@@ -2,211 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D48EA60501A
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 21:05:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7142C605017
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 21:04:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230232AbiJSTFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 15:05:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38140 "EHLO
+        id S230415AbiJSTES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 15:04:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229756AbiJSTFo (ORCPT
+        with ESMTP id S230192AbiJSTEP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 15:05:44 -0400
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF648170DC2
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 12:05:39 -0700 (PDT)
-Received: by mail-pj1-f54.google.com with SMTP id x31-20020a17090a38a200b0020d2afec803so854007pjb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 12:05:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8kG5EvpHdHM0iSYnlLwXpTJZuwX3mygkDwBW2OAorH0=;
-        b=DH9wDXgr9Dv5QZiySC7aqkaYua1OmqQI4UrEt56K2skc8avmTLFW9aKxh0Wjpxm7QD
-         tvLCc4NGFp+P6GGB2kH1DoKPDkXJvLnst77hTcw6S0W28QHsnYlOU5p2icS7n89OYdfq
-         hW3Y2bvBFYvWU9qMWwL862ZykOKcoBGXFXUK2rwCdbDKudQlrTaUYu0GB+wlNYsAZ+hp
-         KHSpPdrHNMxTT8LTzlE2Xq4GzsfkZrLDvZtmoOS8A6SXV8QmQrtgA6pGBPrDxWSpRRPd
-         TpSzEZCSKxn4tKpfbj0yLnrt9A53bn1GXFKcy/R9O3DTzxgQO3s7LndeQKs5xbLqSDZ7
-         6Drw==
-X-Gm-Message-State: ACrzQf0G1fPNr9nwcDTMT9kA2ymczPwxz6tYDk+ypq6j9Q16Q0HgBVBL
-        klXGRMbpCmXeIz7ENmo818A=
-X-Google-Smtp-Source: AMsMyM6Y9lBLr2cALOtxodtksCh7r0lVmvlVAAZsXwkQQ4k9KxfE6GJbNgXOWeWRCnGCuD2w6nhliw==
-X-Received: by 2002:a17:90b:3b92:b0:20d:4fae:1261 with SMTP id pc18-20020a17090b3b9200b0020d4fae1261mr11701057pjb.32.1666206339068;
-        Wed, 19 Oct 2022 12:05:39 -0700 (PDT)
-Received: from sultan-box.localdomain ([142.147.89.230])
-        by smtp.gmail.com with ESMTPSA id r27-20020a63205b000000b00412a708f38asm10123555pgm.35.2022.10.19.12.05.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Oct 2022 12:05:38 -0700 (PDT)
-Date:   Wed, 19 Oct 2022 12:05:35 -0700
-From:   Sultan Alsawaf <sultan@kerneltoast.com>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Wed, 19 Oct 2022 15:04:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D88127412
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 12:04:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666206253;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pfIdnF8ljPzne2VfJo4i9CcwD188vJ7S/S8s9L1Huro=;
+        b=dFWzxrYMNhFk2HLFxTQQZUjO8btofsSbDBfbBEf6M4A65SRjQHcwk0H/Bo/dIyKin0R+ob
+        +pGBD36Y2uKUDjyoJ+Pl3Z2qUYtVmvr3P2U020Z/AEp2Yp3lmrJv/j1qS4d81yQjI0NjCV
+        +fCUDGAFRPdSKk0mxmcv16oIikLEais=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-223-0GDJMe1gMjWu9u8mMbaFWg-1; Wed, 19 Oct 2022 15:04:09 -0400
+X-MC-Unique: 0GDJMe1gMjWu9u8mMbaFWg-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 17A2F1035DE2;
+        Wed, 19 Oct 2022 19:04:01 +0000 (UTC)
+Received: from segfault.boston.devel.redhat.com (segfault.boston.devel.redhat.com [10.19.60.26])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id C427D408A3C5;
+        Wed, 19 Oct 2022 19:03:43 +0000 (UTC)
+From:   Jeff Moyer <jmoyer@redhat.com>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Benjamin LaHaise <bcrl@kvack.org>,
+        linux-fsdevel@vger.kernel.org, linux-aio@kvack.org,
         linux-kernel@vger.kernel.org,
-        "Intel-gfx@lists.freedesktop.org" <Intel-gfx@lists.freedesktop.org>,
-        Ville =?iso-8859-1?Q?Syrj=E4l=E4?= 
-        <ville.syrjala@linux.intel.com>
-Subject: Re: signal: break out of wait loops on kthread_stop()
-Message-ID: <Y1BKf4ol3YtKvLiG@sultan-box.localdomain>
-References: <0029af41-bf24-9972-10ac-f52e1bdcbf08@linux.intel.com>
- <CAHmME9o25v0kZUV-7qEY=6XXAyOA7q0sG8gpQfxHgr3sSVdsWw@mail.gmail.com>
- <41455798-1dcb-135f-516d-25ab9a8082f5@linux.intel.com>
- <Y1A+9kN6bwfXeqVt@zx2c4.com>
+        "Venkataramanan\, Anirudh" <anirudh.venkataramanan@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>
+Subject: Re: [RESEND PATCH] fs/aio: Replace kmap{,_atomic}() with kmap_local_page()
+References: <20221016150656.5803-1-fmdefrancesco@gmail.com>
+        <x49h6zzvn1a.fsf@segfault.boston.devel.redhat.com>
+        <2851287.e9J7NaK4W3@mypc>
+X-PGP-KeyID: 1F78E1B4
+X-PGP-CertKey: F6FE 280D 8293 F72C 65FD  5A58 1FF8 A7CA 1F78 E1B4
+Date:   Wed, 19 Oct 2022 15:07:34 -0400
+In-Reply-To: <2851287.e9J7NaK4W3@mypc> (Fabio M. De Francesco's message of
+        "Wed, 19 Oct 2022 20:52:04 +0200")
+Message-ID: <x494jvztyx5.fsf@segfault.boston.devel.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y1A+9kN6bwfXeqVt@zx2c4.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 12:16:22PM -0600, Jason A. Donenfeld wrote:
-> On Wed, Oct 19, 2022 at 06:57:38PM +0100, Tvrtko Ursulin wrote:
-> > 
-> > On 19/10/2022 17:00, Jason A. Donenfeld wrote:
-> > > On Wed, Oct 19, 2022 at 7:31 AM Tvrtko Ursulin
-> > > <tvrtko.ursulin@linux.intel.com> wrote:
-> > >>
-> > >>
-> > >> Hi,
-> > >>
-> > >> A question regarding a7c01fa93aeb ("signal: break out of wait loops on
-> > >> kthread_stop()") if I may.
-> > >>
-> > >> We have a bunch code in i915, possibly limited to self tests (ie debug
-> > >> builds) but still important for our flows, which spawn kernel threads
-> > >> and exercises parts of the driver.
-> > >>
-> > >> Problem we are hitting with this patch is that code did not really need
-> > >> to be signal aware until now. Well to say that more accurately - we were
-> > >> able to test the code which is normally executed from userspace, so is
-> > >> signal aware, but not worry about -ERESTARTSYS or -EINTR within the test
-> > >> cases itself.
-> > >>
-> > >> For example threads which exercise an internal API for a while until the
-> > >> parent calls kthread_stop. Now those tests can hit unexpected errors.
-> > >>
-> > >> Question is how to best approach working around this change. It is of
-> > >> course technically possible to rework our code in more than one way,
-> > >> although with some cost and impact already felt due reduced pass rates
-> > >> in our automated test suites.
-> > >>
-> > >> Maybe an opt out kthread flag from this new behavior? Would that be
-> > >> acceptable as a quick fix? Or any other comments?
-> > > 
-> > > You can opt out by running `clear_tsk_thread_flag(current,
-> > > TIF_NOTIFY_SIGNAL);` at the top of your kthread. But you should really
-> > > fix your code instead. Were I your reviewer, I wouldn't merge code
-> > > that took the lazy path like that. However, that should work, if you
-> > > do opt for the quick fix.
-> >
-> > Also, are you confident that the change will not catch anyone else by 
-> > surprise? In the original thread I did not spot any concerns about the 
-> > kthreads being generally unprepared to start receiving EINTR/ERESTARTSYS 
-> > from random call chains.
-> 
-> Pretty sure, yea. i915 is unique in its abuse of the API. Keep in mind
-> that kthread_stop() also sets KTHREAD_SHOULD_STOP and such. Your code is
-> abusing the API by calling kthread_run() followed by kthread_stop().
-> 
-> As evidence of how broken your code actually is, the kthread_stop()
-> function has a comment that makes it clear, "This can also be called
-> after kthread_create() instead of calling wake_up_process(): the thread
-> will exit without calling threadfn()," yet i915 has attempted to hack
-> around it with ridiculous yields and msleeps. For example:
-> 
->                 threads[n] = kthread_run(__igt_breadcrumbs_smoketest,
->                                          &t, "igt/%d", n);
-> ...
-> 
->         yield(); /* start all threads before we begin */
->         msleep(jiffies_to_msecs(i915_selftest.timeout_jiffies));
-> ...
->                 err = kthread_stop(threads[n]);
-> 
-> 
-> Or here's another one:
-> 
->                 tsk = kthread_run(fn, &thread[i], "igt-%d", i);
-> ...
->         msleep(10); /* start all threads before we kthread_stop() */
-> ...
->                 status = kthread_stop(tsk);
-> 
-> I mean come on.
-> 
-> This is brittle and bad and kind of ridiculous that it shipped this way.
-> Now you're asking to extend your brittleness, so that you can avoid the
-> work of cleaning up 5 call sites. Just clean up those 5 call sites. It's
-> only 5, as far as I can tell.
-> 
-> 
-> > Right, but our hand is a bit forced at the moment. Since 6.1-rc1 has 
-> > propagated to our development tree on Monday, our automated testing 
-> > started failing significantly, which prevents us merging new work until 
-> > resolved. So a quick fix trumps the ideal road in the short term. Just 
-> > because it is quick.
-> 
-> "Short term" -- somehow I can imagine the short term hack will turn into
-> a long term one.
-> 
-> Anyway, what I suspect you might actually want as a bandaid is a
-> "kthread_wait()"-like function, that doesn't try to stop the thread with
-> KTHREAD_SHOULD_STOP and such, but just waits for the completion:
-> 
-> diff --git a/include/linux/kthread.h b/include/linux/kthread.h
-> index 30e5bec81d2b..2699cc45ad15 100644
-> --- a/include/linux/kthread.h
-> +++ b/include/linux/kthread.h
-> @@ -86,6 +86,7 @@ void free_kthread_struct(struct task_struct *k);
->  void kthread_bind(struct task_struct *k, unsigned int cpu);
->  void kthread_bind_mask(struct task_struct *k, const struct cpumask *mask);
->  int kthread_stop(struct task_struct *k);
-> +int kthread_wait(struct task_struct *k);
->  bool kthread_should_stop(void);
->  bool kthread_should_park(void);
->  bool __kthread_should_park(struct task_struct *k);
-> diff --git a/kernel/kthread.c b/kernel/kthread.c
-> index f97fd01a2932..d581d78a3a26 100644
-> --- a/kernel/kthread.c
-> +++ b/kernel/kthread.c
-> @@ -715,6 +715,22 @@ int kthread_stop(struct task_struct *k)
->  }
->  EXPORT_SYMBOL(kthread_stop);
-> 
-> +int kthread_wait(struct task_struct *k)
-> +{
-> +	struct kthread *kthread;
-> +	int ret;
-> +
-> +	get_task_struct(k);
-> +	kthread = to_kthread(k);
-> +	wake_up_process(k);
-> +	wait_for_completion(&kthread->exited);
-> +	ret = kthread->result;
-> +	put_task_struct(k);
-> +
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL(kthread_stop);
-> +
->  int kthreadd(void *unused)
->  {
->  	struct task_struct *tsk = current;
-> 
+"Fabio M. De Francesco" <fmdefrancesco@gmail.com> writes:
 
-Hi,
+> On Wednesday, October 19, 2022 5:41:21 PM CEST Jeff Moyer wrote:
+>> "Fabio M. De Francesco" <fmdefrancesco@gmail.com> writes:
+>>=20
+>> > The use of kmap() and kmap_atomic() are being deprecated in favor of
+>> > kmap_local_page().
+>> >
+>> > There are two main problems with kmap(): (1) It comes with an overhead=
+ as
+>> > the mapping space is restricted and protected by a global lock for
+>> > synchronization and (2) it also requires global TLB invalidation when =
+the
+>> > kmap=E2=80=99s pool wraps and it might block when the mapping space is=
+ fully
+>> > utilized until a slot becomes available.
+>> >
+>> > With kmap_local_page() the mappings are per thread, CPU local, can take
+>> > page faults, and can be called from any context (including interrupts).
+>> > It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
+>> > the tasks can be preempted and, when they are scheduled to run again, =
+the
+>> > kernel virtual addresses are restored and still valid.
+>> >
+>> > Since its use in fs/aio.c is safe everywhere, it should be preferred.
+>>=20
+>> That sentence is very ambiguous.  I don't know what "its" refers to, and
+>> I'm not sure what "safe" means in this context.
+>
+> I'm sorry for not being clearer.
+>
+> "its use" means "the use of kmap_local_page()". Few lines above you may a=
+lso=20
+> see "It is faster", meaning "kmap_local_page() is faster".
 
-Given the need to ensure the kthreads are started and then synchronously
-flushed, this seems like a good fit for the kthread_work API, which provides all
-of the necessary plumbing for this usecase. No need for the eldritch kthread API
-abuse and flimsy yield+msleep.
+Got it, thanks.
 
-Sultan
+> The "safety" is a very concise way to assert that I've checked, by code=20
+> inspection and by testing (as it is better detailed some lines below) tha=
+t=20
+> these conversions (1) don't break any of the rules of use of local mappin=
+g=20
+> when converting kmap() (please read highmem.rst about these) and (2) the =
+call=20
+> sites of kmap_atomic() didn't rely on its side effects (pagefaults disabl=
+e and=20
+> potential preemption disables).=20
+
+OK, good.  I agree that the aio code wasn't relying on the side effects of
+kmap_atomic.
+
+> Therefore, you may read it as it was: "The use of kmap_local_page() in fs/
+> aio.c has been carefully checked to assure that the conversions won't bre=
+ak=20
+> the code, therefore the newer API is preferred".
+>
+> I hope it makes my argument clearer.
+
+Yes, thank you for explaining!
+
+-Jeff
+
+>
+>>=20
+>> The patch looks okay to me.
+>>=20
+>> Reviewed-by: Jeff Moyer <jmoyer@redhat.com>
+>>=20
+>
+> Thank you so much for the  "Reviewed-by" tag.
+>
+> Regards,
+>
+> Fabio=20
+
