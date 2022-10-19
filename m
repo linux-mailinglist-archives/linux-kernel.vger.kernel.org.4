@@ -2,54 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0643C605360
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 00:47:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C45160535F
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 00:47:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231284AbiJSWrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 18:47:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36156 "EHLO
+        id S231150AbiJSWrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 18:47:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230285AbiJSWrE (ORCPT
+        with ESMTP id S230282AbiJSWrE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 19 Oct 2022 18:47:04 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 966D01849BE;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E0317C167;
         Wed, 19 Oct 2022 15:47:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4CD7BB82613;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 514B7B8261A;
         Wed, 19 Oct 2022 22:47:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4999C433D6;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB837C433B5;
         Wed, 19 Oct 2022 22:47:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1666219621;
-        bh=zhI+nSG0LEQR2PAAAvwCyyYQdtfxOPlUmkdh0E4iu6E=;
+        bh=XdRd/D7YtnjF/VbtVQdPblQxfOL6jWA9yUi4elYsgMo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ie/0CtZv4oEdoViQqjdmdwAOkuUbEniXSDznUSiM+fM8btdjJ+wZZM2Nh2vOHGJBK
-         kuQUWupa2Mqkf1yLJFOutIuIHllryTzfrPxQyLNBM4qdYDtaHkftNSP3NVz68HSGB0
-         IIUB+ijLG9OUCiSW8lCz5etbYQY3MHEHNmg0wwb/8d5S9ximif6nNJQpgMmBPNNZZP
-         tS8EnPBF1QFqoIJD96pTmSVl2edtkzBI6abWSzoYOroWhUZhPPIYAcKUWvpNyH43vD
-         9iuN2l8GfB7H79el4Pi63Mw0C+d6nAORSLbaPu0MJXOakr8ZDhujDXh/SPrsKFgKBH
-         YlnijjYTyPRSw==
+        b=CATtEuYG11NQ97X+dUT5iqaZitwvMN1GjLxxebL7NPDD4dxFA0yPhlkM/csd1ceU0
+         5YpYWBZTlDcIDBhwd6d0OdN3MkPVI2tLW93lrNsg8w9aKtopPk/i42xNiXpnSQrikF
+         9opL8UGvgpS2dC64Wl4SQKHNG9djEdMGQzGo5+nqC2ZAE0qEe7BEwQ9bVoEDpM1P1I
+         zqxyAoxz6PzHlS9NsFx7aMOnhGD5niqY5M1NnljreFhSr0HeZEDtpzzYi5U1llCaEK
+         2fsg1/4UBIGvOSBX7KbTKIxuiO9jPari1IRNCcENz39AozIrPniJi6mGm6EzuGUpMZ
+         pDSXKJwdKXczw==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id A6FAF5C0879; Wed, 19 Oct 2022 15:47:00 -0700 (PDT)
+        id A93345C0890; Wed, 19 Oct 2022 15:47:00 -0700 (PDT)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
-        rostedt@goodmis.org, Pingfan Liu <kernelfans@gmail.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        rostedt@goodmis.org, Zeng Heng <zengheng4@huawei.com>,
+        Mukesh Ojha <quic_mojha@quicinc.com>,
         "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH rcu 2/8] rcu: Synchronize ->qsmaskinitnext in rcu_boost_kthread_setaffinity()
-Date:   Wed, 19 Oct 2022 15:46:53 -0700
-Message-Id: <20221019224659.2499511-2-paulmck@kernel.org>
+Subject: [PATCH rcu 3/8] rcu: Remove unused 'cpu' in rcu_virt_note_context_switch()
+Date:   Wed, 19 Oct 2022 15:46:54 -0700
+Message-Id: <20221019224659.2499511-3-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20221019224652.GA2499358@paulmck-ThinkPad-P17-Gen-1>
 References: <20221019224652.GA2499358@paulmck-ThinkPad-P17-Gen-1>
@@ -64,72 +57,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pingfan Liu <kernelfans@gmail.com>
+From: Zeng Heng <zengheng4@huawei.com>
 
-Once either rcutree_online_cpu() or rcutree_dead_cpu() is invoked
-concurrently, the following rcu_boost_kthread_setaffinity() race can
-occur:
+This commit removes the unused function argument 'cpu'.  This does not
+change functionality, but might save a cycle or two.
 
-        CPU 1                               CPU2
-mask = rcu_rnp_online_cpus(rnp);
-...
-
-                                   mask = rcu_rnp_online_cpus(rnp);
-                                   ...
-                                   set_cpus_allowed_ptr(t, cm);
-
-set_cpus_allowed_ptr(t, cm);
-
-This results in CPU2's update being overwritten by that of CPU1, and
-thus the possibility of ->boost_kthread_task continuing to run on a
-to-be-offlined CPU.
-
-This commit therefore eliminates this race by relying on the pre-existing
-acquisition of ->boost_kthread_mutex to serialize the full process of
-changing the affinity of ->boost_kthread_task.
-
-Signed-off-by: Pingfan Liu <kernelfans@gmail.com>
-Cc: David Woodhouse <dwmw@amazon.co.uk>
-Cc: Frederic Weisbecker <frederic@kernel.org>
-Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
-Cc: Josh Triplett <josh@joshtriplett.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Lai Jiangshan <jiangshanlai@gmail.com>
-Cc: Joel Fernandes <joel@joelfernandes.org>
-Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>
+Signed-off-by: Zeng Heng <zengheng4@huawei.com>
+Acked-by: Mukesh Ojha <quic_mojha@quicinc.com>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- kernel/rcu/tree_plugin.h | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ include/linux/kvm_host.h | 2 +-
+ include/linux/rcutiny.h  | 2 +-
+ include/linux/rcutree.h  | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
-index e3142ee35fc6a..7b0fe741a0886 100644
---- a/kernel/rcu/tree_plugin.h
-+++ b/kernel/rcu/tree_plugin.h
-@@ -1221,11 +1221,13 @@ static void rcu_spawn_one_boost_kthread(struct rcu_node *rnp)
-  * We don't include outgoingcpu in the affinity set, use -1 if there is
-  * no outgoing CPU.  If there are no CPUs left in the affinity set,
-  * this function allows the kthread to execute on any CPU.
-+ *
-+ * Any future concurrent calls are serialized via ->boost_kthread_mutex.
+diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+index 32f259fa58013..381b92d146c71 100644
+--- a/include/linux/kvm_host.h
++++ b/include/linux/kvm_host.h
+@@ -416,7 +416,7 @@ static __always_inline void guest_context_enter_irqoff(void)
+ 	 */
+ 	if (!context_tracking_guest_enter()) {
+ 		instrumentation_begin();
+-		rcu_virt_note_context_switch(smp_processor_id());
++		rcu_virt_note_context_switch();
+ 		instrumentation_end();
+ 	}
+ }
+diff --git a/include/linux/rcutiny.h b/include/linux/rcutiny.h
+index 768196a5f39d6..9bc025aa79a30 100644
+--- a/include/linux/rcutiny.h
++++ b/include/linux/rcutiny.h
+@@ -142,7 +142,7 @@ static inline int rcu_needs_cpu(void)
+  * Take advantage of the fact that there is only one CPU, which
+  * allows us to ignore virtualization-based context switches.
   */
- static void rcu_boost_kthread_setaffinity(struct rcu_node *rnp, int outgoingcpu)
+-static inline void rcu_virt_note_context_switch(int cpu) { }
++static inline void rcu_virt_note_context_switch(void) { }
+ static inline void rcu_cpu_stall_reset(void) { }
+ static inline int rcu_jiffies_till_stall_check(void) { return 21 * HZ; }
+ static inline void rcu_irq_exit_check_preempt(void) { }
+diff --git a/include/linux/rcutree.h b/include/linux/rcutree.h
+index 5efb51486e8af..70795386b9ffa 100644
+--- a/include/linux/rcutree.h
++++ b/include/linux/rcutree.h
+@@ -27,7 +27,7 @@ void rcu_cpu_stall_reset(void);
+  * wrapper around rcu_note_context_switch(), which allows TINY_RCU
+  * to save a few bytes. The caller must have disabled interrupts.
+  */
+-static inline void rcu_virt_note_context_switch(int cpu)
++static inline void rcu_virt_note_context_switch(void)
  {
- 	struct task_struct *t = rnp->boost_kthread_task;
--	unsigned long mask = rcu_rnp_online_cpus(rnp);
-+	unsigned long mask;
- 	cpumask_var_t cm;
- 	int cpu;
- 
-@@ -1234,6 +1236,7 @@ static void rcu_boost_kthread_setaffinity(struct rcu_node *rnp, int outgoingcpu)
- 	if (!zalloc_cpumask_var(&cm, GFP_KERNEL))
- 		return;
- 	mutex_lock(&rnp->boost_kthread_mutex);
-+	mask = rcu_rnp_online_cpus(rnp);
- 	for_each_leaf_node_possible_cpu(rnp, cpu)
- 		if ((mask & leaf_node_cpu_bit(rnp, cpu)) &&
- 		    cpu != outgoingcpu)
+ 	rcu_note_context_switch(false);
+ }
 -- 
 2.31.1.189.g2e36527f23
 
