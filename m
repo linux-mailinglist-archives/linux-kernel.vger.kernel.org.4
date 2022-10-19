@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76B40604C02
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:47:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1BD2604C08
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:47:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230077AbiJSPqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 11:46:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50664 "EHLO
+        id S230489AbiJSPrb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 11:47:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231857AbiJSPqI (ORCPT
+        with ESMTP id S232564AbiJSPrN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 11:46:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68B9B1DED7F;
-        Wed, 19 Oct 2022 08:40:43 -0700 (PDT)
+        Wed, 19 Oct 2022 11:47:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C8FC1E0470;
+        Wed, 19 Oct 2022 08:41:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E038861844;
-        Wed, 19 Oct 2022 15:40:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53BB6C433C1;
-        Wed, 19 Oct 2022 15:40:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 32B3CB82187;
+        Wed, 19 Oct 2022 15:41:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E03BC433D6;
+        Wed, 19 Oct 2022 15:41:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666194023;
-        bh=NZg0qx4t5Tk5wFhDnMc5LFn6+3oYBwr9JSXtiUFpl3I=;
+        s=k20201202; t=1666194082;
+        bh=gERiTvmEkmViJopJuSGIiFwvMAK+LyUh68iyKGIXVJc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qOG5ElYouUvjm/kpFHS03r2CfV9xdBDsi7iOeZR27zxOz9e3uwYDC6LvNUOGsp6xo
-         V4BXEr/sV9lvTcYSfcvJJlx4BJXHvL1PpZUR05ZFMlHx7y9w7qUYA2dsAQCgG3ycPA
-         kej75i/HUWgz3H9k86E2zFNcTpuECH+F3tlEZiFdtIdz/18BKOhjWNbu8D0Qae21Rw
-         GqQDZmPl+tHqw5ZrotqQviZjzHE3DleiLKmr3jHlSHN1hYVn9zRcQ6r9UDZ/Ih/9f+
-         5RrqxXNI7nsMK1ygM3rxYh2P3L8doyTvF7sM1iOSVm3UqiFESk6hHqXfPr6jXr76ZG
-         Xy0an5OR1TpGQ==
+        b=HzTis5MQ+E00VQdc2kK8gHJN2Z3Ink/ov4mmO8GNjNhPUbhrjS841dUj42sf+j0g+
+         Y16a9BvJwEQOKKhxHr6EaKVxDZkRWdrg1fzIBKUuXRYupw24polb7IRS77SaTb+GZ4
+         6qGIAjXbyGSC/hK+EcZjM0yfSLaMMRP4mep7Nu7jSdonA3XiptrI0N8EW5Xavn6IjD
+         M3jZAl6vdpe1Z32MRLv75CrxdP6FdoRAKkrXXsR6WQMInH3RN8x4rJ83dBI24GYY3X
+         9Kw6MDxG7XCV1JL70rCAeCEQ68WGYxo5EAqiqqK5K7Fksp1nOOMqbaaRPYaO/OnF/P
+         nGwalEHGY/JQA==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     Sekhar Nori <nsekhar@ti.com>, Bartosz Golaszewski <brgl@bgdev.pl>,
         linux-arm-kernel@lists.infradead.org,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
 Cc:     linux-kernel@vger.kernel.org, Kevin Hilman <khilman@baylibre.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev
-Subject: [PATCH 13/14] staging: media: remove davinci vpfe_capture driver
-Date:   Wed, 19 Oct 2022 17:29:39 +0200
-Message-Id: <20221019152947.3857217-14-arnd@kernel.org>
+        Arnd Bergmann <arnd@arndb.de>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-media@vger.kernel.org
+Subject: [PATCH 14/14] media: davinci: remove vpbe support
+Date:   Wed, 19 Oct 2022 17:29:40 +0200
+Message-Id: <20221019152947.3857217-15-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20221019152947.3857217-1-arnd@kernel.org>
 References: <20221019152947.3857217-1-arnd@kernel.org>
@@ -60,7028 +60,6878 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-This driver was for the davinci dm644x and dm3xx platforms that are
-now removed from the kernel, so there are no more users.
+The davinci dm3xx/dm644x platforms are gone now, and the remaining
+da8xx platforms do not use the vpbe driver, so the driver can be
+removed as well.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- MAINTAINERS                                   |    1 -
- drivers/staging/media/Kconfig                 |    1 -
- drivers/staging/media/Makefile                |    1 -
- .../media/deprecated/vpfe_capture/Kconfig     |   58 -
- .../media/deprecated/vpfe_capture/Makefile    |    4 -
- .../media/deprecated/vpfe_capture/TODO        |    7 -
- .../deprecated/vpfe_capture/ccdc_hw_device.h  |   80 -
- .../deprecated/vpfe_capture/dm355_ccdc.c      |  934 --------
- .../deprecated/vpfe_capture/dm355_ccdc.h      |  308 ---
- .../deprecated/vpfe_capture/dm355_ccdc_regs.h |  297 ---
- .../deprecated/vpfe_capture/dm644x_ccdc.c     |  879 --------
- .../deprecated/vpfe_capture/dm644x_ccdc.h     |  171 --
- .../vpfe_capture/dm644x_ccdc_regs.h           |  140 --
- .../media/deprecated/vpfe_capture/isif.c      | 1127 ----------
- .../media/deprecated/vpfe_capture/isif.h      |  518 -----
- .../media/deprecated/vpfe_capture/isif_regs.h |  256 ---
- .../deprecated/vpfe_capture/vpfe_capture.c    | 1902 -----------------
- include/media/davinci/vpfe_capture.h          |  177 --
- 18 files changed, 6861 deletions(-)
- delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/Kconfig
- delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/Makefile
- delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/TODO
- delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/ccdc_hw_device.h
- delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc.c
- delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc.h
- delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc_regs.h
- delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/dm644x_ccdc.c
- delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/dm644x_ccdc.h
- delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/dm644x_ccdc_regs.h
- delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/isif.c
- delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/isif.h
- delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/isif_regs.h
- delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/vpfe_capture.c
- delete mode 100644 include/media/davinci/vpfe_capture.h
+ .../admin-guide/media/davinci-vpbe.rst        |   65 -
+ .../admin-guide/media/platform-cardlist.rst   |    1 -
+ .../admin-guide/media/v4l-drivers.rst         |    1 -
+ .../media/drivers/davinci-vpbe-devel.rst      |   39 -
+ .../driver-api/media/drivers/index.rst        |    1 -
+ drivers/media/platform/ti/davinci/Kconfig     |   16 -
+ drivers/media/platform/ti/davinci/Makefile    |    3 -
+ drivers/media/platform/ti/davinci/vpbe.c      |  840 ---------
+ .../media/platform/ti/davinci/vpbe_display.c  | 1510 ----------------
+ drivers/media/platform/ti/davinci/vpbe_osd.c  | 1582 -----------------
+ .../media/platform/ti/davinci/vpbe_osd_regs.h |  352 ----
+ drivers/media/platform/ti/davinci/vpbe_venc.c |  676 -------
+ .../platform/ti/davinci/vpbe_venc_regs.h      |  165 --
+ drivers/media/platform/ti/davinci/vpss.c      |  529 ------
+ include/media/davinci/vpbe.h                  |  184 --
+ include/media/davinci/vpbe_display.h          |  122 --
+ include/media/davinci/vpbe_osd.h              |  382 ----
+ include/media/davinci/vpbe_types.h            |   74 -
+ include/media/davinci/vpbe_venc.h             |   37 -
+ include/media/davinci/vpss.h                  |  111 --
+ 20 files changed, 6690 deletions(-)
+ delete mode 100644 Documentation/admin-guide/media/davinci-vpbe.rst
+ delete mode 100644 Documentation/driver-api/media/drivers/davinci-vpbe-devel.rst
+ delete mode 100644 drivers/media/platform/ti/davinci/vpbe.c
+ delete mode 100644 drivers/media/platform/ti/davinci/vpbe_display.c
+ delete mode 100644 drivers/media/platform/ti/davinci/vpbe_osd.c
+ delete mode 100644 drivers/media/platform/ti/davinci/vpbe_osd_regs.h
+ delete mode 100644 drivers/media/platform/ti/davinci/vpbe_venc.c
+ delete mode 100644 drivers/media/platform/ti/davinci/vpbe_venc_regs.h
+ delete mode 100644 drivers/media/platform/ti/davinci/vpss.c
+ delete mode 100644 include/media/davinci/vpbe.h
+ delete mode 100644 include/media/davinci/vpbe_display.h
+ delete mode 100644 include/media/davinci/vpbe_osd.h
+ delete mode 100644 include/media/davinci/vpbe_types.h
+ delete mode 100644 include/media/davinci/vpbe_venc.h
+ delete mode 100644 include/media/davinci/vpss.h
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index bb3e20381128..5f18c0264e98 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -20491,7 +20491,6 @@ W:	https://linuxtv.org
- Q:	http://patchwork.linuxtv.org/project/linux-media/list/
- T:	git git://linuxtv.org/mhadli/v4l-dvb-davinci_devices.git
- F:	drivers/media/platform/ti/davinci/
--F:	drivers/staging/media/deprecated/vpfe_capture/
- F:	include/media/davinci/
+diff --git a/Documentation/admin-guide/media/davinci-vpbe.rst b/Documentation/admin-guide/media/davinci-vpbe.rst
+deleted file mode 100644
+index 9e6360fd02db..000000000000
+--- a/Documentation/admin-guide/media/davinci-vpbe.rst
++++ /dev/null
+@@ -1,65 +0,0 @@
+-.. SPDX-License-Identifier: GPL-2.0
+-
+-The VPBE V4L2 driver design
+-===========================
+-
+-Functional partitioning
+------------------------
+-
+-Consists of the following:
+-
+- 1. V4L2 display driver
+-
+-    Implements creation of video2 and video3 device nodes and
+-    provides v4l2 device interface to manage VID0 and VID1 layers.
+-
+- 2. Display controller
+-
+-    Loads up VENC, OSD and external encoders such as ths8200. It provides
+-    a set of API calls to V4L2 drivers to set the output/standards
+-    in the VENC or external sub devices. It also provides
+-    a device object to access the services from OSD subdevice
+-    using sub device ops. The connection of external encoders to VENC LCD
+-    controller port is done at init time based on default output and standard
+-    selection or at run time when application change the output through
+-    V4L2 IOCTLs.
+-
+-    When connected to an external encoder, vpbe controller is also responsible
+-    for setting up the interface between VENC and external encoders based on
+-    board specific settings (specified in board-xxx-evm.c). This allows
+-    interfacing external encoders such as ths8200. The setup_if_config()
+-    is implemented for this as well as configure_venc() (part of the next patch)
+-    API to set timings in VENC for a specific display resolution. As of this
+-    patch series, the interconnection and enabling and setting of the external
+-    encoders is not present, and would be a part of the next patch series.
+-
+- 3. VENC subdevice module
+-
+-    Responsible for setting outputs provided through internal DACs and also
+-    setting timings at LCD controller port when external encoders are connected
+-    at the port or LCD panel timings required. When external encoder/LCD panel
+-    is connected, the timings for a specific standard/preset is retrieved from
+-    the board specific table and the values are used to set the timings in
+-    venc using non-standard timing mode.
+-
+-    Support LCD Panel displays using the VENC. For example to support a Logic
+-    PD display, it requires setting up the LCD controller port with a set of
+-    timings for the resolution supported and setting the dot clock. So we could
+-    add the available outputs as a board specific entry (i.e add the "LogicPD"
+-    output name to board-xxx-evm.c). A table of timings for various LCDs
+-    supported can be maintained in the board specific setup file to support
+-    various LCD displays.As of this patch a basic driver is present, and this
+-    support for external encoders and displays forms a part of the next
+-    patch series.
+-
+- 4. OSD module
+-
+-    OSD module implements all OSD layer management and hardware specific
+-    features. The VPBE module interacts with the OSD for enabling and
+-    disabling appropriate features of the OSD.
+-
+-Current status
+---------------
+-
+-A fully functional working version of the V4L2 driver is available. This
+-driver has been tested with NTSC and PAL standards and buffer streaming.
+diff --git a/Documentation/admin-guide/media/platform-cardlist.rst b/Documentation/admin-guide/media/platform-cardlist.rst
+index ac73c4166d1e..8ef57cd13dec 100644
+--- a/Documentation/admin-guide/media/platform-cardlist.rst
++++ b/Documentation/admin-guide/media/platform-cardlist.rst
+@@ -73,7 +73,6 @@ via-camera         VIAFB camera controller
+ video-mux          Video Multiplexer
+ vpif_display       TI DaVinci VPIF V4L2-Display
+ vpif_capture       TI DaVinci VPIF video capture
+-vpss               TI DaVinci VPBE V4L2-Display
+ vsp1               Renesas VSP1 Video Processing Engine
+ xilinx-tpg         Xilinx Video Test Pattern Generator
+ xilinx-video       Xilinx Video IP (EXPERIMENTAL)
+diff --git a/Documentation/admin-guide/media/v4l-drivers.rst b/Documentation/admin-guide/media/v4l-drivers.rst
+index 9c7ebe2ca3bd..13f8a39366c9 100644
+--- a/Documentation/admin-guide/media/v4l-drivers.rst
++++ b/Documentation/admin-guide/media/v4l-drivers.rst
+@@ -13,7 +13,6 @@ Video4Linux (V4L) driver-specific documentation
+ 	cafe_ccic
+ 	cpia2
+ 	cx88
+-	davinci-vpbe
+ 	fimc
+ 	imx
+ 	imx7
+diff --git a/Documentation/driver-api/media/drivers/davinci-vpbe-devel.rst b/Documentation/driver-api/media/drivers/davinci-vpbe-devel.rst
+deleted file mode 100644
+index 4e87bdbc7ae4..000000000000
+--- a/Documentation/driver-api/media/drivers/davinci-vpbe-devel.rst
++++ /dev/null
+@@ -1,39 +0,0 @@
+-.. SPDX-License-Identifier: GPL-2.0
+-
+-The VPBE V4L2 driver design
+-===========================
+-
+-File partitioning
+------------------
+-
+- V4L2 display device driver
+-         drivers/media/platform/ti/davinci/vpbe_display.c
+-         drivers/media/platform/ti/davinci/vpbe_display.h
+-
+- VPBE display controller
+-         drivers/media/platform/ti/davinci/vpbe.c
+-         drivers/media/platform/ti/davinci/vpbe.h
+-
+- VPBE venc sub device driver
+-         drivers/media/platform/ti/davinci/vpbe_venc.c
+-         drivers/media/platform/ti/davinci/vpbe_venc.h
+-         drivers/media/platform/ti/davinci/vpbe_venc_regs.h
+-
+- VPBE osd driver
+-         drivers/media/platform/ti/davinci/vpbe_osd.c
+-         drivers/media/platform/ti/davinci/vpbe_osd.h
+-         drivers/media/platform/ti/davinci/vpbe_osd_regs.h
+-
+-To be done
+-----------
+-
+-vpbe display controller
+-    - Add support for external encoders.
+-    - add support for selecting external encoder as default at probe time.
+-
+-vpbe venc sub device
+-    - add timings for supporting ths8200
+-    - add support for LogicPD LCD.
+-
+-FB drivers
+-    - Add support for fbdev drivers.- Ready and part of subsequent patches.
+diff --git a/Documentation/driver-api/media/drivers/index.rst b/Documentation/driver-api/media/drivers/index.rst
+index 32406490557c..3c17d48f83c0 100644
+--- a/Documentation/driver-api/media/drivers/index.rst
++++ b/Documentation/driver-api/media/drivers/index.rst
+@@ -16,7 +16,6 @@ Video4Linux (V4L) drivers
+ 	cpia2_devel
+ 	cx2341x-devel
+ 	cx88-devel
+-	davinci-vpbe-devel
+ 	fimc-devel
+ 	pvrusb2
+ 	pxa_camera
+diff --git a/drivers/media/platform/ti/davinci/Kconfig b/drivers/media/platform/ti/davinci/Kconfig
+index 96d4bed7fe9e..542a602e66be 100644
+--- a/drivers/media/platform/ti/davinci/Kconfig
++++ b/drivers/media/platform/ti/davinci/Kconfig
+@@ -31,19 +31,3 @@ config VIDEO_DAVINCI_VPIF_CAPTURE
  
- TI ENHANCED CAPTURE (eCAP) DRIVER
-diff --git a/drivers/staging/media/Kconfig b/drivers/staging/media/Kconfig
-index d4f03b203ae5..ddab8e0a0809 100644
---- a/drivers/staging/media/Kconfig
-+++ b/drivers/staging/media/Kconfig
-@@ -57,7 +57,6 @@ source "drivers/staging/media/deprecated/meye/Kconfig"
- source "drivers/staging/media/deprecated/saa7146/Kconfig"
- source "drivers/staging/media/deprecated/stkwebcam/Kconfig"
- source "drivers/staging/media/deprecated/tm6000/Kconfig"
--source "drivers/staging/media/deprecated/vpfe_capture/Kconfig"
- source "drivers/staging/media/deprecated/zr364xx/Kconfig"
- endif
- 
-diff --git a/drivers/staging/media/Makefile b/drivers/staging/media/Makefile
-index a387692b84f2..38e6cdfea29c 100644
---- a/drivers/staging/media/Makefile
-+++ b/drivers/staging/media/Makefile
-@@ -14,5 +14,4 @@ obj-$(CONFIG_VIDEO_IPU3_IMGU)	+= ipu3/
- obj-$(CONFIG_VIDEO_TM6000)	+= deprecated/tm6000/
- obj-$(CONFIG_VIDEO_VIU)		+= deprecated/fsl-viu/
- obj-$(CONFIG_USB_ZR364XX)	+= deprecated/zr364xx/
--obj-y += deprecated/vpfe_capture/
- obj-y += deprecated/saa7146/
-diff --git a/drivers/staging/media/deprecated/vpfe_capture/Kconfig b/drivers/staging/media/deprecated/vpfe_capture/Kconfig
-deleted file mode 100644
-index 10250e7e566b..000000000000
---- a/drivers/staging/media/deprecated/vpfe_capture/Kconfig
-+++ /dev/null
-@@ -1,58 +0,0 @@
--# SPDX-License-Identifier: GPL-2.0-only
--config VIDEO_DM6446_CCDC
--	tristate "TI DM6446 CCDC video capture driver"
+ 	  To compile this driver as a module, choose M here. There will
+ 	  be two modules called vpif.ko and vpif_capture.ko
+-
+-config VIDEO_DAVINCI_VPBE_DISPLAY
+-	tristate "TI DaVinci VPBE V4L2-Display driver"
 -	depends on V4L_PLATFORM_DRIVERS
 -	depends on VIDEO_DEV
 -	depends on ARCH_DAVINCI || COMPILE_TEST
 -	depends on I2C
--	select VIDEOBUF_DMA_CONTIG
+-	select VIDEOBUF2_DMA_CONTIG
 -	help
--	  Enables DaVinci CCD hw module. DaVinci CCDC hw interfaces
--	  with decoder modules such as TVP5146 over BT656 or
--	  sensor module such as MT9T001 over a raw interface. This
--	  module configures the interface and CCDC/ISIF to do
--	  video frame capture from slave decoders.
+-	    Enables Davinci VPBE module used for display devices.
+-	    This module is used for display on TI DM644x/DM365/DM355
+-	    based display devices.
 -
--	  This driver is deprecated and is scheduled for removal by
--	  the beginning of 2023. See the TODO file for more information.
+-	    To compile this driver as a module, choose M here. There will
+-	    be five modules created called vpss.ko, vpbe.ko, vpbe_osd.ko,
+-	    vpbe_venc.ko and vpbe_display.ko
+diff --git a/drivers/media/platform/ti/davinci/Makefile b/drivers/media/platform/ti/davinci/Makefile
+index b20a91653162..512f03369bae 100644
+--- a/drivers/media/platform/ti/davinci/Makefile
++++ b/drivers/media/platform/ti/davinci/Makefile
+@@ -7,6 +7,3 @@
+ obj-$(CONFIG_VIDEO_DAVINCI_VPIF_DISPLAY) += vpif.o vpif_display.o
+ #VPIF Capture driver
+ obj-$(CONFIG_VIDEO_DAVINCI_VPIF_CAPTURE) += vpif.o vpif_capture.o
 -
--	  To compile this driver as a module, choose M here. There will
--	  be two modules called vpfe_capture.ko and dm644x_ccdc.ko
--
--config VIDEO_DM355_CCDC
--	tristate "TI DM355 CCDC video capture driver"
--	depends on V4L_PLATFORM_DRIVERS
--	depends on VIDEO_DEV
--	depends on ARCH_DAVINCI || COMPILE_TEST
--	depends on I2C
--	select VIDEOBUF_DMA_CONTIG
--	help
--	  Enables DM355 CCD hw module. DM355 CCDC hw interfaces
--	  with decoder modules such as TVP5146 over BT656 or
--	  sensor module such as MT9T001 over a raw interface. This
--	  module configures the interface and CCDC/ISIF to do
--	  video frame capture from a slave decoders
--
--	  This driver is deprecated and is scheduled for removal by
--	  the beginning of 2023. See the TODO file for more information.
--
--	  To compile this driver as a module, choose M here. There will
--	  be two modules called vpfe_capture.ko and dm355_ccdc.ko
--
--config VIDEO_DM365_ISIF
--	tristate "TI DM365 ISIF video capture driver"
--	depends on V4L_PLATFORM_DRIVERS
--	depends on VIDEO_DEV
--	depends on ARCH_DAVINCI || COMPILE_TEST
--	depends on I2C
--	select VIDEOBUF_DMA_CONTIG
--	help
--	  Enables ISIF hw module. This is the hardware module for
--	  configuring ISIF in VPFE to capture Raw Bayer RGB data from
--	  a image sensor or YUV data from a YUV source.
--
--	  This driver is deprecated and is scheduled for removal by
--	  the beginning of 2023. See the TODO file for more information.
--
--	  To compile this driver as a module, choose M here. There will
--	  be two modules called vpfe_capture.ko and isif.ko
-diff --git a/drivers/staging/media/deprecated/vpfe_capture/Makefile b/drivers/staging/media/deprecated/vpfe_capture/Makefile
+-obj-$(CONFIG_VIDEO_DAVINCI_VPBE_DISPLAY) += vpss.o vpbe.o vpbe_osd.o \
+-	vpbe_venc.o vpbe_display.o
+diff --git a/drivers/media/platform/ti/davinci/vpbe.c b/drivers/media/platform/ti/davinci/vpbe.c
 deleted file mode 100644
-index 609e8dc09ce7..000000000000
---- a/drivers/staging/media/deprecated/vpfe_capture/Makefile
+index 509ecc84624e..000000000000
+--- a/drivers/media/platform/ti/davinci/vpbe.c
 +++ /dev/null
-@@ -1,4 +0,0 @@
--# SPDX-License-Identifier: GPL-2.0
--obj-$(CONFIG_VIDEO_DM6446_CCDC) += vpfe_capture.o dm644x_ccdc.o
--obj-$(CONFIG_VIDEO_DM355_CCDC) += vpfe_capture.o dm355_ccdc.o
--obj-$(CONFIG_VIDEO_DM365_ISIF) += vpfe_capture.o isif.o
-diff --git a/drivers/staging/media/deprecated/vpfe_capture/TODO b/drivers/staging/media/deprecated/vpfe_capture/TODO
-deleted file mode 100644
-index ce654d7337af..000000000000
---- a/drivers/staging/media/deprecated/vpfe_capture/TODO
-+++ /dev/null
-@@ -1,7 +0,0 @@
--These are one of the few drivers still not using the vb2
--framework, so these drivers are now deprecated with the intent of
--removing them altogether by the beginning of 2023.
--
--In order to keep these drivers they have to be converted to vb2.
--If someone is interested in doing this work, then contact the
--linux-media mailinglist (https://linuxtv.org/lists.php).
-diff --git a/drivers/staging/media/deprecated/vpfe_capture/ccdc_hw_device.h b/drivers/staging/media/deprecated/vpfe_capture/ccdc_hw_device.h
-deleted file mode 100644
-index a545052a95a9..000000000000
---- a/drivers/staging/media/deprecated/vpfe_capture/ccdc_hw_device.h
-+++ /dev/null
-@@ -1,80 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-or-later */
+@@ -1,840 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
 -/*
-- * Copyright (C) 2008-2009 Texas Instruments Inc
-- *
-- * ccdc device API
+- * Copyright (C) 2010 Texas Instruments Inc
 - */
--#ifndef _CCDC_HW_DEVICE_H
--#define _CCDC_HW_DEVICE_H
--
--#ifdef __KERNEL__
--#include <linux/videodev2.h>
--#include <linux/device.h>
--#include <media/davinci/vpfe_types.h>
--#include <media/davinci/ccdc_types.h>
--
--/*
-- * ccdc hw operations
-- */
--struct ccdc_hw_ops {
--	/* Pointer to initialize function to initialize ccdc device */
--	int (*open) (struct device *dev);
--	/* Pointer to deinitialize function */
--	int (*close) (struct device *dev);
--	/* set ccdc base address */
--	void (*set_ccdc_base)(void *base, int size);
--	/* Pointer to function to enable or disable ccdc */
--	void (*enable) (int en);
--	/* reset sbl. only for 6446 */
--	void (*reset) (void);
--	/* enable output to sdram */
--	void (*enable_out_to_sdram) (int en);
--	/* Pointer to function to set hw parameters */
--	int (*set_hw_if_params) (struct vpfe_hw_if_param *param);
--	/* get interface parameters */
--	int (*get_hw_if_params) (struct vpfe_hw_if_param *param);
--	/* Pointer to function to configure ccdc */
--	int (*configure) (void);
--
--	/* Pointer to function to set buffer type */
--	int (*set_buftype) (enum ccdc_buftype buf_type);
--	/* Pointer to function to get buffer type */
--	enum ccdc_buftype (*get_buftype) (void);
--	/* Pointer to function to set frame format */
--	int (*set_frame_format) (enum ccdc_frmfmt frm_fmt);
--	/* Pointer to function to get frame format */
--	enum ccdc_frmfmt (*get_frame_format) (void);
--	/* enumerate hw pix formats */
--	int (*enum_pix)(u32 *hw_pix, int i);
--	/* Pointer to function to set buffer type */
--	u32 (*get_pixel_format) (void);
--	/* Pointer to function to get pixel format. */
--	int (*set_pixel_format) (u32 pixfmt);
--	/* Pointer to function to set image window */
--	int (*set_image_window) (struct v4l2_rect *win);
--	/* Pointer to function to set image window */
--	void (*get_image_window) (struct v4l2_rect *win);
--	/* Pointer to function to get line length */
--	unsigned int (*get_line_length) (void);
--
--	/* Pointer to function to set frame buffer address */
--	void (*setfbaddr) (unsigned long addr);
--	/* Pointer to function to get field id */
--	int (*getfid) (void);
--};
--
--struct ccdc_hw_device {
--	/* ccdc device name */
--	char name[32];
--	/* module owner */
--	struct module *owner;
--	/* hw ops */
--	struct ccdc_hw_ops hw_ops;
--};
--
--/* Used by CCDC module to register & unregister with vpfe capture driver */
--int vpfe_register_ccdc_device(const struct ccdc_hw_device *dev);
--void vpfe_unregister_ccdc_device(const struct ccdc_hw_device *dev);
--
--#endif
--#endif
-diff --git a/drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc.c b/drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc.c
-deleted file mode 100644
-index da8db53e9498..000000000000
---- a/drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc.c
-+++ /dev/null
-@@ -1,934 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-or-later
--/*
-- * Copyright (C) 2005-2009 Texas Instruments Inc
-- *
-- * CCDC hardware module for DM355
-- * ------------------------------
-- *
-- * This module is for configuring DM355 CCD controller of VPFE to capture
-- * Raw yuv or Bayer RGB data from a decoder. CCDC has several modules
-- * such as Defect Pixel Correction, Color Space Conversion etc to
-- * pre-process the Bayer RGB data, before writing it to SDRAM.
-- *
-- * TODO: 1) Raw bayer parameter settings and bayer capture
-- *	 2) Split module parameter structure to module specific ioctl structs
-- *	 3) add support for lense shading correction
-- *	 4) investigate if enum used for user space type definition
-- *	    to be replaced by #defines or integer
-- */
--#include <linux/platform_device.h>
--#include <linux/uaccess.h>
--#include <linux/videodev2.h>
--#include <linux/err.h>
--#include <linux/module.h>
--
--#include "dm355_ccdc.h"
--#include <media/davinci/vpss.h>
--
--#include "dm355_ccdc_regs.h"
--#include "ccdc_hw_device.h"
--
--MODULE_LICENSE("GPL");
--MODULE_DESCRIPTION("CCDC Driver for DM355");
--MODULE_AUTHOR("Texas Instruments");
--
--static struct ccdc_oper_config {
--	struct device *dev;
--	/* CCDC interface type */
--	enum vpfe_hw_if_type if_type;
--	/* Raw Bayer configuration */
--	struct ccdc_params_raw bayer;
--	/* YCbCr configuration */
--	struct ccdc_params_ycbcr ycbcr;
--	/* ccdc base address */
--	void __iomem *base_addr;
--} ccdc_cfg = {
--	/* Raw configurations */
--	.bayer = {
--		.pix_fmt = CCDC_PIXFMT_RAW,
--		.frm_fmt = CCDC_FRMFMT_PROGRESSIVE,
--		.win = CCDC_WIN_VGA,
--		.fid_pol = VPFE_PINPOL_POSITIVE,
--		.vd_pol = VPFE_PINPOL_POSITIVE,
--		.hd_pol = VPFE_PINPOL_POSITIVE,
--		.gain = {
--			.r_ye = 256,
--			.gb_g = 256,
--			.gr_cy = 256,
--			.b_mg = 256
--		},
--		.config_params = {
--			.datasft = 2,
--			.mfilt1 = CCDC_NO_MEDIAN_FILTER1,
--			.mfilt2 = CCDC_NO_MEDIAN_FILTER2,
--			.alaw = {
--				.gamma_wd = 2,
--			},
--			.blk_clamp = {
--				.sample_pixel = 1,
--				.dc_sub = 25
--			},
--			.col_pat_field0 = {
--				.olop = CCDC_GREEN_BLUE,
--				.olep = CCDC_BLUE,
--				.elop = CCDC_RED,
--				.elep = CCDC_GREEN_RED
--			},
--			.col_pat_field1 = {
--				.olop = CCDC_GREEN_BLUE,
--				.olep = CCDC_BLUE,
--				.elop = CCDC_RED,
--				.elep = CCDC_GREEN_RED
--			},
--		},
--	},
--	/* YCbCr configuration */
--	.ycbcr = {
--		.win = CCDC_WIN_PAL,
--		.pix_fmt = CCDC_PIXFMT_YCBCR_8BIT,
--		.frm_fmt = CCDC_FRMFMT_INTERLACED,
--		.fid_pol = VPFE_PINPOL_POSITIVE,
--		.vd_pol = VPFE_PINPOL_POSITIVE,
--		.hd_pol = VPFE_PINPOL_POSITIVE,
--		.bt656_enable = 1,
--		.pix_order = CCDC_PIXORDER_CBYCRY,
--		.buf_type = CCDC_BUFTYPE_FLD_INTERLEAVED
--	},
--};
--
--
--/* Raw Bayer formats */
--static u32 ccdc_raw_bayer_pix_formats[] =
--		{V4L2_PIX_FMT_SBGGR8, V4L2_PIX_FMT_SBGGR16};
--
--/* Raw YUV formats */
--static u32 ccdc_raw_yuv_pix_formats[] =
--		{V4L2_PIX_FMT_UYVY, V4L2_PIX_FMT_YUYV};
--
--/* register access routines */
--static inline u32 regr(u32 offset)
--{
--	return __raw_readl(ccdc_cfg.base_addr + offset);
--}
--
--static inline void regw(u32 val, u32 offset)
--{
--	__raw_writel(val, ccdc_cfg.base_addr + offset);
--}
--
--static void ccdc_enable(int en)
--{
--	unsigned int temp;
--	temp = regr(SYNCEN);
--	temp &= (~CCDC_SYNCEN_VDHDEN_MASK);
--	temp |= (en & CCDC_SYNCEN_VDHDEN_MASK);
--	regw(temp, SYNCEN);
--}
--
--static void ccdc_enable_output_to_sdram(int en)
--{
--	unsigned int temp;
--	temp = regr(SYNCEN);
--	temp &= (~(CCDC_SYNCEN_WEN_MASK));
--	temp |= ((en << CCDC_SYNCEN_WEN_SHIFT) & CCDC_SYNCEN_WEN_MASK);
--	regw(temp, SYNCEN);
--}
--
--static void ccdc_config_gain_offset(void)
--{
--	/* configure gain */
--	regw(ccdc_cfg.bayer.gain.r_ye, RYEGAIN);
--	regw(ccdc_cfg.bayer.gain.gr_cy, GRCYGAIN);
--	regw(ccdc_cfg.bayer.gain.gb_g, GBGGAIN);
--	regw(ccdc_cfg.bayer.gain.b_mg, BMGGAIN);
--	/* configure offset */
--	regw(ccdc_cfg.bayer.ccdc_offset, OFFSET);
--}
--
--/*
-- * ccdc_restore_defaults()
-- * This function restore power on defaults in the ccdc registers
-- */
--static int ccdc_restore_defaults(void)
--{
--	int i;
--
--	dev_dbg(ccdc_cfg.dev, "\nstarting ccdc_restore_defaults...");
--	/* set all registers to zero */
--	for (i = 0; i <= CCDC_REG_LAST; i += 4)
--		regw(0, i);
--
--	/* now override the values with power on defaults in registers */
--	regw(MODESET_DEFAULT, MODESET);
--	/* no culling support */
--	regw(CULH_DEFAULT, CULH);
--	regw(CULV_DEFAULT, CULV);
--	/* Set default Gain and Offset */
--	ccdc_cfg.bayer.gain.r_ye = GAIN_DEFAULT;
--	ccdc_cfg.bayer.gain.gb_g = GAIN_DEFAULT;
--	ccdc_cfg.bayer.gain.gr_cy = GAIN_DEFAULT;
--	ccdc_cfg.bayer.gain.b_mg = GAIN_DEFAULT;
--	ccdc_config_gain_offset();
--	regw(OUTCLIP_DEFAULT, OUTCLIP);
--	regw(LSCCFG2_DEFAULT, LSCCFG2);
--	/* select ccdc input */
--	if (vpss_select_ccdc_source(VPSS_CCDCIN)) {
--		dev_dbg(ccdc_cfg.dev, "\ncouldn't select ccdc input source");
--		return -EFAULT;
--	}
--	/* select ccdc clock */
--	if (vpss_enable_clock(VPSS_CCDC_CLOCK, 1) < 0) {
--		dev_dbg(ccdc_cfg.dev, "\ncouldn't enable ccdc clock");
--		return -EFAULT;
--	}
--	dev_dbg(ccdc_cfg.dev, "\nEnd of ccdc_restore_defaults...");
--	return 0;
--}
--
--static int ccdc_open(struct device *device)
--{
--	return ccdc_restore_defaults();
--}
--
--static int ccdc_close(struct device *device)
--{
--	/* disable clock */
--	vpss_enable_clock(VPSS_CCDC_CLOCK, 0);
--	/* do nothing for now */
--	return 0;
--}
--/*
-- * ccdc_setwin()
-- * This function will configure the window size to
-- * be capture in CCDC reg.
-- */
--static void ccdc_setwin(struct v4l2_rect *image_win,
--			enum ccdc_frmfmt frm_fmt, int ppc)
--{
--	int horz_start, horz_nr_pixels;
--	int vert_start, vert_nr_lines;
--	int mid_img = 0;
--
--	dev_dbg(ccdc_cfg.dev, "\nStarting ccdc_setwin...");
--
--	/*
--	 * ppc - per pixel count. indicates how many pixels per cell
--	 * output to SDRAM. example, for ycbcr, it is one y and one c, so 2.
--	 * raw capture this is 1
--	 */
--	horz_start = image_win->left << (ppc - 1);
--	horz_nr_pixels = ((image_win->width) << (ppc - 1)) - 1;
--
--	/* Writing the horizontal info into the registers */
--	regw(horz_start, SPH);
--	regw(horz_nr_pixels, NPH);
--	vert_start = image_win->top;
--
--	if (frm_fmt == CCDC_FRMFMT_INTERLACED) {
--		vert_nr_lines = (image_win->height >> 1) - 1;
--		vert_start >>= 1;
--		/* Since first line doesn't have any data */
--		vert_start += 1;
--		/* configure VDINT0 and VDINT1 */
--		regw(vert_start, VDINT0);
--	} else {
--		/* Since first line doesn't have any data */
--		vert_start += 1;
--		vert_nr_lines = image_win->height - 1;
--		/* configure VDINT0 and VDINT1 */
--		mid_img = vert_start + (image_win->height / 2);
--		regw(vert_start, VDINT0);
--		regw(mid_img, VDINT1);
--	}
--	regw(vert_start & CCDC_START_VER_ONE_MASK, SLV0);
--	regw(vert_start & CCDC_START_VER_TWO_MASK, SLV1);
--	regw(vert_nr_lines & CCDC_NUM_LINES_VER, NLV);
--	dev_dbg(ccdc_cfg.dev, "\nEnd of ccdc_setwin...");
--}
--
--/* This function will configure CCDC for YCbCr video capture */
--static void ccdc_config_ycbcr(void)
--{
--	struct ccdc_params_ycbcr *params = &ccdc_cfg.ycbcr;
--	u32 temp;
--
--	/* first set the CCDC power on defaults values in all registers */
--	dev_dbg(ccdc_cfg.dev, "\nStarting ccdc_config_ycbcr...");
--	ccdc_restore_defaults();
--
--	/* configure pixel format & video frame format */
--	temp = (((params->pix_fmt & CCDC_INPUT_MODE_MASK) <<
--		CCDC_INPUT_MODE_SHIFT) |
--		((params->frm_fmt & CCDC_FRM_FMT_MASK) <<
--		CCDC_FRM_FMT_SHIFT));
--
--	/* setup BT.656 sync mode */
--	if (params->bt656_enable) {
--		regw(CCDC_REC656IF_BT656_EN, REC656IF);
--		/*
--		 * configure the FID, VD, HD pin polarity fld,hd pol positive,
--		 * vd negative, 8-bit pack mode
--		 */
--		temp |= CCDC_VD_POL_NEGATIVE;
--	} else {		/* y/c external sync mode */
--		temp |= (((params->fid_pol & CCDC_FID_POL_MASK) <<
--			CCDC_FID_POL_SHIFT) |
--			((params->hd_pol & CCDC_HD_POL_MASK) <<
--			CCDC_HD_POL_SHIFT) |
--			((params->vd_pol & CCDC_VD_POL_MASK) <<
--			CCDC_VD_POL_SHIFT));
--	}
--
--	/* pack the data to 8-bit */
--	temp |= CCDC_DATA_PACK_ENABLE;
--
--	regw(temp, MODESET);
--
--	/* configure video window */
--	ccdc_setwin(&params->win, params->frm_fmt, 2);
--
--	/* configure the order of y cb cr in SD-RAM */
--	temp = (params->pix_order << CCDC_Y8POS_SHIFT);
--	temp |= CCDC_LATCH_ON_VSYNC_DISABLE | CCDC_CCDCFG_FIDMD_NO_LATCH_VSYNC;
--	regw(temp, CCDCFG);
--
--	/*
--	 * configure the horizontal line offset. This is done by rounding up
--	 * width to a multiple of 16 pixels and multiply by two to account for
--	 * y:cb:cr 4:2:2 data
--	 */
--	regw(((params->win.width * 2 + 31) >> 5), HSIZE);
--
--	/* configure the memory line offset */
--	if (params->buf_type == CCDC_BUFTYPE_FLD_INTERLEAVED) {
--		/* two fields are interleaved in memory */
--		regw(CCDC_SDOFST_FIELD_INTERLEAVED, SDOFST);
--	}
--
--	dev_dbg(ccdc_cfg.dev, "\nEnd of ccdc_config_ycbcr...\n");
--}
--
--/*
-- * ccdc_config_black_clamp()
-- * configure parameters for Optical Black Clamp
-- */
--static void ccdc_config_black_clamp(struct ccdc_black_clamp *bclamp)
--{
--	u32 val;
--
--	if (!bclamp->b_clamp_enable) {
--		/* configure DCSub */
--		regw(bclamp->dc_sub & CCDC_BLK_DC_SUB_MASK, DCSUB);
--		regw(0x0000, CLAMP);
--		return;
--	}
--	/* Enable the Black clamping, set sample lines and pixels */
--	val = (bclamp->start_pixel & CCDC_BLK_ST_PXL_MASK) |
--	      ((bclamp->sample_pixel & CCDC_BLK_SAMPLE_LN_MASK) <<
--		CCDC_BLK_SAMPLE_LN_SHIFT) | CCDC_BLK_CLAMP_ENABLE;
--	regw(val, CLAMP);
--
--	/* If Black clamping is enable then make dcsub 0 */
--	val = (bclamp->sample_ln & CCDC_NUM_LINE_CALC_MASK)
--			<< CCDC_NUM_LINE_CALC_SHIFT;
--	regw(val, DCSUB);
--}
--
--/*
-- * ccdc_config_black_compense()
-- * configure parameters for Black Compensation
-- */
--static void ccdc_config_black_compense(struct ccdc_black_compensation *bcomp)
--{
--	u32 val;
--
--	val = (bcomp->b & CCDC_BLK_COMP_MASK) |
--		((bcomp->gb & CCDC_BLK_COMP_MASK) <<
--		CCDC_BLK_COMP_GB_COMP_SHIFT);
--	regw(val, BLKCMP1);
--
--	val = ((bcomp->gr & CCDC_BLK_COMP_MASK) <<
--		CCDC_BLK_COMP_GR_COMP_SHIFT) |
--		((bcomp->r & CCDC_BLK_COMP_MASK) <<
--		CCDC_BLK_COMP_R_COMP_SHIFT);
--	regw(val, BLKCMP0);
--}
--
--/*
-- * ccdc_write_dfc_entry()
-- * write an entry in the dfc table.
-- */
--static int ccdc_write_dfc_entry(int index, struct ccdc_vertical_dft *dfc)
--{
--/* TODO This is to be re-visited and adjusted */
--#define DFC_WRITE_WAIT_COUNT	1000
--	u32 val, count = DFC_WRITE_WAIT_COUNT;
--
--	regw(dfc->dft_corr_vert[index], DFCMEM0);
--	regw(dfc->dft_corr_horz[index], DFCMEM1);
--	regw(dfc->dft_corr_sub1[index], DFCMEM2);
--	regw(dfc->dft_corr_sub2[index], DFCMEM3);
--	regw(dfc->dft_corr_sub3[index], DFCMEM4);
--	/* set WR bit to write */
--	val = regr(DFCMEMCTL) | CCDC_DFCMEMCTL_DFCMWR_MASK;
--	regw(val, DFCMEMCTL);
--
--	/*
--	 * Assume, it is very short. If we get an error, we need to
--	 * adjust this value
--	 */
--	while (regr(DFCMEMCTL) & CCDC_DFCMEMCTL_DFCMWR_MASK)
--		count--;
--	/*
--	 * TODO We expect the count to be non-zero to be successful. Adjust
--	 * the count if write requires more time
--	 */
--
--	if (count) {
--		dev_err(ccdc_cfg.dev, "defect table write timeout !!!\n");
--		return -1;
--	}
--	return 0;
--}
--
--/*
-- * ccdc_config_vdfc()
-- * configure parameters for Vertical Defect Correction
-- */
--static int ccdc_config_vdfc(struct ccdc_vertical_dft *dfc)
--{
--	u32 val;
--	int i;
--
--	/* Configure General Defect Correction. The table used is from IPIPE */
--	val = dfc->gen_dft_en & CCDC_DFCCTL_GDFCEN_MASK;
--
--	/* Configure Vertical Defect Correction if needed */
--	if (!dfc->ver_dft_en) {
--		/* Enable only General Defect Correction */
--		regw(val, DFCCTL);
--		return 0;
--	}
--
--	if (dfc->table_size > CCDC_DFT_TABLE_SIZE)
--		return -EINVAL;
--
--	val |= CCDC_DFCCTL_VDFC_DISABLE;
--	val |= (dfc->dft_corr_ctl.vdfcsl & CCDC_DFCCTL_VDFCSL_MASK) <<
--		CCDC_DFCCTL_VDFCSL_SHIFT;
--	val |= (dfc->dft_corr_ctl.vdfcuda & CCDC_DFCCTL_VDFCUDA_MASK) <<
--		CCDC_DFCCTL_VDFCUDA_SHIFT;
--	val |= (dfc->dft_corr_ctl.vdflsft & CCDC_DFCCTL_VDFLSFT_MASK) <<
--		CCDC_DFCCTL_VDFLSFT_SHIFT;
--	regw(val , DFCCTL);
--
--	/* clear address ptr to offset 0 */
--	val = CCDC_DFCMEMCTL_DFCMARST_MASK << CCDC_DFCMEMCTL_DFCMARST_SHIFT;
--
--	/* write defect table entries */
--	for (i = 0; i < dfc->table_size; i++) {
--		/* increment address for non zero index */
--		if (i != 0)
--			val = CCDC_DFCMEMCTL_INC_ADDR;
--		regw(val, DFCMEMCTL);
--		if (ccdc_write_dfc_entry(i, dfc) < 0)
--			return -EFAULT;
--	}
--
--	/* update saturation level and enable dfc */
--	regw(dfc->saturation_ctl & CCDC_VDC_DFCVSAT_MASK, DFCVSAT);
--	val = regr(DFCCTL) | (CCDC_DFCCTL_VDFCEN_MASK <<
--			CCDC_DFCCTL_VDFCEN_SHIFT);
--	regw(val, DFCCTL);
--	return 0;
--}
--
--/*
-- * ccdc_config_csc()
-- * configure parameters for color space conversion
-- * Each register CSCM0-7 has two values in S8Q5 format.
-- */
--static void ccdc_config_csc(struct ccdc_csc *csc)
--{
--	u32 val1 = 0, val2;
--	int i;
--
--	if (!csc->enable)
--		return;
--
--	/* Enable the CSC sub-module */
--	regw(CCDC_CSC_ENABLE, CSCCTL);
--
--	/* Converting the co-eff as per the format of the register */
--	for (i = 0; i < CCDC_CSC_COEFF_TABLE_SIZE; i++) {
--		if ((i % 2) == 0) {
--			/* CSCM - LSB */
--			val1 = (csc->coeff[i].integer &
--				CCDC_CSC_COEF_INTEG_MASK)
--				<< CCDC_CSC_COEF_INTEG_SHIFT;
--			/*
--			 * convert decimal part to binary. Use 2 decimal
--			 * precision, user values range from .00 - 0.99
--			 */
--			val1 |= (((csc->coeff[i].decimal &
--				CCDC_CSC_COEF_DECIMAL_MASK) *
--				CCDC_CSC_DEC_MAX) / 100);
--		} else {
--
--			/* CSCM - MSB */
--			val2 = (csc->coeff[i].integer &
--				CCDC_CSC_COEF_INTEG_MASK)
--				<< CCDC_CSC_COEF_INTEG_SHIFT;
--			val2 |= (((csc->coeff[i].decimal &
--				 CCDC_CSC_COEF_DECIMAL_MASK) *
--				 CCDC_CSC_DEC_MAX) / 100);
--			val2 <<= CCDC_CSCM_MSB_SHIFT;
--			val2 |= val1;
--			regw(val2, (CSCM0 + ((i - 1) << 1)));
--		}
--	}
--}
--
--/*
-- * ccdc_config_color_patterns()
-- * configure parameters for color patterns
-- */
--static void ccdc_config_color_patterns(struct ccdc_col_pat *pat0,
--				       struct ccdc_col_pat *pat1)
--{
--	u32 val;
--
--	val = (pat0->olop | (pat0->olep << 2) | (pat0->elop << 4) |
--		(pat0->elep << 6) | (pat1->olop << 8) | (pat1->olep << 10) |
--		(pat1->elop << 12) | (pat1->elep << 14));
--	regw(val, COLPTN);
--}
--
--/* This function will configure CCDC for Raw mode image capture */
--static int ccdc_config_raw(void)
--{
--	struct ccdc_params_raw *params = &ccdc_cfg.bayer;
--	struct ccdc_config_params_raw *config_params =
--					&ccdc_cfg.bayer.config_params;
--	unsigned int val;
--
--	dev_dbg(ccdc_cfg.dev, "\nStarting ccdc_config_raw...");
--
--	/* restore power on defaults to register */
--	ccdc_restore_defaults();
--
--	/* CCDCFG register:
--	 * set CCD Not to swap input since input is RAW data
--	 * set FID detection function to Latch at V-Sync
--	 * set WENLOG - ccdc valid area to AND
--	 * set TRGSEL to WENBIT
--	 * set EXTRG to DISABLE
--	 * disable latching function on VSYNC - shadowed registers
--	 */
--	regw(CCDC_YCINSWP_RAW | CCDC_CCDCFG_FIDMD_LATCH_VSYNC |
--	     CCDC_CCDCFG_WENLOG_AND | CCDC_CCDCFG_TRGSEL_WEN |
--	     CCDC_CCDCFG_EXTRG_DISABLE | CCDC_LATCH_ON_VSYNC_DISABLE, CCDCFG);
--
--	/*
--	 * Set VDHD direction to input,  input type to raw input
--	 * normal data polarity, do not use external WEN
--	 */
--	val = (CCDC_VDHDOUT_INPUT | CCDC_RAW_IP_MODE | CCDC_DATAPOL_NORMAL |
--		CCDC_EXWEN_DISABLE);
--
--	/*
--	 * Configure the vertical sync polarity (MODESET.VDPOL), horizontal
--	 * sync polarity (MODESET.HDPOL), field id polarity (MODESET.FLDPOL),
--	 * frame format(progressive or interlace), & pixel format (Input mode)
--	 */
--	val |= (((params->vd_pol & CCDC_VD_POL_MASK) << CCDC_VD_POL_SHIFT) |
--		((params->hd_pol & CCDC_HD_POL_MASK) << CCDC_HD_POL_SHIFT) |
--		((params->fid_pol & CCDC_FID_POL_MASK) << CCDC_FID_POL_SHIFT) |
--		((params->frm_fmt & CCDC_FRM_FMT_MASK) << CCDC_FRM_FMT_SHIFT) |
--		((params->pix_fmt & CCDC_PIX_FMT_MASK) << CCDC_PIX_FMT_SHIFT));
--
--	/* set pack for alaw compression */
--	if ((config_params->data_sz == CCDC_DATA_8BITS) ||
--	     config_params->alaw.enable)
--		val |= CCDC_DATA_PACK_ENABLE;
--
--	/* Configure for LPF */
--	if (config_params->lpf_enable)
--		val |= (config_params->lpf_enable & CCDC_LPF_MASK) <<
--			CCDC_LPF_SHIFT;
--
--	/* Configure the data shift */
--	val |= (config_params->datasft & CCDC_DATASFT_MASK) <<
--		CCDC_DATASFT_SHIFT;
--	regw(val , MODESET);
--	dev_dbg(ccdc_cfg.dev, "\nWriting 0x%x to MODESET...\n", val);
--
--	/* Configure the Median Filter threshold */
--	regw((config_params->med_filt_thres) & CCDC_MED_FILT_THRESH, MEDFILT);
--
--	/* Configure GAMMAWD register. defaur 11-2, and Mosaic cfa pattern */
--	val = CCDC_GAMMA_BITS_11_2 << CCDC_GAMMAWD_INPUT_SHIFT |
--		CCDC_CFA_MOSAIC;
--
--	/* Enable and configure aLaw register if needed */
--	if (config_params->alaw.enable) {
--		val |= (CCDC_ALAW_ENABLE |
--			((config_params->alaw.gamma_wd &
--			CCDC_ALAW_GAMMA_WD_MASK) <<
--			CCDC_GAMMAWD_INPUT_SHIFT));
--	}
--
--	/* Configure Median filter1 & filter2 */
--	val |= ((config_params->mfilt1 << CCDC_MFILT1_SHIFT) |
--		(config_params->mfilt2 << CCDC_MFILT2_SHIFT));
--
--	regw(val, GAMMAWD);
--	dev_dbg(ccdc_cfg.dev, "\nWriting 0x%x to GAMMAWD...\n", val);
--
--	/* configure video window */
--	ccdc_setwin(&params->win, params->frm_fmt, 1);
--
--	/* Optical Clamp Averaging */
--	ccdc_config_black_clamp(&config_params->blk_clamp);
--
--	/* Black level compensation */
--	ccdc_config_black_compense(&config_params->blk_comp);
--
--	/* Vertical Defect Correction if needed */
--	if (ccdc_config_vdfc(&config_params->vertical_dft) < 0)
--		return -EFAULT;
--
--	/* color space conversion */
--	ccdc_config_csc(&config_params->csc);
--
--	/* color pattern */
--	ccdc_config_color_patterns(&config_params->col_pat_field0,
--				   &config_params->col_pat_field1);
--
--	/* Configure the Gain  & offset control */
--	ccdc_config_gain_offset();
--
--	dev_dbg(ccdc_cfg.dev, "\nWriting %x to COLPTN...\n", val);
--
--	/* Configure DATAOFST  register */
--	val = (config_params->data_offset.horz_offset & CCDC_DATAOFST_MASK) <<
--		CCDC_DATAOFST_H_SHIFT;
--	val |= (config_params->data_offset.vert_offset & CCDC_DATAOFST_MASK) <<
--		CCDC_DATAOFST_V_SHIFT;
--	regw(val, DATAOFST);
--
--	/* configuring HSIZE register */
--	val = (params->horz_flip_enable & CCDC_HSIZE_FLIP_MASK) <<
--		CCDC_HSIZE_FLIP_SHIFT;
--
--	/* If pack 8 is enable then 1 pixel will take 1 byte */
--	if ((config_params->data_sz == CCDC_DATA_8BITS) ||
--	     config_params->alaw.enable) {
--		val |= (((params->win.width) + 31) >> 5) &
--			CCDC_HSIZE_VAL_MASK;
--
--		/* adjust to multiple of 32 */
--		dev_dbg(ccdc_cfg.dev, "\nWriting 0x%x to HSIZE...\n",
--		       (((params->win.width) + 31) >> 5) &
--			CCDC_HSIZE_VAL_MASK);
--	} else {
--		/* else one pixel will take 2 byte */
--		val |= (((params->win.width * 2) + 31) >> 5) &
--			CCDC_HSIZE_VAL_MASK;
--
--		dev_dbg(ccdc_cfg.dev, "\nWriting 0x%x to HSIZE...\n",
--		       (((params->win.width * 2) + 31) >> 5) &
--			CCDC_HSIZE_VAL_MASK);
--	}
--	regw(val, HSIZE);
--
--	/* Configure SDOFST register */
--	if (params->frm_fmt == CCDC_FRMFMT_INTERLACED) {
--		if (params->image_invert_enable) {
--			/* For interlace inverse mode */
--			regw(CCDC_SDOFST_INTERLACE_INVERSE, SDOFST);
--			dev_dbg(ccdc_cfg.dev, "\nWriting %x to SDOFST...\n",
--				CCDC_SDOFST_INTERLACE_INVERSE);
--		} else {
--			/* For interlace non inverse mode */
--			regw(CCDC_SDOFST_INTERLACE_NORMAL, SDOFST);
--			dev_dbg(ccdc_cfg.dev, "\nWriting %x to SDOFST...\n",
--				CCDC_SDOFST_INTERLACE_NORMAL);
--		}
--	} else if (params->frm_fmt == CCDC_FRMFMT_PROGRESSIVE) {
--		if (params->image_invert_enable) {
--			/* For progessive inverse mode */
--			regw(CCDC_SDOFST_PROGRESSIVE_INVERSE, SDOFST);
--			dev_dbg(ccdc_cfg.dev, "\nWriting %x to SDOFST...\n",
--				CCDC_SDOFST_PROGRESSIVE_INVERSE);
--		} else {
--			/* For progessive non inverse mode */
--			regw(CCDC_SDOFST_PROGRESSIVE_NORMAL, SDOFST);
--			dev_dbg(ccdc_cfg.dev, "\nWriting %x to SDOFST...\n",
--				CCDC_SDOFST_PROGRESSIVE_NORMAL);
--		}
--	}
--	dev_dbg(ccdc_cfg.dev, "\nend of ccdc_config_raw...");
--	return 0;
--}
--
--static int ccdc_configure(void)
--{
--	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
--		return ccdc_config_raw();
--	else
--		ccdc_config_ycbcr();
--	return 0;
--}
--
--static int ccdc_set_buftype(enum ccdc_buftype buf_type)
--{
--	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
--		ccdc_cfg.bayer.buf_type = buf_type;
--	else
--		ccdc_cfg.ycbcr.buf_type = buf_type;
--	return 0;
--}
--static enum ccdc_buftype ccdc_get_buftype(void)
--{
--	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
--		return ccdc_cfg.bayer.buf_type;
--	return ccdc_cfg.ycbcr.buf_type;
--}
--
--static int ccdc_enum_pix(u32 *pix, int i)
--{
--	int ret = -EINVAL;
--	if (ccdc_cfg.if_type == VPFE_RAW_BAYER) {
--		if (i < ARRAY_SIZE(ccdc_raw_bayer_pix_formats)) {
--			*pix = ccdc_raw_bayer_pix_formats[i];
--			ret = 0;
--		}
--	} else {
--		if (i < ARRAY_SIZE(ccdc_raw_yuv_pix_formats)) {
--			*pix = ccdc_raw_yuv_pix_formats[i];
--			ret = 0;
--		}
--	}
--	return ret;
--}
--
--static int ccdc_set_pixel_format(u32 pixfmt)
--{
--	struct ccdc_a_law *alaw = &ccdc_cfg.bayer.config_params.alaw;
--
--	if (ccdc_cfg.if_type == VPFE_RAW_BAYER) {
--		ccdc_cfg.bayer.pix_fmt = CCDC_PIXFMT_RAW;
--		if (pixfmt == V4L2_PIX_FMT_SBGGR8)
--			alaw->enable = 1;
--		else if (pixfmt != V4L2_PIX_FMT_SBGGR16)
--			return -EINVAL;
--	} else {
--		if (pixfmt == V4L2_PIX_FMT_YUYV)
--			ccdc_cfg.ycbcr.pix_order = CCDC_PIXORDER_YCBYCR;
--		else if (pixfmt == V4L2_PIX_FMT_UYVY)
--			ccdc_cfg.ycbcr.pix_order = CCDC_PIXORDER_CBYCRY;
--		else
--			return -EINVAL;
--	}
--	return 0;
--}
--static u32 ccdc_get_pixel_format(void)
--{
--	struct ccdc_a_law *alaw = &ccdc_cfg.bayer.config_params.alaw;
--	u32 pixfmt;
--
--	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
--		if (alaw->enable)
--			pixfmt = V4L2_PIX_FMT_SBGGR8;
--		else
--			pixfmt = V4L2_PIX_FMT_SBGGR16;
--	else {
--		if (ccdc_cfg.ycbcr.pix_order == CCDC_PIXORDER_YCBYCR)
--			pixfmt = V4L2_PIX_FMT_YUYV;
--		else
--			pixfmt = V4L2_PIX_FMT_UYVY;
--	}
--	return pixfmt;
--}
--static int ccdc_set_image_window(struct v4l2_rect *win)
--{
--	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
--		ccdc_cfg.bayer.win = *win;
--	else
--		ccdc_cfg.ycbcr.win = *win;
--	return 0;
--}
--
--static void ccdc_get_image_window(struct v4l2_rect *win)
--{
--	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
--		*win = ccdc_cfg.bayer.win;
--	else
--		*win = ccdc_cfg.ycbcr.win;
--}
--
--static unsigned int ccdc_get_line_length(void)
--{
--	struct ccdc_config_params_raw *config_params =
--				&ccdc_cfg.bayer.config_params;
--	unsigned int len;
--
--	if (ccdc_cfg.if_type == VPFE_RAW_BAYER) {
--		if ((config_params->alaw.enable) ||
--		    (config_params->data_sz == CCDC_DATA_8BITS))
--			len = ccdc_cfg.bayer.win.width;
--		else
--			len = ccdc_cfg.bayer.win.width * 2;
--	} else
--		len = ccdc_cfg.ycbcr.win.width * 2;
--	return ALIGN(len, 32);
--}
--
--static int ccdc_set_frame_format(enum ccdc_frmfmt frm_fmt)
--{
--	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
--		ccdc_cfg.bayer.frm_fmt = frm_fmt;
--	else
--		ccdc_cfg.ycbcr.frm_fmt = frm_fmt;
--	return 0;
--}
--
--static enum ccdc_frmfmt ccdc_get_frame_format(void)
--{
--	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
--		return ccdc_cfg.bayer.frm_fmt;
--	else
--		return ccdc_cfg.ycbcr.frm_fmt;
--}
--
--static int ccdc_getfid(void)
--{
--	return  (regr(MODESET) >> 15) & 1;
--}
--
--/* misc operations */
--static inline void ccdc_setfbaddr(unsigned long addr)
--{
--	regw((addr >> 21) & 0x007f, STADRH);
--	regw((addr >> 5) & 0x0ffff, STADRL);
--}
--
--static int ccdc_set_hw_if_params(struct vpfe_hw_if_param *params)
--{
--	ccdc_cfg.if_type = params->if_type;
--
--	switch (params->if_type) {
--	case VPFE_BT656:
--	case VPFE_YCBCR_SYNC_16:
--	case VPFE_YCBCR_SYNC_8:
--		ccdc_cfg.ycbcr.vd_pol = params->vdpol;
--		ccdc_cfg.ycbcr.hd_pol = params->hdpol;
--		break;
--	default:
--		/* TODO add support for raw bayer here */
--		return -EINVAL;
--	}
--	return 0;
--}
--
--static const struct ccdc_hw_device ccdc_hw_dev = {
--	.name = "DM355 CCDC",
--	.owner = THIS_MODULE,
--	.hw_ops = {
--		.open = ccdc_open,
--		.close = ccdc_close,
--		.enable = ccdc_enable,
--		.enable_out_to_sdram = ccdc_enable_output_to_sdram,
--		.set_hw_if_params = ccdc_set_hw_if_params,
--		.configure = ccdc_configure,
--		.set_buftype = ccdc_set_buftype,
--		.get_buftype = ccdc_get_buftype,
--		.enum_pix = ccdc_enum_pix,
--		.set_pixel_format = ccdc_set_pixel_format,
--		.get_pixel_format = ccdc_get_pixel_format,
--		.set_frame_format = ccdc_set_frame_format,
--		.get_frame_format = ccdc_get_frame_format,
--		.set_image_window = ccdc_set_image_window,
--		.get_image_window = ccdc_get_image_window,
--		.get_line_length = ccdc_get_line_length,
--		.setfbaddr = ccdc_setfbaddr,
--		.getfid = ccdc_getfid,
--	},
--};
--
--static int dm355_ccdc_probe(struct platform_device *pdev)
--{
--	void (*setup_pinmux)(void);
--	struct resource	*res;
--	int status = 0;
--
--	/*
--	 * first try to register with vpfe. If not correct platform, then we
--	 * don't have to iomap
--	 */
--	status = vpfe_register_ccdc_device(&ccdc_hw_dev);
--	if (status < 0)
--		return status;
--
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	if (!res) {
--		status = -ENODEV;
--		goto fail_nores;
--	}
--
--	res = request_mem_region(res->start, resource_size(res), res->name);
--	if (!res) {
--		status = -EBUSY;
--		goto fail_nores;
--	}
--
--	ccdc_cfg.base_addr = ioremap(res->start, resource_size(res));
--	if (!ccdc_cfg.base_addr) {
--		status = -ENOMEM;
--		goto fail_nomem;
--	}
--
--	/* Platform data holds setup_pinmux function ptr */
--	if (NULL == pdev->dev.platform_data) {
--		status = -ENODEV;
--		goto fail_nomap;
--	}
--	setup_pinmux = pdev->dev.platform_data;
--	/*
--	 * setup Mux configuration for ccdc which may be different for
--	 * different SoCs using this CCDC
--	 */
--	setup_pinmux();
--	ccdc_cfg.dev = &pdev->dev;
--	printk(KERN_NOTICE "%s is registered with vpfe.\n", ccdc_hw_dev.name);
--	return 0;
--fail_nomap:
--	iounmap(ccdc_cfg.base_addr);
--fail_nomem:
--	release_mem_region(res->start, resource_size(res));
--fail_nores:
--	vpfe_unregister_ccdc_device(&ccdc_hw_dev);
--	return status;
--}
--
--static int dm355_ccdc_remove(struct platform_device *pdev)
--{
--	struct resource	*res;
--
--	iounmap(ccdc_cfg.base_addr);
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	release_mem_region(res->start, resource_size(res));
--	vpfe_unregister_ccdc_device(&ccdc_hw_dev);
--	return 0;
--}
--
--static struct platform_driver dm355_ccdc_driver = {
--	.driver = {
--		.name	= "dm355_ccdc",
--	},
--	.remove = dm355_ccdc_remove,
--	.probe = dm355_ccdc_probe,
--};
--
--module_platform_driver(dm355_ccdc_driver);
-diff --git a/drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc.h b/drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc.h
-deleted file mode 100644
-index 1f3d00aa46d1..000000000000
---- a/drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc.h
-+++ /dev/null
-@@ -1,308 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-or-later */
--/*
-- * Copyright (C) 2005-2009 Texas Instruments Inc
-- */
--#ifndef _DM355_CCDC_H
--#define _DM355_CCDC_H
--#include <media/davinci/ccdc_types.h>
--#include <media/davinci/vpfe_types.h>
--
--/* enum for No of pixel per line to be avg. in Black Clamping */
--enum ccdc_sample_length {
--	CCDC_SAMPLE_1PIXELS,
--	CCDC_SAMPLE_2PIXELS,
--	CCDC_SAMPLE_4PIXELS,
--	CCDC_SAMPLE_8PIXELS,
--	CCDC_SAMPLE_16PIXELS
--};
--
--/* enum for No of lines in Black Clamping */
--enum ccdc_sample_line {
--	CCDC_SAMPLE_1LINES,
--	CCDC_SAMPLE_2LINES,
--	CCDC_SAMPLE_4LINES,
--	CCDC_SAMPLE_8LINES,
--	CCDC_SAMPLE_16LINES
--};
--
--/* enum for Alaw gamma width */
--enum ccdc_gamma_width {
--	CCDC_GAMMA_BITS_13_4,
--	CCDC_GAMMA_BITS_12_3,
--	CCDC_GAMMA_BITS_11_2,
--	CCDC_GAMMA_BITS_10_1,
--	CCDC_GAMMA_BITS_09_0
--};
--
--enum ccdc_colpats {
--	CCDC_RED,
--	CCDC_GREEN_RED,
--	CCDC_GREEN_BLUE,
--	CCDC_BLUE
--};
--
--struct ccdc_col_pat {
--	enum ccdc_colpats olop;
--	enum ccdc_colpats olep;
--	enum ccdc_colpats elop;
--	enum ccdc_colpats elep;
--};
--
--enum ccdc_datasft {
--	CCDC_DATA_NO_SHIFT,
--	CCDC_DATA_SHIFT_1BIT,
--	CCDC_DATA_SHIFT_2BIT,
--	CCDC_DATA_SHIFT_3BIT,
--	CCDC_DATA_SHIFT_4BIT,
--	CCDC_DATA_SHIFT_5BIT,
--	CCDC_DATA_SHIFT_6BIT
--};
--
--enum ccdc_data_size {
--	CCDC_DATA_16BITS,
--	CCDC_DATA_15BITS,
--	CCDC_DATA_14BITS,
--	CCDC_DATA_13BITS,
--	CCDC_DATA_12BITS,
--	CCDC_DATA_11BITS,
--	CCDC_DATA_10BITS,
--	CCDC_DATA_8BITS
--};
--enum ccdc_mfilt1 {
--	CCDC_NO_MEDIAN_FILTER1,
--	CCDC_AVERAGE_FILTER1,
--	CCDC_MEDIAN_FILTER1
--};
--
--enum ccdc_mfilt2 {
--	CCDC_NO_MEDIAN_FILTER2,
--	CCDC_AVERAGE_FILTER2,
--	CCDC_MEDIAN_FILTER2
--};
--
--/* structure for ALaw */
--struct ccdc_a_law {
--	/* Enable/disable A-Law */
--	unsigned char enable;
--	/* Gamma Width Input */
--	enum ccdc_gamma_width gamma_wd;
--};
--
--/* structure for Black Clamping */
--struct ccdc_black_clamp {
--	/* only if bClampEnable is TRUE */
--	unsigned char b_clamp_enable;
--	/* only if bClampEnable is TRUE */
--	enum ccdc_sample_length sample_pixel;
--	/* only if bClampEnable is TRUE */
--	enum ccdc_sample_line sample_ln;
--	/* only if bClampEnable is TRUE */
--	unsigned short start_pixel;
--	/* only if bClampEnable is FALSE */
--	unsigned short sgain;
--	unsigned short dc_sub;
--};
--
--/* structure for Black Level Compensation */
--struct ccdc_black_compensation {
--	/* Constant value to subtract from Red component */
--	unsigned char r;
--	/* Constant value to subtract from Gr component */
--	unsigned char gr;
--	/* Constant value to subtract from Blue component */
--	unsigned char b;
--	/* Constant value to subtract from Gb component */
--	unsigned char gb;
--};
--
--struct ccdc_float {
--	int integer;
--	unsigned int decimal;
--};
--
--#define CCDC_CSC_COEFF_TABLE_SIZE	16
--/* structure for color space converter */
--struct ccdc_csc {
--	unsigned char enable;
--	/*
--	 * S8Q5. Use 2 decimal precision, user values range from -3.00 to 3.99.
--	 * example - to use 1.03, set integer part as 1, and decimal part as 3
--	 * to use -1.03, set integer part as -1 and decimal part as 3
--	 */
--	struct ccdc_float coeff[CCDC_CSC_COEFF_TABLE_SIZE];
--};
--
--/* Structures for Vertical Defect Correction*/
--enum ccdc_vdf_csl {
--	CCDC_VDF_NORMAL,
--	CCDC_VDF_HORZ_INTERPOL_SAT,
--	CCDC_VDF_HORZ_INTERPOL
--};
--
--enum ccdc_vdf_cuda {
--	CCDC_VDF_WHOLE_LINE_CORRECT,
--	CCDC_VDF_UPPER_DISABLE
--};
--
--enum ccdc_dfc_mwr {
--	CCDC_DFC_MWR_WRITE_COMPLETE,
--	CCDC_DFC_WRITE_REG
--};
--
--enum ccdc_dfc_mrd {
--	CCDC_DFC_READ_COMPLETE,
--	CCDC_DFC_READ_REG
--};
--
--enum ccdc_dfc_ma_rst {
--	CCDC_DFC_INCR_ADDR,
--	CCDC_DFC_CLR_ADDR
--};
--
--enum ccdc_dfc_mclr {
--	CCDC_DFC_CLEAR_COMPLETE,
--	CCDC_DFC_CLEAR
--};
--
--struct ccdc_dft_corr_ctl {
--	enum ccdc_vdf_csl vdfcsl;
--	enum ccdc_vdf_cuda vdfcuda;
--	unsigned int vdflsft;
--};
--
--struct ccdc_dft_corr_mem_ctl {
--	enum ccdc_dfc_mwr dfcmwr;
--	enum ccdc_dfc_mrd dfcmrd;
--	enum ccdc_dfc_ma_rst dfcmarst;
--	enum ccdc_dfc_mclr dfcmclr;
--};
--
--#define CCDC_DFT_TABLE_SIZE	16
--/*
-- * Main Structure for vertical defect correction. Vertical defect
-- * correction can correct up to 16 defects if defects less than 16
-- * then pad the rest with 0
-- */
--struct ccdc_vertical_dft {
--	unsigned char ver_dft_en;
--	unsigned char gen_dft_en;
--	unsigned int saturation_ctl;
--	struct ccdc_dft_corr_ctl dft_corr_ctl;
--	struct ccdc_dft_corr_mem_ctl dft_corr_mem_ctl;
--	int table_size;
--	unsigned int dft_corr_horz[CCDC_DFT_TABLE_SIZE];
--	unsigned int dft_corr_vert[CCDC_DFT_TABLE_SIZE];
--	unsigned int dft_corr_sub1[CCDC_DFT_TABLE_SIZE];
--	unsigned int dft_corr_sub2[CCDC_DFT_TABLE_SIZE];
--	unsigned int dft_corr_sub3[CCDC_DFT_TABLE_SIZE];
--};
--
--struct ccdc_data_offset {
--	unsigned char horz_offset;
--	unsigned char vert_offset;
--};
--
--/*
-- * Structure for CCDC configuration parameters for raw capture mode passed
-- * by application
-- */
--struct ccdc_config_params_raw {
--	/* data shift to be applied before storing */
--	enum ccdc_datasft datasft;
--	/* data size value from 8 to 16 bits */
--	enum ccdc_data_size data_sz;
--	/* median filter for sdram */
--	enum ccdc_mfilt1 mfilt1;
--	enum ccdc_mfilt2 mfilt2;
--	/* low pass filter enable/disable */
--	unsigned char lpf_enable;
--	/* Threshold of median filter */
--	int med_filt_thres;
--	/*
--	 * horz and vertical data offset. Applicable for defect correction
--	 * and lsc
--	 */
--	struct ccdc_data_offset data_offset;
--	/* Structure for Optional A-Law */
--	struct ccdc_a_law alaw;
--	/* Structure for Optical Black Clamp */
--	struct ccdc_black_clamp blk_clamp;
--	/* Structure for Black Compensation */
--	struct ccdc_black_compensation blk_comp;
--	/* structure for vertical Defect Correction Module Configuration */
--	struct ccdc_vertical_dft vertical_dft;
--	/* structure for color space converter Module Configuration */
--	struct ccdc_csc csc;
--	/* color patters for bayer capture */
--	struct ccdc_col_pat col_pat_field0;
--	struct ccdc_col_pat col_pat_field1;
--};
--
--#ifdef __KERNEL__
--#include <linux/io.h>
--
--#define CCDC_WIN_PAL	{0, 0, 720, 576}
--#define CCDC_WIN_VGA	{0, 0, 640, 480}
--
--struct ccdc_params_ycbcr {
--	/* pixel format */
--	enum ccdc_pixfmt pix_fmt;
--	/* progressive or interlaced frame */
--	enum ccdc_frmfmt frm_fmt;
--	/* video window */
--	struct v4l2_rect win;
--	/* field id polarity */
--	enum vpfe_pin_pol fid_pol;
--	/* vertical sync polarity */
--	enum vpfe_pin_pol vd_pol;
--	/* horizontal sync polarity */
--	enum vpfe_pin_pol hd_pol;
--	/* enable BT.656 embedded sync mode */
--	int bt656_enable;
--	/* cb:y:cr:y or y:cb:y:cr in memory */
--	enum ccdc_pixorder pix_order;
--	/* interleaved or separated fields  */
--	enum ccdc_buftype buf_type;
--};
--
--/* Gain applied to Raw Bayer data */
--struct ccdc_gain {
--	unsigned short r_ye;
--	unsigned short gr_cy;
--	unsigned short gb_g;
--	unsigned short b_mg;
--};
--
--/* Structure for CCDC configuration parameters for raw capture mode */
--struct ccdc_params_raw {
--	/* pixel format */
--	enum ccdc_pixfmt pix_fmt;
--	/* progressive or interlaced frame */
--	enum ccdc_frmfmt frm_fmt;
--	/* video window */
--	struct v4l2_rect win;
--	/* field id polarity */
--	enum vpfe_pin_pol fid_pol;
--	/* vertical sync polarity */
--	enum vpfe_pin_pol vd_pol;
--	/* horizontal sync polarity */
--	enum vpfe_pin_pol hd_pol;
--	/* interleaved or separated fields */
--	enum ccdc_buftype buf_type;
--	/* Gain values */
--	struct ccdc_gain gain;
--	/* offset */
--	unsigned int ccdc_offset;
--	/* horizontal flip enable */
--	unsigned char horz_flip_enable;
--	/*
--	 * enable to store the image in inverse order in memory
--	 * (bottom to top)
--	 */
--	unsigned char image_invert_enable;
--	/* Configurable part of raw data */
--	struct ccdc_config_params_raw config_params;
--};
--
--#endif
--#endif				/* DM355_CCDC_H */
-diff --git a/drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc_regs.h b/drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc_regs.h
-deleted file mode 100644
-index eb381f075245..000000000000
---- a/drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc_regs.h
-+++ /dev/null
-@@ -1,297 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-or-later */
--/*
-- * Copyright (C) 2005-2009 Texas Instruments Inc
-- */
--#ifndef _DM355_CCDC_REGS_H
--#define _DM355_CCDC_REGS_H
--
--/**************************************************************************\
--* Register OFFSET Definitions
--\**************************************************************************/
--#define SYNCEN				0x00
--#define MODESET				0x04
--#define HDWIDTH				0x08
--#define VDWIDTH				0x0c
--#define PPLN				0x10
--#define LPFR				0x14
--#define SPH				0x18
--#define NPH				0x1c
--#define SLV0				0x20
--#define SLV1				0x24
--#define NLV				0x28
--#define CULH				0x2c
--#define CULV				0x30
--#define HSIZE				0x34
--#define SDOFST				0x38
--#define STADRH				0x3c
--#define STADRL				0x40
--#define CLAMP				0x44
--#define DCSUB				0x48
--#define COLPTN				0x4c
--#define BLKCMP0				0x50
--#define BLKCMP1				0x54
--#define MEDFILT				0x58
--#define RYEGAIN				0x5c
--#define GRCYGAIN			0x60
--#define GBGGAIN				0x64
--#define BMGGAIN				0x68
--#define OFFSET				0x6c
--#define OUTCLIP				0x70
--#define VDINT0				0x74
--#define VDINT1				0x78
--#define RSV0				0x7c
--#define GAMMAWD				0x80
--#define REC656IF			0x84
--#define CCDCFG				0x88
--#define FMTCFG				0x8c
--#define FMTPLEN				0x90
--#define FMTSPH				0x94
--#define FMTLNH				0x98
--#define FMTSLV				0x9c
--#define FMTLNV				0xa0
--#define FMTRLEN				0xa4
--#define FMTHCNT				0xa8
--#define FMT_ADDR_PTR_B			0xac
--#define FMT_ADDR_PTR(i)			(FMT_ADDR_PTR_B + (i * 4))
--#define FMTPGM_VF0			0xcc
--#define FMTPGM_VF1			0xd0
--#define FMTPGM_AP0			0xd4
--#define FMTPGM_AP1			0xd8
--#define FMTPGM_AP2			0xdc
--#define FMTPGM_AP3                      0xe0
--#define FMTPGM_AP4                      0xe4
--#define FMTPGM_AP5                      0xe8
--#define FMTPGM_AP6                      0xec
--#define FMTPGM_AP7                      0xf0
--#define LSCCFG1                         0xf4
--#define LSCCFG2                         0xf8
--#define LSCH0                           0xfc
--#define LSCV0                           0x100
--#define LSCKH                           0x104
--#define LSCKV                           0x108
--#define LSCMEMCTL                       0x10c
--#define LSCMEMD                         0x110
--#define LSCMEMQ                         0x114
--#define DFCCTL                          0x118
--#define DFCVSAT                         0x11c
--#define DFCMEMCTL                       0x120
--#define DFCMEM0                         0x124
--#define DFCMEM1                         0x128
--#define DFCMEM2                         0x12c
--#define DFCMEM3                         0x130
--#define DFCMEM4                         0x134
--#define CSCCTL                          0x138
--#define CSCM0                           0x13c
--#define CSCM1                           0x140
--#define CSCM2                           0x144
--#define CSCM3                           0x148
--#define CSCM4                           0x14c
--#define CSCM5                           0x150
--#define CSCM6                           0x154
--#define CSCM7                           0x158
--#define DATAOFST			0x15c
--#define CCDC_REG_LAST			DATAOFST
--/**************************************************************
--*	Define for various register bit mask and shifts for CCDC
--*
--**************************************************************/
--#define CCDC_RAW_IP_MODE			0
--#define CCDC_VDHDOUT_INPUT			0
--#define CCDC_YCINSWP_RAW			(0 << 4)
--#define CCDC_EXWEN_DISABLE			0
--#define CCDC_DATAPOL_NORMAL			0
--#define CCDC_CCDCFG_FIDMD_LATCH_VSYNC		0
--#define CCDC_CCDCFG_FIDMD_NO_LATCH_VSYNC	(1 << 6)
--#define CCDC_CCDCFG_WENLOG_AND			0
--#define CCDC_CCDCFG_TRGSEL_WEN			0
--#define CCDC_CCDCFG_EXTRG_DISABLE		0
--#define CCDC_CFA_MOSAIC				0
--#define CCDC_Y8POS_SHIFT			11
--
--#define CCDC_VDC_DFCVSAT_MASK			0x3fff
--#define CCDC_DATAOFST_MASK			0x0ff
--#define CCDC_DATAOFST_H_SHIFT			0
--#define CCDC_DATAOFST_V_SHIFT			8
--#define CCDC_GAMMAWD_CFA_MASK			1
--#define CCDC_GAMMAWD_CFA_SHIFT			5
--#define CCDC_GAMMAWD_INPUT_SHIFT		2
--#define CCDC_FID_POL_MASK			1
--#define CCDC_FID_POL_SHIFT			4
--#define CCDC_HD_POL_MASK			1
--#define CCDC_HD_POL_SHIFT			3
--#define CCDC_VD_POL_MASK			1
--#define CCDC_VD_POL_SHIFT			2
--#define CCDC_VD_POL_NEGATIVE			(1 << 2)
--#define CCDC_FRM_FMT_MASK			1
--#define CCDC_FRM_FMT_SHIFT			7
--#define CCDC_DATA_SZ_MASK			7
--#define CCDC_DATA_SZ_SHIFT			8
--#define CCDC_VDHDOUT_MASK			1
--#define CCDC_VDHDOUT_SHIFT			0
--#define CCDC_EXWEN_MASK				1
--#define CCDC_EXWEN_SHIFT			5
--#define CCDC_INPUT_MODE_MASK			3
--#define CCDC_INPUT_MODE_SHIFT			12
--#define CCDC_PIX_FMT_MASK			3
--#define CCDC_PIX_FMT_SHIFT			12
--#define CCDC_DATAPOL_MASK			1
--#define CCDC_DATAPOL_SHIFT			6
--#define CCDC_WEN_ENABLE				(1 << 1)
--#define CCDC_VDHDEN_ENABLE			(1 << 16)
--#define CCDC_LPF_ENABLE				(1 << 14)
--#define CCDC_ALAW_ENABLE			1
--#define CCDC_ALAW_GAMMA_WD_MASK			7
--#define CCDC_REC656IF_BT656_EN			3
--
--#define CCDC_FMTCFG_FMTMODE_MASK		3
--#define CCDC_FMTCFG_FMTMODE_SHIFT		1
--#define CCDC_FMTCFG_LNUM_MASK			3
--#define CCDC_FMTCFG_LNUM_SHIFT			4
--#define CCDC_FMTCFG_ADDRINC_MASK		7
--#define CCDC_FMTCFG_ADDRINC_SHIFT		8
--
--#define CCDC_CCDCFG_FIDMD_SHIFT			6
--#define	CCDC_CCDCFG_WENLOG_SHIFT		8
--#define CCDC_CCDCFG_TRGSEL_SHIFT		9
--#define CCDC_CCDCFG_EXTRG_SHIFT			10
--#define CCDC_CCDCFG_MSBINVI_SHIFT		13
--
--#define CCDC_HSIZE_FLIP_SHIFT			12
--#define CCDC_HSIZE_FLIP_MASK			1
--#define CCDC_HSIZE_VAL_MASK			0xFFF
--#define CCDC_SDOFST_FIELD_INTERLEAVED		0x249
--#define CCDC_SDOFST_INTERLACE_INVERSE		0x4B6D
--#define CCDC_SDOFST_INTERLACE_NORMAL		0x0B6D
--#define CCDC_SDOFST_PROGRESSIVE_INVERSE		0x4000
--#define CCDC_SDOFST_PROGRESSIVE_NORMAL		0
--#define CCDC_START_PX_HOR_MASK			0x7FFF
--#define CCDC_NUM_PX_HOR_MASK			0x7FFF
--#define CCDC_START_VER_ONE_MASK			0x7FFF
--#define CCDC_START_VER_TWO_MASK			0x7FFF
--#define CCDC_NUM_LINES_VER			0x7FFF
--
--#define CCDC_BLK_CLAMP_ENABLE			(1 << 15)
--#define CCDC_BLK_SGAIN_MASK			0x1F
--#define CCDC_BLK_ST_PXL_MASK			0x1FFF
--#define CCDC_BLK_SAMPLE_LN_MASK			3
--#define CCDC_BLK_SAMPLE_LN_SHIFT		13
--
--#define CCDC_NUM_LINE_CALC_MASK			3
--#define CCDC_NUM_LINE_CALC_SHIFT		14
--
--#define CCDC_BLK_DC_SUB_MASK			0x3FFF
--#define CCDC_BLK_COMP_MASK			0xFF
--#define CCDC_BLK_COMP_GB_COMP_SHIFT		8
--#define CCDC_BLK_COMP_GR_COMP_SHIFT		0
--#define CCDC_BLK_COMP_R_COMP_SHIFT		8
--#define CCDC_LATCH_ON_VSYNC_DISABLE		(1 << 15)
--#define CCDC_LATCH_ON_VSYNC_ENABLE		(0 << 15)
--#define CCDC_FPC_ENABLE				(1 << 15)
--#define CCDC_FPC_FPC_NUM_MASK			0x7FFF
--#define CCDC_DATA_PACK_ENABLE			(1 << 11)
--#define CCDC_FMT_HORZ_FMTLNH_MASK		0x1FFF
--#define CCDC_FMT_HORZ_FMTSPH_MASK		0x1FFF
--#define CCDC_FMT_HORZ_FMTSPH_SHIFT		16
--#define CCDC_FMT_VERT_FMTLNV_MASK		0x1FFF
--#define CCDC_FMT_VERT_FMTSLV_MASK		0x1FFF
--#define CCDC_FMT_VERT_FMTSLV_SHIFT		16
--#define CCDC_VP_OUT_VERT_NUM_MASK		0x3FFF
--#define CCDC_VP_OUT_VERT_NUM_SHIFT		17
--#define CCDC_VP_OUT_HORZ_NUM_MASK		0x1FFF
--#define CCDC_VP_OUT_HORZ_NUM_SHIFT		4
--#define CCDC_VP_OUT_HORZ_ST_MASK		0xF
--
--#define CCDC_CSC_COEF_INTEG_MASK		7
--#define CCDC_CSC_COEF_DECIMAL_MASK		0x1f
--#define CCDC_CSC_COEF_INTEG_SHIFT		5
--#define CCDC_CSCM_MSB_SHIFT			8
--#define CCDC_CSC_ENABLE				1
--#define CCDC_CSC_DEC_MAX			32
--
--#define CCDC_MFILT1_SHIFT			10
--#define CCDC_MFILT2_SHIFT			8
--#define CCDC_MED_FILT_THRESH			0x3FFF
--#define CCDC_LPF_MASK				1
--#define CCDC_LPF_SHIFT				14
--#define CCDC_OFFSET_MASK			0x3FF
--#define CCDC_DATASFT_MASK			7
--#define CCDC_DATASFT_SHIFT			8
--
--#define CCDC_DF_ENABLE				1
--
--#define CCDC_FMTPLEN_P0_MASK			0xF
--#define CCDC_FMTPLEN_P1_MASK			0xF
--#define CCDC_FMTPLEN_P2_MASK			7
--#define CCDC_FMTPLEN_P3_MASK			7
--#define CCDC_FMTPLEN_P0_SHIFT			0
--#define CCDC_FMTPLEN_P1_SHIFT			4
--#define CCDC_FMTPLEN_P2_SHIFT			8
--#define CCDC_FMTPLEN_P3_SHIFT			12
--
--#define CCDC_FMTSPH_MASK			0x1FFF
--#define CCDC_FMTLNH_MASK			0x1FFF
--#define CCDC_FMTSLV_MASK			0x1FFF
--#define CCDC_FMTLNV_MASK			0x7FFF
--#define CCDC_FMTRLEN_MASK			0x1FFF
--#define CCDC_FMTHCNT_MASK			0x1FFF
--
--#define CCDC_ADP_INIT_MASK			0x1FFF
--#define CCDC_ADP_LINE_SHIFT			13
--#define CCDC_ADP_LINE_MASK			3
--#define CCDC_FMTPGN_APTR_MASK			7
--
--#define CCDC_DFCCTL_GDFCEN_MASK			1
--#define CCDC_DFCCTL_VDFCEN_MASK			1
--#define CCDC_DFCCTL_VDFC_DISABLE		(0 << 4)
--#define CCDC_DFCCTL_VDFCEN_SHIFT		4
--#define CCDC_DFCCTL_VDFCSL_MASK			3
--#define CCDC_DFCCTL_VDFCSL_SHIFT		5
--#define CCDC_DFCCTL_VDFCUDA_MASK		1
--#define CCDC_DFCCTL_VDFCUDA_SHIFT		7
--#define CCDC_DFCCTL_VDFLSFT_MASK		3
--#define CCDC_DFCCTL_VDFLSFT_SHIFT		8
--#define CCDC_DFCMEMCTL_DFCMARST_MASK		1
--#define CCDC_DFCMEMCTL_DFCMARST_SHIFT		2
--#define CCDC_DFCMEMCTL_DFCMWR_MASK		1
--#define CCDC_DFCMEMCTL_DFCMWR_SHIFT		0
--#define CCDC_DFCMEMCTL_INC_ADDR			(0 << 2)
--
--#define CCDC_LSCCFG_GFTSF_MASK			7
--#define CCDC_LSCCFG_GFTSF_SHIFT			1
--#define CCDC_LSCCFG_GFTINV_MASK			0xf
--#define CCDC_LSCCFG_GFTINV_SHIFT		4
--#define CCDC_LSC_GFTABLE_SEL_MASK		3
--#define CCDC_LSC_GFTABLE_EPEL_SHIFT		8
--#define CCDC_LSC_GFTABLE_OPEL_SHIFT		10
--#define CCDC_LSC_GFTABLE_EPOL_SHIFT		12
--#define CCDC_LSC_GFTABLE_OPOL_SHIFT		14
--#define CCDC_LSC_GFMODE_MASK			3
--#define CCDC_LSC_GFMODE_SHIFT			4
--#define CCDC_LSC_DISABLE			0
--#define CCDC_LSC_ENABLE				1
--#define CCDC_LSC_TABLE1_SLC			0
--#define CCDC_LSC_TABLE2_SLC			1
--#define CCDC_LSC_TABLE3_SLC			2
--#define CCDC_LSC_MEMADDR_RESET			(1 << 2)
--#define CCDC_LSC_MEMADDR_INCR			(0 << 2)
--#define CCDC_LSC_FRAC_MASK_T1			0xFF
--#define CCDC_LSC_INT_MASK			3
--#define CCDC_LSC_FRAC_MASK			0x3FFF
--#define CCDC_LSC_CENTRE_MASK			0x3FFF
--#define CCDC_LSC_COEF_MASK			0xff
--#define CCDC_LSC_COEFL_SHIFT			0
--#define CCDC_LSC_COEFU_SHIFT			8
--#define CCDC_GAIN_MASK				0x7FF
--#define CCDC_SYNCEN_VDHDEN_MASK			(1 << 0)
--#define CCDC_SYNCEN_WEN_MASK			(1 << 1)
--#define CCDC_SYNCEN_WEN_SHIFT			1
--
--/* Power on Defaults in hardware */
--#define MODESET_DEFAULT				0x200
--#define CULH_DEFAULT				0xFFFF
--#define CULV_DEFAULT				0xFF
--#define GAIN_DEFAULT				256
--#define OUTCLIP_DEFAULT				0x3FFF
--#define LSCCFG2_DEFAULT				0xE
--
--#endif
-diff --git a/drivers/staging/media/deprecated/vpfe_capture/dm644x_ccdc.c b/drivers/staging/media/deprecated/vpfe_capture/dm644x_ccdc.c
-deleted file mode 100644
-index 4a93e5ad6415..000000000000
---- a/drivers/staging/media/deprecated/vpfe_capture/dm644x_ccdc.c
-+++ /dev/null
-@@ -1,879 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-or-later
--/*
-- * Copyright (C) 2006-2009 Texas Instruments Inc
-- *
-- * CCDC hardware module for DM6446
-- * ------------------------------
-- *
-- * This module is for configuring CCD controller of DM6446 VPFE to capture
-- * Raw yuv or Bayer RGB data from a decoder. CCDC has several modules
-- * such as Defect Pixel Correction, Color Space Conversion etc to
-- * pre-process the Raw Bayer RGB data, before writing it to SDRAM.
-- * This file is named DM644x so that other variants such DM6443
-- * may be supported using the same module.
-- *
-- * TODO: Test Raw bayer parameter settings and bayer capture
-- *	 Split module parameter structure to module specific ioctl structs
-- *	 investigate if enum used for user space type definition
-- *	 to be replaced by #defines or integer
-- */
--#include <linux/platform_device.h>
--#include <linux/uaccess.h>
--#include <linux/videodev2.h>
--#include <linux/gfp.h>
--#include <linux/err.h>
--#include <linux/module.h>
--
--#include "dm644x_ccdc.h"
--#include <media/davinci/vpss.h>
--
--#include "dm644x_ccdc_regs.h"
--#include "ccdc_hw_device.h"
--
--MODULE_LICENSE("GPL");
--MODULE_DESCRIPTION("CCDC Driver for DM6446");
--MODULE_AUTHOR("Texas Instruments");
--
--static struct ccdc_oper_config {
--	struct device *dev;
--	/* CCDC interface type */
--	enum vpfe_hw_if_type if_type;
--	/* Raw Bayer configuration */
--	struct ccdc_params_raw bayer;
--	/* YCbCr configuration */
--	struct ccdc_params_ycbcr ycbcr;
--	/* ccdc base address */
--	void __iomem *base_addr;
--} ccdc_cfg = {
--	/* Raw configurations */
--	.bayer = {
--		.pix_fmt = CCDC_PIXFMT_RAW,
--		.frm_fmt = CCDC_FRMFMT_PROGRESSIVE,
--		.win = CCDC_WIN_VGA,
--		.fid_pol = VPFE_PINPOL_POSITIVE,
--		.vd_pol = VPFE_PINPOL_POSITIVE,
--		.hd_pol = VPFE_PINPOL_POSITIVE,
--		.config_params = {
--			.data_sz = CCDC_DATA_10BITS,
--		},
--	},
--	.ycbcr = {
--		.pix_fmt = CCDC_PIXFMT_YCBCR_8BIT,
--		.frm_fmt = CCDC_FRMFMT_INTERLACED,
--		.win = CCDC_WIN_PAL,
--		.fid_pol = VPFE_PINPOL_POSITIVE,
--		.vd_pol = VPFE_PINPOL_POSITIVE,
--		.hd_pol = VPFE_PINPOL_POSITIVE,
--		.bt656_enable = 1,
--		.pix_order = CCDC_PIXORDER_CBYCRY,
--		.buf_type = CCDC_BUFTYPE_FLD_INTERLEAVED
--	},
--};
--
--#define CCDC_MAX_RAW_YUV_FORMATS	2
--
--/* Raw Bayer formats */
--static u32 ccdc_raw_bayer_pix_formats[] =
--	{V4L2_PIX_FMT_SBGGR8, V4L2_PIX_FMT_SBGGR16};
--
--/* Raw YUV formats */
--static u32 ccdc_raw_yuv_pix_formats[] =
--	{V4L2_PIX_FMT_UYVY, V4L2_PIX_FMT_YUYV};
--
--/* CCDC Save/Restore context */
--static u32 ccdc_ctx[CCDC_REG_END / sizeof(u32)];
--
--/* register access routines */
--static inline u32 regr(u32 offset)
--{
--	return __raw_readl(ccdc_cfg.base_addr + offset);
--}
--
--static inline void regw(u32 val, u32 offset)
--{
--	__raw_writel(val, ccdc_cfg.base_addr + offset);
--}
--
--static void ccdc_enable(int flag)
--{
--	regw(flag, CCDC_PCR);
--}
--
--static void ccdc_enable_vport(int flag)
--{
--	if (flag)
--		/* enable video port */
--		regw(CCDC_ENABLE_VIDEO_PORT, CCDC_FMTCFG);
--	else
--		regw(CCDC_DISABLE_VIDEO_PORT, CCDC_FMTCFG);
--}
--
--/*
-- * ccdc_setwin()
-- * This function will configure the window size
-- * to be capture in CCDC reg
-- */
--static void ccdc_setwin(struct v4l2_rect *image_win,
--			enum ccdc_frmfmt frm_fmt,
--			int ppc)
--{
--	int horz_start, horz_nr_pixels;
--	int vert_start, vert_nr_lines;
--	int val = 0, mid_img = 0;
--
--	dev_dbg(ccdc_cfg.dev, "\nStarting ccdc_setwin...");
--	/*
--	 * ppc - per pixel count. indicates how many pixels per cell
--	 * output to SDRAM. example, for ycbcr, it is one y and one c, so 2.
--	 * raw capture this is 1
--	 */
--	horz_start = image_win->left << (ppc - 1);
--	horz_nr_pixels = (image_win->width << (ppc - 1)) - 1;
--	regw((horz_start << CCDC_HORZ_INFO_SPH_SHIFT) | horz_nr_pixels,
--	     CCDC_HORZ_INFO);
--
--	vert_start = image_win->top;
--
--	if (frm_fmt == CCDC_FRMFMT_INTERLACED) {
--		vert_nr_lines = (image_win->height >> 1) - 1;
--		vert_start >>= 1;
--		/* Since first line doesn't have any data */
--		vert_start += 1;
--		/* configure VDINT0 */
--		val = (vert_start << CCDC_VDINT_VDINT0_SHIFT);
--		regw(val, CCDC_VDINT);
--
--	} else {
--		/* Since first line doesn't have any data */
--		vert_start += 1;
--		vert_nr_lines = image_win->height - 1;
--		/*
--		 * configure VDINT0 and VDINT1. VDINT1 will be at half
--		 * of image height
--		 */
--		mid_img = vert_start + (image_win->height / 2);
--		val = (vert_start << CCDC_VDINT_VDINT0_SHIFT) |
--		    (mid_img & CCDC_VDINT_VDINT1_MASK);
--		regw(val, CCDC_VDINT);
--
--	}
--	regw((vert_start << CCDC_VERT_START_SLV0_SHIFT) | vert_start,
--	     CCDC_VERT_START);
--	regw(vert_nr_lines, CCDC_VERT_LINES);
--	dev_dbg(ccdc_cfg.dev, "\nEnd of ccdc_setwin...");
--}
--
--static void ccdc_readregs(void)
--{
--	unsigned int val = 0;
--
--	val = regr(CCDC_ALAW);
--	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to ALAW...\n", val);
--	val = regr(CCDC_CLAMP);
--	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to CLAMP...\n", val);
--	val = regr(CCDC_DCSUB);
--	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to DCSUB...\n", val);
--	val = regr(CCDC_BLKCMP);
--	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to BLKCMP...\n", val);
--	val = regr(CCDC_FPC_ADDR);
--	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to FPC_ADDR...\n", val);
--	val = regr(CCDC_FPC);
--	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to FPC...\n", val);
--	val = regr(CCDC_FMTCFG);
--	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to FMTCFG...\n", val);
--	val = regr(CCDC_COLPTN);
--	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to COLPTN...\n", val);
--	val = regr(CCDC_FMT_HORZ);
--	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to FMT_HORZ...\n", val);
--	val = regr(CCDC_FMT_VERT);
--	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to FMT_VERT...\n", val);
--	val = regr(CCDC_HSIZE_OFF);
--	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to HSIZE_OFF...\n", val);
--	val = regr(CCDC_SDOFST);
--	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to SDOFST...\n", val);
--	val = regr(CCDC_VP_OUT);
--	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to VP_OUT...\n", val);
--	val = regr(CCDC_SYN_MODE);
--	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to SYN_MODE...\n", val);
--	val = regr(CCDC_HORZ_INFO);
--	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to HORZ_INFO...\n", val);
--	val = regr(CCDC_VERT_START);
--	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to VERT_START...\n", val);
--	val = regr(CCDC_VERT_LINES);
--	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to VERT_LINES...\n", val);
--}
--
--static int ccdc_close(struct device *dev)
--{
--	return 0;
--}
--
--/*
-- * ccdc_restore_defaults()
-- * This function will write defaults to all CCDC registers
-- */
--static void ccdc_restore_defaults(void)
--{
--	int i;
--
--	/* disable CCDC */
--	ccdc_enable(0);
--	/* set all registers to default value */
--	for (i = 4; i <= 0x94; i += 4)
--		regw(0,  i);
--	regw(CCDC_NO_CULLING, CCDC_CULLING);
--	regw(CCDC_GAMMA_BITS_11_2, CCDC_ALAW);
--}
--
--static int ccdc_open(struct device *device)
--{
--	ccdc_restore_defaults();
--	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
--		ccdc_enable_vport(1);
--	return 0;
--}
--
--static void ccdc_sbl_reset(void)
--{
--	vpss_clear_wbl_overflow(VPSS_PCR_CCDC_WBL_O);
--}
--
--/*
-- * ccdc_config_ycbcr()
-- * This function will configure CCDC for YCbCr video capture
-- */
--static void ccdc_config_ycbcr(void)
--{
--	struct ccdc_params_ycbcr *params = &ccdc_cfg.ycbcr;
--	u32 syn_mode;
--
--	dev_dbg(ccdc_cfg.dev, "\nStarting ccdc_config_ycbcr...");
--	/*
--	 * first restore the CCDC registers to default values
--	 * This is important since we assume default values to be set in
--	 * a lot of registers that we didn't touch
--	 */
--	ccdc_restore_defaults();
--
--	/*
--	 * configure pixel format, frame format, configure video frame
--	 * format, enable output to SDRAM, enable internal timing generator
--	 * and 8bit pack mode
--	 */
--	syn_mode = (((params->pix_fmt & CCDC_SYN_MODE_INPMOD_MASK) <<
--		    CCDC_SYN_MODE_INPMOD_SHIFT) |
--		    ((params->frm_fmt & CCDC_SYN_FLDMODE_MASK) <<
--		    CCDC_SYN_FLDMODE_SHIFT) | CCDC_VDHDEN_ENABLE |
--		    CCDC_WEN_ENABLE | CCDC_DATA_PACK_ENABLE);
--
--	/* setup BT.656 sync mode */
--	if (params->bt656_enable) {
--		regw(CCDC_REC656IF_BT656_EN, CCDC_REC656IF);
--
--		/*
--		 * configure the FID, VD, HD pin polarity,
--		 * fld,hd pol positive, vd negative, 8-bit data
--		 */
--		syn_mode |= CCDC_SYN_MODE_VD_POL_NEGATIVE;
--		if (ccdc_cfg.if_type == VPFE_BT656_10BIT)
--			syn_mode |= CCDC_SYN_MODE_10BITS;
--		else
--			syn_mode |= CCDC_SYN_MODE_8BITS;
--	} else {
--		/* y/c external sync mode */
--		syn_mode |= (((params->fid_pol & CCDC_FID_POL_MASK) <<
--			     CCDC_FID_POL_SHIFT) |
--			     ((params->hd_pol & CCDC_HD_POL_MASK) <<
--			     CCDC_HD_POL_SHIFT) |
--			     ((params->vd_pol & CCDC_VD_POL_MASK) <<
--			     CCDC_VD_POL_SHIFT));
--	}
--	regw(syn_mode, CCDC_SYN_MODE);
--
--	/* configure video window */
--	ccdc_setwin(&params->win, params->frm_fmt, 2);
--
--	/*
--	 * configure the order of y cb cr in SDRAM, and disable latch
--	 * internal register on vsync
--	 */
--	if (ccdc_cfg.if_type == VPFE_BT656_10BIT)
--		regw((params->pix_order << CCDC_CCDCFG_Y8POS_SHIFT) |
--			CCDC_LATCH_ON_VSYNC_DISABLE | CCDC_CCDCFG_BW656_10BIT,
--			CCDC_CCDCFG);
--	else
--		regw((params->pix_order << CCDC_CCDCFG_Y8POS_SHIFT) |
--			CCDC_LATCH_ON_VSYNC_DISABLE, CCDC_CCDCFG);
--
--	/*
--	 * configure the horizontal line offset. This should be a
--	 * on 32 byte boundary. So clear LSB 5 bits
--	 */
--	regw(((params->win.width * 2  + 31) & ~0x1f), CCDC_HSIZE_OFF);
--
--	/* configure the memory line offset */
--	if (params->buf_type == CCDC_BUFTYPE_FLD_INTERLEAVED)
--		/* two fields are interleaved in memory */
--		regw(CCDC_SDOFST_FIELD_INTERLEAVED, CCDC_SDOFST);
--
--	ccdc_sbl_reset();
--	dev_dbg(ccdc_cfg.dev, "\nEnd of ccdc_config_ycbcr...\n");
--}
--
--static void ccdc_config_black_clamp(struct ccdc_black_clamp *bclamp)
--{
--	u32 val;
--
--	if (!bclamp->enable) {
--		/* configure DCSub */
--		val = (bclamp->dc_sub) & CCDC_BLK_DC_SUB_MASK;
--		regw(val, CCDC_DCSUB);
--		dev_dbg(ccdc_cfg.dev, "\nWriting 0x%x to DCSUB...\n", val);
--		regw(CCDC_CLAMP_DEFAULT_VAL, CCDC_CLAMP);
--		dev_dbg(ccdc_cfg.dev, "\nWriting 0x0000 to CLAMP...\n");
--		return;
--	}
--	/*
--	 * Configure gain,  Start pixel, No of line to be avg,
--	 * No of pixel/line to be avg, & Enable the Black clamping
--	 */
--	val = ((bclamp->sgain & CCDC_BLK_SGAIN_MASK) |
--	       ((bclamp->start_pixel & CCDC_BLK_ST_PXL_MASK) <<
--		CCDC_BLK_ST_PXL_SHIFT) |
--	       ((bclamp->sample_ln & CCDC_BLK_SAMPLE_LINE_MASK) <<
--		CCDC_BLK_SAMPLE_LINE_SHIFT) |
--	       ((bclamp->sample_pixel & CCDC_BLK_SAMPLE_LN_MASK) <<
--		CCDC_BLK_SAMPLE_LN_SHIFT) | CCDC_BLK_CLAMP_ENABLE);
--	regw(val, CCDC_CLAMP);
--	dev_dbg(ccdc_cfg.dev, "\nWriting 0x%x to CLAMP...\n", val);
--	/* If Black clamping is enable then make dcsub 0 */
--	regw(CCDC_DCSUB_DEFAULT_VAL, CCDC_DCSUB);
--	dev_dbg(ccdc_cfg.dev, "\nWriting 0x00000000 to DCSUB...\n");
--}
--
--static void ccdc_config_black_compense(struct ccdc_black_compensation *bcomp)
--{
--	u32 val;
--
--	val = ((bcomp->b & CCDC_BLK_COMP_MASK) |
--	      ((bcomp->gb & CCDC_BLK_COMP_MASK) <<
--	       CCDC_BLK_COMP_GB_COMP_SHIFT) |
--	      ((bcomp->gr & CCDC_BLK_COMP_MASK) <<
--	       CCDC_BLK_COMP_GR_COMP_SHIFT) |
--	      ((bcomp->r & CCDC_BLK_COMP_MASK) <<
--	       CCDC_BLK_COMP_R_COMP_SHIFT));
--	regw(val, CCDC_BLKCMP);
--}
--
--/*
-- * ccdc_config_raw()
-- * This function will configure CCDC for Raw capture mode
-- */
--static void ccdc_config_raw(void)
--{
--	struct ccdc_params_raw *params = &ccdc_cfg.bayer;
--	struct ccdc_config_params_raw *config_params =
--				&ccdc_cfg.bayer.config_params;
--	unsigned int syn_mode = 0;
--	unsigned int val;
--
--	dev_dbg(ccdc_cfg.dev, "\nStarting ccdc_config_raw...");
--
--	/*      Reset CCDC */
--	ccdc_restore_defaults();
--
--	/* Disable latching function registers on VSYNC  */
--	regw(CCDC_LATCH_ON_VSYNC_DISABLE, CCDC_CCDCFG);
--
--	/*
--	 * Configure the vertical sync polarity(SYN_MODE.VDPOL),
--	 * horizontal sync polarity (SYN_MODE.HDPOL), frame id polarity
--	 * (SYN_MODE.FLDPOL), frame format(progressive or interlace),
--	 * data size(SYNMODE.DATSIZ), &pixel format (Input mode), output
--	 * SDRAM, enable internal timing generator
--	 */
--	syn_mode =
--		(((params->vd_pol & CCDC_VD_POL_MASK) << CCDC_VD_POL_SHIFT) |
--		((params->hd_pol & CCDC_HD_POL_MASK) << CCDC_HD_POL_SHIFT) |
--		((params->fid_pol & CCDC_FID_POL_MASK) << CCDC_FID_POL_SHIFT) |
--		((params->frm_fmt & CCDC_FRM_FMT_MASK) << CCDC_FRM_FMT_SHIFT) |
--		((config_params->data_sz & CCDC_DATA_SZ_MASK) <<
--		CCDC_DATA_SZ_SHIFT) |
--		((params->pix_fmt & CCDC_PIX_FMT_MASK) << CCDC_PIX_FMT_SHIFT) |
--		CCDC_WEN_ENABLE | CCDC_VDHDEN_ENABLE);
--
--	/* Enable and configure aLaw register if needed */
--	if (config_params->alaw.enable) {
--		val = ((config_params->alaw.gamma_wd &
--		      CCDC_ALAW_GAMMA_WD_MASK) | CCDC_ALAW_ENABLE);
--		regw(val, CCDC_ALAW);
--		dev_dbg(ccdc_cfg.dev, "\nWriting 0x%x to ALAW...\n", val);
--	}
--
--	/* Configure video window */
--	ccdc_setwin(&params->win, params->frm_fmt, CCDC_PPC_RAW);
--
--	/* Configure Black Clamp */
--	ccdc_config_black_clamp(&config_params->blk_clamp);
--
--	/* Configure Black level compensation */
--	ccdc_config_black_compense(&config_params->blk_comp);
--
--	/* If data size is 8 bit then pack the data */
--	if ((config_params->data_sz == CCDC_DATA_8BITS) ||
--	     config_params->alaw.enable)
--		syn_mode |= CCDC_DATA_PACK_ENABLE;
--
--	/* disable video port */
--	val = CCDC_DISABLE_VIDEO_PORT;
--
--	if (config_params->data_sz == CCDC_DATA_8BITS)
--		val |= (CCDC_DATA_10BITS & CCDC_FMTCFG_VPIN_MASK)
--		    << CCDC_FMTCFG_VPIN_SHIFT;
--	else
--		val |= (config_params->data_sz & CCDC_FMTCFG_VPIN_MASK)
--		    << CCDC_FMTCFG_VPIN_SHIFT;
--	/* Write value in FMTCFG */
--	regw(val, CCDC_FMTCFG);
--
--	dev_dbg(ccdc_cfg.dev, "\nWriting 0x%x to FMTCFG...\n", val);
--	/* Configure the color pattern according to mt9t001 sensor */
--	regw(CCDC_COLPTN_VAL, CCDC_COLPTN);
--
--	dev_dbg(ccdc_cfg.dev, "\nWriting 0xBB11BB11 to COLPTN...\n");
--	/*
--	 * Configure Data formatter(Video port) pixel selection
--	 * (FMT_HORZ, FMT_VERT)
--	 */
--	val = ((params->win.left & CCDC_FMT_HORZ_FMTSPH_MASK) <<
--	      CCDC_FMT_HORZ_FMTSPH_SHIFT) |
--	      (params->win.width & CCDC_FMT_HORZ_FMTLNH_MASK);
--	regw(val, CCDC_FMT_HORZ);
--
--	dev_dbg(ccdc_cfg.dev, "\nWriting 0x%x to FMT_HORZ...\n", val);
--	val = (params->win.top & CCDC_FMT_VERT_FMTSLV_MASK)
--	    << CCDC_FMT_VERT_FMTSLV_SHIFT;
--	if (params->frm_fmt == CCDC_FRMFMT_PROGRESSIVE)
--		val |= (params->win.height) & CCDC_FMT_VERT_FMTLNV_MASK;
--	else
--		val |= (params->win.height >> 1) & CCDC_FMT_VERT_FMTLNV_MASK;
--
--	dev_dbg(ccdc_cfg.dev, "\nparams->win.height  0x%x ...\n",
--	       params->win.height);
--	regw(val, CCDC_FMT_VERT);
--
--	dev_dbg(ccdc_cfg.dev, "\nWriting 0x%x to FMT_VERT...\n", val);
--
--	dev_dbg(ccdc_cfg.dev, "\nbelow regw(val, FMT_VERT)...");
--
--	/*
--	 * Configure Horizontal offset register. If pack 8 is enabled then
--	 * 1 pixel will take 1 byte
--	 */
--	if ((config_params->data_sz == CCDC_DATA_8BITS) ||
--	    config_params->alaw.enable)
--		regw((params->win.width + CCDC_32BYTE_ALIGN_VAL) &
--		    CCDC_HSIZE_OFF_MASK, CCDC_HSIZE_OFF);
--	else
--		/* else one pixel will take 2 byte */
--		regw(((params->win.width * CCDC_TWO_BYTES_PER_PIXEL) +
--		    CCDC_32BYTE_ALIGN_VAL) & CCDC_HSIZE_OFF_MASK,
--		    CCDC_HSIZE_OFF);
--
--	/* Set value for SDOFST */
--	if (params->frm_fmt == CCDC_FRMFMT_INTERLACED) {
--		if (params->image_invert_enable) {
--			/* For intelace inverse mode */
--			regw(CCDC_INTERLACED_IMAGE_INVERT, CCDC_SDOFST);
--			dev_dbg(ccdc_cfg.dev, "\nWriting 0x4B6D to SDOFST..\n");
--		}
--
--		else {
--			/* For intelace non inverse mode */
--			regw(CCDC_INTERLACED_NO_IMAGE_INVERT, CCDC_SDOFST);
--			dev_dbg(ccdc_cfg.dev, "\nWriting 0x0249 to SDOFST..\n");
--		}
--	} else if (params->frm_fmt == CCDC_FRMFMT_PROGRESSIVE) {
--		regw(CCDC_PROGRESSIVE_NO_IMAGE_INVERT, CCDC_SDOFST);
--		dev_dbg(ccdc_cfg.dev, "\nWriting 0x0000 to SDOFST...\n");
--	}
--
--	/*
--	 * Configure video port pixel selection (VPOUT)
--	 * Here -1 is to make the height value less than FMT_VERT.FMTLNV
--	 */
--	if (params->frm_fmt == CCDC_FRMFMT_PROGRESSIVE)
--		val = (((params->win.height - 1) & CCDC_VP_OUT_VERT_NUM_MASK))
--		    << CCDC_VP_OUT_VERT_NUM_SHIFT;
--	else
--		val =
--		    ((((params->win.height >> CCDC_INTERLACED_HEIGHT_SHIFT) -
--		     1) & CCDC_VP_OUT_VERT_NUM_MASK)) <<
--		    CCDC_VP_OUT_VERT_NUM_SHIFT;
--
--	val |= ((((params->win.width))) & CCDC_VP_OUT_HORZ_NUM_MASK)
--	    << CCDC_VP_OUT_HORZ_NUM_SHIFT;
--	val |= (params->win.left) & CCDC_VP_OUT_HORZ_ST_MASK;
--	regw(val, CCDC_VP_OUT);
--
--	dev_dbg(ccdc_cfg.dev, "\nWriting 0x%x to VP_OUT...\n", val);
--	regw(syn_mode, CCDC_SYN_MODE);
--	dev_dbg(ccdc_cfg.dev, "\nWriting 0x%x to SYN_MODE...\n", syn_mode);
--
--	ccdc_sbl_reset();
--	dev_dbg(ccdc_cfg.dev, "\nend of ccdc_config_raw...");
--	ccdc_readregs();
--}
--
--static int ccdc_configure(void)
--{
--	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
--		ccdc_config_raw();
--	else
--		ccdc_config_ycbcr();
--	return 0;
--}
--
--static int ccdc_set_buftype(enum ccdc_buftype buf_type)
--{
--	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
--		ccdc_cfg.bayer.buf_type = buf_type;
--	else
--		ccdc_cfg.ycbcr.buf_type = buf_type;
--	return 0;
--}
--
--static enum ccdc_buftype ccdc_get_buftype(void)
--{
--	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
--		return ccdc_cfg.bayer.buf_type;
--	return ccdc_cfg.ycbcr.buf_type;
--}
--
--static int ccdc_enum_pix(u32 *pix, int i)
--{
--	int ret = -EINVAL;
--	if (ccdc_cfg.if_type == VPFE_RAW_BAYER) {
--		if (i < ARRAY_SIZE(ccdc_raw_bayer_pix_formats)) {
--			*pix = ccdc_raw_bayer_pix_formats[i];
--			ret = 0;
--		}
--	} else {
--		if (i < ARRAY_SIZE(ccdc_raw_yuv_pix_formats)) {
--			*pix = ccdc_raw_yuv_pix_formats[i];
--			ret = 0;
--		}
--	}
--	return ret;
--}
--
--static int ccdc_set_pixel_format(u32 pixfmt)
--{
--	if (ccdc_cfg.if_type == VPFE_RAW_BAYER) {
--		ccdc_cfg.bayer.pix_fmt = CCDC_PIXFMT_RAW;
--		if (pixfmt == V4L2_PIX_FMT_SBGGR8)
--			ccdc_cfg.bayer.config_params.alaw.enable = 1;
--		else if (pixfmt != V4L2_PIX_FMT_SBGGR16)
--			return -EINVAL;
--	} else {
--		if (pixfmt == V4L2_PIX_FMT_YUYV)
--			ccdc_cfg.ycbcr.pix_order = CCDC_PIXORDER_YCBYCR;
--		else if (pixfmt == V4L2_PIX_FMT_UYVY)
--			ccdc_cfg.ycbcr.pix_order = CCDC_PIXORDER_CBYCRY;
--		else
--			return -EINVAL;
--	}
--	return 0;
--}
--
--static u32 ccdc_get_pixel_format(void)
--{
--	struct ccdc_a_law *alaw = &ccdc_cfg.bayer.config_params.alaw;
--	u32 pixfmt;
--
--	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
--		if (alaw->enable)
--			pixfmt = V4L2_PIX_FMT_SBGGR8;
--		else
--			pixfmt = V4L2_PIX_FMT_SBGGR16;
--	else {
--		if (ccdc_cfg.ycbcr.pix_order == CCDC_PIXORDER_YCBYCR)
--			pixfmt = V4L2_PIX_FMT_YUYV;
--		else
--			pixfmt = V4L2_PIX_FMT_UYVY;
--	}
--	return pixfmt;
--}
--
--static int ccdc_set_image_window(struct v4l2_rect *win)
--{
--	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
--		ccdc_cfg.bayer.win = *win;
--	else
--		ccdc_cfg.ycbcr.win = *win;
--	return 0;
--}
--
--static void ccdc_get_image_window(struct v4l2_rect *win)
--{
--	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
--		*win = ccdc_cfg.bayer.win;
--	else
--		*win = ccdc_cfg.ycbcr.win;
--}
--
--static unsigned int ccdc_get_line_length(void)
--{
--	struct ccdc_config_params_raw *config_params =
--				&ccdc_cfg.bayer.config_params;
--	unsigned int len;
--
--	if (ccdc_cfg.if_type == VPFE_RAW_BAYER) {
--		if ((config_params->alaw.enable) ||
--		    (config_params->data_sz == CCDC_DATA_8BITS))
--			len = ccdc_cfg.bayer.win.width;
--		else
--			len = ccdc_cfg.bayer.win.width * 2;
--	} else
--		len = ccdc_cfg.ycbcr.win.width * 2;
--	return ALIGN(len, 32);
--}
--
--static int ccdc_set_frame_format(enum ccdc_frmfmt frm_fmt)
--{
--	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
--		ccdc_cfg.bayer.frm_fmt = frm_fmt;
--	else
--		ccdc_cfg.ycbcr.frm_fmt = frm_fmt;
--	return 0;
--}
--
--static enum ccdc_frmfmt ccdc_get_frame_format(void)
--{
--	if (ccdc_cfg.if_type == VPFE_RAW_BAYER)
--		return ccdc_cfg.bayer.frm_fmt;
--	else
--		return ccdc_cfg.ycbcr.frm_fmt;
--}
--
--static int ccdc_getfid(void)
--{
--	return (regr(CCDC_SYN_MODE) >> 15) & 1;
--}
--
--/* misc operations */
--static inline void ccdc_setfbaddr(unsigned long addr)
--{
--	regw(addr & 0xffffffe0, CCDC_SDR_ADDR);
--}
--
--static int ccdc_set_hw_if_params(struct vpfe_hw_if_param *params)
--{
--	ccdc_cfg.if_type = params->if_type;
--
--	switch (params->if_type) {
--	case VPFE_BT656:
--	case VPFE_YCBCR_SYNC_16:
--	case VPFE_YCBCR_SYNC_8:
--	case VPFE_BT656_10BIT:
--		ccdc_cfg.ycbcr.vd_pol = params->vdpol;
--		ccdc_cfg.ycbcr.hd_pol = params->hdpol;
--		break;
--	default:
--		/* TODO add support for raw bayer here */
--		return -EINVAL;
--	}
--	return 0;
--}
--
--static void ccdc_save_context(void)
--{
--	ccdc_ctx[CCDC_PCR >> 2] = regr(CCDC_PCR);
--	ccdc_ctx[CCDC_SYN_MODE >> 2] = regr(CCDC_SYN_MODE);
--	ccdc_ctx[CCDC_HD_VD_WID >> 2] = regr(CCDC_HD_VD_WID);
--	ccdc_ctx[CCDC_PIX_LINES >> 2] = regr(CCDC_PIX_LINES);
--	ccdc_ctx[CCDC_HORZ_INFO >> 2] = regr(CCDC_HORZ_INFO);
--	ccdc_ctx[CCDC_VERT_START >> 2] = regr(CCDC_VERT_START);
--	ccdc_ctx[CCDC_VERT_LINES >> 2] = regr(CCDC_VERT_LINES);
--	ccdc_ctx[CCDC_CULLING >> 2] = regr(CCDC_CULLING);
--	ccdc_ctx[CCDC_HSIZE_OFF >> 2] = regr(CCDC_HSIZE_OFF);
--	ccdc_ctx[CCDC_SDOFST >> 2] = regr(CCDC_SDOFST);
--	ccdc_ctx[CCDC_SDR_ADDR >> 2] = regr(CCDC_SDR_ADDR);
--	ccdc_ctx[CCDC_CLAMP >> 2] = regr(CCDC_CLAMP);
--	ccdc_ctx[CCDC_DCSUB >> 2] = regr(CCDC_DCSUB);
--	ccdc_ctx[CCDC_COLPTN >> 2] = regr(CCDC_COLPTN);
--	ccdc_ctx[CCDC_BLKCMP >> 2] = regr(CCDC_BLKCMP);
--	ccdc_ctx[CCDC_FPC >> 2] = regr(CCDC_FPC);
--	ccdc_ctx[CCDC_FPC_ADDR >> 2] = regr(CCDC_FPC_ADDR);
--	ccdc_ctx[CCDC_VDINT >> 2] = regr(CCDC_VDINT);
--	ccdc_ctx[CCDC_ALAW >> 2] = regr(CCDC_ALAW);
--	ccdc_ctx[CCDC_REC656IF >> 2] = regr(CCDC_REC656IF);
--	ccdc_ctx[CCDC_CCDCFG >> 2] = regr(CCDC_CCDCFG);
--	ccdc_ctx[CCDC_FMTCFG >> 2] = regr(CCDC_FMTCFG);
--	ccdc_ctx[CCDC_FMT_HORZ >> 2] = regr(CCDC_FMT_HORZ);
--	ccdc_ctx[CCDC_FMT_VERT >> 2] = regr(CCDC_FMT_VERT);
--	ccdc_ctx[CCDC_FMT_ADDR0 >> 2] = regr(CCDC_FMT_ADDR0);
--	ccdc_ctx[CCDC_FMT_ADDR1 >> 2] = regr(CCDC_FMT_ADDR1);
--	ccdc_ctx[CCDC_FMT_ADDR2 >> 2] = regr(CCDC_FMT_ADDR2);
--	ccdc_ctx[CCDC_FMT_ADDR3 >> 2] = regr(CCDC_FMT_ADDR3);
--	ccdc_ctx[CCDC_FMT_ADDR4 >> 2] = regr(CCDC_FMT_ADDR4);
--	ccdc_ctx[CCDC_FMT_ADDR5 >> 2] = regr(CCDC_FMT_ADDR5);
--	ccdc_ctx[CCDC_FMT_ADDR6 >> 2] = regr(CCDC_FMT_ADDR6);
--	ccdc_ctx[CCDC_FMT_ADDR7 >> 2] = regr(CCDC_FMT_ADDR7);
--	ccdc_ctx[CCDC_PRGEVEN_0 >> 2] = regr(CCDC_PRGEVEN_0);
--	ccdc_ctx[CCDC_PRGEVEN_1 >> 2] = regr(CCDC_PRGEVEN_1);
--	ccdc_ctx[CCDC_PRGODD_0 >> 2] = regr(CCDC_PRGODD_0);
--	ccdc_ctx[CCDC_PRGODD_1 >> 2] = regr(CCDC_PRGODD_1);
--	ccdc_ctx[CCDC_VP_OUT >> 2] = regr(CCDC_VP_OUT);
--}
--
--static void ccdc_restore_context(void)
--{
--	regw(ccdc_ctx[CCDC_SYN_MODE >> 2], CCDC_SYN_MODE);
--	regw(ccdc_ctx[CCDC_HD_VD_WID >> 2], CCDC_HD_VD_WID);
--	regw(ccdc_ctx[CCDC_PIX_LINES >> 2], CCDC_PIX_LINES);
--	regw(ccdc_ctx[CCDC_HORZ_INFO >> 2], CCDC_HORZ_INFO);
--	regw(ccdc_ctx[CCDC_VERT_START >> 2], CCDC_VERT_START);
--	regw(ccdc_ctx[CCDC_VERT_LINES >> 2], CCDC_VERT_LINES);
--	regw(ccdc_ctx[CCDC_CULLING >> 2], CCDC_CULLING);
--	regw(ccdc_ctx[CCDC_HSIZE_OFF >> 2], CCDC_HSIZE_OFF);
--	regw(ccdc_ctx[CCDC_SDOFST >> 2], CCDC_SDOFST);
--	regw(ccdc_ctx[CCDC_SDR_ADDR >> 2], CCDC_SDR_ADDR);
--	regw(ccdc_ctx[CCDC_CLAMP >> 2], CCDC_CLAMP);
--	regw(ccdc_ctx[CCDC_DCSUB >> 2], CCDC_DCSUB);
--	regw(ccdc_ctx[CCDC_COLPTN >> 2], CCDC_COLPTN);
--	regw(ccdc_ctx[CCDC_BLKCMP >> 2], CCDC_BLKCMP);
--	regw(ccdc_ctx[CCDC_FPC >> 2], CCDC_FPC);
--	regw(ccdc_ctx[CCDC_FPC_ADDR >> 2], CCDC_FPC_ADDR);
--	regw(ccdc_ctx[CCDC_VDINT >> 2], CCDC_VDINT);
--	regw(ccdc_ctx[CCDC_ALAW >> 2], CCDC_ALAW);
--	regw(ccdc_ctx[CCDC_REC656IF >> 2], CCDC_REC656IF);
--	regw(ccdc_ctx[CCDC_CCDCFG >> 2], CCDC_CCDCFG);
--	regw(ccdc_ctx[CCDC_FMTCFG >> 2], CCDC_FMTCFG);
--	regw(ccdc_ctx[CCDC_FMT_HORZ >> 2], CCDC_FMT_HORZ);
--	regw(ccdc_ctx[CCDC_FMT_VERT >> 2], CCDC_FMT_VERT);
--	regw(ccdc_ctx[CCDC_FMT_ADDR0 >> 2], CCDC_FMT_ADDR0);
--	regw(ccdc_ctx[CCDC_FMT_ADDR1 >> 2], CCDC_FMT_ADDR1);
--	regw(ccdc_ctx[CCDC_FMT_ADDR2 >> 2], CCDC_FMT_ADDR2);
--	regw(ccdc_ctx[CCDC_FMT_ADDR3 >> 2], CCDC_FMT_ADDR3);
--	regw(ccdc_ctx[CCDC_FMT_ADDR4 >> 2], CCDC_FMT_ADDR4);
--	regw(ccdc_ctx[CCDC_FMT_ADDR5 >> 2], CCDC_FMT_ADDR5);
--	regw(ccdc_ctx[CCDC_FMT_ADDR6 >> 2], CCDC_FMT_ADDR6);
--	regw(ccdc_ctx[CCDC_FMT_ADDR7 >> 2], CCDC_FMT_ADDR7);
--	regw(ccdc_ctx[CCDC_PRGEVEN_0 >> 2], CCDC_PRGEVEN_0);
--	regw(ccdc_ctx[CCDC_PRGEVEN_1 >> 2], CCDC_PRGEVEN_1);
--	regw(ccdc_ctx[CCDC_PRGODD_0 >> 2], CCDC_PRGODD_0);
--	regw(ccdc_ctx[CCDC_PRGODD_1 >> 2], CCDC_PRGODD_1);
--	regw(ccdc_ctx[CCDC_VP_OUT >> 2], CCDC_VP_OUT);
--	regw(ccdc_ctx[CCDC_PCR >> 2], CCDC_PCR);
--}
--static const struct ccdc_hw_device ccdc_hw_dev = {
--	.name = "DM6446 CCDC",
--	.owner = THIS_MODULE,
--	.hw_ops = {
--		.open = ccdc_open,
--		.close = ccdc_close,
--		.reset = ccdc_sbl_reset,
--		.enable = ccdc_enable,
--		.set_hw_if_params = ccdc_set_hw_if_params,
--		.configure = ccdc_configure,
--		.set_buftype = ccdc_set_buftype,
--		.get_buftype = ccdc_get_buftype,
--		.enum_pix = ccdc_enum_pix,
--		.set_pixel_format = ccdc_set_pixel_format,
--		.get_pixel_format = ccdc_get_pixel_format,
--		.set_frame_format = ccdc_set_frame_format,
--		.get_frame_format = ccdc_get_frame_format,
--		.set_image_window = ccdc_set_image_window,
--		.get_image_window = ccdc_get_image_window,
--		.get_line_length = ccdc_get_line_length,
--		.setfbaddr = ccdc_setfbaddr,
--		.getfid = ccdc_getfid,
--	},
--};
--
--static int dm644x_ccdc_probe(struct platform_device *pdev)
--{
--	struct resource	*res;
--	int status = 0;
--
--	/*
--	 * first try to register with vpfe. If not correct platform, then we
--	 * don't have to iomap
--	 */
--	status = vpfe_register_ccdc_device(&ccdc_hw_dev);
--	if (status < 0)
--		return status;
--
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	if (!res) {
--		status = -ENODEV;
--		goto fail_nores;
--	}
--
--	res = request_mem_region(res->start, resource_size(res), res->name);
--	if (!res) {
--		status = -EBUSY;
--		goto fail_nores;
--	}
--
--	ccdc_cfg.base_addr = ioremap(res->start, resource_size(res));
--	if (!ccdc_cfg.base_addr) {
--		status = -ENOMEM;
--		goto fail_nomem;
--	}
--
--	ccdc_cfg.dev = &pdev->dev;
--	printk(KERN_NOTICE "%s is registered with vpfe.\n", ccdc_hw_dev.name);
--	return 0;
--fail_nomem:
--	release_mem_region(res->start, resource_size(res));
--fail_nores:
--	vpfe_unregister_ccdc_device(&ccdc_hw_dev);
--	return status;
--}
--
--static int dm644x_ccdc_remove(struct platform_device *pdev)
--{
--	struct resource	*res;
--
--	iounmap(ccdc_cfg.base_addr);
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	release_mem_region(res->start, resource_size(res));
--	vpfe_unregister_ccdc_device(&ccdc_hw_dev);
--	return 0;
--}
--
--static int dm644x_ccdc_suspend(struct device *dev)
--{
--	/* Save CCDC context */
--	ccdc_save_context();
--	/* Disable CCDC */
--	ccdc_enable(0);
--
--	return 0;
--}
--
--static int dm644x_ccdc_resume(struct device *dev)
--{
--	/* Restore CCDC context */
--	ccdc_restore_context();
--
--	return 0;
--}
--
--static const struct dev_pm_ops dm644x_ccdc_pm_ops = {
--	.suspend = dm644x_ccdc_suspend,
--	.resume = dm644x_ccdc_resume,
--};
--
--static struct platform_driver dm644x_ccdc_driver = {
--	.driver = {
--		.name	= "dm644x_ccdc",
--		.pm = &dm644x_ccdc_pm_ops,
--	},
--	.remove = dm644x_ccdc_remove,
--	.probe = dm644x_ccdc_probe,
--};
--
--module_platform_driver(dm644x_ccdc_driver);
-diff --git a/drivers/staging/media/deprecated/vpfe_capture/dm644x_ccdc.h b/drivers/staging/media/deprecated/vpfe_capture/dm644x_ccdc.h
-deleted file mode 100644
-index c20dba3d76d6..000000000000
---- a/drivers/staging/media/deprecated/vpfe_capture/dm644x_ccdc.h
-+++ /dev/null
-@@ -1,171 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-or-later */
--/*
-- * Copyright (C) 2006-2009 Texas Instruments Inc
-- */
--#ifndef _DM644X_CCDC_H
--#define _DM644X_CCDC_H
--#include <media/davinci/ccdc_types.h>
--#include <media/davinci/vpfe_types.h>
--
--/* enum for No of pixel per line to be avg. in Black Clamping*/
--enum ccdc_sample_length {
--	CCDC_SAMPLE_1PIXELS,
--	CCDC_SAMPLE_2PIXELS,
--	CCDC_SAMPLE_4PIXELS,
--	CCDC_SAMPLE_8PIXELS,
--	CCDC_SAMPLE_16PIXELS
--};
--
--/* enum for No of lines in Black Clamping */
--enum ccdc_sample_line {
--	CCDC_SAMPLE_1LINES,
--	CCDC_SAMPLE_2LINES,
--	CCDC_SAMPLE_4LINES,
--	CCDC_SAMPLE_8LINES,
--	CCDC_SAMPLE_16LINES
--};
--
--/* enum for Alaw gamma width */
--enum ccdc_gamma_width {
--	CCDC_GAMMA_BITS_15_6,	/* use bits 15-6 for gamma */
--	CCDC_GAMMA_BITS_14_5,
--	CCDC_GAMMA_BITS_13_4,
--	CCDC_GAMMA_BITS_12_3,
--	CCDC_GAMMA_BITS_11_2,
--	CCDC_GAMMA_BITS_10_1,
--	CCDC_GAMMA_BITS_09_0	/* use bits 9-0 for gamma */
--};
--
--/* returns the highest bit used for the gamma */
--static inline u8 ccdc_gamma_width_max_bit(enum ccdc_gamma_width width)
--{
--	return 15 - width;
--}
--
--enum ccdc_data_size {
--	CCDC_DATA_16BITS,
--	CCDC_DATA_15BITS,
--	CCDC_DATA_14BITS,
--	CCDC_DATA_13BITS,
--	CCDC_DATA_12BITS,
--	CCDC_DATA_11BITS,
--	CCDC_DATA_10BITS,
--	CCDC_DATA_8BITS
--};
--
--/* returns the highest bit used for this data size */
--static inline u8 ccdc_data_size_max_bit(enum ccdc_data_size sz)
--{
--	return sz == CCDC_DATA_8BITS ? 7 : 15 - sz;
--}
--
--/* structure for ALaw */
--struct ccdc_a_law {
--	/* Enable/disable A-Law */
--	unsigned char enable;
--	/* Gamma Width Input */
--	enum ccdc_gamma_width gamma_wd;
--};
--
--/* structure for Black Clamping */
--struct ccdc_black_clamp {
--	unsigned char enable;
--	/* only if bClampEnable is TRUE */
--	enum ccdc_sample_length sample_pixel;
--	/* only if bClampEnable is TRUE */
--	enum ccdc_sample_line sample_ln;
--	/* only if bClampEnable is TRUE */
--	unsigned short start_pixel;
--	/* only if bClampEnable is TRUE */
--	unsigned short sgain;
--	/* only if bClampEnable is FALSE */
--	unsigned short dc_sub;
--};
--
--/* structure for Black Level Compensation */
--struct ccdc_black_compensation {
--	/* Constant value to subtract from Red component */
--	char r;
--	/* Constant value to subtract from Gr component */
--	char gr;
--	/* Constant value to subtract from Blue component */
--	char b;
--	/* Constant value to subtract from Gb component */
--	char gb;
--};
--
--/* Structure for CCDC configuration parameters for raw capture mode passed
-- * by application
-- */
--struct ccdc_config_params_raw {
--	/* data size value from 8 to 16 bits */
--	enum ccdc_data_size data_sz;
--	/* Structure for Optional A-Law */
--	struct ccdc_a_law alaw;
--	/* Structure for Optical Black Clamp */
--	struct ccdc_black_clamp blk_clamp;
--	/* Structure for Black Compensation */
--	struct ccdc_black_compensation blk_comp;
--};
--
--
--#ifdef __KERNEL__
--#include <linux/io.h>
--/* Define to enable/disable video port */
--#define FP_NUM_BYTES		4
--/* Define for extra pixel/line and extra lines/frame */
--#define NUM_EXTRAPIXELS		8
--#define NUM_EXTRALINES		8
--
--/* settings for commonly used video formats */
--#define CCDC_WIN_PAL     {0, 0, 720, 576}
--/* ntsc square pixel */
--#define CCDC_WIN_VGA	{0, 0, (640 + NUM_EXTRAPIXELS), (480 + NUM_EXTRALINES)}
--
--/* Structure for CCDC configuration parameters for raw capture mode */
--struct ccdc_params_raw {
--	/* pixel format */
--	enum ccdc_pixfmt pix_fmt;
--	/* progressive or interlaced frame */
--	enum ccdc_frmfmt frm_fmt;
--	/* video window */
--	struct v4l2_rect win;
--	/* field id polarity */
--	enum vpfe_pin_pol fid_pol;
--	/* vertical sync polarity */
--	enum vpfe_pin_pol vd_pol;
--	/* horizontal sync polarity */
--	enum vpfe_pin_pol hd_pol;
--	/* interleaved or separated fields */
--	enum ccdc_buftype buf_type;
--	/*
--	 * enable to store the image in inverse
--	 * order in memory(bottom to top)
--	 */
--	unsigned char image_invert_enable;
--	/* configurable parameters */
--	struct ccdc_config_params_raw config_params;
--};
--
--struct ccdc_params_ycbcr {
--	/* pixel format */
--	enum ccdc_pixfmt pix_fmt;
--	/* progressive or interlaced frame */
--	enum ccdc_frmfmt frm_fmt;
--	/* video window */
--	struct v4l2_rect win;
--	/* field id polarity */
--	enum vpfe_pin_pol fid_pol;
--	/* vertical sync polarity */
--	enum vpfe_pin_pol vd_pol;
--	/* horizontal sync polarity */
--	enum vpfe_pin_pol hd_pol;
--	/* enable BT.656 embedded sync mode */
--	int bt656_enable;
--	/* cb:y:cr:y or y:cb:y:cr in memory */
--	enum ccdc_pixorder pix_order;
--	/* interleaved or separated fields  */
--	enum ccdc_buftype buf_type;
--};
--#endif
--#endif				/* _DM644X_CCDC_H */
-diff --git a/drivers/staging/media/deprecated/vpfe_capture/dm644x_ccdc_regs.h b/drivers/staging/media/deprecated/vpfe_capture/dm644x_ccdc_regs.h
-deleted file mode 100644
-index c4894f6a254e..000000000000
---- a/drivers/staging/media/deprecated/vpfe_capture/dm644x_ccdc_regs.h
-+++ /dev/null
-@@ -1,140 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-or-later */
--/*
-- * Copyright (C) 2006-2009 Texas Instruments Inc
-- */
--#ifndef _DM644X_CCDC_REGS_H
--#define _DM644X_CCDC_REGS_H
--
--/**************************************************************************\
--* Register OFFSET Definitions
--\**************************************************************************/
--#define CCDC_PID				0x0
--#define CCDC_PCR				0x4
--#define CCDC_SYN_MODE				0x8
--#define CCDC_HD_VD_WID				0xc
--#define CCDC_PIX_LINES				0x10
--#define CCDC_HORZ_INFO				0x14
--#define CCDC_VERT_START				0x18
--#define CCDC_VERT_LINES				0x1c
--#define CCDC_CULLING				0x20
--#define CCDC_HSIZE_OFF				0x24
--#define CCDC_SDOFST				0x28
--#define CCDC_SDR_ADDR				0x2c
--#define CCDC_CLAMP				0x30
--#define CCDC_DCSUB				0x34
--#define CCDC_COLPTN				0x38
--#define CCDC_BLKCMP				0x3c
--#define CCDC_FPC				0x40
--#define CCDC_FPC_ADDR				0x44
--#define CCDC_VDINT				0x48
--#define CCDC_ALAW				0x4c
--#define CCDC_REC656IF				0x50
--#define CCDC_CCDCFG				0x54
--#define CCDC_FMTCFG				0x58
--#define CCDC_FMT_HORZ				0x5c
--#define CCDC_FMT_VERT				0x60
--#define CCDC_FMT_ADDR0				0x64
--#define CCDC_FMT_ADDR1				0x68
--#define CCDC_FMT_ADDR2				0x6c
--#define CCDC_FMT_ADDR3				0x70
--#define CCDC_FMT_ADDR4				0x74
--#define CCDC_FMT_ADDR5				0x78
--#define CCDC_FMT_ADDR6				0x7c
--#define CCDC_FMT_ADDR7				0x80
--#define CCDC_PRGEVEN_0				0x84
--#define CCDC_PRGEVEN_1				0x88
--#define CCDC_PRGODD_0				0x8c
--#define CCDC_PRGODD_1				0x90
--#define CCDC_VP_OUT				0x94
--#define CCDC_REG_END				0x98
--
--/***************************************************************
--*	Define for various register bit mask and shifts for CCDC
--****************************************************************/
--#define CCDC_FID_POL_MASK			1
--#define CCDC_FID_POL_SHIFT			4
--#define CCDC_HD_POL_MASK			1
--#define CCDC_HD_POL_SHIFT			3
--#define CCDC_VD_POL_MASK			1
--#define CCDC_VD_POL_SHIFT			2
--#define CCDC_HSIZE_OFF_MASK			0xffffffe0
--#define CCDC_32BYTE_ALIGN_VAL			31
--#define CCDC_FRM_FMT_MASK			0x1
--#define CCDC_FRM_FMT_SHIFT			7
--#define CCDC_DATA_SZ_MASK			7
--#define CCDC_DATA_SZ_SHIFT			8
--#define CCDC_PIX_FMT_MASK			3
--#define CCDC_PIX_FMT_SHIFT			12
--#define CCDC_VP2SDR_DISABLE			0xFFFBFFFF
--#define CCDC_WEN_ENABLE				BIT(17)
--#define CCDC_SDR2RSZ_DISABLE			0xFFF7FFFF
--#define CCDC_VDHDEN_ENABLE			BIT(16)
--#define CCDC_LPF_ENABLE				BIT(14)
--#define CCDC_ALAW_ENABLE			BIT(3)
--#define CCDC_ALAW_GAMMA_WD_MASK			7
--#define CCDC_BLK_CLAMP_ENABLE			BIT(31)
--#define CCDC_BLK_SGAIN_MASK			0x1F
--#define CCDC_BLK_ST_PXL_MASK			0x7FFF
--#define CCDC_BLK_ST_PXL_SHIFT			10
--#define CCDC_BLK_SAMPLE_LN_MASK			7
--#define CCDC_BLK_SAMPLE_LN_SHIFT		28
--#define CCDC_BLK_SAMPLE_LINE_MASK		7
--#define CCDC_BLK_SAMPLE_LINE_SHIFT		25
--#define CCDC_BLK_DC_SUB_MASK			0x03FFF
--#define CCDC_BLK_COMP_MASK			0xFF
--#define CCDC_BLK_COMP_GB_COMP_SHIFT		8
--#define CCDC_BLK_COMP_GR_COMP_SHIFT		16
--#define CCDC_BLK_COMP_R_COMP_SHIFT		24
--#define CCDC_LATCH_ON_VSYNC_DISABLE		BIT(15)
--#define CCDC_FPC_ENABLE				BIT(15)
--#define CCDC_FPC_DISABLE			0
--#define CCDC_FPC_FPC_NUM_MASK			0x7FFF
--#define CCDC_DATA_PACK_ENABLE			BIT(11)
--#define CCDC_FMTCFG_VPIN_MASK			7
--#define CCDC_FMTCFG_VPIN_SHIFT			12
--#define CCDC_FMT_HORZ_FMTLNH_MASK		0x1FFF
--#define CCDC_FMT_HORZ_FMTSPH_MASK		0x1FFF
--#define CCDC_FMT_HORZ_FMTSPH_SHIFT		16
--#define CCDC_FMT_VERT_FMTLNV_MASK		0x1FFF
--#define CCDC_FMT_VERT_FMTSLV_MASK		0x1FFF
--#define CCDC_FMT_VERT_FMTSLV_SHIFT		16
--#define CCDC_VP_OUT_VERT_NUM_MASK		0x3FFF
--#define CCDC_VP_OUT_VERT_NUM_SHIFT		17
--#define CCDC_VP_OUT_HORZ_NUM_MASK		0x1FFF
--#define CCDC_VP_OUT_HORZ_NUM_SHIFT		4
--#define CCDC_VP_OUT_HORZ_ST_MASK		0xF
--#define CCDC_HORZ_INFO_SPH_SHIFT		16
--#define CCDC_VERT_START_SLV0_SHIFT		16
--#define CCDC_VDINT_VDINT0_SHIFT			16
--#define CCDC_VDINT_VDINT1_MASK			0xFFFF
--#define CCDC_PPC_RAW				1
--#define CCDC_DCSUB_DEFAULT_VAL			0
--#define CCDC_CLAMP_DEFAULT_VAL			0
--#define CCDC_ENABLE_VIDEO_PORT			0x8000
--#define CCDC_DISABLE_VIDEO_PORT			0
--#define CCDC_COLPTN_VAL				0xBB11BB11
--#define CCDC_TWO_BYTES_PER_PIXEL		2
--#define CCDC_INTERLACED_IMAGE_INVERT		0x4B6D
--#define CCDC_INTERLACED_NO_IMAGE_INVERT		0x0249
--#define CCDC_PROGRESSIVE_IMAGE_INVERT		0x4000
--#define CCDC_PROGRESSIVE_NO_IMAGE_INVERT	0
--#define CCDC_INTERLACED_HEIGHT_SHIFT		1
--#define CCDC_SYN_MODE_INPMOD_SHIFT		12
--#define CCDC_SYN_MODE_INPMOD_MASK		3
--#define CCDC_SYN_MODE_8BITS			(7 << 8)
--#define CCDC_SYN_MODE_10BITS			(6 << 8)
--#define CCDC_SYN_MODE_11BITS			(5 << 8)
--#define CCDC_SYN_MODE_12BITS			(4 << 8)
--#define CCDC_SYN_MODE_13BITS			(3 << 8)
--#define CCDC_SYN_MODE_14BITS			(2 << 8)
--#define CCDC_SYN_MODE_15BITS			(1 << 8)
--#define CCDC_SYN_MODE_16BITS			(0 << 8)
--#define CCDC_SYN_FLDMODE_MASK			1
--#define CCDC_SYN_FLDMODE_SHIFT			7
--#define CCDC_REC656IF_BT656_EN			3
--#define CCDC_SYN_MODE_VD_POL_NEGATIVE		BIT(2)
--#define CCDC_CCDCFG_Y8POS_SHIFT			11
--#define CCDC_CCDCFG_BW656_10BIT			BIT(5)
--#define CCDC_SDOFST_FIELD_INTERLEAVED		0x249
--#define CCDC_NO_CULLING				0xffff00ff
--#endif
-diff --git a/drivers/staging/media/deprecated/vpfe_capture/isif.c b/drivers/staging/media/deprecated/vpfe_capture/isif.c
-deleted file mode 100644
-index 4059891c2824..000000000000
---- a/drivers/staging/media/deprecated/vpfe_capture/isif.c
-+++ /dev/null
-@@ -1,1127 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-or-later
--/*
-- * Copyright (C) 2008-2009 Texas Instruments Inc
-- *
-- * Image Sensor Interface (ISIF) driver
-- *
-- * This driver is for configuring the ISIF IP available on DM365 or any other
-- * TI SoCs. This is used for capturing yuv or bayer video or image data
-- * from a decoder or sensor. This IP is similar to the CCDC IP on DM355
-- * and DM6446, but with enhanced or additional ip blocks. The driver
-- * configures the ISIF upon commands from the vpfe bridge driver through
-- * ccdc_hw_device interface.
-- *
-- * TODO: 1) Raw bayer parameter settings and bayer capture
-- *	 2) Add support for control ioctl
-- */
--#include <linux/delay.h>
--#include <linux/platform_device.h>
--#include <linux/uaccess.h>
--#include <linux/io.h>
--#include <linux/videodev2.h>
--#include <linux/err.h>
--#include <linux/module.h>
--
--#include "isif.h"
--#include <media/davinci/vpss.h>
--
--#include "isif_regs.h"
--#include "ccdc_hw_device.h"
--
--/* Defaults for module configuration parameters */
--static const struct isif_config_params_raw isif_config_defaults = {
--	.linearize = {
--		.en = 0,
--		.corr_shft = ISIF_NO_SHIFT,
--		.scale_fact = {1, 0},
--	},
--	.df_csc = {
--		.df_or_csc = 0,
--		.csc = {
--			.en = 0,
--		},
--	},
--	.dfc = {
--		.en = 0,
--	},
--	.bclamp = {
--		.en = 0,
--	},
--	.gain_offset = {
--		.gain = {
--			.r_ye = {1, 0},
--			.gr_cy = {1, 0},
--			.gb_g = {1, 0},
--			.b_mg = {1, 0},
--		},
--	},
--	.culling = {
--		.hcpat_odd = 0xff,
--		.hcpat_even = 0xff,
--		.vcpat = 0xff,
--	},
--	.compress = {
--		.alg = ISIF_ALAW,
--	},
--};
--
--/* ISIF operation configuration */
--static struct isif_oper_config {
--	struct device *dev;
--	enum vpfe_hw_if_type if_type;
--	struct isif_ycbcr_config ycbcr;
--	struct isif_params_raw bayer;
--	enum isif_data_pack data_pack;
--	/* ISIF base address */
--	void __iomem *base_addr;
--	/* ISIF Linear Table 0 */
--	void __iomem *linear_tbl0_addr;
--	/* ISIF Linear Table 1 */
--	void __iomem *linear_tbl1_addr;
--} isif_cfg = {
--	.ycbcr = {
--		.pix_fmt = CCDC_PIXFMT_YCBCR_8BIT,
--		.frm_fmt = CCDC_FRMFMT_INTERLACED,
--		.win = ISIF_WIN_NTSC,
--		.fid_pol = VPFE_PINPOL_POSITIVE,
--		.vd_pol = VPFE_PINPOL_POSITIVE,
--		.hd_pol = VPFE_PINPOL_POSITIVE,
--		.pix_order = CCDC_PIXORDER_CBYCRY,
--		.buf_type = CCDC_BUFTYPE_FLD_INTERLEAVED,
--	},
--	.bayer = {
--		.pix_fmt = CCDC_PIXFMT_RAW,
--		.frm_fmt = CCDC_FRMFMT_PROGRESSIVE,
--		.win = ISIF_WIN_VGA,
--		.fid_pol = VPFE_PINPOL_POSITIVE,
--		.vd_pol = VPFE_PINPOL_POSITIVE,
--		.hd_pol = VPFE_PINPOL_POSITIVE,
--		.gain = {
--			.r_ye = {1, 0},
--			.gr_cy = {1, 0},
--			.gb_g = {1, 0},
--			.b_mg = {1, 0},
--		},
--		.cfa_pat = ISIF_CFA_PAT_MOSAIC,
--		.data_msb = ISIF_BIT_MSB_11,
--		.config_params = {
--			.data_shift = ISIF_NO_SHIFT,
--			.col_pat_field0 = {
--				.olop = ISIF_GREEN_BLUE,
--				.olep = ISIF_BLUE,
--				.elop = ISIF_RED,
--				.elep = ISIF_GREEN_RED,
--			},
--			.col_pat_field1 = {
--				.olop = ISIF_GREEN_BLUE,
--				.olep = ISIF_BLUE,
--				.elop = ISIF_RED,
--				.elep = ISIF_GREEN_RED,
--			},
--			.test_pat_gen = 0,
--		},
--	},
--	.data_pack = ISIF_DATA_PACK8,
--};
--
--/* Raw Bayer formats */
--static const u32 isif_raw_bayer_pix_formats[] = {
--	V4L2_PIX_FMT_SBGGR8, V4L2_PIX_FMT_SBGGR16};
--
--/* Raw YUV formats */
--static const u32 isif_raw_yuv_pix_formats[] = {
--	V4L2_PIX_FMT_UYVY, V4L2_PIX_FMT_YUYV};
--
--/* register access routines */
--static inline u32 regr(u32 offset)
--{
--	return __raw_readl(isif_cfg.base_addr + offset);
--}
--
--static inline void regw(u32 val, u32 offset)
--{
--	__raw_writel(val, isif_cfg.base_addr + offset);
--}
--
--/* reg_modify() - read, modify and write register */
--static inline u32 reg_modify(u32 mask, u32 val, u32 offset)
--{
--	u32 new_val = (regr(offset) & ~mask) | (val & mask);
--
--	regw(new_val, offset);
--	return new_val;
--}
--
--static inline void regw_lin_tbl(u32 val, u32 offset, int i)
--{
--	if (!i)
--		__raw_writel(val, isif_cfg.linear_tbl0_addr + offset);
--	else
--		__raw_writel(val, isif_cfg.linear_tbl1_addr + offset);
--}
--
--static void isif_disable_all_modules(void)
--{
--	/* disable BC */
--	regw(0, CLAMPCFG);
--	/* disable vdfc */
--	regw(0, DFCCTL);
--	/* disable CSC */
--	regw(0, CSCCTL);
--	/* disable linearization */
--	regw(0, LINCFG0);
--	/* disable other modules here as they are supported */
--}
--
--static void isif_enable(int en)
--{
--	if (!en) {
--		/* Before disable isif, disable all ISIF modules */
--		isif_disable_all_modules();
--		/*
--		 * wait for next VD. Assume lowest scan rate is 12 Hz. So
--		 * 100 msec delay is good enough
--		 */
--		msleep(100);
--	}
--	reg_modify(ISIF_SYNCEN_VDHDEN_MASK, en, SYNCEN);
--}
--
--static void isif_enable_output_to_sdram(int en)
--{
--	reg_modify(ISIF_SYNCEN_WEN_MASK, en << ISIF_SYNCEN_WEN_SHIFT, SYNCEN);
--}
--
--static void isif_config_culling(struct isif_cul *cul)
--{
--	u32 val;
--
--	/* Horizontal pattern */
--	val = (cul->hcpat_even << CULL_PAT_EVEN_LINE_SHIFT) | cul->hcpat_odd;
--	regw(val, CULH);
--
--	/* vertical pattern */
--	regw(cul->vcpat, CULV);
--
--	/* LPF */
--	reg_modify(ISIF_LPF_MASK << ISIF_LPF_SHIFT,
--		  cul->en_lpf << ISIF_LPF_SHIFT, MODESET);
--}
--
--static void isif_config_gain_offset(void)
--{
--	struct isif_gain_offsets_adj *gain_off_p =
--		&isif_cfg.bayer.config_params.gain_offset;
--	u32 val;
--
--	val = (!!gain_off_p->gain_sdram_en << GAIN_SDRAM_EN_SHIFT) |
--	      (!!gain_off_p->gain_ipipe_en << GAIN_IPIPE_EN_SHIFT) |
--	      (!!gain_off_p->gain_h3a_en << GAIN_H3A_EN_SHIFT) |
--	      (!!gain_off_p->offset_sdram_en << OFST_SDRAM_EN_SHIFT) |
--	      (!!gain_off_p->offset_ipipe_en << OFST_IPIPE_EN_SHIFT) |
--	      (!!gain_off_p->offset_h3a_en << OFST_H3A_EN_SHIFT);
--
--	reg_modify(GAIN_OFFSET_EN_MASK, val, CGAMMAWD);
--
--	val = (gain_off_p->gain.r_ye.integer << GAIN_INTEGER_SHIFT) |
--	       gain_off_p->gain.r_ye.decimal;
--	regw(val, CRGAIN);
--
--	val = (gain_off_p->gain.gr_cy.integer << GAIN_INTEGER_SHIFT) |
--	       gain_off_p->gain.gr_cy.decimal;
--	regw(val, CGRGAIN);
--
--	val = (gain_off_p->gain.gb_g.integer << GAIN_INTEGER_SHIFT) |
--	       gain_off_p->gain.gb_g.decimal;
--	regw(val, CGBGAIN);
--
--	val = (gain_off_p->gain.b_mg.integer << GAIN_INTEGER_SHIFT) |
--	       gain_off_p->gain.b_mg.decimal;
--	regw(val, CBGAIN);
--
--	regw(gain_off_p->offset, COFSTA);
--}
--
--static void isif_restore_defaults(void)
--{
--	enum vpss_ccdc_source_sel source = VPSS_CCDCIN;
--
--	dev_dbg(isif_cfg.dev, "\nstarting isif_restore_defaults...");
--	isif_cfg.bayer.config_params = isif_config_defaults;
--	/* Enable clock to ISIF, IPIPEIF and BL */
--	vpss_enable_clock(VPSS_CCDC_CLOCK, 1);
--	vpss_enable_clock(VPSS_IPIPEIF_CLOCK, 1);
--	vpss_enable_clock(VPSS_BL_CLOCK, 1);
--	/* Set default offset and gain */
--	isif_config_gain_offset();
--	vpss_select_ccdc_source(source);
--	dev_dbg(isif_cfg.dev, "\nEnd of isif_restore_defaults...");
--}
--
--static int isif_open(struct device *device)
--{
--	isif_restore_defaults();
--	return 0;
--}
--
--/* This function will configure the window size to be capture in ISIF reg */
--static void isif_setwin(struct v4l2_rect *image_win,
--			enum ccdc_frmfmt frm_fmt, int ppc)
--{
--	int horz_start, horz_nr_pixels;
--	int vert_start, vert_nr_lines;
--	int mid_img = 0;
--
--	dev_dbg(isif_cfg.dev, "\nStarting isif_setwin...");
--	/*
--	 * ppc - per pixel count. indicates how many pixels per cell
--	 * output to SDRAM. example, for ycbcr, it is one y and one c, so 2.
--	 * raw capture this is 1
--	 */
--	horz_start = image_win->left << (ppc - 1);
--	horz_nr_pixels = ((image_win->width) << (ppc - 1)) - 1;
--
--	/* Writing the horizontal info into the registers */
--	regw(horz_start & START_PX_HOR_MASK, SPH);
--	regw(horz_nr_pixels & NUM_PX_HOR_MASK, LNH);
--	vert_start = image_win->top;
--
--	if (frm_fmt == CCDC_FRMFMT_INTERLACED) {
--		vert_nr_lines = (image_win->height >> 1) - 1;
--		vert_start >>= 1;
--		/* To account for VD since line 0 doesn't have any data */
--		vert_start += 1;
--	} else {
--		/* To account for VD since line 0 doesn't have any data */
--		vert_start += 1;
--		vert_nr_lines = image_win->height - 1;
--		/* configure VDINT0 and VDINT1 */
--		mid_img = vert_start + (image_win->height / 2);
--		regw(mid_img, VDINT1);
--	}
--
--	regw(0, VDINT0);
--	regw(vert_start & START_VER_ONE_MASK, SLV0);
--	regw(vert_start & START_VER_TWO_MASK, SLV1);
--	regw(vert_nr_lines & NUM_LINES_VER, LNV);
--}
--
--static void isif_config_bclamp(struct isif_black_clamp *bc)
--{
--	u32 val;
--
--	/*
--	 * DC Offset is always added to image data irrespective of bc enable
--	 * status
--	 */
--	regw(bc->dc_offset, CLDCOFST);
--
--	if (bc->en) {
--		val = bc->bc_mode_color << ISIF_BC_MODE_COLOR_SHIFT;
--
--		/* Enable BC and horizontal clamp calculation parameters */
--		val = val | 1 | (bc->horz.mode << ISIF_HORZ_BC_MODE_SHIFT);
--
--		regw(val, CLAMPCFG);
--
--		if (bc->horz.mode != ISIF_HORZ_BC_DISABLE) {
--			/*
--			 * Window count for calculation
--			 * Base window selection
--			 * pixel limit
--			 * Horizontal size of window
--			 * vertical size of the window
--			 * Horizontal start position of the window
--			 * Vertical start position of the window
--			 */
--			val = bc->horz.win_count_calc |
--			      ((!!bc->horz.base_win_sel_calc) <<
--				ISIF_HORZ_BC_WIN_SEL_SHIFT) |
--			      ((!!bc->horz.clamp_pix_limit) <<
--				ISIF_HORZ_BC_PIX_LIMIT_SHIFT) |
--			      (bc->horz.win_h_sz_calc <<
--				ISIF_HORZ_BC_WIN_H_SIZE_SHIFT) |
--			      (bc->horz.win_v_sz_calc <<
--				ISIF_HORZ_BC_WIN_V_SIZE_SHIFT);
--			regw(val, CLHWIN0);
--
--			regw(bc->horz.win_start_h_calc, CLHWIN1);
--			regw(bc->horz.win_start_v_calc, CLHWIN2);
--		}
--
--		/* vertical clamp calculation parameters */
--
--		/* Reset clamp value sel for previous line */
--		val |=
--		(bc->vert.reset_val_sel << ISIF_VERT_BC_RST_VAL_SEL_SHIFT) |
--		(bc->vert.line_ave_coef << ISIF_VERT_BC_LINE_AVE_COEF_SHIFT);
--		regw(val, CLVWIN0);
--
--		/* Optical Black horizontal start position */
--		regw(bc->vert.ob_start_h, CLVWIN1);
--		/* Optical Black vertical start position */
--		regw(bc->vert.ob_start_v, CLVWIN2);
--		/* Optical Black vertical size for calculation */
--		regw(bc->vert.ob_v_sz_calc, CLVWIN3);
--		/* Vertical start position for BC subtraction */
--		regw(bc->vert_start_sub, CLSV);
--	}
--}
--
--static void isif_config_linearization(struct isif_linearize *linearize)
--{
--	u32 val, i;
--
--	if (!linearize->en) {
--		regw(0, LINCFG0);
--		return;
--	}
--
--	/* shift value for correction & enable linearization (set lsb) */
--	val = (linearize->corr_shft << ISIF_LIN_CORRSFT_SHIFT) | 1;
--	regw(val, LINCFG0);
--
--	/* Scale factor */
--	val = ((!!linearize->scale_fact.integer) <<
--	       ISIF_LIN_SCALE_FACT_INTEG_SHIFT) |
--	       linearize->scale_fact.decimal;
--	regw(val, LINCFG1);
--
--	for (i = 0; i < ISIF_LINEAR_TAB_SIZE; i++) {
--		if (i % 2)
--			regw_lin_tbl(linearize->table[i], ((i >> 1) << 2), 1);
--		else
--			regw_lin_tbl(linearize->table[i], ((i >> 1) << 2), 0);
--	}
--}
--
--static int isif_config_dfc(struct isif_dfc *vdfc)
--{
--	/* initialize retries to loop for max ~ 250 usec */
--	u32 val, count, retries = loops_per_jiffy / (4000/HZ);
--	int i;
--
--	if (!vdfc->en)
--		return 0;
--
--	/* Correction mode */
--	val = (vdfc->corr_mode << ISIF_VDFC_CORR_MOD_SHIFT);
--
--	/* Correct whole line or partial */
--	if (vdfc->corr_whole_line)
--		val |= 1 << ISIF_VDFC_CORR_WHOLE_LN_SHIFT;
--
--	/* level shift value */
--	val |= vdfc->def_level_shift << ISIF_VDFC_LEVEL_SHFT_SHIFT;
--
--	regw(val, DFCCTL);
--
--	/* Defect saturation level */
--	regw(vdfc->def_sat_level, VDFSATLV);
--
--	regw(vdfc->table[0].pos_vert, DFCMEM0);
--	regw(vdfc->table[0].pos_horz, DFCMEM1);
--	if (vdfc->corr_mode == ISIF_VDFC_NORMAL ||
--	    vdfc->corr_mode == ISIF_VDFC_HORZ_INTERPOL_IF_SAT) {
--		regw(vdfc->table[0].level_at_pos, DFCMEM2);
--		regw(vdfc->table[0].level_up_pixels, DFCMEM3);
--		regw(vdfc->table[0].level_low_pixels, DFCMEM4);
--	}
--
--	/* set DFCMARST and set DFCMWR */
--	val = regr(DFCMEMCTL) | (1 << ISIF_DFCMEMCTL_DFCMARST_SHIFT) | 1;
--	regw(val, DFCMEMCTL);
--
--	count = retries;
--	while (count && (regr(DFCMEMCTL) & 0x1))
--		count--;
--
--	if (!count) {
--		dev_dbg(isif_cfg.dev, "defect table write timeout !!!\n");
--		return -1;
--	}
--
--	for (i = 1; i < vdfc->num_vdefects; i++) {
--		regw(vdfc->table[i].pos_vert, DFCMEM0);
--		regw(vdfc->table[i].pos_horz, DFCMEM1);
--		if (vdfc->corr_mode == ISIF_VDFC_NORMAL ||
--		    vdfc->corr_mode == ISIF_VDFC_HORZ_INTERPOL_IF_SAT) {
--			regw(vdfc->table[i].level_at_pos, DFCMEM2);
--			regw(vdfc->table[i].level_up_pixels, DFCMEM3);
--			regw(vdfc->table[i].level_low_pixels, DFCMEM4);
--		}
--		val = regr(DFCMEMCTL);
--		/* clear DFCMARST and set DFCMWR */
--		val &= ~BIT(ISIF_DFCMEMCTL_DFCMARST_SHIFT);
--		val |= 1;
--		regw(val, DFCMEMCTL);
--
--		count = retries;
--		while (count && (regr(DFCMEMCTL) & 0x1))
--			count--;
--
--		if (!count) {
--			dev_err(isif_cfg.dev,
--				"defect table write timeout !!!\n");
--			return -1;
--		}
--	}
--	if (vdfc->num_vdefects < ISIF_VDFC_TABLE_SIZE) {
--		/* Extra cycle needed */
--		regw(0, DFCMEM0);
--		regw(0x1FFF, DFCMEM1);
--		regw(1, DFCMEMCTL);
--	}
--
--	/* enable VDFC */
--	reg_modify((1 << ISIF_VDFC_EN_SHIFT), (1 << ISIF_VDFC_EN_SHIFT),
--		   DFCCTL);
--	return 0;
--}
--
--static void isif_config_csc(struct isif_df_csc *df_csc)
--{
--	u32 val1 = 0, val2 = 0, i;
--
--	if (!df_csc->csc.en) {
--		regw(0, CSCCTL);
--		return;
--	}
--	for (i = 0; i < ISIF_CSC_NUM_COEFF; i++) {
--		if ((i % 2) == 0) {
--			/* CSCM - LSB */
--			val1 = (df_csc->csc.coeff[i].integer <<
--				ISIF_CSC_COEF_INTEG_SHIFT) |
--				df_csc->csc.coeff[i].decimal;
--		} else {
--
--			/* CSCM - MSB */
--			val2 = (df_csc->csc.coeff[i].integer <<
--				ISIF_CSC_COEF_INTEG_SHIFT) |
--				df_csc->csc.coeff[i].decimal;
--			val2 <<= ISIF_CSCM_MSB_SHIFT;
--			val2 |= val1;
--			regw(val2, (CSCM0 + ((i - 1) << 1)));
--		}
--	}
--
--	/* program the active area */
--	regw(df_csc->start_pix, FMTSPH);
--	/*
--	 * one extra pixel as required for CSC. Actually number of
--	 * pixel - 1 should be configured in this register. So we
--	 * need to subtract 1 before writing to FMTSPH, but we will
--	 * not do this since csc requires one extra pixel
--	 */
--	regw(df_csc->num_pixels, FMTLNH);
--	regw(df_csc->start_line, FMTSLV);
--	/*
--	 * one extra line as required for CSC. See reason documented for
--	 * num_pixels
--	 */
--	regw(df_csc->num_lines, FMTLNV);
--
--	/* Enable CSC */
--	regw(1, CSCCTL);
--}
--
--static int isif_config_raw(void)
--{
--	struct isif_params_raw *params = &isif_cfg.bayer;
--	struct isif_config_params_raw *module_params =
--		&isif_cfg.bayer.config_params;
--	struct vpss_pg_frame_size frame_size;
--	struct vpss_sync_pol sync;
--	u32 val;
--
--	dev_dbg(isif_cfg.dev, "\nStarting isif_config_raw..\n");
--
--	/*
--	 * Configure CCDCFG register:-
--	 * Set CCD Not to swap input since input is RAW data
--	 * Set FID detection function to Latch at V-Sync
--	 * Set WENLOG - isif valid area
--	 * Set TRGSEL
--	 * Set EXTRG
--	 * Packed to 8 or 16 bits
--	 */
--
--	val = ISIF_YCINSWP_RAW | ISIF_CCDCFG_FIDMD_LATCH_VSYNC |
--		ISIF_CCDCFG_WENLOG_AND | ISIF_CCDCFG_TRGSEL_WEN |
--		ISIF_CCDCFG_EXTRG_DISABLE | isif_cfg.data_pack;
--
--	dev_dbg(isif_cfg.dev, "Writing 0x%x to ...CCDCFG \n", val);
--	regw(val, CCDCFG);
--
--	/*
--	 * Configure the vertical sync polarity(MODESET.VDPOL)
--	 * Configure the horizontal sync polarity (MODESET.HDPOL)
--	 * Configure frame id polarity (MODESET.FLDPOL)
--	 * Configure data polarity
--	 * Configure External WEN Selection
--	 * Configure frame format(progressive or interlace)
--	 * Configure pixel format (Input mode)
--	 * Configure the data shift
--	 */
--
--	val = ISIF_VDHDOUT_INPUT | (params->vd_pol << ISIF_VD_POL_SHIFT) |
--		(params->hd_pol << ISIF_HD_POL_SHIFT) |
--		(params->fid_pol << ISIF_FID_POL_SHIFT) |
--		(ISIF_DATAPOL_NORMAL << ISIF_DATAPOL_SHIFT) |
--		(ISIF_EXWEN_DISABLE << ISIF_EXWEN_SHIFT) |
--		(params->frm_fmt << ISIF_FRM_FMT_SHIFT) |
--		(params->pix_fmt << ISIF_INPUT_SHIFT) |
--		(params->config_params.data_shift << ISIF_DATASFT_SHIFT);
--
--	regw(val, MODESET);
--	dev_dbg(isif_cfg.dev, "Writing 0x%x to MODESET...\n", val);
--
--	/*
--	 * Configure GAMMAWD register
--	 * CFA pattern setting
--	 */
--	val = params->cfa_pat << ISIF_GAMMAWD_CFA_SHIFT;
--
--	/* Gamma msb */
--	if (module_params->compress.alg == ISIF_ALAW)
--		val |= ISIF_ALAW_ENABLE;
--
--	val |= (params->data_msb << ISIF_ALAW_GAMMA_WD_SHIFT);
--	regw(val, CGAMMAWD);
--
--	/* Configure DPCM compression settings */
--	if (module_params->compress.alg == ISIF_DPCM) {
--		val =  BIT(ISIF_DPCM_EN_SHIFT) |
--		       (module_params->compress.pred <<
--		       ISIF_DPCM_PREDICTOR_SHIFT);
--	}
--
--	regw(val, MISC);
--
--	/* Configure Gain & Offset */
--	isif_config_gain_offset();
--
--	/* Configure Color pattern */
--	val = (params->config_params.col_pat_field0.olop) |
--	      (params->config_params.col_pat_field0.olep << 2) |
--	      (params->config_params.col_pat_field0.elop << 4) |
--	      (params->config_params.col_pat_field0.elep << 6) |
--	      (params->config_params.col_pat_field1.olop << 8) |
--	      (params->config_params.col_pat_field1.olep << 10) |
--	      (params->config_params.col_pat_field1.elop << 12) |
--	      (params->config_params.col_pat_field1.elep << 14);
--	regw(val, CCOLP);
--	dev_dbg(isif_cfg.dev, "Writing %x to CCOLP ...\n", val);
--
--	/* Configure HSIZE register  */
--	val = (!!params->horz_flip_en) << ISIF_HSIZE_FLIP_SHIFT;
--
--	/* calculate line offset in 32 bytes based on pack value */
--	if (isif_cfg.data_pack == ISIF_PACK_8BIT)
--		val |= ((params->win.width + 31) >> 5);
--	else if (isif_cfg.data_pack == ISIF_PACK_12BIT)
--		val |= (((params->win.width +
--		       (params->win.width >> 2)) + 31) >> 5);
--	else
--		val |= (((params->win.width * 2) + 31) >> 5);
--	regw(val, HSIZE);
--
--	/* Configure SDOFST register  */
--	if (params->frm_fmt == CCDC_FRMFMT_INTERLACED) {
--		if (params->image_invert_en) {
--			/* For interlace inverse mode */
--			regw(0x4B6D, SDOFST);
--			dev_dbg(isif_cfg.dev, "Writing 0x4B6D to SDOFST...\n");
--		} else {
--			/* For interlace non inverse mode */
--			regw(0x0B6D, SDOFST);
--			dev_dbg(isif_cfg.dev, "Writing 0x0B6D to SDOFST...\n");
--		}
--	} else if (params->frm_fmt == CCDC_FRMFMT_PROGRESSIVE) {
--		if (params->image_invert_en) {
--			/* For progressive inverse mode */
--			regw(0x4000, SDOFST);
--			dev_dbg(isif_cfg.dev, "Writing 0x4000 to SDOFST...\n");
--		} else {
--			/* For progressive non inverse mode */
--			regw(0x0000, SDOFST);
--			dev_dbg(isif_cfg.dev, "Writing 0x0000 to SDOFST...\n");
--		}
--	}
--
--	/* Configure video window */
--	isif_setwin(&params->win, params->frm_fmt, 1);
--
--	/* Configure Black Clamp */
--	isif_config_bclamp(&module_params->bclamp);
--
--	/* Configure Vertical Defection Pixel Correction */
--	if (isif_config_dfc(&module_params->dfc) < 0)
--		return -EFAULT;
--
--	if (!module_params->df_csc.df_or_csc)
--		/* Configure Color Space Conversion */
--		isif_config_csc(&module_params->df_csc);
--
--	isif_config_linearization(&module_params->linearize);
--
--	/* Configure Culling */
--	isif_config_culling(&module_params->culling);
--
--	/* Configure horizontal and vertical offsets(DFC,LSC,Gain) */
--	regw(module_params->horz_offset, DATAHOFST);
--	regw(module_params->vert_offset, DATAVOFST);
--
--	/* Setup test pattern if enabled */
--	if (params->config_params.test_pat_gen) {
--		/* Use the HD/VD pol settings from user */
--		sync.ccdpg_hdpol = params->hd_pol;
--		sync.ccdpg_vdpol = params->vd_pol;
--		dm365_vpss_set_sync_pol(sync);
--		frame_size.hlpfr = isif_cfg.bayer.win.width;
--		frame_size.pplen = isif_cfg.bayer.win.height;
--		dm365_vpss_set_pg_frame_size(frame_size);
--		vpss_select_ccdc_source(VPSS_PGLPBK);
--	}
--
--	dev_dbg(isif_cfg.dev, "\nEnd of isif_config_ycbcr...\n");
--	return 0;
--}
--
--static int isif_set_buftype(enum ccdc_buftype buf_type)
--{
--	if (isif_cfg.if_type == VPFE_RAW_BAYER)
--		isif_cfg.bayer.buf_type = buf_type;
--	else
--		isif_cfg.ycbcr.buf_type = buf_type;
--
--	return 0;
--
--}
--static enum ccdc_buftype isif_get_buftype(void)
--{
--	if (isif_cfg.if_type == VPFE_RAW_BAYER)
--		return isif_cfg.bayer.buf_type;
--
--	return isif_cfg.ycbcr.buf_type;
--}
--
--static int isif_enum_pix(u32 *pix, int i)
--{
--	int ret = -EINVAL;
--
--	if (isif_cfg.if_type == VPFE_RAW_BAYER) {
--		if (i < ARRAY_SIZE(isif_raw_bayer_pix_formats)) {
--			*pix = isif_raw_bayer_pix_formats[i];
--			ret = 0;
--		}
--	} else {
--		if (i < ARRAY_SIZE(isif_raw_yuv_pix_formats)) {
--			*pix = isif_raw_yuv_pix_formats[i];
--			ret = 0;
--		}
--	}
--
--	return ret;
--}
--
--static int isif_set_pixel_format(unsigned int pixfmt)
--{
--	if (isif_cfg.if_type == VPFE_RAW_BAYER) {
--		if (pixfmt == V4L2_PIX_FMT_SBGGR8) {
--			if ((isif_cfg.bayer.config_params.compress.alg !=
--			     ISIF_ALAW) &&
--			    (isif_cfg.bayer.config_params.compress.alg !=
--			     ISIF_DPCM)) {
--				dev_dbg(isif_cfg.dev,
--					"Either configure A-Law or DPCM\n");
--				return -EINVAL;
--			}
--			isif_cfg.data_pack = ISIF_PACK_8BIT;
--		} else if (pixfmt == V4L2_PIX_FMT_SBGGR16) {
--			isif_cfg.bayer.config_params.compress.alg =
--					ISIF_NO_COMPRESSION;
--			isif_cfg.data_pack = ISIF_PACK_16BIT;
--		} else
--			return -EINVAL;
--		isif_cfg.bayer.pix_fmt = CCDC_PIXFMT_RAW;
--	} else {
--		if (pixfmt == V4L2_PIX_FMT_YUYV)
--			isif_cfg.ycbcr.pix_order = CCDC_PIXORDER_YCBYCR;
--		else if (pixfmt == V4L2_PIX_FMT_UYVY)
--			isif_cfg.ycbcr.pix_order = CCDC_PIXORDER_CBYCRY;
--		else
--			return -EINVAL;
--		isif_cfg.data_pack = ISIF_PACK_8BIT;
--	}
--	return 0;
--}
--
--static u32 isif_get_pixel_format(void)
--{
--	u32 pixfmt;
--
--	if (isif_cfg.if_type == VPFE_RAW_BAYER)
--		if (isif_cfg.bayer.config_params.compress.alg == ISIF_ALAW ||
--		    isif_cfg.bayer.config_params.compress.alg == ISIF_DPCM)
--			pixfmt = V4L2_PIX_FMT_SBGGR8;
--		else
--			pixfmt = V4L2_PIX_FMT_SBGGR16;
--	else {
--		if (isif_cfg.ycbcr.pix_order == CCDC_PIXORDER_YCBYCR)
--			pixfmt = V4L2_PIX_FMT_YUYV;
--		else
--			pixfmt = V4L2_PIX_FMT_UYVY;
--	}
--	return pixfmt;
--}
--
--static int isif_set_image_window(struct v4l2_rect *win)
--{
--	if (isif_cfg.if_type == VPFE_RAW_BAYER) {
--		isif_cfg.bayer.win.top = win->top;
--		isif_cfg.bayer.win.left = win->left;
--		isif_cfg.bayer.win.width = win->width;
--		isif_cfg.bayer.win.height = win->height;
--	} else {
--		isif_cfg.ycbcr.win.top = win->top;
--		isif_cfg.ycbcr.win.left = win->left;
--		isif_cfg.ycbcr.win.width = win->width;
--		isif_cfg.ycbcr.win.height = win->height;
--	}
--	return 0;
--}
--
--static void isif_get_image_window(struct v4l2_rect *win)
--{
--	if (isif_cfg.if_type == VPFE_RAW_BAYER)
--		*win = isif_cfg.bayer.win;
--	else
--		*win = isif_cfg.ycbcr.win;
--}
--
--static unsigned int isif_get_line_length(void)
--{
--	unsigned int len;
--
--	if (isif_cfg.if_type == VPFE_RAW_BAYER) {
--		if (isif_cfg.data_pack == ISIF_PACK_8BIT)
--			len = ((isif_cfg.bayer.win.width));
--		else if (isif_cfg.data_pack == ISIF_PACK_12BIT)
--			len = (((isif_cfg.bayer.win.width * 2) +
--				 (isif_cfg.bayer.win.width >> 2)));
--		else
--			len = (((isif_cfg.bayer.win.width * 2)));
--	} else
--		len = (((isif_cfg.ycbcr.win.width * 2)));
--	return ALIGN(len, 32);
--}
--
--static int isif_set_frame_format(enum ccdc_frmfmt frm_fmt)
--{
--	if (isif_cfg.if_type == VPFE_RAW_BAYER)
--		isif_cfg.bayer.frm_fmt = frm_fmt;
--	else
--		isif_cfg.ycbcr.frm_fmt = frm_fmt;
--	return 0;
--}
--static enum ccdc_frmfmt isif_get_frame_format(void)
--{
--	if (isif_cfg.if_type == VPFE_RAW_BAYER)
--		return isif_cfg.bayer.frm_fmt;
--	return isif_cfg.ycbcr.frm_fmt;
--}
--
--static int isif_getfid(void)
--{
--	return (regr(MODESET) >> 15) & 0x1;
--}
--
--/* misc operations */
--static void isif_setfbaddr(unsigned long addr)
--{
--	regw((addr >> 21) & 0x07ff, CADU);
--	regw((addr >> 5) & 0x0ffff, CADL);
--}
--
--static int isif_set_hw_if_params(struct vpfe_hw_if_param *params)
--{
--	isif_cfg.if_type = params->if_type;
--
--	switch (params->if_type) {
--	case VPFE_BT656:
--	case VPFE_BT656_10BIT:
--	case VPFE_YCBCR_SYNC_8:
--		isif_cfg.ycbcr.pix_fmt = CCDC_PIXFMT_YCBCR_8BIT;
--		isif_cfg.ycbcr.pix_order = CCDC_PIXORDER_CBYCRY;
--		break;
--	case VPFE_BT1120:
--	case VPFE_YCBCR_SYNC_16:
--		isif_cfg.ycbcr.pix_fmt = CCDC_PIXFMT_YCBCR_16BIT;
--		isif_cfg.ycbcr.pix_order = CCDC_PIXORDER_CBYCRY;
--		break;
--	case VPFE_RAW_BAYER:
--		isif_cfg.bayer.pix_fmt = CCDC_PIXFMT_RAW;
--		break;
--	default:
--		dev_dbg(isif_cfg.dev, "Invalid interface type\n");
--		return -EINVAL;
--	}
--
--	return 0;
--}
--
--/* This function will configure ISIF for YCbCr parameters. */
--static int isif_config_ycbcr(void)
--{
--	struct isif_ycbcr_config *params = &isif_cfg.ycbcr;
--	u32 modeset = 0, ccdcfg = 0;
--
--	dev_dbg(isif_cfg.dev, "\nStarting isif_config_ycbcr...");
--
--	/* configure pixel format or input mode */
--	modeset = modeset | (params->pix_fmt << ISIF_INPUT_SHIFT) |
--		  (params->frm_fmt << ISIF_FRM_FMT_SHIFT) |
--		  (params->fid_pol << ISIF_FID_POL_SHIFT) |
--		  (params->hd_pol << ISIF_HD_POL_SHIFT) |
--		  (params->vd_pol << ISIF_VD_POL_SHIFT);
--
--	/* pack the data to 8-bit ISIFCFG */
--	switch (isif_cfg.if_type) {
--	case VPFE_BT656:
--		if (params->pix_fmt != CCDC_PIXFMT_YCBCR_8BIT) {
--			dev_dbg(isif_cfg.dev, "Invalid pix_fmt(input mode)\n");
--			return -EINVAL;
--		}
--		modeset |= (VPFE_PINPOL_NEGATIVE << ISIF_VD_POL_SHIFT);
--		regw(3, REC656IF);
--		ccdcfg = ccdcfg | ISIF_DATA_PACK8 | ISIF_YCINSWP_YCBCR;
--		break;
--	case VPFE_BT656_10BIT:
--		if (params->pix_fmt != CCDC_PIXFMT_YCBCR_8BIT) {
--			dev_dbg(isif_cfg.dev, "Invalid pix_fmt(input mode)\n");
--			return -EINVAL;
--		}
--		/* setup BT.656, embedded sync  */
--		regw(3, REC656IF);
--		/* enable 10 bit mode in ccdcfg */
--		ccdcfg = ccdcfg | ISIF_DATA_PACK8 | ISIF_YCINSWP_YCBCR |
--			ISIF_BW656_ENABLE;
--		break;
--	case VPFE_BT1120:
--		if (params->pix_fmt != CCDC_PIXFMT_YCBCR_16BIT) {
--			dev_dbg(isif_cfg.dev, "Invalid pix_fmt(input mode)\n");
--			return -EINVAL;
--		}
--		regw(3, REC656IF);
--		break;
--
--	case VPFE_YCBCR_SYNC_8:
--		ccdcfg |= ISIF_DATA_PACK8;
--		ccdcfg |= ISIF_YCINSWP_YCBCR;
--		if (params->pix_fmt != CCDC_PIXFMT_YCBCR_8BIT) {
--			dev_dbg(isif_cfg.dev, "Invalid pix_fmt(input mode)\n");
--			return -EINVAL;
--		}
--		break;
--	case VPFE_YCBCR_SYNC_16:
--		if (params->pix_fmt != CCDC_PIXFMT_YCBCR_16BIT) {
--			dev_dbg(isif_cfg.dev, "Invalid pix_fmt(input mode)\n");
--			return -EINVAL;
--		}
--		break;
--	default:
--		/* should never come here */
--		dev_dbg(isif_cfg.dev, "Invalid interface type\n");
--		return -EINVAL;
--	}
--
--	regw(modeset, MODESET);
--
--	/* Set up pix order */
--	ccdcfg |= params->pix_order << ISIF_PIX_ORDER_SHIFT;
--
--	regw(ccdcfg, CCDCFG);
--
--	/* configure video window */
--	if ((isif_cfg.if_type == VPFE_BT1120) ||
--	    (isif_cfg.if_type == VPFE_YCBCR_SYNC_16))
--		isif_setwin(&params->win, params->frm_fmt, 1);
--	else
--		isif_setwin(&params->win, params->frm_fmt, 2);
--
--	/*
--	 * configure the horizontal line offset
--	 * this is done by rounding up width to a multiple of 16 pixels
--	 * and multiply by two to account for y:cb:cr 4:2:2 data
--	 */
--	regw(((((params->win.width * 2) + 31) & 0xffffffe0) >> 5), HSIZE);
--
--	/* configure the memory line offset */
--	if ((params->frm_fmt == CCDC_FRMFMT_INTERLACED) &&
--	    (params->buf_type == CCDC_BUFTYPE_FLD_INTERLEAVED))
--		/* two fields are interleaved in memory */
--		regw(0x00000249, SDOFST);
--
--	return 0;
--}
--
--static int isif_configure(void)
--{
--	if (isif_cfg.if_type == VPFE_RAW_BAYER)
--		return isif_config_raw();
--	return isif_config_ycbcr();
--}
--
--static int isif_close(struct device *device)
--{
--	/* copy defaults to module params */
--	isif_cfg.bayer.config_params = isif_config_defaults;
--	return 0;
--}
--
--static const struct ccdc_hw_device isif_hw_dev = {
--	.name = "ISIF",
--	.owner = THIS_MODULE,
--	.hw_ops = {
--		.open = isif_open,
--		.close = isif_close,
--		.enable = isif_enable,
--		.enable_out_to_sdram = isif_enable_output_to_sdram,
--		.set_hw_if_params = isif_set_hw_if_params,
--		.configure = isif_configure,
--		.set_buftype = isif_set_buftype,
--		.get_buftype = isif_get_buftype,
--		.enum_pix = isif_enum_pix,
--		.set_pixel_format = isif_set_pixel_format,
--		.get_pixel_format = isif_get_pixel_format,
--		.set_frame_format = isif_set_frame_format,
--		.get_frame_format = isif_get_frame_format,
--		.set_image_window = isif_set_image_window,
--		.get_image_window = isif_get_image_window,
--		.get_line_length = isif_get_line_length,
--		.setfbaddr = isif_setfbaddr,
--		.getfid = isif_getfid,
--	},
--};
--
--static int isif_probe(struct platform_device *pdev)
--{
--	void (*setup_pinmux)(void);
--	struct resource	*res;
--	void __iomem *addr;
--	int status = 0, i;
--
--	/* Platform data holds setup_pinmux function ptr */
--	if (!pdev->dev.platform_data)
--		return -ENODEV;
--
--	/*
--	 * first try to register with vpfe. If not correct platform, then we
--	 * don't have to iomap
--	 */
--	status = vpfe_register_ccdc_device(&isif_hw_dev);
--	if (status < 0)
--		return status;
--
--	setup_pinmux = pdev->dev.platform_data;
--	/*
--	 * setup Mux configuration for ccdc which may be different for
--	 * different SoCs using this CCDC
--	 */
--	setup_pinmux();
--
--	i = 0;
--	/* Get the ISIF base address, linearization table0 and table1 addr. */
--	while (i < 3) {
--		res = platform_get_resource(pdev, IORESOURCE_MEM, i);
--		if (!res) {
--			status = -ENODEV;
--			goto fail_nobase_res;
--		}
--		res = request_mem_region(res->start, resource_size(res),
--					 res->name);
--		if (!res) {
--			status = -EBUSY;
--			goto fail_nobase_res;
--		}
--		addr = ioremap(res->start, resource_size(res));
--		if (!addr) {
--			status = -ENOMEM;
--			goto fail_base_iomap;
--		}
--		switch (i) {
--		case 0:
--			/* ISIF base address */
--			isif_cfg.base_addr = addr;
--			break;
--		case 1:
--			/* ISIF linear tbl0 address */
--			isif_cfg.linear_tbl0_addr = addr;
--			break;
--		default:
--			/* ISIF linear tbl0 address */
--			isif_cfg.linear_tbl1_addr = addr;
--			break;
--		}
--		i++;
--	}
--	isif_cfg.dev = &pdev->dev;
--
--	printk(KERN_NOTICE "%s is registered with vpfe.\n",
--		isif_hw_dev.name);
--	return 0;
--fail_base_iomap:
--	release_mem_region(res->start, resource_size(res));
--	i--;
--fail_nobase_res:
--	if (isif_cfg.base_addr) {
--		iounmap(isif_cfg.base_addr);
--		isif_cfg.base_addr = NULL;
--	}
--	if (isif_cfg.linear_tbl0_addr) {
--		iounmap(isif_cfg.linear_tbl0_addr);
--		isif_cfg.linear_tbl0_addr = NULL;
--	}
--
--	while (i >= 0) {
--		res = platform_get_resource(pdev, IORESOURCE_MEM, i);
--		if (res)
--			release_mem_region(res->start, resource_size(res));
--		i--;
--	}
--	vpfe_unregister_ccdc_device(&isif_hw_dev);
--	return status;
--}
--
--static int isif_remove(struct platform_device *pdev)
--{
--	struct resource	*res;
--	int i = 0;
--
--	iounmap(isif_cfg.base_addr);
--	isif_cfg.base_addr = NULL;
--	iounmap(isif_cfg.linear_tbl0_addr);
--	isif_cfg.linear_tbl0_addr = NULL;
--	iounmap(isif_cfg.linear_tbl1_addr);
--	isif_cfg.linear_tbl1_addr = NULL;
--	while (i < 3) {
--		res = platform_get_resource(pdev, IORESOURCE_MEM, i);
--		release_mem_region(res->start, resource_size(res));
--		i++;
--	}
--	vpfe_unregister_ccdc_device(&isif_hw_dev);
--	return 0;
--}
--
--static struct platform_driver isif_driver = {
--	.driver = {
--		.name	= "isif",
--	},
--	.remove = isif_remove,
--	.probe = isif_probe,
--};
--
--module_platform_driver(isif_driver);
--
--MODULE_LICENSE("GPL");
-diff --git a/drivers/staging/media/deprecated/vpfe_capture/isif.h b/drivers/staging/media/deprecated/vpfe_capture/isif.h
-deleted file mode 100644
-index 8369acd26e7e..000000000000
---- a/drivers/staging/media/deprecated/vpfe_capture/isif.h
-+++ /dev/null
-@@ -1,518 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-or-later */
--/*
-- * Copyright (C) 2008-2009 Texas Instruments Inc
-- *
-- * isif header file
-- */
--#ifndef _ISIF_H
--#define _ISIF_H
--
--#include <media/davinci/ccdc_types.h>
--#include <media/davinci/vpfe_types.h>
--
--/* isif float type S8Q8/U8Q8 */
--struct isif_float_8 {
--	/* 8 bit integer part */
--	__u8 integer;
--	/* 8 bit decimal part */
--	__u8 decimal;
--};
--
--/* isif float type U16Q16/S16Q16 */
--struct isif_float_16 {
--	/* 16 bit integer part */
--	__u16 integer;
--	/* 16 bit decimal part */
--	__u16 decimal;
--};
--
--/************************************************************************
-- *   Vertical Defect Correction parameters
-- ***********************************************************************/
--/* Defect Correction (DFC) table entry */
--struct isif_vdfc_entry {
--	/* vertical position of defect */
--	__u16 pos_vert;
--	/* horizontal position of defect */
--	__u16 pos_horz;
--	/*
--	 * Defect level of Vertical line defect position. This is subtracted
--	 * from the data at the defect position
--	 */
--	__u8 level_at_pos;
--	/*
--	 * Defect level of the pixels upper than the vertical line defect.
--	 * This is subtracted from the data
--	 */
--	__u8 level_up_pixels;
--	/*
--	 * Defect level of the pixels lower than the vertical line defect.
--	 * This is subtracted from the data
--	 */
--	__u8 level_low_pixels;
--};
--
--#define ISIF_VDFC_TABLE_SIZE		8
--struct isif_dfc {
--	/* enable vertical defect correction */
--	__u8 en;
--	/* Defect level subtraction. Just fed through if saturating */
--#define	ISIF_VDFC_NORMAL		0
--	/*
--	 * Defect level subtraction. Horizontal interpolation ((i-2)+(i+2))/2
--	 * if data saturating
--	 */
--#define ISIF_VDFC_HORZ_INTERPOL_IF_SAT	1
--	/* Horizontal interpolation (((i-2)+(i+2))/2) */
--#define	ISIF_VDFC_HORZ_INTERPOL		2
--	/* one of the vertical defect correction modes above */
--	__u8 corr_mode;
--	/* 0 - whole line corrected, 1 - not pixels upper than the defect */
--	__u8 corr_whole_line;
--#define ISIF_VDFC_NO_SHIFT		0
--#define ISIF_VDFC_SHIFT_1		1
--#define ISIF_VDFC_SHIFT_2		2
--#define ISIF_VDFC_SHIFT_3		3
--#define ISIF_VDFC_SHIFT_4		4
--	/*
--	 * defect level shift value. level_at_pos, level_upper_pos,
--	 * and level_lower_pos can be shifted up by this value. Choose
--	 * one of the values above
--	 */
--	__u8 def_level_shift;
--	/* defect saturation level */
--	__u16 def_sat_level;
--	/* number of vertical defects. Max is ISIF_VDFC_TABLE_SIZE */
--	__u16 num_vdefects;
--	/* VDFC table ptr */
--	struct isif_vdfc_entry table[ISIF_VDFC_TABLE_SIZE];
--};
--
--struct isif_horz_bclamp {
--
--	/* Horizontal clamp disabled. Only vertical clamp value is subtracted */
--#define	ISIF_HORZ_BC_DISABLE		0
--	/*
--	 * Horizontal clamp value is calculated and subtracted from image data
--	 * along with vertical clamp value
--	 */
--#define ISIF_HORZ_BC_CLAMP_CALC_ENABLED	1
--	/*
--	 * Horizontal clamp value calculated from previous image is subtracted
--	 * from image data along with vertical clamp value.
--	 */
--#define ISIF_HORZ_BC_CLAMP_NOT_UPDATED	2
--	/* horizontal clamp mode. One of the values above */
--	__u8 mode;
--	/*
--	 * pixel value limit enable.
--	 *  0 - limit disabled
--	 *  1 - pixel value limited to 1023
--	 */
--	__u8 clamp_pix_limit;
--	/* Select Most left window for bc calculation */
--#define	ISIF_SEL_MOST_LEFT_WIN		0
--	/* Select Most right window for bc calculation */
--#define ISIF_SEL_MOST_RIGHT_WIN		1
--	/* Select most left or right window for clamp val calculation */
--	__u8 base_win_sel_calc;
--	/* Window count per color for calculation. range 1-32 */
--	__u8 win_count_calc;
--	/* Window start position - horizontal for calculation. 0 - 8191 */
--	__u16 win_start_h_calc;
--	/* Window start position - vertical for calculation 0 - 8191 */
--	__u16 win_start_v_calc;
--#define ISIF_HORZ_BC_SZ_H_2PIXELS	0
--#define ISIF_HORZ_BC_SZ_H_4PIXELS	1
--#define ISIF_HORZ_BC_SZ_H_8PIXELS	2
--#define ISIF_HORZ_BC_SZ_H_16PIXELS	3
--	/* Width of the sample window in pixels for calculation */
--	__u8 win_h_sz_calc;
--#define ISIF_HORZ_BC_SZ_V_32PIXELS	0
--#define ISIF_HORZ_BC_SZ_V_64PIXELS	1
--#define	ISIF_HORZ_BC_SZ_V_128PIXELS	2
--#define ISIF_HORZ_BC_SZ_V_256PIXELS	3
--	/* Height of the sample window in pixels for calculation */
--	__u8 win_v_sz_calc;
--};
--
--/************************************************************************
-- *  Black Clamp parameters
-- ***********************************************************************/
--struct isif_vert_bclamp {
--	/* Reset value used is the clamp value calculated */
--#define	ISIF_VERT_BC_USE_HORZ_CLAMP_VAL		0
--	/* Reset value used is reset_clamp_val configured */
--#define	ISIF_VERT_BC_USE_CONFIG_CLAMP_VAL	1
--	/* No update, previous image value is used */
--#define	ISIF_VERT_BC_NO_UPDATE			2
--	/*
--	 * Reset value selector for vertical clamp calculation. Use one of
--	 * the above values
--	 */
--	__u8 reset_val_sel;
--	/* U8Q8. Line average coefficient used in vertical clamp calculation */
--	__u8 line_ave_coef;
--	/* Height of the optical black region for calculation */
--	__u16 ob_v_sz_calc;
--	/* Optical black region start position - horizontal. 0 - 8191 */
--	__u16 ob_start_h;
--	/* Optical black region start position - vertical 0 - 8191 */
--	__u16 ob_start_v;
--};
--
--struct isif_black_clamp {
--	/*
--	 * This offset value is added irrespective of the clamp enable status.
--	 * S13
--	 */
--	__u16 dc_offset;
--	/*
--	 * Enable black/digital clamp value to be subtracted from the image data
--	 */
--	__u8 en;
--	/*
--	 * black clamp mode. same/separate clamp for 4 colors
--	 * 0 - disable - same clamp value for all colors
--	 * 1 - clamp value calculated separately for all colors
--	 */
--	__u8 bc_mode_color;
--	/* Vertical start position for bc subtraction */
--	__u16 vert_start_sub;
--	/* Black clamp for horizontal direction */
--	struct isif_horz_bclamp horz;
--	/* Black clamp for vertical direction */
--	struct isif_vert_bclamp vert;
--};
--
--/*************************************************************************
--** Color Space Conversion (CSC)
--*************************************************************************/
--#define ISIF_CSC_NUM_COEFF	16
--struct isif_color_space_conv {
--	/* Enable color space conversion */
--	__u8 en;
--	/*
--	 * csc coefficient table. S8Q5, M00 at index 0, M01 at index 1, and
--	 * so forth
--	 */
--	struct isif_float_8 coeff[ISIF_CSC_NUM_COEFF];
--};
--
--
--/*************************************************************************
--**  Black  Compensation parameters
--*************************************************************************/
--struct isif_black_comp {
--	/* Comp for Red */
--	__s8 r_comp;
--	/* Comp for Gr */
--	__s8 gr_comp;
--	/* Comp for Blue */
--	__s8 b_comp;
--	/* Comp for Gb */
--	__s8 gb_comp;
--};
--
--/*************************************************************************
--**  Gain parameters
--*************************************************************************/
--struct isif_gain {
--	/* Gain for Red or ye */
--	struct isif_float_16 r_ye;
--	/* Gain for Gr or cy */
--	struct isif_float_16 gr_cy;
--	/* Gain for Gb or g */
--	struct isif_float_16 gb_g;
--	/* Gain for Blue or mg */
--	struct isif_float_16 b_mg;
--};
--
--#define ISIF_LINEAR_TAB_SIZE	192
--/*************************************************************************
--**  Linearization parameters
--*************************************************************************/
--struct isif_linearize {
--	/* Enable or Disable linearization of data */
--	__u8 en;
--	/* Shift value applied */
--	__u8 corr_shft;
--	/* scale factor applied U11Q10 */
--	struct isif_float_16 scale_fact;
--	/* Size of the linear table */
--	__u16 table[ISIF_LINEAR_TAB_SIZE];
--};
--
--/* Color patterns */
--#define ISIF_RED	0
--#define	ISIF_GREEN_RED	1
--#define ISIF_GREEN_BLUE	2
--#define ISIF_BLUE	3
--struct isif_col_pat {
--	__u8 olop;
--	__u8 olep;
--	__u8 elop;
--	__u8 elep;
--};
--
--/*************************************************************************
--**  Data formatter parameters
--*************************************************************************/
--struct isif_fmtplen {
--	/*
--	 * number of program entries for SET0, range 1 - 16
--	 * when fmtmode is ISIF_SPLIT, 1 - 8 when fmtmode is
--	 * ISIF_COMBINE
--	 */
--	__u16 plen0;
--	/*
--	 * number of program entries for SET1, range 1 - 16
--	 * when fmtmode is ISIF_SPLIT, 1 - 8 when fmtmode is
--	 * ISIF_COMBINE
--	 */
--	__u16 plen1;
--	/**
--	 * number of program entries for SET2, range 1 - 16
--	 * when fmtmode is ISIF_SPLIT, 1 - 8 when fmtmode is
--	 * ISIF_COMBINE
--	 */
--	__u16 plen2;
--	/**
--	 * number of program entries for SET3, range 1 - 16
--	 * when fmtmode is ISIF_SPLIT, 1 - 8 when fmtmode is
--	 * ISIF_COMBINE
--	 */
--	__u16 plen3;
--};
--
--struct isif_fmt_cfg {
--#define ISIF_SPLIT		0
--#define ISIF_COMBINE		1
--	/* Split or combine or line alternate */
--	__u8 fmtmode;
--	/* enable or disable line alternating mode */
--	__u8 ln_alter_en;
--#define ISIF_1LINE		0
--#define	ISIF_2LINES		1
--#define	ISIF_3LINES		2
--#define	ISIF_4LINES		3
--	/* Split/combine line number */
--	__u8 lnum;
--	/* Address increment Range 1 - 16 */
--	__u8 addrinc;
--};
--
--struct isif_fmt_addr_ptr {
--	/* Initial address */
--	__u32 init_addr;
--	/* output line number */
--#define ISIF_1STLINE		0
--#define	ISIF_2NDLINE		1
--#define	ISIF_3RDLINE		2
--#define	ISIF_4THLINE		3
--	__u8 out_line;
--};
--
--struct isif_fmtpgm_ap {
--	/* program address pointer */
--	__u8 pgm_aptr;
--	/* program address increment or decrement */
--	__u8 pgmupdt;
--};
--
--struct isif_data_formatter {
--	/* Enable/Disable data formatter */
--	__u8 en;
--	/* data formatter configuration */
--	struct isif_fmt_cfg cfg;
--	/* Formatter program entries length */
--	struct isif_fmtplen plen;
--	/* first pixel in a line fed to formatter */
--	__u16 fmtrlen;
--	/* HD interval for output line. Only valid when split line */
--	__u16 fmthcnt;
--	/* formatter address pointers */
--	struct isif_fmt_addr_ptr fmtaddr_ptr[16];
--	/* program enable/disable */
--	__u8 pgm_en[32];
--	/* program address pointers */
--	struct isif_fmtpgm_ap fmtpgm_ap[32];
--};
--
--struct isif_df_csc {
--	/* Color Space Conversion configuration, 0 - csc, 1 - df */
--	__u8 df_or_csc;
--	/* csc configuration valid if df_or_csc is 0 */
--	struct isif_color_space_conv csc;
--	/* data formatter configuration valid if df_or_csc is 1 */
--	struct isif_data_formatter df;
--	/* start pixel in a line at the input */
--	__u32 start_pix;
--	/* number of pixels in input line */
--	__u32 num_pixels;
--	/* start line at the input */
--	__u32 start_line;
--	/* number of lines at the input */
--	__u32 num_lines;
--};
--
--struct isif_gain_offsets_adj {
--	/* Gain adjustment per color */
--	struct isif_gain gain;
--	/* Offset adjustment */
--	__u16 offset;
--	/* Enable or Disable Gain adjustment for SDRAM data */
--	__u8 gain_sdram_en;
--	/* Enable or Disable Gain adjustment for IPIPE data */
--	__u8 gain_ipipe_en;
--	/* Enable or Disable Gain adjustment for H3A data */
--	__u8 gain_h3a_en;
--	/* Enable or Disable Gain adjustment for SDRAM data */
--	__u8 offset_sdram_en;
--	/* Enable or Disable Gain adjustment for IPIPE data */
--	__u8 offset_ipipe_en;
--	/* Enable or Disable Gain adjustment for H3A data */
--	__u8 offset_h3a_en;
--};
--
--struct isif_cul {
--	/* Horizontal Cull pattern for odd lines */
--	__u8 hcpat_odd;
--	/* Horizontal Cull pattern for even lines */
--	__u8 hcpat_even;
--	/* Vertical Cull pattern */
--	__u8 vcpat;
--	/* Enable or disable lpf. Apply when cull is enabled */
--	__u8 en_lpf;
--};
--
--struct isif_compress {
--#define ISIF_ALAW		0
--#define ISIF_DPCM		1
--#define ISIF_NO_COMPRESSION	2
--	/* Compression Algorithm used */
--	__u8 alg;
--	/* Choose Predictor1 for DPCM compression */
--#define ISIF_DPCM_PRED1		0
--	/* Choose Predictor2 for DPCM compression */
--#define ISIF_DPCM_PRED2		1
--	/* Predictor for DPCM compression */
--	__u8 pred;
--};
--
--/* all the stuff in this struct will be provided by userland */
--struct isif_config_params_raw {
--	/* Linearization parameters for image sensor data input */
--	struct isif_linearize linearize;
--	/* Data formatter or CSC */
--	struct isif_df_csc df_csc;
--	/* Defect Pixel Correction (DFC) configuration */
--	struct isif_dfc dfc;
--	/* Black/Digital Clamp configuration */
--	struct isif_black_clamp bclamp;
--	/* Gain, offset adjustments */
--	struct isif_gain_offsets_adj gain_offset;
--	/* Culling */
--	struct isif_cul culling;
--	/* A-Law and DPCM compression options */
--	struct isif_compress compress;
--	/* horizontal offset for Gain/LSC/DFC */
--	__u16 horz_offset;
--	/* vertical offset for Gain/LSC/DFC */
--	__u16 vert_offset;
--	/* color pattern for field 0 */
--	struct isif_col_pat col_pat_field0;
--	/* color pattern for field 1 */
--	struct isif_col_pat col_pat_field1;
--#define ISIF_NO_SHIFT		0
--#define	ISIF_1BIT_SHIFT		1
--#define	ISIF_2BIT_SHIFT		2
--#define	ISIF_3BIT_SHIFT		3
--#define	ISIF_4BIT_SHIFT		4
--#define ISIF_5BIT_SHIFT		5
--#define ISIF_6BIT_SHIFT		6
--	/* Data shift applied before storing to SDRAM */
--	__u8 data_shift;
--	/* enable input test pattern generation */
--	__u8 test_pat_gen;
--};
--
--#ifdef __KERNEL__
--struct isif_ycbcr_config {
--	/* isif pixel format */
--	enum ccdc_pixfmt pix_fmt;
--	/* isif frame format */
--	enum ccdc_frmfmt frm_fmt;
--	/* ISIF crop window */
--	struct v4l2_rect win;
--	/* field polarity */
--	enum vpfe_pin_pol fid_pol;
--	/* interface VD polarity */
--	enum vpfe_pin_pol vd_pol;
--	/* interface HD polarity */
--	enum vpfe_pin_pol hd_pol;
--	/* isif pix order. Only used for ycbcr capture */
--	enum ccdc_pixorder pix_order;
--	/* isif buffer type. Only used for ycbcr capture */
--	enum ccdc_buftype buf_type;
--};
--
--/* MSB of image data connected to sensor port */
--enum isif_data_msb {
--	ISIF_BIT_MSB_15,
--	ISIF_BIT_MSB_14,
--	ISIF_BIT_MSB_13,
--	ISIF_BIT_MSB_12,
--	ISIF_BIT_MSB_11,
--	ISIF_BIT_MSB_10,
--	ISIF_BIT_MSB_9,
--	ISIF_BIT_MSB_8,
--	ISIF_BIT_MSB_7
--};
--
--enum isif_cfa_pattern {
--	ISIF_CFA_PAT_MOSAIC,
--	ISIF_CFA_PAT_STRIPE
--};
--
--struct isif_params_raw {
--	/* isif pixel format */
--	enum ccdc_pixfmt pix_fmt;
--	/* isif frame format */
--	enum ccdc_frmfmt frm_fmt;
--	/* video window */
--	struct v4l2_rect win;
--	/* field polarity */
--	enum vpfe_pin_pol fid_pol;
--	/* interface VD polarity */
--	enum vpfe_pin_pol vd_pol;
--	/* interface HD polarity */
--	enum vpfe_pin_pol hd_pol;
--	/* buffer type. Applicable for interlaced mode */
--	enum ccdc_buftype buf_type;
--	/* Gain values */
--	struct isif_gain gain;
--	/* cfa pattern */
--	enum isif_cfa_pattern cfa_pat;
--	/* Data MSB position */
--	enum isif_data_msb data_msb;
--	/* Enable horizontal flip */
--	unsigned char horz_flip_en;
--	/* Enable image invert vertically */
--	unsigned char image_invert_en;
--
--	/* all the userland defined stuff*/
--	struct isif_config_params_raw config_params;
--};
--
--enum isif_data_pack {
--	ISIF_PACK_16BIT,
--	ISIF_PACK_12BIT,
--	ISIF_PACK_8BIT
--};
--
--#define ISIF_WIN_NTSC				{0, 0, 720, 480}
--#define ISIF_WIN_VGA				{0, 0, 640, 480}
--
--#endif
--#endif
-diff --git a/drivers/staging/media/deprecated/vpfe_capture/isif_regs.h b/drivers/staging/media/deprecated/vpfe_capture/isif_regs.h
-deleted file mode 100644
-index d68d38841ae7..000000000000
---- a/drivers/staging/media/deprecated/vpfe_capture/isif_regs.h
-+++ /dev/null
-@@ -1,256 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-or-later */
--/*
-- * Copyright (C) 2008-2009 Texas Instruments Inc
-- */
--#ifndef _ISIF_REGS_H
--#define _ISIF_REGS_H
--
--/* ISIF registers relative offsets */
--#define SYNCEN					0x00
--#define MODESET					0x04
--#define HDW					0x08
--#define VDW					0x0c
--#define PPLN					0x10
--#define LPFR					0x14
--#define SPH					0x18
--#define LNH					0x1c
--#define SLV0					0x20
--#define SLV1					0x24
--#define LNV					0x28
--#define CULH					0x2c
--#define CULV					0x30
--#define HSIZE					0x34
--#define SDOFST					0x38
--#define CADU					0x3c
--#define CADL					0x40
--#define LINCFG0					0x44
--#define LINCFG1					0x48
--#define CCOLP					0x4c
--#define CRGAIN					0x50
--#define CGRGAIN					0x54
--#define CGBGAIN					0x58
--#define CBGAIN					0x5c
--#define COFSTA					0x60
--#define FLSHCFG0				0x64
--#define FLSHCFG1				0x68
--#define FLSHCFG2				0x6c
--#define VDINT0					0x70
--#define VDINT1					0x74
--#define VDINT2					0x78
--#define MISC					0x7c
--#define CGAMMAWD				0x80
--#define REC656IF				0x84
--#define CCDCFG					0x88
--/*****************************************************
--* Defect Correction registers
--*****************************************************/
--#define DFCCTL					0x8c
--#define VDFSATLV				0x90
--#define DFCMEMCTL				0x94
--#define DFCMEM0					0x98
--#define DFCMEM1					0x9c
--#define DFCMEM2					0xa0
--#define DFCMEM3					0xa4
--#define DFCMEM4					0xa8
--/****************************************************
--* Black Clamp registers
--****************************************************/
--#define CLAMPCFG				0xac
--#define CLDCOFST				0xb0
--#define CLSV					0xb4
--#define CLHWIN0					0xb8
--#define CLHWIN1					0xbc
--#define CLHWIN2					0xc0
--#define CLVRV					0xc4
--#define CLVWIN0					0xc8
--#define CLVWIN1					0xcc
--#define CLVWIN2					0xd0
--#define CLVWIN3					0xd4
--/****************************************************
--* Lense Shading Correction
--****************************************************/
--#define DATAHOFST				0xd8
--#define DATAVOFST				0xdc
--#define LSCHVAL					0xe0
--#define LSCVVAL					0xe4
--#define TWODLSCCFG				0xe8
--#define TWODLSCOFST				0xec
--#define TWODLSCINI				0xf0
--#define TWODLSCGRBU				0xf4
--#define TWODLSCGRBL				0xf8
--#define TWODLSCGROF				0xfc
--#define TWODLSCORBU				0x100
--#define TWODLSCORBL				0x104
--#define TWODLSCOROF				0x108
--#define TWODLSCIRQEN				0x10c
--#define TWODLSCIRQST				0x110
--/****************************************************
--* Data formatter
--****************************************************/
--#define FMTCFG					0x114
--#define FMTPLEN					0x118
--#define FMTSPH					0x11c
--#define FMTLNH					0x120
--#define FMTSLV					0x124
--#define FMTLNV					0x128
--#define FMTRLEN					0x12c
--#define FMTHCNT					0x130
--#define FMTAPTR_BASE				0x134
--/* Below macro for addresses FMTAPTR0 - FMTAPTR15 */
--#define FMTAPTR(i)			(FMTAPTR_BASE + (i * 4))
--#define FMTPGMVF0				0x174
--#define FMTPGMVF1				0x178
--#define FMTPGMAPU0				0x17c
--#define FMTPGMAPU1				0x180
--#define FMTPGMAPS0				0x184
--#define FMTPGMAPS1				0x188
--#define FMTPGMAPS2				0x18c
--#define FMTPGMAPS3				0x190
--#define FMTPGMAPS4				0x194
--#define FMTPGMAPS5				0x198
--#define FMTPGMAPS6				0x19c
--#define FMTPGMAPS7				0x1a0
--/************************************************
--* Color Space Converter
--************************************************/
--#define CSCCTL					0x1a4
--#define CSCM0					0x1a8
--#define CSCM1					0x1ac
--#define CSCM2					0x1b0
--#define CSCM3					0x1b4
--#define CSCM4					0x1b8
--#define CSCM5					0x1bc
--#define CSCM6					0x1c0
--#define CSCM7					0x1c4
--#define OBWIN0					0x1c8
--#define OBWIN1					0x1cc
--#define OBWIN2					0x1d0
--#define OBWIN3					0x1d4
--#define OBVAL0					0x1d8
--#define OBVAL1					0x1dc
--#define OBVAL2					0x1e0
--#define OBVAL3					0x1e4
--#define OBVAL4					0x1e8
--#define OBVAL5					0x1ec
--#define OBVAL6					0x1f0
--#define OBVAL7					0x1f4
--#define CLKCTL					0x1f8
--
--/* Masks & Shifts below */
--#define START_PX_HOR_MASK			0x7FFF
--#define NUM_PX_HOR_MASK				0x7FFF
--#define START_VER_ONE_MASK			0x7FFF
--#define START_VER_TWO_MASK			0x7FFF
--#define NUM_LINES_VER				0x7FFF
--
--/* gain - offset masks */
--#define GAIN_INTEGER_SHIFT			9
--#define OFFSET_MASK				0xFFF
--#define GAIN_SDRAM_EN_SHIFT			12
--#define GAIN_IPIPE_EN_SHIFT			13
--#define GAIN_H3A_EN_SHIFT			14
--#define OFST_SDRAM_EN_SHIFT			8
--#define OFST_IPIPE_EN_SHIFT			9
--#define OFST_H3A_EN_SHIFT			10
--#define GAIN_OFFSET_EN_MASK			0x7700
--
--/* Culling */
--#define CULL_PAT_EVEN_LINE_SHIFT		8
--
--/* CCDCFG register */
--#define ISIF_YCINSWP_RAW			(0x00 << 4)
--#define ISIF_YCINSWP_YCBCR			(0x01 << 4)
--#define ISIF_CCDCFG_FIDMD_LATCH_VSYNC		(0x00 << 6)
--#define ISIF_CCDCFG_WENLOG_AND			(0x00 << 8)
--#define ISIF_CCDCFG_TRGSEL_WEN			(0x00 << 9)
--#define ISIF_CCDCFG_EXTRG_DISABLE		(0x00 << 10)
--#define ISIF_LATCH_ON_VSYNC_DISABLE		(0x01 << 15)
--#define ISIF_LATCH_ON_VSYNC_ENABLE		(0x00 << 15)
--#define ISIF_DATA_PACK_MASK			3
--#define ISIF_DATA_PACK16			0
--#define ISIF_DATA_PACK12			1
--#define ISIF_DATA_PACK8				2
--#define ISIF_PIX_ORDER_SHIFT			11
--#define ISIF_BW656_ENABLE			(0x01 << 5)
--
--/* MODESET registers */
--#define ISIF_VDHDOUT_INPUT			(0x00 << 0)
--#define ISIF_INPUT_SHIFT			12
--#define ISIF_RAW_INPUT_MODE			0
--#define ISIF_FID_POL_SHIFT			4
--#define ISIF_HD_POL_SHIFT			3
--#define ISIF_VD_POL_SHIFT			2
--#define ISIF_DATAPOL_NORMAL			0
--#define ISIF_DATAPOL_SHIFT			6
--#define ISIF_EXWEN_DISABLE			0
--#define ISIF_EXWEN_SHIFT			5
--#define ISIF_FRM_FMT_SHIFT			7
--#define ISIF_DATASFT_SHIFT			8
--#define ISIF_LPF_SHIFT				14
--#define ISIF_LPF_MASK				1
--
--/* GAMMAWD registers */
--#define ISIF_ALAW_GAMMA_WD_MASK			0xF
--#define ISIF_ALAW_GAMMA_WD_SHIFT		1
--#define ISIF_ALAW_ENABLE			1
--#define ISIF_GAMMAWD_CFA_SHIFT			5
--
--/* HSIZE registers */
--#define ISIF_HSIZE_FLIP_MASK			1
--#define ISIF_HSIZE_FLIP_SHIFT			12
--
--/* MISC registers */
--#define ISIF_DPCM_EN_SHIFT			12
--#define ISIF_DPCM_PREDICTOR_SHIFT		13
--
--/* Black clamp related */
--#define ISIF_BC_MODE_COLOR_SHIFT		4
--#define ISIF_HORZ_BC_MODE_SHIFT			1
--#define ISIF_HORZ_BC_WIN_SEL_SHIFT		5
--#define ISIF_HORZ_BC_PIX_LIMIT_SHIFT		6
--#define ISIF_HORZ_BC_WIN_H_SIZE_SHIFT		8
--#define ISIF_HORZ_BC_WIN_V_SIZE_SHIFT		12
--#define	ISIF_VERT_BC_RST_VAL_SEL_SHIFT		4
--#define ISIF_VERT_BC_LINE_AVE_COEF_SHIFT	8
--
--/* VDFC registers */
--#define ISIF_VDFC_EN_SHIFT			4
--#define ISIF_VDFC_CORR_MOD_SHIFT		5
--#define ISIF_VDFC_CORR_WHOLE_LN_SHIFT		7
--#define ISIF_VDFC_LEVEL_SHFT_SHIFT		8
--#define ISIF_VDFC_POS_MASK			0x1FFF
--#define ISIF_DFCMEMCTL_DFCMARST_SHIFT		2
--
--/* CSC registers */
--#define ISIF_CSC_COEF_INTEG_MASK		7
--#define ISIF_CSC_COEF_DECIMAL_MASK		0x1f
--#define ISIF_CSC_COEF_INTEG_SHIFT		5
--#define ISIF_CSCM_MSB_SHIFT			8
--#define ISIF_DF_CSC_SPH_MASK			0x1FFF
--#define ISIF_DF_CSC_LNH_MASK			0x1FFF
--#define ISIF_DF_CSC_SLV_MASK			0x1FFF
--#define ISIF_DF_CSC_LNV_MASK			0x1FFF
--#define ISIF_DF_NUMLINES			0x7FFF
--#define ISIF_DF_NUMPIX				0x1FFF
--
--/* Offsets for LSC/DFC/Gain */
--#define ISIF_DATA_H_OFFSET_MASK			0x1FFF
--#define ISIF_DATA_V_OFFSET_MASK			0x1FFF
--
--/* Linearization */
--#define ISIF_LIN_CORRSFT_SHIFT			4
--#define ISIF_LIN_SCALE_FACT_INTEG_SHIFT		10
--
--
--/* Pattern registers */
--#define ISIF_PG_EN				(1 << 3)
--#define ISIF_SEL_PG_SRC				(3 << 4)
--#define ISIF_PG_VD_POL_SHIFT			0
--#define ISIF_PG_HD_POL_SHIFT			1
--
--/*random other junk*/
--#define ISIF_SYNCEN_VDHDEN_MASK			(1 << 0)
--#define ISIF_SYNCEN_WEN_MASK			(1 << 1)
--#define ISIF_SYNCEN_WEN_SHIFT			1
--
--#endif
-diff --git a/drivers/staging/media/deprecated/vpfe_capture/vpfe_capture.c b/drivers/staging/media/deprecated/vpfe_capture/vpfe_capture.c
-deleted file mode 100644
-index 0a2226b321d7..000000000000
---- a/drivers/staging/media/deprecated/vpfe_capture/vpfe_capture.c
-+++ /dev/null
-@@ -1,1902 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-or-later
--/*
-- * Copyright (C) 2008-2009 Texas Instruments Inc
-- *
-- * Driver name : VPFE Capture driver
-- *    VPFE Capture driver allows applications to capture and stream video
-- *    frames on DaVinci SoCs (DM6446, DM355 etc) from a YUV source such as
-- *    TVP5146 or  Raw Bayer RGB image data from an image sensor
-- *    such as Microns' MT9T001, MT9T031 etc.
-- *
-- *    These SoCs have, in common, a Video Processing Subsystem (VPSS) that
-- *    consists of a Video Processing Front End (VPFE) for capturing
-- *    video/raw image data and Video Processing Back End (VPBE) for displaying
-- *    YUV data through an in-built analog encoder or Digital LCD port. This
-- *    driver is for capture through VPFE. A typical EVM using these SoCs have
-- *    following high level configuration.
-- *
-- *    decoder(TVP5146/		YUV/
-- *	     MT9T001)   -->  Raw Bayer RGB ---> MUX -> VPFE (CCDC/ISIF)
-- *				data input              |      |
-- *							V      |
-- *						      SDRAM    |
-- *							       V
-- *							   Image Processor
-- *							       |
-- *							       V
-- *							     SDRAM
-- *    The data flow happens from a decoder connected to the VPFE over a
-- *    YUV embedded (BT.656/BT.1120) or separate sync or raw bayer rgb interface
-- *    and to the input of VPFE through an optional MUX (if more inputs are
-- *    to be interfaced on the EVM). The input data is first passed through
-- *    CCDC (CCD Controller, a.k.a Image Sensor Interface, ISIF). The CCDC
-- *    does very little or no processing on YUV data and does pre-process Raw
-- *    Bayer RGB data through modules such as Defect Pixel Correction (DFC)
-- *    Color Space Conversion (CSC), data gain/offset etc. After this, data
-- *    can be written to SDRAM or can be connected to the image processing
-- *    block such as IPIPE (on DM355 only).
-- *
-- *    Features supported
-- *		- MMAP IO
-- *		- Capture using TVP5146 over BT.656
-- *		- support for interfacing decoders using sub device model
-- *		- Work with DM355 or DM6446 CCDC to do Raw Bayer RGB/YUV
-- *		  data capture to SDRAM.
-- *    TODO list
-- *		- Support multiple REQBUF after open
-- *		- Support for de-allocating buffers through REQBUF
-- *		- Support for Raw Bayer RGB capture
-- *		- Support for chaining Image Processor
-- *		- Support for static allocation of buffers
-- *		- Support for USERPTR IO
-- *		- Support for STREAMON before QBUF
-- *		- Support for control ioctls
-- */
--#include <linux/module.h>
--#include <linux/slab.h>
+-#include <linux/kernel.h>
 -#include <linux/init.h>
+-#include <linux/module.h>
+-#include <linux/errno.h>
+-#include <linux/fs.h>
+-#include <linux/string.h>
+-#include <linux/wait.h>
+-#include <linux/time.h>
 -#include <linux/platform_device.h>
--#include <linux/interrupt.h>
--#include <media/v4l2-common.h>
 -#include <linux/io.h>
--#include <media/davinci/vpfe_capture.h>
--#include "ccdc_hw_device.h"
+-#include <linux/slab.h>
+-#include <linux/clk.h>
+-#include <linux/err.h>
 -
+-#include <media/v4l2-device.h>
+-#include <media/davinci/vpbe_types.h>
+-#include <media/davinci/vpbe.h>
+-#include <media/davinci/vpss.h>
+-#include <media/davinci/vpbe_venc.h>
+-
+-#define VPBE_DEFAULT_OUTPUT	"Composite"
+-#define VPBE_DEFAULT_MODE	"ntsc"
+-
+-static char *def_output = VPBE_DEFAULT_OUTPUT;
+-static char *def_mode = VPBE_DEFAULT_MODE;
 -static int debug;
--static u32 numbuffers = 3;
--static u32 bufsize = (720 * 576 * 2);
 -
--module_param(numbuffers, uint, S_IRUGO);
--module_param(bufsize, uint, S_IRUGO);
+-module_param(def_output, charp, S_IRUGO);
+-module_param(def_mode, charp, S_IRUGO);
 -module_param(debug, int, 0644);
 -
--MODULE_PARM_DESC(numbuffers, "buffer count (default:3)");
--MODULE_PARM_DESC(bufsize, "buffer size in bytes (default:720 x 576 x 2)");
+-MODULE_PARM_DESC(def_output, "vpbe output name (default:Composite)");
+-MODULE_PARM_DESC(def_mode, "vpbe output mode name (default:ntsc");
 -MODULE_PARM_DESC(debug, "Debug level 0-1");
 -
--MODULE_DESCRIPTION("VPFE Video for Linux Capture Driver");
+-MODULE_DESCRIPTION("TI DMXXX VPBE Display controller");
 -MODULE_LICENSE("GPL");
 -MODULE_AUTHOR("Texas Instruments");
 -
--/* standard information */
--struct vpfe_standard {
--	v4l2_std_id std_id;
--	unsigned int width;
--	unsigned int height;
--	struct v4l2_fract pixelaspect;
--	/* 0 - progressive, 1 - interlaced */
--	int frame_format;
--};
--
--/* ccdc configuration */
--struct ccdc_config {
--	/* This make sure vpfe is probed and ready to go */
--	int vpfe_probed;
--	/* name of ccdc device */
--	char name[32];
--};
--
--/* data structures */
--static struct vpfe_config_params config_params = {
--	.min_numbuffers = 3,
--	.numbuffers = 3,
--	.min_bufsize = 720 * 480 * 2,
--	.device_bufsize = 720 * 576 * 2,
--};
--
--/* ccdc device registered */
--static const struct ccdc_hw_device *ccdc_dev;
--/* lock for accessing ccdc information */
--static DEFINE_MUTEX(ccdc_lock);
--/* ccdc configuration */
--static struct ccdc_config *ccdc_cfg;
--
--static const struct vpfe_standard vpfe_standards[] = {
--	{V4L2_STD_525_60, 720, 480, {11, 10}, 1},
--	{V4L2_STD_625_50, 720, 576, {54, 59}, 1},
--};
--
--/* Used when raw Bayer image from ccdc is directly captured to SDRAM */
--static const struct vpfe_pixel_format vpfe_pix_fmts[] = {
--	{
--		.pixelformat = V4L2_PIX_FMT_SBGGR8,
--		.bpp = 1,
--	},
--	{
--		.pixelformat = V4L2_PIX_FMT_SBGGR16,
--		.bpp = 2,
--	},
--	{
--		.pixelformat = V4L2_PIX_FMT_SGRBG10DPCM8,
--		.bpp = 1,
--	},
--	{
--		.pixelformat = V4L2_PIX_FMT_UYVY,
--		.bpp = 2,
--	},
--	{
--		.pixelformat = V4L2_PIX_FMT_YUYV,
--		.bpp = 2,
--	},
--	{
--		.pixelformat = V4L2_PIX_FMT_NV12,
--		.bpp = 1,
--	},
--};
--
--/*
-- * vpfe_lookup_pix_format()
-- * lookup an entry in the vpfe pix format table based on pix_format
+-/**
+- * vpbe_current_encoder_info - Get config info for current encoder
+- * @vpbe_dev: vpbe device ptr
+- *
+- * Return ptr to current encoder config info
 - */
--static const struct vpfe_pixel_format *vpfe_lookup_pix_format(u32 pix_format)
+-static struct encoder_config_info*
+-vpbe_current_encoder_info(struct vpbe_device *vpbe_dev)
 -{
+-	struct vpbe_config *cfg = vpbe_dev->cfg;
+-	int index = vpbe_dev->current_sd_index;
+-
+-	return ((index == 0) ? &cfg->venc :
+-				&cfg->ext_encoders[index-1]);
+-}
+-
+-/**
+- * vpbe_find_encoder_sd_index - Given a name find encoder sd index
+- *
+- * @cfg: ptr to vpbe cfg
+- * @index: index used by application
+- *
+- * Return sd index of the encoder
+- */
+-static int vpbe_find_encoder_sd_index(struct vpbe_config *cfg,
+-			     int index)
+-{
+-	char *encoder_name = cfg->outputs[index].subdev_name;
 -	int i;
 -
--	for (i = 0; i < ARRAY_SIZE(vpfe_pix_fmts); i++) {
--		if (pix_format == vpfe_pix_fmts[i].pixelformat)
--			return &vpfe_pix_fmts[i];
+-	/* Venc is always first	*/
+-	if (!strcmp(encoder_name, cfg->venc.module_name))
+-		return 0;
+-
+-	for (i = 0; i < cfg->num_ext_encoders; i++) {
+-		if (!strcmp(encoder_name,
+-		     cfg->ext_encoders[i].module_name))
+-			return i+1;
 -	}
--	return NULL;
+-
+-	return -EINVAL;
 -}
 -
--/*
-- * vpfe_register_ccdc_device. CCDC module calls this to
-- * register with vpfe capture
+-/**
+- * vpbe_enum_outputs - enumerate outputs
+- * @vpbe_dev: vpbe device ptr
+- * @output: ptr to v4l2_output structure
+- *
+- * Enumerates the outputs available at the vpbe display
+- * returns the status, -EINVAL if end of output list
 - */
--int vpfe_register_ccdc_device(const struct ccdc_hw_device *dev)
+-static int vpbe_enum_outputs(struct vpbe_device *vpbe_dev,
+-			     struct v4l2_output *output)
 -{
--	int ret = 0;
--	printk(KERN_NOTICE "vpfe_register_ccdc_device: %s\n", dev->name);
+-	struct vpbe_config *cfg = vpbe_dev->cfg;
+-	unsigned int temp_index = output->index;
 -
--	if (!dev->hw_ops.open ||
--	    !dev->hw_ops.enable ||
--	    !dev->hw_ops.set_hw_if_params ||
--	    !dev->hw_ops.configure ||
--	    !dev->hw_ops.set_buftype ||
--	    !dev->hw_ops.get_buftype ||
--	    !dev->hw_ops.enum_pix ||
--	    !dev->hw_ops.set_frame_format ||
--	    !dev->hw_ops.get_frame_format ||
--	    !dev->hw_ops.get_pixel_format ||
--	    !dev->hw_ops.set_pixel_format ||
--	    !dev->hw_ops.set_image_window ||
--	    !dev->hw_ops.get_image_window ||
--	    !dev->hw_ops.get_line_length ||
--	    !dev->hw_ops.getfid)
+-	if (temp_index >= cfg->num_outputs)
 -		return -EINVAL;
 -
--	mutex_lock(&ccdc_lock);
--	if (!ccdc_cfg) {
--		/*
--		 * TODO. Will this ever happen? if so, we need to fix it.
--		 * Probably we need to add the request to a linked list and
--		 * walk through it during vpfe probe
--		 */
--		printk(KERN_ERR "vpfe capture not initialized\n");
--		ret = -EFAULT;
--		goto unlock;
--	}
--
--	if (strcmp(dev->name, ccdc_cfg->name)) {
--		/* ignore this ccdc */
--		ret = -EINVAL;
--		goto unlock;
--	}
--
--	if (ccdc_dev) {
--		printk(KERN_ERR "ccdc already registered\n");
--		ret = -EINVAL;
--		goto unlock;
--	}
--
--	ccdc_dev = dev;
--unlock:
--	mutex_unlock(&ccdc_lock);
--	return ret;
--}
--EXPORT_SYMBOL(vpfe_register_ccdc_device);
--
--/*
-- * vpfe_unregister_ccdc_device. CCDC module calls this to
-- * unregister with vpfe capture
-- */
--void vpfe_unregister_ccdc_device(const struct ccdc_hw_device *dev)
--{
--	if (!dev) {
--		printk(KERN_ERR "invalid ccdc device ptr\n");
--		return;
--	}
--
--	printk(KERN_NOTICE "vpfe_unregister_ccdc_device, dev->name = %s\n",
--		dev->name);
--
--	if (strcmp(dev->name, ccdc_cfg->name)) {
--		/* ignore this ccdc */
--		return;
--	}
--
--	mutex_lock(&ccdc_lock);
--	ccdc_dev = NULL;
--	mutex_unlock(&ccdc_lock);
--}
--EXPORT_SYMBOL(vpfe_unregister_ccdc_device);
--
--/*
-- * vpfe_config_ccdc_image_format()
-- * For a pix format, configure ccdc to setup the capture
-- */
--static int vpfe_config_ccdc_image_format(struct vpfe_device *vpfe_dev)
--{
--	enum ccdc_frmfmt frm_fmt = CCDC_FRMFMT_INTERLACED;
--	int ret = 0;
--
--	if (ccdc_dev->hw_ops.set_pixel_format(
--			vpfe_dev->fmt.fmt.pix.pixelformat) < 0) {
--		v4l2_err(&vpfe_dev->v4l2_dev,
--			"couldn't set pix format in ccdc\n");
--		return -EINVAL;
--	}
--	/* configure the image window */
--	ccdc_dev->hw_ops.set_image_window(&vpfe_dev->crop);
--
--	switch (vpfe_dev->fmt.fmt.pix.field) {
--	case V4L2_FIELD_INTERLACED:
--		/* do nothing, since it is default */
--		ret = ccdc_dev->hw_ops.set_buftype(
--				CCDC_BUFTYPE_FLD_INTERLEAVED);
--		break;
--	case V4L2_FIELD_NONE:
--		frm_fmt = CCDC_FRMFMT_PROGRESSIVE;
--		/* buffer type only applicable for interlaced scan */
--		break;
--	case V4L2_FIELD_SEQ_TB:
--		ret = ccdc_dev->hw_ops.set_buftype(
--				CCDC_BUFTYPE_FLD_SEPARATED);
--		break;
--	default:
--		return -EINVAL;
--	}
--
--	/* set the frame format */
--	if (!ret)
--		ret = ccdc_dev->hw_ops.set_frame_format(frm_fmt);
--	return ret;
--}
--/*
-- * vpfe_config_image_format()
-- * For a given standard, this functions sets up the default
-- * pix format & crop values in the vpfe device and ccdc.  It first
-- * starts with defaults based values from the standard table.
-- * It then checks if sub device supports get_fmt and then override the
-- * values based on that.Sets crop values to match with scan resolution
-- * starting at 0,0. It calls vpfe_config_ccdc_image_format() set the
-- * values in ccdc
-- */
--static int vpfe_config_image_format(struct vpfe_device *vpfe_dev,
--				    v4l2_std_id std_id)
--{
--	struct vpfe_subdev_info *sdinfo = vpfe_dev->current_subdev;
--	struct v4l2_subdev_format fmt = {
--		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
--	};
--	struct v4l2_mbus_framefmt *mbus_fmt = &fmt.format;
--	struct v4l2_pix_format *pix = &vpfe_dev->fmt.fmt.pix;
--	int i, ret;
--
--	for (i = 0; i < ARRAY_SIZE(vpfe_standards); i++) {
--		if (vpfe_standards[i].std_id & std_id) {
--			vpfe_dev->std_info.active_pixels =
--					vpfe_standards[i].width;
--			vpfe_dev->std_info.active_lines =
--					vpfe_standards[i].height;
--			vpfe_dev->std_info.frame_format =
--					vpfe_standards[i].frame_format;
--			vpfe_dev->std_index = i;
--			break;
--		}
--	}
--
--	if (i ==  ARRAY_SIZE(vpfe_standards)) {
--		v4l2_err(&vpfe_dev->v4l2_dev, "standard not supported\n");
--		return -EINVAL;
--	}
--
--	vpfe_dev->crop.top = 0;
--	vpfe_dev->crop.left = 0;
--	vpfe_dev->crop.width = vpfe_dev->std_info.active_pixels;
--	vpfe_dev->crop.height = vpfe_dev->std_info.active_lines;
--	pix->width = vpfe_dev->crop.width;
--	pix->height = vpfe_dev->crop.height;
--
--	/* first field and frame format based on standard frame format */
--	if (vpfe_dev->std_info.frame_format) {
--		pix->field = V4L2_FIELD_INTERLACED;
--		/* assume V4L2_PIX_FMT_UYVY as default */
--		pix->pixelformat = V4L2_PIX_FMT_UYVY;
--		v4l2_fill_mbus_format(mbus_fmt, pix,
--				MEDIA_BUS_FMT_YUYV10_2X10);
--	} else {
--		pix->field = V4L2_FIELD_NONE;
--		/* assume V4L2_PIX_FMT_SBGGR8 */
--		pix->pixelformat = V4L2_PIX_FMT_SBGGR8;
--		v4l2_fill_mbus_format(mbus_fmt, pix,
--				MEDIA_BUS_FMT_SBGGR8_1X8);
--	}
--
--	/* if sub device supports get_fmt, override the defaults */
--	ret = v4l2_device_call_until_err(&vpfe_dev->v4l2_dev,
--			sdinfo->grp_id, pad, get_fmt, NULL, &fmt);
--
--	if (ret && ret != -ENOIOCTLCMD) {
--		v4l2_err(&vpfe_dev->v4l2_dev,
--			"error in getting get_fmt from sub device\n");
--		return ret;
--	}
--	v4l2_fill_pix_format(pix, mbus_fmt);
--	pix->bytesperline = pix->width * 2;
--	pix->sizeimage = pix->bytesperline * pix->height;
--
--	/* Sets the values in CCDC */
--	ret = vpfe_config_ccdc_image_format(vpfe_dev);
--	if (ret)
--		return ret;
--
--	/* Update the values of sizeimage and bytesperline */
--	pix->bytesperline = ccdc_dev->hw_ops.get_line_length();
--	pix->sizeimage = pix->bytesperline * pix->height;
+-	*output = cfg->outputs[temp_index].output;
+-	output->index = temp_index;
 -
 -	return 0;
 -}
 -
--static int vpfe_initialize_device(struct vpfe_device *vpfe_dev)
+-static int vpbe_get_mode_info(struct vpbe_device *vpbe_dev, char *mode,
+-			      int output_index)
 -{
+-	struct vpbe_config *cfg = vpbe_dev->cfg;
+-	struct vpbe_enc_mode_info var;
+-	int curr_output = output_index;
+-	int i;
+-
+-	if (!mode)
+-		return -EINVAL;
+-
+-	for (i = 0; i < cfg->outputs[curr_output].num_modes; i++) {
+-		var = cfg->outputs[curr_output].modes[i];
+-		if (!strcmp(mode, var.name)) {
+-			vpbe_dev->current_timings = var;
+-			return 0;
+-		}
+-	}
+-
+-	return -EINVAL;
+-}
+-
+-static int vpbe_get_current_mode_info(struct vpbe_device *vpbe_dev,
+-				      struct vpbe_enc_mode_info *mode_info)
+-{
+-	if (!mode_info)
+-		return -EINVAL;
+-
+-	*mode_info = vpbe_dev->current_timings;
+-
+-	return 0;
+-}
+-
+-/* Get std by std id */
+-static int vpbe_get_std_info(struct vpbe_device *vpbe_dev,
+-			     v4l2_std_id std_id)
+-{
+-	struct vpbe_config *cfg = vpbe_dev->cfg;
+-	struct vpbe_enc_mode_info var;
+-	int curr_output = vpbe_dev->current_out_index;
+-	int i;
+-
+-	for (i = 0; i < vpbe_dev->cfg->outputs[curr_output].num_modes; i++) {
+-		var = cfg->outputs[curr_output].modes[i];
+-		if ((var.timings_type & VPBE_ENC_STD) &&
+-		  (var.std_id & std_id)) {
+-			vpbe_dev->current_timings = var;
+-			return 0;
+-		}
+-	}
+-
+-	return -EINVAL;
+-}
+-
+-static int vpbe_get_std_info_by_name(struct vpbe_device *vpbe_dev,
+-				char *std_name)
+-{
+-	struct vpbe_config *cfg = vpbe_dev->cfg;
+-	struct vpbe_enc_mode_info var;
+-	int curr_output = vpbe_dev->current_out_index;
+-	int i;
+-
+-	for (i = 0; i < vpbe_dev->cfg->outputs[curr_output].num_modes; i++) {
+-		var = cfg->outputs[curr_output].modes[i];
+-		if (!strcmp(var.name, std_name)) {
+-			vpbe_dev->current_timings = var;
+-			return 0;
+-		}
+-	}
+-
+-	return -EINVAL;
+-}
+-
+-/**
+- * vpbe_set_output - Set output
+- * @vpbe_dev: vpbe device ptr
+- * @index: index of output
+- *
+- * Set vpbe output to the output specified by the index
+- */
+-static int vpbe_set_output(struct vpbe_device *vpbe_dev, int index)
+-{
+-	struct encoder_config_info *curr_enc_info =
+-			vpbe_current_encoder_info(vpbe_dev);
+-	struct vpbe_config *cfg = vpbe_dev->cfg;
+-	struct venc_platform_data *venc_device = vpbe_dev->venc_device;
+-	int enc_out_index;
+-	int sd_index;
 -	int ret;
 -
--	/* set first input of current subdevice as the current input */
--	vpfe_dev->current_input = 0;
+-	if (index >= cfg->num_outputs)
+-		return -EINVAL;
 -
--	/* set default standard */
--	vpfe_dev->std_index = 0;
+-	mutex_lock(&vpbe_dev->lock);
 -
--	/* Configure the default format information */
--	ret = vpfe_config_image_format(vpfe_dev,
--				vpfe_standards[vpfe_dev->std_index].std_id);
+-	sd_index = vpbe_dev->current_sd_index;
+-	enc_out_index = cfg->outputs[index].output.index;
+-	/*
+-	 * Currently we switch the encoder based on output selected
+-	 * by the application. If media controller is implemented later
+-	 * there is will be an API added to setup_link between venc
+-	 * and external encoder. So in that case below comparison always
+-	 * match and encoder will not be switched. But if application
+-	 * chose not to use media controller, then this provides current
+-	 * way of switching encoder at the venc output.
+-	 */
+-	if (strcmp(curr_enc_info->module_name,
+-		   cfg->outputs[index].subdev_name)) {
+-		/* Need to switch the encoder at the output */
+-		sd_index = vpbe_find_encoder_sd_index(cfg, index);
+-		if (sd_index < 0) {
+-			ret = -EINVAL;
+-			goto unlock;
+-		}
+-
+-		ret = venc_device->setup_if_config(cfg->outputs[index].if_params);
+-		if (ret)
+-			goto unlock;
+-	}
+-
+-	/* Set output at the encoder */
+-	ret = v4l2_subdev_call(vpbe_dev->encoders[sd_index], video,
+-				       s_routing, 0, enc_out_index, 0);
 -	if (ret)
--		return ret;
--
--	/* now open the ccdc device to initialize it */
--	mutex_lock(&ccdc_lock);
--	if (!ccdc_dev) {
--		v4l2_err(&vpfe_dev->v4l2_dev, "ccdc device not registered\n");
--		ret = -ENODEV;
 -		goto unlock;
+-
+-	/*
+-	 * It is assumed that venc or external encoder will set a default
+-	 * mode in the sub device. For external encoder or LCD pannel output,
+-	 * we also need to set up the lcd port for the required mode. So setup
+-	 * the lcd port for the default mode that is configured in the board
+-	 * arch/arm/mach-davinci/board-dm355-evm.setup file for the external
+-	 * encoder.
+-	 */
+-	ret = vpbe_get_mode_info(vpbe_dev,
+-				 cfg->outputs[index].default_mode, index);
+-	if (!ret) {
+-		struct osd_state *osd_device = vpbe_dev->osd_device;
+-
+-		osd_device->ops.set_left_margin(osd_device,
+-			vpbe_dev->current_timings.left_margin);
+-		osd_device->ops.set_top_margin(osd_device,
+-		vpbe_dev->current_timings.upper_margin);
+-		vpbe_dev->current_sd_index = sd_index;
+-		vpbe_dev->current_out_index = index;
 -	}
--
--	if (!try_module_get(ccdc_dev->owner)) {
--		v4l2_err(&vpfe_dev->v4l2_dev, "Couldn't lock ccdc module\n");
--		ret = -ENODEV;
--		goto unlock;
--	}
--	ret = ccdc_dev->hw_ops.open(vpfe_dev->pdev);
--	if (!ret)
--		vpfe_dev->initialized = 1;
--
--	/* Clear all VPFE/CCDC interrupts */
--	if (vpfe_dev->cfg->clr_intr)
--		vpfe_dev->cfg->clr_intr(-1);
--
 -unlock:
--	mutex_unlock(&ccdc_lock);
+-	mutex_unlock(&vpbe_dev->lock);
+-	return ret;
+-}
+-
+-static int vpbe_set_default_output(struct vpbe_device *vpbe_dev)
+-{
+-	struct vpbe_config *cfg = vpbe_dev->cfg;
+-	int i;
+-
+-	for (i = 0; i < cfg->num_outputs; i++) {
+-		if (!strcmp(def_output,
+-			    cfg->outputs[i].output.name)) {
+-			int ret = vpbe_set_output(vpbe_dev, i);
+-
+-			if (!ret)
+-				vpbe_dev->current_out_index = i;
+-			return ret;
+-		}
+-	}
+-	return 0;
+-}
+-
+-/**
+- * vpbe_get_output - Get output
+- * @vpbe_dev: vpbe device ptr
+- *
+- * return current vpbe output to the index
+- */
+-static unsigned int vpbe_get_output(struct vpbe_device *vpbe_dev)
+-{
+-	return vpbe_dev->current_out_index;
+-}
+-
+-/*
+- * vpbe_s_dv_timings - Set the given preset timings in the encoder
+- *
+- * Sets the timings if supported by the current encoder. Return the status.
+- * 0 - success & -EINVAL on error
+- */
+-static int vpbe_s_dv_timings(struct vpbe_device *vpbe_dev,
+-		    struct v4l2_dv_timings *dv_timings)
+-{
+-	struct vpbe_config *cfg = vpbe_dev->cfg;
+-	int out_index = vpbe_dev->current_out_index;
+-	struct vpbe_output *output = &cfg->outputs[out_index];
+-	int sd_index = vpbe_dev->current_sd_index;
+-	int ret, i;
+-
+-
+-	if (!(cfg->outputs[out_index].output.capabilities &
+-	    V4L2_OUT_CAP_DV_TIMINGS))
+-		return -ENODATA;
+-
+-	for (i = 0; i < output->num_modes; i++) {
+-		if (output->modes[i].timings_type == VPBE_ENC_DV_TIMINGS &&
+-		    !memcmp(&output->modes[i].dv_timings,
+-				dv_timings, sizeof(*dv_timings)))
+-			break;
+-	}
+-	if (i >= output->num_modes)
+-		return -EINVAL;
+-	vpbe_dev->current_timings = output->modes[i];
+-	mutex_lock(&vpbe_dev->lock);
+-
+-	ret = v4l2_subdev_call(vpbe_dev->encoders[sd_index], video,
+-					s_dv_timings, dv_timings);
+-	if (!ret && vpbe_dev->amp) {
+-		/* Call amplifier subdevice */
+-		ret = v4l2_subdev_call(vpbe_dev->amp, video,
+-				s_dv_timings, dv_timings);
+-	}
+-	/* set the lcd controller output for the given mode */
+-	if (!ret) {
+-		struct osd_state *osd_device = vpbe_dev->osd_device;
+-
+-		osd_device->ops.set_left_margin(osd_device,
+-		vpbe_dev->current_timings.left_margin);
+-		osd_device->ops.set_top_margin(osd_device,
+-		vpbe_dev->current_timings.upper_margin);
+-	}
+-	mutex_unlock(&vpbe_dev->lock);
+-
 -	return ret;
 -}
 -
 -/*
-- * vpfe_open : It creates object of file handle structure and
-- * stores it in private_data  member of filepointer
+- * vpbe_g_dv_timings - Get the timings in the current encoder
+- *
+- * Get the timings in the current encoder. Return the status. 0 - success
+- * -EINVAL on error
 - */
--static int vpfe_open(struct file *file)
+-static int vpbe_g_dv_timings(struct vpbe_device *vpbe_dev,
+-		     struct v4l2_dv_timings *dv_timings)
 -{
--	struct vpfe_device *vpfe_dev = video_drvdata(file);
--	struct video_device *vdev = video_devdata(file);
--	struct vpfe_fh *fh;
+-	struct vpbe_config *cfg = vpbe_dev->cfg;
+-	int out_index = vpbe_dev->current_out_index;
 -
--	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_open\n");
+-	if (!(cfg->outputs[out_index].output.capabilities &
+-		V4L2_OUT_CAP_DV_TIMINGS))
+-		return -ENODATA;
 -
--	if (!vpfe_dev->cfg->num_subdevs) {
--		v4l2_err(&vpfe_dev->v4l2_dev, "No decoder registered\n");
+-	if (vpbe_dev->current_timings.timings_type &
+-	  VPBE_ENC_DV_TIMINGS) {
+-		*dv_timings = vpbe_dev->current_timings.dv_timings;
+-		return 0;
+-	}
+-
+-	return -EINVAL;
+-}
+-
+-/*
+- * vpbe_enum_dv_timings - Enumerate the dv timings in the current encoder
+- *
+- * Get the timings in the current encoder. Return the status. 0 - success
+- * -EINVAL on error
+- */
+-static int vpbe_enum_dv_timings(struct vpbe_device *vpbe_dev,
+-			 struct v4l2_enum_dv_timings *timings)
+-{
+-	struct vpbe_config *cfg = vpbe_dev->cfg;
+-	int out_index = vpbe_dev->current_out_index;
+-	struct vpbe_output *output = &cfg->outputs[out_index];
+-	int j = 0;
+-	int i;
+-
+-	if (!(output->output.capabilities & V4L2_OUT_CAP_DV_TIMINGS))
+-		return -ENODATA;
+-
+-	for (i = 0; i < output->num_modes; i++) {
+-		if (output->modes[i].timings_type == VPBE_ENC_DV_TIMINGS) {
+-			if (j == timings->index)
+-				break;
+-			j++;
+-		}
+-	}
+-
+-	if (i == output->num_modes)
+-		return -EINVAL;
+-	timings->timings = output->modes[i].dv_timings;
+-	return 0;
+-}
+-
+-/*
+- * vpbe_s_std - Set the given standard in the encoder
+- *
+- * Sets the standard if supported by the current encoder. Return the status.
+- * 0 - success & -EINVAL on error
+- */
+-static int vpbe_s_std(struct vpbe_device *vpbe_dev, v4l2_std_id std_id)
+-{
+-	struct vpbe_config *cfg = vpbe_dev->cfg;
+-	int out_index = vpbe_dev->current_out_index;
+-	int sd_index = vpbe_dev->current_sd_index;
+-	int ret;
+-
+-	if (!(cfg->outputs[out_index].output.capabilities &
+-		V4L2_OUT_CAP_STD))
+-		return -ENODATA;
+-
+-	ret = vpbe_get_std_info(vpbe_dev, std_id);
+-	if (ret)
+-		return ret;
+-
+-	mutex_lock(&vpbe_dev->lock);
+-
+-	ret = v4l2_subdev_call(vpbe_dev->encoders[sd_index], video,
+-			       s_std_output, std_id);
+-	/* set the lcd controller output for the given mode */
+-	if (!ret) {
+-		struct osd_state *osd_device = vpbe_dev->osd_device;
+-
+-		osd_device->ops.set_left_margin(osd_device,
+-		vpbe_dev->current_timings.left_margin);
+-		osd_device->ops.set_top_margin(osd_device,
+-		vpbe_dev->current_timings.upper_margin);
+-	}
+-	mutex_unlock(&vpbe_dev->lock);
+-
+-	return ret;
+-}
+-
+-/*
+- * vpbe_g_std - Get the standard in the current encoder
+- *
+- * Get the standard in the current encoder. Return the status. 0 - success
+- * -EINVAL on error
+- */
+-static int vpbe_g_std(struct vpbe_device *vpbe_dev, v4l2_std_id *std_id)
+-{
+-	struct vpbe_enc_mode_info *cur_timings = &vpbe_dev->current_timings;
+-	struct vpbe_config *cfg = vpbe_dev->cfg;
+-	int out_index = vpbe_dev->current_out_index;
+-
+-	if (!(cfg->outputs[out_index].output.capabilities & V4L2_OUT_CAP_STD))
+-		return -ENODATA;
+-
+-	if (cur_timings->timings_type & VPBE_ENC_STD) {
+-		*std_id = cur_timings->std_id;
+-		return 0;
+-	}
+-
+-	return -EINVAL;
+-}
+-
+-/*
+- * vpbe_set_mode - Set mode in the current encoder using mode info
+- *
+- * Use the mode string to decide what timings to set in the encoder
+- * This is typically useful when fbset command is used to change the current
+- * timings by specifying a string to indicate the timings.
+- */
+-static int vpbe_set_mode(struct vpbe_device *vpbe_dev,
+-			 struct vpbe_enc_mode_info *mode_info)
+-{
+-	struct vpbe_enc_mode_info *preset_mode = NULL;
+-	struct vpbe_config *cfg = vpbe_dev->cfg;
+-	struct v4l2_dv_timings dv_timings;
+-	struct osd_state *osd_device;
+-	int out_index = vpbe_dev->current_out_index;
+-	int i;
+-
+-	if (!mode_info || !mode_info->name)
+-		return -EINVAL;
+-
+-	for (i = 0; i < cfg->outputs[out_index].num_modes; i++) {
+-		if (!strcmp(mode_info->name,
+-		     cfg->outputs[out_index].modes[i].name)) {
+-			preset_mode = &cfg->outputs[out_index].modes[i];
+-			/*
+-			 * it may be one of the 3 timings type. Check and
+-			 * invoke right API
+-			 */
+-			if (preset_mode->timings_type & VPBE_ENC_STD)
+-				return vpbe_s_std(vpbe_dev,
+-						 preset_mode->std_id);
+-			if (preset_mode->timings_type &
+-						VPBE_ENC_DV_TIMINGS) {
+-				dv_timings =
+-					preset_mode->dv_timings;
+-				return vpbe_s_dv_timings(vpbe_dev, &dv_timings);
+-			}
+-		}
+-	}
+-
+-	/* Only custom timing should reach here */
+-	if (!preset_mode)
+-		return -EINVAL;
+-
+-	mutex_lock(&vpbe_dev->lock);
+-
+-	osd_device = vpbe_dev->osd_device;
+-	vpbe_dev->current_timings = *preset_mode;
+-	osd_device->ops.set_left_margin(osd_device,
+-		vpbe_dev->current_timings.left_margin);
+-	osd_device->ops.set_top_margin(osd_device,
+-		vpbe_dev->current_timings.upper_margin);
+-
+-	mutex_unlock(&vpbe_dev->lock);
+-	return 0;
+-}
+-
+-static int vpbe_set_default_mode(struct vpbe_device *vpbe_dev)
+-{
+-	int ret;
+-
+-	ret = vpbe_get_std_info_by_name(vpbe_dev, def_mode);
+-	if (ret)
+-		return ret;
+-
+-	/* set the default mode in the encoder */
+-	return vpbe_set_mode(vpbe_dev, &vpbe_dev->current_timings);
+-}
+-
+-static int platform_device_get(struct device *dev, void *data)
+-{
+-	struct platform_device *pdev = to_platform_device(dev);
+-	struct vpbe_device *vpbe_dev = data;
+-
+-	if (strstr(pdev->name, "vpbe-osd"))
+-		vpbe_dev->osd_device = platform_get_drvdata(pdev);
+-	if (strstr(pdev->name, "vpbe-venc"))
+-		vpbe_dev->venc_device = dev_get_platdata(&pdev->dev);
+-
+-	return 0;
+-}
+-
+-/**
+- * vpbe_initialize() - Initialize the vpbe display controller
+- * @dev: Master and slave device ptr
+- * @vpbe_dev: vpbe device ptr
+- *
+- * Master frame buffer device drivers calls this to initialize vpbe
+- * display controller. This will then registers v4l2 device and the sub
+- * devices and sets a current encoder sub device for display. v4l2 display
+- * device driver is the master and frame buffer display device driver is
+- * the slave. Frame buffer display driver checks the initialized during
+- * probe and exit if not initialized. Returns status.
+- */
+-static int vpbe_initialize(struct device *dev, struct vpbe_device *vpbe_dev)
+-{
+-	struct encoder_config_info *enc_info;
+-	struct amp_config_info *amp_info;
+-	struct v4l2_subdev **enc_subdev;
+-	struct osd_state *osd_device;
+-	struct i2c_adapter *i2c_adap;
+-	int num_encoders;
+-	int ret = 0;
+-	int err;
+-	int i;
+-
+-	/*
+-	 * v4l2 abd FBDev frame buffer devices will get the vpbe_dev pointer
+-	 * from the platform device by iteration of platform drivers and
+-	 * matching with device name
+-	 */
+-	if (!vpbe_dev || !dev) {
+-		printk(KERN_ERR "Null device pointers.\n");
 -		return -ENODEV;
 -	}
 -
--	/* Allocate memory for the file handle object */
--	fh = kmalloc(sizeof(*fh), GFP_KERNEL);
--	if (!fh)
--		return -ENOMEM;
+-	if (vpbe_dev->initialized)
+-		return 0;
 -
--	/* store pointer to fh in private_data member of file */
--	file->private_data = fh;
--	fh->vpfe_dev = vpfe_dev;
--	v4l2_fh_init(&fh->fh, vdev);
--	mutex_lock(&vpfe_dev->lock);
--	/* If decoder is not initialized. initialize it */
--	if (!vpfe_dev->initialized) {
--		if (vpfe_initialize_device(vpfe_dev)) {
--			mutex_unlock(&vpfe_dev->lock);
--			v4l2_fh_exit(&fh->fh);
--			kfree(fh);
--			return -ENODEV;
+-	mutex_lock(&vpbe_dev->lock);
+-
+-	if (strcmp(vpbe_dev->cfg->module_name, "dm644x-vpbe-display") != 0) {
+-		/* We have dac clock available for platform */
+-		vpbe_dev->dac_clk = clk_get(vpbe_dev->pdev, "vpss_dac");
+-		if (IS_ERR(vpbe_dev->dac_clk)) {
+-			ret =  PTR_ERR(vpbe_dev->dac_clk);
+-			goto fail_mutex_unlock;
+-		}
+-		if (clk_prepare_enable(vpbe_dev->dac_clk)) {
+-			ret =  -ENODEV;
+-			clk_put(vpbe_dev->dac_clk);
+-			goto fail_mutex_unlock;
 -		}
 -	}
--	/* Increment device usrs counter */
--	vpfe_dev->usrs++;
--	/* Set io_allowed member to false */
--	fh->io_allowed = 0;
--	v4l2_fh_add(&fh->fh);
--	mutex_unlock(&vpfe_dev->lock);
--	return 0;
--}
 -
--static void vpfe_schedule_next_buffer(struct vpfe_device *vpfe_dev)
--{
--	unsigned long addr;
+-	/* first enable vpss clocks */
+-	vpss_enable_clock(VPSS_VPBE_CLOCK, 1);
 -
--	vpfe_dev->next_frm = list_entry(vpfe_dev->dma_queue.next,
--					struct videobuf_buffer, queue);
--	list_del(&vpfe_dev->next_frm->queue);
--	vpfe_dev->next_frm->state = VIDEOBUF_ACTIVE;
--	addr = videobuf_to_dma_contig(vpfe_dev->next_frm);
+-	/* First register a v4l2 device */
+-	ret = v4l2_device_register(dev, &vpbe_dev->v4l2_dev);
+-	if (ret) {
+-		v4l2_err(dev->driver,
+-			"Unable to register v4l2 device.\n");
+-		goto fail_clk_put;
+-	}
+-	v4l2_info(&vpbe_dev->v4l2_dev, "vpbe v4l2 device registered\n");
 -
--	ccdc_dev->hw_ops.setfbaddr(addr);
--}
--
--static void vpfe_schedule_bottom_field(struct vpfe_device *vpfe_dev)
--{
--	unsigned long addr;
--
--	addr = videobuf_to_dma_contig(vpfe_dev->cur_frm);
--	addr += vpfe_dev->field_off;
--	ccdc_dev->hw_ops.setfbaddr(addr);
--}
--
--static void vpfe_process_buffer_complete(struct vpfe_device *vpfe_dev)
--{
--	vpfe_dev->cur_frm->ts = ktime_get_ns();
--	vpfe_dev->cur_frm->state = VIDEOBUF_DONE;
--	vpfe_dev->cur_frm->size = vpfe_dev->fmt.fmt.pix.sizeimage;
--	wake_up_interruptible(&vpfe_dev->cur_frm->done);
--	vpfe_dev->cur_frm = vpfe_dev->next_frm;
--}
--
--/* ISR for VINT0*/
--static irqreturn_t vpfe_isr(int irq, void *dev_id)
--{
--	struct vpfe_device *vpfe_dev = dev_id;
--	enum v4l2_field field;
--	int fid;
--
--	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "\nStarting vpfe_isr...\n");
--	field = vpfe_dev->fmt.fmt.pix.field;
--
--	/* if streaming not started, don't do anything */
--	if (!vpfe_dev->started)
--		goto clear_intr;
--
--	/* only for 6446 this will be applicable */
--	if (ccdc_dev->hw_ops.reset)
--		ccdc_dev->hw_ops.reset();
--
--	if (field == V4L2_FIELD_NONE) {
--		/* handle progressive frame capture */
--		v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev,
--			"frame format is progressive...\n");
--		if (vpfe_dev->cur_frm != vpfe_dev->next_frm)
--			vpfe_process_buffer_complete(vpfe_dev);
--		goto clear_intr;
+-	err = bus_for_each_dev(&platform_bus_type, NULL, vpbe_dev,
+-			       platform_device_get);
+-	if (err < 0) {
+-		ret = err;
+-		goto fail_dev_unregister;
 -	}
 -
--	/* interlaced or TB capture check which field we are in hardware */
--	fid = ccdc_dev->hw_ops.getfid();
--
--	/* switch the software maintained field id */
--	vpfe_dev->field_id ^= 1;
--	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "field id = %x:%x.\n",
--		fid, vpfe_dev->field_id);
--	if (fid == vpfe_dev->field_id) {
--		/* we are in-sync here,continue */
--		if (fid == 0) {
--			/*
--			 * One frame is just being captured. If the next frame
--			 * is available, release the current frame and move on
--			 */
--			if (vpfe_dev->cur_frm != vpfe_dev->next_frm)
--				vpfe_process_buffer_complete(vpfe_dev);
--			/*
--			 * based on whether the two fields are stored
--			 * interleavely or separately in memory, reconfigure
--			 * the CCDC memory address
--			 */
--			if (field == V4L2_FIELD_SEQ_TB)
--				vpfe_schedule_bottom_field(vpfe_dev);
--			goto clear_intr;
+-	vpbe_dev->venc = venc_sub_dev_init(&vpbe_dev->v4l2_dev,
+-					   vpbe_dev->cfg->venc.module_name);
+-	/* register venc sub device */
+-	if (!vpbe_dev->venc) {
+-		v4l2_err(&vpbe_dev->v4l2_dev,
+-			"vpbe unable to init venc sub device\n");
+-		ret = -ENODEV;
+-		goto fail_dev_unregister;
+-	}
+-	/* initialize osd device */
+-	osd_device = vpbe_dev->osd_device;
+-	if (osd_device->ops.initialize) {
+-		err = osd_device->ops.initialize(osd_device);
+-		if (err) {
+-			v4l2_err(&vpbe_dev->v4l2_dev,
+-				 "unable to initialize the OSD device");
+-			ret = -ENOMEM;
+-			goto fail_dev_unregister;
 -		}
--		/*
--		 * if one field is just being captured configure
--		 * the next frame get the next frame from the empty
--		 * queue if no frame is available hold on to the
--		 * current buffer
--		 */
--		spin_lock(&vpfe_dev->dma_queue_lock);
--		if (!list_empty(&vpfe_dev->dma_queue) &&
--		    vpfe_dev->cur_frm == vpfe_dev->next_frm)
--			vpfe_schedule_next_buffer(vpfe_dev);
--		spin_unlock(&vpfe_dev->dma_queue_lock);
--	} else if (fid == 0) {
--		/*
--		 * out of sync. Recover from any hardware out-of-sync.
--		 * May loose one frame
--		 */
--		vpfe_dev->field_id = fid;
--	}
--clear_intr:
--	if (vpfe_dev->cfg->clr_intr)
--		vpfe_dev->cfg->clr_intr(irq);
--
--	return IRQ_HANDLED;
--}
--
--/* vdint1_isr - isr handler for VINT1 interrupt */
--static irqreturn_t vdint1_isr(int irq, void *dev_id)
--{
--	struct vpfe_device *vpfe_dev = dev_id;
--
--	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "\nInside vdint1_isr...\n");
--
--	/* if streaming not started, don't do anything */
--	if (!vpfe_dev->started) {
--		if (vpfe_dev->cfg->clr_intr)
--			vpfe_dev->cfg->clr_intr(irq);
--		return IRQ_HANDLED;
 -	}
 -
--	spin_lock(&vpfe_dev->dma_queue_lock);
--	if ((vpfe_dev->fmt.fmt.pix.field == V4L2_FIELD_NONE) &&
--	    !list_empty(&vpfe_dev->dma_queue) &&
--	    vpfe_dev->cur_frm == vpfe_dev->next_frm)
--		vpfe_schedule_next_buffer(vpfe_dev);
--	spin_unlock(&vpfe_dev->dma_queue_lock);
--
--	if (vpfe_dev->cfg->clr_intr)
--		vpfe_dev->cfg->clr_intr(irq);
--
--	return IRQ_HANDLED;
--}
--
--static void vpfe_detach_irq(struct vpfe_device *vpfe_dev)
--{
--	enum ccdc_frmfmt frame_format;
--
--	frame_format = ccdc_dev->hw_ops.get_frame_format();
--	if (frame_format == CCDC_FRMFMT_PROGRESSIVE)
--		free_irq(vpfe_dev->ccdc_irq1, vpfe_dev);
--}
--
--static int vpfe_attach_irq(struct vpfe_device *vpfe_dev)
--{
--	enum ccdc_frmfmt frame_format;
--
--	frame_format = ccdc_dev->hw_ops.get_frame_format();
--	if (frame_format == CCDC_FRMFMT_PROGRESSIVE) {
--		return request_irq(vpfe_dev->ccdc_irq1, vdint1_isr,
--				    0, "vpfe_capture1",
--				    vpfe_dev);
+-	/*
+-	 * Register any external encoders that are configured. At index 0 we
+-	 * store venc sd index.
+-	 */
+-	num_encoders = vpbe_dev->cfg->num_ext_encoders + 1;
+-	vpbe_dev->encoders = kmalloc_array(num_encoders,
+-					   sizeof(*vpbe_dev->encoders),
+-					   GFP_KERNEL);
+-	if (!vpbe_dev->encoders) {
+-		ret = -ENOMEM;
+-		goto fail_dev_unregister;
 -	}
--	return 0;
--}
 -
--/* vpfe_stop_ccdc_capture: stop streaming in ccdc/isif */
--static void vpfe_stop_ccdc_capture(struct vpfe_device *vpfe_dev)
--{
--	vpfe_dev->started = 0;
--	ccdc_dev->hw_ops.enable(0);
--	if (ccdc_dev->hw_ops.enable_out_to_sdram)
--		ccdc_dev->hw_ops.enable_out_to_sdram(0);
--}
--
--/*
-- * vpfe_release : This function deletes buffer queue, frees the
-- * buffers and the vpfe file  handle
-- */
--static int vpfe_release(struct file *file)
--{
--	struct vpfe_device *vpfe_dev = video_drvdata(file);
--	struct vpfe_fh *fh = file->private_data;
--	struct vpfe_subdev_info *sdinfo;
--	int ret;
--
--	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_release\n");
--
--	/* Get the device lock */
--	mutex_lock(&vpfe_dev->lock);
--	/* if this instance is doing IO */
--	if (fh->io_allowed) {
--		if (vpfe_dev->started) {
--			sdinfo = vpfe_dev->current_subdev;
--			ret = v4l2_device_call_until_err(&vpfe_dev->v4l2_dev,
--							 sdinfo->grp_id,
--							 video, s_stream, 0);
--			if (ret && (ret != -ENOIOCTLCMD))
--				v4l2_err(&vpfe_dev->v4l2_dev,
--				"stream off failed in subdev\n");
--			vpfe_stop_ccdc_capture(vpfe_dev);
--			vpfe_detach_irq(vpfe_dev);
--			videobuf_streamoff(&vpfe_dev->buffer_queue);
+-	i2c_adap = i2c_get_adapter(vpbe_dev->cfg->i2c_adapter_id);
+-	for (i = 0; i < (vpbe_dev->cfg->num_ext_encoders + 1); i++) {
+-		if (i == 0) {
+-			/* venc is at index 0 */
+-			enc_subdev = &vpbe_dev->encoders[i];
+-			*enc_subdev = vpbe_dev->venc;
+-			continue;
 -		}
--		vpfe_dev->io_usrs = 0;
--		vpfe_dev->numbuffers = config_params.numbuffers;
--		videobuf_stop(&vpfe_dev->buffer_queue);
--		videobuf_mmap_free(&vpfe_dev->buffer_queue);
+-		enc_info = &vpbe_dev->cfg->ext_encoders[i];
+-		if (enc_info->is_i2c) {
+-			enc_subdev = &vpbe_dev->encoders[i];
+-			*enc_subdev = v4l2_i2c_new_subdev_board(
+-						&vpbe_dev->v4l2_dev, i2c_adap,
+-						&enc_info->board_info, NULL);
+-			if (*enc_subdev)
+-				v4l2_info(&vpbe_dev->v4l2_dev,
+-					  "v4l2 sub device %s registered\n",
+-					  enc_info->module_name);
+-			else {
+-				v4l2_err(&vpbe_dev->v4l2_dev, "encoder %s failed to register",
+-					 enc_info->module_name);
+-				ret = -ENODEV;
+-				goto fail_kfree_encoders;
+-			}
+-		} else
+-			v4l2_warn(&vpbe_dev->v4l2_dev, "non-i2c encoders currently not supported");
+-	}
+-	/* Add amplifier subdevice for dm365 */
+-	if ((strcmp(vpbe_dev->cfg->module_name, "dm365-vpbe-display") == 0) &&
+-	   vpbe_dev->cfg->amp) {
+-		amp_info = vpbe_dev->cfg->amp;
+-		if (amp_info->is_i2c) {
+-			vpbe_dev->amp = v4l2_i2c_new_subdev_board(
+-			&vpbe_dev->v4l2_dev, i2c_adap,
+-			&amp_info->board_info, NULL);
+-			if (!vpbe_dev->amp) {
+-				v4l2_err(&vpbe_dev->v4l2_dev,
+-					 "amplifier %s failed to register",
+-					 amp_info->module_name);
+-				ret = -ENODEV;
+-				goto fail_kfree_encoders;
+-			}
+-			v4l2_info(&vpbe_dev->v4l2_dev,
+-					  "v4l2 sub device %s registered\n",
+-					  amp_info->module_name);
+-		} else {
+-			    vpbe_dev->amp = NULL;
+-			    v4l2_warn(&vpbe_dev->v4l2_dev, "non-i2c amplifiers currently not supported");
+-		}
+-	} else {
+-	    vpbe_dev->amp = NULL;
 -	}
 -
--	/* Decrement device usrs counter */
--	vpfe_dev->usrs--;
--	v4l2_fh_del(&fh->fh);
--	v4l2_fh_exit(&fh->fh);
--	/* If this is the last file handle */
--	if (!vpfe_dev->usrs) {
--		vpfe_dev->initialized = 0;
--		if (ccdc_dev->hw_ops.close)
--			ccdc_dev->hw_ops.close(vpfe_dev->pdev);
--		module_put(ccdc_dev->owner);
+-	/* set the current encoder and output to that of venc by default */
+-	vpbe_dev->current_sd_index = 0;
+-	vpbe_dev->current_out_index = 0;
+-
+-	mutex_unlock(&vpbe_dev->lock);
+-
+-	printk(KERN_NOTICE "Setting default output to %s\n", def_output);
+-	ret = vpbe_set_default_output(vpbe_dev);
+-	if (ret) {
+-		v4l2_err(&vpbe_dev->v4l2_dev, "Failed to set default output %s",
+-			 def_output);
+-		goto fail_kfree_amp;
 -	}
--	mutex_unlock(&vpfe_dev->lock);
--	file->private_data = NULL;
--	/* Free memory allocated to file handle object */
--	kfree(fh);
+-
+-	printk(KERN_NOTICE "Setting default mode to %s\n", def_mode);
+-	ret = vpbe_set_default_mode(vpbe_dev);
+-	if (ret) {
+-		v4l2_err(&vpbe_dev->v4l2_dev, "Failed to set default mode %s",
+-			 def_mode);
+-		goto fail_kfree_amp;
+-	}
+-	vpbe_dev->initialized = 1;
+-	/* TBD handling of bootargs for default output and mode */
 -	return 0;
+-
+-fail_kfree_amp:
+-	mutex_lock(&vpbe_dev->lock);
+-	kfree(vpbe_dev->amp);
+-fail_kfree_encoders:
+-	kfree(vpbe_dev->encoders);
+-fail_dev_unregister:
+-	v4l2_device_unregister(&vpbe_dev->v4l2_dev);
+-fail_clk_put:
+-	if (strcmp(vpbe_dev->cfg->module_name, "dm644x-vpbe-display") != 0) {
+-		clk_disable_unprepare(vpbe_dev->dac_clk);
+-		clk_put(vpbe_dev->dac_clk);
+-	}
+-fail_mutex_unlock:
+-	mutex_unlock(&vpbe_dev->lock);
+-	return ret;
 -}
 -
--/*
-- * vpfe_mmap : It is used to map kernel space buffers
-- * into user spaces
+-/**
+- * vpbe_deinitialize() - de-initialize the vpbe display controller
+- * @dev: Master and slave device ptr
+- * @vpbe_dev: vpbe device ptr
+- *
+- * vpbe_master and slave frame buffer devices calls this to de-initialize
+- * the display controller. It is called when master and slave device
+- * driver modules are removed and no longer requires the display controller.
 - */
--static int vpfe_mmap(struct file *file, struct vm_area_struct *vma)
+-static void vpbe_deinitialize(struct device *dev, struct vpbe_device *vpbe_dev)
 -{
--	/* Get the device object and file handle object */
--	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-	v4l2_device_unregister(&vpbe_dev->v4l2_dev);
+-	if (strcmp(vpbe_dev->cfg->module_name, "dm644x-vpbe-display") != 0) {
+-		clk_disable_unprepare(vpbe_dev->dac_clk);
+-		clk_put(vpbe_dev->dac_clk);
+-	}
 -
--	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_mmap\n");
--
--	return videobuf_mmap_mapper(&vpfe_dev->buffer_queue, vma);
+-	kfree(vpbe_dev->amp);
+-	kfree(vpbe_dev->encoders);
+-	vpbe_dev->initialized = 0;
+-	/* disable vpss clocks */
+-	vpss_enable_clock(VPSS_VPBE_CLOCK, 0);
 -}
 -
--/*
-- * vpfe_poll: It is used for select/poll system call
-- */
--static __poll_t vpfe_poll(struct file *file, poll_table *wait)
--{
--	struct vpfe_device *vpfe_dev = video_drvdata(file);
--
--	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_poll\n");
--
--	if (vpfe_dev->started)
--		return videobuf_poll_stream(file,
--					    &vpfe_dev->buffer_queue, wait);
--	return 0;
--}
--
--/* vpfe capture driver file operations */
--static const struct v4l2_file_operations vpfe_fops = {
--	.owner = THIS_MODULE,
--	.open = vpfe_open,
--	.release = vpfe_release,
--	.unlocked_ioctl = video_ioctl2,
--	.mmap = vpfe_mmap,
--	.poll = vpfe_poll
+-static const struct vpbe_device_ops vpbe_dev_ops = {
+-	.enum_outputs = vpbe_enum_outputs,
+-	.set_output = vpbe_set_output,
+-	.get_output = vpbe_get_output,
+-	.s_dv_timings = vpbe_s_dv_timings,
+-	.g_dv_timings = vpbe_g_dv_timings,
+-	.enum_dv_timings = vpbe_enum_dv_timings,
+-	.s_std = vpbe_s_std,
+-	.g_std = vpbe_g_std,
+-	.initialize = vpbe_initialize,
+-	.deinitialize = vpbe_deinitialize,
+-	.get_mode_info = vpbe_get_current_mode_info,
+-	.set_mode = vpbe_set_mode,
 -};
 -
--/*
-- * vpfe_check_format()
-- * This function adjust the input pixel format as per hardware
-- * capabilities and update the same in pixfmt.
-- * Following algorithm used :-
-- *
-- *	If given pixformat is not in the vpfe list of pix formats or not
-- *	supported by the hardware, current value of pixformat in the device
-- *	is used
-- *	If given field is not supported, then current field is used. If field
-- *	is different from current, then it is matched with that from sub device.
-- *	Minimum height is 2 lines for interlaced or tb field and 1 line for
-- *	progressive. Maximum height is clamped to active active lines of scan
-- *	Minimum width is 32 bytes in memory and width is clamped to active
-- *	pixels of scan.
-- *	bytesperline is a multiple of 32.
-- */
--static const struct vpfe_pixel_format *
--	vpfe_check_format(struct vpfe_device *vpfe_dev,
--			  struct v4l2_pix_format *pixfmt)
+-static int vpbe_probe(struct platform_device *pdev)
 -{
--	u32 min_height = 1, min_width = 32, max_width, max_height;
--	const struct vpfe_pixel_format *vpfe_pix_fmt;
--	u32 pix;
--	int temp, found;
+-	struct vpbe_device *vpbe_dev;
+-	struct vpbe_config *cfg;
 -
--	vpfe_pix_fmt = vpfe_lookup_pix_format(pixfmt->pixelformat);
--	if (!vpfe_pix_fmt) {
--		/*
--		 * use current pixel format in the vpfe device. We
--		 * will find this pix format in the table
--		 */
--		pixfmt->pixelformat = vpfe_dev->fmt.fmt.pix.pixelformat;
--		vpfe_pix_fmt = vpfe_lookup_pix_format(pixfmt->pixelformat);
+-	if (!pdev->dev.platform_data) {
+-		v4l2_err(pdev->dev.driver, "No platform data\n");
+-		return -ENODEV;
+-	}
+-	cfg = pdev->dev.platform_data;
+-
+-	if (!cfg->module_name[0] ||
+-	    !cfg->osd.module_name[0] ||
+-	    !cfg->venc.module_name[0]) {
+-		v4l2_err(pdev->dev.driver, "vpbe display module names not defined\n");
+-		return -EINVAL;
 -	}
 -
--	/* check if hw supports it */
--	temp = 0;
--	found = 0;
--	while (ccdc_dev->hw_ops.enum_pix(&pix, temp) >= 0) {
--		if (vpfe_pix_fmt->pixelformat == pix) {
--			found = 1;
--			break;
+-	vpbe_dev = kzalloc(sizeof(*vpbe_dev), GFP_KERNEL);
+-	if (!vpbe_dev)
+-		return -ENOMEM;
+-
+-	vpbe_dev->cfg = cfg;
+-	vpbe_dev->ops = vpbe_dev_ops;
+-	vpbe_dev->pdev = &pdev->dev;
+-
+-	if (cfg->outputs->num_modes > 0)
+-		vpbe_dev->current_timings = vpbe_dev->cfg->outputs[0].modes[0];
+-	else {
+-		kfree(vpbe_dev);
+-		return -ENODEV;
+-	}
+-
+-	/* set the driver data in platform device */
+-	platform_set_drvdata(pdev, vpbe_dev);
+-	mutex_init(&vpbe_dev->lock);
+-
+-	return 0;
+-}
+-
+-static int vpbe_remove(struct platform_device *device)
+-{
+-	struct vpbe_device *vpbe_dev = platform_get_drvdata(device);
+-
+-	kfree(vpbe_dev);
+-
+-	return 0;
+-}
+-
+-static struct platform_driver vpbe_driver = {
+-	.driver	= {
+-		.name	= "vpbe_controller",
+-	},
+-	.probe = vpbe_probe,
+-	.remove = vpbe_remove,
+-};
+-
+-module_platform_driver(vpbe_driver);
+diff --git a/drivers/media/platform/ti/davinci/vpbe_display.c b/drivers/media/platform/ti/davinci/vpbe_display.c
+deleted file mode 100644
+index 9ea70817538e..000000000000
+--- a/drivers/media/platform/ti/davinci/vpbe_display.c
++++ /dev/null
+@@ -1,1510 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/*
+- * Copyright (C) 2010 Texas Instruments Incorporated - https://www.ti.com/
+- */
+-#include <linux/kernel.h>
+-#include <linux/init.h>
+-#include <linux/module.h>
+-#include <linux/errno.h>
+-#include <linux/interrupt.h>
+-#include <linux/string.h>
+-#include <linux/wait.h>
+-#include <linux/time.h>
+-#include <linux/platform_device.h>
+-#include <linux/irq.h>
+-#include <linux/mm.h>
+-#include <linux/mutex.h>
+-#include <linux/videodev2.h>
+-#include <linux/slab.h>
+-
+-
+-#include <media/v4l2-dev.h>
+-#include <media/v4l2-common.h>
+-#include <media/v4l2-ioctl.h>
+-#include <media/v4l2-device.h>
+-#include <media/davinci/vpbe_display.h>
+-#include <media/davinci/vpbe_types.h>
+-#include <media/davinci/vpbe.h>
+-#include <media/davinci/vpbe_venc.h>
+-#include <media/davinci/vpbe_osd.h>
+-#include "vpbe_venc_regs.h"
+-
+-#define VPBE_DISPLAY_DRIVER "vpbe-v4l2"
+-
+-static int debug;
+-
+-#define VPBE_DEFAULT_NUM_BUFS 3
+-
+-module_param(debug, int, 0644);
+-
+-static int vpbe_set_osd_display_params(struct vpbe_display *disp_dev,
+-			struct vpbe_layer *layer);
+-
+-static int venc_is_second_field(struct vpbe_display *disp_dev)
+-{
+-	struct vpbe_device *vpbe_dev = disp_dev->vpbe_dev;
+-	int ret, val;
+-
+-	ret = v4l2_subdev_call(vpbe_dev->venc,
+-			       core,
+-			       command,
+-			       VENC_GET_FLD,
+-			       &val);
+-	if (ret < 0) {
+-		v4l2_err(&vpbe_dev->v4l2_dev,
+-			 "Error in getting Field ID 0\n");
+-		return 1;
+-	}
+-	return val;
+-}
+-
+-static void vpbe_isr_even_field(struct vpbe_display *disp_obj,
+-				struct vpbe_layer *layer)
+-{
+-	if (layer->cur_frm == layer->next_frm)
+-		return;
+-
+-	layer->cur_frm->vb.vb2_buf.timestamp = ktime_get_ns();
+-	vb2_buffer_done(&layer->cur_frm->vb.vb2_buf, VB2_BUF_STATE_DONE);
+-	/* Make cur_frm pointing to next_frm */
+-	layer->cur_frm = layer->next_frm;
+-}
+-
+-static void vpbe_isr_odd_field(struct vpbe_display *disp_obj,
+-				struct vpbe_layer *layer)
+-{
+-	struct osd_state *osd_device = disp_obj->osd_device;
+-	unsigned long addr;
+-
+-	spin_lock(&disp_obj->dma_queue_lock);
+-	if (list_empty(&layer->dma_queue) ||
+-		(layer->cur_frm != layer->next_frm)) {
+-		spin_unlock(&disp_obj->dma_queue_lock);
+-		return;
+-	}
+-	/*
+-	 * one field is displayed configure
+-	 * the next frame if it is available
+-	 * otherwise hold on current frame
+-	 * Get next from the buffer queue
+-	 */
+-	layer->next_frm = list_entry(layer->dma_queue.next,
+-			  struct  vpbe_disp_buffer, list);
+-	/* Remove that from the buffer queue */
+-	list_del(&layer->next_frm->list);
+-	spin_unlock(&disp_obj->dma_queue_lock);
+-	/* Mark state of the frame to active */
+-	layer->next_frm->vb.vb2_buf.state = VB2_BUF_STATE_ACTIVE;
+-	addr = vb2_dma_contig_plane_dma_addr(&layer->next_frm->vb.vb2_buf, 0);
+-	osd_device->ops.start_layer(osd_device,
+-			layer->layer_info.id,
+-			addr,
+-			disp_obj->cbcr_ofst);
+-}
+-
+-/* interrupt service routine */
+-static irqreturn_t venc_isr(int irq, void *arg)
+-{
+-	struct vpbe_display *disp_dev = (struct vpbe_display *)arg;
+-	struct vpbe_layer *layer;
+-	static unsigned last_event;
+-	unsigned event = 0;
+-	int fid;
+-	int i;
+-
+-	if (!arg || !disp_dev->dev[0])
+-		return IRQ_HANDLED;
+-
+-	if (venc_is_second_field(disp_dev))
+-		event |= VENC_SECOND_FIELD;
+-	else
+-		event |= VENC_FIRST_FIELD;
+-
+-	if (event == (last_event & ~VENC_END_OF_FRAME)) {
+-		/*
+-		* If the display is non-interlaced, then we need to flag the
+-		* end-of-frame event at every interrupt regardless of the
+-		* value of the FIDST bit.  We can conclude that the display is
+-		* non-interlaced if the value of the FIDST bit is unchanged
+-		* from the previous interrupt.
+-		*/
+-		event |= VENC_END_OF_FRAME;
+-	} else if (event == VENC_SECOND_FIELD) {
+-		/* end-of-frame for interlaced display */
+-		event |= VENC_END_OF_FRAME;
+-	}
+-	last_event = event;
+-
+-	for (i = 0; i < VPBE_DISPLAY_MAX_DEVICES; i++) {
+-		layer = disp_dev->dev[i];
+-
+-		if (!vb2_start_streaming_called(&layer->buffer_queue))
+-			continue;
+-
+-		if (layer->layer_first_int) {
+-			layer->layer_first_int = 0;
+-			continue;
 -		}
--		temp++;
+-		/* Check the field format */
+-		if ((V4L2_FIELD_NONE == layer->pix_fmt.field) &&
+-			(event & VENC_END_OF_FRAME)) {
+-			/* Progressive mode */
+-
+-			vpbe_isr_even_field(disp_dev, layer);
+-			vpbe_isr_odd_field(disp_dev, layer);
+-		} else {
+-		/* Interlaced mode */
+-
+-			layer->field_id ^= 1;
+-			if (event & VENC_FIRST_FIELD)
+-				fid = 0;
+-			else
+-				fid = 1;
+-
+-			/*
+-			* If field id does not match with store
+-			* field id
+-			*/
+-			if (fid != layer->field_id) {
+-				/* Make them in sync */
+-				layer->field_id = fid;
+-				continue;
+-			}
+-			/*
+-			* device field id and local field id are
+-			* in sync. If this is even field
+-			*/
+-			if (0 == fid)
+-				vpbe_isr_even_field(disp_dev, layer);
+-			else  /* odd field */
+-				vpbe_isr_odd_field(disp_dev, layer);
+-		}
 -	}
 -
--	if (!found) {
--		/* use current pixel format */
--		pixfmt->pixelformat = vpfe_dev->fmt.fmt.pix.pixelformat;
--		/*
--		 * Since this is currently used in the vpfe device, we
--		 * will find this pix format in the table
--		 */
--		vpfe_pix_fmt = vpfe_lookup_pix_format(pixfmt->pixelformat);
--	}
+-	return IRQ_HANDLED;
+-}
 -
--	/* check what field format is supported */
--	if (pixfmt->field == V4L2_FIELD_ANY) {
--		/* if field is any, use current value as default */
--		pixfmt->field = vpfe_dev->fmt.fmt.pix.field;
+-/*
+- * vpbe_buffer_prepare()
+- * This is the callback function called from vb2_qbuf() function
+- * the buffer is prepared and user space virtual address is converted into
+- * physical address
+- */
+-static int vpbe_buffer_prepare(struct vb2_buffer *vb)
+-{
+-	struct vb2_queue *q = vb->vb2_queue;
+-	struct vpbe_layer *layer = vb2_get_drv_priv(q);
+-	struct vpbe_device *vpbe_dev = layer->disp_dev->vpbe_dev;
+-	unsigned long addr;
+-
+-	v4l2_dbg(1, debug, &vpbe_dev->v4l2_dev,
+-				"vpbe_buffer_prepare\n");
+-
+-	vb2_set_plane_payload(vb, 0, layer->pix_fmt.sizeimage);
+-	if (vb2_get_plane_payload(vb, 0) > vb2_plane_size(vb, 0))
+-		return -EINVAL;
+-
+-	addr = vb2_dma_contig_plane_dma_addr(vb, 0);
+-	if (!IS_ALIGNED(addr, 8)) {
+-		v4l2_err(&vpbe_dev->v4l2_dev,
+-			 "buffer_prepare:offset is not aligned to 32 bytes\n");
+-		return -EINVAL;
+-	}
+-	return 0;
+-}
+-
+-/*
+- * vpbe_buffer_setup()
+- * This function allocates memory for the buffers
+- */
+-static int
+-vpbe_buffer_queue_setup(struct vb2_queue *vq,
+-			unsigned int *nbuffers, unsigned int *nplanes,
+-			unsigned int sizes[], struct device *alloc_devs[])
+-
+-{
+-	/* Get the file handle object and layer object */
+-	struct vpbe_layer *layer = vb2_get_drv_priv(vq);
+-	struct vpbe_device *vpbe_dev = layer->disp_dev->vpbe_dev;
+-
+-	v4l2_dbg(1, debug, &vpbe_dev->v4l2_dev, "vpbe_buffer_setup\n");
+-
+-	/* Store number of buffers allocated in numbuffer member */
+-	if (vq->num_buffers + *nbuffers < VPBE_DEFAULT_NUM_BUFS)
+-		*nbuffers = VPBE_DEFAULT_NUM_BUFS - vq->num_buffers;
+-
+-	if (*nplanes)
+-		return sizes[0] < layer->pix_fmt.sizeimage ? -EINVAL : 0;
+-
+-	*nplanes = 1;
+-	sizes[0] = layer->pix_fmt.sizeimage;
+-
+-	return 0;
+-}
+-
+-/*
+- * vpbe_buffer_queue()
+- * This function adds the buffer to DMA queue
+- */
+-static void vpbe_buffer_queue(struct vb2_buffer *vb)
+-{
+-	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
+-	/* Get the file handle object and layer object */
+-	struct vpbe_disp_buffer *buf = container_of(vbuf,
+-				struct vpbe_disp_buffer, vb);
+-	struct vpbe_layer *layer = vb2_get_drv_priv(vb->vb2_queue);
+-	struct vpbe_display *disp = layer->disp_dev;
+-	struct vpbe_device *vpbe_dev = layer->disp_dev->vpbe_dev;
+-	unsigned long flags;
+-
+-	v4l2_dbg(1, debug, &vpbe_dev->v4l2_dev,
+-			"vpbe_buffer_queue\n");
+-
+-	/* add the buffer to the DMA queue */
+-	spin_lock_irqsave(&disp->dma_queue_lock, flags);
+-	list_add_tail(&buf->list, &layer->dma_queue);
+-	spin_unlock_irqrestore(&disp->dma_queue_lock, flags);
+-}
+-
+-static int vpbe_start_streaming(struct vb2_queue *vq, unsigned int count)
+-{
+-	struct vpbe_layer *layer = vb2_get_drv_priv(vq);
+-	struct osd_state *osd_device = layer->disp_dev->osd_device;
+-	int ret;
+-
+-	osd_device->ops.disable_layer(osd_device, layer->layer_info.id);
+-
+-	/* Get the next frame from the buffer queue */
+-	layer->next_frm = layer->cur_frm = list_entry(layer->dma_queue.next,
+-				struct vpbe_disp_buffer, list);
+-	/* Remove buffer from the buffer queue */
+-	list_del(&layer->cur_frm->list);
+-	/* Mark state of the current frame to active */
+-	layer->cur_frm->vb.vb2_buf.state = VB2_BUF_STATE_ACTIVE;
+-	/* Initialize field_id and started member */
+-	layer->field_id = 0;
+-
+-	/* Set parameters in OSD and VENC */
+-	ret = vpbe_set_osd_display_params(layer->disp_dev, layer);
+-	if (ret < 0) {
+-		struct vpbe_disp_buffer *buf, *tmp;
+-
+-		vb2_buffer_done(&layer->cur_frm->vb.vb2_buf,
+-				VB2_BUF_STATE_QUEUED);
+-		list_for_each_entry_safe(buf, tmp, &layer->dma_queue, list) {
+-			list_del(&buf->list);
+-			vb2_buffer_done(&buf->vb.vb2_buf,
+-					VB2_BUF_STATE_QUEUED);
+-		}
+-
+-		return ret;
 -	}
 -
 -	/*
--	 * if field is not same as current field in the vpfe device
--	 * try matching the field with the sub device field
+-	 * if request format is yuv420 semiplanar, need to
+-	 * enable both video windows
 -	 */
--	if (vpfe_dev->fmt.fmt.pix.field != pixfmt->field) {
--		/*
--		 * If field value is not in the supported fields, use current
--		 * field used in the device as default
--		 */
--		switch (pixfmt->field) {
--		case V4L2_FIELD_INTERLACED:
--		case V4L2_FIELD_SEQ_TB:
--			/* if sub device is supporting progressive, use that */
--			if (!vpfe_dev->std_info.frame_format)
--				pixfmt->field = V4L2_FIELD_NONE;
--			break;
--		case V4L2_FIELD_NONE:
--			if (vpfe_dev->std_info.frame_format)
--				pixfmt->field = V4L2_FIELD_INTERLACED;
--			break;
+-	layer->layer_first_int = 1;
 -
--		default:
--			/* use current field as default */
--			pixfmt->field = vpfe_dev->fmt.fmt.pix.field;
--			break;
--		}
+-	return ret;
+-}
+-
+-static void vpbe_stop_streaming(struct vb2_queue *vq)
+-{
+-	struct vpbe_layer *layer = vb2_get_drv_priv(vq);
+-	struct osd_state *osd_device = layer->disp_dev->osd_device;
+-	struct vpbe_display *disp = layer->disp_dev;
+-	unsigned long flags;
+-
+-	if (!vb2_is_streaming(vq))
+-		return;
+-
+-	osd_device->ops.disable_layer(osd_device, layer->layer_info.id);
+-
+-	/* release all active buffers */
+-	spin_lock_irqsave(&disp->dma_queue_lock, flags);
+-	if (layer->cur_frm == layer->next_frm) {
+-		vb2_buffer_done(&layer->cur_frm->vb.vb2_buf,
+-				VB2_BUF_STATE_ERROR);
+-	} else {
+-		if (layer->cur_frm)
+-			vb2_buffer_done(&layer->cur_frm->vb.vb2_buf,
+-					VB2_BUF_STATE_ERROR);
+-		if (layer->next_frm)
+-			vb2_buffer_done(&layer->next_frm->vb.vb2_buf,
+-					VB2_BUF_STATE_ERROR);
 -	}
 -
--	/* Now adjust image resolutions supported */
--	if (pixfmt->field == V4L2_FIELD_INTERLACED ||
--	    pixfmt->field == V4L2_FIELD_SEQ_TB)
+-	while (!list_empty(&layer->dma_queue)) {
+-		layer->next_frm = list_entry(layer->dma_queue.next,
+-						struct vpbe_disp_buffer, list);
+-		list_del(&layer->next_frm->list);
+-		vb2_buffer_done(&layer->next_frm->vb.vb2_buf,
+-				VB2_BUF_STATE_ERROR);
+-	}
+-	spin_unlock_irqrestore(&disp->dma_queue_lock, flags);
+-}
+-
+-static const struct vb2_ops video_qops = {
+-	.queue_setup = vpbe_buffer_queue_setup,
+-	.wait_prepare = vb2_ops_wait_prepare,
+-	.wait_finish = vb2_ops_wait_finish,
+-	.buf_prepare = vpbe_buffer_prepare,
+-	.start_streaming = vpbe_start_streaming,
+-	.stop_streaming = vpbe_stop_streaming,
+-	.buf_queue = vpbe_buffer_queue,
+-};
+-
+-static
+-struct vpbe_layer*
+-_vpbe_display_get_other_win_layer(struct vpbe_display *disp_dev,
+-			struct vpbe_layer *layer)
+-{
+-	enum vpbe_display_device_id thiswin, otherwin;
+-	thiswin = layer->device_id;
+-
+-	otherwin = (thiswin == VPBE_DISPLAY_DEVICE_0) ?
+-	VPBE_DISPLAY_DEVICE_1 : VPBE_DISPLAY_DEVICE_0;
+-	return disp_dev->dev[otherwin];
+-}
+-
+-static int vpbe_set_osd_display_params(struct vpbe_display *disp_dev,
+-			struct vpbe_layer *layer)
+-{
+-	struct osd_layer_config *cfg  = &layer->layer_info.config;
+-	struct osd_state *osd_device = disp_dev->osd_device;
+-	struct vpbe_device *vpbe_dev = disp_dev->vpbe_dev;
+-	unsigned long addr;
+-	int ret;
+-
+-	addr = vb2_dma_contig_plane_dma_addr(&layer->cur_frm->vb.vb2_buf, 0);
+-	/* Set address in the display registers */
+-	osd_device->ops.start_layer(osd_device,
+-				    layer->layer_info.id,
+-				    addr,
+-				    disp_dev->cbcr_ofst);
+-
+-	ret = osd_device->ops.enable_layer(osd_device,
+-				layer->layer_info.id, 0);
+-	if (ret < 0) {
+-		v4l2_err(&vpbe_dev->v4l2_dev,
+-			"Error in enabling osd window layer 0\n");
+-		return -1;
+-	}
+-
+-	/* Enable the window */
+-	layer->layer_info.enable = 1;
+-	if (cfg->pixfmt == PIXFMT_NV12) {
+-		struct vpbe_layer *otherlayer =
+-			_vpbe_display_get_other_win_layer(disp_dev, layer);
+-
+-		ret = osd_device->ops.enable_layer(osd_device,
+-				otherlayer->layer_info.id, 1);
+-		if (ret < 0) {
+-			v4l2_err(&vpbe_dev->v4l2_dev,
+-				"Error in enabling osd window layer 1\n");
+-			return -1;
+-		}
+-		otherlayer->layer_info.enable = 1;
+-	}
+-	return 0;
+-}
+-
+-static void
+-vpbe_disp_calculate_scale_factor(struct vpbe_display *disp_dev,
+-			struct vpbe_layer *layer,
+-			int expected_xsize, int expected_ysize)
+-{
+-	struct display_layer_info *layer_info = &layer->layer_info;
+-	struct v4l2_pix_format *pixfmt = &layer->pix_fmt;
+-	struct osd_layer_config *cfg  = &layer->layer_info.config;
+-	struct vpbe_device *vpbe_dev = disp_dev->vpbe_dev;
+-	int calculated_xsize;
+-	int h_exp = 0;
+-	int v_exp = 0;
+-	int h_scale;
+-	int v_scale;
+-
+-	v4l2_std_id standard_id = vpbe_dev->current_timings.std_id;
+-
+-	/*
+-	 * Application initially set the image format. Current display
+-	 * size is obtained from the vpbe display controller. expected_xsize
+-	 * and expected_ysize are set through S_SELECTION ioctl. Based on this,
+-	 * driver will calculate the scale factors for vertical and
+-	 * horizontal direction so that the image is displayed scaled
+-	 * and expanded. Application uses expansion to display the image
+-	 * in a square pixel. Otherwise it is displayed using displays
+-	 * pixel aspect ratio.It is expected that application chooses
+-	 * the crop coordinates for cropped or scaled display. if crop
+-	 * size is less than the image size, it is displayed cropped or
+-	 * it is displayed scaled and/or expanded.
+-	 *
+-	 * to begin with, set the crop window same as expected. Later we
+-	 * will override with scaled window size
+-	 */
+-
+-	cfg->xsize = pixfmt->width;
+-	cfg->ysize = pixfmt->height;
+-	layer_info->h_zoom = ZOOM_X1;	/* no horizontal zoom */
+-	layer_info->v_zoom = ZOOM_X1;	/* no horizontal zoom */
+-	layer_info->h_exp = H_EXP_OFF;	/* no horizontal zoom */
+-	layer_info->v_exp = V_EXP_OFF;	/* no horizontal zoom */
+-
+-	if (pixfmt->width < expected_xsize) {
+-		h_scale = vpbe_dev->current_timings.xres / pixfmt->width;
+-		if (h_scale < 2)
+-			h_scale = 1;
+-		else if (h_scale >= 4)
+-			h_scale = 4;
+-		else
+-			h_scale = 2;
+-		cfg->xsize *= h_scale;
+-		if (cfg->xsize < expected_xsize) {
+-			if ((standard_id & V4L2_STD_525_60) ||
+-			(standard_id & V4L2_STD_625_50)) {
+-				calculated_xsize = (cfg->xsize *
+-					VPBE_DISPLAY_H_EXP_RATIO_N) /
+-					VPBE_DISPLAY_H_EXP_RATIO_D;
+-				if (calculated_xsize <= expected_xsize) {
+-					h_exp = 1;
+-					cfg->xsize = calculated_xsize;
+-				}
+-			}
+-		}
+-		if (h_scale == 2)
+-			layer_info->h_zoom = ZOOM_X2;
+-		else if (h_scale == 4)
+-			layer_info->h_zoom = ZOOM_X4;
+-		if (h_exp)
+-			layer_info->h_exp = H_EXP_9_OVER_8;
+-	} else {
+-		/* no scaling, only cropping. Set display area to crop area */
+-		cfg->xsize = expected_xsize;
+-	}
+-
+-	if (pixfmt->height < expected_ysize) {
+-		v_scale = expected_ysize / pixfmt->height;
+-		if (v_scale < 2)
+-			v_scale = 1;
+-		else if (v_scale >= 4)
+-			v_scale = 4;
+-		else
+-			v_scale = 2;
+-		cfg->ysize *= v_scale;
+-		if (cfg->ysize < expected_ysize) {
+-			if ((standard_id & V4L2_STD_625_50)) {
+-				calculated_xsize = (cfg->ysize *
+-					VPBE_DISPLAY_V_EXP_RATIO_N) /
+-					VPBE_DISPLAY_V_EXP_RATIO_D;
+-				if (calculated_xsize <= expected_ysize) {
+-					v_exp = 1;
+-					cfg->ysize = calculated_xsize;
+-				}
+-			}
+-		}
+-		if (v_scale == 2)
+-			layer_info->v_zoom = ZOOM_X2;
+-		else if (v_scale == 4)
+-			layer_info->v_zoom = ZOOM_X4;
+-		if (v_exp)
+-			layer_info->v_exp = V_EXP_6_OVER_5;
+-	} else {
+-		/* no scaling, only cropping. Set display area to crop area */
+-		cfg->ysize = expected_ysize;
+-	}
+-	v4l2_dbg(1, debug, &vpbe_dev->v4l2_dev,
+-		"crop display xsize = %d, ysize = %d\n",
+-		cfg->xsize, cfg->ysize);
+-}
+-
+-static void vpbe_disp_adj_position(struct vpbe_display *disp_dev,
+-			struct vpbe_layer *layer,
+-			int top, int left)
+-{
+-	struct osd_layer_config *cfg = &layer->layer_info.config;
+-	struct vpbe_device *vpbe_dev = disp_dev->vpbe_dev;
+-
+-	cfg->xpos = min((unsigned int)left,
+-			vpbe_dev->current_timings.xres - cfg->xsize);
+-	cfg->ypos = min((unsigned int)top,
+-			vpbe_dev->current_timings.yres - cfg->ysize);
+-
+-	v4l2_dbg(1, debug, &vpbe_dev->v4l2_dev,
+-		"new xpos = %d, ypos = %d\n",
+-		cfg->xpos, cfg->ypos);
+-}
+-
+-static void vpbe_disp_check_window_params(struct vpbe_display *disp_dev,
+-			struct v4l2_rect *c)
+-{
+-	struct vpbe_device *vpbe_dev = disp_dev->vpbe_dev;
+-
+-	if ((c->width == 0) ||
+-	  ((c->width + c->left) > vpbe_dev->current_timings.xres))
+-		c->width = vpbe_dev->current_timings.xres - c->left;
+-
+-	if ((c->height == 0) || ((c->height + c->top) >
+-	  vpbe_dev->current_timings.yres))
+-		c->height = vpbe_dev->current_timings.yres - c->top;
+-
+-	/* window height must be even for interlaced display */
+-	if (vpbe_dev->current_timings.interlaced)
+-		c->height &= (~0x01);
+-
+-}
+-
+-/*
+- * vpbe_try_format()
+- * If user application provides width and height, and have bytesperline set
+- * to zero, driver calculates bytesperline and sizeimage based on hardware
+- * limits.
+- */
+-static int vpbe_try_format(struct vpbe_display *disp_dev,
+-			struct v4l2_pix_format *pixfmt, int check)
+-{
+-	struct vpbe_device *vpbe_dev = disp_dev->vpbe_dev;
+-	int min_height = 1;
+-	int min_width = 32;
+-	int max_height;
+-	int max_width;
+-	int bpp;
+-
+-	if ((pixfmt->pixelformat != V4L2_PIX_FMT_UYVY) &&
+-	    (pixfmt->pixelformat != V4L2_PIX_FMT_NV12))
+-		/* choose default as V4L2_PIX_FMT_UYVY */
+-		pixfmt->pixelformat = V4L2_PIX_FMT_UYVY;
+-
+-	/* Check the field format */
+-	if ((pixfmt->field != V4L2_FIELD_INTERLACED) &&
+-		(pixfmt->field != V4L2_FIELD_NONE)) {
+-		if (vpbe_dev->current_timings.interlaced)
+-			pixfmt->field = V4L2_FIELD_INTERLACED;
+-		else
+-			pixfmt->field = V4L2_FIELD_NONE;
+-	}
+-
+-	if (pixfmt->field == V4L2_FIELD_INTERLACED)
 -		min_height = 2;
 -
--	max_width = vpfe_dev->std_info.active_pixels;
--	max_height = vpfe_dev->std_info.active_lines;
--	min_width /= vpfe_pix_fmt->bpp;
--
--	v4l2_info(&vpfe_dev->v4l2_dev, "width = %d, height = %d, bpp = %d\n",
--		  pixfmt->width, pixfmt->height, vpfe_pix_fmt->bpp);
--
--	pixfmt->width = clamp((pixfmt->width), min_width, max_width);
--	pixfmt->height = clamp((pixfmt->height), min_height, max_height);
--
--	/* If interlaced, adjust height to be a multiple of 2 */
--	if (pixfmt->field == V4L2_FIELD_INTERLACED)
--		pixfmt->height &= (~1);
--	/*
--	 * recalculate bytesperline and sizeimage since width
--	 * and height might have changed
--	 */
--	pixfmt->bytesperline = (((pixfmt->width * vpfe_pix_fmt->bpp) + 31)
--				& ~31);
 -	if (pixfmt->pixelformat == V4L2_PIX_FMT_NV12)
--		pixfmt->sizeimage =
--			pixfmt->bytesperline * pixfmt->height +
--			((pixfmt->bytesperline * pixfmt->height) >> 1);
+-		bpp = 1;
+-	else
+-		bpp = 2;
+-
+-	max_width = vpbe_dev->current_timings.xres;
+-	max_height = vpbe_dev->current_timings.yres;
+-
+-	min_width /= bpp;
+-
+-	if (!pixfmt->width || (pixfmt->width < min_width) ||
+-		(pixfmt->width > max_width)) {
+-		pixfmt->width = vpbe_dev->current_timings.xres;
+-	}
+-
+-	if (!pixfmt->height || (pixfmt->height  < min_height) ||
+-		(pixfmt->height  > max_height)) {
+-		pixfmt->height = vpbe_dev->current_timings.yres;
+-	}
+-
+-	if (pixfmt->bytesperline < (pixfmt->width * bpp))
+-		pixfmt->bytesperline = pixfmt->width * bpp;
+-
+-	/* Make the bytesperline 32 byte aligned */
+-	pixfmt->bytesperline = ((pixfmt->width * bpp + 31) & ~31);
+-
+-	if (pixfmt->pixelformat == V4L2_PIX_FMT_NV12)
+-		pixfmt->sizeimage = pixfmt->bytesperline * pixfmt->height +
+-				(pixfmt->bytesperline * pixfmt->height >> 1);
 -	else
 -		pixfmt->sizeimage = pixfmt->bytesperline * pixfmt->height;
 -
--	v4l2_info(&vpfe_dev->v4l2_dev, "adjusted width = %d, height = %d, bpp = %d, bytesperline = %d, sizeimage = %d\n",
--		 pixfmt->width, pixfmt->height, vpfe_pix_fmt->bpp,
--		 pixfmt->bytesperline, pixfmt->sizeimage);
--	return vpfe_pix_fmt;
+-	return 0;
 -}
 -
--static int vpfe_querycap(struct file *file, void  *priv,
+-static int vpbe_display_querycap(struct file *file, void  *priv,
 -			       struct v4l2_capability *cap)
 -{
--	struct vpfe_device *vpfe_dev = video_drvdata(file);
+-	struct vpbe_layer *layer = video_drvdata(file);
+-	struct vpbe_device *vpbe_dev = layer->disp_dev->vpbe_dev;
 -
--	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_querycap\n");
+-	snprintf(cap->driver, sizeof(cap->driver), "%s",
+-		dev_name(vpbe_dev->pdev));
+-	strscpy(cap->card, vpbe_dev->cfg->module_name, sizeof(cap->card));
 -
--	strscpy(cap->driver, CAPTURE_DRV_NAME, sizeof(cap->driver));
--	strscpy(cap->bus_info, "VPFE", sizeof(cap->bus_info));
--	strscpy(cap->card, vpfe_dev->cfg->card_name, sizeof(cap->card));
 -	return 0;
 -}
 -
--static int vpfe_g_fmt_vid_cap(struct file *file, void *priv,
--				struct v4l2_format *fmt)
+-static int vpbe_display_s_selection(struct file *file, void *priv,
+-			     struct v4l2_selection *sel)
 -{
--	struct vpfe_device *vpfe_dev = video_drvdata(file);
--
--	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_g_fmt_vid_cap\n");
--	/* Fill in the information about format */
--	*fmt = vpfe_dev->fmt;
--	return 0;
--}
--
--static int vpfe_enum_fmt_vid_cap(struct file *file, void  *priv,
--				   struct v4l2_fmtdesc *fmt)
--{
--	struct vpfe_device *vpfe_dev = video_drvdata(file);
--	const struct vpfe_pixel_format *pix_fmt;
--	u32 pix;
--
--	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_enum_fmt_vid_cap\n");
--
--	if (ccdc_dev->hw_ops.enum_pix(&pix, fmt->index) < 0)
--		return -EINVAL;
--
--	/* Fill in the information about format */
--	pix_fmt = vpfe_lookup_pix_format(pix);
--	if (pix_fmt) {
--		fmt->pixelformat = pix_fmt->pixelformat;
--		return 0;
--	}
--	return -EINVAL;
--}
--
--static int vpfe_s_fmt_vid_cap(struct file *file, void *priv,
--				struct v4l2_format *fmt)
--{
--	struct vpfe_device *vpfe_dev = video_drvdata(file);
--	const struct vpfe_pixel_format *pix_fmts;
+-	struct vpbe_layer *layer = video_drvdata(file);
+-	struct vpbe_display *disp_dev = layer->disp_dev;
+-	struct vpbe_device *vpbe_dev = disp_dev->vpbe_dev;
+-	struct osd_layer_config *cfg = &layer->layer_info.config;
+-	struct osd_state *osd_device = disp_dev->osd_device;
+-	struct v4l2_rect rect = sel->r;
 -	int ret;
 -
--	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_s_fmt_vid_cap\n");
+-	v4l2_dbg(1, debug, &vpbe_dev->v4l2_dev,
+-		"VIDIOC_S_SELECTION, layer id = %d\n", layer->device_id);
 -
--	/* If streaming is started, return error */
--	if (vpfe_dev->started) {
--		v4l2_err(&vpfe_dev->v4l2_dev, "Streaming is started\n");
--		return -EBUSY;
--	}
--
--	/* Check for valid frame format */
--	pix_fmts = vpfe_check_format(vpfe_dev, &fmt->fmt.pix);
--	if (!pix_fmts)
+-	if (sel->type != V4L2_BUF_TYPE_VIDEO_OUTPUT ||
+-	    sel->target != V4L2_SEL_TGT_CROP)
 -		return -EINVAL;
 -
--	/* store the pixel format in the device  object */
--	ret = mutex_lock_interruptible(&vpfe_dev->lock);
--	if (ret)
--		return ret;
+-	if (rect.top < 0)
+-		rect.top = 0;
+-	if (rect.left < 0)
+-		rect.left = 0;
 -
--	/* First detach any IRQ if currently attached */
--	vpfe_detach_irq(vpfe_dev);
--	vpfe_dev->fmt = *fmt;
--	/* set image capture parameters in the ccdc */
--	ret = vpfe_config_ccdc_image_format(vpfe_dev);
--	mutex_unlock(&vpfe_dev->lock);
--	return ret;
--}
+-	vpbe_disp_check_window_params(disp_dev, &rect);
 -
--static int vpfe_try_fmt_vid_cap(struct file *file, void *priv,
--				  struct v4l2_format *f)
--{
--	struct vpfe_device *vpfe_dev = video_drvdata(file);
--	const struct vpfe_pixel_format *pix_fmts;
+-	osd_device->ops.get_layer_config(osd_device,
+-			layer->layer_info.id, cfg);
 -
--	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_try_fmt_vid_cap\n");
--
--	pix_fmts = vpfe_check_format(vpfe_dev, &f->fmt.pix);
--	if (!pix_fmts)
--		return -EINVAL;
--	return 0;
--}
--
--/*
-- * vpfe_get_subdev_input_index - Get subdev index and subdev input index for a
-- * given app input index
-- */
--static int vpfe_get_subdev_input_index(struct vpfe_device *vpfe_dev,
--					int *subdev_index,
--					int *subdev_input_index,
--					int app_input_index)
--{
--	struct vpfe_config *cfg = vpfe_dev->cfg;
--	struct vpfe_subdev_info *sdinfo;
--	int i, j = 0;
--
--	for (i = 0; i < cfg->num_subdevs; i++) {
--		sdinfo = &cfg->sub_devs[i];
--		if (app_input_index < (j + sdinfo->num_inputs)) {
--			*subdev_index = i;
--			*subdev_input_index = app_input_index - j;
--			return 0;
--		}
--		j += sdinfo->num_inputs;
--	}
--	return -EINVAL;
--}
--
--/*
-- * vpfe_get_app_input - Get app input index for a given subdev input index
-- * driver stores the input index of the current sub device and translate it
-- * when application request the current input
-- */
--static int vpfe_get_app_input_index(struct vpfe_device *vpfe_dev,
--				    int *app_input_index)
--{
--	struct vpfe_config *cfg = vpfe_dev->cfg;
--	struct vpfe_subdev_info *sdinfo;
--	int i, j = 0;
--
--	for (i = 0; i < cfg->num_subdevs; i++) {
--		sdinfo = &cfg->sub_devs[i];
--		if (!strcmp(sdinfo->name, vpfe_dev->current_subdev->name)) {
--			if (vpfe_dev->current_input >= sdinfo->num_inputs)
--				return -1;
--			*app_input_index = j + vpfe_dev->current_input;
--			return 0;
--		}
--		j += sdinfo->num_inputs;
--	}
--	return -EINVAL;
--}
--
--static int vpfe_enum_input(struct file *file, void *priv,
--				 struct v4l2_input *inp)
--{
--	struct vpfe_device *vpfe_dev = video_drvdata(file);
--	struct vpfe_subdev_info *sdinfo;
--	int subdev, index ;
--
--	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_enum_input\n");
--
--	if (vpfe_get_subdev_input_index(vpfe_dev,
--					&subdev,
--					&index,
--					inp->index) < 0) {
--		v4l2_err(&vpfe_dev->v4l2_dev, "input information not found for the subdev\n");
--		return -EINVAL;
--	}
--	sdinfo = &vpfe_dev->cfg->sub_devs[subdev];
--	*inp = sdinfo->inputs[index];
--	return 0;
--}
--
--static int vpfe_g_input(struct file *file, void *priv, unsigned int *index)
--{
--	struct vpfe_device *vpfe_dev = video_drvdata(file);
--
--	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_g_input\n");
--
--	return vpfe_get_app_input_index(vpfe_dev, index);
--}
--
--
--static int vpfe_s_input(struct file *file, void *priv, unsigned int index)
--{
--	struct vpfe_device *vpfe_dev = video_drvdata(file);
--	struct v4l2_subdev *sd;
--	struct vpfe_subdev_info *sdinfo;
--	int subdev_index, inp_index;
--	struct vpfe_route *route;
--	u32 input, output;
--	int ret;
--
--	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_s_input\n");
--
--	ret = mutex_lock_interruptible(&vpfe_dev->lock);
--	if (ret)
--		return ret;
--
--	/*
--	 * If streaming is started return device busy
--	 * error
--	 */
--	if (vpfe_dev->started) {
--		v4l2_err(&vpfe_dev->v4l2_dev, "Streaming is on\n");
--		ret = -EBUSY;
--		goto unlock_out;
--	}
--	ret = vpfe_get_subdev_input_index(vpfe_dev,
--					  &subdev_index,
--					  &inp_index,
--					  index);
+-	vpbe_disp_calculate_scale_factor(disp_dev, layer,
+-					rect.width,
+-					rect.height);
+-	vpbe_disp_adj_position(disp_dev, layer, rect.top,
+-					rect.left);
+-	ret = osd_device->ops.set_layer_config(osd_device,
+-				layer->layer_info.id, cfg);
 -	if (ret < 0) {
--		v4l2_err(&vpfe_dev->v4l2_dev, "invalid input index\n");
--		goto unlock_out;
+-		v4l2_err(&vpbe_dev->v4l2_dev,
+-			"Error in set layer config:\n");
+-		return -EINVAL;
 -	}
 -
--	sdinfo = &vpfe_dev->cfg->sub_devs[subdev_index];
--	sd = vpfe_dev->sd[subdev_index];
--	route = &sdinfo->routes[inp_index];
--	if (route && sdinfo->can_route) {
--		input = route->input;
--		output = route->output;
--	} else {
--		input = 0;
--		output = 0;
--	}
--
--	if (sd)
--		ret = v4l2_subdev_call(sd, video, s_routing, input, output, 0);
--
--	if (ret) {
--		v4l2_err(&vpfe_dev->v4l2_dev,
--			"vpfe_doioctl:error in setting input in decoder\n");
--		ret = -EINVAL;
--		goto unlock_out;
--	}
--	vpfe_dev->current_subdev = sdinfo;
--	if (sd)
--		vpfe_dev->v4l2_dev.ctrl_handler = sd->ctrl_handler;
--	vpfe_dev->current_input = index;
--	vpfe_dev->std_index = 0;
--
--	/* set the bus/interface parameter for the sub device in ccdc */
--	ret = ccdc_dev->hw_ops.set_hw_if_params(&sdinfo->ccdc_if_params);
--	if (ret)
--		goto unlock_out;
--
--	/* set the default image parameters in the device */
--	ret = vpfe_config_image_format(vpfe_dev,
--				vpfe_standards[vpfe_dev->std_index].std_id);
--unlock_out:
--	mutex_unlock(&vpfe_dev->lock);
--	return ret;
--}
--
--static int vpfe_querystd(struct file *file, void *priv, v4l2_std_id *std_id)
--{
--	struct vpfe_device *vpfe_dev = video_drvdata(file);
--	struct vpfe_subdev_info *sdinfo;
--	int ret;
--
--	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_querystd\n");
--
--	ret = mutex_lock_interruptible(&vpfe_dev->lock);
--	sdinfo = vpfe_dev->current_subdev;
--	if (ret)
--		return ret;
--	/* Call querystd function of decoder device */
--	ret = v4l2_device_call_until_err(&vpfe_dev->v4l2_dev, sdinfo->grp_id,
--					 video, querystd, std_id);
--	mutex_unlock(&vpfe_dev->lock);
--	return ret;
--}
--
--static int vpfe_s_std(struct file *file, void *priv, v4l2_std_id std_id)
--{
--	struct vpfe_device *vpfe_dev = video_drvdata(file);
--	struct vpfe_subdev_info *sdinfo;
--	int ret;
--
--	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_s_std\n");
--
--	/* Call decoder driver function to set the standard */
--	ret = mutex_lock_interruptible(&vpfe_dev->lock);
--	if (ret)
--		return ret;
--
--	sdinfo = vpfe_dev->current_subdev;
--	/* If streaming is started, return device busy error */
--	if (vpfe_dev->started) {
--		v4l2_err(&vpfe_dev->v4l2_dev, "streaming is started\n");
--		ret = -EBUSY;
--		goto unlock_out;
--	}
--
--	ret = v4l2_device_call_until_err(&vpfe_dev->v4l2_dev, sdinfo->grp_id,
--					 video, s_std, std_id);
+-	/* apply zooming and h or v expansion */
+-	osd_device->ops.set_zoom(osd_device,
+-			layer->layer_info.id,
+-			layer->layer_info.h_zoom,
+-			layer->layer_info.v_zoom);
+-	ret = osd_device->ops.set_vid_expansion(osd_device,
+-			layer->layer_info.h_exp,
+-			layer->layer_info.v_exp);
 -	if (ret < 0) {
--		v4l2_err(&vpfe_dev->v4l2_dev, "Failed to set standard\n");
--		goto unlock_out;
+-		v4l2_err(&vpbe_dev->v4l2_dev,
+-		"Error in set vid expansion:\n");
+-		return -EINVAL;
 -	}
--	ret = vpfe_config_image_format(vpfe_dev, std_id);
 -
--unlock_out:
--	mutex_unlock(&vpfe_dev->lock);
--	return ret;
--}
+-	if ((layer->layer_info.h_zoom != ZOOM_X1) ||
+-		(layer->layer_info.v_zoom != ZOOM_X1) ||
+-		(layer->layer_info.h_exp != H_EXP_OFF) ||
+-		(layer->layer_info.v_exp != V_EXP_OFF))
+-		/* Enable expansion filter */
+-		osd_device->ops.set_interpolation_filter(osd_device, 1);
+-	else
+-		osd_device->ops.set_interpolation_filter(osd_device, 0);
 -
--static int vpfe_g_std(struct file *file, void *priv, v4l2_std_id *std_id)
--{
--	struct vpfe_device *vpfe_dev = video_drvdata(file);
--
--	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_g_std\n");
--
--	*std_id = vpfe_standards[vpfe_dev->std_index].std_id;
--	return 0;
--}
--/*
-- *  Videobuf operations
-- */
--static int vpfe_videobuf_setup(struct videobuf_queue *vq,
--				unsigned int *count,
--				unsigned int *size)
--{
--	struct vpfe_fh *fh = vq->priv_data;
--	struct vpfe_device *vpfe_dev = fh->vpfe_dev;
--
--	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_buffer_setup\n");
--	*size = vpfe_dev->fmt.fmt.pix.sizeimage;
--	if (vpfe_dev->memory == V4L2_MEMORY_MMAP &&
--		vpfe_dev->fmt.fmt.pix.sizeimage > config_params.device_bufsize)
--		*size = config_params.device_bufsize;
--
--	if (*count < config_params.min_numbuffers)
--		*count = config_params.min_numbuffers;
--	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev,
--		"count=%d, size=%d\n", *count, *size);
+-	sel->r = rect;
 -	return 0;
 -}
 -
--static int vpfe_videobuf_prepare(struct videobuf_queue *vq,
--				struct videobuf_buffer *vb,
--				enum v4l2_field field)
+-static int vpbe_display_g_selection(struct file *file, void *priv,
+-				    struct v4l2_selection *sel)
 -{
--	struct vpfe_fh *fh = vq->priv_data;
--	struct vpfe_device *vpfe_dev = fh->vpfe_dev;
--	unsigned long addr;
--	int ret;
+-	struct vpbe_layer *layer = video_drvdata(file);
+-	struct osd_layer_config *cfg = &layer->layer_info.config;
+-	struct vpbe_device *vpbe_dev = layer->disp_dev->vpbe_dev;
+-	struct osd_state *osd_device = layer->disp_dev->osd_device;
+-	struct v4l2_rect *rect = &sel->r;
 -
--	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_buffer_prepare\n");
+-	v4l2_dbg(1, debug, &vpbe_dev->v4l2_dev,
+-			"VIDIOC_G_SELECTION, layer id = %d\n",
+-			layer->device_id);
 -
--	/* If buffer is not initialized, initialize it */
--	if (VIDEOBUF_NEEDS_INIT == vb->state) {
--		vb->width = vpfe_dev->fmt.fmt.pix.width;
--		vb->height = vpfe_dev->fmt.fmt.pix.height;
--		vb->size = vpfe_dev->fmt.fmt.pix.sizeimage;
--		vb->field = field;
--
--		ret = videobuf_iolock(vq, vb, NULL);
--		if (ret < 0)
--			return ret;
--
--		addr = videobuf_to_dma_contig(vb);
--		/* Make sure user addresses are aligned to 32 bytes */
--		if (!ALIGN(addr, 32))
--			return -EINVAL;
--
--		vb->state = VIDEOBUF_PREPARED;
--	}
--	return 0;
--}
--
--static void vpfe_videobuf_queue(struct videobuf_queue *vq,
--				struct videobuf_buffer *vb)
--{
--	/* Get the file handle object and device object */
--	struct vpfe_fh *fh = vq->priv_data;
--	struct vpfe_device *vpfe_dev = fh->vpfe_dev;
--	unsigned long flags;
--
--	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_buffer_queue\n");
--
--	/* add the buffer to the DMA queue */
--	spin_lock_irqsave(&vpfe_dev->dma_queue_lock, flags);
--	list_add_tail(&vb->queue, &vpfe_dev->dma_queue);
--	spin_unlock_irqrestore(&vpfe_dev->dma_queue_lock, flags);
--
--	/* Change state of the buffer */
--	vb->state = VIDEOBUF_QUEUED;
--}
--
--static void vpfe_videobuf_release(struct videobuf_queue *vq,
--				  struct videobuf_buffer *vb)
--{
--	struct vpfe_fh *fh = vq->priv_data;
--	struct vpfe_device *vpfe_dev = fh->vpfe_dev;
--	unsigned long flags;
--
--	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_videobuf_release\n");
--
--	/*
--	 * We need to flush the buffer from the dma queue since
--	 * they are de-allocated
--	 */
--	spin_lock_irqsave(&vpfe_dev->dma_queue_lock, flags);
--	INIT_LIST_HEAD(&vpfe_dev->dma_queue);
--	spin_unlock_irqrestore(&vpfe_dev->dma_queue_lock, flags);
--	videobuf_dma_contig_free(vq, vb);
--	vb->state = VIDEOBUF_NEEDS_INIT;
--}
--
--static const struct videobuf_queue_ops vpfe_videobuf_qops = {
--	.buf_setup      = vpfe_videobuf_setup,
--	.buf_prepare    = vpfe_videobuf_prepare,
--	.buf_queue      = vpfe_videobuf_queue,
--	.buf_release    = vpfe_videobuf_release,
--};
--
--/*
-- * vpfe_reqbufs. currently support REQBUF only once opening
-- * the device.
-- */
--static int vpfe_reqbufs(struct file *file, void *priv,
--			struct v4l2_requestbuffers *req_buf)
--{
--	struct vpfe_device *vpfe_dev = video_drvdata(file);
--	struct vpfe_fh *fh = file->private_data;
--	int ret;
--
--	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_reqbufs\n");
--
--	if (V4L2_BUF_TYPE_VIDEO_CAPTURE != req_buf->type) {
--		v4l2_err(&vpfe_dev->v4l2_dev, "Invalid buffer type\n");
--		return -EINVAL;
--	}
--
--	ret = mutex_lock_interruptible(&vpfe_dev->lock);
--	if (ret)
--		return ret;
--
--	if (vpfe_dev->io_usrs != 0) {
--		v4l2_err(&vpfe_dev->v4l2_dev, "Only one IO user allowed\n");
--		ret = -EBUSY;
--		goto unlock_out;
--	}
--
--	vpfe_dev->memory = req_buf->memory;
--	videobuf_queue_dma_contig_init(&vpfe_dev->buffer_queue,
--				&vpfe_videobuf_qops,
--				vpfe_dev->pdev,
--				&vpfe_dev->irqlock,
--				req_buf->type,
--				vpfe_dev->fmt.fmt.pix.field,
--				sizeof(struct videobuf_buffer),
--				fh, NULL);
--
--	fh->io_allowed = 1;
--	vpfe_dev->io_usrs = 1;
--	INIT_LIST_HEAD(&vpfe_dev->dma_queue);
--	ret = videobuf_reqbufs(&vpfe_dev->buffer_queue, req_buf);
--unlock_out:
--	mutex_unlock(&vpfe_dev->lock);
--	return ret;
--}
--
--static int vpfe_querybuf(struct file *file, void *priv,
--			 struct v4l2_buffer *buf)
--{
--	struct vpfe_device *vpfe_dev = video_drvdata(file);
--
--	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_querybuf\n");
--
--	if (V4L2_BUF_TYPE_VIDEO_CAPTURE != buf->type) {
--		v4l2_err(&vpfe_dev->v4l2_dev, "Invalid buf type\n");
--		return  -EINVAL;
--	}
--
--	if (vpfe_dev->memory != V4L2_MEMORY_MMAP) {
--		v4l2_err(&vpfe_dev->v4l2_dev, "Invalid memory\n");
--		return -EINVAL;
--	}
--	/* Call videobuf_querybuf to get information */
--	return videobuf_querybuf(&vpfe_dev->buffer_queue, buf);
--}
--
--static int vpfe_qbuf(struct file *file, void *priv,
--		     struct v4l2_buffer *p)
--{
--	struct vpfe_device *vpfe_dev = video_drvdata(file);
--	struct vpfe_fh *fh = file->private_data;
--
--	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_qbuf\n");
--
--	if (V4L2_BUF_TYPE_VIDEO_CAPTURE != p->type) {
--		v4l2_err(&vpfe_dev->v4l2_dev, "Invalid buf type\n");
--		return -EINVAL;
--	}
--
--	/*
--	 * If this file handle is not allowed to do IO,
--	 * return error
--	 */
--	if (!fh->io_allowed) {
--		v4l2_err(&vpfe_dev->v4l2_dev, "fh->io_allowed\n");
--		return -EACCES;
--	}
--	return videobuf_qbuf(&vpfe_dev->buffer_queue, p);
--}
--
--static int vpfe_dqbuf(struct file *file, void *priv,
--		      struct v4l2_buffer *buf)
--{
--	struct vpfe_device *vpfe_dev = video_drvdata(file);
--
--	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_dqbuf\n");
--
--	if (V4L2_BUF_TYPE_VIDEO_CAPTURE != buf->type) {
--		v4l2_err(&vpfe_dev->v4l2_dev, "Invalid buf type\n");
--		return -EINVAL;
--	}
--	return videobuf_dqbuf(&vpfe_dev->buffer_queue,
--				      buf, file->f_flags & O_NONBLOCK);
--}
--
--/*
-- * vpfe_calculate_offsets : This function calculates buffers offset
-- * for top and bottom field
-- */
--static void vpfe_calculate_offsets(struct vpfe_device *vpfe_dev)
--{
--	struct v4l2_rect image_win;
--
--	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_calculate_offsets\n");
--
--	ccdc_dev->hw_ops.get_image_window(&image_win);
--	vpfe_dev->field_off = image_win.height * image_win.width;
--}
--
--/* vpfe_start_ccdc_capture: start streaming in ccdc/isif */
--static void vpfe_start_ccdc_capture(struct vpfe_device *vpfe_dev)
--{
--	ccdc_dev->hw_ops.enable(1);
--	if (ccdc_dev->hw_ops.enable_out_to_sdram)
--		ccdc_dev->hw_ops.enable_out_to_sdram(1);
--	vpfe_dev->started = 1;
--}
--
--/*
-- * vpfe_streamon. Assume the DMA queue is not empty.
-- * application is expected to call QBUF before calling
-- * this ioctl. If not, driver returns error
-- */
--static int vpfe_streamon(struct file *file, void *priv,
--			 enum v4l2_buf_type buf_type)
--{
--	struct vpfe_device *vpfe_dev = video_drvdata(file);
--	struct vpfe_fh *fh = file->private_data;
--	struct vpfe_subdev_info *sdinfo;
--	unsigned long addr;
--	int ret;
--
--	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_streamon\n");
--
--	if (V4L2_BUF_TYPE_VIDEO_CAPTURE != buf_type) {
--		v4l2_err(&vpfe_dev->v4l2_dev, "Invalid buf type\n");
--		return -EINVAL;
--	}
--
--	/* If file handle is not allowed IO, return error */
--	if (!fh->io_allowed) {
--		v4l2_err(&vpfe_dev->v4l2_dev, "fh->io_allowed\n");
--		return -EACCES;
--	}
--
--	sdinfo = vpfe_dev->current_subdev;
--	ret = v4l2_device_call_until_err(&vpfe_dev->v4l2_dev, sdinfo->grp_id,
--					video, s_stream, 1);
--
--	if (ret && (ret != -ENOIOCTLCMD)) {
--		v4l2_err(&vpfe_dev->v4l2_dev, "stream on failed in subdev\n");
--		return -EINVAL;
--	}
--
--	/* If buffer queue is empty, return error */
--	if (list_empty(&vpfe_dev->buffer_queue.stream)) {
--		v4l2_err(&vpfe_dev->v4l2_dev, "buffer queue is empty\n");
--		return -EIO;
--	}
--
--	/* Call videobuf_streamon to start streaming * in videobuf */
--	ret = videobuf_streamon(&vpfe_dev->buffer_queue);
--	if (ret)
--		return ret;
--
--
--	ret = mutex_lock_interruptible(&vpfe_dev->lock);
--	if (ret)
--		goto streamoff;
--	/* Get the next frame from the buffer queue */
--	vpfe_dev->next_frm = list_entry(vpfe_dev->dma_queue.next,
--					struct videobuf_buffer, queue);
--	vpfe_dev->cur_frm = vpfe_dev->next_frm;
--	/* Remove buffer from the buffer queue */
--	list_del(&vpfe_dev->cur_frm->queue);
--	/* Mark state of the current frame to active */
--	vpfe_dev->cur_frm->state = VIDEOBUF_ACTIVE;
--	/* Initialize field_id and started member */
--	vpfe_dev->field_id = 0;
--	addr = videobuf_to_dma_contig(vpfe_dev->cur_frm);
--
--	/* Calculate field offset */
--	vpfe_calculate_offsets(vpfe_dev);
--
--	if (vpfe_attach_irq(vpfe_dev) < 0) {
--		v4l2_err(&vpfe_dev->v4l2_dev,
--			 "Error in attaching interrupt handle\n");
--		ret = -EFAULT;
--		goto unlock_out;
--	}
--	if (ccdc_dev->hw_ops.configure() < 0) {
--		v4l2_err(&vpfe_dev->v4l2_dev,
--			 "Error in configuring ccdc\n");
--		ret = -EINVAL;
--		goto unlock_out;
--	}
--	ccdc_dev->hw_ops.setfbaddr((unsigned long)(addr));
--	vpfe_start_ccdc_capture(vpfe_dev);
--	mutex_unlock(&vpfe_dev->lock);
--	return ret;
--unlock_out:
--	mutex_unlock(&vpfe_dev->lock);
--streamoff:
--	videobuf_streamoff(&vpfe_dev->buffer_queue);
--	return ret;
--}
--
--static int vpfe_streamoff(struct file *file, void *priv,
--			  enum v4l2_buf_type buf_type)
--{
--	struct vpfe_device *vpfe_dev = video_drvdata(file);
--	struct vpfe_fh *fh = file->private_data;
--	struct vpfe_subdev_info *sdinfo;
--	int ret;
--
--	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_streamoff\n");
--
--	if (V4L2_BUF_TYPE_VIDEO_CAPTURE != buf_type) {
--		v4l2_err(&vpfe_dev->v4l2_dev, "Invalid buf type\n");
--		return -EINVAL;
--	}
--
--	/* If io is allowed for this file handle, return error */
--	if (!fh->io_allowed) {
--		v4l2_err(&vpfe_dev->v4l2_dev, "fh->io_allowed\n");
--		return -EACCES;
--	}
--
--	/* If streaming is not started, return error */
--	if (!vpfe_dev->started) {
--		v4l2_err(&vpfe_dev->v4l2_dev, "device started\n");
--		return -EINVAL;
--	}
--
--	ret = mutex_lock_interruptible(&vpfe_dev->lock);
--	if (ret)
--		return ret;
--
--	vpfe_stop_ccdc_capture(vpfe_dev);
--	vpfe_detach_irq(vpfe_dev);
--
--	sdinfo = vpfe_dev->current_subdev;
--	ret = v4l2_device_call_until_err(&vpfe_dev->v4l2_dev, sdinfo->grp_id,
--					video, s_stream, 0);
--
--	if (ret && (ret != -ENOIOCTLCMD))
--		v4l2_err(&vpfe_dev->v4l2_dev, "stream off failed in subdev\n");
--	ret = videobuf_streamoff(&vpfe_dev->buffer_queue);
--	mutex_unlock(&vpfe_dev->lock);
--	return ret;
--}
--
--static int vpfe_g_pixelaspect(struct file *file, void *priv,
--			      int type, struct v4l2_fract *f)
--{
--	struct vpfe_device *vpfe_dev = video_drvdata(file);
--
--	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_g_pixelaspect\n");
--
--	if (type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
--		return -EINVAL;
--	/* If std_index is invalid, then just return (== 1:1 aspect) */
--	if (vpfe_dev->std_index >= ARRAY_SIZE(vpfe_standards))
--		return 0;
--
--	*f = vpfe_standards[vpfe_dev->std_index].pixelaspect;
--	return 0;
--}
--
--static int vpfe_g_selection(struct file *file, void *priv,
--			    struct v4l2_selection *sel)
--{
--	struct vpfe_device *vpfe_dev = video_drvdata(file);
--
--	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_g_selection\n");
--
--	if (sel->type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
+-	if (sel->type != V4L2_BUF_TYPE_VIDEO_OUTPUT)
 -		return -EINVAL;
 -
 -	switch (sel->target) {
 -	case V4L2_SEL_TGT_CROP:
--		sel->r = vpfe_dev->crop;
+-		osd_device->ops.get_layer_config(osd_device,
+-						 layer->layer_info.id, cfg);
+-		rect->top = cfg->ypos;
+-		rect->left = cfg->xpos;
+-		rect->width = cfg->xsize;
+-		rect->height = cfg->ysize;
 -		break;
 -	case V4L2_SEL_TGT_CROP_DEFAULT:
 -	case V4L2_SEL_TGT_CROP_BOUNDS:
--		sel->r.width = vpfe_standards[vpfe_dev->std_index].width;
--		sel->r.height = vpfe_standards[vpfe_dev->std_index].height;
+-		rect->left = 0;
+-		rect->top = 0;
+-		rect->width = vpbe_dev->current_timings.xres;
+-		rect->height = vpbe_dev->current_timings.yres;
 -		break;
 -	default:
 -		return -EINVAL;
 -	}
+-
 -	return 0;
 -}
 -
--static int vpfe_s_selection(struct file *file, void *priv,
--			    struct v4l2_selection *sel)
+-static int vpbe_display_g_pixelaspect(struct file *file, void *priv,
+-				      int type, struct v4l2_fract *f)
 -{
--	struct vpfe_device *vpfe_dev = video_drvdata(file);
--	struct v4l2_rect rect = sel->r;
--	int ret;
+-	struct vpbe_layer *layer = video_drvdata(file);
+-	struct vpbe_device *vpbe_dev = layer->disp_dev->vpbe_dev;
 -
--	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev, "vpfe_s_selection\n");
+-	v4l2_dbg(1, debug, &vpbe_dev->v4l2_dev, "VIDIOC_CROPCAP ioctl\n");
 -
--	if (sel->type != V4L2_BUF_TYPE_VIDEO_CAPTURE ||
--	    sel->target != V4L2_SEL_TGT_CROP)
+-	if (type != V4L2_BUF_TYPE_VIDEO_OUTPUT)
 -		return -EINVAL;
 -
--	if (vpfe_dev->started) {
--		/* make sure streaming is not started */
--		v4l2_err(&vpfe_dev->v4l2_dev,
--			"Cannot change crop when streaming is ON\n");
--		return -EBUSY;
+-	*f = vpbe_dev->current_timings.aspect;
+-	return 0;
+-}
+-
+-static int vpbe_display_g_fmt(struct file *file, void *priv,
+-				struct v4l2_format *fmt)
+-{
+-	struct vpbe_layer *layer = video_drvdata(file);
+-	struct vpbe_device *vpbe_dev = layer->disp_dev->vpbe_dev;
+-
+-	v4l2_dbg(1, debug, &vpbe_dev->v4l2_dev,
+-			"VIDIOC_G_FMT, layer id = %d\n",
+-			layer->device_id);
+-
+-	/* If buffer type is video output */
+-	if (V4L2_BUF_TYPE_VIDEO_OUTPUT != fmt->type) {
+-		v4l2_err(&vpbe_dev->v4l2_dev, "invalid type\n");
+-		return -EINVAL;
+-	}
+-	/* Fill in the information about format */
+-	fmt->fmt.pix = layer->pix_fmt;
+-
+-	return 0;
+-}
+-
+-static int vpbe_display_enum_fmt(struct file *file, void  *priv,
+-				   struct v4l2_fmtdesc *fmt)
+-{
+-	struct vpbe_layer *layer = video_drvdata(file);
+-	struct vpbe_device *vpbe_dev = layer->disp_dev->vpbe_dev;
+-
+-	v4l2_dbg(1, debug, &vpbe_dev->v4l2_dev,
+-				"VIDIOC_ENUM_FMT, layer id = %d\n",
+-				layer->device_id);
+-	if (fmt->index > 1) {
+-		v4l2_err(&vpbe_dev->v4l2_dev, "Invalid format index\n");
+-		return -EINVAL;
 -	}
 -
--	ret = mutex_lock_interruptible(&vpfe_dev->lock);
+-	/* Fill in the information about format */
+-	if (fmt->index == 0)
+-		fmt->pixelformat = V4L2_PIX_FMT_UYVY;
+-	else
+-		fmt->pixelformat = V4L2_PIX_FMT_NV12;
+-
+-	return 0;
+-}
+-
+-static int vpbe_display_s_fmt(struct file *file, void *priv,
+-				struct v4l2_format *fmt)
+-{
+-	struct vpbe_layer *layer = video_drvdata(file);
+-	struct vpbe_display *disp_dev = layer->disp_dev;
+-	struct vpbe_device *vpbe_dev = disp_dev->vpbe_dev;
+-	struct osd_layer_config *cfg  = &layer->layer_info.config;
+-	struct v4l2_pix_format *pixfmt = &fmt->fmt.pix;
+-	struct osd_state *osd_device = disp_dev->osd_device;
+-	int ret;
+-
+-	v4l2_dbg(1, debug, &vpbe_dev->v4l2_dev,
+-			"VIDIOC_S_FMT, layer id = %d\n",
+-			layer->device_id);
+-
+-	if (vb2_is_busy(&layer->buffer_queue))
+-		return -EBUSY;
+-
+-	if (V4L2_BUF_TYPE_VIDEO_OUTPUT != fmt->type) {
+-		v4l2_dbg(1, debug, &vpbe_dev->v4l2_dev, "invalid type\n");
+-		return -EINVAL;
+-	}
+-	/* Check for valid pixel format */
+-	ret = vpbe_try_format(disp_dev, pixfmt, 1);
 -	if (ret)
 -		return ret;
 -
--	if (rect.top < 0 || rect.left < 0) {
--		v4l2_err(&vpfe_dev->v4l2_dev,
--			"doesn't support negative values for top & left\n");
--		ret = -EINVAL;
--		goto unlock_out;
--	}
+-	/* YUV420 is requested, check availability of the
+-	other video window */
 -
--	/* adjust the width to 16 pixel boundary */
--	rect.width = ((rect.width + 15) & ~0xf);
+-	layer->pix_fmt = *pixfmt;
+-	if (pixfmt->pixelformat == V4L2_PIX_FMT_NV12) {
+-		struct vpbe_layer *otherlayer;
 -
--	/* make sure parameters are valid */
--	if ((rect.left + rect.width >
--		vpfe_dev->std_info.active_pixels) ||
--	    (rect.top + rect.height >
--		vpfe_dev->std_info.active_lines)) {
--		v4l2_err(&vpfe_dev->v4l2_dev, "Error in S_SELECTION params\n");
--		ret = -EINVAL;
--		goto unlock_out;
--	}
--	ccdc_dev->hw_ops.set_image_window(&rect);
--	vpfe_dev->fmt.fmt.pix.width = rect.width;
--	vpfe_dev->fmt.fmt.pix.height = rect.height;
--	vpfe_dev->fmt.fmt.pix.bytesperline =
--		ccdc_dev->hw_ops.get_line_length();
--	vpfe_dev->fmt.fmt.pix.sizeimage =
--		vpfe_dev->fmt.fmt.pix.bytesperline *
--		vpfe_dev->fmt.fmt.pix.height;
--	vpfe_dev->crop = rect;
--	sel->r = rect;
--unlock_out:
--	mutex_unlock(&vpfe_dev->lock);
--	return ret;
--}
--
--/* vpfe capture ioctl operations */
--static const struct v4l2_ioctl_ops vpfe_ioctl_ops = {
--	.vidioc_querycap	 = vpfe_querycap,
--	.vidioc_g_fmt_vid_cap    = vpfe_g_fmt_vid_cap,
--	.vidioc_enum_fmt_vid_cap = vpfe_enum_fmt_vid_cap,
--	.vidioc_s_fmt_vid_cap    = vpfe_s_fmt_vid_cap,
--	.vidioc_try_fmt_vid_cap  = vpfe_try_fmt_vid_cap,
--	.vidioc_enum_input	 = vpfe_enum_input,
--	.vidioc_g_input		 = vpfe_g_input,
--	.vidioc_s_input		 = vpfe_s_input,
--	.vidioc_querystd	 = vpfe_querystd,
--	.vidioc_s_std		 = vpfe_s_std,
--	.vidioc_g_std		 = vpfe_g_std,
--	.vidioc_reqbufs		 = vpfe_reqbufs,
--	.vidioc_querybuf	 = vpfe_querybuf,
--	.vidioc_qbuf		 = vpfe_qbuf,
--	.vidioc_dqbuf		 = vpfe_dqbuf,
--	.vidioc_streamon	 = vpfe_streamon,
--	.vidioc_streamoff	 = vpfe_streamoff,
--	.vidioc_g_pixelaspect	 = vpfe_g_pixelaspect,
--	.vidioc_g_selection	 = vpfe_g_selection,
--	.vidioc_s_selection	 = vpfe_s_selection,
--};
--
--static struct vpfe_device *vpfe_initialize(void)
--{
--	struct vpfe_device *vpfe_dev;
--
--	/* Default number of buffers should be 3 */
--	if ((numbuffers > 0) &&
--	    (numbuffers < config_params.min_numbuffers))
--		numbuffers = config_params.min_numbuffers;
--
--	/*
--	 * Set buffer size to min buffers size if invalid buffer size is
--	 * given
--	 */
--	if (bufsize < config_params.min_bufsize)
--		bufsize = config_params.min_bufsize;
--
--	config_params.numbuffers = numbuffers;
--
--	if (numbuffers)
--		config_params.device_bufsize = bufsize;
--
--	/* Allocate memory for device objects */
--	vpfe_dev = kzalloc(sizeof(*vpfe_dev), GFP_KERNEL);
--
--	return vpfe_dev;
--}
--
--/*
-- * vpfe_probe : This function creates device entries by register
-- * itself to the V4L2 driver and initializes fields of each
-- * device objects
-- */
--static int vpfe_probe(struct platform_device *pdev)
--{
--	struct vpfe_subdev_info *sdinfo;
--	struct vpfe_config *vpfe_cfg;
--	struct resource *res1;
--	struct vpfe_device *vpfe_dev;
--	struct i2c_adapter *i2c_adap;
--	struct video_device *vfd;
--	int ret, i, j;
--	int num_subdevs = 0;
--
--	/* Get the pointer to the device object */
--	vpfe_dev = vpfe_initialize();
--
--	if (!vpfe_dev) {
--		v4l2_err(pdev->dev.driver,
--			"Failed to allocate memory for vpfe_dev\n");
--		return -ENOMEM;
--	}
--
--	vpfe_dev->pdev = &pdev->dev;
--
--	if (!pdev->dev.platform_data) {
--		v4l2_err(pdev->dev.driver, "Unable to get vpfe config\n");
--		ret = -ENODEV;
--		goto probe_free_dev_mem;
--	}
--
--	vpfe_cfg = pdev->dev.platform_data;
--	vpfe_dev->cfg = vpfe_cfg;
--	if (!vpfe_cfg->ccdc || !vpfe_cfg->card_name || !vpfe_cfg->sub_devs) {
--		v4l2_err(pdev->dev.driver, "null ptr in vpfe_cfg\n");
--		ret = -ENOENT;
--		goto probe_free_dev_mem;
--	}
--
--	/* Allocate memory for ccdc configuration */
--	ccdc_cfg = kmalloc(sizeof(*ccdc_cfg), GFP_KERNEL);
--	if (!ccdc_cfg) {
--		ret = -ENOMEM;
--		goto probe_free_dev_mem;
--	}
--
--	mutex_lock(&ccdc_lock);
--
--	strscpy(ccdc_cfg->name, vpfe_cfg->ccdc, sizeof(ccdc_cfg->name));
--	/* Get VINT0 irq resource */
--	res1 = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
--	if (!res1) {
--		v4l2_err(pdev->dev.driver,
--			 "Unable to get interrupt for VINT0\n");
--		ret = -ENODEV;
--		goto probe_free_ccdc_cfg_mem;
--	}
--	vpfe_dev->ccdc_irq0 = res1->start;
--
--	/* Get VINT1 irq resource */
--	res1 = platform_get_resource(pdev, IORESOURCE_IRQ, 1);
--	if (!res1) {
--		v4l2_err(pdev->dev.driver,
--			 "Unable to get interrupt for VINT1\n");
--		ret = -ENODEV;
--		goto probe_free_ccdc_cfg_mem;
--	}
--	vpfe_dev->ccdc_irq1 = res1->start;
--
--	ret = request_irq(vpfe_dev->ccdc_irq0, vpfe_isr, 0,
--			  "vpfe_capture0", vpfe_dev);
--
--	if (0 != ret) {
--		v4l2_err(pdev->dev.driver, "Unable to request interrupt\n");
--		goto probe_free_ccdc_cfg_mem;
--	}
--
--	vfd = &vpfe_dev->video_dev;
--	/* Initialize field of video device */
--	vfd->release		= video_device_release_empty;
--	vfd->fops		= &vpfe_fops;
--	vfd->ioctl_ops		= &vpfe_ioctl_ops;
--	vfd->tvnorms		= 0;
--	vfd->v4l2_dev		= &vpfe_dev->v4l2_dev;
--	vfd->device_caps	= V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING;
--	snprintf(vfd->name, sizeof(vfd->name),
--		 "%s_V%d.%d.%d",
--		 CAPTURE_DRV_NAME,
--		 (VPFE_CAPTURE_VERSION_CODE >> 16) & 0xff,
--		 (VPFE_CAPTURE_VERSION_CODE >> 8) & 0xff,
--		 (VPFE_CAPTURE_VERSION_CODE) & 0xff);
--
--	ret = v4l2_device_register(&pdev->dev, &vpfe_dev->v4l2_dev);
--	if (ret) {
--		v4l2_err(pdev->dev.driver,
--			"Unable to register v4l2 device.\n");
--		goto probe_out_release_irq;
--	}
--	v4l2_info(&vpfe_dev->v4l2_dev, "v4l2 device registered\n");
--	spin_lock_init(&vpfe_dev->irqlock);
--	spin_lock_init(&vpfe_dev->dma_queue_lock);
--	mutex_init(&vpfe_dev->lock);
--
--	/* Initialize field of the device objects */
--	vpfe_dev->numbuffers = config_params.numbuffers;
--
--	/* register video device */
--	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev,
--		"trying to register vpfe device.\n");
--	v4l2_dbg(1, debug, &vpfe_dev->v4l2_dev,
--		"video_dev=%p\n", &vpfe_dev->video_dev);
--	vpfe_dev->fmt.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
--	ret = video_register_device(&vpfe_dev->video_dev,
--				    VFL_TYPE_VIDEO, -1);
--
--	if (ret) {
--		v4l2_err(pdev->dev.driver,
--			"Unable to register video device.\n");
--		goto probe_out_v4l2_unregister;
--	}
--
--	v4l2_info(&vpfe_dev->v4l2_dev, "video device registered\n");
--	/* set the driver data in platform device */
--	platform_set_drvdata(pdev, vpfe_dev);
--	/* set driver private data */
--	video_set_drvdata(&vpfe_dev->video_dev, vpfe_dev);
--	i2c_adap = i2c_get_adapter(vpfe_cfg->i2c_adapter_id);
--	num_subdevs = vpfe_cfg->num_subdevs;
--	vpfe_dev->sd = kmalloc_array(num_subdevs,
--				     sizeof(*vpfe_dev->sd),
--				     GFP_KERNEL);
--	if (!vpfe_dev->sd) {
--		ret = -ENOMEM;
--		goto probe_out_video_unregister;
--	}
--
--	for (i = 0; i < num_subdevs; i++) {
--		struct v4l2_input *inps;
--
--		sdinfo = &vpfe_cfg->sub_devs[i];
--
--		/* Load up the subdevice */
--		vpfe_dev->sd[i] =
--			v4l2_i2c_new_subdev_board(&vpfe_dev->v4l2_dev,
--						  i2c_adap,
--						  &sdinfo->board_info,
--						  NULL);
--		if (vpfe_dev->sd[i]) {
--			v4l2_info(&vpfe_dev->v4l2_dev,
--				  "v4l2 sub device %s registered\n",
--				  sdinfo->name);
--			vpfe_dev->sd[i]->grp_id = sdinfo->grp_id;
--			/* update tvnorms from the sub devices */
--			for (j = 0; j < sdinfo->num_inputs; j++) {
--				inps = &sdinfo->inputs[j];
--				vfd->tvnorms |= inps->std;
--			}
--		} else {
--			v4l2_info(&vpfe_dev->v4l2_dev,
--				  "v4l2 sub device %s register fails\n",
--				  sdinfo->name);
--			ret = -ENXIO;
--			goto probe_sd_out;
+-		otherlayer = _vpbe_display_get_other_win_layer(disp_dev, layer);
+-		/* if other layer is available, only
+-		 * claim it, do not configure it
+-		 */
+-		ret = osd_device->ops.request_layer(osd_device,
+-						    otherlayer->layer_info.id);
+-		if (ret < 0) {
+-			v4l2_err(&vpbe_dev->v4l2_dev,
+-				 "Display Manager failed to allocate layer\n");
+-			return -EBUSY;
 -		}
 -	}
 -
--	/* set first sub device as current one */
--	vpfe_dev->current_subdev = &vpfe_cfg->sub_devs[0];
--	vpfe_dev->v4l2_dev.ctrl_handler = vpfe_dev->sd[0]->ctrl_handler;
+-	/* Get osd layer config */
+-	osd_device->ops.get_layer_config(osd_device,
+-			layer->layer_info.id, cfg);
+-	/* Store the pixel format in the layer object */
+-	cfg->xsize = pixfmt->width;
+-	cfg->ysize = pixfmt->height;
+-	cfg->line_length = pixfmt->bytesperline;
+-	cfg->ypos = 0;
+-	cfg->xpos = 0;
+-	cfg->interlaced = vpbe_dev->current_timings.interlaced;
 -
--	/* We have at least one sub device to work with */
--	mutex_unlock(&ccdc_lock);
+-	if (V4L2_PIX_FMT_UYVY == pixfmt->pixelformat)
+-		cfg->pixfmt = PIXFMT_YCBCRI;
+-
+-	/* Change of the default pixel format for both video windows */
+-	if (V4L2_PIX_FMT_NV12 == pixfmt->pixelformat) {
+-		struct vpbe_layer *otherlayer;
+-		cfg->pixfmt = PIXFMT_NV12;
+-		otherlayer = _vpbe_display_get_other_win_layer(disp_dev,
+-								layer);
+-		otherlayer->layer_info.config.pixfmt = PIXFMT_NV12;
+-	}
+-
+-	/* Set the layer config in the osd window */
+-	ret = osd_device->ops.set_layer_config(osd_device,
+-				layer->layer_info.id, cfg);
+-	if (ret < 0) {
+-		v4l2_err(&vpbe_dev->v4l2_dev,
+-				"Error in S_FMT params:\n");
+-		return -EINVAL;
+-	}
+-
+-	/* Readback and fill the local copy of current pix format */
+-	osd_device->ops.get_layer_config(osd_device,
+-			layer->layer_info.id, cfg);
+-
+-	return 0;
+-}
+-
+-static int vpbe_display_try_fmt(struct file *file, void *priv,
+-				  struct v4l2_format *fmt)
+-{
+-	struct vpbe_layer *layer = video_drvdata(file);
+-	struct vpbe_display *disp_dev = layer->disp_dev;
+-	struct vpbe_device *vpbe_dev = layer->disp_dev->vpbe_dev;
+-	struct v4l2_pix_format *pixfmt = &fmt->fmt.pix;
+-
+-	v4l2_dbg(1, debug, &vpbe_dev->v4l2_dev, "VIDIOC_TRY_FMT\n");
+-
+-	if (V4L2_BUF_TYPE_VIDEO_OUTPUT != fmt->type) {
+-		v4l2_err(&vpbe_dev->v4l2_dev, "invalid type\n");
+-		return -EINVAL;
+-	}
+-
+-	/* Check for valid field format */
+-	return  vpbe_try_format(disp_dev, pixfmt, 0);
+-
+-}
+-
+-/*
+- * vpbe_display_s_std - Set the given standard in the encoder
+- *
+- * Sets the standard if supported by the current encoder. Return the status.
+- * 0 - success & -EINVAL on error
+- */
+-static int vpbe_display_s_std(struct file *file, void *priv,
+-				v4l2_std_id std_id)
+-{
+-	struct vpbe_layer *layer = video_drvdata(file);
+-	struct vpbe_device *vpbe_dev = layer->disp_dev->vpbe_dev;
+-	int ret;
+-
+-	v4l2_dbg(1, debug, &vpbe_dev->v4l2_dev, "VIDIOC_S_STD\n");
+-
+-	if (vb2_is_busy(&layer->buffer_queue))
+-		return -EBUSY;
+-
+-	if (vpbe_dev->ops.s_std) {
+-		ret = vpbe_dev->ops.s_std(vpbe_dev, std_id);
+-		if (ret) {
+-			v4l2_err(&vpbe_dev->v4l2_dev,
+-			"Failed to set standard for sub devices\n");
+-			return -EINVAL;
+-		}
+-	} else {
+-		return -EINVAL;
+-	}
+-
+-	return 0;
+-}
+-
+-/*
+- * vpbe_display_g_std - Get the standard in the current encoder
+- *
+- * Get the standard in the current encoder. Return the status. 0 - success
+- * -EINVAL on error
+- */
+-static int vpbe_display_g_std(struct file *file, void *priv,
+-				v4l2_std_id *std_id)
+-{
+-	struct vpbe_layer *layer = video_drvdata(file);
+-	struct vpbe_device *vpbe_dev = layer->disp_dev->vpbe_dev;
+-
+-	v4l2_dbg(1, debug, &vpbe_dev->v4l2_dev,	"VIDIOC_G_STD\n");
+-
+-	/* Get the standard from the current encoder */
+-	if (vpbe_dev->current_timings.timings_type & VPBE_ENC_STD) {
+-		*std_id = vpbe_dev->current_timings.std_id;
+-		return 0;
+-	}
+-
+-	return -EINVAL;
+-}
+-
+-/*
+- * vpbe_display_enum_output - enumerate outputs
+- *
+- * Enumerates the outputs available at the vpbe display
+- * returns the status, -EINVAL if end of output list
+- */
+-static int vpbe_display_enum_output(struct file *file, void *priv,
+-				    struct v4l2_output *output)
+-{
+-	struct vpbe_layer *layer = video_drvdata(file);
+-	struct vpbe_device *vpbe_dev = layer->disp_dev->vpbe_dev;
+-	int ret;
+-
+-	v4l2_dbg(1, debug, &vpbe_dev->v4l2_dev,	"VIDIOC_ENUM_OUTPUT\n");
+-
+-	/* Enumerate outputs */
+-	if (!vpbe_dev->ops.enum_outputs)
+-		return -EINVAL;
+-
+-	ret = vpbe_dev->ops.enum_outputs(vpbe_dev, output);
+-	if (ret) {
+-		v4l2_dbg(1, debug, &vpbe_dev->v4l2_dev,
+-			"Failed to enumerate outputs\n");
+-		return -EINVAL;
+-	}
+-
+-	return 0;
+-}
+-
+-/*
+- * vpbe_display_s_output - Set output to
+- * the output specified by the index
+- */
+-static int vpbe_display_s_output(struct file *file, void *priv,
+-				unsigned int i)
+-{
+-	struct vpbe_layer *layer = video_drvdata(file);
+-	struct vpbe_device *vpbe_dev = layer->disp_dev->vpbe_dev;
+-	int ret;
+-
+-	v4l2_dbg(1, debug, &vpbe_dev->v4l2_dev,	"VIDIOC_S_OUTPUT\n");
+-
+-	if (vb2_is_busy(&layer->buffer_queue))
+-		return -EBUSY;
+-
+-	if (!vpbe_dev->ops.set_output)
+-		return -EINVAL;
+-
+-	ret = vpbe_dev->ops.set_output(vpbe_dev, i);
+-	if (ret) {
+-		v4l2_err(&vpbe_dev->v4l2_dev,
+-			"Failed to set output for sub devices\n");
+-		return -EINVAL;
+-	}
+-
+-	return 0;
+-}
+-
+-/*
+- * vpbe_display_g_output - Get output from subdevice
+- * for a given by the index
+- */
+-static int vpbe_display_g_output(struct file *file, void *priv,
+-				unsigned int *i)
+-{
+-	struct vpbe_layer *layer = video_drvdata(file);
+-	struct vpbe_device *vpbe_dev = layer->disp_dev->vpbe_dev;
+-
+-	v4l2_dbg(1, debug, &vpbe_dev->v4l2_dev, "VIDIOC_G_OUTPUT\n");
+-	/* Get the standard from the current encoder */
+-	*i = vpbe_dev->current_out_index;
+-
+-	return 0;
+-}
+-
+-/*
+- * vpbe_display_enum_dv_timings - Enumerate the dv timings
+- *
+- * enum the timings in the current encoder. Return the status. 0 - success
+- * -EINVAL on error
+- */
+-static int
+-vpbe_display_enum_dv_timings(struct file *file, void *priv,
+-			struct v4l2_enum_dv_timings *timings)
+-{
+-	struct vpbe_layer *layer = video_drvdata(file);
+-	struct vpbe_device *vpbe_dev = layer->disp_dev->vpbe_dev;
+-	int ret;
+-
+-	v4l2_dbg(1, debug, &vpbe_dev->v4l2_dev, "VIDIOC_ENUM_DV_TIMINGS\n");
+-
+-	/* Enumerate outputs */
+-	if (!vpbe_dev->ops.enum_dv_timings)
+-		return -EINVAL;
+-
+-	ret = vpbe_dev->ops.enum_dv_timings(vpbe_dev, timings);
+-	if (ret) {
+-		v4l2_err(&vpbe_dev->v4l2_dev,
+-			"Failed to enumerate dv timings info\n");
+-		return -EINVAL;
+-	}
+-
+-	return 0;
+-}
+-
+-/*
+- * vpbe_display_s_dv_timings - Set the dv timings
+- *
+- * Set the timings in the current encoder. Return the status. 0 - success
+- * -EINVAL on error
+- */
+-static int
+-vpbe_display_s_dv_timings(struct file *file, void *priv,
+-				struct v4l2_dv_timings *timings)
+-{
+-	struct vpbe_layer *layer = video_drvdata(file);
+-	struct vpbe_device *vpbe_dev = layer->disp_dev->vpbe_dev;
+-	int ret;
+-
+-	v4l2_dbg(1, debug, &vpbe_dev->v4l2_dev, "VIDIOC_S_DV_TIMINGS\n");
+-
+-	if (vb2_is_busy(&layer->buffer_queue))
+-		return -EBUSY;
+-
+-	/* Set the given standard in the encoder */
+-	if (!vpbe_dev->ops.s_dv_timings)
+-		return -EINVAL;
+-
+-	ret = vpbe_dev->ops.s_dv_timings(vpbe_dev, timings);
+-	if (ret) {
+-		v4l2_err(&vpbe_dev->v4l2_dev,
+-			"Failed to set the dv timings info\n");
+-		return -EINVAL;
+-	}
+-
+-	return 0;
+-}
+-
+-/*
+- * vpbe_display_g_dv_timings - Set the dv timings
+- *
+- * Get the timings in the current encoder. Return the status. 0 - success
+- * -EINVAL on error
+- */
+-static int
+-vpbe_display_g_dv_timings(struct file *file, void *priv,
+-				struct v4l2_dv_timings *dv_timings)
+-{
+-	struct vpbe_layer *layer = video_drvdata(file);
+-	struct vpbe_device *vpbe_dev = layer->disp_dev->vpbe_dev;
+-
+-	v4l2_dbg(1, debug, &vpbe_dev->v4l2_dev, "VIDIOC_G_DV_TIMINGS\n");
+-
+-	/* Get the given standard in the encoder */
+-
+-	if (vpbe_dev->current_timings.timings_type &
+-				VPBE_ENC_DV_TIMINGS) {
+-		*dv_timings = vpbe_dev->current_timings.dv_timings;
+-	} else {
+-		return -EINVAL;
+-	}
+-
+-	return 0;
+-}
+-
+-/*
+- * vpbe_display_open()
+- * It creates object of file handle structure and stores it in private_data
+- * member of filepointer
+- */
+-static int vpbe_display_open(struct file *file)
+-{
+-	struct vpbe_layer *layer = video_drvdata(file);
+-	struct vpbe_display *disp_dev = layer->disp_dev;
+-	struct vpbe_device *vpbe_dev = disp_dev->vpbe_dev;
+-	struct osd_state *osd_device = disp_dev->osd_device;
+-	int err;
+-
+-	/* creating context for file descriptor */
+-	err = v4l2_fh_open(file);
+-	if (err) {
+-		v4l2_err(&vpbe_dev->v4l2_dev, "v4l2_fh_open failed\n");
+-		return err;
+-	}
+-
+-	/* leaving if layer is already initialized */
+-	if (!v4l2_fh_is_singular_file(file))
+-		return err;
+-
+-	if (!layer->usrs) {
+-		if (mutex_lock_interruptible(&layer->opslock))
+-			return -ERESTARTSYS;
+-		/* First claim the layer for this device */
+-		err = osd_device->ops.request_layer(osd_device,
+-						layer->layer_info.id);
+-		mutex_unlock(&layer->opslock);
+-		if (err < 0) {
+-			/* Couldn't get layer */
+-			v4l2_err(&vpbe_dev->v4l2_dev,
+-				"Display Manager failed to allocate layer\n");
+-			v4l2_fh_release(file);
+-			return -EINVAL;
+-		}
+-	}
+-	/* Increment layer usrs counter */
+-	layer->usrs++;
+-	v4l2_dbg(1, debug, &vpbe_dev->v4l2_dev,
+-			"vpbe display device opened successfully\n");
+-	return 0;
+-}
+-
+-/*
+- * vpbe_display_release()
+- * This function deletes buffer queue, frees the buffers and the davinci
+- * display file * handle
+- */
+-static int vpbe_display_release(struct file *file)
+-{
+-	struct vpbe_layer *layer = video_drvdata(file);
+-	struct osd_layer_config *cfg  = &layer->layer_info.config;
+-	struct vpbe_display *disp_dev = layer->disp_dev;
+-	struct vpbe_device *vpbe_dev = disp_dev->vpbe_dev;
+-	struct osd_state *osd_device = disp_dev->osd_device;
+-
+-	v4l2_dbg(1, debug, &vpbe_dev->v4l2_dev, "vpbe_display_release\n");
+-
+-	mutex_lock(&layer->opslock);
+-
+-	osd_device->ops.disable_layer(osd_device,
+-			layer->layer_info.id);
+-	/* Decrement layer usrs counter */
+-	layer->usrs--;
+-	/* If this file handle has initialize encoder device, reset it */
+-	if (!layer->usrs) {
+-		if (cfg->pixfmt == PIXFMT_NV12) {
+-			struct vpbe_layer *otherlayer;
+-			otherlayer =
+-			_vpbe_display_get_other_win_layer(disp_dev, layer);
+-			osd_device->ops.disable_layer(osd_device,
+-					otherlayer->layer_info.id);
+-			osd_device->ops.release_layer(osd_device,
+-					otherlayer->layer_info.id);
+-		}
+-		osd_device->ops.disable_layer(osd_device,
+-				layer->layer_info.id);
+-		osd_device->ops.release_layer(osd_device,
+-				layer->layer_info.id);
+-	}
+-
+-	_vb2_fop_release(file, NULL);
+-	mutex_unlock(&layer->opslock);
+-
+-	disp_dev->cbcr_ofst = 0;
+-
+-	return 0;
+-}
+-
+-/* vpbe capture ioctl operations */
+-static const struct v4l2_ioctl_ops vpbe_ioctl_ops = {
+-	.vidioc_querycap	 = vpbe_display_querycap,
+-	.vidioc_g_fmt_vid_out    = vpbe_display_g_fmt,
+-	.vidioc_enum_fmt_vid_out = vpbe_display_enum_fmt,
+-	.vidioc_s_fmt_vid_out    = vpbe_display_s_fmt,
+-	.vidioc_try_fmt_vid_out  = vpbe_display_try_fmt,
+-
+-	.vidioc_reqbufs		 = vb2_ioctl_reqbufs,
+-	.vidioc_create_bufs	 = vb2_ioctl_create_bufs,
+-	.vidioc_querybuf	 = vb2_ioctl_querybuf,
+-	.vidioc_qbuf		 = vb2_ioctl_qbuf,
+-	.vidioc_dqbuf		 = vb2_ioctl_dqbuf,
+-	.vidioc_streamon	 = vb2_ioctl_streamon,
+-	.vidioc_streamoff	 = vb2_ioctl_streamoff,
+-	.vidioc_expbuf		 = vb2_ioctl_expbuf,
+-
+-	.vidioc_g_pixelaspect	 = vpbe_display_g_pixelaspect,
+-	.vidioc_g_selection	 = vpbe_display_g_selection,
+-	.vidioc_s_selection	 = vpbe_display_s_selection,
+-
+-	.vidioc_s_std		 = vpbe_display_s_std,
+-	.vidioc_g_std		 = vpbe_display_g_std,
+-
+-	.vidioc_enum_output	 = vpbe_display_enum_output,
+-	.vidioc_s_output	 = vpbe_display_s_output,
+-	.vidioc_g_output	 = vpbe_display_g_output,
+-
+-	.vidioc_s_dv_timings	 = vpbe_display_s_dv_timings,
+-	.vidioc_g_dv_timings	 = vpbe_display_g_dv_timings,
+-	.vidioc_enum_dv_timings	 = vpbe_display_enum_dv_timings,
+-};
+-
+-static const struct v4l2_file_operations vpbe_fops = {
+-	.owner = THIS_MODULE,
+-	.open = vpbe_display_open,
+-	.release = vpbe_display_release,
+-	.unlocked_ioctl = video_ioctl2,
+-	.mmap = vb2_fop_mmap,
+-	.poll =  vb2_fop_poll,
+-};
+-
+-static int vpbe_device_get(struct device *dev, void *data)
+-{
+-	struct platform_device *pdev = to_platform_device(dev);
+-	struct vpbe_display *vpbe_disp  = data;
+-
+-	if (strcmp("vpbe_controller", pdev->name) == 0)
+-		vpbe_disp->vpbe_dev = platform_get_drvdata(pdev);
+-
+-	if (strstr(pdev->name, "vpbe-osd"))
+-		vpbe_disp->osd_device = platform_get_drvdata(pdev);
+-
+-	return 0;
+-}
+-
+-static int init_vpbe_layer(int i, struct vpbe_display *disp_dev,
+-			   struct platform_device *pdev)
+-{
+-	struct vpbe_layer *vpbe_display_layer = NULL;
+-	struct video_device *vbd = NULL;
+-
+-	/* Allocate memory for four plane display objects */
+-	disp_dev->dev[i] = kzalloc(sizeof(*disp_dev->dev[i]), GFP_KERNEL);
+-	if (!disp_dev->dev[i])
+-		return  -ENOMEM;
+-
+-	spin_lock_init(&disp_dev->dev[i]->irqlock);
+-	mutex_init(&disp_dev->dev[i]->opslock);
+-
+-	/* Get the pointer to the layer object */
+-	vpbe_display_layer = disp_dev->dev[i];
+-	vbd = &vpbe_display_layer->video_dev;
+-	/* Initialize field of video device */
+-	vbd->release	= video_device_release_empty;
+-	vbd->fops	= &vpbe_fops;
+-	vbd->ioctl_ops	= &vpbe_ioctl_ops;
+-	vbd->minor	= -1;
+-	vbd->v4l2_dev   = &disp_dev->vpbe_dev->v4l2_dev;
+-	vbd->lock	= &vpbe_display_layer->opslock;
+-	vbd->vfl_dir	= VFL_DIR_TX;
+-	vbd->device_caps = V4L2_CAP_VIDEO_OUTPUT | V4L2_CAP_STREAMING;
+-
+-	if (disp_dev->vpbe_dev->current_timings.timings_type &
+-			VPBE_ENC_STD)
+-		vbd->tvnorms = (V4L2_STD_525_60 | V4L2_STD_625_50);
+-
+-	snprintf(vbd->name, sizeof(vbd->name),
+-			"DaVinci_VPBE Display_DRIVER_V%d.%d.%d",
+-			(VPBE_DISPLAY_VERSION_CODE >> 16) & 0xff,
+-			(VPBE_DISPLAY_VERSION_CODE >> 8) & 0xff,
+-			(VPBE_DISPLAY_VERSION_CODE) & 0xff);
+-
+-	vpbe_display_layer->device_id = i;
+-
+-	vpbe_display_layer->layer_info.id =
+-		((i == VPBE_DISPLAY_DEVICE_0) ? WIN_VID0 : WIN_VID1);
+-
+-
+-	return 0;
+-}
+-
+-static int register_device(struct vpbe_layer *vpbe_display_layer,
+-			   struct vpbe_display *disp_dev,
+-			   struct platform_device *pdev)
+-{
+-	int err;
+-
+-	v4l2_info(&disp_dev->vpbe_dev->v4l2_dev,
+-		  "Trying to register VPBE display device.\n");
+-	v4l2_info(&disp_dev->vpbe_dev->v4l2_dev,
+-		  "layer=%p,layer->video_dev=%p\n",
+-		  vpbe_display_layer,
+-		  &vpbe_display_layer->video_dev);
+-
+-	vpbe_display_layer->video_dev.queue = &vpbe_display_layer->buffer_queue;
+-	err = video_register_device(&vpbe_display_layer->video_dev,
+-				    VFL_TYPE_VIDEO,
+-				    -1);
+-	if (err)
+-		return -ENODEV;
+-
+-	vpbe_display_layer->disp_dev = disp_dev;
+-	/* set the driver data in platform device */
+-	platform_set_drvdata(pdev, disp_dev);
+-	video_set_drvdata(&vpbe_display_layer->video_dev,
+-			  vpbe_display_layer);
+-
+-	return 0;
+-}
+-
+-
+-
+-/*
+- * vpbe_display_probe()
+- * This function creates device entries by register itself to the V4L2 driver
+- * and initializes fields of each layer objects
+- */
+-static int vpbe_display_probe(struct platform_device *pdev)
+-{
+-	struct vpbe_display *disp_dev;
+-	struct v4l2_device *v4l2_dev;
+-	struct resource *res = NULL;
+-	struct vb2_queue *q;
+-	int k;
+-	int i;
+-	int err;
+-	int irq;
+-
+-	printk(KERN_DEBUG "vpbe_display_probe\n");
+-	/* Allocate memory for vpbe_display */
+-	disp_dev = devm_kzalloc(&pdev->dev, sizeof(*disp_dev), GFP_KERNEL);
+-	if (!disp_dev)
+-		return -ENOMEM;
+-
+-	spin_lock_init(&disp_dev->dma_queue_lock);
+-	/*
+-	 * Scan all the platform devices to find the vpbe
+-	 * controller device and get the vpbe_dev object
+-	 */
+-	err = bus_for_each_dev(&platform_bus_type, NULL, disp_dev,
+-			vpbe_device_get);
+-	if (err < 0)
+-		return err;
+-
+-	v4l2_dev = &disp_dev->vpbe_dev->v4l2_dev;
+-	/* Initialize the vpbe display controller */
+-	if (disp_dev->vpbe_dev->ops.initialize) {
+-		err = disp_dev->vpbe_dev->ops.initialize(&pdev->dev,
+-							 disp_dev->vpbe_dev);
+-		if (err) {
+-			v4l2_err(v4l2_dev, "Error initing vpbe\n");
+-			err = -ENOMEM;
+-			goto probe_out;
+-		}
+-	}
+-
+-	for (i = 0; i < VPBE_DISPLAY_MAX_DEVICES; i++) {
+-		if (init_vpbe_layer(i, disp_dev, pdev)) {
+-			err = -ENODEV;
+-			goto probe_out;
+-		}
+-	}
+-
+-	res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+-	if (!res) {
+-		v4l2_err(v4l2_dev, "Unable to get VENC interrupt resource\n");
+-		err = -ENODEV;
+-		goto probe_out;
+-	}
+-
+-	irq = res->start;
+-	err = devm_request_irq(&pdev->dev, irq, venc_isr, 0,
+-			       VPBE_DISPLAY_DRIVER, disp_dev);
+-	if (err) {
+-		v4l2_err(v4l2_dev, "VPBE IRQ request failed\n");
+-		goto probe_out;
+-	}
+-
+-	for (i = 0; i < VPBE_DISPLAY_MAX_DEVICES; i++) {
+-		/* initialize vb2 queue */
+-		q = &disp_dev->dev[i]->buffer_queue;
+-		memset(q, 0, sizeof(*q));
+-		q->type = V4L2_BUF_TYPE_VIDEO_OUTPUT;
+-		q->io_modes = VB2_MMAP | VB2_USERPTR | VB2_DMABUF;
+-		q->drv_priv = disp_dev->dev[i];
+-		q->ops = &video_qops;
+-		q->mem_ops = &vb2_dma_contig_memops;
+-		q->buf_struct_size = sizeof(struct vpbe_disp_buffer);
+-		q->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
+-		q->min_buffers_needed = 1;
+-		q->lock = &disp_dev->dev[i]->opslock;
+-		q->dev = disp_dev->vpbe_dev->pdev;
+-		err = vb2_queue_init(q);
+-		if (err) {
+-			v4l2_err(v4l2_dev, "vb2_queue_init() failed\n");
+-			goto probe_out;
+-		}
+-
+-		INIT_LIST_HEAD(&disp_dev->dev[i]->dma_queue);
+-
+-		if (register_device(disp_dev->dev[i], disp_dev, pdev)) {
+-			err = -ENODEV;
+-			goto probe_out;
+-		}
+-	}
+-
+-	v4l2_dbg(1, debug, v4l2_dev,
+-		 "Successfully completed the probing of vpbe v4l2 device\n");
+-
 -	return 0;
 -
--probe_sd_out:
--	kfree(vpfe_dev->sd);
--probe_out_video_unregister:
--	video_unregister_device(&vpfe_dev->video_dev);
--probe_out_v4l2_unregister:
--	v4l2_device_unregister(&vpfe_dev->v4l2_dev);
--probe_out_release_irq:
--	free_irq(vpfe_dev->ccdc_irq0, vpfe_dev);
--probe_free_ccdc_cfg_mem:
--	kfree(ccdc_cfg);
--	mutex_unlock(&ccdc_lock);
--probe_free_dev_mem:
--	kfree(vpfe_dev);
+-probe_out:
+-	for (k = 0; k < VPBE_DISPLAY_MAX_DEVICES; k++) {
+-		/* Unregister video device */
+-		if (disp_dev->dev[k]) {
+-			video_unregister_device(&disp_dev->dev[k]->video_dev);
+-			kfree(disp_dev->dev[k]);
+-		}
+-	}
+-	return err;
+-}
+-
+-/*
+- * vpbe_display_remove()
+- * It un-register hardware layer from V4L2 driver
+- */
+-static int vpbe_display_remove(struct platform_device *pdev)
+-{
+-	struct vpbe_layer *vpbe_display_layer;
+-	struct vpbe_display *disp_dev = platform_get_drvdata(pdev);
+-	struct vpbe_device *vpbe_dev = disp_dev->vpbe_dev;
+-	int i;
+-
+-	v4l2_dbg(1, debug, &vpbe_dev->v4l2_dev, "vpbe_display_remove\n");
+-
+-	/* deinitialize the vpbe display controller */
+-	if (vpbe_dev->ops.deinitialize)
+-		vpbe_dev->ops.deinitialize(&pdev->dev, vpbe_dev);
+-	/* un-register device */
+-	for (i = 0; i < VPBE_DISPLAY_MAX_DEVICES; i++) {
+-		/* Get the pointer to the layer object */
+-		vpbe_display_layer = disp_dev->dev[i];
+-		/* Unregister video device */
+-		video_unregister_device(&vpbe_display_layer->video_dev);
+-
+-	}
+-	for (i = 0; i < VPBE_DISPLAY_MAX_DEVICES; i++) {
+-		kfree(disp_dev->dev[i]);
+-		disp_dev->dev[i] = NULL;
+-	}
+-
+-	return 0;
+-}
+-
+-static struct platform_driver vpbe_display_driver = {
+-	.driver = {
+-		.name = VPBE_DISPLAY_DRIVER,
+-		.bus = &platform_bus_type,
+-	},
+-	.probe = vpbe_display_probe,
+-	.remove = vpbe_display_remove,
+-};
+-
+-module_platform_driver(vpbe_display_driver);
+-
+-MODULE_DESCRIPTION("TI DM644x/DM355/DM365 VPBE Display controller");
+-MODULE_LICENSE("GPL");
+-MODULE_AUTHOR("Texas Instruments");
+diff --git a/drivers/media/platform/ti/davinci/vpbe_osd.c b/drivers/media/platform/ti/davinci/vpbe_osd.c
+deleted file mode 100644
+index 32f7ef547c82..000000000000
+--- a/drivers/media/platform/ti/davinci/vpbe_osd.c
++++ /dev/null
+@@ -1,1582 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/*
+- * Copyright (C) 2007-2010 Texas Instruments Inc
+- * Copyright (C) 2007 MontaVista Software, Inc.
+- *
+- * Andy Lowe (alowe@mvista.com), MontaVista Software
+- * - Initial version
+- * Murali Karicheri (mkaricheri@gmail.com), Texas Instruments Ltd.
+- * - ported to sub device interface
+- */
+-#include <linux/module.h>
+-#include <linux/mod_devicetable.h>
+-#include <linux/kernel.h>
+-#include <linux/interrupt.h>
+-#include <linux/platform_device.h>
+-#include <linux/clk.h>
+-#include <linux/slab.h>
+-
+-#include <media/davinci/vpss.h>
+-#include <media/v4l2-device.h>
+-#include <media/davinci/vpbe_types.h>
+-#include <media/davinci/vpbe_osd.h>
+-
+-#include <linux/io.h>
+-#include "vpbe_osd_regs.h"
+-
+-#define MODULE_NAME	"davinci-vpbe-osd"
+-
+-static const struct platform_device_id vpbe_osd_devtype[] = {
+-	{
+-		.name = DM644X_VPBE_OSD_SUBDEV_NAME,
+-		.driver_data = VPBE_VERSION_1,
+-	}, {
+-		.name = DM365_VPBE_OSD_SUBDEV_NAME,
+-		.driver_data = VPBE_VERSION_2,
+-	}, {
+-		.name = DM355_VPBE_OSD_SUBDEV_NAME,
+-		.driver_data = VPBE_VERSION_3,
+-	},
+-	{
+-		/* sentinel */
+-	}
+-};
+-
+-MODULE_DEVICE_TABLE(platform, vpbe_osd_devtype);
+-
+-/* register access routines */
+-static inline u32 __always_unused osd_read(struct osd_state *sd, u32 offset)
+-{
+-	struct osd_state *osd = sd;
+-
+-	return readl(osd->osd_base + offset);
+-}
+-
+-static inline u32 osd_write(struct osd_state *sd, u32 val, u32 offset)
+-{
+-	struct osd_state *osd = sd;
+-
+-	writel(val, osd->osd_base + offset);
+-
+-	return val;
+-}
+-
+-static inline u32 osd_set(struct osd_state *sd, u32 mask, u32 offset)
+-{
+-	struct osd_state *osd = sd;
+-
+-	void __iomem *addr = osd->osd_base + offset;
+-	u32 val = readl(addr) | mask;
+-
+-	writel(val, addr);
+-
+-	return val;
+-}
+-
+-static inline u32 osd_clear(struct osd_state *sd, u32 mask, u32 offset)
+-{
+-	struct osd_state *osd = sd;
+-
+-	void __iomem *addr = osd->osd_base + offset;
+-	u32 val = readl(addr) & ~mask;
+-
+-	writel(val, addr);
+-
+-	return val;
+-}
+-
+-static inline u32 osd_modify(struct osd_state *sd, u32 mask, u32 val,
+-				 u32 offset)
+-{
+-	struct osd_state *osd = sd;
+-
+-	void __iomem *addr = osd->osd_base + offset;
+-	u32 new_val = (readl(addr) & ~mask) | (val & mask);
+-
+-	writel(new_val, addr);
+-
+-	return new_val;
+-}
+-
+-/* define some macros for layer and pixfmt classification */
+-#define is_osd_win(layer) (((layer) == WIN_OSD0) || ((layer) == WIN_OSD1))
+-#define is_vid_win(layer) (((layer) == WIN_VID0) || ((layer) == WIN_VID1))
+-#define is_rgb_pixfmt(pixfmt) \
+-	(((pixfmt) == PIXFMT_RGB565) || ((pixfmt) == PIXFMT_RGB888))
+-#define is_yc_pixfmt(pixfmt) \
+-	(((pixfmt) == PIXFMT_YCBCRI) || ((pixfmt) == PIXFMT_YCRCBI) || \
+-	((pixfmt) == PIXFMT_NV12))
+-#define MAX_WIN_SIZE OSD_VIDWIN0XP_V0X
+-#define MAX_LINE_LENGTH (OSD_VIDWIN0OFST_V0LO << 5)
+-
+-/**
+- * _osd_dm6446_vid0_pingpong() - field inversion fix for DM6446
+- * @sd: ptr to struct osd_state
+- * @field_inversion: inversion flag
+- * @fb_base_phys: frame buffer address
+- * @lconfig: ptr to layer config
+- *
+- * This routine implements a workaround for the field signal inversion silicon
+- * erratum described in Advisory 1.3.8 for the DM6446.  The fb_base_phys and
+- * lconfig parameters apply to the vid0 window.  This routine should be called
+- * whenever the vid0 layer configuration or start address is modified, or when
+- * the OSD field inversion setting is modified.
+- * Returns: 1 if the ping-pong buffers need to be toggled in the vsync isr, or
+- *          0 otherwise
+- */
+-static int _osd_dm6446_vid0_pingpong(struct osd_state *sd,
+-				     int field_inversion,
+-				     unsigned long fb_base_phys,
+-				     const struct osd_layer_config *lconfig)
+-{
+-	struct osd_platform_data *pdata;
+-
+-	pdata = (struct osd_platform_data *)sd->dev->platform_data;
+-	if (pdata != NULL && pdata->field_inv_wa_enable) {
+-
+-		if (!field_inversion || !lconfig->interlaced) {
+-			osd_write(sd, fb_base_phys & ~0x1F, OSD_VIDWIN0ADR);
+-			osd_write(sd, fb_base_phys & ~0x1F, OSD_PPVWIN0ADR);
+-			osd_modify(sd, OSD_MISCCTL_PPSW | OSD_MISCCTL_PPRV, 0,
+-				   OSD_MISCCTL);
+-			return 0;
+-		} else {
+-			unsigned miscctl = OSD_MISCCTL_PPRV;
+-
+-			osd_write(sd,
+-				(fb_base_phys & ~0x1F) - lconfig->line_length,
+-				OSD_VIDWIN0ADR);
+-			osd_write(sd,
+-				(fb_base_phys & ~0x1F) + lconfig->line_length,
+-				OSD_PPVWIN0ADR);
+-			osd_modify(sd,
+-				OSD_MISCCTL_PPSW | OSD_MISCCTL_PPRV, miscctl,
+-				OSD_MISCCTL);
+-
+-			return 1;
+-		}
+-	}
+-
+-	return 0;
+-}
+-
+-static void _osd_set_field_inversion(struct osd_state *sd, int enable)
+-{
+-	unsigned fsinv = 0;
+-
+-	if (enable)
+-		fsinv = OSD_MODE_FSINV;
+-
+-	osd_modify(sd, OSD_MODE_FSINV, fsinv, OSD_MODE);
+-}
+-
+-static void _osd_set_blink_attribute(struct osd_state *sd, int enable,
+-				     enum osd_blink_interval blink)
+-{
+-	u32 osdatrmd = 0;
+-
+-	if (enable) {
+-		osdatrmd |= OSD_OSDATRMD_BLNK;
+-		osdatrmd |= blink << OSD_OSDATRMD_BLNKINT_SHIFT;
+-	}
+-	/* caller must ensure that OSD1 is configured in attribute mode */
+-	osd_modify(sd, OSD_OSDATRMD_BLNKINT | OSD_OSDATRMD_BLNK, osdatrmd,
+-		  OSD_OSDATRMD);
+-}
+-
+-static void _osd_set_rom_clut(struct osd_state *sd,
+-			      enum osd_rom_clut rom_clut)
+-{
+-	if (rom_clut == ROM_CLUT0)
+-		osd_clear(sd, OSD_MISCCTL_RSEL, OSD_MISCCTL);
+-	else
+-		osd_set(sd, OSD_MISCCTL_RSEL, OSD_MISCCTL);
+-}
+-
+-static void _osd_set_palette_map(struct osd_state *sd,
+-				 enum osd_win_layer osdwin,
+-				 unsigned char pixel_value,
+-				 unsigned char clut_index,
+-				 enum osd_pix_format pixfmt)
+-{
+-	static const int map_2bpp[] = { 0, 5, 10, 15 };
+-	static const int map_1bpp[] = { 0, 15 };
+-	int bmp_offset;
+-	int bmp_shift;
+-	int bmp_mask;
+-	int bmp_reg;
+-
+-	switch (pixfmt) {
+-	case PIXFMT_1BPP:
+-		bmp_reg = map_1bpp[pixel_value & 0x1];
+-		break;
+-	case PIXFMT_2BPP:
+-		bmp_reg = map_2bpp[pixel_value & 0x3];
+-		break;
+-	case PIXFMT_4BPP:
+-		bmp_reg = pixel_value & 0xf;
+-		break;
+-	default:
+-		return;
+-	}
+-
+-	switch (osdwin) {
+-	case OSDWIN_OSD0:
+-		bmp_offset = OSD_W0BMP01 + (bmp_reg >> 1) * sizeof(u32);
+-		break;
+-	case OSDWIN_OSD1:
+-		bmp_offset = OSD_W1BMP01 + (bmp_reg >> 1) * sizeof(u32);
+-		break;
+-	default:
+-		return;
+-	}
+-
+-	if (bmp_reg & 1) {
+-		bmp_shift = 8;
+-		bmp_mask = 0xff << 8;
+-	} else {
+-		bmp_shift = 0;
+-		bmp_mask = 0xff;
+-	}
+-
+-	osd_modify(sd, bmp_mask, clut_index << bmp_shift, bmp_offset);
+-}
+-
+-static void _osd_set_rec601_attenuation(struct osd_state *sd,
+-					enum osd_win_layer osdwin, int enable)
+-{
+-	switch (osdwin) {
+-	case OSDWIN_OSD0:
+-		osd_modify(sd, OSD_OSDWIN0MD_ATN0E,
+-			  enable ? OSD_OSDWIN0MD_ATN0E : 0,
+-			  OSD_OSDWIN0MD);
+-		if (sd->vpbe_type == VPBE_VERSION_1)
+-			osd_modify(sd, OSD_OSDWIN0MD_ATN0E,
+-				  enable ? OSD_OSDWIN0MD_ATN0E : 0,
+-				  OSD_OSDWIN0MD);
+-		else if ((sd->vpbe_type == VPBE_VERSION_3) ||
+-			   (sd->vpbe_type == VPBE_VERSION_2))
+-			osd_modify(sd, OSD_EXTMODE_ATNOSD0EN,
+-				  enable ? OSD_EXTMODE_ATNOSD0EN : 0,
+-				  OSD_EXTMODE);
+-		break;
+-	case OSDWIN_OSD1:
+-		osd_modify(sd, OSD_OSDWIN1MD_ATN1E,
+-			  enable ? OSD_OSDWIN1MD_ATN1E : 0,
+-			  OSD_OSDWIN1MD);
+-		if (sd->vpbe_type == VPBE_VERSION_1)
+-			osd_modify(sd, OSD_OSDWIN1MD_ATN1E,
+-				  enable ? OSD_OSDWIN1MD_ATN1E : 0,
+-				  OSD_OSDWIN1MD);
+-		else if ((sd->vpbe_type == VPBE_VERSION_3) ||
+-			   (sd->vpbe_type == VPBE_VERSION_2))
+-			osd_modify(sd, OSD_EXTMODE_ATNOSD1EN,
+-				  enable ? OSD_EXTMODE_ATNOSD1EN : 0,
+-				  OSD_EXTMODE);
+-		break;
+-	}
+-}
+-
+-static void _osd_set_blending_factor(struct osd_state *sd,
+-				     enum osd_win_layer osdwin,
+-				     enum osd_blending_factor blend)
+-{
+-	switch (osdwin) {
+-	case OSDWIN_OSD0:
+-		osd_modify(sd, OSD_OSDWIN0MD_BLND0,
+-			  blend << OSD_OSDWIN0MD_BLND0_SHIFT, OSD_OSDWIN0MD);
+-		break;
+-	case OSDWIN_OSD1:
+-		osd_modify(sd, OSD_OSDWIN1MD_BLND1,
+-			  blend << OSD_OSDWIN1MD_BLND1_SHIFT, OSD_OSDWIN1MD);
+-		break;
+-	}
+-}
+-
+-static void _osd_enable_rgb888_pixblend(struct osd_state *sd,
+-					enum osd_win_layer osdwin)
+-{
+-
+-	osd_modify(sd, OSD_MISCCTL_BLDSEL, 0, OSD_MISCCTL);
+-	switch (osdwin) {
+-	case OSDWIN_OSD0:
+-		osd_modify(sd, OSD_EXTMODE_OSD0BLDCHR,
+-			  OSD_EXTMODE_OSD0BLDCHR, OSD_EXTMODE);
+-		break;
+-	case OSDWIN_OSD1:
+-		osd_modify(sd, OSD_EXTMODE_OSD1BLDCHR,
+-			  OSD_EXTMODE_OSD1BLDCHR, OSD_EXTMODE);
+-		break;
+-	}
+-}
+-
+-static void _osd_enable_color_key(struct osd_state *sd,
+-				  enum osd_win_layer osdwin,
+-				  unsigned colorkey,
+-				  enum osd_pix_format pixfmt)
+-{
+-	switch (pixfmt) {
+-	case PIXFMT_1BPP:
+-	case PIXFMT_2BPP:
+-	case PIXFMT_4BPP:
+-	case PIXFMT_8BPP:
+-		if (sd->vpbe_type == VPBE_VERSION_3) {
+-			switch (osdwin) {
+-			case OSDWIN_OSD0:
+-				osd_modify(sd, OSD_TRANSPBMPIDX_BMP0,
+-					  colorkey <<
+-					  OSD_TRANSPBMPIDX_BMP0_SHIFT,
+-					  OSD_TRANSPBMPIDX);
+-				break;
+-			case OSDWIN_OSD1:
+-				osd_modify(sd, OSD_TRANSPBMPIDX_BMP1,
+-					  colorkey <<
+-					  OSD_TRANSPBMPIDX_BMP1_SHIFT,
+-					  OSD_TRANSPBMPIDX);
+-				break;
+-			}
+-		}
+-		break;
+-	case PIXFMT_RGB565:
+-		if (sd->vpbe_type == VPBE_VERSION_1)
+-			osd_write(sd, colorkey & OSD_TRANSPVAL_RGBTRANS,
+-				  OSD_TRANSPVAL);
+-		else if (sd->vpbe_type == VPBE_VERSION_3)
+-			osd_write(sd, colorkey & OSD_TRANSPVALL_RGBL,
+-				  OSD_TRANSPVALL);
+-		break;
+-	case PIXFMT_YCBCRI:
+-	case PIXFMT_YCRCBI:
+-		if (sd->vpbe_type == VPBE_VERSION_3)
+-			osd_modify(sd, OSD_TRANSPVALU_Y, colorkey,
+-				   OSD_TRANSPVALU);
+-		break;
+-	case PIXFMT_RGB888:
+-		if (sd->vpbe_type == VPBE_VERSION_3) {
+-			osd_write(sd, colorkey & OSD_TRANSPVALL_RGBL,
+-				  OSD_TRANSPVALL);
+-			osd_modify(sd, OSD_TRANSPVALU_RGBU, colorkey >> 16,
+-				  OSD_TRANSPVALU);
+-		}
+-		break;
+-	default:
+-		break;
+-	}
+-
+-	switch (osdwin) {
+-	case OSDWIN_OSD0:
+-		osd_set(sd, OSD_OSDWIN0MD_TE0, OSD_OSDWIN0MD);
+-		break;
+-	case OSDWIN_OSD1:
+-		osd_set(sd, OSD_OSDWIN1MD_TE1, OSD_OSDWIN1MD);
+-		break;
+-	}
+-}
+-
+-static void _osd_disable_color_key(struct osd_state *sd,
+-				   enum osd_win_layer osdwin)
+-{
+-	switch (osdwin) {
+-	case OSDWIN_OSD0:
+-		osd_clear(sd, OSD_OSDWIN0MD_TE0, OSD_OSDWIN0MD);
+-		break;
+-	case OSDWIN_OSD1:
+-		osd_clear(sd, OSD_OSDWIN1MD_TE1, OSD_OSDWIN1MD);
+-		break;
+-	}
+-}
+-
+-static void _osd_set_osd_clut(struct osd_state *sd,
+-			      enum osd_win_layer osdwin,
+-			      enum osd_clut clut)
+-{
+-	u32 winmd = 0;
+-
+-	switch (osdwin) {
+-	case OSDWIN_OSD0:
+-		if (clut == RAM_CLUT)
+-			winmd |= OSD_OSDWIN0MD_CLUTS0;
+-		osd_modify(sd, OSD_OSDWIN0MD_CLUTS0, winmd, OSD_OSDWIN0MD);
+-		break;
+-	case OSDWIN_OSD1:
+-		if (clut == RAM_CLUT)
+-			winmd |= OSD_OSDWIN1MD_CLUTS1;
+-		osd_modify(sd, OSD_OSDWIN1MD_CLUTS1, winmd, OSD_OSDWIN1MD);
+-		break;
+-	}
+-}
+-
+-static void _osd_set_zoom(struct osd_state *sd, enum osd_layer layer,
+-			  enum osd_zoom_factor h_zoom,
+-			  enum osd_zoom_factor v_zoom)
+-{
+-	u32 winmd = 0;
+-
+-	switch (layer) {
+-	case WIN_OSD0:
+-		winmd |= (h_zoom << OSD_OSDWIN0MD_OHZ0_SHIFT);
+-		winmd |= (v_zoom << OSD_OSDWIN0MD_OVZ0_SHIFT);
+-		osd_modify(sd, OSD_OSDWIN0MD_OHZ0 | OSD_OSDWIN0MD_OVZ0, winmd,
+-			  OSD_OSDWIN0MD);
+-		break;
+-	case WIN_VID0:
+-		winmd |= (h_zoom << OSD_VIDWINMD_VHZ0_SHIFT);
+-		winmd |= (v_zoom << OSD_VIDWINMD_VVZ0_SHIFT);
+-		osd_modify(sd, OSD_VIDWINMD_VHZ0 | OSD_VIDWINMD_VVZ0, winmd,
+-			  OSD_VIDWINMD);
+-		break;
+-	case WIN_OSD1:
+-		winmd |= (h_zoom << OSD_OSDWIN1MD_OHZ1_SHIFT);
+-		winmd |= (v_zoom << OSD_OSDWIN1MD_OVZ1_SHIFT);
+-		osd_modify(sd, OSD_OSDWIN1MD_OHZ1 | OSD_OSDWIN1MD_OVZ1, winmd,
+-			  OSD_OSDWIN1MD);
+-		break;
+-	case WIN_VID1:
+-		winmd |= (h_zoom << OSD_VIDWINMD_VHZ1_SHIFT);
+-		winmd |= (v_zoom << OSD_VIDWINMD_VVZ1_SHIFT);
+-		osd_modify(sd, OSD_VIDWINMD_VHZ1 | OSD_VIDWINMD_VVZ1, winmd,
+-			  OSD_VIDWINMD);
+-		break;
+-	}
+-}
+-
+-static void _osd_disable_layer(struct osd_state *sd, enum osd_layer layer)
+-{
+-	switch (layer) {
+-	case WIN_OSD0:
+-		osd_clear(sd, OSD_OSDWIN0MD_OACT0, OSD_OSDWIN0MD);
+-		break;
+-	case WIN_VID0:
+-		osd_clear(sd, OSD_VIDWINMD_ACT0, OSD_VIDWINMD);
+-		break;
+-	case WIN_OSD1:
+-		/* disable attribute mode as well as disabling the window */
+-		osd_clear(sd, OSD_OSDWIN1MD_OASW | OSD_OSDWIN1MD_OACT1,
+-			  OSD_OSDWIN1MD);
+-		break;
+-	case WIN_VID1:
+-		osd_clear(sd, OSD_VIDWINMD_ACT1, OSD_VIDWINMD);
+-		break;
+-	}
+-}
+-
+-static void osd_disable_layer(struct osd_state *sd, enum osd_layer layer)
+-{
+-	struct osd_state *osd = sd;
+-	struct osd_window_state *win = &osd->win[layer];
+-	unsigned long flags;
+-
+-	spin_lock_irqsave(&osd->lock, flags);
+-
+-	if (!win->is_enabled) {
+-		spin_unlock_irqrestore(&osd->lock, flags);
+-		return;
+-	}
+-	win->is_enabled = 0;
+-
+-	_osd_disable_layer(sd, layer);
+-
+-	spin_unlock_irqrestore(&osd->lock, flags);
+-}
+-
+-static void _osd_enable_attribute_mode(struct osd_state *sd)
+-{
+-	/* enable attribute mode for OSD1 */
+-	osd_set(sd, OSD_OSDWIN1MD_OASW, OSD_OSDWIN1MD);
+-}
+-
+-static void _osd_enable_layer(struct osd_state *sd, enum osd_layer layer)
+-{
+-	switch (layer) {
+-	case WIN_OSD0:
+-		osd_set(sd, OSD_OSDWIN0MD_OACT0, OSD_OSDWIN0MD);
+-		break;
+-	case WIN_VID0:
+-		osd_set(sd, OSD_VIDWINMD_ACT0, OSD_VIDWINMD);
+-		break;
+-	case WIN_OSD1:
+-		/* enable OSD1 and disable attribute mode */
+-		osd_modify(sd, OSD_OSDWIN1MD_OASW | OSD_OSDWIN1MD_OACT1,
+-			  OSD_OSDWIN1MD_OACT1, OSD_OSDWIN1MD);
+-		break;
+-	case WIN_VID1:
+-		osd_set(sd, OSD_VIDWINMD_ACT1, OSD_VIDWINMD);
+-		break;
+-	}
+-}
+-
+-static int osd_enable_layer(struct osd_state *sd, enum osd_layer layer,
+-			    int otherwin)
+-{
+-	struct osd_state *osd = sd;
+-	struct osd_window_state *win = &osd->win[layer];
+-	struct osd_layer_config *cfg = &win->lconfig;
+-	unsigned long flags;
+-
+-	spin_lock_irqsave(&osd->lock, flags);
+-
+-	/*
+-	 * use otherwin flag to know this is the other vid window
+-	 * in YUV420 mode, if is, skip this check
+-	 */
+-	if (!otherwin && (!win->is_allocated ||
+-			!win->fb_base_phys ||
+-			!cfg->line_length ||
+-			!cfg->xsize ||
+-			!cfg->ysize)) {
+-		spin_unlock_irqrestore(&osd->lock, flags);
+-		return -1;
+-	}
+-
+-	if (win->is_enabled) {
+-		spin_unlock_irqrestore(&osd->lock, flags);
+-		return 0;
+-	}
+-	win->is_enabled = 1;
+-
+-	if (cfg->pixfmt != PIXFMT_OSD_ATTR)
+-		_osd_enable_layer(sd, layer);
+-	else {
+-		_osd_enable_attribute_mode(sd);
+-		_osd_set_blink_attribute(sd, osd->is_blinking, osd->blink);
+-	}
+-
+-	spin_unlock_irqrestore(&osd->lock, flags);
+-
+-	return 0;
+-}
+-
+-#define OSD_SRC_ADDR_HIGH4	0x7800000
+-#define OSD_SRC_ADDR_HIGH7	0x7F0000
+-#define OSD_SRCADD_OFSET_SFT	23
+-#define OSD_SRCADD_ADD_SFT	16
+-#define OSD_WINADL_MASK		0xFFFF
+-#define OSD_WINOFST_MASK	0x1000
+-#define VPBE_REG_BASE		0x80000000
+-
+-static void _osd_start_layer(struct osd_state *sd, enum osd_layer layer,
+-			     unsigned long fb_base_phys,
+-			     unsigned long cbcr_ofst)
+-{
+-
+-	if (sd->vpbe_type == VPBE_VERSION_1) {
+-		switch (layer) {
+-		case WIN_OSD0:
+-			osd_write(sd, fb_base_phys & ~0x1F, OSD_OSDWIN0ADR);
+-			break;
+-		case WIN_VID0:
+-			osd_write(sd, fb_base_phys & ~0x1F, OSD_VIDWIN0ADR);
+-			break;
+-		case WIN_OSD1:
+-			osd_write(sd, fb_base_phys & ~0x1F, OSD_OSDWIN1ADR);
+-			break;
+-		case WIN_VID1:
+-			osd_write(sd, fb_base_phys & ~0x1F, OSD_VIDWIN1ADR);
+-			break;
+-	      }
+-	} else if (sd->vpbe_type == VPBE_VERSION_3) {
+-		unsigned long fb_offset_32 =
+-		    (fb_base_phys - VPBE_REG_BASE) >> 5;
+-
+-		switch (layer) {
+-		case WIN_OSD0:
+-			osd_modify(sd, OSD_OSDWINADH_O0AH,
+-				  fb_offset_32 >> (OSD_SRCADD_ADD_SFT -
+-						   OSD_OSDWINADH_O0AH_SHIFT),
+-				  OSD_OSDWINADH);
+-			osd_write(sd, fb_offset_32 & OSD_OSDWIN0ADL_O0AL,
+-				  OSD_OSDWIN0ADL);
+-			break;
+-		case WIN_VID0:
+-			osd_modify(sd, OSD_VIDWINADH_V0AH,
+-				  fb_offset_32 >> (OSD_SRCADD_ADD_SFT -
+-						   OSD_VIDWINADH_V0AH_SHIFT),
+-				  OSD_VIDWINADH);
+-			osd_write(sd, fb_offset_32 & OSD_VIDWIN0ADL_V0AL,
+-				  OSD_VIDWIN0ADL);
+-			break;
+-		case WIN_OSD1:
+-			osd_modify(sd, OSD_OSDWINADH_O1AH,
+-				  fb_offset_32 >> (OSD_SRCADD_ADD_SFT -
+-						   OSD_OSDWINADH_O1AH_SHIFT),
+-				  OSD_OSDWINADH);
+-			osd_write(sd, fb_offset_32 & OSD_OSDWIN1ADL_O1AL,
+-				  OSD_OSDWIN1ADL);
+-			break;
+-		case WIN_VID1:
+-			osd_modify(sd, OSD_VIDWINADH_V1AH,
+-				  fb_offset_32 >> (OSD_SRCADD_ADD_SFT -
+-						   OSD_VIDWINADH_V1AH_SHIFT),
+-				  OSD_VIDWINADH);
+-			osd_write(sd, fb_offset_32 & OSD_VIDWIN1ADL_V1AL,
+-				  OSD_VIDWIN1ADL);
+-			break;
+-		}
+-	} else if (sd->vpbe_type == VPBE_VERSION_2) {
+-		struct osd_window_state *win = &sd->win[layer];
+-		unsigned long fb_offset_32, cbcr_offset_32;
+-
+-		fb_offset_32 = fb_base_phys - VPBE_REG_BASE;
+-		if (cbcr_ofst)
+-			cbcr_offset_32 = cbcr_ofst;
+-		else
+-			cbcr_offset_32 = win->lconfig.line_length *
+-					 win->lconfig.ysize;
+-		cbcr_offset_32 += fb_offset_32;
+-		fb_offset_32 = fb_offset_32 >> 5;
+-		cbcr_offset_32 = cbcr_offset_32 >> 5;
+-		/*
+-		 * DM365: start address is 27-bit long address b26 - b23 are
+-		 * in offset register b12 - b9, and * bit 26 has to be '1'
+-		 */
+-		if (win->lconfig.pixfmt == PIXFMT_NV12) {
+-			switch (layer) {
+-			case WIN_VID0:
+-			case WIN_VID1:
+-				/* Y is in VID0 */
+-				osd_modify(sd, OSD_VIDWIN0OFST_V0AH,
+-					 ((fb_offset_32 & OSD_SRC_ADDR_HIGH4) >>
+-					 (OSD_SRCADD_OFSET_SFT -
+-					 OSD_WINOFST_AH_SHIFT)) |
+-					 OSD_WINOFST_MASK, OSD_VIDWIN0OFST);
+-				osd_modify(sd, OSD_VIDWINADH_V0AH,
+-					  (fb_offset_32 & OSD_SRC_ADDR_HIGH7) >>
+-					  (OSD_SRCADD_ADD_SFT -
+-					  OSD_VIDWINADH_V0AH_SHIFT),
+-					   OSD_VIDWINADH);
+-				osd_write(sd, fb_offset_32 & OSD_WINADL_MASK,
+-					  OSD_VIDWIN0ADL);
+-				/* CbCr is in VID1 */
+-				osd_modify(sd, OSD_VIDWIN1OFST_V1AH,
+-					 ((cbcr_offset_32 &
+-					 OSD_SRC_ADDR_HIGH4) >>
+-					 (OSD_SRCADD_OFSET_SFT -
+-					 OSD_WINOFST_AH_SHIFT)) |
+-					 OSD_WINOFST_MASK, OSD_VIDWIN1OFST);
+-				osd_modify(sd, OSD_VIDWINADH_V1AH,
+-					  (cbcr_offset_32 &
+-					  OSD_SRC_ADDR_HIGH7) >>
+-					  (OSD_SRCADD_ADD_SFT -
+-					  OSD_VIDWINADH_V1AH_SHIFT),
+-					  OSD_VIDWINADH);
+-				osd_write(sd, cbcr_offset_32 & OSD_WINADL_MASK,
+-					  OSD_VIDWIN1ADL);
+-				break;
+-			default:
+-				break;
+-			}
+-		}
+-
+-		switch (layer) {
+-		case WIN_OSD0:
+-			osd_modify(sd, OSD_OSDWIN0OFST_O0AH,
+-				 ((fb_offset_32 & OSD_SRC_ADDR_HIGH4) >>
+-				 (OSD_SRCADD_OFSET_SFT -
+-				 OSD_WINOFST_AH_SHIFT)) | OSD_WINOFST_MASK,
+-				  OSD_OSDWIN0OFST);
+-			osd_modify(sd, OSD_OSDWINADH_O0AH,
+-				 (fb_offset_32 & OSD_SRC_ADDR_HIGH7) >>
+-				 (OSD_SRCADD_ADD_SFT -
+-				 OSD_OSDWINADH_O0AH_SHIFT), OSD_OSDWINADH);
+-			osd_write(sd, fb_offset_32 & OSD_WINADL_MASK,
+-					OSD_OSDWIN0ADL);
+-			break;
+-		case WIN_VID0:
+-			if (win->lconfig.pixfmt != PIXFMT_NV12) {
+-				osd_modify(sd, OSD_VIDWIN0OFST_V0AH,
+-					 ((fb_offset_32 & OSD_SRC_ADDR_HIGH4) >>
+-					 (OSD_SRCADD_OFSET_SFT -
+-					 OSD_WINOFST_AH_SHIFT)) |
+-					 OSD_WINOFST_MASK, OSD_VIDWIN0OFST);
+-				osd_modify(sd, OSD_VIDWINADH_V0AH,
+-					  (fb_offset_32 & OSD_SRC_ADDR_HIGH7) >>
+-					  (OSD_SRCADD_ADD_SFT -
+-					  OSD_VIDWINADH_V0AH_SHIFT),
+-					  OSD_VIDWINADH);
+-				osd_write(sd, fb_offset_32 & OSD_WINADL_MASK,
+-					  OSD_VIDWIN0ADL);
+-			}
+-			break;
+-		case WIN_OSD1:
+-			osd_modify(sd, OSD_OSDWIN1OFST_O1AH,
+-				 ((fb_offset_32 & OSD_SRC_ADDR_HIGH4) >>
+-				 (OSD_SRCADD_OFSET_SFT -
+-				 OSD_WINOFST_AH_SHIFT)) | OSD_WINOFST_MASK,
+-				  OSD_OSDWIN1OFST);
+-			osd_modify(sd, OSD_OSDWINADH_O1AH,
+-				  (fb_offset_32 & OSD_SRC_ADDR_HIGH7) >>
+-				  (OSD_SRCADD_ADD_SFT -
+-				  OSD_OSDWINADH_O1AH_SHIFT),
+-				  OSD_OSDWINADH);
+-			osd_write(sd, fb_offset_32 & OSD_WINADL_MASK,
+-					OSD_OSDWIN1ADL);
+-			break;
+-		case WIN_VID1:
+-			if (win->lconfig.pixfmt != PIXFMT_NV12) {
+-				osd_modify(sd, OSD_VIDWIN1OFST_V1AH,
+-					 ((fb_offset_32 & OSD_SRC_ADDR_HIGH4) >>
+-					 (OSD_SRCADD_OFSET_SFT -
+-					 OSD_WINOFST_AH_SHIFT)) |
+-					 OSD_WINOFST_MASK, OSD_VIDWIN1OFST);
+-				osd_modify(sd, OSD_VIDWINADH_V1AH,
+-					  (fb_offset_32 & OSD_SRC_ADDR_HIGH7) >>
+-					  (OSD_SRCADD_ADD_SFT -
+-					  OSD_VIDWINADH_V1AH_SHIFT),
+-					  OSD_VIDWINADH);
+-				osd_write(sd, fb_offset_32 & OSD_WINADL_MASK,
+-					  OSD_VIDWIN1ADL);
+-			}
+-			break;
+-		}
+-	}
+-}
+-
+-static void osd_start_layer(struct osd_state *sd, enum osd_layer layer,
+-			    unsigned long fb_base_phys,
+-			    unsigned long cbcr_ofst)
+-{
+-	struct osd_state *osd = sd;
+-	struct osd_window_state *win = &osd->win[layer];
+-	struct osd_layer_config *cfg = &win->lconfig;
+-	unsigned long flags;
+-
+-	spin_lock_irqsave(&osd->lock, flags);
+-
+-	win->fb_base_phys = fb_base_phys & ~0x1F;
+-	_osd_start_layer(sd, layer, fb_base_phys, cbcr_ofst);
+-
+-	if (layer == WIN_VID0) {
+-		osd->pingpong =
+-		    _osd_dm6446_vid0_pingpong(sd, osd->field_inversion,
+-						       win->fb_base_phys,
+-						       cfg);
+-	}
+-
+-	spin_unlock_irqrestore(&osd->lock, flags);
+-}
+-
+-static void osd_get_layer_config(struct osd_state *sd, enum osd_layer layer,
+-				 struct osd_layer_config *lconfig)
+-{
+-	struct osd_state *osd = sd;
+-	struct osd_window_state *win = &osd->win[layer];
+-	unsigned long flags;
+-
+-	spin_lock_irqsave(&osd->lock, flags);
+-
+-	*lconfig = win->lconfig;
+-
+-	spin_unlock_irqrestore(&osd->lock, flags);
+-}
+-
+-/**
+- * try_layer_config() - Try a specific configuration for the layer
+- * @sd: ptr to struct osd_state
+- * @layer: layer to configure
+- * @lconfig: layer configuration to try
+- *
+- * If the requested lconfig is completely rejected and the value of lconfig on
+- * exit is the current lconfig, then try_layer_config() returns 1.  Otherwise,
+- * try_layer_config() returns 0.  A return value of 0 does not necessarily mean
+- * that the value of lconfig on exit is identical to the value of lconfig on
+- * entry, but merely that it represents a change from the current lconfig.
+- */
+-static int try_layer_config(struct osd_state *sd, enum osd_layer layer,
+-			    struct osd_layer_config *lconfig)
+-{
+-	struct osd_state *osd = sd;
+-	struct osd_window_state *win = &osd->win[layer];
+-	int bad_config = 0;
+-
+-	/* verify that the pixel format is compatible with the layer */
+-	switch (lconfig->pixfmt) {
+-	case PIXFMT_1BPP:
+-	case PIXFMT_2BPP:
+-	case PIXFMT_4BPP:
+-	case PIXFMT_8BPP:
+-	case PIXFMT_RGB565:
+-		if (osd->vpbe_type == VPBE_VERSION_1)
+-			bad_config = !is_vid_win(layer);
+-		break;
+-	case PIXFMT_YCBCRI:
+-	case PIXFMT_YCRCBI:
+-		bad_config = !is_vid_win(layer);
+-		break;
+-	case PIXFMT_RGB888:
+-		if (osd->vpbe_type == VPBE_VERSION_1)
+-			bad_config = !is_vid_win(layer);
+-		else if ((osd->vpbe_type == VPBE_VERSION_3) ||
+-			 (osd->vpbe_type == VPBE_VERSION_2))
+-			bad_config = !is_osd_win(layer);
+-		break;
+-	case PIXFMT_NV12:
+-		if (osd->vpbe_type != VPBE_VERSION_2)
+-			bad_config = 1;
+-		else
+-			bad_config = is_osd_win(layer);
+-		break;
+-	case PIXFMT_OSD_ATTR:
+-		bad_config = (layer != WIN_OSD1);
+-		break;
+-	default:
+-		bad_config = 1;
+-		break;
+-	}
+-	if (bad_config) {
+-		/*
+-		 * The requested pixel format is incompatible with the layer,
+-		 * so keep the current layer configuration.
+-		 */
+-		*lconfig = win->lconfig;
+-		return bad_config;
+-	}
+-
+-	/* DM6446: */
+-	/* only one OSD window at a time can use RGB pixel formats */
+-	if ((osd->vpbe_type == VPBE_VERSION_1) &&
+-	    is_osd_win(layer) && is_rgb_pixfmt(lconfig->pixfmt)) {
+-		enum osd_pix_format pixfmt;
+-
+-		if (layer == WIN_OSD0)
+-			pixfmt = osd->win[WIN_OSD1].lconfig.pixfmt;
+-		else
+-			pixfmt = osd->win[WIN_OSD0].lconfig.pixfmt;
+-
+-		if (is_rgb_pixfmt(pixfmt)) {
+-			/*
+-			 * The other OSD window is already configured for an
+-			 * RGB, so keep the current layer configuration.
+-			 */
+-			*lconfig = win->lconfig;
+-			return 1;
+-		}
+-	}
+-
+-	/* DM6446: only one video window at a time can use RGB888 */
+-	if ((osd->vpbe_type == VPBE_VERSION_1) && is_vid_win(layer) &&
+-		lconfig->pixfmt == PIXFMT_RGB888) {
+-		enum osd_pix_format pixfmt;
+-
+-		if (layer == WIN_VID0)
+-			pixfmt = osd->win[WIN_VID1].lconfig.pixfmt;
+-		else
+-			pixfmt = osd->win[WIN_VID0].lconfig.pixfmt;
+-
+-		if (pixfmt == PIXFMT_RGB888) {
+-			/*
+-			 * The other video window is already configured for
+-			 * RGB888, so keep the current layer configuration.
+-			 */
+-			*lconfig = win->lconfig;
+-			return 1;
+-		}
+-	}
+-
+-	/* window dimensions must be non-zero */
+-	if (!lconfig->line_length || !lconfig->xsize || !lconfig->ysize) {
+-		*lconfig = win->lconfig;
+-		return 1;
+-	}
+-
+-	/* round line_length up to a multiple of 32 */
+-	lconfig->line_length = ((lconfig->line_length + 31) / 32) * 32;
+-	lconfig->line_length =
+-	    min(lconfig->line_length, (unsigned)MAX_LINE_LENGTH);
+-	lconfig->xsize = min(lconfig->xsize, (unsigned)MAX_WIN_SIZE);
+-	lconfig->ysize = min(lconfig->ysize, (unsigned)MAX_WIN_SIZE);
+-	lconfig->xpos = min(lconfig->xpos, (unsigned)MAX_WIN_SIZE);
+-	lconfig->ypos = min(lconfig->ypos, (unsigned)MAX_WIN_SIZE);
+-	lconfig->interlaced = (lconfig->interlaced != 0);
+-	if (lconfig->interlaced) {
+-		/* ysize and ypos must be even for interlaced displays */
+-		lconfig->ysize &= ~1;
+-		lconfig->ypos &= ~1;
+-	}
+-
+-	return 0;
+-}
+-
+-static void _osd_disable_vid_rgb888(struct osd_state *sd)
+-{
+-	/*
+-	 * The DM6446 supports RGB888 pixel format in a single video window.
+-	 * This routine disables RGB888 pixel format for both video windows.
+-	 * The caller must ensure that neither video window is currently
+-	 * configured for RGB888 pixel format.
+-	 */
+-	if (sd->vpbe_type == VPBE_VERSION_1)
+-		osd_clear(sd, OSD_MISCCTL_RGBEN, OSD_MISCCTL);
+-}
+-
+-static void _osd_enable_vid_rgb888(struct osd_state *sd,
+-				   enum osd_layer layer)
+-{
+-	/*
+-	 * The DM6446 supports RGB888 pixel format in a single video window.
+-	 * This routine enables RGB888 pixel format for the specified video
+-	 * window.  The caller must ensure that the other video window is not
+-	 * currently configured for RGB888 pixel format, as this routine will
+-	 * disable RGB888 pixel format for the other window.
+-	 */
+-	if (sd->vpbe_type == VPBE_VERSION_1) {
+-		if (layer == WIN_VID0)
+-			osd_modify(sd, OSD_MISCCTL_RGBEN | OSD_MISCCTL_RGBWIN,
+-				  OSD_MISCCTL_RGBEN, OSD_MISCCTL);
+-		else if (layer == WIN_VID1)
+-			osd_modify(sd, OSD_MISCCTL_RGBEN | OSD_MISCCTL_RGBWIN,
+-				  OSD_MISCCTL_RGBEN | OSD_MISCCTL_RGBWIN,
+-				  OSD_MISCCTL);
+-	}
+-}
+-
+-static void _osd_set_cbcr_order(struct osd_state *sd,
+-				enum osd_pix_format pixfmt)
+-{
+-	/*
+-	 * The caller must ensure that all windows using YC pixfmt use the same
+-	 * Cb/Cr order.
+-	 */
+-	if (pixfmt == PIXFMT_YCBCRI)
+-		osd_clear(sd, OSD_MODE_CS, OSD_MODE);
+-	else if (pixfmt == PIXFMT_YCRCBI)
+-		osd_set(sd, OSD_MODE_CS, OSD_MODE);
+-}
+-
+-static void _osd_set_layer_config(struct osd_state *sd, enum osd_layer layer,
+-				  const struct osd_layer_config *lconfig)
+-{
+-	u32 winmd = 0, winmd_mask = 0, bmw = 0;
+-
+-	_osd_set_cbcr_order(sd, lconfig->pixfmt);
+-
+-	switch (layer) {
+-	case WIN_OSD0:
+-		if (sd->vpbe_type == VPBE_VERSION_1) {
+-			winmd_mask |= OSD_OSDWIN0MD_RGB0E;
+-			if (lconfig->pixfmt == PIXFMT_RGB565)
+-				winmd |= OSD_OSDWIN0MD_RGB0E;
+-		} else if ((sd->vpbe_type == VPBE_VERSION_3) ||
+-		  (sd->vpbe_type == VPBE_VERSION_2)) {
+-			winmd_mask |= OSD_OSDWIN0MD_BMP0MD;
+-			switch (lconfig->pixfmt) {
+-			case PIXFMT_RGB565:
+-					winmd |= (1 <<
+-					OSD_OSDWIN0MD_BMP0MD_SHIFT);
+-					break;
+-			case PIXFMT_RGB888:
+-				winmd |= (2 << OSD_OSDWIN0MD_BMP0MD_SHIFT);
+-				_osd_enable_rgb888_pixblend(sd, OSDWIN_OSD0);
+-				break;
+-			case PIXFMT_YCBCRI:
+-			case PIXFMT_YCRCBI:
+-				winmd |= (3 << OSD_OSDWIN0MD_BMP0MD_SHIFT);
+-				break;
+-			default:
+-				break;
+-			}
+-		}
+-
+-		winmd_mask |= OSD_OSDWIN0MD_BMW0 | OSD_OSDWIN0MD_OFF0;
+-
+-		switch (lconfig->pixfmt) {
+-		case PIXFMT_1BPP:
+-			bmw = 0;
+-			break;
+-		case PIXFMT_2BPP:
+-			bmw = 1;
+-			break;
+-		case PIXFMT_4BPP:
+-			bmw = 2;
+-			break;
+-		case PIXFMT_8BPP:
+-			bmw = 3;
+-			break;
+-		default:
+-			break;
+-		}
+-		winmd |= (bmw << OSD_OSDWIN0MD_BMW0_SHIFT);
+-
+-		if (lconfig->interlaced)
+-			winmd |= OSD_OSDWIN0MD_OFF0;
+-
+-		osd_modify(sd, winmd_mask, winmd, OSD_OSDWIN0MD);
+-		osd_write(sd, lconfig->line_length >> 5, OSD_OSDWIN0OFST);
+-		osd_write(sd, lconfig->xpos, OSD_OSDWIN0XP);
+-		osd_write(sd, lconfig->xsize, OSD_OSDWIN0XL);
+-		if (lconfig->interlaced) {
+-			osd_write(sd, lconfig->ypos >> 1, OSD_OSDWIN0YP);
+-			osd_write(sd, lconfig->ysize >> 1, OSD_OSDWIN0YL);
+-		} else {
+-			osd_write(sd, lconfig->ypos, OSD_OSDWIN0YP);
+-			osd_write(sd, lconfig->ysize, OSD_OSDWIN0YL);
+-		}
+-		break;
+-	case WIN_VID0:
+-		winmd_mask |= OSD_VIDWINMD_VFF0;
+-		if (lconfig->interlaced)
+-			winmd |= OSD_VIDWINMD_VFF0;
+-
+-		osd_modify(sd, winmd_mask, winmd, OSD_VIDWINMD);
+-		osd_write(sd, lconfig->line_length >> 5, OSD_VIDWIN0OFST);
+-		osd_write(sd, lconfig->xpos, OSD_VIDWIN0XP);
+-		osd_write(sd, lconfig->xsize, OSD_VIDWIN0XL);
+-		/*
+-		 * For YUV420P format the register contents are
+-		 * duplicated in both VID registers
+-		 */
+-		if ((sd->vpbe_type == VPBE_VERSION_2) &&
+-				(lconfig->pixfmt == PIXFMT_NV12)) {
+-			/* other window also */
+-			if (lconfig->interlaced) {
+-				winmd_mask |= OSD_VIDWINMD_VFF1;
+-				winmd |= OSD_VIDWINMD_VFF1;
+-				osd_modify(sd, winmd_mask, winmd,
+-					  OSD_VIDWINMD);
+-			}
+-
+-			osd_modify(sd, OSD_MISCCTL_S420D,
+-				    OSD_MISCCTL_S420D, OSD_MISCCTL);
+-			osd_write(sd, lconfig->line_length >> 5,
+-				  OSD_VIDWIN1OFST);
+-			osd_write(sd, lconfig->xpos, OSD_VIDWIN1XP);
+-			osd_write(sd, lconfig->xsize, OSD_VIDWIN1XL);
+-			/*
+-			  * if NV21 pixfmt and line length not 32B
+-			  * aligned (e.g. NTSC), Need to set window
+-			  * X pixel size to be 32B aligned as well
+-			  */
+-			if (lconfig->xsize % 32) {
+-				osd_write(sd,
+-					  ((lconfig->xsize + 31) & ~31),
+-					  OSD_VIDWIN1XL);
+-				osd_write(sd,
+-					  ((lconfig->xsize + 31) & ~31),
+-					  OSD_VIDWIN0XL);
+-			}
+-		} else if ((sd->vpbe_type == VPBE_VERSION_2) &&
+-				(lconfig->pixfmt != PIXFMT_NV12)) {
+-			osd_modify(sd, OSD_MISCCTL_S420D, ~OSD_MISCCTL_S420D,
+-						OSD_MISCCTL);
+-		}
+-
+-		if (lconfig->interlaced) {
+-			osd_write(sd, lconfig->ypos >> 1, OSD_VIDWIN0YP);
+-			osd_write(sd, lconfig->ysize >> 1, OSD_VIDWIN0YL);
+-			if ((sd->vpbe_type == VPBE_VERSION_2) &&
+-				lconfig->pixfmt == PIXFMT_NV12) {
+-				osd_write(sd, lconfig->ypos >> 1,
+-					  OSD_VIDWIN1YP);
+-				osd_write(sd, lconfig->ysize >> 1,
+-					  OSD_VIDWIN1YL);
+-			}
+-		} else {
+-			osd_write(sd, lconfig->ypos, OSD_VIDWIN0YP);
+-			osd_write(sd, lconfig->ysize, OSD_VIDWIN0YL);
+-			if ((sd->vpbe_type == VPBE_VERSION_2) &&
+-				lconfig->pixfmt == PIXFMT_NV12) {
+-				osd_write(sd, lconfig->ypos, OSD_VIDWIN1YP);
+-				osd_write(sd, lconfig->ysize, OSD_VIDWIN1YL);
+-			}
+-		}
+-		break;
+-	case WIN_OSD1:
+-		/*
+-		 * The caller must ensure that OSD1 is disabled prior to
+-		 * switching from a normal mode to attribute mode or from
+-		 * attribute mode to a normal mode.
+-		 */
+-		if (lconfig->pixfmt == PIXFMT_OSD_ATTR) {
+-			if (sd->vpbe_type == VPBE_VERSION_1) {
+-				winmd_mask |= OSD_OSDWIN1MD_ATN1E |
+-				OSD_OSDWIN1MD_RGB1E | OSD_OSDWIN1MD_CLUTS1 |
+-				OSD_OSDWIN1MD_BLND1 | OSD_OSDWIN1MD_TE1;
+-			} else {
+-				winmd_mask |= OSD_OSDWIN1MD_BMP1MD |
+-				OSD_OSDWIN1MD_CLUTS1 | OSD_OSDWIN1MD_BLND1 |
+-				OSD_OSDWIN1MD_TE1;
+-			}
+-		} else {
+-			if (sd->vpbe_type == VPBE_VERSION_1) {
+-				winmd_mask |= OSD_OSDWIN1MD_RGB1E;
+-				if (lconfig->pixfmt == PIXFMT_RGB565)
+-					winmd |= OSD_OSDWIN1MD_RGB1E;
+-			} else if ((sd->vpbe_type == VPBE_VERSION_3)
+-				   || (sd->vpbe_type == VPBE_VERSION_2)) {
+-				winmd_mask |= OSD_OSDWIN1MD_BMP1MD;
+-				switch (lconfig->pixfmt) {
+-				case PIXFMT_RGB565:
+-					winmd |=
+-					    (1 << OSD_OSDWIN1MD_BMP1MD_SHIFT);
+-					break;
+-				case PIXFMT_RGB888:
+-					winmd |=
+-					    (2 << OSD_OSDWIN1MD_BMP1MD_SHIFT);
+-					_osd_enable_rgb888_pixblend(sd,
+-							OSDWIN_OSD1);
+-					break;
+-				case PIXFMT_YCBCRI:
+-				case PIXFMT_YCRCBI:
+-					winmd |=
+-					    (3 << OSD_OSDWIN1MD_BMP1MD_SHIFT);
+-					break;
+-				default:
+-					break;
+-				}
+-			}
+-
+-			winmd_mask |= OSD_OSDWIN1MD_BMW1;
+-			switch (lconfig->pixfmt) {
+-			case PIXFMT_1BPP:
+-				bmw = 0;
+-				break;
+-			case PIXFMT_2BPP:
+-				bmw = 1;
+-				break;
+-			case PIXFMT_4BPP:
+-				bmw = 2;
+-				break;
+-			case PIXFMT_8BPP:
+-				bmw = 3;
+-				break;
+-			default:
+-				break;
+-			}
+-			winmd |= (bmw << OSD_OSDWIN1MD_BMW1_SHIFT);
+-		}
+-
+-		winmd_mask |= OSD_OSDWIN1MD_OFF1;
+-		if (lconfig->interlaced)
+-			winmd |= OSD_OSDWIN1MD_OFF1;
+-
+-		osd_modify(sd, winmd_mask, winmd, OSD_OSDWIN1MD);
+-		osd_write(sd, lconfig->line_length >> 5, OSD_OSDWIN1OFST);
+-		osd_write(sd, lconfig->xpos, OSD_OSDWIN1XP);
+-		osd_write(sd, lconfig->xsize, OSD_OSDWIN1XL);
+-		if (lconfig->interlaced) {
+-			osd_write(sd, lconfig->ypos >> 1, OSD_OSDWIN1YP);
+-			osd_write(sd, lconfig->ysize >> 1, OSD_OSDWIN1YL);
+-		} else {
+-			osd_write(sd, lconfig->ypos, OSD_OSDWIN1YP);
+-			osd_write(sd, lconfig->ysize, OSD_OSDWIN1YL);
+-		}
+-		break;
+-	case WIN_VID1:
+-		winmd_mask |= OSD_VIDWINMD_VFF1;
+-		if (lconfig->interlaced)
+-			winmd |= OSD_VIDWINMD_VFF1;
+-
+-		osd_modify(sd, winmd_mask, winmd, OSD_VIDWINMD);
+-		osd_write(sd, lconfig->line_length >> 5, OSD_VIDWIN1OFST);
+-		osd_write(sd, lconfig->xpos, OSD_VIDWIN1XP);
+-		osd_write(sd, lconfig->xsize, OSD_VIDWIN1XL);
+-		/*
+-		 * For YUV420P format the register contents are
+-		 * duplicated in both VID registers
+-		 */
+-		if (sd->vpbe_type == VPBE_VERSION_2) {
+-			if (lconfig->pixfmt == PIXFMT_NV12) {
+-				/* other window also */
+-				if (lconfig->interlaced) {
+-					winmd_mask |= OSD_VIDWINMD_VFF0;
+-					winmd |= OSD_VIDWINMD_VFF0;
+-					osd_modify(sd, winmd_mask, winmd,
+-						  OSD_VIDWINMD);
+-				}
+-				osd_modify(sd, OSD_MISCCTL_S420D,
+-					   OSD_MISCCTL_S420D, OSD_MISCCTL);
+-				osd_write(sd, lconfig->line_length >> 5,
+-					  OSD_VIDWIN0OFST);
+-				osd_write(sd, lconfig->xpos, OSD_VIDWIN0XP);
+-				osd_write(sd, lconfig->xsize, OSD_VIDWIN0XL);
+-			} else {
+-				osd_modify(sd, OSD_MISCCTL_S420D,
+-					   ~OSD_MISCCTL_S420D, OSD_MISCCTL);
+-			}
+-		}
+-
+-		if (lconfig->interlaced) {
+-			osd_write(sd, lconfig->ypos >> 1, OSD_VIDWIN1YP);
+-			osd_write(sd, lconfig->ysize >> 1, OSD_VIDWIN1YL);
+-			if ((sd->vpbe_type == VPBE_VERSION_2) &&
+-				lconfig->pixfmt == PIXFMT_NV12) {
+-				osd_write(sd, lconfig->ypos >> 1,
+-					  OSD_VIDWIN0YP);
+-				osd_write(sd, lconfig->ysize >> 1,
+-					  OSD_VIDWIN0YL);
+-			}
+-		} else {
+-			osd_write(sd, lconfig->ypos, OSD_VIDWIN1YP);
+-			osd_write(sd, lconfig->ysize, OSD_VIDWIN1YL);
+-			if ((sd->vpbe_type == VPBE_VERSION_2) &&
+-				lconfig->pixfmt == PIXFMT_NV12) {
+-				osd_write(sd, lconfig->ypos, OSD_VIDWIN0YP);
+-				osd_write(sd, lconfig->ysize, OSD_VIDWIN0YL);
+-			}
+-		}
+-		break;
+-	}
+-}
+-
+-static int osd_set_layer_config(struct osd_state *sd, enum osd_layer layer,
+-				struct osd_layer_config *lconfig)
+-{
+-	struct osd_state *osd = sd;
+-	struct osd_window_state *win = &osd->win[layer];
+-	struct osd_layer_config *cfg = &win->lconfig;
+-	unsigned long flags;
+-	int reject_config;
+-
+-	spin_lock_irqsave(&osd->lock, flags);
+-
+-	reject_config = try_layer_config(sd, layer, lconfig);
+-	if (reject_config) {
+-		spin_unlock_irqrestore(&osd->lock, flags);
+-		return reject_config;
+-	}
+-
+-	/* update the current Cb/Cr order */
+-	if (is_yc_pixfmt(lconfig->pixfmt))
+-		osd->yc_pixfmt = lconfig->pixfmt;
+-
+-	/*
+-	 * If we are switching OSD1 from normal mode to attribute mode or from
+-	 * attribute mode to normal mode, then we must disable the window.
+-	 */
+-	if (layer == WIN_OSD1) {
+-		if (((lconfig->pixfmt == PIXFMT_OSD_ATTR) &&
+-		  (cfg->pixfmt != PIXFMT_OSD_ATTR)) ||
+-		  ((lconfig->pixfmt != PIXFMT_OSD_ATTR) &&
+-		  (cfg->pixfmt == PIXFMT_OSD_ATTR))) {
+-			win->is_enabled = 0;
+-			_osd_disable_layer(sd, layer);
+-		}
+-	}
+-
+-	_osd_set_layer_config(sd, layer, lconfig);
+-
+-	if (layer == WIN_OSD1) {
+-		struct osd_osdwin_state *osdwin_state =
+-		    &osd->osdwin[OSDWIN_OSD1];
+-
+-		if ((lconfig->pixfmt != PIXFMT_OSD_ATTR) &&
+-		  (cfg->pixfmt == PIXFMT_OSD_ATTR)) {
+-			/*
+-			 * We just switched OSD1 from attribute mode to normal
+-			 * mode, so we must initialize the CLUT select, the
+-			 * blend factor, transparency colorkey enable, and
+-			 * attenuation enable (DM6446 only) bits in the
+-			 * OSDWIN1MD register.
+-			 */
+-			_osd_set_osd_clut(sd, OSDWIN_OSD1,
+-						   osdwin_state->clut);
+-			_osd_set_blending_factor(sd, OSDWIN_OSD1,
+-							  osdwin_state->blend);
+-			if (osdwin_state->colorkey_blending) {
+-				_osd_enable_color_key(sd, OSDWIN_OSD1,
+-							       osdwin_state->
+-							       colorkey,
+-							       lconfig->pixfmt);
+-			} else
+-				_osd_disable_color_key(sd, OSDWIN_OSD1);
+-			_osd_set_rec601_attenuation(sd, OSDWIN_OSD1,
+-						    osdwin_state->
+-						    rec601_attenuation);
+-		} else if ((lconfig->pixfmt == PIXFMT_OSD_ATTR) &&
+-		  (cfg->pixfmt != PIXFMT_OSD_ATTR)) {
+-			/*
+-			 * We just switched OSD1 from normal mode to attribute
+-			 * mode, so we must initialize the blink enable and
+-			 * blink interval bits in the OSDATRMD register.
+-			 */
+-			_osd_set_blink_attribute(sd, osd->is_blinking,
+-							  osd->blink);
+-		}
+-	}
+-
+-	/*
+-	 * If we just switched to a 1-, 2-, or 4-bits-per-pixel bitmap format
+-	 * then configure a default palette map.
+-	 */
+-	if ((lconfig->pixfmt != cfg->pixfmt) &&
+-	  ((lconfig->pixfmt == PIXFMT_1BPP) ||
+-	  (lconfig->pixfmt == PIXFMT_2BPP) ||
+-	  (lconfig->pixfmt == PIXFMT_4BPP))) {
+-		enum osd_win_layer osdwin =
+-		    ((layer == WIN_OSD0) ? OSDWIN_OSD0 : OSDWIN_OSD1);
+-		struct osd_osdwin_state *osdwin_state =
+-		    &osd->osdwin[osdwin];
+-		unsigned char clut_index;
+-		unsigned char clut_entries = 0;
+-
+-		switch (lconfig->pixfmt) {
+-		case PIXFMT_1BPP:
+-			clut_entries = 2;
+-			break;
+-		case PIXFMT_2BPP:
+-			clut_entries = 4;
+-			break;
+-		case PIXFMT_4BPP:
+-			clut_entries = 16;
+-			break;
+-		default:
+-			break;
+-		}
+-		/*
+-		 * The default palette map maps the pixel value to the clut
+-		 * index, i.e. pixel value 0 maps to clut entry 0, pixel value
+-		 * 1 maps to clut entry 1, etc.
+-		 */
+-		for (clut_index = 0; clut_index < 16; clut_index++) {
+-			osdwin_state->palette_map[clut_index] = clut_index;
+-			if (clut_index < clut_entries) {
+-				_osd_set_palette_map(sd, osdwin, clut_index,
+-						     clut_index,
+-						     lconfig->pixfmt);
+-			}
+-		}
+-	}
+-
+-	*cfg = *lconfig;
+-	/* DM6446: configure the RGB888 enable and window selection */
+-	if (osd->win[WIN_VID0].lconfig.pixfmt == PIXFMT_RGB888)
+-		_osd_enable_vid_rgb888(sd, WIN_VID0);
+-	else if (osd->win[WIN_VID1].lconfig.pixfmt == PIXFMT_RGB888)
+-		_osd_enable_vid_rgb888(sd, WIN_VID1);
+-	else
+-		_osd_disable_vid_rgb888(sd);
+-
+-	if (layer == WIN_VID0) {
+-		osd->pingpong =
+-		    _osd_dm6446_vid0_pingpong(sd, osd->field_inversion,
+-						       win->fb_base_phys,
+-						       cfg);
+-	}
+-
+-	spin_unlock_irqrestore(&osd->lock, flags);
+-
+-	return 0;
+-}
+-
+-static void osd_init_layer(struct osd_state *sd, enum osd_layer layer)
+-{
+-	struct osd_state *osd = sd;
+-	struct osd_window_state *win = &osd->win[layer];
+-	enum osd_win_layer osdwin;
+-	struct osd_osdwin_state *osdwin_state;
+-	struct osd_layer_config *cfg = &win->lconfig;
+-	unsigned long flags;
+-
+-	spin_lock_irqsave(&osd->lock, flags);
+-
+-	win->is_enabled = 0;
+-	_osd_disable_layer(sd, layer);
+-
+-	win->h_zoom = ZOOM_X1;
+-	win->v_zoom = ZOOM_X1;
+-	_osd_set_zoom(sd, layer, win->h_zoom, win->v_zoom);
+-
+-	win->fb_base_phys = 0;
+-	_osd_start_layer(sd, layer, win->fb_base_phys, 0);
+-
+-	cfg->line_length = 0;
+-	cfg->xsize = 0;
+-	cfg->ysize = 0;
+-	cfg->xpos = 0;
+-	cfg->ypos = 0;
+-	cfg->interlaced = 0;
+-	switch (layer) {
+-	case WIN_OSD0:
+-	case WIN_OSD1:
+-		osdwin = (layer == WIN_OSD0) ? OSDWIN_OSD0 : OSDWIN_OSD1;
+-		osdwin_state = &osd->osdwin[osdwin];
+-		/*
+-		 * Other code relies on the fact that OSD windows default to a
+-		 * bitmap pixel format when they are deallocated, so don't
+-		 * change this default pixel format.
+-		 */
+-		cfg->pixfmt = PIXFMT_8BPP;
+-		_osd_set_layer_config(sd, layer, cfg);
+-		osdwin_state->clut = RAM_CLUT;
+-		_osd_set_osd_clut(sd, osdwin, osdwin_state->clut);
+-		osdwin_state->colorkey_blending = 0;
+-		_osd_disable_color_key(sd, osdwin);
+-		osdwin_state->blend = OSD_8_VID_0;
+-		_osd_set_blending_factor(sd, osdwin, osdwin_state->blend);
+-		osdwin_state->rec601_attenuation = 0;
+-		_osd_set_rec601_attenuation(sd, osdwin,
+-						     osdwin_state->
+-						     rec601_attenuation);
+-		if (osdwin == OSDWIN_OSD1) {
+-			osd->is_blinking = 0;
+-			osd->blink = BLINK_X1;
+-		}
+-		break;
+-	case WIN_VID0:
+-	case WIN_VID1:
+-		cfg->pixfmt = osd->yc_pixfmt;
+-		_osd_set_layer_config(sd, layer, cfg);
+-		break;
+-	}
+-
+-	spin_unlock_irqrestore(&osd->lock, flags);
+-}
+-
+-static void osd_release_layer(struct osd_state *sd, enum osd_layer layer)
+-{
+-	struct osd_state *osd = sd;
+-	struct osd_window_state *win = &osd->win[layer];
+-	unsigned long flags;
+-
+-	spin_lock_irqsave(&osd->lock, flags);
+-
+-	if (!win->is_allocated) {
+-		spin_unlock_irqrestore(&osd->lock, flags);
+-		return;
+-	}
+-
+-	spin_unlock_irqrestore(&osd->lock, flags);
+-	osd_init_layer(sd, layer);
+-	spin_lock_irqsave(&osd->lock, flags);
+-
+-	win->is_allocated = 0;
+-
+-	spin_unlock_irqrestore(&osd->lock, flags);
+-}
+-
+-static int osd_request_layer(struct osd_state *sd, enum osd_layer layer)
+-{
+-	struct osd_state *osd = sd;
+-	struct osd_window_state *win = &osd->win[layer];
+-	unsigned long flags;
+-
+-	spin_lock_irqsave(&osd->lock, flags);
+-
+-	if (win->is_allocated) {
+-		spin_unlock_irqrestore(&osd->lock, flags);
+-		return -1;
+-	}
+-	win->is_allocated = 1;
+-
+-	spin_unlock_irqrestore(&osd->lock, flags);
+-
+-	return 0;
+-}
+-
+-static void _osd_init(struct osd_state *sd)
+-{
+-	osd_write(sd, 0, OSD_MODE);
+-	osd_write(sd, 0, OSD_VIDWINMD);
+-	osd_write(sd, 0, OSD_OSDWIN0MD);
+-	osd_write(sd, 0, OSD_OSDWIN1MD);
+-	osd_write(sd, 0, OSD_RECTCUR);
+-	osd_write(sd, 0, OSD_MISCCTL);
+-	if (sd->vpbe_type == VPBE_VERSION_3) {
+-		osd_write(sd, 0, OSD_VBNDRY);
+-		osd_write(sd, 0, OSD_EXTMODE);
+-		osd_write(sd, OSD_MISCCTL_DMANG, OSD_MISCCTL);
+-	}
+-}
+-
+-static void osd_set_left_margin(struct osd_state *sd, u32 val)
+-{
+-	osd_write(sd, val, OSD_BASEPX);
+-}
+-
+-static void osd_set_top_margin(struct osd_state *sd, u32 val)
+-{
+-	osd_write(sd, val, OSD_BASEPY);
+-}
+-
+-static int osd_initialize(struct osd_state *osd)
+-{
+-	if (osd == NULL)
+-		return -ENODEV;
+-	_osd_init(osd);
+-
+-	/* set default Cb/Cr order */
+-	osd->yc_pixfmt = PIXFMT_YCBCRI;
+-
+-	if (osd->vpbe_type == VPBE_VERSION_3) {
+-		/*
+-		 * ROM CLUT1 on the DM355 is similar (identical?) to ROM CLUT0
+-		 * on the DM6446, so make ROM_CLUT1 the default on the DM355.
+-		 */
+-		osd->rom_clut = ROM_CLUT1;
+-	}
+-
+-	_osd_set_field_inversion(osd, osd->field_inversion);
+-	_osd_set_rom_clut(osd, osd->rom_clut);
+-
+-	osd_init_layer(osd, WIN_OSD0);
+-	osd_init_layer(osd, WIN_VID0);
+-	osd_init_layer(osd, WIN_OSD1);
+-	osd_init_layer(osd, WIN_VID1);
+-
+-	return 0;
+-}
+-
+-static const struct vpbe_osd_ops osd_ops = {
+-	.initialize = osd_initialize,
+-	.request_layer = osd_request_layer,
+-	.release_layer = osd_release_layer,
+-	.enable_layer = osd_enable_layer,
+-	.disable_layer = osd_disable_layer,
+-	.set_layer_config = osd_set_layer_config,
+-	.get_layer_config = osd_get_layer_config,
+-	.start_layer = osd_start_layer,
+-	.set_left_margin = osd_set_left_margin,
+-	.set_top_margin = osd_set_top_margin,
+-};
+-
+-static int osd_probe(struct platform_device *pdev)
+-{
+-	const struct platform_device_id *pdev_id;
+-	struct osd_state *osd;
+-	struct resource *res;
+-
+-	pdev_id = platform_get_device_id(pdev);
+-	if (!pdev_id)
+-		return -EINVAL;
+-
+-	osd = devm_kzalloc(&pdev->dev, sizeof(struct osd_state), GFP_KERNEL);
+-	if (osd == NULL)
+-		return -ENOMEM;
+-
+-
+-	osd->dev = &pdev->dev;
+-	osd->vpbe_type = pdev_id->driver_data;
+-
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	osd->osd_base = devm_ioremap_resource(&pdev->dev, res);
+-	if (IS_ERR(osd->osd_base))
+-		return PTR_ERR(osd->osd_base);
+-
+-	osd->osd_base_phys = res->start;
+-	osd->osd_size = resource_size(res);
+-	spin_lock_init(&osd->lock);
+-	osd->ops = osd_ops;
+-	platform_set_drvdata(pdev, osd);
+-	dev_notice(osd->dev, "OSD sub device probe success\n");
+-
+-	return 0;
+-}
+-
+-static int osd_remove(struct platform_device *pdev)
+-{
+-	return 0;
+-}
+-
+-static struct platform_driver osd_driver = {
+-	.probe		= osd_probe,
+-	.remove		= osd_remove,
+-	.driver		= {
+-		.name	= MODULE_NAME,
+-	},
+-	.id_table	= vpbe_osd_devtype
+-};
+-
+-module_platform_driver(osd_driver);
+-
+-MODULE_LICENSE("GPL");
+-MODULE_DESCRIPTION("DaVinci OSD Manager Driver");
+-MODULE_AUTHOR("Texas Instruments");
+diff --git a/drivers/media/platform/ti/davinci/vpbe_osd_regs.h b/drivers/media/platform/ti/davinci/vpbe_osd_regs.h
+deleted file mode 100644
+index cecd5991d4c5..000000000000
+--- a/drivers/media/platform/ti/davinci/vpbe_osd_regs.h
++++ /dev/null
+@@ -1,352 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-only */
+-/*
+- * Copyright (C) 2006-2010 Texas Instruments Inc
+- */
+-#ifndef _VPBE_OSD_REGS_H
+-#define _VPBE_OSD_REGS_H
+-
+-/* VPBE Global Registers */
+-#define VPBE_PID				0x0
+-#define VPBE_PCR				0x4
+-
+-/* VPSS CLock Registers */
+-#define VPSSCLK_PID				0x00
+-#define VPSSCLK_CLKCTRL				0x04
+-
+-/* VPSS Buffer Logic Registers */
+-#define VPSSBL_PID				0x00
+-#define VPSSBL_PCR				0x04
+-#define VPSSBL_BCR				0x08
+-#define VPSSBL_INTSTAT				0x0C
+-#define VPSSBL_INTSEL				0x10
+-#define VPSSBL_EVTSEL				0x14
+-#define VPSSBL_MEMCTRL				0x18
+-#define VPSSBL_CCDCMUX				0x1C
+-
+-/* DM365 ISP5 system configuration */
+-#define ISP5_PID				0x0
+-#define ISP5_PCCR				0x4
+-#define ISP5_BCR				0x8
+-#define ISP5_INTSTAT				0xC
+-#define ISP5_INTSEL1				0x10
+-#define ISP5_INTSEL2				0x14
+-#define ISP5_INTSEL3				0x18
+-#define ISP5_EVTSEL				0x1c
+-#define ISP5_CCDCMUX				0x20
+-
+-/* VPBE On-Screen Display Subsystem Registers (OSD) */
+-#define OSD_MODE				0x00
+-#define OSD_VIDWINMD				0x04
+-#define OSD_OSDWIN0MD				0x08
+-#define OSD_OSDWIN1MD				0x0C
+-#define OSD_OSDATRMD				0x0C
+-#define OSD_RECTCUR				0x10
+-#define OSD_VIDWIN0OFST				0x18
+-#define OSD_VIDWIN1OFST				0x1C
+-#define OSD_OSDWIN0OFST				0x20
+-#define OSD_OSDWIN1OFST				0x24
+-#define OSD_VIDWINADH				0x28
+-#define OSD_VIDWIN0ADL				0x2C
+-#define OSD_VIDWIN0ADR				0x2C
+-#define OSD_VIDWIN1ADL				0x30
+-#define OSD_VIDWIN1ADR				0x30
+-#define OSD_OSDWINADH				0x34
+-#define OSD_OSDWIN0ADL				0x38
+-#define OSD_OSDWIN0ADR				0x38
+-#define OSD_OSDWIN1ADL				0x3C
+-#define OSD_OSDWIN1ADR				0x3C
+-#define OSD_BASEPX				0x40
+-#define OSD_BASEPY				0x44
+-#define OSD_VIDWIN0XP				0x48
+-#define OSD_VIDWIN0YP				0x4C
+-#define OSD_VIDWIN0XL				0x50
+-#define OSD_VIDWIN0YL				0x54
+-#define OSD_VIDWIN1XP				0x58
+-#define OSD_VIDWIN1YP				0x5C
+-#define OSD_VIDWIN1XL				0x60
+-#define OSD_VIDWIN1YL				0x64
+-#define OSD_OSDWIN0XP				0x68
+-#define OSD_OSDWIN0YP				0x6C
+-#define OSD_OSDWIN0XL				0x70
+-#define OSD_OSDWIN0YL				0x74
+-#define OSD_OSDWIN1XP				0x78
+-#define OSD_OSDWIN1YP				0x7C
+-#define OSD_OSDWIN1XL				0x80
+-#define OSD_OSDWIN1YL				0x84
+-#define OSD_CURXP				0x88
+-#define OSD_CURYP				0x8C
+-#define OSD_CURXL				0x90
+-#define OSD_CURYL				0x94
+-#define OSD_W0BMP01				0xA0
+-#define OSD_W0BMP23				0xA4
+-#define OSD_W0BMP45				0xA8
+-#define OSD_W0BMP67				0xAC
+-#define OSD_W0BMP89				0xB0
+-#define OSD_W0BMPAB				0xB4
+-#define OSD_W0BMPCD				0xB8
+-#define OSD_W0BMPEF				0xBC
+-#define OSD_W1BMP01				0xC0
+-#define OSD_W1BMP23				0xC4
+-#define OSD_W1BMP45				0xC8
+-#define OSD_W1BMP67				0xCC
+-#define OSD_W1BMP89				0xD0
+-#define OSD_W1BMPAB				0xD4
+-#define OSD_W1BMPCD				0xD8
+-#define OSD_W1BMPEF				0xDC
+-#define OSD_VBNDRY				0xE0
+-#define OSD_EXTMODE				0xE4
+-#define OSD_MISCCTL				0xE8
+-#define OSD_CLUTRAMYCB				0xEC
+-#define OSD_CLUTRAMCR				0xF0
+-#define OSD_TRANSPVAL				0xF4
+-#define OSD_TRANSPVALL				0xF4
+-#define OSD_TRANSPVALU				0xF8
+-#define OSD_TRANSPBMPIDX			0xFC
+-#define OSD_PPVWIN0ADR				0xFC
+-
+-/* bit definitions */
+-#define VPBE_PCR_VENC_DIV			(1 << 1)
+-#define VPBE_PCR_CLK_OFF			(1 << 0)
+-
+-#define VPSSBL_INTSTAT_HSSIINT			(1 << 14)
+-#define VPSSBL_INTSTAT_CFALDINT			(1 << 13)
+-#define VPSSBL_INTSTAT_IPIPE_INT5		(1 << 12)
+-#define VPSSBL_INTSTAT_IPIPE_INT4		(1 << 11)
+-#define VPSSBL_INTSTAT_IPIPE_INT3		(1 << 10)
+-#define VPSSBL_INTSTAT_IPIPE_INT2		(1 << 9)
+-#define VPSSBL_INTSTAT_IPIPE_INT1		(1 << 8)
+-#define VPSSBL_INTSTAT_IPIPE_INT0		(1 << 7)
+-#define VPSSBL_INTSTAT_IPIPEIFINT		(1 << 6)
+-#define VPSSBL_INTSTAT_OSDINT			(1 << 5)
+-#define VPSSBL_INTSTAT_VENCINT			(1 << 4)
+-#define VPSSBL_INTSTAT_H3AINT			(1 << 3)
+-#define VPSSBL_INTSTAT_CCDC_VDINT2		(1 << 2)
+-#define VPSSBL_INTSTAT_CCDC_VDINT1		(1 << 1)
+-#define VPSSBL_INTSTAT_CCDC_VDINT0		(1 << 0)
+-
+-/* DM365 ISP5 bit definitions */
+-#define ISP5_INTSTAT_VENCINT			(1 << 21)
+-#define ISP5_INTSTAT_OSDINT			(1 << 20)
+-
+-/* VMOD TVTYP options for HDMD=0 */
+-#define SDTV_NTSC				0
+-#define SDTV_PAL				1
+-/* VMOD TVTYP options for HDMD=1 */
+-#define HDTV_525P				0
+-#define HDTV_625P				1
+-#define HDTV_1080I				2
+-#define HDTV_720P				3
+-
+-#define OSD_MODE_CS				(1 << 15)
+-#define OSD_MODE_OVRSZ				(1 << 14)
+-#define OSD_MODE_OHRSZ				(1 << 13)
+-#define OSD_MODE_EF				(1 << 12)
+-#define OSD_MODE_VVRSZ				(1 << 11)
+-#define OSD_MODE_VHRSZ				(1 << 10)
+-#define OSD_MODE_FSINV				(1 << 9)
+-#define OSD_MODE_BCLUT				(1 << 8)
+-#define OSD_MODE_CABG_SHIFT			0
+-#define OSD_MODE_CABG				(0xff << 0)
+-
+-#define OSD_VIDWINMD_VFINV			(1 << 15)
+-#define OSD_VIDWINMD_V1EFC			(1 << 14)
+-#define OSD_VIDWINMD_VHZ1_SHIFT			12
+-#define OSD_VIDWINMD_VHZ1			(3 << 12)
+-#define OSD_VIDWINMD_VVZ1_SHIFT			10
+-#define OSD_VIDWINMD_VVZ1			(3 << 10)
+-#define OSD_VIDWINMD_VFF1			(1 << 9)
+-#define OSD_VIDWINMD_ACT1			(1 << 8)
+-#define OSD_VIDWINMD_V0EFC			(1 << 6)
+-#define OSD_VIDWINMD_VHZ0_SHIFT			4
+-#define OSD_VIDWINMD_VHZ0			(3 << 4)
+-#define OSD_VIDWINMD_VVZ0_SHIFT			2
+-#define OSD_VIDWINMD_VVZ0			(3 << 2)
+-#define OSD_VIDWINMD_VFF0			(1 << 1)
+-#define OSD_VIDWINMD_ACT0			(1 << 0)
+-
+-#define OSD_OSDWIN0MD_ATN0E			(1 << 14)
+-#define OSD_OSDWIN0MD_RGB0E			(1 << 13)
+-#define OSD_OSDWIN0MD_BMP0MD_SHIFT		13
+-#define OSD_OSDWIN0MD_BMP0MD			(3 << 13)
+-#define OSD_OSDWIN0MD_CLUTS0			(1 << 12)
+-#define OSD_OSDWIN0MD_OHZ0_SHIFT		10
+-#define OSD_OSDWIN0MD_OHZ0			(3 << 10)
+-#define OSD_OSDWIN0MD_OVZ0_SHIFT		8
+-#define OSD_OSDWIN0MD_OVZ0			(3 << 8)
+-#define OSD_OSDWIN0MD_BMW0_SHIFT		6
+-#define OSD_OSDWIN0MD_BMW0			(3 << 6)
+-#define OSD_OSDWIN0MD_BLND0_SHIFT		3
+-#define OSD_OSDWIN0MD_BLND0			(7 << 3)
+-#define OSD_OSDWIN0MD_TE0			(1 << 2)
+-#define OSD_OSDWIN0MD_OFF0			(1 << 1)
+-#define OSD_OSDWIN0MD_OACT0			(1 << 0)
+-
+-#define OSD_OSDWIN1MD_OASW			(1 << 15)
+-#define OSD_OSDWIN1MD_ATN1E			(1 << 14)
+-#define OSD_OSDWIN1MD_RGB1E			(1 << 13)
+-#define OSD_OSDWIN1MD_BMP1MD_SHIFT		13
+-#define OSD_OSDWIN1MD_BMP1MD			(3 << 13)
+-#define OSD_OSDWIN1MD_CLUTS1			(1 << 12)
+-#define OSD_OSDWIN1MD_OHZ1_SHIFT		10
+-#define OSD_OSDWIN1MD_OHZ1			(3 << 10)
+-#define OSD_OSDWIN1MD_OVZ1_SHIFT		8
+-#define OSD_OSDWIN1MD_OVZ1			(3 << 8)
+-#define OSD_OSDWIN1MD_BMW1_SHIFT		6
+-#define OSD_OSDWIN1MD_BMW1			(3 << 6)
+-#define OSD_OSDWIN1MD_BLND1_SHIFT		3
+-#define OSD_OSDWIN1MD_BLND1			(7 << 3)
+-#define OSD_OSDWIN1MD_TE1			(1 << 2)
+-#define OSD_OSDWIN1MD_OFF1			(1 << 1)
+-#define OSD_OSDWIN1MD_OACT1			(1 << 0)
+-
+-#define OSD_OSDATRMD_OASW			(1 << 15)
+-#define OSD_OSDATRMD_OHZA_SHIFT			10
+-#define OSD_OSDATRMD_OHZA			(3 << 10)
+-#define OSD_OSDATRMD_OVZA_SHIFT			8
+-#define OSD_OSDATRMD_OVZA			(3 << 8)
+-#define OSD_OSDATRMD_BLNKINT_SHIFT		6
+-#define OSD_OSDATRMD_BLNKINT			(3 << 6)
+-#define OSD_OSDATRMD_OFFA			(1 << 1)
+-#define OSD_OSDATRMD_BLNK			(1 << 0)
+-
+-#define OSD_RECTCUR_RCAD_SHIFT			8
+-#define OSD_RECTCUR_RCAD			(0xff << 8)
+-#define OSD_RECTCUR_CLUTSR			(1 << 7)
+-#define OSD_RECTCUR_RCHW_SHIFT			4
+-#define OSD_RECTCUR_RCHW			(7 << 4)
+-#define OSD_RECTCUR_RCVW_SHIFT			1
+-#define OSD_RECTCUR_RCVW			(7 << 1)
+-#define OSD_RECTCUR_RCACT			(1 << 0)
+-
+-#define OSD_VIDWIN0OFST_V0LO			(0x1ff << 0)
+-
+-#define OSD_VIDWIN1OFST_V1LO			(0x1ff << 0)
+-
+-#define OSD_OSDWIN0OFST_O0LO			(0x1ff << 0)
+-
+-#define OSD_OSDWIN1OFST_O1LO			(0x1ff << 0)
+-
+-#define OSD_WINOFST_AH_SHIFT			9
+-
+-#define OSD_VIDWIN0OFST_V0AH			(0xf << 9)
+-#define OSD_VIDWIN1OFST_V1AH			(0xf << 9)
+-#define OSD_OSDWIN0OFST_O0AH			(0xf << 9)
+-#define OSD_OSDWIN1OFST_O1AH			(0xf << 9)
+-
+-#define OSD_VIDWINADH_V1AH_SHIFT		8
+-#define OSD_VIDWINADH_V1AH			(0x7f << 8)
+-#define OSD_VIDWINADH_V0AH_SHIFT		0
+-#define OSD_VIDWINADH_V0AH			(0x7f << 0)
+-
+-#define OSD_VIDWIN0ADL_V0AL			(0xffff << 0)
+-
+-#define OSD_VIDWIN1ADL_V1AL			(0xffff << 0)
+-
+-#define OSD_OSDWINADH_O1AH_SHIFT		8
+-#define OSD_OSDWINADH_O1AH			(0x7f << 8)
+-#define OSD_OSDWINADH_O0AH_SHIFT		0
+-#define OSD_OSDWINADH_O0AH			(0x7f << 0)
+-
+-#define OSD_OSDWIN0ADL_O0AL			(0xffff << 0)
+-
+-#define OSD_OSDWIN1ADL_O1AL			(0xffff << 0)
+-
+-#define OSD_BASEPX_BPX				(0x3ff << 0)
+-
+-#define OSD_BASEPY_BPY				(0x1ff << 0)
+-
+-#define OSD_VIDWIN0XP_V0X			(0x7ff << 0)
+-
+-#define OSD_VIDWIN0YP_V0Y			(0x7ff << 0)
+-
+-#define OSD_VIDWIN0XL_V0W			(0x7ff << 0)
+-
+-#define OSD_VIDWIN0YL_V0H			(0x7ff << 0)
+-
+-#define OSD_VIDWIN1XP_V1X			(0x7ff << 0)
+-
+-#define OSD_VIDWIN1YP_V1Y			(0x7ff << 0)
+-
+-#define OSD_VIDWIN1XL_V1W			(0x7ff << 0)
+-
+-#define OSD_VIDWIN1YL_V1H			(0x7ff << 0)
+-
+-#define OSD_OSDWIN0XP_W0X			(0x7ff << 0)
+-
+-#define OSD_OSDWIN0YP_W0Y			(0x7ff << 0)
+-
+-#define OSD_OSDWIN0XL_W0W			(0x7ff << 0)
+-
+-#define OSD_OSDWIN0YL_W0H			(0x7ff << 0)
+-
+-#define OSD_OSDWIN1XP_W1X			(0x7ff << 0)
+-
+-#define OSD_OSDWIN1YP_W1Y			(0x7ff << 0)
+-
+-#define OSD_OSDWIN1XL_W1W			(0x7ff << 0)
+-
+-#define OSD_OSDWIN1YL_W1H			(0x7ff << 0)
+-
+-#define OSD_CURXP_RCSX				(0x7ff << 0)
+-
+-#define OSD_CURYP_RCSY				(0x7ff << 0)
+-
+-#define OSD_CURXL_RCSW				(0x7ff << 0)
+-
+-#define OSD_CURYL_RCSH				(0x7ff << 0)
+-
+-#define OSD_EXTMODE_EXPMDSEL			(1 << 15)
+-#define OSD_EXTMODE_SCRNHEXP_SHIFT		13
+-#define OSD_EXTMODE_SCRNHEXP			(3 << 13)
+-#define OSD_EXTMODE_SCRNVEXP			(1 << 12)
+-#define OSD_EXTMODE_OSD1BLDCHR			(1 << 11)
+-#define OSD_EXTMODE_OSD0BLDCHR			(1 << 10)
+-#define OSD_EXTMODE_ATNOSD1EN			(1 << 9)
+-#define OSD_EXTMODE_ATNOSD0EN			(1 << 8)
+-#define OSD_EXTMODE_OSDHRSZ15			(1 << 7)
+-#define OSD_EXTMODE_VIDHRSZ15			(1 << 6)
+-#define OSD_EXTMODE_ZMFILV1HEN			(1 << 5)
+-#define OSD_EXTMODE_ZMFILV1VEN			(1 << 4)
+-#define OSD_EXTMODE_ZMFILV0HEN			(1 << 3)
+-#define OSD_EXTMODE_ZMFILV0VEN			(1 << 2)
+-#define OSD_EXTMODE_EXPFILHEN			(1 << 1)
+-#define OSD_EXTMODE_EXPFILVEN			(1 << 0)
+-
+-#define OSD_MISCCTL_BLDSEL			(1 << 15)
+-#define OSD_MISCCTL_S420D			(1 << 14)
+-#define OSD_MISCCTL_BMAPT			(1 << 13)
+-#define OSD_MISCCTL_DM365M			(1 << 12)
+-#define OSD_MISCCTL_RGBEN			(1 << 7)
+-#define OSD_MISCCTL_RGBWIN			(1 << 6)
+-#define OSD_MISCCTL_DMANG			(1 << 6)
+-#define OSD_MISCCTL_TMON			(1 << 5)
+-#define OSD_MISCCTL_RSEL			(1 << 4)
+-#define OSD_MISCCTL_CPBSY			(1 << 3)
+-#define OSD_MISCCTL_PPSW			(1 << 2)
+-#define OSD_MISCCTL_PPRV			(1 << 1)
+-
+-#define OSD_CLUTRAMYCB_Y_SHIFT			8
+-#define OSD_CLUTRAMYCB_Y			(0xff << 8)
+-#define OSD_CLUTRAMYCB_CB_SHIFT			0
+-#define OSD_CLUTRAMYCB_CB			(0xff << 0)
+-
+-#define OSD_CLUTRAMCR_CR_SHIFT			8
+-#define OSD_CLUTRAMCR_CR			(0xff << 8)
+-#define OSD_CLUTRAMCR_CADDR_SHIFT		0
+-#define OSD_CLUTRAMCR_CADDR			(0xff << 0)
+-
+-#define OSD_TRANSPVAL_RGBTRANS			(0xffff << 0)
+-
+-#define OSD_TRANSPVALL_RGBL			(0xffff << 0)
+-
+-#define OSD_TRANSPVALU_Y_SHIFT			8
+-#define OSD_TRANSPVALU_Y			(0xff << 8)
+-#define OSD_TRANSPVALU_RGBU_SHIFT		0
+-#define OSD_TRANSPVALU_RGBU			(0xff << 0)
+-
+-#define OSD_TRANSPBMPIDX_BMP1_SHIFT		8
+-#define OSD_TRANSPBMPIDX_BMP1			(0xff << 8)
+-#define OSD_TRANSPBMPIDX_BMP0_SHIFT		0
+-#define OSD_TRANSPBMPIDX_BMP0			0xff
+-
+-#endif				/* _DAVINCI_VPBE_H_ */
+diff --git a/drivers/media/platform/ti/davinci/vpbe_venc.c b/drivers/media/platform/ti/davinci/vpbe_venc.c
+deleted file mode 100644
+index 4c8e31de12b1..000000000000
+--- a/drivers/media/platform/ti/davinci/vpbe_venc.c
++++ /dev/null
+@@ -1,676 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/*
+- * Copyright (C) 2010 Texas Instruments Inc
+- */
+-#include <linux/module.h>
+-#include <linux/mod_devicetable.h>
+-#include <linux/kernel.h>
+-#include <linux/init.h>
+-#include <linux/ctype.h>
+-#include <linux/delay.h>
+-#include <linux/device.h>
+-#include <linux/interrupt.h>
+-#include <linux/platform_device.h>
+-#include <linux/videodev2.h>
+-#include <linux/slab.h>
+-
+-#include <linux/platform_data/i2c-davinci.h>
+-
+-#include <linux/io.h>
+-
+-#include <media/davinci/vpbe_types.h>
+-#include <media/davinci/vpbe_venc.h>
+-#include <media/davinci/vpss.h>
+-#include <media/v4l2-device.h>
+-
+-#include "vpbe_venc_regs.h"
+-
+-#define MODULE_NAME	"davinci-vpbe-venc"
+-
+-static const struct platform_device_id vpbe_venc_devtype[] = {
+-	{
+-		.name = DM644X_VPBE_VENC_SUBDEV_NAME,
+-		.driver_data = VPBE_VERSION_1,
+-	}, {
+-		.name = DM365_VPBE_VENC_SUBDEV_NAME,
+-		.driver_data = VPBE_VERSION_2,
+-	}, {
+-		.name = DM355_VPBE_VENC_SUBDEV_NAME,
+-		.driver_data = VPBE_VERSION_3,
+-	},
+-	{
+-		/* sentinel */
+-	}
+-};
+-
+-MODULE_DEVICE_TABLE(platform, vpbe_venc_devtype);
+-
+-static int debug = 2;
+-module_param(debug, int, 0644);
+-MODULE_PARM_DESC(debug, "Debug level 0-2");
+-
+-struct venc_state {
+-	struct v4l2_subdev sd;
+-	struct venc_callback *callback;
+-	struct venc_platform_data *pdata;
+-	struct device *pdev;
+-	u32 output;
+-	v4l2_std_id std;
+-	spinlock_t lock;
+-	void __iomem *venc_base;
+-	void __iomem *vdaccfg_reg;
+-	enum vpbe_version venc_type;
+-};
+-
+-static inline struct venc_state *to_state(struct v4l2_subdev *sd)
+-{
+-	return container_of(sd, struct venc_state, sd);
+-}
+-
+-static inline u32 venc_read(struct v4l2_subdev *sd, u32 offset)
+-{
+-	struct venc_state *venc = to_state(sd);
+-
+-	return readl(venc->venc_base + offset);
+-}
+-
+-static inline u32 venc_write(struct v4l2_subdev *sd, u32 offset, u32 val)
+-{
+-	struct venc_state *venc = to_state(sd);
+-
+-	writel(val, (venc->venc_base + offset));
+-
+-	return val;
+-}
+-
+-static inline u32 venc_modify(struct v4l2_subdev *sd, u32 offset,
+-				 u32 val, u32 mask)
+-{
+-	u32 new_val = (venc_read(sd, offset) & ~mask) | (val & mask);
+-
+-	venc_write(sd, offset, new_val);
+-
+-	return new_val;
+-}
+-
+-static inline u32 vdaccfg_write(struct v4l2_subdev *sd, u32 val)
+-{
+-	struct venc_state *venc = to_state(sd);
+-
+-	writel(val, venc->vdaccfg_reg);
+-
+-	val = readl(venc->vdaccfg_reg);
+-
+-	return val;
+-}
+-
+-#define VDAC_COMPONENT	0x543
+-#define VDAC_S_VIDEO	0x210
+-/* This function sets the dac of the VPBE for various outputs
+- */
+-static int venc_set_dac(struct v4l2_subdev *sd, u32 out_index)
+-{
+-	switch (out_index) {
+-	case 0:
+-		v4l2_dbg(debug, 1, sd, "Setting output to Composite\n");
+-		venc_write(sd, VENC_DACSEL, 0);
+-		break;
+-	case 1:
+-		v4l2_dbg(debug, 1, sd, "Setting output to Component\n");
+-		venc_write(sd, VENC_DACSEL, VDAC_COMPONENT);
+-		break;
+-	case 2:
+-		v4l2_dbg(debug, 1, sd, "Setting output to S-video\n");
+-		venc_write(sd, VENC_DACSEL, VDAC_S_VIDEO);
+-		break;
+-	default:
+-		return -EINVAL;
+-	}
+-
+-	return 0;
+-}
+-
+-static void venc_enabledigitaloutput(struct v4l2_subdev *sd, int benable)
+-{
+-	struct venc_state *venc = to_state(sd);
+-
+-	v4l2_dbg(debug, 2, sd, "venc_enabledigitaloutput\n");
+-
+-	if (benable) {
+-		venc_write(sd, VENC_VMOD, 0);
+-		venc_write(sd, VENC_CVBS, 0);
+-		venc_write(sd, VENC_LCDOUT, 0);
+-		venc_write(sd, VENC_HSPLS, 0);
+-		venc_write(sd, VENC_HSTART, 0);
+-		venc_write(sd, VENC_HVALID, 0);
+-		venc_write(sd, VENC_HINT, 0);
+-		venc_write(sd, VENC_VSPLS, 0);
+-		venc_write(sd, VENC_VSTART, 0);
+-		venc_write(sd, VENC_VVALID, 0);
+-		venc_write(sd, VENC_VINT, 0);
+-		venc_write(sd, VENC_YCCCTL, 0);
+-		venc_write(sd, VENC_DACSEL, 0);
+-
+-	} else {
+-		venc_write(sd, VENC_VMOD, 0);
+-		/* disable VCLK output pin enable */
+-		venc_write(sd, VENC_VIDCTL, 0x141);
+-
+-		/* Disable output sync pins */
+-		venc_write(sd, VENC_SYNCCTL, 0);
+-
+-		/* Disable DCLOCK */
+-		venc_write(sd, VENC_DCLKCTL, 0);
+-		venc_write(sd, VENC_DRGBX1, 0x0000057C);
+-
+-		/* Disable LCD output control (accepting default polarity) */
+-		venc_write(sd, VENC_LCDOUT, 0);
+-		if (venc->venc_type != VPBE_VERSION_3)
+-			venc_write(sd, VENC_CMPNT, 0x100);
+-		venc_write(sd, VENC_HSPLS, 0);
+-		venc_write(sd, VENC_HINT, 0);
+-		venc_write(sd, VENC_HSTART, 0);
+-		venc_write(sd, VENC_HVALID, 0);
+-
+-		venc_write(sd, VENC_VSPLS, 0);
+-		venc_write(sd, VENC_VINT, 0);
+-		venc_write(sd, VENC_VSTART, 0);
+-		venc_write(sd, VENC_VVALID, 0);
+-
+-		venc_write(sd, VENC_HSDLY, 0);
+-		venc_write(sd, VENC_VSDLY, 0);
+-
+-		venc_write(sd, VENC_YCCCTL, 0);
+-		venc_write(sd, VENC_VSTARTA, 0);
+-
+-		/* Set OSD clock and OSD Sync Adavance registers */
+-		venc_write(sd, VENC_OSDCLK0, 1);
+-		venc_write(sd, VENC_OSDCLK1, 2);
+-	}
+-}
+-
+-static void
+-venc_enable_vpss_clock(int venc_type,
+-		       enum vpbe_enc_timings_type type,
+-		       unsigned int pclock)
+-{
+-	if (venc_type == VPBE_VERSION_1)
+-		return;
+-
+-	if (venc_type == VPBE_VERSION_2 && (type == VPBE_ENC_STD || (type ==
+-	    VPBE_ENC_DV_TIMINGS && pclock <= 27000000))) {
+-		vpss_enable_clock(VPSS_VENC_CLOCK_SEL, 1);
+-		vpss_enable_clock(VPSS_VPBE_CLOCK, 1);
+-		return;
+-	}
+-
+-	if (venc_type == VPBE_VERSION_3 && type == VPBE_ENC_STD)
+-		vpss_enable_clock(VPSS_VENC_CLOCK_SEL, 0);
+-}
+-
+-#define VDAC_CONFIG_SD_V3	0x0E21A6B6
+-#define VDAC_CONFIG_SD_V2	0x081141CF
+-/*
+- * setting NTSC mode
+- */
+-static int venc_set_ntsc(struct v4l2_subdev *sd)
+-{
+-	struct venc_state *venc = to_state(sd);
+-	struct venc_platform_data *pdata = venc->pdata;
+-
+-	v4l2_dbg(debug, 2, sd, "venc_set_ntsc\n");
+-
+-	/* Setup clock at VPSS & VENC for SD */
+-	vpss_enable_clock(VPSS_VENC_CLOCK_SEL, 1);
+-	if (pdata->setup_clock(VPBE_ENC_STD, V4L2_STD_525_60) < 0)
+-		return -EINVAL;
+-
+-	venc_enable_vpss_clock(venc->venc_type, VPBE_ENC_STD, V4L2_STD_525_60);
+-	venc_enabledigitaloutput(sd, 0);
+-
+-	if (venc->venc_type == VPBE_VERSION_3) {
+-		venc_write(sd, VENC_CLKCTL, 0x01);
+-		venc_write(sd, VENC_VIDCTL, 0);
+-		vdaccfg_write(sd, VDAC_CONFIG_SD_V3);
+-	} else if (venc->venc_type == VPBE_VERSION_2) {
+-		venc_write(sd, VENC_CLKCTL, 0x01);
+-		venc_write(sd, VENC_VIDCTL, 0);
+-		vdaccfg_write(sd, VDAC_CONFIG_SD_V2);
+-	} else {
+-		/* to set VENC CLK DIV to 1 - final clock is 54 MHz */
+-		venc_modify(sd, VENC_VIDCTL, 0, 1 << 1);
+-		/* Set REC656 Mode */
+-		venc_write(sd, VENC_YCCCTL, 0x1);
+-		venc_modify(sd, VENC_VDPRO, 0, VENC_VDPRO_DAFRQ);
+-		venc_modify(sd, VENC_VDPRO, 0, VENC_VDPRO_DAUPS);
+-	}
+-
+-	venc_write(sd, VENC_VMOD, 0);
+-	venc_modify(sd, VENC_VMOD, (1 << VENC_VMOD_VIE_SHIFT),
+-			VENC_VMOD_VIE);
+-	venc_modify(sd, VENC_VMOD, (0 << VENC_VMOD_VMD), VENC_VMOD_VMD);
+-	venc_modify(sd, VENC_VMOD, (0 << VENC_VMOD_TVTYP_SHIFT),
+-			VENC_VMOD_TVTYP);
+-	venc_write(sd, VENC_DACTST, 0x0);
+-	venc_modify(sd, VENC_VMOD, VENC_VMOD_VENC, VENC_VMOD_VENC);
+-
+-	return 0;
+-}
+-
+-/*
+- * setting PAL mode
+- */
+-static int venc_set_pal(struct v4l2_subdev *sd)
+-{
+-	struct venc_state *venc = to_state(sd);
+-
+-	v4l2_dbg(debug, 2, sd, "venc_set_pal\n");
+-
+-	/* Setup clock at VPSS & VENC for SD */
+-	vpss_enable_clock(VPSS_VENC_CLOCK_SEL, 1);
+-	if (venc->pdata->setup_clock(VPBE_ENC_STD, V4L2_STD_625_50) < 0)
+-		return -EINVAL;
+-
+-	venc_enable_vpss_clock(venc->venc_type, VPBE_ENC_STD, V4L2_STD_625_50);
+-	venc_enabledigitaloutput(sd, 0);
+-
+-	if (venc->venc_type == VPBE_VERSION_3) {
+-		venc_write(sd, VENC_CLKCTL, 0x1);
+-		venc_write(sd, VENC_VIDCTL, 0);
+-		vdaccfg_write(sd, VDAC_CONFIG_SD_V3);
+-	} else if (venc->venc_type == VPBE_VERSION_2) {
+-		venc_write(sd, VENC_CLKCTL, 0x1);
+-		venc_write(sd, VENC_VIDCTL, 0);
+-		vdaccfg_write(sd, VDAC_CONFIG_SD_V2);
+-	} else {
+-		/* to set VENC CLK DIV to 1 - final clock is 54 MHz */
+-		venc_modify(sd, VENC_VIDCTL, 0, 1 << 1);
+-		/* Set REC656 Mode */
+-		venc_write(sd, VENC_YCCCTL, 0x1);
+-	}
+-
+-	venc_modify(sd, VENC_SYNCCTL, 1 << VENC_SYNCCTL_OVD_SHIFT,
+-			VENC_SYNCCTL_OVD);
+-	venc_write(sd, VENC_VMOD, 0);
+-	venc_modify(sd, VENC_VMOD,
+-			(1 << VENC_VMOD_VIE_SHIFT),
+-			VENC_VMOD_VIE);
+-	venc_modify(sd, VENC_VMOD,
+-			(0 << VENC_VMOD_VMD), VENC_VMOD_VMD);
+-	venc_modify(sd, VENC_VMOD,
+-			(1 << VENC_VMOD_TVTYP_SHIFT),
+-			VENC_VMOD_TVTYP);
+-	venc_write(sd, VENC_DACTST, 0x0);
+-	venc_modify(sd, VENC_VMOD, VENC_VMOD_VENC, VENC_VMOD_VENC);
+-
+-	return 0;
+-}
+-
+-#define VDAC_CONFIG_HD_V2	0x081141EF
+-/*
+- * venc_set_480p59_94
+- *
+- * This function configures the video encoder to EDTV(525p) component setting.
+- */
+-static int venc_set_480p59_94(struct v4l2_subdev *sd)
+-{
+-	struct venc_state *venc = to_state(sd);
+-	struct venc_platform_data *pdata = venc->pdata;
+-
+-	v4l2_dbg(debug, 2, sd, "venc_set_480p59_94\n");
+-	if (venc->venc_type != VPBE_VERSION_1 &&
+-	    venc->venc_type != VPBE_VERSION_2)
+-		return -EINVAL;
+-
+-	/* Setup clock at VPSS & VENC for SD */
+-	if (pdata->setup_clock(VPBE_ENC_DV_TIMINGS, 27000000) < 0)
+-		return -EINVAL;
+-
+-	venc_enable_vpss_clock(venc->venc_type, VPBE_ENC_DV_TIMINGS, 27000000);
+-	venc_enabledigitaloutput(sd, 0);
+-
+-	if (venc->venc_type == VPBE_VERSION_2)
+-		vdaccfg_write(sd, VDAC_CONFIG_HD_V2);
+-	venc_write(sd, VENC_OSDCLK0, 0);
+-	venc_write(sd, VENC_OSDCLK1, 1);
+-
+-	if (venc->venc_type == VPBE_VERSION_1) {
+-		venc_modify(sd, VENC_VDPRO, VENC_VDPRO_DAFRQ,
+-			    VENC_VDPRO_DAFRQ);
+-		venc_modify(sd, VENC_VDPRO, VENC_VDPRO_DAUPS,
+-			    VENC_VDPRO_DAUPS);
+-	}
+-
+-	venc_write(sd, VENC_VMOD, 0);
+-	venc_modify(sd, VENC_VMOD, (1 << VENC_VMOD_VIE_SHIFT),
+-		    VENC_VMOD_VIE);
+-	venc_modify(sd, VENC_VMOD, VENC_VMOD_HDMD, VENC_VMOD_HDMD);
+-	venc_modify(sd, VENC_VMOD, (HDTV_525P << VENC_VMOD_TVTYP_SHIFT),
+-		    VENC_VMOD_TVTYP);
+-	venc_modify(sd, VENC_VMOD, VENC_VMOD_VDMD_YCBCR8 <<
+-		    VENC_VMOD_VDMD_SHIFT, VENC_VMOD_VDMD);
+-
+-	venc_modify(sd, VENC_VMOD, VENC_VMOD_VENC, VENC_VMOD_VENC);
+-
+-	return 0;
+-}
+-
+-/*
+- * venc_set_625p
+- *
+- * This function configures the video encoder to HDTV(625p) component setting
+- */
+-static int venc_set_576p50(struct v4l2_subdev *sd)
+-{
+-	struct venc_state *venc = to_state(sd);
+-	struct venc_platform_data *pdata = venc->pdata;
+-
+-	v4l2_dbg(debug, 2, sd, "venc_set_576p50\n");
+-
+-	if (venc->venc_type != VPBE_VERSION_1 &&
+-	    venc->venc_type != VPBE_VERSION_2)
+-		return -EINVAL;
+-	/* Setup clock at VPSS & VENC for SD */
+-	if (pdata->setup_clock(VPBE_ENC_DV_TIMINGS, 27000000) < 0)
+-		return -EINVAL;
+-
+-	venc_enable_vpss_clock(venc->venc_type, VPBE_ENC_DV_TIMINGS, 27000000);
+-	venc_enabledigitaloutput(sd, 0);
+-
+-	if (venc->venc_type == VPBE_VERSION_2)
+-		vdaccfg_write(sd, VDAC_CONFIG_HD_V2);
+-
+-	venc_write(sd, VENC_OSDCLK0, 0);
+-	venc_write(sd, VENC_OSDCLK1, 1);
+-
+-	if (venc->venc_type == VPBE_VERSION_1) {
+-		venc_modify(sd, VENC_VDPRO, VENC_VDPRO_DAFRQ,
+-			    VENC_VDPRO_DAFRQ);
+-		venc_modify(sd, VENC_VDPRO, VENC_VDPRO_DAUPS,
+-			    VENC_VDPRO_DAUPS);
+-	}
+-
+-	venc_write(sd, VENC_VMOD, 0);
+-	venc_modify(sd, VENC_VMOD, (1 << VENC_VMOD_VIE_SHIFT),
+-		    VENC_VMOD_VIE);
+-	venc_modify(sd, VENC_VMOD, VENC_VMOD_HDMD, VENC_VMOD_HDMD);
+-	venc_modify(sd, VENC_VMOD, (HDTV_625P << VENC_VMOD_TVTYP_SHIFT),
+-		    VENC_VMOD_TVTYP);
+-
+-	venc_modify(sd, VENC_VMOD, VENC_VMOD_VDMD_YCBCR8 <<
+-		    VENC_VMOD_VDMD_SHIFT, VENC_VMOD_VDMD);
+-	venc_modify(sd, VENC_VMOD, VENC_VMOD_VENC, VENC_VMOD_VENC);
+-
+-	return 0;
+-}
+-
+-/*
+- * venc_set_720p60_internal - Setup 720p60 in venc for dm365 only
+- */
+-static int venc_set_720p60_internal(struct v4l2_subdev *sd)
+-{
+-	struct venc_state *venc = to_state(sd);
+-	struct venc_platform_data *pdata = venc->pdata;
+-
+-	if (pdata->setup_clock(VPBE_ENC_DV_TIMINGS, 74250000) < 0)
+-		return -EINVAL;
+-
+-	venc_enable_vpss_clock(venc->venc_type, VPBE_ENC_DV_TIMINGS, 74250000);
+-	venc_enabledigitaloutput(sd, 0);
+-
+-	venc_write(sd, VENC_OSDCLK0, 0);
+-	venc_write(sd, VENC_OSDCLK1, 1);
+-
+-	venc_write(sd, VENC_VMOD, 0);
+-	/* DM365 component HD mode */
+-	venc_modify(sd, VENC_VMOD, (1 << VENC_VMOD_VIE_SHIFT),
+-	    VENC_VMOD_VIE);
+-	venc_modify(sd, VENC_VMOD, VENC_VMOD_HDMD, VENC_VMOD_HDMD);
+-	venc_modify(sd, VENC_VMOD, (HDTV_720P << VENC_VMOD_TVTYP_SHIFT),
+-		    VENC_VMOD_TVTYP);
+-	venc_modify(sd, VENC_VMOD, VENC_VMOD_VENC, VENC_VMOD_VENC);
+-	venc_write(sd, VENC_XHINTVL, 0);
+-	return 0;
+-}
+-
+-/*
+- * venc_set_1080i30_internal - Setup 1080i30 in venc for dm365 only
+- */
+-static int venc_set_1080i30_internal(struct v4l2_subdev *sd)
+-{
+-	struct venc_state *venc = to_state(sd);
+-	struct venc_platform_data *pdata = venc->pdata;
+-
+-	if (pdata->setup_clock(VPBE_ENC_DV_TIMINGS, 74250000) < 0)
+-		return -EINVAL;
+-
+-	venc_enable_vpss_clock(venc->venc_type, VPBE_ENC_DV_TIMINGS, 74250000);
+-	venc_enabledigitaloutput(sd, 0);
+-
+-	venc_write(sd, VENC_OSDCLK0, 0);
+-	venc_write(sd, VENC_OSDCLK1, 1);
+-
+-
+-	venc_write(sd, VENC_VMOD, 0);
+-	/* DM365 component HD mode */
+-	venc_modify(sd, VENC_VMOD, (1 << VENC_VMOD_VIE_SHIFT),
+-		    VENC_VMOD_VIE);
+-	venc_modify(sd, VENC_VMOD, VENC_VMOD_HDMD, VENC_VMOD_HDMD);
+-	venc_modify(sd, VENC_VMOD, (HDTV_1080I << VENC_VMOD_TVTYP_SHIFT),
+-		    VENC_VMOD_TVTYP);
+-	venc_modify(sd, VENC_VMOD, VENC_VMOD_VENC, VENC_VMOD_VENC);
+-	venc_write(sd, VENC_XHINTVL, 0);
+-	return 0;
+-}
+-
+-static int venc_s_std_output(struct v4l2_subdev *sd, v4l2_std_id norm)
+-{
+-	v4l2_dbg(debug, 1, sd, "venc_s_std_output\n");
+-
+-	if (norm & V4L2_STD_525_60)
+-		return venc_set_ntsc(sd);
+-	else if (norm & V4L2_STD_625_50)
+-		return venc_set_pal(sd);
+-
+-	return -EINVAL;
+-}
+-
+-static int venc_s_dv_timings(struct v4l2_subdev *sd,
+-			    struct v4l2_dv_timings *dv_timings)
+-{
+-	struct venc_state *venc = to_state(sd);
+-	u32 height = dv_timings->bt.height;
+-	int ret;
+-
+-	v4l2_dbg(debug, 1, sd, "venc_s_dv_timings\n");
+-
+-	if (height == 576)
+-		return venc_set_576p50(sd);
+-	else if (height == 480)
+-		return venc_set_480p59_94(sd);
+-	else if ((height == 720) &&
+-			(venc->venc_type == VPBE_VERSION_2)) {
+-		/* TBD setup internal 720p mode here */
+-		ret = venc_set_720p60_internal(sd);
+-		/* for DM365 VPBE, there is DAC inside */
+-		vdaccfg_write(sd, VDAC_CONFIG_HD_V2);
+-		return ret;
+-	} else if ((height == 1080) &&
+-		(venc->venc_type == VPBE_VERSION_2)) {
+-		/* TBD setup internal 1080i mode here */
+-		ret = venc_set_1080i30_internal(sd);
+-		/* for DM365 VPBE, there is DAC inside */
+-		vdaccfg_write(sd, VDAC_CONFIG_HD_V2);
+-		return ret;
+-	}
+-	return -EINVAL;
+-}
+-
+-static int venc_s_routing(struct v4l2_subdev *sd, u32 input, u32 output,
+-			  u32 config)
+-{
+-	struct venc_state *venc = to_state(sd);
+-	int ret;
+-
+-	v4l2_dbg(debug, 1, sd, "venc_s_routing\n");
+-
+-	ret = venc_set_dac(sd, output);
+-	if (!ret)
+-		venc->output = output;
+-
 -	return ret;
 -}
 -
--/*
-- * vpfe_remove : It un-register device from V4L2 driver
-- */
--static int vpfe_remove(struct platform_device *pdev)
+-static long venc_command(struct v4l2_subdev *sd, unsigned int cmd, void *arg)
 -{
--	struct vpfe_device *vpfe_dev = platform_get_drvdata(pdev);
+-	u32 val;
 -
--	v4l2_info(pdev->dev.driver, "vpfe_remove\n");
+-	switch (cmd) {
+-	case VENC_GET_FLD:
+-		val = venc_read(sd, VENC_VSTAT);
+-		*((int *)arg) = ((val & VENC_VSTAT_FIDST) ==
+-		VENC_VSTAT_FIDST);
+-		break;
+-	default:
+-		v4l2_err(sd, "Wrong IOCTL cmd\n");
+-		break;
+-	}
 -
--	free_irq(vpfe_dev->ccdc_irq0, vpfe_dev);
--	kfree(vpfe_dev->sd);
--	v4l2_device_unregister(&vpfe_dev->v4l2_dev);
--	video_unregister_device(&vpfe_dev->video_dev);
--	kfree(vpfe_dev);
--	kfree(ccdc_cfg);
 -	return 0;
 -}
 -
--static int vpfe_suspend(struct device *dev)
--{
--	return 0;
--}
--
--static int vpfe_resume(struct device *dev)
--{
--	return 0;
--}
--
--static const struct dev_pm_ops vpfe_dev_pm_ops = {
--	.suspend = vpfe_suspend,
--	.resume = vpfe_resume,
+-static const struct v4l2_subdev_core_ops venc_core_ops = {
+-	.command      = venc_command,
 -};
 -
--static struct platform_driver vpfe_driver = {
--	.driver = {
--		.name = CAPTURE_DRV_NAME,
--		.pm = &vpfe_dev_pm_ops,
+-static const struct v4l2_subdev_video_ops venc_video_ops = {
+-	.s_routing = venc_s_routing,
+-	.s_std_output = venc_s_std_output,
+-	.s_dv_timings = venc_s_dv_timings,
+-};
+-
+-static const struct v4l2_subdev_ops venc_ops = {
+-	.core = &venc_core_ops,
+-	.video = &venc_video_ops,
+-};
+-
+-static int venc_initialize(struct v4l2_subdev *sd)
+-{
+-	struct venc_state *venc = to_state(sd);
+-	int ret;
+-
+-	/* Set default to output to composite and std to NTSC */
+-	venc->output = 0;
+-	venc->std = V4L2_STD_525_60;
+-
+-	ret = venc_s_routing(sd, 0, venc->output, 0);
+-	if (ret < 0) {
+-		v4l2_err(sd, "Error setting output during init\n");
+-		return -EINVAL;
+-	}
+-
+-	ret = venc_s_std_output(sd, venc->std);
+-	if (ret < 0) {
+-		v4l2_err(sd, "Error setting std during init\n");
+-		return -EINVAL;
+-	}
+-
+-	return ret;
+-}
+-
+-static int venc_device_get(struct device *dev, void *data)
+-{
+-	struct platform_device *pdev = to_platform_device(dev);
+-	struct venc_state **venc = data;
+-
+-	if (strstr(pdev->name, "vpbe-venc") != NULL)
+-		*venc = platform_get_drvdata(pdev);
+-
+-	return 0;
+-}
+-
+-struct v4l2_subdev *venc_sub_dev_init(struct v4l2_device *v4l2_dev,
+-		const char *venc_name)
+-{
+-	struct venc_state *venc = NULL;
+-
+-	bus_for_each_dev(&platform_bus_type, NULL, &venc,
+-			venc_device_get);
+-	if (venc == NULL)
+-		return NULL;
+-
+-	v4l2_subdev_init(&venc->sd, &venc_ops);
+-
+-	strscpy(venc->sd.name, venc_name, sizeof(venc->sd.name));
+-	if (v4l2_device_register_subdev(v4l2_dev, &venc->sd) < 0) {
+-		v4l2_err(v4l2_dev,
+-			"vpbe unable to register venc sub device\n");
+-		return NULL;
+-	}
+-	if (venc_initialize(&venc->sd)) {
+-		v4l2_err(v4l2_dev,
+-			"vpbe venc initialization failed\n");
+-		return NULL;
+-	}
+-
+-	return &venc->sd;
+-}
+-EXPORT_SYMBOL(venc_sub_dev_init);
+-
+-static int venc_probe(struct platform_device *pdev)
+-{
+-	const struct platform_device_id *pdev_id;
+-	struct venc_state *venc;
+-
+-	if (!pdev->dev.platform_data) {
+-		dev_err(&pdev->dev, "No platform data for VENC sub device");
+-		return -EINVAL;
+-	}
+-
+-	pdev_id = platform_get_device_id(pdev);
+-	if (!pdev_id)
+-		return -EINVAL;
+-
+-	venc = devm_kzalloc(&pdev->dev, sizeof(struct venc_state), GFP_KERNEL);
+-	if (venc == NULL)
+-		return -ENOMEM;
+-
+-	venc->venc_type = pdev_id->driver_data;
+-	venc->pdev = &pdev->dev;
+-	venc->pdata = pdev->dev.platform_data;
+-
+-	venc->venc_base = devm_platform_ioremap_resource(pdev, 0);
+-	if (IS_ERR(venc->venc_base))
+-		return PTR_ERR(venc->venc_base);
+-
+-	if (venc->venc_type != VPBE_VERSION_1) {
+-		venc->vdaccfg_reg = devm_platform_ioremap_resource(pdev, 1);
+-		if (IS_ERR(venc->vdaccfg_reg))
+-			return PTR_ERR(venc->vdaccfg_reg);
+-	}
+-	spin_lock_init(&venc->lock);
+-	platform_set_drvdata(pdev, venc);
+-	dev_notice(venc->pdev, "VENC sub device probe success\n");
+-
+-	return 0;
+-}
+-
+-static int venc_remove(struct platform_device *pdev)
+-{
+-	return 0;
+-}
+-
+-static struct platform_driver venc_driver = {
+-	.probe		= venc_probe,
+-	.remove		= venc_remove,
+-	.driver		= {
+-		.name	= MODULE_NAME,
 -	},
--	.probe = vpfe_probe,
--	.remove = vpfe_remove,
+-	.id_table	= vpbe_venc_devtype
 -};
 -
--module_platform_driver(vpfe_driver);
-diff --git a/include/media/davinci/vpfe_capture.h b/include/media/davinci/vpfe_capture.h
+-module_platform_driver(venc_driver);
+-
+-MODULE_LICENSE("GPL");
+-MODULE_DESCRIPTION("VPBE VENC Driver");
+-MODULE_AUTHOR("Texas Instruments");
+diff --git a/drivers/media/platform/ti/davinci/vpbe_venc_regs.h b/drivers/media/platform/ti/davinci/vpbe_venc_regs.h
 deleted file mode 100644
-index 4ad53031e2f7..000000000000
---- a/include/media/davinci/vpfe_capture.h
+index 29d8fc3af662..000000000000
+--- a/drivers/media/platform/ti/davinci/vpbe_venc_regs.h
 +++ /dev/null
-@@ -1,177 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-or-later */
+@@ -1,165 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-only */
 -/*
-- * Copyright (C) 2008-2009 Texas Instruments Inc
+- * Copyright (C) 2006-2010 Texas Instruments Inc
 - */
+-#ifndef _VPBE_VENC_REGS_H
+-#define _VPBE_VENC_REGS_H
 -
--#ifndef _VPFE_CAPTURE_H
--#define _VPFE_CAPTURE_H
+-/* VPBE Video Encoder / Digital LCD Subsystem Registers (VENC) */
+-#define VENC_VMOD				0x00
+-#define VENC_VIDCTL				0x04
+-#define VENC_VDPRO				0x08
+-#define VENC_SYNCCTL				0x0C
+-#define VENC_HSPLS				0x10
+-#define VENC_VSPLS				0x14
+-#define VENC_HINT				0x18
+-#define VENC_HSTART				0x1C
+-#define VENC_HVALID				0x20
+-#define VENC_VINT				0x24
+-#define VENC_VSTART				0x28
+-#define VENC_VVALID				0x2C
+-#define VENC_HSDLY				0x30
+-#define VENC_VSDLY				0x34
+-#define VENC_YCCCTL				0x38
+-#define VENC_RGBCTL				0x3C
+-#define VENC_RGBCLP				0x40
+-#define VENC_LINECTL				0x44
+-#define VENC_CULLLINE				0x48
+-#define VENC_LCDOUT				0x4C
+-#define VENC_BRTS				0x50
+-#define VENC_BRTW				0x54
+-#define VENC_ACCTL				0x58
+-#define VENC_PWMP				0x5C
+-#define VENC_PWMW				0x60
+-#define VENC_DCLKCTL				0x64
+-#define VENC_DCLKPTN0				0x68
+-#define VENC_DCLKPTN1				0x6C
+-#define VENC_DCLKPTN2				0x70
+-#define VENC_DCLKPTN3				0x74
+-#define VENC_DCLKPTN0A				0x78
+-#define VENC_DCLKPTN1A				0x7C
+-#define VENC_DCLKPTN2A				0x80
+-#define VENC_DCLKPTN3A				0x84
+-#define VENC_DCLKHS				0x88
+-#define VENC_DCLKHSA				0x8C
+-#define VENC_DCLKHR				0x90
+-#define VENC_DCLKVS				0x94
+-#define VENC_DCLKVR				0x98
+-#define VENC_CAPCTL				0x9C
+-#define VENC_CAPDO				0xA0
+-#define VENC_CAPDE				0xA4
+-#define VENC_ATR0				0xA8
+-#define VENC_ATR1				0xAC
+-#define VENC_ATR2				0xB0
+-#define VENC_VSTAT				0xB8
+-#define VENC_RAMADR				0xBC
+-#define VENC_RAMPORT				0xC0
+-#define VENC_DACTST				0xC4
+-#define VENC_YCOLVL				0xC8
+-#define VENC_SCPROG				0xCC
+-#define VENC_CVBS				0xDC
+-#define VENC_CMPNT				0xE0
+-#define VENC_ETMG0				0xE4
+-#define VENC_ETMG1				0xE8
+-#define VENC_ETMG2				0xEC
+-#define VENC_ETMG3				0xF0
+-#define VENC_DACSEL				0xF4
+-#define VENC_ARGBX0				0x100
+-#define VENC_ARGBX1				0x104
+-#define VENC_ARGBX2				0x108
+-#define VENC_ARGBX3				0x10C
+-#define VENC_ARGBX4				0x110
+-#define VENC_DRGBX0				0x114
+-#define VENC_DRGBX1				0x118
+-#define VENC_DRGBX2				0x11C
+-#define VENC_DRGBX3				0x120
+-#define VENC_DRGBX4				0x124
+-#define VENC_VSTARTA				0x128
+-#define VENC_OSDCLK0				0x12C
+-#define VENC_OSDCLK1				0x130
+-#define VENC_HVLDCL0				0x134
+-#define VENC_HVLDCL1				0x138
+-#define VENC_OSDHADV				0x13C
+-#define VENC_CLKCTL				0x140
+-#define VENC_GAMCTL				0x144
+-#define VENC_XHINTVL				0x174
 -
--#ifdef __KERNEL__
+-/* bit definitions */
+-#define VPBE_PCR_VENC_DIV			(1 << 1)
+-#define VPBE_PCR_CLK_OFF			(1 << 0)
 -
--/* Header files */
--#include <media/v4l2-dev.h>
+-#define VENC_VMOD_VDMD_SHIFT			12
+-#define VENC_VMOD_VDMD_YCBCR16			0
+-#define VENC_VMOD_VDMD_YCBCR8			1
+-#define VENC_VMOD_VDMD_RGB666			2
+-#define VENC_VMOD_VDMD_RGB8			3
+-#define VENC_VMOD_VDMD_EPSON			4
+-#define VENC_VMOD_VDMD_CASIO			5
+-#define VENC_VMOD_VDMD_UDISPQVGA		6
+-#define VENC_VMOD_VDMD_STNLCD			7
+-#define VENC_VMOD_VIE_SHIFT			1
+-#define VENC_VMOD_VDMD				(7 << 12)
+-#define VENC_VMOD_ITLCL				(1 << 11)
+-#define VENC_VMOD_ITLC				(1 << 10)
+-#define VENC_VMOD_NSIT				(1 << 9)
+-#define VENC_VMOD_HDMD				(1 << 8)
+-#define VENC_VMOD_TVTYP_SHIFT			6
+-#define VENC_VMOD_TVTYP				(3 << 6)
+-#define VENC_VMOD_SLAVE				(1 << 5)
+-#define VENC_VMOD_VMD				(1 << 4)
+-#define VENC_VMOD_BLNK				(1 << 3)
+-#define VENC_VMOD_VIE				(1 << 1)
+-#define VENC_VMOD_VENC				(1 << 0)
+-
+-/* VMOD TVTYP options for HDMD=0 */
+-#define SDTV_NTSC				0
+-#define SDTV_PAL				1
+-/* VMOD TVTYP options for HDMD=1 */
+-#define HDTV_525P				0
+-#define HDTV_625P				1
+-#define HDTV_1080I				2
+-#define HDTV_720P				3
+-
+-#define VENC_VIDCTL_VCLKP			(1 << 14)
+-#define VENC_VIDCTL_VCLKE_SHIFT			13
+-#define VENC_VIDCTL_VCLKE			(1 << 13)
+-#define VENC_VIDCTL_VCLKZ_SHIFT			12
+-#define VENC_VIDCTL_VCLKZ			(1 << 12)
+-#define VENC_VIDCTL_SYDIR_SHIFT			8
+-#define VENC_VIDCTL_SYDIR			(1 << 8)
+-#define VENC_VIDCTL_DOMD_SHIFT			4
+-#define VENC_VIDCTL_DOMD			(3 << 4)
+-#define VENC_VIDCTL_YCDIR_SHIFT			0
+-#define VENC_VIDCTL_YCDIR			(1 << 0)
+-
+-#define VENC_VDPRO_ATYCC_SHIFT			5
+-#define VENC_VDPRO_ATYCC			(1 << 5)
+-#define VENC_VDPRO_ATCOM_SHIFT			4
+-#define VENC_VDPRO_ATCOM			(1 << 4)
+-#define VENC_VDPRO_DAFRQ			(1 << 3)
+-#define VENC_VDPRO_DAUPS			(1 << 2)
+-#define VENC_VDPRO_CUPS				(1 << 1)
+-#define VENC_VDPRO_YUPS				(1 << 0)
+-
+-#define VENC_SYNCCTL_VPL_SHIFT			3
+-#define VENC_SYNCCTL_VPL			(1 << 3)
+-#define VENC_SYNCCTL_HPL_SHIFT			2
+-#define VENC_SYNCCTL_HPL			(1 << 2)
+-#define VENC_SYNCCTL_SYEV_SHIFT			1
+-#define VENC_SYNCCTL_SYEV			(1 << 1)
+-#define VENC_SYNCCTL_SYEH_SHIFT			0
+-#define VENC_SYNCCTL_SYEH			(1 << 0)
+-#define VENC_SYNCCTL_OVD_SHIFT			14
+-#define VENC_SYNCCTL_OVD			(1 << 14)
+-
+-#define VENC_DCLKCTL_DCKEC_SHIFT		11
+-#define VENC_DCLKCTL_DCKEC			(1 << 11)
+-#define VENC_DCLKCTL_DCKPW_SHIFT		0
+-#define VENC_DCLKCTL_DCKPW			(0x3f << 0)
+-
+-#define VENC_VSTAT_FIDST			(1 << 4)
+-
+-#define VENC_CMPNT_MRGB_SHIFT			14
+-#define VENC_CMPNT_MRGB				(1 << 14)
+-
+-#endif				/* _VPBE_VENC_REGS_H */
+diff --git a/drivers/media/platform/ti/davinci/vpss.c b/drivers/media/platform/ti/davinci/vpss.c
+deleted file mode 100644
+index d15b991ab17c..000000000000
+--- a/drivers/media/platform/ti/davinci/vpss.c
++++ /dev/null
+@@ -1,529 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-or-later
+-/*
+- * Copyright (C) 2009 Texas Instruments.
+- *
+- * common vpss system module platform driver for all video drivers.
+- */
+-#include <linux/module.h>
+-#include <linux/platform_device.h>
+-#include <linux/io.h>
+-#include <linux/pm_runtime.h>
+-#include <linux/err.h>
+-
+-#include <media/davinci/vpss.h>
+-
+-MODULE_LICENSE("GPL");
+-MODULE_DESCRIPTION("VPSS Driver");
+-MODULE_AUTHOR("Texas Instruments");
+-
+-/* DM644x defines */
+-#define DM644X_SBL_PCR_VPSS		(4)
+-
+-#define DM355_VPSSBL_INTSEL		0x10
+-#define DM355_VPSSBL_EVTSEL		0x14
+-/* vpss BL register offsets */
+-#define DM355_VPSSBL_CCDCMUX		0x1c
+-/* vpss CLK register offsets */
+-#define DM355_VPSSCLK_CLKCTRL		0x04
+-/* masks and shifts */
+-#define VPSS_HSSISEL_SHIFT		4
+-/*
+- * VDINT0 - vpss_int0, VDINT1 - vpss_int1, H3A - vpss_int4,
+- * IPIPE_INT1_SDR - vpss_int5
+- */
+-#define DM355_VPSSBL_INTSEL_DEFAULT	0xff83ff10
+-/* VENCINT - vpss_int8 */
+-#define DM355_VPSSBL_EVTSEL_DEFAULT	0x4
+-
+-#define DM365_ISP5_PCCR				0x04
+-#define DM365_ISP5_PCCR_BL_CLK_ENABLE		BIT(0)
+-#define DM365_ISP5_PCCR_ISIF_CLK_ENABLE		BIT(1)
+-#define DM365_ISP5_PCCR_H3A_CLK_ENABLE		BIT(2)
+-#define DM365_ISP5_PCCR_RSZ_CLK_ENABLE		BIT(3)
+-#define DM365_ISP5_PCCR_IPIPE_CLK_ENABLE	BIT(4)
+-#define DM365_ISP5_PCCR_IPIPEIF_CLK_ENABLE	BIT(5)
+-#define DM365_ISP5_PCCR_RSV			BIT(6)
+-
+-#define DM365_ISP5_BCR			0x08
+-#define DM365_ISP5_BCR_ISIF_OUT_ENABLE	BIT(1)
+-
+-#define DM365_ISP5_INTSEL1		0x10
+-#define DM365_ISP5_INTSEL2		0x14
+-#define DM365_ISP5_INTSEL3		0x18
+-#define DM365_ISP5_CCDCMUX		0x20
+-#define DM365_ISP5_PG_FRAME_SIZE	0x28
+-#define DM365_VPBE_CLK_CTRL		0x00
+-
+-#define VPSS_CLK_CTRL			0x01c40044
+-#define VPSS_CLK_CTRL_VENCCLKEN		BIT(3)
+-#define VPSS_CLK_CTRL_DACCLKEN		BIT(4)
+-
+-/*
+- * vpss interrupts. VDINT0 - vpss_int0, VDINT1 - vpss_int1,
+- * AF - vpss_int3
+- */
+-#define DM365_ISP5_INTSEL1_DEFAULT	0x0b1f0100
+-/* AEW - vpss_int6, RSZ_INT_DMA - vpss_int5 */
+-#define DM365_ISP5_INTSEL2_DEFAULT	0x1f0a0f1f
+-/* VENC - vpss_int8 */
+-#define DM365_ISP5_INTSEL3_DEFAULT	0x00000015
+-
+-/* masks and shifts for DM365*/
+-#define DM365_CCDC_PG_VD_POL_SHIFT	0
+-#define DM365_CCDC_PG_HD_POL_SHIFT	1
+-
+-#define CCD_SRC_SEL_MASK		(BIT_MASK(5) | BIT_MASK(4))
+-#define CCD_SRC_SEL_SHIFT		4
+-
+-/* Different SoC platforms supported by this driver */
+-enum vpss_platform_type {
+-	DM644X,
+-	DM355,
+-	DM365,
+-};
+-
+-/*
+- * vpss operations. Depends on platform. Not all functions are available
+- * on all platforms. The api, first check if a function is available before
+- * invoking it. In the probe, the function ptrs are initialized based on
+- * vpss name. vpss name can be "dm355_vpss", "dm644x_vpss" etc.
+- */
+-struct vpss_hw_ops {
+-	/* enable clock */
+-	int (*enable_clock)(enum vpss_clock_sel clock_sel, int en);
+-	/* select input to ccdc */
+-	void (*select_ccdc_source)(enum vpss_ccdc_source_sel src_sel);
+-	/* clear wbl overflow bit */
+-	int (*clear_wbl_overflow)(enum vpss_wbl_sel wbl_sel);
+-	/* set sync polarity */
+-	void (*set_sync_pol)(struct vpss_sync_pol);
+-	/* set the PG_FRAME_SIZE register*/
+-	void (*set_pg_frame_size)(struct vpss_pg_frame_size);
+-	/* check and clear interrupt if occurred */
+-	int (*dma_complete_interrupt)(void);
+-};
+-
+-/* vpss configuration */
+-struct vpss_oper_config {
+-	__iomem void *vpss_regs_base0;
+-	__iomem void *vpss_regs_base1;
+-	__iomem void *vpss_regs_base2;
+-	enum vpss_platform_type platform;
+-	spinlock_t vpss_lock;
+-	struct vpss_hw_ops hw_ops;
+-};
+-
+-static struct vpss_oper_config oper_cfg;
+-
+-/* register access routines */
+-static inline u32 bl_regr(u32 offset)
+-{
+-	return __raw_readl(oper_cfg.vpss_regs_base0 + offset);
+-}
+-
+-static inline void bl_regw(u32 val, u32 offset)
+-{
+-	__raw_writel(val, oper_cfg.vpss_regs_base0 + offset);
+-}
+-
+-static inline u32 vpss_regr(u32 offset)
+-{
+-	return __raw_readl(oper_cfg.vpss_regs_base1 + offset);
+-}
+-
+-static inline void vpss_regw(u32 val, u32 offset)
+-{
+-	__raw_writel(val, oper_cfg.vpss_regs_base1 + offset);
+-}
+-
+-/* For DM365 only */
+-static inline u32 isp5_read(u32 offset)
+-{
+-	return __raw_readl(oper_cfg.vpss_regs_base0 + offset);
+-}
+-
+-/* For DM365 only */
+-static inline void isp5_write(u32 val, u32 offset)
+-{
+-	__raw_writel(val, oper_cfg.vpss_regs_base0 + offset);
+-}
+-
+-static void dm365_select_ccdc_source(enum vpss_ccdc_source_sel src_sel)
+-{
+-	u32 temp = isp5_read(DM365_ISP5_CCDCMUX) & ~CCD_SRC_SEL_MASK;
+-
+-	/* if we are using pattern generator, enable it */
+-	if (src_sel == VPSS_PGLPBK || src_sel == VPSS_CCDCPG)
+-		temp |= 0x08;
+-
+-	temp |= (src_sel << CCD_SRC_SEL_SHIFT);
+-	isp5_write(temp, DM365_ISP5_CCDCMUX);
+-}
+-
+-static void dm355_select_ccdc_source(enum vpss_ccdc_source_sel src_sel)
+-{
+-	bl_regw(src_sel << VPSS_HSSISEL_SHIFT, DM355_VPSSBL_CCDCMUX);
+-}
+-
+-int vpss_dma_complete_interrupt(void)
+-{
+-	if (!oper_cfg.hw_ops.dma_complete_interrupt)
+-		return 2;
+-	return oper_cfg.hw_ops.dma_complete_interrupt();
+-}
+-EXPORT_SYMBOL(vpss_dma_complete_interrupt);
+-
+-int vpss_select_ccdc_source(enum vpss_ccdc_source_sel src_sel)
+-{
+-	if (!oper_cfg.hw_ops.select_ccdc_source)
+-		return -EINVAL;
+-
+-	oper_cfg.hw_ops.select_ccdc_source(src_sel);
+-	return 0;
+-}
+-EXPORT_SYMBOL(vpss_select_ccdc_source);
+-
+-static int dm644x_clear_wbl_overflow(enum vpss_wbl_sel wbl_sel)
+-{
+-	u32 mask = 1, val;
+-
+-	if (wbl_sel < VPSS_PCR_AEW_WBL_0 ||
+-	    wbl_sel > VPSS_PCR_CCDC_WBL_O)
+-		return -EINVAL;
+-
+-	/* writing a 0 clear the overflow */
+-	mask = ~(mask << wbl_sel);
+-	val = bl_regr(DM644X_SBL_PCR_VPSS) & mask;
+-	bl_regw(val, DM644X_SBL_PCR_VPSS);
+-	return 0;
+-}
+-
+-void vpss_set_sync_pol(struct vpss_sync_pol sync)
+-{
+-	if (!oper_cfg.hw_ops.set_sync_pol)
+-		return;
+-
+-	oper_cfg.hw_ops.set_sync_pol(sync);
+-}
+-EXPORT_SYMBOL(vpss_set_sync_pol);
+-
+-int vpss_clear_wbl_overflow(enum vpss_wbl_sel wbl_sel)
+-{
+-	if (!oper_cfg.hw_ops.clear_wbl_overflow)
+-		return -EINVAL;
+-
+-	return oper_cfg.hw_ops.clear_wbl_overflow(wbl_sel);
+-}
+-EXPORT_SYMBOL(vpss_clear_wbl_overflow);
+-
+-/*
+- *  dm355_enable_clock - Enable VPSS Clock
+- *  @clock_sel: Clock to be enabled/disabled
+- *  @en: enable/disable flag
+- *
+- *  This is called to enable or disable a vpss clock
+- */
+-static int dm355_enable_clock(enum vpss_clock_sel clock_sel, int en)
+-{
+-	unsigned long flags;
+-	u32 utemp, mask = 0x1, shift = 0;
+-
+-	switch (clock_sel) {
+-	case VPSS_VPBE_CLOCK:
+-		/* nothing since lsb */
+-		break;
+-	case VPSS_VENC_CLOCK_SEL:
+-		shift = 2;
+-		break;
+-	case VPSS_CFALD_CLOCK:
+-		shift = 3;
+-		break;
+-	case VPSS_H3A_CLOCK:
+-		shift = 4;
+-		break;
+-	case VPSS_IPIPE_CLOCK:
+-		shift = 5;
+-		break;
+-	case VPSS_CCDC_CLOCK:
+-		shift = 6;
+-		break;
+-	default:
+-		printk(KERN_ERR "dm355_enable_clock: Invalid selector: %d\n",
+-		       clock_sel);
+-		return -EINVAL;
+-	}
+-
+-	spin_lock_irqsave(&oper_cfg.vpss_lock, flags);
+-	utemp = vpss_regr(DM355_VPSSCLK_CLKCTRL);
+-	if (!en)
+-		utemp &= ~(mask << shift);
+-	else
+-		utemp |= (mask << shift);
+-
+-	vpss_regw(utemp, DM355_VPSSCLK_CLKCTRL);
+-	spin_unlock_irqrestore(&oper_cfg.vpss_lock, flags);
+-	return 0;
+-}
+-
+-static int dm365_enable_clock(enum vpss_clock_sel clock_sel, int en)
+-{
+-	unsigned long flags;
+-	u32 utemp, mask = 0x1, shift = 0, offset = DM365_ISP5_PCCR;
+-	u32 (*read)(u32 offset) = isp5_read;
+-	void(*write)(u32 val, u32 offset) = isp5_write;
+-
+-	switch (clock_sel) {
+-	case VPSS_BL_CLOCK:
+-		break;
+-	case VPSS_CCDC_CLOCK:
+-		shift = 1;
+-		break;
+-	case VPSS_H3A_CLOCK:
+-		shift = 2;
+-		break;
+-	case VPSS_RSZ_CLOCK:
+-		shift = 3;
+-		break;
+-	case VPSS_IPIPE_CLOCK:
+-		shift = 4;
+-		break;
+-	case VPSS_IPIPEIF_CLOCK:
+-		shift = 5;
+-		break;
+-	case VPSS_PCLK_INTERNAL:
+-		shift = 6;
+-		break;
+-	case VPSS_PSYNC_CLOCK_SEL:
+-		shift = 7;
+-		break;
+-	case VPSS_VPBE_CLOCK:
+-		read = vpss_regr;
+-		write = vpss_regw;
+-		offset = DM365_VPBE_CLK_CTRL;
+-		break;
+-	case VPSS_VENC_CLOCK_SEL:
+-		shift = 2;
+-		read = vpss_regr;
+-		write = vpss_regw;
+-		offset = DM365_VPBE_CLK_CTRL;
+-		break;
+-	case VPSS_LDC_CLOCK:
+-		shift = 3;
+-		read = vpss_regr;
+-		write = vpss_regw;
+-		offset = DM365_VPBE_CLK_CTRL;
+-		break;
+-	case VPSS_FDIF_CLOCK:
+-		shift = 4;
+-		read = vpss_regr;
+-		write = vpss_regw;
+-		offset = DM365_VPBE_CLK_CTRL;
+-		break;
+-	case VPSS_OSD_CLOCK_SEL:
+-		shift = 6;
+-		read = vpss_regr;
+-		write = vpss_regw;
+-		offset = DM365_VPBE_CLK_CTRL;
+-		break;
+-	case VPSS_LDC_CLOCK_SEL:
+-		shift = 7;
+-		read = vpss_regr;
+-		write = vpss_regw;
+-		offset = DM365_VPBE_CLK_CTRL;
+-		break;
+-	default:
+-		printk(KERN_ERR "dm365_enable_clock: Invalid selector: %d\n",
+-		       clock_sel);
+-		return -1;
+-	}
+-
+-	spin_lock_irqsave(&oper_cfg.vpss_lock, flags);
+-	utemp = read(offset);
+-	if (!en) {
+-		mask = ~mask;
+-		utemp &= (mask << shift);
+-	} else
+-		utemp |= (mask << shift);
+-
+-	write(utemp, offset);
+-	spin_unlock_irqrestore(&oper_cfg.vpss_lock, flags);
+-
+-	return 0;
+-}
+-
+-int vpss_enable_clock(enum vpss_clock_sel clock_sel, int en)
+-{
+-	if (!oper_cfg.hw_ops.enable_clock)
+-		return -EINVAL;
+-
+-	return oper_cfg.hw_ops.enable_clock(clock_sel, en);
+-}
+-EXPORT_SYMBOL(vpss_enable_clock);
+-
+-void dm365_vpss_set_sync_pol(struct vpss_sync_pol sync)
+-{
+-	int val = 0;
+-	val = isp5_read(DM365_ISP5_CCDCMUX);
+-
+-	val |= (sync.ccdpg_hdpol << DM365_CCDC_PG_HD_POL_SHIFT);
+-	val |= (sync.ccdpg_vdpol << DM365_CCDC_PG_VD_POL_SHIFT);
+-
+-	isp5_write(val, DM365_ISP5_CCDCMUX);
+-}
+-EXPORT_SYMBOL(dm365_vpss_set_sync_pol);
+-
+-void vpss_set_pg_frame_size(struct vpss_pg_frame_size frame_size)
+-{
+-	if (!oper_cfg.hw_ops.set_pg_frame_size)
+-		return;
+-
+-	oper_cfg.hw_ops.set_pg_frame_size(frame_size);
+-}
+-EXPORT_SYMBOL(vpss_set_pg_frame_size);
+-
+-void dm365_vpss_set_pg_frame_size(struct vpss_pg_frame_size frame_size)
+-{
+-	int current_reg = ((frame_size.hlpfr >> 1) - 1) << 16;
+-
+-	current_reg |= (frame_size.pplen - 1);
+-	isp5_write(current_reg, DM365_ISP5_PG_FRAME_SIZE);
+-}
+-EXPORT_SYMBOL(dm365_vpss_set_pg_frame_size);
+-
+-static int vpss_probe(struct platform_device *pdev)
+-{
+-	char *platform_name;
+-
+-	if (!pdev->dev.platform_data) {
+-		dev_err(&pdev->dev, "no platform data\n");
+-		return -ENOENT;
+-	}
+-
+-	platform_name = pdev->dev.platform_data;
+-	if (!strcmp(platform_name, "dm355_vpss"))
+-		oper_cfg.platform = DM355;
+-	else if (!strcmp(platform_name, "dm365_vpss"))
+-		oper_cfg.platform = DM365;
+-	else if (!strcmp(platform_name, "dm644x_vpss"))
+-		oper_cfg.platform = DM644X;
+-	else {
+-		dev_err(&pdev->dev, "vpss driver not supported on this platform\n");
+-		return -ENODEV;
+-	}
+-
+-	dev_info(&pdev->dev, "%s vpss probed\n", platform_name);
+-	oper_cfg.vpss_regs_base0 = devm_platform_ioremap_resource(pdev, 0);
+-	if (IS_ERR(oper_cfg.vpss_regs_base0))
+-		return PTR_ERR(oper_cfg.vpss_regs_base0);
+-
+-	if (oper_cfg.platform == DM355 || oper_cfg.platform == DM365) {
+-		oper_cfg.vpss_regs_base1 = devm_platform_ioremap_resource(pdev, 1);
+-		if (IS_ERR(oper_cfg.vpss_regs_base1))
+-			return PTR_ERR(oper_cfg.vpss_regs_base1);
+-	}
+-
+-	if (oper_cfg.platform == DM355) {
+-		oper_cfg.hw_ops.enable_clock = dm355_enable_clock;
+-		oper_cfg.hw_ops.select_ccdc_source = dm355_select_ccdc_source;
+-		/* Setup vpss interrupts */
+-		bl_regw(DM355_VPSSBL_INTSEL_DEFAULT, DM355_VPSSBL_INTSEL);
+-		bl_regw(DM355_VPSSBL_EVTSEL_DEFAULT, DM355_VPSSBL_EVTSEL);
+-	} else if (oper_cfg.platform == DM365) {
+-		oper_cfg.hw_ops.enable_clock = dm365_enable_clock;
+-		oper_cfg.hw_ops.select_ccdc_source = dm365_select_ccdc_source;
+-		/* Setup vpss interrupts */
+-		isp5_write((isp5_read(DM365_ISP5_PCCR) |
+-				      DM365_ISP5_PCCR_BL_CLK_ENABLE |
+-				      DM365_ISP5_PCCR_ISIF_CLK_ENABLE |
+-				      DM365_ISP5_PCCR_H3A_CLK_ENABLE |
+-				      DM365_ISP5_PCCR_RSZ_CLK_ENABLE |
+-				      DM365_ISP5_PCCR_IPIPE_CLK_ENABLE |
+-				      DM365_ISP5_PCCR_IPIPEIF_CLK_ENABLE |
+-				      DM365_ISP5_PCCR_RSV), DM365_ISP5_PCCR);
+-		isp5_write((isp5_read(DM365_ISP5_BCR) |
+-			    DM365_ISP5_BCR_ISIF_OUT_ENABLE), DM365_ISP5_BCR);
+-		isp5_write(DM365_ISP5_INTSEL1_DEFAULT, DM365_ISP5_INTSEL1);
+-		isp5_write(DM365_ISP5_INTSEL2_DEFAULT, DM365_ISP5_INTSEL2);
+-		isp5_write(DM365_ISP5_INTSEL3_DEFAULT, DM365_ISP5_INTSEL3);
+-	} else
+-		oper_cfg.hw_ops.clear_wbl_overflow = dm644x_clear_wbl_overflow;
+-
+-	pm_runtime_enable(&pdev->dev);
+-
+-	pm_runtime_get(&pdev->dev);
+-
+-	spin_lock_init(&oper_cfg.vpss_lock);
+-	dev_info(&pdev->dev, "%s vpss probe success\n", platform_name);
+-
+-	return 0;
+-}
+-
+-static int vpss_remove(struct platform_device *pdev)
+-{
+-	pm_runtime_disable(&pdev->dev);
+-	return 0;
+-}
+-
+-static int vpss_suspend(struct device *dev)
+-{
+-	pm_runtime_put(dev);
+-	return 0;
+-}
+-
+-static int vpss_resume(struct device *dev)
+-{
+-	pm_runtime_get(dev);
+-	return 0;
+-}
+-
+-static const struct dev_pm_ops vpss_pm_ops = {
+-	.suspend = vpss_suspend,
+-	.resume = vpss_resume,
+-};
+-
+-static struct platform_driver vpss_driver = {
+-	.driver = {
+-		.name	= "vpss",
+-		.pm = &vpss_pm_ops,
+-	},
+-	.remove = vpss_remove,
+-	.probe = vpss_probe,
+-};
+-
+-static void vpss_exit(void)
+-{
+-	platform_driver_unregister(&vpss_driver);
+-	iounmap(oper_cfg.vpss_regs_base2);
+-	release_mem_region(VPSS_CLK_CTRL, 4);
+-}
+-
+-static int __init vpss_init(void)
+-{
+-	int ret;
+-
+-	if (!request_mem_region(VPSS_CLK_CTRL, 4, "vpss_clock_control"))
+-		return -EBUSY;
+-
+-	oper_cfg.vpss_regs_base2 = ioremap(VPSS_CLK_CTRL, 4);
+-	if (unlikely(!oper_cfg.vpss_regs_base2)) {
+-		ret = -ENOMEM;
+-		goto err_ioremap;
+-	}
+-
+-	writel(VPSS_CLK_CTRL_VENCCLKEN |
+-	       VPSS_CLK_CTRL_DACCLKEN, oper_cfg.vpss_regs_base2);
+-
+-	ret = platform_driver_register(&vpss_driver);
+-	if (ret)
+-		goto err_pd_register;
+-
+-	return 0;
+-
+-err_pd_register:
+-	iounmap(oper_cfg.vpss_regs_base2);
+-err_ioremap:
+-	release_mem_region(VPSS_CLK_CTRL, 4);
+-	return ret;
+-}
+-subsys_initcall(vpss_init);
+-module_exit(vpss_exit);
+diff --git a/include/media/davinci/vpbe.h b/include/media/davinci/vpbe.h
+deleted file mode 100644
+index e74a93475d21..000000000000
+--- a/include/media/davinci/vpbe.h
++++ /dev/null
+@@ -1,184 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-only */
+-/*
+- * Copyright (C) 2010 Texas Instruments Inc
+- */
+-#ifndef _VPBE_H
+-#define _VPBE_H
+-
 -#include <linux/videodev2.h>
--#include <linux/clk.h>
 -#include <linux/i2c.h>
--#include <media/v4l2-fh.h>
+-
+-#include <media/v4l2-dev.h>
 -#include <media/v4l2-ioctl.h>
 -#include <media/v4l2-device.h>
--#include <media/videobuf-dma-contig.h>
--#include <media/davinci/vpfe_types.h>
+-#include <media/davinci/vpbe_osd.h>
+-#include <media/davinci/vpbe_venc.h>
+-#include <media/davinci/vpbe_types.h>
 -
--#define VPFE_CAPTURE_NUM_DECODERS        5
--
--/* Macros */
--#define VPFE_MAJOR_RELEASE              0
--#define VPFE_MINOR_RELEASE              0
--#define VPFE_BUILD                      1
--#define VPFE_CAPTURE_VERSION_CODE       ((VPFE_MAJOR_RELEASE << 16) | \
--					(VPFE_MINOR_RELEASE << 8)  | \
--					VPFE_BUILD)
--
--#define CAPTURE_DRV_NAME		"vpfe-capture"
--
--struct vpfe_pixel_format {
--	u32 pixelformat;
--	/* bytes per pixel */
--	int bpp;
+-/* OSD configuration info */
+-struct osd_config_info {
+-	char module_name[32];
 -};
 -
--struct vpfe_std_info {
--	int active_pixels;
--	int active_lines;
--	/* current frame format */
--	int frame_format;
+-struct vpbe_output {
+-	struct v4l2_output output;
+-	/*
+-	 * If output capabilities include dv_timings, list supported timings
+-	 * below
+-	 */
+-	char *subdev_name;
+-	/*
+-	 * defualt_mode identifies the default timings set at the venc or
+-	 * external encoder.
+-	 */
+-	char *default_mode;
+-	/*
+-	 * Fields below are used for supporting multiple modes. For example,
+-	 * LCD panel might support different modes and they are listed here.
+-	 * Similarly for supporting external encoders, lcd controller port
+-	 * requires a set of non-standard timing values to be listed here for
+-	 * each supported mode since venc is used in non-standard timing mode
+-	 * for interfacing with external encoder similar to configuring lcd
+-	 * panel timings
+-	 */
+-	unsigned int num_modes;
+-	struct vpbe_enc_mode_info *modes;
+-	/*
+-	 * Bus configuration goes here for external encoders. Some encoders
+-	 * may require multiple interface types for each of the output. For
+-	 * example, SD modes would use YCC8 where as HD mode would use YCC16.
+-	 * Not sure if this is needed on a per mode basis instead of per
+-	 * output basis. If per mode is needed, we may have to move this to
+-	 * mode_info structure
+-	 */
+-	u32 if_params;
 -};
 -
--struct vpfe_route {
--	u32 input;
--	u32 output;
--};
--
--struct vpfe_subdev_info {
--	/* Sub device name */
--	char name[32];
--	/* Sub device group id */
--	int grp_id;
--	/* Number of inputs supported */
--	int num_inputs;
--	/* inputs available at the sub device */
--	struct v4l2_input *inputs;
--	/* Sub dev routing information for each input */
--	struct vpfe_route *routes;
--	/* check if sub dev supports routing */
--	int can_route;
--	/* ccdc bus/interface configuration */
--	struct vpfe_hw_if_param ccdc_if_params;
+-/* encoder configuration info */
+-struct encoder_config_info {
+-	char module_name[32];
+-	/* Is this an i2c device ? */
+-	unsigned int is_i2c:1;
 -	/* i2c subdevice board info */
 -	struct i2c_board_info board_info;
 -};
 -
--struct vpfe_config {
--	/* Number of sub devices connected to vpfe */
--	int num_subdevs;
+-/*amplifier configuration info */
+-struct amp_config_info {
+-	char module_name[32];
+-	/* Is this an i2c device ? */
+-	unsigned int is_i2c:1;
+-	/* i2c subdevice board info */
+-	struct i2c_board_info board_info;
+-};
+-
+-/* structure for defining vpbe display subsystem components */
+-struct vpbe_config {
+-	char module_name[32];
 -	/* i2c bus adapter no */
 -	int i2c_adapter_id;
--	/* information about each subdev */
--	struct vpfe_subdev_info *sub_devs;
--	/* evm card info */
--	char *card_name;
--	/* ccdc name */
--	char *ccdc;
--	/* vpfe clock */
--	struct clk *vpssclk;
--	struct clk *slaveclk;
--	/* Function for Clearing the interrupt */
--	void (*clr_intr)(int vdint);
+-	struct osd_config_info osd;
+-	struct encoder_config_info venc;
+-	/* external encoder information goes here */
+-	int num_ext_encoders;
+-	struct encoder_config_info *ext_encoders;
+-	/* amplifier information goes here */
+-	struct amp_config_info *amp;
+-	unsigned int num_outputs;
+-	/* Order is venc outputs followed by LCD and then external encoders */
+-	struct vpbe_output *outputs;
 -};
 -
--struct vpfe_device {
--	/* V4l2 specific parameters */
--	/* Identifies video device for this channel */
--	struct video_device video_dev;
--	/* sub devices */
--	struct v4l2_subdev **sd;
--	/* vpfe cfg */
--	struct vpfe_config *cfg;
+-struct vpbe_device;
+-
+-struct vpbe_device_ops {
+-	/* Enumerate the outputs */
+-	int (*enum_outputs)(struct vpbe_device *vpbe_dev,
+-			    struct v4l2_output *output);
+-
+-	/* Set output to the given index */
+-	int (*set_output)(struct vpbe_device *vpbe_dev,
+-			 int index);
+-
+-	/* Get current output */
+-	unsigned int (*get_output)(struct vpbe_device *vpbe_dev);
+-
+-	/* Set DV preset at current output */
+-	int (*s_dv_timings)(struct vpbe_device *vpbe_dev,
+-			   struct v4l2_dv_timings *dv_timings);
+-
+-	/* Get DV presets supported at the output */
+-	int (*g_dv_timings)(struct vpbe_device *vpbe_dev,
+-			   struct v4l2_dv_timings *dv_timings);
+-
+-	/* Enumerate the DV Presets supported at the output */
+-	int (*enum_dv_timings)(struct vpbe_device *vpbe_dev,
+-			       struct v4l2_enum_dv_timings *timings_info);
+-
+-	/* Set std at the output */
+-	int (*s_std)(struct vpbe_device *vpbe_dev, v4l2_std_id std_id);
+-
+-	/* Get the current std at the output */
+-	int (*g_std)(struct vpbe_device *vpbe_dev, v4l2_std_id *std_id);
+-
+-	/* initialize the device */
+-	int (*initialize)(struct device *dev, struct vpbe_device *vpbe_dev);
+-
+-	/* De-initialize the device */
+-	void (*deinitialize)(struct device *dev, struct vpbe_device *vpbe_dev);
+-
+-	/* Get the current mode info */
+-	int (*get_mode_info)(struct vpbe_device *vpbe_dev,
+-			     struct vpbe_enc_mode_info*);
+-
+-	/*
+-	 * Set the current mode in the encoder. Alternate way of setting
+-	 * standard or DV preset or custom timings in the encoder
+-	 */
+-	int (*set_mode)(struct vpbe_device *vpbe_dev,
+-			struct vpbe_enc_mode_info*);
+-	/* Power management operations */
+-	int (*suspend)(struct vpbe_device *vpbe_dev);
+-	int (*resume)(struct vpbe_device *vpbe_dev);
+-};
+-
+-/* struct for vpbe device */
+-struct vpbe_device {
 -	/* V4l2 device */
 -	struct v4l2_device v4l2_dev;
+-	/* vpbe dispay controller cfg */
+-	struct vpbe_config *cfg;
 -	/* parent device */
 -	struct device *pdev;
--	/* number of open instances of the channel */
--	u32 usrs;
--	/* Indicates id of the field which is being displayed */
--	u32 field_id;
--	/* flag to indicate whether decoder is initialized */
--	u8 initialized;
--	/* current interface type */
--	struct vpfe_hw_if_param vpfe_if_params;
--	/* ptr to currently selected sub device */
--	struct vpfe_subdev_info *current_subdev;
--	/* current input at the sub device */
--	int current_input;
--	/* Keeps track of the information about the standard */
--	struct vpfe_std_info std_info;
--	/* std index into std table */
--	int std_index;
--	/* CCDC IRQs used when CCDC/ISIF output to SDRAM */
--	unsigned int ccdc_irq0;
--	unsigned int ccdc_irq1;
--	/* number of buffers in fbuffers */
--	u32 numbuffers;
--	/* List of buffer pointers for storing frames */
--	u8 *fbuffers[VIDEO_MAX_FRAME];
+-	/* external encoder v4l2 sub devices */
+-	struct v4l2_subdev **encoders;
+-	/* current encoder index */
+-	int current_sd_index;
+-	/* external amplifier v4l2 subdevice */
+-	struct v4l2_subdev *amp;
+-	struct mutex lock;
+-	/* device initialized */
+-	int initialized;
+-	/* vpbe dac clock */
+-	struct clk *dac_clk;
+-	/* osd_device pointer */
+-	struct osd_state *osd_device;
+-	/* venc device pointer */
+-	struct venc_platform_data *venc_device;
+-	/*
+-	 * fields below are accessed by users of vpbe_device. Not the
+-	 * ones above
+-	 */
+-
+-	/* current output */
+-	int current_out_index;
+-	/* lock used by caller to do atomic operation on vpbe device */
+-	/* current timings set in the controller */
+-	struct vpbe_enc_mode_info current_timings;
+-	/* venc sub device */
+-	struct v4l2_subdev *venc;
+-	/* device operations below */
+-	struct vpbe_device_ops ops;
+-};
+-
+-#endif
+diff --git a/include/media/davinci/vpbe_display.h b/include/media/davinci/vpbe_display.h
+deleted file mode 100644
+index d8751ea926a2..000000000000
+--- a/include/media/davinci/vpbe_display.h
++++ /dev/null
+@@ -1,122 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-only */
+-/*
+- * Copyright (C) 2010 Texas Instruments Incorporated - https://www.ti.com/
+- */
+-#ifndef VPBE_DISPLAY_H
+-#define VPBE_DISPLAY_H
+-
+-/* Header files */
+-#include <linux/videodev2.h>
+-#include <media/v4l2-common.h>
+-#include <media/v4l2-fh.h>
+-#include <media/videobuf2-v4l2.h>
+-#include <media/videobuf2-dma-contig.h>
+-#include <media/davinci/vpbe_types.h>
+-#include <media/davinci/vpbe_osd.h>
+-#include <media/davinci/vpbe.h>
+-
+-#define VPBE_DISPLAY_MAX_DEVICES 2
+-
+-enum vpbe_display_device_id {
+-	VPBE_DISPLAY_DEVICE_0,
+-	VPBE_DISPLAY_DEVICE_1
+-};
+-
+-#define VPBE_DISPLAY_DRV_NAME	"vpbe-display"
+-
+-#define VPBE_DISPLAY_MAJOR_RELEASE              1
+-#define VPBE_DISPLAY_MINOR_RELEASE              0
+-#define VPBE_DISPLAY_BUILD                      1
+-#define VPBE_DISPLAY_VERSION_CODE ((VPBE_DISPLAY_MAJOR_RELEASE << 16) | \
+-	(VPBE_DISPLAY_MINOR_RELEASE << 8)  | \
+-	VPBE_DISPLAY_BUILD)
+-
+-#define VPBE_DISPLAY_VALID_FIELD(field)   ((V4L2_FIELD_NONE == field) || \
+-	 (V4L2_FIELD_ANY == field) || (V4L2_FIELD_INTERLACED == field))
+-
+-/* Exp ratio numerator and denominator constants */
+-#define VPBE_DISPLAY_H_EXP_RATIO_N	9
+-#define VPBE_DISPLAY_H_EXP_RATIO_D	8
+-#define VPBE_DISPLAY_V_EXP_RATIO_N	6
+-#define VPBE_DISPLAY_V_EXP_RATIO_D	5
+-
+-/* Zoom multiplication factor */
+-#define VPBE_DISPLAY_ZOOM_4X	4
+-#define VPBE_DISPLAY_ZOOM_2X	2
+-
+-/* Structures */
+-struct display_layer_info {
+-	int enable;
+-	/* Layer ID used by Display Manager */
+-	enum osd_layer id;
+-	struct osd_layer_config config;
+-	enum osd_zoom_factor h_zoom;
+-	enum osd_zoom_factor v_zoom;
+-	enum osd_h_exp_ratio h_exp;
+-	enum osd_v_exp_ratio v_exp;
+-};
+-
+-struct vpbe_disp_buffer {
+-	struct vb2_v4l2_buffer vb;
+-	struct list_head list;
+-};
+-
+-/* vpbe display object structure */
+-struct vpbe_layer {
+-	/* Pointer to the vpbe_display */
+-	struct vpbe_display *disp_dev;
 -	/* Pointer pointing to current v4l2_buffer */
--	struct videobuf_buffer *cur_frm;
+-	struct vpbe_disp_buffer *cur_frm;
 -	/* Pointer pointing to next v4l2_buffer */
--	struct videobuf_buffer *next_frm;
--	/*
--	 * This field keeps track of type of buffer exchange mechanism
--	 * user has selected
+-	struct vpbe_disp_buffer *next_frm;
+-	/* vb2 specific parameters
+-	 * Buffer queue used in vb2
 -	 */
--	enum v4l2_memory memory;
--	/* Used to store pixel format */
--	struct v4l2_format fmt;
--	/*
--	 * used when IMP is chained to store the crop window which
--	 * is different from the image window
--	 */
--	struct v4l2_rect crop;
--	/* Buffer queue used in video-buf */
--	struct videobuf_queue buffer_queue;
+-	struct vb2_queue buffer_queue;
 -	/* Queue of filled frames */
 -	struct list_head dma_queue;
--	/* Used in video-buf */
+-	/* Used for video buffer handling */
 -	spinlock_t irqlock;
--	/* IRQ lock for DMA queue */
--	spinlock_t dma_queue_lock;
--	/* lock used to access this structure */
--	struct mutex lock;
--	/* number of users performing IO */
--	u32 io_usrs;
--	/* Indicates whether streaming started */
--	u8 started;
--	/*
--	 * offset where second field starts from the starting of the
--	 * buffer for field separated YCbCr formats
+-	/* V4l2 specific parameters */
+-	/* Identifies video device for this layer */
+-	struct video_device video_dev;
+-	/* Used to store pixel format */
+-	struct v4l2_pix_format pix_fmt;
+-	enum v4l2_field buf_field;
+-	/* Video layer configuration params */
+-	struct display_layer_info layer_info;
+-	/* vpbe specific parameters
+-	 * enable window for display
 -	 */
--	u32 field_off;
+-	unsigned char window_enable;
+-	/* number of open instances of the layer */
+-	unsigned int usrs;
+-	/* Indicates id of the field which is being displayed */
+-	unsigned int field_id;
+-	/* Identifies device object */
+-	enum vpbe_display_device_id device_id;
+-	/* facilitation of ioctl ops lock by v4l2*/
+-	struct mutex opslock;
+-	u8 layer_first_int;
 -};
 -
--/* File handle structure */
--struct vpfe_fh {
--	struct v4l2_fh fh;
--	struct vpfe_device *vpfe_dev;
--	/* Indicates whether this file handle is doing IO */
--	u8 io_allowed;
+-/* vpbe device structure */
+-struct vpbe_display {
+-	/* layer specific parameters */
+-	/* lock for isr updates to buf layers*/
+-	spinlock_t dma_queue_lock;
+-	/* C-Plane offset from start of y-plane */
+-	unsigned int cbcr_ofst;
+-	struct vpbe_layer *dev[VPBE_DISPLAY_MAX_DEVICES];
+-	struct vpbe_device *vpbe_dev;
+-	struct osd_state *osd_device;
 -};
 -
--struct vpfe_config_params {
--	u8 min_numbuffers;
--	u8 numbuffers;
--	u32 min_bufsize;
--	u32 device_bufsize;
+-struct buf_config_params {
+-	unsigned char min_numbuffers;
+-	unsigned char numbuffers[VPBE_DISPLAY_MAX_DEVICES];
+-	unsigned int min_bufsize[VPBE_DISPLAY_MAX_DEVICES];
+-	unsigned int layer_bufsize[VPBE_DISPLAY_MAX_DEVICES];
 -};
 -
--#endif				/* End of __KERNEL__ */
--#endif				/* _DAVINCI_VPFE_H */
+-#endif	/* VPBE_DISPLAY_H */
+diff --git a/include/media/davinci/vpbe_osd.h b/include/media/davinci/vpbe_osd.h
+deleted file mode 100644
+index a4fc4f2a56fb..000000000000
+--- a/include/media/davinci/vpbe_osd.h
++++ /dev/null
+@@ -1,382 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-only */
+-/*
+- * Copyright (C) 2007-2009 Texas Instruments Inc
+- * Copyright (C) 2007 MontaVista Software, Inc.
+- *
+- * Andy Lowe (alowe@mvista.com), MontaVista Software
+- * - Initial version
+- * Murali Karicheri (mkaricheri@gmail.com), Texas Instruments Ltd.
+- * - ported to sub device interface
+- */
+-#ifndef _OSD_H
+-#define _OSD_H
+-
+-#include <media/davinci/vpbe_types.h>
+-
+-#define DM644X_VPBE_OSD_SUBDEV_NAME	"dm644x,vpbe-osd"
+-#define DM365_VPBE_OSD_SUBDEV_NAME	"dm365,vpbe-osd"
+-#define DM355_VPBE_OSD_SUBDEV_NAME	"dm355,vpbe-osd"
+-
+-/**
+- * enum osd_layer
+- * @WIN_OSD0: On-Screen Display Window 0
+- * @WIN_VID0: Video Window 0
+- * @WIN_OSD1: On-Screen Display Window 1
+- * @WIN_VID1: Video Window 1
+- *
+- * Description:
+- * An enumeration of the osd display layers.
+- */
+-enum osd_layer {
+-	WIN_OSD0,
+-	WIN_VID0,
+-	WIN_OSD1,
+-	WIN_VID1,
+-};
+-
+-/**
+- * enum osd_win_layer
+- * @OSDWIN_OSD0: On-Screen Display Window 0
+- * @OSDWIN_OSD1: On-Screen Display Window 1
+- *
+- * Description:
+- * An enumeration of the OSD Window layers.
+- */
+-enum osd_win_layer {
+-	OSDWIN_OSD0,
+-	OSDWIN_OSD1,
+-};
+-
+-/**
+- * enum osd_pix_format
+- * @PIXFMT_1BPP: 1-bit-per-pixel bitmap
+- * @PIXFMT_2BPP: 2-bits-per-pixel bitmap
+- * @PIXFMT_4BPP: 4-bits-per-pixel bitmap
+- * @PIXFMT_8BPP: 8-bits-per-pixel bitmap
+- * @PIXFMT_RGB565: 16-bits-per-pixel RGB565
+- * @PIXFMT_YCBCRI: YUV 4:2:2
+- * @PIXFMT_RGB888: 24-bits-per-pixel RGB888
+- * @PIXFMT_YCRCBI: YUV 4:2:2 with chroma swap
+- * @PIXFMT_NV12: YUV 4:2:0 planar
+- * @PIXFMT_OSD_ATTR: OSD Attribute Window pixel format (4bpp)
+- *
+- * Description:
+- * An enumeration of the DaVinci pixel formats.
+- */
+-enum osd_pix_format {
+-	PIXFMT_1BPP = 0,
+-	PIXFMT_2BPP,
+-	PIXFMT_4BPP,
+-	PIXFMT_8BPP,
+-	PIXFMT_RGB565,
+-	PIXFMT_YCBCRI,
+-	PIXFMT_RGB888,
+-	PIXFMT_YCRCBI,
+-	PIXFMT_NV12,
+-	PIXFMT_OSD_ATTR,
+-};
+-
+-/**
+- * enum osd_h_exp_ratio
+- * @H_EXP_OFF: no expansion (1/1)
+- * @H_EXP_9_OVER_8: 9/8 expansion ratio
+- * @H_EXP_3_OVER_2: 3/2 expansion ratio
+- *
+- * Description:
+- * An enumeration of the available horizontal expansion ratios.
+- */
+-enum osd_h_exp_ratio {
+-	H_EXP_OFF,
+-	H_EXP_9_OVER_8,
+-	H_EXP_3_OVER_2,
+-};
+-
+-/**
+- * enum osd_v_exp_ratio
+- * @V_EXP_OFF: no expansion (1/1)
+- * @V_EXP_6_OVER_5: 6/5 expansion ratio
+- *
+- * Description:
+- * An enumeration of the available vertical expansion ratios.
+- */
+-enum osd_v_exp_ratio {
+-	V_EXP_OFF,
+-	V_EXP_6_OVER_5,
+-};
+-
+-/**
+- * enum osd_zoom_factor
+- * @ZOOM_X1: no zoom (x1)
+- * @ZOOM_X2: x2 zoom
+- * @ZOOM_X4: x4 zoom
+- *
+- * Description:
+- * An enumeration of the available zoom factors.
+- */
+-enum osd_zoom_factor {
+-	ZOOM_X1,
+-	ZOOM_X2,
+-	ZOOM_X4,
+-};
+-
+-/**
+- * enum osd_clut
+- * @ROM_CLUT: ROM CLUT
+- * @RAM_CLUT: RAM CLUT
+- *
+- * Description:
+- * An enumeration of the available Color Lookup Tables (CLUTs).
+- */
+-enum osd_clut {
+-	ROM_CLUT,
+-	RAM_CLUT,
+-};
+-
+-/**
+- * enum osd_rom_clut
+- * @ROM_CLUT0: Macintosh CLUT
+- * @ROM_CLUT1: CLUT from DM270 and prior devices
+- *
+- * Description:
+- * An enumeration of the ROM Color Lookup Table (CLUT) options.
+- */
+-enum osd_rom_clut {
+-	ROM_CLUT0,
+-	ROM_CLUT1,
+-};
+-
+-/**
+- * enum osd_blending_factor
+- * @OSD_0_VID_8: OSD pixels are fully transparent
+- * @OSD_1_VID_7: OSD pixels contribute 1/8, video pixels contribute 7/8
+- * @OSD_2_VID_6: OSD pixels contribute 2/8, video pixels contribute 6/8
+- * @OSD_3_VID_5: OSD pixels contribute 3/8, video pixels contribute 5/8
+- * @OSD_4_VID_4: OSD pixels contribute 4/8, video pixels contribute 4/8
+- * @OSD_5_VID_3: OSD pixels contribute 5/8, video pixels contribute 3/8
+- * @OSD_6_VID_2: OSD pixels contribute 6/8, video pixels contribute 2/8
+- * @OSD_8_VID_0: OSD pixels are fully opaque
+- *
+- * Description:
+- * An enumeration of the DaVinci pixel blending factor options.
+- */
+-enum osd_blending_factor {
+-	OSD_0_VID_8,
+-	OSD_1_VID_7,
+-	OSD_2_VID_6,
+-	OSD_3_VID_5,
+-	OSD_4_VID_4,
+-	OSD_5_VID_3,
+-	OSD_6_VID_2,
+-	OSD_8_VID_0,
+-};
+-
+-/**
+- * enum osd_blink_interval
+- * @BLINK_X1: blink interval is 1 vertical refresh cycle
+- * @BLINK_X2: blink interval is 2 vertical refresh cycles
+- * @BLINK_X3: blink interval is 3 vertical refresh cycles
+- * @BLINK_X4: blink interval is 4 vertical refresh cycles
+- *
+- * Description:
+- * An enumeration of the DaVinci pixel blinking interval options.
+- */
+-enum osd_blink_interval {
+-	BLINK_X1,
+-	BLINK_X2,
+-	BLINK_X3,
+-	BLINK_X4,
+-};
+-
+-/**
+- * enum osd_cursor_h_width
+- * @H_WIDTH_1: horizontal line width is 1 pixel
+- * @H_WIDTH_4: horizontal line width is 4 pixels
+- * @H_WIDTH_8: horizontal line width is 8 pixels
+- * @H_WIDTH_12: horizontal line width is 12 pixels
+- * @H_WIDTH_16: horizontal line width is 16 pixels
+- * @H_WIDTH_20: horizontal line width is 20 pixels
+- * @H_WIDTH_24: horizontal line width is 24 pixels
+- * @H_WIDTH_28: horizontal line width is 28 pixels
+- */
+-enum osd_cursor_h_width {
+-	H_WIDTH_1,
+-	H_WIDTH_4,
+-	H_WIDTH_8,
+-	H_WIDTH_12,
+-	H_WIDTH_16,
+-	H_WIDTH_20,
+-	H_WIDTH_24,
+-	H_WIDTH_28,
+-};
+-
+-/**
+- * enum osd_cursor_v_width
+- * @V_WIDTH_1: vertical line width is 1 line
+- * @V_WIDTH_2: vertical line width is 2 lines
+- * @V_WIDTH_4: vertical line width is 4 lines
+- * @V_WIDTH_6: vertical line width is 6 lines
+- * @V_WIDTH_8: vertical line width is 8 lines
+- * @V_WIDTH_10: vertical line width is 10 lines
+- * @V_WIDTH_12: vertical line width is 12 lines
+- * @V_WIDTH_14: vertical line width is 14 lines
+- */
+-enum osd_cursor_v_width {
+-	V_WIDTH_1,
+-	V_WIDTH_2,
+-	V_WIDTH_4,
+-	V_WIDTH_6,
+-	V_WIDTH_8,
+-	V_WIDTH_10,
+-	V_WIDTH_12,
+-	V_WIDTH_14,
+-};
+-
+-/**
+- * struct osd_cursor_config
+- * @xsize: horizontal size in pixels
+- * @ysize: vertical size in lines
+- * @xpos: horizontal offset in pixels from the left edge of the display
+- * @ypos: vertical offset in lines from the top of the display
+- * @interlaced: Non-zero if the display is interlaced, or zero otherwise
+- * @h_width: horizontal line width
+- * @v_width: vertical line width
+- * @clut: the CLUT selector (ROM or RAM) for the cursor color
+- * @clut_index: an index into the CLUT for the cursor color
+- *
+- * Description:
+- * A structure describing the configuration parameters of the hardware
+- * rectangular cursor.
+- */
+-struct osd_cursor_config {
+-	unsigned xsize;
+-	unsigned ysize;
+-	unsigned xpos;
+-	unsigned ypos;
+-	int interlaced;
+-	enum osd_cursor_h_width h_width;
+-	enum osd_cursor_v_width v_width;
+-	enum osd_clut clut;
+-	unsigned char clut_index;
+-};
+-
+-/**
+- * struct osd_layer_config
+- * @pixfmt: pixel format
+- * @line_length: offset in bytes between start of each line in memory
+- * @xsize: number of horizontal pixels displayed per line
+- * @ysize: number of lines displayed
+- * @xpos: horizontal offset in pixels from the left edge of the display
+- * @ypos: vertical offset in lines from the top of the display
+- * @interlaced: Non-zero if the display is interlaced, or zero otherwise
+- *
+- * Description:
+- * A structure describing the configuration parameters of an On-Screen Display
+- * (OSD) or video layer related to how the image is stored in memory.
+- * @line_length must be a multiple of the cache line size (32 bytes).
+- */
+-struct osd_layer_config {
+-	enum osd_pix_format pixfmt;
+-	unsigned line_length;
+-	unsigned xsize;
+-	unsigned ysize;
+-	unsigned xpos;
+-	unsigned ypos;
+-	int interlaced;
+-};
+-
+-/* parameters that apply on a per-window (OSD or video) basis */
+-struct osd_window_state {
+-	int is_allocated;
+-	int is_enabled;
+-	unsigned long fb_base_phys;
+-	enum osd_zoom_factor h_zoom;
+-	enum osd_zoom_factor v_zoom;
+-	struct osd_layer_config lconfig;
+-};
+-
+-/* parameters that apply on a per-OSD-window basis */
+-struct osd_osdwin_state {
+-	enum osd_clut clut;
+-	enum osd_blending_factor blend;
+-	int colorkey_blending;
+-	unsigned colorkey;
+-	int rec601_attenuation;
+-	/* index is pixel value */
+-	unsigned char palette_map[16];
+-};
+-
+-/* hardware rectangular cursor parameters */
+-struct osd_cursor_state {
+-	int is_enabled;
+-	struct osd_cursor_config config;
+-};
+-
+-struct osd_state;
+-
+-struct vpbe_osd_ops {
+-	int (*initialize)(struct osd_state *sd);
+-	int (*request_layer)(struct osd_state *sd, enum osd_layer layer);
+-	void (*release_layer)(struct osd_state *sd, enum osd_layer layer);
+-	int (*enable_layer)(struct osd_state *sd, enum osd_layer layer,
+-			    int otherwin);
+-	void (*disable_layer)(struct osd_state *sd, enum osd_layer layer);
+-	int (*set_layer_config)(struct osd_state *sd, enum osd_layer layer,
+-				struct osd_layer_config *lconfig);
+-	void (*get_layer_config)(struct osd_state *sd, enum osd_layer layer,
+-				 struct osd_layer_config *lconfig);
+-	void (*start_layer)(struct osd_state *sd, enum osd_layer layer,
+-			    unsigned long fb_base_phys,
+-			    unsigned long cbcr_ofst);
+-	void (*set_left_margin)(struct osd_state *sd, u32 val);
+-	void (*set_top_margin)(struct osd_state *sd, u32 val);
+-	void (*set_interpolation_filter)(struct osd_state *sd, int filter);
+-	int (*set_vid_expansion)(struct osd_state *sd,
+-					enum osd_h_exp_ratio h_exp,
+-					enum osd_v_exp_ratio v_exp);
+-	void (*get_vid_expansion)(struct osd_state *sd,
+-					enum osd_h_exp_ratio *h_exp,
+-					enum osd_v_exp_ratio *v_exp);
+-	void (*set_zoom)(struct osd_state *sd, enum osd_layer layer,
+-				enum osd_zoom_factor h_zoom,
+-				enum osd_zoom_factor v_zoom);
+-};
+-
+-struct osd_state {
+-	enum vpbe_version vpbe_type;
+-	spinlock_t lock;
+-	struct device *dev;
+-	dma_addr_t osd_base_phys;
+-	void __iomem *osd_base;
+-	unsigned long osd_size;
+-	/* 1-->the isr will toggle the VID0 ping-pong buffer */
+-	int pingpong;
+-	int interpolation_filter;
+-	int field_inversion;
+-	enum osd_h_exp_ratio osd_h_exp;
+-	enum osd_v_exp_ratio osd_v_exp;
+-	enum osd_h_exp_ratio vid_h_exp;
+-	enum osd_v_exp_ratio vid_v_exp;
+-	enum osd_clut backg_clut;
+-	unsigned backg_clut_index;
+-	enum osd_rom_clut rom_clut;
+-	int is_blinking;
+-	/* attribute window blinking enabled */
+-	enum osd_blink_interval blink;
+-	/* YCbCrI or YCrCbI */
+-	enum osd_pix_format yc_pixfmt;
+-	/* columns are Y, Cb, Cr */
+-	unsigned char clut_ram[256][3];
+-	struct osd_cursor_state cursor;
+-	/* OSD0, VID0, OSD1, VID1 */
+-	struct osd_window_state win[4];
+-	/* OSD0, OSD1 */
+-	struct osd_osdwin_state osdwin[2];
+-	/* OSD device Operations */
+-	struct vpbe_osd_ops ops;
+-};
+-
+-struct osd_platform_data {
+-	int  field_inv_wa_enable;
+-};
+-
+-#endif
+diff --git a/include/media/davinci/vpbe_types.h b/include/media/davinci/vpbe_types.h
+deleted file mode 100644
+index 6015cda235cc..000000000000
+--- a/include/media/davinci/vpbe_types.h
++++ /dev/null
+@@ -1,74 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-only */
+-/*
+- * Copyright (C) 2010 Texas Instruments Inc
+- */
+-#ifndef _VPBE_TYPES_H
+-#define _VPBE_TYPES_H
+-
+-enum vpbe_version {
+-	VPBE_VERSION_1 = 1,
+-	VPBE_VERSION_2,
+-	VPBE_VERSION_3,
+-};
+-
+-/* vpbe_timing_type - Timing types used in vpbe device */
+-enum vpbe_enc_timings_type {
+-	VPBE_ENC_STD = 0x1,
+-	VPBE_ENC_DV_TIMINGS = 0x4,
+-	/* Used when set timings through FB device interface */
+-	VPBE_ENC_TIMINGS_INVALID = 0x8,
+-};
+-
+-/*
+- * struct vpbe_enc_mode_info
+- * @name: ptr to name string of the standard, "NTSC", "PAL" etc
+- * @std: standard or non-standard mode. 1 - standard, 0 - nonstandard
+- * @interlaced: 1 - interlaced, 0 - non interlaced/progressive
+- * @xres: x or horizontal resolution of the display
+- * @yres: y or vertical resolution of the display
+- * @fps: frame per second
+- * @left_margin: left margin of the display
+- * @right_margin: right margin of the display
+- * @upper_margin: upper margin of the display
+- * @lower_margin: lower margin of the display
+- * @hsync_len: h-sync length
+- * @vsync_len: v-sync length
+- * @flags: bit field: bit usage is documented below
+- *
+- * Description:
+- *  Structure holding timing and resolution information of a standard.
+- * Used by vpbe_device to set required non-standard timing in the
+- * venc when lcd controller output is connected to a external encoder.
+- * A table of timings is maintained in vpbe device to set this in
+- * venc when external encoder is connected to lcd controller output.
+- * Encoder may provide a g_dv_timings() API to override these values
+- * as needed.
+- *
+- *  Notes
+- *  ------
+- *  if_type should be used only by encoder manager and encoder.
+- *  flags usage
+- *     b0 (LSB) - hsync polarity, 0 - negative, 1 - positive
+- *     b1       - vsync polarity, 0 - negative, 1 - positive
+- *     b2       - field id polarity, 0 - negative, 1  - positive
+- */
+-struct vpbe_enc_mode_info {
+-	unsigned char *name;
+-	enum vpbe_enc_timings_type timings_type;
+-	v4l2_std_id std_id;
+-	struct v4l2_dv_timings dv_timings;
+-	unsigned int interlaced;
+-	unsigned int xres;
+-	unsigned int yres;
+-	struct v4l2_fract aspect;
+-	struct v4l2_fract fps;
+-	unsigned int left_margin;
+-	unsigned int right_margin;
+-	unsigned int upper_margin;
+-	unsigned int lower_margin;
+-	unsigned int hsync_len;
+-	unsigned int vsync_len;
+-	unsigned int flags;
+-};
+-
+-#endif
+diff --git a/include/media/davinci/vpbe_venc.h b/include/media/davinci/vpbe_venc.h
+deleted file mode 100644
+index 93cf6a5fb49d..000000000000
+--- a/include/media/davinci/vpbe_venc.h
++++ /dev/null
+@@ -1,37 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-only */
+-/*
+- * Copyright (C) 2010 Texas Instruments Inc
+- */
+-#ifndef _VPBE_VENC_H
+-#define _VPBE_VENC_H
+-
+-#include <media/v4l2-subdev.h>
+-#include <media/davinci/vpbe_types.h>
+-
+-#define DM644X_VPBE_VENC_SUBDEV_NAME	"dm644x,vpbe-venc"
+-#define DM365_VPBE_VENC_SUBDEV_NAME	"dm365,vpbe-venc"
+-#define DM355_VPBE_VENC_SUBDEV_NAME	"dm355,vpbe-venc"
+-
+-/* venc events */
+-#define VENC_END_OF_FRAME	BIT(0)
+-#define VENC_FIRST_FIELD	BIT(1)
+-#define VENC_SECOND_FIELD	BIT(2)
+-
+-struct venc_platform_data {
+-	int (*setup_pinmux)(u32 if_type, int field);
+-	int (*setup_clock)(enum vpbe_enc_timings_type type,
+-			   unsigned int pixclock);
+-	int (*setup_if_config)(u32 pixcode);
+-	/* Number of LCD outputs supported */
+-	int num_lcd_outputs;
+-	struct vpbe_if_params *lcd_if_params;
+-};
+-
+-enum venc_ioctls {
+-	VENC_GET_FLD = 1,
+-};
+-
+-/* exported functions */
+-struct v4l2_subdev *venc_sub_dev_init(struct v4l2_device *v4l2_dev,
+-		const char *venc_name);
+-#endif
+diff --git a/include/media/davinci/vpss.h b/include/media/davinci/vpss.h
+deleted file mode 100644
+index 315fa77e238c..000000000000
+--- a/include/media/davinci/vpss.h
++++ /dev/null
+@@ -1,111 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-or-later */
+-/*
+- * Copyright (C) 2009 Texas Instruments Inc
+- *
+- * vpss - video processing subsystem module header file.
+- *
+- * Include this header file if a driver needs to configure vpss system
+- * module. It exports a set of library functions  for video drivers to
+- * configure vpss system module functions such as clock enable/disable,
+- * vpss interrupt mux to arm, and other common vpss system module
+- * functions.
+- */
+-#ifndef _VPSS_H
+-#define _VPSS_H
+-
+-/* selector for ccdc input selection on DM355 */
+-enum vpss_ccdc_source_sel {
+-	VPSS_CCDCIN,
+-	VPSS_HSSIIN,
+-	VPSS_PGLPBK,	/* for DM365 only */
+-	VPSS_CCDCPG	/* for DM365 only */
+-};
+-
+-struct vpss_sync_pol {
+-	unsigned int ccdpg_hdpol:1;
+-	unsigned int ccdpg_vdpol:1;
+-};
+-
+-struct vpss_pg_frame_size {
+-	short hlpfr;
+-	short pplen;
+-};
+-
+-/* Used for enable/disable VPSS Clock */
+-enum vpss_clock_sel {
+-	/* DM355/DM365 */
+-	VPSS_CCDC_CLOCK,
+-	VPSS_IPIPE_CLOCK,
+-	VPSS_H3A_CLOCK,
+-	VPSS_CFALD_CLOCK,
+-	/*
+-	 * When using VPSS_VENC_CLOCK_SEL in vpss_enable_clock() api
+-	 * following applies:-
+-	 * en = 0 selects ENC_CLK
+-	 * en = 1 selects ENC_CLK/2
+-	 */
+-	VPSS_VENC_CLOCK_SEL,
+-	VPSS_VPBE_CLOCK,
+-	/* DM365 only clocks */
+-	VPSS_IPIPEIF_CLOCK,
+-	VPSS_RSZ_CLOCK,
+-	VPSS_BL_CLOCK,
+-	/*
+-	 * When using VPSS_PCLK_INTERNAL in vpss_enable_clock() api
+-	 * following applies:-
+-	 * en = 0 disable internal PCLK
+-	 * en = 1 enables internal PCLK
+-	 */
+-	VPSS_PCLK_INTERNAL,
+-	/*
+-	 * When using VPSS_PSYNC_CLOCK_SEL in vpss_enable_clock() api
+-	 * following applies:-
+-	 * en = 0 enables MMR clock
+-	 * en = 1 enables VPSS clock
+-	 */
+-	VPSS_PSYNC_CLOCK_SEL,
+-	VPSS_LDC_CLOCK_SEL,
+-	VPSS_OSD_CLOCK_SEL,
+-	VPSS_FDIF_CLOCK,
+-	VPSS_LDC_CLOCK
+-};
+-
+-/* select input to ccdc on dm355 */
+-int vpss_select_ccdc_source(enum vpss_ccdc_source_sel src_sel);
+-/* enable/disable a vpss clock, 0 - success, -1 - failure */
+-int vpss_enable_clock(enum vpss_clock_sel clock_sel, int en);
+-/* set sync polarity, only for DM365*/
+-void dm365_vpss_set_sync_pol(struct vpss_sync_pol);
+-/* set the PG_FRAME_SIZE register, only for DM365 */
+-void dm365_vpss_set_pg_frame_size(struct vpss_pg_frame_size);
+-
+-/* wbl reset for dm644x */
+-enum vpss_wbl_sel {
+-	VPSS_PCR_AEW_WBL_0 = 16,
+-	VPSS_PCR_AF_WBL_0,
+-	VPSS_PCR_RSZ4_WBL_0,
+-	VPSS_PCR_RSZ3_WBL_0,
+-	VPSS_PCR_RSZ2_WBL_0,
+-	VPSS_PCR_RSZ1_WBL_0,
+-	VPSS_PCR_PREV_WBL_0,
+-	VPSS_PCR_CCDC_WBL_O,
+-};
+-/* clear wbl overflow flag for DM6446 */
+-int vpss_clear_wbl_overflow(enum vpss_wbl_sel wbl_sel);
+-
+-/* set sync polarity*/
+-void vpss_set_sync_pol(struct vpss_sync_pol sync);
+-/* set the PG_FRAME_SIZE register */
+-void vpss_set_pg_frame_size(struct vpss_pg_frame_size frame_size);
+-/*
+- * vpss_check_and_clear_interrupt - check and clear interrupt
+- * @irq - common enumerator for IRQ
+- *
+- * Following return values used:-
+- * 0 - interrupt occurred and cleared
+- * 1 - interrupt not occurred
+- * 2 - interrupt status not available
+- */
+-int vpss_dma_complete_interrupt(void);
+-
+-#endif
 -- 
 2.29.2
 
