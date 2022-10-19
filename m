@@ -2,189 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADE2A60383B
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 04:52:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A71F60383D
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 04:52:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229608AbiJSCwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 22:52:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53858 "EHLO
+        id S229671AbiJSCwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 22:52:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbiJSCwK (ORCPT
+        with ESMTP id S229525AbiJSCwf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 22:52:10 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A038D77FC
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 19:52:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666147927; x=1697683927;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=S0gMdeKvVj5/KEGXIK9nockkF8OKvS7+OCuLAOupFyI=;
-  b=m/2OGcWFg5teFEa70up2R4q7Uur85/nB74RAgkdaF2XwR6Rkmo2812uQ
-   gFyFoERVOQ2JabicKGNzmLWb/dnb4ONGdEJlGR7fClSbsh5GFsCma53Xa
-   ZaNhKNO/ZdwAGHJFRJtiHdNz/TfXlegX6F4ey6O4vZgztnFCNmSAOf+hS
-   4uKbUOppebBRPgEULAJuQ7hikSCgi6ZoGFhmQ3kR+r2TeB6Ud09C8Dn0S
-   KYZuhZF2W8rw07aU5L6xKYIrYtvZah3V2wDgjdCWlcdA+O2XYZsresvrY
-   W6NpZB/dDQtt00w1mWYVSPsbHzPPiirAUY4BWlupuaJ872AE3dF0zCneB
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="368342269"
-X-IronPort-AV: E=Sophos;i="5.95,194,1661842800"; 
-   d="scan'208";a="368342269"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2022 19:52:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="958102664"
-X-IronPort-AV: E=Sophos;i="5.95,194,1661842800"; 
-   d="scan'208";a="958102664"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by fmsmga005.fm.intel.com with ESMTP; 18 Oct 2022 19:52:05 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 18 Oct 2022 19:52:05 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 18 Oct 2022 19:52:05 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Tue, 18 Oct 2022 19:52:05 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.102)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+        Tue, 18 Oct 2022 22:52:35 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AFADE52CD
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 19:52:28 -0700 (PDT)
+X-UUID: 634b250efb884b76868e141e5afbb4b7-20221019
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=VIMMLG0dXuwl6KEM8MBxM2bfM4gT2Sc13xFGqaWm6lg=;
+        b=iG646NaHTZK5FstIDLWZ6yaKWiyTHJ2EwR1eR8UiFXszmgAErXhwEwktb3ntJsFEsUuC57ckb3xPvktFJOQgN9VYqnCeDdeOkq617Ha/b9trtANIkYtO6THwHT/fNdyDVG3SMk3OyCCgW+X7hnZdAMLOhPz5ZfLwTpu6rV9FB5c=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:3b255795-bad7-4138-8aeb-cbb422660271,IP:0,U
+        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+        ON:release,TS:95
+X-CID-INFO: VERSION:1.1.11,REQID:3b255795-bad7-4138-8aeb-cbb422660271,IP:0,URL
+        :0,TC:0,Content:-5,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
+        ON:quarantine,TS:95
+X-CID-META: VersionHash:39a5ff1,CLOUDID:3dcd3ca4-ebb2-41a8-a87c-97702aaf2e20,B
+        ulkID:2210191052232YY0THHH,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
+        il,Content:0,EDM:-3,IP:nil,URL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 634b250efb884b76868e141e5afbb4b7-20221019
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <xinlei.lee@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 352889621; Wed, 19 Oct 2022 10:52:20 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Tue, 18 Oct 2022 19:52:02 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PcvkmOH37k/GTVpc9p8oPWvWoP5cBigSko19kWWzjfhscjRYpq5TaHSWMZVsysTCTP5TxV3co1rw0O0JdYDablgD6KbEeVX000JNQV37bVxVyBtHOzL6oQljORbFqJ2Hgqohmhe0t/bgaUsYbfrw+aHm+ckcR4zIOMzzFxOPzomhaCA4VUNqmZLBavty0nCEBjzMnT3VA3dhAQLzpxaUKRl4nWedBvzDBkYkDF+AaCynyUu1qKNZqHdF5gM2TTQzdPvlkEWIqm/SR/23stj5F+C7QA8ALWhMKxFQOkuCip2ZcRPGzfKmO+b4O5bewgh3u55JXRFjVb4YV6F5ZjHWQA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Gjh8r10D1zIR93k3zt2MnLBq8r7hmvD0IiESeKBmQ0Y=;
- b=D76WhHvR04LSq3LbewcjCIehCAfXQgm4UgEn0xJNFvnhY8nsFphf1F3BmYbL0bYkQrBDPR7lgD4ErW5UciTLltlRZ4X/7qVnzPIDpg9Zz6xtNnXgjD5kWPwSv+tulInqOYYwxGXMrA3RKgLyOnsUp9qaT8TBoY2PBecoPt9XaLq7LkZQQCbHQpZL9o7maN0XX4H+w8pomy6qYmgAyRz5WftZGi7jYkTJIitZBfehAjS1G4V8WKg3w7LSZHTG4sYiR1Y+eRqTsRDsfA52eooVvdbwzA2cHvT2kwlZmQfpz9iJemoaiV4MD3fOX1brb08/paKS1D2MtSlbDsFdwxJ6Ag==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SA1PR11MB6733.namprd11.prod.outlook.com (2603:10b6:806:25c::17)
- by SA3PR11MB7535.namprd11.prod.outlook.com (2603:10b6:806:307::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.33; Wed, 19 Oct
- 2022 02:52:01 +0000
-Received: from SA1PR11MB6733.namprd11.prod.outlook.com
- ([fe80::6f83:c165:aa0c:efae]) by SA1PR11MB6733.namprd11.prod.outlook.com
- ([fe80::6f83:c165:aa0c:efae%8]) with mapi id 15.20.5723.033; Wed, 19 Oct 2022
- 02:51:59 +0000
-Date:   Tue, 18 Oct 2022 19:51:55 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Gao Xiang <hsiangkao@linux.alibaba.com>
-CC:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        <linux-erofs@lists.ozlabs.org>, Chao Yu <chao@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] erofs: use kmap_local_page() only for erofs_bread()
-Message-ID: <Y09mS6LrHCGmi+AJ@iweiny-desk3>
-References: <20221018105313.4940-1-hsiangkao@linux.alibaba.com>
- <9108233.CDJkKcVGEf@mypc>
- <Y08asdeoz5yOAefN@B-P7TQMD6M-0146.lan>
- <2019477.yKVeVyVuyW@mypc>
- <Y084l0m88JGOqGRN@B-P7TQMD6M-0146.lan>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <Y084l0m88JGOqGRN@B-P7TQMD6M-0146.lan>
-X-ClientProxiedBy: SJ0PR03CA0050.namprd03.prod.outlook.com
- (2603:10b6:a03:33e::25) To SA1PR11MB6733.namprd11.prod.outlook.com
- (2603:10b6:806:25c::17)
+ 15.2.792.15; Wed, 19 Oct 2022 10:52:18 +0800
+Received: from mszsdaap41.gcn.mediatek.inc (10.16.6.141) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Wed, 19 Oct 2022 10:52:18 +0800
+From:   <xinlei.lee@mediatek.com>
+To:     <matthias.bgg@gmail.com>, <rex-bc.chen@mediatek.com>,
+        <angelogioacchino.delregno@collabora.com>,
+        <jason-jh.lin@mediatek.com>, <nfraprado@collabora.com>,
+        <chunkuang.hu@kernel.org>, <p.zabel@pengutronix.de>,
+        <airlied@linux.ie>, <daniel@ffwll.ch>
+CC:     <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Xinlei Lee <xinlei.lee@mediatek.com>
+Subject: [PATCH v12,0/3] Add dpi output format control for MT8186
+Date:   Wed, 19 Oct 2022 10:52:13 +0800
+Message-ID: <1666147936-27368-1-git-send-email-xinlei.lee@mediatek.com>
+X-Mailer: git-send-email 2.6.4
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA1PR11MB6733:EE_|SA3PR11MB7535:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7194342d-355f-4fe1-b535-08dab17ce487
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +U+6/uOMBlgcQFu/KTwep58rVjrxUVo144OLknNG6kdCEm7Yc8h6BnBEjZtSFn7VTRjbbJrucztoFMT8LGeegUTVzpn1Jsq/v9w7inrAJAy+qEizGvuY73YoiHEMP8AzBBDIYX/YsmiQpZQUOyBmQRPTDRXQmtcVAVVDcMcKRWuplKzVeQa/mzpxJPhIaTGymBFBN+qwyPbEG+w9INWd/ZVrsEvfASbJRJxKJ3fckMGRjosUIMAEr1jKae6Am0F3zxc7aeg32Cxo88+ArNtmMa01UffpC77zyYZxkGmhTVDHFyT9SIwM5YJAHuonhFe24Jgb+lunJjD1s8q6xGcqUxikAlUIBMRo0+52Dh8GMesmxqEQP8rQEBSXyMGNVPBc/prqx4LpBTidq96uOr1qBksI5z68PH18+elcTBRvrRnr3TLf+a2YZtoH0ByCcfcQPumjzWoNx/KW95unJv+RS7U5MpaWpHScR03dT+q9r/YpypN9VdtBKdtJsZjB6NLUiO6qVtag4sinBHN5SdoBsW9X2JU9Q4lOkXSfG+Z4BEMMOak9hDk7ABAPTqHDsd6mYcr5S+LzSg2akF0tQWXwwppbhTG8V106053TggkbKL/buvGR7Xvdp60IDNSaYzsL+nBnLHMfqBtG+4g/wgl/ArXnn83xE9TPLmdj9Kv1xIhZzHRZdl+3ufjwSPc241bFF0EXhsoDr1bSR0RhfD0LBnsYMNoIrx25OtmTxWS80LjJRvxHzxXQd0ZZXFtruGbydkFkySdsZbZVGjUiwXiDQg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6733.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(376002)(396003)(366004)(346002)(39860400002)(136003)(451199015)(86362001)(2906002)(41300700001)(8936002)(44832011)(5660300002)(316002)(6916009)(6486002)(54906003)(8676002)(4326008)(478600001)(66946007)(66476007)(66556008)(6666004)(38100700002)(9686003)(6512007)(53546011)(26005)(83380400001)(6506007)(82960400001)(186003)(33716001)(67856001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?TK1M06qFiP0rTrbT5psmujinOQjhl+/L6YHUCynJR+gmQbQWniAkdZiUNfCD?=
- =?us-ascii?Q?tnfx+hjgNwTjf+tFOm+skelYbYEytTcRB19bBF2udosXjkTujrSowJJQMeYY?=
- =?us-ascii?Q?D9bdeXNRKoIivX04Q0U6VouEJa42YNzyfh3Lb0DXzmS3BJ8HRRjEph6aPIE/?=
- =?us-ascii?Q?qDtkSyKIWKtfBCchnr9tInAIBOYiHaFEi0ZhkqPVJ8wBsI4VOLmldIJaaJ+Z?=
- =?us-ascii?Q?Oybvsj3kL7L6jsr1UlDvd5lhxPdrx4JAQqzvcMQ5PxTp2eMVZiM15g+5fWZs?=
- =?us-ascii?Q?Z5XGBosnxI6aDmeE0ZCwwcecLxhHTO8nOBaSG73b/Bn3bT89iIW+OMfAXcpP?=
- =?us-ascii?Q?1rXsHBr2Qk6rfDl06Reu90RE4RAG9yfoZQ5d7jO67aBQVGcCcuwnSGaONcbl?=
- =?us-ascii?Q?cNAK7LrClJrNbakz/TJWpcb3VMT3pyiuvnJeGpRl/49AUGKT4uv5ojzdFs9J?=
- =?us-ascii?Q?LIddDO6VX706zMm3uh3Zw/17NIpIlgqvACTkOHaUto6TBGqQ8DL3aQawkPYk?=
- =?us-ascii?Q?cdQk8r5GWQZenoOxHRCmXSospre94EOdSwrp2/PTYtC1XxQqcebB7SnZ6Dxn?=
- =?us-ascii?Q?3PipfDLDiPZOp34smnuI/1hpovE2Y9CCcQdlIOu9y3J9oq5+E0c/jFnIMvsi?=
- =?us-ascii?Q?LV1B7fQxe21NEz9GUTf/w/52MFw78Xt3CxkvQ2CcdQgRYGm8o+0uYsXKLGpN?=
- =?us-ascii?Q?a/esCzQeb4oY86u1QO+eX8Awy98BJFwyPLqfleIhfbvZZ6d9o5ys3OevxZ6J?=
- =?us-ascii?Q?Zb2kbjwWSR2ETlenhIbUCFL/uV5H45LFnaH3Z09D+7H0M3A/pplWUiQokTZh?=
- =?us-ascii?Q?Pqegu2n/c/frPnYoIQtmEBen9dqw1/5UQitF/KXprGmDDf+Hr/mKRUteUis4?=
- =?us-ascii?Q?aKP5jyM0Fkm82uejYWL316VrNrdU98crFWhWWcMihXFiS8URoY5DhVy1kpXx?=
- =?us-ascii?Q?YLSQ1JogvKyuWzncy61BudyoWdKjQBy53w19N5kAcAnI8p+WX8mGYuMOrWMm?=
- =?us-ascii?Q?xiHhpaw1oafN7slgX1ZkanNcNIfOA1DLqV4lJekvrMA8kGeV0pQX6z4FFIUX?=
- =?us-ascii?Q?9yCLf2QSVeHBtX5AVY6azdiZUWxsw7hu2q0N9pNNtQX8mw/8y8V5sibyys7H?=
- =?us-ascii?Q?rTSD3DS9vf4FJ7CFFtsosW1DHqNg9T9dHbl2DueuLAqQuh28FtGJkxdyYVXy?=
- =?us-ascii?Q?zkNMcbOoh+F84lKL5g7FSTki+2adk5Qy1GxWKfAuc6NSOtxpDe1buLAJt/er?=
- =?us-ascii?Q?rszImKvLYivpurTamPy9DT9FV8qL97NfyRLIf1pEnk8Heyno8XaPdksz7yND?=
- =?us-ascii?Q?VYMe4P0zhiay4Z4RRRk8G6cFrsbeScpdUssNQ04dcFjXBMxdji6ok1VUBNWT?=
- =?us-ascii?Q?AjIN5k5/KgKXVlvGUVDXYXvNUesk+OGQl9Tmwa4e2h5vxvvV641yk4eykjlM?=
- =?us-ascii?Q?bTbYH+huFjVRB6Y5aYQ2bMQZM2dclYm55kqjpBmIoG+c+KAjk43e5iAMVqXq?=
- =?us-ascii?Q?zZocf6lqy9530ouewbRQ3LpDuqFEqj2rBLlIigrmv66UbturRneFrPf6smSw?=
- =?us-ascii?Q?dxOY3dEbIx47m6gcCnfb+EH91l8GP0Rrxko7q5Jp?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7194342d-355f-4fe1-b535-08dab17ce487
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6733.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Oct 2022 02:51:59.5911
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4aK69pZ8Cw6M4LbMCF8vZS55e4Aow6aC41Hox9xIj07Ote2Te7IxV/MnLhUQwJr0gkYi/K+JXdWXkMvPTNQJDw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR11MB7535
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 07:36:55AM +0800, Gao Xiang wrote:
-> On Wed, Oct 19, 2022 at 01:21:27AM +0200, Fabio M. De Francesco wrote:
-> > On Tuesday, October 18, 2022 11:29:21 PM CEST Gao Xiang wrote:
-> 
-> ...
+From: Xinlei Lee <xinlei.lee@mediatek.com>
 
-[snip]
+Base on the branch of linus/master v6.1 rc1.
 
-> > 
-> > In Btrfs I solved (thanks to David S.' advice) by mapping only one of two 
-> > pages, only the one coming from the page cache. 
-> > 
-> > The other page didn't need the use of kmap_local_page() because it was 
-> > allocated in the filesystem with "alloc_page(GFP_NOFS)". GFP_NOFS won't ever 
-> > allocate from ZONE_HIGHMEM, therefore a direct page_address() could avoid the 
-> > mapping and the nesting issues.
-> > 
-> > Did you check if you may solve the same way? 
-> 
-> That is not simple.  Currently we have compressed pages and decompressed
-> pages (page cache or others), and they can be unmapped when either data
-> is all consumed, so compressed pages can be unmapped first, or
-> decompressed pages can be unmapped first.  That quite depends on which
-> pages goes first.
-> 
-> I think such usage is a quite common pattern for decoder or encoder,
-> you could take a look at z_erofs_lzma_decompress() in
-> fs/erofs/decompressor_lzma.c.  So kmap() is still useful for such cases
-> since I don't really care the HIGHMEM performance but correctness, but
-> other alternative could churn/complex the map/unmap/remap pattern.
-> 
+Change since v11:
+1. Rebase on v6.1-rc1. Change nothing.
 
-When you say kmap() is still useful is this because of the map/unmap ordering
-restrictions or because the address is required in different threads?
+Change since v10:
+1. Modify patch title and add review tag.
 
-Ira
+Change since v9:
+1. Modify the location of the mmsys_dev member variable.
+
+Change since v8:
+1. Modified the title and some description information.
+
+Changes since v7:
+1. This series is based on the following patch:
+   [1] soc: mediatek: Add mmsys func to adapt to dpi output for MT8186
+   https://patchwork.kernel.org/project/linux-mediatek/patch/1663161662-1598-2-git-send-email-xinlei.lee@mediatek.com/
+2. Modify the DPI_FORMAT_MASK macro definition to GENMASK(1, 0);
+3. Add all settings to mtk_mmsys_ddp_dpi_fmt_config;
+4. Modify the commit title to Add mt8186 dpi compatibles and platform
+data.
+
+Changes since v6:
+1. Different from other ICs, when mt8186 DPI changes the output format,
+the mmsys_base+400 register needs to be set to be valid at the same
+time.
+   In this series, all the situations that mmsys need to be set up are
+perfected (not necessarily used in practice).
+2. Put the value that controls the mmsys function in mtk-mmsys.h.
+3. Encountered the sink ic switched between dual edge and single edge,
+perfected setting and clearing mmsys bit operations in mtk_dpi.c.
+
+Changes since v5:
+1. Separate the patch that adds edge_cfg_in_mmsys from the patch that
+adds mt8186 dpi support.
+2. Move the mmsys register definition to mmsys driver.
+ 
+Changes since v4:
+1. This series of cancellations is based on the following patches:
+   [1] Add MediaTek SoC(vdosys1) support for mt8195
+   https://patchwork.kernel.org/project/linux-mediatek/cover/20220711075245.10492-1-nancy.lin@mediatek.com/
+   [2] Add MediaTek SoC DRM (vdosys1) support for mt8195
+   https://patchwork.kernel.org/project/linux-mediatek/cover/20220804072827.22383-1-nancy.lin@mediatek.com/
+2. Added mtk_mmsys_update_bits function in mtk-mmsys.c;
+3. MMSYS 0x400 register is modified to MT8186_MMSYS_DPI_OUTPUT_FORMAT;
+4. Fix formatting issues.
+
+Changes since v3:
+1. Fix formatting issues;
+2. Modify the edge output control name & description;
+3. Fix the threading problem.
+
+Changes since v2:
+1. Modify key nouns in the description;
+2. Add the label of jitao to Co-developed-by;
+3. Macro definition address lowercase problem and function naming;
+4. Add missing a description of this property in the mtk_dpi_conf.
+
+Change since v1:
+1. Modify mt8186 compatiable location.
+2. Modify MT8186_DPI_OUTPUT_FORMAT name.
+
+When MT8186 outputs dpi signal, it is necessary to add dual edge output
+format control in mmsys.
+
+Xinlei Lee (3):
+  soc: mediatek: Add all settings to mtk_mmsys_ddp_dpi_fmt_config func
+  drm: mediatek: Set dpi format in mmsys
+  drm: mediatek: Add mt8186 dpi compatibles and platform data
+
+ drivers/gpu/drm/mediatek/mtk_dpi.c     | 32 ++++++++++++++++++++++++++
+ drivers/gpu/drm/mediatek/mtk_drm_drv.c |  2 ++
+ drivers/soc/mediatek/mt8186-mmsys.h    |  8 ++++---
+ drivers/soc/mediatek/mtk-mmsys.c       | 27 +++++++++++++++++-----
+ include/linux/soc/mediatek/mtk-mmsys.h |  7 ++++++
+ 5 files changed, 67 insertions(+), 9 deletions(-)
+
+-- 
+2.18.0
+
