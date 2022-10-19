@@ -2,150 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D56C603973
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 07:59:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41C39603974
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 07:59:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229933AbiJSF7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 01:59:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60822 "EHLO
+        id S229949AbiJSF7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 01:59:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229942AbiJSF7O (ORCPT
+        with ESMTP id S229935AbiJSF7g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 01:59:14 -0400
-Received: from omta035.useast.a.cloudfilter.net (omta035.useast.a.cloudfilter.net [44.202.169.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9894053A5E
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 22:59:11 -0700 (PDT)
-Received: from eig-obgw-5007a.ext.cloudfilter.net ([10.0.29.141])
-        by cmsmtp with ESMTP
-        id kyWIoVEOzVgqJl26goSM6e; Wed, 19 Oct 2022 05:59:10 +0000
-Received: from gator4166.hostgator.com ([108.167.133.22])
-        by cmsmtp with ESMTP
-        id l26VoR1YVAnjUl26Vozjgj; Wed, 19 Oct 2022 05:58:59 +0000
-X-Authority-Analysis: v=2.4 cv=LsWBd1Rc c=1 sm=1 tr=0 ts=634f9223
- a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=VLn1U4HDsV/kFU42pi1uTw==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10 a=Qawa6l4ZSaYA:10
- a=wYkD_t78qR0A:10 a=cm27Pg_UAAAA:8 a=VwQbUJbxAAAA:8 a=Qgz39EsCW-LGziui3z8A:9
- a=QEXdDO2ut3YA:10 a=xmb-EsYY8bH0VWELuYED:22 a=AjGcO6oz07-iQ99wixmX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=cO2pMH5o5rFNjaegSUZJR5RRzkW1PCUC3AUJ+Q7uoNc=; b=ycvo3HFILiKjWdun33pRJ01AvN
-        s2rgU8+eozWvKOZlVv/R6Y4pQ6+kVtzGPOD+oQ6EucZwZvx0XWTdExWl6ATWYX1CYflpMCa/VjoNV
-        5a0ift/n1buAOyhhk/u20x9ys5iUSQwy7o6BTXeplBIzsZfFzRIegDPu2SKnijxd96LfZQTqHvv2o
-        wFz/MYfGycnJ0h3rF847pOJiBj44n54oP0PsJepme72nlMV0LPRjyDWjl2MaJaeKo9I73vKtfGC5u
-        OMORO9rhwQcJ0axs7C4BCKpk4L0Bjy4QcvhZDzmzxSsDuRaJar5C/i9fwfGdu9YSx2foF2DYWgsVY
-        g1n8VHrQ==;
-Received: from [187.184.159.238] (port=9278 helo=[192.168.0.24])
-        by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <gustavo@embeddedor.com>)
-        id 1ol26T-0001NQ-Sd;
-        Wed, 19 Oct 2022 00:58:58 -0500
-Message-ID: <f134c4ff-aac0-eb79-871e-73cff18a57c8@embeddedor.com>
-Date:   Wed, 19 Oct 2022 00:58:50 -0500
+        Wed, 19 Oct 2022 01:59:36 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 040EC11A16
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 22:59:33 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id b12-20020a5d804c000000b006b723722d4eso12040115ior.17
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 22:59:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xzvk70GSoy8v6g/xMQR0hh15OGuFCcc8W8bi0WPq9/w=;
+        b=H781Z7+ts//eTiBK9OaWKmVjegQ5kYewpVVdkNZpzXBbAYOPhGRVrabDyj7Iy1uG+g
+         CQ7KipVnSBbx25mot0eir0D+Ao/58mLtiQkLE4FvymUDlbUrq0vmmmpVOuYpZmWt8h4R
+         5NuU+C0/VJufQMQzeJpFgPHT54S9J/qXHIPPR7G6zmD/heHriIbLAyZY6ADrzeQvBwel
+         cQHkveSadoXu6g6ZYH4NT/GliRbB6u4Rd1XgPLsYv4d3q3EF4ca+UaCkwDU1cVh8uBmo
+         TWUNXskTnz5+5JqPtSY0IYTbO78hBGf5ccDuCP27KWCudOEuLEU15X9IAJcKInkv4fMM
+         YIFg==
+X-Gm-Message-State: ACrzQf3/V6rbqhMlv0FmPDXi8mvjVbXHz6+qmBTtJf0GEtw3l+1DcU+g
+        FJaj3jOa6Dxe0PECmjuKqKMzj0WbPod23ympR3at156XVIkZ
+X-Google-Smtp-Source: AMsMyM7YQxaymmcL7aiWLNJbM0Xf1OGkjfIPzAyP7stDCdYOt8Usgkk+hFkQy0pE6/4tv+C0hgeFG9StgwVJcFSJ51urxXvOCDrx
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 6/6][next] airo: Avoid clashing function prototypes
-Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-References: <cover.1666038048.git.gustavoars@kernel.org>
- <ab0047382e6fd20c694e4ca14de8ca2c2a0e19d0.1666038048.git.gustavoars@kernel.org>
- <202210171950.B5F2676D7F@keescook>
-From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <202210171950.B5F2676D7F@keescook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 187.184.159.238
-X-Source-L: No
-X-Exim-ID: 1ol26T-0001NQ-Sd
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: ([192.168.0.24]) [187.184.159.238]:9278
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 2
-X-Org:  HG=hgshared;ORG=hostgator;
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfCnMqHgZ4jGS+trP9nZo5kNdjfPudUYomkXAlRMJcl7P6DbEkVusrusWJoMMAg5YVealljiMv4ESeZntg2Q8YcZI6yg/qrIdzdqBxWkhtutwITSdw+6f
- DrMcRmAALjwrJtokGrueY5K8jUgSExD52a4Oqbe6rf2T4iw1qbUoMK1Xr2rSjstvoasGI2/5VVBpAtm7C9jpdUxT1SadNdAsCXqOVsZknmBEDy+3/7bZglQl
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:184f:b0:2fc:ec3c:98ec with SMTP id
+ b15-20020a056e02184f00b002fcec3c98ecmr4552277ilv.188.1666159173332; Tue, 18
+ Oct 2022 22:59:33 -0700 (PDT)
+Date:   Tue, 18 Oct 2022 22:59:33 -0700
+In-Reply-To: <000000000000dd7d5a05eb5ca523@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000aa768a05eb5ce9c2@google.com>
+Subject: Re: [syzbot] UBSAN: array-index-out-of-bounds in dbDiscardAG
+From:   syzbot <syzbot+f0e0fcf3cd1047ae60ad@syzkaller.appspotmail.com>
+To:     jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        shaggy@kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+syzbot has found a reproducer for the following issue on:
 
+HEAD commit:    493ffd6605b2 Merge tag 'ucount-rlimits-cleanups-for-v5.19'..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=12410be6880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d19f5d16783f901
+dashboard link: https://syzkaller.appspot.com/bug?extid=f0e0fcf3cd1047ae60ad
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1408aae2880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=123f717c880000
 
-On 10/17/22 21:53, Kees Cook wrote:
-> On Mon, Oct 17, 2022 at 03:36:20PM -0500, Gustavo A. R. Silva wrote:
->> [...]
->> @@ -6312,16 +6326,16 @@ static int airo_get_mode(struct net_device *dev,
->>   	/* If not managed, assume it's ad-hoc */
->>   	switch (local->config.opmode & MODE_CFG_MASK) {
->>   		case MODE_STA_ESS:
->> -			*uwrq = IW_MODE_INFRA;
->> +			uwrq->mode = IW_MODE_INFRA;
->>   			break;
->>   		case MODE_AP:
->> -			*uwrq = IW_MODE_MASTER;
->> +			uwrq->mode = IW_MODE_MASTER;
->>   			break;
->>   		case MODE_AP_RPTR:
->> -			*uwrq = IW_MODE_REPEAT;
->> +			uwrq->mode = IW_MODE_REPEAT;
->>   			break;
->>   		default:
->> -			*uwrq = IW_MODE_ADHOC;
->> +			uwrq->mode = IW_MODE_ADHOC;
->>   	}
->>   
->>   	return 0;
-> 
-> Sometimes you use the union directly, sometimes not. What was your
-> heuristic for that?
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/f1ff6481e26f/disk-493ffd66.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/101bd3c7ae47/vmlinux-493ffd66.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/3472d2d58c3a/mount_0.gz
 
-Oh it is just that I had previously used a new variable in function airo_set_mode(),
-and then I immediately ran into this similar scenario (function airo_get_mode) and
-I said "wait a second, why don't I directly use the union, instead? :thinking_face:"
-and I did, and moved on. :P
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+f0e0fcf3cd1047ae60ad@syzkaller.appspotmail.com
 
-> 
-> Regardless, looks good!
-> 
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> 
+ERROR: (device loop0): dbAllocAG: allocation request is larger than the allocation group size
+ERROR: (device loop0): dbDiscardAG: -EIO
+================================================================================
+UBSAN: array-index-out-of-bounds in fs/jfs/jfs_dmap.c:1567:12
+index 128 is out of range for type 's64 [128]'
+CPU: 1 PID: 3614 Comm: syz-executor131 Not tainted 6.0.0-syzkaller-09423-g493ffd6605b2 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
+ ubsan_epilogue lib/ubsan.c:151 [inline]
+ __ubsan_handle_out_of_bounds+0xdb/0x130 lib/ubsan.c:283
+ dbDiscardAG+0x9d6/0xa50 fs/jfs/jfs_dmap.c:1567
+ jfs_ioc_trim+0x433/0x660 fs/jfs/jfs_discard.c:100
+ jfs_ioctl+0x2bd/0x3d0 fs/jfs/ioctl.c:131
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f0cc1ffdda9
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffdd75ab778 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f0cc1ffdda9
+RDX: 0000000020000140 RSI: 00000000c0185879 RDI: 0000000000000003
+RBP: 00007f0cc1fbd570 R08: 0000000000000000 R09: 00007f0cc1fbd570
+R10: 00005555566902c0 R11: 0000000000000246 R12: 0000000000000000
+R13: 0000000000000000 R14: 00083878000000f8 R15: 0000000000000000
+ </TASK>
+================================================================================
 
-Thanks for this!
-
-BTW, I already have a new series (this time a 4-patch series, instead of 6), with
-the latest fixes, here:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git/log/?h=6.1-rc1-Wcast-function-type-strict
-
-I think we could quickly review it tomorrow before I send it out. :)
-
---
-Gustavo
