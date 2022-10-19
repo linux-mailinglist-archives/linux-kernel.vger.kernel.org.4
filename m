@@ -2,148 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AE5E604571
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 14:36:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1E3C6044A1
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 14:10:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233110AbiJSMgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 08:36:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48722 "EHLO
+        id S232327AbiJSMKA convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 19 Oct 2022 08:10:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233076AbiJSMg2 (ORCPT
+        with ESMTP id S233044AbiJSMJV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 08:36:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8698EEE8B0
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 05:16:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666181658;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=H2ajoM6HKyyy0fQV6RqoVpjRKL+El/OinHj8fwlKME4=;
-        b=VYNNUMpoPumwuHJGMG/d+caaOclbcd9TcHRqBNILi1dopDWza1DVpRSxCpYjePDRtiAumw
-        X+eQeLHbkBGyITyjeJDLUIzjyL/qbGrUviPOXT5CjUHL6g8ePtQcE4rRGYu4qSh0PGXR7B
-        jB/WPVcEFnCKYXECx55Nfxc4BtGhgAs=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-495-Opx8lbmnP5SdPVKKAAvGvQ-1; Wed, 19 Oct 2022 07:31:47 -0400
-X-MC-Unique: Opx8lbmnP5SdPVKKAAvGvQ-1
-Received: by mail-wm1-f70.google.com with SMTP id r203-20020a1c44d4000000b003c3a87d8abdso147613wma.2
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 04:31:47 -0700 (PDT)
+        Wed, 19 Oct 2022 08:09:21 -0400
+Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ADA7E22ED;
+        Wed, 19 Oct 2022 04:45:06 -0700 (PDT)
+Received: by mail-io1-f43.google.com with SMTP id 137so14164173iou.9;
+        Wed, 19 Oct 2022 04:45:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to:date
-         :cc:to:from:subject:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=H2ajoM6HKyyy0fQV6RqoVpjRKL+El/OinHj8fwlKME4=;
-        b=Tg8qkx9VS+d3tgKKvqQNK7I3310XRlf3yDctKHJ4BlfJa84CMqa9O+MXBGgdgqgT+H
-         FtOGSbqhGI0t1Gpwrwla5xId9cDHc9ICSVtfDozE9acQutEIblXRR12f4pqEezARBuUe
-         Ugu26oSG8Rq3Ct7j2uNExfi+8s5tUfAGF2/rdn6n8eWbpA8zC+zJW+fLcg00jjbyxrEZ
-         lToFlsnGGUg8T0SSUnM99+YxLtSqkNF40I9v/20nxm2OWZt+tvSdiynwmoMoeFSaB13a
-         Y7Fj2AbpvqDrsR45IjNSQ6rog5YoYK42jY1oG7PPgN+EskzZ+hPFk1udywmih4pnn1Ev
-         Oy6g==
-X-Gm-Message-State: ACrzQf3WmDh6FF/qP0vkCWt0VX3RrHzjjkWXz+HpgzySRLwYNBIfEp2X
-        7ZbQq9q7ByNrYU8isoisKyWQLj/u6BzAzE34o5QyXphZgy0KVIHBAw3OsFAXyR5ujTtoPt6pl8I
-        gnnV+M/9FDbiPPnOedC82JqJM
-X-Received: by 2002:a05:6000:c9:b0:22e:4055:559c with SMTP id q9-20020a05600000c900b0022e4055559cmr4949058wrx.438.1666179106160;
-        Wed, 19 Oct 2022 04:31:46 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5jhXdXMY6tfwF+LeqiXu53MARy6CeNryQi7gzcTecSoJUh1oPQe8TyCADGSn28OF8Mz3uJCA==
-X-Received: by 2002:a05:6000:c9:b0:22e:4055:559c with SMTP id q9-20020a05600000c900b0022e4055559cmr4949042wrx.438.1666179105944;
-        Wed, 19 Oct 2022 04:31:45 -0700 (PDT)
-Received: from ypodemsk.tlv.csb (IGLD-84-229-250-135.inter.net.il. [84.229.250.135])
-        by smtp.gmail.com with ESMTPSA id h13-20020a05600c314d00b003c7087f6c9asm593781wmo.32.2022.10.19.04.31.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Oct 2022 04:31:44 -0700 (PDT)
-Message-ID: <ee89073a1e9de11c7bd7726eb5da71a0e8795099.camel@redhat.com>
-Subject: Re: [PATCH] x86/aperfmperf: Fix arch_scale_freq_tick() on tickless
- systems
-From:   ypodemsk@redhat.com
-To:     Valentin Schneider <vschneid@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        rafael.j.wysocki@intel.com, pauld@redhat.com, frederic@kernel.org,
-        ggherdovich@suse.cz, linux-kernel@vger.kernel.org, lenb@kernel.org,
-        jlelli@redhat.com, mtosatti@redhat.com, ppandit@redhat.com,
-        alougovs@redhat.com, lcapitul@redhat.com, nsaenz@kernel.org
-Date:   Wed, 19 Oct 2022 14:31:40 +0300
-In-Reply-To: <xhsmhsfl4bhpb.mognet@vschneid.remote.csb>
-References: <20220804131728.58513-1-ypodemsk@redhat.com>
-         <YxdfO/5/Yfodm18i@hirez.programming.kicks-ass.net>
-         <xhsmhsfl4bhpb.mognet@vschneid.remote.csb>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YkeBWCcFMJNFjbaBfw9zUjyE7Y7cuaLWG97IUP/cIwE=;
+        b=2uYsTnYGOhx+EBdGM4FFhNbO0y+B6rBtBistqOR6vJrLWSWSGn6HfvH9CjZhXDnWAu
+         ETj00CuZL22d63tIeDwBEEeFzE0g0YVj8axeadGjz+AMj8/tEvzbIdNvBiNBCo2lD+S5
+         jeTyWJP8Pg9iUaEVFgmiJoXV4XZBKZxj54pVkJrmNgRqadB7YN2bwDnZ8Y0yYQIZWvru
+         UxI+xEPH7VbH5jpZnkJb3HwrO+jlbbbNukvZA6IeovWXd5ZkiEqmP++DQf3rXY1CkqFE
+         LSeiJeO5mmfcYYmyErvRlHRiMo+rzgXZdynXXmHzFOmq6/xjzL8VlZsCEgO3r71bzEjf
+         6y+w==
+X-Gm-Message-State: ACrzQf1Nd7rpTXGFmbCby3Hnl5jOCbBw0K3zy0hq79K55IgkrRxDIjGF
+        6RYTwGUWuLgSST7HNv4riW2z1/aH5DVnSt/ATrWXvnQv
+X-Google-Smtp-Source: AMsMyM4thGGOyHBsHmCvvqQFnAaUTg02mrvN5eJOGsv40LHgyG4ZXauIIJtsE/iD/+LYK3PEcWkvYSqrgq7+QexcHUo=
+X-Received: by 2002:a05:620a:158f:b0:6ee:93d5:e249 with SMTP id
+ d15-20020a05620a158f00b006ee93d5e249mr5044929qkk.505.1666179338715; Wed, 19
+ Oct 2022 04:35:38 -0700 (PDT)
+MIME-Version: 1.0
+References: <12097002.O9o76ZdvQC@kreacher> <Y0+7Ug9Yh6J6uHVr@intel.com>
+In-Reply-To: <Y0+7Ug9Yh6J6uHVr@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 19 Oct 2022 13:35:26 +0200
+Message-ID: <CAJZ5v0gKW9S29xS2+qkcopzYtZKTcM=ZT-Jjc4fnEJfu=oYKaw@mail.gmail.com>
+Subject: Re: [PATCH] ACPI: PCI: Fix device reference counting in acpi_get_pci_dev()
+To:     =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <helgaas@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-09-06 at 17:17 +0100, Valentin Schneider wrote:
-> On 06/09/22 16:54, Peter Zijlstra wrote:
-> > On Thu, Aug 04, 2022 at 04:17:28PM +0300, Yair Podemsky wrote:
-> > > @@ -392,7 +400,12 @@ void arch_scale_freq_tick(void)
-> > >      s->mcnt = mcnt;
-> > >      raw_write_seqcount_end(&s->seq);
-> > > 
-> > > -	scale_freq_tick(acnt, mcnt);
-> > > +	/*
-> > > +	 * Avoid calling scale_freq_tick() when the last update was too
-> > > long ago,
-> > > +	 * as it might overflow during calulation.
-> > > +	 */
-> > > +	if ((jiffies - last) <= MAX_SAMPLE_AGE_NOHZ)
-> > > +		scale_freq_tick(acnt, mcnt);
-> > >  }
-> > 
-> > All this patch does is avoid the warning; but afaict it doesn't
-> > make it
-> > behave in a sane way.
+On Wed, Oct 19, 2022 at 11:02 AM Ville Syrjälä
+<ville.syrjala@linux.intel.com> wrote:
+>
+> On Tue, Oct 18, 2022 at 07:34:03PM +0200, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > Commit 63f534b8bad9 ("ACPI: PCI: Rework acpi_get_pci_dev()") failed
+> > to reference count the device returned by acpi_get_pci_dev() as
+> > expected by its callers which in some cases may cause device objects
+> > to be dropped prematurely.
+> >
+> > Add the missing get_device() to acpi_get_pci_dev().
+> >
+> > Fixes: 63f534b8bad9 ("ACPI: PCI: Rework acpi_get_pci_dev()")
+>
+> FYI this (and the rtc-cmos regression discussed in
+> https://lore.kernel.org/linux-acpi/5887691.lOV4Wx5bFT@kreacher/)
+> took down the entire Intel gfx CI.
 
-It also avoids the disabling of the frequency invariance accounting for
-all cpus, that occurs immediately after the warning.
-That is the bug that is being solved, Since it affects also non-
-tickless cpus.
+Sorry for the disturbance.
 
-> > 
-> > I'm thinking that on nohz_full cpus you don't have load balancing,
-> > I'm
-> > also thinking that on nohz_full cpus you don't have DVFS.
-> > 
-> > So *why* the heck are we setting this stuff to random values ?
-> > Should
-> > you not simply kill th entire thing for nohz_full cpus?
-> 
-> IIRC this stems from systems where nohz_full CPUs are not running
-> tickless
-> at all times (you get transitions to/from latency-sensitive work).
-> Also
-> from what I've seen isolation is (intentionally) done with just
-> isolcpus=managed_irq,<nohz_cpus>; there isn't the 'domain' flag so
-> load
-> balancing isn't permanently disabled.
-> 
-> DVFS is another point, I don't remember seeing cpufreq governor
-> changes in
-> the transitions, but I wouldn't be suprised if there were - so we'd
-> move
-> from tickless, no-DVFS to ticking with DVFS (and would like that to
-> behave
-> "sanely").
-> 
-> FWIW arm64 does something similar in that it just saves the counters
-> but
-> doesn't update the scale when the delta overflows/wrapsaround, so
-> that the
-> next tick can work with a sane delta, cf
-> 
->   arch/arm64/kernel/topology.c::amu_scale_freq_tick()
-> 
+> I've applied both fixes into our fixup branch and things are looking much
+> healthier now.
 
+Thanks for letting me know.
+
+I've just added the $subject patch to my linux-next branch as an
+urgent fix and the other one has been applied to the RTC tree.
+
+> This one caused i915 selftests to eat a lot of POISON_FREE
+> in the CI. While bisecting it locally I didn't have
+> poisoning enabled so I got refcount_t undeflows instead.
+
+Unfortunately, making no mistakes is generally hard to offer.
+
+If catching things like this early is better, what about pulling my
+bleeding-edge branch, where all of my changes are staged before going
+into linux-next, into the CI?
+
+> https://intel-gfx-ci.01.org/tree/drm-tip/index.html has a lot
+> of colorful boxes to click if you're interested in any of the
+> logs. The fixes are included in the CI_DRM_12259 build. Earlier
+> builds were broken.
+
+Thanks!
