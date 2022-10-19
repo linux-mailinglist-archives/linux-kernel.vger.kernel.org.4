@@ -2,53 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A65A1603A82
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 09:20:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87312603A88
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 09:21:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229918AbiJSHUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 03:20:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49152 "EHLO
+        id S229752AbiJSHVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 03:21:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbiJSHUV (ORCPT
+        with ESMTP id S229977AbiJSHUv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 03:20:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF89C4D4F6
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 00:20:19 -0700 (PDT)
+        Wed, 19 Oct 2022 03:20:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E0773C30;
+        Wed, 19 Oct 2022 00:20:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4BE3AB82266
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 07:20:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0D9BDC433D6;
-        Wed, 19 Oct 2022 07:20:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D5AC6179B;
+        Wed, 19 Oct 2022 07:20:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0733C43470;
+        Wed, 19 Oct 2022 07:20:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666164017;
-        bh=qZJGPYJhWSg9HQuKthn3430obiGHVRfi2d0cY0Qdp4M=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=b/qQBS2x3i6Xq3yycOaBcncVHeEIHKz5ZQg1RPwffX4qTmGT5VMMeTlLWOHWf0Gry
-         kR0EDfwqBhyyE7qmX67UGeSYeg6b5tPvU1UdvXSNfdLuMOeFF4hLBCW9RTP2ChoIgL
-         AY/7C8s4GMN/igad4Y5iP7j305A8+1oD0DsjvAi3WeVOvLORm5vd3ynOyaX3JcMxT+
-         ljHRZIWxVUs0TobfPU0o0DSM97FYyLhXxfQyegh/Wt8B/KrJzhvULCBbwvpKdGRxTJ
-         DppyOE8h7ZIXhaQlEVLNRYArZd1qvL+diF0yGu3gbyzuhqTJR5HThP4SLWCiuwq3Q7
-         9zayvd/ypnGxw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E5F8BE270EA;
-        Wed, 19 Oct 2022 07:20:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1666164047;
+        bh=of0ZAKA9tXwjIpzkLxVj0WEzoODLE+HML3Zt/NyW1FI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=rth+6yIaIPUoMoM1pxucaWlgEMssAO8Eru2d0JwqA3zpx1ntiE3YBzXYseEVpxEW1
+         Te8mnjIjNvDTSKzNnhxdq4NtkS3sGrrX4YS78GMWNTR40Y/+meT+D6rV3uuvYuB6T4
+         Gw8/tr+OQwlVGJfjYrpxxpHZTfJ7CJREowoiRS6Z4EbVDqol3rDoo0dHQXxJo650kV
+         32MmU5AZaFqlIgRr2IoWEWHT3ssDT9S3UpGsXSsAvY89uPxXutEAGrGP8+BRGjHXVT
+         VXgWDHzvPBLmCS690TSGaRF4uxkxFCMhHYAHlURsbAs7C1KuCiFb5zCRH2CW1CyrJu
+         xq8cd//S49iFg==
+Received: by mail-lj1-f175.google.com with SMTP id a6so21001584ljq.5;
+        Wed, 19 Oct 2022 00:20:47 -0700 (PDT)
+X-Gm-Message-State: ACrzQf3NXTmJUzlQAYvxZIV/ymhMsLGMMnLsYKWv8qG89c7faCSZzTVr
+        vZpU6AqsoNMBtMSiKEuAjGfFwi021BC2YzF00MA=
+X-Google-Smtp-Source: AMsMyM79wv2U9Np07awqzvnz6sL6EQ+0zOwlDh+2fitHZm8BIzvAhkUJ9m1PDDV/Omqe4NVeQ6LRwg9zPvXAObVQN2o=
+X-Received: by 2002:a05:651c:1590:b0:26c:4311:9b84 with SMTP id
+ h16-20020a05651c159000b0026c43119b84mr2566040ljq.152.1666164045946; Wed, 19
+ Oct 2022 00:20:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] platform/chrome: cros_hps_i2c: make remove callback return
- void
-From:   patchwork-bot+chrome-platform@kernel.org
-Message-Id: <166616401693.8747.4313124084194924915.git-patchwork-notify@kernel.org>
-Date:   Wed, 19 Oct 2022 07:20:16 +0000
-References: <20221018235237.2274969-1-dcallagh@chromium.org>
-In-Reply-To: <20221018235237.2274969-1-dcallagh@chromium.org>
-To:     Dan Callaghan <dcallagh@chromium.org>
-Cc:     chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
-        skyostil@chromium.org, bleung@chromium.org, tzungbi@kernel.org,
-        lkp@intel.com
+References: <cover.1662459668.git.baskov@ispras.ru> <fae59721001d43db9a0ad2c9c09947284f1ecaa1.1662459668.git.baskov@ispras.ru>
+In-Reply-To: <fae59721001d43db9a0ad2c9c09947284f1ecaa1.1662459668.git.baskov@ispras.ru>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Wed, 19 Oct 2022 09:20:34 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXEr9qgSjWmXboXXp9_+EBvnzodwegAC9XXNUyt1o6=2cA@mail.gmail.com>
+Message-ID: <CAMj1kXEr9qgSjWmXboXXp9_+EBvnzodwegAC9XXNUyt1o6=2cA@mail.gmail.com>
+Subject: Re: [PATCH 08/16] x86/boot: Remove mapping from page fault handler
+To:     Evgeniy Baskov <baskov@ispras.ru>
+Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        lvc-project@linuxtesting.org, x86@kernel.org,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -58,30 +68,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Tue, 6 Sept 2022 at 12:41, Evgeniy Baskov <baskov@ispras.ru> wrote:
+>
+> After every implicit mapping is removed, this code is no longer needed.
+>
+> Remove memory mapping from page fault handler to ensure that there are
+> no hidden invalid memory accesses.
+>
+> Signed-off-by: Evgeniy Baskov <baskov@ispras.ru>
 
-This patch was applied to chrome-platform/linux.git (for-next)
-by Tzung-Bi Shih <tzungbi@kernel.org>:
+I don't grok this 100% but to me, it seems not having to rely on a
+page fault handler to ensure that the 1:1 mapping has sufficient
+coverage is a win so
 
-On Wed, 19 Oct 2022 10:52:37 +1100 you wrote:
-> Commit ed5c2f5fd10d ("i2c: Make remove callback return void") changed
-> the return type of the 'remove' callback to void, but this driver was
-> originally written before that change landed. Update the remove callback
-> to match.
-> 
-> Fixes: 5f9952548d91 ("platform/chrome: add a driver for HPS")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Dan Callaghan <dcallagh@chromium.org>
-> 
-> [...]
+Acked-by: Ard Biesheuvel <ardb@kernel.org>
 
-Here is the summary with links:
-  - platform/chrome: cros_hps_i2c: make remove callback return void
-    https://git.kernel.org/chrome-platform/c/d8cb88f1541f
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+> ---
+>  arch/x86/boot/compressed/ident_map_64.c | 26 ++++++++++---------------
+>  1 file changed, 10 insertions(+), 16 deletions(-)
+>
+> diff --git a/arch/x86/boot/compressed/ident_map_64.c b/arch/x86/boot/compressed/ident_map_64.c
+> index 880e08293023..c20cd31e665f 100644
+> --- a/arch/x86/boot/compressed/ident_map_64.c
+> +++ b/arch/x86/boot/compressed/ident_map_64.c
+> @@ -385,27 +385,21 @@ void do_boot_page_fault(struct pt_regs *regs, unsigned long error_code)
+>  {
+>         unsigned long address = native_read_cr2();
+>         unsigned long end;
+> -       bool ghcb_fault;
+> +       char *msg;
+>
+> -       ghcb_fault = sev_es_check_ghcb_fault(address);
+> +       if (sev_es_check_ghcb_fault(address))
+> +               msg = "Page-fault on GHCB page:";
+> +       else
+> +               msg = "Unexpected page-fault:";
+>
+>         address   &= PMD_MASK;
+>         end        = address + PMD_SIZE;
+>
+>         /*
+> -        * Check for unexpected error codes. Unexpected are:
+> -        *      - Faults on present pages
+> -        *      - User faults
+> -        *      - Reserved bits set
+> -        */
+> -       if (error_code & (X86_PF_PROT | X86_PF_USER | X86_PF_RSVD))
+> -               do_pf_error("Unexpected page-fault:", error_code, address, regs->ip);
+> -       else if (ghcb_fault)
+> -               do_pf_error("Page-fault on GHCB page:", error_code, address, regs->ip);
+> -
+> -       /*
+> -        * Error code is sane - now identity map the 2M region around
+> -        * the faulting address.
+> +        * Since all memory allocations are made explicit
+> +        * now, every page fault at this stage is an
+> +        * error and the error handler is there only
+> +        * for debug purposes.
+>          */
+> -       kernel_add_identity_map(address, end, MAP_WRITE);
+> +       do_pf_error(msg, error_code, address, regs->ip);
+>  }
+> --
+> 2.35.1
+>
