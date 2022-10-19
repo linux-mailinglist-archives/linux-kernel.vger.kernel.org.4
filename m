@@ -2,662 +2,420 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 489616040F0
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 12:31:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C8ED6040C0
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 12:15:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229880AbiJSKbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 06:31:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55242 "EHLO
+        id S230477AbiJSKPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 06:15:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229731AbiJSKaf (ORCPT
+        with ESMTP id S230517AbiJSKOn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 06:30:35 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8BD1FD2C
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 03:09:29 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id m29-20020a05600c3b1d00b003c6bf423c71so16754636wms.0
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 03:09:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NrZg8tooH1yOnzWrypIBMmFTPHGQfUX7xh1NNIa2u4M=;
-        b=NCQGrZCOuvTdZbsFAIokwjQlfRQkkZcRFpkpa+20sJKqFqk/bIGXfBINDumRbl0+m/
-         PJXpZVQZiJud6Tc7moOLARsU+zu7MzZpuHLRlVWQUThir1Tr0L+phwNUo+qnueP57jP2
-         1eWmXzYZ46tJfhiixg6KLg3jCm1DliOGEtLeo=
+        Wed, 19 Oct 2022 06:14:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA94263C3
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 02:56:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666173261;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3EnGVpbVs1Jg7zhQuwPwS2bsC5qKJxAivlieD2GLqY0=;
+        b=En7VlKm+HgxuFENH3H1mKugN9xwTc2yeGFvvDd+427ElcNwJohfxgHgo+o7cuvADQ2MQk8
+        SkKh0SK7H65+aVaKd/MG2jXitmndN5h0Ze5QbVM/aqBVFwbHIoAViCVIUL4DAxMCMAXjfl
+        2PLJedv3fQDKnyKG3o7AXFebaSXtCwo=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-434-Jl0zvfgwOSOkPcI_-8_Lgg-1; Wed, 19 Oct 2022 05:09:22 -0400
+X-MC-Unique: Jl0zvfgwOSOkPcI_-8_Lgg-1
+Received: by mail-qk1-f198.google.com with SMTP id s14-20020a05620a0bce00b006ee7e19c44bso14292125qki.12
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 02:09:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NrZg8tooH1yOnzWrypIBMmFTPHGQfUX7xh1NNIa2u4M=;
-        b=mPtRu4QZHvKg9jrutp0kom+wr1SpGkcpunmBevmWr2bUBIRSpPDZ8YH4fc4r9tbJIh
-         HiOXxx3Plu8PUO29l6Zs3R/6blSaxFYiTHE0WBuCo0KelvoiLRpaMn9Dz7Sbf6JaslfE
-         Tls4TS198MA4hOoUW3ZHwOsl1B5ZyxPgSmyX7T2AvIgURNyaNAbBXds6mFEoeAwbNv7W
-         5K0C1V0EXQuDr4US/tuw9sw1l+A6uc6S80JZBTFDRm1Veb81OFLxELZUUhpCF84mF8ov
-         32vsXjS51TA2HpbtyvjwiN7ZoKKOkVnPc2asVErAR+yCjExnnBYj0vQgBzK4Gfrj3eBi
-         v+MA==
-X-Gm-Message-State: ACrzQf37y9//OO8gH9rih+kousiEcOT/5zfcUMrJyn9RBZb0vnJ5Ex5Q
-        Cvn/fnMkS7aT8daWY3jKQDXnPjtxeJ47dg==
-X-Google-Smtp-Source: AMsMyM5HZ3lZrLtt5izS7xZadWbFVCatzI1VQQIUAuik93OcdPbyb20krlDJjhOaOEsv3DLkDAAGJQ==
-X-Received: by 2002:a05:600c:468e:b0:3c6:f243:89c2 with SMTP id p14-20020a05600c468e00b003c6f24389c2mr13512420wmo.150.1666170266549;
-        Wed, 19 Oct 2022 02:04:26 -0700 (PDT)
-Received: from tom-ThinkPad-T14s-Gen-2i (net-188-217-54-207.cust.vodafonedsl.it. [188.217.54.207])
-        by smtp.gmail.com with ESMTPSA id m6-20020a1c2606000000b003c452678025sm21088500wmm.4.2022.10.19.02.04.25
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3EnGVpbVs1Jg7zhQuwPwS2bsC5qKJxAivlieD2GLqY0=;
+        b=cRL2YYBmSoe+HCUv+hjPMOrfEgtVI2/T0aKzEQxz4XICtNvihssRR0VstwoYuztDtX
+         Qrj6DBdQjWr6Qy2db8T+CvqdeQsXmoppUkp2Vdb4NY6hIe957Fd3POlhpJwkznrtWD5A
+         Pc304Ndp4EvRqMBD7ZpTT3eX5rvAc+SFWvGkKnG3b/MCDjGNer1yjcfQ0SCw0beFl9li
+         LEZHzmoFVbHoIj56MSx0t/OSL5UhHKNM3yTQoylEPDQ9yfG/0DzBwi4wyyAJYX+LGkTI
+         4zQ7ZwbMkXg56wTz+AY5AXZ/KB+DBe7LbcGfw/2f/MH2qADXtPdF2cN5L0mlvds37nb8
+         SULw==
+X-Gm-Message-State: ACrzQf0hMYVrSyz0o0AQ6fvUjZMZTcw9LWrol0HBa9f9a9Kd0DN6c96S
+        RoB6yPwtVHcMNpPWAXPEQV9OA0XOXXEQQvZ124poAjyX1/t0AFjnPYfqlaAx6CcqyvIUbFn03OR
+        fRElKlMpupYh1fR+HpwDv7DHm
+X-Received: by 2002:a37:ad12:0:b0:6ee:8313:6199 with SMTP id f18-20020a37ad12000000b006ee83136199mr4577926qkm.570.1666170561546;
+        Wed, 19 Oct 2022 02:09:21 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6BI6bdxTE5F2x228Qgl0gTkwy30p0prbPpkptGtQRgNRnP8ELOXe2NvJFQuVfViqHQxKw6MQ==
+X-Received: by 2002:a37:ad12:0:b0:6ee:8313:6199 with SMTP id f18-20020a37ad12000000b006ee83136199mr4577908qkm.570.1666170560959;
+        Wed, 19 Oct 2022 02:09:20 -0700 (PDT)
+Received: from ?IPv6:2001:bb6:3900:0:2e44:7c94:b73:654e? ([2001:bb6:3900:0:2e44:7c94:b73:654e])
+        by smtp.gmail.com with ESMTPSA id h5-20020a05620a10a500b006bbc3724affsm4311735qkk.45.2022.10.19.02.09.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Oct 2022 02:04:25 -0700 (PDT)
-Date:   Wed, 19 Oct 2022 11:04:23 +0200
-From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-To:     Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-Cc:     linuxfancy@googlegroups.com, linux-amarula@amarulasolutions.com,
-        kamlesh.gurudasani@gmail.com, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH 2/2] drm/tiny: add support for tft displays based on
- ilitek,ili9488
-Message-ID: <20221019090423.GA1737196@tom-ThinkPad-T14s-Gen-2i>
-References: <20221018164532.1705215-1-tommaso.merciai@amarulasolutions.com>
- <20221018164532.1705215-3-tommaso.merciai@amarulasolutions.com>
- <CAOf5uw=6kGHFxU7R2b8GdU3orDxmJEuPoB=rv-neiskZpjhOWA@mail.gmail.com>
+        Wed, 19 Oct 2022 02:09:20 -0700 (PDT)
+Message-ID: <1a81e33d7069875ecba0fd493b298b5d33718081.camel@redhat.com>
+Subject: Re: [PATCH 0/4] vDPA: dev config export via "vdpa dev show" command
+From:   Sean Mooney <smooney@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>,
+        Si-Wei Liu <si-wei.liu@oracle.com>
+Cc:     mst@redhat.com, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, Daniel Berrange <berrange@redhat.com>
+Date:   Wed, 19 Oct 2022 10:08:58 +0100
+In-Reply-To: <CACGkMEvQhfenW9-StMwaJ887eatb_qtRYdDn=E12Wwkc6HU-sQ@mail.gmail.com>
+References: <1665793690-28120-1-git-send-email-si-wei.liu@oracle.com>
+         <CACGkMEvaKnqS-0p7iqyHP_Wbbj1YdmPFA7ABfKK_8FbXMsZEkg@mail.gmail.com>
+         <08d98212a355fdce5820d57bd0ffaf3ca0968531.camel@redhat.com>
+         <5887b71e-cef2-a7b9-133c-e4ba860bf24a@oracle.com>
+         <CACGkMEvQhfenW9-StMwaJ887eatb_qtRYdDn=E12Wwkc6HU-sQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAOf5uw=6kGHFxU7R2b8GdU3orDxmJEuPoB=rv-neiskZpjhOWA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 08:31:22PM +0200, Michael Nazzareno Trimarchi wrote:
-
-Hi Michael,
-
-> Hi
+On Tue, 2022-10-18 at 15:59 +0800, Jason Wang wrote:
+> On Tue, Oct 18, 2022 at 7:35 AM Si-Wei Liu <si-wei.liu@oracle.com> wrote:
+> > 
+> > 
+> > 
+> > On 10/17/2022 5:28 AM, Sean Mooney wrote:
+> > > On Mon, 2022-10-17 at 15:08 +0800, Jason Wang wrote:
+> > > > Adding Sean and Daniel for more thoughts.
+> > > > 
+> > > > On Sat, Oct 15, 2022 at 9:33 AM Si-Wei Liu <si-wei.liu@oracle.com> wrote:
+> > > > > Live migration of vdpa would typically require re-instate vdpa
+> > > > > device with an idential set of configs on the destination node,
+> > > > > same way as how source node created the device in the first place.
+> > > > > 
+> > > > > In order to allow live migration orchestration software to export the
+> > > > > initial set of vdpa attributes with which the device was created, it
+> > > > > will be useful if the vdpa tool can report the config on demand with
+> > > > > simple query.
+> > > > For live migration, I think the management layer should have this
+> > > > knowledge and they can communicate directly without bothering the vdpa
+> > > > tool on the source. If I was not wrong this is the way libvirt is
+> > > > doing now.
+> > > At least form a openstack(nova) perspective we are not expecting to do any vdpa device configuration
+> > > at the openstack level. To use a vdpa device in openstack the oeprator when installing openstack
+> > > need to create a udev/systemd script to precreatre the vdpa devices.
+> > This seems to correlate vdpa device creation with the static allocation
+> > of SR-IOV VF devices. Perhaps OpenStack doesn't have a plan to support
+> > dynamic vdpa creation, but conceptionally vdpa creation can be on demand
+> > for e.g. over Mellanox SubFunction or Intel Scalable IOV device.
 > 
-> On Tue, Oct 18, 2022 at 6:46 PM Tommaso Merciai
-> <tommaso.merciai@amarulasolutions.com> wrote:
-> >
-> > This adds support for ilitek,ili9488 based displays with shift register
-> > in front of controller. Waveshare,pico-restouch-lcd-3.5 are such displays
-> >
-> > Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-> > ---
-> 
-> Because I start to make it working this driver, I think that my
-> signed-off is missing here
+> Yes, it's not specific to vDPA but something that openstack needs to consider.
 
-Yes, right. :)
-I upload in v2, my bad
+yes so before i joined redhat in 2018 i worked at intel and was trying to intergate there mdev based
+solution for a nic that got canceled due to the changes required to adtop vdpa and some other issues. 
+that orgianal approch was goign to dynmaicaly create teh mdev. for vdpa we built the support on top of
+our pci manager so the current support directly requires the vdpa device's parent to be a vf.
 
-> 
-> >  drivers/gpu/drm/tiny/Kconfig   |  13 +
-> >  drivers/gpu/drm/tiny/Makefile  |   1 +
-> >  drivers/gpu/drm/tiny/ili9488.c | 440 +++++++++++++++++++++++++++++++++
-> >  3 files changed, 454 insertions(+)
-> >  create mode 100644 drivers/gpu/drm/tiny/ili9488.c
-> >
-> > diff --git a/drivers/gpu/drm/tiny/Kconfig b/drivers/gpu/drm/tiny/Kconfig
-> > index 027cd87c3d0d7..6e708e8414806 100644
-> > --- a/drivers/gpu/drm/tiny/Kconfig
-> > +++ b/drivers/gpu/drm/tiny/Kconfig
-> > @@ -148,6 +148,19 @@ config TINYDRM_ILI9486
-> >
-> >           If M is selected the module will be called ili9486.
-> >
-> > +config TINYDRM_ILI9488
-> > +       tristate "DRM support for ILI9488 display panels"
-> > +       depends on DRM && SPI
-> > +       select DRM_KMS_HELPER
-> > +       select DRM_GEM_CMA_HELPER
-> > +       select DRM_MIPI_DBI
-> > +       select BACKLIGHT_CLASS_DEVICE
-> > +       help
-> > +         DRM driver for the following Ilitek ILI9488 panels:
-> > +         * LCD 3.5" 320x480 TFT (Waveshare Pico-ResTouch-LCD-3.5")
-> > +
-> > +         If M is selected the module will be called ili9486.
-> > +
-> >  config TINYDRM_MI0283QT
-> >         tristate "DRM support for MI0283QT"
-> >         depends on DRM && SPI
-> > diff --git a/drivers/gpu/drm/tiny/Makefile b/drivers/gpu/drm/tiny/Makefile
-> > index 1d9d6227e7ab7..aad6683b2ac40 100644
-> > --- a/drivers/gpu/drm/tiny/Makefile
-> > +++ b/drivers/gpu/drm/tiny/Makefile
-> > @@ -11,6 +11,7 @@ obj-$(CONFIG_TINYDRM_ILI9163)         += ili9163.o
-> >  obj-$(CONFIG_TINYDRM_ILI9225)          += ili9225.o
-> >  obj-$(CONFIG_TINYDRM_ILI9341)          += ili9341.o
-> >  obj-$(CONFIG_TINYDRM_ILI9486)          += ili9486.o
-> > +obj-$(CONFIG_TINYDRM_ILI9488)          += ili9488.o
-> >  obj-$(CONFIG_TINYDRM_MI0283QT)         += mi0283qt.o
-> >  obj-$(CONFIG_TINYDRM_REPAPER)          += repaper.o
-> >  obj-$(CONFIG_TINYDRM_ST7586)           += st7586.o
-> > diff --git a/drivers/gpu/drm/tiny/ili9488.c b/drivers/gpu/drm/tiny/ili9488.c
-> > new file mode 100644
-> > index 0000000000000..b94d9d4ff4544
-> > --- /dev/null
-> > +++ b/drivers/gpu/drm/tiny/ili9488.c
-> > @@ -0,0 +1,440 @@
-> > +// SPDX-License-Identifier: GPL-2.0+
-> > +/*
-> > + * DRM driver for Ilitek ILI9488 panels
-> > + *
-> > + * Copyright 2020 Kamlesh Gurudasani <kamlesh.gurudasani@gmail.com>
-> > + */
-> 
-> Code was changed a bit so please add copyright of me and you
+we did this for two reasons, first when i started working on this again in 2020 that was the only model that
+worked with any nic that were aviable and at the time mdevs were automaticaly created when you allcoated the
+vf sicne this predated teh newer model of using the vdpa cli to add devcies. secondly buliding on top of the
+sriov/pci passthough framework was less invasive. with openstack we currently have only tested our vdpa support
+with melonox connectx6-dx cards which at the time i added supprot only supported vdpa device creation on vfs
+not subfunctions.
 
-Agree, thanks.
+we are aware that vdpa devices can be created over a Mellanox SubFunction or Intel Scalable IOV device
+but we do not plan to support either in the near term. Im the primary person who has been workign on the openstack
+support for vdpa in openstack but i will be working on some other work for the next 6 months or so
+its unlikely we will look at extending nova vdpa cpablities until our upstream b cycle which start in march next year.
 
-> 
-> > +
-> > +#include <linux/delay.h>
-> > +#include <linux/dma-buf.h>
-> > +#include <linux/gpio/consumer.h>
-> > +#include <linux/module.h>
-> > +#include <linux/property.h>
-> > +#include <linux/spi/spi.h>
-> > +#include <video/mipi_display.h>
-> > +
-> > +#include <drm/drm_atomic_helper.h>
-> > +#include <drm/drm_drv.h>
-> > +#include <drm/drm_fb_cma_helper.h>
-> > +#include <drm/drm_gem_framebuffer_helper.h>
-> > +#include <drm/drm_fb_helper.h>
-> > +#include <drm/drm_damage_helper.h>
-> > +#include <drm/drm_framebuffer.h>
-> > +#include <drm/drm_gem_atomic_helper.h>
-> > +#include <drm/drm_gem_cma_helper.h>
-> > +#include <drm/drm_managed.h>
-> > +#include <drm/drm_mipi_dbi.h>
-> > +#include <drm/drm_modeset_helper.h>
-> > +
-> > +#define ILI9488_VCOM_CONTROL_1                 0xC5
-> > +#define ILI9488_COLUMN_ADDRESS_SET             0x2A
-> > +#define ILI9488_PAGE_ADDRESS_SET               0x2B
-> > +#define ILI9488_MEMORY_WRITE                   0x2C
-> > +#define ILI9488_POSITIVE_GAMMA_CORRECTION      0xE0
-> > +#define ILI9488_NEGATIVE_GAMMA_CORRECTION      0xE1
-> > +#define ILI9488_POWER_CONTROL_1                        0xC0
-> > +#define ILI9488_POWER_CONTROL_2                        0xC1
-> > +#define ILI9488_POWER_CONTROL_3                        0xC2
-> > +#define ILI9488_MEM_ACCESS_CONTROL             0x36
-> > +#define ILI9488_COLMOD_PIXEL_FORMAT_SET                0x3A
-> > +#define ILI9488_INTERFACE_MODE_CONTROL         0xB0
-> > +#define ILI9488_FRAME_RATE_CONTROL_PARTIAL     0xB3
-> > +#define ILI9488_DISPLAY_INVERSION_ON           0x21
-> > +#define ILI9488_DISPLAY_INVERSION_CONTROL      0xB4
-> > +#define ILI9488_DISPLAY_FUNCTION_CONTROL       0xB6
-> > +#define ILI9488_ENTRY_MODE_SET                 0xB7
-> > +#define ILI9488_HS_LANES_CONTROL               0xBE
-> > +#define ILI9488_SET_IMAGE_FUNCTION             0xE9
-> > +#define ILI9488_ADJUST_CONTROL_3               0xF7
-> > +#define ILI9488_DISPLAY_ON                     0x29
-> > +#define ILI9488_DISPLAY_OFF                    0x28
-> > +#define ILI9488_ENTER_SLEEP_MODE               0x10
-> > +#define ILI9488_DBI_BPP18                      0x06
-> > +#define ILI9488_DBI_BPP16                      0x05
-> > +#define ILI9488_DPI_BPP24                      0x70
-> > +#define ILI9488_DPI_BPP18                      0x60
-> > +#define ILI9488_DPI_BPP16                      0x50
-> > +#define ILI9488_FRAME_RATE_CONTROL_NORMAL      0xB1
-> > +#define ILI9488_SLEEP_OUT                      0x11
-> > +
-> > +#define ILI9488_MADCTL_RGB     BIT(2)
-> > +#define ILI9488_MADCTL_BGR     BIT(3)
-> > +#define ILI9488_MADCTL_MV      BIT(5)
-> > +#define ILI9488_MADCTL_MX      BIT(6)
-> > +#define ILI9488_MADCTL_MY      BIT(7)
-> > +
-> > +static void ili9488_rgb565_to_rgb666_line(u8 *dst, u16 *sbuf,
-> > +                                         unsigned int pixels)
-> > +{
-> > +       unsigned int x;
-> > +
-> > +       for (x = 0; x < pixels; x++) {
-> > +               *dst++ = ((*sbuf & 0xF800) >> 8);
-> > +               *dst++ = ((*sbuf & 0x07E0) >> 3);
-> > +               *dst++ = ((*sbuf & 0x001F) << 3);
-> > +               sbuf++;
-> > +       }
-> > +}
-> > +
-> > +static void ili9488_rgb565_to_rgb666(u8 *dst, void *vaddr,
-> > +                                    struct drm_framebuffer *fb,
-> > +                                    struct drm_rect *rect)
-> > +{
-> > +       unsigned long linepixels = drm_rect_width(rect);
-> > +       unsigned long lines = drm_rect_height(rect);
-> > +       size_t dst_len = linepixels * 3;
-> > +       size_t src_len = linepixels * fb->format->cpp[0];
-> > +       unsigned int y;
-> > +       u16 *sbuf;
-> > +
-> > +       /*
-> > +        * The cma memory is write-combined so reads are uncached.
-> > +        * Speed up by fetching one line at a time.
-> > +        */
-> > +       sbuf = kmalloc(src_len, GFP_KERNEL);
-> > +       if (!sbuf)
-> > +               return;
-> > +
-> > +       memset(sbuf, 0, src_len);
-> > +
-> 
-> Is this really needed?. This will be write on the copy
+conceptually speakign we have two concerns with the dynamic approch. nova for better or worse effectivly runs with
+full root access alhtough tha tis configend with selinux/apparmor policies and/or with contaienrs in most production
+installations. even so we try to limit privaldged calls and in the past we did not want nova specirifcly
+to make privladged calls to reconfigure hardware.  we already have precident for breaking that in the form of our
+generic mdev support where we are pass a list of parent devices and the mdev type to create on that device and then
+dynimcily advertise pools of avaiable mdevs which we create dynamicly. The scecond conserne is we have seen caching issue
+with libvirt when device change dynmicaly as it does nto always process the udev events correctly. as such our experince
+tells us that we are less likely to have caching related bugs if we take a staic approch.
 
-You are right, this comes from some test. I remove this in v2.
+Enableing dynamic vdpa createion would reqiure a large rewrite of how vdpa has been integrated in nova and neutron(openstack networking component).
+right now when you create a neutron port of type vdpa we internally convert that to a pci_request of type vdpa which
+or pci_manager matches to a db record for the precreated vdpa devices. we woudl likely need to have a new vdpa-dynmaic or similar
+port type that would correspond to the subfucniton/iov backed vdpa devices adn we would need to modle them differencly in our database.
+
+for sr-iov vfs the consumable consumable and therfor schdulable resouce is the vf so we have pools of vf with some metadata ot map them to logical
+networks in the case of a nic.  for a subfunciton/iov backed device there are presumabel two logical consumable resouces. The number of hardware
+vq pairs, and presumably there is a fintes number of iov/subfunctions a PF can allcoate. im sure there are other qualatative aspect we would like
+to schdule on but those are the main consumables that will determin how many vdpa devices we can create when selecting a host.
+
+we/i intentionally put this out of scope fo the inital vdpa support as i had no way to test this back in 2020 partly because we have a policy
+of not support test only code path i.e. adding supprot for the vdpa_sim kernel module which was discussed adn rejected becasue it does not create
+pci vfs for the vdpa devices and would have prevent using the pci manager or at least require us to fake the pci adress info using a sentenial like
+all 0. if we did not need to supprot dynamic creation the usnign a cential pci adress would actully be a quick way to add iov/subfucniton support
+but it woudl still require the static creations and a slight tweak to how we disucover the vdpa devices from libvirt.
+
+so to summerise supporting vdpa with iov/subfuctions as the backedn device would be a relitivly simple if they are precreated, we can
+fake the entry in the pci tacker in that case using a sentinal adress other tag in the db row to denote they are not vf backed.
+this woudl not require any change to neutron although we woudl likely need ot also modify os-vif to lookup the repesentor netdev which we
+attach to openvswitch to accoutn for the fact its an iov/subfunciton isntead of a vf parent.
+the dynmic approch 
 
 > 
-> > +       vaddr += rect->y1 * fb->pitches[0] + rect->x1 * fb->format->cpp[0];
-> > +       for (y = 0; y < lines; y++) {
-> > +               memcpy(sbuf, vaddr, src_len);
-> > +               ili9488_rgb565_to_rgb666_line(dst, sbuf, linepixels);
-> > +               vaddr += fb->pitches[0];
-> > +               dst += dst_len;
-> > +       }
-> > +       kfree(sbuf);
-> > +}
-> > +
-> > +static int ili9488_buf_copy(void *dst, struct drm_framebuffer *fb,
-> > +                           struct drm_rect *rect)
-> > +{
-> > +       struct drm_gem_cma_object *cma_obj = drm_fb_cma_get_gem_obj(fb, 0);
-> > +       void *src = cma_obj->vaddr;
-> > +       int ret = 0;
-> > +
-> > +       ret = drm_gem_fb_begin_cpu_access(fb, DMA_FROM_DEVICE);
-> > +       if (ret)
-> > +               return ret;
-> > +
-> > +       switch (fb->format->format) {
-> > +       case DRM_FORMAT_RGB565:
-> > +               ili9488_rgb565_to_rgb666(dst, src, fb, rect);
-> > +               break;
-> > +       default:
-> > +               dev_err_once(fb->dev->dev, "Format is not supported: %p4cc\n",
-> > +                               &fb->format->format);
-> > +               return -EINVAL;
-> > +       }
-> > +
-> > +       drm_gem_fb_end_cpu_access(fb, DMA_FROM_DEVICE);
-> > +
-> > +       return ret;
-> > +}
-> > +
-> > +static void ili9488_dbi_set_window_address(struct mipi_dbi_dev *dbidev,
-> > +                                       unsigned int xs, unsigned int xe,
-> > +                                       unsigned int ys, unsigned int ye)
-> > +{
-> > +       struct mipi_dbi *dbi = &dbidev->dbi;
-> > +
-> > +       xs += dbidev->left_offset;
-> > +       xe += dbidev->left_offset;
-> > +       ys += dbidev->top_offset;
-> > +       ye += dbidev->top_offset;
-> > +
-> > +       mipi_dbi_command(dbi, MIPI_DCS_SET_COLUMN_ADDRESS, (xs >> 8) & 0xff,
-> > +                        xs & 0xff, (xe >> 8) & 0xff, xe & 0xff);
-> > +       mipi_dbi_command(dbi, MIPI_DCS_SET_PAGE_ADDRESS, (ys >> 8) & 0xff,
-> > +                        ys & 0xff, (ye >> 8) & 0xff, ye & 0xff);
-> > +}
-> > +
+> > 
+> > > 
+> > > nova will query libvirt for the list avaiable vdpa devices at start up and record them in our database.
+> > > when schudling we select a host that has a free vdpa device and on that host we generate a xml snipit
+> > > that refernce the vdpa device and proivde that to libvirt and it will in turn program the mac.
+> > > 
+> > > """
+> > > <interface type="vdpa">
+> > >      <mac address="b5:bc:2e:e7:51:ee"/>
+> > >      <source dev="/dev/vhost-vdpa-3"/>
+> > > </interface>
+> > > """
+> > > 
+> > > when live migrating the workflow is similar. we ask our schduler for a host that should have enough avaiable
+> > > resouces, then we make an rpc call "pre_live_migrate" which makes a number of assterions such as cpu compatiablity
 > 
-> This is duplicated from the drm and maybe we can export from there
-
-I'll check and let you know.
+> A migration compatibility check for vDPA should be done as well here.
+yes it could be although at this point we have alredy complete schduling so if the check fails we will abort the migration.
+presumable libvirt will also check after we invoke the migraation too but the ideal case woudl be that we have enough
+info in our db to select a host we know will work rather then checkign after the fact.
+> 
+> > > but also computes cpu pinning and device passthough asignemnts. i.e. in pre_live_migate we select wich cpu cores, pcie
+> > > devices and in this case vdpa devices to use on the destination host
+> > In the case of vdpa, does it (the pre_live_migrate rpc) now just selects
+> > the parent mgmtdev for creating vdpa in later phase, or it ends up with
+> > a vdpa device being created? Be noted by now there's only a few
+> > properties for vdpa creation e.g. mtu and mac, that it doesn't need
+> > special reservation of resources for creating a vdpa device. But that
+> > may well change in the future.
+> > 
+> > > and return that in our rpc result.
+> > > 
+> > > we then use that information to udpate the libvirt domain xml with the new host specific information and start
+> > > the migration at the libvirt level.
+> > > 
+> > > today in openstack we use a hack i came up with to workaroudn that fact that you cant migrate with sriov/pci passthough
+> > > devices to support live migration with vdpa. basically before we call libvirt to live migrate we hot unplug the vdpa nic
+> > > form the guest and add them back after the migration is complte. if you dont bound the vdpa nics wiht a transparently migratable
+> > > nic in the guest that obvioulsy result in a loss of network connectivity while the migration is happenign which is not ideal
+> > > so a normal virtio-net interface on ovs is what we recommend as the fallback interface for the bound.
+> > Do you need to preserve the mac address when falling back to the normal
+> > virtio-net interface, and similarly any other network config/state?
+> > Basically vDPA doesn't support live migration for the moment.
+> 
+> Basic shadow vq based live migration can work now. Eugenio is working
+> to make it fully ready in the near future.
+this missed our merge window for the Zed cycle which feature froze in september and was relased a week or two ago.
 
 > 
-> > +static void ili9488_fb_dirty(struct drm_framebuffer *fb, struct drm_rect *rect)
-> > +{
-> > +       struct iosys_map map[DRM_FORMAT_MAX_PLANES];
-> > +       struct iosys_map data[DRM_FORMAT_MAX_PLANES];
-> > +       struct mipi_dbi_dev *dbidev = drm_to_mipi_dbi_dev(fb->dev);
-> > +       unsigned int height = rect->y2 - rect->y1;
-> > +       unsigned int width = rect->x2 - rect->x1;
-> > +       struct mipi_dbi *dbi = &dbidev->dbi;
-> > +       int idx, ret = 0;
-> > +       bool full;
-> > +       void *tr;
-> > +
-> > +       if (WARN_ON(!fb))
-> > +               return;
-> > +
-> > +       if (!drm_dev_enter(fb->dev, &idx))
-> > +               return;
-> > +
-> > +       ret = drm_gem_fb_vmap(fb, map, data);
-> > +       if (ret)
-> > +               goto err_drm_dev_exit;
-> > +
-> > +       full = width == fb->width && height == fb->height;
-> > +
-> > +       DRM_DEBUG_KMS("Flushing [FB:%d] " DRM_RECT_FMT "\n", fb->base.id, DRM_RECT_ARG(rect));
-> > +
-> > +       if (!dbi->dc || !full ||
-> > +           fb->format->format == DRM_FORMAT_RGB565) {
-> > +               tr = dbidev->tx_buf;
-> > +               ret = ili9488_buf_copy(dbidev->tx_buf, fb, rect);
-> > +               if (ret)
-> > +                       goto err_msg;
-> > +       } else {
-> > +               tr = data[0].vaddr; /* TODO: Use mapping abstraction properly */
-> > +       }
-> > +
-> > +       ili9488_dbi_set_window_address(dbidev, rect->x1, rect->x2 - 1, rect->y1,
-> > +                                   rect->y2 - 1);
-> > +
-> > +       ret = mipi_dbi_command_buf(dbi, MIPI_DCS_WRITE_MEMORY_START, tr,
-> > +                                  width * height * 3);
-> > +err_msg:
-> > +       if (ret)
-> > +               drm_err_once(fb->dev, "Failed to update display %d\n", ret);
-> > +
-> > +       drm_gem_fb_vunmap(fb, map);
-> > +
-> > +err_drm_dev_exit:
-> > +       drm_dev_exit(idx);
-> > +}
-> > +
-> > +static void ili9488_pipe_update(struct drm_simple_display_pipe *pipe,
-> > +                              struct drm_plane_state *old_state)
-> > +{
-> > +       struct drm_plane_state *state = pipe->plane.state;
-> > +       struct drm_rect rect;
-> > +
-> > +       if (!pipe->crtc.state->active)
-> > +               return;
-> > +
-> > +       if (drm_atomic_helper_damage_merged(old_state, state, &rect))
-> > +               ili9488_fb_dirty(state->fb, &rect);
-> > +}
-> > +
-> > +static void ili9488_pipe_enable(struct drm_simple_display_pipe *pipe,
-> > +                               struct drm_crtc_state *crtc_state,
-> > +                               struct drm_plane_state *plane_state)
-> > +{
-> > +       struct mipi_dbi_dev *dbidev = drm_to_mipi_dbi_dev(pipe->crtc.dev);
-> > +       struct drm_framebuffer *fb = plane_state->fb;
-> > +       struct mipi_dbi *dbi = &dbidev->dbi;
-> > +       u8 addr_mode;
-> > +       struct drm_rect rect = {
-> > +               .x1 = 0,
-> > +               .x2 = fb->width,
-> > +               .y1 = 0,
-> > +               .y2 = fb->height,
-> > +       };
+> > This
+> > doesn't like to be a technically correct solution for it to work.
 > 
-> rect can be dropped
-> 
-> > +       int ret, idx;
-> > +
-> > +       if (!drm_dev_enter(pipe->crtc.dev, &idx))
-> > +               return;
-> > +
-> > +       DRM_DEBUG_KMS("\n");
-> > +
-> > +       ret = mipi_dbi_poweron_conditional_reset(dbidev);
-> > +       if (ret < 0)
-> > +               goto out_exit;
-> > +       if (ret == 1)
-> > +               goto out_enable;
-> > +
-> > +       mipi_dbi_command(dbi, ILI9488_DISPLAY_INVERSION_ON);
-> > +       mipi_dbi_command(dbi, ILI9488_POWER_CONTROL_3, 0x33);
-> > +       mipi_dbi_command(dbi, ILI9488_FRAME_RATE_CONTROL_NORMAL, 0xB0);
-> > +       mipi_dbi_command(dbi, ILI9488_MEM_ACCESS_CONTROL, 0x28);
-> > +
-> > +       mipi_dbi_command(dbi, MIPI_DCS_SET_PIXEL_FORMAT, 0x65);
-> > +
-> > +       mipi_dbi_command(dbi, ILI9488_POSITIVE_GAMMA_CORRECTION,
-> > +                        0x00, 0x13, 0x18, 0x04, 0x0F,
-> > +                        0x06, 0x3A, 0x56, 0x4D, 0x03,
-> > +                        0x0A, 0x06, 0x30, 0x3E, 0x0F);
-> > +       mipi_dbi_command(dbi, ILI9488_NEGATIVE_GAMMA_CORRECTION,
-> > +                        0x00, 0x13, 0x18, 0x01, 0x11,
-> > +                        0x06, 0x38, 0x3A, 0x4D, 0x06,
-> > +                        0x0D, 0x0B, 0x31, 0x37, 0x0F);
-> > +
-> > +       mipi_dbi_command(dbi, MIPI_DCS_SET_PIXEL_FORMAT, MIPI_DCS_PIXEL_FMT_18BIT);
-> > +       mipi_dbi_command(dbi, MIPI_DCS_EXIT_SLEEP_MODE);
-> > +       msleep(120);
-> > +       mipi_dbi_command(dbi, MIPI_DCS_SET_DISPLAY_ON);
-> > +       msleep(100);
-> > +
-> > +out_enable:
-> > +       switch (dbidev->rotation) {
-> > +       default:
-> > +               addr_mode = ILI9488_MADCTL_MX;
-> > +               break;
-> > +       case 90:
-> > +               addr_mode = ILI9488_MADCTL_MV;
-> > +               break;
-> > +       case 180:
-> > +               addr_mode = ILI9488_MADCTL_MY;
-> > +               break;
-> > +       case 270:
-> > +               addr_mode = ILI9488_MADCTL_MV | ILI9488_MADCTL_MY |
-> > +                       ILI9488_MADCTL_MX;
-> > +               break;
-> > +       }
-> > +       addr_mode |= ILI9488_MADCTL_BGR;
-> > +       mipi_dbi_command(dbi, MIPI_DCS_SET_ADDRESS_MODE, addr_mode);
-> > +       ili9488_fb_dirty(fb, &rect);
-> 
-> This is not needed and and rect can be drop as I have on latest code
-> 
->    mipi_dbi_command(dbi, MIPI_DCS_SET_ADDRESS_MODE, addr_mode);
->    mipi_dbi_enable_flush(dbidev, crtc_state, plane_state);
-> 
-> The flush should call the pipeline_update and you don't need to have
-> then anything more than this
+> I agree.
+this is what is what we added for sriov VF direct pasthouhg
+all you need to do in the guest is use the linux kernel bond driver to create a bound between the vf and anoter live migratebale prot type.
+the basic test i did for this i added the mac of the VF  to the allowed adress pairs for the ovs port and used that as the mac of the vf.
+this is all out os scope of openstack to configure and manage. we are not useing the virtio fallback support that was added after we implemted this
+as we dont have a good way today to descibe the grouping of the primary and fallback internfce in neutron api.
 
-Don't agree on this I found the following description:
+the details of waht we do are here https://specs.openstack.org/openstack/nova-specs/specs/stein/approved/libvirt-neutron-sriov-livemigration.html
 
-drivers/gpu/drm/drm_mipi_dbi.c
-
-Note: Drivers which don't use mipi_dbi_pipe_update() because they have custom
-framebuffer flushing, can't use this function since they both use the same
-flushing code.
-
-Thanks & Regards,
-Tommaso
+we only do automatic hotplug for nic and only if they are drectly attached, if they use a macvtap to attach the vf to the vm we do not remove them.
+our intent for vdpa was to also not remove them and rely on the native live migration supprot when we detct the source and destiantion host
+supprot that.
 
 > 
-> Michael
+> > > 
+> > > obviouly when vdpa supprot transparent live migration we can just skip this workaround which woudl be a very nice ux improvement.
+> > > one of the sideeffct of the hack however is you can start with an intel nic and end up with a melonox nic becasue we dont need
+> > > to preserve the device capablies sicne we are hotplugging.
+> > Exactly. This is the issue.
+so today in an openstack cloud you ingeneral should not know the vendro fo the nic that si provdie as a normal user.
+for vdpa that is even more imporant as vdpa is ment to abstract that and provdie a standardised virtio interface to the guest.
+there are atributes of the virtio inteface that obviously need to match liek the vq_size but we shoudl be able to
+live migrate from a vdpa device created on a connext6-dx vf to one expsoed by an intel iov device without the guest knowing
+that we have changed teh backend.
+> > > 
+> > > with vdpa we will at least have a virtaul virtio-net-pci frontend in qemu to provide some level of abstraction.
+> > > i guess the point you are raising is that for live migration we cant start with 4 queue paris and vq_size=256
+> > > and select a device with 2 queue pairs and vq_size of 512 and expect that to just work.
+> > Not exactly, the vq_size comes from QEMU that has nothing to do with
+> > vDPA tool. And live migrating from 4 queue pairs to 2 queue pairs won't
+> > work for the guest driver. Change of queue pair numbers would need
+> > device reset which  won't happen transparently during live migration.
+> > Basically libvirt has to match the exact queue pair number and queue
+> > length on destination node.
+> > 
+> > > 
+> > > There are two ways to adress that. 1 we can start recording this infor in our db and schdule only ot hosts with the same
+> > > configuration values, or 2 we can record the capablities i.e. the max vaulues that are support by a devcice and schdule to a host
+> > > where its >= the current value and rely on libvirt to reconfigure the device.
+> > > 
+> > > libvirt required very little input today to consume a vdpa interface
+> > > https://libvirt.org/formatdomain.html#vdpa-devices
 > 
-> > +out_exit:
-> > +       drm_dev_exit(idx);
-> > +}
-> > +
-> > +static void ili9488_pipe_disable(struct drm_simple_display_pipe *pipe)
-> > +{
-> > +       struct mipi_dbi_dev *dbidev = drm_to_mipi_dbi_dev(pipe->crtc.dev);
-> > +       /*
-> > +        * This callback is not protected by drm_dev_enter/exit since we want to
-> > +        * turn off the display on regular driver unload. It's highly unlikely
-> > +        * that the underlying SPI controller is gone should this be called
-> > +        * after unplug.
-> > +        */
-> > +
-> > +       DRM_DEBUG_KMS("\n");
-> > +
-> > +       mipi_dbi_command(&dbidev->dbi, MIPI_DCS_SET_DISPLAY_OFF);
-> > +}
-> > +
-> > +static const u32 ili9488_formats[] = {
-> > +       DRM_FORMAT_RGB565,
-> > +};
-> > +
-> > +static const struct drm_simple_display_pipe_funcs ili9488_pipe_funcs = {
-> > +       .enable = ili9488_pipe_enable,
-> > +       .disable = ili9488_pipe_disable,
-> > +       .update = ili9488_pipe_update,
-> > +};
-> > +
-> > +static const struct drm_display_mode ili9488_mode = {
-> > +       DRM_SIMPLE_MODE(320, 480, 49, 73),
-> > +};
-> > +
-> > +DEFINE_DRM_GEM_CMA_FOPS(ili9488_fops);
-> > +
-> > +static struct drm_driver ili9488_driver = {
-> > +       .driver_features        = DRIVER_GEM | DRIVER_MODESET | DRIVER_ATOMIC,
-> > +       .fops                   = &ili9488_fops,
-> > +       DRM_GEM_CMA_DRIVER_OPS_VMAP,
-> > +       .debugfs_init           = mipi_dbi_debugfs_init,
-> > +       .name                   = "ili9488",
-> > +       .desc                   = "Ilitek ILI9488",
-> > +       .date                   = "20221017",
-> > +       .major                  = 1,
-> > +       .minor                  = 0,
-> > +};
-> > +
-> > +static const struct of_device_id ili9488_of_match[] = {
-> > +       { .compatible = "waveshare,pico-rt-lcd-35" },
-> > +       { }
-> > +};
-> > +MODULE_DEVICE_TABLE(of, ili9488_of_match);
-> > +
-> > +static const struct spi_device_id ili9488_id[] = {
-> > +       { "ili9488", 0 },
-> > +       { }
-> > +};
-> > +MODULE_DEVICE_TABLE(spi, ili9488_id);
-> > +
-> > +static int ili9488_probe(struct spi_device *spi)
-> > +{
-> > +       struct device *dev = &spi->dev;
-> > +       struct mipi_dbi_dev *dbidev;
-> > +       struct drm_device *drm;
-> > +       struct mipi_dbi *dbi;
-> > +       struct gpio_desc *dc;
-> > +       u32 rotation = 0;
-> > +       size_t bufsize;
-> > +       int ret;
-> > +
-> > +       dbidev = devm_drm_dev_alloc(dev, &ili9488_driver,
-> > +                                   struct mipi_dbi_dev, drm);
-> > +       if (IS_ERR(dbidev))
-> > +               return PTR_ERR(dbidev);
-> > +
-> > +       dbi = &dbidev->dbi;
-> > +       drm = &dbidev->drm;
-> > +
-> > +       bufsize = ili9488_mode.vdisplay * ili9488_mode.hdisplay * 3;
-> > +
-> > +       dbi->reset = devm_gpiod_get(dev, "reset", GPIOD_OUT_HIGH);
-> > +       if (IS_ERR(dbi->reset)) {
-> > +               DRM_DEV_ERROR(dev, "Failed to get gpio 'reset'\n");
-> > +               return PTR_ERR(dbi->reset);
-> > +       }
-> > +
-> > +       dc = devm_gpiod_get(dev, "dc", GPIOD_OUT_LOW);
-> > +       if (IS_ERR(dc)) {
-> > +               DRM_DEV_ERROR(dev, "Failed to get gpio 'dc'\n");
-> > +               return PTR_ERR(dc);
-> > +       }
-> > +
-> > +       dbidev->backlight = devm_of_find_backlight(dev);
-> > +       if (IS_ERR(dbidev->backlight))
-> > +               return PTR_ERR(dbidev->backlight);
-> > +
-> > +       device_property_read_u32(dev, "rotation", &rotation);
-> > +
-> > +       ret = mipi_dbi_spi_init(spi, dbi, dc);
-> > +       if (ret)
-> > +               return ret;
-> > +
-> > +       dbidev->drm.mode_config.preferred_depth = 16;
-> > +
-> > +       ret = mipi_dbi_dev_init_with_formats(dbidev, &ili9488_pipe_funcs,
-> > +                                            ili9488_formats,
-> > +                                            ARRAY_SIZE(ili9488_formats),
-> > +                                            &ili9488_mode, rotation, bufsize);
-> > +       if (ret)
-> > +               return ret;
-> > +
-> > +       dbi->swap_bytes = true;
-> > +       drm_mode_config_reset(drm);
-> > +
-> > +       ret = drm_dev_register(drm, 0);
-> > +       if (ret)
-> > +               return ret;
-> > +
-> > +       spi_set_drvdata(spi, drm);
-> > +
-> > +       drm_fbdev_generic_setup(drm, 0);
-> > +
-> > +       return 0;
-> > +}
-> > +
-> > +static void ili9488_remove(struct spi_device *spi)
-> > +{
-> > +       struct drm_device *drm = spi_get_drvdata(spi);
-> > +
-> > +       drm_dev_unplug(drm);
-> > +       drm_atomic_helper_shutdown(drm);
-> > +}
-> > +
-> > +static void ili9488_shutdown(struct spi_device *spi)
-> > +{
-> > +       drm_atomic_helper_shutdown(spi_get_drvdata(spi));
-> > +}
-> > +
-> > +static struct spi_driver ili9488_spi_driver = {
-> > +       .driver = {
-> > +               .name = "ili9488",
-> > +               .owner = THIS_MODULE,
-> > +               .of_match_table = ili9488_of_match,
-> > +       },
-> > +       .id_table = ili9488_id,
-> > +       .probe = ili9488_probe,
-> > +       .remove = ili9488_remove,
-> > +       .shutdown = ili9488_shutdown,
-> > +};
-> > +module_spi_driver(ili9488_spi_driver);
-> > +
-> > +MODULE_DESCRIPTION("Ilitek ILI9488 DRM driver");
-> > +MODULE_AUTHOR("Kamlesh Gurudasani <kamlesh.gurudasani@gmail.com>");
-> > +MODULE_AUTHOR("Michael Trimarchi <michael@amarulasolutions.com>");
-> > +MODULE_AUTHOR("Tommaso Merciai <tommaso.merciai@amarulasolutions.com>");
-> > +MODULE_LICENSE("GPL");
-> > \ No newline at end of file
-> > --
-> > 2.25.1
-> >
-> 
-> 
-> -- 
-> Michael Nazzareno Trimarchi
-> Co-Founder & Chief Executive Officer
-> M. +39 347 913 2170
-> michael@amarulasolutions.com
-> __________________________________
-> 
-> Amarula Solutions BV
-> Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
-> T. +31 (0)85 111 9172
-> info@amarulasolutions.com
-> www.amarulasolutions.com
+> So a question here, if we need to create vDPA on demand (e.g with the
+> features and configs from the source) who will do the provision? Is it
+> libvirt?
+for mdevs we directly write to /sys we decied not to supprot mdevctl as it was not vendor neutal at the time or packaged in
+distros other then fedora. since then libvirt has added the ablity to create mdevs via its nodedev api. if that had existed
+at the time we probably would have used that instead. so if we were to support dynamic mdev createion we would have two options
 
--- 
-Tommaso Merciai
-Embedded Linux Engineer
-tommaso.merciai@amarulasolutions.com
-__________________________________
+1.) wrap calls to the vdpa cli into privaldged fucntions executed in our privaladge seperation deamon
+2.) use a libvirt provided api likely an extention to the nodedev api like the mdev one.
 
-Amarula Solutions SRL
-Via Le Canevare 30, 31100 Treviso, Veneto, IT
-T. +39 042 243 5310
-info@amarulasolutions.com
-www.amarulasolutions.com
+timing would be a factor but if libvirt supported the capablity when we started working on supprot i dont see why we woudl
+bypass it and do it ourselve. if libvirt did not want to supprot this we woudl fall back to option 1.
+
+as noted above the openstack team at redhat will not have capsity to consume this ongoing work in the kernel/libvit
+until q2 next year at the eairliest so we likely wont make any discision in this regard until then.
+
+> 
+> Thanks
+> 
+> > > there are some generic virtio device optiosn we could set https://libvirt.org/formatdomain.html#virtio-related-options
+> > > and some generic options like the mtu that the interface element supportr
+> > > 
+> > > but the miniumal valide xml snipit is litrally just the source dev path.
+> > > 
+> > > <devices>
+> > >    <interface type='vdpa'>
+> > >      <source dev='/dev/vhost-vdpa-0'/>
+> > >    </interface>
+> > > </devices>
+> > > 
+> > > nova only add the mac address and MTU today although i have some untested code that will try to also set the vq size.
+> > > https://github.com/openstack/nova/blob/11cb31258fa5b429ea9881c92b2d745fd127cdaf/nova/virt/libvirt/designer.py#L154-L167
+> > > 
+> > > The basic supprot we have today assumes however that the vq_size is either the same on all host or it does not matter because we do
+> > > not support transparent live migration today so its ok for it to change form host to host.
+> > > in any case we do not track the vq_size or vq count today so we cant schdule based on it or comunicate it to libvirt via our
+> > > pre_live_migration rpc result. that means libvirt shoudl check if the dest device has the same cofnig or update it if posible
+> > > before starting the destination qemu instance and begining the migration.
+> > > 
+> > > > > This will ease the orchestration software implementation
+> > > > > so that it doesn't have to keep track of vdpa config change, or have
+> > > > > to persist vdpa attributes across failure and recovery, in fear of
+> > > > > being killed due to accidental software error.
+> > > the vdpa device config is not somethign we do today so this woudl make our lives more complex
+> > It's regarding use case whether to support or not. These configs well
+> > exist before my change.
+> > 
+> > > depending on
+> > > what that info is. at least in the case of nova we do not use the vdpa cli at all, we use libvirt as an indirection layer.
+> > > so libvirt would need to support this interface, we would have to then add it to our db and modify our RPC interface
+> > > to then update the libvirt xml with addtional info we dont need today.
+> > 
+> > Yes. You can follow libvirt when the corresponding support is done, but
+> > I think it's orthogonal with my changes. Basically my change won't
+> > affect libvirt's implementation at all.
+> > 
+> > Thanks,
+> > -Siwei
+> > 
+> > 
+> > > > > In this series, the initial device config for vdpa creation will be
+> > > > > exported via the "vdpa dev show" command.
+> > > > > This is unlike the "vdpa
+> > > > > dev config show" command that usually goes with the live value in
+> > > > > the device config space, which is not reliable subject to the dynamics
+> > > > > of feature negotiation and possible change in device config space.
+> > > > > 
+> > > > > Examples:
+> > > > > 
+> > > > > 1) Create vDPA by default without any config attribute
+> > > > > 
+> > > > > $ vdpa dev add mgmtdev pci/0000:41:04.2 name vdpa0
+> > > > > $ vdpa dev show vdpa0
+> > > > > vdpa0: type network mgmtdev pci/0000:41:04.2 vendor_id 5555 max_vqs 9 max_vq_size 256
+> > > > > $ vdpa dev -jp show vdpa0
+> > > > > {
+> > > > >      "dev": {
+> > > > >          "vdpa0": {
+> > > > >              "type": "network",
+> > > > >              "mgmtdev": "pci/0000:41:04.2",
+> > > > >              "vendor_id": 5555,
+> > > > >              "max_vqs": 9,
+> > > > >              "max_vq_size": 256,
+> > > > >          }
+> > > > >      }
+> > > > > }
+> > > This is how openstack works today. this step is done statically at boot time typiccly via a udev script or systemd servic file.
+> > > the mac adress is udpate don the vdpa interface by libvirt when its asigined to the qemu process.
+> > > if we wanted to suport multi queue or vq size configuration it would also happen at that time not during device creation.
+> > > > > 2) Create vDPA with config attribute(s) specified
+> > > > > 
+> > > > > $ vdpa dev add mgmtdev pci/0000:41:04.2 name vdpa0 \
+> > > > >      mac e4:11:c6:d3:45:f0 max_vq_pairs 4
+> > > > > $ vdpa dev show
+> > > > > vdpa0: type network mgmtdev pci/0000:41:04.2 vendor_id 5555 max_vqs 9 max_vq_size 256
+> > > > >    mac e4:11:c6:d3:45:f0 max_vq_pairs 4
+> > > > > $ vdpa dev -jp show
+> > > > > {
+> > > > >      "dev": {
+> > > > >          "vdpa0": {
+> > > > >              "type": "network",
+> > > > >              "mgmtdev": "pci/0000:41:04.2",
+> > > > So "mgmtdev" looks not necessary for live migration.
+> > > > 
+> > > > Thanks
+> > > > 
+> > > > >              "vendor_id": 5555,
+> > > > >              "max_vqs": 9,
+> > > > >              "max_vq_size": 256,
+> > > > >              "mac": "e4:11:c6:d3:45:f0",
+> > > > >              "max_vq_pairs": 4
+> > > > >          }
+> > > > >      }
+> > > > > }
+> > > dynmaicaly creating vdpa device at runtime while possible is not an approch we are plannign to supprot.
+> > > 
+> > > currntly in nova we perefer to do allcoation of staticically provsioned resouces in nova.
+> > > for persitent memory, sriov/pci passthorgh, dedciated cpus, hugepages and vdpa devices we manage inventories
+> > > of resouce that the operator has configured on the platform.
+> > > 
+> > > we have one excption to this static aproch which is semi dynmaic that is how we manage vifo mediated devices.
+> > > for reasons that are not important we currrnly track the partent devices that are capable of providing MDEVs
+> > > and we directlly write to /sys/... to create teh mdev instance  of a requested mdev on demand.
+> > > 
+> > > This has proven ot be quite problematic as we have encountered caching bugs due to the delay between device
+> > > creation and when the /sys interface expost the direcotry stucture for the mdev. This has lead ot libvirt and as a result
+> > > nova getting out of sync with the actual state of the host. There are also issue with host reboots.
+> > > 
+> > > while we do see the advantage of beign able to create vdpa interface on demad espicaly if we can do finer grained resouce
+> > > partioning by allcoating one mdev with 4 vqs adn another with 8 ectra, or experice with dynmic mdev management gives us
+> > > pause. we can and will fix our bugs with mdevs but we have found that most of our customers that use feature  like this
+> > > are telcos or other similar industries that typiclly have very static wrokloads. while there is  some interest in making
+> > > there clouds more dynmaic they typically file a host and run the same worklaod on that host form months to years at a
+> > > time and plan there hardware and acordingly so they are well seved by the static usecase "1) Create vDPA by default without any config attribute".
+> > > 
+> > > > > ---
+> > > > > 
+> > > > > Si-Wei Liu (4):
+> > > > >    vdpa: save vdpa_dev_set_config in struct vdpa_device
+> > > > >    vdpa: pass initial config to _vdpa_register_device()
+> > > > >    vdpa: show dev config as-is in "vdpa dev show" output
+> > > > >    vdpa: fix improper error message when adding vdpa dev
+> > > > > 
+> > > > >   drivers/vdpa/ifcvf/ifcvf_main.c      |  2 +-
+> > > > >   drivers/vdpa/mlx5/net/mlx5_vnet.c    |  2 +-
+> > > > >   drivers/vdpa/vdpa.c                  | 63 +++++++++++++++++++++++++++++++++---
+> > > > >   drivers/vdpa/vdpa_sim/vdpa_sim_blk.c |  2 +-
+> > > > >   drivers/vdpa/vdpa_sim/vdpa_sim_net.c |  2 +-
+> > > > >   drivers/vdpa/vdpa_user/vduse_dev.c   |  2 +-
+> > > > >   drivers/vdpa/virtio_pci/vp_vdpa.c    |  3 +-
+> > > > >   include/linux/vdpa.h                 | 26 ++++++++-------
+> > > > >   8 files changed, 80 insertions(+), 22 deletions(-)
+> > > > > 
+> > > > > --
+> > > > > 1.8.3.1
+> > > > > 
+> > 
+> 
+
