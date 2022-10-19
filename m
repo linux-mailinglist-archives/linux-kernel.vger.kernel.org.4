@@ -2,117 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D096360446A
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 14:03:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7197A6044B1
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 14:11:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232471AbiJSMDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 08:03:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36204 "EHLO
+        id S229802AbiJSMLZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 08:11:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbiJSMDM (ORCPT
+        with ESMTP id S232499AbiJSMKl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 08:03:12 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBBD62182B;
-        Wed, 19 Oct 2022 04:39:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666179573; x=1697715573;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=F4/v5xFdGeutzQlY/uK0xk51209qAd1LVCKjl8ZCvfY=;
-  b=jIDiz0RF/ktVNTvvBBLdrzAOJ4D51jzob7uTrW4thUniVSTp8yerbyrD
-   0RUrfXpAkjIn2q4wMUbYxNshACydiasZFd3jDY3k03DGkSqF+50d8kgVg
-   ijJYHnsS+BTbvNZMfP10U3+LzuUfHu+KqlLTGbwxw5IqFHU36is5zPr4C
-   J9fxHFAAi4rMQG79cn9JPXxdj0iX6/A6rDy8r0ONFH1wFbW+DQx421IvX
-   pn64/1tNlUirdZqf4f2GL/kN/vmaVMt5r/9/JmyiYWHIG3RYUa5GX01Mx
-   1P+c4hCMBVoMsMQTvClrSDH1fLAmUMywGzHfNFuRgIPGi9BTbCAvbTu6L
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="308057632"
-X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
-   d="scan'208";a="308057632"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 03:31:00 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="804236884"
-X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
-   d="scan'208";a="804236884"
-Received: from sponnura-mobl1.amr.corp.intel.com ([10.251.214.35])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 03:30:58 -0700
-Date:   Wed, 19 Oct 2022 13:30:55 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-cc:     linux-serial <linux-serial@vger.kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/2] tty: Convert tty_buffer flags to bool
-In-Reply-To: <Y0/QhJBW1TapqrjC@kroah.com>
-Message-ID: <7536939f-d46-a4fc-b987-53421849ce5a@linux.intel.com>
-References: <20221019094241.10870-1-ilpo.jarvinen@linux.intel.com> <Y0/QhJBW1TapqrjC@kroah.com>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-861702288-1666175459=:1619"
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 19 Oct 2022 08:10:41 -0400
+Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73B9810F881;
+        Wed, 19 Oct 2022 04:45:56 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=25;SR=0;TI=SMTPD_---0VSaNslb_1666175784;
+Received: from localhost.localdomain(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VSaNslb_1666175784)
+          by smtp.aliyun-inc.com;
+          Wed, 19 Oct 2022 18:36:34 +0800
+From:   Xianting Tian <xianting.tian@linux.alibaba.com>
+To:     paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, anup@brainfault.org, heiko@sntech.de,
+        guoren@kernel.org, mick@ics.forth.gr,
+        alexandre.ghiti@canonical.com, bhe@redhat.com, vgoyal@redhat.com,
+        dyoung@redhat.com, corbet@lwn.net, Conor.Dooley@microchip.com,
+        bagasdotme@gmail.com, k-hagio-ab@nec.com, lijiang@redhat.com
+Cc:     kexec@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        crash-utility@redhat.com, heinrich.schuchardt@canonical.com,
+        hschauhan@nulltrace.org, yixun.lan@gmail.com,
+        Xianting Tian <xianting.tian@linux.alibaba.com>
+Subject: [PATCH V4 0/2] Support VMCOREINFO export for RISCV64
+Date:   Wed, 19 Oct 2022 18:36:21 +0800
+Message-Id: <20221019103623.7008-1-xianting.tian@linux.alibaba.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+As disscussed in below patch set, the patch of 'describe VMCOREINFO export in Documentation'
+need to update according to Bagas's comments. 
+https://lore.kernel.org/linux-riscv/22AAF52E-8CC8-4D11-99CB-88DE4D113444@kernel.org/
 
---8323329-861702288-1666175459=:1619
-Content-Type: text/plain; charset=iso-8859-1
-Content-Transfer-Encoding: 8BIT
+As others patches in above patch set already applied, so this patch set only contains below two
+patches.
 
-On Wed, 19 Oct 2022, Greg KH wrote:
+------
+Changes:
+   Fix commit message in patch 2: use "Document these RISCV64 exports above" instead of
+   "This patch just add the description of VMCOREINFO export for RISCV64."
+V1 -> V2:
+   Remove unnecessary overline above header text in patch 2.
+V2 -> V3:
+   Fix commit message in patch 1,2; 
+   Use 'space' instead of 'region' for vmemmap description in patch 2.
+V3 -> V4:
+   Remove unnecessary kernel space export:
+   KASAN_SHADOW_START ~ KASAN_SHADOW_END,
+   ADDRESS_SPACE_END
 
-> On Wed, Oct 19, 2022 at 12:42:39PM +0300, Ilpo Järvinen wrote:
-> > The struct tty_buffer has flags which is only used for storing TTYB_NORMAL.
-> > There is also a few quite confusing operations for checking the presense
-> > of TTYB_NORMAL. Simplify things by converting flags to bool.
-> > 
-> > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> > ---
-> >  drivers/tty/tty_buffer.c   | 28 ++++++++++++++--------------
-> >  include/linux/tty_buffer.h |  5 +----
-> >  include/linux/tty_flip.h   |  4 ++--
-> >  3 files changed, 17 insertions(+), 20 deletions(-)
-> > 
-> > diff --git a/drivers/tty/tty_buffer.c b/drivers/tty/tty_buffer.c
-> > index 5e287dedce01..be3431575a19 100644
-> > --- a/drivers/tty/tty_buffer.c
-> > +++ b/drivers/tty/tty_buffer.c
-> > @@ -107,7 +107,7 @@ static void tty_buffer_reset(struct tty_buffer *p, size_t size)
-> >  	p->commit = 0;
-> >  	p->lookahead = 0;
-> >  	p->read = 0;
-> > -	p->flags = 0;
-> > +	p->flags = true;
-> >  }
-> >  
-> >  /**
-> > @@ -249,7 +249,7 @@ void tty_buffer_flush(struct tty_struct *tty, struct tty_ldisc *ld)
-> >   * __tty_buffer_request_room	-	grow tty buffer if needed
-> >   * @port: tty port
-> >   * @size: size desired
-> > - * @flags: buffer flags if new buffer allocated (default = 0)
-> > + * @flags: buffer flags if new buffer allocated
-> 
-> If all this does is store TTYB_NORMAL, why not name it "ttyb_normal"?
-> Leaving it at "flags" and having that be a boolean is just confusing.
+Xianting Tian (2):
+  RISC-V: Add arch_crash_save_vmcoreinfo support
+  Documentation: kdump: describe VMCOREINFO export for RISCV64
 
-No, it's intentional.
-
-"Flags" (as boolean) here refer to whether the buffer stores flag array 
-along with the character data array. Previously it perhaps could be 
-interpreted differently meaning that the member variable itself stored 
-flags such as TTYB_NORMAL.
-
-Flags is much better name than ttyb_normal, IMHO.
+ .../admin-guide/kdump/vmcoreinfo.rst          | 30 ++++++++++++++++++
+ arch/riscv/kernel/Makefile                    |  1 +
+ arch/riscv/kernel/crash_core.c                | 29 +++++++++++++++++
+ 3 files changed, 61 insertions(+)
+ create mode 100644 arch/riscv/kernel/crash_core.c
 
 -- 
- i.
+2.17.1
 
---8323329-861702288-1666175459=:1619--
