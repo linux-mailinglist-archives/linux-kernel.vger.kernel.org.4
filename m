@@ -2,69 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A993604FAC
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 20:32:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3064604FB2
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 20:33:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229777AbiJSScA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 14:32:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43744 "EHLO
+        id S229794AbiJSSdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 14:33:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbiJSSbz (ORCPT
+        with ESMTP id S229680AbiJSSdC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 14:31:55 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F181D0D56
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 11:31:41 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id p6-20020a17090a748600b002103d1ef63aso770994pjk.1
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 11:31:41 -0700 (PDT)
+        Wed, 19 Oct 2022 14:33:02 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE181CFF3B
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 11:33:00 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id j4so29646713lfk.0
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 11:33:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=yM0uwPnj6p1l0Vw8Vwd+2ABZhuvsHqcxHJob6ITYEUE=;
-        b=C+O4qNrSYj7KA1j+eCNL+Ay7VrHzRJXkWUQ2b6oXQQA/T4lowFXpfzpWsEsS5aJK8H
-         F/k79iImu0EYUEqiHhhE0pgJcT5KBFpFvO3T/9uUM8wS+bFvwUA42tfp9tParmphQ0Gc
-         U0d5FCUKSBhANP3iTzrLc1aIL/gQJQN2vPYgH8Zj7OPLoLeSytrz/H4Oq7q+/5NkO3lQ
-         +pSemIEr10NjFQxZ6vCUzhVpaBV2kOO2L9fqMU1gLOLHqAZ2BPpIYfT1u5LTrOxPi1x+
-         7gJuF8ukdDmr/ytYr3TY8pilGLNhv90kTVkoYyDx32mIAYSBBUlJVhl0AfXNH4J0/tzw
-         NI1g==
+        bh=VPr6UAOpmN1/gMX0ewomaOCJg5YtZQmOBncflHxMDjk=;
+        b=LwRPgs44Xx9fZBCWVguQMsygec+a76lxS9ASG3VWi6VBR4o+JOMKkdn5tTnapNhNbx
+         FCagxAT3CfEM6YSuiTVMbPHaJojgG9FhVAFnQbxsBultlVUY0pF/BJ7Pb1rCsoLbQEMZ
+         Tsz/eakulZFZMoaUwgMl+Q1Q2Mo6Ja/eO1XGRRJI1TLh6z4IE3uaaC2a1iSmaS0U4Sg7
+         StbFJsC36uGNihltZfZ/naEuTHBMd0aKRn0MseX2AD4OY2VEwCn3xL3Np44L+mr8bSRa
+         xewHLuoL2hqyU3VemdfwUsM41M+NZMYII6+iUpJITWhnfKF5ZBr0cRMrYzrFp5Hl4kbC
+         lg5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=yM0uwPnj6p1l0Vw8Vwd+2ABZhuvsHqcxHJob6ITYEUE=;
-        b=NADOtfy/Fu0Uq/BGMhdwEHTBfCHtGi9cYjeh5QK4itx2XHKVvrdztJPy9FHqJERp3b
-         yfAu3Vx7f/f7dxhISQ9kQR79Y5mMEvX2BuybM6VzplCyWp/fEHpLsLia/qertmcrCTMo
-         9klO2ncTTBZA/G9YDqEBEv47HhpWaGjtFgve1qGLDg0oFPTQovbAOnXwNPXLBn4mD/cE
-         DxEAWid84tf4NImxGyPIBFPkWhuruwTbcgcdqFUhxH24RjE5l4QaVoxGp8tWBX9UFewX
-         83ZsMw50e2cQjgi2g5Dm9MotD64tFwhwB6m4tlXwAgbdag8rxc6QmaWMvL2Kzp/Wi6b4
-         UspQ==
-X-Gm-Message-State: ACrzQf0G1Gei/eBDKEJp8aVa77qi+I9MiWOuhRgpKlflsDgA1HjVrREV
-        jHoDaUEEt96hYTrzmb+vJ2Oafol+xWD/UsPpwMU=
-X-Google-Smtp-Source: AMsMyM7wfgoNmD59GgTzTHHz2vdkzDHJoKgejRCMy0H+v9wmEhS0AeNx7ASEW6sDS2ebG48W9deqSp/dFv2yM8BKpAE=
-X-Received: by 2002:a17:90b:1c87:b0:20a:e485:4e21 with SMTP id
- oo7-20020a17090b1c8700b0020ae4854e21mr11232233pjb.194.1666204280538; Wed, 19
- Oct 2022 11:31:20 -0700 (PDT)
+        bh=VPr6UAOpmN1/gMX0ewomaOCJg5YtZQmOBncflHxMDjk=;
+        b=15hfDe5nszg8eWoMiDuc0XSs2H1uYx3Qb3NgVwTQVJG68OnSgH/dEX07g8dabaF9hb
+         CINbqddIG71hUv+4lvzZ45V3Jf0SquwJ9C8HuDDuYWpVQIQ5kJtYUPytl6M7twCdqeQ3
+         tNxyqDur9HcntnEnTKKl0gvAO6ElyI0kz6jHuT0E2fe5KMQOPQhdQYIsXP0Q/JO4f0og
+         G7Ddtx2Bky8q1XYwCRKyJE16TRPonbSgoDaMUHNZV26IpbWVUGzFmG5u+WBsLe9IotWP
+         H1bbcNhH01T7S0bY0nIKk9+5d3bgbk3noJBosKfRnDa0Df0ar+zr4Sfo3WgkJMJmOAiv
+         fDpQ==
+X-Gm-Message-State: ACrzQf0YsaXTZ/2bnDEjXviX4p9ixD7O0ESRAzjKy2iSsVHJlgFe1n77
+        KZr9zHBnH0EDvUFKdqce9gYkR0LJ8yEP5GXTvFkLZA==
+X-Google-Smtp-Source: AMsMyM4EBV5NPiqUSsGoH76d60Oj4XtTNKzmBM3XB8zcFOXHmexalPNeyd2MnHJenC/4Cf4QA3Wt+/yC+VCqwQatWHo=
+X-Received: by 2002:a05:6512:3119:b0:4a2:d749:ff82 with SMTP id
+ n25-20020a056512311900b004a2d749ff82mr3531001lfb.637.1666204378020; Wed, 19
+ Oct 2022 11:32:58 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221018200125.848471-1-jthoughton@google.com>
-In-Reply-To: <20221018200125.848471-1-jthoughton@google.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Wed, 19 Oct 2022 11:31:08 -0700
-Message-ID: <CAHbLzkoAeXhpJ2_eM6uYU9kuqNsT25NubOZZG6E1mFngYREuPg@mail.gmail.com>
-Subject: Re: [PATCH] hugetlbfs: don't delete error page from pagecache
-To:     James Houghton <jthoughton@google.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
+References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
+ <20220915142913.2213336-6-chao.p.peng@linux.intel.com> <CA+EHjTxukqBfaN6D+rPOiX83zkGknHEQ16J0k6GQSdL_-e9C6g@mail.gmail.com>
+ <20221012023516.GA3218049@chaop.bj.intel.com> <CA+EHjTyGyGL+ox81=jdtoHERtHPV=P7wJub=3j7chdijyq-AgA@mail.gmail.com>
+ <Y03UiYYioV+FQIpx@google.com> <20221019132308.GA3496045@chaop.bj.intel.com>
+ <CA+EHjTytCEup0m-nhnVHsuQ1xjaCxXNHO_Oxe+QbpwqaewpfKQ@mail.gmail.com> <Y1AhP0dlRSgTCObX@google.com>
+In-Reply-To: <Y1AhP0dlRSgTCObX@google.com>
+From:   Fuad Tabba <tabba@google.com>
+Date:   Wed, 19 Oct 2022 19:32:21 +0100
+Message-ID: <CA+EHjTzR6DwU950gud1opEGCNqCfiEvA4-JFtyJ0NBgTD-uHNg@mail.gmail.com>
+Subject: Re: [PATCH v8 5/8] KVM: Register/unregister the guest private memory regions
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Axel Rasmussen <axelrasmussen@google.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,123 +100,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 1:01 PM James Houghton <jthoughton@google.com> wrote:
+On Wed, Oct 19, 2022 at 5:09 PM Sean Christopherson <seanjc@google.com> wrote:
 >
-> This change is very similar to the change that was made for shmem [1],
-> and it solves the same problem but for HugeTLBFS instead.
+> On Wed, Oct 19, 2022, Fuad Tabba wrote:
+> > > > > This sounds good. Thank you.
+> > > >
+> > > > I like the idea of a separate Kconfig, e.g. CONFIG_KVM_GENERIC_PRIVATE_MEM or
+> > > > something.  I highly doubt there will be any non-x86 users for multiple years,
+> > > > if ever, but it would allow testing the private memory stuff on ARM (and any other
+> > > > non-x86 arch) without needing full pKVM support and with only minor KVM
+> > > > modifications, e.g. the x86 support[*] to test UPM without TDX is shaping up to be
+> > > > trivial.
+> > >
+> > > CONFIG_KVM_GENERIC_PRIVATE_MEM looks good to me.
+> >
+> > That sounds good to me, and just keeping the xarray isn't really an
+> > issue for pKVM.
 >
-> Currently, when poison is found in a HugeTLB page, the page is removed
-> from the page cache. That means that attempting to map or read that
-> hugepage in the future will result in a new hugepage being allocated
-> instead of notifying the user that the page was poisoned. As [1] states,
-> this is effectively memory corruption.
+> The xarray won't exist for pKVM if the #ifdefs in this patch are changed from
+> CONFIG_HAVE_KVM_PRIVATE_MEM => CONFIG_KVM_GENERIC_PRIVATE_MEM.
 >
-> The fix is to leave the page in the page cache. If the user attempts to
-> use a poisoned HugeTLB page with a syscall, the syscall will fail with
-> EIO, the same error code that shmem uses. For attempts to map the page,
-> the thread will get a BUS_MCEERR_AR SIGBUS.
+> > We could end up using it instead of some of the other
+> > structures we use for tracking.
 >
-> [1]: commit a76054266661 ("mm: shmem: don't truncate page if memory failure happens")
->
-> Signed-off-by: James Houghton <jthoughton@google.com>
+> I don't think pKVM should hijack the xarray for other purposes.  At best, it will
+> be confusing, at worst we'll end up with a mess if ARM ever supports the "generic"
+> implementation.
 
-Thanks for the patch. Yes, we should do the same thing for hugetlbfs.
-When I was working on shmem I did look into hugetlbfs too. But the
-problem is we actually make the whole hugetlb page unavailable even
-though just one 4K sub page is hwpoisoned. It may be fine to 2M
-hugetlb page, but a lot of memory may be a huge waste for 1G hugetlb
-page, particular for the page fault path.
+Definitely wasn't referring to hijacking it for other purposes, which
+is the main reason I wanted to clarify the documentation and the
+naming of private_fd. Anyway, I'm glad to see that we're in agreement.
+Once I've tightened the screws, I'll share the pKVM port as an RFC as
+well.
 
-So I discussed this with Mike offline last year, and I was told Google
-was working on PTE mapped hugetlb page. That should be able to solve
-the problem. And we'd like to have the high-granularity hugetlb
-mapping support as the predecessor.
-
-There were some other details, but I can't remember all of them, I
-have to refresh my memory by rereading the email discussions...
-
-> ---
->  fs/hugetlbfs/inode.c | 13 ++++++-------
->  mm/hugetlb.c         |  4 ++++
->  mm/memory-failure.c  |  5 ++++-
->  3 files changed, 14 insertions(+), 8 deletions(-)
->
-> diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
-> index fef5165b73a5..7f836f8f9db1 100644
-> --- a/fs/hugetlbfs/inode.c
-> +++ b/fs/hugetlbfs/inode.c
-> @@ -328,6 +328,12 @@ static ssize_t hugetlbfs_read_iter(struct kiocb *iocb, struct iov_iter *to)
->                 } else {
->                         unlock_page(page);
->
-> +                       if (PageHWPoison(page)) {
-> +                               put_page(page);
-> +                               retval = -EIO;
-> +                               break;
-> +                       }
-> +
->                         /*
->                          * We have the page, copy it to user space buffer.
->                          */
-> @@ -1111,13 +1117,6 @@ static int hugetlbfs_migrate_folio(struct address_space *mapping,
->  static int hugetlbfs_error_remove_page(struct address_space *mapping,
->                                 struct page *page)
->  {
-> -       struct inode *inode = mapping->host;
-> -       pgoff_t index = page->index;
-> -
-> -       hugetlb_delete_from_page_cache(page_folio(page));
-> -       if (unlikely(hugetlb_unreserve_pages(inode, index, index + 1, 1)))
-> -               hugetlb_fix_reserve_counts(inode);
-> -
->         return 0;
->  }
->
-> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> index 97896165fd3f..5120a9ccbf5b 100644
-> --- a/mm/hugetlb.c
-> +++ b/mm/hugetlb.c
-> @@ -6101,6 +6101,10 @@ int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
->
->         ptl = huge_pte_lock(h, dst_mm, dst_pte);
->
-> +       ret = -EIO;
-> +       if (PageHWPoison(page))
-> +               goto out_release_unlock;
-> +
->         /*
->          * We allow to overwrite a pte marker: consider when both MISSING|WP
->          * registered, we firstly wr-protect a none pte which has no page cache
-> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-> index 145bb561ddb3..bead6bccc7f2 100644
-> --- a/mm/memory-failure.c
-> +++ b/mm/memory-failure.c
-> @@ -1080,6 +1080,7 @@ static int me_huge_page(struct page_state *ps, struct page *p)
->         int res;
->         struct page *hpage = compound_head(p);
->         struct address_space *mapping;
-> +       bool extra_pins = false;
->
->         if (!PageHuge(hpage))
->                 return MF_DELAYED;
-> @@ -1087,6 +1088,8 @@ static int me_huge_page(struct page_state *ps, struct page *p)
->         mapping = page_mapping(hpage);
->         if (mapping) {
->                 res = truncate_error_page(hpage, page_to_pfn(p), mapping);
-> +               /* The page is kept in page cache. */
-> +               extra_pins = true;
->                 unlock_page(hpage);
->         } else {
->                 unlock_page(hpage);
-> @@ -1104,7 +1107,7 @@ static int me_huge_page(struct page_state *ps, struct page *p)
->                 }
->         }
->
-> -       if (has_extra_refcount(ps, p, false))
-> +       if (has_extra_refcount(ps, p, extra_pins))
->                 res = MF_FAILED;
->
->         return res;
-> --
-> 2.38.0.413.g74048e4d9e-goog
->
+Cheers,
+/fuad
