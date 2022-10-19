@@ -2,87 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CE786051BD
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 23:07:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D3206051CC
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 23:12:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231633AbiJSVHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 17:07:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57392 "EHLO
+        id S230513AbiJSVMv convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 19 Oct 2022 17:12:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231294AbiJSVHG (ORCPT
+        with ESMTP id S229978AbiJSVMs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 17:07:06 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FF941C73C5
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 14:07:04 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-322-W1fNxx02PquJ4hRcvsmAdg-1; Wed, 19 Oct 2022 22:07:01 +0100
-X-MC-Unique: W1fNxx02PquJ4hRcvsmAdg-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 19 Oct
- 2022 22:07:01 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.042; Wed, 19 Oct 2022 22:07:01 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Linus Torvalds' <torvalds@linux-foundation.org>,
-        Segher Boessenkool <segher@kernel.crashing.org>
-CC:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-toolchains@vger.kernel.org" <linux-toolchains@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
+        Wed, 19 Oct 2022 17:12:48 -0400
+Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 332F0183DA7
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 14:12:47 -0700 (PDT)
+Received: from omf04.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay01.hostedemail.com (Postfix) with ESMTP id A18DD1C5FA0;
+        Wed, 19 Oct 2022 21:12:45 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf04.hostedemail.com (Postfix) with ESMTPA id 762A520030;
+        Wed, 19 Oct 2022 21:12:05 +0000 (UTC)
+Message-ID: <babe69207a0a301b270726cbead912345d9f015f.camel@perches.com>
+Subject: Re: [PATCH] checkpatch: add warning for non-lore mailing list URLs
+From:   Joe Perches <joe@perches.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        Andy Whitcroft <apw@canonical.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
         Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: RE: [PATCH] kbuild: treat char as always signed
-Thread-Topic: [PATCH] kbuild: treat char as always signed
-Thread-Index: AQHY4+Y9hyAXVET2lkaxpfvqAx79z64WM2og
-Date:   Wed, 19 Oct 2022 21:07:01 +0000
-Message-ID: <e0f6a641c7464d71abbddb4befd35e59@AcuMS.aculab.com>
-References: <20221019162648.3557490-1-Jason@zx2c4.com>
- <20221019165455.GL25951@gate.crashing.org>
- <CAHk-=wiMWk2t8FHn0iqVVe1mn62OTAD6ffL5rn9Eeu021H9d1Q@mail.gmail.com>
- <20221019174345.GM25951@gate.crashing.org>
- <CAHk-=wiNNKLFfa0d+Hk=Wm5caiKjLY4V9wwu9DhcSSwPuMbxrg@mail.gmail.com>
-In-Reply-To: <CAHk-=wiNNKLFfa0d+Hk=Wm5caiKjLY4V9wwu9DhcSSwPuMbxrg@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
+Date:   Wed, 19 Oct 2022 14:12:40 -0700
+In-Reply-To: <20221019202843.40810-1-helgaas@kernel.org>
+References: <20221019202843.40810-1-helgaas@kernel.org>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Stat-Signature: 3mz9dr7rom18nz8cn576y5iyo87cor6k
+X-Rspamd-Server: rspamout05
+X-Rspamd-Queue-Id: 762A520030
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1+Ay7ZXh7o5wGeykZBcEZdmcVy0QRsnMRo=
+X-HE-Tag: 1666213925-546317
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogTGludXMgVG9ydmFsZHMNCj4gU2VudDogMTkgT2N0b2JlciAyMDIyIDE5OjExDQouLi4N
-Cj4gRXhwbGljaXQgY2FzdHMgYXJlIGJhZCAodW5sZXNzLCBvZiBjb3Vyc2UsIHlvdSBhcmUgZXhw
-bGljaXRseSB0cnlpbmcNCj4gdG8gdmlvbGF0ZSB0aGUgdHlwZSBzeXN0ZW0sIHdoZW4gdGhleSBh
-cmUgYm90aCByZXF1aXJlZCwgYW5kIGEgZ3JlYXQNCj4gd2F5IHRvIHNheSAibG9vaywgSSdtIGRv
-aW5nIHNvbWV0aGluZyBkYW5nZXJvdXMiKS4NCg0KVGhlIHdvcnN0IG9uZXMgaW4gdGhlIGtlcm5l
-bCBhcmUgdGhlIF9fZm9yY2Ugb25lcyBmb3Igc3BhcnNlLg0KVGhleSByZWFsbHkgb3VnaHQgdG8g
-YmUgYSBmdW5jdGlvbiAoI2RlZmluZSkgc28gdGhhdCB0aGV5DQphcmUgbm90IHNlZW4gYnkgdGhl
-IGNvbXBpbGVyIGF0IGFsbC4NCk90aGVyd2lzZSB0aGV5IGNhbiBoaWRlIGEgbXVsdGl0dWRlIG9m
-IHNpbnMuDQoNClRoZXJlIGFyZSBhbHNvIHRoZSBjYXN0cyB0byBjb252ZXJ0IGludGVnZXIgdmFs
-dWVzIHRvL2Zyb20gdW5zaWduZWQuDQphbmQgdG8gZGlmZmVyZW50IHNpemVkIGludGVnZXJzLg0K
-VGhleSBhbGwgaGFwcGVuIGZhciB0b28gb2Z0ZW4gYW5kIGNhbiBoaWRlIHRoaW5ncy4NCkEgJysg
-MHUnIHdpbGwgY29udmVydCBpbnRvIHRvIHVuc2lnbmVkIGludCB3aXRob3V0IGEgY2FzdC4NCkNh
-c3RzIHJlYWxseSBvdWdodCB0byBiZSByYXJlLg0KRXZlbiB0aGUgY2FzdHMgdG8gZnJvbSAodm9p
-ZCAqKSAoZm9yICdidWZmZXJzJykgY2FuIHVzdWFsbHkgYmUNCm1hZGUgaW1wbGljaXQgaW4gYSBm
-dW5jdGlvbiBjYWxsIGFyZ3VtZW50Lg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNz
-IExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAx
-UFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
+On Wed, 2022-10-19 at 15:28 -0500, Bjorn Helgaas wrote:
+> From: Bjorn Helgaas <bhelgaas@google.com>
+> 
+> The lkml.org, marc.info, spinics.net, etc archives are not quite as useful
+> as lore.kernel.org because they use different styles, add advertising, and
+> may disappear in the future.  The lore archives are more consistent and
+> more likely to stick around, so prefer https://lore.kernel.org URLs when
+> they exist.
+> 
+> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+
+Seems sensible, thanks.
+
+> ---
+> 
+> Sample commits for testing with "checkpatch -g":
+> 
+>   bd82d4bd2188 www.spinics.net/lists/arm-kernel/msg716956.html
+>   fdec2a9ef853 www.spinics.net/lists/kvm-arm
+>   1cdca16c043a www.spinics.net/lists/linux-mmc
+>   48ea02184a9d www.spinics.net/lists/linux-pci
+>   f32ae8a5f131 www.spinics.net/lists/netdev
+>   b7dca6dd1e59 lkml.org
+>   265df32eae58 lkml.org/lkml/
+>   4a9ceb7dbadf marc.info/?l=linux-kernel&m=155656897409107&w=2.
+>   c03914b7aa31 marc.info/?l=linux-mm
+>   f108c887d089 marc.info/?l=linux-netdev
+>   7424edbb5590 marc.info/?t=156200975600004&r=1&w=2
+>   dabac6e460ce https://marc.info/?l=linux-rdma&m=152296522708522&w=2
+>   b02f6a2ef0a1 www.mail-archive.com/linux-kernel@vger.kernel.org
+>   5e91bf5ce9b8 lists.infradead.org/pipermail/linux-snps-arc/2019-May
+>   3cde818cd02b mailman.alsa-project.org/pipermail/alsa-devel/2019-January/144761.html
+>   a5448fdc469d http://lists.infradead.org/pipermail/linux-nvme/2019-June/024721.html
+> 
+> Previously posted:
+>   https://lore.kernel.org/all/20201217235615.43328-1-helgaas@kernel.org/
+>   https://lore.kernel.org/all/20220401201417.126664-1-helgaas@kernel.org/
+> ---
+>  scripts/checkpatch.pl | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
+> 
+> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+> index 1e5e66ae5a52..4e187202e77a 100755
+> --- a/scripts/checkpatch.pl
+> +++ b/scripts/checkpatch.pl
+> @@ -702,6 +702,17 @@ sub find_standard_signature {
+>  	return "";
+>  }
+>  
+> +our $obsolete_archives = qr{(?xi:
+> +	\Qfreedesktop.org/archives/dri-devel\E |
+> +	\Qlists.infradead.org\E |
+> +	\Qlkml.org\E |
+> +	\Qmail-archive.com\E |
+> +	\Qmailman.alsa-project.org/pipermail\E |
+> +	\Qmarc.info\E |
+> +	\Qozlabs.org/pipermail\E |
+> +	\Qspinics.net\E
+> +)};
+> +
+>  our @typeListMisordered = (
+>  	qr{char\s+(?:un)?signed},
+>  	qr{int\s+(?:(?:un)?signed\s+)?short\s},
+> @@ -3324,6 +3335,12 @@ sub process {
+>  			$last_git_commit_id_linenr = $linenr if ($line =~ /\bcommit\s*$/i);
+>  		}
+>  
+> +# Check for mailing list archives other than lore.kernel.org
+> +		if ($rawline =~ m{\b$obsolete_archives}) {
+> +			WARN("PREFER_LORE_ARCHIVE",
+> +			     "Use lore.kernel.org archive links when possible - see https://lore.kernel.org/lists.html\n" . $herecurr);
+> +		}
+> +
+>  # Check for added, moved or deleted files
+>  		if (!$reported_maintainer_file && !$in_commit_log &&
+>  		    ($line =~ /^(?:new|deleted) file mode\s*\d+\s*$/ ||
 
