@@ -2,134 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25B0D6044B0
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 14:11:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 148496044B4
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 14:11:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232807AbiJSML2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 08:11:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46924 "EHLO
+        id S232821AbiJSMLr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 08:11:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232552AbiJSMKm (ORCPT
+        with ESMTP id S232783AbiJSMLP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 08:10:42 -0400
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D897AC5130
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 04:45:58 -0700 (PDT)
-Received: by mail-wr1-f48.google.com with SMTP id u10so28696229wrq.2
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 04:45:58 -0700 (PDT)
+        Wed, 19 Oct 2022 08:11:15 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52E3C169134
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 04:46:17 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id h14so107967pjv.4
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 04:46:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=veefSpmCEaSzEYZOHgJlbLK7mKiem3jbiT2QhSe/bYM=;
-        b=UtgxVNkB5KqW11YYWEnWP275MLheN5JO1hvhm+lkEug9ipvI4NaEqmHwvjC7EEU5ix
-         IlUIEhIlExmMwLfJTfs4PcnCobMquFSCZ3zn+JXJqEPDIhzo4OCosnmqTD9/XY7An0Uw
-         LqfQuK1fIckyr12d6ZwKS1mBbCdAAQu4LvPvoFv7orxnALAmm2AXLydr8JGriFRZbCnq
-         U1npfT24e5b2yU4zphbn2gIofLgp7CN2+2aL2fqRLyTC0Y1P0bNfPKatjBVIf6uPR8ny
-         Ce5rZ5amUrjVnsVVYPgNx2XeivIi3ekz6mMMkpvpGNB3hWUMDfFwJF5tgcJqrotkkWui
-         EX0Q==
+        d=ventanamicro.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZGoLnZ3sUUjQ6T551O77F/cGWLjVF5P0hXeaCsgTaUA=;
+        b=Vskm+yty8cHq30qB1XgOoU1LcXaaEsiDus8pFxuanPbvYIXPc6bX1hGlNQ0jVDCNx7
+         eRrfGWJZtsJKhE+FRBodn3GyYJNof9dRTPdWw5kWatcodxLb7pielQnya3aMZ/idFhDz
+         vUhdMfRJQRw1mCEpBP+iGQQneQTwaShSGR5vqu6EqaRbpx9/VFR+p4m+mkzBr8pVVLq1
+         T6EgPUC/QTeQCwSmc1lS2hjHIohlhAAjTGDGvl5YxbLcF7TflrNID3CGaZSVQtm1pzVi
+         FwQErpkGCfvYOQBTLy5ztGY7xHOyWDh7flnFI3HPRO9Iaf8HYeUTDbjlB2mesrR4KVO/
+         Xupw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=veefSpmCEaSzEYZOHgJlbLK7mKiem3jbiT2QhSe/bYM=;
-        b=NT550axrQaHyfaAjXyhnoYSI9ua+Peo4N4vryQOhYuZm4NmmZpKg2BRIeZIFhGMqUi
-         7Ozm+/HotfAg9hBc4DIUmgXr/KD3/o1hJUWmp6OWxVVVGsLtWsVdbfcipAC/9k9ud6qo
-         xlqHy9nepjdPNV7gr1TiwIr1cPCYuDLSjc5PVeXHVJ/OCNsiG7s6Q5Jz9cGZ9lg882Z4
-         azktSH8Rvc56PEJWvbJjYwewvdbeD+fP2pNdKon3HuEyFkBZqUiV/2UXITAptA0dC6ZL
-         5qKmZFwHbcIX2vQt7BzihFXd115T7rf2hxE3lSwu5SrFZeetEl24VZQu8Ilap7zekHLI
-         4Xjg==
-X-Gm-Message-State: ACrzQf0p7fEJtjMinMZEeGSBGjZNISz+TQkZtDaRbm1SfPrZqMuSpHKH
-        24Q+UlAq3I+x/IbBbC/mpowK1g==
-X-Google-Smtp-Source: AMsMyM6/W/E5CFf72zm9LnvLDDpmUQ9I7DEQk8iXL3Z11yqnh6YURaFSd1kfYytRGGqbVdZEchQEWA==
-X-Received: by 2002:adf:f591:0:b0:22e:504e:fe76 with SMTP id f17-20020adff591000000b0022e504efe76mr4869340wro.553.1666179839455;
-        Wed, 19 Oct 2022 04:43:59 -0700 (PDT)
-Received: from airbuntu (host86-130-134-87.range86-130.btcentralplus.com. [86.130.134.87])
-        by smtp.gmail.com with ESMTPSA id o2-20020a05600c4fc200b003c701c12a17sm3044680wmq.12.2022.10.19.04.43.58
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZGoLnZ3sUUjQ6T551O77F/cGWLjVF5P0hXeaCsgTaUA=;
+        b=6clMM/e1hi2TyvK8n1sfc2KIMRDsB7uBQxe6ujm1Bi9w5q5kVLQ4Wi6jTySarWvR0W
+         L046DYceBA1btCBKr3ni9/Vp52VJtGgvHsTmSwi/qAPq3SD3FARxYAaFl03dJiVgfkZi
+         xBJzTEiEmI8QqqzI4izGW1n/+n5HftxOHtV+EEbFlgyKtg26fcVZJw5trd0BljR8jqYJ
+         VOz4UnAsUAn/u7zw0prKNEk8bRXgAyLynKM3bRP3lr1phg2+NxSAAYebAU1/6UWyh8Wj
+         KRGhpaxoiQCWgJLWgtz7I3A4kdo4jRHd7gjrrABGTfWXB8yuHqjVmpDj4m9cY2z4tnN5
+         zFrw==
+X-Gm-Message-State: ACrzQf0YxR3ENEuXS5VoMiUUQiPqvVpXb8BcjSsqJa3FJwymx7fnfXoW
+        IHaToUOFppAlY8pFunZu8HUqQw==
+X-Google-Smtp-Source: AMsMyM77U4ULWvxjJJOXxoE5nYztOUYKiByZiqSqBWtTwWGz4p8dLYj8lRpsHAlLZdstaJ2qIsHw8g==
+X-Received: by 2002:a17:90b:1bc3:b0:20d:75b8:ee74 with SMTP id oa3-20020a17090b1bc300b0020d75b8ee74mr46164266pjb.1.1666179945267;
+        Wed, 19 Oct 2022 04:45:45 -0700 (PDT)
+Received: from anup-ubuntu64-vm.. ([171.76.82.102])
+        by smtp.gmail.com with ESMTPSA id e15-20020a17090301cf00b00185507b5ef8sm6664148plh.50.2022.10.19.04.45.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Oct 2022 04:43:58 -0700 (PDT)
-Date:   Wed, 19 Oct 2022 12:43:57 +0100
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Connor O'Brien <connoro@google.com>, linux-kernel@vger.kernel.org,
-        kernel-team@android.com, John Stultz <jstultz@google.com>,
-        Qais Yousef <qais.yousef@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>
-Subject: Re: [RFC PATCH 00/11] Reviving the Proxy Execution Series
-Message-ID: <20221019114357.yipijpetxz7ns5aq@airbuntu>
-References: <20221003214501.2050087-1-connoro@google.com>
- <Y0y8iURTSAv7ZspC@google.com>
+        Wed, 19 Oct 2022 04:45:44 -0700 (PDT)
+From:   Anup Patel <apatel@ventanamicro.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Atish Patra <atishp@atishpatra.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Anup Patel <apatel@ventanamicro.com>
+Subject: [PATCH] RISC-V: KVM: Fix kvm_riscv_vcpu_timer_pending() for Sstc
+Date:   Wed, 19 Oct 2022 17:15:35 +0530
+Message-Id: <20221019114535.131469-1-apatel@ventanamicro.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y0y8iURTSAv7ZspC@google.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/17/22 02:23, Joel Fernandes wrote:
+The kvm_riscv_vcpu_timer_pending() checks per-VCPU next_cycles
+and per-VCPU software injected VS timer interrupt. This function
+returns incorrect value when Sstc is available because the per-VCPU
+next_cycles are only updated by kvm_riscv_vcpu_timer_save() called
+from kvm_arch_vcpu_put(). As a result, when Sstc is available the
+VCPU does not block properly upon WFI traps.
 
-> I ran a test to check CFS time sharing. The accounting on top is confusing,
-> but ftrace confirms the proxying happening.
-> 
-> Task A - pid 122
-> Task B - pid 123
-> Task C - pid 121
-> Task D - pid 124
-> 
-> Here D and B just spin all the time. C is lock owner (in-kernel mutex) and
-> spins all the time, while A blocks on the same in-kernel mutex and remains
-> blocked.
-> 
-> Then I did "top -H" while the test was running which gives below output.
-> The first column is PID, and the third-last column is CPU percentage.
-> 
-> Without PE:
->   121 root      20   0   99496   4   0 R  33.6   0.0   0:02.76 t  (task C)
->   123 root      20   0   99496   4   0 R  33.2   0.0   0:02.75 t  (task B)
->   124 root      20   0   99496   4   0 R  33.2   0.0   0:02.75 t  (task D)
-> 
-> With PE:
->   PID
->   122 root      20   0   99496   4   0 D  25.3   0.0   0:22.21 t  (task A)
->   121 root      20   0   99496   4   0 R  25.0   0.0   0:22.20 t  (task C)
->   123 root      20   0   99496   4   0 R  25.0   0.0   0:22.20 t  (task B)
->   124 root      20   0   99496   4   0 R  25.0   0.0   0:22.20 t  (task D)
-> 
-> With PE, I was expecting 2 threads with 25% and 1 thread with 50%. Instead I
-> get 4 threads with 25% in the top. Ftrace confirms that the D-state task is
-> in fact not running and proxying to the owner task so everything seems
-> working correctly, but the accounting seems confusing, as in, it is confusing
-> to see the D-state task task taking 25% CPU when it is obviously "sleeping".
-> 
-> Yeah, yeah, I know D is proxying for C (while being in the uninterruptible
-> sleep state), so may be it is OK then, but I did want to bring this up :-)
+To fix the above issue, we introduce kvm_riscv_vcpu_timer_sync()
+which will update per-VCPU next_cycles upon every VM exit instead
+of kvm_riscv_vcpu_timer_save().
 
-I seem to remember Valentin raised similar issue about how userspace view can
-get confusing/misleading:
+Fixes: 8f5cb44b1bae ("RISC-V: KVM: Support sstc extension")
+Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+---
+ arch/riscv/include/asm/kvm_vcpu_timer.h |  1 +
+ arch/riscv/kvm/vcpu.c                   |  3 +++
+ arch/riscv/kvm/vcpu_timer.c             | 17 +++++++++++++++--
+ 3 files changed, 19 insertions(+), 2 deletions(-)
 
-	https://www.youtube.com/watch?v=UQNOT20aCEg&t=3h21m41s
+diff --git a/arch/riscv/include/asm/kvm_vcpu_timer.h b/arch/riscv/include/asm/kvm_vcpu_timer.h
+index 0d8fdb8ec63a..82f7260301da 100644
+--- a/arch/riscv/include/asm/kvm_vcpu_timer.h
++++ b/arch/riscv/include/asm/kvm_vcpu_timer.h
+@@ -45,6 +45,7 @@ int kvm_riscv_vcpu_timer_deinit(struct kvm_vcpu *vcpu);
+ int kvm_riscv_vcpu_timer_reset(struct kvm_vcpu *vcpu);
+ void kvm_riscv_vcpu_timer_restore(struct kvm_vcpu *vcpu);
+ void kvm_riscv_guest_timer_init(struct kvm *kvm);
++void kvm_riscv_vcpu_timer_sync(struct kvm_vcpu *vcpu);
+ void kvm_riscv_vcpu_timer_save(struct kvm_vcpu *vcpu);
+ bool kvm_riscv_vcpu_timer_pending(struct kvm_vcpu *vcpu);
+ 
+diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
+index a032c4f0d600..71ebbc4821f0 100644
+--- a/arch/riscv/kvm/vcpu.c
++++ b/arch/riscv/kvm/vcpu.c
+@@ -708,6 +708,9 @@ void kvm_riscv_vcpu_sync_interrupts(struct kvm_vcpu *vcpu)
+ 				clear_bit(IRQ_VS_SOFT, &v->irqs_pending);
+ 		}
+ 	}
++
++	/* Sync-up timer CSRs */
++	kvm_riscv_vcpu_timer_sync(vcpu);
+ }
+ 
+ int kvm_riscv_vcpu_set_interrupt(struct kvm_vcpu *vcpu, unsigned int irq)
+diff --git a/arch/riscv/kvm/vcpu_timer.c b/arch/riscv/kvm/vcpu_timer.c
+index 185f2386a747..ad34519c8a13 100644
+--- a/arch/riscv/kvm/vcpu_timer.c
++++ b/arch/riscv/kvm/vcpu_timer.c
+@@ -320,20 +320,33 @@ void kvm_riscv_vcpu_timer_restore(struct kvm_vcpu *vcpu)
+ 	kvm_riscv_vcpu_timer_unblocking(vcpu);
+ }
+ 
+-void kvm_riscv_vcpu_timer_save(struct kvm_vcpu *vcpu)
++void kvm_riscv_vcpu_timer_sync(struct kvm_vcpu *vcpu)
+ {
+ 	struct kvm_vcpu_timer *t = &vcpu->arch.timer;
+ 
+ 	if (!t->sstc_enabled)
+ 		return;
+ 
+-	t = &vcpu->arch.timer;
+ #if defined(CONFIG_32BIT)
+ 	t->next_cycles = csr_read(CSR_VSTIMECMP);
+ 	t->next_cycles |= (u64)csr_read(CSR_VSTIMECMPH) << 32;
+ #else
+ 	t->next_cycles = csr_read(CSR_VSTIMECMP);
+ #endif
++}
++
++void kvm_riscv_vcpu_timer_save(struct kvm_vcpu *vcpu)
++{
++	struct kvm_vcpu_timer *t = &vcpu->arch.timer;
++
++	if (!t->sstc_enabled)
++		return;
++
++	/*
++	 * The vstimecmp CSRs are saved by kvm_riscv_vcpu_timer_sync()
++	 * upon every VM exit so no need to save here.
++	 */
++
+ 	/* timer should be enabled for the remaining operations */
+ 	if (unlikely(!t->init_done))
+ 		return;
+-- 
+2.34.1
 
-
-Cheers
-
---
-Qais Yousef
