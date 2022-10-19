@@ -2,66 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9772603944
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 07:33:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAF0A603946
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 07:34:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbiJSFdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 01:33:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47834 "EHLO
+        id S229852AbiJSFej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 01:34:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbiJSFdt (ORCPT
+        with ESMTP id S229848AbiJSFef (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 01:33:49 -0400
-Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6514733E1;
-        Tue, 18 Oct 2022 22:33:47 -0700 (PDT)
-Received: by mail-ua1-x92b.google.com with SMTP id p89so6580276uap.12;
-        Tue, 18 Oct 2022 22:33:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=LO38QpyOE6fdNXOKDxL+oOJ2Yxv54v5opD2oHL55TzY=;
-        b=ohmCVjEdsj0DYP70o8JJWsUgcFVLyNODYe6dv86llYcdAosGLxEC2SDrB0xgpghRea
-         mzbugV8DYnf7Exmd65YMLTbNWrGs4qOSKUfUxzuS7YYzl2KzkmLFTmywjUEf5QRXzFvU
-         5Mrcw/aaWh6PIotIgfJK6QfgWQ0SMHgAPJuXRB59m280/t9csQbHZNIK0YvTDup3tUsH
-         JV29LkYhHpLZ6PknW53dgx23gbGcbiCd137TZGiJrRBEK0QGcEU9YsFbefB0J/8TBRV7
-         1GvaV78FG5Nt03Y3x7BaD/0/v8657H6eit2sKQBcqkAIQgu6cSu1yurNqvzbJDAoT8Iy
-         SDZQ==
+        Wed, 19 Oct 2022 01:34:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D7CB1DD
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 22:34:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666157673;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4Vfj5MuYwEDLW1gKn2gdMUxDMm1tBwT8JsH+LnyHaeM=;
+        b=dKB0rpGVtGVo+7QzmtnKzVA+/H5FuqWnj0Rbw+zMa+ZpXgYzdsxrN2e+FsG3m11xvxeRE4
+        qt2Flp1Wq+XcNdelpT6gWraTvhinJZ55KuJyAZE8sLJCJygN6lKPvhyf4Cs8wQ7OYmDpxQ
+        rXCPdPz9goCy1vw/mlshSSTJdcI5d9s=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-624-u6d0Qgq5Nbea3mJzCNkssw-1; Wed, 19 Oct 2022 01:34:31 -0400
+X-MC-Unique: u6d0Qgq5Nbea3mJzCNkssw-1
+Received: by mail-wm1-f71.google.com with SMTP id bg21-20020a05600c3c9500b003c2acbff422so226083wmb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 22:34:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LO38QpyOE6fdNXOKDxL+oOJ2Yxv54v5opD2oHL55TzY=;
-        b=EstM+uQEzx5Ju19Qh2kirrJfCklrtieaqmQHdWSlTVLsLN2GOSjsI5OzcfL3s044uZ
-         IAxc4Ujjd9eC9cSDRAcenFx7lnNz499ZvbAgpUN5hg14IvuFv4rsJm6SFUJqs3rSj5NP
-         Z5jFuulgeBpPJWGaPQ6neUvQJQ8eLvL5uQh48UrYwya/flgG3YozYcgaEEBdI2ggRWxR
-         TumloIvgEmNkisvzyDT4d0EUMRsVB7X9ly0sjYOeuqBQ10F+9Dc5uPt5p6IAcziDAgwz
-         KlX0kMD+uMkqBzpIlafsIIinMiIKeA2tHmHnSwUoi5nyZwS4RY8FcAhbpK5Tgvyn83Dd
-         zp2A==
-X-Gm-Message-State: ACrzQf1EuGRRpFwIDs6m6bW/JFYCj1Odh5BXWZNsipFxW2zsCMMVcR8P
-        icxxAQM47/Tvm1C/RysSZNbPf5ogD3OGaMgUqyJ9HI0uYrs=
-X-Google-Smtp-Source: AMsMyM6mW/VUZnjWZ7HLR1vlCTwrRf2FN0svKzajtL8b/sExmap7P23vaIgdZfylqN9LbyTTozudoYSJlluNIw0X0rM=
-X-Received: by 2002:ab0:7509:0:b0:3d6:9dcb:b3db with SMTP id
- m9-20020ab07509000000b003d69dcbb3dbmr3189918uap.9.1666157626962; Tue, 18 Oct
- 2022 22:33:46 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4Vfj5MuYwEDLW1gKn2gdMUxDMm1tBwT8JsH+LnyHaeM=;
+        b=2WNIRrFVuCNTaLfe4+3NsJCR0Ys9sC+orW+qslDLHfrC/saa5ic7CZ6HRFlis08MG7
+         qkMA5sPIC1cNgKgMHs3uWzltIroeITmVSRQL0uzWtiw8rn378jvtFBgl5YIqp3qhrLZ0
+         w+MlA+38G/whRfMFwFqPLthdkh4QwlDUxbZAHlamFxkUFZYJpDPip+jHDmiwCkyHyC2T
+         odCGsp5NaDFtXAfWDD270W2H0YAcw70WlwgoZe91iyEjTMWVZe4asV6hBt6PFp/q6szn
+         LyI9auD0KXzLhRWvN/AbMc8Lx/fsoPdhKIrCs9N9nb1Uj6h9u/KuH3AKY64j8fSmV5f0
+         ELjw==
+X-Gm-Message-State: ACrzQf1nsBFhmQ+oKI38pkIg+pMpjGgeUH4sHb5+02yLG9rkIs3UtIlV
+        aMa+/5I8OfEvOXjQhPlRipgrnrRynu7O1+WLIg/JidduUVbHXIcA5gpxqx9ZZ+ahK4cCr0Hgcwh
+        foqCFtjf/vjKNR8W8sS6vQffH
+X-Received: by 2002:a05:6000:1e17:b0:22e:618f:b9d8 with SMTP id bj23-20020a0560001e1700b0022e618fb9d8mr3690571wrb.280.1666157670219;
+        Tue, 18 Oct 2022 22:34:30 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7o9MFWDHGx4YaY6MVWmGaWkVEK4VcTVqnehSs1l742aYijDHIWJsqEoztB+11w7fU7P2ZjsA==
+X-Received: by 2002:a05:6000:1e17:b0:22e:618f:b9d8 with SMTP id bj23-20020a0560001e1700b0022e618fb9d8mr3690556wrb.280.1666157669949;
+        Tue, 18 Oct 2022 22:34:29 -0700 (PDT)
+Received: from redhat.com ([2.54.191.184])
+        by smtp.gmail.com with ESMTPSA id p39-20020a05600c1da700b003c6d21a19a0sm15231591wms.29.2022.10.18.22.34.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Oct 2022 22:34:29 -0700 (PDT)
+Date:   Wed, 19 Oct 2022 01:34:26 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Eli Cohen <elic@nvidia.com>
+Cc:     Si-Wei Liu <si-wei.liu@oracle.com>,
+        "jasowang@redhat.com" <jasowang@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "eperezma@redhat.com" <eperezma@redhat.com>,
+        "lulu@redhat.com" <lulu@redhat.com>
+Subject: Re: [PATCH 1/4] vdpa/mlx5: Fix rule forwarding VLAN to TIR
+Message-ID: <20221019013402-mutt-send-email-mst@kernel.org>
+References: <20221018111232.4021-1-elic@nvidia.com>
+ <20221018111232.4021-2-elic@nvidia.com>
+ <7eceaaf2-753a-8ff8-4014-39314b31d47a@oracle.com>
+ <DM8PR12MB540062ECEFFA463C69FD08C9AB2B9@DM8PR12MB5400.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-References: <20221013222719.277923-1-stephen.s.brennan@oracle.com>
- <20221018041233.376977-1-stephen.s.brennan@oracle.com> <CAOQ4uxgnW1An-3FJvUfYoixeycZ0w=XDfU0fh6RdV4KM9DzX_g@mail.gmail.com>
- <87edv44rll.fsf@oracle.com>
-In-Reply-To: <87edv44rll.fsf@oracle.com>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Wed, 19 Oct 2022 08:33:34 +0300
-Message-ID: <CAOQ4uxhwFGddgJP5xPYDysoa4GFPYu6Bj7rgHVXTEuZk+QKYQQ@mail.gmail.com>
-Subject: Re: [PATCH 0/2] fsnotify: fix softlockups iterating over d_subdirs
-To:     Stephen Brennan <stephen.s.brennan@oracle.com>
-Cc:     Jan Kara <jack@suse.cz>, Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DM8PR12MB540062ECEFFA463C69FD08C9AB2B9@DM8PR12MB5400.namprd12.prod.outlook.com>
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,127 +85,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 2:52 AM Stephen Brennan
-<stephen.s.brennan@oracle.com> wrote:
->
-> Amir Goldstein <amir73il@gmail.com> writes:
-> > On Tue, Oct 18, 2022 at 7:12 AM Stephen Brennan
-> > <stephen.s.brennan@oracle.com> wrote:
-> >>
-> >> Hi Jan, Amir, Al,
-> >>
-> >> Here's my first shot at implementing what we discussed. I tested it using the
-> >> negative dentry creation tool I mentioned in my previous message, with a similar
-> >> workflow. Rather than having a bunch of threads accessing the directory to
-> >> create that "thundering herd" of CPUs in __fsnotify_update_child_dentry_flags, I
-> >> just started a lot of inotifywait tasks:
-> >>
-> >> 1. Create 100 million negative dentries in a dir
-> >> 2. Use trace-cmd to watch __fsnotify_update_child_dentry_flags:
-> >>    trace-cmd start -p function_graph -l __fsnotify_update_child_dentry_flags
-> >>    sudo cat /sys/kernel/debug/tracing/trace_pipe
-> >> 3. Run a lot of inotifywait tasks: for i in {1..10} inotifywait $dir & done
-> >>
-> >> With step #3, I see only one execution of __fsnotify_update_child_dentry_flags.
-> >> Once that completes, all the inotifywait tasks say "Watches established".
-> >> Similarly, once an access occurs in the directory, a single
-> >> __fsnotify_update_child_dentry_flags execution occurs, and all the tasks exit.
-> >> In short: it works great!
-> >>
-> >> However, while testing this, I've observed a dentry still in use warning during
-> >> unmount of rpc_pipefs on the "nfs" dentry during shutdown. NFS is of course in
-> >> use, and I assume that fsnotify must have been used to trigger this. The error
-> >> is not there on mainline without my patch so it's definitely caused by this
-> >> code. I'll continue debugging it but I wanted to share my first take on this so
-> >> you could take a look.
-> >>
-> >> [ 1595.197339] BUG: Dentry 000000005f5e7197{i=67,n=nfs}  still in use (2) [unmount of rpc_pipefs rpc_pipefs]
-> >>
-> >
-> > Hmm, the assumption we made about partial stability of d_subdirs
-> > under dir inode lock looks incorrect for rpc_pipefs.
-> > None of the functions that update the rpc_pipefs dcache take the parent
-> > inode lock.
->
-> That may be, but I'm confused how that would trigger this issue. If I'm
-> understanding correctly, this warning indicates a reference counting
-> bug.
+On Wed, Oct 19, 2022 at 05:31:48AM +0000, Eli Cohen wrote:
+> > From: Si-Wei Liu <si-wei.liu@oracle.com>
+> > Sent: Tuesday, 18 October 2022 22:21
+> > To: Eli Cohen <elic@nvidia.com>; mst@redhat.com; jasowang@redhat.com;
+> > linux-kernel@vger.kernel.org; virtualization@lists.linux-foundation.org
+> > Cc: eperezma@redhat.com; lulu@redhat.com
+> > Subject: Re: [PATCH 1/4] vdpa/mlx5: Fix rule forwarding VLAN to TIR
+> > 
+> > Hi Eli,
+> > 
+> > It's not for this patch but something related, so just a friendly
+> > heads-up. I haven't validated the VLAN tagging behavior yet for mlx5
+> > vdpa, but from my quick read of the code it doesn't seem it
+> > differentiates the case with and without VIRTIO_NET_F_CTRL_VLAN, to be
+> > compatible/compliant with what's been implemented in QEMU software (a
+> > spec addendum was filed as requested by Michael):
+> > 
+> > https://github.com/oasis-tcs/virtio-spec/issues/147
+> > 
+> > - when VIRTIO_NET_F_CTRL_VLAN is negotiated, the device starts with
+> > all VLANs filtered (meaning only untagged traffic can be received,
+> > and traffic with VLAN tag will be dropped).
+> > 
+> > - when VIRTIO_NET_F_CTRL_VLAN is not negotiated, all traffic including
+> > untagged and tagged can be received.
+> > 
+> > Can you please help check if we need further fix in terms of VLAN tagging?
+> > 
+> 
+> Sure. It's broken today. I will fix this to conform to the above requirements and send V1.
 
-Yes.
-On generic_shutdown_super() there should be no more
-references to dentries.
+Did you mean v2?
 
->
-> If __fsnotify_update_child_dentry_flags() had gone to sleep and the list
-> were edited, then it seems like there could be only two possibilities
-> that could cause bugs:
->
-> 1. The dentry we slept holding a reference to was removed from the list,
-> and maybe moved to a different one, or just removed. If that were the
-> case, we're quite unlucky, because we'll start looping indefinitely as
-> we'll never get back to the beginning of the list, or worse.
->
-> 2. A dentry adjacent to the one we held a reference to was removed. In
-> that case, our dentry's d_child pointers should get rearranged, and when
-> we wake, we should see those updates and continue.
->
-> In neither of those cases do I understand where we could have done a
-> dget() unpaired with a dput(), which is what seemingly would trigger
-> this issue.
->
+> > Thanks,
+> > -Siwei
+> > 
+> > 
+> > On 10/18/2022 4:12 AM, Eli Cohen wrote:
+> > > Set the VLAN id to the header values field instead of overwriting the
+> > > headers criteria field.
+> > >
+> > > Before this fix, VLAN filtering would not really work and tagged packets
+> > > would be forwarded unfiltered to the TIR.
+> > >
+> > > Fixes: baf2ad3f6a98 ("vdpa/mlx5: Add RX MAC VLAN filter support")
+> > >
+> > > Signed-off-by: Eli Cohen <elic@nvidia.com>
+> > Reviewed-by: Si-Wei Liu <si-wei.liu@oracle.com>
+> > 
+> > > ---
+> > >   drivers/vdpa/mlx5/net/mlx5_vnet.c | 2 +-
+> > >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > >
+> > > diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> > b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> > > index 90913365def4..dd29fdfc24ed 100644
+> > > --- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> > > +++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> > > @@ -1472,7 +1472,7 @@ static int mlx5_vdpa_add_mac_vlan_rules(struct
+> > mlx5_vdpa_net *ndev, u8 *mac,
+> > >   	if (tagged) {
+> > >   		MLX5_SET(fte_match_set_lyr_2_4, headers_v, cvlan_tag, 1);
+> > >   		MLX5_SET_TO_ONES(fte_match_set_lyr_2_4, headers_c,
+> > first_vid);
+> > > -		MLX5_SET(fte_match_set_lyr_2_4, headers_c, first_vid, vid);
+> > > +		MLX5_SET(fte_match_set_lyr_2_4, headers_v, first_vid, vid);
+> > >   	}
+> > >   	flow_act.action = MLX5_FLOW_CONTEXT_ACTION_FWD_DEST;
+> > >   	dest.type = MLX5_FLOW_DESTINATION_TYPE_TIR;
+> 
 
-I got the same impression.
-
-> I'm probably wrong, but without understanding the mechanism behind the
-> error, I'm not sure how to approach it.
->
-> > The assumption looks incorrect for other pseudo fs as well.
-> >
-> > The other side of the coin is that we do not really need to worry
-> > about walking a huge list of pseudo fs children.
-> >
-> > The question is how to classify those pseudo fs and whether there
-> > are other cases like this that we missed.
-> >
-> > Perhaps having simple_dentry_operationsis a good enough
-> > clue, but perhaps it is not enough. I am not sure.
-> >
-> > It covers all the cases of pseudo fs that I know about, so you
-> > can certainly use this clue to avoid going to sleep in the
-> > update loop as a first approximation.
->
-> I would worry that it would become an exercise of whack-a-mole.
-> Allow/deny-listing certain filesystems for certain behavior seems scary.
->
-
-Totally agree.
-
-> > I can try to figure this out, but I prefer that Al will chime in to
-> > provide reliable answers to those questions.
->
-> I have a core dump from the warning (with panic_on_warn=1) and will see
-> if I can trace or otherwise identify the exact mechanism myself.
->
-
-Most likely the refcount was already leaked earlier, but
-worth trying.
-
->
-> Thanks for your detailed review of both the patches. I didn't get much
-> time today to update the patches and test them. Your feedback looks very
-> helpful though, and I'll hope to send out an updated revision tomorrow.
->
-> In the absolute worst case (and I don't want to concede defeat just
-> yet), keeping patch 1 without patch 2 (sleepable iteration) would still
-> be a major win, since it resolves the thundering herd problem which is
-> what compounds problem of the long lists.
->
-
-Makes sense.
-Patch 1 logic is solid.
-
-Hope my suggestions won't complicate you too much,
-if they do, I am sure Jan will find a way to simplify ;)
-
-Thanks,
-Amir.
