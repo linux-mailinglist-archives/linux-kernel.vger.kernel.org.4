@@ -2,102 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA861603A12
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 08:49:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCD02603997
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 08:09:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230103AbiJSGtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 02:49:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44490 "EHLO
+        id S229714AbiJSGJ0 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 19 Oct 2022 02:09:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230131AbiJSGs5 (ORCPT
+        with ESMTP id S229729AbiJSGJW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 02:48:57 -0400
-X-Greylist: delayed 3602 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 18 Oct 2022 23:48:54 PDT
-Received: from 1.mo583.mail-out.ovh.net (1.mo583.mail-out.ovh.net [188.165.57.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB3B74BB8
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 23:48:54 -0700 (PDT)
-Received: from player698.ha.ovh.net (unknown [10.109.156.194])
-        by mo583.mail-out.ovh.net (Postfix) with ESMTP id 753EF25382
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 05:32:03 +0000 (UTC)
-Received: from RCM-web6.webmail.mail.ovh.net (ip-194-187-74-233.konfederacka.maverick.com.pl [194.187.74.233])
-        (Authenticated sender: rafal@milecki.pl)
-        by player698.ha.ovh.net (Postfix) with ESMTPSA id 177242FD2CF4E;
-        Wed, 19 Oct 2022 05:31:57 +0000 (UTC)
+        Wed, 19 Oct 2022 02:09:22 -0400
+Received: from sd108198.server.idn.vn (sd108198.server.idn.vn [103.45.230.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D96F367049
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 23:08:10 -0700 (PDT)
+Received: from [192.168.0.111] ([185.248.12.38])
+        by sd108198.server.idn.vn (IceWarp 10.3.1) with ASMTP (SSL) id NQX19713;
+        Wed, 19 Oct 2022 13:04:13 +0700
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Date:   Wed, 19 Oct 2022 07:31:57 +0200
-From:   =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Richard Weinberger <richard.weinberger@gmail.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: Re: linux-next: manual merge of the mtd tree with the mtd-fixes tree
-In-Reply-To: <20221019092812.7d370b06@canb.auug.org.au>
-References: <20221019092812.7d370b06@canb.auug.org.au>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <23d311953ef13608be2283a05b2e853d@milecki.pl>
-X-Sender: rafal@milecki.pl
-X-Originating-IP: 194.187.74.233
-X-Webmail-UserID: rafal@milecki.pl
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Ovh-Tracer-Id: 10075396791477512996
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrfeelfedgleeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepggffhffvvefujghffgfkgihitgfgsehtjehjtddtredvnecuhfhrohhmpeftrghfrghlpgfoihhlvggtkhhiuceorhgrfhgrlhesmhhilhgvtghkihdrphhlqeenucggtffrrghtthgvrhhnpeegvdffjeelvdeggeetheegveejieetgeeiiefggeelveejffehieekhfduueelhfenucfkphepuddvjedrtddrtddruddpudelgedrudekjedrjeegrddvfeefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpeeorhgrfhgrlhesmhhilhgvtghkihdrphhlqedpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheekfedpmhhouggvpehsmhhtphhouhht
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Re: Awaiting Your Response.
+To:     Recipients <toanbui@benhvienranghammat.vn>
+From:   "Mr. Andrew Kyle" <toanbui@benhvienranghammat.vn>
+Date:   Wed, 19 Oct 2022 09:00:29 +0300
+Reply-To: andrewkyle69@hotmail.com
+Message-ID: <eec6a7295a792427aedf501414936b99@benhvienranghammat.vn>
+X-Spam-Status: Yes, score=6.2 required=5.0 tests=BAYES_60,
+        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,HK_NAME_MR_MRS,
+        RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
+        *      [score: 0.6044]
+        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
+        *      https://senderscore.org/blocklistlookup/
+        *      [103.45.230.198 listed in bl.score.senderscore.com]
+        * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
+        *      [103.45.230.198 listed in wl.mailspike.net]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [andrewkyle69[at]hotmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  1.0 HK_NAME_MR_MRS No description available.
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Good day,
 
-On 2022-10-19 00:28, Stephen Rothwell wrote:
-> Today's linux-next merge of the mtd tree got a conflict in:
-> 
->   drivers/mtd/mtdcore.c
-> 
-> between commit:
-> 
->   12b58961de0b ("mtd: core: add missing of_node_get() in dynamic
-> partitions code")
-> 
-> from the mtd-fixes tree and commit:
-> 
->   63db0cb35e1c ("mtd: core: simplify (a bit) code find
-> partition-matching dynamic OF node")
-> 
-> from the mtd tree.
-> 
-> I fixed it up (I just used the latter version) and can carry the fix as
-> necessary. This is now fixed as far as linux-next is concerned, but any
-> non trivial conflicts should be mentioned to your upstream maintainer
-> when your tree is submitted for merging.  You may also want to consider
-> cooperating with the maintainer of the conflicting tree to minimise any
-> particularly complex conflicts.
+How are you doing today, I hope this email finds you in good health. You have not responded to my previous mail to you regarding our late client Mr. Fredrick.
 
-this isn't exactly the correct fix, of_node_get() is still needed.
+Kindly acknowledge my proposition and let me know what your decisions are, if you are taking the offer.
 
-I'll make sure we let Linus know about this conflict (and solution) when
-sending 6.2 pull request.
+Get back to me as soon as you can for further details.
 
+Regards,
 
-diff --git a/drivers/mtd/mtdcore.c b/drivers/mtd/mtdcore.c
-index 07249af4f890..20fcedc3021e 100644
---- a/drivers/mtd/mtdcore.c
-+++ b/drivers/mtd/mtdcore.c
-@@ -559,7 +559,7 @@ static void mtd_check_of_node(struct mtd_info *mtd)
-  	if (!mtd_is_partition(mtd))
-  		return;
-
--	parent_dn = mtd_get_of_node(mtd->parent);
-+	parent_dn = of_node_get(mtd_get_of_node(mtd->parent));
-  	if (!parent_dn)
-  		return;
-
+Andrew Kyle
