@@ -2,78 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EBCC604E98
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 19:26:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1529C604E9B
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 19:26:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbiJSR0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 13:26:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45582 "EHLO
+        id S229784AbiJSR0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 13:26:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbiJSR0b (ORCPT
+        with ESMTP id S230250AbiJSR0o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 13:26:31 -0400
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76B581C0708
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 10:26:28 -0700 (PDT)
-Received: by mail-ot1-x331.google.com with SMTP id z11-20020a05683020cb00b00661a95cf920so9899229otq.5
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 10:26:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cupPL1neXJFDi/CczZUnnSksrOf8QPniSG3CPoyTvwk=;
-        b=Gac78J9i90UOUBCVrylc5ZrTgnCY15Gnsk7zaNO8hbQdMniRSpKeWxkTTG5TuRyEZB
-         UDik7FL9jFr1ZdlcLkLkZx9hlXsSPXv05eXESmVQoWZJDrDoiml8TtqDCjSsxyMM3DcH
-         ByvbBAe5KO9N+pJ+tA8JESSDV1WDzdBhegWb0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cupPL1neXJFDi/CczZUnnSksrOf8QPniSG3CPoyTvwk=;
-        b=PoS+eHVLG0N2KcXtZ4Cc1iqhiTc2p1cIFFH8Ry7/6N+eB4m6UMLrRHWX/1qcNBYjL+
-         b+aeXKas4qtHgHyK1UH+xM+2odz9jQjf3PCQGEyJExDk8+w8AssGSY8aENT6cb4AKhQJ
-         9Zm0Mo+g2Km5rsnmbsAZgn0DiXcfJ3MUcySf8CSpA0a2PmFW+TidgNAbqMoCqMsyMQt6
-         oIbGx2Xuz8se5Y/LEuD7ajenOQZ+h0Q3ICc9NrB7foI1hSEltCyIsZXXWabkVpmqLMxE
-         VXWwd3XqAjWd6CHZ2aWvB9KTCPBBH/8GJnlaXxPeT0pRTOleA4UvIeFdI0hpraplnvtt
-         +uRQ==
-X-Gm-Message-State: ACrzQf29VDraUqIy2lglshZj4a3GaGNftZ/6hLRVZSVr5AO+8fZJ1qRN
-        lfwPwQ37o4lbm435c8LvsWqlJz5y6A8slQ==
-X-Google-Smtp-Source: AMsMyM7SZShIs9O9NceAa+k82KLulh/2dc6thv5XBNgFzZFVn3whu9j7h35HxiQ1+2gCEmi9YAu9pQ==
-X-Received: by 2002:a9d:74c6:0:b0:661:c309:f0cf with SMTP id a6-20020a9d74c6000000b00661c309f0cfmr4407337otl.55.1666200387204;
-        Wed, 19 Oct 2022 10:26:27 -0700 (PDT)
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com. [209.85.167.176])
-        by smtp.gmail.com with ESMTPSA id e9-20020a9d2a89000000b006618b96bcd4sm7221081otb.52.2022.10.19.10.26.25
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Oct 2022 10:26:25 -0700 (PDT)
-Received: by mail-oi1-f176.google.com with SMTP id g10so20015631oif.10
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 10:26:25 -0700 (PDT)
-X-Received: by 2002:a54:4899:0:b0:354:add8:52ab with SMTP id
- r25-20020a544899000000b00354add852abmr5135777oic.229.1666200385369; Wed, 19
- Oct 2022 10:26:25 -0700 (PDT)
+        Wed, 19 Oct 2022 13:26:44 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E79F1D1A98;
+        Wed, 19 Oct 2022 10:26:41 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29JHQXLG116399;
+        Wed, 19 Oct 2022 12:26:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1666200393;
+        bh=3hvx9pr5K+0guJn4DKXmTSuodCT3VlQZ4faEGDqq4No=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=v2YFb2MRCK2ydlVtJg3M8fj+9tfFUlNJSrR81RTgl+kRfVt+1at2w9sIgjM29DnsB
+         50HZbFREPlqJ/t4hwfdylSqSedOpk0cA3eRzx4aLjASO4Ez24CNIGO2ApNcGyLXEHa
+         UjTixXMg1pnkfrKjELk/Brh1IpO4hh+kTJBt05sM=
+Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29JHQXM6047730
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 19 Oct 2022 12:26:33 -0500
+Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Wed, 19
+ Oct 2022 12:26:33 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Wed, 19 Oct 2022 12:26:32 -0500
+Received: from [10.250.33.68] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29JHQVvj123567;
+        Wed, 19 Oct 2022 12:26:31 -0500
+Message-ID: <90cbb65b-389e-95b5-26d8-39bc33f88df6@ti.com>
+Date:   Wed, 19 Oct 2022 12:26:31 -0500
 MIME-Version: 1.0
-References: <20221019162648.3557490-1-Jason@zx2c4.com> <20221019165455.GL25951@gate.crashing.org>
- <CAHk-=wiMWk2t8FHn0iqVVe1mn62OTAD6ffL5rn9Eeu021H9d1Q@mail.gmail.com>
-In-Reply-To: <CAHk-=wiMWk2t8FHn0iqVVe1mn62OTAD6ffL5rn9Eeu021H9d1Q@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 19 Oct 2022 10:26:09 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whggBoH78ojE0wttyHKwuf48hrSS_X7s3D3Qd_516ayzQ@mail.gmail.com>
-Message-ID: <CAHk-=whggBoH78ojE0wttyHKwuf48hrSS_X7s3D3Qd_516ayzQ@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: treat char as always signed
-To:     Segher Boessenkool <segher@kernel.crashing.org>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-toolchains@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2 3/4] arm64: dts: ti: Add initial support for J784S4 SoC
+Content-Language: en-US
+To:     Apurva Nandan <a-nandan@ti.com>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>
+CC:     Hari Nagalla <hnagalla@ti.com>
+References: <20221014082314.118361-1-a-nandan@ti.com>
+ <20221014082314.118361-4-a-nandan@ti.com>
+From:   Andrew Davis <afd@ti.com>
+In-Reply-To: <20221014082314.118361-4-a-nandan@ti.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,45 +74,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 10:14 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> The pointer-sign thing doesn't actually help (ie it won't find places
-> where you actually compare a char), and it causes untold damage in
-> doing completely insane things.
+On 10/14/22 3:23 AM, Apurva Nandan wrote:
+> The J784S4 SoC belongs to the K3 Multicore SoC architecture
+> platform, providing advanced system integration in automotive,
+> ADAS and industrial applications requiring AI at the network edge.
+> This SoC extends the K3 Jacinto 7 family of SoCs with focus on
+> raising performance and integration while providing interfaces,
+> memory architecture and compute performance for multi-sensor, high
+> concurrency applications.
+> 
 
-Side note: several years ago I tried to make up some sane rules to
-have 'sparse' actually be able to warn when a 'char' was used in a
-context where the sign mattered.
+[...]
 
-I failed miserably.
+> +
+> +		hwspinlock: hwlock@30e00000 {
+> +			compatible = "ti,am654-hwspinlock";
+> +			reg = <0x00 0x30e00000 0x00 0x1000>;
+> +			#hwlock-cells = <1>;
+> +			status = "disabled";
 
-You actually can see some signs (heh) of that in the sparse sources,
-in that the type system actually has a bit for explicitly signed types
-("MOD_EXPLICITLY_SIGNED"), but it ends up being almost entirely
-unused.
+Why is this disabled? The node is complete and usable.
 
-That bit does still have one particular use: the "bitfield is
-dubiously signed" thing where sparse will complain about bitfields
-that are implicitly (but not explicitly) signed. Because people really
-expect 'int a:1' to have values 0/1, not 0/-1.
+I do not know if we settled on a set of rules for disabling nodes
+by default in the dtsi, I couldn't find one if we did, but how does
+this sound,
 
-But the original intent was to find code where people used a 'char'
-that wasn't explicitly signed, and that then had architecture-defined
-behavior.
+If a node in a dtsi file is incomplete, or the described hardware
+unusable, without additional information provided by board-level
+additions, then the node may be disabled. Otherwise it must be
+left in the default enabled state.
 
-I just could not come up with any even remotely sane warning
-heuristics that didn't have a metric buttload of false positives.
+Without something like that, we will end up with the same problem
+we are trying to fix here, but in reverse, one will have to
+enable nodes in board files that would not otherwise need to
+refrenced. Worse that sounds like a configuration setting, not a
+hardware description, so it would not belong in the device tree.
 
-I still have this feeling that it *should* be possible to warn about
-the situation where you end up doing an implicit type widening (ie the
-normal C "arithmetic is always done in at least 'int'") that then does
-not get narrowed down again without the upper bits ever mattering.
+Same for main_ringacc, main_udmap, cpts, and mcu_navss below.
 
-But it needs somebody smarter than me, I'm afraid.
+> +		};
+> +
 
-And the fact that I don't think any other compiler has that warning
-either makes me just wonder if my feeling that it should be possible
-is just wrong.
+[...]
 
-                   Linus
+> +
+> +#include <dt-bindings/interrupt-controller/irq.h>
+> +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> +#include <dt-bindings/pinctrl/k3.h>
+> +#include <dt-bindings/soc/ti,sci_pm_domain.h>
+> +
+> +/ {
+> +
+
+Extra newline not needed.
+
+Andrew
+
+> +	model = "Texas Instruments K3 J784S4 SoC";
