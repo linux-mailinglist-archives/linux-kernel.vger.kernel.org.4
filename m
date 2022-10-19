@@ -2,249 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AEB6603860
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 05:06:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C0B9603881
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 05:15:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229849AbiJSDGW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 18 Oct 2022 23:06:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53576 "EHLO
+        id S229913AbiJSDPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 18 Oct 2022 23:15:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbiJSDGM (ORCPT
+        with ESMTP id S229975AbiJSDPB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 18 Oct 2022 23:06:12 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A8F4816AB
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 20:06:11 -0700 (PDT)
-Received: from canpemm500006.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Msb9170hYz1P6mL;
-        Wed, 19 Oct 2022 11:01:25 +0800 (CST)
-Received: from use12-sp2.huawei.com (10.67.189.174) by
- canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 19 Oct 2022 11:06:09 +0800
-From:   Xiaoming Ni <nixiaoming@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <phillip@squashfs.org.uk>
-CC:     <nixiaoming@huawei.com>, <wangle6@huawei.com>,
-        <yi.zhang@huawei.com>, <zhongjubin@huawei.com>,
-        <chenjianguo3@huawei.com>
-Subject: [PATCH v6 2/2] squashfs: Allows users to configure the number of decompression threads
-Date:   Wed, 19 Oct 2022 11:09:30 +0800
-Message-ID: <20221019030930.130456-3-nixiaoming@huawei.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20221019030930.130456-1-nixiaoming@huawei.com>
-References: <20220930091406.50869-1-nixiaoming@huawei.com>
- <20221019030930.130456-1-nixiaoming@huawei.com>
+        Tue, 18 Oct 2022 23:15:01 -0400
+Received: from mail-m975.mail.163.com (mail-m975.mail.163.com [123.126.97.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D268212751
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 20:14:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=4ljMN
+        8Acdu32tWrNECoIr2RUoGL9U4V3ODGHPZdQnuk=; b=i/7jgS51FeKBPZxc0Jn+y
+        3WGUu2PVDfMNNGCi3qVxuu1ZKqOl/BGlFb/WDaqxxbRk5pUOqQ/RHDzF5WcUcIdZ
+        oXa5eURjhvNawqOEZHv5cznsS1xPSvvspAHMoZYUZvn68gg1BHn+9Z7CQQEclm1N
+        DoIZEU+8eCzBJU/nzujL5g=
+Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
+        by smtp5 (Coremail) with SMTP id HdxpCgBHVAyPa09jNuHElg--.26802S2;
+        Wed, 19 Oct 2022 11:14:24 +0800 (CST)
+From:   Zheng Wang <zyytlz.wz@163.com>
+To:     gregkh@linuxfoundation.org
+Cc:     zhengyejian1@huawei.com, dimitri.sivanich@hpe.com, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
+        alex000young@gmail.com, security@kernel.org,
+        Zheng Wang <zyytlz.wz@163.com>
+Subject: [PATCH v3] misc: sgi-gru: fix use-after-free error in  gru_set_context_option, gru_fault and gru_handle_user_call_os
+Date:   Wed, 19 Oct 2022 11:14:23 +0800
+Message-Id: <20221019031423.901246-1-zyytlz.wz@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.189.174]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500006.china.huawei.com (7.192.105.130)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: HdxpCgBHVAyPa09jNuHElg--.26802S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxGr4xtF4UKFy3AryxAw4fZrb_yoWrKF18pa
+        1jg348ZrW3XF45urs7ta1kWFW3Ca4kJFWUGr9rt34F9w4rAFs8C34DJas0qr4DZrW0qr4a
+        yr4rtFnI9an0g3JanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziaLv_UUUUU=
+X-Originating-IP: [111.206.145.21]
+X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/xtbB2BOfU2BHMS4LQgAAs2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The maximum number of threads in the decompressor_multi.c file is fixed
-and cannot be adjusted according to user needs.
-Therefore, the mount parameter needs to be added to allow users to
-configure the number of threads as required. The upper limit is
-num_online_cpus() * 2.
+Gts may be freed in gru_check_chiplet_assignment.
+The caller still use it after that, UAF happens.
 
-Signed-off-by: Xiaoming Ni <nixiaoming@huawei.com>
+Fix it by introducing a return value to see if it's in error path or not.
+Free the gts in caller if gru_check_chiplet_assignment check failed.
+
+Fixes: 55484c45dbec ("gru: allow users to specify gru chiplet 2")
+Reported-by: Zheng Wang <hackerzheng666@gmail.com>
+Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
 ---
- fs/squashfs/Kconfig              | 16 ++++++++--
- fs/squashfs/decompressor_multi.c |  4 +--
- fs/squashfs/squashfs_fs_sb.h     |  1 +
- fs/squashfs/super.c              | 55 ++++++++++++++++++++++++++++----
- 4 files changed, 66 insertions(+), 10 deletions(-)
+v4:
+- use VM_FAULT_NOPAGE as failure code in gru_fault and -EINVAL in other functions suggested by Yejian
 
-diff --git a/fs/squashfs/Kconfig b/fs/squashfs/Kconfig
-index 218bacdd4298..60fc98bdf421 100644
---- a/fs/squashfs/Kconfig
-+++ b/fs/squashfs/Kconfig
-@@ -73,11 +73,10 @@ config SQUASHFS_CHOICE_DECOMP_BY_MOUNT
- 	select SQUASHFS_DECOMP_SINGLE
- 	select SQUASHFS_DECOMP_MULTI
- 	select SQUASHFS_DECOMP_MULTI_PERCPU
-+	select SQUASHFS_MOUNT_DECOMP_THREADS
- 	help
- 	  Compile all parallel decompression modes and specify the
- 	  decompression mode by setting "threads=" during mount.
--	    threads=<single|multi|percpu>
--
- 	  default Decompressor parallelisation is SQUASHFS_DECOMP_SINGLE
+v3:
+- add preempt_enable and use VM_FAULT_NOPAGE as failure code suggested by Yejian
+
+v2:
+- commit message changes suggested by Greg
+
+v1: https://lore.kernel.org/lkml/CAJedcCzY72jqgF-pCPtx66vXXwdPn-KMagZnqrxcpWw1NxTLaA@mail.gmail.com/
+---
+ drivers/misc/sgi-gru/grufault.c  | 14 ++++++++++++--
+ drivers/misc/sgi-gru/grumain.c   | 18 ++++++++++++++----
+ drivers/misc/sgi-gru/grutables.h |  2 +-
+ 3 files changed, 27 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/misc/sgi-gru/grufault.c b/drivers/misc/sgi-gru/grufault.c
+index d7ef61e602ed..2b5b049fbd38 100644
+--- a/drivers/misc/sgi-gru/grufault.c
++++ b/drivers/misc/sgi-gru/grufault.c
+@@ -656,7 +656,9 @@ int gru_handle_user_call_os(unsigned long cb)
+ 	if (ucbnum >= gts->ts_cbr_au_count * GRU_CBR_AU_SIZE)
+ 		goto exit;
  
- choice
-@@ -127,6 +126,19 @@ config SQUASHFS_COMPILE_DECOMP_MULTI_PERCPU
- 	  decompression is load-balanced across the cores.
- endchoice
+-	gru_check_context_placement(gts);
++	ret = gru_check_context_placement(gts);
++	if (ret)
++		goto err;
  
-+config SQUASHFS_MOUNT_DECOMP_THREADS
-+	bool "Add the mount parameter 'threads=' for squashfs"
-+	depends on SQUASHFS
-+	depends on SQUASHFS_DECOMP_MULTI
-+	default n
-+	help
-+	  Use threads= to set the decompression parallel mode and the number of threads.
-+	  If SQUASHFS_CHOICE_DECOMP_BY_MOUNT=y
-+	      threads=<single|multi|percpu|1|2|3|...>
-+	  else
-+	      threads=<2|3|...>
-+	  The upper limit is num_online_cpus() * 2.
-+
- config SQUASHFS_XATTR
- 	bool "Squashfs XATTR support"
- 	depends on SQUASHFS
-diff --git a/fs/squashfs/decompressor_multi.c b/fs/squashfs/decompressor_multi.c
-index eb25432bd149..416c53eedbd1 100644
---- a/fs/squashfs/decompressor_multi.c
-+++ b/fs/squashfs/decompressor_multi.c
-@@ -144,7 +144,7 @@ static struct decomp_stream *get_decomp_stream(struct squashfs_sb_info *msblk,
- 		 * If there is no available decomp and already full,
- 		 * let's wait for releasing decomp from other users.
- 		 */
--		if (stream->avail_decomp >= MAX_DECOMPRESSOR)
-+		if (stream->avail_decomp >= msblk->max_thread_num)
- 			goto wait;
- 
- 		/* Let's allocate new decomp */
-@@ -160,7 +160,7 @@ static struct decomp_stream *get_decomp_stream(struct squashfs_sb_info *msblk,
- 		}
- 
- 		stream->avail_decomp++;
--		WARN_ON(stream->avail_decomp > MAX_DECOMPRESSOR);
-+		WARN_ON(stream->avail_decomp > msblk->max_thread_num);
- 
- 		mutex_unlock(&stream->mutex);
- 		break;
-diff --git a/fs/squashfs/squashfs_fs_sb.h b/fs/squashfs/squashfs_fs_sb.h
-index f1e5dad8ae0a..659082e9e51d 100644
---- a/fs/squashfs/squashfs_fs_sb.h
-+++ b/fs/squashfs/squashfs_fs_sb.h
-@@ -67,5 +67,6 @@ struct squashfs_sb_info {
- 	unsigned int				ids;
- 	bool					panic_on_errors;
- 	const struct squashfs_decompressor_thread_ops *thread_ops;
-+	int					max_thread_num;
- };
- #endif
-diff --git a/fs/squashfs/super.c b/fs/squashfs/super.c
-index aac3ea72a9ba..1e428ca9414e 100644
---- a/fs/squashfs/super.c
-+++ b/fs/squashfs/super.c
-@@ -53,6 +53,7 @@ enum squashfs_param {
- struct squashfs_mount_opts {
- 	enum Opt_errors errors;
- 	const struct squashfs_decompressor_thread_ops *thread_ops;
-+	int thread_num;
- };
- 
- static const struct constant_table squashfs_param_errors[] = {
-@@ -67,7 +68,8 @@ static const struct fs_parameter_spec squashfs_fs_parameters[] = {
- 	{}
- };
- 
--static int squashfs_parse_param_threads(const char *str, struct squashfs_mount_opts *opts)
-+
-+static int squashfs_parse_param_threads_str(const char *str, struct squashfs_mount_opts *opts)
- {
- #ifdef CONFIG_SQUASHFS_CHOICE_DECOMP_BY_MOUNT
- 	if (strcmp(str, "single") == 0) {
-@@ -86,6 +88,42 @@ static int squashfs_parse_param_threads(const char *str, struct squashfs_mount_o
- 	return -EINVAL;
- }
- 
-+static int squashfs_parse_param_threads_num(const char *str, struct squashfs_mount_opts *opts)
-+{
-+#ifdef CONFIG_SQUASHFS_MOUNT_DECOMP_THREADS
-+	int ret;
-+	unsigned long num;
-+
-+	ret = kstrtoul(str, 0, &num);
-+	if (ret != 0)
-+		return -EINVAL;
-+	if (num > 1) {
-+		opts->thread_ops = &squashfs_decompressor_multi;
-+		if (num > opts->thread_ops->max_decompressors())
-+			return -EINVAL;
-+		opts->thread_num = (int)num;
-+		return 0;
-+	}
-+#ifdef CONFIG_SQUASHFS_DECOMP_SINGLE
-+	if (num == 1) {
-+		opts->thread_ops = &squashfs_decompressor_single;
-+		opts->thread_num = 1;
-+		return 0;
-+	}
-+#endif
-+#endif /* !CONFIG_SQUASHFS_MOUNT_DECOMP_THREADS */
+ 	/*
+ 	 * CCH may contain stale data if ts_force_cch_reload is set.
+@@ -677,6 +679,10 @@ int gru_handle_user_call_os(unsigned long cb)
+ exit:
+ 	gru_unlock_gts(gts);
+ 	return ret;
++err:
++	gru_unlock_gts(gts);
++	gru_unload_context(gts, 1);
 +	return -EINVAL;
-+}
-+
-+static int squashfs_parse_param_threads(const char *str, struct squashfs_mount_opts *opts)
-+{
-+	int ret = squashfs_parse_param_threads_str(str, opts);
-+
-+	if (ret == 0)
-+		return ret;
-+	return squashfs_parse_param_threads_num(str, opts);
-+}
-+
- static int squashfs_parse_param(struct fs_context *fc, struct fs_parameter *param)
- {
- 	struct squashfs_mount_opts *opts = fc->fs_private;
-@@ -194,6 +232,11 @@ static int squashfs_fill_super(struct super_block *sb, struct fs_context *fc)
- 		goto failed_mount;
+ }
+ 
+ /*
+@@ -874,7 +880,7 @@ int gru_set_context_option(unsigned long arg)
+ 		} else {
+ 			gts->ts_user_blade_id = req.val1;
+ 			gts->ts_user_chiplet_id = req.val0;
+-			gru_check_context_placement(gts);
++			ret = gru_check_context_placement(gts);
+ 		}
+ 		break;
+ 	case sco_gseg_owner:
+@@ -889,6 +895,10 @@ int gru_set_context_option(unsigned long arg)
+ 		ret = -EINVAL;
  	}
- 	msblk->thread_ops = opts->thread_ops;
-+	if (opts->thread_num == 0) {
-+		msblk->max_thread_num = msblk->thread_ops->max_decompressors();
-+	} else {
-+		msblk->max_thread_num = opts->thread_num;
+ 	gru_unlock_gts(gts);
++	if (ret) {
++		gru_unload_context(gts, 1);
++		ret = -EINVAL;
 +	}
  
- 	/* Check the MAJOR & MINOR versions and lookup compression type */
- 	msblk->decompressor = supported_squashfs_filesystem(
-@@ -279,7 +322,7 @@ static int squashfs_fill_super(struct super_block *sb, struct fs_context *fc)
- 
- 	/* Allocate read_page block */
- 	msblk->read_page = squashfs_cache_init("data",
--		msblk->thread_ops->max_decompressors(), msblk->block_size);
-+		msblk->max_thread_num, msblk->block_size);
- 	if (msblk->read_page == NULL) {
- 		errorf(fc, "Failed to allocate read_page block");
- 		goto failed_mount;
-@@ -467,14 +510,13 @@ static int squashfs_show_options(struct seq_file *s, struct dentry *root)
- 		seq_puts(s, ",threads=single");
- 		return 0;
- 	}
--	if (msblk->thread_ops == &squashfs_decompressor_multi) {
--		seq_puts(s, ",threads=multi");
--		return 0;
--	}
- 	if (msblk->thread_ops == &squashfs_decompressor_percpu) {
- 		seq_puts(s, ",threads=percpu");
- 		return 0;
- 	}
-+#endif
-+#ifdef CONFIG_SQUASHFS_MOUNT_DECOMP_THREADS
-+	seq_printf(s, ",threads=%d", msblk->max_thread_num);
- #endif
- 	return 0;
+ 	return ret;
  }
-@@ -496,6 +538,7 @@ static int squashfs_init_fs_context(struct fs_context *fc)
- #else
- #error "fail: unknown squashfs decompression thread mode?"
- #endif
-+	opts->thread_num = 0;
- 	fc->fs_private = opts;
- 	fc->ops = &squashfs_context_ops;
- 	return 0;
+diff --git a/drivers/misc/sgi-gru/grumain.c b/drivers/misc/sgi-gru/grumain.c
+index 9afda47efbf2..77becb52f550 100644
+--- a/drivers/misc/sgi-gru/grumain.c
++++ b/drivers/misc/sgi-gru/grumain.c
+@@ -716,9 +716,10 @@ static int gru_check_chiplet_assignment(struct gru_state *gru,
+  * chiplet. Misassignment can occur if the process migrates to a different
+  * blade or if the user changes the selected blade/chiplet.
+  */
+-void gru_check_context_placement(struct gru_thread_state *gts)
++int gru_check_context_placement(struct gru_thread_state *gts)
+ {
+ 	struct gru_state *gru;
++	int ret = 0;
+ 
+ 	/*
+ 	 * If the current task is the context owner, verify that the
+@@ -727,14 +728,16 @@ void gru_check_context_placement(struct gru_thread_state *gts)
+ 	 */
+ 	gru = gts->ts_gru;
+ 	if (!gru || gts->ts_tgid_owner != current->tgid)
+-		return;
++		return ret;
+ 
+ 	if (!gru_check_chiplet_assignment(gru, gts)) {
+ 		STAT(check_context_unload);
+-		gru_unload_context(gts, 1);
++		ret = -EINVAL;
+ 	} else if (gru_retarget_intr(gts)) {
+ 		STAT(check_context_retarget_intr);
+ 	}
++
++	return ret;
+ }
+ 
+ 
+@@ -919,6 +922,7 @@ vm_fault_t gru_fault(struct vm_fault *vmf)
+ 	struct gru_thread_state *gts;
+ 	unsigned long paddr, vaddr;
+ 	unsigned long expires;
++	int ret;
+ 
+ 	vaddr = vmf->address;
+ 	gru_dbg(grudev, "vma %p, vaddr 0x%lx (0x%lx)\n",
+@@ -934,7 +938,13 @@ vm_fault_t gru_fault(struct vm_fault *vmf)
+ 	mutex_lock(&gts->ts_ctxlock);
+ 	preempt_disable();
+ 
+-	gru_check_context_placement(gts);
++	ret = gru_check_context_placement(gts);
++	if (ret) {
++		preempt_enable();
++		mutex_unlock(&gts->ts_ctxlock);
++		gru_unload_context(gts, 1);
++		return VM_FAULT_NOPAGE;
++	}
+ 
+ 	if (!gts->ts_gru) {
+ 		STAT(load_user_context);
+diff --git a/drivers/misc/sgi-gru/grutables.h b/drivers/misc/sgi-gru/grutables.h
+index 5efc869fe59a..f4a5a787685f 100644
+--- a/drivers/misc/sgi-gru/grutables.h
++++ b/drivers/misc/sgi-gru/grutables.h
+@@ -632,7 +632,7 @@ extern int gru_user_flush_tlb(unsigned long arg);
+ extern int gru_user_unload_context(unsigned long arg);
+ extern int gru_get_exception_detail(unsigned long arg);
+ extern int gru_set_context_option(unsigned long address);
+-extern void gru_check_context_placement(struct gru_thread_state *gts);
++extern int gru_check_context_placement(struct gru_thread_state *gts);
+ extern int gru_cpu_fault_map_id(void);
+ extern struct vm_area_struct *gru_find_vma(unsigned long vaddr);
+ extern void gru_flush_all_tlb(struct gru_state *gru);
 -- 
-2.27.0
+2.25.1
 
