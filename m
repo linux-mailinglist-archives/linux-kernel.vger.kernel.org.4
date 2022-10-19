@@ -2,122 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1518604B95
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:34:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 371DE604B0E
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:18:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbiJSPeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 11:34:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34364 "EHLO
+        id S231416AbiJSPSG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 11:18:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232072AbiJSPdw (ORCPT
+        with ESMTP id S232255AbiJSPRn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 11:33:52 -0400
-Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C07B4155DBB;
-        Wed, 19 Oct 2022 08:28:41 -0700 (PDT)
+        Wed, 19 Oct 2022 11:17:43 -0400
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F3961D0657
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 08:10:31 -0700 (PDT)
+Received: by mail-ot1-f53.google.com with SMTP id r13-20020a056830418d00b0065601df69c0so9671189otu.7
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 08:10:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1666193322;
-  x=1697729322;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hCTTTOmWPuE1nWOozcq8XqfrXalZRdh/62SN0Hq9k/w=;
-  b=IoyWvcE3I23IrYGwjXMnrIcRZqADX9mVwWFm21pzRNtbiqO+boTXR9FE
-   vjm/MioM/teU5PLVosGqge+6VShQIi5e8nsgF9zFtzdkj06z54Mg0JzTq
-   cpB4AEJXTebz7cxTZbHkiLx5fhW/M4MhZnKy49gXQNwdzgcWw+cYHExb4
-   wjAYufjf3wA2TcSPgqjj/Lmc8nRtj3jhxGHRZuZuOoHFWYh3w/PVkFTpL
-   eA87mS463WvwzICfNEmyWwEtMX+Obyelk1s1Kq8Fg2O7nOLtCx57VSZ5L
-   H3MQXx0z9d4wSIBAC+JTRUq1RRsLMQ6+IO/mdAwkP3NrCpPLZhOyi8fjP
-   g==;
-Date:   Wed, 19 Oct 2022 17:07:27 +0200
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     Jon Hunter <jonathanh@nvidia.com>
-CC:     Ulf Hansson <ulf.hansson@linaro.org>, kernel <kernel@axis.com>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "tytso@mit.edu" <tytso@mit.edu>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Prathamesh Shete <pshete@nvidia.com>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH] mmc: core: support zeroout using TRIM
-Message-ID: <Y1ASr6zpqobEbFmG@axis.com>
-References: <20220429152118.3617303-1-vincent.whitchurch@axis.com>
- <3c75ca82-f889-a346-a031-2c417c57e2b0@nvidia.com>
+        d=google.com; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=a50Sl6Y7oXbp/PbRU6wwFOKAQcgLlChD+njiyUUoAVM=;
+        b=h70JsGS/Zoz8vPmb1ANnoBkMX44g+sxyVOW52S1JD2OZF2n48IxQu5ncLP3M8qRf/h
+         xDBej6UyND7l7rJPQ8i9fjPeQEpcHRKWWQE1+bH9XElFOLZ5VatiL4lNG2FwKSNdP560
+         UYsXdOZbEIAM94O26kGuqZxoT4hZVPt8WjSVB6BF48sajh5wk3DWAEfEhO1zWv8OgvSG
+         x5K1KidB/krzoG80jSGgoN5JaW9/bc4oE5mUIzLWa+300n71CLDvV3Z0ji7UmGh6gGEQ
+         hRtYYmCzt/S+xdVfTpf5t5lqDUw4nzl8f7GrpR1bpF3IjVcv6ULWT13ehDh+rL+2OLGA
+         IeGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=a50Sl6Y7oXbp/PbRU6wwFOKAQcgLlChD+njiyUUoAVM=;
+        b=k6UD1V0zKF8294UaOKI+JbTzN44QWt3IvdzEQKnM1+R5BH6Jot6tyBjnZZ0icb0uy5
+         MLjemaqXbRZD6Xh5Za21QeQopa8ObNyXNk2h2hqh8XOEeHvLwRA3GbkDYiSyH/yJRRSV
+         aczPwY5vPx3Ymx+5ZX/1w5CBk99QWSIMvnyOTyDFj01v+VkUaNpqrNoqnknqC3rexj/K
+         02bIVHK6+Xfuwlm7R12FzeNOUGJ41x5fmc3qSIm4xCqClaY68mnbSY6FZVt6nTDUKzWU
+         VryH5jZkO4ODDUrdZYv4s1zcwe0WywxUQaIPucjiAZ8yP6VSC5tC02tJyG1E8A4tLI7N
+         JHOw==
+X-Gm-Message-State: ACrzQf2rwPZkWrJAYcCGfkUQsyyatkiDyeTwJepMECWyli0pFZn7cypz
+        J4NtTI9U/+/6srgFU1luEw4knw==
+X-Google-Smtp-Source: AMsMyM6B5kzgMH+hjBQB6K/IjDP4ra47FP0SDKRR1abufpFyGdTGCrUkGGL0gb5vu740LTrzGbEJww==
+X-Received: by 2002:a05:6830:3703:b0:65f:c2ff:c526 with SMTP id bl3-20020a056830370300b0065fc2ffc526mr4166999otb.302.1666192109330;
+        Wed, 19 Oct 2022 08:08:29 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id w15-20020a9d70cf000000b00661abb66319sm7067181otj.37.2022.10.19.08.08.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Oct 2022 08:08:29 -0700 (PDT)
+Date:   Wed, 19 Oct 2022 08:08:27 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Keith Busch <kbusch@kernel.org>, Jan Kara <jack@suse.cz>,
+        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>,
+        linux-block@vger.kernel.org
+Subject: Re: [PATCH 6.0 517/862] sbitmap: Avoid leaving waitqueue in invalid
+ state in __sbq_wake_up()
+In-Reply-To: <20221019083312.840347737@linuxfoundation.org>
+Message-ID: <9edd6656-e1af-e1fa-123a-115c3ba7b1ae@google.com>
+References: <20221019083249.951566199@linuxfoundation.org> <20221019083312.840347737@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <3c75ca82-f889-a346-a031-2c417c57e2b0@nvidia.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 04:54:12PM +0200, Jon Hunter wrote:
-> [    4.168317] mmc0: Command Queue Engine enabled
-> [    4.176723] mmc0: new HS400 Enhanced strobe MMC card at address 0001
-> [    4.189609] mmcblk0: mmc0:0001 HBG4a2 29.1 GiB
-> [    4.207660] mmc0: running CQE recovery
-> [    4.215332]  mmcblk0: p1 p2 p3 p4 p5 p6 p7 p8 p9 p10 p11 p12 p13 p14 p15 p16 p17 p18 p19 p20 p21 p22 p23 p24 p25 p26 p27 p28 p29 p30 p31 p32 p33 p34 p35 p36 p37 p38 p39 p40 p41 p42
-> [    4.249403] mmcblk0boot0: mmc0:0001 HBG4a2 8.00 MiB
-> [    4.255457] mmcblk0boot1: mmc0:0001 HBG4a2 8.00 MiB
-> [    4.262063] mmcblk0rpmb: mmc0:0001 HBG4a2 4.00 MiB, chardev (511:0)
-> ...
-> [    9.034384] ------------[ cut here ]------------
-> [    9.038985] WARNING: CPU: 4 PID: 199 at /mlt/kernel/drivers/mmc/core/block.c:2379 mmc_blk_mq_issue_rq+0x370/0x820
-> [    9.049100] Modules linked in: ip_tables x_tables ipv6
-> [    9.054180] CPU: 4 PID: 199 Comm: kworker/4:1H Not tainted 6.1.0-rc1-00025-gaae703b02f92 #1
-> [    9.062399] Hardware name: NVIDIA Jetson AGX Xavier Developer Kit (DT)
-> [    9.068821] Workqueue: kblockd blk_mq_run_work_fn
-> [    9.073464] pstate: 20400009 (nzCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> [    9.080318] pc : mmc_blk_mq_issue_rq+0x370/0x820
-> [    9.084872] lr : mmc_blk_mq_issue_rq+0x70/0x820
-> [    9.089382] sp : ffff80000b5b3ad0
-> [    9.092643] x29: ffff80000b5b3ad0 x28: ffff00008467a288 x27: 0000000000000014
-> [    9.099733] x26: ffff000082d49000 x25: ffff00008467a240 x24: ffff0000802acad8
-> [    9.106758] x23: ffff0000802aca10 x22: ffff0000802aca00 x21: 0000000000000000
-> [    9.113810] x20: ffff000080fa0800 x19: ffff800009824000 x18: 0000000000000080
-> [    9.120858] x17: 0000000000000000 x16: f8ffffffffffffff x15: 000000000000029a
-> [    9.127918] x14: 0000000000000000 x13: 0000000000002000 x12: 0000000000000000
-> [    9.134980] x11: 0000000106d66000 x10: 0000000000000001 x9 : 0000000000000002
-> [    9.142066] x8 : 0000000000000009 x7 : ffff000084650118 x6 : 00000000000000ff
-> [    9.149171] x5 : ffff000084650000 x4 : 0000000000403082 x3 : ffffffffffffca4a
-> [    9.156240] x2 : 0000000000000000 x1 : 00000000ffffffe7 x0 : 0000000000000009
-> [    9.163276] Call trace:
-> [    9.165737]  mmc_blk_mq_issue_rq+0x370/0x820
-> [    9.169993]  mmc_mq_queue_rq+0x134/0x270
-> [    9.173900]  blk_mq_dispatch_rq_list+0x14c/0x8d8
-> [    9.178500]  blk_mq_do_dispatch_sched+0x330/0x348
-> [    9.183169]  __blk_mq_sched_dispatch_requests+0xd4/0x170
-> [    9.188440]  blk_mq_sched_dispatch_requests+0x34/0x70
-> [    9.193456]  __blk_mq_run_hw_queue+0x58/0xb0
-> [    9.197666]  blk_mq_run_work_fn+0x20/0x28
-> [    9.201673]  process_one_work+0x1e0/0x348
-> [    9.205672]  worker_thread+0x48/0x410
-> [    9.209326]  kthread+0xf4/0x110
-> [    9.212462]  ret_from_fork+0x10/0x20
-> [    9.216025] ---[ end trace 0000000000000000 ]---
-> [    9.220899] I/O error, dev mmcblk0, sector 12624 op 0x9:(WRITE_ZEROES) flags 0x800 phys_seg 0 prio class 2
-> [   11.500035] I/O error, dev mmcblk0, sector 16720 op 0x9:(WRITE_ZEROES) flags 0x800 phys_seg 0 prio class 2
-> [   13.804317] I/O error, dev mmcblk0, sector 20816 op 0x9:(WRITE_ZEROES) flags 0x800 phys_seg 0 prio class 2
-> [   16.104063] I/O error, dev mmcblk0, sector 24912 op 0x9:(WRITE_ZEROES) flags 0x800 phys_seg 0 prio class 2
+On Wed, 19 Oct 2022, Greg Kroah-Hartman wrote:
+
+> From: Jan Kara <jack@suse.cz>
+> 
+> [ Upstream commit 48c033314f372478548203c583529f53080fd078 ]
+> 
+> When __sbq_wake_up() decrements wait_cnt to 0 but races with someone
+> else waking the waiter on the waitqueue (so the waitqueue becomes
+> empty), it exits without reseting wait_cnt to wake_batch number. Once
+> wait_cnt is 0, nobody will ever reset the wait_cnt or wake the new
+> waiters resulting in possible deadlocks or busyloops. Fix the problem by
+> making sure we reset wait_cnt even if we didn't wake up anybody in the
+> end.
+> 
+> Fixes: 040b83fcecfb ("sbitmap: fix possible io hung due to lost wakeup")
+> Reported-by: Keith Busch <kbusch@kernel.org>
+> Signed-off-by: Jan Kara <jack@suse.cz>
+> Link: https://lore.kernel.org/r/20220908130937.2795-1-jack@suse.cz
+> Signed-off-by: Jens Axboe <axboe@kernel.dk>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
+
+I have no authority on linux-block, but I'll say NAK to this one
+(and 479/862), and let Jens and Jan overrule me if they disagree.
+
+This was another of several 6.1-rc1 commits which had given me lost
+wakeups never suffered before; was not tagged Cc stable; and (unless I've
+missed it on lore) never had AUTOSEL posted to linux-block or linux-kernel.
+
+Hugh
+
+> ---
+>  lib/sbitmap.c | 18 +++++++++++++++---
+>  1 file changed, 15 insertions(+), 3 deletions(-)
+> 
+> diff --git a/lib/sbitmap.c b/lib/sbitmap.c
+> index 1f31147872e6..bb1970ad4875 100644
+> --- a/lib/sbitmap.c
+> +++ b/lib/sbitmap.c
+> @@ -605,6 +605,7 @@ static bool __sbq_wake_up(struct sbitmap_queue *sbq)
+>  	struct sbq_wait_state *ws;
+>  	unsigned int wake_batch;
+>  	int wait_cnt;
+> +	bool ret;
+>  
+>  	ws = sbq_wake_ptr(sbq);
+>  	if (!ws)
+> @@ -615,12 +616,23 @@ static bool __sbq_wake_up(struct sbitmap_queue *sbq)
+>  	 * For concurrent callers of this, callers should call this function
+>  	 * again to wakeup a new batch on a different 'ws'.
+>  	 */
+> -	if (wait_cnt < 0 || !waitqueue_active(&ws->wait))
+> +	if (wait_cnt < 0)
+>  		return true;
+>  
+> +	/*
+> +	 * If we decremented queue without waiters, retry to avoid lost
+> +	 * wakeups.
+> +	 */
+>  	if (wait_cnt > 0)
+> -		return false;
+> +		return !waitqueue_active(&ws->wait);
+>  
+> +	/*
+> +	 * When wait_cnt == 0, we have to be particularly careful as we are
+> +	 * responsible to reset wait_cnt regardless whether we've actually
+> +	 * woken up anybody. But in case we didn't wakeup anybody, we still
+> +	 * need to retry.
+> +	 */
+> +	ret = !waitqueue_active(&ws->wait);
+>  	wake_batch = READ_ONCE(sbq->wake_batch);
+>  
+>  	/*
+> @@ -649,7 +661,7 @@ static bool __sbq_wake_up(struct sbitmap_queue *sbq)
+>  	sbq_index_atomic_inc(&sbq->wake_index);
+>  	atomic_set(&ws->wait_cnt, wake_batch);
+>  
+> -	return false;
+> +	return ret;
+>  }
+>  
+>  void sbitmap_queue_wake_up(struct sbitmap_queue *sbq)
+> -- 
+> 2.35.1
 > 
 > 
-> Reverting this makes the issue go away. Please let me know if you have any thoughts on this.
-
-Could you please test if the below change fixes it?  Thank you.
-
-diff --git a/drivers/mmc/core/queue.c b/drivers/mmc/core/queue.c
-index fefaa901b50f..3661ba0bbc87 100644
---- a/drivers/mmc/core/queue.c
-+++ b/drivers/mmc/core/queue.c
-@@ -48,6 +48,7 @@ static enum mmc_issue_type mmc_cqe_issue_type(struct mmc_host *host,
- 	case REQ_OP_DRV_OUT:
- 	case REQ_OP_DISCARD:
- 	case REQ_OP_SECURE_ERASE:
-+	case REQ_OP_WRITE_ZEROES:
- 		return MMC_ISSUE_SYNC;
- 	case REQ_OP_FLUSH:
- 		return mmc_cqe_can_dcmd(host) ? MMC_ISSUE_DCMD : MMC_ISSUE_SYNC;
+> 
+> 
