@@ -2,92 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41F886039D3
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 08:37:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCA6C6039D5
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 08:38:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbiJSGhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 02:37:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46124 "EHLO
+        id S229890AbiJSGid convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 19 Oct 2022 02:38:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbiJSGhs (ORCPT
+        with ESMTP id S229525AbiJSGib (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 02:37:48 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CDE96BD4A
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 23:37:47 -0700 (PDT)
-Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MsgvZ3rPYzJn2B;
-        Wed, 19 Oct 2022 14:35:06 +0800 (CST)
-Received: from huawei.com (10.67.175.83) by kwepemi500008.china.huawei.com
- (7.221.188.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 19 Oct
- 2022 14:37:45 +0800
-From:   ruanjinjie <ruanjinjie@huawei.com>
-To:     <mpe@ellerman.id.au>, <npiggin@gmail.com>,
-        <christophe.leroy@csgroup.eu>, <joel@jms.id.au>,
-        <Julia.Lawall@inria.fr>, <linuxppc-dev@lists.ozlabs.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <ruanjinjie@huawei.com>
-Subject: [PATCH -next v2] powerpc/mpic_msgr: fix cast removes address space of expression warnings
-Date:   Wed, 19 Oct 2022 14:34:14 +0800
-Message-ID: <20221019063414.3758087-1-ruanjinjie@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 19 Oct 2022 02:38:31 -0400
+Received: from relay.hostedemail.com (smtprelay0016.hostedemail.com [216.40.44.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C86D6BD4A
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 23:38:30 -0700 (PDT)
+Received: from omf02.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay10.hostedemail.com (Postfix) with ESMTP id 0B1B4C08CB;
+        Wed, 19 Oct 2022 06:38:28 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf02.hostedemail.com (Postfix) with ESMTPA id 470438000D;
+        Wed, 19 Oct 2022 06:38:24 +0000 (UTC)
+Message-ID: <3ce9206fc3b756e72ee4dcfbbad6cefae5fedada.camel@perches.com>
+Subject: Re: [PATCH 2/4] staging: r8188eu: reformat long computation lines
+From:   Joe Perches <joe@perches.com>
+To:     Deepak R Varma <drv@mailo.com>
+Cc:     David Laight <David.Laight@aculab.com>,
+        'Greg KH' <gregkh@linuxfoundation.org>,
+        "outreachy@lists.linux.dev" <outreachy@lists.linux.dev>,
+        "Larry.Finger@lwfinger.net" <Larry.Finger@lwfinger.net>,
+        "phil@philpotter.co.uk" <phil@philpotter.co.uk>,
+        "paskripkin@gmail.com" <paskripkin@gmail.com>,
+        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kumarpraveen@linux.microsoft.com" <kumarpraveen@linux.microsoft.com>,
+        "saurabh.truth@gmail.com" <saurabh.truth@gmail.com>
+Date:   Tue, 18 Oct 2022 23:38:22 -0700
+In-Reply-To: <Y0+WYIVTugrs6khA@debian-BULLSEYE-live-builder-AMD64>
+References: <cover.1666011479.git.drv@mailo.com>
+         <2dd27eff9aab5ffe31e61086c0584982794507cf.1666011479.git.drv@mailo.com>
+         <Y01iLXp20G0FSJFG@kroah.com>
+         <a0bef75b959f4ca6a7bbfaacd531f8ae@AcuMS.aculab.com>
+         <Y06fKv7U0/GhZfSZ@debian-BULLSEYE-live-builder-AMD64>
+         <e2675698427ed987dd88ed5f9996fe86e5315dbb.camel@perches.com>
+         <Y0+WYIVTugrs6khA@debian-BULLSEYE-live-builder-AMD64>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.175.83]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemi500008.china.huawei.com (7.221.188.139)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
+X-Stat-Signature: qrp556xabu4rcgk3uzc5qu1f6emj8yp5
+X-Rspamd-Server: rspamout06
+X-Rspamd-Queue-Id: 470438000D
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1/g0+7RQbC87mJXozGXiKxUhZ8kAexcSYs=
+X-HE-Tag: 1666161504-437654
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When build Linux kernel, encounter the following warnings:
+On Wed, 2022-10-19 at 11:47 +0530, Deepak R Varma wrote:
+> On Tue, Oct 18, 2022 at 10:43:07PM -0700, Joe Perches wrote:
+> > On Tue, 2022-10-18 at 18:12 +0530, Deepak R Varma wrote:
+> > > On Tue, Oct 18, 2022 at 11:21:26AM +0000, David Laight wrote:
+> > > > From: Greg KH
+> > > > > Sent: 17 October 2022 15:10
+> > > > > 
+> > > > > On Mon, Oct 17, 2022 at 06:52:50PM +0530, Deepak R Varma wrote:
+> > > > > > Reformat long running computation instructions to improve code readability.
+> > > > > > Address following checkpatch script complaints:
+> > > > > > 	CHECK: line length of 171 exceeds 100 columns
+> > > > > > 	CHECK: line length of 113 exceeds 100 columns
+> > []
+> > > > > > diff --git a/drivers/staging/r8188eu/core/rtw_br_ext.c b/drivers/staging/r8188eu/core/rtw_br_ext.c
+> > []
+> > > > > > @@ -211,8 +211,10 @@ static int __nat25_network_hash(unsigned char *network_addr)
+> > > > > >  	} else if (network_addr[0] == NAT25_IPX) {
+> > > > > >  		unsigned long x;
+> > > > > > 
+> > > > > > -		x = network_addr[1] ^ network_addr[2] ^ network_addr[3] ^ network_addr[4] ^
+> > > > > network_addr[5] ^
+> > > > > > -			network_addr[6] ^ network_addr[7] ^ network_addr[8] ^ network_addr[9] ^
+> > > > > network_addr[10];
+> > > > > > +		x = network_addr[1] ^ network_addr[2] ^ network_addr[3] ^
+> > > > > 
+> > > > > Why not go out to [4] here and then you are one line shorter?
+> > > > 
+> > > > and/or use a shorter variable name....
+> > > Hi David,
+> > > I have already re-submitted the patch set with 4 in line arrangement. Do you
+> > > still suggest using shorter variable names?
+> > 
+> > Assuming this code is not performance sensitive, I suggest not just
+> > molifying checkpatch but perhaps improving the code by adding a helper
+> > function something like:
+> > 
+> > u8 xor_array_u8(u8 *x, size_t len)
+> > {
+> > 	size_t i;
+> > 	u8 xor = x[0];
+> > 
+> > 	for (i = 1; i < len; i++)
+> > 		xor ^= x[i];
+> > 
+> > 	return xor;
+> > }
+> > 
+> > so for instance this could be:
+> > 
+> > 		x = xor_array_u8(&network_addr[1], 10);
+> > 
+> 
+> Hi Joe,
+> Great suggestion. Thank you.
+> Is there a way to confirm that this improvement won't impact performance? Will I
+> need any specific hardware / device to run tests?
 
-./arch/powerpc/sysdev/mpic_msgr.c:230:38: warning: cast removes address space '__iomem' of expression
-./arch/powerpc/sysdev/mpic_msgr.c:230:27: warning: incorrect type in assignment (different address spaces)
-
-The data type of msgr->mer and msgr->base are 'u32 __iomem *', but
-converted to 'u32 *' and 'u8 *' directly and cause above warnings, now
-instead of using a type cast, change the size of the pointer offset to fix
-these warnings.
-
-Signed-off-by: ruanjinjie <ruanjinjie@huawei.com>
----
-v2:
-- change the macro of MPIC_MSGR_MER_OFFSET to avoid type cast and
-  simplify the fix
----
- arch/powerpc/sysdev/mpic_msgr.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/powerpc/sysdev/mpic_msgr.c b/arch/powerpc/sysdev/mpic_msgr.c
-index a439e33eae06..d75064fb7d12 100644
---- a/arch/powerpc/sysdev/mpic_msgr.c
-+++ b/arch/powerpc/sysdev/mpic_msgr.c
-@@ -20,7 +20,7 @@
- 
- #define MPIC_MSGR_REGISTERS_PER_BLOCK	4
- #define MPIC_MSGR_STRIDE		0x10
--#define MPIC_MSGR_MER_OFFSET		0x100
-+#define MPIC_MSGR_MER_OFFSET		(0x100 / sizeof(u32))
- #define MSGR_INUSE			0
- #define MSGR_FREE			1
- 
-@@ -234,7 +234,7 @@ static int mpic_msgr_probe(struct platform_device *dev)
- 
- 		reg_number = block_number * MPIC_MSGR_REGISTERS_PER_BLOCK + i;
- 		msgr->base = msgr_block_addr + i * MPIC_MSGR_STRIDE;
--		msgr->mer = (u32 *)((u8 *)msgr->base + MPIC_MSGR_MER_OFFSET);
-+		msgr->mer = msgr->base + MPIC_MSGR_MER_OFFSET;
- 		msgr->in_use = MSGR_FREE;
- 		msgr->num = i;
- 		raw_spin_lock_init(&msgr->lock);
--- 
-2.25.1
+I suggest reading the code to see if the uses are in some fast path.
 
