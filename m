@@ -2,434 +2,1219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E99BA6042CC
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 13:10:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97F3F6043B2
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 13:47:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233250AbiJSLKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 07:10:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60856 "EHLO
+        id S229906AbiJSLqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 07:46:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234339AbiJSLJF (ORCPT
+        with ESMTP id S230460AbiJSLq1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 07:09:05 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7752D17FD53;
-        Wed, 19 Oct 2022 03:37:53 -0700 (PDT)
-Received: from loongson.cn (unknown [10.180.13.64])
-        by gateway (Coremail) with SMTP id _____8DxPdmbuk9jbLAAAA--.3616S3;
-        Wed, 19 Oct 2022 16:51:39 +0800 (CST)
-Received: from [10.180.13.64] (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxPuCZuk9jIzcBAA--.4941S2;
-        Wed, 19 Oct 2022 16:51:38 +0800 (CST)
-Subject: Re: [PATCH v7 1/2] thermal: loongson2: add thermal management support
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        Wed, 19 Oct 2022 07:46:27 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C85816698D;
+        Wed, 19 Oct 2022 04:26:03 -0700 (PDT)
+Date:   Wed, 19 Oct 2022 08:55:41 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1666169746;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MpE7JN0J712AZTmfXkF1mMEdtzSAWR1Ait6md6beY2w=;
+        b=u7aTr816RwOQh5w9fJySbVsQwV6gPRlsXYJOmolI9WU75Idy5l+xC/CKfXS17W2ruBXzlz
+        2Palsakd/SStzVhBJOQa5JgJWYo9T7mPb27QEZKtJ9yf8Xe50btsFHVfs5RT/Y13C2EsTp
+        zHNME6A8d/OutJnJIvqWPeVsMC9DLV3mwNOxQZ9OIUA7AMJsWPuojKBUCNA+Ef9HuMVy47
+        I1Fg4NM277XLY1pPk99t1HhRz32O667qRmWF0e7dDXUoKr+gMV7TTMHt3qS2pMVq+vQEDd
+        e1G56R0MxM3vMbIQULMP4OZWOPA39f44Cvg4j5XQsyg0lrDDGajByMBg2P+lSQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1666169746;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MpE7JN0J712AZTmfXkF1mMEdtzSAWR1Ait6md6beY2w=;
+        b=X4zC+5oxSegXisLdnb3HqqYpDYSPe938MJDpEM0v1/TMBR0zP2rgtpU3qnGW/QKEqP+d+x
+        iZdbSZXXVN6DLLBw==
+From:   "tip-bot2 for Brian Gerst" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/misc] x86/signal/32: Merge native and compat 32-bit signal code
+Cc:     Brian Gerst <brgerst@gmail.com>, Borislav Petkov <bp@suse.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     zhanghongchen <zhanghongchen@loongson.cn>,
-        Liu Peibao <liupeibao@loongson.cn>, zhuyinbo@loongson.cn
-References: <20220930021054.22387-1-zhuyinbo@loongson.cn>
- <72c5ecfa-da9f-f7d9-e020-133a48de92a4@loongson.cn>
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-Message-ID: <32cff5f7-d0c2-c7e6-67d2-2506469b5d15@loongson.cn>
-Date:   Wed, 19 Oct 2022 16:51:37 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+In-Reply-To: <20220606203802.158958-8-brgerst@gmail.com>
+References: <20220606203802.158958-8-brgerst@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <72c5ecfa-da9f-f7d9-e020-133a48de92a4@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxPuCZuk9jIzcBAA--.4941S2
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvAXoW3ur1DJw48JrWfGryxAFyUAwb_yoW8Gr4kJo
-        W7Kr1rJr4Fyr1jgryDtw1UJFyaq3WUCwnrtry7CrZrXF10y3W5C3yUJryUK3yUGF18Kr17
-        JF1UJ34FyFW7tr95n29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXasCq-sGcSsGvf
-        J3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnRJU
-        UU9S1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFV
-        AK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2
-        z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr
-        1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG
-        8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI
-        8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26F4j6r4UJwAm72CE4IkC6x0Yz7v_Jr0_Gr1l
-        F7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04
-        k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26rWl4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l
-        x2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14
-        v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IY
-        x2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87
-        Iv67AKxVWxJVW8Jr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU
-        0xZFpf9x07UKjgxUUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <166616974172.401.10111186283861148120.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The following commit has been merged into the x86/misc branch of tip:
 
+Commit-ID:     24e6dc35ccd825de7c71751610ff8f3295347e5b
+Gitweb:        https://git.kernel.org/tip/24e6dc35ccd825de7c71751610ff8f3295347e5b
+Author:        Brian Gerst <brgerst@gmail.com>
+AuthorDate:    Mon, 06 Jun 2022 16:38:01 -04:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Wed, 19 Oct 2022 09:58:49 +02:00
 
-在 2022/10/14 上午11:48, Yinbo Zhu 写道:
-> Hi thermal maintainer
-> 
-> Are there any other suggestions about this patch? If not, please help
-> merge this patch to upstream.
-> 
-> RRs
-> Yinbo
+x86/signal/32: Merge native and compat 32-bit signal code
 
-Any updates?
+There are significant differences between signal handling on 32-bit vs.
+64-bit, like different structure layouts and legacy syscalls.  Instead
+of duplicating that code for native and compat, merge both versions
+into one file.
 
-> 在 2022/9/30 上午10:10, Yinbo Zhu 写道:
->> This patch adds the support for loongson2 thermal sensor controller,
->> which can support maximum 4 sensors.
->>
->> It's based on thermal of framework:
->>   - Trip points defined in device tree.
->>   - Cpufreq as cooling device registered in loongson2 cpufreq driver.
->>   - Pwm fan as cooling device registered in hwmon pwm-fan driver.
->>
->> Signed-off-by: zhanghongchen <zhanghongchen@loongson.cn>
->> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->> ---
->> Change in v7:
->>         1. Split the modification of patch 3 and merge it into this 
->> patch.
->>         2. Remove the unless code annotation to fix the compile warning
->>            when compile C code with W=1.
->>
->>   MAINTAINERS                         |   7 +
->>   drivers/thermal/Kconfig             |  10 ++
->>   drivers/thermal/Makefile            |   1 +
->>   drivers/thermal/loongson2_thermal.c | 264 ++++++++++++++++++++++++++++
->>   4 files changed, 282 insertions(+)
->>   create mode 100644 drivers/thermal/loongson2_thermal.c
->>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 589517372408..2efbd5b158b9 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -11899,6 +11899,13 @@ F:    drivers/*/*loongarch*
->>   F:    Documentation/loongarch/
->>   F:    Documentation/translations/zh_CN/loongarch/
->> +LOONGSON2 SOC SERIES THERMAL DRIVER
->> +M:    zhanghongchen <zhanghongchen@loongson.cn>
->> +M:    Yinbo Zhu <zhuyinbo@loongson.cn>
->> +L:    linux-pm@vger.kernel.org
->> +S:    Maintained
->> +F:    drivers/thermal/loongson2_thermal.c
->> +
->>   LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
->>   M:    Sathya Prakash <sathya.prakash@broadcom.com>
->>   M:    Sreekanth Reddy <sreekanth.reddy@broadcom.com>
->> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
->> index e052dae614eb..6b60397e96a1 100644
->> --- a/drivers/thermal/Kconfig
->> +++ b/drivers/thermal/Kconfig
->> @@ -504,4 +504,14 @@ config KHADAS_MCU_FAN_THERMAL
->>         If you say yes here you get support for the FAN controlled
->>         by the Microcontroller found on the Khadas VIM boards.
->> +config LOONGSON2_THERMAL
->> +    tristate "Loongson2 SOC series thermal driver"
->> +    depends on OF
->> +    default y
->> +    help
->> +      Support for Thermal driver found on Loongson2 SOC series 
->> platforms.
->> +      It supports one critical trip point and one passive trip point. 
->> The
->> +      cpufreq and the pwm fan is used as the cooling device to throttle
->> +      CPUs when the passive trip is crossed.
->> +
->>   endif
->> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
->> index def8e1a0399c..e99f839126fa 100644
->> --- a/drivers/thermal/Makefile
->> +++ b/drivers/thermal/Makefile
->> @@ -61,3 +61,4 @@ obj-$(CONFIG_UNIPHIER_THERMAL)    += uniphier_thermal.o
->>   obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
->>   obj-$(CONFIG_SPRD_THERMAL)    += sprd_thermal.o
->>   obj-$(CONFIG_KHADAS_MCU_FAN_THERMAL)    += khadas_mcu_fan.o
->> +obj-$(CONFIG_LOONGSON2_THERMAL)    += loongson2_thermal.o
->> diff --git a/drivers/thermal/loongson2_thermal.c 
->> b/drivers/thermal/loongson2_thermal.c
->> new file mode 100644
->> index 000000000000..082f9dd0b2a2
->> --- /dev/null
->> +++ b/drivers/thermal/loongson2_thermal.c
->> @@ -0,0 +1,264 @@
->> +// SPDX-License-Identifier: GPL-2.0+
->> +/*
->> + * Author: zhanghongchen <zhanghongchen@loongson.cn>
->> + *         Yinbo Zhu <zhuyinbo@loongson.cn>
->> + * Copyright (C) 2022-2023 Loongson Technology Corporation Limited
->> + */
->> +
->> +#include <linux/cpufreq.h>
->> +#include <linux/delay.h>
->> +#include <linux/interrupt.h>
->> +#include <linux/module.h>
->> +#include <linux/platform_device.h>
->> +#include <linux/io.h>
->> +#include <linux/of_device.h>
->> +#include <linux/thermal.h>
->> +#include "thermal_hwmon.h"
->> +
->> +#define LOONGSON2_SOC_MAX_SENSOR_NUM            4
->> +
->> +#define LOONGSON2_TSENSOR_CTRL_HI            0x0
->> +#define LOONGSON2_TSENSOR_CTRL_LO            0x8
->> +#define LOONGSON2_TSENSOR_STATUS            0x10
->> +#define LOONGSON2_TSENSOR_OUT                0x14
->> +
->> +struct loongson2_thermal_data {
->> +    struct thermal_zone_device *tzd;
->> +    int irq;
->> +    int id;
->> +    void __iomem *regs;
->> +    struct platform_device *pdev;
->> +    u16 ctrl_low_val;
->> +    u16 ctrl_hi_val;
->> +};
->> +
->> +static int loongson2_thermal_set(struct loongson2_thermal_data *data,
->> +                    int low, int high, bool enable)
->> +{
->> +    u64 reg_ctrl = 0;
->> +    int reg_off = data->id * 2;
->> +
->> +    if (low > high)
->> +        return -EINVAL;
->> +
->> +    low = low < -100 ? -100 : low;
->> +    high = high > 155 ? 155 : high;
->> +
->> +    low += 100;
->> +    high += 100;
->> +
->> +    reg_ctrl |= low;
->> +    reg_ctrl |= enable ? 0x100 : 0;
->> +    writew(reg_ctrl, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
->> +
->> +    reg_ctrl = 0;
->> +    reg_ctrl |= high;
->> +    reg_ctrl |= enable ? 0x100 : 0;
->> +    writew(reg_ctrl, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
->> +
->> +    return 0;
->> +}
->> +
->> +static int loongson2_thermal_get_temp(void *__data, int *temp)
->> +{
->> +    struct loongson2_thermal_data *data = __data;
->> +    u32 reg_val;
->> +
->> +    reg_val = readl(data->regs + LOONGSON2_TSENSOR_OUT);
->> +    *temp = ((reg_val & 0xff) - 100) * 1000;
->> +
->> +    return 0;
->> +}
->> +
->> +static int loongson2_thermal_get_sensor_id(void)
->> +{
->> +    int ret, id;
->> +    struct of_phandle_args sensor_specs;
->> +    struct device_node *np, *sensor_np;
->> +
->> +    np = of_find_node_by_name(NULL, "thermal-zones");
->> +    if (!np)
->> +        return -ENODEV;
->> +
->> +    sensor_np = of_get_next_child(np, NULL);
->> +    ret = of_parse_phandle_with_args(sensor_np, "thermal-sensors",
->> +            "#thermal-sensor-cells",
->> +            0, &sensor_specs);
->> +    if (ret) {
->> +        of_node_put(np);
->> +        of_node_put(sensor_np);
->> +        return ret;
->> +    }
->> +
->> +    if (sensor_specs.args_count >= 1) {
->> +        id = sensor_specs.args[0];
->> +        WARN(sensor_specs.args_count > 1,
->> +                "%s: too many cells in sensor specifier %d\n",
->> +                sensor_specs.np->name, sensor_specs.args_count);
->> +    } else {
->> +        id = 0;
->> +    }
->> +
->> +    of_node_put(np);
->> +    of_node_put(sensor_np);
->> +
->> +    return id;
->> +}
->> +
->> +static irqreturn_t loongson2_thermal_alarm_irq(int irq, void *dev)
->> +{
->> +    struct loongson2_thermal_data *data = dev;
->> +
->> +    /* clear interrupt */
->> +    writeb(0x3, data->regs + LOONGSON2_TSENSOR_STATUS);
->> +
->> +    disable_irq_nosync(irq);
->> +
->> +    return IRQ_WAKE_THREAD;
->> +}
->> +
->> +static irqreturn_t loongson2_thermal_irq_thread(int irq, void *dev)
->> +{
->> +    struct loongson2_thermal_data *data = dev;
->> +
->> +    thermal_zone_device_update(data->tzd,
->> +                   THERMAL_EVENT_UNSPECIFIED);
->> +    enable_irq(data->irq);
->> +
->> +    return IRQ_HANDLED;
->> +}
->> +
->> +static int loongson2_thermal_set_trips(void *data, int low, int high)
->> +{
->> +    return loongson2_thermal_set(data, low/1000, high/1000, true);
->> +}
->> +
->> +static const struct thermal_zone_of_device_ops 
->> loongson2_of_thermal_ops = {
->> +    .get_temp = loongson2_thermal_get_temp,
->> +    .set_trips = loongson2_thermal_set_trips,
->> +};
->> +
->> +static int loongson2_thermal_probe(struct platform_device *pdev)
->> +{
->> +    struct device *dev = &pdev->dev;
->> +    struct resource *res;
->> +    struct loongson2_thermal_data *data;
->> +    int ret;
->> +
->> +    data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
->> +    if (!data)
->> +        return -ENOMEM;
->> +
->> +    data->pdev = pdev;
->> +    platform_set_drvdata(pdev, data);
->> +
->> +    res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
->> +    data->regs = devm_ioremap(dev, res->start, resource_size(res));
->> +    if (IS_ERR(data->regs))
->> +        return PTR_ERR(data->regs);
->> +
->> +    /* get irq */
->> +    data->irq = platform_get_irq(pdev, 0);
->> +    if (data->irq < 0)
->> +        return data->irq;
->> +
->> +    /* get id */
->> +    data->id = loongson2_thermal_get_sensor_id();
->> +    if (data->id > LOONGSON2_SOC_MAX_SENSOR_NUM - 1 || data->id < 0) {
->> +        dev_err(dev, "sensor id error,must be in <0 ~ %d>\n",
->> +                LOONGSON2_SOC_MAX_SENSOR_NUM - 1);
->> +        return -EINVAL;
->> +    }
->> +
->> +    writeb(0xff, data->regs + LOONGSON2_TSENSOR_STATUS);
->> +
->> +    loongson2_thermal_set(data, 0, 0, false);
->> +
->> +    data->tzd = devm_thermal_zone_of_sensor_register(&pdev->dev,
->> +                               data->id, data,
->> +                               &loongson2_of_thermal_ops);
->> +    if (IS_ERR(data->tzd)) {
->> +        ret = PTR_ERR(data->tzd);
->> +        data->tzd = NULL;
->> +        dev_err(&pdev->dev, "failed to register %d\n", ret);
->> +        return ret;
->> +    }
->> +
->> +    ret = devm_request_threaded_irq(dev, data->irq,
->> +            loongson2_thermal_alarm_irq, loongson2_thermal_irq_thread,
->> +            IRQF_ONESHOT, "loongson2_thermal", data);
->> +    if (ret < 0) {
->> +        dev_err(dev, "failed to request alarm irq: %d\n", ret);
->> +        return ret;
->> +    }
->> +
->> +    /*
->> +     * Thermal_zone doesn't enable hwmon as default,
->> +     * enable it here
->> +     */
->> +    data->tzd->tzp->no_hwmon = false;
->> +    ret = thermal_add_hwmon_sysfs(data->tzd);
->> +    if (ret) {
->> +        dev_err(dev, "failed to add hwmon sysfs interface %d\n", ret);
->> +        return ret;
->> +    }
->> +
->> +    return 0;
->> +}
->> +
->> +static int loongson2_thermal_remove(struct platform_device *pdev)
->> +{
->> +    struct loongson2_thermal_data *data = platform_get_drvdata(pdev);
->> +    int reg_off = data->id * 2;
->> +
->> +    /* disable interrupt */
->> +    writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
->> +    writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
->> +
->> +    return 0;
->> +}
->> +
->> +static const struct of_device_id of_loongson2_thermal_match[] = {
->> +    { .compatible = "loongson,ls2k-thermal",},
->> +    { /* end */ }
->> +};
->> +MODULE_DEVICE_TABLE(of, of_loongson2_thermal_match);
->> +
->> +static int __maybe_unused loongson2_thermal_suspend(struct device *dev)
->> +{
->> +    struct loongson2_thermal_data *data = dev_get_drvdata(dev);
->> +    int reg_off = data->id * 2;
->> +
->> +    data->ctrl_low_val = readw(data->regs + LOONGSON2_TSENSOR_CTRL_LO 
->> + reg_off);
->> +    data->ctrl_hi_val = readw(data->regs + LOONGSON2_TSENSOR_CTRL_HI 
->> + reg_off);
->> +
->> +    writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
->> +    writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
->> +
->> +    return 0;
->> +}
->> +
->> +static int __maybe_unused loongson2_thermal_resume(struct device *dev)
->> +{
->> +    struct loongson2_thermal_data *data = dev_get_drvdata(dev);
->> +    int reg_off = data->id * 2;
->> +
->> +    writew(data->ctrl_low_val, data->regs + LOONGSON2_TSENSOR_CTRL_LO 
->> + reg_off);
->> +    writew(data->ctrl_hi_val, data->regs + LOONGSON2_TSENSOR_CTRL_HI 
->> + reg_off);
->> +
->> +    return 0;
->> +}
->> +
->> +static SIMPLE_DEV_PM_OPS(loongson2_thermal_pm_ops,
->> +             loongson2_thermal_suspend, loongson2_thermal_resume);
->> +
->> +static struct platform_driver loongson2_thermal_driver = {
->> +    .driver = {
->> +        .name        = "loongson2_thermal",
->> +        .pm = &loongson2_thermal_pm_ops,
->> +        .of_match_table = of_loongson2_thermal_match,
->> +    },
->> +    .probe    = loongson2_thermal_probe,
->> +    .remove    = loongson2_thermal_remove,
->> +};
->> +module_platform_driver(loongson2_thermal_driver);
->>
+Signed-off-by: Brian Gerst <brgerst@gmail.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Acked-by: "Eric W. Biederman" <ebiederm@xmission.com>
+Link: https://lore.kernel.org/r/20220606203802.158958-8-brgerst@gmail.com
+Signed-off-by: Borislav Petkov <bp@suse.de>
+---
+ arch/x86/ia32/Makefile         |   2 +-
+ arch/x86/ia32/ia32_signal.c    | 340 +-----------------------------
+ arch/x86/include/asm/segment.h |   1 +-
+ arch/x86/kernel/Makefile       |   4 +-
+ arch/x86/kernel/signal.c       | 219 +------------------
+ arch/x86/kernel/signal_32.c    | 379 ++++++++++++++++++++++++++++++++-
+ include/linux/syscalls.h       |   2 +-
+ 7 files changed, 390 insertions(+), 557 deletions(-)
+ delete mode 100644 arch/x86/ia32/ia32_signal.c
+ create mode 100644 arch/x86/kernel/signal_32.c
 
+diff --git a/arch/x86/ia32/Makefile b/arch/x86/ia32/Makefile
+index e481056..333556a 100644
+--- a/arch/x86/ia32/Makefile
++++ b/arch/x86/ia32/Makefile
+@@ -3,7 +3,5 @@
+ # Makefile for the ia32 kernel emulation subsystem.
+ #
+ 
+-obj-$(CONFIG_IA32_EMULATION) := ia32_signal.o
+-
+ audit-class-$(CONFIG_AUDIT) := audit.o
+ obj-$(CONFIG_IA32_EMULATION) += $(audit-class-y)
+diff --git a/arch/x86/ia32/ia32_signal.c b/arch/x86/ia32/ia32_signal.c
+deleted file mode 100644
+index e28421f..0000000
+--- a/arch/x86/ia32/ia32_signal.c
++++ /dev/null
+@@ -1,340 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0
+-/*
+- *  linux/arch/x86_64/ia32/ia32_signal.c
+- *
+- *  Copyright (C) 1991, 1992  Linus Torvalds
+- *
+- *  1997-11-28  Modified for POSIX.1b signals by Richard Henderson
+- *  2000-06-20  Pentium III FXSR, SSE support by Gareth Hughes
+- *  2000-12-*   x86-64 compatibility mode signal handling by Andi Kleen
+- */
+-
+-#include <linux/sched.h>
+-#include <linux/sched/task_stack.h>
+-#include <linux/mm.h>
+-#include <linux/smp.h>
+-#include <linux/kernel.h>
+-#include <linux/errno.h>
+-#include <linux/wait.h>
+-#include <linux/unistd.h>
+-#include <linux/stddef.h>
+-#include <linux/personality.h>
+-#include <linux/compat.h>
+-#include <linux/binfmts.h>
+-#include <linux/syscalls.h>
+-#include <asm/ucontext.h>
+-#include <linux/uaccess.h>
+-#include <asm/fpu/signal.h>
+-#include <asm/ptrace.h>
+-#include <asm/ia32_unistd.h>
+-#include <asm/user32.h>
+-#include <uapi/asm/sigcontext.h>
+-#include <asm/proto.h>
+-#include <asm/vdso.h>
+-#include <asm/sigframe.h>
+-#include <asm/sighandling.h>
+-#include <asm/smap.h>
+-
+-static inline void reload_segments(struct sigcontext_32 *sc)
+-{
+-	unsigned int cur;
+-
+-	savesegment(gs, cur);
+-	if ((sc->gs | 0x03) != cur)
+-		load_gs_index(sc->gs | 0x03);
+-	savesegment(fs, cur);
+-	if ((sc->fs | 0x03) != cur)
+-		loadsegment(fs, sc->fs | 0x03);
+-	savesegment(ds, cur);
+-	if ((sc->ds | 0x03) != cur)
+-		loadsegment(ds, sc->ds | 0x03);
+-	savesegment(es, cur);
+-	if ((sc->es | 0x03) != cur)
+-		loadsegment(es, sc->es | 0x03);
+-}
+-
+-/*
+- * Do a signal return; undo the signal stack.
+- */
+-static bool ia32_restore_sigcontext(struct pt_regs *regs,
+-				    struct sigcontext_32 __user *usc)
+-{
+-	struct sigcontext_32 sc;
+-
+-	/* Always make any pending restarted system calls return -EINTR */
+-	current->restart_block.fn = do_no_restart_syscall;
+-
+-	if (unlikely(copy_from_user(&sc, usc, sizeof(sc))))
+-		return false;
+-
+-	/* Get only the ia32 registers. */
+-	regs->bx = sc.bx;
+-	regs->cx = sc.cx;
+-	regs->dx = sc.dx;
+-	regs->si = sc.si;
+-	regs->di = sc.di;
+-	regs->bp = sc.bp;
+-	regs->ax = sc.ax;
+-	regs->sp = sc.sp;
+-	regs->ip = sc.ip;
+-
+-	/* Get CS/SS and force CPL3 */
+-	regs->cs = sc.cs | 0x03;
+-	regs->ss = sc.ss | 0x03;
+-
+-	regs->flags = (regs->flags & ~FIX_EFLAGS) | (sc.flags & FIX_EFLAGS);
+-	/* disable syscall checks */
+-	regs->orig_ax = -1;
+-
+-	/*
+-	 * Reload fs and gs if they have changed in the signal
+-	 * handler.  This does not handle long fs/gs base changes in
+-	 * the handler, but does not clobber them at least in the
+-	 * normal case.
+-	 */
+-	reload_segments(&sc);
+-	return fpu__restore_sig(compat_ptr(sc.fpstate), 1);
+-}
+-
+-COMPAT_SYSCALL_DEFINE0(sigreturn)
+-{
+-	struct pt_regs *regs = current_pt_regs();
+-	struct sigframe_ia32 __user *frame = (struct sigframe_ia32 __user *)(regs->sp-8);
+-	sigset_t set;
+-
+-	if (!access_ok(frame, sizeof(*frame)))
+-		goto badframe;
+-	if (__get_user(set.sig[0], &frame->sc.oldmask)
+-	    || __get_user(((__u32 *)&set)[1], &frame->extramask[0]))
+-		goto badframe;
+-
+-	set_current_blocked(&set);
+-
+-	if (!ia32_restore_sigcontext(regs, &frame->sc))
+-		goto badframe;
+-	return regs->ax;
+-
+-badframe:
+-	signal_fault(regs, frame, "32bit sigreturn");
+-	return 0;
+-}
+-
+-COMPAT_SYSCALL_DEFINE0(rt_sigreturn)
+-{
+-	struct pt_regs *regs = current_pt_regs();
+-	struct rt_sigframe_ia32 __user *frame;
+-	sigset_t set;
+-
+-	frame = (struct rt_sigframe_ia32 __user *)(regs->sp - 4);
+-
+-	if (!access_ok(frame, sizeof(*frame)))
+-		goto badframe;
+-	if (__get_user(set.sig[0], (__u64 __user *)&frame->uc.uc_sigmask))
+-		goto badframe;
+-
+-	set_current_blocked(&set);
+-
+-	if (!ia32_restore_sigcontext(regs, &frame->uc.uc_mcontext))
+-		goto badframe;
+-
+-	if (compat_restore_altstack(&frame->uc.uc_stack))
+-		goto badframe;
+-
+-	return regs->ax;
+-
+-badframe:
+-	signal_fault(regs, frame, "32bit rt sigreturn");
+-	return 0;
+-}
+-
+-/*
+- * Set up a signal frame.
+- */
+-
+-#define get_user_seg(seg)	({ unsigned int v; savesegment(seg, v); v; })
+-
+-static __always_inline int
+-__unsafe_setup_sigcontext32(struct sigcontext_32 __user *sc,
+-			    void __user *fpstate,
+-			    struct pt_regs *regs, unsigned int mask)
+-{
+-	unsafe_put_user(get_user_seg(gs), (unsigned int __user *)&sc->gs, Efault);
+-	unsafe_put_user(get_user_seg(fs), (unsigned int __user *)&sc->fs, Efault);
+-	unsafe_put_user(get_user_seg(ds), (unsigned int __user *)&sc->ds, Efault);
+-	unsafe_put_user(get_user_seg(es), (unsigned int __user *)&sc->es, Efault);
+-
+-	unsafe_put_user(regs->di, &sc->di, Efault);
+-	unsafe_put_user(regs->si, &sc->si, Efault);
+-	unsafe_put_user(regs->bp, &sc->bp, Efault);
+-	unsafe_put_user(regs->sp, &sc->sp, Efault);
+-	unsafe_put_user(regs->bx, &sc->bx, Efault);
+-	unsafe_put_user(regs->dx, &sc->dx, Efault);
+-	unsafe_put_user(regs->cx, &sc->cx, Efault);
+-	unsafe_put_user(regs->ax, &sc->ax, Efault);
+-	unsafe_put_user(current->thread.trap_nr, &sc->trapno, Efault);
+-	unsafe_put_user(current->thread.error_code, &sc->err, Efault);
+-	unsafe_put_user(regs->ip, &sc->ip, Efault);
+-	unsafe_put_user(regs->cs, (unsigned int __user *)&sc->cs, Efault);
+-	unsafe_put_user(regs->flags, &sc->flags, Efault);
+-	unsafe_put_user(regs->sp, &sc->sp_at_signal, Efault);
+-	unsafe_put_user(regs->ss, (unsigned int __user *)&sc->ss, Efault);
+-
+-	unsafe_put_user(ptr_to_compat(fpstate), &sc->fpstate, Efault);
+-
+-	/* non-iBCS2 extensions.. */
+-	unsafe_put_user(mask, &sc->oldmask, Efault);
+-	unsafe_put_user(current->thread.cr2, &sc->cr2, Efault);
+-	return 0;
+-
+-Efault:
+-	return -EFAULT;
+-}
+-
+-#define unsafe_put_sigcontext32(sc, fp, regs, set, label)		\
+-do {									\
+-	if (__unsafe_setup_sigcontext32(sc, fp, regs, set->sig[0]))	\
+-		goto label;						\
+-} while(0)
+-
+-int ia32_setup_frame(struct ksignal *ksig, struct pt_regs *regs)
+-{
+-	compat_sigset_t *set = (compat_sigset_t *) sigmask_to_save();
+-	struct sigframe_ia32 __user *frame;
+-	void __user *restorer;
+-	void __user *fp = NULL;
+-
+-	/* copy_to_user optimizes that into a single 8 byte store */
+-	static const struct {
+-		u16 poplmovl;
+-		u32 val;
+-		u16 int80;
+-	} __attribute__((packed)) code = {
+-		0xb858,		 /* popl %eax ; movl $...,%eax */
+-		__NR_ia32_sigreturn,
+-		0x80cd,		/* int $0x80 */
+-	};
+-
+-	frame = get_sigframe(ksig, regs, sizeof(*frame), &fp);
+-
+-	if (ksig->ka.sa.sa_flags & SA_RESTORER) {
+-		restorer = ksig->ka.sa.sa_restorer;
+-	} else {
+-		/* Return stub is in 32bit vsyscall page */
+-		if (current->mm->context.vdso)
+-			restorer = current->mm->context.vdso +
+-				vdso_image_32.sym___kernel_sigreturn;
+-		else
+-			restorer = &frame->retcode;
+-	}
+-
+-	if (!user_access_begin(frame, sizeof(*frame)))
+-		return -EFAULT;
+-
+-	unsafe_put_user(ksig->sig, &frame->sig, Efault);
+-	unsafe_put_sigcontext32(&frame->sc, fp, regs, set, Efault);
+-	unsafe_put_user(set->sig[1], &frame->extramask[0], Efault);
+-	unsafe_put_user(ptr_to_compat(restorer), &frame->pretcode, Efault);
+-	/*
+-	 * These are actually not used anymore, but left because some
+-	 * gdb versions depend on them as a marker.
+-	 */
+-	unsafe_put_user(*((u64 *)&code), (u64 __user *)frame->retcode, Efault);
+-	user_access_end();
+-
+-	/* Set up registers for signal handler */
+-	regs->sp = (unsigned long) frame;
+-	regs->ip = (unsigned long) ksig->ka.sa.sa_handler;
+-
+-	/* Make -mregparm=3 work */
+-	regs->ax = ksig->sig;
+-	regs->dx = 0;
+-	regs->cx = 0;
+-
+-	loadsegment(ds, __USER_DS);
+-	loadsegment(es, __USER_DS);
+-
+-	regs->cs = __USER32_CS;
+-	regs->ss = __USER_DS;
+-
+-	return 0;
+-Efault:
+-	user_access_end();
+-	return -EFAULT;
+-}
+-
+-int ia32_setup_rt_frame(struct ksignal *ksig, struct pt_regs *regs)
+-{
+-	compat_sigset_t *set = (compat_sigset_t *) sigmask_to_save();
+-	struct rt_sigframe_ia32 __user *frame;
+-	void __user *restorer;
+-	void __user *fp = NULL;
+-
+-	/* unsafe_put_user optimizes that into a single 8 byte store */
+-	static const struct {
+-		u8 movl;
+-		u32 val;
+-		u16 int80;
+-		u8  pad;
+-	} __attribute__((packed)) code = {
+-		0xb8,
+-		__NR_ia32_rt_sigreturn,
+-		0x80cd,
+-		0,
+-	};
+-
+-	frame = get_sigframe(ksig, regs, sizeof(*frame), &fp);
+-
+-	if (!user_access_begin(frame, sizeof(*frame)))
+-		return -EFAULT;
+-
+-	unsafe_put_user(ksig->sig, &frame->sig, Efault);
+-	unsafe_put_user(ptr_to_compat(&frame->info), &frame->pinfo, Efault);
+-	unsafe_put_user(ptr_to_compat(&frame->uc), &frame->puc, Efault);
+-
+-	/* Create the ucontext.  */
+-	if (static_cpu_has(X86_FEATURE_XSAVE))
+-		unsafe_put_user(UC_FP_XSTATE, &frame->uc.uc_flags, Efault);
+-	else
+-		unsafe_put_user(0, &frame->uc.uc_flags, Efault);
+-	unsafe_put_user(0, &frame->uc.uc_link, Efault);
+-	unsafe_compat_save_altstack(&frame->uc.uc_stack, regs->sp, Efault);
+-
+-	if (ksig->ka.sa.sa_flags & SA_RESTORER)
+-		restorer = ksig->ka.sa.sa_restorer;
+-	else
+-		restorer = current->mm->context.vdso +
+-			vdso_image_32.sym___kernel_rt_sigreturn;
+-	unsafe_put_user(ptr_to_compat(restorer), &frame->pretcode, Efault);
+-
+-	/*
+-	 * Not actually used anymore, but left because some gdb
+-	 * versions need it.
+-	 */
+-	unsafe_put_user(*((u64 *)&code), (u64 __user *)frame->retcode, Efault);
+-	unsafe_put_sigcontext32(&frame->uc.uc_mcontext, fp, regs, set, Efault);
+-	unsafe_put_user(*(__u64 *)set, (__u64 __user *)&frame->uc.uc_sigmask, Efault);
+-	user_access_end();
+-
+-	if (__copy_siginfo_to_user32(&frame->info, &ksig->info))
+-		return -EFAULT;
+-
+-	/* Set up registers for signal handler */
+-	regs->sp = (unsigned long) frame;
+-	regs->ip = (unsigned long) ksig->ka.sa.sa_handler;
+-
+-	/* Make -mregparm=3 work */
+-	regs->ax = ksig->sig;
+-	regs->dx = (unsigned long) &frame->info;
+-	regs->cx = (unsigned long) &frame->uc;
+-
+-	loadsegment(ds, __USER_DS);
+-	loadsegment(es, __USER_DS);
+-
+-	regs->cs = __USER32_CS;
+-	regs->ss = __USER_DS;
+-
+-	return 0;
+-Efault:
+-	user_access_end();
+-	return -EFAULT;
+-}
+diff --git a/arch/x86/include/asm/segment.h b/arch/x86/include/asm/segment.h
+index e056c29..c390a67 100644
+--- a/arch/x86/include/asm/segment.h
++++ b/arch/x86/include/asm/segment.h
+@@ -135,6 +135,7 @@
+ #define __KERNEL_DS			(GDT_ENTRY_KERNEL_DS*8)
+ #define __USER_DS			(GDT_ENTRY_DEFAULT_USER_DS*8 + 3)
+ #define __USER_CS			(GDT_ENTRY_DEFAULT_USER_CS*8 + 3)
++#define __USER32_CS			__USER_CS
+ #define __ESPFIX_SS			(GDT_ENTRY_ESPFIX_SS*8)
+ 
+ /* segment for calling fn: */
+diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
+index f901658..72e1371 100644
+--- a/arch/x86/kernel/Makefile
++++ b/arch/x86/kernel/Makefile
+@@ -53,8 +53,8 @@ obj-y			+= setup.o x86_init.o i8259.o irqinit.o
+ obj-$(CONFIG_JUMP_LABEL)	+= jump_label.o
+ obj-$(CONFIG_IRQ_WORK)  += irq_work.o
+ obj-y			+= probe_roms.o
+-obj-$(CONFIG_X86_32)	+= sys_ia32.o
+-obj-$(CONFIG_IA32_EMULATION)	+= sys_ia32.o
++obj-$(CONFIG_X86_32)	+= sys_ia32.o signal_32.o
++obj-$(CONFIG_IA32_EMULATION)	+= sys_ia32.o signal_32.o
+ obj-$(CONFIG_X86_64)	+= sys_x86_64.o
+ obj-$(CONFIG_X86_ESPFIX64)	+= espfix_64.o
+ obj-$(CONFIG_SYSFS)	+= ksysfs.o
+diff --git a/arch/x86/kernel/signal.c b/arch/x86/kernel/signal.c
+index 0511e05..962cfd8 100644
+--- a/arch/x86/kernel/signal.c
++++ b/arch/x86/kernel/signal.c
+@@ -92,10 +92,6 @@ static void force_valid_ss(struct pt_regs *regs)
+ 	    ar != (AR_DPL3 | AR_S | AR_P | AR_TYPE_RWDATA_EXPDOWN))
+ 		regs->ss = __USER_DS;
+ }
+-# define CONTEXT_COPY_SIZE	offsetof(struct sigcontext, reserved1)
+-#else
+-# define CONTEXT_COPY_SIZE	sizeof(struct sigcontext)
+-#endif
+ 
+ static bool restore_sigcontext(struct pt_regs *regs,
+ 			       struct sigcontext __user *usc,
+@@ -106,16 +102,9 @@ static bool restore_sigcontext(struct pt_regs *regs,
+ 	/* Always make any pending restarted system calls return -EINTR */
+ 	current->restart_block.fn = do_no_restart_syscall;
+ 
+-	if (copy_from_user(&sc, usc, CONTEXT_COPY_SIZE))
++	if (copy_from_user(&sc, usc, offsetof(struct sigcontext, reserved1)))
+ 		return false;
+ 
+-#ifdef CONFIG_X86_32
+-	loadsegment(gs, sc.gs);
+-	regs->fs = sc.fs;
+-	regs->es = sc.es;
+-	regs->ds = sc.ds;
+-#endif /* CONFIG_X86_32 */
+-
+ 	regs->bx = sc.bx;
+ 	regs->cx = sc.cx;
+ 	regs->dx = sc.dx;
+@@ -125,8 +114,6 @@ static bool restore_sigcontext(struct pt_regs *regs,
+ 	regs->ax = sc.ax;
+ 	regs->sp = sc.sp;
+ 	regs->ip = sc.ip;
+-
+-#ifdef CONFIG_X86_64
+ 	regs->r8 = sc.r8;
+ 	regs->r9 = sc.r9;
+ 	regs->r10 = sc.r10;
+@@ -135,7 +122,6 @@ static bool restore_sigcontext(struct pt_regs *regs,
+ 	regs->r13 = sc.r13;
+ 	regs->r14 = sc.r14;
+ 	regs->r15 = sc.r15;
+-#endif /* CONFIG_X86_64 */
+ 
+ 	/* Get CS/SS and force CPL3 */
+ 	regs->cs = sc.cs | 0x03;
+@@ -145,33 +131,20 @@ static bool restore_sigcontext(struct pt_regs *regs,
+ 	/* disable syscall checks */
+ 	regs->orig_ax = -1;
+ 
+-#ifdef CONFIG_X86_64
+ 	/*
+ 	 * Fix up SS if needed for the benefit of old DOSEMU and
+ 	 * CRIU.
+ 	 */
+ 	if (unlikely(!(uc_flags & UC_STRICT_RESTORE_SS) && user_64bit_mode(regs)))
+ 		force_valid_ss(regs);
+-#endif
+ 
+-	return fpu__restore_sig((void __user *)sc.fpstate,
+-			       IS_ENABLED(CONFIG_X86_32));
++	return fpu__restore_sig((void __user *)sc.fpstate, 0);
+ }
+ 
+ static __always_inline int
+ __unsafe_setup_sigcontext(struct sigcontext __user *sc, void __user *fpstate,
+ 		     struct pt_regs *regs, unsigned long mask)
+ {
+-#ifdef CONFIG_X86_32
+-	unsigned int gs;
+-	savesegment(gs, gs);
+-
+-	unsafe_put_user(gs,	  (unsigned int __user *)&sc->gs, Efault);
+-	unsafe_put_user(regs->fs, (unsigned int __user *)&sc->fs, Efault);
+-	unsafe_put_user(regs->es, (unsigned int __user *)&sc->es, Efault);
+-	unsafe_put_user(regs->ds, (unsigned int __user *)&sc->ds, Efault);
+-#endif /* CONFIG_X86_32 */
+-
+ 	unsafe_put_user(regs->di, &sc->di, Efault);
+ 	unsafe_put_user(regs->si, &sc->si, Efault);
+ 	unsafe_put_user(regs->bp, &sc->bp, Efault);
+@@ -180,7 +153,6 @@ __unsafe_setup_sigcontext(struct sigcontext __user *sc, void __user *fpstate,
+ 	unsafe_put_user(regs->dx, &sc->dx, Efault);
+ 	unsafe_put_user(regs->cx, &sc->cx, Efault);
+ 	unsafe_put_user(regs->ax, &sc->ax, Efault);
+-#ifdef CONFIG_X86_64
+ 	unsafe_put_user(regs->r8, &sc->r8, Efault);
+ 	unsafe_put_user(regs->r9, &sc->r9, Efault);
+ 	unsafe_put_user(regs->r10, &sc->r10, Efault);
+@@ -189,23 +161,15 @@ __unsafe_setup_sigcontext(struct sigcontext __user *sc, void __user *fpstate,
+ 	unsafe_put_user(regs->r13, &sc->r13, Efault);
+ 	unsafe_put_user(regs->r14, &sc->r14, Efault);
+ 	unsafe_put_user(regs->r15, &sc->r15, Efault);
+-#endif /* CONFIG_X86_64 */
+ 
+ 	unsafe_put_user(current->thread.trap_nr, &sc->trapno, Efault);
+ 	unsafe_put_user(current->thread.error_code, &sc->err, Efault);
+ 	unsafe_put_user(regs->ip, &sc->ip, Efault);
+-#ifdef CONFIG_X86_32
+-	unsafe_put_user(regs->cs, (unsigned int __user *)&sc->cs, Efault);
+-	unsafe_put_user(regs->flags, &sc->flags, Efault);
+-	unsafe_put_user(regs->sp, &sc->sp_at_signal, Efault);
+-	unsafe_put_user(regs->ss, (unsigned int __user *)&sc->ss, Efault);
+-#else /* !CONFIG_X86_32 */
+ 	unsafe_put_user(regs->flags, &sc->flags, Efault);
+ 	unsafe_put_user(regs->cs, &sc->cs, Efault);
+ 	unsafe_put_user(0, &sc->gs, Efault);
+ 	unsafe_put_user(0, &sc->fs, Efault);
+ 	unsafe_put_user(regs->ss, &sc->ss, Efault);
+-#endif /* CONFIG_X86_32 */
+ 
+ 	unsafe_put_user(fpstate, (unsigned long __user *)&sc->fpstate, Efault);
+ 
+@@ -228,6 +192,8 @@ do {									\
+ 			(__u64 __user *)&(frame)->uc.uc_sigmask, \
+ 			label)
+ 
++#endif /* CONFIG_X86_64 */
++
+ /*
+  * Set up a signal frame.
+  */
+@@ -313,148 +279,7 @@ get_sigframe(struct ksignal *ksig, struct pt_regs *regs, size_t frame_size,
+ 	return (void __user *)sp;
+ }
+ 
+-#ifdef CONFIG_X86_32
+-static const struct {
+-	u16 poplmovl;
+-	u32 val;
+-	u16 int80;
+-} __attribute__((packed)) retcode = {
+-	0xb858,		/* popl %eax; movl $..., %eax */
+-	__NR_sigreturn,
+-	0x80cd,		/* int $0x80 */
+-};
+-
+-static const struct {
+-	u8  movl;
+-	u32 val;
+-	u16 int80;
+-	u8  pad;
+-} __attribute__((packed)) rt_retcode = {
+-	0xb8,		/* movl $..., %eax */
+-	__NR_rt_sigreturn,
+-	0x80cd,		/* int $0x80 */
+-	0
+-};
+-
+-int ia32_setup_frame(struct ksignal *ksig, struct pt_regs *regs)
+-{
+-	sigset_t *set = sigmask_to_save();
+-	struct sigframe __user *frame;
+-	void __user *restorer;
+-	void __user *fp = NULL;
+-
+-	frame = get_sigframe(ksig, regs, sizeof(*frame), &fp);
+-
+-	if (!user_access_begin(frame, sizeof(*frame)))
+-		return -EFAULT;
+-
+-	unsafe_put_user(ksig->sig, &frame->sig, Efault);
+-	unsafe_put_sigcontext(&frame->sc, fp, regs, set, Efault);
+-	unsafe_put_user(set->sig[1], &frame->extramask[0], Efault);
+-	if (current->mm->context.vdso)
+-		restorer = current->mm->context.vdso +
+-			vdso_image_32.sym___kernel_sigreturn;
+-	else
+-		restorer = &frame->retcode;
+-	if (ksig->ka.sa.sa_flags & SA_RESTORER)
+-		restorer = ksig->ka.sa.sa_restorer;
+-
+-	/* Set up to return from userspace.  */
+-	unsafe_put_user(restorer, &frame->pretcode, Efault);
+-
+-	/*
+-	 * This is popl %eax ; movl $__NR_sigreturn, %eax ; int $0x80
+-	 *
+-	 * WE DO NOT USE IT ANY MORE! It's only left here for historical
+-	 * reasons and because gdb uses it as a signature to notice
+-	 * signal handler stack frames.
+-	 */
+-	unsafe_put_user(*((u64 *)&retcode), (u64 *)frame->retcode, Efault);
+-	user_access_end();
+-
+-	/* Set up registers for signal handler */
+-	regs->sp = (unsigned long)frame;
+-	regs->ip = (unsigned long)ksig->ka.sa.sa_handler;
+-	regs->ax = (unsigned long)ksig->sig;
+-	regs->dx = 0;
+-	regs->cx = 0;
+-
+-	regs->ds = __USER_DS;
+-	regs->es = __USER_DS;
+-	regs->ss = __USER_DS;
+-	regs->cs = __USER_CS;
+-
+-	return 0;
+-
+-Efault:
+-	user_access_end();
+-	return -EFAULT;
+-}
+-
+-int ia32_setup_rt_frame(struct ksignal *ksig, struct pt_regs *regs)
+-{
+-	sigset_t *set = sigmask_to_save();
+-	struct rt_sigframe __user *frame;
+-	void __user *restorer;
+-	void __user *fp = NULL;
+-
+-	frame = get_sigframe(ksig, regs, sizeof(*frame), &fp);
+-
+-	if (!user_access_begin(frame, sizeof(*frame)))
+-		return -EFAULT;
+-
+-	unsafe_put_user(ksig->sig, &frame->sig, Efault);
+-	unsafe_put_user(&frame->info, &frame->pinfo, Efault);
+-	unsafe_put_user(&frame->uc, &frame->puc, Efault);
+-
+-	/* Create the ucontext.  */
+-	if (static_cpu_has(X86_FEATURE_XSAVE))
+-		unsafe_put_user(UC_FP_XSTATE, &frame->uc.uc_flags, Efault);
+-	else
+-		unsafe_put_user(0, &frame->uc.uc_flags, Efault);
+-	unsafe_put_user(0, &frame->uc.uc_link, Efault);
+-	unsafe_save_altstack(&frame->uc.uc_stack, regs->sp, Efault);
+-
+-	/* Set up to return from userspace.  */
+-	restorer = current->mm->context.vdso +
+-		vdso_image_32.sym___kernel_rt_sigreturn;
+-	if (ksig->ka.sa.sa_flags & SA_RESTORER)
+-		restorer = ksig->ka.sa.sa_restorer;
+-	unsafe_put_user(restorer, &frame->pretcode, Efault);
+-
+-	/*
+-	 * This is movl $__NR_rt_sigreturn, %ax ; int $0x80
+-	 *
+-	 * WE DO NOT USE IT ANY MORE! It's only left here for historical
+-	 * reasons and because gdb uses it as a signature to notice
+-	 * signal handler stack frames.
+-	 */
+-	unsafe_put_user(*((u64 *)&rt_retcode), (u64 *)frame->retcode, Efault);
+-	unsafe_put_sigcontext(&frame->uc.uc_mcontext, fp, regs, set, Efault);
+-	unsafe_put_sigmask(set, frame, Efault);
+-	user_access_end();
+-	
+-	if (copy_siginfo_to_user(&frame->info, &ksig->info))
+-		return -EFAULT;
+-
+-	/* Set up registers for signal handler */
+-	regs->sp = (unsigned long)frame;
+-	regs->ip = (unsigned long)ksig->ka.sa.sa_handler;
+-	regs->ax = (unsigned long)ksig->sig;
+-	regs->dx = (unsigned long)&frame->info;
+-	regs->cx = (unsigned long)&frame->uc;
+-
+-	regs->ds = __USER_DS;
+-	regs->es = __USER_DS;
+-	regs->ss = __USER_DS;
+-	regs->cs = __USER_CS;
+-
+-	return 0;
+-Efault:
+-	user_access_end();
+-	return -EFAULT;
+-}
+-#else /* !CONFIG_X86_32 */
++#ifdef CONFIG_X86_64
+ static unsigned long frame_uc_flags(struct pt_regs *regs)
+ {
+ 	unsigned long flags;
+@@ -545,7 +370,6 @@ Efault:
+ 	user_access_end();
+ 	return -EFAULT;
+ }
+-#endif /* CONFIG_X86_32 */
+ 
+ #ifdef CONFIG_X86_X32_ABI
+ static int x32_copy_siginfo_to_user(struct compat_siginfo __user *to,
+@@ -631,38 +455,6 @@ Efault:
+ /*
+  * Do a signal return; undo the signal stack.
+  */
+-#ifdef CONFIG_X86_32
+-SYSCALL_DEFINE0(sigreturn)
+-{
+-	struct pt_regs *regs = current_pt_regs();
+-	struct sigframe __user *frame;
+-	sigset_t set;
+-
+-	frame = (struct sigframe __user *)(regs->sp - 8);
+-
+-	if (!access_ok(frame, sizeof(*frame)))
+-		goto badframe;
+-	if (__get_user(set.sig[0], &frame->sc.oldmask) ||
+-	    __get_user(set.sig[1], &frame->extramask[0]))
+-		goto badframe;
+-
+-	set_current_blocked(&set);
+-
+-	/*
+-	 * x86_32 has no uc_flags bits relevant to restore_sigcontext.
+-	 * Save a few cycles by skipping the __get_user.
+-	 */
+-	if (!restore_sigcontext(regs, &frame->sc, 0))
+-		goto badframe;
+-	return regs->ax;
+-
+-badframe:
+-	signal_fault(regs, frame, "sigreturn");
+-
+-	return 0;
+-}
+-#endif /* CONFIG_X86_32 */
+-
+ SYSCALL_DEFINE0(rt_sigreturn)
+ {
+ 	struct pt_regs *regs = current_pt_regs();
+@@ -692,6 +484,7 @@ badframe:
+ 	signal_fault(regs, frame, "rt_sigreturn");
+ 	return 0;
+ }
++#endif /* CONFIG_X86_64 */
+ 
+ /*
+  * There are four different struct types for signal frame: sigframe_ia32,
+diff --git a/arch/x86/kernel/signal_32.c b/arch/x86/kernel/signal_32.c
+new file mode 100644
+index 0000000..2553136
+--- /dev/null
++++ b/arch/x86/kernel/signal_32.c
+@@ -0,0 +1,379 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ *  Copyright (C) 1991, 1992  Linus Torvalds
++ *
++ *  1997-11-28  Modified for POSIX.1b signals by Richard Henderson
++ *  2000-06-20  Pentium III FXSR, SSE support by Gareth Hughes
++ *  2000-12-*   x86-64 compatibility mode signal handling by Andi Kleen
++ */
++
++#include <linux/sched.h>
++#include <linux/sched/task_stack.h>
++#include <linux/mm.h>
++#include <linux/smp.h>
++#include <linux/kernel.h>
++#include <linux/errno.h>
++#include <linux/wait.h>
++#include <linux/unistd.h>
++#include <linux/stddef.h>
++#include <linux/personality.h>
++#include <linux/compat.h>
++#include <linux/binfmts.h>
++#include <linux/syscalls.h>
++#include <asm/ucontext.h>
++#include <linux/uaccess.h>
++#include <asm/fpu/signal.h>
++#include <asm/ptrace.h>
++#include <asm/user32.h>
++#include <uapi/asm/sigcontext.h>
++#include <asm/proto.h>
++#include <asm/vdso.h>
++#include <asm/sigframe.h>
++#include <asm/sighandling.h>
++#include <asm/smap.h>
++
++#ifdef CONFIG_IA32_EMULATION
++#include <asm/ia32_unistd.h>
++
++static inline void reload_segments(struct sigcontext_32 *sc)
++{
++	unsigned int cur;
++
++	savesegment(gs, cur);
++	if ((sc->gs | 0x03) != cur)
++		load_gs_index(sc->gs | 0x03);
++	savesegment(fs, cur);
++	if ((sc->fs | 0x03) != cur)
++		loadsegment(fs, sc->fs | 0x03);
++	savesegment(ds, cur);
++	if ((sc->ds | 0x03) != cur)
++		loadsegment(ds, sc->ds | 0x03);
++	savesegment(es, cur);
++	if ((sc->es | 0x03) != cur)
++		loadsegment(es, sc->es | 0x03);
++}
++
++#define sigset32_t			compat_sigset_t
++#define restore_altstack32		compat_restore_altstack
++#define unsafe_save_altstack32		unsafe_compat_save_altstack
++
++#else
++
++#define sigset32_t			sigset_t
++#define __NR_ia32_sigreturn		__NR_sigreturn
++#define __NR_ia32_rt_sigreturn		__NR_rt_sigreturn
++#define restore_altstack32		restore_altstack
++#define unsafe_save_altstack32		unsafe_save_altstack
++#define __copy_siginfo_to_user32	copy_siginfo_to_user
++
++#endif
++
++/*
++ * Do a signal return; undo the signal stack.
++ */
++static bool ia32_restore_sigcontext(struct pt_regs *regs,
++				    struct sigcontext_32 __user *usc)
++{
++	struct sigcontext_32 sc;
++
++	/* Always make any pending restarted system calls return -EINTR */
++	current->restart_block.fn = do_no_restart_syscall;
++
++	if (unlikely(copy_from_user(&sc, usc, sizeof(sc))))
++		return false;
++
++	/* Get only the ia32 registers. */
++	regs->bx = sc.bx;
++	regs->cx = sc.cx;
++	regs->dx = sc.dx;
++	regs->si = sc.si;
++	regs->di = sc.di;
++	regs->bp = sc.bp;
++	regs->ax = sc.ax;
++	regs->sp = sc.sp;
++	regs->ip = sc.ip;
++
++	/* Get CS/SS and force CPL3 */
++	regs->cs = sc.cs | 0x03;
++	regs->ss = sc.ss | 0x03;
++
++	regs->flags = (regs->flags & ~FIX_EFLAGS) | (sc.flags & FIX_EFLAGS);
++	/* disable syscall checks */
++	regs->orig_ax = -1;
++
++#ifdef CONFIG_IA32_EMULATION
++	/*
++	 * Reload fs and gs if they have changed in the signal
++	 * handler.  This does not handle long fs/gs base changes in
++	 * the handler, but does not clobber them at least in the
++	 * normal case.
++	 */
++	reload_segments(&sc);
++#else
++	loadsegment(gs, sc.gs);
++	regs->fs = sc.fs;
++	regs->es = sc.es;
++	regs->ds = sc.ds;
++#endif
++
++	return fpu__restore_sig(compat_ptr(sc.fpstate), 1);
++}
++
++SYSCALL32_DEFINE0(sigreturn)
++{
++	struct pt_regs *regs = current_pt_regs();
++	struct sigframe_ia32 __user *frame = (struct sigframe_ia32 __user *)(regs->sp-8);
++	sigset_t set;
++
++	if (!access_ok(frame, sizeof(*frame)))
++		goto badframe;
++	if (__get_user(set.sig[0], &frame->sc.oldmask)
++	    || __get_user(((__u32 *)&set)[1], &frame->extramask[0]))
++		goto badframe;
++
++	set_current_blocked(&set);
++
++	if (!ia32_restore_sigcontext(regs, &frame->sc))
++		goto badframe;
++	return regs->ax;
++
++badframe:
++	signal_fault(regs, frame, "32bit sigreturn");
++	return 0;
++}
++
++SYSCALL32_DEFINE0(rt_sigreturn)
++{
++	struct pt_regs *regs = current_pt_regs();
++	struct rt_sigframe_ia32 __user *frame;
++	sigset_t set;
++
++	frame = (struct rt_sigframe_ia32 __user *)(regs->sp - 4);
++
++	if (!access_ok(frame, sizeof(*frame)))
++		goto badframe;
++	if (__get_user(*(__u64 *)&set, (__u64 __user *)&frame->uc.uc_sigmask))
++		goto badframe;
++
++	set_current_blocked(&set);
++
++	if (!ia32_restore_sigcontext(regs, &frame->uc.uc_mcontext))
++		goto badframe;
++
++	if (restore_altstack32(&frame->uc.uc_stack))
++		goto badframe;
++
++	return regs->ax;
++
++badframe:
++	signal_fault(regs, frame, "32bit rt sigreturn");
++	return 0;
++}
++
++/*
++ * Set up a signal frame.
++ */
++
++#define get_user_seg(seg)	({ unsigned int v; savesegment(seg, v); v; })
++
++static __always_inline int
++__unsafe_setup_sigcontext32(struct sigcontext_32 __user *sc,
++			    void __user *fpstate,
++			    struct pt_regs *regs, unsigned int mask)
++{
++	unsafe_put_user(get_user_seg(gs), (unsigned int __user *)&sc->gs, Efault);
++#ifdef CONFIG_IA32_EMULATION
++	unsafe_put_user(get_user_seg(fs), (unsigned int __user *)&sc->fs, Efault);
++	unsafe_put_user(get_user_seg(ds), (unsigned int __user *)&sc->ds, Efault);
++	unsafe_put_user(get_user_seg(es), (unsigned int __user *)&sc->es, Efault);
++#else
++	unsafe_put_user(regs->fs, (unsigned int __user *)&sc->fs, Efault);
++	unsafe_put_user(regs->es, (unsigned int __user *)&sc->es, Efault);
++	unsafe_put_user(regs->ds, (unsigned int __user *)&sc->ds, Efault);
++#endif
++
++	unsafe_put_user(regs->di, &sc->di, Efault);
++	unsafe_put_user(regs->si, &sc->si, Efault);
++	unsafe_put_user(regs->bp, &sc->bp, Efault);
++	unsafe_put_user(regs->sp, &sc->sp, Efault);
++	unsafe_put_user(regs->bx, &sc->bx, Efault);
++	unsafe_put_user(regs->dx, &sc->dx, Efault);
++	unsafe_put_user(regs->cx, &sc->cx, Efault);
++	unsafe_put_user(regs->ax, &sc->ax, Efault);
++	unsafe_put_user(current->thread.trap_nr, &sc->trapno, Efault);
++	unsafe_put_user(current->thread.error_code, &sc->err, Efault);
++	unsafe_put_user(regs->ip, &sc->ip, Efault);
++	unsafe_put_user(regs->cs, (unsigned int __user *)&sc->cs, Efault);
++	unsafe_put_user(regs->flags, &sc->flags, Efault);
++	unsafe_put_user(regs->sp, &sc->sp_at_signal, Efault);
++	unsafe_put_user(regs->ss, (unsigned int __user *)&sc->ss, Efault);
++
++	unsafe_put_user(ptr_to_compat(fpstate), &sc->fpstate, Efault);
++
++	/* non-iBCS2 extensions.. */
++	unsafe_put_user(mask, &sc->oldmask, Efault);
++	unsafe_put_user(current->thread.cr2, &sc->cr2, Efault);
++	return 0;
++
++Efault:
++	return -EFAULT;
++}
++
++#define unsafe_put_sigcontext32(sc, fp, regs, set, label)		\
++do {									\
++	if (__unsafe_setup_sigcontext32(sc, fp, regs, set->sig[0]))	\
++		goto label;						\
++} while(0)
++
++int ia32_setup_frame(struct ksignal *ksig, struct pt_regs *regs)
++{
++	sigset32_t *set = (sigset32_t *) sigmask_to_save();
++	struct sigframe_ia32 __user *frame;
++	void __user *restorer;
++	void __user *fp = NULL;
++
++	/* copy_to_user optimizes that into a single 8 byte store */
++	static const struct {
++		u16 poplmovl;
++		u32 val;
++		u16 int80;
++	} __attribute__((packed)) code = {
++		0xb858,		 /* popl %eax ; movl $...,%eax */
++		__NR_ia32_sigreturn,
++		0x80cd,		/* int $0x80 */
++	};
++
++	frame = get_sigframe(ksig, regs, sizeof(*frame), &fp);
++
++	if (ksig->ka.sa.sa_flags & SA_RESTORER) {
++		restorer = ksig->ka.sa.sa_restorer;
++	} else {
++		/* Return stub is in 32bit vsyscall page */
++		if (current->mm->context.vdso)
++			restorer = current->mm->context.vdso +
++				vdso_image_32.sym___kernel_sigreturn;
++		else
++			restorer = &frame->retcode;
++	}
++
++	if (!user_access_begin(frame, sizeof(*frame)))
++		return -EFAULT;
++
++	unsafe_put_user(ksig->sig, &frame->sig, Efault);
++	unsafe_put_sigcontext32(&frame->sc, fp, regs, set, Efault);
++	unsafe_put_user(set->sig[1], &frame->extramask[0], Efault);
++	unsafe_put_user(ptr_to_compat(restorer), &frame->pretcode, Efault);
++	/*
++	 * These are actually not used anymore, but left because some
++	 * gdb versions depend on them as a marker.
++	 */
++	unsafe_put_user(*((u64 *)&code), (u64 __user *)frame->retcode, Efault);
++	user_access_end();
++
++	/* Set up registers for signal handler */
++	regs->sp = (unsigned long) frame;
++	regs->ip = (unsigned long) ksig->ka.sa.sa_handler;
++
++	/* Make -mregparm=3 work */
++	regs->ax = ksig->sig;
++	regs->dx = 0;
++	regs->cx = 0;
++
++#ifdef CONFIG_IA32_EMULATION
++	loadsegment(ds, __USER_DS);
++	loadsegment(es, __USER_DS);
++#else
++	regs->ds = __USER_DS;
++	regs->es = __USER_DS;
++#endif
++
++	regs->cs = __USER32_CS;
++	regs->ss = __USER_DS;
++
++	return 0;
++Efault:
++	user_access_end();
++	return -EFAULT;
++}
++
++int ia32_setup_rt_frame(struct ksignal *ksig, struct pt_regs *regs)
++{
++	sigset32_t *set = (sigset32_t *) sigmask_to_save();
++	struct rt_sigframe_ia32 __user *frame;
++	void __user *restorer;
++	void __user *fp = NULL;
++
++	/* unsafe_put_user optimizes that into a single 8 byte store */
++	static const struct {
++		u8 movl;
++		u32 val;
++		u16 int80;
++		u8  pad;
++	} __attribute__((packed)) code = {
++		0xb8,
++		__NR_ia32_rt_sigreturn,
++		0x80cd,
++		0,
++	};
++
++	frame = get_sigframe(ksig, regs, sizeof(*frame), &fp);
++
++	if (!user_access_begin(frame, sizeof(*frame)))
++		return -EFAULT;
++
++	unsafe_put_user(ksig->sig, &frame->sig, Efault);
++	unsafe_put_user(ptr_to_compat(&frame->info), &frame->pinfo, Efault);
++	unsafe_put_user(ptr_to_compat(&frame->uc), &frame->puc, Efault);
++
++	/* Create the ucontext.  */
++	if (static_cpu_has(X86_FEATURE_XSAVE))
++		unsafe_put_user(UC_FP_XSTATE, &frame->uc.uc_flags, Efault);
++	else
++		unsafe_put_user(0, &frame->uc.uc_flags, Efault);
++	unsafe_put_user(0, &frame->uc.uc_link, Efault);
++	unsafe_save_altstack32(&frame->uc.uc_stack, regs->sp, Efault);
++
++	if (ksig->ka.sa.sa_flags & SA_RESTORER)
++		restorer = ksig->ka.sa.sa_restorer;
++	else
++		restorer = current->mm->context.vdso +
++			vdso_image_32.sym___kernel_rt_sigreturn;
++	unsafe_put_user(ptr_to_compat(restorer), &frame->pretcode, Efault);
++
++	/*
++	 * Not actually used anymore, but left because some gdb
++	 * versions need it.
++	 */
++	unsafe_put_user(*((u64 *)&code), (u64 __user *)frame->retcode, Efault);
++	unsafe_put_sigcontext32(&frame->uc.uc_mcontext, fp, regs, set, Efault);
++	unsafe_put_user(*(__u64 *)set, (__u64 __user *)&frame->uc.uc_sigmask, Efault);
++	user_access_end();
++
++	if (__copy_siginfo_to_user32(&frame->info, &ksig->info))
++		return -EFAULT;
++
++	/* Set up registers for signal handler */
++	regs->sp = (unsigned long) frame;
++	regs->ip = (unsigned long) ksig->ka.sa.sa_handler;
++
++	/* Make -mregparm=3 work */
++	regs->ax = ksig->sig;
++	regs->dx = (unsigned long) &frame->info;
++	regs->cx = (unsigned long) &frame->uc;
++
++#ifdef CONFIG_IA32_EMULATION
++	loadsegment(ds, __USER_DS);
++	loadsegment(es, __USER_DS);
++#else
++	regs->ds = __USER_DS;
++	regs->es = __USER_DS;
++#endif
++
++	regs->cs = __USER32_CS;
++	regs->ss = __USER_DS;
++
++	return 0;
++Efault:
++	user_access_end();
++	return -EFAULT;
++}
+diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
+index a34b0f9..33a0ee3 100644
+--- a/include/linux/syscalls.h
++++ b/include/linux/syscalls.h
+@@ -264,6 +264,7 @@ static inline int is_syscall_trace_event(struct trace_event_call *tp_event)
+ #define SC_VAL64(type, name) ((type) name##_hi << 32 | name##_lo)
+ 
+ #ifdef CONFIG_COMPAT
++#define SYSCALL32_DEFINE0 COMPAT_SYSCALL_DEFINE0
+ #define SYSCALL32_DEFINE1 COMPAT_SYSCALL_DEFINE1
+ #define SYSCALL32_DEFINE2 COMPAT_SYSCALL_DEFINE2
+ #define SYSCALL32_DEFINE3 COMPAT_SYSCALL_DEFINE3
+@@ -271,6 +272,7 @@ static inline int is_syscall_trace_event(struct trace_event_call *tp_event)
+ #define SYSCALL32_DEFINE5 COMPAT_SYSCALL_DEFINE5
+ #define SYSCALL32_DEFINE6 COMPAT_SYSCALL_DEFINE6
+ #else
++#define SYSCALL32_DEFINE0 SYSCALL_DEFINE0
+ #define SYSCALL32_DEFINE1 SYSCALL_DEFINE1
+ #define SYSCALL32_DEFINE2 SYSCALL_DEFINE2
+ #define SYSCALL32_DEFINE3 SYSCALL_DEFINE3
