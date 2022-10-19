@@ -2,123 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A5B660441E
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 13:58:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 456976041F6
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 12:51:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232159AbiJSL6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 07:58:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44500 "EHLO
+        id S234521AbiJSKvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 06:51:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232226AbiJSL5s (ORCPT
+        with ESMTP id S234471AbiJSKtK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 07:57:48 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A90BE37;
-        Wed, 19 Oct 2022 04:35:44 -0700 (PDT)
-X-UUID: 34acd60cc80d4990bce2455bf390b3c9-20221019
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=cSeJUyFSeok6ngFkYCaH8KpME5/ESKjKnL4imI8pLTw=;
-        b=PDKa1XaV8UieJrHHR+UTXbQfm/hVyCdohgzFGftdl4QG0iB/Y+peIH+ElM7++SmmjGgqaa2bjTvii+OiGLmDKspaOy2zeu//65yP/sNEhMvotYiVzEjrM6BVXnFakiFjQueBqRm+go/nQPtHXo/j0WFDkpv1aFFmRm5EiICoFEU=;
-X-CID-UNFAMILIAR: 1
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.12,REQID:6ebdbc00-af9e-4b5b-a14d-21d30de43647,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:54,FILE:0,BULK:28,RULE:Release_Ham,ACTIO
-        N:release,TS:82
-X-CID-INFO: VERSION:1.1.12,REQID:6ebdbc00-af9e-4b5b-a14d-21d30de43647,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:54,FILE:0,BULK:28,RULE:Spam_GS981B3D,ACTIO
-        N:quarantine,TS:82
-X-CID-META: VersionHash:62cd327,CLOUDID:846449a4-ebb2-41a8-a87c-97702aaf2e20,B
-        ulkID:22101906415932MWZJGX,BulkQuantity:83,Recheck:0,SF:38|28|16|19|48|102
-        ,TC:nil,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:40|20,QS:nil,BEC:ni
-        l,COL:0
-X-UUID: 34acd60cc80d4990bce2455bf390b3c9-20221019
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <irui.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1757139302; Wed, 19 Oct 2022 16:56:52 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Wed, 19 Oct 2022 16:56:50 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Wed, 19 Oct 2022 16:56:49 +0800
-Message-ID: <e710546052b93ee2e77b1aeae3f7e4631e884f9f.camel@mediatek.com>
-Subject: Re: [PATCH v1 3/3] arm64: dts: mt8195: Add venc node
-From:   Irui Wang <irui.wang@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Tinghan Shen <tinghan.shen@mediatek.com>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Jianjun Wang <jianjun.wang@mediatek.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     <linux-pci@vger.kernel.org>, <linux-mediatek@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Wed, 19 Oct 2022 16:56:49 +0800
-In-Reply-To: <01ef8a2d-091f-5428-2cb8-41ba3e137a06@collabora.com>
-References: <20221017070858.13902-1-tinghan.shen@mediatek.com>
-         <20221017070858.13902-4-tinghan.shen@mediatek.com>
-         <01ef8a2d-091f-5428-2cb8-41ba3e137a06@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Wed, 19 Oct 2022 06:49:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 384F312B34A;
+        Wed, 19 Oct 2022 03:21:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0EB3AB8244E;
+        Wed, 19 Oct 2022 08:59:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE96EC433B5;
+        Wed, 19 Oct 2022 08:59:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666169985;
+        bh=ihGyUt66Xn5KkFVt2Ai5BlSmYAVmRhdfjWNm29R+RKM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WgUIMkYXmrYHZYC5wNczTProIVvFgcTKLWvQoHvRYHczvvPDg3rPnIBK7LzVmcE0n
+         j2sWIpfaVOEez9QWrG3LbCZPn93/Z04LqPG+u6K4AjSGXT0dZhLC7iBmyQ1DvpCj8J
+         aIlv/opynJ1eOvPJ9K4LLOXUrHBG2lt9e1cQvnVehAPKBdcaKc1HL2Ir+IF5zgSzeH
+         nNEtrZjNjMOtD+XJSBiJucdgoFWP2WRI3gejTzHIRzWTGW6p6cv5w+BrjPJoHuUL2/
+         QCfTZNU2whkEHUSEriBe7WBqf7wYu/CxIa9umei+JScUpMvYNN0TOFwd/DNjr2246H
+         dS74ZGvaFkXYw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1ol4vE-0004up-Tj; Wed, 19 Oct 2022 10:59:33 +0200
+Date:   Wed, 19 Oct 2022 10:59:32 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Stefan Agner <stefan@agner.ch>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        stable <stable@kernel.org>, regressions@lists.linux.dev,
+        m.szyprowski@samsung.com, krzk@kernel.org
+Subject: Re: [PATCH stable-5.15 3/3] usb: dwc3: disable USB core PHY
+ management
+Message-ID: <Y0+8dKESygFunXOu@hovoldconsulting.com>
+References: <20220906120702.19219-1-johan@kernel.org>
+ <20220906120702.19219-4-johan@kernel.org>
+ <808bdba846bb60456adf10a3016911ee@agner.ch>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <808bdba846bb60456adf10a3016911ee@agner.ch>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-10-19 at 10:51 +0200, AngeloGioacchino Del Regno wrote:
-> Il 17/10/22 09:08, Tinghan Shen ha scritto:
-> > Add venc node for mt8195 SoC.
+On Tue, Oct 18, 2022 at 05:27:24PM +0200, Stefan Agner wrote:
+> Hi Johan,
+> 
+> On 2022-09-06 14:07, Johan Hovold wrote:
+> > From: Johan Hovold <johan+linaro@kernel.org>
 > > 
-> > Signed-off-by: Irui Wang <irui.wang@mediatek.com>
-> > Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
-> > ---
-> >   arch/arm64/boot/dts/mediatek/mt8195.dtsi | 24
-> > ++++++++++++++++++++++++
-> >   1 file changed, 24 insertions(+)
+> > commit 6000b8d900cd5f52fbcd0776d0cc396e88c8c2ea upstream.
 > > 
-> > diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> > b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> > index 903e92d6156f..7cf2f7ef4ec6 100644
-> > --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> > +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> > @@ -2163,6 +2163,30 @@
-> >   			power-domains = <&spm
-> > MT8195_POWER_DOMAIN_VENC>;
-> >   		};
-> >   
-> > +		venc: venc@1a020000 {
+> > The dwc3 driver manages its PHYs itself so the USB core PHY management
+> > needs to be disabled.
+> > 
+> > Use the struct xhci_plat_priv hack added by commits 46034a999c07 ("usb:
+> > host: xhci-plat: add platform data support") and f768e718911e ("usb:
+> > host: xhci-plat: add priv quirk for skip PHY initialization") to
+> > propagate the setting for now.
 > 
-> As Krzysztof also said, this is video-codec@1a020000.
+> [adding also Samsung/ODROID device tree authors Krzysztof and Marek]
 > 
-> Also, there's one more thing... MT8195 has two video encoder cores,
-> but this
-> node is only for the first one. There's a second instance at
-> 0x1b020000: please
-> add it.
-Dear Angelo,
+> For some reason, this commit seems to break detection of the USB to
+> S-ATA controller on ODROID-HC1 devices (Exynos 5422).
+> 
+> We have a known to work OS release of v5.15.60, and known to not be
+> working of v5.15.67. By reverting suspicious commits, I was able to
+> pinpoint the problem to this particular commit.
+> 
+> From what I understand, on that particular hardware the S-ATA controller
+> power is controlled via the V-BUS signal VBUSCTRL_U2 (Schematic [1]).
+> Presumably this signal is no longer controlled with this change.
+> 
+> This came up in our HAOS issue #2153 [2].
 
-The second video encoder core 0x1b020000 is not ready in driver, there
-is only one core 0x1a020000 used, so we don't need add it in current
-patch now.
+Thanks for the report and sorry about the breakage. This wasn't supposed
+to go to stable but Greg thought otherwise (and I helped with the
+backporting to prevent autosel from pulling in even more changes).
 
-Thanks
-Best Regards
-> 
-> Regards,
-> Angelo
-> 
+But at least this way we found out sooner that this platform depends on
+having both USB core and dwc3 managing the same PHY.
 
+I think this may be related to the calibration calls added to dwc3 and
+later removed again by commits:
+
+	d8c80bb3b55b ("phy: exynos5-usbdrd: Calibrate LOS levels for exynos5420/5800")
+	a0a465569b45 ("usb: dwc3: remove generic PHY calibrate() calls")
+
+The removal explicitly mentions that the expectation is that USB core
+will do the PHY calibration.
+
+There could be other changes in the sequencing of events that this
+platform has been implicitly relying on, but as a start, could try
+adding the missing calibration calls (patch below) and see if that makes a
+difference?
+
+Johan
+
+
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index 46cf8edf7f93..f8a0e340eb63 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -198,6 +198,8 @@ static void __dwc3_set_mode(struct work_struct *work)
+                                otg_set_vbus(dwc->usb2_phy->otg, true);
+                        phy_set_mode(dwc->usb2_generic_phy, PHY_MODE_USB_HOST);
+                        phy_set_mode(dwc->usb3_generic_phy, PHY_MODE_USB_HOST);
++                       phy_calibrate(dwc->usb2_generic_phy);
++                       phy_calibrate(dwc->usb3_generic_phy);
+                        if (dwc->dis_split_quirk) {
+                                reg = dwc3_readl(dwc->regs, DWC3_GUCTL3);
+                                reg |= DWC3_GUCTL3_SPLITDISABLE;
+@@ -1369,6 +1371,8 @@ static int dwc3_core_init_mode(struct dwc3 *dwc)
+                        otg_set_vbus(dwc->usb2_phy->otg, true);
+                phy_set_mode(dwc->usb2_generic_phy, PHY_MODE_USB_HOST);
+                phy_set_mode(dwc->usb3_generic_phy, PHY_MODE_USB_HOST);
++               phy_calibrate(dwc->usb2_generic_phy);
++               phy_calibrate(dwc->usb3_generic_phy);
+ 
+                ret = dwc3_host_init(dwc);
+                if (ret)
