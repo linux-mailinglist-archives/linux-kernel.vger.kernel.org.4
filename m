@@ -2,289 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07CDD603919
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 07:14:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4F9060391C
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 07:15:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbiJSFOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 01:14:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35398 "EHLO
+        id S229756AbiJSFPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 01:15:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbiJSFOb (ORCPT
+        with ESMTP id S229489AbiJSFPD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 01:14:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9570A95B8
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 22:14:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666156468;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=elWLeuJKIZ4oJu/GVv8j/7xLvrjS+NMtbQ72eCBOoSw=;
-        b=jUpscYdczdWmtKZn85NyMYHvFhhRlTZuWZYjqUcT/1HYujy93PW7phd63y7H5uLaKpxDwu
-        TrpVNYU++bjFmRnw2klUBqoLcipDuBu1nWE1tcc6i5H9ecvbG8bKaZBhTveT9pFzR/1MW4
-        Xs7+QAPxp42Q61/t3uPPpIKRbfTcdDg=
-Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com
- [209.85.210.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-183-kEDLbcL7P_CoZUmB95_M3w-1; Wed, 19 Oct 2022 01:14:27 -0400
-X-MC-Unique: kEDLbcL7P_CoZUmB95_M3w-1
-Received: by mail-pf1-f198.google.com with SMTP id o14-20020a056a00214e00b0056238ef46ebso8842249pfk.2
-        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 22:14:27 -0700 (PDT)
+        Wed, 19 Oct 2022 01:15:03 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D6233858
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 22:15:01 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id b2so15882749plc.7
+        for <linux-kernel@vger.kernel.org>; Tue, 18 Oct 2022 22:15:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=2MDTOj7x55gi8T/5qGxJNdcvudsMBqVqaN52jivhMBc=;
+        b=Nubc/N1WRcDHtWF9V6+h+4CPl5kouEUj4EcmfnZWlxwW4e1BlEmfiLrSadFlLs+reM
+         2fqDm5Jm1Qi157SpJ2/88LV5UiISnGmQGwrCn4oP+HnUMAU/+VovrF+9pBsNfSdB8ml1
+         duxb/A7vMs5uQ1rV9vnIbizTUVMqSOLE6nlhc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=elWLeuJKIZ4oJu/GVv8j/7xLvrjS+NMtbQ72eCBOoSw=;
-        b=VWa9aBnIOgUy1uXBuXCP6LKCl8+uYTwDQdwrLaYvJv7tgPpdgJdPlXo5/ZjhKFmqvF
-         5QhWwWA3EA+LHOa3ZeW7GMYIv3fv3uNf+I7vXCSHqunRWD0xIQA6Stx5PMpfeJ9Pmirh
-         UpG1jJ7EvA8MPB2+yHBcxsj3pol2PaQuAOYts8+Pq9WVraKCB8pbHGur9LrauvCMIUUF
-         8gGQJ4w5VM+dlKfOX00CLMavpooN6kcXspXr2/u4unKLCcy8yr7m8z8GyYGQ4ipyqArX
-         U7h3KKAB7EkZLxfT8bVASZT/NsF7XtI+CnOMNb3Qmm5kWLo3/S2GT6u6xMaLCGu+oS4x
-         ELhA==
-X-Gm-Message-State: ACrzQf1kPN1D1CvXwe+xoUDhYZjrgOJ6CLdFrJgqTx6poYb8lY8vAWdy
-        W1lAhk70PIS7qpi5v9VRJOpjklqtJ2jqHIMkCip4ffpyO252mez8uXz2/2hDn5t9W2K5mWJ8x4f
-        Gum5JQEnhQOZGLwgXuJkGDJTC
-X-Received: by 2002:a05:6a00:168e:b0:53b:3f2c:3213 with SMTP id k14-20020a056a00168e00b0053b3f2c3213mr6616144pfc.56.1666156464636;
-        Tue, 18 Oct 2022 22:14:24 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5Hvcr/I9EH7SdGoInjE6Qebm/YSK0Gmhj8yliMC/8ZMVpkTInJy4XKE5CCKWujd1Hid7apSg==
-X-Received: by 2002:a17:902:ce91:b0:183:610c:1df3 with SMTP id f17-20020a170902ce9100b00183610c1df3mr6401359plg.51.1666156453588;
-        Tue, 18 Oct 2022 22:14:13 -0700 (PDT)
-Received: from [10.72.12.164] ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id n19-20020a170902d0d300b0018658badef3sm45961pln.232.2022.10.18.22.14.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Oct 2022 22:14:12 -0700 (PDT)
-Message-ID: <33449319-b984-a60b-50e2-a0080a62f1c1@redhat.com>
-Date:   Wed, 19 Oct 2022 13:14:08 +0800
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2MDTOj7x55gi8T/5qGxJNdcvudsMBqVqaN52jivhMBc=;
+        b=Sbtdo3FuRfdwMiYzeexAR5mwiOkgfllcbl6CkqLBWBHbGWZEpeTlgy+BwGlosk34Bk
+         Pw7WsEf1344/IJAevePtRlD0Wz6A2ErbR9VJB/dR6bisgK+RXDhsB7R7AnAwJgIQcDTc
+         Nlv8kODJr25MsphC8/VlDL8eZVAEJPxLrTM0AfaRbDBlgzwVath9QPGZXGPtFEIqkB/c
+         57do3VEsfLtlL9ry4NLs/Nx83+Z6WKtQsFyA5mYKktw3ADLjx3AFRpsxl++ULd7jaLwv
+         0BmveJ0UGUxVwZvLSlgWBqkM+bOPq9GkbL+F/0w8Hzjps2mRg48EeztOLo+Bs9yjO9WR
+         N86g==
+X-Gm-Message-State: ACrzQf3KwPfQo6cNwevR9q148pyyAm2LJ0nxCtazplPs/3nUGhbGQjSq
+        MH0YWk7RJ9AC6D7YgtP5HPOm1Q==
+X-Google-Smtp-Source: AMsMyM7Xi5W1uehLbIxbs1T6YqB95QnOK0f9z9Zo1GDqOH5j3jJVj8isKdQZQkU6sOwZf+hERBRPKw==
+X-Received: by 2002:a17:90b:3912:b0:20d:4151:1b65 with SMTP id ob18-20020a17090b391200b0020d41511b65mr43880234pjb.233.1666156501455;
+        Tue, 18 Oct 2022 22:15:01 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id p65-20020a625b44000000b0053e4296e1d3sm10197153pfb.198.2022.10.18.22.15.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Oct 2022 22:15:00 -0700 (PDT)
+Date:   Tue, 18 Oct 2022 22:14:59 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, Sami Tolvanen <samitolvanen@google.com>,
+        Joao Moreira <joao@overdrivepizza.com>,
+        linux-kernel@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: Re: [PATCH] x86/ibt: Implement FineIBT
+Message-ID: <202210182206.8B707407@keescook>
+References: <Y06rtoE9BsERG9uv@hirez.programming.kicks-ass.net>
+ <202210181020.79AF7F7@keescook>
+ <Y08E9DgGD0lPB85O@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.1
-Subject: Re: [PATCH 3/4] vdpa/mlx5: Add debugfs subtree
-Content-Language: en-US
-To:     Eli Cohen <elic@nvidia.com>, mst@redhat.com,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-Cc:     si-wei.liu@oracle.com, eperezma@redhat.com, lulu@redhat.com
-References: <20221018111232.4021-1-elic@nvidia.com>
- <20221018111232.4021-4-elic@nvidia.com>
-From:   Jason Wang <jasowang@redhat.com>
-In-Reply-To: <20221018111232.4021-4-elic@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y08E9DgGD0lPB85O@hirez.programming.kicks-ass.net>
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Oct 18, 2022 at 09:56:36PM +0200, Peter Zijlstra wrote:
+> On Tue, Oct 18, 2022 at 11:09:13AM -0700, Kees Cook wrote:
+> > > +config FINEIBT
+> > > +	def_bool y
+> > > +	depends on X86_KERNEL_IBT && CFI_CLANG
+> > > +	select CALL_PADDING
+> > 
+> > To that end, can we please make this a prompted choice?
+> 
+> How about something like so instead?
 
-在 2022/10/18 19:12, Eli Cohen 写道:
-> Add debugfs subtree and expose flow table ID and TIR number. This
-> information can be used by external tools to do extended
-> troubleshooting.
->
-> The information can be retrieved like so:
-> $ cat /sys/kernel/debug/mlx5/mlx5_core.sf.1/vdpa-0/rx/table_id
-> $ cat /sys/kernel/debug/mlx5/mlx5_core.sf.1/vdpa-0/rx/tirn
+/me throws a party :)
+
+I can imagine the case where someone will want a CONFIG to choose the
+default, but yes, I love it. Thank you!
+
+For example:
+
+enum cfi_mode {
+	CFI_OFF = 0,
+	CFI_KCFI = 1,
+	CFI_FINEIBT = 2,
+};
+
+#define CFI_DEFAULT	CONFIG_CFI_MODE
 
 
-I wonder if we need a config option for this.
+choice
+	prompt "CFI mode" if expert
+	default CFI_MODE_FINEIBT
 
-And if it's better to use vendor stats.
+	config CFI_MODE_FINEIBT
+		bool "FineIBT"
+        config CFI_MODE_KCFI
+		bool "kCFI"
+	config CFI_MODE_OFF
+		bool "CFI disabled"
+endchoice
 
-Thanks
+config CFI_MODE
+	int
+	default "0" if CFI_MODE_OFF
+	default "1" if CFI_MODE_KCFI
+	default "2"
 
 
->
-> Signed-off-by: Eli Cohen <elic@nvidia.com>
-> ---
->   drivers/vdpa/mlx5/Makefile        |  2 +-
->   drivers/vdpa/mlx5/net/debug.c     | 66 +++++++++++++++++++++++++++++++
->   drivers/vdpa/mlx5/net/mlx5_vnet.c | 11 ++++++
->   drivers/vdpa/mlx5/net/mlx5_vnet.h |  9 +++++
->   4 files changed, 87 insertions(+), 1 deletion(-)
->   create mode 100644 drivers/vdpa/mlx5/net/debug.c
->
-> diff --git a/drivers/vdpa/mlx5/Makefile b/drivers/vdpa/mlx5/Makefile
-> index f717978c83bf..e791394c33e3 100644
-> --- a/drivers/vdpa/mlx5/Makefile
-> +++ b/drivers/vdpa/mlx5/Makefile
-> @@ -1,4 +1,4 @@
->   subdir-ccflags-y += -I$(srctree)/drivers/vdpa/mlx5/core
->   
->   obj-$(CONFIG_MLX5_VDPA_NET) += mlx5_vdpa.o
-> -mlx5_vdpa-$(CONFIG_MLX5_VDPA_NET) += net/mlx5_vnet.o core/resources.o core/mr.o
-> +mlx5_vdpa-$(CONFIG_MLX5_VDPA_NET) += net/mlx5_vnet.o core/resources.o core/mr.o net/debug.o
-> diff --git a/drivers/vdpa/mlx5/net/debug.c b/drivers/vdpa/mlx5/net/debug.c
-> new file mode 100644
-> index 000000000000..95e4801df211
-> --- /dev/null
-> +++ b/drivers/vdpa/mlx5/net/debug.c
-> @@ -0,0 +1,66 @@
-> +// SPDX-License-Identifier: GPL-2.0 OR Linux-OpenIB
-> +/* Copyright (c) 2022, NVIDIA CORPORATION & AFFILIATES. All rights reserved. */
-> +
-> +#include <linux/debugfs.h>
-> +#include <linux/mlx5/fs.h>
-> +#include "mlx5_vnet.h"
-> +
-> +static int tirn_show(struct seq_file *file, void *priv)
-> +{
-> +	struct mlx5_vdpa_net *ndev = file->private;
-> +
-> +	seq_printf(file, "0x%x\n", ndev->res.tirn);
-> +	return 0;
-> +}
-> +
-> +DEFINE_SHOW_ATTRIBUTE(tirn);
-> +
-> +void mlx5_vdpa_remove_tirn(struct mlx5_vdpa_net *ndev)
-> +{
-> +	if (ndev->debugfs)
-> +		debugfs_remove(ndev->res.tirn_dent);
-> +}
-> +
-> +void mlx5_vdpa_add_tirn(struct mlx5_vdpa_net *ndev)
-> +{
-> +	ndev->res.tirn_dent = debugfs_create_file("tirn", 0444, ndev->rx_dent,
-> +						  ndev, &tirn_fops);
-> +}
-> +
-> +static int rx_flow_table_show(struct seq_file *file, void *priv)
-> +{
-> +	struct mlx5_vdpa_net *ndev = file->private;
-> +
-> +	seq_printf(file, "0x%x\n", mlx5_flow_table_id(ndev->rxft));
-> +	return 0;
-> +}
-> +
-> +DEFINE_SHOW_ATTRIBUTE(rx_flow_table);
-> +
-> +void mlx5_vdpa_remove_rx_flow_table(struct mlx5_vdpa_net *ndev)
-> +{
-> +	if (ndev->debugfs)
-> +		debugfs_remove(ndev->rx_table_dent);
-> +}
-> +
-> +void mlx5_vdpa_add_rx_flow_table(struct mlx5_vdpa_net *ndev)
-> +{
-> +	ndev->rx_table_dent = debugfs_create_file("table_id", 0444, ndev->rx_dent,
-> +						  ndev, &rx_flow_table_fops);
-> +}
-> +
-> +void mlx5_vdpa_add_debugfs(struct mlx5_vdpa_net *ndev)
-> +{
-> +	struct mlx5_core_dev *mdev;
-> +
-> +	mdev = ndev->mvdev.mdev;
-> +	ndev->debugfs = debugfs_create_dir(dev_name(&ndev->mvdev.vdev.dev),
-> +					   mlx5_debugfs_get_dev_root(mdev));
-> +	if (!IS_ERR(ndev->debugfs))
-> +		ndev->rx_dent = debugfs_create_dir("rx", ndev->debugfs);
-> +}
-> +
-> +void mlx5_vdpa_remove_debugfs(struct dentry *dbg)
-> +{
-> +	debugfs_remove_recursive(dbg);
-> +}
-> diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-> index 64fdb940380f..ee50da33e25b 100644
-> --- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
-> +++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-> @@ -1388,11 +1388,16 @@ static int create_tir(struct mlx5_vdpa_net *ndev)
->   
->   	err = mlx5_vdpa_create_tir(&ndev->mvdev, in, &ndev->res.tirn);
->   	kfree(in);
-> +	if (err)
-> +		return err;
-> +
-> +	mlx5_vdpa_add_tirn(ndev);
->   	return err;
->   }
->   
->   static void destroy_tir(struct mlx5_vdpa_net *ndev)
->   {
-> +	mlx5_vdpa_remove_tirn(ndev);
->   	mlx5_vdpa_destroy_tir(&ndev->mvdev, ndev->res.tirn);
->   }
->   
-> @@ -1576,6 +1581,7 @@ static int setup_steering(struct mlx5_vdpa_net *ndev)
->   		mlx5_vdpa_warn(&ndev->mvdev, "failed to create flow table\n");
->   		return PTR_ERR(ndev->rxft);
->   	}
-> +	mlx5_vdpa_add_rx_flow_table(ndev);
->   
->   	err = mac_vlan_add(ndev, ndev->config.mac, 0, false);
->   	if (err)
-> @@ -1584,6 +1590,7 @@ static int setup_steering(struct mlx5_vdpa_net *ndev)
->   	return 0;
->   
->   err_add:
-> +	mlx5_vdpa_remove_rx_flow_table(ndev);
->   	mlx5_destroy_flow_table(ndev->rxft);
->   	return err;
->   }
-> @@ -1591,6 +1598,7 @@ static int setup_steering(struct mlx5_vdpa_net *ndev)
->   static void teardown_steering(struct mlx5_vdpa_net *ndev)
->   {
->   	clear_mac_vlan_table(ndev);
-> +	mlx5_vdpa_remove_rx_flow_table(ndev);
->   	mlx5_destroy_flow_table(ndev->rxft);
->   }
->   
-> @@ -3167,6 +3175,7 @@ static int mlx5_vdpa_dev_add(struct vdpa_mgmt_dev *v_mdev, const char *name,
->   	if (err)
->   		goto err_reg;
->   
-> +	mlx5_vdpa_add_debugfs(ndev);
->   	mgtdev->ndev = ndev;
->   	return 0;
->   
-> @@ -3193,6 +3202,8 @@ static void mlx5_vdpa_dev_del(struct vdpa_mgmt_dev *v_mdev, struct vdpa_device *
->   	struct mlx5_vdpa_net *ndev = to_mlx5_vdpa_ndev(mvdev);
->   	struct workqueue_struct *wq;
->   
-> +	mlx5_vdpa_remove_debugfs(ndev->debugfs);
-> +	ndev->debugfs = NULL;
->   	if (ndev->nb_registered) {
->   		mlx5_notifier_unregister(mvdev->mdev, &ndev->nb);
->   		ndev->nb_registered = false;
-> diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.h b/drivers/vdpa/mlx5/net/mlx5_vnet.h
-> index 6691c879a6ca..f2cef3925e5b 100644
-> --- a/drivers/vdpa/mlx5/net/mlx5_vnet.h
-> +++ b/drivers/vdpa/mlx5/net/mlx5_vnet.h
-> @@ -16,6 +16,7 @@ struct mlx5_vdpa_net_resources {
->   	u32 tirn;
->   	u32 rqtn;
->   	bool valid;
-> +	struct dentry *tirn_dent;
->   };
->   
->   #define MLX5V_MACVLAN_SIZE 256
-> @@ -43,6 +44,7 @@ struct mlx5_vdpa_net {
->   	struct vdpa_callback config_cb;
->   	struct mlx5_vdpa_wq_ent cvq_ent;
->   	struct hlist_head macvlan_hash[MLX5V_MACVLAN_SIZE];
-> +	struct dentry *debugfs;
->   };
->   
->   struct macvlan_node {
-> @@ -52,4 +54,11 @@ struct macvlan_node {
->   	u64 macvlan;
->   };
->   
-> +void mlx5_vdpa_add_debugfs(struct mlx5_vdpa_net *ndev);
-> +void mlx5_vdpa_remove_debugfs(struct dentry *dbg);
-> +void mlx5_vdpa_add_rx_flow_table(struct mlx5_vdpa_net *ndev);
-> +void mlx5_vdpa_remove_rx_flow_table(struct mlx5_vdpa_net *ndev);
-> +void mlx5_vdpa_add_tirn(struct mlx5_vdpa_net *ndev);
-> +void mlx5_vdpa_remove_tirn(struct mlx5_vdpa_net *ndev);
-> +
->   #endif /* __MLX5_VNET_H__ */
-
+-- 
+Kees Cook
