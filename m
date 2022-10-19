@@ -2,86 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21AFE604CB9
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 18:06:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7921A604CBC
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 18:06:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230020AbiJSQGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 12:06:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60730 "EHLO
+        id S229788AbiJSQG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 12:06:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229795AbiJSQFb (ORCPT
+        with ESMTP id S231361AbiJSQFv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 12:05:31 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2854826D7;
-        Wed, 19 Oct 2022 09:04:24 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
- id 72dc682b41a07469; Wed, 19 Oct 2022 18:03:35 +0200
-Received: from kreacher.localnet (unknown [213.134.188.148])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 902B06669D5;
-        Wed, 19 Oct 2022 18:03:34 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        linux-rtc@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Todd Brandt <todd.e.brandt@linux.intel.com>
-Subject: [PATCH] rtc: rtc-cmos: Fix compilation with CONFIG_ACPI unset
-Date:   Wed, 19 Oct 2022 18:03:33 +0200
-Message-ID: <2677035.mvXUDI8C0e@kreacher>
+        Wed, 19 Oct 2022 12:05:51 -0400
+Received: from smtpdh19-2.aruba.it (smtpdh19-2.aruba.it [62.149.155.149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 495CBC2CA1
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 09:04:40 -0700 (PDT)
+Received: from localhost.localdomain ([146.241.87.206])
+        by Aruba Outgoing Smtp  with ESMTPSA
+        id lBYBoox5FSmRKlBYCoDstr; Wed, 19 Oct 2022 18:04:13 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+        t=1666195453; bh=GOiiI3+8vXjlQ7VXBWeCNN1srDCedk1v4RecNZAv7pg=;
+        h=From:To:Subject:Date:MIME-Version;
+        b=jTRQ/WLvghaA9QEMvIRdKd+hiS4Qa6RO6qs8uiyvxaGqYZxRtJkUZex89uzrTdBK5
+         hMIMwjMtj6C0TMIgeOFvx0oB8nE5OgaiOfqW/8vmtMiOIue9sf5E6aczbWtkiYPLfP
+         gfG7CmUVm/3pJqwsGxjeQMr3Wla7HXTPqRAMV1E7WbKGIZVzDhtqj0tEK4NrbuSljr
+         F5+rHChwbe6lfsDoZCFwawO3Wbcj2ExS7b5QY2iQAvZXw5KBM6Se0Rl2bGfzRmNTk1
+         5lrpiSgdAk0ITe6oDBZhdb3qNqj8JG9CPaRYX7U5MYHrbGFuJSPKTa4rRYN1D2QgLm
+         U6YGyGJACGTIA==
+From:   Giulio Benetti <giulio.benetti@benettiengineering.com>
+To:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Song Liu <song@kernel.org>,
+        =?UTF-8?q?Dirk=20M=C3=BCller?= <dmueller@suse.de>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        Giulio Benetti <giulio.benetti@benettiengineering.com>,
+        Christoph Hellwig <hch@infradead.org>
+Subject: [PATCH] lib/raid6: drop RAID6_USE_EMPTY_ZERO_PAGE
+Date:   Wed, 19 Oct 2022 18:04:07 +0200
+Message-Id: <20221019160407.7550-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <Y0/Yt4uJWg4knNoc@infradead.org>
+References: <Y0/Yt4uJWg4knNoc@infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.188.148
-X-CLIENT-HOSTNAME: 213.134.188.148
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrfeelgedgleehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepffffffekgfehheffleetieevfeefvefhleetjedvvdeijeejledvieehueevueffnecukfhppedvudefrddufeegrddukeekrddugeeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudekkedrudegkedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepuddupdhrtghpthhtoheprghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomhdprhgtphhtthhopegrrdiiuhhmmhhosehtohifvghrthgvtghhrdhithdprhgtphhtthhopehmrghrihhordhlihhmohhntghivghllhhosegrmhgurdgtohhmpdhrtghpthhtoheplhhinhhugidqrhhttgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphht
- thhopehhvghlghgrrghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehmghhorhhmrghnsehtvggthhhsihhnghhulhgrrhhithihrdhnvghtpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomhdprhgtphhtthhopehtohguugdrvgdrsghrrghnughtsehlihhnuhigrdhinhhtvghlrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=11 Fuz1=11 Fuz2=11
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4xfAG43ZSehpx2rzMtQ4WywAEY4w2w7pXjnboijBNvBg2L2b5faGjDfm7J/rWud9TgVdySsulvWquaGuvW9ztb2o5BitM3DsE/uaGn+77CpdMIhUgLmgbm
+ wG878r2326b18l0Ht3VRVev/Tod4w+s3XZhcx8Sb6ChaoD5KVTaKzTO635Jz2xFiGXDMwdTAyB3zcYrDs5OZ9nVMYmfA5R8abLEE0NUMvzzKWLvy3luA/gLu
+ 1NqtznKBoeA0lDf50Vd/8Fx6aZdOs+g9EzwTMW6HFUr92PwAuMrSryqt8aiguWvufsVo9+nfxyqJsE6KxLcfT244CWi3ewNHIPfNF14iLTjbb5JiRZ09PRtX
+ NXiInngJqqehS9OizZGFF1nXpSy8xSvD6GqTfU9JzsDdZPttRGxYjiBsHz6cMR5S8iFYEtp4+bhneaz0I2s0zZ4J4Wkaow==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+RAID6_USE_EMPTY_ZERO_PAGE is unused and hardcoded to 0, so let's drop it.
 
-After commit 0782b66ed2fb ("rtc: rtc-cmos: Fix wake alarm breakage")
-the driver won't build with CONFIG_ACPI unset due to a missing stub
-definition of rtc_wake_setup(), so fix that.
-
-Fixes: 0782b66ed2fb ("rtc: rtc-cmos: Fix wake alarm breakage")
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- drivers/rtc/rtc-cmos.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ include/linux/raid/pq.h | 8 --------
+ lib/raid6/algos.c       | 2 --
+ 2 files changed, 10 deletions(-)
 
-Index: linux-pm/drivers/rtc/rtc-cmos.c
-===================================================================
---- linux-pm.orig/drivers/rtc/rtc-cmos.c
-+++ linux-pm/drivers/rtc/rtc-cmos.c
-@@ -1337,6 +1337,10 @@ static void cmos_check_acpi_rtc_status(s
+diff --git a/include/linux/raid/pq.h b/include/linux/raid/pq.h
+index d6e5a1feb947..f29aaaf2eb21 100644
+--- a/include/linux/raid/pq.h
++++ b/include/linux/raid/pq.h
+@@ -10,17 +10,9 @@
  
+ #ifdef __KERNEL__
+ 
+-/* Set to 1 to use kernel-wide empty_zero_page */
+-#define RAID6_USE_EMPTY_ZERO_PAGE 0
+ #include <linux/blkdev.h>
+ 
+-/* We need a pre-zeroed page... if we don't want to use the kernel-provided
+-   one define it here */
+-#if RAID6_USE_EMPTY_ZERO_PAGE
+-# define raid6_empty_zero_page empty_zero_page
+-#else
+ extern const char raid6_empty_zero_page[PAGE_SIZE];
+-#endif
+ 
+ #else /* ! __KERNEL__ */
+ /* Used for testing in user space */
+diff --git a/lib/raid6/algos.c b/lib/raid6/algos.c
+index 39b74221f4a7..a22a05c9af8a 100644
+--- a/lib/raid6/algos.c
++++ b/lib/raid6/algos.c
+@@ -18,12 +18,10 @@
  #else
+ #include <linux/module.h>
+ #include <linux/gfp.h>
+-#if !RAID6_USE_EMPTY_ZERO_PAGE
+ /* In .bss so it's zeroed */
+ const char raid6_empty_zero_page[PAGE_SIZE] __attribute__((aligned(256)));
+ EXPORT_SYMBOL(raid6_empty_zero_page);
+ #endif
+-#endif
  
-+static inline void rtc_wake_setup(struct device *dev)
-+{
-+}
-+
- static void cmos_wake_setup(struct device *dev)
- {
- }
-
-
+ struct raid6_calls raid6_call;
+ EXPORT_SYMBOL_GPL(raid6_call);
+-- 
+2.34.1
 
