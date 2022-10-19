@@ -2,101 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4D616050FC
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 22:06:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70B3D605100
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 22:07:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230307AbiJSUGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 16:06:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49770 "EHLO
+        id S230242AbiJSUHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 16:07:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230467AbiJSUF6 (ORCPT
+        with ESMTP id S230133AbiJSUHO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 16:05:58 -0400
-Received: from smtp-bc0e.mail.infomaniak.ch (smtp-bc0e.mail.infomaniak.ch [IPv6:2001:1600:4:17::bc0e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07EFC18BE20
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 13:05:55 -0700 (PDT)
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Mt1v13XXkzMq4cH;
-        Wed, 19 Oct 2022 22:05:49 +0200 (CEST)
-Received: from localhost (unknown [23.97.221.149])
-        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4Mt1v06dk9zxH;
-        Wed, 19 Oct 2022 22:05:48 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1666209949;
-        bh=dLhBf8o1kXqp6sscAfSz5LKvdc7yEb7Q8TYdJPkHjFU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=AoGSdmPF2lFsibBkqhvB5eYH60CouLgJ8QYefj+ta77rUi4JMemlGJVAt8EPpPaCk
-         P+tS6NSCCXlNSCOxMpSJa4uhMtesUp5+kVEmXqiUFqIhu0KYl9/3fEoekhY7JwKyEr
-         r1uI/wobcxe+Eb9kYM0tZ2vS3YpOOh+RzjhTgB6U=
-From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Guillaume Tucker <guillaume.tucker@collabora.com>,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, stable@vger.kernel.org
-Subject: [PATCH v1] selftests/landlock: Build without static libraries
-Date:   Wed, 19 Oct 2022 22:05:36 +0200
-Message-Id: <20221019200536.2771316-1-mic@digikod.net>
+        Wed, 19 Oct 2022 16:07:14 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2737E190E68;
+        Wed, 19 Oct 2022 13:07:13 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id c20so23606822ljj.7;
+        Wed, 19 Oct 2022 13:07:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :references:in-reply-to:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=b7CNOQx77jxJkr8fo3A8KqRmFLYVGew+7knPtLNO80g=;
+        b=awEFpEhcqOyuVVRGI60VVcsY5M+7n3ldfd1Do6gZB1LMVB3KIviAIQVoo0kYWTOHT8
+         XM1MHj97CJzRipIruN5JqNCyKjUeAGAXbhnVmtZadyZlm7K0obdKSz1nbZdSRur3DoiH
+         WpM0+oRZ17FZSFdsb0BHFWIRMTSgulfz/o0MFuuo3sKFZvdXVpgc1Z4QW6TK+DhHBE9/
+         8VNXsPpSviKl/qU0YqAEakVFHyvMzyztSAOEde/r0NLVMzhuD+Ni1F2qG/zPZruDeEFL
+         m5TGE/5ApV7g8brCcqclP/YXzChpw8AOm4ewYdXBFs/i/pe8Uw/3y84IWfdoPmZ3poQ0
+         480Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :references:in-reply-to:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=b7CNOQx77jxJkr8fo3A8KqRmFLYVGew+7knPtLNO80g=;
+        b=PayZpNq2ycENY9bUxVfSVAwasNJQt0K4LjohFgKzsZjim0lFoEeQN1sKiZ8ZodkdRR
+         UNlxzEK+W9Mp/ZFiiJ5b/RNnBASaD/TvM3+dhp0F4/zY5GkuHkvk215/tEYAJ8LvojuA
+         CHuofo5ZuT1PJv8Eeq2wdOglOYz6NrLjM+v+0IjiZZhtHDLRMeI6+vCYxqg+2VNlz/uT
+         wzAUSqvL7rNMVUwuk6/3W2Af2ZFgJwFQbUWhz9eASsI8ozfDVRghI9Yy5acns+ivjjx9
+         pkSg0gFib5ETT2bWCISqVYElm4ZSnjK5TnKXpdxOr4KXo9GkymwH07bI7YndEWr1uB30
+         Q15g==
+X-Gm-Message-State: ACrzQf0AiqgujliC3byscTf3l7TSQvx/KVPSApIli4r/9OC6mo05mlyv
+        7kcj6eMcwOA92dSvNp4kqDsDIz6DlDA6uCkAa9w=
+X-Google-Smtp-Source: AMsMyM6sYCtQ57vM1AQbbV3fxrVxnMWB0NyC+Rv9m+1OQN0e2gDL0yS2/jvhhkzrg5lQMHkx2CWA73bYz/FN+wz9pwU=
+X-Received: by 2002:a2e:2a03:0:b0:26d:ff37:f731 with SMTP id
+ q3-20020a2e2a03000000b0026dff37f731mr3316534ljq.25.1666210031367; Wed, 19 Oct
+ 2022 13:07:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Received: by 2002:ab3:5411:0:b0:1f6:575a:5fb7 with HTTP; Wed, 19 Oct 2022
+ 13:07:10 -0700 (PDT)
+In-Reply-To: <Y1BXQlu+JOoJi6Yk@elver.google.com>
+References: <20220915150417.722975-19-glider@google.com> <20221019173620.10167-1-youling257@gmail.com>
+ <CAOzgRda_CToTVicwxx86E7YcuhDTcayJR=iQtWQ3jECLLhHzcg@mail.gmail.com>
+ <CANpmjNMPKokoJVFr9==-0-+O1ypXmaZnQT3hs4Ys0Y4+o86OVA@mail.gmail.com>
+ <CAOzgRdbbVWTWR0r4y8u5nLUeANA7bU-o5JxGCHQ3r7Ht+TCg1Q@mail.gmail.com> <Y1BXQlu+JOoJi6Yk@elver.google.com>
+From:   youling 257 <youling257@gmail.com>
+Date:   Thu, 20 Oct 2022 04:07:10 +0800
+Message-ID: <CAOzgRdY6KSxDMRJ+q2BWHs4hRQc5y-PZ2NYG++-AMcUrO8YOgA@mail.gmail.com>
+Subject: Re: [PATCH v7 18/43] instrumented.h: add KMSAN support
+To:     Marco Elver <elver@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
+        linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The only (forced) static test binary doesn't depend on libcap.  Because
-using -lcap on systems that don't have such static library would fail
-(e.g. on Arch Linux), let's be more specific and require only dynamic
-libcap linking.
+That is i did,i already test, remove "u64 __tmp=E2=80=A6kmsan_unpoison_memo=
+ry", no help.
+i only remove kmsan_copy_to_user, fix my issue.
 
-Fixes: a52540522c95 ("selftests/landlock: Fix out-of-tree builds")
-Cc: Anders Roxell <anders.roxell@linaro.org>
-Cc: Guillaume Tucker <guillaume.tucker@collabora.com>
-Cc: Mark Brown <broonie@kernel.org>
-Cc: Shuah Khan <skhan@linuxfoundation.org>
-Cc: stable@vger.kernel.org
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
-Link: https://lore.kernel.org/r/20221019200536.2771316-1-mic@digikod.net
----
- tools/testing/selftests/landlock/Makefile | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/landlock/Makefile b/tools/testing/selftests/landlock/Makefile
-index 6632bfff486b..348e2dbdb4e0 100644
---- a/tools/testing/selftests/landlock/Makefile
-+++ b/tools/testing/selftests/landlock/Makefile
-@@ -3,7 +3,6 @@
- # First run: make -C ../../../.. headers_install
- 
- CFLAGS += -Wall -O2 $(KHDR_INCLUDES)
--LDLIBS += -lcap
- 
- LOCAL_HDRS += common.h
- 
-@@ -13,10 +12,12 @@ TEST_GEN_PROGS := $(src_test:.c=)
- 
- TEST_GEN_PROGS_EXTENDED := true
- 
--# Static linking for short targets:
-+# Short targets:
-+$(TEST_GEN_PROGS): LDLIBS += -lcap
- $(TEST_GEN_PROGS_EXTENDED): LDFLAGS += -static
- 
- include ../lib.mk
- 
--# Static linking for targets with $(OUTPUT)/ prefix:
-+# Targets with $(OUTPUT)/ prefix:
-+$(TEST_GEN_PROGS): LDLIBS += -lcap
- $(TEST_GEN_PROGS_EXTENDED): LDFLAGS += -static
-
-base-commit: 9abf2313adc1ca1b6180c508c25f22f9395cc780
--- 
-2.37.2
-
+2022-10-20 4:00 GMT+08:00, Marco Elver <elver@google.com>:
+> On Thu, Oct 20, 2022 at 03:29AM +0800, youling 257 wrote:
+> [...]
+>> > What arch?
+>> > If x86, can you try to revert only the change to
+>> > instrument_get_user()? (I wonder if the u64 conversion is causing
+>> > issues.)
+>> >
+>> arch x86, this's my revert,
+>> https://github.com/youling257/android-mainline/commit/401cbfa61cbfc20c87=
+a5be8e2dda68ac5702389f
+>> i tried different revert, have to remove kmsan_copy_to_user.
+>
+> There you reverted only instrument_put_user() - does it fix the issue?
+>
+> If not, can you try only something like this (only revert
+> instrument_get_user()):
+>
+> diff --git a/include/linux/instrumented.h b/include/linux/instrumented.h
+> index 501fa8486749..dbe3ec38d0e6 100644
+> --- a/include/linux/instrumented.h
+> +++ b/include/linux/instrumented.h
+> @@ -167,9 +167,6 @@ instrument_copy_from_user_after(const void *to, const
+> void __user *from,
+>   */
+>  #define instrument_get_user(to)				\
+>  ({							\
+> -	u64 __tmp =3D (u64)(to);				\
+> -	kmsan_unpoison_memory(&__tmp, sizeof(__tmp));	\
+> -	to =3D __tmp;					\
+>  })
+>
+>
+> Once we know which one of these is the issue, we can figure out a proper
+> fix.
+>
+> Thanks,
+>
+> -- Marco
+>
