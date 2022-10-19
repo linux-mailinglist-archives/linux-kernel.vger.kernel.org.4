@@ -2,127 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3605C604517
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 14:21:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFC896046D6
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 15:21:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231838AbiJSMVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 08:21:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46236 "EHLO
+        id S232084AbiJSNVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 09:21:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233267AbiJSMTm (ORCPT
+        with ESMTP id S231767AbiJSNVM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 08:19:42 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B7F565668;
-        Wed, 19 Oct 2022 04:55:22 -0700 (PDT)
-X-UUID: 9e2244b9f5e1430cbb49fe1ac3ce02b5-20221019
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=F+3N5jdI5Vdo+TGFz2Tt3Kx3wcLZK4tfh0R6kaTzfo4=;
-        b=PjTvdmEHWiqw09J54bOAxr1dmCDvPJISe4/WmVzzTmy5hNfTZ22RP0DMYxSQunnyICJEYduLDEr+nrt+ZSLaCD+Vf+fWvG1hG+tfrEH40/aTzC9dII87b5bK3XosHeM9kzlV7tqv8JoNvMYN5T1ltkY+UGPM/C1AffgYpM0dC4o=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.12,REQID:e22817f7-e0fa-4f0c-95dd-0fb874ae3dbf,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:40
-X-CID-INFO: VERSION:1.1.12,REQID:e22817f7-e0fa-4f0c-95dd-0fb874ae3dbf,IP:0,URL
-        :0,TC:0,Content:-5,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:40
-X-CID-META: VersionHash:62cd327,CLOUDID:37c34aa3-73e4-48dd-a911-57b5d5484f14,B
-        ulkID:2210191807288342RCAR,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48|102,
-        TC:nil,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,C
-        OL:0
-X-UUID: 9e2244b9f5e1430cbb49fe1ac3ce02b5-20221019
-Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw01.mediatek.com
-        (envelope-from <irui.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 318839224; Wed, 19 Oct 2022 18:07:28 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Wed, 19 Oct 2022 18:07:26 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 19 Oct 2022 18:07:25 +0800
-Message-ID: <d264de2367a777e310b0824fb2e04bfb37d46d3d.camel@mediatek.com>
-Subject: Re: [PATCH] media: mediatek: vcodec: Skip unsupported h264 encoder
- profile
-From:   Irui Wang <irui.wang@mediatek.com>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        <angelogioacchino.delregno@collabora.com>,
-        <nicolas.dufresne@collabora.com>
-CC:     Maoguang Meng <maoguang.meng@mediatek.com>,
-        Longfei Wang <longfei.wang@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Wed, 19 Oct 2022 18:07:25 +0800
-In-Reply-To: <20220926093501.26466-1-irui.wang@mediatek.com>
-References: <20220926093501.26466-1-irui.wang@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Wed, 19 Oct 2022 09:21:12 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EDF818DAA7;
+        Wed, 19 Oct 2022 06:06:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1666184770;
+        bh=zFDApoDas0uJkB2pTqthBHi/bLKJFfQsKy3mBsM559Y=;
+        h=X-UI-Sender-Class:Date:From:Subject:To:Cc;
+        b=YIH2twBdOjm2WL9TU5DvIGnatP0k9AjTVZWLz9cVCJ5CZc3165WZl+ZziysaxQG+k
+         Uz1cwaZF0on+OfvDSf9KuGXSnnEghzDkbFu4RLzdJRSiF6noTPVS/uDcHmDOTR/4E6
+         FViShCK1DLUtF3PVdxfvyUGa8S5KEgRYDXm9zxCQ=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.100.20] ([46.142.33.106]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1McY8T-1pGZT63b4P-00cxv1; Wed, 19
+ Oct 2022 12:17:09 +0200
+Message-ID: <7b06560d-1271-fa17-fef8-f3b5da6a3f8a@gmx.de>
+Date:   Wed, 19 Oct 2022 12:17:09 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+From:   Ronald Warsow <rwarsow@gmx.de>
+Subject: Re: [PATCH 6.0 000/862] 6.0.3-rc1 review
+To:     linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org
+Content-Language: de-DE
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Provags-ID: V03:K1:x/1Yky7vo0jNz9N4s9Sk3unjF8U50f8x1i1VQHUooN8MtrDBLnG
+ yxXW9P1fHI4OEUQdlY4Yx0iTAEzqbH3Nj53M/sBZ2dhP6OXemSeExtHlv5XPIqyJG+860fq
+ Zl/dC7gPU+51GkKBIOZ+EaS2oRi2yXbYUdbX9yCN3bFKhm8H7zEbh1PLoHwMcTovA78AIgQ
+ jKNpEiTuRg5TnObMA25OA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:JV77/7SUk6s=:ff8Poi6gMMhNwNxRThCjpZ
+ sOA4hmebKLux5DUxjUGk5jNYpz5UWWLjdcukUVAvjgtjjI5DtE09Ac2UHycf/Rx1lExYO4Dv+
+ FMR+ukXJRmEUT6JBWEz4UBsXDUD36c0oi9Ko409H9ZPMoJuWCXo3gXOVg8yv47TAvp8j7scbR
+ BVBCDi55Tua99bpVM3nHAWh6fNcDadKByMMwvlKrcaekC4Eg3snmA/0wOUEW8jGt2hYkNebH9
+ K+aoQi4ELx/akR3mfcCi6qYbYWlULdXV6L/J6Sy3e0C3VuuDZGcmukjFTfaPP1+2hjhpgdlFc
+ WE9GBaA4VZhTf0O+jfddvJOYPyqn9N+gpI51gBj5Vhpugvk1Vkmw5OXqMj0KVdNYq+nGVePyI
+ JFEV9efgbifOE72xfJ52KMoYPGUDK6vFcDTQjce1B9EOdE9eFSnx4lmoK33p7tVZ0dkO2Kp/D
+ uwmgUKwdjvX1xjtj+TSyhlGGS8YayO3m6QTvsvu2DRwoUVfcAHGTrkDmcQ761gG926xWY8oNQ
+ +Fiju/TjxINbs/zlMq4gJMM++xidOH39fGknpVhgpIzH/WNgxizeoGUUTsvT9BBVzjvM2TrxK
+ oPqd6iH6RxPafPLnxaAALA4NqRcrDzc+Q8/QgUd2MfHC2JvaKo48SQftQ/jSN3jNf9l9bzdmX
+ 7JjXRNLon9snVslRfGlTafiM/NR7QxxL6HCo/z7D70861H6bB2Hlrz6bkDKY51grcYxLsrJ0H
+ BaXEddn2vFQaUHXLPKTaHHpLIq9fowC6E+8Es7CYVvGNd0D1FP7Xg38t+9UpMOX9P6/+tzRGC
+ qAKtvgZJ7jb+uWYt0zx29NFYaXX9gk3C9Ra0Ovs5VOHC1DFYXlxlb/jk8DlYIIzmkNmRyccYk
+ oJ7cjqeOF7rTGZGSwIuoaO0mhMl6VeOIOtNgkUOv0/8gzASvf14UDmxfO90PuRiPqbAEKWxCW
+ NhSrPKrWyecmMNhI7F9o1njeDeSO9w1Lcoc0xi7VPCv8ZrFG/XpkBoBqgqbsONAXikqMS2Xfu
+ W9JlAlG4BHqKWllQg/rTATwuscat6cAqFWUgI+hDFr4KNMITfeBy1QS3AGoSXVCscOQu2E0yc
+ ec4l9UHQF25guufQi0ywiBXyycd+bthdBjXh9GqvB16DYWRWkTaYqtatYeH0IpQI2L5FTCuqm
+ Y6FhQND/56vtCnAlZ04pJWM/c2ZmhGMf/PY5QuFR+e2ZlDcI5OXLxXl9I4FxTLhaMT2qMIIx7
+ gIKZirdp+sediTomApcyu510ED4HPUGZ+gHazXhcbIT34NL5N8W3SqZIdYrj+zUf4JW5ZPFPf
+ gLPHAoHthYEuTlG4wbFql1qTNT1pNEkwrUDhJ2XrDnldG4/jDyZDk2Joep2gHI+YgWiqnlaUi
+ zritnxBYslX+LWEVy0m/Bbcvrl2roraOiGIXL/RGvzs5C0xnC2+g+5M9BKk2f/U7wcH4b6Hxa
+ DX4vLeNyZ+6h/MCWkpweBcI/MDEK+106e8L67KyqbIep+TntDsh7WsVgJxyE9Vj0p3Gjw6kN0
+ fGtrJ9m5TOaXsrJAhrt9/p8o9jS49f+At1Ow/KJ9YmY+p
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Hans,
+Hi Greg
 
-Gently ping for this patch, could you help to review this patch?
+6.0.3-rc1
+
+compiles, boots and runs here on x86_64
+(Intel i5-11400, Fedora 37 Beta)
 
 Thanks
-Best Regards
 
-On Mon, 2022-09-26 at 17:35 +0800, Irui Wang wrote:
-> The encoder driver support h264 baseline, main, high encoder
-> profile, set mask for V4L2_CID_MPEG_VIDEO_H264_PROFILE to skip
-> the unsupported profile.
-> 
-> get supported h264_profile by command: v4l2-ctl -d /dev/videoX -L
-> h264_profile 0x00990a6b (menu) : min=0 max=4 default=4 value=4
->         0: Baseline
->         2: Main
->         4: High
-> 
-> Signed-off-by: Irui Wang <irui.wang@mediatek.com>
-> ---
->  drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
-> b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
-> index d810a78dde51..d65800a3b89d 100644
-> --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
-> +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
-> @@ -1397,7 +1397,10 @@ int mtk_vcodec_enc_ctrls_setup(struct
-> mtk_vcodec_ctx *ctx)
->  			0, V4L2_MPEG_VIDEO_HEADER_MODE_SEPARATE);
->  	v4l2_ctrl_new_std_menu(handler, ops,
-> V4L2_CID_MPEG_VIDEO_H264_PROFILE,
->  			V4L2_MPEG_VIDEO_H264_PROFILE_HIGH,
-> -			0, V4L2_MPEG_VIDEO_H264_PROFILE_HIGH);
-> +			~((1 << V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE)
-> |
-> +			  (1 << V4L2_MPEG_VIDEO_H264_PROFILE_MAIN) |
-> +			  (1 << V4L2_MPEG_VIDEO_H264_PROFILE_HIGH)),
-> +			V4L2_MPEG_VIDEO_H264_PROFILE_HIGH);
->  	v4l2_ctrl_new_std_menu(handler, ops,
-> V4L2_CID_MPEG_VIDEO_H264_LEVEL,
->  			       h264_max_level,
->  			       0, V4L2_MPEG_VIDEO_H264_LEVEL_4_0);
+Tested-by: Ronald Warsow <rwarsow@gmx.de>
 
