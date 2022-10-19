@@ -2,164 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29E2A60478B
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 15:41:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E0936047A5
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 15:43:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231696AbiJSNlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 09:41:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55280 "EHLO
+        id S231337AbiJSNmv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 09:42:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232754AbiJSNlK (ORCPT
+        with ESMTP id S232996AbiJSNls (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 09:41:10 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2049.outbound.protection.outlook.com [40.107.92.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 033D0286F7
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 06:28:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QYc24oQXy1bs3McN9gLW43xM8HYaz5PX6HRC5HUEm/rHX3YH7xtN4aCTyhPXESH4OwROSHh4PncfEE6TWoMuS2io9YPwTRbpL3IoKIBOxeZtCsLErUzxODJRRL7XaZISUR69dBVOJ7WJNDFYX1YXw9rGYxuxs1rMJZNxTQkcvdoQ2DNY48pOhfZqCBbpO1Td43AW3V/MZdQzxOWtW95GVZIYg3WTrPuhHM9Nr1GZwNKpnVt1f7ctHq+njWHx/jmlxbI8QhzJXSyEJz1eJSP9ZrQlbPqrk2nGmBl0ZEMl/UUrFk6/UxKSAGwK7eNenFX1J9INJ6vzBFfCUCivPxIxsg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OoqTYRPcgXkgJgHefT+YMxUJ7bzZxO8lnRSa8eDWmWo=;
- b=HAT8QtPB5S0UmtUxOkNljpN4Z6qISPhFUy9IG2vsY8GDLiqTJYJgPCWLf/chTOl0MdW/j9OeMc0wQMR9jSemSC5fW9vTRe1uIvGtMlYdwRtPZ8W/Xw+0qO31s0dam7PuDbHZH6egHIvrpmk1x0dNrQSHYi6WNvdkZfrZcWXyR68kVwrh8oP//xurvb9mniMuQvrefhYgR8bhJ9dkm4aBka26q0Q7MZbAWBna6DWHx+fST/4tT4sVJPG0I1+e4TrZKiKpmoP1omkWjOOzPyrwCWIGDhnGz+cKNNXVHfiDLJj6i6CDW4a8qdkSa6DSh63OUHDn84+z0LWmBUQ6mLB9/Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OoqTYRPcgXkgJgHefT+YMxUJ7bzZxO8lnRSa8eDWmWo=;
- b=H7RrFKWFYTh3vQaMwaCH/XFhMaavg5XIanEikOFJgxYaX6Mga+g63VwKyaEIKGNCDYzYNI3XbfkrrlxyS047mcljZKF8ZBLBcL9ZRz7IyXYNPf9d2N6aLamiv31RJxr0+Vqm+aWbyyaNEpGkM59YwVGhn2PULr4vrp5Da+nDIfs=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from CO6PR12MB5427.namprd12.prod.outlook.com (2603:10b6:5:358::13)
- by IA1PR12MB6140.namprd12.prod.outlook.com (2603:10b6:208:3e8::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.32; Wed, 19 Oct
- 2022 13:27:22 +0000
-Received: from CO6PR12MB5427.namprd12.prod.outlook.com
- ([fe80::aef3:6aae:b904:e395]) by CO6PR12MB5427.namprd12.prod.outlook.com
- ([fe80::aef3:6aae:b904:e395%7]) with mapi id 15.20.5723.034; Wed, 19 Oct 2022
- 13:27:22 +0000
-Message-ID: <faaae681-65b7-0cc5-d413-b8995978d2c5@amd.com>
-Date:   Wed, 19 Oct 2022 09:27:18 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH -next] drm/amd/display: make dcn32_mmhubbub_funcs static
-Content-Language: en-US
-To:     ruanjinjie <ruanjinjie@huawei.com>, sunpeng.li@amd.com,
-        Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
-        daniel@ffwll.ch, jiapeng.chong@linux.alibaba.com,
-        aurabindo.pillai@amd.com, isabbasso@riseup.net,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20221019063115.3757510-1-ruanjinjie@huawei.com>
-From:   Harry Wentland <harry.wentland@amd.com>
-In-Reply-To: <20221019063115.3757510-1-ruanjinjie@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YT3PR01CA0022.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:86::26) To CO6PR12MB5427.namprd12.prod.outlook.com
- (2603:10b6:5:358::13)
+        Wed, 19 Oct 2022 09:41:48 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C142A24F1C
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 06:29:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666186150; x=1697722150;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yZj4UEN+B3a8Kk2/d9hYXrDFIOMBCx70PYm2jCFaBRc=;
+  b=WulgZ8xHUtDdj/GVgZ53Cqvc4oa2tJVFOUcSx3dYVDoseoCLIw24kaXR
+   oEpXjim1jn9HW74cakHm0BqKNf3Wlynb2mLF4D17BlyPHYuc5Qd7e8zqd
+   pOIyBGOx4iKUZKBoI/fVDNlGpDnQj18I8gyd7Df4tw1cpJYqat40LYUMy
+   7Ymc4wPEJFanHhuGva5VjWGUSj7Zfvts6SBqn5CE3/byeeC5yfqvv+OsB
+   30A8wsBFMmzl24ibJbGdf3jkH+Xl6vB5t+7HPvfYAtXz+HSsrQZ4e3IJS
+   qu7yTXZWmlQkkk3StE8nTdTZad9HOnvcYpp083zNvdjsl1ExVDRkHoEq1
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="370626276"
+X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
+   d="scan'208";a="370626276"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 06:27:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="580339685"
+X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
+   d="scan'208";a="580339685"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga003.jf.intel.com with ESMTP; 19 Oct 2022 06:27:49 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ol96q-009sMy-0G;
+        Wed, 19 Oct 2022 16:27:48 +0300
+Date:   Wed, 19 Oct 2022 16:27:47 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Shuo Liu <shuo.a.liu@intel.com>, linux-kernel@vger.kernel.org
+Cc:     Fei Li <fei1.li@intel.com>, "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH v3 1/1] virt: acrn: Mark the uuid field as unused
+Message-ID: <Y0/7U6yCuoIlKWyQ@smile.fi.intel.com>
+References: <20220831122356.65544-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR12MB5427:EE_|IA1PR12MB6140:EE_
-X-MS-Office365-Filtering-Correlation-Id: 63d85d61-7fdf-4efc-6cbe-08dab1d5a704
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: NWKyTqA6d5dhj5Lu2dDMWIBuT30caJ+sibmybFT4rEAZxeahWJ0Vjbhu3kDYkY1AplS1L77Wt3zczK6sftdpjfk0altiQOQgxVrxwz/+RsqucP/lCy/N8Z5gVubyT66wn44tUDH7gRNQpVx1lIBnYarFHKKGPKVL9mlzdh2T1h4JNyDxMaQq6pXZ0mjBXxLbp6llK5jjO7WugCDi2UXZ4HSxB9FBnHzSL7+G1XBCshbpK/n/08N/LmJyeerIrDhTARW7K9Jn/dfYUKAQ6KLmQtWm5ORh0Ae8LQeSrEEF3yCVAhmxeIOyRAE8TX8MtC3Pk/JF9Ez2x7XrXuFH57ktnzgQ73hJTYMNf31aCZcKjwTMbtGKH8Nvx1uy7EBcIVCqjJ0bKbvy7AJLRM5hClb/gjSDjvdwRplmjCxFFEt1ziRKLQlyfDiD60xLLV+YlvqVNR+/RnAkkLtHdyf5KLsVYXMMB73Fp7jw2LiWqZac+YhFNnQPRTc6rpwDS0mN+GWw/v7hUFbQ1pvCK8WXoOQLcvbfxHpS8T7J8QRBxTA5c+0ktGHby8B/Ex815TFIK8U0jT/GIGoH5HEeqXxPLWCiFR8GkbTY3dT7dW2tCziDsUvfS+tOnixH2ZZVXCvcyfq65C5MrUZhahwo94mGP+sj83HuzSCCqtjnxJqD8EY3P2Veoj3y/fRxMIROl8Lz8P7t9f3ZG0zDqiAaAAooquIXwy+NynEIRrxcCaUBOiiOdIThtdffS4mXIgeHL575ACT1/gOidPdy772GucauuuLeUhRxp/K6pw7GbMF7BWAXYv+eNd24Kh4e7hQBRpdn2HC+
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5427.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(346002)(136003)(39860400002)(396003)(366004)(451199015)(31696002)(2906002)(5660300002)(66476007)(8936002)(83380400001)(41300700001)(8676002)(6506007)(66946007)(44832011)(66556008)(4001150100001)(921005)(36756003)(2616005)(186003)(478600001)(26005)(6512007)(6666004)(316002)(6486002)(53546011)(38100700002)(86362001)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TUhOTWsyYVRkQm8yMDFxQ1p0dFFnV0RZTkk3WU5EOUNqaXVsd2NlVGF2V1VN?=
- =?utf-8?B?RW9zaTF2MFJXZXd4QWhoQnRCb21VeHlDQmxjQkM0WXNwcnIyMUdkSGcvaXda?=
- =?utf-8?B?YzlzaFZRV0laU2F2U1RyV05reWxCMXhOVmdpWXhyTUZoT3ZyMUNURUQ0QjZz?=
- =?utf-8?B?VzM5VjhuUmk3NTZaYWhNV3BUTCtNdkMvVU9sZ1JaV1JQT2kwa2hQS3cxUXVY?=
- =?utf-8?B?VmdneU9nU3hXT1VqUlpGMy9KM2FPcmtFYXRnUS9BRFV0dmJrSjZkWHlZd1hy?=
- =?utf-8?B?Ym5SUENKQ1dtM3JvSDdiR2d0clJ6Y09PdmttbTNqMm1XaFVHMm9RazBHdXJX?=
- =?utf-8?B?ZWhZK2lEZkwvTmlvZXJ0eUdOWHo4b1pCeTR2SVh0NlpwaFMzdnNBU3FIdkZq?=
- =?utf-8?B?ekRibkdlZVZZWHVjbTRLVGVSeUh3NHdRdWY4c1NTdmRpclkvczVwR1RIbFVO?=
- =?utf-8?B?RFJ5MEtrdUVSUUFFRjFUTU5kNGMydUVYMjZoWlpBa1dSMGs2YzRYaFJ5Rkhl?=
- =?utf-8?B?cm9DOTA1eHg5VWNpNlA4VlNoWHU4Z3ZXWGpCNmtuVnhMWUsyUzkwNmpEL3R4?=
- =?utf-8?B?MDdmbUFtQkNhb3N5NzMrVkhZMEJxS2hDQ0kzRXpyWkhTbFM0eVVKRmNIMENm?=
- =?utf-8?B?VUJVRkY5NStUVDM1eUhkTUx3WVMranRtd1U3NlZDQUU1dG4xVExUVFlVOVUy?=
- =?utf-8?B?Ry80TGlMY1pQUkloWG4yd2w3MlZUR0ttMks0VUNNOEZNT08xVlRTYWU1aGtB?=
- =?utf-8?B?T2dCaVNOWmRKRWYzbVc0Wjh2bTRZUExxVk9YTzhOcnN5NG5PVzZmaVJtckwy?=
- =?utf-8?B?OW42NzNLNnFHdUNFemlLc1c1T3lxbS9CL1JCVklGNVJNMzRZeDFhcXYweGIx?=
- =?utf-8?B?cVZZLzJ6KzN5Wkk2aVlCTFdwUUh6OWpwQkhOQngvSFF1L0NVN2dBVnBUbHY3?=
- =?utf-8?B?emhTZSttVFV5a085RHo2SkdndUcrSW9QcGdsT3IrbkE5NGJUL045R1JKL2Yw?=
- =?utf-8?B?MDBhTjhoeDhaRXlQRTNHQmh2dHVMQ2VTd0JFajNJVGhnSkpyMjdDa2I5RCtE?=
- =?utf-8?B?RmFrb0EvR2tUSW4zSW5pd3hiNXZXYitzeHlwZDB0d2xCT2JqVnJYeExNa3Jz?=
- =?utf-8?B?V1RuU3YzY2hXOUFMdkNmVFJYVzNuZ0R1blNPN2JhUktWNFlqcXhoN1Rjbkxj?=
- =?utf-8?B?WU93ZUtFYkR6ajZpTkhvQ2c5OGJjZGN5bEh1ZHZSMnlicUswKzdabnB5NmdZ?=
- =?utf-8?B?alVtYks5bzFpQTRMN1BlMmRIc3dMTmhHQTZRS2NHODVMdEovRE9pR1NvRlEz?=
- =?utf-8?B?UjJqNUpaVklZanBmc01WMmxVcVR3NG15MzhvSU0zQU50enF4OVBBNXVuYmVO?=
- =?utf-8?B?OUNlMmhjUG16NFV4ZzdQNk4rV0owcUw1dFRySjlYclErb1VwUm45dzMrS1NM?=
- =?utf-8?B?TkpRcmtMQldiNzYrSGVXZWYzelFqeGFXN1JvNkpsVnBNcE0xOXczK1N2TkRw?=
- =?utf-8?B?N095UnkyRDNNR2wxcWxIR1hqNUhsOWNubW53VUMzM2RHTE1GRG5NV3dkaVYz?=
- =?utf-8?B?US8xQ3dmamk1K0tCaEhrN0swK3NyQi94RExuemEwRzlqK3pFbmJTTDluTnhP?=
- =?utf-8?B?alFpSm1uL2lWR2lkU0s0ZDNtekhWcGM2b1RkOU0xWDBPMUVpcWZEUi9FU0xa?=
- =?utf-8?B?YVd0d09mWHVXQXZzT2hoYnhDOS9hb0RIZmhNYzgySUc1V2JhdzdleWpVdGlQ?=
- =?utf-8?B?RUNkbXMxTmlTYXhJU1VLaG16UHJ4NS9Ib3NId04wcVR0VjR1THZHaUI5R1k1?=
- =?utf-8?B?aE40aXFPaVh3MWgwNW8xRCtWdzBLUWFySUwyZWZMQ3lxUFVzVi9oYkpRcU5i?=
- =?utf-8?B?NW9jaExHZFdXbnZWVkJ5TmIzcS9qT1JmL3lIMlR5amM1RmQ4ZG9HaTNGejJS?=
- =?utf-8?B?bkRHZU9ablFVQkl1K0dGKzJ1bG1hUUJmKzNTeXpPNTZzd0NYVGJXcm4xTk9E?=
- =?utf-8?B?b281clpxaDI4Sk8xblp0VXVIT3p3MmJpNTcyY3JiSHZ6YmZTcGhtSU5mU3Vn?=
- =?utf-8?B?TjZHbU1UMG4zV2tqTXNDeTltdGxZUDNoSTFnc1JCa1hULzJWR3hFdThXWlRs?=
- =?utf-8?Q?xPKHcZQ3UhhB5Ya2MTHVba5aG?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 63d85d61-7fdf-4efc-6cbe-08dab1d5a704
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5427.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Oct 2022 13:27:21.8644
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: uBD/qpRa49MJIF6jRtZLt45vTRF1fyYIfsCyEZPQwwFILIWL32w9Z2S5C7WoP/wO3HubRuvLy+j5N063u9GRGQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6140
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220831122356.65544-1-andriy.shevchenko@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022-10-19 02:31, ruanjinjie wrote:
-> The symbol is not used outside of the file, so mark it static.
+On Wed, Aug 31, 2022 at 03:23:56PM +0300, Andy Shevchenko wrote:
+> After the commits for userspace (see Link tags below) the uuid field is
+> not being used in the ACRN code. Update kernel to reflect these changes.
+> I.e. we do the following:
+> - adding a comment explaining that it's not used anymore
+> - replacing the specific type by a raw buffer
+> - updating the example code accordingly
 > 
-> Fixes the following warning:
-> 
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn32/dcn32_mmhubbub.c:214:28:
-> warning: symbol 'dcn32_mmhubbub_funcs' was
-> not declared. Should it be static?
-> 
-> Signed-off-by: ruanjinjie <ruanjinjie@huawei.com>
+> The advertised field confused users and actually never been used. So
+> the wrong part here is that kernel puts something which userspace never
+> used and hence this may confuse a reader of this code.
 
-Reviewed-by: Harry Wentland <harry.wentland@amd.com>
+Rafael, I think I have addressed all your concerns.
+Anything else should I do?
 
-Harry
-
+> Link: https://github.com/projectacrn/acrn-hypervisor/commit/da0d24326ed6
+> Link: https://github.com/projectacrn/acrn-hypervisor/commit/bb0327e70097
+> Fixes: 5b06931d7f8b ("sample/acrn: Introduce a sample of HSM ioctl interface usage")
+> Fixes: 9c5137aedd11 ("virt: acrn: Introduce VM management interfaces")
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > ---
->  drivers/gpu/drm/amd/display/dc/dcn32/dcn32_mmhubbub.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> v3: converted to Link tags (Rafael), explained what was wrong (Rafael)
+> v2: added tag (Fei)
+>  include/uapi/linux/acrn.h | 5 ++---
+>  samples/acrn/vm-sample.c  | 3 ---
+>  2 files changed, 2 insertions(+), 6 deletions(-)
 > 
-> diff --git a/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_mmhubbub.c b/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_mmhubbub.c
-> index 41b0baf8e183..c3b089ba511a 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_mmhubbub.c
-> +++ b/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_mmhubbub.c
-> @@ -211,7 +211,7 @@ static void mmhubbub32_config_mcif_arb(struct mcif_wb *mcif_wb,
->  	REG_UPDATE(MCIF_WB_ARBITRATION_CONTROL, MCIF_WB_CLIENT_ARBITRATION_SLICE,  params->arbitration_slice);
->  }
+> diff --git a/include/uapi/linux/acrn.h b/include/uapi/linux/acrn.h
+> index ccf47ed92500..04fa83647ae5 100644
+> --- a/include/uapi/linux/acrn.h
+> +++ b/include/uapi/linux/acrn.h
+> @@ -12,7 +12,6 @@
+>  #define _UAPI_ACRN_H
 >  
-> -const struct mcif_wb_funcs dcn32_mmhubbub_funcs = {
-> +static const struct mcif_wb_funcs dcn32_mmhubbub_funcs = {
->  	.warmup_mcif		= mmhubbub32_warmup_mcif,
->  	.enable_mcif		= mmhubbub2_enable_mcif,
->  	.disable_mcif		= mmhubbub2_disable_mcif,
+>  #include <linux/types.h>
+> -#include <linux/uuid.h>
+>  
+>  #define ACRN_IO_REQUEST_MAX		16
+>  
+> @@ -186,7 +185,7 @@ struct acrn_ioreq_notify {
+>   * @reserved0:		Reserved and must be 0
+>   * @vcpu_num:		Number of vCPU in the VM. Return from hypervisor.
+>   * @reserved1:		Reserved and must be 0
+> - * @uuid:		UUID of the VM. Pass to hypervisor directly.
+> + * @uuid:		Reserved (used to be UUID of the VM)
+>   * @vm_flag:		Flag of the VM creating. Pass to hypervisor directly.
+>   * @ioreq_buf:		Service VM GPA of I/O request buffer. Pass to
+>   *			hypervisor directly.
+> @@ -198,7 +197,7 @@ struct acrn_vm_creation {
+>  	__u16	reserved0;
+>  	__u16	vcpu_num;
+>  	__u16	reserved1;
+> -	guid_t	uuid;
+> +	__u8	uuid[16];
+>  	__u64	vm_flag;
+>  	__u64	ioreq_buf;
+>  	__u64	cpu_affinity;
+> diff --git a/samples/acrn/vm-sample.c b/samples/acrn/vm-sample.c
+> index b2dad47a77a0..7abd68b20153 100644
+> --- a/samples/acrn/vm-sample.c
+> +++ b/samples/acrn/vm-sample.c
+> @@ -29,8 +29,6 @@ static struct acrn_io_request *io_req_buf = (struct acrn_io_request *)io_request
+>  
+>  __u16 vcpu_num;
+>  __u16 vmid;
+> -/* POST_STANDARD_VM_UUID1, refer to https://github.com/projectacrn/acrn-hypervisor/blob/master/hypervisor/include/common/vm_uuids.h */
+> -guid_t vm_uuid = GUID_INIT(0x385479d2, 0xd625, 0xe811, 0x86, 0x4e, 0xcb, 0x7a, 0x18, 0xb3, 0x46, 0x43);
+>  
+>  int hsm_fd;
+>  int is_running = 1;
+> @@ -63,7 +61,6 @@ int main(int argc, char **argv)
+>  	}
+>  	hsm_fd = open("/dev/acrn_hsm", O_RDWR|O_CLOEXEC);
+>  
+> -	memcpy(&create_vm.uuid, &vm_uuid, 16);
+>  	create_vm.ioreq_buf = (__u64)io_req_buf;
+>  	ret = ioctl(hsm_fd, ACRN_IOCTL_CREATE_VM, &create_vm);
+>  	printf("Created VM! [%d]\n", ret);
+> -- 
+> 2.35.1
+> 
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
