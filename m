@@ -2,139 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A95B604C86
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:59:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFE7A604C94
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 18:01:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231163AbiJSP7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 11:59:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47778 "EHLO
+        id S231855AbiJSQBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 12:01:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231578AbiJSP6u (ORCPT
+        with ESMTP id S231817AbiJSQAq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 11:58:50 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9411C193464
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 08:57:46 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id 8so10987353qka.1
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 08:57:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XuH1cwGYuoIXuHDHrxmGsjJyFHpkABDYVCIkLmAK2bw=;
-        b=ghdwkgoTZX+EiHmt/h6EJyEpxc3hSgg79jAPidHTEO5U7Oacb2f7aV9dA16+K2MI+2
-         ZzRKn6SblRwL+Rux3tzWlTKKK0E+pXdghGvOqIUCGWlsFEqRDdMrL3lJvy/xM9Jm/J8i
-         RRa9s8ygIFflpnEI7Oafv9LZ+seAPhNZ0bpscvw5Yk0pUNTAgLlOCdBvKHWaC+TKSBEN
-         /xlpUA+2rL7MD4soWBynVfAodBYwZDxgDAvIr/lbs3fW72ukn33S338xKxaC+S1OptCh
-         hBSPFsIFUsKwTeGOzyu+tPtH7BasQmSIyETOFf+XPtp2krHM8NbAy1mN78PRPba3v0gl
-         yIow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XuH1cwGYuoIXuHDHrxmGsjJyFHpkABDYVCIkLmAK2bw=;
-        b=aKKD1wS8eABDZNnIBeUBjgcBnKai8AsBzu8AaWjWFHD4a5FtZ+cYgOkQGR/PzVJgPd
-         h9eK1OwKFcPmN8PFPwIyRHySLS8puUdag3ybi+KCvRIZxyks4r6Zr0wpxPJW1sErVCUv
-         RioKhwEY+kv8RTRWVfNSr2JoSrb+u20KTIsoL9GALHs4NDEbhSfZ1Y8Dmu7hW5VOaPtN
-         CX4M8ILLJx0GeaKET6pYOsEzKBSGGTOW0iziKzT/0kSeBk0AFfcQVUT/OYgCB2a/seM5
-         XAog1M/WduHwWnsMYtxvX2dKnH1NVDUXPJnA93UdfI06wNZHqxG9nxxwgUiO51ins1nB
-         R9Sw==
-X-Gm-Message-State: ACrzQf0a071R+7Iaxje1+ypVIgVsEFun87rUiSDE0J1JwE46wvtKbKdP
-        k7qRIEKNIQxqH4iUM/u7UcRTAw==
-X-Google-Smtp-Source: AMsMyM4eCXdcxPYYjqQ4LMC6OlOLsmYWjCS81HiLMFGL1eq8MVPxt363n9uh3cA7kLDZL6Qos11S6g==
-X-Received: by 2002:a05:620a:30b:b0:6e4:6de2:7f38 with SMTP id s11-20020a05620a030b00b006e46de27f38mr6179989qkm.520.1666195060953;
-        Wed, 19 Oct 2022 08:57:40 -0700 (PDT)
-Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
-        by smtp.gmail.com with ESMTPSA id i23-20020ac84897000000b0039853b7b771sm4218488qtq.80.2022.10.19.08.57.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Oct 2022 08:57:40 -0700 (PDT)
-Message-ID: <6b71bc77-b168-282b-9318-1640bba4e946@linaro.org>
-Date:   Wed, 19 Oct 2022 11:57:37 -0400
-MIME-Version: 1.0
+        Wed, 19 Oct 2022 12:00:46 -0400
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70081.outbound.protection.outlook.com [40.107.7.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87A80635D;
+        Wed, 19 Oct 2022 09:00:00 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=S397E/k8qqULoXtRlWCHdBSFZ//JdLOYx3cgJpBQ7xb9gW3ASJz9B1fIrPp1uVfSotLJMGmBYdtkn6I6URiR+Maii/sLBjMWjJvRuqBL92IggYc9G9DyVMzUnorQebR3OM1DrVOs+dyR5AlmWhEYv30uHctY534nvsssruTX1yCnOIkgJ3SFdjjM1v/Agze9HCH/h21nvHSaP2w+30eG1f3dnzetJBnOr/9/JM0S9/JRZ7EGyNyKJyghBxOEdY0KIH2mZIKCkCi3rPgO6V4AEuK9PT7R2Nt+mEA9wySA2szE4XT7q3Omzi8e65vHw2DqNjAXJJ7Xd5ofFKHVQFelwQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EXdGnWlg5yN6K0X2iVjMGSgaxcHlqiOz5hDmXVZj/oQ=;
+ b=JbGwFKCeSsrVka0IPK4pCXnorpQcR8oHaT1Q3qVNXPg1sNcYsxaA1EV4wUezp0dppVOF+a0xmsFOgIGlsi3q5uxdTVIEmZY7zjREug6CMokKLucKjdXmrjhJuRBfM1iMpx/FUi7fbIGuO5rzsEZfK+JVWjs2okIYX1FudUtzpsqDvc+ohB+rL52D8oTgj7+9iGJCQVvUqpDWstU3Wt43XQF/1mwq4jxoROV/p3ZjYuV+3DMsGZxJzR1odLmyxXzOm3kyASyGoVBHddoAqPi/29Pwj/+wbLGb4J6WrwLvJedsNV8Q4fpYg+GA6adilSezilkbDl+O4PDVNTb42hk4ug==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=theobroma-systems.com; dmarc=pass action=none
+ header.from=theobroma-systems.com; dkim=pass header.d=theobroma-systems.com;
+ arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=theobroma-systems.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EXdGnWlg5yN6K0X2iVjMGSgaxcHlqiOz5hDmXVZj/oQ=;
+ b=Y7hNSg3nzuPbvb59tkUduY0yyjhB/+lC5SOqcmdvwm9ZnIRxfNFJF8/lgZE5f3SdL8N3OWuaRqYEoTqkK8pwiZEir0QbqsaY4aYmqQOO7EXyPLsUTQm9P7jDCRGJzFW44S17H77gXiWTk/7H1jvNZiXTSJKSBHxwdH6811H+bkHrkrYvjGmmzAdpjD3TG2IpG0LEonrN/oiJ7PJaPnYjAJYUzKyDB4p4L6xXeG2eQYwCQnJqRGbbkOHNb33h52xru9+zwJ5WdMkUsKqpFMXLuKhJD1WuXOl1wjrHJKUtRV1XKpBaG01mvWqIXnrD286HAg3QPJiJiqROgqI+1nuL/g==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=theobroma-systems.com;
+Received: from DU2PR04MB8536.eurprd04.prod.outlook.com (2603:10a6:10:2d7::10)
+ by AS8PR04MB9045.eurprd04.prod.outlook.com (2603:10a6:20b:440::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.26; Wed, 19 Oct
+ 2022 15:59:56 +0000
+Received: from DU2PR04MB8536.eurprd04.prod.outlook.com
+ ([fe80::5e5e:1989:e5ec:c833]) by DU2PR04MB8536.eurprd04.prod.outlook.com
+ ([fe80::5e5e:1989:e5ec:c833%3]) with mapi id 15.20.5723.034; Wed, 19 Oct 2022
+ 15:59:56 +0000
+Message-ID: <52349f5d-661f-3e38-9745-01a84ddf820f@theobroma-systems.com>
+Date:   Wed, 19 Oct 2022 17:59:54 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v3 4/4] dt-bindings: pinctrl: qcom,sc7180: convert to
- dtschema
-Content-Language: en-US
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
+ Thunderbird/102.3.1
+From:   quentin.schulz@theobroma-systems.com
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Quentin Schulz <foss+kernel@0leil.net>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
-References: <20221019001351.1630089-1-krzysztof.kozlowski@linaro.org>
- <20221019001351.1630089-5-krzysztof.kozlowski@linaro.org>
- <CAD=FV=U0WR-a7d4p5eoCFMRer5yhX8AcEPdUaJag4KpGB9kp+A@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAD=FV=U0WR-a7d4p5eoCFMRer5yhX8AcEPdUaJag4KpGB9kp+A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+        Heiko Stuebner <heiko@sntech.de>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org,
+        Jakob Unterwurzacher <jakob.unterwurzacher@theobroma-systems.com>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] arm64: dts: rockchip: lower rk3399-puma-haikou SD
+ controller clock frequency
+References: <20221019-upstream-puma-sd-40mhz-v1-0-754a76421518@theobroma-systems.com>
+ <Y1AQHqm+cOmrrveJ@kroah.com>
+In-Reply-To: <Y1AQHqm+cOmrrveJ@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AS9PR06CA0724.eurprd06.prod.outlook.com
+ (2603:10a6:20b:487::12) To DU2PR04MB8536.eurprd04.prod.outlook.com
+ (2603:10a6:10:2d7::10)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU2PR04MB8536:EE_|AS8PR04MB9045:EE_
+X-MS-Office365-Filtering-Correlation-Id: 60cfbaa7-3705-4a9b-32d0-08dab1eaf789
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: nCpxX49VX/zPEFU2U+n/Fi92U7VX1fbxhqPCo8AzbO5zBNi2LJnQAKb3t0yPiGcue1DgDM8Wv7nX282o4xFesvlkykk2IgMuPW5ui4J5XbYybWjvvAQOjD0rWFrnaf+dD4bEFWkB7Rv1dQtMpaTppDPKpFdeGi6HYJ2YYj0TFlSLly/6VnYxYBxEA/lJOkBUkvB+AQwBKNatuA+g9ZPsOxbkytcJKsjrxXgH+jPUtDxvVFlXhDVSGB0h0PV+vny0ScCcPva03qe9HEwk67nXGlOaYUkythmqmGWs7+0AZu+ZS61Bmn5Yuhhx7CeEX+H8pdqxbM3ypPTLB9sjSlEteMlrps+30T40f7oT5wp8JonweL79kls/MMf6nV4MwhVMVQ+xPAMp3htUAMhwSVt40bwXqMrd4QmoO7pslWU5fuv61yywb4pXli8VFGlRzJP9VdSY810f0qBq5L/o+q585+gdClOftmzfNFSc6XUf8DfxCMtVETqTC5QRq8oadE5wJwTAdR7TODrQ9Es9hVgjNn1KHOBfCMCuQ5+gXV9lFMXcQkPeSEpu5qPtk35pvg745yCdmirHbbsuwNXl8dJy7BKYDhuY/dkaXy5/C5fjghrzX2fI34yn5XOjj2esxYZ/s010TlVx1Wu2yaZGzPgo4/ikv4VaTmZpT3PW8t24SeiClScRA7pwh+AiXVgv+mzWmeF9esFG4z7XVFbEhhWo8xabR5JZAhdOdthSNYnOFEO7BGYQpyARe1j+As2pizUnR/djW790QzHI+NmCyymhjw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8536.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39850400004)(136003)(366004)(376002)(396003)(346002)(451199015)(6486002)(921005)(316002)(478600001)(4744005)(110136005)(31686004)(7416002)(66476007)(8676002)(66556008)(26005)(66946007)(6512007)(5660300002)(36756003)(41300700001)(6506007)(53546011)(9686003)(2906002)(8936002)(86362001)(186003)(2616005)(38100700002)(31696002)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WWtETHJaNFBpa2poOUZyekErdmUyRXROc1NyNHRWNzc3dG9vN2RBRUtqcnhI?=
+ =?utf-8?B?UlFFVlp5aHR0eC9DYlQ2VmJTck1ZQjZINGZsUmpOWUVZdDlEL3hSZExqcVJF?=
+ =?utf-8?B?eDJkZDNQTThISjVRRWhodStoTTZyR1dOd1Ard0RKRU0xcTlXOTBGK3piME5J?=
+ =?utf-8?B?cXFnbGFWelBsd0pzQjhGeFhSUkhSa1NFcDhSYmZTc2Q0VGRJSWhUT21tQkgy?=
+ =?utf-8?B?TmxOOUkyT2hMUXUrVUVjWHBpc0dxMSsxQjZLTkhBVkRzNXQ4UmN0ZXo0a2dS?=
+ =?utf-8?B?bExQMmZDZ25tYml3UzRud1lpdzBiSUVGWkc0ckRwTWlxSENSL0JnWUhBNjRH?=
+ =?utf-8?B?SjRMRkUrVXZsNktkOWpsV0hwdlQxYjBuTHFvZjRMOWh5QUc5MGpCZXZzc25P?=
+ =?utf-8?B?V3hjYkN2U1BkUUNxamhoNm1CZ2F6QzdtTTdrVWJCWWtMTzR0MEVLUWR4VkRn?=
+ =?utf-8?B?blFibDAxYzVCMThNRjVoMW5zUi9TUE0vb2x3bWVWWEtmNGxmSGhMTzRsbTJ4?=
+ =?utf-8?B?N2loRlAvS1lBdnh5b1Q4bkxwY0lGYjdnVWNuMm1OSndqeEdaQ1IwWG9WRENo?=
+ =?utf-8?B?cG5HS3UrSkZqMnZTRld3QlVzTTlVVWp5N0hmdUFnYW5iZStJVXBGQ3h4K0Fv?=
+ =?utf-8?B?N0tBU2xxRkxzZTVXbzFuN0NzcG1pUHNxL3FEaFVqMHZrRFVTUHVyWGd3RXpm?=
+ =?utf-8?B?NjVQQ1VQc1d5ODk1eEozZGdvT1J6MVVUWStXVVdqclZsUUgrOWxuOVFSYWVs?=
+ =?utf-8?B?c29LUnlZNHBxNmVaTUQwVEFiQ3k3dHl5Q1huc3JtNFNuVnB2eGx6aENOQStF?=
+ =?utf-8?B?UWtIZUllVHJJSkk3czVhSlVITDZsTWhIeGM5YXVHa2VEL3IrUE95bVEvYUF2?=
+ =?utf-8?B?SnQwREFyTWVrand1dVp5S0xRRDFPR0x4Q1RlcmlUMHZTUjJGa0MrTy9GVTVZ?=
+ =?utf-8?B?SkozVDR0bnIxMS84MGMxcnFCcmh5aVF6L25JamlHaUc4Nk5tN1l4MG1kTWdw?=
+ =?utf-8?B?VUNPTHVFc3orak5McUxtNnMyblplOHlkQ3ZCcS9DZW9CMi83bnBsNXhEbkoz?=
+ =?utf-8?B?RFJiZEpQQmYzNFVoU1hpd1ZBYmpPU095ZlZjVVFscWJoWUZDWHRJK2dmQ0lD?=
+ =?utf-8?B?WHpLQnRXaG1OTWY4OVFFM1lRUnE1Ym11QVhuTktSS3d4Y29MTTl6OUFxSy9P?=
+ =?utf-8?B?WlYxampvOE8wR0VEYjlHZnNyb3liRVJjdG5ka2dEa3JyQmFCRFJTbWdjQXYx?=
+ =?utf-8?B?UzFwS054RnZIa2xIcGk3dXNVZWRBRDc1OXU5SUxBSmFSY05sUTJFWC9vZjgr?=
+ =?utf-8?B?dVAybGxsMVo3MVl4MlA1N2kzRzVSVUc0ejJtM3RrdmM1cU1vdm0veUhGdlJ6?=
+ =?utf-8?B?UDJpVExRc0ZOZTV5cjhJT2NOMmNUN1hhYzBPbWdvUTY1bVhnaXdwT2pSWm1u?=
+ =?utf-8?B?WkZlV1F3Uzl4RjcrSi9INmlpaE1PMzgvN0h5dTZ1L3V4aldLcUNSN3VTYVRk?=
+ =?utf-8?B?bVFJbGdBSnlQU1ZKTXZrbVdMT0VFdG9TaUxidTlVSXJKTEozSktmMFRmS2pY?=
+ =?utf-8?B?RmVHNWptL3EvTG1lRVRGOU5PRFdSVGtMLzlGMERLTTYvQkhiWUk3UGM3TGFw?=
+ =?utf-8?B?YUdlSnAxTUI5KzlleE1waXN6Ui96eDVLTEt6U1RlRkZoTVpTRmRjVktvR1dn?=
+ =?utf-8?B?SnE1TWVjTjF6S1dMbUUrelF4WEhlWWpmWWNNaERhYStzNHhOazdVZ2NRcmVx?=
+ =?utf-8?B?a0VEZ1B4b0ZhM0xDTGNmMExsZkJWM1FEN3pabGlFUGNNak1iaXBGcEthN3gx?=
+ =?utf-8?B?R0thSnlSZGF2Z2N6TSthVm9EVEZkRHFLbHdQcDNqcFV0MkM4eFBGaE8vL0dl?=
+ =?utf-8?B?OHh1UjFYZ1VCTXFPL3VKL3BBWkhRWFp5UjVWR1RxY1UzbWE1YnhKWWU5b04v?=
+ =?utf-8?B?MFlITktQZi9vc2hXNFY0L0RNWC9Dc3c3NjEwWVg3aUJmSUkzL04yNW0xNHAz?=
+ =?utf-8?B?SThnYlRFZkpHSXUvM3dwMThUNFRSM21hb0xJRjVCZnBaMjhwRjI0QmNsRlJK?=
+ =?utf-8?B?TG43UFZHb0VCLzR0TWNUc0M5bUZJY2lGZU1la1pDSWpqWFFlb2RQak1WYlRl?=
+ =?utf-8?B?OVZGcWkrQlFjV2dzaEsxVVdwOXIrZHQrdElPK2Vhd245ZXRWWnh0dkdNWXVS?=
+ =?utf-8?Q?PsmClaA26tDO12tuBMZjXjM=3D?=
+X-OriginatorOrg: theobroma-systems.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 60cfbaa7-3705-4a9b-32d0-08dab1eaf789
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8536.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Oct 2022 15:59:56.0711
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5e0e1b52-21b5-4e7b-83bb-514ec460677e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: EeRn9kYhSjAZc2SZeo6rR9lG9hqE5QJndGs8obLqxCl7X1V86hAPlAHIZTvxDLaig77cOjhm4iV3LM39EJxPfwOiTClcu9YgIcF/a8krFfkpm6dYoEvUAD/fSsaBSqc9
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB9045
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/10/2022 11:48, Doug Anderson wrote:
-> Hi,
+Hi Greg,
+
+On 10/19/22 4:56 PM, Greg KH <gregkh@linuxfoundation.org> wrote:
+> On Wed, Oct 19, 2022 at 04:27:27PM +0200, Quentin Schulz wrote:
+> > From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+> >
+> > From: Jakob Unterwurzacher <jakob.unterwurzacher@theobroma-systems.com>
 > 
-> On Tue, Oct 18, 2022 at 5:14 PM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> Convert Qualcomm SC7180 pin controller bindings to DT schema.  Keep the
->> parsing of pin configuration subnodes consistent with other Qualcomm
->> schemas (children named with '-state' suffix, their children with
->> '-pins').
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> Reviewed-by: Rob Herring <robh@kernel.org>
->>
->> ---
->>
->> Changes since v2:
->> 1. Drop entire drive-strength (not needed, brought by common TLMM
->>    schema).
->>
->> Changes since v1:
->> 1. Drop default:2 for drive strength
->> 2. Add Rb tag.
->>
->> Cc: Doug Anderson <dianders@chromium.org>
->> ---
->>  .../bindings/pinctrl/qcom,sc7180-pinctrl.txt  | 187 ------------------
->>  .../bindings/pinctrl/qcom,sc7180-pinctrl.yaml | 158 +++++++++++++++
->>  2 files changed, 158 insertions(+), 187 deletions(-)
+> You can not have 2 authors :(
 > 
-> Looks great now.
+
+That's a bug in b4 and my patch submission/mail sending workflow, I'll sort something out with the b4 community and send a new version of the patch soon. Thanks for the heads up!
+
+[...]
+
+> It has to be accepted before you are done :)
 > 
-> Reviewed-by: Douglas Anderson <dianders@chromium.org>
 
-Thanks
+A "small" detail :)
 
-> 
-> Will you also send out separate patches to fix up the "drive strength"
-> for all the other Qualcomm boards. They all have the same problem. The
-> drive strength never defaults to 2 and always gets left at whatever
-> the BIOS leaves it at unless it's specified.
-
-If you mean - other bindings for Qualcomm - then answer is yes. Several
-things are already applied and will pop-up in tomorrow's next:
-https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-dt.git/log/?h=next/qcom-pinctrl
-
-I'll go in spare time with rest of bindings.
-
-Best regards,
-Krzysztof
-
+Cheers,
+Quentin
