@@ -2,125 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E96DD604BFE
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:46:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE1C8604C64
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:55:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232243AbiJSPq0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 11:46:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34394 "EHLO
+        id S231566AbiJSPzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 11:55:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231402AbiJSPps (ORCPT
+        with ESMTP id S229741AbiJSPyX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 11:45:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B7051CFF21;
-        Wed, 19 Oct 2022 08:40:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 19 Oct 2022 11:54:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99E20188A9C
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 08:52:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666194687;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=MAsS6j5/KUgYwehdScWVOm+WWLh2WflTE+nFerqwEQQ=;
+        b=e9zhi2NCRsULAP/DzXjfaTOwHzXcGNg+JomyMtYVFOIhWJnyWT2XopbVEDSfINND3oLsZg
+        ayXKL9A8C4mPTHYYpI+KNFKvtujpENCVirLd/fPKkA/bhpox2p34wenSq/mB1CnimDuffT
+        5qRIMwzZXYk1QDL1fJlY8vx94+GOsGI=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-21-iFkQkA9NOhC-My5HscVccQ-1; Wed, 19 Oct 2022 11:41:09 -0400
+X-MC-Unique: iFkQkA9NOhC-My5HscVccQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D23EFB824B0;
-        Wed, 19 Oct 2022 15:39:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78462C433D6;
-        Wed, 19 Oct 2022 15:39:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666193975;
-        bh=R5mUdvcbU/2/tJ5ejtkz4jCaK/oLwR1v0C5V24F/6/k=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Zjb61FJnSBefpHHnl1oA1kqetSFgeFF//FrU7kAN9jPwJ8ucHxBbhv3DNoABZ7Xvr
-         7UEj06IcirGVTOiz+Beq5LEQGjoMaqygdMVoVt4J192L3atmvpTDsLINx3sdkT//Fl
-         WP1htq1Nev9xjix5Qh5Lwxntmow9dH5Zd7UvO886IrNjriWoqt+I8xc7Hwo29Xv5BI
-         yC58Nmz4w9y7E5MSTGAegHwpuOFF095SCKQ5XJFPMYccIvsjAI4cXrtydl2qJefsbn
-         I5HBje7WUSFQH3Z4CDN1Hn1fLHnxqL4j8adgWZqVY13ekYxs6qYcT6H5S2WBGbyg03
-         N0amDzKZZNaQQ==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1olBAK-0001Wd-VX;
-        Wed, 19 Oct 2022 16:39:33 +0100
-Date:   Wed, 19 Oct 2022 16:39:32 +0100
-Message-ID: <867d0vg6vf.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Sekhar Nori <nsekhar@ti.com>, Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Kevin Hilman <khilman@baylibre.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        David Lechner <david@lechnology.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        Lee Jones <lee@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bin Liu <b-liu@ti.com>,
-        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        linux-media@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-usb@vger.kernel.org, alsa-devel@alsa-project.org
-Subject: Re: [PATCH 00/14] ARM: remove unused davinci board & drivers
-In-Reply-To: <20221019152947.3857217-1-arnd@kernel.org>
-References: <20221019152947.3857217-1-arnd@kernel.org>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: arnd@kernel.org, nsekhar@ti.com, brgl@bgdev.pl, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, khilman@baylibre.com, arnd@arndb.de, linux@armlinux.org.uk, mchehab@kernel.org, damien.lemoal@opensource.wdc.com, s.shtylyov@omp.ru, david@lechnology.com, mturquette@baylibre.com, sboyd@kernel.org, dmitry.torokhov@gmail.com, tglx@linutronix.de, prabhakar.csengg@gmail.com, lee@kernel.org, a.zummo@towertech.it, alexandre.belloni@bootlin.com, gregkh@linuxfoundation.org, b-liu@ti.com, peter.ujfalusi@gmail.com, lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz, tiwai@suse.com, laurent.pinchart@ideasonboard.com, hverkuil-cisco@xs4all.nl, yangyingliang@huawei.com, linux-media@vger.kernel.org, linux-ide@vger.kernel.org, linux-clk@vger.kernel.org, linux-input@vger.kernel.org, linux-rtc@vger.kernel.org, linux-staging@lists.linux.dev, linux-usb@vger.kernel.org, alsa-devel@alsa-project.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B272A2932493;
+        Wed, 19 Oct 2022 15:41:08 +0000 (UTC)
+Received: from jtoppins.rdu.csb (unknown [10.22.34.209])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4CF1686D78;
+        Wed, 19 Oct 2022 15:41:08 +0000 (UTC)
+From:   Jonathan Toppins <jtoppins@redhat.com>
+To:     linux-kbuild@vger.kernel.org
+Cc:     dzickus@redhat.com, kheib@redhat.com, jtornosm@redhat.com,
+        ihuguet@redhat.com, Ivan Vecera <ivecera@redhat.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org
+Subject: [RFC PATCH] kbuild: add ability to make source rpm buildable using koji
+Date:   Wed, 19 Oct 2022 11:40:12 -0400
+Message-Id: <5b59fdb7db34f5292b1d138939c6b70b2b2039dd.1666194012.git.jtoppins@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 19 Oct 2022 16:29:26 +0100,
-Arnd Bergmann <arnd@kernel.org> wrote:
-> 
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> As part of removing all board files that were previously marked as unused,
-> I looked through the davinci platform and recursively removed everything
-> that has now become unused.
-> 
-> In particular, this is for all dm3xx support, in addition to the dm64xx
-> support removed previously. The remaining support is now for da8xx using
-> devicetree only, which means a lot of the da8xx specific device support
-> can also go away.
-> 
-> As with the previous series, I can keep patches together in the
-> soc tree, or subsystem maintainers can pick them up individually
-> through their subsystems, whichever they prefer.
-> 
-> Arnd Bergmann (14):
+From: Ivan Vecera <ivecera@redhat.com>
 
-[...]
+Changes:
+- added new target 'srcrpm-pkg' to generate source rpm
+- added required build tools to spec file
+- removed locally compiled host tools to force their re-compile
 
->   irqchip: remove davinci aintc driver
+Signed-off-by: Ivan Vecera <ivecera@redhat.com>
+Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
+---
+ scripts/Makefile.package | 10 ++++++++++
+ scripts/package/mkspec   |  7 +++++++
+ 2 files changed, 17 insertions(+)
 
-Acked-by: Marc Zyngier <maz@kernel.org>
-
-	M.
-
+diff --git a/scripts/Makefile.package b/scripts/Makefile.package
+index 8bbcced67c22..e0830a870394 100644
+--- a/scripts/Makefile.package
++++ b/scripts/Makefile.package
+@@ -62,6 +62,16 @@ rpm-pkg:
+ 	+rpmbuild $(RPMOPTS) --target $(UTS_MACHINE)-linux -ta $(KERNELPATH).tar.gz \
+ 	--define='_smp_mflags %{nil}'
+ 
++# srcrpm-pkg
++# ---------------------------------------------------------------------------
++PHONY += srcrpm-pkg
++srcrpm-pkg:
++	$(MAKE) clean
++	$(CONFIG_SHELL) $(MKSPEC) >$(objtree)/kernel.spec
++	$(call cmd,src_tar,$(KERNELPATH),kernel.spec)
++	+rpmbuild $(RPMOPTS) --target $(UTS_MACHINE) -ts $(KERNELPATH).tar.gz \
++	--define='_smp_mflags %{nil}' --define='_srcrpmdir $(srctree)'
++
+ # binrpm-pkg
+ # ---------------------------------------------------------------------------
+ PHONY += binrpm-pkg
+diff --git a/scripts/package/mkspec b/scripts/package/mkspec
+index 70392fd2fd29..dda00a948a01 100755
+--- a/scripts/package/mkspec
++++ b/scripts/package/mkspec
+@@ -33,6 +33,8 @@ EXCLUDES="$RCS_TAR_IGNORE --exclude=*vmlinux* --exclude=*.mod \
+ --exclude=*.o --exclude=*.ko --exclude=*.cmd --exclude=Documentation \
+ --exclude=.config.old --exclude=.missing-syscalls.d --exclude=*.s"
+ 
++test -n "$LOCALVERSION" && MAKE="$MAKE LOCALVERSION=$LOCALVERSION"
++
+ # We can label the here-doc lines for conditional output to the spec file
+ #
+ # Labels:
+@@ -49,6 +51,9 @@ sed -e '/^DEL/d' -e 's/^\t*//' <<EOF
+ 	URL: https://www.kernel.org
+ $S	Source: kernel-$__KERNELRELEASE.tar.gz
+ 	Provides: $PROVIDES
++$S	BuildRequires: bc binutils bison dwarves elfutils-libelf-devel flex
++$S	BuildRequires: gcc make openssl openssl-devel perl python3 rsync
++
+ 	# $UTS_MACHINE as a fallback of _arch in case
+ 	# /usr/lib/rpm/platform/*/macros was not included.
+ 	%define _arch %{?_arch:$UTS_MACHINE}
+@@ -80,6 +85,8 @@ $S$M	against the $__KERNELRELEASE kernel package.
+ $S$M
+ $S	%prep
+ $S	%setup -q
++$S	rm -f scripts/basic/fixdep scripts/kconfig/conf
++$S	rm -f tools/objtool/{fixdep,objtool}
+ $S
+ $S	%build
+ $S	$MAKE %{?_smp_mflags} KBUILD_BUILD_VERSION=%{release}
 -- 
-Without deviation from the norm, progress is not possible.
+2.31.1
+
