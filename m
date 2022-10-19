@@ -2,97 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5BF9604AB4
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:10:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08552604ABA
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:10:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231313AbiJSPKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 11:10:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33340 "EHLO
+        id S231614AbiJSPKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 11:10:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232509AbiJSPJR (ORCPT
+        with ESMTP id S232635AbiJSPJc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 11:09:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F02D13F1B
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 08:02:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666191747;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PuGHfrLsMCWGVahZJWXTgYQa14ARBbhcsNOf6vopbCQ=;
-        b=bukGPRteUO5/IoMjs7p4qVtTch3El2uPHDuGXmOJVFNGRvC4SdGy66H3Yug5juy4Y8kE3g
-        tbqnK9AtCGIAC1BhYF2MPF0UgRm4pVVZAtfFGqFX/dVnVKdsVT/JVOE6G0FJOZe3ilQfnA
-        uYvUIzZ7eIB0ZyhdNwTWgXY+QBJoKQo=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-645-tE1eHk-AO7i8LxfgR7FYyw-1; Wed, 19 Oct 2022 11:02:23 -0400
-X-MC-Unique: tE1eHk-AO7i8LxfgR7FYyw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8BDFB18ABFB3;
-        Wed, 19 Oct 2022 15:02:06 +0000 (UTC)
-Received: from [10.22.33.65] (unknown [10.22.33.65])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3955D9D464;
-        Wed, 19 Oct 2022 15:02:03 +0000 (UTC)
-Message-ID: <28264558-5f3f-9521-ced2-2c94a27002ec@redhat.com>
-Date:   Wed, 19 Oct 2022 11:02:00 -0400
+        Wed, 19 Oct 2022 11:09:32 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3B6838A1F
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 08:03:01 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id be13so12952856lfb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 08:03:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=8uws4B5WgtxEQQPonRBN7dDm57mj+TMYZwg9NWMF6uE=;
+        b=GNoRQIq9JKVsi3NBMOHtxRxaA+HyiSRxEbQwKROCIdQN7YeQVvkeCL/tBfTJ0rFShS
+         wLv+OMed6GKtlzQERAvDIH0fS9RwWNLH1iDzg8iIFUBsQUCTCUR56HEIdBHp5w6KeZ+i
+         ed0p1SeRI6LjurmDyBxbuv8clbnocReb3YyBgtI/ebogw01dMtsK7A/KD1lbcyPsqtH5
+         TaWyyc8eNama/1dRhNwUMQO8P85tBb+QCcPLfYt81cuF60S21NuSTt9ENjFqtPiqHbYW
+         QbAZcIWW265YqQ7fQmjB0etPPuYGAVxyYuBBwAInvDjayuW/S/xhDX/aqG8lWy7/HjYu
+         bNlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8uws4B5WgtxEQQPonRBN7dDm57mj+TMYZwg9NWMF6uE=;
+        b=vroUB/Kw8rF/rwtz85w67d+rNKDFHc+wAoY2Pni3Ac3LJ8t23bFpZewSavR4bo2TCw
+         6FcVFESxnSVs7F9gr5a9gy8qkxBQ0lT2ApzbWU8L08MIb3Uj8EdJxEKNuOVuQ9hk9tBb
+         yIe0G3K9LuXpycmvaowPHg/FF9NkfcLKU34EfT4mXYvg0zb5jf5qyjpKedDGyJCZXU2e
+         P8FBuWTNECYSqczYUws/PK4XzOYezcizkRUgLVcoWkAg4qMO2Olee7AIZbF63AxaF4UY
+         fTqHW/N6WNbOzI16PpHs8iV0Pbl9vJkuh0Jit7oqIuDHc2aWiPr1VSiS4yR5+Ynd11Y8
+         FBcQ==
+X-Gm-Message-State: ACrzQf1j3fDaV53ckaSakPV8nzvW0P8YZOPr4W5WfxBfalpcLNilkOTz
+        il5hjjw2e34ti21I2/I0coFvua7MPedevt4RqTEPpw==
+X-Google-Smtp-Source: AMsMyM73/Iz2UA6hD6VnKREmVWKox8T+CDDwCUSlKn0rjft7dc92r9M4EXDXMPFumhxI7Ld+a4+gjwQViVOGvFn4W+A=
+X-Received: by 2002:a05:6512:4cb:b0:4a2:25b6:9e73 with SMTP id
+ w11-20020a05651204cb00b004a225b69e73mr3205357lfq.30.1666191778897; Wed, 19
+ Oct 2022 08:02:58 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v3 4/5] locking/rwsem: Enable direct rwsem lock handoff
-Content-Language: en-US
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     Mukesh Ojha <quic_mojha@quicinc.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        linux-kernel@vger.kernel.org, john.p.donnelly@oracle.com,
-        =?UTF-8?B?VGluZzExIFdhbmcg546L5am3?= <wangting11@xiaomi.com>
-References: <20221017211356.333862-1-longman@redhat.com>
- <20221018111424.1007-1-hdanton@sina.com>
- <9b63611e-8d9a-529b-dcdc-05b10a8a712a@quicinc.com>
- <20221018235138.1088-1-hdanton@sina.com>
- <20221019022934.1166-1-hdanton@sina.com>
- <20221019070559.1220-1-hdanton@sina.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20221019070559.1220-1-hdanton@sina.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
+ <20220915142913.2213336-6-chao.p.peng@linux.intel.com> <CA+EHjTxukqBfaN6D+rPOiX83zkGknHEQ16J0k6GQSdL_-e9C6g@mail.gmail.com>
+ <20221012023516.GA3218049@chaop.bj.intel.com> <CA+EHjTyGyGL+ox81=jdtoHERtHPV=P7wJub=3j7chdijyq-AgA@mail.gmail.com>
+ <Y03UiYYioV+FQIpx@google.com> <20221019132308.GA3496045@chaop.bj.intel.com>
+In-Reply-To: <20221019132308.GA3496045@chaop.bj.intel.com>
+From:   Fuad Tabba <tabba@google.com>
+Date:   Wed, 19 Oct 2022 16:02:22 +0100
+Message-ID: <CA+EHjTytCEup0m-nhnVHsuQ1xjaCxXNHO_Oxe+QbpwqaewpfKQ@mail.gmail.com>
+Subject: Re: [PATCH v8 5/8] KVM: Register/unregister the guest private memory regions
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/19/22 03:05, Hillf Danton wrote:
-> On 18 Oct 2022 22:49:02 -0400 Waiman Long <longman@redhat.com>
->> On 10/18/22 22:29, Hillf Danton wrote:
->>> If handoff grants rwsem to a read waiter then the read fast path may revive.
->> I don't quite understand what you mean by "read fast path may revive".
-> Subsequent readers may take rwsem without going the slow path after a
-> read waiter is granted.
-That may not be true. As long as there are still waiters in the wait 
-queue, a reader has to go into the slow path and queued up in the wait 
-queue. This is is to prevent a continuous stream of readers from 
-starving writers in the wait queue.
+> > > This sounds good. Thank you.
+> >
+> > I like the idea of a separate Kconfig, e.g. CONFIG_KVM_GENERIC_PRIVATE_MEM or
+> > something.  I highly doubt there will be any non-x86 users for multiple years,
+> > if ever, but it would allow testing the private memory stuff on ARM (and any other
+> > non-x86 arch) without needing full pKVM support and with only minor KVM
+> > modifications, e.g. the x86 support[*] to test UPM without TDX is shaping up to be
+> > trivial.
 >
-> OTOH even after the check for single BIAS, another reader may come in
-> and add its BIAS to count, which builds the same count as multiple
-> readers came in before the check.
+> CONFIG_KVM_GENERIC_PRIVATE_MEM looks good to me.
 
-That is true, but hopefully we will eventually run out reader trying to 
-get a read lock on a given rwsem.
+That sounds good to me, and just keeping the xarray isn't really an
+issue for pKVM. We could end up using it instead of some of the other
+structures we use for tracking.
 
 Cheers,
-Longman
+/fuad
 
-
+> Thanks,
+> Chao
+> >
+> > [*] https://lore.kernel.org/all/Y0mu1FKugNQG5T8K@google.com
