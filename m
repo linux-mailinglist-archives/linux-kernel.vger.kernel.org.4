@@ -2,82 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F817604545
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 14:29:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7D2060454A
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 14:30:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230299AbiJSM3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 08:29:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35902 "EHLO
+        id S231381AbiJSMai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 08:30:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232885AbiJSM2y (ORCPT
+        with ESMTP id S229972AbiJSMaI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 08:28:54 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CC1511A975;
-        Wed, 19 Oct 2022 05:05:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=vGBsCUqFwWa+5hhW0zeEah/ZUEjsYfdXFEhqLjTbsNA=; b=BlLx6D56pzr5wjMcKu3HON//TV
-        vfdQxAJ+JZLnPNKTt4sAUEBpDVQw8rOxaANkDlyM4m1EijklbdUR06/pBCX3I9sRhwfabIsHiTbzN
-        VMstuVifqL7rbwnMC83dtXsjDpK+JAy6gINl6Fmn7oHFZ55vLg1kdEv/eYC4FZQrcYbGWmNFW2GlM
-        J41OsYnW4a3NBRCJIIHPvtX/Uh29mi28rgUgtUL3drKaxIcCuZXNjujJNbQmMYChTR05drz1raQYu
-        GS8YQvLkf/3iCSc97x6KWQeBz2RSpIEqV5ihrJP684qIKyx3BNRM5/G3gzPjq+FNk/aqqjPnLd+vv
-        CEr+xVCw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34800)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1ol7lX-0005cV-UB; Wed, 19 Oct 2022 13:01:43 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1ol7lX-00028O-Aq; Wed, 19 Oct 2022 13:01:43 +0100
-Date:   Wed, 19 Oct 2022 13:01:43 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Sergiu Moga <sergiu.moga@microchip.com>
-Cc:     nicolas.ferre@microchip.com, claudiu.beznea@microchip.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, f.fainelli@gmail.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: macb: Specify PHY PM management done by MAC
-Message-ID: <Y0/nJ+gtYoPQ5WNH@shell.armlinux.org.uk>
-References: <20221019095548.57650-1-sergiu.moga@microchip.com>
+        Wed, 19 Oct 2022 08:30:08 -0400
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C49CD18C438
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 05:07:42 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1666181081;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=9Zp0rsOwaZAudeS2Yn3cYhCuuXMlRO2UwNZgHWLJ9K8=;
+        b=Q9+90QS7LNNNm7kvUFJq+pkQ4l+2WZSD6FZFg0q7ZB5/5f5Xs5+3GMbwNjkTuCj7iJOrW5
+        YUKLmIry915vUhFojJ/KmG4rSx+AD/GffFSwQ4Qra4DtOzTkjNXNHx6VsCv+TPUnXe8fUU
+        tKcSlGnMJLvICa4C26YADM1IV2yUjmQ=
+From:   Yajun Deng <yajun.deng@linux.dev>
+To:     rppt@kernel.org, akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Yajun Deng <yajun.deng@linux.dev>
+Subject: [PATCH] memblock: remove repeat round
+Date:   Wed, 19 Oct 2022 20:03:37 +0800
+Message-Id: <20221019120337.2098298-1-yajun.deng@linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221019095548.57650-1-sergiu.moga@microchip.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 12:55:50PM +0300, Sergiu Moga wrote:
-> The `macb_resume`/`macb_suspend` methods already call the
-> `phylink_start`/`phylink_stop` methods during their execution so
-> explicitly say that the PM of the PHY is done by MAC by using the
-> `mac_managed_pm` flag of the `struct phylink_config`.
-> 
-> This also fixes the warning message issued during resume:
-> WARNING: CPU: 0 PID: 237 at drivers/net/phy/phy_device.c:323 mdio_bus_phy_resume+0x144/0x148
-> 
-> Fixes: 744d23c71af3 ("net: phy: Warn about incorrect mdio_bus_phy_resume() state")
+There is no need round twice in memblock_add_range().
 
-Hi,
+We can call memblock_double_array() to extand the size if type->cnt no
+less than type->max before memblock_insert_region(), otherwise we can
+insert the new region directly.
 
-You also need to mention that this commit depends on 96de900ae78e
-in the net tree, which introduced the mac_managed_pm member to
-phylink_config.
+Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
+---
+ mm/memblock.c | 54 +++++++++++++++------------------------------------
+ 1 file changed, 16 insertions(+), 38 deletions(-)
 
-Thanks.
-
+diff --git a/mm/memblock.c b/mm/memblock.c
+index 511d4783dcf1..1679244b4a1a 100644
+--- a/mm/memblock.c
++++ b/mm/memblock.c
+@@ -578,7 +578,6 @@ static int __init_memblock memblock_add_range(struct memblock_type *type,
+ 				phys_addr_t base, phys_addr_t size,
+ 				int nid, enum memblock_flags flags)
+ {
+-	bool insert = false;
+ 	phys_addr_t obase = base;
+ 	phys_addr_t end = base + memblock_cap_size(base, &size);
+ 	int idx, nr_new;
+@@ -598,22 +597,6 @@ static int __init_memblock memblock_add_range(struct memblock_type *type,
+ 		return 0;
+ 	}
+ 
+-	/*
+-	 * The worst case is when new range overlaps all existing regions,
+-	 * then we'll need type->cnt + 1 empty regions in @type. So if
+-	 * type->cnt * 2 + 1 is less than type->max, we know
+-	 * that there is enough empty regions in @type, and we can insert
+-	 * regions directly.
+-	 */
+-	if (type->cnt * 2 + 1 < type->max)
+-		insert = true;
+-
+-repeat:
+-	/*
+-	 * The following is executed twice.  Once with %false @insert and
+-	 * then with %true.  The first counts the number of regions needed
+-	 * to accommodate the new area.  The second actually inserts them.
+-	 */
+ 	base = obase;
+ 	nr_new = 0;
+ 
+@@ -635,10 +618,14 @@ static int __init_memblock memblock_add_range(struct memblock_type *type,
+ #endif
+ 			WARN_ON(flags != rgn->flags);
+ 			nr_new++;
+-			if (insert)
+-				memblock_insert_region(type, idx++, base,
+-						       rbase - base, nid,
+-						       flags);
++
++			if ((type->cnt >= type->max) &&
++			    (memblock_double_array(type, obase, size) < 0))
++				return -ENOMEM;
++
++			memblock_insert_region(type, idx++, base,
++					       rbase - base, nid,
++					       flags);
+ 		}
+ 		/* area below @rend is dealt with, forget about it */
+ 		base = min(rend, end);
+@@ -647,28 +634,19 @@ static int __init_memblock memblock_add_range(struct memblock_type *type,
+ 	/* insert the remaining portion */
+ 	if (base < end) {
+ 		nr_new++;
+-		if (insert)
+-			memblock_insert_region(type, idx, base, end - base,
+-					       nid, flags);
++		if ((type->cnt >= type->max) &&
++		    (memblock_double_array(type, obase, size) < 0))
++			return -ENOMEM;
++
++		memblock_insert_region(type, idx, base, end - base,
++				       nid, flags);
+ 	}
+ 
+ 	if (!nr_new)
+ 		return 0;
+ 
+-	/*
+-	 * If this was the first round, resize array and repeat for actual
+-	 * insertions; otherwise, merge and return.
+-	 */
+-	if (!insert) {
+-		while (type->cnt + nr_new > type->max)
+-			if (memblock_double_array(type, obase, size) < 0)
+-				return -ENOMEM;
+-		insert = true;
+-		goto repeat;
+-	} else {
+-		memblock_merge_regions(type);
+-		return 0;
+-	}
++	memblock_merge_regions(type);
++	return 0;
+ }
+ 
+ /**
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+2.25.1
+
