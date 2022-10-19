@@ -2,116 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84D96604095
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 12:05:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBA1A6040A0
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 12:07:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231297AbiJSKFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 06:05:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42444 "EHLO
+        id S229498AbiJSKHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 06:07:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234622AbiJSKFS (ORCPT
+        with ESMTP id S230188AbiJSKGf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 06:05:18 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E8041D0C9;
-        Wed, 19 Oct 2022 02:43:52 -0700 (PDT)
-X-UUID: f32d2bf420ce445486fa0c94b58479ca-20221019
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=Kog1vDR6cA7Cv/+p3jG4ipnaDZd4MDhSuD+VBldspaE=;
-        b=su5nwCGt5Oz+fYz3hMY5xHpH9xtgIqKo0O+NuSgYA2AI9ryoH8ZrwvITVLajtSJt/MpvitTiMTHu9jEakhF74wEV78m8gLDaShdMqkZ7SrXVdlMWxIL5qwm9YKKNsgauPOSnJN7fToz3r1JwwpKl0kwnm5E5QCBwIRRmA5Kyii4=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.12,REQID:4709ae2d-bb2f-4f3e-b64f-715b7cc10456,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:62cd327,CLOUDID:16134aa3-73e4-48dd-a911-57b5d5484f14,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: f32d2bf420ce445486fa0c94b58479ca-20221019
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
-        (envelope-from <xinlei.lee@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1042997215; Wed, 19 Oct 2022 17:42:21 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Wed, 19 Oct 2022 17:42:20 +0800
-Received: from mszsdaap41.gcn.mediatek.inc (10.16.6.141) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Wed, 19 Oct 2022 17:42:19 +0800
-From:   <xinlei.lee@mediatek.com>
-To:     <thierry.reding@gmail.com>, <u.kleine-koenig@pengutronix.de>,
-        <matthias.bgg@gmail.com>, <jitao.shi@mediatek.com>
-CC:     <linux-pwm@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        xinlei lee <xinlei.lee@mediatek.com>
-Subject: [PATCH v4] pwm: mtk-disp: Fix the parameters calculated by the enabled flag of disp_pwm
-Date:   Wed, 19 Oct 2022 17:42:18 +0800
-Message-ID: <1666172538-11652-1-git-send-email-xinlei.lee@mediatek.com>
-X-Mailer: git-send-email 2.6.4
+        Wed, 19 Oct 2022 06:06:35 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B308E37FBF;
+        Wed, 19 Oct 2022 02:45:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666172706; x=1697708706;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=uzmWH6BVJnji7ty8wQYZD2FSX6+VKQm7vy7t4xf+g2Y=;
+  b=iOURUV7EvbOnDdjxdfSqx1totlS/irBVF1YdbF4iz3H9lp8gySLY28g7
+   TeRGkBbScFYujh8E/kWQRQxkAwpgGXBIyic4M6YU1MZkynCEOFF9eGbuQ
+   4y5NlNoMmsz/FxmhY3UVUaQGs0LPXRflXgfMKIK9r9ZJwXMzhdS6ZCxdA
+   xP/abeGsvqhpKxe1Pf/wT2fPPFb0c7cYv/HupwwHWhZIUaFM6OkeLdTon
+   ztiURZgh8/8+jtNJa4ZGHhIqGZATQBZih/nwnt41BwKhmD+z9+gZTtk+V
+   61B82kPKL/nF7AOrXEWOlYRX71hnl+9wvZlq0Uo1zRDJMxJCPjZCeIZCF
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="305097153"
+X-IronPort-AV: E=Sophos;i="5.95,195,1661842800"; 
+   d="scan'208";a="305097153"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 02:42:50 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="631584363"
+X-IronPort-AV: E=Sophos;i="5.95,195,1661842800"; 
+   d="scan'208";a="631584363"
+Received: from sponnura-mobl1.amr.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.251.214.35])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 02:42:48 -0700
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 1/2] tty: Convert tty_buffer flags to bool
+Date:   Wed, 19 Oct 2022 12:42:39 +0300
+Message-Id: <20221019094241.10870-1-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: xinlei lee <xinlei.lee@mediatek.com>
+The struct tty_buffer has flags which is only used for storing TTYB_NORMAL.
+There is also a few quite confusing operations for checking the presense
+of TTYB_NORMAL. Simplify things by converting flags to bool.
 
-In the original mtk_disp_pwm_get_state() function wrongly uses bit 0 of
-CON0 to judge if the PWM is enabled.
-However that is indicated by a bit (at a machine dependent position) in
-the DISP_PWM_EN register. Fix this accordingly.
-
-Fixes: 3f2b16734914 ("pwm: mtk-disp: Implement atomic API .get_state()")
-Signed-off-by: xinlei lee <xinlei.lee@mediatek.com>
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
-Rebase on linus/master v6.1-rc1.
+ drivers/tty/tty_buffer.c   | 28 ++++++++++++++--------------
+ include/linux/tty_buffer.h |  5 +----
+ include/linux/tty_flip.h   |  4 ++--
+ 3 files changed, 17 insertions(+), 20 deletions(-)
 
-change since v3:
-1. Remove the empty line between Fixes: and S-o-b.
-
-change since v2:
-1. Modify the code for readability.
-
-change since v1:
-1. Modify the way to set disp_pwm enbale.
----
----
- drivers/pwm/pwm-mtk-disp.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/pwm/pwm-mtk-disp.c b/drivers/pwm/pwm-mtk-disp.c
-index c605013e4114..3fbb4bae93a4 100644
---- a/drivers/pwm/pwm-mtk-disp.c
-+++ b/drivers/pwm/pwm-mtk-disp.c
-@@ -178,7 +178,7 @@ static void mtk_disp_pwm_get_state(struct pwm_chip *chip,
- {
- 	struct mtk_disp_pwm *mdp = to_mtk_disp_pwm(chip);
- 	u64 rate, period, high_width;
--	u32 clk_div, con0, con1;
-+	u32 clk_div, pwm_en, con0, con1;
- 	int err;
+diff --git a/drivers/tty/tty_buffer.c b/drivers/tty/tty_buffer.c
+index 5e287dedce01..be3431575a19 100644
+--- a/drivers/tty/tty_buffer.c
++++ b/drivers/tty/tty_buffer.c
+@@ -107,7 +107,7 @@ static void tty_buffer_reset(struct tty_buffer *p, size_t size)
+ 	p->commit = 0;
+ 	p->lookahead = 0;
+ 	p->read = 0;
+-	p->flags = 0;
++	p->flags = true;
+ }
  
- 	err = clk_prepare_enable(mdp->clk_main);
-@@ -197,7 +197,8 @@ static void mtk_disp_pwm_get_state(struct pwm_chip *chip,
- 	rate = clk_get_rate(mdp->clk_main);
- 	con0 = readl(mdp->base + mdp->data->con0);
- 	con1 = readl(mdp->base + mdp->data->con1);
--	state->enabled = !!(con0 & BIT(0));
-+	pwm_en = readl(mdp->base + DISP_PWM_EN);
-+	state->enabled = !!(pwm_en & mdp->data->enable_mask);
- 	clk_div = FIELD_GET(PWM_CLKDIV_MASK, con0);
- 	period = FIELD_GET(PWM_PERIOD_MASK, con1);
- 	/*
+ /**
+@@ -249,7 +249,7 @@ void tty_buffer_flush(struct tty_struct *tty, struct tty_ldisc *ld)
+  * __tty_buffer_request_room	-	grow tty buffer if needed
+  * @port: tty port
+  * @size: size desired
+- * @flags: buffer flags if new buffer allocated (default = 0)
++ * @flags: buffer flags if new buffer allocated
+  *
+  * Make at least @size bytes of linear space available for the tty buffer.
+  *
+@@ -260,19 +260,19 @@ void tty_buffer_flush(struct tty_struct *tty, struct tty_ldisc *ld)
+  * Returns: the size we managed to find.
+  */
+ static int __tty_buffer_request_room(struct tty_port *port, size_t size,
+-				     int flags)
++				     bool flags)
+ {
+ 	struct tty_bufhead *buf = &port->buf;
+ 	struct tty_buffer *b, *n;
+ 	int left, change;
+ 
+ 	b = buf->tail;
+-	if (b->flags & TTYB_NORMAL)
++	if (!b->flags)
+ 		left = 2 * b->size - b->used;
+ 	else
+ 		left = b->size - b->used;
+ 
+-	change = (b->flags & TTYB_NORMAL) && (~flags & TTYB_NORMAL);
++	change = !b->flags && flags;
+ 	if (change || left < size) {
+ 		/* This is the slow path - looking for new buffers to use */
+ 		n = tty_buffer_alloc(port, size);
+@@ -300,7 +300,7 @@ static int __tty_buffer_request_room(struct tty_port *port, size_t size,
+ 
+ int tty_buffer_request_room(struct tty_port *port, size_t size)
+ {
+-	return __tty_buffer_request_room(port, size, 0);
++	return __tty_buffer_request_room(port, size, true);
+ }
+ EXPORT_SYMBOL_GPL(tty_buffer_request_room);
+ 
+@@ -320,17 +320,17 @@ int tty_insert_flip_string_fixed_flag(struct tty_port *port,
+ 		const unsigned char *chars, char flag, size_t size)
+ {
+ 	int copied = 0;
++	bool flags = flag != TTY_NORMAL;
+ 
+ 	do {
+ 		int goal = min_t(size_t, size - copied, TTY_BUFFER_PAGE);
+-		int flags = (flag == TTY_NORMAL) ? TTYB_NORMAL : 0;
+ 		int space = __tty_buffer_request_room(port, goal, flags);
+ 		struct tty_buffer *tb = port->buf.tail;
+ 
+ 		if (unlikely(space == 0))
+ 			break;
+ 		memcpy(char_buf_ptr(tb, tb->used), chars, space);
+-		if (~tb->flags & TTYB_NORMAL)
++		if (tb->flags)
+ 			memset(flag_buf_ptr(tb, tb->used), flag, space);
+ 		tb->used += space;
+ 		copied += space;
+@@ -393,13 +393,13 @@ EXPORT_SYMBOL(tty_insert_flip_string_flags);
+ int __tty_insert_flip_char(struct tty_port *port, unsigned char ch, char flag)
+ {
+ 	struct tty_buffer *tb;
+-	int flags = (flag == TTY_NORMAL) ? TTYB_NORMAL : 0;
++	bool flags = flag != TTY_NORMAL;
+ 
+ 	if (!__tty_buffer_request_room(port, 1, flags))
+ 		return 0;
+ 
+ 	tb = port->buf.tail;
+-	if (~tb->flags & TTYB_NORMAL)
++	if (tb->flags)
+ 		*flag_buf_ptr(tb, tb->used) = flag;
+ 	*char_buf_ptr(tb, tb->used++) = ch;
+ 
+@@ -424,13 +424,13 @@ EXPORT_SYMBOL(__tty_insert_flip_char);
+ int tty_prepare_flip_string(struct tty_port *port, unsigned char **chars,
+ 		size_t size)
+ {
+-	int space = __tty_buffer_request_room(port, size, TTYB_NORMAL);
++	int space = __tty_buffer_request_room(port, size, false);
+ 
+ 	if (likely(space)) {
+ 		struct tty_buffer *tb = port->buf.tail;
+ 
+ 		*chars = char_buf_ptr(tb, tb->used);
+-		if (~tb->flags & TTYB_NORMAL)
++		if (tb->flags)
+ 			memset(flag_buf_ptr(tb, tb->used), TTY_NORMAL, space);
+ 		tb->used += space;
+ 	}
+@@ -492,7 +492,7 @@ static void lookahead_bufs(struct tty_port *port, struct tty_buffer *head)
+ 			unsigned char *p, *f = NULL;
+ 
+ 			p = char_buf_ptr(head, head->lookahead);
+-			if (~head->flags & TTYB_NORMAL)
++			if (head->flags)
+ 				f = flag_buf_ptr(head, head->lookahead);
+ 
+ 			port->client_ops->lookahead_buf(port, p, f, count);
+@@ -509,7 +509,7 @@ receive_buf(struct tty_port *port, struct tty_buffer *head, int count)
+ 	const char *f = NULL;
+ 	int n;
+ 
+-	if (~head->flags & TTYB_NORMAL)
++	if (head->flags)
+ 		f = flag_buf_ptr(head, head->read);
+ 
+ 	n = port->client_ops->receive_buf(port, p, f, count);
+diff --git a/include/linux/tty_buffer.h b/include/linux/tty_buffer.h
+index 1796648c2907..6ceb2789e6c8 100644
+--- a/include/linux/tty_buffer.h
++++ b/include/linux/tty_buffer.h
+@@ -17,14 +17,11 @@ struct tty_buffer {
+ 	int commit;
+ 	int lookahead;		/* Lazy update on recv, can become less than "read" */
+ 	int read;
+-	int flags;
++	bool flags;
+ 	/* Data points here */
+ 	unsigned long data[];
+ };
+ 
+-/* Values for .flags field of tty_buffer */
+-#define TTYB_NORMAL	1	/* buffer has no flags buffer */
+-
+ static inline unsigned char *char_buf_ptr(struct tty_buffer *b, int ofs)
+ {
+ 	return ((unsigned char *)b->data) + ofs;
+diff --git a/include/linux/tty_flip.h b/include/linux/tty_flip.h
+index 483d41cbcbb7..bfaaeee61a05 100644
+--- a/include/linux/tty_flip.h
++++ b/include/linux/tty_flip.h
+@@ -25,9 +25,9 @@ static inline int tty_insert_flip_char(struct tty_port *port,
+ 	struct tty_buffer *tb = port->buf.tail;
+ 	int change;
+ 
+-	change = (tb->flags & TTYB_NORMAL) && (flag != TTY_NORMAL);
++	change = !tb->flags && (flag != TTY_NORMAL);
+ 	if (!change && tb->used < tb->size) {
+-		if (~tb->flags & TTYB_NORMAL)
++		if (tb->flags)
+ 			*flag_buf_ptr(tb, tb->used) = flag;
+ 		*char_buf_ptr(tb, tb->used++) = ch;
+ 		return 1;
 -- 
-2.18.0
+2.30.2
 
