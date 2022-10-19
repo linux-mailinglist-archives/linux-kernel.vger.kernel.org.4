@@ -2,95 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E67D603E9B
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 11:16:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DB20603B71
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 10:27:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233202AbiJSJQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 05:16:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54008 "EHLO
+        id S229773AbiJSI1M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 04:27:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233114AbiJSJOA (ORCPT
+        with ESMTP id S229489AbiJSI1K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 05:14:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D57F1A4867;
-        Wed, 19 Oct 2022 02:04:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F68B61840;
-        Wed, 19 Oct 2022 09:03:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84248C433C1;
-        Wed, 19 Oct 2022 09:03:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666170206;
-        bh=HWsCh6S8kYslKrA90A/YzpYwjW55iz5uvgEbnbjOmZE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=alSJsnEHve3LNkgC8Tj8cNDmWBVUjzyfA/koY586aGiw5uAMgmVVZHaLQbePs1oCD
-         /Bl+s0GM6NAmy1uTFY5GB5xVYUtxWlWR6vnJgF3VQNuHIrmrQQstyOlIPPLIRAfpC+
-         1NTJO0aHdYRNwUjkZKJa3jpE7CP8A/K2jw3SRFAs=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Robert Marko <robimarko@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 6.0 568/862] clk: qcom: apss-ipq6018: mark apcs_alias0_core_clk as critical
-Date:   Wed, 19 Oct 2022 10:30:55 +0200
-Message-Id: <20221019083315.084807810@linuxfoundation.org>
+        Wed, 19 Oct 2022 04:27:10 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C97FD657F;
+        Wed, 19 Oct 2022 01:27:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1666168030; x=1697704030;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=MXelgcyJAvDzDyiQRCyTuEGTLOVMAItrzyFRkWJ6X4k=;
+  b=iJmgftERtcRAMzFhq2u+FlZLbTCBkI6wWztxMaY2OVP8+Uaeh7TQItOn
+   OgOYLxLfdRiZoq3i8NkueeDSepI0sn0zLrSKyjMJ45I1ru43xSbjE/0+e
+   u5lXuM1LLv0ozEh/6rSjhWIs1i3K/UeSyU5HLwQjAjLCXVrWt6pi8fAyA
+   mdt44iIoPq0WLkaNBk42EiknEwgpsZs3WCcaIw7sb5otL2wv8fAkR7r+q
+   epUdjWagPNOQlNXn1umO+VimhmAPEdRLLbCsR0E8VM56+WHPbtLrssNSh
+   aKqR+szs6asQFn26aXGxpXj9UmSZgWLrYkd2XjmuDxF8/XorB4oQEYtvx
+   A==;
+X-IronPort-AV: E=Sophos;i="5.95,195,1661842800"; 
+   d="scan'208";a="179506375"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 19 Oct 2022 01:27:09 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Wed, 19 Oct 2022 01:27:08 -0700
+Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Wed, 19 Oct 2022 01:27:06 -0700
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <UNGLinuxDriver@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: [PATCH net] net: lan966x: Fix the rx drop counter
+Date:   Wed, 19 Oct 2022 10:30:56 +0200
+Message-ID: <20221019083056.2744282-1-horatiu.vultur@microchip.com>
 X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221019083249.951566199@linuxfoundation.org>
-References: <20221019083249.951566199@linuxfoundation.org>
-User-Agent: quilt/0.67
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robert Marko <robimarko@gmail.com>
+Currently the rx drop is calculated as the sum of multiple HW drop
+counters. The issue is that not all the HW drop counters were added for
+the rx drop counter. So if for example you have a police that drops
+frames, they were not see in the rx drop counter.
+Fix this by updating how the rx drop counter is calculated. It is
+required to add also RX_RED_PRIO_* HW counters.
 
-[ Upstream commit 86e78995c93ee182433f965babfccd48417d4dcf ]
-
-While fixing up the driver I noticed that my IPQ8074 board was hanging
-after CPUFreq switched the frequency during boot, WDT would eventually
-reset it.
-
-So mark apcs_alias0_core_clk as critical since its the clock feeding the
-CPU cluster and must never be disabled.
-
-Fixes: 5e77b4ef1b19 ("clk: qcom: Add ipq6018 apss clock controller")
-Signed-off-by: Robert Marko <robimarko@gmail.com>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Signed-off-by: Bjorn Andersson <andersson@kernel.org>
-Link: https://lore.kernel.org/r/20220818220628.339366-3-robimarko@gmail.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 12c2d0a5b8e2 ("net: lan966x: add ethtool configuration and statistics")
+Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
 ---
- drivers/clk/qcom/apss-ipq6018.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../net/ethernet/microchip/lan966x/lan966x_ethtool.c   | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/clk/qcom/apss-ipq6018.c b/drivers/clk/qcom/apss-ipq6018.c
-index d78ff2f310bf..b5d93657e1ee 100644
---- a/drivers/clk/qcom/apss-ipq6018.c
-+++ b/drivers/clk/qcom/apss-ipq6018.c
-@@ -57,7 +57,7 @@ static struct clk_branch apcs_alias0_core_clk = {
- 			.parent_hws = (const struct clk_hw *[]){
- 				&apcs_alias0_clk_src.clkr.hw },
- 			.num_parents = 1,
--			.flags = CLK_SET_RATE_PARENT,
-+			.flags = CLK_SET_RATE_PARENT | CLK_IS_CRITICAL,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_ethtool.c b/drivers/net/ethernet/microchip/lan966x/lan966x_ethtool.c
+index e58a27fd8b508..fea42542be280 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_ethtool.c
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_ethtool.c
+@@ -656,7 +656,15 @@ void lan966x_stats_get(struct net_device *dev,
+ 	stats->rx_dropped = dev->stats.rx_dropped +
+ 		lan966x->stats[idx + SYS_COUNT_RX_LONG] +
+ 		lan966x->stats[idx + SYS_COUNT_DR_LOCAL] +
+-		lan966x->stats[idx + SYS_COUNT_DR_TAIL];
++		lan966x->stats[idx + SYS_COUNT_DR_TAIL] +
++		lan966x->stats[idx + SYS_COUNT_RX_RED_PRIO_0] +
++		lan966x->stats[idx + SYS_COUNT_RX_RED_PRIO_1] +
++		lan966x->stats[idx + SYS_COUNT_RX_RED_PRIO_2] +
++		lan966x->stats[idx + SYS_COUNT_RX_RED_PRIO_3] +
++		lan966x->stats[idx + SYS_COUNT_RX_RED_PRIO_4] +
++		lan966x->stats[idx + SYS_COUNT_RX_RED_PRIO_5] +
++		lan966x->stats[idx + SYS_COUNT_RX_RED_PRIO_6] +
++		lan966x->stats[idx + SYS_COUNT_RX_RED_PRIO_7];
+ 
+ 	for (i = 0; i < LAN966X_NUM_TC; i++) {
+ 		stats->rx_dropped +=
 -- 
-2.35.1
-
-
+2.38.0
 
