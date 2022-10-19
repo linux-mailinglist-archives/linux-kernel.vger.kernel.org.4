@@ -2,92 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E3E16040E3
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 12:27:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 020546043A8
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 13:46:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbiJSK0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 06:26:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54350 "EHLO
+        id S231482AbiJSLq2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 07:46:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229963AbiJSK0S (ORCPT
+        with ESMTP id S229906AbiJSLqH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 06:26:18 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62500F5CD1;
-        Wed, 19 Oct 2022 03:05:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1666173944; x=1697709944;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=VqVlegNUVIV/JH7Zje+bGAcW407b6Vj+m+3Z8IAvusY=;
-  b=L5ivXYJHs1Aw54tnKZi+H6R4SgPtULGvuI4zqBVge4fYXnHDZMldPWPv
-   2BgG5uc+sMbxztN8wsFiE61HvrG5ZVvcw+/oMM+WCwMSd3gU2mz/b2u8H
-   J3Ioz3Xpm+Yk02Fbh7q2wDTGLUsp7ycpR8CpTUUtJI3NsaMYHzueR7LxN
-   iF4kR6aEIPidLwmDLGqF0/6Tnkw4PH+PQVedu5HTggNFC5ZYnInmGRbno
-   ksJj2TSU2bsqvduuYfTUBQ2YIotM8env4Yg4G+ZP8tCXquNlBfm33hRCa
-   lj75q4aVDAZsVOckR3wJ9fvqbFNzR4Qk7/HEZBTWteXq7JBgF2r0Uveks
-   g==;
-X-IronPort-AV: E=Sophos;i="5.95,195,1661842800"; 
-   d="scan'208";a="182912338"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 19 Oct 2022 02:57:05 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Wed, 19 Oct 2022 02:57:02 -0700
-Received: from ROB-ULT-M68701.mchp-main.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Wed, 19 Oct 2022 02:56:59 -0700
-From:   Sergiu Moga <sergiu.moga@microchip.com>
-To:     <nicolas.ferre@microchip.com>, <claudiu.beznea@microchip.com>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <linux@armlinux.org.uk>,
-        <f.fainelli@gmail.com>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Sergiu Moga <sergiu.moga@microchip.com>
-Subject: [PATCH] net: macb: Specify PHY PM management done by MAC
-Date:   Wed, 19 Oct 2022 12:55:50 +0300
-Message-ID: <20221019095548.57650-1-sergiu.moga@microchip.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 19 Oct 2022 07:46:07 -0400
+Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3667169126
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 04:25:51 -0700 (PDT)
+Received: from dev011.ch-qa.sw.ru ([172.29.1.16])
+        by relay.virtuozzo.com with esmtp (Exim 4.95)
+        (envelope-from <alexander.atanasov@virtuozzo.com>)
+        id 1ol5lY-00B8K8-H0;
+        Wed, 19 Oct 2022 11:56:27 +0200
+From:   Alexander Atanasov <alexander.atanasov@virtuozzo.com>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Nadav Amit <namit@vmware.com>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     kernel@openvz.org,
+        Alexander Atanasov <alexander.atanasov@virtuozzo.com>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        virtualization@lists.linux-foundation.org, linux-mm@kvack.org
+Subject: [RFC PATCH v5 1/8] mm: Make a place for a common balloon code
+Date:   Wed, 19 Oct 2022 12:56:13 +0300
+Message-Id: <20221019095620.124909-2-alexander.atanasov@virtuozzo.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20221019095620.124909-1-alexander.atanasov@virtuozzo.com>
+References: <20221019095620.124909-1-alexander.atanasov@virtuozzo.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The `macb_resume`/`macb_suspend` methods already call the
-`phylink_start`/`phylink_stop` methods during their execution so
-explicitly say that the PM of the PHY is done by MAC by using the
-`mac_managed_pm` flag of the `struct phylink_config`.
+The file already contains code that is common along balloon
+drivers so rename it to reflect its contents.
+mm/balloon_compaction.c -> mm/balloon.c
+include/linux/balloon_compaction.h -> include/linux/balloon.h
+Remove it from files that do not actually use it.
+Drop externs from function declarations.
 
-This also fixes the warning message issued during resume:
-WARNING: CPU: 0 PID: 237 at drivers/net/phy/phy_device.c:323 mdio_bus_phy_resume+0x144/0x148
-
-Fixes: 744d23c71af3 ("net: phy: Warn about incorrect mdio_bus_phy_resume() state")
-Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
+Signed-off-by: Alexander Atanasov <alexander.atanasov@virtuozzo.com>
+Acked-by: Nadav Amit <namit@vmware.com>
 ---
- drivers/net/ethernet/cadence/macb_main.c | 1 +
- 1 file changed, 1 insertion(+)
+ MAINTAINERS                                       |  4 ++--
+ arch/powerpc/platforms/pseries/cmm.c              |  2 +-
+ drivers/misc/vmw_balloon.c                        |  2 +-
+ drivers/virtio/virtio_balloon.c                   |  2 +-
+ include/linux/{balloon_compaction.h => balloon.h} | 12 +++++-------
+ mm/Makefile                                       |  2 +-
+ mm/{balloon_compaction.c => balloon.c}            |  4 +---
+ mm/migrate.c                                      |  1 -
+ mm/vmscan.c                                       |  1 -
+ 9 files changed, 12 insertions(+), 18 deletions(-)
+ rename include/linux/{balloon_compaction.h => balloon.h} (93%)
+ rename mm/{balloon_compaction.c => balloon.c} (99%)
 
-diff --git a/drivers/net/ethernet/cadence/macb_main.c b/drivers/net/ethernet/cadence/macb_main.c
-index 51c9fd6f68a4..4f63f1ba3161 100644
---- a/drivers/net/ethernet/cadence/macb_main.c
-+++ b/drivers/net/ethernet/cadence/macb_main.c
-@@ -806,6 +806,7 @@ static int macb_mii_probe(struct net_device *dev)
+diff --git a/MAINTAINERS b/MAINTAINERS
+index cf0f18502372..3f5a4e409562 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -21744,8 +21744,8 @@ L:	virtualization@lists.linux-foundation.org
+ S:	Maintained
+ F:	drivers/virtio/virtio_balloon.c
+ F:	include/uapi/linux/virtio_balloon.h
+-F:	include/linux/balloon_compaction.h
+-F:	mm/balloon_compaction.c
++F:	include/linux/balloon.h
++F:	mm/balloon.c
  
- 	bp->phylink_config.dev = &dev->dev;
- 	bp->phylink_config.type = PHYLINK_NETDEV;
-+	bp->phylink_config.mac_managed_pm = true;
+ VIRTIO CRYPTO DRIVER
+ M:	Gonglei <arei.gonglei@huawei.com>
+diff --git a/arch/powerpc/platforms/pseries/cmm.c b/arch/powerpc/platforms/pseries/cmm.c
+index 5f4037c1d7fe..1d40f6416d6a 100644
+--- a/arch/powerpc/platforms/pseries/cmm.c
++++ b/arch/powerpc/platforms/pseries/cmm.c
+@@ -19,7 +19,7 @@
+ #include <linux/stringify.h>
+ #include <linux/swap.h>
+ #include <linux/device.h>
+-#include <linux/balloon_compaction.h>
++#include <linux/balloon.h>
+ #include <asm/firmware.h>
+ #include <asm/hvcall.h>
+ #include <asm/mmu.h>
+diff --git a/drivers/misc/vmw_balloon.c b/drivers/misc/vmw_balloon.c
+index 61a2be712bf7..91d4d2a285c5 100644
+--- a/drivers/misc/vmw_balloon.c
++++ b/drivers/misc/vmw_balloon.c
+@@ -29,7 +29,7 @@
+ #include <linux/rwsem.h>
+ #include <linux/slab.h>
+ #include <linux/spinlock.h>
+-#include <linux/balloon_compaction.h>
++#include <linux/balloon.h>
+ #include <linux/vmw_vmci_defs.h>
+ #include <linux/vmw_vmci_api.h>
+ #include <asm/hypervisor.h>
+diff --git a/drivers/virtio/virtio_balloon.c b/drivers/virtio/virtio_balloon.c
+index 3f78a3a1eb75..d0c27c680721 100644
+--- a/drivers/virtio/virtio_balloon.c
++++ b/drivers/virtio/virtio_balloon.c
+@@ -13,7 +13,7 @@
+ #include <linux/delay.h>
+ #include <linux/slab.h>
+ #include <linux/module.h>
+-#include <linux/balloon_compaction.h>
++#include <linux/balloon.h>
+ #include <linux/oom.h>
+ #include <linux/wait.h>
+ #include <linux/mm.h>
+diff --git a/include/linux/balloon_compaction.h b/include/linux/balloon.h
+similarity index 93%
+rename from include/linux/balloon_compaction.h
+rename to include/linux/balloon.h
+index 5ca2d5699620..46ac8f61f607 100644
+--- a/include/linux/balloon_compaction.h
++++ b/include/linux/balloon.h
+@@ -1,7 +1,5 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+ /*
+- * include/linux/balloon_compaction.h
+- *
+  * Common interface definitions for making balloon pages movable by compaction.
+  *
+  * Balloon page migration makes use of the general non-lru movable page
+@@ -59,13 +57,13 @@ struct balloon_dev_info {
+ 			struct page *page, enum migrate_mode mode);
+ };
  
- 	if (bp->phy_interface == PHY_INTERFACE_MODE_SGMII) {
- 		bp->phylink_config.poll_fixed_state = true;
+-extern struct page *balloon_page_alloc(void);
+-extern void balloon_page_enqueue(struct balloon_dev_info *b_dev_info,
++struct page *balloon_page_alloc(void);
++void balloon_page_enqueue(struct balloon_dev_info *b_dev_info,
+ 				 struct page *page);
+-extern struct page *balloon_page_dequeue(struct balloon_dev_info *b_dev_info);
+-extern size_t balloon_page_list_enqueue(struct balloon_dev_info *b_dev_info,
++struct page *balloon_page_dequeue(struct balloon_dev_info *b_dev_info);
++size_t balloon_page_list_enqueue(struct balloon_dev_info *b_dev_info,
+ 				      struct list_head *pages);
+-extern size_t balloon_page_list_dequeue(struct balloon_dev_info *b_dev_info,
++size_t balloon_page_list_dequeue(struct balloon_dev_info *b_dev_info,
+ 				     struct list_head *pages, size_t n_req_pages);
+ 
+ static inline void balloon_devinfo_init(struct balloon_dev_info *balloon)
+diff --git a/mm/Makefile b/mm/Makefile
+index 8e105e5b3e29..f73a9b200c91 100644
+--- a/mm/Makefile
++++ b/mm/Makefile
+@@ -116,7 +116,7 @@ obj-$(CONFIG_ZSMALLOC)	+= zsmalloc.o
+ obj-$(CONFIG_Z3FOLD)	+= z3fold.o
+ obj-$(CONFIG_GENERIC_EARLY_IOREMAP) += early_ioremap.o
+ obj-$(CONFIG_CMA)	+= cma.o
+-obj-$(CONFIG_MEMORY_BALLOON) += balloon_compaction.o
++obj-$(CONFIG_MEMORY_BALLOON) += balloon.o
+ obj-$(CONFIG_PAGE_EXTENSION) += page_ext.o
+ obj-$(CONFIG_PAGE_TABLE_CHECK) += page_table_check.o
+ obj-$(CONFIG_CMA_DEBUGFS) += cma_debug.o
+diff --git a/mm/balloon_compaction.c b/mm/balloon.c
+similarity index 99%
+rename from mm/balloon_compaction.c
+rename to mm/balloon.c
+index 22c96fed70b5..22b3e876bc78 100644
+--- a/mm/balloon_compaction.c
++++ b/mm/balloon.c
+@@ -1,7 +1,5 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ /*
+- * mm/balloon_compaction.c
+- *
+  * Common interface for making balloon pages movable by compaction.
+  *
+  * Copyright (C) 2012, Red Hat, Inc.  Rafael Aquini <aquini@redhat.com>
+@@ -9,7 +7,7 @@
+ #include <linux/mm.h>
+ #include <linux/slab.h>
+ #include <linux/export.h>
+-#include <linux/balloon_compaction.h>
++#include <linux/balloon.h>
+ 
+ static void balloon_page_enqueue_one(struct balloon_dev_info *b_dev_info,
+ 				     struct page *page)
+diff --git a/mm/migrate.c b/mm/migrate.c
+index 1379e1912772..74c21b1cb2ec 100644
+--- a/mm/migrate.c
++++ b/mm/migrate.c
+@@ -41,7 +41,6 @@
+ #include <linux/pfn_t.h>
+ #include <linux/memremap.h>
+ #include <linux/userfaultfd_k.h>
+-#include <linux/balloon_compaction.h>
+ #include <linux/page_idle.h>
+ #include <linux/page_owner.h>
+ #include <linux/sched/mm.h>
+diff --git a/mm/vmscan.c b/mm/vmscan.c
+index 04d8b88e5216..5a4e17bf4193 100644
+--- a/mm/vmscan.c
++++ b/mm/vmscan.c
+@@ -59,7 +59,6 @@
+ #include <asm/div64.h>
+ 
+ #include <linux/swapops.h>
+-#include <linux/balloon_compaction.h>
+ #include <linux/sched/sysctl.h>
+ 
+ #include "internal.h"
 -- 
-2.34.1
+2.31.1
 
