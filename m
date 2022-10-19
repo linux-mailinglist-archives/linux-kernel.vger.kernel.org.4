@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80BD260442C
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 13:59:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97CC8604441
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 14:00:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232186AbiJSL7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 07:59:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44266 "EHLO
+        id S232012AbiJSMAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 08:00:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232482AbiJSL7I (ORCPT
+        with ESMTP id S231732AbiJSL7V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 07:59:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA582E0731;
-        Wed, 19 Oct 2022 04:37:35 -0700 (PDT)
+        Wed, 19 Oct 2022 07:59:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D7121285E2;
+        Wed, 19 Oct 2022 04:37:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 43DF060A66;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6CC9AB822A3;
         Wed, 19 Oct 2022 11:36:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D665C4314D;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D694C43152;
         Wed, 19 Oct 2022 11:36:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1666179379;
-        bh=X8dGKcEatEcWeJmdLOuulVQ9QOL8lBrkv9IoBNpoAeg=;
+        bh=PkjNR+pEzmOYfE2IfEfjNtpDBUAoZAWCYslxLltfZwY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QV/242UqsWtXytsiPh0Qaz6UpnmMGjWlDm92Jt0omW20KUDqXAEMOpY7AtTbshfXw
-         ll+w0PfLnp3P8DU4bq9FHAu2ugwfUPRWTjypgANgkllpDGlObMz0zWpqvqCz5c9xC/
-         HarUHUF1PzcxwqNJnskXtu1if1lx+vwXGpkx5u7ppLkW4/kf2tCCjrCjpUrZGIlBo+
-         MMvx1e8CrgN86YnPm2umgRgRCw/Afo8rN35+lvN34sVNqEgkKpkbRLb7HR8nF28h4F
-         vfqJoRVTRFzhBcqm6F/ufDne7n8cPVVr+sOhz4OjcWjQO1TCsRidcp/zaJ8V2wh/vJ
-         azaEjUGbKSU5Q==
+        b=uwFQqoiLuxbeArRohrBmZwr7Sm87Cmqg0aYXzn+vUEraB6aQVWSdzRLjWygYea8r/
+         AIGnV3L5MXnFJpRFsRBuE0t1MZQg/2HTK2KzIcRgcwzGTsStCnGuJ/6yW42y5hlkql
+         Iu/L9cXyeohuvLuPh7WKygNfosXqZOAPSqZsj1NpveRFd+cut1jwMabfP8oPaksOe7
+         oNeDgdLdQTqRTbAFGFxgnwyqZMsS0Af/nbwE6MX1qFrj52LVfQD8gtKLlKiRO4X/FG
+         +1OEbfxZhOC1DaQsfc57KVmq7A103JwAMlaGBJlgMJpdif0YbCR3/rtWJEPBylgJPl
+         pb0Z+AiXa1ktA==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1ol7Ml-0005pQ-Lx; Wed, 19 Oct 2022 13:36:07 +0200
+        id 1ol7Ml-0005pT-OT; Wed, 19 Oct 2022 13:36:07 +0200
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Vinod Koul <vkoul@kernel.org>
 Cc:     Andy Gross <agross@kernel.org>,
@@ -46,9 +46,9 @@ Cc:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH v2 05/15] phy: qcom-qmp-pcie: clean up probe initialisation
-Date:   Wed, 19 Oct 2022 13:35:42 +0200
-Message-Id: <20221019113552.22353-6-johan+linaro@kernel.org>
+Subject: [PATCH v2 06/15] phy: qcom-qmp-pcie: rename PHY ops structure
+Date:   Wed, 19 Oct 2022 13:35:43 +0200
+Message-Id: <20221019113552.22353-7-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221019113552.22353-1-johan+linaro@kernel.org>
 References: <20221019113552.22353-1-johan+linaro@kernel.org>
@@ -63,136 +63,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Stop abusing the driver data pointer and instead pass the driver state
-structure directly to the initialisation helpers during probe.
+Rename the PHY operation structure so that it has a "phy_ops" suffix and
+move it next to the implementation.
 
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 49 +++++++++++-------------
- 1 file changed, 23 insertions(+), 26 deletions(-)
+ drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-index bc96518ad6b0..e30cbc94cbf6 100644
+index e30cbc94cbf6..bd946438e3c3 100644
 --- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
 +++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-@@ -2037,9 +2037,10 @@ static int qmp_pcie_set_mode(struct phy *phy, enum phy_mode mode, int submode)
+@@ -2037,6 +2037,13 @@ static int qmp_pcie_set_mode(struct phy *phy, enum phy_mode mode, int submode)
  	return 0;
  }
  
--static int qmp_pcie_vreg_init(struct device *dev, const struct qmp_phy_cfg *cfg)
-+static int qmp_pcie_vreg_init(struct qmp_pcie *qmp)
++static const struct phy_ops qmp_pcie_phy_ops = {
++	.power_on	= qmp_pcie_enable,
++	.power_off	= qmp_pcie_disable,
++	.set_mode	= qmp_pcie_set_mode,
++	.owner		= THIS_MODULE,
++};
++
+ static int qmp_pcie_vreg_init(struct qmp_pcie *qmp)
  {
--	struct qmp_pcie *qmp = dev_get_drvdata(dev);
-+	const struct qmp_phy_cfg *cfg = qmp->cfg;
-+	struct device *dev = qmp->dev;
- 	int num = cfg->num_vregs;
- 	int i;
- 
-@@ -2053,9 +2054,10 @@ static int qmp_pcie_vreg_init(struct device *dev, const struct qmp_phy_cfg *cfg)
- 	return devm_regulator_bulk_get(dev, num, qmp->vregs);
+ 	const struct qmp_phy_cfg *cfg = qmp->cfg;
+@@ -2160,13 +2167,6 @@ static int phy_pipe_clk_register(struct qmp_pcie *qmp, struct device_node *np)
+ 	return devm_add_action_or_reset(qmp->dev, phy_clk_release_provider, np);
  }
  
--static int qmp_pcie_reset_init(struct device *dev, const struct qmp_phy_cfg *cfg)
-+static int qmp_pcie_reset_init(struct qmp_pcie *qmp)
- {
--	struct qmp_pcie *qmp = dev_get_drvdata(dev);
-+	const struct qmp_phy_cfg *cfg = qmp->cfg;
-+	struct device *dev = qmp->dev;
- 	int i;
- 	int ret;
- 
-@@ -2074,9 +2076,10 @@ static int qmp_pcie_reset_init(struct device *dev, const struct qmp_phy_cfg *cfg
- 	return 0;
- }
- 
--static int qmp_pcie_clk_init(struct device *dev, const struct qmp_phy_cfg *cfg)
-+static int qmp_pcie_clk_init(struct qmp_pcie *qmp)
- {
--	struct qmp_pcie *qmp = dev_get_drvdata(dev);
-+	const struct qmp_phy_cfg *cfg = qmp->cfg;
-+	struct device *dev = qmp->dev;
- 	int num = cfg->num_clks;
- 	int i;
- 
-@@ -2164,18 +2167,15 @@ static const struct phy_ops qmp_pcie_ops = {
- 	.owner		= THIS_MODULE,
- };
- 
--static int qmp_pcie_create(struct device *dev, struct device_node *np,
--			void __iomem *serdes, const struct qmp_phy_cfg *cfg)
-+static int qmp_pcie_create(struct qmp_pcie *qmp, struct device_node *np)
- {
--	struct qmp_pcie *qmp = dev_get_drvdata(dev);
-+	const struct qmp_phy_cfg *cfg = qmp->cfg;
-+	struct device *dev = qmp->dev;
- 	struct phy *generic_phy;
- 	int ret;
- 
- 	qmp->mode = PHY_MODE_PCIE_RC;
- 
--	qmp->cfg = cfg;
--	qmp->serdes = serdes;
+-static const struct phy_ops qmp_pcie_ops = {
+-	.power_on	= qmp_pcie_enable,
+-	.power_off	= qmp_pcie_disable,
+-	.set_mode	= qmp_pcie_set_mode,
+-	.owner		= THIS_MODULE,
+-};
 -
- 	/*
- 	 * Get memory resources for the PHY:
- 	 * Resources are indexed as: tx -> 0; rx -> 1; pcs -> 2.
-@@ -2247,8 +2247,6 @@ static int qmp_pcie_probe(struct platform_device *pdev)
- 	struct device *dev = &pdev->dev;
- 	struct device_node *child;
- 	struct phy_provider *phy_provider;
--	void __iomem *serdes;
--	const struct qmp_phy_cfg *cfg = NULL;
- 	struct qmp_pcie *qmp;
- 	int ret;
+ static int qmp_pcie_create(struct qmp_pcie *qmp, struct device_node *np)
+ {
+ 	const struct qmp_phy_cfg *cfg = qmp->cfg;
+@@ -2229,7 +2229,7 @@ static int qmp_pcie_create(struct qmp_pcie *qmp, struct device_node *np)
+ 				     "failed to get pipe clock\n");
+ 	}
  
-@@ -2257,28 +2255,27 @@ static int qmp_pcie_probe(struct platform_device *pdev)
- 		return -ENOMEM;
- 
- 	qmp->dev = dev;
--	dev_set_drvdata(dev, qmp);
- 
--	cfg = of_device_get_match_data(dev);
--	if (!cfg)
-+	qmp->cfg = of_device_get_match_data(dev);
-+	if (!qmp->cfg)
- 		return -EINVAL;
- 
--	WARN_ON_ONCE(!cfg->pwrdn_ctrl);
--	WARN_ON_ONCE(!cfg->phy_status);
-+	WARN_ON_ONCE(!qmp->cfg->pwrdn_ctrl);
-+	WARN_ON_ONCE(!qmp->cfg->phy_status);
- 
--	serdes = devm_platform_ioremap_resource(pdev, 0);
--	if (IS_ERR(serdes))
--		return PTR_ERR(serdes);
-+	qmp->serdes = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(qmp->serdes))
-+		return PTR_ERR(qmp->serdes);
- 
--	ret = qmp_pcie_clk_init(dev, cfg);
-+	ret = qmp_pcie_clk_init(qmp);
- 	if (ret)
- 		return ret;
- 
--	ret = qmp_pcie_reset_init(dev, cfg);
-+	ret = qmp_pcie_reset_init(qmp);
- 	if (ret)
- 		return ret;
- 
--	ret = qmp_pcie_vreg_init(dev, cfg);
-+	ret = qmp_pcie_vreg_init(qmp);
- 	if (ret)
- 		return ret;
- 
-@@ -2286,7 +2283,7 @@ static int qmp_pcie_probe(struct platform_device *pdev)
- 	if (!child)
- 		return -EINVAL;
- 
--	ret = qmp_pcie_create(dev, child, serdes, cfg);
-+	ret = qmp_pcie_create(qmp, child);
- 	if (ret)
- 		goto err_node_put;
- 
+-	generic_phy = devm_phy_create(dev, np, &qmp_pcie_ops);
++	generic_phy = devm_phy_create(dev, np, &qmp_pcie_phy_ops);
+ 	if (IS_ERR(generic_phy)) {
+ 		ret = PTR_ERR(generic_phy);
+ 		dev_err(dev, "failed to create PHY: %d\n", ret);
 -- 
 2.37.3
 
