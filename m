@@ -2,53 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35347604A94
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:07:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6BFD604A82
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:06:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232082AbiJSPGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 11:06:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52700 "EHLO
+        id S231987AbiJSPGK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 11:06:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231847AbiJSPFk (ORCPT
+        with ESMTP id S231613AbiJSPFF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 11:05:40 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C8C334993;
-        Wed, 19 Oct 2022 07:59:17 -0700 (PDT)
+        Wed, 19 Oct 2022 11:05:05 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E5091DDC6
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 07:59:03 -0700 (PDT)
 From:   John Ogness <john.ogness@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1666191370;
+        s=2020; t=1666191371;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=jjpBzMIZil2dmLUT+irfoeemb7oKmLhPxEY4dlNGawQ=;
-        b=SRSJfh36p3UleipLxlUtTUFpPUDmxLS8yo+PBwx959oqjUNw376zK6DIo/TpEECQam0Wav
-        /2i/bDbwVlsuguU4ipVk+E4hAwVZr3ThbxI4eRGPkgdkCfPFhUgsuu/0h07oZavqc7iS6J
-        j2MiWZcfTsr11cF4dBtCFOpcYxI5k3TlsXRagqXz+bBUpm3HMvQNYCWx3izXsjdjez+Q9W
-        wEFLfevTyEeT3C/B5o9VIhitHIt0qyzvN3XoWRCvsHwrp7R5LrgqTxXEsewej4Jm6gnydQ
-        aBuETCfoPiaOSRdbyc7ZRmpDtL6UqKZgreHmyf0z8VczL/og4nKGiDSM/2agug==
+        bh=A5NubkodPN0irIWt1R4/lmY742ka0PyGCnf6KGs6APw=;
+        b=WEzWfi4KYJK6tM+UtRO9gMqcL80wT6ZfChj8pVIGHeb3YIK8WqcUSy2zLWw/YojPSsGNup
+        y7TQiRk0nnLkGjmOTqw0TEl1/pK8HDisoKp2Nk5Yb4JeRsivDB1CzI0E2o2qg0LVhsdq8m
+        zyNH5ObjKPbpSu80an465e/0eKD5IrMpnPWTzA90Ir/JAkTes5pABQ40isFhZEHLol3hQf
+        G/9qi1yXpMDuoHf2/pGXSYMCmXLbcMI9K/QMqEtFkkge19m+3XWRUYic9PsXu+yn2/vmRZ
+        FNkJG8kyRt1kEdOSxEc5o/S3bJfASgsb4wf/OAS1njjVebC3sch6ryLQd2ZEmQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1666191370;
+        s=2020e; t=1666191371;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=jjpBzMIZil2dmLUT+irfoeemb7oKmLhPxEY4dlNGawQ=;
-        b=HzSWZdqEZL2J95BBvsCPnMwoU3L+/EMg5oVAvdeTTFj3KSaG3KgrIou7oKqs+PVEiiY/lu
-        WxdYmH+I94CFn5DA==
+        bh=A5NubkodPN0irIWt1R4/lmY742ka0PyGCnf6KGs6APw=;
+        b=7C+o7eTStwH+TXiK5kilPxMT0uoA0rWx2USLmgf4Q5VlRjt97pmtga3hTsgy3a6OZTtOaX
+        Cj0gT50z2MtWHsDg==
 To:     Petr Mladek <pmladek@suse.com>
 Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         linux-kernel@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH printk v2 16/38] tty: serial: xilinx_uartps: use console_is_enabled()
-Date:   Wed, 19 Oct 2022 17:01:38 +0206
-Message-Id: <20221019145600.1282823-17-john.ogness@linutronix.de>
+        Jiri Slaby <jirislaby@kernel.org>
+Subject: [PATCH printk v2 17/38] tty: tty_io: use console_is_enabled()
+Date:   Wed, 19 Oct 2022 17:01:39 +0206
+Message-Id: <20221019145600.1282823-18-john.ogness@linutronix.de>
 In-Reply-To: <20221019145600.1282823-1-john.ogness@linutronix.de>
 References: <20221019145600.1282823-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
@@ -67,22 +65,22 @@ Replace (console->flags & CON_ENABLED) usage with console_is_enabled().
 
 Signed-off-by: John Ogness <john.ogness@linutronix.de>
 ---
- drivers/tty/serial/xilinx_uartps.c | 2 +-
+ drivers/tty/tty_io.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/tty/serial/xilinx_uartps.c b/drivers/tty/serial/xilinx_uartps.c
-index 2eff7cff57c4..e1fe95bd55c1 100644
---- a/drivers/tty/serial/xilinx_uartps.c
-+++ b/drivers/tty/serial/xilinx_uartps.c
-@@ -1631,7 +1631,7 @@ static int cdns_uart_probe(struct platform_device *pdev)
- #ifdef CONFIG_SERIAL_XILINX_PS_UART_CONSOLE
- 	/* This is not port which is used for console that's why clean it up */
- 	if (console_port == port &&
--	    !(cdns_uart_uart_driver.cons->flags & CON_ENABLED)) {
-+	    !console_is_enabled(cdns_uart_uart_driver.cons)) {
- 		console_port = NULL;
- 		cdns_uart_console.index = -1;
- 	}
+diff --git a/drivers/tty/tty_io.c b/drivers/tty/tty_io.c
+index de06c3c2ff70..2050e63963bb 100644
+--- a/drivers/tty/tty_io.c
++++ b/drivers/tty/tty_io.c
+@@ -3532,7 +3532,7 @@ static ssize_t show_cons_active(struct device *dev,
+ 			continue;
+ 		if (!c->write)
+ 			continue;
+-		if ((c->flags & CON_ENABLED) == 0)
++		if (!console_is_enabled(c))
+ 			continue;
+ 		cs[i++] = c;
+ 		if (i >= ARRAY_SIZE(cs))
 -- 
 2.30.2
 
