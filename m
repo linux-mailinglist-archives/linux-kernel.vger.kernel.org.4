@@ -2,256 +2,367 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BCF5603AD3
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 09:41:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C69B6603ADB
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 09:42:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230104AbiJSHlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 03:41:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59444 "EHLO
+        id S230098AbiJSHmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 03:42:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229786AbiJSHkz (ORCPT
+        with ESMTP id S229498AbiJSHms (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 03:40:55 -0400
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2989642D4;
-        Wed, 19 Oct 2022 00:40:50 -0700 (PDT)
-Received: by mail-il1-x136.google.com with SMTP id o13so8741972ilc.7;
-        Wed, 19 Oct 2022 00:40:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IpQeTIlmyll1M3qV70p7bUT0WCQ8wcYTPT0PV1LmbZ4=;
-        b=gdmsuVeU1h8ElvcPUP+vONGSpFXCinI3xaEu2STNPKqEVdYoMYe1MiYsDgFzkMTrZv
-         AZ8ICEqf38L570ie7m2+GH8MUHOQeYRC7bJ+Rc48D/weu+ogHtr929cJIgg1OouoEfxl
-         JqQ844SDXlLiT3rNEOE9+7M86x7t+kgMx5rhh6cx65a1tb4xXi+6fRaHIsNPRvWYYFnx
-         JuvTQZSbHmOcIwjRDiiohd56heUmiIDtZ72WMwO41sSJL3w8fxrahMQr/uI+CBz1uuca
-         xqRtMC4OWk0iBvdlctWO6lE8/PdBGzmpRT1/96K4GIGxfFzgltWzXKB8lS7UXoDOaPFa
-         FCHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IpQeTIlmyll1M3qV70p7bUT0WCQ8wcYTPT0PV1LmbZ4=;
-        b=HmVNQQUHHBw0X0+J15xzMNIoAkTPAghKYaIkjMdGDIAF6S0R9d5xx+Sqsb0AaewOsW
-         cDO5hJolZd5Vc5rsG/IvTnuNeXsCD1iPALO18kBIo/y/ASUQ6XmmuYe872BsgDvMCTt3
-         A+YlrFs3fzQ1MRwlb5eLML4nrv2K5xc3yxk9F+FuGZ5X8IFsAIJYFVCbYPsMNw3XMTGC
-         UzjTu3HV4Jur/NYp8g8eENq86onyPZ6RnMt+Nr0vhOfW4XNzTDIFLNZVWtdYhiBh1E54
-         iEBtVjaGocM00/HyHQjhYtDNa/Agju3HESKMaXEToa51BCrMU0jYRzxyb/OvD8GgnKwD
-         DFFw==
-X-Gm-Message-State: ACrzQf32WWPP39BFmc222D32NaCyUfGYCv7N18QyvYLGQ6B3U4RTvBwj
-        PL4msoXLj6mpZAGSyXE7L/5fWGx5wL1BcvKO
-X-Google-Smtp-Source: AMsMyM46OyPoqaSc6D5QnTkM05N7fFuXu0DrIfKTQyZMhRgWWpPhjv0O2W1KFYt8hGahKN4fzraQUw==
-X-Received: by 2002:a92:cc0b:0:b0:2f9:f3a9:c3e7 with SMTP id s11-20020a92cc0b000000b002f9f3a9c3e7mr4554939ilp.253.1666165248819;
-        Wed, 19 Oct 2022 00:40:48 -0700 (PDT)
-Received: from qjv001-XeonWs (c-67-167-199-249.hsd1.il.comcast.net. [67.167.199.249])
-        by smtp.gmail.com with ESMTPSA id 142-20020a6b1494000000b00688faad4741sm1978942iou.24.2022.10.19.00.40.47
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 19 Oct 2022 00:40:48 -0700 (PDT)
-Date:   Wed, 19 Oct 2022 02:40:46 -0500
-From:   Jeff Vanhoof <jdv1029@gmail.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Jeffrey Vanhoof <jvanhoof@motorola.com>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "dan.scally@ideasonboard.com" <dan.scally@ideasonboard.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "laurent.pinchart@ideasonboard.com" 
-        <laurent.pinchart@ideasonboard.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "m.grzeschik@pengutronix.de" <m.grzeschik@pengutronix.de>,
-        "paul.elder@ideasonboard.com" <paul.elder@ideasonboard.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        Dan Vacura <W36195@motorola.com>
-Subject: Re: [PATCH v3 2/6] usb: dwc3: gadget: cancel requests instead of
- release after missed isoc
-Message-ID: <20221019074043.GA19727@qjv001-XeonWs>
-References: <PUZPR03MB613101A170B0034F55401121A1289@PUZPR03MB6131.apcprd03.prod.outlook.com>
- <20221018223521.ytiwqsxmxoen5iyt@synopsys.com>
- <20221019014108.GA5732@qjv001-XeonWs>
- <20221019020240.exujmo7uvae4xfdi@synopsys.com>
+        Wed, 19 Oct 2022 03:42:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8375A4F66A;
+        Wed, 19 Oct 2022 00:42:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 12D47617A8;
+        Wed, 19 Oct 2022 07:42:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70670C43470;
+        Wed, 19 Oct 2022 07:42:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666165365;
+        bh=14m9TnMdIamI7NRowRSrQHq987dQEEQNdsOMZoawFWM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=HClf0ncR3egbSc+Xcsue8EAwnK72ibfndgBCNLmhg3Z7OascqnmOL6vu5KprByuKG
+         AStwREksRj3fInDnxgUSioaMyoJ7RO+uZ+R15f5puS6fGnR6VaGhev1K+YNyZ4Tv8e
+         oa/etbJhxRQB9oA3ITSxnUoOn41Br4NkZNOKpZPDiKgbUpmmw/Gj+9IaZdwBQBMUQV
+         fLPhMq8Nf6qXYj0f4d5mG3BebM89QXwxwti2e+9ZN4KMXOffphm0OPMIDJHs7nrikV
+         k2kDrt4fgeQ20oAC5753SKsSWJQLeQZFm5XFXS/PT9Z4daW2+KA09IFaAwueWanGTF
+         v4MKDK8a7XgrA==
+Received: by mail-lj1-f178.google.com with SMTP id a6so21062578ljq.5;
+        Wed, 19 Oct 2022 00:42:45 -0700 (PDT)
+X-Gm-Message-State: ACrzQf1szu+wzqgePkodL9i5eMrfm+S5Pu24zHtAv3dmrHv7aIex+iMD
+        DlCIwpoGH2kiE8FxPMkygiveu+Ipl3rdGNFQjhk=
+X-Google-Smtp-Source: AMsMyM5tlUReT+nKFmwl6ym1vN33SMdT6OsFPCIaILaxjZa8/POU7PbjxCRIZ/2S8kmECig82aDJXOIZDhcXimvBSvA=
+X-Received: by 2002:a2e:9a81:0:b0:26c:5b63:7a83 with SMTP id
+ p1-20020a2e9a81000000b0026c5b637a83mr2578764lji.291.1666165363344; Wed, 19
+ Oct 2022 00:42:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221019020240.exujmo7uvae4xfdi@synopsys.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <cover.1662459668.git.baskov@ispras.ru> <5de2d80398986b81b6cfcdd35436bba8bf62c0e7.1662459668.git.baskov@ispras.ru>
+In-Reply-To: <5de2d80398986b81b6cfcdd35436bba8bf62c0e7.1662459668.git.baskov@ispras.ru>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Wed, 19 Oct 2022 09:42:32 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXFvT4kTyMWhb-Qvwq88VuuvCDE94FCDsnAd4JqQEmPWPA@mail.gmail.com>
+Message-ID: <CAMj1kXFvT4kTyMWhb-Qvwq88VuuvCDE94FCDsnAd4JqQEmPWPA@mail.gmail.com>
+Subject: Re: [PATCH 16/16] efi/libstub: Use memory attribute protocol
+To:     Evgeniy Baskov <baskov@ispras.ru>
+Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        lvc-project@linuxtesting.org, x86@kernel.org,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thinh,
-
-On Wed, Oct 19, 2022 at 02:02:53AM +0000, Thinh Nguyen wrote:
-> On Tue, Oct 18, 2022, Jeff Vanhoof wrote:
-> > Hi Thinh,
-> > 
-> > On Tue, Oct 18, 2022 at 10:35:30PM +0000, Thinh Nguyen wrote:
-> > > On Tue, Oct 18, 2022, Jeffrey Vanhoof wrote:
-> > > > Hi Thinh,
-> > > > 
-> > > > On Tue, Oct 18, 2022 at 06:45:40PM +0000, Thinh Nguyen wrote:
-> > > > > Hi Dan,
-> > > > > 
-> > > > > On Mon, Oct 17, 2022, Dan Vacura wrote:
-> > > > > > Hi Thinh,
-> > > > > > 
-> > > > > > On Mon, Oct 17, 2022 at 09:30:38PM +0000, Thinh Nguyen wrote:
-> > > > > > > On Mon, Oct 17, 2022, Dan Vacura wrote:
-> > > > > > > > From: Jeff Vanhoof <qjv001@motorola.com>
-> > > > > > > > 
-> > > > > > > > arm-smmu related crashes seen after a Missed ISOC interrupt when
-> > > > > > > > no_interrupt=1 is used. This can happen if the hardware is still using
-> > > > > > > > the data associated with a TRB after the usb_request's ->complete call
-> > > > > > > > has been made.  Instead of immediately releasing a request when a Missed
-> > > > > > > > ISOC interrupt has occurred, this change will add logic to cancel the
-> > > > > > > > request instead where it will eventually be released when the
-> > > > > > > > END_TRANSFER command has completed. This logic is similar to some of the
-> > > > > > > > cleanup done in dwc3_gadget_ep_dequeue.
-> > > > > > > 
-> > > > > > > This doesn't sound right. How did you determine that the hardware is
-> > > > > > > still using the data associated with the TRB? Did you check the TRB's
-> > > > > > > HWO bit?
-> > > > > > 
-> > > > > > The problem we're seeing was mentioned in the summary of this patch
-> > > > > > series, issue #1. Basically, with the following patch
-> > > > > > https://urldefense.com/v3/__https://patchwork.kernel.org/project/linux-usb/patch/20210628155311.16762-6-m.grzeschik@pengutronix.de/__;!!A4F2R9G_pg!aSNZ-IjMcPgL47A4NR5qp9qhVlP91UGTuCxej5NRTv8-FmTrMkKK7CjNToQQVEgtpqbKzLU2HXET9O226AEN$  
-> > > > > > integrated a smmu panic is occurring on our Android device with the 5.15
-> > > > > > kernel which is:
-> > > > > > 
-> > > > > >     <3>[  718.314900][  T803] arm-smmu 15000000.apps-smmu: Unhandled arm-smmu context fault from a600000.dwc3!
-> > > > > > 
-> > > > > > The uvc gadget driver appears to be the first (and only) gadget that
-> > > > > > uses the no_interrupt=1 logic, so this seems to be a new condition for
-> > > > > > the dwc3 driver. In our configuration, we have up to 64 requests and the
-> > > > > > no_interrupt=1 for up to 15 requests. The list size of dep->started_list
-> > > > > > would get up to that amount when looping through to cleanup the
-> > > > > > completed requests. From testing and debugging the smmu panic occurs
-> > > > > > when a -EXDEV status shows up and right after
-> > > > > > dwc3_gadget_ep_cleanup_completed_request() was visited. The conclusion
-> > > > > > we had was the requests were getting returned to the gadget too early.
-> > > > > 
-> > > > > As I mentioned, if the status is updated to missed isoc, that means that
-> > > > > the controller returned ownership of the TRB to the driver. At least for
-> > > > > the particular request with -EXDEV, its TRBs are completed. I'm not
-> > > > > clear on your conclusion.
-> > > > > 
-> > > > > Do we know where did the crash occur? Is it from dwc3 driver or from uvc
-> > > > > driver, and at what line? It'd great if we can see the driver log.
-> > > > >
-> > > > 
-> > > > To interject, what should happen in dwc3_gadget_ep_reclaim_completed_trb if the
-> > > > IOC bit is not set (but the IMI bit is) and -EXDEV status is passed into it?
-> > > 
-> > > Hm... we may have overlooked this case for no_interrupt scenario. If IMI
-> > > is set, then there will be an interrupt when there's missed isoc
-> > > regardless of whether no_interrupt is set by the gadget driver.
-> > > 
-> > > > If the function returns 0, another attempt to reclaim may occur. If this
-> > > > happens and the next request did have the HWO bit set, the function would
-> > > > return 1 but dwc3_gadget_ep_cleanup_completed_request would still call
-> > > > dwc3_gadget_giveback.
-> > > > 
-> > > > As a test (without this patch), I added a check to see if HWO bit was set in
-> > > > dwc3_gadget_ep_cleanup_completed_requests(). If the usecase was ISOC and the
-> > > > HWO bit was set I avoided calling dwc3_gadget_ep_cleanup_completed_request().
-> > > > This seemed to also avoid the iommu related crash being seen.
-> > > > 
-> > > > Is there an issue in this area that needs to be corrected instead? Not having
-> > > > interrupts set for each request may be causing some new issues to be uncovered.
-> > > > 
-> > > > As far as the crash seen without this patch, no good stacktrace is given. Line
-> > > > provided for crash varied a bit, but tended to appear towards the end of
-> > > > dwc3_stop_active_transfer() or dwc3_gadget_endpoint_trbs_complete().
-> > > > 
-> > > > Since dwc3_gadget_endpoint_trbs_complete() can be called from multiple
-> > > > locations, I duplicated the function to help identify which path it was likely
-> > > > being called from. At the time of the crashes seen,
-> > > > dwc3_gadget_endpoint_transfer_in_progress() appeared to be the caller.
-> > > > 
-> > > > dwc3_gadget_endpoint_transfer_in_progress()
-> > > > ->dwc3_gadget_endpoint_trbs_complete() (crashed towards end of here)
-> > > > ->dwc3_stop_active_transfer() (sometimes crashed towards end of here)
-> > > > 
-> > > > I hope this clarifies things a bit.
-> > > >  
-> > > 
-> > > Can we try this? Let me know if it resolves your issue.
-> > > 
-> > > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> > > index 61fba2b7389b..8352f4b5dd9f 100644
-> > > --- a/drivers/usb/dwc3/gadget.c
-> > > +++ b/drivers/usb/dwc3/gadget.c
-> > > @@ -3657,6 +3657,10 @@ static int dwc3_gadget_ep_reclaim_completed_trb(struct dwc3_ep *dep,
-> > >  	if (event->status & DEPEVT_STATUS_SHORT && !chain)
-> > >  		return 1;
-> > >  
-> > > +	if (usb_endpoint_xfer_isoc(dep->endpoint.desc) &&
-> > > +	    (event->status & DEPEVT_STATUS_MISSED_ISOC) && !chain)
-> > > +		return 1;
-> > > +
-> > >  	if ((trb->ctrl & DWC3_TRB_CTRL_IOC) ||
-> > >  	    (trb->ctrl & DWC3_TRB_CTRL_LST))
-> > >  		return 1;
-> > >
-> > 
-> > With this change it doesn't seem to crash but unfortunately the output
-> > completely hangs after the first missed isoc. At the moment I do not understand
-> > why this might happen. 
-> > 
-> 
-> Can you capture the driver tracepoints with the change above?
+On Tue, 6 Sept 2022 at 12:42, Evgeniy Baskov <baskov@ispras.ru> wrote:
 >
+> Add EFI_MEMORY_ATTRIBUTE_PROTOCOL as preferred alternative to DXE
+> services for changing memory attributes in the EFISTUB.
+>
+> Use DXE services only as a fallback in case aforementioned protocol
+> is not supported by UEFI implementation.
+>
+> Move DXE services initialization code closer to the place they are used
+> to match EFI_MEMORY_ATTRIBUTE_PROTOCOL initialization code.
+>
+> Signed-off-by: Evgeniy Baskov <baskov@ispras.ru>
+> ---
+>  drivers/firmware/efi/libstub/mem.c      | 166 ++++++++++++++++++------
+>  drivers/firmware/efi/libstub/x86-stub.c |  17 ---
+>  2 files changed, 127 insertions(+), 56 deletions(-)
+>
+> diff --git a/drivers/firmware/efi/libstub/mem.c b/drivers/firmware/efi/libstub/mem.c
+> index 89ebc8ad2c22..8c8782993b30 100644
+> --- a/drivers/firmware/efi/libstub/mem.c
+> +++ b/drivers/firmware/efi/libstub/mem.c
+> @@ -5,6 +5,9 @@
+>
+>  #include "efistub.h"
+>
+> +const efi_dxe_services_table_t *efi_dxe_table;
+> +efi_memory_attribute_protocol_t *efi_mem_attrib_proto;
+> +
+>  static inline bool mmap_has_headroom(unsigned long buff_size,
+>                                      unsigned long map_size,
+>                                      unsigned long desc_size)
+> @@ -131,50 +134,32 @@ void efi_free(unsigned long size, unsigned long addr)
+>         efi_bs_call(free_pages, addr, nr_pages);
+>  }
+>
+> -/**
+> - * efi_adjust_memory_range_protection() - change memory range protection attributes
+> - * @start:     memory range start address
+> - * @size:      memory range size
+> - *
+> - * Actual memory range for which memory attributes are modified is
+> - * the smallest ranged with start address and size aligned to EFI_PAGE_SIZE
+> - * that includes [start, start + size].
+> - *
+> - * @return: status code
+> - */
+> -efi_status_t efi_adjust_memory_range_protection(unsigned long start,
+> -                                               unsigned long size,
+> -                                               unsigned long attributes)
+> +static void retrive_dxe_table(void)
 
-Due to the size of the log, have sent it to directly to you.
+retrieve
 
-From what I can gather from the log, with the current changes it seems that
-after a missed isoc event few requests are staying longer than expected in the
-started_list (not getting reclaimed) and this is preventing the transmission
-from stopping/starting again, and opening the door for continuous stream of
-missed isoc events that cause what appears to the user as a frozen video.
+> +{
+> +       efi_dxe_table = get_efi_config_table(EFI_DXE_SERVICES_TABLE_GUID);
+> +       if (efi_dxe_table &&
+> +           efi_dxe_table->hdr.signature != EFI_DXE_SERVICES_TABLE_SIGNATURE) {
+> +               efi_warn("Ignoring DXE services table: invalid signature\n");
+> +               efi_dxe_table = NULL;
+> +       }
+> +}
+> +
+> +static efi_status_t adjust_mem_attrib_dxe(efi_physical_addr_t rounded_start,
+> +                                         efi_physical_addr_t rounded_end,
+> +                                         unsigned long attributes)
+>  {
+>         efi_status_t status;
+>         efi_gcd_memory_space_desc_t desc;
+> -       efi_physical_addr_t end, next;
+> -       efi_physical_addr_t rounded_start, rounded_end;
+> +       efi_physical_addr_t end, next, start;
+>         efi_physical_addr_t unprotect_start, unprotect_size;
+>         int has_system_memory = 0;
+>
+> -       if (efi_dxe_table == NULL)
+> -               return EFI_UNSUPPORTED;
+> +       if (!efi_dxe_table) {
+> +               retrive_dxe_table();
 
-So one thought, if IOC bit is not set every frame, but IMI bit is, when a
-missed isoc related interrupt occurs it seems likely that more than one trb
-request will need to be reclaimed, but the current set of changes is not
-handling this.
+Same here
 
-In the good transfer case this issue seems to be taken care of since the IOC
-bit is not set every frame and the reclaimation will loop through every item in
-the started_list and only stop if there are no additional trbs or if one has
-its HWO bit set. Although I am a bit surprised that we are not yet seeing iommu
-related panics here too since the trb is being reclaimed and given back even
-the HWO bit still set, but maybe I am misunderstanding something. In my earlier
-testing, if a missed isoc event was received and we attempted to
-reclaim/giveback a trb with its HWO bit set, a iommu related panic would be
-seen.
+>
+> -       /*
+> -        * This function should not be used to modify attributes
+> -        * other than writable/executable.
+> -        */
+> -
+> -       if ((attributes & ~(EFI_MEMORY_RO | EFI_MEMORY_XP)) != 0)
+> -               return EFI_INVALID_PARAMETER;
+> -
+> -       /*
+> -        * Disallow simultaniously executable and writable memory
+> -        * to inforce W^X policy if direct extraction code is enabled.
+> -        */
+> -
+> -       if ((attributes & (EFI_MEMORY_RO | EFI_MEMORY_XP)) == 0 &&
+> -           IS_ENABLED(CONFIG_EFI_STUB_EXTRACT_DIRECT))
+> -               return EFI_INVALID_PARAMETER;
+> -
+> -       rounded_start = rounddown(start, EFI_PAGE_SIZE);
+> -       rounded_end = roundup(start + size, EFI_PAGE_SIZE);
+> +               if (!efi_dxe_table)
+> +                       return EFI_UNSUPPORTED;
+> +       }
+>
+>         /*
+>          * Don't modify memory region attributes, they are
+> @@ -182,14 +167,15 @@ efi_status_t efi_adjust_memory_range_protection(unsigned long start,
+>          * encounter firmware bugs.
+>          */
+>
+> -       for (end = start + size; start < end; start = next) {
+> +
+> +       for (start = rounded_start, end = rounded_end; start < end; start = next) {
+>
+>                 status = efi_dxe_call(get_memory_space_descriptor,
+>                                       start, &desc);
+>
+>                 if (status != EFI_SUCCESS) {
+>                         efi_warn("Unable to get memory descriptor at %lx\n",
+> -                                start);
+> +                                (unsigned long)start);
+>                         return status;
+>                 }
+>
+> @@ -231,3 +217,105 @@ efi_status_t efi_adjust_memory_range_protection(unsigned long start,
+>
+>         return EFI_SUCCESS;
+>  }
+> +
+> +static void retrive_memory_attributes_proto(void)
 
-Can you propose an additional change to handle freeing up the extra trbs in the
-missed isoc case? I think that somehow the HWO bit should be checked before
-entering dwc3_gadget_ep_cleanup_completed_request in order to avoid the trb
-being given back too soon.
+and here
 
-Your thoughts?
+> +{
+> +       efi_status_t status;
+> +       efi_guid_t guid = EFI_MEMORY_ATTRIBUTE_PROTOCOL_GUID;
+> +
+> +       status = efi_bs_call(locate_protocol, &guid, NULL,
+> +                            (void **)&efi_mem_attrib_proto);
+> +       if (status != EFI_SUCCESS)
+> +               efi_mem_attrib_proto = NULL;
+> +}
+> +
+> +/**
+> + * efi_adjust_memory_range_protection() - change memory range protection attributes
+> + * @start:     memory range start address
+> + * @size:      memory range size
+> + *
+> + * Actual memory range for which memory attributes are modified is
+> + * the smallest ranged with start address and size aligned to EFI_PAGE_SIZE
+> + * that includes [start, start + size].
+> + *
+> + * This function first attempts to use EFI_MEMORY_ATTRIBUTE_PROTOCOL,
+> + * that is a part of UEFI Specification since version 2.10.
+> + * If the protocol is unavailable it falls back to DXE services functions.
+> + *
+> + * @return: status code
+> + */
+> +efi_status_t efi_adjust_memory_range_protection(unsigned long start,
+> +                                               unsigned long size,
+> +                                               unsigned long attributes)
+> +{
+> +       efi_status_t status;
+> +       efi_physical_addr_t rounded_start, rounded_end;
+> +       unsigned long attr_clear;
+> +
+> +       /*
+> +        * This function should not be used to modify attributes
+> +        * other than writable/executable.
+> +        */
+> +
+> +       if ((attributes & ~(EFI_MEMORY_RO | EFI_MEMORY_XP)) != 0)
+> +               return EFI_INVALID_PARAMETER;
+> +
+> +       /*
+> +        * Disallow simultaniously executable and writable memory
 
-> > 
-> > Note that I haven't quite learned correctly how to reply correct to the mailing
-> > list.  I appologize for messing up the thread a bit.
-> > 
-> 
-> Seems fine to me. As long as I can read and understand, I've no issue. :)
-> 
-> Thanks,
-> Thinh
+simultaneously
 
-Thanks,
-Jeff
+> +        * to inforce W^X policy if direct extraction code is enabled.
 
+enforce
+
+> +        */
+> +
+> +       if ((attributes & (EFI_MEMORY_RO | EFI_MEMORY_XP)) == 0 &&
+> +           IS_ENABLED(CONFIG_EFI_STUB_EXTRACT_DIRECT))
+
+efi_adjust_memory_range_protection() is a generic routine, but here it
+depends on a x86-specific Kconfig symbol. Is that really necessary?
+
+> +               return EFI_INVALID_PARAMETER;
+> +
+> +       rounded_start = rounddown(start, EFI_PAGE_SIZE);
+> +       rounded_end = roundup(start + size, EFI_PAGE_SIZE);
+> +
+> +       if (!efi_mem_attrib_proto) {
+> +               retrive_memory_attributes_proto();
+
+retrieve
+
+> +
+> +               /* Fall back to DXE services if unsupported */
+> +               if (!efi_mem_attrib_proto) {
+> +                       return adjust_mem_attrib_dxe(rounded_start,
+> +                                                    rounded_end,
+> +                                                    attributes);
+> +               }
+> +       }
+> +
+> +       /*
+> +        * Unlike DXE services functions, EFI_MEMORY_ATTRIBUTE_PROTOCOL
+> +        * does not clear unset protection bit, so it needs to be cleared
+> +        * explcitly
+> +        */
+> +
+> +       attr_clear = ~attributes &
+> +                    (EFI_MEMORY_RO | EFI_MEMORY_XP | EFI_MEMORY_RP);
+> +
+> +       status = efi_call_proto(efi_mem_attrib_proto,
+> +                               clear_memory_attributes,
+> +                               rounded_start,
+> +                               rounded_end - rounded_start,
+> +                               attr_clear);
+> +       if (status != EFI_SUCCESS) {
+> +               efi_warn("Failed to clear memory attributes at [%08lx,%08lx]: %lx",
+
+Need \n at the end here
+
+> +                        (unsigned long)rounded_start,
+> +                        (unsigned long)rounded_end,
+> +                        status);
+> +               return status;
+> +       }
+> +
+> +       status = efi_call_proto(efi_mem_attrib_proto,
+> +                               set_memory_attributes,
+> +                               rounded_start,
+> +                               rounded_end - rounded_start,
+> +                               attributes);
+> +       if (status != EFI_SUCCESS) {
+> +               efi_warn("Failed to set memory attributes at [%08lx,%08lx]: %lx",
+
+and here
+
+> +                        (unsigned long)rounded_start,
+> +                        (unsigned long)rounded_end,
+> +                        status);
+> +       }
+> +
+> +       return status;
+> +}
+> diff --git a/drivers/firmware/efi/libstub/x86-stub.c b/drivers/firmware/efi/libstub/x86-stub.c
+> index 914106d547a6..dd1e1e663072 100644
+> --- a/drivers/firmware/efi/libstub/x86-stub.c
+> +++ b/drivers/firmware/efi/libstub/x86-stub.c
+> @@ -22,7 +22,6 @@
+>  #define MAXMEM_X86_64_4LEVEL (1ull << 46)
+>
+>  const efi_system_table_t *efi_system_table;
+> -const efi_dxe_services_table_t *efi_dxe_table;
+>  extern u32 image_offset;
+>  static efi_loaded_image_t *image = NULL;
+>
+> @@ -401,15 +400,6 @@ static void setup_sections_memory_protection(void *image_base,
+>                                              unsigned long init_size)
+>  {
+>  #ifdef CONFIG_EFI_DXE_MEM_ATTRIBUTES
+> -       efi_dxe_table = get_efi_config_table(EFI_DXE_SERVICES_TABLE_GUID);
+> -
+> -       if (!efi_dxe_table ||
+> -           efi_dxe_table->hdr.signature != EFI_DXE_SERVICES_TABLE_SIGNATURE) {
+> -               efi_warn("Unable to locate EFI DXE services table\n");
+> -               efi_dxe_table = NULL;
+> -               return;
+> -       }
+> -
+>         extern char _head[], _ehead[];
+>         extern char _compressed[], _ecompressed[];
+>         extern char _text[], _etext[];
+> @@ -791,13 +781,6 @@ unsigned long efi_main(efi_handle_t handle,
+>         if (efi_system_table->hdr.signature != EFI_SYSTEM_TABLE_SIGNATURE)
+>                 efi_exit(handle, EFI_INVALID_PARAMETER);
+>
+> -       efi_dxe_table = get_efi_config_table(EFI_DXE_SERVICES_TABLE_GUID);
+> -       if (efi_dxe_table &&
+> -           efi_dxe_table->hdr.signature != EFI_DXE_SERVICES_TABLE_SIGNATURE) {
+> -               efi_warn("Ignoring DXE services table: invalid signature\n");
+> -               efi_dxe_table = NULL;
+> -       }
+> -
+>  #ifndef CONFIG_EFI_STUB_EXTRACT_DIRECT
+>         /*
+>          * If the kernel isn't already loaded at a suitable address,
+> --
+> 2.35.1
+>
