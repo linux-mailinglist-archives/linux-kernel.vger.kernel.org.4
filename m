@@ -2,184 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14BFF60414E
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 12:42:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEC05604161
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 12:43:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229935AbiJSKmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 06:42:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53676 "EHLO
+        id S232689AbiJSKnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 06:43:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232180AbiJSKlP (ORCPT
+        with ESMTP id S232545AbiJSKmt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 06:41:15 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FE6E5FCB;
-        Wed, 19 Oct 2022 03:19:27 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29J8JVb6008813;
-        Wed, 19 Oct 2022 10:17:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=0uBWXpcUu6GK+gkxHOG4A7UL9k/FeUaumNYxBXEQc/g=;
- b=Tbbo8XyJBMAaZvPmonEjVONB8bGajBFUM1UjgncjOgOBhvIhRCVEJapSmG9y13hM12ca
- gV9zb8/3GL1ex7TIuDwEcig6KNvPTqswCmPgyfGQj5T21BOZ5Lk/BIzIxcjigqLeYac0
- TqWNAr6JAJqTVCfpK1IXM8alnab1iRZh5xN2Ifa5MPqveDMDjGmfSvjovnkAg4srgn/Z
- VTYfqqtn22EVSN37puSwjPRmgHxWnVrv5GfAcUNRY11mNgbbKWX/PqEinfii9BgQmns1
- 4rR0q56XM9XQzawPQPH2Srenqep6uQ6SXHtfECxORr9vaz5F7nLMyTIPTER/g+P7Hyx7 SA== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ka5emhhe5-1
+        Wed, 19 Oct 2022 06:42:49 -0400
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 911561119C9;
+        Wed, 19 Oct 2022 03:20:23 -0700 (PDT)
+Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29J6aPFI006134;
+        Wed, 19 Oct 2022 06:18:17 -0400
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3k7pq7ebh5-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Oct 2022 10:17:44 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29JAHiZH023414
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Oct 2022 10:17:44 GMT
-Received: from [10.253.8.223] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 19 Oct
- 2022 03:17:42 -0700
-Message-ID: <fbae8ec2-a645-6141-8308-3122c2ca9fab@quicinc.com>
-Date:   Wed, 19 Oct 2022 18:17:39 +0800
+        Wed, 19 Oct 2022 06:18:17 -0400
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 29JAIFSm062014
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 19 Oct 2022 06:18:15 -0400
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by ASHBMBX9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Wed, 19 Oct
+ 2022 06:18:14 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Wed, 19 Oct 2022 06:18:14 -0400
+Received: from tachici-Precision-5530.ad.analog.com ([10.48.65.157])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 29JAHsWe019538;
+        Wed, 19 Oct 2022 06:17:56 -0400
+From:   Alexandru Tachici <alexandru.tachici@analog.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     <andrew@lunn.ch>, <linux@armlinux.org.uk>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <netdev@vger.kernel.org>
+Subject: [net-next] net: ethernet: adi: adin1110: Fix notifiers
+Date:   Wed, 19 Oct 2022 13:17:50 +0300
+Message-ID: <20221019101750.8978-1-alexandru.tachici@analog.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v3 0/2] Add LED driver for flash module in QCOM PMICs
-Content-Language: en-US
-To:     Luca Weiss <luca.weiss@fairphone.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <krzysztof.kozlowski@linaro.org>
-CC:     <quic_collinsd@quicinc.com>, <quic_subbaram@quicinc.com>
-References: <20221018014024.948731-1-quic_fenglinw@quicinc.com>
- <CNPPXFMBHOPK.2XSBJT5M1TNVP@otso>
-From:   Fenglin Wu <quic_fenglinw@quicinc.com>
-In-Reply-To: <CNPPXFMBHOPK.2XSBJT5M1TNVP@otso>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: O9ApRDCYgI_KUhvlNefCO8N8dAGLBiY-
-X-Proofpoint-GUID: O9ApRDCYgI_KUhvlNefCO8N8dAGLBiY-
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-ORIG-GUID: qNhwbe8x13qI7rnCRfhoaKPBM091ocnC
+X-Proofpoint-GUID: qNhwbe8x13qI7rnCRfhoaKPBM091ocnC
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-19_06,2022-10-19_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
- lowpriorityscore=0 suspectscore=0 mlxlogscore=999 spamscore=0
- malwarescore=0 clxscore=1011 phishscore=0 mlxscore=0 bulkscore=0
- impostorscore=0 priorityscore=1501 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2209130000 definitions=main-2210190057
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+ definitions=2022-10-19_06,2022-10-19_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
+ phishscore=0 mlxlogscore=999 priorityscore=1501 impostorscore=0
+ clxscore=1011 mlxscore=0 spamscore=0 suspectscore=0 bulkscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210190057
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+ADIN1110 was registering netdev_notifiers on each device probe.
+This leads to warnings/probe failures because of double registration
+of the same notifier when to adin1110/2111 devices are connected to
+the same system.
 
+Move the registration of netdev_notifiers in module init call,
+in this way multiple driver instances can use the same notifiers.
 
-On 2022/10/19 15:23, Luca Weiss wrote:
-> Hi Fenglin,
-> 
-> On Tue Oct 18, 2022 at 3:40 AM CEST, Fenglin Wu wrote:
->> Initial driver and binding document changes for supporting flash LED
->> module in Qualcomm Technologies, Inc. PMICs.
->>
-> 
-> Thanks for these patches, it's really nice to see drivers like this
-> being sent upstream!
-> 
-> I've just tried these patches on pm6150l which also is compatible with
-> this driver (and used on sm7225-fairphone-fp4).
-> 
-> The two different flash LEDs on the device I could adjust as expected
-> using sysfs:
-> 
-> $ echo 255 > /sys/class/leds/yellow:flash-0/brightness
-> $ echo 255 > /sys/class/leds/white:flash-0/brightness
-> 
-> Also lower brightness values resulted in lower brightness on the LED, so
-> all is good here!
-> 
-> But for flash usage, I couldn't figure out how to use it, doing the
-> following resulted in no change on the LED.
-> 
-> $ cat /sys/class/leds/white:flash-0/max_flash_brightness
-> 1000000
-> $ echo 1000000 > /sys/class/leds/white:flash-0/flash_brightness
-> 
-> Here's my LED definition:
-> 
->    led-0 {
->      function = LED_FUNCTION_FLASH;
->      color = <LED_COLOR_ID_YELLOW>;
->      led-sources = <1>;
->      led-max-microamp = <180000>;
->      flash-max-microamp = <1000000>;
->      flash-max-timeout-us = <1280000>;
->    };
-> 
->  From values are from msm-4.19 kernel:
-> 
->    qcom,flash_0 {
->      qcom,current-ma = <1000>; // => flash-max-microamp
->      qcom,duration-ms = <1280>; // => flash-max-timeout-us
->      qcom,id = <0>; // => led-sources?
->    };
-> 
->    qcom,torch_0 {
->      qcom,current-ma = <180>; // => led-max-microamp
->      qcom,id = <0>; // => led-sources?
->    };
-> 
-> Could you please let me know how flash is supposed to work or if I
-> maybe have messed up some setting here?
-> 
-> Regards
-> Luca
+Fixes: bc93e19d088b ("net: ethernet: adi: Add ADIN1110 support")
+Signed-off-by: Alexandru Tachici <alexandru.tachici@analog.com>
+---
+ drivers/net/ethernet/adi/adin1110.c | 38 ++++++++++++++++++++++-------
+ 1 file changed, 29 insertions(+), 9 deletions(-)
 
-Hi Luca,
+diff --git a/drivers/net/ethernet/adi/adin1110.c b/drivers/net/ethernet/adi/adin1110.c
+index 086aa9c96b31..78ded19dd8c1 100644
+--- a/drivers/net/ethernet/adi/adin1110.c
++++ b/drivers/net/ethernet/adi/adin1110.c
+@@ -1507,16 +1507,15 @@ static struct notifier_block adin1110_switchdev_notifier = {
+ 	.notifier_call = adin1110_switchdev_event,
+ };
+ 
+-static void adin1110_unregister_notifiers(void *data)
++static void adin1110_unregister_notifiers(void)
+ {
+ 	unregister_switchdev_blocking_notifier(&adin1110_switchdev_blocking_notifier);
+ 	unregister_switchdev_notifier(&adin1110_switchdev_notifier);
+ 	unregister_netdevice_notifier(&adin1110_netdevice_nb);
+ }
+ 
+-static int adin1110_setup_notifiers(struct adin1110_priv *priv)
++static int adin1110_setup_notifiers(void)
+ {
+-	struct device *dev = &priv->spidev->dev;
+ 	int ret;
+ 
+ 	ret = register_netdevice_notifier(&adin1110_netdevice_nb);
+@@ -1531,13 +1530,14 @@ static int adin1110_setup_notifiers(struct adin1110_priv *priv)
+ 	if (ret < 0)
+ 		goto err_sdev;
+ 
+-	return devm_add_action_or_reset(dev, adin1110_unregister_notifiers, NULL);
++	return 0;
+ 
+ err_sdev:
+ 	unregister_switchdev_notifier(&adin1110_switchdev_notifier);
+ 
+ err_netdev:
+ 	unregister_netdevice_notifier(&adin1110_netdevice_nb);
++
+ 	return ret;
+ }
+ 
+@@ -1608,10 +1608,6 @@ static int adin1110_probe_netdevs(struct adin1110_priv *priv)
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	ret = adin1110_setup_notifiers(priv);
+-	if (ret < 0)
+-		return ret;
+-
+ 	for (i = 0; i < priv->cfg->ports_nr; i++) {
+ 		ret = devm_register_netdev(dev, priv->ports[i]->netdev);
+ 		if (ret < 0) {
+@@ -1688,7 +1684,31 @@ static struct spi_driver adin1110_driver = {
+ 	.probe = adin1110_probe,
+ 	.id_table = adin1110_spi_id,
+ };
+-module_spi_driver(adin1110_driver);
++
++static int __init adin1110_driver_init(void)
++{
++	int err;
++
++	err = spi_register_driver(&adin1110_driver);
++	if (err)
++		return err;
++
++	err = adin1110_setup_notifiers();
++	if (err) {
++		spi_unregister_driver(&adin1110_driver);
++		return err;
++	}
++
++	return 0;
++}
++
++static void __exit adin1110_exit(void)
++{
++	adin1110_unregister_notifiers();
++	spi_unregister_driver(&adin1110_driver);
++}
++module_init(adin1110_driver_init);
++module_exit(adin1110_exit);
+ 
+ MODULE_DESCRIPTION("ADIN1110 Network driver");
+ MODULE_AUTHOR("Alexandru Tachici <alexandru.tachici@analog.com>");
+-- 
+2.34.1
 
-Thanks for testing the driver at your end.
-The "brightness" node is for enabling/disable/adjusting brightness when 
-the LED is working in torch mode, the nodes for enabling/adjusting the 
-LED behavior in flash mode are "flash_brightness" "flash_timeout" 
-"flash_strobe".
-You can strobe the flash by "echo 1 > flash_strobe" directly and the 
-default brightness/timeout value will be used, or you can update the 
-settings with "echo xxx > flash_brightness; echo xxx > flash_timeout" 
-then strobe the LED with "echo 1 > flash_strobe". Please remember you 
-always need to "echo 0 > flash_strobe" 1st if you want to enable it again.
-Thanks
-
-Fenglin
-> 
->> Changes in V3:
->>    1. Updated the driver to use regmap_field for register access.
->>    2. Adressed the review comments in binding document change.
->>
->> Changes in V2:
->>    1. Addressed review comments in binding change, thanks Krzysztof!
->>    2. Updated driver to address the compilation issue reported by
->>       kernel test robot.
->>
->>
->> Fenglin Wu (2):
->>    leds: flash: add driver to support flash LED module in QCOM PMICs
->>    dt-bindings: add bindings for QCOM flash LED
->>
->>   .../bindings/leds/qcom,spmi-flash-led.yaml    | 116 +++
->>   drivers/leds/flash/Kconfig                    |  15 +
->>   drivers/leds/flash/Makefile                   |   1 +
->>   drivers/leds/flash/leds-qcom-flash.c          | 700 ++++++++++++++++++
->>   4 files changed, 832 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/leds/qcom,spmi-flash-led.yaml
->>   create mode 100644 drivers/leds/flash/leds-qcom-flash.c
->>
->> -- 
->> 2.25.1
-> 
