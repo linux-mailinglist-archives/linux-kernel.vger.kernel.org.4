@@ -2,262 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FC45604B4B
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:27:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84E0E604B2A
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:23:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230463AbiJSP1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 11:27:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56262 "EHLO
+        id S232511AbiJSPXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 11:23:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232546AbiJSP0T (ORCPT
+        with ESMTP id S232073AbiJSPWr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 11:26:19 -0400
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AC3F6DF82
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 08:19:36 -0700 (PDT)
-Received: by mail-qt1-f173.google.com with SMTP id hh9so11831612qtb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 08:19:36 -0700 (PDT)
+        Wed, 19 Oct 2022 11:22:47 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65A971DC83B
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 08:16:02 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id pq16so17195508pjb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 08:16:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=f/qjJ08JU/nokrfccNNsGXG1NRnGmT82iKK0zORnPFE=;
-        b=C7cvr0iYIzQZH95BpzZw4rJXXTdBJsWDMfX+CHM8JxUEevFwIlF1kYW7pC99QB5f5/
-         /y2K1lwKqDhtwk2JiCoryPo4LF577k14bg1a+cV4BAJY7kX3IlmlpiNqHATESDL9ROO7
-         swbR/jqOqpKJHUNrxjWy3pnlGMIPgFTCNGVv7JyxzDX/jfDT46nuA7N/XAssSFtXvidP
-         MYcVob5qXcUTgwFYJodU3Sx7Wk+CMdnR1AquZd5U4sVl3VqEWHfU4oO2Cow4V96kzPtj
-         Ikm9KKQaYF8IeFN4vAl9Jf1g6z6gfJdNRcg88jH426WjpXQHyEUeRKGBbkrPuWFXE/x3
-         VKEQ==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=p/yGaf4/dBguojbfnSYOpEC26mQ4z6N8HhJSV9NQYmc=;
+        b=cIg9nG++bbZE2c03DnK9RMCaADOtPz/gGEgWVWUqAYfwleQ22poIlPP0wCG+NW7Rmp
+         RKTOFTu7fHg66D/Fmw3wzl+fMuoIWINWXJJzi1zHcoeXjJ6OqdO2XXRonT7Alct/fPkb
+         RUQiQSH5nE/gMhhkn8ktWcbqAlVRo/favIaLHNWcs+n3/f9tSSXVFw9THflKOa4y9EEC
+         5QTE+ueeK5kUXObSAW1Mp//o9Xy936OH5v8rtslSmX4Hz8kwRJVe7ieQwqFuA1SSBSFo
+         IDHnJ9lDWaR9WqbZGmuKkBiycN8KET6NGfEbrAUF+2t9YcsWtWieeNCm661physY5+wa
+         fwFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=f/qjJ08JU/nokrfccNNsGXG1NRnGmT82iKK0zORnPFE=;
-        b=WSyLFQXKquG8+YngYlaHUmv7UYzEIAXqhMoJ6lH3iu6D7WrtiGCbZK17nRLU/RUFXL
-         XL/LT6sixAXAU6a5f49/9qoHp4ho02nR/k/SjmyZVZ6lK4o1QYO/g7RBts1G5pzkZR1N
-         A8ehh08fJDbrzYf4G5g71u0wjImPG2osce5XeKRZW8sxiVLR5Vr5LUq+H66EFTdHlC3A
-         mDZG1yRMOHz7ARdYTStmlMgss4aoz6qjLjmmxAxOG6b3iLqfDzp073j4ySaVCf7tRAST
-         WpjV70+CiqmZHHv7X2h8RmZuyNvzLS5nVyyI/IhFNGO7Tpm4HuipneBCHo1lcuRvqLgX
-         EUCw==
-X-Gm-Message-State: ACrzQf3ak97V36E73PKWLA7Hh3TWF5sOqRnepmB9HlkbBDIxSRbANOD9
-        cDix5Mc+lc/xdXDbf6kcimU9/w==
-X-Google-Smtp-Source: AMsMyM7i1zxfEr8Q170RjgVzKH2IP4Yh9mf8xVQXflM9hJlN3TbtBJrxW3Z8G0qBR0SqGAQPfyH9Lg==
-X-Received: by 2002:a05:622a:1787:b0:39c:d695:8590 with SMTP id s7-20020a05622a178700b0039cd6958590mr6865239qtk.104.1666192409077;
-        Wed, 19 Oct 2022 08:13:29 -0700 (PDT)
-Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
-        by smtp.gmail.com with ESMTPSA id r2-20020ae9d602000000b006ceb933a9fesm4946019qkk.81.2022.10.19.08.13.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Oct 2022 08:13:28 -0700 (PDT)
-Message-ID: <86e2a49b-557a-0a91-3e54-e64115fec736@linaro.org>
-Date:   Wed, 19 Oct 2022 11:13:27 -0400
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=p/yGaf4/dBguojbfnSYOpEC26mQ4z6N8HhJSV9NQYmc=;
+        b=ErstIr1yxaIEqFBUDRWMjofKctTEB41dhd5O9I7tEj5F7mHrq6DIh+/plbSMLPS4ra
+         jmDzPHYOvN2tSX3IMw1sGnUxfGNNoyen0xIKsaUpoWt0Lw1Zqdtx0AHEibgKW4qL6lql
+         paRvbAKLN6G27UHbZ0c8i/qaLLre2sKJnnbhj3baTJ93fB8oFj9aZKuAx2cqcj6FZXIz
+         jLpq2qwa7Jkf8shUMZkEShLCMVROPe1sctfvezk1m774/bTcRrpKzBz1CrdiC9ekmTgN
+         DwKST5L6Oya8kpQraeTKKZivSK2YJEnmSdj2j1uwlh7DVtrK9wEi7tyY8bov7ReP5PvJ
+         9x8g==
+X-Gm-Message-State: ACrzQf2ER7aNFMCHeshnqzQk+KcQY0WWrJ9MKLfd/RA1ekr2CmYFVgZ4
+        JChG0k0tr1F4fkIZ8g0xNjolLw==
+X-Google-Smtp-Source: AMsMyM45rvfJtgYQFuVbJhF4qQk2Q0lTHAIdYG6ftqWTFaKuEuf6kzBOZRS2T890rgIPZr52WzWJ3g==
+X-Received: by 2002:a17:902:b907:b0:178:2898:8084 with SMTP id bf7-20020a170902b90700b0017828988084mr8978392plb.140.1666192522159;
+        Wed, 19 Oct 2022 08:15:22 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id y9-20020a17090abd0900b001fd6066284dsm117148pjr.6.2022.10.19.08.15.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Oct 2022 08:15:21 -0700 (PDT)
+Date:   Wed, 19 Oct 2022 15:15:18 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Jiaxi Chen <jiaxi.chen@linux.intel.com>
+Cc:     kvm@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, pbonzini@redhat.com, ndesaulniers@google.com,
+        alexandre.belloni@bootlin.com, peterz@infradead.org,
+        jpoimboe@kernel.org, chang.seok.bae@intel.com,
+        pawan.kumar.gupta@linux.intel.com, babu.moger@amd.com,
+        jmattson@google.com, sandipan.das@amd.com, tony.luck@intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, fenghua.yu@intel.com,
+        keescook@chromium.org, jane.malalane@citrix.com, nathan@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/6] x86: KVM: Enable CMPccXADD CPUID and expose it to
+ guest
+Message-ID: <Y1AUhlwWjIkKfZHA@google.com>
+References: <20221019084734.3590760-1-jiaxi.chen@linux.intel.com>
+ <20221019084734.3590760-2-jiaxi.chen@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 2/2] dt-bindings: PCI: xilinx-nwl: Convert to YAML schemas
- of Xilinx NWL PCIe Root Port Bridge
-Content-Language: en-US
-To:     Thippeswamy Havalige <thippeswamy.havalige@amd.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org
-Cc:     bhelgaas@google.com, michals@xilinx.com, robh+dt@kernel.org,
-        bharat.kumar.gogada@amd.com
-References: <20221019144640.9458-1-thippeswamy.havalige@amd.com>
- <20221019144640.9458-2-thippeswamy.havalige@amd.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221019144640.9458-2-thippeswamy.havalige@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221019084734.3590760-2-jiaxi.chen@linux.intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/10/2022 10:46, Thippeswamy Havalige wrote:
-> Convert to YAML schemas for Xilinx NWL PCIe Root Port Bridge
-> dt binding.
+For all the shortlogs, "expose it to guest" is technically wrong.  Adding
+recognition in kvm/cpuid.c advertises KVM support to host userspace.  Whether or
+not a feature is exposed to the guest is up to the userspace VMM.
+
+On Wed, Oct 19, 2022, Jiaxi Chen wrote:
+> CMPccXADD is a new set of instructions in the latest Intel platform Sierra
+> Forest. It includes a semaphore operation that can compare and add the
+
+In general, avoid pronouns in changelogs, it's not clear what "it" refers to here.
+
+And for all of these changelogs, please explicitly state that there are no VMX
+controls for these instructions, assuming that's actually true.  From a KVM
+perspective, that's far more interesting than the details of the instruction(s).
+
+> operands if condition is met, which can improve database performance.
 > 
-> Signed-off-by: Thippeswamy Havalige <thippeswamy.havalige@amd.com>
+> The bit definition:
+> CPUID.(EAX=7,ECX=1):EAX[bit 7]
+> 
+> This patch enables this CPUID in the kernel feature bits and expose it to
+> guest OS.
 
-(...)
+Same thing here, KVM doesn't decide whether or not to expose the feature to the
+guest.
 
-> diff --git a/Documentation/devicetree/bindings/pci/xilinx-nwl-pcie.yaml b/Documentation/devicetree/bindings/pci/xilinx-nwl-pcie.yaml
-> new file mode 100644
-> index 000000000000..97a33e8cc171
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/pci/xilinx-nwl-pcie.yaml
-> @@ -0,0 +1,122 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/pci/xilinx-nwl-pcie.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Xilinx NWL PCIe Root Port Bridge DT description
+> Signed-off-by: Jiaxi Chen <jiaxi.chen@linux.intel.com>
+> ---
+>  arch/x86/include/asm/cpufeatures.h | 1 +
+>  arch/x86/kvm/cpuid.c               | 2 +-
+>  2 files changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+> index ef4775c6db01..445626cb5779 100644
+> --- a/arch/x86/include/asm/cpufeatures.h
+> +++ b/arch/x86/include/asm/cpufeatures.h
+> @@ -308,6 +308,7 @@
+>  /* Intel-defined CPU features, CPUID level 0x00000007:1 (EAX), word 12 */
+>  #define X86_FEATURE_AVX_VNNI		(12*32+ 4) /* AVX VNNI instructions */
+>  #define X86_FEATURE_AVX512_BF16		(12*32+ 5) /* AVX512 BFLOAT16 instructions */
+> +#define X86_FEATURE_CMPCCXADD           (12*32+ 7) /* CMPccXADD instructions */
 
-Same comments apply.
+Boris,
 
-> +
-> +maintainers:
-> +  - Thippeswamy Havalige <thippesw@xilinx.com>
-
-Use current email address.
-
-> +
-> +allOf:
-> +  - $ref: /schemas/pci/pci-bus.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: xlnx,nwl-pcie-2.11
-> +
-> +  reg:
-> +    items:
-> +      - description: PCIe bridge registers location.
-> +      - description: PCIe Controller registers location.
-> +      - description: PCIe Configuration space region.
-> +
-> +  reg-names:
-> +    items:
-> +      - const: breg
-> +      - const: pcireg
-> +      - const: cfg
-> +
-> +  interrupts:
-> +    items:
-> +      - description: msi0 interrupt asserted when an MSI is received
-> +      - description: msi1 interrupt asserted when an MSI is received
-> +      - description: interrupt asserted when a legacy interrupt is received
-> +      - description: unused interrupt(dummy)
-> +      - description: interrupt asserted when miscellaneous interrupt is received
-> +
-> +  interrupt-names:
-> +    minItems: 5
-
-maxItems instead
-
-> +
-> +  interrupt-map-mask:
-> +    items:
-> +      - const: 0
-> +      - const: 0
-> +      - const: 0
-> +      - const: 7
-> +
-> +  "#interrupt-cells":
-> +    const: 1
-> +
-> +  msi-controller:
-> +    description: Identifies the node as an MSI controller.
-
-If it is a MSI controller, shouldn't you reference
-/schemas/interrupt-controller/msi-controller.yaml ?
-
-> +
-> +  msi-parent:
-> +    description: MSI controller the device is capable of using.
-
-msi-parent: true
-
-> +
-> +  interrupt-map:
-> +    maxItems: 4
-> +
-> +  legacy-interrupt-controller:
-> +    description: Interrupt controller node for handling legacy PCI interrupts.
-> +    type: object
-
-Same comments apply.
-
-> +    properties:
-> +      "#address-cells":
-> +        const: 0
-> +      "#interrupt-cells":
-> +        const: 1
-> +      "interrupt-controller": true
-> +
-
-what happened to clocks? You did not describe any changes in commit msg.
-
-> +required:
-
-compatible
-
-> +  - reg
-> +  - reg-names
-> +  - interrupts
-> +  - interrupt-names
-> +  - "#interrupt-cells"
-> +  - interrupt-map
-> +  - msi-controller
-> +  - msi-parent
-> +  - interrupt-map-mask
-> +  - legacy-interrupt-controller
-
-Drop properties required by referenced schema.
-
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +
-> +    soc {
-> +          #address-cells = <2>;
-> +          #size-cells = <2>;
-> +          nwl_pcie: pcie@fd0e0000 {
-> +                     #address-cells = <3>;
-
-Mess up indentation
-
-Use 4 spaces for example indentation.
-
-> +                     #size-cells = <2>;
-> +                     compatible = "xlnx,nwl-pcie-2.11";
-
-Same comments apply
-
-> +                     #interrupt-cells = <1>;
-> +                     msi-controller;
-> +                     device_type = "pci";
-> +                     interrupt-parent = <&gic>;
-> +                     interrupts = <0 114 4>, <0 115 4>, <0 116 4>, <0 117 4>, <0 118 4>;
-> +                     interrupt-names = "msi0", "msi1", "intx", "dummy", "misc";
-> +                     interrupt-map-mask = <0x0 0x0 0x0 0x7>;
-> +                     interrupt-map = <0x0 0x0 0x0 0x1 &pcie_intc 0x1>,
-> +                                     <0x0 0x0 0x0 0x2 &pcie_intc 0x2>,
-> +                                     <0x0 0x0 0x0 0x3 &pcie_intc 0x3>,
-> +                                     <0x0 0x0 0x0 0x4 &pcie_intc 0x4>;
-> +
-> +                     msi-parent = <&nwl_pcie>;
-> +                     reg = <0x0 0xfd0e0000 0x0 0x1000>,
-> +                           <0x0 0xfd480000 0x0 0x1000>,
-> +                           <0x80 0x00000000 0x0 0x1000000>;
-
-This is a second property in the list (followed by reg-names, ranges)
-
-> +                     reg-names = "breg", "pcireg", "cfg";
-> +                     ranges = <0x02000000 0x0 0xe0000000 0x0 0xe0000000 0x0 0x10000000
-> +                               0x43000000 0x00000006 0x0 0x00000006 0x0 0x00000002 0x0>;
-> +
-> +                     pcie_intc: legacy-interrupt-controller {
-> +                     interrupt-controller;
-
-That's even worse...
-
-> +                     #address-cells = <0>;
-> +                     #interrupt-cells = <1>;
-> +                     };
-> +
-> +           };
-> +        };
-
-Best regards,
-Krzysztof
-
+What do you think about moving CPUID_7_1_EAX to be a KVM-only leaf too?  AFAICT,
+KVM passthrough is the only reason the existing features are defined.
