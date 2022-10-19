@@ -2,52 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23B7F604B05
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:17:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E0A1604B22
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 17:22:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231809AbiJSPRW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 11:17:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55090 "EHLO
+        id S230280AbiJSPWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 11:22:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232207AbiJSPRC (ORCPT
+        with ESMTP id S232355AbiJSPVw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 11:17:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED4BD14409D
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 08:09:55 -0700 (PDT)
+        Wed, 19 Oct 2022 11:21:52 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C120816EA3F
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 08:15:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C0DF4B824A5
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 15:08:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDC48C433C1;
-        Wed, 19 Oct 2022 15:08:01 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id EAD6DCE20F4
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 15:08:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C30C8C433C1;
+        Wed, 19 Oct 2022 15:08:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666192083;
-        bh=95MlQNM30vmfwNJFsblpQxVcyVh7sYL+rn6OLXApeOA=;
+        s=k20201202; t=1666192114;
+        bh=rM4ihlMZEz7jlcwFH6NvhSrb6DAtLdGVREDYqsgOkLk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dXrG90nVSwcvr2gq5pXRK6RjII348ylQTrCTVeamFy7AnpXi4cBDLcWkyEgBAJeJ9
-         8sKiNf/ITiCUletwrgC8Hxcgx2nPlO8yzfa7eth3zGVHgi/xsK+6E/QrmbYtW+SQLy
-         F5AKd4+CvWb1Uu/q8vZf0M8Dp2RtctUC9EjbCeKoO/Sm7ITsTVAuVtXTjJkK39VYVW
-         4Jjz0twFemiEOEFSzNoNtPQct+M/llMGJ5orDlO9rBQmFn/gKWPcBgW73TsLkNNSR6
-         zdU82WqWumqzrEAY81f1a7ecwoREtXBGBjha5HvJHi8b7fRhZqSMH5zFgFZYlRmi05
-         NwK7h3sw5mhYw==
+        b=vCT0t7tvprdK7zo6svNHgNTnSX1/KyaKyT+me2OTatE/jtZ8ikR12LnKP+1QhJczQ
+         ito+QZQ0OrFGnrfdb+itbPTFS+w9r0q0lGSEs4yw183c1GnRKJ2rvPob3JNCZxYaZz
+         yE/ldLK4QdB+OkY0XB8o4cKY+PnwqOjnvaDY1d0ZkN0qucJOLkIGgTG+WDzed/suHK
+         E4z2QzIKUnzGC9fy4mOs7sOGG8OW+np7F/ffFFJSvskFc9+RwImxkmLkSG5BuZ5v+c
+         Iv8TU8zZrOGJXnSIWK6MXPIv79rL6BYowrVAVPEKgAuhiwMg3kerIkwTweEJTuQDQ3
+         EdqSfuBc3KJUA==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     linux-arm-kernel@lists.infradead.org,
-        Hartley Sweeten <hsweeten@visionengravers.com>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
 Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Lennert Buytenhek <kernel@wantstofly.org>,
-        Hubert Feurstein <hubert.feurstein@contec.at>
-Subject: [PATCH 04/17] ARM: ep93xx: remove old board files
-Date:   Wed, 19 Oct 2022 17:03:26 +0200
-Message-Id: <20221019150410.3851944-4-arnd@kernel.org>
+        Mika Westerberg <mika.westerberg@iki.fi>,
+        Ryan Mallon <rmallon@gmail.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        alsa-devel@alsa-project.org
+Subject: [PATCH 05/17] ASoC: remove unused ep93xx files
+Date:   Wed, 19 Oct 2022 17:03:27 +0200
+Message-Id: <20221019150410.3851944-5-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20221019150410.3851944-1-arnd@kernel.org>
 References: <20221019144119.3848027-1-arnd@kernel.org>
  <20221019150410.3851944-1-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -60,716 +62,763 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-These five board files were marked as unused a while ago, and
-nobody wanted to keep them around for longer, so remove them
-now.
+A couple of ep93xx board files were unused and got removed, so
+the corresponding ASoC support can also be removed.
 
-We still have the edb93xx, visision_ep9307 and ts72xx files,
-which can hopefully be converted to device tree in the future.
-
-Cc: Lennert Buytenhek <kernel@wantstofly.org>
-Cc: Hubert Feurstein <hubert.feurstein@contec.at>
+Cc: Mika Westerberg <mika.westerberg@iki.fi>
+Cc: Ryan Mallon <rmallon@gmail.com>
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- MAINTAINERS                            |  10 --
- arch/arm/boot/compressed/misc-ep93xx.h |  13 +-
- arch/arm/mach-ep93xx/Kconfig           |  63 ----------
- arch/arm/mach-ep93xx/Makefile          |   5 -
- arch/arm/mach-ep93xx/adssphere.c       |  41 -------
- arch/arm/mach-ep93xx/gesbc9312.c       |  41 -------
- arch/arm/mach-ep93xx/micro9.c          | 125 -------------------
- arch/arm/mach-ep93xx/simone.c          | 128 -------------------
- arch/arm/mach-ep93xx/snappercl15.c     | 162 -------------------------
- 9 files changed, 1 insertion(+), 587 deletions(-)
- delete mode 100644 arch/arm/mach-ep93xx/adssphere.c
- delete mode 100644 arch/arm/mach-ep93xx/gesbc9312.c
- delete mode 100644 arch/arm/mach-ep93xx/micro9.c
- delete mode 100644 arch/arm/mach-ep93xx/simone.c
- delete mode 100644 arch/arm/mach-ep93xx/snappercl15.c
+ sound/soc/cirrus/Kconfig       |  23 --
+ sound/soc/cirrus/Makefile      |   6 -
+ sound/soc/cirrus/ep93xx-ac97.c | 446 ---------------------------------
+ sound/soc/cirrus/simone.c      |  86 -------
+ sound/soc/cirrus/snappercl15.c | 134 ----------
+ 5 files changed, 695 deletions(-)
+ delete mode 100644 sound/soc/cirrus/ep93xx-ac97.c
+ delete mode 100644 sound/soc/cirrus/simone.c
+ delete mode 100644 sound/soc/cirrus/snappercl15.c
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 57b74156df3a..89f72dba8e64 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1793,11 +1793,6 @@ F:	include/dt-bindings/reset/actions,*
- F:	include/linux/soc/actions/
- N:	owl
+diff --git a/sound/soc/cirrus/Kconfig b/sound/soc/cirrus/Kconfig
+index 8039a8febefa..34870c2d0cba 100644
+--- a/sound/soc/cirrus/Kconfig
++++ b/sound/soc/cirrus/Kconfig
+@@ -27,29 +27,6 @@ config SND_EP93XX_SOC_I2S_WATCHDOG
  
--ARM/ADS SPHERE MACHINE SUPPORT
--M:	Lennert Buytenhek <kernel@wantstofly.org>
--L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
--S:	Maintained
+ endif # if SND_EP93XX_SOC_I2S
+ 
+-config SND_EP93XX_SOC_AC97
+-	tristate
+-	select AC97_BUS
+-	select SND_SOC_AC97_BUS
 -
- ARM/Allwinner SoC Clock Support
- M:	Emilio López <emilio@elopez.com.ar>
- S:	Maintained
-@@ -2029,11 +2024,6 @@ S:	Maintained
- F:	arch/arm/boot/dts/cx92755*
- N:	digicolor
- 
--ARM/CONTEC MICRO9 MACHINE SUPPORT
--M:	Hubert Feurstein <hubert.feurstein@contec.at>
--S:	Maintained
--F:	arch/arm/mach-ep93xx/micro9.c
--
- ARM/CORESIGHT FRAMEWORK AND DRIVERS
- M:	Mathieu Poirier <mathieu.poirier@linaro.org>
- M:	Suzuki K Poulose <suzuki.poulose@arm.com>
-diff --git a/arch/arm/boot/compressed/misc-ep93xx.h b/arch/arm/boot/compressed/misc-ep93xx.h
-index 3dc942589cba..65b4121d1490 100644
---- a/arch/arm/boot/compressed/misc-ep93xx.h
-+++ b/arch/arm/boot/compressed/misc-ep93xx.h
-@@ -57,8 +57,7 @@ static inline void ep93xx_decomp_setup(void)
- 	if (machine_is_ts72xx())
- 		ts72xx_watchdog_disable();
- 
--	if (machine_is_adssphere() ||
--	    machine_is_edb9301() ||
-+	if (machine_is_edb9301() ||
- 	    machine_is_edb9302() ||
- 	    machine_is_edb9302a() ||
- 	    machine_is_edb9302a() ||
-@@ -69,16 +68,6 @@ static inline void ep93xx_decomp_setup(void)
- 	    machine_is_edb9315() ||
- 	    machine_is_edb9315a() ||
- 	    machine_is_edb9315a() ||
--	    machine_is_gesbc9312() ||
--	    machine_is_micro9() ||
--	    machine_is_micro9l() ||
--	    machine_is_micro9m() ||
--	    machine_is_micro9s() ||
--	    machine_is_micro9m() ||
--	    machine_is_micro9l() ||
--	    machine_is_micro9s() ||
--	    machine_is_sim_one() ||
--	    machine_is_snapper_cl15() ||
- 	    machine_is_ts72xx() ||
- 	    machine_is_bk3() ||
- 	    machine_is_vision_ep9307())
-diff --git a/arch/arm/mach-ep93xx/Kconfig b/arch/arm/mach-ep93xx/Kconfig
-index 2c40996a444b..703f3d232a60 100644
---- a/arch/arm/mach-ep93xx/Kconfig
-+++ b/arch/arm/mach-ep93xx/Kconfig
-@@ -25,13 +25,6 @@ config EP93XX_SOC_COMMON
- 
- comment "EP93xx Platforms"
- 
--config MACH_ADSSPHERE
--	bool "Support ADS Sphere"
--	depends on UNUSED_BOARD_FILES
+-config SND_EP93XX_SOC_SNAPPERCL15
+-	tristate "SoC Audio support for Bluewater Systems Snapper CL15 module"
+-	depends on SND_EP93XX_SOC && MACH_SNAPPER_CL15 && I2C
+-	select SND_EP93XX_SOC_I2S
+-	select SND_SOC_TLV320AIC23_I2C
 -	help
--	  Say 'Y' here if you want your kernel to support the ADS
--	  Sphere board.
+-	  Say Y or M here if you want to add support for I2S audio on the
+-	  Bluewater Systems Snapper CL15 module.
 -
- config MACH_BK3
- 	bool "Support Liebherr BK3.1"
- 	select MACH_TS72XX
-@@ -98,62 +91,6 @@ config MACH_EDB9315A
- 	  Say 'Y' here if you want your kernel to support the Cirrus
- 	  Logic EDB9315A Evaluation Board.
+-config SND_EP93XX_SOC_SIMONE
+-	tristate "SoC Audio support for Simplemachines Sim.One board"
+-	depends on SND_EP93XX_SOC && MACH_SIM_ONE
+-	select SND_EP93XX_SOC_AC97
+-	select SND_SOC_AC97_CODEC
+-	help
+-	  Say Y or M here if you want to add support for AC97 audio on the
+-	  Simplemachines Sim.One board.
+-
+ config SND_EP93XX_SOC_EDB93XX
+ 	tristate "SoC Audio support for Cirrus Logic EDB93xx boards"
+ 	depends on SND_EP93XX_SOC && (MACH_EDB9301 || MACH_EDB9302 || MACH_EDB9302A || MACH_EDB9307A || MACH_EDB9315A)
+diff --git a/sound/soc/cirrus/Makefile b/sound/soc/cirrus/Makefile
+index bfb8dc409f53..19a86daad660 100644
+--- a/sound/soc/cirrus/Makefile
++++ b/sound/soc/cirrus/Makefile
+@@ -2,17 +2,11 @@
+ # EP93xx Platform Support
+ snd-soc-ep93xx-objs				:= ep93xx-pcm.o
+ snd-soc-ep93xx-i2s-objs	 			:= ep93xx-i2s.o
+-snd-soc-ep93xx-ac97-objs 			:= ep93xx-ac97.o
  
--config MACH_GESBC9312
--	bool "Support Glomation GESBC-9312-sx"
--	depends on UNUSED_BOARD_FILES
--	help
--	  Say 'Y' here if you want your kernel to support the Glomation
--	  GESBC-9312-sx board.
--
--config MACH_MICRO9
--	bool
--
--config MACH_MICRO9H
--	bool "Support Contec Micro9-High"
--	select MACH_MICRO9
--	depends on UNUSED_BOARD_FILES
--	help
--	  Say 'Y' here if you want your kernel to support the
--	  Contec Micro9-High board.
--
--config MACH_MICRO9M
--	bool "Support Contec Micro9-Mid"
--	select MACH_MICRO9
--	depends on UNUSED_BOARD_FILES
--	help
--	  Say 'Y' here if you want your kernel to support the
--	  Contec Micro9-Mid board.
--
--config MACH_MICRO9L
--	bool "Support Contec Micro9-Lite"
--	select MACH_MICRO9
--	depends on UNUSED_BOARD_FILES
--	help
--	  Say 'Y' here if you want your kernel to support the
--	  Contec Micro9-Lite board.
--
--config MACH_MICRO9S
--	bool "Support Contec Micro9-Slim"
--	select MACH_MICRO9
--	depends on UNUSED_BOARD_FILES
--	help
--	  Say 'Y' here if you want your kernel to support the
--	  Contec Micro9-Slim board.
--
--config MACH_SIM_ONE
--        bool "Support Simplemachines Sim.One board"
--	depends on UNUSED_BOARD_FILES
--        help
--          Say 'Y' here if you want your kernel to support the
--          Simplemachines Sim.One board.
--
--config MACH_SNAPPER_CL15
--	bool "Support Bluewater Systems Snapper CL15 Module"
--	depends on UNUSED_BOARD_FILES
--	help
--	  Say 'Y' here if you want your kernel to support the Bluewater
--	  Systems Snapper CL15 Module.
--
- config MACH_TS72XX
- 	bool "Support Technologic Systems TS-72xx SBC"
- 	help
-diff --git a/arch/arm/mach-ep93xx/Makefile b/arch/arm/mach-ep93xx/Makefile
-index cfad517fac46..62e37403df14 100644
---- a/arch/arm/mach-ep93xx/Makefile
-+++ b/arch/arm/mach-ep93xx/Makefile
-@@ -6,11 +6,6 @@ obj-y			:= core.o clock.o timer-ep93xx.o
+ obj-$(CONFIG_SND_EP93XX_SOC)			+= snd-soc-ep93xx.o
+ obj-$(CONFIG_SND_EP93XX_SOC_I2S)		+= snd-soc-ep93xx-i2s.o
+-obj-$(CONFIG_SND_EP93XX_SOC_AC97)		+= snd-soc-ep93xx-ac97.o
  
- obj-$(CONFIG_EP93XX_DMA)	+= dma.o
+ # EP93XX Machine Support
+-snd-soc-snappercl15-objs			:= snappercl15.o
+-snd-soc-simone-objs				:= simone.o
+ snd-soc-edb93xx-objs				:= edb93xx.o
  
--obj-$(CONFIG_MACH_ADSSPHERE)	+= adssphere.o
- obj-$(CONFIG_MACH_EDB93XX)	+= edb93xx.o
--obj-$(CONFIG_MACH_GESBC9312)	+= gesbc9312.o
--obj-$(CONFIG_MACH_MICRO9)	+= micro9.o
--obj-$(CONFIG_MACH_SIM_ONE)	+= simone.o
--obj-$(CONFIG_MACH_SNAPPER_CL15)	+= snappercl15.o
- obj-$(CONFIG_MACH_TS72XX)	+= ts72xx.o
- obj-$(CONFIG_MACH_VISION_EP9307)+= vision_ep9307.o
-diff --git a/arch/arm/mach-ep93xx/adssphere.c b/arch/arm/mach-ep93xx/adssphere.c
+-obj-$(CONFIG_SND_EP93XX_SOC_SNAPPERCL15)	+= snd-soc-snappercl15.o
+-obj-$(CONFIG_SND_EP93XX_SOC_SIMONE)		+= snd-soc-simone.o
+ obj-$(CONFIG_SND_EP93XX_SOC_EDB93XX)		+= snd-soc-edb93xx.o
+diff --git a/sound/soc/cirrus/ep93xx-ac97.c b/sound/soc/cirrus/ep93xx-ac97.c
 deleted file mode 100644
-index 0c48d3c5b8e7..000000000000
---- a/arch/arm/mach-ep93xx/adssphere.c
+index 37593abe6053..000000000000
+--- a/sound/soc/cirrus/ep93xx-ac97.c
 +++ /dev/null
-@@ -1,41 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-or-later
--/*
-- * arch/arm/mach-ep93xx/adssphere.c
-- * ADS Sphere support.
-- *
-- * Copyright (C) 2006 Lennert Buytenhek <buytenh@wantstofly.org>
-- */
--
--#include <linux/kernel.h>
--#include <linux/init.h>
--#include <linux/platform_device.h>
--#include <linux/sizes.h>
--
--#include "hardware.h"
--
--#include <asm/mach-types.h>
--#include <asm/mach/arch.h>
--
--#include "soc.h"
--
--static struct ep93xx_eth_data __initdata adssphere_eth_data = {
--	.phy_id		= 1,
--};
--
--static void __init adssphere_init_machine(void)
--{
--	ep93xx_init_devices();
--	ep93xx_register_flash(4, EP93XX_CS6_PHYS_BASE, SZ_32M);
--	ep93xx_register_eth(&adssphere_eth_data, 1);
--}
--
--MACHINE_START(ADSSPHERE, "ADS Sphere board")
--	/* Maintainer: Lennert Buytenhek <buytenh@wantstofly.org> */
--	.atag_offset	= 0x100,
--	.nr_irqs	= NR_EP93XX_IRQS,
--	.map_io		= ep93xx_map_io,
--	.init_irq	= ep93xx_init_irq,
--	.init_time	= ep93xx_timer_init,
--	.init_machine	= adssphere_init_machine,
--	.restart	= ep93xx_restart,
--MACHINE_END
-diff --git a/arch/arm/mach-ep93xx/gesbc9312.c b/arch/arm/mach-ep93xx/gesbc9312.c
-deleted file mode 100644
-index 0b7043e3e178..000000000000
---- a/arch/arm/mach-ep93xx/gesbc9312.c
-+++ /dev/null
-@@ -1,41 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-or-later
--/*
-- * arch/arm/mach-ep93xx/gesbc9312.c
-- * Glomation GESBC-9312-sx support.
-- *
-- * Copyright (C) 2006 Lennert Buytenhek <buytenh@wantstofly.org>
-- */
--
--#include <linux/kernel.h>
--#include <linux/init.h>
--#include <linux/platform_device.h>
--#include <linux/sizes.h>
--
--#include "hardware.h"
--
--#include <asm/mach-types.h>
--#include <asm/mach/arch.h>
--
--#include "soc.h"
--
--static struct ep93xx_eth_data __initdata gesbc9312_eth_data = {
--	.phy_id		= 1,
--};
--
--static void __init gesbc9312_init_machine(void)
--{
--	ep93xx_init_devices();
--	ep93xx_register_flash(4, EP93XX_CS6_PHYS_BASE, SZ_8M);
--	ep93xx_register_eth(&gesbc9312_eth_data, 0);
--}
--
--MACHINE_START(GESBC9312, "Glomation GESBC-9312-sx")
--	/* Maintainer: Lennert Buytenhek <buytenh@wantstofly.org> */
--	.atag_offset	= 0x100,
--	.nr_irqs	= NR_EP93XX_IRQS,
--	.map_io		= ep93xx_map_io,
--	.init_irq	= ep93xx_init_irq,
--	.init_time	= ep93xx_timer_init,
--	.init_machine	= gesbc9312_init_machine,
--	.restart	= ep93xx_restart,
--MACHINE_END
-diff --git a/arch/arm/mach-ep93xx/micro9.c b/arch/arm/mach-ep93xx/micro9.c
-deleted file mode 100644
-index c121c459aa17..000000000000
---- a/arch/arm/mach-ep93xx/micro9.c
-+++ /dev/null
-@@ -1,125 +0,0 @@
+@@ -1,446 +0,0 @@
 -// SPDX-License-Identifier: GPL-2.0-only
 -/*
-- *  linux/arch/arm/mach-ep93xx/micro9.c
+- * ASoC driver for Cirrus Logic EP93xx AC97 controller.
 - *
-- * Copyright (C) 2006 Contec Steuerungstechnik & Automation GmbH
-- *                    Manfred Gruber <m.gruber@tirol.com>
-- * Copyright (C) 2009 Contec Steuerungstechnik & Automation GmbH
-- *                    Hubert Feurstein <hubert.feurstein@contec.at>
+- * Copyright (c) 2010 Mika Westerberg
+- *
+- * Based on s3c-ac97 ASoC driver by Jaswinder Singh.
 - */
 -
--#include <linux/kernel.h>
--#include <linux/init.h>
--#include <linux/platform_device.h>
+-#include <linux/delay.h>
+-#include <linux/err.h>
 -#include <linux/io.h>
--
--#include "hardware.h"
--
--#include <asm/mach-types.h>
--#include <asm/mach/arch.h>
--
--#include "soc.h"
--
--/*************************************************************************
-- * Micro9 NOR Flash
-- *
-- * Micro9-High has up to 64MB of 32-bit flash on CS1
-- * Micro9-Mid has up to 64MB of either 32-bit or 16-bit flash on CS1
-- * Micro9-Lite uses a separate MTD map driver for flash support
-- * Micro9-Slim has up to 64MB of either 32-bit or 16-bit flash on CS1
-- *************************************************************************/
--static unsigned int __init micro9_detect_bootwidth(void)
--{
--	u32 v;
--
--	/* Detect the bus width of the external flash memory */
--	v = __raw_readl(EP93XX_SYSCON_SYSCFG);
--	if (v & EP93XX_SYSCON_SYSCFG_LCSN7)
--		return 4; /* 32-bit */
--	else
--		return 2; /* 16-bit */
--}
--
--static void __init micro9_register_flash(void)
--{
--	unsigned int width;
--
--	if (machine_is_micro9())
--		width = 4;
--	else if (machine_is_micro9m() || machine_is_micro9s())
--		width = micro9_detect_bootwidth();
--	else
--		width = 0;
--
--	if (width)
--		ep93xx_register_flash(width, EP93XX_CS1_PHYS_BASE, SZ_64M);
--}
--
--
--/*************************************************************************
-- * Micro9 Ethernet
-- *************************************************************************/
--static struct ep93xx_eth_data __initdata micro9_eth_data = {
--	.phy_id		= 0x1f,
--};
--
--
--static void __init micro9_init_machine(void)
--{
--	ep93xx_init_devices();
--	ep93xx_register_eth(&micro9_eth_data, 1);
--	micro9_register_flash();
--}
--
--
--#ifdef CONFIG_MACH_MICRO9H
--MACHINE_START(MICRO9, "Contec Micro9-High")
--	/* Maintainer: Hubert Feurstein <hubert.feurstein@contec.at> */
--	.atag_offset	= 0x100,
--	.nr_irqs	= NR_EP93XX_IRQS,
--	.map_io		= ep93xx_map_io,
--	.init_irq	= ep93xx_init_irq,
--	.init_time	= ep93xx_timer_init,
--	.init_machine	= micro9_init_machine,
--	.restart	= ep93xx_restart,
--MACHINE_END
--#endif
--
--#ifdef CONFIG_MACH_MICRO9M
--MACHINE_START(MICRO9M, "Contec Micro9-Mid")
--	/* Maintainer: Hubert Feurstein <hubert.feurstein@contec.at> */
--	.atag_offset	= 0x100,
--	.nr_irqs	= NR_EP93XX_IRQS,
--	.map_io		= ep93xx_map_io,
--	.init_irq	= ep93xx_init_irq,
--	.init_time	= ep93xx_timer_init,
--	.init_machine	= micro9_init_machine,
--	.restart	= ep93xx_restart,
--MACHINE_END
--#endif
--
--#ifdef CONFIG_MACH_MICRO9L
--MACHINE_START(MICRO9L, "Contec Micro9-Lite")
--	/* Maintainer: Hubert Feurstein <hubert.feurstein@contec.at> */
--	.atag_offset	= 0x100,
--	.nr_irqs	= NR_EP93XX_IRQS,
--	.map_io		= ep93xx_map_io,
--	.init_irq	= ep93xx_init_irq,
--	.init_time	= ep93xx_timer_init,
--	.init_machine	= micro9_init_machine,
--	.restart	= ep93xx_restart,
--MACHINE_END
--#endif
--
--#ifdef CONFIG_MACH_MICRO9S
--MACHINE_START(MICRO9S, "Contec Micro9-Slim")
--	/* Maintainer: Hubert Feurstein <hubert.feurstein@contec.at> */
--	.atag_offset	= 0x100,
--	.nr_irqs	= NR_EP93XX_IRQS,
--	.map_io		= ep93xx_map_io,
--	.init_irq	= ep93xx_init_irq,
--	.init_time	= ep93xx_timer_init,
--	.init_machine	= micro9_init_machine,
--	.restart	= ep93xx_restart,
--MACHINE_END
--#endif
-diff --git a/arch/arm/mach-ep93xx/simone.c b/arch/arm/mach-ep93xx/simone.c
-deleted file mode 100644
-index 569e72413561..000000000000
---- a/arch/arm/mach-ep93xx/simone.c
-+++ /dev/null
-@@ -1,128 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-or-later
--/*
-- * arch/arm/mach-ep93xx/simone.c
-- * Simplemachines Sim.One support.
-- *
-- * Copyright (C) 2010 Ryan Mallon
-- *
-- * Based on the 2.6.24.7 support:
-- *   Copyright (C) 2009 Simplemachines
-- *   MMC support by Peter Ivanov <ivanovp@gmail.com>, 2007
-- */
--
--#include <linux/kernel.h>
 -#include <linux/init.h>
+-#include <linux/module.h>
 -#include <linux/platform_device.h>
--#include <linux/i2c.h>
--#include <linux/mmc/host.h>
--#include <linux/spi/spi.h>
--#include <linux/spi/mmc_spi.h>
--#include <linux/platform_data/video-ep93xx.h>
--#include <linux/platform_data/spi-ep93xx.h>
--#include <linux/gpio.h>
--#include <linux/gpio/machine.h>
+-#include <linux/slab.h>
 -
--#include "hardware.h"
--#include "gpio-ep93xx.h"
+-#include <sound/core.h>
+-#include <sound/dmaengine_pcm.h>
+-#include <sound/ac97_codec.h>
+-#include <sound/soc.h>
 -
--#include <asm/mach-types.h>
--#include <asm/mach/arch.h>
+-#include <linux/platform_data/dma-ep93xx.h>
+-#include <linux/soc/cirrus/ep93xx.h>
 -
--#include "soc.h"
--
--static struct ep93xx_eth_data __initdata simone_eth_data = {
--	.phy_id		= 1,
--};
--
--static struct ep93xxfb_mach_info __initdata simone_fb_info = {
--	.flags		= EP93XXFB_USE_SDCSN0 | EP93XXFB_PCLK_FALLING,
--};
--
--static struct mmc_spi_platform_data simone_mmc_spi_data = {
--	.detect_delay	= 500,
--	.ocr_mask	= MMC_VDD_32_33 | MMC_VDD_33_34,
--};
--
--static struct gpiod_lookup_table simone_mmc_spi_gpio_table = {
--	.dev_id = "mmc_spi.0", /* "mmc_spi" @ CS0 */
--	.table = {
--		/* Card detect */
--		GPIO_LOOKUP_IDX("A", 0, NULL, 0, GPIO_ACTIVE_LOW),
--		{ },
--	},
--};
--
--static struct spi_board_info simone_spi_devices[] __initdata = {
--	{
--		.modalias		= "mmc_spi",
--		.platform_data		= &simone_mmc_spi_data,
--		/*
--		 * We use 10 MHz even though the maximum is 3.7 MHz. The driver
--		 * will limit it automatically to max. frequency.
--		 */
--		.max_speed_hz		= 10 * 1000 * 1000,
--		.bus_num		= 0,
--		.chip_select		= 0,
--		.mode			= SPI_MODE_3,
--	},
--};
+-#include "ep93xx-pcm.h"
 -
 -/*
-- * Up to v1.3, the Sim.One used SFRMOUT as SD card chip select, but this goes
-- * low between multi-message command blocks. From v1.4, it uses a GPIO instead.
-- * v1.3 parts will still work, since the signal on SFRMOUT is automatic.
+- * Per channel (1-4) registers.
 - */
--static struct gpiod_lookup_table simone_spi_cs_gpio_table = {
--	.dev_id = "spi0",
--	.table = {
--		GPIO_LOOKUP("A", 1, "cs", GPIO_ACTIVE_LOW),
--		{ },
--	},
--};
+-#define AC97CH(n)		(((n) - 1) * 0x20)
 -
--static struct ep93xx_spi_info simone_spi_info __initdata = {
--	.use_dma = 1,
--};
+-#define AC97DR(n)		(AC97CH(n) + 0x0000)
 -
--static struct i2c_board_info __initdata simone_i2c_board_info[] = {
--	{
--		I2C_BOARD_INFO("ds1337", 0x68),
--	},
--};
+-#define AC97RXCR(n)		(AC97CH(n) + 0x0004)
+-#define AC97RXCR_REN		BIT(0)
+-#define AC97RXCR_RX3		BIT(3)
+-#define AC97RXCR_RX4		BIT(4)
+-#define AC97RXCR_CM		BIT(15)
 -
--static struct platform_device simone_audio_device = {
--	.name		= "simone-audio",
--	.id		= -1,
--};
+-#define AC97TXCR(n)		(AC97CH(n) + 0x0008)
+-#define AC97TXCR_TEN		BIT(0)
+-#define AC97TXCR_TX3		BIT(3)
+-#define AC97TXCR_TX4		BIT(4)
+-#define AC97TXCR_CM		BIT(15)
 -
--static void __init simone_register_audio(void)
--{
--	ep93xx_register_ac97();
--	platform_device_register(&simone_audio_device);
--}
+-#define AC97SR(n)		(AC97CH(n) + 0x000c)
+-#define AC97SR_TXFE		BIT(1)
+-#define AC97SR_TXUE		BIT(6)
 -
--static void __init simone_init_machine(void)
--{
--	ep93xx_init_devices();
--	ep93xx_register_flash(2, EP93XX_CS6_PHYS_BASE, SZ_8M);
--	ep93xx_register_eth(&simone_eth_data, 1);
--	ep93xx_register_fb(&simone_fb_info);
--	ep93xx_register_i2c(simone_i2c_board_info,
--			    ARRAY_SIZE(simone_i2c_board_info));
--	gpiod_add_lookup_table(&simone_mmc_spi_gpio_table);
--	gpiod_add_lookup_table(&simone_spi_cs_gpio_table);
--	ep93xx_register_spi(&simone_spi_info, simone_spi_devices,
--			    ARRAY_SIZE(simone_spi_devices));
--	simone_register_audio();
--}
+-#define AC97RISR(n)		(AC97CH(n) + 0x0010)
+-#define AC97ISR(n)		(AC97CH(n) + 0x0014)
+-#define AC97IE(n)		(AC97CH(n) + 0x0018)
 -
--MACHINE_START(SIM_ONE, "Simplemachines Sim.One Board")
--	/* Maintainer: Ryan Mallon */
--	.atag_offset	= 0x100,
--	.nr_irqs	= NR_EP93XX_IRQS,
--	.map_io		= ep93xx_map_io,
--	.init_irq	= ep93xx_init_irq,
--	.init_time	= ep93xx_timer_init,
--	.init_machine	= simone_init_machine,
--	.restart	= ep93xx_restart,
--MACHINE_END
-diff --git a/arch/arm/mach-ep93xx/snappercl15.c b/arch/arm/mach-ep93xx/snappercl15.c
-deleted file mode 100644
-index 1dfb725671b1..000000000000
---- a/arch/arm/mach-ep93xx/snappercl15.c
-+++ /dev/null
-@@ -1,162 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-or-later
 -/*
-- * arch/arm/mach-ep93xx/snappercl15.c
-- * Bluewater Systems Snapper CL15 system module
-- *
-- * Copyright (C) 2009 Bluewater Systems Ltd
-- * Author: Ryan Mallon
-- *
-- * NAND code adapted from driver by:
-- *   Andre Renaud <andre@bluewatersys.com>
-- *   James R. McKaskill
+- * Global AC97 controller registers.
 - */
+-#define AC97S1DATA		0x0080
+-#define AC97S2DATA		0x0084
+-#define AC97S12DATA		0x0088
 -
--#include <linux/platform_device.h>
--#include <linux/kernel.h>
--#include <linux/init.h>
--#include <linux/io.h>
--#include <linux/i2c.h>
--#include <linux/fb.h>
+-#define AC97RGIS		0x008c
+-#define AC97GIS			0x0090
+-#define AC97IM			0x0094
+-/*
+- * Common bits for RGIS, GIS and IM registers.
+- */
+-#define AC97_SLOT2RXVALID	BIT(1)
+-#define AC97_CODECREADY		BIT(5)
+-#define AC97_SLOT2TXCOMPLETE	BIT(6)
 -
--#include <linux/mtd/platnand.h>
+-#define AC97EOI			0x0098
+-#define AC97EOI_WINT		BIT(0)
+-#define AC97EOI_CODECREADY	BIT(1)
 -
--#include "hardware.h"
--#include <linux/platform_data/video-ep93xx.h>
--#include "gpio-ep93xx.h"
+-#define AC97GCR			0x009c
+-#define AC97GCR_AC97IFE		BIT(0)
 -
--#include <asm/mach-types.h>
--#include <asm/mach/arch.h>
+-#define AC97RESET		0x00a0
+-#define AC97RESET_TIMEDRESET	BIT(0)
 -
--#include "soc.h"
+-#define AC97SYNC		0x00a4
+-#define AC97SYNC_TIMEDSYNC	BIT(0)
 -
--#define SNAPPERCL15_NAND_BASE	(EP93XX_CS7_PHYS_BASE + SZ_16M)
+-#define AC97_TIMEOUT		msecs_to_jiffies(5)
 -
--#define SNAPPERCL15_NAND_WPN	(1 << 8)  /* Write protect (active low) */
--#define SNAPPERCL15_NAND_ALE	(1 << 9)  /* Address latch */
--#define SNAPPERCL15_NAND_CLE	(1 << 10) /* Command latch */
--#define SNAPPERCL15_NAND_CEN	(1 << 11) /* Chip enable (active low) */
--#define SNAPPERCL15_NAND_RDY	(1 << 14) /* Device ready */
+-/**
+- * struct ep93xx_ac97_info - EP93xx AC97 controller info structure
+- * @lock: mutex serializing access to the bus (slot 1 & 2 ops)
+- * @dev: pointer to the platform device dev structure
+- * @regs: mapped AC97 controller registers
+- * @done: bus ops wait here for an interrupt
+- */
+-struct ep93xx_ac97_info {
+-	struct mutex		lock;
+-	struct device		*dev;
+-	void __iomem		*regs;
+-	struct completion	done;
+-	struct snd_dmaengine_dai_dma_data dma_params_rx;
+-	struct snd_dmaengine_dai_dma_data dma_params_tx;
+-};
 -
--#define NAND_CTRL_ADDR(chip) 	(chip->legacy.IO_ADDR_W + 0x40)
+-/* currently ALSA only supports a single AC97 device */
+-static struct ep93xx_ac97_info *ep93xx_ac97_info;
 -
--static void snappercl15_nand_cmd_ctrl(struct nand_chip *chip, int cmd,
--				      unsigned int ctrl)
+-static struct ep93xx_dma_data ep93xx_ac97_pcm_out = {
+-	.name		= "ac97-pcm-out",
+-	.port		= EP93XX_DMA_AAC1,
+-	.direction	= DMA_MEM_TO_DEV,
+-};
+-
+-static struct ep93xx_dma_data ep93xx_ac97_pcm_in = {
+-	.name		= "ac97-pcm-in",
+-	.port		= EP93XX_DMA_AAC1,
+-	.direction	= DMA_DEV_TO_MEM,
+-};
+-
+-static inline unsigned ep93xx_ac97_read_reg(struct ep93xx_ac97_info *info,
+-					    unsigned reg)
 -{
--	static u16 nand_state = SNAPPERCL15_NAND_WPN;
--	u16 set;
+-	return __raw_readl(info->regs + reg);
+-}
 -
--	if (ctrl & NAND_CTRL_CHANGE) {
--		set = SNAPPERCL15_NAND_CEN | SNAPPERCL15_NAND_WPN;
+-static inline void ep93xx_ac97_write_reg(struct ep93xx_ac97_info *info,
+-					 unsigned reg, unsigned val)
+-{
+-	__raw_writel(val, info->regs + reg);
+-}
 -
--		if (ctrl & NAND_NCE)
--			set &= ~SNAPPERCL15_NAND_CEN;
--		if (ctrl & NAND_CLE)
--			set |= SNAPPERCL15_NAND_CLE;
--		if (ctrl & NAND_ALE)
--			set |= SNAPPERCL15_NAND_ALE;
+-static unsigned short ep93xx_ac97_read(struct snd_ac97 *ac97,
+-				       unsigned short reg)
+-{
+-	struct ep93xx_ac97_info *info = ep93xx_ac97_info;
+-	unsigned short val;
 -
--		nand_state &= ~(SNAPPERCL15_NAND_CEN |
--				SNAPPERCL15_NAND_CLE |
--				SNAPPERCL15_NAND_ALE);
--		nand_state |= set;
--		__raw_writew(nand_state, NAND_CTRL_ADDR(chip));
+-	mutex_lock(&info->lock);
+-
+-	ep93xx_ac97_write_reg(info, AC97S1DATA, reg);
+-	ep93xx_ac97_write_reg(info, AC97IM, AC97_SLOT2RXVALID);
+-	if (!wait_for_completion_timeout(&info->done, AC97_TIMEOUT)) {
+-		dev_warn(info->dev, "timeout reading register %x\n", reg);
+-		mutex_unlock(&info->lock);
+-		return -ETIMEDOUT;
+-	}
+-	val = (unsigned short)ep93xx_ac97_read_reg(info, AC97S2DATA);
+-
+-	mutex_unlock(&info->lock);
+-	return val;
+-}
+-
+-static void ep93xx_ac97_write(struct snd_ac97 *ac97,
+-			      unsigned short reg,
+-			      unsigned short val)
+-{
+-	struct ep93xx_ac97_info *info = ep93xx_ac97_info;
+-
+-	mutex_lock(&info->lock);
+-
+-	/*
+-	 * Writes to the codec need to be done so that slot 2 is filled in
+-	 * before slot 1.
+-	 */
+-	ep93xx_ac97_write_reg(info, AC97S2DATA, val);
+-	ep93xx_ac97_write_reg(info, AC97S1DATA, reg);
+-
+-	ep93xx_ac97_write_reg(info, AC97IM, AC97_SLOT2TXCOMPLETE);
+-	if (!wait_for_completion_timeout(&info->done, AC97_TIMEOUT))
+-		dev_warn(info->dev, "timeout writing register %x\n", reg);
+-
+-	mutex_unlock(&info->lock);
+-}
+-
+-static void ep93xx_ac97_warm_reset(struct snd_ac97 *ac97)
+-{
+-	struct ep93xx_ac97_info *info = ep93xx_ac97_info;
+-
+-	mutex_lock(&info->lock);
+-
+-	/*
+-	 * We are assuming that before this functions gets called, the codec
+-	 * BIT_CLK is stopped by forcing the codec into powerdown mode. We can
+-	 * control the SYNC signal directly via AC97SYNC register. Using
+-	 * TIMEDSYNC the controller will keep the SYNC high > 1us.
+-	 */
+-	ep93xx_ac97_write_reg(info, AC97SYNC, AC97SYNC_TIMEDSYNC);
+-	ep93xx_ac97_write_reg(info, AC97IM, AC97_CODECREADY);
+-	if (!wait_for_completion_timeout(&info->done, AC97_TIMEOUT))
+-		dev_warn(info->dev, "codec warm reset timeout\n");
+-
+-	mutex_unlock(&info->lock);
+-}
+-
+-static void ep93xx_ac97_cold_reset(struct snd_ac97 *ac97)
+-{
+-	struct ep93xx_ac97_info *info = ep93xx_ac97_info;
+-
+-	mutex_lock(&info->lock);
+-
+-	/*
+-	 * For doing cold reset, we disable the AC97 controller interface, clear
+-	 * WINT and CODECREADY bits, and finally enable the interface again.
+-	 */
+-	ep93xx_ac97_write_reg(info, AC97GCR, 0);
+-	ep93xx_ac97_write_reg(info, AC97EOI, AC97EOI_CODECREADY | AC97EOI_WINT);
+-	ep93xx_ac97_write_reg(info, AC97GCR, AC97GCR_AC97IFE);
+-
+-	/*
+-	 * Now, assert the reset and wait for the codec to become ready.
+-	 */
+-	ep93xx_ac97_write_reg(info, AC97RESET, AC97RESET_TIMEDRESET);
+-	ep93xx_ac97_write_reg(info, AC97IM, AC97_CODECREADY);
+-	if (!wait_for_completion_timeout(&info->done, AC97_TIMEOUT))
+-		dev_warn(info->dev, "codec cold reset timeout\n");
+-
+-	/*
+-	 * Give the codec some time to come fully out from the reset. This way
+-	 * we ensure that the subsequent reads/writes will work.
+-	 */
+-	usleep_range(15000, 20000);
+-
+-	mutex_unlock(&info->lock);
+-}
+-
+-static irqreturn_t ep93xx_ac97_interrupt(int irq, void *dev_id)
+-{
+-	struct ep93xx_ac97_info *info = dev_id;
+-	unsigned status, mask;
+-
+-	/*
+-	 * Just mask out the interrupt and wake up the waiting thread.
+-	 * Interrupts are cleared via reading/writing to slot 1 & 2 registers by
+-	 * the waiting thread.
+-	 */
+-	status = ep93xx_ac97_read_reg(info, AC97GIS);
+-	mask = ep93xx_ac97_read_reg(info, AC97IM);
+-	mask &= ~status;
+-	ep93xx_ac97_write_reg(info, AC97IM, mask);
+-
+-	complete(&info->done);
+-	return IRQ_HANDLED;
+-}
+-
+-static struct snd_ac97_bus_ops ep93xx_ac97_ops = {
+-	.read		= ep93xx_ac97_read,
+-	.write		= ep93xx_ac97_write,
+-	.reset		= ep93xx_ac97_cold_reset,
+-	.warm_reset	= ep93xx_ac97_warm_reset,
+-};
+-
+-static int ep93xx_ac97_trigger(struct snd_pcm_substream *substream,
+-			       int cmd, struct snd_soc_dai *dai)
+-{
+-	struct ep93xx_ac97_info *info = snd_soc_dai_get_drvdata(dai);
+-	unsigned v = 0;
+-
+-	switch (cmd) {
+-	case SNDRV_PCM_TRIGGER_START:
+-	case SNDRV_PCM_TRIGGER_RESUME:
+-	case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
+-		if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK) {
+-			/*
+-			 * Enable compact mode, TX slots 3 & 4, and the TX FIFO
+-			 * itself.
+-			 */
+-			v |= AC97TXCR_CM;
+-			v |= AC97TXCR_TX3 | AC97TXCR_TX4;
+-			v |= AC97TXCR_TEN;
+-			ep93xx_ac97_write_reg(info, AC97TXCR(1), v);
+-		} else {
+-			/*
+-			 * Enable compact mode, RX slots 3 & 4, and the RX FIFO
+-			 * itself.
+-			 */
+-			v |= AC97RXCR_CM;
+-			v |= AC97RXCR_RX3 | AC97RXCR_RX4;
+-			v |= AC97RXCR_REN;
+-			ep93xx_ac97_write_reg(info, AC97RXCR(1), v);
+-		}
+-		break;
+-
+-	case SNDRV_PCM_TRIGGER_STOP:
+-	case SNDRV_PCM_TRIGGER_SUSPEND:
+-	case SNDRV_PCM_TRIGGER_PAUSE_PUSH:
+-		if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK) {
+-			/*
+-			 * As per Cirrus EP93xx errata described below:
+-			 *
+-			 * https://www.cirrus.com/en/pubs/errata/ER667E2B.pdf
+-			 *
+-			 * we will wait for the TX FIFO to be empty before
+-			 * clearing the TEN bit.
+-			 */
+-			unsigned long timeout = jiffies + AC97_TIMEOUT;
+-
+-			do {
+-				v = ep93xx_ac97_read_reg(info, AC97SR(1));
+-				if (time_after(jiffies, timeout)) {
+-					dev_warn(info->dev, "TX timeout\n");
+-					break;
+-				}
+-			} while (!(v & (AC97SR_TXFE | AC97SR_TXUE)));
+-
+-			/* disable the TX FIFO */
+-			ep93xx_ac97_write_reg(info, AC97TXCR(1), 0);
+-		} else {
+-			/* disable the RX FIFO */
+-			ep93xx_ac97_write_reg(info, AC97RXCR(1), 0);
+-		}
+-		break;
+-
+-	default:
+-		dev_warn(info->dev, "unknown command %d\n", cmd);
+-		return -EINVAL;
 -	}
 -
--	if (cmd != NAND_CMD_NONE)
--		__raw_writew((cmd & 0xff) | nand_state,
--			     chip->legacy.IO_ADDR_W);
+-	return 0;
 -}
 -
--static int snappercl15_nand_dev_ready(struct nand_chip *chip)
+-static int ep93xx_ac97_dai_probe(struct snd_soc_dai *dai)
 -{
--	return !!(__raw_readw(NAND_CTRL_ADDR(chip)) & SNAPPERCL15_NAND_RDY);
+-	struct ep93xx_ac97_info *info = snd_soc_dai_get_drvdata(dai);
+-
+-	info->dma_params_tx.filter_data = &ep93xx_ac97_pcm_out;
+-	info->dma_params_rx.filter_data = &ep93xx_ac97_pcm_in;
+-
+-	dai->playback_dma_data = &info->dma_params_tx;
+-	dai->capture_dma_data = &info->dma_params_rx;
+-
+-	return 0;
 -}
 -
--static struct mtd_partition snappercl15_nand_parts[] = {
--	{
--		.name		= "Kernel",
--		.offset		= 0,
--		.size		= SZ_2M,
+-static const struct snd_soc_dai_ops ep93xx_ac97_dai_ops = {
+-	.trigger	= ep93xx_ac97_trigger,
+-};
+-
+-static struct snd_soc_dai_driver ep93xx_ac97_dai = {
+-	.name		= "ep93xx-ac97",
+-	.id		= 0,
+-	.probe		= ep93xx_ac97_dai_probe,
+-	.playback	= {
+-		.stream_name	= "AC97 Playback",
+-		.channels_min	= 2,
+-		.channels_max	= 2,
+-		.rates		= SNDRV_PCM_RATE_8000_48000,
+-		.formats	= SNDRV_PCM_FMTBIT_S16_LE,
 -	},
--	{
--		.name		= "Filesystem",
--		.offset		= MTDPART_OFS_APPEND,
--		.size		= MTDPART_SIZ_FULL,
+-	.capture	= {
+-		.stream_name	= "AC97 Capture",
+-		.channels_min	= 2,
+-		.channels_max	= 2,
+-		.rates		= SNDRV_PCM_RATE_8000_48000,
+-		.formats	= SNDRV_PCM_FMTBIT_S16_LE,
 -	},
+-	.ops			= &ep93xx_ac97_dai_ops,
 -};
 -
--static struct platform_nand_data snappercl15_nand_data = {
--	.chip = {
--		.nr_chips		= 1,
--		.partitions		= snappercl15_nand_parts,
--		.nr_partitions		= ARRAY_SIZE(snappercl15_nand_parts),
--		.chip_delay		= 25,
--	},
--	.ctrl = {
--		.dev_ready		= snappercl15_nand_dev_ready,
--		.cmd_ctrl		= snappercl15_nand_cmd_ctrl,
--	},
+-static const struct snd_soc_component_driver ep93xx_ac97_component = {
+-	.name			= "ep93xx-ac97",
+-	.legacy_dai_naming	= 1,
 -};
 -
--static struct resource snappercl15_nand_resource[] = {
--	{
--		.start		= SNAPPERCL15_NAND_BASE,
--		.end		= SNAPPERCL15_NAND_BASE + SZ_4K - 1,
--		.flags		= IORESOURCE_MEM,
--	},
--};
--
--static struct platform_device snappercl15_nand_device = {
--	.name			= "gen_nand",
--	.id			= -1,
--	.dev.platform_data	= &snappercl15_nand_data,
--	.resource		= snappercl15_nand_resource,
--	.num_resources		= ARRAY_SIZE(snappercl15_nand_resource),
--};
--
--static struct ep93xx_eth_data __initdata snappercl15_eth_data = {
--	.phy_id			= 1,
--};
--
--static struct i2c_board_info __initdata snappercl15_i2c_data[] = {
--	{
--		/* Audio codec */
--		I2C_BOARD_INFO("tlv320aic23", 0x1a),
--	},
--};
--
--static struct ep93xxfb_mach_info __initdata snappercl15_fb_info = {
--};
--
--static struct platform_device snappercl15_audio_device = {
--	.name		= "snappercl15-audio",
--	.id		= -1,
--};
--
--static void __init snappercl15_register_audio(void)
+-static int ep93xx_ac97_probe(struct platform_device *pdev)
 -{
--	ep93xx_register_i2s();
--	platform_device_register(&snappercl15_audio_device);
+-	struct ep93xx_ac97_info *info;
+-	int irq;
+-	int ret;
+-
+-	info = devm_kzalloc(&pdev->dev, sizeof(*info), GFP_KERNEL);
+-	if (!info)
+-		return -ENOMEM;
+-
+-	info->regs = devm_platform_ioremap_resource(pdev, 0);
+-	if (IS_ERR(info->regs))
+-		return PTR_ERR(info->regs);
+-
+-	irq = platform_get_irq(pdev, 0);
+-	if (irq <= 0)
+-		return irq < 0 ? irq : -ENODEV;
+-
+-	ret = devm_request_irq(&pdev->dev, irq, ep93xx_ac97_interrupt,
+-			       IRQF_TRIGGER_HIGH, pdev->name, info);
+-	if (ret)
+-		goto fail;
+-
+-	dev_set_drvdata(&pdev->dev, info);
+-
+-	mutex_init(&info->lock);
+-	init_completion(&info->done);
+-	info->dev = &pdev->dev;
+-
+-	ep93xx_ac97_info = info;
+-	platform_set_drvdata(pdev, info);
+-
+-	ret = snd_soc_set_ac97_ops(&ep93xx_ac97_ops);
+-	if (ret)
+-		goto fail;
+-
+-	ret = snd_soc_register_component(&pdev->dev, &ep93xx_ac97_component,
+-					 &ep93xx_ac97_dai, 1);
+-	if (ret)
+-		goto fail;
+-
+-	ret = devm_ep93xx_pcm_platform_register(&pdev->dev);
+-	if (ret)
+-		goto fail_unregister;
+-
+-	return 0;
+-
+-fail_unregister:
+-	snd_soc_unregister_component(&pdev->dev);
+-fail:
+-	ep93xx_ac97_info = NULL;
+-	snd_soc_set_ac97_ops(NULL);
+-	return ret;
 -}
 -
--static void __init snappercl15_init_machine(void)
+-static int ep93xx_ac97_remove(struct platform_device *pdev)
 -{
--	ep93xx_init_devices();
--	ep93xx_register_eth(&snappercl15_eth_data, 1);
--	ep93xx_register_i2c(snappercl15_i2c_data,
--			    ARRAY_SIZE(snappercl15_i2c_data));
--	ep93xx_register_fb(&snappercl15_fb_info);
--	snappercl15_register_audio();
--	platform_device_register(&snappercl15_nand_device);
+-	struct ep93xx_ac97_info	*info = platform_get_drvdata(pdev);
+-
+-	snd_soc_unregister_component(&pdev->dev);
+-
+-	/* disable the AC97 controller */
+-	ep93xx_ac97_write_reg(info, AC97GCR, 0);
+-
+-	ep93xx_ac97_info = NULL;
+-
+-	snd_soc_set_ac97_ops(NULL);
+-
+-	return 0;
 -}
 -
--MACHINE_START(SNAPPER_CL15, "Bluewater Systems Snapper CL15")
--	/* Maintainer: Ryan Mallon */
--	.atag_offset	= 0x100,
--	.nr_irqs	= NR_EP93XX_IRQS,
--	.map_io		= ep93xx_map_io,
--	.init_irq	= ep93xx_init_irq,
--	.init_time	= ep93xx_timer_init,
--	.init_machine	= snappercl15_init_machine,
--	.restart	= ep93xx_restart,
--MACHINE_END
+-static struct platform_driver ep93xx_ac97_driver = {
+-	.probe	= ep93xx_ac97_probe,
+-	.remove	= ep93xx_ac97_remove,
+-	.driver = {
+-		.name = "ep93xx-ac97",
+-	},
+-};
+-
+-module_platform_driver(ep93xx_ac97_driver);
+-
+-MODULE_DESCRIPTION("EP93xx AC97 ASoC Driver");
+-MODULE_AUTHOR("Mika Westerberg <mika.westerberg@iki.fi>");
+-MODULE_LICENSE("GPL");
+-MODULE_ALIAS("platform:ep93xx-ac97");
+diff --git a/sound/soc/cirrus/simone.c b/sound/soc/cirrus/simone.c
+deleted file mode 100644
+index 801c90877d77..000000000000
+--- a/sound/soc/cirrus/simone.c
++++ /dev/null
+@@ -1,86 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/*
+- * simone.c -- ASoC audio for Simplemachines Sim.One board
+- *
+- * Copyright (c) 2010 Mika Westerberg
+- *
+- * Based on snappercl15 machine driver by Ryan Mallon.
+- */
+-
+-#include <linux/init.h>
+-#include <linux/module.h>
+-#include <linux/platform_device.h>
+-#include <linux/soc/cirrus/ep93xx.h>
+-
+-#include <sound/core.h>
+-#include <sound/pcm.h>
+-#include <sound/soc.h>
+-
+-#include <asm/mach-types.h>
+-
+-SND_SOC_DAILINK_DEFS(hifi,
+-	DAILINK_COMP_ARRAY(COMP_CPU("ep93xx-ac97")),
+-	DAILINK_COMP_ARRAY(COMP_CODEC("ac97-codec", "ac97-hifi")),
+-	DAILINK_COMP_ARRAY(COMP_PLATFORM("ep93xx-ac97")));
+-
+-static struct snd_soc_dai_link simone_dai = {
+-	.name		= "AC97",
+-	.stream_name	= "AC97 HiFi",
+-	SND_SOC_DAILINK_REG(hifi),
+-};
+-
+-static struct snd_soc_card snd_soc_simone = {
+-	.name		= "Sim.One",
+-	.owner		= THIS_MODULE,
+-	.dai_link	= &simone_dai,
+-	.num_links	= 1,
+-};
+-
+-static struct platform_device *simone_snd_ac97_device;
+-
+-static int simone_probe(struct platform_device *pdev)
+-{
+-	struct snd_soc_card *card = &snd_soc_simone;
+-	int ret;
+-
+-	simone_snd_ac97_device = platform_device_register_simple("ac97-codec",
+-								 -1, NULL, 0);
+-	if (IS_ERR(simone_snd_ac97_device))
+-		return PTR_ERR(simone_snd_ac97_device);
+-
+-	card->dev = &pdev->dev;
+-
+-	ret = snd_soc_register_card(card);
+-	if (ret) {
+-		dev_err(&pdev->dev, "snd_soc_register_card() failed: %d\n",
+-			ret);
+-		platform_device_unregister(simone_snd_ac97_device);
+-	}
+-
+-	return ret;
+-}
+-
+-static int simone_remove(struct platform_device *pdev)
+-{
+-	struct snd_soc_card *card = platform_get_drvdata(pdev);
+-
+-	snd_soc_unregister_card(card);
+-	platform_device_unregister(simone_snd_ac97_device);
+-
+-	return 0;
+-}
+-
+-static struct platform_driver simone_driver = {
+-	.driver		= {
+-		.name	= "simone-audio",
+-	},
+-	.probe		= simone_probe,
+-	.remove		= simone_remove,
+-};
+-
+-module_platform_driver(simone_driver);
+-
+-MODULE_DESCRIPTION("ALSA SoC Simplemachines Sim.One");
+-MODULE_AUTHOR("Mika Westerberg <mika.westerberg@iki.fi>");
+-MODULE_LICENSE("GPL");
+-MODULE_ALIAS("platform:simone-audio");
+diff --git a/sound/soc/cirrus/snappercl15.c b/sound/soc/cirrus/snappercl15.c
+deleted file mode 100644
+index a286f5beeaeb..000000000000
+--- a/sound/soc/cirrus/snappercl15.c
++++ /dev/null
+@@ -1,134 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-or-later
+-/*
+- * snappercl15.c -- SoC audio for Bluewater Systems Snapper CL15 module
+- *
+- * Copyright (C) 2008 Bluewater Systems Ltd
+- * Author: Ryan Mallon
+- */
+-
+-#include <linux/platform_device.h>
+-#include <linux/module.h>
+-#include <linux/soc/cirrus/ep93xx.h>
+-#include <sound/core.h>
+-#include <sound/pcm.h>
+-#include <sound/soc.h>
+-
+-#include <asm/mach-types.h>
+-
+-#include "../codecs/tlv320aic23.h"
+-
+-#define CODEC_CLOCK 5644800
+-
+-static int snappercl15_hw_params(struct snd_pcm_substream *substream,
+-				 struct snd_pcm_hw_params *params)
+-{
+-	struct snd_soc_pcm_runtime *rtd = asoc_substream_to_rtd(substream);
+-	struct snd_soc_dai *codec_dai = asoc_rtd_to_codec(rtd, 0);
+-	struct snd_soc_dai *cpu_dai = asoc_rtd_to_cpu(rtd, 0);
+-	int err;
+-
+-	err = snd_soc_dai_set_sysclk(codec_dai, 0, CODEC_CLOCK, 
+-				     SND_SOC_CLOCK_IN);
+-	if (err)
+-		return err;
+-
+-	err = snd_soc_dai_set_sysclk(cpu_dai, 0, CODEC_CLOCK, 
+-				     SND_SOC_CLOCK_OUT);
+-	if (err)
+-		return err;
+-
+-	return 0;
+-}
+-
+-static const struct snd_soc_ops snappercl15_ops = {
+-	.hw_params	= snappercl15_hw_params,
+-};
+-
+-static const struct snd_soc_dapm_widget tlv320aic23_dapm_widgets[] = {
+-	SND_SOC_DAPM_HP("Headphone Jack", NULL),
+-	SND_SOC_DAPM_LINE("Line In", NULL),
+-	SND_SOC_DAPM_MIC("Mic Jack", NULL),
+-};
+-
+-static const struct snd_soc_dapm_route audio_map[] = {
+-	{"Headphone Jack", NULL, "LHPOUT"},
+-	{"Headphone Jack", NULL, "RHPOUT"},
+-
+-	{"LLINEIN", NULL, "Line In"},
+-	{"RLINEIN", NULL, "Line In"},
+-
+-	{"MICIN", NULL, "Mic Jack"},
+-};
+-
+-SND_SOC_DAILINK_DEFS(aic23,
+-	DAILINK_COMP_ARRAY(COMP_CPU("ep93xx-i2s")),
+-	DAILINK_COMP_ARRAY(COMP_CODEC("tlv320aic23-codec.0-001a",
+-				      "tlv320aic23-hifi")),
+-	DAILINK_COMP_ARRAY(COMP_PLATFORM("ep93xx-i2s")));
+-
+-static struct snd_soc_dai_link snappercl15_dai = {
+-	.name		= "tlv320aic23",
+-	.stream_name	= "AIC23",
+-	.dai_fmt	= SND_SOC_DAIFMT_I2S | SND_SOC_DAIFMT_NB_NF |
+-			  SND_SOC_DAIFMT_CBC_CFC,
+-	.ops		= &snappercl15_ops,
+-	SND_SOC_DAILINK_REG(aic23),
+-};
+-
+-static struct snd_soc_card snd_soc_snappercl15 = {
+-	.name		= "Snapper CL15",
+-	.owner		= THIS_MODULE,
+-	.dai_link	= &snappercl15_dai,
+-	.num_links	= 1,
+-
+-	.dapm_widgets		= tlv320aic23_dapm_widgets,
+-	.num_dapm_widgets	= ARRAY_SIZE(tlv320aic23_dapm_widgets),
+-	.dapm_routes		= audio_map,
+-	.num_dapm_routes	= ARRAY_SIZE(audio_map),
+-};
+-
+-static int snappercl15_probe(struct platform_device *pdev)
+-{
+-	struct snd_soc_card *card = &snd_soc_snappercl15;
+-	int ret;
+-
+-	ret = ep93xx_i2s_acquire();
+-	if (ret)
+-		return ret;
+-
+-	card->dev = &pdev->dev;
+-
+-	ret = snd_soc_register_card(card);
+-	if (ret) {
+-		dev_err(&pdev->dev, "snd_soc_register_card() failed: %d\n",
+-			ret);
+-		ep93xx_i2s_release();
+-	}
+-
+-	return ret;
+-}
+-
+-static int snappercl15_remove(struct platform_device *pdev)
+-{
+-	struct snd_soc_card *card = platform_get_drvdata(pdev);
+-
+-	snd_soc_unregister_card(card);
+-	ep93xx_i2s_release();
+-
+-	return 0;
+-}
+-
+-static struct platform_driver snappercl15_driver = {
+-	.driver		= {
+-		.name	= "snappercl15-audio",
+-	},
+-	.probe		= snappercl15_probe,
+-	.remove		= snappercl15_remove,
+-};
+-
+-module_platform_driver(snappercl15_driver);
+-
+-MODULE_AUTHOR("Ryan Mallon");
+-MODULE_DESCRIPTION("ALSA SoC Snapper CL15");
+-MODULE_LICENSE("GPL");
+-MODULE_ALIAS("platform:snappercl15-audio");
 -- 
 2.29.2
 
