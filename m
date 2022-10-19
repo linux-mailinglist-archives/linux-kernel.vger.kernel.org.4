@@ -2,106 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63C366050B5
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 21:49:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CA106050B8
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 21:49:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231248AbiJSTs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 15:48:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59096 "EHLO
+        id S230160AbiJSTtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 15:49:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230437AbiJSTsz (ORCPT
+        with ESMTP id S230283AbiJSTtW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 15:48:55 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F14241D3A5B;
-        Wed, 19 Oct 2022 12:48:53 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id o2so11434959qkk.10;
-        Wed, 19 Oct 2022 12:48:53 -0700 (PDT)
+        Wed, 19 Oct 2022 15:49:22 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D9E81003
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 12:49:20 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id o21so15854919ple.5
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 12:49:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cXqWYGSUyr7OrNHL1T/x/7EkjfHttBM4QCa4eRu5CdE=;
-        b=ox4rhvjtu73vL7Eoxb3ELsaih0GlyG+yB5zAmkNS2KiGxZogVp8NBKoF6fDJ9BzkmB
-         g5m7neSOBU7hxoeYpgeJhyW82i4iUuH+nAkA1889hB4gGWH4W84vgK2aEjqfKIUmw9e2
-         6KQeu2jyaZbGrHtlleYWE765geA3KCNVdXzxzwVlSMf01m+k+kOLAS12he6YgxdoOX82
-         rXVagiCyq1Cr/b1T2PqecVmN8w/Y2jDApucHSTERZlg+zPKUq8lW7N0qfzAdtRJFAukt
-         UcCZNp5iz9eOTx0EkWGUMtkEpjXHNVJLVNrndqpioDkYpW6THJL9HVRtB1vn9S37Go8D
-         hl0w==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DE+pC1xoa6jKzJgz9ssD3qXjzyl5nNC8ht+oyc3rAWU=;
+        b=yUHzem6sIADgl8VuoSM7oJkVqb+B5GHyJmRtSkk0r+NAk9gYc798fS+bCXMzJ0sPqz
+         gvhK1tXz6VWvJO1Aut71+PSwDju5EPluhhqCTyB9zoRDkmzWhYIiZJNVrEjApe8DORn8
+         KcevE4cLtP5SHAZpXPXIFh4xUNN7j9hoL5P4wBDwwUNG4OFARL04b8gmHZGE5jbZZ/Ph
+         AtWzdmd0UHVDDpgIdbRXMTQwQmEG7tr4dm2DJk2KynNJ1xzwv826mP1LceJ3JBfgdFYx
+         PAvM2DUd4lH0lArT6GV6RokgNsDgwR1/9x8oR9ELO347v6rLm6YNmMTkiseODRtqZ+/3
+         0WgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cXqWYGSUyr7OrNHL1T/x/7EkjfHttBM4QCa4eRu5CdE=;
-        b=FXLA2xf6CdAGhzY4bmALR2AwuCgobBh62urC+rE92sV41FHBkSv4gM5xz2qGsN8e4x
-         rt1C25T3wjOH6lVWZHKE/yG5RrIyg/g+bimR0akT4a4JrmJk/IHsQ1j4uPSH2Gp7CnLD
-         Wzen4PrFPJMeTEZmCfyhQG/I8ea1Qrln6BxwFM4JNcuBWsbv44n1WSYznyZqzRznnJqi
-         kWdvx8yy0Ur8EPI9LnNHvEirS7S7gz4cdmgutvgmzfr2FanYU7klth70G6yBSL/4in2T
-         xVckRsINL9HSO4Ptv5mFNv27yUaW7zL2i5zO56akr6lm/PpKgK0FmrzvApuOMGyJbjX3
-         Sekw==
-X-Gm-Message-State: ACrzQf1r0tdH4Hc0Bv/JePCYuGiougGO9/kHAi99w44TPPcxpm/7vdP/
-        OXrmYZ7ZVB14jLPZYIXO92FKgCppYHQ9uyhl4Qo=
-X-Google-Smtp-Source: AMsMyM67C5+6trm/g0kHA0nfVIVp7N/QTSeM9dZkG/qfb9srEg8RMwNlyV/8r8K+waGxTBLgd71QtUJMHNv6t+Se0ks=
-X-Received: by 2002:a05:620a:d94:b0:6bc:5a8c:3168 with SMTP id
- q20-20020a05620a0d9400b006bc5a8c3168mr6743224qkl.56.1666208933104; Wed, 19
- Oct 2022 12:48:53 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DE+pC1xoa6jKzJgz9ssD3qXjzyl5nNC8ht+oyc3rAWU=;
+        b=n32eOhGyU24la3HOTrM/ag4w4zHE1gYqTLTLNB+bc9HJWt7r5eAKMk5V9afvTa2rbB
+         m8gRTCHDwjeD3yX+otH+rCKGluKQY95+EDjvHvbztBfKeNJwBzAaZ7ASgh/WPh3qi8+6
+         YhPh/WOXROTTsuMHDcZUFqpwDE3A/6eS1SMlWGaanh69xtY0uJ5MStjH4wiQ7nS2SeWl
+         QpnpmoO/iB/vaOmRCatA5piQlYqYJ2ZQ3ltGle/9jd3kB5iENAgK/HuES4r4Z6Rihz7t
+         /8Qm/KDt/3h4pyvvTGTmnzZkVyKtJYILgrkcDtTGqWWuubgtlOg8+IPm8jevxPt3hRhU
+         UpRQ==
+X-Gm-Message-State: ACrzQf3SUa/kVVRjK5knn0VpzRJk4hsoYZnwAUH2mV9DykgnnV9TI4fD
+        b27dnrYoXFyOb+YcZz8Om2qhMye1cRMvxUii
+X-Google-Smtp-Source: AMsMyM7m5RpbE9FxNm/vTBWuqHTRCXyAoU5oSnqjcB5Qa4UB1SAgXCrRAktuhVVRZXJoQ6L3/ANkCw==
+X-Received: by 2002:a17:90a:a088:b0:20d:67b7:546d with SMTP id r8-20020a17090aa08800b0020d67b7546dmr12127533pjp.6.1666208959487;
+        Wed, 19 Oct 2022 12:49:19 -0700 (PDT)
+Received: from [127.0.0.1] (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
+        by smtp.gmail.com with ESMTPSA id 72-20020a62194b000000b00562362dbbc1sm11531811pfz.157.2022.10.19.12.49.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Oct 2022 12:49:19 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Cc:     Pavel Begunkov <asml.silence@gmail.com>,
+        linux-kernel@vger.kernel.org, vegard.nossum@oracle.com,
+        io-uring@vger.kernel.org, harshit.m.mogalapalli@gmail.com,
+        syzkaller <syzkaller@googlegroups.com>
+In-Reply-To: <20221019171218.1337614-1-harshit.m.mogalapalli@oracle.com>
+References: <20221019171218.1337614-1-harshit.m.mogalapalli@oracle.com>
+Subject: Re: [PATCH] io_uring/msg_ring: Fix NULL pointer dereference in io_msg_send_fd()
+Message-Id: <166620895849.131373.4257100476341517725.b4-ty@kernel.dk>
+Date:   Wed, 19 Oct 2022 12:49:18 -0700
 MIME-Version: 1.0
-References: <20221019085747.3810920-1-davidgow@google.com> <CA+fCnZdPwjThjY7fd7vBkMzS1eFXySR2AKrDK8weJ3p25fzS3g@mail.gmail.com>
- <CABVgOSmP1A4d_-SNrWg7VruxpKj3SZz=Bzb2Xebd=EXw1imXyA@mail.gmail.com>
-In-Reply-To: <CABVgOSmP1A4d_-SNrWg7VruxpKj3SZz=Bzb2Xebd=EXw1imXyA@mail.gmail.com>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Wed, 19 Oct 2022 21:48:42 +0200
-Message-ID: <CA+fCnZcea7UrA11HyRB80WgrUXMtEkK0AjdxEN=H-pMuWBhQyQ@mail.gmail.com>
-Subject: Re: [PATCH] kasan: Enable KUnit integration whenever CONFIG_KUNIT is enabled
-To:     David Gow <davidgow@google.com>
-Cc:     Andrey Konovalov <andreyknvl@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Daniel Latypov <dlatypov@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.11.0-dev-d9ed3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 5:06 PM David Gow <davidgow@google.com> wrote:
->
-> > How does KUnit detect a KASAN failure for other tests than the KASAN
-> > ones? I thought this was only implemented for KASAN tests. At least, I
-> > don't see any code querying kunit_kasan_status outside of KASAN tests.
->
-> Yeah, there aren't any other tests which set up a "kasan_status"
-> resource to expect specific failures, but we still want the fallback
-> call to kunit_set_failure() so that any test which causes a KASAN
-> report will fail:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/mm/kasan/report.c#n130
+On Wed, 19 Oct 2022 10:12:18 -0700, Harshit Mogalapalli wrote:
+> Syzkaller produced the below call trace:
+> 
+>  BUG: KASAN: null-ptr-deref in io_msg_ring+0x3cb/0x9f0
+>  Write of size 8 at addr 0000000000000070 by task repro/16399
+> 
+>  CPU: 0 PID: 16399 Comm: repro Not tainted 6.1.0-rc1 #28
+>  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.11.0-2.el7
+>  Call Trace:
+>   <TASK>
+>   dump_stack_lvl+0xcd/0x134
+>   ? io_msg_ring+0x3cb/0x9f0
+>   kasan_report+0xbc/0xf0
+>   ? io_msg_ring+0x3cb/0x9f0
+>   kasan_check_range+0x140/0x190
+>   io_msg_ring+0x3cb/0x9f0
+>   ? io_msg_ring_prep+0x300/0x300
+>   io_issue_sqe+0x698/0xca0
+>   io_submit_sqes+0x92f/0x1c30
+>   __do_sys_io_uring_enter+0xae4/0x24b0
+> ....
+>  RIP: 0033:0x7f2eaf8f8289
+>  RSP: 002b:00007fff40939718 EFLAGS: 00000246 ORIG_RAX: 00000000000001aa
+>  RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f2eaf8f8289
+>  RDX: 0000000000000000 RSI: 0000000000006f71 RDI: 0000000000000004
+>  RBP: 00007fff409397a0 R08: 0000000000000000 R09: 0000000000000039
+>  R10: 0000000000000000 R11: 0000000000000246 R12: 00000000004006d0
+>  R13: 00007fff40939880 R14: 0000000000000000 R15: 0000000000000000
+>   </TASK>
+>  Kernel panic - not syncing: panic_on_warn set ...
+> 
+> [...]
 
-Ah, right. Thanks for the explanation!
+Applied, thanks!
 
-> > I'm currently switching KASAN tests from using KUnit resources to
-> > console tracepoints [1], and those patches will be in conflict with
-> > yours.
->
-> Ah, sorry -- I'd seen these go past, and totally forgot about them! I
-> think all we really want to keep is the ability to fail tests if a
-> KASAN report occurs. The tricky bit is then disabling that for the
-> KASAN tests, so that they can have "expected" failures.
+[1/1] io_uring/msg_ring: Fix NULL pointer dereference in io_msg_send_fd()
+      (no commit info)
 
-I wonder what's the best solution to support this, assuming KASAN
-tests are switched to using tracepoints... I guess we could still keep
-the per-task KUnit flag, and only use it for non-KASAN tests. However,
-they will still suffer from the same issue tracepoints solve for KASAN
-tests: if a bug is triggered in a context other than the current task,
-the test will succeed.
+Best regards,
+-- 
+Jens Axboe
+
+
