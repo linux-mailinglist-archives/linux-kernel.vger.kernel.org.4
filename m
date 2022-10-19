@@ -2,150 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C19E6045D9
-	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 14:50:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFAA46045E8
+	for <lists+linux-kernel@lfdr.de>; Wed, 19 Oct 2022 14:52:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232158AbiJSMul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 08:50:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58682 "EHLO
+        id S232439AbiJSMvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 08:51:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231776AbiJSMt2 (ORCPT
+        with ESMTP id S233508AbiJSMuy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 08:49:28 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA6671C4921
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 05:32:19 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id C8B0D1FD10;
-        Wed, 19 Oct 2022 12:31:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1666182680;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DIVmI7hDWtRjXOIuomwqF0FtvW97AwrOu0bOOYmNl/k=;
-        b=I2FxgsrVZxgTI3SNhCtv1KZIq3p15PWGTxC/zJehbKBREgGPOhjflvNBwcyNe6v3C7f08u
-        kfN2gF1iE/M+VJTqg4QUXofOu0zAmO5VqBppmGFZyj3hCMm8E9g2JCBd4WT4iz8aIZ03E1
-        SVlJDCe9ESlOMUUUGoCDhpslBtVs8dk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1666182680;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DIVmI7hDWtRjXOIuomwqF0FtvW97AwrOu0bOOYmNl/k=;
-        b=C4SXbJ1ZHQnipSqi/Klx34IL6bKB9gSBm3wWxuzBkPDLExTCr7MOJFC3JATq+4/pp//Tnd
-        X2RMp1gFs/FqzmDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8F66213A36;
-        Wed, 19 Oct 2022 12:31:20 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id DaiCIRjuT2MjbAAAMHmgww
-        (envelope-from <pvorel@suse.cz>); Wed, 19 Oct 2022 12:31:20 +0000
-Date:   Wed, 19 Oct 2022 14:31:18 +0200
-From:   Petr Vorel <pvorel@suse.cz>
-To:     Torsten Hilbrich <torsten.hilbrich@secunet.com>,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: v6.1-rc1: Regression in notification of sethostname changes
-Message-ID: <Y0/uFkggIJMjxcpi@pevik>
-Reply-To: Petr Vorel <pvorel@suse.cz>
-References: <0c2b92a6-0f25-9538-178f-eee3b06da23f@secunet.com>
- <Y0/DlHMIPbRDG+fF@pevik>
+        Wed, 19 Oct 2022 08:50:54 -0400
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AE111285C9
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 05:32:54 -0700 (PDT)
+Received: by mail-qv1-xf29.google.com with SMTP id df9so11223850qvb.9
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 05:32:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TsgvCsDrG0L5go1M7pNQAYTvwXsvN/vC+2+5gNeL11E=;
+        b=Pwht4Y+YQT/Q+akb1YflgdfeRaQJuvKGI6p12b2VMApcNLE+XKb1VRzgzTpED0nkNt
+         4f2KSAw6YjmsVm8Kt69rdjuO/3eGmIhPPBjoFnKwC5zHYkZ2Fbmu0SPZjSkUzBKnP5T+
+         pv1c1OBsXnOCeRoLlWX0VJHUbBHciC17XRfwu1Lmw2ea0IZlXdCMK8+7aCfFMUGqeXDF
+         jer9TP3K+xipbqsEHsFe1GShMYQ1zYLob1JTLk4flJZ3IxU8P3PRvKwb9JLyPRru9Jl5
+         dPQBpZ0irN/tU/QIOTmQQNV6Mxc7D3gIV5HDt/zoERdAxrI06T7LMvXVFzBlSyh0zbqH
+         ihhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TsgvCsDrG0L5go1M7pNQAYTvwXsvN/vC+2+5gNeL11E=;
+        b=2OQhQ24UXVzksoP/H5TMms+IZENBS5kR/YKWuFEti4H3Av3HkYu9999C8px/sbztD7
+         I3jM17mh1M0TwNjilsQ0rnoXs2gGIui17rgvm7giN6+rpvHdnFR0WmWlGZx7rzglYR4z
+         qTmFACLkD5TfDOju6Ivt3H/QQOITWUs+k6SBQZ9woKRLamFMTbX5VJGAuwevnhhei09f
+         sZrVRFHoSjC7W3DuP5mLspDrEs7GqKOkDhflMkylcEjGmV+ARKf7JZN3qiSdYg1zgCFb
+         10QZUI2ICwcGiqTjJq6GWYMVFG8JMXgVdB3uW6R75vzJzFvNT2rQmTmt1aPOA9m6mcKO
+         28QA==
+X-Gm-Message-State: ACrzQf2vyB/Glbr/VEDLhY3rbBXUV++lvSk0ti26qr+jDuXxfJ6c+Zi4
+        1F4V7Y2+oprmunWp95pTeV94hg==
+X-Google-Smtp-Source: AMsMyM7ajU52RN5MSL5JJQ1VgEbJtgiUHm5DykSRp3Iw07X0DoKYmRCW+TIJPHzBUa6tueBS9s6jsQ==
+X-Received: by 2002:a05:6214:519c:b0:4b1:8eaf:a21f with SMTP id kl28-20020a056214519c00b004b18eafa21fmr6147405qvb.97.1666182715482;
+        Wed, 19 Oct 2022 05:31:55 -0700 (PDT)
+Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
+        by smtp.gmail.com with ESMTPSA id hf8-20020a05622a608800b0039cbbcc7da8sm3871762qtb.7.2022.10.19.05.31.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Oct 2022 05:31:54 -0700 (PDT)
+Message-ID: <05305f6e-8ba5-9145-7835-db60a8a560bf@linaro.org>
+Date:   Wed, 19 Oct 2022 08:31:53 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y0/DlHMIPbRDG+fF@pevik>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v2 1/3] dt-bindings: clock: add loongson2 clock include
+ file
+Content-Language: en-US
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev
+References: <20221019062912.3463-1-zhuyinbo@loongson.cn>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221019062912.3463-1-zhuyinbo@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Hi Torsten,
+On 19/10/2022 02:29, Yinbo Zhu wrote:
+> This file defines all loongson2 soc clock indexes, it should be
+> included in the device tree in which there's device using the
+> clocks.
+> 
+> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
 
-> > Hello Petr,
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-> > your commit
-
-> > commit bfca3dd3d0680fc2fc7f659a152234afbac26e4d
-> > Author: Petr Vorel <pvorel@suse.cz>
-> > Date:   Thu Sep 1 21:44:03 2022 +0200
-
-> >     kernel/utsname_sysctl.c: print kernel arch
-
-> >     Print the machine hardware name (UTS_MACHINE) in /proc/sys/kernel/arch.
-
-> >     This helps people who debug kernel with initramfs with minimal environment
-> >     (i.e.  without coreutils or even busybox) or allow to open sysfs file
-> >     instead of run 'uname -m' in high level languages.
-
-> > broke the notification mechanism between the sethostname syscall and the pollers of /proc/sys/kernel/hostname.
-
-> > The table uts_kern_table is addressed within uts_proc_notify by the enum value, however no new enum value was added in "enum uts_proc".
-
-> > I noticed the problem when journald-systemd failed to detect hostname changes made with the sethostname syscall (as used by the hostname tool).
-> > When setting the hostname through /proc/sys/kernel/hostname the poll notification was working.
-
-> Thanks a lot for your report, working on a fix!
-> Andrew, Greg, sorry for a regression.
-
-Hi Torsten,
-
-could you please post exact steps to reproduce the problem.
-Although the required fix to add new enum into enum uts_proc is trivial,
-I was not able to reproduce the problem with 6.1.0-rc1 (actually
-6.1.0-rc1-4.g1d716d8-default which contains few extra patches).
-
-# hostname; hostnamectl hostname; cat /proc/sys/kernel/hostname
-opensuse-tumbleweed.20221001
-opensuse-tumbleweed.20221001
-opensuse-tumbleweed.20221001
-
-# hostnamectl set-hostname foo; echo $?
-0
-# hostname; hostnamectl hostname; cat /proc/sys/kernel/hostname
-foo
-foo
-foo
-
-# hostname bar; echo $?
-0
-# hostname; hostnamectl hostname; cat /proc/sys/kernel/hostname
-bar
-bar
-bar
-
-# echo "baz" > /proc/sys/kernel/hostname
-# hostname; hostnamectl hostname; cat /proc/sys/kernel/hostname
-baz
-baz
-baz
+Best regards,
+Krzysztof
 
 
-# hostnamectl set-hostname foo; reboot
-After reboot it's 'foo'.
-What am I missing?
-
-BTW I originally tested the feature only on dracut initramfs (with rapido [1]),
-which obviously bypass systemd. For a fix I'm creating rpm package (binrpm-pkg).
-
-Kind regards,
-Petr
-
-[1] https://github.com/rapido-linux/rapido
-
-> Kind regards,
-> Petr
-
-> > 	Torsten
