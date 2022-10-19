@@ -2,99 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 731FD605405
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 01:37:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB0B96053FB
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 01:32:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231799AbiJSXhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 19:37:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34604 "EHLO
+        id S231835AbiJSXct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 19:32:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231226AbiJSXhO (ORCPT
+        with ESMTP id S231812AbiJSXci (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 19:37:14 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF9781CF56D;
-        Wed, 19 Oct 2022 16:37:06 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id 78so17645796pgb.13;
-        Wed, 19 Oct 2022 16:37:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gxwOkr2sbt9Ku+GvYa22/rMbCgAwd24FdOiu35P0uoQ=;
-        b=UChISMd5pGB+Lk2wNEmXVXniV1uLC7k9QCxzp0KUZvDW1L9LoGRcN3C2mMO6eDpDyd
-         V3TdshPC8loYHwC6xjqPXb0EfaLCRg9zOESW5GW993HLlblfgUbSdMUUBMDFhJEyUm02
-         NdKz/Kbt7BBzFiKsgv8WntzkwqXw0DnwF0LQSJlSv6v8j8KEQksaq5sVOL9vFxeW53Iq
-         ftCZ5wjG7GUXkZeqlXly6YfA8nwYqJdUDMjzcQ858IUpBbgNQd5o8R8CNRcxYVXMwYOu
-         25cxRtfF/uTOy5RhBPpzyjHkGu3jziSYUJGiZQObkIzbknueOtH9gTyVmHT9Txelsn5S
-         Ce0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gxwOkr2sbt9Ku+GvYa22/rMbCgAwd24FdOiu35P0uoQ=;
-        b=MADaUitMiZbqkGTKXbRRAcohQM1v8PbZO7LzbXfh2UjkIZd+Rd6SmL8HvCdgzB0xKF
-         1uP2DoUFo5k8Ye9a3fs/koLa1EWSoDWwYCJO7ADvru0oHwx7DMRGVmfCs8SmBOV4C7zd
-         8+3cj4hpX/Y8Iy69/sdhwTZ6Qh60frPPoaDvfINEd8SJyp51rJ8ZUxxjQXIz3woe8ePd
-         qZOomJFaefZUVJ9Ea0A+08FC48vSfG2AIqz16GaPeLh44C6Au+V8lZxKaKcNYdj3U2xZ
-         PRZlRdx/s8K1y8pdI5VCFmwJnKrWuzT9pnkRAONviSUEekg5Scb0IO10sXAGtWlTrKCr
-         C71w==
-X-Gm-Message-State: ACrzQf1hKewFm0Fgcq2UMZf7ZDggmG7vydnmljqBiC9jHzZTTV1LZOd0
-        4+r+A4tBCr9SEcccqzbiZx8=
-X-Google-Smtp-Source: AMsMyM6IU1c1qFj+JI+Nm1xFEY3GU6JEIXtMZwAwJW2xtOzKCj8Ctdr+CWOGP2AOMcfWmW1radJQ6A==
-X-Received: by 2002:a63:6986:0:b0:43c:8417:8dac with SMTP id e128-20020a636986000000b0043c84178dacmr9252828pgc.286.1666222625634;
-        Wed, 19 Oct 2022 16:37:05 -0700 (PDT)
-Received: from ?IPV6:2600:8802:b00:4a48:8d6a:5f0b:fdeb:b03? ([2600:8802:b00:4a48:8d6a:5f0b:fdeb:b03])
-        by smtp.gmail.com with ESMTPSA id l8-20020a170903120800b0016c09a0ef87sm11500031plh.255.2022.10.19.16.37.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Oct 2022 16:37:04 -0700 (PDT)
-Message-ID: <527fe1c9-fcaf-af0f-1b5b-aee46afe56f9@gmail.com>
-Date:   Wed, 19 Oct 2022 16:37:03 -0700
+        Wed, 19 Oct 2022 19:32:38 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18F8C1C4920;
+        Wed, 19 Oct 2022 16:32:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666222343; x=1697758343;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=z5X4sFIIoSeyL67r5yY/uxjHbHuM5Ha0FgxnmkDejtQ=;
+  b=Sbv4e5ReBxeUYzjXlPleCRnOuX6Dt60xK2gO57NhPJcta+bq4mewZZcw
+   gAN8vN1e57LVSfnxER8SYzo+brmvRGyAER4BdLEdgWOVDpxKLSamZRfux
+   woIzE6KEPkJIfZDo3xM9PbI3FA2qlptZ1v+Ityc4NkWz6G6Lthzy5Qqx+
+   UvQbhOXdQCrqdcFNX7ixzc3rkRT5VTIkG0nJ1aF/Zg9nhElAiMInML6mp
+   B002j/yQ2ToGd95ZqFRqno+yK6rqB0VDnFvDMfttgmJZMBGkQ6zEIqj4Z
+   zdO81o3qI//XJkBFlFVsDz0hsaLu89Q7pQeNRH1pz9nC3fntx6UW0bVln
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="392859932"
+X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
+   d="scan'208";a="392859932"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 16:32:21 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="662707262"
+X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
+   d="scan'208";a="662707262"
+Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.129])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 16:32:19 -0700
+From:   Zqiang <qiang1.zhang@intel.com>
+To:     paulmck@kernel.org, frederic@kernel.org, joel@joelfernandes.org
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] rcu: Make call_rcu() lazy only when CONFIG_RCU_LAZY is enabled
+Date:   Thu, 20 Oct 2022 07:38:35 +0800
+Message-Id: <20221019233835.395474-1-qiang1.zhang@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v2] net: macb: Specify PHY PM management done by MAC
-Content-Language: en-US
-To:     Sergiu Moga <sergiu.moga@microchip.com>,
-        nicolas.ferre@microchip.com, claudiu.beznea@microchip.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, linux@armlinux.org.uk,
-        tudor.ambarus@microchip.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221019120929.63098-1-sergiu.moga@microchip.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20221019120929.63098-1-sergiu.moga@microchip.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Currently, regardless of whether the CONFIG_RCU_LAZY is enabled,
+invoke the call_rcu() is always lazy, it also means that when
+CONFIG_RCU_LAZY is disabled, invoke the call_rcu_flush() is also
+lazy. therefore, this commit make call_rcu() lazy only when
+CONFIG_RCU_LAZY is enabled.
 
+Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+---
+ v1->v2: 
+ Use IS_ENABLED(CONFIG_RCU_LAZY) to the existing function of the same name.
 
-On 10/19/2022 5:09 AM, Sergiu Moga wrote:
-> The `macb_resume`/`macb_suspend` methods already call the
-> `phylink_start`/`phylink_stop` methods during their execution so
-> explicitly say that the PM of the PHY is done by MAC by using the
-> `mac_managed_pm` flag of the `struct phylink_config`.
-> 
-> This also fixes the warning message issued during resume:
-> WARNING: CPU: 0 PID: 237 at drivers/net/phy/phy_device.c:323 mdio_bus_phy_resume+0x144/0x148
-> 
-> Depends-on: 96de900ae78e ("net: phylink: add mac_managed_pm in phylink_config structure")
-> Fixes: 744d23c71af3 ("net: phy: Warn about incorrect mdio_bus_phy_resume() state")
-> Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
+ kernel/rcu/tree.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
-
-Makes me realize we need to do the same in DSA, I will cook a patch soon.
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index abc615808b6e..ecf42b0d3726 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -2887,7 +2887,10 @@ EXPORT_SYMBOL_GPL(call_rcu_flush);
+  */
+ void call_rcu(struct rcu_head *head, rcu_callback_t func)
+ {
+-	return __call_rcu_common(head, func, true);
++	if (IS_ENABLED(CONFIG_RCU_LAZY))
++		return __call_rcu_common(head, func, true);
++	else
++		return __call_rcu_common(head, func, false);
+ }
+ EXPORT_SYMBOL_GPL(call_rcu);
+ 
 -- 
-Florian
+2.25.1
+
