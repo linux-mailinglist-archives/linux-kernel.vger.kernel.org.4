@@ -2,91 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B342606196
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 15:26:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 858A56061A4
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 15:30:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231224AbiJTN0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 09:26:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58510 "EHLO
+        id S229752AbiJTNa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 09:30:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231138AbiJTNZ5 (ORCPT
+        with ESMTP id S229673AbiJTNaY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 09:25:57 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A59E12E0CF;
-        Thu, 20 Oct 2022 06:25:53 -0700 (PDT)
-Received: from mail.ispras.ru (unknown [83.149.199.84])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 34092419E9D1;
-        Thu, 20 Oct 2022 13:25:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 34092419E9D1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1666272351;
-        bh=GYMsH9Ebnzm8SQXW7t4gkTpMsom8GVugJZf/83SavjE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=t4pusa818gjPOeCIBizSl2dpha4ZAejZRM/j2KGgrOL928umWHsxYUBhoXN8oCU7b
-         mi5S/8q5L/GeYCtz8JmGORRslfFBIRCcESgWneZb1fHTWrnDB785iUvicIaG2saGZZ
-         xtB9KM3V7w5SORbpCnGm9Ahzi7ZqheoIaSptjNnA=
+        Thu, 20 Oct 2022 09:30:24 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C287F986D;
+        Thu, 20 Oct 2022 06:30:22 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id az22-20020a05600c601600b003c6b72797fdso2167511wmb.5;
+        Thu, 20 Oct 2022 06:30:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=sNZ1fDkOKC9Jo5TF5/JPoCj3fNA67pPTBhDMAPFRJaE=;
+        b=p7R3MLJVulWOVWoJxUiuy38kQNO+DB9kySC1q1IDTEHlTCge3yHPJVvwfk121zyS0t
+         aZXEGk7Km24OTocNAHOU/qb8whnMFnBbofdpchAXsw60g1idZfhn7+XgiVkhlqyRWkSe
+         xREgVqLMtW/sZyNnSe57eV1yNCjeTDEtPH0ftiVpflWb7A5fMaPsBfeg/sKRcc/wTxV9
+         4bU+SgCg+e8eUzacH29oH67R4v8K6UESwzA76kRzTzyBNTTjWGaFip84juhWJ3i5xaMz
+         NsSinsFFMKp0EKzJDPndD0t2RTLkOovPZTUaOmkPNBLg/wVcTjO23pV+8CPEiVpV4hVg
+         Ixxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sNZ1fDkOKC9Jo5TF5/JPoCj3fNA67pPTBhDMAPFRJaE=;
+        b=BCyGLmDigb7jyd3VeK2/x0SDL4TfEyYiyYXRS2DgHVIcF/cht6iU233CZFT5dgqiVN
+         RIGTOE8KjsMy4LETvM/AjLC55NqG5/C3XHvTLYWLKrgXiW7N4Xg5bq7cnumbKS+dGKTz
+         MpM/zD2wgRpFxBe0FiwAhG0AFmitmAqtEuX1HLjs+UyCWoEk3N3LgySfD2UUPgvzwmro
+         IeUco+aGqmtzWmDz7g0DbWMaGPLV+tWwnb8MZLrz8VY+egF0ovZedFbqASqU8F5RxEqX
+         +fWcj61YNmfGUPFDwhZ46wXVfynjRfPryvBlAPDXmIK81sOPtBU8mOfTMCeXz6eX+pQz
+         ACPA==
+X-Gm-Message-State: ACrzQf0R1RD0xnKoEYoYlNBU5QiNmK/eEk28+XD39zZ60Tz8EFjhUaDl
+        5AUdacshv49jeyEaESROSjA=
+X-Google-Smtp-Source: AMsMyM7u77J1zc1h/AiiXbf/YKSxR3EuP7pKQBm+knpBnREYCSLYcG97NY84AN3S+oS+Yst1gnFweg==
+X-Received: by 2002:a05:600c:384d:b0:3c6:f5ad:1e0 with SMTP id s13-20020a05600c384d00b003c6f5ad01e0mr15286356wmr.127.1666272620613;
+        Thu, 20 Oct 2022 06:30:20 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id p2-20020a05600c204200b003c6bd12ac27sm1381899wmg.37.2022.10.20.06.30.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Oct 2022 06:30:20 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] tracing/hist: add in missing * in comment blocks
+Date:   Thu, 20 Oct 2022 14:30:19 +0100
+Message-Id: <20221020133019.1547587-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Date:   Thu, 20 Oct 2022 16:25:51 +0300
-From:   Evgeniy Baskov <baskov@ispras.ru>
-To:     Andrew Cooper <Andrew.Cooper3@citrix.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>, Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        lvc-project@linuxtesting.org, x86@kernel.org,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 03/16] x86/boot: Set cr0 to known state in trampoline
-In-Reply-To: <7dce2b16-c652-8b6d-5594-d110c8ac4645@citrix.com>
-References: <cover.1662459668.git.baskov@ispras.ru>
- <a155c20eec6343d34b3bdf40c024ce8b35a90e02.1662459668.git.baskov@ispras.ru>
- <7dce2b16-c652-8b6d-5594-d110c8ac4645@citrix.com>
-User-Agent: Roundcube Webmail/1.4.4
-Message-ID: <e217cff7752088baca2485f691e62d72@ispras.ru>
-X-Sender: baskov@ispras.ru
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-19 10:44, Andrew Cooper wrote:
-> On 06/09/2022 11:41, Evgeniy Baskov wrote:
->> diff --git a/arch/x86/boot/compressed/head_64.S 
->> b/arch/x86/boot/compressed/head_64.S
->> index d33f060900d2..5273367283b7 100644
->> --- a/arch/x86/boot/compressed/head_64.S
->> +++ b/arch/x86/boot/compressed/head_64.S
->> @@ -619,9 +619,8 @@ SYM_CODE_START(trampoline_32bit_src)
->>  	/* Set up new stack */
->>  	leal	TRAMPOLINE_32BIT_STACK_END(%ecx), %esp
->> 
->> -	/* Disable paging */
->> -	movl	%cr0, %eax
->> -	btrl	$X86_CR0_PG_BIT, %eax
->> +	/* Disable paging and setup CR0 */
->> +	movl	$(CR0_STATE & ~X86_CR0_PG), %eax
-> 
-> Why here?  WP is ignored when PG is disabled.
-> 
-> ~Andrew
+There are a couple of missing * in comment blocks. Fix these.
+Cleans up two clang warnings:
 
-PG is enabled lower in this function, so WP can also be set there,
-it should not make any difference. The only important thing is that
-WP supposed to be set in trampoline code.
+kernel/trace/trace_events_hist.c:986: warning: bad line:
+kernel/trace/trace_events_hist.c:3229: warning: bad line:
 
-If you think, that it would be more logical to set PG and WP
-simultaneously, I can change it to be that way.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ kernel/trace/trace_events_hist.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thanks,
-Evgeniy Baskov
+diff --git a/kernel/trace/trace_events_hist.c b/kernel/trace/trace_events_hist.c
+index 48465f7e97b4..087c19548049 100644
+--- a/kernel/trace/trace_events_hist.c
++++ b/kernel/trace/trace_events_hist.c
+@@ -983,7 +983,7 @@ static struct hist_field *find_any_var_ref(struct hist_trigger_data *hist_data,
+  * A trigger can define one or more variables.  If any one of them is
+  * currently referenced by any other trigger, this function will
+  * determine that.
+-
++ *
+  * Typically used to determine whether or not a trigger can be removed
+  * - if there are any references to a trigger's variables, it cannot.
+  *
+@@ -3226,7 +3226,7 @@ static struct field_var *create_field_var(struct hist_trigger_data *hist_data,
+  * events.  However, for convenience, users are allowed to directly
+  * specify an event field in an action, which will be automatically
+  * converted into a variable on their behalf.
+-
++ *
+  * This function creates a field variable with the name var_name on
+  * the hist trigger currently being defined on the target event.  If
+  * subsys_name and event_name are specified, this function simply
+-- 
+2.37.3
+
