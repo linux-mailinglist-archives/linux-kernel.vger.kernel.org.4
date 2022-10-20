@@ -2,95 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09C44605F20
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 13:42:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A65A4605F24
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 13:43:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231407AbiJTLmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 07:42:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53390 "EHLO
+        id S231444AbiJTLnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 07:43:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbiJTLmO (ORCPT
+        with ESMTP id S229491AbiJTLnk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 07:42:14 -0400
-Received: from smtp-fw-6002.amazon.com (smtp-fw-6002.amazon.com [52.95.49.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7CC41DDDC7;
-        Thu, 20 Oct 2022 04:42:12 -0700 (PDT)
+        Thu, 20 Oct 2022 07:43:40 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD4686A52A;
+        Thu, 20 Oct 2022 04:43:39 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id q10-20020a17090a304a00b0020b1d5f6975so2827390pjl.0;
+        Thu, 20 Oct 2022 04:43:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1666266133; x=1697802133;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=2hlgTccoFkFoWBMR73SLtJ14tsBB/9sAvZeBjcUcGqI=;
-  b=BTA/QkVMIzJUtLwhQ0LYre/rWsHcpckXeKEs9c2VRrMqTTvWVXz17sIR
-   s2BJ4iH1eFJAv3bhiS7JX19bB+AYyBZ7ZrXxC4TGxsoS2xQ1K0XCNucAv
-   bKYqLGNdk8cCr6SpQszOuP4JKNhUiM+Xrw/F/cXcfR7DNgvYTImVtAIao
-   A=;
-X-IronPort-AV: E=Sophos;i="5.95,198,1661817600"; 
-   d="scan'208";a="257667255"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2c-m6i4x-fad5e78e.us-west-2.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-6002.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 11:42:08 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2c-m6i4x-fad5e78e.us-west-2.amazon.com (Postfix) with ESMTPS id BF524A0F7E;
-        Thu, 20 Oct 2022 11:42:06 +0000 (UTC)
-Received: from EX19D013UWB004.ant.amazon.com (10.13.138.62) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
- id 15.0.1497.42; Thu, 20 Oct 2022 11:42:04 +0000
-Received: from EX13MTAUWA001.ant.amazon.com (10.43.160.58) by
- EX19D013UWB004.ant.amazon.com (10.13.138.62) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.15; Thu, 20 Oct 2022 11:42:04 +0000
-Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
- (172.19.116.181) by mail-relay.amazon.com (10.43.160.118) with Microsoft SMTP
- Server id 15.0.1497.42 via Frontend Transport; Thu, 20 Oct 2022 11:42:04
- +0000
-Received: by dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com (Postfix, from userid 14301484)
-        id BC8184BB3; Thu, 20 Oct 2022 11:42:03 +0000 (UTC)
-From:   Eliav Farber <farbere@amazon.com>
-To:     <bp@alien8.de>, <mchehab@kernel.org>, <tony.luck@intel.com>,
-        <james.morse@arm.com>, <rric@kernel.org>,
-        <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <talel@amazon.com>, <jonnyc@amazon.com>, <hhhawa@amazon.com>,
-        <hanochu@amazon.com>, <farbere@amazon.com>, <itamark@amazon.com>,
-        <shellykz@amazon.com>, <amitlavi@amazon.com>, <dkl@amazon.com>
-Subject: [PATCH] edac: fix period calculation in edac_device_reset_delay_period()
-Date:   Thu, 20 Oct 2022 11:42:03 +0000
-Message-ID: <20221020114203.10985-1-farbere@amazon.com>
-X-Mailer: git-send-email 2.37.1
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sHyL+iSo35ah0e/V8okK2n5oGkX8sOLEw6ihIICz6Vk=;
+        b=CaxvdnB3D34/mdfSTiomzd6dmlCvR1jIRM2sEYc77uhFp3yfqOsUi/+znPLDKURq+D
+         N8TnBDQ53BfqpOCym+Ed/KoCzh/SJHYXIyM3d+D32y5N+kgMbJ0U11WIRe8147poGaNm
+         ASWFeNQeTXz/O9tZ3ruLsNTXa5tkD6us8+CguOJXzJamJozDp1yUB1NGAosP1D7Hvb5i
+         GcIJ/8ZLrErCJF+PaNDX6bmonXSFL1HQZlkq2AuVh7jki1WRyLhwPWTsx0zwpf8pMtjL
+         f/U0tMgiyCDDdVgDIy1nKmyD93BzzlHVlbgEnDuiNtnRu5YBOEqIzd1FlS8M47CrACvd
+         qEjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=sHyL+iSo35ah0e/V8okK2n5oGkX8sOLEw6ihIICz6Vk=;
+        b=0fYrFYhu1vblpLO5ejLPf1yFtiOOAxT9Ho4O+p3FDn8HTWS+KM1ex88L+vwwEsTO5w
+         7Co9wOJhn1v/Sm03/s9zM4RovO/KST1wnRGkCM3mEN7mk3EHJyETLzjHT/eM/dOJP9KH
+         PyFhw1tFiBxTwR6YbJPa20NDYqyksL+jzi4HKlBMcH1eq/Cycte+Jn/GnsB7W9SoL2e3
+         purIe+WNzFTpQKB78Wh/K9tYOC1nkWx0AcFqZTVksF9zQZhnYnXnpzPJfaOIfjZK5v4N
+         MT88449v3yPDI3FWV3ROHW6epMIv4UQAKas/vJBGYcA/hG5ipBeZRr1NE9IOJ7+/cbjp
+         FU/g==
+X-Gm-Message-State: ACrzQf2G/ENpm7CKI3w6rV7/wKX+T5wCTEnqaxPUF8CJyhCXGZm60SZy
+        eAbEIo5vx/QKQ3CNUC6ZATg=
+X-Google-Smtp-Source: AMsMyM6U0+WqwhwwNRAzULYRnlQT5X0Wjjw8Jf46FlP/uwvT28jGG0i30ZT7HgxIxUtigv77DfWdzQ==
+X-Received: by 2002:a17:90a:1c02:b0:1e0:df7:31f2 with SMTP id s2-20020a17090a1c0200b001e00df731f2mr49904954pjs.222.1666266219347;
+        Thu, 20 Oct 2022 04:43:39 -0700 (PDT)
+Received: from [10.114.96.15] ([129.227.152.6])
+        by smtp.gmail.com with ESMTPSA id h6-20020a170902680600b0016dc6279ab7sm1394637plk.149.2022.10.20.04.43.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Oct 2022 04:43:38 -0700 (PDT)
+Message-ID: <9906b1bf-c938-e918-62bc-0c7118e954a9@gmail.com>
+Date:   Thu, 20 Oct 2022 19:43:35 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-12.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [RESEND PATCH] block, bfq: remove unused variable for bfq_queue
+From:   Yuwei Guan <ssawgyw@gmail.com>
+To:     paolo.valente@linaro.org, axboe@kernel.dk
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yuwei.Guan@zeekrlife.com
+References: <20221018030139.159-1-Yuwei.Guan@zeekrlife.com>
+In-Reply-To: <20221018030139.159-1-Yuwei.Guan@zeekrlife.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix period calculation in case user sets a value of 1000.
-The input of round_jiffies_relative() should be in jiffies and not in
-milli-seconds.
+Hi Jens,
 
-Signed-off-by: Eliav Farber <farbere@amazon.com>
----
- drivers/edac/edac_device.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 2022/10/18 11:01, Yuwei Guan wrote:
+> it defined in d0edc2473be9d, but there's nowhere to use it,
+> so remove it.
+>
+> Signed-off-by: Yuwei Guan <Yuwei.Guan@zeekrlife.com>
+> Acked-by: Paolo Valente <paolo.valente@linaro.org>
+> ---
+>   block/bfq-iosched.h | 4 ----
+>   1 file changed, 4 deletions(-)
 
-diff --git a/drivers/edac/edac_device.c b/drivers/edac/edac_device.c
-index 19522c568aa5..88942a6edc2c 100644
---- a/drivers/edac/edac_device.c
-+++ b/drivers/edac/edac_device.c
-@@ -399,7 +399,7 @@ void edac_device_reset_delay_period(struct edac_device_ctl_info *edac_dev,
- 	unsigned long jiffs = msecs_to_jiffies(value);
- 
- 	if (value == 1000)
--		jiffs = round_jiffies_relative(value);
-+		jiffs = round_jiffies_relative(jiffs);
- 
- 	edac_dev->poll_msec = value;
- 	edac_dev->delay	    = jiffs;
--- 
-2.37.1
+Can you help to check this patch again?
 
+Thanks
+
+> diff --git a/block/bfq-iosched.h b/block/bfq-iosched.h
+> index 64ee618064ba..71f721670ab6 100644
+> --- a/block/bfq-iosched.h
+> +++ b/block/bfq-iosched.h
+> @@ -369,12 +369,8 @@ struct bfq_queue {
+>   	unsigned long split_time; /* time of last split */
+>   
+>   	unsigned long first_IO_time; /* time of first I/O for this queue */
+> -
+>   	unsigned long creation_time; /* when this queue is created */
+>   
+> -	/* max service rate measured so far */
+> -	u32 max_service_rate;
+> -
+>   	/*
+>   	 * Pointer to the waker queue for this queue, i.e., to the
+>   	 * queue Q such that this queue happens to get new I/O right
