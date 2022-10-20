@@ -2,127 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0494B6055DD
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 05:16:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 497716055DF
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 05:17:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230393AbiJTDQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 23:16:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59872 "EHLO
+        id S229670AbiJTDRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 23:17:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230494AbiJTDQl (ORCPT
+        with ESMTP id S229659AbiJTDRq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 23:16:41 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C3D161C0731;
-        Wed, 19 Oct 2022 20:16:37 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.32])
-        by gateway (Coremail) with SMTP id _____8BxLtuUvVBjjOwAAA--.4712S3;
-        Thu, 20 Oct 2022 11:16:36 +0800 (CST)
-Received: from [10.20.42.32] (unknown [10.20.42.32])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxPuCTvVBjiq0BAA--.6867S3;
-        Thu, 20 Oct 2022 11:16:36 +0800 (CST)
-Subject: Re: [PATCH V3 1/4] ACPI / PCI: fix LPIC irq model default PCI IRQ
- polarity
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org,
-        loongarch@lists.linux.dev, Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Len Brown <lenb@kernel.org>, rafael@kernel.org,
-        linux-pci@vger.kernel.org, linux-acpi@vger.kernel.org
-References: <20221019160529.GA18372@bhelgaas>
-From:   Jianmin Lv <lvjianmin@loongson.cn>
-Message-ID: <0ebec963-d835-39cc-537a-bd58855b0171@loongson.cn>
-Date:   Thu, 20 Oct 2022 11:16:35 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Wed, 19 Oct 2022 23:17:46 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF28C152013
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 20:17:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666235864; x=1697771864;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=OY9irz+FwX4g+mZC2EUVo7b3vP0XeFPrKW4Zzx8Hyx4=;
+  b=icb+X2utiaWx1tkWseWQzYcZGrWnmKQZE8M2kMsBoCwAMhr4pTeNlZxo
+   J11cwqVgR+zIkApdP/Z3B0Y19xHXQHyEldFKuITjHS2k0Guv+OxhcHFHE
+   P9qP6WeBqq3iqh5pqZ8DeURWsc9WzUl+POH+4RKbERCZF8HrILENT9VPa
+   V5pGts56+s02rXfs8EzIIRYpYeqKU9Ou6PnyyV0+QYg1QEVldc8eNv3HK
+   9HMUI+s9r8vhsZQCMfciPCp1B2ueHcQ9C0IFVaf2rSTvW40AI12SgLPi7
+   8FBpbNwzZT18SoqOyZjxlQ/dJvu2zN5tFMkdpnc+UseWGvGGodk4BbORm
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="333155575"
+X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
+   d="scan'208";a="333155575"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 20:17:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="804615720"
+X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
+   d="scan'208";a="804615720"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by orsmga005.jf.intel.com with ESMTP; 19 Oct 2022 20:17:44 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 19 Oct 2022 20:17:43 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Wed, 19 Oct 2022 20:17:43 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.102)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Wed, 19 Oct 2022 20:17:42 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dbmSddujV0DtZ5sq3HYWxcR9fQvzlPffGQwi2ksAk86rqH/tjnya9wzpcWYlPY7LwGXG1GM2hW25GmMYt8LI11U7meYqwMuRhXDmMGvLsiC4xN0pFkPI1wvh7Vkcd4BEX3RidOyvkchZxypRP3ERJ5iwzwZrcvNYwV/CWWLcUU6C5cAfWXS1xaL3wosUivusqupJjw1dXa0ufjFWdq7fqvia6tr0BQ8+NXRLC6h9xhA8dD1CNLa6ixvaEMh1iAtlB0e7Y8O0qIcLv+DjobSb2vtTvYTLi1+TtUTlHYeH4nKxuXSrG1cQYoQhevCLCz+uZIRLVFF5MhZo7W2UhDstyg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=A7AG2VJCcaW4jerCeWPeszyWYfygCqiiJgx/HLEMWLU=;
+ b=Blj6F6qDy1rvGOLleOe5JmK6tbtWMBTMroStkrx5fmCLDimcmAvAqn64wlwAbwwOhVJ/ri+fwVZf7SIpogMgQVP5cjGFj/ZIL4SYsLJJp3+lvUOVjzjSJpKp7XLxPtwZ0DLezZTozA00ON/YCRNvsaZPr6U4xjw7XSMejQyri3gJ7wXU5KoNYJONuRrN4aiJC7PX6suzNtCvsZGGNTWsEy8NRKp56pJcod6hiCBFXSXIoy+5bNjxgLUCRghGmK6FLfK3Oxb8NDKLqG5pyoX8NhpXCsN8M0PuCM3lBh84J6qpCCJNz8d81YrTZf9nKXLKgbbPPWglXrgJzLXx05m/uQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SA1PR11MB6733.namprd11.prod.outlook.com (2603:10b6:806:25c::17)
+ by SJ0PR11MB5896.namprd11.prod.outlook.com (2603:10b6:a03:42c::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.30; Thu, 20 Oct
+ 2022 03:17:35 +0000
+Received: from SA1PR11MB6733.namprd11.prod.outlook.com
+ ([fe80::6f83:c165:aa0c:efae]) by SA1PR11MB6733.namprd11.prod.outlook.com
+ ([fe80::6f83:c165:aa0c:efae%8]) with mapi id 15.20.5723.033; Thu, 20 Oct 2022
+ 03:17:35 +0000
+Date:   Wed, 19 Oct 2022 20:17:31 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Gao Xiang <hsiangkao@linux.alibaba.com>
+CC:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        <linux-erofs@lists.ozlabs.org>, Chao Yu <chao@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] erofs: use kmap_local_page() only for erofs_bread()
+Message-ID: <Y1C9y2y/87tIgfia@iweiny-mobl>
+References: <20221018105313.4940-1-hsiangkao@linux.alibaba.com>
+ <2019477.yKVeVyVuyW@mypc>
+ <Y084l0m88JGOqGRN@B-P7TQMD6M-0146.lan>
+ <12077010.O9o76ZdvQC@mypc>
+ <Y1Cv/LuiGpVdO5im@B-P7TQMD6M-0146.local>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <Y1Cv/LuiGpVdO5im@B-P7TQMD6M-0146.local>
+X-ClientProxiedBy: BYAPR04CA0002.namprd04.prod.outlook.com
+ (2603:10b6:a03:40::15) To SA1PR11MB6733.namprd11.prod.outlook.com
+ (2603:10b6:806:25c::17)
 MIME-Version: 1.0
-In-Reply-To: <20221019160529.GA18372@bhelgaas>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxPuCTvVBjiq0BAA--.6867S3
-X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7tF4ruF17Kw1DuryUAF1xAFb_yoW8Kr1fpF
-        Za9an0yrW8tF4DXrs2k3WxXF13XwnakryjkFZ8AanrCFsxur4SvF1IgFy5JryDCFZ5Za18
-        Zr1jyF18WasruaDanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bqxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        n4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
-        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E
-        87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
-        AS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCF
-        s4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI
-        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41l
-        IxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIx
-        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
-        jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8HKZJUUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA1PR11MB6733:EE_|SJ0PR11MB5896:EE_
+X-MS-Office365-Filtering-Correlation-Id: 14d4b096-0185-40a2-c429-08dab249a25d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Ub7CGsXJ1PYDR8tzr5+rIo/+Zx0kfux+CqUx8XPaluomWS7N30FIWyxAE8reE06EwREiLW88c5hV19xakblnb6tMHq1Yj4aKOjfYCHVKXodzWEkP2PWMxiYPiLp4gsgmu9BWD4YWAHZ6Sqo8vJ7rBa8bk0mKcy+QHrYx2wPihWZcgpDX1acz+CmImNznkQ1cZ2HGRtUuUvtBbediFeKA5LWaZ55Lr4aRyMxvPVyRpD0V+4Yybxp9qkYiqBleMfVLPRrXIej2xjcLlW6yRGvAMug2rdZ5BCB43getjdeUxCKH3zv9A8llxaIfp1LkbwlLQB2/NuEeu2fAnTZ4NUuxgkvXnaoz4jS/+p5+WrfcNTNDtu3Q56lKtFHfP0FYn+knKhcnCDhXk0uvMz0sUwrgN2HKm0wYpmwS9TuGy4IEsKQkR8XR9kngmGNVE1tLQHccROE7KaddFxNHmbHbEPUoVCnRegIuTUxgiV0UWSgLPwU7CwSwMvQIBGG/B5oGmmR3ajQxtMPXABHKoV4ctov7u1uJClRyu0ZOkUke+KnIX7ucdemKdwIuVKl7HMp4HZCw2yn0rmTwKR/hMH2J0KHVds57gaB07VS6C7kByFwgruV2qzbhUBNZTgyXmAc8bii6A503ZEVsv5+ebjnq4FOHgW2mXgiW26MgH1x6taHollpZsl2Vg4gR3OnBudRMRebORpuF8/bmNxkWgjoehUSP/Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6733.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(366004)(376002)(136003)(346002)(39860400002)(396003)(451199015)(316002)(54906003)(6916009)(66476007)(83380400001)(8936002)(53546011)(8676002)(66556008)(41300700001)(6506007)(5660300002)(66946007)(86362001)(26005)(9686003)(6666004)(6512007)(2906002)(33716001)(82960400001)(4326008)(186003)(38100700002)(6486002)(478600001)(44832011);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?PBV/K+bLLa2fF5zQ+5Cjz3+ImfpmmO5SDoJ2N/5ii/JHJMsQ/BzhhvKsBPnZ?=
+ =?us-ascii?Q?cvyFxIUmcR6PY9S78oftKtbghaX9wOBr59hNC/3gfszt3BBdD3/QhrHDJJ+j?=
+ =?us-ascii?Q?HKcRU4bsWJkPk9lLX4GVMGPufpy/STKB8F8TPwUxv24rv/4YJWIWF6rMruOC?=
+ =?us-ascii?Q?98CSZvjEeX/V5L+t061gSRMGDGSzR18bPDz3sGXEANJ84TJMRR97xDEVySzh?=
+ =?us-ascii?Q?v9vHZ/amJ3erQvgNvYRWfwnm4OUebOyRqhjC/KWCYNApUJMcxeAB9UA22sIk?=
+ =?us-ascii?Q?4fZYiFqYKV59lpT3dya6edjG+1dNenh19AK4bruy//fJH3We4Fz8PglFTwPG?=
+ =?us-ascii?Q?5q7LTqfATJdS88TZnIZ1TksVMt/lgV8dVCGDu1xP9D0fmru3x2b739Uld8jK?=
+ =?us-ascii?Q?VIPmgrge1QCjVKBltlVez0lRndu/dGp1HNEVdnhgr45NMAuNKagtpPfTJPxJ?=
+ =?us-ascii?Q?b8FyK4KEuMwJJgxv/LM7YESPrFzs/QLAVlQfSs+mW4HML9mHXpNw7PHDo0Rb?=
+ =?us-ascii?Q?D9CQI1QJpKkWtpiQoFGwCkxFsQ5l5T0rUpm5IYopD6CvH+rFX9ux6EVKb3pH?=
+ =?us-ascii?Q?Ix9xZbxnscGdu8aigsKhixqWQ+HTfXLw90HDRZj/u08PRvr/7WlGtINDCAkd?=
+ =?us-ascii?Q?dstKReUPkG6cYPeA11NBmJ19QU2/OBvWEaMqoWf/Cbqw9F8YLYoMwayt0qbK?=
+ =?us-ascii?Q?e2FT3hmSzlEIOW3irz1JNxImiOGgWVq32HILCsDZnuYR2qjwFxvn2Zq9ZPjR?=
+ =?us-ascii?Q?H5GOd7OaEIZExLlGjLwVquJRNkMO4gjHrMvPa/rnq7M65L2MvLhm9ruHjfh8?=
+ =?us-ascii?Q?1hOxMcvnS7q8HBW0cWntV3qVbjushnSGtIV5oI5q5g86YjOwGFsXNwnqP5To?=
+ =?us-ascii?Q?aLXbenLE+xVuMVoAoJLgR6JOJ96fRqso4gqSK5fw7l7Q0n4Yd5DC/aYkHjF7?=
+ =?us-ascii?Q?aw+IIxusaUHBgWnF2ImI5fDr7b13tXn6VX8t6oC2dDiZqy9aGPvqEhHJjift?=
+ =?us-ascii?Q?OTqvDzwurz/tIaJhd4/Jlp/CThzeSX/efmSSj53fqz5huuo56cQgwDWlvhRA?=
+ =?us-ascii?Q?NxghUaKOE0qYdkP/W3Vhbvvl9d38PyOvFVIa4Xf6aFIi0PGr8stYZ1diTw3y?=
+ =?us-ascii?Q?dc03FotOjhbE21yzfGm3z71fco8XW/Ai2C8Fsg5UGLHYooRDzqj5Y/s4FB69?=
+ =?us-ascii?Q?MDuLU2VKnfh51igg+ztJ62hNrqJrorGTlX2ZYA76MqYBgINKsDfTWlhwXU97?=
+ =?us-ascii?Q?dqxEuECqFcfxeteOUCcptLDDhPJoDk6XhMRCTjH+geyMWNz5b9agZU+YFzs0?=
+ =?us-ascii?Q?mSpyeuO0XXSJx4XXbxVak+TaIS2YemHtq1wiWn7uACYleAADOWd8gdQWKB40?=
+ =?us-ascii?Q?ii+5f7UtSZz2X3wPe/+BVz0P00yhto7g0pIC1G7I5wBHZzXyA3tGZxiGt+xM?=
+ =?us-ascii?Q?T5ZVKuRIdSMsmCfgQr+qfxUq3xEFclLrMDv9RgwpJx3JPW4wG9s2Xkqzg9+N?=
+ =?us-ascii?Q?O3St1X6Rslfxq/6eHWhcypdUlOpYFlYtu1cEu0Y70lCTEC1XilEMpyqmrtd+?=
+ =?us-ascii?Q?qkl8vxV/S2ErOYpZMNdFuXPfdAviOhmLFHfmuW1A?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 14d4b096-0185-40a2-c429-08dab249a25d
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6733.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Oct 2022 03:17:35.4319
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 4E0/LnDsX1Jtn6GxVkXJ6OGy7mJ3Whs1xmv6h/mJeQNqUK2ygKqj2AlmGjNZkjTB+4olvemMrgFxuCM6MMKTWA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB5896
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ok, thanks, I'll improve them as your suggestion.
+On Thu, Oct 20, 2022 at 10:18:36AM +0800, Gao Xiang wrote:
+> On Wed, Oct 19, 2022 at 08:17:05PM +0200, Fabio M. De Francesco wrote:
+> > On Wednesday, October 19, 2022 1:36:55 AM CEST Gao Xiang wrote:
+> > > On Wed, Oct 19, 2022 at 01:21:27AM +0200, Fabio M. De Francesco wrote:
+> > > > On Tuesday, October 18, 2022 11:29:21 PM CEST Gao Xiang wrote:
 
-On 2022/10/20 上午12:05, Bjorn Helgaas wrote:
-> In the subject and the commit log below, figure out whether you want
-> to use "irq" or "IRQ" and do it consistently.  I vote for "IRQ".  Also
-> consider subject lines for the other patches.  Stuff like this is
-> trivial, but it's an excuse for whoever will handle this (not me in
-> this case) to put it off.  I also add "()" after function names for
-> clarity.
-> 
-> On Sun, Oct 09, 2022 at 02:44:28PM +0800, Jianmin Lv wrote:
->> On LoongArch ACPI based systems, the irq trigger type of PCI devices
->> is high level, so high level triggered type is required to pass
->> to acpi_register_gsi when create irq mapping for PCI devices.
-> 
-> This isn't worded quite right.  The trigger type of PCI devices
-> doesn't change just because you plug them into a LoongArch system
-> instead of an x86 system.  The comment in the code reads better: The
-> IRQs are active low from the perspective of PCI, but are inverted
-> before the interrupt controller.
-> 
-> Including a reference here to the spec that mentions this inversion
-> would help a lot.
-> 
-> s/when create mapping/when creating mappings/
-> 
->> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
->> ---
->>   drivers/acpi/pci_irq.c | 6 ++++--
->>   1 file changed, 4 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/acpi/pci_irq.c b/drivers/acpi/pci_irq.c
->> index 08e15774fb9f..ff30ceca2203 100644
->> --- a/drivers/acpi/pci_irq.c
->> +++ b/drivers/acpi/pci_irq.c
->> @@ -387,13 +387,15 @@ int acpi_pci_irq_enable(struct pci_dev *dev)
->>   	u8 pin;
->>   	int triggering = ACPI_LEVEL_SENSITIVE;
->>   	/*
->> -	 * On ARM systems with the GIC interrupt model, level interrupts
->> +	 * On ARM systems with the GIC interrupt model, or LoongArch
->> +	 * systems with the LPIC interrupt model, level interrupts
->>   	 * are always polarity high by specification; PCI legacy
->>   	 * IRQs lines are inverted before reaching the interrupt
->>   	 * controller and must therefore be considered active high
->>   	 * as default.
->>   	 */
->> -	int polarity = acpi_irq_model == ACPI_IRQ_MODEL_GIC ?
->> +	int polarity = acpi_irq_model == ACPI_IRQ_MODEL_GIC ||
->> +		       acpi_irq_model == ACPI_IRQ_MODEL_LPIC ?
->>   				      ACPI_ACTIVE_HIGH : ACPI_ACTIVE_LOW;
->>   	char *link = NULL;
->>   	char link_desc[16];
->> -- 
->> 2.31.1
->>
+[snip]
 
+> 
+> That is not the simple nested unmapped case as you said above, I could take
+> a very brief example:
+
+Building on this.  The uncompressed pages always outnumber the compressed
+pages, right?
+
+> 
+> 1. map a decompresed page
+> 2. map a compressed page
+
+First reverse these because you are going to need to map a new decompressed
+page before another compressed page.  So:
+
+1. map compressed
+2. map decompressed
+
+Then 4/5 and 7/8 become unmap/map new without issue.
+
+> 3. working
+> 4. decompressed page is all consumed, unmap the current decompressed page
+> 5. map the next decompressed page
+> 6. working
+> 7. decompressed page is all consumed, unmap the current decompressed page
+> 8. map the next decompressed page
+> 9. working
+
+This is more complicated but not overly so.
+
+Simply
+
+9.1 unmap decompressed
+
+> 10. compressed page is all consumed, unmap the current compressed page
+> 11. map the next compressed page
+
+11.1 remap decompressed
+
+> 12. working
+> 13. ... (anyway, unmap and remap a compressed page or a decompressed page
+>          in any order.)
+> 
+> until all process is finished.  by using kmap(), it's much simple to
+> implement this, but kmap_local(), it only complexes the code.
+
+Agreed kmap() is easier but I think this could work.
+
+Basically you keep the compressed mapped first.
+
+I also assume there is also a reverse of this so reverse the pages in that
+case.
+
+Thoughts?
+Ira
