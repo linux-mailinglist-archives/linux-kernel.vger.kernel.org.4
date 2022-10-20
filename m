@@ -2,119 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A85C7606216
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 15:46:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C4A760621E
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 15:46:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229928AbiJTNqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 09:46:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57670 "EHLO
+        id S229913AbiJTNqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 09:46:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229777AbiJTNqE (ORCPT
+        with ESMTP id S230121AbiJTNq3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 09:46:04 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9747159A3C
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 06:45:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666273560; x=1697809560;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=sOvhO47D7FTpxIF0a2DwvTy4GmSSGRqIP8YnoXp6ofQ=;
-  b=bhhyQR6pnTBFTGh26waGrzIrqekMuae2C6JdoiTwBncIm9szzlc3H7YN
-   xMRXGr5bxXehotjBJt2BZJBH1kUfW++bY5ywbvzoXXuxMTtykMtNB2tuW
-   1RSs9sRARmn8CSlsrFZXhFop4SNnCTNSWu8Q7cdzP9oQ/yZ23VFqxwhRH
-   UxDDIJ/LvLpSvyRMErz5aYdLOSB0+/+AWzV3eKI+DIqToOE6hRm2OVeAV
-   MefP3uNH/MYT/367QpkcikejgyT4jjKDSFC5frY+l1GrgATfXqykDpp7i
-   V+O3GO4c3KLEFBmHm2Q2yp5UdpnSltlZAl0kIYhx5IEG0ccKDs+cotG4z
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="308390701"
-X-IronPort-AV: E=Sophos;i="5.95,198,1661842800"; 
-   d="scan'208";a="308390701"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 06:45:52 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="692990171"
-X-IronPort-AV: E=Sophos;i="5.95,198,1661842800"; 
-   d="scan'208";a="692990171"
-Received: from aasthash-mobl.ger.corp.intel.com (HELO [10.213.232.117]) ([10.213.232.117])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 06:45:51 -0700
-Message-ID: <d47b30e9-5619-c631-aa92-f5d89e88a909@linux.intel.com>
-Date:   Thu, 20 Oct 2022 14:45:49 +0100
+        Thu, 20 Oct 2022 09:46:29 -0400
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1755D17EF19
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 06:46:24 -0700 (PDT)
+Received: by mail-qk1-x729.google.com with SMTP id f8so12775518qkg.3
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 06:46:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=By6WmlApYPTCO07NNuBolUybiimy99uuNIZmRqG4EOw=;
+        b=Powru50NsTbMBrvE1tRNci3OFelg8KUKrZSn9uOoQgaCdWOxIumMRhzH8vTVwQ0zRw
+         qL7IjrdB7+PlPBrsn+6hqfdi1y3Q0uRU8K6Z8V/3JNT8IDcQRRlsH8R2KlMdvipMD7KK
+         ibOhZ0ak1yhaqrS+eerNbaweAHhGj0FyfQDllvvCnrtr7QOqaRU/i891vRTFaCt+S9ii
+         FXSQn0Ydq9XgtigjDUqpE7gC9LX/ewb0idHMl3wtkaKzYs0IkbPA3HPQYQoN/AvEAynL
+         7BpZpoXrkQodXrH09o9nVx2ylEwOs5E3eKL9IumY7UNT6tef3wblIWdd0FQ2JPphnQp6
+         qGNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=By6WmlApYPTCO07NNuBolUybiimy99uuNIZmRqG4EOw=;
+        b=Ke7iI3tlnYBauKTkC/0mCOg01oSHX6v6koFHSohxWTc3aZKWbZouWv0okfqt0bv5UB
+         IbsZNd69J4U/zQp4RdnT1bkFUpGsy6E7R6lO2uoay0gPfTdlLfSVLQE2M4kkz8ai16NG
+         WRfJZ4Vty8nj+dqaAmxH3HKmw4DotFNEiz8pTHSvOfK8OnI5mCIGdQhMm1evAPQmVRyp
+         G28+JZnPOrTd618BrT8owLGguuybvYjQQHqySBqA7ZuU0yAMbRVOoriOKQza6jj6MiJv
+         M5G9ajQqn1UN34KnzCCBJ4fQQlg036uyuEyw0rexXdtCWB/Ypzd3Mxc5+u7iorKLC/k/
+         CBLw==
+X-Gm-Message-State: ACrzQf2f6D7Fa6YoycMRmRBO4oNB5Mw2YqocAYF94Naowmc2pj2zzdBL
+        IKk4yzaI2FdBRq9Js+FhodrwPQ==
+X-Google-Smtp-Source: AMsMyM7XKCA71jHlsnrhFSdFi+dLazxSeT0yz2bHQDtNqZLLi6zwnSL6wBJUsW29B9kjgFunCOqiRw==
+X-Received: by 2002:ae9:eb56:0:b0:6ea:894f:6d21 with SMTP id b83-20020ae9eb56000000b006ea894f6d21mr9204249qkg.301.1666273583582;
+        Thu, 20 Oct 2022 06:46:23 -0700 (PDT)
+Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
+        by smtp.gmail.com with ESMTPSA id v20-20020a05620a441400b006ce813bb306sm7247045qkp.125.2022.10.20.06.46.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Oct 2022 06:46:22 -0700 (PDT)
+Message-ID: <4daa3d61-e157-0947-9d19-50a49f26cc37@linaro.org>
+Date:   Thu, 20 Oct 2022 09:46:21 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [Intel-gfx] signal: break out of wait loops on kthread_stop()
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v6 1/2] dt-bindings: arm: qcom: Document additional
+ sa8540p device
 Content-Language: en-US
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     "Intel-gfx@lists.freedesktop.org" <Intel-gfx@lists.freedesktop.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        linux-kernel@vger.kernel.org, sultan@kerneltoast.com
-References: <0029af41-bf24-9972-10ac-f52e1bdcbf08@linux.intel.com>
- <CAHmME9o25v0kZUV-7qEY=6XXAyOA7q0sG8gpQfxHgr3sSVdsWw@mail.gmail.com>
- <41455798-1dcb-135f-516d-25ab9a8082f5@linux.intel.com>
- <Y1A+9kN6bwfXeqVt@zx2c4.com>
- <8acc3e4a-abbc-32bc-626e-7a216f6755c3@linux.intel.com>
- <Y1Bby6FEEWiFIjjD@zx2c4.com>
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Corporation UK Plc
-In-Reply-To: <Y1Bby6FEEWiFIjjD@zx2c4.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Parikshit Pareek <quic_ppareek@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Andrew Halaney <ahalaney@redhat.com>,
+        Shazad Hussain <quic_shazhuss@quicinc.com>,
+        Brian Masney <bmasney@redhat.com>,
+        Johan Hovold <johan@kernel.org>
+References: <20221020073036.16656-1-quic_ppareek@quicinc.com>
+ <20221020073036.16656-2-quic_ppareek@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221020073036.16656-2-quic_ppareek@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 19/10/2022 21:19, Jason A. Donenfeld wrote:
-> On Wed, Oct 19, 2022 at 09:09:28PM +0100, Tvrtko Ursulin wrote:
->> Hm why is kthread_stop() after kthread_run() abuse? I don't see it in
->> kerneldoc that it must not be used for stopping threads.
+On 20/10/2022 03:30, Parikshit Pareek wrote:
+> Add the qdrive3 ride device to the valid device compatibles found on the
+> sa8540p platform.
 > 
-> Because you don't want it to stop. You want to wait until it's done. If
-> you call stop right after run, it will even stop it before it even
-> begins to run. That's why you wind up sprinkling your msleeps
-> everywhere, indicating that clearly this is not meant to work that way.
-Not after kthread_run which wakes it up already. If the kerneldoc for 
-kthread_stop() is correct at least... In which case I really do think 
-that the yields are pointless/red herring. Perhaps they predate 
-kthread_run and then they were even wrong.
+> Signed-off-by: Parikshit Pareek <quic_ppareek@quicinc.com>
 
->> Yep the yields and sleeps are horrible and will go. But they are also
->> not relevant for the topic at hand.
-> 
-> Except they very much are. The reason you need these is because you're
-> using kthread_stop() for something it's not meant to do.
 
-It is supposed to assert kthread_should_stop() which thread can look at 
-as when to exit. Except that now it can fail to get to that controlled 
-exit point. Granted that argument is moot since it implies incomplete 
-error handling in the thread anyway.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Btw there are actually two use cases in our code base. One is thread 
-controls the exit, second is caller controls the exit. Anyway...
+Best regards,
+Krzysztof
 
->> Never mind, I was not looking for anything more than a suggestion on how
->> to maybe work around it in piece as someone is dealing with the affected
->> call sites.
-> 
-> Sultan's kthread_work idea is probably the right direction. This would
-> seem to have what you need.
-
-... yes, it can be converted. Even though for one of the two use cases 
-we need explicit signalling. There now isn't anything which would assert 
-kthread_should_stop() without also asserting the signal, right?. Neither 
-I found that the thread work API can do it.
-
-Fingers crossed we were the only "abusers" of the API. There's a quite a 
-number of kthread_stop callers and it would be a large job to audit them 
-all.
-
-Regards,
-
-Tvrtko
