@@ -2,95 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DD93605B96
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 11:56:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4ACA605B99
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 11:58:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229613AbiJTJ4c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 05:56:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37144 "EHLO
+        id S229982AbiJTJ6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 05:58:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229832AbiJTJ4Z (ORCPT
+        with ESMTP id S229501AbiJTJ6E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 05:56:25 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E43AF48;
-        Thu, 20 Oct 2022 02:56:24 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id az22-20020a05600c601600b003c6b72797fdso1777069wmb.5;
-        Thu, 20 Oct 2022 02:56:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=V799u1OvsFy3rfEiYBMkwUXRRFdL63Meg4qL1Gy+Szw=;
-        b=gcD3x1hzQYTUcUyKQ5yQINSy9VGeO+QxvYJbP3bVZrsseQ4Hq0wWRQ6iCaZEYzJOfJ
-         oCN95yvunqzlcdaa7BTDHGyBXqN3Cg8i/uDYjpGUAwqCto9X9yxyWUHZLwDJdG5FmZ83
-         c9BQr08Z1gep5B1Sb9wS+M3/r/xE8/UrO8gobkPFp9VygNnoPshRT9s5n8SZ4qM0P3qU
-         JCT2tFzS3kAFFbOaxWH7Yp3HNRG+JvgCL8HBALQFKwvn9tA2OxXGU1757fHqDkwNARTw
-         P2JaqRWBHPGazzm1wGkLnO7xPMUd/NVRKAC9d+ahvvwXrpCwPqhLGQyVSdM/yStmyDiS
-         cI5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=V799u1OvsFy3rfEiYBMkwUXRRFdL63Meg4qL1Gy+Szw=;
-        b=2mow69DIeNl2EcRx4Ie3LQeY7YR8Rr4BKh66mvoY5vFw0Qm6wbbI2y83I7xhZ6zU5I
-         9bYphNJhN69xfQRpvnNZJtacCL5x4xmnyrRnjuertpE3GLVm+JISTpoMUILlls6KidBo
-         95XkxX5agZ4MHtH4dzsmujf+Ip9aDExntgCurZXRT+h5PxPVlG4e9dOYkLcbQ1+NfLRZ
-         qYVzwcnkdWTdc5t+xuWjF5CKghAL/XpL0wv8vVKATe6FVslL9jXbxhB6qAeeNxgN900r
-         +37RMmb813Ayb6LmyyCx08pmzSnIprJJuhKM47JCwnKManatP+c+zosg6VJ4Jjnqv8qb
-         ynRw==
-X-Gm-Message-State: ACrzQf3G5FRZoW8Sh1LSdSBZWIxi8FO9SNIISyPoe/7/EpnfDHCMR8tO
-        6k8TbpmfC6i+JGsE4pCLAOKKZ45q0g==
-X-Google-Smtp-Source: AMsMyM7Hujj1IjiZO30V8UCMmrLinVw+He6y5oyCzTWWvo2+XlZulqjTq++cTFLaOEMxrYLiLovVKA==
-X-Received: by 2002:a7b:c398:0:b0:3c7:87f:3b48 with SMTP id s24-20020a7bc398000000b003c7087f3b48mr4134400wmj.65.1666259782655;
-        Thu, 20 Oct 2022 02:56:22 -0700 (PDT)
-Received: from localhost.localdomain ([46.53.254.126])
-        by smtp.gmail.com with ESMTPSA id f8-20020a05600c154800b003a3442f1229sm2703510wmg.29.2022.10.20.02.56.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 02:56:22 -0700 (PDT)
-Date:   Thu, 20 Oct 2022 12:56:20 +0300
-From:   Alexey Dobriyan <adobriyan@gmail.com>
-To:     akpm@linux-foundation.org
-Cc:     viro@zeniv.linux.org.uk, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH -mm] -funsigned-char, namei: delete cast in
- lookup_one_common()
-Message-ID: <Y1EbRNxRnZ/42G9x@localhost.localdomain>
-References: <20221020000356.177CDC433C1@smtp.kernel.org>
- <Y1EZuQcO8UoN91cX@localhost.localdomain>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y1EZuQcO8UoN91cX@localhost.localdomain>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 20 Oct 2022 05:58:04 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 115521CBA8B;
+        Thu, 20 Oct 2022 02:58:03 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id BDC725C00EA;
+        Thu, 20 Oct 2022 05:58:00 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Thu, 20 Oct 2022 05:58:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1666259880; x=1666346280; bh=L8cNWUhBuV
+        SGANYlibqkfHNdFindWIffs7dtGgKV2So=; b=uhnu+6Tq2aAeLqzLyQuV3Zimot
+        dP7bQdcBQYMyFQ6GIFYuPz8VKPGd/mJqPagoIB2rc4+7Y8LCU52qPbcsW5Z+CqZO
+        ijXF0KbQM6MjiSIBeOX+i7ODLsj9+vI28k4y798SodXlkyKbAXuQ9uOyxHSZsnJm
+        n1UFzfHUVjlJr3wxlEBznr54cMB3oitP6J6Neu2XlHTIsHd8G7l6nSuvn5YhoaQk
+        45wVELVe0mSsSG9y1GPQ9KnrLhNQRgJKLAN/6tVgWKT//Tmm0XfYE0anad4xmmFW
+        Qdzlv7KwxwgJTqQLQau3ENuDJ8Azmd0guwpUt0PB5KP0ViDnE1mGnkhzlyqA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1666259880; x=1666346280; bh=L8cNWUhBuVSGANYlibqkfHNdFind
+        WIffs7dtGgKV2So=; b=GPeSFHuouGHvtNmyvOXALREZtIznc8NW6vGUiydR9RD4
+        jGNyq3ielKBn2TLyNXSwtYkNeC+pi9RgSfYkkgYRmzKFsEBV7zM0Kc2Vctc1eAB6
+        kcinev5TwOdEmu9XKXmJW+sp9YKeRDl4TT5QXF1pbVtMK0FglnDdxutwERLQ/Wuk
+        eiRhi1VKi0uvRG/h4p8G1JFqIRNWeIkZC9az3t4+6jnDvSghIO9Xl4vlSJw8EJ8h
+        PzWQYbg/Vyag/04SuwUFgFa+17IgkPAaCvpNVsfmMdsHZlIXrTj/+vpGG2aseo2f
+        j1ipscqZMeUz7IYPq3ut94xko/czPUXgAptMFkYR8Q==
+X-ME-Sender: <xms:qBtRY4DFzsw8I4NJRdOQJ8ryc8gGJfGP_bDH7MyUOloWptbWo-67Rw>
+    <xme:qBtRY6gzcVMXqoL0r7LLs8jH5MaIocqM4Z-tt0dCV8DPcSfmLPToWwRBD1e9cQo_W
+    6aHcnSWdrUHWQkJpkE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeliedgvdduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:qBtRY7lG3IEo95tlOefm_qinftOgalzj72-zCSPUrlf_pX8zA2xlIw>
+    <xmx:qBtRY-y-wxfXsg4Vih_dfJzJ6I83dju5UDkCwGkXiNo0y0cLt5Qcgw>
+    <xmx:qBtRY9QWtOFomAdvE7zoqLtGIH07sxpVtM6AsA_Jxw6iisDJe-5UoQ>
+    <xmx:qBtRY8GKeMcybX-vNxRx4k4aF6HVxBnIq3V7DoI305rwF7k-5ZmhHg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 8A5A3B60086; Thu, 20 Oct 2022 05:58:00 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1047-g9e4af4ada4-fm-20221005.001-g9e4af4ad
+Mime-Version: 1.0
+Message-Id: <b6c37fd4-d9ca-484a-80c2-d4b6b05c77cb@app.fastmail.com>
+In-Reply-To: <Y1EavIxVymPSfwJC@orome>
+References: <1664186759-9821-1-git-send-email-kkartik@nvidia.com>
+ <Y1EavIxVymPSfwJC@orome>
+Date:   Thu, 20 Oct 2022 11:57:39 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Thierry Reding" <thierry.reding@gmail.com>,
+        "Olof Johansson" <olof@lixom.net>
+Cc:     Kartik <kkartik@nvidia.com>, "Jon Hunter" <jonathanh@nvidia.com>,
+        windhl@126.com, sumitg@nvidia.com, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] soc/tegra: fuse: Export tegra_get_platform() & tegra_is_silicon()
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Cast to unsigned int doesn't do anything because two comparisons are
-a) for equality, and
-b) both '/' and '\0' have non-negative values.
+On Thu, Oct 20, 2022, at 11:54, Thierry Reding wrote:
+> On Mon, Sep 26, 2022 at 03:35:59PM +0530, Kartik wrote:
+>> Functions tegra_get_platform() and tegra_is_silicon() are required
+>> for pre-silicon development to correctly identify the platform on
+>> which the software is running.
+>> 
+>> Export tegra_get_platform() and tegra_is_silicon(), so they can be
+>> used for pre-slicon development of device drivers and kernel space
+>> tests.
+>> 
+>> Signed-off-by: Kartik <kkartik@nvidia.com>
+>> ---
+>>  drivers/soc/tegra/fuse/tegra-apbmisc.c | 2 ++
+>>  1 file changed, 2 insertions(+)
+>
+> Hi Arnd, Olof,
+>
+> can you take a quick look at this and provide some feedback regarding
+> acceptance? It's slightly unorthodox because the only in-tree users of
+> these functions are built-in drivers and early code, so they don't
+> technically need to be exported for strictly in-kernel users. However,
+> we do see these used quite frequently in pre-silicon development and
+> having these available upstream would help with internal kernel
+> transitions and so on. We may also see them used more commonly in
+> upstream drivers in the future.
 
-Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
----
+Hi Thierry and Kartik,
 
- fs/namei.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Have you looked at using soc_device_match() instead?
 
---- a/fs/namei.c
-+++ b/fs/namei.c
-@@ -2657,7 +2657,7 @@ static int lookup_one_common(struct user_namespace *mnt_userns,
- 	}
- 
- 	while (len--) {
--		unsigned int c = *(const unsigned char *)name++;
-+		char c = *name++;
- 		if (c == '/' || c == '\0')
- 			return -EACCES;
- 	}
+As long as the information is part of the soc_device_attribute
+prvoided by the soc info driver, any other kernel driver should
+be able to just use string matching to get what you need here.
+
+    Arnd
