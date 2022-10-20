@@ -2,67 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC5EB6058CC
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 09:39:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33DDD6058DF
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 09:42:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230413AbiJTHjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 03:39:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48266 "EHLO
+        id S229770AbiJTHmg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 03:42:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230322AbiJTHjQ (ORCPT
+        with ESMTP id S230229AbiJTHmD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 03:39:16 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D54D17535D;
-        Thu, 20 Oct 2022 00:39:14 -0700 (PDT)
-X-UUID: 7c8f9628d76c4091a3613f2025ec7cb0-20221020
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=u58lkal9O6ZniiGmn3zPbvHh98+Mlb3TQ62yFSXQPJk=;
-        b=t0SYKoqB3fWyXkLP5THVtqh5CC5ZNUp4c53zF/gCcUT6K78wmwky4fW/zBP6RaOO8quHXzJLwuxnZjdfMwpNf3qIxcNirJnQxBA4M/dfydhLCh8hJgANtsxIfU1GDpQQEw/bUuOjzWPB7Xo+K9J/z+5MdAF9c5m9s/+aXOCD/HA=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.12,REQID:a82f36eb-d0b1-4226-95b2-3b3d74abbbc5,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:100
-X-CID-INFO: VERSION:1.1.12,REQID:a82f36eb-d0b1-4226-95b2-3b3d74abbbc5,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTIO
-        N:quarantine,TS:100
-X-CID-META: VersionHash:62cd327,CLOUDID:c9f9e0ee-314c-4293-acb8-ca4299dd021f,B
-        ulkID:221020153912PKWL4GJE,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
-        il,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 7c8f9628d76c4091a3613f2025ec7cb0-20221020
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
-        (envelope-from <moudy.ho@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1546502171; Thu, 20 Oct 2022 15:39:10 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Thu, 20 Oct 2022 15:39:09 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Thu, 20 Oct 2022 15:39:09 +0800
-From:   Moudy Ho <moudy.ho@mediatek.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-CC:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        <linux-media@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Moudy Ho <moudy.ho@mediatek.com>
-Subject: [PATCH v2 9/9] media: platform: mtk-mdp3: extend shared memory structure to 4-byte aligned
-Date:   Thu, 20 Oct 2022 15:39:02 +0800
-Message-ID: <20221020073902.21039-10-moudy.ho@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20221020073902.21039-1-moudy.ho@mediatek.com>
-References: <20221020073902.21039-1-moudy.ho@mediatek.com>
+        Thu, 20 Oct 2022 03:42:03 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A786BDCADF;
+        Thu, 20 Oct 2022 00:41:33 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id b4so32885743wrs.1;
+        Thu, 20 Oct 2022 00:41:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references
+         :organization:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=o3c3tgj6YU8jOhwmT3k1jbsOKTdSciZj9+jY8nlizX8=;
+        b=TkEbz0vzHhsxl9Qq4QlCXr0MTB/G10131WGqp06yOx4xsx9Os8itwFSjToDVbcmWYf
+         lFgVeEeD6J5dOpOB9joKSs57h24iRmrT3pKTML95Vu7zijcZv4xf+8WxkKVZrqSHUUYL
+         OoPDjeeacFwKo2fcq4iYXxbHxgDB5IJ/rt8O9tGiqO//J5NgkR/gswWylXaF/McwFTul
+         guVTqHzHW9kgyQoLOjvCg4XpPmj04FkkuEJU2wfVxn1uZeuEkhLEoQYB+u174k2/G41a
+         E7QuaceIT9ttJzjb56TKGuerqoHHC5b2zP++CMD1FXbrElMxmr6aCQBueNs1wxTUPP6j
+         eAHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references
+         :organization:message-id:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=o3c3tgj6YU8jOhwmT3k1jbsOKTdSciZj9+jY8nlizX8=;
+        b=Ueae2AzaX9k3QY+tS8ZP4USVvfhrp1E5jqO2FAniFyePRlslPGLkEJn1BbhmcACisf
+         Fai7QegCiN4IjAeJapc2OBxdkVnCsbuU36OzOnYflbCleTed4B7rdH0Ni5yyBQhbyGud
+         ow+lNCFsXEjBMG9wyW3FQKsec2MHZxZmELV81ENb7TYYcgSA+cs7tnJye9ntx6kClnMi
+         ie19Jt5CKHYIbxrFLSvu27MuBm/M5vepvERpZuTgtsN6dHSDGN3e0alDlsb+3uiTVJ0l
+         W6JZrD8apKi7ZYOm/m6mEiPp1OAUwYnAZtLGnkmLMF+GCxvYyLi+ihIh2v93rAgoZmgf
+         zUjQ==
+X-Gm-Message-State: ACrzQf2JESkJ8fOYg7w5aH3zPYrAPrRkZD88tzPHlBe0j47oJm9s1i0w
+        0VilfOq4kkseVIczsSFOvqQ=
+X-Google-Smtp-Source: AMsMyM7iZLZ9gdsJyxQw8mPwRFAftKRx37Ts6dIplF3mmkJMH+HyE1MZImhi3FAfYW1x0PZ67A6rGA==
+X-Received: by 2002:a05:6000:1106:b0:22e:3dee:9a5a with SMTP id z6-20020a056000110600b0022e3dee9a5amr7510873wrw.191.1666251666205;
+        Thu, 20 Oct 2022 00:41:06 -0700 (PDT)
+Received: from wse-c0155 (static-193-12-47-89.cust.tele2.se. [193.12.47.89])
+        by smtp.gmail.com with ESMTPSA id e14-20020a5d65ce000000b0022abcc1e3cesm15571334wrw.116.2022.10.20.00.41.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Oct 2022 00:41:05 -0700 (PDT)
+Date:   Thu, 20 Oct 2022 09:41:04 +0200
+From:   Casper Andersson <casper.casan@gmail.com>
+To:     Steen Hegelund <steen.hegelund@microchip.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, UNGLinuxDriver@microchip.com,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Wan Jiabing <wanjiabing@vivo.com>,
+        Nathan Huckleberry <nhuck@google.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH net-next v2 6/9] net: microchip: sparx5: Adding basic
+ rule management in VCAP API
+Message-ID: <20221020074104.qmow2fc66v4is2rk@wse-c0155>
+Organization: Westermo Network Technologies AB
+References: <20221019114215.620969-1-steen.hegelund@microchip.com>
+ <20221019114215.620969-7-steen.hegelund@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221019114215.620969-7-steen.hegelund@microchip.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,135 +83,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The common header "mtk-img-ipi.h" defines the input frame parameters used to
-pass to SCP for components config calculations.
+On 2022-10-19 13:42, Steen Hegelund wrote:
+> +/* Write VCAP cache content to the VCAP HW instance */
+> +static int vcap_write_rule(struct vcap_rule_internal *ri)
+> +{
+> +	struct vcap_admin *admin = ri->admin;
+> +	int sw_idx, ent_idx = 0, act_idx = 0;
+> +	u32 addr = ri->addr;
+> +
+> +	if (!ri->size || !ri->keyset_sw_regs || !ri->actionset_sw_regs) {
+> +		pr_err("%s:%d: rule is empty\n", __func__, __LINE__);
+> +		return -EINVAL;
+> +	}
+> +	/* Use the values in the streams to write the VCAP cache */
+> +	for (sw_idx = 0; sw_idx < ri->size; sw_idx++, addr++) {
+> +		ri->vctrl->ops->cache_write(ri->ndev, admin,
+> +					VCAP_SEL_ENTRY, ent_idx,
+> +					ri->keyset_sw_regs);
+> +		ri->vctrl->ops->cache_write(ri->ndev, admin,
+> +					VCAP_SEL_ACTION, act_idx,
+> +					ri->actionset_sw_regs);
+> +		ri->vctrl->ops->update(ri->ndev, admin, VCAP_CMD_WRITE,
+> +				   VCAP_SEL_ALL, addr);
 
-However, there is a 4-byte read limit in further SCP hardware, so the
-data structure should be aligned.
+Arguments not aligned with opening parenthesis.
 
-Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
----
- .../platform/mediatek/mdp3/mtk-img-ipi.h      | 50 +++++++++----------
- 1 file changed, 25 insertions(+), 25 deletions(-)
+>  /* Validate a rule with respect to available port keys */
+>  int vcap_val_rule(struct vcap_rule *rule, u16 l3_proto)
+>  {
+>  	struct vcap_rule_internal *ri = to_intrule(rule);
+> +	enum vcap_keyfield_set keysets[10];
+> +	struct vcap_keyset_list kslist;
+> +	int ret;
+>  
+>  	/* This validation will be much expanded later */
+> +	ret = vcap_api_check(ri->vctrl);
+> +	if (ret)
+> +		return ret;
+>  	if (!ri->admin) {
+>  		ri->data.exterr = VCAP_ERR_NO_ADMIN;
+>  		return -EINVAL;
+> @@ -113,14 +304,41 @@ int vcap_val_rule(struct vcap_rule *rule, u16 l3_proto)
+>  		ri->data.exterr = VCAP_ERR_NO_KEYSET_MATCH;
+>  		return -EINVAL;
+>  	}
+> +	/* prepare for keyset validation */
+> +	keysets[0] = ri->data.keyset;
+> +	kslist.keysets = keysets;
+> +	kslist.cnt = 1;
+> +	/* Pick a keyset that is supported in the port lookups */
+> +	ret = ri->vctrl->ops->validate_keyset(ri->ndev, ri->admin, rule, &kslist,
+> +					      l3_proto);
+> +	if (ret < 0) {
+> +		pr_err("%s:%d: keyset validation failed: %d\n",
+> +		       __func__, __LINE__, ret);
+> +		ri->data.exterr = VCAP_ERR_NO_PORT_KEYSET_MATCH;
+> +		return ret;
+> +	}
+>  	if (ri->data.actionset == VCAP_AFS_NO_VALUE) {
+>  		ri->data.exterr = VCAP_ERR_NO_ACTIONSET_MATCH;
+>  		return -EINVAL;
+>  	}
+> -	return 0;
+> +	vcap_add_type_keyfield(rule);
+> +	/* Add default fields to this rule */
+> +	ri->vctrl->ops->add_default_fields(ri->ndev, ri->admin, rule);
+> +
+> +	/* Rule size is the maximum of the entry and action subword count */
+> +	ri->size = max(ri->keyset_sw, ri->actionset_sw);
+> +
+> +	/* Finally check if there is room for the rule in the VCAP */
+> +	return vcap_rule_space(ri->admin, ri->size);
+>  }
+>  EXPORT_SYMBOL_GPL(vcap_val_rule);
 
-diff --git a/drivers/media/platform/mediatek/mdp3/mtk-img-ipi.h b/drivers/media/platform/mediatek/mdp3/mtk-img-ipi.h
-index fcd6f7dd39fc..5b99d3505f9b 100644
---- a/drivers/media/platform/mediatek/mdp3/mtk-img-ipi.h
-+++ b/drivers/media/platform/mediatek/mdp3/mtk-img-ipi.h
-@@ -47,14 +47,14 @@ struct img_sw_addr {
- 
- struct img_plane_format {
- 	u32 size;
--	u16 stride;
-+	u32 stride;
- } __packed;
- 
- struct img_pix_format {
--	u16 width;
--	u16 height;
-+	u32 width;
-+	u32 height;
- 	u32 colorformat; /* enum mdp_color */
--	u16 ycbcr_prof; /* enum mdp_ycbcr_profile */
-+	u32 ycbcr_prof; /* enum mdp_ycbcr_profile */
- 	struct img_plane_format plane_fmt[IMG_MAX_PLANES];
- } __packed;
- 
-@@ -68,10 +68,10 @@ struct img_image_buffer {
- #define IMG_SUBPIXEL_SHIFT	20
- 
- struct img_crop {
--	s16 left;
--	s16 top;
--	u16 width;
--	u16 height;
-+	s32 left;
-+	s32 top;
-+	u32 width;
-+	u32 height;
- 	u32 left_subpix;
- 	u32 top_subpix;
- 	u32 width_subpix;
-@@ -86,24 +86,24 @@ struct img_crop {
- 
- struct img_input {
- 	struct img_image_buffer buffer;
--	u16 flags; /* HDR, DRE, dither */
-+	u32 flags; /* HDR, DRE, dither */
- } __packed;
- 
- struct img_output {
- 	struct img_image_buffer buffer;
- 	struct img_crop crop;
--	s16 rotation;
--	u16 flags; /* H-flip, sharpness, dither */
-+	s32 rotation;
-+	u32 flags; /* H-flip, sharpness, dither */
- } __packed;
- 
- struct img_ipi_frameparam {
- 	u32 index;
- 	u32 frame_no;
- 	struct img_timeval timestamp;
--	u8 type; /* enum mdp_stream_type */
--	u8 state;
--	u8 num_inputs;
--	u8 num_outputs;
-+	u32 type; /* enum mdp_stream_type */
-+	u32 state;
-+	u32 num_inputs;
-+	u32 num_outputs;
- 	u64 drv_data;
- 	struct img_input inputs[IMG_MAX_HW_INPUTS];
- 	struct img_output outputs[IMG_MAX_HW_OUTPUTS];
-@@ -119,25 +119,25 @@ struct img_sw_buffer {
- } __packed;
- 
- struct img_ipi_param {
--	u8 usage;
-+	u32 usage;
- 	struct img_sw_buffer frm_param;
- } __packed;
- 
- struct img_frameparam {
- 	struct list_head list_entry;
- 	struct img_ipi_frameparam frameparam;
--};
-+} __packed;
- 
- struct img_region {
--	s16 left;
--	s16 right;
--	s16 top;
--	s16 bottom;
-+	s32 left;
-+	s32 right;
-+	s32 top;
-+	s32 bottom;
- } __packed;
- 
- struct img_offset {
--	s16 left;
--	s16 top;
-+	s32 left;
-+	s32 top;
- 	u32 left_subpix;
- 	u32 top_subpix;
- } __packed;
-@@ -148,11 +148,11 @@ struct img_mux {
- 	u32 reg;
- 	u32 value;
- 	u32 subsys_id;
--};
-+} __packed;
- 
- struct img_mmsys_ctrl {
- 	struct img_mux sets[IMG_MAX_COMPONENTS * 2];
- 	u32 num_sets;
--};
-+} __packed;
- 
- #endif  /* __MTK_IMG_IPI_H__ */
--- 
-2.18.0
+Validating a rule also modifies it. I think validation and modification
+should generally be kept apart. But it looks like it might be hard with
+the current design since you need to add the fields to then check the
+space it takes, and the rule sizes can depend on the hardware.
+
+Tested on Microchip PCB135 switch.
+
+Tested-by: Casper Andersson <casper.casan@gmail.com>
+Reviewed-by: Casper Andersson <casper.casan@gmail.com>
 
