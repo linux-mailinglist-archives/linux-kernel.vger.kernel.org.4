@@ -2,83 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C448605EE3
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 13:32:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FD82605EE8
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 13:33:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230353AbiJTLct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 07:32:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55894 "EHLO
+        id S230424AbiJTLdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 07:33:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbiJTLcr (ORCPT
+        with ESMTP id S229489AbiJTLdU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 07:32:47 -0400
-Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 313851D4DE4
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 04:32:46 -0700 (PDT)
-Received: by mail-ua1-x932.google.com with SMTP id n5so305387uap.2
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 04:32:46 -0700 (PDT)
+        Thu, 20 Oct 2022 07:33:20 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 760E11D73E5
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 04:33:18 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id b5so18948309pgb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 04:33:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Rns+oJzQnV3aEw/azGr8H9b8+IxEB5CPy0A5JS4FdO8=;
-        b=OEad9E7Isk5cODgz+eKWpBeU6cSjnPHwucqXKHGr0wVIBVmvqgqOD6zMsD1RxRX54E
-         gg8NJev3E9ElsBPAwiho4gEySFb1aaV1ZGlmgSHLclunMpSsT0VpqZ8lTLWiCvxu0FAz
-         /H8vahe0kB+0ZhkIqeCfb23zqS6fzFuyO7wwHR2KbkpO2y6/aWsoTFLRTANfNZ9vplRJ
-         hd2nSDYb6Iig47UBnPMEtZctrfIi6sbFHVsOjaXuKlHrAK2thPSnDJGfoi1WFz7zSdkV
-         aMigfMOw0YY5+X71XCVM8mGejxBylb6PDCeSlWJZ3ABFyIsvPmgeLYWoxXKKWfvi1VOQ
-         5o1Q==
+        bh=tYdfoIPqY+T234/NdafPtOqHMoflIkl5egaJuABTq4w=;
+        b=HtmcYdKiTzYM/L6QSAXCk8GBNXg9RCotQXIaq0FXQWN3I53f/salEcpH1a5O6lPzW1
+         W7e60lHutJpOqv2sZt9QwhKetUufuFicL4eT+nnL3ygQIh08JasTRNXb2ap+escpk/m4
+         RQSFlAAzIWjcyH37Ui/cSJgrs1q/eohLE3mZonCbeyALD2Z3s07LWh9S9L+QE55lFeqn
+         GSFd/kaU3Qa1Lyufjz4KjraC1UIf/OcrA+I27+PzXwEb8YPL5oVuft7ZboaY/Tq5QZ5R
+         b8m9tRYmn7GnX+rRE5dRurhoeNtyPK9+0KFXdegorAC8NTFtczzOEhkLxAOIADgWZbgT
+         TVDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Rns+oJzQnV3aEw/azGr8H9b8+IxEB5CPy0A5JS4FdO8=;
-        b=E4ubR+6G//lkJ3LeY2smslJydDG5PAmS4PkM9pwTvSihhYYXcwOCHtCuuI7p/D28/B
-         BqseFTwGkPSV97NYKtrKI/EHOdSeLtIXk3dR3BoOaG3xU3RlX0t6QIFHx5DZDdDmepjc
-         Z11tNwcK0EZKJpab3Vw0iUjGsTCt+/6A2K7N7+/GJuuvdOxiR/wlgbAzoSUd/lvcryix
-         9KUxuONqSXmAclXwlzJBp1LZYvTQQF3zczap6ItniMQoGG9fsIQbTWqLV49aqxTZTyCa
-         gfSTSqOB7ZsiYfXU7S+iEAamVyFSc1/dKz6OU7Z8e/p6fYHzsm+f5rjpFdMeoOP0qOc3
-         cFtA==
-X-Gm-Message-State: ACrzQf3JMdrXa00vt3GzruBvzcIB7u3DYWvdPzVJATa+NW3BHpWSZeMb
-        r93ZTQo22OYCWEBhJ6ykI8rWbDeWKZlFyZKqzbGCCg==
-X-Google-Smtp-Source: AMsMyM52tNKEZ8cDOKTuyXOo4ybhnndfWVquhIzo+KNGbx+E0qboYWdY95/IF2vaGn1ke0KbLBOG9u7/N4gBzFyR9tY=
-X-Received: by 2002:a05:6102:21cf:b0:3a7:d55d:37a2 with SMTP id
- r15-20020a05610221cf00b003a7d55d37a2mr6261838vsg.61.1666265565264; Thu, 20
- Oct 2022 04:32:45 -0700 (PDT)
+        bh=tYdfoIPqY+T234/NdafPtOqHMoflIkl5egaJuABTq4w=;
+        b=dJZPYnNK6Vz4S6xo6F4YiKQLoUBvSdDrGkoVd3O2BCj7f81gy6vQ2P6bggAjs6n2N3
+         /mJ719BSFESf0mGWqrNBsi+jLIcqfc0qe31ITTY4qq/U7qlQ4LZw9nIx6U5P8feM+HyQ
+         VZJUrmuraTmKU9FJppoQ1iCO46F8Z7/O2uIOS2wSwnK39NjSpAJKLPkiQ5qT0RgCisxv
+         u3ZKg6/B9dsolRr/jCEfNdIz36K9Rguy2cbyIboZLdZQhaRTS0WCkb8H08/Jurmz+WWe
+         fr9gxZ6B+DE05xbxyVe6xNXjVmgWKtxw1m7Zpg/FzsSw2dnXzi/2emMN0dfIqHft2ic5
+         IR1Q==
+X-Gm-Message-State: ACrzQf1FAtKiSEBsxI8TueuHNtjwW5NjJJfcTqo7AnBVLuSD0uNXGYvV
+        RvEhAn+E1AQ6V7x3uI7uoQia+4dpIWxUbOVRZPd3Xw==
+X-Google-Smtp-Source: AMsMyM5MIHc0qsAb61gidhpKGvqVl1pHORPz4Rzt+toUefYZ4KkBzzJf1VnnId2YIqlBwsFGypdatSc41rTgXK/D4CA=
+X-Received: by 2002:a05:6a00:181c:b0:563:2c6c:2a7a with SMTP id
+ y28-20020a056a00181c00b005632c6c2a7amr13553427pfa.28.1666265597933; Thu, 20
+ Oct 2022 04:33:17 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221019152947.3857217-1-arnd@kernel.org> <20221019152947.3857217-4-arnd@kernel.org>
-In-Reply-To: <20221019152947.3857217-4-arnd@kernel.org>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Thu, 20 Oct 2022 13:32:34 +0200
-Message-ID: <CAMRc=MeHo7vU_QyV9erv-aBN3wWc4f1Untf9CYOrzHhLUmvioQ@mail.gmail.com>
-Subject: Re: [PATCH 03/14] ARM: davinci: clean up platform support
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Sekhar Nori <nsekhar@ti.com>, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Kevin Hilman <khilman@baylibre.com>,
-        Arnd Bergmann <arnd@arndb.de>
+References: <20221018105149.820062-1-thierry.reding@gmail.com>
+In-Reply-To: <20221018105149.820062-1-thierry.reding@gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 20 Oct 2022 13:32:41 +0200
+Message-ID: <CAPDyKFopppohLJ7ptnQxpBHzMLh2SZObarQRC0bJyTwE=nky4w@mail.gmail.com>
+Subject: Re: [PATCH] iommu: Always define struct iommu_fwspec
+To:     Joerg Roedel <joro@8bytes.org>,
+        Thierry Reding <thierry.reding@gmail.com>
+Cc:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+        iommu@lists.linux.dev, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 5:33 PM Arnd Bergmann <arnd@kernel.org> wrote:
+On Tue, 18 Oct 2022 at 12:51, Thierry Reding <thierry.reding@gmail.com> wrote:
 >
-> From: Arnd Bergmann <arnd@arndb.de>
+> From: Thierry Reding <treding@nvidia.com>
 >
-> With the board file support gone, and the platform using
-> DT only, a lot of the remaining code is no longer referenced
-> and can be removed.
+> In order to fully make use of the !IOMMU_API stub functions, make the
+> struct iommu_fwspec always available so that users of the stubs can keep
+> using the structure's internals without causing compile failures.
 >
-> Technically, the DT file only references DA850, but since that
-> is very similar to DA830, I'm leaving the latter.
->
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
+> Signed-off-by: Thierry Reding <treding@nvidia.com>
 
-Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+
+> ---
+> Hi Joerg,
+>
+> this is a rebased patch extracted from an ancient series that never
+> ended up getting applied:
+>
+>         https://lore.kernel.org/all/20191209120005.2254786-3-thierry.reding@gmail.com/
+>
+> You had already acked this particular patch, so maybe you can pick this
+> up. I've seen at least two discussions where this was brought up again,
+> so I figured it'd be worth sending this out again because it can help
+> remove a number of #ifdef blocks throughout the kernel.
+
+Yes, this would certainly help to improve the code. To me, it looks
+like the current stub functions, like dev_iommu_fwspec_get() for
+example, aren't really useful without $subject patch.
+
+Note that, I have a pending patch for mmc that would benefit from
+this. To prevent me from delaying that, an easy way forward, assuming
+there are no objections of course, would be to send this for 6.1-rc.
+
+>
+>  include/linux/iommu.h | 39 +++++++++++++++++++--------------------
+>  1 file changed, 19 insertions(+), 20 deletions(-)
+>
+> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+> index a325532aeab5..e3295c45d18f 100644
+> --- a/include/linux/iommu.h
+> +++ b/include/linux/iommu.h
+> @@ -173,6 +173,25 @@ enum iommu_dev_features {
+>
+>  #define IOMMU_PASID_INVALID    (-1U)
+>
+> +/**
+> + * struct iommu_fwspec - per-device IOMMU instance data
+> + * @ops: ops for this device's IOMMU
+> + * @iommu_fwnode: firmware handle for this device's IOMMU
+> + * @flags: IOMMU_FWSPEC_* flags
+> + * @num_ids: number of associated device IDs
+> + * @ids: IDs which this device may present to the IOMMU
+> + */
+> +struct iommu_fwspec {
+> +       const struct iommu_ops  *ops;
+> +       struct fwnode_handle    *iommu_fwnode;
+> +       u32                     flags;
+> +       unsigned int            num_ids;
+> +       u32                     ids[];
+> +};
+> +
+> +/* ATS is supported */
+> +#define IOMMU_FWSPEC_PCI_RC_ATS                        (1 << 0)
+> +
+>  #ifdef CONFIG_IOMMU_API
+>
+>  /**
+> @@ -598,25 +617,6 @@ extern struct iommu_group *generic_device_group(struct device *dev);
+>  /* FSL-MC device grouping function */
+>  struct iommu_group *fsl_mc_device_group(struct device *dev);
+>
+> -/**
+> - * struct iommu_fwspec - per-device IOMMU instance data
+> - * @ops: ops for this device's IOMMU
+> - * @iommu_fwnode: firmware handle for this device's IOMMU
+> - * @flags: IOMMU_FWSPEC_* flags
+> - * @num_ids: number of associated device IDs
+> - * @ids: IDs which this device may present to the IOMMU
+> - */
+> -struct iommu_fwspec {
+> -       const struct iommu_ops  *ops;
+> -       struct fwnode_handle    *iommu_fwnode;
+> -       u32                     flags;
+> -       unsigned int            num_ids;
+> -       u32                     ids[];
+> -};
+> -
+> -/* ATS is supported */
+> -#define IOMMU_FWSPEC_PCI_RC_ATS                        (1 << 0)
+> -
+>  /**
+>   * struct iommu_sva - handle to a device-mm bond
+>   */
+> @@ -680,7 +680,6 @@ bool iommu_group_dma_owner_claimed(struct iommu_group *group);
+>
+>  struct iommu_ops {};
+>  struct iommu_group {};
+> -struct iommu_fwspec {};
+>  struct iommu_device {};
+>  struct iommu_fault_param {};
+>  struct iommu_iotlb_gather {};
+> --
+> 2.37.3
+>
+
+Kind regards
+Uffe
