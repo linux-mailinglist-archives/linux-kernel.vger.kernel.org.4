@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1C036057E2
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 09:08:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37F366057E3
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 09:08:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230013AbiJTHH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 03:07:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37052 "EHLO
+        id S230059AbiJTHIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 03:08:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229996AbiJTHH4 (ORCPT
+        with ESMTP id S229999AbiJTHH6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 03:07:56 -0400
+        Thu, 20 Oct 2022 03:07:58 -0400
 Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E231414C534;
-        Thu, 20 Oct 2022 00:07:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53949153837;
+        Thu, 20 Oct 2022 00:07:58 -0700 (PDT)
 Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29K6bZkH031911;
-        Thu, 20 Oct 2022 07:07:35 GMT
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29K6bY2r031759;
+        Thu, 20 Oct 2022 07:07:46 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
  bh=q0IYKObOpZMNiqFVVVJy1j3P8SAwe0uiRVGDkJEZCiI=;
- b=NwiZr1Blw3fofugcqktYfpugtUPG+d4JBVdhHH/qgVIVyfeh9379+5kxXZvNdSGHbKz6
- 89v87YoCxDB1O4rSgZOLkBO19tCwavkw0Su7tJwmXCzoKGZSPMwLA/V4H0Rl4yebpf/4
- GVyrvPlbsym4S7oB6G/EyxhP4EauqTgJx5ZTkt49n4ZlUn7gRTDfONQJBqtQX1gXjc24
- XOM/4srKyxCoQFUft0TlPMylJLLib8suInilK6qZHTtLVFafH/mdw9ysaOPGlc2zUaml
- n6tJF0ML0kHpHro1BMp8mbYXx+S3julCfXbm+DBtmXGimVuPR0d8U79oS1kfBS7v1Tr0 3A== 
+ b=Qv0Bbx9yurUNJ0BWTN0rV/GkGIgA85BgZfdnfzBWFKIdw/rQdqAGhEgt6Jfbw3Hrzfzk
+ url5CvfzLndeEQjEH+WVaHfMARXdrJzjQ3LByleR5QloNjtO56jN4UuGmmAn7FxAa7G0
+ rf+iai9tpdS/hAlGg4J4j8kdQoQ8HPxegu4cZpfIrtUgHs7b/Z8CoD+qke8gbOlKVIYG
+ lfTcZam+khfvHw7U44wLLssgJ3oCLg+K/CfQCuHU+HuRis7VNq2ZMBgSMkdV4mrOZLxr
+ DAZYXt/CdkM9Ac2H92IMBgr3zNsVX+9m1sF5Jg+RuOGpjudzsQN4QVHfJqSY846aqORQ 6w== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kawfaeaw8-1
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kawfaebev-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 20 Oct 2022 07:07:33 +0000
+        Thu, 20 Oct 2022 07:07:45 +0000
 Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29K6vm7v025380;
-        Thu, 20 Oct 2022 07:07:17 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kawfae9u2-1
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29K6cg3i008507;
+        Thu, 20 Oct 2022 07:07:23 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kawfaea68-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 20 Oct 2022 07:07:17 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29K75PXf018395;
-        Thu, 20 Oct 2022 07:07:05 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma03ams.nl.ibm.com with ESMTP id 3k7mg98erk-1
+        Thu, 20 Oct 2022 07:07:23 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29K75Qkq029188;
+        Thu, 20 Oct 2022 07:07:08 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma04ams.nl.ibm.com with ESMTP id 3k7mg98buf-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 20 Oct 2022 07:07:05 +0000
+        Thu, 20 Oct 2022 07:07:08 +0000
 Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29K772UJ39912032
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29K723Ot43385214
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 20 Oct 2022 07:07:02 GMT
+        Thu, 20 Oct 2022 07:02:03 GMT
 Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E8D6552051;
-        Thu, 20 Oct 2022 07:07:01 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 98B125204E;
+        Thu, 20 Oct 2022 07:07:05 +0000 (GMT)
 Received: from localhost.localdomain (unknown [9.43.103.147])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 9166B5204E;
-        Thu, 20 Oct 2022 07:06:58 +0000 (GMT)
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 5371D52051;
+        Thu, 20 Oct 2022 07:07:02 +0000 (GMT)
 From:   Athira Rajeev <atrajeev@linux.vnet.ibm.com>
 To:     peterz@infradead.org, acme@kernel.org, jolsa@kernel.org,
         namhyung@kernel.org
@@ -62,14 +63,16 @@ Cc:     irogers@google.com, james.clark@arm.com, mpe@ellerman.id.au,
         linuxppc-dev@lists.ozlabs.org, maddy@linux.ibm.com,
         rnsastry@linux.ibm.com, kjain@linux.ibm.com, disgoel@linux.ibm.com
 Subject: [PATCH] [perf/core: Update sample_flags for raw_data in perf_output_sample
-Date:   Thu, 20 Oct 2022 12:36:56 +0530
-Message-Id: <20221020070657.21571-1-atrajeev@linux.vnet.ibm.com>
+Date:   Thu, 20 Oct 2022 12:36:57 +0530
+Message-Id: <20221020070657.21571-2-atrajeev@linux.vnet.ibm.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20221020070657.21571-1-atrajeev@linux.vnet.ibm.com>
+References: <20221020070657.21571-1-atrajeev@linux.vnet.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: nbFTTCCZ7TptiYILTpnzocmdoF73hjwb
-X-Proofpoint-GUID: FALzTCHsWx16XgiUS273CkyFJ2I0yCaU
+X-Proofpoint-ORIG-GUID: 2FcgorJJ70ye-IGwmnSfXTfWl11z-rrG
+X-Proofpoint-GUID: wyA3TauZ3EPHtZYr7ArM6icNO4IcLris
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-10-20_01,2022-10-19_04,2022-06-22_01
