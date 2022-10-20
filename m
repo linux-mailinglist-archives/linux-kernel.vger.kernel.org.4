@@ -2,81 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC45C6067FC
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 20:12:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8042B606800
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 20:12:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230091AbiJTSMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 14:12:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46304 "EHLO
+        id S229731AbiJTSMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 14:12:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230243AbiJTSLy (ORCPT
+        with ESMTP id S230087AbiJTSMj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 14:11:54 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EB3C20272F
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 11:11:52 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id m29-20020a05600c3b1d00b003c6bf423c71so3122657wms.0
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 11:11:52 -0700 (PDT)
+        Thu, 20 Oct 2022 14:12:39 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9AE84E609
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 11:12:38 -0700 (PDT)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29KHxn8Y001181;
+        Thu, 20 Oct 2022 18:12:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2022-7-12;
+ bh=ItwcE0GcAfVlalbHUOFapyiTPgVxtYuPo08DHa4C1Ew=;
+ b=SH0uA7mQUh4VF4n/rCp/TR/swbGlADNLjwdJ+8PxniSusc3TiEtDR10ks62ajfK/cvHi
+ isoh4EwMS+J6rrPQeb5YNaPsk5PBOI4zj40xHV+8dG1m0d5Or7CGdHusZQCkr9aiWROE
+ UEgvY/4wYzngLtVGqwzhwgbPJPJRDxR+D/9kaws3S/3yrT8Hb4p6Xr/yyYcRHr+XpclD
+ mUu6oqpjjcJiTSec5n7Fqooy+j4sShID2XXocjqwIwCw44ba54NfsXKwlJt2mhUDae0D
+ PhMxJKP/U6vKgdtMxIBNC8QKxPHDY4N9cAaE5QpzQbnk8W6KQo7d0hnxuAcNNVlv19aG eg== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3k99ntjagj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 20 Oct 2022 18:12:33 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 29KFWu6D038639;
+        Thu, 20 Oct 2022 18:12:33 GMT
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2100.outbound.protection.outlook.com [104.47.70.100])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3k8hr2gd4j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 20 Oct 2022 18:12:33 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ws8eBbpbAjY8Q4rKFB7Ic8avkJVEj7AVSsk8xZfyxj5mZM4nAlIguZ6mhDlH5Tn7iu78M3oBRsrlIYqjsn4oIvWu+IwnZTXsf7IUy/NwEznrwSQ+HWov2NMRaZ4u+UsmHuov8CEGz6QOsX3lf38PZeKAXqGMTHsqogw1uF5EUuiI/HLjyLxSa8iQ9VyL8pKjFGGrhXUFh6uQD3glrTJGkhaev8OYEhtduQIXCEIU5Q9CwUwYzvqYe2gcVTVAmmFNryRJalMMHW9H4v1MYoKpehbmlzV4+1UYDzMFkep5X7mCEDzhKAc8rGQomYByucQf+qs9NVFe0ygum84S7/TEJQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ItwcE0GcAfVlalbHUOFapyiTPgVxtYuPo08DHa4C1Ew=;
+ b=RKWVgbZR5OB8a/8CNXGsPtUotVyxd8pWiErOwtQ8Fh93pdCrq/HcbBoxN94NKi7zVZYTrY4nktRRnE11qqV+cyVETcwKoUxjuEVhgEpJP3m+FthoAztmsN99YSgUvhNV4QvEmtAA0TZ15cs5phKGucpGdb4ViNfamA7EFSiL1Nax33Bm9azo3JOOkM5d4S42fXnxtxVrTb28yajxS3wHK544kDciZutM3992bESHhUW0rTokUnLoGxjv4M7gTXH9M1cOQnaU8M5q6mq8hslCRWIuaKKyvhUim0O4FUy3SH/XuBLj1LTGoEVsFVJhnxl0892V6eQqlZteYi22+s+pjQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6tbvR8liwmRMUZzHJk6Yh3h8ihkkHrt+7l54fpW+xg0=;
-        b=i9MWjTTtmwMkSm8Lb1he8IxlnpgPSqcwtV6Of2M7vzpB7JdiLJLngQxacxN/9bemps
-         DOPKK/wbw2Abutn+4TL3ikpFP7xoxmi0nHpkRgNf7O8BmtlT66Ce2eFz8R3hIc0b1LwQ
-         oPiy7FujyTN/HI+3fp2+hFk6c9asFTSEbuCrRypumUIsOj+D36qv3SihBrVEQf8G7sbH
-         aEhXBBrBOFxB1t1Z58p6/GXgl3FJ4+0REqFVSpe3nWzfKGOv+APV//qtdik4d+B81jNo
-         thaeMZPvGSCEhqpkCioxawvPzVwLru+H/RNXdYM1U0eB5B2zrriAJIOH96V2MTQPBWrs
-         gsPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6tbvR8liwmRMUZzHJk6Yh3h8ihkkHrt+7l54fpW+xg0=;
-        b=PF/VPzG0oQEnI7ebcwf/0WgPIMQKtK6jxlD1nriLnT7ksWb5lhWJAGZHn0b5r7PZZO
-         kR9W8kAV3G+/rqkG2WXP8Hy4yzeVWBtCH17tLttbylLDif1vJoAlnM39a+nQwOLR0CYL
-         182XInf5GJUtGbmFaRmMLbZq50aALpar3nOS5zRSRkpr6wHtr+WO6nctwi2Qr0M6C6x0
-         AYH0EbcVlWaTY1emI5RUu1rd7l2pBR/CzIKFwQGG9vpHeChVdiwEEHldZFH5XeEASdXB
-         x4JnQhW/Ws3r4fXdOSIsu6xrz14PtF7TW+32v1LdqSErjWPx6BLxCFf1OV0WD9aebp6s
-         ma9g==
-X-Gm-Message-State: ACrzQf3PWmWDyL44egrW7kvIWFJu6MR+183galec9vVTutm2BPvDqfh9
-        gZf1yGmcNMXev2SIMg4Hin0=
-X-Google-Smtp-Source: AMsMyM4d4pOnVkhOGxOVg7xfSjhRWrXwApSBU8/qpFZsQTRVq5lb9jNCpIfhXs6JoWoIWB23Fl78fA==
-X-Received: by 2002:a05:600c:1614:b0:3c6:ca05:3e02 with SMTP id m20-20020a05600c161400b003c6ca053e02mr32130985wmn.116.1666289510311;
-        Thu, 20 Oct 2022 11:11:50 -0700 (PDT)
-Received: from [192.168.1.93] (adsl-46.176.58.194.tellas.gr. [176.58.194.46])
-        by smtp.gmail.com with ESMTPSA id b21-20020a05600c4e1500b003a83ca67f73sm357594wmq.3.2022.10.20.11.11.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Oct 2022 11:11:49 -0700 (PDT)
-Message-ID: <44fdaba0-15eb-0778-bacf-3937a36b0841@gmail.com>
-Date:   Thu, 20 Oct 2022 21:11:46 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH V2] xen/virtio: Handle PCI devices which Host controller
- is described in DT
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ItwcE0GcAfVlalbHUOFapyiTPgVxtYuPo08DHa4C1Ew=;
+ b=OPwZ5fznLoXUnpH5lvDPUS7XBc4NZVoJyyVr6RNNKd1Mqz/MgPEoPQldyq7PMjSphQU2gh8IwkxfIQfyr+BdT+FUcmnYvALogcDFusMSspPkPY3QNItpkol1Du6drs3rNlW9qVfVGLObf/+60UlsQNikxI3SEkJn64lIfIP97N8=
+Received: from MW4PR10MB6535.namprd10.prod.outlook.com (2603:10b6:303:225::12)
+ by SA2PR10MB4778.namprd10.prod.outlook.com (2603:10b6:806:114::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.22; Thu, 20 Oct
+ 2022 18:12:31 +0000
+Received: from MW4PR10MB6535.namprd10.prod.outlook.com
+ ([fe80::9830:ae4d:f10c:c30a]) by MW4PR10MB6535.namprd10.prod.outlook.com
+ ([fe80::9830:ae4d:f10c:c30a%5]) with mapi id 15.20.5723.032; Thu, 20 Oct 2022
+ 18:12:30 +0000
+Message-ID: <86529a16-6358-ad9e-7ae3-ea1580db015c@oracle.com>
+Date:   Thu, 20 Oct 2022 11:12:25 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH v2 3/4] vdpa: show dev config as-is in "vdpa dev show"
+ output
 Content-Language: en-US
-To:     Oleksandr Tyshchenko <Oleksandr_Tyshchenko@epam.com>
-Cc:     "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <olekstysh@gmail.com>
-References: <20221015153409.918775-1-olekstysh@gmail.com>
- <alpine.DEB.2.22.394.2210181734440.4587@ubuntu-linux-20-04-desktop>
- <19823a2a-bc84-5458-bb69-7ac0c1b81573@gmail.com>
- <41b56c3f-1b81-a953-2e75-5a3ab8ef82a2@epam.com>
- <da0d72d1-3398-8005-1c40-b5f341ff9fc8@gmail.com>
- <ded6c520-8f1a-6ee3-bbfa-3de7e1f74779@epam.com>
-From:   Xenia Ragiadakou <burzalodowa@gmail.com>
-In-Reply-To: <ded6c520-8f1a-6ee3-bbfa-3de7e1f74779@epam.com>
+To:     Jason Wang <jasowang@redhat.com>, Parav Pandit <parav@nvidia.com>
+Cc:     mst@redhat.com, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+References: <1666137032-28192-1-git-send-email-si-wei.liu@oracle.com>
+ <1666137032-28192-4-git-send-email-si-wei.liu@oracle.com>
+ <CACGkMEuDn+Y8OEw6uK+FC0oOOd6+kj0EXS4Fm-+54GjrqY3_Gw@mail.gmail.com>
+From:   Si-Wei Liu <si-wei.liu@oracle.com>
+Organization: Oracle Corporation
+In-Reply-To: <CACGkMEuDn+Y8OEw6uK+FC0oOOd6+kj0EXS4Fm-+54GjrqY3_Gw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SN6PR2101CA0011.namprd21.prod.outlook.com
+ (2603:10b6:805:106::21) To MW4PR10MB6535.namprd10.prod.outlook.com
+ (2603:10b6:303:225::12)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MW4PR10MB6535:EE_|SA2PR10MB4778:EE_
+X-MS-Office365-Filtering-Correlation-Id: b0627be8-f4f0-4d92-10c2-08dab2c6a751
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Xb/PLKHnpeYTVOo+oIqY+N+hzbN8Lj2AVxRSuvx0SoKtOaNPJ7XIpgTxdfy3JcBHJzAuEBcdBpE7Cs0S5asjsPVyHFW5oy2XxolApKm59TAMX7jGrGI3AmGxD6eThL+QTRJKrAw33DQM7eaTCRJEdjR7Ki0T3cOcVnNdHUJcuAKooWW1kTZQXxQNf0n1obWMguvMsFGbWINxSLCtGqPUaNpBTrhtJ5WYAODt98dFLJT+BHhG/kp14kn8UsAv2qtl2uqiNq/PTVmCCf+IaWXnLU44VZBw6CkwY5tWZT5BqjkJ4slfq5L08fusO1eDekWGpYZVXwFKf4ewTZzJLY4yAtlbX/TOozur9PB3FYYix9rJ5J53lrBEUWE5qsDbZpfeHBMKfdRuECy7Yud7skXvOTZi/Gka4WYqWa+i9SGhnrwTJsAfLK0mVkSDeWyLwh+jj+QhBZX7DWfZMRDhIw/iefG0KuSYDNfizajbLc8XkEZ2ULvJqGOuvWE7llt1hzdUW/E1D2AvkJxNCw3VfvUY2dRFxrSPIMxuYdmczAqaqxlSjbwz+tsQ9Kr5Q2kSpjg2HfMM/bFD/lBYNdOvxC8pMBT19VQtOzU1cVC050pfgJp4+8Kb+/2252t1L7KZpmfedgl/s9LljwjJaEphxcz3cS78UN4oP5wP56URjGdU/HC9Rnk9MTYFs9qNsN8VYIGoSFSPagapVDOYZnGzCJ/yuzU3PiHzGArZF9pP+yZE1263C1TbM1CS8yOzzhW9jSH8HK4A405OH/0Ayja6M1T3oQKiiAhLiZA3ZPA671ZaBqg=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR10MB6535.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(376002)(366004)(39860400002)(136003)(346002)(451199015)(83380400001)(36756003)(86362001)(31696002)(38100700002)(6666004)(66556008)(316002)(110136005)(31686004)(5660300002)(53546011)(2616005)(186003)(2906002)(8936002)(66476007)(6506007)(66946007)(478600001)(6512007)(36916002)(41300700001)(26005)(6486002)(4326008)(8676002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cWNHLzFJdUxab3IySTFjWFo0TTFXOEVlOGZ0UXE5K1RFWUlDeWJieEQ2ZG9i?=
+ =?utf-8?B?VnRLOEdGUzBxWkdWUHNnMTRoRGsyNEV4ZDgycURpcFRqbnlETzd5Q1BYLytM?=
+ =?utf-8?B?S2RHOTVOQkc4RjRCUUdqUFhQVU5ydzBhdFBKK0dKTVRKL28xdGMyZHlqSVA5?=
+ =?utf-8?B?Z1RjLzcyRlFJYXNDZzdTS29wNHJsZXpReWN1cWNzY0ZpZE9hd1NWSUlsdXo2?=
+ =?utf-8?B?ZVFiUlczQjFJbkI0ejc4c1gzVDZVTEVlbkJzV2V1VFoxL2NsVGlKQ29WL1hD?=
+ =?utf-8?B?V3N4N1BUcTJvbDZtTWpsdnV6emhyU0UzMDFyMTlDdmFnWlMrRDNUNThDL0x2?=
+ =?utf-8?B?ZlE1U3hEUnhEWWRZcW52YlpUaThneWxaTUJkMUlORHdueFNkTEtGQzFjNmV5?=
+ =?utf-8?B?VE5yWkxoMjJXWXZpdjNNU3JoMGhFRnJYWE5LZ3U2UENSL3NSOEo2NnlvVmZz?=
+ =?utf-8?B?MnhIUUF3WGVSSTVGQk13UTlCOHFmWXZiSFJFK1NLVWlDVjhpWFBOVEJ3c1VK?=
+ =?utf-8?B?cXNGMFVYanhUekdKamdvRE9VN3JnM2NYMktUM3BSMHFZbU1SVEZXcmt1V2kv?=
+ =?utf-8?B?WE92TWFlTUtBWVBDV3NFYUZ0VVA1ZHRlOEp6VWUwWWdDWEdWQmJpeFQ5MU1q?=
+ =?utf-8?B?d2UwYis4ZTVya2NCdGQ1ZmdqT2FUaWxFUU9jcjlEZGlDamZVd0o1a3FrVzJI?=
+ =?utf-8?B?OXhmV3JKNHAxUHRhVFJIdFBrTkt2cFNPbmpISm0zOWwra3ZoREdXS1dIc0VU?=
+ =?utf-8?B?QzZuV1QxNkYwTVAvWVdzdTdEaWc5VW03YlVoTmZNWWNWTURPM3BhdmNab1VE?=
+ =?utf-8?B?Q1JMWjlPMFdQTXFtdncvT2pQMkNtWDJFcjNndklic1NOQnE4LzZ1YWhURkwr?=
+ =?utf-8?B?S2xYRmV6cjFNMXNWMUdtTVUxYm05azd3SHd4enY1S1hRMnk1eDFZMytmSUNh?=
+ =?utf-8?B?WElLSnYxeVR3Y05lbnRBajlqOEtKZHF0K21PeXVhUkRrQTNGQkZzenZGZDV2?=
+ =?utf-8?B?WkxHd0lTRGpVN0hXMGtGejB0ajJ3ZnZsYWtsTGJnWGVlZjhBcVNETTgzWTR2?=
+ =?utf-8?B?Ui9Xb2dOWkxVRGhKK1ZvcDAvQXN6ZFMyNnltNldOckdEMDA2V2hEN25PdS9U?=
+ =?utf-8?B?ZnBRdUxjSlRPcmdXcG9zdGF6akNnYWNQTGNuUXlCRWJoUTVUQkJjK09jNlJE?=
+ =?utf-8?B?ZnJLZlNhZGUrWXdDTjRGdzJBb1QyMGowaEw5Sml0WUtLTzE2bnc0Y1ExN2Q3?=
+ =?utf-8?B?djFGOExSSFlBWGt4ZG8yMGZjcWlzbmh4YVFnTUwvUSszZjZKbHk2bTJZS09Z?=
+ =?utf-8?B?d01tYWdzYTJHNVhJaW9veE5YM2h6M1RUNWlFN2JlLzEyTk9wb1pxNmRMM0Nr?=
+ =?utf-8?B?V29RWGRJZXgxWEJiK2M3L0dwMjdUTUZkMWlWellQaTd2MFhTQWJIcnl4OXJt?=
+ =?utf-8?B?VjB6T0RnVFpkbEdsZXBZK0pXVThZVWpnU2xyeVYzYjN1T0E4RGNEOXZ4R2pk?=
+ =?utf-8?B?SVpiUEUzQ2VROXQxWU1MOGtpMFNKV1pZMFdkU045bWJWdUw4VFRBRklaTWsw?=
+ =?utf-8?B?WFJ2V1pBa3Q5UUl6ZU1US3Fzak5BRHFHckxUUlRPOTF5WFcxU0dGWHF1VHAz?=
+ =?utf-8?B?R1lVOUNsckNnbm84dUFtUklSQXFvNG84QzV5N0lBWXZaeHg2N29TbkJaQmty?=
+ =?utf-8?B?RXNHZkc1SStFeklSM2txN1hnN3pZdDQ0QUxISy9OWDRjWS92Wk5jSjl6ckxo?=
+ =?utf-8?B?ZWtLclRUMUJjRXovRlppKzBhSnRkWlRSWXd6RWMya3J0VGo1V0dqMVNGSlRK?=
+ =?utf-8?B?YnlFUVVNak9STVk3WkRrOFlwamZWcHBTTTRoN0NtL3ZoTEY4WHNEM2p3RG5r?=
+ =?utf-8?B?MmNQYVhCNEhOUUJqVWxtRkN5V1pCYTlJeFRONW5lV0dJSVJQUUJXWGNmck1S?=
+ =?utf-8?B?akJiRlNhSFRNOFdTcndxYVVXR1VmcGVQTzRIN3JJT0lGNmdEaGRlNUU0N1Ru?=
+ =?utf-8?B?MTQzTHJDZDlXUzFzSFhDRzZJTjk4OUdyUWtxRTQ2K1VsNjJXeHVVd3JML0s5?=
+ =?utf-8?B?UWJjR1NBVHNzSTM3a3Njc1BMTXQ4WjRhVzJvTWpuTElTbXRFTnVWaXZheUN6?=
+ =?utf-8?Q?+dUSz5SGVJQWMbrl2sbyq3tor?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b0627be8-f4f0-4d92-10c2-08dab2c6a751
+X-MS-Exchange-CrossTenant-AuthSource: MW4PR10MB6535.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Oct 2022 18:12:30.8753
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 44K1KDcNZtQUG4wJiCsWi3qZN7qn9/tnnwe9CsR8lDZzGfFFOH89QKtN7e1e4iqHNdfw3ScD1i5IF0bvAoe4Ww==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR10MB4778
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-20_09,2022-10-20_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 adultscore=0 bulkscore=0
+ malwarescore=0 phishscore=0 mlxlogscore=999 spamscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
+ definitions=main-2210200109
+X-Proofpoint-ORIG-GUID: TcdPgVVCaylgsaXtOJcTRsGet5C0tygU
+X-Proofpoint-GUID: TcdPgVVCaylgsaXtOJcTRsGet5C0tygU
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,393 +159,151 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/20/22 17:12, Oleksandr Tyshchenko wrote:
-> 
-> On 20.10.22 11:24, Xenia Ragiadakou wrote:
->> On 10/19/22 22:41, Oleksandr Tyshchenko wrote:
+
+
+On 10/19/2022 10:25 PM, Jason Wang wrote:
+> On Wed, Oct 19, 2022 at 8:56 AM Si-Wei Liu <si-wei.liu@oracle.com> wrote:
+>> Live migration of vdpa would typically require re-instate vdpa
+>> device with an idential set of configs on the destination node,
+>> same way as how source node created the device in the first
+>> place. In order to save orchestration software from memorizing
+>> and keeping track of vdpa config, it will be helpful if the vdpa
+>> tool provides the aids for exporting the initial configs from
+>> which vdpa device was created as-is. The "vdpa dev show" command
+>> seems to be the right vehicle for that. It is unlike the "vdpa dev
+>> config show" command output that usually goes with the live value
+>> in the device config space, which is not quite reliable subject to
+>> the dynamics of feature negotiation and possible change in device
+>> config space.
 >>
->> Hi Oleksandr
-> 
-> 
-> Hello Xenia
-> 
-> 
+>> Examples:
 >>
->>>
->>> On 19.10.22 11:47, Xenia Ragiadakou wrote:
->>>
->>> Hello Xenia
->>>
->>>> On 10/19/22 03:58, Stefano Stabellini wrote:
->>>>> On Sat, 15 Oct 2022, Oleksandr Tyshchenko wrote:
->>>>>> From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
->>>>>>
->>>>>> Use the same "xen-grant-dma" device concept for the PCI devices
->>>>>> behind device-tree based PCI Host controller, but with one
->>>>>> modification.
->>>>>> Unlike for platform devices, we cannot use generic IOMMU bindings
->>>>>> (iommus property), as we need to support more flexible configuration.
->>>>>> The problem is that PCI devices under the single PCI Host controller
->>>>>> may have the backends running in different Xen domains and thus have
->>>>>> different endpoints ID (backend domains ID).
->>>>>>
->>>>>> So use generic PCI-IOMMU bindings instead (iommu-map/iommu-map-mask
->>>>>> properties) which allows us to describe relationship between PCI
->>>>>> devices and backend domains ID properly.
->>>>>>
->>>>>> Signed-off-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
->>>>>
->>>>> Now that I understood the approach and the reasons for it, I can
->>>>> review
->>>>> the patch :-)
->>>>>
->>>>> Please add an example of the bindings in the commit message.
->>>>>
->>>>>
->>>>>> ---
->>>>>> Slightly RFC. This is needed to support Xen grant mappings for
->>>>>> virtio-pci devices
->>>>>> on Arm at some point in the future. The Xen toolstack side is not
->>>>>> completely ready yet.
->>>>>> Here, for PCI devices we use more flexible way to pass backend domid
->>>>>> to the guest
->>>>>> than for platform devices.
->>>>>>
->>>>>> Changes V1 -> V2:
->>>>>>       - update commit description
->>>>>>       - rebase
->>>>>>       - rework to use generic PCI-IOMMU bindings instead of generic
->>>>>> IOMMU bindings
->>>>>>
->>>>>> Previous discussion is at:
->>>>>> https://urldefense.com/v3/__https://lore.kernel.org/xen-devel/20221006174804.2003029-1-olekstysh@gmail.com/__;!!GF_29dbcQIUBPA!3-vq7Edm3XfKtD5cnNjnOzDQvuo_XrhJ73yH-nPfqOkGGU0IjLG7R7MR_nAJCAPeOutHRLT44wKYwQwz3SauACie_ZAy$
->>>>>>
->>>>>> [lore[.]kernel[.]org]
->>>>>>
->>>>>> Based on:
->>>>>> https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/xen/tip.git/log/?h=for-linus-6.1__;!!GF_29dbcQIUBPA!3-vq7Edm3XfKtD5cnNjnOzDQvuo_XrhJ73yH-nPfqOkGGU0IjLG7R7MR_nAJCAPeOutHRLT44wKYwQwz3SauAEnMDHAq$
->>>>>>
->>>>>> [git[.]kernel[.]org]
->>>>>> ---
->>>>>>     drivers/xen/grant-dma-ops.c | 87
->>>>>> ++++++++++++++++++++++++++++++++-----
->>>>>>     1 file changed, 76 insertions(+), 11 deletions(-)
->>>>>>
->>>>>> diff --git a/drivers/xen/grant-dma-ops.c
->>>>>> b/drivers/xen/grant-dma-ops.c
->>>>>> index daa525df7bdc..b79d9d6ce154 100644
->>>>>> --- a/drivers/xen/grant-dma-ops.c
->>>>>> +++ b/drivers/xen/grant-dma-ops.c
->>>>>> @@ -10,6 +10,7 @@
->>>>>>     #include <linux/module.h>
->>>>>>     #include <linux/dma-map-ops.h>
->>>>>>     #include <linux/of.h>
->>>>>> +#include <linux/pci.h>
->>>>>>     #include <linux/pfn.h>
->>>>>>     #include <linux/xarray.h>
->>>>>>     #include <linux/virtio_anchor.h>
->>>>>> @@ -292,12 +293,55 @@ static const struct dma_map_ops
->>>>>> xen_grant_dma_ops = {
->>>>>>         .dma_supported = xen_grant_dma_supported,
->>>>>>     };
->>>>>>     +static struct device_node *xen_dt_get_pci_host_node(struct device
->>>>>> *dev)
->>>>>> +{
->>>>>> +    struct pci_dev *pdev = to_pci_dev(dev);
->>>>>> +    struct pci_bus *bus = pdev->bus;
->>>>>> +
->>>>>> +    /* Walk up to the root bus to look for PCI Host controller */
->>>>>> +    while (!pci_is_root_bus(bus))
->>>>>> +        bus = bus->parent;
->>>>>> +
->>>>>> +    return of_node_get(bus->bridge->parent->of_node);
->>>>>> +}
->>>>>
->>>>> It seems silly that we need to walk the hierachy that way, but I
->>>>> couldn't find another way to do it
->>>>>
->>>>>
->>>>>> +static struct device_node *xen_dt_get_node(struct device *dev)
->>>>>> +{
->>>>>> +    if (dev_is_pci(dev))
->>>>>> +        return xen_dt_get_pci_host_node(dev);
->>>>>> +
->>>>>> +    return of_node_get(dev->of_node);
->>>>>> +}
->>>>>> +
->>>>>> +static int xen_dt_map_id(struct device *dev, struct device_node
->>>>>> **iommu_np,
->>>>>> +             u32 *sid)
->>>>>> +{
->>>>>> +    struct pci_dev *pdev = to_pci_dev(dev);
->>>>>> +    u32 rid = PCI_DEVID(pdev->bus->number, pdev->devfn);
->>>>>> +    struct device_node *host_np;
->>>>>> +    int ret;
->>>>>> +
->>>>>> +    host_np = xen_dt_get_pci_host_node(dev);
->>>>>> +    if (!host_np)
->>>>>> +        return -ENODEV;
->>>>>> +
->>>>>> +    ret = of_map_id(host_np, rid, "iommu-map", "iommu-map-mask",
->>>>>> iommu_np, sid);
->>>>>> +    of_node_put(host_np);
->>>>>> +    return ret;
->>>>>> +}
->>>>>> +
->>>>>>     static bool xen_is_dt_grant_dma_device(struct device *dev)
->>>>>>     {
->>>>>> -    struct device_node *iommu_np;
->>>>>> +    struct device_node *iommu_np = NULL;
->>>>>>         bool has_iommu;
->>>>>>     -    iommu_np = of_parse_phandle(dev->of_node, "iommus", 0);
->>>>>> +    if (dev_is_pci(dev)) {
->>>>>> +        if (xen_dt_map_id(dev, &iommu_np, NULL))
->>>>>> +            return false;
->>>>>> +    } else
->>>>>> +        iommu_np = of_parse_phandle(dev->of_node, "iommus", 0);
->>>>>> +
->>>>>>         has_iommu = iommu_np &&
->>>>>>                 of_device_is_compatible(iommu_np, "xen,grant-dma");
->>>>>>         of_node_put(iommu_np);
->>>>>> @@ -307,9 +351,17 @@ static bool xen_is_dt_grant_dma_device(struct
->>>>>> device *dev)
->>>>>>       bool xen_is_grant_dma_device(struct device *dev)
->>>>>>     {
->>>>>> +    struct device_node *np;
->>>>>> +
->>>>>>         /* XXX Handle only DT devices for now */
->>>>>> -    if (dev->of_node)
->>>>>> -        return xen_is_dt_grant_dma_device(dev);
->>>>>> +    np = xen_dt_get_node(dev);
->>>>>> +    if (np) {
->>>>>> +        bool ret;
->>>>>> +
->>>>>> +        ret = xen_is_dt_grant_dma_device(dev);
->>>>>> +        of_node_put(np);
->>>>>> +        return ret;
->>>>>> +    }
->>>>>
->>>>> We don't need to walk the PCI hierachy twice. Maybe we can add the
->>>>> of_node check directly to xen_is_dt_grant_dma_device?
->>>>>
->>>>
->>>> I think in general we could pass directly the host bridge device if
->>>> dev_is_pci(dev) (which can be retrieved with
->>>> pci_get_host_bridge_device(to_pci_dev(dev), and after done with it
->>>> pci_put_host_bridge_device(phb)).
->>>> So that, xen_is_dt_grant_dma_device() and
->>>> xen_dt_grant_init_backend_domid() won't need to discover it themselves.
->>>> This will simplify the code.
->>>
->>>
->>> Good point. I have some remark. Can we use pci_find_host_bridge()
->>> instead? This way we don't have to add #include "../pci/pci.h", and have
->>> to drop reference afterwards.
->>>
->>> With that xen_dt_get_pci_host_node() will became the following:
->>>
->>>
->>> static struct device_node *xen_dt_get_pci_host_node(struct device *dev)
->>> {
->>>        struct pci_host_bridge *bridge =
->>> pci_find_host_bridge(to_pci_dev(dev)->bus);
->>>
->>>        return of_node_get(bridge->dev.parent->of_node);
->>> }
->>>
+>> 1) Create vDPA by default without any config attribute
 >>
->> You are right. I prefer your version instead of the above.
-> 
-> 
-> ok, thanks
-> 
-> 
->>
->>
->>>
->>> With Stefano's suggestion, we won't walk the PCI hierarchy twice when
->>> executing xen_is_grant_dma_device() for PCI device:
->>>
->>> xen_is_grant_dma_device() -> xen_is_dt_grant_dma_device() ->
->>> xen_dt_map_id() -> xen_dt_get_pci_host_node()
->>>
->>>
->>> What do you think?
->>>
->>
->> I was thinking passing the device_node along with the device in the
->> function arguments. More specifically, of doing this (not tested, just
->> an idea):
->>
->> bool xen_is_grant_dma_device(struct device *dev)
+>> $ vdpa dev add mgmtdev pci/0000:41:04.2 name vdpa0
+>> $ vdpa dev show vdpa0
+>> vdpa0: type network mgmtdev pci/0000:41:04.2 vendor_id 5555 max_vqs 9 max_vq_size 256
+>> $ vdpa dev -jp show vdpa0
 >> {
->>      struct device_node *np;
->>      bool has_iommu = false;
->>
->>      /* XXX Handle only DT devices for now */
->>      np = xen_dt_get_node(dev);
->>      if (np)
->>          has_iommu = xen_is_dt_grant_dma_device(dev, np);
->>      of_node_put(np);
->>      return has_iommu;
+>>      "dev": {
+>>          "vdpa0": {
+>>              "type": "network",
+>>              "mgmtdev": "pci/0000:41:04.2",
+>>              "vendor_id": 5555,
+>>              "max_vqs": 9,
+>>              "max_vq_size": 256,
+>>          }
+>>      }
 >> }
 >>
->> static bool xen_is_dt_grant_dma_device(struct device *dev,
->>                                         struct device_node *np)
+>> 2) Create vDPA with config attribute(s) specified
+>>
+>> $ vdpa dev add mgmtdev pci/0000:41:04.2 name vdpa0 \
+>>      mac e4:11:c6:d3:45:f0 max_vq_pairs 4
+>> $ vdpa dev show
+>> vdpa0: type network mgmtdev pci/0000:41:04.2 vendor_id 5555 max_vqs 9 max_vq_size 256
+>>    virtio_config: mac e4:11:c6:d3:45:f0 max_vq_pairs 4
+>> $ vdpa dev -jp show
 >> {
->>      struct device_node *iommu_np = NULL;
->>      bool has_iommu;
->>
->>      if (dev_is_pci(dev)) {
->>          struct pci_dev *pdev = to_pci_dev(dev);
->>      u32 id = PCI_DEVID(pdev->bus->number, pdev->devfn);
->>          of_map_id(np, id, "iommu-map", "iommu-map-mask", &iommu_np,
->> NULL);
->>      } else {
->>          iommu_np = of_parse_phandle(np, "iommus", 0);
->>      }
->>
->>      has_iommu = iommu_np && of_device_is_compatible(iommu_np,
->> "xen,grant-dma");
->>      of_node_put(iommu_np);
->>
->>      return has_iommu;
+>>      "dev": {
+>>          "vdpa0": {
+>>              "type": "network",
+>>              "mgmtdev": "pci/0000:41:04.2",
+>>              "vendor_id": 5555,
+>>              "max_vqs": 9,
+>>              "max_vq_size": 256,
+>>              "virtio_config": {
+>>                  "mac": "e4:11:c6:d3:45:f0",
+>>                  "max_vq_pairs": 4
+>>              }
+>>          }
+>>      }
 >> }
-> 
-> 
-> I got it.
-> 
-> xen_is_grant_dma_device() for V3 won't call xen_dt_get_node(), but call
-> xen_is_dt_grant_dma_device() directly.
-> 
-> static bool xen_is_dt_grant_dma_device(struct device *dev)
-> {
->       struct device_node *iommu_np = NULL;
->       bool has_iommu;
-> 
->       if (dev_is_pci(dev)) {
->           if (xen_dt_map_id(dev, &iommu_np, NULL))
->               return false;
->       } else if (dev->of_node)
->           iommu_np = of_parse_phandle(dev->of_node, "iommus", 0);
->       else
->           return false;
-> 
->       has_iommu = iommu_np &&
->               of_device_is_compatible(iommu_np, "xen,grant-dma");
->       of_node_put(iommu_np);
-> 
->       return has_iommu;
-> }
-> 
-> bool xen_is_grant_dma_device(struct device *dev)
-> {
->       /* XXX Handle only DT devices for now */
->       return xen_is_dt_grant_dma_device(dev);
-> }
-> 
-> 
-
-Ok. One difference, that I see from the previous, is that here you don't 
-use the dynamic interface when you access the dev->of_node 
-(of_node_get/of_node_put). Before, this was guarded through the external 
-xen_dt_get_node().
-
-I suspect that the same needs to be done for the function 
-xen_grant_setup_dma_ops(). There, also, the code walks up to the root 
-bus twice.
-
 >>
->> I 'm wondering ... is it possible for the host bridge device node to
->> have the iommus property set? meaning that all of its pci devs will
->> have the same backend?
-> 
-> Good question. I think, it is possible... This is technically what V1 is
-> doing.
-> 
-> 
-> Are you asking because to support "iommus" for PCI devices as well to
-> describe that use-case with all PCI devices having the same endpoint ID
-> (backend ID)?
-> If yes, I think, this could be still described by "iommu-map" property,
-> something like that (if we don't want to describe mapping for each PCI
-> device one-by-one).
-> 
-> iommu-map = <0x0 &iommu X 0x1>;
-> 
-> iommu-map-mask = <0x0>;
-> 
-> where the X is backend ID.
-> 
-> 
-> It feels to me that it should be written down somewhere that for
-> platform devices we expect "iommus" and for PCI devices we expect
-> "iommu-map/iommu-map-mask" to be present.
-
-Thanks for the clarification, now I got it. Yes I agree.
-
+>> Signed-off-by: Si-Wei Liu <si-wei.liu@oracle.com>
+>> ---
+>>   drivers/vdpa/vdpa.c | 39 +++++++++++++++++++++++++++++++++++++++
+>>   1 file changed, 39 insertions(+)
 >>
+>> diff --git a/drivers/vdpa/vdpa.c b/drivers/vdpa/vdpa.c
+>> index 566c1c6..91eca6d 100644
+>> --- a/drivers/vdpa/vdpa.c
+>> +++ b/drivers/vdpa/vdpa.c
+>> @@ -677,6 +677,41 @@ static int vdpa_nl_cmd_dev_del_set_doit(struct sk_buff *skb, struct genl_info *i
+>>   }
 >>
->>>>
->>>>>
->>>>>>         return false;
->>>>>>     }
->>>>>> @@ -325,12 +377,19 @@ bool xen_virtio_mem_acc(struct virtio_device
->>>>>> *dev)
->>>>>>     static int xen_dt_grant_init_backend_domid(struct device *dev,
->>>>>>                            struct xen_grant_dma_data *data)
->>>>>>     {
->>>>>> -    struct of_phandle_args iommu_spec;
->>>>>> +    struct of_phandle_args iommu_spec = { .args_count = 1 };
->>>>>>     -    if (of_parse_phandle_with_args(dev->of_node, "iommus",
->>>>>> "#iommu-cells",
->>>>>> -            0, &iommu_spec)) {
->>>>>> -        dev_err(dev, "Cannot parse iommus property\n");
->>>>>> -        return -ESRCH;
->>>>>> +    if (dev_is_pci(dev)) {
->>>>>> +        if (xen_dt_map_id(dev, &iommu_spec.np, iommu_spec.args)) {
->>>>>> +            dev_err(dev, "Cannot translate ID\n");
->>>>>> +            return -ESRCH;
->>>>>> +        }
->>>>>> +    } else {
->>>>>> +        if (of_parse_phandle_with_args(dev->of_node, "iommus",
->>>>>> "#iommu-cells",
->>>>>> +                0, &iommu_spec)) {
->>>>>> +            dev_err(dev, "Cannot parse iommus property\n");
->>>>>> +            return -ESRCH;
->>>>>> +        }
->>>>>>         }
->>>>>>           if (!of_device_is_compatible(iommu_spec.np,
->>>>>> "xen,grant-dma") ||
->>>>>> @@ -354,6 +413,7 @@ static int
->>>>>> xen_dt_grant_init_backend_domid(struct device *dev,
->>>>>>     void xen_grant_setup_dma_ops(struct device *dev)
->>>>>>     {
->>>>>>         struct xen_grant_dma_data *data;
->>>>>> +    struct device_node *np;
->>>>>>           data = find_xen_grant_dma_data(dev);
->>>>>>         if (data) {
->>>>>> @@ -365,8 +425,13 @@ void xen_grant_setup_dma_ops(struct device *dev)
->>>>>>         if (!data)
->>>>>>             goto err;
->>>>>>     -    if (dev->of_node) {
->>>>>> -        if (xen_dt_grant_init_backend_domid(dev, data))
->>>>>> +    np = xen_dt_get_node(dev);
->>>>>> +    if (np) {
->>>>>> +        int ret;
->>>>>> +
->>>>>> +        ret = xen_dt_grant_init_backend_domid(dev, data);
->>>>>> +        of_node_put(np);
->>>>>> +        if (ret)
->>>>>>                 goto err;
->>>>>>         } else if (IS_ENABLED(CONFIG_XEN_VIRTIO_FORCE_GRANT)) {
->>>>>>             dev_info(dev, "Using dom0 as backend\n");
->>>>>> -- 
->>>>>> 2.25.1
->>>>>>
->>>>>
->>>>
+>>   static int
+>> +vdpa_dev_cfgattrs_fill(struct vdpa_device *vdev, struct sk_buff *msg, u32 device_id)
+>> +{
+>> +       struct vdpa_dev_set_config *cfg = &vdev->vdev_cfg;
+>> +       int err = -EMSGSIZE;
+>> +
+>> +       if (!cfg->mask)
+>> +               return 0;
+>> +
+>> +       switch (device_id) {
+>> +       case VIRTIO_ID_NET:
+>> +               if ((cfg->mask & BIT_ULL(VDPA_ATTR_DEV_NET_CFG_MACADDR)) != 0 &&
+>> +                   nla_put(msg, VDPA_ATTR_DEV_NET_CFG_MACADDR,
+>> +                           sizeof(cfg->net.mac), cfg->net.mac))
+>> +                       return err;
+>> +               if ((cfg->mask & BIT_ULL(VDPA_ATTR_DEV_NET_CFG_MTU)) != 0 &&
+>> +                   nla_put_u16(msg, VDPA_ATTR_DEV_NET_CFG_MTU, cfg->net.mtu))
+>> +                       return err;
+>> +               if ((cfg->mask & BIT_ULL(VDPA_ATTR_DEV_NET_CFG_MAX_VQP)) != 0 &&
+>> +                   nla_put_u16(msg, VDPA_ATTR_DEV_NET_CFG_MAX_VQP,
+>> +                               cfg->net.max_vq_pairs))
+>> +                       return err;
+>> +               break;
+> This makes me think if we can reuse the virtio_net_config structure
+> other than duplicate it slowly with a dedicated nested structure
+> inside vdpa_dev_set_config then we can reuse the
+> vdpa_dev_net_config_fill().
+Adding Parav.
+
+I think for now the struct vdpa_dev_set_config has just a few fields, so 
+it's not very obvious. But from what I understand, the 
+vdpa_dev_set_config struct is designed to be built around vdpa 
+configurables, without getting it limited by what's exposed by the 
+virtio device config structure, such as virtio_net_config. For instance, 
+there could be possibility for vdpa user to specify the size of MAC 
+unicast or multicast address table, which is not defined anywhere in the 
+virtio_net_config. I think it's important to match such configuration 
+(which may not even be defined in spec) for src&dst vdpa devices 
+involving the live migration.
+
+-Siwei
+>
+> Thanks
+>
+>> +       default:
+>> +               break;
+>> +       }
+>> +
+>> +       if ((cfg->mask & BIT_ULL(VDPA_ATTR_DEV_FEATURES)) != 0 &&
+>> +           nla_put_u64_64bit(msg, VDPA_ATTR_DEV_FEATURES,
+>> +                             cfg->device_features, VDPA_ATTR_PAD))
+>> +               return err;
+>> +
+>> +       return 0;
+>> +}
+>> +
+>> +static int
+>>   vdpa_dev_fill(struct vdpa_device *vdev, struct sk_buff *msg, u32 portid, u32 seq,
+>>                int flags, struct netlink_ext_ack *extack)
+>>   {
+>> @@ -715,6 +750,10 @@ static int vdpa_nl_cmd_dev_del_set_doit(struct sk_buff *skb, struct genl_info *i
+>>          if (nla_put_u16(msg, VDPA_ATTR_DEV_MIN_VQ_SIZE, min_vq_size))
+>>                  goto msg_err;
+>>
+>> +       err = vdpa_dev_cfgattrs_fill(vdev, msg, device_id);
+>> +       if (err)
+>> +               goto msg_err;
+>> +
+>>          genlmsg_end(msg, hdr);
+>>          return 0;
+>>
+>> --
+>> 1.8.3.1
 >>
 
--- 
-Xenia
