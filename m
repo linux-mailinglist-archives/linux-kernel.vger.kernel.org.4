@@ -2,231 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E2BE606043
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 14:35:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 045D260604B
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 14:36:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230101AbiJTMfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 08:35:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54172 "EHLO
+        id S230133AbiJTMgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 08:36:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbiJTMfb (ORCPT
+        with ESMTP id S229767AbiJTMgF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 08:35:31 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2052.outbound.protection.outlook.com [40.107.93.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F09B12344E
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 05:35:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WbPPDxy0yTnzm7g3nGAHC/6T8it/wuqeQLJHoRXg4WAkIQaMngjhc/QFHgyVY6k/EvmuIGUP4iTyp7R8Xa5u5kdRXiuqBWXxCuDW5o1U6y0aOm4Q+eCrTMLXNm0B6sicLufgpF2xeeDfjaP5bgaefeq5hSTIk9vaZzz/chKiDJlL864GawYibNxWgVFARTrWf0WYLsZbtz3Gp6z1NlLVTm6ouE4t9O1wT6Y7/DC63Cp5xPwofu5ktC+D3w/Jg0JSFDiIHYoZw+jf/GCCLQUqBi1IF6eDP3xjIshnuNN/8x+LST75Uj4S5r85LhyFkAFPUbbxrqinPQdnvoNuYb4dXw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NdGS4KXe9XUKpLpxDALHM17c/IMunNGUpcyggSxe2YU=;
- b=d4DAV+/Eq4lwsLVA1fpHcJdYhWO2qiWvmr1H/s9vUzpgfM981CiKA8c7FvanRjMIt2K4OSpJNFpRDJKMuO7fU95j2K8GB6X/nDw7PDwIyMnN20cV9brzNYd+Re7vQH/yXFEtwLhqZbZYL5RP3Y3YOE6Thz1WmFgtC2XoSSBlM/36rTMil+q8JuHwD6HHeGwJLpxTItt0toRvuDR9Fh7bRM8s7eL3+KAFCo50gMpzCfpmJOzF2egxNnJr0ss/BZyd5K34zvQPtuE5aYWZl+lYkr0XWHrM7fPUvf/aTMUFDjOAq5xvW3N1XU4jEfPPhYzH2M4OOCuHUqn8/d6ZlCmOug==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NdGS4KXe9XUKpLpxDALHM17c/IMunNGUpcyggSxe2YU=;
- b=YHEqvVNnXNH/XdpZknl5wlhuLwjR8l+Xdy6w6lBfU3pWYj3IOwGz9aWFcsgRJ/WMkYy012bVsQqwDXClgEt0OLDFly1TVhOGWxtZg1ymCqhnr0ip1mgGDlYzRHiRtH9lRtor+fyfDRejBIbGHpZDnSxDZi8UYHryrgtKiakF1h0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN2PR12MB2941.namprd12.prod.outlook.com (2603:10b6:208:a9::12)
- by PH8PR12MB7026.namprd12.prod.outlook.com (2603:10b6:510:1bd::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.35; Thu, 20 Oct
- 2022 12:35:25 +0000
-Received: from MN2PR12MB2941.namprd12.prod.outlook.com
- ([fe80::588f:c941:4f62:9d89]) by MN2PR12MB2941.namprd12.prod.outlook.com
- ([fe80::588f:c941:4f62:9d89%3]) with mapi id 15.20.5723.026; Thu, 20 Oct 2022
- 12:35:25 +0000
-Message-ID: <ea5d60cd-8d0b-7018-425e-b91e5750a830@amd.com>
-Date:   Thu, 20 Oct 2022 08:35:23 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH] drm/amd/display: Revert logic for plane modifiers
-Content-Language: en-US
-To:     =?UTF-8?Q?Joaqu=c3=adn_Ignacio_Aramend=c3=ada?= 
-        <samsagax@gmail.com>, harry.wentland@amd.com
-Cc:     amd-gfx@lists.freedesktop.org, sunpeng.li@amd.com,
-        alexander.deucher@amd.com, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20221019151543.22753-1-samsagax@gmail.com>
-From:   Rodrigo Siqueira Jordao <Rodrigo.Siqueira@amd.com>
-In-Reply-To: <20221019151543.22753-1-samsagax@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: CH2PR11CA0008.namprd11.prod.outlook.com
- (2603:10b6:610:54::18) To MN2PR12MB2941.namprd12.prod.outlook.com
- (2603:10b6:208:a9::12)
+        Thu, 20 Oct 2022 08:36:05 -0400
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FAEF1D4DFD
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 05:35:46 -0700 (PDT)
+Received: by mail-qv1-xf2c.google.com with SMTP id x15so614959qvp.1
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 05:35:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8/UkpWDlCb1VBoDddnSGcWzFXaR1SMPz8bBVjiSyJik=;
+        b=oOCjXD8mJP66/QfUDSL1e5Czts0R7eKIud3RFfBeioP3j0qau02qJsUyCTKhuCB+BQ
+         K8rF0xnzRmihdhl/nYgYbfUUpjYdBbikSbAzKsv4Ug72zwuOAj+ptRJl/KV4efWoSdt6
+         HVyMD4V+823kzmdW60hr28NqJry4G75GlzxujfSkr9E+ptlObetd5eFiqCa01RhVe34F
+         gP93tnTi/PKWL/NJrRmnFHqG64nwFlZSG9KjITgjD4d4Vp7dsWmXoWJA73UNhE0iMtfe
+         7PdhQroPCOhLQ51mlDnHohPC2i10amEQi49BkEiQrCoNk6e21duz6/hSvYnZmdQOs+HU
+         AT+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8/UkpWDlCb1VBoDddnSGcWzFXaR1SMPz8bBVjiSyJik=;
+        b=oFIgm28Ig/XZocXsd5sZnqFICAp04dHeg2HqPRNgFsLZsOG5dZ7CZnx4eaw1Aj6ghQ
+         i2IaLyBF581Cw0DDrTLjaYwgNMG0JfzuyvB/lj3Qoh0OgE7+fNbofzpIor1g4feDkKHR
+         3tGWx3YEat4VQsmVkhE1iVFlUal8B4pf1ukhQ23ENzHYY6RAxAuqHCse91fQaf6PfgT8
+         Afunrb85X/mpJ4NzotWNGDiXSByPbIeyB+XuGT/XZm5XfYKdVvwOhqTLdPhvZoZRTtRz
+         qCvsJINLeA0wLRxnKKeNHwTbR8ir4H6q6c6B3l9fw67AKXvMcjPIj2ZHkOz7CIrlVZvt
+         FkEw==
+X-Gm-Message-State: ACrzQf2TXpb4V7gzXj0racE4q3l/xMHL1HeeScvxObX8kOfTzrBHQpL7
+        h922mdMNhVUv0s/FFZIap0d5yw==
+X-Google-Smtp-Source: AMsMyM6lzIwu5NdXuv/ZUmXvjjlFYw8NTQ5oTBAqsfEI2gkDUGtqecr003L/apzboVEWywKL7I+RyA==
+X-Received: by 2002:a0c:dd11:0:b0:4b1:97db:abe with SMTP id u17-20020a0cdd11000000b004b197db0abemr10576971qvk.95.1666269344392;
+        Thu, 20 Oct 2022 05:35:44 -0700 (PDT)
+Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
+        by smtp.gmail.com with ESMTPSA id dt5-20020a05620a478500b006ee94c5bf26sm7458715qkb.91.2022.10.20.05.35.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Oct 2022 05:35:43 -0700 (PDT)
+Message-ID: <a8d38406-6294-581a-9677-ff2e686eca50@linaro.org>
+Date:   Thu, 20 Oct 2022 08:35:42 -0400
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN2PR12MB2941:EE_|PH8PR12MB7026:EE_
-X-MS-Office365-Filtering-Correlation-Id: ba5152b3-bd35-42c7-f4e6-08dab2978fbc
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 1AHt/4VaX6eNsFsOT3O5Z+JHFU2YrFRlhJFQLSrtK2ZgXPV02P8hVlmJjLpJTNB61axam8ge6jwF5FQsM9aZA+HeFUT0noNW7zoA1LyIQGDDfxZAmo6V7RHcQFsaWPd+kuaAM0LirwYqsLkIRFe39QHxP64OtQopNUXia0tBVUdmnqbK1PhYBMH6tPkWSv3ABwb73yWXY03P0iC8d9O3TN3GCY9yqSnJkvPOROzeYSLov9aD174Ywi8KGu1ubjnJ0zYz/IUOmm081T/AlWJDJYRPBbsnoqC1j/yRQrgDR9kewZfp8tgw0rf78rBzdpHT0S2ybFMIudGVxLNreDZYd4y2YQrtuhTdAyXOoJl4MahHml67XYSyqEvFC06rcNK51JXtFeDA6OHgjs0lyTe28SLksmJDTqv84nVNGjTzhA+Csz3xMOKgQVvyX7PPvhFr9j7MW31GAAAPFfQ0oX180XHBTgjaTMKvDYjOFEOg9ggOGLRmMPjN3TWLBRWoNfGzJGhed5EzbOnWG9YmQcUejCoXsgwoqckvPDwxy0Z6zTqJALJibByKCgNwTonZYclbUBLC9YOp0w/ydKdocV40uwP3/pdDCEoEtGStOtAgKfL+UUGaYxH34PQYC2DfkRCtTtRZkElOuKRtvwarVXp0cmyH0zkVBHUKvgdarTvTcRD7XQX1zqrsgen7E2OIDvTXqXVC2BC84gtf+gozwYVbQbbS4L6FUoftvC+7SeMw6a2G3AIC+MWZt/DNEecgy8Gyt3dc9HiHeLV4xPcs1ElG02cEbV8XaYNTpfxI/ffl47dpFDtL9VGi09PmtJhwaa1L
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB2941.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(396003)(39860400002)(346002)(136003)(376002)(451199015)(316002)(83380400001)(2906002)(31696002)(86362001)(38100700002)(478600001)(41300700001)(8676002)(66946007)(66556008)(66476007)(4326008)(5660300002)(6486002)(8936002)(6636002)(2616005)(186003)(53546011)(26005)(6512007)(4001150100001)(6506007)(31686004)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?a2ZQSU1yTEw1VUNKOFpZZm95YVo2QzNIeTZ5SDdMK2lmN2IzOEpQeUlIOThk?=
- =?utf-8?B?SVRMQVU1a0gzNzY1RVhTd0tjbGF0UERESEF6cmJNSko5WFhRNktqRXZWNTB2?=
- =?utf-8?B?a1FGMGZ3NmliTHkwRHM1Tk0raUZOSDRPUXhia2lwWFNZS0RsU2NKZ3FwTG9X?=
- =?utf-8?B?SEs1cG9uQ0ZkbzViMzk5YytacGpsYnZta1BIVXVYQ2FjYmV4bldoMXRNb0hq?=
- =?utf-8?B?WEtZbklWb2MrMS9yOTcwNnB6MERJUVNtTTNxQU9MbkpkRytqaFBidnVRaGxT?=
- =?utf-8?B?cDhzNWlIUFg1ejMrOFhTYUFnaDVhRThaL0NranUxWlVTeXZvaklyWHB3TjVL?=
- =?utf-8?B?eU5ZNHY5cEFBM1ZnSW9qNjRPcTNEZG9wS3VPcWVLZWZGaE5FUXdjWCtZWWYy?=
- =?utf-8?B?aXNiVDRDZm9TMzFGT1REMDYzMU5QcmdlVWFvNm8rTDFqQWZwTGl4TEFkYlRj?=
- =?utf-8?B?V2ZOR3lUL0VOUW1OdTI3bWIwZU14WmE4bGptb3BSZklvMWlWUGl3OHR3Q3pZ?=
- =?utf-8?B?QTZwM3hUM0JhWlEyOEh6V0NNQ1MrK0k0VUF6RjAwVnI3M3Q0SU5rZGpZVWwz?=
- =?utf-8?B?ampYN0R0Y0JRR2dJUHNneDl1VkVrTnJVZjU2cmFnTFhsa1Z4V2FFS09qYWR0?=
- =?utf-8?B?SUVZcG5oM1JJenZkbEV3dFg1aC81NEZLMU1tc2F6Z1RvaDRDeDcxVUZ5K1Mv?=
- =?utf-8?B?SDhKTTFaS0k4MVhXeGttY01xQ2d2b0hpK1hadVlmanIvR28vZHdKY3pvU1dn?=
- =?utf-8?B?L2QvVGhQUm1LcWJlUU1ieG05SlBpVXFWS1dteElFdkwrOVZ2QnpZOC9uTHpx?=
- =?utf-8?B?aTFVU3YzTWFVaXN5T0VFUGtyNks1Z0EzQW9VOVpSQTl5dU1yNUNIdGd0cElS?=
- =?utf-8?B?VHdFUEZJUW1sd3M4a1hkQmVaYUZkTFBpZzY0NkVVT0c5OVhoOFExQmREdzlJ?=
- =?utf-8?B?OEhIWFF6NjdlTHVEcllXdnp6S1hleGFlOHd4VUgwMXdNNmtXMWcvbUx5eXlD?=
- =?utf-8?B?T0pSNk9LVytmRkNkK0Q5aWhodmNTb0xaMms3dk4rQTRpRFJQUm55SjJBU3A0?=
- =?utf-8?B?VDh0d3dVa1BQM2dCMmtlTHFhZUZDNnFYY0FrQUc1SHRHd1QrVVZvaVY2bnRn?=
- =?utf-8?B?dVFscWVoWXRWL1IwREwwYW5nRGVwWEhVT3ZjZ2w5cjZDY1hiYmhGSkRnZ3Nm?=
- =?utf-8?B?d1E5ZG9OZTIwV2VxeUhXWGlteDNoUXI4cUtQWG1OZGQ5Q1JwZHdkUEVITnhZ?=
- =?utf-8?B?ZHFOVENjd2g4d2VzNlY2cFMyeHZBQVROdVQ4S3MvSmI0SEhKcEsyRmlkNHZ0?=
- =?utf-8?B?OGp4K1JkSEtUWmlrMkJnSjdQb0t1bDVCZVpMZ0FIQ2JVTWNsanJ1RHVoTTl6?=
- =?utf-8?B?SVVhQkVsaVRIOU4wZUJBc3pyZ2FFcnMvZGI2YVNIejNhZUtNRURScEdVNy8w?=
- =?utf-8?B?RXhFTmEzaUw3NTNkRGVMNER4ZTdQMFhQQlB2bHJpYWxUNlI2Y1ZmZmptQVRL?=
- =?utf-8?B?RDBqS2RWZ0t2dmx4clk0SHVRR0piSFgxbmFWYWRUUU1HbE1NMVM3eVl1UVFt?=
- =?utf-8?B?NzZhTi9Rd3lYZFRJdHpkSnA4RnBqRjZCOXV5U05nZGhnYWd0dW9ZZUd2S1Ar?=
- =?utf-8?B?dDd2b0dmUEQwY1hTSkUxUmlyZFgwdlQzMzlhWmJ0VFhWU0Y5Z0lOejdrS2ZD?=
- =?utf-8?B?RTVSSExZNk1DeDJ6T25oNjlXdHZKcmVGTVFJMW1iMGRySDhXMGF5STgreitZ?=
- =?utf-8?B?em5VdWZ4SjhPYTFUaW8wTUtoaXJxSTZ2b2VVODhDQ1BOK2hMWm9yUGpwTCtk?=
- =?utf-8?B?U05oSXVNZWIzWlJNSGRVUUl1SXVMR3daTGMyTEYwekdiZmk2eEhMODkrSklT?=
- =?utf-8?B?WW5iTUNmZkF0NTZEcVBUckYvYnlCVUQvMmpnRGREd1plS0lQVzcwVTlpZ01t?=
- =?utf-8?B?cEcyeTFnUEFxWGhYanY0UXJndEVDaW5wMk5oeGZHY2lSMUtGQTJVQzdnUUl3?=
- =?utf-8?B?QUVyOVVNMDh5OFJ0Q2ZNYWtsZ0hKTjNPTGREbjVtWVFMakJ0aDlDQk5hMmRw?=
- =?utf-8?B?d2VXKzRvdHBKOGhMQjJSc0FiTnZFRUZOSkZrNWpWWXlRWVJ4RjdiOGJ3QUk4?=
- =?utf-8?Q?uFyMMOPs1qqHJ+tsaPLps6Rjx?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ba5152b3-bd35-42c7-f4e6-08dab2978fbc
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB2941.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Oct 2022 12:35:25.1271
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GQ9gA7s3u3NarQPem5JMnZnnNAU6T/GjNoyMkMlBxhrJ9tfcuXxogxJue4Hdo3RpCfQ95IQMoJ3jXoVMwwCQTg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7026
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v2 1/4] dt-bindings: firmware: scm: Add QDU1000/QRU1000
+ compatibles
+Content-Language: en-US
+To:     Melody Olvera <quic_molvera@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Robert Marko <robimarko@gmail.com>,
+        Guru Das Srinagesh <quic_gurus@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221014221121.7497-1-quic_molvera@quicinc.com>
+ <20221014221121.7497-2-quic_molvera@quicinc.com>
+ <55d026c0-9c54-f5d6-bf5e-da71856f0698@linaro.org>
+ <4d680e5a-16eb-f68b-ac6a-e11580104c23@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <4d680e5a-16eb-f68b-ac6a-e11580104c23@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022-10-19 11:15, Joaquín Ignacio Aramendía wrote:
-> This file was split in commit 5d945cbcd4b16a29d6470a80dfb19738f9a4319f
-> ("drm/amd/display: Create a file dedicated to planes") the logic in
-> dm_plane_format_mod_supported() function got changed by a switch logic.
-> That change broke drm_plane modifiers setting on series 5000 APUs
-> (tested on OXP mini AMD 5800U and HP Dev One 5850U PRO)
-> leading to Gamescope not working as reproted on GitHub[1]
+On 19/10/2022 14:08, Melody Olvera wrote:
 > 
-> To reproduce the issue, enter a TTY and run:
 > 
-> $ gamescope -- vkcube
+> On 10/15/2022 6:34 AM, Krzysztof Kozlowski wrote:
+>> On 14/10/2022 18:11, Melody Olvera wrote:
+>>> Add compatibles for scm driver for QDU1000 and QRU1000 platforms.
+>>>
+>>> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
+>>> ---
+>>>  .../devicetree/bindings/firmware/qcom,scm.yaml   | 16 ++++++++++++++++
+>>>  1 file changed, 16 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+>>> index c5b76c9f7ad0..47083f47f109 100644
+>>> --- a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+>>> +++ b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+>>> @@ -38,6 +38,8 @@ properties:
+>>>            - qcom,scm-msm8994
+>>>            - qcom,scm-msm8996
+>>>            - qcom,scm-msm8998
+>>> +          - qcom,scm-qdu1000
+>>> +          - qcom,scm-qru1000
+>> Why exactly we are no using qdu1000 as fallback? That was the
+>> recommendation in previous discussion.
+> Will use only qdu; I think I misunderstood the outcome of that discussion.
+
+Actually, I think I commented about this in wrong patch. I think the
+outcome was to use two compatibles for most of the cases, but as a
+fallback, so:
+
+QDU: "qcom,qdu1000-rpmhpd"
+QRU: "qcom,qru1000-rpmhpd", "qcom,qdu1000-rpmhpd"
+(or skip entirely second if you do not customize QRU in DTSI)
+
+However here we already have a fallback, so these are fine:
+
+"qcom,scm-qdu1000", "qcom,scm"
+"qcom,scm-qru1000", "qcom,scm"
+
+Still assuming you customize them in DTSI... which does not seem the
+case, right?
+
+>>
+>> Patch is still incomplete - you still do no have proper changes in allOf
+>> for the clocks. If you want to say that this SoC does not take any
+>> clocks as input, then they should not be allowed.
+> That is what I'm trying to say; it seems most of our most recent SoCs (sm8*) don't have any
+> clocks associated with the scm. Does it make sense to remove the minItems earlier
+> in the binding, or is there something else that would communicate this in allOf better?
 > 
-> With said commit applied it will abort. This one restores the old logic,
-> fixing the issue that affects Gamescope.
-> 
-> [1](https://github.com/Plagman/gamescope/issues/624>> 
-> Signed-off-by: Joaquín Ignacio Aramendía <samsagax@gmail.com>
-> ---
->   .../amd/display/amdgpu_dm/amdgpu_dm_plane.c   | 50 +++----------------
->   1 file changed, 8 insertions(+), 42 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_plane.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_plane.c
-> index dfd3be49eac8..81c1fc9468b8 100644
-> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_plane.c
-> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_plane.c
-> @@ -1371,6 +1371,8 @@ static bool dm_plane_format_mod_supported(struct drm_plane *plane,
->   	const struct drm_format_info *info = drm_format_info(format);
->   	struct hw_asic_id asic_id = adev->dm.dc->ctx->asic_id;
 
-Hi,
 
-First of all, thanks a lot for this patch.
+Then disallow clocks for your variant:
 
-You can drop asic_id since it is not used anymore.
+  - if:
+     ....
+    then:
+     ...
+      clocks: false
+      clock-names: false
 
-Thanks
-Siqueira
-
->   
-> +	int i;
-> +
->   	enum dm_micro_swizzle microtile = modifier_gfx9_swizzle_mode(modifier) & 3;
->   
->   	if (!info)
-> @@ -1386,49 +1388,13 @@ static bool dm_plane_format_mod_supported(struct drm_plane *plane,
->   		return true;
->   	}
->   
-> -	/* check if swizzle mode is supported by this version of DCN */
-> -	switch (asic_id.chip_family) {
-> -	case FAMILY_SI:
-> -	case FAMILY_CI:
-> -	case FAMILY_KV:
-> -	case FAMILY_CZ:
-> -	case FAMILY_VI:
-> -		/* asics before AI does not have modifier support */
-> -		return false;
-> -	case FAMILY_AI:
-> -	case FAMILY_RV:
-> -	case FAMILY_NV:
-> -	case FAMILY_VGH:
-> -	case FAMILY_YELLOW_CARP:
-> -	case AMDGPU_FAMILY_GC_10_3_6:
-> -	case AMDGPU_FAMILY_GC_10_3_7:
-> -		switch (AMD_FMT_MOD_GET(TILE, modifier)) {
-> -		case AMD_FMT_MOD_TILE_GFX9_64K_R_X:
-> -		case AMD_FMT_MOD_TILE_GFX9_64K_D_X:
-> -		case AMD_FMT_MOD_TILE_GFX9_64K_S_X:
-> -		case AMD_FMT_MOD_TILE_GFX9_64K_D:
-> -			return true;
-> -		default:
-> -			return false;
-> -		}
-> -		break;
-> -	case AMDGPU_FAMILY_GC_11_0_0:
-> -	case AMDGPU_FAMILY_GC_11_0_1:
-> -		switch (AMD_FMT_MOD_GET(TILE, modifier)) {
-> -		case AMD_FMT_MOD_TILE_GFX11_256K_R_X:
-> -		case AMD_FMT_MOD_TILE_GFX9_64K_R_X:
-> -		case AMD_FMT_MOD_TILE_GFX9_64K_D_X:
-> -		case AMD_FMT_MOD_TILE_GFX9_64K_S_X:
-> -		case AMD_FMT_MOD_TILE_GFX9_64K_D:
-> -			return true;
-> -		default:
-> -			return false;
-> -		}
-> -		break;
-> -	default:
-> -		ASSERT(0); /* Unknown asic */
-> -		break;
-> +	/* Check that the modifier is on the list of the plane's supported modifiers. */
-> +	for (i = 0; i < plane->modifier_count; i++) {
-> +		if (modifier == plane->modifiers[i])
-> +			break;
->   	}
-> +	if (i == plane->modifier_count)
-> +		return false;
->   
->   	/*
->   	 * For D swizzle the canonical modifier depends on the bpp, so check
+Best regards,
+Krzysztof
 
