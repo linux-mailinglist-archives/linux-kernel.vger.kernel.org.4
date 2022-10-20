@@ -2,325 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5181860590E
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 09:53:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EE8B60590F
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 09:53:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231154AbiJTHx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 03:53:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35214 "EHLO
+        id S230219AbiJTHxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 03:53:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230522AbiJTHxP (ORCPT
+        with ESMTP id S231124AbiJTHxQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 03:53:15 -0400
-Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66BC710C4F6
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 00:53:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1666252375; bh=XEdO+ZqaSOOnLGg+ZfItnpFDSNeXu0lhtVOkDRqJP/U=;
-        h=X-EA-Auth:Date:From:To:Subject:Message-ID:References:MIME-Version:
-         Content-Type:In-Reply-To;
-        b=cRbLEgxYyfiLY+k5LBoRxFh9YzAACAnx22cqBVDn7VtZnt11pr2DXRmXuh1EZnBuk
-         vYDMrhsy6M1wuCpNDf8CNpd6C6DXs1XakqDEAXF7eFnmuA8vkBUnXMVUvJTzupCVtC
-         ShQi0P2CrxWzFk9f5sGteFG6+d86cDkT89hqXhBQ=
-Received: by b-1.in.mailobj.net [192.168.90.11] with ESMTP
-        via [213.182.55.206]
-        Thu, 20 Oct 2022 09:52:55 +0200 (CEST)
-X-EA-Auth: iFkuWVCG9t9xlU67EMOdszspOyO1+46zJaqbJYXRj+nMkyL1yDf9qa2HsU4Fxd9jD2Tb9xnqzkKgW+mU2W+9t6smfh5KA1MA
-Date:   Thu, 20 Oct 2022 13:22:50 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     outreachy@lists.linux.dev, Larry.Finger@lwfinger.net,
-        phil@philpotter.co.uk, paskripkin@gmail.com,
-        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, kumarpraveen@linux.microsoft.com,
-        saurabh.truth@gmail.com
-Subject: [PATCH v3 01/10] staging: r8188eu: use Linux kernel variable naming
- convention
-Message-ID: <5226d30242be78ab1ee32bfdd87239ca82569642.1666249716.git.drv@mailo.com>
-References: <cover.1666249715.git.drv@mailo.com>
+        Thu, 20 Oct 2022 03:53:16 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C63C1213CD
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 00:53:11 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id b12so28681939edd.6
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 00:53:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Bm0vkM5wr/+4Mm+pAGk2CVcFWiT+KtN810ewhbWr3To=;
+        b=k1F6m8aKrE0u5jIHlQvKNPLuWT7u5rAEc9STRhQZuGg/PpVEKyeE4MRPuXsKE+CRpH
+         IVLO2FMM48bx4NY8Vz/KT/lf3Zo6mQVnM1hd2nUgENUb0fNFZ+aCm235DXe35t+WQ3hf
+         KvcrsvmyVcRibgPbXoJyiEwnw89TKA9S4PcDDiBZEra1EnV/962+giTTY2sDh3gdlQxa
+         mzk1mywj0VMVTWPi1QrjU8XF57xZbiNznVNepBFyEd7q7K68KPHrqFGzfPjolIW9x4qn
+         rUtAt9Dp7vEje60e0vgmUKe5T5D16IFxEaxiYh1ZlO9KsT9zNQNkQuRmKfvf5FPxc2bL
+         BdlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Bm0vkM5wr/+4Mm+pAGk2CVcFWiT+KtN810ewhbWr3To=;
+        b=Yz93Mwk5pCISvggcLnq5YS6s/PCMvBvJAgNsnJ7pacD6TQXFYqft4j9fJB7qlY+B1P
+         5UwcZNOE/cpjKp6o9e9m63ZENcb/ID+Is14cm6aLUG5cHUJg8Z5gjigfh03sJ8wVhJgE
+         +U0WaScEgtpKkbvRvo07sf/dQemOjG5G5k7z173cUkXWRjZULkb89Knv+LMHl9sGHOVX
+         LXNVFzZ5JY7+XzoBGpE+YEwnl5pyVxNFs24wzH/7X3fmZz5IgGSN4bOvEPL5WrgN4qRc
+         4JUqBR8lFl/lQbhxxlkvqGjazdv9bT0YGvB2Y9y5T8a86Mho+CFJXJzBoPGWFIfKxxZz
+         EoBw==
+X-Gm-Message-State: ACrzQf3RccXBO7P2w+mxMufLP2lh3V2xOg4Sg9Jg9Xn2ptTCcjuxN7vP
+        h85S4/4r3obTqvDTDWsuWiv1+wBnFmFlnrqNyHRPYUJmOm8=
+X-Google-Smtp-Source: AMsMyM7iQ6iIBDDVAXsPhM8E+fezmoZGOwJ6Ju/JfiEYC8PUXsNKfHAhSd2QOln4f84lV6Rlp8g3QqkYDLF9qMQzxMI=
+X-Received: by 2002:a05:6402:4029:b0:45b:d50c:b9b0 with SMTP id
+ d41-20020a056402402900b0045bd50cb9b0mr10931422eda.126.1666252389406; Thu, 20
+ Oct 2022 00:53:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1666249715.git.drv@mailo.com>
+References: <20221019144119.3848027-1-arnd@kernel.org> <20221019150410.3851944-1-arnd@kernel.org>
+ <20221019150410.3851944-11-arnd@kernel.org>
+In-Reply-To: <20221019150410.3851944-11-arnd@kernel.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 20 Oct 2022 09:52:58 +0200
+Message-ID: <CACRpkdaU8rHipXO+Lv9uwOd0AyBHtnKNikjQKXUYWV94+Dj_CQ@mail.gmail.com>
+Subject: Re: [PATCH 11/17] gpio: remove iop driver
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Lennert Buytenhek <buytenh@wantstofly.org>,
+        linux-gpio@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Follow the Linux Kernel coding style variable naming convention instead
-of using camelCase style. Issue reported by checkpatch script for
-these variables:
-        tagLen, tagType, networkAddr, ipAddr, macAddr
+On Wed, Oct 19, 2022 at 5:14 PM Arnd Bergmann <arnd@kernel.org> wrote:
 
-Signed-off-by: Deepak R Varma <drv@mailo.com>
----
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> The iop32x platform was removed, and its gpio driver is now
+> orphaned.
+>
+> Cc: Lennert Buytenhek <buytenh@wantstofly.org>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Changes in v3:
-   -- None
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
 
-Changes in v1 [actually v2]:
-   1. Improve patch description per feedback from julia.lawall@inria.fr
-
-
- drivers/staging/r8188eu/core/rtw_br_ext.c | 112 +++++++++++-----------
- 1 file changed, 56 insertions(+), 56 deletions(-)
-
-diff --git a/drivers/staging/r8188eu/core/rtw_br_ext.c b/drivers/staging/r8188eu/core/rtw_br_ext.c
-index 4c5f30792a46..79daf8f269d6 100644
---- a/drivers/staging/r8188eu/core/rtw_br_ext.c
-+++ b/drivers/staging/r8188eu/core/rtw_br_ext.c
-@@ -50,17 +50,17 @@
- static unsigned char *__nat25_find_pppoe_tag(struct pppoe_hdr *ph, unsigned short type)
- {
- 	unsigned char *cur_ptr, *start_ptr;
--	unsigned short tagLen, tagType;
-+	unsigned short tag_len, tag_type;
-
- 	start_ptr = (unsigned char *)ph->tag;
- 	cur_ptr = (unsigned char *)ph->tag;
- 	while ((cur_ptr - start_ptr) < ntohs(ph->length)) {
- 		/*  prevent un-alignment access */
--		tagType = (unsigned short)((cur_ptr[0] << 8) + cur_ptr[1]);
--		tagLen  = (unsigned short)((cur_ptr[2] << 8) + cur_ptr[3]);
--		if (tagType == type)
-+		tag_type = (unsigned short)((cur_ptr[0] << 8) + cur_ptr[1]);
-+		tag_len  = (unsigned short)((cur_ptr[2] << 8) + cur_ptr[3]);
-+		if (tag_type == type)
- 			return cur_ptr;
--		cur_ptr = cur_ptr + TAG_HDR_LEN + tagLen;
-+		cur_ptr = cur_ptr + TAG_HDR_LEN + tag_len;
- 	}
- 	return NULL;
- }
-@@ -111,32 +111,32 @@ static int  __nat25_has_expired(struct nat25_network_db_entry *fdb)
- 	return 0;
- }
-
--static void __nat25_generate_ipv4_network_addr(unsigned char *networkAddr,
--				unsigned int *ipAddr)
-+static void __nat25_generate_ipv4_network_addr(unsigned char *network_addr,
-+				unsigned int *ip_addr)
- {
--	memset(networkAddr, 0, MAX_NETWORK_ADDR_LEN);
-+	memset(network_addr, 0, MAX_NETWORK_ADDR_LEN);
-
--	networkAddr[0] = NAT25_IPV4;
--	memcpy(networkAddr + 7, (unsigned char *)ipAddr, 4);
-+	network_addr[0] = NAT25_IPV4;
-+	memcpy(network_addr + 7, (unsigned char *)ip_addr, 4);
- }
-
--static void __nat25_generate_pppoe_network_addr(unsigned char *networkAddr,
-+static void __nat25_generate_pppoe_network_addr(unsigned char *network_addr,
- 				unsigned char *ac_mac, __be16 *sid)
- {
--	memset(networkAddr, 0, MAX_NETWORK_ADDR_LEN);
-+	memset(network_addr, 0, MAX_NETWORK_ADDR_LEN);
-
--	networkAddr[0] = NAT25_PPPOE;
--	memcpy(networkAddr + 1, (unsigned char *)sid, 2);
--	memcpy(networkAddr + 3, (unsigned char *)ac_mac, 6);
-+	network_addr[0] = NAT25_PPPOE;
-+	memcpy(network_addr + 1, (unsigned char *)sid, 2);
-+	memcpy(network_addr + 3, (unsigned char *)ac_mac, 6);
- }
-
--static  void __nat25_generate_ipv6_network_addr(unsigned char *networkAddr,
--				unsigned int *ipAddr)
-+static  void __nat25_generate_ipv6_network_addr(unsigned char *network_addr,
-+				unsigned int *ip_addr)
- {
--	memset(networkAddr, 0, MAX_NETWORK_ADDR_LEN);
-+	memset(network_addr, 0, MAX_NETWORK_ADDR_LEN);
-
--	networkAddr[0] = NAT25_IPV6;
--	memcpy(networkAddr + 1, (unsigned char *)ipAddr, 16);
-+	network_addr[0] = NAT25_IPV6;
-+	memcpy(network_addr + 1, (unsigned char *)ip_addr, 16);
- }
-
- static unsigned char *scan_tlv(unsigned char *data, int len, unsigned char tag, unsigned char len8b)
-@@ -200,40 +200,40 @@ static int update_nd_link_layer_addr(unsigned char *data, int len, unsigned char
- 	return 0;
- }
-
--static int __nat25_network_hash(unsigned char *networkAddr)
-+static int __nat25_network_hash(unsigned char *network_addr)
- {
--	if (networkAddr[0] == NAT25_IPV4) {
-+	if (network_addr[0] == NAT25_IPV4) {
- 		unsigned long x;
-
--		x = networkAddr[7] ^ networkAddr[8] ^ networkAddr[9] ^ networkAddr[10];
-+		x = network_addr[7] ^ network_addr[8] ^ network_addr[9] ^ network_addr[10];
-
- 		return x & (NAT25_HASH_SIZE - 1);
--	} else if (networkAddr[0] == NAT25_IPX) {
-+	} else if (network_addr[0] == NAT25_IPX) {
- 		unsigned long x;
-
--		x = networkAddr[1] ^ networkAddr[2] ^ networkAddr[3] ^ networkAddr[4] ^ networkAddr[5] ^
--			networkAddr[6] ^ networkAddr[7] ^ networkAddr[8] ^ networkAddr[9] ^ networkAddr[10];
-+		x = network_addr[1] ^ network_addr[2] ^ network_addr[3] ^ network_addr[4] ^ network_addr[5] ^
-+			network_addr[6] ^ network_addr[7] ^ network_addr[8] ^ network_addr[9] ^ network_addr[10];
-
- 		return x & (NAT25_HASH_SIZE - 1);
--	} else if (networkAddr[0] == NAT25_APPLE) {
-+	} else if (network_addr[0] == NAT25_APPLE) {
- 		unsigned long x;
-
--		x = networkAddr[1] ^ networkAddr[2] ^ networkAddr[3];
-+		x = network_addr[1] ^ network_addr[2] ^ network_addr[3];
-
- 		return x & (NAT25_HASH_SIZE - 1);
--	} else if (networkAddr[0] == NAT25_PPPOE) {
-+	} else if (network_addr[0] == NAT25_PPPOE) {
- 		unsigned long x;
-
--		x = networkAddr[0] ^ networkAddr[1] ^ networkAddr[2] ^ networkAddr[3] ^ networkAddr[4] ^ networkAddr[5] ^ networkAddr[6] ^ networkAddr[7] ^ networkAddr[8];
-+		x = network_addr[0] ^ network_addr[1] ^ network_addr[2] ^ network_addr[3] ^ network_addr[4] ^ network_addr[5] ^ network_addr[6] ^ network_addr[7] ^ network_addr[8];
-
- 		return x & (NAT25_HASH_SIZE - 1);
--	} else if (networkAddr[0] == NAT25_IPV6) {
-+	} else if (network_addr[0] == NAT25_IPV6) {
- 		unsigned long x;
-
--		x = networkAddr[1] ^ networkAddr[2] ^ networkAddr[3] ^ networkAddr[4] ^ networkAddr[5] ^
--			networkAddr[6] ^ networkAddr[7] ^ networkAddr[8] ^ networkAddr[9] ^ networkAddr[10] ^
--			networkAddr[11] ^ networkAddr[12] ^ networkAddr[13] ^ networkAddr[14] ^ networkAddr[15] ^
--			networkAddr[16];
-+		x = network_addr[1] ^ network_addr[2] ^ network_addr[3] ^ network_addr[4] ^ network_addr[5] ^
-+			network_addr[6] ^ network_addr[7] ^ network_addr[8] ^ network_addr[9] ^ network_addr[10] ^
-+			network_addr[11] ^ network_addr[12] ^ network_addr[13] ^ network_addr[14] ^ network_addr[15] ^
-+			network_addr[16];
-
- 		return x & (NAT25_HASH_SIZE - 1);
- 	} else {
-@@ -241,7 +241,7 @@ static int __nat25_network_hash(unsigned char *networkAddr)
- 		int i;
-
- 		for (i = 0; i < MAX_NETWORK_ADDR_LEN; i++)
--			x ^= networkAddr[i];
-+			x ^= network_addr[i];
-
- 		return x & (NAT25_HASH_SIZE - 1);
- 	}
-@@ -269,17 +269,17 @@ static void __network_hash_unlink(struct nat25_network_db_entry *ent)
- }
-
- static void __nat25_db_network_insert(struct adapter *priv,
--				unsigned char *macAddr, unsigned char *networkAddr)
-+				unsigned char *mac_addr, unsigned char *network_addr)
- {
- 	struct nat25_network_db_entry *db;
- 	int hash;
-
- 	spin_lock_bh(&priv->br_ext_lock);
--	hash = __nat25_network_hash(networkAddr);
-+	hash = __nat25_network_hash(network_addr);
- 	db = priv->nethash[hash];
- 	while (db) {
--		if (!memcmp(db->networkAddr, networkAddr, MAX_NETWORK_ADDR_LEN)) {
--			memcpy(db->macAddr, macAddr, ETH_ALEN);
-+		if (!memcmp(db->networkAddr, network_addr, MAX_NETWORK_ADDR_LEN)) {
-+			memcpy(db->macAddr, mac_addr, ETH_ALEN);
- 			db->ageing_timer = jiffies;
- 			spin_unlock_bh(&priv->br_ext_lock);
- 			return;
-@@ -291,8 +291,8 @@ static void __nat25_db_network_insert(struct adapter *priv,
- 		spin_unlock_bh(&priv->br_ext_lock);
- 		return;
- 	}
--	memcpy(db->networkAddr, networkAddr, MAX_NETWORK_ADDR_LEN);
--	memcpy(db->macAddr, macAddr, ETH_ALEN);
-+	memcpy(db->networkAddr, network_addr, MAX_NETWORK_ADDR_LEN);
-+	memcpy(db->macAddr, mac_addr, ETH_ALEN);
- 	atomic_set(&db->use_count, 1);
- 	db->ageing_timer = jiffies;
-
-@@ -366,7 +366,7 @@ void nat25_db_expire(struct adapter *priv)
- int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
- {
- 	unsigned short protocol;
--	unsigned char networkAddr[MAX_NETWORK_ADDR_LEN];
-+	unsigned char network_addr[MAX_NETWORK_ADDR_LEN];
- 	unsigned int tmp;
-
- 	if (!skb)
-@@ -395,9 +395,9 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
- 			if (iph->saddr == 0)
- 				return 0;
- 			tmp = be32_to_cpu(iph->saddr);
--			__nat25_generate_ipv4_network_addr(networkAddr, &tmp);
-+			__nat25_generate_ipv4_network_addr(network_addr, &tmp);
- 			/* record source IP address and , source mac address into db */
--			__nat25_db_network_insert(priv, skb->data + ETH_ALEN, networkAddr);
-+			__nat25_db_network_insert(priv, skb->data + ETH_ALEN, network_addr);
- 			return 0;
- 		default:
- 			return -1;
-@@ -421,8 +421,8 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
- 			memcpy(arp_ptr, GET_MY_HWADDR(priv), ETH_ALEN);
- 			arp_ptr += arp->ar_hln;
- 			sender = (unsigned int *)arp_ptr;
--			__nat25_generate_ipv4_network_addr(networkAddr, sender);
--			__nat25_db_network_insert(priv, skb->data + ETH_ALEN, networkAddr);
-+			__nat25_generate_ipv4_network_addr(network_addr, sender);
-+			__nat25_db_network_insert(priv, skb->data + ETH_ALEN, network_addr);
- 			return 0;
- 		default:
- 			return -1;
-@@ -495,9 +495,9 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
- 					return -1;
- 				}
- 			} else {	/*  session phase */
--				__nat25_generate_pppoe_network_addr(networkAddr, skb->data, &ph->sid);
-+				__nat25_generate_pppoe_network_addr(network_addr, skb->data, &ph->sid);
-
--				__nat25_db_network_insert(priv, skb->data + ETH_ALEN, networkAddr);
-+				__nat25_db_network_insert(priv, skb->data + ETH_ALEN, network_addr);
-
- 				if (!priv->ethBrExtInfo.addPPPoETag &&
- 				    priv->pppoe_connection_in_progress &&
-@@ -548,8 +548,8 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
- 			return -1;
- 		case NAT25_INSERT:
- 			if (memcmp(&iph->saddr, "\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0", 16)) {
--				__nat25_generate_ipv6_network_addr(networkAddr, (unsigned int *)&iph->saddr);
--				__nat25_db_network_insert(priv, skb->data + ETH_ALEN, networkAddr);
-+				__nat25_generate_ipv6_network_addr(network_addr, (unsigned int *)&iph->saddr);
-+				__nat25_db_network_insert(priv, skb->data + ETH_ALEN, network_addr);
-
- 				if (iph->nexthdr == IPPROTO_ICMPV6 &&
- 						skb->len > (ETH_HLEN +  sizeof(*iph) + 4)) {
-@@ -639,17 +639,17 @@ void dhcp_flag_bcast(struct adapter *priv, struct sk_buff *skb)
- 	}
- }
-
--void *scdb_findEntry(struct adapter *priv, unsigned char *ipAddr)
-+void *scdb_findEntry(struct adapter *priv, unsigned char *ip_addr)
- {
--	unsigned char networkAddr[MAX_NETWORK_ADDR_LEN];
-+	unsigned char network_addr[MAX_NETWORK_ADDR_LEN];
- 	struct nat25_network_db_entry *db;
- 	int hash;
-
--	__nat25_generate_ipv4_network_addr(networkAddr, (unsigned int *)ipAddr);
--	hash = __nat25_network_hash(networkAddr);
-+	__nat25_generate_ipv4_network_addr(network_addr, (unsigned int *)ip_addr);
-+	hash = __nat25_network_hash(network_addr);
- 	db = priv->nethash[hash];
- 	while (db) {
--		if (!memcmp(db->networkAddr, networkAddr, MAX_NETWORK_ADDR_LEN)) {
-+		if (!memcmp(db->networkAddr, network_addr, MAX_NETWORK_ADDR_LEN)) {
- 			return (void *)db;
- 		}
-
---
-2.30.2
-
-
-
+Yours,
+Linus Walleij
