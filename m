@@ -2,137 +2,313 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1F93606365
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 16:43:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1282C60636A
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 16:44:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230076AbiJTOnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 10:43:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35270 "EHLO
+        id S230058AbiJTOoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 10:44:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229972AbiJTOm7 (ORCPT
+        with ESMTP id S229707AbiJTOoG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 10:42:59 -0400
-Received: from mail.savoirfairelinux.com (mail.savoirfairelinux.com [208.88.110.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58169159974;
-        Thu, 20 Oct 2022 07:42:53 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.savoirfairelinux.com (Postfix) with ESMTP id 5C8199C062D;
-        Thu, 20 Oct 2022 10:42:51 -0400 (EDT)
-Received: from mail.savoirfairelinux.com ([127.0.0.1])
-        by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id 09Qn1BFO0JbC; Thu, 20 Oct 2022 10:42:50 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.savoirfairelinux.com (Postfix) with ESMTP id C28599C066D;
-        Thu, 20 Oct 2022 10:42:50 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.savoirfairelinux.com C28599C066D
+        Thu, 20 Oct 2022 10:44:06 -0400
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F7E91F3
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 07:44:05 -0700 (PDT)
+Received: by mail-io1-xd2e.google.com with SMTP id d142so17343762iof.7
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 07:44:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=savoirfairelinux.com; s=DFC430D2-D198-11EC-948E-34200CB392D2;
-        t=1666276970; bh=312VwPoO9EN6ems018dwBc7eHCw2XRv7lNPATT84L6U=;
-        h=Message-ID:From:To:Date:MIME-Version;
-        b=pvZBKw1SMFL5/bl/2AFwJ3RcQpXpSgrd7hh7fQwalweyqDY5GcaltUVTpMwpvB8kI
-         U3MbgW+y9CMCqSw2ZFZ7sP3byKy+eNqWzU4SWhFzS7KqKOhTShz+LbHtaf3EB3S4rk
-         vGdyQZ8xeMek6EE5DbkCOtZJCawOCsuAcONJgDysEyJV/FbBLkb0CsQxL+xpP6/FO4
-         iSd+xwMNNuFpZHygpNdOvk74RluD+OTA9lCzoSj8EGfAyH6Tzu3S3uAhGcwmOGCRai
-         fCTvQJLhydWsno37T0nhwWAsY4rrJQRaXM84IecUhoDp8qRH2WDPXwAKjVtAMBohJq
-         MwqGNeNtxYRnA==
-X-Virus-Scanned: amavisd-new at mail.savoirfairelinux.com
-Received: from mail.savoirfairelinux.com ([127.0.0.1])
-        by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 5wD4LvTvv3NF; Thu, 20 Oct 2022 10:42:50 -0400 (EDT)
-Received: from [192.168.48.98] (unknown [192.168.51.254])
-        by mail.savoirfairelinux.com (Postfix) with ESMTPSA id 92AB79C062D;
-        Thu, 20 Oct 2022 10:42:50 -0400 (EDT)
-Message-ID: <0f29aa0297d6fc5daa86f81925754c1f6d3f679c.camel@savoirfairelinux.com>
-Subject: Re: [PATCH] mmc: add TS7800 FPGA based MMC controller driver
-From:   firas ashkar <firas.ashkar@savoirfairelinux.com>
-To:     Arnd Bergmann <arnd@arndb.de>, alex@digriz.org.uk,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-mmc@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Thu, 20 Oct 2022 10:42:50 -0400
-In-Reply-To: <a577dfcf-5a0a-4568-8f6d-872a8324dfcc@app.fastmail.com>
-References: <20221018133800.10636-1-firas.ashkar@savoirfairelinux.com>
-         <a577dfcf-5a0a-4568-8f6d-872a8324dfcc@app.fastmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.1-0ubuntu1 
+        d=joelfernandes.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=nJwHLcf/0f+WA6hGh9SbH2k5UqoC7BdA4gDyaTGmHNs=;
+        b=ZJRb2+s7ZG4O55mws3aWVZBf0D409xIPfEQiGx+SxEZ6eG8TpIeJz39MbCouB5kCbV
+         b6Ducx3J1y2gY9RBLgAX1lAJTdhEisWbtzFSSdlUZAOlWk3me5xXQq13FPoVwurF/vsL
+         YjfBkYRN7an1n1yHnPLWfa1EKfX9E69gdg2/4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nJwHLcf/0f+WA6hGh9SbH2k5UqoC7BdA4gDyaTGmHNs=;
+        b=F03bcV4lXo38AnKCZ0Yvgf6uduQ27ne0pK0gcxWyCZT/NAm15TvFoKAfAHpDq0IXrV
+         KaMzhf9IUsEX+kDtex4w8G5W6TELXEZiCmuYP2Xcvkhge1JrrgxpnqHbyGmy6CPeONjo
+         caw2P21P5j6onvlPNv/bzV8qpIFI6XeRKQkv4EOGwlFKjhMfncXKvRhVBc401k+i6BZI
+         Hs2fuzzDK3YCghkxmuUVJKzzwziEHzRDHYLAu8jFSNjt+iJbVgN1z8N2uRSVw8rG7ibW
+         gPGT7HERbcAgGAUjnmEbhuf1hyFDeGBWv8ejv8fZqsPrdohI6GUVv7Y67Yr5C+FDngIG
+         qXlQ==
+X-Gm-Message-State: ACrzQf2A1RgXEZYad+6fi+qz2l57dqFtIsGPHWKFrg9zlFlv4BRkHnCy
+        Z/9Q2BHkdfgFelAxHrgfnAMxHcbAuhcS9heewFhGe8r4KhQrzA==
+X-Google-Smtp-Source: AMsMyM4p2kg0NqfSTMS7kSeoz9mtc6tix8Id8QNnNIN8YZLt3n4/zUH4ZT2nXgYAfK82WL+JEUYC9iKsx4v9dmRURMM=
+X-Received: by 2002:a05:6602:26d5:b0:68a:db5d:2923 with SMTP id
+ g21-20020a05660226d500b0068adb5d2923mr10269264ioo.175.1666277044260; Thu, 20
+ Oct 2022 07:44:04 -0700 (PDT)
 MIME-Version: 1.0
+References: <20221019200137.70343645@gandalf.local.home>
+In-Reply-To: <20221019200137.70343645@gandalf.local.home>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Thu, 20 Oct 2022 10:43:53 -0400
+Message-ID: <CAEXW_YQ-fr7fG-cqHuaKVD8neV+avkwrGf_f_XPG33qzO97Wog@mail.gmail.com>
+Subject: Re: [PATCH] tracing: Add trace_trigger kernel command line option
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-thank you for the comments, pls check below for replies and acks=20
---=20
-Firas Ashkar
-Developpeur Syst=C3=A8me Embarqu=C3=A9
+Hi Steven,
 
-savoirfairelinux.com | Montr=C3=A9al, Qu=C3=A9bec
+On Wed, Oct 19, 2022 at 8:01 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+>
+> Allow triggers to be enabled at kernel boot up. For example:
+>
+>   trace_trigger="sched_switch.stacktrace if prev_state == 2"
+>
+> The above will enable the stacktrace trigger on top of the sched_switch
+> event and only trigger if its prev_state is 2 (TASK_UNINTERRUPTIBLE). Then
+> at boot up, a stacktrace will trigger and be recorded in the tracing ring
+> buffer every time the sched_switch happens where the previous state is
+> TASK_INTERRUPTIBLE.
+>
+> As this calls into tracepoint logic during very early boot (before
+> interrupts are enabled), a check has to be done to see if early boot
+> interrupts are still disabled, and if so, avoid any call to RCU
+> synchronization, as that will enable interrupts and cause boot up issues.
+>
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> ---
 
-T=C3=A9l.: +1 514 276 5468 ext. 118
+rest_init() -> rcu_scheduler_starting() sets RCU_SCHEDULER_INIT
+
+start_kernel() disables interrupts and does the dance you mentioned,
+while setting that early_ flag. start_kernel() is called from arch
+code.
+
+From your crash, the trace trigger is happening before the early_ boot
+flag is set to true.
+rcu_blocking_is_gp() should return true at the point your trigger
+fires because RCU_SCHEDULER_INACTIVE is still set.
+
+So I would expect your synchronize_rcu() to not do anything.
+
+There's comments in rcu_blocking_is_gp() like so:
+   * During early boot, any blocking grace-period wait automatically
+   * implies a grace period.
+
+So it should be returning straight from here. I wonder where/why it's
+re-enabling interrupts for you. What does rcu_blocking_is_gp() return
+if you can print that, at the time of the crash?
+
+Cheers,
+
+ - J
 
 
-On Tue, 2022-10-18 at 21:06 +0200, Arnd Bergmann wrote:
-> On Tue, Oct 18, 2022, at 15:38, Firas Ashkar wrote:
-> > add standard mmc/host controller driver for TS-7800v1, instead of
-> > the
-> > original block based 'tssdcore' driver provided by EmbeddedTS
-> > linux-2.6.x
-> > code base.
->=20
-> I'm looking at this driver since Marc pointed me to your
-> work on the platform and I noticed this post as well.
-> Not doing a full review, but I'm still pointing out a few
-> issue that caught my eye.
->=20
-> > +
-> > +#define DRIVER_NAME "ts7800v1_sdmmc"
->=20
-> Maybe drop this macro and just use the string directly.
-This define macro used in multiple locations
->=20
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (IS_ERR_OR_NULL(pslot->rw=
-_dma_buf)) {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0dev_warn(mmc_dev(ts_sdmmc_host->mmc_host),
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 "%s|%=
-d - Error, No allocated DMA read
-> > buffer %ld\n",
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 __fun=
-c__, __LINE__, PTR_ERR(pslot-
-> > >rw_dma_buf));
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0*data_error =3D ret =3D -ENOMEM;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0goto done;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0dat0_sent_crc16_buf =3D kzal=
-loc(sizeof(u16), GFP_KERNEL);
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (IS_ERR_OR_NULL(dat0_sent=
-_crc16_buf)) {
->=20
-> You should never need IS_ERR_OR_NULL, as all interfaces
-> in the kernel are supposed to either return an error code
-> or return NULL on error. Please fix the error handling
-> for this throughout the driver.
-ack
->=20
-> > + spin_lock_bh(&ts_sdmmc_host->bh_lock);
->=20
-> I'm a bit confused by your locking. Why do you use
-> spin_lock_bh() instead of a normal spin_lock() or
-> a spin_lock_irq()? I don't see any use of softirqs
-> (typically tasklets and timers) in this driver, so
-> disabling softirqs in the critical section should
-> not change anything.
-ack
->=20
-> =C2=A0=C2=A0=C2=A0=C2=A0 Arnd
+>  .../admin-guide/kernel-parameters.txt         | 19 ++++++
+>  include/linux/tracepoint.h                    |  4 ++
+>  kernel/trace/trace.c                          |  3 +-
+>  kernel/trace/trace_events.c                   | 63 ++++++++++++++++++-
+>  kernel/tracepoint.c                           |  6 ++
+>  5 files changed, 92 insertions(+), 3 deletions(-)
+>
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index a465d5242774..ccf91a4bf113 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -6257,6 +6257,25 @@
+>                         See also Documentation/trace/ftrace.rst "trace options"
+>                         section.
+>
+> +       trace_trigger=[trigger-list]
+> +                       [FTRACE] Add a event trigger on specific events.
+> +                       Set a trigger on top of a specific event, with an optional
+> +                       filter.
+> +
+> +                       The format is is "trace_trigger=<event>.<trigger>[ if <filter>],..."
+> +                       Where more than one trigger may be specified that are comma deliminated.
+> +
+> +                       For example:
+> +
+> +                         trace_trigger="sched_switch.stacktrace if prev_state == 2"
+> +
+> +                       The above will enable the "stacktrace" trigger on the "sched_switch"
+> +                       event but only trigger it if the "prev_state" of the "sched_switch"
+> +                       event is "2" (TASK_UNINTERUPTIBLE).
+> +
+> +                       See also "Event triggers" in Documentation/trace/events.rst
+> +
+> +
+>         traceoff_on_warning
+>                         [FTRACE] enable this option to disable tracing when a
+>                         warning is hit. This turns off "tracing_on". Tracing can
+> diff --git a/include/linux/tracepoint.h b/include/linux/tracepoint.h
+> index 4b33b95eb8be..a5c6b5772897 100644
+> --- a/include/linux/tracepoint.h
+> +++ b/include/linux/tracepoint.h
+> @@ -90,6 +90,10 @@ int unregister_tracepoint_module_notifier(struct notifier_block *nb)
+>  #ifdef CONFIG_TRACEPOINTS
+>  static inline void tracepoint_synchronize_unregister(void)
+>  {
+> +       /* Early updates do not need synchronization */
+> +       if (early_boot_irqs_disabled)
+> +               return;
+> +
+>         synchronize_srcu(&tracepoint_srcu);
+>         synchronize_rcu();
+>  }
+> diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+> index 47a44b055a1d..c03fd7037add 100644
+> --- a/kernel/trace/trace.c
+> +++ b/kernel/trace/trace.c
+> @@ -2749,7 +2749,8 @@ void trace_buffered_event_disable(void)
+>         preempt_enable();
+>
+>         /* Wait for all current users to finish */
+> -       synchronize_rcu();
+> +       if (!early_boot_irqs_disabled)
+> +               synchronize_rcu();
+>
+>         for_each_tracing_cpu(cpu) {
+>                 free_page((unsigned long)per_cpu(trace_buffered_event, cpu));
+> diff --git a/kernel/trace/trace_events.c b/kernel/trace/trace_events.c
+> index 0356cae0cf74..06554939252c 100644
+> --- a/kernel/trace/trace_events.c
+> +++ b/kernel/trace/trace_events.c
+> @@ -2796,6 +2796,44 @@ trace_create_new_event(struct trace_event_call *call,
+>         return file;
+>  }
+>
+> +#ifdef CONFIG_HIST_TRIGGERS
+> +#define MAX_BOOT_TRIGGERS 32
+> +
+> +static struct boot_triggers {
+> +       const char              *event;
+> +       char                    *trigger;
+> +} bootup_triggers[MAX_BOOT_TRIGGERS];
+> +
+> +static char bootup_trigger_buf[COMMAND_LINE_SIZE];
+> +static int nr_boot_triggers;
+> +
+> +static __init int setup_trace_triggers(char *str)
+> +{
+> +       char *trigger;
+> +       char *buf;
+> +       int i;
+> +
+> +       strlcpy(bootup_trigger_buf, str, COMMAND_LINE_SIZE);
+> +       ring_buffer_expanded = true;
+> +       disable_tracing_selftest("running event triggers");
+> +
+> +       buf = bootup_trigger_buf;
+> +       for (i = 0; i < MAX_BOOT_TRIGGERS; i++) {
+> +               trigger = strsep(&buf, ",");
+> +               if (!trigger)
+> +                       break;
+> +               bootup_triggers[i].event = strsep(&trigger, ".");
+> +               bootup_triggers[i].trigger = strsep(&trigger, ".");
+> +               if (!bootup_triggers[i].trigger)
+> +                       break;
+> +       }
+> +
+> +       nr_boot_triggers = i;
+> +       return 1;
+> +}
+> +__setup("trace_trigger=", setup_trace_triggers);
+> +#endif
+> +
+>  /* Add an event to a trace directory */
+>  static int
+>  __trace_add_new_event(struct trace_event_call *call, struct trace_array *tr)
+> @@ -2822,12 +2860,32 @@ __trace_early_add_new_event(struct trace_event_call *call,
+>                             struct trace_array *tr)
+>  {
+>         struct trace_event_file *file;
+> +       int ret;
+> +       int i;
+>
+>         file = trace_create_new_event(call, tr);
+>         if (!file)
+>                 return -ENOMEM;
+>
+> -       return event_define_fields(call);
+> +       ret = event_define_fields(call);
+> +       if (ret)
+> +               return ret;
+> +
+> +#ifdef CONFIG_HIST_TRIGGERS
+> +       for (i = 0; i < nr_boot_triggers; i++) {
+> +               if (strcmp(trace_event_name(call), bootup_triggers[i].event))
+> +                       continue;
+> +               mutex_lock(&event_mutex);
+> +               ret = trigger_process_regex(file, bootup_triggers[i].trigger);
+> +               mutex_unlock(&event_mutex);
+> +               if (ret)
+> +                       pr_err("Failed to register trigger '%s' on event %s\n",
+> +                              bootup_triggers[i].trigger,
+> +                              bootup_triggers[i].event);
+> +       }
+> +#endif
+> +
+> +       return 0;
+>  }
+>
+>  struct ftrace_module_file_ops;
+> @@ -3726,6 +3784,8 @@ static __init int event_trace_enable(void)
+>                         list_add(&call->list, &ftrace_events);
+>         }
+>
+> +       register_trigger_cmds();
+> +
+>         /*
+>          * We need the top trace array to have a working set of trace
+>          * points at early init, before the debug files and directories
+> @@ -3740,7 +3800,6 @@ static __init int event_trace_enable(void)
+>
+>         register_event_cmds();
+>
+> -       register_trigger_cmds();
+>
+>         return 0;
+>  }
+> diff --git a/kernel/tracepoint.c b/kernel/tracepoint.c
+> index f23144af5743..f6e4ee1e40b3 100644
+> --- a/kernel/tracepoint.c
+> +++ b/kernel/tracepoint.c
+> @@ -48,6 +48,9 @@ static void tp_rcu_get_state(enum tp_transition_sync sync)
+>  {
+>         struct tp_transition_snapshot *snapshot = &tp_transition_snapshot[sync];
+>
+> +       if (early_boot_irqs_disabled)
+> +               return;
+> +
+>         /* Keep the latest get_state snapshot. */
+>         snapshot->rcu = get_state_synchronize_rcu();
+>         snapshot->srcu = start_poll_synchronize_srcu(&tracepoint_srcu);
+> @@ -58,6 +61,9 @@ static void tp_rcu_cond_sync(enum tp_transition_sync sync)
+>  {
+>         struct tp_transition_snapshot *snapshot = &tp_transition_snapshot[sync];
+>
+> +       if (early_boot_irqs_disabled)
+> +               return;
+> +
+>         if (!snapshot->ongoing)
+>                 return;
+>         cond_synchronize_rcu(snapshot->rcu);
+> --
+> 2.35.1
+>
