@@ -2,163 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BE206063CA
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 17:05:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0D2D6063CB
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 17:07:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbiJTPFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 11:05:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59094 "EHLO
+        id S229992AbiJTPHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 11:07:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiJTPFk (ORCPT
+        with ESMTP id S229810AbiJTPHC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 11:05:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E97D2E318A
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 08:05:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 20 Oct 2022 11:07:02 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DE541BB96F
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 08:06:59 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8630461BAA
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 15:05:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D86BC433C1;
-        Thu, 20 Oct 2022 15:05:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666278335;
-        bh=kvXoX4ijYxSANkduYlYoFnTVUFQxEl6TiWfaboeuW5c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OJf7hTdmOGwP/n8wMK6FrwqmUPkKjfhdkAyJIt2/KThiuUVWGbpGFkcHIDZV/S6kp
-         Rp4hN6JXGV7vMGk72rPZC1jDUYT/uz2WFvORESfuCOxeNXMh+lXM7dMyxiK32xjmof
-         rH7388WBQ5oiXkuCGC7Duf+JCcaxdlOE/a7CQTcQ=
-Date:   Thu, 20 Oct 2022 17:05:32 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Deepak R Varma <drv@mailo.com>
-Cc:     Julia Lawall <julia.lawall@inria.fr>, outreachy@lists.linux.dev,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kumarpraveen@linux.microsoft.com, saurabh.truth@gmail.com
-Subject: Re: [PATCH v4 2/2] staging: most: dim2: correct misleading struct
- type name
-Message-ID: <Y1FjvHkNI9z1D7pp@kroah.com>
-References: <cover.1666208065.git.drv@mailo.com>
- <6b772a1ac06ae3b0d63e198e7238c1590b14703a.1666208065.git.drv@mailo.com>
- <alpine.DEB.2.22.394.2210192208290.3068@hadrien>
- <Y1BeZYBf/xsW8F4O@debian-BULLSEYE-live-builder-AMD64>
- <Y1E1kv6YSmxVzjkf@debian-BULLSEYE-live-builder-AMD64>
- <404cc67c-efd6-4a70-c3ca-7958db21bcb@inria.fr>
- <Y1FFbB8BWi1IHYgB@debian-BULLSEYE-live-builder-AMD64>
- <Y1FjlInI92hqHF6W@kroah.com>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 85BE22295F;
+        Thu, 20 Oct 2022 15:06:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1666278417; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=H9kD/H/leKyl4VkvwRs3GIyaKPOFO8lA1R3qMpLYsVw=;
+        b=DHIwMul6gD4J3vnQypXyAniGcYTN5gjoWt2Mxyx0NwJo/BNBaGJnlvbVF1Q3BfAH5x3MjE
+        9yAQ7eJ3VUUBVU/xEBv9XSFlmqX1EH4SoaM509fatc/N1JBDQs1hpGkcz6Rf1zik+aVx6f
+        PqES4wc1XPZNuM38EUUv920g1QcYPDo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1666278417;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=H9kD/H/leKyl4VkvwRs3GIyaKPOFO8lA1R3qMpLYsVw=;
+        b=iJbkLeb0Ajd59e9D7YTXkqU3TdCkwRriNLnT+ojzZcFPFW8xNM085LlX3BlX3Lc9vvZ+3k
+        vjH+gIylyK9PShCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4F5C513AF5;
+        Thu, 20 Oct 2022 15:06:57 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Z/wgERFkUWMJegAAMHmgww
+        (envelope-from <pvorel@suse.cz>); Thu, 20 Oct 2022 15:06:57 +0000
+From:   Petr Vorel <pvorel@suse.cz>
+To:     linux-kernel@vger.kernel.org
+Cc:     Petr Vorel <pvorel@suse.cz>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Torsten Hilbrich <torsten.hilbrich@secunet.com>
+Subject: [PATCH 1/1] kernel/utsname_sysctl.c: Add missing enum uts_proc value
+Date:   Thu, 20 Oct 2022 17:06:45 +0200
+Message-Id: <20221020150645.11719-1-pvorel@suse.cz>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y1FjlInI92hqHF6W@kroah.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 05:04:52PM +0200, Greg KH wrote:
-> On Thu, Oct 20, 2022 at 06:26:12PM +0530, Deepak R Varma wrote:
-> > On Thu, Oct 20, 2022 at 02:06:41PM +0200, Julia Lawall wrote:
-> > >
-> > >
-> > > On Thu, 20 Oct 2022, Deepak R Varma wrote:
-> > >
-> > > > On Thu, Oct 20, 2022 at 02:00:29AM +0530, Deepak R Varma wrote:
-> > > > > On Wed, Oct 19, 2022 at 10:08:53PM +0200, Julia Lawall wrote:
-> > > > > >
-> > > > > >
-> > > > > > On Thu, 20 Oct 2022, Deepak R Varma wrote:
-> > > > > >
-> > > > > > > Correct misleading struct type name dim_ch_state_t to dim_ch_state
-> > > > > > > since this not a typedef but a normal structure declaration.
-> > > > > > >
-> > > > > > > Suggested-by: Julia Lawall <julia.lawall@inria.fr>
-> > > > > > > Signed-off-by: Deepak R Varma <drv@mailo.com>
-> > > > > > > ---
-> > > > > > >
-> > > > > > > Changes in v4:
-> > > > > > >    1. Correct patch subject and log message. Use struct type name instead of
-> > > > > > >       variable name for the change description. Feedback from julia.lawall@inria.fr
-> > > > > > >
-> > > > > > > Changes in v3:
-> > > > > > >    1. Patch introduced in the patch set
-> > > > > > >
-> > > > > > >  drivers/staging/most/dim2/dim2.c | 2 +-
-> > > > > > >  drivers/staging/most/dim2/hal.c  | 4 ++--
-> > > > > > >  drivers/staging/most/dim2/hal.h  | 6 +++---
-> > > > > > >  3 files changed, 6 insertions(+), 6 deletions(-)
-> > > > > > >
-> > > > > > > diff --git a/drivers/staging/most/dim2/dim2.c b/drivers/staging/most/dim2/dim2.c
-> > > > > > > index 4c1f27898a29..a69a61a69283 100644
-> > > > > > > --- a/drivers/staging/most/dim2/dim2.c
-> > > > > > > +++ b/drivers/staging/most/dim2/dim2.c
-> > > > > > > @@ -161,7 +161,7 @@ static int try_start_dim_transfer(struct hdm_channel *hdm_ch)
-> > > > > > >  	struct list_head *head = &hdm_ch->pending_list;
-> > > > > > >  	struct mbo *mbo;
-> > > > > > >  	unsigned long flags;
-> > > > > > > -	struct dim_ch_state_t st;
-> > > > > > > +	struct dim_ch_state st;
-> > > > > >
-> > > > > > Is there another use in service_done_flag?
-> > > > >
-> > > > > Hi,
-> > > > > I did not understand your question fully. This is from a different function
-> > > > > try_start_dim_transfer where the variable st is used down the line in the
-> > > > > execution. This time the channel state is retrieved by calling
-> > > > > dim_get_channel_state function. The state is simply computed and set. Should I
-> > > > > improve this as well?
-> > > > >
-> > > > > If you are asking something different, could you please elaborate?
-> > > >
-> > > > Hi Julia,
-> > > > Can you please review and comment on my response?
-> > >
-> > > In my kernel there is an occurrence of the type name in service_done_flag.
-> > > But I have the mainline, not Greg's staging tree, so there could be some
-> > > differences.
-> > >
-> > > When I do git grep dim_ch_state_t, I get two occurrences in
-> > > drivers/staging/most/dim2/dim2.c
-> > 
-> > Okay. Still unclear. Following snip is what I see in my local staging-testing branch.
-> > 
-> > <snip>
-> > 	drv@debian:~/git/kernels/staging$ git grep dim_ch_state_t
-> > 	drivers/staging/most/dim2/dim2.c:       struct dim_ch_state_t st;
-> > 	drivers/staging/most/dim2/dim2.c:       struct dim_ch_state_t st;
-> > 	drivers/staging/most/dim2/hal.c:struct dim_ch_state_t *dim_get_channel_state(struct dim_channel *ch,
-> > 	drivers/staging/most/dim2/hal.c:                                             struct dim_ch_state_t *state_ptr)
-> > 	drivers/staging/most/dim2/hal.h:struct dim_ch_state_t {
-> > 	drivers/staging/most/dim2/hal.h:struct dim_ch_state_t *dim_get_channel_state(struct dim_channel *ch,
-> > 	drivers/staging/most/dim2/hal.h:                                             struct dim_ch_state_t *state_ptr);
-> > 	drv@debian:~/git/kernels/staging$
-> > </snip>
-> > 
-> > Does that help?
-> 
-> Not at all, as you did not test with your change applied:
-> 
->   CC [M]  drivers/gpu/drm/vmwgfx/vmwgfx_drv.o
-> drivers/staging/most/dim2/dim2.c: In function ‘service_done_flag’:
-> drivers/staging/most/dim2/dim2.c:262:31: error: storage size of ‘st’ isn’t known
->   262 |         struct dim_ch_state_t st;
->       |                               ^~
-> drivers/staging/most/dim2/dim2.c:262:31: error: unused variable ‘st’ [-Werror=unused-variable]
-> 
-> :(
-> 
+bfca3dd3d068 added new struct ctl_table uts_kern_table[], but not new
+enum uts_proc value. It broke the notification mechanism between the
+sethostname syscall and the pollers of /proc/sys/kernel/hostname.
 
-Ah, that was because I rejected patch 1/2 here. So this one will not
-work as-is, my fault.
+The table uts_kern_table is addressed within uts_proc_notify by the enum
+value, that's why new enum value is needed.
 
-Please fix up and resend only this one if you still want to see it
-applied.
+Fixes: bfca3dd3d068 ("kernel/utsname_sysctl.c: print kernel arch")
 
-thanks,
+Reported-by: Torsten Hilbrich <torsten.hilbrich@secunet.com>
+Signed-off-by: Petr Vorel <pvorel@suse.cz>
+---
+Hi all,
 
-greg k-h
+I'm sorry to introduce a regression.
+
+Torsten Hilbrich reported [1] that hostnamectl set-hostname foo
+which does poll() got affected by bfca3dd3d068. He also wrote a
+reproducer [2] which does not require systemd, I tested the patch on
+dracut initramfs.
+
+Kind regards,
+Petr
+
+[1] https://lore.kernel.org/lkml/0c2b92a6-0f25-9538-178f-eee3b06da23f@secunet.com/
+[2] https://lore.kernel.org/lkml/ec9e00b9-8b47-7918-c39b-8b0069003169@secunet.com/2-hostname-poll-test.c
+
+ include/linux/utsname.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/include/linux/utsname.h b/include/linux/utsname.h
+index 2b1737c9b244..bf7613ba412b 100644
+--- a/include/linux/utsname.h
++++ b/include/linux/utsname.h
+@@ -10,6 +10,7 @@
+ #include <uapi/linux/utsname.h>
+ 
+ enum uts_proc {
++	UTS_PROC_ARCH,
+ 	UTS_PROC_OSTYPE,
+ 	UTS_PROC_OSRELEASE,
+ 	UTS_PROC_VERSION,
+-- 
+2.38.0
+
