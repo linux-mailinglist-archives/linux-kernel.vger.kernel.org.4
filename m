@@ -2,173 +2,469 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 276A1606631
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 18:47:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9907E606635
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 18:48:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230226AbiJTQrr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 12:47:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46968 "EHLO
+        id S229648AbiJTQr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 12:47:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230162AbiJTQri (ORCPT
+        with ESMTP id S230182AbiJTQrm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 12:47:38 -0400
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2073.outbound.protection.outlook.com [40.107.101.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567EE1C2F0F
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 09:47:33 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EQybIGZcC4/CvcZ9KIAQ9Na4mcHdbRpxZXiXCC3s3nETG3Lo0rpgaCHUTQv+s5iUad3VkQkI1QtmBJHmhpKJQWJasOUBGCCjrUYoCU1EZ0lZjp/X63x9pLsqT0JjNyAyfOAbSe71C97q1+He0plSJdG6bW8xffI4ziF16WJJDnq0TCgjjy97tRLZbYpSo1/aAdsBK2sULdpt72/QC0H4YIRD2lM68ngDysjdqfcyJQffvPVvkqxJkHUw3V7DYRO/SrNHB1ptwykUsU0UsdOxAP/bkU8FnIpEsBTNz7MZCKGhn/ixmr1abWjN0JTe74Gve8Iv6UoIYU2hFHVDqqeEAQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+02KaacGz4xY6GOVRQ98K/MX3q9mehMLCejg1kTNOqQ=;
- b=RRmmT6688zrR/gAmheosP3oZ1yiIGLZ2Vm29lcL0jXPf5sqVBUmjfITtzAaia56aAVOCt9fnTqrYLbh9PyvHXRkmzvM0m8gRpyXRp1UG/EvDv5hUmVaF7RXpt79V3TZwZxywsPJQTi1KzDHSgGbRuU3aUZCI6aYLWdbql/av71xvTiH/CcpefvfcX1ZkjpjQ5OTPvvg2LuiR3AO6UcmNmQMREgDJzO/bHeXmPUOw/Up4yqE8FssEh0vZF5FExolP+LR/dqIZvgNsMmzJr//OrR2MzoxWYKMnUoqhY7kPlrjxoc0nez8en/JrKFTahSXkgJhgapThccKWAchvD6dHPA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+02KaacGz4xY6GOVRQ98K/MX3q9mehMLCejg1kTNOqQ=;
- b=YpjqHM5DOTtlgn9MwtVfTTr52nwUVEuP7CxTtRowDgHeNxjapHPkR/3Xs+ctS1VauWoGUfLc7UogvhR15gRgvnxqxYg/XRFGkRl+onysUgWih4G5o9M/dOqv4z+DSdlqKg5RhDDsf9+n8cTdb7SZ6tCFBN6nCmoW4I32FWn2IjU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN9PR12MB5115.namprd12.prod.outlook.com (2603:10b6:408:118::14)
- by PH8PR12MB7253.namprd12.prod.outlook.com (2603:10b6:510:226::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.34; Thu, 20 Oct
- 2022 16:47:30 +0000
-Received: from BN9PR12MB5115.namprd12.prod.outlook.com
- ([fe80::f9a4:8620:8238:20e8]) by BN9PR12MB5115.namprd12.prod.outlook.com
- ([fe80::f9a4:8620:8238:20e8%6]) with mapi id 15.20.5723.034; Thu, 20 Oct 2022
- 16:47:30 +0000
-Message-ID: <fcc77463-10e7-7fd4-b675-7adcb13219ed@amd.com>
-Date:   Thu, 20 Oct 2022 12:47:28 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] drm/amdkfd: use vma_lookup() instead of find_vma()
-Content-Language: en-US
-To:     Deming Wang <wangdeming@inspur.com>, airlied@gmail.com,
-        daniel@ffwll.ch, alexander.deucher@amd.com,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20221007022651.4816-1-wangdeming@inspur.com>
-From:   Felix Kuehling <felix.kuehling@amd.com>
-In-Reply-To: <20221007022651.4816-1-wangdeming@inspur.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: YT3PR01CA0115.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:85::26) To BN9PR12MB5115.namprd12.prod.outlook.com
- (2603:10b6:408:118::14)
+        Thu, 20 Oct 2022 12:47:42 -0400
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ED1B1DB273;
+        Thu, 20 Oct 2022 09:47:38 -0700 (PDT)
+Received: by mail-io1-xd33.google.com with SMTP id 137so33655iou.9;
+        Thu, 20 Oct 2022 09:47:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1hja3ecI+y63g+N3+beyMUAJk1Z0DCQwjT33b1vzUxY=;
+        b=NzDcGvmhZIc/WXXz3+zpuV2vh3I/8NtP44+U1Br0rS5hKJAwbLiNb/BWToTde5HHzO
+         lm/Y85BiQfevMlUh8IragQKkgZds2R4ZCSJclOWmWjDS7rubA7Geoixv5bxel2YM0F6J
+         3zWw1XQg9dWH0SFuLdzZ5O/K985tsxMNzzYEMbrkrCKGcjxcy7Qs5XQc09EFG7DAHP+x
+         WlyjFLE+lUX/zQooB+iagDd+5HqdWlJa5f0dGZ0rVLAKP9O7fGU8m61nFVwE69Jypjed
+         UN1b1786IDqr8pXHr5EiMBbhRT+UXv5LAnKGSOzxkz46x00ZRO4xpGN8OoJOAVq+Ohc2
+         eZ5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1hja3ecI+y63g+N3+beyMUAJk1Z0DCQwjT33b1vzUxY=;
+        b=HIQ814JGN7FDFpeGqJIi0Fut16Fr/IzPCRagVmirUJkdKx5wVzHJJYoz+xZZZ/nnOH
+         8A3rhwjcS+49OTCL9C+6vKUxtNCrJsOvMGfXTCzom5EbqHaeRSn38BVi2ARWPTq6B5on
+         Nxc1RRNwH3k5+s2Oa8K700WsqwMZcJ8tb5TU4aZ4YtaAt9Ss6jbpizY2R2HTWjhj9+rg
+         ORXon8OyQtqINZPAcqUIRTbWBwsm7dSBH7pnS7gBuNFAmihSQ91C91HsZ9gvnqcOXlXk
+         vOLrOOT/eRtmL2oCFAGzj2lAZeTUT6r7w+G4UgDsljgXwbwm4QqrBPKLIg5K/QgXvEN8
+         ehNw==
+X-Gm-Message-State: ACrzQf1+ZMjOLsUpLgng7kSVVKGo8urF/7+7CDxXTJFTY3ALDQgsVFAM
+        fo1dVN9k56oIgesn3Z4oIc4=
+X-Google-Smtp-Source: AMsMyM7KjwiUn2XAgtkLzTjWyFbIw27ivEV1ptwDlf9oDk0JFZaDqHnCf7FBNGXhSOeiu/J70H0peQ==
+X-Received: by 2002:a02:a510:0:b0:363:7345:2f5f with SMTP id e16-20020a02a510000000b0036373452f5fmr10156740jam.314.1666284457442;
+        Thu, 20 Oct 2022 09:47:37 -0700 (PDT)
+Received: from qjv001-XeonWs (c-67-167-199-249.hsd1.il.comcast.net. [67.167.199.249])
+        by smtp.gmail.com with ESMTPSA id p16-20020a056638217000b00363dddc0037sm3258954jak.130.2022.10.20.09.47.36
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 20 Oct 2022 09:47:37 -0700 (PDT)
+Date:   Thu, 20 Oct 2022 11:47:34 -0500
+From:   Jeff Vanhoof <jdv1029@gmail.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Jeffrey Vanhoof <jvanhoof@motorola.com>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "dan.scally@ideasonboard.com" <dan.scally@ideasonboard.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "laurent.pinchart@ideasonboard.com" 
+        <laurent.pinchart@ideasonboard.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "m.grzeschik@pengutronix.de" <m.grzeschik@pengutronix.de>,
+        "paul.elder@ideasonboard.com" <paul.elder@ideasonboard.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        Dan Vacura <W36195@motorola.com>
+Subject: Re: [PATCH v3 2/6] usb: dwc3: gadget: cancel requests instead of
+ release after missed isoc
+Message-ID: <20221020164732.GA25496@qjv001-XeonWs>
+References: <PUZPR03MB613101A170B0034F55401121A1289@PUZPR03MB6131.apcprd03.prod.outlook.com>
+ <20221018223521.ytiwqsxmxoen5iyt@synopsys.com>
+ <20221019014108.GA5732@qjv001-XeonWs>
+ <20221019020240.exujmo7uvae4xfdi@synopsys.com>
+ <20221019074043.GA19727@qjv001-XeonWs>
+ <20221019190819.m35ai5fm3g5qpgqj@synopsys.com>
+ <20221019213410.GA17789@qjv001-XeonWs>
+ <20221019230555.gwovdtmnopwacirt@synopsys.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN9PR12MB5115:EE_|PH8PR12MB7253:EE_
-X-MS-Office365-Filtering-Correlation-Id: c20a39f5-9647-49d0-f293-08dab2bac72a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: kEv6UJt9Lv/ExeMmsBGl+EptEJyx7Zx2c8FntIcSAvi1ErKPo9r0X/7WXA0rYTsQvlHC09kN7A/LaINZgEq9nxhSJSC1LhprjazZYWppolxbeA27/qnP6dl7a4q3R41ReO7mZ2j2n7X7RBR8rRq2tUoRssVMj3Zq2oFKeEBMq+2PjsUKNXf8gBy0vU6fmwAC5R7GNWrVHMbkXKt0cszVt8VSP3A6QEhU3mYpfRYmQOXfOt1s2Dys5/HRIYGwHOFo/d/piTmAZpfgMXyuPyZkaVlt3/ZwWN3hVcJyk2iXZzCr3C6cv/JVssz8RhpbW9FJzW7UFzBFqjDwTG3T6VP8O3IEhIyZBqb+1R5vGRtZ6F1UbFSIxecJiwSO1Wf+owH2Ej/ZAu9PqD9fT9ZAMuclHjGZV1gjWvr59A+JC7NyPv6QccI1VGCU1Fr5q6UtVegoWQNgi9jgAI1exPNq/sc8H53Qj/O0YRdc6wwPgMtBtHzSL1akmDPV6SmT9jP5LlRj+YlprF1lxIGmKEUitLV/0Gv/SiKok0mOUtn/Mj/5AHkArtFgQePzrQJR6nW8s+VcGBQNzUCzFUvh2q9FogMtHBDuCOejtURMC8UB2xowm+WUCh1EWdIWWII4E1gROKYwossTo58QG/MXhfhtWI9sAoX34Dmi3wjZt7Yb/2ohD9qboNaE1mpj6Kc9Ju0icW4SqqoVztgtjJ/uM94G8VFX3SKXC/HfEQ9NXiFWMEE5MUSPfGkOP2MeJGGWjozPH0yYn8QYv3iJ1hJHfqxhtQtjYBfmGm3TAW9UwS6WA9lDQno=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5115.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(39860400002)(396003)(346002)(366004)(376002)(451199015)(41300700001)(6506007)(38100700002)(26005)(6512007)(6636002)(66946007)(66476007)(6486002)(66556008)(8676002)(86362001)(316002)(31696002)(2906002)(4326008)(478600001)(36756003)(186003)(83380400001)(31686004)(5660300002)(8936002)(44832011)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?c212c1BKSUh5UFZtWDQyeVpzMHZnZ2FSTWFrZ2gzTnhvcFBxYnIvcmQyaUV2?=
- =?utf-8?B?S1JqYzk3NW5rZDFodkwyMWJDUlh5S2UySG5TeVhzSXRlemN1aVZ3LzBLMm1z?=
- =?utf-8?B?ZkVmVFF4Wjkwdktwc3dtc0g5ZkxjNXpsTnpFSUQxMVV4TmtOZWhGK2NITjdU?=
- =?utf-8?B?aFJiRXRoL3FXaVl5TDVFS1JxWmozRVJBakkrYitpZ1VHWGhYcGozMWswRWZi?=
- =?utf-8?B?N3lRaWdaUzhTSzZFTTRHcUh3bTJZbCtkTHJ3enlPdHdQc3VUeWw1Skc2SHlW?=
- =?utf-8?B?Q0oyWTBiZkltZnc2YnQ0VDBMR09INXNnd0pwSUFDdG1ldm5TZHlqcWwxcWFL?=
- =?utf-8?B?ZVQ5TmtIOU5PSDNZdTNnNi92cTJVZVVRRFphRmFwT0l4bHd3WGJGYmk2WlVB?=
- =?utf-8?B?NHZXa3VXa0N6TDZVSDB1MkhRVzdiRXhBSUNESjlJOXpyaFRaR1JJcnRXODBY?=
- =?utf-8?B?aEx3emdaK0pNTDRzRExpZWFQUnJEc0dKdEQyMFhxcXUxaVkzZkRMalVxWHYw?=
- =?utf-8?B?UG1Kd0lvTWU5cDBxUjlzaGhycUwyR0tmY0FYcDlZNHNIdS9sY2orcHlORjhj?=
- =?utf-8?B?bys4akdQQzB3S3FNTnByaEFMZlQrZ0F3c3BIdjIwYWtBRkt3Rm1CSnB0TE1B?=
- =?utf-8?B?cHJzbmtUNERVSXlqQUVPWHBTUjNCditpRmJlTnIreUhBYVpYTDFlUTZYbDdQ?=
- =?utf-8?B?MXl2MVVkd2cxVGR6NXViL0ZtSGdSY2Y0VDZNRDFQVFN6MThmQ2VTTVNYTEk4?=
- =?utf-8?B?MnU2OXNxY256UllaRGk5dlQrK2ptdkhQbjBHM3JRVjVLaTNNMkRQdVZZcjla?=
- =?utf-8?B?Ym1uK1FEOGdYZUF6aGJOeEdscEl5N0d3bHd5cE5LbTFlbHJRTXVFajNray9F?=
- =?utf-8?B?QjNQYWlvWWhmbFZGR3hYUHJJVmFvNmIyR2lJdmZMc09EakNzdExFNU4zKzVn?=
- =?utf-8?B?K1ByTWZiMFR3cVRrbHEyNUFJSm8rZEVvTmltTC9ocUFZR3JqcVhDeWh0ZkJY?=
- =?utf-8?B?b0tpSk1TQ243K1ZoYklZK0JvTEs1YWdsVU9HNnNnUmw4dGZHaUlqZXlVbjN5?=
- =?utf-8?B?NGs4Ukg3NmRDanFleE0ya3F3RTJNL2lXK21rd01VK0t5WEhwaiswRzY2ODlL?=
- =?utf-8?B?TElCV0NUY2NkcW1TUjU5b2ZGTkhnR2grY3J4Z2pFSmhqOUgvR3FUTVFLNjVO?=
- =?utf-8?B?bXVIdGk0MVdYQUppYldkVnBLY1JSZXBsVWEvY25WWDhnS1Z2aC91M2RjdWth?=
- =?utf-8?B?SU0yZTRCc2xVOWlZUEw2NkRnYWZ0T3AyUnNXMWVYOTM1aGUyQXp1Yjd5NzRs?=
- =?utf-8?B?c3lCNWRNVUpKUUc0UW9GQktjYlRxWDgyMDZOVzhkSkZ5ZDFTRTk3MW4rY2c3?=
- =?utf-8?B?Zzd4SloyaEhRelE2czNYbGd1dWFZbnFmQzBDNy9weDIwTzdCMWVPTmozbCtY?=
- =?utf-8?B?SDFpeHNnd0E0SVVIVkpRZEoxMGtkdHBjOTE1Qk9XS2hSdEQ0VnE0ZVg3TlNy?=
- =?utf-8?B?VWFFZ2RhSTVVNmt3MTAvMXZaVlFWWFFwZklVWW8yVU1EN3V0VEY1Mnl2MENE?=
- =?utf-8?B?RDFCbWpPTkxMb2x3MnhKYWVycERrL3ZCd3VIWmVuQ05mVWhEK080ZHYrUlBD?=
- =?utf-8?B?U2F6TDFtQVNVSWI3Z0JGOVQ1ajYyQkNJdnNMdVl4Tnp5cFovVDYzSjQra1RF?=
- =?utf-8?B?L2NBeko5UW43OEx0OVhRRlNEb0Z5YlljNkVPMzV1ZzVuU0dtRWxVTzZhckls?=
- =?utf-8?B?TFUxc2tCYzJDaVJSNHZncElhRmNQeVNhSkhhY3ZhTGlZa0VKNHZ3aXBOMXND?=
- =?utf-8?B?WGM3Nld0LzBFdVlPNG80VUVYRzFMVklGL29vazJkRmJrNXQvcDJMWHBuaEFK?=
- =?utf-8?B?azBKbjFVcHlmZlMwM2FWM3VuUDh0U1ZGczlCZmFRVmhXeUVZT2JXOWdqMHhq?=
- =?utf-8?B?dHpSYUY5OURwVjg2VXo2ZFR1WHRFNHgwT2R5VlpnZFgvTlhxZnIxUkxNTSs2?=
- =?utf-8?B?M1NyWlpwcUZXUUZUc3BnVG8xbE5PR1NVZTZ3QkJtZHZ6SCtQTzQyTHBBTkdl?=
- =?utf-8?B?YlUxeDRGb3dBMGkxVGJHNExZTXVuSEhSQTdLRUNsM1BKZnRNeWpjRzd4QTlJ?=
- =?utf-8?Q?2nAEkH6SlUpq2U8bpHxd+h+q0?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c20a39f5-9647-49d0-f293-08dab2bac72a
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5115.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Oct 2022 16:47:30.4144
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2oQ8ZNodjiI0OLLk2VHEofuGbBinHXn1ZtV+cegshJGKYiiYDPIDJd1QK8E7yZExbWzP4Ru0P+Y59OKVgpedqA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7253
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221019230555.gwovdtmnopwacirt@synopsys.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-10-06 um 22:26 schrieb Deming Wang:
-> Using vma_lookup() verifies the start address is contained in the found
-> vma.  This results in easier to read the code.
+Hi Thinh,
+
+On Wed, Oct 19, 2022 at 11:06:08PM +0000, Thinh Nguyen wrote:
+> Hi,
+> 
+> On Wed, Oct 19, 2022, Jeff Vanhoof wrote:
+> > Hi Thinh,
+> > On Wed, Oct 19, 2022 at 07:08:27PM +0000, Thinh Nguyen wrote:
+> > > On Wed, Oct 19, 2022, Jeff Vanhoof wrote:
+> 
+> <snip>
+> 
+> > > > 
+> > > > From what I can gather from the log, with the current changes it seems that
+> > > > after a missed isoc event few requests are staying longer than expected in the
+> > > > started_list (not getting reclaimed) and this is preventing the transmission
+> > > > from stopping/starting again, and opening the door for continuous stream of
+> > > > missed isoc events that cause what appears to the user as a frozen video.
+> > > > 
+> > > > So one thought, if IOC bit is not set every frame, but IMI bit is, when a
+> > > > missed isoc related interrupt occurs it seems likely that more than one trb
+> > > > request will need to be reclaimed, but the current set of changes is not
+> > > > handling this.
+> > > > 
+> > > > In the good transfer case this issue seems to be taken care of since the IOC
+> > > > bit is not set every frame and the reclaimation will loop through every item in
+> > > > the started_list and only stop if there are no additional trbs or if one has
+> > > 
+> > > It should stop at the request that associated with the interrupt event,
+> > > whether it's because of IMI or IOC.
+> > 
+> > In this case I was concerned that if multipled queued reqs did not have IOC bit
+> > set, but there was a missed isoc on one of the last reqs, whether or not we would
+> > reclaim all of the requests up to the missed isoc related req. I'm not sure if
+> > my concern is valid or not.
+> > 
+> 
+> There should be no problem. If there's an interrupt event indicating a
+> TRB completion, the driver will give back all the requests up to the
+> request associated with the interrupt event, and the controller will
+> continue processing the remaining TRBs. On the next TRB completion
+> event, the driver will again give back all the requests up to the
+> request associated with that event.
 >
-> Signed-off-by: Deming Wang <wangdeming@inspur.com>
-> ---
->   drivers/gpu/drm/amd/amdkfd/kfd_migrate.c | 8 ++++----
->   1 file changed, 4 insertions(+), 4 deletions(-)
+
+I was testing with the following patch you suggested:
+
+> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> index 61fba2b7389b..8352f4b5dd9f 100644
+> --- a/drivers/usb/dwc3/gadget.c
+> +++ b/drivers/usb/dwc3/gadget.c
+> @@ -3657,6 +3657,10 @@ static int dwc3_gadget_ep_reclaim_completed_trb(struct dwc3_ep *dep,
+>  	if (event->status & DEPEVT_STATUS_SHORT && !chain)
+>  		return 1;
+>  
+> +	if (usb_endpoint_xfer_isoc(dep->endpoint.desc) &&
+> +	    (event->status & DEPEVT_STATUS_MISSED_ISOC) && !chain)
+> +		return 1;
+> +
+>  	if ((trb->ctrl & DWC3_TRB_CTRL_IOC) ||
+>  	    (trb->ctrl & DWC3_TRB_CTRL_LST))
+>  		return 1;
 >
-> diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_migrate.c b/drivers/gpu/drm/amd/amdkfd/kfd_migrate.c
-> index 2797029bd500..3599cc931b0a 100644
-> --- a/drivers/gpu/drm/amd/amdkfd/kfd_migrate.c
-> +++ b/drivers/gpu/drm/amd/amdkfd/kfd_migrate.c
-> @@ -529,8 +529,8 @@ svm_migrate_ram_to_vram(struct svm_range *prange, uint32_t best_loc,
->   	for (addr = start; addr < end;) {
->   		unsigned long next;
->   
-> -		vma = find_vma(mm, addr);
-> -		if (!vma || addr < vma->vm_start)
-> +		vma = vma_lookup(mm, addr);
-> +		if (!vma)
->   			break;
->   
->   		next = min(vma->vm_end, end);
-> @@ -798,8 +798,8 @@ int svm_migrate_vram_to_ram(struct svm_range *prange, struct mm_struct *mm,
->   	for (addr = start; addr < end;) {
->   		unsigned long next;
->   
-> -		vma = find_vma(mm, addr);
-> -		if (!vma || addr < vma->vm_start) {
-> +		vma = vma_lookup(mm, addr)
 
-There is a semicolon missing here. I will fix this before I submit the 
-patch.
+At this time the IMI bit was set for every frame. With these changes it
+appeared in case of missed isoc that sometimes not all requests would be
+reclaimed (enqueued != dequeued even 100ms after the last interrupt was
+handled). If the 1st req in the started_list was fine (IMI set, but not IOC),
+and a later req was the one actually missed, because of this status check the
+reclaimation could stop early and not clean up to the appropriate req. As
+suggested yesterday, I also tried only setting the IMI bit when no_interrupt is
+not set, however I was still seeing the complete freezes. After analyzing this
+issue a bit, I have updated the diff to look more like this:
 
-Please do at least a minimum amount of due diligence before posting 
-patches. That would include a test to make sure your code compiles.
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index dfaf9ac24c4f..bb800a81815b 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -1230,8 +1230,9 @@ static void __dwc3_prepare_one_trb(struct dwc3_ep *dep, struct dwc3_trb *trb,
+ 			trb->ctrl = DWC3_TRBCTL_ISOCHRONOUS;
+ 		}
+ 
+-		/* always enable Interrupt on Missed ISOC */
+-		trb->ctrl |= DWC3_TRB_CTRL_ISP_IMI;
++		/* enable Interrupt on Missed ISOC */
++		if ((!no_interrupt && !chain) || must_interrupt)
++		    trb->ctrl |= DWC3_TRB_CTRL_ISP_IMI;
+ 		break;
+ 
+ 	case USB_ENDPOINT_XFER_BULK:
+@@ -3195,6 +3196,11 @@ static int dwc3_gadget_ep_reclaim_completed_trb(struct dwc3_ep *dep,
+ 	if (event->status & DEPEVT_STATUS_SHORT && !chain)
+ 		return 1;
+ 
++	if (usb_endpoint_xfer_isoc(dep->endpoint.desc) &&
++		(event->status & DEPEVT_STATUS_MISSED_ISOC) && !chain
++		&& (trb->ctrl & DWC3_TRB_CTRL_ISP_IMI))
++		return 1;
++
+ 	if ((trb->ctrl & DWC3_TRB_CTRL_IOC) ||
+ 	    (trb->ctrl & DWC3_TRB_CTRL_LST))
+ 		return 1;
 
-Regards,
-   Felix
+Where the trb must have the IMI set before returning early. This seemed to make
+the freezes recoverable.
+
+> > > 
+> > > > its HWO bit set. Although I am a bit surprised that we are not yet seeing iommu
+> > > > related panics here too since the trb is being reclaimed and given back even
+> > > > the HWO bit still set, but maybe I am misunderstanding something. In my earlier
+> > > > testing, if a missed isoc event was received and we attempted to
+> > > > reclaim/giveback a trb with its HWO bit set, a iommu related panic would be
+> > > > seen.
+> > > 
+> > > If the controller processed the TRB, it would clear the HWO bit after
+> > > completion. There are cases which the HWO bit is still set for some
+> > > TRBs, but the request is completed (e.g. short transfers causing the
+> > > controller to stop processing further). That those cases, the driver
+> > > would clear the HWO bit manually.
+> > > 
+> > > > 
+> > > > Can you propose an additional change to handle freeing up the extra trbs in the
+> > > > missed isoc case? I think that somehow the HWO bit should be checked before
+> > > > entering dwc3_gadget_ep_cleanup_completed_request in order to avoid the trb
+> > > > being given back too soon.
+> > > 
+> > > We should not check for TRBs of requests beyond the request associated
+> > > with the interrupt event.
+> > > 
+> > > > 
+> > > > Your thoughts?
+> > > > 
+> > > 
+> > > The capture shows underrun, and it causes missed isoc.
+> > > 
+> > > Let's take a look at the first missed isoc request (req ffffff88f834db00)
+> > > 
+> > >            <...>-22551   [002] d..2 13985.789684: dwc3_ep_queue: ep2in: req ffffff88f834db00 length 0/49152 zsi ==> -115
+> > >            <...>-22551   [002] dn.2 13985.789728: dwc3_prepare_trb: ep2in: trb ffffffc016071970 (E152:D149) buf 00000000ea800000 size 1x 49152 ctrl 00000461 (Hlcs:Sc:isoc-first)
+> > > 
+> > > Each request uses a one TRB. From above, you can see that there are only
+> > > 3 intervals prepared (E152 - D149 = 3).
+> > > 
+> > > The timestamp of the last request completion is 13985.788919.
+> > > The timestamp which the queued request is 13985.789728.
+> > > We can roughly estimate the diff is at least 809us.
+> > > 
+> > > 3 intervals (3x125us) is less than 809us. So missed isoc is expected:
+> > > 
+> > >     irq/399-dwc3-15269   [002] d..1 13985.790754: dwc3_event: event (f9acc08a): ep2in: Transfer In Progress [63916] (sIM)
+> > >     irq/399-dwc3-15269   [002] d..1 13985.790758: dwc3_complete_trb: ep2in: trb ffffffc016071970 (E154:D152) buf 00000000ea800000 size 1x 49152 ctrl 3e6a0460 (hlcs:Sc:isoc-first)
+> > >     irq/399-dwc3-15269   [002] d..1 13985.790808: dwc3_gadget_giveback: ep2in: req ffffff88f834db00 length 0/49152 zsi ==> -18
+> > > 
+> > > 
+> > > After this point, the uvc driver keeps playing catch up to stay in sync
+> > > with the host. It tries, but it couldn't catch up. Also, occasionally
+> > > something seems to be blocking dwc3, creating time gaps. Maybe because
+> > > of a spin_lock held somewhere?
+> > >
+> > 
+> > Could the time gaps be created by the interrupt frequency changes? They
+> > completely change up the timing of when the transfers are kicked in dwc3 and
+> > when uvc_video_complete/uvcg_video_pump is called.
+> 
+> You can check all the "fastrpc_msg" tracepoints in the log. These steps
+> seem to slow down the queuing process in uvc.
+>
+
+The large time gaps appear related to the low fps used for the camera
+configuration. I was able to confirm this by adding additional trace points in
+the uvc driver to see if pump was being called after new work was queued up
+by v4l2.
+
+Some additional thoughts:
+
+On the scheduling side, one issue I've seen:
+1) uvc/dwc3 may take a few millisecs to queue up the requests for a single
+frame. How quickly this is completed could make for some of the differences
+seen from one platform to another.
+
+2) If the isoc transfer has not yet started and uvc begins to queue up requests to
+dwc3, it appears that the isoc transfer will almost immediately start. And if
+the remaining requests for the frame do not come quickly enough, there is a
+potential for the transfer to stop or a missed isoc event to occur.
+
+Maybe this happens frequently on my platform because the debug kernel I am
+using has a bit too much overhead. Will allowing a bit more time for initially
+queuing up some data before kicking off the transfer be prudent? Is 500us
+really enough for a mobile platform? We've always have had issues with random
+frame drops, but on much older platforms I was able to reduce the frequency of
+them by delaying the start by pushing out the frame_number by 16 or 32.
+
+Also, one problem I am seeing specifically with the skip interrupts:
+1) If a missed isoc event occurs, dwc3_gadget_giveback will call the request's
+->complete callback where the status -EXDEV is passed. In uvc_video_complete it
+will begin to cancel the queue if this status is seen. If this occurs while in
+the middle of queuing up the requests for the same frame, then it's quite
+possible that the last set of requests will have had no_interrupt=1 set.
+
+2) In dwc3 after the missed isoc event, if the remaining set of requests in the
+started_list do not have the IOC bit set, then no further interrupts will
+occur. And because the started_list is not emptied the transfer will not be
+stopped. Only after uvc queues up the requests for the next frame (which may
+come much later, i.e. 30-100ms) will the transfers appear to continue, however
+additional missed isoc events will be received and the cycle could continue.
+
+I believe that this is a problem that should be addressed somehow. Not sure if
+the uvc driver needs to send a dummy request when an error is received, or if
+it should just send one more additional request with the no_interrupt bit not
+set, or if it needs to just send the complete frame in spite of the
+error. Hopefully I'm not just completely lost on this stuff.
+
+Using the above patch, I grabbed the following trace snippets to show what is being seen:
+
+Normal looking missed isoc related trace where enqueued == dequeued and transfer ends as expected:
+   kworker/u17:5-8169    [000] d..2   187.669572: dwc3_gadget_ep_cmd: ep2in: cmd 'Start Transfer' [49540406] params 00000000 efff5f30 00000000 --> status: Successful
+    irq/398-dwc3-9882    [000] d..1   187.672504: dwc3_complete_trb: ep2in: trb ffffffc016396f30 (E250:D244) buf 00000000ed470000 size 1x 0 ctrl 12550c60 (hlcs:SC:isoc-first)
+    irq/398-dwc3-9882    [000] d..1   187.672804: dwc3_complete_trb: ep2in: trb ffffffc016396f40 (E250:D245) buf 00000000ec5e0000 size 1x 0 ctrl 12558060 (hlcs:sc:isoc-first)
+    irq/398-dwc3-9882    [000] d..1   187.672885: dwc3_complete_trb: ep2in: trb ffffffc016396f50 (E250:D246) buf 00000000ecd30000 size 1x 0 ctrl 12560060 (hlcs:sc:isoc-first)
+    irq/398-dwc3-9882    [000] d..1   187.672942: dwc3_complete_trb: ep2in: trb ffffffc016396f60 (E250:D247) buf 00000000ecd40000 size 1x 0 ctrl 12568060 (hlcs:sc:isoc-first)
+    irq/398-dwc3-9882    [000] d..1   187.672993: dwc3_complete_trb: ep2in: trb ffffffc016396f70 (E250:D248) buf 00000000edfb0000 size 1x 0 ctrl 12570060 (hlcs:sc:isoc-first)
+    irq/398-dwc3-9882    [000] d..1   187.673049: dwc3_complete_trb: ep2in: trb ffffffc016396f80 (E250:D249) buf 00000000edfa0000 size 1x 0 ctrl 12578c60 (hlcs:SC:isoc-first)
+    irq/398-dwc3-9882    [000] d..1   187.674615: dwc3_complete_trb: ep2in: trb ffffffc016396f90 (E254:D250) buf 00000000eca80000 size 1x 0 ctrl 12580060 (hlcs:sc:isoc-first)
+    irq/398-dwc3-9882    [000] d..1   187.674722: dwc3_complete_trb: ep2in: trb ffffffc016396fa0 (E254:D251) buf 00000000edfa0000 size 1x 49152 ctrl 12588060 (hlcs:sc:isoc-first)
+    irq/398-dwc3-9882    [000] d...   187.674793: usb_gadget_giveback_request: ep2in: req ffffff894498a600 length 0/49152 sgs 0/0 stream 0 zsi status -18 --> 0
+    irq/398-dwc3-9882    [000] d..1   187.675008: dwc3_complete_trb: ep2in: trb ffffffc016396fb0 (E254:D252) buf 00000000edfb0000 size 1x 49152 ctrl 12590060 (hlcs:sc:isoc-first)
+    irq/398-dwc3-9882    [000] d...   187.675093: usb_gadget_giveback_request: ep2in: req ffffff892bcd3500 length 0/49152 sgs 0/0 stream 0 zsi status -18 --> 0
+    irq/398-dwc3-9882    [000] d..1   187.675120: dwc3_complete_trb: ep2in: trb ffffffc016396fc0 (E254:D253) buf 00000000ecd40000 size 1x 49152 ctrl 12598060 (hlcs:sc:isoc-first)
+    irq/398-dwc3-9882    [000] d...   187.675207: usb_gadget_giveback_request: ep2in: req ffffff8918f48200 length 0/49152 sgs 0/0 stream 0 zsi status -18 --> 0
+    irq/398-dwc3-9882    [000] d..1   187.675225: dwc3_complete_trb: ep2in: trb ffffffc016396fd0 (E254:D254) buf 00000000ecd30000 size 1x 49152 ctrl 125a0c60 (hlcs:SC:isoc-first)
+    irq/398-dwc3-9882    [000] d...   187.675274: usb_gadget_giveback_request: ep2in: req ffffff892bcd3600 length 0/49152 sgs 0/0 stream 0 zsI status -18 --> 0
+    irq/398-dwc3-9882    [000] d..1   187.675364: dwc3_gadget_ep_cmd: ep2in: cmd 'End Transfer' [50d08] params 00000000 00000000 00000000 --> status: Successful
+
+Abnormal trace where the 'End Transfer' is delayed by a few frames:
+   kworker/u17:5-8169    [000] dn.2   190.804817: dwc3_gadget_ep_cmd: ep2in: cmd 'Start Transfer' [ab500406] params 00000000 efff5290 00000000 --> status: Successful
+    irq/398-dwc3-9882    [000] d..1   190.809070: dwc3_complete_trb: ep2in: trb ffffffc016396290 (E51:D42) buf 00000000ef6b0000 size 1x 0 ctrl 2ad40c60 (hlcs:SC:isoc-first)
+    irq/398-dwc3-9882    [000] d..1   190.809478: dwc3_complete_trb: ep2in: trb ffffffc0163962a0 (E53:D43) buf 00000000ef060000 size 1x 49152 ctrl 2ad48060 (hlcs:sc:isoc-first)
+    irq/398-dwc3-9882    [000] d...   190.809534: usb_gadget_giveback_request: ep2in: req ffffff8918f48200 length 0/49152 sgs 0/0 stream 0 zsi status -18 --> 0
+    irq/398-dwc3-9882    [000] d..1   190.809752: dwc3_complete_trb: ep2in: trb ffffffc0163962b0 (E54:D44) buf 00000000ec5a0000 size 1x 49152 ctrl 2ad50060 (hlcs:sc:isoc-first)
+    irq/398-dwc3-9882    [000] d...   190.809878: usb_gadget_giveback_request: ep2in: req ffffff8859af4e00 length 0/49152 sgs 0/0 stream 0 zsi status -18 --> 0
+    irq/398-dwc3-9882    [000] d..1   190.809966: dwc3_complete_trb: ep2in: trb ffffffc0163962c0 (E54:D45) buf 00000000ef180000 size 1x 49152 ctrl 2ad58060 (hlcs:sc:isoc-first)
+    irq/398-dwc3-9882    [000] d...   190.810037: usb_gadget_giveback_request: ep2in: req ffffff8918f48000 length 0/49152 sgs 0/0 stream 0 zsi status -18 --> 0
+    irq/398-dwc3-9882    [000] d..1   190.810058: dwc3_complete_trb: ep2in: trb ffffffc0163962d0 (E54:D46) buf 00000000ef070000 size 1x 49152 ctrl 2ad60060 (hlcs:sc:isoc-first)
+    irq/398-dwc3-9882    [000] d...   190.810139: usb_gadget_giveback_request: ep2in: req ffffff894498a500 length 0/49152 sgs 0/0 stream 0 zsi status -18 --> 0
+    irq/398-dwc3-9882    [000] d..1   190.810159: dwc3_complete_trb: ep2in: trb ffffffc0163962e0 (E54:D47) buf 00000000eeae0000 size 1x 49152 ctrl 2ad68c60 (hlcs:SC:isoc-first)
+    irq/398-dwc3-9882    [000] d...   190.810238: usb_gadget_giveback_request: ep2in: req ffffff88bddb9f00 length 0/49152 sgs 0/0 stream 0 zsI status -18 --> 0
+    irq/398-dwc3-9882    [000] d..1   190.810293: dwc3_complete_trb: ep2in: trb ffffffc0163962f0 (E54:D48) buf 00000000ec0d0000 size 1x 49152 ctrl 2ad70060 (hlcs:sc:isoc-first)
+    irq/398-dwc3-9882    [000] d...   190.810368: usb_gadget_giveback_request: ep2in: req ffffff892bcd3500 length 0/49152 sgs 0/0 stream 0 zsi status -18 --> 0
+    irq/398-dwc3-9882    [000] d..1   190.810389: dwc3_complete_trb: ep2in: trb ffffffc016396300 (E54:D49) buf 00000000ec0e0000 size 1x 0 ctrl 2ad78060 (hlcs:sc:isoc-first)
+    irq/398-dwc3-9882    [000] d..1   190.810454: dwc3_complete_trb: ep2in: trb ffffffc016396310 (E54:D50) buf 00000000ec0f0000 size 1x 0 ctrl 2ad80060 (hlcs:sc:isoc-first)
+    irq/398-dwc3-9882    [000] d..1   190.810526: dwc3_complete_trb: ep2in: trb ffffffc016396320 (E54:D51) buf 00000000efa20000 size 1x 49152 ctrl 2ad88060 (hlcs:sc:isoc-first)
+    irq/398-dwc3-9882    [000] d...   190.810591: usb_gadget_giveback_request: ep2in: req ffffff8859af5800 length 0/49152 sgs 0/0 stream 0 zsi status -18 --> 0
+    irq/398-dwc3-9882    [000] d..1   190.810609: dwc3_complete_trb: ep2in: trb ffffffc016396330 (E54:D52) buf 00000000efa30000 size 1x 49152 ctrl 2ad90c60 (hlcs:SC:isoc-first)
+    irq/398-dwc3-9882    [000] d...   190.810676: usb_gadget_giveback_request: ep2in: req ffffff88bddb8300 length 0/49152 sgs 0/0 stream 0 zsI status -18 --> 0
+...
+    irq/398-dwc3-9882    [000] d..1   190.919720: dwc3_complete_trb: ep2in: trb ffffffc016396340 (E56:D53) buf 00000000efa40000 size 1x 49152 ctrl 2ad98060 (hlcs:sc:isoc-first)
+    irq/398-dwc3-9882    [000] d...   190.919804: usb_gadget_giveback_request: ep2in: req ffffff894498a900 length 0/49152 sgs 0/0 stream 0 zsi status -18 --> 0
+    irq/398-dwc3-9882    [000] d..1   190.920065: dwc3_complete_trb: ep2in: trb ffffffc016396350 (E57:D54) buf 00000000efa50000 size 1x 49152 ctrl 2ada0060 (hlcs:sc:isoc-first)
+    irq/398-dwc3-9882    [000] d...   190.920116: usb_gadget_giveback_request: ep2in: req ffffff88bddb8b00 length 0/49152 sgs 0/0 stream 0 zsi status -18 --> 0
+    irq/398-dwc3-9882    [000] d..1   190.920175: dwc3_complete_trb: ep2in: trb ffffffc016396360 (E57:D55) buf 00000000efa60000 size 1x 49152 ctrl 2ada8c60 (hlcs:SC:isoc-first)
+    irq/398-dwc3-9882    [000] d...   190.920223: usb_gadget_giveback_request: ep2in: req ffffff892bcd3600 length 0/49152 sgs 0/0 stream 0 zsI status -18 --> 0
+...
+    irq/398-dwc3-9882    [000] d..1   190.992902: dwc3_complete_trb: ep2in: trb ffffffc016396370 (E59:D56) buf 00000000efa90000 size 1x 49152 ctrl 2adb0060 (hlcs:sc:isoc-first)
+    irq/398-dwc3-9882    [000] d...   190.993014: usb_gadget_giveback_request: ep2in: req ffffff88a0b9b400 length 0/49152 sgs 0/0 stream 0 zsi status -18 --> 0
+    irq/398-dwc3-9882    [000] d..1   190.993365: dwc3_complete_trb: ep2in: trb ffffffc016396380 (E60:D57) buf 00000000efaa0000 size 1x 49152 ctrl 2adb8060 (hlcs:sc:isoc-first)
+    irq/398-dwc3-9882    [000] d...   190.993439: usb_gadget_giveback_request: ep2in: req ffffff8859af4f00 length 0/49152 sgs 0/0 stream 0 zsi status -18 --> 0
+    irq/398-dwc3-9882    [000] d..1   190.993528: dwc3_complete_trb: ep2in: trb ffffffc016396390 (E60:D58) buf 00000000efab0000 size 1x 49152 ctrl 2adc0c60 (hlcs:SC:isoc-first)
+    irq/398-dwc3-9882    [000] d...   190.993622: usb_gadget_giveback_request: ep2in: req ffffff8859af4e00 length 0/49152 sgs 0/0 stream 0 zsI status -18 --> 0
+...
+    irq/398-dwc3-9882    [000] d..1   191.104270: dwc3_complete_trb: ep2in: trb ffffffc0163963a0 (E61:D59) buf 00000000ee950000 size 1x 49152 ctrl 2adc8060 (hlcs:sc:isoc-first)
+    irq/398-dwc3-9882    [000] d...   191.104410: usb_gadget_giveback_request: ep2in: req ffffff8918f48000 length 0/49152 sgs 0/0 stream 0 zsi status -18 --> 0
+    irq/398-dwc3-9882    [000] d..1   191.104648: dwc3_complete_trb: ep2in: trb ffffffc0163963b0 (E61:D60) buf 00000000ed530000 size 1x 49152 ctrl 2add0060 (hlcs:sc:isoc-first)
+    irq/398-dwc3-9882    [000] d...   191.104745: usb_gadget_giveback_request: ep2in: req ffffff894498a500 length 0/49152 sgs 0/0 stream 0 zsi status -18 --> 0
+    irq/398-dwc3-9882    [000] d..1   191.104834: dwc3_complete_trb: ep2in: trb ffffffc0163963c0 (E61:D61) buf 00000000ef610000 size 1x 49152 ctrl 2add8c60 (hlcs:SC:isoc-first)
+    irq/398-dwc3-9882    [000] d...   191.104925: usb_gadget_giveback_request: ep2in: req ffffff8859af5800 length 0/49152 sgs 0/0 stream 0 zsI status -18 --> 0
+    irq/398-dwc3-9882    [000] d..1   191.105098: dwc3_gadget_ep_cmd: ep2in: cmd 'End Transfer' [50d08] params 00000000 00000000 00000000 --> status: Successful
+
+Where you can see that in between frames enqueued != dequeued, and this can
+cause the video to freeze/skip for more than a single frame. The length of the
+freeze is all timing related and depends on if an interrupt occurs on the last
+req or not in the started_list.
+
+So, to sort of rehash things again, we came up with the patch:
+[PATCH v3 2/6] usb: dwc3: gadget: cancel requests instead of release after missed isoc
+to workaround the iommu related crashes being seen with the skip interrupt solution.
+
+As an alternative solution, we are now using the diff mentioned above, and it
+seems to avoid the crash, however we are seeing longer freezes with it, I believe
+due to the explaination I provided above.
+
+If you agree with my analysis, what should we do from here? What's the best way to ensure
+that the started_list can get cleaned up after a missed isoc with the skip interrupt solution
+enabled? 
 
 
-> +		if (!vma) {
->   			pr_debug("failed to find vma for prange %p\n", prange);
->   			r = -EFAULT;
->   			break;
+> > 
+> > > The logic to detect underrun doesn't trigger because the queued list is
+> > > always non-empty, but the queued requests are expected to be missed
+> > > already. So you keep seeing missed isoc.
+> > > 
+> > > There are a few things you can mitigate this issue:
+> > > 1) Don't set IMI if the request indicates no_interrupt. This reduces the
+> > >    time software needs to handle interrupts.
+> > 
+> > I did try this out earlier and it did not prevent the video freeze. It does
+> > make sense what you are suggesting, but because it didn't work for me it made
+> > me think that not all reqs are being reclaimed after a missed isoc is seen.
+> > I'll revisit this area again.
+> 
+> I don't expect this to improve much.
+> 
+> > 
+> > > 2) Improve the underrun detection logic.
+> > 
+> > I like this idea a lot but I'm not up to the task just yet. Will attempt to
+> > follow your recommendations below and see where I get with this.
+> > 
+> > > 3) Increase the queuing frequency from the uvc to keep the request queue
+> > >    full. Note that reduce/avoid setting no_interrupt will allow the
+> > >    controller driver to update uvc often to keep requeuing new requests.
+> > > 
+> > > Best option is 3), but maybe we can do all 3.
+> > >
+> > 
+> > I think that this is our best option too. Dan provided a patch to make
+> > the interrupt skip logic configurable in the uvc driver:
+> > https://urldefense.com/v3/__https://patchwork.kernel.org/project/linux-usb/patch/20221018215044.765044-6-w36195@motorola.com/__;!!A4F2R9G_pg!eBu4j9m9C_XJHcuTXmYqo4CAe8bcQ0ZC3UWT3NJUZYYG6S-VJpriVwd2Q5NmAOFnN2PLgTauFDZ-fBM35ftO$  
+> > https://urldefense.com/v3/__https://lore.kernel.org/linux-usb/20221018215044.765044-6-w36195@motorola.com/__;!!A4F2R9G_pg!eBu4j9m9C_XJHcuTXmYqo4CAe8bcQ0ZC3UWT3NJUZYYG6S-VJpriVwd2Q5NmAOFnN2PLgTauFDZ-fCLOxuhL$  
+> > 
+> > > For 2), you can set IMI for all isoc request as it is now. On missed
+> > > isoc, check for the TRB's scheduled uframe (from TRB info) and compare
+> > > it to the current uframe (from DSTS) for the number of intervals in
+> > > between. With the number of queued requests, you can calculate whether
+> > > the gadget driver queued enough requests. If it doesn't, send End
+> > > Transfer command and cancel all the queued requests. The next set of
+> > > requests will be in-sync again.
+> > > 
+> > > BR,
+> > > Thinh
+> > > 
+> > > PS. On a side note, I notice that there are reports of issue when using
+> > > SG right? Please note that dwc3 driver only allocates 256 TRBs
+> > > (including a link TRB). Each SG entry takes a TRB. If a request has many
+> > > SG entries, that eats up the available TRBs. So, even though the UVC may
+> > > queue many requests, not all of them are prepared immediately. If the
+> > > TRB ring is full, the driver need to wait for more TRBs to free up
+> > > before preparing more. From the log, I see that it's sending 48KB. Let's
+> > > say the uvc splits it into PAGE_SIZE of 4KB, that would take at least 12
+> > > TRB per request. (Side thought: I'm not sure why UVC needs SG in the
+> > > first place with its current implementation)
+> > 
+> > On our platform I am seeing 2 items in the sg list being sent out from the uvc
+> > driver. The 1st item in the list is a 2 byte uvc header and the 2nd item is
+> > the 48KBs of data. To me this seems inefficient but sort of makes sense why it
+> > was done, likely to avoid a memory copy just for the 2 byte header.  But I
+> 
+> That doesn't make sense to me, but I'm sure there's a real reason. Just
+> curious, that's all. :)
+> 
+> > share your concern here, it's possible that other users wont be so lucky and
+> > will wind up having a lot of page sized items in the sg list.
+> > 
+> > We are also hoping to make the use of sg configurable with the change:
+> > https://urldefense.com/v3/__https://patchwork.kernel.org/project/linux-usb/patch/20221018215044.765044-7-w36195@motorola.com/__;!!A4F2R9G_pg!eBu4j9m9C_XJHcuTXmYqo4CAe8bcQ0ZC3UWT3NJUZYYG6S-VJpriVwd2Q5NmAOFnN2PLgTauFDZ-fAiSl95Q$  
+> > https://urldefense.com/v3/__https://lore.kernel.org/linux-usb/20221018215044.765044-7-w36195@motorola.com/__;!!A4F2R9G_pg!eBu4j9m9C_XJHcuTXmYqo4CAe8bcQ0ZC3UWT3NJUZYYG6S-VJpriVwd2Q5NmAOFnN2PLgTauFDZ-fDoaNx6Q$  
+> > 
+> 
+> Ok.
+> 
+> Thanks,
+> Thinh
+
+Thanks,
+Jeff
+
