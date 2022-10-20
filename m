@@ -2,158 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA63360627A
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 16:09:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7489C60627F
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 16:10:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbiJTOJH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 10:09:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51318 "EHLO
+        id S229736AbiJTOJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 10:09:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230103AbiJTOJC (ORCPT
+        with ESMTP id S229761AbiJTOJv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 10:09:02 -0400
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3205B170B53
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 07:09:01 -0700 (PDT)
-Received: by mail-ot1-x32c.google.com with SMTP id br15-20020a056830390f00b0061c9d73b8bdso11465575otb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 07:09:01 -0700 (PDT)
+        Thu, 20 Oct 2022 10:09:51 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A1B7357DA
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 07:09:49 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id y14so47665505ejd.9
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 07:09:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=KmrrMOMdYJ6b8buOtE8wTwfyN1foDEi2s8Ex1cEpDfY=;
-        b=To+Qk0A3CM/eFhRAolkD4U6Tmg9JsHMThNENPRJNAC/8o31f3nqxxAoWnz8aornjNY
-         ZmjX9KtEBg56Di83mek3SSSKstfbmTv32ucyB2YEwNFQOfpZhrpHKLtzIz89q2S0VBB6
-         Nwl35WxoMpSkp6lBNMueuK5hUwiiQpuDlfU0nXhZlWgqYM+8f0r6pBkOv45hlWR74/rB
-         llB1M+pJJinTTHg1UV3/IA4VeEIdivuIdj7r/QInd0DKXs8veOu1DttyZMiDsaHAGJCs
-         g4CRjlw1PAPpqroyID3/q8GTDnu2qA6yuwgUnmzRW33+3ThPWS9uvrJQJyP6Uxkh2KCX
-         s5nw==
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=F3gY5O7nKoCue4aUObD2Ry9zxDVljyutT9lJm/4wu1g=;
+        b=RCtBERtGUuobnAig7pYIgKtjL97Ydq440F1TN34SgOXAeHIXDgKO8YhCEKzzMKOKSY
+         63TAFHK+MXjtmWzbMroow/OlgioAP62vgFECpS4BNXpJPQmGfLJGW7o7+Jqjm3P+Ck1F
+         MxDtNLVl5EUCeS/qvElRbrPGx6q/rI+rGzrYh+QCIF9qneeMQ/G6+VQ3kO8GsI8oQqGv
+         IOX4gDgACU24WSU7ljxEG1j+R4UgwCAY/LxnHkT3qy22D38B+qnPCfAyNxmh4Gzj11OU
+         Wz/hcsraIcxuHotP5h50Xu3GGhz6DArbCZ5AnuEBnbTh5C/LopZgiCSgm1rtHgvIvQ+c
+         IYOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KmrrMOMdYJ6b8buOtE8wTwfyN1foDEi2s8Ex1cEpDfY=;
-        b=fWUUk3JwF1XdTIA8JTN6gb2rMOlbW3DTK7/YjUryF/Lmy3d1vQm/MYHv2ljFJnHJG5
-         cZv1+RZNiddxTX/djObtg6oYisqtiUn3DE/zs2WzFbxxNlY4u6CQej6E4IILCLKK6YSc
-         D7zF7tDNB15fAp7XSwGZwFWLiMf/21bstkA6iNEGwUFtVwg/psyVqH3qikWAq/tTuw59
-         yNiHiO1YH0D7w4Vqj7v9OsA7aRT4ceoZsSMGrrwOh+dpZs2h6hyHVEPabPLZy/kXNUlq
-         Xd1BcEgTzOO8Y5b7Qi0zuaOiGse3s0E9rO5iR9pGus9q5melDgHb3cEgBMukWO7UVDDo
-         daKQ==
-X-Gm-Message-State: ACrzQf1lga2pfQAowzJFzzMZU8TJzL8sL5a4ludTMZvg/uBKoOLTri72
-        GGnAqcnq12dpaLa4XpvJ2Xzv0z+tJpk4BcHNcFcCWa3E5gc=
-X-Google-Smtp-Source: AMsMyM7TnkHvlubvtysHFMD02cLjU/w/mTgkliIpDR7G2WAUuROhb7YuX7lLMg1AN6GBnVxu2mW0NzRsuihLAUrld5s=
-X-Received: by 2002:a05:6830:4119:b0:661:e687:1912 with SMTP id
- w25-20020a056830411900b00661e6871912mr7160259ott.352.1666274940321; Thu, 20
- Oct 2022 07:09:00 -0700 (PDT)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=F3gY5O7nKoCue4aUObD2Ry9zxDVljyutT9lJm/4wu1g=;
+        b=W2Tsvy06SlwonGk/ROAN8GNbQUBQS3x+NUmD2vsYcAR68mP9h3PmOh35SqvlJH5rJZ
+         E4F6TJoRwN/Jj+0W5q/aZRiY8R9MMMFdaYbbKrpVcbNa1cQ3OglSDla1YS/at03X/EMz
+         nvjinTqw98ezvUjZ01W8rrgv5WZss5+xzjNCkYS+Uo+bi8GBca0Mcfs5RA6l7EPiREMr
+         Un0GkjGwiMjFaPURKNPvPudogWtrotefdOXCNGK9OmJhMDUuiv1cwJCML3sQeJDHp3+6
+         mpr8t4gHr2qBmp3AMjbBC0UqHR18Q5EeF6L9PgXm0qrfLpQW3HFuOdjrmdYCKASe2ppI
+         5MlA==
+X-Gm-Message-State: ACrzQf3VA7MUzAjOcv2nZ6PvsW9SxMBlBxrCS9h+9LfXDwlkODZNjh6D
+        sS64Mj3oPSZEFJOIMGb8lxKN8U2kV0bbR3gXBMGpDw==
+X-Google-Smtp-Source: AMsMyM7SGZ0XTtcSaYBLs9xPt4lvZ0m0MEYlP1BnZUi2dNpFH7IdPCCnnPLUKv4K6bQ9BC2uET83RJAVoSdiDcgHB90=
+X-Received: by 2002:a17:907:16aa:b0:6fe:91d5:18d2 with SMTP id
+ hc42-20020a17090716aa00b006fe91d518d2mr11464143ejc.190.1666274987831; Thu, 20
+ Oct 2022 07:09:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221018145348.4051809-1-amit.pundir@linaro.org>
- <CAPDyKFoBMB9OMUrcoPCV0of1fj2dimEwPyHGW=ydjJ2M0ubM8Q@mail.gmail.com> <20221020093057.zrrvxlgghn27bpes@bogus>
-In-Reply-To: <20221020093057.zrrvxlgghn27bpes@bogus>
-From:   Amit Pundir <amit.pundir@linaro.org>
-Date:   Thu, 20 Oct 2022 19:38:23 +0530
-Message-ID: <CAMi1Hd05PkEJcHqHpQX-X6B2oR4250_pHPjkd2-54JWgKsYx0Q@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: qcom: qrb5165-rb5: Disable cpuidle states
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Maulik Shah <quic_mkshah@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
+References: <20220921001630.56765-1-konrad.dybcio@somainline.org>
+ <83b90478-3974-28e6-cf13-35fc4f62e0db@marcan.st> <13b8c67c-399c-d1a6-4929-61aea27aa57d@somainline.org>
+ <0e65a8b2-0827-af1e-602c-76d9450e3d11@marcan.st> <7fd077c5-83f8-02e2-03c1-900a47f05dc1@somainline.org>
+ <CACRpkda3uryD6TOEaTi3pPX5No40LBWoyHR4VcEuKw4iYT0dqA@mail.gmail.com>
+ <20220922133056.eo26da4npkg6bpf2@bang-olufsen.dk> <CACRpkdYwJLO18t08zqu_Y1gaSpZJMc+3MFxRUtQzLkJF2MqmqQ@mail.gmail.com>
+ <87wn9q35tp.fsf_-_@kernel.org>
+In-Reply-To: <87wn9q35tp.fsf_-_@kernel.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 20 Oct 2022 16:09:36 +0200
+Message-ID: <CACRpkdYmXDCADH6-5KvdTZFFgTLRsw5U7zO2EtK-cN4E2BgOYw@mail.gmail.com>
+Subject: Re: Stockholm syndrome with Linux wireless?
+To:     Kalle Valo <kvalo@kernel.org>
+Cc:     =?UTF-8?Q?Alvin_=C5=A0ipraga?= <ALSI@bang-olufsen.dk>,
         Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        dt <devicetree@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
+        Hector Martin <marcan@marcan.st>,
+        "~postmarketos/upstreaming@lists.sr.ht" 
+        <~postmarketos/upstreaming@lists.sr.ht>,
+        "martin.botka@somainline.org" <martin.botka@somainline.org>,
+        "angelogioacchino.delregno@somainline.org" 
+        <angelogioacchino.delregno@somainline.org>,
+        "marijn.suijten@somainline.org" <marijn.suijten@somainline.org>,
+        "jamipkettunen@somainline.org" <jamipkettunen@somainline.org>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Marek Vasut <marex@denx.de>,
+        "Zhao, Jiaqing" <jiaqing.zhao@intel.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Soon Tak Lee <soontak.lee@cypress.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "brcm80211-dev-list.pdl@broadcom.com" 
+        <brcm80211-dev-list.pdl@broadcom.com>,
+        "SHA-cyfmac-dev-list@infineon.com" <SHA-cyfmac-dev-list@infineon.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 20 Oct 2022 at 15:01, Sudeep Holla <sudeep.holla@arm.com> wrote:
->
-> On Wed, Oct 19, 2022 at 01:57:34PM +0200, Ulf Hansson wrote:
-> > On Tue, 18 Oct 2022 at 16:53, Amit Pundir <amit.pundir@linaro.org> wrote:
-> > >
-> > > Disable cpuidle states for RB5. These cpuidle states
-> > > made the device highly unstable and it runs into the
-> > > following crash frequently:
-> > >
-> > > [    T1] vreg_l11c_3p3: failed to enable: -ETIMEDOUT
-> > > [    T1] qcom-rpmh-regulator 18200000.rsc:pm8150l-rpmh-regulators: ldo11: devm_regulator_register() failed, ret=-110
-> > > [    T1] qcom-rpmh-regulator: probe of 18200000.rsc:pm8150l-rpmh-regulators failed with error -110
-> > >
-> > > Fixes: 32bc936d7321 ("arm64: dts: qcom: sm8250: Add cpuidle states")
-> > > Signed-off-by: Amit Pundir <amit.pundir@linaro.org>
-> > > ---
-> > >  arch/arm64/boot/dts/qcom/qrb5165-rb5.dts | 8 ++++++++
-> > >  1 file changed, 8 insertions(+)
-> > >
-> > > diff --git a/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts b/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
-> > > index cc003535a3c5..f936c41bfbea 100644
-> > > --- a/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
-> > > +++ b/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
-> > > @@ -251,6 +251,14 @@ qca639x: qca639x {
-> > >
-> > >  };
-> > >
-> > > +&LITTLE_CPU_SLEEP_0 {
-> > > +       status = "disabled";
-> > > +};
-> > > +
-> > > +&BIG_CPU_SLEEP_0 {
-> > > +       status = "disabled";
-> > > +};
-> > > +
-> > >  &adsp {
-> > >         status = "okay";
-> > >         firmware-name = "qcom/sm8250/adsp.mbn";
-> > > --
-> > > 2.25.1
+On Mon, Sep 26, 2022 at 10:20 AM Kalle Valo <kvalo@kernel.org> wrote:
+> Linus Walleij <linus.walleij@linaro.org> writes:
+> > On Thu, Sep 22, 2022 at 3:31 PM Alvin =C5=A0ipraga <ALSI@bang-olufsen.d=
+k> wrote:
 > >
-> > Disabling the CPU idlestates, will revert us back to using only the WFI state.
+> >> I would also point out that the BCM4359 is equivalent to the
+> >> CYW88359/CYW89359 chipset, which we are using in some of our
+> >> products. Note that this is a Cypress chipset (identifiable by the
+> >> Version: ... (... CY) tag in the version string). But the FW Konrad is
+> >> linking appears to be for a Broadcom chipset.
 > >
-> > An option that probably works too is to just drop the idlestate for
-> > the CPU cluster. Would you mind trying the below and see if that works
-> > too?
-> >
+> > This just makes me think about Peter Robinsons seminar at
+> > LPC last week...
+> > "All types of wireless in Linux are terrible and why the vendors
+> > should feel bad"
+> > https://lpc.events/event/16/contributions/1278/attachments/1120/2153/wi=
+reless-issues.pdf
 >
-> Indeed this is was I suggested to check initially. But I was surprised to
-> see IIUC, Amit just disabled CPU states with above change and got it working.
-> So it is not cluster state alone causing the issue, is it somehow presence
-> of both cpu and cluster states ? Am I missing something here.
+> Thanks, this was a good read! I'm always interested about user and
+> downstream feedback, both good and bad :) But I didn't get the Stockholm
+> syndrome comment in the end, what does he mean with that?
 >
-> > diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> > b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> > index c32227ea40f9..c707a49e8001 100644
-> > --- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> > +++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> > @@ -700,7 +700,6 @@ CPU_PD7: cpu7 {
-> >
-> >                 CLUSTER_PD: cpu-cluster0 {
-> >                         #power-domain-cells = <0>;
-> > -                       domain-idle-states = <&CLUSTER_SLEEP_0>;
->
-> How about just marking CLUSTER_SLEEP_0 state disabled ? That looks cleaner
-> than deleting this domain-idle-states property here. Also not sure if DTS
-> warnings will appear if you delete this ?
+> BTW we have a wireless workshop in netdevconf 0x16, it would be great to
+> have there a this kind of session discussing user pain points:
 
-Hi, I did try disabling CLUSTER_SLEEP_0: cluster-sleep-0 {} in
-domain-idle-states {} but that didn't help. That's why I end up
-disabling individual cpu states in idle-states {}.
+I can't go to Lisbon, but my personal pain points are all this:
+https://openwrt.org/meta/infobox/broadcom_wifi
+and I think I'm not alone, but I can't speak for OpenWrt.
 
-Regards,
-Amit Pundir
+The lack of support in b43 for modern phys such as AC, i.e. the gap
+between b43 and brcmfmac, is extremely annoying and turning perfectly
+fine aftermarket devices into paperweights because there isn't even
+a way to make Broadcoms old proprietary blob work with contemporary
+kernels.
 
+If Broadcom could be convinced to either add support for the late b43
+variants or at least release documentation for the aftermarket that
+would be great.
 
->
-> --
-> Regards,
-> Sudeep
+I suppose they might be coming to the conference so give them my best
+regards with a "please fix" tag attached.
+
+Yours,
+Linus Walleij
