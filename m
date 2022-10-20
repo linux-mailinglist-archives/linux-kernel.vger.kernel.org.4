@@ -2,140 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2715605E7C
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 13:11:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A92EB605E7E
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 13:11:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbiJTLLR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 07:11:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32986 "EHLO
+        id S231259AbiJTLLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 07:11:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229868AbiJTLLO (ORCPT
+        with ESMTP id S229705AbiJTLLr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 07:11:14 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F6031D73D1
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 04:11:12 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id m16so29407640edc.4
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 04:11:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hn/N2WGEIShHDhSTOCpQpwNa3x9m9bdbA56cDhmTwHI=;
-        b=ef8EMNfsO7kJ1LUFqdRczimji9rYxgHXvyGrKSITnKn5o4gTgzlj/YK5sUjK5PkRWi
-         Hr4qy2C0NbrUXVdLgNXVuZDfr1L6KVDyjIl8w4GKtOVXf6fXTqypjoKUU8WhFxn4yGo8
-         ur4T852Gknsr/Bz2TCUEX2yM+3iWfBJEakL4QhWEOxMWAfmVbXVDLtP4NgYQxkxv7x7y
-         aM20vt/1/ZUxkB/8Y7MlE04BoQCndKxopC32Hl1Z75ybbw38PBaYTsiW64AnRoZwDgvh
-         L7OGOVJoi907f6UNIeOeyVkgmujlp4O82JHkscUyakfnIM2FD6SBW5Xbf+tn+GHQMign
-         S6Bg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hn/N2WGEIShHDhSTOCpQpwNa3x9m9bdbA56cDhmTwHI=;
-        b=ewB/AbQx1mAdJ9VKBquhkCsu4aQLxEv0nOZn+xumzSreN0eWixWvFDj/khBtC3pjcc
-         4PUN+XeP7AHQwdTFkddCXXKKThi3+PB7leWa4mH9xC6bLB7VnBCnhreRBT525AQrgLqj
-         gGbudFGxuw46AZ7SkRJAjCeqIBVMQTDL/6mAuEMyyP5l+p6asD+7WeDJ48L15jthtllP
-         qgol3HMXTRYeXUvpAVfP75JyVpj4ZrvUUKb3hFCGYY+yU3ni0ZIwFDRy7F6pSHQVSdtr
-         jBnQgu91/+1977w5Vw4Y4XgIOPmWktlCt/1oB/ynG2cncRUEjSFI0RN4bry/xQKbZa0Z
-         tyqQ==
-X-Gm-Message-State: ACrzQf2Pz/VvIIuI4I2+wArjtSYJntPzI8sRFUkC1fhP9ekYuIXoCw7t
-        yyGh4Jttxh78kYWlYJJHyR2MKaK2g1I=
-X-Google-Smtp-Source: AMsMyM4ppw+tav9D/2RCt8wE8gvgksSGpYvuY3s8GUCLxEuXBe/Z0lKtHaOUVEpdk3ZMlOH0Jo+i2A==
-X-Received: by 2002:a05:6402:4310:b0:45c:c16c:5c7d with SMTP id m16-20020a056402431000b0045cc16c5c7dmr11588275edc.246.1666264271293;
-        Thu, 20 Oct 2022 04:11:11 -0700 (PDT)
-Received: from nam-dell (ip-217-105-46-158.ip.prioritytelecom.net. [217.105.46.158])
-        by smtp.gmail.com with ESMTPSA id n24-20020a170906119800b0077077b59085sm10092230eja.184.2022.10.20.04.11.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 04:11:10 -0700 (PDT)
-Date:   Thu, 20 Oct 2022 13:10:56 +0200
-From:   Nam Cao <namcaov@gmail.com>
-To:     Tanjuate Brunostar <tanjubrunostar0@gmail.com>
-Cc:     outreachy@lists.linux.dev, greg@kroah.com,
-        forest@alittletooquiet.net, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] staging: vt6655: Fix Lines should not end with a '('
-Message-ID: <20221020111056.GA168499@nam-dell>
-References: <Y1EpYbkrau17uhDI@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
+        Thu, 20 Oct 2022 07:11:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 469743054F;
+        Thu, 20 Oct 2022 04:11:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ED930B82708;
+        Thu, 20 Oct 2022 11:11:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50B94C433D6;
+        Thu, 20 Oct 2022 11:11:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1666264303;
+        bh=fqppNzeCEo1NHzHf6cVOz8qZAjKWYPqQw/5w9Joza68=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GLnd7QnW7rjUEnIqOp/2/3h7dC8jkxN0JEK33g+5Kz8JjIeO9McVsGH2QRz7NDTaq
+         UbZnJpwvv4oKO3cF+LcDbUgMY8O1JOg8S3ha1Ad/TfDN/InH94SiDjG5NrzUET4vmZ
+         rZk9HtBogEblGTtmpixEL6l1FHFu1QA2DpcZEIdk=
+Date:   Thu, 20 Oct 2022 13:11:40 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     wangwenmei168@163.com
+Cc:     mathias.nyman@intel.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, gehao <gehao@kylinos.cn>
+Subject: Re: [RESEND PATCH] xhci: Fix Renesas PCIe controllers passthrough
+ issue
+Message-ID: <Y1Es7JWPNtcK2Qsu@kroah.com>
+References: <20221020103914.262202-1-wangwenmei168@163.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y1EpYbkrau17uhDI@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221020103914.262202-1-wangwenmei168@163.com>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 10:56:33AM +0000, Tanjuate Brunostar wrote:
-> Code style warnings reported by checkpatch.
-> Improve the layout of a function header:
-> Put the first parameter immediately after the '(' and align the other
-> parameters underneath it.
-> 
-> Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
-> 
-> ---
-> v2: put static and void on the same line and adjusted the indentation as
-> suggested by Greg KH
-> ---
->  drivers/staging/vt6655/rxtx.c | 18 ++++++------------
->  1 file changed, 6 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
-> index 5bdb5176772c..d987f7dff02a 100644
-> --- a/drivers/staging/vt6655/rxtx.c
-> +++ b/drivers/staging/vt6655/rxtx.c
-> @@ -85,10 +85,8 @@ static const unsigned short wFB_Opt1[2][5] = {
->  #define DATADUR_A_F1    13
->  
->  /*---------------------  Static Functions  --------------------------*/
-> -static
-> -void
-> -s_vFillRTSHead(
-> -	struct vnt_private *pDevice,
-> +static void
-> +s_vFillRTSHead(struct vnt_private *pDevice,
->  	unsigned char byPktType,
->  	void *pvRTS,
->  	unsigned int	cbFrameLength,
-> @@ -96,13 +94,10 @@ s_vFillRTSHead(
->  	bool bDisCRC,
->  	struct ieee80211_hdr *hdr,
->  	unsigned short wCurrentRate,
-> -	unsigned char byFBOption
-> -);
-> +	unsigned char byFBOption);
->  
-> -static
-> -void
-> -s_vGenerateTxParameter(
-> -	struct vnt_private *pDevice,
-> +static void
-> +s_vGenerateTxParameter(struct vnt_private *pDevice,
->  	unsigned char byPktType,
->  	struct vnt_tx_fifo_head *,
->  	void *pvRrvTime,
-> @@ -112,8 +107,7 @@ s_vGenerateTxParameter(
->  	bool bNeedACK,
->  	unsigned int	uDMAIdx,
->  	void *psEthHeader,
-> -	unsigned short wCurrentRate
-> -);
-> +	unsigned short wCurrentRate);
->  
->  static unsigned int
->  s_cbFillTxBufHead(struct vnt_private *pDevice, unsigned char byPktType,
-> -- 
-> 2.34.1
->
+On Thu, Oct 20, 2022 at 06:39:14PM +0800, wangwenmei168@163.com wrote:
+> From: gehao <gehao@kylinos.cn>
 
-I think you mistakenly sent v2 again..
+This does not match your from: line in the email at all, so we can't
+take this :(
 
-Best regards,
-Nam
+Please work with your company's email system to make it possible to send
+kernel patches if you wish to be able to contribute.
+
+> 
+> When we use uPD720201 USB 3.0 Host Controller passthrough to VM
+> guest os will report follow errors and it can not working.
+> 
+> xhci_hcd 0000:09:00.0: Host took too long to start, waited 16000
+> microseconds.
+> xhci_hcd 0000:09:00.0: startup error -19.
+> 
+> Because when we passthroug some device to our guest os,
+> dev->iommu_group =NULL,so it will return from this function,
+> Actually it still control by host os.
+> I think that this condition is not necessary.
+> 
+> For host os with IOMMU,it is safe.
+> For host os with noiommu,doing anything when there is no
+> iommu is definitely.
+> For guest os,the addresses we can access are restricted.
+> 
+> After add this path,they all work well.
+
+This line isn't needed in a changelog, right?
+
+> 
+> Signed-off-by: gehao <gehao@kylinos.cn>
+> ---
+>  drivers/usb/host/xhci.c | 6 +-----
+>  1 file changed, 1 insertion(+), 5 deletions(-)
+> 
+> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> index 5176765c4013..e8f4c4ee3ea3 100644
+> --- a/drivers/usb/host/xhci.c
+> +++ b/drivers/usb/host/xhci.c
+> @@ -241,12 +241,8 @@ static void xhci_zero_64b_regs(struct xhci_hcd *xhci)
+>  	 * changing the programming leads to extra accesses even if the
+>  	 * controller is supposed to be halted. The controller ends up with
+>  	 * a fatal fault, and is then ripe for being properly reset.
+> -	 *
+> -	 * Special care is taken to only apply this if the device is behind
+> -	 * an iommu. Doing anything when there is no iommu is definitely
+> -	 * unsafe...
+
+How many different systems did you test this on to verify that this is
+now ok to do?
+
+thanks,
+
+greg k-h
