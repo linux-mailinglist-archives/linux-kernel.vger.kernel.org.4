@@ -2,139 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6046D606241
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 15:53:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9759A60625E
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 16:01:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbiJTNx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 09:53:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42384 "EHLO
+        id S230057AbiJTOBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 10:01:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbiJTNxW (ORCPT
+        with ESMTP id S229661AbiJTOA5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 09:53:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E06EA1A913E
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 06:53:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666273994;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=x9NhUtGxO6K74gqQdZfG6EzOgRH0Jnrjb43QwxtH/NI=;
-        b=H7MwrIVAtvYB7QmXAKzSTcndp+PN+XBPkNX414oCKI9bVc+4mVczrjrI3C40tpHvGYcKK2
-        kRH4v2z+bWNf1tZKDRMCEGohHkyAu5RjuGNsSLTupvEK8QOn9cRejUEcLokUs8ybri6rfg
-        Y5yEfudEQhrR8HpY22fI+Fz/dqEDyaU=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-482-tGUNIB2dMby1Cv7uYW3BDQ-1; Thu, 20 Oct 2022 09:53:13 -0400
-X-MC-Unique: tGUNIB2dMby1Cv7uYW3BDQ-1
-Received: by mail-ej1-f69.google.com with SMTP id hd11-20020a170907968b00b0078df60485fdso9712392ejc.17
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 06:53:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=x9NhUtGxO6K74gqQdZfG6EzOgRH0Jnrjb43QwxtH/NI=;
-        b=2wYJ/hQzzbaInBCeXw38ojYkJUdwxN2n9QicryCqnJjyDSamUqUkL2zvYWUu2mbLoh
-         RxuE0YrhLqHzZfcOLihGpaaVdg88AnEgspLHcirI4e4+hGYobgH3N3MqReRsQWw3O3yr
-         7aHwizgOhCF037ze5d2/pXRSQLaxQCKd8YN6lBwbCrnj2TLS9hAKAdIEbxFj352TPx2i
-         BMVngIirbhB91a/sgvDX/IoZwG1B83m5N2bI6/I5FTtCEde2uI58JXQLzQpUCetMy88R
-         QRpd3s3DpaBgae5glqmk/oSStPpuMXbXNcmFfpGZQLp/hsKJZVASCUp/1wv51ULi632L
-         b23Q==
-X-Gm-Message-State: ACrzQf2MVTvE35YLVbYPAensxWp2r4luu3xrxhMCwAU40BJ6AEaSNTSn
-        Eu9J49GEFZZjKFPOPGOE06rfDXAN2/c88SFORVccgGp+IRQ7bsA0XHPxVfM5vrnf9N8/kCMstSj
-        sL33GexIZvom4Il0f1HI+uQbk
-X-Received: by 2002:a17:907:d02:b0:78d:b3cd:a277 with SMTP id gn2-20020a1709070d0200b0078db3cda277mr11010885ejc.622.1666273992058;
-        Thu, 20 Oct 2022 06:53:12 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4PotGcQ07K6ypuchl5tD8IgFsrRkxFuy7goJ/+FeOLMHBFjGRjP71jovTbqc1KjV7/6G7ilA==
-X-Received: by 2002:a17:907:d02:b0:78d:b3cd:a277 with SMTP id gn2-20020a1709070d0200b0078db3cda277mr11010870ejc.622.1666273991734;
-        Thu, 20 Oct 2022 06:53:11 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id j18-20020a17090623f200b0078db18d7972sm10327867ejg.117.2022.10.20.06.53.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Oct 2022 06:53:11 -0700 (PDT)
-Message-ID: <8bc59991-53c2-cff1-c63a-07da93a34bf4@redhat.com>
-Date:   Thu, 20 Oct 2022 15:53:10 +0200
+        Thu, 20 Oct 2022 10:00:57 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03A431918BD;
+        Thu, 20 Oct 2022 07:00:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1666274092;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=+mgBMCBNsWwFZE81j7AWjxRLPZ+r53tvByijdyeHgpc=;
+    b=hAm9jsAcRSqWq0k1wHI5OIw5UFEu1cy87TRtt7G1igCJzQ8bkNthnA+7u6Tm8FkSH8
+    yG2ng66KAHxInB7K2OSp6Hc0PVhaI09GxLXDVPw6+3tuzEz3+oV8/JHZXrZ5rKKmMB2Y
+    OpzgX6hetF+aLttb6EtjHm8J7DN6WPQvkIrnCjMAnHY9HkeZ42UkSZS1JxmeCuf2UFUZ
+    phQ51lZAkFYKqTMP3XzE58d1t3bb0XY3GHvt1c9cSds19Sg0XtVvHIMEiGCo2L73LRr3
+    GnflH1LS0UL+CBtw0mQKDWtd8BmjU1678/KknIsuGOtG6EzEK21/FegQEqpsZdvgZGSK
+    I9Lw==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJAhd5WwPXI"
+X-RZG-CLASS-ID: mo00
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 48.2.0 DYNA|AUTH)
+    with ESMTPSA id f6c614y9KDsqYnL
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Thu, 20 Oct 2022 15:54:52 +0200 (CEST)
+Date:   Thu, 20 Oct 2022 15:54:46 +0200
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Melody Olvera <quic_molvera@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] arm64: dts: qcom: Add base QDU1000/QRU1000 DTSIs
+Message-ID: <Y1FTJgloEi5ag2/j@gerhold.net>
+References: <20221014221138.7552-1-quic_molvera@quicinc.com>
+ <20221014221138.7552-3-quic_molvera@quicinc.com>
+ <56af2a04-1b21-000d-e3f9-86b6ac74aaf2@linaro.org>
+ <a0032338-482f-0de7-5952-c3c8b8423df6@quicinc.com>
+ <50372a15-56ce-6ad6-f622-00624b909db8@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [GIT PULL] Backlight for v6.1
-Content-Language: en-US, nl
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Lee Jones <lee@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <Yz18QA27+gN0oaM3@google.com>
- <CAHk-=whK-q1W-X0q0f_nBJ9sKyta-DVJhEAS4BF_oKAVAUQ4Jw@mail.gmail.com>
- <Y0AmmR2NfKc/Y7Mb@google.com>
- <CAHk-=wg=hh8xkPjiySnjAyR66AG64eyZ1Y9gHw+MCs8uuSZReA@mail.gmail.com>
- <Y0HB3K8IRVhX5IvT@smile.fi.intel.com>
- <CAHk-=wixtjmiENLbc1=Hds3mMSjVRA3ZiwXN7yg8mw_1MCg_QQ@mail.gmail.com>
- <d66fa3ea-1efe-e7da-be80-89507067e2a9@redhat.com>
- <CAHk-=wgF_0+au4cz-ZmH4qOpgDWmmbJC101fh_RVAbsJRH7d-Q@mail.gmail.com>
- <189ed242-4ccb-4935-ede0-c5807d7b5083@redhat.com>
- <e0fb158f-81af-8f3d-5d8b-c4c423feec6c@infradead.org>
- <Y1FRwfeX+ynmHxPm@smile.fi.intel.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <Y1FRwfeX+ynmHxPm@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <50372a15-56ce-6ad6-f622-00624b909db8@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 10/20/22 15:48, Andy Shevchenko wrote:
-> On Wed, Oct 19, 2022 at 08:31:33PM -0700, Randy Dunlap wrote:
->> On 10/9/22 05:58, Hans de Goede wrote:
->>> On 10/9/22 01:23, Linus Torvalds wrote:
->>>> On Sat, Oct 8, 2022 at 12:59 PM Hans de Goede <hdegoede@redhat.com> wrote:
+On Thu, Oct 20, 2022 at 08:41:15AM -0400, Krzysztof Kozlowski wrote:
+> On 19/10/2022 16:21, Melody Olvera wrote:
+> > On 10/15/2022 6:28 AM, Krzysztof Kozlowski wrote:
+> >> On 14/10/2022 18:11, Melody Olvera wrote:
+> >> [...]
+> >>> +	clocks {
+> >>> +		xo_board: xo-board {
+> >>> +			compatible = "fixed-clock";
+> >>> +			clock-frequency = <19200000>;
+> >> Both clocks are not a property of a SoC. They are provided by the board,
+> >> so they should either be defined by board DTS or at least their
+> >> frequency must be provided by the board.
+> > That doesn't seem in keeping with precedent.... the sm8* series all have the clocks in
+> > the dtsi. These are common to the boards anyways.
 > 
-> ...
+> Because people do not pay attention what is part of SoC, what is part of
+> board. DTSI is for the SoC and these are inputs to the SoC.
 > 
->>>> Because if it depends on some symbols from I2C_DESIGNWARE_PLATFORM,
->>>> and that one can be a module, then the Intel PMIC driver also needs to
->>>> be built as a module to just get the build coverage, at least.
->>
->> I don't see intel_soc_pmic_crc.c using any direct calls into
->> i2c-designware-platform code. If it calls into it, it must be thru some
->> indirect pointers (?).
-> 
-> It's on hardware level, the PMIC is connected to the I²C host controller,
-> which is Synopsys DesignWare and being services by the respective driver.
-> 
-> Any access to the PMIC's registers requires the I²C to be involved.
-> What we talked above is even bigger loop, that takes AML code in
-> the chain.
 
-Right and the involvement of AML means that we need this all to
-work early on during boot, which means that all the bits, including
-the I2C controller needs to be builtin. So things will compile fine
-without the "depends on I2C_DESIGNWARE_PLATFORM=y" but then things
-start breaking at runtime.
+(Just chiming in because I had this thought already a few times when you
+ suggested moving the XO "clock-frequency" to the board DTS:)
 
-After a bunch of bug-reports due to wrong kernel configs I decided to
-add the "depends on I2C_DESIGNWARE_PLATFORM=y" and since then we have
-received no more bug reports about it. So although technically there
-is no dependency on symbols from the i2c-designware driver I would
-still very much like to keep the dependency around.
+I understand your reasoning for moving components of the board to the
+board DTS, but IMHO adding just the clock-frequency to the board DTS is
+even more misleading: It suggests that there are functional board
+designs where you would use a XO clock with a different clock-frequency.
+Is that really realistic though?
 
-As I already mentioned earlier in the thread adding a
-' || COMPILE_TEST' to this is absolutely fine and if I get Cc-ed
-on such a patch I'm more then happy to Ack it.
+There are assumptions about the XO clock frequency in a lot of places:
+You would need to fully rewrite the gcc-<SoC>.c driver because it has
+fixed multipliers/dividers for one specific XO frequency. All firmware
+binaries would likely need changes. And does the hardware even support a
+different XO clock frequency? The APQ8016E datasheet for example
+strictly documents a XO clock input of 19.2 MHz and a sleep clock of
+32.768 kHz.
 
-Regards,
+IMHO the only realistic variation of the XO clock setup would be to have
+a physical "fixed-clock" with a higher frequency, followed by a
+"fixed-factor-clock" that brings it back to the expected frequency. To
+model that properly it is not enough to have just the "clock-frequency"
+in the board DTS. In this case you need two clock nodes, and the
+xo_board would be the "fixed-factor-clock".
 
-Hans
+Therefore it should be all or nothing IMO: Either we move the full
+xo-board node to the board DTS (which allows alternatively defining the
+"fixed-factor-clock" or whatever). Or we assume that there will be
+always an input clock signal with the fixed frequency and keep it fully
+in the SoC .dtsi.
 
+Having just the "clock-frequency" in the board DTS puts the attention on
+the wrong detail, IMO. :)
+
+Thanks,
+Stephan
