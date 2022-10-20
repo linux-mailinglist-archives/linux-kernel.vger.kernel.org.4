@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D381B60573E
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 08:17:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BC9B60573F
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 08:17:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230108AbiJTGRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 02:17:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35436 "EHLO
+        id S230116AbiJTGRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 02:17:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbiJTGRn (ORCPT
+        with ESMTP id S230089AbiJTGRn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 20 Oct 2022 02:17:43 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1977184994
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 23:17:41 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id i4-20020a056e02152400b002fa876e95b3so19196230ilu.17
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 23:17:41 -0700 (PDT)
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9936D1849A3
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 23:17:42 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id s3-20020a5eaa03000000b006bbdfc81c6fso15896701ioe.4
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 23:17:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=DBc7Xw2HbF4h3gnckV7KCo2QmXlEWnaB1MHtVlvS1GA=;
-        b=ML0PYUvFu2A9lXO9iW3zBsNp26soX2kkpyp7hGxz/xxmXLI4GIUGFRsBA+tGW/Dgm7
-         4ncWc3dWjrWCfB9GHSphqA+DjYBUlrUvGbIa7L/2gz9TPWoHyswUo+osEPtWK29xi0K4
-         wJKPyPuip3bcTxTGWkJyRgBd3DfKw4EM27pAZOKwo5vSKdP0k86iPd3ekNvj/kwhv9AS
-         R6E4lVpYkJ+/8dKEO8E7mSAtVrbmPwNagO7yrGVbbPuXR8zmoUvovwI/SS2zZck73kxL
-         918TDkG3JswrdC05UZxNqCcQZmqcqcCCgfYjWfMEJGikSS69sVrp3y12miJGkiG0sn69
-         qyDA==
-X-Gm-Message-State: ACrzQf3rA90dWzRLV+CLij/imE9lPQVln6szs3rfw46aID8EnRginwKP
-        aPySWhxp6QOfzXi1itoIVEIlYC/d7PHOZs+DIIzOcoiyw+Nd
-X-Google-Smtp-Source: AMsMyM6hGq6RnqsBwy9BdPUy8QoOU8kxV/JmTATMK+MpM8POvOLd7QLNVGkBULbGVELkHEBXdw9fhvl7uZogrshcgaFWnePZx6LO
+        bh=ta5MpRduwUsht0i2QMhM2lVMVgWREjI8RsgK+nyWoLk=;
+        b=6PQJJmhglbyPgk/eXtof8moXt6ZZTNb0XBPEYINyYmV6m3DpIYkKpVOMdAOWwBbPwl
+         wBNw+abqEBbOYcB4Dk3KtgYxeKMshdzayKqHvY2YLJ7/xg2AEstd35cX5+sZZfqrgpZd
+         xWGZKwHKJ2revdMgWp1ABG6P1F7bj4PTI1EfC0uoY/1OSx9aypXa2nBEgfwnlfvSLRoh
+         PMJQDbH4c5s+51xES/35VEM6Aw+ZAr4xKnm/5U9BTm3g3zSudmKgct2qA+uIPr0zlMGH
+         cT6wbbeEk4lv2NjRCwkkZpsuGzzDMXsLcI42L4zHcNNQ9kY48rSMGYTtjZJRhs7NLVfl
+         jYtA==
+X-Gm-Message-State: ACrzQf1qmCUzjI6XwQx7u/QH9qTCwJpiDjHHNuN8j4HEvO2kmN25Qv57
+        KpV8ynMGNK1uRn7aUYJ7NXosngheoaoWBtI4ePl77P5GwTlv
+X-Google-Smtp-Source: AMsMyM4XoENKn2XfcsA8GCNHMS4eZqWCctRx+Nn7/K3ajeM95faXHkAPGKGYcv0cIG31nJrxpnFtHtyT3sQhRFR+4oS4D/AE9Omg
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:2685:b0:363:dfd1:a144 with SMTP id
- o5-20020a056638268500b00363dfd1a144mr10086616jat.249.1666246661293; Wed, 19
+X-Received: by 2002:a05:6e02:b2d:b0:2f9:e735:a010 with SMTP id
+ e13-20020a056e020b2d00b002f9e735a010mr8561834ilu.151.1666246661883; Wed, 19
  Oct 2022 23:17:41 -0700 (PDT)
 Date:   Wed, 19 Oct 2022 23:17:41 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000005ad00405eb7148c6@google.com>
-Subject: [syzbot] general protection fault in hugetlbfs_parse_param
-From:   syzbot <syzbot+a3e6acd85ded5c16a709@syzkaller.appspotmail.com>
-To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        mike.kravetz@oracle.com, songmuchun@bytedance.com,
+Message-ID: <00000000000063d12705eb7148be@google.com>
+Subject: [syzbot] WARNING in udf_table_free_blocks
+From:   syzbot <syzbot+ff260305474b823e33a6@syzkaller.appspotmail.com>
+To:     jack@suse.com, linux-kernel@vger.kernel.org,
         syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
@@ -59,99 +58,75 @@ Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    a72b55bc981b Add linux-next specific files for 20221019
-git tree:       linux-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=14510b06880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=200524babbc01b2a
-dashboard link: https://syzkaller.appspot.com/bug?extid=a3e6acd85ded5c16a709
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15bbe2d2880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16678bd6880000
+HEAD commit:    493ffd6605b2 Merge tag 'ucount-rlimits-cleanups-for-v5.19'..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=136fead6880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d19f5d16783f901
+dashboard link: https://syzkaller.appspot.com/bug?extid=ff260305474b823e33a6
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
 
 Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/fa24fb5893fd/disk-a72b55bc.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/cf1b7e7b579c/vmlinux-a72b55bc.xz
+disk image: https://storage.googleapis.com/syzbot-assets/f1ff6481e26f/disk-493ffd66.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/101bd3c7ae47/vmlinux-493ffd66.xz
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+a3e6acd85ded5c16a709@syzkaller.appspotmail.com
+Reported-by: syzbot+ff260305474b823e33a6@syzkaller.appspotmail.com
 
-general protection fault, probably for non-canonical address 0xdffffc0000000000: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
-CPU: 1 PID: 3607 Comm: syz-executor454 Not tainted 6.1.0-rc1-next-20221019-syzkaller #0
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 3765 at fs/udf/udfdecl.h:116 udf_add_free_space fs/udf/balloc.c:102 [inline]
+WARNING: CPU: 0 PID: 3765 at fs/udf/udfdecl.h:116 udf_table_free_blocks+0x14b6/0x1920 fs/udf/balloc.c:384
+Modules linked in:
+CPU: 0 PID: 3765 Comm: syz-executor.1 Not tainted 6.0.0-syzkaller-09423-g493ffd6605b2 #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
-RIP: 0010:hugetlbfs_parse_param+0x1dd/0x8e0 fs/hugetlbfs/inode.c:1380
-Code: 00 fc ff df 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 84 06 00 00 48 b8 00 00 00 00 00 fc ff df 4d 8b 65 10 4c 89 e2 48 c1 ea 03 <0f> b6 04 02 4c 89 e2 83 e2 07 38 d0 7f 0c 84 c0 74 08 4c 89 e7 e8
-RSP: 0018:ffffc90003a5fb48 EFLAGS: 00010246
-RAX: dffffc0000000000 RBX: 1ffff9200074bf6b RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffffffff82350899 RDI: ffffc90003a5fc78
-RBP: ffff88801db5ac00 R08: 0000000000000005 R09: 0000000000000006
-R10: 0000000000000005 R11: 000000000008c001 R12: 0000000000000000
-R13: ffffc90003a5fc68 R14: ffff88801d5fbf00 R15: ffff88801db5acd0
-FS:  00005555569383c0(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+RIP: 0010:udf_updated_lvid fs/udf/udfdecl.h:114 [inline]
+RIP: 0010:udf_add_free_space fs/udf/balloc.c:102 [inline]
+RIP: 0010:udf_table_free_blocks+0x14b6/0x1920 fs/udf/balloc.c:384
+Code: 89 ff e8 bd ec e5 fe 48 8b 9c 24 70 01 00 00 48 85 db 74 07 e8 fb 81 92 fe eb bc e8 f4 81 92 fe e9 2d ed ff ff e8 ea 81 92 fe <0f> 0b e9 fa ee ff ff 89 f9 80 e1 07 fe c1 38 c1 0f 8c 64 ec ff ff
+RSP: 0018:ffffc900057df500 EFLAGS: 00010293
+RAX: ffffffff82f3ff66 RBX: 0000000000000001 RCX: ffff888024a7bb00
+RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
+RBP: ffffc900057df708 R08: ffffffff82f3ee55 R09: fffffbfff1c19fde
+R10: fffffbfff1c19fde R11: 1ffffffff1c19fdd R12: dffffc0000000000
+R13: ffff8880968ba01c R14: ffff88807aeea678 R15: 1ffff92000afbf30
+FS:  0000555556550400(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
 CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020001000 CR3: 0000000074e4c000 CR4: 00000000003506e0
+CR2: 000000c00ebc4a80 CR3: 000000004cb15000 CR4: 00000000003506f0
 DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
 DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 Call Trace:
  <TASK>
- vfs_parse_fs_param fs/fs_context.c:148 [inline]
- vfs_parse_fs_param+0x1f9/0x3c0 fs/fs_context.c:129
- vfs_parse_fs_string+0xdb/0x170 fs/fs_context.c:191
- generic_parse_monolithic+0x16f/0x1f0 fs/fs_context.c:231
- do_new_mount fs/namespace.c:3036 [inline]
- path_mount+0x12de/0x1e20 fs/namespace.c:3370
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount fs/namespace.c:3568 [inline]
- __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ udf_free_blocks+0x1b2/0x240 fs/udf/balloc.c:662
+ extent_trunc+0x3ae/0x4b0 fs/udf/truncate.c:56
+ udf_truncate_extents+0x38d/0x11c0 fs/udf/truncate.c:230
+ udf_setsize+0xeb9/0x1290 fs/udf/inode.c:1282
+ udf_evict_inode+0x74/0x410 fs/udf/inode.c:145
+ evict+0x2a4/0x620 fs/inode.c:664
+ udf_free_partition fs/udf/super.c:279 [inline]
+ udf_sb_free_partitions+0x134/0x570 fs/udf/super.c:306
+ udf_put_super+0x10f/0x160 fs/udf/super.c:2361
+ generic_shutdown_super+0x130/0x310 fs/super.c:491
+ kill_block_super+0x79/0xd0 fs/super.c:1427
+ deactivate_locked_super+0xa7/0xf0 fs/super.c:331
+ cleanup_mnt+0x4ce/0x560 fs/namespace.c:1186
+ task_work_run+0x146/0x1c0 kernel/task_work.c:177
+ resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+ exit_to_user_mode_loop+0x124/0x150 kernel/entry/common.c:169
+ exit_to_user_mode_prepare+0xb2/0x140 kernel/entry/common.c:201
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
+ syscall_exit_to_user_mode+0x26/0x60 kernel/entry/common.c:294
+ do_syscall_64+0x49/0xb0 arch/x86/entry/common.c:86
  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f06d8633fe9
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffe278e8e18 EFLAGS: 00000246 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 00007ffe278e8e28 RCX: 00007f06d8633fe9
-RDX: 0000000020000040 RSI: 0000000020000000 RDI: 0000000000000000
-RBP: 00007ffe278e8e20 R08: 0000000020000280 R09: 00007f06d85f20a0
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+RIP: 0033:0x7f20fc08ca17
+Code: ff ff ff f7 d8 64 89 01 48 83 c8 ff c3 66 0f 1f 44 00 00 31 f6 e9 09 00 00 00 66 0f 1f 84 00 00 00 00 00 b8 a6 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffebd6ce1e8 EFLAGS: 00000246 ORIG_RAX: 00000000000000a6
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 00007f20fc08ca17
+RDX: 00007ffebd6ce2bb RSI: 000000000000000a RDI: 00007ffebd6ce2b0
+RBP: 00007ffebd6ce2b0 R08: 00000000ffffffff R09: 00007ffebd6ce080
+R10: 00005555565518b3 R11: 0000000000000246 R12: 00007f20fc0e55f6
+R13: 00007ffebd6cf370 R14: 0000555556551810 R15: 00007ffebd6cf3b0
  </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:hugetlbfs_parse_param+0x1dd/0x8e0 fs/hugetlbfs/inode.c:1380
-Code: 00 fc ff df 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 84 06 00 00 48 b8 00 00 00 00 00 fc ff df 4d 8b 65 10 4c 89 e2 48 c1 ea 03 <0f> b6 04 02 4c 89 e2 83 e2 07 38 d0 7f 0c 84 c0 74 08 4c 89 e7 e8
-RSP: 0018:ffffc90003a5fb48 EFLAGS: 00010246
-RAX: dffffc0000000000 RBX: 1ffff9200074bf6b RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffffffff82350899 RDI: ffffc90003a5fc78
-RBP: ffff88801db5ac00 R08: 0000000000000005 R09: 0000000000000006
-R10: 0000000000000005 R11: 000000000008c001 R12: 0000000000000000
-R13: ffffc90003a5fc68 R14: ffff88801d5fbf00 R15: ffff88801db5acd0
-FS:  00005555569383c0(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f06d86453c0 CR3: 0000000074e4c000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess), 3 bytes skipped:
-   0:	df 48 89             	fisttps -0x77(%rax)
-   3:	fa                   	cli
-   4:	48 c1 ea 03          	shr    $0x3,%rdx
-   8:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1)
-   c:	0f 85 84 06 00 00    	jne    0x696
-  12:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-  19:	fc ff df
-  1c:	4d 8b 65 10          	mov    0x10(%r13),%r12
-  20:	4c 89 e2             	mov    %r12,%rdx
-  23:	48 c1 ea 03          	shr    $0x3,%rdx
-* 27:	0f b6 04 02          	movzbl (%rdx,%rax,1),%eax <-- trapping instruction
-  2b:	4c 89 e2             	mov    %r12,%rdx
-  2e:	83 e2 07             	and    $0x7,%edx
-  31:	38 d0                	cmp    %dl,%al
-  33:	7f 0c                	jg     0x41
-  35:	84 c0                	test   %al,%al
-  37:	74 08                	je     0x41
-  39:	4c 89 e7             	mov    %r12,%rdi
-  3c:	e8                   	.byte 0xe8
 
 
 ---
@@ -161,5 +136,3 @@ syzbot engineers can be reached at syzkaller@googlegroups.com.
 
 syzbot will keep track of this issue. See:
 https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
