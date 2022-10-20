@@ -2,69 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AF65606AB3
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 00:00:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45FF1606AEE
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 00:00:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230090AbiJTWAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 18:00:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40570 "EHLO
+        id S230108AbiJTWAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 18:00:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230071AbiJTV75 (ORCPT
+        with ESMTP id S230136AbiJTWAN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 17:59:57 -0400
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94A3363372;
-        Thu, 20 Oct 2022 14:59:49 -0700 (PDT)
-Received: by mail-ot1-x32f.google.com with SMTP id z11-20020a05683020cb00b00661a95cf920so716624otq.5;
-        Thu, 20 Oct 2022 14:59:49 -0700 (PDT)
+        Thu, 20 Oct 2022 18:00:13 -0400
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A74210B78E;
+        Thu, 20 Oct 2022 15:00:08 -0700 (PDT)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-13ae8117023so1257841fac.9;
+        Thu, 20 Oct 2022 15:00:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ARKH8V4OjwusuqSwsWSFzG2eaJLXUFsNfMNSJs9wECM=;
-        b=QHLiWlFjoX5OUha/ys/iXAC4fg65Vf638ogS9SpT0lsl3GnzgKrCjmbrX72B14cu55
-         TZzmNQvCnPhH9pBKFlYpxA/oE115jT7LvGo6IUONe2jDOGz0lxtKfTjnB4vYD3Lvdjdf
-         1KxsSX/Mf8bxFkhNsVOQ3/l9wlk4McsQrey0r5ZzWRwgm5jSJ1ifDA1P4eJNAW0seKqd
-         YNy1VDHfqq3SATFjrvEhtFn93VIaSZKIv6e/D42bWRbrVK/jl1SicFGnmlBEAFI8VEFW
-         VuVz/ty8W/ekDinoR0vHCRuQPw63HIVC4xZjPweIDTLcjyKB946I+Cx/hNc2SjNF/mIE
-         Riew==
+        bh=mADrD5kqZ/aWrDx8+xfVy4IIeq0xlwp2VEYiTpJwCPg=;
+        b=Q7t7Sk3IMTefNmRlElWe23sXJSE+xUcHKmdPRosUNJY9MKcRBkV16rF92pkbmJj3y9
+         TshRhELiOAVYg2+voo6loNbXHIJhAACYivxSq/Wy11q8y1JnOLSJ9wEFU7qVO9hUSv9k
+         h8GWf/zt6QIkxDmOJBwPqGe9Iq9P1WozuQHEGh433mvN2vxj1BQ3xPNfLXj5yJdF21nb
+         oQ/3TzGbyP6l3Vpac3ppfDHznMGaYw3UZbinK+4pNYhBiX+QVL/xIR6+quVL1mD2Bq7p
+         XdnKQ1gkxLGZY4uv3yfpCQb8R5GjksUAcqCtEN5JfnVEmoO8BxUZDUygb25Rtr4QE2S3
+         vuQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ARKH8V4OjwusuqSwsWSFzG2eaJLXUFsNfMNSJs9wECM=;
-        b=z1+9/bUWK7SfWWHgKOvPu7XyxIl6oAZp2H2fl5lz0nTkCX4+1K2YIDaphsugwYtnPz
-         9mRiZXRbtLR3x0gayL/nIdm1qnk4gVzr71vM9BsEIeGNMYgE5TO0zBl2fKxzVIhTj/hY
-         FbQTGEsz5n/OX86Bdv4Beqm4EGQyGv4Iruy0NM6zQdv2atceggx+cLovgMh6sgz8mdzI
-         rSbgk43xl/RhPEqJwr4U1d6+hlHSO4KoIztUuOLj8vGekayVDIAF38Fxp5WxuinA/4KI
-         Xq6KpeGaUzayrn5tJRMHTYK0LnZ+pQCgcPmZlAmm8sbiSxU1MSQMPFxRqewz4nlGNlUW
-         U1ag==
-X-Gm-Message-State: ACrzQf0rsYws4BudSD/SAK5k2exGWgQPBm51bEAR1U56zJHZF6Cw0iuH
-        5ZuOdYPoGUocPGks1LBwJPXcGiWrwUw=
-X-Google-Smtp-Source: AMsMyM6Bp5KAulmHuUu2awsZIpbNsyJIytpi5ilN12coZKK+TUs/+Xia9Oj5192t1KRIUT+AdtReMw==
-X-Received: by 2002:a9d:191:0:b0:661:a5db:56d1 with SMTP id e17-20020a9d0191000000b00661a5db56d1mr8111675ote.125.1666303188712;
-        Thu, 20 Oct 2022 14:59:48 -0700 (PDT)
+        bh=mADrD5kqZ/aWrDx8+xfVy4IIeq0xlwp2VEYiTpJwCPg=;
+        b=cbMGnKSAHAmIi/zGmhM7TyIFwZDf1HObFLqhd+xYA2kG3FqDUTm70ffJiHP7I/hsLF
+         CNLwBWxrk3uRMuvc29ElQwHoBPBKDkGtEo6iZVRuvR7zuYeTQdI4ukRZFEBIRE4slTdB
+         J5BoVMsrAMB27zG9YwGD66re5VO2+izUEDPE7BIcERRH/AnD/CC3Gqgin634dnJBlG79
+         PP3UCaUdSfz4hdJZ3YF6MOYvMynJ4CDYcDk6GkgKn7g/IW7G51yH4ymQWuFC9GTEhPNx
+         tefdsO3OVTNvUVhxT/H3WWDNYeM7ojNbnEf38EQ9nCibPAd3sHUjHdV+Ab/HuRasdrgl
+         o7GA==
+X-Gm-Message-State: ACrzQf3p0yehiOovvXmxjkwLMQD9J9/aVoG6xYC/S8OoXCEj/ywKOexq
+        soRWgS055elhM5bfBXcCOck=
+X-Google-Smtp-Source: AMsMyM7a2jcQriM9sV+NON7Zf7PX03Znjkv4gAjl8Lhp5FKb1qq4xwyietbaenKl9y1nU4ARxwH9og==
+X-Received: by 2002:a05:6870:a198:b0:136:6459:b294 with SMTP id a24-20020a056870a19800b001366459b294mr10505915oaf.43.1666303207397;
+        Thu, 20 Oct 2022 15:00:07 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h23-20020a9d61d7000000b00661a1d92aacsm394776otk.33.2022.10.20.14.59.48
+        by smtp.gmail.com with ESMTPSA id db10-20020a0568306b0a00b00661a80d555fsm398041otb.40.2022.10.20.15.00.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 14:59:48 -0700 (PDT)
+        Thu, 20 Oct 2022 15:00:06 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 20 Oct 2022 14:59:47 -0700
+Date:   Thu, 20 Oct 2022 15:00:05 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Paul Cercueil <paul@crapouillou.net>
 Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/4] watchdog: twl4030: Remove #ifdef guards for PM
- related functions
-Message-ID: <20221020215947.GB4035307@roeck-us.net>
+Subject: Re: [PATCH 3/4] watchdog: omap: Remove #ifdef guards for PM related
+ functions
+Message-ID: <20221020220005.GC4035307@roeck-us.net>
 References: <20221020185047.1001522-1-paul@crapouillou.net>
- <20221020185047.1001522-3-paul@crapouillou.net>
+ <20221020185047.1001522-4-paul@crapouillou.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221020185047.1001522-3-paul@crapouillou.net>
+In-Reply-To: <20221020185047.1001522-4-paul@crapouillou.net>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -76,7 +76,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 07:50:45PM +0100, Paul Cercueil wrote:
+On Thu, Oct 20, 2022 at 07:50:46PM +0100, Paul Cercueil wrote:
 > Use the pm_ptr() macro to handle the .suspend/.resume callbacks.
 > 
 > This macro allows the suspend and resume functions to be automatically
@@ -90,43 +90,45 @@ On Thu, Oct 20, 2022 at 07:50:45PM +0100, Paul Cercueil wrote:
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->  drivers/watchdog/twl4030_wdt.c | 9 ++-------
->  1 file changed, 2 insertions(+), 7 deletions(-)
+>  drivers/watchdog/omap_wdt.c | 11 ++---------
+>  1 file changed, 2 insertions(+), 9 deletions(-)
 > 
-> diff --git a/drivers/watchdog/twl4030_wdt.c b/drivers/watchdog/twl4030_wdt.c
-> index 36b4a660928d..09d17e20f4a7 100644
-> --- a/drivers/watchdog/twl4030_wdt.c
-> +++ b/drivers/watchdog/twl4030_wdt.c
-> @@ -81,7 +81,6 @@ static int twl4030_wdt_probe(struct platform_device *pdev)
->  	return devm_watchdog_register_device(dev, wdt);
->  }
->  
-> -#ifdef CONFIG_PM
->  static int twl4030_wdt_suspend(struct platform_device *pdev, pm_message_t state)
->  {
->  	struct watchdog_device *wdt = platform_get_drvdata(pdev);
-> @@ -99,10 +98,6 @@ static int twl4030_wdt_resume(struct platform_device *pdev)
->  
+> diff --git a/drivers/watchdog/omap_wdt.c b/drivers/watchdog/omap_wdt.c
+> index 74d785b2b478..e75aa86f63cb 100644
+> --- a/drivers/watchdog/omap_wdt.c
+> +++ b/drivers/watchdog/omap_wdt.c
+> @@ -316,8 +316,6 @@ static int omap_wdt_remove(struct platform_device *pdev)
 >  	return 0;
 >  }
+>  
+> -#ifdef	CONFIG_PM
+> -
+>  /* REVISIT ... not clear this is the best way to handle system suspend; and
+>   * it's very inappropriate for selective device suspend (e.g. suspending this
+>   * through sysfs rather than by stopping the watchdog daemon).  Also, this
+> @@ -353,11 +351,6 @@ static int omap_wdt_resume(struct platform_device *pdev)
+>  	return 0;
+>  }
+>  
 > -#else
-> -#define twl4030_wdt_suspend        NULL
-> -#define twl4030_wdt_resume         NULL
+> -#define	omap_wdt_suspend	NULL
+> -#define	omap_wdt_resume		NULL
 > -#endif
->  
->  static const struct of_device_id twl_wdt_of_match[] = {
->  	{ .compatible = "ti,twl4030-wdt", },
-> @@ -112,8 +107,8 @@ MODULE_DEVICE_TABLE(of, twl_wdt_of_match);
->  
->  static struct platform_driver twl4030_wdt_driver = {
->  	.probe		= twl4030_wdt_probe,
-> -	.suspend	= twl4030_wdt_suspend,
-> -	.resume		= twl4030_wdt_resume,
-> +	.suspend	= pm_ptr(twl4030_wdt_suspend),
-> +	.resume		= pm_ptr(twl4030_wdt_resume),
+> -
+>  static const struct of_device_id omap_wdt_of_match[] = {
+>  	{ .compatible = "ti,omap3-wdt", },
+>  	{},
+> @@ -368,8 +361,8 @@ static struct platform_driver omap_wdt_driver = {
+>  	.probe		= omap_wdt_probe,
+>  	.remove		= omap_wdt_remove,
+>  	.shutdown	= omap_wdt_shutdown,
+> -	.suspend	= omap_wdt_suspend,
+> -	.resume		= omap_wdt_resume,
+> +	.suspend	= pm_ptr(omap_wdt_suspend),
+> +	.resume		= pm_ptr(omap_wdt_resume),
 >  	.driver		= {
->  		.name		= "twl4030_wdt",
->  		.of_match_table	= twl_wdt_of_match,
+>  		.name	= "omap_wdt",
+>  		.of_match_table = omap_wdt_of_match,
 > -- 
 > 2.35.1
 > 
