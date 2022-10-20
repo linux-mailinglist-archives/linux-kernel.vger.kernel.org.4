@@ -2,128 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98B81605A3D
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 10:52:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E8B76059CB
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 10:31:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230401AbiJTIwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 04:52:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57570 "EHLO
+        id S230009AbiJTIbo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 04:31:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231196AbiJTIvo (ORCPT
+        with ESMTP id S229949AbiJTIbj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 04:51:44 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 231C018C962
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 01:51:22 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 6F4C6320091A;
-        Thu, 20 Oct 2022 04:51:18 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Thu, 20 Oct 2022 04:51:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1666255878; x=
-        1666342278; bh=xhtPz8Dqfioscgg3yoemS47J761NmMtmupbcefOZt74=; b=p
-        IVewE0Z001+xXD14v17px7/vL/VxtVJrbQt+NJ6J9T8W/JvZY0/LJ6bkUmDm6fQw
-        QoQvlOtwBp8Wa1wAuf1PRQK4Z8Zp29IQIZB0mSL7Cp7I05vGgLvFNY6gM64dWcQC
-        ngCxUgzgTA8G5i4wmUP9xT4M+5QoERh+3tM4kOe4B0ynR+ZU+AZ4ZzCEU36bgYGW
-        bzlcrKflb9qW41WBomCSmi/vV6lN15P4q1R5rWIWHT2Su8Maw1gUQpbjrmB1wExd
-        7mN6PhxI2fEGXrNrvlHXn+DJRLjk0u9F/vtiNMF1OBVngXkVvSimJE/cptsALTQR
-        n1cc3r6b85CeX8OeaHnCQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1666255878; x=
-        1666342278; bh=xhtPz8Dqfioscgg3yoemS47J761NmMtmupbcefOZt74=; b=C
-        YXW505xbvqJ2G9zUNNnOvQMxGHFv/58s3C41nZicrHh0R89cuLhDmM3wtW6XplC1
-        Zt0Er0ad66JMQN6UcG2uB4KaaSCpo1KTE1J8AZuJB5RlJ5eulFmaOKwdgFfhTQLm
-        PTemKkm88XPxWlbkAu8KDRNv00ZYkwLjV5diX1YOeWjhhyGkuIeMomzIhmUD91BF
-        KH/RMl90dh1L2nYyT9szLoHDXQOs/Tw/lo4gRlf0iNW9KHJF5RXlE/N9aI6s5By7
-        dH+WPRjIgVe2+MPgGqsZYtXd/V6NMpsH5FWAtOeayZ7U1TDRYC1pilO6xXBhcEtL
-        08tne4wslk6/9tzqyokeg==
-X-ME-Sender: <xms:BQxRYzsUh28oJRqvodjeeceY4EYL170KmPkUeVRLCM3fEK_iqGPdtw>
-    <xme:BQxRY0e7CvH8PEiFvjKX_N4cbyeHNA-bqmDIDj8LGY3Z8jSrsMyH-oA_kDpblbPNH
-    MCO9pmmAYDS2KmLRa8>
-X-ME-Received: <xmr:BQxRY2zfp3RiFlTHCKBH6VI9FGx2UwJqIyAV3e0__pS8ZGEZB68mhPfA2z14fcp8gGoy5jmtlky-XWtFz1OHvuGrTvJUTPlDFTg3>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeliedgtdekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephfffufggtgfgkfhfjgfvvefosehtkeertdertdejnecuhfhrohhmpeforgig
-    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
-    grthhtvghrnhepudduudfhveejteefgedvffdvvedvjedugedukeejhedtlefhffevtefh
-    jeeltdevnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghilhhfrhhomh
-    epmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:BQxRYyOVqGLLEnyNxVR2uOLKcI2Tzm5jpJ6LVgHJ4NSOd_2ZQBP9Fw>
-    <xmx:BQxRYz-2TIojs7NlQUWhSld5QTXle2lfGX62sUrvD6_pD6OP12R02Q>
-    <xmx:BQxRYyXPYPOSFpZ3P9ikI7D_eTZw_Hn6GbLaH3TnfXCFEFvWxN3hiQ>
-    <xmx:BgxRY5Pn7jwOyu0br5JIGV5gXJI01s-U10Qriip07_T-3Lfh1gDwRA>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 20 Oct 2022 04:51:17 -0400 (EDT)
-From:   Maxime Ripard <maxime@cerno.tech>
-Date:   Thu, 20 Oct 2022 10:30:51 +0200
-Subject: [PATCH v2 7/7] drm/vc4: dpi: Fix format mapping for RGB565
+        Thu, 20 Oct 2022 04:31:39 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA02C15ECC5
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 01:31:37 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id m29-20020a05600c3b1d00b003c6bf423c71so1789040wms.0
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 01:31:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/hCpDbVRoc+q/9gSPADK7PRRzF3tzQ7+LRZVH7HnjY8=;
+        b=ZOwrGT8YlcyuCniv3v2gcTGYsyOsF1bRQP+5/n5cJtEfVLBTSwrkPRnwTHYdXH5AS4
+         GpbQhf/EJDFhESbVNKeMcOA4AP/2TpsnqAwRkh1zuw8DPcNFNt3I1DKvWc8OhxL47HyO
+         94eUlug5J2DmCBN69I9GYPdf+CiQJEmygXdjpETIGeowjOre0R79sv7c1Q9RQ0aeSgjA
+         mt/1gthUycDV4pJjcXRfNC8PgwaWu2zZ3S9r53z1oORZ2tRITN3YHmhzLqhKj86MHQ3y
+         7h/s9aWZfmFMX5F4eVOhSoMD5mrH13LUCX+GXuMWABU1wXjzGcvvXu+zda+XvTRoiu9v
+         naog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/hCpDbVRoc+q/9gSPADK7PRRzF3tzQ7+LRZVH7HnjY8=;
+        b=t1eEG3M8gcwmlhN5LZKTsbE/WJ9q3Kju3KqvytZIDoa0C+prv2MJx7AQ23COkonLhM
+         /jSivalC7zyNstZMg3IABKnqNcN0uhpJ5iJpbmROF4+MnH82bESkdp1C8ig1npCRr9wd
+         KE56nNE5qnIgk4OdGGXJLV1ULY2isTJIQQ58bXUt14L5O4EqL9izUD3zOzm2FvMX0x4r
+         wGuEVqFRJJv5cWQY4wLbYywEPKp378ThfmN+8D0GiUQ5+G8amb34aiIOGzlJrawWS6Ru
+         dn9eTCDacaRFj2QMWackJtWD8sbA9xsHc62dzYYU+9l0nRDCyRB0qO3YyhZM49rQNFGz
+         dbNg==
+X-Gm-Message-State: ACrzQf3iVHOoye0b3UUxiMcEpjZku7Y6ivFpnWLtzR7Xyu/A2m3LbrVm
+        Z0KrjgbBO/MAaPPM80gHHB1Dbg==
+X-Google-Smtp-Source: AMsMyM6iQl1yh/y0HEH9uS1CZVI3KrJmHjy5uCOsdpFu/YF84jxhh6xVVSE8CZ2CG6O57/gkvjT9Lg==
+X-Received: by 2002:a05:600c:a08:b0:3bc:eb4c:b90 with SMTP id z8-20020a05600c0a0800b003bceb4c0b90mr8488441wmp.184.1666254696083;
+        Thu, 20 Oct 2022 01:31:36 -0700 (PDT)
+Received: from localhost ([82.66.159.240])
+        by smtp.gmail.com with ESMTPSA id j28-20020a5d6e5c000000b0022cd27bc8c1sm19246814wrz.9.2022.10.20.01.31.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Oct 2022 01:31:35 -0700 (PDT)
+From:   Mattijs Korpershoek <mkorpershoek@baylibre.com>
+To:     Jason Andryuk <jandryuk@gmail.com>, linux-kernel@vger.kernel.org
+Cc:     xen-devel@lists.xenproject.org, Jason Andryuk <jandryuk@gmail.com>,
+        Phillip Susi <phill@thesusis.net>, stable@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-input@vger.kernel.org
+Subject: Re: [PATCH] Input: xen-kbdfront - drop keys to shrink modalias
+In-Reply-To: <20221019201458.21803-1-jandryuk@gmail.com>
+References: <20221019201458.21803-1-jandryuk@gmail.com>
+Date:   Thu, 20 Oct 2022 10:31:34 +0200
+Message-ID: <87zgdq99qx.fsf@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20221013-rpi-dpi-improvements-v2-7-7691903fb9c8@cerno.tech>
-References: <20221013-rpi-dpi-improvements-v2-0-7691903fb9c8@cerno.tech>
-In-Reply-To: <20221013-rpi-dpi-improvements-v2-0-7691903fb9c8@cerno.tech>
-To:     Emma Anholt <emma@anholt.net>, Maxime Ripard <mripard@kernel.org>,
-        Rob Herring <robh@kernel.org>, Daniel Vetter <daniel@ffwll.ch>,
-        Eric Anholt <eric@anholt.net>, David Airlie <airlied@linux.ie>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Joerg Quinten <aBUGSworstnightmare@gmail.com>,
-        Chris Morgan <macromorgan@hotmail.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <maxime@cerno.tech>
-X-Mailer: b4 0.10.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1022; i=maxime@cerno.tech;
- h=from:subject:message-id; bh=43Ff0zFIOvU8ONzBI2sMboXcyvjpYfdtbjUUqEZ+IMo=;
- b=owGbwMvMwCX2+D1vfrpE4FHG02pJDMmB7BZun+9cOHhhZkG26VLBhMoqro9zxHQ+PCx667xsuZma
- k/aijlIWBjEuBlkxRZYYYfMlcadmve5k45sHM4eVCWQIAxenAEzkNyfDH44Js/RL30h/b5r/keNHVN
- 69AHY+vat1EfyvqnU+Tz7wroCRYe/BjROqBet2JGWJf3k4TzZpjwfzZlad31VF87ebilinsQIA
-X-Developer-Key: i=maxime@cerno.tech; a=openpgp;
- fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dave Stevenson <dave.stevenson@raspberrypi.com>
+On Wed, Oct 19, 2022 at 16:14, Jason Andryuk <jandryuk@gmail.com> wrote:
 
-The mapping is incorrect for RGB565_1X16 as it should be
-DPI_FORMAT_18BIT_666_RGB_1 instead of DPI_FORMAT_18BIT_666_RGB_3.
+> xen kbdfront registers itself as being able to deliver *any* key since
+> it doesn't know what keys the backend may produce.
+>
+> Unfortunately, the generated modalias gets too large and uevent creation
+> fails with -ENOMEM.
+>
+> This can lead to gdm not using the keyboard since there is no seat
+> associated [1] and the debian installer crashing [2].
+>
+> Trim the ranges of key capabilities by removing some BTN_* ranges.
+> While doing this, some neighboring undefined ranges are removed to trim
+> it further.
+>
+> This removes:
+> BTN_DPAD_UP(0x220)..BTN_DPAD_RIGHT(0x223)
+> Empty space 0x224..0x229
+>
+> Emtpy space 0x2bd..0x2bf
+> BTN_TRIGGER_HAPPY(0x2c0)..BTN_TRIGGER_HAPPY40(0x2e7)
+> Empty space 0x2e8..0x2ff
+>
+> The modalias shrinks from 2082 to 1754 bytes.
+>
+> [1] https://github.com/systemd/systemd/issues/22944
+> [2] https://lore.kernel.org/xen-devel/87o8dw52jc.fsf@vps.thesusis.net/T/
+>
+> Cc: Phillip Susi <phill@thesusis.net>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Jason Andryuk <jandryuk@gmail.com>
 
-Fixes: 08302c35b59d ("drm/vc4: Add DPI driver")
-Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
----
- drivers/gpu/drm/vc4/vc4_dpi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Reviewed-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
 
-diff --git a/drivers/gpu/drm/vc4/vc4_dpi.c b/drivers/gpu/drm/vc4/vc4_dpi.c
-index fdae02760b6d..a7bebfa5d5b0 100644
---- a/drivers/gpu/drm/vc4/vc4_dpi.c
-+++ b/drivers/gpu/drm/vc4/vc4_dpi.c
-@@ -185,7 +185,7 @@ static void vc4_dpi_encoder_enable(struct drm_encoder *encoder)
- 						       DPI_FORMAT);
- 				break;
- 			case MEDIA_BUS_FMT_RGB565_1X16:
--				dpi_c |= VC4_SET_FIELD(DPI_FORMAT_16BIT_565_RGB_3,
-+				dpi_c |= VC4_SET_FIELD(DPI_FORMAT_16BIT_565_RGB_1,
- 						       DPI_FORMAT);
- 				break;
- 			case MEDIA_BUS_FMT_RGB565_1X24_CPADHI:
-
--- 
-b4 0.10.1
+> ---
+>  drivers/input/misc/xen-kbdfront.c | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/input/misc/xen-kbdfront.c b/drivers/input/misc/xen-kbdfront.c
+> index 8d8ebdc2039b..23f37211be78 100644
+> --- a/drivers/input/misc/xen-kbdfront.c
+> +++ b/drivers/input/misc/xen-kbdfront.c
+> @@ -256,7 +256,14 @@ static int xenkbd_probe(struct xenbus_device *dev,
+>  		__set_bit(EV_KEY, kbd->evbit);
+>  		for (i = KEY_ESC; i < KEY_UNKNOWN; i++)
+>  			__set_bit(i, kbd->keybit);
+> -		for (i = KEY_OK; i < KEY_MAX; i++)
+> +		/* In theory we want to go KEY_OK..KEY_MAX, but that grows the
+> +		 * modalias line too long.  KEY_KBD_LCD_MENU5 is the last
+> +		 * defined non-button key. There is a gap of buttons from
+> +		 * BTN_DPAD_UP..BTN_DPAD_RIGHT and KEY_ALS_TOGGLE is the next
+> +		 * defined. */
+> +		for (i = KEY_OK; i < BTN_DPAD_UP; i++)
+> +			__set_bit(i, kbd->keybit);
+> +		for (i = KEY_ALS_TOGGLE; i <= KEY_KBD_LCD_MENU5; i++)
+>  			__set_bit(i, kbd->keybit);
+>  
+>  		ret = input_register_device(kbd);
+> -- 
+> 2.37.3
