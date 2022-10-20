@@ -2,112 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4C1A606219
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 15:46:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A85C7606216
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 15:46:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229785AbiJTNqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 09:46:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57906 "EHLO
+        id S229928AbiJTNqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 09:46:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229786AbiJTNqG (ORCPT
+        with ESMTP id S229777AbiJTNqE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 09:46:06 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCECC11874B;
-        Thu, 20 Oct 2022 06:45:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id D34C4CE252D;
-        Thu, 20 Oct 2022 13:45:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4AC2C433C1;
-        Thu, 20 Oct 2022 13:45:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666273549;
-        bh=gEzBsG2afAcJArkvwrtS1d1ZrUezVmRH4opGNtVPXAQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=VJGp3AgHy1aLrltfoH3ZUIY2vPiG8odz2T6+x6jMCxcJgZCwTqS9qB3icoBC8o4E8
-         E1gfpoW8H0h3qQq/0/EZYuKYCvQC8HL2tkyrpL4XwUeqKy9JVjs4nQoNI/bL0fqMMC
-         fht4bNrhgVpd8SagpFnXZ9RE9junpC95FZ9mZIXzSFLwxrvemWT4v9YJzydgYmRwr9
-         Dq/0vR7MpzhoHTTfYTeffDWxoum67vJnPgSuWd0+edba3zhaABe6sytQ7LWcvC1QV0
-         OeDSrpxLauYQmP8C3WM0IafIX95qvt1v+oz6aA+EnOZHYUsc8+crMpW+Mx2cnmWOWH
-         H+9jYGQE6tu6w==
-Date:   Thu, 20 Oct 2022 08:45:47 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     kernel test robot <lkp@intel.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Heiko Stuebner <heiko@sntech.de>, linux-pci@vger.kernel.org,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        llvm@lists.linux.dev, Minghuan Lian <minghuan.Lian@nxp.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Bharat Kumar Gogada <bharat.kumar.gogada@amd.com>,
-        Toan Le <toan@os.amperecomputing.com>,
-        linux-riscv@lists.infradead.org,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Joyce Ooi <joyce.ooi@intel.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-arm-kernel@lists.infradead.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        Shawn Lin <shawn.lin@rock-chips.com>,
-        Ray Jui <rjui@broadcom.com>, linux-tegra@vger.kernel.org,
-        linux-omap@vger.kernel.org, Mingkai Hu <mingkai.hu@nxp.com>,
-        Roy Zang <roy.zang@nxp.com>, Michal Simek <monstr@monstr.eu>,
-        kbuild-all@lists.01.org, Scott Branden <sbranden@broadcom.com>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        linux-kernel@vger.kernel.org, Tom Joseph <tjoseph@cadence.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Subject: Re: [PATCH] PCI: Remove unnecessary of_irq.h includes
-Message-ID: <20221020134547.GA94120@bhelgaas>
+        Thu, 20 Oct 2022 09:46:04 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9747159A3C
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 06:45:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666273560; x=1697809560;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=sOvhO47D7FTpxIF0a2DwvTy4GmSSGRqIP8YnoXp6ofQ=;
+  b=bhhyQR6pnTBFTGh26waGrzIrqekMuae2C6JdoiTwBncIm9szzlc3H7YN
+   xMRXGr5bxXehotjBJt2BZJBH1kUfW++bY5ywbvzoXXuxMTtykMtNB2tuW
+   1RSs9sRARmn8CSlsrFZXhFop4SNnCTNSWu8Q7cdzP9oQ/yZ23VFqxwhRH
+   UxDDIJ/LvLpSvyRMErz5aYdLOSB0+/+AWzV3eKI+DIqToOE6hRm2OVeAV
+   MefP3uNH/MYT/367QpkcikejgyT4jjKDSFC5frY+l1GrgATfXqykDpp7i
+   V+O3GO4c3KLEFBmHm2Q2yp5UdpnSltlZAl0kIYhx5IEG0ccKDs+cotG4z
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="308390701"
+X-IronPort-AV: E=Sophos;i="5.95,198,1661842800"; 
+   d="scan'208";a="308390701"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 06:45:52 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="692990171"
+X-IronPort-AV: E=Sophos;i="5.95,198,1661842800"; 
+   d="scan'208";a="692990171"
+Received: from aasthash-mobl.ger.corp.intel.com (HELO [10.213.232.117]) ([10.213.232.117])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 06:45:51 -0700
+Message-ID: <d47b30e9-5619-c631-aa92-f5d89e88a909@linux.intel.com>
+Date:   Thu, 20 Oct 2022 14:45:49 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y1D2ubkwXqwx9LWD@wendy>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [Intel-gfx] signal: break out of wait loops on kthread_stop()
+Content-Language: en-US
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     "Intel-gfx@lists.freedesktop.org" <Intel-gfx@lists.freedesktop.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        linux-kernel@vger.kernel.org, sultan@kerneltoast.com
+References: <0029af41-bf24-9972-10ac-f52e1bdcbf08@linux.intel.com>
+ <CAHmME9o25v0kZUV-7qEY=6XXAyOA7q0sG8gpQfxHgr3sSVdsWw@mail.gmail.com>
+ <41455798-1dcb-135f-516d-25ab9a8082f5@linux.intel.com>
+ <Y1A+9kN6bwfXeqVt@zx2c4.com>
+ <8acc3e4a-abbc-32bc-626e-7a216f6755c3@linux.intel.com>
+ <Y1Bby6FEEWiFIjjD@zx2c4.com>
+From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Organization: Intel Corporation UK Plc
+In-Reply-To: <Y1Bby6FEEWiFIjjD@zx2c4.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+cc Pali, heads-up for trivial addition of <linux/irqdomain.h> to
-pci-mvebu.c]
 
-On Thu, Oct 20, 2022 at 08:20:25AM +0100, Conor Dooley wrote:
-> On Thu, Oct 20, 2022 at 03:08:50PM +0800, kernel test robot wrote:
-> > Hi Bjorn,
-> > 
-> > I love your patch! Yet something to improve:
-> > 
-> > >> drivers/pci/controller/pcie-microchip-host.c:473:31: error: incomplete definition of type 'struct irq_domain'
-> >            struct mc_pcie *port = domain->host_data;
+On 19/10/2022 21:19, Jason A. Donenfeld wrote:
+> On Wed, Oct 19, 2022 at 09:09:28PM +0100, Tvrtko Ursulin wrote:
+>> Hm why is kthread_stop() after kthread_run() abuse? I don't see it in
+>> kerneldoc that it must not be used for stopping threads.
 > 
-> That's what I get for only visually inspecting the patch before Acking
-> it.. Un-ack I suppose.
+> Because you don't want it to stop. You want to wait until it's done. If
+> you call stop right after run, it will even stop it before it even
+> begins to run. That's why you wind up sprinkling your msleeps
+> everywhere, indicating that clearly this is not meant to work that way.
+Not after kthread_run which wakes it up already. If the kerneldoc for 
+kthread_stop() is correct at least... In which case I really do think 
+that the yields are pointless/red herring. Perhaps they predate 
+kthread_run and then they were even wrong.
 
-No problem!
+>> Yep the yields and sleeps are horrible and will go. But they are also
+>> not relevant for the topic at hand.
+> 
+> Except they very much are. The reason you need these is because you're
+> using kthread_stop() for something it's not meant to do.
 
-I think what happened is the pcie-microchip-host.c uses
-irq_domain_add_linear() so it needs <linux/irqdomain.h>, but it
-currently gets it via <linux/of_irq.h>, which it doesn't otherwise
-need.
+It is supposed to assert kthread_should_stop() which thread can look at 
+as when to exit. Except that now it can fail to get to that controlled 
+exit point. Granted that argument is moot since it implies incomplete 
+error handling in the thread anyway.
 
-I added a preparatory patch to include <linux/irqdomain.h> explicitly,
-but I haven't been able to cross-build either riscv or ia64 to verify
-this fix.  I'll wait a few days and post an updated series for the
-0-day bot to test.
+Btw there are actually two use cases in our code base. One is thread 
+controls the exit, second is caller controls the exit. Anyway...
 
-Same situation for pcie-altera-msi.c.
+>> Never mind, I was not looking for anything more than a suggestion on how
+>> to maybe work around it in piece as someone is dealing with the affected
+>> call sites.
+> 
+> Sultan's kthread_work idea is probably the right direction. This would
+> seem to have what you need.
 
-pci-mvebu.c also relies on getting <linux/irqdomain.h> via
-<linux/of_irq.h>, but it actually depends on of_irq.h, so I'll just
-add an irqdomain.h include there.
+... yes, it can be converted. Even though for one of the two use cases 
+we need explicit signalling. There now isn't anything which would assert 
+kthread_should_stop() without also asserting the signal, right?. Neither 
+I found that the thread work API can do it.
 
-Bjorn
+Fingers crossed we were the only "abusers" of the API. There's a quite a 
+number of kthread_stop callers and it would be a large job to audit them 
+all.
 
+Regards,
+
+Tvrtko
