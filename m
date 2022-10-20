@@ -2,39 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 189D5606A40
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 23:27:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C6FA606A42
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 23:28:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230123AbiJTV1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 17:27:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42136 "EHLO
+        id S229868AbiJTV2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 17:28:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230124AbiJTV1f (ORCPT
+        with ESMTP id S230040AbiJTV2M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 17:27:35 -0400
-Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 604B41843F2
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 14:27:34 -0700 (PDT)
+        Thu, 20 Oct 2022 17:28:12 -0400
+Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0B6D1B65DC
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 14:28:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1666301241; bh=Z+VG00Bz+MqCLxk3bOeCCdRBcry1M+c82M61bL+Qfho=;
+        t=1666301271; bh=osZn+6l7ZcamOnQm1Kj8TWDodwur+Vk/CJgdHGyMLV4=;
         h=X-EA-Auth:Date:From:To:Subject:Message-ID:References:MIME-Version:
          Content-Type:In-Reply-To;
-        b=HG3V0WZeCX+bY02ChW3ggUuLoHKA6XBC27RpT+HqhpEcZJ3v6xOPz/1zJN87ce+51
-         XYfQ3riDeRkTb9KdQ9SI732XCtoXTsTLnTaJlf1iEoz3KD7j+H699/iNGSKeJbtzbD
-         ffC/g84bxM76s/ZI2lo76YTBWTVjzPh4Ue2gt+pc=
-Received: by b-5.in.mailobj.net [192.168.90.15] with ESMTP
+        b=JDK6sXJHHZPm1X1JTA/3n1F0TgXNsvYRopXGLFEr5mI1yLZZ1dz6m4AqcEvcbQYBY
+         evKOVFQUCHJRFrGEfqcp8HQPKUS5emEfNRaIJOHzyLoZLOhy2Jhaifsq2zeW29Pfmb
+         X2gfsMsaAzSo685ocId1avlE15cNXTK52QEj3Ya8=
+Received: by b-3.in.mailobj.net [192.168.90.13] with ESMTP
         via [213.182.55.206]
-        Thu, 20 Oct 2022 23:27:21 +0200 (CEST)
-X-EA-Auth: /9poAHYZcrK/Wv1IuSYCeojHh6q7xwja4LEfweSX98onskwOcDQV30QmMCiGZO+5NVi5kR8V06qqooqJ9sWVSMNEI0fFsaes
-Date:   Fri, 21 Oct 2022 02:57:16 +0530
+        Thu, 20 Oct 2022 23:27:51 +0200 (CEST)
+X-EA-Auth: 0SzVPJnUCFVymnvhYnT+ZBDlwrBjoO0BYlm5VbZ1Sfr7f4NihbYSY1U9y0GZvCNK20pdPkmZbPno2jP9oXOwF2kaZfor+WOo
+Date:   Fri, 21 Oct 2022 02:57:47 +0530
 From:   Deepak R Varma <drv@mailo.com>
 To:     outreachy@lists.linux.dev, Larry.Finger@lwfinger.net,
         phil@philpotter.co.uk, paskripkin@gmail.com,
         gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
         linux-kernel@vger.kernel.org, kumarpraveen@linux.microsoft.com,
         saurabh.truth@gmail.com
-Subject: [PATCH v4 02/11] staging: r8188eu: reformat long computation lines
-Message-ID: <e07506ef1dc4ac1d3f8b076a8182628bd0e5cec0.1666299151.git.drv@mailo.com>
+Subject: [PATCH v4 03/11] staging: r8188eu: remove {} for single statement
+ blocks
+Message-ID: <a50460e1507621b29a7901cc4ff9501b172417db.1666299151.git.drv@mailo.com>
 References: <cover.1666299151.git.drv@mailo.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -49,61 +50,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reformat long running computation instructions to improve code readability.
-Address checkpatch script complaints like:
-	CHECK: line length of 171 exceeds 100 columns
+As per the Linux kernel coding-style guidelines, there is no need to
+use {} for single statement blocks. Issue flagged by checkpatch script.
 
 Signed-off-by: Deepak R Varma <drv@mailo.com>
 ---
 
 Changes in v4:
-   -- As the variable name is shorter now, the reformatting is more clearer.
+   -- None.
 
 Changes in v3:
-   -- None
+   -- None.
 
 Changes in v1 [actually v2]:
-   1. Further improve the formatting per feedback from gregkh@linuxfoundation.org
+   1. Improve patch description language to make it simpler. Feedback received
+      from julia.lawall@inria.fr
 
 
- drivers/staging/r8188eu/core/rtw_br_ext.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/staging/r8188eu/core/rtw_br_ext.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/drivers/staging/r8188eu/core/rtw_br_ext.c b/drivers/staging/r8188eu/core/rtw_br_ext.c
-index e509b8454e25..d4059f0fc362 100644
+index d4059f0fc362..b418cbc307b3 100644
 --- a/drivers/staging/r8188eu/core/rtw_br_ext.c
 +++ b/drivers/staging/r8188eu/core/rtw_br_ext.c
-@@ -212,7 +212,7 @@ static int __nat25_network_hash(unsigned char *addr)
- 		unsigned long x;
+@@ -649,9 +649,8 @@ void *scdb_findEntry(struct adapter *priv, unsigned char *ip_addr)
+ 	hash = __nat25_network_hash(addr);
+ 	db = priv->nethash[hash];
+ 	while (db) {
+-		if (!memcmp(db->networkAddr, addr, MAX_NETWORK_ADDR_LEN)) {
++		if (!memcmp(db->networkAddr, addr, MAX_NETWORK_ADDR_LEN))
+ 			return (void *)db;
+-		}
 
- 		x = addr[1] ^ addr[2] ^ addr[3] ^ addr[4] ^ addr[5] ^
--			addr[6] ^ addr[7] ^ addr[8] ^ addr[9] ^ addr[10];
-+		    addr[6] ^ addr[7] ^ addr[8] ^ addr[9] ^ addr[10];
-
- 		return x & (NAT25_HASH_SIZE - 1);
- 	} else if (addr[0] == NAT25_APPLE) {
-@@ -224,16 +224,16 @@ static int __nat25_network_hash(unsigned char *addr)
- 	} else if (addr[0] == NAT25_PPPOE) {
- 		unsigned long x;
-
--		x = addr[0] ^ addr[1] ^ addr[2] ^ addr[3] ^ addr[4] ^ addr[5] ^ addr[6] ^ addr[7] ^ addr[8];
-+		x = addr[0] ^ addr[1] ^ addr[2] ^ addr[3] ^ addr[4] ^
-+		    addr[5] ^ addr[6] ^ addr[7] ^ addr[8];
-
- 		return x & (NAT25_HASH_SIZE - 1);
- 	} else if (addr[0] == NAT25_IPV6) {
- 		unsigned long x;
-
--		x = addr[1] ^ addr[2] ^ addr[3] ^ addr[4] ^ addr[5] ^
--			addr[6] ^ addr[7] ^ addr[8] ^ addr[9] ^ addr[10] ^
--			addr[11] ^ addr[12] ^ addr[13] ^ addr[14] ^ addr[15] ^
--			addr[16];
-+		x = addr[1] ^ addr[2] ^ addr[3] ^ addr[4] ^ addr[5] ^ addr[6] ^
-+		    addr[7] ^ addr[8] ^ addr[9] ^ addr[10] ^ addr[11] ^ addr[12] ^
-+		    addr[13] ^ addr[14] ^ addr[15] ^ addr[16];
-
- 		return x & (NAT25_HASH_SIZE - 1);
- 	} else {
+ 		db = db->next_hash;
+ 	}
 --
 2.30.2
 
