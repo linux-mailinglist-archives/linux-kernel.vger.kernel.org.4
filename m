@@ -2,106 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D6B96065C8
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 18:28:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38CDF6065CB
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 18:29:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229795AbiJTQ22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 12:28:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44526 "EHLO
+        id S229751AbiJTQ3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 12:29:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbiJTQ2Z (ORCPT
+        with ESMTP id S229729AbiJTQ3A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 12:28:25 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDBC62E9D6;
-        Thu, 20 Oct 2022 09:28:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 1FA1DCE26F9;
-        Thu, 20 Oct 2022 16:28:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEFFCC433B5;
-        Thu, 20 Oct 2022 16:28:20 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="bHnUKadW"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1666283298;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6c56fZ5kerOQ5aIM75vB4dMcPlUkfVpQAx4Ufxtjbdk=;
-        b=bHnUKadWsAUlF5xfxV4eJ7eZeUVZuzHbvjXnv8KT1YFZWheHixIoOHRqDj2dXiKv1ZfhtE
-        rWnMSwzb4Rl5GOjvYp1Z+Oe8RqGPVPijCuWtPNwERamJKyG1MaLXSQlAHuf3Wjc+lOZoBK
-        S5+FEFBAf/vloGUaKYuXzbHoRjiMq7A=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d41a3611 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Thu, 20 Oct 2022 16:28:18 +0000 (UTC)
-Received: by mail-ua1-f49.google.com with SMTP id h25so9959512uao.13;
-        Thu, 20 Oct 2022 09:28:17 -0700 (PDT)
-X-Gm-Message-State: ACrzQf1kcoYSL0Tlbchk3/rY1JIE/wtGlZhyMLtJupM1Jb9Iby5xvxXw
-        fcYATk9Pz+ZShih3Dgi3FetbUeSc8NSENnuQfcM=
-X-Google-Smtp-Source: AMsMyM73A4O7b+F/R0fell/X1cFuk98lyms+Gw6tPxMTTI1kYRmUpaee7D31c9lshQYfXDjtKpk1jik3WRwXkJ254bA=
-X-Received: by 2002:a67:ec47:0:b0:3a9:682c:bc5c with SMTP id
- z7-20020a67ec47000000b003a9682cbc5cmr7410097vso.70.1666283296983; Thu, 20 Oct
- 2022 09:28:16 -0700 (PDT)
+        Thu, 20 Oct 2022 12:29:00 -0400
+Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49C65138BAB
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 09:28:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1666283318; bh=QrbH8ZlnlI+VbcMy6Hlu3J19WCIXjbJ5GTHzbmUSm2g=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
+         MIME-Version:Content-Type:In-Reply-To;
+        b=AGwOUilnyB5IDjnY5sVaQFc8Z7/gZ/d71nT18CpZBVJTLD36MCW5hCYNrja/Xu5V5
+         MIbjw3uR7GpHGpaH05BpBMeddQdttSmSP1CMxnJLjaN+H3IjhiJwzkxtdlzpI2/bko
+         7dk/549VBSpAo/zzulMZaNWYgYqHKw8ChNW/dq+M=
+Received: by b-2.in.mailobj.net [192.168.90.12] with ESMTP
+        via [213.182.55.206]
+        Thu, 20 Oct 2022 18:28:38 +0200 (CEST)
+X-EA-Auth: 6Al72bKYPQ7R+pUm09MhmDMG6GnIPgd8P8WfhJUlVlzguoPlasZL+/X6202mxzfGxpNtJsmZvETVMSHGIOl1jfX3T908+M5W
+Date:   Thu, 20 Oct 2022 21:58:33 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     outreachy@lists.linux.dev, Larry.Finger@lwfinger.net,
+        phil@philpotter.co.uk, paskripkin@gmail.com,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kumarpraveen@linux.microsoft.com, saurabh.truth@gmail.com
+Subject: Re: [PATCH v3 01/10] staging: r8188eu: use Linux kernel variable
+ naming convention
+Message-ID: <Y1F3MTzzq1axUyec@debian-BULLSEYE-live-builder-AMD64>
+References: <cover.1666249715.git.drv@mailo.com>
+ <5226d30242be78ab1ee32bfdd87239ca82569642.1666249716.git.drv@mailo.com>
+ <Y1Ftx/Q69AHVR4oZ@kroah.com>
 MIME-Version: 1.0
-References: <20221020000356.177CDC433C1@smtp.kernel.org> <Y1EZuQcO8UoN91cX@localhost.localdomain>
-In-Reply-To: <Y1EZuQcO8UoN91cX@localhost.localdomain>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Thu, 20 Oct 2022 10:28:06 -0600
-X-Gmail-Original-Message-ID: <CAHmME9prEhkHqQmtDGCSFunNnxiKdE_8FHKiksyqebUN63U81Q@mail.gmail.com>
-Message-ID: <CAHmME9prEhkHqQmtDGCSFunNnxiKdE_8FHKiksyqebUN63U81Q@mail.gmail.com>
-Subject: Re: [PATCH -mm] -funsigned-char, x86: make struct p4_event_bind::cntr
- signed array
-To:     Alexey Dobriyan <adobriyan@gmail.com>
-Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        mm-commits@vger.kernel.org, torvalds@linux-foundation.org,
-        masahiroy@kernel.org, keescook@chromium.org,
-        gregkh@linuxfoundation.org, andriy.shevchenko@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1Ftx/Q69AHVR4oZ@kroah.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 3:49 AM Alexey Dobriyan <adobriyan@gmail.com> wrote:
+On Thu, Oct 20, 2022 at 05:48:23PM +0200, Greg KH wrote:
+> On Thu, Oct 20, 2022 at 01:22:50PM +0530, Deepak R Varma wrote:
+> > Follow the Linux Kernel coding style variable naming convention instead
+> > of using camelCase style. Issue reported by checkpatch script for
+> > these variables:
+> >         tagLen, tagType, networkAddr, ipAddr, macAddr
+> >
+> > Signed-off-by: Deepak R Varma <drv@mailo.com>
+> > ---
+> >
+> > Changes in v3:
+> >    -- None
+> >
+> > Changes in v1 [actually v2]:
+> >    1. Improve patch description per feedback from julia.lawall@inria.fr
+> >
+> >
+> >  drivers/staging/r8188eu/core/rtw_br_ext.c | 112 +++++++++++-----------
+> >  1 file changed, 56 insertions(+), 56 deletions(-)
+> >
+> > diff --git a/drivers/staging/r8188eu/core/rtw_br_ext.c b/drivers/staging/r8188eu/core/rtw_br_ext.c
+> > index 4c5f30792a46..79daf8f269d6 100644
+> > --- a/drivers/staging/r8188eu/core/rtw_br_ext.c
+> > +++ b/drivers/staging/r8188eu/core/rtw_br_ext.c
+> > @@ -50,17 +50,17 @@
+> >  static unsigned char *__nat25_find_pppoe_tag(struct pppoe_hdr *ph, unsigned short type)
+> >  {
+> >  	unsigned char *cur_ptr, *start_ptr;
+> > -	unsigned short tagLen, tagType;
+> > +	unsigned short tag_len, tag_type;
+> >
+> >  	start_ptr = (unsigned char *)ph->tag;
+> >  	cur_ptr = (unsigned char *)ph->tag;
+> >  	while ((cur_ptr - start_ptr) < ntohs(ph->length)) {
+> >  		/*  prevent un-alignment access */
+> > -		tagType = (unsigned short)((cur_ptr[0] << 8) + cur_ptr[1]);
+> > -		tagLen  = (unsigned short)((cur_ptr[2] << 8) + cur_ptr[3]);
+> > -		if (tagType == type)
+> > +		tag_type = (unsigned short)((cur_ptr[0] << 8) + cur_ptr[1]);
+> > +		tag_len  = (unsigned short)((cur_ptr[2] << 8) + cur_ptr[3]);
+> > +		if (tag_type == type)
+> >  			return cur_ptr;
+> > -		cur_ptr = cur_ptr + TAG_HDR_LEN + tagLen;
+> > +		cur_ptr = cur_ptr + TAG_HDR_LEN + tag_len;
+> >  	}
+> >  	return NULL;
+> >  }
+> > @@ -111,32 +111,32 @@ static int  __nat25_has_expired(struct nat25_network_db_entry *fdb)
+> >  	return 0;
+> >  }
+> >
+> > -static void __nat25_generate_ipv4_network_addr(unsigned char *networkAddr,
 >
-> struct p4_event_bind::cntr[][] should be signed because of
-> the following code:
+> As others have said, just make "networkAddr" be "addr" and then it will
+> be a lot cleaner and smaller overall.
+
+Sounds good. Noted for next revision.
+
+Thank you.
+./drv
+
 >
->         int i, j;
->         for (i = 0; i < P4_CNTR_LIMIT; i++) {
->           ===>  j = bind->cntr[thread][i];
->                 if (j != -1 && !test_bit(j, used_mask))
->                         return j;
->         }
+> thanks,
 >
-> Making this member unsigned will make "j" 255 and fail "j != -1"
-> comparison.
->
-> Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
+> greg k-h
 
-Nice catch.
 
-Reviewed-by: Jason A. Donenfeld <Jason@zx2c4.com>
-
->  arch/x86/events/intel/p4.c |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> --- a/arch/x86/events/intel/p4.c
-> +++ b/arch/x86/events/intel/p4.c
-> @@ -24,7 +24,7 @@ struct p4_event_bind {
->         unsigned int escr_msr[2];               /* ESCR MSR for this event */
->         unsigned int escr_emask;                /* valid ESCR EventMask bits */
->         unsigned int shared;                    /* event is shared across threads */
-> -       char cntr[2][P4_CNTR_LIMIT];            /* counter index (offset), -1 on absence */
-> +       signed char cntr[2][P4_CNTR_LIMIT];     /* counter index (offset), -1 on absence */
->  };
-
-This is fine, but I wonder if this is a good occasion to use `s8` instead?
-
-Jason
