@@ -2,124 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FCC9605F71
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 13:54:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42948605F73
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 13:55:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229610AbiJTLy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 07:54:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34306 "EHLO
+        id S229657AbiJTLyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 07:54:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbiJTLy0 (ORCPT
+        with ESMTP id S229685AbiJTLyn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 07:54:26 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 949C912A356;
-        Thu, 20 Oct 2022 04:54:18 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id b18so25977786ljr.13;
-        Thu, 20 Oct 2022 04:54:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5JGPiF/4jkoD0aBNRCvwydXVeVeGYneVf/IKbljyENQ=;
-        b=ZjbQByTE2QtMBGesKwYrvQvu1WW0ijiW+cjdm4n7kNdoF6VW1nF78m74dVBe8KSFt8
-         /5tTjakEQ9fBWBNyvn2s6xMonLcHkYnRF8ATZDb+SXrqWHYBY60wMf8XGTpQ/rm9UDRY
-         lgmR531GjfPPkjMQvlUS3aaIM5Yt3sdk0fd5rVwKj8tlekuM71eON4t/oF1Xzh6pYNJ6
-         0lEV14Y/+OOAV8w24BIll7j9VW0jqKXQA6tj2XErZJ88ncLewrsvmeKHqPOdW4WTxBFg
-         /R7K4lOWdNVXJRF4NDFFKQhbiqLZGdaw7EbEsqU+fprMkqFsnR6QYGoA5jdVJi4zn3zN
-         CWPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5JGPiF/4jkoD0aBNRCvwydXVeVeGYneVf/IKbljyENQ=;
-        b=n6FZGuuZgebXLJ5UL8Wfan7uyYXQ68r1OOF3WE1PQTLv6Eq814TpL6TVzuzTaM+/Qy
-         zrkHHF27VkhR43tvCN5DbpYg7kQzaXCvTBUvAy8qmSLHI2Bp8moeVfWxw9y98ogyOsvP
-         LV0fwbCya2T2E/vziRfspyknRJBmi5pGVV5h4XelDU+ZqbIPFv5aYm8GgW3wep0w9Erb
-         8TpE+Gjs8mBuF4pjdLQojzeFArIS2Ir6YkIvp/hvdEpLe0O3YMkhelV5bk/2rdmDDC7d
-         NWWpHH3kS+tIwzuWUNxd/jrQMQIHTjdED6MRFJsDdRCc7S5expA+M3WVObrVJDtuQkBQ
-         iAxg==
-X-Gm-Message-State: ACrzQf111sbOz9ff+0VJSuac1UtDANdb6U8Q6Fk9BhCA7Rm7e0DQUq6j
-        auqHr3tE7fGUUKE1dHN3RCk=
-X-Google-Smtp-Source: AMsMyM46UPSKHOo0se4flSNdEG/fBMvboDvcvuT+IK9c0Sh4oIh3mWrr92RC8p63+wNLiC6JYFEUUw==
-X-Received: by 2002:a2e:2418:0:b0:26d:d930:e3cf with SMTP id k24-20020a2e2418000000b0026dd930e3cfmr5172130ljk.232.1666266856924;
-        Thu, 20 Oct 2022 04:54:16 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:16f3:4a00::4? (dc75zzyyyyyyyyyyyyycy-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::4])
-        by smtp.gmail.com with ESMTPSA id f5-20020a2e9e85000000b0026dfdcbccdasm2878012ljk.14.2022.10.20.04.54.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Oct 2022 04:54:16 -0700 (PDT)
-Message-ID: <7d8660c4-2f4c-b91e-4e1e-b2dee5cc058f@gmail.com>
-Date:   Thu, 20 Oct 2022 14:54:15 +0300
+        Thu, 20 Oct 2022 07:54:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25BFA1D0D2;
+        Thu, 20 Oct 2022 04:54:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BC1D0B82712;
+        Thu, 20 Oct 2022 11:54:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EF3EC433C1;
+        Thu, 20 Oct 2022 11:54:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666266873;
+        bh=gPDeLlGv5sanaXqP06t21wZhZ1fAuLnrnAmtJV6iA58=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GhZ6QyQ5tb4dmwBop9SC8Z/qz+f5cyTHmznzuS+QQY8rKScu9UsxyLGGzseSYIXuG
+         c3eSuAehlwnKttfeEvsfx8BPmiUGyI5HMMMAPYBTQwKOPOId2Zlgx5LJLwszL6/xTQ
+         wP+3RBlcXzM2bY81DPSnMn9+ZzGZbZBYRSvd3guGB1HKPbm2HNRYpbal4oxNtRignZ
+         nrwAl90UDHYK0d9ryEJNXPEAZwzZ+PUl7tgtKOWDvb7u7IaTXgvi+pdVQHYE+lHuKY
+         gU66JD2KGcTH6XvIWaZWgTpzQjwAomzg+pHWlVEKRgeo1gkvokt84XR0kYJAZdI8HZ
+         oF5BPoIpGg+cg==
+Date:   Thu, 20 Oct 2022 14:54:30 +0300
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Aru <aru.kolappan@oracle.com>
+Cc:     jgg@ziepe.ca, saeedm@nvidia.com, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        manjunath.b.patil@oracle.com, rama.nichanamatlu@oracle.com
+Subject: Re: [PATCH 1/1] net/mlx5: add dynamic logging for mlx5_dump_err_cqe
+Message-ID: <Y1E29kg8yuZjCV4v@unreal>
+References: <1665618772-11048-1-git-send-email-aru.kolappan@oracle.com>
+ <Y0frx6g/iadBBYgQ@unreal>
+ <a7fad299-6df5-e79b-960a-c85c7ea4235a@oracle.com>
+ <Y05aGuXSEtSt2aS2@unreal>
+ <60899818-61fc-3d1e-e908-fb595cac1940@oracle.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v3 0/3] iio: Support ROHM/Kionix kx022a
-Content-Language: en-US
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
-        Dmitry Rokosov <DDRokosov@sberdevices.ru>,
-        Jagath Jog J <jagathjog1996@gmail.com>,
-        Cosmin Tanislav <demonsingur@gmail.com>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1666263249.git.mazziesaccount@gmail.com>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <cover.1666263249.git.mazziesaccount@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <60899818-61fc-3d1e-e908-fb595cac1940@oracle.com>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/20/22 14:35, Matti Vaittinen wrote:
-> Add initial support for ROHM/Kionix kx022a accelerometer
+On Thu, Oct 20, 2022 at 01:24:54AM -0700, Aru wrote:
+> On 10/18/22 12:47 AM, Leon Romanovsky wrote:
+> > On Fri, Oct 14, 2022 at 12:12:36PM -0700, Aru wrote:
+> > > Hi Leon,
+> > > 
+> > > Thank you for reviewing the patch.
+> > > 
+> > > The method you mentioned disables the dump permanently for the kernel.
+> > > We thought vendor might have enabled it for their consumption when needed.
+> > > Hence we made it dynamic, so that it can be enabled/disabled at run time.
+> > > 
+> > > Especially, in a production environment, having the option to turn this log
+> > > on/off
+> > > at runtime will be helpful.
+> > While you are interested on/off this specific warning, your change will
+> > cause "to hide" all syndromes as it is unlikely that anyone runs in
+> > production with debug prints.
+> > 
+> >   -   mlx5_ib_warn(dev, "dump error cqe\n");
+> >   +   mlx5_ib_dbg(dev, "dump error cqe\n");
+> > 
+> > Something like this will do the trick without interrupting to the others.
+> > 
+> > diff --git a/drivers/infiniband/hw/mlx5/cq.c b/drivers/infiniband/hw/mlx5/cq.c
+> > index 457f57b088c6..966206085eb3 100644
+> > --- a/drivers/infiniband/hw/mlx5/cq.c
+> > +++ b/drivers/infiniband/hw/mlx5/cq.c
+> > @@ -267,10 +267,29 @@ static void handle_responder(struct ib_wc *wc, struct mlx5_cqe64 *cqe,
+> >   	wc->wc_flags |= IB_WC_WITH_NETWORK_HDR_TYPE;
+> >   }
+> > -static void dump_cqe(struct mlx5_ib_dev *dev, struct mlx5_err_cqe *cqe)
+> > +static void dump_cqe(struct mlx5_ib_dev *dev, struct mlx5_err_cqe *cqe,
+> > +		     struct ib_wc *wc, int dump)
+> >   {
+> > -	mlx5_ib_warn(dev, "dump error cqe\n");
+> > -	mlx5_dump_err_cqe(dev->mdev, cqe);
+> > +	const char *level;
+> > +
+> > +	if (!dump)
+> > +		return;
+> > +
+> > +	mlx5_ib_warn(dev, "WC error: %d, Message: %s\n", wc->status,
+> > +		     ib_wc_status_msg(wc->status));
+> > +
+> > +	if (dump == 1) {
+> > +		mlx5_ib_warn(dev, "dump error cqe\n");
+> > +		level = KERN_WARNING;
+> > +	}
+> > +
+> > +	if (dump == 2) {
+> > +		mlx5_ib_dbg(dev, "dump error cqe\n");
+> > +		level = KERN_DEBUG;
+> > +	}
+> > +
+> > +	print_hex_dump(level, "", DUMP_PREFIX_OFFSET, 16, 1, cqe, sizeof(*cqe),
+> > +		       false);
+> >   }
+> Hi Leon,
 > 
-> About the HW:
-> KX022A accelerometer is a sensor which:
-> 	- supports G-ranges of (+/-) 2, 4, 8, and 16G
-> 	- can be connected to I2C or SPI
-> 	- has internal HW FIFO buffer
-> 	- supports various ODRs (output data rates)
-> 	- support detecting special events like double tap or motion
-> 	- can be configured to wake-up system when events are detected.
+> Thank you for the reply and your suggested method to handle this debug
+> logging.
 > 
-> About the series:
+> We set 'dump=2' for the syndromes applicable to our scenario: 
+> MLX5_CQE_SYNDROME_REMOTE_ACCESS_ERR,
+> MLX5_CQE_SYNDROME_REMOTE_OP_ERR and MLX5_CQE_SYNDROME_LOCAL_PROT_ERR.
+> We verified this code change and by default, the dump_cqe is not printed to
+> syslog until
+> the level is changed to KERN_DEBUG level. This works as expected.
 > 
-> This series adds support for only getting the accelerometer data and
-> configuring the G-range / ODR via IIO. Motion detection or double-tap
-> detection are not supported by the series. The other quite important but
-> still missing piece is the runtime PM. Nevertheless, the driver should be
-> usable and brings the basic support for getting accelerometer data.
+> I will send out another email with the patch using your method.
 > 
-// snip
+> Is it fine with you If I add your name in the 'suggested-by' field in the
+> new patch?
 
-> base-commit: 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
-> prerequisite-patch-id: f692b7ef9ce0a0b016fb5ac1c5733e562baa4ae2
-> prerequisite-patch-id: cc2e849e2b3fe553fe955f21a4b995681e04383f
-> prerequisite-patch-id: f136637f7a8fe92dc4f60b908e2e7aa24aac3f43
+Whatever works for you.
 
-// Snip.
-
-Sorry folks! I don't know what happened with my format-patch :( I 
-Should've noted this before sending. My apologies.
-
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
-
+Thanks
