@@ -2,124 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25120606645
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 18:51:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40E3A60664B
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 18:53:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229893AbiJTQvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 12:51:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60292 "EHLO
+        id S229895AbiJTQxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 12:53:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbiJTQvo (ORCPT
+        with ESMTP id S229497AbiJTQxk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 12:51:44 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B0D81A4003
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 09:51:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=bsrmTa68MJY8KkG/NoF58D+w4Y5gc7WtNmjgNur4ts8=; b=fID3YRw//dhl3IO6+CGYGK8pFL
-        a+Pccbx7i0P3pKtPm0t7jt1V28IiQfLQrsvspkNu7hJ1lZ82AH5Z4DgeMcBQ3NHQ70iJv2rX/Yora
-        SYj3xI05RQE0ipCDS8MHOT4cH8WhkGr7z1SYjYbjDM1m7bZPyeGddzzpQPfmzYQhaGexa8CLGaFg6
-        yeibixhwe1a8GTeA7/Hm83Kv7fB1eqeESpfvzeIuMhw7Cf+3b1duu6QVCVdWSmkxbWgdz+G4ilYy3
-        vbBAiv5KDfd/BmSIH0UT3i0ZX8QnqIW3kALPlo7O70ZRnp/MJE+UVM2lEcTTM5XQ/uM4E9eiybKzq
-        lukzx0JA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34834)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1olYld-0007YR-9x; Thu, 20 Oct 2022 17:51:37 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1olYla-0003Jk-It; Thu, 20 Oct 2022 17:51:34 +0100
-Date:   Thu, 20 Oct 2022 17:51:34 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alexey Klimov <klimov.linux@gmail.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Andy Whitcroft <apw@canonical.com>,
-        Dennis Zhou <dennis@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Kees Cook <keescook@chromium.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Subject: Re: [RFC PATCH 0/2] Switch ARM to generic find_bit() API
-Message-ID: <Y1F8ljDDqYElE3aT@shell.armlinux.org.uk>
-References: <20221020032024.1804535-1-yury.norov@gmail.com>
+        Thu, 20 Oct 2022 12:53:40 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A39F71AE2B8
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 09:53:39 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id a6-20020a17090abe0600b0020d7c0c6650so4121184pjs.0
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 09:53:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+        b=BI2PsI0VI9U4kWcutJFDWHLoQCzj5sx4mONhdLx5vH4Jgs1s4v1vc77Va+jVXKAzME
+         YmNTydRbTPTR+/5k5BrCOKJAfmQNywNPxAtEq6KBiHdpfxFKq4lCh6J0n/rzA7b6XvNq
+         s22vQMpSPFFXmE10htK1G7GFa4tid20mK786l/BeLivUN7ooV1BhNLbvd28gfwOs9hCZ
+         3V/tF3blOC/6oXDELPuDARCmQ0JAq2ehpVP28kKgToft/FmNlxBp8rSjERDGtOMFE9Cg
+         HHAfZP8X+xJkfohY6ZpR89IvUVSxAinnwR7+hUv2Je7Af9Ws6xvD/3ATZUIqW8S5UuA4
+         +uMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+        b=NzzGtjdWhDfq+l6Y2H3pTjaaedmZ+PX0rz980uxAFCLEfu4x3vFelPWfW/gZDgEQqg
+         r53foJy5uJYEdYSalaVZa6DxcUUJv6Lhc1255zF7NRsVRDpYc/Shhrj66FlOsrCy5agf
+         RBtekCRyGItAzXlplLyhQLMkwBLN8p644mJ32v7h6q2Xh633YSVOL85LnetXj+0cO6vd
+         Nkik0hb3nvsp0RDEt2wB+d/hOSKqvQfzTwqjU5OMo7TFuuIrC66UT/QcZi/NgbvxbOlO
+         7MHcU0zT1O0BELVn6DzkBnS1b2yQUSsO0qdiMKd+spc1B0wrz6+a/eFL/ogQlSHzMdEc
+         BMcQ==
+X-Gm-Message-State: ACrzQf3UOCs3PgeRmo3LQCfhrIsNEsiM8diys7gGGcrRPRbUI8dYZm66
+        j6aK2L6LpQr2f71EznxCUSay0UdsUH3LrZiK2Fw=
+X-Google-Smtp-Source: AMsMyM5nxyBjElftk6Ar6jErfxmE8W4y439DQqJkpw9L6lIZnAQ0mIjZUemrlV8rXFO0/5vp2ddEnzYSFR81jOU8yDQ=
+X-Received: by 2002:a17:90a:6484:b0:210:f17b:f465 with SMTP id
+ h4-20020a17090a648400b00210f17bf465mr7358246pjj.241.1666284819118; Thu, 20
+ Oct 2022 09:53:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221020032024.1804535-1-yury.norov@gmail.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6a06:13f0:b0:57d:879e:4a67 with HTTP; Thu, 20 Oct 2022
+ 09:53:38 -0700 (PDT)
+From:   mike williams <petyetgeta@gmail.com>
+Date:   Thu, 20 Oct 2022 16:53:38 +0000
+Message-ID: <CAK8YFDeR5xv42+SXB1AV2YjPBPBX11PLMK8U96_V2RzZw7z0_w@mail.gmail.com>
+Subject: Hi ?????????????????????????????????
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_20,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TVD_SPACE_RATIO
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 08:20:22PM -0700, Yury Norov wrote:
-> Hi Russell, all,
-> 
-> I'd like to respin a patch that switches ARM to generic find_bit()
-> functions.
-> 
-> Generic code works on par with arch or better, according to my
-> testing [1], and with recent improvements merged in v6.1, it should
-> be even faster.
-> 
-> ARM already uses many generic find_bit() functions - those that it
-> doesn't implement. So we are talking about migrating a subset of the
-> API; most of find_bit() family has only generic implementation on ARM.
-> 
-> The only concern about this migration is that ARM code supports
-> byte-aligned bitmap addresses, while generic code is optimized for
-> word-aligned bitmaps.
-> 
-> In my practice, I've never seen unaligned bitmaps. But to check that on
-> ARM, I added a run-time check for bitmap alignment. I gave it run on
-> several architectures and found nothing.
-> 
-> Can you please check that on your hardware and compare performance of
-> generic vs arch code for you? If everything is OK, I suggest switching
-> ARM to generic find_bit() completely.
-> 
-> Thanks,
-> Yury
-> 
-> [1] https://lore.kernel.org/all/YuWk3titnOiQACzC@yury-laptop/
 
-I _really_ don't want to play around with this stuff right now... 6.0
-appears to have a regression on arm32 early on during boot:
-
-[    1.410115] EXT4-fs error (device sda1): htree_dirblock_to_tree:1093: inode #256: block 8797: comm systemd: bad entry in directory: rec_len % 4 != 0 - offset=0, inode=33188, rec_len=35097, size=4096 fake=0
-
-Booting 5.19 with the same filesystem works without issue and without
-even a fsck, but booting 6.0 always results in some problem that
-prevents it booting.
-
-Debugging this is not easy, because there also seems to be something
-up with the bloody serial console - sometimes I get nothing, other
-times I get nothing more than:
-
-[    2.929502] EXT4-fs error (de
-
-and then the output stops. Is the console no longer synchronous? If it
-isn't, that's a huge mistake which can be seen right here with the
-partial message output... so I also need to work out how to make the
-console output synchronous again.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
