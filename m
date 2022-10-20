@@ -2,66 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 772A0605A45
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 10:52:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E43BE605A4A
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 10:53:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230137AbiJTIwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 04:52:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57636 "EHLO
+        id S229882AbiJTIxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 04:53:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230190AbiJTIw1 (ORCPT
+        with ESMTP id S230361AbiJTIwz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 04:52:27 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 600DD1929BB;
-        Thu, 20 Oct 2022 01:52:15 -0700 (PDT)
-X-UUID: 0b8c80ff656e4f829ed817df65990b24-20221020
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=AJ2M5XJKl6SRTMP63loV//P+jxWoSU8S0YiLYNWgiqg=;
-        b=Y60UZf9OQLJeGqBdI+wbaBzbsYecqrlemipSxVMVX6ILyTDs63+Tdbe0BbdGacWuF299E3bGrHBQsxsMNuZ+TiYDCAMph+tW5sVvAwVJrDiOCAepIC4w8EoAvfWOvQZRl/p7US/2rOwSHWku+VLbJpzVVSb1ByK4gsx58AVARWY=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.12,REQID:48c55b20-91a9-4b8d-b687-286e895148cc,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:62cd327,CLOUDID:4e75e3ee-314c-4293-acb8-ca4299dd021f,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 0b8c80ff656e4f829ed817df65990b24-20221020
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
-        (envelope-from <biao.huang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 985525040; Thu, 20 Oct 2022 16:52:08 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Thu, 20 Oct 2022 16:52:07 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Thu, 20 Oct 2022 16:52:06 +0800
-From:   Biao Huang <biao.huang@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        "Biao Huang" <biao.huang@mediatek.com>, <macpaul.lin@mediatek.com>
-Subject: [PATCH v4] arm64: dts: mt8195: Add Ethernet controller
-Date:   Thu, 20 Oct 2022 16:52:03 +0800
-Message-ID: <20221020085203.1974-2-biao.huang@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221020085203.1974-1-biao.huang@mediatek.com>
-References: <20221020085203.1974-1-biao.huang@mediatek.com>
+        Thu, 20 Oct 2022 04:52:55 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 505A7192B8C
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 01:52:53 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id bp11so33236629wrb.9
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 01:52:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linbit-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fxJKiEotGSWnJtU5023vvPUDcYNa2O9fl/RCysq+NZA=;
+        b=CmP3VgGnictPB7LKKm5de97ljCHY369aWKMvv2xLSdFmS2DeCVFc6Z9czgE1Dk/U7/
+         VyK1kIEbW0pmuuLffv8j6kySncqAJ8V9/FDA1rg8qQGVo3ke0WGrPRmcg2urSSs29hxk
+         LBg3V8XSAVOzs2K7dp1kc8pTw4iPmcmRHqJdR1vWCDbpsTEG9crmhrOB3HYQYGUODobE
+         jAVnxtjHyfPe2VgdaZn00vNh09lrjBVkifh2je1viTI9LGoZpAkogxDSA5IoWxLEoTj5
+         YemzS5ly8MaTIiJIdGpBIk8eFHW+wOLh6jfbyP6OB20QNb0LgRCgvIR80Rm21DN6wlOX
+         AF/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fxJKiEotGSWnJtU5023vvPUDcYNa2O9fl/RCysq+NZA=;
+        b=Mbi3UDXgY5QLHIEVsNIJpemBXU5JimEbHQq1KsVogasScr2lEf4oSiZGajtEVz5kDY
+         vrG6DvUHon9SPFnqcZOSb1WT55BHzWAE811Bz5qbXOvKCe+hiI62ebUMTeuFrFiZFXxx
+         jAv0Y2MHPBI5rAYfVwS9Lyb1l0+BDsKVqi0jODScM9pR3qVvwv/gLyMMCJ16YSplup9J
+         oQ1+CHY+BOL/tVh6CqVV5d1jodn/jgfPUSX85+0q1JSLzAUeZ3VcHfYX7xc3gEmQXDgT
+         7RJ17fAoebEn4iklQnmbvuKPqNfYZ4x49Bdnz/SkQcobyzO5ECKYp+Cv+bionzXlOJlU
+         Vf0A==
+X-Gm-Message-State: ACrzQf1/XpxLagkS4XWO7yckT/mcNtS5rOb1Ek+hBQbVhIO8/6wEcym6
+        3U1BMvXHtxTcLMBKcEpRbbkLThqQJLKHsV44
+X-Google-Smtp-Source: AMsMyM5aImbG8bVRLMpXktjc/gAOVl/L1zQG4Vzf0bERE8RpGUb1vgAIW6AnFp5nhL1A0UyViy7sBQ==
+X-Received: by 2002:a5d:4683:0:b0:22e:6be0:dfc6 with SMTP id u3-20020a5d4683000000b0022e6be0dfc6mr7915288wrq.573.1666255970764;
+        Thu, 20 Oct 2022 01:52:50 -0700 (PDT)
+Received: from localhost.localdomain (h082218028181.host.wavenet.at. [82.218.28.181])
+        by smtp.gmail.com with ESMTPSA id f10-20020a05600c4e8a00b003a84375d0d1sm2409409wmq.44.2022.10.20.01.52.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Oct 2022 01:52:50 -0700 (PDT)
+From:   =?UTF-8?q?Christoph=20B=C3=B6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     drbd-dev@lists.linbit.com, linux-kernel@vger.kernel.org,
+        Lars Ellenberg <lars.ellenberg@linbit.com>,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        linux-block@vger.kernel.org,
+        =?UTF-8?q?Christoph=20B=C3=B6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>,
+        Joel Colledge <joel.colledge@linbit.com>,
+        Christoph Hellwig <hch@lst.de>
+Subject: [PATCH v2] drbd: only clone bio if we have a backing device
+Date:   Thu, 20 Oct 2022 10:52:05 +0200
+Message-Id: <20221020085205.129090-1-christoph.boehmwalder@linbit.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,218 +76,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add Ethernet controller node for mt8195.
+Commit c347a787e34cb (drbd: set ->bi_bdev in drbd_req_new) moved a
+bio_set_dev call (which has since been removed) to "earlier", from
+drbd_request_prepare to drbd_req_new.
 
-Signed-off-by: Biao Huang <biao.huang@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+The problem is that this accesses device->ldev->backing_bdev, which is
+not NULL-checked at this point. When we don't have an ldev (i.e. when
+the DRBD device is diskless), this leads to a null pointer deref.
+
+So, only allocate the private_bio if we actually have a disk. This is
+also a small optimization, since we don't clone the bio to only to
+immediately free it again in the diskless case.
+
+Fixes: c347a787e34cb ("drbd: set ->bi_bdev in drbd_req_new")
+Co-developed-by: Christoph Böhmwalder <christoph.boehmwalder@linbit.com>
+Signed-off-by: Christoph Böhmwalder <christoph.boehmwalder@linbit.com>
+Co-developed-by: Joel Colledge <joel.colledge@linbit.com>
+Signed-off-by: Joel Colledge <joel.colledge@linbit.com>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
 ---
- arch/arm64/boot/dts/mediatek/mt8195-demo.dts | 88 ++++++++++++++++++++
- arch/arm64/boot/dts/mediatek/mt8195.dtsi     | 86 +++++++++++++++++++
- 2 files changed, 174 insertions(+)
+Changes in v2:
+    - Fix an overly long line
+---
+ drivers/block/drbd/drbd_req.c | 14 ++++++--------
+ 1 file changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8195-demo.dts b/arch/arm64/boot/dts/mediatek/mt8195-demo.dts
-index 4fbd99eb496a..0e8496d837ef 100644
---- a/arch/arm64/boot/dts/mediatek/mt8195-demo.dts
-+++ b/arch/arm64/boot/dts/mediatek/mt8195-demo.dts
-@@ -258,6 +258,72 @@ &mt6359_vsram_others_ldo_reg {
- };
+diff --git a/drivers/block/drbd/drbd_req.c b/drivers/block/drbd/drbd_req.c
+index 8f7f144e54f3..7f9bcc82fc9c 100644
+--- a/drivers/block/drbd/drbd_req.c
++++ b/drivers/block/drbd/drbd_req.c
+@@ -30,11 +30,6 @@ static struct drbd_request *drbd_req_new(struct drbd_device *device, struct bio
+ 		return NULL;
+ 	memset(req, 0, sizeof(*req));
  
- &pio {
-+	eth_default_pins: eth-default-pins {
-+		pins-txd {
-+			pinmux = <PINMUX_GPIO77__FUNC_GBE_TXD3>,
-+				 <PINMUX_GPIO78__FUNC_GBE_TXD2>,
-+				 <PINMUX_GPIO79__FUNC_GBE_TXD1>,
-+				 <PINMUX_GPIO80__FUNC_GBE_TXD0>;
-+			drive-strength = <MTK_DRIVE_8mA>;
-+		};
-+		pins-cc {
-+			pinmux = <PINMUX_GPIO85__FUNC_GBE_TXC>,
-+				 <PINMUX_GPIO88__FUNC_GBE_TXEN>,
-+				 <PINMUX_GPIO87__FUNC_GBE_RXDV>,
-+				 <PINMUX_GPIO86__FUNC_GBE_RXC>;
-+			drive-strength = <MTK_DRIVE_8mA>;
-+		};
-+		pins-rxd {
-+			pinmux = <PINMUX_GPIO81__FUNC_GBE_RXD3>,
-+				 <PINMUX_GPIO82__FUNC_GBE_RXD2>,
-+				 <PINMUX_GPIO83__FUNC_GBE_RXD1>,
-+				 <PINMUX_GPIO84__FUNC_GBE_RXD0>;
-+		};
-+		pins-mdio {
-+			pinmux = <PINMUX_GPIO89__FUNC_GBE_MDC>,
-+				 <PINMUX_GPIO90__FUNC_GBE_MDIO>;
-+			input-enable;
-+		};
-+		pins-power {
-+			pinmux = <PINMUX_GPIO91__FUNC_GPIO91>,
-+				 <PINMUX_GPIO92__FUNC_GPIO92>;
-+			output-high;
-+		};
-+	};
-+
-+	eth_sleep_pins: eth-sleep-pins {
-+		pins-txd {
-+			pinmux = <PINMUX_GPIO77__FUNC_GPIO77>,
-+				 <PINMUX_GPIO78__FUNC_GPIO78>,
-+				 <PINMUX_GPIO79__FUNC_GPIO79>,
-+				 <PINMUX_GPIO80__FUNC_GPIO80>;
-+		};
-+		pins-cc {
-+			pinmux = <PINMUX_GPIO85__FUNC_GPIO85>,
-+				 <PINMUX_GPIO88__FUNC_GPIO88>,
-+				 <PINMUX_GPIO87__FUNC_GPIO87>,
-+				 <PINMUX_GPIO86__FUNC_GPIO86>;
-+		};
-+		pins-rxd {
-+			pinmux = <PINMUX_GPIO81__FUNC_GPIO81>,
-+				 <PINMUX_GPIO82__FUNC_GPIO82>,
-+				 <PINMUX_GPIO83__FUNC_GPIO83>,
-+				 <PINMUX_GPIO84__FUNC_GPIO84>;
-+		};
-+		pins-mdio {
-+			pinmux = <PINMUX_GPIO89__FUNC_GPIO89>,
-+				 <PINMUX_GPIO90__FUNC_GPIO90>;
-+			input-disable;
-+			bias-disable;
-+		};
-+		pins-power {
-+			pinmux = <PINMUX_GPIO91__FUNC_GPIO91>,
-+				 <PINMUX_GPIO92__FUNC_GPIO92>;
-+			input-disable;
-+			bias-disable;
-+		};
-+	};
-+
- 	gpio_keys_pins: gpio-keys-pins {
- 		pins {
- 			pinmux = <PINMUX_GPIO106__FUNC_GPIO106>;
-@@ -434,6 +500,28 @@ &xhci0 {
- 	status = "okay";
- };
+-	req->private_bio = bio_alloc_clone(device->ldev->backing_bdev, bio_src,
+-					   GFP_NOIO, &drbd_io_bio_set);
+-	req->private_bio->bi_private = req;
+-	req->private_bio->bi_end_io = drbd_request_endio;
+-
+ 	req->rq_state = (bio_data_dir(bio_src) == WRITE ? RQ_WRITE : 0)
+ 		      | (bio_op(bio_src) == REQ_OP_WRITE_ZEROES ? RQ_ZEROES : 0)
+ 		      | (bio_op(bio_src) == REQ_OP_DISCARD ? RQ_UNMAP : 0);
+@@ -1219,9 +1214,12 @@ drbd_request_prepare(struct drbd_device *device, struct bio *bio)
+ 	/* Update disk stats */
+ 	req->start_jif = bio_start_io_acct(req->master_bio);
  
-+&eth {
-+	phy-mode ="rgmii-rxid";
-+	phy-handle = <&ethernet_phy0>;
-+	snps,reset-gpio = <&pio 93 GPIO_ACTIVE_HIGH>;
-+	snps,reset-delays-us = <0 10000 10000>;
-+	mediatek,tx-delay-ps = <2030>;
-+	pinctrl-names = "default", "sleep";
-+	pinctrl-0 = <&eth_default_pins>;
-+	pinctrl-1 = <&eth_sleep_pins>;
-+	status = "okay";
-+
-+	mdio {
-+		compatible = "snps,dwmac-mdio";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		ethernet_phy0: ethernet-phy@1 {
-+			compatible = "ethernet-phy-id001c.c916";
-+			reg = <0x1>;
-+		};
-+	};
-+};
-+
- &xhci1 {
- 	vusb33-supply = <&mt6359_vusb_ldo_reg>;
- 	status = "okay";
-diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-index 905d1a90b406..0639ad9d261c 100644
---- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-@@ -1042,6 +1042,92 @@ spis1: spi@1101e000 {
- 			status = "disabled";
- 		};
+-	if (!get_ldev(device)) {
+-		bio_put(req->private_bio);
+-		req->private_bio = NULL;
++	if (get_ldev(device)) {
++		req->private_bio = bio_alloc_clone(device->ldev->backing_bdev,
++						   bio, GFP_NOIO,
++						   &drbd_io_bio_set);
++		req->private_bio->bi_private = req;
++		req->private_bio->bi_end_io = drbd_request_endio;
+ 	}
  
-+		eth: ethernet@11021000 {
-+			compatible = "mediatek,mt8195-gmac", "snps,dwmac-5.10a";
-+			reg = <0 0x11021000 0 0x4000>;
-+			interrupts = <GIC_SPI 716 IRQ_TYPE_LEVEL_HIGH 0>;
-+			interrupt-names = "macirq";
-+			clock-names = "axi",
-+				      "apb",
-+				      "mac_cg",
-+				      "mac_main",
-+				      "ptp_ref",
-+				      "rmii_internal";
-+			clocks = <&pericfg_ao CLK_PERI_AO_ETHERNET>,
-+				 <&pericfg_ao CLK_PERI_AO_ETHERNET_BUS>,
-+				 <&pericfg_ao CLK_PERI_AO_ETHERNET_MAC>,
-+				 <&topckgen CLK_TOP_SNPS_ETH_250M>,
-+				 <&topckgen CLK_TOP_SNPS_ETH_62P4M_PTP>,
-+				 <&topckgen CLK_TOP_SNPS_ETH_50M_RMII>;
-+			assigned-clocks = <&topckgen CLK_TOP_SNPS_ETH_250M>,
-+					  <&topckgen CLK_TOP_SNPS_ETH_62P4M_PTP>,
-+					  <&topckgen CLK_TOP_SNPS_ETH_50M_RMII>;
-+			assigned-clock-parents = <&topckgen CLK_TOP_ETHPLL_D2>,
-+						 <&topckgen CLK_TOP_ETHPLL_D8>,
-+						 <&topckgen CLK_TOP_ETHPLL_D10>;
-+			power-domains = <&spm MT8195_POWER_DOMAIN_ETHER>;
-+			mediatek,pericfg = <&infracfg_ao>;
-+			snps,axi-config = <&stmmac_axi_setup>;
-+			snps,mtl-rx-config = <&mtl_rx_setup>;
-+			snps,mtl-tx-config = <&mtl_tx_setup>;
-+			snps,txpbl = <16>;
-+			snps,rxpbl = <16>;
-+			snps,clk-csr = <0>;
-+			status = "disabled";
-+
-+			stmmac_axi_setup: stmmac-axi-config {
-+				snps,wr_osr_lmt = <0x7>;
-+				snps,rd_osr_lmt = <0x7>;
-+				snps,blen = <0 0 0 0 16 8 4>;
-+			};
-+
-+			mtl_rx_setup: rx-queues-config {
-+				snps,rx-queues-to-use = <4>;
-+				snps,rx-sched-sp;
-+				queue0 {
-+					snps,dcb-algorithm;
-+					snps,map-to-dma-channel = <0x0>;
-+				};
-+				queue1 {
-+					snps,dcb-algorithm;
-+					snps,map-to-dma-channel = <0x0>;
-+				};
-+				queue2 {
-+					snps,dcb-algorithm;
-+					snps,map-to-dma-channel = <0x0>;
-+				};
-+				queue3 {
-+					snps,dcb-algorithm;
-+					snps,map-to-dma-channel = <0x0>;
-+				};
-+			};
-+
-+			mtl_tx_setup: tx-queues-config {
-+				snps,tx-queues-to-use = <4>;
-+				snps,tx-sched-wrr;
-+				queue0 {
-+					snps,weight = <0x10>;
-+					snps,dcb-algorithm;
-+					snps,priority = <0x0>;
-+				};
-+				queue1 {
-+					snps,weight = <0x11>;
-+					snps,dcb-algorithm;
-+					snps,priority = <0x1>;
-+				};
-+				queue2 {
-+					snps,weight = <0x12>;
-+					snps,dcb-algorithm;
-+					snps,priority = <0x2>;
-+				};
-+				queue3 {
-+					snps,weight = <0x13>;
-+					snps,dcb-algorithm;
-+					snps,priority = <0x3>;
-+				};
-+			};
-+		};
-+
- 		xhci0: usb@11200000 {
- 			compatible = "mediatek,mt8195-xhci",
- 				     "mediatek,mtk-xhci";
+ 	/* process discards always from our submitter thread */
 -- 
-2.25.1
+2.37.3
 
