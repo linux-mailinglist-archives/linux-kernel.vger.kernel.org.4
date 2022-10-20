@@ -2,124 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 685E16066D7
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 19:16:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 042E76066D8
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 19:16:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbiJTRQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 13:16:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35674 "EHLO
+        id S229783AbiJTRQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 13:16:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbiJTRQP (ORCPT
+        with ESMTP id S229622AbiJTRQW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 13:16:15 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90FDA1BC169
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 10:16:13 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id k2so1147857ejr.2
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 10:16:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=2TXBtgerhY2vz40E1BiNZvR68nOLcA3rB68dKpPRhG8=;
-        b=B5gHnbiJXUdhDCzqMJgOcQkFsziUWONNHtddTx6t98hLgp6MGEal7sjQxgUOyA3rFU
-         Qfq/T1ymFmWUeV/2sKscRxxP9yEujBmFXTrXtQKlEy8RFKQ94lGmyL5tzMcXuS0N2Gb8
-         SHyUQgUU2mHg3ZntaVaxS230u+Pm/pL5POmr0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2TXBtgerhY2vz40E1BiNZvR68nOLcA3rB68dKpPRhG8=;
-        b=D+v0lJt31C4RPE0nutCeGksgIgvxoFnUNOVX9Pe17+PCO5gyINU8Hh1PnfoeIPOzEv
-         uCFfB7R9XnOR+qcnUESHsFevANOeuNA1TphHV2IfZjF5pIp/yI8mjipf8kY3DbdIyq1u
-         R7cvBAjuUHDN2JDD4aWKeNZvm4LhlNsyDYZ10LCo2d6oal3F/uevydIZJLpFks6y/Zk/
-         esxMwr22iF0GcGSRWor2VEMs78dm6tXwFVPo0L3wXE5MmVfq0WZYPC6gtfnJoyMG28ip
-         bd8wElN2RFmJTB/hD2U1oFOTIszAlbwM78J75QiWZTrFRIJ0ruDLPMQUZdlU/FnmJKPR
-         oyMg==
-X-Gm-Message-State: ACrzQf313ckLrmhqeIBg6wv68uEK2pt0Ae9r2WpWMpGvTG8FYIpgqq0U
-        Xmle8v2kpUqRXj+94k7nQDS3By+RH4uATUxK6gQ=
-X-Google-Smtp-Source: AMsMyM6bC5wN24PM0SZxciSWydbelPzFqLPVtsGPRimVwn7ml+FgVZ6Nr9yRUicvB+/tuLDkEipp0g==
-X-Received: by 2002:a17:906:ee8e:b0:730:3646:d178 with SMTP id wt14-20020a170906ee8e00b007303646d178mr12102021ejb.426.1666286171841;
-        Thu, 20 Oct 2022 10:16:11 -0700 (PDT)
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com. [209.85.128.50])
-        by smtp.gmail.com with ESMTPSA id 13-20020a170906328d00b007822196378asm10758952ejw.176.2022.10.20.10.16.08
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Oct 2022 10:16:09 -0700 (PDT)
-Received: by mail-wm1-f50.google.com with SMTP id bg9-20020a05600c3c8900b003bf249616b0so124072wmb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 10:16:08 -0700 (PDT)
-X-Received: by 2002:a1c:7215:0:b0:3c7:130c:a77f with SMTP id
- n21-20020a1c7215000000b003c7130ca77fmr1992230wmc.151.1666286168514; Thu, 20
- Oct 2022 10:16:08 -0700 (PDT)
+        Thu, 20 Oct 2022 13:16:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3932E1C4ED7
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 10:16:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C9A2B61CD1
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 17:16:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D49EC433C1;
+        Thu, 20 Oct 2022 17:16:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666286180;
+        bh=AuNPXEriMinpq6NQJseGQt+ecB+hhC8Jw8SzfZT7M0Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XTDgM2l40sbykPCnoeu94u0Mc4uGNuIfWAfp2J1b72iHfxXysHMzaTwV3mNCUYu2z
+         SwAKh/uGMUjEoofG+Cy8PPmWGc0DB7uM5ZvbS0mhabOIjeKo8D6i/oJAjgzy6X8+B7
+         e9tGWlf3i7rmeU78imt3XP2C+OEwopABxiFWjfoTf3Uwd/IOi8sTrynw9XsYScxY1Q
+         ejgTBk2RPWuhm1KhCZhwFUHCYfUXnCjyz5njxcxaSqZBTRbcQPxPtZXnug281aC3KT
+         kEIWlD6e2f3++wLjIOsTZyBcG/Q3cNKz4Tgc2o3O64MwSYqTY0mH4Uec/SHJX50ORj
+         rKebXr3V7R28Q==
+Date:   Thu, 20 Oct 2022 10:16:17 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Rik van Riel <riel@surriel.com>
+Cc:     "Huang, Ying" <ying.huang@intel.com>,
+        kernel test robot <yujie.liu@intel.com>, lkp@lists.01.org,
+        lkp@intel.com, Andrew Morton <akpm@linux-foundation.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        feng.tang@intel.com, zhengjun.xing@linux.intel.com,
+        fengwei.yin@intel.com
+Subject: Re: [mm] f35b5d7d67: will-it-scale.per_process_ops -95.5% regression
+Message-ID: <Y1GCYXGtEVZbcv/5@dev-arch.thelio-3990X>
+References: <202210181535.7144dd15-yujie.liu@intel.com>
+ <87edv4r2ip.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <Y1DNQaoPWxE+rGce@dev-arch.thelio-3990X>
+ <871qr3nkw2.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <366045a27a96e01d0526d63fd78d4f3c5d1f530b.camel@surriel.com>
 MIME-Version: 1.0
-References: <20221014083058.1451914-1-ken_lin5@hotmail.com> <TYAPR03MB3085DD9F15177F126E9DF7C6AE249@TYAPR03MB3085.apcprd03.prod.outlook.com>
-In-Reply-To: <TYAPR03MB3085DD9F15177F126E9DF7C6AE249@TYAPR03MB3085.apcprd03.prod.outlook.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 20 Oct 2022 10:15:56 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=WH9N4Vx6e7Qr8q1fxsTRh=1kHBcg5RuWxOmruJEvr4kw@mail.gmail.com>
-Message-ID: <CAD=FV=WH9N4Vx6e7Qr8q1fxsTRh=1kHBcg5RuWxOmruJEvr4kw@mail.gmail.com>
-Subject: Re: [PATCH 1/1] nvme-pci: disable write zeros support on WD SSDs
-To:     Ken Lin <ken_lin5@hotmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        michael.jao@quanta.corp-partner.google.com, derekhuang@google.com,
-        chi-jen.chen@quanta.corp-partner.google.com,
-        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@fb.com>,
-        Keith Busch <kbusch@kernel.org>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        linux-nvme@lists.infradead.org,
-        Matthias Kaehlcke <mka@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <366045a27a96e01d0526d63fd78d4f3c5d1f530b.camel@surriel.com>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Rik,
 
-On Fri, Oct 14, 2022 at 1:32 AM Ken Lin <ken_lin5@hotmail.com> wrote:
->
-> Like commit 5611ec2b9814 ("nvme-pci: prevent SK hynix PC400 from using
-> Write Zeroes command"), Western Digital has the same issue:
-> [ 6305.633887] blk_update_request: operation not supported error,
-> dev nvme0n1, sector 340812032 op 0x9:(WRITE_ZEROES)
-> flags 0x0 phys_seg 0 prio class 0
->
-> So also disable Write Zeroes command on Western Digital.
->
-> Signed-off-by: Ken Lin <ken_lin5@hotmail.com>
-> ---
->
->  drivers/nvme/host/pci.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
-> index 3a1c37f32f30..5c1b812a3c2b 100644
-> --- a/drivers/nvme/host/pci.c
-> +++ b/drivers/nvme/host/pci.c
-> @@ -3517,6 +3517,8 @@ static const struct pci_device_id nvme_id_table[] = {
->                 .driver_data = NVME_QUIRK_NO_DEEPEST_PS, },
->         { PCI_DEVICE(0xc0a9, 0x540a),   /* Crucial P2 */
->                 .driver_data = NVME_QUIRK_BOGUS_NID, },
-> +       { PCI_DEVICE(0x15b7, 0x501e),   /* Sandisk 2280 NVMe SSD  */
-> +               .driver_data = NVME_QUIRK_NO_DEEPEST_PS, },
+On Thu, Oct 20, 2022 at 11:28:16AM -0400, Rik van Riel wrote:
+> On Thu, 2022-10-20 at 13:07 +0800, Huang, Ying wrote:
+> > 
+> > Nathan Chancellor <nathan@kernel.org> writes:
+> > > 
+> > > For what it's worth, I just bisected a massive and visible
+> > > performance
+> > > regression on my Threadripper 3990X workstation to commit
+> > > f35b5d7d676e
+> > > ("mm: align larger anonymous mappings on THP boundaries"), which
+> > > seems
+> > > directly related to this report/analysis. I initially noticed this
+> > > because my full set of kernel builds against mainline went from 2
+> > > hours
+> > > and 20 minutes or so to over 3 hours. Zeroing in on x86_64
+> > > allmodconfig,
+> > > which I used for the bisect:
+> > > 
+> > > @ 7b5a0b664ebe ("mm/page_ext: remove unused variable in
+> > > offline_page_ext"):
+> > > 
+> > > Benchmark 1: make -skj128 LLVM=1 allmodconfig all
+> > >   Time (mean ± σ):     318.172 s ±  0.730 s    [User: 31750.902 s,
+> > > System: 4564.246 s]
+> > >   Range (min … max):   317.332 s … 318.662 s    3 runs
+> > > 
+> > > @ f35b5d7d676e ("mm: align larger anonymous mappings on THP
+> > > boundaries"):
+> > > 
+> > > Benchmark 1: make -skj128 LLVM=1 allmodconfig all
+> > >   Time (mean ± σ):     406.688 s ±  0.676 s    [User: 31819.526 s,
+> System: 16327.022 s]
+> > >   Range (min … max):   405.954 s … 407.284 s    3 run
+> > 
+> > Have you tried to build with gcc?  Want to check whether is this
+> > clang
+> > specific issue or not.
+> 
+> This may indeed be something LLVM specific. In previous tests,
+> GCC has generally seen a benefit from increased THP usage.
+> Many other applications also benefit from getting more THPs.
 
-So I'm not really an expert and don't really have the context, but you
-CCed me and so I took a quick glance.
+Indeed, GCC builds actually appear to be slightly faster on my system now,
+apologies for not trying that before reporting :/
 
-Something smells a little fishy. ${SUBJECT} talks about disabling
-"write zeros". The patch description talks about disabling "Write
-Zeroes". The patch you reference seems to disable "write zeros" by
-setting the quirk NVME_QUIRK_DISABLE_WRITE_ZEROES. ...but the contents
-of your patch doesn't seem to match. Instead it adds the quirk
-NVME_QUIRK_NO_DEEPEST_PS.
+7b5a0b664ebe:
 
-As I said, I'm not an expert and maybe everyone will tell me that it
-all makes sense, but it seems weird.
+Benchmark 1: make -skj128 allmodconfig all
+  Time (mean ± σ):     355.294 s ±  0.931 s    [User: 33620.469 s, System: 6390.064 s]
+  Range (min … max):   354.571 s … 356.344 s    3 runs
 
--Doug
+f35b5d7d676e:
+
+Benchmark 1: make -skj128 allmodconfig all
+  Time (mean ± σ):     347.400 s ±  2.029 s    [User: 34389.724 s, System: 4603.175 s]
+  Range (min … max):   345.815 s … 349.686 s    3 runs
+
+> LLVM showing 10% system time before this change, and a whopping
+> 30% system time after that change, suggests that LLVM is behaving
+> quite differently from GCC in some ways.
+
+The above tests were done with GCC 12.2.0 from Arch Linux. The previous LLVM
+tests were done with a self-compiled version of LLVM from the main branch
+(16.0.0), optimized with BOLT [1]. To eliminate that as a source of issues, I
+used my distribution's version of clang (14.0.6) and saw similar results as
+before:
+
+7b5a0b664ebe:
+
+Benchmark 1: make -skj128 LLVM=/usr/bin/ allmodconfig all
+  Time (mean ± σ):     462.517 s ±  1.214 s    [User: 48544.240 s, System: 5586.212 s]
+  Range (min … max):   461.115 s … 463.245 s    3 runs
+
+f35b5d7d676e:
+
+Benchmark 1: make -skj128 LLVM=/usr/bin/ allmodconfig all
+  Time (mean ± σ):     547.927 s ±  0.862 s    [User: 47913.709 s, System: 17682.514 s]
+  Range (min … max):   547.429 s … 548.922 s    3 runs
+
+> If we can figure out what these differences are, maybe we can
+> just fine tune the code to avoid this issue.
+> 
+> I'll try to play around with LLVM compilation a little bit next
+> week, to see if I can figure out what might be going on. I wonder
+> if LLVM is doing lots of mremap calls or something...
+
+If there is any further information I can provide or patches I can test,
+I am more than happy to do so.
+
+[1]: https://github.com/llvm/llvm-project/tree/96552e73900176d65ee6650facae8d669d6f9498/bolt
+
+Cheers,
+Nathan
