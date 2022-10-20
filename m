@@ -2,91 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED72E60547E
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 02:30:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 906F6605484
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 02:34:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230071AbiJTAa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 20:30:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38632 "EHLO
+        id S230251AbiJTAeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 20:34:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229844AbiJTAaW (ORCPT
+        with ESMTP id S229903AbiJTAeC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 20:30:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1166911F4BF;
-        Wed, 19 Oct 2022 17:30:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 01E0DB82658;
-        Thu, 20 Oct 2022 00:30:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id AB1C6C43140;
-        Thu, 20 Oct 2022 00:30:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666225817;
-        bh=pRl0+DSMGYOIeWm9GcncNAKVky0quhgm8G6SzQfP0Mk=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=ZayUWyeTSlOkjkrPzy9UB7svdP3YBmeiepR4q32erEtjgyM5SkOoNSJHNt+lOpGDd
-         TUiPlceeNbw/lKSkfDJk+HRRCy4kSDnluEg2sC1t3/C8rnIuXBkJB7GXCn2iJaR4Jp
-         PU/Pq2iGZWX3t2i6cf/lSFDH81iCOb/+woPT225zivHqhmd6otnAXA8ASLcsyKxtKI
-         +PBzJvo3QfSd35tjRMSVA7BaFDyud+e5Teawh7aqohqeT8l/w/cGPLKHO6yH3P/m0y
-         idog2+jKv6TO7sVvPtEV9PfyDlDbhcqbgjCR8quNibwbYJQpFu8fzDVVjO6SMTnoAI
-         oR7TCs5jHMD2w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 94A57E270EA;
-        Thu, 20 Oct 2022 00:30:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 19 Oct 2022 20:34:02 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28D1B1B2B9F
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 17:34:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666226041; x=1697762041;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=87qpzl5VuBgixsuakBVkMxYZabfA2HU7mgCTHOJupqk=;
+  b=jY1mdYOO/CBu/h2vYY57Cd6hId40w8/AZJssBaAPl8IlmhhKjaeXZlwf
+   vOXZDpkVwm7Y3CPqcUD067NvVxu0ffzaO5lGcfSaDRreiaCzFGbVXzfU9
+   SWI+h9jBXFU5iNyNDKdfPr1HTMX/6DoWlqr24r46acS9Udw3dfaE0WwhV
+   ECpkMteLF2wTpYNrTrPEPj1ZEwN6DSK3vYq9r8mlWyBZhC0R6RV5mf9wx
+   Rh6yPBxDeTWHntlUUQwkyAvAnNEBDGoqDDNatcUR/SKkP+X9iP4AE+azu
+   0bDEI0TWnkiwN+1CD9j73yiei6SsbmimYkVi/vZ1rjZxH74BqSEt6+PpR
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="286962885"
+X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
+   d="scan'208";a="286962885"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 17:34:00 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="772044405"
+X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
+   d="scan'208";a="772044405"
+Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.249.173.192]) ([10.249.173.192])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 17:33:59 -0700
+Subject: Re: [kbuild-all] Re: drivers/firmware/efi/libstub/zboot.c:163:1:
+ sparse: sparse: symbol 'efi_zboot_entry' was not declared. Should it be
+ static?
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+References: <202210190351.b33PaxC4-lkp@intel.com>
+ <CAMj1kXEUs-CTpM2LJ_9+yH3Gy+N+dm51M7VvNpKNAsRBTDCRaw@mail.gmail.com>
+ <def83285-af62-f0c4-dcaa-f9e54aaba768@intel.com>
+ <CAMj1kXFG243S0awWUHD4xWidG8nsRamVBk9CC8QYz2hbkgBWxQ@mail.gmail.com>
+From:   "Chen, Rong A" <rong.a.chen@intel.com>
+Message-ID: <cfc54875-d9c0-b641-b275-ad728b1ad3af@intel.com>
+Date:   Thu, 20 Oct 2022 08:33:57 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.12.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] openvswitch: Use kmalloc_size_roundup() to match ksize()
- usage
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166622581760.22962.5530740992080732843.git-patchwork-notify@kernel.org>
-Date:   Thu, 20 Oct 2022 00:30:17 +0000
-References: <20221018090628.never.537-kees@kernel.org>
-In-Reply-To: <20221018090628.never.537-kees@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     pshelar@ovn.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        dev@openvswitch.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAMj1kXFG243S0awWUHD4xWidG8nsRamVBk9CC8QYz2hbkgBWxQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
 
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
 
-On Tue, 18 Oct 2022 02:06:33 -0700 you wrote:
-> Round up allocations with kmalloc_size_roundup() so that openvswitch's
-> use of ksize() is always accurate and no special handling of the memory
-> is needed by KASAN, UBSAN_BOUNDS, nor FORTIFY_SOURCE.
+On 10/19/2022 5:11 PM, Ard Biesheuvel wrote:
+> On Wed, 19 Oct 2022 at 11:10, Chen, Rong A <rong.a.chen@intel.com> wrote:
+>>
+>>
+>>
+>> On 10/19/2022 3:50 AM, Ard Biesheuvel wrote:
+>>> This is another spurious report of an asmlinkage symbol.
+>>
+>> Hi Ard,
+>>
+>> Thanks for your reply, we'll add this warning to the ignore list.
+>>
 > 
-> Cc: Pravin B Shelar <pshelar@ovn.org>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: netdev@vger.kernel.org
-> Cc: dev@openvswitch.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+> Thank you Rong.
 > 
-> [...]
+> Wouldn't it be easier to detect the asmlinkage and never warn on it?
 
-Here is the summary with links:
-  - openvswitch: Use kmalloc_size_roundup() to match ksize() usage
-    https://git.kernel.org/netdev/net-next/c/ab3f7828c979
+Hi Ard,
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+We'll try to search asmlinkage from code if the sparse warning occurred.
 
+Best Regards,
+Rong Chen
 
+> Maybe this should be sparse's job instead ...
+> 
+> 
+>>
+>>>
+>>> On Tue, 18 Oct 2022 at 21:49, kernel test robot <lkp@intel.com> wrote:
+>>>>
+>>>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+>>>> head:   bb1a1146467ad812bb65440696df0782e2bc63c8
+>>>> commit: a050910972bb25152b42ad2e544652117c5ad915 efi/libstub: implement generic EFI zboot
+>>>> date:   4 weeks ago
+>>>> config: riscv-randconfig-s043-20221018
+>>>> compiler: riscv64-linux-gcc (GCC) 12.1.0
+>>>> reproduce:
+>>>>           wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>>>>           chmod +x ~/bin/make.cross
+>>>>           # apt-get install sparse
+>>>>           # sparse version: v0.6.4-39-gce1a6720-dirty
+>>>>           # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a050910972bb25152b42ad2e544652117c5ad915
+>>>>           git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>>>>           git fetch --no-tags linus master
+>>>>           git checkout a050910972bb25152b42ad2e544652117c5ad915
+>>>>           # save the config file
+>>>>           mkdir build_dir && cp config build_dir/.config
+>>>>           COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=riscv SHELL=/bin/bash drivers/firmware/efi/libstub/ lib/xz/
+>>>>
+>>>> If you fix the issue, kindly add following tag where applicable
+>>>> | Reported-by: kernel test robot <lkp@intel.com>
+>>>>
+>>>> sparse warnings: (new ones prefixed by >>)
+>>>>      WARNING: invalid argument to '-march': '_zihintpause'
+>>>>      drivers/firmware/efi/libstub/zboot.c: note: in included file (through drivers/firmware/efi/libstub/../../../../lib/decompress_unxz.c):
+>>>>>> drivers/firmware/efi/libstub/../../../../lib/xz/xz_dec_stream.c:393:28: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected restricted __le32 const [usertype] *p @@     got unsigned int const [usertype] * @@
+>>>>      drivers/firmware/efi/libstub/../../../../lib/xz/xz_dec_stream.c:393:28: sparse:     expected restricted __le32 const [usertype] *p
+>>>>      drivers/firmware/efi/libstub/../../../../lib/xz/xz_dec_stream.c:393:28: sparse:     got unsigned int const [usertype] *
+>>>>      drivers/firmware/efi/libstub/../../../../lib/xz/xz_dec_stream.c:427:48: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected restricted __le32 const [usertype] *p @@     got unsigned int const [usertype] * @@
+>>>>      drivers/firmware/efi/libstub/../../../../lib/xz/xz_dec_stream.c:427:48: sparse:     expected restricted __le32 const [usertype] *p
+>>>>      drivers/firmware/efi/libstub/../../../../lib/xz/xz_dec_stream.c:427:48: sparse:     got unsigned int const [usertype] *
+>>>>      drivers/firmware/efi/libstub/../../../../lib/xz/xz_dec_stream.c:435:37: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected restricted __le32 const [usertype] *p @@     got unsigned int const [usertype] * @@
+>>>>      drivers/firmware/efi/libstub/../../../../lib/xz/xz_dec_stream.c:435:37: sparse:     expected restricted __le32 const [usertype] *p
+>>>>      drivers/firmware/efi/libstub/../../../../lib/xz/xz_dec_stream.c:435:37: sparse:     got unsigned int const [usertype] *
+>>>>      drivers/firmware/efi/libstub/../../../../lib/xz/xz_dec_stream.c:459:28: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected restricted __le32 const [usertype] *p @@     got unsigned int const [usertype] * @@
+>>>>      drivers/firmware/efi/libstub/../../../../lib/xz/xz_dec_stream.c:459:28: sparse:     expected restricted __le32 const [usertype] *p
+>>>>      drivers/firmware/efi/libstub/../../../../lib/xz/xz_dec_stream.c:459:28: sparse:     got unsigned int const [usertype] *
+>>>>>> drivers/firmware/efi/libstub/zboot.c:163:1: sparse: sparse: symbol 'efi_zboot_entry' was not declared. Should it be static?
+>>>>
+>>>> vim +/efi_zboot_entry +163 drivers/firmware/efi/libstub/zboot.c
+>>>>
+>>>>      161
+>>>>      162  asmlinkage efi_status_t __efiapi
+>>>>    > 163  efi_zboot_entry(efi_handle_t handle, efi_system_table_t *systab)
+>>>>
+>>>> --
+>>>> 0-DAY CI Kernel Test Service
+>>>> https://01.org/lkp
+>>> _______________________________________________
+>>> kbuild-all mailing list -- kbuild-all@lists.01.org
+>>> To unsubscribe send an email to kbuild-all-leave@lists.01.org
+>>>
+> _______________________________________________
+> kbuild-all mailing list -- kbuild-all@lists.01.org
+> To unsubscribe send an email to kbuild-all-leave@lists.01.org
+> 
