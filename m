@@ -2,109 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E62D605988
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 10:20:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB54860598B
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 10:21:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbiJTIUj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 04:20:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55964 "EHLO
+        id S230255AbiJTIVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 04:21:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbiJTIUf (ORCPT
+        with ESMTP id S229621AbiJTIVn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 04:20:35 -0400
-Received: from ssh248.corpemail.net (ssh248.corpemail.net [210.51.61.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA3729E6A0
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 01:20:29 -0700 (PDT)
-Received: from ([60.208.111.195])
-        by ssh248.corpemail.net ((D)) with ASMTP (SSL) id PKP00123;
-        Thu, 20 Oct 2022 16:20:23 +0800
-Received: from localhost.localdomain (10.200.104.82) by
- jtjnmail201605.home.langchao.com (10.100.2.5) with Microsoft SMTP Server id
- 15.1.2507.12; Thu, 20 Oct 2022 16:20:24 +0800
-From:   Deming Wang <wangdeming@inspur.com>
-To:     <Felix.Kuehling@amd.com>, <alexander.deucher@amd.com>,
-        <christian.koenig@amd.com>, <Xinhui.Pan@amd.com>,
-        <airlied@gmail.com>, <daniel@ffwll.ch>
-CC:     <amd-gfx@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>,
-        <linux-kernel@vger.kernel.org>, Deming Wang <wangdeming@inspur.com>
-Subject: [PATCH] drm/amdkfd: use vma_lookup() instead of find_vma()
-Date:   Thu, 20 Oct 2022 04:20:20 -0400
-Message-ID: <20221020082020.1589-1-wangdeming@inspur.com>
-X-Mailer: git-send-email 2.31.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.200.104.82]
-tUid:   202210201620236694c4ed1177b3ab6d2ed521f42be43e
-X-Abuse-Reports-To: service@corp-email.com
-Abuse-Reports-To: service@corp-email.com
-X-Complaints-To: service@corp-email.com
-X-Report-Abuse-To: service@corp-email.com
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 20 Oct 2022 04:21:43 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49435157F55;
+        Thu, 20 Oct 2022 01:21:42 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id f11so33106847wrm.6;
+        Thu, 20 Oct 2022 01:21:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QeezRGYgxj7EJWdnJplc0G+vBkrvPe7bUlDhb1HV7rU=;
+        b=bn/vU8OZnQ/Ud8EolQED7bs6Sa944BHUHZ+xXEFW/qbB+MrDyMw7hdbdMK/98IPxlZ
+         pqYufZtm/kAV5T/oxz5qFoDUQB0/3GdXiRkAqCZn8e7GtwqfWE9EjusIcsLbDEsnHAcP
+         4RYgIzJL9VIBwuB22Oz8fs5qP6IoswwT15jf36b92kX5xHRZ5E2vUVqSGkk6uGFMXCbG
+         ug1EOezbi84EnwJ7xRRVGKJGS4IHlUn8LrNk3S5KZ9Q1HCBMr7dbdze1ON0lz13K6Yh4
+         av72WVkqeqIlcFAy+rP7j/T4PI8c+8gEOMEMGrvLf5SKsb1QwtfhMk/Rt62ogkVMGRUH
+         yOVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QeezRGYgxj7EJWdnJplc0G+vBkrvPe7bUlDhb1HV7rU=;
+        b=YVXD09X+pnjxa+h9O+DVLEhRGl/w3BVuhltxb6cMJWbOlpRC0hj0QEcufNYhmSvIEB
+         v04dn8vwlKMGDodzEWoEYKwRl0dN84SZ1eW1MbZckqtqUX81Q0cpIn5g2n83GyKH3Adx
+         a6DHSCNg5DiVY+5b02rW711zi1GyctzpJolBtidueb0HcBKd3CqJldZOR8rIZuthJJjg
+         S5GIKQZGXtFM6iwyoBr1WToP7Zp9zd42Z1NtIjLxkbZ9AbMc10Kv6VOSF/GrieYkhlUY
+         AlvyShpH55FeN9tvmc4VIfdqxxXQT2o2q4AysNqyqp5f+IBaeDzLEVmvZGNwiwkKatCr
+         lFAA==
+X-Gm-Message-State: ACrzQf0QKY5aK6KgYKUtGtAnZ3QiIRl+n41v6FPxzxMoZGrDE9MfKOo7
+        /DMoIcTf4SDkPhC2Z3YdB9A=
+X-Google-Smtp-Source: AMsMyM65O7j+dkaw81J0CnvRH48uMvZTbLbhDTsoL1FSsxK7tpbliqXXuQ9xlmwGCxiMoxHj2vIpDQ==
+X-Received: by 2002:a5d:6485:0:b0:230:b6db:d41c with SMTP id o5-20020a5d6485000000b00230b6dbd41cmr7362534wri.709.1666254100569;
+        Thu, 20 Oct 2022 01:21:40 -0700 (PDT)
+Received: from felia.fritz.box (200116b826709f00b540fdc83ad027eb.dip.versatel-1u1.de. [2001:16b8:2670:9f00:b540:fdc8:3ad0:27eb])
+        by smtp.gmail.com with ESMTPSA id p26-20020a1c741a000000b003c6b70a4d69sm2020989wmc.42.2022.10.20.01.21.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Oct 2022 01:21:39 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Arnd Bergmann <arnd@arndb.de>, Vinod Koul <vkoul@kernel.org>,
+        dmaengine@vger.kernel.org
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] MAINTAINERS: remove section INTEL IOP-ADMA DMA DRIVER
+Date:   Thu, 20 Oct 2022 10:21:03 +0200
+Message-Id: <20221020082103.29218-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Using vma_lookup() verifies the start address is contained in the found
-vma.  This results in easier to read the code.
+Commit cd0ab43ec91a ("dmaengine: remove iop-adma driver") removes the
+driver's source code, but misses to remove the MAINTAINERS section.
 
-Signed-off-by: Deming Wang <wangdeming@inspur.com>
+Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
+broken file pattern.
+
+Remove the INTEL IOP-ADMA DMA DRIVER section pointing to the removed
+driver.
+
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 ---
- drivers/gpu/drm/amd/amdkfd/kfd_svm.c | 17 ++++++++---------
- 1 file changed, 8 insertions(+), 9 deletions(-)
+Arnd, please ack.
 
-diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_svm.c b/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
-index 64fdf63093a0..0100812478b2 100644
---- a/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
-+++ b/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
-@@ -1586,8 +1586,8 @@ static int svm_range_validate_and_map(struct mm_struct *mm,
- 		unsigned long npages;
- 		bool readonly;
+Vinod, please pick this minor clean-up patch on top of the commit above.
+
+ MAINTAINERS | 5 -----
+ 1 file changed, 5 deletions(-)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 8912c852d5a2..9839febf8b51 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -10339,11 +10339,6 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/joro/iommu.git
+ F:	drivers/iommu/intel/
+ F:	include/linux/intel-svm.h
  
--		vma = find_vma(mm, addr);
--		if (!vma || addr < vma->vm_start) {
-+		vma = vma_lookup(mm, addr);
-+		if (!vma) {
- 			r = -EFAULT;
- 			goto unreserve_out;
- 		}
-@@ -2542,8 +2542,8 @@ svm_range_get_range_boundaries(struct kfd_process *p, int64_t addr,
- 	struct interval_tree_node *node;
- 	unsigned long start_limit, end_limit;
- 
--	vma = find_vma(p->mm, addr << PAGE_SHIFT);
--	if (!vma || (addr << PAGE_SHIFT) < vma->vm_start) {
-+	vma = vma_lookup(p->mm, addr << PAGE_SHIFT);
-+	if (!vma) {
- 		pr_debug("VMA does not exist in address [0x%llx]\n", addr);
- 		return -EFAULT;
- 	}
-@@ -2871,8 +2871,8 @@ svm_range_restore_pages(struct amdgpu_device *adev, unsigned int pasid,
- 	/* __do_munmap removed VMA, return success as we are handling stale
- 	 * retry fault.
- 	 */
--	vma = find_vma(mm, addr << PAGE_SHIFT);
--	if (!vma || (addr << PAGE_SHIFT) < vma->vm_start) {
-+	vma = vma_lookup(mm, addr << PAGE_SHIFT);
-+	if (!vma) {
- 		pr_debug("address 0x%llx VMA is removed\n", addr);
- 		r = 0;
- 		goto out_unlock_range;
-@@ -3152,9 +3152,8 @@ svm_range_is_valid(struct kfd_process *p, uint64_t start, uint64_t size)
- 	start <<= PAGE_SHIFT;
- 	end = start + (size << PAGE_SHIFT);
- 	do {
--		vma = find_vma(p->mm, start);
--		if (!vma || start < vma->vm_start ||
--		    (vma->vm_flags & device_vma))
-+		vma = vma_lookup(p->mm, start);
-+		if (!vma || (vma->vm_flags & device_vma))
- 			return -EFAULT;
- 		start = min(end, vma->vm_end);
- 	} while (start < end);
+-INTEL IOP-ADMA DMA DRIVER
+-R:	Dan Williams <dan.j.williams@intel.com>
+-S:	Odd fixes
+-F:	drivers/dma/iop-adma.c
+-
+ INTEL IPU3 CSI-2 CIO2 DRIVER
+ M:	Yong Zhi <yong.zhi@intel.com>
+ M:	Sakari Ailus <sakari.ailus@linux.intel.com>
 -- 
-2.27.0
+2.17.1
 
