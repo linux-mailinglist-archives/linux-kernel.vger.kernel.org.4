@@ -2,102 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E005A6065B2
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 18:25:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99D4A6065BB
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 18:26:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229664AbiJTQZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 12:25:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33678 "EHLO
+        id S229836AbiJTQ01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 12:26:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbiJTQZX (ORCPT
+        with ESMTP id S229784AbiJTQ0V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 12:25:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98C69A0267;
-        Thu, 20 Oct 2022 09:25:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 410A361C14;
-        Thu, 20 Oct 2022 16:25:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E161C433C1;
-        Thu, 20 Oct 2022 16:25:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666283120;
-        bh=WA6ArbC///fPpUFKat2w0OyZjBrmeEDkfhpgrx6B+ps=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qiePNk7+gyM4hfxx+v7U32xQIsBTDyQE3l+9jPy0Ggm0lOOn5jlBVEU89rreYttkW
-         qREx7PQTpjn7Mj1b8bts7AHTbkLMDiQC+9opmSo9eQir8zRWc4h40gem2ZXl1ol+UI
-         uiy2GnwvhhKxiQyQZ2NZr5cHcD4DbyrQuSbYqqYgZ+eUA/9wk09GVqaxXq9L4PyOzh
-         LOYhXVeGwcJ2cbGo5pF5VsshWFLRdzG3TSLzxOIBXr5c6n66qJ8tZh0FwGTduDl+R6
-         6Z6Nk29xFpLZIIiDTUeXdZ9nRP8eijqGcb+0fGKHvq40IAUEJAoY0WsKAJwI0j6Tw+
-         tx59TfQONm9dw==
-Date:   Thu, 20 Oct 2022 17:25:15 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Daniel Mack <daniel@zonque.org>,
+        Thu, 20 Oct 2022 12:26:21 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 922A16392;
+        Thu, 20 Oct 2022 09:26:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666283178; x=1697819178;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=L1PpsyQD3YIK+QP7eDAPlt7fNZIEOmcOxOCOyV/CAlg=;
+  b=FhUfgggrV43MyhyaVgEEf7+W26+vyJiWjcDG8VQwQvzbqNoEy3PCvEok
+   Jq3+iqz8BjwZajyg+s3oflBiwL4+FFb3IK2yuVqmLcWgQP14jndXlMLWb
+   gTVl17mcmpw5zK2LnAdWkVJI29RBUmFgNRhrv7iLEjrxte8B/TbfpGJiD
+   2e3arBjQFbXdDTjVLkyGc9HvMCycsS2t8Gx8cb7wYhV493CedTPDHyGVG
+   1K6fOWiUyDnm+4hcht+EYx3NOuTG28K/yH+L7eYFuZ5uf+f+v3NRjadzM
+   rRUYOAlM23CVWg336795ff8ptvyv6PkKB8tXZOmEH0kml9MWh9yS2ZjDv
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="287164938"
+X-IronPort-AV: E=Sophos;i="5.95,199,1661842800"; 
+   d="scan'208";a="287164938"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 09:26:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="581004363"
+X-IronPort-AV: E=Sophos;i="5.95,199,1661842800"; 
+   d="scan'208";a="581004363"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga003.jf.intel.com with ESMTP; 20 Oct 2022 09:26:11 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id A2394291; Thu, 20 Oct 2022 19:26:32 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Daniel Mack <daniel@zonque.org>,
         Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>
-Subject: Re: [PATCH v1 3/6] spi: pxa2xx: Remove no more needed PCI ID table
-Message-ID: <Y1F2a6CR+9sY66Zz@sirena.org.uk>
-References: <20221017171243.57078-1-andriy.shevchenko@linux.intel.com>
- <20221017171243.57078-3-andriy.shevchenko@linux.intel.com>
- <Y02ObkYoUQlY9oG/@sirena.org.uk>
- <Y02SVH04iiu7Rj+8@smile.fi.intel.com>
- <Y02TR0UBseEKUjq8@sirena.org.uk>
- <Y02TxHp53XQo34ql@smile.fi.intel.com>
- <Y06RCxzwrPZwIETp@sirena.org.uk>
- <Y1ASXFOuc2uGXOlV@smile.fi.intel.com>
- <Y1AczgwCEQO2gvQ2@sirena.org.uk>
- <Y1F0z5aP3MsqnMan@smile.fi.intel.com>
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH v3 0/5] spi: pxa2xx: Pass the SSP type via device property
+Date:   Thu, 20 Oct 2022 19:26:26 +0300
+Message-Id: <20221020162631.68914-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="8ZsyvR6DT6KBTzFY"
-Content-Disposition: inline
-In-Reply-To: <Y1F0z5aP3MsqnMan@smile.fi.intel.com>
-X-Cookie: Today is what happened to yesterday.
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Currently the SPI PXA2xx devices on Intel platforms can be instantiated
+via the following paths:
+ 1) as ACPI LPSS device on Haswell, Bay Trail and Cherry Trail;
+ 2) as ACPI LPSS device on the Sky Lake and newer;
+ 3) as PCI LPSS device on Haswell, Bay Trail and Cherry Trail;
+ 4) as PCI LPSS device on the Sky Lake and newer;
+ 5) as PCI device via ID table.
 
---8ZsyvR6DT6KBTzFY
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Each of these cases provides some platform related data differently,
+i.e.:
+ 1) via drivers/acpi/acpi_lpss.c and drivers/spi/spi-pxa2xx.c
+ 2) via drivers/mfd/intel-lpss-acpi.c
+ 3) via drivers/spi/spi-pxa2xx-pci.c
+ 4) via drivers/mfd/intel-lpss-pci.c and drivers/spi/spi-pxa2xx.c
+ 5) via drivers/spi/spi-pxa2xx-pci.c
 
-On Thu, Oct 20, 2022 at 07:18:23PM +0300, Andy Shevchenko wrote:
-> On Wed, Oct 19, 2022 at 04:50:38PM +0100, Mark Brown wrote:
+This approach has two downsides:
 
-> > For example a check that the ID is one we know about.  IIRC that bit of
-> > context looked like a tree of if statements with no particular
-> > validation.
+a) there is no data propagated in the case #2 because we can't have
+   two or more drivers to match the same ACPI ID and hence some cases
+   are still not supported (Sky Lake and newer ACPI enabled LPSS);
 
-> But isn't it guaranteed to be handled by device core, i.e. we won't get driver
-> even enumerated if ID is unknown to us.
+b) the data is duplicated over two drivers in the cases #1 & #4 and,
+   besides to be a bloatware, it is error prone (e.g. Lakefield has
+   a wrong data right now due to missed PCI entry in the spi-pxa2xx.c).
 
-That's true currently since you're matching based on ACPI ID and then
-have the lookup done with the ID information in the acpi_device_id table
-but IIRC the patch was replacing that with some device property stuff.
+This series fixes the downsides, and enables previously unsupported
+cases. On top of that it has a couple of cleanups (patches 4 and 5).
 
---8ZsyvR6DT6KBTzFY
-Content-Type: application/pgp-signature; name="signature.asc"
+Changelog v3:
+- added tags to patches 4 & 5 (Jonathan)
+- massaged cover letter
 
------BEGIN PGP SIGNATURE-----
+Changelog v2:
+- added cover letter (Mark)
+- dropped applied patch
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNRdmsACgkQJNaLcl1U
-h9AQWgf/cxAZpP10nopJ1x0dx9Fldq1w4K3nzW1g84Hdt6vHzb1+F+Yb/lg9hg4+
-HqkyucjudaILCwckOsRs3WH1jXDOyDraBZ1QzdXWJfWiFa0BBBBg4PGxGhDHwF2/
-Zr2LbwBp78nVEo6NF9VIB8QW5+NHPdlUN6q9m/NkOSkJRuDEntegov/FWzsCggjh
-DkxBLHI6hf7aYdUkXO1vOt641cJVz90pf3H2fI+LlZ29iemdokC0lUuidWqk86cX
-+yysqW/ENllNBWNiQM1eX8yZ4BVKKICdjD0o5n5NO5DWSglk1UpR6vfo9FJZHowH
-4OjMAzESRqXaOi3vuc4NoT3Ov52bnA==
-=cf23
------END PGP SIGNATURE-----
+Andy Shevchenko (5):
+  spi: pxa2xx: Respect Intel SSP type given by a property
+  spi: pxa2xx: Remove no more needed PCI ID table
+  spi: pxa2xx: Remove no more needed driver data
+  spi: pxa2xx: Move OF and ACPI ID tables closer to their user
+  spi: pxa2xx: Switch from PM ifdeffery to pm_ptr()
 
---8ZsyvR6DT6KBTzFY--
+ drivers/spi/spi-pxa2xx.c   | 170 +++++++------------------------------
+ include/linux/pxa2xx_ssp.h |   1 +
+ 2 files changed, 30 insertions(+), 141 deletions(-)
+
+-- 
+2.35.1
+
