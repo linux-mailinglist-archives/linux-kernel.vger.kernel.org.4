@@ -2,57 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B507606754
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 19:54:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F936606756
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 19:54:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229980AbiJTRx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 13:53:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40100 "EHLO
+        id S229635AbiJTRyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 13:54:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiJTRxy (ORCPT
+        with ESMTP id S229597AbiJTRye (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 13:53:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D2B31E7446;
-        Thu, 20 Oct 2022 10:53:53 -0700 (PDT)
+        Thu, 20 Oct 2022 13:54:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BDE029351;
+        Thu, 20 Oct 2022 10:54:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 38BC761B4B;
-        Thu, 20 Oct 2022 17:53:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ADCCC433D6;
-        Thu, 20 Oct 2022 17:53:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1873DB828AD;
+        Thu, 20 Oct 2022 17:54:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEFFBC433C1;
+        Thu, 20 Oct 2022 17:54:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666288432;
-        bh=ENyBHTU+PlCOFSNauBVolLBO7eB6Z+yD7cAHq5oAFfc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=itsqb22tDrJn/TaivCWnwHoR/9a1Q/K3QjttRaDQ6N0wPGbj3sGv4KhTbdN4/5Nxy
-         qe9lpYkzAHrw8iXhNx+gUH/eJBvgfpinLFdJht+aIV7B43iS5L474MXiI9lVQER+YZ
-         YTk7aj6vm6U8rTbfb7xKZUYPy+pGcWR7F8pJu2zwTF87vqlR9Ehr4jsb3uNftkF6wX
-         W433vYi8ytZV2h2vgJcXNFub79eBqffDd5s+X9Ii4M3CXEkxnezmYYWH1bZSoXfnhK
-         /DRZwynNDXEwrQwvO3QTUtZeYnREpKChG+YqGe2lhRXJ0yI7Xzeaa98a9j5d59l671
-         vlXEDoBoA2chA==
-Date:   Thu, 20 Oct 2022 10:53:50 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     "Li, Xin3" <xin3.li@intel.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "H.Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>
-Subject: Re: upgrade the orphan section warning to a hard link error
-Message-ID: <Y1GLLnYsEC8lYTdp@dev-arch.thelio-3990X>
-References: <BN6PR1101MB216105D169D482FC8C539059A8269@BN6PR1101MB2161.namprd11.prod.outlook.com>
- <Y02eZ6A/vlj8+B/c@dev-arch.thelio-3990X>
- <202210171230.CC40461C@keescook>
- <Y02zWFxC92VDSpdZ@dev-arch.thelio-3990X>
- <BN6PR1101MB216126260E3A9AFEE3F9CFB8A82A9@BN6PR1101MB2161.namprd11.prod.outlook.com>
+        s=k20201202; t=1666288469;
+        bh=GCQ+1VSy9DlUaoSYI9kxL0iKmoCvhaDUmTklwlw81eY=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=mqMjGqb1QNR0m2u8JuW27pOAK0BbieZk2NryYAmCitBYiXwEmWbxM66M4pqnb/ifu
+         FRCazSNNGNBJeRFGUBd1LqXd2CN0+n/L057yhKzdp5ctrXzi6mvz1Tktp9iOI2UFk4
+         37QMqJNwCl8W5b8OV+iB3bu18ZV6cZ9mmJUTnXnhGMw/zM9YAZQMK99vawnCV70GU1
+         xyauY1rET4DBmHJGKFKcu7b9CBzyvuM3fF/7JarDuB5D4k3kMub0YGVcvCkxwy6sbD
+         LhpL2YDMjLV7egR8OIQ4hgYZfPr5AQvmbkw+TxPQvnD/0S8wS1DGY55s3jZ5bw+7kJ
+         HG6ToQUzNjyfw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 708AE5C0624; Thu, 20 Oct 2022 10:54:29 -0700 (PDT)
+Date:   Thu, 20 Oct 2022 10:54:29 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Tom Zanussi <zanussi@kernel.org>
+Subject: Re: [PATCH] tracing: Add trace_trigger kernel command line option
+Message-ID: <20221020175429.GS5600@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221019200137.70343645@gandalf.local.home>
+ <20221019200745.0152fc51@gandalf.local.home>
+ <20221020155900.GM5600@paulmck-ThinkPad-P17-Gen-1>
+ <20221020123357.0f90e823@gandalf.local.home>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <BN6PR1101MB216126260E3A9AFEE3F9CFB8A82A9@BN6PR1101MB2161.namprd11.prod.outlook.com>
+In-Reply-To: <20221020123357.0f90e823@gandalf.local.home>
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -62,95 +64,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 05:17:35AM +0000, Li, Xin3 wrote:
-> Hi Nathan,
+On Thu, Oct 20, 2022 at 12:33:57PM -0400, Steven Rostedt wrote:
+> On Thu, 20 Oct 2022 08:59:00 -0700
+> "Paul E. McKenney" <paulmck@kernel.org> wrote:
 > 
-> > On Mon, Oct 17, 2022 at 12:32:39PM -0700, Kees Cook wrote:
-> > > On Mon, Oct 17, 2022 at 11:26:47AM -0700, Nathan Chancellor wrote:
-> > > > It might be interesting to turn orphan sections into an error if
-> > > > CONFIG_WERROR is set. Perhaps something like the following (FYI, not
-> > > > even compile tested)?
-> > > >
-> > > > diff --git a/Makefile b/Makefile
-> > > > index 0837445110fc..485f47fc2c07 100644
-> > > > --- a/Makefile
-> > > > +++ b/Makefile
-> > > > @@ -1119,7 +1119,7 @@ endif
-> > > >  # We never want expected sections to be placed heuristically by the
-> > > > # linker. All sections should be explicitly named in the linker script.
-> > > >  ifdef CONFIG_LD_ORPHAN_WARN
-> > > > -LDFLAGS_vmlinux += --orphan-handling=warn
-> > > > +LDFLAGS_vmlinux += --orphan-handling=$(if
-> > > > +$(CONFIG_WERROR),error,warn)
-> > > >  endif
-> > >
-> > > Yes, this is much preferred.
-> > >
-> > > > Outright turning the warning into an error with no escape hatch
-> > > > might be too aggressive, as we have had these warnings triggered by
-> > > > new compiler generated sections, such as in commit 848378812e40
-> > ("vmlinux.lds.h:
-> > > > Handle clang's module.{c,d}tor sections"). Unconditionally breaking
-> > > > the build in these situations is unfortunate but the warnings do
-> > > > need to be dealt with so I think having it error by default with the
-> > > > ability to opt-out is probably worth doing. I do not have a strong opinion
-> > though.
-> > >
-> > > Correct; the mandate from Linus (disregarding his addition of
-> > > CONFIG_WERROR for all*config builds), is that we should avoid breaking
-> > > builds. It wrecks bisection, it causes problems across compiler
-> > > versions, etc.
-> > >
-> > > So, yes, only on CONFIG_WERROR=y.
+> > On Wed, Oct 19, 2022 at 08:07:45PM -0400, Steven Rostedt wrote:
+> > > On Wed, 19 Oct 2022 20:01:37 -0400
+> > > Steven Rostedt <rostedt@goodmis.org> wrote:
+> > >   
+> > > > @@ -90,6 +90,10 @@ int unregister_tracepoint_module_notifier(struct notifier_block *nb)
+> > > >  #ifdef CONFIG_TRACEPOINTS
+> > > >  static inline void tracepoint_synchronize_unregister(void)
+> > > >  {
+> > > > +	/* Early updates do not need synchronization */
+> > > > +	if (early_boot_irqs_disabled)
+> > > > +		return;
+> > > > +
+> > > >  	synchronize_srcu(&tracepoint_srcu);
+> > > >  	synchronize_rcu();  
+> > > 
+> > > I wonder if this check should be just moved to the RCU synchronization
+> > > code? That is, if early_boot_irqs_disabled is set, do nothing, as there
+> > > should be nothing to synchronize against.  
 > > 
-> > We would probably want to alter the text of CONFIG_WERROR in some manner
-> > to convey this, perhaps like so:
+> > There already is a similar check, but it follows the lockdep check.
 > > 
-> > diff --git a/init/Kconfig b/init/Kconfig index a19314933e54..1fc03e4b2af2
-> > 100644
-> > --- a/init/Kconfig
-> > +++ b/init/Kconfig
-> > @@ -165,10 +165,12 @@ config WERROR
-> >  	help
-> >  	  A kernel build should not cause any compiler warnings, and this
-> >  	  enables the '-Werror' (for C) and '-Dwarnings' (for Rust) flags
-> > -	  to enforce that rule by default.
-> > +	  to enforce that rule by default. Certain warnings from other tools
-> > +	  such as the linker may be upgraded to errors with this option as
-> > +	  well.
-> > 
-> > -	  However, if you have a new (or very old) compiler with odd and
-> > -	  unusual warnings, or you have some architecture with problems,
-> > +	  However, if you have a new (or very old) compiler or linker with odd
-> > +	  and unusual warnings, or you have some architecture with problems,
-> >  	  you may need to disable this config option in order to
-> >  	  successfully build the kernel.
+> > Does the following patch help?
 > 
-> Thanks a lot for making this crystal clear.
+> Not sure if it would.
 > 
-> Do you want me to continue?  Or maybe it's easier for you to complete it?
+> I added this:
+> 
+> 
+> diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+> index c03fd7037add..79ac31a6a87b 100644
+> --- a/kernel/trace/trace.c
+> +++ b/kernel/trace/trace.c
+> @@ -2748,9 +2748,12 @@ void trace_buffered_event_disable(void)
+>  			       disable_trace_buffered_event, NULL, 1);
+>  	preempt_enable();
+>  
+> +	if (!irqs_disabled())
+> +		printk("IRQS DISABLED!! before %s:%d\n", __func__, __LINE__);
+>  	/* Wait for all current users to finish */
+> -	if (!early_boot_irqs_disabled)
+> -		synchronize_rcu();
+> +	synchronize_rcu();
+> +	if (!irqs_disabled())
+> +		printk("IRQS DISABLED!! after %s:%d\n", __func__, __LINE__);
+>  
+>  	for_each_tracing_cpu(cpu) {
+>  		free_page((unsigned long)per_cpu(trace_buffered_event, cpu));
+> 
+> Which produced this:
+> 
+> 
+> [    0.972867] ftrace: allocating 47021 entries in 184 pages
+> [    0.978285] ftrace section at ffffffffacef74c0 sorted properly
+> [    0.991153] ftrace: allocated 184 pages with 4 groups
+> [    0.996163] Dynamic Preempt: full
+> [    0.999354] rcu: Preemptible hierarchical RCU implementation.
+> [    1.005020] rcu:     RCU restricting CPUs from NR_CPUS=128 to nr_cpu_ids=8.
+> [    1.011680]  Tasks-RCU CPU stall warnings timeout set to 120000 (rcu_task_stall_timeout).
+> [    1.019813]  Trampoline variant of Tasks RCU enabled.
+> [    1.024831]  Rude variant of Tasks RCU enabled.
+> [    1.029330]  Tracing variant of Tasks RCU enabled.
+> [    1.034089] rcu: RCU calculated value of scheduler-enlistment delay is 100 jiffies.
+> [    1.041699] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=8
+> [    1.052607] IRQS DISABLED!! after trace_buffered_event_disable:2756
+> [    1.058712] NR_IRQS: 8448, nr_irqs: 488, preallocated irqs: 16
+> [    1.064670] NO_HZ: Full dynticks CPUs: 3.
+> [    1.068501] rcu:     Offload RCU callbacks from CPUs: 3.
+> [    1.073519] rcu: srcu_init: Setting srcu_struct sizes based on contention.
+> [    1.080400] ------------[ cut here ]------------
+> [    1.084938] Interrupts were enabled early
+> [    1.088919] WARNING: CPU: 0 PID: 0 at init/main.c:1061 start_kernel+0x36f/0x4e8
+> [    1.096184] Modules linked in:
+> [    1.099213] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.1.0-rc1-test+ #468
+> [    1.106047] Hardware name: Hewlett-Packard HP Compaq Pro 6300 SFF/339A, BIOS K01 v03.03 07/14/2016
+> [    1.114960] RIP: 0010:start_kernel+0x36f/0x4e8
+> [    1.119373] Code: 48 27 53 e8 fd 7b 03 00 e8 55 72 e5 fe e8 6b 05 03 00 ff 15 2a f9 89 ff 0f ba e0 09 73 0e 48 c7 c7 98 25 31 ac e8 01 5b df fe <0f> 0b c6 05 c7 2c af ff 00 e8 ba 36 47 fe ff 15 14 f9 89 ff e8 56
+> [    1.138057] RSP: 0000:ffffffffac603f30 EFLAGS: 00010286
+> [    1.143248] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+> [    1.150343] RDX: 0000000000000002 RSI: 00000000ffffdfff RDI: 0000000000000001
+> [    1.157438] RBP: 0000000000000000 R08: 0000000000000000 R09: ffffffffac603dd8
+> [    1.164537] R10: 0000000000000003 R11: ffffffffac734168 R12: 000000000000180a
+> [    1.171633] R13: 00000000010fecf0 R14: 0000000000000000 R15: 00000000d44e3018
+> [    1.178730] FS:  0000000000000000(0000) GS:ffff93ee1aa00000(0000) knlGS:0000000000000000
+> [    1.186778] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [    1.192489] CR2: ffff93ee1edff000 CR3: 000000002e60a001 CR4: 00000000000606f0
+> [    1.199584] Call Trace:
+> [    1.202009]  <TASK>
+> 
+> 
+> So I'm not sure how just updating srcu will do anything to prevent this.
 
-Sure, I think it is reasonable for you to continue with this as you
-brought up the idea initially! Feel free to just take those diffs
-wholesale if they work and stick a
+Apologies, SRCU on the brain due to a different email thread...  :-/
 
-    Suggested-by: Nathan Chancellor <nathan@kernel.org>
+							Thanx, Paul
 
-or
-
-    Co-developed-by: Nathan Chancellor <nathan@kernel.org>
-    Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-
-on the patch if you are so inclined or rework them in a way you see fit,
-I do not have a strong opinion.
-
-> I will need to find resources to test the patch on other platforms besides x86.
-
-In theory, we should have already cleaned up all these warnings when we
-enabled CONFIG_LD_ORPHAN_WARN for all these architectures, so that
-change should be a no-op. More testing is never a bad idea though :)
-
-I can throw it into my LLVM testing matrix as well.
-
-Cheers,
-Nathan
+> -- Steve
+> 
+> > 
+> > 							Thanx, Paul
+> > 
+> > ------------------------------------------------------------------------
+> > 
+> > diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
+> > index ca4b5dcec675b..356ef70d5442c 100644
+> > --- a/kernel/rcu/srcutree.c
+> > +++ b/kernel/rcu/srcutree.c
+> > @@ -1267,14 +1267,15 @@ static void __synchronize_srcu(struct srcu_struct *ssp, bool do_norm)
+> >  {
+> >  	struct rcu_synchronize rcu;
+> >  
+> > +	if (rcu_scheduler_active == RCU_SCHEDULER_INACTIVE)
+> > +		return;
+> > +
+> >  	RCU_LOCKDEP_WARN(lockdep_is_held(ssp) ||
+> >  			 lock_is_held(&rcu_bh_lock_map) ||
+> >  			 lock_is_held(&rcu_lock_map) ||
+> >  			 lock_is_held(&rcu_sched_lock_map),
+> >  			 "Illegal synchronize_srcu() in same-type SRCU (or in RCU) read-side critical section");
+> >  
+> > -	if (rcu_scheduler_active == RCU_SCHEDULER_INACTIVE)
+> > -		return;
+> >  	might_sleep();
+> >  	check_init_srcu_struct(ssp);
+> >  	init_completion(&rcu.completion);
+> 
