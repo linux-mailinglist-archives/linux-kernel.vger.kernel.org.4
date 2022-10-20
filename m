@@ -2,97 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B52A0606B4E
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 00:36:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D9C4606B57
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 00:38:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229777AbiJTWgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 18:36:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48276 "EHLO
+        id S229850AbiJTWi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 18:38:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbiJTWgq (ORCPT
+        with ESMTP id S229787AbiJTWiW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 18:36:46 -0400
-Received: from p3plwbeout22-02.prod.phx3.secureserver.net (p3plsmtp22-02-2.prod.phx3.secureserver.net [68.178.252.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3099C222F1C
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 15:36:44 -0700 (PDT)
-Received: from mailex.mailcore.me ([94.136.40.144])
-        by :WBEOUT: with ESMTP
-        id le9aojCr1imR6le9bos5ab; Thu, 20 Oct 2022 15:36:43 -0700
-X-CMAE-Analysis: v=2.4 cv=U/ZXscnu c=1 sm=1 tr=0 ts=6351cd7b
- a=wXHyRMViKMYRd//SnbHIqA==:117 a=84ok6UeoqCVsigPHarzEiQ==:17
- a=ggZhUymU-5wA:10 a=Qawa6l4ZSaYA:10 a=VwQbUJbxAAAA:8 a=FXvPX3liAAAA:8
- a=NzQU21p7aw8KqXuY42AA:9 a=AjGcO6oz07-iQ99wixmX:22 a=UObqyxdv-6Yh2QiB9mM_:22
-X-SECURESERVER-ACCT: phillip@squashfs.org.uk  
-X-SID:  le9aojCr1imR6
-Received: from 82-69-79-175.dsl.in-addr.zen.co.uk ([82.69.79.175] helo=phoenix.fritz.box)
-        by smtp12.mailcore.me with esmtpa (Exim 4.94.2)
-        (envelope-from <phillip@squashfs.org.uk>)
-        id 1ole9Z-0006zQ-Oa; Thu, 20 Oct 2022 23:36:42 +0100
-From:   Phillip Lougher <phillip@squashfs.org.uk>
-To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org
-Cc:     hsinyi@chromium.org, regressions@leemhuis.info,
-        regressions@lists.linux.dev, dimitri.ledkov@canonical.com,
-        michael.vogt@canonical.com, phillip.lougher@gmail.com,
-        ogra@ubuntu.com, olivier.tilloy@canonical.com,
-        Phillip Lougher <phillip@squashfs.org.uk>,
-        stable@vger.kernel.org
-Subject: [PATCH 3/3] squashfs: fix buffer release race condition in readahead code
-Date:   Thu, 20 Oct 2022 23:36:16 +0100
-Message-Id: <20221020223616.7571-4-phillip@squashfs.org.uk>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221020223616.7571-1-phillip@squashfs.org.uk>
-References: <20221020223616.7571-1-phillip@squashfs.org.uk>
+        Thu, 20 Oct 2022 18:38:22 -0400
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA5071C5A73
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 15:38:21 -0700 (PDT)
+Received: by mail-ej1-x644.google.com with SMTP id d26so2952082ejc.8
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 15:38:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=XAlG+R0L7V+c4eZDAFmMDuMjD1uoa7yYl/auqG4oieg=;
+        b=lCSU0pfPqttzas41dzzOVDLE8MRyVU6xsbN3m/xliJTSEf2HWDALXIhYf3eFJpNqz2
+         s/OINIMF4ZnOwrMjhjK67BPZNqp35rlxs7poQ+JinQUFanBXyXVN+aPFHV6f10MI54G6
+         Fg7GdbnK+v2Th23F/IBs9FGrI+ORoqheZxqwI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XAlG+R0L7V+c4eZDAFmMDuMjD1uoa7yYl/auqG4oieg=;
+        b=YxxGrCa+fZ3MFkvE10/d5vFVzAEUJ8SpfiLNkmB7qg0p9c3IgAdI6v4oTIBHCI4gT9
+         H159YsROQZcPwL2rwXQlJWajAnQrJ1Yfp9qukAvaFJBtjf4BeG7hNK/onAipe2XxbqcC
+         010dBqf7u8gBkMz7cf+8OgWBejpUJsEuqfz41wQsBs2KQ26CljK3+pgK1Yl9NHSXR2Im
+         NEEM0dRYYpF/tVhKX2xSUA67p86s4MUviQ0NuHOiQEL/CtWl/59NeYZboTBgKcQu77xz
+         PmoKnWye8z3ayr6czcSvhtJS37bJaXDozlScvtSOCdsw5f7XGTmuflIPIHcdWX2B1p8L
+         dMnw==
+X-Gm-Message-State: ACrzQf2AtltT1c5Hk6zybvGCIJk8X62eGCamVmyiNs5QwOUzJQMuJCd8
+        q/LahBfseVlbLRJe6HowV+k1/rn2lg9BVCtR
+X-Google-Smtp-Source: AMsMyM7+zJp9Z32kdytaI5kZmFXPzneAUfDQoVMw0p2tiHvryftNofbC/StNQlAAlKfDqdDTRyLhsQ==
+X-Received: by 2002:a17:907:e93:b0:78d:b8ff:9b5f with SMTP id ho19-20020a1709070e9300b0078db8ff9b5fmr13079481ejc.12.1666305500570;
+        Thu, 20 Oct 2022 15:38:20 -0700 (PDT)
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com. [209.85.221.52])
+        by smtp.gmail.com with ESMTPSA id sd42-20020a1709076e2a00b00722e50dab2csm10864609ejc.109.2022.10.20.15.36.43
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Oct 2022 15:37:17 -0700 (PDT)
+Received: by mail-wr1-f52.google.com with SMTP id w18so1814238wro.7
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 15:36:43 -0700 (PDT)
+X-Received: by 2002:adf:9d8a:0:b0:230:5212:d358 with SMTP id
+ p10-20020adf9d8a000000b002305212d358mr10213052wre.405.1666305392092; Thu, 20
+ Oct 2022 15:36:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Mailcore-Auth: 439999529
-X-Mailcore-Domain: 1394945
-X-123-reg-Authenticated:  phillip@squashfs.org.uk  
-X-Originating-IP: 82.69.79.175
-X-CMAE-Envelope: MS4xfAeCv/9N9gGLkcg1ImRY2fUmkVE71wOfuWJmX1a0UkB/ryWiX3y5yIue4/Yy3QtFRpidgVVBo22XNLG+TfnbBSVH3gJLNbtv2eP7vlZRmcpl5Gej0pr+
- t7+OhBCF8T08Ib1MYoekZGQEHIEufT3c0Iya0RdaNxWE5uTEpCgSF7zgj8HfU0GeU0ICZLb2Gv+oMq0TDRZ57BXmGYbxUQ3b/FFpLNP/q/bsh7kGsn/mHo0T
- 3XjQ/9k2IJxEO2w5nvW+zA==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220901024827.v3.1.I3aa360986c0e7377ea5e96c116f014ff1ab8c968@changeid>
+ <166606235849.3553294.10700447109437637515.b4-ty@kernel.org>
+In-Reply-To: <166606235849.3553294.10700447109437637515.b4-ty@kernel.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 20 Oct 2022 15:36:20 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=WXGGHTAgH7O6MP3eOp4HLAwkBAOJ9L63ow3PSdkUtCYg@mail.gmail.com>
+Message-ID: <CAD=FV=WXGGHTAgH7O6MP3eOp4HLAwkBAOJ9L63ow3PSdkUtCYg@mail.gmail.com>
+Subject: Re: (subset) [PATCH v3 1/2] dt-bindings: arm: qcom: Document
+ additional skus for sc7180 pazquel360
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        yunlong.jia@ecs.corp-partner.google.com, henrysun@google.com,
+        devicetree@vger.kernel.org, moragues@chromium.org,
+        agross@kernel.org, robh+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix a buffer release race condition, where the error value was
-used after release.
+Hi,
 
-Fixes: b09a7a036d20 ("squashfs: support reading fragments in readahead call")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Phillip Lougher <phillip@squashfs.org.uk>
----
- fs/squashfs/file.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+On Mon, Oct 17, 2022 at 8:15 PM Bjorn Andersson <andersson@kernel.org> wrote:
+>
+> On Thu, 1 Sep 2022 02:49:57 +0000, Yunlong Jia wrote:
+> > pazquel360 is an extension project based on pazquel.
+> > We create 3 sku on pazquel360:
+> >    sku 20 for LTE with physical SIM _and_ eSIM and WiFi
+> >    sku 21 for WiFi only
+> >    sku 22 for LTE with only a physical SIM
+> >  Both sku20 and sku22 are LTE SKUs.
+> >  One has the eSIM stuffed and one doesn't.
+> >  There is a single shared device tree for the two.
+> >
+> > [...]
+>
+> Applied, thanks!
+>
+> [1/2] dt-bindings: arm: qcom: Document additional skus for sc7180 pazquel360
+>       commit: 185d192d0a7b565a24b3f7456a2f84f169ab087a
+> [2/2] arm64: dts: qcom: Add sc7180-pazquel360
+>       commit: 2f72a4f54cdb4fd0ebea9a2dea65756d3e676be2
 
-diff --git a/fs/squashfs/file.c b/fs/squashfs/file.c
-index f0afd4d6fd30..8ba8c4c50770 100644
---- a/fs/squashfs/file.c
-+++ b/fs/squashfs/file.c
-@@ -506,8 +506,9 @@ static int squashfs_readahead_fragment(struct page **page,
- 		squashfs_i(inode)->fragment_size);
- 	struct squashfs_sb_info *msblk = inode->i_sb->s_fs_info;
- 	unsigned int n, mask = (1 << (msblk->block_log - PAGE_SHIFT)) - 1;
-+	int error = buffer->error;
- 
--	if (buffer->error)
-+	if (error)
- 		goto out;
- 
- 	expected += squashfs_i(inode)->fragment_offset;
-@@ -529,7 +530,7 @@ static int squashfs_readahead_fragment(struct page **page,
- 
- out:
- 	squashfs_cache_put(buffer);
--	return buffer->error;
-+	return error;
- }
- 
- static void squashfs_readahead(struct readahead_control *ractl)
--- 
-2.35.1
+FWIW, it looks like you landed v3 instead of v5. See:
 
+https://lore.kernel.org/r/20220923083657.v5.3.Iea2d2918adfff2825b87d428b5732717425c196f@changeid/
+
+Presumably something about your process got confused because Yunlong
+changed the email address they were sending it from (I think someone
+requested not to use an "corp-partner" email address).
+
+The other difference between v3 and v5 is the touchscreen. Presumably
+Yunlong can send a followup patch to add the touchscreen atop what
+you've landed.
+
+-Doug
