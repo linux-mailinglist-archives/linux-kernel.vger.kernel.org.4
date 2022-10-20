@@ -2,171 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD05D606000
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 14:18:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE395606004
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 14:18:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230075AbiJTMSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 08:18:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42578 "EHLO
+        id S230077AbiJTMSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 08:18:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbiJTMS2 (ORCPT
+        with ESMTP id S230096AbiJTMSo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 08:18:28 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47B791843EE;
-        Thu, 20 Oct 2022 05:18:28 -0700 (PDT)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29KC9DiV004673;
-        Thu, 20 Oct 2022 12:17:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=HilN0jkjDLsmNvszQyx6RX3zBM7i9SRGWjKB/R0VMbw=;
- b=GD4C3dGaC14a+5cY/iiUFZk2XMCxcNbIzCW4N5/DnGPClUkxmPTcJIXi2jgSDaNLOja6
- zWe+6ALJJJzZUmYup2KmHY9ygLcP20zKhmntcWJ94bJDXTVIDFF/7KG4OQIlRw+N+wh/
- qZlRdSnhCPdUBQ3mSkM/vgwp7ebxvCrJB1b/57aJcm2ugIR0/fuqTBSJ/9yi0LM3u5Fm
- KpX3yN/AJpYwp4UqcE6YlJYFB9VxcPV1dMU5pi8c4p0jr0PIVZH6tZu+LjLAo1rQwr22
- xrLgzWIqx+qvBI/xKJYgvum95xGaIfcr7CzUybF82RAFWXGbdjG4LTHFFI0r/zxa2hqV IA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kb4t5a4cc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 20 Oct 2022 12:17:56 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29KCAg2B009462;
-        Thu, 20 Oct 2022 12:17:56 GMT
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kb4t5a4bv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 20 Oct 2022 12:17:56 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29KC5RYS010331;
-        Thu, 20 Oct 2022 12:17:55 GMT
-Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
-        by ppma04dal.us.ibm.com with ESMTP id 3k7mgbmhw2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 20 Oct 2022 12:17:55 +0000
-Received: from smtpav04.dal12v.mail.ibm.com ([9.208.128.131])
-        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29KCHtwT5636620
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 20 Oct 2022 12:17:55 GMT
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 998D758063;
-        Thu, 20 Oct 2022 12:17:53 +0000 (GMT)
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 689535804E;
-        Thu, 20 Oct 2022 12:17:52 +0000 (GMT)
-Received: from sig-9-65-203-47.ibm.com (unknown [9.65.203.47])
-        by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Thu, 20 Oct 2022 12:17:52 +0000 (GMT)
-Message-ID: <3eaa7e1fd74c2cdd4efe63ea8c8249666d046003.camel@linux.ibm.com>
-Subject: Re: [PATCH 2/9] security: Move trivial IMA hooks into LSM
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        Petr Vorel <pvorel@suse.cz>, Borislav Petkov <bp@suse.de>,
-        Takashi Iwai <tiwai@suse.de>,
-        Jonathan McDowell <noodles@fb.com>,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, KP Singh <kpsingh@kernel.org>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        John Johansen <john.johansen@canonical.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Date:   Thu, 20 Oct 2022 08:17:52 -0400
-In-Reply-To: <202210191639.58F18F1AA@keescook>
-References: <20221013222702.never.990-kees@kernel.org>
-         <20221013223654.659758-2-keescook@chromium.org>
-         <16e008b3709f3c85dbad1accb9fce8ddad552205.camel@linux.ibm.com>
-         <202210191134.FC646AFC71@keescook>
-         <ffa58bb09df15a9debc45aaf0ed51f2b34f5c225.camel@linux.ibm.com>
-         <202210191639.58F18F1AA@keescook>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
+        Thu, 20 Oct 2022 08:18:44 -0400
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95CB719188B
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 05:18:42 -0700 (PDT)
+Received: by mail-qv1-xf29.google.com with SMTP id h10so13351161qvq.7
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 05:18:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6P29Au+mNsUaLWGRFWpA1rpC+F5XcqKKfHLDcUXt2LM=;
+        b=gX0c4gwqfE3LYsCNebzbubSDDy44gkgCDd/bgcEYCNFxJ3S3V+Os771bMGcp2U4SQa
+         /YTGk8l7AdlBYLAjV4+LpSfweRGV0Ee/1DEuBzUXa4cRaF42Owp8B7he2aHeYARRSXez
+         tqijng7a14Hgs8m1Ozz/SfS09dRAdLNP1QWHIXPahDZFyoqiEIpplf/Fq5p5rrp0CDAN
+         ky/rLt6V0kKS5J8acDZh9vnF/XIAvFuF+8RxNp/PXd8A3FVPc7sTTG7tDR0aLbCrCyjA
+         zDqMRJ6s+IUg7ggVW2OtRNRp7iogxPq+lFMQWwZ3513MQytj8dgURnKL+1E7kWrM5+Ty
+         /Zrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6P29Au+mNsUaLWGRFWpA1rpC+F5XcqKKfHLDcUXt2LM=;
+        b=1xy2z1Y230qkPL1MZ4BENuGzpAxybYHr5Xrz7ZrkSy+n5xVoJO5dcCwKTXiFjXwgdp
+         oEQXuI4v9o1/2EhrbYrDpim87HR5w0o8yPPRTM6AE4ypOa/tF+4nlomH8M/lEUmF5K+Z
+         XkaUyxCaVDg7EQ8eSETZzhjplCjHLDhnSdzCapF9lP7xgTyc6e1ioIekSoz++IleKhuk
+         l5Hep9WZxauXKv48Sa0hoXMXsATXy/YYTSYjHfFWMXa6pBcuBB1zh3Yrh4QGJYw7riOM
+         mW0mVAnA0ovEgVeo1dSYEruGdkUdd09bkW5GVktr1WjUwqvgcjoAxamUiiTX57/Hcr61
+         4KwQ==
+X-Gm-Message-State: ACrzQf1JalzCj4aYKdv2Ag0v4t4mj8MjeLQw/TVcAguC54XXjl3DZoiN
+        Q/YjXR7BfkHOKnJ1kwH2jzJqUeCpFqiNBA==
+X-Google-Smtp-Source: AMsMyM6cXFBCkNgP0DqHpNDj7XnN6Spz2TY86LLtTMXRJIAvMaTzzlwSmMWcFPK2MjNbKNTmSJkqtw==
+X-Received: by 2002:a05:6214:2242:b0:4b1:ccb3:aced with SMTP id c2-20020a056214224200b004b1ccb3acedmr10831498qvc.51.1666268321693;
+        Thu, 20 Oct 2022 05:18:41 -0700 (PDT)
+Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
+        by smtp.gmail.com with ESMTPSA id g8-20020ac87f48000000b0035cf31005e2sm6172602qtk.73.2022.10.20.05.18.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Oct 2022 05:18:40 -0700 (PDT)
+Message-ID: <ea6893f6-be39-697c-4493-7f1c0ed6708d@linaro.org>
+Date:   Thu, 20 Oct 2022 08:18:26 -0400
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH 2/3] dt-bindings: watchdog: fsl-imx: document suspend in
+ wait mode
+Content-Language: en-US
+To:     Andrej Picej <andrej.picej@norik.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, shawnguo@kernel.org,
+        linux@roeck-us.net, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-imx@nxp.com, festevam@gmail.com,
+        kernel@pengutronix.de, s.hauer@pengutronix.de,
+        wim@linux-watchdog.org, robh+dt@kernel.org
+References: <20221019111714.1953262-1-andrej.picej@norik.com>
+ <20221019111714.1953262-3-andrej.picej@norik.com>
+ <7508670.GXAFRqVoOG@steina-w>
+ <56118d35-dfe6-f46b-9fc7-28aca6530fb5@linaro.org>
+ <d93503b7-fa65-d2ae-461f-56d68bf312e0@norik.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <d93503b7-fa65-d2ae-461f-56d68bf312e0@norik.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: X4qCPi94kqbixVxmCFCIOsrVDiK-E7aq
-X-Proofpoint-ORIG-GUID: lhEivODYjn0tjV0PPqiNgpIi9cz847UW
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-20_03,2022-10-20_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxscore=0
- malwarescore=0 lowpriorityscore=0 mlxlogscore=999 priorityscore=1501
- clxscore=1015 spamscore=0 adultscore=0 impostorscore=0 bulkscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210200072
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-10-19 at 16:41 -0700, Kees Cook wrote:
-> On Wed, Oct 19, 2022 at 04:45:41PM -0400, Mimi Zohar wrote:
-> > On Wed, 2022-10-19 at 11:59 -0700, Kees Cook wrote:
-> > > On Wed, Oct 19, 2022 at 10:34:48AM -0400, Mimi Zohar wrote:
-> > > > On Thu, 2022-10-13 at 15:36 -0700, Kees Cook wrote:
-> > > > > This moves the trivial hard-coded stacking of IMA LSM hooks into the
-> > > > > existing LSM infrastructure.
-> > > > 
-> > > > The only thing trivial about making IMA and EVM LSMs is moving them to
-> > > > LSM hooks.  Although static files may be signed and the signatures
-> > > > distributed with the file data through the normal distribution
-> > > > mechanisms (e.g. RPM), other files cannot be signed remotely (e.g.
-> > > > configuration files).  For these files, both IMA and EVM may be
-> > > > configured to maintain persistent file state stored as security xattrs
-> > > > in the form of security.ima file hashes or security.evm HMACs.  The LSM
-> > > > flexibility of enabling/disabling IMA or EVM on a per boot basis breaks
-> > > > this usage, potentially preventing subsequent boots.
-> > > 
-> > > I'm not suggesting IMA and EVM don't have specific behaviors that need to
-> > > be correctly integrated into the LSM infrastructure. In fact, I spent a
-> > > lot of time designing that infrastructure to be flexible enough to deal
-> > > with these kinds of things. (e.g. plumbing "enablement", etc.) As I
-> > > mentioned, this was more of trying to provide a head-start on the
-> > > conversion. I don't intend to drive this -- please take whatever is
-> > > useful from this example and use it. :) I'm happy to help construct any
-> > > missing infrastructure needed (e.g. LSM_ORDER_LAST, etc).
-> > > 
-> > > As for preventing subsequent boots, this is already true with other LSMs
-> > > that save state that affects system behavior (like SELinux tags, AppArmor
-> > > policy). IMA and EVM are not special in that regard conceptually.
-> > 
-> > > Besides, it also looks like it's already possible to boot with IMA or EVM
-> > > disabled ("ima_appraise=off", or "evm=fix"), so there's no regression
-> > > conceptually for having "integrity" get dropped from the lsm= list at
-> > > boot. And if you want it not to be silent disabling, that's fine --
-> > > just panic during initialization if "integrity" is disabled, as is
-> > > already happening.
-> > 
-> > Being able to specify "ima_appraise=" on the boot command line requires
-> > IMA_APPRAISE_BOOTPARAM to be configured.  Even when specified, if the
-> > system is booted with secure-boot mode enabled, it also cannot be
-> > modified.   With the ability of randomly enabling/disabling LSMs, these
-> > protections are useless.
+On 20/10/2022 02:23, Andrej Picej wrote:
+> Hi Alexander and Krzysztof,
 > 
-> Sure, so let's get lsm= added to the lockdown list, etc.
+> hope I can reply to both questions here.
+> 
+> On 19. 10. 22 17:51, Krzysztof Kozlowski wrote:
+>> On 19/10/2022 09:00, Alexander Stein wrote:
+>>> Hello Andrej,
+>>>
+>>> Am Mittwoch, 19. Oktober 2022, 13:17:13 CEST schrieb Andrej Picej:
+>>
+>> Missing commit msg.
+>>
+>>>> Signed-off-by: Andrej Picej <andrej.picej@norik.com>
+>>>> ---
+>>>>   Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml | 5 +++++
+>>>>   1 file changed, 5 insertions(+)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml
+>>>> b/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml index
+>>>> fb7695515be1..01b3e04e7e65 100644
+>>>> --- a/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml
+>>>> +++ b/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml
+>>>> @@ -55,6 +55,11 @@ properties:
+>>>>         If present, the watchdog device is configured to assert its
+>>>>         external reset (WDOG_B) instead of issuing a software reset.
+>>>>
+>>>> +  fsl,suspend-in-wait:
+>>>> +    $ref: /schemas/types.yaml#/definitions/flag
+>>>> +    description: |
+>>>> +      If present, the watchdog device is suspended in WAIT mode.
+>>>> +
+>>>>   required:
+>>>>     - compatible
+>>>>     - interrupts
+>>>
+>>> What is the condition the watchdog is suspended in WAIT mode? Is this specific
+>>> to SoC or platform or something else?
+>>>
+>>
+> 
+> Sorry, what exactly do you mean by condition?
 
-I thought the move to "lsm=" was to allow different LSMs to be
-enabled/disabled at run time.  Adding "lsm=" to the lockdown list
-doesn't seem like the correct solution to limiting which LSMs can be
-enabled/disabled at runtime.  As I recall, lockdown needs to be enabled
-by userspace.
+Ugh, I also cannot parse it now...
 
-> My point is for
-> us to work through each of these concerns and address them. I am not an
-> IMA/EVM expert, but I do understand the LSM infrastructure deeply, so
-> I'd like to help you get these changes made.
+> When the property 
+> "fsl,suspend-in-wait" is set the watchdog is suspended in WAIT mode, so 
+> this is defined by the user. Didn't want to apply it for all the 
+> supported machines since there could be devices which depend on watchdog 
+> triggering in WAIT mode. We stumbled on this problem on imx6 devices, 
+> but the same bit (with the same description) is found on imx25, imx35, 
+> imx50/51/53, imx7 and imx8.
 
-Sure
+I meant, what is expected to happen if you do not enable this bit and
+watchdog triggers in WAIT mode? IOW, why someone might want to enable or
+disable this property?
 
--- 
-thanks,
+> 
+>> And what happens else? When it is not suspended in WAIT mode?
+>>
+> 
+> When you put the device in "freeze"/"Suspend-To-Idle" low-power mode the 
+> watchdog keeps running and triggers a reset after 128 seconds. So the 
+> maximum length the device can stay in this mode is limited to 128 seconds.
 
-Mimi
+And who wakes up the system before 128 seconds? IOW is there a use case
+of not enabling this property?
+
+Best regards,
+Krzysztof
 
