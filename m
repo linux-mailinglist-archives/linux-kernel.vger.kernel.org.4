@@ -2,58 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AA96606513
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 17:51:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5816D606517
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 17:51:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230336AbiJTPvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 11:51:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32816 "EHLO
+        id S230346AbiJTPv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 11:51:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230128AbiJTPvL (ORCPT
+        with ESMTP id S230406AbiJTPvX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 11:51:11 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 598DA57570
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 08:51:10 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1olXp3-0007mt-Eq; Thu, 20 Oct 2022 17:51:05 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1olXoz-000LfJ-Vs; Thu, 20 Oct 2022 17:51:04 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1olXp1-009MN7-M1; Thu, 20 Oct 2022 17:51:03 +0200
-Date:   Thu, 20 Oct 2022 17:51:03 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Ben Dooks <ben.dooks@sifive.com>
-Cc:     linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        jarkko.nikula@linux.intel.com,
-        William Salmon <william.salmon@sifive.com>,
-        Jude Onyenegecha <jude.onyenegecha@sifive.com>
-Subject: Re: [PATCH v6 02/10] pwm: dwc: allow driver to be built with
- COMPILE_TEST
-Message-ID: <20221020155103.tdqsxo2uwrsihp4b@pengutronix.de>
-References: <20221020151610.59443-1-ben.dooks@sifive.com>
- <20221020151610.59443-3-ben.dooks@sifive.com>
+        Thu, 20 Oct 2022 11:51:23 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 396821B90FE;
+        Thu, 20 Oct 2022 08:51:16 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id 186-20020a1c02c3000000b003c6c154d528so2685621wmc.4;
+        Thu, 20 Oct 2022 08:51:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=54fd/0yen88eFOEGtvTo0HIRTRehsPlXZmjj7D9lRYM=;
+        b=AYzEUOOvgKrh8OY79DYRWSgwx6N8g/vR6J3zOIQt1gL8WOjDLWAvK0msuxAhyjy8H5
+         gggcBJuxspkS1/wgrQLT9gieS4kFqu/mJAgZ91Qbp9fsYRwVSSdVjymrhQOpRcfHFyrs
+         vNRr0nHhoAQ+F8gPsOe5wA8m7xO+PAeHiFT3p0gr84lf5L/rtvXxecm4lkmf8I+c2Toh
+         2iNtwXaKtllOhvTEnCy8jnkFj3p8ozL9gV+oeNG/AXBMdhpeiy36hxivHZN0IEx6e6Fw
+         5Fpi5LiZdrRHQMMbr9nRKNAjvE+yYYa1ZFS3CvKJEAZ++wOhbYVd2+1kidN34KTWWFyZ
+         FD0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=54fd/0yen88eFOEGtvTo0HIRTRehsPlXZmjj7D9lRYM=;
+        b=bFpCd6txKIsCYOdo9RQx292AGuDTLgwWP7IldpdxKjB8BgE/V2a82KeXcQ5mvU7eoA
+         SrNjf258FHSYw5g/oKffjx/3bohbnsTSWFL4etuJyntjhmMCfTkmXWek7QWpAnlm9qeq
+         ihtFzT8u858xCqI2+VMgyBMVVlnAeeMxNsGqFO5+YfxbQ7kukMOi2eW1CMms8yYqWy2C
+         98o8Qx8YJzLVlsTnbTt/QXuLkqoYeO5/Gp9QeXh9GYW/g3LPGCLvONmWE7UU0vh5vQDY
+         DjvQnHvCTHwunKKlsTwcPIs6sDKzUdrZUe6E0YAmOl5XJ6Np7z4Ljn4Zn4VQCL1iuYp4
+         2EUw==
+X-Gm-Message-State: ACrzQf3jQhfsei/+jAHvASx6INqiaz7SRou86Y6u9AeN2P+pkGGKDZXT
+        5WGHSMWBrhv/3O4ezgn/O2q90TGUDt+xUA==
+X-Google-Smtp-Source: AMsMyM4kwoM78oquyzfzXtDeD8DlaN+JrS1iv5KYcCC4O7CgALTGucAn/e7/srb06hAYQjUkLMB/vQ==
+X-Received: by 2002:a1c:f60d:0:b0:3be:708b:c96c with SMTP id w13-20020a1cf60d000000b003be708bc96cmr31458957wmc.168.1666281074889;
+        Thu, 20 Oct 2022 08:51:14 -0700 (PDT)
+Received: from localhost.localdomain ([46.248.82.114])
+        by smtp.gmail.com with ESMTPSA id b21-20020a05600c4e1500b003a83ca67f73sm31645wmq.3.2022.10.20.08.51.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Oct 2022 08:51:14 -0700 (PDT)
+From:   Uros Bizjak <ubizjak@gmail.com>
+To:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Uros Bizjak <ubizjak@gmail.com>, Song Liu <song@kernel.org>
+Subject: [PATCH v2] raid5-cache: use try_cmpxchg in r5l_wake_reclaim
+Date:   Thu, 20 Oct 2022 17:51:04 +0200
+Message-Id: <20221020155104.9485-1-ubizjak@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5b6aanlbsfteqtwm"
-Content-Disposition: inline
-In-Reply-To: <20221020151610.59443-3-ben.dooks@sifive.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,42 +68,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Use try_cmpxchg instead of cmpxchg (*ptr, old, new) == old in
+r5l_wake_reclaim. 86 CMPXCHG instruction returns success in ZF flag, so
+this change saves a compare after cmpxchg (and related move instruction in
+front of cmpxchg).
 
---5b6aanlbsfteqtwm
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Also, try_cmpxchg implicitly assigns old *ptr value to "old" when cmpxchg
+fails. There is no need to re-read the value in the loop.
 
-On Thu, Oct 20, 2022 at 04:16:02PM +0100, Ben Dooks wrote:
-> Allow dwc driver to be built with COMPILE_TEST should allow
-> better coverage when build testing.
->=20
-> Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
+Note that the value from *ptr should be read using READ_ONCE to prevent
+the compiler from merging, refetching or reordering the read.
 
-Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+No functional change intended.
 
-(forwarded from v4)
+Cc: Song Liu <song@kernel.org>
+Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+---
+v2: Fix garbled subject line
+---
+ drivers/md/raid5-cache.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Best regards
-Uwe
+diff --git a/drivers/md/raid5-cache.c b/drivers/md/raid5-cache.c
+index 832d8566e165..a63023aae21e 100644
+--- a/drivers/md/raid5-cache.c
++++ b/drivers/md/raid5-cache.c
+@@ -1565,11 +1565,12 @@ void r5l_wake_reclaim(struct r5l_log *log, sector_t space)
+ 
+ 	if (!log)
+ 		return;
++
++	target = READ_ONCE(log->reclaim_target);
+ 	do {
+-		target = log->reclaim_target;
+ 		if (new < target)
+ 			return;
+-	} while (cmpxchg(&log->reclaim_target, target, new) != target);
++	} while (!try_cmpxchg(&log->reclaim_target, &target, new));
+ 	md_wakeup_thread(log->reclaim_thread);
+ }
+ 
+-- 
+2.37.3
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---5b6aanlbsfteqtwm
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmNRbmQACgkQwfwUeK3K
-7Ak9lwgAgAuO1JUYT2rplVcXHsuTwa6mp0c9MuAG9GQfq6fwkH86Zy6navhNcbFj
-QDJAiCFCSfasnOcK2G1bSSmd/A/qmIm2G+GhIBCVw+pyHMcMERlMJFSrUUCYxsOK
-RZSW/hOvC7Oz46gkmlyTJ98Hjs9+qNOGyB6O85Oxd4CDxx3dAgE86fPAtb8uzJTc
-BAP76XqdS1ICvxf3ZIjM86M0s1TSoFf5AxanyHDqBVtwJQTD6NUqfalBtOCwkMmT
-8cci9K/hK1ZZ4QjKGOoYnfGI3m30G4i9yb2v0QBr/IDBS05fAfyA1HCwGKvzzALQ
-YQEabEKJ5RPIrS+l11JHPReymIr+YA==
-=bcw4
------END PGP SIGNATURE-----
-
---5b6aanlbsfteqtwm--
