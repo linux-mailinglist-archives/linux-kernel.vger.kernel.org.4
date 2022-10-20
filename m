@@ -2,113 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 969CB60670A
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 19:30:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5124B606708
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 19:29:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229484AbiJTRaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 13:30:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35590 "EHLO
+        id S229902AbiJTR3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 13:29:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229799AbiJTRaI (ORCPT
+        with ESMTP id S229795AbiJTR3m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 13:30:08 -0400
-Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C89097F265
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 10:30:05 -0700 (PDT)
-Received: by mail-ua1-x92d.google.com with SMTP id i16so72650uak.1
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 10:30:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=/3I182d8OS7x64S+BRqz8kKKkjGoMeVc6W9/b71l3sw=;
-        b=bhSI7PYNE96zmlTK54HcXVXMKa4MpE9a0d4dT9ZRpfu7bAo4nZ0dY8odSDsuC0n4qb
-         A0NFcoTa7mQMvE/GIp2fGxlNaTyc1xC+mJpWpkZHWApIZlZJ3laViyURgnGhUU5MCAVQ
-         R3aA1LAKm6EK2SR5YSOJpLv5cUBKXKHSdX9JwmOWekAiv9N1om5ege3SRcktdGKMdNHh
-         yQxvjQIOk/8YjZxrQSoJxslmTSutFc7m1L57zkygsaoPAhvYWKzOjOUDMOzSKj1eBDTZ
-         3L9UfmjsSMrcHEGhKK7d6tV0FEY6U+aSuevH+4xHLmsKF38KDErViXZa+bXzVBaq/OfH
-         BBaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/3I182d8OS7x64S+BRqz8kKKkjGoMeVc6W9/b71l3sw=;
-        b=AomUwV51dzlK4laRNnuyRQSFhRKg9b2dbRGdfdu1yp+Ks/6XcafbJlhOL8rTNvtrId
-         Ymdl/UiPxehkAIY1I4gwnC55F2ESMsOk/OykJsmCtOX0hQVJ60xLm7BPUZNVH9Ai5/ld
-         vJh0614gnwxCi1B9rh52iyiEQVvibHoMJMVn1n3HafKvFfaEHvVSs3DkSm7RTdvy77BY
-         VZWW3H8k6MYnTWAp+tYTwreXxS3NAdPmq8MAJPLR7CX5Xl3QWxwvjtYBC5WR7KDq+FaI
-         zAxS7/g+wBR2Yff1hS0XWyqG0ywBDPdimhwNjrqbgntscqx2/65MaioIo8aAslsQ//0f
-         hNKw==
-X-Gm-Message-State: ACrzQf32C5glrG4yCozgTm+s6hIZ1PdalrVcFXXhTfwbjtTe7zFT1KV0
-        HwoWjNS4job1ycnf7uAaMCPCEANlfO5IssjKqn+ONQ==
-X-Google-Smtp-Source: AMsMyM7ZtK1yZD880885vt34ACfB0CnhggaIUmZIRNZa/OsjpdJn+CuCLZLquEgbn0ZGbfEfVGjcWZp2RLOvSEDhDfQ=
-X-Received: by 2002:ab0:6f94:0:b0:3d1:d6e5:5de6 with SMTP id
- f20-20020ab06f94000000b003d1d6e55de6mr7915486uav.51.1666287004714; Thu, 20
- Oct 2022 10:30:04 -0700 (PDT)
+        Thu, 20 Oct 2022 13:29:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A23AF1C90E
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 10:29:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666286977;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YQXgKbUKEd0FI2ap/xmYT1wD+dqAT2h28k3BQUOIDyY=;
+        b=BXciggb8tRIho8VjZ3ZOUx5XGju9+BWrPbwjAQhk8gJiPifPwtAo+8ce0erwMia/I2tBKa
+        gWkLwRWgdzZGnW9gXyt0GCr2S3JKnUqg8wi9W+P8LtuwlIRA56Yv08X75IKM4DjVxSojS8
+        YHotUtNUeknOAkCdznpTrtKjiXg+Yec=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-5-JzS2JGXHNIamf7cIEYsh9w-1; Thu, 20 Oct 2022 13:29:32 -0400
+X-MC-Unique: JzS2JGXHNIamf7cIEYsh9w-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B04071C0A102;
+        Thu, 20 Oct 2022 17:29:31 +0000 (UTC)
+Received: from [10.22.17.13] (unknown [10.22.17.13])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3575E49BB60;
+        Thu, 20 Oct 2022 17:29:31 +0000 (UTC)
+Message-ID: <d54972a2-c328-d753-afc2-ff0f5cf726f3@redhat.com>
+Date:   Thu, 20 Oct 2022 13:29:31 -0400
 MIME-Version: 1.0
-References: <20220815071332.627393-1-yuzhao@google.com> <20220815071332.627393-9-yuzhao@google.com>
- <Y0go8wWtdcyH1+Ch@hirez.programming.kicks-ass.net> <CAOUHufa9+FTO3Pv-5jC-e3S5goPsUGu-5KcPVHa4bWb0X+d2ug@mail.gmail.com>
- <CAHk-=wj1rc2t5noMtVOgu8XXeTM4KiggEub9PdcexxeQrYPZvA@mail.gmail.com> <Y1FXpHdyvXjrjbLw@hirez.programming.kicks-ass.net>
-In-Reply-To: <Y1FXpHdyvXjrjbLw@hirez.programming.kicks-ass.net>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Thu, 20 Oct 2022 11:29:28 -0600
-Message-ID: <CAOUHufaEMt6oiaw7pj+eGLTK4y7CaiYO0BSf13vrE27JqQiAzw@mail.gmail.com>
-Subject: Re: [PATCH v14 08/14] mm: multi-gen LRU: support page table walks
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org, x86@kernel.org,
-        page-reclaim@google.com, Brian Geffon <bgeffon@google.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Donald Carr <d@chaos-reins.com>,
-        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH clocksource] Reject bogus watchdog clocksource
+ measurements
+Content-Language: en-US
+To:     paulmck@kernel.org, Feng Tang <feng.tang@intel.com>
+Cc:     linux-kernel@vger.kernel.org, clm@meta.com, jstultz@google.com,
+        tglx@linutronix.de, sboyd@kernel.org
+References: <20221019230904.GA2502730@paulmck-ThinkPad-P17-Gen-1>
+ <Y1ECHVUHilqgKD9o@feng-clx>
+ <20221020140944.GK5600@paulmck-ThinkPad-P17-Gen-1>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20221020140944.GK5600@paulmck-ThinkPad-P17-Gen-1>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 8:14 AM Peter Zijlstra <peterz@infradead.org> wrote:
+On 10/20/22 10:09, Paul E. McKenney wrote:
+> On Thu, Oct 20, 2022 at 04:09:01PM +0800, Feng Tang wrote:
+>> On Wed, Oct 19, 2022 at 04:09:04PM -0700, Paul E. McKenney wrote:
+>>> One remaining clocksource-skew issue involves extreme CPU overcommit,
+>>> which can cause the clocksource watchdog measurements to be delayed by
+>>> tens of seconds.  This in turn means that a clock-skew criterion that
+>>> is appropriate for a 500-millisecond interval will instead give lots of
+>>> false positives.
+>> I remembered I saw logs that the watchdog were delayed to dozens of
+>> or hundreds of seconds.
+>>
+>> Thanks for the fix which makes sense to me! with some nits below.
+>>
+>>> Therefore, check for the watchdog clocksource reporting much larger or
+>>> much less than the time specified by WATCHDOG_INTERVAL.  In these cases,
+>>> print a pr_warn() warning and refrain from marking the clocksource under
+>>> test as being unstable.
+>>>
+>>> Reported-by: Chris Mason <clm@meta.com>
+>>> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+>>> Cc: John Stultz <jstultz@google.com>
+>>> Cc: Thomas Gleixner <tglx@linutronix.de>
+>>> Cc: Stephen Boyd <sboyd@kernel.org>
+>>> Cc: Feng Tang <feng.tang@intel.com>
+>>> Cc: Waiman Long <longman@redhat.com>
+>>>
+>>> diff --git a/kernel/time/clocksource.c b/kernel/time/clocksource.c
+>>> index 8058bec87acee..dcaf38c062161 100644
+>>> --- a/kernel/time/clocksource.c
+>>> +++ b/kernel/time/clocksource.c
+>>> @@ -386,7 +386,7 @@ EXPORT_SYMBOL_GPL(clocksource_verify_percpu);
+>>>   
+>>>   static void clocksource_watchdog(struct timer_list *unused)
+>>>   {
+>>> -	u64 csnow, wdnow, cslast, wdlast, delta;
+>>> +	u64 csnow, wdnow, cslast, wdlast, delta, wdi;
+>>>   	int next_cpu, reset_pending;
+>>>   	int64_t wd_nsec, cs_nsec;
+>>>   	struct clocksource *cs;
+>>> @@ -440,6 +440,17 @@ static void clocksource_watchdog(struct timer_list *unused)
+>>>   		if (atomic_read(&watchdog_reset_pending))
+>>>   			continue;
+>>>   
+>>> +		/* Check for bogus measurements. */
+>>> +		wdi = jiffies_to_nsecs(WATCHDOG_INTERVAL);
+>>> +		if (wd_nsec < (wdi >> 2)) {
+>>> +			pr_warn("timekeeping watchdog on CPU%d: Watchdog clocksource '%s' advanced only %lld ns during %d-jiffy time interval, skipping watchdog check.\n", smp_processor_id(), watchdog->name, wd_nsec, WATCHDOG_INTERVAL);
+>>> +			continue;
+>>> +		}
+>> If this happens (500ms timer happens only after less than 125ms),
+>> there is some severe problem with timer/interrupt system.
+> Should I add ", suspect timer/interrupt bug" just after "jiffy time
+> interval"?  Or would a comment before that pr_warn() work better for you?
 >
-> On Wed, Oct 19, 2022 at 10:40:40AM -0700, Linus Torvalds wrote:
+>>> +		if (wd_nsec > (wdi << 2)) {
+>>> +			pr_warn("timekeeping watchdog on CPU%d: Watchdog clocksource '%s' advanced an excessive %lld ns during %d-jiffy time interval, probable CPU overutilization, skipping watchdog check.\n", smp_processor_id(), watchdog->name, wd_nsec, WATCHDOG_INTERVAL);
+>>> +			continue;
+>>> +		}
+>> I agree with Waiman that some rate limiting may be needed. As there
+>> were reports of hundreds of seconds of delay, 2 seconds delay could
+>> easily happen if a system is too busy or misbehave to trigger this
+>> problem.
+> Good points, thank you both!
 >
-> > Because as you say, the function is already called "read_atomic", and
-> > it should damn well *act* that way then.
->
-> So I've been sitting on these here patches (and never having time to
-> repost them), which is how I noticed in the first place:
->
->   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/log/?h=x86/mm.pae
+> Left to myself, I would use a capped power-of-two backoff that was reset
+> any time that the interval was within bounds.  Maybe a cap of 10 minutes?
 
-This looks good to me. It'll help get rid of all those open-coded
-barrier()s and fix a couple of missing barrier()s.
+That sounds good to me.
+
+Thanks,
+Longman
+
