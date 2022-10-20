@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 785096058C2
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 09:38:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D4D26058C3
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 09:38:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230345AbiJTHia (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 03:38:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47044 "EHLO
+        id S230351AbiJTHis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 03:38:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230335AbiJTHiX (ORCPT
+        with ESMTP id S230139AbiJTHio (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 03:38:23 -0400
+        Thu, 20 Oct 2022 03:38:44 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 334DC16EA09
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 00:38:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEAA6175345
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 00:38:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E5F73B8265D
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 07:38:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE588C433D6;
-        Thu, 20 Oct 2022 07:38:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B2639B8265F
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 07:38:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84CB4C433C1;
+        Thu, 20 Oct 2022 07:38:38 +0000 (UTC)
 From:   Huacai Chen <chenhuacai@loongson.cn>
 To:     Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>
 Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
@@ -29,9 +29,9 @@ Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
         Huacai Chen <chenhuacai@gmail.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH V2 2/4] irqchip/loongson-eiointc: Add suspend/resume support
-Date:   Thu, 20 Oct 2022 15:35:25 +0800
-Message-Id: <20221020073527.541845-3-chenhuacai@loongson.cn>
+Subject: [PATCH V2 3/4] irqchip/loongson-pch-pic: Add suspend/resume support
+Date:   Thu, 20 Oct 2022 15:35:26 +0800
+Message-Id: <20221020073527.541845-4-chenhuacai@loongson.cn>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20221020073527.541845-1-chenhuacai@loongson.cn>
 References: <20221020073527.541845-1-chenhuacai@loongson.cn>
@@ -46,72 +46,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add suspend/resume support for EIOINTC irqchip, which is needed for
+Add suspend/resume support for PCH-PIC irqchip, which is needed for
 upcoming suspend/hibernation.
 
 Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 ---
- drivers/irqchip/irq-loongson-eiointc.c | 33 ++++++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ drivers/irqchip/irq-loongson-pch-pic.c | 47 ++++++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
 
-diff --git a/drivers/irqchip/irq-loongson-eiointc.c b/drivers/irqchip/irq-loongson-eiointc.c
-index efead0bfb1ca..fa2f99d30c08 100644
---- a/drivers/irqchip/irq-loongson-eiointc.c
-+++ b/drivers/irqchip/irq-loongson-eiointc.c
-@@ -17,6 +17,7 @@
+diff --git a/drivers/irqchip/irq-loongson-pch-pic.c b/drivers/irqchip/irq-loongson-pch-pic.c
+index d2cf54a87bee..ef3d54e3eb72 100644
+--- a/drivers/irqchip/irq-loongson-pch-pic.c
++++ b/drivers/irqchip/irq-loongson-pch-pic.c
+@@ -15,6 +15,7 @@
  #include <linux/of_address.h>
  #include <linux/of_irq.h>
  #include <linux/of_platform.h>
 +#include <linux/syscore_ops.h>
  
- #define EIOINTC_REG_NODEMAP	0x14a0
- #define EIOINTC_REG_IPMAP	0x14c0
-@@ -301,6 +302,37 @@ static struct irq_domain *acpi_get_vec_parent(int node, struct acpi_vector_group
- 	return NULL;
+ /* Registers */
+ #define PCH_PIC_MASK		0x20
+@@ -42,6 +43,9 @@ struct pch_pic {
+ 	raw_spinlock_t		pic_lock;
+ 	u32			vec_count;
+ 	u32			gsi_base;
++	u32			saved_vec_en[PIC_REG_COUNT];
++	u32			saved_vec_pol[PIC_REG_COUNT];
++	u32			saved_vec_edge[PIC_REG_COUNT];
+ };
+ 
+ static struct pch_pic *pch_pic_priv[MAX_IO_PICS];
+@@ -145,6 +149,7 @@ static struct irq_chip pch_pic_irq_chip = {
+ 	.irq_ack		= pch_pic_ack_irq,
+ 	.irq_set_affinity	= irq_chip_set_affinity_parent,
+ 	.irq_set_type		= pch_pic_set_type,
++	.flags			= IRQCHIP_SKIP_SET_WAKE,
+ };
+ 
+ static int pch_pic_domain_translate(struct irq_domain *d,
+@@ -228,6 +233,46 @@ static void pch_pic_reset(struct pch_pic *priv)
+ 	}
  }
  
-+static int eiointc_suspend(void)
++static int pch_pic_suspend(void)
 +{
++	int i, j;
++
++	for (i = 0; i < nr_pics; i++) {
++		for (j = 0; j < PIC_REG_COUNT; j++) {
++			pch_pic_priv[i]->saved_vec_pol[j] =
++				readl(pch_pic_priv[i]->base + PCH_PIC_POL + 4 * j);
++			pch_pic_priv[i]->saved_vec_edge[j] =
++				readl(pch_pic_priv[i]->base + PCH_PIC_EDGE + 4 * j);
++			pch_pic_priv[i]->saved_vec_en[j] =
++				readl(pch_pic_priv[i]->base + PCH_PIC_MASK + 4 * j);
++		}
++	}
++
 +	return 0;
 +}
 +
-+static void eiointc_resume(void)
++static void pch_pic_resume(void)
 +{
 +	int i, j;
-+	struct irq_desc *desc;
-+	struct irq_data *irq_data;
-+
-+	eiointc_router_init(0);
 +
 +	for (i = 0; i < nr_pics; i++) {
-+		for (j = 0; j < VEC_COUNT; j++) {
-+			desc = irq_resolve_mapping(eiointc_priv[i]->eiointc_domain, j);
-+			if (desc && desc->handle_irq && desc->handle_irq != handle_bad_irq) {
-+				raw_spin_lock(&desc->lock);
-+				irq_data = &desc->irq_data;
-+				eiointc_set_irq_affinity(irq_data, irq_data->common->affinity, 0);
-+				raw_spin_unlock(&desc->lock);
-+			}
++		pch_pic_reset(pch_pic_priv[i]);
++		for (j = 0; j < PIC_REG_COUNT; j++) {
++			writel(pch_pic_priv[i]->saved_vec_pol[j],
++					pch_pic_priv[i]->base + PCH_PIC_POL + 4 * j);
++			writel(pch_pic_priv[i]->saved_vec_edge[j],
++					pch_pic_priv[i]->base + PCH_PIC_EDGE + 4 * j);
++			writel(pch_pic_priv[i]->saved_vec_en[j],
++					pch_pic_priv[i]->base + PCH_PIC_MASK + 4 * j);
 +		}
 +	}
 +}
 +
-+static struct syscore_ops eiointc_syscore_ops = {
-+	.suspend = eiointc_suspend,
-+	.resume = eiointc_resume,
++static struct syscore_ops pch_pic_syscore_ops = {
++	.suspend =  pch_pic_suspend,
++	.resume =  pch_pic_resume,
 +};
 +
- static int __init pch_pic_parse_madt(union acpi_subtable_headers *header,
- 					const unsigned long end)
- {
-@@ -375,6 +407,7 @@ int __init eiointc_acpi_init(struct irq_domain *parent,
- 	parent_irq = irq_create_mapping(parent, acpi_eiointc->cascade);
- 	irq_set_chained_handler_and_data(parent_irq, eiointc_irq_dispatch, priv);
+ static int pch_pic_init(phys_addr_t addr, unsigned long size, int vec_base,
+ 			struct irq_domain *parent_domain, struct fwnode_handle *domain_handle,
+ 			u32 gsi_base)
+@@ -260,6 +305,8 @@ static int pch_pic_init(phys_addr_t addr, unsigned long size, int vec_base,
+ 	pch_pic_handle[nr_pics] = domain_handle;
+ 	pch_pic_priv[nr_pics++] = priv;
  
-+	register_syscore_ops(&eiointc_syscore_ops);
- 	cpuhp_setup_state_nocalls(CPUHP_AP_IRQ_LOONGARCH_STARTING,
- 				  "irqchip/loongarch/intc:starting",
- 				  eiointc_router_init, NULL);
++	register_syscore_ops(&pch_pic_syscore_ops);
++
+ 	return 0;
+ 
+ iounmap_base:
 -- 
 2.31.1
 
