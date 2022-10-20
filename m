@@ -2,155 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7736E60662B
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 18:47:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 276A1606631
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 18:47:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230098AbiJTQr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 12:47:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46740 "EHLO
+        id S230226AbiJTQrr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 12:47:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230031AbiJTQrZ (ORCPT
+        with ESMTP id S230162AbiJTQri (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 12:47:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6016C1CD31B;
-        Thu, 20 Oct 2022 09:47:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 99FA2B828AE;
-        Thu, 20 Oct 2022 16:47:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED999C433D6;
-        Thu, 20 Oct 2022 16:47:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666284440;
-        bh=i2MxslQTn19sPCgAavDX/R8BnJavJaB9fvKHaUuXvsU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=MWN7oC5hi/4+3tLMYX3dO5X/w68hAQRuOaylnk1rkAt0muhiSPMJs7BjKNfl3WJnB
-         KWjakKCZBHA2GnSypMFC0jBa6Yrxr/7SKc5P1n/1McgtNqzFfe8iGj5HtgEwoM7Ahw
-         GNEFYFV0q7C62dO69GWAb9ny5sCeH4elomWkd72uSuhpyDZaleMHgqLxvRZl5Z8Yio
-         LryF36J38pR05ePvkTSaDYnUbKeRaQkt1joW4w0IEVZeklDV7Du1c4ZzZ2grRxG2IX
-         VrpZAVTYt59GCAzXygXxE/MhqgVrM1L5pRUFILzj9dwLf7Mr0nboRpVhGBIFpDm91A
-         aefgjE+iSfO2g==
-Date:   Thu, 20 Oct 2022 11:47:18 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Jianmin Lv <lvjianmin@loongson.cn>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org,
-        loongarch@lists.linux.dev, Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Len Brown <lenb@kernel.org>, rafael@kernel.org,
-        linux-pci@vger.kernel.org, linux-acpi@vger.kernel.org
-Subject: Re: [PATCH V4 1/4] ACPI / PCI: fix LPIC IRQ model default PCI IRQ
- polarity
-Message-ID: <20221020164718.GA127832@bhelgaas>
+        Thu, 20 Oct 2022 12:47:38 -0400
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2073.outbound.protection.outlook.com [40.107.101.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567EE1C2F0F
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 09:47:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EQybIGZcC4/CvcZ9KIAQ9Na4mcHdbRpxZXiXCC3s3nETG3Lo0rpgaCHUTQv+s5iUad3VkQkI1QtmBJHmhpKJQWJasOUBGCCjrUYoCU1EZ0lZjp/X63x9pLsqT0JjNyAyfOAbSe71C97q1+He0plSJdG6bW8xffI4ziF16WJJDnq0TCgjjy97tRLZbYpSo1/aAdsBK2sULdpt72/QC0H4YIRD2lM68ngDysjdqfcyJQffvPVvkqxJkHUw3V7DYRO/SrNHB1ptwykUsU0UsdOxAP/bkU8FnIpEsBTNz7MZCKGhn/ixmr1abWjN0JTe74Gve8Iv6UoIYU2hFHVDqqeEAQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+02KaacGz4xY6GOVRQ98K/MX3q9mehMLCejg1kTNOqQ=;
+ b=RRmmT6688zrR/gAmheosP3oZ1yiIGLZ2Vm29lcL0jXPf5sqVBUmjfITtzAaia56aAVOCt9fnTqrYLbh9PyvHXRkmzvM0m8gRpyXRp1UG/EvDv5hUmVaF7RXpt79V3TZwZxywsPJQTi1KzDHSgGbRuU3aUZCI6aYLWdbql/av71xvTiH/CcpefvfcX1ZkjpjQ5OTPvvg2LuiR3AO6UcmNmQMREgDJzO/bHeXmPUOw/Up4yqE8FssEh0vZF5FExolP+LR/dqIZvgNsMmzJr//OrR2MzoxWYKMnUoqhY7kPlrjxoc0nez8en/JrKFTahSXkgJhgapThccKWAchvD6dHPA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+02KaacGz4xY6GOVRQ98K/MX3q9mehMLCejg1kTNOqQ=;
+ b=YpjqHM5DOTtlgn9MwtVfTTr52nwUVEuP7CxTtRowDgHeNxjapHPkR/3Xs+ctS1VauWoGUfLc7UogvhR15gRgvnxqxYg/XRFGkRl+onysUgWih4G5o9M/dOqv4z+DSdlqKg5RhDDsf9+n8cTdb7SZ6tCFBN6nCmoW4I32FWn2IjU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN9PR12MB5115.namprd12.prod.outlook.com (2603:10b6:408:118::14)
+ by PH8PR12MB7253.namprd12.prod.outlook.com (2603:10b6:510:226::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.34; Thu, 20 Oct
+ 2022 16:47:30 +0000
+Received: from BN9PR12MB5115.namprd12.prod.outlook.com
+ ([fe80::f9a4:8620:8238:20e8]) by BN9PR12MB5115.namprd12.prod.outlook.com
+ ([fe80::f9a4:8620:8238:20e8%6]) with mapi id 15.20.5723.034; Thu, 20 Oct 2022
+ 16:47:30 +0000
+Message-ID: <fcc77463-10e7-7fd4-b675-7adcb13219ed@amd.com>
+Date:   Thu, 20 Oct 2022 12:47:28 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] drm/amdkfd: use vma_lookup() instead of find_vma()
+Content-Language: en-US
+To:     Deming Wang <wangdeming@inspur.com>, airlied@gmail.com,
+        daniel@ffwll.ch, alexander.deucher@amd.com,
+        christian.koenig@amd.com, Xinhui.Pan@amd.com
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20221007022651.4816-1-wangdeming@inspur.com>
+From:   Felix Kuehling <felix.kuehling@amd.com>
+In-Reply-To: <20221007022651.4816-1-wangdeming@inspur.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: YT3PR01CA0115.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:85::26) To BN9PR12MB5115.namprd12.prod.outlook.com
+ (2603:10b6:408:118::14)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221020082205.20505-2-lvjianmin@loongson.cn>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN9PR12MB5115:EE_|PH8PR12MB7253:EE_
+X-MS-Office365-Filtering-Correlation-Id: c20a39f5-9647-49d0-f293-08dab2bac72a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: kEv6UJt9Lv/ExeMmsBGl+EptEJyx7Zx2c8FntIcSAvi1ErKPo9r0X/7WXA0rYTsQvlHC09kN7A/LaINZgEq9nxhSJSC1LhprjazZYWppolxbeA27/qnP6dl7a4q3R41ReO7mZ2j2n7X7RBR8rRq2tUoRssVMj3Zq2oFKeEBMq+2PjsUKNXf8gBy0vU6fmwAC5R7GNWrVHMbkXKt0cszVt8VSP3A6QEhU3mYpfRYmQOXfOt1s2Dys5/HRIYGwHOFo/d/piTmAZpfgMXyuPyZkaVlt3/ZwWN3hVcJyk2iXZzCr3C6cv/JVssz8RhpbW9FJzW7UFzBFqjDwTG3T6VP8O3IEhIyZBqb+1R5vGRtZ6F1UbFSIxecJiwSO1Wf+owH2Ej/ZAu9PqD9fT9ZAMuclHjGZV1gjWvr59A+JC7NyPv6QccI1VGCU1Fr5q6UtVegoWQNgi9jgAI1exPNq/sc8H53Qj/O0YRdc6wwPgMtBtHzSL1akmDPV6SmT9jP5LlRj+YlprF1lxIGmKEUitLV/0Gv/SiKok0mOUtn/Mj/5AHkArtFgQePzrQJR6nW8s+VcGBQNzUCzFUvh2q9FogMtHBDuCOejtURMC8UB2xowm+WUCh1EWdIWWII4E1gROKYwossTo58QG/MXhfhtWI9sAoX34Dmi3wjZt7Yb/2ohD9qboNaE1mpj6Kc9Ju0icW4SqqoVztgtjJ/uM94G8VFX3SKXC/HfEQ9NXiFWMEE5MUSPfGkOP2MeJGGWjozPH0yYn8QYv3iJ1hJHfqxhtQtjYBfmGm3TAW9UwS6WA9lDQno=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5115.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(39860400002)(396003)(346002)(366004)(376002)(451199015)(41300700001)(6506007)(38100700002)(26005)(6512007)(6636002)(66946007)(66476007)(6486002)(66556008)(8676002)(86362001)(316002)(31696002)(2906002)(4326008)(478600001)(36756003)(186003)(83380400001)(31686004)(5660300002)(8936002)(44832011)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?c212c1BKSUh5UFZtWDQyeVpzMHZnZ2FSTWFrZ2gzTnhvcFBxYnIvcmQyaUV2?=
+ =?utf-8?B?S1JqYzk3NW5rZDFodkwyMWJDUlh5S2UySG5TeVhzSXRlemN1aVZ3LzBLMm1z?=
+ =?utf-8?B?ZkVmVFF4Wjkwdktwc3dtc0g5ZkxjNXpsTnpFSUQxMVV4TmtOZWhGK2NITjdU?=
+ =?utf-8?B?aFJiRXRoL3FXaVl5TDVFS1JxWmozRVJBakkrYitpZ1VHWGhYcGozMWswRWZi?=
+ =?utf-8?B?N3lRaWdaUzhTSzZFTTRHcUh3bTJZbCtkTHJ3enlPdHdQc3VUeWw1Skc2SHlW?=
+ =?utf-8?B?Q0oyWTBiZkltZnc2YnQ0VDBMR09INXNnd0pwSUFDdG1ldm5TZHlqcWwxcWFL?=
+ =?utf-8?B?ZVQ5TmtIOU5PSDNZdTNnNi92cTJVZVVRRFphRmFwT0l4bHd3WGJGYmk2WlVB?=
+ =?utf-8?B?NHZXa3VXa0N6TDZVSDB1MkhRVzdiRXhBSUNESjlJOXpyaFRaR1JJcnRXODBY?=
+ =?utf-8?B?aEx3emdaK0pNTDRzRExpZWFQUnJEc0dKdEQyMFhxcXUxaVkzZkRMalVxWHYw?=
+ =?utf-8?B?UG1Kd0lvTWU5cDBxUjlzaGhycUwyR0tmY0FYcDlZNHNIdS9sY2orcHlORjhj?=
+ =?utf-8?B?bys4akdQQzB3S3FNTnByaEFMZlQrZ0F3c3BIdjIwYWtBRkt3Rm1CSnB0TE1B?=
+ =?utf-8?B?cHJzbmtUNERVSXlqQUVPWHBTUjNCditpRmJlTnIreUhBYVpYTDFlUTZYbDdQ?=
+ =?utf-8?B?MXl2MVVkd2cxVGR6NXViL0ZtSGdSY2Y0VDZNRDFQVFN6MThmQ2VTTVNYTEk4?=
+ =?utf-8?B?MnU2OXNxY256UllaRGk5dlQrK2ptdkhQbjBHM3JRVjVLaTNNMkRQdVZZcjla?=
+ =?utf-8?B?Ym1uK1FEOGdYZUF6aGJOeEdscEl5N0d3bHd5cE5LbTFlbHJRTXVFajNray9F?=
+ =?utf-8?B?QjNQYWlvWWhmbFZGR3hYUHJJVmFvNmIyR2lJdmZMc09EakNzdExFNU4zKzVn?=
+ =?utf-8?B?K1ByTWZiMFR3cVRrbHEyNUFJSm8rZEVvTmltTC9ocUFZR3JqcVhDeWh0ZkJY?=
+ =?utf-8?B?b0tpSk1TQ243K1ZoYklZK0JvTEs1YWdsVU9HNnNnUmw4dGZHaUlqZXlVbjN5?=
+ =?utf-8?B?NGs4Ukg3NmRDanFleE0ya3F3RTJNL2lXK21rd01VK0t5WEhwaiswRzY2ODlL?=
+ =?utf-8?B?TElCV0NUY2NkcW1TUjU5b2ZGTkhnR2grY3J4Z2pFSmhqOUgvR3FUTVFLNjVO?=
+ =?utf-8?B?bXVIdGk0MVdYQUppYldkVnBLY1JSZXBsVWEvY25WWDhnS1Z2aC91M2RjdWth?=
+ =?utf-8?B?SU0yZTRCc2xVOWlZUEw2NkRnYWZ0T3AyUnNXMWVYOTM1aGUyQXp1Yjd5NzRs?=
+ =?utf-8?B?c3lCNWRNVUpKUUc0UW9GQktjYlRxWDgyMDZOVzhkSkZ5ZDFTRTk3MW4rY2c3?=
+ =?utf-8?B?Zzd4SloyaEhRelE2czNYbGd1dWFZbnFmQzBDNy9weDIwTzdCMWVPTmozbCtY?=
+ =?utf-8?B?SDFpeHNnd0E0SVVIVkpRZEoxMGtkdHBjOTE1Qk9XS2hSdEQ0VnE0ZVg3TlNy?=
+ =?utf-8?B?VWFFZ2RhSTVVNmt3MTAvMXZaVlFWWFFwZklVWW8yVU1EN3V0VEY1Mnl2MENE?=
+ =?utf-8?B?RDFCbWpPTkxMb2x3MnhKYWVycERrL3ZCd3VIWmVuQ05mVWhEK080ZHYrUlBD?=
+ =?utf-8?B?U2F6TDFtQVNVSWI3Z0JGOVQ1ajYyQkNJdnNMdVl4Tnp5cFovVDYzSjQra1RF?=
+ =?utf-8?B?L2NBeko5UW43OEx0OVhRRlNEb0Z5YlljNkVPMzV1ZzVuU0dtRWxVTzZhckls?=
+ =?utf-8?B?TFUxc2tCYzJDaVJSNHZncElhRmNQeVNhSkhhY3ZhTGlZa0VKNHZ3aXBOMXND?=
+ =?utf-8?B?WGM3Nld0LzBFdVlPNG80VUVYRzFMVklGL29vazJkRmJrNXQvcDJMWHBuaEFK?=
+ =?utf-8?B?azBKbjFVcHlmZlMwM2FWM3VuUDh0U1ZGczlCZmFRVmhXeUVZT2JXOWdqMHhq?=
+ =?utf-8?B?dHpSYUY5OURwVjg2VXo2ZFR1WHRFNHgwT2R5VlpnZFgvTlhxZnIxUkxNTSs2?=
+ =?utf-8?B?M1NyWlpwcUZXUUZUc3BnVG8xbE5PR1NVZTZ3QkJtZHZ6SCtQTzQyTHBBTkdl?=
+ =?utf-8?B?YlUxeDRGb3dBMGkxVGJHNExZTXVuSEhSQTdLRUNsM1BKZnRNeWpjRzd4QTlJ?=
+ =?utf-8?Q?2nAEkH6SlUpq2U8bpHxd+h+q0?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c20a39f5-9647-49d0-f293-08dab2bac72a
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5115.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Oct 2022 16:47:30.4144
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 2oQ8ZNodjiI0OLLk2VHEofuGbBinHXn1ZtV+cegshJGKYiiYDPIDJd1QK8E7yZExbWzP4Ru0P+Y59OKVgpedqA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7253
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 04:22:02PM +0800, Jianmin Lv wrote:
-> On LoongArch ACPI based systems, the PCI devices (e.g. sata
-> controlers and PCI-to-to PCI bridge controlers) existed in
-> Loongson chipsets output high-level interrupt signal to the
-> interrupt controller they connected to,
-
-I assume the active high behavior is hardware behavior that is
-independent of the fact that you're using ACPI firmware on the
-hardware.  If so, I would omit "ACPI based".
-
-s/sata/SATA/
-s/controlers/controllers/ (twice)
-s/PCI-to-to PCI/PCI-to-PCI/
-s/existed in/in/
-s/they connected/they are connected/
-
-> while the IRQs are
-> active low from the perspective of PCI(in 2.2.6. Interrupt
-> Pins, "Interrupts on PCI are optional and defined as level
-> sensitive, asserted low),
-
-I don't think you need this spec reference, since "asserted low" is
-the standard thing that happens everywhere.  But if you do want it, it
-needs to specify which spec it refers to, e.g., "Conventional PCI
-r3.0, sec 2.2.6" so it's not confused with the PCIe spec.
-
-The quote from the spec itself should be terminated with a close quote
-("), i.e., 
-
-  "Interrupts on PCI ... asserted low"
-
-> which means that the interrupt
-> output of PCI devices plugged into PCI-to-to PCI bridges of
-> Loongson chipset will be also converted to high-level. So
-> high level triggered type is required to be passed to
-> acpi_register_gsi() when creating mappings for PCI devices.
-
-This is the part where I was hoping for a reference to a spec that
-talks about how PCI interrupts are inverted.  The inverter is the part
-that's special here.
-
-I see that ACPI r6.5, sec 5.2.12, mentions LPIC, but it doesn't
-mention the inverter.  It has a lot more mentions of GIC, but also no
-details about an inverter.  I suppose that would be in the GIC spec,
-which I'm not familiar with.
-
-The point is that one should be able to write this code from a spec,
-without having to empirically discover the interrupt polarity.  What
-spec tells you about using ACTIVE_HIGH here?
-
-s/PCI-to-to PCI/PCI-to-PCI/ again
-
-Rewrap the log to fill 75 columns like the rest of the history.
-
-> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
+Am 2022-10-06 um 22:26 schrieb Deming Wang:
+> Using vma_lookup() verifies the start address is contained in the found
+> vma.  This results in easier to read the code.
+>
+> Signed-off-by: Deming Wang <wangdeming@inspur.com>
 > ---
->  drivers/acpi/pci_irq.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/acpi/pci_irq.c b/drivers/acpi/pci_irq.c
-> index 08e15774fb9f..ff30ceca2203 100644
-> --- a/drivers/acpi/pci_irq.c
-> +++ b/drivers/acpi/pci_irq.c
-> @@ -387,13 +387,15 @@ int acpi_pci_irq_enable(struct pci_dev *dev)
->  	u8 pin;
->  	int triggering = ACPI_LEVEL_SENSITIVE;
->  	/*
-> -	 * On ARM systems with the GIC interrupt model, level interrupts
-> +	 * On ARM systems with the GIC interrupt model, or LoongArch
-> +	 * systems with the LPIC interrupt model, level interrupts
+>   drivers/gpu/drm/amd/amdkfd/kfd_migrate.c | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_migrate.c b/drivers/gpu/drm/amd/amdkfd/kfd_migrate.c
+> index 2797029bd500..3599cc931b0a 100644
+> --- a/drivers/gpu/drm/amd/amdkfd/kfd_migrate.c
+> +++ b/drivers/gpu/drm/amd/amdkfd/kfd_migrate.c
+> @@ -529,8 +529,8 @@ svm_migrate_ram_to_vram(struct svm_range *prange, uint32_t best_loc,
+>   	for (addr = start; addr < end;) {
+>   		unsigned long next;
+>   
+> -		vma = find_vma(mm, addr);
+> -		if (!vma || addr < vma->vm_start)
+> +		vma = vma_lookup(mm, addr);
+> +		if (!vma)
+>   			break;
+>   
+>   		next = min(vma->vm_end, end);
+> @@ -798,8 +798,8 @@ int svm_migrate_vram_to_ram(struct svm_range *prange, struct mm_struct *mm,
+>   	for (addr = start; addr < end;) {
+>   		unsigned long next;
+>   
+> -		vma = find_vma(mm, addr);
+> -		if (!vma || addr < vma->vm_start) {
+> +		vma = vma_lookup(mm, addr)
 
-Is "LoongArch" required in this comment?  Might the LPIC model be used
-on non-LoongArch systems?
+There is a semicolon missing here. I will fix this before I submit the 
+patch.
 
-I see it follows the example of "ARM systems".  In my opinion, "ARM"
-probably should be removed, too, because the code checks only for GIC
-or LPIC; it doesn't check for ARM or LoongArch.
+Please do at least a minimum amount of due diligence before posting 
+patches. That would include a test to make sure your code compiles.
 
-If GIC is restricted to ARM and LPIC is restricted to LoongArch,
-that's fine, but that constraint should be expressed somewhere else
-and doesn't need to be repeated here.
+Regards,
+   Felix
 
->  	 * are always polarity high by specification; PCI legacy
->  	 * IRQs lines are inverted before reaching the interrupt
->  	 * controller and must therefore be considered active high
->  	 * as default.
->  	 */
-> -	int polarity = acpi_irq_model == ACPI_IRQ_MODEL_GIC ?
-> +	int polarity = acpi_irq_model == ACPI_IRQ_MODEL_GIC ||
-> +		       acpi_irq_model == ACPI_IRQ_MODEL_LPIC ?
->  				      ACPI_ACTIVE_HIGH : ACPI_ACTIVE_LOW;
->  	char *link = NULL;
->  	char link_desc[16];
-> -- 
-> 2.31.1
-> 
+
+> +		if (!vma) {
+>   			pr_debug("failed to find vma for prange %p\n", prange);
+>   			r = -EFAULT;
+>   			break;
