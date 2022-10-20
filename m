@@ -2,91 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4C9C605505
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 03:31:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36749605504
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 03:31:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbiJTBbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 21:31:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57486 "EHLO
+        id S231446AbiJTBbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 21:31:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231294AbiJTBbK (ORCPT
+        with ESMTP id S231356AbiJTBbK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 19 Oct 2022 21:31:10 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6A18FF243
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 18:30:38 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id pq16so18437698pjb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 18:30:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5BDKoCuiX9gLdyLhtKOYiwtgCSx3wnswv+GarFhOTZU=;
-        b=JHS0tpXqLX5GdsoQR5MFjpSHLMbrcGQDL5yQISyBkWOTUWPO0WuLbO2XI4+GI76j4i
-         p8YfWzmnFz32jjnoZqPPRsAtgOlNrcCWhOqSXINc49JKDAa9chl7qBcw66j6ZkQL1a+U
-         SEWjGiRmPD2p+N+wS4HHHOXafEtOkdYUa53PSGWZJGKQX3Aw4Lzv/HftVgCc1NhnZ7yk
-         kVLuSxoL0iGQOq+yVx+lP3Zpn9dGGgFUxt4HtIrbhTlsUPHS5D7FJFSmz61fKZ5BWwKu
-         e/Cz0w9imbnAvZv/rua2FppYhGCTHHJ2iDwrCiciBcElkVm8X6WzCgQmko9CyCI8cQ/C
-         dwHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5BDKoCuiX9gLdyLhtKOYiwtgCSx3wnswv+GarFhOTZU=;
-        b=LilquEJwIBpgBfym1YmWVOdF/rI1bkdeMVZgRz5VgiV7IQO9Z9zaEfgAlQBRqgYkzi
-         RB4uCzJavO+eDOk/OoGnujC+tpYELIgPUfBXAnvykldRK6SvhSIyMtFmESlz+Cotna3L
-         60SnO+TRC3m7JNhpmLUWvLMUpGsHb+WQBrTjonypgXnr7cbHXk39FvEdYIh+PJSv8H7X
-         YB9sIUW227O+67wkGAbM2XLssEXsMspN2gQh1BIpTZQ0FfREAlycnxh/8o0vp1zC9ryx
-         nvshQXsMoQ3/CHALhzJngf64vkSM2ndr4joMV6NdI8bA8WuKZ89j466HZWg3aSJ8Xgg7
-         X3/w==
-X-Gm-Message-State: ACrzQf3gzJQ/czrNW2YWTC7Hxd0THrEJq0Y1ieyjzZL4H6aAC7qXAyWK
-        mtkFhfbIOHdfPGfbDYKA3DO5BtvJRbKIlv7o
-X-Google-Smtp-Source: AMsMyM7WDF8L7Gcohi5cKDVOBbvJUV/wbv2310vXAaOcpxqGAZO4eKF+4zl5qMZAfPZjQfR3gdSNqA==
-X-Received: by 2002:a17:902:bf46:b0:179:eba5:90ba with SMTP id u6-20020a170902bf4600b00179eba590bamr11376463pls.16.1666229275351;
-        Wed, 19 Oct 2022 18:27:55 -0700 (PDT)
-Received: from [127.0.0.1] (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
-        by smtp.gmail.com with ESMTPSA id u11-20020a17090a2b8b00b0020ada6ed6c7sm521379pjd.41.2022.10.19.18.27.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Oct 2022 18:27:54 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     ming.lei@redhat.com, zys.zljxml@gmail.com
-Cc:     Yushan Zhou <katrinzhou@tencent.com>, linux-kernel@vger.kernel.org,
-        linux-block@vger.kernel.org
-In-Reply-To: <20221018100132.355393-1-zys.zljxml@gmail.com>
-References: <20221018100132.355393-1-zys.zljxml@gmail.com>
-Subject: Re: [PATCH] ublk_drv: use flexible-array member instead of zero-length array
-Message-Id: <166622927442.148655.12986325074372768712.b4-ty@kernel.dk>
-Date:   Wed, 19 Oct 2022 18:27:54 -0700
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D721E107A97;
+        Wed, 19 Oct 2022 18:30:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 2A3E4CE244F;
+        Thu, 20 Oct 2022 01:28:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 090E1C433C1;
+        Thu, 20 Oct 2022 01:28:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666229300;
+        bh=mD3inEdf2jiFkDkLAVywxo6JgEJGztOJHQE90Gbw1lA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YhETbkqeYgFejbwTc/We2YjRDwkBNWEKa8jg2zi9TWp8tK75/9dsvBVhehFusrBmp
+         xSidrBLVSssEQn3URcmTO399Esr/m7GfwJVUTm+raWaTUVY+2hSO+piUlriMTzzS0m
+         J8SNB3bUc4uqoujr4ED5MHSg9DKxE6EwC4jOH49oY6w1Mh5OoSDhzrCLwX2bdysyOG
+         q8BuzAEwgURLLlncp//c4BiwhA+LQL6vRK3tn1OXoJhrQ07+/bVwMfpAz/SATfMD8L
+         8v7UfBxXOw/GqqQpdq7lBH1MYotGgFUHIsWQh9XIfO6NGez+EfSmvJ+KH0/I3CAr1r
+         VMqJ9lXGaZrcQ==
+Date:   Wed, 19 Oct 2022 19:28:17 -0600
+From:   Keith Busch <kbusch@kernel.org>
+To:     Dmitrii Tcvetkov <me@demsh.org>
+Cc:     Keith Busch <kbusch@fb.com>, Jens Axboe <axboe@kernel.dk>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [bisected] QEMU guest boot failure since 6.0 on x86_64 host
+Message-ID: <Y1CkMS+xbwbvn8My@kbusch-mbp.dhcp.thefacebook.com>
+References: <20221020031725.7d01051a@xps.demsh.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.11.0-dev-d9ed3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221020031725.7d01051a@xps.demsh.org>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 18 Oct 2022 18:01:32 +0800, zys.zljxml@gmail.com wrote:
-> From: Yushan Zhou <katrinzhou@tencent.com>
+On Thu, Oct 20, 2022 at 03:17:25AM +0300, Dmitrii Tcvetkov wrote:
 > 
-> Eliminate the following coccicheck warning:
-> ./drivers/block/ublk_drv.c:127:16-19: WARNING use flexible-array member instead
+> Bisect led me to commit b1a000d3b8ec5  ("block: relax direct io memory
+> alignment"). I was unable to resolve revert conflicts when
+> tried to revert b1a000d3b8ec5  ("block: relax direct io memory
+> alignment") as I lack necessary understanding of block subsystem.
+
+Background info: when your virtual block device's logical block size is
+smaller than the host's block device backing it, qemu needs to bounce
+unaligned buffers when using direct-io.
+
+Historically for direct-io, the logical block size happened to also be
+the memory page offset alignment. QEMU did this the other way around: it
+used the memory offset as the block size, and that was not intended:
+
+  https://lore.kernel.org/lkml/32db4f89-a83f-aac4-5d27-0801bdca60bf@redhat.com/
+
+The kernel patch you bisected to detangled memory alignment from logical
+block size, so now older qemu versions have the wrong idea of the
+minimum vector size. That is fixed in the qemu repository here:
+
+  https://git.qemu.org/?p=qemu.git;a=commitdiff;h=25474d90aa50bd32e0de395a33d8de42dd6f2aef
 > 
-> 
+> This fails to boot on 6.0+ host:
+> # losetup -b 4096 -f image.raw
+> # qemu-system-x86_64 -enable-kvm -drive
+> file=/dev/loop0,format=raw,cache=none
 
-Applied, thanks!
+In the above, your backing storage is 4k, and the default virtual device
+block size is 512b, so qemu needs to bounce that, but older versions
+might not do that as intended.
 
-[1/1] ublk_drv: use flexible-array member instead of zero-length array
-      commit: 72495b5ab456ec9f05d587238d1e2fa8e9ea63ec
+It should work if you include logical_block_size=4096 to the -drive
+parameters.
 
-Best regards,
--- 
-Jens Axboe
+> These boot fine on 6.0+ host:
+> # losetup -b 4096 -f image.raw
+> # qemu-system-x86_64 -enable-kvm -drive
+> file=/dev/loop0,format=raw
 
+The above is using cache, which doesn't have any alignment and size
+constraints, so works with anything sizes.
+ 
+> # losetup -f image.raw
+> # qemu-system-x86_64 -enable-kvm -drive
+> file=/dev/loop0,format=raw,cache=none
 
+The above is using a 512b formated backing store to a 512b emulated
+drive, so the matching means qemu never needs to bounce.
