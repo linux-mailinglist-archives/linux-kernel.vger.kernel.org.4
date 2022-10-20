@@ -2,97 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE10E606236
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 15:51:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B62B606239
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 15:51:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbiJTNvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 09:51:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41098 "EHLO
+        id S229491AbiJTNvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 09:51:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiJTNu5 (ORCPT
+        with ESMTP id S229552AbiJTNvJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 09:50:57 -0400
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9E3C181D83
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 06:50:55 -0700 (PDT)
-Received: by mail-qv1-xf31.google.com with SMTP id h10so13525641qvq.7
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 06:50:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=70fU6KeNRW7R1LN3rF+HXaUE8gLW+SCCFHePgLIEiVo=;
-        b=osFhRyr/lFjJpuhojn5RhI73H7fstQhOUSHj7p97Lqq4Z3VScnVNwB1tSBEq1spM9n
-         ODCX4lUpkQbMeC4Ltoyc7+MXY6LxDEvgTIRp5oJAxstVgUzH0kxmzADpyZ/Bn7Q+3ClF
-         uDAp6pFPlvxUs/wrcxpNduW1PRMRC6AITgpktEZx1xyU4fIxc4wGKYkVX0HuyO2wl1uJ
-         zuAnB25f+uiRmG6MpftLxAHWhSgq9ao7+zG/mGzy85HctJadMDTlJkarYgKfGFMQN06H
-         8b1WQd+g6G8qJ2ai34risIZphkyqq37yYvCENAYm6E3Vx0Okrk/OMCInny27kxBinEzo
-         9HHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=70fU6KeNRW7R1LN3rF+HXaUE8gLW+SCCFHePgLIEiVo=;
-        b=yIdlCw5mD1D7DFWUOjw9kYxfram+v61yeOX3MoHYjgcJPoLiee1RiWG7QvGAXu47az
-         31L10FERqQ1ldB5bw7CxVCJ1GDWMbppvndDt+YRLDMwXYsqHZTTYYhuel8LgpSzXqqeI
-         gY/RgLP4GS14wNwpyNa4MO+2a3lCF1xVYDpFxn3sV6ppIEVYU2QIzENOs58ORHBVtGIw
-         7QNN/I5z7QpiBhIUXBsQeVJ71lpKSplVqSrlzFkLGGdj/ILUdsiV+6MMGBLzSKlQHVHa
-         jlMjCzEbbHB3tHXg8KAUjO3VMV/wop/b+by7ZYabFqoq9X5GD7HqR4w16tKinRg3iHxh
-         0PEw==
-X-Gm-Message-State: ACrzQf13BA5Knj1xhsQPEn3SYDuKW55x+cNrWP3S86xwQf7TEm5Anm0K
-        M1uDjVoeOXyuR4zkk+i4ZP4OWg==
-X-Google-Smtp-Source: AMsMyM6QEQctQDmwqUBoOcdguw1tjbsDuu/HyULlZ5GeSKS5bBIxFTQb+FWDzobc57MXkLYUdEP1tg==
-X-Received: by 2002:a05:6214:2aa6:b0:4b1:95e9:f948 with SMTP id js6-20020a0562142aa600b004b195e9f948mr10998053qvb.129.1666273855138;
-        Thu, 20 Oct 2022 06:50:55 -0700 (PDT)
-Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
-        by smtp.gmail.com with ESMTPSA id bk18-20020a05620a1a1200b006ec771d8f89sm7482932qkb.112.2022.10.20.06.50.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Oct 2022 06:50:54 -0700 (PDT)
-Message-ID: <53d02cf5-26a3-4e8e-fa62-7a2cfca2dd4c@linaro.org>
-Date:   Thu, 20 Oct 2022 09:50:53 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 1/2] dt-bindings: soc: qcom: spm: Add MSM8939 CPU
- compatible
-Content-Language: en-US
-To:     Vincent Knecht <vincent.knecht@mailoo.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Thu, 20 Oct 2022 09:51:09 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F72181D81;
+        Thu, 20 Oct 2022 06:51:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666273865; x=1697809865;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RLLFKLdR8QHeqJ8ykIP9osVfd7AvWCqdb2p3WTU8Lqs=;
+  b=hQ9zEkIZVCwNiaPW37LG0NLo1nLXql1raxN1PgsjoYwxbH4dH3SB0D3h
+   QPT+MCnoh7u9ZZ/V50+JyyaNCqwIq4eo3oa2CsXHPO3FVw6BDzoufPj82
+   all6Gjk/0dRfmex9Yhjda1mlms9IWhgsSJEQDU2bU+CGg3gEF9SceUcxx
+   pO7Luh5V7//V4cIT5LgAsMYMLDUMkb9UAWBB/nlXuLJBCUoCDIwsjbbsV
+   4pS+LLGRMZaO5eJrgoCS6eS9Nh69bh/gpKR+tdayuIkfgfi9u3Bc2GXyh
+   cs/RxkLAvJLCbMPd33mQcVqWvAHG1eu4OEJ1Lm5KVsPcAEMIWMZFXPnRZ
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="290017264"
+X-IronPort-AV: E=Sophos;i="5.95,198,1661842800"; 
+   d="scan'208";a="290017264"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 06:51:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="719070007"
+X-IronPort-AV: E=Sophos;i="5.95,198,1661842800"; 
+   d="scan'208";a="719070007"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by FMSMGA003.fm.intel.com with ESMTP; 20 Oct 2022 06:51:02 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1olVwq-00AZVW-2M;
+        Thu, 20 Oct 2022 16:51:00 +0300
+Date:   Thu, 20 Oct 2022 16:51:00 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Xiang Yang <xiangyang3@huawei.com>,
+        mika.westerberg@linux.intel.com, linus.walleij@linaro.org,
+        linux-gpio@vger.kernel.org, linux-acpi@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20221019171004.1080911-1-vincent.knecht@mailoo.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221019171004.1080911-1-vincent.knecht@mailoo.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Subject: Re: [PATCH -next] gpiolib: acpi: Use METHOD_NAME__AEI macro for
+ acpi_walk_resources
+Message-ID: <Y1FSRJC9s+7cvJI3@smile.fi.intel.com>
+References: <20221020014426.188667-1-xiangyang3@huawei.com>
+ <CAMRc=Md6nseghBwfiRCL0KQ1BJ0WE7MH9QENf=HdJdnC1Xz1Fg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMRc=Md6nseghBwfiRCL0KQ1BJ0WE7MH9QENf=HdJdnC1Xz1Fg@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/10/2022 13:10, Vincent Knecht wrote:
-> Document the "qcom,msm8939-saw2-v3.0-cpu" compatible for the CPU
-> Subsystem Power Manager (SPM) on the MSM8939 SoC.
+On Thu, Oct 20, 2022 at 03:23:27PM +0200, Bartosz Golaszewski wrote:
+> On Thu, Oct 20, 2022 at 3:48 AM Xiang Yang <xiangyang3@huawei.com> wrote:
+> >
+> > Using the METHOD_NAME__AEI macro instead of using "_AEI" directly.
+> >
+> > Signed-off-by: Xiang Yang <xiangyang3@huawei.com>
+> > ---
+> >  drivers/gpio/gpiolib-acpi.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/gpio/gpiolib-acpi.c b/drivers/gpio/gpiolib-acpi.c
+> > index a7d2358736fe..064ba5150fd4 100644
+> > --- a/drivers/gpio/gpiolib-acpi.c
+> > +++ b/drivers/gpio/gpiolib-acpi.c
+> > @@ -512,7 +512,7 @@ void acpi_gpiochip_request_interrupts(struct gpio_chip *chip)
+> >         if (ACPI_FAILURE(status))
+> >                 return;
+> >
+> > -       acpi_walk_resources(handle, "_AEI",
+> > +       acpi_walk_resources(handle, METHOD_NAME__AEI,
+> >                             acpi_gpiochip_alloc_event, acpi_gpio);
 > 
-> Signed-off-by: Vincent Knecht <vincent.knecht@mailoo.org>
-> ---
->  Documentation/devicetree/bindings/soc/qcom/qcom,spm.yaml | 1 +
->  1 file changed, 1 insertion(+)
+> This line dates back to 2018 so why -next in your PATCH tag?
 
+This means "for Linux next cycle". It has roots in the net subsystem where
+it's a requirement to mark each patch either net or net-next, because they
+have a huge traffic of patches.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> That being said - patch applied (unless Andy wants to take it directly).
 
-Best regards,
-Krzysztof
+I think I will take it. Care to provide your tag?
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
