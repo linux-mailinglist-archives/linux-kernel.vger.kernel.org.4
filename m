@@ -2,99 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C03D605D56
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 12:38:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82674605D8A
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 12:39:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231182AbiJTKi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 06:38:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60810 "EHLO
+        id S230080AbiJTKjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 06:39:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230387AbiJTKiH (ORCPT
+        with ESMTP id S230347AbiJTKjm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 06:38:07 -0400
-Received: from m12-14.163.com (m12-14.163.com [220.181.12.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4F7941BF86B;
-        Thu, 20 Oct 2022 03:38:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=8q+5K
-        QmZUtsBHsbUWdHpgQvm5Sqvk0LcH6V/uuCe82U=; b=YqSK6J3xrDpNC5fpTjqNU
-        Etn23TjzS6xBN2Mmw7MPJj5vDHxx/7QQDMOJqQVblMhc6P7RRKz1Zlw7kNqee8v0
-        1SQRseLCgHuO8+wRXmearqNvM7087vMGW5fI14YzVUL07WmkUSzv/xhKuAw6rzXI
-        1OCRfkZvpbeU42BVrb9T6w=
-Received: from localhost.localdomain (unknown [111.48.58.12])
-        by smtp10 (Coremail) with SMTP id DsCowABXLkPRJFFj3I0FHg--.50916S2;
-        Thu, 20 Oct 2022 18:37:06 +0800 (CST)
-From:   wangwenmei168@163.com
-To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     gehao <gehao@kylinos.cn>
-Subject: [RESEND PATCH] xhci: Fix Renesas PCIe controllers passthrough issue
-Date:   Thu, 20 Oct 2022 18:39:14 +0800
-Message-Id: <20221020103914.262202-1-wangwenmei168@163.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 20 Oct 2022 06:39:42 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E80B81A810;
+        Thu, 20 Oct 2022 03:39:36 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id EBB6B5C00BB;
+        Thu, 20 Oct 2022 06:39:35 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Thu, 20 Oct 2022 06:39:35 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1666262375; x=1666348775; bh=S1ftnTpYuQcReY/G3NfEdbNnp8Vp
+        rTKoBjhbqWtaoKc=; b=iCe/Rvu6bFpLhdRiFLseQTjmRSppYh8mgDp5RDe8ipFd
+        9uLniu4/r9mtcPD8lv275zKIgdR4yFWywgF0Zz2+3flDko2akg1azH+jf+SpnVaW
+        WpwU+II1aXF1qcVWfsA9NNgpt8XZyYwrAdQsMDeoY5yCFXQNgDCYI30CWDCwaRNN
+        jn7CcOKp26xwFy0HI9DNuWRTFoR6RpAD0r150+ViWcFUeYnrWWy69INJp19aixBC
+        wWa9nP2b5yG4OR+VO11o9IfO0nWNj+vzyx3Gez/VN8kav1c/NmZmH9W11bbuTdCY
+        NxWfoW9I/qYTDcpBhEvYs4PrKVxgxhwORef1aTT1cg==
+X-ME-Sender: <xms:ZiVRYxamPMkznv1v4gD35Qh5Ob_8B_HMeffFsiEP1oo41XivTGmeKw>
+    <xme:ZiVRY4aXSKTAiK6kMzIZW9ROlThi0biQ1d5pr3gTNuP6HdTRGI54ZcYt8dgiIydAE
+    _0Sy0bRKS_t02A>
+X-ME-Received: <xmr:ZiVRYz9A8wUI1GDguEybJYJTB5N5-Wb0wCzOABbO9gJzglDjesDBoOEjZ05G3HBlQ8Hf38WU0OaRG823w2pImYxwAIQskw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeliedgfedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepkfguohcu
+    ufgthhhimhhmvghluceoihguohhstghhsehiughoshgthhdrohhrgheqnecuggftrfgrth
+    htvghrnhephefhtdejvdeiffefudduvdffgeetieeigeeugfduffdvffdtfeehieejtdfh
+    jeeknecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehiughoshgthhesihguohhstghhrdhorhhg
+X-ME-Proxy: <xmx:ZiVRY_pgQjUJJ4EH5bbpEHHGoLgWIs6htf-8T7GagcTsRodooLpFsw>
+    <xmx:ZiVRY8qqH7972EK5u_TwKWYQOTJ1PVLSVc_C16SA9I7TttkE81abow>
+    <xmx:ZiVRY1TQC_P-976Dik7Lx5a4M8wQxPNGCDTFmNObfd4as8DgDiog1Q>
+    <xmx:ZyVRY3WT-F5C0aQSEOnOAAYgsJWL6QE0GlmD2jeO8bQ5S6ZF7fjAMA>
+Feedback-ID: i494840e7:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 20 Oct 2022 06:39:33 -0400 (EDT)
+Date:   Thu, 20 Oct 2022 13:39:29 +0300
+From:   Ido Schimmel <idosch@idosch.org>
+To:     Daniel Lezcano <daniel.lezcano@linexp.org>
+Cc:     daniel.lezcano@linaro.org, rafael@kernel.org, rui.zhang@intel.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        khilman@baylibre.com, abailon@baylibre.com, lukasz.luba@arm.com,
+        broonie@kernel.org, damien.lemoal@opensource.wdc.com,
+        heiko@sntech.de, hayashi.kunihiko@socionext.com,
+        mhiramat@kernel.org, talel@amazon.com, thierry.reding@gmail.com,
+        digetx@gmail.com, jonathanh@nvidia.com, anarsoul@gmail.com,
+        tiny.windzz@gmail.com, baolin.wang7@gmail.com,
+        f.fainelli@gmail.com, bjorn.andersson@linaro.org,
+        mcoquelin.stm32@gmail.com, glaroque@baylibre.com,
+        miquel.raynal@bootlin.com, shawnguo@kernel.org,
+        niklas.soderlund@ragnatech.se, matthias.bgg@gmail.com,
+        j-keerthy@ti.com, Amit Kucheria <amitk@kernel.org>
+Subject: Re: [PATCH v5 01/33] thermal/of: Rework the thermal device tree
+ initialization
+Message-ID: <Y1ElYWjfP48kTuzS@shredder>
+References: <20220804224349.1926752-1-daniel.lezcano@linexp.org>
+ <20220804224349.1926752-2-daniel.lezcano@linexp.org>
+ <Y05/8JUU+3kLCZvb@shredder>
+ <6650b077-1900-a6e6-755e-a84282e5fd13@linexp.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: DsCowABXLkPRJFFj3I0FHg--.50916S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Kw1kWw4rAw17tr4kWF1rWFg_yoW8WFyrpF
-        W5CFW3GFs5tr4rtasruw48Ja4rG3Z7ArW5tr97K3yYvrsxJ34qgFyDtFZ3Z3y7XrWIy34a
-        vr1vg345uF4UXaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07bjKZXUUUUU=
-X-Originating-IP: [111.48.58.12]
-X-CM-SenderInfo: 5zdqw45hqpvxqrwyqiywtou0bp/xtbBWRKgEGAZA+7y+wAAsm
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6650b077-1900-a6e6-755e-a84282e5fd13@linexp.org>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: gehao <gehao@kylinos.cn>
+On Wed, Oct 19, 2022 at 09:53:50PM +0200, Daniel Lezcano wrote:
+> Thanks for reporting the issue. If you can submit it, that would be great
 
-When we use uPD720201 USB 3.0 Host Controller passthrough to VM
-guest os will report follow errors and it can not working.
-
-xhci_hcd 0000:09:00.0: Host took too long to start, waited 16000
-microseconds.
-xhci_hcd 0000:09:00.0: startup error -19.
-
-Because when we passthroug some device to our guest os,
-dev->iommu_group =NULL,so it will return from this function,
-Actually it still control by host os.
-I think that this condition is not necessary.
-
-For host os with IOMMU,it is safe.
-For host os with noiommu,doing anything when there is no
-iommu is definitely.
-For guest os,the addresses we can access are restricted.
-
-After add this path,they all work well.
-
-Signed-off-by: gehao <gehao@kylinos.cn>
----
- drivers/usb/host/xhci.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
-
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 5176765c4013..e8f4c4ee3ea3 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -241,12 +241,8 @@ static void xhci_zero_64b_regs(struct xhci_hcd *xhci)
- 	 * changing the programming leads to extra accesses even if the
- 	 * controller is supposed to be halted. The controller ends up with
- 	 * a fatal fault, and is then ripe for being properly reset.
--	 *
--	 * Special care is taken to only apply this if the device is behind
--	 * an iommu. Doing anything when there is no iommu is definitely
--	 * unsafe...
- 	 */
--	if (!(xhci->quirks & XHCI_ZERO_64B_REGS) || !device_iommu_mapped(dev))
-+	if (!(xhci->quirks & XHCI_ZERO_64B_REGS))
- 		return;
- 
- 	xhci_info(xhci, "Zeroing 64bit base registers, expecting fault\n");
--- 
-2.25.1
-
+Sent:
+https://lore.kernel.org/linux-pm/20221020103658.802457-1-idosch@nvidia.com/
