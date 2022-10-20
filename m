@@ -2,148 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81DE4605B45
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 11:34:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59355605B53
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 11:37:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230071AbiJTJdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 05:33:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35278 "EHLO
+        id S229846AbiJTJhy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 05:37:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230163AbiJTJd0 (ORCPT
+        with ESMTP id S229519AbiJTJhv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 05:33:26 -0400
-Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D33C155DB2
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 02:33:22 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VSeaYB9_1666258397;
-Received: from 30.97.48.62(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VSeaYB9_1666258397)
-          by smtp.aliyun-inc.com;
-          Thu, 20 Oct 2022 17:33:19 +0800
-Message-ID: <dbfb24e8-e83e-5a70-618e-87e1cebdfe5e@linux.alibaba.com>
-Date:   Thu, 20 Oct 2022 17:33:17 +0800
+        Thu, 20 Oct 2022 05:37:51 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E698916F401;
+        Thu, 20 Oct 2022 02:37:46 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29K8clux024665;
+        Thu, 20 Oct 2022 09:37:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : to : cc : from : subject : content-type :
+ content-transfer-encoding; s=pp1;
+ bh=/Sipbaw/Vo0+MW3rolamGoLn46TO7W2aqL/jh2yhdZc=;
+ b=dBHYACGrhbWb1eTlyuAXNRk4/5fRrpU15MNX/Cp2BfkbKd3GkOJF53AXbjhfmhkR9I2Q
+ jPV3OHQR1JB9YBzqQCGkAn/0Ps466e4UU/Mav8pJddybPZY+62Ka4pK3vnzI5lIl9sYy
+ uoIiT0g9BcJbUIsRB4budBk1WGHW8P7/EeAvHjnsx+vmgmdcmUPEFauLtbMkDLejzdAt
+ kA6raDUc24TjvVUvLoQjFffWHHRSowd2AC/coY5H5F4gd6AIxtbz0zdpdRbF+mC1ne2f
+ GnKRHeGJQNuO89RKKAqS98GCWvEd9ok1TejoYALeYbXx5zS560DURfluCK18ZgnDHYC8 8w== 
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kb29q38ra-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 20 Oct 2022 09:37:44 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29K9ZQVd008491;
+        Thu, 20 Oct 2022 09:37:22 GMT
+Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
+        by ppma03dal.us.ibm.com with ESMTP id 3kapd5660f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 20 Oct 2022 09:37:22 +0000
+Received: from smtpav01.wdc07v.mail.ibm.com ([9.208.128.113])
+        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29K9bKnl721620
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 20 Oct 2022 09:37:21 GMT
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7483458055;
+        Thu, 20 Oct 2022 09:37:20 +0000 (GMT)
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4CF725805B;
+        Thu, 20 Oct 2022 09:37:13 +0000 (GMT)
+Received: from [9.43.91.85] (unknown [9.43.91.85])
+        by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 20 Oct 2022 09:37:12 +0000 (GMT)
+Message-ID: <a8dce54b-e494-81c9-1798-6475861cd399@linux.vnet.ibm.com>
+Date:   Thu, 20 Oct 2022 15:07:10 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH 2/2] mm: migrate: Try again if THP split is failed due to
- page refcnt
-To:     "Huang, Ying" <ying.huang@intel.com>
-Cc:     akpm@linux-foundation.org, david@redhat.com, ziy@nvidia.com,
-        shy828301@gmail.com, jingshan@linux.alibaba.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <cc48dc1e4db8c33289f168cf380ab3641f45f8ad.1666251624.git.baolin.wang@linux.alibaba.com>
- <c44225ae71b1be21e32891e2143044863a0b91b1.1666251624.git.baolin.wang@linux.alibaba.com>
- <87mt9qnbrf.fsf@yhuang6-desk2.ccr.corp.intel.com>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <87mt9qnbrf.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Content-Language: en-US
+To:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org
+Cc:     abdhalee@linux.vnet.ibm.com, mputtash@linux.vnet.com,
+        sachinp@linux.vnet.com
+From:   Tasmiya Nalatwad <tasmiya@linux.vnet.ibm.com>
+Subject: [linux mainline/master] [6.0-6.1-rc1] [SRIOV] WARNING: CPU: 3 PID:
+ 690 at arch/powerpc/kernel/irq_64.c:285 arch_local_irq_restore+0x230/0x26]
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: KltvPbc3TQS8HVJ-7JTPmqIdY2yj8ezY
+X-Proofpoint-GUID: KltvPbc3TQS8HVJ-7JTPmqIdY2yj8ezY
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-20_03,2022-10-19_04,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
+ malwarescore=0 phishscore=0 impostorscore=0 clxscore=1015 mlxlogscore=510
+ lowpriorityscore=0 bulkscore=0 spamscore=0 adultscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
+ definitions=main-2210200056
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Greetings,
+
+[linux mainline/master] [6.0-6.1-rc1] [SRIOV] WARNING: CPU: 3 PID: 690 
+at arch/powerpc/kernel/irq_64.c:285 arch_local_irq_restore+0x230/0x26]
 
 
-On 10/20/2022 4:24 PM, Huang, Ying wrote:
-> Baolin Wang <baolin.wang@linux.alibaba.com> writes:
-> 
->> When creating a virtual machine, we will use memfd_create() to get
->> a file descriptor which can be used to create share memory mappings
->> using the mmap function, meanwhile the mmap() will set the MAP_POPULATE
->> flag to allocate physical pages for the virtual machine.
->>
->> When allocating physical pages for the guest, the host can fallback to
->> allocate some CMA pages for the guest when over half of the zone's free
->> memory is in the CMA area.
->>
->> In guest os, when the application wants to do some data transaction with
->> DMA, our QEMU will call VFIO_IOMMU_MAP_DMA ioctl to do longterm-pin and
->> create IOMMU mappings for the DMA pages. However, when calling
->> VFIO_IOMMU_MAP_DMA ioctl to pin the physical pages, we found it will be
->> failed to longterm-pin sometimes.
->>
->> After some invetigation, we found the pages used to do DMA mapping can
->> contain some CMA pages, and these CMA pages will cause a possible
->> failure of the longterm-pin, due to failed to migrate the CMA pages.
->> The reason of migration failure may be temporary reference count or
->> memory allocation failure. So that will cause the VFIO_IOMMU_MAP_DMA
->> ioctl returns error, which makes the application failed to start.
->>
->> I observed one migration failure case (which is not easy to reproduce) is
->> that, the 'thp_migration_fail' count is 1 and the 'thp_split_page_failed'
->> count is also 1.
->>
->> That means when migrating a THP which is in CMA area, but can not allocate
->> a new THP due to memory fragmentation, so it will split the THP. However
->> THP split is also failed, probably the reason is temporary reference count
->> of this THP. And the temporary reference count can be caused by dropping
->> page caches (I observed the drop caches operation in the system), but we
->> can not drop the shmem page caches due to they are already dirty at that time.
->>
->> Especially for THP split failure, which is caused by temporary reference
->> count, we can try again to mitigate the failure of migration in this case
->> according to previous discussion [1].
-> 
-> Does the patch solved your problem?
+--- Traces ---
+[   19.877841] ------------[ cut here ]------------
+[   19.877855] WARNING: CPU: 3 PID: 690 at 
+arch/powerpc/kernel/irq_64.c:285 arch_local_irq_restore+0x230/0x260
+[   19.877865] Modules linked in: mbcache jbd2 sd_mod t10_pi 
+crc64_rocksoft crc64 sg mlx5_core mlxfw ibmvscsi ibmveth 
+scsi_transport_srp be2net psample ptp pps_core ipmi_devintf 
+ipmi_msghandler fuse
+[   19.877891] CPU: 3 PID: 690 Comm: modprobe Not tainted 
+6.1.0-rc1-autotest-gaae703b02f92 #1
+[   19.877897] Hardware name: IBM,8375-42A POWER9 (raw) 0x4e0202 
+0xf000005 of:IBM,FW950.40 (VL950_099) hv:phyp pSeries
+[   19.877903] NIP:  c00000000003f830 LR: c0000000000b4b7c CTR: 
+000000000000a6a4
+[   19.877908] REGS: c000000071ac76a0 TRAP: 0700   Not tainted 
+(6.1.0-rc1-autotest-gaae703b02f92)
+[   19.877913] MSR:  800000000282b033 <SF,VEC,VSX,EE,FP,ME,IR,DR,RI,LE>  
+CR: 44222284  XER: 00000000
+[   19.877929] CFAR: c00000000003f684 IRQMASK: 1
+[   19.877929] GPR00: c0000000000b4c3c c000000071ac7940 c00000000117ad00 
+0000000000000000
+[   19.877929] GPR04: 0000000000000000 0000001031a81794 0000000000000000 
+4009287a77000005
+[   19.877929] GPR08: 0000000000000000 0000000000008000 c000000071997700 
+0000000000000040
+[   19.877929] GPR12: 0000000000002000 c00000000fffae80 c0080000058af7e8 
+c0080000009efde0
+[   19.877929] GPR16: c008000004eb2830 c0080000058af928 00000000ffffffff 
+c000000000fb47e0
+[   19.877929] GPR20: c0000000029947d8 c008000000d79b00 c008000004e9eff8 
+aaaaaaaaaaaaaaab
+[   19.877929] GPR24: c0080000058b0ae8 c008000000c90000 0000000048034f65 
+c008000000080000
+[   19.877929] GPR28: c0000000029ce0d8 0000000000000000 0000000000000000 
+c0000000035f0040
+[   19.877989] NIP [c00000000003f830] arch_local_irq_restore+0x230/0x260
+[   19.877995] LR [c0000000000b4b7c] patch_instruction+0x26c/0x340
+[   19.878002] Call Trace:
+[   19.878004] [c000000071ac7940] [c0000000029ce0d8] init_mm+0x0/0x5c0 
+(unreliable)
+[   19.878012] [c000000071ac7970] [c0000000000b4c3c] 
+patch_instruction+0x32c/0x340
+[   19.878020] [c000000071ac79c0] [c000000000060c4c] 
+apply_relocate_add+0x76c/0x960
+[   19.878026] [c000000071ac7ac0] [c000000000233490] 
+load_module+0x1b60/0x20b0
+[   19.878034] [c000000071ac7ca0] [c000000000233d4c] 
+__do_sys_finit_module+0xdc/0x180
+[   19.878041] [c000000071ac7dd0] [c000000000034eb4] 
+system_call_exception+0x164/0x3b0
+[   19.878048] [c000000071ac7e10] [c00000000000c6d4] 
+system_call_common+0xf4/0x258
+[   19.878056] --- interrupt: c00 at 0x7fff7f5df1d4
+[   19.878060] NIP:  00007fff7f5df1d4 LR: 000000012796f06c CTR: 
+0000000000000000
+[   19.878065] REGS: c000000071ac7e80 TRAP: 0c00   Not tainted 
+(6.1.0-rc1-autotest-gaae703b02f92)
+[   19.878070] MSR:  800000000000f033 <SF,EE,PR,FP,ME,IR,DR,RI,LE>  CR: 
+28222244  XER: 00000000
+[   19.878084] IRQMASK: 0
+[   19.878084] GPR00: 0000000000000161 00007fffdfffa8d0 00007fff7f6b7300 
+0000000000000002
+[   19.878084] GPR04: 000000012797b5d0 0000000000000000 0000000000000000 
+0000000000000000
+[   19.878084] GPR08: 0000000000000000 0000000000000000 0000000000000000 
+0000000000000000
+[   19.878084] GPR12: 0000000000000000 00007fff7fbbca50 0000000000040000 
+0000000000000000
+[   19.878084] GPR16: 0000000000000000 0000000000000000 0000000000000000 
+0000000000000000
+[   19.878084] GPR20: 0000000000000000 0000000000000000 0000010017ee1b20 
+00000001279798d8
+[   19.878084] GPR24: 0000000000000000 0000000020000000 0000000000000000 
+0000010017ee1ee0
+[   19.878084] GPR28: 000000012797b5d0 0000000000040000 0000000000000000 
+0000010017ee1b20
+[   19.878141] NIP [00007fff7f5df1d4] 0x7fff7f5df1d4
+[   19.878145] LR [000000012796f06c] 0x12796f06c
+[   19.878149] --- interrupt: c00
+[   19.878152] Instruction dump:
+[   19.878156] 0fe00000 4bfffff0 60000000 60000000 ebe10028 4bfffa95 
+4bfffed4 60000000
+[   19.878166] 0fe00000 4bffffd0 60000000 60000000 <0fe00000> 4bffffc0 
+60000000 60000000
+[   19.878177] ---[ end trace 0000000000000000 ]---
 
-The problem is not easy to reproduce and I will test this patch on our 
-products. However I think this is a likely case to fail the migration, 
-which need to be addressed to mitigate the failure.
+-- 
+Regards,
+Tasmiya Nalatwad
+IBM Linux Technology Center
 
->> [1] https://lore.kernel.org/all/470dc638-a300-f261-94b4-e27250e42f96@redhat.com/
->> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
->> ---
->>   mm/huge_memory.c |  4 ++--
->>   mm/migrate.c     | 18 +++++++++++++++---
->>   2 files changed, 17 insertions(+), 5 deletions(-)
->>
->> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
->> index ad17c8d..a79f03b 100644
->> --- a/mm/huge_memory.c
->> +++ b/mm/huge_memory.c
->> @@ -2666,7 +2666,7 @@ int split_huge_page_to_list(struct page *page, struct list_head *list)
->>   	 * split PMDs
->>   	 */
->>   	if (!can_split_folio(folio, &extra_pins)) {
->> -		ret = -EBUSY;
->> +		ret = -EAGAIN;
->>   		goto out_unlock;
->>   	}
->>   
->> @@ -2716,7 +2716,7 @@ int split_huge_page_to_list(struct page *page, struct list_head *list)
->>   			xas_unlock(&xas);
->>   		local_irq_enable();
->>   		remap_page(folio, folio_nr_pages(folio));
->> -		ret = -EBUSY;
->> +		ret = -EAGAIN;
->>   	}
->>   
->>   out_unlock:
->> diff --git a/mm/migrate.c b/mm/migrate.c
->> index 8e5eb6e..55c7855 100644
->> --- a/mm/migrate.c
->> +++ b/mm/migrate.c
->> @@ -1506,9 +1506,21 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->>   				if (is_thp) {
->>   					nr_thp_failed++;
->>   					/* THP NUMA faulting doesn't split THP to retry. */
->> -					if (!nosplit && !try_split_thp(page, &thp_split_pages)) {
->> -						nr_thp_split++;
->> -						break;
->> +					if (!nosplit) {
->> +						rc = try_split_thp(page, &thp_split_pages);
->> +						if (!rc) {
->> +							nr_thp_split++;
->> +							break;
->> +						} else if (reason == MR_LONGTERM_PIN &&
->> +							   rc == -EAGAIN) {
-> 
-> In case reason != MR_LONGTERM_PIN, you change the return value of
-> migrate_pages().  So you need to use another variable for return value.
-
-Good catch, will fix in next version. Thanks for your comments.
