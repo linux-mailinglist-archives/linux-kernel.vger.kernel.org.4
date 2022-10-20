@@ -2,73 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2256606AA2
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 23:59:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AF65606AB3
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 00:00:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230052AbiJTV7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 17:59:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38974 "EHLO
+        id S230090AbiJTWAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 18:00:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229968AbiJTV7k (ORCPT
+        with ESMTP id S230071AbiJTV75 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 17:59:40 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34DFF3ECE4;
-        Thu, 20 Oct 2022 14:59:37 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-13af2d12469so1228762fac.13;
-        Thu, 20 Oct 2022 14:59:37 -0700 (PDT)
+        Thu, 20 Oct 2022 17:59:57 -0400
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94A3363372;
+        Thu, 20 Oct 2022 14:59:49 -0700 (PDT)
+Received: by mail-ot1-x32f.google.com with SMTP id z11-20020a05683020cb00b00661a95cf920so716624otq.5;
+        Thu, 20 Oct 2022 14:59:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=hpKyyfWkb62lUIceh7gyV/N6Kg54kc5jJ2XC2VNLnUM=;
-        b=mHR7V41ApUDBGiYLMp2rxWBH8UQDoI0+iRXCdB+dyDfhHdo6aK0V2D7+7rbSuOvSSx
-         hkDkw5tY/7XugrnfduadrQCcPHDIMgxwtk/2ohzAQjM1Qh3TbhZdlUslg4jwLP5iIPVi
-         nz6AXYzp/wP2yPCG42Na5YN7W875N4nhO3VZzknnlB15KDMKLxWzHSyY9kj84UZ2xvfI
-         J2jl2ixSM5TsRP7gGdHGkzNMnR56mkbg0bfsx/OzVI4YMrvLm3crckHSZm9ok3g4FoMF
-         +egrPk7DIVY/pNq/b9bNDjU8Jt1CaISX4dlubm/pVXLsqscC+FDKzJLK7KQPrg+gjI8t
-         8DIA==
+        bh=ARKH8V4OjwusuqSwsWSFzG2eaJLXUFsNfMNSJs9wECM=;
+        b=QHLiWlFjoX5OUha/ys/iXAC4fg65Vf638ogS9SpT0lsl3GnzgKrCjmbrX72B14cu55
+         TZzmNQvCnPhH9pBKFlYpxA/oE115jT7LvGo6IUONe2jDOGz0lxtKfTjnB4vYD3Lvdjdf
+         1KxsSX/Mf8bxFkhNsVOQ3/l9wlk4McsQrey0r5ZzWRwgm5jSJ1ifDA1P4eJNAW0seKqd
+         YNy1VDHfqq3SATFjrvEhtFn93VIaSZKIv6e/D42bWRbrVK/jl1SicFGnmlBEAFI8VEFW
+         VuVz/ty8W/ekDinoR0vHCRuQPw63HIVC4xZjPweIDTLcjyKB946I+Cx/hNc2SjNF/mIE
+         Riew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=hpKyyfWkb62lUIceh7gyV/N6Kg54kc5jJ2XC2VNLnUM=;
-        b=a5GFQUi/4VLcVuHlVXSipcJsH96uCb0leUKJoQ9Y6R4Ggq2zaob+27g5N21ENi4jme
-         sIFVKGH5/J570HXQDwK0nYFw8gacDNU2AciAu3r0yZ/lryxAaEwIuPPTxPydu97yhVRD
-         vhyHiicXpBuu4PmWOP40/IgiOFgknJIWFk7c7ofoqX7AkOcM2ZnVmoK28uOIwQvUmo+T
-         wu52XR4+JCf6o9CRxz2+werXEo+8Qf646/LenI3hv42gVALItNfk20kePSZEhNf63wMp
-         JSuAF75VoR9km7mVcjm1M3pEHlyqzprUsvtkmrwkE7BSrovApL+GI0x7hzJukyb7vxK4
-         P9jw==
-X-Gm-Message-State: ACrzQf2Ep5e6LDJcdQ+GpuB3MRjriQH7jkA9KoAhEkY91bkuJDz+iwg+
-        WqO55XwLkpm7/sxg6WChgokE6nTjtrg=
-X-Google-Smtp-Source: AMsMyM5vpBPfIaIeco5D6jMKvwrZ8L7UWSZAqNhqnnYMq6szIAcfiSKIjf4gmY5rIcXAGbdP/WlQxw==
-X-Received: by 2002:a05:6870:344b:b0:133:2265:780c with SMTP id i11-20020a056870344b00b001332265780cmr26776518oah.164.1666303176493;
-        Thu, 20 Oct 2022 14:59:36 -0700 (PDT)
+        bh=ARKH8V4OjwusuqSwsWSFzG2eaJLXUFsNfMNSJs9wECM=;
+        b=z1+9/bUWK7SfWWHgKOvPu7XyxIl6oAZp2H2fl5lz0nTkCX4+1K2YIDaphsugwYtnPz
+         9mRiZXRbtLR3x0gayL/nIdm1qnk4gVzr71vM9BsEIeGNMYgE5TO0zBl2fKxzVIhTj/hY
+         FbQTGEsz5n/OX86Bdv4Beqm4EGQyGv4Iruy0NM6zQdv2atceggx+cLovgMh6sgz8mdzI
+         rSbgk43xl/RhPEqJwr4U1d6+hlHSO4KoIztUuOLj8vGekayVDIAF38Fxp5WxuinA/4KI
+         Xq6KpeGaUzayrn5tJRMHTYK0LnZ+pQCgcPmZlAmm8sbiSxU1MSQMPFxRqewz4nlGNlUW
+         U1ag==
+X-Gm-Message-State: ACrzQf0rsYws4BudSD/SAK5k2exGWgQPBm51bEAR1U56zJHZF6Cw0iuH
+        5ZuOdYPoGUocPGks1LBwJPXcGiWrwUw=
+X-Google-Smtp-Source: AMsMyM6Bp5KAulmHuUu2awsZIpbNsyJIytpi5ilN12coZKK+TUs/+Xia9Oj5192t1KRIUT+AdtReMw==
+X-Received: by 2002:a9d:191:0:b0:661:a5db:56d1 with SMTP id e17-20020a9d0191000000b00661a5db56d1mr8111675ote.125.1666303188712;
+        Thu, 20 Oct 2022 14:59:48 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t33-20020a4a96e4000000b00480fd9f311esm543483ooi.13.2022.10.20.14.59.34
+        by smtp.gmail.com with ESMTPSA id h23-20020a9d61d7000000b00661a1d92aacsm394776otk.33.2022.10.20.14.59.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 14:59:35 -0700 (PDT)
+        Thu, 20 Oct 2022 14:59:48 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 20 Oct 2022 14:59:33 -0700
+Date:   Thu, 20 Oct 2022 14:59:47 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Paul Cercueil <paul@crapouillou.net>
 Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 1/4] watchdog: at91rm9200: Remove #ifdef guards for PM
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/4] watchdog: twl4030: Remove #ifdef guards for PM
  related functions
-Message-ID: <20221020215933.GA4035307@roeck-us.net>
+Message-ID: <20221020215947.GB4035307@roeck-us.net>
 References: <20221020185047.1001522-1-paul@crapouillou.net>
- <20221020185047.1001522-2-paul@crapouillou.net>
+ <20221020185047.1001522-3-paul@crapouillou.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221020185047.1001522-2-paul@crapouillou.net>
+In-Reply-To: <20221020185047.1001522-3-paul@crapouillou.net>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -80,7 +76,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 07:50:44PM +0100, Paul Cercueil wrote:
+On Thu, Oct 20, 2022 at 07:50:45PM +0100, Paul Cercueil wrote:
 > Use the pm_ptr() macro to handle the .suspend/.resume callbacks.
 > 
 > This macro allows the suspend and resume functions to be automatically
@@ -94,81 +90,43 @@ On Thu, Oct 20, 2022 at 07:50:44PM +0100, Paul Cercueil wrote:
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
-> Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
-> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> Cc: Claudiu Beznea <claudiu.beznea@microchip.com>
-> Cc: linux-arm-kernel@lists.infradead.org
+>  drivers/watchdog/twl4030_wdt.c | 9 ++-------
+>  1 file changed, 2 insertions(+), 7 deletions(-)
 > 
->  drivers/watchdog/at91rm9200_wdt.c | 11 ++---------
->  drivers/watchdog/db8500_wdt.c     |  9 ++-------
->  2 files changed, 4 insertions(+), 16 deletions(-)
-> 
-> diff --git a/drivers/watchdog/at91rm9200_wdt.c b/drivers/watchdog/at91rm9200_wdt.c
-> index 6d751eb8191d..5126454bb861 100644
-> --- a/drivers/watchdog/at91rm9200_wdt.c
-> +++ b/drivers/watchdog/at91rm9200_wdt.c
-> @@ -278,8 +278,6 @@ static void at91wdt_shutdown(struct platform_device *pdev)
->  	at91_wdt_stop();
+> diff --git a/drivers/watchdog/twl4030_wdt.c b/drivers/watchdog/twl4030_wdt.c
+> index 36b4a660928d..09d17e20f4a7 100644
+> --- a/drivers/watchdog/twl4030_wdt.c
+> +++ b/drivers/watchdog/twl4030_wdt.c
+> @@ -81,7 +81,6 @@ static int twl4030_wdt_probe(struct platform_device *pdev)
+>  	return devm_watchdog_register_device(dev, wdt);
 >  }
 >  
 > -#ifdef CONFIG_PM
-> -
->  static int at91wdt_suspend(struct platform_device *pdev, pm_message_t message)
+>  static int twl4030_wdt_suspend(struct platform_device *pdev, pm_message_t state)
 >  {
->  	at91_wdt_stop();
-> @@ -293,11 +291,6 @@ static int at91wdt_resume(struct platform_device *pdev)
->  	return 0;
->  }
+>  	struct watchdog_device *wdt = platform_get_drvdata(pdev);
+> @@ -99,10 +98,6 @@ static int twl4030_wdt_resume(struct platform_device *pdev)
 >  
-> -#else
-> -#define at91wdt_suspend NULL
-> -#define at91wdt_resume	NULL
-> -#endif
-> -
->  static const struct of_device_id at91_wdt_dt_ids[] = {
->  	{ .compatible = "atmel,at91rm9200-wdt" },
->  	{ /* sentinel */ }
-> @@ -308,8 +301,8 @@ static struct platform_driver at91wdt_driver = {
->  	.probe		= at91wdt_probe,
->  	.remove		= at91wdt_remove,
->  	.shutdown	= at91wdt_shutdown,
-> -	.suspend	= at91wdt_suspend,
-> -	.resume		= at91wdt_resume,
-> +	.suspend	= pm_ptr(at91wdt_suspend),
-> +	.resume		= pm_ptr(at91wdt_resume),
->  	.driver		= {
->  		.name	= "atmel_st_watchdog",
->  		.of_match_table = at91_wdt_dt_ids,
-> diff --git a/drivers/watchdog/db8500_wdt.c b/drivers/watchdog/db8500_wdt.c
-> index 6ed8b63d310d..97148ac0aa54 100644
-> --- a/drivers/watchdog/db8500_wdt.c
-> +++ b/drivers/watchdog/db8500_wdt.c
-> @@ -105,7 +105,6 @@ static int db8500_wdt_probe(struct platform_device *pdev)
->  	return 0;
->  }
->  
-> -#ifdef CONFIG_PM
->  static int db8500_wdt_suspend(struct platform_device *pdev,
->  			     pm_message_t state)
->  {
-> @@ -130,15 +129,11 @@ static int db8500_wdt_resume(struct platform_device *pdev)
->  	}
 >  	return 0;
 >  }
 > -#else
-> -#define db8500_wdt_suspend NULL
-> -#define db8500_wdt_resume NULL
+> -#define twl4030_wdt_suspend        NULL
+> -#define twl4030_wdt_resume         NULL
 > -#endif
 >  
->  static struct platform_driver db8500_wdt_driver = {
->  	.probe		= db8500_wdt_probe,
-> -	.suspend	= db8500_wdt_suspend,
-> -	.resume		= db8500_wdt_resume,
-> +	.suspend	= pm_ptr(db8500_wdt_suspend),
-> +	.resume		= pm_ptr(db8500_wdt_resume),
+>  static const struct of_device_id twl_wdt_of_match[] = {
+>  	{ .compatible = "ti,twl4030-wdt", },
+> @@ -112,8 +107,8 @@ MODULE_DEVICE_TABLE(of, twl_wdt_of_match);
+>  
+>  static struct platform_driver twl4030_wdt_driver = {
+>  	.probe		= twl4030_wdt_probe,
+> -	.suspend	= twl4030_wdt_suspend,
+> -	.resume		= twl4030_wdt_resume,
+> +	.suspend	= pm_ptr(twl4030_wdt_suspend),
+> +	.resume		= pm_ptr(twl4030_wdt_resume),
 >  	.driver		= {
->  		.name	= "db8500_wdt",
->  	},
+>  		.name		= "twl4030_wdt",
+>  		.of_match_table	= twl_wdt_of_match,
 > -- 
 > 2.35.1
 > 
