@@ -2,71 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43D59605B10
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 11:25:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B135E605B11
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 11:25:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230229AbiJTJYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 05:24:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59568 "EHLO
+        id S230256AbiJTJZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 05:25:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230177AbiJTJYu (ORCPT
+        with ESMTP id S230184AbiJTJY6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 05:24:50 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C9A2D1C3;
-        Thu, 20 Oct 2022 02:24:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1666257884; x=1697793884;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=Wj4l33DaYJ9VEOxS8rubLXY/EOYmxzoOfQFw6w/nBTU=;
-  b=a5qvAb+BrLiGG5pPTBpNMihNWDXHohwVAv2CmbBKCcYsXgj2ASluQ06R
-   JmPV51zmJHit0VtQ+eH1t5+p0t1Lz87bUoPwmt1rZO9rpFYnXB7/nXUs3
-   a7/UEdWzOe56YRfyCESgmvipF4dVclkZHS6r0x1GOdxT0KKDsQtNyo+7c
-   n60Hu84+MpGDDBUsidrJrpaiSmz14KQUhVsWpeeIPAbCujVdc2RMtuQ3y
-   noOqD1S/uRITn8nHdpr7+djCXyEc9kzmIvAYmRoQDegyWk6lKuINaCbF4
-   EQ+xPoBn1qqSKxWIcRt743ON7LvcExmT+dhFbl55UVP0e0kmOcBcEFnPP
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.95,198,1661842800"; 
-   d="scan'208";a="185546700"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 20 Oct 2022 02:24:43 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Thu, 20 Oct 2022 02:24:43 -0700
-Received: from den-dk-m31857.microchip.com (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Thu, 20 Oct 2022 02:24:40 -0700
-Message-ID: <85b3993eae5e82860f366c112342527f2018243f.camel@microchip.com>
-Subject: Re: [PATCH net-next v2 7/9] net: microchip: sparx5: Writing rules
- to the IS2 VCAP
-From:   Steen Hegelund <steen.hegelund@microchip.com>
-To:     Casper Andersson <casper.casan@gmail.com>
-CC:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        <UNGLinuxDriver@microchip.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        "Wan Jiabing" <wanjiabing@vivo.com>,
-        Nathan Huckleberry <nhuck@google.com>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Date:   Thu, 20 Oct 2022 11:24:40 +0200
-In-Reply-To: <20221020074806.ys7lyfkn7f7zpkcp@wse-c0155>
-References: <20221019114215.620969-1-steen.hegelund@microchip.com>
-         <20221019114215.620969-8-steen.hegelund@microchip.com>
-         <20221020074806.ys7lyfkn7f7zpkcp@wse-c0155>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.44.4 
+        Thu, 20 Oct 2022 05:24:58 -0400
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A373732BA1
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 02:24:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=AygbfjnKnB+/RDS1GNl/7N5AgIDAmqmAzOgJPCJ0Cqw=;
+  b=uDVC7WsR4KlqUZexSOGg9BjKogYc6Mn3lWRYiiJc5mg1ACGnSBcosMxP
+   FetlqLPEAr1lXpeFxYKMobVhgEpeJ8srZ1n95nLzCBUJQQxe8OEPcQllr
+   rtoM1yCLzbHJOWFbwiBEM/8B5SEAZdtTvdlPxRzsEEZBKTahEc6OAesk+
+   8=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.95,198,1661810400"; 
+   d="scan'208";a="66133235"
+Received: from dt-lawall.paris.inria.fr ([128.93.67.65])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 11:24:52 +0200
+Date:   Thu, 20 Oct 2022 11:24:52 +0200 (CEST)
+From:   Julia Lawall <julia.lawall@inria.fr>
+To:     Deepak R Varma <drv@mailo.com>
+cc:     outreachy@lists.linux.dev, Larry.Finger@lwfinger.net,
+        phil@philpotter.co.uk, paskripkin@gmail.com,
+        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, kumarpraveen@linux.microsoft.com,
+        saurabh.truth@gmail.com
+Subject: Re: [PATCH v3 05/10] staging: r8188eu: correct misspelled words in
+ comments
+In-Reply-To: <3235c0f681d817f7f89dd80537f36e1f9686fa24.1666249716.git.drv@mailo.com>
+Message-ID: <d89421f-7546-f33-e621-815b428b71d8@inria.fr>
+References: <cover.1666249715.git.drv@mailo.com> <3235c0f681d817f7f89dd80537f36e1f9686fa24.1666249716.git.drv@mailo.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,75 +54,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgQ2FzcGVyLAoKT24gVGh1LCAyMDIyLTEwLTIwIGF0IDA5OjQ4ICswMjAwLCBDYXNwZXIgQW5k
-ZXJzc29uIHdyb3RlOgo+IEVYVEVSTkFMIEVNQUlMOiBEbyBub3QgY2xpY2sgbGlua3Mgb3Igb3Bl
-biBhdHRhY2htZW50cyB1bmxlc3MgeW91IGtub3cgdGhlIGNvbnRlbnQgaXMgc2FmZQo+IAo+IE9u
-IDIwMjItMTAtMTkgMTM6NDIsIFN0ZWVuIEhlZ2VsdW5kIHdyb3RlOgo+ID4gK3N0YXRpYyB2b2lk
-IHZjYXBfaXRlcl9za2lwX3RnKHN0cnVjdCB2Y2FwX3N0cmVhbV9pdGVyICppdHIpCj4gPiArewo+
-ID4gK8KgwqDCoMKgIC8qIENvbXBlbnNhdGUgdGhlIGZpZWxkIG9mZnNldCBmb3IgcHJlY2VkaW5n
-IHR5cGVncm91cHMgKi8KPiA+ICvCoMKgwqDCoCB3aGlsZSAoaXRyLT50Zy0+d2lkdGggJiYgaXRy
-LT5vZmZzZXQgPj0gaXRyLT50Zy0+b2Zmc2V0KSB7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgIGl0ci0+b2Zmc2V0ICs9IGl0ci0+dGctPndpZHRoOwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoCBpdHItPnRnKys7IC8qIG5leHQgdHlwZWdyb3VwICovCj4gPiArwqDCoMKgwqAgfQo+
-ID4gK30KPiAKPiBJdCB3YXMgbm90IGltbWVkaWF0ZWx5IG9idmlvdXMgdG8gbWUgd2h5IGl0IHNo
-b3VsZCBzdG9wIGl0ZXJhdGluZyB3aGVuCj4gdGctPndpZHRoIGlzIHplcm8uIEJ1dCBhZnRlciBz
-b21lIGRpZ2dpbmcgSSBzYXcgdGhhdCB0aGUgdGcgaXRlcmF0b3JzCj4gYWx3YXlzIGVuZHMgd2l0
-aCBhbiBlbXB0eSBlbGVtZW50IChhbGwgYml0cyB6ZXJvLCBhbmQgdGhlcmVmb3JlIHdpZHRoIGlz
-Cj4gemVybykuIENvdWxkIHRoaXMgYmUgbWFkZSBjbGVhcmVyPyBPciBtYXliZSB0aGlzIGlzIHNv
-bWV0aGluZyBjb21tb24KPiB0aGF0IEknbSBqdXN0IG5vdCB1c2VkIHRvIHNlZWluZy4KClllcyB0
-aGUgZW1wdHkgZWxlbWVudCBpcyBqdXN0IGEgbGlzdCB0ZXJtaW5hdG9yLCBhbmQgaXQganVzdCBt
-YWtlcyB0aGUgaXRlcmF0aW9uIHNpbXBsZXIgdGhhbiB1c2luZwphIGNvdW50IHdoaWNoIHdvdWxk
-IGhhdmUgYmVlbiBzdG9yZWQgaW4gYSBzZXBhcmF0ZSBsb2NhdGlvbi4KSSBjb3VsZCBhZGQgYSBj
-b21tZW50IGhlcmUgdG8gY2xhcmlmeSB0aGlzLgoKPiAKPiA+ICtzdGF0aWMgdm9pZCB2Y2FwX2Vu
-Y29kZV9iaXQodTMyICpzdHJlYW0sIHN0cnVjdCB2Y2FwX3N0cmVhbV9pdGVyICppdHIsIGJvb2wg
-dmFsKQo+ID4gK3sKPiA+ICvCoMKgwqDCoCAvKiBXaGVuIGludGVyc2VjdGVkIGJ5IGEgdHlwZSBn
-cm91cCBmaWVsZCwgc3RyZWFtIHRoZSB0eXBlIGdyb3VwIGJpdHMKPiA+ICvCoMKgwqDCoMKgICog
-YmVmb3JlIGNvbnRpbnVpbmcgd2l0aCB0aGUgdmFsdWUgYml0Cj4gPiArwqDCoMKgwqDCoCAqLwo+
-ID4gK8KgwqDCoMKgIHdoaWxlIChpdHItPnRnLT53aWR0aCAmJgo+ID4gK8KgwqDCoMKgwqDCoMKg
-wqDCoMKgwqAgaXRyLT5vZmZzZXQgPj0gaXRyLT50Zy0+b2Zmc2V0ICYmCj4gPiArwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoCBpdHItPm9mZnNldCA8IGl0ci0+dGctPm9mZnNldCArIGl0ci0+dGctPndp
-ZHRoKSB7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGludCB0Z19iaXRwb3MgPSBpdHIt
-PnRnLT5vZmZzZXQgLSBpdHItPm9mZnNldDsKPiA+ICsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqAgdmNhcF9zZXRfYml0KHN0cmVhbSwgaXRyLCAoaXRyLT50Zy0+dmFsdWUgPj4gdGdfYml0
-cG9zKSAmIDB4MSk7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGl0ci0+b2Zmc2V0Kys7
-Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHZjYXBfaXRlcl91cGRhdGUoaXRyKTsKPiA+
-ICvCoMKgwqDCoCB9Cj4gCj4gU2FtZSBhcyBhYm92ZS4KClllcyBpdCBhbHNvIGNoZWNrcyBmb3Ig
-dGhlIGxpc3QgdGVybWluYXRvci4KCj4gCj4gPiArc3RhdGljIHZvaWQgdmNhcF9lbmNvZGVfdHlw
-ZWdyb3Vwcyh1MzIgKnN0cmVhbSwgaW50IHN3X3dpZHRoLAo+ID4gK8KgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGNvbnN0IHN0cnVj
-dCB2Y2FwX3R5cGVncm91cCAqdGcsCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgYm9vbCBtYXNrKQo+ID4gK3sKPiA+ICvC
-oMKgwqDCoCBzdHJ1Y3QgdmNhcF9zdHJlYW1faXRlciBpdGVyOwo+ID4gK8KgwqDCoMKgIGludCBp
-ZHg7Cj4gPiArCj4gPiArwqDCoMKgwqAgLyogTWFzayBiaXRzIG11c3QgYmUgc2V0IHRvIHplcm9z
-IChpbnZlcnRlZCBsYXRlciB3aGVuIHdyaXRpbmcgdG8gdGhlCj4gPiArwqDCoMKgwqDCoCAqIG1h
-c2sgY2FjaGUgcmVnaXN0ZXIpLCBzbyB0aGF0IHRoZSBtYXNrIHR5cGVncm91cCBiaXRzIGNvbnNp
-c3Qgb2YKPiA+ICvCoMKgwqDCoMKgICogbWF0Y2gtMSBvciBtYXRjaC0wLCBvciBib3RoCj4gPiAr
-wqDCoMKgwqDCoCAqLwo+ID4gK8KgwqDCoMKgIHZjYXBfaXRlcl9zZXQoJml0ZXIsIHN3X3dpZHRo
-LCB0ZywgMCk7Cj4gPiArwqDCoMKgwqAgd2hpbGUgKGl0ZXIudGctPndpZHRoKSB7Cj4gPiArwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgIC8qIFNldCBwb3NpdGlvbiB0byBjdXJyZW50IHR5cGVncm91
-cCBiaXQgKi8KPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgaXRlci5vZmZzZXQgPSBpdGVy
-LnRnLT5vZmZzZXQ7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHZjYXBfaXRlcl91cGRh
-dGUoJml0ZXIpOwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBmb3IgKGlkeCA9IDA7IGlk
-eCA8IGl0ZXIudGctPndpZHRoOyBpZHgrKykgewo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqAgLyogSXRlcmF0ZSBvdmVyIGN1cnJlbnQgdHlwZWdyb3VwIGJpdHMu
-IE1hc2sgdHlwZWdyb3VwCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgICogYml0cyBhcmUgYWx3YXlzIHNldAo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoCAqLwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqAgaWYgKG1hc2spCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgdmNhcF9zZXRfYml0KHN0cmVhbSwgJml0ZXIsIDB4
-MSk7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBlbHNlCj4g
-PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqAgdmNhcF9zZXRfYml0KHN0cmVhbSwgJml0ZXIsCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoCAoaXRlci50Zy0+dmFsdWUgPj4gaWR4KSAmIDB4MSk7Cj4gPiArwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBpdGVyLm9mZnNldCsrOwo+ID4gK8KgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgdmNhcF9pdGVyX3VwZGF0ZSgmaXRlcik7Cj4g
-PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIH0KPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqAgaXRlci50ZysrOyAvKiBuZXh0IHR5cGVncm91cCAqLwo+ID4gK8KgwqDCoMKgIH0KPiAKPiBT
-YW1lIGFzIGFib3ZlLgpZZXMgc2FtZSBwcm9jZWR1cmUgaGVyZS4KCj4gCj4gVGVzdGVkIG9uIE1p
-Y3JvY2hpcCBQQ0IxMzUgc3dpdGNoLgo+IAo+IFRlc3RlZC1ieTogQ2FzcGVyIEFuZGVyc3NvbiA8
-Y2FzcGVyLmNhc2FuQGdtYWlsLmNvbT4KPiBSZXZpZXdlZC1ieTogQ2FzcGVyIEFuZGVyc3NvbiA8
-Y2FzcGVyLmNhc2FuQGdtYWlsLmNvbT4KPiAKPiBCZXN0IFJlZ2FyZHMsCj4gQ2FzcGVyCgpUaGFu
-a3MgYWdhaW4gZm9yIHRoZSByZXZpZXcgYW5kIHRoZSB0YXJnZXQgdGVzdGluZy4KCkJSClN0ZWVu
-Cgo=
 
+
+On Thu, 20 Oct 2022, Deepak R Varma wrote:
+
+> Incorrectly spelled words should be corrected as per the Linux
+> coding-style guidelines.
+
+This seems a bit verbose.  I think that spelling mistakes should just be
+fixed, and the need for fixes shouldn't have to rely on style guidelines.
+
+Fix spelling mistakes in code comments across the driver.
+
+> @@ -4615,7 +4615,7 @@ int issue_probereq_ex(struct adapter *padapter, struct ndis_802_11_ssid *pssid,
+>  	return ret;
+>  }
+>
+> -/*  if psta == NULL, indiate we are station(client) now... */
+> +/*  if psta == NULL, indicate we are station(client) now... */
+
+Does station plat the role of a function call?  If (client) is just giving
+some extra information there should eb a space before the (.
+
+>  void issue_auth(struct adapter *padapter, struct sta_info *psta, unsigned short status)
+>  {
+>  	struct xmit_frame *pmgntframe;
+> @@ -5014,7 +5014,7 @@ void issue_assocreq(struct adapter *padapter)
+>  				if (!padapter->registrypriv.wifi_spec) {
+>  					/* Commented by Kurt 20110629 */
+>  					/* In some older APs, WPS handshake */
+> -					/* would be fail if we append vender extensions informations to AP */
+> +					/* would be fail if we append vender extensions information to AP */
+
+envder -> vendor
+extensions -> extension
+
+> @@ -5344,7 +5344,7 @@ static int _issue_qos_nulldata(struct adapter *padapter, unsigned char *da, u16
+>  	return ret;
+>  }
+>
+> -/* when wait_ms > 0 , this function shoule be called at process context */
+> +/* when wait_ms > 0 , this function should be called at process context */
+
+Unnecessary space before the comma.
+
+> @@ -6058,7 +6058,7 @@ void site_survey(struct adapter *padapter)
+>  		} else {
+>  			/*  20100721:Interrupt scan operation here. */
+>  			/*  For SW antenna diversity before link, it needs to switch to another antenna and scan again. */
+> -			/*  It compares the scan result and select beter one to do connection. */
+> +			/*  It compares the scan result and select better one to do connection. */
+
+select -> selects a
+
+> +++ b/drivers/staging/r8188eu/hal/rtl8188e_phycfg.c
+> @@ -94,7 +94,7 @@ void rtl8188e_PHY_SetBBReg(struct adapter *Adapter, u32 RegAddr, u32 BitMask, u3
+>  /**
+>  * Function:	phy_RFSerialRead
+>  *
+> -* OverView:	Read regster from RF chips
+> +* OverView:	Read register from RF chips
+
+Not sure why View is capitalized.
+
+julia
