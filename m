@@ -2,71 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28C0F605536
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 03:52:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC31660553F
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 03:55:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230463AbiJTBwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 21:52:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50608 "EHLO
+        id S229929AbiJTBzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 21:55:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230397AbiJTBwq (ORCPT
+        with ESMTP id S229683AbiJTBzJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 21:52:46 -0400
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1947E16EA39;
-        Wed, 19 Oct 2022 18:52:43 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R941e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=24;SR=0;TI=SMTPD_---0VScdp8u_1666230756;
-Received: from 30.221.97.125(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VScdp8u_1666230756)
-          by smtp.aliyun-inc.com;
-          Thu, 20 Oct 2022 09:52:38 +0800
-Message-ID: <5fa1f75a-1641-771e-3670-2d8978c99d2a@linux.alibaba.com>
-Date:   Thu, 20 Oct 2022 09:52:36 +0800
+        Wed, 19 Oct 2022 21:55:09 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0411F148F53;
+        Wed, 19 Oct 2022 18:55:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=2WkjNmweiW5UWvFDyTIcZUK41JmBY3NIJ3WWOjzemz4=; b=yix4Du8TvUlpQtqptrK+MKkL3z
+        /ET3kalM77hPT3l6cx/BkcbjUVKBkwSwplYfuXRgJ9WOQ6FButJSZbMP+5V6MB7P/Ryg33i28lEP4
+        +oCjfTdMsXUhKarpfrdoliN5qeym6d0ygAMgpVWD6rrk7WtUK8uswQdkzG04mNwtpurpG6fQe1udT
+        Se2/1kfXz3Ct3emBhO80iKRfrL3NWFgHpGq/yT87KnL7F8fKCvNQcwAE5Tj/80CMuIx+YlrvGhBk6
+        nDfyBbT0d/YKYDny9orz7JkmlFfc0/jiau2GCVzD8xoelbrh/CKvDdtYIGtb3NGidbIAhp4OGjk4b
+        pIUiSmOA==;
+Received: from [2601:1c2:d80:3110::a2e7]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1olKlu-009Dnn-Qc; Thu, 20 Oct 2022 01:54:58 +0000
+Message-ID: <d5a7c385-4155-af0c-ed51-865f274fa030@infradead.org>
+Date:   Wed, 19 Oct 2022 18:54:57 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.12.0
-Subject: Re: [PATCH V3 1/2] RISC-V: Add arch_crash_save_vmcoreinfo support
-To:     =?UTF-8?B?SEFHSU8gS0FaVUhJVE8o6JCp5bC+IOS4gOS7gSk=?= 
-        <k-hagio-ab@nec.com>, Baoquan He <bhe@redhat.com>,
-        lijiang <lijiang@redhat.com>
-Cc:     "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-        "anup@brainfault.org" <anup@brainfault.org>,
-        "heiko@sntech.de" <heiko@sntech.de>,
-        "guoren@kernel.org" <guoren@kernel.org>,
-        "mick@ics.forth.gr" <mick@ics.forth.gr>,
-        "alexandre.ghiti@canonical.com" <alexandre.ghiti@canonical.com>,
-        "vgoyal@redhat.com" <vgoyal@redhat.com>,
-        "dyoung@redhat.com" <dyoung@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "Conor.Dooley@microchip.com" <Conor.Dooley@microchip.com>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "kexec@lists.infradead.org" <kexec@lists.infradead.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "crash-utility@redhat.com" <crash-utility@redhat.com>,
-        "heinrich.schuchardt@canonical.com" 
-        <heinrich.schuchardt@canonical.com>,
-        "hschauhan@nulltrace.org" <hschauhan@nulltrace.org>,
-        "yixun.lan@gmail.com" <yixun.lan@gmail.com>
-References: <20221018081755.6214-1-xianting.tian@linux.alibaba.com>
- <20221018081755.6214-2-xianting.tian@linux.alibaba.com>
- <Y05tfxRenMs5d+bt@MiWiFi-R3L-srv>
- <049ec19e-60c3-2854-5f5e-9850231108b4@linux.alibaba.com>
- <Y05540td7lLz+0BY@MiWiFi-R3L-srv>
- <a66a5b16-5f1f-3d80-3cdc-4b82d38d604f@linux.alibaba.com>
- <0f0a77a9-c824-8aa4-77de-a75c2139d791@nec.com>
- <811bdf09-be38-ce2a-a1d3-ada9f7c85b97@linux.alibaba.com>
- <52023285-172a-97cc-bad4-4ab4e709885c@nec.com>
-From:   Xianting Tian <xianting.tian@linux.alibaba.com>
-In-Reply-To: <52023285-172a-97cc-bad4-4ab4e709885c@nec.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH] of: fix repeated words in comments
+Content-Language: en-US
+To:     Theodore Ts'o <tytso@mit.edu>
+Cc:     Jilin Yuan <yuanjilin@cdjrlc.com>, robh+dt@kernel.org,
+        frowand.list@gmail.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221019130200.60460-1-yuanjilin@cdjrlc.com>
+ <9fb4c010-b465-e908-6868-d9e493a9688f@infradead.org>
+ <Y1Cm2Hvf7W7NxVzk@mit.edu>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <Y1Cm2Hvf7W7NxVzk@mit.edu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -74,61 +57,55 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-在 2022/10/20 上午9:35, HAGIO KAZUHITO(萩尾 一仁) 写道:
-> On 2022/10/19 12:17, Xianting Tian wrote:
->
->>>>>>>> +    if (IS_ENABLED(CONFIG_64BIT)) {
->>>>>>>> +#ifdef CONFIG_KASAN
->>>>>>>> +        vmcoreinfo_append_str("NUMBER(KASAN_SHADOW_START)=0x%lx\n", KASAN_SHADOW_START);
->>>>>>>> +        vmcoreinfo_append_str("NUMBER(KASAN_SHADOW_END)=0x%lx\n", KASAN_SHADOW_END);
->>>>>>>> +#endif
->>>>>>>> +        vmcoreinfo_append_str("NUMBER(KERNEL_LINK_ADDR)=0x%lx\n", KERNEL_LINK_ADDR);
->>>>>>>> +        vmcoreinfo_append_str("NUMBER(ADDRESS_SPACE_END)=0x%lx\n", ADDRESS_SPACE_END);
->>>>>>> Seems this is the firsr ARCH where kasan and kernel link/bpf space are
->>>>>>> added to dump and analyze. Just curious, have you got code change to
->>>>>>> make use of them to do dumping and analyze?
->>>>>> KASAN_SHADOW_START is not used, KERNEL_LINK_ADDR is used in the crash patch set:
->>>>>> https://patchwork.kernel.org/project/linux-riscv/cover/20220813031753.3097720-1-xianting.tian@linux.alibaba.com/
->>>>> Oh, I would say please no. Sometime we got tons of objection when adding an
->>>>> necessary one, we definitely should not add one for possible future
->>>>> use.
->>>>>
->>>>> For this kind of newly added one, we need get ack from
->>>>> makedumpfile/crash utility maintainer so that we know they are necessary
->>>>> to have. At least they don't oppose.
->>>> Hi Kazu, Li Jiang
->>>>
->>>> Could you help comment whether we need KASAN_SHADOW_START and KERNEL_LINK_ADDR area export for vmcore from crash point of view？
->>>>
->>>> In my crash patch set, I don't use KASAN_SHADOW_START,
->>>> And only get the value of KERNEL_LINK_ADDR, not realy use it.
->>>> https://patchwork.kernel.org/project/linux-riscv/cover/20220813031753.3097720-1-xianting.tian@linux.alibaba.com/
->>> In your crash patch set, KERNEL_LINK_ADDR is used in VTOP() and looks
->>> necessary to me.
->>>
->>> The others (KASAN_SHADOW_START, KASAN_SHADOW_END and ADDRESS_SPACE_END)
->>> are not currently used.  It may be better to add them when they are
->>> really used.
->> I am very sorry, I missed it , KERNEL_LINK_ADDR is used indeed.
+
+On 10/19/22 18:39, Theodore Ts'o wrote:
+> On Wed, Oct 19, 2022 at 11:53:54AM -0700, Randy Dunlap wrote:
 >>
->> KASAN_SHADOW_START is not used, so I don't need to send crash patch set> again. only need to remove KASAN_SHADOW_END in kernel patch set.
-> I see that your v4 kernel patch set does not have ADDRESS_SPACE_END,
-> so it seems there would be need to change this part and related ones
-> at crash side.
->
->           if ((string = pc->read_vmcoreinfo("NUMBER(ADDRESS_SPACE_END)"))) {
->                   ms->address_space_end = htol(string, QUIET, NULL);
->                   free(string);
->           } else
->                   goto error;
-> ...
-> error:
->           error(FATAL, "cannot get vm layout\n");
+>> On 10/19/22 06:02, Jilin Yuan wrote:
+>>> Delete the redundant word 'of'.
+>>>
+>>> Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+>>> ---
+>>>  drivers/of/device.c | 2 +-
+>>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/of/device.c b/drivers/of/device.c
+>>> index 8cefe5a7d04e..16c7e5a2a868 100644
+>>> --- a/drivers/of/device.c
+>>> +++ b/drivers/of/device.c
+>>> @@ -19,7 +19,7 @@
+>>>  
+>>>  /**
+>>>   * of_match_device - Tell if a struct device matches an of_device_id list
+>>> - * @matches: array of of device match structures to search in
+>>> + * @matches: array of device match structures to search in
+>>
+>> Hi,
+>> Rob has already explained this at least 2 times.
+>>
+>> The second "of" is "open firmware".
+>> I would write it
+>>               array of OF device match structures to search in
+>> :)
+> 
+> Actually, I'd probably do something like
+> 
+>     	     array of Open Firmware (OF) device match structures...
 
-thanks,
+Sure, that's good.
 
-I just send V4 of crash patch set, the issue is also fixed in V4.
+> This is the first place in that file (at least in a comment) where OF
+> gets used, and I've always been a big fan of using the fully expanded
+> acronym before using the acronym form.  Remember, PCMCIA stands for
+> People Can't Memorize Computer Industry Acronyms.  :-)
+> 
+> (Actually, it's Personal Computer Memory Chip Industry Association,
 
->
-> Thanks,
-> Kazu
+                                           Card International Association :)
+
+> but most people don't know that, because using acronyms without
+> defining them first makes you feel like you're an "insider".  :-)
+
+
+-- 
+~Randy
