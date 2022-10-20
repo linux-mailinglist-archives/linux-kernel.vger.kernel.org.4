@@ -2,76 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 157256064A3
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 17:34:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98E556064A8
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 17:34:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230224AbiJTPd4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 11:33:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36462 "EHLO
+        id S229658AbiJTPe0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 11:34:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230346AbiJTPdy (ORCPT
+        with ESMTP id S230493AbiJTPeK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 11:33:54 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA8C1B65FC
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 08:33:51 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id w196so23248575oiw.8
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 08:33:51 -0700 (PDT)
+        Thu, 20 Oct 2022 11:34:10 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B23251B4C49
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 08:34:09 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id o17-20020a17090aac1100b0020d98b0c0f4so3814512pjq.4
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 08:34:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Sb7wkJsdodj13ALcLKizHm+uIzlavrlwr63btmQUUWM=;
-        b=LDpJmRNtfTZTl6bPThW6qW0OA8mlAT1aEHTzGk3+MB9awjN1+LlNL/89KiuCD2V+Cv
-         /yyOq+68qRg1091rqP8oHkDUsyLUzH8vANUfuXndSJdVXyYbamlBOtW7Q6m7/dJQPKcM
-         ID4j0vUTfiv6S/3TDK3IaDmErf2h5E0Ho3bWRBXmuZmiIow25y2ocSSsAwrUeO5v10Et
-         w1U7aBaePb0d7511zpzHPUh1oQ3zoYuSIjPyZFx3Vt4PujCywB6mwYkugO9N8qsVu8kZ
-         Zq/YceOk5CB8IY8EBpounD7s47R7k/dqgHDAjEiRqpF2pE3Eb8jsUEXNKmNR1j0PpVHL
-         wPzA==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=cLdV6PnMuiKqKn7gplx6uvtLf96oiQWdR0P2i4ykuy0=;
+        b=TQT2+C3O9UUEZA+1iAGO7fXFxtjW15uivVF5CNBDmGN2z0KWp+O2blljq7h9DyKSc5
+         EvOMFs/UY84ParhE3rIwN9cVgLml7iv7F4mLfv+Cs0ujLRmntlZx1rtpA3jabG4i6fWI
+         bJZ1faD95NoNYmNvr8lopzIUTC1s/fp08cBi2jq9MSen0qEwKRL/YXOsSthHh6udKfvi
+         /KOIKnc+V+AZlCCynwrOiofsJ9i38TmXK72rP0fejJL+yJJq+n6SluNS6E+Qx73zVhRo
+         mP7PsUSvMOwz4hfXsHZruD04/bMBgDjfHKX62X1CV66rqnJG7w5xhdF+LqyuZwUi0s7w
+         kq9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Sb7wkJsdodj13ALcLKizHm+uIzlavrlwr63btmQUUWM=;
-        b=uSfVF7SfK3LqrvkjXbq4I27YaXzJIlLH6/TyxPJVPpXcW8yTcq7+ekJ6O15p11427Y
-         47y5rvLlTGYFhycRXuro7kXSN8tPkpamjDp7kDOYSRbvGu3WRpfGeepfT2uXi3ULChwg
-         U9Ew4kPF8FiqdMnd8Hgk7EO04wPe6IVN+RiuUZ+m23zjwcUscAWL1D1aCAO01TYsW+Ly
-         gwFEkUrStDCI6o9cSQSq1JtT67TNcBTjDGYB2bi4LsnPuUOBBYSEahavjqXkf8Hhct8u
-         gU408eW3Bczgq0Zw715XxOp5ZC5VcyHBvADBjpcH9HSpj9z3V4XI2HvEMzpRy+ddLhDz
-         1SRw==
-X-Gm-Message-State: ACrzQf0qWXJGw6TTHYX1spHt++UwYjlH+hGxt4LyFsAZuuVndsmCzV3Y
-        v2pp5XjA0usc4SDlH/Z1Vbav2Kr0rZ+RWnj2F3d2Vw==
-X-Google-Smtp-Source: AMsMyM4OVA68IQCay0CdDe0+XNd+vxHWXh/Z106bovGEWGu4Z6EQOF56pVhT9SYEYgCPjDY5RhnWuUJlJlJF+DpomH8=
-X-Received: by 2002:a05:6808:3097:b0:355:347e:2df6 with SMTP id
- bl23-20020a056808309700b00355347e2df6mr11804023oib.44.1666280030766; Thu, 20
- Oct 2022 08:33:50 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cLdV6PnMuiKqKn7gplx6uvtLf96oiQWdR0P2i4ykuy0=;
+        b=hlFeKSL679z2O7GWrGGR7R//SlWMiXPwWpOtB55FXxoheeNQ1E1Z8I84+s4uyiiA8k
+         SqSHpZ6DSj19amEH1WeFvURYIDfsS6k3dYsqyIooG0JpdJ5K0/iusZ2BqJbps3hb9PK1
+         /m9O57PBuuqpeSWRnt4zgCTDtfEeE2Yi1Dur07LuoY9ZluulDxMp30zRHLhWqRypStCK
+         lpAfBUbVDijHSMMXEk3aA9NR8DeWwsMfF/7WvU7Z4njW/+lnulsU7/TvMm4VuqpzoCCY
+         5sU1/X4Nsps8ZYHqhxOG1pEaOBm1CkGdNhfXThnkziwe4fhs6PgJ7EpBmilRjgqsgEqv
+         Vqug==
+X-Gm-Message-State: ACrzQf36tLeYzWjMYk6s/aGl90mOoKClUq/DDjdmqZ2KBN2+Lwzlw2AW
+        uWQ2Ujov47KsKHEnqBdbeTICpAdtcksBzA==
+X-Google-Smtp-Source: AMsMyM4SAjheRdafoKSz7GuP3WqVBUXFdEVhBe4c4GJ/YHF97KUpwVnjB7h5dCGblkpUFxePss9bpQ==
+X-Received: by 2002:a17:902:9a07:b0:178:8024:1393 with SMTP id v7-20020a1709029a0700b0017880241393mr14554070plp.128.1666280038382;
+        Thu, 20 Oct 2022 08:33:58 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id l1-20020a63f301000000b00440416463fesm11770926pgh.27.2022.10.20.08.33.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Oct 2022 08:33:54 -0700 (PDT)
+Date:   Thu, 20 Oct 2022 15:33:50 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
+        x86@kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, stable@vger.kernel.org
+Subject: Re: [PATCH 4/4] KVM: x86: forcibly leave nested mode on vCPU reset
+Message-ID: <Y1FqXiBB7Bqzj8eh@google.com>
+References: <20221020093055.224317-1-mlevitsk@redhat.com>
+ <20221020093055.224317-5-mlevitsk@redhat.com>
 MIME-Version: 1.0
-References: <20221018145348.4051809-1-amit.pundir@linaro.org>
- <CAPDyKFoBMB9OMUrcoPCV0of1fj2dimEwPyHGW=ydjJ2M0ubM8Q@mail.gmail.com>
- <20221020093057.zrrvxlgghn27bpes@bogus> <CAMi1Hd05PkEJcHqHpQX-X6B2oR4250_pHPjkd2-54JWgKsYx0Q@mail.gmail.com>
- <CAPDyKFo=w-ET62c-B6=qSpkZm-V9LmBuVRy38GzX_UAjQhX6oA@mail.gmail.com>
-In-Reply-To: <CAPDyKFo=w-ET62c-B6=qSpkZm-V9LmBuVRy38GzX_UAjQhX6oA@mail.gmail.com>
-From:   Amit Pundir <amit.pundir@linaro.org>
-Date:   Thu, 20 Oct 2022 21:03:14 +0530
-Message-ID: <CAMi1Hd3SeN56a7oRC0RYBTPx0PwWSP4dM=9tHFMa0P4OckXjiA@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: qcom: qrb5165-rb5: Disable cpuidle states
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Maulik Shah <quic_mkshah@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        dt <devicetree@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221020093055.224317-5-mlevitsk@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,98 +77,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 20 Oct 2022 at 20:10, Ulf Hansson <ulf.hansson@linaro.org> wrote:
->
-> On Thu, 20 Oct 2022 at 16:09, Amit Pundir <amit.pundir@linaro.org> wrote:
-> >
-> > On Thu, 20 Oct 2022 at 15:01, Sudeep Holla <sudeep.holla@arm.com> wrote:
-> > >
-> > > On Wed, Oct 19, 2022 at 01:57:34PM +0200, Ulf Hansson wrote:
-> > > > On Tue, 18 Oct 2022 at 16:53, Amit Pundir <amit.pundir@linaro.org> wrote:
-> > > > >
-> > > > > Disable cpuidle states for RB5. These cpuidle states
-> > > > > made the device highly unstable and it runs into the
-> > > > > following crash frequently:
-> > > > >
-> > > > > [    T1] vreg_l11c_3p3: failed to enable: -ETIMEDOUT
-> > > > > [    T1] qcom-rpmh-regulator 18200000.rsc:pm8150l-rpmh-regulators: ldo11: devm_regulator_register() failed, ret=-110
-> > > > > [    T1] qcom-rpmh-regulator: probe of 18200000.rsc:pm8150l-rpmh-regulators failed with error -110
-> > > > >
-> > > > > Fixes: 32bc936d7321 ("arm64: dts: qcom: sm8250: Add cpuidle states")
-> > > > > Signed-off-by: Amit Pundir <amit.pundir@linaro.org>
-> > > > > ---
-> > > > >  arch/arm64/boot/dts/qcom/qrb5165-rb5.dts | 8 ++++++++
-> > > > >  1 file changed, 8 insertions(+)
-> > > > >
-> > > > > diff --git a/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts b/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
-> > > > > index cc003535a3c5..f936c41bfbea 100644
-> > > > > --- a/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
-> > > > > +++ b/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
-> > > > > @@ -251,6 +251,14 @@ qca639x: qca639x {
-> > > > >
-> > > > >  };
-> > > > >
-> > > > > +&LITTLE_CPU_SLEEP_0 {
-> > > > > +       status = "disabled";
-> > > > > +};
-> > > > > +
-> > > > > +&BIG_CPU_SLEEP_0 {
-> > > > > +       status = "disabled";
-> > > > > +};
-> > > > > +
-> > > > >  &adsp {
-> > > > >         status = "okay";
-> > > > >         firmware-name = "qcom/sm8250/adsp.mbn";
-> > > > > --
-> > > > > 2.25.1
-> > > >
-> > > > Disabling the CPU idlestates, will revert us back to using only the WFI state.
-> > > >
-> > > > An option that probably works too is to just drop the idlestate for
-> > > > the CPU cluster. Would you mind trying the below and see if that works
-> > > > too?
-> > > >
-> > >
-> > > Indeed this is was I suggested to check initially. But I was surprised to
-> > > see IIUC, Amit just disabled CPU states with above change and got it working.
-> > > So it is not cluster state alone causing the issue, is it somehow presence
-> > > of both cpu and cluster states ? Am I missing something here.
-> > >
-> > > > diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> > > > b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> > > > index c32227ea40f9..c707a49e8001 100644
-> > > > --- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> > > > +++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> > > > @@ -700,7 +700,6 @@ CPU_PD7: cpu7 {
-> > > >
-> > > >                 CLUSTER_PD: cpu-cluster0 {
-> > > >                         #power-domain-cells = <0>;
-> > > > -                       domain-idle-states = <&CLUSTER_SLEEP_0>;
-> > >
-> > > How about just marking CLUSTER_SLEEP_0 state disabled ? That looks cleaner
-> > > than deleting this domain-idle-states property here. Also not sure if DTS
-> > > warnings will appear if you delete this ?
-> >
-> > Hi, I did try disabling CLUSTER_SLEEP_0: cluster-sleep-0 {} in
-> > domain-idle-states {} but that didn't help. That's why I end up
-> > disabling individual cpu states in idle-states {}.
->
-> Yep, this boils down to the fact that genpd doesn't check whether the
-> domain-idle-state is disabled by using of_device_is_available(). See
-> genpd_iterate_idle_states().
->
-> That said, I suggest we go with the above one-line change. It may not
-> be as clean as it could be, but certainly easy to revert when the
-> support for it has been added in a newer kernel.
->
-> Amit, do you want me to post a new patch or do you prefer to re-spin
-> your patch? It doesn't matter to me.
+On Thu, Oct 20, 2022, Maxim Levitsky wrote:
+> While not obivous, kvm_vcpu_reset leaves the nested mode by
 
-Sent. Thanks.
+Please add () when referencing function, and wrap closer to ~75 chars.
 
-Regards,
-Amit Pundir
+> clearing 'vcpu->arch.hflags' but it does so without all the
+> required housekeeping.
+> 
+> This makes SVM and VMX continue to use vmcs02/vmcb02 while
 
->
-> Kind regards
-> Uffe
+This bug should be impossible to hit on VMX as INIT and TRIPLE_FAULT unconditionally
+cause VM-Exit, i.e. will always be forwarded to L1.
+
+> the cpu is not in nested mode.
+
+Can you add a blurb to call out exactly how this bug can be triggered?  Doesn't
+take much effort to suss out the "how", but it'd be nice to capture that info in
+the changelog.
+
+> In particular, in SVM code, it makes the 'svm_free_nested'
+> free the vmcb02, while still in use, which later triggers
+> use after free and a kernel crash.
+> 
+> This issue is assigned CVE-2022-3344
+> 
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+> ---
+>  arch/x86/kvm/x86.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index d86a8aae1471d3..313c4a6dc65e45 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -11931,6 +11931,7 @@ void kvm_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
+>  	WARN_ON_ONCE(!init_event &&
+>  		     (old_cr0 || kvm_read_cr3(vcpu) || kvm_read_cr4(vcpu)));
+>  
+> +	kvm_leave_nested(vcpu);
+
+Not a big deal, especially if/when nested_ops are turned into static_calls, but
+at the same time it's quite easy to do:
+
+	if (is_guest_mode(vcpu))
+		kvm_leave_nested(vcpu);
+
+I think it's worth adding a comment explaining how this can happen, and to also
+call out that EFER is cleared on INIT, i.e. that virtualization is disabled due
+to EFER.SVME=0.  Unsurprisingly, I don't see anything in the APM that explicitly
+states what happens if INIT occurs in guest mode, i.e. it's not immediately obvious
+that forcing the vCPU back to L1 is architecturally correct.
+
+
+>  	kvm_lapic_reset(vcpu, init_event);
+>  
+>  	vcpu->arch.hflags = 0;
+
+Maybe add a WARN above this to try and detect other potential issues?  Kinda silly,
+but it'd at least help draw attention to the importance of hflags.
+
+E.g. this?
+
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 4bd5f8a751de..c50fa0751a0b 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -11915,6 +11915,15 @@ void kvm_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
+        unsigned long old_cr0 = kvm_read_cr0(vcpu);
+        unsigned long new_cr0;
+ 
++       /*
++        * SVM doesn't unconditionally VM-Exit on INIT and SHUTDOWN, thus it's
++        * possible to INIT the vCPU while L2 is active.  Force the vCPU back
++        * into L1 as EFER.SVME is cleared on INIT (along with all other EFER
++        * bits), i.e. virtualization is disabled.
++        */
++       if (is_guest_mode(vcpu))
++               kvm_leave_nested(vcpu);
++
+        /*
+         * Several of the "set" flows, e.g. ->set_cr0(), read other registers
+         * to handle side effects.  RESET emulation hits those flows and relies
+@@ -11927,6 +11936,7 @@ void kvm_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
+ 
+        kvm_lapic_reset(vcpu, init_event);
+ 
++       WARN_ON_ONCE(is_guest_mode(vcpu) || is_smm(vcpu));
+        vcpu->arch.hflags = 0;
+ 
+        vcpu->arch.smi_pending = 0;
