@@ -2,113 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A52C606BFB
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 01:14:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C225E606BFA
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 01:14:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229757AbiJTXOE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 19:14:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34938 "EHLO
+        id S229966AbiJTXOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 19:14:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229786AbiJTXN6 (ORCPT
+        with ESMTP id S229667AbiJTXN5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 19:13:58 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9773722E0F6
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 16:13:56 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id DC8A12C048F;
-        Fri, 21 Oct 2022 12:13:50 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1666307630;
-        bh=fgJ7uD7kfNF0O9FMoUEaassWIRXGLCe8NVSu130vzYo=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=1tskjm5ljMlMykF+QD5hQ2Pbg3TRTrKXDKW/VeVerWy3UJWaH0VvaRYzPfGS5osbG
-         /IK2Q8rBizvgysWc/0Rq+gsHhjMUw92AW04EbHRjgqHyQsXZYOS7bka1wq2X/JVbIB
-         nOsHfbXC/oh6RXpgl4My+JCWnGRcj/3PgiL9kf+T07gJ+UQedyD8LnYWiUSh0v/Qn0
-         UhpTIct5FMVUPO1+LTUNH1rQN+vxeB9XZ5QvSbypOB1l9gdluVVsONbXakMPl95kMg
-         d94AVb7fR+8CN+4CvB71cBA9oQkhV6H1fgZF37fyxjrmN9osiCwdbqBpqNb0Tpzt0u
-         AAp8kCedzPa0Q==
-Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B6351d62e0001>; Fri, 21 Oct 2022 12:13:50 +1300
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
- by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
- Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 21 Oct 2022 12:13:50 +1300
-Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
- svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
- 15.00.1497.042; Fri, 21 Oct 2022 12:13:50 +1300
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Vadym Kochan <vadym.kochan@plvision.eu>
-CC:     Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Liang Yang <liang.yang@amlogic.com>,
-        Chuanhong Guo <gch981213@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Elad Nachman <enachman@marvell.com>,
-        "Aviram Dali" <aviramd@marvell.com>
-Subject: Re: [PATCH 2/3] dt-bindings: mtd: Add AC5 specific binding
-Thread-Topic: [PATCH 2/3] dt-bindings: mtd: Add AC5 specific binding
-Thread-Index: AQHY45PZG1Eksg8lkEuM7xSMI1VNl64UjZcAgAKEjQA=
-Date:   Thu, 20 Oct 2022 23:13:50 +0000
-Message-ID: <e13c3b91-c092-7756-3969-f1822e04cfdf@alliedtelesis.co.nz>
-References: <20221019082046.30160-1-vadym.kochan@plvision.eu>
- <20221019082046.30160-3-vadym.kochan@plvision.eu>
- <20221019104654.7ee35744@xps-13>
-In-Reply-To: <20221019104654.7ee35744@xps-13>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.32.1.11]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <DE745B3BA81DA041852ACC5DF8D4D834@atlnz.lc>
-Content-Transfer-Encoding: base64
+        Thu, 20 Oct 2022 19:13:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 977A122E0FC;
+        Thu, 20 Oct 2022 16:13:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2DEFEB828B5;
+        Thu, 20 Oct 2022 23:13:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5426C433B5;
+        Thu, 20 Oct 2022 23:13:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666307633;
+        bh=axu5Xp7Ry043Wqw4vY+2kZM7lnVF71Cg1L+qE8Jwhco=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=gV4ctlBkZHzMAjmaEvkaPMiVjmCr/ljvNWEAQYhdl/8q2fo3al5fBGohGCT+8b4Yd
+         eyNqwlDzejTU/EcgrAO1JP4sLAoBj15wjinwjGbbr/mS2Ic3BGBuQ4Z9eZ0n5sZP2m
+         ZiHQvhex2Pwzpk76Sad2/SdBUJQsAirKxCfEZiYfv8BPpaZ3vleJ1qiROXEAATN7X5
+         4HhWO904l3VblMb513WeVExeNrm1VW+Sj5Hjm9Q/fsrU8SWgnpdk6wovsBoTdfErH6
+         JNSd6OFaBwoRTTxxvu0KoJHKWSXx0j1ssn5z1X+MCJp0quR3AyRWIn63Z19MwB+W8f
+         NSioxMBgG9PqQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 6D7875C1109; Thu, 20 Oct 2022 16:13:53 -0700 (PDT)
+Date:   Thu, 20 Oct 2022 16:13:53 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Zhen Lei <thunder.leizhen@huawei.com>
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/3] rcu: Add RCU stall diagnosis information
+Message-ID: <20221020231353.GC5600@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221017100108.2063-1-thunder.leizhen@huawei.com>
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=YrxxuLQX c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=Qawa6l4ZSaYA:10 a=g8kJ_gb0AAAA:8 a=M5GUcnROAAAA:8 a=2f4N3uraW7I7RusRnqYA:9 a=QEXdDO2ut3YA:10 a=ecSNLfPMzbq-p5zXJZOg:22 a=OBjm3rFKGHvpk9ecZwUJ:22
-X-SEG-SpamProfiler-Score: 0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221017100108.2063-1-thunder.leizhen@huawei.com>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgVmFkeW0sDQoNCk9uIDE5LzEwLzIyIDIxOjQ2LCBNaXF1ZWwgUmF5bmFsIHdyb3RlOg0KPiBI
-aSBWYWR5bSwNCj4NCj4gdmFkeW0ua29jaGFuQHBsdmlzaW9uLmV1IHdyb3RlIG9uIFdlZCwgMTkg
-T2N0IDIwMjIgMTE6MjA6MzkgKzAzMDA6DQo+DQo+PiBGcm9tOiBBdmlyYW0gRGFsaSA8YXZpcmFt
-ZEBtYXJ2ZWxsLmNvbT4NCj4+DQo+PiBBZGQgYmluZGluZyBmb3IgQUM1IFNvQyB3aGljaCBoYXZl
-IGl0cyBzcGVjaWFsIHdheSBvZiBoYW5kaW5nDQo+PiBOQU5EIGxheW91dC4NCj4+DQo+PiBTaWdu
-ZWQtb2ZmLWJ5OiBBdmlyYW0gRGFsaSA8YXZpcmFtZEBtYXJ2ZWxsLmNvbT4NCj4+IFNpZ25lZC1v
-ZmYtYnk6IFZhZHltIEtvY2hhbiA8dmFkeW0ua29jaGFuQHBsdmlzaW9uLmV1Pg0KPj4gLS0tDQo+
-PiAgIERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9tdGQvbWFydmVsbC1uYW5kLnR4
-dCB8IDEgKw0KPj4gICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKykNCj4+DQo+PiBkaWZm
-IC0tZ2l0IGEvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL210ZC9tYXJ2ZWxsLW5h
-bmQudHh0IGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL210ZC9tYXJ2ZWxsLW5h
-bmQudHh0DQo+PiBpbmRleCBhMmQ5YTBmMmI2ODMuLjI5MzU1MWVjNzM1MCAxMDA2NDQNCj4+IC0t
-LSBhL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9tdGQvbWFydmVsbC1uYW5kLnR4
-dA0KPj4gKysrIGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL210ZC9tYXJ2ZWxs
-LW5hbmQudHh0DQo+PiBAQCAtMiw2ICsyLDcgQEAgTWFydmVsbCBOQU5EIEZsYXNoIENvbnRyb2xs
-ZXIgKE5GQykNCj4+ICAgDQo+PiAgIFJlcXVpcmVkIHByb3BlcnRpZXM6DQo+PiAgIC0gY29tcGF0
-aWJsZTogY2FuIGJlIG9uZSBvZiB0aGUgZm9sbG93aW5nOg0KPj4gKyAgICAqICJtYXJ2ZWxsLGFj
-NS1uYW5kLWNvbnRyb2xsZXIiDQo+PiAgICAgICAqICJtYXJ2ZWxsLGFybWFkYS04ay1uYW5kLWNv
-bnRyb2xsZXIiDQo+PiAgICAgICAqICJtYXJ2ZWxsLGFybWFkYTM3MC1uYW5kLWNvbnRyb2xsZXIi
-DQo+PiAgICAgICAqICJtYXJ2ZWxsLHB4YTN4eC1uYW5kLWNvbnRyb2xsZXIiDQo+IENvdWxkIHlv
-dSBwbGVhc2UgZG8gdGhlIHlhbWwgY29udmVyc2lvbiBmaXJzdD8NCklmIGl0IGhlbHBzIEkndmUg
-ZG9uZSBhIGZldyBvZiB0aGVzZSBjb252ZXJzaW9ucyBpbiB0aGUgcGFzdC4gSSdkIGJlIA0KaGFw
-cHkgdG8gaGVscCB5b3Ugb3V0IHdpdGggZG9pbmcgdGhlIGNvbnZlcnNpb24gaWYgaXQgaGVscHMg
-eW91IG1vdmUgdGhlIA0KcmVzdCBvZiB0aGUgc2VyaWVzIGZvcndhcmQuDQo+DQo+IFRoYW5rcywN
-Cj4gTWlxdcOobA==
+On Mon, Oct 17, 2022 at 06:01:05PM +0800, Zhen Lei wrote:
+> In some extreme cases, such as the I/O pressure test, the CPU usage may
+> be 100%, causing RCU stall. In this case, the printed information about
+> current is not useful. Displays the number and usage of hard interrupts,
+> soft interrupts, and context switches that are generated within half of
+> the CPU stall timeout, can help us make a general judgment. In other
+> cases, we can preliminarily determine whether an infinite loop occurs
+> when local_irq, local_bh or preempt is disabled.
+> 
+> Zhen Lei (3):
+>   sched: Add helper kstat_cpu_softirqs_sum()
+>   sched: Add helper nr_context_switches_cpu()
+>   rcu: Add RCU stall diagnosis information
+
+Interesting approach, thank you!
+
+I have pulled this in for testing and review, having rescued it from my
+spam folder.
+
+Some questions that might come up include:  (1) Can the addition of
+things like cond_resched() make RCU happier with the I/O pressure test?
+(2) Should there be a way to turn this off for environments with slow
+consoles?  (3) If this information shows heavy CPU usage, what debug
+and fix approach should be used?
+
+For an example of #1, if a CPU is flooded with softirq activity, one
+might hope that the call to rcu_softirq_qs() would prevent the RCU CPU
+stall warning, at least for kernels built with CONFIG_PREEMPT_RT=n.
+Similarly, if there are huge numbers of context switches, one might hope
+that the rcu_note_context_switch() would report a quiescent state sooner
+rather than later.
+
+Thoughts?
+
+							Thanx, Paul
+
+>  include/linux/kernel_stat.h | 12 +++++++++++
+>  kernel/rcu/tree.h           | 11 ++++++++++
+>  kernel/rcu/tree_stall.h     | 40 +++++++++++++++++++++++++++++++++++++
+>  kernel/sched/core.c         |  5 +++++
+>  4 files changed, 68 insertions(+)
+> 
+> -- 
+> 2.25.1
+> 
