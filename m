@@ -2,67 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EE8B60590F
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 09:53:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3E62605910
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 09:53:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230219AbiJTHxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 03:53:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35286 "EHLO
+        id S231171AbiJTHxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 03:53:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231124AbiJTHxQ (ORCPT
+        with ESMTP id S231126AbiJTHxU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 03:53:16 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C63C1213CD
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 00:53:11 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id b12so28681939edd.6
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 00:53:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Bm0vkM5wr/+4Mm+pAGk2CVcFWiT+KtN810ewhbWr3To=;
-        b=k1F6m8aKrE0u5jIHlQvKNPLuWT7u5rAEc9STRhQZuGg/PpVEKyeE4MRPuXsKE+CRpH
-         IVLO2FMM48bx4NY8Vz/KT/lf3Zo6mQVnM1hd2nUgENUb0fNFZ+aCm235DXe35t+WQ3hf
-         KvcrsvmyVcRibgPbXoJyiEwnw89TKA9S4PcDDiBZEra1EnV/962+giTTY2sDh3gdlQxa
-         mzk1mywj0VMVTWPi1QrjU8XF57xZbiNznVNepBFyEd7q7K68KPHrqFGzfPjolIW9x4qn
-         rUtAt9Dp7vEje60e0vgmUKe5T5D16IFxEaxiYh1ZlO9KsT9zNQNkQuRmKfvf5FPxc2bL
-         BdlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Bm0vkM5wr/+4Mm+pAGk2CVcFWiT+KtN810ewhbWr3To=;
-        b=Yz93Mwk5pCISvggcLnq5YS6s/PCMvBvJAgNsnJ7pacD6TQXFYqft4j9fJB7qlY+B1P
-         5UwcZNOE/cpjKp6o9e9m63ZENcb/ID+Is14cm6aLUG5cHUJg8Z5gjigfh03sJ8wVhJgE
-         +U0WaScEgtpKkbvRvo07sf/dQemOjG5G5k7z173cUkXWRjZULkb89Knv+LMHl9sGHOVX
-         LXNVFzZ5JY7+XzoBGpE+YEwnl5pyVxNFs24wzH/7X3fmZz5IgGSN4bOvEPL5WrgN4qRc
-         4JUqBR8lFl/lQbhxxlkvqGjazdv9bT0YGvB2Y9y5T8a86Mho+CFJXJzBoPGWFIfKxxZz
-         EoBw==
-X-Gm-Message-State: ACrzQf3RccXBO7P2w+mxMufLP2lh3V2xOg4Sg9Jg9Xn2ptTCcjuxN7vP
-        h85S4/4r3obTqvDTDWsuWiv1+wBnFmFlnrqNyHRPYUJmOm8=
-X-Google-Smtp-Source: AMsMyM7iQ6iIBDDVAXsPhM8E+fezmoZGOwJ6Ju/JfiEYC8PUXsNKfHAhSd2QOln4f84lV6Rlp8g3QqkYDLF9qMQzxMI=
-X-Received: by 2002:a05:6402:4029:b0:45b:d50c:b9b0 with SMTP id
- d41-20020a056402402900b0045bd50cb9b0mr10931422eda.126.1666252389406; Thu, 20
- Oct 2022 00:53:09 -0700 (PDT)
+        Thu, 20 Oct 2022 03:53:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 967EE10C4F6
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 00:53:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B4FFBB8265F
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 07:53:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15CD8C433C1;
+        Thu, 20 Oct 2022 07:53:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1666252395;
+        bh=AUCcxQX+3OrFrZYEaeAKfPk2+T4/m43Mh3bvc3iiCLM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=I4pVmq4Kha4+7FlaH0QBsbIpgQ3hjkl1Zq1mVKMCpXR8u5JWIXc6gG4lYbSvue9/y
+         v8bvi1ilTWnuGFdkIgw4L19X6Tqtz0KJrV0nZrQB/N4bIv/67yLrBOCkeiYR9VMEkR
+         AqI5i8Ja/gEJAfrlHhXcBSUzg8j4HzIM+u9JN9fY=
+Date:   Thu, 20 Oct 2022 09:53:12 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH printk v2 33/38] printk: introduce console_list_lock
+Message-ID: <Y1D+aPltJYNGhucW@kroah.com>
+References: <20221019145600.1282823-1-john.ogness@linutronix.de>
+ <20221019145600.1282823-34-john.ogness@linutronix.de>
 MIME-Version: 1.0
-References: <20221019144119.3848027-1-arnd@kernel.org> <20221019150410.3851944-1-arnd@kernel.org>
- <20221019150410.3851944-11-arnd@kernel.org>
-In-Reply-To: <20221019150410.3851944-11-arnd@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 20 Oct 2022 09:52:58 +0200
-Message-ID: <CACRpkdaU8rHipXO+Lv9uwOd0AyBHtnKNikjQKXUYWV94+Dj_CQ@mail.gmail.com>
-Subject: Re: [PATCH 11/17] gpio: remove iop driver
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Lennert Buytenhek <buytenh@wantstofly.org>,
-        linux-gpio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221019145600.1282823-34-john.ogness@linutronix.de>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,17 +55,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 5:14 PM Arnd Bergmann <arnd@kernel.org> wrote:
+On Wed, Oct 19, 2022 at 05:01:55PM +0206, John Ogness wrote:
+> Currently there exist races in console_register(), where the types
+> of registered consoles are checked (without holding the console_lock)
+> and then after acquiring the console_lock, it is assumed that the list
+> has not changed. Also, some code that performs console_unregister()
+> make similar assumptions.
+> 
+> Introduce a console_list_lock to provide full synchronization for any
+> console list changes. The console_list_lock also provides
+> synchronization for updates to console->flags.
+> 
+> Note that one of the various responsibilities of the console_lock is
+> also intended to provide this synchronization. Later changes will
+> update call sites relying on the console_lock for this purpose. Once
+> all call sites have been updated, the console_lock will be relieved
+> of synchronizing console_list and console->flags updates.
+> 
+> Signed-off-by: John Ogness <john.ogness@linutronix.de>
+> ---
+>  include/linux/console.h | 20 ++++++++--
+>  kernel/printk/printk.c  | 82 +++++++++++++++++++++++++++++++++++------
+>  2 files changed, 88 insertions(+), 14 deletions(-)
 
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> The iop32x platform was removed, and its gpio driver is now
-> orphaned.
->
-> Cc: Lennert Buytenhek <buytenh@wantstofly.org>
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
-
-Yours,
-Linus Walleij
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
