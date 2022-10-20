@@ -2,71 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99C436054FB
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 03:29:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3E74605502
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 03:31:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231288AbiJTB3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 21:29:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49842 "EHLO
+        id S231344AbiJTBbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 21:31:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231239AbiJTB3p (ORCPT
+        with ESMTP id S231343AbiJTBbI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 21:29:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 828581D0D6E
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 18:28:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666229185;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cMgGZ6JgJsqaOFU1082FRyXxTCRVHVjB7j7NRF7R4zo=;
-        b=Uy9S48VTrP1JjZ1pvLD4TRHcRRMaVzAopM030QO2t9awIE2VTFHOiqcx+Ym1E+jALG6qkZ
-        qQVAcjb8rrGo3hJUWbvQjaVOcIQ1xtyJbh4kfrgFiYqFhISyTdfUF8eOLtVS6S2MmPTUhb
-        cEnyo0ktX6yqZITPFYcJAKBH+egaDSo=
-Received: from mail-vs1-f72.google.com (mail-vs1-f72.google.com
- [209.85.217.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-470-dmtrUB9zN1e8O0BnkWKusQ-1; Wed, 19 Oct 2022 21:26:24 -0400
-X-MC-Unique: dmtrUB9zN1e8O0BnkWKusQ-1
-Received: by mail-vs1-f72.google.com with SMTP id b68-20020a676747000000b003a780247edcso5100069vsc.14
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 18:26:24 -0700 (PDT)
+        Wed, 19 Oct 2022 21:31:08 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75D7686F88;
+        Wed, 19 Oct 2022 18:30:31 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id d6so31034383lfs.10;
+        Wed, 19 Oct 2022 18:30:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=yJ87aDPEGTeaHnfrYNL1PdpyB4+D4BDv2/4OYt77PL8=;
+        b=Y7IMT5Nava8658aIV/9QO13ByfJULYRCalDQklkwzr7W57i1tzFrfxO4BZxUSLNI1Q
+         0RsVQ2+++MTkLbnYW6UXTUaPVgUE0pLsrk2PU5O2S5tps/fuF9dInT+Ek5+TUoMmA2lM
+         ksmOC76QO/P5imLzP6MDc22UAiZqlz2WOb7E347E2pwxgjrhHuh+849ikUlWkP24Kmf6
+         z5LRXnMuyZaGWMQ+T8YWo21W5HPV/nXuNidE4IzDt/OouGzE2dWIGPCSYeUeTAHs2I1I
+         KWwSqOGe+tnckInL1M1FjJp9ZBfdygrcDWMKURef+V4FURVzPU5KgiSn3X8XyT9OEnJ2
+         KKpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=cMgGZ6JgJsqaOFU1082FRyXxTCRVHVjB7j7NRF7R4zo=;
-        b=eiWbO1rKVo8Y8yGXZ3GfxzBJ9gnFBnbNblKVCWq8nRmQGYjOnzApbxf79v8+yG5+nS
-         lEpcS43hMSaNhXiuLUEYllpFWfq00jnLLO6RpwZpsx4EqSE0pUF56l6WVw5O93yR+Wgx
-         /4sQEBeAPi3zChD2ZboZ2BmKEISAj4YWD71849oDKz5lQCXvAGct3vxuOeGPvVUnTklc
-         5dzfQyRGbe/wwEIUXlyhZImJxhPw2aZmTwnkvS0h5NiYsoLf7PU0Yr3+Bn31hFZ5oHW/
-         IoFXbI5WeTuKkXvX/vnlxBCRB9jd7UaJ4KWr5jskjt2GTwuJWLD5YRlHB3EFUiP00SQm
-         bTDQ==
-X-Gm-Message-State: ACrzQf0Fw7PV+NBcYXk1WEp+ZNVal28ujKxbzOIDGspZvqqqfgoW7Z4v
-        7vqLsbVwXRXVtOZ0x6FpT1PIvAh5CR0eJyb+USx7YllabblVRFlcnDORIW+jGXUVS1fKOdJWU3v
-        599ilC7I+6umq1mD3k7QX2IIlIL4AzgzyQ7Oa9vGH
-X-Received: by 2002:a1f:43cc:0:b0:3ab:ad61:bf73 with SMTP id q195-20020a1f43cc000000b003abad61bf73mr5209828vka.33.1666229183969;
-        Wed, 19 Oct 2022 18:26:23 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5VqJMndKWdo1ttTzuTTW0GETd8TPEBsQhdsNZ8Ipln45lWhXgKpdKmtP1bjflXLDqOWHirpSJF5Vml3H3EyJQ=
-X-Received: by 2002:a1f:43cc:0:b0:3ab:ad61:bf73 with SMTP id
- q195-20020a1f43cc000000b003abad61bf73mr5209819vka.33.1666229183758; Wed, 19
- Oct 2022 18:26:23 -0700 (PDT)
+        bh=yJ87aDPEGTeaHnfrYNL1PdpyB4+D4BDv2/4OYt77PL8=;
+        b=uxdzIWoEcJOx7PcDMUVrRPklXsl6o44F5bt2ck9NBPehzFqdihszSwfYKFgsBL2d7Y
+         35Ga4anELzGungU1E4easVLAnT7IgYWl9fQM7B4jJSbpoTryM+uxjrMlGkbtfG4BMiI4
+         4BW37tgPBxNtPEPl+aNvBTB5rGsuacoeeb/7nyhuB5ECGfzlI59tKhhKhUOsrMMdmwKv
+         x1w2gBt0meITA1+M3XX1R6EAGLtRyp9XSsZAAVLsimuJYGVn08WF1/S5vwCg1EzCdat+
+         9pm5E1zPzv3ooeTjva+2O8vH+VHYT9fl2aZWaadY/rmL9igkjC8vAbHYXEbADOv8m2pM
+         dy2g==
+X-Gm-Message-State: ACrzQf2AYJJyrCNlaaGitzj7ONxakT28yAIEHSvpIMHAqx5JBoKxcXwp
+        BidcbYOAeL655Uhv4PN0L7YVjasX+HtSMRy8BMw=
+X-Google-Smtp-Source: AMsMyM5lgPVYZzSz+ecmDAbZuQ5Xqy7gZatRR+i8Pveg+5vwjKrJ70pd22RAtoDevwIUmkPxwNNcyA3B8s5c2j/DYW4=
+X-Received: by 2002:a05:6512:158c:b0:4a2:5cf6:5338 with SMTP id
+ bp12-20020a056512158c00b004a25cf65338mr3845266lfb.81.1666229288238; Wed, 19
+ Oct 2022 18:28:08 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221018100132.355393-1-zys.zljxml@gmail.com>
-In-Reply-To: <20221018100132.355393-1-zys.zljxml@gmail.com>
-From:   Ming Lei <ming.lei@redhat.com>
-Date:   Thu, 20 Oct 2022 09:26:12 +0800
-Message-ID: <CAFj5m9L-=DL-bB9iKRkAdVB+Jjdb5LaF12K1hfj5SCKmii1gXw@mail.gmail.com>
-Subject: Re: [PATCH] ublk_drv: use flexible-array member instead of
- zero-length array
-To:     zys.zljxml@gmail.com
-Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yushan Zhou <katrinzhou@tencent.com>
+References: <1665725448-31439-1-git-send-email-zhaoyang.huang@unisoc.com>
+ <Y0lSChlclGPkwTeA@casper.infradead.org> <CAGWkznG=_A-3A8JCJEoWXVcx+LUNH=gvXjLpZZs0cRX4dhUJfQ@mail.gmail.com>
+ <Y017BeC64GDb3Kg7@casper.infradead.org> <CAGWkznEdtGPPZkHrq6Y_+XLL37w12aC8XN8R_Q-vhq48rFhkSA@mail.gmail.com>
+ <Y04Y3RNq6D2T9rVw@casper.infradead.org> <20221018223042.GJ2703033@dread.disaster.area>
+ <20221019011636.GM2703033@dread.disaster.area> <20221019044734.GN2703033@dread.disaster.area>
+ <CAGWkznEGMg293S7jOmZ7G-UhEBg6rQZhTd6ffhjoDgoFGvhFNw@mail.gmail.com> <Y0/2T5KpFurV2MLp@casper.infradead.org>
+In-Reply-To: <Y0/2T5KpFurV2MLp@casper.infradead.org>
+From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
+Date:   Thu, 20 Oct 2022 09:27:39 +0800
+Message-ID: <CAGWkznF3y0BFi-9+1GhBv8NS5P7TZKvdbX0qSbaGVR2BmvD3Ew@mail.gmail.com>
+Subject: Re: [RFC PATCH] mm: move xa forward when run across zombie page
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Dave Chinner <david@fromorbit.com>,
+        "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, ke.wang@unisoc.com,
+        steve.kang@unisoc.com, baocong.liu@unisoc.com,
+        linux-fsdevel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,34 +76,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 6:02 PM <zys.zljxml@gmail.com> wrote:
+On Wed, Oct 19, 2022 at 9:06 PM Matthew Wilcox <willy@infradead.org> wrote:
 >
-> From: Yushan Zhou <katrinzhou@tencent.com>
+> On Wed, Oct 19, 2022 at 01:48:37PM +0800, Zhaoyang Huang wrote:
+> > On Wed, Oct 19, 2022 at 12:47 PM Dave Chinner <david@fromorbit.com> wrote:
+> > > I removed the mapping_set_large_folios() calls in the XFS inode
+> > > instantiation and the test code has now run over 55,000 iterations
+> > > without failing.  The most iterations I'd seen with large folios
+> > > enabled was about 7,000 - typically it would fail within 2-3,000
+> > > iterations.
+> > hint from my side. The original problem I raised is under v5.15 where
+> > there is no folio yet.
 >
-> Eliminate the following coccicheck warning:
-> ./drivers/block/ublk_drv.c:127:16-19: WARNING use flexible-array member instead
->
-> Signed-off-by: Yushan Zhou <katrinzhou@tencent.com>
-> ---
->  drivers/block/ublk_drv.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
-> index 2651bf41dde3..5afce6ffaadf 100644
-> --- a/drivers/block/ublk_drv.c
-> +++ b/drivers/block/ublk_drv.c
-> @@ -124,7 +124,7 @@ struct ublk_queue {
->         bool force_abort;
->         unsigned short nr_io_ready;     /* how many ios setup */
->         struct ublk_device *dev;
-> -       struct ublk_io ios[0];
-> +       struct ublk_io ios[];
->  };
->
->  #define UBLK_DAEMON_MONITOR_PERIOD     (5 * HZ)
-
-Reviewed-by: Ming Lei <ming.lei@redhat.com>
-
-Thanks,
-Ming
-
+> But 5.15 does use 2MB pages in shmem.  You haven't really provided
+> any information, so I don't know whether the inode that you're having
+> problems with is a shmem inode.
+No, it is a f2fs inode using 4KB pages.
