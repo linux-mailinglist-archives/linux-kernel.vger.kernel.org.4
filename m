@@ -2,77 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 870CA605EDB
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 13:29:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAA19605EDE
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 13:30:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230199AbiJTL3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 07:29:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47542 "EHLO
+        id S229909AbiJTLaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 07:30:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231358AbiJTL3a (ORCPT
+        with ESMTP id S229910AbiJTLaM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 07:29:30 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E00B2714;
-        Thu, 20 Oct 2022 04:29:26 -0700 (PDT)
-Received: from mail.ispras.ru (unknown [83.149.199.84])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 5C4CB419E9C7;
-        Thu, 20 Oct 2022 11:29:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 5C4CB419E9C7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1666265364;
-        bh=Bktf/BxjJqjDJ23NM9HZvwVXwoTJKkV8c5PmHQJNsTY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=jssNHKHKmIPg/5ykG2ksrA/aBKD6W1fr5In8ptWGD0v/LTFWyaIa2RXqVB2jDBQN8
-         iqh7J/piT0z7cwInKpkO+v4lIbljodXVOsm4Og5PnyJUCLJ9REuWd2XSB6rUemXiMw
-         vPjwoMz8Sj9gLDv8xMktsilczEP31Hje+5Xp7Ckk=
+        Thu, 20 Oct 2022 07:30:12 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A67E108DC6;
+        Thu, 20 Oct 2022 04:30:10 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id y4so1165772plb.2;
+        Thu, 20 Oct 2022 04:30:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=oxkGsht8Um+eQ+AA7QKGJnPL5aBRWvNYoBIpMYroGm4=;
+        b=jZtD2P3GIVjFPZkSUmowjCEhkSQTvPcvND+AfjIb6qweRdwnG03O+zmnmEYQ5osRtL
+         teoCIB2sLgezbRp+C2Qfv/12yC4p3fYkTT8MzqaK6FfKbdFyGWC/AT6liTuG3gMn+iVm
+         JdpVOvZvxPN2DvTAMpe9vU+/PxU/+TcPKRj7LSE8/ojly6rBd0ggiVjAh/OPEa6EGayd
+         n0XPjUozMyNbzMpdiwJGBdHNUul1c5rO8wWDcxZEj5RbIiFri2LHODT0twLn+XOYdIrg
+         ytADM1bsY2IkS0QHbct0LkFcd7kEi/JNwXf1aZx/EZ7GrEBe7EWIcy03G6J4ECChl43a
+         77Ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oxkGsht8Um+eQ+AA7QKGJnPL5aBRWvNYoBIpMYroGm4=;
+        b=hr7XU92Us7IbsIyT8mMtZ4bqolrB/4EhiJ4SeZOOa6zodwXBw59Ox6/h7t/05Ksv8t
+         NzcmMGT7LhYfwLkdKPVYhcfum82lKrWfk5jOtbq8rVPPsfzGHoThvp+HbW9Xl5g9OHK8
+         GFAiAlXzBctAMOLX14nMScL/JrmIQbH8NO0qLSwPe1hiNYZNYZGg32ja2pCI2OxIzJE+
+         FcowMkvwh0TC8LD9sb8aPIJvFMrB29dPE0p9jxhUUVm2HuG/a4+NcRku0iR0quN5GBON
+         sUNTMjXjsMjIntolhYa9V+seGyXeG7CfPDhoFwaIMLDsSLwwPZLJ+QE3+eZnagncp4My
+         WSRQ==
+X-Gm-Message-State: ACrzQf1PZisQYqOt7VfGX0WgtWTkjAQS4vzzWRSv7wwZFVKLLTZlfCgS
+        50e1dhfMh0Sue1kdviP9BUk=
+X-Google-Smtp-Source: AMsMyM4uzCN4Fy0l5xIt4oMVRAoHTiGctlsItIuQgXL2SYAEs0yARZdIleQ97SzmJVT0qrPbCFMO1w==
+X-Received: by 2002:a17:90b:1a84:b0:20d:5086:3694 with SMTP id ng4-20020a17090b1a8400b0020d50863694mr15913301pjb.74.1666265409872;
+        Thu, 20 Oct 2022 04:30:09 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id p7-20020a17090a284700b00200461cfa99sm1539369pjf.11.2022.10.20.04.30.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Oct 2022 04:30:09 -0700 (PDT)
+From:   yexingchen116@gmail.com
+X-Google-Original-From: ye.xingchen@zte.com.cn
+To:     akpm@linux-foundation.org
+Cc:     slyich@gmail.com, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ye xingchen <ye.xingchen@zte.com.cn>
+Subject: [PATCH linux-next] ia64: Replace IS_ERR() with IS_ERR_VALUE()
+Date:   Thu, 20 Oct 2022 11:30:04 +0000
+Message-Id: <20221020113004.400031-1-ye.xingchen@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Date:   Thu, 20 Oct 2022 14:29:24 +0300
-From:   Evgeniy Baskov <baskov@ispras.ru>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        lvc-project@linuxtesting.org, x86@kernel.org,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 04/16] x86/boot: Increase boot page table size
-In-Reply-To: <CAMj1kXG6wZ2UK7cPeym8M4WioCUABa5qAo48LyGKHNA=QZ8YCw@mail.gmail.com>
-References: <cover.1662459668.git.baskov@ispras.ru>
- <e4dd6f83a49551d72682ad399dba8feeea955fb4.1662459668.git.baskov@ispras.ru>
- <CAMj1kXG6wZ2UK7cPeym8M4WioCUABa5qAo48LyGKHNA=QZ8YCw@mail.gmail.com>
-User-Agent: Roundcube Webmail/1.4.4
-Message-ID: <a9b80446b5898d5ecc370e9429eed351@ispras.ru>
-X-Sender: baskov@ispras.ru
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-19 10:08, Ard Biesheuvel wrote:
-> On Tue, 6 Sept 2022 at 12:41, Evgeniy Baskov <baskov@ispras.ru> wrote:
->> 
->> Previous calculations ignored pages implicitly mapped by ACPI code,
-> 
-> I'm not sure I understand what this means. Which ACPI code and which
-> pages does it map?
+From: ye xingchen <ye.xingchen@zte.com.cn>
 
-Code from boot/compressed/{acpi.c,efi.c} that touches ACPI/EFI tables
-is currently mapping pages that contain the tables implicitly by
-causing page faults. And those mappings may require additional
-memory for page tables. It became more apparent when I were removing
-memory mapping from page fault handler.
+Avoid type casts that are needed for IS_ERR() and use
+IS_ERR_VALUE() instead.
 
-> 
->> so theoretical upper limit is higher than was set.
-...
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+---
+ arch/ia64/kernel/sys_ia64.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/arch/ia64/kernel/sys_ia64.c b/arch/ia64/kernel/sys_ia64.c
+index 215bf3f8cb20..f6a502e8f02c 100644
+--- a/arch/ia64/kernel/sys_ia64.c
++++ b/arch/ia64/kernel/sys_ia64.c
+@@ -140,7 +140,7 @@ asmlinkage unsigned long
+ sys_mmap2 (unsigned long addr, unsigned long len, int prot, int flags, int fd, long pgoff)
+ {
+ 	addr = ksys_mmap_pgoff(addr, len, prot, flags, fd, pgoff);
+-	if (!IS_ERR((void *) addr))
++	if (!IS_ERR_VALUE(addr))
+ 		force_successful_syscall_return();
+ 	return addr;
+ }
+@@ -152,7 +152,7 @@ sys_mmap (unsigned long addr, unsigned long len, int prot, int flags, int fd, lo
+ 		return -EINVAL;
+ 
+ 	addr = ksys_mmap_pgoff(addr, len, prot, flags, fd, off >> PAGE_SHIFT);
+-	if (!IS_ERR((void *) addr))
++	if (!IS_ERR_VALUE(addr))
+ 		force_successful_syscall_return();
+ 	return addr;
+ }
+@@ -162,7 +162,7 @@ ia64_mremap (unsigned long addr, unsigned long old_len, unsigned long new_len, u
+ 	     unsigned long new_addr)
+ {
+ 	addr = sys_mremap(addr, old_len, new_len, flags, new_addr);
+-	if (!IS_ERR((void *) addr))
++	if (!IS_ERR_VALUE(addr))
+ 		force_successful_syscall_return();
+ 	return addr;
+ }
+-- 
+2.25.1
+
