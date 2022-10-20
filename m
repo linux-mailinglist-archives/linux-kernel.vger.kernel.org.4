@@ -2,116 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1097F605FB9
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 14:06:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23D51605FBC
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 14:07:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229911AbiJTMGq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 08:06:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45252 "EHLO
+        id S229978AbiJTMHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 08:07:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbiJTMGo (ORCPT
+        with ESMTP id S229597AbiJTMHT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 08:06:44 -0400
-Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB14118B4B0
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 05:06:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=tSAa9IItfB/2eDYRz08Kgo9IPGM2D4x1b+PWnE0NgEM=;
-  b=iEmwmJxzQdXT+pNcg/LACDQ50cHFnTHv3M8ULMWj9afCgav3Nb5V3oF4
-   EriFD04PB1dHqv7ec1rkOK/2P4B8rVx/MYsKljsMGK98ggDnkUJIIRA5w
-   wPkLnXApWHam+aBDZKZ9OxK4N6uyv1qkDX49+JT0dSueGcsCaLKo0q/yr
-   A=;
-Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.95,198,1661810400"; 
-   d="scan'208";a="66169640"
-Received: from dt-lawall.paris.inria.fr ([128.93.67.65])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 14:06:41 +0200
-Date:   Thu, 20 Oct 2022 14:06:41 +0200 (CEST)
-From:   Julia Lawall <julia.lawall@inria.fr>
-To:     Deepak R Varma <drv@mailo.com>
-cc:     outreachy@lists.linux.dev, gregkh@linuxfoundation.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kumarpraveen@linux.microsoft.com, saurabh.truth@gmail.com
-Subject: Re: [PATCH v4 2/2] staging: most: dim2: correct misleading struct
- type name
-In-Reply-To: <Y1E1kv6YSmxVzjkf@debian-BULLSEYE-live-builder-AMD64>
-Message-ID: <404cc67c-efd6-4a70-c3ca-7958db21bcb@inria.fr>
-References: <cover.1666208065.git.drv@mailo.com> <6b772a1ac06ae3b0d63e198e7238c1590b14703a.1666208065.git.drv@mailo.com> <alpine.DEB.2.22.394.2210192208290.3068@hadrien> <Y1BeZYBf/xsW8F4O@debian-BULLSEYE-live-builder-AMD64>
- <Y1E1kv6YSmxVzjkf@debian-BULLSEYE-live-builder-AMD64>
+        Thu, 20 Oct 2022 08:07:19 -0400
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6AE018D469;
+        Thu, 20 Oct 2022 05:07:18 -0700 (PDT)
+Received: from mail.ispras.ru (unknown [83.149.199.84])
+        by mail.ispras.ru (Postfix) with ESMTPSA id AD524419E9CC;
+        Thu, 20 Oct 2022 12:07:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru AD524419E9CC
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
+        s=default; t=1666267636;
+        bh=CLe/bnN98OW5tE8+acaQniHU65a/oz8vjoeS4/v74Gk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=lmiLgTujqQc2B0kY76LCiMZ/wsq2CuwSVFKokBNsY5RAwEkkN/puW/DKC7ZGX9Ev2
+         GtBOKYRC/+mUjv6HdyK4VwEkpCMg4wqzNTW4DsI70J5xkpYHdtsPu7gQkOu2Mdrbvm
+         OK/nx5m9hEnfQintilxIpwIOuM3LvelHmtSOfa3I=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Date:   Thu, 20 Oct 2022 15:07:16 +0300
+From:   Evgeniy Baskov <baskov@ispras.ru>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        lvc-project@linuxtesting.org, x86@kernel.org,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 06/16] x86/boot: Setup memory protection for bzImage code
+In-Reply-To: <CAMj1kXG59mtzbJoREgr4GA9QJkORcYb-XuDr3VoZ-3XYLy7k2g@mail.gmail.com>
+References: <cover.1662459668.git.baskov@ispras.ru>
+ <2fd61a79a1e6885dc47ec826b62a936dd88a0a16.1662459668.git.baskov@ispras.ru>
+ <CAMj1kXG59mtzbJoREgr4GA9QJkORcYb-XuDr3VoZ-3XYLy7k2g@mail.gmail.com>
+User-Agent: Roundcube Webmail/1.4.4
+Message-ID: <e4774b9c13a2bbb9f976dd0e00bebd07@ispras.ru>
+X-Sender: baskov@ispras.ru
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022-10-19 10:17, Ard Biesheuvel wrote:
+> On Tue, 6 Sept 2022 at 12:42, Evgeniy Baskov <baskov@ispras.ru> wrote:
+>> 
+>> Use previously added code to use 4KB pages for mapping. Map compressed
+>> and uncompressed kernel with appropriate memory protection attributes.
+>> For compressed kernel set them up manually. For uncompressed kernel
+>> used flags specified in ELF header.
+>> 
+>> Signed-off-by: Evgeniy Baskov <baskov@ispras.ru>
+...
+>> 
+>>  /*
+>>   * Locally defined symbols should be marked hidden:
+>> @@ -578,6 +578,7 @@ SYM_FUNC_START_LOCAL_NOALIGN(.Lrelocated)
+>>         pushq   %rsi
+>>         call    load_stage2_idt
+>> 
+>> +       call    startup32_enable_nx_if_supported
+>>         /* Pass boot_params to initialize_identity_maps() */
+>>         movq    (%rsp), %rdi
+>>         call    initialize_identity_maps
+>> @@ -602,6 +603,28 @@ SYM_FUNC_START_LOCAL_NOALIGN(.Lrelocated)
+>>         jmp     *%rax
+>>  SYM_FUNC_END(.Lrelocated)
+>> 
+>> +SYM_FUNC_START_LOCAL_NOALIGN(startup32_enable_nx_if_supported)
+> 
+> Why the startup32_ prefix for this function name?
 
+Oh, right there is no reasons, I will remove it.
+...
+>>  /*
+>>   * Adds the specified range to the identity mappings.
+>>   */
+>> -void kernel_add_identity_map(unsigned long start, unsigned long end)
+>> +unsigned long kernel_add_identity_map(unsigned long start,
+>> +                                     unsigned long end,
+>> +                                     unsigned int flags)
+>>  {
+>>         int ret;
+>> 
+>>         /* Align boundary to 2M. */
+>> -       start = round_down(start, PMD_SIZE);
+>> -       end = round_up(end, PMD_SIZE);
+>> +       start = round_down(start, PAGE_SIZE);
+>> +       end = round_up(end, PAGE_SIZE);
+>>         if (start >= end)
+>> -               return;
+>> +               return start;
+>> +
+>> +       /* Enforce W^X -- just stop booting with error on violation. 
+>> */
+>> +       if (IS_ENABLED(CONFIG_RANDOMIZE_BASE) &&
+>> +           (flags & (MAP_EXEC | MAP_WRITE)) == (MAP_EXEC | 
+>> MAP_WRITE))
+>> +               error("Error: W^X violation\n");
+>> +
+> 
+> Do we need to add a new failure mode here?
 
-On Thu, 20 Oct 2022, Deepak R Varma wrote:
+It seems reasonable to me to leave it here to avoid unintentionally 
+introducing
+RWX mappings. And this function can already fail on OOM situation.
+I can change it to warning if failure is too harsh in this situation.
+> 
+>> +       bool nx = !(flags & MAP_EXEC) && has_nx;
+>> +       bool ro = !(flags & MAP_WRITE);
+>> +
+...
+>> -       kernel_add_identity_map((unsigned long)_head, (unsigned 
+>> long)_end);
+>> -       boot_params = rmode;
+>> -       kernel_add_identity_map((unsigned long)boot_params, (unsigned 
+>> long)(boot_params + 1));
+>> +       extern char _head[], _ehead[];
+> 
+> Please move these extern declarations out of the function scope (at
+> the very least)
 
-> On Thu, Oct 20, 2022 at 02:00:29AM +0530, Deepak R Varma wrote:
-> > On Wed, Oct 19, 2022 at 10:08:53PM +0200, Julia Lawall wrote:
-> > >
-> > >
-> > > On Thu, 20 Oct 2022, Deepak R Varma wrote:
-> > >
-> > > > Correct misleading struct type name dim_ch_state_t to dim_ch_state
-> > > > since this not a typedef but a normal structure declaration.
-> > > >
-> > > > Suggested-by: Julia Lawall <julia.lawall@inria.fr>
-> > > > Signed-off-by: Deepak R Varma <drv@mailo.com>
-> > > > ---
-> > > >
-> > > > Changes in v4:
-> > > >    1. Correct patch subject and log message. Use struct type name instead of
-> > > >       variable name for the change description. Feedback from julia.lawall@inria.fr
-> > > >
-> > > > Changes in v3:
-> > > >    1. Patch introduced in the patch set
-> > > >
-> > > >  drivers/staging/most/dim2/dim2.c | 2 +-
-> > > >  drivers/staging/most/dim2/hal.c  | 4 ++--
-> > > >  drivers/staging/most/dim2/hal.h  | 6 +++---
-> > > >  3 files changed, 6 insertions(+), 6 deletions(-)
-> > > >
-> > > > diff --git a/drivers/staging/most/dim2/dim2.c b/drivers/staging/most/dim2/dim2.c
-> > > > index 4c1f27898a29..a69a61a69283 100644
-> > > > --- a/drivers/staging/most/dim2/dim2.c
-> > > > +++ b/drivers/staging/most/dim2/dim2.c
-> > > > @@ -161,7 +161,7 @@ static int try_start_dim_transfer(struct hdm_channel *hdm_ch)
-> > > >  	struct list_head *head = &hdm_ch->pending_list;
-> > > >  	struct mbo *mbo;
-> > > >  	unsigned long flags;
-> > > > -	struct dim_ch_state_t st;
-> > > > +	struct dim_ch_state st;
-> > >
-> > > Is there another use in service_done_flag?
-> >
-> > Hi,
-> > I did not understand your question fully. This is from a different function
-> > try_start_dim_transfer where the variable st is used down the line in the
-> > execution. This time the channel state is retrieved by calling
-> > dim_get_channel_state function. The state is simply computed and set. Should I
-> > improve this as well?
-> >
-> > If you are asking something different, could you please elaborate?
->
-> Hi Julia,
-> Can you please review and comment on my response?
+I will move it to misc.h then, there are already some of these 
+declarations present.
 
-In my kernel there is an occurrence of the type name in service_done_flag.
-But I have the mainline, not Greg's staging tree, so there could be some
-differences.
+> 
+>> +       kernel_add_identity_map((unsigned long)_head,
+>> +                               (unsigned long)_ehead, MAP_EXEC | 
+>> MAP_NOFLUSH);
+>> +
+>> +       extern char _compressed[], _ecompressed[];
+>> +       kernel_add_identity_map((unsigned long)_compressed,
+>> +                               (unsigned long)_ecompressed, MAP_WRITE 
+>> | MAP_NOFLUSH);
+>> +
+>> +       extern char _text[], _etext[];
+>> +       kernel_add_identity_map((unsigned long)_text,
+>> +                               (unsigned long)_etext, MAP_EXEC | 
+>> MAP_NOFLUSH);
+>> +
+>> +       extern char _rodata[], _erodata[];
+>> +       kernel_add_identity_map((unsigned long)_rodata,
+>> +                               (unsigned long)_erodata, MAP_NOFLUSH);
+>> +
+> 
+> Same question as before: do we really need three different regions for
+> rodata+text here?
 
-When I do git grep dim_ch_state_t, I get two occurrences in
-drivers/staging/most/dim2/dim2.c
+As I already told, I think, its undesirable to leave compressed kernel 
+blob
+(and .rodata) executable, as it it will provide higher attack surface if 
+some
+control flow interception vulnerability in this code would be 
+discovered,
+and though I am not aware of such vulnerabilities to be present 
+currently,
+I think, additional security is not redundant, since it can be provided 
+almost
+for free.
 
-julia
+I can merge these regions, if you think it does not worth it.
+
+> 
+...
+>> +                       /*
+>> +                        * Simultaneously readable and writable 
+>> segments are
+>> +                        * violating W^X, and should not be present in 
+>> vmlinux image.
+>> +                        */
+>> +                       if ((phdr->p_flags & (PF_X | PF_W)) == (PF_X | 
+>> PF_W))
+>> +                               error("W^X violation for ELF 
+>> segment");
+>> +
+> 
+> Can we catch this at build time instead?
+
+Thanks, thats great idea! I will implement that in tools/build.c
+
+> 
+...
+>> +#else
+>> +static inline unsigned long kernel_add_identity_map(unsigned long 
+>> start,
+>> +                                                   unsigned long end,
+>> +                                                   unsigned int 
+>> flags)
+>> +{
+>> +       (void)flags;
+>> +       (void)end;
+> 
+> Why these (void) casts? Can we just drop them?
+> 
+
+Unused parameters used to cause warnings for me here somehow...
+I will drop them.
