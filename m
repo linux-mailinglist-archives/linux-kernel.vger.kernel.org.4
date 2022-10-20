@@ -2,107 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 127A2605937
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 10:00:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 120D760593C
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 10:02:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229987AbiJTIAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 04:00:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54454 "EHLO
+        id S229854AbiJTICW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 04:02:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231236AbiJTIAW (ORCPT
+        with ESMTP id S229586AbiJTICT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 04:00:22 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F1D748F7
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 01:00:14 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id w18so45419814ejq.11
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 01:00:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+NnDDSUoFW1p/YYrT8o2AeBUy64LBLrL7TXVJeeJNsE=;
-        b=gfr0OOmHN/gW3+VUUkPNe/rvNFvWe/J4sFvkKffbWA5/GqgpDet+i9JcOu2BgYUH7m
-         XMd7ff8HCmtgLsp9eWw/fBmMwQV1CAZ20wlTwEEF4G3My0AShqzcjsKBVwjcst+B5YLk
-         PjW62HVCCYc4hIRkke7Kjrkq6kxJrHs1/RwT+Wj+cpri1LPkQ2AlokEfELqfp7SbPoVt
-         lyCPrxFNsa6CBSLg1l1ua0LxY9qI901W8XPqD8zx2SkE7y7izLcdWfzLThr1zry8i3fR
-         F29uO/Af2cKghsHzOLsagW3Z2GErdjA+GmGWN63MQtkxdj6PwvLdKcceQyIi3usk8cDR
-         nYUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+NnDDSUoFW1p/YYrT8o2AeBUy64LBLrL7TXVJeeJNsE=;
-        b=2jlJBphR/fZtZu9wnTPECUP8QgFGfsWToqWfsOtPj3vqlXlcVQCMQkqOw5J73LGxgc
-         CWhK59uRbtlgsAfh+Cn05nZdKfMI1OXwK/6UIaez1aI0p9sENWY5k9/D+soXNNVrD8Sc
-         be0Fs4ZMlz/4UK//B9HUH7ujX2IGfhAsXQZN1pfOUvRLI+aGYvR497zsjvNRwzAl5WMN
-         RQ9GpgBW7YgewylXlsjnkVOi2OhM1XYCu5mFfA7AwfTFglvefu2dzUHjC0PZZAL9bTYq
-         wyFYyMKEAEhgLGU7Fax/5sDTwOUNYeQWYtFHnYR8Iv8FYUckPtW/aFRLjP53jr5eHe7c
-         f11Q==
-X-Gm-Message-State: ACrzQf3AXEqyyPFUwkbMmag03gbBLkgdxuBTD3KgiJswiO8EtZ35RwdQ
-        KVvY1iAYCYozOcP0LDgsM+hAyM1C8Rmr8sHABItj0w==
-X-Google-Smtp-Source: AMsMyM5+Lku99gTMJI4bG6h/y7MjMSoqz4+WMa283TgV9DaUiQdCWvkKvZptj29nYoZKCK1khdCO9NPvJqUu05LPkgg=
-X-Received: by 2002:a17:907:7606:b0:78e:61d:757e with SMTP id
- jx6-20020a170907760600b0078e061d757emr9365136ejc.690.1666252812748; Thu, 20
- Oct 2022 01:00:12 -0700 (PDT)
+        Thu, 20 Oct 2022 04:02:19 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1360F108253
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 01:02:15 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MtKnV1Bh3zHv9V;
+        Thu, 20 Oct 2022 16:02:06 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 20 Oct 2022 16:01:44 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 20 Oct
+ 2022 16:01:44 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     <gregkh@linuxfoundation.org>
+Subject: [PATCH] firmware: edd: fix possible memory leak in edd_device_register()
+Date:   Thu, 20 Oct 2022 16:00:56 +0800
+Message-ID: <20221020080056.1050369-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20221011-gpiolib-quirks-v3-0-eae9cc2ed0a1@gmail.com>
- <Y06cvrpcHn0jwZxU@smile.fi.intel.com> <CACRpkdZZZp5Li7OSybv8F7a8F5iik_gRumwR__BAwpWddfctxQ@mail.gmail.com>
- <Y0/cot711ad/hG/o@smile.fi.intel.com>
-In-Reply-To: <Y0/cot711ad/hG/o@smile.fi.intel.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 20 Oct 2022 10:00:01 +0200
-Message-ID: <CACRpkda_BbpNa+OLz=9vYuMbBNyWi4RBfoDS8F_gtc+vP_Fgyg@mail.gmail.com>
-Subject: Re: [PATCH v3 00/10] gpiolib: more quirks to handle legacy names
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 1:16 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
-> On Wed, Oct 19, 2022 at 12:56:31PM +0200, Linus Walleij wrote:
-> > On Tue, Oct 18, 2022 at 2:32 PM Andy Shevchenko
+Inject fault while loading module, kobject_init_and_add() may fail
+in edd_device_register(), if it fails, kobject_put() need be called
+to properly clean up the memory associated with the object, or the
+name of kobject is leaked.
 
-> > > I was wondering if we can use the approach that ACPI chose for itself,
-> > > i.e.  the separate data that can be filled by the corresponding driver
-> > > and then GPIO OF common code may use it. In that case each driver knows
-> > > the exact list of compatible strings and associated quirks.
-> >
-> > I actually deliverately chose the other way around, to centralize all quirks,
-> > so that drivers look nice and simple and the ugly historical errors of the
-> > device tree be hidden away in gpiolib-of.c.
->
-> This makes sense if and only if we may guarantee no quirks will appear in the
-> future. So, it may be true for DT, but I'm quite skeptical about ACPI...
+unreferenced object 0xffff8e7d40d15820 (size 16):
+  comm "swapper/0", pid 1, jiffies 4294669397 (age 47.978s)
+  hex dump (first 16 bytes):
+    69 6e 74 31 33 5f 64 65 76 38 30 00 7d 8e ff ff  int13_dev80.}...
+  backtrace:
+    [<000000009c36832f>] __kmem_cache_alloc_node+0x1e9/0x360
+    [<00000000c952bd6c>] __kmalloc_node_track_caller+0x44/0x1a0
+    [<000000007573fbea>] kvasprintf+0x67/0xd0
+    [<00000000b2800ea6>] kobject_set_name_vargs+0x1e/0x90
+    [<000000002d7bc789>] kobject_init_and_add+0x5d/0xa0
+    [<000000002569fea1>] edd_init+0x170/0x2ad
 
-Right, the idea is to stop more idiomatic DT bindings from coming into existance
-by review and formal verification of the reviewed bindings by using
-YAML schemas.
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/firmware/edd.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-ACPI is somewhat lacking public review of "bindings" and DSDT tables, and I
-don't know if there is some counterpart to the schema validation, so that
-makes for more new bugs. But maybe ACPI has some tricks up its sleeve that I
-don't know about. To me it seems like bugs in ACPI are discovered by developers
-after the devices are already produced :/
+diff --git a/drivers/firmware/edd.c b/drivers/firmware/edd.c
+index 5cc238916551..ae39119ea403 100644
+--- a/drivers/firmware/edd.c
++++ b/drivers/firmware/edd.c
+@@ -708,6 +708,8 @@ edd_device_register(struct edd_device *edev, int i)
+ 	if (!error) {
+ 		edd_populate_dir(edev);
+ 		kobject_uevent(&edev->kobj, KOBJ_ADD);
++	} else {
++		kobject_put(&edev->kobj);
+ 	}
+ 	return error;
+ }
+@@ -747,10 +749,8 @@ edd_init(void)
+ 		}
+ 
+ 		rc = edd_device_register(edev, i);
+-		if (rc) {
+-			kfree(edev);
++		if (rc)
+ 			goto out;
+-		}
+ 		edd_devices[i] = edev;
+ 	}
+ 
+-- 
+2.25.1
 
-There are bindings and device trees which lack public review too, most notably
-Apple Mac, so especially for them we are redefining new bindings and
-who knows, maybe Apple will pick them up eventually!
-
-Yours,
-Linus Walleij
