@@ -2,100 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68775605B39
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 11:31:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D001D605B28
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 11:31:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230478AbiJTJbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 05:31:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57578 "EHLO
+        id S229543AbiJTJbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 05:31:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230439AbiJTJb3 (ORCPT
+        with ESMTP id S229936AbiJTJbD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 05:31:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A6CC157F6F
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 02:31:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666258283;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nm86sopHALiAvOTB3Mb1uaCRxtNMK3Osw7jYg3LC+M0=;
-        b=PrBzeCYAoQuMxz23urWDMNkIm5te+d7ccZd/Ny3fT2+GBPnEdZQzALrJUB0+ZWxImEOq0R
-        FxlTuhZwN9aiV2wCuoOqdZKlnGjeOvZ3/+qd0nm8GSV8P1te/gh8W9+vapaOfVD/6YmAEk
-        iJ9eu6619IYI28GShB35+XZwssdMIUc=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-423-MgE-q4rgP1SE4fwskpXN-A-1; Thu, 20 Oct 2022 05:31:18 -0400
-X-MC-Unique: MgE-q4rgP1SE4fwskpXN-A-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9305729324B0;
-        Thu, 20 Oct 2022 09:31:17 +0000 (UTC)
-Received: from localhost.localdomain (ovpn-192-51.brq.redhat.com [10.40.192.51])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C4AAC49BB60;
-        Thu, 20 Oct 2022 09:31:14 +0000 (UTC)
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     kvm@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
-        Sean Christopherson <seanjc@google.com>, x86@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>, stable@vger.kernel.org
-Subject: [PATCH 4/4] KVM: x86: forcibly leave nested mode on vCPU reset
-Date:   Thu, 20 Oct 2022 12:30:55 +0300
-Message-Id: <20221020093055.224317-5-mlevitsk@redhat.com>
-In-Reply-To: <20221020093055.224317-1-mlevitsk@redhat.com>
-References: <20221020093055.224317-1-mlevitsk@redhat.com>
+        Thu, 20 Oct 2022 05:31:03 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2434812977D;
+        Thu, 20 Oct 2022 02:31:02 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 28E53ED1;
+        Thu, 20 Oct 2022 02:31:08 -0700 (PDT)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 458913F792;
+        Thu, 20 Oct 2022 02:31:00 -0700 (PDT)
+Date:   Thu, 20 Oct 2022 10:30:57 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Amit Pundir <amit.pundir@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Maulik Shah <quic_mkshah@quicinc.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        dt <devicetree@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] arm64: dts: qcom: qrb5165-rb5: Disable cpuidle states
+Message-ID: <20221020093057.zrrvxlgghn27bpes@bogus>
+References: <20221018145348.4051809-1-amit.pundir@linaro.org>
+ <CAPDyKFoBMB9OMUrcoPCV0of1fj2dimEwPyHGW=ydjJ2M0ubM8Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFoBMB9OMUrcoPCV0of1fj2dimEwPyHGW=ydjJ2M0ubM8Q@mail.gmail.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While not obivous, kvm_vcpu_reset leaves the nested mode by
-clearing 'vcpu->arch.hflags' but it does so without all the
-required housekeeping.
+On Wed, Oct 19, 2022 at 01:57:34PM +0200, Ulf Hansson wrote:
+> On Tue, 18 Oct 2022 at 16:53, Amit Pundir <amit.pundir@linaro.org> wrote:
+> >
+> > Disable cpuidle states for RB5. These cpuidle states
+> > made the device highly unstable and it runs into the
+> > following crash frequently:
+> >
+> > [    T1] vreg_l11c_3p3: failed to enable: -ETIMEDOUT
+> > [    T1] qcom-rpmh-regulator 18200000.rsc:pm8150l-rpmh-regulators: ldo11: devm_regulator_register() failed, ret=-110
+> > [    T1] qcom-rpmh-regulator: probe of 18200000.rsc:pm8150l-rpmh-regulators failed with error -110
+> >
+> > Fixes: 32bc936d7321 ("arm64: dts: qcom: sm8250: Add cpuidle states")
+> > Signed-off-by: Amit Pundir <amit.pundir@linaro.org>
+> > ---
+> >  arch/arm64/boot/dts/qcom/qrb5165-rb5.dts | 8 ++++++++
+> >  1 file changed, 8 insertions(+)
+> >
+> > diff --git a/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts b/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
+> > index cc003535a3c5..f936c41bfbea 100644
+> > --- a/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
+> > +++ b/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
+> > @@ -251,6 +251,14 @@ qca639x: qca639x {
+> >
+> >  };
+> >
+> > +&LITTLE_CPU_SLEEP_0 {
+> > +       status = "disabled";
+> > +};
+> > +
+> > +&BIG_CPU_SLEEP_0 {
+> > +       status = "disabled";
+> > +};
+> > +
+> >  &adsp {
+> >         status = "okay";
+> >         firmware-name = "qcom/sm8250/adsp.mbn";
+> > --
+> > 2.25.1
+> 
+> Disabling the CPU idlestates, will revert us back to using only the WFI state.
+> 
+> An option that probably works too is to just drop the idlestate for
+> the CPU cluster. Would you mind trying the below and see if that works
+> too?
+>
 
-This makes SVM and VMX continue to use vmcs02/vmcb02 while
-the cpu is not in nested mode.
+Indeed this is was I suggested to check initially. But I was surprised to
+see IIUC, Amit just disabled CPU states with above change and got it working.
+So it is not cluster state alone causing the issue, is it somehow presence
+of both cpu and cluster states ? Am I missing something here.
 
-In particular, in SVM code, it makes the 'svm_free_nested'
-free the vmcb02, while still in use, which later triggers
-use after free and a kernel crash.
+> diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi
+> b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+> index c32227ea40f9..c707a49e8001 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+> @@ -700,7 +700,6 @@ CPU_PD7: cpu7 {
+> 
+>                 CLUSTER_PD: cpu-cluster0 {
+>                         #power-domain-cells = <0>;
+> -                       domain-idle-states = <&CLUSTER_SLEEP_0>;
 
-This issue is assigned CVE-2022-3344
+How about just marking CLUSTER_SLEEP_0 state disabled ? That looks cleaner
+than deleting this domain-idle-states property here. Also not sure if DTS
+warnings will appear if you delete this ?
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
----
- arch/x86/kvm/x86.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index d86a8aae1471d3..313c4a6dc65e45 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -11931,6 +11931,7 @@ void kvm_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
- 	WARN_ON_ONCE(!init_event &&
- 		     (old_cr0 || kvm_read_cr3(vcpu) || kvm_read_cr4(vcpu)));
- 
-+	kvm_leave_nested(vcpu);
- 	kvm_lapic_reset(vcpu, init_event);
- 
- 	vcpu->arch.hflags = 0;
 -- 
-2.26.3
-
+Regards,
+Sudeep
