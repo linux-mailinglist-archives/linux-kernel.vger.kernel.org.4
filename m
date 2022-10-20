@@ -2,74 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B997F606072
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 14:41:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DA8E60606B
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 14:40:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230178AbiJTMlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 08:41:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38650 "EHLO
+        id S230159AbiJTMks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 08:40:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230108AbiJTMlo (ORCPT
+        with ESMTP id S230108AbiJTMkp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 08:41:44 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8543FE903;
-        Thu, 20 Oct 2022 05:41:43 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id bg9-20020a05600c3c8900b003bf249616b0so2071366wmb.3;
-        Thu, 20 Oct 2022 05:41:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8EllZcT8J+eAyQkPvu8Kw7IL2qqWhHd8MYZfSohvEhQ=;
-        b=D8vjWSesFwAWDtsz3YRspZbZkuyxK51VONAkKaVzJx6q3nXkjRlq3YaSsipnyjqV4q
-         17rXacA3rV2/kxuhtzAP5HGgM7SGmNMPpTb8e6oOqosHDkwvAdpNwDNegC93YX2gnP4g
-         074eqIKTHpOxdNg0B+kqrYZmTiq8VR4eBa9g/0oKKplx0qg947/MdvItRBbEPQu7k0x7
-         XFffhxu4WP/xudR9IN0u3jksks4n9VueZbu0eo2TmpAx49pf4NxD+mt5CTqU8bRjD52Y
-         jA+raCgbC35SlaEfothPpnvrJARa8n0LTLwoiWJSOEaV8xdH18R9r860GsIwIeBYWqmF
-         glRQ==
+        Thu, 20 Oct 2022 08:40:45 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E01AFE903
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 05:40:44 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id i21-20020a056e021d1500b002f9e4f8eab7so19793451ila.7
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 05:40:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8EllZcT8J+eAyQkPvu8Kw7IL2qqWhHd8MYZfSohvEhQ=;
-        b=nN5UGS7hqjkxttepXUBlnlpfEaj8dc6UTKoJo/asCVPryGnw9+ncBd+JtRPO6BwrBt
-         IWesKZEL/FC4pdnr+bHgsWPXlyLXjnYmtFCD9TjLK181hR8mRc0P2kGqqZGu0ndIvSJp
-         xxgJxZNHGdzP85XvHRxlbDnm4VKsIHIVEw7kLM76ewQtwrPIjwF3xAjl8EQVUvGy1oU3
-         t7RC8LjG45PbvWVtNpiSUGlIv+0fvKwqb+BrKhlZfptD2SqP+sECawZuLwF+fp4V88Z4
-         i13GmCm1AycIg/0weDB7k3wh+BG5VYWmnqJuS2CgUNSBIS1COFhyGRhNYuV/U5IHBCZd
-         E2gA==
-X-Gm-Message-State: ACrzQf0DkvJvFn0llK6hA9yMyLypVm6WI/tKvRdylW6XB8+4uMXPfh3H
-        DNSoIg9ocZMcKyXMjGM+J9s=
-X-Google-Smtp-Source: AMsMyM6UqjVECVgb9wk+WJzGBpm0dyaknZSMK23Z4eQ7BQhJsL2bnYiRnoX0ZebaT/CtRzPCX8OJuw==
-X-Received: by 2002:a05:600c:3b99:b0:3c6:8b8e:a624 with SMTP id n25-20020a05600c3b9900b003c68b8ea624mr9274665wms.113.1666269702341;
-        Thu, 20 Oct 2022 05:41:42 -0700 (PDT)
-Received: from ?IPV6:2620:10d:c096:310::22ef? ([2620:10d:c092:600::2:93dd])
-        by smtp.gmail.com with ESMTPSA id m24-20020a05600c461800b003b4de550e34sm2476285wmo.40.2022.10.20.05.41.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Oct 2022 05:41:41 -0700 (PDT)
-Message-ID: <dd22bf6a-8620-49c1-ec27-195e39cb4c33@gmail.com>
-Date:   Thu, 20 Oct 2022 13:40:19 +0100
+        bh=KwGYY0QPmnxlAVVvL0co5D9B4tE8s5P1HVCnF6SqBMc=;
+        b=Ed14pxn6YAM4Qi/k3UK15DnBiwVA3fidfyjZY5aqK4Oostf9FkOd/CdZmsnQVK2ajv
+         /o9awv6gQIAkCdg5pdPN5KID7kqQeWTjkEnC7YGbu50iqd5nxOZkqGAeF3k4sIDOlVy7
+         dwBRrdpjPZHJ3PMIswNpwbdxPa+anrZ/I+4PLqUyGEJ7xoEWXdjxpYO6YyYr7QJREF/8
+         jM1H1aS7C9nHOnXfoPQYlwndoeZWPxWsVVznQ3ChtRxrpArld+MECbckqySoKfawzlwB
+         IP0aZQUJSh3Qj9A23PQkwC7CcbbMcS/BcxyxQHR8P0Gy54hVHRpZ1LQ6rEZIskQmImC6
+         2pmw==
+X-Gm-Message-State: ACrzQf2SwBMBfrXdBTV3pEyl0VCHHtnDQS2GtgWhSNtj2PI8dIGbbXxI
+        r0VOc4q3LuIgDgixRv2+brTtUpqAAiwJnNkkBoVgh6LNwYcO
+X-Google-Smtp-Source: AMsMyM7DqrYf6EYcjDMYUCPq3+5y/Z5mSW2/jYyqbypXJT7zLKQCIZAEc+v05C3WJKXxBZDmNGniuUVEXj4+iziO3DZCYBFoVB/i
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [RFC for-next v2 0/4] enable pcpu bio caching for IRQ I/O
-Content-Language: en-US
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
-        io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-References: <cover.1666122465.git.asml.silence@gmail.com>
- <Y1EHjbhS1wuw3qcr@infradead.org>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <Y1EHjbhS1wuw3qcr@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Received: by 2002:a92:cd89:0:b0:2fa:dba1:2b6a with SMTP id
+ r9-20020a92cd89000000b002fadba12b6amr10127960ilb.29.1666269643384; Thu, 20
+ Oct 2022 05:40:43 -0700 (PDT)
+Date:   Thu, 20 Oct 2022 05:40:43 -0700
+In-Reply-To: <0000000000009fa63105eb7648d8@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000031aec805eb76a2d4@google.com>
+Subject: Re: [syzbot] BUG: sleeping function called from invalid context in vm_area_dup
+From:   syzbot <syzbot+b910411d3d253dab25d8@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, bigeasy@linutronix.de,
+        bpf@vger.kernel.org, brauner@kernel.org, ebiederm@xmission.com,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        tglx@linutronix.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,22 +57,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/20/22 09:32, Christoph Hellwig wrote:
-> On Tue, Oct 18, 2022 at 08:50:54PM +0100, Pavel Begunkov wrote:
->> This series implements bio pcpu caching for normal / IRQ-driven I/O
->> extending REQ_ALLOC_CACHE currently limited to iopoll. The allocation side
->> still only works from non-irq context, which is the reason it's not enabled
->> by default, but turning it on for other users (e.g. filesystems) is
->> as a matter of passing a flag.
->>
->> t/io_uring with an Optane SSD setup showed +7% for batches of 32 requests
->> and +4.3% for batches of 8.
-> 
-> This looks much nicer to me than the previous attempt exposing the bio
-> internals to io_uring, thanks.
+syzbot has found a reproducer for the following issue on:
 
-Yeah, I saw the one Jens posted before but I wanted this one to be more
-generic, i.e. applicable not only to io_uring. Thanks for taking a look.
+HEAD commit:    acee3e83b493 Add linux-next specific files for 20221020
+git tree:       linux-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=170a8016880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c82245cfb913f766
+dashboard link: https://syzkaller.appspot.com/bug?extid=b910411d3d253dab25d8
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=109e0372880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1770d752880000
 
--- 
-Pavel Begunkov
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/98cc5896cded/disk-acee3e83.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/b3d3eb3aa10a/vmlinux-acee3e83.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+b910411d3d253dab25d8@syzkaller.appspotmail.com
+
+BUG: sleeping function called from invalid context at include/linux/sched/mm.h:274
+in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 3602, name: syz-executor107
+preempt_count: 1, expected: 0
+RCU nest depth: 0, expected: 0
+INFO: lockdep is turned off.
+Preemption disabled at:
+[<0000000000000000>] 0x0
+CPU: 0 PID: 3602 Comm: syz-executor107 Not tainted 6.1.0-rc1-next-20221020-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ __might_resched.cold+0x222/0x26b kernel/sched/core.c:9890
+ might_alloc include/linux/sched/mm.h:274 [inline]
+ slab_pre_alloc_hook mm/slab.h:727 [inline]
+ slab_alloc_node mm/slub.c:3323 [inline]
+ slab_alloc mm/slub.c:3411 [inline]
+ __kmem_cache_alloc_lru mm/slub.c:3418 [inline]
+ kmem_cache_alloc+0x2e6/0x3c0 mm/slub.c:3427
+ vm_area_dup+0x81/0x380 kernel/fork.c:466
+ copy_vma+0x376/0x8d0 mm/mmap.c:3216
+ move_vma+0x449/0xf60 mm/mremap.c:626
+ __do_sys_mremap+0x487/0x16b0 mm/mremap.c:1075
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fd090fa5b29
+Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffc2e90bd38 EFLAGS: 00000246 ORIG_RAX: 0000000000000019
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fd090fa5b29
+RDX: 0000000000001000 RSI: 0000000000004000 RDI: 00000000201c4000
+RBP: 00007fd090f69cd0 R08: 00000000202ef000 R09: 0000000000000000
+R10: 0000000000000003 R11: 0000000000000246 R12: 00007fd090f69d60
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+
