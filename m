@@ -2,44 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B1A1606A3B
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 23:27:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FE52606A3A
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 23:26:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230071AbiJTV1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 17:27:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39924 "EHLO
+        id S229803AbiJTV0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 17:26:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230073AbiJTV1D (ORCPT
+        with ESMTP id S229779AbiJTV0A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 17:27:03 -0400
-Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 397F91B65DC
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 14:26:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1666301176; bh=ibzGFol51WWHH1kAZe6QOOvlh+zMJhgtwaluS+pfjKo=;
-        h=X-EA-Auth:Date:From:To:Subject:Message-ID:MIME-Version:
-         Content-Type;
-        b=GaLXFnyiaSpTngMuEfh8nxTIumTnBEP1AwbhNoBFpPg1habkNXoiGsRY8mTCI2nVP
-         2+Kcck/mr17SmpiLn8m9H2o3R6uspxM25bHybTaz4/CVyNeahz3I4N/YgdhbDbhd+L
-         nlmYKQ7LH6qZepzgkVihAoUKD0iCH2mlpphZKGFg=
-Received: by b-1.in.mailobj.net [192.168.90.11] with ESMTP
-        via [213.182.55.206]
-        Thu, 20 Oct 2022 23:26:16 +0200 (CEST)
-X-EA-Auth: JE9KFmpUaJpP3Y1Ti1VTiLP+tKc//LVPG0j41IQ1zfzKaCfv/DmG0sYiOyy2mj572pLPj8eMZc98oeUov4bPR0sZO/MrFq1u
-Date:   Fri, 21 Oct 2022 02:56:10 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     outreachy@lists.linux.dev, Larry.Finger@lwfinger.net,
-        phil@philpotter.co.uk, paskripkin@gmail.com,
-        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, kumarpraveen@linux.microsoft.com,
-        saurabh.truth@gmail.com
-Subject: [PATCH v4 00/11] staging: r8188eu: trivial code cleanup patches
-Message-ID: <cover.1666299151.git.drv@mailo.com>
+        Thu, 20 Oct 2022 17:26:00 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 071F217E232;
+        Thu, 20 Oct 2022 14:25:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666301159; x=1697837159;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=vZCpdvJHfbvZBCLZsEQYW68bNUKI0Koalfz10BUIW0o=;
+  b=S6zYlvpJMgzxSXnGML8JEOoRPB6tnv146qaZb19TajNwECfNQeyyg6yw
+   ugEMrv53lXL5o9a/boqYZZ2kye49G9x6eCWCJ9OMiJAtcxOxhbb7DPxoA
+   KOrSK1Rl5IN5BdGJXlWwG8eYXBpGItGewKsQS4wwsqUBi17SCGkWTDx7l
+   7eKLMTERwvfhma6J7yGGIe7V2aOqnvAJN2yefBiG5gYOcjsnnTcRHVjw7
+   kDKpxB64Ckpm+C0GlZydknYkOE34N65IfHgABeQ7MbFZiEYJWhyUva0Ra
+   TAjCXL2XzqlUwGqwF2Tw7MtI2qjDZDIrgVFna14B8DohFDvQns5w/Ob1O
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="333412443"
+X-IronPort-AV: E=Sophos;i="5.95,199,1661842800"; 
+   d="scan'208";a="333412443"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 14:25:57 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="693260685"
+X-IronPort-AV: E=Sophos;i="5.95,199,1661842800"; 
+   d="scan'208";a="693260685"
+Received: from rhweight-wrk1.ra.intel.com ([137.102.106.139])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 14:25:57 -0700
+From:   matthew.gerlach@linux.intel.com
+To:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        jirislaby@kernel.org, geert+renesas@glider.be,
+        andriy.shevchenko@linux.intel.com,
+        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
+        johan@kernel.org, lukas@wunner.de, ilpo.jarvinen@linux.intel.com,
+        marpagan@redhat.com
+Cc:     Matthew Gerlach <matthew.gerlach@linux.intel.com>
+Subject: [PATCH v4 4/4] tty: serial: 8250: add DFL bus driver for Altera 16550.
+Date:   Thu, 20 Oct 2022 14:26:10 -0700
+Message-Id: <20221020212610.697729-5-matthew.gerlach@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221020212610.697729-1-matthew.gerlach@linux.intel.com>
+References: <20221020212610.697729-1-matthew.gerlach@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,67 +69,224 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Address different kinds of checkpatch complains for the staging/r8188eu module.
-The patches are required to be applied in sequence.
+From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 
-Changes in v4:
-   1. Include patch 11 in the set for unused macro clean up. Suggested by julia.lawall@inria.fr
-   2. Update patch 1 per feedback from David.Laight@ACULAB.COM
-   3. Update patch 5 & 6 per feedback from dan.carpenter@oracle.com & julia.lawall@inria.fr
+Add a Device Feature List (DFL) bus driver for the Altera
+16550 implementation of UART.
 
-Changes in v3:
-   1. Patch 4: Extend the __constant_htons to htons change to other files of the driver.
-      This was suggested by philipp.g.hortmann@gmail.com
-   2. Patch 4: Spelling mistake corrected as pointed out by joe@perches.com
-   3. Patch 5 through 10: Included in this version. Additional clean up patches.
+Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+---
+v4: use dev_err_probe() everywhere that is appropriate
+    clean up noise
+    change error messages to use the word, unsupported
+    tried again to sort Makefile and KConfig better
+    reorder probe function for easier error handling
+    use new dfh_find_param API
 
-Changes in v2:
-   I incorrectly labeled the first revision as v1 instead of v2. So,
-   following change recorded under v1 is actually changes for v2. Feedback
-   provided by philipp.g.hortmann@gmail.com
-      1. Improve language / grammar for the patch descriptions
-      2. Further improve code reformatting
+v3: use passed in location of registers
+    use cleaned up functions for parsing parameters
 
+v2: clean up error messages
+    alphabetize header files
+    fix 'missing prototype' error by making function static
+    tried to sort Makefile and Kconfig better
+---
+ drivers/tty/serial/8250/8250_dfl.c | 149 +++++++++++++++++++++++++++++
+ drivers/tty/serial/8250/Kconfig    |  12 +++
+ drivers/tty/serial/8250/Makefile   |   1 +
+ 3 files changed, 162 insertions(+)
+ create mode 100644 drivers/tty/serial/8250/8250_dfl.c
 
-Deepak R Varma (11):
-  staging: r8188eu: use Linux kernel variable naming convention
-  staging: r8188eu: reformat long computation lines
-  staging: r8188eu: remove {} for single statement blocks
-  staging: r8188eu: use htons macro instead of __constant_htons
-  staging: r8188eu: correct misspelled words in comments
-  staging: r8188eu: Add space between function & macro parameters
-  staging: r8188eu: Associate pointer symbol with parameter name
-  staging: r8188eu: replace leading spaces by tabs
-  staging: r8188eu: Put '{" on the symbol declaration line
-  staging: r8188eu: Correct missing or extra space in the statements
-  staging: r8188eu: Remove unused macros
-
- drivers/staging/r8188eu/core/rtw_br_ext.c     | 119 +++++++++---------
- drivers/staging/r8188eu/core/rtw_ioctl_set.c  |   2 +-
- drivers/staging/r8188eu/core/rtw_mlme_ext.c   |  36 +++---
- drivers/staging/r8188eu/core/rtw_recv.c       |   8 +-
- drivers/staging/r8188eu/core/rtw_xmit.c       |  14 +--
- drivers/staging/r8188eu/hal/HalPhyRf_8188e.c  |   2 +-
- drivers/staging/r8188eu/hal/odm_RTL8188E.c    |   2 +-
- .../staging/r8188eu/hal/rtl8188e_hal_init.c   |   2 +-
- drivers/staging/r8188eu/hal/rtl8188e_phycfg.c |  16 +--
- .../staging/r8188eu/include/Hal8188EPhyReg.h  |   4 +-
- .../staging/r8188eu/include/osdep_service.h   |   4 +-
- .../staging/r8188eu/include/rtl8188e_hal.h    |   6 +-
- .../staging/r8188eu/include/rtl8188e_spec.h   |  18 +--
- drivers/staging/r8188eu/include/rtw_cmd.h     |  62 +++++----
- drivers/staging/r8188eu/include/rtw_io.h      |  16 +--
- .../staging/r8188eu/include/rtw_ioctl_set.h   |   4 +-
- drivers/staging/r8188eu/include/rtw_mlme.h    |  22 ++--
- .../staging/r8188eu/include/rtw_mlme_ext.h    |  12 +-
- drivers/staging/r8188eu/include/rtw_recv.h    |   4 +-
- drivers/staging/r8188eu/include/rtw_xmit.h    |   2 +-
- drivers/staging/r8188eu/include/wifi.h        |  12 +-
- drivers/staging/r8188eu/os_dep/ioctl_linux.c  |   6 +-
- 22 files changed, 176 insertions(+), 197 deletions(-)
-
---
-2.30.2
-
-
+diff --git a/drivers/tty/serial/8250/8250_dfl.c b/drivers/tty/serial/8250/8250_dfl.c
+new file mode 100644
+index 000000000000..f02f0ba2a565
+--- /dev/null
++++ b/drivers/tty/serial/8250/8250_dfl.c
+@@ -0,0 +1,149 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Driver for FPGA UART
++ *
++ * Copyright (C) 2022 Intel Corporation, Inc.
++ *
++ * Authors:
++ *   Ananda Ravuri <ananda.ravuri@intel.com>
++ *   Matthew Gerlach <matthew.gerlach@linux.intel.com>
++ */
++
++#include <linux/bitfield.h>
++#include <linux/dfl.h>
++#include <linux/io-64-nonatomic-lo-hi.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/serial.h>
++#include <linux/serial_8250.h>
++
++struct dfl_uart {
++	int line;
++};
++
++static int dfl_uart_get_params(struct dfl_device *dfl_dev, struct uart_8250_port *uart)
++{
++	struct device *dev = &dfl_dev->dev;
++	u64 v, fifo_len, reg_width;
++	u64 *p;
++
++	p = dfh_find_param(dfl_dev, DFHv1_PARAM_ID_CLK_FRQ);
++	if (!p)
++		return dev_err_probe(dev, -EINVAL, "missing CLK_FRQ param\n");
++
++	uart->port.uartclk = *p;
++	dev_dbg(dev, "UART_CLK_ID %u Hz\n", uart->port.uartclk);
++
++	p = dfh_find_param(dfl_dev, DFHv1_PARAM_ID_FIFO_LEN);
++	if (!p)
++		return dev_err_probe(dev, -EINVAL, "missing FIFO_LEN param\n");
++
++	fifo_len = *p;
++	dev_dbg(dev, "UART_FIFO_ID fifo_len %llu\n", fifo_len);
++
++	switch (fifo_len) {
++	case 32:
++		uart->port.type = PORT_ALTR_16550_F32;
++		break;
++
++	case 64:
++		uart->port.type = PORT_ALTR_16550_F64;
++		break;
++
++	case 128:
++		uart->port.type = PORT_ALTR_16550_F128;
++		break;
++
++	default:
++		return dev_err_probe(dev, -EINVAL, "unsupported fifo_len %llu\n", fifo_len);
++	}
++
++	p = dfh_find_param(dfl_dev, DFHv1_PARAM_ID_REG_LAYOUT);
++	if (!p)
++		return dev_err_probe(dev, -EINVAL, "missing REG_LAYOUT param\n");
++
++	v = *p;
++	uart->port.regshift = FIELD_GET(DFHv1_PARAM_ID_REG_SHIFT, v);
++	reg_width = FIELD_GET(DFHv1_PARAM_ID_REG_WIDTH, v);
++
++	dev_dbg(dev, "UART_LAYOUT_ID width %lld shift %d\n", reg_width, uart->port.regshift);
++
++	switch (reg_width) {
++	case 4:
++		uart->port.iotype = UPIO_MEM32;
++		break;
++
++	case 2:
++		uart->port.iotype = UPIO_MEM16;
++		break;
++
++	default:
++		return dev_err_probe(dev, -EINVAL, "unsupported reg_width %lld\n", reg_width);
++	}
++
++	return 0;
++}
++
++static int dfl_uart_probe(struct dfl_device *dfl_dev)
++{
++	struct device *dev = &dfl_dev->dev;
++	struct uart_8250_port uart;
++	struct dfl_uart *dfluart;
++	int ret;
++
++	memset(&uart, 0, sizeof(uart));
++	uart.port.flags = UPF_IOREMAP;
++	uart.port.mapbase = dfl_dev->mmio_res.start;
++	uart.port.mapsize = resource_size(&dfl_dev->mmio_res);
++
++	ret = dfl_uart_get_params(dfl_dev, &uart);
++
++	if (ret < 0)
++		return dev_err_probe(dev, ret, "failed uart feature walk\n");
++
++	dev_dbg(dev, "nr_irqs %d %p\n", dfl_dev->num_irqs, dfl_dev->irqs);
++
++	if (dfl_dev->num_irqs == 1)
++		uart.port.irq = dfl_dev->irqs[0];
++
++	dfluart = devm_kzalloc(dev, sizeof(*dfluart), GFP_KERNEL);
++	if (!dfluart)
++		return -ENOMEM;
++
++	dfluart->line = serial8250_register_8250_port(&uart);
++	if (dfluart->line < 0)
++		return dev_err_probe(dev, dfluart->line, "unable to register 8250 port.\n");
++
++	dev_set_drvdata(dev, dfluart);
++
++	return 0;
++}
++
++static void dfl_uart_remove(struct dfl_device *dfl_dev)
++{
++	struct dfl_uart *dfluart = dev_get_drvdata(&dfl_dev->dev);
++
++	serial8250_unregister_port(dfluart->line);
++}
++
++#define FME_FEATURE_ID_UART 0x24
++
++static const struct dfl_device_id dfl_uart_ids[] = {
++	{ FME_ID, FME_FEATURE_ID_UART },
++	{ }
++};
++MODULE_DEVICE_TABLE(dfl, dfl_uart_ids);
++
++static struct dfl_driver dfl_uart_driver = {
++	.drv = {
++		.name = "dfl-uart",
++	},
++	.id_table = dfl_uart_ids,
++	.probe = dfl_uart_probe,
++	.remove = dfl_uart_remove,
++};
++module_dfl_driver(dfl_uart_driver);
++
++MODULE_DESCRIPTION("DFL Intel UART driver");
++MODULE_AUTHOR("Intel Corporation");
++MODULE_LICENSE("GPL");
+diff --git a/drivers/tty/serial/8250/Kconfig b/drivers/tty/serial/8250/Kconfig
+index d0b49e15fbf5..4efc8ee51c18 100644
+--- a/drivers/tty/serial/8250/Kconfig
++++ b/drivers/tty/serial/8250/Kconfig
+@@ -370,6 +370,18 @@ config SERIAL_8250_FSL
+ 	  erratum for Freescale 16550 UARTs in the 8250 driver. It also
+ 	  enables support for ACPI enumeration.
+ 
++config SERIAL_8250_DFL
++	tristate "DFL bus driver for Altera 16550 UART"
++	depends on SERIAL_8250 && FPGA_DFL
++	help
++	  This option enables support for a Device Feature List (DFL) bus
++	  driver for the Altera 16650 UART.  One or more Altera 16650 UARTs
++	  can be instantiated in a FPGA and then be discovered during
++	  enumeration of the DFL bus.
++
++	  To compile this driver as a module, chose M here: the
++	  module will be called 8250_dfl.
++
+ config SERIAL_8250_DW
+ 	tristate "Support for Synopsys DesignWare 8250 quirks"
+ 	depends on SERIAL_8250
+diff --git a/drivers/tty/serial/8250/Makefile b/drivers/tty/serial/8250/Makefile
+index bee908f99ea0..65bc6ad4dd01 100644
+--- a/drivers/tty/serial/8250/Makefile
++++ b/drivers/tty/serial/8250/Makefile
+@@ -28,6 +28,7 @@ obj-$(CONFIG_SERIAL_8250_EXAR_ST16C554)	+= 8250_exar_st16c554.o
+ obj-$(CONFIG_SERIAL_8250_HUB6)		+= 8250_hub6.o
+ obj-$(CONFIG_SERIAL_8250_FSL)		+= 8250_fsl.o
+ obj-$(CONFIG_SERIAL_8250_MEN_MCB)	+= 8250_men_mcb.o
++obj-$(CONFIG_SERIAL_8250_DFL)		+= 8250_dfl.o
+ obj-$(CONFIG_SERIAL_8250_DW)		+= 8250_dw.o
+ obj-$(CONFIG_SERIAL_8250_EM)		+= 8250_em.o
+ obj-$(CONFIG_SERIAL_8250_IOC3)		+= 8250_ioc3.o
+-- 
+2.25.1
 
