@@ -2,103 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C20D606B69
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 00:44:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7B45606B70
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 00:45:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230053AbiJTWn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 18:43:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37070 "EHLO
+        id S229983AbiJTWpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 18:45:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229983AbiJTWnw (ORCPT
+        with ESMTP id S230166AbiJTWon (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 18:43:52 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D50322C801;
-        Thu, 20 Oct 2022 15:43:40 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id b12so1715783edd.6;
-        Thu, 20 Oct 2022 15:43:40 -0700 (PDT)
+        Thu, 20 Oct 2022 18:44:43 -0400
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64280BE09
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 15:44:22 -0700 (PDT)
+Received: by mail-qv1-xf34.google.com with SMTP id i9so738933qvo.0
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 15:44:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JglhUSuAsvyo/02iuoDdhbFLRdL0c14GOno7/e71c6I=;
-        b=UVFcLtLRlFJ23BO5nFdHnG4XQRcYTdnQfD3m/QakLfwgOixkkCd7UJlVA+CHErZDSK
-         yqcpu2eHqMGfmTPApN2EotBAlWuycXT2OjFAFM1+5hggxKMnxWXGuezOaAd4WEJlzw/E
-         QwfCAicGgtNoOd8NE+jP3QuxiLJQ5qMyH/pDBuCnlZYt4z3r6VCKUlsfCNk+YLZNLAOA
-         jZfpDE2kC2IhtsQcsYya9US9kOGVA9O8AzfTEwo/8FQZKplzXol7D+K0m8g9+ZJMdMlA
-         7qnuH1rqNqLEFKQ+7QqHXn3BuFaESpqJ+j9E4Q1RUqqQor0Pmd9ogjMf6JpK5JbYc/PN
-         U2Rw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QUNEnkUVOtrIsNl0Nn0NKbwDCPKMSvaAN/1K8+cyLSY=;
+        b=r2d2QkHovGMl1Zem1CpccoVHttUcwvFlTg0rirAmDiVERKbjrrgzo4/UfSzYprr9Kk
+         PW0hUb7ntj65mtKNnz65qkJ4i/VBYdwwA+ZaFCoyRPGvN6/yKGRmTDZNNlHjfIxX8LSK
+         XAyapw2XJcjeH57uFDTkRx7rnLSZwiyArnTkKipxfdrCSwf90tRfi3OSo6pNv73LVJ4H
+         3qZS4kGUdgX9VVVjQTN8umKghN8OiG38BFVYRvprmAslCnrkBMbIKNSsnFyQ1k92q7Ee
+         iD2GaHrVmWb1BAY7Pag8Yg6ChA3vibFLwZ5KAW/XKSdAlMdmK2CVCDhTo/3r79pVXKgq
+         ddVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JglhUSuAsvyo/02iuoDdhbFLRdL0c14GOno7/e71c6I=;
-        b=U7nGKDNnITWBgWJ7fdu3/isGxxQah2zaOX/mK7kEShsHJCHilFu6JQYA7m+mekBEBH
-         lwd414b5tLQSjR2CGI0ex8RCQsQ6ddNyVGPXuGWenSpexU59VvlxX4tHoZ+a6L/bTzQt
-         uGq2SRXAobZVkvfRO4WBsI5J9BHugvBha8CEQgXEXo3i0fb98t3Hx2NbYuRAPO3lgPvY
-         UtvrtoR2pS3eUE+SU+KqcopQqy+EeW0+oBvpwEUSrrHpt3BTybI/UuvhRaCp9UKZ6IUL
-         5uHWkYbfkaJZ9JM0HBQ38ioKtsC/xswAq2Sta3+kdNBReB/k7cudM6ztPYPUFSSOxaEJ
-         vACQ==
-X-Gm-Message-State: ACrzQf1v+F0415UupESRzNKHIWjcKQZ9HN4OeI8UE0b3HqsBvMCJUTK9
-        P9ncfko2xbNDZ7Ikv5sFVyE=
-X-Google-Smtp-Source: AMsMyM5MjXkVhqFJ0DzPxQqFB+bWxrQP/KKt/X60NxMrSXVU8VHjgZ1HhV+RGAF8iAk/TVSu8j+SmA==
-X-Received: by 2002:a05:6402:518b:b0:45d:9a19:66d2 with SMTP id q11-20020a056402518b00b0045d9a1966d2mr14121112edd.43.1666305818360;
-        Thu, 20 Oct 2022 15:43:38 -0700 (PDT)
-Received: from skbuf ([188.27.184.197])
-        by smtp.gmail.com with ESMTPSA id w14-20020a170906384e00b0078246b1360fsm10790195ejc.131.2022.10.20.15.43.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 15:43:37 -0700 (PDT)
-Date:   Fri, 21 Oct 2022 01:43:34 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     netdev@kapio-technology.com
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Florent Fourcot <florent.fourcot@wifirst.fr>,
-        Hans Schultz <schultz.hans@gmail.com>,
-        Joachim Wiberg <troglobit@gmail.com>,
-        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v8 net-next 03/12] net: bridge: enable bridge to install
- locked fdb entries from drivers
-Message-ID: <20221020224334.ksh4xciad7yro3cj@skbuf>
-References: <20221018165619.134535-1-netdev@kapio-technology.com>
- <20221018165619.134535-4-netdev@kapio-technology.com>
- <20221020125549.v6kls2lk7etvay7c@skbuf>
- <e1184c879642c35e4ff6f19e0fd5de46@kapio-technology.com>
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QUNEnkUVOtrIsNl0Nn0NKbwDCPKMSvaAN/1K8+cyLSY=;
+        b=N4ESSa1iPM/VPWfKatO1s++Bqgmh5TRxN9sC/aEkJ9PunoMU52Viv7cEMnr/uQGnio
+         meeOqIEppSf8Rfo/f2uX8yv5CG/lrASzTStrNnOKY0WLv/LquZ7yzJd6EeRVGKEPgERp
+         DHLKfBhf+PR1DtirEqmOZtzGLTGBPXdP2eD6DG+HK6O8xdp9kW5NqleHFMYPU25P469C
+         vn9cBpoumvGuSwkSyTUATWRaNoQWtyHIBO/tUaiC0hgkQGKP6M4Kg25dMQPNRRphfPI/
+         b5uwkuZXu+2xTjQKFiRwmrRKwR13orCGGvRvwPR2vdAo9592vmvwPWYZh0Q9Wdy18oXa
+         qWSA==
+X-Gm-Message-State: ACrzQf31AlYei/b85ek65hjpfB7mUHa16gbraOiOrKz5zzJvZcMwcWTh
+        V9S78YpLcZzjpHIjRN7zvsuZmnZL3KfHbQ==
+X-Google-Smtp-Source: AMsMyM5nSoTED+lWd7YlYhQDXH09NsprD8SDwk/FXfeSS5sTtNCuOPFK21N2b1/JUvVl1ah0z3kQ1g==
+X-Received: by 2002:a05:6214:212e:b0:4b8:56d2:d0f5 with SMTP id r14-20020a056214212e00b004b856d2d0f5mr4805771qvc.4.1666305861749;
+        Thu, 20 Oct 2022 15:44:21 -0700 (PDT)
+Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
+        by smtp.gmail.com with ESMTPSA id do35-20020a05620a2b2300b006b95b0a714esm1280506qkb.17.2022.10.20.15.44.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Oct 2022 15:44:20 -0700 (PDT)
+Message-ID: <d2f71dd3-bd0a-b85e-32d6-5bb6411442bb@linaro.org>
+Date:   Thu, 20 Oct 2022 18:44:18 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e1184c879642c35e4ff6f19e0fd5de46@kapio-technology.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v3 3/4] arm64: dts: qcom: sc7180: align TLMM pin
+ configuration with DT schema
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221019001351.1630089-1-krzysztof.kozlowski@linaro.org>
+ <20221019001351.1630089-4-krzysztof.kozlowski@linaro.org>
+ <CAD=FV=VsFbei4h_cwhJhReUi8Pk_C-qHu_8iDqfzf_e=C8QnXg@mail.gmail.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAD=FV=VsFbei4h_cwhJhReUi8Pk_C-qHu_8iDqfzf_e=C8QnXg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -106,34 +86,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 09:29:06PM +0200, netdev@kapio-technology.com wrote:
-> On 2022-10-20 14:55, Vladimir Oltean wrote:
-> > On Tue, Oct 18, 2022 at 06:56:10PM +0200, Hans J. Schultz wrote:
-> > > diff --git a/net/bridge/br_switchdev.c b/net/bridge/br_switchdev.c
-> > > index 8f3d76c751dd..c6b938c01a74 100644
-> > > --- a/net/bridge/br_switchdev.c
-> > > +++ b/net/bridge/br_switchdev.c
-> > > @@ -136,6 +136,7 @@ static void br_switchdev_fdb_populate(struct
-> > > net_bridge *br,
-> > >  	item->added_by_user = test_bit(BR_FDB_ADDED_BY_USER, &fdb->flags);
-> > >  	item->offloaded = test_bit(BR_FDB_OFFLOADED, &fdb->flags);
-> > >  	item->is_local = test_bit(BR_FDB_LOCAL, &fdb->flags);
-> > > +	item->locked = test_bit(BR_FDB_LOCKED, &fdb->flags);
-> > 
-> > Shouldn't this be set to 0 here, since it is the bridge->driver
-> > direction?
+On 19/10/2022 11:48, Doug Anderson wrote:
+>>  .../dts/qcom/sc7180-trogdor-wormdingler.dtsi  |  72 +-
+>>  arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi  | 629 +++++++-----------
+>>  arch/arm64/boot/dts/qcom/sc7180.dtsi          | 597 +++++++++--------
+>>  18 files changed, 776 insertions(+), 1137 deletions(-)
 > 
-> Wouldn't it be a good idea to allow drivers to add what corresponds to a blackhole
-> entry when using the bridge input chain to activate the MAB feature, or in general
-> to leave the decision of what to do to the driver implementation?
+> You probably should send a v4 since this now conflicts with commit
+> c24c9d53e001 ("arm64: dts: qcom: correct white-space before {"), which
+> has landed.
+> 
 
-The patch doesn't propose that. It proposes:
+Indeed.
 
-| net: bridge: enable bridge to install locked fdb entries from drivers
-| 
-| The bridge will be able to install locked entries when receiving
-| SWITCHDEV_FDB_ADD_TO_BRIDGE notifications from drivers.
+> In any case, this looks nice to me.
+> 
+> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+> 
+> FWIW I put this on a sc7180-trogdor-coachz and the device booted up to
+> the browser. I didn't do massive amounts of tests, but I'm OK with:
+> 
+> Tested-by: Douglas Anderson <dianders@chromium.org>
 
-Please write patches which make just one logical change, and explain the
-justification for that change and precisely that change in the commit
-message.
+Thanks!
+
+Best regards,
+Krzysztof
+
