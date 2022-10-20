@@ -2,126 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D444860561D
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 05:53:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ECC7605624
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 05:54:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229770AbiJTDxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 23:53:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50438 "EHLO
+        id S229768AbiJTDyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 23:54:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbiJTDxK (ORCPT
+        with ESMTP id S229736AbiJTDyq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 23:53:10 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87A4818BE06;
-        Wed, 19 Oct 2022 20:53:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=/JvjmffQ3hXpqGN/9W/KavgcOAZl9PKoivWmEcGrYWs=; b=Q0izzeWPBJEoLmgIJ8h5+GsAA/
-        lz+Tl14gdK2oC8hvKqJshx92m73jjHfse8nC6iGms1xA2RNusjhg2LGdJfOLLkLm+TCmcXEGMS/0X
-        NO1DjE5ZxH7F2TbQ8lOn0xEdxDuYjTxXHlBJTjMpwD9e8IWeUNrp8mYqElXLpEs/Oro3YLPXKgmUJ
-        slckUs/Vx5pAl+F0fX0u58h1AWS+kYxQPp+vuY+wNFOlTnSxbHweKNkLk/V1vJl2DfrcASvs42R53
-        4fNmeRyFyaSQBxsYCBBdWfo/VZJ6YYoKlKmSDwe5CHdJSVLy9UIKf7oUo0JtNUaRz26ez83f85pNY
-        kUHj5BPQ==;
-Received: from [2601:1c2:d80:3110::a2e7]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1olMcB-00A3P0-Vi; Thu, 20 Oct 2022 03:53:04 +0000
-Message-ID: <c270337a-7be2-e53d-d4e8-81a934907205@infradead.org>
-Date:   Wed, 19 Oct 2022 20:53:03 -0700
+        Wed, 19 Oct 2022 23:54:46 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92CBB29C92;
+        Wed, 19 Oct 2022 20:54:44 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id x31-20020a17090a38a200b0020d2afec803so1863807pjb.2;
+        Wed, 19 Oct 2022 20:54:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=cls9hPD2bbrQKC1wtXrkJF4y2UlILPEIkviM6fS1b4M=;
+        b=opDupmmzU/oD8a1/HD/V48st6LXQIvxaLoJxuqnkFZaIAYnnxph8RJ5qGQCg5CfU2p
+         P6yEivAwEpoMS6Omy3YHbgYnNPP90Z2WJu4+9cM4zSdPl/STf1y5qitqxogaqg3ZkVLr
+         NUIpIjJTGxVNg2I0ufEztP2yjINBis1s+TaLtuHQLWgyKRSKJpmyHx09HHlWYP5OH+rT
+         pZGARW/SnfgTvIquFWUaUw9/4I0gCOrOUdSPumsMVVHtX3IWIZhj0ju0hUForAxSX1NP
+         4BeGtfcuB7qdEv7SRROIFDBc+Tgsp2Elk6RNB3+3bzYNzFLtmOS2snWNuP3gyJTJV5F7
+         X2zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cls9hPD2bbrQKC1wtXrkJF4y2UlILPEIkviM6fS1b4M=;
+        b=T1AgHpre7vX8xh7Qq6ZR6ILvW64Jk11Jnx+E5rm/BID3wZ+gaH2LtIXYMwA1qCEJtG
+         Qar8Z3ZD8hsJipHdkYp8CAWNExOWcU/7G6anqbkNVgAvtTPjKaeRhSm4aP6zzClH1EeS
+         qYDEHlaeFe69G0fUOGdbj6m8okK13nBfimqaDQBfKMy8xCebRgUQbfBSjrKMQ0FIQK86
+         BGdGRU/RHrQWai1/yQwA7adpYHLDqPZFNu/pKBEvgu8h+WnUdgSW5MG/+LiCAGSw7lVR
+         h/rbDEHptqv5KbrN7XySeSZufIZCw/DXnZmgU5wY2mZgAZx6UndB0J44JmjWUWcC/pkG
+         jFjQ==
+X-Gm-Message-State: ACrzQf3JVNHoxRDDP+UJLP25q8pUAkkmMDMYmILoB5LaEU83M3pgdxlg
+        VBlNQsf/DNVl5ryCQ49uLTQ=
+X-Google-Smtp-Source: AMsMyM7C8fvckchyhYqiVeDNIPQxtK5440sc5fzIo9KHDa6ah0cFoiiDd/OYzTOAAozoOBHcUBLpdw==
+X-Received: by 2002:a17:90a:930b:b0:20b:a5d:35d6 with SMTP id p11-20020a17090a930b00b0020b0a5d35d6mr48789899pjo.146.1666238084014;
+        Wed, 19 Oct 2022 20:54:44 -0700 (PDT)
+Received: from debian.me (subs03-180-214-233-92.three.co.id. [180.214.233.92])
+        by smtp.gmail.com with ESMTPSA id w14-20020a17090a5e0e00b0020ad53b5883sm722300pjf.14.2022.10.19.20.54.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Oct 2022 20:54:43 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 509B11032B1; Thu, 20 Oct 2022 10:54:39 +0700 (WIB)
+Date:   Thu, 20 Oct 2022 10:54:38 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>
+Cc:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 0/5] serial: RS485 kerneldoc/documentation improvements
+Message-ID: <Y1DGfq8mNI5dc8Hz@debian.me>
+References: <20221019093343.9546-1-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH] vfs: fs_context: Modify mismatched function name
-Content-Language: en-US
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        viro@zeniv.linux.org.uk
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-References: <20221020034036.56523-1-jiapeng.chong@linux.alibaba.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20221020034036.56523-1-jiapeng.chong@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="g0j7Qa5xVl5Dx7IW"
+Content-Disposition: inline
+In-Reply-To: <20221019093343.9546-1-ilpo.jarvinen@linux.intel.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
 
-On 10/19/22 20:40, Jiapeng Chong wrote:
-> No functional modification involved.
-> 
-> fs/fs_context.c:347: warning: expecting prototype for vfs_dup_fc_config(). Prototype was for vfs_dup_fs_context() instead.
-> 
-> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2456
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-> ---
->  fs/fs_context.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/fs/fs_context.c b/fs/fs_context.c
-> index df04e5fc6d66..be45701cd998 100644
-> --- a/fs/fs_context.c
-> +++ b/fs/fs_context.c
-> @@ -340,7 +340,7 @@ void fc_drop_locked(struct fs_context *fc)
->  static void legacy_fs_context_free(struct fs_context *fc);
->  
->  /**
-> - * vfs_dup_fc_config: Duplicate a filesystem context.
-> + * vfs_dup_fs_context: Duplicate a filesystem context.
+--g0j7Qa5xVl5Dx7IW
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-That is still not the correct kernel-doc format (or syntax).
-The ':' should be a '-' instead.
+On Wed, Oct 19, 2022 at 12:33:38PM +0300, Ilpo J=C3=A4rvinen wrote:
+> RS485 documentation improvements. While doing the kerneldoc conversion,
+> a few other items came up so they're now included in this series.
+>=20
+> v5:
+> - Make formatting of names more consistent
+> - serial_rs485::flags bits are: -> The flag bits are:
+>=20
+> v4:
+> - Remove wrong private: markers
+> - Fix grammar problems
+>=20
+> v3:
+> - More fixes to kernel doc formatting (thanks to Jiri)
+> - Added a few other related improvements
+>=20
+> v2:
+> - Include serial_rs485 into documentation
+> - Add * to multi-line flag descriptions
+>=20
+> Ilpo J=C3=A4rvinen (5):
+>   serial: Convert serial_rs485 to kernel doc
+>   Documentation: rs485: Link reference properly
+>   Documentation: rs485: Mention uart_get_rs485_mode()
+>   Documentation: rs485: Fix struct referencing
+>   Documentation: Make formatting consistent for rs485 docs
+>=20
+>  .../driver-api/serial/serial-rs485.rst        | 56 ++++++++++---------
+>  include/uapi/linux/serial.h                   | 55 +++++++++++-------
+>  2 files changed, 66 insertions(+), 45 deletions(-)
+>=20
 
-Also, I see scripts/kernel-doc reporting 16 kernel-doc format
-problems in this file. How about fixing more than just one of them, please.
+The doc LGTM, thanks.
 
-fs_context.c:95: warning: No description found for return value of 'vfs_parse_fs
-_param_source'
-fs_context.c:128: warning: No description found for return value of 'vfs_parse_f
-s_param'
-fs_context.c:168: warning: Function parameter or member 'fc' not described in 'v
-fs_parse_fs_string'
-fs_context.c:168: warning: Function parameter or member 'key' not described in '
-vfs_parse_fs_string'
-fs_context.c:168: warning: Function parameter or member 'value' not described in
- 'vfs_parse_fs_string'
-fs_context.c:168: warning: Function parameter or member 'v_size' not described i
-n 'vfs_parse_fs_string'
-fs_context.c:168: warning: No description found for return value of 'vfs_parse_f
-s_string'
-fs_context.c:202: warning: Function parameter or member 'fc' not described in 'g
-eneric_parse_monolithic'
-fs_context.c:202: warning: Excess function parameter 'ctx' description in 'gener
-ic_parse_monolithic'
-fs_context.c:202: warning: No description found for return value of 'generic_par
-se_monolithic'
-fs_context.c:252: warning: No description found for return value of 'alloc_fs_co
-ntext'
-fs_context.c:340: warning: No description found for return value of 'vfs_dup_fs_
-context'
-fs_context.c:386: warning: Function parameter or member 'log' not described in '
-logfc'
-fs_context.c:386: warning: Function parameter or member 'prefix' not described i
-n 'logfc'
-fs_context.c:386: warning: Function parameter or member 'level' not described in
- 'logfc'
-fs_context.c:386: warning: Excess function parameter 'fc' description in 'logfc'
-16 warnings
+For the series,
 
+Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
->   * @src_fc: The context to copy.
->   */
->  struct fs_context *vfs_dup_fs_context(struct fs_context *src_fc)
+--=20
+An old man doll... just what I always wanted! - Clara
 
--- 
-~Randy
+--g0j7Qa5xVl5Dx7IW
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY1DGdQAKCRD2uYlJVVFO
+oyQtAP4pvAC4qMzXjOMlbzC8eFOqbfWjfJv2EMaZN2YpLeWp4AEA8Iz1+qEtNz6Y
+3N7RWNuRZQZBsT1WkSK5QjKukLQW0AU=
+=9D5b
+-----END PGP SIGNATURE-----
+
+--g0j7Qa5xVl5Dx7IW--
