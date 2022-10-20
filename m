@@ -2,98 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8E40605E5D
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 13:01:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C0A5605E5B
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 13:01:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231137AbiJTLBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 07:01:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38038 "EHLO
+        id S230433AbiJTLBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 07:01:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230472AbiJTLBo (ORCPT
+        with ESMTP id S229909AbiJTLBD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 07:01:44 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2059.outbound.protection.outlook.com [40.107.223.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9DAE1C881A
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 04:01:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Kmr0OuvVFJ+0kRNDQ+7RBCsLNQEWNJzpz1wsWkSmx5Yin20EYjnRnUXAk0FWcHpgkRRv7TJoOTLE4LBv/FLo6n72mS8HmX0rlUu11YdwYp1zITGplwAhB6aze/1gP9FbMAPCEEMebX1c/EQImISjp3r3ZF0ohD9GaWOGUtVSho16AWmC+mR5gJmQB3Dym+fkWci3BRtFnX6YvOFuGszQjII7bYxfC3IwsVyX93Xw87/I3WITo26mV8pfZwGpMrffsiqmB03awdNgCOnE4Wy9Qi50Iq2LXn/BRql8JGrKVtthzVt9DOakmtCDqMRZSh4FqMiUkpVU65d3UXzBQ01y2g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/9gXseAVEO4QsLPZNzUqKIFl/L2H49J1TsOZzGDObJ8=;
- b=eX1/r0yVc6yYzXv8H/x4auglgfIxAR8X7G4xaS5aXPpGZF6tgXHv+f1r7ijH0SlpRe0hxor1nDJ1fAJ1Xnd7tIPLpSQrlW/IRp0DZ3mqFXrS42qGSXu12v6ch3Yl1QE7oV65hMJ9I7+EH72kEkdCVtE0Sk4wFKn6WfbEBE3HucqFSAYHnpP8dFRxjGU6relEaUOCIC6McJsQFfOAXEaFgsKPtlDsQSAUeYvEsx1Hj6npOVPRBc/SiZlBF8Ecv7lMswmQZcQG3txeMpCD4fC7IbQTZ3F9x4hzkEVftI6w3wOkfPM8Hm2+smoloMkwsLjSth/7rd3wJjLzILp22e5Log==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/9gXseAVEO4QsLPZNzUqKIFl/L2H49J1TsOZzGDObJ8=;
- b=47/hEmvNncdPSEDBPImjziOAAK9I1Jk1SSvJ+eLjiGJ5pjT6+0S2a2iGuo7HheiywNX127r4UWlSEIt5AxHqHW7zKJRwTwtx0AIvb6upxu6ZCwbxNg+UGb7EO1b/WkzcjQaB0dK15n673jteeqazA8mWEZVVDIlfOZPPI59ztoE=
-Received: from MW2PR16CA0037.namprd16.prod.outlook.com (2603:10b6:907:1::14)
- by LV2PR12MB5989.namprd12.prod.outlook.com (2603:10b6:408:171::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.30; Thu, 20 Oct
- 2022 11:01:38 +0000
-Received: from CO1NAM11FT093.eop-nam11.prod.protection.outlook.com
- (2603:10b6:907:1:cafe::44) by MW2PR16CA0037.outlook.office365.com
- (2603:10b6:907:1::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.26 via Frontend
- Transport; Thu, 20 Oct 2022 11:01:38 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT093.mail.protection.outlook.com (10.13.175.59) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5746.16 via Frontend Transport; Thu, 20 Oct 2022 11:01:38 +0000
-Received: from amd.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 20 Oct
- 2022 06:01:34 -0500
-From:   Arvind Yadav <Arvind.Yadav@amd.com>
-To:     <Christian.Koenig@amd.com>, <andrey.grodzovsky@amd.com>,
-        <shashank.sharma@amd.com>, <amaranath.somalapuram@amd.com>,
-        <Arunpravin.PaneerSelvam@amd.com>,
-        <maarten.lankhorst@linux.intel.com>, <mripard@kernel.org>,
-        <tzimmermann@suse.de>, <airlied@linux.ie>, <daniel@ffwll.ch>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-CC:     Arvind Yadav <Arvind.Yadav@amd.com>
-Subject: [PATCH] drm/syncobj : Enable signaling on fence for syncobj
-Date:   Thu, 20 Oct 2022 16:30:03 +0530
-Message-ID: <20221020110003.582831-1-Arvind.Yadav@amd.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 20 Oct 2022 07:01:03 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFC5B15B13E
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 04:01:02 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id by36so25818548ljb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 04:01:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:to:date:from
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gyBUuslthV1iukz97HjUzwRbU5DGVBFIKN5W8BNvfbc=;
+        b=KL9selRsjGQMqeAp735iVBdW5FfEC5WZ6RWYe7yFBHmxo5pyZdg0khgt+p3RoBGnXm
+         OMwgaHe5r0beFOmWCG/+QrfAcLa2j7bBEwtVBYoXRlVfQ1O1msL7cvJ+xgrIlfdfa2NS
+         EWdBsrIXdjr230NPeIkLDOU7kdzVI7DdlQbcpmtI1Z7hB46pk6m8pMLp7E5X5z/3R+VW
+         tEmfZnfkitqRZdyFLY6xwziWxMFJBgwp1j3m1eley+7ryXTHUHvDluoDb6BgpDYwygBi
+         eKiI95MdSWgXqgjzCQFBNvCoPp+n3NPHe+L8GhlPpQCuKvv0YxVGVhidc0VUuCFo1YnL
+         YcYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gyBUuslthV1iukz97HjUzwRbU5DGVBFIKN5W8BNvfbc=;
+        b=7/nt4dSw/y2QjfaMFRe5iF0+DxjgLMVKtEhS9xYPM0Y2PDop4We8Y9XMtGPcY6X7Ha
+         I9SEcyHyfzU8PCrcu7/GhyUN7Ds4EPNlo4DDvenYcLzrYj6F1ZDycG6qWmswVVyBQ9MK
+         vb+VrKuzsdaFXNsSiShnvZrgT1mWLaAbtoS6U/yMdRKaQ+ZQHJqRHtvfUconvTinQHKp
+         v7AdNc323p5UkbLb0jjt/8wvjp//bQeTKMAzz5eToa/5Fb12JwQ8ayty9y1IIFsicun1
+         k5C9v2OL2oPU9SZKoUCiMuA/NYBsH5g8PlRrNG0/ku6B1Y7xdSH3ASmPli+wBfHLAuU8
+         OjNw==
+X-Gm-Message-State: ACrzQf0f+43ug3rYG7C9r6J/q4tjyBjlmF+fH73oDVOYjN/1nWsjcFIW
+        HcNNatmQEb/4uzcPZes/Y1I=
+X-Google-Smtp-Source: AMsMyM4pjUdJKKO7wtjGosPyHWL6LBIOThxgqwqxcVch8+HA2lbCyUsk/Rdi/D9OO0i+F2FAJEGsWg==
+X-Received: by 2002:a2e:b88c:0:b0:26f:cbfb:784b with SMTP id r12-20020a2eb88c000000b0026fcbfb784bmr4776944ljp.357.1666263660991;
+        Thu, 20 Oct 2022 04:01:00 -0700 (PDT)
+Received: from elroy-temp-vm ([20.240.130.248])
+        by smtp.gmail.com with ESMTPSA id z22-20020ac25df6000000b00494a8fecacesm2676152lfq.192.2022.10.20.04.01.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Oct 2022 04:01:00 -0700 (PDT)
+From:   Ubuntu <tanjubrunostar0@gmail.com>
+X-Google-Original-From: Ubuntu <TanjuateBrunostartanjubrunostar0@gmail.com>
+Date:   Thu, 20 Oct 2022 11:00:59 +0000
+To:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev
+Subject: Request for assistance
+Message-ID: <Y1Eqa7uKB+Wk+Mb+@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT093:EE_|LV2PR12MB5989:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9fb5a56e-b450-4892-6dfa-08dab28a763d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QSi4awRTTd2PinARDbrzhI8wo7a2L0X0ApcmYOg2lBneNJ8SGmRA+qaLQd3fRzlFt4aL27WqFDr8ALwoX1R9kjT3v570rT6o4XZWIRiFFZz7M3+v6GvdcPU9bSu4lLmKVVx72xFT3Xkz5PpbhVGuMM32WPGP9Bfj8bU9K5HdO9YiBdJ6jeXt8nCW/iFjyq7jlkUho82xywwH/DN9J0i2FyzSoF41sPANCTu6oKAS0ShE+S3fq3kn2SjvvxejjVfHSCeZliAKJzx35GSgYM5B80tmtqLgqNyjFbDfq0575xxDB9Bjja/yKbvG1tgKn9UWKJxCRZqnd1lMRtAPYuBc9TDwUV2G2E+O9MVQNUpzjmp5MqR/GvEkyOctE4gDP9+nK5t1M299SSO/O7mVJDbZNhiCShxx0gx8N6udCXLlmnXgnidnImuXAqEooKTrGS3VqHGVjcZwH7wx7Vm9a00Nnc4xVeCyDfOd0xkOJY0KHD6gY6W1HTVuHt1R99n68u2QsfS89DXSYu8XOEhmlE/0HPqz3adBWOVbXRuBvVch1xEvGr28NmkDaA5mpp+RrPJaP9drojLae9BukPSf2Cn7evuL7CtLeKu65K8YQRfbGlhWc2Wb6bIdsupGa5RvYDhYc2i23JakEo6ZJqemLJvBTQxSM64VQhLll9a7QfN9Ys/qujOq0Z8aJ5rhmBsOkkkMVtCMkIZGjuBd1c5OyNYXaMrrGqQaxbPPAAUM2sxGFdOuT3LZ3Lf7AzhTkiFgzfYf/W0nrfWVNb3a/DD0XaKovRVbeLb6TGk7aN/XiaCRWiO6dA6PWpB9XHPfbZVB7xififBl3RmdioaNISbrz9Ig0WsjHgMjpj0zfRjHP6cJDhk=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(396003)(346002)(376002)(39860400002)(136003)(451199015)(46966006)(36840700001)(40470700004)(316002)(4744005)(336012)(426003)(110136005)(26005)(2906002)(1076003)(2616005)(41300700001)(7696005)(186003)(16526019)(36756003)(5660300002)(40460700003)(83380400001)(6666004)(4326008)(8936002)(40480700001)(70586007)(70206006)(47076005)(82310400005)(8676002)(921005)(82740400003)(36860700001)(356005)(86362001)(478600001)(81166007)(36900700001)(2101003)(83996005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Oct 2022 11:01:38.3752
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9fb5a56e-b450-4892-6dfa-08dab28a763d
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT093.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5989
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,26 +68,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Here's enabling software signaling on fence for syncobj.
+Hello,
+I have a diffictly deciding where exactly to split a long line of code. for example, this line of code is too long
 
-Signed-off-by: Arvind Yadav <Arvind.Yadav@amd.com>
----
- drivers/gpu/drm/drm_syncobj.c | 2 ++
- 1 file changed, 2 insertions(+)
+uCTSTime = bb_get_frame_time(pDevice->preamble_type, byPktType, 14, pDevice->byTopCCKBasicRate);
 
-diff --git a/drivers/gpu/drm/drm_syncobj.c b/drivers/gpu/drm/drm_syncobj.c
-index 0c2be8360525..2ab7a1a9eeb4 100644
---- a/drivers/gpu/drm/drm_syncobj.c
-+++ b/drivers/gpu/drm/drm_syncobj.c
-@@ -302,6 +302,8 @@ void drm_syncobj_add_point(struct drm_syncobj *syncobj,
- 	dma_fence_chain_init(chain, prev, fence, point);
- 	rcu_assign_pointer(syncobj->fence, &chain->base);
- 
-+	dma_fence_enable_sw_signaling(&chain->base);
-+
- 	list_for_each_entry_safe(cur, tmp, &syncobj->cb_list, node)
- 		syncobj_wait_syncobj_func(syncobj, cur);
- 	spin_unlock(&syncobj->lock);
--- 
-2.25.1
+if i spit it this way:
+uCTSTime =
+        bb_get_frame_time(pDevice->preamble_type, byPktType, 14, pDevice->byTopCCKBasicRate);
 
+It does not help as the second line is still too long. I considered doing it this way instead:
+uCTSTime = bb_get_frame_time(pDevice->preamble_type, byPktType, 14,
+                                pDevice->byTopCCKBasicRate);
+But i did this on one of my patches and i was told it is not advisable to split a line between
+parenthesis '(' and ')'
+
+how can i go about this please?
