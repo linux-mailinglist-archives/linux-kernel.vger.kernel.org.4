@@ -2,239 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A9A4605F7C
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 13:57:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B0FF605F80
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 13:57:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229760AbiJTL47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 07:56:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45970 "EHLO
+        id S229778AbiJTL5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 07:57:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbiJTL4y (ORCPT
+        with ESMTP id S229768AbiJTL5k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 07:56:54 -0400
-Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E120F134DEB
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 04:56:47 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1666267005;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=h1eg7lftjZwHwlpEPa2PsbvY+k99P5M493CYWmMhT+A=;
-        b=xf9AYapUBZUAGvR3RM/0QQx+r4Tq4xSLh6VVr3HNNhTd8MlciibOzWzz6dChqyjCUQv0xP
-        Pyn5bEHKcBAc9ZMNQAoB3K+YgfgUEvTdM0l0g3whJ6x4PCUsBiV2BiiiX0VYdBiJYBZCWA
-        5ASBtXK667niNnJ1zYxgS7BLuxd17gE=
-From:   Yajun Deng <yajun.deng@linux.dev>
-To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com
-Cc:     noodles@fb.com, ross.philipson@oracle.com, daniel.kiper@oracle.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        Yajun Deng <yajun.deng@linux.dev>
-Subject: [PATCH] x86/e820: make e820 type string uniform
-Date:   Thu, 20 Oct 2022 19:56:09 +0800
-Message-Id: <20221020115609.223940-1-yajun.deng@linux.dev>
+        Thu, 20 Oct 2022 07:57:40 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 705C1134DD4
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 04:57:38 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MtQvl40k1z1P6nm;
+        Thu, 20 Oct 2022 19:52:51 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 20 Oct 2022 19:57:36 +0800
+Received: from [10.174.178.174] (10.174.178.174) by
+ dggpemm500007.china.huawei.com (7.185.36.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 20 Oct 2022 19:57:36 +0800
+Subject: Re: [PATCH] ocfs2: possible memory leak in mlog_sys_init()
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joseph Qi <joseph.qi@linux.alibaba.com>
+CC:     <mark@fasheh.com>, <jlbec@evilplan.org>,
+        <akpm@linux-foundation.org>,
+        ocfs2-devel <ocfs2-devel@oss.oracle.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20221018075213.736562-1-yangyingliang@huawei.com>
+ <bf27f347-5ced-98e5-f188-659cc2a9736f@linux.alibaba.com>
+ <09bb2844-e20a-98e8-c2af-5b6c4795d48e@huawei.com>
+ <c7a3bdac-3ed6-e695-5c45-e7007615a4d9@linux.alibaba.com>
+ <0db486eb-6927-927e-3629-958f8f211194@huawei.com>
+ <1adbbf98-2700-27c8-4aca-9510bca91458@linux.alibaba.com>
+ <f6bc6dd3-f7b7-e757-fc36-d1cfbc7305e5@huawei.com>
+ <30747fd7-fe79-2ed8-ce63-425a008e3e4f@linux.alibaba.com>
+ <Y1Egf2CmSZbtRr3f@kroah.com>
+From:   Yang Yingliang <yangyingliang@huawei.com>
+Message-ID: <53ae60ab-0fe6-ddaf-d233-b7b3bcd5efa5@huawei.com>
+Date:   Thu, 20 Oct 2022 19:57:35 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
+In-Reply-To: <Y1Egf2CmSZbtRr3f@kroah.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Language: en-US
+X-Originating-IP: [10.174.178.174]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These e820_print_type() and e820_type_to_string() functions are similar,
-the former used in dmesg and the latter used in /proc/iomem.
 
-Make them uniform, so that we can find the correspondence between dmesg
-and /proc/iomem.
+On 2022/10/20 18:18, Greg Kroah-Hartman wrote:
+> On Thu, Oct 20, 2022 at 10:06:48AM +0800, Joseph Qi wrote:
+>>
+>> On 10/19/22 10:57 AM, Yang Yingliang wrote:
+>>> On 2022/10/19 10:26, Joseph Qi wrote:
+>>>> On 10/18/22 10:28 PM, Yang Yingliang wrote:
+>>>>> On 2022/10/18 21:39, Joseph Qi wrote:
+>>>>>> On 10/18/22 6:33 PM, Yang Yingliang wrote:
+>>>>>>> Hi,
+>>>>>>>
+>>>>>>> On 2022/10/18 17:02, Joseph Qi wrote:
+>>>>>>>> Hi,
+>>>>>>>>
+>>>>>>>> On 10/18/22 3:52 PM, Yang Yingliang wrote:
+>>>>>>>>> Inject fault while probing module, kset_register() may fail,
+>>>>>>>>> if it fails, but the refcount of kobject is not decreased to
+>>>>>>>>> 0, the name allocated in kobject_set_name() is leaked. Fix
+>>>>>>>>> this by calling kset_put(), so that name can be freed in
+>>>>>>>>> callback function kobject_cleanup().
+>>>>>>>>>
+>>>>>>>>> unreferenced object 0xffff888100da9348 (size 8):
+>>>>>>>>>       comm "modprobe", pid 257, jiffies 4294701096 (age 33.334s)
+>>>>>>>>>       hex dump (first 8 bytes):
+>>>>>>>>>         6c 6f 67 6d 61 73 6b 00                          logmask.
+>>>>>>>>>       backtrace:
+>>>>>>>>>         [<00000000306e441c>] __kmalloc_node_track_caller+0x44/0x1b0
+>>>>>>>>>         [<000000007c491a9e>] kstrdup+0x3a/0x70
+>>>>>>>>>         [<0000000015719a3b>] kstrdup_const+0x63/0x80
+>>>>>>>>>         [<0000000084e458ea>] kvasprintf_const+0x149/0x180
+>>>>>>>>>         [<0000000091302b42>] kobject_set_name_vargs+0x56/0x150
+>>>>>>>>>         [<000000005f48eeac>] kobject_set_name+0xab/0xe0
+>>>>>>>>>
+>>>>>>>>> Fixes: 34980ca8faeb ("Drivers: clean up direct setting of the name of a kset")
+>>>>>>>>> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+>>>>>>>>> ---
+>>>>>>>>>      fs/ocfs2/cluster/masklog.c | 7 ++++++-
+>>>>>>>>>      1 file changed, 6 insertions(+), 1 deletion(-)
+>>>>>>>>>
+>>>>>>>>> diff --git a/fs/ocfs2/cluster/masklog.c b/fs/ocfs2/cluster/masklog.c
+>>>>>>>>> index 563881ddbf00..7f9ba816d955 100644
+>>>>>>>>> --- a/fs/ocfs2/cluster/masklog.c
+>>>>>>>>> +++ b/fs/ocfs2/cluster/masklog.c
+>>>>>>>>> @@ -156,6 +156,7 @@ static struct kset mlog_kset = {
+>>>>>>>>>      int mlog_sys_init(struct kset *o2cb_kset)
+>>>>>>>>>      {
+>>>>>>>>>          int i = 0;
+>>>>>>>>> +    int ret;
+>>>>>>>>>            while (mlog_attrs[i].attr.mode) {
+>>>>>>>>>              mlog_default_attrs[i] = &mlog_attrs[i].attr;
+>>>>>>>>> @@ -165,7 +166,11 @@ int mlog_sys_init(struct kset *o2cb_kset)
+>>>>>>>>>            kobject_set_name(&mlog_kset.kobj, "logmask");
+>>>>>>>>>          mlog_kset.kobj.kset = o2cb_kset;
+>>>>>>>>> -    return kset_register(&mlog_kset);
+>>>>>>>>> +    ret = kset_register(&mlog_kset);
+>>>>>>>> If register fails, it will call unregister in o2cb_sys_init(), which
+>>>>>>>> will put kobject.
+>>>>>>> They are different ksets, the kset unregistered in o2cb_sys_init() is 'o2cb_kset', the
+>>>>>>> kset used to registered in mlog_sys_init() is 'mlog_kset', and they hold difference
+>>>>>>> refcounts.
+>>>>>>> Yes, you are right. I've mixed the two ksets up.
+>>>>>> In theory, kset_register() may return error because of a NULL kset, so
+>>>>>> here we may not call kset_put() directly, I'm not sure if a static
+>>>>>> checker will happy.
+>>>>>> Though this can't happen since it's already statically allocated...
+>>>>> kset_register() may fail if kobject_add_internal() return error (can't allocate memory), the name
+>>>>> "logmask" is dynamically alloctated while ocfs2 is compile as module and insert it (if ocfs2 is
+>>>>> built in kernel, the name is constant, it won't cause a leak), so the name can be leaked.
+>>>> What I mean is kset_register() may fail with many reasons, or even
+>>>> without kset_init().
+>>>> I wonder if we have to handle this internal kset_register(), but not
+>>>> leave it to caller. This may benefit other callers as well.
+>>>>
+>>>> Something like:
+>>>> err = kobject_add_internal(&k->kobj);
+>>>> if (err) {
+>>>>      kset_put(k);
+>>>>      return err;
+>>>> }
+>>> I had think about this method to fix this, but some kset is allocated dynamically in driver and
+>>> it's freed in callback function which is called after kset_put() and in error path in driver will free
+>>> it again, it leads double free in some drivers.
+>>>
+>> I don't think it's good idea that caller has to take care part of the
+>> internal logic of kset_register() in case of error.
+>> Hi Greg, what do you think?
+> I think if you are messing around with raw ksets, you have to handle
+> them properly :)
+>
+> For some driver and kobject core functions, once you call register, you
+> have to call put() to handle an error because the driver core can not
+> know what you are doing with that memory at times.
+>
+> But, maybe for ksets this is not needed and the kobject core can
+> properly clean up from an error here.  Yang, can you please look into
+> this?  That might make this much simpler.
+OK, I will look into this to see how to make it simpler for drivers.
+>
+> Either way, the documentation for kset_register() needs to be fixed up
+> first, so that people have a chance to know what to do here and THEN we
+> can fix up the callers like this.
+>
+> Yang, can you do this all as one long series that I can take through the
+> driver core tree.  No need to scatter it all across a bunch of different
+> subsystems.
+OK, I will fix all these in one series.
 
-It may be confusing in dmesg. The e820 type update seems no change, but
-the log like that:
-...
-[    0.000000] e820: update [mem 0x81004018-0x81023c57] usable ==> usable
-[    0.000000] e820: update [mem 0x81004018-0x81023c57] usable ==> usable
-[    0.000000] e820: update [mem 0x80ff3018-0x81003e57] usable ==> usable
-[    0.000000] e820: update [mem 0x80ff3018-0x81003e57] usable ==> usable
-...
-
-Another confusion in /proc/iomem, the continuous area may be divided
-into multiple parts, but they have same name, like that:
-
-...
-00100000-80ff3017 : System RAM
-80ff3018-81003e57 : System RAM
-81003e58-81004017 : System RAM
-81004018-81023c57 : System RAM
-81023c58-87672fff : System RAM
-...
-
-Separate the string of E820_TYPE_RESERVED_KERN and E820_TYPE_RAM, this
-makes more clearer.
-
-After patch:
-dmesg:
-...
-[    0.000000] BIOS-provided physical RAM map:
-[    0.000000] BIOS-e820: [mem 0x0000000000000000-0x000000000005efff] System RAM
-[    0.000000] BIOS-e820: [mem 0x000000000005f000-0x000000000005ffff] Reserved
-[    0.000000] BIOS-e820: [mem 0x0000000000060000-0x000000000009ffff] System RAM
-[    0.000000] BIOS-e820: [mem 0x00000000000a0000-0x00000000000fffff] Reserved
-[    0.000000] BIOS-e820: [mem 0x0000000000100000-0x000000008c7b5fff] System RAM
-[    0.000000] BIOS-e820: [mem 0x000000008c7b6000-0x000000008e025fff] Reserved
-[    0.000000] BIOS-e820: [mem 0x000000008e026000-0x000000008e200fff] ACPI Tables
-[    0.000000] BIOS-e820: [mem 0x000000008e201000-0x000000008e689fff] ACPI Non-volatile Storage
-[    0.000000] BIOS-e820: [mem 0x000000008e68a000-0x000000008f40dfff] Reserved
-[    0.000000] BIOS-e820: [mem 0x000000008f40e000-0x000000008f40efff] System RAM
-[    0.000000] BIOS-e820: [mem 0x000000008f40f000-0x000000008fffffff] Reserved
-[    0.000000] BIOS-e820: [mem 0x00000000e0000000-0x00000000efffffff] Reserved
-[    0.000000] BIOS-e820: [mem 0x00000000fe000000-0x00000000fe010fff] Reserved
-[    0.000000] BIOS-e820: [mem 0x00000000fec00000-0x00000000fec00fff] Reserved
-[    0.000000] BIOS-e820: [mem 0x00000000fed00000-0x00000000fed03fff] Reserved
-[    0.000000] BIOS-e820: [mem 0x00000000fee00000-0x00000000fee00fff] Reserved
-[    0.000000] BIOS-e820: [mem 0x00000000ff000000-0x00000000ffffffff] Reserved
-[    0.000000] BIOS-e820: [mem 0x0000000100000000-0x000000086dffffff] System RAM
-[    0.000000] NX (Execute Disable) protection: active
-[    0.000000] e820: update [mem 0x81004018-0x81023c57] System RAM ==> System RAM (kernel)
-[    0.000000] e820: update [mem 0x81004018-0x81023c57] System RAM ==> System RAM (kernel)
-[    0.000000] e820: update [mem 0x80ff3018-0x81003e57] System RAM ==> System RAM (kernel)
-[    0.000000] e820: update [mem 0x80ff3018-0x81003e57] System RAM ==> System RAM (kernel)
-...
-
-/proc/iomem:
-...
-00000000-00000fff : Reserved
-00001000-0005efff : System RAM
-0005f000-0005ffff : Reserved
-00060000-0009ffff : System RAM
-000a0000-000fffff : Reserved
-  000a0000-000bffff : PCI Bus 0000:00
-  000c0000-000cddff : Video ROM
-  000f0000-000fffff : System ROM
-00100000-80ff3017 : System RAM
-80ff3018-81003e57 : System RAM (kernel)
-81003e58-81004017 : System RAM
-81004018-81023c57 : System RAM (kernel)
-81023c58-87672fff : System RAM
-...
-
-Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
----
- arch/x86/kernel/e820.c | 54 ++++++++++++++----------------------------
- 1 file changed, 18 insertions(+), 36 deletions(-)
-
-diff --git a/arch/x86/kernel/e820.c b/arch/x86/kernel/e820.c
-index 9dac24680ff8..8a0fb22bd740 100644
---- a/arch/x86/kernel/e820.c
-+++ b/arch/x86/kernel/e820.c
-@@ -184,19 +184,19 @@ void __init e820__range_add(u64 start, u64 size, enum e820_type type)
- 	__e820__range_add(e820_table, start, size, type);
- }
- 
--static void __init e820_print_type(enum e820_type type)
-+static const char *__init e820_type_to_string(enum e820_type type)
- {
- 	switch (type) {
--	case E820_TYPE_RAM:		/* Fall through: */
--	case E820_TYPE_RESERVED_KERN:	pr_cont("usable");			break;
--	case E820_TYPE_RESERVED:	pr_cont("reserved");			break;
--	case E820_TYPE_SOFT_RESERVED:	pr_cont("soft reserved");		break;
--	case E820_TYPE_ACPI:		pr_cont("ACPI data");			break;
--	case E820_TYPE_NVS:		pr_cont("ACPI NVS");			break;
--	case E820_TYPE_UNUSABLE:	pr_cont("unusable");			break;
--	case E820_TYPE_PMEM:		/* Fall through: */
--	case E820_TYPE_PRAM:		pr_cont("persistent (type %u)", type);	break;
--	default:			pr_cont("type %u", type);		break;
-+	case E820_TYPE_RESERVED_KERN:	return "System RAM (kernel)";
-+	case E820_TYPE_RAM:		return "System RAM";
-+	case E820_TYPE_ACPI:		return "ACPI Tables";
-+	case E820_TYPE_NVS:		return "ACPI Non-volatile Storage";
-+	case E820_TYPE_UNUSABLE:	return "Unusable memory";
-+	case E820_TYPE_PRAM:		return "Persistent Memory (legacy)";
-+	case E820_TYPE_PMEM:		return "Persistent Memory";
-+	case E820_TYPE_RESERVED:	return "Reserved";
-+	case E820_TYPE_SOFT_RESERVED:	return "Soft Reserved";
-+	default:			return "Unknown E820 type";
- 	}
- }
- 
-@@ -210,8 +210,7 @@ void __init e820__print_table(char *who)
- 			e820_table->entries[i].addr,
- 			e820_table->entries[i].addr + e820_table->entries[i].size - 1);
- 
--		e820_print_type(e820_table->entries[i].type);
--		pr_cont("\n");
-+		pr_info("%s\n", e820_type_to_string(e820_table->entries[i].type));
- 	}
- }
- 
-@@ -473,10 +472,8 @@ __e820__range_update(struct e820_table *table, u64 start, u64 size, enum e820_ty
- 
- 	end = start + size;
- 	printk(KERN_DEBUG "e820: update [mem %#010Lx-%#010Lx] ", start, end - 1);
--	e820_print_type(old_type);
--	pr_cont(" ==> ");
--	e820_print_type(new_type);
--	pr_cont("\n");
-+	pr_info("%s ==> %s\n", e820_type_to_string(old_type),
-+		e820_type_to_string(new_type));
- 
- 	for (i = 0; i < table->nr_entries; i++) {
- 		struct e820_entry *entry = &table->entries[i];
-@@ -550,7 +547,7 @@ u64 __init e820__range_remove(u64 start, u64 size, enum e820_type old_type, bool
- 	end = start + size;
- 	printk(KERN_DEBUG "e820: remove [mem %#010Lx-%#010Lx] ", start, end - 1);
- 	if (check_type)
--		e820_print_type(old_type);
-+		pr_info("%s", e820_type_to_string(old_type));
- 	pr_cont("\n");
- 
- 	for (i = 0; i < e820_table->nr_entries; i++) {
-@@ -1071,22 +1068,6 @@ void __init e820__finish_early_params(void)
- 	}
- }
- 
--static const char *__init e820_type_to_string(struct e820_entry *entry)
--{
--	switch (entry->type) {
--	case E820_TYPE_RESERVED_KERN:	/* Fall-through: */
--	case E820_TYPE_RAM:		return "System RAM";
--	case E820_TYPE_ACPI:		return "ACPI Tables";
--	case E820_TYPE_NVS:		return "ACPI Non-volatile Storage";
--	case E820_TYPE_UNUSABLE:	return "Unusable memory";
--	case E820_TYPE_PRAM:		return "Persistent Memory (legacy)";
--	case E820_TYPE_PMEM:		return "Persistent Memory";
--	case E820_TYPE_RESERVED:	return "Reserved";
--	case E820_TYPE_SOFT_RESERVED:	return "Soft Reserved";
--	default:			return "Unknown E820 type";
--	}
--}
--
- static unsigned long __init e820_type_to_iomem_type(struct e820_entry *entry)
- {
- 	switch (entry->type) {
-@@ -1174,7 +1155,7 @@ void __init e820__reserve_resources(void)
- 		}
- 		res->start = entry->addr;
- 		res->end   = end;
--		res->name  = e820_type_to_string(entry);
-+		res->name  = e820_type_to_string(entry->type);
- 		res->flags = e820_type_to_iomem_type(entry);
- 		res->desc  = e820_type_to_iores_desc(entry);
- 
-@@ -1194,7 +1175,8 @@ void __init e820__reserve_resources(void)
- 	for (i = 0; i < e820_table_firmware->nr_entries; i++) {
- 		struct e820_entry *entry = e820_table_firmware->entries + i;
- 
--		firmware_map_add_early(entry->addr, entry->addr + entry->size, e820_type_to_string(entry));
-+		firmware_map_add_early(entry->addr,
-+			entry->addr + entry->size, e820_type_to_string(entry->type));
- 	}
- }
- 
--- 
-2.25.1
-
+Thanks,
+Yang
+>
+> thanks,
+>
+> greg k-h
+> .
