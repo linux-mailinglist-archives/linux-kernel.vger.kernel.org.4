@@ -2,73 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 423FD606926
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 21:53:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF51A606928
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 21:54:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbiJTTxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 15:53:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35998 "EHLO
+        id S229905AbiJTTyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 15:54:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229768AbiJTTxD (ORCPT
+        with ESMTP id S229799AbiJTTyF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 15:53:03 -0400
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C2AB211293;
-        Thu, 20 Oct 2022 12:53:02 -0700 (PDT)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.94.2)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1olbb8-0005vb-A5; Thu, 20 Oct 2022 21:52:58 +0200
-Date:   Thu, 20 Oct 2022 20:52:52 +0100
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Sam Shih <sam.shih@mediatek.com>,
-        Miles Chen <miles.chen@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Chen-Yu Tsai <wenst@chromium.org>
-Subject: [PATCH] clk: mediatek: fix dependency of MT7986 ADC clocks
-Message-ID: <Y1GnFEjOWpplFjqI@makrotopia.org>
+        Thu, 20 Oct 2022 15:54:05 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51BD8215503;
+        Thu, 20 Oct 2022 12:54:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666295644; x=1697831644;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=qsMqdU9A1dj40AcyQFiHsoLDiAxuAbQUMYuX1A7KJR0=;
+  b=CbJu2aJjspNdnDbRt8Ve1uaOOXlw+/KsznA8wBDzywEG7D/whIaFxEq+
+   WQqHxaXBf0fPDnoVo0L7QaUu34Wi3cr+TiirN1hOLNxEYMHX9PJSreMb2
+   hZ44t22Fq2rHPT/cfEXbpA/t3h/LLt/pGp7B8TVWHJ+gYLcXOp+OahhzB
+   wUiEJKdUpbtoYtMOqN9JIfIDClhyi67dU6Wzd96Nhd/GogGrOETC/Yqup
+   bFXVyd5kJqwJOpWGSuQI6Oc1u1kzaOqMtV+YYs1cOY5TTXyVtpCkZ/2un
+   9+VV3rMpEm5cQMci9O17dOZIZG1yDltfLoXNkye+vFbZ75cokII2Lxk6J
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="307920214"
+X-IronPort-AV: E=Sophos;i="5.95,199,1661842800"; 
+   d="scan'208";a="307920214"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 12:54:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="959164973"
+X-IronPort-AV: E=Sophos;i="5.95,199,1661842800"; 
+   d="scan'208";a="959164973"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga005.fm.intel.com with ESMTP; 20 Oct 2022 12:54:02 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id A6FA1107; Thu, 20 Oct 2022 22:54:23 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mark Brown <broonie@kernel.org>, David Jander <david@protonic.nl>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 1/1] spi: Introduce spi_get_device_match_data() helper
+Date:   Thu, 20 Oct 2022 22:54:21 +0300
+Message-Id: <20221020195421.10482-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It seems like CLK_INFRA_ADC_FRC_CK always need to be enabled for
-CLK_INFRA_ADC_26M_CK to work. Instead of adding this dependency to the
-mtk-thermal and mt6577_auxadc drivers, add dependency to the clock
-driver clk-mt7986-infracfg.c.
+The proposed spi_get_device_match_data() helper is for retrieving
+a driver data associated with the ID in an ID table. First, it tries
+to get driver data of the device enumerated by firmware interface
+(usually Device Tree or ACPI). If none is found it falls back to
+the SPI ID table matching.
 
-Suggested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/clk/mediatek/clk-mt7986-infracfg.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+v2: rebased on top of v6.1-rc1, so shouldn't be any compilation errors
+ drivers/spi/spi.c       | 12 ++++++++++++
+ include/linux/spi/spi.h |  3 +++
+ 2 files changed, 15 insertions(+)
 
-diff --git a/drivers/clk/mediatek/clk-mt7986-infracfg.c b/drivers/clk/mediatek/clk-mt7986-infracfg.c
-index d90727a53283c7..49666047bf0ed5 100644
---- a/drivers/clk/mediatek/clk-mt7986-infracfg.c
-+++ b/drivers/clk/mediatek/clk-mt7986-infracfg.c
-@@ -153,7 +153,7 @@ static const struct mtk_gate infra_clks[] = {
- 		    18),
- 	GATE_INFRA1(CLK_INFRA_MSDC_66M_CK, "infra_msdc_66m", "infra_sysaxi_d2",
- 		    19),
--	GATE_INFRA1(CLK_INFRA_ADC_26M_CK, "infra_adc_26m", "csw_f26m_sel", 20),
-+	GATE_INFRA1(CLK_INFRA_ADC_26M_CK, "infra_adc_26m", "infra_adc_frc", 20),
- 	GATE_INFRA1(CLK_INFRA_ADC_FRC_CK, "infra_adc_frc", "csw_f26m_sel", 21),
- 	GATE_INFRA1(CLK_INFRA_FBIST2FPC_CK, "infra_fbist2fpc", "nfi1x_sel", 23),
- 	/* INFRA2 */
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index 5f9aedd1f0b6..aaf07052fd01 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -360,6 +360,18 @@ const struct spi_device_id *spi_get_device_id(const struct spi_device *sdev)
+ }
+ EXPORT_SYMBOL_GPL(spi_get_device_id);
+ 
++const void *spi_get_device_match_data(const struct spi_device *sdev)
++{
++	const void *match;
++
++	match = device_get_match_data(&sdev->dev);
++	if (match)
++		return match;
++
++	return (const void *)spi_get_device_id(sdev)->driver_data;
++}
++EXPORT_SYMBOL_GPL(spi_get_device_match_data);
++
+ static int spi_match_device(struct device *dev, struct device_driver *drv)
+ {
+ 	const struct spi_device	*spi = to_spi_device(dev);
+diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+index fbf8c0d95968..8fe3d0a9d2c9 100644
+--- a/include/linux/spi/spi.h
++++ b/include/linux/spi/spi.h
+@@ -1514,6 +1514,9 @@ extern void spi_unregister_device(struct spi_device *spi);
+ extern const struct spi_device_id *
+ spi_get_device_id(const struct spi_device *sdev);
+ 
++extern const void *
++spi_get_device_match_data(const struct spi_device *sdev);
++
+ static inline bool
+ spi_transfer_is_last(struct spi_controller *ctlr, struct spi_transfer *xfer)
+ {
 -- 
-2.38.1
+2.35.1
 
