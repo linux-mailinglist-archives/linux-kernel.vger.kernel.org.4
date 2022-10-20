@@ -2,116 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA34E6058D2
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 09:39:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DE306058BF
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 09:36:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230403AbiJTHjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 03:39:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48170 "EHLO
+        id S230284AbiJTHgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 03:36:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230388AbiJTHjH (ORCPT
+        with ESMTP id S230273AbiJTHgg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 03:39:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 639F0175362
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 00:39:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EE14A61A3E
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 07:39:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69D01C433D6;
-        Thu, 20 Oct 2022 07:39:03 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>
-Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH V2 4/4] irqchip/loongson-pch-lpc: Add suspend/resume support
-Date:   Thu, 20 Oct 2022 15:35:27 +0800
-Message-Id: <20221020073527.541845-5-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20221020073527.541845-1-chenhuacai@loongson.cn>
-References: <20221020073527.541845-1-chenhuacai@loongson.cn>
+        Thu, 20 Oct 2022 03:36:36 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA48171CF9
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 00:36:32 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id y13-20020a056e021bed00b002faba3c4afbso19575591ilv.13
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 00:36:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=beK/RyAk6JMkokDhacR9sWsAak3KfcE5cJn8YM9YfXo=;
+        b=WkfUS8OlQaXyocO9VEUtZVuyYjnSLcBSgREkrJz4sWNWHTd4Vy1Ust1Q0tnB6yjrB0
+         KBs2L4kGRI93tt4zPjNRJRucjmjnQDUtleJ2Q/G+9MaqIu1h48Y+dgyxCDOfvBQkkiUs
+         ah3qC9+OQFnbaNCE05xjPk+lWp84lR0bYD6SExZ45uOeK6aFG9sp2G6epXszB81DD/sW
+         E/Ue/Mz34M/d1DYrZ0A2psa0jVTJcu+CsNtbJw89F7kUqqbZu9CWmG03gRyLMSOQ+ItP
+         3hHzr7BoOZ3DG6ZfipVfjS2vNPMKWaxQtNGVTzw8lhLagmqQNUOFMLXYwsObwwnhpt3e
+         rigg==
+X-Gm-Message-State: ACrzQf3HAD+8MEYlHUmiOZcUlnCwsf+vSyscZIJR0CsRzaPRefCUMQc1
+        CHqJw5sHnTWzzi9dRnbGfBvot6flC9AAnodwFAMBAA55+EA2
+X-Google-Smtp-Source: AMsMyM6lPwgj4Q3DvjBnp+fA4UBjMmmzDlSR0FOvw5VDPgORiz2X3QYKE3lMgf1h1krXbr1FvKl8b7UL+ome8+zH7iGCIHYV/akz
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:d28b:0:b0:2f9:95e5:fae6 with SMTP id
+ p11-20020a92d28b000000b002f995e5fae6mr9067829ilp.313.1666251391412; Thu, 20
+ Oct 2022 00:36:31 -0700 (PDT)
+Date:   Thu, 20 Oct 2022 00:36:31 -0700
+In-Reply-To: <000000000000f2b07b05d5dc87cc@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000004ab16105eb726264@google.com>
+Subject: Re: [syzbot] general protection fault in fscache_free_cookie
+From:   syzbot <syzbot+5b129e8586277719bab3@syzkaller.appspotmail.com>
+To:     dhowells@redhat.com, dvyukov@google.com,
+        linux-cachefs-bounces@redhat.com, linux-cachefs-owner@redhat.com,
+        linux-cachefs@redhat.com, linux-kernel@vger.kernel.org,
+        mudongliangabcd@gmail.com, nogikh@google.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add suspend/resume support for PCH-LPC irqchip, which is needed for
-upcoming suspend/hibernation.
-
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
----
- drivers/irqchip/irq-loongson-pch-lpc.c | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
-
-diff --git a/drivers/irqchip/irq-loongson-pch-lpc.c b/drivers/irqchip/irq-loongson-pch-lpc.c
-index bf2324910a75..9b35492fb6be 100644
---- a/drivers/irqchip/irq-loongson-pch-lpc.c
-+++ b/drivers/irqchip/irq-loongson-pch-lpc.c
-@@ -13,6 +13,7 @@
- #include <linux/irqchip/chained_irq.h>
- #include <linux/irqdomain.h>
- #include <linux/kernel.h>
-+#include <linux/syscore_ops.h>
- 
- /* Registers */
- #define LPC_INT_CTL		0x00
-@@ -34,6 +35,7 @@ struct pch_lpc {
- 	u32			saved_reg_pol;
- };
- 
-+static struct pch_lpc *pch_lpc_priv;
- struct fwnode_handle *pch_lpc_handle;
- 
- static void lpc_irq_ack(struct irq_data *d)
-@@ -147,6 +149,26 @@ static int pch_lpc_disabled(struct pch_lpc *priv)
- 			(readl(priv->base + LPC_INT_STS) == 0xffffffff);
- }
- 
-+static int pch_lpc_suspend(void)
-+{
-+	pch_lpc_priv->saved_reg_ctl = readl(pch_lpc_priv->base + LPC_INT_CTL);
-+	pch_lpc_priv->saved_reg_ena = readl(pch_lpc_priv->base + LPC_INT_ENA);
-+	pch_lpc_priv->saved_reg_pol = readl(pch_lpc_priv->base + LPC_INT_POL);
-+	return 0;
-+}
-+
-+static void pch_lpc_resume(void)
-+{
-+	writel(pch_lpc_priv->saved_reg_ctl, pch_lpc_priv->base + LPC_INT_CTL);
-+	writel(pch_lpc_priv->saved_reg_ena, pch_lpc_priv->base + LPC_INT_ENA);
-+	writel(pch_lpc_priv->saved_reg_pol, pch_lpc_priv->base + LPC_INT_POL);
-+}
-+
-+static struct syscore_ops pch_lpc_syscore_ops = {
-+	.suspend = pch_lpc_suspend,
-+	.resume = pch_lpc_resume,
-+};
-+
- int __init pch_lpc_acpi_init(struct irq_domain *parent,
- 					struct acpi_madt_lpc_pic *acpi_pchlpc)
- {
-@@ -191,7 +213,10 @@ int __init pch_lpc_acpi_init(struct irq_domain *parent,
- 	parent_irq = irq_create_fwspec_mapping(&fwspec);
- 	irq_set_chained_handler_and_data(parent_irq, lpc_irq_dispatch, priv);
- 
-+	pch_lpc_priv = priv;
- 	pch_lpc_handle = irq_handle;
-+	register_syscore_ops(&pch_lpc_syscore_ops);
-+
- 	return 0;
- 
- free_irq_handle:
--- 
-2.31.1
-
+This bug is marked as fixed by commit:
+fscache: fix GPF in fscache_free_cookie
+But I can't find it in any tested tree for more than 90 days.
+Is it a correct commit? Please update it by replying:
+#syz fix: exact-commit-title
+Until then the bug is still considered open and
+new crashes with the same signature are ignored.
