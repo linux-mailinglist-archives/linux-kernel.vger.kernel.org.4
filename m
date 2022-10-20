@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBBC16069CF
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 22:47:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDFD16069D0
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 22:48:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbiJTUr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 16:47:57 -0400
+        id S230023AbiJTUsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 16:48:01 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbiJTUro (ORCPT
+        with ESMTP id S229808AbiJTUrx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 16:47:44 -0400
+        Thu, 20 Oct 2022 16:47:53 -0400
 Received: from vps-vb.mhejs.net (vps-vb.mhejs.net [37.28.154.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586335B730
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 13:47:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBD6F1B2338
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 13:47:36 -0700 (PDT)
 Received: from MUA
         by vps-vb.mhejs.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <mail@maciej.szmigiero.name>)
-        id 1olcRP-0007VS-7d; Thu, 20 Oct 2022 22:46:59 +0200
+        id 1olcRU-0007Vc-JN; Thu, 20 Oct 2022 22:47:04 +0200
 From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
 To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
 Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 5/6] ALSA: ca0106: Use snd_ctl_rename() to rename a control
-Date:   Thu, 20 Oct 2022 22:46:25 +0200
-Message-Id: <bffee980a420f9b0eee5681d2f48d34a70cec0ce.1666296963.git.maciej.szmigiero@oracle.com>
+Subject: [PATCH 6/6] ALSA: ac97: Use snd_ctl_rename() to rename a control
+Date:   Thu, 20 Oct 2022 22:46:26 +0200
+Message-Id: <adb68bfa0885ba4a2583794b828f8e20d23f67c7.1666296963.git.maciej.szmigiero@oracle.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <cover.1666296963.git.maciej.szmigiero@oracle.com>
 References: <cover.1666296963.git.maciej.szmigiero@oracle.com>
@@ -48,23 +48,74 @@ have to be updated too.
 snd_ctl_rename() takes care of that, so use it instead of directly
 modifying the control name.
 
+While we are at it, check also that the new control name doesn't
+accidentally overwrite the available buffer space.
+
 Fixes: c27e1efb61c5 ("ALSA: control: Use xarray for faster lookups")
 Cc: stable@vger.kernel.org
 Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
 ---
- sound/pci/ca0106/ca0106_mixer.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ sound/pci/ac97/ac97_codec.c | 32 ++++++++++++++++++++++++--------
+ 1 file changed, 24 insertions(+), 8 deletions(-)
 
-diff --git a/sound/pci/ca0106/ca0106_mixer.c b/sound/pci/ca0106/ca0106_mixer.c
-index 05f56015ddd87..f6381c098d4f6 100644
---- a/sound/pci/ca0106/ca0106_mixer.c
-+++ b/sound/pci/ca0106/ca0106_mixer.c
-@@ -720,7 +720,7 @@ static int rename_ctl(struct snd_card *card, const char *src, const char *dst)
+diff --git a/sound/pci/ac97/ac97_codec.c b/sound/pci/ac97/ac97_codec.c
+index ceead55f13ab1..ff685321f1a11 100644
+--- a/sound/pci/ac97/ac97_codec.c
++++ b/sound/pci/ac97/ac97_codec.c
+@@ -2656,11 +2656,18 @@ EXPORT_SYMBOL(snd_ac97_resume);
+  */
+ static void set_ctl_name(char *dst, const char *src, const char *suffix)
  {
- 	struct snd_kcontrol *kctl = ctl_find(card, src);
+-	if (suffix)
+-		sprintf(dst, "%s %s", src, suffix);
+-	else
+-		strcpy(dst, src);
+-}	
++	const size_t msize = SNDRV_CTL_ELEM_ID_NAME_MAXLEN;
++
++	if (suffix) {
++		if (snprintf(dst, msize, "%s %s", src, suffix) >= msize)
++			pr_warn("ALSA: AC97 control name '%s %s' truncated to '%s'\n",
++				src, suffix, dst);
++	} else {
++		if (strscpy(dst, src, msize) < 0)
++			pr_warn("ALSA: AC97 control name '%s' truncated to '%s'\n",
++				src, dst);
++	}
++}
+ 
+ /* remove the control with the given name and optional suffix */
+ static int snd_ac97_remove_ctl(struct snd_ac97 *ac97, const char *name,
+@@ -2687,8 +2694,11 @@ static int snd_ac97_rename_ctl(struct snd_ac97 *ac97, const char *src,
+ 			       const char *dst, const char *suffix)
+ {
+ 	struct snd_kcontrol *kctl = ctl_find(ac97, src, suffix);
++	char name[SNDRV_CTL_ELEM_ID_NAME_MAXLEN];
++
  	if (kctl) {
--		strcpy(kctl->id.name, dst);
-+		snd_ctl_rename(card, kctl, dst);
+-		set_ctl_name(kctl->id.name, dst, suffix);
++		set_ctl_name(name, dst, suffix);
++		snd_ctl_rename(ac97->bus->card, kctl, name);
+ 		return 0;
+ 	}
+ 	return -ENOENT;
+@@ -2707,11 +2717,17 @@ static int snd_ac97_swap_ctl(struct snd_ac97 *ac97, const char *s1,
+ 			     const char *s2, const char *suffix)
+ {
+ 	struct snd_kcontrol *kctl1, *kctl2;
++	char name[SNDRV_CTL_ELEM_ID_NAME_MAXLEN];
++
+ 	kctl1 = ctl_find(ac97, s1, suffix);
+ 	kctl2 = ctl_find(ac97, s2, suffix);
+ 	if (kctl1 && kctl2) {
+-		set_ctl_name(kctl1->id.name, s2, suffix);
+-		set_ctl_name(kctl2->id.name, s1, suffix);
++		set_ctl_name(name, s2, suffix);
++		snd_ctl_rename(ac97->bus->card, kctl1, name);
++
++		set_ctl_name(name, s1, suffix);
++		snd_ctl_rename(ac97->bus->card, kctl2, name);
++
  		return 0;
  	}
  	return -ENOENT;
