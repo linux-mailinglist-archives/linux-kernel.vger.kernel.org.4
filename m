@@ -2,131 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A5CE605E99
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 13:15:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DF4B605E9E
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 13:18:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229520AbiJTLPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 07:15:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43362 "EHLO
+        id S229973AbiJTLSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 07:18:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230340AbiJTLP2 (ORCPT
+        with ESMTP id S229678AbiJTLSB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 07:15:28 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA34315A325;
-        Thu, 20 Oct 2022 04:15:23 -0700 (PDT)
-Received: from mail.ispras.ru (unknown [83.149.199.84])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 34561419E9C7;
-        Thu, 20 Oct 2022 11:15:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 34561419E9C7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1666264521;
-        bh=tnQUIpaUoSUhMRbn1sP4W0MAUNcif6nai7PaNRHEOr8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=IxmYSXRnzxe7iuap7CBMtX62Wsuc9pl7UGw2DXTlQRb9dfAbLBjApGqS8EeMo9yJP
-         zfRtv+uu+SnOL1oW54rBSiEFuoIVOPj/PVS/FMAGA5ITbewlUzF/Qen2Fl4N1cwy3r
-         skqQ7TgGDQfapGocShrStSpXiAQcYp4/z8COA360=
+        Thu, 20 Oct 2022 07:18:01 -0400
+Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 869EF1E195C
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 04:18:00 -0700 (PDT)
+Received: by mail-ua1-x92b.google.com with SMTP id e22so8706890uar.5
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 04:18:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=SwRqOKLQj0/Xq8oBlan9WmyUy+o6GvIxuV89KZTsH50=;
+        b=ED5hikbDP1RKUt7WEy5mrsr88SOWQGWj+D8HT4vJM7niAKLqfFunDUCRVuKeO0ZNQk
+         REfa3oSU8/7VBxNM48i1CbAsupQPnar6wO0aPHEc65/1H1r5lOzYclwIBAf51zrSFCYL
+         L2gGBZAD2DImIYqjVwOgPG00kRBWQ9A6i2UheW4tir1kpsrKWMHORhmCg//gtuy5tttG
+         6iDiq1aVdmMk3egJnDRpIGkaO9103xuD3sHc2cleMXOV24lTSuHcl0W7AHY64TxWvviO
+         IM36GoiI52FsGNjVV4tbV8JJh9HKeUUsUhrPTlw6delMhybwGCeeXZgzMBv5N0DOqGWi
+         dD4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SwRqOKLQj0/Xq8oBlan9WmyUy+o6GvIxuV89KZTsH50=;
+        b=B9rm+sTqDGlTbeNZRuSY/6C/S0bjky+Mh2jZoX78Y1uZVqvSlHfoj6bPiBhJKUpjkh
+         gC2dIiHeAXzXPfhTUmKmyliJlmndMksdtfSqnrXQ71pS1xnls1a1kGcv49UdvveCRDpj
+         ho0xXNucoBmcQh3dQQdsxmgs66dgbA6d9+GqVnG1737UZpwib69falrvPlFwZ+XUrKqg
+         20wKz3tiS2lBPIxQ3DG8QrMwZlSEgFI6/aOfkjw/us71aXP+CTxB+WSwmCU9j2lUIBGf
+         W6QeLKYhF3twn4tiDLW+NRT3vz9p81uHES8arRZGwGRAPqaA7OPzWJHyMigm2ALZxo9D
+         o72A==
+X-Gm-Message-State: ACrzQf1NMrl0MNpiOf8ReEDODZsEyuQx+MMqZq9fQjdu39kJhQhHL3mq
+        UNTH+WcGiAdDh3wHOL+3ZK/O1ywqtAZBYCgtgusUAQ==
+X-Google-Smtp-Source: AMsMyM5rX7qIHDZSvX38KSmq37iD0nlk3DPHuFt6jZ7wVNSqOOAwmL0t+n94gq+v/20iWZ2reKS9ClaNobU92VYg4pQ=
+X-Received: by 2002:a67:ac0c:0:b0:3a9:e899:3b9b with SMTP id
+ v12-20020a67ac0c000000b003a9e8993b9bmr755932vse.9.1666264678974; Thu, 20 Oct
+ 2022 04:17:58 -0700 (PDT)
 MIME-Version: 1.0
-Date:   Thu, 20 Oct 2022 14:15:21 +0300
-From:   Evgeniy Baskov <baskov@ispras.ru>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        lvc-project@linuxtesting.org, x86@kernel.org,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 02/16] x86/build: Remove RWX sections and align on 4KB
-In-Reply-To: <CAMj1kXFyZJD5FnjWDEZbpzZM=T-676Z4q7nzEQAxp=zBAFGktw@mail.gmail.com>
-References: <cover.1662459668.git.baskov@ispras.ru>
- <aac3ce7c5aa706269d468fbe16129ee383deac2e.1662459668.git.baskov@ispras.ru>
- <CAMj1kXFyZJD5FnjWDEZbpzZM=T-676Z4q7nzEQAxp=zBAFGktw@mail.gmail.com>
-User-Agent: Roundcube Webmail/1.4.4
-Message-ID: <3261d02e8e6175a3cb122467b1fd0063@ispras.ru>
-X-Sender: baskov@ispras.ru
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20221019152947.3857217-1-arnd@kernel.org> <20221019152947.3857217-8-arnd@kernel.org>
+In-Reply-To: <20221019152947.3857217-8-arnd@kernel.org>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Thu, 20 Oct 2022 13:17:48 +0200
+Message-ID: <CAMRc=Mc8vKhB8phH6pwLOo=zdZWMxuCsO=aY_Nj8cG92V6eGyw@mail.gmail.com>
+Subject: Re: [PATCH 07/14] input: remove davinci keyboard driver
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Sekhar Nori <nsekhar@ti.com>, linux-arm-kernel@lists.infradead.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-kernel@vger.kernel.org, Kevin Hilman <khilman@baylibre.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
+        linux-input@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-19 10:04, Ard Biesheuvel wrote:
-> On Tue, 6 Sept 2022 at 12:41, Evgeniy Baskov <baskov@ispras.ru> wrote:
->> 
->> Avoid creating sections with maximal privileges to prepare for W^X
-> 
-> privileges
-> 
->> implementation. Align sections on page size (4KB) to allow protecting
->> them in page table.
->> 
-> 
-> in the page tables.
-> 
->> Signed-off-by: Evgeniy Baskov <baskov@ispras.ru>
->> ---
->>  arch/x86/kernel/vmlinux.lds.S | 15 ++++++++-------
->>  1 file changed, 8 insertions(+), 7 deletions(-)
->> 
->> diff --git a/arch/x86/kernel/vmlinux.lds.S 
->> b/arch/x86/kernel/vmlinux.lds.S
->> index 15f29053cec4..6587e0201b50 100644
->> --- a/arch/x86/kernel/vmlinux.lds.S
->> +++ b/arch/x86/kernel/vmlinux.lds.S
->> @@ -102,12 +102,11 @@ jiffies = jiffies_64;
->>  PHDRS {
->>         text PT_LOAD FLAGS(5);          /* R_E */
->>         data PT_LOAD FLAGS(6);          /* RW_ */
->> -#ifdef CONFIG_X86_64
->> -#ifdef CONFIG_SMP
->> +#if defined(CONFIG_X86_64) && defined(CONFIG_SMP)
->>         percpu PT_LOAD FLAGS(6);        /* RW_ */
->>  #endif
->> -       init PT_LOAD FLAGS(7);          /* RWE */
->> -#endif
->> +       inittext PT_LOAD FLAGS(5);      /* R_E */
->> +       init PT_LOAD FLAGS(6);          /* RW_ */
-> 
-> Please explain in the commit log how this change affects X86_32
-> 
->>         note PT_NOTE FLAGS(0);          /* ___ */
->>  }
->> 
->> @@ -226,9 +225,10 @@ SECTIONS
->>  #endif
->> 
->>         INIT_TEXT_SECTION(PAGE_SIZE)
->> -#ifdef CONFIG_X86_64
->> -       :init
->> -#endif
->> +       :inittext
->> +
->> +       . = ALIGN(PAGE_SIZE);
->> +
->> 
->>         /*
->>          * Section for code used exclusively before alternatives are 
->> run. All
->> @@ -240,6 +240,7 @@ SECTIONS
->>         .altinstr_aux : AT(ADDR(.altinstr_aux) - LOAD_OFFSET) {
->>                 *(.altinstr_aux)
->>         }
->> +       :init
->> 
->>         INIT_DATA_SECTION(16)
->> 
->> --
->> 2.35.1
->> 
+On Wed, Oct 19, 2022 at 5:36 PM Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> The dm365evm board was removed, and no other users of this
+> device exist.
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
 
-Thanks for pointing you, I'll fix all mentioned nitpicks before sending
-this again.
+Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
