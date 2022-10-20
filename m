@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 707AE60685C
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 20:43:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8392B60685D
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 20:44:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229739AbiJTSni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 14:43:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57894 "EHLO
+        id S229788AbiJTSoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 14:44:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiJTSnh (ORCPT
+        with ESMTP id S229514AbiJTSoJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 14:43:37 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E1D208817
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 11:43:36 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id fy4so1668355ejc.5
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 11:43:36 -0700 (PDT)
+        Thu, 20 Oct 2022 14:44:09 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C1F20882E
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 11:44:08 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id l22so879599edj.5
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 11:44:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=a4MNsuWXvt+bS3agOGU3z+N2CwGZIxCInLkhAMhqwl0=;
-        b=Ug8LDle/yVBuiKK79Ei1HiwQqWtE9+BFTn8qtqeyTo+OZOZQ0/5ECS8+MR8vbahV9A
-         NFiFsNGEAY4t1LXeJ0vjZ3+1vDtu2oZ1XhE0Pn53dlSSWTH3pxRK6kmJh/DtDGwoDGK8
-         DsAWna/UKmgZ0UDWvzjabdTRRmwg8fu0CoGL8hJgQnDpfjLJqwEfRUNOgpUQIuKM1ziW
-         Nw6oJ7VqaHAVMWfYxgMIvN3reS4aLhiBG6dPd5mxKIzYH1LIcorjvpZPoJINrtqJfdON
-         gjMSUHwKl6ru6qp5XQwpDcpqbYCHKQzt9ARe3c9c+71FbP8o27B6vV3Q+pY0esxjb6fb
-         ciCA==
+        bh=YAXDkl5OHacYtnMU6aGNdSp9H5dDI+zvMIbdfENsliM=;
+        b=rlYy4fmtLo89IDWwDGER07KU5thlGrVVG812rEBXzPLpS5/T+u5s4cKMiYG6mTMqbQ
+         tA4xjRxoMwCTt/KTHkfrF/fGdlkyXjAANAsdrGu6zZoxCjWuYq3JFp80VmZF+gm4OG7R
+         gVit8sq4JJ35CZpcap30Vy75/b8e7maJzrHjVdqX6Afet39FY5+ys84qd8T7aLwX6Evf
+         PSAVSDhTKfUYcJGG7qPckTkU8/QCBAaZEsieWu0waM9ruHcxI731GBECWteofd6aDXPP
+         T5RopbyVNp7showNJ5pBUswOmKNsIbnyD6T9soLZ6pChbsu6KtD5tNT4C0AIuaBg00Nv
+         cUEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=a4MNsuWXvt+bS3agOGU3z+N2CwGZIxCInLkhAMhqwl0=;
-        b=x3QIP4MzHW9Trf8unniZ7NSnOY+SC4M3fI1ZcZN5K54IYvHBExXvaWUQKr/sFlyrMP
-         ppXVjcYBrSOI04KGEH4V4GmxD34QMP/MLFrgHBPO6si1F3267T+9bieWha+KL7mrSSPC
-         HGm8xG/4Ta3QpXYSPP7XWsPA9YNltaWC4JggqzbO9WwVsfl0vb5BfuxUDkjWwv9vKg/T
-         mKWL3ukVIGvnO6Z5EqHxfrgnsX8yTmK7QIVJ7gSk5gP8K2XYU+uRSKDkaihomsgqEdId
-         17O69hWF3z5cT3W9IWcAr/17fRVeAFS4KuseV6xrlgQeXdaWqo1gfmwy+IiDC6LyX8rd
-         mnFw==
-X-Gm-Message-State: ACrzQf2rNGdDIaIwtZ6zeBStrV/SAVqJTgeqp18MyxpShVZ3lyvKY9O6
-        GDH0hniaMZKp88PJ0ZZWg43FRGgdZpq1GJhlkKlTiQ==
-X-Google-Smtp-Source: AMsMyM5NryrBEVL92yY+4fuy+BVBZ1+RXYvsGixaWGVhnPJpn73+WzMltR4/AwjeQsfiPg1+Pmsg1dar/SGUopxBg/U=
-X-Received: by 2002:a17:906:fe04:b0:777:b13d:30a6 with SMTP id
- wy4-20020a170906fe0400b00777b13d30a6mr12022670ejb.248.1666291414788; Thu, 20
- Oct 2022 11:43:34 -0700 (PDT)
+        bh=YAXDkl5OHacYtnMU6aGNdSp9H5dDI+zvMIbdfENsliM=;
+        b=BLMle+KVE+CBwRNwxGrydpcZ2NcnN6+t4hWO1hlCaDoZfj0haoSLCBjxasgIzQ9qvD
+         O8bGDLteGA2myt2QCqNa6tV2divpgHOVM71K9gw/MRtt5kHQkkpoo2TbyZqKco4JunmC
+         KhxRnE/8kYntEeLTASvDXjjNkfyWwt4sGo6rPeAFYlw5kxwJL4kgrXeADbPXR2ycJTXM
+         rik43mTIitREFH9GGeqAditp4RSRbPNz8iL7ozfCTqqiNmQp255dUigw1lj6XKn89Fek
+         hsXvpSpqIJZjuvM6py9zD8lKbQtE4OX+6aZmf9VfNI0X9ByrUZ9YSij9oUbMIuhjibQR
+         hAhw==
+X-Gm-Message-State: ACrzQf1ZPhETDkkuNssSTx2PlwSxG+ktloTOOUumKmi3kNX4WAb7gF6R
+        8Edqra8KGM43ljvxaGfeJuDT9cCKa7AFiJWzUpwB1g==
+X-Google-Smtp-Source: AMsMyM4x8PfivOxX0Gf6vX8/VO4WEJSCX2468LHbcQPBeAz2NWKjPDb8tJKEW31AWTyh/F0Dc2pFuxIeMjviaXhJ/Q8=
+X-Received: by 2002:aa7:dcc5:0:b0:45c:7613:65f6 with SMTP id
+ w5-20020aa7dcc5000000b0045c761365f6mr13975208edu.142.1666291446527; Thu, 20
+ Oct 2022 11:44:06 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221003214501.2050087-1-connoro@google.com> <20221003214501.2050087-2-connoro@google.com>
- <73859883-78c4-1080-7846-e8d644ad397a@redhat.com>
-In-Reply-To: <73859883-78c4-1080-7846-e8d644ad397a@redhat.com>
+References: <20221003214501.2050087-1-connoro@google.com> <20221003214501.2050087-6-connoro@google.com>
+ <xhsmhr0z3wx5z.mognet@vschneid.remote.csb>
+In-Reply-To: <xhsmhr0z3wx5z.mognet@vschneid.remote.csb>
 From:   "Connor O'Brien" <connoro@google.com>
-Date:   Thu, 20 Oct 2022 11:43:23 -0700
-Message-ID: <CALE1s+PPhC0Eb5Eojz+H5m96OXdc5qp6eOhj16vZgsP9n_UX1A@mail.gmail.com>
-Subject: Re: [RFC PATCH 01/11] locking/ww_mutex: Remove wakeups from under mutex::wait_lock
-To:     Waiman Long <longman@redhat.com>
+Date:   Thu, 20 Oct 2022 11:43:54 -0700
+Message-ID: <CALE1s+NqyXziXaFbWdwG8SvP0WFrUaDSB+b9_u3uFL61B89=8g@mail.gmail.com>
+Subject: Re: [RFC PATCH 05/11] sched: Split scheduler execution context
+To:     Valentin Schneider <vschneid@redhat.com>
 Cc:     linux-kernel@vger.kernel.org, kernel-team@android.com,
         John Stultz <jstultz@google.com>,
         Joel Fernandes <joelaf@google.com>,
@@ -67,8 +67,8 @@ Cc:     linux-kernel@vger.kernel.org, kernel-team@android.com,
         Steven Rostedt <rostedt@goodmis.org>,
         Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
         Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
         Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
         Boqun Feng <boqun.feng@gmail.com>,
         "Paul E . McKenney" <paulmck@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
@@ -83,67 +83,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 4, 2022 at 9:01 AM Waiman Long <longman@redhat.com> wrote:
+On Wed, Oct 19, 2022 at 10:17 AM Valentin Schneider <vschneid@redhat.com> wrote:
 >
-> On 10/3/22 17:44, Connor O'Brien wrote:
-> > diff --git a/kernel/locking/ww_mutex.h b/kernel/locking/ww_mutex.h
-> > index 56f139201f24..dfc174cd96c6 100644
-> > --- a/kernel/locking/ww_mutex.h
-> > +++ b/kernel/locking/ww_mutex.h
-> > @@ -161,6 +161,11 @@ static inline void lockdep_assert_wait_lock_held(struct rt_mutex *lock)
-> >
-> >   #endif /* WW_RT */
-> >
-> > +void ww_ctx_wake(struct ww_acquire_ctx *ww_ctx)
-> > +{
-> > +     wake_up_q(&ww_ctx->wake_q);
-> > +}
-> > +
-> >   /*
-> >    * Wait-Die:
-> >    *   The newer transactions are killed when:
-> > @@ -284,7 +289,7 @@ __ww_mutex_die(struct MUTEX *lock, struct MUTEX_WAITER *waiter,
-> >   #ifndef WW_RT
-> >               debug_mutex_wake_waiter(lock, waiter);
-> >   #endif
-> > -             wake_up_process(waiter->task);
-> > +             wake_q_add(&ww_ctx->wake_q, waiter->task);
-> >       }
-> >
-> >       return true;
-> > @@ -331,7 +336,7 @@ static bool __ww_mutex_wound(struct MUTEX *lock,
-> >                * wakeup pending to re-read the wounded state.
-> >                */
-> >               if (owner != current)
-> > -                     wake_up_process(owner);
-> > +                     wake_q_add(&ww_ctx->wake_q, owner);
-> >
-> >               return true;
-> >       }
-> > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> > index ee28253c9ac0..617e737392be 100644
-> > --- a/kernel/sched/core.c
-> > +++ b/kernel/sched/core.c
-> > @@ -1013,6 +1013,13 @@ void wake_up_q(struct wake_q_head *head)
-> >               wake_up_process(task);
-> >               put_task_struct(task);
-> >       }
-> > +     /*
-> > +      * XXX connoro: seems this is needed now that ww_ctx_wake() passes in a
-> > +      * wake_q_head that is embedded in struct ww_acquire_ctx rather than
-> > +      * declared locally.
-> > +      */
-> > +     head->first = node;
-> > +     head->lastp = &head->first;
-> >   }
-> >
+> On 03/10/22 21:44, Connor O'Brien wrote:
+> > @@ -1303,7 +1303,7 @@ static u64 grub_reclaim(u64 delta, struct rq *rq, struct sched_dl_entity *dl_se)
+> >   */
+> >  static void update_curr_dl(struct rq *rq)
+> >  {
+> > -     struct task_struct *curr = rq->curr;
+> > +     struct task_struct *curr = rq->proxy;
 >
-> You shouldn't do wake_q_init() here in wake_up_q(). Instead, you should
-> do it in ww_ctx_wake() right after the wake_up_q() call.
+> I found a note pointing out that Juri has a patch to unify the
+> update_curr*() functions as part of the deadline servers thing; I think it
+> could be picked as a standalone to at least unify the curr = rq->proxy
+> trickery - this will also (hopefully) remove redundancy for whatever we do
+> to expose sane runtime values to userspace.
+>
+> Last iteration I could find is:
+>
+> https://lore.kernel.org/all/20200807095051.385985-2-juri.lelli@redhat.com/
 
-Thanks, will fix this in the next version.
-
->
-> Cheers,
-> Longman
->
+That makes sense, thanks for the pointer to this patch.
