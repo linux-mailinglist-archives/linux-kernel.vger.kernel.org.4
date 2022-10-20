@@ -2,108 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7072606C25
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 01:43:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3585A606C27
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 01:44:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbiJTXnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 19:43:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49400 "EHLO
+        id S229497AbiJTXoc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 19:44:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiJTXnD (ORCPT
+        with ESMTP id S229449AbiJTXo3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 19:43:03 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88E5216DC30
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 16:43:01 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id x13so1004966qkg.11
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 16:43:01 -0700 (PDT)
+        Thu, 20 Oct 2022 19:44:29 -0400
+X-Greylist: delayed 356 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 20 Oct 2022 16:44:25 PDT
+Received: from 004.mia.mailroute.net (004.mia.mailroute.net [199.89.3.7])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53178BC2B
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 16:44:23 -0700 (PDT)
+Received: from localhost (004.mia.mailroute.net [127.0.0.1])
+        by 004.mia.mailroute.net (Postfix) with ESMTP id 4Mtkhk3MSGzHpk3
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 23:44:22 +0000 (UTC)
+X-Virus-Scanned: by MailRoute
+Received: from 004.mia.mailroute.net ([199.89.3.7])
+        by localhost (004.mia [127.0.0.1]) (mroute_mailscanner, port 10026)
+        with LMTP id V_ZDC_paeMSG for <linux-kernel@vger.kernel.org>;
+        Thu, 20 Oct 2022 23:44:20 +0000 (UTC)
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by 004.mia.mailroute.net (Postfix) with ESMTPS id 4Mtkhh2gRpzHpYr
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 23:44:20 +0000 (UTC)
+Received: by mail-pl1-f198.google.com with SMTP id c12-20020a170903234c00b0017f695bf8f0so490502plh.6
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 16:44:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q3AP/tQZsCGWdqocUdGbR0U8FOgV3GYYbflK+bE4iCU=;
-        b=n3in2a6l84dZ4h43JiWPEaU07Ag4vYTbida9+trrLRkXvVMbPcyx6HxtX8lAajFZFC
-         DtoagUZ1PTH2sW0BvUiuWacOoD+b0oHxbdazrKo7R18xXMv8a3vvGZGyW62mYg4k6lkt
-         3/foqWE3SI3G+FIcfErHPBsohl89rS5d99nOCfhFM+R8EWwDBwnmrXXAOdtpDHqEUdZo
-         oMi4qWhGG7oSMxykmVnWYIwNz7FJ2k300VniYOJMoYM5/+paUqv5Ir8yBWQ898/Yzkzm
-         ihj9GA65p7uqsk6bsfytPAf9WygErO/AX5iGn+8DsaW97NMJqf1dnss8tzD88E+2Oquw
-         RSDQ==
+        d=sladewatkins.net; s=googled;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=YX1dOQSRsve78QezUb/eXdj5VKCyEMPTdvcMB3RYrOQ=;
+        b=WbIhvWU8CfHx8GVDZGCjoiNp8HwXpcmXBtrDYeXkgwCxun52M4sXTAU7fvjDWmQIDa
+         m14lf2Dkr9vaxUNBrV1dEzQyAjrofbS6nbkuPY5HluitUiRVsA2qCA63DDZQAz1pnhcb
+         9iZhdMitQh2kG5RWefsNKLOf+SolbgeiSnXrS0C/is8Ow+7OT2IKl2kPTbFABWHB3Zj8
+         m4OfxPhnXDMPtRJCcRHwL0c7694ItA0+ePqTw9SoCgg9RHlgnrw58FPqMZL0VrC+5tMf
+         ssP3zJa8OvnvQndg9B9LLvvpYWX/dCw8asU4LC2qxWe+v8RTas2J7rREyzqEQLYiMJ7C
+         rJ2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Q3AP/tQZsCGWdqocUdGbR0U8FOgV3GYYbflK+bE4iCU=;
-        b=TkwgWcDW6ipAEZ0ySTm7vHHSA8q95J0+ZYxcYufpqLKJqPCzXblOcBwa+Ucac1qpmq
-         u2xUSSpDY186EpV3JBBH8QvKIFRX8lvx3ZoJJBDL60MSU3qMd6MO8FsVfubUN4QGjXeM
-         GNSPKkbnh6iOB0y3/61BkcsEqAsZuBmZcwQ4mJeM7XvIPhfuLpMqNLoK5g7rLe7/3okD
-         rGUHqz7r8K9KZj4HSI1eNb6TV4nh8QJ0D3YVAinnZakjvthU3YDwJQrGntFBvycjS8yq
-         Dm6TlFda5WnqCMi4+Fpb6Q7qS6ozfrXT9hBU7bH4HNQVpOj0nt83iHMYuQmJzmdijelF
-         cw/w==
-X-Gm-Message-State: ACrzQf1PqMTpzjqCHlU6dZTCTz1i8cAmLwpmlk9ilzc7apyC9QE62EKa
-        BXHAa3P1Tin7bCYTKdXLBURzeg==
-X-Google-Smtp-Source: AMsMyM77ieCA9Ka3hBL0aoBJg1xvsJRStZW8qEvdIlyx1P3eg6ZqCcE+FSB11I0sMIsyLJKF0HZlSQ==
-X-Received: by 2002:a05:620a:13b6:b0:6ee:cf79:bfa1 with SMTP id m22-20020a05620a13b600b006eecf79bfa1mr11569554qki.15.1666309380684;
-        Thu, 20 Oct 2022 16:43:00 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-47-55-122-23.dhcp-dynamic.fibreop.ns.bellaliant.net. [47.55.122.23])
-        by smtp.gmail.com with ESMTPSA id y13-20020a05620a25cd00b006bbf85cad0fsm8537748qko.20.2022.10.20.16.42.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 16:42:59 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1olfBj-00B3Bu-0U;
-        Thu, 20 Oct 2022 20:42:59 -0300
-Date:   Thu, 20 Oct 2022 20:42:58 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Pankaj Gupta <pankaj.gupta@nxp.com>,
-        "jarkko@kernel.org" <jarkko@kernel.org>,
-        "a.fatoum@pengutronix.de" <a.fatoum@pengutronix.de>,
-        "gilad@benyossef.com" <gilad@benyossef.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "sumit.garg@linaro.org" <sumit.garg@linaro.org>,
-        "david@sigma-star.at" <david@sigma-star.at>,
-        "michael@walle.cc" <michael@walle.cc>,
-        "john.ernberg@actia.se" <john.ernberg@actia.se>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "j.luebbe@pengutronix.de" <j.luebbe@pengutronix.de>,
-        "richard@nod.at" <richard@nod.at>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        Sahil Malhotra <sahil.malhotra@nxp.com>,
-        Kshitiz Varshney <kshitiz.varshney@nxp.com>,
-        Horia Geanta <horia.geanta@nxp.com>,
-        Varun Sethi <V.Sethi@nxp.com>
-Subject: Re: [EXT] Re: [PATCH v0 3/8] crypto: hbk flags & info added to the
- tfm
-Message-ID: <Y1HdAmy6ZfN8f5hJ@ziepe.ca>
-References: <Yz/OEwDtyTm+VH0p@gondor.apana.org.au>
- <DU2PR04MB8630CBBB8ABDC3768320C18195209@DU2PR04MB8630.eurprd04.prod.outlook.com>
- <Y0Q3JKnWSNIC4Xlu@zx2c4.com>
- <Y0UxY51KQoKCq59o@gondor.apana.org.au>
- <Y0XLqd/+C1sxq2G0@zx2c4.com>
- <Y0aDiLp7BztzwNez@gondor.apana.org.au>
- <Y0m2TU5k78I1AR+p@ziepe.ca>
- <Y1DN3SqEyFZd9i37@sol.localdomain>
- <Y1GgSX+ZmOsxhB2N@ziepe.ca>
- <Y1G9hKPT1MNQQxcG@sol.localdomain>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YX1dOQSRsve78QezUb/eXdj5VKCyEMPTdvcMB3RYrOQ=;
+        b=re/54aNUaDk+kWzeXnjzioNNdq0hM0M1+EoPxTS7FlmirbOH8j1YpBUSR6Xq6oC/Yo
+         uA1hP+Tbobqkw6E6nZBILQIa6ppLl2MT5p/4wKF8h5f0+J+j/yFJRMNEliEnbQqsJv5r
+         1zZt//wcek+7obfJ9bhpbHvmBDgOayfSwRzaJadQIXxzhtQiX+dFBJj6xzYL5VfzCz0W
+         T6wudEfZPWRPP01/peNhI0AWYm5EOkoGYN+wbDydytlxJXLR8DL08rawEDAa+KSK4ZDN
+         8RMYjW3kMSNDGOVYX7nlwrXiihFIEWbvSbOLLij0GMYxbmAAUChdKW0mbQgUanqyx4IA
+         UuJA==
+X-Gm-Message-State: ACrzQf1Icuvs+p40JB7yjZe/8VjzAvFNImkQ7Cvj+SGXaqH67aKZGVF/
+        ZFBUtHOGOAkm+STxYczslDHk3kdIMbxnbN2MeVH2kJrQpeAoMDpglRypGBERxl9qVH7mMq9mkqH
+        O7J6LI0RxtumKNXG/zTVqACEO15HwbE9GDFBYFbwOJCjcY5ICrWPYsKY=
+X-Received: by 2002:a63:df03:0:b0:462:cfa2:2871 with SMTP id u3-20020a63df03000000b00462cfa22871mr13685278pgg.225.1666309459071;
+        Thu, 20 Oct 2022 16:44:19 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM75NxUHYbQaS3LgwG5b/WXaDO1a4BYysaF3eePJ2McKsaOhV8OIsrv2zZdZ2WzF6btIac6cwDHaWtY7Ngc0h+A=
+X-Received: by 2002:a63:df03:0:b0:462:cfa2:2871 with SMTP id
+ u3-20020a63df03000000b00462cfa22871mr13685264pgg.225.1666309458800; Thu, 20
+ Oct 2022 16:44:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y1G9hKPT1MNQQxcG@sol.localdomain>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+References: <20221018174157.1897-1-phillip@squashfs.org.uk>
+ <20221020135545.586-1-nicememory@gmail.com> <41ef4b22-eea8-2d67-99d8-6aaae7d25ac1@squashfs.org.uk>
+ <02b72b86-7240-5530-477a-c8bdcfd35ef5@gmail.com>
+In-Reply-To: <02b72b86-7240-5530-477a-c8bdcfd35ef5@gmail.com>
+From:   Slade Watkins <srw@sladewatkins.net>
+Date:   Thu, 20 Oct 2022 19:44:07 -0400
+Message-ID: <CA+pv=HO36vMH6Uqu412MF+Hmu-+57QeapGt6k+QDDxr-AsbJkw@mail.gmail.com>
+Subject: Re: BISECT result: 6.0.0-RC kernels trigger Firefox snap bug with
+ 6.0.0-rc3 through 6.0.0-rc7
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Phillip Lougher <phillip@squashfs.org.uk>,
+        Jintao Yin <nicememory@gmail.com>, hsinyi@chromium.org,
+        linux-kernel@vger.kernel.org, marcmiltenberger@gmail.com,
+        mirsad.todorovac@alu.unizg.hr, regressions@leemhuis.info,
+        regressions@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -111,44 +90,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 02:28:36PM -0700, Eric Biggers wrote:
-> On Thu, Oct 20, 2022 at 04:23:53PM -0300, Jason Gunthorpe wrote:
-> > On Wed, Oct 19, 2022 at 09:26:05PM -0700, Eric Biggers wrote:
-> > 
-> > > Are you referring to the support for hardware-wrapped inline crypto keys?  It
-> > > isn't upstream yet, but my latest patchset is at
-> > > https://lore.kernel.org/linux-fscrypt/20220927014718.125308-2-ebiggers@kernel.org/T/#u.
-> > > There's also a version of it used by some Android devices already.  Out of
-> > > curiosity, are you using it in an Android device, or have you adopted it in some
-> > > other downstream?
-> > 
-> > Unrelated to Android, similar functionality, but slightly different
-> > ultimate purpose. We are going to be sending a fscrypt patch series
-> > for mlx5 and nvme soonish.
-> 
-> That's interesting, though also slightly scary in that it sounds like you've
-> already shipped some major fscrypt changes without review!
+[Resend due to formatting issue, thanks gmail.]
 
-Heh, says the Android guy :)
+On Thu, Oct 20, 2022 at 7:23 PM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
+>
+> Ah! I was about to test his third fixup patch. I prefer to go
+> with your fix instead (as the formal patch).
 
-Fortunately nothing major, we are enterprise focused, we need stuff in
-real distros - we know know how to do it.
++1, agreed.
 
-> > That sounds disappointing that we are now having parallel ways for the
-> > admin to manipulate kernel owned keys.
-> 
-> Well, the keyrings subsystem never worked properly for fscrypt anyway.  At most,
-> it's only useful for providing the key to the filesystem initially (by passing a
-> key ID to FS_IOC_ADD_ENCRYPTION_KEY, instead of the key bytes), similar to what
-> dm-crypt allows.  After that, the keyrings subsystem plays no role.
-
-Sure, but loading the key into the keyring should allow many different
-options, including things like TPM PCR secured keys (eg like
-bitlocker) - we shouldn't allow user space the ability to see the key
-data at all.
-
-Duplicating this in every subsystem makes no sense, there is a
-reasonable role for the keyring to play in solving these kinds of
-problems for everything.
-
-Jason
+-srw
