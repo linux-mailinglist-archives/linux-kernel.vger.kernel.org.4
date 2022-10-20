@@ -2,70 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C28160647D
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 17:28:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DD6560647F
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 17:28:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230491AbiJTP2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 11:28:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43320 "EHLO
+        id S230403AbiJTP2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 11:28:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230387AbiJTP1i (ORCPT
+        with ESMTP id S230430AbiJTP1k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 11:27:38 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF4D91E09AC
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 08:27:16 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id i9so1949199wrv.5
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 08:27:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XCbyLMSIwCFaLYXKLCOo4G7nJD5L3ekihEuWwF8mvwE=;
-        b=AHsOeapv1EyxJ+xdz0WzZjvTMxMBeHTZ6UtguuVOJ9Gl62qUZIjrdJXYVqjBjsPcxF
-         f16HghPj2YMDQLefKmMlvFLbbnCklef/5UMFwyeMQTshmiGIQHTiHxPYF0JpdZtEgmli
-         VpP63PsFk+o24RwaMpCIgvGuHiwwNik0jpvKhKjurFhVXiVG/mRDL5WJuQakZD7vPEF4
-         gIs+wcfl3q/KZs91d/k/Ki4xhbabkzGORwbNI/mR07UacD5pEFAgFG1bTgaaa4Ke6pfV
-         5uQVFXgAWLkFvoM9rJIfeVg8yT8zLHQfqxXDjE40eMRdxweRUyM3dNyrQWdfC4qiog3U
-         hLog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XCbyLMSIwCFaLYXKLCOo4G7nJD5L3ekihEuWwF8mvwE=;
-        b=RoUW2ytHOJg1H6HfXX6S9l195+zjoUIuPj0uGq2fIm7gfb9Jws/zkVpB47GK7eU9ov
-         CrQiho/G9TTl5rcHVx4Pc+unX0TfQx/bdwpvOw7XEABc5ywIX2t/QaBtfYt/GEaxvXTT
-         no2K8qS5f0VvVWEMeG+P1Fpu/NpoBWgcEPOAW9m+PEh7ogaHCZ76W/eCVszEUro6cOxV
-         qT+aO1yHC6QBnZbflC8G0PdRorKlmUNPdPt/vnWEcJ4V6gFYcZnI72d7n/0Jxz/66xKK
-         dInfmLXQesJLq1iuTGbTKT7DLbItdKSW0uJbo+EPNylGTmkPd/TiZW8VorE26rvCqFJq
-         ikDA==
-X-Gm-Message-State: ACrzQf06y1hzL5eZdXHbx38QlbN66DeNZyHJ3asW2bo0+RbMZAHjiOQM
-        6+LvgcfZ98+PPdiuc+zHfFyJBg==
-X-Google-Smtp-Source: AMsMyM6T/Q23E1nYwJNyAnSSIRY+OeFn/EWUv8rRi4c/ox7+0bnVyTjq0llT45iQOJ9xvo+3ghTMkQ==
-X-Received: by 2002:a5d:64cf:0:b0:231:2e6c:7609 with SMTP id f15-20020a5d64cf000000b002312e6c7609mr9115673wri.172.1666279623573;
-        Thu, 20 Oct 2022 08:27:03 -0700 (PDT)
-Received: from MBP-di-Paolo.station (net-2-35-55-161.cust.vodafonedsl.it. [2.35.55.161])
-        by smtp.gmail.com with ESMTPSA id l10-20020a1ced0a000000b003c409244bb0sm134337wmh.6.2022.10.20.08.27.02
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 20 Oct 2022 08:27:03 -0700 (PDT)
-From:   Paolo Valente <paolo.valente@linaro.org>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        glen.valante@linaro.org, arie.vanderhoeven@seagate.com,
-        rory.c.chen@seagate.com, Davide Zini <davidezini2@gmail.com>,
-        Paolo Valente <paolo.valente@linaro.org>
-Subject: [PATCH V4 8/8] block, bfq: balance I/O injection among underutilized actuators
-Date:   Thu, 20 Oct 2022 17:26:43 +0200
-Message-Id: <20221020152643.21199-9-paolo.valente@linaro.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20221020152643.21199-1-paolo.valente@linaro.org>
-References: <20221020152643.21199-1-paolo.valente@linaro.org>
+        Thu, 20 Oct 2022 11:27:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47B0B1AD6BA;
+        Thu, 20 Oct 2022 08:27:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F1F361BDF;
+        Thu, 20 Oct 2022 15:27:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFA6DC433D7;
+        Thu, 20 Oct 2022 15:27:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1666279635;
+        bh=yUb9kASzpdyGhOn55ZBT35rZSOA+C2xuJAammcJn0Y4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Vrxw1yziM7jBZiuUc3jbtSWXr7FQNLACtlkU6aOWmNedZr/uyRFFFgb5br/9UIJ9y
+         oehVl2MCI/s2FrVnGsp0DWPJ8afN1qeIxX6H7nQdEcEPB4CXPBLlb7lXQQeh66dPuB
+         9hBgX+xh3grkfn93PJpqT2m487+5lbCRakD0s3i4=
+Date:   Thu, 20 Oct 2022 17:27:12 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Kang Minchul <tegongkang@gmail.com>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: iio: Use div64_ul instead of do_div
+Message-ID: <Y1Fo0NmzspXRS92n@kroah.com>
+References: <20221019053829.821918-1-tegongkang@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221019053829.821918-1-tegongkang@gmail.com>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,72 +53,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Davide Zini <davidezini2@gmail.com>
+On Wed, Oct 19, 2022 at 02:38:29PM +0900, Kang Minchul wrote:
+> Using div64_ul instead of do_div (64-by-32 division) is more
+> recommended by coccicheck because this can avoid potential truncation.
+> 
+> So this commit changes do_div to div64_ul and
+> remove coccicheck warnings.
+> 
+> Signed-off-by: Kang Minchul <tegongkang@gmail.com>
+> ---
+>  drivers/staging/iio/frequency/ad9832.c          | 2 +-
+>  drivers/staging/iio/frequency/ad9834.c          | 2 +-
+>  drivers/staging/iio/impedance-analyzer/ad5933.c | 2 +-
+>  3 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/staging/iio/frequency/ad9832.c b/drivers/staging/iio/frequency/ad9832.c
+> index 6f9eebd6c7ee..cd038480f63c 100644
+> --- a/drivers/staging/iio/frequency/ad9832.c
+> +++ b/drivers/staging/iio/frequency/ad9832.c
+> @@ -122,7 +122,7 @@ static unsigned long ad9832_calc_freqreg(unsigned long mclk, unsigned long fout)
+>  {
+>  	unsigned long long freqreg = (u64)fout *
+>  				     (u64)((u64)1L << AD9832_FREQ_BITS);
+> -	do_div(freqreg, mclk);
+> +	freqreg = div64_ul(freqreg, mclk);
 
-Upon the invocation of its dispatch function, BFQ returns the next I/O
-request of the in-service bfq_queue, unless some exception holds. One
-such exception is that there is some underutilized actuator, different
-from the actuator for which the in-service queue contains I/O, and
-that some other bfq_queue happens to contain I/O for such an
-actuator. In this case, the next I/O request of the latter bfq_queue,
-and not of the in-service bfq_queue, is returned (I/O is injected from
-that bfq_queue). To find such an actuator, a linear scan, in
-increasing index order, is performed among actuators.
+I think the original code here is correct, no need for a change, unless
+you have the hardware to test this out and can verify it all still works
+identically.
 
-Performing a linear scan entails a prioritization among actuators: an
-underutilized actuator may be considered for injection only if all
-actuators with a lower index are currently fully utilized, or if there
-is no pending I/O for any lower-index actuator that happens to be
-underutilized.
+thanks,
 
-This commits breaks this prioritization and tends to distribute
-injection uniformly across actuators. This is obtained by adding the
-following condition to the linear scan: even if an actuator A is
-underutilized, A is however skipped if its load is higher than that of
-the next actuator.
-
-Signed-off-by: Paolo Valente <paolo.valente@linaro.org>
-Signed-off-by: Davide Zini <davidezini2@gmail.com>
----
- block/bfq-iosched.c | 18 +++++++++++++-----
- 1 file changed, 13 insertions(+), 5 deletions(-)
-
-diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-index 77d3ddabf059..b178dfe8a5c8 100644
---- a/block/bfq-iosched.c
-+++ b/block/bfq-iosched.c
-@@ -4819,10 +4819,16 @@ bfq_find_active_bfqq_for_actuator(struct bfq_data *bfqd,
- 
- /*
-  * Perform a linear scan of each actuator, until an actuator is found
-- * for which the following two conditions hold: the load of the
-- * actuator is below the threshold (see comments on actuator_load_threshold
-- * for details), and there is a queue that contains I/O for that
-- * actuator. On success, return that queue.
-+ * for which the following three conditions hold: the load of the
-+ * actuator is below the threshold (see comments on
-+ * actuator_load_threshold for details) and lower than that of the
-+ * next actuator (comments on this extra condition below), and there
-+ * is a queue that contains I/O for that actuator. On success, return
-+ * that queue.
-+ *
-+ * Performing a plain linear scan entails a prioritization among
-+ * actuators. The extra condition above breaks this prioritization and
-+ * tends to distribute injection uniformly across actuators.
-  */
- static struct bfq_queue *
- bfq_find_bfqq_for_underused_actuator(struct bfq_data *bfqd)
-@@ -4830,7 +4836,9 @@ bfq_find_bfqq_for_underused_actuator(struct bfq_data *bfqd)
- 	int i;
- 
- 	for (i = 0 ; i < bfqd->num_actuators; i++)
--		if (bfqd->rq_in_driver[i] < bfqd->actuator_load_threshold) {
-+		if (bfqd->rq_in_driver[i] < bfqd->actuator_load_threshold &&
-+		    (i == bfqd->num_actuators - 1 ||
-+		     bfqd->rq_in_driver[i] < bfqd->rq_in_driver[i+1])) {
- 			struct bfq_queue *bfqq =
- 				bfq_find_active_bfqq_for_actuator(bfqd, i);
- 
--- 
-2.20.1
-
+greg k-h
