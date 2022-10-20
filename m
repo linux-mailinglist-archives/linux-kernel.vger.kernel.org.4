@@ -2,100 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18443606B1D
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 00:16:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF140606B20
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 00:17:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229862AbiJTWQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 18:16:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51792 "EHLO
+        id S229886AbiJTWRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 18:17:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiJTWQs (ORCPT
+        with ESMTP id S229861AbiJTWRL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 18:16:48 -0400
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ADC31D93D6;
-        Thu, 20 Oct 2022 15:16:47 -0700 (PDT)
-Received: by mail-ot1-x32a.google.com with SMTP id a16-20020a056830101000b006619dba7fd4so713211otp.12;
-        Thu, 20 Oct 2022 15:16:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/A4TsPZ5OKeQV12OXhSz51owPiznHLBKdOy5Wwbscas=;
-        b=FkI1K4tshdheWJHtWR/mNvfpli11lVVGaZ6PBlI37HmO+pT1bv6/on8QsvvJrG830h
-         nEEQlUrcen/NMzVdCw7R1+nDqPTPHFWbktExGjmw+uwE68Rz7NAsZp9GkNOejzWD4m/J
-         SrIwGuMqUjiV6h5xaf8fSD+chPkKy3N1+0XCuKa537MZBduRuQwHUbMtMwlfKphTEiCQ
-         swKOj51hRA2ccFaKW9OQCBcmz3yJox/cS+5eMMz/xDCckrg6ZrSxNHcEpRXbKa80MJxK
-         IvA2hRy/XX827cTWLU7TLA3saN+tb4dCPhOGsdG0fEM3uxv6FesVRa2QBeSQLd5cJA5A
-         Xc7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/A4TsPZ5OKeQV12OXhSz51owPiznHLBKdOy5Wwbscas=;
-        b=ZM7FfcPze5xQN4p+uWJH3PhrfLduw1oO8lOpga3/DHBX3iza6YqyCSd10p3CsqSi+I
-         fkzmbfl30Huta/ra9s7swa3H6rOeXXsv9nUCpRp8+j/PmX8+KO+9s4NWsbAqyRcG9O/O
-         z4DV383gX2IwXgzI4j708miXBj/MMtWcQpdeXg9FKYrc4/VfoUBIZD1q7uXckMBSUebo
-         fX0tcvLJYMK+//4wzpAX6+WHt0PM4RMf2YhIFNtHsHGgyIGtMxET9q4zQLJJbo04GOWD
-         eMcjGdVWJeENnxz/MXKC3RKFRpYbYGngeMIxo+G/Dcy8Rb8uPf1clf9XSFbJYd4xSqjl
-         tbEA==
-X-Gm-Message-State: ACrzQf00m/ubgM6826P289a8EjUryEBTIjsg7IdKm2fyxGPeoPBgM7xi
-        +XYYbegYt3WMrb0TGHN9F8s=
-X-Google-Smtp-Source: AMsMyM5Uz2WW637gp/+mECf2Y+GTW/j/H+cLyZ95Gr0b6pCTQAqV+NnrRCCeUGEhJ/50JBOtWBQzrw==
-X-Received: by 2002:a05:6830:3686:b0:661:ed59:d3e2 with SMTP id bk6-20020a056830368600b00661ed59d3e2mr8177278otb.357.1666304206820;
-        Thu, 20 Oct 2022 15:16:46 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id bf33-20020a056808192100b00354948e04e4sm509464oib.2.2022.10.20.15.16.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 15:16:46 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 20 Oct 2022 15:16:45 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     linux-hwmon@vger.kernel.org, jdelvare@suse.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v2 0/4] hwmon: (jc42) regmap conversion and resume fix
-Message-ID: <20221020221645.GH4035307@roeck-us.net>
-References: <20221020210320.1624617-1-martin.blumenstingl@googlemail.com>
+        Thu, 20 Oct 2022 18:17:11 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 395D321551B;
+        Thu, 20 Oct 2022 15:17:08 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29KMGmK2058047;
+        Thu, 20 Oct 2022 17:16:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1666304208;
+        bh=zQnSES82ipiGqNM7gc4jpefdaGHRyDoGL9iPjKpkoyU=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=ACL3SPCxxjsb/0PTbeY5uC7GHrhOjlfRLnKNpXCA7rO06iDVj/mYogHdYX2kXOBrZ
+         BdX0oIU65+djzlM5b0d4D1tjipgdyEPj0FBtqvmO0PV6ilLuzmRQSCCLrCIQdT8Ztg
+         UyLVv8pFXxo3HTYVM93PKG8FSsyJMO1zKCTQRU/g=
+Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29KMGmLF009684
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 20 Oct 2022 17:16:48 -0500
+Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Thu, 20
+ Oct 2022 17:16:47 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Thu, 20 Oct 2022 17:16:47 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29KMGlJK014120;
+        Thu, 20 Oct 2022 17:16:47 -0500
+Date:   Thu, 20 Oct 2022 17:16:47 -0500
+From:   Bryan Brattlof <bb@ti.com>
+To:     Andrew Davis <afd@ti.com>
+CC:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 00/12] TI J7x Disable Incomplete DT Nodes
+Message-ID: <20221020221647.d6pifdm2jtjpt4yk@bryanbrattlof.com>
+References: <20221020160305.18711-1-afd@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
-In-Reply-To: <20221020210320.1624617-1-martin.blumenstingl@googlemail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221020160305.18711-1-afd@ti.com>
+X-PGP-Fingerprint: D3D1 77E4 0A38 DF4D 1853 FEEF 41B9 0D5D 71D5 6CE0
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 11:03:16PM +0200, Martin Blumenstingl wrote:
-> Hello,
+On October 20, 2022 thus sayeth Andrew Davis:
+> Hello all,
 > 
-> this is a follow-up to the comments I got from Guenter on v1 of my patch
-> from [0] titled:
->   "hwmon: (jc42) Restore the min/max/critical temperatures on resume"
-> There Guenter suggested: "The best solution would probably be to convert
-> the driver to use regmap and let regmap handle the caching". That's the
-> goal of this series - in addition to fixing the original resume issue
-> (see patch #3 - which was the reason for v1 of this series).
+> Same story as for AM64x[0] and AM62x[1], this time for J7x.
 > 
-> Changes since v1 at [0]:
-> - marked as RFC
-> - added patches for regmap (patch #1) and regcache (patch #2) conversion
-> - patch #3 has been updated to use regcache for restoring the register
->   values during system resume (this was originally patch 1/1)
-> - added another patch to remove caching of the temperature register
+> This one was a little more involved that the last 2 rounds as some IP
+> (like UART) are pinned out using the default pinmux. Perhaps we should be
+> explicit here and have pinmux nodes that simply restate the defaults. I
+> can go solve that in a follow up series if we think that is what we
+> want to do.
+> 
+> I have the last round for AM65x ready to post, but that involves a few
+> boards that I do not have (Simatic IOT2050) but would like to do some
+> additional re-work with, so holding off until after I get that sorted.
+> 
+> Thanks,
+> Andrew
+> 
+> [0] https://www.spinics.net/lists/arm-kernel/msg1018532.html
+> [1] https://www.spinics.net/lists/arm-kernel/msg1018864.html
+> 
+> Andrew Davis (12):
+>   arm64: dts: ti: k3-j721e: Enable UART nodes at the board level
+>   arm64: dts: ti: k3-j721e: Enable I2C nodes at the board level
+>   arm64: dts: ti: k3-j721e: Enable MCASP nodes at the board level
+>   arm64: dts: ti: k3-j721e: Enable MCAN nodes at the board level
+>   arm64: dts: ti: k3-j7200: Enable UART nodes at the board level
+>   arm64: dts: ti: k3-j7200: Enable I2C nodes at the board level
+>   arm64: dts: ti: k3-j721s2: Enable UART nodes at the board level
+>   arm64: dts: ti: k3-j721e: Enable Mailbox nodes at the board level
+>   arm64: dts: ti: k3-j7200: Enable Mailbox nodes at the board level
+>   arm64: dts: ti: k3-j721s2: Enable Mailbox nodes at the board level
+>   arm64: dts: ti: k3-j721s2: Enable MCAN nodes at the board level
+>   arm64: dts: ti: k3-j721s2: Enable I2C nodes at the board level
+> 
+>  .../dts/ti/k3-j7200-common-proc-board.dts     |  48 ++----
+>  arch/arm64/boot/dts/ti/k3-j7200-main.dtsi     |  29 ++++
+>  .../boot/dts/ti/k3-j7200-mcu-wakeup.dtsi      |   5 +
+>  arch/arm64/boot/dts/ti/k3-j7200-som-p0.dtsi   |  42 +----
+>  .../dts/ti/k3-j721e-common-proc-board.dts     | 141 +++-------------
+>  arch/arm64/boot/dts/ti/k3-j721e-main.dtsi     |  55 ++++++
+>  .../boot/dts/ti/k3-j721e-mcu-wakeup.dtsi      |   7 +
+>  arch/arm64/boot/dts/ti/k3-j721e-sk.dts        | 158 ++----------------
+>  arch/arm64/boot/dts/ti/k3-j721e-som-p0.dtsi   |  33 +---
+>  .../dts/ti/k3-j721s2-common-proc-board.dts    | 132 +--------------
+>  arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi    |  58 +++++++
+>  .../boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi     |   7 +
+>  arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi  |  98 +----------
+>  13 files changed, 231 insertions(+), 582 deletions(-)
 > 
 
+*whew* these Jacinto boards have a lot of stuff on them :) but it LGTM
 
-Great, excellent work. As mentioned in the patches, please combine
-patches 1, 2, and 4 into a single patch. Also, drop the RFC.
+Reviewed-by: Bryan Brattlof <bb@ti.com>
 
-Thanks,
-Guenter
+~Bryan
