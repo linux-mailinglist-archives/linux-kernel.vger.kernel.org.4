@@ -2,145 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFABF6059A0
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 10:23:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 581AB60599D
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 10:22:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229850AbiJTIXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 04:23:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36988 "EHLO
+        id S230409AbiJTIWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 04:22:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbiJTIXZ (ORCPT
+        with ESMTP id S229913AbiJTIWm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 04:23:25 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FBE1183DB6
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 01:23:15 -0700 (PDT)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29K5pDRp017748;
-        Thu, 20 Oct 2022 08:22:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2022-7-12;
- bh=Clfj87675GHdX4Rj6pHC1Kc3scNEvSoiZL9LOWBWvEs=;
- b=KzqjY7aN76EFNvEnVqk9a+JILx2ZdqRh21Bk+yHWNtn0be9VAmwpiDu4NGfqPjwxXgBQ
- 0bl+hQw5lZzwAO9BxILkwtebfwCTcgyu+faNj2L05h+EymKcJoVTaUkENvCLqZHHd9IS
- nXM97YFGoiArq8w1W85WKsyaM5EnuIF1msvEtL/Ouy2xb+0oDPfx28vEtGiQXbP4mqt7
- 3lBJIXHOBiHwYM2pF6+1o6+8a75tDUD0KmaqW/NuQLU2xmU+5nEf7maoCbnMuumIyyAC
- LHpwit14/M6js2kJLCcp6iimgCHtIbhHMBVHReL4zuMtoNoPbbZhyExEJh6jd9aTlaZd hg== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3k7ndtn0ae-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 20 Oct 2022 08:22:32 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 29K4pY0P003893;
-        Thu, 20 Oct 2022 08:22:31 GMT
-Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2169.outbound.protection.outlook.com [104.47.58.169])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3k8j0srk8g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 20 Oct 2022 08:22:31 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MOOjnl5nQD9APnKw+YzCkEzPPxL33LTjiaAjBvBME7A8DCy6MAT+0jtQWSTCYhBgJ5qK9bEmRhphA0AMysvOD6Is1NE2p6Q/tEHxSF06etElFR4zUU4PN82ay3SX5kvYryZUieGNUwjPrXhvDHbEunA3RutoyMl7bvTMpDQj79WQZASJHIhJIEgCXZFTwcH0UiR74Y7bGQhcUIg/nj/0HSycbaxQ2h+FF8gOlfMek4moBV6lViTYa3pgWg+8bmu3UlG11ZwkHD4Tb8Ih9fG0Fb3IRgVHgDzyXXPxxIzVNofAJgv11b09mHUcv1EvM1Zyft+0Vps4wlQyirwRuhSGiA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Clfj87675GHdX4Rj6pHC1Kc3scNEvSoiZL9LOWBWvEs=;
- b=EmhJJIBqSfzCKzjA5f4W3Ocrzyuzro1nkSRb5wQRssLcWCXtQWSHj3py9PSkdsz2TB1bHiK0NOZbynLwkv9HUdQVGgdoh7YjjhO8785kbJPLAd+SlKfQLcF6+cRR3ZzyCcWa1siPfRhDtmJwHNnqH2Fw59/lxvXSK/DkfEZ+umrHbuhaWlcRM/7Sk9x2eXWye/36gWu3IRUgVePmEIfANcWVlRTanGIyzK8Om5dt3D8o7/GlE5cUvcfvr8WWFZe/Wjegs62EQBzDzS0s9ODCEfkgULcV2DQefeDVnu0prEyyu9QB5UYThsAc+JsIKm/+xohfTSGiP+aw3eDPnhyQ7Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Clfj87675GHdX4Rj6pHC1Kc3scNEvSoiZL9LOWBWvEs=;
- b=heTCzWt+uXG+b33hIW2VJtZh6B6k3JmKw5kdtOtJIyjOP++LxpFeTaaHibjfmSGAns273ITi8zgugzwv/+5SSviBMDc53UdCQnXaA/UbQYPZMnNTIMhiMpdKave9fBYSM6EgD+pROT9yTkAtm331oVzjs82KG/EOt2xf3v760gQ=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by MN0PR10MB5934.namprd10.prod.outlook.com
- (2603:10b6:208:3ce::10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.33; Thu, 20 Oct
- 2022 08:22:29 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::1b8e:540e:10f0:9aec]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::1b8e:540e:10f0:9aec%4]) with mapi id 15.20.5676.031; Thu, 20 Oct 2022
- 08:22:29 +0000
-Date:   Thu, 20 Oct 2022 11:22:10 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Deepak R Varma <drv@mailo.com>
-Cc:     outreachy@lists.linux.dev, Larry.Finger@lwfinger.net,
-        phil@philpotter.co.uk, paskripkin@gmail.com,
-        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, kumarpraveen@linux.microsoft.com,
-        saurabh.truth@gmail.com
-Subject: Re: [PATCH v3 05/10] staging: r8188eu: correct misspelled words in
- comments
-Message-ID: <Y1EFMt6fjLdRirnA@kadam>
-References: <cover.1666249715.git.drv@mailo.com>
- <3235c0f681d817f7f89dd80537f36e1f9686fa24.1666249716.git.drv@mailo.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3235c0f681d817f7f89dd80537f36e1f9686fa24.1666249716.git.drv@mailo.com>
-X-ClientProxiedBy: JNXP275CA0014.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:19::26)
- To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
+        Thu, 20 Oct 2022 04:22:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 716BA183E0C
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 01:22:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666254144;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NXxC5THgAjtEYfgbLwABUhO1u5EsuU0JRYrQfyg0GwE=;
+        b=R1Pdy+BjhwRCyyXekrFJbbHc1VsEK9rMt6hsSg5QjxzMtluaCqITfmO7RVtWxDkiRT1Myn
+        3f4lCfCr//zPBn6eIaLxY76QhSibnN2QvsvuA/Vw0xPo9U2gBbAdCAFh2cSj0R8eY5L/f+
+        4TcQ7yzx/l+n5KoteVRVRV2buVBeJZI=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-595-v6C8G18dMSCqGyaZ7YwHRQ-1; Thu, 20 Oct 2022 04:22:22 -0400
+X-MC-Unique: v6C8G18dMSCqGyaZ7YwHRQ-1
+Received: by mail-ej1-f69.google.com with SMTP id sb13-20020a1709076d8d00b0078d8e1f6f7aso9173820ejc.8
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 01:22:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NXxC5THgAjtEYfgbLwABUhO1u5EsuU0JRYrQfyg0GwE=;
+        b=EJY3gNUI1ONTcMhdRPIR05ADKPvQvanoyI6tcUT7O/7soX3AhneBUwaeW1EbAHWgis
+         4omhds69H9YQ4ilNy1iTpkHSDsf1VidBRbO2inuKS+G8Kk9mujxFbavfZoTNgpEh9+WH
+         1OhbSZLpsAIyA+gkwZ8uXtS3oNNOerdvDbwnfO0IgO5dDmcMqqULwvWH5KXzTqQIWqQL
+         PmU9hufUYFKZVtzS2rmVgt/0daR9i8xbx8WFcxVwj36uVibYEZ/DXpn9QjqGTsndFSZY
+         7ng0b2g49Jt8+MGH9HTGzvePwxHFmT9MB1CGzIsQjQTr0pi8pgk+rhqhUMco+t+0/Zg6
+         Q20Q==
+X-Gm-Message-State: ACrzQf0w52P+SG79yRo10oKOCDw/KtSSeFrTUSn/7x2fHRbCwc35K9S9
+        vvvpoVSmhUyYarTbeI8aoE7YHEQfxsQWE04WIw8kizfLkfNSKUF7MHPyf6I4PHSy4fkOcWp7y/B
+        t2pNYu073nBQ4DEt1YotN6tzOHQ49TzbngwCWAV6OlGfVSkj4HIqHAz14gXqvdDqasat6vr4Vxm
+        AQ
+X-Received: by 2002:a17:907:971c:b0:78e:63f:c766 with SMTP id jg28-20020a170907971c00b0078e063fc766mr9957399ejc.330.1666254141416;
+        Thu, 20 Oct 2022 01:22:21 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM77hNuYpdTNzaBxaGl4qanwjEest2MmHQgxj9LIOEFNPTGkaoTFS2OSELTfyljEa7SX2DQbRw==
+X-Received: by 2002:a17:907:971c:b0:78e:63f:c766 with SMTP id jg28-20020a170907971c00b0078e063fc766mr9957379ejc.330.1666254141175;
+        Thu, 20 Oct 2022 01:22:21 -0700 (PDT)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id t14-20020a05640203ce00b00459e3a3f3ddsm11633580edw.79.2022.10.20.01.22.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Oct 2022 01:22:20 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        Yuan Yao <yuan.yao@linux.intel.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v11 00/46] KVM: x86: hyper-v: Fine-grained TLB flush +
+ L2 TLB flush features
+In-Reply-To: <Y1B4kAIsc8Z0b2P9@google.com>
+References: <20221004123956.188909-1-vkuznets@redhat.com>
+ <Y1B4kAIsc8Z0b2P9@google.com>
+Date:   Thu, 20 Oct 2022 10:22:19 +0200
+Message-ID: <87v8oedhvo.fsf@redhat.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWHPR1001MB2365:EE_|MN0PR10MB5934:EE_
-X-MS-Office365-Filtering-Correlation-Id: e125a5a1-2aa4-46bd-b61e-08dab27439aa
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Zh/Ym6Q+o1Op8VCbghsWNC16p1bEZ9aR3mwenLIGsdmM6XzOXFKn7IyESZXjFXdW80p75ARgtqI7RJoM5AkYFpxzb3QP5tDC2ZNDQTDhesjqVFQFwwl0hSFSOjQ0Ik2R/9z2YepjnzCsfj0UFMM2UQ6jmUif7YHnZJFGFrIxfgdVTkKylERyJMg5hAdSSOKgA/sgbV26r3V/vRr2r/miOB9w02amLE46HixLJTf76y1rw0XRH9UBnIxnUSUjj+bZjpuaqCR3nJIB6xO3oTy8wLrTxJOmx6cfJmk/dQGaa7xt+rg76hgVaQ6vSZHdAfg0bKKTWPqZzkP3b7fNytvp/az/gsPrejsMgFu1bsyR8xiHG9DS4WxiHSzHM5B/RH2e8M6Qwpy2TGOsMc69m5iWee4QJqHW2+wVmfLZr9Kk/tDRxFk/ZpA7bsG1hncbkDRONsjHIGqCmBi2nXfpVo1O3dxXfyfNFwlIliAmSr5KlEk+/CnFJmI9wVv3jaq85jI4+8p5/Sim6KZ/grTlYXv65/hX9G02Cnv6vXRot6jrlVpW8OaC5nIE8vKgHr2I7KaG7418jaN7KQrs1nvjWP2g/msQgnfGHePGdPiaxHrzh2KslzTj/TXCNkYX+pcROZS5Eab9lFRzFN2LRza/2E0nFVs4++8G6MTZXUwrBZX/qDzh5qzjXoRJkGvY+EUsnnReHMaoq7pNNyG5e8PWI7UyZQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(39860400002)(366004)(396003)(346002)(136003)(376002)(451199015)(2906002)(44832011)(4744005)(4326008)(66476007)(7416002)(41300700001)(5660300002)(33716001)(38100700002)(8936002)(66556008)(8676002)(26005)(9686003)(6506007)(6512007)(186003)(6486002)(478600001)(6916009)(6666004)(66946007)(316002)(86362001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?etxcMbKNmdkaur+Ncl7fuasLDOCGtG1b5hYk7ixjMz9zRxBpi5nxrBHq5gbM?=
- =?us-ascii?Q?7D5+cujNe+/baxqPd1zb+9aQie92UFfG4GQyWMJnE+IYyK5vW5WRt1Tiqk9L?=
- =?us-ascii?Q?dbk+eNJreJ9sNWSgwrKtK7NyCilKyUsHsVoz+qa8zIji3uXlVp6fR5kNu7NQ?=
- =?us-ascii?Q?o/YWQLE0paHppvwE8i4J0qQN93l8YObR9135Pfj8SS2agyl2lv5fbyHaPpIT?=
- =?us-ascii?Q?Rkc8BPFEGWT39BQCsIq5l5dox9+9b6fV3tIfjZixLUnoj3hARqj/zy5FO16u?=
- =?us-ascii?Q?m+pvYjw0k+YKI04X7vqZj/OyCjyg0W7rEZvGEvODXg3OkM0maUnLa4Jwy4qY?=
- =?us-ascii?Q?zychTqS1RsqbdUIYvibLOg6yDdMTLQTvJ843ccryCW+2TIklG1zZzpSunF2F?=
- =?us-ascii?Q?esd0ZyJVrJJLrkHnEPfHDkPYN/14rVc8OrGMNDt8Lo7lECIKe3aKnfR4oPPs?=
- =?us-ascii?Q?QojNayx/dGugA6abOdBxLPO+LLxLWJ+jcESa50DMDU6Hz8K331DCh18rAPBO?=
- =?us-ascii?Q?W5EX5tNLIKFTu2gVjwc/svDFeSlJT8iJTiAEGAazqN1of40MVZoA5o67Cyhu?=
- =?us-ascii?Q?TARFj0x6vEINuGjXRd2ZXT9G9B3uNpoz4auUJlTcb4yGy6njjFG4UcWqBns6?=
- =?us-ascii?Q?DoExYxhXnig2Cj4ljadKFdJunidLkWFp/6TbAoVqNMiEybKUs34ngHU3YJVd?=
- =?us-ascii?Q?Pcto2T73Fx7na3X/F+u6Ox0FW0d8D0gz/ma6/c/v3FXxzu5iDj+KUh9HyJ9+?=
- =?us-ascii?Q?Ac96wEEzZW977cboEb3K9kAx/BdVsZSz0f2wzOVDracc6C6UeR4uxTcmHKWe?=
- =?us-ascii?Q?gZRZ+NETCnE8pcEt/WTZIttWwmA8o1kHtL2PX+Zh67IlyufPIt3TP7xstHQG?=
- =?us-ascii?Q?C3fQTmsnbAp+6h0V2nLAbkzjJ29iDVzCotq0PaIabOpqVnHOIoQVNiq1z7xG?=
- =?us-ascii?Q?OpRmgHsuASkqbhJozxUBeonTH081WdYDJ7SCcAqGM4q03WE5w3X31JHDTKSc?=
- =?us-ascii?Q?KJVT8CvsF72owgwx2yJpIksS5YPBG019Obu3uRtTq3CxotZ57tXgQokVF5Qn?=
- =?us-ascii?Q?n/BwuAC/B3I+YVj7ao2ZO42VH7fDpRBUdKigf6fHUWU/MuFia6c58r0kNajx?=
- =?us-ascii?Q?cZZ8bTVckpYaP/lIqcpKFXlCIfunXAZDvx1z5idy/eygmxoZRt9A4zwQD+bE?=
- =?us-ascii?Q?dW6/TtIftuJbuB0PY3YroRm3DF89m6SBBS3sXJ+LNJ+DEtqUMebt7P4x8vP0?=
- =?us-ascii?Q?lM8aGweeQ5w5o2PjtJ6MrzEi2SbHgp3uBCiptw5/MHOuxdy2TIXcgtW/uUG+?=
- =?us-ascii?Q?A8lLoFW+4roHXT1VtJ/qpNYHClR/O7XYkhsnYOkGfRyXbBv1PIq+wFteaobN?=
- =?us-ascii?Q?aqAeiBF4v4g6KQ5AifPdNXIXKSgaZzY9lKJF/Kdw0ReYXpQ/YRgJXbs/OfuE?=
- =?us-ascii?Q?X8xsnX56iJKymyVUxvfytLSWIts7p+3cJiwJXMcY12L+z7HJ+JMba1oJS1cf?=
- =?us-ascii?Q?ZNjSyAgOoEujjfAl9NvxQSIlaHEkdJ24aOfKzt6jsGivrPRUpugJAmNpdkFw?=
- =?us-ascii?Q?naV3Yvr9MIaH230nBOnAcDKEjkxuQFsja6JdctBh0wfk3Ez2l8U3+FMlJ/5p?=
- =?us-ascii?Q?tA=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e125a5a1-2aa4-46bd-b61e-08dab27439aa
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Oct 2022 08:22:29.0097
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: bwBhQEBRg5rpj6pTnp040fBy+Ta77+GeGpaY92qaUPescwi9d3FU+hHVf70LYipS7Kg5AFj6HjeBCe2cLMRmZcYX4RV7S19YurXR+FQKYx0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR10MB5934
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-20_02,2022-10-19_04,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 bulkscore=0 mlxscore=0
- suspectscore=0 mlxlogscore=999 phishscore=0 malwarescore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
- definitions=main-2210200048
-X-Proofpoint-ORIG-GUID: UH9umQ1zz44VZ0oycO35wQ0XuKhL6SL1
-X-Proofpoint-GUID: UH9umQ1zz44VZ0oycO35wQ0XuKhL6SL1
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -148,24 +84,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 01:25:16PM +0530, Deepak R Varma wrote:
-> diff --git a/drivers/staging/r8188eu/core/rtw_ioctl_set.c b/drivers/staging/r8188eu/core/rtw_ioctl_set.c
-> index 55e6b0f41dc3..1de808832ed8 100644
-> --- a/drivers/staging/r8188eu/core/rtw_ioctl_set.c
-> +++ b/drivers/staging/r8188eu/core/rtw_ioctl_set.c
-> @@ -287,7 +287,7 @@ u8 rtw_set_802_11_infrastructure_mode(struct adapter *padapter,
-> 
->  		if ((*pold_state == Ndis802_11Infrastructure) || (*pold_state == Ndis802_11IBSS)) {
->  			if (check_fwstate(pmlmepriv, _FW_LINKED))
-> -				rtw_indicate_disconnect(padapter); /* will clr Linked_state; before this function, we must have chked whether  issue dis-assoc_cmd or not */
-> +				rtw_indicate_disconnect(padapter); /* will clr Linked_state; before this function, we must have cheked whether  issue dis-assoc_cmd or not */
+Sean Christopherson <seanjc@google.com> writes:
 
+> On Tue, Oct 04, 2022, Vitaly Kuznetsov wrote:
+>> Changes since v10 (Sean):
+>> - New patches added:
+>>   - "x86/hyperv: Move VMCB enlightenment definitions to hyperv-tlfs.h"
+>>   - "KVM: selftests: Move "struct hv_enlightenments" to x86_64/svm.h"
+>>   - "KVM: SVM: Add a proper field for Hyper-V VMCB enlightenments"
+>>   - 'x86/hyperv: KVM: Rename "hv_enlightenments" to "hv_vmcb_enlightenments"'
+>>   - 'KVM: VMX: Rename "vmx/evmcs.{ch}" to "vmx/hyperv.{ch}"'
+>>   - "KVM: x86: Move clearing of TLB_FLUSH_CURRENT to kvm_vcpu_flush_tlb_all()"
+>>   - "KVM: selftests: Drop helpers to read/write page table entries"
+>>   - "KVM: x86: Make kvm_hv_get_assist_page() return 0/-errno"
+>> - Removed patches:
+>>   - "KVM: selftests: Export _vm_get_page_table_entry()"
+>> - Main differences:
+>>   - Move Hyper-V TLB flushing out of kvm_service_local_tlb_flush_requests().
+>>     On SVM, Hyper-V TLB flush FIFO is emptied from svm_flush_tlb_current()
+>>   - Don't disable IRQs in hv_tlb_flush_enqueue().
+>>   - Don't call kvm_vcpu_flush_tlb_guest() from kvm_hv_vcpu_flush_tlb() but
+>>     return -errno instead.
+>>   - Avoid unneded flushes in !EPT/!NPT cases.
+>>   - Optimize hv_is_vp_in_sparse_set().
+>>   - Move TLFS definitions to asm/hyperv-tlfs.h.
+>>   - Use u64 vals in Hyper-V PV TLB flush selftest + multiple smaler changes
+>>   - Typos, indentation, renames, ...
+>
+> Some nits throughout, but nothing major.  Everything could be fixed up when
+> applying, but if it's not too much trouble I'd prefer a v11, the potential changes
+> to kvm_hv_hypercall_complete() aren't completely trivial.
 
-s/cheked/checked/
+Thanks for the review! Let me do v12 to address your comments, I plan to
+do it tomorrow.
 
->  	       }
-> 
->  		*pold_state = networktype;
+-- 
+Vitaly
 
-regards,
-dan carpenter
