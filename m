@@ -2,70 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B124A6056E1
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 07:40:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A7086056F9
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 07:47:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229778AbiJTFkz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 01:40:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39170 "EHLO
+        id S229945AbiJTFrG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 01:47:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230017AbiJTFku (ORCPT
+        with ESMTP id S229514AbiJTFrD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 01:40:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FAC9143A47
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 22:40:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666244446;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3cLm9HnF52RPDChT7zvm6M4NNF+pwOpLfcF1b46hwk4=;
-        b=NxYAwD5K7VIgaTi3+C9zhvuIanJX0Hiz/hEmhbVWO9TFWdyLrqcMZ4DS63xi1g2U2vJKpN
-        wlOE0WO5J0HWSxpje6A6znZscfva/CdWsAwXPdCXWDtU3djQ/f4DFpB1+zZDcVd/bwQDjH
-        d4CiCwzYufa9akU+Pi8tDdQlOKeHvBw=
-Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com
- [209.85.167.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-636-iG5NECX0MZGtsG3VvbciQw-1; Thu, 20 Oct 2022 01:40:45 -0400
-X-MC-Unique: iG5NECX0MZGtsG3VvbciQw-1
-Received: by mail-oi1-f197.google.com with SMTP id c23-20020a544e97000000b0035468a53d49so8404161oiy.19
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 22:40:44 -0700 (PDT)
+        Thu, 20 Oct 2022 01:47:03 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E53CB159D5F;
+        Wed, 19 Oct 2022 22:46:58 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id e129so18272363pgc.9;
+        Wed, 19 Oct 2022 22:46:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ovO4Wn2KciXjhfhIU1Ht+t+UirFlYYyzrqGDJdPLqqI=;
+        b=Ko+4G9InvfhExZOlJfPtkMVy/D5gdhgAia6F8iPargASMfbh6TDIkDbuK6cxdw5MUI
+         6IAiGIKEEoodin9JQjbz4cFOq0loHWMlsMPs6EpJDR7+IRrAzRNDOEl9PTDKJPQpOgq1
+         cdXUH05ZeMS9Rq+xGcQ/cfjjjeOZIY4rAfNrVhIx+sUvXHZvjCaAk40IhmZzfAhFm2dt
+         uGxoHw+EOvF4C5aCq1OCafCBUUP093CdYJYYDNpab1RsU3EhQELMmAUzWjuL3aw569Mt
+         CNP/xTEjj27zgCAjwatHvaL1XRTHyKoqlSOv3EoYAASFFEP419W8tttiP7R340T0kGPo
+         ErkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=3cLm9HnF52RPDChT7zvm6M4NNF+pwOpLfcF1b46hwk4=;
-        b=ulFiK47tS8d2UWn9HC73EAVennInKoEOo7iHFXnh5xnpGwD80o8GJcwziiXfUebAUf
-         nFO07FPLjhEyksAPDM7m/a3IXU2yhREo0kzQ+LfNUbYhCOpzAAvz1gYQkbZP2Q9Uz2QN
-         223SvM6vgva0sVjOQgXGxJpvSGysRx3ptAWRfpOGwkIErgQ/3zZL7FSUVkJ/91587Kar
-         WLmQY13QL9OJCqCLlwmk96xFVmq7r7yApTQVZ15lILgzW9dg67ifhdGpIWqIhmrfbXB/
-         sU3DlH+3OS2nJxrPwtEJhP38AZiDfqktZ/B7og1dqrMtlOnG77UCB+6QObuNKQDv53Xa
-         kHZg==
-X-Gm-Message-State: ACrzQf21QzCGFye76mZgCG4f0/gS4Qa9Z/bn/dhXlcHMaSQJauWWALvA
-        bmcXi8G9QBja/MRU9sJCQprmvEOV/vNDJYS9JhQSPhSUcIOykPnOZ9Eh7ckeJizBu84wB8eeQPN
-        RAAkx3caVnPp2VtidvH7BOBHX3HhhuZzKJIMgagKB
-X-Received: by 2002:a9d:7dcf:0:b0:661:dc25:ba0 with SMTP id k15-20020a9d7dcf000000b00661dc250ba0mr6006238otn.201.1666244444378;
-        Wed, 19 Oct 2022 22:40:44 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4KOnL5N1u6m6VXP6xpqvCTdnJWSdwlGbLkZlRfz6DwviF2O1N/QP25F1zjvuTZ8UH3pFNQC3QvWeykzR4PRL8=
-X-Received: by 2002:a9d:7dcf:0:b0:661:dc25:ba0 with SMTP id
- k15-20020a9d7dcf000000b00661dc250ba0mr6006229otn.201.1666244444153; Wed, 19
- Oct 2022 22:40:44 -0700 (PDT)
+        bh=ovO4Wn2KciXjhfhIU1Ht+t+UirFlYYyzrqGDJdPLqqI=;
+        b=h21fgMfG731dh3HlLi/zj79RbzTg2hbquaoojkJFRFg0p8BPWheLTPntNIkCSA56qJ
+         S2Dsy1q81PNOMjlRNsMO+J1R+C+LCB3vZYiyRk2Xdwey3ncQLxFWJVqJwe17TP+qG1So
+         uQgiy60/AB9qkI/Tqsm0E5OSJnFtD/EMqv1GdPxXVawIDs25LMIsapWdrDyPxRWJZByj
+         +uesG5+cAHL708VubJwMGV4zxhFf5XlMczgAscYF52av2HOjdXkQtf+f2yxDsXqAePg0
+         aTRvDFL6rQu/6WPHqwbYNALBdO7/KBa5wDvgJAX1aP1/p3uuX5kyAgh3BHLsRfwfeM6s
+         eKXw==
+X-Gm-Message-State: ACrzQf3yuuKxW1ogszIlCvm1G5YVOtozK914EMXoR3cpoIzK1Rm1M45i
+        +mfXrRX63BVpx/XYB+jtbDL6PvoeIno=
+X-Google-Smtp-Source: AMsMyM7Ueen3Nu9ppQUHWRCrMntwIJPRbnc9qTy4XNKiB3UH010g2eyTQdJH2TCd9WHa7Nx8FtdFfw==
+X-Received: by 2002:a63:194b:0:b0:457:7295:8de0 with SMTP id 11-20020a63194b000000b0045772958de0mr10618087pgz.612.1666244818452;
+        Wed, 19 Oct 2022 22:46:58 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id r16-20020a63e510000000b004308422060csm10651732pgh.69.2022.10.19.22.46.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Oct 2022 22:46:57 -0700 (PDT)
+From:   cuijinpeng666@gmail.com
+X-Google-Original-From: cui.jinpeng2@zte.com.cn
+To:     martin.petersen@oracle.com, linux-scsi@vger.kernel.org
+Cc:     target-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jinpeng Cui <cui.jinpeng2@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH linux-next] scsi: target: core: use strscpy() is more robust and safer
+Date:   Thu, 20 Oct 2022 05:46:50 +0000
+Message-Id: <20221020054650.394396-1-cui.jinpeng2@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <1666137032-28192-1-git-send-email-si-wei.liu@oracle.com> <1666137032-28192-5-git-send-email-si-wei.liu@oracle.com>
-In-Reply-To: <1666137032-28192-5-git-send-email-si-wei.liu@oracle.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Thu, 20 Oct 2022 13:40:32 +0800
-Message-ID: <CACGkMEtV_amYoz7JqpJyyUMDnsZuPJYfXk8bP9Yb1oyJrhpY8w@mail.gmail.com>
-Subject: Re: [PATCH v2 4/4] vdpa: fix improper error message when adding vdpa dev
-To:     Si-Wei Liu <si-wei.liu@oracle.com>
-Cc:     mst@redhat.com, virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,67 +71,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 8:56 AM Si-Wei Liu <si-wei.liu@oracle.com> wrote:
->
-> In below example, before the fix, mtu attribute is supported
-> by the parent mgmtdev, but the error message showing "All
-> provided are not supported" is just misleading.
->
-> $ vdpa mgmtdev show
-> vdpasim_net:
->   supported_classes net
->   max_supported_vqs 3
->   dev_features MTU MAC CTRL_VQ CTRL_MAC_ADDR ANY_LAYOUT VERSION_1 ACCESS_PLATFORM
->
-> $ vdpa dev add mgmtdev vdpasim_net name vdpasim0 mtu 5000 max_vqp 2
-> Error: vdpa: All provided attributes are not supported.
-> kernel answers: Operation not supported
->
-> After fix, the relevant error message will be like:
->
-> $ vdpa dev add mgmtdev vdpasim_net name vdpasim0 mtu 5000 max_vqp 2
-> Error: vdpa: Some provided attributes are not supported.
-> kernel answers: Operation not supported
->
-> $ vdpa dev add mgmtdev vdpasim_net name vdpasim0 max_vqp 2
-> Error: vdpa: All provided attributes are not supported.
-> kernel answers: Operation not supported
->
-> Signed-off-by: Si-Wei Liu <si-wei.liu@oracle.com>
+From: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
 
-Acked-by: Jason Wang <jasowang@redhat.com>
+The implementation of strscpy() is more robust and safer.
 
-> ---
->  drivers/vdpa/vdpa.c | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/vdpa/vdpa.c b/drivers/vdpa/vdpa.c
-> index 91eca6d..ff15e0a 100644
-> --- a/drivers/vdpa/vdpa.c
-> +++ b/drivers/vdpa/vdpa.c
-> @@ -629,13 +629,20 @@ static int vdpa_nl_cmd_dev_add_set_doit(struct sk_buff *skb, struct genl_info *i
->                 err = PTR_ERR(mdev);
->                 goto err;
->         }
-> -       if ((config.mask & mdev->config_attr_mask) != config.mask) {
-> +       if (config.mask && (config.mask & mdev->config_attr_mask) == 0) {
->                 NL_SET_ERR_MSG_MOD(info->extack,
->                                    "All provided attributes are not supported");
->                 err = -EOPNOTSUPP;
->                 goto err;
->         }
->
-> +       if ((config.mask & mdev->config_attr_mask) != config.mask) {
-> +               NL_SET_ERR_MSG_MOD(info->extack,
-> +                                  "Some provided attributes are not supported");
-> +               err = -EOPNOTSUPP;
-> +               goto err;
-> +       }
-> +
->         err = mdev->ops->dev_add(mdev, name, &config);
->  err:
->         up_write(&vdpa_dev_lock);
-> --
-> 1.8.3.1
->
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
+---
+ drivers/target/target_core_device.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/target/target_core_device.c b/drivers/target/target_core_device.c
+index b7f16ee8aa0e..0eec5a3217b9 100644
+--- a/drivers/target/target_core_device.c
++++ b/drivers/target/target_core_device.c
+@@ -809,10 +809,10 @@ struct se_device *target_alloc_device(struct se_hba *hba, const char *name)
+ 	xcopy_lun->lun_tpg = &xcopy_pt_tpg;
+ 
+ 	/* Preload the default INQUIRY const values */
+-	strlcpy(dev->t10_wwn.vendor, "LIO-ORG", sizeof(dev->t10_wwn.vendor));
+-	strlcpy(dev->t10_wwn.model, dev->transport->inquiry_prod,
++	strscpy(dev->t10_wwn.vendor, "LIO-ORG", sizeof(dev->t10_wwn.vendor));
++	strscpy(dev->t10_wwn.model, dev->transport->inquiry_prod,
+ 		sizeof(dev->t10_wwn.model));
+-	strlcpy(dev->t10_wwn.revision, dev->transport->inquiry_rev,
++	strscpy(dev->t10_wwn.revision, dev->transport->inquiry_rev,
+ 		sizeof(dev->t10_wwn.revision));
+ 
+ 	return dev;
+-- 
+2.25.1
 
