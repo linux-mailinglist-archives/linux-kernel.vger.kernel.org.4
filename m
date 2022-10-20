@@ -2,50 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34E79605539
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 03:53:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28C0F605536
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 03:52:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231542AbiJTBxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 21:53:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50986 "EHLO
+        id S230463AbiJTBwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 21:52:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231522AbiJTBxF (ORCPT
+        with ESMTP id S230397AbiJTBwq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 21:53:05 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 523F91958F5;
-        Wed, 19 Oct 2022 18:53:03 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Mt9VH5KL9zVj0L;
-        Thu, 20 Oct 2022 09:48:23 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 20 Oct 2022 09:52:30 +0800
-CC:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <yangyicong@hisilicon.com>,
-        <wsa@kernel.org>, <robh@kernel.org>, <robh+dt@kernel.org>,
-        <xuwei5@huawei.com>
-Subject: Re: [PATCH next v6 2/2] dt-bindings: i2c: add entry for
- hisilicon,i2c-ascend910
-To:     Weilong Chen <chenweilong@huawei.com>
-References: <20221018073012.309355-1-chenweilong@huawei.com>
- <20221018073012.309355-2-chenweilong@huawei.com>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <7520818b-de40-7f2a-1b03-b1dcd29a2023@huawei.com>
-Date:   Thu, 20 Oct 2022 09:52:30 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Wed, 19 Oct 2022 21:52:46 -0400
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1947E16EA39;
+        Wed, 19 Oct 2022 18:52:43 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R941e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=24;SR=0;TI=SMTPD_---0VScdp8u_1666230756;
+Received: from 30.221.97.125(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VScdp8u_1666230756)
+          by smtp.aliyun-inc.com;
+          Thu, 20 Oct 2022 09:52:38 +0800
+Message-ID: <5fa1f75a-1641-771e-3670-2d8978c99d2a@linux.alibaba.com>
+Date:   Thu, 20 Oct 2022 09:52:36 +0800
 MIME-Version: 1.0
-In-Reply-To: <20221018073012.309355-2-chenweilong@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.12.0
+Subject: Re: [PATCH V3 1/2] RISC-V: Add arch_crash_save_vmcoreinfo support
+To:     =?UTF-8?B?SEFHSU8gS0FaVUhJVE8o6JCp5bC+IOS4gOS7gSk=?= 
+        <k-hagio-ab@nec.com>, Baoquan He <bhe@redhat.com>,
+        lijiang <lijiang@redhat.com>
+Cc:     "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+        "anup@brainfault.org" <anup@brainfault.org>,
+        "heiko@sntech.de" <heiko@sntech.de>,
+        "guoren@kernel.org" <guoren@kernel.org>,
+        "mick@ics.forth.gr" <mick@ics.forth.gr>,
+        "alexandre.ghiti@canonical.com" <alexandre.ghiti@canonical.com>,
+        "vgoyal@redhat.com" <vgoyal@redhat.com>,
+        "dyoung@redhat.com" <dyoung@redhat.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "Conor.Dooley@microchip.com" <Conor.Dooley@microchip.com>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "kexec@lists.infradead.org" <kexec@lists.infradead.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "crash-utility@redhat.com" <crash-utility@redhat.com>,
+        "heinrich.schuchardt@canonical.com" 
+        <heinrich.schuchardt@canonical.com>,
+        "hschauhan@nulltrace.org" <hschauhan@nulltrace.org>,
+        "yixun.lan@gmail.com" <yixun.lan@gmail.com>
+References: <20221018081755.6214-1-xianting.tian@linux.alibaba.com>
+ <20221018081755.6214-2-xianting.tian@linux.alibaba.com>
+ <Y05tfxRenMs5d+bt@MiWiFi-R3L-srv>
+ <049ec19e-60c3-2854-5f5e-9850231108b4@linux.alibaba.com>
+ <Y05540td7lLz+0BY@MiWiFi-R3L-srv>
+ <a66a5b16-5f1f-3d80-3cdc-4b82d38d604f@linux.alibaba.com>
+ <0f0a77a9-c824-8aa4-77de-a75c2139d791@nec.com>
+ <811bdf09-be38-ce2a-a1d3-ada9f7c85b97@linux.alibaba.com>
+ <52023285-172a-97cc-bad4-4ab4e709885c@nec.com>
+From:   Xianting Tian <xianting.tian@linux.alibaba.com>
+In-Reply-To: <52023285-172a-97cc-bad4-4ab4e709885c@nec.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,118 +73,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/10/18 15:30, Weilong Chen wrote:
-> Add the new compatible for HiSilicon i2c.
-> 
-> Signed-off-by: Weilong Chen <chenweilong@huawei.com>
-> ---
-> Change since v5:
-> - Use hisilicon,i2c-ascend910 as compatible string. For more information about
->   the SoC at https://e.huawei.com/en/products/cloud-computing-dc/atlas/ascend-910
-> - Alphabetic order the MAINTAINERS
-> 
-> Change since v4:
-> - Add description for SoC specific compatibles.
-> - Use the clock binding.
-> - Fix decimal, space, case, unused labels.
-> Link: https://lore.kernel.org/lkml/20220909074842.281232-1-chenweilong@huawei.com/T/#m4e1c915ead04f4e2e48d69131053a966801625db
-> 
->  .../bindings/i2c/hisilicon,i2c-xxx.yaml       | 70 +++++++++++++++++++
 
-The file name may look a bit strange, but anyway the doc itself looks good to me.
+在 2022/10/20 上午9:35, HAGIO KAZUHITO(萩尾 一仁) 写道:
+> On 2022/10/19 12:17, Xianting Tian wrote:
+>
+>>>>>>>> +    if (IS_ENABLED(CONFIG_64BIT)) {
+>>>>>>>> +#ifdef CONFIG_KASAN
+>>>>>>>> +        vmcoreinfo_append_str("NUMBER(KASAN_SHADOW_START)=0x%lx\n", KASAN_SHADOW_START);
+>>>>>>>> +        vmcoreinfo_append_str("NUMBER(KASAN_SHADOW_END)=0x%lx\n", KASAN_SHADOW_END);
+>>>>>>>> +#endif
+>>>>>>>> +        vmcoreinfo_append_str("NUMBER(KERNEL_LINK_ADDR)=0x%lx\n", KERNEL_LINK_ADDR);
+>>>>>>>> +        vmcoreinfo_append_str("NUMBER(ADDRESS_SPACE_END)=0x%lx\n", ADDRESS_SPACE_END);
+>>>>>>> Seems this is the firsr ARCH where kasan and kernel link/bpf space are
+>>>>>>> added to dump and analyze. Just curious, have you got code change to
+>>>>>>> make use of them to do dumping and analyze?
+>>>>>> KASAN_SHADOW_START is not used, KERNEL_LINK_ADDR is used in the crash patch set:
+>>>>>> https://patchwork.kernel.org/project/linux-riscv/cover/20220813031753.3097720-1-xianting.tian@linux.alibaba.com/
+>>>>> Oh, I would say please no. Sometime we got tons of objection when adding an
+>>>>> necessary one, we definitely should not add one for possible future
+>>>>> use.
+>>>>>
+>>>>> For this kind of newly added one, we need get ack from
+>>>>> makedumpfile/crash utility maintainer so that we know they are necessary
+>>>>> to have. At least they don't oppose.
+>>>> Hi Kazu, Li Jiang
+>>>>
+>>>> Could you help comment whether we need KASAN_SHADOW_START and KERNEL_LINK_ADDR area export for vmcore from crash point of view？
+>>>>
+>>>> In my crash patch set, I don't use KASAN_SHADOW_START,
+>>>> And only get the value of KERNEL_LINK_ADDR, not realy use it.
+>>>> https://patchwork.kernel.org/project/linux-riscv/cover/20220813031753.3097720-1-xianting.tian@linux.alibaba.com/
+>>> In your crash patch set, KERNEL_LINK_ADDR is used in VTOP() and looks
+>>> necessary to me.
+>>>
+>>> The others (KASAN_SHADOW_START, KASAN_SHADOW_END and ADDRESS_SPACE_END)
+>>> are not currently used.  It may be better to add them when they are
+>>> really used.
+>> I am very sorry, I missed it , KERNEL_LINK_ADDR is used indeed.
+>>
+>> KASAN_SHADOW_START is not used, so I don't need to send crash patch set> again. only need to remove KASAN_SHADOW_END in kernel patch set.
+> I see that your v4 kernel patch set does not have ADDRESS_SPACE_END,
+> so it seems there would be need to change this part and related ones
+> at crash side.
+>
+>           if ((string = pc->read_vmcoreinfo("NUMBER(ADDRESS_SPACE_END)"))) {
+>                   ms->address_space_end = htol(string, QUIET, NULL);
+>                   free(string);
+>           } else
+>                   goto error;
+> ...
+> error:
+>           error(FATAL, "cannot get vm layout\n");
 
-Reviewed-by: Yicong Yang <yangyicong@hisilicon.com>
+thanks,
 
->  MAINTAINERS                                   |  1 +
->  2 files changed, 71 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/i2c/hisilicon,i2c-xxx.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/i2c/hisilicon,i2c-xxx.yaml b/Documentation/devicetree/bindings/i2c/hisilicon,i2c-xxx.yaml
-> new file mode 100644
-> index 000000000000..a7285ddc260d
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/i2c/hisilicon,i2c-xxx.yaml
-> @@ -0,0 +1,70 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/i2c/hisilicon,i2c-xxx.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: HiSilicon common IIC controller Device Tree Bindings
-> +
-> +maintainers:
-> +  - yangyicong@huawei.com
-> +
-> +allOf:
-> +  - $ref: /schemas/i2c/i2c-controller.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: hisilicon,i2c-ascend910
-> +    description:
-> +      The HiSilicon common IIC controller can be used for many different
-> +      types of SoC such as Huawei Ascend AI series chips.
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  clock-frequency:
-> +    default: 400000
-> +
-> +  i2c-sda-falling-time-ns:
-> +    default: 343
-> +
-> +  i2c-scl-falling-time-ns:
-> +    default: 203
-> +
-> +  i2c-sda-hold-time-ns:
-> +    default: 830
-> +
-> +  i2c-scl-rising-time-ns:
-> +    default: 365
-> +
-> +  i2c-digital-filter-width-ns:
-> +    default: 0
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    i2c@5038b0000 {
-> +      compatible = "hisilicon,i2c-ascend910";
-> +      reg = <0x38b0000 0x10000>;
-> +      interrupts = <0x0 120 0x4>;
-> +      i2c-sda-falling-time-ns = <56>;
-> +      i2c-scl-falling-time-ns = <56>;
-> +      i2c-sda-hold-time-ns = <56>;
-> +      i2c-scl-rising-time-ns = <56>;
-> +      i2c-digital-filter;
-> +      i2c-digital-filter-width-ns = <0x0>;
-> +      clocks = <&alg_clk>;
-> +      clock-frequency = <400000>;
-> +    };
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index ad32dc9c4822..961e4442fb08 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -9211,6 +9211,7 @@ M:	Yicong Yang <yangyicong@hisilicon.com>
->  L:	linux-i2c@vger.kernel.org
->  S:	Maintained
->  W:	https://www.hisilicon.com
-> +F:	Documentation/devicetree/bindings/i2c/hisilicon,i2c-xxx.yaml
->  F:	drivers/i2c/busses/i2c-hisi.c
->  
->  HISILICON LPC BUS DRIVER
-> 
+I just send V4 of crash patch set, the issue is also fixed in V4.
+
+>
+> Thanks,
+> Kazu
