@@ -2,137 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42948605F73
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 13:55:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D20EF605F76
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 13:55:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229657AbiJTLyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 07:54:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34330 "EHLO
+        id S229633AbiJTLzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 07:55:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbiJTLyn (ORCPT
+        with ESMTP id S229615AbiJTLza (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 07:54:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25BFA1D0D2;
-        Thu, 20 Oct 2022 04:54:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BC1D0B82712;
-        Thu, 20 Oct 2022 11:54:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EF3EC433C1;
-        Thu, 20 Oct 2022 11:54:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666266873;
-        bh=gPDeLlGv5sanaXqP06t21wZhZ1fAuLnrnAmtJV6iA58=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GhZ6QyQ5tb4dmwBop9SC8Z/qz+f5cyTHmznzuS+QQY8rKScu9UsxyLGGzseSYIXuG
-         c3eSuAehlwnKttfeEvsfx8BPmiUGyI5HMMMAPYBTQwKOPOId2Zlgx5LJLwszL6/xTQ
-         wP+3RBlcXzM2bY81DPSnMn9+ZzGZbZBYRSvd3guGB1HKPbm2HNRYpbal4oxNtRignZ
-         nrwAl90UDHYK0d9ryEJNXPEAZwzZ+PUl7tgtKOWDvb7u7IaTXgvi+pdVQHYE+lHuKY
-         gU66JD2KGcTH6XvIWaZWgTpzQjwAomzg+pHWlVEKRgeo1gkvokt84XR0kYJAZdI8HZ
-         oF5BPoIpGg+cg==
-Date:   Thu, 20 Oct 2022 14:54:30 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Aru <aru.kolappan@oracle.com>
-Cc:     jgg@ziepe.ca, saeedm@nvidia.com, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        manjunath.b.patil@oracle.com, rama.nichanamatlu@oracle.com
-Subject: Re: [PATCH 1/1] net/mlx5: add dynamic logging for mlx5_dump_err_cqe
-Message-ID: <Y1E29kg8yuZjCV4v@unreal>
-References: <1665618772-11048-1-git-send-email-aru.kolappan@oracle.com>
- <Y0frx6g/iadBBYgQ@unreal>
- <a7fad299-6df5-e79b-960a-c85c7ea4235a@oracle.com>
- <Y05aGuXSEtSt2aS2@unreal>
- <60899818-61fc-3d1e-e908-fb595cac1940@oracle.com>
+        Thu, 20 Oct 2022 07:55:30 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 397EA133323
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 04:55:29 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id r14so33130095lfm.2
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 04:55:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=LsYCCTAqbxl1nYegcA6XVTC9x8A8DOyUVzkeALJAq+8=;
+        b=NBtRzRBtf3CHp+ZqCc1ugzJAxtf+FQVKg2znqKAHKcyqQD28FLc1pZigowJDa5b4cx
+         T14yJBOg6h/DCw82V1QIGM5NujztBo7z5POKBdEh5+GvZIpQO2i62wrTbaUya4zjj0Jw
+         nGJDa6LGC2eIuoWcU+F57K/9Qxd4SMDa/bgId48bb9tHTIDzwE95NvzZQyMscY4iPcD6
+         UZwmxGMzeB2fHWb5jDfOtSSwUjZ3KGnLsHuHwaicwmoEa7hdVRhuEFI3rTONtWv3Ijlv
+         OvKXGcaJibok55AsceVFipb8FoGx2bs8Kyk/0c5y0e2+o4xRRqSkc+sJnYg66ADBpmj8
+         VOpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LsYCCTAqbxl1nYegcA6XVTC9x8A8DOyUVzkeALJAq+8=;
+        b=xeQoBKM0j7hZjCKUy17HAwfcIwMZyY9UeilZYY/NXWdhc9L5iKHxoxu3P8TQF8fu+h
+         V2B9xHorqwNNF3ipdPjJbc6tQn+u8bJ1KojHnCtOwopfckgzkqWxavUEDwIHc/cpDqyP
+         5JmMzkTgfOMpg6ZXloNzfWltsACNxl+i086yuuszS3p+I6tGVejsbso2EcqKxR8A7sje
+         fbVpyFYUq2RhGCSxEzZljYKk0ncvEUDFmrl/g23v/J5VZpFhMhWw7d+zxicr36vCdAF1
+         j0NDru5iSRVuL9DkHkrBqmBeIfYEMgym4EbTgkEY7bt1rVL7WMuCIqd8mk6Gt17i64i2
+         4ehQ==
+X-Gm-Message-State: ACrzQf0z2VeTIsA00GiyYuObysDmY/C95qZgVYZ6KwlDgvMG4Y8MGIT0
+        fKKxhLlWrl/s1Toht9SDgX9dFw==
+X-Google-Smtp-Source: AMsMyM5ipN3ArP3zHYOiQQl4eLE64TxXPn3wOxrn/2+hiWFMuiv5mEYk8Kq5Z/mO5CmICg29fehyZw==
+X-Received: by 2002:a05:6512:40d:b0:4a2:d61d:6c82 with SMTP id u13-20020a056512040d00b004a2d61d6c82mr4378263lfk.381.1666266927538;
+        Thu, 20 Oct 2022 04:55:27 -0700 (PDT)
+Received: from uffe-XPS13.. (h-94-254-63-18.NA.cust.bahnhof.se. [94.254.63.18])
+        by smtp.gmail.com with ESMTPSA id s16-20020a056512215000b0049adf925d00sm2701626lfr.1.2022.10.20.04.55.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Oct 2022 04:55:26 -0700 (PDT)
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org
+Cc:     Johan Hovold <johan@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] cpuidle: psci: Extend information in log about OSI/PC mode
+Date:   Thu, 20 Oct 2022 13:55:13 +0200
+Message-Id: <20221020115513.93809-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <60899818-61fc-3d1e-e908-fb595cac1940@oracle.com>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 01:24:54AM -0700, Aru wrote:
-> On 10/18/22 12:47 AM, Leon Romanovsky wrote:
-> > On Fri, Oct 14, 2022 at 12:12:36PM -0700, Aru wrote:
-> > > Hi Leon,
-> > > 
-> > > Thank you for reviewing the patch.
-> > > 
-> > > The method you mentioned disables the dump permanently for the kernel.
-> > > We thought vendor might have enabled it for their consumption when needed.
-> > > Hence we made it dynamic, so that it can be enabled/disabled at run time.
-> > > 
-> > > Especially, in a production environment, having the option to turn this log
-> > > on/off
-> > > at runtime will be helpful.
-> > While you are interested on/off this specific warning, your change will
-> > cause "to hide" all syndromes as it is unlikely that anyone runs in
-> > production with debug prints.
-> > 
-> >   -   mlx5_ib_warn(dev, "dump error cqe\n");
-> >   +   mlx5_ib_dbg(dev, "dump error cqe\n");
-> > 
-> > Something like this will do the trick without interrupting to the others.
-> > 
-> > diff --git a/drivers/infiniband/hw/mlx5/cq.c b/drivers/infiniband/hw/mlx5/cq.c
-> > index 457f57b088c6..966206085eb3 100644
-> > --- a/drivers/infiniband/hw/mlx5/cq.c
-> > +++ b/drivers/infiniband/hw/mlx5/cq.c
-> > @@ -267,10 +267,29 @@ static void handle_responder(struct ib_wc *wc, struct mlx5_cqe64 *cqe,
-> >   	wc->wc_flags |= IB_WC_WITH_NETWORK_HDR_TYPE;
-> >   }
-> > -static void dump_cqe(struct mlx5_ib_dev *dev, struct mlx5_err_cqe *cqe)
-> > +static void dump_cqe(struct mlx5_ib_dev *dev, struct mlx5_err_cqe *cqe,
-> > +		     struct ib_wc *wc, int dump)
-> >   {
-> > -	mlx5_ib_warn(dev, "dump error cqe\n");
-> > -	mlx5_dump_err_cqe(dev->mdev, cqe);
-> > +	const char *level;
-> > +
-> > +	if (!dump)
-> > +		return;
-> > +
-> > +	mlx5_ib_warn(dev, "WC error: %d, Message: %s\n", wc->status,
-> > +		     ib_wc_status_msg(wc->status));
-> > +
-> > +	if (dump == 1) {
-> > +		mlx5_ib_warn(dev, "dump error cqe\n");
-> > +		level = KERN_WARNING;
-> > +	}
-> > +
-> > +	if (dump == 2) {
-> > +		mlx5_ib_dbg(dev, "dump error cqe\n");
-> > +		level = KERN_DEBUG;
-> > +	}
-> > +
-> > +	print_hex_dump(level, "", DUMP_PREFIX_OFFSET, 16, 1, cqe, sizeof(*cqe),
-> > +		       false);
-> >   }
-> Hi Leon,
-> 
-> Thank you for the reply and your suggested method to handle this debug
-> logging.
-> 
-> We set 'dump=2' for the syndromes applicable to our scenario: 
-> MLX5_CQE_SYNDROME_REMOTE_ACCESS_ERR,
-> MLX5_CQE_SYNDROME_REMOTE_OP_ERR and MLX5_CQE_SYNDROME_LOCAL_PROT_ERR.
-> We verified this code change and by default, the dump_cqe is not printed to
-> syslog until
-> the level is changed to KERN_DEBUG level. This works as expected.
-> 
-> I will send out another email with the patch using your method.
-> 
-> Is it fine with you If I add your name in the 'suggested-by' field in the
-> new patch?
+It's useful to understand whether we are using OS-initiated (OSI) mode or
+Platform Coordinated (PC) mode, when initializing the CPU PM domains.
+Therefore, let's extend the print in the log after a successful probe with
+this information.
 
-Whatever works for you.
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+---
+ drivers/cpuidle/cpuidle-psci-domain.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Thanks
+diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
+index 821984947ed9..c80cf9ddabd8 100644
+--- a/drivers/cpuidle/cpuidle-psci-domain.c
++++ b/drivers/cpuidle/cpuidle-psci-domain.c
+@@ -181,7 +181,8 @@ static int psci_cpuidle_domain_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		goto remove_pd;
+ 
+-	pr_info("Initialized CPU PM domain topology\n");
++	pr_info("Initialized CPU PM domain topology using %s mode\n",
++		use_osi ? "OSI" : "PC");
+ 	return 0;
+ 
+ put_node:
+-- 
+2.34.1
+
