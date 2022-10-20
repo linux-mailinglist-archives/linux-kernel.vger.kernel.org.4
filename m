@@ -2,96 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3137960635A
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 16:41:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD7D0606360
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 16:42:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230093AbiJTOlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 10:41:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59842 "EHLO
+        id S230125AbiJTOm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 10:42:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229998AbiJTOk5 (ORCPT
+        with ESMTP id S229880AbiJTOmY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 10:40:57 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F29A1144E38;
-        Thu, 20 Oct 2022 07:40:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=6sKArn3fl5+ouv8EYn7A1qXEQs1M7gQhoItikJI0JG8=; b=TxFdT5ShdrFFI1JVzL+bFVTMWP
-        /9do5iqXYdMe5lUBOiGbBhoWfJuI0R+/+7if2AvKoB2Kzh5GjErgTwgPQDe1Px8JrQV1QFep4L2+E
-        UeUevas2gpKatqsafsmX7JPRqhQ7AIGor6/rd23cHSAKEhk3pcieKGKEcoMnHFqr2WNAuH3BpfFBU
-        WmVi8lK7BHvpDHcviVSnt/N6Hxiq4Rpc7sLKL8qirXDNDR/JDWWQJUFkUsN4noEtnzkpcHbxwGy2/
-        jidGIha3Zg+HAvYGbFHdkXPzukCLpWeh+8vDlfEveauyRs9Wb2uO2R+aEWSbu7UhiCZ8IALdv85XH
-        FL8SVRuw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1olWiz-00CRqm-3Q; Thu, 20 Oct 2022 14:40:45 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5B03C300209;
-        Thu, 20 Oct 2022 16:40:39 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 335682BF40BC0; Thu, 20 Oct 2022 16:40:39 +0200 (CEST)
-Date:   Thu, 20 Oct 2022 16:40:39 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Athira Rajeev <atrajeev@linux.vnet.ibm.com>
-Cc:     acme@kernel.org, jolsa@kernel.org, namhyung@kernel.org,
-        irogers@google.com, james.clark@arm.com, mpe@ellerman.id.au,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, maddy@linux.ibm.com,
-        rnsastry@linux.ibm.com, kjain@linux.ibm.com, disgoel@linux.ibm.com
-Subject: Re: [PATCH] [perf/core: Update sample_flags for raw_data in
- perf_output_sample
-Message-ID: <Y1Fd57P5I+aSNT/V@hirez.programming.kicks-ass.net>
-References: <20221020070657.21571-1-atrajeev@linux.vnet.ibm.com>
+        Thu, 20 Oct 2022 10:42:24 -0400
+Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B95B8050E;
+        Thu, 20 Oct 2022 07:42:22 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lirui.org; s=key1;
+        t=1666276940;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Z/iSlv3vCDY/LuUj111gTd0QbnGmIW//KkgjFhZEcrk=;
+        b=KYevtNxG8LNAUTmPNQy7flggBFfO53H+oLsF9bsXw9N4LA9KnMeSj6cubgFO2eQTd23+Bb
+        YfVpiGFKAXg8nNQIDJ58t8RD56p1QXENCp5NjsqI9K7RI75VlVHeciJpllQRHRai+uBVW8
+        p4NMlktZmjqr65MJ+4aOVaus4UYkEXcPzfBO/fMZUoH34oEaqoGBS97N8pbNJAUkoE3h9J
+        /Q/hhEtFq0NyO1d9NBFKXVIc/VpsJvx9oah8B8ApnJt8F1xMI5JZykdUEOUsP8ld5KXoBb
+        DpOxjl50kKKaCRVwF9OgRONUtf77LwA3MDsLidnRz5mL12/WesU1k9hz5UlASw==
+From:   Rui Li <me@lirui.org>
+To:     Alex Shi <alexs@kernel.org>, Yanteng Si <siyanteng@loongson.cn>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Wu XiangCheng <wu.xiangcheng@linux.dev>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rui Li <me@lirui.org>
+Subject: [PATCH v3 0/2] docs/zh_CN: Add staging/index and xz Chinese translation
+Date:   Thu, 20 Oct 2022 22:42:12 +0800
+Message-Id: <cover.1666275798.git.me@lirui.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221020070657.21571-1-atrajeev@linux.vnet.ibm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 12:36:56PM +0530, Athira Rajeev wrote:
-> commit 838d9bb62d13 ("perf: Use sample_flags for raw_data")
-> added check for PERF_SAMPLE_RAW in sample_flags in
-> perf_prepare_sample(). But while copying the sample in memory,
-> the check for sample_flags is not added in perf_output_sample().
-> Fix adds the same in perf_output_sample as well.
-> 
-> Fixes: 838d9bb62d13 ("perf: Use sample_flags for raw_data")
-> Signed-off-by: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
-> ---
->  kernel/events/core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/kernel/events/core.c b/kernel/events/core.c
-> index 4ec3717003d5..daf387c75d33 100644
-> --- a/kernel/events/core.c
-> +++ b/kernel/events/core.c
-> @@ -7099,7 +7099,7 @@ void perf_output_sample(struct perf_output_handle *handle,
->  	if (sample_type & PERF_SAMPLE_RAW) {
->  		struct perf_raw_record *raw = data->raw;
->  
-> -		if (raw) {
-> +		if (raw && (data->sample_flags & PERF_SAMPLE_RAW)) {
->  			struct perf_raw_frag *frag = &raw->frag;
->  
->  			perf_output_put(handle, raw->size);
+Translate the following files into Chinese:
 
-Urgh.. something smells here. We already did a PERF_SAMPLE_RAW test.
+- Documentation/staging/index.rst
+- Documentation/staging/xz.rst
 
-And perf_prepare_sample() explicitly makes data->raw be NULL when not
-set earlier.
+Add staging/index into the menu of zh_CN/index. Also fix one
+translation in the zh_CN/index file.
 
-So what's going wrong?
+Rui Li (2):
+  docs/zh_CN: Add staging/index Chinese translation
+  docs/zh_CN: Add staging/xz Chinese translation
+
+ Documentation/translations/zh_CN/index.rst    |   8 +-
+ .../translations/zh_CN/staging/index.rst      |  26 +++++
+ .../translations/zh_CN/staging/xz.rst         | 100 ++++++++++++++++++
+ 3 files changed, 130 insertions(+), 4 deletions(-)
+ create mode 100644 Documentation/translations/zh_CN/staging/index.rst
+ create mode 100644 Documentation/translations/zh_CN/staging/xz.rst
+
+-- 
+2.30.2
 
