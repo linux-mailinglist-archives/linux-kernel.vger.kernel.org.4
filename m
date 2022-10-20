@@ -2,110 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC31660553F
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 03:55:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8895B60553B
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 03:53:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbiJTBzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 21:55:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56776 "EHLO
+        id S231545AbiJTBxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 21:53:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbiJTBzJ (ORCPT
+        with ESMTP id S231544AbiJTBxN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 21:55:09 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0411F148F53;
-        Wed, 19 Oct 2022 18:55:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=2WkjNmweiW5UWvFDyTIcZUK41JmBY3NIJ3WWOjzemz4=; b=yix4Du8TvUlpQtqptrK+MKkL3z
-        /ET3kalM77hPT3l6cx/BkcbjUVKBkwSwplYfuXRgJ9WOQ6FButJSZbMP+5V6MB7P/Ryg33i28lEP4
-        +oCjfTdMsXUhKarpfrdoliN5qeym6d0ygAMgpVWD6rrk7WtUK8uswQdkzG04mNwtpurpG6fQe1udT
-        Se2/1kfXz3Ct3emBhO80iKRfrL3NWFgHpGq/yT87KnL7F8fKCvNQcwAE5Tj/80CMuIx+YlrvGhBk6
-        nDfyBbT0d/YKYDny9orz7JkmlFfc0/jiau2GCVzD8xoelbrh/CKvDdtYIGtb3NGidbIAhp4OGjk4b
-        pIUiSmOA==;
-Received: from [2601:1c2:d80:3110::a2e7]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1olKlu-009Dnn-Qc; Thu, 20 Oct 2022 01:54:58 +0000
-Message-ID: <d5a7c385-4155-af0c-ed51-865f274fa030@infradead.org>
-Date:   Wed, 19 Oct 2022 18:54:57 -0700
+        Wed, 19 Oct 2022 21:53:13 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED6BF1C3E7D;
+        Wed, 19 Oct 2022 18:53:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666230791; x=1697766791;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=hfWjYaVPC1jR2bOcPd6wO2+FVIEpJFXHmpCSZH0ayOk=;
+  b=Zn1yfRx0T7aLVCEiLn6KrBi9mOWgotUohRaFiwT8D/xCD8wNjRDK/269
+   3Dt2NkzOYaQ32cqfY9IxulZzNeGnHlfFt5L+tpD8rG1gn5OKnot+tvxcn
+   /Wt16ejh6sFkbaG7JnRMzVD4ruYo6WpUj6GpfnIJMLdNJzqiTccKEJWd/
+   mbh+++Jm5ksNWh6om9NETKLdm1HC578uRWFJuZWlbP3IpyL0XO1neSvLm
+   31ptYCFBm8pld1OCa9qO/pB4SahhnHU4Lrl+1bH1R9vM8IhdC8P/n7onr
+   413qQCrK0NMxluyCiJ0OOpEWNd+BRdFptx21gMR1+CdKUFC8SbcJc3Gti
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="333143313"
+X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
+   d="scan'208";a="333143313"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 18:52:52 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="662755519"
+X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
+   d="scan'208";a="662755519"
+Received: from bard-ubuntu.sh.intel.com ([10.239.185.57])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 18:52:49 -0700
+From:   Bard Liao <yung-chuan.liao@linux.intel.com>
+To:     alsa-devel@alsa-project.org, vkoul@kernel.org
+Cc:     vinod.koul@linaro.org, linux-kernel@vger.kernel.org,
+        pierre-louis.bossart@linux.intel.com, bard.liao@intel.com,
+        stable@vger.kernel.org
+Subject: [PATCH] soundwire: intel: Initialize clock stop timeout
+Date:   Thu, 20 Oct 2022 09:56:24 +0800
+Message-Id: <20221020015624.1703950-1-yung-chuan.liao@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH] of: fix repeated words in comments
-Content-Language: en-US
-To:     Theodore Ts'o <tytso@mit.edu>
-Cc:     Jilin Yuan <yuanjilin@cdjrlc.com>, robh+dt@kernel.org,
-        frowand.list@gmail.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221019130200.60460-1-yuanjilin@cdjrlc.com>
- <9fb4c010-b465-e908-6868-d9e493a9688f@infradead.org>
- <Y1Cm2Hvf7W7NxVzk@mit.edu>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <Y1Cm2Hvf7W7NxVzk@mit.edu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Sjoerd Simons <sjoerd@collabora.com>
 
+The bus->clk_stop_timeout member is only initialized to a non-zero value
+during the codec driver probe. This can lead to corner cases where this
+value remains pegged at zero when the bus suspends, which results in an
+endless loop in sdw_bus_wait_for_clk_prep_deprep().
 
-On 10/19/22 18:39, Theodore Ts'o wrote:
-> On Wed, Oct 19, 2022 at 11:53:54AM -0700, Randy Dunlap wrote:
->>
->> On 10/19/22 06:02, Jilin Yuan wrote:
->>> Delete the redundant word 'of'.
->>>
->>> Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
->>> ---
->>>  drivers/of/device.c | 2 +-
->>>  1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/of/device.c b/drivers/of/device.c
->>> index 8cefe5a7d04e..16c7e5a2a868 100644
->>> --- a/drivers/of/device.c
->>> +++ b/drivers/of/device.c
->>> @@ -19,7 +19,7 @@
->>>  
->>>  /**
->>>   * of_match_device - Tell if a struct device matches an of_device_id list
->>> - * @matches: array of of device match structures to search in
->>> + * @matches: array of device match structures to search in
->>
->> Hi,
->> Rob has already explained this at least 2 times.
->>
->> The second "of" is "open firmware".
->> I would write it
->>               array of OF device match structures to search in
->> :)
-> 
-> Actually, I'd probably do something like
-> 
->     	     array of Open Firmware (OF) device match structures...
+Corner cases include configurations with no codecs described in the
+firmware, or delays in probing codec drivers.
 
-Sure, that's good.
+Initializing the default timeout to the smallest non-zero value avoid this
+problem and allows for the existing logic to be preserved: the
+bus->clk_stop_timeout is set as the maximum required by all codecs
+connected on the bus.
 
-> This is the first place in that file (at least in a comment) where OF
-> gets used, and I've always been a big fan of using the fully expanded
-> acronym before using the acronym form.  Remember, PCMCIA stands for
-> People Can't Memorize Computer Industry Acronyms.  :-)
-> 
-> (Actually, it's Personal Computer Memory Chip Industry Association,
+Fixes: 1f2dcf3a154ac ("soundwire: intel: set dev_num_ida_min")
+Signed-off-by: Sjoerd Simons <sjoerd@collabora.com>
+Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Reviewed-by: Chao Song <chao.song@intel.com>
+Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
+---
+ drivers/soundwire/intel.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-                                           Card International Association :)
-
-> but most people don't know that, because using acronyms without
-> defining them first makes you feel like you're an "insider".  :-)
-
-
+diff --git a/drivers/soundwire/intel.c b/drivers/soundwire/intel.c
+index 25ec9c272239..78d35bb4852c 100644
+--- a/drivers/soundwire/intel.c
++++ b/drivers/soundwire/intel.c
+@@ -1311,6 +1311,7 @@ static int intel_link_probe(struct auxiliary_device *auxdev,
+ 
+ 	bus->link_id = auxdev->id;
+ 	bus->dev_num_ida_min = INTEL_DEV_NUM_IDA_MIN;
++	bus->clk_stop_timeout = 1;
+ 
+ 	sdw_cdns_probe(cdns);
+ 
 -- 
-~Randy
+2.25.1
+
