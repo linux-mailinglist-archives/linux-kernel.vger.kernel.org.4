@@ -2,122 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9759A60625E
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 16:01:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3805260624A
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 15:56:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230057AbiJTOBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 10:01:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60580 "EHLO
+        id S229648AbiJTN4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 09:56:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbiJTOA5 (ORCPT
+        with ESMTP id S229638AbiJTN4r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 10:00:57 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03A431918BD;
-        Thu, 20 Oct 2022 07:00:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1666274092;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=+mgBMCBNsWwFZE81j7AWjxRLPZ+r53tvByijdyeHgpc=;
-    b=hAm9jsAcRSqWq0k1wHI5OIw5UFEu1cy87TRtt7G1igCJzQ8bkNthnA+7u6Tm8FkSH8
-    yG2ng66KAHxInB7K2OSp6Hc0PVhaI09GxLXDVPw6+3tuzEz3+oV8/JHZXrZ5rKKmMB2Y
-    OpzgX6hetF+aLttb6EtjHm8J7DN6WPQvkIrnCjMAnHY9HkeZ42UkSZS1JxmeCuf2UFUZ
-    phQ51lZAkFYKqTMP3XzE58d1t3bb0XY3GHvt1c9cSds19Sg0XtVvHIMEiGCo2L73LRr3
-    GnflH1LS0UL+CBtw0mQKDWtd8BmjU1678/KknIsuGOtG6EzEK21/FegQEqpsZdvgZGSK
-    I9Lw==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJAhd5WwPXI"
-X-RZG-CLASS-ID: mo00
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 48.2.0 DYNA|AUTH)
-    with ESMTPSA id f6c614y9KDsqYnL
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Thu, 20 Oct 2022 15:54:52 +0200 (CEST)
-Date:   Thu, 20 Oct 2022 15:54:46 +0200
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Melody Olvera <quic_molvera@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] arm64: dts: qcom: Add base QDU1000/QRU1000 DTSIs
-Message-ID: <Y1FTJgloEi5ag2/j@gerhold.net>
-References: <20221014221138.7552-1-quic_molvera@quicinc.com>
- <20221014221138.7552-3-quic_molvera@quicinc.com>
- <56af2a04-1b21-000d-e3f9-86b6ac74aaf2@linaro.org>
- <a0032338-482f-0de7-5952-c3c8b8423df6@quicinc.com>
- <50372a15-56ce-6ad6-f622-00624b909db8@linaro.org>
+        Thu, 20 Oct 2022 09:56:47 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6949016D883
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 06:56:46 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id b5so19292196pgb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 06:56:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nPO05jfjybmXcLv8HEhuWd4rZu708IpG4U7mlzmOe4o=;
+        b=etW0oKCItxd0/U46DsdrYxSldrWL/238XSHKmxikTw+hFsbOf6O4uiz6IC9SdyJSTt
+         JY6jA6G0h76rPCcjagUSpym/3oftNcZtKmlw03kQ7ZD1xg0rRRVfSxG+XltHZKaq2spF
+         7PPzT+LCuNxbif1wFQN248w137pm31FgX/cx5gpvsDLVliUlXF5nloJWMbi/LvIf9UeB
+         Zi7z++PKE/zQavKE1PJfroM0AeQDBGbWz0l+WOlakzaalFb3BtvH3TuVMZMs/IxwS8b/
+         erKhEcFHSlyXN2jyIbCNc0jm3mqTbA9+LVx2ZfkYuEqaG9yCsdMO2QcKOBr24QCVz3sN
+         4p+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nPO05jfjybmXcLv8HEhuWd4rZu708IpG4U7mlzmOe4o=;
+        b=7mgoyd5Nli5XcTnTVHFYTS0uAAIKudxZcK5uV09Cps/JX21p6mS4Wc46HYHMDSXY7z
+         cmINp18DjpcVIjJ5WJfcMo+Yt1h4guhhxpoYGhJkn76R5f90HCxVIuBTo0Ads9eEhHnW
+         +8pCiKWT5zrx+Q1yIJ2OE8Hl2u4VxTyp5X8D/yw7x4S0etjieDGGGKxx33IKiKeqrvt+
+         97MiUc/TeGEYgOU1Q4Xi6g2uAYO9UvjAIi7m5LRLsLkQinRtG71snvJN7maOMFBqqTXE
+         BYpGdaijX1BQW6Kqo5RRL2nAer6aLo1mV8tluZiQ3JdxPhB34eY0IihWQS9XiWD9MqWh
+         SLNA==
+X-Gm-Message-State: ACrzQf3LquxlILeUen4g69akaKBwN2D9RgMd+v6Su4NeEXF4zoP1f4UX
+        hNgM0kRf2ZrdDfs/Fbs87qk=
+X-Google-Smtp-Source: AMsMyM5sReiudgDAIXkOT8S4grAa16BKY2Z8gm5kD41qRiJTzty39MiJA80Hg12ACjEq+wzbg52I6Q==
+X-Received: by 2002:a05:6a00:301c:b0:567:6e2c:45f0 with SMTP id ay28-20020a056a00301c00b005676e2c45f0mr10414913pfb.84.1666274205889;
+        Thu, 20 Oct 2022 06:56:45 -0700 (PDT)
+Received: from localhost.localdomain ([199.101.192.167])
+        by smtp.googlemail.com with ESMTPSA id a9-20020a1709027e4900b0017f8094a52asm12873456pln.29.2022.10.20.06.56.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Oct 2022 06:56:45 -0700 (PDT)
+From:   Jintao Yin <nicememory@gmail.com>
+To:     phillip@squashfs.org.uk
+Cc:     bagasdotme@gmail.com, hsinyi@chromium.org,
+        linux-kernel@vger.kernel.org, marcmiltenberger@gmail.com,
+        mirsad.todorovac@alu.unizg.hr, nicememory@gmail.com,
+        regressions@leemhuis.info, regressions@lists.linux.dev,
+        srw@sladewatkins.net
+Subject: Re: BISECT result: 6.0.0-RC kernels trigger Firefox snap bug with 6.0.0-rc3 through 6.0.0-rc7
+Date:   Thu, 20 Oct 2022 21:55:45 +0800
+Message-Id: <20221020135545.586-1-nicememory@gmail.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221018174157.1897-1-phillip@squashfs.org.uk>
+References: <20221018174157.1897-1-phillip@squashfs.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <50372a15-56ce-6ad6-f622-00624b909db8@linaro.org>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 08:41:15AM -0400, Krzysztof Kozlowski wrote:
-> On 19/10/2022 16:21, Melody Olvera wrote:
-> > On 10/15/2022 6:28 AM, Krzysztof Kozlowski wrote:
-> >> On 14/10/2022 18:11, Melody Olvera wrote:
-> >> [...]
-> >>> +	clocks {
-> >>> +		xo_board: xo-board {
-> >>> +			compatible = "fixed-clock";
-> >>> +			clock-frequency = <19200000>;
-> >> Both clocks are not a property of a SoC. They are provided by the board,
-> >> so they should either be defined by board DTS or at least their
-> >> frequency must be provided by the board.
-> > That doesn't seem in keeping with precedent.... the sm8* series all have the clocks in
-> > the dtsi. These are common to the boards anyways.
-> 
-> Because people do not pay attention what is part of SoC, what is part of
-> board. DTSI is for the SoC and these are inputs to the SoC.
-> 
+Hi all,
 
-(Just chiming in because I had this thought already a few times when you
- suggested moving the XO "clock-frequency" to the board DTS:)
+After review the details of page actor, the tail bytes may be written to
+a temp buffer instead the last used page. So before diff would wrongly
+memzero a page which is not the tail bytes in.
 
-I understand your reasoning for moving components of the board to the
-board DTS, but IMHO adding just the clock-frequency to the board DTS is
-even more misleading: It suggests that there are functional board
-designs where you would use a XO clock with a different clock-frequency.
-Is that really realistic though?
+In this diff fixes it by caculation of the real index the trailing bytes
+in and check if the last used page matches this index. If the page is
+the real tail bytes in, then memzero the trailing bypte of the page.
 
-There are assumptions about the XO clock frequency in a lot of places:
-You would need to fully rewrite the gcc-<SoC>.c driver because it has
-fixed multipliers/dividers for one specific XO frequency. All firmware
-binaries would likely need changes. And does the hardware even support a
-different XO clock frequency? The APQ8016E datasheet for example
-strictly documents a XO clock input of 19.2 MHz and a sleep clock of
-32.768 kHz.
-
-IMHO the only realistic variation of the XO clock setup would be to have
-a physical "fixed-clock" with a higher frequency, followed by a
-"fixed-factor-clock" that brings it back to the expected frequency. To
-model that properly it is not enough to have just the "clock-frequency"
-in the board DTS. In this case you need two clock nodes, and the
-xo_board would be the "fixed-factor-clock".
-
-Therefore it should be all or nothing IMO: Either we move the full
-xo-board node to the board DTS (which allows alternatively defining the
-"fixed-factor-clock" or whatever). Or we assume that there will be
-always an input clock signal with the fixed frequency and keep it fully
-in the SoC .dtsi.
-
-Having just the "clock-frequency" in the board DTS puts the attention on
-the wrong detail, IMO. :)
+Please help test and any feedbacks are welcome.
 
 Thanks,
-Stephan
+
+Jintao
+
+
+diff --git a/fs/squashfs/file.c b/fs/squashfs/file.c
+index e56510964b22..e1fafd10a850 100644
+--- a/fs/squashfs/file.c
++++ b/fs/squashfs/file.c
+@@ -506,8 +506,9 @@ static int squashfs_readahead_fragment(struct page **page,
+ 		squashfs_i(inode)->fragment_size);
+ 	struct squashfs_sb_info *msblk = inode->i_sb->s_fs_info;
+ 	unsigned int n, mask = (1 << (msblk->block_log - PAGE_SHIFT)) - 1;
++	int res = buffer->error;
+ 
+-	if (buffer->error)
++	if (res)
+ 		goto out;
+ 
+ 	expected += squashfs_i(inode)->fragment_offset;
+@@ -529,7 +530,7 @@ static int squashfs_readahead_fragment(struct page **page,
+ 
+ out:
+ 	squashfs_cache_put(buffer);
+-	return buffer->error;
++	return res;
+ }
+ 
+ static void squashfs_readahead(struct readahead_control *ractl)
+@@ -557,6 +558,7 @@ static void squashfs_readahead(struct readahead_control *ractl)
+ 		int res, bsize;
+ 		u64 block = 0;
+ 		unsigned int expected;
++		int nr_used_pages;
+ 
+ 		nr_pages = __readahead_batch(ractl, pages, max_pages);
+ 		if (!nr_pages)
+@@ -593,18 +595,21 @@ static void squashfs_readahead(struct readahead_control *ractl)
+ 
+ 		res = squashfs_read_data(inode->i_sb, block, bsize, NULL, actor);
+ 
+-		squashfs_page_actor_free(actor);
++		nr_used_pages = squashfs_page_actor_free(actor);
+ 
+ 		if (res == expected) {
+ 			int bytes;
++			pgoff_t bytes_index;
+ 
+ 			/* Last page (if present) may have trailing bytes not filled */
+ 			bytes = res % PAGE_SIZE;
+-			if (pages[nr_pages - 1]->index == file_end && bytes)
+-				memzero_page(pages[nr_pages - 1], bytes,
++			bytes_index = (index << shift) + ((res - bytes) >> PAGE_SHIFT);
++			if (bytes && nr_used_pages > 0 &&
++				pages[nr_used_pages - 1]->index == bytes_index)
++				memzero_page(pages[nr_used_pages - 1], bytes,
+ 					     PAGE_SIZE - bytes);
+ 
+-			for (i = 0; i < nr_pages; i++) {
++			for (i = 0; i < nr_used_pages; i++) {
+ 				flush_dcache_page(pages[i]);
+ 				SetPageUptodate(pages[i]);
+ 			}
+diff --git a/fs/squashfs/file_direct.c b/fs/squashfs/file_direct.c
+index f1ccad519e28..ee462ef380bf 100644
+--- a/fs/squashfs/file_direct.c
++++ b/fs/squashfs/file_direct.c
+@@ -26,14 +26,14 @@ int squashfs_readpage_block(struct page *target_page, u64 block, int bsize,
+ 	struct inode *inode = target_page->mapping->host;
+ 	struct squashfs_sb_info *msblk = inode->i_sb->s_fs_info;
+ 
+-	int file_end = (i_size_read(inode) - 1) >> PAGE_SHIFT;
+-	int mask = (1 << (msblk->block_log - PAGE_SHIFT)) - 1;
+-	int start_index = target_page->index & ~mask;
+-	int end_index = start_index | mask;
+-	int i, n, pages, bytes, res = -ENOMEM;
++	pgoff_t file_end = (i_size_read(inode) - 1) >> PAGE_SHIFT;
++	pgoff_t mask = (1 << (msblk->block_log - PAGE_SHIFT)) - 1;
++	pgoff_t start_index = target_page->index & ~mask;
++	pgoff_t end_index = start_index | mask;
++	int i, pages, used_pages, bytes, res = -ENOMEM;
++	pgoff_t n, bytes_index;
+ 	struct page **page;
+ 	struct squashfs_page_actor *actor;
+-	void *pageaddr;
+ 
+ 	if (end_index > file_end)
+ 		end_index = file_end;
+@@ -74,7 +74,7 @@ int squashfs_readpage_block(struct page *target_page, u64 block, int bsize,
+ 	/* Decompress directly into the page cache buffers */
+ 	res = squashfs_read_data(inode->i_sb, block, bsize, NULL, actor);
+ 
+-	squashfs_page_actor_free(actor);
++	used_pages = squashfs_page_actor_free(actor);
+ 
+ 	if (res < 0)
+ 		goto mark_errored;
+@@ -86,16 +86,19 @@ int squashfs_readpage_block(struct page *target_page, u64 block, int bsize,
+ 
+ 	/* Last page (if present) may have trailing bytes not filled */
+ 	bytes = res % PAGE_SIZE;
+-	if (page[pages - 1]->index == end_index && bytes) {
+-		pageaddr = kmap_local_page(page[pages - 1]);
+-		memset(pageaddr + bytes, 0, PAGE_SIZE - bytes);
+-		kunmap_local(pageaddr);
++	bytes_index = start_index + ((res - bytes) >> PAGE_SHIFT);
++	if (used_pages > 0 && bytes &&
++		page[used_pages - 1]->index == bytes_index) {
++		memzero_page(page[used_pages - 1], bytes,
++			     PAGE_SIZE - bytes);
+ 	}
+ 
+ 	/* Mark pages as uptodate, unlock and release */
+ 	for (i = 0; i < pages; i++) {
+-		flush_dcache_page(page[i]);
+-		SetPageUptodate(page[i]);
++		if (i < used_pages) {
++			flush_dcache_page(page[i]);
++			SetPageUptodate(page[i]);
++		}
+ 		unlock_page(page[i]);
+ 		if (page[i] != target_page)
+ 			put_page(page[i]);
+@@ -112,8 +115,10 @@ int squashfs_readpage_block(struct page *target_page, u64 block, int bsize,
+ 	for (i = 0; i < pages; i++) {
+ 		if (page[i] == NULL || page[i] == target_page)
+ 			continue;
+-		flush_dcache_page(page[i]);
+-		SetPageError(page[i]);
++		if (i < used_pages) {
++			flush_dcache_page(page[i]);
++			SetPageError(page[i]);
++		}
+ 		unlock_page(page[i]);
+ 		put_page(page[i]);
+ 	}
+diff --git a/fs/squashfs/page_actor.h b/fs/squashfs/page_actor.h
+index 95ffbb543d91..c2c5c3937ef9 100644
+--- a/fs/squashfs/page_actor.h
++++ b/fs/squashfs/page_actor.h
+@@ -29,10 +29,12 @@ extern struct squashfs_page_actor *squashfs_page_actor_init(void **buffer,
+ extern struct squashfs_page_actor *squashfs_page_actor_init_special(
+ 				struct squashfs_sb_info *msblk,
+ 				struct page **page, int pages, int length);
+-static inline void squashfs_page_actor_free(struct squashfs_page_actor *actor)
++static inline int squashfs_page_actor_free(struct squashfs_page_actor *actor)
+ {
++	int res = actor->next_page;
+ 	kfree(actor->tmp_buffer);
+ 	kfree(actor);
++	return res;
+ }
+ static inline void *squashfs_first_page(struct squashfs_page_actor *actor)
+ {
