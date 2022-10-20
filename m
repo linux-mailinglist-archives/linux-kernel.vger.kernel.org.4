@@ -2,84 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC445605E37
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 12:53:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A27F605E3B
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 12:54:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230460AbiJTKxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 06:53:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44918 "EHLO
+        id S230490AbiJTKyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 06:54:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbiJTKxJ (ORCPT
+        with ESMTP id S229722AbiJTKyL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 06:53:09 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B97971DEC1A
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 03:53:06 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id bp15so32857853lfb.13
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 03:53:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ISfaqMEVOt5NqZEabZB8HqvfH97r0fX/dwv3Z1arI3k=;
-        b=XrsYM0iklTxLXZILvOg1PPVfUoCjJp8xeQHMrJz7StSbFgE4mtixPNAIUAQpQtkNIk
-         2zUilbpOZSD2UFSkKpLSyCcx74qLnyo9CuxjyWW1fHbpp9yXQki6QWznnRGEzQ/z7vH7
-         KLg/0V+gmqqpmITyg+u3lJPI4exFRkg4w3bRG3mQy6urIdVWU5Bf3xYpzJLvuFy4BmfS
-         MTFy5bRqg78PSBWqv5o3QR+zyn8/4f9KiQg+qQe5yW1TGv1utkLDkiXmoF8J9S1aXJ69
-         NSO3x12qyuVK6Npj9hte5slILYjO1GxIcmffctQ/DQ6IOIVb03i/f14otGrA2YNuxE1I
-         J4Ig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ISfaqMEVOt5NqZEabZB8HqvfH97r0fX/dwv3Z1arI3k=;
-        b=FvqfkEyLuK5uas9FCxsaiH6E93GZHZPXaaGv9gLC8Q1HtUZ2QH92eOcnf8I0sfoYi/
-         hERBRR+cHdO2N/HBantyM5Byjf9Sfoccj3WrbjEASgIMA7g4Llnart0OaNLvbalHHABx
-         tacTTQzqyfVfLF1bXHun3cmggdv1eMGb+SbH52vGjmb5zviHnKMWO9/nUWJk+mVeeiTH
-         hAPM/+vhMtLHYzKVhQBLkXG6ftdjdpJ//xVJHjlrrfSHu5YaMuS3ep1om8GrochXVT8G
-         hY5gE1uBuwA9rUVyVKuSGwL1LIVvyCKpzsTmuSq7XQAe60uC2zIBL38/3CPWkrdiMEox
-         YrmQ==
-X-Gm-Message-State: ACrzQf1TaNKQL4HGzyF5o0KaUMSZKOg7Gb45mEaxRZwQixRZG5tsDsLd
-        BAn6C0itRBarQVVMDl8RTN+TfA==
-X-Google-Smtp-Source: AMsMyM6xi13XCb8wPT/fKx+LGwtxsuOWmheJ8Ywz9Lm/ngGNRFgqX7aiftxA0zyAVVJooR5s4uB4Yg==
-X-Received: by 2002:a05:6512:250c:b0:4a2:731e:ca1 with SMTP id be12-20020a056512250c00b004a2731e0ca1mr4869703lfb.357.1666263185032;
-        Thu, 20 Oct 2022 03:53:05 -0700 (PDT)
-Received: from [10.10.15.130] ([192.130.178.91])
-        by smtp.gmail.com with ESMTPSA id z15-20020a056512308f00b00492f0f66956sm2661106lfd.284.2022.10.20.03.53.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Oct 2022 03:53:04 -0700 (PDT)
-Message-ID: <f170d43e-f3b7-38f6-6376-2c9116413c1a@linaro.org>
-Date:   Thu, 20 Oct 2022 13:53:03 +0300
+        Thu, 20 Oct 2022 06:54:11 -0400
+Received: from IND01-BMX-obe.outbound.protection.outlook.com (mail-bmxind01olkn2045.outbound.protection.outlook.com [40.92.103.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 546851DED79;
+        Thu, 20 Oct 2022 03:54:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=T0BVxf0wO8/F/AqP8pcbgpFIHLFwnZsLc38Sqrmcomz3Iax2AeLpIyPOgUDEosVSGkUAwUVpOaQ8JDzWWAN+L4jUxSBnoBjVS/ytbawlvlxuIVL+IlX+BUZYDBMvhyF+i/XF8gK7jTQTLEHqfpFfnUCAP9+BC5P8ax+tQ6K0m8MoqyyqoJeHAmGRTT/3z8kMEirveMdJs8EFAnBiUO8TOYAu9lVRp4k8jjy+7Qo+e0Ck8lXKx8rNZx41aFl9boZllk8z5x9klg8H2hV9V/InMWI/kTD25PH7JclqzrJV9z0SIU+R3v/bQU85ceh/Ou55/fVUsahKOcGiZaaDULOniA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UPdoY822CpO8VSLl1ks731zySDDkY/p1apilx5+uFTs=;
+ b=VdEaZzpUfJK+sWomGIjWONXH/CLmbd6BZdqGRzDQhZ4tQQC0iVBu0XcLxnkCWSFaIJOoG01pzwSu1vb5/pq4MwjsIqSG/v9Nvovoitt2+qEIIhNvJ5SU/DJ3NS5p6rA+7ZPJkHrgdZI/i7DDottv3WRg2VhgoCfK4pymqQ8iEF/UNfHYve55VH+Hvb7haSKbG56fPMw9SJrKKyMeLv6mxJWBovzwvmJiu+J6w+HWDbxFhsWTKkz/85ZAGuCN9BboKlmugeodbVpJ1M6S76r3YEh3y+hTL5M4GTQUNUgYLuEujEqBBGbZVp0QVNiFkIc8Igl59K1tCBmA4HDirT8Irw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UPdoY822CpO8VSLl1ks731zySDDkY/p1apilx5+uFTs=;
+ b=R0uCeSVU0mZc/7YaTXaMwhq9qkbSuGlah6KAL2UURkpGO/4KLvIDyaJwVryFTAYCxeAuZk5yA80nFPovp4i+pmBxwRTCmSDBjCmEDQ2q4m3/pNGSoqsQ57Rp7ie6qOaR9yYcXGfjbbSJM7s+LXA03UE66WXRjTcYVmQDOsEZX2vJ/9vspRNmS2y163o6VDx5qVWCdySSewi0jMynZTmVGu8P+cc429h8QFNKiFJxsxrcwlfh3nGjG1VAPBq/K6lvAkUr6m1NjE6ynyDxeXqnqWT0gvqw3TSkGwBe05w0V9q40YrjOJTH+s39AdCGrORqNfxX6G6p5kfkvzxrcIxHQw==
+Received: from BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM (2603:1096:b00:2::9) by
+ MA0PR01MB5866.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a01:6f::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5723.34; Thu, 20 Oct 2022 10:54:05 +0000
+Received: from BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::3dc1:f6bc:49e4:b294]) by BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::3dc1:f6bc:49e4:b294%9]) with mapi id 15.20.5723.034; Thu, 20 Oct 2022
+ 10:54:05 +0000
+From:   Aditya Garg <gargaditya08@live.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+CC:     "matthew.garrett@nebula.com" <matthew.garrett@nebula.com>,
+        "jk@ozlabs.org" <jk@ozlabs.org>,
+        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Orlando Chamberlain <redecorating@protonmail.com>
+Subject: Re: [REGRESSION] Failure to write the NVRAM variables starting from
+ kernel 6.0 on T2 Macs
+Thread-Topic: [REGRESSION] Failure to write the NVRAM variables starting from
+ kernel 6.0 on T2 Macs
+Thread-Index: AQHY4/Chn/t4Wu6acU6x14mE2JkbVq4WOgwAgADinAA=
+Date:   Thu, 20 Oct 2022 10:54:05 +0000
+Message-ID: <E59CCD93-C6F2-4A78-89F7-9F2244C9AB97@live.com>
+References: <23DC077F-69DF-402C-A940-2E7EEABF2D97@live.com>
+ <CAMj1kXG03-0AdM_ROf2UhH-N2Z52v7ox_emSQw=y5p3sMeTrMA@mail.gmail.com>
+In-Reply-To: <CAMj1kXG03-0AdM_ROf2UhH-N2Z52v7ox_emSQw=y5p3sMeTrMA@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-tmn:  [2+pP6O3j0bsIvcQ6qSIwwO6j1rneeC76]
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BM1PR01MB0931:EE_|MA0PR01MB5866:EE_
+x-ms-office365-filtering-correlation-id: 9bbf5be6-84cf-427a-2dee-08dab2896831
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 1AnkMEuHjiXwFjEAxx9391OkBLbOK6H8W3mk296SU9HWZQ2uU14cMEtKw+o6DRwPJRFNgHqGsxth8u694rqtoa5AQBns+Me/qnB65CDN8JwLzQ6LLC/QEakJu0HrL9zV/YMIeZoSTEcol48/VGVABBRgQniXxzQSl1DvANyl4Zflbp4be3wnRvkEdqY7tuqGjTklPcZF6wRYCfdlUGPlc+6WnVDPXS8FGcZArQI9TNmmArjJpoBqSUw/yjmobUtgl/ES/CdUlDh38XTgtK9BZQdSejtz5XiSsJ1nGqsNJbH6BvmlXCKi9DWkZ0f3dFTTXnmEOK2DbtQbUJyI33AdzgFkpJdsM72gaJgsD6XyfsKk76hqmowGgRHzo9Os2ehzmyY/hB5divYtY402M8GfKhYK+dEXtkJd/NYCVlZ56nLSSKLQXJ8DLUAlVhMqtO+2Sxm31VK45K3LL05nbWxQro5pqXaYH4TbqtOZ6HcTI8SdPKWwhFVQQ926VHz8r1TPb9ySXGt0YElhg4ParzlMnWaf7/QDoE0w+Aw127iY8zW8lFNl7biIn+CzCIRqgcpCdOHnfm9Kl4w280VWCJYNfZDJ4IO++/4ehJM210zLc4QKiKY8IrZP18HelndL1GhkoUV/6qoBljNw2l1dmu9k7YkHL5aKUL0A8CcPWde4eI/Huu+Qw/RqRVwo4iyY229Q
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?KMaRt9NsaHh4YXArv54QUwPN6CKCB+rmSrwdKiFUzAcujqD+VvYMdPmvpU95?=
+ =?us-ascii?Q?PnwgeVups92QHC9qAZ/ezMN3VtTQa/6Esns3OuoaNYBN61ph7iKwBnBVDtCt?=
+ =?us-ascii?Q?C/eKV9HAinf8dlBaxi6akI5q0ziFspkXpe5m8imhjHe+rbAKuyhc8GMnfA34?=
+ =?us-ascii?Q?wqfiffuahLTLxoJRYXOcUSCehW18Kzt1iFIOPtsjUi12fXx+EyJV8wHEW6YI?=
+ =?us-ascii?Q?L+J0cIQhLoHF5gK1A3GEgauYgPD4X7yRrOTqz8AdoKcekPxQqhJxPi2ymZ3A?=
+ =?us-ascii?Q?Db/ytfld2I4YSwanPZCzhbnLnCDu0XPz6ZTp5ID2nVEDvTJT1aF3jAyZ4hz2?=
+ =?us-ascii?Q?u1R+KhJp7AjZNYQBw2z9NjiB1+ru4TJDRhXD0D2FmLwghq6lAMEFhZSFNPWq?=
+ =?us-ascii?Q?ast5veBrNWe7VF9tvv7hLjcN0BX/lsP8AZyQlBe4WYfrJ8saDhDDpheN/KGV?=
+ =?us-ascii?Q?0ZdSHTB/u6szyiHbBf4l5a6hqasGEO6BFl2jfaD2Hl1gttPgTqfXzb//pZ2G?=
+ =?us-ascii?Q?qdhwlXK7GNRFLX/90gyIvfUFErl/9Ke7JyvAvL5h3DHHf6wSCXsj8jqAv3cL?=
+ =?us-ascii?Q?BtEQAAiilJZEmYRaWs/Z01B6/YEpc5IZoUjbT/DD3KPaMvXerG8bg3iX9FfQ?=
+ =?us-ascii?Q?cA07v2xi2tkzjyefCoCGODrT7Up2u4u3hJCx8w0vzv+kcwcV7tHqY6OsO8Fq?=
+ =?us-ascii?Q?rU0d04WxdXATNRW7liGR5Bq9LTSfw288U+vlXqoiAGs+MMHb8XNFAMsy3CL0?=
+ =?us-ascii?Q?3lDNZRMXVsJXmZt3+msiSbMU9CSEVcs2Xsz+GRSzs5ewmxIrvDU09288BBCA?=
+ =?us-ascii?Q?MnjeXQIrGa/+QdSMRTwj2gIOL5hgm8ODZLYgbwivCoxD/aoWcYcee5Lw/LbP?=
+ =?us-ascii?Q?VkfD2vZY4k8YNMnTlSI6lj5OFOA2gFx1tctF4lMxB2qAu3IxAHNkZ+ShsrRE?=
+ =?us-ascii?Q?rIiSr4OO2OSqIE5VW5PXbT9AAyJkfmMNqZgbzO7sGa8/ISRDu2LvS6SWSOdN?=
+ =?us-ascii?Q?FQDf9CFo2+vy+hWUOMRXWPb63Dn0DUL3tUdOQnzUqLlLbF27YtwqpiaGGUWz?=
+ =?us-ascii?Q?JPL367DhWdpq+sEMC2EG19UKj7FUPog4bLLmfgSHG3qXuRqo4OGU6+OU7pEi?=
+ =?us-ascii?Q?nV35ze8Hhi/Z0dlyUPSlxnCKMz9x5GZwyZMkEJwLV62Y/djfciqGDdbywt8l?=
+ =?us-ascii?Q?H938IT4I6L3SH5l8zOdoQGwc6UmBwSJ8AQX9EMlR0llTVq3E8UDcAoousyqO?=
+ =?us-ascii?Q?SCvZ/055COoOwVzNfykTnS+gUFDwrbKu6WUj7Bf/fQ=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <A5269247AF865E4B861CE308EC5C6A6E@INDPRD01.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v2 13/15] phy: qcom-qmp-pcie: add support for pipediv2
- clock
-Content-Language: en-GB
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221019113552.22353-1-johan+linaro@kernel.org>
- <20221019113552.22353-14-johan+linaro@kernel.org>
- <325d6c7b-ca96-df73-a792-4d156a710267@linaro.org>
- <Y1EPZBinv0tyZVqW@hovoldconsulting.com>
- <7eb3fb9a-ce4a-eee0-b6bc-cee6aa6bf37b@linaro.org>
- <Y1EnsKMhoWo+cIWo@hovoldconsulting.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <Y1EnsKMhoWo+cIWo@hovoldconsulting.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-42ed3.templateTenant
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9bbf5be6-84cf-427a-2dee-08dab2896831
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Oct 2022 10:54:05.4038
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MA0PR01MB5866
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,57 +112,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/10/2022 13:49, Johan Hovold wrote:
-> On Thu, Oct 20, 2022 at 12:28:14PM +0300, Dmitry Baryshkov wrote:
->> On 20/10/2022 12:05, Johan Hovold wrote:
-> 
->>> Here's your example diff inline:
-> 
->>> @@ -2206,12 +2207,17 @@ static int qmp_pcie_parse_dt_legacy(struct qmp_pcie *qmp, struct device_node *np
->>>    		}
->>>    	}
->>>    
->>> -	qmp->pipe_clk = devm_get_clk_from_child(dev, np, NULL);
->>> -	if (IS_ERR(qmp->pipe_clk)) {
->>> -		return dev_err_probe(dev, PTR_ERR(qmp->pipe_clk),
->>> +	clk = devm_get_clk_from_child(dev, np, NULL);
->>> +	if (IS_ERR(clk)) {
->>> +		return dev_err_probe(dev, PTR_ERR(clk),
->>>    				     "failed to get pipe clock\n");
->>>    	}
->>>    
->>> +	qmp->num_pipe_clks = 1;
->>> +	qmp->pipe_clks = devm_kcalloc(dev, qmp->num_pipe_clks,
->>> +				      sizeof(*qmp->pipe_clks), GFP_KERNEL);
->>> +	qmp->pipe_clks[0].clk = clk;
->>>
->>> So here you're poking at bulk API internals and forgot to set the id
->>> string, which the implementation uses.
->>
->> I didn't forget, I just skipped setting it. Hmm. I thought that it is
->> used only for clk_bulk_get. But after checking, it seems it's also used
->> for error messages. Mea culpa.
->>
->> But it's not that I was poking into the internals. These items are in
->> the public header.
-> 
-> My point is that you're not using the bulk API as it was intended (e.g.
-> with clk_bulk_get()) and you risk running into issues like the above.
-> 
-> And looking up the actual clock name for this is overkill, even in the
-> case were it is provided, so we'd need to set it unconditionally to
-> "pipe" (which is fine).
-> 
->>> For reasons like this, and the fact that will likely never have a third
->>> pipe clock, I'm reluctant to using the bulk API.
->>
->> Let's resort to the maintainer opinion then.
-> 
-> I'll take another look at it too.
+Hi Ard
 
-Thanks!
+> On 20-Oct-2022, at 2:53 AM, Ard Biesheuvel <ardb@kernel.org> wrote:
+>=20
+> Hello Aditya
+>=20
+> Thanks for the report. I did identify an issue in some refactoring
+> work of the efivars layer that went into 6.0
+>=20
+> Can you please check whether the change below fixes the issue for you?
 
--- 
-With best wishes
-Dmitry
+The patch given below fixes the issue for me.
 
+>=20
+> diff --git a/drivers/firmware/efi/vars.c b/drivers/firmware/efi/vars.c
+> index dd74d2ad3184..35edba93cf14 100644
+> --- a/drivers/firmware/efi/vars.c
+> +++ b/drivers/firmware/efi/vars.c
+> @@ -209,7 +209,7 @@ efivar_set_variable_blocking(efi_char16_t *name,
+> efi_guid_t *vendor,
+>        if (data_size > 0) {
+>                status =3D check_var_size(attr, data_size +
+>                                              ucs2_strsize(name, 1024));
+> -               if (status !=3D EFI_SUCCESS)
+> +               if (status !=3D EFI_SUCCESS && status !=3D EFI_UNSUPPORTE=
+D)
+>                        return status;
+>        }
+>        return __efivars->ops->set_variable(name, vendor, attr,
+> data_size, data);
+> @@ -242,7 +242,7 @@ efi_status_t
+> efivar_set_variable_locked(efi_char16_t *name, efi_guid_t *vendor,
+>        if (data_size > 0) {
+>                status =3D check_var_size_nonblocking(attr, data_size +
+>=20
+> ucs2_strsize(name, 1024));
+> -               if (status !=3D EFI_SUCCESS)
+> +               if (status !=3D EFI_SUCCESS && status !=3D EFI_UNSUPPORTE=
+D)
+>                        return status;
+>        }
+>        return setvar(name, vendor, attr, data_size, data);
+
+Thanks
+Aditya
