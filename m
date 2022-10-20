@@ -2,400 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D445B60614F
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 15:16:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42B9260615A
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 15:18:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231150AbiJTNQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 09:16:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56386 "EHLO
+        id S231173AbiJTNSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 09:18:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231129AbiJTNQ0 (ORCPT
+        with ESMTP id S231156AbiJTNS0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 09:16:26 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B732E52F2;
-        Thu, 20 Oct 2022 06:16:09 -0700 (PDT)
-Received: from mail.ispras.ru (unknown [83.149.199.84])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 89CA3419E9CC;
-        Thu, 20 Oct 2022 13:13:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 89CA3419E9CC
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1666271581;
-        bh=pAZAxFClnNu/Y3kZQAKw/60dmxh4WamF+LHzKbwPL38=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=btD3CHu4rWZ14kMdho4Is5pcoID+y4gF/EK7nmMYqbHBLtLYW5gTLTElcZW5uBpl6
-         Go1vS4+2oCm55+YRWBcsJ3nO3ZNOqP2DJ6JYZ54sGzeLJ0vLOvulw/8aWVYg9rLSFt
-         TNi860eZdazuq5d0riaUAm6AYWOdMVb37cB3/9Ng=
+        Thu, 20 Oct 2022 09:18:26 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on0705.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe0c::705])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A04501B2326;
+        Thu, 20 Oct 2022 06:17:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ixzl0OXFLN30HItqEOZIJB+QFY9K9E2b79Ex0mA3w8eHAtsj6c3/p/cV4gPZ82revovlQky2pf4OJ7jVXQyg9146lCjz0Tz0UUEXZEAes+i9uk5AToqM9QfqjX5Qg1m6K6SWcxk1mFaPa0D+eCJxCanGDtIKST4sxnn3CrYfWR+yiWGr1tbl6bN6VTqXgdQdiwQ8jtUg3fNpy/cuipRhi1GOjh38iJdTuBgEfpVEzlsb9E4gsXEBUg6IYloFXCCg8bmKPZYeTbS8hTfib/i5JoICc1+edZqfbSRDgSbAOdPKL7qPbGvloq0LK2+XFDQBDZ1QUJv2bu4ZARQ+xYD5tg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kjAnBXhLkwQpLKBKKEGG5Sf1u8GNrCyjp7MjS6rgmmg=;
+ b=iDDotWyrQJfGqxiWfDlyVoVanXW3+MOExNXnrV1opz+TK3hFWRY1NMw+e5sLGwZh9Cmuj4Ha2XCxJkmfciv+xd3jkWCQ5nliN20boENt5H4LUM1nlvDWEW4H3ba7kU/NKd1cyD+Ldr64QNx7P08X24xB06aFnhrRrvcNg/6LsQIphMNofk7wl5dY/weO0ueTwpd3jzkdxstLqnkZ5bJvvMwlZ0PbelW6BJIMkFH1GHBSCoEgsIOcNzRdReETC6e7zqZ+1iDsvTuZp5Bp8Z418dG8+K9moBKZkio+H6b1fCfi5c0JQaVevOTWUY11/S/QVR+KPqAvzBqlNGxuIIZ+fw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=plvision.eu; dmarc=pass action=none header.from=plvision.eu;
+ dkim=pass header.d=plvision.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=plvision.eu;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kjAnBXhLkwQpLKBKKEGG5Sf1u8GNrCyjp7MjS6rgmmg=;
+ b=MdjRSicbXX7p+QOZhzecLlr0U3J+fendMEsXFwiaxpUKldpm+RUodaXnGAmdGm2OoCLNesw0N4bCxpdoQjQEj6yIoVVyIz8P/fw8xeSPW9zXT8X6PEYU3hiyXPDPn6yg1U6USWEKrYGKpGplZFZ03LHJ+dYO9RCG1D2+TL/iNEI=
+Received: from VI1P190MB0317.EURP190.PROD.OUTLOOK.COM (2603:10a6:802:38::26)
+ by AS4P190MB2022.EURP190.PROD.OUTLOOK.COM (2603:10a6:20b:51a::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.33; Thu, 20 Oct
+ 2022 13:14:45 +0000
+Received: from VI1P190MB0317.EURP190.PROD.OUTLOOK.COM
+ ([fe80::a621:b61f:de56:b8]) by VI1P190MB0317.EURP190.PROD.OUTLOOK.COM
+ ([fe80::a621:b61f:de56:b8%7]) with mapi id 15.20.5723.035; Thu, 20 Oct 2022
+ 13:14:44 +0000
+From:   Vadym Kochan <vadym.kochan@plvision.eu>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+CC:     Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Liang Yang <liang.yang@amlogic.com>,
+        Chuanhong Guo <gch981213@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Elad Nachman <enachman@marvell.com>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Aviram Dali <aviramd@marvell.com>
+Subject: Re: [PATCH 2/3] dt-bindings: mtd: Add AC5 specific binding
+Thread-Topic: [PATCH 2/3] dt-bindings: mtd: Add AC5 specific binding
+Thread-Index: AQHY45PTPI7TLc+fQEC4CnOCf8ArC64VZ4UAgAHcf2s=
+Date:   Thu, 20 Oct 2022 13:14:44 +0000
+Message-ID: <VI1P190MB0317826F688A57D3FBBB16BB952A9@VI1P190MB0317.EURP190.PROD.OUTLOOK.COM>
+References: <20221019082046.30160-1-vadym.kochan@plvision.eu>
+        <20221019082046.30160-3-vadym.kochan@plvision.eu>
+ <20221019104654.7ee35744@xps-13>
+In-Reply-To: <20221019104654.7ee35744@xps-13>
+Accept-Language: uk-UA, en-US
+Content-Language: uk-UA
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=plvision.eu;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: VI1P190MB0317:EE_|AS4P190MB2022:EE_
+x-ms-office365-filtering-correlation-id: d940a562-14fc-4892-51ab-08dab29d0e36
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: QJQBKQl2P7z+zqP7NehqvHrPkQikPW9d1uxubHIb8knOMMcHVgE/CzUe9DSAUV7D1oxo5SWLq4POHLe5Z5ZNHjTNPnGdVVBB6R3CqD5SDa8lamUtCAGevHqPE+aAp8Zjkv0U7gfXb62bPIcfgus49dm1lK9N/AGxEezOiOsJKPFy4n0ur9oo+kjGy/uQy+Vem4xvFm2+WvWDDBmpNWhAhxZCGoqWypcMftzy6xpBoeSivWHLXNKOsELbzVJzFph8Ebm50DJxLc5OvGJobbfKKEId9vGAV8y1rjnmntywafIE4SH1/7mkpRigEcroAal6YkE5UEHzTcQQ5QbixPQAzGWRl/jWpN7LJ2kQ+I9GDXrPrIxozsUwAB/9lyRaO6hhRFBOirQdzjf//RLKAtHZEYVoCe8+p+un4gOjVXvHqoEslwqqs5M3Z+jVAI3C4Jci5H1IDG1QOKwAFtxnTgKRrlmNayVTWX6aLS6FMMudGLUCOTpeaFStvSYg1NBBoH3SAXbCJ8MntmRT0R4VmsDPsahxmUQZFWpbBlYam6HUsVTtcLiybN+S/leDcImIxt/HyTbLnKBqGYUnUS/vA5n9KLWCSGXoVBTz6NWtV66lW5/o5x68iRQz2Qj9HYWadyoU0qq8Oy9tGoOihu7U6SgtDrrKDsgN6Hgux+B7uSw6SY8Q5Ygx+K04x9A3Rwn/5NjB7JY4aYonSKg+YhkAnquPzzzfrHfMoCNs5He0pKnM+n3eU2REKytQq2pynLPuajkJ
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1P190MB0317.EURP190.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(39830400003)(366004)(346002)(34036004)(376002)(136003)(451199015)(66946007)(66556008)(91956017)(71200400001)(5660300002)(66476007)(76116006)(54906003)(6916009)(4326008)(66446008)(316002)(38070700005)(33656002)(2906002)(7416002)(64756008)(7696005)(6506007)(122000001)(8676002)(55016003)(38100700002)(8936002)(52536014)(558084003)(186003)(41300700001)(26005)(9686003)(86362001)(508600001)(44832011)(41320700001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?koi8-u?Q?NMGZsprsStyvdz0aU7C9MehjfwVXP18eZlRtEyr955veWg/XBQQW3T5Gm6qbzk?=
+ =?koi8-u?Q?vhxpG4GZ5O8q2SF7wLHN1CioMTIgXiIlAi9OZkGEndelxE+p5oE3KM8xeNfrZO?=
+ =?koi8-u?Q?Em9A9L2MdiTaB6xfJ/AHGnTE8smikNp2EolXvaQLKiCk+k6m4k4zkY9FOLE23V?=
+ =?koi8-u?Q?QFK5QfeszpMX+M4xvA897Oz0KNb2oP3JBz8UI8alx5s8hrdedgJ3V5kb2SCn9g?=
+ =?koi8-u?Q?Kr21DPavUlboCv/zwhqlAQ3k2l5my9/srDAmKFZKXeMASeEzefuE2RwEiR07a7?=
+ =?koi8-u?Q?s9U9UMdSciHiyURhmT1ihdiAKShQ8kWMDHyQoQgpLYFxcD64caSeomUqBHCuUH?=
+ =?koi8-u?Q?uNOHEdHHRZW+DN1fEOcunORFYTNnp9UKYeFbW4XybIj7eVmQm/bZ/oR0P/uQhO?=
+ =?koi8-u?Q?cSN/X1khrHwDWjKvdPa69uk9NB84qpiZym/LXFC0sXTVXhxrikjT2C4m4ZkT9+?=
+ =?koi8-u?Q?/THjf/OVjg+KuNvqsp/kqJRLgBdZ1krGDxqVqUtYfsCmO7dFND82l3ayPZinid?=
+ =?koi8-u?Q?iCVQvIa38/6IbRBeN8I4uQ6kUX4wzcFrOgUBGDzNhP4UxicHz34XuWp9rrm4DL?=
+ =?koi8-u?Q?JD0yxa2loCU8yX9aH+KwBP3U0XQcjWeZxff3LaGWVtH7d9pSu3jauiWcQUeuvd?=
+ =?koi8-u?Q?pmYLxbl9zyR9asl4GIFiqjmop/zYSf2owV0xh8xa8fnt+TYmLBgO+W1cM3PQUF?=
+ =?koi8-u?Q?SROetX4JRNoKcaFojgwxnOJ+NkflmE9I/LTpjIpbDamGetUT/o93kZhlByfEBw?=
+ =?koi8-u?Q?E0K8asDW+GYABue9c5cSwl64Snt++dRrRBbYxn4wL79A9GsmFry54r2h+KRNtd?=
+ =?koi8-u?Q?euczc5dCBm/cH7kWqwiocXeLv1wm5lpJ5CtQyxG4KeFsfzyIS7I5oJLPszzw+l?=
+ =?koi8-u?Q?eNLVmAntAfmI4LJhyDqq6604OJixOM3kE7yRGXx7TC4rA0LPw9xJdeyw8TmzSY?=
+ =?koi8-u?Q?bg32JaeaPtpta41gDsqkXJfNeNEnjQD1OaEFNkxApoJRrMmfwLaZNOiKSrKAif?=
+ =?koi8-u?Q?KiMfhLDrKR9b+r8Ud1qVe/Xer2P7HBJK3moxZDFH+oPp9VCU/+kwAZwifM1vXa?=
+ =?koi8-u?Q?3jDGcXtVhyAj6mVPbe2g4fp0OMXAKm3mj5DrICwpfsScynkWRQr0+TT6bAzkYg?=
+ =?koi8-u?Q?xYGdP/9Z462Yct8qJYkuvpkSaKliYihy1izC9xz1z9WlzMvEansaRwjeuWe/dU?=
+ =?koi8-u?Q?qpj59gIpBMgZ75A2sm7gp13/2fQl5FQAbp0tlTPy5E4YnoZh2T3RN4sIgK6tk4?=
+ =?koi8-u?Q?EPaz4z6OfYALr6GsfSFtC3Tu1AQc8vU8c+sxfOidsogSv919lgYwP2Q3SGtaJR?=
+ =?koi8-u?Q?UkJGLG5KbpzTvlYdh5ghxXE99+WmHq4M0pa8h6sj4mM4+gEB9+/bBeF6LKhHbR?=
+ =?koi8-u?Q?/kVMBuOCMh07FJ4fSi7kFKJBd9mdjl4DuV7RDskUmwNZKkGdZ4kOEiqUxfTnAG?=
+ =?koi8-u?Q?D1R2CMi2hUxnAl7sH5XqZ2NGG+GX1H6CqqFD616IzM9grFn6+yABAQR9zJovsB?=
+ =?koi8-u?Q?dkf/jmyDuCKDUtMkDV1XPSyo5LYbtuY1qMexhG7oUZ7aFpopAu?=
+Content-Type: text/plain; charset="koi8-u"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Date:   Thu, 20 Oct 2022 16:13:01 +0300
-From:   Evgeniy Baskov <baskov@ispras.ru>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        lvc-project@linuxtesting.org, x86@kernel.org,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 16/16] efi/libstub: Use memory attribute protocol
-In-Reply-To: <CAMj1kXFvT4kTyMWhb-Qvwq88VuuvCDE94FCDsnAd4JqQEmPWPA@mail.gmail.com>
-References: <cover.1662459668.git.baskov@ispras.ru>
- <5de2d80398986b81b6cfcdd35436bba8bf62c0e7.1662459668.git.baskov@ispras.ru>
- <CAMj1kXFvT4kTyMWhb-Qvwq88VuuvCDE94FCDsnAd4JqQEmPWPA@mail.gmail.com>
-User-Agent: Roundcube Webmail/1.4.4
-Message-ID: <555e46a9d135218ea0a9d62fc7a74871@ispras.ru>
-X-Sender: baskov@ispras.ru
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
+X-OriginatorOrg: plvision.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: VI1P190MB0317.EURP190.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: d940a562-14fc-4892-51ab-08dab29d0e36
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Oct 2022 13:14:44.3928
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 03707b74-30f3-46b6-a0e0-ff0a7438c9c4
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: jEFzugzvd5IuqVtxn9TOIDOh/n1HKbBFm9FQGPyg9b+WNqw7iqPeLchc2yUuZh5B42ucxpyiOvd0JMXSoZi0B7u2WudcRMTwlH7aipj7YME=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS4P190MB2022
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-19 10:42, Ard Biesheuvel wrote:
-> On Tue, 6 Sept 2022 at 12:42, Evgeniy Baskov <baskov@ispras.ru> wrote:
->> 
->> Add EFI_MEMORY_ATTRIBUTE_PROTOCOL as preferred alternative to DXE
->> services for changing memory attributes in the EFISTUB.
->> 
->> Use DXE services only as a fallback in case aforementioned protocol
->> is not supported by UEFI implementation.
->> 
->> Move DXE services initialization code closer to the place they are 
->> used
->> to match EFI_MEMORY_ATTRIBUTE_PROTOCOL initialization code.
->> 
->> Signed-off-by: Evgeniy Baskov <baskov@ispras.ru>
->> ---
->>  drivers/firmware/efi/libstub/mem.c      | 166 
->> ++++++++++++++++++------
->>  drivers/firmware/efi/libstub/x86-stub.c |  17 ---
->>  2 files changed, 127 insertions(+), 56 deletions(-)
->> 
->> diff --git a/drivers/firmware/efi/libstub/mem.c 
->> b/drivers/firmware/efi/libstub/mem.c
->> index 89ebc8ad2c22..8c8782993b30 100644
->> --- a/drivers/firmware/efi/libstub/mem.c
->> +++ b/drivers/firmware/efi/libstub/mem.c
->> @@ -5,6 +5,9 @@
->> 
->>  #include "efistub.h"
->> 
->> +const efi_dxe_services_table_t *efi_dxe_table;
->> +efi_memory_attribute_protocol_t *efi_mem_attrib_proto;
->> +
->>  static inline bool mmap_has_headroom(unsigned long buff_size,
->>                                      unsigned long map_size,
->>                                      unsigned long desc_size)
->> @@ -131,50 +134,32 @@ void efi_free(unsigned long size, unsigned long 
->> addr)
->>         efi_bs_call(free_pages, addr, nr_pages);
->>  }
->> 
->> -/**
->> - * efi_adjust_memory_range_protection() - change memory range 
->> protection attributes
->> - * @start:     memory range start address
->> - * @size:      memory range size
->> - *
->> - * Actual memory range for which memory attributes are modified is
->> - * the smallest ranged with start address and size aligned to 
->> EFI_PAGE_SIZE
->> - * that includes [start, start + size].
->> - *
->> - * @return: status code
->> - */
->> -efi_status_t efi_adjust_memory_range_protection(unsigned long start,
->> -                                               unsigned long size,
->> -                                               unsigned long 
->> attributes)
->> +static void retrive_dxe_table(void)
-> 
-> retrieve
-> 
->> +{
->> +       efi_dxe_table = 
->> get_efi_config_table(EFI_DXE_SERVICES_TABLE_GUID);
->> +       if (efi_dxe_table &&
->> +           efi_dxe_table->hdr.signature != 
->> EFI_DXE_SERVICES_TABLE_SIGNATURE) {
->> +               efi_warn("Ignoring DXE services table: invalid 
->> signature\n");
->> +               efi_dxe_table = NULL;
->> +       }
->> +}
->> +
->> +static efi_status_t adjust_mem_attrib_dxe(efi_physical_addr_t 
->> rounded_start,
->> +                                         efi_physical_addr_t 
->> rounded_end,
->> +                                         unsigned long attributes)
->>  {
->>         efi_status_t status;
->>         efi_gcd_memory_space_desc_t desc;
->> -       efi_physical_addr_t end, next;
->> -       efi_physical_addr_t rounded_start, rounded_end;
->> +       efi_physical_addr_t end, next, start;
->>         efi_physical_addr_t unprotect_start, unprotect_size;
->>         int has_system_memory = 0;
->> 
->> -       if (efi_dxe_table == NULL)
->> -               return EFI_UNSUPPORTED;
->> +       if (!efi_dxe_table) {
->> +               retrive_dxe_table();
-> 
-> Same here
-> 
->> 
->> -       /*
->> -        * This function should not be used to modify attributes
->> -        * other than writable/executable.
->> -        */
->> -
->> -       if ((attributes & ~(EFI_MEMORY_RO | EFI_MEMORY_XP)) != 0)
->> -               return EFI_INVALID_PARAMETER;
->> -
->> -       /*
->> -        * Disallow simultaniously executable and writable memory
->> -        * to inforce W^X policy if direct extraction code is enabled.
->> -        */
->> -
->> -       if ((attributes & (EFI_MEMORY_RO | EFI_MEMORY_XP)) == 0 &&
->> -           IS_ENABLED(CONFIG_EFI_STUB_EXTRACT_DIRECT))
->> -               return EFI_INVALID_PARAMETER;
->> -
->> -       rounded_start = rounddown(start, EFI_PAGE_SIZE);
->> -       rounded_end = roundup(start + size, EFI_PAGE_SIZE);
->> +               if (!efi_dxe_table)
->> +                       return EFI_UNSUPPORTED;
->> +       }
->> 
->>         /*
->>          * Don't modify memory region attributes, they are
->> @@ -182,14 +167,15 @@ efi_status_t 
->> efi_adjust_memory_range_protection(unsigned long start,
->>          * encounter firmware bugs.
->>          */
->> 
->> -       for (end = start + size; start < end; start = next) {
->> +
->> +       for (start = rounded_start, end = rounded_end; start < end; 
->> start = next) {
->> 
->>                 status = efi_dxe_call(get_memory_space_descriptor,
->>                                       start, &desc);
->> 
->>                 if (status != EFI_SUCCESS) {
->>                         efi_warn("Unable to get memory descriptor at 
->> %lx\n",
->> -                                start);
->> +                                (unsigned long)start);
->>                         return status;
->>                 }
->> 
->> @@ -231,3 +217,105 @@ efi_status_t 
->> efi_adjust_memory_range_protection(unsigned long start,
->> 
->>         return EFI_SUCCESS;
->>  }
->> +
->> +static void retrive_memory_attributes_proto(void)
-> 
-> and here
-> 
->> +{
->> +       efi_status_t status;
->> +       efi_guid_t guid = EFI_MEMORY_ATTRIBUTE_PROTOCOL_GUID;
->> +
->> +       status = efi_bs_call(locate_protocol, &guid, NULL,
->> +                            (void **)&efi_mem_attrib_proto);
->> +       if (status != EFI_SUCCESS)
->> +               efi_mem_attrib_proto = NULL;
->> +}
->> +
->> +/**
->> + * efi_adjust_memory_range_protection() - change memory range 
->> protection attributes
->> + * @start:     memory range start address
->> + * @size:      memory range size
->> + *
->> + * Actual memory range for which memory attributes are modified is
->> + * the smallest ranged with start address and size aligned to 
->> EFI_PAGE_SIZE
->> + * that includes [start, start + size].
->> + *
->> + * This function first attempts to use EFI_MEMORY_ATTRIBUTE_PROTOCOL,
->> + * that is a part of UEFI Specification since version 2.10.
->> + * If the protocol is unavailable it falls back to DXE services 
->> functions.
->> + *
->> + * @return: status code
->> + */
->> +efi_status_t efi_adjust_memory_range_protection(unsigned long start,
->> +                                               unsigned long size,
->> +                                               unsigned long 
->> attributes)
->> +{
->> +       efi_status_t status;
->> +       efi_physical_addr_t rounded_start, rounded_end;
->> +       unsigned long attr_clear;
->> +
->> +       /*
->> +        * This function should not be used to modify attributes
->> +        * other than writable/executable.
->> +        */
->> +
->> +       if ((attributes & ~(EFI_MEMORY_RO | EFI_MEMORY_XP)) != 0)
->> +               return EFI_INVALID_PARAMETER;
->> +
->> +       /*
->> +        * Disallow simultaniously executable and writable memory
-> 
-> simultaneously
-> 
->> +        * to inforce W^X policy if direct extraction code is enabled.
-> 
-> enforce
-> 
->> +        */
->> +
->> +       if ((attributes & (EFI_MEMORY_RO | EFI_MEMORY_XP)) == 0 &&
->> +           IS_ENABLED(CONFIG_EFI_STUB_EXTRACT_DIRECT))
-> 
-> efi_adjust_memory_range_protection() is a generic routine, but here it
-> depends on a x86-specific Kconfig symbol. Is that really necessary?
-
-Since, I will make direct extraction unconditional, I will remove this 
-as
-well, since it will be always true.
-
-> 
->> +               return EFI_INVALID_PARAMETER;
->> +
->> +       rounded_start = rounddown(start, EFI_PAGE_SIZE);
->> +       rounded_end = roundup(start + size, EFI_PAGE_SIZE);
->> +
->> +       if (!efi_mem_attrib_proto) {
->> +               retrive_memory_attributes_proto();
-> 
-> retrieve
-> 
->> +
->> +               /* Fall back to DXE services if unsupported */
->> +               if (!efi_mem_attrib_proto) {
->> +                       return adjust_mem_attrib_dxe(rounded_start,
->> +                                                    rounded_end,
->> +                                                    attributes);
->> +               }
->> +       }
->> +
->> +       /*
->> +        * Unlike DXE services functions, 
->> EFI_MEMORY_ATTRIBUTE_PROTOCOL
->> +        * does not clear unset protection bit, so it needs to be 
->> cleared
->> +        * explcitly
->> +        */
->> +
->> +       attr_clear = ~attributes &
->> +                    (EFI_MEMORY_RO | EFI_MEMORY_XP | EFI_MEMORY_RP);
->> +
->> +       status = efi_call_proto(efi_mem_attrib_proto,
->> +                               clear_memory_attributes,
->> +                               rounded_start,
->> +                               rounded_end - rounded_start,
->> +                               attr_clear);
->> +       if (status != EFI_SUCCESS) {
->> +               efi_warn("Failed to clear memory attributes at 
->> [%08lx,%08lx]: %lx",
-> 
-> Need \n at the end here
-> 
->> +                        (unsigned long)rounded_start,
->> +                        (unsigned long)rounded_end,
->> +                        status);
->> +               return status;
->> +       }
->> +
->> +       status = efi_call_proto(efi_mem_attrib_proto,
->> +                               set_memory_attributes,
->> +                               rounded_start,
->> +                               rounded_end - rounded_start,
->> +                               attributes);
->> +       if (status != EFI_SUCCESS) {
->> +               efi_warn("Failed to set memory attributes at 
->> [%08lx,%08lx]: %lx",
-> 
-> and here
-> 
->> +                        (unsigned long)rounded_start,
->> +                        (unsigned long)rounded_end,
->> +                        status);
->> +       }
->> +
->> +       return status;
->> +}
->> diff --git a/drivers/firmware/efi/libstub/x86-stub.c 
->> b/drivers/firmware/efi/libstub/x86-stub.c
->> index 914106d547a6..dd1e1e663072 100644
->> --- a/drivers/firmware/efi/libstub/x86-stub.c
->> +++ b/drivers/firmware/efi/libstub/x86-stub.c
->> @@ -22,7 +22,6 @@
->>  #define MAXMEM_X86_64_4LEVEL (1ull << 46)
->> 
->>  const efi_system_table_t *efi_system_table;
->> -const efi_dxe_services_table_t *efi_dxe_table;
->>  extern u32 image_offset;
->>  static efi_loaded_image_t *image = NULL;
->> 
->> @@ -401,15 +400,6 @@ static void setup_sections_memory_protection(void 
->> *image_base,
->>                                              unsigned long init_size)
->>  {
->>  #ifdef CONFIG_EFI_DXE_MEM_ATTRIBUTES
->> -       efi_dxe_table = 
->> get_efi_config_table(EFI_DXE_SERVICES_TABLE_GUID);
->> -
->> -       if (!efi_dxe_table ||
->> -           efi_dxe_table->hdr.signature != 
->> EFI_DXE_SERVICES_TABLE_SIGNATURE) {
->> -               efi_warn("Unable to locate EFI DXE services table\n");
->> -               efi_dxe_table = NULL;
->> -               return;
->> -       }
->> -
->>         extern char _head[], _ehead[];
->>         extern char _compressed[], _ecompressed[];
->>         extern char _text[], _etext[];
->> @@ -791,13 +781,6 @@ unsigned long efi_main(efi_handle_t handle,
->>         if (efi_system_table->hdr.signature != 
->> EFI_SYSTEM_TABLE_SIGNATURE)
->>                 efi_exit(handle, EFI_INVALID_PARAMETER);
->> 
->> -       efi_dxe_table = 
->> get_efi_config_table(EFI_DXE_SERVICES_TABLE_GUID);
->> -       if (efi_dxe_table &&
->> -           efi_dxe_table->hdr.signature != 
->> EFI_DXE_SERVICES_TABLE_SIGNATURE) {
->> -               efi_warn("Ignoring DXE services table: invalid 
->> signature\n");
->> -               efi_dxe_table = NULL;
->> -       }
->> -
->>  #ifndef CONFIG_EFI_STUB_EXTRACT_DIRECT
->>         /*
->>          * If the kernel isn't already loaded at a suitable address,
->> --
->> 2.35.1
->> 
-
-Thanks, for nitpicks, I will fix all the typos. \n's are fixed by 
-Peter's patch,
-so I will rely on it.
+Hi Miquel,=0A=
+=0A=
+> Could you please do the yaml conversion first?=0A=
+=0A=
+Sure, will try.=0A=
+=0A=
+Thanks,=0A=
+Vadym=0A=
