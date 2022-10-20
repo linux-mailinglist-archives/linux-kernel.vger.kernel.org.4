@@ -2,127 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C30A60688B
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 20:57:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5AE5606899
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 21:04:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230027AbiJTS5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 14:57:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45734 "EHLO
+        id S229588AbiJTTEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 15:04:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229897AbiJTS5h (ORCPT
+        with ESMTP id S229509AbiJTTEa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 14:57:37 -0400
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E7D16A4DB;
-        Thu, 20 Oct 2022 11:57:34 -0700 (PDT)
-Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-1364357a691so696687fac.7;
-        Thu, 20 Oct 2022 11:57:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1mcRseKjTDv1dnCkTp74lsoW6tE2eVMgrAQoJL5kJyc=;
-        b=iG5AeI0/6LPqVn/bxFYgGKQkry7Ay9XE/eaONqFI/mo9j/HJzjIgsqQWjrVzX1KPY5
-         nhQEIA/n+LseZ/34DnuQUZ2jNxlStZec6mw4ErMnB/ogzF2OOGNdnfsMVdlbc+UbI4/v
-         a1T/DzEAyyD5zPkokF6Dl8HPYckT8JGnDakXqUrezAt7fO75IFdhcBQ0dahfJRfZW2+T
-         mB4sI67g5K5uPgo/3yo6f0AW0hjXCy4SE1PtQzsWblE4HdvLqQqlwZqz2TtBsVvj1Drm
-         Pghy1wllNqcwN22+e/Q6lPVYa91kFmS8qKyQY1Rt/pNKyK4vLyEbcSKqq60DWSxi1LVx
-         Wvzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1mcRseKjTDv1dnCkTp74lsoW6tE2eVMgrAQoJL5kJyc=;
-        b=N1/AkeV9CysaMGBnJPbYAq4+Z0u1jTeOk51AHkPr9WEKh8TwWkbiUah1t3stTbvJ/f
-         8m8HAA5hL9qz/el5Yjf1/Q7vENpMjiNEsIWyjtAJNVrZuzNCfYNpcN9aB0NbbzPfyhI5
-         R0rIwyQRwJP0ZuXlv0AdKOv0c6WMhL1NgcaOlcAFYzllMA1+lgNZRJvFtpM6yMjRB900
-         s1w9fkFvs0ZbEID2Rw1GPCXR6n0RyaFsKmAiQtwT9jP/syJsno1WODYXk1zvGdfU+ZY6
-         k2efCu1aFQJwdpoBN/r5Tn31HykaQdiR6MfPGLjJjchaVh753vO8IqzmIv5xDWIV7WF5
-         o7eA==
-X-Gm-Message-State: ACrzQf1FxnTqzRaHWA80aNrvaSH+xDvp4LQuhCgx0xP7V5wPwzrILrsu
-        KwAkGAYdQWnDex3XhO3p7oE=
-X-Google-Smtp-Source: AMsMyM5H583fHPrarJCAQlhw2RpOm6I+O7B5AbrTGYZYamUDFMvjnn4q0fz+fOy7Qin0SLVMP9j01A==
-X-Received: by 2002:a05:6870:b68d:b0:12d:484a:2643 with SMTP id cy13-20020a056870b68d00b0012d484a2643mr26753310oab.105.1666292253132;
-        Thu, 20 Oct 2022 11:57:33 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c8-20020a9d4808000000b00661ac688285sm269710otf.0.2022.10.20.11.57.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Oct 2022 11:57:32 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <ba17a8b0-bd35-d172-fced-222ffa771ace@roeck-us.net>
-Date:   Thu, 20 Oct 2022 11:57:28 -0700
+        Thu, 20 Oct 2022 15:04:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C34D12A86;
+        Thu, 20 Oct 2022 12:04:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BC58761CDB;
+        Thu, 20 Oct 2022 19:04:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9294C433D6;
+        Thu, 20 Oct 2022 19:04:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666292667;
+        bh=HR30xac7/0YN9/YwEhlF6z4rb2w90/XCBJ4nOHc4JoI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=Pb2vN61GH6AyB/9TndECIzbx7fKtS3d7yJ6Tb8Sfw/uoqPO4ByAHO17ZJfegVtIlD
+         rSfJOBKQhzM7LxnxtlktqClL1O/tRD4Ae1ht9n4dho7mwAklUAy5PzzGb7JAjwluLZ
+         n8ze8fw/7wasYn87KfWwq/K43u3Y7nA/3f9/A2Dhbl31HAo7n2sLJ04aaEiO+GcoiJ
+         xalfYfmUaAmFChDgmY+R4NsQuEfVyHGmwAe/ONKqoXXwb5Q+uOfiaKPtzOtqgkQEam
+         GD2o4GPtlYujTfy26V/xxzMKExgwEHN5f4O6pR7YED1It55IYIb48cVFDT60Ey8f7U
+         9T2TPD4p35uOA==
+Date:   Thu, 20 Oct 2022 14:04:25 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Michael Kelley <mikelley@microsoft.com>
+Cc:     hpa@zytor.com, kys@microsoft.com, haiyangz@microsoft.com,
+        sthemmin@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+        luto@kernel.org, peterz@infradead.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        lpieralisi@kernel.org, robh@kernel.org, kw@linux.com,
+        bhelgaas@google.com, arnd@arndb.de, hch@infradead.org,
+        m.szyprowski@samsung.com, robin.murphy@arm.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        Tianyu.Lan@microsoft.com, kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, dan.j.williams@intel.com,
+        jane.chu@oracle.com, seanjc@google.com, tony.luck@intel.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
+        iommu@lists.linux.dev
+Subject: Re: [PATCH 11/12] PCI: hv: Add hypercalls to read/write MMIO space
+Message-ID: <20221020190425.GA139674@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Content-Language: en-US
-To:     "Tilki, Ibrahim" <Ibrahim.Tilki@analog.com>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>
-Cc:     "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "Arslanbenzer, Zeynep" <Zeynep.Arslanbenzer@analog.com>
-References: <20221019133910.282-1-Ibrahim.Tilki@analog.com>
- <409d7e93-f911-11b6-ed54-8ae8c94a8af0@roeck-us.net>
- <DM8PR03MB624786DEF5E135986ECB7B1F962A9@DM8PR03MB6247.namprd03.prod.outlook.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH 1/2] drivers: rtc: add max313xx series rtc driver
-In-Reply-To: <DM8PR03MB624786DEF5E135986ECB7B1F962A9@DM8PR03MB6247.namprd03.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1666288635-72591-12-git-send-email-mikelley@microsoft.com>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/20/22 07:47, Tilki, Ibrahim wrote:
-> ...
+On Thu, Oct 20, 2022 at 10:57:14AM -0700, Michael Kelley wrote:
+> To support PCI pass-thru devices in Confidential VMs, Hyper-V
+> has added hypercalls to read and write MMIO space. Add the
+> appropriate definitions to hyperv-tlfs.h and implement
+> functions to make the hypercalls. These functions are used
+> in a subsequent patch.
 > 
->>> +
->>> +static int max313xx_wdt_ping(struct watchdog_device *wdd)
->>> +{
->>> +	int ret;
->>> +
->>> +	ret = max313xx_wdt_stop(wdd);
->>> +	if (ret)
->>> +		return ret;
->>> +
->>> +	return max313xx_wdt_start(wdd);
->>
->> Having to stop a watchdog just to ping it is unusual. Is this really
->> necessary ?
->>
+> Co-developed-by: Dexuan Cui <decui@microsoft.com>
+> Signed-off-by: Dexuan Cui <decui@microsoft.com>
+> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
+> ---
+>  arch/x86/include/asm/hyperv-tlfs.h  |  3 ++
+>  drivers/pci/controller/pci-hyperv.c | 62 +++++++++++++++++++++++++++++++++++++
+>  include/asm-generic/hyperv-tlfs.h   | 22 +++++++++++++
+>  3 files changed, 87 insertions(+)
 > 
-> Unfortunately RTCs do not have any other way of resetting timer counter
-> other than restarting the timer.
-> 
+> diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
+> index 3089ec3..f769b9d 100644
+> --- a/arch/x86/include/asm/hyperv-tlfs.h
+> +++ b/arch/x86/include/asm/hyperv-tlfs.h
+> @@ -117,6 +117,9 @@
+>  /* Recommend using enlightened VMCS */
+>  #define HV_X64_ENLIGHTENED_VMCS_RECOMMENDED		BIT(14)
+>  
+> +/* Use hypercalls for MMIO config space access */
+> +#define HV_X64_USE_MMIO_HYPERCALLS			BIT(21)
+> +
+>  /*
+>   * CPU management features identification.
+>   * These are HYPERV_CPUID_CPU_MANAGEMENT_FEATURES.EAX bits.
+> diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
+> index e7c6f66..02ebf3e 100644
+> --- a/drivers/pci/controller/pci-hyperv.c
+> +++ b/drivers/pci/controller/pci-hyperv.c
+> @@ -1054,6 +1054,68 @@ static int wslot_to_devfn(u32 wslot)
+>  	return PCI_DEVFN(slot_no.bits.dev, slot_no.bits.func);
+>  }
+>  
+> +static void hv_pci_read_mmio(phys_addr_t gpa, int size, u32 *val)
+> +{
+> +	struct hv_mmio_read_input *in;
+> +	struct hv_mmio_read_output *out;
+> +	u64 ret;
+> +
+> +	/*
+> +	 * Must be called with interrupts disabled so it is safe
+> +	 * to use the per-cpu input argument page.  Use it for
+> +	 * both input and output.
+> +	 */
+> +	in = *this_cpu_ptr(hyperv_pcpu_input_arg);
+> +	out = *this_cpu_ptr(hyperv_pcpu_input_arg) + sizeof(*in);
+> +	in->gpa = gpa;
+> +	in->size = size;
+> +
+> +	ret = hv_do_hypercall(HVCALL_MMIO_READ, in, out);
+> +	if (hv_result_success(ret)) {
+> +		switch (size) {
+> +		case 1:
+> +			*val = *(u8 *)(out->data);
+> +			break;
+> +		case 2:
+> +			*val = *(u16 *)(out->data);
+> +			break;
+> +		default:
+> +			*val = *(u32 *)(out->data);
+> +			break;
+> +		}
+> +	} else
+> +		pr_err("MMIO read hypercall failed with status %llx\n", ret);
 
-That is a bit too generic. I sampled a couple of rtc drivers implementing
-watchdog support, and they all support pinging the watchdog without
-stopping it (or, in other words, they have explicit watchdog support).
+Too bad there's not more information to give the user/administrator
+here.  Seeing "MMIO read hypercall failed with status -5" in the log
+doesn't give many clues about where to look or who to notify.  I don't
+know what's even feasible, but driver name, device, address (gpa),
+size would all be possibilities.
 
-Looking at one of the chip datasheets, I would argue that the timers
-on that chip series are not really suitable (nor intended) to support
-watchdog functionality. They are real time alarm timers. They don't
-generate an alarm N seconds in the future, but at specific times/dates.
-That means that updating the time would interfere with watchdog functionality.
-That is way too fragile to be usable as watchdog timer.
-
-I would suggest to drop watchdog support from this driver.
-
-Thanks,
-Guenter
-
+Bjorn
