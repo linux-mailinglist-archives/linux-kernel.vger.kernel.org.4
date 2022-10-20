@@ -2,103 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A7086056F9
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 07:47:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 955F96056FD
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 07:50:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229945AbiJTFrG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 01:47:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51116 "EHLO
+        id S230035AbiJTFuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 01:50:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiJTFrD (ORCPT
+        with ESMTP id S229514AbiJTFuE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 01:47:03 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E53CB159D5F;
-        Wed, 19 Oct 2022 22:46:58 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id e129so18272363pgc.9;
-        Wed, 19 Oct 2022 22:46:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ovO4Wn2KciXjhfhIU1Ht+t+UirFlYYyzrqGDJdPLqqI=;
-        b=Ko+4G9InvfhExZOlJfPtkMVy/D5gdhgAia6F8iPargASMfbh6TDIkDbuK6cxdw5MUI
-         6IAiGIKEEoodin9JQjbz4cFOq0loHWMlsMPs6EpJDR7+IRrAzRNDOEl9PTDKJPQpOgq1
-         cdXUH05ZeMS9Rq+xGcQ/cfjjjeOZIY4rAfNrVhIx+sUvXHZvjCaAk40IhmZzfAhFm2dt
-         uGxoHw+EOvF4C5aCq1OCafCBUUP093CdYJYYDNpab1RsU3EhQELMmAUzWjuL3aw569Mt
-         CNP/xTEjj27zgCAjwatHvaL1XRTHyKoqlSOv3EoYAASFFEP419W8tttiP7R340T0kGPo
-         ErkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ovO4Wn2KciXjhfhIU1Ht+t+UirFlYYyzrqGDJdPLqqI=;
-        b=h21fgMfG731dh3HlLi/zj79RbzTg2hbquaoojkJFRFg0p8BPWheLTPntNIkCSA56qJ
-         S2Dsy1q81PNOMjlRNsMO+J1R+C+LCB3vZYiyRk2Xdwey3ncQLxFWJVqJwe17TP+qG1So
-         uQgiy60/AB9qkI/Tqsm0E5OSJnFtD/EMqv1GdPxXVawIDs25LMIsapWdrDyPxRWJZByj
-         +uesG5+cAHL708VubJwMGV4zxhFf5XlMczgAscYF52av2HOjdXkQtf+f2yxDsXqAePg0
-         aTRvDFL6rQu/6WPHqwbYNALBdO7/KBa5wDvgJAX1aP1/p3uuX5kyAgh3BHLsRfwfeM6s
-         eKXw==
-X-Gm-Message-State: ACrzQf3yuuKxW1ogszIlCvm1G5YVOtozK914EMXoR3cpoIzK1Rm1M45i
-        +mfXrRX63BVpx/XYB+jtbDL6PvoeIno=
-X-Google-Smtp-Source: AMsMyM7Ueen3Nu9ppQUHWRCrMntwIJPRbnc9qTy4XNKiB3UH010g2eyTQdJH2TCd9WHa7Nx8FtdFfw==
-X-Received: by 2002:a63:194b:0:b0:457:7295:8de0 with SMTP id 11-20020a63194b000000b0045772958de0mr10618087pgz.612.1666244818452;
-        Wed, 19 Oct 2022 22:46:58 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id r16-20020a63e510000000b004308422060csm10651732pgh.69.2022.10.19.22.46.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Oct 2022 22:46:57 -0700 (PDT)
-From:   cuijinpeng666@gmail.com
-X-Google-Original-From: cui.jinpeng2@zte.com.cn
-To:     martin.petersen@oracle.com, linux-scsi@vger.kernel.org
-Cc:     target-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jinpeng Cui <cui.jinpeng2@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] scsi: target: core: use strscpy() is more robust and safer
-Date:   Thu, 20 Oct 2022 05:46:50 +0000
-Message-Id: <20221020054650.394396-1-cui.jinpeng2@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Thu, 20 Oct 2022 01:50:04 -0400
+Received: from cpanel.siel.si (cpanel.siel.si [46.19.9.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAC117332B;
+        Wed, 19 Oct 2022 22:49:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
+        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=lKThIZgqHKvCGltJVdtOA9KYQdCfRmAyFjIfTDwMoBQ=; b=Zf5dd0Y2XxTVRidSB3EicwY+WG
+        An2pcvGEKZvScnESm6TfJxtYJ3GnGR5lw/kqfHWG4DmI4IEhmg0oUbWMVyVrTUBX4y3cpehAw60+x
+        WDbb6h1bc8bCv16ZA3XbvL8rbaDCYdbHSp8BHBVyXp1OfbzdD27XTDJkm6iMatdemCN7ckvpn5Oiy
+        BbS2UAv+iXK4lOZeFmPABBGeTviyt1isrpDkfPGsO45oMa3W1HYXqH/9BNYCARChqLMk3ux2heDBh
+        K5x3Qsatd/4JpS38GkvMV4hXcT5TI2WtkGSqrO8apwbEP+S1O4lrof0YE5J1+XeaCJhSz1ZaCNX0e
+        9975xVpg==;
+Received: from [89.212.21.243] (port=51160 helo=[192.168.69.85])
+        by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <andrej.picej@norik.com>)
+        id 1olOR8-00Ccn8-QR;
+        Thu, 20 Oct 2022 07:49:54 +0200
+Message-ID: <7b3bc437-6b92-4691-fd95-08e408b1c962@norik.com>
+Date:   Thu, 20 Oct 2022 07:49:55 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 0/3] Suspending i.MX watchdog in WAIT mode
+Content-Language: en-GB
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-watchdog@vger.kernel.org
+Cc:     shawnguo@kernel.org, linux@roeck-us.net,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-imx@nxp.com, festevam@gmail.com,
+        kernel@pengutronix.de, s.hauer@pengutronix.de,
+        wim@linux-watchdog.org, robh+dt@kernel.org
+References: <20221019111714.1953262-1-andrej.picej@norik.com>
+ <5bf984f4-681c-7001-281f-f35bb7fdfc8b@linaro.org>
+From:   Andrej Picej <andrej.picej@norik.com>
+In-Reply-To: <5bf984f4-681c-7001-281f-f35bb7fdfc8b@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - cpanel.siel.si
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - norik.com
+X-Get-Message-Sender-Via: cpanel.siel.si: authenticated_id: andrej.picej@norik.com
+X-Authenticated-Sender: cpanel.siel.si: andrej.picej@norik.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
+Hi Krzysztof,
 
-The implementation of strscpy() is more robust and safer.
+On 19. 10. 22 17:46, Krzysztof Kozlowski wrote:
+> On 19/10/2022 07:17, Andrej Picej wrote:
+>> The i.MX6 watchdog can't be stopped once started. This means that
+>> special hardware suspend needs to be configured when the device enters
+>> low-power modes.
+>> Usually i.MX devices have two bits which deal with this:
+>> - WDZST bit disables the timer in "deeper" low power modes and
+>> - WDW bit disables the timer in "WAIT" mode which corresponds with
+>> Linux's "freeze" low-power mode.
+>>
+>> WDZST bit support is already in place since 1a9c5efa576e ("watchdog: imx2_wdt: disable watchdog timer during low power mode").
+>> WDW bit is not common for all imx2-wdt supported devices, therefore use
+>> a new device-tree property "fsl,suspend-in-wait" which suspends the
+>> watchdog in "WAIT" mode.
+>>
+>> Andrej Picej (3):
+>>    watchdog: imx2_wdg: suspend watchdog in WAIT mode
+>>    dt-bindings: watchdog: fsl-imx: document suspend in wait mode
+>>    ARM: dts: imx6ul/ull: suspend i.MX6UL watchdog in wait mode
+>>
+>>   .../devicetree/bindings/watchdog/fsl-imx-wdt.yaml          | 5 +++++
+> 
+> Please use scripts/get_maintainers.pl to get a list of necessary people
+> and lists to CC.  It might happen, that command when run on an older
+> kernel, gives you outdated entries.  Therefore please be sure you base
+> your patches on recent Linux kernel.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
----
- drivers/target/target_core_device.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+I thought I did. I run that script on linux-watchdog.git, master branch.
+I thought I should base my patches meant for watchdog subsystem there?
 
-diff --git a/drivers/target/target_core_device.c b/drivers/target/target_core_device.c
-index b7f16ee8aa0e..0eec5a3217b9 100644
---- a/drivers/target/target_core_device.c
-+++ b/drivers/target/target_core_device.c
-@@ -809,10 +809,10 @@ struct se_device *target_alloc_device(struct se_hba *hba, const char *name)
- 	xcopy_lun->lun_tpg = &xcopy_pt_tpg;
- 
- 	/* Preload the default INQUIRY const values */
--	strlcpy(dev->t10_wwn.vendor, "LIO-ORG", sizeof(dev->t10_wwn.vendor));
--	strlcpy(dev->t10_wwn.model, dev->transport->inquiry_prod,
-+	strscpy(dev->t10_wwn.vendor, "LIO-ORG", sizeof(dev->t10_wwn.vendor));
-+	strscpy(dev->t10_wwn.model, dev->transport->inquiry_prod,
- 		sizeof(dev->t10_wwn.model));
--	strlcpy(dev->t10_wwn.revision, dev->transport->inquiry_rev,
-+	strscpy(dev->t10_wwn.revision, dev->transport->inquiry_rev,
- 		sizeof(dev->t10_wwn.revision));
- 
- 	return dev;
--- 
-2.25.1
+Best regards,
+Andrej
 
+> 
+> Best regards,
+> Krzysztof
+> 
