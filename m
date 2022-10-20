@@ -2,89 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC453605914
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 09:54:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FD72605915
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 09:54:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231187AbiJTHyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 03:54:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36332 "EHLO
+        id S229849AbiJTHyf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 03:54:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231139AbiJTHyA (ORCPT
+        with ESMTP id S230348AbiJTHyb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 03:54:00 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37412148FC6
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 00:53:59 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a26so45028960ejc.4
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 00:53:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=XIy6ZVMvppl/b0MZxwgJbi/e6Y3XMjUjdrp2vf+E0nw=;
-        b=uhV0+YrtX7/80cANw90/dQxsRV8PBLKfv4W5FEPi/SR05BGohmBo1B7iIPtC2cvqaB
-         3lDOp2RZ+ouBW+86Zymgx+FphPVGIBFIWgwGr2vVSEyC80rlgDyVn60Mfy8BNkV7J+6Z
-         JYm1c7pft/bEhMCdR9oFN74JIgCucnzz8W3eku9GInNW41Z7k51MMifxTEyJqMsj6vxs
-         BO3zS9AZsGJ3HlTgcmSKsyj4Ok/qc7mvvxDqMewE9Bx/Jlq8f47GE3r+UrLDHbKltF2S
-         Be1Rx9equx103r/TY6a/i3IUepXQm1eTaje1JBHOrWHe69PbNjZp5wKdnqSAxw6F5Q0r
-         1tnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XIy6ZVMvppl/b0MZxwgJbi/e6Y3XMjUjdrp2vf+E0nw=;
-        b=zOlWzivIOaNSu4A0t2uNllRCX8rtlJ625o3SU9IG2ooajzgMqMtNm6tatW8L4zPY/T
-         fXHYMns3WkoB9NK1S0NLDdldgKOSO39If0LS3QRP4Rsw03ZqOeGI6rCf/s6nvButuobj
-         mulkaY4BZW55tZdNRq1wrqgb2kDCTZXTjIdo2Rs/tMD62/K6U7yCViywCw+EUTBGDCnd
-         Cz4PIECTR8F41Q+mhKqUgQM7fYAmfENb/pONVVMeIrfOrOiBPmoLV/iXVivE7kygsnBQ
-         EsJjhELvGVlZj4vabBMXeuIw6mwcNGlwZPvjAwhfMCNjECdnrE1ZOiKLEg4dCrwnVcCX
-         xYlA==
-X-Gm-Message-State: ACrzQf3Y4J2D7KoYkK1TknfMXPGF3odpQUL21k2Kq0DgndFsumdEkXWb
-        /M3q4li+PA1tN9s1QROvJkg2aX8x4NKAcghGrlydHw==
-X-Google-Smtp-Source: AMsMyM7/ruAcTPWuF5rV5RbQhEQhWNz5EL/tLxUjgT4VSPPoQX6EP+m2UULvHnVE3w+d69SONmEQvMmkuF++WGzeKAU=
-X-Received: by 2002:a17:907:1624:b0:78d:d61c:2b4a with SMTP id
- hb36-20020a170907162400b0078dd61c2b4amr9754771ejc.208.1666252437594; Thu, 20
- Oct 2022 00:53:57 -0700 (PDT)
+        Thu, 20 Oct 2022 03:54:31 -0400
+Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5842B260B
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 00:54:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1666252447; bh=GOHbeyhbpiWqUIeLgoO3djV5sPwClY/EXzZLrrc0xgI=;
+        h=X-EA-Auth:Date:From:To:Subject:Message-ID:References:MIME-Version:
+         Content-Type:In-Reply-To;
+        b=Q+uXmpkedC+0AAd9mJ0G79pngGlKQwiIkaAzEkYVSEwQ8TuKCeP/1LsK/TzbXauSk
+         0SJYVyrnNtI84JTYdyEMeGs38LSZqyoJlbR8f+cfLdYp6JT/cUk2XlysYkZhC+2qV1
+         Tmjix8qcWtA4fTn7WMYlB39xZqIvm5nvhwc3iE5U=
+Received: by b-5.in.mailobj.net [192.168.90.15] with ESMTP
+        via [213.182.55.206]
+        Thu, 20 Oct 2022 09:54:07 +0200 (CEST)
+X-EA-Auth: lBtzwUmq7xiKtOzyvHN69sq3v1ryWUyhapouZYaD82HQ6FHSZOZkFlSjW6wztT01LluNiNa6J2ce0Io+iiJpDuLvD0DLFBJR
+Date:   Thu, 20 Oct 2022 13:24:03 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     outreachy@lists.linux.dev, Larry.Finger@lwfinger.net,
+        phil@philpotter.co.uk, paskripkin@gmail.com,
+        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, kumarpraveen@linux.microsoft.com,
+        saurabh.truth@gmail.com
+Subject: [PATCH v3 03/10] staging: r8188eu: remove {} for single statement
+ blocks
+Message-ID: <0e18149144533a749e30d97b0051cff384016cf1.1666249716.git.drv@mailo.com>
+References: <cover.1666249715.git.drv@mailo.com>
 MIME-Version: 1.0
-References: <20221019152947.3857217-1-arnd@kernel.org> <20221019152947.3857217-5-arnd@kernel.org>
-In-Reply-To: <20221019152947.3857217-5-arnd@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 20 Oct 2022 09:53:45 +0200
-Message-ID: <CACRpkdYxuPFV-uQCRUJX03VKSdDZvFH8aKunM+bak0eVbmEV-A@mail.gmail.com>
-Subject: Re: [PATCH 04/14] clk: remove davinci dm3xx drivers
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Sekhar Nori <nsekhar@ti.com>, Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-arm-kernel@lists.infradead.org,
-        David Lechner <david@lechnology.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
-        Kevin Hilman <khilman@baylibre.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        linux-clk@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1666249715.git.drv@mailo.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 5:33 PM Arnd Bergmann <arnd@kernel.org> wrote:
+As per the Linux kernel coding-style guidelines, there is no need to
+use {} for single statement blocks. Issue flagged by checkpatch script.
 
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> The davinci dm3xx machines are all removed, so the clk driver
-> is no longer needed. The da8xx platforms are now using DT
-> exclusively, so those drivers remain untouched.
->
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Deepak R Varma <drv@mailo.com>
+---
 
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
+Changes in v3:
+   -- None.
 
-Yours,
-Linus Walleij
+Changes in v1 [actually v2]:
+   1. Improve patch description language to make it simpler. Feedback received
+      from julia.lawall@inria.fr
+
+ drivers/staging/r8188eu/core/rtw_br_ext.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/staging/r8188eu/core/rtw_br_ext.c b/drivers/staging/r8188eu/core/rtw_br_ext.c
+index 8b1c9fdf6ed2..14797c2d6d76 100644
+--- a/drivers/staging/r8188eu/core/rtw_br_ext.c
++++ b/drivers/staging/r8188eu/core/rtw_br_ext.c
+@@ -652,9 +652,8 @@ void *scdb_findEntry(struct adapter *priv, unsigned char *ip_addr)
+ 	hash = __nat25_network_hash(network_addr);
+ 	db = priv->nethash[hash];
+ 	while (db) {
+-		if (!memcmp(db->networkAddr, network_addr, MAX_NETWORK_ADDR_LEN)) {
++		if (!memcmp(db->networkAddr, network_addr, MAX_NETWORK_ADDR_LEN))
+ 			return (void *)db;
+-		}
+
+ 		db = db->next_hash;
+ 	}
+--
+2.30.2
+
+
+
