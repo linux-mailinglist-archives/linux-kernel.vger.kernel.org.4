@@ -2,147 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8998606536
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 18:01:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41EE1606538
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 18:01:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230399AbiJTQA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 12:00:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57844 "EHLO
+        id S230173AbiJTQBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 12:01:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230437AbiJTQAx (ORCPT
+        with ESMTP id S230481AbiJTQBN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 12:00:53 -0400
-Received: from sonic306-27.consmr.mail.ne1.yahoo.com (sonic306-27.consmr.mail.ne1.yahoo.com [66.163.189.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1B1E1A910A
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 09:00:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1666281651; bh=9QmrNtJTcgxNR1m3Z/rs+lNfaULYqDNjsU1Rc6F3/Yk=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=r6EeNDWOT/JUgoR3ydzFdZ1r3ivCQ0z44IUitZrHZMeDLgtCoExzxGp2QZuTP4a1DU/Yww0Pgc9X0jPr0VLSN8LVjJmHUDeMd9Rn8PW7w2L/7+hAj7r3LY0kdzuK/Avh4mK8c2EMuw/QJOrVT1XKpJ6NHiLaBROD60SYKwV0sKwM6le3dGu5cIO9qOd3csK3DhCQ8pA9ywdcj9go9WEKvxA+YYx008L0haKa8liON8+Lb4kH9j4UR6c4rEMjvPI2BByLB/20TZUSY8mW+YweWQOtlOIAlKKfZ+MskbWBzNyvGXtwuxx5HTk1vJZQ8iRAAbP2sfgNiVnC1xaSFPe2Nw==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1666281651; bh=jK+eIxo+rBow1kYbX1XAINFAeIZEjKNpgpzN8wntyDI=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=iuAAe0LTkZOGp6f7rfxxQfHGcqZY5Hh6sSAZGEHyiUoTlAE6s/KgQDxxuBW1b4KaJniw73W8Z8rpmA/yUNuiTL56dHDBOzqNZusrcd5/Wt75JoT8cvcs+fhVxIi2k79dpQ2Ex64fi53pbBBqZ0oEurde9BRL3dRNBi2HjR7mnadpAI1NhLVqwrqtB+DgSu5t1ssMretTXXZi+vcRm0PpTDsnErEDo22whrX1rJs+hyPhm6utNsNVcJGiMf6DPtuQSfXTe+Tq3jVz5viR9F0Acx9iqvoO7h9KyEnNse1CECfTBSC4eStWKBpnWoGG+NAjyCUsO3CYNDlOU6cowGqlBw==
-X-YMail-OSG: Gacy4u0VM1kIScte7IPolEBjaAASYXyaU7xSNXaf82RpwJojwZmfdhk6Qq7vNa8
- BYqHfP1IxPdD6v3URD8a1JQ61RuGl4Qb.9xzLIfZXZMrzAYAsKp_5R3kR.PQBlpqJnZAUAjLwCy5
- .GJr6V4thZAw1feD_ie3VYkCXvWmLecw5oec47CJi4wKJapY1yx7hMLIDv1jceNMDXmjdp4ZmY4G
- BMPKBKEFQJJwtIi2cvO2hE_zKZq89GLef6NNq3NSuv67Tjr16nHXE9KQYsev00Pk5WdiM8ZIjJtv
- j0sZ05Q_.I7kpi0OMgxIyTCll6EGi_6oOD1MBRfJ4W0yaLk5hM9WLRHDHhdfCupbCP9HoLXvbt_q
- nZWX9yJybbPc7WGXhH_pqYrgasttxsNhP2NfRTcecARqIIZPPYjky5Jq3LTcrnevv.hrcXLoUlVN
- jYxSrCdKOCEhL5Ll36hb1U3yAVfT2La8MZEodAKH2h5lQNmKE6DIRMG.o7tQqMa3j8dZma8O5.ck
- wmn2fgzOjzBDFba5xM3K2H1pCqeXVVmE0TisLzLohwAa1EDO3lJlnd9W6ePOoTZ4zAldzvvRbWo5
- 2m..yKyhmI2OhRs3znhI7MZhzS0XocYSFcW2AuDJPJIdSssejP.wMp3MqilI.jTz6PkLGm8BBqQz
- xEgUcQeRUdWfw3duD_4H.4wLt2chpLULF5dpCL5wGNb1W1FFMoS5M1q8EHKWN1OpzaWz6XA4WPRP
- HdqkGNzHR0svemKTSj9hWS6f7ybOuk0Quet8p8ma8iXXMRHOWsilkz_7md8ZxslXcMH11GGj_r88
- fKUptGPaMQGz_PWiNtZSzgWo3TTOmaimcBIyxt.FQt6XCNoX5N_sZSWMtwdkxwXaSpq_IuMsAsW3
- pUmy4PrNyywfqSQahdmd1I.HZX7Cixld40LSdhMeN9bQsB3VhRbF8lAofkEh_4b7cRCMdAX01bbg
- DODVeLhEgi.T50aHidXrOJWkK.OMgi_fIdrxvN1PygK7hDepH0KDaJSoUkxNTYHfUihr1bocmEzR
- bB4xbjjEP50buS.WfMUBDZLGmBHMCMiTfJVylwoPzpLUiZywIDrsQTd4hqejqAk9Dv8Pji1LFkzj
- rd4RvlEZuUx4d4ghtrv_22EMGGsvOS7o6Y5IChFwI11NEBRerzBs.zDBWpj4kfDSqh8t7flcw6F1
- jjYjhA703x.E9yrivETO1M2MKOr0QF_VvyyR8iz_WiX8cF83EmB0dbwag9wfGonw2mR_iNTBMWDd
- fd2.sqX4larAyGNG27yr3cRI5QbPnNaSKUPfYnlKylNXL0Rr8KT1BPjx0jCEMWxZC57V9pI8GbS4
- jWa.RwwVzqUzlRKankP84SkatruNHIVwvqO9t6LWcZqgbEqj5MQd2LoQE7eq6IAz3B8kSuBX7vht
- 1D_w7NL3q6HkEOwL2gCTCnkAuIApibbrK5hQ3O4vbvFQy22miE_fqobAmvgVAZ8oSzKgo11rzzvJ
- .8UTaJTYAgkWy1V4polpb6PYGN0A4Y_b14vmxe0oRhAf5TtHZfg6J8pcjMu8xTwqUTXgKviXX6DZ
- gWb5esxtZhM6Y9_TqDDUxGk67il12pOh6NHV4VqITqFSkDFw7nIbcnFWcFqPr5Te9sE69z.uU_0m
- 2ejGiK6vskhHhDNSpc_xFwn6zEpabqZVbAoU_Oy8Lugjav7d4j7sHObpgoLl3_P7o8hniirZLxbX
- SG5GGDnUmjFNw4wSd3kXf6TVEyjG28ClmMwRDetQ4h_.PvK1Zbme1zHrQQRJX91LEe94zD4oxtB1
- 5.ji83JG9s6R8zqFH_soV4Thxui8hEHG.uQ1I8eEg4._rY3_GXMrhjS56hjzn__cOhuy.bCUbA2r
- 0C4K9IjWgQMvplCIL6xAj9p4EnH9B4DSwlDq8gELvDLJ2V58nN2NE.qGgMFJJKH9BoVM2fyyXN9R
- FEcpvUD.a8G9RyyrbWW_wuYl.JOdpDsmW7Gn1AA.JUXsAuVTcUYZE2C0FNyTogO9C_USdI_l_9Xe
- ygvkiRnO2cUpAibsK.a5Wg9C7PciC_yXoRA3Xvb8KuBhmpghiGlr2u4VZUiFyLR5ODZYsA3VpKHE
- do55h8lhXXFt3l_rQ4aRpYng74OksFvIhnXsL5uyyJNagaULNjMt8jY4Lh6hLh74LmD7o5l5iVsC
- 5yva6YJT27PFxI7bH9JbvGrd1t.jfg.8jif_hr4UNjJ5hqq2TnhGZFBLs3VmJI6M75WtodkOk8DQ
- gCf9tWjtelIf7MLcJNsDrJnwsCJyxLOW7W6cNjOlTgw.zLwUvTy4sAWvO6KNTvpkWNP2geybiZ1P
- JtqWdV4.4tooWbvaKl0eUkBiQpQs-
-X-Sonic-MF: <casey@schaufler-ca.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic306.consmr.mail.ne1.yahoo.com with HTTP; Thu, 20 Oct 2022 16:00:51 +0000
-Received: by hermes--production-gq1-754cb59848-n5qk6 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 3b6e906b9ca7a255148941b46f673044;
-          Thu, 20 Oct 2022 16:00:49 +0000 (UTC)
-Message-ID: <41b7c231-1c97-2196-878b-92ad1778f11c@schaufler-ca.com>
-Date:   Thu, 20 Oct 2022 09:00:47 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v3 1/1] security: Add CONFIG_LSM_AUTO to handle default
- LSM stack ordering
+        Thu, 20 Oct 2022 12:01:13 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2061.outbound.protection.outlook.com [40.107.92.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E2B15302A;
+        Thu, 20 Oct 2022 09:01:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BgsBc9HhbQs6mqwDYhE52j8j1mLLQN4vJbat/45jdy6rRuM141meS4DlF37rGW2OLlLSddRIcSb8nu3YM64r0sWz3MHTmEh3bdmcO77fym+o6CYHg1jOaXhuXTxLGgqxuHQ1A9KWteSLcRkXwJlH+wimAT31vZlhHzCIENy475CeNKe2KLuxXx6ODAr0pRjBRodUQnHo2W3T7yBbnWWErmE44X8UMOsEZa1rSG7YoU9stQcIAURy4RFTPHyIpEXxEuZ32+WF3XdOdzEkAko0LrLdv3rxObywyTaQmweodqvcSyNTyxZ6cSDvqm7Gssi/wngIgUCcRX2MNlNLAVW12A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=B22AcLTbzVnxqcdHJcYT0no7oEYgezA5HeyiPq8ECYo=;
+ b=ktcRjLURNPuewRw28VrjPg6586BWHmX1mKqRG+2aQLxVMB6zFw6tMprRZMtqXzuAKR933HgMk86lE8BGQdk/Ozk8T2n0neQJbnbRNEZi78tGfSI3yDTQ7unl+bx3lOYZQTpTHbXp4opUMXi11oYZE9bDVcnNzcZiKFVrB+sLsXcrUZxG6+8kngRKhAtuf+2d/o0ftdvfzJgEc+EIecJ6LoPKeaViOkBEM+r0FYb47QdxBJcEUREe/Wc/nsCjHizuX3HUz5kxlLD9OZwSHZy1KQnnFegb0CI03wDQvRLluOSBUDv7Cd6qCvnpvk2vIuxdAoosnGk39NY/ch9uBov0wA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=B22AcLTbzVnxqcdHJcYT0no7oEYgezA5HeyiPq8ECYo=;
+ b=c6pH7OxzSFd/DDzM8uKMQOcru8yr4j6o9xmt5h+Mo9R7zGf9keGXSLH9lpZImhL1mPrmc4QF1Phlx0oLTTLqMzqnToG2S1JGQ87WZQYJKqlpTWKjR9P9kiXnMRmq6UdhPvDebzC7JkPA1hsKbvrHLUlBq2pskS7nWTwv1VSpG4w=
+Received: from DM4PR12MB5278.namprd12.prod.outlook.com (2603:10b6:5:39e::17)
+ by DM4PR12MB6280.namprd12.prod.outlook.com (2603:10b6:8:a2::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.33; Thu, 20 Oct
+ 2022 16:01:09 +0000
+Received: from DM4PR12MB5278.namprd12.prod.outlook.com
+ ([fe80::3bf0:6f5b:fe42:4149]) by DM4PR12MB5278.namprd12.prod.outlook.com
+ ([fe80::3bf0:6f5b:fe42:4149%5]) with mapi id 15.20.5723.034; Thu, 20 Oct 2022
+ 16:01:09 +0000
+From:   "Yuan, Perry" <Perry.Yuan@amd.com>
+To:     "Huang, Ray" <Ray.Huang@amd.com>
+CC:     "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
+        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
+        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Huang, Shimmer" <Shimmer.Huang@amd.com>,
+        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
+        "Meng, Li (Jassmine)" <Li.Meng@amd.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [RESEND PATCH V2 4/9] x86/msr: Add the MSR definition for AMD
+ CPPC boost state
+Thread-Topic: [RESEND PATCH V2 4/9] x86/msr: Add the MSR definition for AMD
+ CPPC boost state
+Thread-Index: AQHY3MSt/PlF0KNBQ02nB5ERDMK6Va4SZAsAgAUbdVA=
+Date:   Thu, 20 Oct 2022 16:01:09 +0000
+Message-ID: <DM4PR12MB527826BF143D69100305B1A79C2A9@DM4PR12MB5278.namprd12.prod.outlook.com>
+References: <20221010162248.348141-1-Perry.Yuan@amd.com>
+ <20221010162248.348141-5-Perry.Yuan@amd.com> <Y00m6Fm6AKqh65Fr@amd.com>
+In-Reply-To: <Y00m6Fm6AKqh65Fr@amd.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>, Paul Moore <paul@paul-moore.com>
-Cc:     Nicolas Iooss <nicolas.iooss@m4x.org>,
-        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8?= =?UTF-8?Q?n?= <mic@digikod.net>,
-        James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>,
-        casey@schaufler-ca.com
-References: <20210222150608.808146-1-mic@digikod.net>
- <20210222150608.808146-2-mic@digikod.net>
- <51725b44-bc40-0205-8583-285d3b35b5ca@schaufler-ca.com>
- <ee461f8d-a02d-0782-8f31-691853a57f00@digikod.net>
- <7b67163a-9de1-313f-5b5a-8c720cef9b73@schaufler-ca.com>
- <CAJfZ7=n5FOxHXMLRrDQ3F-kDqbYngNoYKcz6_PWi1rPa0_8WpA@mail.gmail.com>
- <3b97e25b-303c-d732-3e5d-f1b1a446e090@schaufler-ca.com>
- <202210171111.21E3983165@keescook>
- <CAHC9VhTTKpesvjnc_233x+wG1BvXyup9nM4Dv2h1953zXAvU3A@mail.gmail.com>
- <202210172153.C65BF23D5E@keescook>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <202210172153.C65BF23D5E@keescook>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.20754 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2022-10-20T16:01:06Z;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=a4a59061-ebe0-43dd-bc41-c69ecb678add;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=1
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_enabled: true
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_setdate: 2022-10-20T16:01:06Z
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_method: Standard
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_name: General
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_actionid: 205c12e0-30a8-449d-90a6-f4ad0c82ce5b
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_contentbits: 0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM4PR12MB5278:EE_|DM4PR12MB6280:EE_
+x-ms-office365-filtering-correlation-id: bede2e3e-ca62-43fc-e2fe-08dab2b44d99
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: /UMuiCpqyVuWoD5GEgFj5mhWOXLHdnKa+kTPCw4U3sSgOlMVJfR49eYmlUqKgu1IUyskc1CGIXIG/rw68pQuPrj0Mq7VxNR2dnKAsEtqNNFttJw6Q0qlt6wXQ38GMbCFAmOdG5J7BwMIqQ/oaZ+Skao9REdohgH0wMURzCv/rGxNL7L4UNYoV0st6UxdE287chq8nVK4SuuLn2zDFdHyo+Kp3yt5liwJNRleScYh3Y8uiEIXvRUq5M+ZtK1NO4CjuAlfQA2COvXyxaaEcjd1ofCsrPh67+xRbiB1LgN4q2rzo2HODEc1TeyuKPTYr8TveoqvTBySi448jDCKljBEuGfq4b7l4zu/AmdNXBVd5XBR1MloD/VUoFRaAzD+RuwHbLsT1F4Y8KFBLJxQeyHxNz2BbgIL+4hzHtn+VXeZYJk2eRoto2rsBzQhMPmGGSicPA7knn5IF0PZABDcBry6Pqtc7LBupFCHRdP0+mKRBSZtJw2UtQCve81VnoVwIvpuqhtk1W7spxp+prttCmb+9qTqESX9gnSoH+hpr5y+HBPSDwc3tww4gotw/gJO1h3h9D2sTeGuj8YwwlKbtKTW59LVlndYeaMxzhuBIYD2+6XWgL+IC3tMyVYJ/ZKaZenCoxATh+F8IPXkaiIaX6W2mafjzq1AGtxQBEeGvAk6DKr+4rgFlfibh/44F9ipz8HF6wSC5nb2Pdjn0Fj5S03ZQjcald6tJpvZ8fkAU7HgigR77YliQWYH4q2gzh08bvyGsVdyj8TG14z7/byKsbNDV5wPStHfK0uAxfFXJIj+296zq9kUwM9ovlv+RfiB0f0jR9LB2ACHqofWUL2hHzNwMQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5278.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(366004)(136003)(346002)(396003)(39860400002)(451199015)(8936002)(6862004)(5660300002)(66476007)(64756008)(66446008)(6636002)(4326008)(52536014)(38100700002)(66556008)(8676002)(33656002)(9686003)(2906002)(122000001)(38070700005)(41300700001)(26005)(86362001)(7696005)(6506007)(966005)(54906003)(53546011)(71200400001)(478600001)(66946007)(76116006)(55016003)(186003)(83380400001)(316002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?2XXc69Rz/HxI+OSRHtYv1fWLfYcrLqlHrZvk2ni+hCuX/vZUIpEyDXuRQzPn?=
+ =?us-ascii?Q?oPyt/DkAHQTg64XrWt5jhRbeLqoc+HY/+9C3tMSRZ32zlVeJOlxtfhKSIT3m?=
+ =?us-ascii?Q?/7WpQM0YDiq95W6/FfCkBLoM40/AfsvYo98CPMLE7KxE02LYMNfLfXQZUuHx?=
+ =?us-ascii?Q?2EwOGPrtH0RMPo11ABtOifE+0HRETJHsSX+rbjiEr7qrKaR+yM08AMpf8aN5?=
+ =?us-ascii?Q?1nymJ14nZYPTnS7cLqNA1XAXMo7muGMpxQOGlPrCV4Q5cjLCCBy44nRr8Nk1?=
+ =?us-ascii?Q?vXQE15Y200r+A/qRWCPObUpc1iWjBHtxcxyfiQKfm+Pd+bnGxZbCekmrsLtN?=
+ =?us-ascii?Q?pdl82y+ZTwfftqgAXhLMGh5qnd1HhdRsCxC27x+4U4YNDl1X/hE7AAxySE4S?=
+ =?us-ascii?Q?csFswGt9LokGcwO+KK9VDpQH00jAs963+TgmKuK225Z8hD6p6wM+9Ydkm5qK?=
+ =?us-ascii?Q?2cmW5klzqI257VBtdKsk9EA2gCcwfrK45V8GKgwPMr4XgEJNTsHyBwJfJPdZ?=
+ =?us-ascii?Q?N9IK+4Q91/D6TgUB8cB9O6yYB/Cm94aobKXNGjJVqWtOzTDVqbMHAbD+/lZd?=
+ =?us-ascii?Q?EUJP//uovV7QzxifZSkMPhhRVWGnX/LdqxbeZ82qJz/rAK5del2qYAm+asAJ?=
+ =?us-ascii?Q?MVmI4udm9XkhOWxZDxxkCassLzY7yAYKpFB77KU9wyQ5V/m3d/8b3rl8Slte?=
+ =?us-ascii?Q?kuV4lu5VmFn8bEZwc8SJ0L2aRKM0Ta53/LIyEud6Ovqq+eE1/yE0hxQ4mfJB?=
+ =?us-ascii?Q?xe7SfhkS82/7Z1Ju9kSdLBZAH+Tm/s6RfNxyE9SCa7UxPssEbTSyYBoA35ql?=
+ =?us-ascii?Q?R8OvlPsZMAu4Ai9W8nyJeCz7a8hgAwusQhMELc93VM3oDy0fNw6/pyU1AlIZ?=
+ =?us-ascii?Q?Nk0XJlqImN6WnpU7IVylykr90U5da6B4oa5hGZYsTR52BWhb8+YdUpWwnKeJ?=
+ =?us-ascii?Q?CGLXuPXeSkQu6niwvajLkSAqU7demVsj69HkZ6Qh+ZKanlFRXtZt0+HizDQj?=
+ =?us-ascii?Q?YcOOqwzUcxJs1E/OZRs9gJhJ1iNclWClhP3iIxNXNvNgS7Wxfe4pSny9Su4u?=
+ =?us-ascii?Q?qhTGRqFugGc07J1y3WbY79sar6WRBbsT8gAk8qEGHFaCBQqoC5kBz5yBWu73?=
+ =?us-ascii?Q?jHrqErAkgdzJs5BDy7eiFah8LEFARfOlTB3Wlw2ywPmOo2hGk1Ym8qFsVp1r?=
+ =?us-ascii?Q?xx1Ffr8r/v1U/n+loEM9R2UXxveLHSpgIBl6Fmqlmuy8Jj/b9zHpRk0qfWOf?=
+ =?us-ascii?Q?5VKaqfiqNkWM8uhp6TA4KvCIv0oj95CZrmYT1sprbyZNUPE33OON76dfbOAj?=
+ =?us-ascii?Q?Rb3KbpDc9xHW71XFkJif5zrBYl1vjiXJupqW6cUY/+rBBB7F/T3h8k39cvUd?=
+ =?us-ascii?Q?Ez3NLgAOElZ3rHoOmpqo60L9WacJqtcWtk5/T7eL8w92okN0GqRPnzrcAM7b?=
+ =?us-ascii?Q?OAdgs+gkGJngpl2ehzr1AP2Wmo4z24+F0iatq88e57qI8rzoSLARxS+SDXPd?=
+ =?us-ascii?Q?znaOYk/mskgF2oDjuGhAJrRLDtpGOwAoVpoyD0W7ghxlkQB/S+X2/F+hHszI?=
+ =?us-ascii?Q?UhSBm19hIw2pu/hh4LcjsQ16waxU+dsVBS/nWVMC?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5278.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bede2e3e-ca62-43fc-e2fe-08dab2b44d99
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Oct 2022 16:01:09.1666
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: YvTkxx8BziWKN4leGYyk9aoYH6SfrUIq9v8x2ZkQgrzqSpz4raG8hYm9mUUa7sLzF4W5115bINvhQ/UfFnKAOw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6280
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/17/2022 10:55 PM, Kees Cook wrote:
-> On Mon, Oct 17, 2022 at 09:45:21PM -0400, Paul Moore wrote:
->> The code sorta cares about ordering, at least to the extent that the
->> LSMs will behave differently depending on the ordering, e.g. a LSM
-> Right -- this is why I've been so uncomfortable with allowing
-> arbitrarily reordering of the LSM list from lsm=. There are orderings we
-> know work, and others may have undesirable side-effects. I'd much rather
-> the kernel be specific about the order.
->
->> I personally would like to preserve the existing concept where "built"
->> does *not* equate to "enabled" by default.
-> Yup, understood. I didn't think I was going to win over anyone on that
-> one, but figured I'd just point it out again. ;)
->
->>> I *still* think there should be a way to leave ordering alone and have
->>> separate enable/disable control.
->> My current opinion is that enabling a LSM and specifying its place in
->> an ordered list are one in the same.  The way LSM stacking as
->> currently done almost requires the ability to specify an order if an
->> admin is trying to meet an security relevant operation visibility
->> goal.
-> As in an admin wants to see selinux rejections instead of loadpin
-> rejections for a blocked module loading?
->
-> Hmmm. Is this a realistic need?
+[AMD Official Use Only - General]
 
-One of the security modules I hope to write someday will provide controls
-based on multiple successful accesses to particular resources. The old
-school example is a program that scans /tmp constantly. No one access will
-be denied, but the fact that it does stat() on /tmp/foo a thousand times
-a second is suspicious. If my system is running any of SELinux, Smack or
-AppArmor I may get different results depending on whether it is loaded
-before or after the "primary" module. The user may care which result is
-obtained. In truth, the user may use the module both ways as a mechanism
-to measure the effectiveness of the "primary" module.
+Hi Ray.=20
 
-The current set of new security modules is diverging from the MAC model
-that LSM was invented to support. I don't see that restricting its use
-to make the infrastructure easier to deal with (as much as I'd like to
-do that from time to time) would be the Right Thing.
+> -----Original Message-----
+> From: Huang, Ray <Ray.Huang@amd.com>
+> Sent: Monday, October 17, 2022 5:57 PM
+> To: Yuan, Perry <Perry.Yuan@amd.com>
+> Cc: rafael.j.wysocki@intel.com; viresh.kumar@linaro.org; Sharma, Deepak
+> <Deepak.Sharma@amd.com>; Limonciello, Mario
+> <Mario.Limonciello@amd.com>; Fontenot, Nathan
+> <Nathan.Fontenot@amd.com>; Deucher, Alexander
+> <Alexander.Deucher@amd.com>; Huang, Shimmer
+> <Shimmer.Huang@amd.com>; Du, Xiaojian <Xiaojian.Du@amd.com>; Meng,
+> Li (Jassmine) <Li.Meng@amd.com>; linux-pm@vger.kernel.org; linux-
+> kernel@vger.kernel.org
+> Subject: Re: [RESEND PATCH V2 4/9] x86/msr: Add the MSR definition for
+> AMD CPPC boost state
+>=20
+> On Tue, Oct 11, 2022 at 12:22:43AM +0800, Yuan, Perry wrote:
+> > This MSR can be used to check whether the CPU frequency boost state is
+> > enabled in the hardware control. User can change the boost state in
+> > the BIOS setting,amd_pstate driver will update the boost state
+> > according to this msr value.
+> >
+> > AMD Processor Programming Reference (PPR)
+> > Link: https://www.amd.com/system/files/TechDocs/40332.pdf [p1095]
+> > Link: https://www.amd.com/system/files/TechDocs/56569-A1-PUB.zip
+> > [p162]
+> >
+> > Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
+> > ---
+> >  arch/x86/include/asm/msr-index.h | 3 +++
+> >  1 file changed, 3 insertions(+)
+> >
+> > diff --git a/arch/x86/include/asm/msr-index.h
+> > b/arch/x86/include/asm/msr-index.h
+> > index 6674bdb096f3..e5ea1c9f747b 100644
+> > --- a/arch/x86/include/asm/msr-index.h
+> > +++ b/arch/x86/include/asm/msr-index.h
+> > @@ -569,6 +569,7 @@
+> >  #define MSR_AMD_CPPC_CAP2		0xc00102b2
+> >  #define MSR_AMD_CPPC_REQ		0xc00102b3
+> >  #define MSR_AMD_CPPC_STATUS		0xc00102b4
+> > +#define MSR_AMD_CPPC_HW_CTL		0xc0010015
+> >
+> >  #define AMD_CPPC_LOWEST_PERF(x)		(((x) >> 0) & 0xff)
+> >  #define AMD_CPPC_LOWNONLIN_PERF(x)	(((x) >> 8) & 0xff)
+> > @@ -579,6 +580,8 @@
+> >  #define AMD_CPPC_MIN_PERF(x)		(((x) & 0xff) << 8)
+> >  #define AMD_CPPC_DES_PERF(x)		(((x) & 0xff) << 16)
+> >  #define AMD_CPPC_ENERGY_PERF_PREF(x)	(((x) & 0xff) << 24)
+> > +#define AMD_CPPC_PRECISION_BOOST_BIT   25
+> > +#define AMD_CPPC_PRECISION_BOOST_ENABLED
+> BIT_ULL(AMD_CPPC_PRECISION_BOOST_BIT)
+>=20
+> I had commented the MSR_AMD_CPPC_HW_CTL is duplicated with
+> MSR_K7_HWCR
+>=20
+> https://lore.kernel.org/lkml/YtX+uF/nAIG0ykHN@amd.com/
+> https://lore.kernel.org/lkml/YtX586RDd9Xw44IO@amd.com/
+>=20
+> Could you please make sure address the commments?
+>=20
+> Thanks,
+> Ray
 
->
->> We can have defaults, like we do know, but I'm in no hurry to remove
->> the ability to allow admins to change the ordering at boot time.
-> My concern is with new LSMs vs the build system. A system builder will
-> be prompted for a new CONFIG_SECURITY_SHINY, but won't be prompted
-> about making changes to CONFIG_LSM to include it.
->
-> Even booting with "lsm.debug" isn't entirely helpful to helping someone
-> construct the "lsm=" option they actually want... I guess I can fix that
-> part, at least. :)
->
+If I rename that the MSR definition string, that will cause lots of driver =
+file change.=20
+So I suggest to add one new MSR macro for the CPPC, the MSR_K7_HWCR is  mis=
+matching in the CPPC Pstate driver.
+If you refuse to use this new one, I will reuse that old one.=20
+
+Perry.=20
