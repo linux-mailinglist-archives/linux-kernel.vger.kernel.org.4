@@ -2,69 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE633605A8D
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 11:06:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A461605AAB
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 11:09:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230271AbiJTJGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 05:06:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41934 "EHLO
+        id S229959AbiJTJJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 05:09:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbiJTJGA (ORCPT
+        with ESMTP id S230318AbiJTJIz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 05:06:00 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 526C017C558;
-        Thu, 20 Oct 2022 02:05:54 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id d24so19723934pls.4;
-        Thu, 20 Oct 2022 02:05:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=7o3DdS6QAF9bYcwYa9OQ8LlTpX2ZcGANydX8jAzYar4=;
-        b=TLZ04qDs5Zy8Zg0EhnSXGWOdoORY56Fwy/FrJit+9mwSG6BzgNClx6P/rXbJkjPzqi
-         JT+57SRFD2qlquqvNl8YQnuAEsPm+2vcDmUCXKPq6ozQVgN7QTaGqEtbw0kTd/7th8Ab
-         bF1Pz5OhPicdX55adPsAQFZ71susRlr9EG/0BK13uc0nZ2yIcYrZmFytHcaNHaUOXQkL
-         1V+CdI8a21467V+T8blGn7Y3ToAe7sktnmsr1sVVqkyR5DLgMUuXmqvarECR+i9xxaBI
-         D71miwyiPJALc+l6auuQjYstDpWMCFjOpxlRcehtmmAXhGt9+3L9Rhgk8n0fUnHpSUxu
-         xE2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7o3DdS6QAF9bYcwYa9OQ8LlTpX2ZcGANydX8jAzYar4=;
-        b=tr+zuSDdZC94Y0vr+j7VFkvaji8ctEQ7a05R/acVIq9T6tOC9ZmgI+0ByRHrqAX0As
-         FPCbhwTuCQmJ0cSSykch/SMT2RlI6KptZtO82W6gnpVDkBNZYOdJrPxqwSJ+n1p+zStj
-         LUPtk6sabs/bDUTA1SyEZUhrvWS4cMRtTblWBdzkuHNN6UQ2jw0lhHKZzoO6U/pHsjhA
-         /Q8ghRD4VUNYdwrLZvJe8yI54iuYGR9p6LrW19YtmvXwKG/4xgL3Ta+nYKddFMKNjSVg
-         TgSMlsQwxVFC1PFrm5iuS9MY5trUWwiVNRv8b29qeACtc2a9eu+VHf4E5A/fzo+gPZPO
-         K6TQ==
-X-Gm-Message-State: ACrzQf01t3vmO3RiSQfVQzYFlDydEIo7KY4fRCH7C+KqywO6ievkKDVi
-        Yfm/PGJghwHh2LCv6NqRbiw=
-X-Google-Smtp-Source: AMsMyM71W/wNqPPTlWVcqYRg3hjkpwHhSLKtq/Kgii0eyBMRYiYEeJL449HJnyI3tiFJ4QAqCeOObw==
-X-Received: by 2002:a17:90b:4f4e:b0:20d:9f5b:abbf with SMTP id pj14-20020a17090b4f4e00b0020d9f5babbfmr15378166pjb.148.1666256753196;
-        Thu, 20 Oct 2022 02:05:53 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id w24-20020aa79558000000b00562adc8b6d3sm12642653pfq.193.2022.10.20.02.05.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 02:05:52 -0700 (PDT)
-From:   cuijinpeng666@gmail.com
-X-Google-Original-From: cui.jinpeng2@zte.com.cn
-To:     ast@kernel.org, keescook@chromium.org, jolsa@kernel.org,
-        cui.jinpeng2@zte.com.cn
-Cc:     peterz@infradead.org, stephen.s.brennan@oracle.com,
-        alan.maguire@oracle.com, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] kallsyms: Use strscpy() instead of strlcpy()
-Date:   Thu, 20 Oct 2022 09:05:47 +0000
-Message-Id: <20221020090547.398680-1-cui.jinpeng2@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Thu, 20 Oct 2022 05:08:55 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 762FD19C22F;
+        Thu, 20 Oct 2022 02:08:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1666256934; x=1697792934;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=VzVml3ru9djMLT9juNFps09rLYH/GdhMKWk//DGKRRE=;
+  b=UUHovZC8jKpokzjM5tjAsox5audJw7IsNF6FxHdKejfvgiSvkkRtwIVS
+   vDxOFEfAtgEKZ8+9B5kJ7zl61U5h6U2my/jJMhTQU9R2JqTbyAoCAtm9s
+   2UUa0rtidpPJRsvdLIlciuIGZpFaLM5QT0nX1vw4+F0pT/07t0QYbJMHo
+   09vvrR6hEPTDEdp7ifZHzBcWyJo3JoQJP1kOesKpiPeOMnP/EX57dkb+s
+   5x9X7COhheL6un8dwB15rjIuycH3hEe/CrGX+pzDk7G4WBRYfQMxPIn/X
+   WW+EWp4MyAu9adnk5rhFro8AUokgZV5i27ue5kYjKeQgKdxdlWZz+cwpC
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.95,198,1661842800"; 
+   d="scan'208";a="196270069"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 20 Oct 2022 02:08:53 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Thu, 20 Oct 2022 02:08:53 -0700
+Received: from den-dk-m31857.microchip.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Thu, 20 Oct 2022 02:08:51 -0700
+Message-ID: <194f5d4aba163e9afeaa427d968bbcd3a0e4cbc5.camel@microchip.com>
+Subject: Re: [PATCH net-next v2 4/9] net: microchip: sparx5: Adding initial
+ tc flower support for VCAP API
+From:   Steen Hegelund <steen.hegelund@microchip.com>
+To:     Casper Andersson <casper.casan@gmail.com>
+CC:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        <UNGLinuxDriver@microchip.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        "Wan Jiabing" <wanjiabing@vivo.com>,
+        Nathan Huckleberry <nhuck@google.com>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Date:   Thu, 20 Oct 2022 11:08:50 +0200
+In-Reply-To: <20221020073134.ru2p5m5ittadthzr@wse-c0155>
+References: <20221019114215.620969-1-steen.hegelund@microchip.com>
+         <20221019114215.620969-5-steen.hegelund@microchip.com>
+         <20221020073134.ru2p5m5ittadthzr@wse-c0155>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.44.4 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,38 +74,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
-
-The implementation of strscpy() is more robust and safer.
-
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
----
- kernel/kallsyms.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-index cc244c02b4cf..639de60ed417 100644
---- a/kernel/kallsyms.c
-+++ b/kernel/kallsyms.c
-@@ -660,7 +660,7 @@ static int get_ksymbol_bpf(struct kallsym_iter *iter)
- {
- 	int ret;
- 
--	strlcpy(iter->module_name, "bpf", MODULE_NAME_LEN);
-+	strscpy(iter->module_name, "bpf", MODULE_NAME_LEN);
- 	iter->exported = 0;
- 	ret = bpf_get_kallsym(iter->pos - iter->pos_ftrace_mod_end,
- 			      &iter->value, &iter->type,
-@@ -680,7 +680,7 @@ static int get_ksymbol_bpf(struct kallsym_iter *iter)
-  */
- static int get_ksymbol_kprobe(struct kallsym_iter *iter)
- {
--	strlcpy(iter->module_name, "__builtin__kprobes", MODULE_NAME_LEN);
-+	strscpy(iter->module_name, "__builtin__kprobes", MODULE_NAME_LEN);
- 	iter->exported = 0;
- 	return kprobe_get_kallsym(iter->pos - iter->pos_bpf_end,
- 				  &iter->value, &iter->type,
--- 
-2.25.1
+SGkgQ2FzcGVyLAoKT24gVGh1LCAyMDIyLTEwLTIwIGF0IDA5OjMxICswMjAwLCBDYXNwZXIgQW5k
+ZXJzc29uIHdyb3RlOgo+IEVYVEVSTkFMIEVNQUlMOiBEbyBub3QgY2xpY2sgbGlua3Mgb3Igb3Bl
+biBhdHRhY2htZW50cyB1bmxlc3MgeW91IGtub3cgdGhlIGNvbnRlbnQgaXMgc2FmZQo+IAo+IEhp
+IFN0ZWVuLAo+IAo+IEl0J3MgYSBwcmV0dHkgYmlnIHBhdGNoIHNlcmllcywgYnV0IG92ZXJhbGwg
+SSB0aGluayBpdCBsb29rcyB2ZXJ5IGdvb2QuCj4gSSd2ZSBnb3Qgc29tZSBtaW5vciBjb21tZW50
+cy4gSSBhbHNvIHRlc3RlZCBpdCBvbiB0aGUgTWljcm9jaGlwIFBDQjEzNQo+IHN3aXRjaCBhbmQg
+aXQgd29ya3MgYXMgZGVzY3JpYmVkLgoKUmVhbGx5IGdvb2QgdGhhdCB5b3UgY291bGQgZmluZCB0
+aW1lIHRvIGRvIHRoaXMhCgo+IAo+IE9uIDIwMjItMTAtMTkgMTM6NDIsIFN0ZWVuIEhlZ2VsdW5k
+IHdyb3RlOgo+ID4gK3N0YXRpYyB2b2lkIHNwYXJ4NV90Y19mbG93ZXJfc2V0X2V4dGVycihzdHJ1
+Y3QgbmV0X2RldmljZSAqbmRldiwKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgc3RydWN0IGZsb3dfY2xz
+X29mZmxvYWQgKmZjbywKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgc3RydWN0IHZjYXBfcnVsZSAqdnJ1
+bGUpCj4gPiArewo+ID4gK8KgwqDCoMKgIHN3aXRjaCAodnJ1bGUtPmV4dGVycikgewo+ID4gK8Kg
+wqDCoMKgIGNhc2UgVkNBUF9FUlJfTk9ORToKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
+YnJlYWs7Cj4gPiArwqDCoMKgwqAgY2FzZSBWQ0FQX0VSUl9OT19BRE1JTjoKPiA+ICvCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqAgTkxfU0VUX0VSUl9NU0dfTU9EKGZjby0+Y29tbW9uLmV4dGFjaywK
+PiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoCAiTWlzc2luZyBWQ0FQIGluc3RhbmNlIik7Cj4gPiArwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgIGJyZWFrOwo+ID4gK8KgwqDCoMKgIGNhc2UgVkNBUF9FUlJfTk9fTkVUREVWOgo+
+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBOTF9TRVRfRVJSX01TR19NT0QoZmNvLT5jb21t
+b24uZXh0YWNrLAo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgICJNaXNzaW5nIG5ldHdvcmsgaW50ZXJmYWNlIik7Cj4gPiAr
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGJyZWFrOwo+ID4gK8KgwqDCoMKgIGNhc2UgVkNBUF9F
+UlJfTk9fS0VZU0VUX01BVENIOgo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBOTF9TRVRf
+RVJSX01TR19NT0QoZmNvLT5jb21tb24uZXh0YWNrLAo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICJObyBrZXlzZXQgbWF0
+Y2hlZCB0aGUgZmlsdGVyIGtleXMiKTsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgYnJl
+YWs7Cj4gPiArwqDCoMKgwqAgY2FzZSBWQ0FQX0VSUl9OT19BQ1RJT05TRVRfTUFUQ0g6Cj4gPiAr
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIE5MX1NFVF9FUlJfTVNHX01PRChmY28tPmNvbW1vbi5l
+eHRhY2ssCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqAgIk5vIGFjdGlvbnNldCBtYXRjaGVkIHRoZSBmaWx0ZXIgYWN0aW9u
+cyIpOwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBicmVhazsKPiA+ICvCoMKgwqDCoCBj
+YXNlIFZDQVBfRVJSX05PX1BPUlRfS0VZU0VUX01BVENIOgo+ID4gK8KgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoCBOTF9TRVRfRVJSX01TR19NT0QoZmNvLT5jb21tb24uZXh0YWNrLAo+ID4gK8KgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+ICJObyBwb3J0IGtleXNldCBtYXRjaGVkIHRoZSBmaWx0ZXIga2V5cyIpOwo+ID4gK8KgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoCBicmVhazsKPiA+ICvCoMKgwqDCoCB9Cj4gPiArfQo+IAo+IENvdWxk
+IHRoaXMgYWxzbyBiZSBzaGFyZWQgaW4gdGhlIFZDQVAgQVBJPyBJdCBjdXJyZW50bHkgZG9lc24n
+dCB1c2UKPiBhbnl0aGluZyBTcGFyeDUgc3BlY2lmaWMuIFRob3VnaCwgbmV0X2RldmljZSBpcyB1
+bnVzZWQgc28gSSdtIGd1ZXNzaW5nCj4geW91IG1pZ2h0IGhhdmUgcGxhbnMgZm9yIHRoaXMgaW4g
+dGhlIGZ1dHVyZS4gQW5kIGl0IG1pZ2h0IGZpdCBiZXR0ZXIKPiBoZXJlIGFjY29yZGluZyB0byB5
+b3VyIGRlc2lnbiBnb2Fscy4KClllcyB0aGlzIGlzIG5vdCBTcGFyeDUgc3BlY2lmaWMgc28gaXQg
+Y291bGQgYmUgYWRkZWQgdG8gdGhlIEFQSSAod2hlcmUgdGhlIGVudW1zIGFyZSBkZWZpbmVkCmFu
+eXdheSkuCgo+IAo+IFRlc3RlZC1ieTogQ2FzcGVyIEFuZGVyc3NvbiA8Y2FzcGVyLmNhc2FuQGdt
+YWlsLmNvbT4KPiBSZXZpZXdlZC1ieTogQ2FzcGVyIEFuZGVyc3NvbiA8Y2FzcGVyLmNhc2FuQGdt
+YWlsLmNvbT4KPiAKClRoYW5rcyBmb3IgdGhlIHJldmlldy4KCkJSClN0ZWVuCg==
 
