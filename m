@@ -2,84 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10C2C6065E2
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 18:34:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86DBD6065E6
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 18:34:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230152AbiJTQd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 12:33:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60374 "EHLO
+        id S230096AbiJTQe2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 12:34:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230111AbiJTQdy (ORCPT
+        with ESMTP id S229746AbiJTQeZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 12:33:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E33BE1C4EDA
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 09:33:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666283633;
+        Thu, 20 Oct 2022 12:34:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0F3B17D288;
+        Thu, 20 Oct 2022 09:34:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A24BFB826A9;
+        Thu, 20 Oct 2022 16:34:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED493C433D7;
+        Thu, 20 Oct 2022 16:34:09 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ladaFUCN"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1666283647;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=+PN9Zmo6gmcoTAvY3Ztc9ZICuuK1P6MwzJ+pG+ZS7pk=;
-        b=O2dmEAOBdK18ll39MZY5h0xJlh6SMaZuZ06aoKlFbakAvjIPvxx1/QUYNR5558O0Phlukw
-        WCQVBfsmyZUX7nV6JhfXWzF1E7HJCc5O8f/x14UnF4THyEtk5v61ECl5r7BKWw2ToJGpgm
-        zlmLjWjeuxdT0kxPvTjA2V2xAyD6Hz0=
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com
- [209.85.166.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-42-UusmGaUaOJe9E28upQqWUg-1; Thu, 20 Oct 2022 12:33:44 -0400
-X-MC-Unique: UusmGaUaOJe9E28upQqWUg-1
-Received: by mail-il1-f198.google.com with SMTP id y13-20020a056e021bed00b002faba3c4afbso286847ilv.13
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 09:33:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+PN9Zmo6gmcoTAvY3Ztc9ZICuuK1P6MwzJ+pG+ZS7pk=;
-        b=Sjwih47hJilLeo7FYZwknrMuTtjEA1jfXPO6fMe5hILfycWnk1Nx7Btaj7UqCa5XgN
-         Y5XPFtZOUal3TQdZtc7QN747NbjpStfsIxgVJ6m0VP6J+D5Nct6w8G002Viptn3KM2Za
-         V/LG1m6LZN2uTKpNnYng8PFhW5AAKaFTHq/TUO6SzM8ceCZxJzyK1rGtuWKlPoPakdmX
-         RZITmBweKb9vvMiFa2nuYbuWxaWS69VQ94/GiROwqtybg6cvpquVLaX4/lqk2W1jMfS0
-         26iA23nWzvHI6lbMmGwNOjhlycHXZtig4nSGeri7v3/pok320pSjTVmZuKyY8ghpgrve
-         TTFg==
-X-Gm-Message-State: ACrzQf2LPE9oUiX3exyZWtuLuHL5rPQMFt1KA/+LeGltmfBG1KD+ZcKC
-        GvWuONh+IsPgdtRmRSavlj1aH6cjzJ+2AEhaGy1aMIlo7Kj8dN4rvlwM96sijrKqMebKN1vRpoe
-        jnVc4zm+wWUvAbjp92I8ZlEY/
-X-Received: by 2002:a05:6e02:1546:b0:2fd:1a72:8825 with SMTP id j6-20020a056e02154600b002fd1a728825mr10907262ilu.83.1666283623522;
-        Thu, 20 Oct 2022 09:33:43 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7XHdv+alEzff5ONYljf0u9Vv1MKFPW6k4p9y5USRUJuL/pvytZkuf5ZoBiDEPgV8q09Ix6lw==
-X-Received: by 2002:a05:6e02:1546:b0:2fd:1a72:8825 with SMTP id j6-20020a056e02154600b002fd1a728825mr10907245ilu.83.1666283623274;
-        Thu, 20 Oct 2022 09:33:43 -0700 (PDT)
-Received: from x1 (c-98-239-145-235.hsd1.wv.comcast.net. [98.239.145.235])
-        by smtp.gmail.com with ESMTPSA id c4-20020a92cf44000000b002ff36cb0a62sm883868ilr.27.2022.10.20.09.33.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 09:33:42 -0700 (PDT)
-Date:   Thu, 20 Oct 2022 12:33:40 -0400
-From:   Brian Masney <bmasney@redhat.com>
-To:     Parikshit Pareek <quic_ppareek@quicinc.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Andrew Halaney <ahalaney@redhat.com>,
-        Shazad Hussain <quic_shazhuss@quicinc.com>,
-        Johan Hovold <johan@kernel.org>
-Subject: Re: [PATCH v6 1/2] dt-bindings: arm: qcom: Document additional
- sa8540p device
-Message-ID: <Y1F4ZMAhHWRd9c3m@x1>
-References: <20221020073036.16656-1-quic_ppareek@quicinc.com>
- <20221020073036.16656-2-quic_ppareek@quicinc.com>
+        bh=j6/3/s/F9AiqZ8ACkktuUlP8j8csHgAdMQTJ3xPu0RU=;
+        b=ladaFUCNFHYEdS+B5lBVsUu7VOyg2l1LsONGKpmaJE+SQOzJeKVPlPFPd6VRQMtvOsKnrQ
+        Fbc98kpAvzczoJ0ualK85kOyjs0aW1klyXlXUWaIfjIJqLFmYapVadnDOv0pFQ7zpifsOl
+        gHzeoVDoUomAff/UMawkFmbDk12k7KI=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 49be7ccd (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Thu, 20 Oct 2022 16:34:06 +0000 (UTC)
+Received: by mail-ua1-f51.google.com with SMTP id y20so9978880uao.8;
+        Thu, 20 Oct 2022 09:34:06 -0700 (PDT)
+X-Gm-Message-State: ACrzQf0FLEp+HUka5qpbpFxwBy7ZurjveFakUSMekepBsywVxhZo3KrX
+        CjqH+dqjqLSKND25CcoZWnnTISV22IbmAUWC9Rg=
+X-Google-Smtp-Source: AMsMyM4UbgKYinuY1PeLlQUJ+zAbDnXOqoO0YgQNW243VlJSovQbjZ4gksu4qa/PVM5AIgL5W9c5Duh97XLbOtbizJw=
+X-Received: by 2002:a05:6102:7c9:b0:3a7:6261:935 with SMTP id
+ y9-20020a05610207c900b003a762610935mr7838965vsg.73.1666283644745; Thu, 20 Oct
+ 2022 09:34:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221020073036.16656-2-quic_ppareek@quicinc.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+References: <20221019162648.3557490-1-Jason@zx2c4.com> <202210201618.8XhEGsLd-lkp@intel.com>
+In-Reply-To: <202210201618.8XhEGsLd-lkp@intel.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Thu, 20 Oct 2022 10:33:53 -0600
+X-Gmail-Original-Message-ID: <CAHmME9pqXvoYZL4u3dzfQDNyDB3TbaMAkynn=MLqagC_Dmk6TQ@mail.gmail.com>
+Message-ID: <CAHmME9pqXvoYZL4u3dzfQDNyDB3TbaMAkynn=MLqagC_Dmk6TQ@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: treat char as always signed
+To:     kernel test robot <lkp@intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-toolchains@vger.kernel.org,
+        kbuild-all@lists.01.org, Masahiro Yamada <masahiroy@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,11 +71,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 01:00:35PM +0530, Parikshit Pareek wrote:
-> Add the qdrive3 ride device to the valid device compatibles found on the
-> sa8540p platform.
-> 
-> Signed-off-by: Parikshit Pareek <quic_ppareek@quicinc.com>
+On Thu, Oct 20, 2022 at 2:40 AM kernel test robot <lkp@intel.com> wrote:
+> >> drivers/s390/block/dasd.c:1912:9: warning: case label value exceeds maximum value for type [-Wswitch-outside-range]
+>     1912 |         case DASD_CQR_ERROR:
 
-Reviewed-by: Brian Masney <bmasney@redhat.com>
+Just to save other readers the momentary "huh?" that I experienced,
+this warning/error is from the -fsigned-char patch. We ultimately went
+with (or are trying to go with) the -funsigned-char approach instead.
+So safely ignore this kernel test bot error, as it applies to v1
+rather than the v2 here:
+https://lore.kernel.org/lkml/20221019203034.3795710-1-Jason@zx2c4.com/
 
+Jason
