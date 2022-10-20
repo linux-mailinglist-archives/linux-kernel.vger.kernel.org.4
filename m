@@ -2,56 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05E24605644
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 06:23:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9774A60564E
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 06:26:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbiJTEXg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 00:23:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48664 "EHLO
+        id S229849AbiJTE0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 00:26:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiJTEXe (ORCPT
+        with ESMTP id S229691AbiJTE0J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 00:23:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78C3C129760
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 21:23:33 -0700 (PDT)
+        Thu, 20 Oct 2022 00:26:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 199786CD2C;
+        Wed, 19 Oct 2022 21:26:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1806B619C0
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 04:23:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAEFDC433C1;
-        Thu, 20 Oct 2022 04:23:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5AEF3619DD;
+        Thu, 20 Oct 2022 04:26:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2D5CC433D6;
+        Thu, 20 Oct 2022 04:26:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666239812;
-        bh=72tTKGbgKwwdiFqcYUuSHcLhVUtIrMblIuSM800kcwE=;
+        s=k20201202; t=1666239967;
+        bh=3umPUvfp+ZdS2/b5YkkwJDF80zqjXSIkipDtGhz5ce4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VHFHem4VxtFVyufXo2v6XHdNuHJ6MTFsnXbi3xXzP41NoesViFbWYmWhD0TRyFEPc
-         TNLv7koof5iEq2QqQKpEH3DnwjP5KEVbp9BaHGiy6QL3Ay8+p6n70n3M4n2lMLcLyF
-         S1EOkLY7gX2EHpC5bm/71osoVaJObft2girJKVMnriyoEKS1ab5s5RT06S0eCiFvj1
-         rgMpz6eWCEgOOxxNOgNC38SW/jkro0s1F+21HWId7ofPpfHgyUU9qgS+ODZvRMn1Nh
-         aWjZ2W9eu5JdSch8Wt7CKctvJK7tUj23O8eTwZDKh79dUcfIfULY8MxR9vODK7E+Ff
-         r68oXdjsqbe0w==
-Date:   Wed, 19 Oct 2022 21:23:29 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     "Huang, Ying" <ying.huang@intel.com>,
-        Rik van Riel <riel@surriel.com>
-Cc:     kernel test robot <yujie.liu@intel.com>, lkp@lists.01.org,
-        lkp@intel.com, Andrew Morton <akpm@linux-foundation.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        feng.tang@intel.com, zhengjun.xing@linux.intel.com,
-        fengwei.yin@intel.com
-Subject: Re: [mm] f35b5d7d67: will-it-scale.per_process_ops -95.5% regression
-Message-ID: <Y1DNQaoPWxE+rGce@dev-arch.thelio-3990X>
-References: <202210181535.7144dd15-yujie.liu@intel.com>
- <87edv4r2ip.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        b=Tb92p97DWaxzjXjwVK4TeOa6QkVdaDnDSVo/vJUBM1aO+urHJ6f/YkhkxKva78SHz
+         pFMPbhMffAYqTWT3j8YFFzprop51+MqrJF+x7eNNKj45Ek0q97grA/FXdurAtwZ/xz
+         FcRwKBslCvcNzQnIilKIP/aHwZSYiDuUmTHlxnvgg6KkKKsYhNgNkFoRvO9LRHGng1
+         NgqCVX9WFM9RzYTdqYXH0Ac9ZHt1+MAGL8Cgmi0Wrd81CsA8ZVLLPSsrBLrpp89GU3
+         ZPnHOdnm2jPirTA/fAIHj89RcWKw0jZglskMO9/S6PkklDi7xZhlVoohYCq7x72QPz
+         dg10w7h5DLB5g==
+Date:   Wed, 19 Oct 2022 21:26:05 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Pankaj Gupta <pankaj.gupta@nxp.com>,
+        "jarkko@kernel.org" <jarkko@kernel.org>,
+        "a.fatoum@pengutronix.de" <a.fatoum@pengutronix.de>,
+        "gilad@benyossef.com" <gilad@benyossef.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "sumit.garg@linaro.org" <sumit.garg@linaro.org>,
+        "david@sigma-star.at" <david@sigma-star.at>,
+        "michael@walle.cc" <michael@walle.cc>,
+        "john.ernberg@actia.se" <john.ernberg@actia.se>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "j.luebbe@pengutronix.de" <j.luebbe@pengutronix.de>,
+        "richard@nod.at" <richard@nod.at>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        Sahil Malhotra <sahil.malhotra@nxp.com>,
+        Kshitiz Varshney <kshitiz.varshney@nxp.com>,
+        Horia Geanta <horia.geanta@nxp.com>,
+        Varun Sethi <V.Sethi@nxp.com>
+Subject: Re: [EXT] Re: [PATCH v0 3/8] crypto: hbk flags & info added to the
+ tfm
+Message-ID: <Y1DN3SqEyFZd9i37@sol.localdomain>
+References: <20221006130837.17587-1-pankaj.gupta@nxp.com>
+ <20221006130837.17587-4-pankaj.gupta@nxp.com>
+ <Yz/OEwDtyTm+VH0p@gondor.apana.org.au>
+ <DU2PR04MB8630CBBB8ABDC3768320C18195209@DU2PR04MB8630.eurprd04.prod.outlook.com>
+ <Y0Q3JKnWSNIC4Xlu@zx2c4.com>
+ <Y0UxY51KQoKCq59o@gondor.apana.org.au>
+ <Y0XLqd/+C1sxq2G0@zx2c4.com>
+ <Y0aDiLp7BztzwNez@gondor.apana.org.au>
+ <Y0m2TU5k78I1AR+p@ziepe.ca>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87edv4r2ip.fsf@yhuang6-desk2.ccr.corp.intel.com>
+In-Reply-To: <Y0m2TU5k78I1AR+p@ziepe.ca>
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -61,120 +88,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ying,
+Hi Jason,
 
-On Wed, Oct 19, 2022 at 10:05:50AM +0800, Huang, Ying wrote:
-> Hi, Yujie,
+On Fri, Oct 14, 2022 at 04:19:41PM -0300, Jason Gunthorpe wrote:
+> On Wed, Oct 12, 2022 at 05:06:16PM +0800, Herbert Xu wrote:
 > 
-> >      32528  48%    +147.6%      80547  38%  numa-meminfo.node0.AnonHugePages
-> >      92821  23%     +59.3%     147839  28%  numa-meminfo.node0.AnonPages
+> > > Rather, drivers that do AES should be called "aes". For this hardware
+> > > key situation, I guess that means keys have a type (in-memory vs
+> > > hardware-resident). Then, a crypto operation takes an "algorithm" and a
+> > > "key", and the abstraction then picks the best implementation that's
+> > > compatible with both the "algorithm" and the "key".
+> > 
+> > No the key is already in a specific hardware bound to some driver.
+> > The user already knows where the key is and therefore they know
+> > which driver it is.
 > 
-> The Anon pages allocated are much more than the parent commit.  This is
-> expected, because THP instead of normal page will be allocated for
-> aligned memory area.
+> Do they?
 > 
-> >      95.23           -79.8       15.41   6%  perf-profile.calltrace.cycles-pp.__munmap
-> >      95.08           -79.7       15.40   6%  perf-profile.calltrace.cycles-pp.entry_SYSCALL_64_after_hwframe.__munmap
-> >      95.02           -79.6       15.39   6%  perf-profile.calltrace.cycles-pp.do_syscall_64.entry_SYSCALL_64_after_hwframe.__munmap
-> >      94.96           -79.6       15.37   6%  perf-profile.calltrace.cycles-pp.__x64_sys_munmap.do_syscall_64.entry_SYSCALL_64_after_hwframe.__munmap
-> >      94.95           -79.6       15.37   6%  perf-profile.calltrace.cycles-pp.__vm_munmap.__x64_sys_munmap.do_syscall_64.entry_SYSCALL_64_after_hwframe.__munmap
-> >      94.86           -79.5       15.35   6%  perf-profile.calltrace.cycles-pp.__do_munmap.__vm_munmap.__x64_sys_munmap.do_syscall_64.entry_SYSCALL_64_after_hwframe
-> >      94.38           -79.2       15.22   6%  perf-profile.calltrace.cycles-pp.unmap_region.__do_munmap.__vm_munmap.__x64_sys_munmap.do_syscall_64
-> >      42.74           -42.7        0.00        perf-profile.calltrace.cycles-pp.lru_add_drain.unmap_region.__do_munmap.__vm_munmap.__x64_sys_munmap
-> >      42.74           -42.7        0.00        perf-profile.calltrace.cycles-pp.lru_add_drain_cpu.lru_add_drain.unmap_region.__do_munmap.__vm_munmap
-> >      42.72           -42.7        0.00        perf-profile.calltrace.cycles-pp.folio_batch_move_lru.lru_add_drain_cpu.lru_add_drain.unmap_region.__do_munmap
-> >      41.84           -41.8        0.00        perf-profile.calltrace.cycles-pp.folio_lruvec_lock_irqsave.folio_batch_move_lru.lru_add_drain_cpu.lru_add_drain.unmap_region
-> >      41.70           -41.7        0.00        perf-profile.calltrace.cycles-pp._raw_spin_lock_irqsave.folio_lruvec_lock_irqsave.folio_batch_move_lru.lru_add_drain_cpu.lru_add_drain
-> >      41.62           -41.6        0.00        perf-profile.calltrace.cycles-pp.folio_lruvec_lock_irqsave.release_pages.tlb_batch_pages_flush.tlb_finish_mmu.unmap_region
-> >      41.55           -41.6        0.00        perf-profile.calltrace.cycles-pp.native_queued_spin_lock_slowpath._raw_spin_lock_irqsave.folio_lruvec_lock_irqsave.folio_batch_move_lru.lru_add_drain_cpu
-> >      41.52           -41.5        0.00        perf-profile.calltrace.cycles-pp._raw_spin_lock_irqsave.folio_lruvec_lock_irqsave.release_pages.tlb_batch_pages_flush.tlb_finish_mmu
-> >      41.28           -41.3        0.00        perf-profile.calltrace.cycles-pp.native_queued_spin_lock_slowpath._raw_spin_lock_irqsave.folio_lruvec_lock_irqsave.release_pages.tlb_batch_pages_flush
+> We have HW that can do HW resident keys as as well, in our case it is
+> plugged into the storage system with fscrypt and all the crypto
+> operations are being done "inline" as the data is DMA'd into/out of
+> the storage. So, no crypto API here.
 > 
-> In the parent commit, most CPU cycles are used for contention on LRU lock.
+> I would say the user knows about the key and its binding in the sense
+> they loaded a key into the storage device and mounted a fscrypt
+> filesystem from that storage device - but the kernel may not know this
+> explicitly.
+
+Are you referring to the support for hardware-wrapped inline crypto keys?  It
+isn't upstream yet, but my latest patchset is at
+https://lore.kernel.org/linux-fscrypt/20220927014718.125308-2-ebiggers@kernel.org/T/#u.
+There's also a version of it used by some Android devices already.  Out of
+curiosity, are you using it in an Android device, or have you adopted it in some
+other downstream?
+
+Anyway, that feature does indeed use a boolean flag to indicate whether the key
+is hardware-wrapped or not.  And yes, it doesn't use the crypto API.  Nor does
+it use the keyrings subsystem, for that matter.
+
+However, the design of hardware-wrapped inline crypto keys is that keys are
+scoped to a particular block device (or a set of block devices), which are
+assumed to have only one version of wrapped keys.  That makes the boolean flag
+work, as it's always unambiguous what the keys mean.
+
+I don't think that would work as well for the crypto API, which is a bit more
+general.  In the crypto API, there can be an arbitrary number of crypto drivers,
+each of which has its own version of hardware-wrapped (bound) keys.  So maybe
+the existing design that is based on algorithm names is fine.
+
+> > > If you don't want a proliferation of different ways of doing the same
+> > > thing, maybe the requirement should be that the author of this series
+> > > also converts the existing "paes" kludge to use the new thing he's
+> > > proposing?
+> > 
+> > Yes that would definitely be a good idea.  We should also talk to the
+> > people who added paes in the first place, i.e., s390.
 > 
-> >       0.00            +4.8        4.82   7%  perf-profile.calltrace.cycles-pp.do_huge_pmd_anonymous_page.__handle_mm_fault.handle_mm_fault.do_user_addr_fault.exc_page_fault
-> >       0.00            +4.9        4.88   7%  perf-profile.calltrace.cycles-pp.zap_huge_pmd.zap_pmd_range.unmap_page_range.unmap_vmas.unmap_region
-> >       0.00            +8.2        8.22   8%  perf-profile.calltrace.cycles-pp.native_queued_spin_lock_slowpath._raw_spin_lock.rmqueue_bulk.rmqueue.get_page_from_freelist
-> >       0.00            +8.2        8.23   8%  perf-profile.calltrace.cycles-pp._raw_spin_lock.rmqueue_bulk.rmqueue.get_page_from_freelist.__alloc_pages
-> >       0.00            +8.3        8.35   8%  perf-profile.calltrace.cycles-pp.native_queued_spin_lock_slowpath._raw_spin_lock.free_pcppages_bulk.free_unref_page.release_pages
-> >       0.00            +8.3        8.35   8%  perf-profile.calltrace.cycles-pp._raw_spin_lock.free_pcppages_bulk.free_unref_page.release_pages.tlb_batch_pages_flush
-> >       0.00            +8.4        8.37   8%  perf-profile.calltrace.cycles-pp.free_pcppages_bulk.free_unref_page.release_pages.tlb_batch_pages_flush.tlb_finish_mmu
-> >       0.00            +9.6        9.60   6%  perf-profile.calltrace.cycles-pp.free_unref_page.release_pages.tlb_batch_pages_flush.tlb_finish_mmu.unmap_region
-> >       0.00           +65.5       65.48   2%  perf-profile.calltrace.cycles-pp.clear_page_erms.clear_huge_page.__do_huge_pmd_anonymous_page.__handle_mm_fault.handle_mm_fault
-> >       0.00           +72.5       72.51   2%  perf-profile.calltrace.cycles-pp.clear_huge_page.__do_huge_pmd_anonymous_page.__handle_mm_fault.handle_mm_fault.do_user_addr_fault
-> 
-> With the commit, most CPU cycles are consumed for clear huge page.  This
-> is expected.  We allocate more pages, so, we need more cycles to clear
-> them.
-> 
-> Check the source code of test case (will-it-scale/malloc1), I found that
-> it will allocate some memory with malloc() then free it.
-> 
-> In the parent commit, because the virtual memory address isn't aligned
-> with 2M, normal page will be allocated.  With the commit, THP will be
-> allocated, so more page clearing and less LRU lock contention.  I think
-> this is the expected behavior of the commit.  And the test case isn't so
-> popular (malloc() then free() but don't access the memory allocated).  So
-> this regression isn't important.  We can just ignore it.
+> Yes, it would be nice to see a comprehensive understand on how HW
+> resident keys can be modeled in the keyring.
 
-For what it's worth, I just bisected a massive and visible performance
-regression on my Threadripper 3990X workstation to commit f35b5d7d676e
-("mm: align larger anonymous mappings on THP boundaries"), which seems
-directly related to this report/analysis. I initially noticed this
-because my full set of kernel builds against mainline went from 2 hours
-and 20 minutes or so to over 3 hours. Zeroing in on x86_64 allmodconfig,
-which I used for the bisect:
+Note that the keyrings subsystem is not as useful as it might seem.  It sounds
+like something you want (you have keys, and there is a subsystem called
+"keyrings", so it should be used, right?), but often it isn't.  fscrypt has
+mostly moved away from using it, as it caused lots of problems.  I would caution
+against assuming that it needs to be part of any solution.
 
-@ 7b5a0b664ebe ("mm/page_ext: remove unused variable in offline_page_ext"):
-
-Benchmark 1: make -skj128 LLVM=1 allmodconfig all
-  Time (mean ± σ):     318.172 s ±  0.730 s    [User: 31750.902 s, System: 4564.246 s]
-  Range (min … max):   317.332 s … 318.662 s    3 runs
-
-@ f35b5d7d676e ("mm: align larger anonymous mappings on THP boundaries"):
-
-Benchmark 1: make -skj128 LLVM=1 allmodconfig all
-  Time (mean ± σ):     406.688 s ±  0.676 s    [User: 31819.526 s, System: 16327.022 s]
-  Range (min … max):   405.954 s … 407.284 s    3 run
-
-That is a pretty big difference (27%), which is visible while doing a
-lot of builds, only because of the extra system time. If there is any
-way to improve this, it should certainly be considered.
-
-For now, I'll just revert it locally.
-
-Cheers,
-Nathan
-
-# bad: [aae703b02f92bde9264366c545e87cec451de471] Merge tag 'for-6.1-rc1-tag' of git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux
-# good: [4fe89d07dcc2804c8b562f6c7896a45643d34b2f] Linux 6.0
-git bisect start 'aae703b02f92bde9264366c545e87cec451de471' 'v6.0'
-# good: [18fd049731e67651009f316195da9281b756f2cf] Merge tag 'arm64-upstream' of git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux
-git bisect good 18fd049731e67651009f316195da9281b756f2cf
-# good: [ab0c23b535f3f9d8345d8ad4c18c0a8594459d55] MAINTAINERS: add RISC-V's patchwork
-git bisect good ab0c23b535f3f9d8345d8ad4c18c0a8594459d55
-# bad: [f721d24e5dae8358b49b24399d27ba5d12a7e049] Merge tag 'pull-tmpfile' of git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs
-git bisect bad f721d24e5dae8358b49b24399d27ba5d12a7e049
-# good: [ada3bfb6492a6d0d3eca50f3b61315fe032efc72] Merge tag 'tpmdd-next-v6.1-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd
-git bisect good ada3bfb6492a6d0d3eca50f3b61315fe032efc72
-# bad: [4e07acdda7fc23f5c4666e54961ef972a1195ffd] mm/hwpoison: add __init/__exit annotations to module init/exit funcs
-git bisect bad 4e07acdda7fc23f5c4666e54961ef972a1195ffd
-# bad: [000a449345bbb4ffbd880f7143b5fb4acac34121] radix tree test suite: add allocation counts and size to kmem_cache
-git bisect bad 000a449345bbb4ffbd880f7143b5fb4acac34121
-# bad: [47d55419951312d723de1b6ad53ee92948b8eace] btrfs: convert process_page_range() to use filemap_get_folios_contig()
-git bisect bad 47d55419951312d723de1b6ad53ee92948b8eace
-# bad: [4d86d4f7227c6f2acfbbbe0623d49865aa71b756] mm: add more BUILD_BUG_ONs to gfp_migratetype()
-git bisect bad 4d86d4f7227c6f2acfbbbe0623d49865aa71b756
-# bad: [816284a3d0e27828b5cc35f3cf539b0711939ce3] userfaultfd: update documentation to describe /dev/userfaultfd
-git bisect bad 816284a3d0e27828b5cc35f3cf539b0711939ce3
-# good: [be6667b0db97e10b2a6d57a906c2c8fd2b985e5e] selftests/vm: dedup hugepage allocation logic
-git bisect good be6667b0db97e10b2a6d57a906c2c8fd2b985e5e
-# bad: [2ace36f0f55777be8a871c370832527e1cd54b15] mm: memory-failure: cleanup try_to_split_thp_page()
-git bisect bad 2ace36f0f55777be8a871c370832527e1cd54b15
-# good: [9d0d946840075e0268f4f77fe39ba0f53e84c7c4] selftests/vm: add selftest to verify multi THP collapse
-git bisect good 9d0d946840075e0268f4f77fe39ba0f53e84c7c4
-# bad: [f35b5d7d676e59e401690b678cd3cfec5e785c23] mm: align larger anonymous mappings on THP boundaries
-git bisect bad f35b5d7d676e59e401690b678cd3cfec5e785c23
-# good: [7b5a0b664ebe2625965a0fdba2614c88c4b9bbc6] mm/page_ext: remove unused variable in offline_page_ext
-git bisect good 7b5a0b664ebe2625965a0fdba2614c88c4b9bbc6
-# first bad commit: [f35b5d7d676e59e401690b678cd3cfec5e785c23] mm: align larger anonymous mappings on THP boundaries
+- Eric
