@@ -2,153 +2,324 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F8C76061AC
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 15:31:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FC4D6061B1
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 15:32:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229948AbiJTNbn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 09:31:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47634 "EHLO
+        id S229817AbiJTNcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 09:32:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229817AbiJTNbk (ORCPT
+        with ESMTP id S229558AbiJTNco (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 09:31:40 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B9C61918BA;
-        Thu, 20 Oct 2022 06:31:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Ub1/BqWnc+u3S6gZuqlIRI6PL3Nk/sdK2+QXvb0/fQU=; b=RN5JK4lTNkV7unSEKrdF+0s9/3
-        cAJwWtWZWcVCoR1k83daYisqZj0q+OX25fIvm0RQko13gvAImNqVuHFIcq4RGlj4GCNZyocIbo58m
-        DjU9444DUyGtC/X4QMzvfdl6SmXjYAvDk6EX/slC2TjYSnmYZKfYCme/5FgRN5p15pfWskTRAPCO+
-        JrDtRGG1lHvNI7eIe12Y3zewqUgvvx8wBHzS+PiPGICEbXMbEeZI997mTacqnYJ8uus7tjmJOaQHz
-        NH+LEqZtVhB11qij3EOkGj9+e5++8799XHfFLyvy0Vfts2zq9vS/KMfuzBwwtLqxjoayZBSVDnEN1
-        1okF8/vg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1olVe7-00CPQP-8e; Thu, 20 Oct 2022 13:31:39 +0000
-Date:   Thu, 20 Oct 2022 14:31:39 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     syzbot <syzbot+e33c2a7e25ff31df5297@syzkaller.appspotmail.com>
-Cc:     akpm@linux-foundation.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        syzkaller-bugs@googlegroups.com,
-        Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
-        ntfs3@lists.linux.dev
-Subject: Re: [syzbot] BUG: unable to handle kernel NULL pointer dereference
- in filemap_read_folio
-Message-ID: <Y1FNu60vwt7oJRSu@casper.infradead.org>
-References: <00000000000020f00f05eb774338@google.com>
+        Thu, 20 Oct 2022 09:32:44 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B39B41A4032;
+        Thu, 20 Oct 2022 06:32:40 -0700 (PDT)
+Received: from dggpeml500024.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MtT6h5lTmzHv2P;
+        Thu, 20 Oct 2022 21:32:28 +0800 (CST)
+Received: from dggpeml500003.china.huawei.com (7.185.36.200) by
+ dggpeml500024.china.huawei.com (7.185.36.10) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 20 Oct 2022 21:32:36 +0800
+Received: from [10.174.177.173] (10.174.177.173) by
+ dggpeml500003.china.huawei.com (7.185.36.200) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 20 Oct 2022 21:32:36 +0800
+Message-ID: <97cfec0d-a24b-9917-2bd1-404e344eaa36@huawei.com>
+Date:   Thu, 20 Oct 2022 21:32:35 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <00000000000020f00f05eb774338@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [BUG] possible deadlock in __rcu_irq_enter_check_tick
+Content-Language: en-US
+To:     Mark Rutland <mark.rutland@arm.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+CC:     "liwei (GF)" <liwei391@huawei.com>, <linux-kernel@vger.kernel.org>,
+        <rcu@vger.kernel.org>
+References: <e015e32d-d068-2d17-1ca5-c584c30ffebb@huawei.com>
+ <20221012064911.GN4221@paulmck-ThinkPad-P17-Gen-1> <Y063MGk3oVg6ney0@lakrids>
+ <Y1AGWuwZsq/NW1U3@FVFF77S0Q05N>
+From:   Yu Liao <liaoyu15@huawei.com>
+In-Reply-To: <Y1AGWuwZsq/NW1U3@FVFF77S0Q05N>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.173]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpeml500003.china.huawei.com (7.185.36.200)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 06:25:43AM -0700, syzbot wrote:
-> Hello,
+On 2022/10/19 22:14, Mark Rutland wrote:
+> On Tue, Oct 18, 2022 at 03:24:48PM +0100, Mark Rutland wrote:
+>> On Tue, Oct 11, 2022 at 11:49:11PM -0700, Paul E. McKenney wrote:
+>>> On Tue, Oct 11, 2022 at 09:18:11PM +0800, Yu Liao wrote:
+>>>> Hello,
+>>>>
+>>>> When I run syzkaller, a deadlock problem occurs. The call stack is as follows:
+>>>> [ 1088.244366][    C1] ======================================================
+>>>> [ 1088.244838][    C1] WARNING: possible circular locking dependency detected
+>>>> [ 1088.245313][    C1] 5.10.0-04424-ga472e3c833d3 #1 Not tainted
+>>>> [ 1088.245745][    C1] ------------------------------------------------------
+>>>
+>>> It is quite possible that an unfortunate set of commits were backported
+>>> to v5.10.  Could you please bisect?
+>>>
+>>>> [ 1088.246214][    C1] syz-executor.2/932 is trying to acquire lock:
+>>>> [ 1088.246628][    C1] ffffa0001440c418 (rcu_node_0){..-.}-{2:2}, at:
+>>>> __rcu_irq_enter_check_tick+0x128/0x2f4
+>>>> [ 1088.247330][    C1]
+>>>> [ 1088.247330][    C1] but task is already holding lock:
+>>>> [ 1088.247830][    C1] ffff000224d0c298 (&rq->lock){-.-.}-{2:2}, at:
+>>>> try_to_wake_up+0x6e0/0xd40
+>>>> [ 1088.248424][    C1]
+>>>> [ 1088.248424][    C1] which lock already depends on the new lock.
+>>>> [ 1088.248424][    C1]
+>>>> [ 1088.249127][    C1]
+>>>> [ 1088.249127][    C1] the existing dependency chain (in reverse order) is:
+>>>> [ 1088.249726][    C1]
+>>>> [ 1088.249726][    C1] -> #1 (&rq->lock){-.-.}-{2:2}:
+>>>> [ 1088.250239][    C1]        validate_chain+0x6dc/0xb0c
+>>>> [ 1088.250591][    C1]        __lock_acquire+0x498/0x940
+>>>> [ 1088.250942][    C1]        lock_acquire+0x228/0x580
+>>>> [ 1088.251346][    C1]        _raw_spin_lock_irqsave+0xc0/0x15c
+>>>> [ 1088.251758][    C1]        resched_cpu+0x5c/0x110
+>>>> [ 1088.252091][    C1]        rcu_implicit_dynticks_qs+0x2b0/0x5d0
+>>>> [ 1088.252501][    C1]        force_qs_rnp+0x244/0x39c
+>>>> [ 1088.252847][    C1]        rcu_gp_fqs_loop+0x2e4/0x440
+>>>> [ 1088.253219][    C1]        rcu_gp_kthread+0x1a4/0x240
+>>>> [ 1088.253597][    C1]        kthread+0x20c/0x260
+>>>> [ 1088.253963][    C1]        ret_from_fork+0x10/0x18
+>>>> [ 1088.254389][    C1]
+>>>> [ 1088.254389][    C1] -> #0 (rcu_node_0){..-.}-{2:2}:
+>>>> [ 1088.255296][    C1]        check_prev_add+0xe0/0x105c
+>>>> [ 1088.256000][    C1]        check_prevs_add+0x1c8/0x3d4
+>>>> [ 1088.256693][    C1]        validate_chain+0x6dc/0xb0c
+>>>> [ 1088.257372][    C1]        __lock_acquire+0x498/0x940
+>>>> [ 1088.257731][    C1]        lock_acquire+0x228/0x580
+>>>> [ 1088.258079][    C1]        _raw_spin_lock+0xa0/0x120
+>>>> [ 1088.258425][    C1]        __rcu_irq_enter_check_tick+0x128/0x2f4
+>>>> [ 1088.258844][    C1]        rcu_nmi_enter+0xc4/0xd0
+>>>
+>>> This is looking like we took an interrupt while holding an rq lock.
+>>> Am I reading this correctly?  If so, that is bad in and of itself.
+>>
+>> In this case it's not an interrupt; per the entry bits below:
+>>
+>>>> [ 1088.259183][    C1]        arm64_enter_el1_dbg+0xb0/0x160
+>>>> [ 1088.259623][    C1]        el1_dbg+0x28/0x50
+>>>> [ 1088.260011][    C1]        el1_sync_handler+0xf4/0x150
+>>>> [ 1088.260481][    C1]        el1_sync+0x74/0x100
+>>
+>> ... this is a synchronous debug exception, which is one of:
+>>
+>>  * A hardware single-step exception
+>>  * A hardware watchpoint
+>>  * A hardware breakpoint
+>>  * A software breakpoint (i.e. a BRK instruction)
+>>
+>> ... and we have to treat those as NMIs.
+>>
+>> That could be a kprobe, or a WARN, etc.
 > 
-> syzbot found the following issue on:
+> Having a go with v6.1-rc1, placing a kprobe on __rcu_irq_enter_check_tick()
+> causes a recursive exception which triggers the stack overflow detection, so
+> there are bigger problems here, and we'll need to do some further rework of the
+> arm64 entry code. FWIW, x86-64 seems fine.
+> 
+> I have a vague recollection that that there was something (some part kprobes,
+> perhaps) that didn't like being called in NMI context, which is why debug
+> exceptions aren't accounted as true NMIs (but get most of the same treatment).
+> 
+> I'll have to dig into this a bit more; there are a bunch of subtle interactions
+> in this area, and I don't want to put a band-aid over this without fully
+> understanding the implications.
+> 
+> Once we've figured that out for mainline, we can figure out what needs to go to
+> stable.
+> 
+> Yu, were you particularly interested in tracing __rcu_irq_enter_check_tick(),
+> or did you stumble upon this by other means?
+Oh，This was found with the help of the kernel fuzzer syzkaller.
 
-NTFS.  Ignored.
+Thanks,
+Yu
 
-> HEAD commit:    55be6084c8e0 Merge tag 'timers-core-2022-10-05' of git://g..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=108783e6880000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=c29b6436e994d72e
-> dashboard link: https://syzkaller.appspot.com/bug?extid=e33c2a7e25ff31df5297
-> compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
 > 
-> Unfortunately, I don't have any reproducer for this issue yet.
+> Thanks,
+> Mark.
+>
+>>
+>> Thanks,
+>> Mark.
+>>
+>>>> [ 1088.260800][    C1]        update_irq_load_avg+0x5d8/0xaa0
+>>>> [ 1088.261194][    C1]        update_rq_clock_task+0xb8/0x2d0
+>>>> [ 1088.261595][    C1]        update_rq_clock+0x8c/0x120
+>>>> [ 1088.261952][    C1]        try_to_wake_up+0x70c/0xd40
+>>>> [ 1088.262305][    C1]        wake_up_process+0x1c/0x24
+>>>> [ 1088.262652][    C1]        wakeup_softirqd+0x58/0x64
+>>>> [ 1088.263000][    C1]        __do_softirq+0x6b8/0x95c
+>>>> [ 1088.263345][    C1]        irq_exit+0x27c/0x2d0
+>>>> [ 1088.263674][    C1]        __handle_domain_irq+0x100/0x184
+>>>> [ 1088.264049][    C1]        gic_handle_irq+0xc0/0x760
+>>>> [ 1088.264394][    C1]        el1_irq+0xb8/0x140
+>>>> [ 1088.264709][    C1]        _raw_spin_unlock_irqrestore+0x7c/0x130
+>>>> [ 1088.265134][    C1]        __aarch64_insn_write+0xc4/0x100
+>>>> [ 1088.265516][    C1]        aarch64_insn_patch_text_nosync+0x40/0xa0
+>>>> [ 1088.265942][    C1]        ftrace_make_nop+0x120/0x1a4
+>>>> [ 1088.266300][    C1]        __ftrace_replace_code+0xdc/0x160
+>>>> [ 1088.266684][    C1]        ftrace_replace_code+0x100/0x1a4
+>>>> [ 1088.267063][    C1]        ftrace_modify_all_code+0x1a8/0x260
+>>>> [ 1088.267456][    C1]        arch_ftrace_update_code+0x1c/0x2c
+>>>> [ 1088.267847][    C1]        ftrace_run_update_code+0x38/0xa4
+>>>> [ 1088.268259][    C1]        ftrace_shutdown.part.0+0x2dc/0x550
+>>>> [ 1088.268682][    C1]        unregister_ftrace_function+0x74/0xc0
+>>>> [ 1088.269117][    C1]        perf_ftrace_event_register+0x130/0x1a0
+>>>> [ 1088.269559][    C1]        perf_trace_destroy+0x68/0x9c
+>>>> [ 1088.269938][    C1]        tp_perf_event_destroy+0x1c/0x2c
+>>>> [ 1088.270340][    C1]        _free_event+0x2f4/0x670
+>>>> [ 1088.270696][    C1]        put_event+0x7c/0x90
+>>>> [ 1088.271031][    C1]        perf_event_release_kernel+0x3c0/0x450
+>>>> [ 1088.271467][    C1]        perf_release+0x24/0x34
+>>>> [ 1088.271824][    C1]        __fput+0x1dc/0x500
+>>>> [ 1088.272155][    C1]        ____fput+0x24/0x30
+>>>> [ 1088.272471][    C1]        task_work_run+0xf4/0x1ec
+>>>> [ 1088.272811][    C1]        do_notify_resume+0x378/0x410
+>>>> [ 1088.273180][    C1]        work_pending+0xc/0x198
+>>>> [ 1088.273504][    C1]
+>>>> [ 1088.273504][    C1] other info that might help us debug this:
+>>>> [ 1088.273504][    C1]
+>>>> [ 1088.274168][    C1]  Possible unsafe locking scenario:
+>>>> [ 1088.274168][    C1]
+>>>> [ 1088.274658][    C1]        CPU0                    CPU1
+>>>> [ 1088.275012][    C1]        ----                    ----
+>>>> [ 1088.275367][    C1]   lock(&rq->lock);
+>>>> [ 1088.275646][    C1]                                lock(rcu_node_0);
+>>>> [ 1088.276082][    C1]                                lock(&rq->lock);
+>>>> [ 1088.276517][    C1]   lock(rcu_node_0);
+>>>> [ 1088.276797][    C1]
+>>>> [ 1088.276797][    C1]  *** DEADLOCK ***
+>>>> [ 1088.276797][    C1]
+>>>> [ 1088.277339][    C1] 4 locks held by syz-executor.2/932:
+>>>> [ 1088.277696][    C1]  #0: ffffa000145251e8 (event_mutex){+.+.}-{3:3}, at:
+>>>> perf_trace_destroy+0x34/0x9c
+>>>> [ 1088.278345][    C1]  #1: ffffa000144fb5a8 (ftrace_lock){+.+.}-{3:3}, at:
+>>>> unregister_ftrace_function+0x2c/0xc0
+>>>> [ 1088.279034][    C1]  #2: ffff0000c0e0c968 (&p->pi_lock){-.-.}-{2:2}, at:
+>>>> try_to_wake_up+0xbc/0xd40
+>>>> [ 1088.279672][    C1]  #3: ffff000224d0c298 (&rq->lock){-.-.}-{2:2}, at:
+>>>> try_to_wake_up+0x6e0/0xd40
+>>>> [ 1088.280300][    C1]
+>>>> [ 1088.280300][    C1] stack backtrace:
+>>>> [ 1088.280706][    C1] CPU: 1 PID: 932 Comm: syz-executor.2 Not tainted
+>>>> 5.10.0-04424-ga472e3c833d3 #1
+>>>> [ 1088.281315][    C1] Hardware name: linux,dummy-virt (DT)
+>>>> [ 1088.281679][    C1] Call trace:
+>>>> [ 1088.281910][    C1]  dump_backtrace+0x0/0x41c
+>>>> [ 1088.282218][    C1]  show_stack+0x30/0x40
+>>>> [ 1088.282505][    C1]  dump_stack+0x1fc/0x2c0
+>>>> [ 1088.282807][    C1]  print_circular_bug+0x1ec/0x284
+>>>> [ 1088.283149][    C1]  check_noncircular+0x1cc/0x1ec
+>>>> [ 1088.283486][    C1]  check_prev_add+0xe0/0x105c
+>>>> [ 1088.283804][    C1]  check_prevs_add+0x1c8/0x3d4
+>>>> [ 1088.284126][    C1]  validate_chain+0x6dc/0xb0c
+>>>> [ 1088.284442][    C1]  __lock_acquire+0x498/0x940
+>>>> [ 1088.284764][    C1]  lock_acquire+0x228/0x580
+>>>> [ 1088.285072][    C1]  _raw_spin_lock+0xa0/0x120
+>>>> [ 1088.285392][    C1]  __rcu_irq_enter_check_tick+0x128/0x2f4
+>>>> [ 1088.285779][    C1]  rcu_nmi_enter+0xc4/0xd0
+>>>> [ 1088.286082][    C1]  arm64_enter_el1_dbg+0xb0/0x160
+>>>> [ 1088.286420][    C1]  el1_dbg+0x28/0x50
+>>>> [ 1088.286689][    C1]  el1_sync_handler+0xf4/0x150
+>>>> [ 1088.287010][    C1]  el1_sync+0x74/0x100
+>>>> [ 1088.287295][    C1]  update_irq_load_avg+0x5d8/0xaa0
+>>>> [ 1088.287640][    C1]  update_rq_clock_task+0xb8/0x2d0
+>>>> [ 1088.287988][    C1]  update_rq_clock+0x8c/0x120
+>>>> [ 1088.288309][    C1]  try_to_wake_up+0x70c/0xd40
+>>>> [ 1088.288629][    C1]  wake_up_process+0x1c/0x24
+>>>> [ 1088.288945][    C1]  wakeup_softirqd+0x58/0x64
+>>>> [ 1088.289271][    C1]  __do_softirq+0x6b8/0x95c
+>>>> [ 1088.289580][    C1]  irq_exit+0x27c/0x2d0
+>>>> [ 1088.289868][    C1]  __handle_domain_irq+0x100/0x184
+>>>> [ 1088.290211][    C1]  gic_handle_irq+0xc0/0x760
+>>>> [ 1088.290522][    C1]  el1_irq+0xb8/0x140
+>>>> [ 1088.290801][    C1]  _raw_spin_unlock_irqrestore+0x7c/0x130
+>>>> [ 1088.291188][    C1]  __aarch64_insn_write+0xc4/0x100
+>>>> [ 1088.291533][    C1]  aarch64_insn_patch_text_nosync+0x40/0xa0
+>>>> [ 1088.291928][    C1]  ftrace_make_nop+0x120/0x1a4
+>>>> [ 1088.292256][    C1]  __ftrace_replace_code+0xdc/0x160
+>>>> [ 1088.292613][    C1]  ftrace_replace_code+0x100/0x1a4
+>>>> [ 1088.292963][    C1]  ftrace_modify_all_code+0x1a8/0x260
+>>>> [ 1088.293335][    C1]  arch_ftrace_update_code+0x1c/0x2c
+>>>> [ 1088.293694][    C1]  ftrace_run_update_code+0x38/0xa4
+>>>> [ 1088.294048][    C1]  ftrace_shutdown.part.0+0x2dc/0x550
+>>>> [ 1088.294415][    C1]  unregister_ftrace_function+0x74/0xc0
+>>>> [ 1088.294787][    C1]  perf_ftrace_event_register+0x130/0x1a0
+>>>> [ 1088.295172][    C1]  perf_trace_destroy+0x68/0x9c
+>>>> [ 1088.295500][    C1]  tp_perf_event_destroy+0x1c/0x2c
+>>>> [ 1088.295850][    C1]  _free_event+0x2f4/0x670
+>>>> [ 1088.296154][    C1]  put_event+0x7c/0x90
+>>>> [ 1088.296439][    C1]  perf_event_release_kernel+0x3c0/0x450
+>>>> [ 1088.296820][    C1]  perf_release+0x24/0x34
+>>>> [ 1088.297125][    C1]  __fput+0x1dc/0x500
+>>>> [ 1088.297404][    C1]  ____fput+0x24/0x30
+>>>> [ 1088.297682][    C1]  task_work_run+0xf4/0x1ec
+>>>> [ 1088.297989][    C1]  do_notify_resume+0x378/0x410
+>>>> [ 1088.298316][    C1]  work_pending+0xc/0x198
+>>>>
+>>>> I checked the code. The following scenarios may cause deadlock.
+>>>>
+>>>> static void ttwu_queue(struct task_struct *p, int cpu, int wake_flags)
+>>>> {
+>>>>     struct rq *rq = cpu_rq(cpu);
+>>>>     struct rq_flags rf;
+>>>>
+>>>>     if (ttwu_queue_wakelist(p, cpu, wake_flags))
+>>>>         return;
+>>>>
+>>>>     rq_lock(rq, &rf);
+>>>>     update_rq_clock(rq);	
+>>>> 		===> el1_dbg
+>>>> 			  ->rcu_nmi_enter
+>>>> 			    ->__rcu_irq_enter_check_tick
+>>>> 				  ->raw_spin_lock_rcu_node(rdp->mynode);
+>>>>     ttwu_do_activate(rq, p, wake_flags, &rf);
+>>>>     rq_unlock(rq, &rf);
+>>>> }
+>>>>
+>>>> static void rcu_gp_fqs(bool first_time)
+>>>> {
+>>>>     struct rcu_node *rnp = rcu_get_root();
+>>>>
+>>>>     WRITE_ONCE(rcu_state.gp_activity, jiffies);
+>>>>     WRITE_ONCE(rcu_state.n_force_qs, rcu_state.n_force_qs + 1);
+>>>>     if (first_time) {
+>>>>         /* Collect dyntick-idle snapshots. */
+>>>>         force_qs_rnp(dyntick_save_progress_counter);
+>>>>     } else {
+>>>>         /* Handle dyntick-idle and offline CPUs. */
+>>>>         force_qs_rnp(rcu_implicit_dynticks_qs);	
+>>>> 			===>raw_spin_lock_irqsave_rcu_node(rnp, flags);
+>>>> 			===>rcu_implicit_dynticks_qs
+>>>> 				  ->resched_cpu
+>>>> 				    ->raw_spin_lock_irqsave(&rq->lock, flags);
+>>>>     }
+>>>>     /* Clear flag to prevent immediate re-entry. */
+>>>>     if (READ_ONCE(rcu_state.gp_flags) & RCU_GP_FLAG_FQS) {
+>>>>         raw_spin_lock_irq_rcu_node(rnp);
+>>>>         WRITE_ONCE(rcu_state.gp_flags,
+>>>>                READ_ONCE(rcu_state.gp_flags) & ~RCU_GP_FLAG_FQS);
+>>>>         raw_spin_unlock_irq_rcu_node(rnp);
+>>>>     }
+>>>> }
+>>>>
 > 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/c8f5131ab57d/disk-55be6084.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/77167f226f35/vmlinux-55be6084.xz
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+e33c2a7e25ff31df5297@syzkaller.appspotmail.com
-> 
-> ntfs: volume version 3.1.
-> BUG: kernel NULL pointer dereference, address: 0000000000000000
-> #PF: supervisor instruction fetch in kernel mode
-> #PF: error_code(0x0010) - not-present page
-> PGD a5bf9067 P4D a5bf9067 PUD 37d2e067 PMD 0 
-> Oops: 0010 [#1] PREEMPT SMP KASAN
-> CPU: 1 PID: 11041 Comm: syz-executor.1 Not tainted 6.0.0-syzkaller-09589-g55be6084c8e0 #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
-> RIP: 0010:0x0
-> Code: Unable to access opcode bytes at 0xffffffffffffffd6.
-> RSP: 0018:ffffc9001504f618 EFLAGS: 00010287
-> RAX: ffffffff81b64c0e RBX: ffffc9001504f680 RCX: 0000000000040000
-> RDX: ffffc9000ae14000 RSI: ffffea0002a61580 RDI: 0000000000000000
-> RBP: ffffc9001504f6f8 R08: dffffc0000000000 R09: fffff9400054c2b1
-> R10: fffff9400054c2b1 R11: 1ffffd400054c2b0 R12: ffffea0002a61580
-> R13: 1ffffd400054c2b1 R14: 0000000000000000 R15: ffffea0002a61588
-> FS:  00007f0f425d5700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: ffffffffffffffd6 CR3: 00000000a32e1000 CR4: 00000000003506e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  filemap_read_folio+0x1ba/0x7f0 mm/filemap.c:2399
->  do_read_cache_folio+0x2d3/0x790 mm/filemap.c:3526
->  do_read_cache_page mm/filemap.c:3568 [inline]
->  read_cache_page+0x57/0x250 mm/filemap.c:3577
->  read_mapping_page include/linux/pagemap.h:756 [inline]
->  ntfs_map_page fs/ntfs/aops.h:75 [inline]
->  ntfs_check_logfile+0x3f1/0x2a50 fs/ntfs/logfile.c:532
->  load_and_check_logfile+0x6f/0xd0 fs/ntfs/super.c:1215
->  load_system_files+0x3376/0x48d0 fs/ntfs/super.c:1941
->  ntfs_fill_super+0x19a9/0x2bf0 fs/ntfs/super.c:2892
->  mount_bdev+0x26c/0x3a0 fs/super.c:1400
->  legacy_get_tree+0xea/0x180 fs/fs_context.c:610
->  vfs_get_tree+0x88/0x270 fs/super.c:1530
->  do_new_mount+0x289/0xad0 fs/namespace.c:3040
->  do_mount fs/namespace.c:3383 [inline]
->  __do_sys_mount fs/namespace.c:3591 [inline]
->  __se_sys_mount+0x2e3/0x3d0 fs/namespace.c:3568
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> RIP: 0033:0x7f0f4148cada
-> Code: 48 c7 c2 b8 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 b8 04 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007f0f425d4f88 EFLAGS: 00000202 ORIG_RAX: 00000000000000a5
-> RAX: ffffffffffffffda RBX: 0000000020000200 RCX: 00007f0f4148cada
-> RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007f0f425d4fe0
-> RBP: 00007f0f425d5020 R08: 00007f0f425d5020 R09: 0000000020000000
-> R10: 0000000000000000 R11: 0000000000000202 R12: 0000000020000000
-> R13: 0000000020000100 R14: 00007f0f425d4fe0 R15: 00000000200026c0
->  </TASK>
-> Modules linked in:
-> CR2: 0000000000000000
-> ---[ end trace 0000000000000000 ]---
-> RIP: 0010:0x0
-> Code: Unable to access opcode bytes at 0xffffffffffffffd6.
-> RSP: 0018:ffffc9001504f618 EFLAGS: 00010287
-> RAX: ffffffff81b64c0e RBX: ffffc9001504f680 RCX: 0000000000040000
-> RDX: ffffc9000ae14000 RSI: ffffea0002a61580 RDI: 0000000000000000
-> RBP: ffffc9001504f6f8 R08: dffffc0000000000 R09: fffff9400054c2b1
-> R10: fffff9400054c2b1 R11: 1ffffd400054c2b0 R12: ffffea0002a61580
-> R13: 1ffffd400054c2b1 R14: 0000000000000000 R15: ffffea0002a61588
-> FS:  00007f0f425d5700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: ffffffffffffffd6 CR3: 00000000a32e1000 CR4: 00000000003506e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> 
-> 
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
-> 
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
