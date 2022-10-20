@@ -2,79 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B413560608E
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 14:49:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C92D606091
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 14:49:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230255AbiJTMtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 08:49:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52200 "EHLO
+        id S230256AbiJTMt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 08:49:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbiJTMs5 (ORCPT
+        with ESMTP id S230209AbiJTMtV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 08:48:57 -0400
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF68A18B09D
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 05:48:55 -0700 (PDT)
-Received: by mail-qv1-xf29.google.com with SMTP id h10so13403599qvq.7
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 05:48:55 -0700 (PDT)
+        Thu, 20 Oct 2022 08:49:21 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B2C221
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 05:49:19 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id l28so13574359qtv.4
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 05:49:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Q1M+ZjygcTh+wQj/LaxDBpu7tJHisiKmS4wQI9QNJcE=;
-        b=f70jO+rGeNbNXJzEkd45j6Ddwl2FJ+n3aWFgYESzO4HCa4/8nk+a1IpfagfnXXpfFS
-         uAZ2YSiq6H4q7djpGDD+k+mZJQigOaOEGUBPc5N6ECV8WmJcYtZb8Ir2ocoNJOf24t7p
-         I7NAMptGN6/CGe84jawcV62mxzbk3AFe1U0kSlOdnWllShr3cE83dRDn3mpaIRIwvvCR
-         C6QiNQcZ00H9FGHVOkfj6L0KXjnTF0hqFFSbwsggf4pPKY19Mvi0sQ4+X95rVTOG2xpA
-         xESOirAxOqMbK7lKhEFjTT+grQ8TY7roHA8p4OFWN6BJ4CMS1fUnsnHlpkA4mn4S5/eQ
-         2OPA==
+        bh=7zzLiSLuWDpRehAEZWWY+YVaKXFqQFcIBPnNnew2YXA=;
+        b=PdZuxs6MjlDnlNzQz5OvgwlDa4ipQHz3SJcbSHa8GGxbWqYSCrOhrIpgIRmL0bbZyh
+         cQ/sT3Wlegy+jRZn9G1hxurXh/athUMdenfE1TvCD29eTKmi6c8pjsNRtPhrotLNmDyI
+         Ogiai7InvvtM1nydktd0c3f6udis80eG18SRwTqONqnpXIzVkCOtQd7VCOHq6vwPnThU
+         L6zklbV08bsN+NZcOAe15qsbT0g24eNmyKRzjz5G3amKpMkDrQGfNK8lySHp4iVl+7p0
+         BuAzVzXn8CEI4UPcx8eE6mZfJ4AZlZXZpqiyZYQ78xKYVX0Mfu3M7j6TgM4q4Cqf9M92
+         3+tw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q1M+ZjygcTh+wQj/LaxDBpu7tJHisiKmS4wQI9QNJcE=;
-        b=1OKjw7uWPQ9seG5F+guOg+6ipeLCcR+VVgH0QDV1SoFc46LDy3atAgIh+GJBAjvsfU
-         ungRnsXlCcDDmslCfXrSqWTlaFnnAWQbe8FzoR88eqyMe3Guxjmg2ySpNGioSJDu2RiR
-         MZVD1Z3Xrnl/EnUQmYctapn1fxKsROWtfZuA7sbyXVWE6/+WQPfhP93RTZH5W4kZUXF5
-         xvesL/dQmP08AOqpeB0S6ejd9R3NPAZH+0HrSJB1QPxHc6XktyR8mnNExI8n2SE9UwwS
-         6YSp4xMe5hq/3mBh3s8WxMyCgpmcU2eW3YPIjwJK54YUsN/6A1QcDx4zhlP9iX85XnoB
-         i5IA==
-X-Gm-Message-State: ACrzQf3kdgRGey65XAtHSg0tfxF9D8km/lqkBpx8RYezpoWns/Lw/aTg
-        D/h5Ncrj3bHfYMXX8meuj0iPaw==
-X-Google-Smtp-Source: AMsMyM7I9aV/f95bj7v+lreXR9VyQcLP8Abt+ZwUvcSxkF81/hwGk36S5tUn8jCXLGR9ascLThvvEg==
-X-Received: by 2002:a0c:e1c6:0:b0:4af:aa3c:987c with SMTP id v6-20020a0ce1c6000000b004afaa3c987cmr11230613qvl.60.1666270134922;
-        Thu, 20 Oct 2022 05:48:54 -0700 (PDT)
+        bh=7zzLiSLuWDpRehAEZWWY+YVaKXFqQFcIBPnNnew2YXA=;
+        b=lvOOuH3OwRx0RbuNxCcqeV1B+x8EzZfyZXTT+d+hFMnpsTzzPF7V4r6W8fjbM7w4Gp
+         KU2Zc3AnZN+odPa+/2B7IX21wN4Ie5opi1B/ahpea+wMGO/w/e5MG+5zgUR6TDo61gjP
+         s5vR1dWeOStRtIkXT1UszWOYMpK+ygb6DzSX2O3mfiUAO+Gy5SKY0t3db+0rycMKeW8P
+         tnoXRWFT6cTVKmzltt3DWunwo19g6C48GtEGhy8A+E/xgLtvVAsWa5IYN73Gg+KIdDKk
+         Y8h4VGvy1v/DL2gDeIN5V+nCnafL0xgISmO3csL8uFCC7PVuGfHcYjE+wuYwT4pi6IkV
+         WMlA==
+X-Gm-Message-State: ACrzQf3vX5mPPSk3er19sOhelMy6XGNDTgYrsqllg/+i5rdzCKh0cdoK
+        uR/cAYaSHjFZTBzc6Tf5QgjOsg==
+X-Google-Smtp-Source: AMsMyM4t+vrwAcBb+25n+go7JZPtlChxYQtXIsomDdytCwaeNLSbAoJXk3x6Ke4EBw9HmsWcmg8Jnw==
+X-Received: by 2002:ac8:5a42:0:b0:39d:136e:8a43 with SMTP id o2-20020ac85a42000000b0039d136e8a43mr1118096qta.372.1666270158481;
+        Thu, 20 Oct 2022 05:49:18 -0700 (PDT)
 Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
-        by smtp.gmail.com with ESMTPSA id dm10-20020a05620a1d4a00b006bb87c4833asm7232789qkb.109.2022.10.20.05.48.52
+        by smtp.gmail.com with ESMTPSA id u7-20020a05620a430700b006cf8fc6e922sm7133652qko.119.2022.10.20.05.49.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Oct 2022 05:48:53 -0700 (PDT)
-Message-ID: <730eec7e-deb2-2d04-6ba9-132a41ebed58@linaro.org>
-Date:   Thu, 20 Oct 2022 08:48:47 -0400
+        Thu, 20 Oct 2022 05:49:17 -0700 (PDT)
+Message-ID: <20c115e0-0acf-dac2-2a30-0f394fa513ab@linaro.org>
+Date:   Thu, 20 Oct 2022 08:49:15 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.0
-Subject: Re: [PATCH] dt-bindings: nvmem: add new stm32mp13 compatible for
- stm32-romem
+Subject: Re: [PATCH v3 1/2] spi: dt-bindings: amlogic, meson-gx-spicc: Add
+ pinctrl names for SPI signal states
 Content-Language: en-US
-To:     Patrick DELAUNAY <patrick.delaunay@foss.st.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
+To:     neil.armstrong@linaro.org,
+        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        Mark Brown <broonie@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-References: <20221014172324.1.Ifc1812116ff63f5501f3edd155d3cf5c0ecc846c@changeid>
- <7ada410d-8d13-b29a-869c-3f5d032528bf@linaro.org>
- <4d113cfd-4c22-780e-2a13-48ca0e2b28ab@foss.st.com>
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Da Xue <da@libre.computer>, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221004-up-aml-fix-spi-v3-0-89de126fd163@baylibre.com>
+ <20221004-up-aml-fix-spi-v3-1-89de126fd163@baylibre.com>
+ <d355ee40-5905-4d10-8300-81e9a63117ee@linaro.org>
+ <dc918114-8b89-441b-5ba1-aaf3ae084860@linaro.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <4d113cfd-4c22-780e-2a13-48ca0e2b28ab@foss.st.com>
+In-Reply-To: <dc918114-8b89-441b-5ba1-aaf3ae084860@linaro.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
@@ -85,148 +87,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/10/2022 13:23, Patrick DELAUNAY wrote:
-> Hi,
+>>> +      properties:
+>>> +        pinctrl-names:
+>>> +          minItems: 1
+>>> +          items:
+>>> +            - const: default
+>>> +            - const: idle-high
+>>> +            - const: idle-low
+>>
+>> You should also define in such case pinctrl-0 and others.
 > 
-> On 10/18/22 03:56, Krzysztof Kozlowski wrote:
->> On 14/10/2022 11:23, Patrick Delaunay wrote:
->>> Add a new compatible for stm32mp13 support.
->>>
->>> Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
->>> ---
->>>
->>>   Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml | 1 +
->>>   1 file changed, 1 insertion(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml b/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml
->>> index 448a2678dc62..16f4cad2fa55 100644
->>> --- a/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml
->>> +++ b/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml
->>> @@ -22,6 +22,7 @@ properties:
->>>     compatible:
->>>       enum:
->>>         - st,stm32f4-otp
->>> +      - st,stm32mp13-bsec
->>>         - st,stm32mp15-bsec
->> According to usage in DTS (separate patch for some reason), the devices
->> are compatible, so please describe them like that.
+> Ok I thought it would be covered by the pinctrl-consumer.yaml
+> but yeah we should allow pinctrl-1 and pinctrl-2 here aswell by adding:
 > 
+>              pinctrl-1: true
+>              pinctrl-2: true
 > 
-> I push the separate patch "ARM: dts: stm32mp13: fix compatible for BSEC"
-> 
-> It is a advice of my colleagues: send an update of device tree
-> 
-> only when the binding modification is acked.
+>
 
-That's not correct advice - only for few cases it's valid (when
-subsystem maintainer wants to take entire patchset, so there should be
-no DTS inside). We want to see the bindings and its usage, so one of:
-1. the same patchset
-2. if two patchsets, then cross linked to each other with URLs to
-lore.kernel.org. I see DTS had link but not this one.
-
-Driver changes also must be sent together with the bindings. Since there
-are no driver changes here, it means for us the devices are compatible
-from Linux point of view.
-
-> 
-> 
-> Sorry for disturbance, I can sent a V2 with the 2 patches.
-> 
-> 
-> The STM32MP15 and STM32MP13 don't use the same version of the BSEC device,
-> 
-> and the driver need to handle it.
-> 
-> 
-> In these 2 patches:
-> 
-> - [PATCH] dt-bindings: nvmem: add new stm32mp13 compatible for stm32-romem
-> 
-> - [PATCH] ARM: dts: stm32mp13: fix compatible for BSEC
-> 
-> 
-> I fix a error for BSEC node in the initial patch to support STM32MP13x,
-
-The question is then whether device was working before or not. If it was
-working, you fix one error but break DTS usage on any system which does
-not have updated driver (so BSD, u-boot, other firmware, other Linux
-kernel versions).
-
-If it was not working, then it's okay, but such case was not explained
-in DTS patch, I think.
-
-> 
-> the DTS "stm32mp131.dtsi" should not used/accepted with the a BSEC node 
-> using
-> 
-> the compatible "st,stm32mp15-bsec" in commit 1da8779c0029 ("ARM: dts: 
-> stm32: add STM32MP13 SoCs support")
-> 
-> 
-> It is a preliminary step to add support of STM32MP13x in STM32 ROMEM driver.
-> 
-> 
-> I don't indicate these patches as "Fixes:" to avoid a dts check issue
-> 
-> if only the DTS patch was backported.
-> 
-> 
-> Today it not blocking for STM32MP13x users because this SoC is not yet 
-> available for customers
-> 
-> and it is only used internally on the ST Microelectronics board 
-> STM32MP135F-DK.
-
-DTS patch says nothing about it...
-
-> 
-> 
-> Nobody (except STMicroelectronics) use this SoC  STM32MP13x with the 
-> current DTS / Linux version.
-> 
-> 
-> Moreover, by default, the STM32 ROMEM driver in not activated in any 
-> defconfig,
-
-Independent issue.
-
-> 
-> I prepare a other patch to activated it by default in arm_multiv7_defconfig.
-> 
-> but I am waiting this DTS correction to avoid to probe the stm32 romen 
-> driver with STM32MP15
-> 
-> configuration on STM32MP13x SoC.
-> 
-> 
-> I think is a good time to update this DTS error before the SoC availability,
-> 
-> agreed with SoC Maintainer, Alexandre Torgue, even if this patch breaks 
-> surrent users
-> 
-> of STM32MP13x DTS (but it is only internals user STMicroelectronics 
-> until now).
-> 
-> 
-> but perhaps you prefer a other solution ?
-
-With that explanation it is fine, but the DTS commit was not mentioning
-explanation.
-
-> 
-> add Fixes in the DTS patch ?
-> 
-> + Fixes: 1da8779c0029 ("ARM: dts: stm32: add STM32MP13 SoCs support")
-> 
-> or
-> 
-> 
->          bsec: efuse@5c005000 {
->              compatible = "st,stm32mp13-bsec", "st,stm32mp15-bsec";
-
-
-Depends whether devices are compatible or not.
+Yes.
 
 Best regards,
 Krzysztof
