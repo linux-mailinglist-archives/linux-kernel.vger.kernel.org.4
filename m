@@ -2,70 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 327DA60685B
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 20:42:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 707AE60685C
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 20:43:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230097AbiJTSmx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 14:42:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57522 "EHLO
+        id S229739AbiJTSni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 14:43:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbiJTSmu (ORCPT
+        with ESMTP id S229514AbiJTSnh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 14:42:50 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 468A1208809
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 11:42:49 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id y4so149351plb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 11:42:49 -0700 (PDT)
+        Thu, 20 Oct 2022 14:43:37 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E1D208817
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 11:43:36 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id fy4so1668355ejc.5
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 11:43:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=GiLFWWbEtdCDuURuAcgBAS+IDqShPLESUc/digwUyOQ=;
-        b=is+dxxAdd4jXbGomGgpqBlglzFuIhZBN+mY22McB5iz1ijkjv+BOtTkj7PHH7jR4w+
-         vWEf+Njo+LaPuFFiSjL3qGSpn9IMgegQr4ayfAi9LSJY330Mdg65huw6G/+2QWT7JB0l
-         EfXLfofcVi43z9wEOwUm6BZuCO5InhFjCF0FSy7VT3uBkbIhZ/l++dJmv1aDxm7aheJw
-         jKfZRNM3zxR2uIVrMmPR/7yWQA6XYzXF8JfJprgTguhr4dDSSc/NpKW6eymDIRs6Nuc/
-         /QS2HSwvHLZKW0aeS7OMu/sH2PvqTgBZ9wVY6+N6wY5jWM7X7YUgjBhQ27/noQ7Ih22l
-         CiFg==
+        bh=a4MNsuWXvt+bS3agOGU3z+N2CwGZIxCInLkhAMhqwl0=;
+        b=Ug8LDle/yVBuiKK79Ei1HiwQqWtE9+BFTn8qtqeyTo+OZOZQ0/5ECS8+MR8vbahV9A
+         NFiFsNGEAY4t1LXeJ0vjZ3+1vDtu2oZ1XhE0Pn53dlSSWTH3pxRK6kmJh/DtDGwoDGK8
+         DsAWna/UKmgZ0UDWvzjabdTRRmwg8fu0CoGL8hJgQnDpfjLJqwEfRUNOgpUQIuKM1ziW
+         Nw6oJ7VqaHAVMWfYxgMIvN3reS4aLhiBG6dPd5mxKIzYH1LIcorjvpZPoJINrtqJfdON
+         gjMSUHwKl6ru6qp5XQwpDcpqbYCHKQzt9ARe3c9c+71FbP8o27B6vV3Q+pY0esxjb6fb
+         ciCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=GiLFWWbEtdCDuURuAcgBAS+IDqShPLESUc/digwUyOQ=;
-        b=wB2cPyoj2MQQ16D3PlJ75f8wyzy8dMaWq34dD7Bjen3vAsAH5pKFk9VugPMBHldcs4
-         o+2xYS/oU7dKC9GeMELoX+cUCPcai+vx1VO+pMqU5jgenmiPQHSOAXGQXkN79ERPebmB
-         OUtOtdujF90Ic9KcSqWNDmCVSbtPTDL3r+h8SG5GbFTJ7OHygJY6OeHLynq3PI1z4dJz
-         UbjxZuNmAZzJ/FIqKzRzTMVzeOEFR6cA2Z0hSBuc1L/YvWhroyKJ0NP2LgEQHCIXuRK6
-         RqM0G012y0s1xhVV9ZRPHL/ZRP2i4mbn2xH77PqGn7batEARH4F46HdejXokVVv/1XO+
-         bB1g==
-X-Gm-Message-State: ACrzQf3afpG7eWOFE2xGYAp/K8EJT2QeMKGRSxe+AsruBUFsqhefqx9O
-        3yma23YoMqt6UeM9AKnkJWivftQt0Levh/Y8GrI=
-X-Google-Smtp-Source: AMsMyM6UhYzjmEGu+p0gK8975yIVhbSs0Cg4B50yT+TQ3UmVYiKa78m9OHOBciwIIqBzUSJ5kno8pCZNuZrQ9fnQ+6Y=
-X-Received: by 2002:a17:903:41cf:b0:183:5a22:c63e with SMTP id
- u15-20020a17090341cf00b001835a22c63emr14905540ple.61.1666291368493; Thu, 20
- Oct 2022 11:42:48 -0700 (PDT)
+        bh=a4MNsuWXvt+bS3agOGU3z+N2CwGZIxCInLkhAMhqwl0=;
+        b=x3QIP4MzHW9Trf8unniZ7NSnOY+SC4M3fI1ZcZN5K54IYvHBExXvaWUQKr/sFlyrMP
+         ppXVjcYBrSOI04KGEH4V4GmxD34QMP/MLFrgHBPO6si1F3267T+9bieWha+KL7mrSSPC
+         HGm8xG/4Ta3QpXYSPP7XWsPA9YNltaWC4JggqzbO9WwVsfl0vb5BfuxUDkjWwv9vKg/T
+         mKWL3ukVIGvnO6Z5EqHxfrgnsX8yTmK7QIVJ7gSk5gP8K2XYU+uRSKDkaihomsgqEdId
+         17O69hWF3z5cT3W9IWcAr/17fRVeAFS4KuseV6xrlgQeXdaWqo1gfmwy+IiDC6LyX8rd
+         mnFw==
+X-Gm-Message-State: ACrzQf2rNGdDIaIwtZ6zeBStrV/SAVqJTgeqp18MyxpShVZ3lyvKY9O6
+        GDH0hniaMZKp88PJ0ZZWg43FRGgdZpq1GJhlkKlTiQ==
+X-Google-Smtp-Source: AMsMyM5NryrBEVL92yY+4fuy+BVBZ1+RXYvsGixaWGVhnPJpn73+WzMltR4/AwjeQsfiPg1+Pmsg1dar/SGUopxBg/U=
+X-Received: by 2002:a17:906:fe04:b0:777:b13d:30a6 with SMTP id
+ wy4-20020a170906fe0400b00777b13d30a6mr12022670ejb.248.1666291414788; Thu, 20
+ Oct 2022 11:43:34 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221018200125.848471-1-jthoughton@google.com>
- <CAHbLzkoAeXhpJ2_eM6uYU9kuqNsT25NubOZZG6E1mFngYREuPg@mail.gmail.com> <Y1BIHxIbVIc18zBj@monkey>
-In-Reply-To: <Y1BIHxIbVIc18zBj@monkey>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Thu, 20 Oct 2022 11:42:36 -0700
-Message-ID: <CAHbLzkrQsg8NVio+uLz6vbgY1q4LdK3DVH1ET2kj32caqPxyBw@mail.gmail.com>
-Subject: Re: [PATCH] hugetlbfs: don't delete error page from pagecache
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     James Houghton <jthoughton@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Axel Rasmussen <axelrasmussen@google.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
+References: <20221003214501.2050087-1-connoro@google.com> <20221003214501.2050087-2-connoro@google.com>
+ <73859883-78c4-1080-7846-e8d644ad397a@redhat.com>
+In-Reply-To: <73859883-78c4-1080-7846-e8d644ad397a@redhat.com>
+From:   "Connor O'Brien" <connoro@google.com>
+Date:   Thu, 20 Oct 2022 11:43:23 -0700
+Message-ID: <CALE1s+PPhC0Eb5Eojz+H5m96OXdc5qp6eOhj16vZgsP9n_UX1A@mail.gmail.com>
+Subject: Re: [RFC PATCH 01/11] locking/ww_mutex: Remove wakeups from under mutex::wait_lock
+To:     Waiman Long <longman@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-team@android.com,
+        John Stultz <jstultz@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Qais Yousef <qais.yousef@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,68 +83,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 11:55 AM Mike Kravetz <mike.kravetz@oracle.com> wrote:
+On Tue, Oct 4, 2022 at 9:01 AM Waiman Long <longman@redhat.com> wrote:
 >
-> On 10/19/22 11:31, Yang Shi wrote:
-> > On Tue, Oct 18, 2022 at 1:01 PM James Houghton <jthoughton@google.com> wrote:
-> > >
-> > > This change is very similar to the change that was made for shmem [1],
-> > > and it solves the same problem but for HugeTLBFS instead.
-> > >
-> > > Currently, when poison is found in a HugeTLB page, the page is removed
-> > > from the page cache. That means that attempting to map or read that
-> > > hugepage in the future will result in a new hugepage being allocated
-> > > instead of notifying the user that the page was poisoned. As [1] states,
-> > > this is effectively memory corruption.
-> > >
-> > > The fix is to leave the page in the page cache. If the user attempts to
-> > > use a poisoned HugeTLB page with a syscall, the syscall will fail with
-> > > EIO, the same error code that shmem uses. For attempts to map the page,
-> > > the thread will get a BUS_MCEERR_AR SIGBUS.
-> > >
-> > > [1]: commit a76054266661 ("mm: shmem: don't truncate page if memory failure happens")
-> > >
-> > > Signed-off-by: James Houghton <jthoughton@google.com>
+> On 10/3/22 17:44, Connor O'Brien wrote:
+> > diff --git a/kernel/locking/ww_mutex.h b/kernel/locking/ww_mutex.h
+> > index 56f139201f24..dfc174cd96c6 100644
+> > --- a/kernel/locking/ww_mutex.h
+> > +++ b/kernel/locking/ww_mutex.h
+> > @@ -161,6 +161,11 @@ static inline void lockdep_assert_wait_lock_held(struct rt_mutex *lock)
 > >
-> > Thanks for the patch. Yes, we should do the same thing for hugetlbfs.
-> > When I was working on shmem I did look into hugetlbfs too. But the
-> > problem is we actually make the whole hugetlb page unavailable even
-> > though just one 4K sub page is hwpoisoned. It may be fine to 2M
-> > hugetlb page, but a lot of memory may be a huge waste for 1G hugetlb
-> > page, particular for the page fault path.
+> >   #endif /* WW_RT */
+> >
+> > +void ww_ctx_wake(struct ww_acquire_ctx *ww_ctx)
+> > +{
+> > +     wake_up_q(&ww_ctx->wake_q);
+> > +}
+> > +
+> >   /*
+> >    * Wait-Die:
+> >    *   The newer transactions are killed when:
+> > @@ -284,7 +289,7 @@ __ww_mutex_die(struct MUTEX *lock, struct MUTEX_WAITER *waiter,
+> >   #ifndef WW_RT
+> >               debug_mutex_wake_waiter(lock, waiter);
+> >   #endif
+> > -             wake_up_process(waiter->task);
+> > +             wake_q_add(&ww_ctx->wake_q, waiter->task);
+> >       }
+> >
+> >       return true;
+> > @@ -331,7 +336,7 @@ static bool __ww_mutex_wound(struct MUTEX *lock,
+> >                * wakeup pending to re-read the wounded state.
+> >                */
+> >               if (owner != current)
+> > -                     wake_up_process(owner);
+> > +                     wake_q_add(&ww_ctx->wake_q, owner);
+> >
+> >               return true;
+> >       }
+> > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> > index ee28253c9ac0..617e737392be 100644
+> > --- a/kernel/sched/core.c
+> > +++ b/kernel/sched/core.c
+> > @@ -1013,6 +1013,13 @@ void wake_up_q(struct wake_q_head *head)
+> >               wake_up_process(task);
+> >               put_task_struct(task);
+> >       }
+> > +     /*
+> > +      * XXX connoro: seems this is needed now that ww_ctx_wake() passes in a
+> > +      * wake_q_head that is embedded in struct ww_acquire_ctx rather than
+> > +      * declared locally.
+> > +      */
+> > +     head->first = node;
+> > +     head->lastp = &head->first;
+> >   }
+> >
 >
-> One thing that complicated this a bit is the vmemmap optimizations for
-> hugetlb.  However, I believe Naoya may have addressed this recently.
->
-> > So I discussed this with Mike offline last year, and I was told Google
-> > was working on PTE mapped hugetlb page. That should be able to solve
-> > the problem. And we'd like to have the high-granularity hugetlb
-> > mapping support as the predecessor.
->
-> Yes, I went back in my notes and noticed it had been one year.  No offense
-> intended to James and his great work on HGM.  However, in hindsight we should
-> have fixed this in some way without waiting for a HGM based.
->
-> > There were some other details, but I can't remember all of them, I
-> > have to refresh my memory by rereading the email discussions...
->
-> I think the complicating factor was vmemmap optimization.  As mentioned
-> above, this may have already been addressed by Naoya in patches to
-> indicate which sub-page(s) had the actual error.
->
-> As Yang Shi notes, this patch makes the entire hugetlb page inaccessible.
-> With some work, we could allow reads to everything but the sub-page with
-> error.  However, this should be much easier with HGM.  And, we could
-> potentially even do page faults everywhere but the sub-page with error.
->
-> I still think it may be better to wait for HGM instead of trying to do
-> read access to all but sub-page with error now.  But, entirely open to
-> other opinions.
+> You shouldn't do wake_q_init() here in wake_up_q(). Instead, you should
+> do it in ww_ctx_wake() right after the wake_up_q() call.
 
-I have no strong preference about which goes first.
-
+Thanks, will fix this in the next version.
 
 >
-> I plan to do a review of this patch a little later.
-> --
-> Mike Kravetz
+> Cheers,
+> Longman
+>
