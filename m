@@ -2,207 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE2F26056BD
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 07:26:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3EDF6056C1
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 07:26:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229789AbiJTF0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 01:26:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38386 "EHLO
+        id S229943AbiJTF0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 01:26:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbiJTF0M (ORCPT
+        with ESMTP id S229519AbiJTF0x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 01:26:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA10918DA84
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 22:26:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666243570;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+RSA0RntEqf7QmuVbJ4H4/9krr36kS4aFkfU2E/RUmU=;
-        b=QptxlI3GcWlYlGaR0t32Q90hYid+JX69jd+sE63AsZlcMCDy/ZAbcH+VVIZuLqvhWUxDTK
-        DX7CAcpDotNya32bWsahbhkCX5Au3DLnAtC+nZ677ZDfBGisnKROKl6GpSB4FmDuhtlt00
-        CAuGuSGhG6phANK7RXJwY+ChWCzFfv8=
-Received: from mail-oa1-f71.google.com (mail-oa1-f71.google.com
- [209.85.160.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-422-hVXrWNvvOjyXVOZ7-EZGSw-1; Thu, 20 Oct 2022 01:26:09 -0400
-X-MC-Unique: hVXrWNvvOjyXVOZ7-EZGSw-1
-Received: by mail-oa1-f71.google.com with SMTP id 586e51a60fabf-136fd83729dso9282384fac.20
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 22:26:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+RSA0RntEqf7QmuVbJ4H4/9krr36kS4aFkfU2E/RUmU=;
-        b=T4VxDChm63KocfimthL8kBBd48bqkuLNL8GorOdZKQ0cAsIv9/HawFYdmnW3V6zv8F
-         N4c6+iO5Fcn0wmEbKD1C3B7pgkxI3WD4sNlYCmryGbwv10+TGvXGS9f75fLYI1Q9efo9
-         rLoZEQWC82vKIuLsC3T85YYp1XtsrUiIelKP/lwqGcM3cVR5b4O2I7xfVt/EE5Mqvl4u
-         UX13Ha4AD8o6DUi7OA/KbrDRJHLguPo33YJqurcyWUhLMkn7Sld7gsWFk6BHMtOcb3F6
-         nCyPnv+fCIXCwRrRz58jgeXKkENqqYuPnfOwzLmXHZ7ufKUyWd0k9DTQmue1MjMN/Ybw
-         VqfQ==
-X-Gm-Message-State: ACrzQf04yAMGPe1XbO/zp9sUy6qwhureWr7nvautG5/oE1lPjldtU3sB
-        EX5vDVLtmEHCNqpN1DuTFTJbkxp6ZwmNOtUSEQzwd7y0rfdRdDIw7jpRD4KHzIaKxICSmsyMdqD
-        lnyyDutjBRFWMTuuifpVdrUEr8QGdFTMkk4TVt+hV
-X-Received: by 2002:a9d:12a8:0:b0:661:a06f:33d7 with SMTP id g37-20020a9d12a8000000b00661a06f33d7mr6035172otg.237.1666243567543;
-        Wed, 19 Oct 2022 22:26:07 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5nSvUC0HcWvAHFOesU6EeZfKDqnoOFz1h2xahVvfHticSDonuZxkzjvKKM0os702cuEIZFj9+ghX/ZL0FOJ/Y=
-X-Received: by 2002:a9d:12a8:0:b0:661:a06f:33d7 with SMTP id
- g37-20020a9d12a8000000b00661a06f33d7mr6035164otg.237.1666243567310; Wed, 19
- Oct 2022 22:26:07 -0700 (PDT)
+        Thu, 20 Oct 2022 01:26:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FDE91911D8;
+        Wed, 19 Oct 2022 22:26:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BC76CB82671;
+        Thu, 20 Oct 2022 05:26:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D077FC433C1;
+        Thu, 20 Oct 2022 05:26:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666243607;
+        bh=vAZmXggjSCZpIcGU5wkrL2Ub6Nof/q/Qn9/o5p8l1ZA=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=acXmbVM7o1Fp6FBk33RSXnCufre5ha3eZfjfq9gJOhnuGQF6qB9oWHBgvT1HZZZcq
+         byGruFKcw4Sx7fe2rhjxmuBhB0Ejy7L4aB2d0LtarcwWWIhiPA6dBcv7lB31Mq6G/u
+         tozJjODOQ0RK1pdsnTn/EtV1DLJMd4/iovNgv4eDR4MQJ2JJlo7B61/lyno7xoWdgL
+         upC5qjiUJ4PQCOpI/GWCgpY9mqk3o1jAUfeKcAUY4TmoRrI0ox1OpHzsiLBxqmpmuw
+         PPzoiJG+IAvPVLVNqnzSxEQp+hzjolIJPM9ASHK4I9WvJM/yrwOXTsySLA9f7J4IMY
+         VnGZLLULxjrlA==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     kernel test robot <lkp@intel.com>,
+        Tomislav =?utf-8?Q?Po=C5=BEega?= <pozega.tomislav@gmail.com>,
+        llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Daniel Golle <daniel@makrotopia.org>,
+        linux-wireless@vger.kernel.org
+Subject: Re: drivers/net/wireless/ralink/rt2x00/rt2800lib.c:9439:15: warning: result of comparison of constant -7 with expression of type 'char' is always false
+References: <202210191553.vO9rtKe5-lkp@intel.com> <87pmeol020.fsf@kernel.org>
+        <CAHmME9qFKMLJiZa=pg9bnBWHSfbgP-+yimteL_t4sxuepQ6bAg@mail.gmail.com>
+        <CAHmME9ocXJMTmCQfi1NY+zOw-r5VCe_Z48q5VJCZxR4Hj=1oZA@mail.gmail.com>
+        <CAHmME9oeHMPjg5aCdv4d5pY_ue9ufgaS4FQkYRRWAX_E0zFtfw@mail.gmail.com>
+Date:   Thu, 20 Oct 2022 08:26:40 +0300
+In-Reply-To: <CAHmME9oeHMPjg5aCdv4d5pY_ue9ufgaS4FQkYRRWAX_E0zFtfw@mail.gmail.com>
+        (Jason A. Donenfeld's message of "Wed, 19 Oct 2022 02:15:33 -0600")
+Message-ID: <87lepb2hgv.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-References: <1666137032-28192-1-git-send-email-si-wei.liu@oracle.com> <1666137032-28192-4-git-send-email-si-wei.liu@oracle.com>
-In-Reply-To: <1666137032-28192-4-git-send-email-si-wei.liu@oracle.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Thu, 20 Oct 2022 13:25:55 +0800
-Message-ID: <CACGkMEuDn+Y8OEw6uK+FC0oOOd6+kj0EXS4Fm-+54GjrqY3_Gw@mail.gmail.com>
-Subject: Re: [PATCH v2 3/4] vdpa: show dev config as-is in "vdpa dev show" output
-To:     Si-Wei Liu <si-wei.liu@oracle.com>
-Cc:     mst@redhat.com, virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 8:56 AM Si-Wei Liu <si-wei.liu@oracle.com> wrote:
->
-> Live migration of vdpa would typically require re-instate vdpa
-> device with an idential set of configs on the destination node,
-> same way as how source node created the device in the first
-> place. In order to save orchestration software from memorizing
-> and keeping track of vdpa config, it will be helpful if the vdpa
-> tool provides the aids for exporting the initial configs from
-> which vdpa device was created as-is. The "vdpa dev show" command
-> seems to be the right vehicle for that. It is unlike the "vdpa dev
-> config show" command output that usually goes with the live value
-> in the device config space, which is not quite reliable subject to
-> the dynamics of feature negotiation and possible change in device
-> config space.
->
-> Examples:
->
-> 1) Create vDPA by default without any config attribute
->
-> $ vdpa dev add mgmtdev pci/0000:41:04.2 name vdpa0
-> $ vdpa dev show vdpa0
-> vdpa0: type network mgmtdev pci/0000:41:04.2 vendor_id 5555 max_vqs 9 max_vq_size 256
-> $ vdpa dev -jp show vdpa0
-> {
->     "dev": {
->         "vdpa0": {
->             "type": "network",
->             "mgmtdev": "pci/0000:41:04.2",
->             "vendor_id": 5555,
->             "max_vqs": 9,
->             "max_vq_size": 256,
->         }
->     }
-> }
->
-> 2) Create vDPA with config attribute(s) specified
->
-> $ vdpa dev add mgmtdev pci/0000:41:04.2 name vdpa0 \
->     mac e4:11:c6:d3:45:f0 max_vq_pairs 4
-> $ vdpa dev show
-> vdpa0: type network mgmtdev pci/0000:41:04.2 vendor_id 5555 max_vqs 9 max_vq_size 256
->   virtio_config: mac e4:11:c6:d3:45:f0 max_vq_pairs 4
-> $ vdpa dev -jp show
-> {
->     "dev": {
->         "vdpa0": {
->             "type": "network",
->             "mgmtdev": "pci/0000:41:04.2",
->             "vendor_id": 5555,
->             "max_vqs": 9,
->             "max_vq_size": 256,
->             "virtio_config": {
->                 "mac": "e4:11:c6:d3:45:f0",
->                 "max_vq_pairs": 4
->             }
->         }
->     }
-> }
->
-> Signed-off-by: Si-Wei Liu <si-wei.liu@oracle.com>
-> ---
->  drivers/vdpa/vdpa.c | 39 +++++++++++++++++++++++++++++++++++++++
->  1 file changed, 39 insertions(+)
->
-> diff --git a/drivers/vdpa/vdpa.c b/drivers/vdpa/vdpa.c
-> index 566c1c6..91eca6d 100644
-> --- a/drivers/vdpa/vdpa.c
-> +++ b/drivers/vdpa/vdpa.c
-> @@ -677,6 +677,41 @@ static int vdpa_nl_cmd_dev_del_set_doit(struct sk_buff *skb, struct genl_info *i
->  }
->
->  static int
-> +vdpa_dev_cfgattrs_fill(struct vdpa_device *vdev, struct sk_buff *msg, u32 device_id)
-> +{
-> +       struct vdpa_dev_set_config *cfg = &vdev->vdev_cfg;
-> +       int err = -EMSGSIZE;
-> +
-> +       if (!cfg->mask)
-> +               return 0;
-> +
-> +       switch (device_id) {
-> +       case VIRTIO_ID_NET:
-> +               if ((cfg->mask & BIT_ULL(VDPA_ATTR_DEV_NET_CFG_MACADDR)) != 0 &&
-> +                   nla_put(msg, VDPA_ATTR_DEV_NET_CFG_MACADDR,
-> +                           sizeof(cfg->net.mac), cfg->net.mac))
-> +                       return err;
-> +               if ((cfg->mask & BIT_ULL(VDPA_ATTR_DEV_NET_CFG_MTU)) != 0 &&
-> +                   nla_put_u16(msg, VDPA_ATTR_DEV_NET_CFG_MTU, cfg->net.mtu))
-> +                       return err;
-> +               if ((cfg->mask & BIT_ULL(VDPA_ATTR_DEV_NET_CFG_MAX_VQP)) != 0 &&
-> +                   nla_put_u16(msg, VDPA_ATTR_DEV_NET_CFG_MAX_VQP,
-> +                               cfg->net.max_vq_pairs))
-> +                       return err;
-> +               break;
+"Jason A. Donenfeld" <Jason@zx2c4.com> writes:
 
-This makes me think if we can reuse the virtio_net_config structure
-other than duplicate it slowly with a dedicated nested structure
-inside vdpa_dev_set_config then we can reuse the
-vdpa_dev_net_config_fill().
-
-Thanks
-
-> +       default:
-> +               break;
-> +       }
-> +
-> +       if ((cfg->mask & BIT_ULL(VDPA_ATTR_DEV_FEATURES)) != 0 &&
-> +           nla_put_u64_64bit(msg, VDPA_ATTR_DEV_FEATURES,
-> +                             cfg->device_features, VDPA_ATTR_PAD))
-> +               return err;
-> +
-> +       return 0;
-> +}
-> +
-> +static int
->  vdpa_dev_fill(struct vdpa_device *vdev, struct sk_buff *msg, u32 portid, u32 seq,
->               int flags, struct netlink_ext_ack *extack)
->  {
-> @@ -715,6 +750,10 @@ static int vdpa_nl_cmd_dev_del_set_doit(struct sk_buff *skb, struct genl_info *i
->         if (nla_put_u16(msg, VDPA_ATTR_DEV_MIN_VQ_SIZE, min_vq_size))
->                 goto msg_err;
+> On Wed, Oct 19, 2022 at 2:02 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+>>
+>> On Wed, Oct 19, 2022 at 1:59 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+>> >
+>> > On Wed, Oct 19, 2022 at 1:55 AM Kalle Valo <kvalo@kernel.org> wrote:
+>> > >
+>> > > + jason, linux-wireless
+>> > >
+>> > > kernel test robot <lkp@intel.com> writes:
+>> > >
+>> > > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+>> > > > head:   aae703b02f92bde9264366c545e87cec451de471
+>> > > > commit: dab902fe1d29dc0fa1dccc8d13dc89ffbf633881 wifi: rt2x00: add TX
+>> > > > LOFT calibration for MT7620
+>> > > > date:   4 weeks ago
+>> > > > config: arm64-allmodconfig
+>> > > > compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project
+>> > > > 791a7ae1ba3efd6bca96338e10ffde557ba83920)
+>> > > > reproduce (this is a W=1 build):
+>> > > >         wget
+>> > > > https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross
+>> > > > -O ~/bin/make.cross
+>> > > >         chmod +x ~/bin/make.cross
+>> > > >         # install arm64 cross compiling tool for clang build
+>> > > >         # apt-get install binutils-aarch64-linux-gnu
+>> > > >         #
+>> > > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=dab902fe1d29dc0fa1dccc8d13dc89ffbf633881
+>> > > >         git remote add linus
+>> > > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>> > > >         git fetch --no-tags linus master
+>> > > >         git checkout dab902fe1d29dc0fa1dccc8d13dc89ffbf633881
+>> > > >         # save the config file
+>> > > >         mkdir build_dir && cp config build_dir/.config
+>> > > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1
+>> > > > O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/amd/amdgpu/
+>> > > > drivers/net/wireless/ralink/rt2x00/ drivers/staging/media/
+>> > > >
+>> > > > If you fix the issue, kindly add following tag where applicable
+>> > > > | Reported-by: kernel test robot <lkp@intel.com>
+>> > > >
+>> > > > All warnings (new ones prefixed by >>):
+>> > > >
+>> > > >>> drivers/net/wireless/ralink/rt2x00/rt2800lib.c:9439:15: warning:
+>> > > >> result of comparison of constant -7 with expression of type 'char'
+>> > > >> is always false [-Wtautological-constant-out-of-range-compare]
+>> > > >            gerr = (gerr < -0x07) ? -0x07 : (gerr > 0x05) ? 0x05 : gerr;
+>> > > >                    ~~~~ ^ ~~~~~
+>> > > >    drivers/net/wireless/ralink/rt2x00/rt2800lib.c:9443:15: warning: result of comparison of constant -31 with expression of type 'char' is always false [-Wtautological-constant-out-of-range-compare]
+>> > > >            perr = (perr < -0x1f) ? -0x1f : (perr > 0x1d) ? 0x1d : perr;
+>> > > >                    ~~~~ ^ ~~~~~
+>> > > >    2 warnings generated.
+>> > >
+>> > > I believe this patch should fix it:
+>> > >
+>> > > https://patchwork.kernel.org/project/linux-wireless/patch/20221018202734.140489-1-Jason@zx2c4.com/
+>> > >
+>> > > Jason, is my understanding correct?
+>> >
+>> > That's a different bug caused by the same pitfall: assuming char is
+>> > signed. I'll send a patch for that function too.
+>>
+>>
+>> Actually, maybe I should fix the whole file? Patch incoming.
 >
-> +       err = vdpa_dev_cfgattrs_fill(vdev, msg, device_id);
-> +       if (err)
-> +               goto msg_err;
-> +
->         genlmsg_end(msg, hdr);
->         return 0;
->
-> --
-> 1.8.3.1
->
+> Okay here's a v2 that handles it driver-wide:
+> https://lore.kernel.org/linux-wireless/20221019081417.3402284-1-Jason@zx2c4.com/
+> (Might take a few minutes to hit lore.)
 
+Great, thanks Jason.
+
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
