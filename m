@@ -2,112 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A96756059B6
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 10:28:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAB6B6059B8
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 10:28:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbiJTI2F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 04:28:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50976 "EHLO
+        id S229981AbiJTI2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 04:28:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiJTI17 (ORCPT
+        with ESMTP id S229660AbiJTI2J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 04:27:59 -0400
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B0BD189808
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 01:27:58 -0700 (PDT)
-Received: by mail-qv1-xf2d.google.com with SMTP id mg6so13048576qvb.10
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 01:27:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vAYFmXkINTjJjSvosD7JyY8mMrc36MRPPjiOcaF+K1Y=;
-        b=MF9mY9LrtxQJ9y/MfIehqQFud5E+lhTwm+09rzk0yD/RFbw66AjuV6Gto/DzQLulq4
-         pD0YcPljm4H5M/iJghYWZhGuPmWLVvFDT6rdgTx2b5JWxLif3z461paHZqQMJTSAHCjt
-         nRkOudsDu+gEIX2T0wrVipLSdCxfJoDMUVaCs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vAYFmXkINTjJjSvosD7JyY8mMrc36MRPPjiOcaF+K1Y=;
-        b=4gSvSls2SM8NqnO8oUlI3GLOyMHcmZncUpF9FK+UI/TVSjHp1rnwetdfP5L62pZXJQ
-         iQHcGrZlqJ5l/sj6QCJd1eYfnxD5cBgtMYG4UzsfX/wBfzUMHPyPSHh5mPQbut0yUot8
-         32WuqwCI5EOyCvCfr+peVDjwXV75VsGkNimx1F8qPBQ/3TOGXLue8XBl8TZ3N1CaZrsr
-         sn01wRNSJHmtImuQstPbh05twsdW23FYyBDH9UlGFO4pbVBvyFThgOZjQ8DjR3QIx6b8
-         bADj6S08a9VSqoF0vW78nvWvY/fiW30MXrGzXlPJvRnhNnItzqZ1BUOJHlUM7y3qXJj9
-         /XVQ==
-X-Gm-Message-State: ACrzQf2sJ0R+YvTz2B5lUb7EcwS9uFLxrii1k8z871mZgxMmqHZY0vys
-        GC76OX4F68l6pc/urh5QZdFcHQ==
-X-Google-Smtp-Source: AMsMyM4gVknx/zGimNxQCk6OKQeMPCHi9kxUIY0rGsdAUdUJvhROid4TAt1xP4mWJtITy4EJr5D3yw==
-X-Received: by 2002:a0c:f54f:0:b0:4b1:872e:102 with SMTP id p15-20020a0cf54f000000b004b1872e0102mr10244381qvm.123.1666254477516;
-        Thu, 20 Oct 2022 01:27:57 -0700 (PDT)
-Received: from smtpclient.apple (c-73-148-104-166.hsd1.va.comcast.net. [73.148.104.166])
-        by smtp.gmail.com with ESMTPSA id h10-20020ac8744a000000b0039953dcc480sm5564728qtr.88.2022.10.20.01.27.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Oct 2022 01:27:57 -0700 (PDT)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Joel Fernandes <joel@joelfernandes.org>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH v3] rcu: Make call_rcu() lazy only when CONFIG_RCU_LAZY is enabled
-Date:   Thu, 20 Oct 2022 04:27:56 -0400
-Message-Id: <07E5D3DD-2AA5-48B2-ADCF-48004D889724@joelfernandes.org>
-References: <20221020010242.453121-1-qiang1.zhang@intel.com>
-Cc:     paulmck@kernel.org, frederic@kernel.org, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20221020010242.453121-1-qiang1.zhang@intel.com>
-To:     Zqiang <qiang1.zhang@intel.com>
-X-Mailer: iPhone Mail (19G82)
+        Thu, 20 Oct 2022 04:28:09 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F1FD18982F;
+        Thu, 20 Oct 2022 01:28:07 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 55D9D66023A3;
+        Thu, 20 Oct 2022 09:28:05 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1666254485;
+        bh=Dm2sSpcy/WPT5qaMKRDCmxl/L7RXt0Zoucvbb30uh6g=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Q0pak6ywHzVJvhN8eGTE2FfIQO1kLkFxLeg3dP2mvNeHMiNAhPJiH6dHxHpl12qTS
+         J+8nY/2EVFTQgzz9+8s8R+lpiGRdx3sFVnpvKHLr+zDlEJi97gP7pcMbkRVYoah7tZ
+         Fpo912yLr/OKsUnex8YjcPEk9IH6tz597jXROLsb/CbNTkoMlg+thZ57HGmyBoSKtA
+         0dJPuRZZDHr5UUx54YNNFpEc/7e8LJ48W8fIK0g79/hRW+OUfi7gEidO6uzzg2biCO
+         BbE2ThRTNpQ/cQD87churaTOiy/4WhJHjnKdWi/iYUwyNJlokS/mxqQSAfs5RfiLr6
+         NaLDOuU07xU7w==
+Message-ID: <b33b9d2a-f6d5-b2a7-bcb8-1ed2303c04b4@collabora.com>
+Date:   Thu, 20 Oct 2022 10:28:02 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH 2/2] dt-bindings: iio: adc: mediatek,mt2701-auxadc: new
+ 32k clock
+Content-Language: en-US
+To:     Daniel Golle <daniel@makrotopia.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-iio@vger.kernel.org
+Cc:     Gwendal Grignou <gwendal@chromium.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <f98ed7f3fc15a0614443a57427d46ce17ec2e0cc.1666190235.git.daniel@makrotopia.org>
+ <dbe88fd2f7ea5b2f419dce6ecb48c20e96e2e634.1666190235.git.daniel@makrotopia.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <dbe88fd2f7ea5b2f419dce6ecb48c20e96e2e634.1666190235.git.daniel@makrotopia.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-> On Oct 19, 2022, at 8:56 PM, Zqiang <qiang1.zhang@intel.com> wrote:
->=20
-> =EF=BB=BFCurrently, regardless of whether the CONFIG_RCU_LAZY is enabled,
-> invoke the call_rcu() is always lazy, it also means that when
-> CONFIG_RCU_LAZY is disabled, invoke the call_rcu_flush() is also
-> lazy. therefore, this commit make call_rcu() lazy only when
-> CONFIG_RCU_LAZY is enabled.
->=20
-> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+Il 19/10/22 16:38, Daniel Golle ha scritto:
+> Newer MediaTek SoCs need an additional clock to be brought up for
+> AUXADC to work. Add this new optional clock to
+> mediatek,mt2701-auxadc.yaml.
+> 
+> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
 > ---
-> v1->v2->v3:
-> Use IS_ENABLED(CONFIG_RCU_LAZY) to the existing function of the same name.=
-=20
+>   .../bindings/iio/adc/mediatek,mt2701-auxadc.yaml          | 8 ++++++--
+>   1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/iio/adc/mediatek,mt2701-auxadc.yaml b/Documentation/devicetree/bindings/iio/adc/mediatek,mt2701-auxadc.yaml
+> index 7f79a06e76f596..c2a1813dd54152 100644
+> --- a/Documentation/devicetree/bindings/iio/adc/mediatek,mt2701-auxadc.yaml
+> +++ b/Documentation/devicetree/bindings/iio/adc/mediatek,mt2701-auxadc.yaml
+> @@ -44,10 +44,14 @@ properties:
+>       maxItems: 1
+>   
+>     clocks:
+> -    maxItems: 1
+> +    maxItems: 2
+> +    minItems: 1
+>   
+>     clock-names:
+> -    const: main
+> +    items:
+> +      - const: main
+> +      - const: 32k
 
-Acked-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+You're adding this for MT7986, and I don't see any 32KHz ADC clock on that SoC.
+I suppose that your '32k' clock is CLK_INFRA_ADC_FRC_CK, currently parented to
+'csw_f26m_sel', so that's 26MHz, not 32KHz.
 
-Best,
+Since you'll need the same changes for thermal as well, I would consider setting
+"infra_adc_frc" as a parent of "infra_adc_26m", like so:
 
- - J
+	GATE_INFRA1(CLK_INFRA_ADC_26M_CK, "infra_adc_26m", "infra_adc_frc", 20),
+	GATE_INFRA1(CLK_INFRA_ADC_FRC_CK, "infra_adc_frc", "csw_f26m_sel", 21),
 
+...just because there's apparently no reason to have one of them enabled but not
+the other or, at least, it looks like we *always* need ADC_26M_CK enabled when
+ADC_FRC_CK is enabled.
 
-> kernel/rcu/tree.c | 2 +-
-> 1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> index abc615808b6e..1f6a4b2b13da 100644
-> --- a/kernel/rcu/tree.c
-> +++ b/kernel/rcu/tree.c
-> @@ -2887,7 +2887,7 @@ EXPORT_SYMBOL_GPL(call_rcu_flush);
->  */
-> void call_rcu(struct rcu_head *head, rcu_callback_t func)
-> {
-> -    return __call_rcu_common(head, func, true);
-> +    return __call_rcu_common(head, func, IS_ENABLED(CONFIG_RCU_LAZY));
-> }
-> EXPORT_SYMBOL_GPL(call_rcu);
->=20
-> --=20
-> 2.25.1
->=20
+Regards,
+Angelo
