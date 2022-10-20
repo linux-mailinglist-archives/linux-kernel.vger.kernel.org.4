@@ -2,91 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 518A3605A2B
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 10:50:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A167E605A3F
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 10:52:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230480AbiJTIuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 04:50:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53202 "EHLO
+        id S231304AbiJTIwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 04:52:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229973AbiJTIuT (ORCPT
+        with ESMTP id S230273AbiJTIvt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 04:50:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA9B011701C;
-        Thu, 20 Oct 2022 01:50:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4608561A9C;
-        Thu, 20 Oct 2022 08:50:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4BA31C4314B;
-        Thu, 20 Oct 2022 08:50:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666255817;
-        bh=E3xpOIEteQXFleAx3p+y6v3LsALPWIW5v62pwBCoKZs=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=O67hm3NpvRmveytv6hYHOUz+iOXQZLLmCvgytlYLBxXBHy1eutU2TbJJg5JQ1/rjR
-         kUsYaJcOAYXG+VbP8Wu5ppHwP060mIF959kOKbx4K61j1GeMFyK0NI/notPGrXzFGu
-         dt4KAbh+Cl3M6pEGANleJ8XeK065SRonVw8/ikwL3GhNVhlWV1EBoelgDGioknS278
-         wF/JZe661/08Ccu8hqj9KIF7DUKVmwDDm1Qkxww+55qJQhwd5AldRtqCWRmM9SBLwF
-         Y77HHfZ8mzpsHWZdO8Ayxnsdds2TiGC6YP4Wcf8tYQb56fXyPeubVd3t+XE6o2orXF
-         cEKbtABD46BFg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DB7B1E270E3;
-        Thu, 20 Oct 2022 08:50:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v3] net: ipa: Proactively round up to kmalloc bucket size
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166625581689.27221.12370908891307752871.git-patchwork-notify@kernel.org>
-Date:   Thu, 20 Oct 2022 08:50:16 +0000
-References: <20221018092724.give.735-kees@kernel.org>
-In-Reply-To: <20221018092724.give.735-kees@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org, elder@linaro.org,
-        elder@kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 20 Oct 2022 04:51:49 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A30021911F7;
+        Thu, 20 Oct 2022 01:51:28 -0700 (PDT)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29K8hIaY010866;
+        Thu, 20 Oct 2022 08:51:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=rOo0Rw7hdoHqY3knTVoyqP0bdVcOO8+ZPUEIoL/qJt4=;
+ b=EZV2LjwT6BPmwEIW4TFD+1ZOF2sCHdGiZY2pqseyP7gGMTJIIh9ZhcIT3IwJarDBZqnD
+ Rx1UjXKLdZkKgkv+lEWzYkmB7ycZhjBeBNQbq5zFJp2npMnfb7cL9IAxq3TBJPMyzMYo
+ n7BrbOsp3ZaHtHo36WQzwe1kIp3zAnMo/KrxfoFoJUDF4B93nJ11NSODKAQ5QeRhfQl8
+ KiiM6OKWOnU+E6XozBtfm6kNZhsTfHnCnFz6eOKWb9rljzj5erTlTAXq/Ysup1twhEUx
+ jbjVmrIBhPXqDtBEJZJF2FmB7QWYgJrHSySD78Xz4t+5TfjZHSJdLS6JF2MD7TAWR0wE jA== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kb32hr6jm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 20 Oct 2022 08:51:16 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29K8pEuk005033;
+        Thu, 20 Oct 2022 08:51:14 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma03ams.nl.ibm.com with ESMTP id 3k7mg98m0u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 20 Oct 2022 08:51:14 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29K8pBnD42402256
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 20 Oct 2022 08:51:11 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5699242045;
+        Thu, 20 Oct 2022 08:51:11 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D461442041;
+        Thu, 20 Oct 2022 08:51:10 +0000 (GMT)
+Received: from oc-nschnelle.boeblingen.de.ibm.com (unknown [9.155.199.46])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 20 Oct 2022 08:51:10 +0000 (GMT)
+Message-ID: <f3551bb461b3ef3cfc1a0c644093816be1835b3f.camel@linux.ibm.com>
+Subject: Re: [PATCH 3/5] iommu/s390: Use RCU to allow concurrent domain_list
+ iteration
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Matthew Rosato <mjrosato@linux.ibm.com>, iommu@lists.linux.dev,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Gerd Bayer <gbayer@linux.ibm.com>,
+        Pierre Morel <pmorel@linux.ibm.com>,
+        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        svens@linux.ibm.com, linux-kernel@vger.kernel.org
+Date:   Thu, 20 Oct 2022 10:51:10 +0200
+In-Reply-To: <Y0/lMCQ8oeXJ2HTg@nvidia.com>
+References: <20221018145132.998866-1-schnelle@linux.ibm.com>
+         <20221018145132.998866-4-schnelle@linux.ibm.com>
+         <Y07Dz/NROAMI0Hku@nvidia.com>
+         <8e268ab5e0dadf86be5fd7ffaa9debb76cea67f3.camel@linux.ibm.com>
+         <Y0/lMCQ8oeXJ2HTg@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 8wWJRvvydOu6sIg9_UYBhgDAfptnNEhD
+X-Proofpoint-ORIG-GUID: 8wWJRvvydOu6sIg9_UYBhgDAfptnNEhD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-20_02,2022-10-19_04,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
+ priorityscore=1501 mlxscore=0 lowpriorityscore=0 bulkscore=0
+ impostorscore=0 adultscore=0 phishscore=0 clxscore=1015 mlxlogscore=999
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210200049
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net-next.git (master)
-by Paolo Abeni <pabeni@redhat.com>:
-
-On Tue, 18 Oct 2022 02:28:27 -0700 you wrote:
-> Instead of discovering the kmalloc bucket size _after_ allocation, round
-> up proactively so the allocation is explicitly made for the full size,
-> allowing the compiler to correctly reason about the resulting size of
-> the buffer through the existing __alloc_size() hint.
+On Wed, 2022-10-19 at 08:53 -0300, Jason Gunthorpe wrote:
+> On Wed, Oct 19, 2022 at 10:31:21AM +0200, Niklas Schnelle wrote:
+> > On Tue, 2022-10-18 at 12:18 -0300, Jason Gunthorpe wrote:
+> > > On Tue, Oct 18, 2022 at 04:51:30PM +0200, Niklas Schnelle wrote:
+> > > 
+> > > > @@ -84,7 +88,7 @@ static void __s390_iommu_detach_device(struct zpci_dev *zdev)
+> > > >  		return;
+> > > >  
+> > > >  	spin_lock_irqsave(&s390_domain->list_lock, flags);
+> > > > -	list_del_init(&zdev->iommu_list);
+> > > > +	list_del_rcu(&zdev->iommu_list);
+> > > >  	spin_unlock_irqrestore(&s390_domain->list_lock, flags);
+> > > 
+> > > This doesn't seem obviously OK, the next steps remove the translation
+> > > while we can still have concurrent RCU protected flushes going on.
+> > > 
+> > > Is it OK to call the flushes when after the zpci_dma_exit_device()/etc?
+> > > 
+> > > Jason
+> > 
+> > Interesting point. So for the flushes themselves this should be fine,
+> > once the zpci_unregister_ioat() is executed all subsequent and ongoing
+> > IOTLB flushes should return an error code without further adverse
+> > effects. Though I think we do still have an issue in the IOTLB ops for
+> > this case as that error would skip the IOTLB flushes of other attached
+> > devices.
 > 
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: netdev@vger.kernel.org
-> Reviewed-by: Alex Elder <elder@linaro.org>
-> Link: https://lore.kernel.org/lkml/4d75a9fd-1b94-7208-9de8-5a0102223e68@ieee.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+> That sounds bad
+
+Thankfully it's very easy to fix since our IOTLB flushes are per PCI
+function, I just need to continue the loop in the IOTLB ops on error
+instead of breaking out of it and skipping the other devices. Makes no
+sense anyway to skip  devices just because there is an error on another
+device.
+
 > 
-> [...]
+> 
+> > The bigger question and that seems independent from RCU is how/if
+> > detach is supposed to work if there are still DMAs ongoing. Once we do
+> > the zpci_unregister_ioat() any DMA request coming from the PCI device
+> > will be blocked and will lead to the PCI device being isolated (put
+> > into an error state) for attempting an invalid DMA. So I had expected
+> > that calls of detach/attach would happen without expected ongoing DMAs
+> > and thus IOTLB flushes? 
+> 
+> "ongoing DMA" from this device shouuld be stopped, it doesn't mean
+> that the other devices attached to the same domain are not also still
+> operating and also still having flushes. So now that it is RCU a flush
+> triggered by a different device will continue to see this now disabled
+> device and try to flush it until the grace period.
+> 
+> Jason
 
-Here is the summary with links:
-  - [v3] net: ipa: Proactively round up to kmalloc bucket size
-    https://git.kernel.org/netdev/net-next/c/36875a063b5e
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Ok that makes sense thanks for the explanation. So yes my assessment is
+still that in this situation the IOTLB flush is architected to return
+an error that we can ignore. Not the most elegant I admit but at least
+it's simple. Alternatively I guess we could use call_rcu() to do the
+zpci_unregister_ioat() but I'm not sure how to then make sure that a
+subsequent zpci_register_ioat() only happens after that without adding
+too much more logic.
 
