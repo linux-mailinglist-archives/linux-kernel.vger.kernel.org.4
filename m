@@ -2,178 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFA5C605ADE
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 11:16:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0A79605AF3
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 11:17:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229621AbiJTJQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 05:16:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42098 "EHLO
+        id S230136AbiJTJR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 05:17:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbiJTJQN (ORCPT
+        with ESMTP id S229610AbiJTJRZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 05:16:13 -0400
-Received: from smtp-fw-80006.amazon.com (smtp-fw-80006.amazon.com [99.78.197.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16BD1FAC7
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 02:15:58 -0700 (PDT)
+        Thu, 20 Oct 2022 05:17:25 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99AF81BFB97;
+        Thu, 20 Oct 2022 02:17:14 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id w18so45852899ejq.11;
+        Thu, 20 Oct 2022 02:17:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1666257359; x=1697793359;
-  h=message-id:date:mime-version:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:subject;
-  bh=50K2fOMXsk+lwezuCkWwD6hRARUwosKvthRX0IylFyg=;
-  b=DNfryAeHFlB6YklclwRRr50/rf2zxM//z5aObnNTLwgAwj6pw9FDRvZv
-   yC5CVyr8zs6P0wZMxsjcCHU3RM+bAZrRoDXCXTb2YH74HfBmEILyEw8Sx
-   dZxNKAbcQWi3V5D+O1UJVdQZKKfZsgiRFJDUuga+0M6q3uHBByckkx3HJ
-   U=;
-X-IronPort-AV: E=Sophos;i="5.95,198,1661817600"; 
-   d="scan'208";a="142228806"
-Subject: Re: [PATCH v2 1/1] mtd: spi-nor: micron-st: Enable locking for
- n25q256ax1/mt25qu256a
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-iad-1d-b48bc93b.us-east-1.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 09:15:50 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1d-b48bc93b.us-east-1.amazon.com (Postfix) with ESMTPS id 36EC7C0932;
-        Thu, 20 Oct 2022 09:15:46 +0000 (UTC)
-Received: from EX19D013UWA004.ant.amazon.com (10.13.138.207) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
- id 15.0.1497.42; Thu, 20 Oct 2022 09:15:46 +0000
-Received: from EX13MTAUEA001.ant.amazon.com (10.43.61.82) by
- EX19D013UWA004.ant.amazon.com (10.13.138.207) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.15;
- Thu, 20 Oct 2022 09:15:46 +0000
-Received: from [192.168.104.103] (10.85.143.175) by mail-relay.amazon.com
- (10.43.61.243) with Microsoft SMTP Server id 15.0.1497.42 via Frontend
- Transport; Thu, 20 Oct 2022 09:15:42 +0000
-Message-ID: <a1411e79-d0ec-31e7-a190-ec2622928070@amazon.com>
-Date:   Thu, 20 Oct 2022 12:15:41 +0300
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ijAZiBjO3w0y1kvusgRiOelSTdrXihYwCd2kzIFwaGs=;
+        b=EpuGO0hZUcyRg18HdoToRuQnkUQJhKA77WFdMukfQb/RbDQDxHL0enGmIn0EqusrB4
+         0Rfm2GO+gmrd+9/TiSSNoMDNlXyaP6I1ylJDndRamZ3q3ju5gwgYx5fmCG3vmibCcjua
+         g3kWybmZcLiVSfM6lorgbzJfSO+/CP5KNSjiUhUhsJbfz/b/9+XoaAaQE0LAQDjz/HsI
+         UBYjThQ4UdPQOMEHg1WDsUOMqMxM5wfkE/foRHAx+ilfv4pzZrcJ+3agR9GegscC/K4i
+         LkRmFhlqLz4t6+ZW+mKBRr8ESGCmGNt3e/1a6Cya6dii2DSDGEZie5xDGrMpROZj1Jgk
+         3ofw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ijAZiBjO3w0y1kvusgRiOelSTdrXihYwCd2kzIFwaGs=;
+        b=lyuwyIdU0i/xCge9r6g6q6djwJUyKaDAM7yqIKJRo/VWEGtiI7HT/viIFOclGfbN6r
+         GKKPCkGi9FnWz+maqF2px+gY0qFEPtMs1CSro37Vp2wHi1O+D9DIBZ+mX3Z7YItLRQCe
+         K5jk3Mx1wK/npXNas+RjyJsIm4g8qZPrsB/6n2x9e7+CWpDMdSTMCYNKG+tybqGBObqu
+         C8LGGJdBS9BUDonNVZqRr2zQXqhhZOfyuOAhFo+qgKTil0k360v8TsiVrui+2nO4dgZy
+         sY2yFF6bMAYZz7Vx6HRQ8+R/uvLVl8qj9GZCxMKsyBBu8CYkp44Eo8gMUqPCAjitBw7e
+         1i3g==
+X-Gm-Message-State: ACrzQf2CSsAQm3UsH8RYQJLYUXyvxWrShwuvrLMH3KUQb/oj62Mz1i8H
+        fsYRKAWTj1P/jg9+St25nAjYQTcgFsTF5FtVz0w=
+X-Google-Smtp-Source: AMsMyM4aprYfd77BrZhcLjIeRA3YKHSKMc9W9DhAYJ7Dgjpqn9yKGmc6i2ZKCYcolLWMgV/lb7UGii5PNx7S7USak3w=
+X-Received: by 2002:a17:907:6d9b:b0:78d:ce6a:3300 with SMTP id
+ sb27-20020a1709076d9b00b0078dce6a3300mr9640449ejc.91.1666257431179; Thu, 20
+ Oct 2022 02:17:11 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-To:     Michael Walle <michael@walle.cc>
-CC:     <tudor.ambarus@microchip.com>, <pratyush@kernel.org>,
-        <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
-        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <talel@amazon.com>, <jonnyc@amazon.com>, <hhhawa@amazon.com>,
-        <hanochu@amazon.com>, <itamark@amazon.com>, <shellykz@amazon.com>,
-        <amitlavi@amazon.com>, <dkl@amazon.com>,
-        "Farber, Eliav" <farbere@amazon.com>
-References: <20221019071631.15191-1-farbere@amazon.com>
- <73bfa5ae90e2269387540019806c2839@walle.cc>
- <1ba2e7ff-cf6c-1292-72e0-14b5b5b9282c@amazon.com>
- <f489048bd1fa65db1a050f1321c640de@walle.cc>
- <01dfdbec-1a1f-6118-23fb-8b8f7b827c82@amazon.com>
- <41a05a89cd30b21dce866bc3209fe836@walle.cc>
-Content-Language: en-US
-From:   "Farber, Eliav" <farbere@amazon.com>
-In-Reply-To: <41a05a89cd30b21dce866bc3209fe836@walle.cc>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-12.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20221020013535.27843-1-zhewang116@gmail.com> <DM6PR04MB6575A7FE015D8690F5094957FC2A9@DM6PR04MB6575.namprd04.prod.outlook.com>
+In-Reply-To: <DM6PR04MB6575A7FE015D8690F5094957FC2A9@DM6PR04MB6575.namprd04.prod.outlook.com>
+From:   Zhe Wang <zhewang116@gmail.com>
+Date:   Thu, 20 Oct 2022 17:16:59 +0800
+Message-ID: <CAJxzgGoGcqi5H0-CAtSz4ELoK4ShG0ObEkbz4Z2kALFvULw8wg@mail.gmail.com>
+Subject: Re: [PATCH RESEND] scsi: ufs: core: Let delay value after LPM can be
+ modified by vendor
+To:     Avri Altman <Avri.Altman@wdc.com>
+Cc:     "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "zhe.wang1@unisoc.com" <zhe.wang1@unisoc.com>,
+        "zhenxiong.lai@unisoc.com" <zhenxiong.lai@unisoc.com>,
+        "yuelin.tang@unisoc.com" <yuelin.tang@unisoc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/19/2022 1:23 PM, Michael Walle wrote:
-> Am 2022-10-19 11:52, schrieb Farber, Eliav:
->> On 10/19/2022 12:38 PM, Michael Walle wrote:
->>> Am 2022-10-19 11:25, schrieb Farber, Eliav:
->>>> On 10/19/2022 11:21 AM, Michael Walle wrote:
->>>>> Hi,
->>>>>
->>>>> Am 2022-10-19 09:16, schrieb Eliav Farber:
->>>>>> n25q256ax1 [1] and mt25qu256a [2] (both have same jedec_id -
->>>>>> 0x20bb19)
->>>>>> use the 4 bit Block Protection scheme and support Top/Bottom
->>>>>> protection
->>>>>> via the BP and TB bits of the Status Register.
->>>>>> BP3 is located in bit 6 of the Status Register.
->>>>>> Tested on both n25q256ax1 and mt25qu256a.
->>>>>>
->>>>>> [1]
->>>>>> https://www.micron.com/-/media/client/global/documents/products/data-sheet/nor-flash/serial-nor/n25q/n25q_256mb_3v.pdf 
->>>>>>
->>>>>> [2]
->>>>>> https://www.micron.com/-/media/client/global/documents/products/data-sheet/nor-flash/serial-nor/mt25q/die-rev-a/mt25q_qljs_u_256_aba_0.pdf 
->>>>>>
->>>>>
->>>>> If you respin, you can use a "Link:" tag for the URL above.
->>>>
->>>> Ack.
->>>>
->>>>>> Signed-off-by: Eliav Farber <farbere@amazon.com>
->>>>>> ---
->>>>>> xxd -p
->>>>>> /sys/devices/platform/soc/fd882000.spi/spi_master/spi0/spi0.0/spi-nor/sfdp 
->>>>>>
->>>>>> 53464450060101ff00060110300000ff84000102800000ffffffffffffff
->>>>>> ffffffffffffffffffffffffffffffffffffe520fbffffffff0f29eb276b
->>>>>> 273b27bbffffffffffff27bbffff29eb0c2010d80f520000244a99008b8e
->>>>>> 03d4ac0127387a757a75fbbdd55c4a0f82ff81bd3d36ffffffffffffffff
->>>>>> ffffffffffffffffffe7ffff21dcffff
->>>>>>
->>>>>> md5sum
->>>>>> /sys/devices/platform/soc/fd882000.spi/spi_master/spi0/spi0.0/spi-nor/sfdp 
->>>>>>
->>>>>> 5ea738216f68c9f98987bb3725699a32
->>>>>> /sys/devices/platform/soc/fd882000.spi/spi_master/spi0/spi0.0/spi-nor/sfdp 
->>>>>>
->>>>>> cat
->>>>>> /sys/devices/platform/soc/fd882000.spi/spi_master/spi0/spi0.0/spi-nor/jedec_id 
->>>>>>
->>>>>> 20bb19104400
->>>>>>
->>>>>> cat
->>>>>> /sys/devices/platform/soc/fd882000.spi/spi_master/spi0/spi0.0/spi-nor/partname 
->>>>>>
->>>>>> mt25qu256a
->>>>>>
->>>>>> cat
->>>>>> /sys/devices/platform/soc/fd882000.spi/spi_master/spi0/spi0.0/spi-nor/manufacturer 
->>>>>>
->>>>>> st
->>>>>
->>>>> That's the mt25qu256a SFDP. What about the n25q256ax1?
->>>>
->>>> On the same card, with same NOR flash memory I'm running two
->>>> different
->>>> kernel versions.
->>>> First version is quite old - 4.19.239 which does not support
->>>> mt25qu256a
->>>> and therefore device is detected as n25q256ax1.
->>>> Second version is 6.1.0-rc1 and it detects the same device as
->>>> mt25qu256a.
->>>> So I was able to dump SFDP when running version 6.1.0-rc1, but not
->>>> when
->>>> running 4.19.239 which does not support the sysfs to dump the SFPD
->>>> information.
->>>> I checked that locking works with my changes when running on both
->>>> kernel
->>>> versions.
->>>
->>> So you've only tested on an mt25qu256a, correct? Then you should only
->>> add the locking to this flash device. (and maybe backport the
->>> mt25qu256a
->>> to your older kernel).
->>
->> I dumped SFDP tables only for mt25qu256a, but as I mentioned I tested
->> locking functionality for both (on 4.19.239 which detects the device as
->> n25q256ax1 and on 6.1.0-rc1  which detects the device as mt25qu256a).
->> This is the flow I used for testing the change on both versions:
+Avri Altman <Avri.Altman@wdc.com> =E4=BA=8E2022=E5=B9=B410=E6=9C=8820=E6=97=
+=A5=E5=91=A8=E5=9B=9B 15:16=E5=86=99=E9=81=93=EF=BC=9A
 >
-> You said you've tested on the same board, thus it has the same flash
-> device. But with the older kernel it was detected as a different part.
+> > From: Zhe Wang <zhe.wang1@unisoc.com>
+> >
+> > Some UFS devices require that the VCC should drop below 0.1V after
+> > turning off, otherwise device may not resume successfully. And
+> > because the power-off rate is different on different SOC platforms.
+> > Therefore, we hope that the delay can be modified by vendor to
+> > adjust the most appropriate delay value.
+> >
+> > Signed-off-by: Zhe Wang <zhe.wang1@unisoc.com>
+> > ---
+> >  drivers/ufs/core/ufshcd.c | 11 +++++++++--
+> >  include/ufs/ufshcd.h      |  2 ++
+> >  2 files changed, 11 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+> > index 7256e6c43ca6..f6350231da0e 100644
+> > --- a/drivers/ufs/core/ufshcd.c
+> > +++ b/drivers/ufs/core/ufshcd.c
+> > @@ -89,6 +89,9 @@
+> >  /* Polling time to wait for fDeviceInit */
+> >  #define FDEVICEINIT_COMPL_TIMEOUT 1500 /* millisecs */
+> >
+> > +/* Default value of turn off VCC rail: 5000us */
+> > +#define UFS_VCC_TURNOFF_DELAY_US 5000
+> > +
+> >  #define ufshcd_toggle_vreg(_dev, _vreg, _on)                          =
+ \
+> >         ({                                                             =
+ \
+> >                 int _ret;                                              =
+ \
+> > @@ -7784,6 +7787,9 @@ static int ufs_get_device_desc(struct ufs_hba
+> > *hba)
+> >
+> >         ufs_fixup_device_setup(hba);
+> >
+> > +       if (hba->dev_quirks & UFS_DEVICE_QUIRK_DELAY_AFTER_LPM &&
+> > !hba->vcc_turnoff_delay)
+> > +               hba->vcc_turnoff_delay =3D UFS_VCC_TURNOFF_DELAY_US;
+> Couldn't find where otherwise you are setting this value?
+> Also, UFS_DEVICE_QUIRK_DELAY_AFTER_LPM is only set for MTK.
+> Are you planning at some point adding your own host driver?
 >
-> So the question is, what is the correct part number? I.e. what is the
-> _actual_ flash device soldered on your board?
 
-I have found out that we use MT25QU256ABA8ESF-0SIT so I'll release a
-patch for mt25qu256a only.
+We are still preparing and discussing our own UFS host driver code,
+which will be uploaded once we are done.
 
---
-Thanks, Eliav
+> > +
+> >         ufshcd_wb_probe(hba, desc_buf);
+> >
+> >         ufshcd_temp_notif_probe(hba, desc_buf);
+> > @@ -8917,8 +8923,9 @@ static void ufshcd_vreg_set_lpm(struct ufs_hba
+> > *hba)
+> >          * Some UFS devices require delay after VCC power rail is turne=
+d-off.
+> >          */
+> >         if (vcc_off && hba->vreg_info.vcc &&
+> > -               hba->dev_quirks & UFS_DEVICE_QUIRK_DELAY_AFTER_LPM)
+> > -               usleep_range(5000, 5100);
+> > +               hba->dev_quirks & UFS_DEVICE_QUIRK_DELAY_AFTER_LPM &&
+> > +               hba->vcc_turnoff_delay)
+> > +               usleep_range(hba->vcc_turnoff_delay, hba->vcc_turnoff_d=
+elay +
+> > 100);
+> >  }
+> >
+> >  #ifdef CONFIG_PM
+> > diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
+> > index 9f28349ebcff..bfde3cb962fb 100644
+> > --- a/include/ufs/ufshcd.h
+> > +++ b/include/ufs/ufshcd.h
+> > @@ -828,6 +828,7 @@ struct ufs_hba_monitor {
+> >   *     device
+> >   * @complete_put: whether or not to call ufshcd_rpm_put() from inside
+> >   *     ufshcd_resume_complete()
+> > + * @vcc_turnoff_delay: VCC turnoff delay value.
+> >   */
+> >  struct ufs_hba {
+> >         void __iomem *mmio_base;
+> > @@ -975,6 +976,7 @@ struct ufs_hba {
+> >  #endif
+> >         u32 luns_avail;
+> >         bool complete_put;
+> > +       u32 vcc_turnoff_delay;
+> Can this be part of struct ufs_vreg instead?
+> Also maybe vcc_turnoff_delay_us?
+>
+> Thanks,
+> Avri
+> >  };
+> >
+> >  /* Returns true if clocks can be gated. Otherwise false */
+> > --
+> > 2.17.1
+>
+
+Thanks for your suggestion, I will modify it in V2.
+
+Thanks,
+Zhe Wang
