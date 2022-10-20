@@ -2,96 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A2DB60545E
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 02:07:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46FD9605461
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 02:11:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230098AbiJTAHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 20:07:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44456 "EHLO
+        id S229826AbiJTALV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 20:11:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbiJTAHs (ORCPT
+        with ESMTP id S230089AbiJTALS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 20:07:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CB011946E5;
-        Wed, 19 Oct 2022 17:07:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2D806B82626;
-        Thu, 20 Oct 2022 00:07:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21371C433C1;
-        Thu, 20 Oct 2022 00:07:42 +0000 (UTC)
-Date:   Wed, 19 Oct 2022 20:07:45 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Tom Zanussi <zanussi@kernel.org>
-Subject: Re: [PATCH] tracing: Add trace_trigger kernel command line option
-Message-ID: <20221019200745.0152fc51@gandalf.local.home>
-In-Reply-To: <20221019200137.70343645@gandalf.local.home>
-References: <20221019200137.70343645@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 19 Oct 2022 20:11:18 -0400
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB291B8678
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 17:11:15 -0700 (PDT)
+Received: by mail-qt1-x835.google.com with SMTP id f22so12790331qto.3
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 17:11:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=TvTy8n6C/1bhGfXbm3sWLXfdEs9qoqny5LEASHEaNLk=;
+        b=XUuyKUtVk/E8FvAa0yrjE7arzz1tSezBbWYYJSXcz6sxfS6RHTtGrPKvwnKEOdW3oD
+         RsfHg547QyRyTxoGJWre6JJxFdMYHlAnnqnNTo5EIUQ7RxnVkA1jAWPv3TG/Y8W+QUJ+
+         IgidGLePtNsUdi3C/qbpsGAfSgrU0ybb6wqpk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TvTy8n6C/1bhGfXbm3sWLXfdEs9qoqny5LEASHEaNLk=;
+        b=QgmCMGlR3g14Y9d9iiVuq+x0ODxhrTVQtuHgg6vYiT/PIMcWFA5h/D/grUxsMbxICG
+         e711Lv+5wKDKFaW8KrS4ATo9WRJzyU62SRNzLFhzhOIKc9BpIkIhxWA7snbjc8OVdSj1
+         PwPP65vtpL8DUDClVA24MLC3pfC8oAIwAEmbZ9UedkxTF7NLVTF4Cf7gkfoWfj15bhpT
+         /4bj+8PAOSuAY534lq1I3CUNlcQzmFogGxYSklLFOqkYAK6Yt7DSjm3+G1/sFLP8FMJ5
+         uN/99CksAmOTXF7CSBpG7VRSxUllWFb9zq7sj+va1XJ4CHg51OICHfbx9SR5ok04R267
+         zPQg==
+X-Gm-Message-State: ACrzQf18oC45/Mz59sVMjbsqDWIcnp9oAiB8ojP5vRFYwdDDr15kUck2
+        M2FkY1uhTe2NLJR7jGlYB81VLyyCi8Oplg==
+X-Google-Smtp-Source: AMsMyM4mSOa4C4DroN4tq/2Htxn33Tn6SUlnWv210Whntyvcev45bJ4CRz9nz601urjfo8sf/ewe5g==
+X-Received: by 2002:ac8:7f11:0:b0:39c:e908:6451 with SMTP id f17-20020ac87f11000000b0039ce9086451mr8905999qtk.560.1666224674246;
+        Wed, 19 Oct 2022 17:11:14 -0700 (PDT)
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
+        by smtp.gmail.com with ESMTPSA id gd21-20020a05622a5c1500b00399ad646794sm5081637qtb.41.2022.10.19.17.11.11
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Oct 2022 17:11:12 -0700 (PDT)
+Received: by mail-yb1-f169.google.com with SMTP id o70so3529801yba.7
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 17:11:11 -0700 (PDT)
+X-Received: by 2002:a05:6902:1002:b0:6be:d89d:98d0 with SMTP id
+ w2-20020a056902100200b006bed89d98d0mr8880613ybt.571.1666224671596; Wed, 19
+ Oct 2022 17:11:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221019162648.3557490-1-Jason@zx2c4.com> <20221019165455.GL25951@gate.crashing.org>
+ <CAHk-=wiMWk2t8FHn0iqVVe1mn62OTAD6ffL5rn9Eeu021H9d1Q@mail.gmail.com>
+ <20221019174345.GM25951@gate.crashing.org> <CAHk-=wiNNKLFfa0d+Hk=Wm5caiKjLY4V9wwu9DhcSSwPuMbxrg@mail.gmail.com>
+ <CAKwvOdn4iocWHY_-sXMqE7F1XrV669QsyQDzh7vPFg6+7368Cg@mail.gmail.com>
+ <CAHk-=wiD90ZphsbTzSetHsK3_kQzhgyiYYS0msboVsJ3jbNALQ@mail.gmail.com>
+ <202210191209.919149F4@keescook> <CAHk-=wgz3Uba8w7kdXhsqR1qvfemYL+OFQdefJnkeqXG8qZ_pA@mail.gmail.com>
+ <Y1Bfg06qV0sDiugt@zx2c4.com>
+In-Reply-To: <Y1Bfg06qV0sDiugt@zx2c4.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 19 Oct 2022 17:10:54 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjsbYJuO=3331LmQGePXWAdHEdT33HOup53shjMJFan6Q@mail.gmail.com>
+Message-ID: <CAHk-=wjsbYJuO=3331LmQGePXWAdHEdT33HOup53shjMJFan6Q@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: treat char as always signed
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-toolchains@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 19 Oct 2022 20:01:37 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+On Wed, Oct 19, 2022 at 1:35 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+>
+> I wish folks would use `u8 *` when they mean "byte array".
 
-> @@ -90,6 +90,10 @@ int unregister_tracepoint_module_notifier(struct notifier_block *nb)
->  #ifdef CONFIG_TRACEPOINTS
->  static inline void tracepoint_synchronize_unregister(void)
->  {
-> +	/* Early updates do not need synchronization */
-> +	if (early_boot_irqs_disabled)
-> +		return;
-> +
->  	synchronize_srcu(&tracepoint_srcu);
->  	synchronize_rcu();
+Together with '-funsigned-char', we could typedef 'u8' to just 'char'
+(just for __KERNEL__ code, though!), and then we really could just use
+'strlen()' and friends on said kind of arrays without any warnings.
 
-I wonder if this check should be just moved to the RCU synchronization
-code? That is, if early_boot_irqs_disabled is set, do nothing, as there
-should be nothing to synchronize against.
+But we do have a *lot* of 'unsigned char' users, so it would be a huge
+amount of churn to do this kind of thing.
 
-It took me a bit to figure out why I was constantly getting:
+And as mentioned, right now we definitely have a lot of other "ignore
+sign" code.
 
-[    1.072013] rcu: srcu_init: Setting srcu_struct sizes based on contention.
-[    1.078888] ------------[ cut here ]------------
-[    1.083422] Interrupts were enabled early
-[    1.087399] WARNING: CPU: 0 PID: 0 at init/main.c:1061 start_kernel+0x36f/0x4e8
-[    1.094656] Modules linked in:
-[    1.097683] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.1.0-rc1-test+ #461
-[    1.104509] Hardware name: Hewlett-Packard HP Compaq Pro 6300 SFF/339A, BIOS K01 v03.03 07/14/2016
-[    1.113411] RIP: 0010:start_kernel+0x36f/0x4e8
-[    1.117817] Code: 48 27 5f e8 fd 7b 03 00 e8 55 72 e5 fe e8 6b 05 03 00 ff 15 2a f9 89 ff 0f ba e0 09 73 0e 48 c7 c7 98 26 31 a0 e8 01 5b df fe <0f> 0b c6 05 c7 2c af ff 00 e8 da 36 47 fe ff 15 14 f9 89 ff e8 56
-[    1.136485] RSP: 0000:ffffffffa0603f30 EFLAGS: 00010286
-[    1.141670] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-[    1.148754] RDX: 0000000000000002 RSI: 00000000ffffdfff RDI: 0000000000000001
-[    1.155840] RBP: 0000000000000000 R08: 0000000000000000 R09: ffffffffa0603dd8
-[    1.162926] R10: 0000000000000003 R11: ffffffffa0734168 R12: 000000000000180a
-[    1.170011] R13: 00000000010fecf0 R14: 0000000000000000 R15: 00000000d44e3018
-[    1.177097] FS:  0000000000000000(0000) GS:ffff91909aa00000(0000) knlGS:0000000000000000
-[    1.185131] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[    1.190835] CR2: ffff91909edff000 CR3: 000000007760a001 CR4: 00000000000606f0
-[    1.197924] Call Trace:
-[    1.200345]  <TASK>
+Much of it is probably simply because we haven't been able to ever use
+that warning flag, so it's just accumulated and might be trivial to
+fix. But I wouldn't be surprised at all if some of it ends up somewhat
+fundamental.
 
-
-It was a bit of whack-a-mole in finding all the places that were calling
-synchronize RCU.
-
--- Steve
+              Linus
