@@ -2,106 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB54860598B
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 10:21:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95E6A605992
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 10:22:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230255AbiJTIVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 04:21:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33182 "EHLO
+        id S229506AbiJTIWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 04:22:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbiJTIVn (ORCPT
+        with ESMTP id S229583AbiJTIWJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 04:21:43 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49435157F55;
-        Thu, 20 Oct 2022 01:21:42 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id f11so33106847wrm.6;
-        Thu, 20 Oct 2022 01:21:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QeezRGYgxj7EJWdnJplc0G+vBkrvPe7bUlDhb1HV7rU=;
-        b=bn/vU8OZnQ/Ud8EolQED7bs6Sa944BHUHZ+xXEFW/qbB+MrDyMw7hdbdMK/98IPxlZ
-         pqYufZtm/kAV5T/oxz5qFoDUQB0/3GdXiRkAqCZn8e7GtwqfWE9EjusIcsLbDEsnHAcP
-         4RYgIzJL9VIBwuB22Oz8fs5qP6IoswwT15jf36b92kX5xHRZ5E2vUVqSGkk6uGFMXCbG
-         ug1EOezbi84EnwJ7xRRVGKJGS4IHlUn8LrNk3S5KZ9Q1HCBMr7dbdze1ON0lz13K6Yh4
-         av72WVkqeqIlcFAy+rP7j/T4PI8c+8gEOMEMGrvLf5SKsb1QwtfhMk/Rt62ogkVMGRUH
-         yOVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QeezRGYgxj7EJWdnJplc0G+vBkrvPe7bUlDhb1HV7rU=;
-        b=YVXD09X+pnjxa+h9O+DVLEhRGl/w3BVuhltxb6cMJWbOlpRC0hj0QEcufNYhmSvIEB
-         v04dn8vwlKMGDodzEWoEYKwRl0dN84SZ1eW1MbZckqtqUX81Q0cpIn5g2n83GyKH3Adx
-         a6DHSCNg5DiVY+5b02rW711zi1GyctzpJolBtidueb0HcBKd3CqJldZOR8rIZuthJJjg
-         S5GIKQZGXtFM6iwyoBr1WToP7Zp9zd42Z1NtIjLxkbZ9AbMc10Kv6VOSF/GrieYkhlUY
-         AlvyShpH55FeN9tvmc4VIfdqxxXQT2o2q4AysNqyqp5f+IBaeDzLEVmvZGNwiwkKatCr
-         lFAA==
-X-Gm-Message-State: ACrzQf0QKY5aK6KgYKUtGtAnZ3QiIRl+n41v6FPxzxMoZGrDE9MfKOo7
-        /DMoIcTf4SDkPhC2Z3YdB9A=
-X-Google-Smtp-Source: AMsMyM65O7j+dkaw81J0CnvRH48uMvZTbLbhDTsoL1FSsxK7tpbliqXXuQ9xlmwGCxiMoxHj2vIpDQ==
-X-Received: by 2002:a5d:6485:0:b0:230:b6db:d41c with SMTP id o5-20020a5d6485000000b00230b6dbd41cmr7362534wri.709.1666254100569;
-        Thu, 20 Oct 2022 01:21:40 -0700 (PDT)
-Received: from felia.fritz.box (200116b826709f00b540fdc83ad027eb.dip.versatel-1u1.de. [2001:16b8:2670:9f00:b540:fdc8:3ad0:27eb])
-        by smtp.gmail.com with ESMTPSA id p26-20020a1c741a000000b003c6b70a4d69sm2020989wmc.42.2022.10.20.01.21.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 01:21:39 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Arnd Bergmann <arnd@arndb.de>, Vinod Koul <vkoul@kernel.org>,
-        dmaengine@vger.kernel.org
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] MAINTAINERS: remove section INTEL IOP-ADMA DMA DRIVER
-Date:   Thu, 20 Oct 2022 10:21:03 +0200
-Message-Id: <20221020082103.29218-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 20 Oct 2022 04:22:09 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6F3DB15A96C;
+        Thu, 20 Oct 2022 01:22:07 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.32])
+        by gateway (Coremail) with SMTP id _____8BxfdouBVFjJ_wAAA--.5190S3;
+        Thu, 20 Oct 2022 16:22:06 +0800 (CST)
+Received: from loongson-pc.loongson.cn (unknown [10.20.42.32])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxLuItBVFjxM4BAA--.7555S2;
+        Thu, 20 Oct 2022 16:22:05 +0800 (CST)
+From:   Jianmin Lv <lvjianmin@loongson.cn>
+To:     Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Len Brown <lenb@kernel.org>, rafael@kernel.org,
+        linux-pci@vger.kernel.org, linux-acpi@vger.kernel.org
+Subject: [PATCH V4 0/4] irqchip: Support to set irq type for ACPI path
+Date:   Thu, 20 Oct 2022 16:22:01 +0800
+Message-Id: <20221020082205.20505-1-lvjianmin@loongson.cn>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8CxLuItBVFjxM4BAA--.7555S2
+X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBjvdXoWrKFWUur13CryDAFy3XrWfAFb_yoWktFgE9F
+        4I934DZa4vqFn2vayxJry5XFyqyFWDWa1v9FWvyFn3W34rJws3Ar47uw1aq34xtFy5XFs3
+        JrZ5Ar1FkryI9jkaLaAFLSUrUUUU8b8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
+        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
+        A7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
+        AFIxvE14AKwVWUAVWUZwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
+        6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7
+        xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kK
+        e7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
+        0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUtVWrXwAv7VC2z280
+        aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I0En4
+        kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI
+        1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_Jr
+        Wlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1I
+        6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr
+        0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUv
+        cSsGvfC2KfnxnUUI43ZEXa7IU8EoGPUUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit cd0ab43ec91a ("dmaengine: remove iop-adma driver") removes the
-driver's source code, but misses to remove the MAINTAINERS section.
+For ACPI path of pch-pic and liointc driver, setting irq
+type is not supported yet, so the patch series add code
+to implement it.
 
-Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
-broken file pattern.
+And a bug in translate callback of irqchip/loongson-pch-pic, which
+is introduced by previous patch, is fixed.
 
-Remove the INTEL IOP-ADMA DMA DRIVER section pointing to the removed
-driver.
+GSI for legacy irqs of PCI devices are mapped in pch-pic domain, after
+supporting setting_irq_type for pch-pic domain, we add the workaround
+for LoongArch based PCI controller with high-level trigger intterrupt
+so that the high-level trigger type is passed into acpi_register_gsi().
+  
+V1 -> V2
+- Change comment information and fix a bug for DT path in patch[1].
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
-Arnd, please ack.
+V2 -> V3
+- Separate original patch[1] to three patches[1][2][3].
 
-Vinod, please pick this minor clean-up patch on top of the commit above.
+V3 -> V4
+- Improve commit log
 
- MAINTAINERS | 5 -----
- 1 file changed, 5 deletions(-)
+Jianmin Lv (4):
+  ACPI / PCI: fix LPIC IRQ model default PCI IRQ polarity
+  irqchip/loongson-pch-pic: fix translate callback for DT path
+  irqchip/loongson-pch-pic: Support to set IRQ type for ACPI path
+  irqchip/loongson-liointc: Support to set IRQ type for ACPI path
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8912c852d5a2..9839febf8b51 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -10339,11 +10339,6 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/joro/iommu.git
- F:	drivers/iommu/intel/
- F:	include/linux/intel-svm.h
- 
--INTEL IOP-ADMA DMA DRIVER
--R:	Dan Williams <dan.j.williams@intel.com>
--S:	Odd fixes
--F:	drivers/dma/iop-adma.c
--
- INTEL IPU3 CSI-2 CIO2 DRIVER
- M:	Yong Zhi <yong.zhi@intel.com>
- M:	Sakari Ailus <sakari.ailus@linux.intel.com>
+ drivers/acpi/pci_irq.c                 |  6 ++++--
+ drivers/irqchip/irq-loongson-liointc.c |  7 ++++++-
+ drivers/irqchip/irq-loongson-pch-pic.c | 14 ++++++++++----
+ 3 files changed, 20 insertions(+), 7 deletions(-)
+
 -- 
-2.17.1
+2.31.1
 
