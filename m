@@ -2,138 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B64E606B21
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 00:17:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5549F606B23
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 00:19:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229911AbiJTWRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 18:17:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53698 "EHLO
+        id S229919AbiJTWTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 18:19:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229843AbiJTWRM (ORCPT
+        with ESMTP id S229925AbiJTWT3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 18:17:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3316A219FDD;
-        Thu, 20 Oct 2022 15:17:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C3A8261D40;
-        Thu, 20 Oct 2022 22:17:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29C46C433D6;
-        Thu, 20 Oct 2022 22:17:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666304230;
-        bh=Il3d0PlX0wY6nzksO56o3AO8e9bOL8S6BjAlHket0ug=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=jd41YewXS1bdCjMK58vj9ft4COtTK5GVIjLuBXrSQzggVFdwxOEDlSGnLXPLopykT
-         ZGXWTuUA8j9vDuvx3WwAboeAFWj8F+RZaDC77DkSPGcaMlS34cnYOMhD7TAmFV9VX2
-         Ry+zqeOa+uJiFbtS1BBm4JXR5N4Xzq6G3Zq/KHVeddOSlH3EjVpZ/5fkrBXjRyA82g
-         03oicmFFS1N8ffnTOM2kj4QZ/h8WYvXfzRqw9kJ+NB01rMk1P1iq5yOIGQmbMXT56f
-         aYuaorvNHsAssCdNf+gH+sLrU/nMNXU2on16O0A68B51DQb+/rhEcMl9t+DAkbFGF1
-         dxd/j5Kg5dlRA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id C29315C1109; Thu, 20 Oct 2022 15:17:09 -0700 (PDT)
-Date:   Thu, 20 Oct 2022 15:17:09 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Zqiang <qiang1.zhang@intel.com>, frederic@kernel.org,
-        rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [PATCH] rcu: Make call_rcu() lazy only when CONFIG_RCU_LAZY is
- enabled
-Message-ID: <20221020221709.GX5600@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <95331C23-3632-4E0B-9959-43CE159FE60F@joelfernandes.org>
- <DC93C5EB-91A5-4291-A642-8A57179930E4@joelfernandes.org>
+        Thu, 20 Oct 2022 18:19:29 -0400
+Received: from mail-vk1-xa33.google.com (mail-vk1-xa33.google.com [IPv6:2607:f8b0:4864:20::a33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2C5422B3A0
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 15:19:14 -0700 (PDT)
+Received: by mail-vk1-xa33.google.com with SMTP id y129so538673vkg.8
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 15:19:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=yPAtFjxnM9QnPlCbiawpwzjKWBbf/HX4WSc2JVqLBOY=;
+        b=O84ATMDl80Y3SemMzzwQ8EhGpuSf7ld5bfiznIEopm2rGgtJ2AVff2EKS4z/g8jvTY
+         TJ6ZQhu7eyriq8P5/K15dRBQhTAfMSJ+7o7KzFVtV3sgCdVxWauKyzIl08agFdTedz3Y
+         irvKUAJktENQYFrv8APfpioWxRUhrGliDoj9F2tT+0H0vZdE0rckcKhXI6YJ+8yloUVa
+         jbt+raQSAqWX2CUGU2pPAs9icMIgJRQZShjYbgpAkxgPlg6IuxAwG9v16Yv417TJnEc3
+         blZ7tpFUJGB9fjfkFlBd1hLZK7WCCOHcxjHC08Br+8ru/MXjmXbf2gdYDMNyYI3aA5xx
+         4lxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yPAtFjxnM9QnPlCbiawpwzjKWBbf/HX4WSc2JVqLBOY=;
+        b=B3llGa6rERJ1GTCxkh7IqY3dXlmDWa2cv9k9gamdnW4idKWVL6N3dpB0kWX+BWQGX8
+         RSegyD2eIIjNgRB0mVQBBUVlqTX96iHjijjWyRIRIzxw2ZabS2iI49Li5hym201kL6fg
+         OfnpjoG0KA72+nFFM88igZjhSAxQNmpDCI+HsGB1BKWn7sdeJddKyws9pEd0s+LC0rX8
+         ZjjdOziEXzOYAT86M+ORMdFXir9TXCeab2kvuOv/SZB8xGSI/xY+4OXHtbnegcajM754
+         OFFeMqlObxwfL3kyKDtwuRFCJKg0UmJfPTzKdhJxFNIqHkfduVIbRIybu/eMJ4pmjq5b
+         LtCw==
+X-Gm-Message-State: ACrzQf3vr28VqkK3suMoxaZH84oJJhmYlJPU8NCgT0vyLnNXp2l5Tc85
+        jN5cnHVQK4fiO7DYa74zErsYMzlKUFXKGvVcr0AdTv+FLz7+jA==
+X-Google-Smtp-Source: AMsMyM6xkQz9a/gQKoWalavcV/VMmLVHiTXvwYuHIgv3jfm/DBzxvgR9gq6NZaYBHO17UoOHWK1SA4j2k8/IhBKP3AQ=
+X-Received: by 2002:a1f:b453:0:b0:3ab:2c49:57df with SMTP id
+ d80-20020a1fb453000000b003ab2c4957dfmr8495848vkf.29.1666304353774; Thu, 20
+ Oct 2022 15:19:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <DC93C5EB-91A5-4291-A642-8A57179930E4@joelfernandes.org>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <1666289686-22798-1-git-send-email-ssengar@linux.microsoft.com>
+In-Reply-To: <1666289686-22798-1-git-send-email-ssengar@linux.microsoft.com>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Thu, 20 Oct 2022 16:18:37 -0600
+Message-ID: <CAOUHufbkcdyg8RAEa08DvKE=+bsxjuReiP4iscTV99sZ1oBQ2g@mail.gmail.com>
+Subject: Re: [PATCH] mm/gup: fix gup_pud_range() for dax
+To:     Saurabh Sengar <ssengar@linux.microsoft.com>
+Cc:     ssengar@microsoft.com, akpm@linux-foundation.org, jack@suse.cz,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        jostarks@microsoft.com, Matthew Wilcox <willy@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 05:33:37PM -0400, Joel Fernandes wrote:
-> 
-> 
-> > On Oct 20, 2022, at 2:46 PM, Joel Fernandes <joel@joelfernandes.org> wrote:
-> >>> 
-> >>>>> More comments below:
-> >>>>>> 
-> >>>>>>>> Looks like though I made every one test the patch without having to enable the config option ;-). Hey, I’m a half glass full kind of guy, why do you ask?
-> >>>>>>>> 
-> >>>>>>>> Paul, I’ll take a closer look once I’m at the desk, but would you prefer to squash a diff into the existing patch, or want a new patch altogether?
-> >>>>>>> 
-> >>>>>>> On the other hand, what I’d want is to nuke the config option altogether or make it default y, we want to catch issues sooner than later.
-> >>>>>> 
-> >>>>>> That might be what we do at some point, but one thing at a time.  Let's
-> >>>>>> not penalize innocent bystanders, at least not just yet.
-> >>>>> 
-> >>>>> It’s a trade off, I thought that’s why we wanted to have the binary search stuff. If no one reports issue on Linux-next, then that code won’t be put to use in the near future at least.
-> >>>> 
-> >>>> Well, not to put too fine a point on it, but we currently really are
-> >>>> exposing -next to lazy call_rcu().  ;-)
-> >>> 
-> >>> This is true. I think I assumed nobody will enable a default off config option but I probably meant a smaller percentage will.
-> >>> 
-> >>>>>> I do very strongly encourage the ChromeOS and Android folks to test this
-> >>>>>> very severely, however.
-> >>>>> 
-> >>>>> Agreed. Yes that will happen, though I have to make a note for Android folks other than Vlad, to backports these (and enable the config option), carefully! Especially on pre-5.15 kernels. Luckily I had to do this (not so trivial) exercise myself.
-> >>>> 
-> >>>> And this is another situation in which the binary search stuff may prove
-> >>>> extremely useful.
-> >>> 
-> >>> Agreed. Thanks. Very least I owe per-rdp splitting of the hashtable, to that code.  Steven and me talked today that probably the hashtable can go into the rcu_segcblist itself, and protect it by the nocb lock.
-> >> 
-> >> I have to ask...
-> >> 
-> >> How does this fit in with CPU-hotplug and callback migration?
-> > 
-> > Yes it will require change and I already thought of that, have to update the hashtable on all such events.
-> > 
-> >> More to the point, what events would cause us to decide that this is
-> >> required?  For example, shouldn't we give your current binary-search
-> >> code at least a few chances to save the day?
-> > 
-> > Totally, if you’re taking the patch as is, I would be very happy. And I’ll continue to improve it with the above. But I was not sure yet if you’re taking it.
-> > 
-> > I think it’s a worthwhile to take it for mainline in the current state and I’ll also add more data about callbacks to it in future (queuing time of callback, etc) — basically all the stuff I wanted to add to rcu_head.
-> > 
-> > One reason for the above proposal is I also want to keep it turned on in production, and the current solution cannot be, due to the global locking and is not expected to be kept on in production. But is still a worthwhile addition for debug kernels IMO.
-> 
-> I realized while talking to Steve that the hashtable has to be per CPU if we are to store more than a lazy flag, such as queuing timestamps. This is because you can have multiple callbacks of the same function pointer queued on multiple CPUs. So you can have multiple timestamps to store. Same thing if we stored automata. It’s per callback instance, not per callback function.
+On Thu, Oct 20, 2022 at 12:14 PM Saurabh Sengar
+<ssengar@linux.microsoft.com> wrote:
+>
+> From: John Starks <jostarks@microsoft.com>
+>
+> For dax pud, pud_huge() returns true on x86. So the function works as long
+> as hugetlb is configured. However, dax doesn't depend on hugetlb.
+> Commit 414fd080d125 ("mm/gup: fix gup_pmd_range() for dax") fixed
+> devmap-backed huge PMDs, but missed devmap-backed huge PUDs. Fix this as
+> well.
+>
+> Fixes: 414fd080d125 ("mm/gup: fix gup_pmd_range() for dax")
+> Signed-off-by: John Starks <jostarks@microsoft.com>
+> Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+> ---
+>  mm/gup.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/mm/gup.c b/mm/gup.c
+> index 05068d3d2557..9e07aa54a4cd 100644
+> --- a/mm/gup.c
+> +++ b/mm/gup.c
+> @@ -2687,7 +2687,7 @@ static int gup_pud_range(p4d_t *p4dp, p4d_t p4d, unsigned long addr, unsigned lo
+>                 next = pud_addr_end(addr, end);
+>                 if (unlikely(!pud_present(pud)))
+>                         return 0;
+> -               if (unlikely(pud_huge(pud))) {
+> +               if (unlikely(pud_huge(pud) || pud_devmap(pud))) {
 
-Agreed, to be useful, this must be per callback instance.
+Perhaps s/pud_huge/pud_leaf/ ?
 
-							Thanx, Paul
-
-> Thanks,
-> 
->  - Joel
-> 
-> 
-> > 
-> > Thanks,
-> > 
-> > - Joel
-> > 
-> > 
-> >>                           Thanx, Paul
-> >> 
-> >>>>>>>>> +}
-> >>>>>>>>> +EXPORT_SYMBOL_GPL(call_rcu);
-> >>>>>>>>> +#endif
-> >>>>>>>>> 
-> >>>>>>>>> /* Maximum number of jiffies to wait before draining a batch. */
-> >>>>>>>>> #define KFREE_DRAIN_JIFFIES (5 * HZ)
-> >>>>>>>>> -- 
-> >>>>>>>>> 2.25.1
-> >>>>>>>>> 
+>                         if (!gup_huge_pud(pud, pudp, addr, next, flags,
+>                                           pages, nr))
+>                                 return 0;
+> --
+> 2.25.1
+>
