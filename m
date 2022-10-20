@@ -2,80 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52CA9605E22
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 12:46:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A1E1605E28
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 12:48:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230085AbiJTKqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 06:46:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32952 "EHLO
+        id S230419AbiJTKs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 06:48:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiJTKqi (ORCPT
+        with ESMTP id S229491AbiJTKsZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 06:46:38 -0400
-Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A66AD1C5E30
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 03:46:36 -0700 (PDT)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id 1D88E1285;
-        Thu, 20 Oct 2022 12:46:34 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1666262794;
+        Thu, 20 Oct 2022 06:48:25 -0400
+Received: from hermod.demsh.org (hermod.demsh.org [45.140.147.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF5A11DC821;
+        Thu, 20 Oct 2022 03:48:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=demsh.org; s=022020;
+        t=1666262900;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=qyfpMJ7wvOKQzKJbA8gxhqaiUcCTequz7kYwWgzsxo4=;
-        b=S8juV9ehFY1QtzfsNES16OBDCJDt6D8JuIVPz/Los2OyZjJ6w3Vjia8HTvNhkenO54ppQ3
-        unFA6yGNnUmRezw+llCgvp6smheHSUdl+nLDaH/sj86RcbiqSsEZMzD2eIy8tN7mbXeIk/
-        rEWjea8uO3QWs23LC7Oxzl3f9pzXOV512GMQEH8dcbHm6NY4EV7MmMCrEr3pbu3X1tRbg9
-        zyPNP/obX07WdBHsRY4cKH4ZJpxA9GVSIXWnwqmoYx6tk/JL+2H54ovBwMfEH+I55genyJ
-        Q2YoIew+XpV+wQ38hPNvT32jFOsu9aTsY6KekRcOm4EUF9UMJ+FWfU4cKphlkA==
+        bh=ETkbRpvmDPnr18kYQQ0G/Rg2H1mJOLWgSuqFKhzOm3E=;
+        b=OS63sYgbwTHI9M9z/xNpLVHTrX2fEs16wlGEYH39W36mpTaNOzyAN9XAOT1sxTYt8JjebZ
+        Lt0QvG5j2WDJpa0k8efxT+MuL5LlC/RFdz7KLu0zKeryjViP6+XE3nmXdxvLUCA6tmlOEE
+        NY9wGYvSTS71L9P9VZYYP7LphO8PsWHtG/Wx0Ye9+XPGnbYWo+BwFFpl6hv4i5aEPXpFSD
+        94B/PC8s3lVPZ94o3gQ95mWPDJc7rmNkPUyc65HOXkcxohpZjpSoHGgWg0xJr0zgCDUmMq
+        fkG2q2krPx/LTZuw6dwjCGILepf54jGRh1CuRMJQy6QNBrubk1TA1SxnZ7N6Ow==
+Received: from xps.demsh.org (algiz.demsh.org [94.103.82.47])
+        by hermod.demsh.org (OpenSMTPD) with ESMTPSA id 4bb7512b (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO) auth=yes user=me;
+        Thu, 20 Oct 2022 10:48:20 +0000 (UTC)
+Date:   Thu, 20 Oct 2022 13:48:18 +0300
+From:   Dmitrii Tcvetkov <me@demsh.org>
+To:     Keith Busch <kbusch@kernel.org>
+Cc:     Keith Busch <kbusch@fb.com>, Jens Axboe <axboe@kernel.dk>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [bisected] QEMU guest boot failure since 6.0 on x86_64 host
+Message-ID: <20221020134818.30961090@xps.demsh.org>
+In-Reply-To: <Y1CkMS+xbwbvn8My@kbusch-mbp.dhcp.thefacebook.com>
+References: <20221020031725.7d01051a@xps.demsh.org>
+        <Y1CkMS+xbwbvn8My@kbusch-mbp.dhcp.thefacebook.com>
 MIME-Version: 1.0
-Date:   Thu, 20 Oct 2022 12:46:33 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Eliav Farber <farbere@amazon.com>
-Cc:     tudor.ambarus@microchip.com, pratyush@kernel.org,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        talel@amazon.com, jonnyc@amazon.com, hhhawa@amazon.com,
-        hanochu@amazon.com, itamark@amazon.com, shellykz@amazon.com,
-        amitlavi@amazon.com, dkl@amazon.com
-Subject: Re: [PATCH v3 1/1] mtd: spi-nor: micron-st: Enable locking for
- mt25qu256a
-In-Reply-To: <20221020092058.33844-1-farbere@amazon.com>
-References: <20221020092058.33844-1-farbere@amazon.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <d91e3d91f085390d5dbe0c4415c9e37f@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-10-20 11:20, schrieb Eliav Farber:
-> mt25qu256a [1] uses the 4 bit Block Protection scheme and supports
-> Top/Bottom protection via the BP and TB bits of the Status Register.
-> BP3 is located in bit 6 of the Status Register.
-> Tested on MT25QU256ABA8ESF-0SIT.
-> 
-> [1] 
-> https://www.micron.com/-/media/client/global/documents/products/data-sheet/nor-flash/serial-nor/mt25q/die-rev-a/mt25q_qljs_u_256_aba_0.pdf
-> 
-> Signed-off-by: Eliav Farber <farbere@amazon.com>
-> Link: 
-> https://lore.kernel.org/lkml/20221019071631.15191-1-farbere@amazon.com
+On Wed, 19 Oct 2022 19:28:17 -0600
+Keith Busch <kbusch@kernel.org> wrote:
 
-Reviewed-by: Michael Walle <michael@walle.cc>
+> On Thu, Oct 20, 2022 at 03:17:25AM +0300, Dmitrii Tcvetkov wrote:
+> > 
+> > Bisect led me to commit b1a000d3b8ec5  ("block: relax direct io
+> > memory alignment"). I was unable to resolve revert conflicts when
+> > tried to revert b1a000d3b8ec5  ("block: relax direct io memory
+> > alignment") as I lack necessary understanding of block subsystem.
+> 
+> Background info: when your virtual block device's logical block size
+> is smaller than the host's block device backing it, qemu needs to
+> bounce unaligned buffers when using direct-io.
+> 
+> Historically for direct-io, the logical block size happened to also be
+> the memory page offset alignment. QEMU did this the other way around:
+> it used the memory offset as the block size, and that was not
+> intended:
+> 
+>   https://lore.kernel.org/lkml/32db4f89-a83f-aac4-5d27-0801bdca60bf@redhat.com/
+> 
+> The kernel patch you bisected to detangled memory alignment from
+> logical block size, so now older qemu versions have the wrong idea of
+> the minimum vector size. That is fixed in the qemu repository here:
+> 
+>   https://git.qemu.org/?p=qemu.git;a=commitdiff;h=25474d90aa50bd32e0de395a33d8de42dd6f2aef
+> > 
+> > This fails to boot on 6.0+ host:
+> > # losetup -b 4096 -f image.raw
+> > # qemu-system-x86_64 -enable-kvm -drive
+> > file=/dev/loop0,format=raw,cache=none
+> 
+> In the above, your backing storage is 4k, and the default virtual
+> device block size is 512b, so qemu needs to bounce that, but older
+> versions might not do that as intended.
+> 
+> It should work if you include logical_block_size=4096 to the -drive
+> parameters.
+> 
+> > These boot fine on 6.0+ host:
+> > # losetup -b 4096 -f image.raw
+> > # qemu-system-x86_64 -enable-kvm -drive
+> > file=/dev/loop0,format=raw
+> 
+> The above is using cache, which doesn't have any alignment and size
+> constraints, so works with anything sizes.
+>  
+> > # losetup -f image.raw
+> > # qemu-system-x86_64 -enable-kvm -drive
+> > file=/dev/loop0,format=raw,cache=none
+> 
+> The above is using a 512b formated backing store to a 512b emulated
+> drive, so the matching means qemu never needs to bounce.
 
-Thanks,
--michael
+Thanks! Specifying logical_block_size=4096 indeed helps, guest still
+doesn't boot but because it has partition table with an assumption of 512
+sectors. After reinstall with logical_block_size=4096 specified it
+boots.
