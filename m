@@ -2,91 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02DE86064E2
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 17:46:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAF046064EA
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 17:48:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230164AbiJTPq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 11:46:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47868 "EHLO
+        id S229994AbiJTPsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 11:48:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229736AbiJTPqx (ORCPT
+        with ESMTP id S229822AbiJTPsB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 11:46:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81F31564F3
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 08:46:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 35C19B82888
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 15:46:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A38CC433D6;
-        Thu, 20 Oct 2022 15:46:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666280809;
-        bh=eP4e8g5LGe7tE0rzg1TkiUPKLfDmJmDnBitOJzbIoX4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=1jKLukBcnl+iVVvlo13J3MNXZa8cNtK3LE9CqhcpJki5gwFNW1DkX5nEl5dXPy3MZ
-         J3bRXrIva+cfwVo9Vy1xyOOGTVrCy7Z1gc60JmahWl3sVygk+dS2zwvQdOBo2qdSr3
-         WXn1kFuDKqU7/Sna1Qo7Fzq23jgyWpmqR55u469I=
-Date:   Thu, 20 Oct 2022 17:46:47 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Duoming Zhou <duoming@zju.edu.cn>
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        paskripkin@gmail.com, martin@kaiser.cx, straube.linux@gmail.com,
-        kuba@kernel.org
-Subject: Re: [PATCH] drivers: staging: r8188eu: Fix sleep-in-atomic-context
- bug in rtw_join_timeout_handler
-Message-ID: <Y1FtZzV9wRQRaTYk@kroah.com>
-References: <20221018083424.79741-1-duoming@zju.edu.cn>
+        Thu, 20 Oct 2022 11:48:01 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CEBB19C050
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 08:48:00 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id j130so40331ybj.9
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 08:48:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=1FgKYeu1p//oQqI8aloC3qi8jZpEu+hoUnjxFymh4Kw=;
+        b=Yq0S3FR84Q/sf2fswB2ghCBhoy7IIgMhl3hdhxREh3R659IXlLQYVfczsBOBNZzojl
+         jfZGgnvXqco7BpUcmvH4uHt6ujAV4TLRg1DyAnsi+j/A5dwXEqVe9ZN4671I1lVpKmlw
+         kX7IbDBrCy//NTHBOQLu2p0sTUslE/3itfzsEa39HupsSQVn1zHoO+QkSjLEMKDD2foo
+         NzvfCgYxPjXhjKBLl2O7ZNPMwfgLlAuhUFuh6Bc/EAZnwNU4/tjtW9QexrP1BCWhfHEO
+         vmBX4Vf6wdbIjL5G3EqXLuQ308pNReaHKqra0/qqGuYHzYM0ycCyQjyBzZhcax8npD9X
+         j/4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1FgKYeu1p//oQqI8aloC3qi8jZpEu+hoUnjxFymh4Kw=;
+        b=gKje8JMABde4sW8iQJhU7GhjlPwZyyhbt0NspJZbmo+J2lMdwiLNchstPSJ5xn5trD
+         P2OSo4XEkBRTCyQO0vSQuPOrmEM/1tIbCSdYniUKMXL/C+/szCeqc3/z34/DYM18TgYb
+         4jstT9a+wdBYY7MgK1adVZe+U+V4VIPEv6iwykTZhoSm5GnqC5XMweej9T84sHn+9FaP
+         iRAbgSj6DvNkHS3IP+NrwUjyYDnzlk+uEKj+4NPBsEKYP7UYL/1z579VpJwc+vr3NgDF
+         o45AwjfNIHtPo0gdD/5AAo2dvvOZSZTM7cpzG8Jo++cmU1yLbFm6YgDVdxye0B+dLX4i
+         jJzA==
+X-Gm-Message-State: ACrzQf3EhRNLBKeopS6h+ldj55HxVv00d0UbylhIBmVlz7LyyghBdF5M
+        dR4stS8jlR+jrTmBGfQTnOvsYFGnjySD2IwpNDyT
+X-Google-Smtp-Source: AMsMyM7qAGLonUqMOVaGL4XnjKhbi9gjpeiqUQpAKWVmVrvVhzDqUNkBgxcJP3aA7gaQ6AiFfLWPCO+ZPilqGhDMyaI=
+X-Received: by 2002:a05:6902:124f:b0:6c0:770:1890 with SMTP id
+ t15-20020a056902124f00b006c007701890mr12155097ybu.186.1666280879508; Thu, 20
+ Oct 2022 08:47:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221018083424.79741-1-duoming@zju.edu.cn>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20221013222702.never.990-kees@kernel.org> <20221013223654.659758-4-keescook@chromium.org>
+ <20221018150213.7n4sv7rtsh6lshd5@wittgenstein> <1b41c633bbd31b82b02fdbae718f2f11ac862181.camel@huaweicloud.com>
+ <202210181126.E58AB4A0F@keescook> <00bf4f189e4ec3b98130451f40e77ead8f28179e.camel@huaweicloud.com>
+In-Reply-To: <00bf4f189e4ec3b98130451f40e77ead8f28179e.camel@huaweicloud.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Thu, 20 Oct 2022 11:47:46 -0400
+Message-ID: <CAHC9VhTfF0oU5ppYcf_WMztDp-nyZ9bQ2oE4Z+b5Ajk4wszw-Q@mail.gmail.com>
+Subject: Re: [PATCH 4/9] ima: Move ima_file_free() into LSM
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, Petr Vorel <pvorel@suse.cz>,
+        Jonathan McDowell <noodles@fb.com>,
+        Borislav Petkov <bp@suse.de>, Takashi Iwai <tiwai@suse.de>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>,
+        KP Singh <kpsingh@kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        John Johansen <john.johansen@canonical.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 04:34:24PM +0800, Duoming Zhou wrote:
-> The rtw_join_timeout_handler() is a timer handler that
-> runs in atomic context, but it could call msleep().
-> As a result, the sleep-in-atomic-context bug will happen.
-> The process is shown below:
-> 
->      (atomic context)
-> rtw_join_timeout_handler
+On Wed, Oct 19, 2022 at 2:56 AM Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+> On Tue, 2022-10-18 at 11:29 -0700, Kees Cook wrote:
+> > On Tue, Oct 18, 2022 at 05:32:40PM +0200, Roberto Sassu wrote:
+> > > I also did this work before. In my implementation, I created a new
+> > > security hook called security_file_pre_free().
+> > >
+> > > https://github.com/robertosassu/linux/commit/692c9d36fff865435b23b3cb765d31f3584f6263
+> > >
+> > > If useful, the whole patch set is available at:
+> > >
+> > > https://github.com/robertosassu/linux/commits/ima-evm-lsm-v1-devel-v3
+> >
+> > Ah, lovely! Can you pick this back up and run with it? I mainly did
+> > these a proof-of-concept, but it looks like you got further.
+>
+> It was some time ago. If I remember correctly, I got to the point of
+> running IMA/EVM and passing basic tests.
+>
+> Will take a look at your patches and comments, and integrate in mines
+> if something is missing.
+>
+> Will also send again the prerequisite patch set.
 
-Wait, how is this an atomic timeout?
+Thanks Roberto, I appreciate you taking the time to resume your
+earlier work.  I think this will be a nice improvement and help us
+cleanup a lot of code.
 
-When can that happen?
-
->  _rtw_join_timeout_handler
->   rtw_do_join
->    rtw_select_and_join_from_scanned_queue
->     rtw_indicate_disconnect
->      rtw_lps_ctrl_wk_cmd
->       lps_ctrl_wk_hdl
->        LPS_Leave
->         LPS_RF_ON_check
->          msleep //sleep in atomic context
-
-How was this found?
-
-> Fix by removing msleep() and replacing with mdelay().
-
-Wouldn't people have seen an error already if msleep() was really called
-in atomic context?
-
-And what about the other drivers that have this identical code, why only
-fix one?
-
-thanks,
-
-greg k-h
+-- 
+paul-moore.com
