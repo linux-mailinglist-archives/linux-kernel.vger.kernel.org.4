@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAC1760573B
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 08:17:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F12E605739
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 08:16:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230144AbiJTGRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 02:17:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34958 "EHLO
+        id S230083AbiJTGQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 02:16:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230096AbiJTGRF (ORCPT
+        with ESMTP id S230059AbiJTGQv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 02:17:05 -0400
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC9918B779
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 23:16:58 -0700 (PDT)
-Received: by mail-pj1-f71.google.com with SMTP id m16-20020a17090ab79000b0020abf0d3ff4so8226820pjr.1
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 23:16:58 -0700 (PDT)
+        Thu, 20 Oct 2022 02:16:51 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D9B7183E24
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 23:16:49 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id 75-20020a6b144e000000b006bbed69b669so15958378iou.21
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 23:16:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=g3RhILIsdBjH805xVaYg94nPQyHHq7YNZ6eTkxF7o6U=;
-        b=oS3XixdBYWs0AgGH4mz2MSZOUVuVfFaRk8eAcfKr1l/Zz5UBNbtRDlc9tg7ZsohvCh
-         4hbD5fCZnr8Ciz0Kwywo+2sAc/U+7z4csOIQptS2sT2KCBJOdD/gC9aDTrrWdeIWw1a6
-         u7TwgtObvb+wnKbnlxoraCJ62M551mRqLEZo94HrL+7+GWmOhaIOmppywSYMXoDwzyhM
-         knFUW12rVQtkBwuJ/gvA7wwps36GwC+h9Mi6Dnz6dIXblA8PAxJzfFTQAGqtdO29HiXc
-         NZf0yajBCy0q6K+l+kcoXqrwMaqh1++N/h6mvF/0W6OVm/uc/cUg5RBX13QGCq2VeRJi
-         83mg==
-X-Gm-Message-State: ACrzQf1fJMN6mHcB9itKnBOfMKwNaNX79oeLFrt3DlPfaL9+hmB+CU1y
-        Hlz7YRiGm4Fkzd5CE4Ot3pQwRmemkV0KeisZWBYFxmNvxTpV
-X-Google-Smtp-Source: AMsMyM6STQIWM4rzVxFj9lolU6gWFvxngXt5tC47tXItvVr0PK09wTot70Ku/eDM+TxMApGwQn7l4TPTbHPYcczHV0XTBR2472gN
+        bh=0vv0g5Hf0bDXF9rf4LbrVovhSHtbDdHpYzUlhBOmk0E=;
+        b=eCtnSTsR/x1lfLmD4QcZw3UyT2Q3wETahHvO1oqadmeb5jyLjWKVEsEdpmw1TSMDsg
+         qgLFzLGE81nEHZHKi7XAuH62j4/930s8iCkxoqRXlhysN1nxYR5VwnDLVhovYut9us4N
+         yMIdfsaLAbgc4PL8TW3V0OTFmzIAZq80afYHY5oxvvP+XeLBvAGT7iBB0nr4v4KDDBeh
+         aa9GTs+uULbsDilMA0j0Ineees7DcdT0U41x/UIUIl/07ZYm7BtNvjkInRTiK41bBzIK
+         htA0ag5OKSM/tWyl1A2J4u3XwUkblBTlnPIPS/AJDeglI5T8svrekvJxYBbG3K/4zKlO
+         WDLA==
+X-Gm-Message-State: ACrzQf10IKWeqrXxjHzlU+VQ6NfIXUkbLLVhHzjYF+2g2heXa8kdWK2q
+        6sWMNWzF7v7EPhiq866aVQavo7R1/pHtCxlNFO9OeNldxXKi
+X-Google-Smtp-Source: AMsMyM6j+9TtjoaJUYpUPpYNDY1++MYiTnFj3C5I807Q44YlHw+HnHfvSqp9XSY1w8SbWLIyswQgte5lJkbg3tF+TKXCBKDLrP+i
 MIME-Version: 1.0
-X-Received: by 2002:a92:cd83:0:b0:2f9:c29a:9107 with SMTP id
- r3-20020a92cd83000000b002f9c29a9107mr10003805ilb.271.1666246608151; Wed, 19
+X-Received: by 2002:a05:6e02:170b:b0:2fc:59ab:bcd2 with SMTP id
+ u11-20020a056e02170b00b002fc59abbcd2mr8701132ill.74.1666246608396; Wed, 19
  Oct 2022 23:16:48 -0700 (PDT)
 Date:   Wed, 19 Oct 2022 23:16:48 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000002feb6605eb71458e@google.com>
-Subject: [syzbot] general protection fault in _parse_integer_fixup_radix
-From:   syzbot <syzbot+db1d2ea936378be0e4ea@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, hughd@google.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+Message-ID: <00000000000033a7b505eb714534@google.com>
+Subject: [syzbot] INFO: task hung in __gfs2_trans_begin
+From:   syzbot <syzbot+a159cc6676345e04ff7d@syzkaller.appspotmail.com>
+To:     agruenba@redhat.com, cluster-devel@redhat.com,
+        linux-kernel@vger.kernel.org, rpeterso@redhat.com,
         syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -59,103 +59,280 @@ Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    a72b55bc981b Add linux-next specific files for 20221019
-git tree:       linux-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=1728c644880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=200524babbc01b2a
-dashboard link: https://syzkaller.appspot.com/bug?extid=db1d2ea936378be0e4ea
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12afb08c880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11001c72880000
+HEAD commit:    493ffd6605b2 Merge tag 'ucount-rlimits-cleanups-for-v5.19'..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=13aa22ba880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d19f5d16783f901
+dashboard link: https://syzkaller.appspot.com/bug?extid=a159cc6676345e04ff7d
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15fbd70c880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14dceee2880000
 
 Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/fa24fb5893fd/disk-a72b55bc.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/cf1b7e7b579c/vmlinux-a72b55bc.xz
+disk image: https://storage.googleapis.com/syzbot-assets/f1ff6481e26f/disk-493ffd66.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/101bd3c7ae47/vmlinux-493ffd66.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/510833e7acb6/mount_1.gz
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+db1d2ea936378be0e4ea@syzkaller.appspotmail.com
+Reported-by: syzbot+a159cc6676345e04ff7d@syzkaller.appspotmail.com
 
-general protection fault, probably for non-canonical address 0xdffffc0000000000: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
-CPU: 1 PID: 3606 Comm: syz-executor141 Not tainted 6.1.0-rc1-next-20221019-syzkaller #0
+INFO: task syz-executor714:3609 blocked for more than 143 seconds.
+      Not tainted 6.0.0-syzkaller-09423-g493ffd6605b2 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor714 state:D stack:23256 pid: 3609 ppid:  3606 flags:0x00004002
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5183 [inline]
+ __schedule+0x91f/0xdf0 kernel/sched/core.c:6495
+ schedule+0xcb/0x190 kernel/sched/core.c:6571
+ rwsem_down_read_slowpath+0x5f9/0x930 kernel/locking/rwsem.c:1087
+ __down_read_common+0x54/0x2a0 kernel/locking/rwsem.c:1252
+ __gfs2_trans_begin+0x4e4/0x8c0 fs/gfs2/trans.c:87
+ gfs2_trans_begin+0x6d/0xe0 fs/gfs2/trans.c:118
+ gfs2_write_jdata_pagevec+0x100/0xe20 fs/gfs2/aops.c:220
+ gfs2_write_cache_jdata+0x46d/0x7b0 fs/gfs2/aops.c:349
+ gfs2_jdata_writepages+0x81/0x150 fs/gfs2/aops.c:391
+ do_writepages+0x3c3/0x680 mm/page-writeback.c:2469
+ filemap_fdatawrite_wbc+0x11e/0x170 mm/filemap.c:388
+ gfs2_ail1_start_one fs/gfs2/log.c:134 [inline]
+ gfs2_ail1_flush+0xbc3/0xeb0 fs/gfs2/log.c:214
+ gfs2_ail1_start fs/gfs2/log.c:245 [inline]
+ empty_ail1_list+0x17f/0x260 fs/gfs2/log.c:977
+ gfs2_log_flush+0x212a/0x26a0 fs/gfs2/log.c:1122
+ gfs2_kill_sb+0x50/0xd0 fs/gfs2/ops_fstype.c:1725
+ deactivate_locked_super+0xa7/0xf0 fs/super.c:331
+ cleanup_mnt+0x4ce/0x560 fs/namespace.c:1186
+ task_work_run+0x146/0x1c0 kernel/task_work.c:177
+ ptrace_notify+0x29a/0x340 kernel/signal.c:2354
+ ptrace_report_syscall include/linux/ptrace.h:420 [inline]
+ ptrace_report_syscall_exit include/linux/ptrace.h:482 [inline]
+ syscall_exit_work+0x8c/0xe0 kernel/entry/common.c:249
+ syscall_exit_to_user_mode_prepare+0x63/0xc0 kernel/entry/common.c:276
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:281 [inline]
+ syscall_exit_to_user_mode+0xa/0x60 kernel/entry/common.c:294
+ do_syscall_64+0x49/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fc8dc1bc527
+RSP: 002b:00007fff602f2de8 EFLAGS: 00000206 ORIG_RAX: 00000000000000a6
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 00007fc8dc1bc527
+RDX: 00007fff602f2ea9 RSI: 000000000000000a RDI: 00007fff602f2ea0
+RBP: 00007fff602f2ea0 R08: 00000000ffffffff R09: 00007fff602f2c80
+R10: 000055555558c653 R11: 0000000000000206 R12: 00007fff602f3f10
+R13: 000055555558c5f0 R14: 00007fff602f2e10 R15: 0000000000000005
+ </TASK>
+INFO: task gfs2_logd:3658 blocked for more than 143 seconds.
+      Not tainted 6.0.0-syzkaller-09423-g493ffd6605b2 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:gfs2_logd       state:D stack:29592 pid: 3658 ppid:     2 flags:0x00004000
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5183 [inline]
+ __schedule+0x91f/0xdf0 kernel/sched/core.c:6495
+ schedule+0xcb/0x190 kernel/sched/core.c:6571
+ rwsem_down_write_slowpath+0xf1c/0x1350 kernel/locking/rwsem.c:1182
+ __down_write_common kernel/locking/rwsem.c:1297 [inline]
+ __down_write kernel/locking/rwsem.c:1306 [inline]
+ down_write+0x163/0x170 kernel/locking/rwsem.c:1553
+ gfs2_log_flush+0xe7/0x26a0 fs/gfs2/log.c:1034
+ gfs2_logd+0x41f/0xe50 fs/gfs2/log.c:1319
+ kthread+0x266/0x300 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+ </TASK>
+INFO: task gfs2_quotad:3659 blocked for more than 144 seconds.
+      Not tainted 6.0.0-syzkaller-09423-g493ffd6605b2 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:gfs2_quotad     state:D stack:27576 pid: 3659 ppid:     2 flags:0x00004000
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5183 [inline]
+ __schedule+0x91f/0xdf0 kernel/sched/core.c:6495
+ schedule+0xcb/0x190 kernel/sched/core.c:6571
+ rwsem_down_read_slowpath+0x5f9/0x930 kernel/locking/rwsem.c:1087
+ __down_read_common+0x54/0x2a0 kernel/locking/rwsem.c:1252
+ __gfs2_trans_begin+0x4e4/0x8c0 fs/gfs2/trans.c:87
+ gfs2_trans_begin+0x6d/0xe0 fs/gfs2/trans.c:118
+ gfs2_statfs_sync+0x37f/0x4c0 fs/gfs2/super.c:294
+ quotad_check_timeo fs/gfs2/quota.c:1512 [inline]
+ gfs2_quotad+0x485/0xb20 fs/gfs2/quota.c:1554
+ kthread+0x266/0x300 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+ </TASK>
+INFO: task syz-executor714:3660 blocked for more than 144 seconds.
+      Not tainted 6.0.0-syzkaller-09423-g493ffd6605b2 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor714 state:D stack:27064 pid: 3660 ppid:  3608 flags:0x00004004
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5183 [inline]
+ __schedule+0x91f/0xdf0 kernel/sched/core.c:6495
+ schedule+0xcb/0x190 kernel/sched/core.c:6571
+ rwsem_down_read_slowpath+0x5f9/0x930 kernel/locking/rwsem.c:1087
+ __down_read_common+0x54/0x2a0 kernel/locking/rwsem.c:1252
+ iterate_supers+0xb0/0x1f0 fs/super.c:721
+ ksys_sync+0xd5/0x1c0 fs/sync.c:104
+ __do_sys_sync+0xa/0x10 fs/sync.c:113
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fc8dc1bb189
+RSP: 002b:00007fff602f3ed8 EFLAGS: 00000246 ORIG_RAX: 00000000000000a2
+RAX: ffffffffffffffda RBX: 000000000000e657 RCX: 00007fc8dc1bb189
+RDX: 00007fc8dc1baba7 RSI: 0000000000000004 RDI: 00007fc8dc1ff074
+RBP: 0000000000000000 R08: 00007fff602f3950 R09: 00007fff602f3f00
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007fff602f3efc
+R13: 00007fff602f3f30 R14: 00007fff602f3f10 R15: 0000000000000005
+ </TASK>
+INFO: task syz-executor714:3661 blocked for more than 144 seconds.
+      Not tainted 6.0.0-syzkaller-09423-g493ffd6605b2 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor714 state:D stack:27288 pid: 3661 ppid:  3610 flags:0x00004004
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5183 [inline]
+ __schedule+0x91f/0xdf0 kernel/sched/core.c:6495
+ schedule+0xcb/0x190 kernel/sched/core.c:6571
+ rwsem_down_read_slowpath+0x5f9/0x930 kernel/locking/rwsem.c:1087
+ __down_read_common+0x54/0x2a0 kernel/locking/rwsem.c:1252
+ iterate_supers+0xb0/0x1f0 fs/super.c:721
+ ksys_sync+0xb7/0x1c0 fs/sync.c:102
+ __do_sys_sync+0xa/0x10 fs/sync.c:113
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fc8dc1bb189
+RSP: 002b:00007fff602f3ed8 EFLAGS: 00000246 ORIG_RAX: 00000000000000a2
+RAX: ffffffffffffffda RBX: 000000000000e326 RCX: 00007fc8dc1bb189
+RDX: 00007fc8dc1baba7 RSI: 0000000000000004 RDI: 00007fc8dc1ff074
+RBP: 0000000000000000 R08: 00007fff602f3950 R09: 00007fff602f3f00
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007fff602f3efc
+R13: 00007fff602f3f30 R14: 00007fff602f3f10 R15: 0000000000000005
+ </TASK>
+INFO: task syz-executor714:3662 blocked for more than 144 seconds.
+      Not tainted 6.0.0-syzkaller-09423-g493ffd6605b2 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor714 state:D stack:28088 pid: 3662 ppid:  3612 flags:0x00004004
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5183 [inline]
+ __schedule+0x91f/0xdf0 kernel/sched/core.c:6495
+ schedule+0xcb/0x190 kernel/sched/core.c:6571
+ rwsem_down_read_slowpath+0x5f9/0x930 kernel/locking/rwsem.c:1087
+ __down_read_common+0x54/0x2a0 kernel/locking/rwsem.c:1252
+ iterate_supers+0xb0/0x1f0 fs/super.c:721
+ ksys_sync+0xb7/0x1c0 fs/sync.c:102
+ __do_sys_sync+0xa/0x10 fs/sync.c:113
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fc8dc1bb189
+RSP: 002b:00007fff602f3ed8 EFLAGS: 00000246 ORIG_RAX: 00000000000000a2
+RAX: ffffffffffffffda RBX: 000000000000e34d RCX: 00007fc8dc1bb189
+RDX: 00007fc8dc1baba7 RSI: 0000000000000004 RDI: 00007fc8dc1ff074
+RBP: 0000000000000000 R08: 00007fff602f3950 R09: 00007fff602f3f00
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007fff602f3efc
+R13: 00007fff602f3f30 R14: 00007fff602f3f10 R15: 0000000000000005
+ </TASK>
+INFO: task syz-executor714:3663 blocked for more than 144 seconds.
+      Not tainted 6.0.0-syzkaller-09423-g493ffd6605b2 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor714 state:D stack:28088 pid: 3663 ppid:  3607 flags:0x00004004
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5183 [inline]
+ __schedule+0x91f/0xdf0 kernel/sched/core.c:6495
+ schedule+0xcb/0x190 kernel/sched/core.c:6571
+ rwsem_down_read_slowpath+0x5f9/0x930 kernel/locking/rwsem.c:1087
+ __down_read_common+0x54/0x2a0 kernel/locking/rwsem.c:1252
+ iterate_supers+0xb0/0x1f0 fs/super.c:721
+ ksys_sync+0xb7/0x1c0 fs/sync.c:102
+ __do_sys_sync+0xa/0x10 fs/sync.c:113
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fc8dc1bb189
+RSP: 002b:00007fff602f3ed8 EFLAGS: 00000246 ORIG_RAX: 00000000000000a2
+RAX: ffffffffffffffda RBX: 000000000000e673 RCX: 00007fc8dc1bb189
+RDX: 00007fc8dc1baba7 RSI: 0000000000000004 RDI: 00007fc8dc1ff074
+RBP: 0000000000000000 R08: 00007fff602f3950 R09: 00007fff602f3f00
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007fff602f3efc
+R13: 00007fff602f3f30 R14: 00007fff602f3f10 R15: 0000000000000005
+ </TASK>
+INFO: task syz-executor714:3664 blocked for more than 145 seconds.
+      Not tainted 6.0.0-syzkaller-09423-g493ffd6605b2 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor714 state:D stack:28088 pid: 3664 ppid:  3611 flags:0x00004004
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5183 [inline]
+ __schedule+0x91f/0xdf0 kernel/sched/core.c:6495
+ schedule+0xcb/0x190 kernel/sched/core.c:6571
+ rwsem_down_read_slowpath+0x5f9/0x930 kernel/locking/rwsem.c:1087
+ __down_read_common+0x54/0x2a0 kernel/locking/rwsem.c:1252
+ iterate_supers+0xb0/0x1f0 fs/super.c:721
+ ksys_sync+0xb7/0x1c0 fs/sync.c:102
+ __do_sys_sync+0xa/0x10 fs/sync.c:113
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fc8dc1bb189
+RSP: 002b:00007fff602f3ed8 EFLAGS: 00000246 ORIG_RAX: 00000000000000a2
+RAX: ffffffffffffffda RBX: 000000000000e62e RCX: 00007fc8dc1bb189
+RDX: 00007fc8dc1baba7 RSI: 0000000000000004 RDI: 00007fc8dc1ff074
+RBP: 0000000000000000 R08: 00007fff602f3950 R09: 00007fff602f3f00
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007fff602f3efc
+R13: 00007fff602f3f30 R14: 00007fff602f3f10 R15: 0000000000000005
+ </TASK>
+INFO: lockdep is turned off.
+NMI backtrace for cpu 0
+CPU: 0 PID: 29 Comm: khungtaskd Not tainted 6.0.0-syzkaller-09423-g493ffd6605b2 #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
-RIP: 0010:_parse_integer_fixup_radix+0x60/0x290 lib/kstrtox.c:29
-Code: 02 00 00 41 8b 2c 24 31 ff 89 ee e8 4a ae 76 fd 85 ed 75 62 e8 71 b1 76 fd 48 89 da 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 <0f> b6 04 02 48 89 da 83 e2 07 38 d0 7f 08 84 c0 0f 85 e2 01 00 00
-RSP: 0018:ffffc90003d3fa40 EFLAGS: 00010246
-RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffffffff8405d49f RDI: 0000000000000005
-RBP: 0000000000000000 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000000 R11: 000000000008c001 R12: ffffc90003d3fa90
-R13: ffffc90003d3fbd8 R14: 000000007fffffff R15: ffff8880798524d0
-FS:  000055555732c300(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
+ nmi_cpu_backtrace+0x425/0x450 lib/nmi_backtrace.c:111
+ nmi_trigger_cpumask_backtrace+0x169/0x280 lib/nmi_backtrace.c:62
+ trigger_all_cpu_backtrace include/linux/nmi.h:148 [inline]
+ check_hung_uninterruptible_tasks kernel/hung_task.c:212 [inline]
+ watchdog+0xcd5/0xd20 kernel/hung_task.c:369
+ kthread+0x266/0x300 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+ </TASK>
+Sending NMI from CPU 0 to CPUs 1:
+NMI backtrace for cpu 1
+CPU: 1 PID: 1081 Comm: kworker/u4:5 Not tainted 6.0.0-syzkaller-09423-g493ffd6605b2 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+Workqueue: events_unbound toggle_allocation_gate
+RIP: 0010:__sanitizer_cov_trace_switch+0x0/0x100 kernel/kcov.c:310
+Code: 48 83 c8 08 48 c7 04 01 07 00 00 00 48 89 d0 48 83 c8 10 48 89 3c 01 48 83 ca 18 48 89 34 11 4e 89 44 c9 20 c3 0f 1f 44 00 00 <41> 57 41 56 53 48 8b 46 08 48 83 c0 f8 48 c1 c0 3d 48 83 f8 07 0f
+RSP: 0018:ffffc9000515f810 EFLAGS: 00000246
+RAX: 1ffff92000a2bf00 RBX: 0000000000000001 RCX: 0000000000000000
+RDX: ffff8880200fd880 RSI: ffffffff8d1c1900 RDI: 0000000000000001
+RBP: 0000000000000000 R08: ffffffff846979e0 R09: ffffc9000515f960
+R10: fffff52000a2bf37 R11: 1ffff92000a2bf2c R12: ffffc9000515f960
+R13: 0000000000000044 R14: 1ffff92000a2bf39 R15: dffffc0000000000
+FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
 CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020000000 CR3: 000000007b427000 CR4: 00000000003506e0
+CR2: 000055c30a147990 CR3: 000000000c88e000 CR4: 00000000003506e0
 DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
 DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 Call Trace:
  <TASK>
- simple_strntoull+0x88/0x160 lib/vsprintf.c:68
- memparse+0x72/0x180 lib/cmdline.c:154
- shmem_parse_one+0x6a3/0xa60 mm/shmem.c:3478
- vfs_parse_fs_param fs/fs_context.c:148 [inline]
- vfs_parse_fs_param+0x1f9/0x3c0 fs/fs_context.c:129
- vfs_parse_fs_string+0xdb/0x170 fs/fs_context.c:191
- shmem_parse_options+0x15f/0x240 mm/shmem.c:3570
- do_new_mount fs/namespace.c:3036 [inline]
- path_mount+0x12de/0x1e20 fs/namespace.c:3370
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount fs/namespace.c:3568 [inline]
- __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f012fe73e09
-Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffed54dd188 EFLAGS: 00000246 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 0030656c69662f2e RCX: 00007f012fe73e09
-RDX: 0000000020000040 RSI: 0000000020000000 RDI: 0000000000000000
-RBP: 00007f012fe37d20 R08: 0000000020000180 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007f012fe37db0
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ insn_get_displacement+0x33b/0x9a0 arch/x86/lib/insn.c:490
+ insn_get_immediate+0x427/0x12e0 arch/x86/lib/insn.c:632
+ insn_get_length arch/x86/lib/insn.c:707 [inline]
+ insn_decode+0x3b0/0x550 arch/x86/lib/insn.c:747
+ text_poke_loc_init+0xb3/0x500 arch/x86/kernel/alternative.c:1590
+ arch_jump_label_transform_queue+0x70/0xd0 arch/x86/kernel/jump_label.c:138
+ __jump_label_update+0x19b/0x3b0 kernel/jump_label.c:447
+ static_key_disable_cpuslocked+0xc8/0x1b0 kernel/jump_label.c:207
+ static_key_disable+0x16/0x20 kernel/jump_label.c:215
+ toggle_allocation_gate+0x3b8/0x450 mm/kfence/core.c:825
+ process_one_work+0x877/0xdb0 kernel/workqueue.c:2289
+ worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
+ kthread+0x266/0x300 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
  </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:_parse_integer_fixup_radix+0x60/0x290 lib/kstrtox.c:29
-Code: 02 00 00 41 8b 2c 24 31 ff 89 ee e8 4a ae 76 fd 85 ed 75 62 e8 71 b1 76 fd 48 89 da 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 <0f> b6 04 02 48 89 da 83 e2 07 38 d0 7f 08 84 c0 0f 85 e2 01 00 00
-RSP: 0018:ffffc90003d3fa40 EFLAGS: 00010246
-RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffffffff8405d49f RDI: 0000000000000005
-RBP: 0000000000000000 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000000 R11: 000000000008c001 R12: ffffc90003d3fa90
-R13: ffffc90003d3fbd8 R14: 000000007fffffff R15: ffff8880798524d0
-FS:  000055555732c300(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020000000 CR3: 000000007b427000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	02 00                	add    (%rax),%al
-   2:	00 41 8b             	add    %al,-0x75(%rcx)
-   5:	2c 24                	sub    $0x24,%al
-   7:	31 ff                	xor    %edi,%edi
-   9:	89 ee                	mov    %ebp,%esi
-   b:	e8 4a ae 76 fd       	callq  0xfd76ae5a
-  10:	85 ed                	test   %ebp,%ebp
-  12:	75 62                	jne    0x76
-  14:	e8 71 b1 76 fd       	callq  0xfd76b18a
-  19:	48 89 da             	mov    %rbx,%rdx
-  1c:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-  23:	fc ff df
-  26:	48 c1 ea 03          	shr    $0x3,%rdx
-* 2a:	0f b6 04 02          	movzbl (%rdx,%rax,1),%eax <-- trapping instruction
-  2e:	48 89 da             	mov    %rbx,%rdx
-  31:	83 e2 07             	and    $0x7,%edx
-  34:	38 d0                	cmp    %dl,%al
-  36:	7f 08                	jg     0x40
-  38:	84 c0                	test   %al,%al
-  3a:	0f 85 e2 01 00 00    	jne    0x222
 
 
 ---
