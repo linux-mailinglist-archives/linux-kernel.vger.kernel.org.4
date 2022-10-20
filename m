@@ -2,86 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 572BC605DBE
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 12:41:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEDD9605E16
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 12:43:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230454AbiJTKlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 06:41:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42728 "EHLO
+        id S230309AbiJTKnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 06:43:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230466AbiJTKku (ORCPT
+        with ESMTP id S229716AbiJTKnj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 06:40:50 -0400
-Received: from mx3.wp.pl (mx3.wp.pl [212.77.101.9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1026592CF0
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 03:40:43 -0700 (PDT)
-Received: (wp-smtpd smtp.wp.pl 29077 invoked from network); 20 Oct 2022 12:40:40 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=1024a;
-          t=1666262440; bh=YiUYx4m1KM/++4m8L0pp6WOehdY09Qob4zZNKzryBSc=;
-          h=From:To:Cc:Subject;
-          b=SECSFuLFtgLY+UIoEigmDcOl4MC6ss6ytWo9jjV0fEzw7xVgLsYqSwC/86Dpqwxa1
-           6Pavi4Mwde2eBYetegBlN3B9j0o95A1Tpy0wCCRmO8G9CH6KKxRE1k95Mp1dcb3d4M
-           ihbMWosePD4EeMjVu6w+qtwEcafWE1MJVp0IckmY=
-Received: from 89-64-7-202.dynamic.chello.pl (HELO localhost) (stf_xl@wp.pl@[89.64.7.202])
-          (envelope-sender <stf_xl@wp.pl>)
-          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <andriy.shevchenko@linux.intel.com>; 20 Oct 2022 12:40:40 +0200
-Date:   Thu, 20 Oct 2022 12:40:40 +0200
-From:   Stanislaw Gruszka <stf_xl@wp.pl>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Helmut Schaa <helmut.schaa@googlemail.com>,
-        Kalle Valo <kvalo@kernel.org>
-Subject: Re: [PATCH] wifi: rt2x00: use explicitly signed type for clamping
-Message-ID: <20221020104040.GB95289@wp.pl>
-References: <202210190108.ESC3pc3D-lkp@intel.com>
- <20221018202734.140489-1-Jason@zx2c4.com>
- <20221019085219.GA81503@wp.pl>
- <Y0/Z2aHKYVPsiWa5@smile.fi.intel.com>
+        Thu, 20 Oct 2022 06:43:39 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 311F01DE3DC;
+        Thu, 20 Oct 2022 03:43:38 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id a3so33643473wrt.0;
+        Thu, 20 Oct 2022 03:43:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8by0Y4Eoa0kr85uGkSh6id4MSxKcFJ3fiBsqOvDMlAE=;
+        b=Dg6FZMiKOpS+wPxYXYMQwJb3ghZ5Ne0C127VSEeSn3UKizE7cW7LRh12OvEHacm+qZ
+         KhNtypoje0v5fsvDtzKGq72NbjfASL/e8+ZM74dESE7QDnCfxXD8h0wzc+Z9plxtyPvM
+         ou19svqJ0A6hZ3+zB6SG+EzdbxbVkw1PVVSvGywkkhCgtsKIc3pN2QzNSHb1AB8as2b+
+         n4sI7lxtpfrHU+x9plYF108oFAYbulyky+Gn5iWZjryOTHbpcXViHhDlmXmAQl4xDv7H
+         zxu5jPFvwf9+5oJ/GMizcfHZZPpWZI4+IEslAbikejLDq2AeOzP1eZixTEDn6Ytu+ntG
+         U42Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8by0Y4Eoa0kr85uGkSh6id4MSxKcFJ3fiBsqOvDMlAE=;
+        b=amckc+jKBblgOFQjB8pInDYbLoFyZcTMCmn4/noY5OR7tWOBfqWBrmn4JexApj2tQu
+         xo/kI6WEuJzCdV+xamNA2+gg7+6PfJiVy2SRj5hqDgNpG0IqKpMOdxB2M6YPE1Co967f
+         T+aWaE5VQWNeWJDjOcWxauLS0e+MorbVaUzkZXCerKdeUh83L2K5M42DjvEsSovstpbD
+         QnwKTWcUQDlwbVQisoGdM24sphQzf4ghupzLukcAnS21N3Gm9J6lFtZomNXiQVKAcLx/
+         pnsXL05eduZycUfKnS0ljpbntc0gb4ammN07q8wjmCaMZHD7/CxjXFMObVB+h14Ka/Vu
+         JOew==
+X-Gm-Message-State: ACrzQf00tk/oMlWOuej2E5H1RgEkggoVXY8UHmlgNK+wpguKxDGFDO5N
+        HhbA8PXfCjWYFNOE9Dt3+Ys=
+X-Google-Smtp-Source: AMsMyM6G/XskeXiqSWkNXzfremvJ9+c3oqzjPfthvFDcEEEWjq5GY/l8JArMbaaY5BR7Q0M6TODDVg==
+X-Received: by 2002:a5d:6485:0:b0:230:b6db:d41c with SMTP id o5-20020a5d6485000000b00230b6dbd41cmr7786324wri.709.1666262616595;
+        Thu, 20 Oct 2022 03:43:36 -0700 (PDT)
+Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
+        by smtp.gmail.com with ESMTPSA id p26-20020a1c741a000000b003c6b70a4d69sm2357806wmc.42.2022.10.20.03.43.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Oct 2022 03:43:36 -0700 (PDT)
+Date:   Thu, 20 Oct 2022 11:43:34 +0100
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, srw@sladewatkins.net
+Subject: Re: [PATCH 6.0 000/862] 6.0.3-rc1 review
+Message-ID: <Y1EmVsftX4MYH8TS@debian>
+References: <20221019083249.951566199@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y0/Z2aHKYVPsiWa5@smile.fi.intel.com>
-X-WP-MailID: 09a596413a20ffdf6a3f0dbf20015b16
-X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
-X-WP-SPAM: NO 0000000 [AWP0]                               
+In-Reply-To: <20221019083249.951566199@linuxfoundation.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 02:04:57PM +0300, Andy Shevchenko wrote:
-> On Wed, Oct 19, 2022 at 10:52:19AM +0200, Stanislaw Gruszka wrote:
-> > On Tue, Oct 18, 2022 at 02:27:34PM -0600, Jason A. Donenfeld wrote:
-> > > On some platforms, `char` is unsigned, which makes casting -7 to char
-> > > overflow, which in turn makes the clamping operation bogus. Instead,
-> > > deal with an explicit `s8` type, so that the comparison is always
-> > > signed, and return an s8 result from the function as well. Note that
-> > > this function's result is assigned to a `short`, which is always signed.
-> > > 
-> > > Cc: Andrew Morton <akpm@linux-foundation.org>
-> > > Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > > Cc: Stanislaw Gruszka <stf_xl@wp.pl>
-> > > Cc: Helmut Schaa <helmut.schaa@googlemail.com>
-> > > Cc: Kalle Valo <kvalo@kernel.org>
-> > > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> > 
-> > I prefer s8 just because is shorter name than short :-)
+Hi Greg,
+
+On Wed, Oct 19, 2022 at 10:21:27AM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.0.3 release.
+> There are 862 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Shouldn't the corresponding data structure type be fixed accordingly?
+> Responses should be made by Fri, 21 Oct 2022 08:30:19 +0000.
+> Anything received after that time might be too late.
 
-We can change types of channel_info default_power* fields in rt2x00.h,
-but I'm a bit reluctant to do so, as I'm afraid this could change
-actual power values sent to the hardware and will require careful
-verification.
+Build test (gcc version 12.2.1 20221016):
+mips: 52 configs -> no failure
+arm: 100 configs -> no failure
+arm64: 3 configs -> no failure
+x86_64: 4 configs -> no failure
+alpha allmodconfig -> no failure
+csky allmodconfig -> no failure
+powerpc allmodconfig -> no failure
+riscv allmodconfig -> no failure
+s390 allmodconfig -> no failure
+xtensa allmodconfig -> no failure
 
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+
+[1]. https://openqa.qa.codethink.co.uk/tests/2018
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
+-- 
 Regards
-Stanislaw
+Sudip
