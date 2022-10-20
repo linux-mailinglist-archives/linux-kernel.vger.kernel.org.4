@@ -2,136 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 973736059A6
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 10:25:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BECA605A2E
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 10:51:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229697AbiJTIZC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 04:25:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41674 "EHLO
+        id S230250AbiJTIvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 04:51:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229978AbiJTIY7 (ORCPT
+        with ESMTP id S229501AbiJTIvB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 04:24:59 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A5B48BB8B;
-        Thu, 20 Oct 2022 01:24:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666254297; x=1697790297;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LIQIgRcbz5Lb9wHlEl2vSnyQOnSfQ4cdPljf3Dl5Img=;
-  b=nKcd4EaesVfe8eh0c6coOHXHQ1NNHNxz+taxxjhR/QQawcNnybzi/P9f
-   ciTdHz5MNNDINWTensI+OCC9qh4hRrUpL+ACPeqEMT86S9XkU5Hnzfdh3
-   W/iVZf0vgtxB45hJEwY04kKWWxTtwbmkDm0fRCvkkV8ddZ73mXQmXn55J
-   hflO/Fixcv1ojFUamp7BGofYY0rJH2Zjf/D5fkbS23flCKaQY+EZM8NpM
-   cuiGcxOES+0tv7MkwjWk2tONn+kv+PQy9kViFpsO+V267zVzJkbziDUh0
-   KZNyiRUqG+Z5NG5W6BuhSxWgsHyJ6ZAp9wiJleXbeSNh09HliNGpaT10m
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="286365394"
-X-IronPort-AV: E=Sophos;i="5.95,198,1661842800"; 
-   d="scan'208";a="286365394"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 01:24:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="607536732"
-X-IronPort-AV: E=Sophos;i="5.95,198,1661842800"; 
-   d="scan'208";a="607536732"
-Received: from liuzhao-optiplex-7080.sh.intel.com (HELO localhost) ([10.239.160.132])
-  by orsmga006.jf.intel.com with ESMTP; 20 Oct 2022 01:24:53 -0700
-Date:   Thu, 20 Oct 2022 16:30:29 +0800
-From:   Zhao Liu <zhao1.liu@linux.intel.com>
-To:     Ira Weiny <ira.weiny@intel.com>
-Cc:     "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Zhenyu Wang <zhenyu.z.wang@intel.com>,
-        Zhao Liu <zhao1.liu@intel.com>
-Subject: Re: [PATCH] x86/hyperv: Remove BUG_ON() for kmap_local_page()
-Message-ID: <Y1EHJc7H/63F6rxt@liuzhao-OptiPlex-7080>
-References: <20221018162117.2332508-1-zhao1.liu@linux.intel.com>
- <Y09n6dRN+zxsaLW/@iweiny-desk3>
+        Thu, 20 Oct 2022 04:51:01 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8F4217536F
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 01:50:54 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 3A701320085B;
+        Thu, 20 Oct 2022 04:50:49 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Thu, 20 Oct 2022 04:50:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1666255848; x=1666342248; bh=w5WjrHX1p4
+        oGXE8GiUzEI3SU/oVM7aMllFffCWen/+c=; b=JMKDRfWeMk7d/aEyjQ2ZgPHU8N
+        3eANlS05qRpu954BxJ7JW7lsVCeH7CfH7AxjBf8ilrFYDZlK1dNFihyI6rzzS9FI
+        1pVDVQqXahp/l/mNqcY8roSHPY39Xi6gxr5ZqQzq9we8l8lnAtJcTtq2WJ7JpTCs
+        wR6S2tpRRYd8DreuSZTQC3Mf4eS0W8GUbn8R2KnFh0RRXJdFCnYtDLY5arfB8ReX
+        fJRnVKtWn8z55O/eGZV6h7YGw7ghm4NiqWJXO65GB2dR9wnvPoDDGoa30ijAqkg5
+        iSOobzB9gNTTHgcxqrJ1t56WCTFHpc6LD0ze9WQSoUCu8HaMwbDXnfry7zuA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1666255848; x=1666342248; bh=w5WjrHX1p4oGX
+        E8GiUzEI3SU/oVM7aMllFffCWen/+c=; b=ssB3BbU8rKENSAOB4fD1BSSG90DMh
+        DzwYygAU2W9SDgNGV0slTmRwFzfttSaVyx07PYTemC23fUpEgTxyj8AsE5X57QI1
+        OD2FqPKVZZ04HTx1e9qHL55l65Fts1Ta3rDA9D/gcri5XWt4xaMSTlD1AVDUCVww
+        N3KRcaYrxSmKzpHLm0IxssZPAvBsJqgKYswpyE2qWJOM6PSu+FhGUvnChU6sRR8w
+        igRdAy/4oN23K/oYVWUCIRsPY8774xnj4GPmUFnwhd8+SJ7p+9aq5Hslcg+ekxOq
+        yPltO/BFz7UyPDXiLZNe5dq9TQ3w/ffADuHtRi/QJXodm1OHnp/eV934A==
+X-ME-Sender: <xms:6AtRYx47H3pXV5Ighqz1ISFiAN2M1tVePySyVpAePnpZMeAU7K7e7A>
+    <xme:6AtRY-47B9rFehLU9R5NijBGW8hU8Gprv-72wjfe183GTIwQphXwliqppBVK4PJ3n
+    4_WnQPgXGb_blAUS5o>
+X-ME-Received: <xmr:6AtRY4ewtO9wO3hPRwTiJPInPaXrmavUCaK5WclUFtJ6L38-W2OTbZSItlHhpwu7ltTNnDOjxd0DAR_nS6jjTcfeXuq0QWc4CNuP>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeliedgtdekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepufggtgfghfffkffvvefosehtkeertdertdejnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepleeuveetteffvdevlefgffelgeduueefleevfedvudegheekfeekheejieek
+    gedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:6AtRY6Lf33nVyVDS5fNQheIy0hYHsOvJmjrnMzYpUGArO0z10jTPew>
+    <xmx:6AtRY1KI2ejs99O6TSiQd7MDowQGMaVb2qTxBPG_iCfLnJhkDVQQew>
+    <xmx:6AtRYzxTl92O0FttY4-XPC7aizhEpzSdBrIeroYOtb9Xl7RNNmc0qA>
+    <xmx:6AtRYy5iuSIXwpEHto840GtfNDQ82q1iKoYAPLrolaUj5jtcT9o3Mg>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 20 Oct 2022 04:50:47 -0400 (EDT)
+Subject: [PATCH v2 0/7] drm/vc4: dpi: Various improvements
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y09n6dRN+zxsaLW/@iweiny-desk3>
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-b4-tracking: H4sIADQHUWMC/4WNzQrCMBCEX6Xk7Ep+rDU9+R7iIU0Xu9AmZVMDUvruLr6Ah2GYgflmVwWZsKi+2R
+ VjpUI5SbCnRsUppBcCjZKV1dYabRzwSjCKaFk5V1wwbQWiG7u2bZ2JziuZDqEgDBxSnGSc3vMs5URl
+ y/z5XVUj9vhDrQY03EIX/NVffBz0PSKnfN5QsM/jOL5vI7ZZvgAAAA==
+From:   Maxime Ripard <maxime@cerno.tech>
+Date:   Thu, 20 Oct 2022 10:30:44 +0200
+Message-Id: <20221013-rpi-dpi-improvements-v2-0-7691903fb9c8@cerno.tech>
+To:     Emma Anholt <emma@anholt.net>, Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh@kernel.org>, Daniel Vetter <daniel@ffwll.ch>,
+        Eric Anholt <eric@anholt.net>, David Airlie <airlied@linux.ie>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Joerg Quinten <aBUGSworstnightmare@gmail.com>,
+        Chris Morgan <macromorgan@hotmail.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <maxime@cerno.tech>
+X-Mailer: b4 0.10.1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1789; i=maxime@cerno.tech;
+ h=from:subject:message-id; bh=WBeFEiPbgMgKukc/SpChNRlkueJiLmWc/Mq8YeDR5TM=;
+ b=owGbwMvMwCX2+D1vfrpE4FHG02pJDMmB7BbTzN7r8agc9XXzn/31z56zE+sZ5bQXe91z/ji5efPb
+ PD/+jlIWBjEuBlkxRZYYYfMlcadmve5k45sHM4eVCWQIAxenAEyk4QQjw/ZZ79rvzsp+OSFA2eDYjG
+ xz12+77ijU+QZnqd1te9Ix4SjDX2le48IMxRu37Hi1/F6dnMubFV32ap+qfPFG7pMbmDtsOAE=
+X-Developer-Key: i=maxime@cerno.tech; a=openpgp;
+ fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 07:58:49PM -0700, Ira Weiny wrote:
-> Date: Tue, 18 Oct 2022 19:58:49 -0700
-> From: Ira Weiny <ira.weiny@intel.com>
-> Subject: Re: [PATCH] x86/hyperv: Remove BUG_ON() for kmap_local_page()
-> 
-> On Wed, Oct 19, 2022 at 12:21:17AM +0800, Zhao Liu wrote:
-> > From: Zhao Liu <zhao1.liu@intel.com>
-> > 
-> > The commit 154fb14df7a3c ("x86/hyperv: Replace kmap() with
-> > kmap_local_page()") keeps the BUG_ON() to check if kmap_local_page()
-> > fails.
-> > 
-> > But in fact, kmap_local_page() always returns a valid kernel address
-> > and won't return NULL here. It will BUG on its own if it fails. [1]
-> > 
-> > So directly use memcpy_to_page() which creates local mapping to copy.
-> > 
-> > [1]: https://lore.kernel.org/lkml/YztFEyUA48et0yTt@iweiny-mobl/
-> > 
-> > Fixes: 154fb14df7a3 ("x86/hyperv: Replace kmap() with kmap_local_page()")
-> 
-> I don't know that a fixes is required here.  We are not looking to backport any
-> of this and the other patch was correct.  This is just a follow on cleanup.
-> 
-> > Suggested-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-> > Suggested-by: Ira Weiny <ira.weiny@intel.com>
-> 
-> Code looks good.  Without the fixes.
-> 
-> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+Hi,
 
-Thanks! Let me quickly refresh a v2 patch without "Fixes" tag.
+Those patches have been in the downstream RaspberryPi tree for a while and help
+to support more DPI displays.
 
-Zhao
+Let me know what you think,
+Maxime
 
-> 
-> > Signed-off-by: Zhao Liu <zhao1.liu@intel.com>
-> > ---
-> >  arch/x86/hyperv/hv_init.c | 6 ++----
-> >  1 file changed, 2 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
-> > index 29774126e931..f66c5709324f 100644
-> > --- a/arch/x86/hyperv/hv_init.c
-> > +++ b/arch/x86/hyperv/hv_init.c
-> > @@ -459,13 +459,11 @@ void __init hyperv_init(void)
-> >  		wrmsrl(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
-> >  
-> >  		pg = vmalloc_to_page(hv_hypercall_pg);
-> > -		dst = kmap_local_page(pg);
-> >  		src = memremap(hypercall_msr.guest_physical_address << PAGE_SHIFT, PAGE_SIZE,
-> >  				MEMREMAP_WB);
-> > -		BUG_ON(!(src && dst));
-> > -		memcpy(dst, src, HV_HYP_PAGE_SIZE);
-> > +		BUG_ON(!src);
-> > +		memcpy_to_page(pg, 0, src, HV_HYP_PAGE_SIZE);
-> >  		memunmap(src);
-> > -		kunmap_local(dst);
-> >  	} else {
-> >  		hypercall_msr.guest_physical_address = vmalloc_to_pfn(hv_hypercall_pg);
-> >  		wrmsrl(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
-> > -- 
-> > 2.34.1
-> > 
+To: Emma Anholt <emma@anholt.net>
+To: Maxime Ripard <mripard@kernel.org>
+To: David Airlie <airlied@linux.ie>
+To: Daniel Vetter <daniel@ffwll.ch>
+To: Eric Anholt <eric@anholt.net>
+To: Rob Herring <robh@kernel.org>
+Cc: linux-kernel@vger.kernel.org
+Cc: dri-devel@lists.freedesktop.org
+Cc: Chris Morgan <macromorgan@hotmail.com>
+Cc: Joerg Quinten <aBUGSworstnightmare@gmail.com>
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+
+---
+Changes in v2:
+- Documentation for the media bus formats
+- Reword the commit log of patch 5
+- Link to v1: https://lore.kernel.org/r/20221013-rpi-dpi-improvements-v1-0-8a7a96949cb0@cerno.tech
+
+---
+Chris Morgan (2):
+      media: uapi: add MEDIA_BUS_FMT_RGB565_1X24_CPADHI
+      drm/vc4: dpi: Support RGB565 format
+
+Dave Stevenson (2):
+      drm/vc4: dpi: Change the default DPI format to being 18bpp, not 24.
+      drm/vc4: dpi: Fix format mapping for RGB565
+
+Joerg Quinten (3):
+      media: uapi: add MEDIA_BUS_FMT_BGR666_1X18
+      media: uapi: add MEDIA_BUS_FMT_BGR666_1X24_CPADHI
+      drm/vc4: dpi: Support BGR666 formats
+
+ .../userspace-api/media/v4l/subdev-formats.rst     | 111 +++++++++++++++++++++
+ drivers/gpu/drm/vc4/vc4_dpi.c                      |  16 ++-
+ include/uapi/linux/media-bus-format.h              |   5 +-
+ 3 files changed, 128 insertions(+), 4 deletions(-)
+---
+base-commit: 7c99616e3fe7f35fe25bf6f5797267da29b4751e
+change-id: 20221013-rpi-dpi-improvements-c3d755531c39
+
+Best regards,
+-- 
+Maxime Ripard <maxime@cerno.tech>
