@@ -2,131 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32102606B51
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 00:37:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7783606B54
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 00:38:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229736AbiJTWhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 18:37:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49868 "EHLO
+        id S229783AbiJTWiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 18:38:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiJTWht (ORCPT
+        with ESMTP id S229452AbiJTWiT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 18:37:49 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE8B1C20B2;
-        Thu, 20 Oct 2022 15:37:48 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-1322fa1cf6fso1371749fac.6;
-        Thu, 20 Oct 2022 15:37:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=z3SGi30j7hFN3YbuFDduStPgqshj7yXMDHLAjGLiyeY=;
-        b=PSO+4So0AYkxGI24LGhGHcIwtS7rQOeehTspOoBE0bCvAAGBhtrI7YUyy75ohLbMS6
-         f0vh3O1aokYrbHvVga1e1nhY3V1C82hj6xQ8Oxo9oqyIjOfhid/PHPpW+1ojOJUUSdCA
-         1FpX9LvjSbghks0tM7W4x39q/5ZzA8JyfGL7PMii3u8RlS3Aw1m5N3l8OwxO10ojybxf
-         FX3N7nwnJNsJsmBnqEGFbjuj3sBx5PNN1oPY4t+WSoaWrY/fc5V7Reuryu2ADUuoJaB6
-         adGDmhMZ31wQFFNWeaEhUb30aWunfcEnZLI49YBmOjq3pa9UrTAb2H85x37GBb4Otph6
-         k+Ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=z3SGi30j7hFN3YbuFDduStPgqshj7yXMDHLAjGLiyeY=;
-        b=scjWB/cqdTrU4Wiz0PAmOaXD8WEVow0l24noYjYcbg/jlVJ2eZzJyoXC4pJzTVJCk9
-         O7rZdGMd7rXAMx60ItsMhz12reaymfviePo5g4HL8cBSeBvPPGCZcoyBy8Mo71hwLjLj
-         j27qhNyMypi0SD5/p9NJifsuiwochyUA0EY/YKWGDD+pPHiL0VGDEyktgLt+pZMPPXzr
-         Cc2NJ8hRLm00Z132VDJxmeIYM9ZQf0Qd0wMJ5pyo5VxQC5SBpwFWFHqBNv+41Px4BzD3
-         gJgoOlVJmWjRQLXpI5WVJmMJmI6Ce8tc6uVKRZnj7j/o0LaQWUh9htAEmET4PFzLDI6F
-         8VNQ==
-X-Gm-Message-State: ACrzQf0lsLj7WKOTaLUAmLSjNlN4USnVx5iMF6gMTvxYZNK3mTtYj2w1
-        d5cDK6bIBda4z2rDN9wbMyA=
-X-Google-Smtp-Source: AMsMyM4YZllEZu9hVOKnIRboHVpiVMwXKsI5fQCdYA9QwWs+Eur9DZIeOTyDL26wrL30rnJRH2Uwlg==
-X-Received: by 2002:a05:6870:c8a2:b0:136:5491:8f08 with SMTP id er34-20020a056870c8a200b0013654918f08mr26250667oab.225.1666305468183;
-        Thu, 20 Oct 2022 15:37:48 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s4-20020a056870248400b00136cfb02a94sm9475643oaq.7.2022.10.20.15.37.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Oct 2022 15:37:47 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <e2fadcfa-aedc-ded4-8867-5f2525852af6@roeck-us.net>
-Date:   Thu, 20 Oct 2022 15:37:46 -0700
+        Thu, 20 Oct 2022 18:38:19 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 909621C5A73;
+        Thu, 20 Oct 2022 15:38:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=d1uOCKlJdY/yPHuKmQEyZZ8R2iRmAZNykCdT1OMy84s=; b=hJjRN+9eKGnr+4+zGPmG0xStZx
+        DmKNQolz1r3Thm99kcT1Fcvq4mgQkSJybJHt8PGV+yx11j0adMDpX7hfA+sKiBWFu2OT7ZriVR1ok
+        75kxOAypPBWZMPpz6uhcBMSY5v1VVEDF8C4NtQDNIh4VHhT1oHNC1yOARuc616zpMcb3XprYd8rzu
+        nn5Qb5sU7mv5UN9uyWAiyT/xQN1hlt444TE2NmGkdoOEW2RCmqIc0fxs+l0cRPzvL7lTIK7qT7fZD
+        Eora7w2UPe0L4BShALsNWJwPbcaNYASxhknHkqEkkCQ9TksN+FzK2opjCm7aQ22UUu9w7e35d31f3
+        7O5hk7fA==;
+Received: from [179.113.159.85] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1oleAu-002Whx-TJ; Fri, 21 Oct 2022 00:38:06 +0200
+Message-ID: <ec384313-e19b-379b-4dd5-23ec8cefc9b0@igalia.com>
+Date:   Thu, 20 Oct 2022 19:37:48 -0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [RFC PATCH v2 4/4] hwmon: (jc42) Don't cache the temperature
- register
+ Thunderbird/102.3.2
+Subject: Re: [PATCH V3 06/11] tracing: Improve panic/die notifiers
 Content-Language: en-US
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     linux-hwmon@vger.kernel.org, jdelvare@suse.com,
-        linux-kernel@vger.kernel.org
-References: <20221020210320.1624617-1-martin.blumenstingl@googlemail.com>
- <20221020210320.1624617-5-martin.blumenstingl@googlemail.com>
- <20221020221417.GG4035307@roeck-us.net>
- <CAFBinCB3oKxdCNbjAtO+tw+yGrb1oBJwtHxCh_ptTPB6MTw5uA@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <CAFBinCB3oKxdCNbjAtO+tw+yGrb1oBJwtHxCh_ptTPB6MTw5uA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     akpm@linux-foundation.org, bhe@redhat.com, pmladek@suse.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
+        halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
+        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
+        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
+        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, senozhatsky@chromium.org,
+        stern@rowland.harvard.edu, tglx@linutronix.de, vgoyal@redhat.com,
+        vkuznets@redhat.com, will@kernel.org, xuqiang36@huawei.com,
+        Sergei Shtylyov <sergei.shtylyov@gmail.com>
+References: <20220819221731.480795-1-gpiccoli@igalia.com>
+ <20220819221731.480795-7-gpiccoli@igalia.com>
+ <20221020172908.25c6e3a5@gandalf.local.home>
+ <6e2396d1-d0b2-0d1e-d146-f3ad7f2b39f8@igalia.com>
+ <20221020182249.691bb82a@gandalf.local.home>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <20221020182249.691bb82a@gandalf.local.home>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/20/22 15:22, Martin Blumenstingl wrote:
-> Hi Guenter,
+On 20/10/2022 19:22, Steven Rostedt wrote:
+> On Thu, 20 Oct 2022 18:53:43 -0300
+> "Guilherme G. Piccoli" <gpiccoli@igalia.com> wrote:
 > 
-> On Fri, Oct 21, 2022 at 12:14 AM Guenter Roeck <linux@roeck-us.net> wrote:
->>
->> On Thu, Oct 20, 2022 at 11:03:20PM +0200, Martin Blumenstingl wrote:
->>> Now that we're utilizing regmap and it's regcache for the
->>> minimum/maximum/critical temperature registers the only cached register
->>> that's left is the actual temperature register. Drop the custom cache
->>> implementation as it just complicates things.
->>>
->>
->> Ah, you got there eventually. Just combine this patch into the first
->> patch of the series. No need to keep separate patches, especially since
->> a lot of the code changed in patch 1 and 2 is just thrown away here.
-> Thanks again for the quick response and for the great feedback. I'll
-> combine the patches tomorrow and send a v3!
+>> Could you pick it in your tree? Or do you prefer that I re-send as a
+>> solo patch, with your ACK?
 > 
->> That reminds me, though: Make sure that the alarm bits are not dropped
->> after reading the temperature (running the 'sensors' command with
->> alarms active should do). I have some JC42 chips here and will do the
->> same.
-> I configured below ambient high and crit temperatures:
->    jc42-i2c-0-1a
->    Adapter: SMBus PIIX4 adapter port 0 at 0b00
->    temp1:        +35.0°C  (low  =  +0.0°C)                  ALARM (HIGH, CRIT)
->                          (high = +25.0°C, hyst = +25.0°C)
->                          (crit = +30.0°C, hyst = +30.0°C)
+> I wasn't sure there were any dependencies on this. If not, I can take it.
 > 
-> Then I ran "sensors" three times in a row.
-> The output of all "sensors" commands is the same, meaning all of them
-> show the ALARM (HIGH, CRIT) part.
-> 
+> -- Steve
 
-Excellent!
+Thank you! No dependency at all...I just piled a bunch of independent
+panic notifiers fixes, so they can be reviewed by the maintainers and
+picked individually.
 
-> Do you want me to mention this somewhere (for example in the
-> cover-letter or the new patch #1)?
-> 
-Yes, please mention it in the cover letter.
+Some maintainers though prefer them to be sent individually, as solo
+patches...hence my question.
 
-Background for the question: Some older sensor chips (granted, typically
-20+ years old) tend to reset the alarm status after reading it, only
-to set it again after the next measurement cycle.
+Cheers,
 
-Thanks,
-Guenter
 
+Guilherme
