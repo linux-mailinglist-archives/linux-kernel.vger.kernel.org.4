@@ -2,64 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD9156067E7
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 20:07:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 688C46067E8
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 20:08:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230324AbiJTSHu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 14:07:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55570 "EHLO
+        id S230332AbiJTSIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 14:08:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230259AbiJTSHb (ORCPT
+        with ESMTP id S230256AbiJTSH1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 14:07:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 867B215ECF0;
-        Thu, 20 Oct 2022 11:07:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 24EA2B8274A;
-        Thu, 20 Oct 2022 18:07:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32644C433D6;
-        Thu, 20 Oct 2022 18:07:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666289235;
-        bh=a/CirfHVh8b3ZDdDKkjlFwXw3bQiZRvXewi5RbBI6DM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=a0eDlrSPmUKrwYq5VpIV7sngQKzukZuEP1mHuvxzpXjCuyGf78PGpL9y8sh8Rhqlk
-         1NDMrYrvCj8Gtone9uWlnK9iFl7rJ28YGZIJMrd9TiE6EIBSmOuYsM54IrmEvaWDB0
-         JD9aSVbefYsCSerm6dM4E0FkEIAkp+KCQfDFpacePHXwILe1Cf/Wo3h90LqUUtjVvT
-         lXt3FHks2+4XkhKVpMBqUjM8dX0t41VTo72y+JFsyMHc0jvXgOv3+VKqVHG7L7S1Ih
-         I9BDnpiZfBDlsJe6DYL/PSBBBEgyalma7KXjkzj+ZAFv5f9RSvvj+Ckdl3fPs5e+qT
-         MH4QYrtpUY3RQ==
-Date:   Thu, 20 Oct 2022 19:07:10 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>
-Subject: Re: [PATCH v1 3/6] spi: pxa2xx: Remove no more needed PCI ID table
-Message-ID: <Y1GOTtYIeOFmrmm7@sirena.org.uk>
-References: <Y1AczgwCEQO2gvQ2@sirena.org.uk>
- <Y1F0z5aP3MsqnMan@smile.fi.intel.com>
- <Y1F2a6CR+9sY66Zz@sirena.org.uk>
- <Y1F6YRzRS2DR+cKL@smile.fi.intel.com>
- <Y1F+Pw52nN195qDO@sirena.org.uk>
- <Y1F/aVEYn3GIVEN2@smile.fi.intel.com>
- <Y1GEqa07/b25utui@sirena.org.uk>
- <Y1GIVy8l4vKsUYLr@smile.fi.intel.com>
- <Y1GJL8/YfeoUy8wB@sirena.org.uk>
- <Y1GLdp9GCqD7CdfW@smile.fi.intel.com>
+        Thu, 20 Oct 2022 14:07:27 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B631B15A977;
+        Thu, 20 Oct 2022 11:07:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=pWUVsfzWDBIXyjYnhK+XoMfAyHRpezXQSqYzXKvXWzI=; b=K/TLqvaF1o6pPDVyQVhY/896cK
+        9e5z/VznvZSDHDEJgMkAoHAilNDANxyp7gGdBt9s67nQ/koZPxYcU6STAL3axsoNmqkj3+lFEtWnK
+        NWtONsKs7kxiJlG/rIg6Ooask0AkULPvwyK8nuVmvC1mQFmj9HQ/CsVgVOeq/QeahpvQXYeNSGwmC
+        Ld2kAG3nRIEMSS63yw7Zw3XedgtNQKRm/9EoMIvC8n4O9F+lTl1gVSVMAYas4VRAYdHAbG+tveG1a
+        jyYOA7uj8U5YLvQr3mjkyVGyk47t6PDknJGAs1nqLPNDd/4STXGSvEwPuqb3TYxVacpiySZKwh9Cm
+        f0w8heEA==;
+Received: from [2601:1c2:d80:3110::a2e7]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1olZwn-0012aL-LV; Thu, 20 Oct 2022 18:07:13 +0000
+Message-ID: <69d9ee66-c312-0387-1307-62fda7bd24ae@infradead.org>
+Date:   Thu, 20 Oct 2022 11:07:12 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="BRFCv6Eiimv8ODUL"
-Content-Disposition: inline
-In-Reply-To: <Y1GLdp9GCqD7CdfW@smile.fi.intel.com>
-X-Cookie: Today is what happened to yesterday.
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH] tracing/hist: add in missing * in comment blocks
+Content-Language: en-US
+To:     "Colin King (gmail)" <colin.i.king@gmail.com>,
+        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221020133019.1547587-1-colin.i.king@gmail.com>
+ <20221020234423.42816821e2d09aba61db5e69@kernel.org>
+ <6005e7c0-5901-ef5a-6af7-2801975e39bc@gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <6005e7c0-5901-ef5a-6af7-2801975e39bc@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -67,56 +57,70 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---BRFCv6Eiimv8ODUL
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Oct 20, 2022 at 08:55:02PM +0300, Andy Shevchenko wrote:
-> On Thu, Oct 20, 2022 at 06:45:19PM +0100, Mark Brown wrote:
+On 10/20/22 08:10, Colin King (gmail) wrote:
+> On 20/10/2022 15:44, Masami Hiramatsu (Google) wrote:
+>> Hi,
+>>
+>> On Thu, 20 Oct 2022 14:30:19 +0100
+>> Colin Ian King <colin.i.king@gmail.com> wrote:
+>>
+>>> There are a couple of missing * in comment blocks. Fix these.
+>>> Cleans up two clang warnings:
+>>>
+>>> kernel/trace/trace_events_hist.c:986: warning: bad line:
+>>> kernel/trace/trace_events_hist.c:3229: warning: bad line:
+>>>
+>>> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+>>
+>> Thanks for the patch.
+>>
+>> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+>>
+>> BTW, what version of clang are you using?
+>> I couldn't see this warning with clang 15.0.0. Maybe I need a kconfig option?
+> 
+> clang-13 and kernel W=1 for this specific case, e.g. kernel built using make  CC=clang-13 HOSTCC=clang-13 W=1
+> 
 
-> > Not sure I quite get what you're proposing here but I *think* so,
-> > assuming you mean checking the values if the property is present (and
-> > error out if the property isn't there at all and you're instantiating
-> > via a MFD rather than direct PCI/DT binding I guess)?
+but those are kernel-doc warnings, not clang (AFAIK).
 
-> When we instantiate via MFD, we (semi-)manually create resources for each=
- of
-> the children. These resources may or may not have a dedicated names. Those
-> names can be given _only_ inside the source code in the kernel, so it mea=
-ns
-> it is _explicit_ telling, that we are know where the device in question c=
-omes
-> from.
+> 
+>>
+>> Thank you,
+>>
+>>> ---
+>>>   kernel/trace/trace_events_hist.c | 4 ++--
+>>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/kernel/trace/trace_events_hist.c b/kernel/trace/trace_events_hist.c
+>>> index 48465f7e97b4..087c19548049 100644
+>>> --- a/kernel/trace/trace_events_hist.c
+>>> +++ b/kernel/trace/trace_events_hist.c
+>>> @@ -983,7 +983,7 @@ static struct hist_field *find_any_var_ref(struct hist_trigger_data *hist_data,
+>>>    * A trigger can define one or more variables.  If any one of them is
+>>>    * currently referenced by any other trigger, this function will
+>>>    * determine that.
+>>> -
+>>> + *
+>>>    * Typically used to determine whether or not a trigger can be removed
+>>>    * - if there are any references to a trigger's variables, it cannot.
+>>>    *
+>>> @@ -3226,7 +3226,7 @@ static struct field_var *create_field_var(struct hist_trigger_data *hist_data,
+>>>    * events.  However, for convenience, users are allowed to directly
+>>>    * specify an event field in an action, which will be automatically
+>>>    * converted into a variable on their behalf.
+>>> -
+>>> + *
+>>>    * This function creates a field variable with the name var_name on
+>>>    * the hist trigger currently being defined on the target event.  If
+>>>    * subsys_name and event_name are specified, this function simply
+>>> -- 
+>>> 2.37.3
+>>>
+>>
+>>
+> 
 
-> 	if (resource_with_name_present()) {
-> 		ret =3D device_property_...
-
-> Like you said, checking property only when we have resource present _by n=
-ame_
-> and bail out if there is none.
-
-Remember that device_property backs onto fwnode so properties can come
-=66rom _DSD properties too since fwnode will query any source of
-properties (and further remember that things will be going through
-multiple trees so even with stuff purely in the kernel things could get
-out of sync).  I think the code would have to also check that it was a
-MFD child at least, you couldn't get _DSD on a child node so that should
-be fine.
-
---BRFCv6Eiimv8ODUL
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNRjk4ACgkQJNaLcl1U
-h9Aa5gf+Li8nAm1wcGGB+Y07UKUpEKCSK0gYWI+WrjeeVhnJOV48ruFsHVy4V9Eu
-2ODR1xr/oY6Pu8Mc31KwO7btICMmGS9RJRiove1+oJQVS6SUUGV8x5jw2eBLy1wY
-uvBtLsScl1UNr+rQtSyjodWQwglWL2Fpz43dsp+86RyhD/HcmmJ9uJlK4tvQV1Hp
-NtbgYTpx/ENhpw9RrKgSXlOp4Q0UD3cKpTGq3t5jKXYiA2g+xtgN+yurmZZU7E/+
-T528tYGmJ+rsIKXr/OuzaPiccRL07JZ3x3++ro0ntbKYtve50svenz6jjmt8vJ0B
-8i/ykM6qu6WbMu3WsZyPwwfDodOKow==
-=8/xp
------END PGP SIGNATURE-----
-
---BRFCv6Eiimv8ODUL--
+-- 
+~Randy
