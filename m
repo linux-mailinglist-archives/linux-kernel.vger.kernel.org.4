@@ -2,363 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1166605695
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 07:00:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99D5D60569C
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 07:05:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbiJTFAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 01:00:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40338 "EHLO
+        id S229738AbiJTFFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 01:05:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbiJTE7o (ORCPT
+        with ESMTP id S229649AbiJTFFK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 00:59:44 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4B282792A;
-        Wed, 19 Oct 2022 21:59:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666241981; x=1697777981;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=p+sUnn7KTIQ8XWNxIf5VmU2ElbLpb0lVdDmjgaFJsp0=;
-  b=UgcR+HmwCky28abvmQ7MU5PEkrqFz8o25EV0kR5N/nDWTi1qmo9yJrx1
-   T5b/KhZFkr+WKNoE9JDir5GZycAg3UOF3bSA9YH3+Cyt4LMeDYV2r916T
-   PIpQuKFQm4TIgTwn0Wml6kmCTxW/tkkPFB94boNkLo5nbF7TWbE6fWfpQ
-   sjeQNLQt2uW/7doB6mzev/OAYD5vNH//IHDEi0gaPFSAFyOWo4KFYyq05
-   iN9LCE1QOatVWLPZhmifx3utklLr39H1VfqPBYcHFU26bRQkMdNHoZqUO
-   G14xnpEixI3tTA+zJEQ2MSuVLxArFkM46GW7xgVwC4CXFsrM4Y6Unvo86
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="293997454"
-X-IronPort-AV: E=Sophos;i="5.95,198,1661842800"; 
-   d="scan'208";a="293997454"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 21:59:32 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="660690262"
-X-IronPort-AV: E=Sophos;i="5.95,198,1661842800"; 
-   d="scan'208";a="660690262"
-Received: from srnaisha-mobl.amr.corp.intel.com (HELO skuppusw-desk1.amr.corp.intel.com) ([10.209.25.189])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 21:59:31 -0700
-From:   Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>
-Cc:     "H . Peter Anvin" <hpa@zytor.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: [PATCH v15 3/3] selftests: tdx: Test TDX attestation GetReport support
-Date:   Wed, 19 Oct 2022 21:58:28 -0700
-Message-Id: <20221020045828.2354731-4-sathyanarayanan.kuppuswamy@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221020045828.2354731-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-References: <20221020045828.2354731-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+        Thu, 20 Oct 2022 01:05:10 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3CA1A6C3A
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 22:04:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id BC524CE24F8
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 05:04:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97E4FC433C1;
+        Thu, 20 Oct 2022 05:04:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666242287;
+        bh=S4bgYk27v6fr5ccei0OpH1tdK6q8fftrSVTC5nw3ZQY=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=f0AkW092X8nrvk8jWLncPghZF6G2blYVjNAnELz+f1+KA5R+Ay0GcMGUSQSCKRRfN
+         x33Y7MkY6G/up59ywRa43NKcCWaZUPtMdZmbltwk1dqMr6ZnPkWV1qtUp30+1SEAwl
+         x6EfpCR4/2npffSNRHS/PNP8W2HnoLGc2/RdlOEJDDZ71bsFmVqEomSWwYOlDpRbxx
+         fePq5Ws7usSQhvISwwDJOj7DMHyyC7K1A7timdYTbLi7LFn2yIhmDH/3UWUPWPkSHT
+         miNbxeGwIlxXremmtvsHsNuco8LFZWAwYqT/pBuJIxavV8l/l79TSDLfsQjOZcWDj1
+         zUlSNCJzQytsQ==
+Date:   Wed, 19 Oct 2022 22:04:44 -0700
+From:   Kees Cook <kees@kernel.org>
+To:     Andrei Vagin <avagin@gmail.com>, linux-kernel@vger.kernel.org
+CC:     Andy Lutomirski <luto@amacapital.net>,
+        Christian Brauner <brauner@kernel.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Kees Cook <keescook@chromium.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Peter Oskolkov <posk@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Tycho Andersen <tycho@tycho.pizza>,
+        Will Drewry <wad@chromium.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_5/5=5D_selftest/seccomp=3A_add_a_new_?= =?US-ASCII?Q?test_for_the_sync_mode_of_seccomp=5Fuser=5Fnotify?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20221020011048.156415-6-avagin@gmail.com>
+References: <20221020011048.156415-1-avagin@gmail.com> <20221020011048.156415-6-avagin@gmail.com>
+Message-ID: <B33DF09C-9121-4342-926E-B7B1988036B9@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Attestation is used to verify the trustworthiness of a TDX guest.
-During the guest bring-up, the Intel TDX module measures and records
-the initial contents and configuration of the guest, and at runtime,
-guest software uses runtime measurement registers (RMTRs) to measure
-and record details related to kernel image, command line params, ACPI
-tables, initrd, etc. At guest runtime, the attestation process is used
-to attest to these measurements.
+On October 19, 2022 6:10:48 PM PDT, Andrei Vagin <avagin@gmail=2Ecom> wrote=
+:
+>Test output:
+>RUN           global=2Euser_notification_sync =2E=2E=2E
+>seccomp_bpf=2Ec:4279:user_notification_sync:basic: 8655 nsec/syscall
+>seccomp_bpf=2Ec:4279:user_notification_sync:sync:	 2919 nsec/syscall
+>OK  global=2Euser_notification_sync
 
-The first step in the TDX attestation process is to get the TDREPORT
-data. It is a fixed size data structure generated by the TDX module
-which includes the above mentioned measurements data, a MAC ID to
-protect the integrity of the TDREPORT, and a 64-Byte of user specified
-data passed during TDREPORT request which can uniquely identify the
-TDREPORT.
+This looks like a benchmark, not a functionality test=2E But maybe the tes=
+t is "is sync faster than async?"
 
-Intel's TDX guest driver exposes TDX_CMD_GET_REPORT IOCTL interface to
-enable guest userspace to get the TDREPORT.
+>
+>Signed-off-by: Andrei Vagin <avagin@gmail=2Ecom>
+>---
+> tools/testing/selftests/seccomp/seccomp_bpf=2Ec | 80 +++++++++++++++++++
+> 1 file changed, 80 insertions(+)
+>
+>diff --git a/tools/testing/selftests/seccomp/seccomp_bpf=2Ec b/tools/test=
+ing/selftests/seccomp/seccomp_bpf=2Ec
+>index 4ae6c8991307=2E=2E01f872415c17 100644
+>--- a/tools/testing/selftests/seccomp/seccomp_bpf=2Ec
+>+++ b/tools/testing/selftests/seccomp/seccomp_bpf=2Ec
+>@@ -4241,6 +4241,86 @@ TEST(user_notification_addfd_rlimit)
+> 	close(memfd);
+> }
+>=20
+>+/* USER_NOTIF_BENCH_TIMEOUT is 100 miliseconds=2E */
+>+#define USER_NOTIF_BENCH_TIMEOUT  100000000ULL
+>+#define NSECS_PER_SEC            1000000000ULL
+>+
+>+#ifndef SECCOMP_USER_NOTIF_FD_SYNC_WAKE_UP
+>+#define SECCOMP_USER_NOTIF_FD_SYNC_WAKE_UP (1UL << 0)
+>+#define SECCOMP_IOCTL_NOTIF_SET_FLAGS  SECCOMP_IOW(4, __u64)
+>+#endif
+>+
+>+static void user_notification_sync_loop(struct __test_metadata *_metadat=
+a,
+>+					char *test_name, int listener)
+>+{
+>+	struct timespec ts;
+>+	uint64_t start, end, nr;
+>+	struct seccomp_notif req =3D {};
+>+	struct seccomp_notif_resp resp =3D {};
+>+
+>+	clock_gettime(CLOCK_MONOTONIC, &ts);
+>+	start =3D ts=2Etv_nsec + ts=2Etv_sec * NSECS_PER_SEC;
+>+	for (end =3D start, nr =3D 0; end - start < USER_NOTIF_BENCH_TIMEOUT; n=
+r++) {
+>+		memset(&req, 0, sizeof(req));
+>+		req=2Epid =3D 0;
+>+		EXPECT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_RECV, &req), 0);
+>+
+>+		EXPECT_EQ(req=2Edata=2Enr,  __NR_getppid);
+>+
+>+		resp=2Eid =3D req=2Eid;
+>+		resp=2Eerror =3D 0;
+>+		resp=2Eval =3D USER_NOTIF_MAGIC;
+>+		resp=2Eflags =3D 0;
+>+		EXPECT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_SEND, &resp), 0);
 
-Add a kernel self test module to test this ABI and verify the validity
-of the generated TDREPORT.
+I think these EXPECTs should be ASSERTs=2E=2E=2E
 
-Reviewed-by: Tony Luck <tony.luck@intel.com>
-Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-Acked-by: Kai Huang <kai.huang@intel.com>
-Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
----
+>+
+>+		clock_gettime(CLOCK_MONOTONIC, &ts);
+>+		end =3D ts=2Etv_nsec + ts=2Etv_sec * NSECS_PER_SEC;
+>+	}
+>+	TH_LOG("%s:\t%lld nsec/syscall", test_name, USER_NOTIF_BENCH_TIMEOUT / =
+nr);
+>+}
+>+
+>+TEST(user_notification_sync)
+>+{
+>+	pid_t pid;
+>+	long ret;
+>+	int status, listener;
+>+
+>+	ret =3D prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
+>+	ASSERT_EQ(0, ret) {
+>+		TH_LOG("Kernel does not support PR_SET_NO_NEW_PRIVS!");
+>+	}
+>+
+>+	listener =3D user_notif_syscall(__NR_getppid,
+>+				      SECCOMP_FILTER_FLAG_NEW_LISTENER);
+>+	ASSERT_GE(listener, 0);
+>+
+>+	pid =3D fork();
+>+	ASSERT_GE(pid, 0);
+>+
+>+	if (pid =3D=3D 0) {
+>+		while (1) {
+>+			ret =3D syscall(__NR_getppid);
+>+			if (ret =3D=3D USER_NOTIF_MAGIC)
+>+				continue;
+>+			break;
+>+		}
+>+		_exit(1);
+>+	}
+>+
+>+	user_notification_sync_loop(_metadata, "basic", listener);
+>+
+>+	EXPECT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_SET_FLAGS,
+>+			SECCOMP_USER_NOTIF_FD_SYNC_WAKE_UP, 0), 0);
 
-Changes since v14:
- * Fixed format issue in struct comments.
- * Rebased on top of v6.1-rc1
+Same here=2E
 
-Changes since v13:
- * Removed __packed from TDREPORT structs.
- * Since the guest driver is moved to drivers/virt/coco, removed
-   tools/arch/x86/include header folder usage.
- * Fixed struct comments to match kernel-doc format.
- * Fixed commit log as per review comments.
- * Fixed some format issues in the code.
+Also can you test that invalid SET_FLAGS are correctly rejected here?
 
-Changes since v12:
- * Changed #ifdef DEBUG usage with if (DEBUG).
- * Initialized reserved entries values to zero.
+>+
+>+	user_notification_sync_loop(_metadata, "sync", listener);
+>+
 
-Changes since v11:
- * Renamed devname with TDX_GUEST_DEVNAME.
+If the timings are collected, add a test that sync is <=3D async here?
 
-Changes since v10:
- * Replaced TD/TD Guest usage with guest or TDX guest.
- * Reworded the subject line.
+>+	kill(pid, SIGKILL);
+>+	EXPECT_EQ(waitpid(pid, &status, 0), pid);
+>+	EXPECT_EQ(true, WIFSIGNALED(status));
+>+	EXPECT_EQ(SIGKILL, WTERMSIG(status));
+>+}
+>+
+>+
+> /* Make sure PTRACE_O_SUSPEND_SECCOMP requires CAP_SYS_ADMIN=2E */
+> FIXTURE(O_SUSPEND_SECCOMP) {
+> 	pid_t pid;
 
-Changes since v9:
- * Copied arch/x86/include/uapi/asm/tdx.h to tools/arch/x86/include to
-   decouple header dependency between kernel source and tools dir.
- * Fixed Makefile to adapt to above change.
- * Fixed commit log and comments.
- * Added __packed to hardware structs.
+Otherwise, yeah, looks good=2E
 
-Changes since v8:
- * Please refer to https://lore.kernel.org/all/ \
-   20220728034420.648314-1-sathyanarayanan.kuppuswamy@linux.intel.com/
 
- tools/testing/selftests/Makefile             |   1 +
- tools/testing/selftests/tdx/Makefile         |   7 +
- tools/testing/selftests/tdx/config           |   1 +
- tools/testing/selftests/tdx/tdx_guest_test.c | 175 +++++++++++++++++++
- 4 files changed, 184 insertions(+)
- create mode 100644 tools/testing/selftests/tdx/Makefile
- create mode 100644 tools/testing/selftests/tdx/config
- create mode 100644 tools/testing/selftests/tdx/tdx_guest_test.c
-
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 0464b2c6c1e4..f60e14d16bfd 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -73,6 +73,7 @@ TARGETS += sync
- TARGETS += syscall_user_dispatch
- TARGETS += sysctl
- TARGETS += tc-testing
-+TARGETS += tdx
- TARGETS += timens
- ifneq (1, $(quicktest))
- TARGETS += timers
-diff --git a/tools/testing/selftests/tdx/Makefile b/tools/testing/selftests/tdx/Makefile
-new file mode 100644
-index 000000000000..8dd43517cd55
---- /dev/null
-+++ b/tools/testing/selftests/tdx/Makefile
-@@ -0,0 +1,7 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+CFLAGS += -O3 -Wl,-no-as-needed -Wall -static
-+
-+TEST_GEN_PROGS := tdx_guest_test
-+
-+include ../lib.mk
-diff --git a/tools/testing/selftests/tdx/config b/tools/testing/selftests/tdx/config
-new file mode 100644
-index 000000000000..aa1edc829ab6
---- /dev/null
-+++ b/tools/testing/selftests/tdx/config
-@@ -0,0 +1 @@
-+CONFIG_TDX_GUEST_DRIVER=y
-diff --git a/tools/testing/selftests/tdx/tdx_guest_test.c b/tools/testing/selftests/tdx/tdx_guest_test.c
-new file mode 100644
-index 000000000000..19fdb0a89bad
---- /dev/null
-+++ b/tools/testing/selftests/tdx/tdx_guest_test.c
-@@ -0,0 +1,175 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Test TDX guest features
-+ *
-+ * Copyright (C) 2022 Intel Corporation. All rights reserved.
-+ *
-+ * Author: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-+ */
-+
-+#include <sys/ioctl.h>
-+
-+#include <errno.h>
-+#include <fcntl.h>
-+
-+#include "../kselftest_harness.h"
-+#include "../../../../include/uapi/linux/tdx-guest.h"
-+
-+#define TDX_GUEST_DEVNAME "/dev/tdx_guest"
-+#define HEX_DUMP_SIZE 8
-+#define DEBUG 0
-+
-+/**
-+ * struct tdreport_type - Type header of TDREPORT_STRUCT.
-+ * @type: Type of the TDREPORT (0 - SGX, 81 - TDX, rest are reserved)
-+ * @sub_type: Subtype of the TDREPORT (Default value is 0).
-+ * @version: TDREPORT version (Default value is 0).
-+ * @reserved: Added for future extension.
-+ *
-+ * More details can be found in TDX v1.0 module specification, sec
-+ * titled "REPORTTYPE".
-+ */
-+struct tdreport_type {
-+	__u8 type;
-+	__u8 sub_type;
-+	__u8 version;
-+	__u8 reserved;
-+};
-+
-+/**
-+ * struct reportmac - TDX guest report data, MAC and TEE hashes.
-+ * @type: TDREPORT type header.
-+ * @reserved1: Reserved for future extension.
-+ * @cpu_svn: CPU security version.
-+ * @tee_tcb_info_hash: SHA384 hash of TEE TCB INFO.
-+ * @tee_td_info_hash: SHA384 hash of TDINFO_STRUCT.
-+ * @reportdata: User defined unique data passed in TDG.MR.REPORT request.
-+ * @reserved2: Reserved for future extension.
-+ * @mac: CPU MAC ID.
-+ *
-+ * It is MAC-protected and contains hashes of the remainder of the
-+ * report structure along with user provided report data. More details can
-+ * be found in TDX v1.0 Module specification, sec titled "REPORTMACSTRUCT"
-+ */
-+struct reportmac {
-+	struct tdreport_type type;
-+	__u8 reserved1[12];
-+	__u8 cpu_svn[16];
-+	__u8 tee_tcb_info_hash[48];
-+	__u8 tee_td_info_hash[48];
-+	__u8 reportdata[64];
-+	__u8 reserved2[32];
-+	__u8 mac[32];
-+};
-+
-+/**
-+ * struct td_info - TDX guest measurements and configuration.
-+ * @attr: TDX Guest attributes (like debug, spet_disable, etc).
-+ * @xfam: Extended features allowed mask.
-+ * @mrtd: Build time measurement register.
-+ * @mrconfigid: Software-defined ID for non-owner-defined configuration
-+ *              of the guest - e.g., run-time or OS configuration.
-+ * @mrowner: Software-defined ID for the guest owner.
-+ * @mrownerconfig: Software-defined ID for owner-defined configuration of
-+ *                 the guest - e.g., specific to the workload.
-+ * @rtmr: Run time measurement registers.
-+ * @reserved: Added for future extension.
-+ *
-+ * It contains the measurements and initial configuration of the TDX guest
-+ * that was locked at initialization and a set of measurement registers
-+ * that are run-time extendable. More details can be found in TDX v1.0
-+ * Module specification, sec titled "TDINFO_STRUCT".
-+ */
-+struct td_info {
-+	__u8 attr[8];
-+	__u64 xfam;
-+	__u64 mrtd[6];
-+	__u64 mrconfigid[6];
-+	__u64 mrowner[6];
-+	__u64 mrownerconfig[6];
-+	__u64 rtmr[24];
-+	__u64 reserved[14];
-+};
-+
-+/*
-+ * struct tdreport - Output of TDCALL[TDG.MR.REPORT].
-+ * @reportmac: Mac protected header of size 256 bytes.
-+ * @tee_tcb_info: Additional attestable elements in the TCB are not
-+ *                reflected in the reportmac.
-+ * @reserved: Added for future extension.
-+ * @tdinfo: Measurements and configuration data of size 512 bytes.
-+ *
-+ * More details can be found in TDX v1.0 Module specification, sec
-+ * titled "TDREPORT_STRUCT".
-+ */
-+struct tdreport {
-+	struct reportmac reportmac;
-+	__u8 tee_tcb_info[239];
-+	__u8 reserved[17];
-+	struct td_info tdinfo;
-+};
-+
-+static void print_array_hex(const char *title, const char *prefix_str,
-+			    const void *buf, int len)
-+{
-+	int i, j, line_len, rowsize = HEX_DUMP_SIZE;
-+	const __u8 *ptr = buf;
-+
-+	if (!len || !buf)
-+		return;
-+
-+	printf("\t\t%s", title);
-+
-+	for (j = 0; j < len; j += rowsize) {
-+		line_len = rowsize < (len - j) ? rowsize : (len - j);
-+		printf("%s%.8x:", prefix_str, j);
-+		for (i = 0; i < line_len; i++)
-+			printf(" %.2x", ptr[j + i]);
-+		printf("\n");
-+	}
-+
-+	printf("\n");
-+}
-+
-+TEST(verify_report)
-+{
-+	__u8 reportdata[TDX_REPORTDATA_LEN];
-+	struct tdx_report_req req;
-+	struct tdreport tdreport;
-+	int devfd, i;
-+
-+	devfd = open(TDX_GUEST_DEVNAME, O_RDWR | O_SYNC);
-+	ASSERT_LT(0, devfd);
-+
-+	/* Generate sample report data */
-+	for (i = 0; i < TDX_REPORTDATA_LEN; i++)
-+		reportdata[i] = i;
-+
-+	/* Initialize IOCTL request */
-+	req.subtype     = 0;
-+	req.reportdata  = (__u64)reportdata;
-+	req.rpd_len     = TDX_REPORTDATA_LEN;
-+	req.tdreport    = (__u64)&tdreport;
-+	req.tdr_len     = sizeof(tdreport);
-+
-+	memset(req.reserved, 0, sizeof(req.reserved));
-+
-+	/* Get TDREPORT */
-+	ASSERT_EQ(0, ioctl(devfd, TDX_CMD_GET_REPORT, &req));
-+
-+	if (DEBUG) {
-+		print_array_hex("\n\t\tTDX report data\n", "",
-+				reportdata, sizeof(reportdata));
-+
-+		print_array_hex("\n\t\tTDX tdreport data\n", "",
-+				&tdreport, sizeof(tdreport));
-+	}
-+
-+	/* Make sure TDREPORT data includes the REPORTDATA passed */
-+	ASSERT_EQ(0, memcmp(&tdreport.reportmac.reportdata[0],
-+			    reportdata, sizeof(reportdata)));
-+
-+	ASSERT_EQ(0, close(devfd));
-+}
-+
-+TEST_HARNESS_MAIN
--- 
-2.34.1
-
+--=20
+Kees Cook
