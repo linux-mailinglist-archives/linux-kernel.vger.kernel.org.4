@@ -2,118 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83D7D605528
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 03:47:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 209DE605534
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 03:51:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231515AbiJTBrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 21:47:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39528 "EHLO
+        id S231479AbiJTBve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 21:51:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231171AbiJTBri (ORCPT
+        with ESMTP id S230463AbiJTBvc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 21:47:38 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D487B1D1017;
-        Wed, 19 Oct 2022 18:47:36 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id w196so21297374oiw.8;
-        Wed, 19 Oct 2022 18:47:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9vUhRSZJCY7KpJC4RI1IvvNhYQ/fmK2CLSJSd1FaYiA=;
-        b=cavVnV1m3N5NzP2tWUyolKWTQYTngRg094gtT/25DeHzYd3cgOWjrVH8E2jFKHLk51
-         7nM4JDL6aJY9FpUkYq0AOl9/Nj8I2KPsCNhMYGpJyiaHvJyWEH36gMyl2F0bsVYstF2G
-         HZLRxTqfQbFBaLai7tB4X0a8m78LCMDJ0LwWWzL1Mn0kzmzeEwUld6mMVhv0mVGaGS+j
-         +/ymesLIVt92rAXvCMBttH2YU8rukbqCynenjijaD83UcgBInFC3EqkvZneoFXeRA7Xr
-         Zj9nrObRMe8//Yr+8fCT78UJrJdMFzB2cdywEWX9ohFisY9DcNfybz/PCqkzyETz7/Z7
-         sx1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9vUhRSZJCY7KpJC4RI1IvvNhYQ/fmK2CLSJSd1FaYiA=;
-        b=2+y8xlEiZUVInjotwsFwPau1VM3QDAPluEZ5s57GHt8IO6emxqQaFmj8FFPCLaP3bD
-         4s6a161BW7lSN35htKvrMQwqr5Cr39RwzEqkI0ZOvytcbzpSpkoSf39TPb3Z8/1OVxZq
-         ecK0gc68IAYwQ57MECzxAeJKwc7g8THdOuwTih9Uxa/DogNWZMe256bUD3Ola3r3Epq4
-         uIWD4My7vmB8P351zc/44He3jJ4fKQOyeYu3P+LenYfYwvoVodlqFBh4rH9L+NaJnB3z
-         bYF7Cnmok1ZYw9raub4rmUYxsEcfO+lDd45fGj8mgPSBjHM7PQ2ErmDlex7DElHSyRft
-         rYkg==
-X-Gm-Message-State: ACrzQf2zeOWBFLe9Rv0qj6xZC4Pwr11DV7aN0mwKcrXzJHZJY3WAv1WD
-        ABmE7G+gHfRVEjLU245yBh9P/KWmZ5I=
-X-Google-Smtp-Source: AMsMyM6KyAp1lPo3/Ky++XR1l54cXcru3NtP2qcPOA81rcBKjKix6JjImvrcIFGYItXw0VLJdoFzXA==
-X-Received: by 2002:a05:6871:5d3:b0:131:feaf:b826 with SMTP id v19-20020a05687105d300b00131feafb826mr7528563oan.129.1666230445909;
-        Wed, 19 Oct 2022 18:47:25 -0700 (PDT)
-Received: from macondo.. ([2804:431:e7cc:1855:8393:57eb:548f:5125])
-        by smtp.gmail.com with ESMTPSA id f10-20020a056830204a00b00661b019accbsm7659796otp.3.2022.10.19.18.47.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Oct 2022 18:47:25 -0700 (PDT)
-From:   Rafael Mendonca <rafaelmendsr@gmail.com>
-To:     Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>
-Cc:     Rafael Mendonca <rafaelmendsr@gmail.com>, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] io-wq: Fix memory leak in worker creation
-Date:   Wed, 19 Oct 2022 22:47:09 -0300
-Message-Id: <20221020014710.902201-1-rafaelmendsr@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 19 Oct 2022 21:51:32 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29971160ECA
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 18:51:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666230691; x=1697766691;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=jqVvHxPo050Zb28QPRhB5MKlDfuC+lZT57Gtdn8Tgy4=;
+  b=D+dVk04IJhrjiVbY5hGN50z0dES/OQ4kdyuBdZqKHkt84J8qrCCXQ3M+
+   XHDIecGdniKW/kWnQdCdJbdOgOnu6LEN03QYaZmMF5Hjv4ROWqUtrR+OB
+   /3SVKo3LLil3bKBau0rS0FZu+MPel3Ojgek0PO+DG8EWGrMfkr5Ji2BFj
+   fWiXCXbE7B4XkFHtMk6DaX3wi5v1ZgVIqozH9Ce2L1YktUW7pK+o7PeKy
+   K1v3PelaqAFo/DQU9Za9EFeKwGTdq66JEjk0n0rkGNOEWspPenSp4Egr0
+   PPggtfgRQv82Bp7F/mmm7gzzThuvT5n93AvGelIyfUNSX/yk1pk4qlF3p
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="307679133"
+X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
+   d="scan'208";a="307679133"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 18:51:30 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="772070468"
+X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
+   d="scan'208";a="772070468"
+Received: from yhuang6-mobl2.sh.intel.com ([10.238.6.69])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 18:51:26 -0700
+From:   Huang Ying <ying.huang@intel.com>
+To:     linux-mm@kvack.org
+Cc:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Huang Ying <ying.huang@intel.com>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Bharata B Rao <bharata@amd.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Jagdish Gediya <jvgediya.oss@gmail.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Tim Chen <tim.c.chen@intel.com>, Wei Xu <weixugc@google.com>,
+        Yang Shi <shy828301@gmail.com>
+Subject: [PATCH] memory tier, sysfs: rename attribute "nodes" to "nodelist"
+Date:   Thu, 20 Oct 2022 09:51:22 +0800
+Message-Id: <20221020015122.290097-1-ying.huang@intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the CPU mask allocation for a node fails, then the memory allocated for
-the 'io_wqe' struct of the current node doesn't get freed on the error
-handling path, since it has not yet been added to the 'wqes' array.
+In sysfs, we use attribute name "cpumap" or "cpus" for cpu mask and
+"cpulist" or "cpus_list" for cpu list.  For example, in my system,
 
-This was spotted when fuzzing v6.1-rc1 with Syzkaller:
-BUG: memory leak
-unreferenced object 0xffff8880093d5000 (size 1024):
-  comm "syz-executor.2", pid 7701, jiffies 4295048595 (age 13.900s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<00000000cb463369>] __kmem_cache_alloc_node+0x18e/0x720
-    [<00000000147a3f9c>] kmalloc_node_trace+0x2a/0x130
-    [<000000004e107011>] io_wq_create+0x7b9/0xdc0
-    [<00000000c38b2018>] io_uring_alloc_task_context+0x31e/0x59d
-    [<00000000867399da>] __io_uring_add_tctx_node.cold+0x19/0x1ba
-    [<000000007e0e7a79>] io_uring_setup.cold+0x1b80/0x1dce
-    [<00000000b545e9f6>] __x64_sys_io_uring_setup+0x5d/0x80
-    [<000000008a8a7508>] do_syscall_64+0x5d/0x90
-    [<000000004ac08bec>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+ $ cat /sys/devices/system/node/node0/cpumap
+ f,ffffffff
+ $ cat /sys/devices/system/cpu/cpu2/topology/core_cpus
+ 0,00100004
+ $ cat cat /sys/devices/system/node/node0/cpulist
+ 0-35
+ $ cat /sys/devices/system/cpu/cpu2/topology/core_cpus_list
+ 2,20
 
-Fixes: 0e03496d1967 ("io-wq: use private CPU mask")
-Signed-off-by: Rafael Mendonca <rafaelmendsr@gmail.com>
+It looks reasonable to use "nodemap" for node mask and "nodelist" for
+node list.  So, rename the attribute to follow the naming convention.
+
+Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+Cc: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+Cc: Alistair Popple <apopple@nvidia.com>
+Cc: Bharata B Rao <bharata@amd.com>
+Cc: Dan Williams <dan.j.williams@intel.com>
+Cc: Dave Hansen <dave.hansen@intel.com>
+Cc: Davidlohr Bueso <dave@stgolabs.net>
+Cc: Hesham Almatary <hesham.almatary@huawei.com>
+Cc: Jagdish Gediya <jvgediya.oss@gmail.com>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: Michal Hocko <mhocko@kernel.org>
+Cc: Tim Chen <tim.c.chen@intel.com>
+Cc: Wei Xu <weixugc@google.com>
+Cc: Yang Shi <shy828301@gmail.com>
 ---
- io_uring/io-wq.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/ABI/testing/sysfs-kernel-mm-memory-tiers | 4 ++--
+ mm/memory-tiers.c                                      | 8 ++++----
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/io_uring/io-wq.c b/io_uring/io-wq.c
-index c6536d4b2da0..6f1d0e5df23a 100644
---- a/io_uring/io-wq.c
-+++ b/io_uring/io-wq.c
-@@ -1164,10 +1164,10 @@ struct io_wq *io_wq_create(unsigned bounded, struct io_wq_data *data)
- 		wqe = kzalloc_node(sizeof(struct io_wqe), GFP_KERNEL, alloc_node);
- 		if (!wqe)
- 			goto err;
-+		wq->wqes[node] = wqe;
- 		if (!alloc_cpumask_var(&wqe->cpu_mask, GFP_KERNEL))
- 			goto err;
- 		cpumask_copy(wqe->cpu_mask, cpumask_of_node(node));
--		wq->wqes[node] = wqe;
- 		wqe->node = alloc_node;
- 		wqe->acct[IO_WQ_ACCT_BOUND].max_workers = bounded;
- 		wqe->acct[IO_WQ_ACCT_UNBOUND].max_workers =
+diff --git a/Documentation/ABI/testing/sysfs-kernel-mm-memory-tiers b/Documentation/ABI/testing/sysfs-kernel-mm-memory-tiers
+index 45985e411f13..721a05b90109 100644
+--- a/Documentation/ABI/testing/sysfs-kernel-mm-memory-tiers
++++ b/Documentation/ABI/testing/sysfs-kernel-mm-memory-tiers
+@@ -10,7 +10,7 @@ Description:	A collection of all the memory tiers allocated.
+ 
+ 
+ What:		/sys/devices/virtual/memory_tiering/memory_tierN/
+-		/sys/devices/virtual/memory_tiering/memory_tierN/nodes
++		/sys/devices/virtual/memory_tiering/memory_tierN/nodelist
+ Date:		August 2022
+ Contact:	Linux memory management mailing list <linux-mm@kvack.org>
+ Description:	Directory with details of a specific memory tier
+@@ -21,5 +21,5 @@ Description:	Directory with details of a specific memory tier
+ 		A smaller value of N implies a higher (faster) memory tier in the
+ 		hierarchy.
+ 
+-		nodes: NUMA nodes that are part of this memory tier.
++		nodelist: NUMA nodes that are part of this memory tier.
+ 
+diff --git a/mm/memory-tiers.c b/mm/memory-tiers.c
+index f116b7b6333e..fa8c9d07f9ce 100644
+--- a/mm/memory-tiers.c
++++ b/mm/memory-tiers.c
+@@ -131,8 +131,8 @@ static void memory_tier_device_release(struct device *dev)
+ 	kfree(tier);
+ }
+ 
+-static ssize_t nodes_show(struct device *dev,
+-			  struct device_attribute *attr, char *buf)
++static ssize_t nodelist_show(struct device *dev,
++			     struct device_attribute *attr, char *buf)
+ {
+ 	int ret;
+ 	nodemask_t nmask;
+@@ -143,10 +143,10 @@ static ssize_t nodes_show(struct device *dev,
+ 	mutex_unlock(&memory_tier_lock);
+ 	return ret;
+ }
+-static DEVICE_ATTR_RO(nodes);
++static DEVICE_ATTR_RO(nodelist);
+ 
+ static struct attribute *memtier_dev_attrs[] = {
+-	&dev_attr_nodes.attr,
++	&dev_attr_nodelist.attr,
+ 	NULL
+ };
+ 
 -- 
-2.34.1
+2.35.1
 
