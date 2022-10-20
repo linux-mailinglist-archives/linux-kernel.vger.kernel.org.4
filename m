@@ -2,70 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3EF560626A
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 16:04:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32A46606267
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 16:04:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230107AbiJTOEX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 10:04:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34346 "EHLO
+        id S230108AbiJTOEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 10:04:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230078AbiJTOEN (ORCPT
+        with ESMTP id S229779AbiJTOEI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 10:04:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C9BF1D5850
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 07:04:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666274650;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9nCYnpDiF6jG8sTPBwmH96ryJf+ugRaTkdwBFuQTVY4=;
-        b=BsBG/CXuVgumBAFHCvqqshjLIPe07ZMRASnEjAOlcH4rT9/rcs9phlAJZV9ZgwFFdySoXI
-        fFPMnhhyyJjmBR2EwxiF0i3VcRubBKhr5/LWaG/4wpfJZ49nJtyFIIC1at7OYZ8MBCGtQt
-        k6w6wQ7YzJhOO+15j8SqLI6u5M+u3Mo=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-161-3ruEITnrN6ywsi0u79TsCA-1; Thu, 20 Oct 2022 10:04:04 -0400
-X-MC-Unique: 3ruEITnrN6ywsi0u79TsCA-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 603E9858282;
-        Thu, 20 Oct 2022 14:03:58 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.3])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9D84B40315C;
-        Thu, 20 Oct 2022 14:03:56 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <Y01VjOE2RrLVA2T6@infradead.org>
-References: <Y01VjOE2RrLVA2T6@infradead.org> <1762414.1665761217@warthog.procyon.org.uk>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     dhowells@redhat.com, Al Viro <viro@zeniv.linux.org.uk>,
-        willy@infradead.org, dchinner@redhat.com,
-        Steve French <smfrench@gmail.com>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Rohith Surabattula <rohiths.msft@gmail.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>, torvalds@linux-foundation.org,
-        linux-cifs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: How to convert I/O iterators to iterators, sglists and RDMA lists
+        Thu, 20 Oct 2022 10:04:08 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE2B11D5850;
+        Thu, 20 Oct 2022 07:04:06 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id bj12so47591559ejb.13;
+        Thu, 20 Oct 2022 07:04:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=VcnoQx3qI7fpXJUKM0CZbdSa56iEX07NlfTNetUmqRw=;
+        b=l5bu8brHSu0lV8jpdsslwekKWTitm3jcIzunKjSvYW6ZHEoyPulraEujek+0GP/Hvd
+         VGynsaEV431/P0R4Up0JmdjgrLdZCAEXuS4thXeD1IkB0tL1c1TYwuHI0t7KEYQ28Ngi
+         OjfuEUQIW5cD1w1T5Wl38wkB5vFtRrmJ1I+460JqsxkhwjNxe2MY/MZLUVaLfNXb9rxB
+         mvWyTgjjiRaVTJ1C2POs4n/gmyaptI+zmwL5wEC99pA8loysp0dqVPy7tyoy7eWkwaRH
+         0PWHvnaY1M5vrwXfwri59mlcpsoC38vvExyhtVa9UiFedcueAmfgCoofwGx7+yQve6jp
+         dbcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VcnoQx3qI7fpXJUKM0CZbdSa56iEX07NlfTNetUmqRw=;
+        b=MGTpiQJDH0M8YHrF40zLf6Tnlo5FCi+KomiQDetLNZ5sb9pJyaEUvHg6vY9OW9LN1x
+         WS6paqtC6HbqWCVJQXdZSwdlmdez9xlnr9ryRt8l9qoPbfaxoNVWAg5OOeFQ075lGlh+
+         LJFGeChVyMhtAZ2TPlF5XqBX8nHsO5QBjBJ3PzaHdSWE5PJLyPqwmrvFcDxOUXPvyF0/
+         PqoFnYn2Ww1ZCTQquhHslfDeNR3DpRCdGNXg9sfeQKmOlJbTy00urFUYoXzCvVHU18rd
+         8gCh9Rh83lcck4PN9guVZYqQczNN/T8HXq5g7CTwzkQgtulBGm7xLZC5gKMnnJxqVKNg
+         gNzg==
+X-Gm-Message-State: ACrzQf2uNIf5YEutIhOPHsPEMpsCo0Vc7458GpleWLPySMKiGBpDrrYd
+        sBfjcyjWka+XIDUUzuymt7SjqDgol6VZuw==
+X-Google-Smtp-Source: AMsMyM4SZEZSqVPTVYvWzQRYrzgh/kATVwZIqEmKTRuF0c5R/E5+UHJTLTdHcYlKatrB4zrmQDmY/g==
+X-Received: by 2002:a17:906:cc0b:b0:78e:1d51:36ea with SMTP id ml11-20020a170906cc0b00b0078e1d5136eamr11264073ejb.408.1666274645060;
+        Thu, 20 Oct 2022 07:04:05 -0700 (PDT)
+Received: from skbuf ([188.27.184.197])
+        by smtp.gmail.com with ESMTPSA id nb36-20020a1709071ca400b0073ddb2eff27sm10450359ejc.167.2022.10.20.07.04.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Oct 2022 07:04:04 -0700 (PDT)
+Date:   Thu, 20 Oct 2022 17:04:00 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Ido Schimmel <idosch@nvidia.com>
+Cc:     "Hans J. Schultz" <netdev@kapio-technology.com>,
+        davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Florent Fourcot <florent.fourcot@wifirst.fr>,
+        Hans Schultz <schultz.hans@gmail.com>,
+        Joachim Wiberg <troglobit@gmail.com>,
+        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v8 net-next 05/12] net: dsa: propagate the locked flag
+ down through the DSA layer
+Message-ID: <20221020140400.h4czo4wwv7erncy7@skbuf>
+References: <20221018165619.134535-1-netdev@kapio-technology.com>
+ <20221018165619.134535-1-netdev@kapio-technology.com>
+ <20221018165619.134535-6-netdev@kapio-technology.com>
+ <20221018165619.134535-6-netdev@kapio-technology.com>
+ <20221020130224.6ralzvteoxfdwseb@skbuf>
+ <Y1FMAI9BzDRUPi5Y@shredder>
+ <20221020133506.76wroc7owpwjzrkg@skbuf>
+ <Y1FTzyPdTbAF+ODT@shredder>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1415914.1666274636.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Thu, 20 Oct 2022 15:03:56 +0100
-Message-ID: <1415915.1666274636@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1FTzyPdTbAF+ODT@shredder>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,144 +110,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christoph Hellwig <hch@infradead.org> wrote:
+On Thu, Oct 20, 2022 at 04:57:35PM +0300, Ido Schimmel wrote:
+> On Thu, Oct 20, 2022 at 04:35:06PM +0300, Vladimir Oltean wrote:
+> > On Thu, Oct 20, 2022 at 04:24:16PM +0300, Ido Schimmel wrote:
+> > > On Thu, Oct 20, 2022 at 04:02:24PM +0300, Vladimir Oltean wrote:
+> > > > On Tue, Oct 18, 2022 at 06:56:12PM +0200, Hans J. Schultz wrote:
+> > > > > @@ -3315,6 +3316,7 @@ static int dsa_slave_fdb_event(struct net_device *dev,
+> > > > >  	struct dsa_port *dp = dsa_slave_to_port(dev);
+> > > > >  	bool host_addr = fdb_info->is_local;
+> > > > >  	struct dsa_switch *ds = dp->ds;
+> > > > > +	u16 fdb_flags = 0;
+> > > > >  
+> > > > >  	if (ctx && ctx != dp)
+> > > > >  		return 0;
+> > > > > @@ -3361,6 +3363,9 @@ static int dsa_slave_fdb_event(struct net_device *dev,
+> > > > >  		   orig_dev->name, fdb_info->addr, fdb_info->vid,
+> > > > >  		   host_addr ? " as host address" : "");
+> > > > >  
+> > > > > +	if (fdb_info->locked)
+> > > > > +		fdb_flags |= DSA_FDB_FLAG_LOCKED;
+> > > > 
+> > > > This is the bridge->driver direction. In which of the changes up until
+> > > > now/through which mechanism will the bridge emit a
+> > > > SWITCHDEV_FDB_ADD_TO_DEVICE with fdb_info->locked = true?
+> > > 
+> > > I believe it can happen in the following call chain:
+> > > 
+> > > br_handle_frame_finish
+> > >    br_fdb_update // p->flags & BR_PORT_MAB
+> > >        fdb_notify
+> > >            br_switchdev_fdb_notify
+> > > 
+> > > This can happen with Spectrum when a packet ingresses via a locked port
+> > > and incurs an FDB miss in hardware. The packet will be trapped and
+> > > injected to the Rx path where it should invoke the above call chain.
+> > 
+> > Ah, so this is the case which in mv88e6xxx would generate an ATU
+> > violation interrupt; in the Spectrum case it generates a special packet.
+> 
+> Not sure what you mean by "special" :) It's simply the packet that
+> incurred the FDB miss on the SMAC.
+> 
+> > Right now this packet isn't generated, right?
+> 
+> Right. We don't support BR_PORT_LOCKED so these checks are not currently
+> enabled in hardware. To be clear, only packets received via locked ports
+> are able to trigger the check.
+> 
+> > 
+> > I think we have the same thing in ocelot, a port can be configured to
+> > send "learn frames" to the CPU.
+> > 
+> > Should these packets be injected into the bridge RX path in the first
+> > place? They reach the CPU because of an FDB miss, not because the CPU
+> > was the intended destination.
+> 
+> The reason to inject them to the Rx path is so that they will trigger
+> the creation of the "locked" entry in the bridge driver (when MAB is
+> on), thereby notifying user space about the presence of a new MAC behind
+> the locked port. We can try to parse them in the driver and notify the
+> bridge driver via SWITCHDEV_FDB_ADD_TO_BRIDGE, but it's quite ugly...
 
-> >  (1) Async direct I/O.
-> > =
+"ugly" => your words, not mine... But abstracting things a bit, doing
+what you just said (SWITCHDEV_FDB_ADD_TO_BRIDGE) for learn frames would
+be exactly the same thing as what mv88e6xxx is doing (so your "ugly"
+comment equally applies to Marvell). The learn frames are "special" in
+the sense that they don't belong to the data path of the software
+bridge*, they are just hardware specific information which the driver
+must deal with, using a channel that happens to be Ethernet and not an
+IRQ/MDIO.
 
-> >      In the async case direct I/O, we cannot hold on to the iterator w=
-hen we
-> >      return, even if the operation is still in progress (ie. we return
-> >      EIOCBQUEUED), as it is likely to be on the caller's stack.
-> > =
+*in other words, a bridge with proper RX filtering should not even
+receive these frames, or would need special casing for BR_PORT_MAB to
+not drop them in the first place.
 
-> >      Also, simply copying the iterator isn't sufficient as virtual use=
-rspace
-> >      addresses cannot be trusted and we may have to pin the pages that
-> >      comprise the buffer.
-> =
-
-> This is very related to the discussion we are having related to pinning
-> for O_DIRECT with Ira and Al.
-
-Do you have a link to that discussion?  I don't see anything obvious on
-fsdevel including Ira.
-
-I do see a discussion involving iov_iter_pin_pages, but I don't see Ira
-involved in that.
-
-> What block file systems do is to take the pages from the iter and some f=
-lags
-> on what is pinned.  We can generalize this to store all extra state in a
-> flags word, or byte the bullet and allow cloning of the iter in one form=
- or
-> another.
-
-Yeah, I know.  A list of pages is not an ideal solution.  It can only hand=
-le
-contiguous runs of pages, possibly with a partial page at either end.  A b=
-vec
-iterator would be of more use as it can handle a series of partial pages.
-
-Note also that I would need to turn the pages *back* into an iterator in o=
-rder
-to commune with sendmsg() in the nether reaches of some network filesystem=
-s.
-
-> >  (2) Crypto.
-> > =
-
-> >      The crypto interface takes scatterlists, not iterators, so we nee=
-d to
-> >      be able to convert an iterator into a scatterlist in order to do
-> >      content encryption within netfslib.  Doing this in netfslib makes=
- it
-> >      easier to store content-encrypted files encrypted in fscache.
-> =
-
-> Note that the scatterlist is generally a pretty bad interface.  We've
-> been talking for a while to have an interface that takes a page array
-> as an input and return an array of { dma_addr, len } tuples.  Thinking
-> about it taking in an iter might actually be an even better idea.
-
-It would be nice to be able to pass an iterator to the crypto layer.  I'm =
-not
-sure what the crypto people think of that.
-
-> >  (3) RDMA.
-> > =
-
-> >      To perform RDMA, a buffer list needs to be presented as a QPE arr=
-ay.
-> >      Currently, cifs converts the iterator it is given to lists of pag=
-es,
-> >      then each list to a scatterlist and thence to a QPE array.  I hav=
-e
-> >      code to pass the iterator down to the bottom, using an intermedia=
-te
-> >      BVEC iterator instead of a page list if I can't pass down the
-> >      original directly (eg. an XARRAY iterator on the pagecache), but =
-I
-> >      still end up converting it to a scatterlist, which is then conver=
-ted
-> >      to a QPE.  I'm trying to go directly from an iterator to a QPE ar=
-ray,
-> >      thus avoiding the need to allocate an sglist.
-> =
-
-> I'm not sure what you mean with QPE.  The fundamental low-level
-> interface in RDMA is the ib_sge.
-
-Sorry, yes. ib_sge array.  I think it appears as QPs on the wire.
-
-> If you feed it to RDMA READ/WRITE requests the interface for that is the
-> RDMA R/W API in drivers/infiniband/core/rw.c, which currently takes a
-> scatterlist but to which all of the above remarks on DMA interface apply=
-.
-> For RDMA SEND that ULP has to do a dma_map_single/page to fill it, which=
- is
-> a quite horrible layering violation and should move into the driver, but
-> that is going to a massive change to the whole RDMA subsystem, so unlike=
-ly
-> to happen anytime soon.
-
-In cifs, as it is upstream, in RDMA transmission, the iterator is converte=
-d
-into a clutch of pages in the top, which is converted back into iterators
-(smbd_send()) and those into scatterlists (smbd_post_send_data()), thence =
-into
-sge lists (see smbd_post_send_sgl()).
-
-I have patches that pass an iterator (which it decants to a bvec if async)=
- all
-the way down to the bottom layer.  Snippets are then converted to scatterl=
-ists
-and those to sge lists.  I would like to skip the scatterlist intermediate=
- and
-convert directly to sge lists.
-
-On the other hand, if you think the RDMA API should be taking scatterlists
-rather than sge lists, that would be fine.  Even better if I can just pass=
- an
-iterator in directly - though neither scatterlist nor iterator has a place=
- to
-put the RDMA local_dma_key - though I wonder if that's actually necessary =
-for
-each sge element, or whether it could be handed through as part of the req=
-uest
-as a hole.
-
-> Neither case has anything to do with what should be in common iov_iter
-> code, all this needs to live in the RDMA subsystem as a consumer.
-
-That's fine in principle.  However, I have some extraction code that can
-convert an iterator to another iterator, an sglist or an rdma sge list, us=
-ing
-a common core of code to do all three.
-
-I can split it up if that is preferable.
-
-Do you have code that's ready to be used?  I can make immediate use of it.
-
-David
-
+I would incline towards an unified approach for CPU assisted learning,
+regardless of this (minor, IMO) difference between Marvell and other
+vendors.
