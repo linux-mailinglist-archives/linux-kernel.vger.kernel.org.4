@@ -2,130 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA668606880
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 20:56:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0E0B606886
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 20:57:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230125AbiJTS4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 14:56:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42952 "EHLO
+        id S230156AbiJTS5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 14:57:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbiJTS4P (ORCPT
+        with ESMTP id S229832AbiJTS5Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 14:56:15 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE5FA144E0E;
-        Thu, 20 Oct 2022 11:56:13 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id q9so1890403ejd.0;
-        Thu, 20 Oct 2022 11:56:13 -0700 (PDT)
+        Thu, 20 Oct 2022 14:57:16 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0898316A4DB
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 11:57:15 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id g28so397054pfk.8
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 11:57:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dOkqJ3yOOQFkcMQbSOwgJrCEmoTaf2s2tr3nzMcHbt0=;
-        b=fbYwZZwiNod4xj5Jklg9zaZScJ0H0Xz5Y3nhHgF2d8jzdhcEmMXKASW6Jb6YrU7nov
-         jjJnR74lTiPvYaigckFhy6uOFnBvdf9mK4wwsNooGz1QpAeYHIZNUiepaM8wI70IEtNU
-         RaHVrP3C07hQmL6LhpZFMpMGdafReS5nOMgLXhBA/qxy8Wer20w/qmHLtFPdRuVqNEyl
-         9Y7ozURQVTOjbY01SIPWJjThEVzEDPfxu4OIk+2ZvatmrQ91Kx7J+1jSw6LPZjwKLJuB
-         mVGLRGoqyRXclBp7pLHqHRPv3VF/D34uONSqvTUEC82pUV9mwdGugwrXCxvbl/39ncnw
-         8GEw==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZFG8oe8zjIP3HtrEYf8FZ1cCVncWHGDhPegdRUm6pSk=;
+        b=JH10v71f9cO/zrGHhWXMzQx4+lZEXvmFPiD6f82j66NBiYRArMO6WA87v5WRzOFdmJ
+         vFAhDRdieYSaEwIMaX4NLT7dRZsmxrRodnE3B2inGJhsPNES+Wrq+P3EMm9m7qfLm7+X
+         VDQRrM3G4guBVWiBNXcjYnt5uMWuXxdXqgHv8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dOkqJ3yOOQFkcMQbSOwgJrCEmoTaf2s2tr3nzMcHbt0=;
-        b=1qY8FLvwchBnv7QMp1lTyw4g5n37YLGoNxxSy0jimnHXj3Ih4Pyim8ne9wswY/DBQE
-         MkBPFOjZdMgnmuxEnHHQiNQDpOiOzeYebeBUE2wM0G86uVQhZsYNbattiAliqdjJbKSN
-         Ktz2XPfqRgW6FuXT8H1uuzjV1MJMnT66rjqV0AeawVgZV5KeXl89OGTHWwUN+gC5OMSK
-         Qnb5eCe+Xunx/O1Y3EhX+F21v1+f0UTxtsuqWXJwmzzkWNYCw6jMXXCmwVsBQDBwBkes
-         BGJz7iabF7q2jOB0471b7LUGkNs3OiAzviWANvzoqbUFWnN/9gUs9nL5xHd7C5f9XG0u
-         WiGQ==
-X-Gm-Message-State: ACrzQf3Nxfbd+xXF1ofhh48BlA9DjtqP+Ms2HNXsBXeTSIVJJOccxbj7
-        wfDHD1Lsb8kL1tObmFIxhG2yYgN0qKM=
-X-Google-Smtp-Source: AMsMyM6NWhUShU3QwrVek1U/gxYho1cTWm1qagu1cx9Ko+jwhyiAj12K9AClrVHb/+sdmffnwmArPQ==
-X-Received: by 2002:a17:907:e93:b0:78d:b8ff:9b5f with SMTP id ho19-20020a1709070e9300b0078db8ff9b5fmr12408045ejc.12.1666292172431;
-        Thu, 20 Oct 2022 11:56:12 -0700 (PDT)
-Received: from nz (host81-147-8-29.range81-147.btcentralplus.com. [81.147.8.29])
-        by smtp.gmail.com with ESMTPSA id gl22-20020a170906e0d600b0078d3f96d293sm10666707ejb.30.2022.10.20.11.56.11
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZFG8oe8zjIP3HtrEYf8FZ1cCVncWHGDhPegdRUm6pSk=;
+        b=2p8/mWiJeNXojWD5XF9p/NOcMCv4Z9HvoKLKHN5S7R57Pagp1YpVd6Lly8TfySU3bj
+         KftHRIfxHu628re/8zXwRDxNxadNCpgDBoS4IKHoYh+2Tmk5UCSfJEcNelnftDcKjSpM
+         5wrazwvuuaushKO9xkY9VY5ONBVaUWuvjTlO7Fq74r6F7qzGIgvsH3jh+IhczcDvViZg
+         V1PZmy5Ohf12ZcPwkhNpRFRX4zf6kojfzR1I/sBSEtBUYBoJun1Eu59+js0LP87LzkZE
+         KW0pA4yLYJX1bQqzX3YbyP+yEt71Iq3a1iOedbW+84EquRr06ZoGBJxIHkAOf3/ivZMe
+         wRzQ==
+X-Gm-Message-State: ACrzQf1Ycpcg/jkgAFGx3dDLSRODbbbL2tidFXR++J4Dl+ep6tTytksx
+        ewBQZTuu7ome8I9IlzcZ08RzwQ==
+X-Google-Smtp-Source: AMsMyM5LsHsFEMX8I6dkcpYhAJP8fLYRo6gtf8HpJpwWxcUentkixVPXvC3hRVRGYAOeDT0aPDAVFw==
+X-Received: by 2002:a05:6a00:1707:b0:563:235:769b with SMTP id h7-20020a056a00170700b005630235769bmr15374927pfc.19.1666292234509;
+        Thu, 20 Oct 2022 11:57:14 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id c28-20020aa7953c000000b0053725e331a1sm13669135pfp.82.2022.10.20.11.57.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 11:56:12 -0700 (PDT)
-Date:   Thu, 20 Oct 2022 19:56:11 +0100
-From:   Sergei Trofimovich <slyich@gmail.com>
-To:     yexingchen116@gmail.com
-Cc:     akpm@linux-foundation.org, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ye xingchen <ye.xingchen@zte.com.cn>
-Subject: Re: [PATCH linux-next] ia64: Replace IS_ERR() with IS_ERR_VALUE()
-Message-ID: <20221020195611.234ca44e@nz>
-In-Reply-To: <20221020113004.400031-1-ye.xingchen@zte.com.cn>
-References: <20221020113004.400031-1-ye.xingchen@zte.com.cn>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Thu, 20 Oct 2022 11:57:13 -0700 (PDT)
+Date:   Thu, 20 Oct 2022 11:57:12 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        mm-commits@vger.kernel.org, masahiroy@kernel.org,
+        gregkh@linuxfoundation.org, andriy.shevchenko@linux.intel.com,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: [PATCH -mm] -funsigned-char, x86: make struct
+ p4_event_bind::cntr signed array
+Message-ID: <202210201151.ECC19BC97A@keescook>
+References: <20221020000356.177CDC433C1@smtp.kernel.org>
+ <Y1EZuQcO8UoN91cX@localhost.localdomain>
+ <CAHmME9prEhkHqQmtDGCSFunNnxiKdE_8FHKiksyqebUN63U81Q@mail.gmail.com>
+ <CAHk-=whFow9Wd6C8htoRUt5wXbwf1i_qbuArBbhXOPqYsTFvtw@mail.gmail.com>
+ <CAHmME9qBZqTd0D_gr8nE+DUzCrC0fxZNZK=7u+21jbgtFgAJBg@mail.gmail.com>
+ <CAHk-=wjZDC9o8iwF+bU91Hx40HjGOpMui+VoFCDJkaGCu=rG4A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wjZDC9o8iwF+bU91Hx40HjGOpMui+VoFCDJkaGCu=rG4A@mail.gmail.com>
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 20 Oct 2022 11:30:04 +0000
-yexingchen116@gmail.com wrote:
-
-> From: ye xingchen <ye.xingchen@zte.com.cn>
+On Thu, Oct 20, 2022 at 10:42:25AM -0700, Linus Torvalds wrote:
+> On Thu, Oct 20, 2022 at 10:33 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> >
+> > Or sometimes with objdump, I've had more success by keeping debug
+> > symbols, and then trimming offsets from jmps.
 > 
-> Avoid type casts that are needed for IS_ERR() and use
-> IS_ERR_VALUE() instead.
-
-Looks good to me!
-
-Signed-off-by: Sergei Trofimovich <slyich@gmail.com>
-
-> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
-> ---
->  arch/ia64/kernel/sys_ia64.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+> objdump is what I'm using, and it actually seems ok on individual object files.
 > 
-> diff --git a/arch/ia64/kernel/sys_ia64.c b/arch/ia64/kernel/sys_ia64.c
-> index 215bf3f8cb20..f6a502e8f02c 100644
-> --- a/arch/ia64/kernel/sys_ia64.c
-> +++ b/arch/ia64/kernel/sys_ia64.c
-> @@ -140,7 +140,7 @@ asmlinkage unsigned long
->  sys_mmap2 (unsigned long addr, unsigned long len, int prot, int flags, int fd, long pgoff)
->  {
->  	addr = ksys_mmap_pgoff(addr, len, prot, flags, fd, pgoff);
-> -	if (!IS_ERR((void *) addr))
-> +	if (!IS_ERR_VALUE(addr))
->  		force_successful_syscall_return();
->  	return addr;
->  }
-> @@ -152,7 +152,7 @@ sys_mmap (unsigned long addr, unsigned long len, int prot, int flags, int fd, lo
->  		return -EINVAL;
->  
->  	addr = ksys_mmap_pgoff(addr, len, prot, flags, fd, off >> PAGE_SHIFT);
-> -	if (!IS_ERR((void *) addr))
-> +	if (!IS_ERR_VALUE(addr))
->  		force_successful_syscall_return();
->  	return addr;
->  }
-> @@ -162,7 +162,7 @@ ia64_mremap (unsigned long addr, unsigned long old_len, unsigned long new_len, u
->  	     unsigned long new_addr)
->  {
->  	addr = sys_mremap(addr, old_len, new_len, flags, new_addr);
-> -	if (!IS_ERR((void *) addr))
-> +	if (!IS_ERR_VALUE(addr))
->  		force_successful_syscall_return();
->  	return addr;
->  }
-> -- 
-> 2.25.1
-> 
+> Now I just need to script the "do all the object files" and see how
+> massive the end result is.
+
+For the a/b build, I start with all*config, then:
+
+# Stop painful noise
+CONFIG_KCOV=n
+CONFIG_GCOV_KERNEL=n
+CONFIG_GCC_PLUGINS=n
+CONFIG_IKHEADERS=n
+CONFIG_KASAN=n
+CONFIG_UBSAN=n
+CONFIG_KCSAN=n
+CONFIG_KMSAN=n
+# Get us source/line details
+CONFIG_DEBUG_KERNEL=y
+CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+CONFIG_DEBUG_INFO_REDUCED=n CONFIG_DEBUG_INFO_COMPRESSED=n
+CONFIG_DEBUG_INFO_SPLIT=n
+
+And to keep other build-time junk stabilized[1], I build with these make
+options:
+
+KBUILD_BUILD_TIMESTAMP=1970-01-01
+KBUILD_BUILD_USER=user
+KBUILD_BUILD_HOST=host
+KBUILD_BUILD_VERSION=1
+
+For the code diff, I use:
+
+objdump --disassemble --demangle --no-show-raw-insn --no-addresses
+
+and when doing the manual examination:
+
+objdump --disassemble --demangle --reloc --source -l --no-show-raw-insn
+
+
+My not-great way to filter out the movsbl/movzbl, I added this to diff:
+	-I '\bmov[sz]bl\b'
 
 
 -- 
-
-  Sergei
+Kees Cook
