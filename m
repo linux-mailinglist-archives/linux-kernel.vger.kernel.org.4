@@ -2,81 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2288F6064B8
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 17:36:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02A206064BC
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 17:36:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230219AbiJTPgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 11:36:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48590 "EHLO
+        id S230261AbiJTPgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 11:36:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbiJTPgi (ORCPT
+        with ESMTP id S229506AbiJTPgt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 11:36:38 -0400
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D58201D799B
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 08:36:35 -0700 (PDT)
-Received: by mail-qk1-x72e.google.com with SMTP id o2so111812qkk.10
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 08:36:35 -0700 (PDT)
+        Thu, 20 Oct 2022 11:36:49 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D66A41DDDF4;
+        Thu, 20 Oct 2022 08:36:42 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id sc25so320141ejc.12;
+        Thu, 20 Oct 2022 08:36:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=I8eoY0I5X2Sipw0ooGhphn3tjUk+gvKWNqo8fyMAjhM=;
-        b=eic3GDq4OJUmSYYvHL0oWXDL9lVOw11tLOJKO3ef1YNzKereUxNtFux4TdZPd3NZvp
-         uNy2DRDUzs5T+18K/CnvJnbEHPou10yv3lcXYX++tpwUOhvgDF608RroFgjjzLqGfxia
-         eMWg4eNHeOsdxpSkJCB1L26xljap9hADA6WC+4pcWlzgYFH8U6KDFDWwBkZszr2RU7TC
-         cpiwaEtOVn25gwDzAC7s0CsWAKkSJeqjvSo3jWab/H5Jl9HIWahxceQKBy1BN2HLjJB5
-         q+w4yqYgaD9KZH3068nlNXj4gBcV6lzbrlYzDYW+4yPB2TjTg18yvcHCPcHpxioNYFXc
-         pCrA==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=qPwKKOSL5o3iKP3/dq2Q/Xqf5eS+OyCN/8/d6oWiIbo=;
+        b=Wez6UWR4yVy7ljjWDwKmXH6VNrw+c4JqEj+dW/C4iE13oGKDcKlajUuNqxj6oLepyi
+         C0skbvziSspULzvlwn8TBGB6Tv1ygZ83Nk9yz7CmVwEt93bAqdM1W+mP5lRva/Mu2sfA
+         wUJ27HWB96G1EoRapxy1zVd0dSfec6ORQh0UyIB4LVjAyzUCUXaiRRDCLvVFoEQ8Rdxg
+         Ub7Q/WvBLNLViJ6sWzK+Oz8/bF7ofcwRMyWfFsvy2ESmkC+fRO+XYiQFfPUaUZI46ja+
+         kaaUkAOdxxOythUrOTUZPvVTZDJCnY2dlbASFAtPDOc6Xi/cXW/qf28qa4TWVPqSRx7W
+         vAKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=I8eoY0I5X2Sipw0ooGhphn3tjUk+gvKWNqo8fyMAjhM=;
-        b=sUrUbru0jiG5z89/NdLEaepf1krcc75IiKY40Tu41h0M60Rvu4UBLyuR1kbdp/ryy4
-         jOhqvSRD2p44SR+ytqP2oQozSSMZlVhjNj8yjdfG6JGu/5pp80cGhArqCXA860GdvaJM
-         k3Wo02omYsDHv+qjnbWBELTWKKO/xUuTa0PBX2EAufxQ3DDJpdfqvkJMt/VvvFx3/Zz3
-         xO17W5MKihIOqB3xNNl9y9OzAodplBhy2Wvi1/ImvKzyDN/fzjE7YXw+PDn0DQavG/0r
-         TnwGpZOYAJcSN3LvBNfrWIDOJKFCFkmp9dWV/paYmxtsDvMBkv8scJQSvDbw5KVXPabY
-         JWBg==
-X-Gm-Message-State: ACrzQf18KWGLB+YhIp38+66zURv1EsBf0xP6dAlLCNvURhmYAFQxInhw
-        m2pvV8sZKwvjVR/2SZxXDrHcww==
-X-Google-Smtp-Source: AMsMyM4VSBXCeZsMsTw/Ws3ddbjakxegDhi66swi/1jOVMiIPiNapMwXyWu2+hA7sRlGSn4PLy8h5A==
-X-Received: by 2002:a37:f517:0:b0:6ea:11bd:fdd6 with SMTP id l23-20020a37f517000000b006ea11bdfdd6mr9408107qkk.447.1666280194999;
-        Thu, 20 Oct 2022 08:36:34 -0700 (PDT)
-Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
-        by smtp.gmail.com with ESMTPSA id k11-20020a05620a414b00b006e99290e83fsm7682843qko.107.2022.10.20.08.36.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Oct 2022 08:36:34 -0700 (PDT)
-Message-ID: <22c39fd8-e98a-a091-f2c8-12a235f7be8c@linaro.org>
-Date:   Thu, 20 Oct 2022 11:36:32 -0400
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qPwKKOSL5o3iKP3/dq2Q/Xqf5eS+OyCN/8/d6oWiIbo=;
+        b=lc+2uXgcpmuEkZFec6auGFbaAMddyJSp4+fis4Mvfe2kmVCwJvyHd7oJ7KjQpOkhTB
+         IUvu1sqAnVyp+uY8357N6dv04DZjNkqn87stIjVFcVa/OaZ81Ng9faEN1jHp6V3dUefR
+         p2oXFWda42zjA4NJR3I7QDWASTJkVr/ST6Rx1eynOoPgo2fXs73p/tBDbwBk5WIv1S97
+         c+DIgcBLGHZmYWfZVtVqaElsl25/9FqA2Gtb16VqO8WLk9YIoiu53Ox6I+i2519F29Yf
+         6SRCh/BnvO7OSAGBjpbxqhlrCsE2uL2P9OaNzs4X40d8hbvoLQNkt6yIN4qjPRC97WA2
+         Ul2A==
+X-Gm-Message-State: ACrzQf1zOsu9nGVfnXeKENWiHSrxOfPzz0jtf9v0bBwqlEMxXptGqEIP
+        9jTAZX1CDmY4s/BadptMJDI=
+X-Google-Smtp-Source: AMsMyM5s+eomvicrwy06vylV7JHYWUXt7SptVI0OJ04clH7AsmxgYkS4j30ouF2cBsqK3IsRWpsFNA==
+X-Received: by 2002:a17:907:724d:b0:78d:acf4:4c57 with SMTP id ds13-20020a170907724d00b0078dacf44c57mr11472630ejc.516.1666280200876;
+        Thu, 20 Oct 2022 08:36:40 -0700 (PDT)
+Received: from skbuf ([188.27.184.197])
+        by smtp.gmail.com with ESMTPSA id m13-20020a1709061ecd00b007305d408b3dsm10388170ejj.78.2022.10.20.08.36.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Oct 2022 08:36:39 -0700 (PDT)
+Date:   Thu, 20 Oct 2022 18:36:36 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Ido Schimmel <idosch@nvidia.com>
+Cc:     "Hans J. Schultz" <netdev@kapio-technology.com>,
+        davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Florent Fourcot <florent.fourcot@wifirst.fr>,
+        Hans Schultz <schultz.hans@gmail.com>,
+        Joachim Wiberg <troglobit@gmail.com>,
+        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v8 net-next 05/12] net: dsa: propagate the locked flag
+ down through the DSA layer
+Message-ID: <20221020153636.ceqk67hmut3govsp@skbuf>
+References: <20221018165619.134535-1-netdev@kapio-technology.com>
+ <20221018165619.134535-1-netdev@kapio-technology.com>
+ <20221018165619.134535-6-netdev@kapio-technology.com>
+ <20221018165619.134535-6-netdev@kapio-technology.com>
+ <20221020130224.6ralzvteoxfdwseb@skbuf>
+ <Y1FMAI9BzDRUPi5Y@shredder>
+ <20221020133506.76wroc7owpwjzrkg@skbuf>
+ <Y1FTzyPdTbAF+ODT@shredder>
+ <20221020141104.7h7kpau6cnpfqvh4@skbuf>
+ <Y1Fn+TnbI/uMH0VR@shredder>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v6 01/10] dt-bindings: pwm: Document Synopsys DesignWare
- snps,pwm-dw-apb-timers-pwm2
-Content-Language: en-US
-To:     Ben Dooks <ben.dooks@sifive.com>, linux-pwm@vger.kernel.org
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>,
-        u.kleine-koenig@pengutronix.de,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        jarkko.nikula@linux.intel.com,
-        William Salmon <william.salmon@sifive.com>,
-        Jude Onyenegecha <jude.onyenegecha@sifive.com>
-References: <20221020151610.59443-1-ben.dooks@sifive.com>
- <20221020151610.59443-2-ben.dooks@sifive.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221020151610.59443-2-ben.dooks@sifive.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1Fn+TnbI/uMH0VR@shredder>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,33 +112,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/10/2022 11:16, Ben Dooks wrote:
-> Add documentation for the bindings for Synopsys' DesignWare PWM block
-> as we will be adding DT/platform support to the Linux driver soon.
-> 
-> Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
-> ---
-> v5:
->  - fixed order of properties
->  - corrected clock to two items
+On Thu, Oct 20, 2022 at 06:23:37PM +0300, Ido Schimmel wrote:
+> 3. Miss. FDB entry not found. Here I was thinking to always tell the
+> packet to go to the software data path so that it will trigger the
+> creation of the "locked" entry if MAB is enabled. If MAB is not enabled,
+> it will simply be dropped by the bridge. We can't control it per port in
+> hardware, which is why the BR_PORT_MAB flag is not consulted.
 
-This is a friendly reminder during the review process.
-
-It looks like you received a tag and forgot to add it.
-
-If you do not know the process, here is a short explanation:
-Please add Acked-by/Reviewed-by/Tested-by tags when posting new
-versions. However,
-there's no need to repost patches *only* to add the tags. The upstream
-maintainer will do that for acks received on the version they apply.
-
-https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
-
-If a tag was not added on purpose, please state why and what changed.
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-Best regards,
-Krzysztof
-
+Ah, ok, this is the part I was missing, so you can't control an FDB miss
+to generate a learn frame only on some ports. But in principle, it still
+is the BR_PORT_MAB flag the one which requires these frames to be generated,
+not BR_PORT_LOCKED. You can have all ports LOCKED but not MAB, and no
+learn frames will be necessary to be sent to the CPU. Only EAPOL, which
+is link-local multicast, will reach software for further processing and
+unlock the port for a certain MAC DA.
