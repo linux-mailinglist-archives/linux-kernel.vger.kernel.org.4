@@ -2,200 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 985FA6055CB
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 05:10:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 497C4605549
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 04:03:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230253AbiJTDKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 23:10:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43922 "EHLO
+        id S229746AbiJTCDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 22:03:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230230AbiJTDKI (ORCPT
+        with ESMTP id S229755AbiJTCDb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 23:10:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 692AC4DB5F
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 20:10:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666235403;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rZC6+ToPTVw90Wnz576PIbBOGIevd9F/Dg3iNGIUqzY=;
-        b=Cyrn/uJbQGhq5RIxIVE3A5nOQew04zWR53xWeF9teQoq+boEXF46BQxKhtp5vpt+ItxNs/
-        jODqC9tIqPtcl6UspTDMNuyzIXzSS1SHhdsbITEG3M+owCRG/DHQOzmx/buun2K9ip86WL
-        QkLcifMvEvM5AEmFicpDDYOHIN3vPfg=
-Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com
- [209.85.214.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-157-3SccdcEcPhC_GNqYmQEflQ-1; Wed, 19 Oct 2022 21:29:40 -0400
-X-MC-Unique: 3SccdcEcPhC_GNqYmQEflQ-1
-Received: by mail-pl1-f197.google.com with SMTP id o17-20020a170902d4d100b0018552c4f4bcso6733285plg.13
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 18:29:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-language:content-transfer-encoding:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rZC6+ToPTVw90Wnz576PIbBOGIevd9F/Dg3iNGIUqzY=;
-        b=lC/MMCqACx9p1wU7T1D48mBSEcsGOsU8QlTTwcKaDIVOgswlh0UVvo5vC0bdCcpqFQ
-         cOYfZl1c+MDfyHediCbxRA1Jk7cAX4JPxK+gaNb3qEdOFlpQA12dvcqHITPjKdHqIo9y
-         XBED+GHaWb4qRZqvdN9CDF/D3Ia/MrVzAhlup5vX/cYTnSKTJryF48Ba2D/0hTKjAslQ
-         g3RslZVjlZqNub86LQ1OoOWhXwiWaSJqVKFaWvfxnn0zaw1+lLuDaS3gTij5aycnRzP4
-         f4uumWx+c0jdo++CLIkr/RknfHHlHdzBiaY5tQ2l7VDCOyyiP9w6NA/+eCAGBrEElhlv
-         xPAA==
-X-Gm-Message-State: ACrzQf1phXy0Ih2OLraa5k1UzmCC2KwwnoKu64KiR+FKwFuPFDBR+uYP
-        mGs4bU9M+ZVRDJ6e6ycLkqS8gFjWAUYd2rkXF/yWRBipGh4FeJtF0Z4vKWpokTT/jpXM+iBlCsM
-        yHKgZgrdVxC6YC12EBbRX+qxSRkpwIqmQkUEBuWr1JWGSwn2ab9hAux5QDbuN+hfLlrgnVNxN6A
-        ==
-X-Received: by 2002:a17:90b:3912:b0:20d:4151:1b65 with SMTP id ob18-20020a17090b391200b0020d41511b65mr49381522pjb.233.1666229378745;
-        Wed, 19 Oct 2022 18:29:38 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM50N30+f9apTD5DfIKQUIhu3CELsyaW6/XmNiGAQqCBy6DMFFkfGh7J/RwGOCfxUOD7q5ynug==
-X-Received: by 2002:a17:90b:3912:b0:20d:4151:1b65 with SMTP id ob18-20020a17090b391200b0020d41511b65mr49381487pjb.233.1666229378246;
-        Wed, 19 Oct 2022 18:29:38 -0700 (PDT)
-Received: from [10.72.12.79] ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id s3-20020aa78bc3000000b0056323de479bsm11966507pfd.120.2022.10.19.18.29.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Oct 2022 18:29:37 -0700 (PDT)
-Subject: Re: [PATCH] fs/ceph/super: add mount options "snapdir{mode,uid,gid}"
-To:     Jeff Layton <jlayton@kernel.org>,
-        Max Kellermann <max.kellermann@ionos.com>
-Cc:     idryomov@gmail.com, ceph-devel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220927120857.639461-1-max.kellermann@ionos.com>
- <88f8941f-82bf-5152-b49a-56cb2e465abb@redhat.com>
- <CAKPOu+88FT1SeFDhvnD_NC7aEJBxd=-T99w67mA-s4SXQXjQNw@mail.gmail.com>
- <75e7f676-8c85-af0a-97b2-43664f60c811@redhat.com>
- <CAKPOu+-rKOVsZ1T=1X-T-Y5Fe1MW2Fs9ixQh8rgq3S9shi8Thw@mail.gmail.com>
- <baf42d14-9bc8-93e1-3d75-7248f93afbd2@redhat.com>
- <cd5ed50a3c760f746a43f8d68fdbc69b01b89b39.camel@kernel.org>
-From:   Xiubo Li <xiubli@redhat.com>
-Message-ID: <7e28f7d1-cfd5-642a-dd4e-ab521885187c@redhat.com>
-Date:   Thu, 20 Oct 2022 09:29:32 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Wed, 19 Oct 2022 22:03:31 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F53C140E56
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 19:03:30 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Mt9kC3nJfzmVBQ;
+        Thu, 20 Oct 2022 09:58:43 +0800 (CST)
+Received: from [10.174.151.185] (10.174.151.185) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 20 Oct 2022 10:03:27 +0800
+Subject: Re: [PATCH v2] hugetlb: fix memory leak associated with vma_lock
+ structure
+To:     Mike Kravetz <mike.kravetz@oracle.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Muchun Song <songmuchun@bytedance.com>,
+        David Hildenbrand <david@redhat.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Michal Hocko <mhocko@suse.com>, Peter Xu <peterx@redhat.com>,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Prakash Sangappa <prakash.sangappa@oracle.com>,
+        James Houghton <jthoughton@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Ray Fucillo <Ray.Fucillo@intersystems.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20221019201957.34607-1-mike.kravetz@oracle.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <16389ecd-3c5f-2452-b738-a426397feee4@huawei.com>
+Date:   Thu, 20 Oct 2022 10:03:27 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-In-Reply-To: <cd5ed50a3c760f746a43f8d68fdbc69b01b89b39.camel@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20221019201957.34607-1-mike.kravetz@oracle.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.151.185]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022/10/20 4:19, Mike Kravetz wrote:
+> The hugetlb vma_lock structure hangs off the vm_private_data pointer
+> of sharable hugetlb vmas.  The structure is vma specific and can not
+> be shared between vmas.  At fork and various other times, vmas are
+> duplicated via vm_area_dup().  When this happens, the pointer in the
+> newly created vma must be cleared and the structure reallocated.  Two
+> hugetlb specific routines deal with this hugetlb_dup_vma_private and
+> hugetlb_vm_op_open.  Both routines are called for newly created vmas.
+> hugetlb_dup_vma_private would always clear the pointer and
+> hugetlb_vm_op_open would allocate the new vms_lock structure.  This did
+> not work in the case of this calling sequence pointed out in [1].
+>   move_vma
+>     copy_vma
+>       new_vma = vm_area_dup(vma);
+>       new_vma->vm_ops->open(new_vma); --> new_vma has its own vma lock.
+>     is_vm_hugetlb_page(vma)
+>       clear_vma_resv_huge_pages
+>         hugetlb_dup_vma_private --> vma->vm_private_data is set to NULL
+> When clearing hugetlb_dup_vma_private we actually leak the associated
+> vma_lock structure.
+> 
+> The vma_lock structure contains a pointer to the associated vma.  This
+> information can be used in hugetlb_dup_vma_private and hugetlb_vm_op_open
+> to ensure we only clear the vm_private_data of newly created (copied)
+> vmas.  In such cases, the vma->vma_lock->vma field will not point to the
+> vma.
+> 
+> Update hugetlb_dup_vma_private and hugetlb_vm_op_open to not clear
+> vm_private_data if vma->vma_lock->vma == vma.  Also, log a warning if
+> hugetlb_vm_op_open ever encounters the case where vma_lock has already
+> been correctly allocated for the vma.
+> 
+> [1] https://lore.kernel.org/linux-mm/5154292a-4c55-28cd-0935-82441e512fc3@huawei.com/
+> 
+> Fixes: 131a79b474e9 ("hugetlb: fix vma lock handling during split vma and range unmapping")
+> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
 
-On 11/10/2022 18:45, Jeff Layton wrote:
-> On Mon, 2022-10-10 at 10:02 +0800, Xiubo Li wrote:
->> On 09/10/2022 18:27, Max Kellermann wrote:
->>> On Sun, Oct 9, 2022 at 10:43 AM Xiubo Li <xiubli@redhat.com> wrote:
->>>> I mean CEPHFS CLIENT CAPABILITIES [1].
->>> I know that, but that's suitable for me. This is client-specific, not
->>> user (uid/gid) specific.
->>>
->>> In my use case, a server can run unprivileged user processes which
->>> should not be able create snapshots for their own home directory, and
->>> ideally they should not even be able to traverse into the ".snap"
->>> directory and access the snapshots created of their home directory.
->>> Other (non-superuser) system processes however should be able to
->>> manage snapshots. It should be possible to bind-mount snapshots into
->>> the user's mount namespace.
->>>
->>> All of that is possible with my patch, but impossible with your
->>> suggestion. The client-specific approach is all-or-nothing (unless I
->>> miss something vital).
->>>
->>>> The snapdir name is a different case.
->>> But this is only about the snapdir. The snapdir does not exist on the
->>> server, it is synthesized on the client (in the Linux kernel cephfs
->>> code).
->> This could be applied to it's parent dir instead as one metadata in mds
->> side and in client side it will be transfer to snapdir's metadata, just
->> like what the snapshots.
->>
->> But just ignore this approach.
->>
->>>> But your current approach will introduce issues when an UID/GID is reused after an user/groud is deleted ?
->>> The UID I would specify is one which exists on the client, for a
->>> dedicated system user whose purpose is to manage cephfs snapshots of
->>> all users. The UID is created when the machine is installed, and is
->>> never deleted.
->> This is an ideal use case IMO.
->>
->> I googled about reusing the UID/GID issues and found someone has hit a
->> similar issue in their use case.
->>
-> This is always a danger and not just with ceph. The solution to that is
-> good sysadmin practices (i.e. don't reuse uid/gid values without
-> sanitizing the filesystems first).
+Thanks for update. This patch looks good to me.
 
-Yeah, this sounds reasonable.
+Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
 
->>>> Maybe the proper approach is the posix acl. Then by default the .snap dir will inherit the permission from its parent and you can change it as you wish. This permission could be spread to all the other clients too ?
->>> No, that would be impractical and unreliable.
->>> Impractical because it would require me to walk the whole filesystem
->>> tree and let the kernel synthesize the snapdir inode for all
->>> directories and change its ACL;
->> No, it don't have to. This could work simply as the snaprealm hierarchy
->> thing in kceph.
->>
->> Only the up top directory need to record the ACL and all the descendants
->> will point and use it if they don't have their own ACLs.
->>
->>>    impractical because walking millions
->>> of directories takes longer than I am willing to wait.
->>> Unreliable because there would be race problems when another client
->>> (or even the local client) creates a new directory. Until my local
->>> "snapdir ACL daemon" learns about the existence of the new directory
->>> and is able to update its ACL, the user can already have messed with
->>> it.
->> For multiple clients case I think the cephfs capabilities [3] could
->> guarantee the consistency of this. While for the single client case if
->> before the user could update its ACL just after creating it someone else
->> has changed it or messed it up, then won't the existing ACLs have the
->> same issue ?
->>
->> [3] https://docs.ceph.com/en/quincy/cephfs/capabilities/
->>
->>
->>> Both of that is not a problem with my patch.
->>>
->> Jeff,
->>
->> Any idea ?
->>
-> I tend to agree with Max here. The .snap dir is a client-side fiction,
-> so trying to do something on the MDS to govern its use seems a bit odd.
-> cephx is really about authenticating clients. I know we do things like
-> enforce root squashing on the MDS, but this is a little different.
->
-> Now, all of that said, snapshot handling is an area where I'm just not
-> that knowledgeable. Feel free to ignore my opinion here as uninformed.
+Thanks,
+Miaohe Lin
 
-I am thinking currently the cephfs have the same issue we discussed 
-here. Because the cephfs is saving the UID/GID number in the CInode 
-metedata. While when there have multiple clients are sharing the same 
-cephfs, so in different client nodes another user could cross access a 
-specified user's files. For example:
 
-In client nodeA:
-
-user1's UID is 123, user2's UID is 321.
-
-In client nodeB:
-
-user1's UID is 321, user2's UID is 123.
-
-And if user1 create a fileA in the client nodeA, then user2 could access 
-it from client nodeB.
-
-Doesn't this also sound more like a client-side fiction ?
-
-- Xiubo
-
+> ---
+> v2 - Allocate vma_lock in hugetlb_vm_op_open if !vma->vm_private_data
+>      on entry.  Thanks Miaohe Lin!
+> 
+>  mm/hugetlb.c | 35 +++++++++++++++++++++++++++--------
+>  1 file changed, 27 insertions(+), 8 deletions(-)
+> 
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index 02f781624fce..ccdffc2fa1ca 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -1014,15 +1014,23 @@ void hugetlb_dup_vma_private(struct vm_area_struct *vma)
+>  	VM_BUG_ON_VMA(!is_vm_hugetlb_page(vma), vma);
+>  	/*
+>  	 * Clear vm_private_data
+> +	 * - For shared mappings this is a per-vma semaphore that may be
+> +	 *   allocated in a subsequent call to hugetlb_vm_op_open.
+> +	 *   Before clearing, make sure pointer is not associated with vma
+> +	 *   as this will leak the structure.  This is the case when called
+> +	 *   via clear_vma_resv_huge_pages() and hugetlb_vm_op_open has already
+> +	 *   been called to allocate a new structure.
+>  	 * - For MAP_PRIVATE mappings, this is the reserve map which does
+>  	 *   not apply to children.  Faults generated by the children are
+>  	 *   not guaranteed to succeed, even if read-only.
+> -	 * - For shared mappings this is a per-vma semaphore that may be
+> -	 *   allocated in a subsequent call to hugetlb_vm_op_open.
+>  	 */
+> -	vma->vm_private_data = (void *)0;
+> -	if (!(vma->vm_flags & VM_MAYSHARE))
+> -		return;
+> +	if (vma->vm_flags & VM_MAYSHARE) {
+> +		struct hugetlb_vma_lock *vma_lock = vma->vm_private_data;
+> +
+> +		if (vma_lock && vma_lock->vma != vma)
+> +			vma->vm_private_data = NULL;
+> +	} else
+> +		vma->vm_private_data = NULL;
+>  }
+>  
+>  /*
+> @@ -4601,6 +4609,7 @@ static void hugetlb_vm_op_open(struct vm_area_struct *vma)
+>  	struct resv_map *resv = vma_resv_map(vma);
+>  
+>  	/*
+> +	 * HPAGE_RESV_OWNER indicates a private mapping.
+>  	 * This new VMA should share its siblings reservation map if present.
+>  	 * The VMA will only ever have a valid reservation map pointer where
+>  	 * it is being copied for another still existing VMA.  As that VMA
+> @@ -4615,11 +4624,21 @@ static void hugetlb_vm_op_open(struct vm_area_struct *vma)
+>  
+>  	/*
+>  	 * vma_lock structure for sharable mappings is vma specific.
+> -	 * Clear old pointer (if copied via vm_area_dup) and create new.
+> +	 * Clear old pointer (if copied via vm_area_dup) and allocate
+> +	 * new structure.  Before clearing, make sure vma_lock is not
+> +	 * for this vma.
+>  	 */
+>  	if (vma->vm_flags & VM_MAYSHARE) {
+> -		vma->vm_private_data = NULL;
+> -		hugetlb_vma_lock_alloc(vma);
+> +		struct hugetlb_vma_lock *vma_lock = vma->vm_private_data;
+> +
+> +		if (vma_lock) {
+> +			if (vma_lock->vma != vma) {
+> +				vma->vm_private_data = NULL;
+> +				hugetlb_vma_lock_alloc(vma);
+> +			} else
+> +				pr_warn("HugeTLB: vma_lock already exists in %s.\n", __func__);
+> +		} else
+> +			hugetlb_vma_lock_alloc(vma);
+>  	}
+>  }
+>  
+> 
 
