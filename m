@@ -2,132 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1C99605840
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 09:19:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08BB1605848
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 09:20:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230346AbiJTHSz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 03:18:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44524 "EHLO
+        id S230391AbiJTHUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 03:20:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230294AbiJTHSd (ORCPT
+        with ESMTP id S230217AbiJTHUC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 03:18:33 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02CD216E2A0;
-        Thu, 20 Oct 2022 00:18:16 -0700 (PDT)
-X-UUID: 30801a809907421980614ac785b065f5-20221020
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=oyQcrxZYCAvggulovd4FRHdXOU2WjZQVKRd7NG1+zj8=;
-        b=ByhDzTpYCFzjWm1qSQJjbRkLtm2f8JTZfj4d6d1o8DPc4UaTRpqRfpVDCYZYSgHyLbkMLSRX9uxPcGd70Q0iTA8nkVUlTF37BsC2cjuy4IUXTxDNdPZGyE9Ap9RF7J4/KY1qrg5Oh1W7Y5qoHnfVWWeL/u6hxwq0q0IYwxn3Fyc=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.12,REQID:e6256586-8665-42f6-9e5d-9e85b35cc3bd,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:-25
-X-CID-META: VersionHash:62cd327,CLOUDID:3a4fe0ee-314c-4293-acb8-ca4299dd021f,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 30801a809907421980614ac785b065f5-20221020
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
-        (envelope-from <moudy.ho@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1287693578; Thu, 20 Oct 2022 15:18:03 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Thu, 20 Oct 2022 15:18:02 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Thu, 20 Oct 2022 15:18:02 +0800
-From:   Moudy Ho <moudy.ho@mediatek.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-CC:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        <linux-media@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Moudy Ho <moudy.ho@mediatek.com>
-Subject: [PATCH v3 3/3] media: platform: mtk-mdp3: fix error handling in mdp_probe()
-Date:   Thu, 20 Oct 2022 15:18:00 +0800
-Message-ID: <20221020071800.20487-4-moudy.ho@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20221020071800.20487-1-moudy.ho@mediatek.com>
-References: <20221020071800.20487-1-moudy.ho@mediatek.com>
+        Thu, 20 Oct 2022 03:20:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF99A15708
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 00:19:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666250397;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=d9HqOzVsB8T4yggWYl1bqige06n7AwLzVreZ+LrEySM=;
+        b=KzWb2GdqCw9t6whQCncjrTJ9pC6Gb2HBe7EpSnkOjwQaSyhAcR8aPHbavrnxdaq5OtGFUq
+        y4praoinjLI7y2Ycfhx/VU6ioWwyl5vaEQfM0IidH/5k3XpxHKHWqmHEu26JZvw54+pH2p
+        EkodJhJOPsOGLlBN3C9AHT8U46wY1VA=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-339--4tmXxcVONmOztGz3krQ0w-1; Thu, 20 Oct 2022 03:19:54 -0400
+X-MC-Unique: -4tmXxcVONmOztGz3krQ0w-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EDD051C068C9;
+        Thu, 20 Oct 2022 07:19:53 +0000 (UTC)
+Received: from [10.64.54.70] (vpn2-54-70.bne.redhat.com [10.64.54.70])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id A5A1EC15BA5;
+        Thu, 20 Oct 2022 07:19:45 +0000 (UTC)
+Reply-To: Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH 4/6] KVM: selftests: memslot_perf_test: Support variable
+ guest page size
+To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Cc:     kvm@vger.kernel.org, maz@kernel.org, linux-kernel@vger.kernel.org,
+        zhenyzha@redhat.com, shan.gavin@gmail.com, kvmarm@lists.linux.dev,
+        pbonzini@redhat.com, shuah@kernel.org,
+        kvmarm@lists.cs.columbia.edu, ajones@ventanamicro.com
+References: <20221014071914.227134-1-gshan@redhat.com>
+ <20221014071914.227134-5-gshan@redhat.com>
+ <3eecebca-a526-d10a-02d3-496ce919d577@maciej.szmigiero.name>
+ <bd5df92c-6870-8053-0b35-a2ad993970bd@redhat.com>
+ <da2b7db0-509a-c9e0-c36b-6487a265a779@redhat.com>
+ <a1a8664c-4d06-89e7-8cfa-b730969bb841@maciej.szmigiero.name>
+ <5bfbe050-a654-8400-e1f1-dcfa4dba13e6@redhat.com>
+ <a45cfcc9-0255-14f0-30a5-18d6efaad0d4@maciej.szmigiero.name>
+From:   Gavin Shan <gshan@redhat.com>
+Message-ID: <001d6b60-dc05-370d-5cb3-9f8f855089c3@redhat.com>
+Date:   Thu, 20 Oct 2022 15:19:42 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <a45cfcc9-0255-14f0-30a5-18d6efaad0d4@maciej.szmigiero.name>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adjust label "err_return" order to avoid double freeing, and
-add two labels for easy traceability.
+On 10/20/22 4:18 AM, Maciej S. Szmigiero wrote:
+> On 19.10.2022 02:26, Gavin Shan wrote:
+>> On 10/18/22 11:56 PM, Maciej S. Szmigiero wrote:
+>>> On 18.10.2022 02:51, Gavin Shan wrote:
+>>>> On 10/18/22 8:46 AM, Gavin Shan wrote:
+>>>>> On 10/18/22 5:31 AM, Maciej S. Szmigiero wrote:
+>>>>>> On 14.10.2022 09:19, Gavin Shan wrote:
+>>>>>>> The test case is obviously broken on aarch64 because non-4KB guest
+>>>>>>> page size is supported. The guest page size on aarch64 could be 4KB,
+>>>>>>> 16KB or 64KB.
+>>>>>>>
+>>>>>>> This supports variable guest page size, mostly for aarch64.
+>>>>>>>
+>>>>>>>    - The host determines the guest page size when virtual machine is
+>>>>>>>      created. The value is also passed to guest through the synchronization
+>>>>>>>      area.
+>>>>>>>
+>>>>>>>    - The number of guest pages are unknown until the virtual machine
+>>>>>>>      is to be created. So all the related macros are dropped. Instead,
+>>>>>>>      their values are dynamically calculated based on the guest page
+>>>>>>>      size.
+>>>>>>>
+>>>>>>>    - The static checks on memory sizes and pages becomes dependent
+>>>>>>>      on guest page size, which is unknown until the virtual machine
+>>>>>>>      is about to be created. So all the static checks are converted
+>>>>>>>      to dynamic checks, done in check_memory_sizes().
+>>>>>>>
+>>>>>>>    - As the address passed to madvise() should be aligned to host page,
+>>>>>>>      the size of page chunk is automatically selected, other than one
+>>>>>>>      page.
+>>>>>>>
+>>>>>>>    - All other changes included in this patch are almost mechanical
+>>>>>>>      replacing '4096' with 'guest_page_size'.
+>>>>>>>
+>>>>>>> Signed-off-by: Gavin Shan <gshan@redhat.com>
+>>>>>>> ---
+>>>>>>>   .../testing/selftests/kvm/memslot_perf_test.c | 191 +++++++++++-------
+>>>>>>>   1 file changed, 115 insertions(+), 76 deletions(-)
+>>>>>>>
+>>>>>>> diff --git a/tools/testing/selftests/kvm/memslot_perf_test.c b/tools/testing/selftests/kvm/memslot_perf_test.c
+>>>>>>> index d5aa9148f96f..d587bd952ff9 100644
+>>>>>>> --- a/tools/testing/selftests/kvm/memslot_perf_test.c
+>>>>>>> +++ b/tools/testing/selftests/kvm/memslot_perf_test.c
+>>> (...)
+>>>>>>> @@ -77,8 +61,7 @@ static_assert(MEM_TEST_UNMAP_SIZE_PAGES %
+>>>>>>>    * for the total size of 25 pages.
+>>>>>>>    * Hence, the maximum size here is 50 pages.
+>>>>>>>    */
+>>>>>>> -#define MEM_TEST_MOVE_SIZE_PAGES    (50)
+>>>>>>> -#define MEM_TEST_MOVE_SIZE        (MEM_TEST_MOVE_SIZE_PAGES * 4096)
+>>>>>>> +#define MEM_TEST_MOVE_SIZE        0x32000
+>>>>>>
+>>>>>> The above number seems less readable than an explicit value of 50 pages.
+>>>>>>
+>>>>>> In addition to that, it's 50 pages only with 4k page size, so at least
+>>>>>> the comment above needs to be updated to reflect this fact.
+>>>>>>
+>>>>>
+>>>>> Yeah, I will change the comments like below in next revision.
+>>>>>
+>>>>>   /*
+>>>>>    * When running this test with 32k memslots, actually 32763 excluding
+>>>>>    * the reserved memory slot 0, the memory for each slot is 0x4000 bytes.
+>>>>>    * The last slot contains 0x19000 bytes memory. Hence, the maximum size
+>>>>>    * here is 0x32000 bytes.
+>>>>>    */
+>>>>>
+>>>>
+>>>> I will replace those numbers with readable ones like below :)
+>>>>
+>>>> /*
+>>>>   * When running this test with 32k memslots, actually 32763 excluding
+>>>>   * the reserved memory slot 0, the memory for each slot is 16KB. The
+>>>>   * last slot contains 100KB memory with the remaining 84KB. Hence,
+>>>>   * the maximum size is double of that (200KB)
+>>>>   */
+>>>
+>>> Still, these numbers are for x86, which has KVM_INTERNAL_MEM_SLOTS
+>>> defined as 3.
+>>>
+>>> As far as I can see aarch64 has KVM_INTERNAL_MEM_SLOTS equal to 0, so
+>>> this arch has 32766 slot available for the test memory.
+>>>
+>>> Quick calculations show that this will result in 112 KiB of memory in
+>>> the last slot for 4 KiB page size (while for 64 KiB page size the
+>>> maximum slot count for this test is 8192 anyway - not counting slot 0).
+>>>
+>>
+>> It seems your calculation had (512MB+64KB), instead of (512MB+4KB).
+>> In this particular patch, we still have (512MB+4KB). How about to change
+>> like below in this patch. In next patch, it's adjusted accordingly after
+>> we have (512MB+64KB).
+> 
+> My review comment above referred to the final MEM_SIZE value after the
+> whole series, so 512 MiB + 64 KiB.
+> 
+> I placed that review comment on patch 4 since it's the only patch in this
+> series that modified the code comment about MEM_TEST_MOVE_SIZE.
+> 
+>>
+>> (1) In this patch, the comment is changed to as below
+>>
+>>      /*
+>>       * We have different number of memory slots, excluding the reserved
+>>       * memory slot 0, on various architectures and configurations. The
+>>       * memory size in this test is calculated by doubling the maximal
+>>       * memory size in last memory slot, with alignment to the largest
+>>       * supported page size (64KB).
+>>       *
+>>       * architecture   slots    memory-per-slot    memory-on-last-slot
+>>       * --------------------------------------------------------------
+>>       * x86-4KB        32763    16KB               100KB
+>>       * arm64-4KB      32766    16KB               52KB
+>>       * arm64-64KB     8192     64KB               64KB
+>>       */
+>>      #define MEM_TEST_MOVE_SIZE    0x40000           /* 256KB */
+>>
+>> (2) In the next patch, where we have (512MB+64KB) after the various
+>>      memory sizes are consolidated, It is adjusted accordingly as below.
+>>
+>>      /*
+>>       * We have different number of memory slots, excluding the reserved
+>>       * memory slot 0, on various architectures and configurations. The
+>>       * memory size in this test is calculated by doubling the maximal
+>>       * memory size in last memory slot, with alignment to the largest
+>>       * supported page size (64KB).
+>>       *
+>>       * architecture   slots    memory-per-slot    memory-on-last-slot
+>>       * --------------------------------------------------------------
+>>       * x86-4KB        32763    16KB               160KB
+>>       * arm64-4KB      32766    16KB               112KB
+>>       * arm64-64KB     8192     64KB               128KB
+>>       */
+>>      #define MEM_TEST_MOVE_SIZE    0x50000           /* 320KB */
+> 
+> Now MEM_TEST_MOVE_SIZE is too high for arm64-4KB and arm64-64KB cases
+> (it needs 160 KiB in the last slot but has less available in these two
+> cases).
+> 
+> Using a test size of 192 KiB instead seems like a small difference
+> from the original size of 200 KiB, while still being aligned to
+> 64 KiB.
+> 
+> The move benchmarks runtime difference on x86-4KB with this size
+> (compared to sizes of 200 KiB and 320 KiB) seems to be negligible.
+> 
+> Since it's an odd number of 64 KiB pages (3) the code that halves
+> this number of pages will need to be adjusted to operate on raw
+> sizes instead.
+> 
+> I can see a single block of code that will need such adjustment:
+>> if (lastpages < move_pages / 2) {
+>>         *maxslots = 0;
+>>         return false;
+>> } 
+> 
+> Similar remark goes for the case (1) above, where you'll probably need
+> to use 64 KiB test area size (it's only an intermediate form of code
+> before the final patch changes this value so it's fine if it doesn't
+> perform as well as the final form of the code).
+> 
 
-Fixes: 61890ccaefaf ("media: platform: mtk-mdp3: add MediaTek MDP3 driver")
-Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
----
- .../media/platform/mediatek/mdp3/mtk-mdp3-core.c  | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
+Maciej, all your comments make sense to me. It really took me some times
+to do the calculation. I just posted v3 to address all your comments.
+Hopefully, there is nothing missed. Please go ahead to review v3 directly
+when you get a chance.
 
-diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
-index c413e59d4286..2d1f6ae9f080 100644
---- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
-+++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
-@@ -196,27 +196,27 @@ static int mdp_probe(struct platform_device *pdev)
- 	mm_pdev = __get_pdev_by_id(pdev, MDP_INFRA_MMSYS);
- 	if (!mm_pdev) {
- 		ret = -ENODEV;
--		goto err_return;
-+		goto err_destroy_device;
- 	}
- 	mdp->mdp_mmsys = &mm_pdev->dev;
- 
- 	mm_pdev = __get_pdev_by_id(pdev, MDP_INFRA_MUTEX);
- 	if (WARN_ON(!mm_pdev)) {
- 		ret = -ENODEV;
--		goto err_return;
-+		goto err_destroy_device;
- 	}
- 	for (i = 0; i < MDP_PIPE_MAX; i++) {
- 		mdp->mdp_mutex[i] = mtk_mutex_get(&mm_pdev->dev);
- 		if (!mdp->mdp_mutex[i]) {
- 			ret = -ENODEV;
--			goto err_return;
-+			goto err_free_mutex;
- 		}
- 	}
- 
- 	ret = mdp_comp_config(mdp);
- 	if (ret) {
- 		dev_err(dev, "Failed to config mdp components\n");
--		goto err_return;
-+		goto err_free_mutex;
- 	}
- 
- 	mdp->job_wq = alloc_workqueue(MDP_MODULE_NAME, WQ_FREEZABLE, 0);
-@@ -287,11 +287,12 @@ static int mdp_probe(struct platform_device *pdev)
- 	destroy_workqueue(mdp->job_wq);
- err_deinit_comp:
- 	mdp_comp_destroy(mdp);
--err_return:
-+err_free_mutex:
- 	for (i = 0; i < MDP_PIPE_MAX; i++)
--		if (mdp)
--			mtk_mutex_put(mdp->mdp_mutex[i]);
-+		mtk_mutex_put(mdp->mdp_mutex[i]);
-+err_destroy_device:
- 	kfree(mdp);
-+err_return:
- 	dev_dbg(dev, "Errno %d\n", ret);
- 	return ret;
- }
--- 
-2.18.0
+    v3: https://lore.kernel.org/kvmarm/20221020071209.559062-1-gshan@redhat.com/T/#t
+
+In v3, the comments about MEM_TEST_MOVE_SIZE is fixed in PATCH[v3 4/6],
+but it's 64KB. In PATCH[v3 5/6], it's fixed up to 192KB and memory size
+is used for the comparison in test_memslot_move_prepare().
+
+Thanks,
+Gavin
+
 
