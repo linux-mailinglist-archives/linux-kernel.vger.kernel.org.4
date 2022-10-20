@@ -2,84 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B16F7606852
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 20:40:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CC93606858
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 20:41:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230010AbiJTSkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 14:40:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53090 "EHLO
+        id S230056AbiJTSlg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 14:41:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230126AbiJTSkQ (ORCPT
+        with ESMTP id S229911AbiJTSld (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 14:40:16 -0400
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E48441988;
-        Thu, 20 Oct 2022 11:40:13 -0700 (PDT)
-Received: (Authenticated sender: i.maximets@ovn.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 7290820004;
-        Thu, 20 Oct 2022 18:40:08 +0000 (UTC)
-Message-ID: <b0495014-0673-1ac3-5c9f-b12f947d9cb2@ovn.org>
-Date:   Thu, 20 Oct 2022 20:40:07 +0200
+        Thu, 20 Oct 2022 14:41:33 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D104F208805
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 11:41:31 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id x1-20020a17090ab00100b001fda21bbc90so4336019pjq.3
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 11:41:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=7nPBTU3PqdP5EK9iSk8h8ufgxACQharp0pBd9nt0BIc=;
+        b=V87BkIgQjC4K7MYDNkBaUMfBiwNsRounMByDxYac7tRM8jK6sBUrEZidRmmlXpC9YB
+         Ie7MDrLvE6AArCQgek5J0VqBNd+y0aPXnEktH0qMOtcLrMv3Jw3ejmBf8/tdQz1xaKPC
+         A7AUcNXuDyNgx3VmkwC8GEorFfF+SdXKj2Enc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7nPBTU3PqdP5EK9iSk8h8ufgxACQharp0pBd9nt0BIc=;
+        b=rmuaUezkxSOWHPm6HvlyalMmLgeTuVXmsaqDROFaIOTwOXli2yla1ThiSDXydlI1FM
+         CeR8IaASdonS2yfvl2L6ybXJ/G6P1qObyVYAzAkPbDR0BKAHdUIunInKmfm1rHRS9DBq
+         yGQmgFP4DzsxC5XUjxNtrzUR27YXgUKLBel9DlFo9wklBnylomEXWs1O3jLFDD2DGKib
+         U8p09P/1c027wwG9UHk4NUyiwaClA3OXF4hQJvP6jA7aiRwXU+ANvWk2gn1TgIqJA36A
+         1YvnMZbctQWjZSILnYxceJ9q+YCgpNY8cySbSJUlC7AvLp/dMzAFQCIcLrg5rxYe/7mK
+         G8Aw==
+X-Gm-Message-State: ACrzQf1hS6ensCur1i5oFp5rwgL6B4xmUuU0dlZTRSJJp6TOmvlNRNPs
+        ACEL4qGuVA1xVJtglI8/1uFJfUqa7k0+ew==
+X-Google-Smtp-Source: AMsMyM7jtj0lrm66FgtcXeuW3VLHNK1EiZ1HwCHhzPxNj/ARdDq42D4QCAl03CKpknF5hSdF+2b6lg==
+X-Received: by 2002:a17:903:22c1:b0:184:983f:11b2 with SMTP id y1-20020a17090322c100b00184983f11b2mr15663540plg.40.1666291291263;
+        Thu, 20 Oct 2022 11:41:31 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id p7-20020a170902780700b0017bb38e4591sm178160pll.41.2022.10.20.11.41.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Oct 2022 11:41:30 -0700 (PDT)
+Date:   Thu, 20 Oct 2022 11:41:29 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-toolchains@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v2] kbuild: treat char as always unsigned
+Message-ID: <202210201056.DEE610F6F@keescook>
+References: <Y1BcpXAjR4tmV6RQ@zx2c4.com>
+ <20221019203034.3795710-1-Jason@zx2c4.com>
+ <CAHk-=wit-67VU=kt-8Ojtx04m6wxfqypKLzW7CuSeEH_9MYZvw@mail.gmail.com>
+ <Y1CP/uJb1SQjyS0n@zx2c4.com>
+ <CAHk-=whg00wpUzNLs0obmMKA3GhUnLzat9syA1=_tfi8Ms8TLg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Cc:     i.maximets@ovn.org, Pravin B Shelar <pshelar@ovn.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Thomas Graf <tgraf@suug.ch>,
-        Kevin Sprague <ksprague0711@gmail.com>, dev@openvswitch.org,
-        Eelco Chaudron <echaudro@redhat.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Content-Language: en-US
-To:     Aaron Conole <aconole@redhat.com>, netdev@vger.kernel.org
-References: <20221019183054.105815-1-aconole@redhat.com>
- <20221019183054.105815-2-aconole@redhat.com>
-From:   Ilya Maximets <i.maximets@ovn.org>
-Subject: Re: [PATCH net 1/2] openvswitch: switch from WARN to pr_warn
-In-Reply-To: <20221019183054.105815-2-aconole@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NEUTRAL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=whg00wpUzNLs0obmMKA3GhUnLzat9syA1=_tfi8Ms8TLg@mail.gmail.com>
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/19/22 20:30, Aaron Conole wrote:
-> As noted by Paolo Abeni, pr_warn doesn't generate any splat and can still
-> preserve the warning to the user that feature downgrade occurred.  We
-> likely cannot introduce other kinds of checks / enforcement here because
-> syzbot can generate different genl versions to the datapath.
-> 
-> Reported-by: syzbot+31cde0bef4bbf8ba2d86@syzkaller.appspotmail.com
-> Fixes: 44da5ae5fbea ("openvswitch: Drop user features if old user space attempted to create datapath")
-> Cc: Thomas Graf <tgraf@suug.ch>
-> Signed-off-by: Aaron Conole <aconole@redhat.com>
-> ---
->  net/openvswitch/datapath.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/net/openvswitch/datapath.c b/net/openvswitch/datapath.c
-> index c8a9075ddd0a..155263e73512 100644
-> --- a/net/openvswitch/datapath.c
-> +++ b/net/openvswitch/datapath.c
-> @@ -1616,7 +1616,8 @@ static void ovs_dp_reset_user_features(struct sk_buff *skb,
->  	if (IS_ERR(dp))
->  		return;
->  
-> -	WARN(dp->user_features, "Dropping previously announced user features\n");
-> +	pr_warn("%s: Dropping previously announced user features\n",
-> +		ovs_dp_name(dp));
->  	dp->user_features = 0;
->  }
->  
+On Wed, Oct 19, 2022 at 05:38:55PM -0700, Linus Torvalds wrote:
+> Having some scripting automation that just notices "this changes code
+> generation in function X" might actually be interesting, and judging
+> by my quick tests might not be *too* verbose.
 
-Works fine.  Thanks!
+On the reproducible build comparison system[1] we use for checking a lot
+of the KSPP work for .text deltas, an allmodconfig finds a fair bit for
+this change. Out of 33900 .o files, 1005 have changes.
 
-Acked-by: Ilya Maximets <i.maximets@ovn.org>
+Spot checking matches a lot of what you found already...
+
+        u64 flags = how->flags;
+	...
+fs/open.c:1123:
+        int acc_mode = ACC_MODE(flags);
+-    1c86:      movsbl 0x0(%rdx),%edx
++    1c86:      movzbl 0x0(%rdx),%edx
+
+#define ACC_MODE(x) ("\004\002\006\006"[(x)&O_ACCMODE])
+
+Ignoring those, it goes down to 625, and spot checking those is more
+difficult, but looks to be mostly register selection changes dominating
+the delta. The resulting vmlinux sizes are identical, though.
+
+-Kees
+
+[1] A fancier version of:
+    https://outflux.net/blog/archives/2022/06/24/finding-binary-differences/
+
+-- 
+Kees Cook
