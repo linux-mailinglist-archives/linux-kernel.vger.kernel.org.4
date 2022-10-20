@@ -2,161 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD6B56065AE
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 18:21:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5E356065A9
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 18:21:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229838AbiJTQVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 12:21:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50872 "EHLO
+        id S231131AbiJTQVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 12:21:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230492AbiJTQVU (ORCPT
+        with ESMTP id S230523AbiJTQVT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 12:21:20 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 733EB1C8413
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 09:21:17 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id y10so274496wma.0
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 09:21:17 -0700 (PDT)
+        Thu, 20 Oct 2022 12:21:19 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C61381BA1CE
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 09:21:16 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id y4so1899222plb.2
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 09:21:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GI9uwBLCvWR3OgOlMBN6oypd3UQ7AbJ0Dp0NjT4lxFo=;
-        b=4bkGk7hJ3/gLjKzcyaaVY4WHvFfZ/PYLiPSr23645Oe+YIeu5MQtu87/06UUV74DWt
-         vjeIeuy545c3YWmN4F5u890dHccN6tX0FuXbuDRL9cN1BosH/MLEXrQVnPJ7sTq1mEt5
-         Jaf0j8dfM6H7PxYZg8D8HKbagf/tVdLiR5KQBL5GtdIn7nlluYg1aDQgbb2JtKgUNgyA
-         DULRMrKHxIgtNKU2wEaDALPuviN4CW0AwCoQ0X9GL4ampRj5nmJ5JRR9aP6xMM34qlXp
-         zVXfOmzw7VSRV4Be3wXQVUr2J6tEvrKnKmPavpnipA1l8olLWTgjbM0e2J+AD5+hyZPk
-         rMmw==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=plOOD7cVd6m0ayR0WngHA5VzJY/ih3n9oBQSnCn1imE=;
+        b=gfrRQJVth66JTluBm/IV9RjNih1diET/yN81fJNO+7A/9jBP6/Kw0sjGPFq4VFkHbD
+         zvNz99iBHO/vz0BflPXAZ1XSd3kIiVm7eDYQqqd1bC/GOTRfrTuzFUdS08KKn2b+aphj
+         hfM9cPO3lI9SSGaa/V6FpDfAUq9lZY3bPsnFA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GI9uwBLCvWR3OgOlMBN6oypd3UQ7AbJ0Dp0NjT4lxFo=;
-        b=BhqJVOjj+ssViDOuFBrqJae+Q9Ufp4sSi8P/3lvImLCKQ4il3rmLL1iEOckX29/Cvh
-         PW7C6IIAL/NbJnwqRxWuTyhsgEMZB7z34jOSw24ygjyG2/LAW7K6coIXicht/UjzKhSL
-         YbzonDQST02kuxhh+lWzj+1MlN8P63NzerUdN9ixL1epiK3M4o2mhumJ5YKwuxAbSVdL
-         bWCFUKJaWSsnXvijgx9HhOaLQqw92yiU0hx3Dx9cPBvtv7yyAfqxQKUnZ/atTYekuwPu
-         q/P3qmmH2+XM7ia2ueV53UCClr/TXBU49m+OyYK612UEFScDmhDwvh3iUAQoYObl5iNp
-         xFqg==
-X-Gm-Message-State: ACrzQf0yy+sTUwTbHZA7pUW+asVXGvhoRAVZL5kKvUutLLlyf76RZDoW
-        GcZOj5ZZ5n9ze8yXl+WF22JE6Q==
-X-Google-Smtp-Source: AMsMyM59O1Ens9WgNUevB39v9v24YyNwkvj33JjcvXYrs8vAqoPeTDo86MUcxITGL1VMMe8AHK3heA==
-X-Received: by 2002:a05:600c:3511:b0:3b4:bb85:f1dd with SMTP id h17-20020a05600c351100b003b4bb85f1ddmr10229689wmq.42.1666282875631;
-        Thu, 20 Oct 2022 09:21:15 -0700 (PDT)
-Received: from [127.0.1.1] (158.22.5.93.rev.sfr.net. [93.5.22.158])
-        by smtp.googlemail.com with ESMTPSA id m14-20020a05600c3b0e00b003b4fe03c881sm208028wms.48.2022.10.20.09.21.14
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=plOOD7cVd6m0ayR0WngHA5VzJY/ih3n9oBQSnCn1imE=;
+        b=dZ5ZmR0BW3FaEeM5I1WsY0YRUGL5lOzn4HtydG7dMLtfCd28DybzWz627Mj1+iDnFH
+         Iyv5+vARAAPqxLJMqqLtzpp2feumMeUgTirWlwn1/6f2pu21s1BGHabwlAYPxkdYlNV1
+         HgiEIKjwgk4aTh46TNztxp8/HUbkY9yetUOmjoyLx/MOQnMA8Ep0gGsEUuh9E1wGPC+9
+         Nl9Jfb2NR27CN/OPgS/t7x4HbGEnVAmnm7J6JOIqPvc4b3jTC1f07Sb5ot21RSLQqvV7
+         4b1SeHizzaY4iLhexdsXfYs6KWlOd6xT5OoIRQpyYb7UmVRR6AttqWe3fv+VFd0iXX0V
+         CNGQ==
+X-Gm-Message-State: ACrzQf1DDllLl6IZc0mplRiTH+Tg4+U1mwHXmwguqdafJNvbGnhT0H+i
+        sZKsw8D2x63Y4HyEyLMP8FfYSS4AxJ+U2Q==
+X-Google-Smtp-Source: AMsMyM6TTBcdYg5hMgTgMPFyj9z7SojwECecgH8dVjYo3AiRIoMJbn8XaUhT2ty7xsvM4P3kuD9deg==
+X-Received: by 2002:a17:902:f54d:b0:185:4ca4:2641 with SMTP id h13-20020a170902f54d00b001854ca42641mr14463917plf.50.1666282864857;
+        Thu, 20 Oct 2022 09:21:04 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:57b7:1f0e:44d1:f252])
+        by smtp.gmail.com with ESMTPSA id b4-20020a170902bd4400b0016d72804664sm12908567plx.205.2022.10.20.09.21.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 09:21:15 -0700 (PDT)
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-Date:   Thu, 20 Oct 2022 18:20:49 +0200
-Subject: [PATCH v3 5/5] Input: mtk-pmic-keys: add MT6357 support
+        Thu, 20 Oct 2022 09:21:04 -0700 (PDT)
+Date:   Thu, 20 Oct 2022 09:21:01 -0700
+From:   Brian Norris <briannorris@chromium.org>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Krishna Reddy <vdumpa@nvidia.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        Joerg Roedel <jroedel@suse.de>, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org
+Subject: Re: 6.1-rc1 regression: bisected to 57365a04c921 iommu: Move bus
+ setup to IOMMU device registration
+Message-ID: <Y1F1bbaVX4/bmbS0@google.com>
+References: <Y1CHh2oM5wyHs06J@google.com>
+ <5933d917-a026-7150-2e05-2cb283a73174@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20221005-mt6357-support-v3-5-7e0bd7c315b2@baylibre.com>
-References: <20221005-mt6357-support-v3-0-7e0bd7c315b2@baylibre.com>
-In-Reply-To: <20221005-mt6357-support-v3-0-7e0bd7c315b2@baylibre.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Chen Zhong <chen.zhong@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Lee Jones <lee@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Fabien Parent <fabien.parent@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Rob Herring <robh@kernel.org>,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
-        devicetree@vger.kernel.org, linux-input@vger.kernel.org,
-        Alexandre Mergnat <amergnat@baylibre.com>
-X-Mailer: b4 0.10.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2028; i=amergnat@baylibre.com;
- h=from:subject:message-id; bh=K2/LktiwnSqpYUY/NYDB7cyyBwW4Kzl5Gx1VcVhpHIg=;
- b=owEBbQKS/ZANAwAKAStGSZ1+MdRFAcsmYgBjUXV0iDb1YAXNizgwzlkkfM7Ta8EZ8gn6PwGStpFi
- gLELkyKJAjMEAAEKAB0WIQQjG17X8+qqcA5g/osrRkmdfjHURQUCY1F1dAAKCRArRkmdfjHURU8oD/
- sFWNRnMZfn2cJP8Xi92PmsQjtSjIQBMJiweHO3Y1WhAVltQpeURhm1QH/EAUnhtesmXThIsZzpigI9
- tJA52SFGLbNp65c0YFxO4jon2VvX31XVtRMGEsM1L4YdJjuL32G38ScQqaKK4hGIFD9sxF5mIAyie+
- WjPr47ZocNTBhczo2Dc07VZcu/oTWsBZPthKx2oHGglsHgJTBQ3pcAsxseJGTv9Y/dXaaI/owDEa7Y
- 89Or5TTOiaFHJpNx971Lw9eng+JI0FiQoH+RHGdw510zXFiINtsYdvRsm1Ee/NCiEvprOY9QdzEbiy
- Jw4lais2ggy7LkEEAjbVN8ovn4BSNhido0KzySqEqtnJFlPpcdV4f45tSF552VOFX8j8I0SH9wDekw
- TKQNf63p9fs1ptK7FUFMgrgWUYrxPfZPYIKxiEnS+0fAm4VY+7RXh1V6rRJzXY1HCllSmN5bcajER0
- uofbc+30YUOjtWZ+/22yPcLYOsW5kRh8G1sMo3OFBHFdew2qo2Y3m8s6qYbgqYKBaN14pyxpCQNisn
- R7/KpEG3f6sxUEfqBOWhbcY9kLp7M49mUZ56YFFgmPYKWq2nqwwh+f1pes+A9df7/pKmspkyDZnnwO
- aYWoIe3nLI1owUIr3N9CcN9MTXLgQm9Ko9lvNljcOvdfwtZ01c4BcCwZN1Zw==
-X-Developer-Key: i=amergnat@baylibre.com; a=openpgp;
- fpr=231B5ED7F3EAAA700E60FE8B2B46499D7E31D445
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5933d917-a026-7150-2e05-2cb283a73174@arm.com>
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fabien Parent <fparent@baylibre.com>
+On Thu, Oct 20, 2022 at 11:02:23AM +0100, Robin Murphy wrote:
+> We shouldn't really need locking for iommu_buses itself, but I guess to
+> support async probe we would need per-device locking in
+> iommu_probe_device() to prevent multiple threads trying to probe the
+> same device at once, which must be what's happening in your case to
+> cause a double-dev_iommu_free().
 
-Add PMIC Keys support on MT6357 SoC.
+Perhaps. I still haven't spent enough time trying to learn the expected
+behavior here.
 
-Signed-off-by: Fabien Parent <fparent@baylibre.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Reviewed-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
-Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
----
- drivers/input/keyboard/mtk-pmic-keys.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+> I'll see what I can do ASAP, since I
+> think that's worthwhile.
 
-diff --git a/drivers/input/keyboard/mtk-pmic-keys.c b/drivers/input/keyboard/mtk-pmic-keys.c
-index 9b34da0ec260..2a63e0718eb6 100644
---- a/drivers/input/keyboard/mtk-pmic-keys.c
-+++ b/drivers/input/keyboard/mtk-pmic-keys.c
-@@ -10,6 +10,7 @@
- #include <linux/kernel.h>
- #include <linux/mfd/mt6323/registers.h>
- #include <linux/mfd/mt6331/registers.h>
-+#include <linux/mfd/mt6357/registers.h>
- #include <linux/mfd/mt6358/registers.h>
- #include <linux/mfd/mt6397/core.h>
- #include <linux/mfd/mt6397/registers.h>
-@@ -90,6 +91,19 @@ static const struct mtk_pmic_regs mt6331_regs = {
- 	.rst_lprst_mask = MTK_PMIC_MT6331_RST_DU_MASK,
- };
- 
-+static const struct mtk_pmic_regs mt6357_regs = {
-+	.keys_regs[MTK_PMIC_PWRKEY_INDEX] =
-+		MTK_PMIC_KEYS_REGS(MT6357_TOPSTATUS,
-+				   0x2, MT6357_PSC_TOP_INT_CON0, 0x5,
-+				   MTK_PMIC_PWRKEY_RST),
-+	.keys_regs[MTK_PMIC_HOMEKEY_INDEX] =
-+		MTK_PMIC_KEYS_REGS(MT6357_TOPSTATUS,
-+				   0x8, MT6357_PSC_TOP_INT_CON0, 0xa,
-+				   MTK_PMIC_HOMEKEY_INDEX),
-+	.pmic_rst_reg = MT6357_TOP_RST_MISC,
-+	.rst_lprst_mask = MTK_PMIC_RST_DU_MASK,
-+};
-+
- static const struct mtk_pmic_regs mt6358_regs = {
- 	.keys_regs[MTK_PMIC_PWRKEY_INDEX] =
- 		MTK_PMIC_KEYS_REGS(MT6358_TOPSTATUS,
-@@ -276,6 +290,9 @@ static const struct of_device_id of_mtk_pmic_keys_match_tbl[] = {
- 	}, {
- 		.compatible = "mediatek,mt6331-keys",
- 		.data = &mt6331_regs,
-+	}, {
-+		.compatible = "mediatek,mt6357-keys",
-+		.data = &mt6357_regs,
- 	}, {
- 		.compatible = "mediatek,mt6358-keys",
- 		.data = &mt6358_regs,
+Awesome!
 
--- 
-b4 0.10.1
+> In the meantime, as to why you're hitting the
+> failure path at all, I think that's another subtle oversight on my part,
+
+Ah, I didn't even pay attention to the fact we were hitting an error
+path here.
+
+The comments you move ("Use the first registered IOMMU device") might
+suggest that some of the problems could be more fundamental to rk_iommu,
+since with async probe, there is no such "first registerered device".
+(Well, they get serialized into some lists eventually, but for the most
+part we have to consider them unordered.)
+
+> does something like the diff below help?
+
+I get a different crash at least!
+
+[    0.183048] Unable to handle kernel NULL pointer dereference at virtual address 00000000000002a0
+...
+[    0.183133] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.1.0-rc1+ #66
+[    0.183143] Hardware name: Google Scarlet (DT)
+...
+[    0.183314] Call trace:
+[    0.183319]  _raw_spin_lock_irqsave+0x44/0x9c
+[    0.183328]  devres_add+0x34/0x64
+[    0.183336]  devm_kmalloc+0xac/0xcc
+[    0.183345]  rk_iommu_of_xlate+0x3c/0x80
+[    0.183358]  of_iommu_xlate+0x8c/0xd0
+[    0.183367]  of_iommu_configure+0x120/0x1d0
+[    0.183377]  of_dma_configure_id+0x190/0x244
+[    0.183387]  platform_dma_configure+0x40/0x88
+[    0.183397]  really_probe+0xac/0x284
+[    0.183409]  __driver_probe_device+0xc0/0xec
+[    0.183419]  driver_probe_device+0x4c/0xd4
+[    0.183429]  __driver_attach+0xb8/0x10c
+[    0.183439]  bus_for_each_dev+0x8c/0xd8
+[    0.183448]  driver_attach+0x30/0x3c
+[    0.183458]  bus_add_driver+0x118/0x1f8
+[    0.183467]  driver_register+0x70/0x10c
+[    0.183475]  __platform_register_drivers+0x5c/0xcc
+[    0.183484]  rockchip_drm_init+0x74/0xc4
+[    0.183495]  do_one_initcall+0x154/0x2e0
+[    0.183505]  do_initcall_level+0x134/0x160
+[    0.183515]  do_initcalls+0x60/0xa0
+[    0.183524]  do_basic_setup+0x28/0x34
+[    0.183532]  kernel_init_freeable+0xf8/0x150
+[    0.183541]  kernel_init+0x2c/0x12c
+[    0.183551]  ret_from_fork+0x10/0x20
+[    0.183567] Code: 5280002b 1100054a b900092a f9800011 (885ffc01)
+[    0.183574] ---[ end trace 0000000000000000 ]---
+
+Brian
