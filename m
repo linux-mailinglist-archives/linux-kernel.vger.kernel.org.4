@@ -2,152 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C753D605B2A
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 11:31:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4E7B605B2E
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 11:31:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230285AbiJTJbK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 05:31:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56310 "EHLO
+        id S230248AbiJTJbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 05:31:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbiJTJbH (ORCPT
+        with ESMTP id S230303AbiJTJbQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 05:31:07 -0400
-Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25BFC1413B9
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 02:31:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description; bh=IqJ+PXWSgAwEtUKSxNWOIpPEVROLORYHEj928+nb8F0=; b=mA+cP
-        1Th1gRoOUnc4A4HI5zcTh4Qmq14q9vYCyFAGndWmeeQF9c9tbs283dNbMo0vOcljn/PaCnsvgCavd
-        Vb8bmLkUYczh77aCyJg6rCfkx8Q9wRveH3TF1HvI901VLgXuPlqw+AUF0TzoAegl9NXlDhSjckzJ4
-        5ttxSjMy7IP0T5Yev8vyLDqli4wYJjnEx7SgOCAfC4mjZOjCKK5ArFSKM0+rSkl/TJs8ISnQTB2L9
-        /vE6Wjr4vroB/s0cEnBGdBnPG/SH+C1XP071rXyKgfA9Kxedl0CvfVp0r4N8drQEwpPEeMTRqlZ+8
-        uv0pOaaQ80h5yWNhw75uke7Yy7t+A==;
-Received: from [81.174.171.191] (helo=donbot)
-        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <john@metanate.com>)
-        id 1olRt2-0007uq-8e;
-        Thu, 20 Oct 2022 10:30:49 +0100
-Date:   Thu, 20 Oct 2022 10:30:48 +0100
-From:   John Keeping <john@metanate.com>
-To:     Johan Jonker <jbx6244@gmail.com>
-Cc:     heiko@sntech.de, hjc@rock-chips.com, airlied@gmail.com,
-        daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] drm: rockchip: remove rockchip_drm_framebuffer_init()
- function
-Message-ID: <Y1EVSNa6bkh5JCLV@donbot>
-References: <ebe91504-c5df-99e4-635f-832218584051@gmail.com>
+        Thu, 20 Oct 2022 05:31:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D36F6155DB2
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 02:31:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666258270;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=HREmpKeE6zG7wXYYBoUdQLZW+Or4137GWbBcA8ju1B4=;
+        b=cHTYczoKIFbQwJkWGRqtXeYeGRfH1bA+KFDU8K65cl6O1Tu0HyzuvDQrOf4Ul/zcjRGGnR
+        6M0b0CEipOQGnmbM8EB+CAIYqvhyj6gq0dYAXJQvBjTZvGC5J9n31uBLAhYc1ghRwaO+8h
+        PnQYN7HHF4Gqk94EeQ5hG9f9xD/Bpu4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-653-posLbKhRPH6OIOo4sHzkZw-1; Thu, 20 Oct 2022 05:31:05 -0400
+X-MC-Unique: posLbKhRPH6OIOo4sHzkZw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A02CD882820;
+        Thu, 20 Oct 2022 09:31:04 +0000 (UTC)
+Received: from localhost.localdomain (ovpn-192-51.brq.redhat.com [10.40.192.51])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 75D0E49BB60;
+        Thu, 20 Oct 2022 09:31:01 +0000 (UTC)
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     kvm@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
+        Sean Christopherson <seanjc@google.com>, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>
+Subject: [PATCH 0/4] nSVM: fix L0 crash if L2 has shutdown condtion which L1 doesn't intercept
+Date:   Thu, 20 Oct 2022 12:30:51 +0300
+Message-Id: <20221020093055.224317-1-mlevitsk@redhat.com>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ebe91504-c5df-99e4-635f-832218584051@gmail.com>
-X-Authenticated: YES
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
-        SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 11:35:03PM +0200, Johan Jonker wrote:
-> The function rockchip_drm_framebuffer_init() was in use
-> in the rockchip_drm_fbdev.c file, but that is now replaced
-> by a generic fbdev setup. Reduce the image size by
-> removing the rockchip_drm_framebuffer_init() and sub function
-> rockchip_fb_alloc() and cleanup the rockchip_drm_fb.h header file.
-> 
-> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+Recently while trying to fix some unit tests I found another CVE in SVM nes=
+ted code.=0D
+=0D
+In 'shutdown_interception' vmexit handler we call kvm_vcpu_reset.=0D
+=0D
+However if running nested and L1 doesn't intercept shutdown, we will still =
+end=0D
+up running this function and trigger a bug in it.=0D
+=0D
+The bug is that this function resets the 'vcpu->arch.hflags' without proper=
+ly=0D
+leaving the nested state, which leaves the vCPU in inconsistent state, whic=
+h=0D
+later triggers a kernel panic in SVM code.=0D
+=0D
+The same bug can likely be triggered by sending INIT via local apic to a vC=
+PU=0D
+which runs a nested guest.=0D
+=0D
+On VMX we are lucky that the issue can't happen because VMX always intercep=
+ts=0D
+triple faults, thus triple fault in L2 will always be redirected to L1.=0D
+Plus the 'handle_triple_fault' of VMX doesn't reset the vCPU.=0D
+=0D
+INIT IPI can't happen on VMX either because INIT events are masked while in=
+=0D
+VMX mode.=0D
+=0D
+Best regards,=0D
+	Maxim Levitsky=0D
+=0D
+Maxim Levitsky (4):=0D
+  KVM: x86: nSVM: leave nested mode on vCPU free=0D
+  KVM: x86: nSVM: harden svm_free_nested against freeing vmcb02 while=0D
+    still in use=0D
+  KVM: x86: add kvm_leave_nested=0D
+  KVM: x86: forcibly leave nested mode on vCPU reset=0D
+=0D
+ arch/x86/kvm/svm/nested.c | 6 +++---=0D
+ arch/x86/kvm/svm/svm.c    | 1 +=0D
+ arch/x86/kvm/vmx/nested.c | 3 ---=0D
+ arch/x86/kvm/x86.c        | 9 ++++++++-=0D
+ 4 files changed, 12 insertions(+), 7 deletions(-)=0D
+=0D
+-- =0D
+2.26.3=0D
+=0D
 
-Reviewed-by: John Keeping <john@metanate.com>
-
-> ---
->  drivers/gpu/drm/rockchip/rockchip_drm_fb.c | 43 ----------------------
->  drivers/gpu/drm/rockchip/rockchip_drm_fb.h |  6 ---
->  2 files changed, 49 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_fb.c b/drivers/gpu/drm/rockchip/rockchip_drm_fb.c
-> index 092bf863110b..409eaa1bf092 100644
-> --- a/drivers/gpu/drm/rockchip/rockchip_drm_fb.c
-> +++ b/drivers/gpu/drm/rockchip/rockchip_drm_fb.c
-> @@ -25,35 +25,6 @@ static const struct drm_framebuffer_funcs rockchip_drm_fb_funcs = {
->  	.dirty	       = drm_atomic_helper_dirtyfb,
->  };
->  
-> -static struct drm_framebuffer *
-> -rockchip_fb_alloc(struct drm_device *dev, const struct drm_mode_fb_cmd2 *mode_cmd,
-> -		  struct drm_gem_object **obj, unsigned int num_planes)
-> -{
-> -	struct drm_framebuffer *fb;
-> -	int ret;
-> -	int i;
-> -
-> -	fb = kzalloc(sizeof(*fb), GFP_KERNEL);
-> -	if (!fb)
-> -		return ERR_PTR(-ENOMEM);
-> -
-> -	drm_helper_mode_fill_fb_struct(dev, fb, mode_cmd);
-> -
-> -	for (i = 0; i < num_planes; i++)
-> -		fb->obj[i] = obj[i];
-> -
-> -	ret = drm_framebuffer_init(dev, fb, &rockchip_drm_fb_funcs);
-> -	if (ret) {
-> -		DRM_DEV_ERROR(dev->dev,
-> -			      "Failed to initialize framebuffer: %d\n",
-> -			      ret);
-> -		kfree(fb);
-> -		return ERR_PTR(ret);
-> -	}
-> -
-> -	return fb;
-> -}
-> -
->  static const struct drm_mode_config_helper_funcs rockchip_mode_config_helpers = {
->  	.atomic_commit_tail = drm_atomic_helper_commit_tail_rpm,
->  };
-> @@ -106,20 +77,6 @@ static const struct drm_mode_config_funcs rockchip_drm_mode_config_funcs = {
->  	.atomic_commit = drm_atomic_helper_commit,
->  };
->  
-> -struct drm_framebuffer *
-> -rockchip_drm_framebuffer_init(struct drm_device *dev,
-> -			      const struct drm_mode_fb_cmd2 *mode_cmd,
-> -			      struct drm_gem_object *obj)
-> -{
-> -	struct drm_framebuffer *fb;
-> -
-> -	fb = rockchip_fb_alloc(dev, mode_cmd, &obj, 1);
-> -	if (IS_ERR(fb))
-> -		return ERR_CAST(fb);
-> -
-> -	return fb;
-> -}
-> -
->  void rockchip_drm_mode_config_init(struct drm_device *dev)
->  {
->  	dev->mode_config.min_width = 0;
-> diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_fb.h b/drivers/gpu/drm/rockchip/rockchip_drm_fb.h
-> index 1a696521096d..bae4e079dfb1 100644
-> --- a/drivers/gpu/drm/rockchip/rockchip_drm_fb.h
-> +++ b/drivers/gpu/drm/rockchip/rockchip_drm_fb.h
-> @@ -7,11 +7,5 @@
->  #ifndef _ROCKCHIP_DRM_FB_H
->  #define _ROCKCHIP_DRM_FB_H
->  
-> -struct drm_framebuffer *
-> -rockchip_drm_framebuffer_init(struct drm_device *dev,
-> -			      const struct drm_mode_fb_cmd2 *mode_cmd,
-> -			      struct drm_gem_object *obj);
-> -void rockchip_drm_framebuffer_fini(struct drm_framebuffer *fb);
-> -
->  void rockchip_drm_mode_config_init(struct drm_device *dev);
->  #endif /* _ROCKCHIP_DRM_FB_H */
-> -- 
-> 2.20.1
-> 
