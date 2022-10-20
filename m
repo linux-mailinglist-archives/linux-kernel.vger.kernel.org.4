@@ -2,69 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8F966069FB
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 23:02:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D32D606A00
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 23:03:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229740AbiJTVCb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 17:02:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47062 "EHLO
+        id S229936AbiJTVDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 17:03:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbiJTVCX (ORCPT
+        with ESMTP id S229823AbiJTVDo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 17:02:23 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E56E6CABC0;
-        Thu, 20 Oct 2022 14:02:21 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id a3so1540312wrt.0;
-        Thu, 20 Oct 2022 14:02:21 -0700 (PDT)
+        Thu, 20 Oct 2022 17:03:44 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6FEB220FBD;
+        Thu, 20 Oct 2022 14:03:43 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id e18so1425199edj.3;
+        Thu, 20 Oct 2022 14:03:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=googlemail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=xb9OuFfShbk1zmBdU9t2whIn89Cs7N05c9hSHXwNLbg=;
-        b=Vjn+gBOxO00mhNYMVLOiGaVG772I20ExWGLjR2PfAwqYrX+NfyJ8/67fCRkI+vAo6a
-         m5dPyHI7dqCzIHM4YD0cpeUop++eoFFWehwhb0iWsx/allnct96GpJjHyfkSvp/YpXoy
-         auHGEbKFA6FEr/z0gGztBwKSTDCG6KGST93hAh+ecgQvIqXMn6CxYtmhGiS4bUpLcfPZ
-         oZD2puw+zt/6y1Fx6sxuMU7HO4UlszkEFic8hm1c7ao2fDQt+xcCmgsceuxSBm6CB7Yh
-         V8Lm3WYDwtax9aUeuM0GqvMAwig+4KRT6kL6EXcCd1Ij/IkXez29iV2Rz+8im5zAXe8u
-         DeSA==
+        bh=IGFCobZRK7q8Le6wQKMOqtMW4v64gOHn4YBe4dY8Rdo=;
+        b=XPZK2WYue5gnubN05fUFxAcbiuJgDs85JHmdo5kUvk5/+vh72a9xG7RXtlsyBU3YgL
+         xknfLOF9ziAvdpW8IxovNRQGAx1zNxqJqWFbRMPEOcBD1lb3p1tDQQATeGTX2sCIEdSp
+         c7uIAp6fjgPfEZIrcDXFK+BxZz/3yuL41NR6Xj5JzZC477GLcdfgjHWjDqsHd212eMDX
+         OkvlrL7RyVVDA0W+czNBQHP0KKjBpErc9MTElGozmNrirLeiCA03OtWkrdlpqYKYlyPw
+         TAy0dN2LIX5pHEGiKLdrnfvtwEOj9DtmZINKSAyW2qWv9R+QWJ7AdYasFSkDQgctOVGH
+         BMjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=xb9OuFfShbk1zmBdU9t2whIn89Cs7N05c9hSHXwNLbg=;
-        b=4sagYl5UIje8Bcq9STn5K+JKpGViR6s6rtH2bSVVtmVlnZ3Qm7dH5zOStF7H1lTQx4
-         YcpoGvsZYyqRb+GWCpC1e5ZEv2v2ldCwmZTvGIEJJ6gXeXBbN1b9O6PJvrD9/69JWjk2
-         PlMtLaXrsm4x1e0RFGYZWcUg9wZCfgjPrkC750lIkL9CUcbukdtQ2B7L6QLb4NiO7ZKi
-         3O4mCMiBQj4/v0XKOeuiEO5+6M8oWAfQnd9KVN+Pt2YFdxpwCR+VQnv4nZqh1BPMyzgn
-         S7w12eBMlckf9vw3UcPoMALHOY+xQJfBM/+chAnJbxqMl4syewJxTYfmir28KX+jlmVd
-         ZHZA==
-X-Gm-Message-State: ACrzQf1N115JgMxVIFCuWLXrWRm/bzpsylB+h1lOpydupOazMhHNSQKW
-        Mp5uvJFHmjjnybwfOMAqblQ=
-X-Google-Smtp-Source: AMsMyM5NaTQoqsewNFR9sI+PSyt9Ke9RhPVAXOTiK5PjsWmhgGLCtl3uLs5s9V/N28WheaHc80flNg==
-X-Received: by 2002:adf:f1c9:0:b0:236:49ee:8598 with SMTP id z9-20020adff1c9000000b0023649ee8598mr2243627wro.481.1666299740494;
-        Thu, 20 Oct 2022 14:02:20 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id bi19-20020a05600c3d9300b003c70191f267sm786923wmb.39.2022.10.20.14.02.19
+        bh=IGFCobZRK7q8Le6wQKMOqtMW4v64gOHn4YBe4dY8Rdo=;
+        b=zCxJS61M+qfIOyLBek8T0LRa03yWHfm5R4rCThnvHmd6KdOiN2Xni0WrvuwAg3EOgj
+         8SogHAMCr2TKFKyNnAnuWtXUBOu4Y2hJtr6vCFUdkaqJBpVPTBj33Q9Q8O6ZquWz/EIh
+         Di6JbKYsWWONKKJZ25fDEsWHPuH2lsrLbqRYmRLWwQ6ldg3JHuy7tlKm11SFJtOoT6/A
+         quldqosK/fCVXcWyjKq4JjBcaHEa3yrZxCAI9bensNJ00jkROMSz0O7Wdf6lmeqcHPwM
+         D5yS9NEhvsI8k+CV3QqllI4nUCG+H+jEWPOxupbAuzTn1EgjsfNttQ8gHhONdPmbSnVg
+         EjuQ==
+X-Gm-Message-State: ACrzQf3e7wOhee0j/ic/Mc7T7EpmzDlastwKMORgZ2SUBBXyAZnIjvF7
+        wADoohqK9tH4hJq+HO64xymCQiCKglw=
+X-Google-Smtp-Source: AMsMyM4AqnW8yvTiuC9PRDsF40dDPSAbqFhouYFbO2pvmVivrxp+RftjqWCjSr8xB3BiAwMbYjWKvg==
+X-Received: by 2002:a05:6402:350f:b0:45d:1d86:9ec9 with SMTP id b15-20020a056402350f00b0045d1d869ec9mr14264393edd.266.1666299821799;
+        Thu, 20 Oct 2022 14:03:41 -0700 (PDT)
+Received: from localhost.localdomain (dynamic-2a01-0c23-c046-3500-0000-0000-0000-0e63.c23.pool.telefonica.de. [2a01:c23:c046:3500::e63])
+        by smtp.googlemail.com with ESMTPSA id 18-20020a170906211200b00779cde476e4sm10748721ejt.62.2022.10.20.14.03.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 14:02:20 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Even Xu <even.xu@intel.com>, linux-input@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][V2] hid: intel-ish-hid: ishtp: remove variable rb_count
-Date:   Thu, 20 Oct 2022 22:02:19 +0100
-Message-Id: <20221020210219.45131-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.37.3
+        Thu, 20 Oct 2022 14:03:41 -0700 (PDT)
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+To:     linux@roeck-us.net, linux-hwmon@vger.kernel.org
+Cc:     jdelvare@suse.com, linux-kernel@vger.kernel.org,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Subject: [RFC PATCH v2 0/4] hwmon: (jc42) regmap conversion and resume fix
+Date:   Thu, 20 Oct 2022 23:03:16 +0200
+Message-Id: <20221020210320.1624617-1-martin.blumenstingl@googlemail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,38 +70,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The variable rb_count is being incremented but it
-is never referenced, it is redundant and can be removed.
+Hello,
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
-V2: Fix commit message.
----
- drivers/hid/intel-ish-hid/ishtp/client.c | 3 ---
- 1 file changed, 3 deletions(-)
+this is a follow-up to the comments I got from Guenter on v1 of my patch
+from [0] titled:
+  "hwmon: (jc42) Restore the min/max/critical temperatures on resume"
+There Guenter suggested: "The best solution would probably be to convert
+the driver to use regmap and let regmap handle the caching". That's the
+goal of this series - in addition to fixing the original resume issue
+(see patch #3 - which was the reason for v1 of this series).
 
-diff --git a/drivers/hid/intel-ish-hid/ishtp/client.c b/drivers/hid/intel-ish-hid/ishtp/client.c
-index df0a825694f5..2d92fc129ce4 100644
---- a/drivers/hid/intel-ish-hid/ishtp/client.c
-+++ b/drivers/hid/intel-ish-hid/ishtp/client.c
-@@ -841,7 +841,6 @@ void recv_ishtp_cl_msg(struct ishtp_device *dev,
- 	unsigned char *buffer = NULL;
- 	struct ishtp_cl_rb *complete_rb = NULL;
- 	unsigned long	flags;
--	int	rb_count;
- 
- 	if (ishtp_hdr->reserved) {
- 		dev_err(dev->devc, "corrupted message header.\n");
-@@ -855,9 +854,7 @@ void recv_ishtp_cl_msg(struct ishtp_device *dev,
- 	}
- 
- 	spin_lock_irqsave(&dev->read_list_spinlock, flags);
--	rb_count = -1;
- 	list_for_each_entry(rb, &dev->read_list.list, list) {
--		++rb_count;
- 		cl = rb->cl;
- 		if (!cl || !(cl->host_client_id == ishtp_hdr->host_addr &&
- 				cl->fw_client_id == ishtp_hdr->fw_addr) ||
+Changes since v1 at [0]:
+- marked as RFC
+- added patches for regmap (patch #1) and regcache (patch #2) conversion
+- patch #3 has been updated to use regcache for restoring the register
+  values during system resume (this was originally patch 1/1)
+- added another patch to remove caching of the temperature register
+
+
+[0] https://lore.kernel.org/linux-hwmon/20221019214108.220319-1-martin.blumenstingl@googlemail.com/
+
+
+Martin Blumenstingl (4):
+  hwmon: (jc42) Convert register access to use an I2C regmap
+  hwmon: (jc42) Convert to regmap's built-in caching
+  hwmon: (jc42) Restore the min/max/critical temperatures on resume
+  hwmon: (jc42) Don't cache the temperature register
+
+ drivers/hwmon/Kconfig |   1 +
+ drivers/hwmon/jc42.c  | 224 +++++++++++++++++++++++-------------------
+ 2 files changed, 125 insertions(+), 100 deletions(-)
+
 -- 
-2.37.3
+2.38.1
 
