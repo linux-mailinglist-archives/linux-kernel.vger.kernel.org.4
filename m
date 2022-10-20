@@ -2,69 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3BDF605A50
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 10:54:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C8AA605A5E
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 10:59:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbiJTIya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 04:54:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35288 "EHLO
+        id S229817AbiJTI7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 04:59:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiJTIy1 (ORCPT
+        with ESMTP id S229918AbiJTI67 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 04:54:27 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4230018C976;
-        Thu, 20 Oct 2022 01:54:18 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d10so19681989pfh.6;
-        Thu, 20 Oct 2022 01:54:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=NiLYN93U8S13XfLcXOgHc8FUAWbV+3e6ZIb50KAygfM=;
-        b=H9dvlsEWbqnAq8BgOovWeNH6M9d7j8pLbOvrISyaNZCBkzu1VFT85kasJfH5M4ZhE4
-         4ynAMRwyJTpUO+SRcvaY6pQJ5ak47G/Q+T2PF6w+Ea/UfRh47iS3GkH7EyYvhjNeDZqh
-         AmpydE3chYZ9zKueeO2ys8r/WxqdJ2j3UUuE2c7Zk/41uwOyMMPqzx2nIK2yo3eUtht5
-         9f3yL15t8kdJuYdeSWuLhc2zn6DlzeTfhDr0Z95c415ZVfnAL5FDxA/tGrk5PIid+iHL
-         1WYCo+VVC4oydlbaG+IBOGgTZD0ulFDU9rz71yFzYiIZeTSlJosNUuzIOW+h2LJfUgxd
-         XLdg==
+        Thu, 20 Oct 2022 04:58:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8F3194221
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 01:58:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666256338;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=z4JdVTNocmv+5C7FFGGGdfOf1ttmjLbFkFJntY9Bfk4=;
+        b=Zax5i9ayjz8anF3R1dvhueLGwcykDdKonXoTXAxpPEO6EpDS1Ei5MdnH1O3YyH0eOysSok
+        21CWRRwb6H9R5GrEBh/DVRMwOkBn0rVJPWZS0KYrBt19q2Ta9dkeSSD3usuVX3XgQEtdAX
+        cm6d674C8dAKQGeCTepqF6EzDIJhEqI=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-584-o2YQCuwdPleR911od18Hjw-1; Thu, 20 Oct 2022 04:58:56 -0400
+X-MC-Unique: o2YQCuwdPleR911od18Hjw-1
+Received: by mail-qt1-f197.google.com with SMTP id 22-20020ac85756000000b0039cf0d41e2cso6599333qtx.13
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 01:58:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NiLYN93U8S13XfLcXOgHc8FUAWbV+3e6ZIb50KAygfM=;
-        b=ZDWk2hSudmZgeNRij0SZjN/PtX54EAYKAJx5Fd6ysTOWujhRnXBEI3+og6gIxEVPCU
-         nkMpIuJxCKYMqOG3vix9/LKONCGD3xxEYM8x82vHYPhd2smQjHkkqDsb182SjE02cNEN
-         mi8A10o2I201kO80nVwxNCDJzpGhDT8a/52xre8vfbZPwcoJobwmsnQaZSEfQAPMnzcZ
-         qUOdNUaUisKI4K5g1reBACHxPVgikQWwDYeTkkJr1NZ5afgoOAOEZIqpS7Fyrec2N1kT
-         qL3BX4uWKO+r68kPo7ZTdw97TRFL9INIMIZYY6RQePHCEtj4yhnA1Mb5bVvIsdxqgvZT
-         f/Rw==
-X-Gm-Message-State: ACrzQf3MlElTa5NcegBaFwrnHb0M25BI6EtKuiDq323ZYXru0/YzZAnI
-        HGfl0wYo/8g1LlJARmJ1btFesJhoMZjDVQ==
-X-Google-Smtp-Source: AMsMyM4IZ8N1NVXQZbG71/Cr20n8KhJ7ZYc1VICUq0+Pll6dFamqkZyTPI67uX4OBtp/fNsiWoUb9g==
-X-Received: by 2002:a63:2c90:0:b0:439:ee2c:ab2f with SMTP id s138-20020a632c90000000b00439ee2cab2fmr11418433pgs.2.1666256057430;
-        Thu, 20 Oct 2022 01:54:17 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id b3-20020a170903228300b0017f205d91d9sm12401860plh.118.2022.10.20.01.54.14
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=z4JdVTNocmv+5C7FFGGGdfOf1ttmjLbFkFJntY9Bfk4=;
+        b=zedjQLAYtPSew5SKu/GQ7NIkAEi6gdib0FT4QgU5/TUs4PLFoj19w7wgE6yBYb+GIV
+         3xUOEs3BCwCPK9qpZcgllT8nRYrR7/j3gWLleLtt7iJs+b2kyrsnRM2z4Rhvpg2pw8aq
+         d6twertSSgFNybyUiEnWnosWfmFDL8ezXWCXriBMYUHe/BUZDhAeGWXyHluz0LTalbt4
+         Ng5l11TgYmOVyIq0Z6h5TDJz4WZHNlC40posFbNy2FrS9WpV56jAm8plrjkAAyDHYmuW
+         GzfjcY++ZvJM2hL+0DEBPTxB//ch5j1OoEzI26VioPKcA17q0byZ/GC9FvIywc/F9cw5
+         +o6A==
+X-Gm-Message-State: ACrzQf31tdV0EamU8X4h8zK+OWVAPgOjkPLh8oxT2s2HwcnhO8iQls8P
+        7jQVj0GlhNMgOVQyIbhEyX6jAN+kwZX6Qm7DlbrGZeQVsF44Dan1duTol9dBml35RYICpecC4jy
+        1Uuu8cJcil/SproIf1Wn8vvDJ
+X-Received: by 2002:a0c:cb88:0:b0:4b8:d79e:b2c1 with SMTP id p8-20020a0ccb88000000b004b8d79eb2c1mr694650qvk.85.1666256336284;
+        Thu, 20 Oct 2022 01:58:56 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4bXCasRwb46Qr+S4wxdTnTzsOhS4+ji7UC6MR7ZQFF8dYmBWGwTTEIKInkUbNKjOcrOIHvKQ==
+X-Received: by 2002:a0c:cb88:0:b0:4b8:d79e:b2c1 with SMTP id p8-20020a0ccb88000000b004b8d79eb2c1mr694632qvk.85.1666256336012;
+        Thu, 20 Oct 2022 01:58:56 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-103-235.dyn.eolo.it. [146.241.103.235])
+        by smtp.gmail.com with ESMTPSA id z15-20020a05622a124f00b0039a08c0a594sm5671319qtx.82.2022.10.20.01.58.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 01:54:16 -0700 (PDT)
-From:   cuijinpeng666@gmail.com
-X-Google-Original-From: cui.jinpeng2@zte.com.cn
-To:     peterz@infradead.org, mingo@redhat.com
-Cc:     acme@kernel.org, mark.rutland@arm.com, namhyung@kernel.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jinpeng Cui <cui.jinpeng2@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] perf: Use strscpy() instead of strlcpy()
-Date:   Thu, 20 Oct 2022 08:54:11 +0000
-Message-Id: <20221020085411.398450-1-cui.jinpeng2@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Thu, 20 Oct 2022 01:58:55 -0700 (PDT)
+Message-ID: <bd11473cd4e2a92c4ce2a32d370800522862ad4b.camel@redhat.com>
+Subject: Re: [PATCH][next] net: dev: Convert sa_data to flexible array in
+ struct sockaddr
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Kees Cook <keescook@chromium.org>, Jakub Kicinski <kuba@kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Dylan Yudaken <dylany@fb.com>,
+        Yajun Deng <yajun.deng@linux.dev>,
+        Petr Machata <petrm@nvidia.com>,
+        Hangbin Liu <liuhangbin@gmail.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        syzbot <syzkaller@googlegroups.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        netdev@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        "D. Wythe" <alibuda@linux.alibaba.com>,
+        Jeremy Kerr <jk@codeconstruct.com.au>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Menglong Dong <imagedong@tencent.com>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Congyu Liu <liu3101@purdue.edu>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Ziyang Xuan <william.xuanziyang@huawei.com>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        linux-hardening@vger.kernel.org
+Date:   Thu, 20 Oct 2022 10:58:50 +0200
+In-Reply-To: <20221018095503.never.671-kees@kernel.org>
+References: <20221018095503.never.671-kees@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,47 +104,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
+Hello,
 
-The implementation of strscpy() is more robust and safer.
+On Tue, 2022-10-18 at 02:56 -0700, Kees Cook wrote:
+> One of the worst offenders of "fake flexible arrays" is struct sockaddr,
+> as it is the classic example of why GCC and Clang have been traditionally
+> forced to treat all trailing arrays as fake flexible arrays: in the
+> distant misty past, sa_data became too small, and code started just
+> treating it as a flexible array, even though it was fixed-size. The
+> special case by the compiler is specifically that sizeof(sa->sa_data)
+> and FORTIFY_SOURCE (which uses __builtin_object_size(sa->sa_data, 1))
+> do not agree (14 and -1 respectively), which makes FORTIFY_SOURCE treat
+> it as a flexible array.
+> 
+> However, the coming -fstrict-flex-arrays compiler flag will remove
+> these special cases so that FORTIFY_SOURCE can gain coverage over all
+> the trailing arrays in the kernel that are _not_ supposed to be treated
+> as a flexible array. To deal with this change, convert sa_data to a true
+> flexible array. To keep the structure size the same, move sa_data into
+> a union with a newly introduced sa_data_min with the original size. The
+> result is that FORTIFY_SOURCE can continue to have no idea how large
+> sa_data may actually be, but anything using sizeof(sa->sa_data) must
+> switch to sizeof(sa->sa_data_min).
+> 
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: Jens Axboe <axboe@kernel.dk>
+> Cc: Pavel Begunkov <asml.silence@gmail.com>
+> Cc: David Ahern <dsahern@kernel.org>
+> Cc: Dylan Yudaken <dylany@fb.com>
+> Cc: Yajun Deng <yajun.deng@linux.dev>
+> Cc: Petr Machata <petrm@nvidia.com>
+> Cc: Hangbin Liu <liuhangbin@gmail.com>
+> Cc: Leon Romanovsky <leon@kernel.org>
+> Cc: syzbot <syzkaller@googlegroups.com>
+> Cc: Willem de Bruijn <willemb@google.com>
+> Cc: Pablo Neira Ayuso <pablo@netfilter.org>
+> Cc: netdev@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>  include/linux/socket.h |  5 ++++-
+>  net/core/dev.c         |  2 +-
+>  net/core/dev_ioctl.c   |  2 +-
+>  net/packet/af_packet.c | 10 +++++-----
+>  4 files changed, 11 insertions(+), 8 deletions(-)
+> 
+> diff --git a/include/linux/socket.h b/include/linux/socket.h
+> index de3701a2a212..13c3a237b9c9 100644
+> --- a/include/linux/socket.h
+> +++ b/include/linux/socket.h
+> @@ -33,7 +33,10 @@ typedef __kernel_sa_family_t	sa_family_t;
+>  
+>  struct sockaddr {
+>  	sa_family_t	sa_family;	/* address family, AF_xxx	*/
+> -	char		sa_data[14];	/* 14 bytes of protocol address	*/
+> +	union {
+> +		char sa_data_min[14];		/* Minimum 14 bytes of protocol address	*/
+> +		DECLARE_FLEX_ARRAY(char, sa_data);
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
----
- kernel/events/core.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Any special reason to avoid preserving the old name for the array and
+e.g. using sa_data_flex for the new field, so we don't have to touch
+the sockaddr users?
 
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 01933db7629c..5adf68cbd173 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -8053,7 +8053,7 @@ static void perf_event_comm_event(struct perf_comm_event *comm_event)
- 	unsigned int size;
- 
- 	memset(comm, 0, sizeof(comm));
--	strlcpy(comm, comm_event->task->comm, sizeof(comm));
-+	strscpy(comm, comm_event->task->comm, sizeof(comm));
- 	size = ALIGN(strlen(comm)+1, sizeof(u64));
- 
- 	comm_event->comm = comm;
-@@ -8508,7 +8508,7 @@ static void perf_event_mmap_event(struct perf_mmap_event *mmap_event)
- 	}
- 
- cpy_name:
--	strlcpy(tmp, name, sizeof(tmp));
-+	strscpy(tmp, name, sizeof(tmp));
- 	name = tmp;
- got_name:
- 	/*
-@@ -8937,7 +8937,7 @@ void perf_event_ksymbol(u16 ksym_type, u64 addr, u32 len, bool unregister,
- 	    ksym_type == PERF_RECORD_KSYMBOL_TYPE_UNKNOWN)
- 		goto err;
- 
--	strlcpy(name, sym, KSYM_NAME_LEN);
-+	strscpy(name, sym, KSYM_NAME_LEN);
- 	name_len = strlen(name) + 1;
- 	while (!IS_ALIGNED(name_len, sizeof(u64)))
- 		name[name_len++] = '\0';
--- 
-2.25.1
+Thanks!
+
+Paolo
 
