@@ -2,44 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39FAD605B0B
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 11:24:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9A38605B0D
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 11:24:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230074AbiJTJYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 05:24:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57116 "EHLO
+        id S230146AbiJTJYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 05:24:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230389AbiJTJYT (ORCPT
+        with ESMTP id S230100AbiJTJY3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 05:24:19 -0400
-Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0255123457
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 02:24:17 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VSebxZI_1666257853;
-Received: from 30.97.48.62(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VSebxZI_1666257853)
-          by smtp.aliyun-inc.com;
-          Thu, 20 Oct 2022 17:24:14 +0800
-Message-ID: <b2b44837-045a-a5ac-319e-216f6b2491bb@linux.alibaba.com>
-Date:   Thu, 20 Oct 2022 17:24:13 +0800
+        Thu, 20 Oct 2022 05:24:29 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6C70425DC;
+        Thu, 20 Oct 2022 02:24:24 -0700 (PDT)
+Received: from loongson.cn (unknown [112.20.109.239])
+        by gateway (Coremail) with SMTP id _____8DxPdnGE1FjpQABAA--.4979S3;
+        Thu, 20 Oct 2022 17:24:22 +0800 (CST)
+Received: from [192.168.100.127] (unknown [112.20.109.239])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dxr+DCE1Fj9dcBAA--.7617S3;
+        Thu, 20 Oct 2022 17:24:19 +0800 (CST)
+Message-ID: <804134df-e984-6ebe-6fb2-c52d91974f8b@loongson.cn>
+Date:   Thu, 20 Oct 2022 17:24:18 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH 1/2] mm: gup: Re-pin pages in case of trying several times
- to migrate
-To:     "Huang, Ying" <ying.huang@intel.com>
-Cc:     akpm@linux-foundation.org, david@redhat.com, ziy@nvidia.com,
-        shy828301@gmail.com, jingshan@linux.alibaba.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <cc48dc1e4db8c33289f168cf380ab3641f45f8ad.1666251624.git.baolin.wang@linux.alibaba.com>
- <87r0z2nc6j.fsf@yhuang6-desk2.ccr.corp.intel.com>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <87r0z2nc6j.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2 2/2] docs/zh_CN: Add staging/xz Chinese translation
+Content-Language: en-US
+To:     Rui Li <me@lirui.org>, Alex Shi <alexs@kernel.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Wu XiangCheng <wu.xiangcheng@linux.dev>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <cover.1666181295.git.me@lirui.org>
+ <52f8c1c138d0c2d799c57bba1b7c4cac4c0bf899.1666181295.git.me@lirui.org>
+From:   Yanteng Si <siyanteng@loongson.cn>
+In-Reply-To: <52f8c1c138d0c2d799c57bba1b7c4cac4c0bf899.1666181295.git.me@lirui.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Dxr+DCE1Fj9dcBAA--.7617S3
+X-CM-SenderInfo: pvl1t0pwhqwqxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxKw4DWw43trWfJry7GrWDXFb_yoW3uFWrpF
+        n2gr97G3WxCry5AFy7KF1jgr18Aan3CF4xGFy8J34rJw1rJFZFgF47ta45GwsxGryfZFyD
+        XFZrKFy29w42y3DanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bfAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAa
+        w2AFwI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
+        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2
+        jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62
+        AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI
+        1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_Jr
+        Wlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1I
+        6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr
+        0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUv
+        cSsGvfC2KfnxnUUI43ZEXa7IU8uuWJUUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -47,66 +67,166 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+On 10/19/22 20:11, Rui Li wrote:
+> Translate the following files into Chinese:
+>
+> - Documentation/staging/xz.rst
+>
+> Signed-off-by: Rui Li <me@lirui.org>
+> ---
+> Changes since v1:
+> - Align title
+> - Adjust patch set order
+> - Add xz into index here
+> ---
+>   .../translations/zh_CN/staging/index.rst      |  6 +-
+>   .../translations/zh_CN/staging/xz.rst         | 99 +++++++++++++++++++
 
-On 10/20/2022 4:15 PM, Huang, Ying wrote:
-> Baolin Wang <baolin.wang@linux.alibaba.com> writes:
-> 
->> The migrate_pages() will return the number of {normal page, THP, hugetlb}
->> that were not migrated, or an error code. That means it can still return
->> the number of failure count, though the pages have been migrated
->> successfully with several times re-try.
-> 
-> If my understanding were correct, if pages are migrated successfully
-> after several times re-tries, the return value will be 0.  There's one
-> possibility for migrate_pages() to return non-zero but all pages are
-> migrated.  That is, when THP is split and all subpages are migrated
-> successfully.
+./scripts/checkpatch.pl 
+0002-docs-zh_CN-Add-staging-xz-Chinese-translation.patch
 
-Yeah, that's the case I tested. Thanks for pointing out. I'll re-write 
-my incorrect commit message next time.
+WARNING: Missing or malformed SPDX-License-Identifier tag in line 1
 
-> 
->> So we should not use the return value of migrate_pages() to determin
->> if there are pages are failed to migrate. Instead we can validate the
->> 'movable_page_list' to see if there are pages remained in the list,
->> which are failed to migrate. That can mitigate the failure of longterm
->> pinning.
-> 
-> Another choice is to use a special return value for split THP + success
-> migration.  But I'm fine to use list_empty(return_pages).
 
-OK. Using list_empty(return_pages) looks more simple.
+see Documentation/translations/zh_CN/index.rst  +29
 
-> 
->> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
->> ---
->>   mm/gup.c | 7 ++++---
->>   1 file changed, 4 insertions(+), 3 deletions(-)
->>
->> diff --git a/mm/gup.c b/mm/gup.c
->> index 5182aba..bd8cfcd 100644
->> --- a/mm/gup.c
->> +++ b/mm/gup.c
->> @@ -1914,9 +1914,10 @@ static int migrate_longterm_unpinnable_pages(
->>   			.gfp_mask = GFP_USER | __GFP_NOWARN,
->>   		};
->>   
->> -		if (migrate_pages(movable_page_list, alloc_migration_target,
->> -				  NULL, (unsigned long)&mtc, MIGRATE_SYNC,
->> -				  MR_LONGTERM_PIN, NULL)) {
->> +		ret = migrate_pages(movable_page_list, alloc_migration_target,
->> +				    NULL, (unsigned long)&mtc, MIGRATE_SYNC,
->> +				    MR_LONGTERM_PIN, NULL);
->> +		if (ret < 0 || !list_empty(movable_page_list)) {
-> 
-> It seems that !list_empty() is sufficient here.
+顺便说下，中文文档也需要遵守内核编码风格，风格中中文和英文的主要不同就是中文
+的字符标点占用两个英文字符宽度， 所以，当英文要求不要超过每行100个字符时，
+中文就不要超过50个字符。另外，也要注意'-'，'=' 等符号与相关标题的对齐。在将
+补丁提交到社区之前，一定要进行必要的 ``checkpatch.pl`` 检查和编译测试。
 
-OK. Drop the 'ret < 0'
 
->>   			ret = -ENOMEM;
-> 
-> Why change the error code?  I don't think it's a good idea to do that.
+Thanks,
 
-The GUP need a -errno for failure or partial success when migration, and 
-we can not return the number of pages failed to migrate. So returning 
--ENOMEM seems suitable for both cases?
+Yanteng
+
+>   2 files changed, 104 insertions(+), 1 deletion(-)
+>   create mode 100644 Documentation/translations/zh_CN/staging/xz.rst
+>
+> diff --git a/Documentation/translations/zh_CN/staging/index.rst b/Documentation/translations/zh_CN/staging/index.rst
+> index e26603892a6f..bb55c81c84a3 100644
+> --- a/Documentation/translations/zh_CN/staging/index.rst
+> +++ b/Documentation/translations/zh_CN/staging/index.rst
+> @@ -10,6 +10,11 @@
+>   未分类文档
+>   ==========
+>   
+> +.. toctree::
+> +   :maxdepth: 2
+> +
+> +   xz
+> +
+>   TODOList:
+>   
+>   * crc32
+> @@ -19,4 +24,3 @@ TODOList:
+>   * speculation
+>   * static-keys
+>   * tee
+> -* xz
+> diff --git a/Documentation/translations/zh_CN/staging/xz.rst b/Documentation/translations/zh_CN/staging/xz.rst
+> new file mode 100644
+> index 000000000000..652c5c2a33d2
+> --- /dev/null
+> +++ b/Documentation/translations/zh_CN/staging/xz.rst
+> @@ -0,0 +1,99 @@
+> +.. include:: ../disclaimer-zh_CN.rst
+> +
+> +:Original: Documentation/staging/xz.rst
+> +
+> +:翻译:
+> +
+> + 李睿 Rui Li <me@lirui.org>
+> +
+> +===================
+> +Linux中的XZ数据压缩
+> +===================
+> +
+> +介绍
+> +====
+> +
+> +XZ是一种通用的数据压缩格式，其具有高压缩率和相对快的解压速度。主要的压缩算法（
+> +过滤器）是LZMA2。额外的过滤器可以被用来进一步提高压缩率，比如用来提高可执行数据
+> +压缩率的Branch/Call/Jump (BCJ)过滤器。
+> +
+> +XZ解压器在Linux中被称作XZ Embedded。它支持LZMA2过滤器和可选的BCJ过滤器，并支持
+> +CRC32完整性校验。你可以在XZ Embedded的主页<https://tukaani.org/xz/embedded.html>
+> +中找到最新版本和关于在Linux内核之外使用源码的信息。
+> +
+> +对于用户空间来说，XZ Utils提供了类似于zlib的压缩库和类似于gzip的命令行工具。
+> +XZ Utils可以从<https://tukaani.org/xz/>下载。
+> +
+> +内核中的XZ相关组件
+> +==================
+> +
+> +xz_dec模块为XZ解压器提供了单次调用（缓冲区到缓冲区）和多次调用（有状态）的
+> +API。xz_dec模块的用法记录在include/linux/xz.h中。
+> +
+> +xz_dec_test模块用于测试xz_dec。除非你想魔改XZ解压器，否则xz_dec_test是
+> +没有用的。xz_dec_test会动态分配一个字符设备主设备号，你可以从用户空间向它
+> +写入.xz文件，解压的输出会被丢弃。关注dmesg可以找到xz_dec_test输出的诊断信息。
+> +详细内容请查看xz_dec_test的源码。
+> +
+> +为了解压内核镜像、初始ram文件系统和初始ram磁盘，lib/decompress_unxz.c实现
+> +了一个包装函数。它的API与其他 decompress_*.c 文件相同，那些API定义在
+> +include/linux/decompress/generic.h中。
+> +
+> +scripts/xz_wrap.sh是一个XZ Utils中的xz命令行工具包装器。这个包装器会
+> +设置合适的压缩选项来压缩内核镜像。
+> +
+> +在内核的makefiles中，提供了使用$(call if_needed)的两个命令。内核镜像应该
+> +使用$(call if_needed,xzkern)来压缩，它会使用BCJ过滤器和一个大LZMA2字典。
+> +它还会附加一个四字节的包含源文件大小的预告，这会在启动代码中被用到。其他文件
+> +应该使用$(call if_needed,xzmisc)来压缩，它会使用1 MiB的LZMA2字典并禁用
+> +BCJ过滤器。
+> +
+> +关于压缩选项的说明
+> +==================
+> +
+> +因为XZ Embedded只支持没有完整性校验的数据流或者CRC32，请确保你在编码未来将被
+> +内核解码的文件时没有使用其他完整性校验方式。使用liblzma时，你需要使用LZMA_CHECK_NONE
+> +或LZMA_CHECK_CRC32。使用xz命令行工具时，使用--check=none或--check=crc32。
+> +
+> +除非有其他环节会验证解压数据的完整性，否则强烈使用CRC32。双重验证可能会浪费
+> +CPU周期。请注意头部总是会包含用于解压器验证的CRC32，你只能修改或禁用解压后数据
+> +的完整性校验方式。
+> +
+> +在用户中间中，LZMA2通常使用几兆字节大小的字典。解码器需要在RAM中放置字典，
+> +因此大字典不能被用于那些意在被内核解码的文件。1 MiB在内核中大概是可接受的最大
+> +字典大小（可能对初始ram文件系统也适用）。XZ Utils中的预设值可能并不适合创建
+> +内核文件，所以请别犹豫使用自定义设置。比如::
+> +
+> +	xz --check=crc32 --lzma2=dict=512KiB inputfile
+> +
+> +使用上面字典大小的一个例外是在单一调用模式下使用解码器。解压内核自身就是一个例
+> +子。在单一调用模式下，内存用量并不和字典大小有关，这种情况就是使用大字典的好地
+> +方：为了最大化压缩，字典至少应该和解压后的数据一样大。
+> +
+> +未来计划
+> +========
+> +
+> +如果有人认为有用的话，可能会考虑创建一个受限的XZ编码器。LZMA2的压缩速率比Deflate
+> +或LZO等要慢，即使在最快的配置选项下。所以并不清楚LZMA2编码器是否需要并入内核。
+> +
+> +有计划在解压代码中支持有限的随机访问读数据。不知道这能否在内核中有任何用，但是我
+> +知道这会在一些Linux内核以外的嵌入式项目中有用。
+> +
+> +.xz文件格式规范的一致性
+> +=======================
+> +
+> +在一些边缘情况下，为了简化事情牺牲了尽早地检测错误。因为并不会导致安全问题，实际
+> +上是没有关系的。但在测试代码的时候知道这一点很好，比如测试来自XZ Utils的文件。
+> +
+> +报告错误
+> +========
+> +
+> +请在报告错误前确认是否已经在上游修复。可以从<https://tukaani.org/xz/embedded.html>
+> +获取最新的源码。
+> +
+> +可以通过联系<lasse.collin@tukaani.org>或者访问Freenode上的#tukaani
+> +联系Larhzu。我并不经常阅读LKML或者其他内核相关的邮件列表，所以如果要告知我什么事情
+> +，你应该通过我的私人邮箱或者IRC联系我。
+> +
+> +请不要因为内核中XZ的实现或关于XZ Utils的问题打扰Igor Pavlov。虽然这两种实现
+> +包含了建立在Igor Pavlov的代码上的重要源码，但并不由他维护和提供支持。
+
