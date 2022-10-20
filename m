@@ -2,105 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62FE160620E
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 15:45:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF488606227
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 15:48:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbiJTNpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 09:45:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53634 "EHLO
+        id S229816AbiJTNsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 09:48:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbiJTNpC (ORCPT
+        with ESMTP id S230038AbiJTNrz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 09:45:02 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8427350FB3
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 06:44:56 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id h24so13338767qta.7
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 06:44:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KhTsVyCoCN9J7vHV3+LHFRl6DSDyjLgInh88Ha3AdYw=;
-        b=OkCy9t+DuyOUp1kiX5G08YdPsnAID9mOcGUnLsZZvP9ZRA05L15c+Bzopd4KOm6Sij
-         y0ZMRB8Y/VyqckwpCV3PuSuFtEDFPEIHqWTli+mmJvlDD7eECDLcAfyvScT+DBiPmiOn
-         SnZMm2Dl1WK8q88NJ1BKdLC5kdQC2147wMFzd/G70bOrPOCnjyNkOdQ0i8WDjLZM4lPO
-         JKeRnFnGQaj64DuO8FI77AF9NWyPmvcpuQrmsS1k1x6JyHo/8IJWoQlnEP9cfGgRW9UK
-         Jt3eOCR2/gULg173vgz8nHy0MESqEqmkZ8ylz4jH87o/cNiS1yhZQj4qZnREco+ORivR
-         Qq2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KhTsVyCoCN9J7vHV3+LHFRl6DSDyjLgInh88Ha3AdYw=;
-        b=cG/YWBSO8bi3h5V0+CAjsbeGYPkiXFUiyn/jUfSD0PyGmrz18GVN0HhV2H6bAqLFRl
-         oJIq0cdxRhCbwIBlNYxDSm3+Gpvsi4hK8ZfSIwJVV11kyTbBWiYxMeR/qpnJEAssp6hI
-         o0eEZYXpGG1x86o/xYwKAj7gM0gJJphvPkFxvkRZakmFSZF2dhA/2R4JFJbFCGfPeuVl
-         v4sm34/oB+A3nTmTAgHBjWzldXKrqlP6ogBnJWdkNyqI6XNSET5/Bwjc0SNsj7BtvsCz
-         7hGQzbsROEoCFFu/FlHT7d3nK6XE5neoSX6pi1wEMdUPNfHJJvyFuZc+KYLVENiSe8tf
-         GUDw==
-X-Gm-Message-State: ACrzQf2ijKg8dhvtBtyUbvSsLp9x4KquZEmSvP4L+gsppvca7YPMf7Ef
-        SydWWgGMWZRwAR2c77wwdFl3+g==
-X-Google-Smtp-Source: AMsMyM6CrCDIzx17WZZfhiU5puqnAFNmO9pYHBMUjZkl4+2nl+iNtz8Fg0sMmgmCN95ATx8iULHI8Q==
-X-Received: by 2002:ac8:5c41:0:b0:39c:d768:128c with SMTP id j1-20020ac85c41000000b0039cd768128cmr11031602qtj.269.1666273495413;
-        Thu, 20 Oct 2022 06:44:55 -0700 (PDT)
-Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
-        by smtp.gmail.com with ESMTPSA id az13-20020a05620a170d00b006eea461177csm7521184qkb.29.2022.10.20.06.44.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Oct 2022 06:44:54 -0700 (PDT)
-Message-ID: <6f5465d7-a16a-6f07-98c3-526d3e16bc27@linaro.org>
-Date:   Thu, 20 Oct 2022 09:44:53 -0400
+        Thu, 20 Oct 2022 09:47:55 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 033431A9133;
+        Thu, 20 Oct 2022 06:47:52 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 74163ED1;
+        Thu, 20 Oct 2022 06:47:58 -0700 (PDT)
+Received: from e121896.arm.com (unknown [10.57.5.110])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 7D5093F67D;
+        Thu, 20 Oct 2022 06:47:49 -0700 (PDT)
+From:   James Clark <james.clark@arm.com>
+To:     linux-perf-users@vger.kernel.org, john.garry@huawei.com,
+        acme@kernel.org
+Cc:     linux-kernel@vger.kernel.org, nick.forrington@arm.com,
+        al.grant@arm.com, James Clark <james.clark@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH] perf vendor events: Add Arm Neoverse V2 PMU events
+Date:   Thu, 20 Oct 2022 14:45:11 +0100
+Message-Id: <20221020134512.1345013-1-james.clark@arm.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v3 1/3] dt-bindings: iio: Add KX022A accelerometer
-To:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
-        Dmitry Rokosov <DDRokosov@sberdevices.ru>,
-        Jagath Jog J <jagathjog1996@gmail.com>,
-        Cosmin Tanislav <demonsingur@gmail.com>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1666263249.git.mazziesaccount@gmail.com>
- <aaf22c800b90f4eed1986782c8549bec5c9c72f5.1666263249.git.mazziesaccount@gmail.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <aaf22c800b90f4eed1986782c8549bec5c9c72f5.1666263249.git.mazziesaccount@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/10/2022 07:36, Matti Vaittinen wrote:
-> KX022A is a 3-axis Accelerometer from ROHM/Kionix. The sensor features
-> include variable ODRs, I2C and SPI control, FIFO/LIFO with watermark IRQ,
-> tap/motion detection, wake-up & back-to-sleep events, four acceleration
-> ranges (2, 4, 8 and 16g) and probably some other cool features.
-> 
-> Add the basic device tree description for the accelerometer. Only basic
-> accelerometer features are considered as of now - new properties may or
-> may not be needed in the future when rest of the features are supported.
-> 
-> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+Rename the neoverse-n2 folder to make it clear that it includes V2, and
+add V2 to mapfile.csv. V2 has the same events as N2, visible by running
+the following command in the ARM-software/data github repo [1]:
 
+  diff pmu/neoverse-v2.json pmu/neoverse-n2.json | grep code
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Testing:
 
-Best regards,
-Krzysztof
+  $ perf test pmu
+
+  10: PMU events                                           :
+  10.1: PMU event table sanity                             : Ok
+  10.2: PMU event map aliases                              : Ok
+  10.3: Parsing of PMU event table metrics                 : Ok
+  10.4: Parsing of PMU event table metrics with fake PMUs  : Ok
+
+[1]: https://github.com/ARM-software/data
+
+Signed-off-by: James Clark <james.clark@arm.com>
+---
+ .../arch/arm64/arm/{neoverse-n2 => neoverse-n2-v2}/branch.json | 0
+ .../arch/arm64/arm/{neoverse-n2 => neoverse-n2-v2}/bus.json    | 0
+ .../arch/arm64/arm/{neoverse-n2 => neoverse-n2-v2}/cache.json  | 0
+ .../arm64/arm/{neoverse-n2 => neoverse-n2-v2}/exception.json   | 0
+ .../arm64/arm/{neoverse-n2 => neoverse-n2-v2}/instruction.json | 0
+ .../arch/arm64/arm/{neoverse-n2 => neoverse-n2-v2}/memory.json | 0
+ .../arm64/arm/{neoverse-n2 => neoverse-n2-v2}/pipeline.json    | 0
+ .../arch/arm64/arm/{neoverse-n2 => neoverse-n2-v2}/spe.json    | 0
+ .../arch/arm64/arm/{neoverse-n2 => neoverse-n2-v2}/trace.json  | 0
+ tools/perf/pmu-events/arch/arm64/mapfile.csv                   | 3 ++-
+ 10 files changed, 2 insertions(+), 1 deletion(-)
+ rename tools/perf/pmu-events/arch/arm64/arm/{neoverse-n2 => neoverse-n2-v2}/branch.json (100%)
+ rename tools/perf/pmu-events/arch/arm64/arm/{neoverse-n2 => neoverse-n2-v2}/bus.json (100%)
+ rename tools/perf/pmu-events/arch/arm64/arm/{neoverse-n2 => neoverse-n2-v2}/cache.json (100%)
+ rename tools/perf/pmu-events/arch/arm64/arm/{neoverse-n2 => neoverse-n2-v2}/exception.json (100%)
+ rename tools/perf/pmu-events/arch/arm64/arm/{neoverse-n2 => neoverse-n2-v2}/instruction.json (100%)
+ rename tools/perf/pmu-events/arch/arm64/arm/{neoverse-n2 => neoverse-n2-v2}/memory.json (100%)
+ rename tools/perf/pmu-events/arch/arm64/arm/{neoverse-n2 => neoverse-n2-v2}/pipeline.json (100%)
+ rename tools/perf/pmu-events/arch/arm64/arm/{neoverse-n2 => neoverse-n2-v2}/spe.json (100%)
+ rename tools/perf/pmu-events/arch/arm64/arm/{neoverse-n2 => neoverse-n2-v2}/trace.json (100%)
+
+diff --git a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/branch.json b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2-v2/branch.json
+similarity index 100%
+rename from tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/branch.json
+rename to tools/perf/pmu-events/arch/arm64/arm/neoverse-n2-v2/branch.json
+diff --git a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/bus.json b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2-v2/bus.json
+similarity index 100%
+rename from tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/bus.json
+rename to tools/perf/pmu-events/arch/arm64/arm/neoverse-n2-v2/bus.json
+diff --git a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/cache.json b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2-v2/cache.json
+similarity index 100%
+rename from tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/cache.json
+rename to tools/perf/pmu-events/arch/arm64/arm/neoverse-n2-v2/cache.json
+diff --git a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/exception.json b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2-v2/exception.json
+similarity index 100%
+rename from tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/exception.json
+rename to tools/perf/pmu-events/arch/arm64/arm/neoverse-n2-v2/exception.json
+diff --git a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/instruction.json b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2-v2/instruction.json
+similarity index 100%
+rename from tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/instruction.json
+rename to tools/perf/pmu-events/arch/arm64/arm/neoverse-n2-v2/instruction.json
+diff --git a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/memory.json b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2-v2/memory.json
+similarity index 100%
+rename from tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/memory.json
+rename to tools/perf/pmu-events/arch/arm64/arm/neoverse-n2-v2/memory.json
+diff --git a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/pipeline.json b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2-v2/pipeline.json
+similarity index 100%
+rename from tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/pipeline.json
+rename to tools/perf/pmu-events/arch/arm64/arm/neoverse-n2-v2/pipeline.json
+diff --git a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/spe.json b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2-v2/spe.json
+similarity index 100%
+rename from tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/spe.json
+rename to tools/perf/pmu-events/arch/arm64/arm/neoverse-n2-v2/spe.json
+diff --git a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/trace.json b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2-v2/trace.json
+similarity index 100%
+rename from tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/trace.json
+rename to tools/perf/pmu-events/arch/arm64/arm/neoverse-n2-v2/trace.json
+diff --git a/tools/perf/pmu-events/arch/arm64/mapfile.csv b/tools/perf/pmu-events/arch/arm64/mapfile.csv
+index ad502d00f460..f134e833c069 100644
+--- a/tools/perf/pmu-events/arch/arm64/mapfile.csv
++++ b/tools/perf/pmu-events/arch/arm64/mapfile.csv
+@@ -34,7 +34,8 @@
+ 0x00000000410fd460,v1,arm/cortex-a510,core
+ 0x00000000410fd470,v1,arm/cortex-a710,core
+ 0x00000000410fd480,v1,arm/cortex-x2,core
+-0x00000000410fd490,v1,arm/neoverse-n2,core
++0x00000000410fd490,v1,arm/neoverse-n2-v2,core
++0x00000000410fd4f0,v1,arm/neoverse-n2-v2,core
+ 0x00000000420f5160,v1,cavium/thunderx2,core
+ 0x00000000430f0af0,v1,cavium/thunderx2,core
+ 0x00000000460f0010,v1,fujitsu/a64fx,core
+-- 
+2.28.0
 
