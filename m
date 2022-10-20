@@ -2,100 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEF2C6060E6
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 15:03:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A3336060ED
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 15:05:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230263AbiJTNDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 09:03:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42320 "EHLO
+        id S229494AbiJTNFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 09:05:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229664AbiJTNDe (ORCPT
+        with ESMTP id S229822AbiJTNFa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 09:03:34 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A9E41C6BCB
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 06:03:33 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id y8so20162047pfp.13
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 06:03:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1CrWKVZtOI32J1eyiZca0oyo4c9aEVy1KXMgpcMBc2M=;
-        b=7hI7lCivt4hx9vW2nR0DjQJmQ0HXCPZCnu0Pr7TM/bDO8uGWVGOdq69I7X/yhTvozo
-         FZBowiYLhf1p6Ag4rKysrfyJJJvXRT0qCdz0TgTX2D72YmiUqr6eeJckZin7gptZc4CY
-         gZZ5aCoCvQYK57fRrGcMOfoCx2FcrcQOcXaas2xxOcf+4q/A7tvLp2kAJan7XOo8gh84
-         iouCbnEN4WKbm9CS7ygwL81MBZHqJFAfXfWQXI0F45RvWc1rm70obsjv5ZZPFRLU0zWT
-         1KQjh+KjUfL+70epkmMRS9hrsGq0GOPHt2VjG70insx0oG2+RWlApfqgrj2rQ7pEhTVu
-         RfaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1CrWKVZtOI32J1eyiZca0oyo4c9aEVy1KXMgpcMBc2M=;
-        b=3dp8Plt6aYQUIxTWnZkKX8HcVKkuW1O+A/0uzijFucZLBvanLz7S6Mm1c5tRpokH4m
-         lq9tHZi9fu+wftoXQcIphL49DUIQ3Q227RHnWFBtia+6yDAGg+fkpDDZ71Xv8TA9Pu3t
-         Y5aIKXM8gL6zRxYIsvtz1yBE17UGmcRzphyhN89+KJb12IzaJxSdxD0wAKq9sxp6DBjn
-         /Qp7L/P7KzymXxKUo1RdCfisuJzOYhHPKA4rsQg46kdIhuWnXMFK3cx55f9vrbNaIDsh
-         T5uhtUTMAPRzSZcFaTlr8iTAO2KUYOC1j2x7wypVYsAE8+edUNSv4ThhYHMDtKV5YUro
-         hObA==
-X-Gm-Message-State: ACrzQf0fqkj3sXyAfyNNZsgtRep4KgDKh78+iQf6+qp99qPxep38WZsm
-        8QVUGL/0A2MX9Dm0G/5K9PFYwiI2iLouzcv9
-X-Google-Smtp-Source: AMsMyM5sNnwCGNjwAlRpdcKDHrFE28D3OQt1qPwY32jtVNeAEuKvWNefCzpg7qDZPOnCgE1pbCsNqA==
-X-Received: by 2002:a63:5a41:0:b0:430:673e:1e13 with SMTP id k1-20020a635a41000000b00430673e1e13mr11902186pgm.435.1666271012904;
-        Thu, 20 Oct 2022 06:03:32 -0700 (PDT)
-Received: from [127.0.0.1] (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
-        by smtp.gmail.com with ESMTPSA id q5-20020aa79825000000b005695accca74sm2551230pfl.111.2022.10.20.06.03.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 06:03:32 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     linux-block@vger.kernel.org, mhiramat@kernel.org,
-        Ye Bin <yebin@huaweicloud.com>, rostedt@goodmis.org
-Cc:     linux-kernel@vger.kernel.org, Ye Bin <yebin10@huawei.com>
-In-Reply-To: <20221019033602.752383-1-yebin@huaweicloud.com>
-References: <20221019033602.752383-1-yebin@huaweicloud.com>
-Subject: Re: [PATCH v3 0/3] fix possible memleak in '__blk_trace_remove'
-Message-Id: <166627101165.162941.2701658237902573676.b4-ty@kernel.dk>
-Date:   Thu, 20 Oct 2022 06:03:31 -0700
+        Thu, 20 Oct 2022 09:05:30 -0400
+Received: from cpanel.siel.si (cpanel.siel.si [46.19.9.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33487B7F4F;
+        Thu, 20 Oct 2022 06:05:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
+        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=zBfRLPHN7pD803Ec207ScFoVXllUCYrqmPtJ5RGSCFA=; b=QsSl+Ef1C+rut7w+c7b0dct0SD
+        atVHCLVro1DJl6G9te22fJy+DzsDP+Xfe23qfrrOixaPRk/rH+I8KZVtbpLzag7pQJYiMaFUuf+sg
+        +MVFx/Nd98mBVzOVJhXvDhSqeRlSbi0LaSTtaKIv+ARSw2JfbSmZXDPgouiu2hpk1GoWx5pxMy4se
+        qgmR9wvExF51hUCFZIkOc0x5+Nle803rE+FaBcUzNbf9jpHdoL1p1sv6/wSWiqQWx+09avawGTlXW
+        QJpxZI37YeN/LcXwSwsCscGuC07wOfdfYN/jCT1utdxXzF00mMX2ZZHu0w5GSp42AWmcic4T98FNv
+        2nBR5lUQ==;
+Received: from [89.212.21.243] (port=52854 helo=[192.168.69.85])
+        by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <andrej.picej@norik.com>)
+        id 1olVEb-00DwvZ-3d;
+        Thu, 20 Oct 2022 15:05:17 +0200
+Message-ID: <1a3a1c8c-8baf-ef70-9e5b-e817bb14cfad@norik.com>
+Date:   Thu, 20 Oct 2022 15:05:20 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.11.0-dev-d9ed3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 2/3] dt-bindings: watchdog: fsl-imx: document suspend in
+ wait mode
+Content-Language: en-GB
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, shawnguo@kernel.org,
+        linux@roeck-us.net, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-imx@nxp.com, festevam@gmail.com,
+        kernel@pengutronix.de, s.hauer@pengutronix.de,
+        wim@linux-watchdog.org, robh+dt@kernel.org
+References: <20221019111714.1953262-1-andrej.picej@norik.com>
+ <ea6893f6-be39-697c-4493-7f1c0ed6708d@linaro.org>
+ <143f1466-e34a-254d-4e6e-fefa17ad1390@norik.com>
+ <24401572.EfDdHjke4D@steina-w>
+From:   Andrej Picej <andrej.picej@norik.com>
+In-Reply-To: <24401572.EfDdHjke4D@steina-w>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - cpanel.siel.si
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - norik.com
+X-Get-Message-Sender-Via: cpanel.siel.si: authenticated_id: andrej.picej@norik.com
+X-Authenticated-Sender: cpanel.siel.si: andrej.picej@norik.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 19 Oct 2022 11:35:59 +0800, Ye Bin wrote:
-> From: Ye Bin <yebin10@huawei.com>
+
+
+On 20. 10. 22 14:41, Alexander Stein wrote:
+> Am Donnerstag, 20. Oktober 2022, 14:36:10 CEST schrieb Andrej Picej:
+>> On 20. 10. 22 14:18, Krzysztof Kozlowski wrote:
+>>> On 20/10/2022 02:23, Andrej Picej wrote:
+>>>> Hi Alexander and Krzysztof,
+>>>>
+>>>> hope I can reply to both questions here.
+>>>>
+>>>> On 19. 10. 22 17:51, Krzysztof Kozlowski wrote:
+>>>>> On 19/10/2022 09:00, Alexander Stein wrote:
+>>>>>> Hello Andrej,
+>>>>>
+>>>>>> Am Mittwoch, 19. Oktober 2022, 13:17:13 CEST schrieb Andrej Picej:
+>>>>> Missing commit msg.
+>>>>>
+>>>>>>> Signed-off-by: Andrej Picej <andrej.picej@norik.com>
+>>>>>>> ---
+>>>>>>>
+>>>>>>>     Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml | 5
+>>>>>>>     +++++
+>>>>>>>     1 file changed, 5 insertions(+)
+>>>>>>>
+>>>>>>> diff --git
+>>>>>>> a/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml
+>>>>>>> b/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml index
+>>>>>>> fb7695515be1..01b3e04e7e65 100644
+>>>>>>> --- a/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml
+>>>>>>> +++ b/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml
+>>>>>>>
+>>>>>>> @@ -55,6 +55,11 @@ properties:
+>>>>>>>           If present, the watchdog device is configured to assert its
+>>>>>>>           external reset (WDOG_B) instead of issuing a software reset.
+>>>>>>>
+>>>>>>> +  fsl,suspend-in-wait:
+>>>>>>> +    $ref: /schemas/types.yaml#/definitions/flag
+>>>>>>> +    description: |
+>>>>>>> +      If present, the watchdog device is suspended in WAIT mode.
+>>>>>>> +
+>>>>>>>
+>>>>>>>     required:
+>>>>>>>       - compatible
+>>>>>>>       - interrupts
+>>>>>>
+>>>>>> What is the condition the watchdog is suspended in WAIT mode? Is this
+>>>>>> specific to SoC or platform or something else?
+>>>>
+>>>> Sorry, what exactly do you mean by condition?
+>>>
+>>> Ugh, I also cannot parse it now...
 > 
-> Diff v3 VS v2
-> 1. Invert the check of 'blk_trace_{start,stop}' and return early from the
-> function for the error case.
+> Sorry, Krzysztof already asked the right question: When does one want to
+> enable/disable this feature?
 > 
-> Diff v2 VS v1:
-> 1. Introduce 'blk_trace_{start,stop}' helper instead of 'blk_trace_switch_state'.
-> 2. Move stop block trace from '__blk_trace_remove' to 'blk_trace_cleanup'.
+>>>> When the property
+>>>> "fsl,suspend-in-wait" is set the watchdog is suspended in WAIT mode, so
+>>>> this is defined by the user. Didn't want to apply it for all the
+>>>> supported machines since there could be devices which depend on watchdog
+>>>> triggering in WAIT mode. We stumbled on this problem on imx6 devices,
+>>>> but the same bit (with the same description) is found on imx25, imx35,
+>>>> imx50/51/53, imx7 and imx8.
+>>>
+>>> I meant, what is expected to happen if you do not enable this bit and
+>>> watchdog triggers in WAIT mode? IOW, why someone might want to enable or
+>>> disable this property?
+>>
+>> If this is not enabled and you put the device into the Suspend-to-idle
+>> mode the device resets after 128 seconds. If not, the device can be left
+>> in that state for infinite time. I'm guessing you want me to better
+>> explain the property in device tree docs right?
+>> I can do that in v2.
+>>
+>>>>> And what happens else? When it is not suspended in WAIT mode?
+>>>>
+>>>> When you put the device in "freeze"/"Suspend-To-Idle" low-power mode the
+>>>> watchdog keeps running and triggers a reset after 128 seconds. So the
+>>>> maximum length the device can stay in this mode is limited to 128
+>>>> seconds.
+>>>
+>>> And who wakes up the system before 128 seconds? IOW is there a use case
+>>> of not enabling this property?
+>>
+>> Well I can think of one, system can be woken up by some other interrupt.
+>> Like RTC which triggers interrupt (for example every 10s). So if this
+>> property is left disabled the watchdog can handle errors where other
+>> wakeup sources don't trigger interrupt or if the system is unable to
+>> wake from low-power state. In that case the watchdog will do a hard
+>> reset of the device.
+>>
+>> But I'm not really sure if anybody uses this, just wanted to make sure
+>> that we keep the default behaviour as it is, since this driver is used
+>> by many devices and for quite some time.
 > 
-> [...]
+> This sounds more like (application) configuration. If so this should not be
+> configured in device tree, IMHO.
+> 
 
-Applied, thanks!
+Do you have an idea where should it be configured? Just keep in mind 
+that this can not be configured at runtime, since this is write-once bit 
+so any configuration changes regarding this functionality can not be done.
 
-[1/3] blktrace: introduce 'blk_trace_{start,stop}' helper
-      commit: 60a9bb9048f9e95029df10a9bc346f6b066c593c
-[2/3] blktrace: fix possible memleak in '__blk_trace_remove'
-      commit: dcd1a59c62dc49da75539213611156d6db50ab5d
-[3/3] blktrace: remove unnessary stop block trace in 'blk_trace_shutdown'
-      commit: 2db96217e7e515071726ca4ec791742c4202a1b2
+Basically if I can sum up the problem:
 
-Best regards,
--- 
-Jens Axboe
+Without this property enabled, the WDW bit is left unset:
+$ echo freeze > /sys/power/state
+#device enters Suspend-to-idle, watchdog is left running and the device 
+resets after 128 seconds in this state
 
+With this property set, the WDW bit is set at watchdog initialization:
+$ echo freeze > /sys/power/state
+#device enters Suspend-to-idle, watchdog is suspended and the device can 
+be left in this state until some other wakeup source triggers interrupt.
 
+Thanks,
+Andrej
