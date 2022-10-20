@@ -2,146 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44AF76057D6
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 09:03:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD4506057DA
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 09:06:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229739AbiJTHDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 03:03:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51206 "EHLO
+        id S229916AbiJTHGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 03:06:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbiJTHDp (ORCPT
+        with ESMTP id S229714AbiJTHGR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 03:03:45 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B05FB122BE0;
-        Thu, 20 Oct 2022 00:03:44 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 686CB22D59;
-        Thu, 20 Oct 2022 07:03:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1666249423; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=AZgVjyqLYAgCOTJCxpyzq3En8/Sc8UTiYSdG0XUo3fw=;
-        b=LJQl4PNUvJ/yLxJmWmMJLnXtp62LKVWkCk/ps2Sg0Sd1GxuIi1q35M5otI9N/8Hv90O1qU
-        VKcatypiFhA4hRaVOntaS3ihTSdDRIAqkOKy2/K3z17mwIZsdyCsCsb6e3UNbbi5kidjDo
-        lKGVsobPUj90hQw+qTdU7TAHE6F5Iaw=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 46A782C141;
-        Thu, 20 Oct 2022 07:03:43 +0000 (UTC)
-Date:   Thu, 20 Oct 2022 09:03:39 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Petr Pavlu <petr.pavlu@suse.com>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Prarit Bhargava <prarit@redhat.com>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] module: Merge same-name module load requests
-Message-ID: <Y1Dyy/SAP1U3tPve@alley>
-References: <20220919123233.8538-1-petr.pavlu@suse.com>
- <20220919123233.8538-3-petr.pavlu@suse.com>
- <YzdR0gRNQI2BGnJ9@bombadil.infradead.org>
- <aa8d9456-b260-d999-0296-8e6ab876af7a@suse.com>
- <Y07xX2ejlg0oFoEy@bombadil.infradead.org>
- <d0bc50e3-0e42-311b-20ed-7538bb918c5b@suse.com>
+        Thu, 20 Oct 2022 03:06:17 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4399A12B368;
+        Thu, 20 Oct 2022 00:06:06 -0700 (PDT)
+X-UUID: 58dae4b1da3145d1babad719fc4607a9-20221020
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=i2/QBs75OcbQTrkvBIFamH2kCxToyqzotcYVba2r5Ms=;
+        b=BPagKtxU9j1W8hpyBTRnoML1xMEoeWfx4TZlxLcQ9qqnC1OkONOiba5iT5jkpMlsDCHApQ1nzLE7UwScgi86Ki/fMk9tmvWv5xUfPWPsXlFFgh9nkuyPpTYKKyCMRgKx0dkAFhqEt+C/v6qq6kugjS02GFxt09KzG0Y+Wlc4XQw=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.12,REQID:d3e94cda-a6e3-459b-8bab-f6549bd6e2a8,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:95
+X-CID-INFO: VERSION:1.1.12,REQID:d3e94cda-a6e3-459b-8bab-f6549bd6e2a8,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
+        :quarantine,TS:95
+X-CID-META: VersionHash:62cd327,CLOUDID:296e65a4-ebb2-41a8-a87c-97702aaf2e20,B
+        ulkID:221020150601FTRDHQVN,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
+        il,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 58dae4b1da3145d1babad719fc4607a9-20221020
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <xinlei.lee@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 972279824; Thu, 20 Oct 2022 15:05:59 +0800
+Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
+ mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Thu, 20 Oct 2022 15:05:57 +0800
+Received: from mszsdaap41.gcn.mediatek.inc (10.16.6.141) by
+ mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Thu, 20 Oct 2022 15:05:56 +0800
+From:   <xinlei.lee@mediatek.com>
+To:     <chunkuang.hu@kernel.org>, <p.zabel@pengutronix.de>,
+        <airlied@linux.ie>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
+        <ck.hu@mediatek.com>, <jitao.shi@mediatek.com>
+CC:     <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        xinlei lee <xinlei.lee@mediatek.com>
+Subject: [PATCH 0/2] Add dpi compatibles and platform data for MT8188 
+Date:   Thu, 20 Oct 2022 15:05:51 +0800
+Message-ID: <1666249553-15801-1-git-send-email-xinlei.lee@mediatek.com>
+X-Mailer: git-send-email 2.6.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d0bc50e3-0e42-311b-20ed-7538bb918c5b@suse.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 2022-10-19 14:00:55, Petr Pavlu wrote:
-> On 10/18/22 20:33, Luis Chamberlain wrote:
-> > On Sat, Oct 15, 2022 at 11:27:10AM +0200, Petr Pavlu wrote:
-> >> The patch does address a regression observed after commit 6e6de3dee51a
-> >> ("kernel/module.c: Only return -EEXIST for modules that have finished
-> >> loading"). I guess it can have a Fixes tag added to the patch.
-> >>
-> >> I think it is hard to split this patch into parts because the implemented
-> >> "optimization" is the fix.
-> > 
-> > git describe --contains 6e6de3dee51a
-> > v5.3-rc1~38^2~6
-> > 
-> > I'm a bit torn about this situation. Reverting 6e6de3dee51a would be the
-> > right thing to do, but without it, it still leaves the issue reported
-> > by Prarit Bhargava. We need a way to resolve the issue on stable and
-> > then your optimizations can be applied on top.
-> 
-> Simpler could be to do the following:
-> 
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index d02d39c7174e..0302ac387e93 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -2386,7 +2386,8 @@ static bool finished_loading(const char *name)
->  	sched_annotate_sleep();
->  	mutex_lock(&module_mutex);
->  	mod = find_module_all(name, strlen(name), true);
-> -	ret = !mod || mod->state == MODULE_STATE_LIVE;
-> +	ret = !mod || mod->state == MODULE_STATE_LIVE
-> +		|| mod->state == MODULE_STATE_GOING;
->  	mutex_unlock(&module_mutex);
->  
->  	return ret;
-> @@ -2566,7 +2567,8 @@ static int add_unformed_module(struct module *mod)
->  	mutex_lock(&module_mutex);
->  	old = find_module_all(mod->name, strlen(mod->name), true);
->  	if (old != NULL) {
-> -		if (old->state != MODULE_STATE_LIVE) {
-> +		if (old->state == MODULE_STATE_COMING
-> +		    || old->state == MODULE_STATE_UNFORMED) {
->  			/* Wait in case it fails to load. */
->  			mutex_unlock(&module_mutex);
->  			err = wait_event_interruptible(module_wq,
-> @@ -2575,7 +2577,7 @@ static int add_unformed_module(struct module *mod)
->  				goto out_unlocked;
->  			goto again;
->  		}
-> -		err = -EEXIST;
-> +		err = old->state != MODULE_STATE_LIVE ? -EBUSY : -EEXIST;
->
->  		goto out;
->  	}
->  	mod_update_bounds(mod);
-> 
-> This is an alternative approach to fix the issue that 6e6de3dee51a addressed
-> and it preserves the previous handling of same-module parallel loads.
-> 
-> It works well in practice but a problem is that this previous handling is
-> somewhat fragile because it requires specific timings. A second load of a same
-> module returns EBUSY only if it observes the first load in the going state.
-> 
-> The following can then happen:
-> * A first load of module A is requested. It passes add_unformed_module() and
->   proceeds with full initialization.
-> * A second load of module A arrives. It proceeds up to add_unformed_module()
->   where it waits on the first module to complete its initialization.
-> * The first load fails because its init function happens to produce an error.
->   The cleanup code in do_init_module() unlinks the module from the modules
->   list, frees the module and finally calls wake_up_all(&module_wq).
-> * The second load gets woken up. It sees that there is no module with the same
->   name in the modules list and continues with its full initialization, which
->   likely again fails in the init function.
+From: xinlei lee <xinlei.lee@mediatek.com>
 
-Another solution would be to add one more reference counter directly
-into struct module. The existing counter is about dependencies on the
-module. It forces the module to stay in MODULE_STATE_LIVE when there
-is some dependency. The new reference counter would be just about
-life time of struct module.
+Rebase on linus/master v6.1-rc1.
 
-It should be easier than to add new structure for passing err code.
+xinlei lee (2):
+  dt-bindings: display: mediatek: dpi: Add compatible for MediaTek
+    MT8188
+  drm: mediatek: Add mt8188 dpi compatibles and platform data
 
-Also it would allow to remove the racy finished_loading().
-wait_event_interruptible() could just check mod->state.
+ .../bindings/display/mediatek/mediatek,dpi.yaml         |  1 +
+ drivers/gpu/drm/mediatek/mtk_dpi.c                      | 17 +++++++++++++++++
+ drivers/gpu/drm/mediatek/mtk_drm_drv.c                  |  2 ++
+ 3 files changed, 20 insertions(+)
 
-Best Regards,
-Petr
+-- 
+2.6.4
+
