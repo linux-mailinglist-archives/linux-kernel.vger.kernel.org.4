@@ -2,99 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E162C605E70
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 13:05:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B015605E72
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 13:06:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231231AbiJTLFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 07:05:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48558 "EHLO
+        id S231250AbiJTLGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 07:06:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231233AbiJTLFm (ORCPT
+        with ESMTP id S231258AbiJTLGI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 07:05:42 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28ED011F4BC;
-        Thu, 20 Oct 2022 04:05:31 -0700 (PDT)
-Received: from mail.ispras.ru (unknown [83.149.199.84])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 0A0B040D403D;
-        Thu, 20 Oct 2022 11:05:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 0A0B040D403D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1666263928;
-        bh=5nyZu9zbyZQkn1yMUyXsSQkh3IfzDySokwqJAcsKRCg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=f3sXzuOR1nPhHEECi3o557B2M3QIspwU3OGXzVqGInFdxo605ltEoce4HANMYSMmM
-         lT8OCKc1DicmXiXZG7CJVTJAJWpuDWPT1WVtw7hEkliT/UEPK07Txy1JzMIKL0Vo7n
-         I/Zow9hRC77Wmwne4UyL4b0oRNg1lInSfI0/5Zqg=
+        Thu, 20 Oct 2022 07:06:08 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D42148F79
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 04:05:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=SElGQfKNwDIPPSfTZApA4VvCfDdRlEWNuSutnH46FrI=; b=mB/lW4gBwHTQEJxpwW1VuwcMmi
+        ygzJ/TF1XFh4WdGoFU4WtZrd2opJD278NmFWGaQXqaSF0TAXLi64433Mx0JEK6/ShSrWEPQsGs7L0
+        f+u2k3SUjCJbN8fc38aQS5OANKFX0IQ3z90JED94RQR745hXj8smeQvRGhdz0RPqwi7nS8VIcCtqJ
+        f40v/Kl0VkZRul5PuHE9DAoDRd9QoJN79E9P80iXPNZf/wZ+fJRZQ2lxDrgB/E6DuPQxMCs43SMQT
+        uzHOZjq5hnGL6akyt65/dggN7ELEBst+is7EtATBMUDFVFVf2pMeU+VN4XzLNjlMLGcnoTuJHECkD
+        RWmDUPZQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1olTMu-0050yB-3w; Thu, 20 Oct 2022 11:05:44 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BAD9A300155;
+        Thu, 20 Oct 2022 13:05:43 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id AA8972857668F; Thu, 20 Oct 2022 13:05:43 +0200 (CEST)
+Date:   Thu, 20 Oct 2022 13:05:43 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     x86@kernel.org, Sami Tolvanen <samitolvanen@google.com>,
+        Joao Moreira <joao@overdrivepizza.com>,
+        linux-kernel@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: Re: [PATCH] x86/ibt: Implement FineIBT
+Message-ID: <Y1Erh7uWkRrCn/yP@hirez.programming.kicks-ass.net>
+References: <Y06rtoE9BsERG9uv@hirez.programming.kicks-ass.net>
+ <202210181020.79AF7F7@keescook>
 MIME-Version: 1.0
-Date:   Thu, 20 Oct 2022 14:05:27 +0300
-From:   Evgeniy Baskov <baskov@ispras.ru>
-To:     Peter Jones <pjones@redhat.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>, Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        lvc-project@linuxtesting.org, x86@kernel.org,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 00/16] x86_64: Improvements at compressed kernel stage
-In-Reply-To: <20221018210447.sg3tddaujre6orgc@redhat.com>
-References: <cover.1662459668.git.baskov@ispras.ru>
- <20221018210447.sg3tddaujre6orgc@redhat.com>
-User-Agent: Roundcube Webmail/1.4.4
-Message-ID: <a2aa9cf7f04a33080269ad351e81bafa@ispras.ru>
-X-Sender: baskov@ispras.ru
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202210181020.79AF7F7@keescook>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-19 00:04, Peter Jones wrote:
-> On Tue, Sep 06, 2022 at 01:41:04PM +0300, Evgeniy Baskov wrote:
->> This patchset is aimed
->> * to improve UEFI compatibility of compressed kernel code for x86_64
->> * to setup proper memory access attributes for code and rodata 
->> sections
->> * to implement W^X protection policy throughout the whole execution
->>   of compressed kernel for EFISTUB code path.
-> 
-> Hi Evgeniy,
-> 
-> I've tested this set of patches with the Mu firmware that supports the 
-> W^X
-> feature and a modified bootloader to also support it, and also with an
-> existing firmware and the grub2 build in fedora 36.  On the firmware
-> without W^X support, this all works for me.  With W^X support, it works
-> so long as I use CONFIG_EFI_STUB_EXTRACT_DIRECT, though I still need
-> some changes in grub's loader.  IMO that's a big step forward.
-> 
-> I can't currently make it work with W^X enabled but without direct
-> extraction, and I'm still investigating why not, but I figured I'd give
-> you a heads up.
+On Tue, Oct 18, 2022 at 11:09:13AM -0700, Kees Cook wrote:
 
-Hi Peter,
+> And this is a good time to ping you about this patch as well:
+> https://lore.kernel.org/lkml/20220902234213.3034396-1-keescook@chromium.org/
 
-Thank you for testing!
-
-Without direct extraction enabled this patch set does not implement 
-total W^X
-and needs to allocate RWX memory regions, since it should go through 
-common
-code path that relocates kernel. So if the firmware does not allow 
-allocating
-RWX regions, it might prevent the kernel from booting, I think. I will 
-look
-into that problem soon and let you know it I find anything.
-
-Thanks,
-Evgeniy Baskov
+Can you add a little justification to that Changelog and repost? Then
+I'll carry it in the fineibt branch.
