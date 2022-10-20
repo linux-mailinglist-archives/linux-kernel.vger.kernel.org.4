@@ -2,125 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EFC86060B0
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 14:56:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9077B6060B7
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 14:56:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230291AbiJTMz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 08:55:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43632 "EHLO
+        id S230126AbiJTM4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 08:56:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230164AbiJTMz5 (ORCPT
+        with ESMTP id S229915AbiJTM42 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 08:55:57 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C5006A50D;
-        Thu, 20 Oct 2022 05:55:55 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id t16so10511290edd.2;
-        Thu, 20 Oct 2022 05:55:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fdvrcAZE1EPFKfjlz9uiWm6tLrgoi3e11AtXEZMwK1w=;
-        b=IWGLeBFGsZqMWZu8NBa/5dv5ja5/cw8FaXj7wp6edzJDwcLJj6NIDrLC+M4WHRna9D
-         W/HVQMcSF6esNg0rdN16No22xc3RXNXtqC+d9MIwWWH6OraR3CEpdZlZkXd0vUfIPJmc
-         r76gdPx5puJhBChIud7soYMaAJ0xDETQQUIVLRMeRctA0r9t2d7V5VzVBTljkqjwVwzN
-         xk+sjzPjB9NuQXcw43TV0QX8WHVLExkPruQp0pob9BJFWnTMsxqoV6Lp9yXB/rKr+P2X
-         2pqwPSREhVfXotOpf0+Nbs64TnnBegLM9Dc0G+er8ZPI55mGP3UBqvZXxq5cUyuqaNJQ
-         NTRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fdvrcAZE1EPFKfjlz9uiWm6tLrgoi3e11AtXEZMwK1w=;
-        b=StQg2wVy465CUTjClT89XxsSzDhKW1vdRjvGCYlpFno/jiByDRdAmUrNTSjS8vEWbH
-         ONJO/idNxFJXYmfSr96LHo08X087ryPcvvOBheq61ZMan3c+TWHcLa8EA81Oqf1j8Svc
-         cYENtNJTwMH/N6adwxIy8nLzrYG/+8wsdhZtQ+w5iOkzajSztdXyoN8w6qLuVNhTvetK
-         0AxJl80Ty+FtYryOS6Oo7l/RqAxvhNgF/y0T85zpc9R4ZwRkDn1oVz335m6jPNn2XNHz
-         cduOzmH1re8q3p8h98MnNFkq0AabbvgUaJj7Cb4cgV/X62ym/pmbn6XnEzAyddnoL0y8
-         /RIw==
-X-Gm-Message-State: ACrzQf31juS5kIqQxSBZt/ft9UIfRJyu+2mRg9JxwjIJ7zeX2mniaIla
-        cm261xRKACgSjsCX3cw7XqU=
-X-Google-Smtp-Source: AMsMyM6HB1XTjI180WP9OH8hwcZzkR92cAa1uSRgWwfsf86U4j6iQ/5OrlRR6/R6eQbEuvuZKarM3Q==
-X-Received: by 2002:a05:6402:1393:b0:457:ea9e:ba20 with SMTP id b19-20020a056402139300b00457ea9eba20mr12266779edv.109.1666270553914;
-        Thu, 20 Oct 2022 05:55:53 -0700 (PDT)
-Received: from skbuf ([188.27.184.197])
-        by smtp.gmail.com with ESMTPSA id q5-20020aa7d445000000b0044bfdbd8a33sm11955944edr.88.2022.10.20.05.55.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 05:55:53 -0700 (PDT)
-Date:   Thu, 20 Oct 2022 15:55:49 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     "Hans J. Schultz" <netdev@kapio-technology.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Florent Fourcot <florent.fourcot@wifirst.fr>,
-        Hans Schultz <schultz.hans@gmail.com>,
-        Joachim Wiberg <troglobit@gmail.com>,
-        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v8 net-next 03/12] net: bridge: enable bridge to install
- locked fdb entries from drivers
-Message-ID: <20221020125549.v6kls2lk7etvay7c@skbuf>
-References: <20221018165619.134535-1-netdev@kapio-technology.com>
- <20221018165619.134535-4-netdev@kapio-technology.com>
+        Thu, 20 Oct 2022 08:56:28 -0400
+Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17571148F51
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 05:56:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1666270576; bh=duRMsrf/gJ7eie8q7NwBQZsK46u4dqLgK9IzhR286ik=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
+         MIME-Version:Content-Type:In-Reply-To;
+        b=k1ZMMcqFHwn/r84X+NBia1cQtwpT+tc8fizY1FbI3tyBftJBUExjd6/z2LEehkaQo
+         mumawSv6tN0xfUN6J1gxnbPlDfYp7amUZnw8+TOyDSVsvKuyocaf0gxijr8qWLnV5c
+         2rpSDNk6PVusk/kLfGATqNVIizzch93J0ZuTv9/0=
+Received: by b-1.in.mailobj.net [192.168.90.11] with ESMTP
+        via [213.182.55.206]
+        Thu, 20 Oct 2022 14:56:16 +0200 (CEST)
+X-EA-Auth: AlTAwPZszBxM1uQBnXrH9iLqAFvpsaWg3rmVNN9Wnhue8gs3W50bHpDCKoKsIAiY6x1b92R8GsmPP7c7aY0iGD4rRILIiyZc
+Date:   Thu, 20 Oct 2022 18:26:12 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Julia Lawall <julia.lawall@inria.fr>
+Cc:     outreachy@lists.linux.dev, gregkh@linuxfoundation.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kumarpraveen@linux.microsoft.com, saurabh.truth@gmail.com
+Subject: Re: [PATCH v4 2/2] staging: most: dim2: correct misleading struct
+ type name
+Message-ID: <Y1FFbB8BWi1IHYgB@debian-BULLSEYE-live-builder-AMD64>
+References: <cover.1666208065.git.drv@mailo.com>
+ <6b772a1ac06ae3b0d63e198e7238c1590b14703a.1666208065.git.drv@mailo.com>
+ <alpine.DEB.2.22.394.2210192208290.3068@hadrien>
+ <Y1BeZYBf/xsW8F4O@debian-BULLSEYE-live-builder-AMD64>
+ <Y1E1kv6YSmxVzjkf@debian-BULLSEYE-live-builder-AMD64>
+ <404cc67c-efd6-4a70-c3ca-7958db21bcb@inria.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221018165619.134535-4-netdev@kapio-technology.com>
+In-Reply-To: <404cc67c-efd6-4a70-c3ca-7958db21bcb@inria.fr>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 06:56:10PM +0200, Hans J. Schultz wrote:
-> diff --git a/net/bridge/br_switchdev.c b/net/bridge/br_switchdev.c
-> index 8f3d76c751dd..c6b938c01a74 100644
-> --- a/net/bridge/br_switchdev.c
-> +++ b/net/bridge/br_switchdev.c
-> @@ -136,6 +136,7 @@ static void br_switchdev_fdb_populate(struct net_bridge *br,
->  	item->added_by_user = test_bit(BR_FDB_ADDED_BY_USER, &fdb->flags);
->  	item->offloaded = test_bit(BR_FDB_OFFLOADED, &fdb->flags);
->  	item->is_local = test_bit(BR_FDB_LOCAL, &fdb->flags);
-> +	item->locked = test_bit(BR_FDB_LOCKED, &fdb->flags);
+On Thu, Oct 20, 2022 at 02:06:41PM +0200, Julia Lawall wrote:
+>
+>
+> On Thu, 20 Oct 2022, Deepak R Varma wrote:
+>
+> > On Thu, Oct 20, 2022 at 02:00:29AM +0530, Deepak R Varma wrote:
+> > > On Wed, Oct 19, 2022 at 10:08:53PM +0200, Julia Lawall wrote:
+> > > >
+> > > >
+> > > > On Thu, 20 Oct 2022, Deepak R Varma wrote:
+> > > >
+> > > > > Correct misleading struct type name dim_ch_state_t to dim_ch_state
+> > > > > since this not a typedef but a normal structure declaration.
+> > > > >
+> > > > > Suggested-by: Julia Lawall <julia.lawall@inria.fr>
+> > > > > Signed-off-by: Deepak R Varma <drv@mailo.com>
+> > > > > ---
+> > > > >
+> > > > > Changes in v4:
+> > > > >    1. Correct patch subject and log message. Use struct type name instead of
+> > > > >       variable name for the change description. Feedback from julia.lawall@inria.fr
+> > > > >
+> > > > > Changes in v3:
+> > > > >    1. Patch introduced in the patch set
+> > > > >
+> > > > >  drivers/staging/most/dim2/dim2.c | 2 +-
+> > > > >  drivers/staging/most/dim2/hal.c  | 4 ++--
+> > > > >  drivers/staging/most/dim2/hal.h  | 6 +++---
+> > > > >  3 files changed, 6 insertions(+), 6 deletions(-)
+> > > > >
+> > > > > diff --git a/drivers/staging/most/dim2/dim2.c b/drivers/staging/most/dim2/dim2.c
+> > > > > index 4c1f27898a29..a69a61a69283 100644
+> > > > > --- a/drivers/staging/most/dim2/dim2.c
+> > > > > +++ b/drivers/staging/most/dim2/dim2.c
+> > > > > @@ -161,7 +161,7 @@ static int try_start_dim_transfer(struct hdm_channel *hdm_ch)
+> > > > >  	struct list_head *head = &hdm_ch->pending_list;
+> > > > >  	struct mbo *mbo;
+> > > > >  	unsigned long flags;
+> > > > > -	struct dim_ch_state_t st;
+> > > > > +	struct dim_ch_state st;
+> > > >
+> > > > Is there another use in service_done_flag?
+> > >
+> > > Hi,
+> > > I did not understand your question fully. This is from a different function
+> > > try_start_dim_transfer where the variable st is used down the line in the
+> > > execution. This time the channel state is retrieved by calling
+> > > dim_get_channel_state function. The state is simply computed and set. Should I
+> > > improve this as well?
+> > >
+> > > If you are asking something different, could you please elaborate?
+> >
+> > Hi Julia,
+> > Can you please review and comment on my response?
+>
+> In my kernel there is an occurrence of the type name in service_done_flag.
+> But I have the mainline, not Greg's staging tree, so there could be some
+> differences.
+>
+> When I do git grep dim_ch_state_t, I get two occurrences in
+> drivers/staging/most/dim2/dim2.c
 
-Shouldn't this be set to 0 here, since it is the bridge->driver
-direction?
+Okay. Still unclear. Following snip is what I see in my local staging-testing branch.
 
->  	item->info.dev = (!p || item->is_local) ? br->dev : p->dev;
->  	item->info.ctx = ctx;
->  }
-> -- 
-> 2.34.1
-> 
+<snip>
+	drv@debian:~/git/kernels/staging$ git grep dim_ch_state_t
+	drivers/staging/most/dim2/dim2.c:       struct dim_ch_state_t st;
+	drivers/staging/most/dim2/dim2.c:       struct dim_ch_state_t st;
+	drivers/staging/most/dim2/hal.c:struct dim_ch_state_t *dim_get_channel_state(struct dim_channel *ch,
+	drivers/staging/most/dim2/hal.c:                                             struct dim_ch_state_t *state_ptr)
+	drivers/staging/most/dim2/hal.h:struct dim_ch_state_t {
+	drivers/staging/most/dim2/hal.h:struct dim_ch_state_t *dim_get_channel_state(struct dim_channel *ch,
+	drivers/staging/most/dim2/hal.h:                                             struct dim_ch_state_t *state_ptr);
+	drv@debian:~/git/kernels/staging$
+</snip>
+
+Does that help?
+
+./drv
+
+
+>
+> julia
+
+
