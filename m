@@ -2,233 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25CD2605784
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 08:43:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EE1D6057A9
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 08:46:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbiJTGnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 02:43:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34246 "EHLO
+        id S229787AbiJTGqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 02:46:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230196AbiJTGnn (ORCPT
+        with ESMTP id S229619AbiJTGqG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 02:43:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7E501C1170;
-        Wed, 19 Oct 2022 23:43:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8899F619EE;
-        Thu, 20 Oct 2022 06:43:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE434C433C1;
-        Thu, 20 Oct 2022 06:43:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666248213;
-        bh=P98rue6EL+V6EJka1psQePQe1VwTN63BL+TzJqbRDKs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ISHlqu89GIBldf3hubnpjInbd0yT3HfVjtB4wq27T/1F9w1/EjGes5gvfy0CL7jwY
-         evODlNH1f62m7pL0Tdg/wqzz/K/hqHs7hcRqwOsnEHM6uD4GabRIGOu48+RG4a6/MR
-         PwBdthU+zUG3MWdLHejIZWXxjw/V7ARdvHTVz5Mz/peOGGYxSDQxI9eaVKOsDvUsUO
-         XuCFKsSlilDVtw2FuMVYXCMhEvF5+2UtziSGKHVx8UhcICrEcpdbQxrC77nblmRri4
-         Y7CxebnRRzr32eQEDJc2OfC9zHvtymQ9glN2/pBOh7RilJysnM3fEHfUgjDXDx3gyW
-         IiZlUJhisO24Q==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1olPGx-0005YY-5N; Thu, 20 Oct 2022 08:43:19 +0200
-Date:   Thu, 20 Oct 2022 08:43:19 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 15/15] phy: qcom-qmp-pcie: add support for sc8280xp
- 4-lane PHYs
-Message-ID: <Y1DuB6hzb3V5Lqdy@hovoldconsulting.com>
-References: <20221019113552.22353-1-johan+linaro@kernel.org>
- <20221019113552.22353-16-johan+linaro@kernel.org>
- <2902e7e8-eddf-149c-06fd-86b85d8af326@linaro.org>
+        Thu, 20 Oct 2022 02:46:06 -0400
+Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A90CBF987D;
+        Wed, 19 Oct 2022 23:45:47 -0700 (PDT)
+Received: by mail-qv1-f53.google.com with SMTP id y10so12930511qvo.11;
+        Wed, 19 Oct 2022 23:45:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AvWiMJxsMMzlAV4KUnHA4w+CaUVO2kOyC0iXLhG6h/8=;
+        b=drSuhIJU2hdzuy6S9p1NdRg9E/FLY4hGXkChnOBFMn9Iq13ZYt9ycGLuwndvsJaAH+
+         tgwK0b83YMZzOCG17fvZLM304KRrbdYu8apMO/EA91cbjZEQ90PBW2tNu9dDZyZ2X+Jq
+         0ObIKHGA8WccI9P3yO7uGGo5Ea73uYwkedfYPhKvLA5M3OsJWc1ZKk/YEI6/b/OuuEEE
+         oIEIcSx1Wwe1K6QMvcZRQ3yhQvF096ze4bV96gV9d1DZxI3+26pEFPaRQmg+BuPNgRVC
+         4EpAVwbzCBC8wjOczRPXM7i92w/sZjs7i6lECgU5/8u9180aLr6x51PuR1LteW114bCB
+         CU5Q==
+X-Gm-Message-State: ACrzQf38a0LzmTQE7nTgDOao91N00pykpLlclncLj3iBuEcaqh819FWN
+        lLiqpLUbGBEXxK/RvQjSieo=
+X-Google-Smtp-Source: AMsMyM4z60W+J8zSGqusk5uo0pipuulA4lzSqOJJdWOsXJ8M+Jd6n7IKI/325v69MCxqu8LwcZT/AA==
+X-Received: by 2002:a05:6214:401a:b0:4b1:c215:3980 with SMTP id kd26-20020a056214401a00b004b1c2153980mr9900207qvb.4.1666248346530;
+        Wed, 19 Oct 2022 23:45:46 -0700 (PDT)
+Received: from maniforge.dhcp.thefacebook.com ([2620:10d:c091:480::9f20])
+        by smtp.gmail.com with ESMTPSA id h6-20020ac85846000000b0039a9b55b829sm5682171qth.29.2022.10.19.23.45.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Oct 2022 23:45:45 -0700 (PDT)
+Date:   Thu, 20 Oct 2022 01:45:48 -0500
+From:   David Vernet <void@manifault.com>
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com, tj@kernel.org
+Subject: Re: [PATCH v5 1/3] bpf: Allow trusted pointers to be passed to
+ KF_TRUSTED_ARGS kfuncs
+Message-ID: <Y1DunCgOuKXT8GOm@maniforge.dhcp.thefacebook.com>
+References: <20221014212133.2520531-1-void@manifault.com>
+ <20221014212133.2520531-2-void@manifault.com>
+ <CAP01T75FGW7F=Ho+oqoC6WgxK5uUir2=CUgiW_HwqNxmzmthBg@mail.gmail.com>
+ <Y1BR5c6W4tgljA8q@maniforge.dhcp.thefacebook.com>
+ <20221020055749.33lfipxtaubhnqbv@apollo>
+ <Y1DmnQE0xuj1RDp7@maniforge.dhcp.thefacebook.com>
+ <20221020062229.b7e7r7lrnkszjoiy@apollo>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2902e7e8-eddf-149c-06fd-86b85d8af326@linaro.org>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221020062229.b7e7r7lrnkszjoiy@apollo>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 06:43:47AM +0300, Dmitry Baryshkov wrote:
-> On 19/10/2022 14:35, Johan Hovold wrote:
-> > The PCIe2 and PCIe3 controllers and PHYs on SC8280XP can be used in
-> > 4-lane mode or as separate controllers and PHYs in 2-lane mode (e.g. as
-> > PCIe2A and PCIe2B).
-> > 
-> > Add support for fetching the 4-lane configuration from the TCSR and
-> > programming the lane registers of the second port when in 4-lane mode.
-> > 
-> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> > ---
-> >   drivers/phy/qualcomm/Kconfig             |   1 +
-> >   drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 118 +++++++++++++++++++++++
-> >   2 files changed, 119 insertions(+)
-> > 
-> > diff --git a/drivers/phy/qualcomm/Kconfig b/drivers/phy/qualcomm/Kconfig
-> > index 5c98850f5a36..eb9ddc685b38 100644
-> > --- a/drivers/phy/qualcomm/Kconfig
-> > +++ b/drivers/phy/qualcomm/Kconfig
-> > @@ -54,6 +54,7 @@ config PHY_QCOM_QMP
-> >   	tristate "Qualcomm QMP PHY Driver"
-> >   	depends on OF && COMMON_CLK && (ARCH_QCOM || COMPILE_TEST)
-> >   	select GENERIC_PHY
-> > +	select MFD_SYSCON
-> >   	help
-> >   	  Enable this to support the QMP PHY transceiver that is used
-> >   	  with controllers such as PCIe, UFS, and USB on Qualcomm chips.
-> > diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-> > index ea5228bd9ecc..e5bce4810bb5 100644
-> > --- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-> > +++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-> > @@ -10,6 +10,7 @@
-> >   #include <linux/io.h>
-> >   #include <linux/iopoll.h>
-> >   #include <linux/kernel.h>
-> > +#include <linux/mfd/syscon.h>
-> >   #include <linux/module.h>
-> >   #include <linux/of.h>
-> >   #include <linux/of_device.h>
-> > @@ -17,6 +18,7 @@
-> >   #include <linux/phy/pcie.h>
-> >   #include <linux/phy/phy.h>
-> >   #include <linux/platform_device.h>
-> > +#include <linux/regmap.h>
-> >   #include <linux/regulator/consumer.h>
-> >   #include <linux/reset.h>
-> >   #include <linux/slab.h>
-> > @@ -886,6 +888,10 @@ static const struct qmp_phy_init_tbl sc8280xp_qmp_gen3x2_pcie_rc_serdes_tbl[] =
-> >   	QMP_PHY_INIT_CFG(QSERDES_V5_COM_BIAS_EN_CLKBUFLR_EN, 0x14),
-> >   };
-> >   
-> > +static const struct qmp_phy_init_tbl sc8280xp_qmp_gen3x4_pcie_serdes_4ln_tbl[] = {
-> > +	QMP_PHY_INIT_CFG(QSERDES_V5_COM_BIAS_EN_CLKBUFLR_EN, 0x1c),
-> > +};
-> > +
-> >   static const struct qmp_phy_init_tbl sc8280xp_qmp_gen3x1_pcie_tx_tbl[] = {
-> >   	QMP_PHY_INIT_CFG(QSERDES_V5_TX_PI_QEC_CTRL, 0x20),
-> >   	QMP_PHY_INIT_CFG(QSERDES_V5_TX_LANE_MODE_1, 0x75),
-> > @@ -1491,6 +1497,9 @@ struct qmp_phy_cfg {
-> >   	const struct qmp_phy_cfg_tables *tables_rc;
-> >   	const struct qmp_phy_cfg_tables *tables_ep;
-> >   
-> > +	const struct qmp_phy_init_tbl *serdes_4ln_tbl;
-> > +	int serdes_4ln_num;
+On Thu, Oct 20, 2022 at 11:52:29AM +0530, Kumar Kartikeya Dwivedi wrote:
+> On Thu, Oct 20, 2022 at 11:41:41AM IST, David Vernet wrote:
+> > [...]
+> > Apologies, as mentioned below I pasted the wrong if-check on accident.
+> > If I had actually meant to paste that one, then saying I "misunderstand
+> > this a bit" would have been a very generous understatment :-)
+> >
+> > > When you have task from tracing ctx arg:
+> > > r1 = ctx;
+> > > r1 = *(r1 + ...); // PTR_TO_BTF_ID, task_struct, off=0
+> > > // r1 = task->next
+> > > r1 = *(r1 + offsetof(task_struct, next)); // PTR_TO_BTF_ID | PTR_WALKED, task_struct, off = 0
+> > >
+> > > We loaded a pointer from task_struct into r1.
+> > > Now r1 still points to a task_struct, so that check above won't fail for r1.
+> >
+> > I meant to paste the if-condition _above_ that one. This is the if-check
+> > we'll fail due to the presence of a type modifier (PTR_WALKED):
+> >
+> > 	} else if (is_kfunc && (reg->type == PTR_TO_BTF_ID ||
+> > 		   (reg2btf_ids[base_type(reg->type)] && !type_flag(reg->type)))) {
+> > 		const struct btf_type *reg_ref_t;
+> > 		const struct btf *reg_btf;
+> > 		const char *reg_ref_tname;
+> > 		u32 reg_ref_id;
+> >
+> > So we'll never even get to the if check I originally pasted because
+> > reg->type == PTR_TO_BTF_ID will fail for a PTR_WALKED reg. And then
+> > below we'll eventually fail later on here:
+> >
+> > 	/* Permit pointer to mem, but only when argument
+> > 	 * type is pointer to scalar, or struct composed
+> > 	 * (recursively) of scalars.
+> > 	 * When arg_mem_size is true, the pointer can be
+> > 	 * void *.
+> > 	 * Also permit initialized local dynamic pointers.
+> > 	 */
+> > 	if (!btf_type_is_scalar(ref_t) &&
+> > 	    !__btf_type_is_scalar_struct(log, btf, ref_t, 0) &&
+> > 	    !arg_dynptr &&
+> > 	    (arg_mem_size ? !btf_type_is_void(ref_t) : 1)) {
+> > 		bpf_log(log,
+> > 			"arg#%d pointer type %s %s must point to %sscalar, or struct with scalar\n",
+> > 			i, btf_type_str(ref_t), ref_tname, arg_mem_size ? "void, " : "");
+> > 		return -EINVAL;
+> > 	}
+> >
+> > Appreciate the explanation, sorry to have made you type it.
+> >
 > 
-> Would it make more sense to change this into the proper 
-> qmp_phy_cfg_tables entry and then use the existing API for programming 
-> the table?
+> Ah, I see. Your analysis is right, but the error in CI comes from
+> check_func_arg_reg_off invocation in check_helper_call, this code is for kfuncs.
 
-No, there is just one serdes register update needed when in 4-lane mode,
-besides programming tx/rx for the second port. Adding a third struct
-qmp_phy_cfg_tables for this seems like overkill and would lead to a more
-convoluted implementation of the programming sequence.
+Yeah, in my defense, if you look back at [0] where I fat-fingered the
+wrong if statement, I did say that I missed the case for helpers
+specifically:
 
-And you can't add it two one of the existing ones, as your comment seems
-to suggest.
+> Note that we also don't include PTR_TO_BTF_ID | PTR_UNTRUSTED here. The
+> difference for PTR_TO_BTF_ID | PTR_WALK(ED) is of course that we also need to
+> allow it to work properly for normal helper calls, so I'll make that change.
 
-The gen3x4 PHYs can be in either 4-lane or 2-lane mode depending on the
-TCSR configuration. Port A is programmed identically in both cases
-except for this serdes register, and in 4-lane mode tx/rx also needs
-to be programmed for port B.
- 
-> > +
-> >   	/* clock ids to be requested */
-> >   	const char * const *clk_list;
-> >   	int num_clks;
-> > @@ -1518,6 +1527,7 @@ struct qmp_pcie {
-> >   	struct device *dev;
-> >   
-> >   	const struct qmp_phy_cfg *cfg;
-> > +	bool tcsr_4ln_config;
+[0]: https://lore.kernel.org/all/Y1BR5c6W4tgljA8q@maniforge.dhcp.thefacebook.com/
+
+Anyways, I think we're on the same page. I already have a local revision
+that fixes this.
+
+> Since you have this to preserve backwards compat:
+> +static const struct bpf_reg_types btf_ptr_types = {
+> +	.types = {
+> +		PTR_TO_BTF_ID,
+> +		PTR_TO_BTF_ID | PTR_NESTED
+> +	},
+> +};
 > 
-> As a matter of preference, this seems too specific. I'd rename it to 
-> split_config or split_4ln_config.
+> It allows passing those with PTR_NESTED to stable helpers.
 
-I'm afraid those names do not make much sense. This TCSR register
-controls whether the PHY is in 4-lane mode (instead of 2-lane mode).
-
-> >   
-> >   	void __iomem *serdes;
-> >   	void __iomem *pcs;
-> > @@ -1527,6 +1537,8 @@ struct qmp_pcie {
-> >   	void __iomem *tx2;
-> >   	void __iomem *rx2;
-> >   
-> > +	void __iomem *port_b;
-> > +
-> >   	struct clk *pipe_clk;
-> >   	struct clk *pipediv2_clk;
-> >   	struct clk_bulk_data *clks;
-> > @@ -1932,6 +1944,44 @@ static const struct qmp_phy_cfg sc8280xp_qmp_gen3x2_pciephy_cfg = {
-> >   	.phy_status		= PHYSTATUS,
-> >   };
-  
-> > +static void qmp_pcie_init_port_b(struct qmp_pcie *qmp, const struct qmp_phy_cfg_tables *tbls)
-> > +{
-> > +	const struct qmp_phy_cfg *cfg = qmp->cfg;
-> > +	const struct qmp_pcie_offsets *offs = cfg->offsets;
-> > +	void __iomem *tx3, *rx3, *tx4, *rx4;
-> > +
-> > +	tx3 = qmp->port_b + offs->tx;
-> > +	rx3 = qmp->port_b + offs->rx;
-> > +	tx4 = qmp->port_b + offs->tx2;
-> > +	rx4 = qmp->port_b + offs->rx2;
-> > +
-> > +	qmp_pcie_configure_lane(tx3, tbls->tx, tbls->tx_num, 1);
-> > +	qmp_pcie_configure_lane(rx3, tbls->rx, tbls->rx_num, 1);
-> > +
-> > +	qmp_pcie_configure_lane(tx4, tbls->tx, tbls->tx_num, 2);
-> > +	qmp_pcie_configure_lane(rx4, tbls->rx, tbls->rx_num, 2);
-> 
-> I'd use BIT(2) and BIT(3) here. This would allow one to make a 
-> difference between programming first pair of lanes and second pair of 
-> lanes if necessary.
-
-No, the tx and tx registers of the second port should be programmed
-identically to that of the first port.
-
-> > +}
-> > +
-> >   static void qmp_pcie_init_registers(struct qmp_pcie *qmp, const struct qmp_phy_cfg_tables *tbls)
-> >   {
-> >   	const struct qmp_phy_cfg *cfg = qmp->cfg;
-> > @@ -2080,6 +2148,11 @@ static void qmp_pcie_init_registers(struct qmp_pcie *qmp, const struct qmp_phy_c
-> >   
-> >   	qmp_pcie_configure(pcs, tbls->pcs, tbls->pcs_num);
-> >   	qmp_pcie_configure(pcs_misc, tbls->pcs_misc, tbls->pcs_misc_num);
-> > +
-> > +	if (cfg->lanes >= 4 && qmp->tcsr_4ln_config) {
-> > +		qmp_pcie_configure(serdes, cfg->serdes_4ln_tbl, cfg->serdes_4ln_num);
-> > +		qmp_pcie_init_port_b(qmp, tbls);
-> > +	}
-> 
-> As you have been refactoring this piece of code, maybe it would make 
-> more sense to change qmp->tx/tx2 into an array of two elements? Then we 
-> can extend it to 4 in this patch, and just always write the whole array 
-> in a loop?
-
-No, I don't think that would be an improvement and would obscure the
-fact that we're programming two otherwise identical ports (e.g. tx1 and
-tx2 of port B is used for the third and fourth lanes).
-
-Note that the above conditional encodes the difference in programming
-sequence between 4-lane and 2-lane mode I described above (one serdes
-register difference + tx/rx of port b).
-
-Johan
+I'd need to look over all of this code again to give useful suggestions
+here (it's very difficult to keep it all paged in, there's just so much
+context), but it'd be nice if we could somehow refactor some of this so
+that check_helper_call() and check_kfunc_call() shared more code.
+Obviously out of scope for this patch set.
