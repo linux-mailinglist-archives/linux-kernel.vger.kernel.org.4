@@ -2,77 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B38C606144
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 15:14:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 196C260612F
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 15:12:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230494AbiJTNOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 09:14:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47092 "EHLO
+        id S229921AbiJTNMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 09:12:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230476AbiJTNOf (ORCPT
+        with ESMTP id S230355AbiJTNMM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 09:14:35 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35FF714D8CE
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 06:13:58 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id v11so4879735wmd.1
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 06:13:58 -0700 (PDT)
+        Thu, 20 Oct 2022 09:12:12 -0400
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF1CE1CC3D7
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 06:11:49 -0700 (PDT)
+Received: by mail-oi1-x22a.google.com with SMTP id y72so22795125oia.3
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 06:11:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ot9nuC1I4qAigSvkVZLdiUhVV5F8thjtHAvIFE60P0s=;
-        b=RfQd7pCu5JXtfHFtctkAdsV36AfpV51SnjlbQNPKe4zwbwR37DsF3XdxzHBe/dNAhU
-         OLEFcUxJrTLfxU4wEyp82PJd03MrmVZIN4a67O2rTxIbHIrPFJRUFvqvlhwS3TzbhDY0
-         YJ+aMgWruFtNr0CksFwNGKe1kxUsT0/1qPsDhykcmk5LmVFgYmKYTMcXnNcjm5vK5edw
-         4YwkmOL7NOmFsPR9mX1QYF5zSi1Bs6EIvyfSRSMWAZhuAxF5j8yjpEVAjMOa8Y794+Ue
-         XUd1zmboEzkUiiHzbKB7H9vHotDh4nroJv7yS2l42Skdh11REWPhwrJw9XAL5jQQCQ3n
-         tsUA==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=cemyxy4dpeRq0uuKNf5JWwjxkCluzhqG4ofmZbWFcZE=;
+        b=pIWWgwwDx0olKcKRAZURt9rk1dtYhXUpYLbqxX1PSAukl6Fajs7B35qn889P8hl02V
+         U7SmfroLVgIGpKqH4+EXDNZHvW8gKaTlIT5RpMLibSRVeQ/V4Ymbi7kWsLspGlYVezUC
+         rpz7NXnMiLECXuUpuAYjb/dKj/ydija5LzzQRW0fXst7pp43qqUW1m+lQY5givglzBzP
+         S+/HGdQxOzuhAs8v+l0okIbdmOvWQL7COFjYs//DD5L5CSpDrGEm0nEjL0uyrYLPnJaw
+         vWT8eKakqCBLO9UEDQAohlSOohzztQMCdIQF8BQaImnYLM/Y8hboha61zJNwZy7Lmgnl
+         2t9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ot9nuC1I4qAigSvkVZLdiUhVV5F8thjtHAvIFE60P0s=;
-        b=MXCeAKDS38XR6OpbmJmHblOJIEju4jg6bpNb9LaMLqpfSyJ4Kd/HEMS5e+S5CVgGLK
-         6MrOgHWQXK5/e7/Zds8ti/3KskLc3SZg/vdqXpTSlH9lj6YKdUqhFORiV4vo7iQuZECc
-         SnzN1lOPwfJO3MWf+p0HgdmZFS2iF0cfXunTqragjCThIYIIT0jAJe8exjtv+QrNitY2
-         FQoYSa2tsOry1dOuSoechd9nHdvhtgWNyfwYPKynuX8Y2tjAyFL8yvQeiZa23bqWMUXt
-         IyPMtzFaJoPrgoOYDgDV0NtkDHOA9dmOpFTj6F17wNp+zmwikRGbcnJHWfqdaaVTzHBV
-         NlJA==
-X-Gm-Message-State: ACrzQf3r6BSrGzR7cejGx0+jk0batIKp6ega373byvXxXRvO3p28KCep
-        QGgNUrxNfgxYp6y5uAOyEUZ+8qJQhjn+xA==
-X-Google-Smtp-Source: AMsMyM7eTn/HY8TMG4XXER2zpBfU9Os0yTIHlNciY86QkvzG+I7D/GNHezch8CN5w1iKmaPS8yF1Rg==
-X-Received: by 2002:a05:600c:4f13:b0:3c6:eb72:51e3 with SMTP id l19-20020a05600c4f1300b003c6eb7251e3mr21174576wmq.34.1666271509601;
-        Thu, 20 Oct 2022 06:11:49 -0700 (PDT)
-Received: from localhost.localdomain ([2001:861:3a82:90b0:2979:1615:9a68:f204])
-        by smtp.gmail.com with ESMTPSA id x8-20020a5d6508000000b00228dff8d975sm16453927wru.109.2022.10.20.06.11.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 06:11:49 -0700 (PDT)
-From:   fchiby@baylibre.com
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Johnson Wang <johnson.wang@mediatek.com>,
-        "Zhiyong.Tao" <zhiyong.tao@mediatek.com>
-Cc:     Fabien Parent <fparent@baylibre.com>,
-        Tinghan Shen <tinghan.shen@mediatek.com>,
-        Sen Chu <sen.chu@mediatek.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH 3/3] soc: mediatek: pwrap: add mt8365 SoC support
-Date:   Thu, 20 Oct 2022 15:09:57 +0200
-Message-Id: <20221020130957.25197-4-fchiby@baylibre.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221020130957.25197-1-fchiby@baylibre.com>
-References: <20221020130957.25197-1-fchiby@baylibre.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cemyxy4dpeRq0uuKNf5JWwjxkCluzhqG4ofmZbWFcZE=;
+        b=HazRR+JS/X30lznFFPein3xmYIlRLPAKKmEtBGl+4Ll0jkWIuuZdo1X0LgAV0kKSqX
+         5FWQy1bMF+aeiMytdZvd30nGbJTcferWkuL//7F4hF05q0usf+dDoAmiXXO4qN3JwR45
+         FrC96Rp0EN4Ot/nj845Gc7NdGPjv5KHhgNMmoif6sWyXcipaxo9R/Ss+BqNMwP6Tv8Rx
+         NRDgA1vcFfMhlY0DPiTc2OV1uSu/k41Pu10i/IwP4vPQ63AOZ5j+/A/R2Gw6sD4fmrod
+         G6sI8ZDOPKvcAbRduvMT3Xy+5JKmr+ARVhzNmv3syqUtRM2Tyg/7gMCgbKHiBhQXGSJI
+         1mtA==
+X-Gm-Message-State: ACrzQf1Oa78aPMs7oFjEPbyWf+ngNZvWzOGUjBmpWIx05SExDRopx5an
+        BkTcIo0Yg0WQjnuUdp2K2OQD4LrW/miUsSn2BIs=
+X-Google-Smtp-Source: AMsMyM4E8YbN2RSOu/jza6/DlhbYG1PvAv4swjyW6nf6REHYcBLavUnlzsdHrN7tRScCH/dzh53QEXmGgLCrdZTe3cs=
+X-Received: by 2002:a05:6808:14d2:b0:354:c733:abd3 with SMTP id
+ f18-20020a05680814d200b00354c733abd3mr7176564oiw.96.1666271445001; Thu, 20
+ Oct 2022 06:10:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221019074502.4048521-1-ruanjinjie@huawei.com>
+In-Reply-To: <20221019074502.4048521-1-ruanjinjie@huawei.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Thu, 20 Oct 2022 09:10:33 -0400
+Message-ID: <CADnq5_MTnK22v+NNB0iqY84ZGBP4eBV_w5QMN_2XuCHpSzxPiw@mail.gmail.com>
+Subject: Re: [PATCH -next] drm/amd/display: Make some symbols static
+To:     ruanjinjie <ruanjinjie@huawei.com>
+Cc:     harry.wentland@amd.com, sunpeng.li@amd.com,
+        Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
+        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
+        daniel@ffwll.ch, qingqing.zhuo@amd.com, agustin.gutierrez@amd.com,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,132 +71,246 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fabien Parent <fparent@baylibre.com>
+Applied.  Thanks!
 
-Add PMIC Wrap support for MT8365 SoC.
+Alex
 
-Signed-off-by: Fabien Parent <fparent@baylibre.com>
----
- drivers/soc/mediatek/mtk-pmic-wrap.c | 78 ++++++++++++++++++++++++++++
- 1 file changed, 78 insertions(+)
-
-diff --git a/drivers/soc/mediatek/mtk-pmic-wrap.c b/drivers/soc/mediatek/mtk-pmic-wrap.c
-index d56b00023ccd..15789a03e6c6 100644
---- a/drivers/soc/mediatek/mtk-pmic-wrap.c
-+++ b/drivers/soc/mediatek/mtk-pmic-wrap.c
-@@ -983,6 +983,68 @@ static int mt8195_regs[] = {
- 	[PWRAP_WACS2_RDATA] =		0x8A8,
- };
- 
-+static int mt8365_regs[] = {
-+	[PWRAP_MUX_SEL] =		0x0,
-+	[PWRAP_WRAP_EN] =		0x4,
-+	[PWRAP_DIO_EN] =		0x8,
-+	[PWRAP_CSHEXT_WRITE] =		0x24,
-+	[PWRAP_CSHEXT_READ] =		0x28,
-+	[PWRAP_STAUPD_PRD] =		0x3c,
-+	[PWRAP_STAUPD_GRPEN] =		0x40,
-+	[PWRAP_STAUPD_MAN_TRIG] =	0x58,
-+	[PWRAP_STAUPD_STA] =		0x5c,
-+	[PWRAP_WRAP_STA] =		0x60,
-+	[PWRAP_HARB_INIT] =		0x64,
-+	[PWRAP_HARB_HPRIO] =		0x68,
-+	[PWRAP_HIPRIO_ARB_EN] =		0x6c,
-+	[PWRAP_HARB_STA0] =		0x70,
-+	[PWRAP_HARB_STA1] =		0x74,
-+	[PWRAP_MAN_EN] =		0x7c,
-+	[PWRAP_MAN_CMD] =		0x80,
-+	[PWRAP_MAN_RDATA] =		0x84,
-+	[PWRAP_MAN_VLDCLR] =		0x88,
-+	[PWRAP_WACS0_EN] =		0x8c,
-+	[PWRAP_INIT_DONE0] =		0x90,
-+	[PWRAP_WACS0_CMD] =		0xc00,
-+	[PWRAP_WACS0_RDATA] =		0xc04,
-+	[PWRAP_WACS0_VLDCLR] =		0xc08,
-+	[PWRAP_WACS1_EN] =		0x94,
-+	[PWRAP_INIT_DONE1] =		0x98,
-+	[PWRAP_WACS2_EN] =		0x9c,
-+	[PWRAP_INIT_DONE2] =		0xa0,
-+	[PWRAP_WACS2_CMD] =		0xc20,
-+	[PWRAP_WACS2_RDATA] =		0xc24,
-+	[PWRAP_WACS2_VLDCLR] =		0xc28,
-+	[PWRAP_INT_EN] =		0xb4,
-+	[PWRAP_INT_FLG_RAW] =		0xb8,
-+	[PWRAP_INT_FLG] =		0xbc,
-+	[PWRAP_INT_CLR] =		0xc0,
-+	[PWRAP_SIG_ADR] =		0xd4,
-+	[PWRAP_SIG_MODE] =		0xd8,
-+	[PWRAP_SIG_VALUE] =		0xdc,
-+	[PWRAP_SIG_ERRVAL] =		0xe0,
-+	[PWRAP_CRC_EN] =		0xe4,
-+	[PWRAP_TIMER_EN] =		0xe8,
-+	[PWRAP_TIMER_STA] =		0xec,
-+	[PWRAP_WDT_UNIT] =		0xf0,
-+	[PWRAP_WDT_SRC_EN] =		0xf4,
-+	[PWRAP_WDT_FLG] =		0xfc,
-+	[PWRAP_DEBUG_INT_SEL] =		0x104,
-+	[PWRAP_CIPHER_KEY_SEL] =	0x1c4,
-+	[PWRAP_CIPHER_IV_SEL] =		0x1c8,
-+	[PWRAP_CIPHER_RDY] =		0x1d0,
-+	[PWRAP_CIPHER_MODE] =		0x1d4,
-+	[PWRAP_CIPHER_SWRST] =		0x1d8,
-+	[PWRAP_DCM_EN] =		0x1dc,
-+	[PWRAP_DCM_DBC_PRD] =		0x1e0,
-+	[PWRAP_EINT_STA0_ADR] =		0x44,
-+	[PWRAP_EINT_STA1_ADR] =		0x48,
-+	[PWRAP_INT1_EN] =		0xc4,
-+	[PWRAP_INT1_FLG] =		0xcc,
-+	[PWRAP_INT1_CLR] =		0xd0,
-+	[PWRAP_WDT_SRC_EN_1] =		0xf8,
-+};
-+
- static int mt8516_regs[] = {
- 	[PWRAP_MUX_SEL] =		0x0,
- 	[PWRAP_WRAP_EN] =		0x4,
-@@ -1139,6 +1201,7 @@ enum pwrap_type {
- 	PWRAP_MT8183,
- 	PWRAP_MT8186,
- 	PWRAP_MT8195,
-+	PWRAP_MT8365,
- 	PWRAP_MT8516,
- };
- 
-@@ -1598,6 +1661,7 @@ static int pwrap_init_cipher(struct pmic_wrapper *wrp)
- 	case PWRAP_MT6797:
- 	case PWRAP_MT8173:
- 	case PWRAP_MT8186:
-+	case PWRAP_MT8365:
- 	case PWRAP_MT8516:
- 		pwrap_writel(wrp, 1, PWRAP_CIPHER_EN);
- 		break;
-@@ -2106,6 +2170,19 @@ static struct pmic_wrapper_type pwrap_mt8195 = {
- 	.init_soc_specific = NULL,
- };
- 
-+static const struct pmic_wrapper_type pwrap_mt8365 = {
-+	.regs = mt8365_regs,
-+	.type = PWRAP_MT8365,
-+	.arb_en_all = 0x3ffff,
-+	.int_en_all = 0x7f1fffff,
-+	.int1_en_all = 0x0,
-+	.spi_w = PWRAP_MAN_CMD_SPI_WRITE,
-+	.wdt_src = PWRAP_WDT_SRC_MASK_ALL,
-+	.caps = PWRAP_CAP_INT1_EN | PWRAP_CAP_WDT_SRC1,
-+	.init_reg_clock = pwrap_common_init_reg_clock,
-+	.init_soc_specific = NULL,
-+};
-+
- static struct pmic_wrapper_type pwrap_mt8516 = {
- 	.regs = mt8516_regs,
- 	.type = PWRAP_MT8516,
-@@ -2143,6 +2220,7 @@ static const struct of_device_id of_pwrap_match_tbl[] = {
- 	{ .compatible = "mediatek,mt8183-pwrap", .data = &pwrap_mt8183 },
- 	{ .compatible = "mediatek,mt8186-pwrap", .data = &pwrap_mt8186 },
- 	{ .compatible = "mediatek,mt8195-pwrap", .data = &pwrap_mt8195 },
-+	{ .compatible = "mediatek,mt8365-pwrap", .data = &pwrap_mt8365 },
- 	{ .compatible = "mediatek,mt8516-pwrap", .data = &pwrap_mt8516 },
- 	{ /* sentinel */ }
- };
--- 
-2.25.1
-
+On Wed, Oct 19, 2022 at 3:48 AM ruanjinjie <ruanjinjie@huawei.com> wrote:
+>
+> These symbols qp_table_422_10bpc_min, qp_table_444_8bpc_max,
+> qp_table_420_12bpc_max, qp_table_444_10bpc_min, qp_table_420_8bpc_max,
+> qp_table_444_8bpc_min, qp_table_444_12bpc_min, qp_table_420_12bpc_min,
+> qp_table_422_12bpc_min, qp_table_422_12bpc_max, qp_table_444_12bpc_max,
+> qp_table_420_8bpc_min, qp_table_422_8bpc_min, qp_table_422_10bpc_max,
+> qp_table_420_10bpc_max, qp_table_420_10bpc_min, qp_table_444_10bpc_max,
+> qp_table_422_8bpc_max are not used outside of the file,
+> so mark them static.
+>
+> ./drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:28:18: warning:
+> symbol 'qp_table_422_10bpc_min' was not declared. Should it be static?
+>
+> ./drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:61:18: warning:
+> symbol 'qp_table_444_8bpc_max' was not declared. Should it be static?
+>
+> ./drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:102:18: warning:
+> symbol 'qp_table_420_12bpc_max' was not declared. Should it be static?
+>
+> ./drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:135:18: warning:
+> symbol 'qp_table_444_10bpc_min' was not declared. Should it be static?
+>
+> ./drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:188:18: warning:
+> symbol 'qp_table_420_8bpc_max' was not declared. Should it be static?
+>
+> ./drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:209:18: warning:
+> symbol 'qp_table_444_8bpc_min' was not declared. Should it be static?
+>
+> ./drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:250:18: warning:
+> symbol 'qp_table_444_12bpc_min' was not declared. Should it be static?
+>
+> ./drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:315:18: warning:
+> symbol 'qp_table_420_12bpc_min' was not declared. Should it be static?
+>
+> ./drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:348:18: warning:
+> symbol 'qp_table_422_12bpc_min' was not declared. Should it be static?
+>
+> ./drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:389:18: warning:
+> symbol 'qp_table_422_12bpc_max' was not declared. Should it be static?
+>
+> ./drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:430:18: warning:
+> symbol 'qp_table_444_12bpc_max' was not declared. Should it be static?
+>
+> ./drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:495:18: warning:
+> symbol 'qp_table_420_8bpc_min' was not declared. Should it be static?
+>
+> ./drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:516:18: warning:
+> symbol 'qp_table_422_8bpc_min' was not declared. Should it be static?
+>
+> ./drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:541:18: warning:
+> symbol 'qp_table_422_10bpc_max' was not declared. Should it be static?
+>
+> ./drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:574:16: warning:
+> symbol 'qp_table_420_10bpc_max' was not declared. Should it be static?
+>
+> ./drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:601:18: warning:
+> symbol 'qp_table_420_10bpc_min' was not declared. Should it be static?
+>
+> ./drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:628:18: warning:
+> symbol 'qp_table_444_10bpc_max' was not declared. Should it be static?
+>
+> ./drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:681:18: warning:
+> symbol 'qp_table_422_8bpc_max' was not declared. Should it be static?
+>
+> Signed-off-by: ruanjinjie <ruanjinjie@huawei.com>
+> ---
+>  .../drm/amd/display/dc/dml/dsc/qp_tables.h    | 36 +++++++++----------
+>  1 file changed, 18 insertions(+), 18 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/amd/display/dc/dml/dsc/qp_tables.h b/drivers/gpu/drm/amd/display/dc/dml/dsc/qp_tables.h
+> index e5fac9f4181d..dcff0dd2b6a1 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dml/dsc/qp_tables.h
+> +++ b/drivers/gpu/drm/amd/display/dc/dml/dsc/qp_tables.h
+> @@ -25,7 +25,7 @@
+>   */
+>
+>
+> -const qp_table   qp_table_422_10bpc_min = {
+> +static const qp_table   qp_table_422_10bpc_min = {
+>         {   6, { 0, 4, 5, 6, 6, 6, 6, 7, 7, 8, 9, 9, 9, 12, 16} },
+>         { 6.5, { 0, 4, 5, 6, 6, 6, 6, 7, 7, 8, 9, 9, 9, 12, 16} },
+>         {   7, { 0, 4, 5, 6, 6, 6, 6, 7, 7, 7, 9, 9, 9, 11, 15} },
+> @@ -58,7 +58,7 @@ const qp_table   qp_table_422_10bpc_min = {
+>  };
+>
+>
+> -const qp_table   qp_table_444_8bpc_max = {
+> +static const qp_table   qp_table_444_8bpc_max = {
+>         {   6, { 4, 6, 8, 8, 9, 9, 9, 10, 11, 12, 12, 12, 12, 13, 15} },
+>         { 6.5, { 4, 6, 7, 8, 8, 8, 9, 10, 11, 11, 12, 12, 12, 13, 15} },
+>         {   7, { 4, 5, 7, 7, 8, 8, 8, 9, 10, 11, 11, 12, 12, 13, 14} },
+> @@ -99,7 +99,7 @@ const qp_table   qp_table_444_8bpc_max = {
+>  };
+>
+>
+> -const qp_table   qp_table_420_12bpc_max = {
+> +static const qp_table   qp_table_420_12bpc_max = {
+>         {   4, {11, 12, 13, 14, 15, 15, 15, 16, 17, 18, 18, 19, 19, 21, 22} },
+>         { 4.5, {10, 11, 12, 13, 14, 15, 15, 16, 17, 18, 18, 19, 19, 20, 21} },
+>         {   5, { 9, 11, 12, 13, 14, 15, 15, 16, 17, 17, 18, 18, 19, 20, 21} },
+> @@ -132,7 +132,7 @@ const qp_table   qp_table_420_12bpc_max = {
+>  };
+>
+>
+> -const qp_table   qp_table_444_10bpc_min = {
+> +static const qp_table   qp_table_444_10bpc_min = {
+>         {   6, { 0, 4, 7, 7, 9, 9, 9, 9, 9, 10, 10, 10, 10, 12, 18} },
+>         { 6.5, { 0, 4, 6, 7, 8, 8, 9, 9, 9, 9, 10, 10, 10, 12, 18} },
+>         {   7, { 0, 4, 6, 6, 8, 8, 8, 8, 8, 9, 9, 10, 10, 12, 17} },
+> @@ -185,7 +185,7 @@ const qp_table   qp_table_444_10bpc_min = {
+>  };
+>
+>
+> -const qp_table   qp_table_420_8bpc_max = {
+> +static const qp_table   qp_table_420_8bpc_max = {
+>         {   4, { 4, 4, 5, 6, 7, 7, 7, 8, 9, 10, 10, 11, 11, 13, 14} },
+>         { 4.5, { 4, 4, 5, 6, 7, 7, 7, 8, 9, 10, 10, 11, 11, 12, 13} },
+>         {   5, { 3, 4, 5, 6, 7, 7, 7, 8, 9, 9, 10, 10, 11, 12, 13} },
+> @@ -206,7 +206,7 @@ const qp_table   qp_table_420_8bpc_max = {
+>  };
+>
+>
+> -const qp_table   qp_table_444_8bpc_min = {
+> +static const qp_table   qp_table_444_8bpc_min = {
+>         {   6, { 0, 1, 3, 3, 5, 5, 5, 5, 5, 6, 6, 6, 6, 9, 14} },
+>         { 6.5, { 0, 1, 2, 3, 4, 4, 5, 5, 5, 5, 6, 6, 6, 9, 14} },
+>         {   7, { 0, 0, 2, 2, 4, 4, 4, 4, 4, 5, 5, 6, 6, 9, 13} },
+> @@ -247,7 +247,7 @@ const qp_table   qp_table_444_8bpc_min = {
+>  };
+>
+>
+> -const qp_table   qp_table_444_12bpc_min = {
+> +static const qp_table   qp_table_444_12bpc_min = {
+>         {   6, { 0, 5, 11, 11, 13, 13, 13, 13, 13, 14, 14, 14, 14, 17, 22} },
+>         { 6.5, { 0, 5, 10, 11, 12, 12, 13, 13, 13, 13, 14, 14, 14, 17, 22} },
+>         {   7, { 0, 5, 10, 10, 12, 12, 12, 12, 12, 13, 13, 14, 14, 17, 21} },
+> @@ -312,7 +312,7 @@ const qp_table   qp_table_444_12bpc_min = {
+>  };
+>
+>
+> -const qp_table   qp_table_420_12bpc_min = {
+> +static const qp_table   qp_table_420_12bpc_min = {
+>         {   4, { 0, 4, 9, 10, 11, 11, 11, 11, 11, 11, 13, 13, 13, 15, 21} },
+>         { 4.5, { 0, 4, 8, 9, 10, 11, 11, 11, 11, 11, 13, 13, 13, 15, 20} },
+>         {   5, { 0, 4, 8, 9, 10, 11, 11, 11, 11, 11, 13, 13, 13, 15, 20} },
+> @@ -345,7 +345,7 @@ const qp_table   qp_table_420_12bpc_min = {
+>  };
+>
+>
+> -const qp_table   qp_table_422_12bpc_min = {
+> +static const qp_table   qp_table_422_12bpc_min = {
+>         {   6, { 0, 4, 9, 10, 11, 11, 11, 11, 11, 11, 13, 13, 13, 16, 20} },
+>         { 6.5, { 0, 4, 9, 10, 11, 11, 11, 11, 11, 11, 13, 13, 13, 16, 20} },
+>         {   7, { 0, 4, 9, 10, 11, 11, 11, 11, 11, 11, 13, 13, 13, 15, 19} },
+> @@ -386,7 +386,7 @@ const qp_table   qp_table_422_12bpc_min = {
+>  };
+>
+>
+> -const qp_table   qp_table_422_12bpc_max = {
+> +static const qp_table   qp_table_422_12bpc_max = {
+>         {   6, {12, 12, 13, 14, 15, 15, 15, 16, 17, 18, 18, 19, 19, 20, 21} },
+>         { 6.5, {12, 12, 13, 14, 15, 15, 15, 16, 17, 18, 18, 19, 19, 20, 21} },
+>         {   7, {11, 12, 13, 14, 15, 15, 15, 16, 17, 17, 18, 18, 19, 19, 20} },
+> @@ -427,7 +427,7 @@ const qp_table   qp_table_422_12bpc_max = {
+>  };
+>
+>
+> -const qp_table   qp_table_444_12bpc_max = {
+> +static const qp_table   qp_table_444_12bpc_max = {
+>         {   6, {12, 14, 16, 16, 17, 17, 17, 18, 19, 20, 20, 20, 20, 21, 23} },
+>         { 6.5, {12, 14, 15, 16, 16, 16, 17, 18, 19, 19, 20, 20, 20, 21, 23} },
+>         {   7, {12, 13, 15, 15, 16, 16, 16, 17, 18, 19, 19, 20, 20, 21, 22} },
+> @@ -492,7 +492,7 @@ const qp_table   qp_table_444_12bpc_max = {
+>  };
+>
+>
+> -const qp_table   qp_table_420_8bpc_min = {
+> +static const qp_table   qp_table_420_8bpc_min = {
+>         {   4, { 0, 0, 1, 1, 3, 3, 3, 3, 3, 3, 5, 5, 5, 9, 13} },
+>         { 4.5, { 0, 0, 1, 1, 3, 3, 3, 3, 3, 3, 5, 5, 5, 8, 12} },
+>         {   5, { 0, 0, 1, 1, 3, 3, 3, 3, 3, 3, 5, 5, 5, 8, 12} },
+> @@ -513,7 +513,7 @@ const qp_table   qp_table_420_8bpc_min = {
+>  };
+>
+>
+> -const qp_table   qp_table_422_8bpc_min = {
+> +static const qp_table   qp_table_422_8bpc_min = {
+>         {   6, { 0, 0, 1, 2, 3, 3, 3, 3, 3, 3, 5, 5, 5, 8, 12} },
+>         { 6.5, { 0, 0, 1, 2, 3, 3, 3, 3, 3, 3, 5, 5, 5, 8, 12} },
+>         {   7, { 0, 0, 1, 2, 3, 3, 3, 3, 3, 3, 5, 5, 5, 7, 11} },
+> @@ -538,7 +538,7 @@ const qp_table   qp_table_422_8bpc_min = {
+>  };
+>
+>
+> -const qp_table   qp_table_422_10bpc_max = {
+> +static const qp_table   qp_table_422_10bpc_max = {
+>         {   6, { 8, 8, 9, 10, 11, 11, 11, 12, 13, 14, 14, 15, 15, 16, 17} },
+>         { 6.5, { 8, 8, 9, 10, 11, 11, 11, 12, 13, 14, 14, 15, 15, 16, 17} },
+>         {   7, { 7, 8, 9, 10, 11, 11, 11, 12, 13, 13, 14, 14, 15, 15, 16} },
+> @@ -571,7 +571,7 @@ const qp_table   qp_table_422_10bpc_max = {
+>  };
+>
+>
+> -const qp_table qp_table_420_10bpc_max = {
+> +static const qp_table qp_table_420_10bpc_max = {
+>         {   4, { 8, 8, 9, 10, 11, 11, 11, 12, 13, 14, 14, 15, 15, 17, 18} },
+>         { 4.5, { 8, 8, 9, 10, 11, 11, 11, 12, 13, 14, 14, 15, 15, 16, 17} },
+>         {   5, { 7, 8, 9, 10, 11, 11, 11, 12, 13, 13, 14, 14, 15, 16, 17} },
+> @@ -598,7 +598,7 @@ const qp_table qp_table_420_10bpc_max = {
+>  };
+>
+>
+> -const qp_table   qp_table_420_10bpc_min = {
+> +static const qp_table   qp_table_420_10bpc_min = {
+>         {   4, { 0, 4, 4, 5, 7, 7, 7, 7, 7, 7, 9, 9, 9, 13, 17} },
+>         { 4.5, { 0, 4, 4, 5, 7, 7, 7, 7, 7, 7, 9, 9, 9, 12, 16} },
+>         {   5, { 0, 4, 4, 5, 7, 7, 7, 7, 7, 7, 9, 9, 9, 12, 16} },
+> @@ -625,7 +625,7 @@ const qp_table   qp_table_420_10bpc_min = {
+>  };
+>
+>
+> -const qp_table   qp_table_444_10bpc_max = {
+> +static const qp_table   qp_table_444_10bpc_max = {
+>         {   6, { 8, 10, 12, 12, 13, 13, 13, 14, 15, 16, 16, 16, 16, 17, 19} },
+>         { 6.5, { 8, 10, 11, 12, 12, 12, 13, 14, 15, 15, 16, 16, 16, 17, 19} },
+>         {   7, { 8, 9, 11, 11, 12, 12, 12, 13, 14, 15, 15, 16, 16, 17, 18} },
+> @@ -678,7 +678,7 @@ const qp_table   qp_table_444_10bpc_max = {
+>  };
+>
+>
+> -const qp_table   qp_table_422_8bpc_max = {
+> +static const qp_table   qp_table_422_8bpc_max = {
+>         {   6, { 4, 4, 5, 6, 7, 7, 7, 8, 9, 10, 10, 11, 11, 12, 13} },
+>         { 6.5, { 4, 4, 5, 6, 7, 7, 7, 8, 9, 10, 10, 11, 11, 12, 13} },
+>         {   7, { 3, 4, 5, 6, 7, 7, 7, 8, 9, 9, 10, 10, 11, 11, 12} },
+> --
+> 2.25.1
+>
