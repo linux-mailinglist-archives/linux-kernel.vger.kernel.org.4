@@ -2,75 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B31936060DA
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 15:02:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45E466060E0
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 15:02:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230293AbiJTNCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 09:02:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40136 "EHLO
+        id S230302AbiJTNCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 09:02:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230285AbiJTNCL (ORCPT
+        with ESMTP id S230311AbiJTNCe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 09:02:11 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D69658048
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 06:02:09 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id r18so19132340pgr.12
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 06:02:09 -0700 (PDT)
+        Thu, 20 Oct 2022 09:02:34 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31DD458051;
+        Thu, 20 Oct 2022 06:02:33 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id l22so29791938edj.5;
+        Thu, 20 Oct 2022 06:02:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OyZV+5dHPEm9y2grR1cTVbSv6PIoW3rFM516q3trw+c=;
-        b=hYsLr5so2u6zRKph8E5hlUdCPTFdmUEsuA+JUsFndgKNpB1tZEOigIt6Rb/5RoRPHt
-         qKpNsT7hDrl61cITpT4k1OU7+QEIKd1bIkS5tE0+jeAmZ+ta0MGZpGWQ9TuBvz+EHo9m
-         vwrzgPNKcHCHHquWxkD+f3MJp9QtesaVsHA4GInnePmjyAZhdH5+8A0hCE6KT2ndRaTs
-         YOQ2BSXjvUq5WrfllUi2hwkxbafEjXe9zwBBHqmwNP6A65ZGoZArI9QRDLhpdWKygAh6
-         T/v0BhTH8swSJF3G3kiGzUpH2vZAH4pDJxG5iYMsCx0NDoupeUSEbza2bAgOHsA47UEv
-         Y4Qg==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3lUJaqu0J8uHiOqGzROFev5mvIptXzWIUlXDpg3Z7v8=;
+        b=OMAxspufhBThmNShqa9UUDLPIBfzy7SZQc9dTZqpHU9Nlnt4O9ljoooqZkbDyQd5Wn
+         gzIYe/LUJPI+ct8FN0Hi+S81HlfU7bPbcI0jAPSx43zoBQA7RP3DT1NUiRp0BipoagMe
+         WM3BmOW+ag3j6MR7sNwwjfrrO6SQgW2CZxNW29anlb5TXwu8T542j57m+tr8sau23fD2
+         kxdCniKunD5niZy3zxJkYdspCehbofu9E4eXyD9AJp+4tZDE7xEMSqpAMCdFj0BFxKXF
+         nl0p/5bDAgJzZtUFKR+Qc2N0DnlSLU/UBg7ArX+2Ozcm8hbjyJ+w6M5zkFwbGKhOicd6
+         R0Cg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OyZV+5dHPEm9y2grR1cTVbSv6PIoW3rFM516q3trw+c=;
-        b=fmywQZO+RmuL7Aueuwo6sb6qf0HRbnyiiW+5pxEUReJ3/+VCvvYfL5WgCe4mkiSDMk
-         W/2cEDBxf6IO2KPpRjhADcEisK46rH6vb1ffJUmewl3hNe/EcBv8/GiTHWpYQjMLzAtU
-         BqroP5yUeOt+4a6/a/wm805hIb1ujaCEGbL9buE8AiNIM0juZ/GD0OCFoql73HQ6nfj8
-         jQ9LbOd8Bj0UWivq3/Z/CBcWAC9xufZd9RV22D0O6STJRBq8TAiYPcTisj6+JRirxGiN
-         Q7/XecRtKqA+kiAtMbr48Q9cTtNqFALI94txyNxuPL9KV92jWSIKWDeMDb+ZysTFwE/Z
-         wnYg==
-X-Gm-Message-State: ACrzQf0XlWsZmPGJOlxCZfWSsbTCOt3Tiz1TMJcvyeKmLzPj8F49W2t7
-        rqNtP/iL44Lgz29NXXELMbk=
-X-Google-Smtp-Source: AMsMyM46qEZekBEhBsL2rQCglZLJDHG7q8ndkFW/p46TQddKcn21DGoW5OUV0AiB9/w7YBS/i3nxOA==
-X-Received: by 2002:a63:7e4d:0:b0:43c:8ce9:2a9f with SMTP id o13-20020a637e4d000000b0043c8ce92a9fmr11471320pgn.528.1666270928509;
-        Thu, 20 Oct 2022 06:02:08 -0700 (PDT)
-Received: from [192.168.43.80] (subs28-116-206-12-50.three.co.id. [116.206.12.50])
-        by smtp.gmail.com with ESMTPSA id h10-20020a170902680a00b0017300ec80b0sm12655901plk.308.2022.10.20.06.02.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Oct 2022 06:02:08 -0700 (PDT)
-Message-ID: <9e2e61c9-9d01-bb3a-1dc5-2f48fa7d94cd@gmail.com>
-Date:   Thu, 20 Oct 2022 20:02:02 +0700
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3lUJaqu0J8uHiOqGzROFev5mvIptXzWIUlXDpg3Z7v8=;
+        b=TK2/QwE1H0Nl7qBHskN7T+1JBywSxq1DnmY4qGRc4R3B3a6kGjjrjknz2MDQ3EXWjf
+         ddiR/N9uGpYgsMLDozkHJkiSRNxAj8zKERDix2swp6K3KqzzHXqJqry4yZn3q9lFEHFR
+         ca/NFCwz7Iyoj3EsfET9dMjgBx4WqqrIWY6nY4eiVdIiaErV5Rg4UoZuRKkdJ54zIgG0
+         Qkw0Uvspk2T0alleGCQRyeDc25arjj+VgityCg2qKJwIFTLu5npCCMrQvG0QGa3TKjcx
+         e0Fq0d53kRYfACPp0gTvrYM/MONE9cSfeQh6RCqtyVGNN1SBPSKOJ+5Y24MwgWzMR/wD
+         0LPQ==
+X-Gm-Message-State: ACrzQf02g3oEXL2ErN/OAi4CoDfOlhKq7iDcskKjjHeMOt/y9GOs6FBT
+        vXHJxjer1usk2eGuJdxqvUo=
+X-Google-Smtp-Source: AMsMyM4+6PM374Gyj2DQv2/S/zfoLY99XPugKikNwQJG38eZyHqATg8FtfwMPB9B1Y+1v9AuCZinNA==
+X-Received: by 2002:a05:6402:1e8e:b0:45c:af84:63dd with SMTP id f14-20020a0564021e8e00b0045caf8463ddmr12189234edf.190.1666270950925;
+        Thu, 20 Oct 2022 06:02:30 -0700 (PDT)
+Received: from skbuf ([188.27.184.197])
+        by smtp.gmail.com with ESMTPSA id g16-20020a056402115000b004575085bf18sm11938026edw.74.2022.10.20.06.02.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Oct 2022 06:02:28 -0700 (PDT)
+Date:   Thu, 20 Oct 2022 16:02:24 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     "Hans J. Schultz" <netdev@kapio-technology.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Florent Fourcot <florent.fourcot@wifirst.fr>,
+        Hans Schultz <schultz.hans@gmail.com>,
+        Joachim Wiberg <troglobit@gmail.com>,
+        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v8 net-next 05/12] net: dsa: propagate the locked flag
+ down through the DSA layer
+Message-ID: <20221020130224.6ralzvteoxfdwseb@skbuf>
+References: <20221018165619.134535-1-netdev@kapio-technology.com>
+ <20221018165619.134535-1-netdev@kapio-technology.com>
+ <20221018165619.134535-6-netdev@kapio-technology.com>
+ <20221018165619.134535-6-netdev@kapio-technology.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: BISECT result: 6.0.0-RC kernels trigger Firefox snap bug with
- 6.0.0-rc3 through 6.0.0-rc7
-Content-Language: en-US
-To:     Jintao Yin <nicememory@gmail.com>, phillip@squashfs.org.uk
-Cc:     hsinyi@chromium.org, linux-kernel@vger.kernel.org,
-        marcmiltenberger@gmail.com, mirsad.todorovac@alu.unizg.hr,
-        regressions@leemhuis.info, regressions@lists.linux.dev,
-        srw@sladewatkins.net
-References: <20221018174157.1897-1-phillip@squashfs.org.uk>
- <20221020074341.1431-1-nicememory@gmail.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20221020074341.1431-1-nicememory@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221018165619.134535-6-netdev@kapio-technology.com>
+ <20221018165619.134535-6-netdev@kapio-technology.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,164 +107,183 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/20/22 14:43, Jintao Yin wrote:
-> Ignore my before diff. I didn't notice the end_index caculation greater
-> than file_end part. Use the following diff instead.
+On Tue, Oct 18, 2022 at 06:56:12PM +0200, Hans J. Schultz wrote:
+> Add a new u16 for fdb flags to propagate through the DSA layer towards the
+> fdb add and del functions of the drivers.
 > 
-> This diff is based on Phillip's latest two patches and improves the logic
-> to update the status of pages only if page actor touches them.
+> Signed-off-by: Hans J. Schultz <netdev@kapio-technology.com>
+> ---
+>  include/net/dsa.h  |  2 ++
+>  net/dsa/dsa_priv.h |  6 ++++--
+>  net/dsa/port.c     | 10 ++++++----
+>  net/dsa/slave.c    | 10 ++++++++--
+>  net/dsa/switch.c   | 16 ++++++++--------
+>  5 files changed, 28 insertions(+), 16 deletions(-)
 > 
-> Please help test and feedbacks are welcome.
-> 
-> Thanks,
-> 
-> Jintao
-> 
-> diff --git a/fs/squashfs/file.c b/fs/squashfs/file.c
-> index e56510964b22..5efa2a9f9630 100644
-> --- a/fs/squashfs/file.c
-> +++ b/fs/squashfs/file.c
-> @@ -506,8 +506,9 @@ static int squashfs_readahead_fragment(struct page **page,
->  		squashfs_i(inode)->fragment_size);
->  	struct squashfs_sb_info *msblk = inode->i_sb->s_fs_info;
->  	unsigned int n, mask = (1 << (msblk->block_log - PAGE_SHIFT)) - 1;
-> +	int res = buffer->error;
->  
-> -	if (buffer->error)
-> +	if (res)
->  		goto out;
->  
->  	expected += squashfs_i(inode)->fragment_offset;
-> @@ -529,7 +530,7 @@ static int squashfs_readahead_fragment(struct page **page,
->  
->  out:
->  	squashfs_cache_put(buffer);
-> -	return buffer->error;
-> +	return res;
+> diff --git a/include/net/dsa.h b/include/net/dsa.h
+> index ee369670e20e..e4b641b20713 100644
+> --- a/include/net/dsa.h
+> +++ b/include/net/dsa.h
+> @@ -821,6 +821,8 @@ static inline bool dsa_port_tree_same(const struct dsa_port *a,
+>  	return a->ds->dst == b->ds->dst;
 >  }
 >  
->  static void squashfs_readahead(struct readahead_control *ractl)
-> @@ -557,6 +558,7 @@ static void squashfs_readahead(struct readahead_control *ractl)
->  		int res, bsize;
->  		u64 block = 0;
->  		unsigned int expected;
-> +		int nr_used_pages;
+> +#define DSA_FDB_FLAG_LOCKED		(1 << 0)
+> +
+>  typedef int dsa_fdb_dump_cb_t(const unsigned char *addr, u16 vid,
+>  			      bool is_static, void *data);
+>  struct dsa_switch_ops {
+> diff --git a/net/dsa/dsa_priv.h b/net/dsa/dsa_priv.h
+> index 6e65c7ffd6f3..c943e8934063 100644
+> --- a/net/dsa/dsa_priv.h
+> +++ b/net/dsa/dsa_priv.h
+> @@ -65,6 +65,7 @@ struct dsa_notifier_fdb_info {
+>  	const struct dsa_port *dp;
+>  	const unsigned char *addr;
+>  	u16 vid;
+> +	u16 fdb_flags;
+>  	struct dsa_db db;
+>  };
 >  
->  		nr_pages = __readahead_batch(ractl, pages, max_pages);
->  		if (!nr_pages)
-> @@ -593,18 +595,18 @@ static void squashfs_readahead(struct readahead_control *ractl)
+> @@ -131,6 +132,7 @@ struct dsa_switchdev_event_work {
+>  	 */
+>  	unsigned char addr[ETH_ALEN];
+>  	u16 vid;
+> +	u16 fdb_flags;
+>  	bool host_addr;
+>  };
 >  
->  		res = squashfs_read_data(inode->i_sb, block, bsize, NULL, actor);
->  
-> -		squashfs_page_actor_free(actor);
-> +		nr_used_pages = squashfs_page_actor_free(actor);
->  
->  		if (res == expected) {
->  			int bytes;
->  
->  			/* Last page (if present) may have trailing bytes not filled */
->  			bytes = res % PAGE_SIZE;
-> -			if (pages[nr_pages - 1]->index == file_end && bytes)
-> -				memzero_page(pages[nr_pages - 1], bytes,
-> +			if (index == file_end && bytes && nr_used_pages > 0)
-> +				memzero_page(pages[nr_used_pages - 1], bytes,
->  					     PAGE_SIZE - bytes);
->  
-> -			for (i = 0; i < nr_pages; i++) {
-> +			for (i = 0; i < nr_used_pages; i++) {
->  				flush_dcache_page(pages[i]);
->  				SetPageUptodate(pages[i]);
->  			}
-> diff --git a/fs/squashfs/file_direct.c b/fs/squashfs/file_direct.c
-> index f1ccad519e28..1bb0347f98b0 100644
-> --- a/fs/squashfs/file_direct.c
-> +++ b/fs/squashfs/file_direct.c
-> @@ -30,10 +30,9 @@ int squashfs_readpage_block(struct page *target_page, u64 block, int bsize,
->  	int mask = (1 << (msblk->block_log - PAGE_SHIFT)) - 1;
->  	int start_index = target_page->index & ~mask;
->  	int end_index = start_index | mask;
-> -	int i, n, pages, bytes, res = -ENOMEM;
-> +	int i, n, pages, used_pages, bytes, res = -ENOMEM;
->  	struct page **page;
->  	struct squashfs_page_actor *actor;
-> -	void *pageaddr;
->  
->  	if (end_index > file_end)
->  		end_index = file_end;
-> @@ -74,7 +73,7 @@ int squashfs_readpage_block(struct page *target_page, u64 block, int bsize,
->  	/* Decompress directly into the page cache buffers */
->  	res = squashfs_read_data(inode->i_sb, block, bsize, NULL, actor);
->  
-> -	squashfs_page_actor_free(actor);
-> +	used_pages = squashfs_page_actor_free(actor);
->  
->  	if (res < 0)
->  		goto mark_errored;
-> @@ -86,16 +85,18 @@ int squashfs_readpage_block(struct page *target_page, u64 block, int bsize,
->  
->  	/* Last page (if present) may have trailing bytes not filled */
->  	bytes = res % PAGE_SIZE;
-> -	if (page[pages - 1]->index == end_index && bytes) {
-> -		pageaddr = kmap_local_page(page[pages - 1]);
-> -		memset(pageaddr + bytes, 0, PAGE_SIZE - bytes);
-> -		kunmap_local(pageaddr);
-> +	if (used_pages > 0 && page[used_pages - 1]->index == end_index &&
-> +	    bytes) {
-> +		memzero_page(page[used_pages - 1], bytes,
-> +			     PAGE_SIZE - bytes);
->  	}
->  
->  	/* Mark pages as uptodate, unlock and release */
->  	for (i = 0; i < pages; i++) {
-> -		flush_dcache_page(page[i]);
-> -		SetPageUptodate(page[i]);
-> +		if (i < used_pages) {
-> +			flush_dcache_page(page[i]);
-> +			SetPageUptodate(page[i]);
-> +		}
->  		unlock_page(page[i]);
->  		if (page[i] != target_page)
->  			put_page(page[i]);
-> @@ -112,8 +113,10 @@ int squashfs_readpage_block(struct page *target_page, u64 block, int bsize,
->  	for (i = 0; i < pages; i++) {
->  		if (page[i] == NULL || page[i] == target_page)
->  			continue;
-> -		flush_dcache_page(page[i]);
-> -		SetPageError(page[i]);
-> +		if (i < used_pages) {
-> +			flush_dcache_page(page[i]);
-> +			SetPageError(page[i]);
-> +		}
->  		unlock_page(page[i]);
->  		put_page(page[i]);
->  	}
-> diff --git a/fs/squashfs/page_actor.h b/fs/squashfs/page_actor.h
-> index 95ffbb543d91..c2c5c3937ef9 100644
-> --- a/fs/squashfs/page_actor.h
-> +++ b/fs/squashfs/page_actor.h
-> @@ -29,10 +29,12 @@ extern struct squashfs_page_actor *squashfs_page_actor_init(void **buffer,
->  extern struct squashfs_page_actor *squashfs_page_actor_init_special(
->  				struct squashfs_sb_info *msblk,
->  				struct page **page, int pages, int length);
-> -static inline void squashfs_page_actor_free(struct squashfs_page_actor *actor)
-> +static inline int squashfs_page_actor_free(struct squashfs_page_actor *actor)
+> @@ -241,9 +243,9 @@ int dsa_port_vlan_msti(struct dsa_port *dp,
+>  		       const struct switchdev_vlan_msti *msti);
+>  int dsa_port_mtu_change(struct dsa_port *dp, int new_mtu);
+>  int dsa_port_fdb_add(struct dsa_port *dp, const unsigned char *addr,
+> -		     u16 vid);
+> +		     u16 vid, u16 fdb_flags);
+>  int dsa_port_fdb_del(struct dsa_port *dp, const unsigned char *addr,
+> -		     u16 vid);
+> +		     u16 vid, u16 fdb_flags);
+>  int dsa_port_standalone_host_fdb_add(struct dsa_port *dp,
+>  				     const unsigned char *addr, u16 vid);
+>  int dsa_port_standalone_host_fdb_del(struct dsa_port *dp,
+> diff --git a/net/dsa/port.c b/net/dsa/port.c
+> index 208168276995..ff4f66f14d39 100644
+> --- a/net/dsa/port.c
+> +++ b/net/dsa/port.c
+> @@ -304,7 +304,7 @@ static int dsa_port_inherit_brport_flags(struct dsa_port *dp,
+>  					 struct netlink_ext_ack *extack)
 >  {
-> +	int res = actor->next_page;
->  	kfree(actor->tmp_buffer);
->  	kfree(actor);
-> +	return res;
+>  	const unsigned long mask = BR_LEARNING | BR_FLOOD | BR_MCAST_FLOOD |
+> -				   BR_BCAST_FLOOD | BR_PORT_LOCKED;
+> +				   BR_BCAST_FLOOD;
+>  	struct net_device *brport_dev = dsa_port_to_bridge_port(dp);
+>  	int flag, err;
+>  
+> @@ -328,7 +328,7 @@ static void dsa_port_clear_brport_flags(struct dsa_port *dp)
+>  {
+>  	const unsigned long val = BR_FLOOD | BR_MCAST_FLOOD | BR_BCAST_FLOOD;
+>  	const unsigned long mask = BR_LEARNING | BR_FLOOD | BR_MCAST_FLOOD |
+> -				   BR_BCAST_FLOOD | BR_PORT_LOCKED;
+> +				   BR_BCAST_FLOOD | BR_PORT_LOCKED | BR_PORT_MAB;
+
+Why does the mask of cleared brport flags differ from the one of set
+brport flags, and what/where is the explanation for this change?
+
+>  	int flag, err;
+>  
+>  	for_each_set_bit(flag, &mask, 32) {
+> @@ -956,12 +956,13 @@ int dsa_port_mtu_change(struct dsa_port *dp, int new_mtu)
 >  }
->  static inline void *squashfs_first_page(struct squashfs_page_actor *actor)
+>  
+>  int dsa_port_fdb_add(struct dsa_port *dp, const unsigned char *addr,
+> -		     u16 vid)
+> +		     u16 vid, u16 fdb_flags)
 >  {
+>  	struct dsa_notifier_fdb_info info = {
+>  		.dp = dp,
+>  		.addr = addr,
+>  		.vid = vid,
+> +		.fdb_flags = fdb_flags,
+>  		.db = {
+>  			.type = DSA_DB_BRIDGE,
+>  			.bridge = *dp->bridge,
+> @@ -979,12 +980,13 @@ int dsa_port_fdb_add(struct dsa_port *dp, const unsigned char *addr,
+>  }
+>  
+>  int dsa_port_fdb_del(struct dsa_port *dp, const unsigned char *addr,
+> -		     u16 vid)
+> +		     u16 vid, u16 fdb_flags)
+>  {
+>  	struct dsa_notifier_fdb_info info = {
+>  		.dp = dp,
+>  		.addr = addr,
+>  		.vid = vid,
+> +		.fdb_flags = fdb_flags,
+>  		.db = {
+>  			.type = DSA_DB_BRIDGE,
+>  			.bridge = *dp->bridge,
+> diff --git a/net/dsa/slave.c b/net/dsa/slave.c
+> index 1a59918d3b30..65f0c578ef44 100644
+> --- a/net/dsa/slave.c
+> +++ b/net/dsa/slave.c
+> @@ -3246,6 +3246,7 @@ static void dsa_slave_switchdev_event_work(struct work_struct *work)
+>  		container_of(work, struct dsa_switchdev_event_work, work);
+>  	const unsigned char *addr = switchdev_work->addr;
+>  	struct net_device *dev = switchdev_work->dev;
+> +	u16 fdb_flags = switchdev_work->fdb_flags;
+>  	u16 vid = switchdev_work->vid;
+>  	struct dsa_switch *ds;
+>  	struct dsa_port *dp;
+> @@ -3261,7 +3262,7 @@ static void dsa_slave_switchdev_event_work(struct work_struct *work)
+>  		else if (dp->lag)
+>  			err = dsa_port_lag_fdb_add(dp, addr, vid);
+>  		else
+> -			err = dsa_port_fdb_add(dp, addr, vid);
+> +			err = dsa_port_fdb_add(dp, addr, vid, fdb_flags);
+>  		if (err) {
+>  			dev_err(ds->dev,
+>  				"port %d failed to add %pM vid %d to fdb: %d\n",
+> @@ -3277,7 +3278,7 @@ static void dsa_slave_switchdev_event_work(struct work_struct *work)
+>  		else if (dp->lag)
+>  			err = dsa_port_lag_fdb_del(dp, addr, vid);
+>  		else
+> -			err = dsa_port_fdb_del(dp, addr, vid);
+> +			err = dsa_port_fdb_del(dp, addr, vid, fdb_flags);
+>  		if (err) {
+>  			dev_err(ds->dev,
+>  				"port %d failed to delete %pM vid %d from fdb: %d\n",
+> @@ -3315,6 +3316,7 @@ static int dsa_slave_fdb_event(struct net_device *dev,
+>  	struct dsa_port *dp = dsa_slave_to_port(dev);
+>  	bool host_addr = fdb_info->is_local;
+>  	struct dsa_switch *ds = dp->ds;
+> +	u16 fdb_flags = 0;
+>  
+>  	if (ctx && ctx != dp)
+>  		return 0;
+> @@ -3361,6 +3363,9 @@ static int dsa_slave_fdb_event(struct net_device *dev,
+>  		   orig_dev->name, fdb_info->addr, fdb_info->vid,
+>  		   host_addr ? " as host address" : "");
+>  
+> +	if (fdb_info->locked)
+> +		fdb_flags |= DSA_FDB_FLAG_LOCKED;
 
-Hi Jintao,
+This is the bridge->driver direction. In which of the changes up until
+now/through which mechanism will the bridge emit a
+SWITCHDEV_FDB_ADD_TO_DEVICE with fdb_info->locked = true?
 
-Booting v6.1-rc1 with your patch applied, I got mixed results. On hello-world
-snap, it runs without errors. On lxd, I got the Verneed regression as
-originally reported. Sometimes I also get snapd panic.
+Don't the other switchdev drivers except DSA (search for SWITCHDEV_FDB_EVENT_TO_DEVICE
+in the drivers/ folder) need to handle this new flag too, even if to reject it?
 
-Thanks.
+When other drivers will want to look at fdb_info->locked, they'll have
+the surprise that it's impossible to maintain backwards compatibility,
+because they didn't use to treat the flag at all in the past (so either
+locked or unlocked, they did the same thing).
 
--- 
-An old man doll... just what I always wanted! - Clara
-
+> +
+>  	INIT_WORK(&switchdev_work->work, dsa_slave_switchdev_event_work);
+>  	switchdev_work->event = event;
+>  	switchdev_work->dev = dev;
+> @@ -3369,6 +3374,7 @@ static int dsa_slave_fdb_event(struct net_device *dev,
+>  	ether_addr_copy(switchdev_work->addr, fdb_info->addr);
+>  	switchdev_work->vid = fdb_info->vid;
+>  	switchdev_work->host_addr = host_addr;
+> +	switchdev_work->fdb_flags = fdb_flags;
