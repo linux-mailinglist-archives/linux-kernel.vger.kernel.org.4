@@ -2,808 +2,314 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 627E5606B40
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 00:24:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4F33606B41
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 00:26:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbiJTWYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 18:24:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42838 "EHLO
+        id S229608AbiJTW0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 18:26:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbiJTWYg (ORCPT
+        with ESMTP id S229449AbiJTW0C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 18:24:36 -0400
-Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31571248C9;
-        Thu, 20 Oct 2022 15:24:34 -0700 (PDT)
-Received: by mail-qv1-f41.google.com with SMTP id j8so667997qvo.6;
-        Thu, 20 Oct 2022 15:24:34 -0700 (PDT)
+        Thu, 20 Oct 2022 18:26:02 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B104B50B9B
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 15:25:59 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-35befab86a4so6929297b3.8
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 15:25:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=lYkpkk5lZ6UbU8vLJDuyL389k5VSF1GIIAgVM4h0/14=;
+        b=hsBVPwbjKrKrgBfExbAGtluOzJyrkQ/uRUoJYcAxAmlpY7/TgTVoO8LTUhQjvNxr/X
+         iZC0WFeSJ6xTaIL5UJ4VHjU0VWjqo9QCm3OriDAdpXSgmJL6AW5p4cQQnTA4fWXJjlIV
+         5Rc86aZI+5JzaezrOssbpeVCKRCpY90awmZST1MkeLjsJgPJnqExVP/pU8tFxTcTLXTA
+         IxSVjMXmVgjlPEuMDgd9XLItX+iA32e7iFW/PhylXjKj656W1OxzqmprpPNsD/QVtboU
+         ikazAfJGiD+BnSowbyVqV/B0hQj7JKHGMq8+1OwqTBouCMbSEyu5OoZ7Y3ynAdFNG7pE
+         gs2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9aZ+OmfC3WqmwDr6Z61AifhCCaQltrdfxVaW4RspNfI=;
-        b=fLUWzI0tXmtIoPiZWK6hiOxIrxX+OWYRs73A7upuZ04hx7vVvSH/6gnVlSb6AXaTNS
-         D5bPsLjnC59h/9S066naqwqZVb137kopCwMGTJboq8VIxtzCRPEB1dmVXBOnXrq2jIB/
-         SwL1JHry4GmPhVE/1v/amEE1h/MPxm3NOGdvf2HmxPh3yhHQL9Kv1tHjt6T0CZCijOQZ
-         14tvMYeBFHwJMR2F4yFAfalwyejazA+/+H4AIvOgwvXGLuvpudsRRdH3EGZngMfpCsy0
-         HDRKNTlhk+jPIp7O+eQE6oGdB6cuD302+Bmj7RMOil6qXk0UgOk2EtBdrC8elojntPmT
-         Ch9w==
-X-Gm-Message-State: ACrzQf3cNu5UZiPx8c01zwMN2O3nuFQdJTLNbwzV0QQUq2LB2W0hZC6y
-        /0SOZmtYPfqIcT1P5YDafIcqhOtVsthdvw==
-X-Google-Smtp-Source: AMsMyM6EJrcMfeyW5I011GSam5wd3aSsAxwXgDvtWNhLgzfBQHeHdKuWRcy/QOCgVLiUyFjvOuHNvQ==
-X-Received: by 2002:a0c:ab55:0:b0:4b9:4dd5:64ab with SMTP id i21-20020a0cab55000000b004b94dd564abmr3722464qvb.106.1666304672786;
-        Thu, 20 Oct 2022 15:24:32 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:480::80b7])
-        by smtp.gmail.com with ESMTPSA id bi39-20020a05620a31a700b006eeb64da8b1sm7944171qkb.2.2022.10.20.15.24.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 15:24:32 -0700 (PDT)
-From:   David Vernet <void@manifault.com>
-To:     bpf@vger.kernel.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@fb.com, tj@kernel.org, memxor@gmail.com
-Subject: [PATCH bpf-next v6 3/3] bpf/selftests: Add selftests for new task kfuncs
-Date:   Thu, 20 Oct 2022 17:24:16 -0500
-Message-Id: <20221020222416.3415511-4-void@manifault.com>
-X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221020222416.3415511-1-void@manifault.com>
-References: <20221020222416.3415511-1-void@manifault.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lYkpkk5lZ6UbU8vLJDuyL389k5VSF1GIIAgVM4h0/14=;
+        b=XbqLNirDk9e+sWIfS6SpLddLc4woTENaSDQmyM6CvNCGSwXBLVjNAda1WA5SXM0Lfn
+         tlPyxD6Pm08MAsT9GYbwAsTgQt5p75MBJBdWDzTfppm4qyI46jcVMgCOJ83AIwXIkbIF
+         9d1kMkIvs5sDq1diHKvOpRtTxUEBjAMlPlj65hsd2oA8PC1eTrG+AAenfy1ZUIcXAfx6
+         ez2tBqLkBP37XZ/a0NxM5m4Ot6vg/c222SQgUL6xmmN2O0oMElGNWgqaSgeVht9MMFzl
+         tIpzhBt0lCctPY4bTzfdrFjcD//veym9H/x/LckrEsUPebiJRxPjFLN6NDYKrfnmR3Qf
+         DlTg==
+X-Gm-Message-State: ACrzQf1OW6ydrXbMhl7oCuAyVAJy/HyCl+4K1Ob27bNuh6SSvpzeBXII
+        GHxhTbt3kz88ab7GZGhWHwj6jN4wuV3meVUMP6+5Og==
+X-Google-Smtp-Source: AMsMyM7X2xHBM6u9FmnN0WhferDVZmSwfocFQQeDg1zsd3uR3TG4kwpr+4GGxlDww7/51V1ZfDxvBTZD8XE0/bdLaYY=
+X-Received: by 2002:a0d:fe47:0:b0:361:2bf:6db4 with SMTP id
+ o68-20020a0dfe47000000b0036102bf6db4mr13861718ywf.438.1666304758501; Thu, 20
+ Oct 2022 15:25:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20221010225744.101629-1-surenb@google.com>
+In-Reply-To: <20221010225744.101629-1-surenb@google.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Thu, 20 Oct 2022 15:25:47 -0700
+Message-ID: <CAJuCfpHeJuZBbv-q+WXjgNHwt_caMomFPL3L9rxosXOrZz3fBw@mail.gmail.com>
+Subject: Re: [RESEND PATCH v4 1/1] psi: stop relying on timer_pending for
+ poll_work rescheduling
+To:     peterz@infradead.org
+Cc:     hannes@cmpxchg.org, mingo@redhat.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, matthias.bgg@gmail.com, minchan@google.com,
+        yt.chang@mediatek.com, wenju.xu@mediatek.com,
+        jonathan.jmchen@mediatek.com, show-hong.chen@mediatek.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A previous change added a series of kfuncs for storing struct
-task_struct objects as referenced kptrs. This patch adds a new
-task_kfunc test suite for validating their expected behavior.
+On Mon, Oct 10, 2022 at 3:57 PM Suren Baghdasaryan <surenb@google.com> wrote:
+>
+> Psi polling mechanism is trying to minimize the number of wakeups to
+> run psi_poll_work and is currently relying on timer_pending() to detect
+> when this work is already scheduled. This provides a window of opportunity
+> for psi_group_change to schedule an immediate psi_poll_work after
+> poll_timer_fn got called but before psi_poll_work could reschedule itself.
+> Below is the depiction of this entire window:
+>
+> poll_timer_fn
+>   wake_up_interruptible(&group->poll_wait);
+>
+> psi_poll_worker
+>   wait_event_interruptible(group->poll_wait, ...)
+>   psi_poll_work
+>     psi_schedule_poll_work
+>       if (timer_pending(&group->poll_timer)) return;
+>       ...
+>       mod_timer(&group->poll_timer, jiffies + delay);
+>
+> Prior to 461daba06bdc we used to rely on poll_scheduled atomic which was
+> reset and set back inside psi_poll_work and therefore this race window
+> was much smaller.
+> The larger window causes increased number of wakeups and our partners
+> report visible power regression of ~10mA after applying 461daba06bdc.
+> Bring back the poll_scheduled atomic and make this race window even
+> narrower by resetting poll_scheduled only when we reach polling expiration
+> time. This does not completely eliminate the possibility of extra wakeups
+> caused by a race with psi_group_change however it will limit it to the
+> worst case scenario of one extra wakeup per every tracking window (0.5s
+> in the worst case).
+> This patch also ensures correct ordering between clearing poll_scheduled
+> flag and obtaining changed_states using memory barrier. Correct ordering
+> between updating changed_states and setting poll_scheduled is ensured by
+> atomic_xchg operation.
+> By tracing the number of immediate rescheduling attempts performed by
+> psi_group_change and the number of these attempts being blocked due to
+> psi monitor being already active, we can assess the effects of this change:
+>
+> Before the patch:
+>                                            Run#1    Run#2      Run#3
+> Immediate reschedules attempted:           684365   1385156    1261240
+> Immediate reschedules blocked:             682846   1381654    1258682
+> Immediate reschedules (delta):             1519     3502       2558
+> Immediate reschedules (% of attempted):    0.22%    0.25%      0.20%
+>
+> After the patch:
+>                                            Run#1    Run#2      Run#3
+> Immediate reschedules attempted:           882244   770298    426218
+> Immediate reschedules blocked:             881996   769796    426074
+> Immediate reschedules (delta):             248      502       144
+> Immediate reschedules (% of attempted):    0.03%    0.07%     0.03%
+>
+> The number of non-blocked immediate reschedules dropped from 0.22-0.25%
+> to 0.03-0.07%. The drop is attributed to the decrease in the race window
+> size and the fact that we allow this race only when psi monitors reach
+> polling window expiration time.
+>
+> Fixes: 461daba06bdc ("psi: eliminate kthread_worker from psi trigger scheduling mechanism")
+> Reported-by: Kathleen Chang <yt.chang@mediatek.com>
+> Reported-by: Wenju Xu <wenju.xu@mediatek.com>
+> Reported-by: Jonathan Chen <jonathan.jmchen@mediatek.com>
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> Tested-by: SH Chen <show-hong.chen@mediatek.com>
+> Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+> ---
+> This patch somehow slipped through the cracks after being acked by Johannes in
+> [1] and I didn't notice it until now because we cherry-picked it into Android
+> kernel trees due to the urgency at that time. On the bright side, this change
+> has been tested for about a year in the field by millions of devices.
+> Resending v4 of this patch previously posted at [2], rebased on the latest
+> Linus' TOT.
 
-Signed-off-by: David Vernet <void@manifault.com>
----
- tools/testing/selftests/bpf/DENYLIST.s390x    |   1 +
- .../selftests/bpf/prog_tests/task_kfunc.c     | 160 +++++++++
- .../selftests/bpf/progs/task_kfunc_common.h   |  81 +++++
- .../selftests/bpf/progs/task_kfunc_failure.c  | 315 ++++++++++++++++++
- .../selftests/bpf/progs/task_kfunc_success.c  | 132 ++++++++
- 5 files changed, 689 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/task_kfunc.c
- create mode 100644 tools/testing/selftests/bpf/progs/task_kfunc_common.h
- create mode 100644 tools/testing/selftests/bpf/progs/task_kfunc_failure.c
- create mode 100644 tools/testing/selftests/bpf/progs/task_kfunc_success.c
+Hi Peter,
+We missed this Ack'ed patch last year and as I described above I
+didn't notice that up until now. With rc1 released, hopefully it's a
+good time to ping you to ask for inclusion of this patch in your tree.
+If the timing is not good, please let me know when to remind you and
+I'll send another email. Just want to make sure it does not slip
+again.
 
-diff --git a/tools/testing/selftests/bpf/DENYLIST.s390x b/tools/testing/selftests/bpf/DENYLIST.s390x
-index 520f12229b98..323a0e312b3d 100644
---- a/tools/testing/selftests/bpf/DENYLIST.s390x
-+++ b/tools/testing/selftests/bpf/DENYLIST.s390x
-@@ -52,6 +52,7 @@ skc_to_unix_sock                         # could not attach BPF object unexpecte
- socket_cookie                            # prog_attach unexpected error: -524                                          (trampoline)
- stacktrace_build_id                      # compare_map_keys stackid_hmap vs. stackmap err -2 errno 2                   (?)
- tailcalls                                # tail_calls are not allowed in non-JITed programs with bpf-to-bpf calls      (?)
-+task_kfunc                               # JIT does not support calling kernel function
- task_local_storage                       # failed to auto-attach program 'trace_exit_creds': -524                      (trampoline)
- test_bpffs                               # bpffs test  failed 255                                                      (iterator)
- test_bprm_opts                           # failed to auto-attach program 'secure_exec': -524                           (trampoline)
-diff --git a/tools/testing/selftests/bpf/prog_tests/task_kfunc.c b/tools/testing/selftests/bpf/prog_tests/task_kfunc.c
-new file mode 100644
-index 000000000000..0be90106fd96
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/task_kfunc.c
-@@ -0,0 +1,160 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2022 Meta Platforms, Inc. and affiliates. */
-+
-+#define _GNU_SOURCE
-+#include <sys/wait.h>
-+#include <test_progs.h>
-+#include <unistd.h>
-+
-+#include "task_kfunc_failure.skel.h"
-+#include "task_kfunc_success.skel.h"
-+
-+static size_t log_buf_sz = 1 << 20; /* 1 MB */
-+static char obj_log_buf[1048576];
-+
-+static struct task_kfunc_success *open_load_task_kfunc_skel(void)
-+{
-+	struct task_kfunc_success *skel;
-+	int err;
-+
-+	skel = task_kfunc_success__open();
-+	if (!ASSERT_OK_PTR(skel, "skel_open"))
-+		return NULL;
-+
-+	skel->bss->pid = getpid();
-+
-+	err = task_kfunc_success__load(skel);
-+	if (!ASSERT_OK(err, "skel_load"))
-+		goto cleanup;
-+
-+	return skel;
-+
-+cleanup:
-+	task_kfunc_success__destroy(skel);
-+	return NULL;
-+}
-+
-+static void run_success_test(const char *prog_name)
-+{
-+	struct task_kfunc_success *skel;
-+	int status;
-+	pid_t child_pid;
-+	struct bpf_program *prog;
-+	struct bpf_link *link = NULL;
-+
-+	skel = open_load_task_kfunc_skel();
-+	if (!ASSERT_OK_PTR(skel, "open_load_skel"))
-+		return;
-+
-+	if (!ASSERT_OK(skel->bss->err, "pre_spawn_err"))
-+		goto cleanup;
-+
-+	prog = bpf_object__find_program_by_name(skel->obj, prog_name);
-+	if (!ASSERT_OK_PTR(prog, "bpf_object__find_program_by_name"))
-+		goto cleanup;
-+
-+	link = bpf_program__attach(prog);
-+	if (!ASSERT_OK_PTR(link, "attached_link"))
-+		goto cleanup;
-+
-+	child_pid = fork();
-+	if (!ASSERT_GT(child_pid, -1, "child_pid"))
-+		goto cleanup;
-+	if (child_pid == 0)
-+		_exit(0);
-+	waitpid(child_pid, &status, 0);
-+
-+	ASSERT_OK(skel->bss->err, "post_wait_err");
-+
-+cleanup:
-+	bpf_link__destroy(link);
-+	task_kfunc_success__destroy(skel);
-+}
-+
-+static const char * const success_tests[] = {
-+	"test_task_acquire_release_argument",
-+	"test_task_acquire_release_current",
-+	"test_task_acquire_leave_in_map",
-+	"test_task_xchg_release",
-+	"test_task_get_release",
-+};
-+
-+static struct {
-+	const char *prog_name;
-+	const char *expected_err_msg;
-+} failure_tests[] = {
-+	{"task_kfunc_acquire_untrusted", "arg#0 pointer type STRUCT task_struct must point"},
-+	{"task_kfunc_acquire_fp", "arg#0 pointer type STRUCT task_struct must point"},
-+	{"task_kfunc_acquire_no_null_check", "arg#0 pointer type STRUCT task_struct must point"},
-+	{"task_kfunc_acquire_trusted_walked", "arg#0 pointer type STRUCT task_struct must point"},
-+	{"task_kfunc_acquire_null", "arg#0 pointer type STRUCT task_struct must point"},
-+	{"task_kfunc_acquire_unreleased", "Unreleased reference"},
-+	{"task_kfunc_get_non_kptr_param", "arg#0 expected pointer to map value"},
-+	{"task_kfunc_get_non_kptr_acquired", "arg#0 expected pointer to map value"},
-+	{"task_kfunc_get_null", "arg#0 expected pointer to map value"},
-+	{"task_kfunc_xchg_unreleased", "Unreleased reference"},
-+	{"task_kfunc_get_unreleased", "Unreleased reference"},
-+	{"task_kfunc_release_untrusted", "arg#0 pointer type STRUCT task_struct must point"},
-+	{"task_kfunc_release_fp", "arg#0 pointer type STRUCT task_struct must point"},
-+	{"task_kfunc_release_null", "arg#0 pointer type STRUCT task_struct must point"},
-+	{"task_kfunc_release_unacquired", "release kernel function bpf_task_release expects"},
-+};
-+
-+static void verify_fail(const char *prog_name, const char *expected_err_msg)
-+{
-+	LIBBPF_OPTS(bpf_object_open_opts, opts);
-+	struct task_kfunc_failure *skel;
-+	int err, i;
-+
-+	opts.kernel_log_buf = obj_log_buf;
-+	opts.kernel_log_size = log_buf_sz;
-+	opts.kernel_log_level = 1;
-+
-+	skel = task_kfunc_failure__open_opts(&opts);
-+	if (!ASSERT_OK_PTR(skel, "task_kfunc_failure__open_opts"))
-+		goto cleanup;
-+
-+	skel->bss->pid = getpid();
-+
-+	for (i = 0; i < ARRAY_SIZE(failure_tests); i++) {
-+		struct bpf_program *prog;
-+		const char *curr_name = failure_tests[i].prog_name;
-+
-+		prog = bpf_object__find_program_by_name(skel->obj, curr_name);
-+		if (!ASSERT_OK_PTR(prog, "bpf_object__find_program_by_name"))
-+			goto cleanup;
-+
-+		bpf_program__set_autoload(prog, !strcmp(curr_name, prog_name));
-+	}
-+
-+	err = task_kfunc_failure__load(skel);
-+	if (!ASSERT_ERR(err, "unexpected load success"))
-+		goto cleanup;
-+
-+	if (!ASSERT_OK_PTR(strstr(obj_log_buf, expected_err_msg), "expected_err_msg")) {
-+		fprintf(stderr, "Expected err_msg: %s\n", expected_err_msg);
-+		fprintf(stderr, "Verifier output: %s\n", obj_log_buf);
-+	}
-+
-+cleanup:
-+	task_kfunc_failure__destroy(skel);
-+}
-+
-+void test_task_kfunc(void)
-+{
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(success_tests); i++) {
-+		if (!test__start_subtest(success_tests[i]))
-+			continue;
-+
-+		run_success_test(success_tests[i]);
-+	}
-+
-+	for (i = 0; i < ARRAY_SIZE(failure_tests); i++) {
-+		if (!test__start_subtest(failure_tests[i].prog_name))
-+			continue;
-+
-+		verify_fail(failure_tests[i].prog_name, failure_tests[i].expected_err_msg);
-+	}
-+}
-diff --git a/tools/testing/selftests/bpf/progs/task_kfunc_common.h b/tools/testing/selftests/bpf/progs/task_kfunc_common.h
-new file mode 100644
-index 000000000000..a5bb7604505a
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/task_kfunc_common.h
-@@ -0,0 +1,81 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/* Copyright (c) 2022 Meta Platforms, Inc. and affiliates. */
-+
-+#ifndef _TASK_KFUNC_COMMON_H
-+#define _TASK_KFUNC_COMMON_H
-+
-+#include <errno.h>
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+struct __tasks_kfunc_map_value {
-+	struct task_struct __kptr_ref * task;
-+};
-+
-+struct hash_map {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__type(key, int);
-+	__type(value, struct __tasks_kfunc_map_value);
-+	__uint(max_entries, 1);
-+} __tasks_kfunc_map SEC(".maps");
-+
-+struct task_struct *bpf_task_acquire(struct task_struct *p) __ksym;
-+struct task_struct *bpf_task_kptr_get(struct task_struct **pp) __ksym;
-+void bpf_task_release(struct task_struct *p) __ksym;
-+
-+/* The pid of the test process used to determine if a newly created task is the test task. */
-+int pid;
-+
-+static inline struct __tasks_kfunc_map_value *tasks_kfunc_map_value_lookup(struct task_struct *p)
-+{
-+	s32 pid;
-+	long status;
-+
-+	status = bpf_probe_read_kernel(&pid, sizeof(pid), &p->pid);
-+	if (status)
-+		return NULL;
-+
-+	return bpf_map_lookup_elem(&__tasks_kfunc_map, &pid);
-+}
-+
-+static inline int tasks_kfunc_map_insert(struct task_struct *p)
-+{
-+	struct __tasks_kfunc_map_value local, *v;
-+	long status;
-+	struct task_struct *acquired, *old;
-+	s32 pid;
-+
-+	status = bpf_probe_read_kernel(&pid, sizeof(pid), &p->pid);
-+	if (status)
-+		return status;
-+
-+	local.task = NULL;
-+	status = bpf_map_update_elem(&__tasks_kfunc_map, &pid, &local, BPF_NOEXIST);
-+	if (status)
-+		return status;
-+
-+	v = bpf_map_lookup_elem(&__tasks_kfunc_map, &pid);
-+	if (!v) {
-+		bpf_map_delete_elem(&__tasks_kfunc_map, &pid);
-+		return status;
-+	}
-+
-+	acquired = bpf_task_acquire(p);
-+	old = bpf_kptr_xchg(&v->task, acquired);
-+	if (old) {
-+		bpf_task_release(old);
-+		return -EEXIST;
-+	}
-+
-+	return 0;
-+}
-+
-+static inline bool is_test_kfunc_task(void)
-+{
-+	int cur_pid = bpf_get_current_pid_tgid() >> 32;
-+
-+	return pid == cur_pid;
-+}
-+
-+#endif /* _TASK_KFUNC_COMMON_H */
-diff --git a/tools/testing/selftests/bpf/progs/task_kfunc_failure.c b/tools/testing/selftests/bpf/progs/task_kfunc_failure.c
-new file mode 100644
-index 000000000000..892ee73a928c
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/task_kfunc_failure.c
-@@ -0,0 +1,315 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2022 Meta Platforms, Inc. and affiliates. */
-+
-+#include <vmlinux.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_helpers.h>
-+
-+#include "task_kfunc_common.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+/* Prototype for all of the program trace events below:
-+ *
-+ * TRACE_EVENT(task_newtask,
-+ *         TP_PROTO(struct task_struct *p, u64 clone_flags)
-+ */
-+
-+static struct __tasks_kfunc_map_value *insert_lookup_task(struct task_struct *task)
-+{
-+	int status;
-+
-+	status = tasks_kfunc_map_insert(task);
-+	if (status)
-+		return NULL;
-+
-+	return tasks_kfunc_map_value_lookup(task);
-+}
-+
-+SEC("tp_btf/task_newtask")
-+int BPF_PROG(task_kfunc_acquire_untrusted, struct task_struct *task, u64 clone_flags)
-+{
-+	struct task_struct *acquired;
-+	struct __tasks_kfunc_map_value *v;
-+
-+	if (!is_test_kfunc_task())
-+		return 0;
-+
-+	v = insert_lookup_task(task);
-+	if (!v)
-+		return 0;
-+
-+	/* Can't invoke bpf_task_acquire() on an untrusted pointer. */
-+	acquired = bpf_task_acquire(v->task);
-+	if (!acquired)
-+		return 0;
-+
-+	bpf_task_release(acquired);
-+
-+	return 0;
-+}
-+
-+SEC("tp_btf/task_newtask")
-+int BPF_PROG(task_kfunc_acquire_fp, struct task_struct *task, u64 clone_flags)
-+{
-+	struct task_struct *acquired, *stack_task = (struct task_struct *)&clone_flags;
-+
-+	if (!is_test_kfunc_task())
-+		return 0;
-+
-+	/* Can't invoke bpf_task_acquire() on a random frame pointer. */
-+	acquired = bpf_task_acquire((struct task_struct *)&stack_task);
-+	if (!acquired)
-+		return 0;
-+	bpf_task_release(acquired);
-+
-+	return 0;
-+}
-+
-+SEC("tp_btf/task_newtask")
-+int BPF_PROG(task_kfunc_acquire_no_null_check, struct task_struct *task, u64 clone_flags)
-+{
-+	struct task_struct *acquired;
-+
-+	if (!is_test_kfunc_task())
-+		return 0;
-+
-+	acquired = bpf_task_acquire(task);
-+	/* Can't release a bpf_task_acquire()'d task without a NULL check. */
-+	bpf_task_release(acquired);
-+
-+	return 0;
-+}
-+
-+SEC("tp_btf/task_newtask")
-+int BPF_PROG(task_kfunc_acquire_trusted_walked, struct task_struct *task, u64 clone_flags)
-+{
-+	struct task_struct *acquired;
-+
-+	if (!is_test_kfunc_task())
-+		return 0;
-+
-+	/* Can't invoke bpf_task_acquire() on a trusted pointer obtained from walking a struct. */
-+	acquired = bpf_task_acquire(task->last_wakee);
-+	if (!acquired)
-+		return 0;
-+	bpf_task_release(acquired);
-+
-+	return 0;
-+}
-+
-+
-+SEC("tp_btf/task_newtask")
-+int BPF_PROG(task_kfunc_acquire_null, struct task_struct *task, u64 clone_flags)
-+{
-+	struct task_struct *acquired;
-+
-+	if (!is_test_kfunc_task())
-+		return 0;
-+
-+	/* Can't invoke bpf_task_acquire() on a NULL pointer. */
-+	acquired = bpf_task_acquire(NULL);
-+	if (!acquired)
-+		return 0;
-+	bpf_task_release(acquired);
-+
-+	return 0;
-+}
-+
-+SEC("tp_btf/task_newtask")
-+int BPF_PROG(task_kfunc_acquire_unreleased, struct task_struct *task, u64 clone_flags)
-+{
-+	struct task_struct *acquired;
-+
-+	if (!is_test_kfunc_task())
-+		return 0;
-+
-+	acquired = bpf_task_acquire(task);
-+
-+	/* Acquired task is never released. */
-+
-+	return 0;
-+}
-+
-+SEC("tp_btf/task_newtask")
-+int BPF_PROG(task_kfunc_get_non_kptr_param, struct task_struct *task, u64 clone_flags)
-+{
-+	struct task_struct *kptr;
-+
-+	if (!is_test_kfunc_task())
-+		return 0;
-+
-+	/* Cannot use bpf_task_kptr_get() on a non-kptr, even on a valid task. */
-+	kptr = bpf_task_kptr_get(&task);
-+	if (!kptr)
-+		return 0;
-+
-+	bpf_task_release(kptr);
-+
-+	return 0;
-+}
-+
-+SEC("tp_btf/task_newtask")
-+int BPF_PROG(task_kfunc_get_non_kptr_acquired, struct task_struct *task, u64 clone_flags)
-+{
-+	struct task_struct *kptr, *acquired;
-+
-+	if (!is_test_kfunc_task())
-+		return 0;
-+
-+	acquired = bpf_task_acquire(task);
-+	if (!acquired)
-+		return 0;
-+
-+	/* Cannot use bpf_task_kptr_get() on a non-kptr, even if it was acquired. */
-+	kptr = bpf_task_kptr_get(&acquired);
-+	bpf_task_release(acquired);
-+	if (!kptr)
-+		return 0;
-+
-+	bpf_task_release(kptr);
-+
-+	return 0;
-+}
-+
-+SEC("tp_btf/task_newtask")
-+int BPF_PROG(task_kfunc_get_null, struct task_struct *task, u64 clone_flags)
-+{
-+	struct task_struct *kptr;
-+
-+	if (!is_test_kfunc_task())
-+		return 0;
-+
-+	/* Cannot use bpf_task_kptr_get() on a NULL pointer. */
-+	kptr = bpf_task_kptr_get(NULL);
-+	if (!kptr)
-+		return 0;
-+
-+	bpf_task_release(kptr);
-+
-+	return 0;
-+}
-+
-+SEC("tp_btf/task_newtask")
-+int BPF_PROG(task_kfunc_xchg_unreleased, struct task_struct *task, u64 clone_flags)
-+{
-+	struct task_struct *kptr;
-+	struct __tasks_kfunc_map_value *v;
-+
-+	if (!is_test_kfunc_task())
-+		return 0;
-+
-+	v = insert_lookup_task(task);
-+	if (!v)
-+		return 0;
-+
-+	kptr = bpf_kptr_xchg(&v->task, NULL);
-+	if (!kptr)
-+		return 0;
-+
-+	/* Kptr retrieved from map is never released. */
-+
-+	return 0;
-+}
-+
-+SEC("tp_btf/task_newtask")
-+int BPF_PROG(task_kfunc_get_unreleased, struct task_struct *task, u64 clone_flags)
-+{
-+	struct task_struct *kptr;
-+	struct __tasks_kfunc_map_value *v;
-+
-+	if (!is_test_kfunc_task())
-+		return 0;
-+
-+	v = insert_lookup_task(task);
-+	if (!v)
-+		return 0;
-+
-+	kptr = bpf_task_kptr_get(&v->task);
-+	if (!kptr)
-+		return 0;
-+
-+	/* Kptr acquired above is never released. */
-+
-+	return 0;
-+}
-+
-+SEC("tp_btf/task_newtask")
-+int BPF_PROG(task_kfunc_release_untrusted, struct task_struct *task, u64 clone_flags)
-+{
-+	struct __tasks_kfunc_map_value *v;
-+
-+	if (!is_test_kfunc_task())
-+		return 0;
-+
-+	v = insert_lookup_task(task);
-+	if (!v)
-+		return 0;
-+
-+	/* Can't invoke bpf_task_release() on an untrusted pointer. */
-+	bpf_task_release(v->task);
-+
-+	return 0;
-+}
-+
-+SEC("tp_btf/task_newtask")
-+int BPF_PROG(task_kfunc_release_fp, struct task_struct *task, u64 clone_flags)
-+{
-+	struct task_struct *acquired = (struct task_struct *)&clone_flags;
-+
-+	if (!is_test_kfunc_task())
-+		return 0;
-+
-+	/* Cannot release random frame pointer. */
-+	bpf_task_release(acquired);
-+
-+	return 0;
-+}
-+
-+SEC("tp_btf/task_newtask")
-+int BPF_PROG(task_kfunc_release_null, struct task_struct *task, u64 clone_flags)
-+{
-+	struct __tasks_kfunc_map_value local, *v;
-+	long status;
-+	struct task_struct *acquired, *old;
-+	s32 pid;
-+
-+	if (!is_test_kfunc_task())
-+		return 0;
-+
-+	status = bpf_probe_read_kernel(&pid, sizeof(pid), &task->pid);
-+	if (status)
-+		return 0;
-+
-+	local.task = NULL;
-+	status = bpf_map_update_elem(&__tasks_kfunc_map, &pid, &local, BPF_NOEXIST);
-+	if (status)
-+		return status;
-+
-+	v = bpf_map_lookup_elem(&__tasks_kfunc_map, &pid);
-+	if (!v)
-+		return status;
-+
-+	acquired = bpf_task_acquire(task);
-+	if (!acquired)
-+		return 0;
-+
-+	old = bpf_kptr_xchg(&v->task, acquired);
-+
-+	/* old cannot be passed to bpf_task_release() without a NULL check. */
-+	bpf_task_release(old);
-+
-+	return 0;
-+}
-+
-+SEC("tp_btf/task_newtask")
-+int BPF_PROG(task_kfunc_release_unacquired, struct task_struct *task, u64 clone_flags)
-+{
-+	if (!is_test_kfunc_task())
-+		return 0;
-+
-+	/* Cannot release trusted task pointer which was not acquired. */
-+	bpf_task_release(task);
-+
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/bpf/progs/task_kfunc_success.c b/tools/testing/selftests/bpf/progs/task_kfunc_success.c
-new file mode 100644
-index 000000000000..8d5c05b41d53
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/task_kfunc_success.c
-@@ -0,0 +1,132 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2022 Meta Platforms, Inc. and affiliates. */
-+
-+#include <vmlinux.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_helpers.h>
-+
-+#include "task_kfunc_common.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+int err;
-+
-+/* Prototype for all of the program trace events below:
-+ *
-+ * TRACE_EVENT(task_newtask,
-+ *         TP_PROTO(struct task_struct *p, u64 clone_flags)
-+ */
-+
-+static int test_acquire_release(struct task_struct *task)
-+{
-+	struct task_struct *acquired;
-+
-+	acquired = bpf_task_acquire(task);
-+	if (!acquired) {
-+		err = 1;
-+		return 0;
-+	}
-+
-+	bpf_task_release(acquired);
-+
-+	return 0;
-+}
-+
-+SEC("tp_btf/task_newtask")
-+int BPF_PROG(test_task_acquire_release_argument, struct task_struct *task, u64 clone_flags)
-+{
-+	if (!is_test_kfunc_task())
-+		return 0;
-+
-+	return test_acquire_release(task);
-+}
-+
-+SEC("tp_btf/task_newtask")
-+int BPF_PROG(test_task_acquire_release_current, struct task_struct *task, u64 clone_flags)
-+{
-+	if (!is_test_kfunc_task())
-+		return 0;
-+
-+	return test_acquire_release(bpf_get_current_task_btf());
-+}
-+
-+SEC("tp_btf/task_newtask")
-+int BPF_PROG(test_task_acquire_leave_in_map, struct task_struct *task, u64 clone_flags)
-+{
-+	long status;
-+
-+	if (!is_test_kfunc_task())
-+		return 0;
-+
-+	status = tasks_kfunc_map_insert(task);
-+	if (status)
-+		err = 1;
-+
-+	return 0;
-+}
-+
-+SEC("tp_btf/task_newtask")
-+int BPF_PROG(test_task_xchg_release, struct task_struct *task, u64 clone_flags)
-+{
-+	struct task_struct *kptr;
-+	struct __tasks_kfunc_map_value *v;
-+	long status;
-+
-+	if (!is_test_kfunc_task())
-+		return 0;
-+
-+	status = tasks_kfunc_map_insert(task);
-+	if (status) {
-+		err = 1;
-+		return 0;
-+	}
-+
-+	v = tasks_kfunc_map_value_lookup(task);
-+	if (!v) {
-+		err = 2;
-+		return 0;
-+	}
-+
-+	kptr = bpf_kptr_xchg(&v->task, NULL);
-+	if (!kptr) {
-+		err = 3;
-+		return 0;
-+	}
-+
-+	bpf_task_release(kptr);
-+
-+	return 0;
-+}
-+
-+SEC("tp_btf/task_newtask")
-+int BPF_PROG(test_task_get_release, struct task_struct *task, u64 clone_flags)
-+{
-+	struct task_struct *kptr;
-+	struct __tasks_kfunc_map_value *v;
-+	long status;
-+
-+	if (!is_test_kfunc_task())
-+		return 0;
-+
-+	status = tasks_kfunc_map_insert(task);
-+	if (status) {
-+		err = 1;
-+		return 0;
-+	}
-+
-+	v = tasks_kfunc_map_value_lookup(task);
-+	if (!v) {
-+		err = 2;
-+		return 0;
-+	}
-+
-+	kptr = bpf_task_kptr_get(&v->task);
-+	if (!kptr) {
-+		err = 3;
-+		return 0;
-+	}
-+
-+	bpf_task_release(kptr);
-+
-+	return 0;
-+}
--- 
-2.38.0
+Just FYI, we have two other Ack'ed PSI patches for you to consider:
 
+https://lore.kernel.org/all/20221014110551.22695-1-zhouchengming@bytedance.com/
+https://lore.kernel.org/all/20220919072356.GA29069@haolee.io/
+
+Thanks,
+Suren.
+
+
+
+>
+> [1] https://lore.kernel.org/lkml/YOdwxh3487PeMHRX@cmpxchg.org/
+> [2] https://lore.kernel.org/lkml/20210708203648.2399667-1-surenb@google.com/
+>
+>  include/linux/psi_types.h |  1 +
+>  kernel/sched/psi.c        | 60 +++++++++++++++++++++++++++++++++------
+>  2 files changed, 52 insertions(+), 9 deletions(-)
+>
+> diff --git a/include/linux/psi_types.h b/include/linux/psi_types.h
+> index c7fe7c089718..3f78c9bf7bb1 100644
+> --- a/include/linux/psi_types.h
+> +++ b/include/linux/psi_types.h
+> @@ -170,6 +170,7 @@ struct psi_group {
+>         struct timer_list poll_timer;
+>         wait_queue_head_t poll_wait;
+>         atomic_t poll_wakeup;
+> +       atomic_t poll_scheduled;
+>
+>         /* Protects data used by the monitor */
+>         struct mutex trigger_lock;
+> diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
+> index 7f6030091aee..2f548beeae50 100644
+> --- a/kernel/sched/psi.c
+> +++ b/kernel/sched/psi.c
+> @@ -188,6 +188,7 @@ static void group_init(struct psi_group *group)
+>         INIT_DELAYED_WORK(&group->avgs_work, psi_avgs_work);
+>         mutex_init(&group->avgs_lock);
+>         /* Init trigger-related members */
+> +       atomic_set(&group->poll_scheduled, 0);
+>         mutex_init(&group->trigger_lock);
+>         INIT_LIST_HEAD(&group->triggers);
+>         group->poll_min_period = U32_MAX;
+> @@ -561,18 +562,17 @@ static u64 update_triggers(struct psi_group *group, u64 now)
+>         return now + group->poll_min_period;
+>  }
+>
+> -/* Schedule polling if it's not already scheduled. */
+> -static void psi_schedule_poll_work(struct psi_group *group, unsigned long delay)
+> +/* Schedule polling if it's not already scheduled or forced. */
+> +static void psi_schedule_poll_work(struct psi_group *group, unsigned long delay,
+> +                                  bool force)
+>  {
+>         struct task_struct *task;
+>
+>         /*
+> -        * Do not reschedule if already scheduled.
+> -        * Possible race with a timer scheduled after this check but before
+> -        * mod_timer below can be tolerated because group->polling_next_update
+> -        * will keep updates on schedule.
+> +        * atomic_xchg should be called even when !force to provide a
+> +        * full memory barrier (see the comment inside psi_poll_work).
+>          */
+> -       if (timer_pending(&group->poll_timer))
+> +       if (atomic_xchg(&group->poll_scheduled, 1) && !force)
+>                 return;
+>
+>         rcu_read_lock();
+> @@ -584,12 +584,15 @@ static void psi_schedule_poll_work(struct psi_group *group, unsigned long delay)
+>          */
+>         if (likely(task))
+>                 mod_timer(&group->poll_timer, jiffies + delay);
+> +       else
+> +               atomic_set(&group->poll_scheduled, 0);
+>
+>         rcu_read_unlock();
+>  }
+>
+>  static void psi_poll_work(struct psi_group *group)
+>  {
+> +       bool force_reschedule = false;
+>         u32 changed_states;
+>         u64 now;
+>
+> @@ -597,6 +600,43 @@ static void psi_poll_work(struct psi_group *group)
+>
+>         now = sched_clock();
+>
+> +       if (now > group->polling_until) {
+> +               /*
+> +                * We are either about to start or might stop polling if no
+> +                * state change was recorded. Resetting poll_scheduled leaves
+> +                * a small window for psi_group_change to sneak in and schedule
+> +                * an immegiate poll_work before we get to rescheduling. One
+> +                * potential extra wakeup at the end of the polling window
+> +                * should be negligible and polling_next_update still keeps
+> +                * updates correctly on schedule.
+> +                */
+> +               atomic_set(&group->poll_scheduled, 0);
+> +               /*
+> +                * A task change can race with the poll worker that is supposed to
+> +                * report on it. To avoid missing events, ensure ordering between
+> +                * poll_scheduled and the task state accesses, such that if the poll
+> +                * worker misses the state update, the task change is guaranteed to
+> +                * reschedule the poll worker:
+> +                *
+> +                * poll worker:
+> +                *   atomic_set(poll_scheduled, 0)
+> +                *   smp_mb()
+> +                *   LOAD states
+> +                *
+> +                * task change:
+> +                *   STORE states
+> +                *   if atomic_xchg(poll_scheduled, 1) == 0:
+> +                *     schedule poll worker
+> +                *
+> +                * The atomic_xchg() implies a full barrier.
+> +                */
+> +               smp_mb();
+> +       } else {
+> +               /* Polling window is not over, keep rescheduling */
+> +               force_reschedule = true;
+> +       }
+> +
+> +
+>         collect_percpu_times(group, PSI_POLL, &changed_states);
+>
+>         if (changed_states & group->poll_states) {
+> @@ -622,7 +662,8 @@ static void psi_poll_work(struct psi_group *group)
+>                 group->polling_next_update = update_triggers(group, now);
+>
+>         psi_schedule_poll_work(group,
+> -               nsecs_to_jiffies(group->polling_next_update - now) + 1);
+> +               nsecs_to_jiffies(group->polling_next_update - now) + 1,
+> +               force_reschedule);
+>
+>  out:
+>         mutex_unlock(&group->trigger_lock);
+> @@ -747,7 +788,7 @@ static void psi_group_change(struct psi_group *group, int cpu,
+>         write_seqcount_end(&groupc->seq);
+>
+>         if (state_mask & group->poll_states)
+> -               psi_schedule_poll_work(group, 1);
+> +               psi_schedule_poll_work(group, 1, false);
+>
+>         if (wake_clock && !delayed_work_pending(&group->avgs_work))
+>                 schedule_delayed_work(&group->avgs_work, PSI_FREQ);
+> @@ -1223,6 +1264,7 @@ void psi_trigger_destroy(struct psi_trigger *t)
+>                  * can no longer be found through group->poll_task.
+>                  */
+>                 kthread_stop(task_to_destroy);
+> +               atomic_set(&group->poll_scheduled, 0);
+>         }
+>         kfree(t);
+>  }
+> --
+> 2.38.0.rc1.362.ged0d419d3c-goog
+>
