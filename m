@@ -2,69 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64F11606591
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 18:19:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63D85606593
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 18:19:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230481AbiJTQTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 12:19:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41762 "EHLO
+        id S230478AbiJTQTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 12:19:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230486AbiJTQS7 (ORCPT
+        with ESMTP id S230327AbiJTQTO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 12:18:59 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C287B18858D
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 09:18:58 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id d26so678235ejc.8
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 09:18:58 -0700 (PDT)
+        Thu, 20 Oct 2022 12:19:14 -0400
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B301B90FC
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 09:19:12 -0700 (PDT)
+Received: by mail-qt1-x82f.google.com with SMTP id a24so14000444qto.10
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 09:19:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=4WItWIyPgXs/R6oBIWo9I4nh7TuifrcMi4m2Jb4BDCQ=;
-        b=R0iinNvADiMzfX1pv64vP7mJ9k92NZ9PYJrC9DBL8Sxx48kBI65rHgtKBpR9tzvFBu
-         uHkEml7l5IKe57yZgnNyPFLUVrdVcocL6RPB0Y4IK8/jXk2M2hrNnbQSlwtyAnG25L0i
-         5xzu0G/uhpHNFY52QK9wy2LJWbUz1ftE0sFt0mAB1fOC4l6VPMXUyMn9ndUK5I2pcJLc
-         evp79wio1ya5Q3hPsoZIqnMXDocGfwhFKeVXdrNGWdI4CZRteAciJFb/ho4adR8IY+tr
-         0ZnRObSZ1s9YHR3v8WD1Q4zcD4LEFMK8HVNkTkT2TOz8gLq5whMrYS3+Ke7ddIG7xBKO
-         2fUQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3nmjFBEeD9ZP/eQLwAKtGJ8tL9wL4OpdvH58XZgElX0=;
+        b=Ew3XbGq/ADOFDDQULys1w5f0CUfRk2TBhCZqASgyGf36zV7VrScYztVOw8PmvpPlIB
+         HYGwtPKOluSR6DSzzIvr24JeJ0YYWoedtS8MzVoC5I74C3fbl78BwL4tOR0KcydB2KSb
+         /V2CzhHyrKES9ZLC827HHJDu0gp7CJm6ybgYZrtdqvPzZMmoCUXj/HWvUXMmWbIG1pmn
+         T1bsNTHO9qQzwZZnkI0HRDhTTPZ9azKvLazcaXqn1eFLd1J/GxU3DtrwmOLyVeSlsYvg
+         bG461MfFxyncmwL3rNmwLUZIHwqKECSrwdyKE4M5VeHTEJ9bCVZBJz3/LEdk03MCSnR0
+         Cw8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4WItWIyPgXs/R6oBIWo9I4nh7TuifrcMi4m2Jb4BDCQ=;
-        b=V7jaofbH0GnT71ibfIOXlG/d3+VBIgJVAthwQs+bccSirscv/cantGksa6YDgd9YKs
-         0ZRbDRiQN/Tgdg7BxAby3qM7w+2kwTYtQXRpWe0WiT21tnDiQ4rHRZRd6IC6d9+3QEaO
-         qD7HaYXpB72BMfMV+AL3frjFHOSPzVB0lhcU7pr0J2hN7000Hg16O/gbILmZLdi5y0J8
-         XlfoNsNZs6GVyIRW5UY52N4gs4Jc5sJXASQ2zczSfeVKDlanTzZZKV9m/6fkIuintyov
-         2RJYruUOyXzoW7oDbB6bTwWAqMowq9xHTo2O1gdEg4Tx8ICfotPCfV+KVY2DYqFUXV/9
-         2v4g==
-X-Gm-Message-State: ACrzQf2Abyj0Kb7pb3K1GUc5QoaTJjoFfqbdsilS9qq1A8VxGidvcIK+
-        DTUI3K6Ty91K6em1fU45uJbh++2MmQfKeKKwmtIzVwXDXPBjuA==
-X-Google-Smtp-Source: AMsMyM7tMEvGlLOgkP3LxInWjp4wp4/OOeicynT0n8ZD3NJXOvefXEy70Vd0E9wPHTMVkFhbOR+Hzj3MVIobKHcs47Q=
-X-Received: by 2002:a17:906:fe46:b0:73d:939a:ec99 with SMTP id
- wz6-20020a170906fe4600b0073d939aec99mr11847467ejb.169.1666282726653; Thu, 20
- Oct 2022 09:18:46 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3nmjFBEeD9ZP/eQLwAKtGJ8tL9wL4OpdvH58XZgElX0=;
+        b=bliwMLMVMvmDlJL3KDzsr+yZupooldnTF2F1c0qJGJNx1A8xgGiHB4889IeIHzlCzW
+         jZfmYurMC5EaaGVzwJrZil9jKgctOdGpdvtJAv5GH9R+blGufoORSGkL/T3LrOZRnWR1
+         laE97ZCh+bOWjPTnanX0O04jLa6BJyMBT6s4JtDXwew+826tkwrLLV9PVOHIcX6Pyj6W
+         RKopMMC24336lBNMx6GSsrZLB9fZx2kMXmiTyDrI+m4BKwKUydVeosNBBrMR8rNHsE9z
+         uw3HS29LTpN9YCQJNAmJ1kud8YOrj9Yk+BRiOVP54lKmbB1N9P0bfWv19hKBMDzqqcTN
+         B9oQ==
+X-Gm-Message-State: ACrzQf1mp/SdKgpCNo8Xu6QY2WhE+4JuFqC9rMA/MC9+477QK/03OU8B
+        FHW3XvONhGmTElwK6EeilSoJhg==
+X-Google-Smtp-Source: AMsMyM7XjZb4dPpbk62kCztyoDByKSy+hibNQg8o9nkkhr20RuX1MAdCla2yOjzYa0GvSTYvZIsm+g==
+X-Received: by 2002:ac8:7c44:0:b0:39c:cbe1:2787 with SMTP id o4-20020ac87c44000000b0039ccbe12787mr11764085qtv.214.1666282750048;
+        Thu, 20 Oct 2022 09:19:10 -0700 (PDT)
+Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
+        by smtp.gmail.com with ESMTPSA id r17-20020ac87951000000b0039cb9ef50b5sm6277185qtt.26.2022.10.20.09.19.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Oct 2022 09:19:09 -0700 (PDT)
+Message-ID: <aaf7d4a9-c767-6a63-691d-e3ae00b206fc@linaro.org>
+Date:   Thu, 20 Oct 2022 12:19:07 -0400
 MIME-Version: 1.0
-References: <20221019195815.1298915-1-dionnaglaze@google.com> <3265d311-0e02-6e98-377a-d93a5d0b90cc@amd.com>
-In-Reply-To: <3265d311-0e02-6e98-377a-d93a5d0b90cc@amd.com>
-From:   Dionna Amalie Glaze <dionnaglaze@google.com>
-Date:   Thu, 20 Oct 2022 09:18:35 -0700
-Message-ID: <CAAH4kHZy-tBzsDUzK+N8_F8AyZP1cvX8zt47_m6eAMw5=QqrEg@mail.gmail.com>
-Subject: Re: [PATCH v2] virt/coco/sev-guest: Remove err in handle_guest_request
-To:     Tom Lendacky <thomas.lendacky@amd.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Peter Gonda <pgonda@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH 1/3] dt-bindings: soc: mediatek: pwrap: add MT8365 SoC
+ bindings
+Content-Language: en-US
+To:     fchiby@baylibre.com, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Johnson Wang <johnson.wang@mediatek.com>,
+        "Zhiyong.Tao" <zhiyong.tao@mediatek.com>
+Cc:     Fabien Parent <fparent@baylibre.com>,
+        Rob Herring <robh@kernel.org>,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        Sen Chu <sen.chu@mediatek.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20221020130957.25197-1-fchiby@baylibre.com>
+ <20221020130957.25197-2-fchiby@baylibre.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221020130957.25197-2-fchiby@baylibre.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,22 +87,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->
-> You should include a Fixes: tag.
->
-> With that,
-> Reviewed-by: Tom Lendacky <thomas.lendacky@amd.com>
->
-> Also, you may want to base your other series [1] on this one, since you'll
-> likely get conflicts if this is applied first.
->
-> [1] https://lore.kernel.org/lkml/20221019173537.1238121-1-dionnaglaze@google.com/
->
+On 20/10/2022 09:09, fchiby@baylibre.com wrote:
+> From: Fabien Parent <fparent@baylibre.com>
+> 
+> Add pwrap binding documentation for
+> 
+> Signed-off-by: Fabien Parent <fparent@baylibre.com>
+> Acked-by: Rob Herring <robh@kernel.org>
 
-Let's call this a wash and I'll roll this into that other series then.
-By passing through fw_err directly, I get an unsigned long vs unsigned
-long long type error (in this v2, mea culpa). So I'll put the rename
-and re-typing in the x86 patch before this one.
+This is not exactly v1 then. Please use patch versioning and add
+changelog (to cover letter or to individual patches).
 
--- 
--Dionna Glaze, PhD (she/her)
+Best regards,
+Krzysztof
+
