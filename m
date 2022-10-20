@@ -2,139 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 713EE6063E5
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 17:11:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2DC26063E9
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 17:11:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230108AbiJTPLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 11:11:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42878 "EHLO
+        id S229779AbiJTPLZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 11:11:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbiJTPLH (ORCPT
+        with ESMTP id S230173AbiJTPLT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 11:11:07 -0400
-Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9353D1885BF
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 08:10:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=KQh3yOCx6uZIZGmytqUUlx3xfa3GjgJbDjuJZbw4Egg=;
-  b=rsuJfWpvgYFQHC+yklK1JR85uB4sEYmvzC4esE2Bg8vW1gn2G7PCHueX
-   B7Y9pgR03DibE2MzxPlu3l/9V8cuWDdUcCzwkyfna/sf+p16LhzfMuiMM
-   yt6VLaUChl7G/MU2/7Q8ddFzFjzZshRSoyHjAmk5WW6DKBzSbOI3554cu
-   0=;
-Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.95,198,1661810400"; 
-   d="scan'208";a="66219190"
-Received: from dt-lawall.paris.inria.fr ([128.93.67.65])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 17:10:41 +0200
-Date:   Thu, 20 Oct 2022 17:10:41 +0200 (CEST)
-From:   Julia Lawall <julia.lawall@inria.fr>
-To:     Deepak R Varma <drv@mailo.com>
-cc:     outreachy@lists.linux.dev, gregkh@linuxfoundation.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kumarpraveen@linux.microsoft.com, saurabh.truth@gmail.com
-Subject: Re: [PATCH v4 2/2] staging: most: dim2: correct misleading struct
- type name
-In-Reply-To: <Y1FFbB8BWi1IHYgB@debian-BULLSEYE-live-builder-AMD64>
-Message-ID: <d4b0ff4e-53e8-7f10-c36c-9a792de67c6@inria.fr>
-References: <cover.1666208065.git.drv@mailo.com> <6b772a1ac06ae3b0d63e198e7238c1590b14703a.1666208065.git.drv@mailo.com> <alpine.DEB.2.22.394.2210192208290.3068@hadrien> <Y1BeZYBf/xsW8F4O@debian-BULLSEYE-live-builder-AMD64> <Y1E1kv6YSmxVzjkf@debian-BULLSEYE-live-builder-AMD64>
- <404cc67c-efd6-4a70-c3ca-7958db21bcb@inria.fr> <Y1FFbB8BWi1IHYgB@debian-BULLSEYE-live-builder-AMD64>
+        Thu, 20 Oct 2022 11:11:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70BE51A045D;
+        Thu, 20 Oct 2022 08:11:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A00F561BDF;
+        Thu, 20 Oct 2022 15:11:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59ECCC433C1;
+        Thu, 20 Oct 2022 15:11:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666278675;
+        bh=9tJciRsKBhYoViFTQp4Jzyo6krWJs9KAQXG4IOS7utk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aibgDG8H1jmvy/0hGWGi9jBcH831JbtU5ipO+SdQWABxiVnWt70Or5gaA9y1XuFKq
+         HyXxvJjo8poBaZd2GZv+K3o+dvvHpgoRtf6Yg1tgf5+qDRjdN7CDuj1dQXYxqX4Dsa
+         5EX4SdCNEfQFny8EFXKVsSYW/UIuNN5uvuLAUNz10vgp9zaVW4YAsldw4yzp3wnUZK
+         dxbTs22eCRnmzbn78ye4IH9agTOSh0OvWArwRogj7ozQMGxKZH9k2VuW2wkarABKxx
+         ESlouU94E1riDmXadO1iPCHBUqiYVkMUxXeslfo3kAViGKokhdk8nQtcKukOmcd8jl
+         khRV9DVqIsiAw==
+Date:   Thu, 20 Oct 2022 08:11:12 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     Jes Sorensen <Jes.Sorensen@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Bitterblue Smith <rtl8821cerfe2@gmail.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH][next] wifi: rtl8xxxu: Fix reads of uninitialized
+ variables hw_ctrl_s1, sw_ctrl_s1
+Message-ID: <Y1FlEABysKCjobzu@thelio-3990X>
+References: <20221020135709.1549086-1-colin.i.king@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221020135709.1549086-1-colin.i.king@gmail.com>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Oct 20, 2022 at 02:57:09PM +0100, Colin Ian King wrote:
+> Variables hw_ctrl_s1 and sw_ctrl_s1 are not being initialized and
+> potentially can contain any garbage value. Currently there is an if
+> statement that sets one or the other of these variables, followed
+> by an if statement that checks if any of these variables have been
+> set to a non-zero value. In the case where they may contain
+> uninitialized non-zero values, the latter if statement may be
+> taken as true when it was not expected to.
+> 
+> Fix this by ensuring hw_ctrl_s1 and sw_ctrl_s1 are initialized.
+> 
+> Cleans up clang warning:
+> drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8188f.c:432:7: warning:
+> variable 'hw_ctrl_s1' is used uninitialized whenever 'if' condition is
+> false [-Wsometimes-uninitialized]
+>                 if (hw_ctrl) {
+>                     ^~~~~~~
+> drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8188f.c:440:7: note: uninitialized
+> use occurs here
+>                 if (hw_ctrl_s1 || sw_ctrl_s1) {
+>                     ^~~~~~~~~~
+> drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8188f.c:432:3: note: remove the 'if'
+> if its condition is always true
+>                 if (hw_ctrl) {
+>                 ^~~~~~~~~~~~~
+> 
+> Fixes: c888183b21f3 ("wifi: rtl8xxxu: Support new chip RTL8188FU")
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 
+I was getting ready to send a similar patch.
 
-On Thu, 20 Oct 2022, Deepak R Varma wrote:
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-> On Thu, Oct 20, 2022 at 02:06:41PM +0200, Julia Lawall wrote:
-> >
-> >
-> > On Thu, 20 Oct 2022, Deepak R Varma wrote:
-> >
-> > > On Thu, Oct 20, 2022 at 02:00:29AM +0530, Deepak R Varma wrote:
-> > > > On Wed, Oct 19, 2022 at 10:08:53PM +0200, Julia Lawall wrote:
-> > > > >
-> > > > >
-> > > > > On Thu, 20 Oct 2022, Deepak R Varma wrote:
-> > > > >
-> > > > > > Correct misleading struct type name dim_ch_state_t to dim_ch_state
-> > > > > > since this not a typedef but a normal structure declaration.
-> > > > > >
-> > > > > > Suggested-by: Julia Lawall <julia.lawall@inria.fr>
-> > > > > > Signed-off-by: Deepak R Varma <drv@mailo.com>
-> > > > > > ---
-> > > > > >
-> > > > > > Changes in v4:
-> > > > > >    1. Correct patch subject and log message. Use struct type name instead of
-> > > > > >       variable name for the change description. Feedback from julia.lawall@inria.fr
-> > > > > >
-> > > > > > Changes in v3:
-> > > > > >    1. Patch introduced in the patch set
-> > > > > >
-> > > > > >  drivers/staging/most/dim2/dim2.c | 2 +-
-> > > > > >  drivers/staging/most/dim2/hal.c  | 4 ++--
-> > > > > >  drivers/staging/most/dim2/hal.h  | 6 +++---
-> > > > > >  3 files changed, 6 insertions(+), 6 deletions(-)
-> > > > > >
-> > > > > > diff --git a/drivers/staging/most/dim2/dim2.c b/drivers/staging/most/dim2/dim2.c
-> > > > > > index 4c1f27898a29..a69a61a69283 100644
-> > > > > > --- a/drivers/staging/most/dim2/dim2.c
-> > > > > > +++ b/drivers/staging/most/dim2/dim2.c
-> > > > > > @@ -161,7 +161,7 @@ static int try_start_dim_transfer(struct hdm_channel *hdm_ch)
-> > > > > >  	struct list_head *head = &hdm_ch->pending_list;
-> > > > > >  	struct mbo *mbo;
-> > > > > >  	unsigned long flags;
-> > > > > > -	struct dim_ch_state_t st;
-> > > > > > +	struct dim_ch_state st;
-> > > > >
-> > > > > Is there another use in service_done_flag?
-> > > >
-> > > > Hi,
-> > > > I did not understand your question fully. This is from a different function
-> > > > try_start_dim_transfer where the variable st is used down the line in the
-> > > > execution. This time the channel state is retrieved by calling
-> > > > dim_get_channel_state function. The state is simply computed and set. Should I
-> > > > improve this as well?
-> > > >
-> > > > If you are asking something different, could you please elaborate?
-> > >
-> > > Hi Julia,
-> > > Can you please review and comment on my response?
-> >
-> > In my kernel there is an occurrence of the type name in service_done_flag.
-> > But I have the mainline, not Greg's staging tree, so there could be some
-> > differences.
-> >
-> > When I do git grep dim_ch_state_t, I get two occurrences in
-> > drivers/staging/most/dim2/dim2.c
->
-> Okay. Still unclear. Following snip is what I see in my local staging-testing branch.
->
-> <snip>
-> 	drv@debian:~/git/kernels/staging$ git grep dim_ch_state_t
-> 	drivers/staging/most/dim2/dim2.c:       struct dim_ch_state_t st;
-> 	drivers/staging/most/dim2/dim2.c:       struct dim_ch_state_t st;
-> 	drivers/staging/most/dim2/hal.c:struct dim_ch_state_t *dim_get_channel_state(struct dim_channel *ch,
-> 	drivers/staging/most/dim2/hal.c:                                             struct dim_ch_state_t *state_ptr)
-> 	drivers/staging/most/dim2/hal.h:struct dim_ch_state_t {
-> 	drivers/staging/most/dim2/hal.h:struct dim_ch_state_t *dim_get_channel_state(struct dim_channel *ch,
-> 	drivers/staging/most/dim2/hal.h:                                             struct dim_ch_state_t *state_ptr);
-> 	drv@debian:~/git/kernels/staging$
-> </snip>
->
-> Does that help?
-
-You also have two occurrences in dim2.c.
-
-julia
+> ---
+>  drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8188f.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8188f.c b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8188f.c
+> index 99610bb2afd5..0025bb32538d 100644
+> --- a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8188f.c
+> +++ b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8188f.c
+> @@ -412,7 +412,7 @@ static void rtl8188f_spur_calibration(struct rtl8xxxu_priv *priv, u8 channel)
+>  	};
+>  
+>  	const u8 threshold = 0x16;
+> -	bool do_notch, hw_ctrl, sw_ctrl, hw_ctrl_s1, sw_ctrl_s1;
+> +	bool do_notch, hw_ctrl, sw_ctrl, hw_ctrl_s1 = 0, sw_ctrl_s1 = 0;
+>  	u32 val32, initial_gain, reg948;
+>  
+>  	val32 = rtl8xxxu_read32(priv, REG_OFDM0_RX_D_SYNC_PATH);
+> -- 
+> 2.37.3
+> 
+> 
