@@ -2,79 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0F59606030
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 14:29:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C199606032
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 14:29:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230075AbiJTM3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 08:29:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37672 "EHLO
+        id S230085AbiJTM3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 08:29:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230125AbiJTM3e (ORCPT
+        with ESMTP id S230083AbiJTM3q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 08:29:34 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C89713F8E;
-        Thu, 20 Oct 2022 05:29:27 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id i65so17043637ioa.0;
-        Thu, 20 Oct 2022 05:29:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GbdJ4Peu/E38/32Na4oJOo5P/t/pYNcwFTsRn1CFdQY=;
-        b=TyhPJkyGmsgHkM6VTj5ZF6j/yBnW3wKzbb0eo7yGqS0KzjHLVm2YIfK5GMHosvmg+S
-         pHcCwADi6/GMWThazL155mg1YKNl9SfWT6vLAk/AGe6GOheDvUKo8rWFyHUtGEd3OJoV
-         rw1K7JPKE0ru5dqMI7ogq8TCp/Vm4m5GySiZpe/sWDWBCW15VDfs2e6X9s+SK2c+EfP4
-         JcmCJNGuK8ZkcHum3yhlyJvzy8GHjNoS6YBj1rA6ecDI7hkix3dM3QB+k5ni72UNLfxl
-         Ex6DUmn9Y8SJzZYHCxPD74tvHHdepIHEB3OmJ7AilbLhtvlFiKeCBn+BDXSH7t3iahC5
-         cq7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GbdJ4Peu/E38/32Na4oJOo5P/t/pYNcwFTsRn1CFdQY=;
-        b=O3hT+Ix/xyyaY1zho7gqeiGctCBtOM7Agksf0KMPNnzOPy8p1vKqxAfSVEye9WIP99
-         FtkJGIT3DVyAmBEULC7gQyG3BOx9AWfMNPtziMyyrikXcDg2YHEwRPQDOgPOk+UIfr4R
-         PMdbLIB+mC8p5PqIsG4utUVRltqnlX2kMYBt2XPsEgQXtcaLdAfYu6ny+500gaxfiaQQ
-         XhSyOu+opwhpCqHIFhIvS31nxNaOAvJnFCIQcbsnTjE8Ojc7z00V2++jugxr1rkTZXXM
-         +3KA2XVpAidHjkHQxID/3+4dprPqSWqjUILvxvDBjjnHzgFiLl2VPUDSIa1mM7V7QTxu
-         dwfg==
-X-Gm-Message-State: ACrzQf0iGlHOaUJjl3sT8WjWI7rAh7mcLkwvgILOMXslTfRO2DGgyY7f
-        GR8RGbYNMeqqdv0T94VyfQy7iEP6jZ5udCGGGho=
-X-Google-Smtp-Source: AMsMyM44PndMIt9F+Oo2TK6GgTPokgUODgaLemVzy82ml3MDdlkJTgd+6KE13KqICkXNxlX84EXS3TEoamZZnZbjabI=
-X-Received: by 2002:a6b:ba41:0:b0:6bd:1970:16ac with SMTP id
- k62-20020a6bba41000000b006bd197016acmr1886486iof.15.1666268966631; Thu, 20
- Oct 2022 05:29:26 -0700 (PDT)
+        Thu, 20 Oct 2022 08:29:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D844357E3;
+        Thu, 20 Oct 2022 05:29:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7F52C61B4C;
+        Thu, 20 Oct 2022 12:29:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1A5DC4315E;
+        Thu, 20 Oct 2022 12:29:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666268982;
+        bh=UmMmPdClNg1iQDMWEWV9haE2T0LxMvQ9tZrDoXCBYo0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=MEfjHFy9IjCP7buSekEgL1dlGnUtqlTjnGc/q1dTIIDKQv0uf0qjS7CxNd3l8EB6J
+         2GNzCTHJIHOS8VN187wDQDCMY2iqEjLgjGx1qCtlusqm6jpodnpS3t3oWP7zr6AYNq
+         UEzhL5dWMhhdVKCFkmkfLcfRjIPJrFoQdp6J00szZ/2HtTnIdH1fHRXi298ggf93mp
+         22oa5u+mRMglmJ1n+asHS7yqiYMY5/K+VEURZQXecucwx6LEFR6n8XMh0aVAzyJgR6
+         6iMMRZzKUnyGZkdB8JE+Eg6ZvcSoNvNWQhtURvaQOsdqV/y+d1nrYLMvKa7N6ZWJAS
+         JjIZYABcXGdmA==
+Received: by mail-ot1-f48.google.com with SMTP id a14-20020a9d470e000000b00661b66a5393so11286572otf.11;
+        Thu, 20 Oct 2022 05:29:42 -0700 (PDT)
+X-Gm-Message-State: ACrzQf16auEbOb+Jdv8o3wMI6DvbQ3WChwfqBW5fM5+9SJ0TptRZioZ9
+        aF4mDHeFDf5jArsoDKvUZCBNR8F5oatkOK60MkQ=
+X-Google-Smtp-Source: AMsMyM5gCGTTh54jnxdirFtIVTdFINnQG/9tf0drJtT/lwsLNSHciyP4H6XwE+c8o6/CC6J8KKKz8XrQWvspHXqgvHo=
+X-Received: by 2002:a9d:3634:0:b0:661:a991:7c57 with SMTP id
+ w49-20020a9d3634000000b00661a9917c57mr6495888otb.308.1666268981727; Thu, 20
+ Oct 2022 05:29:41 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221016132648.3011729-1-lis8215@gmail.com> <166609251307.155136.11548088283059583394.b4-ty@kernel.org>
- <CAKNVLfbfRRE3O2uFH6MQxoa_cdqTUcvpGzmcxFm3oCLKFfHv6w@mail.gmail.com> <Y1E7nFC9DcdqegKX@sirena.org.uk>
-In-Reply-To: <Y1E7nFC9DcdqegKX@sirena.org.uk>
-From:   Siarhei Volkau <lis8215@gmail.com>
-Date:   Thu, 20 Oct 2022 15:29:15 +0300
-Message-ID: <CAKNVLfYc8FP6g1+nFAwEVizFg1dDtU-Qj79ZX3-_P1=y0XSKQA@mail.gmail.com>
-Subject: Re: [PATCH v3 0/7] ASoC: codecs: jz4725b: Various improvements and fixes
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-mips@vger.kernel.org, alsa-devel@alsa-project.org
+References: <20221002012451.2351127-1-guoren@kernel.org> <20221002012451.2351127-5-guoren@kernel.org>
+ <YzrJ0wQxWfjWCxhQ@FVFF77S0Q05N> <CAJF2gTRBEGx3qncpk_C8rCsFN+kqxjgeAcPvZU5m7kDnpwytoA@mail.gmail.com>
+ <Y1ERsP0YYVNulWnw@FVFF77S0Q05N>
+In-Reply-To: <Y1ERsP0YYVNulWnw@FVFF77S0Q05N>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Thu, 20 Oct 2022 20:29:28 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTTurEaFjbKvj1tUptq_TLpXeBAE1UstNYxriC-7r5MHpQ@mail.gmail.com>
+Message-ID: <CAJF2gTTurEaFjbKvj1tUptq_TLpXeBAE1UstNYxriC-7r5MHpQ@mail.gmail.com>
+Subject: Re: [PATCH V6 04/11] compiler_types.h: Add __noinstr_section() for noinstr
+To:     Mark Rutland <mark.rutland@arm.com>,
+        Lai Jiangshan <laijs@linux.alibaba.com>
+Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
+        peterz@infradead.org, luto@kernel.org, conor.dooley@microchip.com,
+        heiko@sntech.de, jszhang@kernel.org, lazyparser@gmail.com,
+        falcon@tinylab.org, chenhuacai@kernel.org, apatel@ventanamicro.com,
+        atishp@atishpatra.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, zouyipeng@huawei.com,
+        bigeasy@linutronix.de, David.Laight@aculab.com,
+        chenzhongjin@huawei.com, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Borislav Petkov <bp@alien8.de>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-=D1=87=D1=82, 20 =D0=BE=D0=BA=D1=82. 2022 =D0=B3. =D0=B2 15:14, Mark Brown =
-<broonie@kernel.org>:
-> This was already fixed by Colin...
+Hi Mark and Lai,
 
-Wow! Thank you all, guys!
+On Thu, Oct 20, 2022 at 5:15 PM Mark Rutland <mark.rutland@arm.com> wrote:
+>
+> On Sat, Oct 08, 2022 at 09:54:39AM +0800, Guo Ren wrote:
+> > On Mon, Oct 3, 2022 at 7:39 PM Mark Rutland <mark.rutland@arm.com> wrote:
+> > >
+> > > On Sat, Oct 01, 2022 at 09:24:44PM -0400, guoren@kernel.org wrote:
+> > > > From: Lai Jiangshan <laijs@linux.alibaba.com>
+> > > >
+> > > > And it will be extended for C entry code.
+> > > >
+> > > > Cc: Borislav Petkov <bp@alien8.de>
+> > > > Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
+> > > > Reviewed-by: Kees Cook <keescook@chromium.org>
+> > > > Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
+> > > > Suggested-by: Peter Zijlstra <peterz@infradead.org>
+> > > > Signed-off-by: Lai Jiangshan <laijs@linux.alibaba.com>
+> > > > ---
+> > > >  include/linux/compiler_types.h | 8 +++++---
+> > > >  1 file changed, 5 insertions(+), 3 deletions(-)
+> > > >
+> > > > diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+> > > > index 4f2a819fd60a..e9ce11ea4d8b 100644
+> > > > --- a/include/linux/compiler_types.h
+> > > > +++ b/include/linux/compiler_types.h
+> > > > @@ -227,9 +227,11 @@ struct ftrace_likely_data {
+> > > >  #endif
+> > > >
+> > > >  /* Section for code which can't be instrumented at all */
+> > > > -#define noinstr                                                              \
+> > > > -     noinline notrace __attribute((__section__(".noinstr.text")))    \
+> > > > -     __no_kcsan __no_sanitize_address __no_profile __no_sanitize_coverage
+> > > > +#define __noinstr_section(section)                           \
+> > > > +     noinline notrace __section(section) __no_profile        \
+> > > > +     __no_kcsan __no_sanitize_address __no_sanitize_coverage
+> > > > +
+> > > > +#define noinstr __noinstr_section(".noinstr.text")
+> > >
+> > > One thing proably worth noting here is that while KPROBES will avoid
+> > > instrumenting `.noinstr.text`, that won't happen automatically for other
+> > > __noinstr_section() sections, and that will need to be inhibited through other
+> > > means (e.g. the kprobes blacklist, explicit NOKPROBE_SYMBOL() annotation, or
+> > > otherwise).
+> >
+> > In riscv, "we select HAVE_KPROBES if !XIP_KERNEL", so don't worry
+> > about that. I don't think we could enable kprobe for XIP_KERNEL in the
+> > future.
+>
+> Sure; but someone else might use __noinstr_section() elsewhere where this could
+> matter, and I was suggesting that we could add a comment as above.
+Okay, how about:
+
+/* Be care KPROBES will avoid instrumenting .noinstr.text, not
+__noinstr_section(). */
+#define __noinstr_section(section)                             \
+       noinline notrace __section(section) __no_profile        \
+       __no_kcsan __no_sanitize_address __no_sanitize_coverage
+
+/* Section for code which can't be instrumented at all */
+#define noinstr __noinstr_section(".noinstr.text")
+
+>
+> Thanks,
+> Mark.
+
+
+
+-- 
+Best Regards
+ Guo Ren
