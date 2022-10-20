@@ -2,142 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE54C606C1F
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 01:42:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7072606C25
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 01:43:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbiJTXmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 19:42:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48366 "EHLO
+        id S229652AbiJTXnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 19:43:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbiJTXmL (ORCPT
+        with ESMTP id S229497AbiJTXnD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 19:42:11 -0400
-Received: from sonic306-28.consmr.mail.ne1.yahoo.com (sonic306-28.consmr.mail.ne1.yahoo.com [66.163.189.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFD5116D88B
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 16:42:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1666309330; bh=Ct7M+eQn+1sXkf2JlGtv/zGo5O7AhhVZoEOq681KO4I=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=XJmUiW6rhdzJKiAexE8m1tQxbk48VjkEUm5BKgiMF0LDJwCzYhGksG6Ph/Vdwdauh8YnUKWkeft8gmdi5LpJWTI54eoIh/fmsKzfiegtPKwRBhVqM33qGslEPkmnSpqYSUgyiEVCMQYNp9P88PnCibZ18JKag5brlfvESSROreN39oQCLd97gbpie8GtPrETi96vkN7QOdpKAjld6s6eRGs8NGV0px5a3LPYuewGPfUnOG0SZDK2CZW7f8g7+yFbovIEp5u7xNzepLRblAIGded2lUOp2sKKzOGOpmfjy0G23Lgv3ki8blkg8P0VgMd20EqH61ubYZL4hQMucCCGlg==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1666309330; bh=R/3JbMN9lfHknive0qn6sbuvnm/GqGh1VGmM3zN3yJx=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=USX4h9tBzG978n0IM+oZbuWrsq0Fq0YGj2pRgqivqvsD7jTODfUq5EOK5lLVEb2RHuClTEeArF/1kydv1BreD2lJkBlvgW9bmZs2rZmHyWq4IgEzFSZrxFHu1bM5HimkxYRkhuRlJjzDrp4oyebm+Y6LSE5oNyPnD66zmMDXhZC31kWZDLH2BM9GIsXCv5jVllfUw6tU1B8yf1ER4vxia2y21tFTpGcfY6rJzrKpLsHKA+gWYFF4/ZVkZnqIhW7SPcjYp4IovL9GmT5PacArUy+4dhbGjrY1jD7Kil1NA0O77nSr81QIq9Syhw4My//+WW3XqtQg0ohCDjYCHQ0xnQ==
-X-YMail-OSG: IEVbw1YVM1lqZ_LzZ4UpMqXtNV8WoDJX7Eo0kYY34UcqisNoIH7LsWa_7kS6vnJ
- 1v7CZXjW_noROX74Oc.w.avDj6ZVVh08Iuh6cOLfHW5uONl_vHl18kyz5LOQHwUx5AXyMVs2SxrN
- zurVxX73AvlCx2kQ5o_xhebjWspBMU.wvJFCprW_eU4Rp4Omyxz3jkknsQWBbWk1WR9HhMs9yDHL
- FaL_u5a69D36cm0URE663LbZeE4reCck0MJTbr8DY_.6RdwBL2FPOQregk_eFC3uMPkO2kDtWnxb
- C.81bYAwMnLRjzeVFgSPkHd9DjWApq1d1t2BC6xeZfjHk_4J74vPh_6jrgVNjXRp5j8ArHbMgFVq
- tYDsWjz6Uw_nUBkVT7I7Jal.5PJiw9qHrBxzueMz8yjahT2PnBw3pp1nP.Aw23DvSOH1wtZElZCD
- e7Mpyx0x4rSt_HIqep15dXJTl3vdECaW5psSxy0lRtkovIPsjDldkctv7EV7XrPcvvD4.A48ylEE
- 6.S8w.8r0bP1UNd8Y77SbTh2Jr2Yk8o3_o51RjI5VA9JY2ktBxDO.C5KqSvAUKu2o1HXpwZeMmj0
- sJm4o0B3bxjTnqRjP5uRU_mfFeKgyir1Hw2cBm.SRmS0BpmteZt6oNoZ1l7OGwQ3JjR3RjKp5S3G
- .RBMhFRaZMV6xxJ6ssn16OdBKrNU.cffDPX4Wb6PkiX37T4xoDYL9dtXe877u6P857x.7vIpXAN8
- FJNR5hhSJzzD_8NxuFk125tSYkBSHqRT7sbJQMguklqorvlkXLV1V7D.o6YPnFWnX7EF4vR2h6qL
- 2vb52qWjpADv3sQO2Il0Q8nwItyMQLQCe0wdull889uPzGw27VPanmxtPP9ZlTKYGQfmHSUGwlDU
- .1YnnYMmYT2BC5QWXKzwfzZPMyfgIPzl3JWFpH903PhHJlB1BQOfKyA90vynkdgFzaRfLUQuGb3p
- Eb8_5ddCHwpm_ZHestGVeFCUvBcInvS5ZaHLPFzv5zY9drjwXJLDMyeQYfV8TULpXyWHPsAO3Rmw
- M3iLX37ttXbZpHkp0ekEWJm3ItuljeZcBVqrsqaMVL9lWNlq4v.n2BHjMNd.6PeVSf_MsTe9Hhse
- GAQdGrlvp.qzgFYy0MoGIe4mJ8PkaPTeJuM.GxWREVgg7v_SiEGheBbIdzfvW1EBaUE9CqpCfD5Z
- WUZBF3gBWfyE6tfC1VssSya2ffniydcojldekWjESaXTJAFfqcU1eZ0zj0A86auSTNw4VkWp.Kjn
- fcdQM08uvckp3JSZAiB04ihWoh1ifZdMgoAc4BwOGbAH9uAn8iIpUPrQRYF6.O.4aImRB563Gv0S
- 1nZT2iS9G7yWTnd0jkihlybpE5iX2o1is8plx5JXAuJy1fVTa1NeEn6gcpPnH.gDR6M1TYK90w9s
- ehEZFcyTUP.Atuk79MhnzPN36R640i4_vyIwUVCbOxb9YOTNEpjtfjN2pLtDNmOp0IyVmELllOtJ
- RQRaTdTO70dWiNPePFjHtyOAl0GqWqdE_TnlUk37R26bSJbPz7cbQhCh46g0.sBxDXgtLU6ULICd
- 1gkha6UYzrABVvSQ1WDbMfDh9jqBXXMqPQxVqZIXJB29Z.aIjLx3A7HOijwc6IVVC9vmL8nOATLL
- .KKA2YdOnricxCn2sZVddy5npYD4D5.CGhu1IasCD5UOty3Sw5ZnOgZGVzOUwWOSPiUmVmPIY08s
- m63wfOx0vYpRWThNLdkMPjsZKOcIcKEyGLCY8UfwQBTOEpbqaOh_tQ9dCfNLZLiPgtlBZsMaUwo5
- ts7I.1Hu1PuhyRC8.Qx2YVQ6XgzLHAW_qMUfWo3vAtVx2MGn.ZGuZxDlp3NtHuXamddBZ52Bn7vy
- lSDexgoTbeQs27cXCH..iPyQ_ohzm3toYVsHhTJrSquyaVOizVZMfVSKBV5dR780gl0oyuJ9PBTt
- xdSYIcYDk.Zb5izX66yviyp_qEA8bhoCvZveS1VOE4bkDKR2gspCmqwaT1sgzsZNYp9m3FG4oo4Q
- wHzXBp93nwsTm.db.XaM3j.aGo7cUdd9t.2qznPibUJ_TAuOpBXoFt1u6O1.2ig6xuOPZy8MR6wO
- .izm4OucPFTgvQs0QiQ5VabmxsmG04gSbMcEFmYaG0LSB7TFLVdYFJcrd1wshEeMjzA8emfEVznO
- su9wL_1AQecPOq0wURE3Wl_NybfEzYF3fDucgH65KxtvPAamO2CMzRx..TX6iRYqSzRDTbtj2MkF
- ctQsiLxj468ZglNhHSt6YULzV0P7XVS5L78bSwLGAV78d97ZiyZp3K5XHaQeK02l.EXJDcXaKb8o
- NAkBdmGver.07NSEWahbM0rFT.Ce..w--
-X-Sonic-MF: <casey@schaufler-ca.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic306.consmr.mail.ne1.yahoo.com with HTTP; Thu, 20 Oct 2022 23:42:10 +0000
-Received: by hermes--production-gq1-754cb59848-nlbwv (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 96be409d95bde475d58f7a617539a8b3;
-          Thu, 20 Oct 2022 23:42:06 +0000 (UTC)
-Message-ID: <f6b8ac05-6900-f57d-0daf-02d5ae53bc47@schaufler-ca.com>
-Date:   Thu, 20 Oct 2022 16:42:04 -0700
+        Thu, 20 Oct 2022 19:43:03 -0400
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88E5216DC30
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 16:43:01 -0700 (PDT)
+Received: by mail-qk1-x72c.google.com with SMTP id x13so1004966qkg.11
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 16:43:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q3AP/tQZsCGWdqocUdGbR0U8FOgV3GYYbflK+bE4iCU=;
+        b=n3in2a6l84dZ4h43JiWPEaU07Ag4vYTbida9+trrLRkXvVMbPcyx6HxtX8lAajFZFC
+         DtoagUZ1PTH2sW0BvUiuWacOoD+b0oHxbdazrKo7R18xXMv8a3vvGZGyW62mYg4k6lkt
+         3/foqWE3SI3G+FIcfErHPBsohl89rS5d99nOCfhFM+R8EWwDBwnmrXXAOdtpDHqEUdZo
+         oMi4qWhGG7oSMxykmVnWYIwNz7FJ2k300VniYOJMoYM5/+paUqv5Ir8yBWQ898/Yzkzm
+         ihj9GA65p7uqsk6bsfytPAf9WygErO/AX5iGn+8DsaW97NMJqf1dnss8tzD88E+2Oquw
+         RSDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Q3AP/tQZsCGWdqocUdGbR0U8FOgV3GYYbflK+bE4iCU=;
+        b=TkwgWcDW6ipAEZ0ySTm7vHHSA8q95J0+ZYxcYufpqLKJqPCzXblOcBwa+Ucac1qpmq
+         u2xUSSpDY186EpV3JBBH8QvKIFRX8lvx3ZoJJBDL60MSU3qMd6MO8FsVfubUN4QGjXeM
+         GNSPKkbnh6iOB0y3/61BkcsEqAsZuBmZcwQ4mJeM7XvIPhfuLpMqNLoK5g7rLe7/3okD
+         rGUHqz7r8K9KZj4HSI1eNb6TV4nh8QJ0D3YVAinnZakjvthU3YDwJQrGntFBvycjS8yq
+         Dm6TlFda5WnqCMi4+Fpb6Q7qS6ozfrXT9hBU7bH4HNQVpOj0nt83iHMYuQmJzmdijelF
+         cw/w==
+X-Gm-Message-State: ACrzQf1PqMTpzjqCHlU6dZTCTz1i8cAmLwpmlk9ilzc7apyC9QE62EKa
+        BXHAa3P1Tin7bCYTKdXLBURzeg==
+X-Google-Smtp-Source: AMsMyM77ieCA9Ka3hBL0aoBJg1xvsJRStZW8qEvdIlyx1P3eg6ZqCcE+FSB11I0sMIsyLJKF0HZlSQ==
+X-Received: by 2002:a05:620a:13b6:b0:6ee:cf79:bfa1 with SMTP id m22-20020a05620a13b600b006eecf79bfa1mr11569554qki.15.1666309380684;
+        Thu, 20 Oct 2022 16:43:00 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-47-55-122-23.dhcp-dynamic.fibreop.ns.bellaliant.net. [47.55.122.23])
+        by smtp.gmail.com with ESMTPSA id y13-20020a05620a25cd00b006bbf85cad0fsm8537748qko.20.2022.10.20.16.42.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Oct 2022 16:42:59 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1olfBj-00B3Bu-0U;
+        Thu, 20 Oct 2022 20:42:59 -0300
+Date:   Thu, 20 Oct 2022 20:42:58 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Pankaj Gupta <pankaj.gupta@nxp.com>,
+        "jarkko@kernel.org" <jarkko@kernel.org>,
+        "a.fatoum@pengutronix.de" <a.fatoum@pengutronix.de>,
+        "gilad@benyossef.com" <gilad@benyossef.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "sumit.garg@linaro.org" <sumit.garg@linaro.org>,
+        "david@sigma-star.at" <david@sigma-star.at>,
+        "michael@walle.cc" <michael@walle.cc>,
+        "john.ernberg@actia.se" <john.ernberg@actia.se>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "j.luebbe@pengutronix.de" <j.luebbe@pengutronix.de>,
+        "richard@nod.at" <richard@nod.at>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        Sahil Malhotra <sahil.malhotra@nxp.com>,
+        Kshitiz Varshney <kshitiz.varshney@nxp.com>,
+        Horia Geanta <horia.geanta@nxp.com>,
+        Varun Sethi <V.Sethi@nxp.com>
+Subject: Re: [EXT] Re: [PATCH v0 3/8] crypto: hbk flags & info added to the
+ tfm
+Message-ID: <Y1HdAmy6ZfN8f5hJ@ziepe.ca>
+References: <Yz/OEwDtyTm+VH0p@gondor.apana.org.au>
+ <DU2PR04MB8630CBBB8ABDC3768320C18195209@DU2PR04MB8630.eurprd04.prod.outlook.com>
+ <Y0Q3JKnWSNIC4Xlu@zx2c4.com>
+ <Y0UxY51KQoKCq59o@gondor.apana.org.au>
+ <Y0XLqd/+C1sxq2G0@zx2c4.com>
+ <Y0aDiLp7BztzwNez@gondor.apana.org.au>
+ <Y0m2TU5k78I1AR+p@ziepe.ca>
+ <Y1DN3SqEyFZd9i37@sol.localdomain>
+ <Y1GgSX+ZmOsxhB2N@ziepe.ca>
+ <Y1G9hKPT1MNQQxcG@sol.localdomain>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v38 04/39] LSM: Maintain a table of LSM attribute data
-Content-Language: en-US
-To:     Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        casey.schaufler@intel.com, paul@paul-moore.com,
-        linux-security-module@vger.kernel.org
-Cc:     linux-audit@redhat.com, jmorris@namei.org, selinux@vger.kernel.org,
-        keescook@chromium.org, john.johansen@canonical.com,
-        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
-        casey@schaufler-ca.com
-References: <20220927195421.14713-1-casey@schaufler-ca.com>
- <20220927195421.14713-5-casey@schaufler-ca.com>
- <9907d724-4668-cd50-7454-1a8ca86542b0@I-love.SAKURA.ne.jp>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <9907d724-4668-cd50-7454-1a8ca86542b0@I-love.SAKURA.ne.jp>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.20754 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1G9hKPT1MNQQxcG@sol.localdomain>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/13/2022 3:04 AM, Tetsuo Handa wrote:
-> On 2022/09/28 4:53, Casey Schaufler wrote:
->> @@ -483,6 +491,16 @@ void __init security_add_hooks(struct security_hook_list *hooks, int count,
->>  {
->>  	int i;
->>  
->> +	/*
->> +	 * A security module may call security_add_hooks() more
->> +	 * than once. Landlock is one such case.
->> +	 */
->> +	if (lsm_id == 0 || lsm_idlist[lsm_id - 1] != lsmid)
->> +		lsm_idlist[lsm_id++] = lsmid;
->> +
->> +	if (lsm_id > LSMID_ENTRIES)
->> +		panic("%s Too many LSMs registered.\n", __func__);
-> I'm not happy with LSMID_ENTRIES. This is a way towards forever forbidding LKM-based LSMs.
+On Thu, Oct 20, 2022 at 02:28:36PM -0700, Eric Biggers wrote:
+> On Thu, Oct 20, 2022 at 04:23:53PM -0300, Jason Gunthorpe wrote:
+> > On Wed, Oct 19, 2022 at 09:26:05PM -0700, Eric Biggers wrote:
+> > 
+> > > Are you referring to the support for hardware-wrapped inline crypto keys?  It
+> > > isn't upstream yet, but my latest patchset is at
+> > > https://lore.kernel.org/linux-fscrypt/20220927014718.125308-2-ebiggers@kernel.org/T/#u.
+> > > There's also a version of it used by some Android devices already.  Out of
+> > > curiosity, are you using it in an Android device, or have you adopted it in some
+> > > other downstream?
+> > 
+> > Unrelated to Android, similar functionality, but slightly different
+> > ultimate purpose. We are going to be sending a fscrypt patch series
+> > for mlx5 and nvme soonish.
+> 
+> That's interesting, though also slightly scary in that it sounds like you've
+> already shipped some major fscrypt changes without review!
 
-I don't see any way given the locking issues that we're ever going to
-mix built in security modules and loaded security modules on the same
-hook lists. The SELinux module deletion code is sufficiently scary that
-it is being removed. That does not mean that I think loadable modules
-are impossible, I think it means that their management is going to have
-to be separate, the same way the BPF programs are handled. The only way
-that I see a unified hook list is for all the LSMs to be implemented as
-loadable modules, and I can't see that happening in my lifetime.
+Heh, says the Android guy :)
 
-I can see an LSM like BPF, as I mentioned before, that manages loaded
-modules. Over the years I've seen several designs that might work. I'm
-encouraged (and not a little bit frightened) by the success of the BPF
-work.
+Fortunately nothing major, we are enterprise focused, we need stuff in
+real distros - we know know how to do it.
 
-Converting the array[LSMID_ENTRIES] implementation to a hlist like the
-hooks have used would not be that big a project and I don't see that
-making such a change would be a show-stopper for implementing loadable
-modules. I think that a lot of other issues would be more significant.
+> > That sounds disappointing that we are now having parallel ways for the
+> > admin to manipulate kernel owned keys.
+> 
+> Well, the keyrings subsystem never worked properly for fscrypt anyway.  At most,
+> it's only useful for providing the key to the filesystem initially (by passing a
+> key ID to FS_IOC_ADD_ENCRYPTION_KEY, instead of the key bytes), similar to what
+> dm-crypt allows.  After that, the keyrings subsystem plays no role.
 
-I will, on the other hand, listen to compelling arguments. It is not the
-intention of this code to lock out loadable modules. If I thought it would
-I would not have proposed it.
+Sure, but loading the key into the keyring should allow many different
+options, including things like TPM PCR secured keys (eg like
+bitlocker) - we shouldn't allow user space the ability to see the key
+data at all.
 
-> I'm fine with using UAPI-visible constants for switching /proc/ files.
-> But TOMOYO does not need such constant because TOMOYO does not use /proc/ files.
->
-> Also, lsm_self_attr() will be limited for LSM modules which use /proc/ files, and
-> therefore I think prctl() will be already there.
+Duplicating this in every subsystem makes no sense, there is a
+reasonable role for the keyring to play in solving these kinds of
+problems for everything.
 
-While the proposed set of attributes map to those in /proc/.../attr there is
-no reason to assume they will be limited to those. I can see providing several
-of the Smack attributes currently manipulated in smackfs, such as relabel-self.
-If we are providing SELinux specific values like keycreate there's no reason
-we can't provide Smack or TOMOYO specific values as well.
-
->
->> +
->>  	for (i = 0; i < count; i++) {
->>  		hooks[i].lsmid = lsmid;
->>  		hlist_add_tail_rcu(&hooks[i].list, hooks[i].head);
+Jason
