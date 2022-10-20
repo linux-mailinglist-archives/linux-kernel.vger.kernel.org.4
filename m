@@ -2,79 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99EFB605ECF
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 13:27:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5CEA605ED2
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 13:28:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231340AbiJTL1e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 07:27:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44928 "EHLO
+        id S231346AbiJTL21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 07:28:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231326AbiJTL1d (ORCPT
+        with ESMTP id S231335AbiJTL2Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 07:27:33 -0400
-Received: from mail-ua1-x934.google.com (mail-ua1-x934.google.com [IPv6:2607:f8b0:4864:20::934])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8F661863D8
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 04:27:31 -0700 (PDT)
-Received: by mail-ua1-x934.google.com with SMTP id d8so1384251uaw.11
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 04:27:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=RqUdMHqjy1WvJccWozacPC9YSNwwlhRflaYZf1zUuBU=;
-        b=aTZ+3kQOXJ53jkFLFWp0kw8Cshlyt1NQKqE6VlkhS2cANPlPFftiR9641j/K1dakgZ
-         Tc0HXsjj+ZQXic5Z/vhYlAk1wUmfhCEU98adlNS6QklJLDX7BkHvN1kpD7UH76mJKCv0
-         dTRpn60YRWuNQikqlKuYkN9YiQ9B0ALbHkG8V/8n9Moe7cXANyxTJQWcOmXxL7brmJKv
-         b+PY7KNZ6tNo3LHP6QcmYoZAPH0Xi/ipD6PyvQINpguvULNtSiSIf4SjddY7rdM8h0f5
-         WMn2B/KrF5vfU7CKclaqZpZX4vcaornjkz6WtsPbaQVH2bKEJZmJ6ZcJ4Qwbmg06OrHD
-         4xpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RqUdMHqjy1WvJccWozacPC9YSNwwlhRflaYZf1zUuBU=;
-        b=mFWtpDSjE7ea45dnVUZ+rAyDVLkBistxvXNqSetpMycbgacNJ6Olaak3YIyLYAPVOV
-         cuCzl5WNbNv1h87nzlTuYe4+OjmtKTbeMexlBpS1XRvWOC+iBoNYKA51vypMUFe/v1Ip
-         6+J7hEto5iE32Qf+N1xRP9igDdsCjzF4lTUNnpv3SQ5JWpDQZx0PFnWyJ5y/8blwstns
-         YQbYeCQdO1Z1eNyQC9mxn9tiUrhahk97Ti8uyrNczIx9Z1uvkuegAy9Kzb7GRXQqBm7m
-         hk0CjRFV0xRJvewYmHLtEv+nbm/d2iwKYq1So/cEBDcmjqsNY7GsBNohA02WoQ8ji8gU
-         Tjnw==
-X-Gm-Message-State: ACrzQf0Rqww6XCywO0tvIRTlpVnG6H0VVzrZGUl3qwcMyGUtsDSbD3HT
-        SoJ/+AfjFWId5LUx7eF4RiFj5HDomuD7VKwMAETLSnfdMsI9iQ==
-X-Google-Smtp-Source: AMsMyM4qPtpBnCecZxKQBmHRut/gbopO2qoj83J7ntdWxb1eO1+3khuwTZP40LIvlkq/TiyXF2dITwcqNbK4jut8Kyg=
-X-Received: by 2002:a05:6102:5788:b0:3a6:764d:1382 with SMTP id
- dh8-20020a056102578800b003a6764d1382mr6588139vsb.13.1666265250386; Thu, 20
- Oct 2022 04:27:30 -0700 (PDT)
+        Thu, 20 Oct 2022 07:28:24 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04EBE11CB4F;
+        Thu, 20 Oct 2022 04:28:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Zykh0+WPGN9uC9knxmTn71hjuvUREHosM5NpuyOqmLE=; b=ak23Vnaqq9Qv1bB9sejzP8Afv0
+        aztN6bxfGj6qgx77Dbjg5PaK/OHt2DBNZUngZb4x+hI6eZ+rc2xGHf89c72/a8+T1Fl9F/gRv8Ad7
+        jmQgrsvd04lB84yTh+gJJVWYV2qvy7e8Ezb7yEnEpjlLlA+dylVxTYdUlXsdSiFo9HBpafxl5gzY4
+        URaqvIw82Cd8h0k/frDSzbgabj6UnSJ7K/zX6bO1/UnMp3qRpsCwbp7LOqsBZ0NQerqp9I4CcYXHb
+        G2CEZA/rX4R95t2mrppMqtPRT/UzPSj8OIz8aft+5TGx8O+Lyzk86gMmSr0Zek3EH/O6hl8oBUWUW
+        1IHtFjxw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34820)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1olTij-0006wC-Q6; Thu, 20 Oct 2022 12:28:17 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1olTif-00037n-DO; Thu, 20 Oct 2022 12:28:13 +0100
+Date:   Thu, 20 Oct 2022 12:28:13 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Alexandru Tachici <alexandru.tachici@analog.com>
+Cc:     linux-kernel@vger.kernel.org, andrew@lunn.ch, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, lennart@lfdomain.com
+Subject: Re: [net v2 1/1] net: ethernet: adi: adin1110: Fix notifiers
+Message-ID: <Y1EwzRa3SNpA0++W@shell.armlinux.org.uk>
+References: <20221020094804.13527-1-alexandru.tachici@analog.com>
+ <20221020094804.13527-2-alexandru.tachici@analog.com>
 MIME-Version: 1.0
-References: <20221019152947.3857217-1-arnd@kernel.org> <20221019152947.3857217-2-arnd@kernel.org>
-In-Reply-To: <20221019152947.3857217-2-arnd@kernel.org>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Thu, 20 Oct 2022 13:27:19 +0200
-Message-ID: <CAMRc=Meu+dQjNad8mx=USLKmedBPo3EEmMm05z-_SY+jhqT=VQ@mail.gmail.com>
-Subject: Re: [PATCH 01/14] ARM: davinci: remove unused board support
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Sekhar Nori <nsekhar@ti.com>, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Kevin Hilman <khilman@baylibre.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221020094804.13527-2-alexandru.tachici@analog.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 5:31 PM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> All Kconfig entries marked as "depends on UNUSED_BOARD_FILES"
-> and their direct dependencies are removed here as planned.
->
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
+Hi,
 
-Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On Thu, Oct 20, 2022 at 12:48:04PM +0300, Alexandru Tachici wrote:
+> @@ -1688,7 +1684,31 @@ static struct spi_driver adin1110_driver = {
+>  	.probe = adin1110_probe,
+>  	.id_table = adin1110_spi_id,
+>  };
+> -module_spi_driver(adin1110_driver);
+> +
+> +static int __init adin1110_driver_init(void)
+> +{
+> +	int err;
+> +
+> +	err = spi_register_driver(&adin1110_driver);
+> +	if (err)
+> +		return err;
+
+This is the point that devices can be bound and thus published to
+userspace.
+
+> +
+> +	err = adin1110_setup_notifiers();
+> +	if (err) {
+> +		spi_unregister_driver(&adin1110_driver);
+> +		return err;
+> +	}
+
+And you setup the notifier after, so there is a window when
+notifications could be lost. Is this safe?
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
