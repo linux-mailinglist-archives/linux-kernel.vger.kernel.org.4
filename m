@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC1AB6066F8
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 19:26:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19BD56066F9
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 19:27:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229892AbiJTR0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 13:26:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55828 "EHLO
+        id S229913AbiJTR06 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 13:26:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbiJTR0t (ORCPT
+        with ESMTP id S229783AbiJTR0u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 13:26:49 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594751A1B01;
-        Thu, 20 Oct 2022 10:26:48 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id o17-20020a17090aac1100b0020d98b0c0f4so4149521pjq.4;
-        Thu, 20 Oct 2022 10:26:48 -0700 (PDT)
+        Thu, 20 Oct 2022 13:26:50 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66B402A971;
+        Thu, 20 Oct 2022 10:26:49 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id t12-20020a17090a3b4c00b0020b04251529so182302pjf.5;
+        Thu, 20 Oct 2022 10:26:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zyshK7iYZ8XULGV5AWhAfvvym7/uA21Df+Y+HX9QYb0=;
-        b=huTJFdkUecF8TGzQLLF7zQR3m817T7caMcVFk1X1HFFcunW/qxpRIzuNdRgNp9YqqC
-         4erIuFOo0N3fk1yBwunPDB7AwfRpS4skpBb3GapttN8tJR4Pj1FP52TRxXE7ZQcBRjAt
-         Uyf9bUk2IqMILVqiZnpCslBjYb6WAI896ZicB9uKXSqaeW4lMwda1d1gN8rr87Mnx4LA
-         6yv9ET1FPfDyxBHshHme70jUsHjC87DVvGkotDtQdtVN8VpcAp2yB70KmDhgGZl519eA
-         IsVEmtdAbDJu0KoVRoX34HDr5CawYlZiv1XxTaNR4IUdui3x9KpmdHnei4corF9VXRoK
-         mIxw==
+        bh=eSDt8hP5nyvEWrVukBA1Cz84sJh8J6UC7io/poKcOEs=;
+        b=N0RW9lwt1ROLUFDlxho2ayGf0ooWdY2RDq636CZ8ocTQGvJLQPBJ5CqTubBqIfbyu7
+         PXf+mdlvr8RfVjXEirfd0j43SP5HORrnG20uILv3KjSo4sMhv9MZ5IhUDPfLvfACIep2
+         s8PptwM6hTbl14Q8eyOudBn/zfvJ1BuxfTyMsKNamtrRQ+6HyPCsNRjs4NtPe+JqmsJH
+         2aKulOj3uETNV2WYNz4VntKAkzWluXfRmqHnEkcoUKdYRZdFA1jhn5+ZnHGKLI6m70h1
+         g9XY1pvwe8Ra0bQ9ZXn3O2oTwkSfLBxVWaXrof/x+eahfw1058mxXwMe8bWuJtaZeAei
+         XpoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=zyshK7iYZ8XULGV5AWhAfvvym7/uA21Df+Y+HX9QYb0=;
-        b=wRojlP4qyexTcDDt1NQ9T2ErvZ9+DJwbMjqwbE6ARNm+i3SqS3aCjKFdOUzohUedbe
-         ZGdx8tsYap1F/FVVk8JX/h2grBBHa/3Im2wO55EMOKE8nhf3azk1+Fc1rYXwBBrsEwKN
-         C+w3T30qT/qkwA3wbuaEN5nxe/pLGjoZgsGb2nHk0yJG+miIEWODEUmyBqZpjri9imH+
-         sCF1BaXq9qdzLmWMOGgNaRjswYqcbz/ZFUrIkwimmLiPTr/sb+QzHNy/1/O1LjZLMi0Z
-         hYJCZ47bz+BOwD/G/ZWM3HNqavdKB07xfXtMyI2GGq85PQUB41icxkCXC1jtVxERnvbi
-         iXEw==
-X-Gm-Message-State: ACrzQf1VNVWTowO21RRJ/0tS2D+eCmeH4/6COml4RKBIgm6OEMNCvN+W
-        kFIMKaewISdZKuCmz+OpN4s=
-X-Google-Smtp-Source: AMsMyM4HF8gN3n3GqZnlJ9ZLvjaQwuV1aOqj7FbIz3ADMeJBR/1NPaOMhUVqg8NDy9zyy2uLWVJJYw==
-X-Received: by 2002:a17:903:32c1:b0:185:5398:8c66 with SMTP id i1-20020a17090332c100b0018553988c66mr15241533plr.135.1666286807796;
-        Thu, 20 Oct 2022 10:26:47 -0700 (PDT)
+        bh=eSDt8hP5nyvEWrVukBA1Cz84sJh8J6UC7io/poKcOEs=;
+        b=eISdkpxJKB/Usy3u6PEYvm2NnZBZXSuvIHqoqcoU6TzkoPEmN7kdrVqqc8vQyyVQN2
+         sQB1uJmoSXk80bWp1dtlvvGc0UAQWsQwr9cy62ML0Fww7Io4W+L47htWZDG1ffoi0OvO
+         mQXvazPVvW6QNbthjBD5Lt/hKBEfyVl+4w3uiC0pVdBssoBb+Bm2HGE58mjXnTYXCFba
+         YgVaWPR+s66zAUSsEf9c9TrjHDcWTGpL0Tyxft0A+BETlumGWfo2dDvWAxITJs/T8TRs
+         xXhBzqKNenHzfEAroLtQ+nSPG/54Blczt6Wv0dIZHNFQaabwaX7ZmNh/L7r61pQe1vtL
+         H5Xg==
+X-Gm-Message-State: ACrzQf2bjayvp89slIDFERhWLFwjZyNSfCXNTGTyJu87YAzXyxoEMrRz
+        zUVa165aFJqZKpTzj3s5VELFG8FfmQo=
+X-Google-Smtp-Source: AMsMyM5o5LvTscI4opw10g7FrHdi5ysWG3kfq49oKHRv9Q1CSnQQEPHg9cgluvd+edhgylc7zGejtw==
+X-Received: by 2002:a17:90b:4d90:b0:20d:7f17:5983 with SMTP id oj16-20020a17090b4d9000b0020d7f175983mr53643954pjb.197.1666286808881;
+        Thu, 20 Oct 2022 10:26:48 -0700 (PDT)
 Received: from youngsil.svl.corp.google.com ([2620:15c:2d4:203:637f:7dcc:4bbf:4981])
-        by smtp.gmail.com with ESMTPSA id q13-20020a170902f34d00b0017680faa1a8sm12951754ple.112.2022.10.20.10.26.46
+        by smtp.gmail.com with ESMTPSA id q13-20020a170902f34d00b0017680faa1a8sm12951754ple.112.2022.10.20.10.26.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 10:26:47 -0700 (PDT)
+        Thu, 20 Oct 2022 10:26:48 -0700 (PDT)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -60,9 +60,9 @@ Cc:     Ingo Molnar <mingo@kernel.org>,
         Ian Rogers <irogers@google.com>,
         Adrian Hunter <adrian.hunter@intel.com>,
         linux-perf-users@vger.kernel.org
-Subject: [PATCH 1/8] perf test: Do not use instructions:u explicitly
-Date:   Thu, 20 Oct 2022 10:26:36 -0700
-Message-Id: <20221020172643.3458767-2-namhyung@kernel.org>
+Subject: [PATCH 2/8] perf test: Fix shellcheck issues in the record test
+Date:   Thu, 20 Oct 2022 10:26:37 -0700
+Message-Id: <20221020172643.3458767-3-namhyung@kernel.org>
 X-Mailer: git-send-email 2.38.0.135.g90850a2211-goog
 In-Reply-To: <20221020172643.3458767-1-namhyung@kernel.org>
 References: <20221020172643.3458767-1-namhyung@kernel.org>
@@ -78,53 +78,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I think it's to support non-root user tests.  But perf record can handle
-the case and fall back to a software event (cpu-clock).  Practically this
-would affect when it's run on a VM, but it seems no reason to prevent running
-the test in the guest.
+Basically there are 3 issues:
 
-Reviewed-by: Adrian Hunter <adrian.hunter@intel.com>
+ 1. quote shell expansion
+ 2. do not use egrep
+ 3. use upper case letters for signal names
+
 Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- tools/perf/tests/shell/record.sh | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ tools/perf/tests/shell/record.sh | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
 diff --git a/tools/perf/tests/shell/record.sh b/tools/perf/tests/shell/record.sh
-index 301f95427159..747c33a1ec45 100755
+index 747c33a1ec45..464071462809 100755
 --- a/tools/perf/tests/shell/record.sh
 +++ b/tools/perf/tests/shell/record.sh
-@@ -21,18 +21,18 @@ trap trap_cleanup exit term int
+@@ -8,16 +8,16 @@ err=0
+ perfdata=$(mktemp /tmp/__perf_test.perf.data.XXXXX)
+ 
+ cleanup() {
+-  rm -f ${perfdata}
+-  rm -f ${perfdata}.old
+-  trap - exit term int
++  rm -f "${perfdata}"
++  rm -f "${perfdata}".old
++  trap - EXIT TERM INT
+ }
+ 
+ trap_cleanup() {
+   cleanup
+   exit 1
+ }
+-trap trap_cleanup exit term int
++trap trap_cleanup EXIT TERM INT
  
  test_per_thread() {
    echo "Basic --per-thread mode test"
--  if ! perf record -e instructions:u -o ${perfdata} --quiet true 2> /dev/null
-+  if ! perf record -o /dev/null --quiet true 2> /dev/null
-   then
--    echo "Per-thread record [Skipped instructions:u not supported]"
-+    echo "Per-thread record [Skipped event not supported]"
-     if [ $err -ne 1 ]
-     then
-       err=2
+@@ -30,13 +30,13 @@ test_per_thread() {
      fi
      return
    fi
--  if ! perf record -e instructions:u --per-thread -o ${perfdata} true 2> /dev/null
-+  if ! perf record --per-thread -o ${perfdata} true 2> /dev/null
+-  if ! perf record --per-thread -o ${perfdata} true 2> /dev/null
++  if ! perf record --per-thread -o "${perfdata}" true 2> /dev/null
    then
--    echo "Per-thread record of instructions:u [Failed]"
-+    echo "Per-thread record [Failed record]"
+     echo "Per-thread record [Failed record]"
      err=1
      return
    fi
-@@ -49,7 +49,7 @@ test_register_capture() {
-   echo "Register capture test"
-   if ! perf list | egrep -q 'br_inst_retired.near_call'
+-  if ! perf report -i ${perfdata} -q | egrep -q true
++  if ! perf report -i "${perfdata}" -q | grep -q true
    then
--    echo "Register capture test [Skipped missing instruction]"
-+    echo "Register capture test [Skipped missing event]"
+     echo "Per-thread record [Failed missing output]"
+     err=1
+@@ -47,7 +47,7 @@ test_per_thread() {
+ 
+ test_register_capture() {
+   echo "Register capture test"
+-  if ! perf list | egrep -q 'br_inst_retired.near_call'
++  if ! perf list | grep -q 'br_inst_retired.near_call'
+   then
+     echo "Register capture test [Skipped missing event]"
      if [ $err -ne 1 ]
-     then
-       err=2
+@@ -56,7 +56,7 @@ test_register_capture() {
+     fi
+     return
+   fi
+-  if ! perf record --intr-regs=\? 2>&1 | egrep -q 'available registers: AX BX CX DX SI DI BP SP IP FLAGS CS SS R8 R9 R10 R11 R12 R13 R14 R15'
++  if ! perf record --intr-regs=\? 2>&1 | grep -q 'available registers: AX BX CX DX SI DI BP SP IP FLAGS CS SS R8 R9 R10 R11 R12 R13 R14 R15'
+   then
+     echo "Register capture test [Skipped missing registers]"
+     return
+@@ -64,7 +64,7 @@ test_register_capture() {
+   if ! perf record -o - --intr-regs=di,r8,dx,cx -e br_inst_retired.near_call:p \
+     -c 1000 --per-thread true 2> /dev/null \
+     | perf script -F ip,sym,iregs -i - 2> /dev/null \
+-    | egrep -q "DI:"
++    | grep -q "DI:"
+   then
+     echo "Register capture test [Failed missing output]"
+     err=1
 -- 
 2.38.0.135.g90850a2211-goog
 
