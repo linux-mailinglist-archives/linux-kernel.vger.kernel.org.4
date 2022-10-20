@@ -2,170 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 142F2605939
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 10:00:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 127A2605937
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 10:00:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229452AbiJTIAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 04:00:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54452 "EHLO
+        id S229987AbiJTIAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 04:00:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbiJTIAY (ORCPT
+        with ESMTP id S231236AbiJTIAW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 04:00:24 -0400
-Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B08F7B79C
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 01:00:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1666252803; bh=KZogcX23PzzPa1tx6zdFOcH2ZnPUvNt/ThaGDD/8Dyw=;
-        h=X-EA-Auth:Date:From:To:Subject:Message-ID:References:MIME-Version:
-         Content-Type:In-Reply-To;
-        b=mHjOBXz/STV3tvgxgwPcCdLl2UdXNDPSBwRY5qHlveCvq+lAp7cUfq4B7wLjBzk96
-         A6EZx8FLSNoCV47Men1RL1MIfB17EAXJBYoRbZVevam4ZyS7mTfwvJSp4hG+JeZ+A0
-         oS6DR2F4eCEL7QeA/WTQEy7k8RGmMhblpKlARHXs=
-Received: by b-5.in.mailobj.net [192.168.90.15] with ESMTP
-        via [213.182.55.206]
-        Thu, 20 Oct 2022 10:00:03 +0200 (CEST)
-X-EA-Auth: kEbeVOkRIzsClWki16rMN3tDT4Gwd8JyyJxmSCJmHoIL/4lrk7GZcHTzqeVzNQ6YO3R6GGG/FpmuFiBFvoOGmDY6OomUcqP7
-Date:   Thu, 20 Oct 2022 13:29:58 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     outreachy@lists.linux.dev, Larry.Finger@lwfinger.net,
-        phil@philpotter.co.uk, paskripkin@gmail.com,
-        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, kumarpraveen@linux.microsoft.com,
-        saurabh.truth@gmail.com
-Subject: [PATCH v3 10/10] staging: r8188eu: Correct missing or extra space in
- the statements
-Message-ID: <f400fa71f29ffb3a684ce415a054fc1fc9efe7c0.1666249716.git.drv@mailo.com>
-References: <cover.1666249715.git.drv@mailo.com>
+        Thu, 20 Oct 2022 04:00:22 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F1D748F7
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 01:00:14 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id w18so45419814ejq.11
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 01:00:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+NnDDSUoFW1p/YYrT8o2AeBUy64LBLrL7TXVJeeJNsE=;
+        b=gfr0OOmHN/gW3+VUUkPNe/rvNFvWe/J4sFvkKffbWA5/GqgpDet+i9JcOu2BgYUH7m
+         XMd7ff8HCmtgLsp9eWw/fBmMwQV1CAZ20wlTwEEF4G3My0AShqzcjsKBVwjcst+B5YLk
+         PjW62HVCCYc4hIRkke7Kjrkq6kxJrHs1/RwT+Wj+cpri1LPkQ2AlokEfELqfp7SbPoVt
+         lyCPrxFNsa6CBSLg1l1ua0LxY9qI901W8XPqD8zx2SkE7y7izLcdWfzLThr1zry8i3fR
+         F29uO/Af2cKghsHzOLsagW3Z2GErdjA+GmGWN63MQtkxdj6PwvLdKcceQyIi3usk8cDR
+         nYUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+NnDDSUoFW1p/YYrT8o2AeBUy64LBLrL7TXVJeeJNsE=;
+        b=2jlJBphR/fZtZu9wnTPECUP8QgFGfsWToqWfsOtPj3vqlXlcVQCMQkqOw5J73LGxgc
+         CWhK59uRbtlgsAfh+Cn05nZdKfMI1OXwK/6UIaez1aI0p9sENWY5k9/D+soXNNVrD8Sc
+         be0Fs4ZMlz/4UK//B9HUH7ujX2IGfhAsXQZN1pfOUvRLI+aGYvR497zsjvNRwzAl5WMN
+         RQ9GpgBW7YgewylXlsjnkVOi2OhM1XYCu5mFfA7AwfTFglvefu2dzUHjC0PZZAL9bTYq
+         wyFYyMKEAEhgLGU7Fax/5sDTwOUNYeQWYtFHnYR8Iv8FYUckPtW/aFRLjP53jr5eHe7c
+         f11Q==
+X-Gm-Message-State: ACrzQf3AXEqyyPFUwkbMmag03gbBLkgdxuBTD3KgiJswiO8EtZ35RwdQ
+        KVvY1iAYCYozOcP0LDgsM+hAyM1C8Rmr8sHABItj0w==
+X-Google-Smtp-Source: AMsMyM5+Lku99gTMJI4bG6h/y7MjMSoqz4+WMa283TgV9DaUiQdCWvkKvZptj29nYoZKCK1khdCO9NPvJqUu05LPkgg=
+X-Received: by 2002:a17:907:7606:b0:78e:61d:757e with SMTP id
+ jx6-20020a170907760600b0078e061d757emr9365136ejc.690.1666252812748; Thu, 20
+ Oct 2022 01:00:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1666249715.git.drv@mailo.com>
+References: <20221011-gpiolib-quirks-v3-0-eae9cc2ed0a1@gmail.com>
+ <Y06cvrpcHn0jwZxU@smile.fi.intel.com> <CACRpkdZZZp5Li7OSybv8F7a8F5iik_gRumwR__BAwpWddfctxQ@mail.gmail.com>
+ <Y0/cot711ad/hG/o@smile.fi.intel.com>
+In-Reply-To: <Y0/cot711ad/hG/o@smile.fi.intel.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 20 Oct 2022 10:00:01 +0200
+Message-ID: <CACRpkda_BbpNa+OLz=9vYuMbBNyWi4RBfoDS8F_gtc+vP_Fgyg@mail.gmail.com>
+Subject: Re: [PATCH v3 00/10] gpiolib: more quirks to handle legacy names
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Properly spacing out code statements/instructions improves code
-readability. Add missing or remove extra space as necessary according
-to the Linux Kernel coding-style guidelines. Following errors reported
-by checkpatch script for inconsistent code spacing:
-	ERROR: space prohibited before that close parenthesis ')'
-	ERROR: space prohibited before that ',' (ctx:WxW)
-	CHECK: spaces preferred around that '&' (ctx:VxV)
+On Wed, Oct 19, 2022 at 1:16 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+> On Wed, Oct 19, 2022 at 12:56:31PM +0200, Linus Walleij wrote:
+> > On Tue, Oct 18, 2022 at 2:32 PM Andy Shevchenko
 
-Signed-off-by: Deepak R Varma <drv@mailo.com>
----
+> > > I was wondering if we can use the approach that ACPI chose for itself,
+> > > i.e.  the separate data that can be filled by the corresponding driver
+> > > and then GPIO OF common code may use it. In that case each driver knows
+> > > the exact list of compatible strings and associated quirks.
+> >
+> > I actually deliverately chose the other way around, to centralize all quirks,
+> > so that drivers look nice and simple and the ugly historical errors of the
+> > device tree be hidden away in gpiolib-of.c.
+>
+> This makes sense if and only if we may guarantee no quirks will appear in the
+> future. So, it may be true for DT, but I'm quite skeptical about ACPI...
 
-Changes in v3:
-   1. Patch newly added to the patch set.
+Right, the idea is to stop more idiomatic DT bindings from coming into existance
+by review and formal verification of the reviewed bindings by using
+YAML schemas.
 
+ACPI is somewhat lacking public review of "bindings" and DSDT tables, and I
+don't know if there is some counterpart to the schema validation, so that
+makes for more new bugs. But maybe ACPI has some tricks up its sleeve that I
+don't know about. To me it seems like bugs in ACPI are discovered by developers
+after the devices are already produced :/
 
+There are bindings and device trees which lack public review too, most notably
+Apple Mac, so especially for them we are redefining new bindings and
+who knows, maybe Apple will pick them up eventually!
 
- .../staging/r8188eu/include/rtl8188e_spec.h    | 12 ++++++------
- drivers/staging/r8188eu/include/rtw_mlme.h     | 18 +++++++++---------
- drivers/staging/r8188eu/include/rtw_mlme_ext.h |  2 +-
- 3 files changed, 16 insertions(+), 16 deletions(-)
-
-diff --git a/drivers/staging/r8188eu/include/rtl8188e_spec.h b/drivers/staging/r8188eu/include/rtl8188e_spec.h
-index e34ecdc09688..3fa3b3e5dd64 100644
---- a/drivers/staging/r8188eu/include/rtl8188e_spec.h
-+++ b/drivers/staging/r8188eu/include/rtl8188e_spec.h
-@@ -900,12 +900,12 @@ Current IOREG MAP
- #define HQSEL_HIQ			BIT(5)
-
- /*  For normal driver, 0x10C */
--#define _TXDMA_HIQ_MAP(x)		(((x)&0x3) << 14)
--#define _TXDMA_MGQ_MAP(x)		(((x)&0x3) << 12)
--#define _TXDMA_BKQ_MAP(x)		(((x)&0x3) << 10)
--#define _TXDMA_BEQ_MAP(x)		(((x)&0x3) << 8 )
--#define _TXDMA_VIQ_MAP(x)		(((x)&0x3) << 6 )
--#define _TXDMA_VOQ_MAP(x)		(((x)&0x3) << 4 )
-+#define _TXDMA_HIQ_MAP(x)		(((x) & 0x3) << 14)
-+#define _TXDMA_MGQ_MAP(x)		(((x) & 0x3) << 12)
-+#define _TXDMA_BKQ_MAP(x)		(((x) & 0x3) << 10)
-+#define _TXDMA_BEQ_MAP(x)		(((x) & 0x3) << 8)
-+#define _TXDMA_VIQ_MAP(x)		(((x) & 0x3) << 6)
-+#define _TXDMA_VOQ_MAP(x)		(((x) & 0x3) << 4)
-
- #define QUEUE_LOW			1
- #define QUEUE_NORMAL			2
-diff --git a/drivers/staging/r8188eu/include/rtw_mlme.h b/drivers/staging/r8188eu/include/rtw_mlme.h
-index ebf7168a7ef9..ca539c652f26 100644
---- a/drivers/staging/r8188eu/include/rtw_mlme.h
-+++ b/drivers/staging/r8188eu/include/rtw_mlme.h
-@@ -101,17 +101,17 @@ struct rt_link_detect {
-
- struct profile_info {
- 	u8	ssidlen;
--	u8	ssid[ WLAN_SSID_MAXLEN ];
--	u8	peermac[ ETH_ALEN ];
-+	u8	ssid[WLAN_SSID_MAXLEN];
-+	u8	peermac[ETH_ALEN];
- };
-
- struct tx_invite_req_info {
- 	u8	token;
- 	u8	benable;
--	u8	go_ssid[ WLAN_SSID_MAXLEN ];
-+	u8	go_ssid[WLAN_SSID_MAXLEN];
- 	u8	ssidlen;
--	u8	go_bssid[ ETH_ALEN ];
--	u8	peer_macaddr[ ETH_ALEN ];
-+	u8	go_bssid[ETH_ALEN];
-+	u8	peer_macaddr[ETH_ALEN];
- 	u8	operating_ch;	/* This information will be set by using the
- 				 * p2p_set op_ch=x */
- 	u8	peer_ch;	/* The listen channel for peer P2P device */
-@@ -154,9 +154,9 @@ struct tx_nego_req_info {
- };
-
- struct group_id_info {
--	u8	go_device_addr[ ETH_ALEN ];	/* The GO's device address of
-+	u8	go_device_addr[ETH_ALEN];	/* The GO's device address of
- 						 * this P2P group */
--	u8	ssid[ WLAN_SSID_MAXLEN ];	/* The SSID of this P2P group */
-+	u8	ssid[WLAN_SSID_MAXLEN];	/* The SSID of this P2P group */
- };
-
- struct scan_limit_info {
-@@ -459,7 +459,7 @@ static inline void set_fwstate(struct mlme_priv *pmlmepriv, int state)
- {
- 	pmlmepriv->fw_state |= state;
- 	/* FOR HW integration */
--	if (_FW_UNDER_SURVEY==state)
-+	if (_FW_UNDER_SURVEY == state)
- 		pmlmepriv->bScanInProcess = true;
- }
-
-@@ -467,7 +467,7 @@ static inline void _clr_fwstate_(struct mlme_priv *pmlmepriv, int state)
- {
- 	pmlmepriv->fw_state &= ~state;
- 	/* FOR HW integration */
--	if (_FW_UNDER_SURVEY==state)
-+	if (_FW_UNDER_SURVEY == state)
- 		pmlmepriv->bScanInProcess = false;
- }
-
-diff --git a/drivers/staging/r8188eu/include/rtw_mlme_ext.h b/drivers/staging/r8188eu/include/rtw_mlme_ext.h
-index 413b94e38744..66aa8b497aa1 100644
---- a/drivers/staging/r8188eu/include/rtw_mlme_ext.h
-+++ b/drivers/staging/r8188eu/include/rtw_mlme_ext.h
-@@ -729,7 +729,7 @@ enum rtw_c2h_event {
- 	GEN_EVT_CODE(_Survey),	 /*8*/
- 	GEN_EVT_CODE(_SurveyDone),	 /*9*/
-
--	GEN_EVT_CODE(_JoinBss) , /*10*/
-+	GEN_EVT_CODE(_JoinBss), /*10*/
- 	GEN_EVT_CODE(_AddSTA),
- 	GEN_EVT_CODE(_DelSTA),
- 	GEN_EVT_CODE(_AtimDone),
---
-2.30.2
-
-
-
+Yours,
+Linus Walleij
