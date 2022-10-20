@@ -2,82 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47F44606829
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 20:24:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 688E360682C
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 20:27:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbiJTSYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 14:24:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44314 "EHLO
+        id S229876AbiJTS1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 14:27:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229853AbiJTSYE (ORCPT
+        with ESMTP id S229514AbiJTS1s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 14:24:04 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE191F1839
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 11:24:02 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id w3so142611qtv.9
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 11:24:02 -0700 (PDT)
+        Thu, 20 Oct 2022 14:27:48 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39BAA1F524D
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 11:27:47 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id a5-20020a17090aa50500b002008eeb040eso3501083pjq.1
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 11:27:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cbX/juujWC6ueA+dF64S7G5Ta7cBZWyKR6zbSd0h7YY=;
-        b=AaABUfwRmy6Nfus8levvOmejLM3AdKQQPLMs+8C7Atk5/AiuCuCWT3QFxTCDgb89Br
-         16M62FbFmBpKm0IJrw5ItxSNam9IBr6CrQsRGYaoQxSy/wBc+rHE2pEysHRiqf6fr4nF
-         L5nc9tpgaamvXYaGuCaKnoY+V+b/TiVNnZNiP8qT1+mcBw9XjA/4UybFnd1olfzWnJH6
-         dpbdGkTlqdLk57Z3yvB09nNLDrcbSfjzmUzeX5pfhMiV54UgeuV+WwT+nm7w0XRzxocU
-         kOlPHCXBnv12pukrYyqavXi8XnLw3kOXX8ZL7igpuWV/iZICmrQj7NpKBPR6mXD+M8+v
-         ulFQ==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=0tIx6HdnxvvsDqhgjFe+ArvgpH3bDXYD7273dNF1cgU=;
+        b=dSRDUfwp+jfghkbPv9BNEbmWn5jNVVAAUmaqmB1sJ/4psJI9erOuxkOeUT+D+ih4nG
+         6xUsapOGqaGBMHdQh4qHit0J5dNG47yVxcNVmyaIExVIfwerrD6gm6PxoPGAtS3AQVsj
+         JNHDFC6w8vK4P0p7ZX7H++T2iwIvk1YwFMBCoPjMPnz/+gEzDHFPivL5/CoUO55fgLQz
+         ynywAHWRCJFlI1DgxrN7Shb3aa6XfNT0fc+oYxcptVjY+QuhA5Yu++7CYs5r+D2rf1Wr
+         eNPj+PzZo86qf5N+lO7ZIWDWiIzDARuFgsiWpagsKP51ifTw8djpCC0bRYqZfGunPfGX
+         4rog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cbX/juujWC6ueA+dF64S7G5Ta7cBZWyKR6zbSd0h7YY=;
-        b=2YDrT/uqoMU7BEVcWx7ov+ehCOeupHTEwVxX9YKreHauptmdoucTvOAvP+dZuVB8gg
-         ft92m8dYw1s0OfE5kYXngCbXNj/MpX0qIriLEIo8cyyqWJVOXN2uPmEicRBwiRu6nzCn
-         COnpD3WFoXcCppZyFWeGKGxSHjJ9yYfi0skxav02DUnrQNU8QWvTk2EUUk4oKe1Ejork
-         UBD2Whj4WV8+RItcDHuYXGhHFXbG/UU7/rmv+hDBP0wf0N4sQmkKU7GUWJml0P0q0OAB
-         4KFXrDnK4xj5KgupvrHsDXOIQpY0v0SeYykXi5uOBP5Xh9kRhHlD4sYnfFG+9I0d+AlI
-         ZpIQ==
-X-Gm-Message-State: ACrzQf3rNxKdmx/Ey0/knbiHdDTIRr4yrRKUE91BZQt8/wnODr8CKmvY
-        KxIxNBrNSdqQ87Sow0N5YUAASg==
-X-Google-Smtp-Source: AMsMyM7D0BGgC1BtJnpb+bfxSiU74ftu8bSbR3bVqXlel9eqWedUYhS8sohMpV9TYWuUBSCYl+c2LA==
-X-Received: by 2002:ac8:58c5:0:b0:39c:c710:f58c with SMTP id u5-20020ac858c5000000b0039cc710f58cmr12105164qta.295.1666290242072;
-        Thu, 20 Oct 2022 11:24:02 -0700 (PDT)
-Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
-        by smtp.gmail.com with ESMTPSA id p7-20020a05620a132700b006b61b2cb1d2sm7684779qkj.46.2022.10.20.11.24.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Oct 2022 11:24:01 -0700 (PDT)
-Message-ID: <f8435311-42fa-4858-4623-8088d644f6c6@linaro.org>
-Date:   Thu, 20 Oct 2022 14:23:59 -0400
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0tIx6HdnxvvsDqhgjFe+ArvgpH3bDXYD7273dNF1cgU=;
+        b=KaHASIqQwsSxVjoliehS1kWwfPUZJv8Bgw9A7hqsFh50bEp5peqEZqb7MZvyrQBOuM
+         yoS9ahtQE5YxjWEi45vpZ8llGC0raUP/7AG66B+0TF+Cqjz430LE4ZAO3hGWkSd7q0cz
+         ut2cE2zidfoktDg4UW8vhuuGjUzRlGV1h42yoNJypSi3QNIqK6bGzIpYfrbVGgOtrh6g
+         NMoTKfP2yYgdRyiTbqBW6LAkgYSeELZZueFSxdg3rc8xQXopQZXfrQ0FIB+qLjxNtfCj
+         AhDa0BxtVgsXGk+vB5fQ17/Cw0bd4ochxjohfgp7dE35qXwRDQOiRGPV+JDs8ykuCAaH
+         Qu+Q==
+X-Gm-Message-State: ACrzQf2XDu6ra93IYwhLBYK1ozVZ3dgANCk1PNO9dTDvByG8rd9c3Owc
+        ydCQZwzAnWPxUu/Awl9vzpB94FwKc/RWUAx328Y=
+X-Google-Smtp-Source: AMsMyM6l7jPlCkpp6teBaQ2qsDbSYRodsLiWbU/KFD5M8VnN7xNmjW0TSzthjck2HP04OBtttwh34jp+rkZcdngtdYs=
+X-Received: by 2002:a17:902:d512:b0:181:f1f4:fcb4 with SMTP id
+ b18-20020a170902d51200b00181f1f4fcb4mr15353550plg.102.1666290466641; Thu, 20
+ Oct 2022 11:27:46 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 2/3] dt-bindings: watchdog: fsl-imx: document suspend in
- wait mode
-Content-Language: en-US
-To:     Andrej Picej <andrej.picej@norik.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, shawnguo@kernel.org,
-        linux@roeck-us.net, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-imx@nxp.com, festevam@gmail.com,
-        kernel@pengutronix.de, s.hauer@pengutronix.de,
-        wim@linux-watchdog.org, robh+dt@kernel.org
-References: <20221019111714.1953262-1-andrej.picej@norik.com>
- <ea6893f6-be39-697c-4493-7f1c0ed6708d@linaro.org>
- <143f1466-e34a-254d-4e6e-fefa17ad1390@norik.com>
- <24401572.EfDdHjke4D@steina-w>
- <1a3a1c8c-8baf-ef70-9e5b-e817bb14cfad@norik.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1a3a1c8c-8baf-ef70-9e5b-e817bb14cfad@norik.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+References: <20221018200125.848471-1-jthoughton@google.com>
+ <CAHbLzkoAeXhpJ2_eM6uYU9kuqNsT25NubOZZG6E1mFngYREuPg@mail.gmail.com> <CADrL8HU_a_GzM9kMLO19o6uHdZXpT+Gxyg6EhLORQxpfRSwXdg@mail.gmail.com>
+In-Reply-To: <CADrL8HU_a_GzM9kMLO19o6uHdZXpT+Gxyg6EhLORQxpfRSwXdg@mail.gmail.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Thu, 20 Oct 2022 11:27:34 -0700
+Message-ID: <CAHbLzkpfU_JgPgaZ6q3HWZZozsSd=q=aCCz5bhOUjMwsyXwwfw@mail.gmail.com>
+Subject: Re: [PATCH] hugetlbfs: don't delete error page from pagecache
+To:     James Houghton <jthoughton@google.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Axel Rasmussen <axelrasmussen@google.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,128 +73,156 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/10/2022 09:05, Andrej Picej wrote:
-> 
-> 
-> On 20. 10. 22 14:41, Alexander Stein wrote:
->> Am Donnerstag, 20. Oktober 2022, 14:36:10 CEST schrieb Andrej Picej:
->>> On 20. 10. 22 14:18, Krzysztof Kozlowski wrote:
->>>> On 20/10/2022 02:23, Andrej Picej wrote:
->>>>> Hi Alexander and Krzysztof,
->>>>>
->>>>> hope I can reply to both questions here.
->>>>>
->>>>> On 19. 10. 22 17:51, Krzysztof Kozlowski wrote:
->>>>>> On 19/10/2022 09:00, Alexander Stein wrote:
->>>>>>> Hello Andrej,
->>>>>>
->>>>>>> Am Mittwoch, 19. Oktober 2022, 13:17:13 CEST schrieb Andrej Picej:
->>>>>> Missing commit msg.
->>>>>>
->>>>>>>> Signed-off-by: Andrej Picej <andrej.picej@norik.com>
->>>>>>>> ---
->>>>>>>>
->>>>>>>>     Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml | 5
->>>>>>>>     +++++
->>>>>>>>     1 file changed, 5 insertions(+)
->>>>>>>>
->>>>>>>> diff --git
->>>>>>>> a/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml
->>>>>>>> b/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml index
->>>>>>>> fb7695515be1..01b3e04e7e65 100644
->>>>>>>> --- a/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml
->>>>>>>> +++ b/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml
->>>>>>>>
->>>>>>>> @@ -55,6 +55,11 @@ properties:
->>>>>>>>           If present, the watchdog device is configured to assert its
->>>>>>>>           external reset (WDOG_B) instead of issuing a software reset.
->>>>>>>>
->>>>>>>> +  fsl,suspend-in-wait:
->>>>>>>> +    $ref: /schemas/types.yaml#/definitions/flag
->>>>>>>> +    description: |
->>>>>>>> +      If present, the watchdog device is suspended in WAIT mode.
->>>>>>>> +
->>>>>>>>
->>>>>>>>     required:
->>>>>>>>       - compatible
->>>>>>>>       - interrupts
->>>>>>>
->>>>>>> What is the condition the watchdog is suspended in WAIT mode? Is this
->>>>>>> specific to SoC or platform or something else?
->>>>>
->>>>> Sorry, what exactly do you mean by condition?
->>>>
->>>> Ugh, I also cannot parse it now...
->>
->> Sorry, Krzysztof already asked the right question: When does one want to
->> enable/disable this feature?
->>
->>>>> When the property
->>>>> "fsl,suspend-in-wait" is set the watchdog is suspended in WAIT mode, so
->>>>> this is defined by the user. Didn't want to apply it for all the
->>>>> supported machines since there could be devices which depend on watchdog
->>>>> triggering in WAIT mode. We stumbled on this problem on imx6 devices,
->>>>> but the same bit (with the same description) is found on imx25, imx35,
->>>>> imx50/51/53, imx7 and imx8.
->>>>
->>>> I meant, what is expected to happen if you do not enable this bit and
->>>> watchdog triggers in WAIT mode? IOW, why someone might want to enable or
->>>> disable this property?
->>>
->>> If this is not enabled and you put the device into the Suspend-to-idle
->>> mode the device resets after 128 seconds. If not, the device can be left
->>> in that state for infinite time. I'm guessing you want me to better
->>> explain the property in device tree docs right?
->>> I can do that in v2.
->>>
->>>>>> And what happens else? When it is not suspended in WAIT mode?
->>>>>
->>>>> When you put the device in "freeze"/"Suspend-To-Idle" low-power mode the
->>>>> watchdog keeps running and triggers a reset after 128 seconds. So the
->>>>> maximum length the device can stay in this mode is limited to 128
->>>>> seconds.
->>>>
->>>> And who wakes up the system before 128 seconds? IOW is there a use case
->>>> of not enabling this property?
->>>
->>> Well I can think of one, system can be woken up by some other interrupt.
->>> Like RTC which triggers interrupt (for example every 10s). So if this
->>> property is left disabled the watchdog can handle errors where other
->>> wakeup sources don't trigger interrupt or if the system is unable to
->>> wake from low-power state. In that case the watchdog will do a hard
->>> reset of the device.
->>>
->>> But I'm not really sure if anybody uses this, just wanted to make sure
->>> that we keep the default behaviour as it is, since this driver is used
->>> by many devices and for quite some time.
->>
->> This sounds more like (application) configuration. If so this should not be
->> configured in device tree, IMHO.
->>
-> 
-> Do you have an idea where should it be configured? Just keep in mind 
-> that this can not be configured at runtime, since this is write-once bit 
-> so any configuration changes regarding this functionality can not be done.
-> 
-> Basically if I can sum up the problem:
-> 
-> Without this property enabled, the WDW bit is left unset:
-> $ echo freeze > /sys/power/state
-> #device enters Suspend-to-idle, watchdog is left running and the device 
-> resets after 128 seconds in this state
+On Wed, Oct 19, 2022 at 11:42 AM James Houghton <jthoughton@google.com> wrote:
+>
+> On Wed, Oct 19, 2022 at 11:31 AM Yang Shi <shy828301@gmail.com> wrote:
+> >
+> > On Tue, Oct 18, 2022 at 1:01 PM James Houghton <jthoughton@google.com> wrote:
+> > >
+> > > This change is very similar to the change that was made for shmem [1],
+> > > and it solves the same problem but for HugeTLBFS instead.
+> > >
+> > > Currently, when poison is found in a HugeTLB page, the page is removed
+> > > from the page cache. That means that attempting to map or read that
+> > > hugepage in the future will result in a new hugepage being allocated
+> > > instead of notifying the user that the page was poisoned. As [1] states,
+> > > this is effectively memory corruption.
+> > >
+> > > The fix is to leave the page in the page cache. If the user attempts to
+> > > use a poisoned HugeTLB page with a syscall, the syscall will fail with
+> > > EIO, the same error code that shmem uses. For attempts to map the page,
+> > > the thread will get a BUS_MCEERR_AR SIGBUS.
+> > >
+> > > [1]: commit a76054266661 ("mm: shmem: don't truncate page if memory failure happens")
+> > >
+> > > Signed-off-by: James Houghton <jthoughton@google.com>
+> >
+> > Thanks for the patch. Yes, we should do the same thing for hugetlbfs.
+> > When I was working on shmem I did look into hugetlbfs too. But the
+> > problem is we actually make the whole hugetlb page unavailable even
+> > though just one 4K sub page is hwpoisoned. It may be fine to 2M
+> > hugetlb page, but a lot of memory may be a huge waste for 1G hugetlb
+> > page, particular for the page fault path.
+>
+> Right -- it is wasted until a hole is punched or the file is
+> truncated. Although we're wasting the rest of the hugepage for a
+> little longer with this patch, I think it's worth it to have correct
+> behavior.
+>
+> >
+> > So I discussed this with Mike offline last year, and I was told Google
+> > was working on PTE mapped hugetlb page. That should be able to solve
+> > the problem. And we'd like to have the high-granularity hugetlb
+> > mapping support as the predecessor.
+> >
+> > There were some other details, but I can't remember all of them, I
+> > have to refresh my memory by rereading the email discussions...
+>
+> Yes! I am working on this. :) I will send up a series in the coming
+> weeks that implements basic support for high-granularity mapping
+> (HGM). This patch is required for hwpoison semantics to work properly
+> for high-granularity mapping (and, as the patch states, for shared
+> HugeTLB mappings generally). For HGM, if we partially map a hugepage
+> and find poison, faulting on the unmapped bits of it will allocate a
+> new hugepage. By keeping the poisoned page in the pagecache, we
+> correctly give userspace a SIGBUS. I didn't mention this in the commit
+> description because I think this patch is correct on its own.
 
-I still wonder (and still did not receive) about such use case. When
-would you like to have such behavior?
+I don't mean it is not correct. I'm not sure which one (this patch or
+HGM) would go first. But it sounds like you thought this patch should
+be the predecessor of HGM since it could deliver userspace the correct
+signal?
 
-> 
-> With this property set, the WDW bit is set at watchdog initialization:
-> $ echo freeze > /sys/power/state
-> #device enters Suspend-to-idle, watchdog is suspended and the device can 
-> be left in this state until some other wakeup source triggers interrupt.
-
-Assuming there is such use case, for keeping watchdog running even
-though system sleeps (and cannot poke watchdog), it's fine.
-
-Best regards,
-Krzysztof
-
+>
+> I haven't implemented PAGE_SIZE poisoning of HugeTLB pages yet, but
+> high-granularity mapping unblocks this work. Hopefully that will be
+> ready in the coming months. :)
+>
+> - James Houghton
+>
+> >
+> > > ---
+> > >  fs/hugetlbfs/inode.c | 13 ++++++-------
+> > >  mm/hugetlb.c         |  4 ++++
+> > >  mm/memory-failure.c  |  5 ++++-
+> > >  3 files changed, 14 insertions(+), 8 deletions(-)
+> > >
+> > > diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
+> > > index fef5165b73a5..7f836f8f9db1 100644
+> > > --- a/fs/hugetlbfs/inode.c
+> > > +++ b/fs/hugetlbfs/inode.c
+> > > @@ -328,6 +328,12 @@ static ssize_t hugetlbfs_read_iter(struct kiocb *iocb, struct iov_iter *to)
+> > >                 } else {
+> > >                         unlock_page(page);
+> > >
+> > > +                       if (PageHWPoison(page)) {
+> > > +                               put_page(page);
+> > > +                               retval = -EIO;
+> > > +                               break;
+> > > +                       }
+> > > +
+> > >                         /*
+> > >                          * We have the page, copy it to user space buffer.
+> > >                          */
+> > > @@ -1111,13 +1117,6 @@ static int hugetlbfs_migrate_folio(struct address_space *mapping,
+> > >  static int hugetlbfs_error_remove_page(struct address_space *mapping,
+> > >                                 struct page *page)
+> > >  {
+> > > -       struct inode *inode = mapping->host;
+> > > -       pgoff_t index = page->index;
+> > > -
+> > > -       hugetlb_delete_from_page_cache(page_folio(page));
+> > > -       if (unlikely(hugetlb_unreserve_pages(inode, index, index + 1, 1)))
+> > > -               hugetlb_fix_reserve_counts(inode);
+> > > -
+> > >         return 0;
+> > >  }
+> > >
+> > > diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> > > index 97896165fd3f..5120a9ccbf5b 100644
+> > > --- a/mm/hugetlb.c
+> > > +++ b/mm/hugetlb.c
+> > > @@ -6101,6 +6101,10 @@ int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
+> > >
+> > >         ptl = huge_pte_lock(h, dst_mm, dst_pte);
+> > >
+> > > +       ret = -EIO;
+> > > +       if (PageHWPoison(page))
+> > > +               goto out_release_unlock;
+> > > +
+> > >         /*
+> > >          * We allow to overwrite a pte marker: consider when both MISSING|WP
+> > >          * registered, we firstly wr-protect a none pte which has no page cache
+> > > diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+> > > index 145bb561ddb3..bead6bccc7f2 100644
+> > > --- a/mm/memory-failure.c
+> > > +++ b/mm/memory-failure.c
+> > > @@ -1080,6 +1080,7 @@ static int me_huge_page(struct page_state *ps, struct page *p)
+> > >         int res;
+> > >         struct page *hpage = compound_head(p);
+> > >         struct address_space *mapping;
+> > > +       bool extra_pins = false;
+> > >
+> > >         if (!PageHuge(hpage))
+> > >                 return MF_DELAYED;
+> > > @@ -1087,6 +1088,8 @@ static int me_huge_page(struct page_state *ps, struct page *p)
+> > >         mapping = page_mapping(hpage);
+> > >         if (mapping) {
+> > >                 res = truncate_error_page(hpage, page_to_pfn(p), mapping);
+> > > +               /* The page is kept in page cache. */
+> > > +               extra_pins = true;
+> > >                 unlock_page(hpage);
+> > >         } else {
+> > >                 unlock_page(hpage);
+> > > @@ -1104,7 +1107,7 @@ static int me_huge_page(struct page_state *ps, struct page *p)
+> > >                 }
+> > >         }
+> > >
+> > > -       if (has_extra_refcount(ps, p, false))
+> > > +       if (has_extra_refcount(ps, p, extra_pins))
+> > >                 res = MF_FAILED;
+> > >
+> > >         return res;
+> > > --
+> > > 2.38.0.413.g74048e4d9e-goog
+> > >
