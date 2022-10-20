@@ -2,99 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F66260658E
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 18:18:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A7B0606590
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 18:19:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229515AbiJTQSG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 12:18:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40782 "EHLO
+        id S230175AbiJTQS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 12:18:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbiJTQSE (ORCPT
+        with ESMTP id S229800AbiJTQSx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 12:18:04 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F3410573;
-        Thu, 20 Oct 2022 09:17:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=lESwXvm7/TM1xJl1haYY/cX2oj4VfSDfgY65rchWdvg=; b=QvK+ioe3eZ2LCAB86gz7Gd5G95
-        x0fPcG2Db25FHsXiK/+Sw24enuFw55evax9BQKac4ROlOtV4+Q/AGvtRu2zCpjUdS+eUlFdJaCj4x
-        RToIx5OUJMTOe74dz3GKKjvingM8LPXxAT3crT+3oOy9acGTgfzr0bZqAFuFTf1ZXJmJu3P+7majd
-        mBCgwI1R5d3DCeoJ/+omEjyTxcL+oKtRS+wbca543Mz5cVhxgdoJ/qmkLsxPVLmhx0WkNLZYKXA6K
-        CzK5goRxtiHEORaGz2DoZVCYCxgsXfv5ZXuMC/McJEeEsdN/ewB7uxoUqmCqsbzIqFVUQtNJbuVN8
-        XHZH51KQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34828)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1olYEr-0007UG-6T; Thu, 20 Oct 2022 17:17:45 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1olYEn-0003IX-Hp; Thu, 20 Oct 2022 17:17:41 +0100
-Date:   Thu, 20 Oct 2022 17:17:41 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Frank Wunderlich <linux@fw-web.de>
-Cc:     linux-mediatek@lists.infradead.org,
-        Alexander Couzens <lynxis@fe80.eu>,
-        Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Frank Wunderlich <frank-w@public-files.de>
-Subject: Re: [PATCH v2] net: mtk_sgmii: implement mtk_pcs_ops
-Message-ID: <Y1F0pSrJnNlYzehq@shell.armlinux.org.uk>
-References: <20221020144431.126124-1-linux@fw-web.de>
+        Thu, 20 Oct 2022 12:18:53 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C0A210573;
+        Thu, 20 Oct 2022 09:18:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666282732; x=1697818732;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=um53HRrJ8LVVo6L7ZwNauAEB6I/IHREg0YMMB7JEA+I=;
+  b=QvKIbbS7gfP3bna+LX7vJVPRFVq/zJ8U3vJiS+nBCCHWzFI6ViESwztb
+   E58+QNUSSX0iO+3MdxjEBpXLmnMq4/c3jCiAC/8+f9rh5YHeciVbFFqYW
+   oDIV/aJzDyWf0694TlHu3KFOyIUwaxQmhMQT4yWlXBn3uXKatoA+DL51V
+   cA3CPS3KQ5mK8OBOpHZgaM1Yl8GiZiWROPHv0aqyyAkeNP+bu1rvEOYF4
+   6bL3IUhZFpUcwnxa5e+ENHVjmET9MlBhJjpzNp0W7w7JFMnt1RpFTXOfE
+   qVzyBFtqGK9FqPhCp4fcLTE8Vx8VSox5eTR8RnNjPHwxaVDmBm9fSOAgu
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="304374540"
+X-IronPort-AV: E=Sophos;i="5.95,199,1661842800"; 
+   d="scan'208";a="304374540"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 09:18:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="772457862"
+X-IronPort-AV: E=Sophos;i="5.95,199,1661842800"; 
+   d="scan'208";a="772457862"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga001.fm.intel.com with ESMTP; 20 Oct 2022 09:18:25 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1olYFT-00AdOh-2X;
+        Thu, 20 Oct 2022 19:18:23 +0300
+Date:   Thu, 20 Oct 2022 19:18:23 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>
+Subject: Re: [PATCH v1 3/6] spi: pxa2xx: Remove no more needed PCI ID table
+Message-ID: <Y1F0z5aP3MsqnMan@smile.fi.intel.com>
+References: <20221017171243.57078-1-andriy.shevchenko@linux.intel.com>
+ <20221017171243.57078-3-andriy.shevchenko@linux.intel.com>
+ <Y02ObkYoUQlY9oG/@sirena.org.uk>
+ <Y02SVH04iiu7Rj+8@smile.fi.intel.com>
+ <Y02TR0UBseEKUjq8@sirena.org.uk>
+ <Y02TxHp53XQo34ql@smile.fi.intel.com>
+ <Y06RCxzwrPZwIETp@sirena.org.uk>
+ <Y1ASXFOuc2uGXOlV@smile.fi.intel.com>
+ <Y1AczgwCEQO2gvQ2@sirena.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221020144431.126124-1-linux@fw-web.de>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y1AczgwCEQO2gvQ2@sirena.org.uk>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 04:44:31PM +0200, Frank Wunderlich wrote:
-> diff --git a/drivers/net/ethernet/mediatek/mtk_sgmii.c b/drivers/net/ethernet/mediatek/mtk_sgmii.c
-> index 736839c84130..8b7465057e57 100644
-> --- a/drivers/net/ethernet/mediatek/mtk_sgmii.c
-> +++ b/drivers/net/ethernet/mediatek/mtk_sgmii.c
-> @@ -122,7 +122,21 @@ static void mtk_pcs_link_up(struct phylink_pcs *pcs, unsigned int mode,
->  	regmap_write(mpcs->regmap, SGMSYS_SGMII_MODE, val);
->  }
->  
-> +static void mtk_pcs_get_state(struct phylink_pcs *pcs, struct phylink_link_state *state)
-> +{
-> +	struct mtk_pcs *mpcs = pcs_to_mtk_pcs(pcs);
-> +	unsigned int val;
-> +
-> +	regmap_read(mpcs->regmap, mpcs->ana_rgc3, &val);
-> +	state->speed = val & RG_PHY_SPEED_3_125G ? SPEED_2500 : SPEED_1000;
-> +
+On Wed, Oct 19, 2022 at 04:50:38PM +0100, Mark Brown wrote:
+> On Wed, Oct 19, 2022 at 06:06:04PM +0300, Andy Shevchenko wrote:
+> > On Tue, Oct 18, 2022 at 12:42:03PM +0100, Mark Brown wrote:
+> 
+> > > You should probably also restructure the code interpreting the device
+> > > IDs so that it's very clear that unknown values are handled well, this
+> > > would split things between multiple subsystems and right now the code is
+> > > a bit fragile.
+> 
+> > I'm not sure how better to do this. Any example?
+> 
+> For example a check that the ID is one we know about.  IIRC that bit of
+> context looked like a tree of if statements with no particular
+> validation.
 
-Sorry, looking back at my initial comment on the first revision of this
-patch, I see my second point was confused. It should have read:
-
-"2) There should also be a setting for state->duplex."
-
-IOW, "duplex" instead of "pause".
-
-Also, is there no way to read the link partner advertisement?
+But isn't it guaranteed to be handled by device core, i.e. we won't get driver
+even enumerated if ID is unknown to us.
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+With Best Regards,
+Andy Shevchenko
+
+
