@@ -2,284 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0BB8606668
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 18:59:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95D68606666
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 18:58:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbiJTQ6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 12:58:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45480 "EHLO
+        id S229954AbiJTQ6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 12:58:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229747AbiJTQ6q (ORCPT
+        with ESMTP id S229710AbiJTQ6p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 12:58:46 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CEFD19ABD6;
+        Thu, 20 Oct 2022 12:58:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D48F19ABD0;
         Thu, 20 Oct 2022 09:58:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666285125; x=1697821125;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EdB/x3pV6bign2i/qIA7C2VUh4NXsdGroF4hTnW+aFY=;
-  b=SC+bZr7n95iek8Hd3LKngoIpWIYhr9gglY75XQ35Jv6e2MOAn7nX8e15
-   SwBmwxPeMUnAPkRaLIBU4bd7DMjeinmpuaVvzTit7sjwXaOoR0ySHV1sP
-   wtAmhlVC3hCiGOr844dYgCsZ/XlOH7HMR0BmWInng4EUPG218Y8WBNOrs
-   j35kFwS1rwXz1SLGzlZq0BuOQq2qJ2yCuGiCiUAU8Q8/T7zgTeWcmEPdf
-   GZzOMnyd4q86qsufp4jUApcs4z8IqdXM5O9mIJKkaXG0BZv6WpW8Y/OYH
-   rvD4s8nhA0rUGerlNcfzt3VGVA8ckz7C1ccY+jPk4+mCSmICFX/MyZ1qg
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="368819602"
-X-IronPort-AV: E=Sophos;i="5.95,199,1661842800"; 
-   d="scan'208";a="368819602"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 09:58:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="632366233"
-X-IronPort-AV: E=Sophos;i="5.95,199,1661842800"; 
-   d="scan'208";a="632366233"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga007.fm.intel.com with ESMTP; 20 Oct 2022 09:58:40 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1olYsQ-00AeiQ-26;
-        Thu, 20 Oct 2022 19:58:38 +0300
-Date:   Thu, 20 Oct 2022 19:58:38 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     chengwei <foxfly.lai.tw@gmail.com>
-Cc:     lee@kernel.org, broonie@kernel.org, rafael@kernel.org,
-        mika.westerberg@linux.intel.com, linus.walleij@linaro.org,
-        brgl@bgdev.pl, linux-kernel@vger.kernel.org,
-        gregkh@linuxfoundation.org, lenb@kernel.org,
-        linux-acpi@vger.kernel.org, linux-gpio@vger.kernel.org,
-        GaryWang@aaeon.com.tw, musa.lin@yunjingtech.com,
-        jack.chang@yunjingtech.com, chengwei <larry.lai@yunjingtech.com>,
-        Javier Arteaga <javier@emutex.com>,
-        Nicola Lunghi <nicola.lunghi@emutex.com>
-Subject: Re: [PATCH 5/5] pinctrl: Add support pin control for UP board
- CPLD/FPGA
-Message-ID: <Y1F+PuCma1MX3XzK@smile.fi.intel.com>
-References: <20221019022450.16851-1-larry.lai@yunjingtech.com>
- <20221019022450.16851-6-larry.lai@yunjingtech.com>
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BF65061C9C;
+        Thu, 20 Oct 2022 16:58:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9214EC433D6;
+        Thu, 20 Oct 2022 16:58:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666285124;
+        bh=+OES5EZmhZxEwIIx+Cvwo2LLTdxU66Lge2u2Lr27KyM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ABYCw7v9z008luI93/k6ojwUsiJVDhhwK0Rr0PWe5lOLGSx/h9XHHzu/KF5IJDvn7
+         wUOdqSbmRoLZ2h4pNO99kpGAOmc4ZbGeWSjyCmStJLme15Rw/2RCYcI0H0Lj5XpJBs
+         7hfpAC9JQ6Eq3fY8XPb/CujLwjFlGfUWiPKVcgQ9F+b+yTQc1t4Ob0lcIDxKhVAAq8
+         mzOesEITBmWyDH1MdIsHWCsmH26o1tLymb7gvTvhbXPqxGU2m5k0zThm5SMMeE2xmL
+         iMeZ1S/iNhNAGBvbilhJLSEW/r5uKmWt79qcof+T7JnB6rJ1VWVytzXXlfloCI3a2j
+         xUsO8vzMoC8lA==
+Date:   Thu, 20 Oct 2022 17:58:39 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>
+Subject: Re: [PATCH v1 3/6] spi: pxa2xx: Remove no more needed PCI ID table
+Message-ID: <Y1F+Pw52nN195qDO@sirena.org.uk>
+References: <Y02ObkYoUQlY9oG/@sirena.org.uk>
+ <Y02SVH04iiu7Rj+8@smile.fi.intel.com>
+ <Y02TR0UBseEKUjq8@sirena.org.uk>
+ <Y02TxHp53XQo34ql@smile.fi.intel.com>
+ <Y06RCxzwrPZwIETp@sirena.org.uk>
+ <Y1ASXFOuc2uGXOlV@smile.fi.intel.com>
+ <Y1AczgwCEQO2gvQ2@sirena.org.uk>
+ <Y1F0z5aP3MsqnMan@smile.fi.intel.com>
+ <Y1F2a6CR+9sY66Zz@sirena.org.uk>
+ <Y1F6YRzRS2DR+cKL@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="aJUxk5TzEVqHFiLi"
 Content-Disposition: inline
-In-Reply-To: <20221019022450.16851-6-larry.lai@yunjingtech.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y1F6YRzRS2DR+cKL@smile.fi.intel.com>
+X-Cookie: Today is what happened to yesterday.
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 10:24:50AM +0800, chengwei wrote:
-> The UP Squared board <http://www.upboard.com> implements certain
-> features (pin control) through an on-board FPGA.
 
-...
+--aJUxk5TzEVqHFiLi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> +config PINCTRL_UPBOARD
-> +	tristate "UP board FPGA pin controller"
-> +	depends on ACPI
-> +	depends on MFD_UPBOARD_FPGA
-> +	depends on X86
+On Thu, Oct 20, 2022 at 07:42:09PM +0300, Andy Shevchenko wrote:
+> On Thu, Oct 20, 2022 at 05:25:15PM +0100, Mark Brown wrote:
 
-No compile test coverage?
-I think you wanted something like
+> > That's true currently since you're matching based on ACPI ID and then
+> > have the lookup done with the ID information in the acpi_device_id table
+> > but IIRC the patch was replacing that with some device property stuff.
 
-	depends on (X86 && ACPI) || COMPILE_TEST
+> But that one also based on the IDs, it's not assigned without real IDs of
+> the devices on the certain platforms. I don't see how it's different in
+> this sense.
 
-I'm not even sure, why you have ACPI dependency. I do not see right now it has
-a compile one.
+The driver won't even match and therefore load if it doesn't have a
+lookup for the device with the current code, the type code comes from
+the match.  If it has to go querying a device property then the driver
+can load but end up with a device property it hasn't ever heard of and
+end up misbehaving as a result.
 
-> +	select GENERIC_PINCONF
-> +	select PINMUX
-> +	select PINCONF
+--aJUxk5TzEVqHFiLi
+Content-Type: application/pgp-signature; name="signature.asc"
 
-...
+-----BEGIN PGP SIGNATURE-----
 
-> +#include <linux/acpi.h>
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNRfj4ACgkQJNaLcl1U
+h9CYlQf/ZGasWtKFi/8Brya2HvpljMvaunGOitRyKwPyy32bw6LW76GE4b3wHW6s
+BEOdvkvxeQK2M5KnnNWDd+0oWT7VRAoBMPmKJwWoCvq3bvSUyaF7goab7RzWs23F
+ArKFyKsVgIE8tAraucAejv38diL4U/JR5KiNASMz3F3lp/jFTm0qsn3s7+jzp2Yh
+pH79k7uLXXX3IrWCXn+GALUeXfvPJaYcqwHvVHaEl2D0sS5aquGY0tby/cmbri+P
+exFeCloVN90w9HQqlJXdOQGfIbXE0DDoOJkbRCxDJcGcteKMrgPc+tG7jNOG+V09
+rDQsY6g39dVlMI1F22Q00bLjJ8pj0Q==
+=sOEF
+-----END PGP SIGNATURE-----
 
-See above.
-
-> +#include <linux/dmi.h>
-
-> +#include <linux/gpio.h>
-
-No way, no new code should ever use this.
-
-> +#include <linux/gpio/consumer.h>
-> +#include <linux/gpio/driver.h>
-> +#include <linux/kernel.h>
-> +#include <linux/mfd/upboard-fpga.h>
-> +#include <linux/module.h>
-> +#include <linux/pinctrl/pinctrl.h>
-> +#include <linux/pinctrl/pinmux.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +#include <linux/string.h>
-
-...
-
-> +static int upboard_gpio_request_enable(struct pinctrl_dev *pctldev,
-> +				       struct pinctrl_gpio_range *range,
-> +				       unsigned int pin)
-> +{
-> +	const struct pin_desc * const pd = pin_desc_get(pctldev, pin);
-> +	const struct upboard_pin *p;
-> +	int ret;
-
-> +	if (!pd)
-> +		return -EINVAL;
-
-Why do you need this check?
-Ditto for all the same checks over the code.
-
-> +	p = pd->drv_data;
-> +
-> +	if (p->funcbit) {
-> +		ret = regmap_field_write(p->funcbit, 0);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
-> +	if (p->enbit) {
-> +		ret = regmap_field_write(p->enbit, 1);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
-> +	return 0;
-> +};
-
-...
-
-> +
-> +
-
-One blank line is enough. Please, check all your code for this.
-
-...
-
-> +static int upboard_rpi_to_native_gpio(struct gpio_chip *gc, unsigned int gpio)
-> +{
-> +	struct upboard_pinctrl *pctrl =
-> +		container_of(gc, struct upboard_pinctrl, chip);
-> +	unsigned int pin = pctrl->rpi_mapping[gpio];
-
-> +	struct pinctrl_gpio_range *range =
-> +		pinctrl_find_gpio_range_from_pin(pctrl->pctldev, pin);
-
-Instead, split the assignment and the definition. Same amount of LoCs, but
-reads and maintained better.
-
-> +	if (!range)
-> +		return -ENODEV;
-> +
-> +	return range->base;
-> +}
-
-...
-
-> +static int upboard_gpio_request(struct gpio_chip *gc, unsigned int offset)
-> +{
-> +	int gpio = upboard_rpi_to_native_gpio(gc, offset);
-> +
-> +	if (gpio < 0)
-> +		return gpio;
-> +
-> +	return gpio_request(gpio, module_name(THIS_MODULE));
-
-Nope, new code mustn't use this APIs.
-
-> +}
-
-...
-
-> +	gpio_free(gpio);
-
-Ditto.
-
-> +	return gpio_get_value(gpio);
-
-Ditto.
-
-> +	gpio_set_value(gpio, value);
-
-Ditto.
-
-> +	return gpio_direction_input(gpio);
-
-Ditto.
-
-> +	return gpio_direction_output(gpio, value);
-
-Ditto.
-
-...
-
-> +	{
-> +		.matches = { /* UP2 */
-> +			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "AAEON"),
-> +			DMI_EXACT_MATCH(DMI_BOARD_NAME, "UP-APL01"),
-> +			DMI_EXACT_MATCH(DMI_BOARD_VERSION, "V0.3"),
-> +		},
-> +		.driver_data = (void *)&upboard_up2_bios_info_v0_3,
-> +	},
-> +	{ },
-
-No comma for the terminator entry.
-
-...
-
-> +	hid = acpi_device_hid(adev);
-> +	if (!strcmp(hid, "AANT0F00") || !strcmp(hid, "AANT0F04")) {
-> +		pctldesc = &upboard_up_pinctrl_desc;
-> +		rpi_mapping = upboard_up_rpi_mapping;
-> +		ngpio  = ARRAY_SIZE(upboard_up_rpi_mapping);
-> +	} else if (!strcmp(hid, "AANT0F01")) {
-> +		pctldesc = &upboard_up2_pinctrl_desc;
-> +		rpi_mapping = upboard_up2_rpi_mapping;
-> +		ngpio  = ARRAY_SIZE(upboard_up2_rpi_mapping);
-> +	} else if (!strcmp(hid, "AANT0F02")) {
-> +		pctldesc = &upboard_upcore_crex_pinctrl_desc;
-> +		rpi_mapping = upboard_upcore_crex_rpi_mapping;
-> +		ngpio  = ARRAY_SIZE(upboard_upcore_crex_rpi_mapping);
-> +		bios_info = &upboard_upcore_crex_bios_info;
-> +	} else if (!strcmp(hid, "AANT0F03")) {
-> +		pctldesc = &upboard_upcore_crst02_pinctrl_desc;
-> +		rpi_mapping = upboard_upcore_crst02_rpi_mapping;
-> +		ngpio  = ARRAY_SIZE(upboard_upcore_crst02_rpi_mapping);
-> +		bios_info = &upboard_upcore_crst02_bios_info;
-> +	} else
-> +		return -ENODEV;
-
-NIH device_get_match_data().
-
-...
-
-> +	ret = acpi_node_add_pin_mapping(acpi_fwnode_handle(adev),
-> +					"external-gpios",
-> +					dev_name(&pdev->dev),
-> +					0, UINT_MAX);
-> +	if (ret)
-> +		return ret;
-
-This is something strange. Can you point out to the DSDT, etc.?
-
-
-...
-
-> +
-
-Blank line is not needed.
-
-> +module_platform_driver_probe(upboard_pinctrl_driver, upboard_pinctrl_probe);
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+--aJUxk5TzEVqHFiLi--
