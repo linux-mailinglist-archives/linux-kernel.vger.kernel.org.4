@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C850D606872
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 20:51:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7539B606874
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 20:51:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230182AbiJTSv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 14:51:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56018 "EHLO
+        id S229670AbiJTSvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 14:51:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbiJTSvW (ORCPT
+        with ESMTP id S230224AbiJTSve (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 14:51:22 -0400
+        Thu, 20 Oct 2022 14:51:34 -0400
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA8F0170B59;
-        Thu, 20 Oct 2022 11:51:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C70B6156256;
+        Thu, 20 Oct 2022 11:51:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1666291855; h=from:from:sender:reply-to:subject:subject:date:date:
+        s=mail; t=1666291856; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=31qI4IyMllYZtSn4jgOmFJFt3IC2yVgWJx1sJSLJGZE=;
-        b=jS2b28qwE28HJaF1yBs2kv2L1YlMNT1ryDO6CdMegxqzvI7pKzi2RZmXl0aFoGI3KKG6lA
-        M1OzHcPZ+s2D9F6ybRn/GubVEflE2Wc70jFqM/IkhJ26gx5cF3ryDcXtvzvPumBlp4seJB
-        D9ncjWaLUSE0eLtrYQa4Wr3OGAgKK7s=
+        bh=mQZXeiJoM7b+oCY4wSe+cuIVpnUFu+3jGMCQghIgiAE=;
+        b=KSZlzIwZ7zv1BtHDprWFJCCjVtX4LG3si1Q25EIAcmMdewXUHIeQr8V34Pk0vndAl3QbKZ
+        sQLsF8O/cDlz6G5XYNv0t4kVmyJuowLOOHpRguseqO/vJY+nbcXW+xRq3S4W58bfCpGGCs
+        E2/FZlre0GIYViQn5b6BNTPxLPLCnzg=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
         Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH 3/4] watchdog: omap: Remove #ifdef guards for PM related functions
-Date:   Thu, 20 Oct 2022 19:50:46 +0100
-Message-Id: <20221020185047.1001522-4-paul@crapouillou.net>
+Subject: [PATCH 4/4] watchdog: kempld: Remove #ifdef guards for PM related functions
+Date:   Thu, 20 Oct 2022 19:50:47 +0100
+Message-Id: <20221020185047.1001522-5-paul@crapouillou.net>
 In-Reply-To: <20221020185047.1001522-1-paul@crapouillou.net>
 References: <20221020185047.1001522-1-paul@crapouillou.net>
 MIME-Version: 1.0
@@ -55,45 +55,52 @@ bugs and regressions are easier to catch.
 
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 ---
- drivers/watchdog/omap_wdt.c | 11 ++---------
+ drivers/watchdog/kempld_wdt.c | 11 ++---------
  1 file changed, 2 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/watchdog/omap_wdt.c b/drivers/watchdog/omap_wdt.c
-index 74d785b2b478..e75aa86f63cb 100644
---- a/drivers/watchdog/omap_wdt.c
-+++ b/drivers/watchdog/omap_wdt.c
-@@ -316,8 +316,6 @@ static int omap_wdt_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
--#ifdef	CONFIG_PM
--
- /* REVISIT ... not clear this is the best way to handle system suspend; and
-  * it's very inappropriate for selective device suspend (e.g. suspending this
-  * through sysfs rather than by stopping the watchdog daemon).  Also, this
-@@ -353,11 +351,6 @@ static int omap_wdt_resume(struct platform_device *pdev)
- 	return 0;
- }
- 
--#else
--#define	omap_wdt_suspend	NULL
--#define	omap_wdt_resume		NULL
+diff --git a/drivers/watchdog/kempld_wdt.c b/drivers/watchdog/kempld_wdt.c
+index 40bd518ed873..e6c7a2906680 100644
+--- a/drivers/watchdog/kempld_wdt.c
++++ b/drivers/watchdog/kempld_wdt.c
+@@ -75,9 +75,7 @@ struct kempld_wdt_data {
+ 	struct watchdog_device		wdd;
+ 	unsigned int			pretimeout;
+ 	struct kempld_wdt_stage		stage[KEMPLD_WDT_MAX_STAGES];
+-#ifdef CONFIG_PM
+ 	u8				pm_status_store;
 -#endif
--
- static const struct of_device_id omap_wdt_of_match[] = {
- 	{ .compatible = "ti,omap3-wdt", },
- 	{},
-@@ -368,8 +361,8 @@ static struct platform_driver omap_wdt_driver = {
- 	.probe		= omap_wdt_probe,
- 	.remove		= omap_wdt_remove,
- 	.shutdown	= omap_wdt_shutdown,
--	.suspend	= omap_wdt_suspend,
--	.resume		= omap_wdt_resume,
-+	.suspend	= pm_ptr(omap_wdt_suspend),
-+	.resume		= pm_ptr(omap_wdt_resume),
+ };
+ 
+ #define DEFAULT_TIMEOUT		30 /* seconds */
+@@ -495,7 +493,6 @@ static int kempld_wdt_probe(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
+-#ifdef CONFIG_PM
+ /* Disable watchdog if it is active during suspend */
+ static int kempld_wdt_suspend(struct platform_device *pdev,
+ 				pm_message_t message)
+@@ -531,18 +528,14 @@ static int kempld_wdt_resume(struct platform_device *pdev)
+ 	else
+ 		return kempld_wdt_stop(wdd);
+ }
+-#else
+-#define kempld_wdt_suspend	NULL
+-#define kempld_wdt_resume	NULL
+-#endif
+ 
+ static struct platform_driver kempld_wdt_driver = {
  	.driver		= {
- 		.name	= "omap_wdt",
- 		.of_match_table = omap_wdt_of_match,
+ 		.name	= "kempld-wdt",
+ 	},
+ 	.probe		= kempld_wdt_probe,
+-	.suspend	= kempld_wdt_suspend,
+-	.resume		= kempld_wdt_resume,
++	.suspend	= pm_ptr(kempld_wdt_suspend),
++	.resume		= pm_ptr(kempld_wdt_resume),
+ };
+ 
+ module_platform_driver(kempld_wdt_driver);
 -- 
 2.35.1
 
