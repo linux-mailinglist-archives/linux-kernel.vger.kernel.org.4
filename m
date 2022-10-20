@@ -2,62 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B0FF605F80
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 13:57:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12962605F84
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 13:59:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229778AbiJTL5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 07:57:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48048 "EHLO
+        id S229794AbiJTL7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 07:59:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229768AbiJTL5k (ORCPT
+        with ESMTP id S229826AbiJTL6z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 07:57:40 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 705C1134DD4
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 04:57:38 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MtQvl40k1z1P6nm;
-        Thu, 20 Oct 2022 19:52:51 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 20 Oct 2022 19:57:36 +0800
-Received: from [10.174.178.174] (10.174.178.174) by
- dggpemm500007.china.huawei.com (7.185.36.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 20 Oct 2022 19:57:36 +0800
-Subject: Re: [PATCH] ocfs2: possible memory leak in mlog_sys_init()
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joseph Qi <joseph.qi@linux.alibaba.com>
-CC:     <mark@fasheh.com>, <jlbec@evilplan.org>,
-        <akpm@linux-foundation.org>,
-        ocfs2-devel <ocfs2-devel@oss.oracle.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20221018075213.736562-1-yangyingliang@huawei.com>
- <bf27f347-5ced-98e5-f188-659cc2a9736f@linux.alibaba.com>
- <09bb2844-e20a-98e8-c2af-5b6c4795d48e@huawei.com>
- <c7a3bdac-3ed6-e695-5c45-e7007615a4d9@linux.alibaba.com>
- <0db486eb-6927-927e-3629-958f8f211194@huawei.com>
- <1adbbf98-2700-27c8-4aca-9510bca91458@linux.alibaba.com>
- <f6bc6dd3-f7b7-e757-fc36-d1cfbc7305e5@huawei.com>
- <30747fd7-fe79-2ed8-ce63-425a008e3e4f@linux.alibaba.com>
- <Y1Egf2CmSZbtRr3f@kroah.com>
-From:   Yang Yingliang <yangyingliang@huawei.com>
-Message-ID: <53ae60ab-0fe6-ddaf-d233-b7b3bcd5efa5@huawei.com>
-Date:   Thu, 20 Oct 2022 19:57:35 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Thu, 20 Oct 2022 07:58:55 -0400
+Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C960613A7EE
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 04:58:54 -0700 (PDT)
+Received: by mail-ua1-x936.google.com with SMTP id n5so392887uap.2
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 04:58:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=hmdoR/w6BYsfomWVh267+r2sbsTxrmcMIZmpfdw25R8=;
+        b=chHdDPwrngCggbBKdIbWiDLCXZnP7iqdEib8Kgvwcwr079ZvVEZkyUZObQbu4LPB9v
+         ZmZL9dksUjp5QOtQRXo+nXXBnvv0ujExpS8AhU5qghI4lpxjdojJ+Jx1DFH/NDbbjInN
+         ruQ+XSYsr7gXr+cizYo+gc/5gO69+XfMLDsAFSr2pTkJNvNGaDa611kzMo9dj1wzqVFD
+         4TbBFWpTanYKbeHGfToaLYQ13uydaHAIuvhnLU/Tcm3eyy8MijhlRbUxHpVVNMcOju9n
+         vuXpLEQZYve0hDHgWQLaZ75WAaibrb2NzPg58Y9znicE6ZnLCW1mmy942uanNWrXTHPm
+         dTRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hmdoR/w6BYsfomWVh267+r2sbsTxrmcMIZmpfdw25R8=;
+        b=bPfvEltFsJMkn+Z7zTdcekwsl2MFp7btn5T71vkSA9dXDJkqNgenXY97eMNG1f/1dj
+         CqVq+HneFXw+oVE31982AeKaz02XjaocsZ5hZB5BMSH/VEUUEgne5wWzrHirhhVbOv1X
+         rURrMiQIpu2hTkzpgDst/npfKZLEXPpdkTpit5+bRJm2n566l6GYsOe5chI3+y+YAprY
+         arcJ9MRChm/O2CvWYvEaa/2DyWL1VxtG9mwqc0q/pBa0cQsFyFNS4fnPqEThH/lCYE4Q
+         YkLwOMz5h5iqeOLdrEj6SorCBm7qU3OluIBdyHpVi9v9DxLluVMqKUj90n8JklCUp48X
+         MHTA==
+X-Gm-Message-State: ACrzQf2vnZSsRjE5AoAvRrv3OWKh5MulNqF8VJAuBkm7ZC5hMis197zN
+        I7QroACZe732rMjh7M2bEPkBMtuMsM0yHP8CpuUCGw==
+X-Google-Smtp-Source: AMsMyM60th5P2fPMIOJLE3lPxXDmFgQe29j7XFR82PlU8rUG/MVn+bF0Ceu1sunzO0mIDlQiOE400CHnNlslzzchU9E=
+X-Received: by 2002:a67:ab02:0:b0:3a9:9953:6471 with SMTP id
+ u2-20020a67ab02000000b003a999536471mr4410633vse.47.1666267133910; Thu, 20 Oct
+ 2022 04:58:53 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <Y1Egf2CmSZbtRr3f@kroah.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Originating-IP: [10.174.178.174]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221011-gpiolib-quirks-v3-0-eae9cc2ed0a1@gmail.com>
+In-Reply-To: <20221011-gpiolib-quirks-v3-0-eae9cc2ed0a1@gmail.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Thu, 20 Oct 2022 13:58:42 +0200
+Message-ID: <CAMRc=Md+zoaMHkDJm=SYEZMiHSF7_gYiXApuEboPU5qFpnD_1w@mail.gmail.com>
+Subject: Re: [PATCH v3 00/10] gpiolib: more quirks to handle legacy names
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,117 +70,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Oct 18, 2022 at 7:41 AM Dmitry Torokhov
+<dmitry.torokhov@gmail.com> wrote:
+>
+> In preparation to converting several drivers to gpiod API, and to keep
+> existing DTS working, this series adds additional quirks to locate
+> gpio lines with legacy names.
+>
+> Additionally the quirk handling has been reworked (once again) to pull
+> all simple renames (ones that do not involve change of indices or other
+> complex manipulations) into a single quirk with a table containing
+> transformations. This should make adding new quirks easier.
+> When using legacy names gpiolib will emit a message to nudge users to
+> update DTSes (when possible).
+>
+> Note that the last patch requires the following change from the OF tree:
+>
+>         88269151be67 ("of: base: make of_device_compatible_match() accept const device node")
+>
+> The change is also available in mainline - it has been merged in 6.1
+> merge window.
+>
+> Thanks.
+>
+> To: Linus Walleij <linus.walleij@linaro.org>
+> To: Bartosz Golaszewski <brgl@bgdev.pl>
+> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Cc: Alexander Stein <alexander.stein@ew.tq-group.com>
+> Cc: Daniel Thompson <daniel.thompson@linaro.org>
+> Cc: linux-gpio@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-mediatek@lists.infradead.org
+>
 
-On 2022/10/20 18:18, Greg Kroah-Hartman wrote:
-> On Thu, Oct 20, 2022 at 10:06:48AM +0800, Joseph Qi wrote:
->>
->> On 10/19/22 10:57 AM, Yang Yingliang wrote:
->>> On 2022/10/19 10:26, Joseph Qi wrote:
->>>> On 10/18/22 10:28 PM, Yang Yingliang wrote:
->>>>> On 2022/10/18 21:39, Joseph Qi wrote:
->>>>>> On 10/18/22 6:33 PM, Yang Yingliang wrote:
->>>>>>> Hi,
->>>>>>>
->>>>>>> On 2022/10/18 17:02, Joseph Qi wrote:
->>>>>>>> Hi,
->>>>>>>>
->>>>>>>> On 10/18/22 3:52 PM, Yang Yingliang wrote:
->>>>>>>>> Inject fault while probing module, kset_register() may fail,
->>>>>>>>> if it fails, but the refcount of kobject is not decreased to
->>>>>>>>> 0, the name allocated in kobject_set_name() is leaked. Fix
->>>>>>>>> this by calling kset_put(), so that name can be freed in
->>>>>>>>> callback function kobject_cleanup().
->>>>>>>>>
->>>>>>>>> unreferenced object 0xffff888100da9348 (size 8):
->>>>>>>>>       comm "modprobe", pid 257, jiffies 4294701096 (age 33.334s)
->>>>>>>>>       hex dump (first 8 bytes):
->>>>>>>>>         6c 6f 67 6d 61 73 6b 00                          logmask.
->>>>>>>>>       backtrace:
->>>>>>>>>         [<00000000306e441c>] __kmalloc_node_track_caller+0x44/0x1b0
->>>>>>>>>         [<000000007c491a9e>] kstrdup+0x3a/0x70
->>>>>>>>>         [<0000000015719a3b>] kstrdup_const+0x63/0x80
->>>>>>>>>         [<0000000084e458ea>] kvasprintf_const+0x149/0x180
->>>>>>>>>         [<0000000091302b42>] kobject_set_name_vargs+0x56/0x150
->>>>>>>>>         [<000000005f48eeac>] kobject_set_name+0xab/0xe0
->>>>>>>>>
->>>>>>>>> Fixes: 34980ca8faeb ("Drivers: clean up direct setting of the name of a kset")
->>>>>>>>> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
->>>>>>>>> ---
->>>>>>>>>      fs/ocfs2/cluster/masklog.c | 7 ++++++-
->>>>>>>>>      1 file changed, 6 insertions(+), 1 deletion(-)
->>>>>>>>>
->>>>>>>>> diff --git a/fs/ocfs2/cluster/masklog.c b/fs/ocfs2/cluster/masklog.c
->>>>>>>>> index 563881ddbf00..7f9ba816d955 100644
->>>>>>>>> --- a/fs/ocfs2/cluster/masklog.c
->>>>>>>>> +++ b/fs/ocfs2/cluster/masklog.c
->>>>>>>>> @@ -156,6 +156,7 @@ static struct kset mlog_kset = {
->>>>>>>>>      int mlog_sys_init(struct kset *o2cb_kset)
->>>>>>>>>      {
->>>>>>>>>          int i = 0;
->>>>>>>>> +    int ret;
->>>>>>>>>            while (mlog_attrs[i].attr.mode) {
->>>>>>>>>              mlog_default_attrs[i] = &mlog_attrs[i].attr;
->>>>>>>>> @@ -165,7 +166,11 @@ int mlog_sys_init(struct kset *o2cb_kset)
->>>>>>>>>            kobject_set_name(&mlog_kset.kobj, "logmask");
->>>>>>>>>          mlog_kset.kobj.kset = o2cb_kset;
->>>>>>>>> -    return kset_register(&mlog_kset);
->>>>>>>>> +    ret = kset_register(&mlog_kset);
->>>>>>>> If register fails, it will call unregister in o2cb_sys_init(), which
->>>>>>>> will put kobject.
->>>>>>> They are different ksets, the kset unregistered in o2cb_sys_init() is 'o2cb_kset', the
->>>>>>> kset used to registered in mlog_sys_init() is 'mlog_kset', and they hold difference
->>>>>>> refcounts.
->>>>>>> Yes, you are right. I've mixed the two ksets up.
->>>>>> In theory, kset_register() may return error because of a NULL kset, so
->>>>>> here we may not call kset_put() directly, I'm not sure if a static
->>>>>> checker will happy.
->>>>>> Though this can't happen since it's already statically allocated...
->>>>> kset_register() may fail if kobject_add_internal() return error (can't allocate memory), the name
->>>>> "logmask" is dynamically alloctated while ocfs2 is compile as module and insert it (if ocfs2 is
->>>>> built in kernel, the name is constant, it won't cause a leak), so the name can be leaked.
->>>> What I mean is kset_register() may fail with many reasons, or even
->>>> without kset_init().
->>>> I wonder if we have to handle this internal kset_register(), but not
->>>> leave it to caller. This may benefit other callers as well.
->>>>
->>>> Something like:
->>>> err = kobject_add_internal(&k->kobj);
->>>> if (err) {
->>>>      kset_put(k);
->>>>      return err;
->>>> }
->>> I had think about this method to fix this, but some kset is allocated dynamically in driver and
->>> it's freed in callback function which is called after kset_put() and in error path in driver will free
->>> it again, it leads double free in some drivers.
->>>
->> I don't think it's good idea that caller has to take care part of the
->> internal logic of kset_register() in case of error.
->> Hi Greg, what do you think?
-> I think if you are messing around with raw ksets, you have to handle
-> them properly :)
->
-> For some driver and kobject core functions, once you call register, you
-> have to call put() to handle an error because the driver core can not
-> know what you are doing with that memory at times.
->
-> But, maybe for ksets this is not needed and the kobject core can
-> properly clean up from an error here.  Yang, can you please look into
-> this?  That might make this much simpler.
-OK, I will look into this to see how to make it simpler for drivers.
->
-> Either way, the documentation for kset_register() needs to be fixed up
-> first, so that people have a chance to know what to do here and THEN we
-> can fix up the callers like this.
->
-> Yang, can you do this all as one long series that I can take through the
-> driver core tree.  No need to scatter it all across a bunch of different
-> subsystems.
-OK, I will fix all these in one series.
+I applied the entire series.
 
-Thanks,
-Yang
->
-> thanks,
->
-> greg k-h
-> .
+Bartosz
