@@ -2,212 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E495C606599
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 18:21:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3152C6065A0
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 18:21:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230298AbiJTQVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 12:21:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50520 "EHLO
+        id S231147AbiJTQVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 12:21:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiJTQVI (ORCPT
+        with ESMTP id S229765AbiJTQVS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 12:21:08 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A58F716551A;
-        Thu, 20 Oct 2022 09:21:06 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EDD5D23A;
-        Thu, 20 Oct 2022 09:21:11 -0700 (PDT)
-Received: from e126311.manchester.arm.com (unknown [10.57.67.250])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B84FF3F792;
-        Thu, 20 Oct 2022 09:21:03 -0700 (PDT)
-Date:   Thu, 20 Oct 2022 17:20:45 +0100
-From:   Kajetan Puchalski <kajetan.puchalski@arm.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     daniel.lezcano@linaro.org, lukasz.luba@arm.com,
-        Dietmar.Eggemann@arm.com, dsmythies@telus.net,
-        yu.chen.surf@gmail.com, kajetan.puchalski@arm.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v2 0/1] cpuidle: teo: Introduce optional
- util-awareness
-Message-ID: <Y1F0GYlJJOnFQeYe@e126311.manchester.arm.com>
-References: <20221003144914.160547-1-kajetan.puchalski@arm.com>
- <CAJZ5v0hoe=8nY9vR=+Bjvexrg+E6fcO-S=W+PDkfD=Li6Uy__g@mail.gmail.com>
+        Thu, 20 Oct 2022 12:21:18 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31B1C1BB56E
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 09:21:13 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id l32so238585wms.2
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 09:21:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GaS744uQPmWBXBI6ZqLder+xi41I4zdp+0x6pn9qEpI=;
+        b=BiWAgX/Qr8Rtaa1n4HaNEsXokIi2t7akCjokMnnVo9izFmTT3d1OYSv7Wls0Jw0TVG
+         wnHniUa/aJWLtVFhMN4C6h7OqT0SEHs/I+Qz/Nek5lUoSxieBitDj95Gs8p4//CxDAPM
+         EFtIovz6/Bg77YsQPiSiA79FgW2uMp/5ohlF5p1VrVItPrkwOkQpSQyk+C2FBhrxPtpu
+         WqHTyElGaawjZEW7CwY272Dm9Opr7cMu7GWpP8Gi3IC1zm1YeBT5C+6EaFZRp5B8iJVV
+         XoU4pX9m689/ASxVf317uv+VaYvXCGtxT0p5pjOMgBO02+pg3ktPsiK5Q//EzxGOOZeA
+         HReQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GaS744uQPmWBXBI6ZqLder+xi41I4zdp+0x6pn9qEpI=;
+        b=LhfTTGjJy4+Nty7VR+/fFkruhmrI/qNLR4oGhly/SQULLJInWPKx0GGMgTPMYI7sxy
+         bwpg+VamYI6tJ+CfB+hTrT470BCIMGDJYGxCfvMoBrz6FuKjIuFb5rgt44yAxaq/833C
+         QB5NW5OLDdvKAN+iMGgBaqX9mJXAhw1X9CKbT15nw7U0xJBuDkyHcXjOqgZODbeCiupV
+         yYzdAb+VP7a7J1MC+aPiXH6lmg+5unIVKwb4OuhdWArOiYVFIZR8KOIH/n5FPNRDEBZW
+         tvvQkTUZqSonO5BcZPVm8JJMYP2e4ndKtb7qErKm1FpR5MXO93ChfLZZVoS7QNBZ9NYY
+         1G1Q==
+X-Gm-Message-State: ACrzQf1jtWh2xvTHeAauGB5H805nNIRe7apqwTfpda7gSPL6f2sCY4Zu
+        FN5QVJklQGDTs2VBCHCTlUtTBg==
+X-Google-Smtp-Source: AMsMyM4zHtUzyycG6m90vzzUecGOcjVx/uHTBFmgXqMhKmqeWtCLahlCPFtUo1o9TPVoTLPotl4Wkw==
+X-Received: by 2002:a05:600c:502c:b0:3c6:f5ff:e089 with SMTP id n44-20020a05600c502c00b003c6f5ffe089mr9915804wmr.108.1666282870743;
+        Thu, 20 Oct 2022 09:21:10 -0700 (PDT)
+Received: from [127.0.1.1] (158.22.5.93.rev.sfr.net. [93.5.22.158])
+        by smtp.googlemail.com with ESMTPSA id m14-20020a05600c3b0e00b003b4fe03c881sm208028wms.48.2022.10.20.09.21.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Oct 2022 09:21:10 -0700 (PDT)
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+Date:   Thu, 20 Oct 2022 18:20:45 +0200
+Subject: [PATCH v3 1/5] dt-bindings: mfd: mt6397: add binding for MT6357
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0hoe=8nY9vR=+Bjvexrg+E6fcO-S=W+PDkfD=Li6Uy__g@mail.gmail.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Message-Id: <20221005-mt6357-support-v3-1-7e0bd7c315b2@baylibre.com>
+References: <20221005-mt6357-support-v3-0-7e0bd7c315b2@baylibre.com>
+In-Reply-To: <20221005-mt6357-support-v3-0-7e0bd7c315b2@baylibre.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Chen Zhong <chen.zhong@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Lee Jones <lee@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Fabien Parent <fabien.parent@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Rob Herring <robh@kernel.org>,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
+        devicetree@vger.kernel.org, linux-input@vger.kernel.org,
+        Alexandre Mergnat <amergnat@baylibre.com>
+X-Mailer: b4 0.10.1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=882; i=amergnat@baylibre.com;
+ h=from:subject:message-id; bh=uiI/lTRtppBO+0nDIciFuabIoTVXVizM4YxyzOA2AfE=;
+ b=owEBbQKS/ZANAwAKAStGSZ1+MdRFAcsmYgBjUXV0FVtsiYSeZAnNVIPphZdWfF4LyDG6G1xUR+hY
+ qezaStqJAjMEAAEKAB0WIQQjG17X8+qqcA5g/osrRkmdfjHURQUCY1F1dAAKCRArRkmdfjHURcbQD/
+ 9ZsaHlwgCKvcsyUDObkfQQjeMSZYlAX2q5PSCyCwS4vicU+djfUIZZZ4DYVVJLEeV/1jw8S8COwjtM
+ /gQ+FT2Ud6no8KNQ9XvvXNS8/hES8mEFwnz+Ne25aHAw794Z+9oMYem49sSNY8rkVyfTfI8A2A3188
+ TywOl73c/t1RNnLqrvQYq226VrdewLgd6AaHvOzejK+BHwUOI8OL71k7zIlkoW2fyPnZLYsqIS+66/
+ KAp7FWzWXpfO+51hnaMIJRo6fGvXcn73LVUR+oExo3xIbwE9opKu8tv93irqLjzDjIE5+egOrBNIdf
+ BWqI55Ib2NORmzfa05bH7l3MjErS7A0gRDAufHenjyV6xVQEc+xkzLx9a0X0QYq8PjGi5fOUKa9+ca
+ jdFrhMs+jsCV3iyMbXa2xOXfqUtCVKor4TOPUO6o/lc4CYCIUfIfZRTysxAfyB2hp7mn6h5lab49RK
+ pCeX/Tn1Mk1MvBRtd3TJR2UzE+/2hSaY8lh2Pi0Zxa2jzz1Q0P+pc0+QQAPNnB9ZZWDjZ0m51DgJ3X
+ fkDmw8gqjpK+T6LiT/8GVLpdJ5PhHdDi+MfmlooHMayfI2t9Li85L9RDDKILZCR9aUO9t5RsxCVu8N
+ HYmyzxXKz5+e7+YyEyWhJ03Xc1tLbKhpCIMTILDwPt5wFF+tNOifJI3+w83w==
+X-Developer-Key: i=amergnat@baylibre.com; a=openpgp;
+ fpr=231B5ED7F3EAAA700E60FE8B2B46499D7E31D445
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rafael,
+From: Fabien Parent <fparent@baylibre.com>
 
-> The avg_util value tells us nothing about how much the CPU is going to
-> be idle this time and it also tells us nothing about the
-> latency-sensitivity of the workload.
->
-> Yes, it tells us how much idle time there was on the given CPU in the
-> past, on the average, but there is zero information about the
-> distribution of that idle time in it.
->
-> So in the first place please tell me why it fundamentally makes sense
-> to use avg_util in CPU idle time management at all.
+Add binding documentation for the MT6357 PMIC.
 
-I have an alternative suggestion that could be a reasonable way forward
-here. Instead of applying util-awareness on top of TEO where it would
-have to be reconciled with how TEO is currently expected to work, I just
-wrote a simple completely new governor which operates only on timer
-events alongside util values.
+Signed-off-by: Fabien Parent <fparent@baylibre.com>
+Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+Acked-by: Rob Herring <robh@kernel.org>
+---
+ Documentation/devicetree/bindings/mfd/mt6397.txt | 1 +
+ 1 file changed, 1 insertion(+)
 
-The idea is this:
-1. Find the deepest state based on residency and time until the next timer event
-2. If sched_cpu_util() is above the threshold, select a shallower non-polling state
+diff --git a/Documentation/devicetree/bindings/mfd/mt6397.txt b/Documentation/devicetree/bindings/mfd/mt6397.txt
+index 0088442efca1..518986c44880 100644
+--- a/Documentation/devicetree/bindings/mfd/mt6397.txt
++++ b/Documentation/devicetree/bindings/mfd/mt6397.txt
+@@ -21,6 +21,7 @@ Required properties:
+ compatible:
+ 	"mediatek,mt6323" for PMIC MT6323
+ 	"mediatek,mt6331" for PMIC MT6331 and MT6332
++	"mediatek,mt6357" for PMIC MT6357
+ 	"mediatek,mt6358" for PMIC MT6358 and MT6366
+ 	"mediatek,mt6359" for PMIC MT6359
+ 	"mediatek,mt6397" for PMIC MT6397
 
-There's no other metrics or anything else under the current
-implementation. I can't say how it would work on Intel systems and in
-the presence of more idle states but having a completely separate
-governor would be very useful for us to tune it specifically for our use
-cases and types of systems (ie. ones with 2 idle states and no polling
-states).
-
-As it stands it performs quite well and achieves better results
-(especially in terms of latency) than both menu & TEO but slightly worse
-than the previously suggested TEO + util. As far as we're concerned
-that's okay, we can work from there to try to find a way of doing
-metrics or improving the algorithm that would be more tailored to using
-the util approach. I think it's much cleaner than what we were
-discussing previously since that was effectively overriding most of what
-TEO was doing.
-
-Here are some numbers to visualize the results. They were all obtained
-in the same way as the ones in the cover letter so you can refer to that
-in case something isn't clear.
-
-'teo_util' is of course TEO + util as in the patchset.
-'idleutil' is this entirely new proposed minimal governor.
-
-1. Geekbench 5 (latency-sensitive, heavy load test)
-
-+-----------------+----------+---------+-------------+
-| metric          | kernel   |   value | perc_diff   |
-|-----------------+----------+---------+-------------|
-| multicore_score | menu     |  2832.3 | 0.0%        |
-| multicore_score | teo      |  2815.3 | -0.6%       |
-| multicore_score | teo_util |  2880.6 | 1.7%        |
-| multicore_score | idleutil |  2859.3 | 0.95%       |
-+-----------------+----------+---------+-------------+
-
-Percentages & types of idle misses
-
-+-----------+-------------+--------------+
-| kernel    | type        |   percentage |
-|-----------+-------------+--------------|
-| menu      | too deep    |      15.613% |
-| teo       | too deep    |       9.376% |
-| teo_util  | too deep    |       4.581% |
-| idleutil  | too deep    |       5.464% |
-| menu      | too shallow |       2.611% |
-| teo       | too shallow |       6.099% |
-| teo_util  | too shallow |      14.141% |
-| idleutil  | too shallow |      13.282% |
-+-----------+-------------+--------------+
-
-Power usage [mW]
-
-+--------------+----------+----------+---------+-------------+
-| chan_name    | metric   | kernel   |   value | perc_diff   |
-|--------------+----------+----------+---------+-------------|
-| total_power  | gmean    | menu     |  2705.9 | 0.0%        |
-| total_power  | gmean    | teo      |  2668.2 | -1.39%      |
-| total_power  | gmean    | teo_util |  2710.2 | 0.16%       |
-| total_power  | gmean    | idleutil |  2657.9 | -1.78%      |
-+--------------+----------+----------+---------+-------------+
-
-Wakeup latency
-
-+-----------------+----------+----------+-------------+-------------+
-| comm            | metric   | kernel   |       value | perc_diff   |
-|-----------------+----------+----------+-------------+-------------|
-| AsyncTask #1    | gmean    | menu     | 66.85μs     | 0.0%        |
-| AsyncTask #1    | gmean    | teo      | 66.79μs     | -0.09%      |
-| AsyncTask #1    | gmean    | teo_util | 57.84μs     | -13.47%     |
-| AsyncTask #1    | gmean    | idleutil | 62.61μs     | -6.35%      |
-| labs.geekbench5 | gmean    | menu     | 80.62μs     | 0.0%        |
-| labs.geekbench5 | gmean    | teo      | 94.75μs     | 17.52%      |
-| labs.geekbench5 | gmean    | teo_util | 52.98μs     | -34.28%     |
-| labs.geekbench5 | gmean    | idleutil | 68.58μs     | -14.93%     |
-+-----------------+----------+----------+-------------+-------------+
-
-2. PCMark Web Browsing (non latency-sensitive, normal usage test)
-
-+----------------+----------+---------+-------------+
-| metric         | kernel   |   value | perc_diff   |
-|----------------+----------+---------+-------------|
-| PcmaWebV2Score | menu     |  5232   | 0.0%        |
-| PcmaWebV2Score | teo      |  5219.8 | -0.23%      |
-| PcmaWebV2Score | teo_util |  5249.7 | 0.34%       |
-| PcmaWebV2Score | idleutil |  5215.7 | -0.31%      |
-+----------------+----------+---------+-------------+
-
-Percentages & types of idle misses
-
-+-----------+-------------+--------------+
-| kernel    | type        |   percentage |
-|-----------+-------------+--------------|
-| menu      | too deep    |      24.814% |
-| teo       | too deep    |       11.65% |
-| teo_util  | too deep    |       3.753% |
-| idleutil  | too deep    |       4.304% |
-| menu      | too shallow |       3.101% |
-| teo       | too shallow |       8.578% |
-| teo_util  | too shallow |      18.309% |
-| idleutil  | too shallow |      17.638% |
-+-----------+-------------+--------------+
-
-Power usage [mW]
-
-+--------------+----------+----------+---------+-------------+
-| chan_name    | metric   | kernel   |   value | perc_diff   |
-|--------------+----------+----------+---------+-------------|
-| total_power  | gmean    | menu     |   179.2 | 0.0%        |
-| total_power  | gmean    | teo      |   184.8 | 3.1%        |
-| total_power  | gmean    | teo_util |   180.5 | 0.71%       |
-| total_power  | gmean    | idleutil |   185   | 3.24%       |
-+--------------+----------+----------+---------+-------------+
-
-Wakeup latency
-
-+-----------------+----------+----------+-------------+-------------+
-| comm            | metric   | kernel   |       value | perc_diff   |
-|-----------------+----------+----------+-------------+-------------|
-| CrRendererMain  | gmean    | menu     | 236.63μs    | 0.0%        |
-| CrRendererMain  | gmean    | teo      | 201.85μs    | -14.7%      |
-| CrRendererMain  | gmean    | teo_util | 111.76μs    | -52.77%     |
-| CrRendererMain  | gmean    | idleutil | 105.55μs    | -55.39%     |
-| chmark:workload | gmean    | menu     | 100.30μs    | 0.0%        |
-| chmark:workload | gmean    | teo      | 80.20μs     | -20.04%     |
-| chmark:workload | gmean    | teo_util | 53.81μs     | -46.35%     |
-| chmark:workload | gmean    | idleutil | 71.29μs     | -28.92%     |
-| RenderThread    | gmean    | menu     | 37.97μs     | 0.0%        |
-| RenderThread    | gmean    | teo      | 31.69μs     | -16.54%     |
-| RenderThread    | gmean    | teo_util | 34.32μs     | -9.63%      |
-| RenderThread    | gmean    | idleutil | 35.78μs     | -5.77%      |
-| surfaceflinger  | gmean    | menu     | 97.57μs     | 0.0%        |
-| surfaceflinger  | gmean    | teo      | 98.86μs     | 1.31%       |
-| surfaceflinger  | gmean    | teo_util | 72.59μs     | -25.6%      |
-| surfaceflinger  | gmean    | idleutil | 56.23μs     | -42.37%     |
-+-----------------+----------+----------+-------------+-------------+
-
-I also have similar data for Jankbench & Speedometer with right about
-the same results, I'll skip those for now for brevity.
-Would you like me to send a patch with this new governor instead? What
-would you think about this instead of the previously suggested approach?
-
-Thanks,
-Kajetan
+-- 
+b4 0.10.1
