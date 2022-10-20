@@ -2,94 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C4A760621E
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 15:46:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CEDE606225
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 15:47:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbiJTNqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 09:46:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59004 "EHLO
+        id S230005AbiJTNrn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 09:47:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230121AbiJTNq3 (ORCPT
+        with ESMTP id S229738AbiJTNrh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 09:46:29 -0400
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1755D17EF19
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 06:46:24 -0700 (PDT)
-Received: by mail-qk1-x729.google.com with SMTP id f8so12775518qkg.3
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 06:46:24 -0700 (PDT)
+        Thu, 20 Oct 2022 09:47:37 -0400
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1B6B1A7A0D
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 06:47:36 -0700 (PDT)
+Received: by mail-qv1-xf2d.google.com with SMTP id l19so13517558qvu.4
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 06:47:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=By6WmlApYPTCO07NNuBolUybiimy99uuNIZmRqG4EOw=;
-        b=Powru50NsTbMBrvE1tRNci3OFelg8KUKrZSn9uOoQgaCdWOxIumMRhzH8vTVwQ0zRw
-         qL7IjrdB7+PlPBrsn+6hqfdi1y3Q0uRU8K6Z8V/3JNT8IDcQRRlsH8R2KlMdvipMD7KK
-         ibOhZ0ak1yhaqrS+eerNbaweAHhGj0FyfQDllvvCnrtr7QOqaRU/i891vRTFaCt+S9ii
-         FXSQn0Ydq9XgtigjDUqpE7gC9LX/ewb0idHMl3wtkaKzYs0IkbPA3HPQYQoN/AvEAynL
-         7BpZpoXrkQodXrH09o9nVx2ylEwOs5E3eKL9IumY7UNT6tef3wblIWdd0FQ2JPphnQp6
-         qGNQ==
+        bh=gfoaDvIHm+IYqFg1zUd7jQMQTXkElPWTcNgvljK5gOA=;
+        b=XZcIHHMg1dkhD0LgOjy1iBpji/JY8TckG64n7iRLwcdhSP6mWFjkTQpve5ROlxVx9R
+         z3ZyWgENFeFwmcNNpiAZ1rDDt9xTH7+vV+O6iybz68MR5IU+kPJ431BoBfarnd5CmCIh
+         m75Z0BY/2hll7ZDl3b3Bh4n4rSxv4lRaLGtPBpTKUb2qvOdPzfWtblSDpGZaD0W4Mw2M
+         z9gRZjdMTSNCJwui0gk4X6RdyStQm2ePgb6Lcfcv6MYPB6W0n8bmVA/ntbrAweNTsex0
+         cXFzrKKM9b/6jfDMmxw59mkngKBzHtv3T/Z3jv2aNVReNceJF2AAp2FYF6w8Xx0cCk/X
+         1YpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=By6WmlApYPTCO07NNuBolUybiimy99uuNIZmRqG4EOw=;
-        b=Ke7iI3tlnYBauKTkC/0mCOg01oSHX6v6koFHSohxWTc3aZKWbZouWv0okfqt0bv5UB
-         IbsZNd69J4U/zQp4RdnT1bkFUpGsy6E7R6lO2uoay0gPfTdlLfSVLQE2M4kkz8ai16NG
-         WRfJZ4Vty8nj+dqaAmxH3HKmw4DotFNEiz8pTHSvOfK8OnI5mCIGdQhMm1evAPQmVRyp
-         G28+JZnPOrTd618BrT8owLGguuybvYjQQHqySBqA7ZuU0yAMbRVOoriOKQza6jj6MiJv
-         M5G9ajQqn1UN34KnzCCBJ4fQQlg036uyuEyw0rexXdtCWB/Ypzd3Mxc5+u7iorKLC/k/
-         CBLw==
-X-Gm-Message-State: ACrzQf2f6D7Fa6YoycMRmRBO4oNB5Mw2YqocAYF94Naowmc2pj2zzdBL
-        IKk4yzaI2FdBRq9Js+FhodrwPQ==
-X-Google-Smtp-Source: AMsMyM7XKCA71jHlsnrhFSdFi+dLazxSeT0yz2bHQDtNqZLLi6zwnSL6wBJUsW29B9kjgFunCOqiRw==
-X-Received: by 2002:ae9:eb56:0:b0:6ea:894f:6d21 with SMTP id b83-20020ae9eb56000000b006ea894f6d21mr9204249qkg.301.1666273583582;
-        Thu, 20 Oct 2022 06:46:23 -0700 (PDT)
+        bh=gfoaDvIHm+IYqFg1zUd7jQMQTXkElPWTcNgvljK5gOA=;
+        b=gTU86PWpNG5dDD26p7pzfZRQTthiu33SF6MHb3FOlDLbBKDLh+IYCGwFMuwpjoiLjt
+         k/dsB8l7BUV0e1A6u/9MnZPuuPqr+gyiU7B1+puKvFrx9yWjRHJLH8SpERc+kkvWZRzq
+         t2E31zfNvcykgL0wZfv3veqCqlFTcSxNe9Ch5n4XRiS11anN5PbGbKGJWUQWCkhZSbK5
+         8bN6VJDDOP6zvJA8eph96FhKbua9wOlGgctsXtFpmCYZkaiMroXZt3fZNj2IZQ0PCo52
+         aISzO/y8MegfH9rFz1DzCVA99SHKh4rkhf8MyE3aPvQpgue7ckOM8kvsPmcULSr+nMDm
+         WarA==
+X-Gm-Message-State: ACrzQf0BRG/XGzJPNL9PKfR0vOHnypdfNgRMmJLK1wSa1BQGgcezZdOX
+        ZRZeyRi9dwNdad7UHc5LiOzNhg==
+X-Google-Smtp-Source: AMsMyM5sOIvVtFC130aKpuulDJA8HBv+YuVvL3HoTNZOe6dhDsx7M2SccxP4xCX5/6e1vhY5fApY1w==
+X-Received: by 2002:a05:6214:c68:b0:4b2:31c5:78bc with SMTP id t8-20020a0562140c6800b004b231c578bcmr11137347qvj.45.1666273656040;
+        Thu, 20 Oct 2022 06:47:36 -0700 (PDT)
 Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
-        by smtp.gmail.com with ESMTPSA id v20-20020a05620a441400b006ce813bb306sm7247045qkp.125.2022.10.20.06.46.22
+        by smtp.gmail.com with ESMTPSA id gb11-20020a05622a598b00b00398d83256ddsm6107388qtb.31.2022.10.20.06.47.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Oct 2022 06:46:22 -0700 (PDT)
-Message-ID: <4daa3d61-e157-0947-9d19-50a49f26cc37@linaro.org>
-Date:   Thu, 20 Oct 2022 09:46:21 -0400
+        Thu, 20 Oct 2022 06:47:35 -0700 (PDT)
+Message-ID: <883c9095-f304-1b8c-2f4f-a2151d8e1d1b@linaro.org>
+Date:   Thu, 20 Oct 2022 09:47:33 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.0
-Subject: Re: [PATCH v6 1/2] dt-bindings: arm: qcom: Document additional
- sa8540p device
+Subject: Re: [PATCH v2,1/2] dt-bindings: display: mediatek: dpi: Add
+ compatible for MediaTek MT8188
 Content-Language: en-US
-To:     Parikshit Pareek <quic_ppareek@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Andrew Halaney <ahalaney@redhat.com>,
-        Shazad Hussain <quic_shazhuss@quicinc.com>,
-        Brian Masney <bmasney@redhat.com>,
-        Johan Hovold <johan@kernel.org>
-References: <20221020073036.16656-1-quic_ppareek@quicinc.com>
- <20221020073036.16656-2-quic_ppareek@quicinc.com>
+To:     xinlei.lee@mediatek.com, chunkuang.hu@kernel.org,
+        p.zabel@pengutronix.de, airlied@linux.ie, daniel@ffwll.ch,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, ck.hu@mediatek.com, jitao.shi@mediatek.com
+Cc:     dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <1666266353-16670-1-git-send-email-xinlei.lee@mediatek.com>
+ <1666266353-16670-2-git-send-email-xinlei.lee@mediatek.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221020073036.16656-2-quic_ppareek@quicinc.com>
+In-Reply-To: <1666266353-16670-2-git-send-email-xinlei.lee@mediatek.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/10/2022 03:30, Parikshit Pareek wrote:
-> Add the qdrive3 ride device to the valid device compatibles found on the
-> sa8540p platform.
+On 20/10/2022 07:45, xinlei.lee@mediatek.com wrote:
+> From: xinlei lee <xinlei.lee@mediatek.com>
 > 
-> Signed-off-by: Parikshit Pareek <quic_ppareek@quicinc.com>
+> For MT8188, the vdosys0 only supports 1T1P mode while the vdosys0 supports 2T1P mode in MT8195.
+> 
+> So we need to add dt-binding documentation of dpi for MediaTek MT8188 SoC.
 
 
 Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
