@@ -2,131 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26D7C6062A0
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 16:14:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3F376062CF
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 16:18:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230056AbiJTOOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 10:14:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41116 "EHLO
+        id S230062AbiJTOSo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 10:18:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiJTOOi (ORCPT
+        with ESMTP id S229915AbiJTOSk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 10:14:38 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ABDC186793
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 07:14:09 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1olWJ0-0002IF-Qs; Thu, 20 Oct 2022 16:13:54 +0200
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1olWJ0-0006xn-2h; Thu, 20 Oct 2022 16:13:54 +0200
-Date:   Thu, 20 Oct 2022 16:13:54 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de,
-        devicetree@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
-        linux-kernel@vger.kernel.org, Haibo Chen <haibo.chen@nxp.com>,
-        linux-imx@nxp.com, kernel@pengutronix.de, festevam@gmail.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 14/15] arm64: dts: imx8m[m, p]-evk: change to use
- off-on-delay-us in regulator
-Message-ID: <20221020141354.jxyycnt3nzm7frcr@pengutronix.de>
-References: <20221020095934.1659449-1-peng.fan@oss.nxp.com>
- <20221020095934.1659449-15-peng.fan@oss.nxp.com>
+        Thu, 20 Oct 2022 10:18:40 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35A3E16A4E1;
+        Thu, 20 Oct 2022 07:18:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=AzH2a4QXGz+eTNIZ5k3/P8jk/sAl3fN5pfERFMiCaGI=; b=jrdaHGMwT8rIg0f5wDQi0KOC+J
+        iQjLh+Ip24wmMVh8GSFzWcelTLoD74kUuoZDjUWuicbHm3GIo8OwU5H9zACRf675jBrD85/5tRA+/
+        FBh0RIiF/4V+e45hHBKpixufUXdsVCfbNBY1uZGTabjE5na/CMoRTZwg3fb9WonaeSaNVSz23BppC
+        v2Qlo7mw2yyHnG552uESl/zWzco2W0a+CLOGERPmVhem6U4y2V1p7OZTmD+i2MBq5AnHPkQ7Bgvzo
+        fQbfYIrl0KuvOfRnD1bVZtTAMzRG7LTLmw8FGczXbcvoNopQPfjWdSNN3vfsOA1JROhVH1WEN2I0f
+        8HnjU3aA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1olWJ8-0053JC-Nj; Thu, 20 Oct 2022 14:14:03 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E644930045D;
+        Thu, 20 Oct 2022 16:13:56 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id B99432C08F539; Thu, 20 Oct 2022 16:13:56 +0200 (CEST)
+Date:   Thu, 20 Oct 2022 16:13:56 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Yu Zhao <yuzhao@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org, x86@kernel.org,
+        page-reclaim@google.com, Brian Geffon <bgeffon@google.com>,
+        Jan Alexander Steffens <heftig@archlinux.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Steven Barrett <steven@liquorix.net>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Daniel Byrne <djbyrne@mtu.edu>,
+        Donald Carr <d@chaos-reins.com>,
+        Holger =?iso-8859-1?Q?Hoffst=E4tte?= 
+        <holger@applied-asynchrony.com>,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
+        Shuang Zhai <szhai2@cs.rochester.edu>,
+        Sofia Trinh <sofia.trinh@edi.works>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>
+Subject: Re: [PATCH v14 08/14] mm: multi-gen LRU: support page table walks
+Message-ID: <Y1FXpHdyvXjrjbLw@hirez.programming.kicks-ass.net>
+References: <20220815071332.627393-1-yuzhao@google.com>
+ <20220815071332.627393-9-yuzhao@google.com>
+ <Y0go8wWtdcyH1+Ch@hirez.programming.kicks-ass.net>
+ <CAOUHufa9+FTO3Pv-5jC-e3S5goPsUGu-5KcPVHa4bWb0X+d2ug@mail.gmail.com>
+ <CAHk-=wj1rc2t5noMtVOgu8XXeTM4KiggEub9PdcexxeQrYPZvA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221020095934.1659449-15-peng.fan@oss.nxp.com>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAHk-=wj1rc2t5noMtVOgu8XXeTM4KiggEub9PdcexxeQrYPZvA@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-10-20, Peng Fan (OSS) wrote:
-> From: Haibo Chen <haibo.chen@nxp.com>
-> 
-> After commit f7907e57aea2 ("regulator: fixed: add off-on-delay"), user
-> can use "off-on-delay-us" to define the regulator off-delay time.
-> 
-> For SD card, according to the spec requirement, for sd card power reset
-> operation, it need sd card supply voltage to be lower than 0.5v and keep
-> over 1ms, otherwise, next time power back the sd card supply voltage to
-> 3.3v, sd card can't support SD3.0 mode again.
-> 
-> This patch add the off-on-delay-us to each board, make sure the sd power
-> reset behavior is align with the specification. Without this patch, when
-> do quick system suspend/resume test, some sd card can't work at SD3.0 mode
-> after system resume back.
+On Wed, Oct 19, 2022 at 10:40:40AM -0700, Linus Torvalds wrote:
 
-Please mention that the real issue which is a capicity which gets
-unloaded to slow. Please see the u-boot commit for this which explains
-it better IMHO.
+> Because as you say, the function is already called "read_atomic", and
+> it should damn well *act* that way then.
 
-Regards,
-  Marco
+So I've been sitting on these here patches (and never having time to
+repost them), which is how I noticed in the first place:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/log/?h=x86/mm.pae
 
 
-> 
-> Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  arch/arm64/boot/dts/freescale/imx8mm-evk.dts  | 2 +-
->  arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi | 1 +
->  arch/arm64/boot/dts/freescale/imx8mq-evk.dts  | 1 +
->  3 files changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk.dts b/arch/arm64/boot/dts/freescale/imx8mm-evk.dts
-> index c93387fcd498..898735965ac9 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mm-evk.dts
-> +++ b/arch/arm64/boot/dts/freescale/imx8mm-evk.dts
-> @@ -22,7 +22,7 @@ reg_sd1_vmmc: sd1_regulator {
->  		regulator-min-microvolt = <3300000>;
->  		regulator-max-microvolt = <3300000>;
->  		gpio = <&gpio2 10 GPIO_ACTIVE_HIGH>;
-> -		off-on-delay = <20000>;
-> +		off-on-delay-us = <20000>;
->  		startup-delay-us = <100>;
->  		enable-active-high;
->  	};
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
-> index ce450965e837..fdbcd2483efc 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
-> @@ -56,6 +56,7 @@ reg_usdhc2_vmmc: regulator-usdhc2 {
->  		regulator-min-microvolt = <3300000>;
->  		regulator-max-microvolt = <3300000>;
->  		gpio = <&gpio2 19 GPIO_ACTIVE_HIGH>;
-> +		off-on-delay-us = <20000>;
->  		enable-active-high;
->  	};
->  
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mq-evk.dts b/arch/arm64/boot/dts/freescale/imx8mq-evk.dts
-> index 82387b9cb800..07d9fb2aacf8 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mq-evk.dts
-> +++ b/arch/arm64/boot/dts/freescale/imx8mq-evk.dts
-> @@ -46,6 +46,7 @@ reg_usdhc2_vmmc: regulator-vsd-3v3 {
->  		regulator-min-microvolt = <3300000>;
->  		regulator-max-microvolt = <3300000>;
->  		gpio = <&gpio2 19 GPIO_ACTIVE_HIGH>;
-> +		off-on-delay-us = <20000>;
->  		enable-active-high;
->  	};
->  
-> -- 
-> 2.37.1
-> 
-> 
-> 
