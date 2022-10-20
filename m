@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E78EC606918
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 21:45:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 031BF606919
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 21:45:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230075AbiJTTpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 15:45:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43524 "EHLO
+        id S230100AbiJTTpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 15:45:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230034AbiJTTot (ORCPT
+        with ESMTP id S229835AbiJTTou (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 15:44:49 -0400
+        Thu, 20 Oct 2022 15:44:50 -0400
 Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24BE14003C;
-        Thu, 20 Oct 2022 12:44:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F190B495EF;
+        Thu, 20 Oct 2022 12:44:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666295087; x=1697831087;
+  t=1666295088; x=1697831088;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=VsRgjea9MgWlVLsbOj4OD1KnCuyr+jeXtAYbkZexWv8=;
-  b=n+5tbwXjuhVaZvPz/HXvzSmfG3s6MvvC1mnxCVbJB8+rLTdmIf+FgPSb
-   bdUOUCQeUG3dsR4eHhSM7tuYs00DaVb5WmEZJqa3qb8aFuo1LqGS9CFd0
-   gf1rLW1uWcM4aUusV316gN+haSA+iyeS1n+W3/bcJe78+yuj4/l4aYFmD
-   DuWUb/vOZe22kSzc3ov6zob+LrWvR+vd471QmLzVquA0ekm7NLoOPfGvz
-   P86mFy/uGRVUFPq30E5jOpDY+tSly9xohK90YoJ7aeaFQOTkkbUkfS6v8
-   vIcyXWorNnWNU/c3Df+ejg+NO2jk5SY3kvVrcTcyjxMlREWPdDWKU9Amh
+  bh=mvA9eCR+rKOtsB1zGltIo6l+ymy8s9rrgGnqv92uqD8=;
+  b=aQLuDej1GSBC/RbxkcAjLL/O17aRqZD0FTpYURy1CMVnfd9P8ceCTks0
+   HIKKEQ/3235MskZq2ZP+MUztUERpSWYZ6F+LiTvr931fo1FVLFlEOEstc
+   SSInQ4zrwDkiJAMZtvJ90CxkKMhXTwpFCRGYtrc/EDPqQ7Q5ZBGrohhrR
+   fQdPddrPLf6cMm7UL7u7Sy4s2ICeN372XrheSf6QPVpD7bUyDx65phaiG
+   vT7ma/vX8+8a/gJyxWXPkY2tfvhXPW2Nd4QzuCb2P9Zm4CCVJXNaUQ2zz
+   j0z1kCZNu91/P9Wa++PJotAyjyU+t4hhUkmx4S5ldu+XCT5r+G8PqNIBU
    A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="333392707"
+X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="333392708"
 X-IronPort-AV: E=Sophos;i="5.95,199,1661842800"; 
-   d="scan'208";a="333392707"
+   d="scan'208";a="333392708"
 Received: from fmsmga006.fm.intel.com ([10.253.24.20])
   by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 12:44:44 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="875210367"
+X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="875210365"
 X-IronPort-AV: E=Sophos;i="5.95,199,1661842800"; 
-   d="scan'208";a="875210367"
+   d="scan'208";a="875210365"
 Received: from black.fi.intel.com ([10.237.72.28])
   by fmsmga006.fm.intel.com with ESMTP; 20 Oct 2022 12:44:42 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id EAA72291; Thu, 20 Oct 2022 22:45:03 +0300 (EEST)
+        id 0502B4FD; Thu, 20 Oct 2022 22:45:03 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
@@ -48,10 +48,11 @@ To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
 Cc:     Daniel Mack <daniel@zonque.org>,
         Haojian Zhuang <haojian.zhuang@gmail.com>,
         Robert Jarzmik <robert.jarzmik@free.fr>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH v4 2/5] spi: pxa2xx: Remove no more needed PCI ID table
-Date:   Thu, 20 Oct 2022 22:44:57 +0300
-Message-Id: <20221020194500.10225-3-andriy.shevchenko@linux.intel.com>
+        Mark Brown <broonie@kernel.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [PATCH v4 3/5] spi: pxa2xx: Move OF and ACPI ID tables closer to their user
+Date:   Thu, 20 Oct 2022 22:44:58 +0300
+Message-Id: <20221020194500.10225-4-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221020194500.10225-1-andriy.shevchenko@linux.intel.com>
 References: <20221020194500.10225-1-andriy.shevchenko@linux.intel.com>
@@ -67,191 +68,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since the PCI enumerated devices provide a property with SSP type,
-there is no more necessity to bear the copy of the ID table here.
-Remove it for good.
+There is no code that uses ID tables directly, except the
+struct device_driver at the end of the file. Hence, move
+tables closer to its user. It's always possible to access
+them via pointer to a platform device.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 ---
- drivers/spi/spi-pxa2xx.c | 117 +--------------------------------------
- 1 file changed, 2 insertions(+), 115 deletions(-)
+ drivers/spi/spi-pxa2xx.c | 38 +++++++++++++++++++-------------------
+ 1 file changed, 19 insertions(+), 19 deletions(-)
 
 diff --git a/drivers/spi/spi-pxa2xx.c b/drivers/spi/spi-pxa2xx.c
-index f3ba1b0588fb..96c9bb7925de 100644
+index 96c9bb7925de..0824965e894d 100644
 --- a/drivers/spi/spi-pxa2xx.c
 +++ b/drivers/spi/spi-pxa2xx.c
-@@ -20,7 +20,6 @@
- #include <linux/module.h>
- #include <linux/mod_devicetable.h>
- #include <linux/of.h>
--#include <linux/pci.h>
- #include <linux/platform_device.h>
- #include <linux/pm_runtime.h>
- #include <linux/property.h>
-@@ -1335,121 +1334,17 @@ static const struct acpi_device_id pxa2xx_spi_acpi_match[] = {
- MODULE_DEVICE_TABLE(acpi, pxa2xx_spi_acpi_match);
- #endif
+@@ -1321,25 +1321,6 @@ static void cleanup(struct spi_device *spi)
+ 	kfree(chip);
+ }
  
--/*
-- * PCI IDs of compound devices that integrate both host controller and private
-- * integrated DMA engine. Please note these are not used in module
-- * autoloading and probing in this module but matching the LPSS SSP type.
-- */
--static const struct pci_device_id pxa2xx_spi_pci_compound_match[] = {
--	/* SPT-LP */
--	{ PCI_VDEVICE(INTEL, 0x9d29), LPSS_SPT_SSP },
--	{ PCI_VDEVICE(INTEL, 0x9d2a), LPSS_SPT_SSP },
--	/* SPT-H */
--	{ PCI_VDEVICE(INTEL, 0xa129), LPSS_SPT_SSP },
--	{ PCI_VDEVICE(INTEL, 0xa12a), LPSS_SPT_SSP },
--	/* KBL-H */
--	{ PCI_VDEVICE(INTEL, 0xa2a9), LPSS_SPT_SSP },
--	{ PCI_VDEVICE(INTEL, 0xa2aa), LPSS_SPT_SSP },
--	/* CML-V */
--	{ PCI_VDEVICE(INTEL, 0xa3a9), LPSS_SPT_SSP },
--	{ PCI_VDEVICE(INTEL, 0xa3aa), LPSS_SPT_SSP },
--	/* BXT A-Step */
--	{ PCI_VDEVICE(INTEL, 0x0ac2), LPSS_BXT_SSP },
--	{ PCI_VDEVICE(INTEL, 0x0ac4), LPSS_BXT_SSP },
--	{ PCI_VDEVICE(INTEL, 0x0ac6), LPSS_BXT_SSP },
--	/* BXT B-Step */
--	{ PCI_VDEVICE(INTEL, 0x1ac2), LPSS_BXT_SSP },
--	{ PCI_VDEVICE(INTEL, 0x1ac4), LPSS_BXT_SSP },
--	{ PCI_VDEVICE(INTEL, 0x1ac6), LPSS_BXT_SSP },
--	/* GLK */
--	{ PCI_VDEVICE(INTEL, 0x31c2), LPSS_BXT_SSP },
--	{ PCI_VDEVICE(INTEL, 0x31c4), LPSS_BXT_SSP },
--	{ PCI_VDEVICE(INTEL, 0x31c6), LPSS_BXT_SSP },
--	/* ICL-LP */
--	{ PCI_VDEVICE(INTEL, 0x34aa), LPSS_CNL_SSP },
--	{ PCI_VDEVICE(INTEL, 0x34ab), LPSS_CNL_SSP },
--	{ PCI_VDEVICE(INTEL, 0x34fb), LPSS_CNL_SSP },
--	/* EHL */
--	{ PCI_VDEVICE(INTEL, 0x4b2a), LPSS_BXT_SSP },
--	{ PCI_VDEVICE(INTEL, 0x4b2b), LPSS_BXT_SSP },
--	{ PCI_VDEVICE(INTEL, 0x4b37), LPSS_BXT_SSP },
--	/* JSL */
--	{ PCI_VDEVICE(INTEL, 0x4daa), LPSS_CNL_SSP },
--	{ PCI_VDEVICE(INTEL, 0x4dab), LPSS_CNL_SSP },
--	{ PCI_VDEVICE(INTEL, 0x4dfb), LPSS_CNL_SSP },
--	/* TGL-H */
--	{ PCI_VDEVICE(INTEL, 0x43aa), LPSS_CNL_SSP },
--	{ PCI_VDEVICE(INTEL, 0x43ab), LPSS_CNL_SSP },
--	{ PCI_VDEVICE(INTEL, 0x43fb), LPSS_CNL_SSP },
--	{ PCI_VDEVICE(INTEL, 0x43fd), LPSS_CNL_SSP },
--	/* ADL-P */
--	{ PCI_VDEVICE(INTEL, 0x51aa), LPSS_CNL_SSP },
--	{ PCI_VDEVICE(INTEL, 0x51ab), LPSS_CNL_SSP },
--	{ PCI_VDEVICE(INTEL, 0x51fb), LPSS_CNL_SSP },
--	/* ADL-M */
--	{ PCI_VDEVICE(INTEL, 0x54aa), LPSS_CNL_SSP },
--	{ PCI_VDEVICE(INTEL, 0x54ab), LPSS_CNL_SSP },
--	{ PCI_VDEVICE(INTEL, 0x54fb), LPSS_CNL_SSP },
--	/* APL */
--	{ PCI_VDEVICE(INTEL, 0x5ac2), LPSS_BXT_SSP },
--	{ PCI_VDEVICE(INTEL, 0x5ac4), LPSS_BXT_SSP },
--	{ PCI_VDEVICE(INTEL, 0x5ac6), LPSS_BXT_SSP },
--	/* RPL-S */
--	{ PCI_VDEVICE(INTEL, 0x7a2a), LPSS_CNL_SSP },
--	{ PCI_VDEVICE(INTEL, 0x7a2b), LPSS_CNL_SSP },
--	{ PCI_VDEVICE(INTEL, 0x7a79), LPSS_CNL_SSP },
--	{ PCI_VDEVICE(INTEL, 0x7a7b), LPSS_CNL_SSP },
--	/* ADL-S */
--	{ PCI_VDEVICE(INTEL, 0x7aaa), LPSS_CNL_SSP },
--	{ PCI_VDEVICE(INTEL, 0x7aab), LPSS_CNL_SSP },
--	{ PCI_VDEVICE(INTEL, 0x7af9), LPSS_CNL_SSP },
--	{ PCI_VDEVICE(INTEL, 0x7afb), LPSS_CNL_SSP },
--	/* MTL-P */
--	{ PCI_VDEVICE(INTEL, 0x7e27), LPSS_CNL_SSP },
--	{ PCI_VDEVICE(INTEL, 0x7e30), LPSS_CNL_SSP },
--	{ PCI_VDEVICE(INTEL, 0x7e46), LPSS_CNL_SSP },
--	/* CNL-LP */
--	{ PCI_VDEVICE(INTEL, 0x9daa), LPSS_CNL_SSP },
--	{ PCI_VDEVICE(INTEL, 0x9dab), LPSS_CNL_SSP },
--	{ PCI_VDEVICE(INTEL, 0x9dfb), LPSS_CNL_SSP },
--	/* CNL-H */
--	{ PCI_VDEVICE(INTEL, 0xa32a), LPSS_CNL_SSP },
--	{ PCI_VDEVICE(INTEL, 0xa32b), LPSS_CNL_SSP },
--	{ PCI_VDEVICE(INTEL, 0xa37b), LPSS_CNL_SSP },
--	/* CML-LP */
--	{ PCI_VDEVICE(INTEL, 0x02aa), LPSS_CNL_SSP },
--	{ PCI_VDEVICE(INTEL, 0x02ab), LPSS_CNL_SSP },
--	{ PCI_VDEVICE(INTEL, 0x02fb), LPSS_CNL_SSP },
--	/* CML-H */
--	{ PCI_VDEVICE(INTEL, 0x06aa), LPSS_CNL_SSP },
--	{ PCI_VDEVICE(INTEL, 0x06ab), LPSS_CNL_SSP },
--	{ PCI_VDEVICE(INTEL, 0x06fb), LPSS_CNL_SSP },
--	/* TGL-LP */
--	{ PCI_VDEVICE(INTEL, 0xa0aa), LPSS_CNL_SSP },
--	{ PCI_VDEVICE(INTEL, 0xa0ab), LPSS_CNL_SSP },
--	{ PCI_VDEVICE(INTEL, 0xa0de), LPSS_CNL_SSP },
--	{ PCI_VDEVICE(INTEL, 0xa0df), LPSS_CNL_SSP },
--	{ PCI_VDEVICE(INTEL, 0xa0fb), LPSS_CNL_SSP },
--	{ PCI_VDEVICE(INTEL, 0xa0fd), LPSS_CNL_SSP },
--	{ PCI_VDEVICE(INTEL, 0xa0fe), LPSS_CNL_SSP },
+-#ifdef CONFIG_ACPI
+-static const struct acpi_device_id pxa2xx_spi_acpi_match[] = {
+-	{ "INT33C0", LPSS_LPT_SSP },
+-	{ "INT33C1", LPSS_LPT_SSP },
+-	{ "INT3430", LPSS_LPT_SSP },
+-	{ "INT3431", LPSS_LPT_SSP },
+-	{ "80860F0E", LPSS_BYT_SSP },
+-	{ "8086228E", LPSS_BSW_SSP },
 -	{ },
 -};
+-MODULE_DEVICE_TABLE(acpi, pxa2xx_spi_acpi_match);
+-#endif
 -
- static const struct of_device_id pxa2xx_spi_of_match[] = {
- 	{ .compatible = "marvell,mmp2-ssp", .data = (void *)MMP2_SSP },
- 	{},
- };
- MODULE_DEVICE_TABLE(of, pxa2xx_spi_of_match);
- 
--#ifdef CONFIG_PCI
+-static const struct of_device_id pxa2xx_spi_of_match[] = {
+-	{ .compatible = "marvell,mmp2-ssp", .data = (void *)MMP2_SSP },
+-	{},
+-};
+-MODULE_DEVICE_TABLE(of, pxa2xx_spi_of_match);
 -
  static bool pxa2xx_spi_idma_filter(struct dma_chan *chan, void *param)
  {
  	return param == chan->device->dev;
- }
+@@ -1765,6 +1746,25 @@ static const struct dev_pm_ops pxa2xx_spi_pm_ops = {
+ 			   pxa2xx_spi_runtime_resume, NULL)
+ };
  
--#endif /* CONFIG_PCI */
--
- static struct pxa2xx_spi_controller *
- pxa2xx_spi_init_pdata(struct platform_device *pdev)
- {
-@@ -1458,8 +1353,6 @@ pxa2xx_spi_init_pdata(struct platform_device *pdev)
- 	struct device *parent = dev->parent;
- 	struct ssp_device *ssp;
- 	struct resource *res;
--	struct pci_dev *pcidev = dev_is_pci(parent) ? to_pci_dev(parent) : NULL;
--	const struct pci_device_id *pcidev_id = NULL;
- 	u32 value = SSP_UNDEFINED;
- 	enum pxa_ssp_type type;
- 	bool mfd_enumerated;
-@@ -1475,16 +1368,11 @@ pxa2xx_spi_init_pdata(struct platform_device *pdev)
- 			return ERR_PTR(status);
- 	}
- 
--	if (pcidev)
--		pcidev_id = pci_match_id(pxa2xx_spi_pci_compound_match, pcidev);
--
- 	match = device_get_match_data(&pdev->dev);
- 	if (match)
- 		type = (enum pxa_ssp_type)match;
- 	else if (value > SSP_UNDEFINED && value < SSP_MAX)
- 		type = (enum pxa_ssp_type)value;
--	else if (pcidev_id)
--		type = (enum pxa_ssp_type)pcidev_id->driver_data;
- 	else
- 		return ERR_PTR(-EINVAL);
- 
-@@ -1500,13 +1388,12 @@ pxa2xx_spi_init_pdata(struct platform_device *pdev)
- 
- 	ssp->phys_base = res->start;
- 
--#ifdef CONFIG_PCI
--	if (pcidev_id) {
-+	/* Platforms with iDMA 64-bit */
-+	if (mfd_enumerated) {
- 		pdata->tx_param = parent;
- 		pdata->rx_param = parent;
- 		pdata->dma_filter = pxa2xx_spi_idma_filter;
- 	}
--#endif
- 
- 	ssp->clk = devm_clk_get(&pdev->dev, NULL);
- 	if (IS_ERR(ssp->clk))
++#ifdef CONFIG_ACPI
++static const struct acpi_device_id pxa2xx_spi_acpi_match[] = {
++	{ "80860F0E", LPSS_BYT_SSP },
++	{ "8086228E", LPSS_BSW_SSP },
++	{ "INT33C0", LPSS_LPT_SSP },
++	{ "INT33C1", LPSS_LPT_SSP },
++	{ "INT3430", LPSS_LPT_SSP },
++	{ "INT3431", LPSS_LPT_SSP },
++	{}
++};
++MODULE_DEVICE_TABLE(acpi, pxa2xx_spi_acpi_match);
++#endif
++
++static const struct of_device_id pxa2xx_spi_of_match[] = {
++	{ .compatible = "marvell,mmp2-ssp", .data = (void *)MMP2_SSP },
++	{}
++};
++MODULE_DEVICE_TABLE(of, pxa2xx_spi_of_match);
++
+ static struct platform_driver driver = {
+ 	.driver = {
+ 		.name	= "pxa2xx-spi",
 -- 
 2.35.1
 
