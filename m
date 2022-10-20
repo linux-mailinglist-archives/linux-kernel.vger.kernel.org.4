@@ -2,131 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E8B76059CB
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 10:31:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB37E6059CF
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 10:31:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230009AbiJTIbo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 04:31:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34422 "EHLO
+        id S230203AbiJTIbu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 04:31:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbiJTIbj (ORCPT
+        with ESMTP id S230037AbiJTIbk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 04:31:39 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA02C15ECC5
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 01:31:37 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id m29-20020a05600c3b1d00b003c6bf423c71so1789040wms.0
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 01:31:37 -0700 (PDT)
+        Thu, 20 Oct 2022 04:31:40 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CD6F15F932
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 01:31:38 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id bp15so32283371lfb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 01:31:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=/hCpDbVRoc+q/9gSPADK7PRRzF3tzQ7+LRZVH7HnjY8=;
-        b=ZOwrGT8YlcyuCniv3v2gcTGYsyOsF1bRQP+5/n5cJtEfVLBTSwrkPRnwTHYdXH5AS4
-         GpbQhf/EJDFhESbVNKeMcOA4AP/2TpsnqAwRkh1zuw8DPcNFNt3I1DKvWc8OhxL47HyO
-         94eUlug5J2DmCBN69I9GYPdf+CiQJEmygXdjpETIGeowjOre0R79sv7c1Q9RQ0aeSgjA
-         mt/1gthUycDV4pJjcXRfNC8PgwaWu2zZ3S9r53z1oORZ2tRITN3YHmhzLqhKj86MHQ3y
-         7h/s9aWZfmFMX5F4eVOhSoMD5mrH13LUCX+GXuMWABU1wXjzGcvvXu+zda+XvTRoiu9v
-         naog==
+        d=linaro.org; s=google;
+        h=in-reply-to:from:references:cc:to:content-language:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KgDK8YFBcYlO96C3KJm7NrQCSaicS4eCQwBe4/7dKC8=;
+        b=FI6eR3DYXht8+m9UalT4gkpR82tvRlAezR/K/yaB8vkJH28jtBAkdGh2XY/CykH9mj
+         KYZvIT98Yoyr1KycI4HGdn/JzFWGOQ5UZEqfKDGfFavS9jHlHNlLuy67jOmEN1K8xUqj
+         k4mrBaMSrb1UYIWVWz/8DZXLT3JV3JpkjwzePnKwpIYJA8Vr/qwOMsPLikI/xdfgJA2p
+         3J9P/BMI0AcxZZUQnO0GdYDnJAietkBkHVzeBhv/u9q4FBzJRcRhN825M/mnEEJBS6Tx
+         zPPYp8ZrrgvhdxFH5J0JRK8uGVsy6VIghNPcowfVTZhQsiyGsUmM78LrHCsPOjxmqChq
+         smjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/hCpDbVRoc+q/9gSPADK7PRRzF3tzQ7+LRZVH7HnjY8=;
-        b=t1eEG3M8gcwmlhN5LZKTsbE/WJ9q3Kju3KqvytZIDoa0C+prv2MJx7AQ23COkonLhM
-         /jSivalC7zyNstZMg3IABKnqNcN0uhpJ5iJpbmROF4+MnH82bESkdp1C8ig1npCRr9wd
-         KE56nNE5qnIgk4OdGGXJLV1ULY2isTJIQQ58bXUt14L5O4EqL9izUD3zOzm2FvMX0x4r
-         wGuEVqFRJJv5cWQY4wLbYywEPKp378ThfmN+8D0GiUQ5+G8amb34aiIOGzlJrawWS6Ru
-         dn9eTCDacaRFj2QMWackJtWD8sbA9xsHc62dzYYU+9l0nRDCyRB0qO3YyhZM49rQNFGz
-         dbNg==
-X-Gm-Message-State: ACrzQf3iVHOoye0b3UUxiMcEpjZku7Y6ivFpnWLtzR7Xyu/A2m3LbrVm
-        Z0KrjgbBO/MAaPPM80gHHB1Dbg==
-X-Google-Smtp-Source: AMsMyM6iQl1yh/y0HEH9uS1CZVI3KrJmHjy5uCOsdpFu/YF84jxhh6xVVSE8CZ2CG6O57/gkvjT9Lg==
-X-Received: by 2002:a05:600c:a08:b0:3bc:eb4c:b90 with SMTP id z8-20020a05600c0a0800b003bceb4c0b90mr8488441wmp.184.1666254696083;
+        h=in-reply-to:from:references:cc:to:content-language:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=KgDK8YFBcYlO96C3KJm7NrQCSaicS4eCQwBe4/7dKC8=;
+        b=m8sXWnMIDa74beTIdehYhk7dKSjMlu5BOnQM75jSXbzlWZGUKYMdhmw6O4GFQCgWji
+         phjzZx+vxnA9GChacs//Wt8mDnKIG44HESVszfQ4OC0XoEM0qrSR9rcWNLe2Jk4e1Fh7
+         1Tk/apr+XPkgGxf98Kgz5KZvVGClLhPlTj+WbAKDxiKDkfaW5wcUHEEAz0CUzzIPjPoA
+         dy7QlQPOx6wV57VG9o4NKaru5oqI9keZ1rVUQib4z5BhfHAWxqGHaoFDERMCUxjtgyZ5
+         frEuB1zTur+R1ODPpsLmP+lBh8E+SLnopr1mSoIARa2Bti4qXYq950NWgU5XGJPPubQc
+         mkUw==
+X-Gm-Message-State: ACrzQf0yP9sKApXJ/PhauPr25OopTq9mIho3WpYEWp4rcTS3uxQHufGI
+        oaxPJ5Men13cSdO6seJBtEqVgw==
+X-Google-Smtp-Source: AMsMyM5dvXV0bqmHga039wlUAXgeHaA+4elOpcHo3ft59KpTFvuA4ianAGx8LKDVRpd78p2nJPUkwg==
+X-Received: by 2002:a19:f71a:0:b0:4a2:4fdb:5037 with SMTP id z26-20020a19f71a000000b004a24fdb5037mr4773857lfe.535.1666254696819;
         Thu, 20 Oct 2022 01:31:36 -0700 (PDT)
-Received: from localhost ([82.66.159.240])
-        by smtp.gmail.com with ESMTPSA id j28-20020a5d6e5c000000b0022cd27bc8c1sm19246814wrz.9.2022.10.20.01.31.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 01:31:35 -0700 (PDT)
-From:   Mattijs Korpershoek <mkorpershoek@baylibre.com>
-To:     Jason Andryuk <jandryuk@gmail.com>, linux-kernel@vger.kernel.org
-Cc:     xen-devel@lists.xenproject.org, Jason Andryuk <jandryuk@gmail.com>,
-        Phillip Susi <phill@thesusis.net>, stable@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-input@vger.kernel.org
-Subject: Re: [PATCH] Input: xen-kbdfront - drop keys to shrink modalias
-In-Reply-To: <20221019201458.21803-1-jandryuk@gmail.com>
-References: <20221019201458.21803-1-jandryuk@gmail.com>
-Date:   Thu, 20 Oct 2022 10:31:34 +0200
-Message-ID: <87zgdq99qx.fsf@baylibre.com>
+Received: from [10.10.15.130] ([192.130.178.91])
+        by smtp.gmail.com with ESMTPSA id v14-20020a2ea44e000000b0026c35c4720esm2834569ljn.24.2022.10.20.01.31.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Oct 2022 01:31:36 -0700 (PDT)
+Content-Type: multipart/mixed; boundary="------------i082W3S8x1RX9AUAq7cYn8mr"
+Message-ID: <325d6c7b-ca96-df73-a792-4d156a710267@linaro.org>
+Date:   Thu, 20 Oct 2022 11:31:35 +0300
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH v2 13/15] phy: qcom-qmp-pcie: add support for pipediv2
+ clock
+Content-Language: en-GB
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221019113552.22353-1-johan+linaro@kernel.org>
+ <20221019113552.22353-14-johan+linaro@kernel.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20221019113552.22353-14-johan+linaro@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 16:14, Jason Andryuk <jandryuk@gmail.com> wrote:
+This is a multi-part message in MIME format.
+--------------i082W3S8x1RX9AUAq7cYn8mr
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-> xen kbdfront registers itself as being able to deliver *any* key since
-> it doesn't know what keys the backend may produce.
->
-> Unfortunately, the generated modalias gets too large and uevent creation
-> fails with -ENOMEM.
->
-> This can lead to gdm not using the keyboard since there is no seat
-> associated [1] and the debian installer crashing [2].
->
-> Trim the ranges of key capabilities by removing some BTN_* ranges.
-> While doing this, some neighboring undefined ranges are removed to trim
-> it further.
->
-> This removes:
-> BTN_DPAD_UP(0x220)..BTN_DPAD_RIGHT(0x223)
-> Empty space 0x224..0x229
->
-> Emtpy space 0x2bd..0x2bf
-> BTN_TRIGGER_HAPPY(0x2c0)..BTN_TRIGGER_HAPPY40(0x2e7)
-> Empty space 0x2e8..0x2ff
->
-> The modalias shrinks from 2082 to 1754 bytes.
->
-> [1] https://github.com/systemd/systemd/issues/22944
-> [2] https://lore.kernel.org/xen-devel/87o8dw52jc.fsf@vps.thesusis.net/T/
->
-> Cc: Phillip Susi <phill@thesusis.net>
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Jason Andryuk <jandryuk@gmail.com>
-
-Reviewed-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
-
+On 19/10/2022 14:35, Johan Hovold wrote:
+> Some QMP PHYs have a second fixed-divider pipe clock that needs to be
+> enabled along with the pipe clock.
+> 
+> Add support for an optional "pipediv2" clock.
+> 
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 > ---
->  drivers/input/misc/xen-kbdfront.c | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/input/misc/xen-kbdfront.c b/drivers/input/misc/xen-kbdfront.c
-> index 8d8ebdc2039b..23f37211be78 100644
-> --- a/drivers/input/misc/xen-kbdfront.c
-> +++ b/drivers/input/misc/xen-kbdfront.c
-> @@ -256,7 +256,14 @@ static int xenkbd_probe(struct xenbus_device *dev,
->  		__set_bit(EV_KEY, kbd->evbit);
->  		for (i = KEY_ESC; i < KEY_UNKNOWN; i++)
->  			__set_bit(i, kbd->keybit);
-> -		for (i = KEY_OK; i < KEY_MAX; i++)
-> +		/* In theory we want to go KEY_OK..KEY_MAX, but that grows the
-> +		 * modalias line too long.  KEY_KBD_LCD_MENU5 is the last
-> +		 * defined non-button key. There is a gap of buttons from
-> +		 * BTN_DPAD_UP..BTN_DPAD_RIGHT and KEY_ALS_TOGGLE is the next
-> +		 * defined. */
-> +		for (i = KEY_OK; i < BTN_DPAD_UP; i++)
-> +			__set_bit(i, kbd->keybit);
-> +		for (i = KEY_ALS_TOGGLE; i <= KEY_KBD_LCD_MENU5; i++)
->  			__set_bit(i, kbd->keybit);
->  
->  		ret = input_register_device(kbd);
-> -- 
-> 2.37.3
+>   drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 42 ++++++++++++++++++++----
+>   1 file changed, 36 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
+> index 9c8e009033f1..c1d74c06fad1 100644
+> --- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
+> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
+> @@ -1379,7 +1379,9 @@ struct qmp_pcie {
+>   	void __iomem *rx2;
+>   
+>   	struct clk *pipe_clk;
+> +	struct clk *pipediv2_clk;
+>   	struct clk_bulk_data *clks;
+> +
+>   	struct reset_control_bulk_data *resets;
+>   	struct regulator_bulk_data *vregs;
+>   
+> @@ -1902,6 +1904,36 @@ static int qmp_pcie_exit(struct phy *phy)
+>   	return 0;
+>   }
+>   
+> +static int pipe_clk_enable(struct qmp_pcie *qmp)
+> +{
+> +	int ret;
+> +
+> +	ret = clk_prepare_enable(qmp->pipe_clk);
+> +	if (ret) {
+> +		dev_err(qmp->dev, "failed to enable pipe clock: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	ret = clk_prepare_enable(qmp->pipediv2_clk);
+> +	if (ret) {
+> +		dev_err(qmp->dev, "failed to enable pipediv2 clock: %d\n", ret);
+> +		goto err_disable_pipe_clk;
+> +	}
+> +
+> +	return 0;
+> +
+> +err_disable_pipe_clk:
+> +	clk_disable_unprepare(qmp->pipe_clk);
+> +
+> +	return ret;
+> +}
+> +
+> +static void pipe_clk_disable(struct qmp_pcie *qmp)
+> +{
+> +	clk_disable_unprepare(qmp->pipediv2_clk);
+> +	clk_disable_unprepare(qmp->pipe_clk);
+> +}
+> +
+>   static int qmp_pcie_power_on(struct phy *phy)
+>   {
+>   	struct qmp_pcie *qmp = phy_get_drvdata(phy);
+> @@ -1923,11 +1955,9 @@ static int qmp_pcie_power_on(struct phy *phy)
+>   	qmp_pcie_init_registers(qmp, &cfg->tables);
+>   	qmp_pcie_init_registers(qmp, mode_tables);
+>   
+> -	ret = clk_prepare_enable(qmp->pipe_clk);
+> -	if (ret) {
+> -		dev_err(qmp->dev, "pipe_clk enable failed err=%d\n", ret);
+> +	ret = pipe_clk_enable(qmp);
+> +	if (ret)
+>   		return ret;
+> -	}
+>   
+>   	/* Pull PHY out of reset state */
+>   	qphy_clrbits(pcs, cfg->regs[QPHY_SW_RESET], SW_RESET);
+> @@ -1950,7 +1980,7 @@ static int qmp_pcie_power_on(struct phy *phy)
+>   	return 0;
+>   
+>   err_disable_pipe_clk:
+> -	clk_disable_unprepare(qmp->pipe_clk);
+> +	pipe_clk_disable(qmp);
+>   
+>   	return ret;
+>   }
+> @@ -1960,7 +1990,7 @@ static int qmp_pcie_power_off(struct phy *phy)
+>   	struct qmp_pcie *qmp = phy_get_drvdata(phy);
+>   	const struct qmp_phy_cfg *cfg = qmp->cfg;
+>   
+> -	clk_disable_unprepare(qmp->pipe_clk);
+> +	pipe_clk_disable(qmp);
+>   
+>   	/* PHY reset */
+>   	qphy_setbits(qmp->pcs, cfg->regs[QPHY_SW_RESET], SW_RESET);
+
+I still think that the attached patch is somewhat simpler. Diffstat 
+supports that idea:
+
+$ diffstat /tmp/pipe.diff
+  phy-qcom-qmp-pcie.c |   26 ++++++++++++++++----------
+  1 file changed, 16 insertions(+), 10 deletions(-)
+
+Yes, I'm speaking this after having cleaned up several open-coded 
+versions of clk_bulk_foo from the drm/msm code. It typically starts with 
+the 'just another clock' story, and then suddenly they are all over the 
+code.
+
+-- 
+With best wishes
+Dmitry
+
+--------------i082W3S8x1RX9AUAq7cYn8mr
+Content-Type: text/x-patch; charset=UTF-8; name="pipe.diff"
+Content-Disposition: attachment; filename="pipe.diff"
+Content-Transfer-Encoding: base64
+
+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvcGh5L3F1YWxjb21tL3BoeS1xY29tLXFtcC1wY2llLmMg
+Yi9kcml2ZXJzL3BoeS9xdWFsY29tbS9waHktcWNvbS1xbXAtcGNpZS5jCmluZGV4IDljOGUw
+MDkwMzNmMS4uYTE0OGIxNDNkZDkwIDEwMDY0NAotLS0gYS9kcml2ZXJzL3BoeS9xdWFsY29t
+bS9waHktcWNvbS1xbXAtcGNpZS5jCisrKyBiL2RyaXZlcnMvcGh5L3F1YWxjb21tL3BoeS1x
+Y29tLXFtcC1wY2llLmMKQEAgLTEzNzgsOCArMTM3OCwxMCBAQCBzdHJ1Y3QgcW1wX3BjaWUg
+ewogCXZvaWQgX19pb21lbSAqdHgyOwogCXZvaWQgX19pb21lbSAqcngyOwogCi0Jc3RydWN0
+IGNsayAqcGlwZV9jbGs7CisJc3RydWN0IGNsa19idWxrX2RhdGEgKnBpcGVfY2xrczsKKwlp
+bnQgbnVtX3BpcGVfY2xrczsKIAlzdHJ1Y3QgY2xrX2J1bGtfZGF0YSAqY2xrczsKKwogCXN0
+cnVjdCByZXNldF9jb250cm9sX2J1bGtfZGF0YSAqcmVzZXRzOwogCXN0cnVjdCByZWd1bGF0
+b3JfYnVsa19kYXRhICp2cmVnczsKIApAQCAtMTkyMywxMSArMTkyNSw5IEBAIHN0YXRpYyBp
+bnQgcW1wX3BjaWVfcG93ZXJfb24oc3RydWN0IHBoeSAqcGh5KQogCXFtcF9wY2llX2luaXRf
+cmVnaXN0ZXJzKHFtcCwgJmNmZy0+dGFibGVzKTsKIAlxbXBfcGNpZV9pbml0X3JlZ2lzdGVy
+cyhxbXAsIG1vZGVfdGFibGVzKTsKIAotCXJldCA9IGNsa19wcmVwYXJlX2VuYWJsZShxbXAt
+PnBpcGVfY2xrKTsKLQlpZiAocmV0KSB7Ci0JCWRldl9lcnIocW1wLT5kZXYsICJwaXBlX2Ns
+ayBlbmFibGUgZmFpbGVkIGVycj0lZFxuIiwgcmV0KTsKKwlyZXQgPSBjbGtfYnVsa19wcmVw
+YXJlX2VuYWJsZShxbXAtPm51bV9waXBlX2Nsa3MsIHFtcC0+cGlwZV9jbGtzKTsKKwlpZiAo
+cmV0KQogCQlyZXR1cm4gcmV0OwotCX0KIAogCS8qIFB1bGwgUEhZIG91dCBvZiByZXNldCBz
+dGF0ZSAqLwogCXFwaHlfY2xyYml0cyhwY3MsIGNmZy0+cmVnc1tRUEhZX1NXX1JFU0VUXSwg
+U1dfUkVTRVQpOwpAQCAtMTk1MCw3ICsxOTUwLDcgQEAgc3RhdGljIGludCBxbXBfcGNpZV9w
+b3dlcl9vbihzdHJ1Y3QgcGh5ICpwaHkpCiAJcmV0dXJuIDA7CiAKIGVycl9kaXNhYmxlX3Bp
+cGVfY2xrOgotCWNsa19kaXNhYmxlX3VucHJlcGFyZShxbXAtPnBpcGVfY2xrKTsKKwljbGtf
+YnVsa19kaXNhYmxlX3VucHJlcGFyZShxbXAtPm51bV9waXBlX2Nsa3MsIHFtcC0+cGlwZV9j
+bGtzKTsKIAogCXJldHVybiByZXQ7CiB9CkBAIC0xOTYwLDcgKzE5NjAsNyBAQCBzdGF0aWMg
+aW50IHFtcF9wY2llX3Bvd2VyX29mZihzdHJ1Y3QgcGh5ICpwaHkpCiAJc3RydWN0IHFtcF9w
+Y2llICpxbXAgPSBwaHlfZ2V0X2RydmRhdGEocGh5KTsKIAljb25zdCBzdHJ1Y3QgcW1wX3Bo
+eV9jZmcgKmNmZyA9IHFtcC0+Y2ZnOwogCi0JY2xrX2Rpc2FibGVfdW5wcmVwYXJlKHFtcC0+
+cGlwZV9jbGspOworCWNsa19idWxrX2Rpc2FibGVfdW5wcmVwYXJlKHFtcC0+bnVtX3BpcGVf
+Y2xrcywgcW1wLT5waXBlX2Nsa3MpOwogCiAJLyogUEhZIHJlc2V0ICovCiAJcXBoeV9zZXRi
+aXRzKHFtcC0+cGNzLCBjZmctPnJlZ3NbUVBIWV9TV19SRVNFVF0sIFNXX1JFU0VUKTsKQEAg
+LTIxNTQsNiArMjE1NCw3IEBAIHN0YXRpYyBpbnQgcW1wX3BjaWVfcGFyc2VfZHRfbGVnYWN5
+KHN0cnVjdCBxbXBfcGNpZSAqcW1wLCBzdHJ1Y3QgZGV2aWNlX25vZGUgKm5wCiAJc3RydWN0
+IHBsYXRmb3JtX2RldmljZSAqcGRldiA9IHRvX3BsYXRmb3JtX2RldmljZShxbXAtPmRldik7
+CiAJY29uc3Qgc3RydWN0IHFtcF9waHlfY2ZnICpjZmcgPSBxbXAtPmNmZzsKIAlzdHJ1Y3Qg
+ZGV2aWNlICpkZXYgPSBxbXAtPmRldjsKKwlzdHJ1Y3QgY2xrICpjbGs7CiAKIAlxbXAtPnNl
+cmRlcyA9IGRldm1fcGxhdGZvcm1faW9yZW1hcF9yZXNvdXJjZShwZGV2LCAwKTsKIAlpZiAo
+SVNfRVJSKHFtcC0+c2VyZGVzKSkKQEAgLTIyMDYsMTIgKzIyMDcsMTcgQEAgc3RhdGljIGlu
+dCBxbXBfcGNpZV9wYXJzZV9kdF9sZWdhY3koc3RydWN0IHFtcF9wY2llICpxbXAsIHN0cnVj
+dCBkZXZpY2Vfbm9kZSAqbnAKIAkJfQogCX0KIAotCXFtcC0+cGlwZV9jbGsgPSBkZXZtX2dl
+dF9jbGtfZnJvbV9jaGlsZChkZXYsIG5wLCBOVUxMKTsKLQlpZiAoSVNfRVJSKHFtcC0+cGlw
+ZV9jbGspKSB7Ci0JCXJldHVybiBkZXZfZXJyX3Byb2JlKGRldiwgUFRSX0VSUihxbXAtPnBp
+cGVfY2xrKSwKKwljbGsgPSBkZXZtX2dldF9jbGtfZnJvbV9jaGlsZChkZXYsIG5wLCBOVUxM
+KTsKKwlpZiAoSVNfRVJSKGNsaykpIHsKKwkJcmV0dXJuIGRldl9lcnJfcHJvYmUoZGV2LCBQ
+VFJfRVJSKGNsayksCiAJCQkJICAgICAiZmFpbGVkIHRvIGdldCBwaXBlIGNsb2NrXG4iKTsK
+IAl9CiAKKwlxbXAtPm51bV9waXBlX2Nsa3MgPSAxOworCXFtcC0+cGlwZV9jbGtzID0gZGV2
+bV9rY2FsbG9jKGRldiwgcW1wLT5udW1fcGlwZV9jbGtzLAorCQkJCSAgICAgIHNpemVvZigq
+cW1wLT5waXBlX2Nsa3MpLCBHRlBfS0VSTkVMKTsKKwlxbXAtPnBpcGVfY2xrc1swXS5jbGsg
+PSBjbGs7CisKIAlyZXR1cm4gMDsKIH0KIAo=
+
+--------------i082W3S8x1RX9AUAq7cYn8mr--
