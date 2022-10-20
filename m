@@ -2,86 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DD6560647F
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 17:28:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 914E0606482
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 17:30:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230403AbiJTP2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 11:28:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44424 "EHLO
+        id S230442AbiJTPaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 11:30:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230430AbiJTP1k (ORCPT
+        with ESMTP id S230464AbiJTP3l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 11:27:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47B0B1AD6BA;
-        Thu, 20 Oct 2022 08:27:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F1F361BDF;
-        Thu, 20 Oct 2022 15:27:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFA6DC433D7;
-        Thu, 20 Oct 2022 15:27:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666279635;
-        bh=yUb9kASzpdyGhOn55ZBT35rZSOA+C2xuJAammcJn0Y4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Vrxw1yziM7jBZiuUc3jbtSWXr7FQNLACtlkU6aOWmNedZr/uyRFFFgb5br/9UIJ9y
-         oehVl2MCI/s2FrVnGsp0DWPJ8afN1qeIxX6H7nQdEcEPB4CXPBLlb7lXQQeh66dPuB
-         9hBgX+xh3grkfn93PJpqT2m487+5lbCRakD0s3i4=
-Date:   Thu, 20 Oct 2022 17:27:12 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Kang Minchul <tegongkang@gmail.com>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: iio: Use div64_ul instead of do_div
-Message-ID: <Y1Fo0NmzspXRS92n@kroah.com>
-References: <20221019053829.821918-1-tegongkang@gmail.com>
+        Thu, 20 Oct 2022 11:29:41 -0400
+Received: from shelob.surriel.com (shelob.surriel.com [96.67.55.147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C799B84C
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 08:29:22 -0700 (PDT)
+Received: from imladris.surriel.com ([96.67.55.152])
+        by shelob.surriel.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.96)
+        (envelope-from <riel@shelob.surriel.com>)
+        id 1olXSz-0008Af-26;
+        Thu, 20 Oct 2022 11:28:17 -0400
+Message-ID: <366045a27a96e01d0526d63fd78d4f3c5d1f530b.camel@surriel.com>
+Subject: Re: [mm] f35b5d7d67: will-it-scale.per_process_ops -95.5% regression
+From:   Rik van Riel <riel@surriel.com>
+To:     "Huang, Ying" <ying.huang@intel.com>,
+        Nathan Chancellor <nathan@kernel.org>
+Cc:     kernel test robot <yujie.liu@intel.com>, lkp@lists.01.org,
+        lkp@intel.com, Andrew Morton <akpm@linux-foundation.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        feng.tang@intel.com, zhengjun.xing@linux.intel.com,
+        fengwei.yin@intel.com
+Date:   Thu, 20 Oct 2022 11:28:16 -0400
+In-Reply-To: <871qr3nkw2.fsf@yhuang6-desk2.ccr.corp.intel.com>
+References: <202210181535.7144dd15-yujie.liu@intel.com>
+         <87edv4r2ip.fsf@yhuang6-desk2.ccr.corp.intel.com>
+         <Y1DNQaoPWxE+rGce@dev-arch.thelio-3990X>
+         <871qr3nkw2.fsf@yhuang6-desk2.ccr.corp.intel.com>
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-jyyb0dS8k9AkcqYqrs+D"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221019053829.821918-1-tegongkang@gmail.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Sender: riel@shelob.surriel.com
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 02:38:29PM +0900, Kang Minchul wrote:
-> Using div64_ul instead of do_div (64-by-32 division) is more
-> recommended by coccicheck because this can avoid potential truncation.
-> 
-> So this commit changes do_div to div64_ul and
-> remove coccicheck warnings.
-> 
-> Signed-off-by: Kang Minchul <tegongkang@gmail.com>
-> ---
->  drivers/staging/iio/frequency/ad9832.c          | 2 +-
->  drivers/staging/iio/frequency/ad9834.c          | 2 +-
->  drivers/staging/iio/impedance-analyzer/ad5933.c | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/staging/iio/frequency/ad9832.c b/drivers/staging/iio/frequency/ad9832.c
-> index 6f9eebd6c7ee..cd038480f63c 100644
-> --- a/drivers/staging/iio/frequency/ad9832.c
-> +++ b/drivers/staging/iio/frequency/ad9832.c
-> @@ -122,7 +122,7 @@ static unsigned long ad9832_calc_freqreg(unsigned long mclk, unsigned long fout)
->  {
->  	unsigned long long freqreg = (u64)fout *
->  				     (u64)((u64)1L << AD9832_FREQ_BITS);
-> -	do_div(freqreg, mclk);
-> +	freqreg = div64_ul(freqreg, mclk);
 
-I think the original code here is correct, no need for a change, unless
-you have the hardware to test this out and can verify it all still works
-identically.
+--=-jyyb0dS8k9AkcqYqrs+D
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-thanks,
+On Thu, 2022-10-20 at 13:07 +0800, Huang, Ying wrote:
+>=20
+> Nathan Chancellor <nathan@kernel.org> writes:
+> >=20
+> > For what it's worth, I just bisected a massive and visible
+> > performance
+> > regression on my Threadripper 3990X workstation to commit
+> > f35b5d7d676e
+> > ("mm: align larger anonymous mappings on THP boundaries"), which
+> > seems
+> > directly related to this report/analysis. I initially noticed this
+> > because my full set of kernel builds against mainline went from 2
+> > hours
+> > and 20 minutes or so to over 3 hours. Zeroing in on x86_64
+> > allmodconfig,
+> > which I used for the bisect:
+> >=20
+> > @ 7b5a0b664ebe ("mm/page_ext: remove unused variable in
+> > offline_page_ext"):
+> >=20
+> > Benchmark 1: make -skj128 LLVM=3D1 allmodconfig all
+> > =C2=A0 Time (mean =C2=B1 =CF=83):=C2=A0=C2=A0=C2=A0=C2=A0 318.172 s =C2=
+=B1=C2=A0 0.730 s=C2=A0=C2=A0=C2=A0 [User: 31750.902 s,
+> > System: 4564.246 s]
+> > =C2=A0 Range (min =E2=80=A6 max):=C2=A0=C2=A0 317.332 s =E2=80=A6 318.6=
+62 s=C2=A0=C2=A0=C2=A0 3 runs
+> >=20
+> > @ f35b5d7d676e ("mm: align larger anonymous mappings on THP
+> > boundaries"):
+> >=20
+> > Benchmark 1: make -skj128 LLVM=3D1 allmodconfig all
+> >   Time (mean =C2=B1 =CF=83):     406.688 s =C2=B1  0.676 s    [User: 31=
+819.526 s,
+System: 16327.022 s]
+> >   Range (min =E2=80=A6 max):   405.954 s =E2=80=A6 407.284 s    3 run
+>=20
+> Have you tried to build with gcc?=C2=A0 Want to check whether is this
+> clang
+> specific issue or not.
 
-greg k-h
+This may indeed be something LLVM specific. In previous tests,
+GCC has generally seen a benefit from increased THP usage.
+Many other applications also benefit from getting more THPs.
+
+LLVM showing 10% system time before this change, and a whopping
+30% system time after that change, suggests that LLVM is behaving
+quite differently from GCC in some ways.
+
+If we can figure out what these differences are, maybe we can
+just fine tune the code to avoid this issue.
+
+I'll try to play around with LLVM compilation a little bit next
+week, to see if I can figure out what might be going on. I wonder
+if LLVM is doing lots of mremap calls or something...
+
+--=20
+All Rights Reversed.
+
+--=-jyyb0dS8k9AkcqYqrs+D
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCAAdFiEEKR73pCCtJ5Xj3yADznnekoTE3oMFAmNRaRAACgkQznnekoTE
+3oPi+QgAgglCDIr3nTtc9B3ddLnhdbmzp0chq5yKurOLQJ39FNC8HD7iaukRYXju
+toNVMhIfT5JulxIO/bpc1zP3tL1+JDZCBwtqyogLZfhdrQQKSaM4b+JqnAKKEDd7
+KoZfirX7DoVxCCTZzduqntmhWUsh1xKJdoSuUGXrSa3PfBFaG8lv+VMQDPB45aNq
+SO3hZdgTEMm6u4LgsspE8Ak6oKLhRqgHtf2Kr2DujdQtLUvmn8HdKNROcZSaGpIJ
+dbf74SCUe7lZ3Ov3VZsTRR/CV6FeGiKQbKZOs3Va3Xima+aCkVTxKExyaeFShJyi
+FHKyytxJoZFGuxV0nKr7ZVQdTebHBA==
+=Eb0d
+-----END PGP SIGNATURE-----
+
+--=-jyyb0dS8k9AkcqYqrs+D--
