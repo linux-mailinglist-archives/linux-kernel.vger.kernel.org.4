@@ -2,296 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16AA2605F86
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 13:59:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E437E605F89
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 13:59:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbiJTL7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 07:59:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50196 "EHLO
+        id S229840AbiJTL7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 07:59:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229846AbiJTL66 (ORCPT
+        with ESMTP id S229834AbiJTL7U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 07:58:58 -0400
-Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 258AB13A7F4
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 04:58:57 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.west.internal (Postfix) with ESMTP id A6D412B066E1;
-        Thu, 20 Oct 2022 07:58:52 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Thu, 20 Oct 2022 07:58:56 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1666267132; x=1666274332; bh=ZpTpDn39WC
-        JGSChIdFbiWkCndVEfRKpNniONagZhJUQ=; b=F0GcQVNz5Su7yyTQiCx7B4FkAM
-        7LS/qSCmR75xLiKg9b3P/5rF8nHEjMbvkHrCrn9Wq10wbTJSsBY7VGwePlcfRaPV
-        e+6RMUW508vKRtqmaP8d0omH3UzvdB2K2M/JJqi0Ej6EYckHrxmxiJzanhJrweZN
-        H+aklhcIfeNJRuut6GE2w+vokq4dwIwzut9335Tqq13vjXMQGgNdQekp0X5rwyRo
-        shiNv7iPnoQTu1ZSM4W4ZQy9SIpK1u4jgRQIwtIRhNhDycKem8AoE+kYL857qFwD
-        YcvqMhwirH54GQtOdgZ/IDOsSUt4zoWrWdDNGeIplNqy5L127RuSsYh9w1/Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1666267132; x=1666274332; bh=ZpTpDn39WCJGSChIdFbiWkCndVEf
-        RKpNniONagZhJUQ=; b=af6vWiN47RMgelCZd+0kbw643vgGF3xWdDa3f7WnCEsY
-        X0H8oreXkV9/CrnwfZ0Td7KAWy/w3AqSzJYriwAm58b7J/QPGJ4Y876ErwPstzrW
-        J0hpVU1BjFYUKTpf5i+2XZnELTDOU3yhRA+fbjfdYRYHypMDnr9YqL3NJGnR3LeC
-        EbmWW3Mh5o1HDSKbXO/ntup/lWdErqkIuBP4EAWz8CeOcPP5YHtqZOduMfLUXZcN
-        Dnvv8n24pO8oxQlsssXpraPFQcny1r8RcemUdrVOkyR0v2u6WAb5b/j8Z26Wb1Eh
-        2+LVIFEszIZ0UJodIj+8M54PBQ+izBvDwZUmKNvI8w==
-X-ME-Sender: <xms:-zdRY93Evv092xHu00TfA9m-EN_ghbQ33bMP1CQXIC_p5NLHZUzrtw>
-    <xme:-zdRY0F8ytjgQe7uAy0FLktiWns6hniu1VjSbLB37BysuIYluDnYIf4WHeUgKheIo
-    U5AlWASgpRC6bb2J8g>
-X-ME-Received: <xmr:-zdRY96lJRueA-Xcgv6C0Y_joEMXkJXQIUlzDquvcZGm4iKpCNS7UtitSvratnepl-XJMeh_lCatvBfliStjNRtVMgl-YqnoMGnGO_Jz28HTDA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeliedggeeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephfffvfevuffkfhggtggujgesghdtreertddtudenucfhrhhomhepmhgrgihi
-    mhgvsegtvghrnhhordhtvggthhenucggtffrrghtthgvrhhnpeekgeelvdeujeelveehtd
-    ffhedtudeuleetuddugfefgedtuefggeduffdtvdelheenucffohhmrghinhepkhgvrhhn
-    vghlrdhorhhgpdhgihhthhhusgdrtghomhdpthigthdrshhonecuvehluhhsthgvrhfuih
-    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordht
-    vggthh
-X-ME-Proxy: <xmx:-zdRY61_mBOzjXV-e8bCn6IREbeWXlBc2YOIrkDjg_TjURkb_Dx54A>
-    <xmx:-zdRYwGPY1CTGB1XFiObgK0lx61WIL6z-AH_M7zVoKSfDoL0lURNgA>
-    <xmx:-zdRY79lseAUX7AQUG3yElIz9UTdRLn1O3m28SL1rR25NpOTcSxrcw>
-    <xmx:_DdRY7m_pSxW0GjBYzLpTTDYTYIrbiMa_cvivkk0M_2SCd7tvadtz460KUQ>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 20 Oct 2022 07:58:50 -0400 (EDT)
-From:   maxime@cerno.tech
-Date:   Thu, 20 Oct 2022 13:58:49 +0200
-To:     kfyatek+publicgit@gmail.com
-Cc:     Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        Karol Herbst <kherbst@redhat.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Lyude Paul <lyude@redhat.com>, Emma Anholt <emma@anholt.net>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Dom Cobley <dom@raspberrypi.com>, linux-sunxi@lists.linux.dev,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        nouveau@lists.freedesktop.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-arm-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org,
-        Hans de Goede <hdegoede@redhat.com>,
-        Phil Elwell <phil@raspberrypi.com>
-Subject: Re: [PATCH v5 20/22] drm/vc4: vec: Convert to the new TV mode
- property
-Message-ID: <20221020115849.pvefnyn4wxibycwt@houat>
-References: <20220728-rpi-analog-tv-properties-v5-0-d841cc64fe4b@cerno.tech>
- <20220728-rpi-analog-tv-properties-v5-20-d841cc64fe4b@cerno.tech>
- <c1949248-fb40-682c-492e-bafbd915cee3@gmail.com>
- <81936381-ae37-8c84-4681-9eff19f653b5@tronnes.org>
- <20221018100033.d2sf7xagyycx5d4p@houat>
- <da2b4cb4-5d12-3161-64e3-e87a8cc63e81@gmail.com>
+        Thu, 20 Oct 2022 07:59:20 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 371A513C1C7;
+        Thu, 20 Oct 2022 04:59:15 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id o22so12569429qkl.8;
+        Thu, 20 Oct 2022 04:59:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TyMFpOElofDJZNk00pkycBZ1li0ZG0mlfPkJtReDgXg=;
+        b=M70nAw73IR0CoIQ1ALAjyz+N3PNZkFAK4loZ76XpYp1+Dt/qsWYX4pYeErmz8EBQjU
+         Gj+p/bw1TxgnwU3/VlMs6R54YCeWqYdSAw283lANOTVZZLL7gifAPfELCnmDOhzH0/gQ
+         omMd4iVLWmilF+W8Z8pN7HT0uYg/WzMGqoB+v1vQdLS6VIVcJGN9JrmKYwBdeXYi1V2T
+         OdGTAxprj9dSnJ0pjXuM8Y7Ow84kWwuQ8BBzxMFnS9izGqJtfJ2JVACpMep9KowEY52R
+         F06h9LTKVseezN6xk215VHTpfkQQJBdWUmxV7gz+Ng2naph1TMNQjwYO6OkRVATnl9kN
+         yzBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TyMFpOElofDJZNk00pkycBZ1li0ZG0mlfPkJtReDgXg=;
+        b=f04/OcnkvhxkeNXc2lWsgru0NzvKsLMz4yNY+xRHklqcIbn7oLnf3+fYnUkcCk3u9G
+         1Sbejt8VEnEAqdXQuRSfSD9os96Ed83q4V/qdvqE8qRF+kqQiN5X2OiJYQ+Wd9r1OfJH
+         zdoskzD70BaVEJWWuzr6j8Wy1Lj0hwRGlnE+/kjxCg1Lq8e9SikM+wPyROWZkwY84mj/
+         ptY29RXekUnsg0MT/Zm88n25WlDa1Yi5B+fUJIh775rvKES5YUvleUo511JWLc8n70Oj
+         3gz0wzaGzVygfTZ5MCHJruKpSDxArF1FTfiqxPaSGar2CF8xKy1HjniItXubX5LMKdmT
+         soyA==
+X-Gm-Message-State: ACrzQf0hTII/uQvuEFQxM0Y8nBFYpqUVjpoigCAtsfr+KNhleTOvphlA
+        MuTBIZOedwqeSzHmf+jX7QUa/qGFJGCpvTM7TYG20TOJiw+ZzUWZ
+X-Google-Smtp-Source: AMsMyM48UrLUGogQxyXHnQZ/YxaD4IPpxciQFU4nObHIDhoME9mQfyCSu++KX6/H9lb/F3oLZXexRKCOapJJelT0MN8=
+X-Received: by 2002:a05:6638:3c45:b0:363:afb2:3269 with SMTP id
+ bg5-20020a0566383c4500b00363afb23269mr9854117jab.215.1666267143179; Thu, 20
+ Oct 2022 04:59:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="kngtkif3uvhg4p7e"
-Content-Disposition: inline
-In-Reply-To: <da2b4cb4-5d12-3161-64e3-e87a8cc63e81@gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20221016132648.3011729-1-lis8215@gmail.com> <166609251307.155136.11548088283059583394.b4-ty@kernel.org>
+In-Reply-To: <166609251307.155136.11548088283059583394.b4-ty@kernel.org>
+From:   Siarhei Volkau <lis8215@gmail.com>
+Date:   Thu, 20 Oct 2022 14:58:51 +0300
+Message-ID: <CAKNVLfbfRRE3O2uFH6MQxoa_cdqTUcvpGzmcxFm3oCLKFfHv6w@mail.gmail.com>
+Subject: Re: [PATCH v3 0/7] ASoC: codecs: jz4725b: Various improvements and fixes
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-mips@vger.kernel.org, alsa-devel@alsa-project.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---kngtkif3uvhg4p7e
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi,
-
-On Tue, Oct 18, 2022 at 11:28:35PM +0200, Mateusz Kwiatkowski wrote:
-> W dniu 18.10.2022 o 12:00, Maxime Ripard pisze:
-> > On Mon, Oct 17, 2022 at 12:31:31PM +0200, Noralf Tr=F8nnes wrote:
-> >> Den 16.10.2022 20.52, skrev Mateusz Kwiatkowski:
-> >>>>  static int vc4_vec_connector_get_modes(struct drm_connector *connec=
-tor)
-> >>>>  {
-> >>>> -	struct drm_connector_state *state =3D connector->state;
-> >>>>  	struct drm_display_mode *mode;
-> >>>> =20
-> >>>> -	mode =3D drm_mode_duplicate(connector->dev,
-> >>>> -				  vc4_vec_tv_modes[state->tv.legacy_mode].mode);
-> >>>> +	mode =3D drm_mode_analog_ntsc_480i(connector->dev);
-> >>>>  	if (!mode) {
-> >>>>  		DRM_ERROR("Failed to create a new display mode\n");
-> >>>>  		return -ENOMEM;
-> >>>>  	}
-> >>>> =20
-> >>>> +	mode->type |=3D DRM_MODE_TYPE_PREFERRED;
-> >>>>  	drm_mode_probed_add(connector, mode);
-> >>>> =20
-> >>>> -	return 1;
-> >>>> +	mode =3D drm_mode_analog_pal_576i(connector->dev);
-> >>>> +	if (!mode) {
-> >>>> +		DRM_ERROR("Failed to create a new display mode\n");
-> >>>> +		return -ENOMEM;
-> >>>> +	}
-> >>>> +
-> >>>> +	drm_mode_probed_add(connector, mode);
-> >>>> +
-> >>>> +	return 2;
-> >>>> +}
-> >>>
-> >>> Referencing those previous discussions:
-> >>> - https://lore.kernel.org/dri-devel/0255f7c6-0484-6456-350d-cf24f3fee=
-5d6@tronnes.org/
-> >>> - https://lore.kernel.org/dri-devel/c8f8015a-75da-afa8-ca7f-b2b134cac=
-d16@gmail.com/
-> >>>
-> >>> Unconditionally setting the 480i mode as DRM_MODE_TYPE_PREFERRED caus=
-es Xorg
-> >>> (at least on current Raspberry Pi OS) to display garbage when
-> >>> video=3DComposite1:PAL is specified on the command line, so I'm afrai=
-d this won't
-> >>> do.
-> >>>
-> >>> As I see it, there are three viable solutions for this issue:
-> >>>
-> >>> a) Somehow query the video=3D command line option from this function,=
- and set
-> >>>    DRM_MODE_TYPE_PREFERRED appropriately. This would break the abstra=
-ction
-> >>>    provided by global DRM code, but should work fine.
-> >>>
-> >>> b) Modify drm_helper_probe_add_cmdline_mode() so that it sets
-> >>>    DRM_MODE_TYPE_PREFERRED in addition to DRM_MODE_TYPE_USERDEF. This=
- seems
-> >>>    pretty robust, but affects the entire DRM subsystem, which may bre=
-ak
-> >>>    userspace in different ways.
-> >>>
-> >>>    - Maybe this could be mitigated by adding some additional conditio=
-ns, e.g.
-> >>>      setting the PREFERRED flag only if no modes are already flagged =
-as such
-> >>>      and/or only if the cmdline mode is a named one (~=3D analog TV m=
-ode)
-> >>>
-> >>> c) Forcing userspace (Xorg / Raspberry Pi OS) to get fixed and honor =
-the USERDEF
-> >>>    flag.
-> >>>
-> >>> Either way, hardcoding 480i as PREFERRED does not seem right.
-> >>>
-> >>
-> >> My solution for this is to look at tv.mode to know which mode to mark =
-as
-> >> preferred. Maxime didn't like this since it changes things behind
-> >> userspace's back. I don't see how that can cause any problems for user=
-space.
-> >>
-> >> If userspace uses atomic and sets tv_mode, it has to know which mode to
-> >> use before hand, so it doesn't look at the preferreded flag.
-> >>
-> >> If it uses legacy and sets tv_mode, it can end up with a stale preferr=
-ed
-> >> flag, but no worse than not having the flag or that ntsc is always
-> >> preferred.
-> >>
-> >> If it doesn't change tv_mode, there's no problem, the preferred flag
-> >> doesn't change.
-> >
-> > I don't like it because I just see no way to make this reliable. When we
-> > set tv_mode, we're not only going to change the preferred flag, but also
-> > the order of the modes to make the preferred mode first.
-> >
-> > Since we just changed the mode lists, we also want to send a hotplug
-> > event to userspace so that it gets notified of it. It will pick up the
-> > new preferred mode, great.
-> >
-> > But what if it doesn't? There's no requirement for userspace to handle
-> > hotplug events, and Kodi won't for example. So we just changed the TV
-> > mode but not the actual mode, and that's it. It's just as broken for
-> > Kodi as it is for X11 right now.
-> >
-> > If we can't get a bullet-proof solution, then I'm not convinced it's
-> > worth addressing. Especially since it's already the current state, and
-> > it doesn't seem to bother a lot of people.
->=20
-> I wouldn't rely on the "doesn't seem to bother a lot of people" bit too m=
-uch.
-> Here's why:
->=20
-> - Analog TV output is a relatively obscure feature in this day and age in=
- the
->   first place.
->=20
-> - Out of the people interested in using it with VC4/VEC, many are actuall=
-y using
->   the downstream kernel from https://github.com/raspberrypi/linux instead=
- of the
->   upstream kernel, and/or firmware mode-switching instead of proper KMS.
->=20
->   - The downstream kernel only reports modes that match the TV mode set a=
-t boot
->     either via vc4.tv_norm=3D, or implied by the resolution set via video=
-=3D; note
->     that video=3D is also set appropriately at boot by Pi firmware, based=
- on the
->     value of sdtv_mode set in config.txt. See also the
->     vc4_vec_connector_get_modes() and vc4_vec_get_default_mode() function=
-s in
->     https://github.com/raspberrypi/linux/blob/dbd073e4028580a09b6ee507e0c=
-137441cb52650/drivers/gpu/drm/vc4/vc4_vec.c
->=20
->   - When firmware mode-switching is used, it sets the appropriate TV mode=
- and
->     resolution based on the sdtv_mode set in config.txt.
->=20
-> So, all in all, the number of people who would use 1. analog TV out with =
-VC4,
-> 2. the upstream kernel, 3. full KMS (and thus the vc4_vec.c code) is rath=
-er
-> small, so the fact that you're not hearing too many complaints doesn't me=
-an that
-> the current behavior is OK. If anybody ran into problems and was bothered=
- by
-> that, they likely migrated to the downstream kernel and/or firmware
-> mode-switching.
+=D0=B2=D1=82, 18 =D0=BE=D0=BA=D1=82. 2022 =D0=B3. =D0=B2 14:28, Mark Brown =
+<broonie@kernel.org>:
+> Applied to
 >
-> That being said, I completely forgot that there's a cmdline_mode field in
-> struct drm_connector, even though I actually added code that examines it =
-inside
-> vc4_vec_connector_get_modes() that's in the downstream kernel. So... what=
- do
-> you think about just examining connector->cmdline_mode.tv_mode there? It =
-seems
-> to solve all the problems.
+>    https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-=
+next
+>
+> Thanks!
 
-It's a very good idea, I'll work on it, thanks :)
+Great! Thank you!
 
-Maxime
+Unfortunately I found a critical bug in my patchset, yet easy to fix.
+So I need some help to make and send the fix.
 
---kngtkif3uvhg4p7e
-Content-Type: application/pgp-signature; name="signature.asc"
+> If any updates are required or you are submitting further changes they
+> should be sent as incremental updates against current git, existing
+> patches will not be replaced.
 
------BEGIN PGP SIGNATURE-----
+What are mailing lists it needs to be sent to?
+Any additional tags needed? I know about Fixes tag.
+Do I need to keep a link on this patchset somehow?
+Do I need to mail a patch with the fix to this thread or
+create a new one?
 
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY1E3+AAKCRDj7w1vZxhR
-xafkAQDgQNtnP50CK4yhNqKMZFtxmkX10yJT33hGLDCT6TE8PgD/QcWMJEWdc9aV
-1ov3fdoP/cA1BHg/dvO2qgLkB1+TlQ8=
-=LeLr
------END PGP SIGNATURE-----
+PS: the patch will look like:
+ - {"ADC Sourc Capture Routee", "Line In", "Line In"},
+ + {"ADC Source Capture Route", "Line In", "Line In"},
 
---kngtkif3uvhg4p7e--
+Thanks in advance,
+Siarhei
