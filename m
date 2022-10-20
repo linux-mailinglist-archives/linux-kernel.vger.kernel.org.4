@@ -2,91 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C6FA606A42
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 23:28:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3DF8606A49
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 23:29:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbiJTV2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 17:28:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43344 "EHLO
+        id S229867AbiJTV26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 17:28:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230040AbiJTV2M (ORCPT
+        with ESMTP id S229509AbiJTV24 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 17:28:12 -0400
-Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0B6D1B65DC
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 14:28:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1666301271; bh=osZn+6l7ZcamOnQm1Kj8TWDodwur+Vk/CJgdHGyMLV4=;
-        h=X-EA-Auth:Date:From:To:Subject:Message-ID:References:MIME-Version:
-         Content-Type:In-Reply-To;
-        b=JDK6sXJHHZPm1X1JTA/3n1F0TgXNsvYRopXGLFEr5mI1yLZZ1dz6m4AqcEvcbQYBY
-         evKOVFQUCHJRFrGEfqcp8HQPKUS5emEfNRaIJOHzyLoZLOhy2Jhaifsq2zeW29Pfmb
-         X2gfsMsaAzSo685ocId1avlE15cNXTK52QEj3Ya8=
-Received: by b-3.in.mailobj.net [192.168.90.13] with ESMTP
-        via [213.182.55.206]
-        Thu, 20 Oct 2022 23:27:51 +0200 (CEST)
-X-EA-Auth: 0SzVPJnUCFVymnvhYnT+ZBDlwrBjoO0BYlm5VbZ1Sfr7f4NihbYSY1U9y0GZvCNK20pdPkmZbPno2jP9oXOwF2kaZfor+WOo
-Date:   Fri, 21 Oct 2022 02:57:47 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     outreachy@lists.linux.dev, Larry.Finger@lwfinger.net,
-        phil@philpotter.co.uk, paskripkin@gmail.com,
-        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, kumarpraveen@linux.microsoft.com,
-        saurabh.truth@gmail.com
-Subject: [PATCH v4 03/11] staging: r8188eu: remove {} for single statement
- blocks
-Message-ID: <a50460e1507621b29a7901cc4ff9501b172417db.1666299151.git.drv@mailo.com>
-References: <cover.1666299151.git.drv@mailo.com>
+        Thu, 20 Oct 2022 17:28:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A26E41D0D51;
+        Thu, 20 Oct 2022 14:28:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5CE85B8295E;
+        Thu, 20 Oct 2022 21:28:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AF24C433C1;
+        Thu, 20 Oct 2022 21:28:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666301327;
+        bh=rWfQzP6/H9EAAjSIpr3p+kEno6vt0QBXq32WDxAfruU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ETkFoNIwV/rtQAkC6D0iTcGP48Lv+lCWAEfot85DN9OQs9Tnc4XCjUH5pFR4ztre3
+         nZG3MyrrlnpUwkuUnr8qqsNqMuBZLyf3vg2OnfSLc6jwAG2RU3bUAT3bCYrl0AB8hU
+         vQCBfUbT4Oumto+b5K8TtrWcQcS8zVuk03inW/pg54jeZ4LIRRbIFljLOIshOzyEkK
+         hwdxurKtatrsk+N9iliJjkw2fSpEIAyydd60T7KEQuXbYs69SJ++9ed0+eCzxZLbXt
+         7OpqMh3jh+wdkBlBIgy2DSpm9HBuBMrAarmBV2qy7MEl/1f/KGnvP/KZZvy58CION1
+         li7bd6SYatLqA==
+Date:   Thu, 20 Oct 2022 14:28:36 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Pankaj Gupta <pankaj.gupta@nxp.com>,
+        "jarkko@kernel.org" <jarkko@kernel.org>,
+        "a.fatoum@pengutronix.de" <a.fatoum@pengutronix.de>,
+        "gilad@benyossef.com" <gilad@benyossef.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "sumit.garg@linaro.org" <sumit.garg@linaro.org>,
+        "david@sigma-star.at" <david@sigma-star.at>,
+        "michael@walle.cc" <michael@walle.cc>,
+        "john.ernberg@actia.se" <john.ernberg@actia.se>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "j.luebbe@pengutronix.de" <j.luebbe@pengutronix.de>,
+        "richard@nod.at" <richard@nod.at>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        Sahil Malhotra <sahil.malhotra@nxp.com>,
+        Kshitiz Varshney <kshitiz.varshney@nxp.com>,
+        Horia Geanta <horia.geanta@nxp.com>,
+        Varun Sethi <V.Sethi@nxp.com>
+Subject: Re: [EXT] Re: [PATCH v0 3/8] crypto: hbk flags & info added to the
+ tfm
+Message-ID: <Y1G9hKPT1MNQQxcG@sol.localdomain>
+References: <20221006130837.17587-4-pankaj.gupta@nxp.com>
+ <Yz/OEwDtyTm+VH0p@gondor.apana.org.au>
+ <DU2PR04MB8630CBBB8ABDC3768320C18195209@DU2PR04MB8630.eurprd04.prod.outlook.com>
+ <Y0Q3JKnWSNIC4Xlu@zx2c4.com>
+ <Y0UxY51KQoKCq59o@gondor.apana.org.au>
+ <Y0XLqd/+C1sxq2G0@zx2c4.com>
+ <Y0aDiLp7BztzwNez@gondor.apana.org.au>
+ <Y0m2TU5k78I1AR+p@ziepe.ca>
+ <Y1DN3SqEyFZd9i37@sol.localdomain>
+ <Y1GgSX+ZmOsxhB2N@ziepe.ca>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1666299151.git.drv@mailo.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y1GgSX+ZmOsxhB2N@ziepe.ca>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As per the Linux kernel coding-style guidelines, there is no need to
-use {} for single statement blocks. Issue flagged by checkpatch script.
+On Thu, Oct 20, 2022 at 04:23:53PM -0300, Jason Gunthorpe wrote:
+> On Wed, Oct 19, 2022 at 09:26:05PM -0700, Eric Biggers wrote:
+> 
+> > Are you referring to the support for hardware-wrapped inline crypto keys?  It
+> > isn't upstream yet, but my latest patchset is at
+> > https://lore.kernel.org/linux-fscrypt/20220927014718.125308-2-ebiggers@kernel.org/T/#u.
+> > There's also a version of it used by some Android devices already.  Out of
+> > curiosity, are you using it in an Android device, or have you adopted it in some
+> > other downstream?
+> 
+> Unrelated to Android, similar functionality, but slightly different
+> ultimate purpose. We are going to be sending a fscrypt patch series
+> for mlx5 and nvme soonish.
 
-Signed-off-by: Deepak R Varma <drv@mailo.com>
----
+That's interesting, though also slightly scary in that it sounds like you've
+already shipped some major fscrypt changes without review!
 
-Changes in v4:
-   -- None.
+> > > Yes, it would be nice to see a comprehensive understand on how HW
+> > > resident keys can be modeled in the keyring.
+> > 
+> > Note that the keyrings subsystem is not as useful as it might seem.  It sounds
+> > like something you want (you have keys, and there is a subsystem called
+> > "keyrings", so it should be used, right?), but often it isn't.  fscrypt has
+> > mostly moved away from using it, as it caused lots of problems.  I would caution
+> > against assuming that it needs to be part of any solution.
+> 
+> That sounds disappointing that we are now having parallel ways for the
+> admin to manipulate kernel owned keys.
 
-Changes in v3:
-   -- None.
+Well, the keyrings subsystem never worked properly for fscrypt anyway.  At most,
+it's only useful for providing the key to the filesystem initially (by passing a
+key ID to FS_IOC_ADD_ENCRYPTION_KEY, instead of the key bytes), similar to what
+dm-crypt allows.  After that, the keyrings subsystem plays no role.
 
-Changes in v1 [actually v2]:
-   1. Improve patch description language to make it simpler. Feedback received
-      from julia.lawall@inria.fr
+I'm open to making FS_IOC_ADD_ENCRYPTION_KEY accept other 'struct key' types,
+like "trusted" which has been discussed before and which dm-crypt supports.
 
+Just don't assume that just because you have a key, that you automatically
+*need* the keyrings subsystem.  Normally just passing the key bytes in the ioctl
+works just as well and is much simpler.  Same for dm-crypt, which normally takes
+the key bytes in the device-mapper table parameters...
 
- drivers/staging/r8188eu/core/rtw_br_ext.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/drivers/staging/r8188eu/core/rtw_br_ext.c b/drivers/staging/r8188eu/core/rtw_br_ext.c
-index d4059f0fc362..b418cbc307b3 100644
---- a/drivers/staging/r8188eu/core/rtw_br_ext.c
-+++ b/drivers/staging/r8188eu/core/rtw_br_ext.c
-@@ -649,9 +649,8 @@ void *scdb_findEntry(struct adapter *priv, unsigned char *ip_addr)
- 	hash = __nat25_network_hash(addr);
- 	db = priv->nethash[hash];
- 	while (db) {
--		if (!memcmp(db->networkAddr, addr, MAX_NETWORK_ADDR_LEN)) {
-+		if (!memcmp(db->networkAddr, addr, MAX_NETWORK_ADDR_LEN))
- 			return (void *)db;
--		}
-
- 		db = db->next_hash;
- 	}
---
-2.30.2
-
-
-
+- Eric
