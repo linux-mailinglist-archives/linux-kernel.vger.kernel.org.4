@@ -2,128 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A63A605E82
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 13:12:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82871605E86
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 13:13:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229968AbiJTLMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 07:12:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34398 "EHLO
+        id S229730AbiJTLNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 07:13:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbiJTLMr (ORCPT
+        with ESMTP id S230368AbiJTLNL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 07:12:47 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C75561D63B0
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 04:12:46 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1olTTc-0005sK-KM; Thu, 20 Oct 2022 13:12:40 +0200
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1olTTb-00048X-Ud; Thu, 20 Oct 2022 13:12:39 +0200
-Date:   Thu, 20 Oct 2022 13:12:39 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de,
-        devicetree@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
-        Frank Li <frank.li@nxp.com>, linux-kernel@vger.kernel.org,
-        linux-imx@nxp.com, kernel@pengutronix.de, Han Xu <han.xu@nxp.com>,
-        festevam@gmail.com, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 06/15] arm64: dts: imx8mp-evk: enable fspi nor on imx8mp
- evk
-Message-ID: <20221020111239.vunok2je26tl2nko@pengutronix.de>
-References: <20221020095934.1659449-1-peng.fan@oss.nxp.com>
- <20221020095934.1659449-7-peng.fan@oss.nxp.com>
+        Thu, 20 Oct 2022 07:13:11 -0400
+Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D88C51E0981
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 04:13:10 -0700 (PDT)
+Received: by mail-ed1-x543.google.com with SMTP id m16so29414467edc.4
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 04:13:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=zdnm0e4L4egQY8p/imzEdF1XvlB/g201L2c/ublTFpo=;
+        b=dLLmNvj9ms0bzvYlgFq5S3nAOVEBj6b4h8ts8CH0M6BZRCPrassOfs87hYp7M7g7Uz
+         95DibTwR/HG6v32WUdnix6iSHZlZvRoRaEZx/fa12VWLBCKvuBST/9Ns2/D23SyOLczz
+         Fhs5cjYYjW3e6tBTF/MAb2jt8+30MjT590ADcIKIbSEtKknVTu3xpvx8CDIdL3Pj5cL4
+         l6f3KoVNBoxk7YOtG+3dApM2a9GBalv/+JOJYnP/KCTOpfqAAxrx39IaVcdpup7CBgF0
+         gdre418CpWtFK7Qdj16TlKP6Tz9yBeSDIsyrVe0T1UHvP+r0kF0Ir09aMiJqZqqv0rjC
+         yJaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zdnm0e4L4egQY8p/imzEdF1XvlB/g201L2c/ublTFpo=;
+        b=yAfyY6g/KtNZjqkP5AdqJ7ddHbW0BTfX/3kK7savhJ7BE7wD2YJ91DaM1X+fH0+XG0
+         SlIya6FdP3NIALe/fT+h5aJnkqdt/RkZmlsNnqlm3sG+XlI/758H5/TWFsoeWIhCOhbj
+         pkGy614Do+V4a0GSVbvHtLgKsX/fzY9cmCacGu+pw4MbmLRpFzME3f5tnsS905vwPyFJ
+         DyfJIXWLaLk1EaMr3Qlrl1ja5E/pRwUfeXZPUZ8mH8YqvgVUdTy28Qnqe0M+GOzzEYZU
+         OKgXJ3ydWtW9F/b1SjNvqHFlSYe8nvzng6Kz/+zrXw6OoMrFtitCfKO/nnieSNJfqebL
+         KbKA==
+X-Gm-Message-State: ACrzQf17k+RN9CRxPr7o5dvoTK2OxUUkK+mc5WO32mAEf38MTQpg4viX
+        2Y7vS7YyZ45sG9rl3/gtf/WGcz6Q8v1BJeo9lX8=
+X-Google-Smtp-Source: AMsMyM6TJTr+1CBYy7z4zliNV7Z2vYiHb8I4Al6D3i9j+ck6tYUXqhsVbonKiT5oTBdc+Mj9jZuI2mPFenIi8gCtgH0=
+X-Received: by 2002:a05:6402:2074:b0:458:ad26:d5c2 with SMTP id
+ bd20-20020a056402207400b00458ad26d5c2mr12162647edb.332.1666264389291; Thu, 20
+ Oct 2022 04:13:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221020095934.1659449-7-peng.fan@oss.nxp.com>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+From:   Sarah Laura <demandgenerationslead@gmail.com>
+Date:   Thu, 20 Oct 2022 06:12:54 -0500
+Message-ID: <CAKhOGSq5PcHhFTJsXUDn4_4Hk97qXpEUrquHLamE2RzXJX2O0Q@mail.gmail.com>
+Subject: RE: Gartner Security Attendees Data Lists-2022
+To:     Sarah Laura <demandgenerationslead@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peng,
+Hi,
 
-On 22-10-20, Peng Fan (OSS) wrote:
-> From: Han Xu <han.xu@nxp.com>
-> 
-> enable fspi nor on imx8mp evk dts
-> 
-> Reviewed-by: Frank Li <frank.li@nxp.com>
-> Signed-off-by: Han Xu <han.xu@nxp.com>
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  arch/arm64/boot/dts/freescale/imx8mp-evk.dts | 27 ++++++++++++++++++++
->  1 file changed, 27 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
-> index 366f709f8790..f36033b9cebb 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
-> +++ b/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
-> @@ -85,6 +85,22 @@ reg_usdhc2_vmmc: regulator-usdhc2 {
->  	};
->  };
->  
-> +&flexspi {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_flexspi0>;
-> +	status = "okay";
-> +
-> +	flash0: mt25qu256aba@0 {
-                     ^
-This should throw a warning. You need to name it flash@0.
-Nit: The phandle name is not very useful, instead I would name it
-nor_flash or so.
+I hope you are having a productive day
 
-> +		reg = <0>;
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-> +		compatible = "jedec,spi-nor";
+Would you be interested in acquiring Gartner Security & Risk
+Management Attendees Databank?
 
-compatible is the first property followed by the reg.
+List Includes:- Org-Name, First Name Last Name, Contact Job Title,
+Verified Email Address, Website URL, Mailing Address, Phone Number,
+Fax Number, Industry and many more
 
-> +		spi-max-frequency = <80000000>;
-> +		spi-tx-bus-width = <1>;
-> +		spi-rx-bus-width = <4>;
-> +	};
-> +};
-> +
->  &A53_0 {
->  	cpu-supply = <&reg_arm>;
->  };
-> @@ -585,6 +601,17 @@ MX8MP_IOMUXC_SAI2_MCLK__GPIO4_IO27      0x154   /* CAN2_STBY */
->  		>;
->  	};
->  
-> +	pinctrl_flexspi0: flexspi0grp {
-> +		fsl,pins = <
-> +			MX8MP_IOMUXC_NAND_ALE__FLEXSPI_A_SCLK           0x1c2
-> +			MX8MP_IOMUXC_NAND_CE0_B__FLEXSPI_A_SS0_B        0x82
-> +			MX8MP_IOMUXC_NAND_DATA00__FLEXSPI_A_DATA00      0x82
-> +			MX8MP_IOMUXC_NAND_DATA01__FLEXSPI_A_DATA01      0x82
-> +			MX8MP_IOMUXC_NAND_DATA02__FLEXSPI_A_DATA02      0x82
-> +			MX8MP_IOMUXC_NAND_DATA03__FLEXSPI_A_DATA03      0x82
-> +		>;
-> +	};
-> +
->  	pinctrl_gpio_led: gpioledgrp {
->  		fsl,pins = <
->  			MX8MP_IOMUXC_NAND_READY_B__GPIO3_IO16	0x140
-> -- 
-> 2.37.1
-> 
-> 
-> 
+Contact   :  6,623 Verified Contacts.
+Cost          :  $1,425
+
+Kind Regards,
+Sarah Laura
+Marketing Coordinator
+
+To break off kindly reply with "Leave Out" in the subject line.
