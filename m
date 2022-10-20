@@ -2,128 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C23D6056AA
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 07:15:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 118976056AE
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 07:17:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229893AbiJTFP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 01:15:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46140 "EHLO
+        id S229892AbiJTFRH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 01:17:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbiJTFPW (ORCPT
+        with ESMTP id S229882AbiJTFRE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 01:15:22 -0400
-Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97BDAA2AAD;
-        Wed, 19 Oct 2022 22:15:20 -0700 (PDT)
-Received: by mail-vs1-xe34.google.com with SMTP id n63so131510vsc.8;
-        Wed, 19 Oct 2022 22:15:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kdG+ouZ9mtQkIdf4wHomoStwFFAJkNb2nocVArRayto=;
-        b=qcr0zMjKq3TOa3Pa8KBFhWaFdI4kIGIo3H4i9h1VOh6DkXWXvPRidfiZwbNgy2YcwU
-         zvYzEsYm6VyQUEyZXlY0ANcs4VmRGa08jsQh/Pdj5aeKrIc+Up/27YkQqaMco3BppiXV
-         sCx2ZFHlC3jjVS2Aj1yeYllAxr35/n9Px+fkYlhMPQfvVD4IkkPaUpIXTJNZ1GvFd8Bs
-         hTJo742KS+C2BRzQZIduAZYr/2IPeeWe33Qb2FfXXislrjkXx+m3YG+e39+G8lpUuymf
-         fucfDDgBtBs8AH0hFYDIzo/e4inbexX3/9to29l0yTtpaEj8uYOrd/DpsMVQHL81zS9i
-         TYBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kdG+ouZ9mtQkIdf4wHomoStwFFAJkNb2nocVArRayto=;
-        b=T57W8No4yg0I7VmCY558ipfxG61XKvFyDMx3QewGN3dkvtBySHWmiUAANGDE8XI0vn
-         n+fBLU8hUEshaNEf81c75oK/bBxX+GDPWcKW31uVEG5Tn/pzBnTyQ7c4wh3z707CRt7j
-         swAPq6xIvMZQ3Y7AzIvNCT75GQES43WI1LL+HYV4hFrWDhhztk5OHAeAvf/LRaAemYGS
-         VHYWwR+8z005XH7V+rk7ijOMvYAbVteEpvWr+cVvMz/h91GmG+ql+0JBoNx9rF6tqLlj
-         50LUd6lcm34hGcvOWDt87H0PkdtWOu30qopyKHy2BzExWL0B361oWv7SLoa2zrpHVNQ1
-         8owQ==
-X-Gm-Message-State: ACrzQf0ckrb5nsXzEOn+ykPr3r5vb083iGqCrJBX503rXLRP2lYboGR3
-        xz5WT6dwn4m+TDA8xUn9o7Sa40ii0FK6aG8OTAA=
-X-Google-Smtp-Source: AMsMyM4kBXwe7Pz4GdlrpkzlBWPfvfXtoQ8udCX9lfGy33wGyMNCLOEIlDKT7YviXHxdyz9ACHbc6ge/oFrwYkneBaY=
-X-Received: by 2002:a05:6102:25b:b0:3a7:65fe:899f with SMTP id
- a27-20020a056102025b00b003a765fe899fmr5339724vsq.12.1666242919733; Wed, 19
- Oct 2022 22:15:19 -0700 (PDT)
+        Thu, 20 Oct 2022 01:17:04 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDD7F17C541;
+        Wed, 19 Oct 2022 22:17:02 -0700 (PDT)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29K57qHS005263;
+        Thu, 20 Oct 2022 05:16:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=mAgQ5fC4sKpQ3PvxLcsGXTrIfrhjVMDrWRX9tOmZF6I=;
+ b=puEaCzteE8wpU73EkQgNFMQUyxVppPU4kzJJCPoHqY8sBQO8mnJUm1y/Gk19FgylMPCV
+ U1/kNUFJqUKy1D7nE4JeKj0A+B179H3TgbxxqIaY63sF8pe5ilywXBhEgzb0GXB2MnPp
+ gmlEtog7CP59u8xZlN1sg45QNxukQ32KwwXH4yq5Rd84sLT/g6DWR+Se/cklo7pZJucf
+ XeSkmvoAnMzM5A8UREExOm+vYjawCSl6ec2lRGvrRjkwPONNjzRcBroEn9IUupa2Qe6U
+ CRsiuoxZXsMpC9fPm24xICi4UKJ3eQ1SVuFWV6utwofUlZ+QVwiixAZQK9xAeAxm7+59 SA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kavjv52xm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 20 Oct 2022 05:16:51 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29K58f1j009219;
+        Thu, 20 Oct 2022 05:16:50 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kavjv52wh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 20 Oct 2022 05:16:50 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29K55SWF032014;
+        Thu, 20 Oct 2022 05:16:49 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma04ams.nl.ibm.com with ESMTP id 3k7mg9876n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 20 Oct 2022 05:16:48 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29K5BhTs50331938
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 20 Oct 2022 05:11:43 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6E9C24C046;
+        Thu, 20 Oct 2022 05:16:45 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A7BBB4C040;
+        Thu, 20 Oct 2022 05:16:44 +0000 (GMT)
+Received: from [9.171.43.76] (unknown [9.171.43.76])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 20 Oct 2022 05:16:44 +0000 (GMT)
+Message-ID: <b74752cc-5833-c1b5-3697-262c523e794b@linux.ibm.com>
+Date:   Thu, 20 Oct 2022 07:16:44 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v3 rcu 08/11] arch/s390: Add
+ ARCH_HAS_NMI_SAFE_THIS_CPU_OPS Kconfig option
+To:     "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
+        rostedt@goodmis.org, Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        John Ogness <john.ogness@linutronix.de>,
+        Petr Mladek <pmladek@suse.com>, linux-s390@vger.kernel.org
+References: <20221019225838.GA2500612@paulmck-ThinkPad-P17-Gen-1>
+ <20221019225846.2501109-8-paulmck@kernel.org>
+Content-Language: en-US
+From:   Christian Borntraeger <borntraeger@linux.ibm.com>
+In-Reply-To: <20221019225846.2501109-8-paulmck@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: JLD47XnEjZuXK5fP6AH8MFxtxqmnzhJ8
+X-Proofpoint-ORIG-GUID: lKMJ8UibkdU9hWACLHOimuOXOdYYZxRb
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-References: <20221011021653.27277-1-gaoyankaigeren@gmail.com>
- <DM6PR04MB6575AE77585D584652179089FC239@DM6PR04MB6575.namprd04.prod.outlook.com>
- <CAFN68yVajOkV++gCp-y1+SD5VOKLgUeBhfgskrJZOX5dfGi07A@mail.gmail.com>
- <bee1807b7d072b221c44ac8c2ed8064939d33696.camel@gmail.com>
- <CAFN68yVdwrECaDvNuok_4V-54UZUJU9+dn5icaiPdj6BXEZuVA@mail.gmail.com>
- <8678f69aa94003b357c4c8ef42cd6ce5c7487f8d.camel@gmail.com> <CAFN68yUKXquOLqL_6oBRjfDGDT=NgQPF3cpo7bkHyJ1gNTDbZA@mail.gmail.com>
-In-Reply-To: <CAFN68yUKXquOLqL_6oBRjfDGDT=NgQPF3cpo7bkHyJ1gNTDbZA@mail.gmail.com>
-From:   =?UTF-8?B?6auY5Lil5Yev?= <gaoyankaigeren@gmail.com>
-Date:   Thu, 20 Oct 2022 13:15:08 +0800
-Message-ID: <CAFN68yVLdwrJBivqjGfGd7qiGp_h8FwucBLvSH97wNiyik4nQw@mail.gmail.com>
-Subject: Re: [PATCH] ufs: core: Disable auto h8 before ssu
-To:     Bean Huo <huobean@gmail.com>
-Cc:     Avri Altman <Avri.Altman@wdc.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-20_01,2022-10-19_04,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ suspectscore=0 priorityscore=1501 mlxscore=0 bulkscore=0 mlxlogscore=999
+ phishscore=0 spamscore=0 adultscore=0 clxscore=1011 lowpriorityscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210200028
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear ALL
-Do you agree this patch? I'd like to hear your opinion about this.
 
-Thanks.
 
-=E9=AB=98=E4=B8=A5=E5=87=AF <gaoyankaigeren@gmail.com> =E4=BA=8E2022=E5=B9=
-=B410=E6=9C=8814=E6=97=A5=E5=91=A8=E4=BA=94 18:15=E5=86=99=E9=81=93=EF=BC=
-=9A
->
-> hi Bean
-> Yes, This is the time from when the system enters idle to when auto h8
-> is issued.
-> This patch is just to ensure that there is no continuous action of
-> "auto h8 exit" before dme h8 enter, it has nothing to do with idle
-> time.
-> The reason I want to ensure this order is because when there is an
-> action of "auto h8 exit", most devices take a certain amount of time
-> to get the state ready.
-> Immediately after the action of "auto h8 exit" is completed and "dme
-> h8 enter" is followed, the device will be abnormal.
-> And I think it's more of a common patch for all platforms, Patch can
-> adapt different vendors,and align to ufshcd_auto_hibern8_enable in
-> __ufshcd_wl_resume.
->
-> Bean Huo <huobean@gmail.com> =E4=BA=8E2022=E5=B9=B410=E6=9C=8814=E6=97=A5=
-=E5=91=A8=E4=BA=94 13:48=E5=86=99=E9=81=93=EF=BC=9A
-> >
-> > On Fri, 2022-10-14 at 10:44 +0800, =E9=AB=98=E4=B8=A5=E5=87=AF wrote:
-> > > " UFSHCI has idle time before bringing Link into hibern8 mode, " I
-> > > think  ufs put the link to h8 during the time
-> >
-> >
-> > no,  it is ufs controller. see the ufshci spec:
-> >
-> > "Auto-Hibern8 Idle Timer Value (AH8ITV): This is the timer that UFS
-> > subsystem must be idle before UFS host *controller* may put UniPro link
-> > into Hibernate state autonomously. The idle timer value is multiplied
-> > by the indicated timer scale to yield an absolute timer value. ....
-> >
-> > ...
-> > Any non-zero value will enable Auto-Hibernate idle timer.
-> > UFS host controller shall put Unipro link out of Hibernate state when
-> > the link communication is required. The mechanism to decide when the
-> > Unipro link needs to become active is host controller specific
-> > implementation, and is transparent to the software."
-> >
-> >
+Am 20.10.22 um 00:58 schrieb Paul E. McKenney:
+> The s390 architecture uses either a cmpxchg loop (old systems)
+> or the laa add-to-memory instruction (new systems) to implement
+> this_cpu_add(), both of which are NMI safe.  This means that the old
+> and more-efficient srcu_read_lock() may be used in NMI context, without
+> the need for srcu_read_lock_nmisafe().  Therefore, add the new Kconfig
+> option ARCH_HAS_NMI_SAFE_THIS_CPU_OPS to arch/arm64/Kconfig, which will
+						s390 ?
+> cause NEED_SRCU_NMI_SAFE to be deselected, thus preserving the current
+> srcu_read_lock() behavior.
+> 
+> Link: https://lore.kernel.org/all/20220910221947.171557773@linutronix.de/
+> 
+> Suggested-by: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+> Suggested-by: Frederic Weisbecker <frederic@kernel.org>
+> Suggested-by: Boqun Feng <boqun.feng@gmail.com>
+> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> Cc: Heiko Carstens <hca@linux.ibm.com>
+> Cc: Vasily Gorbik <gor@linux.ibm.com>
+> Cc: Alexander Gordeev <agordeev@linux.ibm.com>
+> Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
+> Cc: Sven Schnelle <svens@linux.ibm.com>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: John Ogness <john.ogness@linutronix.de>
+> Cc: Petr Mladek <pmladek@suse.com>
+> Cc: <linux-s390@vger.kernel.org>
+> ---
+>   arch/s390/Kconfig | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
+> index 318fce77601d3..0acdfda332908 100644
+> --- a/arch/s390/Kconfig
+> +++ b/arch/s390/Kconfig
+> @@ -73,6 +73,7 @@ config S390
+>   	select ARCH_HAS_GIGANTIC_PAGE
+>   	select ARCH_HAS_KCOV
+>   	select ARCH_HAS_MEM_ENCRYPT
+> +	select ARCH_HAS_NMI_SAFE_THIS_CPU_OPS
+>   	select ARCH_HAS_PTE_SPECIAL
+>   	select ARCH_HAS_SCALED_CPUTIME
+>   	select ARCH_HAS_SET_MEMORY
