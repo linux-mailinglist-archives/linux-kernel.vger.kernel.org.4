@@ -2,111 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C92D606091
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 14:49:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C896606099
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 14:50:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230256AbiJTMt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 08:49:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52652 "EHLO
+        id S229768AbiJTMup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 08:50:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230209AbiJTMtV (ORCPT
+        with ESMTP id S230224AbiJTMuk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 08:49:21 -0400
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B2C221
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 05:49:19 -0700 (PDT)
-Received: by mail-qt1-x82a.google.com with SMTP id l28so13574359qtv.4
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 05:49:19 -0700 (PDT)
+        Thu, 20 Oct 2022 08:50:40 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0686972945
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 05:50:39 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id 10so20266660pli.0
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 05:50:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7zzLiSLuWDpRehAEZWWY+YVaKXFqQFcIBPnNnew2YXA=;
-        b=PdZuxs6MjlDnlNzQz5OvgwlDa4ipQHz3SJcbSHa8GGxbWqYSCrOhrIpgIRmL0bbZyh
-         cQ/sT3Wlegy+jRZn9G1hxurXh/athUMdenfE1TvCD29eTKmi6c8pjsNRtPhrotLNmDyI
-         Ogiai7InvvtM1nydktd0c3f6udis80eG18SRwTqONqnpXIzVkCOtQd7VCOHq6vwPnThU
-         L6zklbV08bsN+NZcOAe15qsbT0g24eNmyKRzjz5G3amKpMkDrQGfNK8lySHp4iVl+7p0
-         BuAzVzXn8CEI4UPcx8eE6mZfJ4AZlZXZpqiyZYQ78xKYVX0Mfu3M7j6TgM4q4Cqf9M92
-         3+tw==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3T6X+tt7V+91kobXX12t6/xBrHgsUusEkXMw0L2QMKo=;
+        b=V1e+eumcTbSiXyjph0yA3r/AC6Jy3E7VdU0fC5UdvN3Jjv5eHkX+KRzb3g/5Snd3ZB
+         TO3UwH0dGpPsF3IU1lCS+drZ84tqXau9dHvtNPhV2RLawCrjLIQ8PR4P5KZqR87/eJqb
+         SE0VT26rx6WgMpUXzQiyNswQClOxqQojw78L07iPRMxPxe3bOhmP16OZQ6rbU0gwzOxU
+         KnGQSw+KJJBW8s1zOep5CjR4Fmsir+FCzi9T8L9Okp56p7CnC33SIIoZB1zuZMOvWIPD
+         RMXguy9y9Ej7zdSAjXnm6we46Y+87YtUPtndgbrZl3Bjtl/wMhRUbj0BQhxgNuJ6Dgcp
+         Y9Lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7zzLiSLuWDpRehAEZWWY+YVaKXFqQFcIBPnNnew2YXA=;
-        b=lvOOuH3OwRx0RbuNxCcqeV1B+x8EzZfyZXTT+d+hFMnpsTzzPF7V4r6W8fjbM7w4Gp
-         KU2Zc3AnZN+odPa+/2B7IX21wN4Ie5opi1B/ahpea+wMGO/w/e5MG+5zgUR6TDo61gjP
-         s5vR1dWeOStRtIkXT1UszWOYMpK+ygb6DzSX2O3mfiUAO+Gy5SKY0t3db+0rycMKeW8P
-         tnoXRWFT6cTVKmzltt3DWunwo19g6C48GtEGhy8A+E/xgLtvVAsWa5IYN73Gg+KIdDKk
-         Y8h4VGvy1v/DL2gDeIN5V+nCnafL0xgISmO3csL8uFCC7PVuGfHcYjE+wuYwT4pi6IkV
-         WMlA==
-X-Gm-Message-State: ACrzQf3vX5mPPSk3er19sOhelMy6XGNDTgYrsqllg/+i5rdzCKh0cdoK
-        uR/cAYaSHjFZTBzc6Tf5QgjOsg==
-X-Google-Smtp-Source: AMsMyM4t+vrwAcBb+25n+go7JZPtlChxYQtXIsomDdytCwaeNLSbAoJXk3x6Ke4EBw9HmsWcmg8Jnw==
-X-Received: by 2002:ac8:5a42:0:b0:39d:136e:8a43 with SMTP id o2-20020ac85a42000000b0039d136e8a43mr1118096qta.372.1666270158481;
-        Thu, 20 Oct 2022 05:49:18 -0700 (PDT)
-Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
-        by smtp.gmail.com with ESMTPSA id u7-20020a05620a430700b006cf8fc6e922sm7133652qko.119.2022.10.20.05.49.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Oct 2022 05:49:17 -0700 (PDT)
-Message-ID: <20c115e0-0acf-dac2-2a30-0f394fa513ab@linaro.org>
-Date:   Thu, 20 Oct 2022 08:49:15 -0400
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3T6X+tt7V+91kobXX12t6/xBrHgsUusEkXMw0L2QMKo=;
+        b=Ex+LThhvpvXmVuNKu6ndz9zRcNgQptYWqmgs1cSlR8XeuXekp3n3nG7IUHlLGUEuwd
+         uQ49EgZvZqeYt3J+BFDulSf0ji/6660K3ccJcgeXdYgnEo0pe/s5u/KhzRVAWL0m4VSF
+         OWrDfz1EEylzTpcMg4IfQaXjqNF+vjEvqFkCku3K+Fj4oiagxp2Qm+bIImD22Ewi2KrE
+         Fd9VRgCd+o9E7zv4QCRRS03hoBBLgi/FWwID8ApXndftEkaOQQPe6tpf16W8HvmbW57o
+         oqFABtl1WWEw1MUe2cjhMF+bRgEdh8bbcUBn6v/5biyYU6xs+DomaBq0YdMtM/KTD+MH
+         IpXw==
+X-Gm-Message-State: ACrzQf3UjvzKM4FN8Qsisf/vFQxkvyXB1S8F2feptJOEA7dsnv8WKlLB
+        rDQo5nHVu75+8+Sq9OJDaBpVXciZmW+ZNFyY
+X-Google-Smtp-Source: AMsMyM4TRzgWshHzykwjj+0oSUfvvDKlhXsmbl0EEBW/4qsIASSjpO/zYNZVz/MgLoZQ1OlX/n7zyA==
+X-Received: by 2002:a17:90b:2243:b0:20b:42a:4c0d with SMTP id hk3-20020a17090b224300b0020b042a4c0dmr49870333pjb.123.1666270238215;
+        Thu, 20 Oct 2022 05:50:38 -0700 (PDT)
+Received: from [127.0.0.1] (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
+        by smtp.gmail.com with ESMTPSA id d8-20020a170902cec800b0017f7b6e970esm12885047plg.146.2022.10.20.05.50.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Oct 2022 05:50:37 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     linux-block@vger.kernel.org,
+        Pavel Begunkov <asml.silence@gmail.com>
+Cc:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+In-Reply-To: <cover.1666122465.git.asml.silence@gmail.com>
+References: <cover.1666122465.git.asml.silence@gmail.com>
+Subject: Re: (subset) [RFC for-next v2 0/4] enable pcpu bio caching for IRQ I/O
+Message-Id: <166627023722.161997.8160242378689353670.b4-ty@kernel.dk>
+Date:   Thu, 20 Oct 2022 05:50:37 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v3 1/2] spi: dt-bindings: amlogic, meson-gx-spicc: Add
- pinctrl names for SPI signal states
-Content-Language: en-US
-To:     neil.armstrong@linaro.org,
-        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        Mark Brown <broonie@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Da Xue <da@libre.computer>, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221004-up-aml-fix-spi-v3-0-89de126fd163@baylibre.com>
- <20221004-up-aml-fix-spi-v3-1-89de126fd163@baylibre.com>
- <d355ee40-5905-4d10-8300-81e9a63117ee@linaro.org>
- <dc918114-8b89-441b-5ba1-aaf3ae084860@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <dc918114-8b89-441b-5ba1-aaf3ae084860@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.11.0-dev-d9ed3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->>> +      properties:
->>> +        pinctrl-names:
->>> +          minItems: 1
->>> +          items:
->>> +            - const: default
->>> +            - const: idle-high
->>> +            - const: idle-low
->>
->> You should also define in such case pinctrl-0 and others.
+On Tue, 18 Oct 2022 20:50:54 +0100, Pavel Begunkov wrote:
+> This series implements bio pcpu caching for normal / IRQ-driven I/O
+> extending REQ_ALLOC_CACHE currently limited to iopoll. The allocation side
+> still only works from non-irq context, which is the reason it's not enabled
+> by default, but turning it on for other users (e.g. filesystems) is
+> as a matter of passing a flag.
 > 
-> Ok I thought it would be covered by the pinctrl-consumer.yaml
-> but yeah we should allow pinctrl-1 and pinctrl-2 here aswell by adding:
+> t/io_uring with an Optane SSD setup showed +7% for batches of 32 requests
+> and +4.3% for batches of 8.
 > 
->              pinctrl-1: true
->              pinctrl-2: true
-> 
->
+> [...]
 
-Yes.
+Applied, thanks!
+
+[1/4] bio: safeguard REQ_ALLOC_CACHE bio put
+      commit: d4347d50407daea6237872281ece64c4bdf1ec99
 
 Best regards,
-Krzysztof
+-- 
+Jens Axboe
+
 
