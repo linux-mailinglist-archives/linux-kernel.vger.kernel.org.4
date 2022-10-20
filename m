@@ -2,149 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DAD6606A82
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 23:52:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3797F606A86
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 23:54:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbiJTVw3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 17:52:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51376 "EHLO
+        id S229786AbiJTVyb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 17:54:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbiJTVw0 (ORCPT
+        with ESMTP id S229576AbiJTVy2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 17:52:26 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3A9E1D4621;
-        Thu, 20 Oct 2022 14:52:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=zl1+lgnFnP330eRmt/FInO+nQZKgIEnqURsYwYEVj0k=; b=f0KGmdPRzUiXAfJVP1+jaG4W9p
-        9Gk0OGaoU0TjiebDXQpjBBzQqhO4FdnkjxRKdQs98J9RNFI7jqw4pm8IohKlTtIKjw8TxuPwD8GAb
-        Zo3sMpulpOJfosELNuCvfnnQ9ctU+RD8QQ4JxIPNl3xc225z/Obc+R3DTJWUwAcNaCsXAEhX7Qbpx
-        CfP1WpwyMg8CC3VLaJuEWDJsKCVDDmQqZ846EjkIy7Z0uwQuZDRFqDy4IV15k4bKqW0ufOu3bb7vr
-        EfLEspRYeVlOb2G1akQLmQPg7QyTvJECA05oT+TEFlMmbTcjlwN+WI2FnUgksCmGxohUG47bGNJ5P
-        CwitaE5w==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oldSY-00CgsI-20; Thu, 20 Oct 2022 21:52:14 +0000
-Date:   Thu, 20 Oct 2022 22:52:14 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     Zhaoyang Huang <huangzhaoyang@gmail.com>,
-        "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, ke.wang@unisoc.com,
-        steve.kang@unisoc.com, baocong.liu@unisoc.com,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [RFC PATCH] mm: move xa forward when run across zombie page
-Message-ID: <Y1HDDu3UV0L3cDwE@casper.infradead.org>
-References: <1665725448-31439-1-git-send-email-zhaoyang.huang@unisoc.com>
- <Y0lSChlclGPkwTeA@casper.infradead.org>
- <CAGWkznG=_A-3A8JCJEoWXVcx+LUNH=gvXjLpZZs0cRX4dhUJfQ@mail.gmail.com>
- <Y017BeC64GDb3Kg7@casper.infradead.org>
- <CAGWkznEdtGPPZkHrq6Y_+XLL37w12aC8XN8R_Q-vhq48rFhkSA@mail.gmail.com>
- <Y04Y3RNq6D2T9rVw@casper.infradead.org>
- <20221018223042.GJ2703033@dread.disaster.area>
- <Y1AWXiJdyjdLmO1E@casper.infradead.org>
- <20221019220424.GO2703033@dread.disaster.area>
+        Thu, 20 Oct 2022 17:54:28 -0400
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F596438;
+        Thu, 20 Oct 2022 14:54:21 -0700 (PDT)
+Received: by mail-qk1-x729.google.com with SMTP id a18so924518qko.0;
+        Thu, 20 Oct 2022 14:54:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XJV3aFcijl0Rz0XlRnZF5dclSHM+OiKYXagTECOXWUs=;
+        b=mhSDba1z9+BM+IWhMevt2Zop1ZxgI5vtmX5lEIxyybt5IFnrl63bEj9L06UWGe4Qyj
+         Xh/VFcCdOIlTEXPIAuLMElK/9X2NLL8Xzxgxx0JErorvkGNAIpD6am2MMcie+7j5b5vO
+         f1MRedrX5cqtmrOkuu8sxdcuN0Hwe6AP38s1kkny9SdIMjdyEfTXrbkZ6bO8KyxtESCx
+         Mkt9SAKXBXsE89tXA+vISzKSht45tmKyLvFcnC2QPmatgyY3BBRkC/Fc+BNFns+IuIDL
+         f3NjTc8DIXlDssWaLdR05AHBxi1y/lzgM+XYwxZOBTzai43oKzRsI7ysCjgZ6PHgXyRN
+         rT2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XJV3aFcijl0Rz0XlRnZF5dclSHM+OiKYXagTECOXWUs=;
+        b=pjCUd8U4AsJ6E2akOt5hGNNNTOQcCQIczpckBC0VrzwKC0rgjqrdQk7zAzIO5PRNqZ
+         CJe8X4FHeHqT6LLL5P9UEjmRBFxWhVeAidoIL/hB7DYkGTOzbSNP/ZpyG6S2ss/J1c+a
+         PIHGb0oQ8I1AKTqn6QswFNU7/uQYxckVmJGQ2iWju3B1ALlq3fRSGSEHyjKN1cixb6od
+         e/Sk/iM16Hg4D3ynBFQZp4zIhcp+wC1zmq1VxYBvjk7zQXaTg3q0iEJEntvmy8U/Twwz
+         P+FbEy6Wt4aaccezy1hDbI9AkRCVJucg8b3r+8E3hKhFqCV7jMcH8DQEfHMYfVoo1IGp
+         0DfA==
+X-Gm-Message-State: ACrzQf3NuhvHoeQH4MMUWGm+7fUKKeehmkf+T48WnMV9XaT41o7wmYOO
+        5subbbPsrD3qCOZvkEZyQC8=
+X-Google-Smtp-Source: AMsMyM7xID6F9ahsV93JiJpkQl+rEA4HCAjdi0ex+QQUchYb7mrjkbkktbo/sbZ+jGyVQLZZ2jhgBQ==
+X-Received: by 2002:a05:620a:2697:b0:6cf:33cd:2bd2 with SMTP id c23-20020a05620a269700b006cf33cd2bd2mr11114790qkp.341.1666302861044;
+        Thu, 20 Oct 2022 14:54:21 -0700 (PDT)
+Received: from stbirv-lnx-3.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id bj41-20020a05620a192900b006bb29d932e1sm8121067qkb.105.2022.10.20.14.54.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Oct 2022 14:54:20 -0700 (PDT)
+From:   Doug Berger <opendmb@gmail.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>, Mike Rapoport <rppt@kernel.org>,
+        Borislav Petkov <bp@suse.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@suse.com>,
+        KOSAKI Motohiro <kosaki.motohiro@jp.fujitsu.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        David Hildenbrand <david@redhat.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Doug Berger <opendmb@gmail.com>
+Subject: [PATCH v3 0/9] mm: introduce Designated Movable Blocks
+Date:   Thu, 20 Oct 2022 14:53:09 -0700
+Message-Id: <20221020215318.4193269-1-opendmb@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221019220424.GO2703033@dread.disaster.area>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 09:04:24AM +1100, Dave Chinner wrote:
-> On Wed, Oct 19, 2022 at 04:23:10PM +0100, Matthew Wilcox wrote:
-> > On Wed, Oct 19, 2022 at 09:30:42AM +1100, Dave Chinner wrote:
-> > > This is reading and writing the same amount of file data at the
-> > > application level, but once the data has been written and kicked out
-> > > of the page cache it seems to require an awful lot more read IO to
-> > > get it back to the application. i.e. this looks like mmap() is
-> > > readahead thrashing severely, and eventually it livelocks with this
-> > > sort of report:
-> > > 
-> > > [175901.982484] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
-> > > [175901.985095] rcu:    Tasks blocked on level-1 rcu_node (CPUs 0-15): P25728
-> > > [175901.987996]         (detected by 0, t=97399871 jiffies, g=15891025, q=1972622 ncpus=32)
-> > > [175901.991698] task:test_write      state:R  running task     stack:12784 pid:25728 ppid: 25696 flags:0x00004002
-> > > [175901.995614] Call Trace:
-> > > [175901.996090]  <TASK>
-> > > [175901.996594]  ? __schedule+0x301/0xa30
-> > > [175901.997411]  ? sysvec_apic_timer_interrupt+0xb/0x90
-> > > [175901.998513]  ? sysvec_apic_timer_interrupt+0xb/0x90
-> > > [175901.999578]  ? asm_sysvec_apic_timer_interrupt+0x16/0x20
-> > > [175902.000714]  ? xas_start+0x53/0xc0
-> > > [175902.001484]  ? xas_load+0x24/0xa0
-> > > [175902.002208]  ? xas_load+0x5/0xa0
-> > > [175902.002878]  ? __filemap_get_folio+0x87/0x340
-> > > [175902.003823]  ? filemap_fault+0x139/0x8d0
-> > > [175902.004693]  ? __do_fault+0x31/0x1d0
-> > > [175902.005372]  ? __handle_mm_fault+0xda9/0x17d0
-> > > [175902.006213]  ? handle_mm_fault+0xd0/0x2a0
-> > > [175902.006998]  ? exc_page_fault+0x1d9/0x810
-> > > [175902.007789]  ? asm_exc_page_fault+0x22/0x30
-> > > [175902.008613]  </TASK>
-> > > 
-> > > Given that filemap_fault on XFS is probably trying to map large
-> > > folios, I do wonder if this is a result of some kind of race with
-> > > teardown of a large folio...
-> > 
-> > It doesn't matter whether we're trying to map a large folio; it
-> > matters whether a large folio was previously created in the cache.
-> > Through the magic of readahead, it may well have been.  I suspect
-> > it's not teardown of a large folio, but splitting.  Removing a
-> > page from the page cache stores to the pointer in the XArray
-> > first (either NULL or a shadow entry), then decrements the refcount.
-> > 
-> > We must be observing a frozen folio.  There are a number of places
-> > in the MM which freeze a folio, but the obvious one is splitting.
-> > That looks like this:
-> > 
-> >         local_irq_disable();
-> >         if (mapping) {
-> >                 xas_lock(&xas);
-> > (...)
-> >         if (folio_ref_freeze(folio, 1 + extra_pins)) {
-> 
-> But the lookup is not doing anything to prevent the split on the
-> frozen page from making progress, right? It's not holding any folio
-> references, and it's not holding the mapping tree lock, either. So
-> how does the lookup in progress prevent the page split from making
-> progress?
+MOTIVATION:
+Some Broadcom devices (e.g. 7445, 7278) contain multiple memory
+controllers with each mapped in a different address range within
+a Uniform Memory Architecture. Some users of these systems have
+expressed the desire to locate ZONE_MOVABLE memory on each
+memory controller to allow user space intensive processing to
+make better use of the additional memory bandwidth.
+Unfortunately, the historical monotonic layout of zones would
+mean that if the lowest addressed memory controller contains
+ZONE_MOVABLE memory then all of the memory available from
+memory controllers at higher addresses must also be in the
+ZONE_MOVABLE zone. This would force all kernel memory accesses
+onto the lowest addressed memory controller and significantly
+reduce the amount of memory available for non-movable
+allocations.
 
-My thinking was that it keeps hammering the ->refcount field in
-struct folio.  That might prevent a thread on a different socket
-from making forward progress.  In contrast, spinlocks are designed
-to be fair under contention, so by spinning on an actual lock, we'd
-remove contention on the folio.
+The main objective of this patch set is therefore to allow a
+block of memory to be designated as part of the ZONE_MOVABLE
+zone where it will always only be used by the kernel page
+allocator to satisfy requests for movable pages. The term
+Designated Movable Block is introduced here to represent such a
+block. The favored implementation allows extension of the
+'movablecore' kernel parameter to allow specification of a base
+address and support for multiple blocks. The existing
+'movablecore' mechanisms are retained.
 
-But I think the tests you've done refute that theory.  I'm all out of
-ideas at the moment.  Either we have a frozen folio from somebody who
-doesn't hold the lock, or we have someone who's left a frozen folio in
-the page cache.  I'm leaning towards that explanation at the moment,
-but I don't have a good suggestion for debugging.
+BACKGROUND:
+NUMA architectures support distributing movablecore memory
+across each node, but it is undesirable to introduce the
+overhead and complexities of NUMA on systems that don't have a
+Non-Uniform Memory Architecture.
 
-Perhaps a bad suggestion for debugging would be to call dump_page()
-with a __ratelimit() wrapper to not be overwhelmed with information?
+Commit 342332e6a925 ("mm/page_alloc.c: introduce kernelcore=mirror option")
+also depends on zone overlap to support sytems with multiple
+mirrored ranges.
 
-> I would have thought:
-> 
-> 	if (!folio_try_get_rcu(folio)) {
-> 		rcu_read_unlock();
-> 		cond_resched();
-> 		rcu_read_lock();
-> 		goto repeat;
-> 	}
-> 
-> Would be the right way to yeild the CPU to avoid priority
-> inversion related livelocks here...
+Commit c6f03e2903c9 ("mm, memory_hotplug: remove zone restrictions")
+embraced overlapped zones for memory hotplug.
 
-I'm not sure we're allowed to schedule here.  We might be under another
-spinlock?
+This commit set follows their lead to allow the ZONE_MOVABLE
+zone to overlap other zones. Designated Movable Blocks are made
+absent from overlapping zones and present within the
+ZONE_MOVABLE zone.
+
+I initially investigated an implementation using a Designated
+Movable migrate type in line with comments[1] made by Mel Gorman
+regarding a "sticky" MIGRATE_MOVABLE type to avoid using
+ZONE_MOVABLE. However, this approach was riskier since it was
+much more instrusive on the allocation paths. Ultimately, the
+progress made by the memory hotplug folks to expand the
+ZONE_MOVABLE functionality convinced me to follow this approach.
+
+Changes in v3:
+  - removed OTHER OPPORTUNITIES and NOTES from this cover letter.
+  - prevent the creation of empty zones instead of adding extra
+    info to zoneinfo.
+  - size the ZONE_MOVABLE span to the minimum necessary to cover
+    pages within the zone to be more intuitive.
+  - removed "real" from variable names that were consolidated.
+  - rebased to akpm-mm/master (i.e. Linux 6.1-rc1).
+
+Changes in v2:
+  - first three commits upstreamed separately [3], [4], and [5].
+  - commits 04-06 submitted separately [6].
+  - Corrected errors "Reported-by: kernel test robot <lkp@intel.com>"
+  - Deferred commits after 15 to simplify review of the base
+    functionality.
+  - minor reorganization of commit 13.
+
+v2: https://lore.kernel.org/linux-mm/20220928223301.375229-1-opendmb@gmail.com/ 
+v1: https://lore.kernel.org/linux-mm/20220913195508.3511038-1-opendmb@gmail.com/
+
+[1] https://lore.kernel.org/lkml/20160428103927.GM2858@techsingularity.net/
+[2] https://lore.kernel.org/lkml/1401260672-28339-1-git-send-email-iamjoonsoo.kim@lge.com
+[3] https://lore.kernel.org/linux-mm/20220914023913.1855924-1-zi.yan@sent.com
+[4] https://lore.kernel.org/linux-mm/20220823030209.57434-2-linmiaohe@huawei.com
+[5] https://lore.kernel.org/linux-mm/20220914190917.3517663-1-opendmb@gmail.com
+[6] https://lore.kernel.org/linux-mm/20220921223639.1152392-1-opendmb@gmail.com/
+
+Doug Berger (9):
+  lib/show_mem.c: display MovableOnly
+  mm/page_alloc: calculate node_spanned_pages from pfns
+  mm/page_alloc: prevent creation of empty zones
+  mm/page_alloc.c: allow oversized movablecore
+  mm/page_alloc: introduce init_reserved_pageblock()
+  memblock: introduce MEMBLOCK_MOVABLE flag
+  mm/dmb: Introduce Designated Movable Blocks
+  mm/page_alloc: make alloc_contig_pages DMB aware
+  mm/page_alloc: allow base for movablecore
+
+ .../admin-guide/kernel-parameters.txt         |  14 +-
+ include/linux/dmb.h                           |  29 +++
+ include/linux/gfp.h                           |   5 +-
+ include/linux/memblock.h                      |   8 +
+ lib/show_mem.c                                |   2 +-
+ mm/Kconfig                                    |  12 ++
+ mm/Makefile                                   |   1 +
+ mm/cma.c                                      |  15 +-
+ mm/dmb.c                                      |  91 +++++++++
+ mm/memblock.c                                 |  30 ++-
+ mm/page_alloc.c                               | 188 +++++++++++++-----
+ 11 files changed, 338 insertions(+), 57 deletions(-)
+ create mode 100644 include/linux/dmb.h
+ create mode 100644 mm/dmb.c
+
+-- 
+2.25.1
+
