@@ -2,66 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9071A6065DA
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 18:32:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D8236065DB
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 18:33:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229795AbiJTQck (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 12:32:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59174 "EHLO
+        id S229980AbiJTQdW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 12:33:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230017AbiJTQcd (ORCPT
+        with ESMTP id S229973AbiJTQdT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 12:32:33 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EACD31BE411
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 09:32:32 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id h10-20020a056e021d8a00b002f99580de6cso314125ila.5
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 09:32:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UKNN3axs1y811QkhsVcYtMf113asLOYvCITq8yCsIOI=;
-        b=NBDZnktAZTjRhCsNFoUKwNQ+J799se6RCGwXjEJC1KUfZpUyAgOZZlmrWpdbYnTGDp
-         6TB1sZU8CybMAhEeVz3JS7BSfEDnJbnvtOuQA6lfr1Ylut7Lj3qVK+OzPU2H2P0VtCmR
-         /g7mrdlo45BFiwXRGmJUdkjEoXnAhOZ7fLEEl5xiec5uM2km0F3y8kARiOxi1Al7iIls
-         I2DYS/YF5EM9ugkS6sn+5RjuS+p3wFn2Y0NNTWmhyEIqjhZSS3nibo26GDvFf7mD2r6w
-         mYpd7RxZVW96xOCRNHzhEa3fjS6LV8a2FrV2XRHhZ9LNTNia+ppn9IS6kGmbkeOza0q+
-         ODGA==
-X-Gm-Message-State: ACrzQf0/bKyqOTXcYHNfChN7tDpY+F7d5zXlJM1ZsvqSGRl4WwjVlfo4
-        lqQ19S+9S+P2i4yJoLzbjaCuP20OT0seHtb/GMb6KMMtRmJ5
-X-Google-Smtp-Source: AMsMyM4FPk0iRiokf85qWc1ZXECTEgMCQq+Q8VRal+EfXVpDu+LSoILYcUwg/tzPl125RD3+HZ/hveGyU+kyJ/AQ4rT8VBRuhcH/
+        Thu, 20 Oct 2022 12:33:19 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 746931AFA93
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 09:33:18 -0700 (PDT)
+Received: from notapiano (unknown [IPv6:2600:4041:5b1a:cd00:524d:e95d:1a9c:492a])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5C056660252A;
+        Thu, 20 Oct 2022 17:33:14 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1666283595;
+        bh=Q6u2GbH3PGV2qnNkRIJ/Fn4pm+KSrq6IxNUNSYEyuFY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HrvyrFKm+YQPD31b/I/zrMo5s4g3vbGwhHZXD9Ufc/Pg/y7i650rPbKDnJIG1VUp8
+         M2Tyxtgn+uKnhvC0Mu+s5VmAoBE27ikd2mXu3diJWF0yTaaAbSdlwZZ1qRdrZ197tR
+         NA7dlUGIyrWt9IWpPHc1F4nLKZ1WXBzFlC3jdJBoNPlg8ba7auPTaHQoWejaI2X0N1
+         UiHUX1QcJgYwceHrOw8ORtuKug1p/T92+mF0AlvbzQ8kP6RLAVT47bEeer5nqQeBfY
+         FSmlosRyu4VUA8L52cHjyMdpGk0PYNjHZ3fMSuaAPGTP0bND2dOA3OyRa0Z9aS3omy
+         0lWp6oiNXPRqg==
+Date:   Thu, 20 Oct 2022 12:33:10 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     xinlei.lee@mediatek.com
+Cc:     matthias.bgg@gmail.com, rex-bc.chen@mediatek.com,
+        angelogioacchino.delregno@collabora.com, jason-jh.lin@mediatek.com,
+        chunkuang.hu@kernel.org, p.zabel@pengutronix.de, airlied@linux.ie,
+        daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [PATCH v12,1/3] soc: mediatek: Add all settings to
+ mtk_mmsys_ddp_dpi_fmt_config func
+Message-ID: <20221020163310.tpkjvr7pe5vhwylh@notapiano>
+References: <1666147936-27368-1-git-send-email-xinlei.lee@mediatek.com>
+ <1666147936-27368-2-git-send-email-xinlei.lee@mediatek.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:2164:b0:2fa:e426:dc5e with SMTP id
- s4-20020a056e02216400b002fae426dc5emr10321935ilv.213.1666283551925; Thu, 20
- Oct 2022 09:32:31 -0700 (PDT)
-Date:   Thu, 20 Oct 2022 09:32:31 -0700
-In-Reply-To: <0000000000006c411605e2f127e5@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000352cf605eb79dfde@google.com>
-Subject: Re: kernel BUG in ext4_free_blocks (2)
-From:   syzbot <syzbot+15cd994e273307bf5cfa@syzkaller.appspotmail.com>
-To:     adilger.kernel@dilger.ca, gregkh@linuxfoundation.org,
-        lczerner@redhat.com, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, sashal@kernel.org,
-        stable@vger.kernel.org, syzkaller-android-bugs@googlegroups.com,
-        tadeusz.struk@linaro.org, tytso@mit.edu
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1666147936-27368-2-git-send-email-xinlei.lee@mediatek.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This bug is marked as fixed by commit:
-ext4: block range must be validated before use in ext4_mb_clear_bb()
-But I can't find it in any tested tree for more than 90 days.
-Is it a correct commit? Please update it by replying:
-#syz fix: exact-commit-title
-Until then the bug is still considered open and
-new crashes with the same signature are ignored.
+Hi,
+
+On Wed, Oct 19, 2022 at 10:52:14AM +0800, xinlei.lee@mediatek.com wrote:
+> From: Xinlei Lee <xinlei.lee@mediatek.com>
+> 
+> The difference between MT8186 and other ICs is that when modifying the
+> output format, we need to modify the mmsys_base+0x400 register to take
+> effect.
+> So when setting the dpi output format, we need to call mmsys_func to set
+
+mmsys_func isn't something that exists in the code. Instead mention the actual
+function name: mtk_mmsys_ddp_dpi_fmt_config.
+
+> it to MT8186 synchronously.
+
+
+Here, before saying that the commit adds all the settings for dpi, you could
+have mentioned that the previous commit lacked those, to make it clearer:
+
+Commit a071e52f75d1 ("soc: mediatek: Add mmsys func to adapt to dpi output for MT8186")
+lacked some of the possible output formats and also had a wrong bitmask.
+
+
+> Adding mmsys all the settings that need to be modified with dpi are for
+> mt8186.
+
+This sentence I would change to the following one:
+
+Add the missing output formats and fix the bitmask.
+
+
+Finally, you're also making the function more HW-agnostic (although in my
+opinion this could've been a future separate commit), so it's worth mentioning
+it here:
+
+While at it, also update mtk_mmsys_ddp_dpi_fmt_config() to use generic formats,
+so that it is slightly easier to extend for other platforms.
+
+> 
+> Fixes: a071e52f75d1 ("soc: mediatek: Add mmsys func to adapt to dpi
+> output for MT8186")
+
+The fixes tag should be kept in a single line, without wrapping.
+
+> 
+> Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Reviewed-by: CK Hu <ck.hu@mediatek.com>
+> ---
+>  drivers/soc/mediatek/mt8186-mmsys.h    |  8 +++++---
+>  drivers/soc/mediatek/mtk-mmsys.c       | 27 ++++++++++++++++++++------
+>  include/linux/soc/mediatek/mtk-mmsys.h |  7 +++++++
+>  3 files changed, 33 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/soc/mediatek/mt8186-mmsys.h b/drivers/soc/mediatek/mt8186-mmsys.h
+> index 09b1ccbc0093..035aec1eb616 100644
+> --- a/drivers/soc/mediatek/mt8186-mmsys.h
+> +++ b/drivers/soc/mediatek/mt8186-mmsys.h
+> @@ -5,9 +5,11 @@
+>  
+>  /* Values for DPI configuration in MMSYS address space */
+>  #define MT8186_MMSYS_DPI_OUTPUT_FORMAT		0x400
+> -#define DPI_FORMAT_MASK					0x1
+> -#define DPI_RGB888_DDR_CON				BIT(0)
+> -#define DPI_RGB565_SDR_CON				BIT(1)
+> +#define DPI_FORMAT_MASK					GENMASK(1, 0)
+> +#define DPI_RGB888_SDR_CON				0
+> +#define DPI_RGB888_DDR_CON				1
+> +#define DPI_RGB565_SDR_CON				2
+> +#define DPI_RGB565_DDR_CON				3
+
+These defines should all have a MT8186_ prefix. This will avoid confusions now
+that mtk_mmsys_ddp_dpi_fmt_config() is being made more platform-agnostic.
+
+>  
+>  #define MT8186_MMSYS_OVL_CON			0xF04
+>  #define MT8186_MMSYS_OVL0_CON_MASK			0x3
+> diff --git a/drivers/soc/mediatek/mtk-mmsys.c b/drivers/soc/mediatek/mtk-mmsys.c
+> index d2c7a87aab87..205f6de45851 100644
+> --- a/drivers/soc/mediatek/mtk-mmsys.c
+> +++ b/drivers/soc/mediatek/mtk-mmsys.c
+> @@ -238,12 +238,27 @@ static void mtk_mmsys_update_bits(struct mtk_mmsys *mmsys, u32 offset, u32 mask,
+>  
+>  void mtk_mmsys_ddp_dpi_fmt_config(struct device *dev, u32 val)
+>  {
+> -	if (val)
+> -		mtk_mmsys_update_bits(dev_get_drvdata(dev), MT8186_MMSYS_DPI_OUTPUT_FORMAT,
+> -				      DPI_RGB888_DDR_CON, DPI_FORMAT_MASK);
+> -	else
+> -		mtk_mmsys_update_bits(dev_get_drvdata(dev), MT8186_MMSYS_DPI_OUTPUT_FORMAT,
+> -				      DPI_RGB565_SDR_CON, DPI_FORMAT_MASK);
+> +	struct mtk_mmsys *mmsys = dev_get_drvdata(dev);
+> +
+> +	switch (val) {
+> +	case MTK_DPI_RGB888_SDR_CON:
+> +		mtk_mmsys_update_bits(mmsys, MT8186_MMSYS_DPI_OUTPUT_FORMAT,
+> +				      DPI_FORMAT_MASK, DPI_RGB888_SDR_CON);
+> +		break;
+> +	case MTK_DPI_RGB565_SDR_CON:
+> +		mtk_mmsys_update_bits(mmsys, MT8186_MMSYS_DPI_OUTPUT_FORMAT,
+> +				      DPI_FORMAT_MASK, DPI_RGB565_SDR_CON);
+> +		break;
+> +	case MTK_DPI_RGB565_DDR_CON:
+> +		mtk_mmsys_update_bits(mmsys, MT8186_MMSYS_DPI_OUTPUT_FORMAT,
+> +				      DPI_FORMAT_MASK, DPI_RGB565_DDR_CON);
+> +		break;
+> +	case MTK_DPI_RGB888_DDR_CON:
+> +	default:
+> +		mtk_mmsys_update_bits(mmsys, MT8186_MMSYS_DPI_OUTPUT_FORMAT,
+> +				      DPI_FORMAT_MASK, DPI_RGB888_DDR_CON);
+> +		break;
+> +	}
+
+To be honest I don't really see the point of making the function slightly more
+platform-agnostic like this. With a single platform making use of it it's just
+an unneeded extra abstraction, and it could easily be done when a second
+platform starts requiring this as well...
+
+In any case,
+
+Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+
+Thanks,
+Nícolas
+
+>  }
+[..]
