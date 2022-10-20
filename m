@@ -2,124 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECE9E60628A
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 16:11:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A944060628D
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 16:11:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229823AbiJTOLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 10:11:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60640 "EHLO
+        id S229783AbiJTOLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 10:11:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbiJTOLM (ORCPT
+        with ESMTP id S229970AbiJTOLl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 10:11:12 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D32B170B77;
-        Thu, 20 Oct 2022 07:11:11 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id r17so47672146eja.7;
-        Thu, 20 Oct 2022 07:11:10 -0700 (PDT)
+        Thu, 20 Oct 2022 10:11:41 -0400
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 612AD1C25D1
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 07:11:37 -0700 (PDT)
+Received: by mail-qv1-xf30.google.com with SMTP id h10so13569949qvq.7
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 07:11:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lmwon3whKue/CVr8WrW952+rwBDr0RPAb1kYusMk964=;
-        b=h80IgPyAct7MK5zRLczRsF/1fG3PBVUcnjpRONux/l7QMniZAgQZF7KLJ/b8Xb57nV
-         eNAHIneSfPVRYfQcjBU3UbTc8pcRnTz9EZFVSA2Wme8B885eczCZhwaStsn2GzrZ+2Yh
-         enoURpRTuzQsVnhi3X9wa5HCqzTl9P29ZaZd/6G3Bqi5N6nREPYEZxVqPLjXeaVZq0Ps
-         fqwmyJ29Jjtsc72JKjktuIL9cU5LUimNJgQZFh2PNUR3x6l8gj7g9UKGLd4ZQxSomeBp
-         sbCQCd8BswmIENyTJcTrmwGkm6PzlkR13ILiaHEOGbZjT+4lhpa2zKxGvQ6fu5DKQUUB
-         em4A==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Bdrdivp0kUlb9/g88sUFsnQ6F39lATr3/MrtKIKyGXw=;
+        b=nm8QuSFJX4RCs7KNIS/xmx1ZXGCrI6/hVWx4sLOBhOOBGk89rUETnVz4ZmwxtzPwCG
+         ecEowzSYPc8yH/hEDrxLA/twLep2a2uvOfm9HkYwNvhXeM+KO0X/kripnX7KUZGvmj2O
+         JxvJuL7LX66u4aLmOQI629VblBLlKWQSy6//n52qopf4iCpulHlBdwLSRnvf/rj2rVvp
+         cJ7r++rWorx9oB0trXZJmJsDCS5l/qheaSipSGT4PUtoic6Ij+8oEKmJvEndUytQAKIL
+         Ri1LKmRoSgdbr22/HPmrkExK2BdXXrTOZFvZPZQrQ3ZINL/BoaHQx6nNXp/llr+E+bAm
+         wC5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lmwon3whKue/CVr8WrW952+rwBDr0RPAb1kYusMk964=;
-        b=KB991ka1v00FADRhHBeNS+LRvDsWvYR2tjajeBCpXYz1A11W44eIFzsXFs5F4QGcVc
-         czXrk+kENlIO0WVTs8mmo1iOwrnePssU0MgaG3c70Ia+hBfWevESFuFpMfpZoKsRBOg7
-         4F2tyR2pnss0EzXiPQhFnvHYqC8X7yAkwPLVj5gD44BD2G/SoAsmt3JZj0TNRqw8MNbS
-         D7VFZGrPf+8D3y1CAJ6YvRdyaMXQ6SMEexbTgRsORyWBoNn7CZcVNnO/kHnFi337Bhxv
-         ZcaXAzV4x3SV9cY6Sjvze1KkNDrpMeqN90HOJky0MZOYCeEtOYmNMleNyXYfnhaecBrD
-         sr2g==
-X-Gm-Message-State: ACrzQf1+zXGVj1KwUlx4nyrNJrP6H0h3vhtPeoFaPo6qRUCopWXrnB1z
-        sIFE6botQASoVo3mlYA6m94=
-X-Google-Smtp-Source: AMsMyM57aHXW/RGGiBVsB52ziBQZJfs8YnrGc+aSU1SEGc3QC4xsLDheavS6ccxJp971i10kW+FYgA==
-X-Received: by 2002:a17:906:a4a:b0:782:686d:a1b6 with SMTP id x10-20020a1709060a4a00b00782686da1b6mr11023934ejf.232.1666275069320;
-        Thu, 20 Oct 2022 07:11:09 -0700 (PDT)
-Received: from skbuf ([188.27.184.197])
-        by smtp.gmail.com with ESMTPSA id l17-20020a056402345100b0045cba869e84sm12232510edc.26.2022.10.20.07.11.06
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Bdrdivp0kUlb9/g88sUFsnQ6F39lATr3/MrtKIKyGXw=;
+        b=E3u7BQONbR/BmeMbCi9FG7x/WxhyQSE4xRko+2C2wdh79EJgOWuCCOIRp7If8PFOIP
+         f8D+nl9QVZNaY0wogKKtIhbobDX4ISJpVwV1kc8I4iaqgu2zeBjDYWO9/1wcBViIRPiX
+         0smCK1WgDNZ0yuJ1x7lVmJWfR1Pobgt/8X0xd5fI/GPskj9umKNuxZ0KrxTVm5VrLUkD
+         2JUm2SILnK5SUhuRd7Mimx6QEoRnA+BNmDv9tnU49CEVC8o4g4y6duRDzZtzVPvSLi9C
+         x0j7+DChzP/sSgVHT7SOihBOT7tzqexLtdimwWv6sImHczbqJpfsEZexKznO+JiqQDre
+         Td9g==
+X-Gm-Message-State: ACrzQf21d+dHK8V22cKwGc7wuoiZuGXjga5icd6uIvmYG5iEJ4SAxyRG
+        SsJmW1n+vSAVJbTXXyosNznISA==
+X-Google-Smtp-Source: AMsMyM6BntJH6TKnEXiH0Sz9ePJukbyKwspoR2oupxlImKYI6I/8q4NZ2BX8ifbVq0TybA2MQt5abw==
+X-Received: by 2002:a05:6214:ca8:b0:4b1:87f8:c4ef with SMTP id s8-20020a0562140ca800b004b187f8c4efmr11181151qvs.50.1666275096213;
+        Thu, 20 Oct 2022 07:11:36 -0700 (PDT)
+Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
+        by smtp.gmail.com with ESMTPSA id v21-20020a05620a441500b006cbe3be300esm7585109qkp.12.2022.10.20.07.11.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 07:11:08 -0700 (PDT)
-Date:   Thu, 20 Oct 2022 17:11:04 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Ido Schimmel <idosch@nvidia.com>
-Cc:     "Hans J. Schultz" <netdev@kapio-technology.com>,
-        davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Florent Fourcot <florent.fourcot@wifirst.fr>,
-        Hans Schultz <schultz.hans@gmail.com>,
-        Joachim Wiberg <troglobit@gmail.com>,
-        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v8 net-next 05/12] net: dsa: propagate the locked flag
- down through the DSA layer
-Message-ID: <20221020141104.7h7kpau6cnpfqvh4@skbuf>
-References: <20221018165619.134535-1-netdev@kapio-technology.com>
- <20221018165619.134535-1-netdev@kapio-technology.com>
- <20221018165619.134535-6-netdev@kapio-technology.com>
- <20221018165619.134535-6-netdev@kapio-technology.com>
- <20221020130224.6ralzvteoxfdwseb@skbuf>
- <Y1FMAI9BzDRUPi5Y@shredder>
- <20221020133506.76wroc7owpwjzrkg@skbuf>
- <Y1FTzyPdTbAF+ODT@shredder>
+        Thu, 20 Oct 2022 07:11:33 -0700 (PDT)
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     linux-iio@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        William Breathitt Gray <william.gray@linaro.org>,
+        stable@vger.kernel.org
+Subject: [PATCH] counter: 104-quad-8: Fix race getting function mode and direction
+Date:   Thu, 20 Oct 2022 10:11:21 -0400
+Message-Id: <20221020141121.15434-1-william.gray@linaro.org>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y1FTzyPdTbAF+ODT@shredder>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 04:57:35PM +0300, Ido Schimmel wrote:
-> > Right now this packet isn't generated, right?
-> 
-> Right. We don't support BR_PORT_LOCKED so these checks are not currently
-> enabled in hardware. To be clear, only packets received via locked ports
-> are able to trigger the check.
+The quad8_action_read() function checks the Count function mode and
+Count direction without first acquiring a lock. This is a race condition
+because the function mode could change by the time the direction is
+checked.
 
-You mean BR_PORT_MAB, not BR_PORT_LOCKED, right? AFAIU, "locked" means
-drop unknown MAC SA, "mab" means "install BR_FDB_LOCKED entry on port"
-(and also maybe still drop, if "locked" is also set on port).
+Because the quad8_function_read() already acquires a lock internally,
+the quad8_function_read() is refactored to spin out the no-lock code to
+a new quad8_function_get() function.
 
-Sad there isn't any good documentation about these flags in the patches
-that Hans is proposing.
+To resolve the race condition in quad8_action_read(), a lock is acquired
+before calling quad8_function_get() and quad8_direction_read() in order
+to get both function mode and direction atomically.
+
+Fixes: f1d8a071d45b ("counter: 104-quad-8: Add Generic Counter interface support")
+Cc: stable@vger.kernel.org
+Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
+---
+ drivers/counter/104-quad-8.c | 64 +++++++++++++++++++++++-------------
+ 1 file changed, 42 insertions(+), 22 deletions(-)
+
+diff --git a/drivers/counter/104-quad-8.c b/drivers/counter/104-quad-8.c
+index 77a863b7eefe..deed4afadb29 100644
+--- a/drivers/counter/104-quad-8.c
++++ b/drivers/counter/104-quad-8.c
+@@ -232,34 +232,45 @@ static const enum counter_function quad8_count_functions_list[] = {
+ 	COUNTER_FUNCTION_QUADRATURE_X4,
+ };
+ 
++static int quad8_function_get(const struct quad8 *const priv, const size_t id,
++			      enum counter_function *const function)
++{
++	if (!priv->quadrature_mode[id]) {
++		*function = COUNTER_FUNCTION_PULSE_DIRECTION;
++		return 0;
++	}
++
++	switch (priv->quadrature_scale[id]) {
++	case 0:
++		*function = COUNTER_FUNCTION_QUADRATURE_X1_A;
++		return 0;
++	case 1:
++		*function = COUNTER_FUNCTION_QUADRATURE_X2_A;
++		return 0;
++	case 2:
++		*function = COUNTER_FUNCTION_QUADRATURE_X4;
++		return 0;
++	default:
++		/* should never reach this path */
++		return -EINVAL;
++	}
++}
++
+ static int quad8_function_read(struct counter_device *counter,
+ 			       struct counter_count *count,
+ 			       enum counter_function *function)
+ {
+ 	struct quad8 *const priv = counter_priv(counter);
+-	const int id = count->id;
+ 	unsigned long irqflags;
++	int retval;
+ 
+ 	spin_lock_irqsave(&priv->lock, irqflags);
+ 
+-	if (priv->quadrature_mode[id])
+-		switch (priv->quadrature_scale[id]) {
+-		case 0:
+-			*function = COUNTER_FUNCTION_QUADRATURE_X1_A;
+-			break;
+-		case 1:
+-			*function = COUNTER_FUNCTION_QUADRATURE_X2_A;
+-			break;
+-		case 2:
+-			*function = COUNTER_FUNCTION_QUADRATURE_X4;
+-			break;
+-		}
+-	else
+-		*function = COUNTER_FUNCTION_PULSE_DIRECTION;
++	retval = quad8_function_get(priv, count->id, function);
+ 
+ 	spin_unlock_irqrestore(&priv->lock, irqflags);
+ 
+-	return 0;
++	return retval;
+ }
+ 
+ static int quad8_function_write(struct counter_device *counter,
+@@ -359,6 +370,7 @@ static int quad8_action_read(struct counter_device *counter,
+ 			     enum counter_synapse_action *action)
+ {
+ 	struct quad8 *const priv = counter_priv(counter);
++	unsigned long irqflags;
+ 	int err;
+ 	enum counter_function function;
+ 	const size_t signal_a_id = count->synapses[0].signal->id;
+@@ -374,9 +386,21 @@ static int quad8_action_read(struct counter_device *counter,
+ 		return 0;
+ 	}
+ 
+-	err = quad8_function_read(counter, count, &function);
+-	if (err)
++	spin_lock_irqsave(&priv->lock, irqflags);
++
++	/* Get Count function and direction atomically */
++	err = quad8_function_get(priv, count->id, &function);
++	if (err) {
++		spin_unlock_irqrestore(&priv->lock, irqflags);
++		return err;
++	}
++	err = quad8_direction_read(counter, count, &direction);
++	if (err) {
++		spin_unlock_irqrestore(&priv->lock, irqflags);
+ 		return err;
++	}
++
++	spin_unlock_irqrestore(&priv->lock, irqflags);
+ 
+ 	/* Default action mode */
+ 	*action = COUNTER_SYNAPSE_ACTION_NONE;
+@@ -389,10 +413,6 @@ static int quad8_action_read(struct counter_device *counter,
+ 		return 0;
+ 	case COUNTER_FUNCTION_QUADRATURE_X1_A:
+ 		if (synapse->signal->id == signal_a_id) {
+-			err = quad8_direction_read(counter, count, &direction);
+-			if (err)
+-				return err;
+-
+ 			if (direction == COUNTER_COUNT_DIRECTION_FORWARD)
+ 				*action = COUNTER_SYNAPSE_ACTION_RISING_EDGE;
+ 			else
+-- 
+2.37.3
+
