@@ -2,168 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75FFD60576C
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 08:37:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E7B160576E
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 08:37:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbiJTGgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 02:36:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48296 "EHLO
+        id S229939AbiJTGho (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 02:37:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbiJTGgh (ORCPT
+        with ESMTP id S229751AbiJTGhl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 02:36:37 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6AFA9173589;
-        Wed, 19 Oct 2022 23:36:35 -0700 (PDT)
-Received: from loongson.cn (unknown [10.180.13.64])
-        by gateway (Coremail) with SMTP id _____8Dx_Nhy7FBjtvUAAA--.4790S3;
-        Thu, 20 Oct 2022 14:36:34 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Axf+Bq7FBjccEBAA--.7362S4;
-        Thu, 20 Oct 2022 14:36:33 +0800 (CST)
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        Yinbo Zhu <zhuyinbo@loongson.cn>
-Subject: [PATCH v3 3/3] dt-bindings: clock: add loongson2 clock
-Date:   Thu, 20 Oct 2022 14:36:24 +0800
-Message-Id: <20221020063624.17548-3-zhuyinbo@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20221020063624.17548-1-zhuyinbo@loongson.cn>
-References: <20221020063624.17548-1-zhuyinbo@loongson.cn>
+        Thu, 20 Oct 2022 02:37:41 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DDEF18C414
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 23:37:40 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id s2-20020a056e02216200b002f9de38e484so19293067ilv.8
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 23:37:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YK2IuU4LkO8PftlPkuCYZ3pMTMPqC2CnwJ0QSD9l1HM=;
+        b=RYZFVAz5kuUpBXoX1gIsRHer/RbKfHPjj163LauHr+ybpDd7CZuDp5uDGXR47DHaD0
+         qA9c0JK2NfvSLP3NQRBh+bsxsHlpMRSfCX7IMDtrqyISv/O1BSD35wbxfe3kK5YUCkdE
+         S5w0TCLWEvppBS+KAKzKaWgpH3jHTR3mCsClJkaLGWeGfAHGS1q8QD1IaQJ2gRb0blKD
+         jy4thwiIzv/dBHX04jnTFhENuybQKkI3cVeQuTDbMuGYt+qyo5jz+90UQRvf/0tJYmIV
+         waP+7r+Dwu1DXRJ3SyOQAwIToE76xgFrPYBbB7ebQxLc5yj1Im5fIVAbzMuyPuvI9Ml0
+         5Rtg==
+X-Gm-Message-State: ACrzQf3L+pFPohDCZxcNs4ItA3u26jjBf/qkWvYQ3O6WYxeXQ3nOX/AK
+        NxBmJb+Lk31/RLtCqPD+T2qHOmxPqnyUQjihzASKX4aKp36h
+X-Google-Smtp-Source: AMsMyM5KIowt8hCyeE2JJ+ap+TRmZ8T7wtsmhiRXfBL8RuBj98SGZ3TH1u/QNtesbZwLX4BD86velAHGio4agsgSkOTPX6mZJtUH
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Axf+Bq7FBjccEBAA--.7362S4
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxXF47tF4kJw4fKFyfWF1kuFg_yoW5GFyrpF
-        sxC34rGry0vF17Zws5tFyxA3Z5Z3Z7CFnrZFsrAa42kF98W3W5XF17K34DZa9rAr17Z39F
-        vFWfWr4UC3WxCr7anT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bfAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr
-        1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1ln4kS14v26r126r1DM2AIxVAIcxkE
-        cVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F4
-        0Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC
-        6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2
-        Ij64vIr41l42xK82IY6x8ErcxFaVAv8VWrMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI
-        1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_Jr
-        Wlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26ryj
-        6F1UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr
-        0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUv
-        cSsGvfC2KfnxnUUI43ZEXa7IU8mQ6JUUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a5d:9c11:0:b0:6bc:674b:1a2d with SMTP id
+ 17-20020a5d9c11000000b006bc674b1a2dmr8685303ioe.164.1666247859834; Wed, 19
+ Oct 2022 23:37:39 -0700 (PDT)
+Date:   Wed, 19 Oct 2022 23:37:39 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000cb197c05eb718fe5@google.com>
+Subject: [syzbot] BUG: unable to handle kernel paging request in dquot_add_space
+From:   syzbot <syzbot+7f3f0e8b232d8c69dac1@syzkaller.appspotmail.com>
+To:     jack@suse.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the loongson2 clock binding with DT schema format using
-json-schema.
+Hello,
 
-Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+syzbot found the following issue on:
+
+HEAD commit:    bbed346d5a96 Merge branch 'for-next/core' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=12890b76880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3a4a45d2d827c1e
+dashboard link: https://syzkaller.appspot.com/bug?extid=7f3f0e8b232d8c69dac1
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/e8e91bc79312/disk-bbed346d.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/c1cb3fb3b77e/vmlinux-bbed346d.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+7f3f0e8b232d8c69dac1@syzkaller.appspotmail.com
+
+Unable to handle kernel paging request at virtual address 0000000100000117
+Mem abort info:
+  ESR = 0x0000000096000005
+  EC = 0x25: DABT (current EL), IL = 32 bits
+  SET = 0, FnV = 0
+  EA = 0, S1PTW = 0
+  FSC = 0x05: level 1 translation fault
+Data abort info:
+  ISV = 0, ISS = 0x00000005
+  CM = 0, WnR = 0
+user pgtable: 4k pages, 48-bit VAs, pgdp=000000018f1e0000
+[0000000100000117] pgd=08000001607e1003, p4d=08000001607e1003, pud=0000000000000000
+Internal error: Oops: 0000000096000005 [#1] PREEMPT SMP
+Modules linked in:
+CPU: 0 PID: 22205 Comm: syz-executor.2 Not tainted 6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
+pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : dquot_add_space+0x3c/0x474 fs/quota/dquot.c:1329
+lr : dquot_add_space+0x3c/0x474 fs/quota/dquot.c:1327
+sp : ffff8000208cb590
+x29: ffff8000208cb5a0 x28: ffff000119271800 x27: 0000000000000001
+x26: ffff8000208cb610 x25: 00000000ffffffff x24: ffff00010e158840
+x23: 0000000000000001 x22: 0000000000010000 x21: 00000000ffffffff
+x20: 0000000000000000 x19: ffff80000d47eb10 x18: 00000000000000c0
+x17: ffff80000dd0b198 x16: ffff80000db49158 x15: ffff0000c8173500
+x14: ffff80000dd0b198 x13: ffff80000db49158 x12: 0000000000040000
+x11: 0000000000003c98 x10: ffff800018493000 x9 : ffff8000086badbc
+x8 : 0000000000003c99 x7 : ffff8000086ba810 x6 : 0000000000000000
+x5 : 0000000000000020 x4 : ffff8000208cb610 x3 : 0000000000000001
+x2 : 0000000000000000 x1 : 0000000000010000 x0 : 00000000ffffffff
+Call trace:
+ dquot_add_space+0x3c/0x474 fs/quota/dquot.c:1327
+ __dquot_alloc_space+0x1c8/0x644
+ dquot_alloc_space_nodirty include/linux/quotaops.h:300 [inline]
+ dquot_alloc_space include/linux/quotaops.h:313 [inline]
+ dquot_alloc_block include/linux/quotaops.h:337 [inline]
+ ext4_mb_new_blocks+0x5fc/0x9e4 fs/ext4/mballoc.c:5574
+ ext4_new_meta_blocks+0x84/0x140 fs/ext4/balloc.c:700
+ ext4_xattr_block_set+0xce0/0x142c fs/ext4/xattr.c:2078
+ ext4_xattr_set_handle+0x724/0x994 fs/ext4/xattr.c:2394
+ ext4_xattr_set+0x100/0x1d0 fs/ext4/xattr.c:2495
+ ext4_xattr_security_set+0x4c/0x64 fs/ext4/xattr_security.c:31
+ __vfs_setxattr+0x250/0x260 fs/xattr.c:182
+ __vfs_setxattr_noperm+0xcc/0x320 fs/xattr.c:216
+ __vfs_setxattr_locked+0x16c/0x194 fs/xattr.c:277
+ vfs_setxattr+0x174/0x280 fs/xattr.c:313
+ do_setxattr fs/xattr.c:600 [inline]
+ setxattr fs/xattr.c:623 [inline]
+ path_setxattr+0x354/0x414 fs/xattr.c:642
+ __do_sys_setxattr fs/xattr.c:658 [inline]
+ __se_sys_setxattr fs/xattr.c:654 [inline]
+ __arm64_sys_setxattr+0x2c/0x40 fs/xattr.c:654
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
+ el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
+Code: aa0203f4 aa0103f6 aa0003f5 97ef9397 (f9408ebc) 
+---[ end trace 0000000000000000 ]---
+----------------
+Code disassembly (best guess):
+   0:	aa0203f4 	mov	x20, x2
+   4:	aa0103f6 	mov	x22, x1
+   8:	aa0003f5 	mov	x21, x0
+   c:	97ef9397 	bl	0xffffffffffbe4e68
+* 10:	f9408ebc 	ldr	x28, [x21, #280] <-- trapping instruction
+
+
 ---
-Change in v3:
-		1. Drop redundant (last) binding from the title.
-		2. Drop "- |" between ref_100m node and clk node.
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
- .../bindings/clock/loongson,ls2k-clk.yaml     | 63 +++++++++++++++++++
- MAINTAINERS                                   |  1 +
- 2 files changed, 64 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml
-
-diff --git a/Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml b/Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml
-new file mode 100644
-index 000000000000..6cc6e0755735
---- /dev/null
-+++ b/Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml
-@@ -0,0 +1,63 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/clock/loongson,ls2k-clk.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Loongson2 SoC Clock Control Module
-+
-+maintainers:
-+  - Yinbo Zhu <zhuyinbo@loongson.cn>
-+
-+description: |
-+  Loongson2 SoC clock control module is an integrated clock controller, which
-+  generates and supplies to all modules.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - loongson,ls2k-clk
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    items:
-+      - description: 100m ref
-+
-+  clock-names:
-+    items:
-+      - const: ref_100m
-+
-+  '#clock-cells':
-+    const: 1
-+    description:
-+      The clock consumer should specify the desired clock by having the clock
-+      ID in its "clocks" phandle cell. See include/dt-bindings/clock/loongson,ls2k-clk.h
-+      for the full list of loongson2 SoC clock IDs.
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - '#clock-cells'
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    ref_100m: clock-ref-100m {
-+        compatible = "fixed-clock";
-+        #clock-cells = <0>;
-+        clock-frequency = <100000000>;
-+        clock-output-names = "ref_100m";
-+    };
-+
-+    clk: clock-controller@1fe00480 {
-+        compatible = "loongson,ls2k-clk";
-+        reg = <0x1fe00480 0x58>;
-+        #clock-cells = <1>;
-+        clocks = <&ref_100m>;
-+        clock-names = "ref_100m";
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f01d60cd5c3b..f61a431ad8ca 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11911,6 +11911,7 @@ LOONGSON2 SOC SERIES CLOCK DRIVER
- M:	Yinbo Zhu <zhuyinbo@loongson.cn>
- L:	linux-clk@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml
- F:	drivers/clk/clk-loongson2.c
- F:	include/dt-bindings/clock/loongson,ls2k-clk.h
- 
--- 
-2.31.1
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
