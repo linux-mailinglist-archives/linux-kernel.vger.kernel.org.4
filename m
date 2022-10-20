@@ -2,83 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDC68606B77
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 00:45:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF979606B82
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 00:46:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230098AbiJTWpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 18:45:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37518 "EHLO
+        id S230178AbiJTWqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 18:46:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230084AbiJTWov (ORCPT
+        with ESMTP id S229894AbiJTWqb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 18:44:51 -0400
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B9FE50B98
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 15:44:49 -0700 (PDT)
-Received: by mail-qk1-x730.google.com with SMTP id o22so940321qkl.8
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 15:44:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FPT7tBybriHsBPmnhq33KI/WJRugk0kzMNukS0fuXHg=;
-        b=uWOLgWr2PeyCt4D7XtXlrGfikGUHkSh3nw2aJht3Fm8d+PilSBG3qKuSXLSU5rOA9/
-         FxDjZk9hSapHSiE1Wd40jsgqd+Ynp5uvDaTbcgn8E5xQ4xBGLyacL+So1pyYrvZal4gn
-         ijYOVaz+FefBJoHzVwlkHmnxQhSRyywRsyeeRVnfkSfEE/Kvn5C2GUHNhMKuex4xxPiY
-         qyMT+m/A/aURsO1P70gSk+pDraRffQ051g2vhB/pNfJOBtazwOJQIoh4Qz3X78jVmK59
-         SRdLfq9I8mDSIAazXCo/Gd0t/PU1Yy5w5nmjnX3DCOHFqBQHDFvWnHVBH3lhxYrZTT4Z
-         1pQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FPT7tBybriHsBPmnhq33KI/WJRugk0kzMNukS0fuXHg=;
-        b=0XTDk6YUY8JatyJheuxwCJEbgFfQMDNj5GByQmFcHGxfsrMMRW7mMIAsvkyqIeUjz/
-         AN9W+rvsN52lctkU9JvZgvdQSmTqJDxLSMeb2jpqowc4Gm0V89GEpxNjcfraIRwnCXPr
-         hj4RKn0urKmNrOWHllZUjVZsar5XpVGVrNdBU6weWIgE0XVXXFh7GoJrT/dDHhh3lojp
-         Yyc5zuETLyDgSLqo3DFyJDPzpbN6IatmRFHTkx1Fnksr6TyRezI5EdfwBq7sfOD7pWSe
-         K6SkAIN/hPeLzwXTxOV5Yn1JF6ickfQ95jrkbUQMK5IzsF341JT3k4e7XIhuGy12MHUJ
-         LGIQ==
-X-Gm-Message-State: ACrzQf1XXtWi+b7h0YcJTVy1Z6o4rjYDjkmHvgh6vQ2GzJTfj5FMCjrT
-        3qaWTpv/4v4m6+VsQLMNEM9vkA==
-X-Google-Smtp-Source: AMsMyM7amq+IROYBz05TXTIlsKX/VhkjUV8sy7t8Ci0hzqT/ojdNJYJCpiCQ2T4CYVQDZzFb7ldt3g==
-X-Received: by 2002:a05:620a:440d:b0:6ee:b5eb:a0c6 with SMTP id v13-20020a05620a440d00b006eeb5eba0c6mr11478881qkp.356.1666305888366;
-        Thu, 20 Oct 2022 15:44:48 -0700 (PDT)
-Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
-        by smtp.gmail.com with ESMTPSA id f24-20020ac84658000000b0039cbb50951asm6775416qto.24.2022.10.20.15.44.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Oct 2022 15:44:47 -0700 (PDT)
-Message-ID: <f86806a2-7381-40fb-317c-7167933f24ed@linaro.org>
-Date:   Thu, 20 Oct 2022 18:44:45 -0400
+        Thu, 20 Oct 2022 18:46:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E52D9164BD6;
+        Thu, 20 Oct 2022 15:46:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2162EB821C7;
+        Thu, 20 Oct 2022 22:46:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD6EFC433D6;
+        Thu, 20 Oct 2022 22:46:25 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="AILrQt0B"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1666305983;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bW21QW3lsybJpbLWWG+fLJUAamVkFsJreOYqtoP32IU=;
+        b=AILrQt0BuZWta+vQbL0pfBAe4R0Mx11zmVNFwJidURlA7Qjy7lTlGKnhTu0F+c1LZm8IjW
+        uk5f707N0Suk2CBYUfqr/k0pMr9QMaP9ifp2d1BEuatOgZu2UbkMopY2wqxzGkbqgvG6tD
+        sojNkk+Iz84EGWdD60DtXMeEcBKPevE=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id ca4689d4 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Thu, 20 Oct 2022 22:46:21 +0000 (UTC)
+Date:   Thu, 20 Oct 2022 16:46:01 -0600
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        mm-commits@vger.kernel.org, masahiroy@kernel.org,
+        gregkh@linuxfoundation.org, Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: [PATCH -mm] -funsigned-char, x86: make struct
+ p4_event_bind::cntr signed array
+Message-ID: <Y1HPqdBbv83VqCvp@zx2c4.com>
+References: <20221020000356.177CDC433C1@smtp.kernel.org>
+ <Y1EZuQcO8UoN91cX@localhost.localdomain>
+ <CAHmME9prEhkHqQmtDGCSFunNnxiKdE_8FHKiksyqebUN63U81Q@mail.gmail.com>
+ <CAHk-=whFow9Wd6C8htoRUt5wXbwf1i_qbuArBbhXOPqYsTFvtw@mail.gmail.com>
+ <CAHmME9qBZqTd0D_gr8nE+DUzCrC0fxZNZK=7u+21jbgtFgAJBg@mail.gmail.com>
+ <CAHk-=wjZDC9o8iwF+bU91Hx40HjGOpMui+VoFCDJkaGCu=rG4A@mail.gmail.com>
+ <202210201151.ECC19BC97A@keescook>
+ <CAHk-=wgdXRZy0-3v+vLZdDfRFKFXZLehgmR2QUKSemBA99sfmg@mail.gmail.com>
+ <CAHk-=wjvp=ys2adnWwc1PNt3OrZ_0EkFaUcvjiVuOoVNjX_+AA@mail.gmail.com>
+ <Y1G+7e7l5dpHhCyP@smile.fi.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v3 2/4] arm64: dts: qcom: sc7180: revert "arm64: dts:
- qcom: sc7180: Avoid glitching SPI CS at bootup on trogdor"
-Content-Language: en-US
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221019001351.1630089-1-krzysztof.kozlowski@linaro.org>
- <20221019001351.1630089-3-krzysztof.kozlowski@linaro.org>
- <CAD=FV=UriVs4-=KCg5TkzCuQaS=LEZS=CDOH0=69GsYjhPcu_g@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAD=FV=UriVs4-=KCg5TkzCuQaS=LEZS=CDOH0=69GsYjhPcu_g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y1G+7e7l5dpHhCyP@smile.fi.intel.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,54 +71,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/10/2022 11:48, Doug Anderson wrote:
-> Hi,
+On Fri, Oct 21, 2022 at 12:34:37AM +0300, Andy Shevchenko wrote:
+> On Thu, Oct 20, 2022 at 01:17:33PM -0700, Linus Torvalds wrote:
+> > On Thu, Oct 20, 2022 at 12:39 PM Linus Torvalds
+> > <torvalds@linux-foundation.org> wrote:
 > 
-> On Tue, Oct 18, 2022 at 5:14 PM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> This reverts commit e440e30e26dd6b0424002ad0ddcbbcea783efd85 because it
->> is not a reliable way of fixing SPI CS glitch and it depends on specific
->> Linux kernel pin controller driver behavior.
->>
->> This behavior of kernel driver was changed in commit b991f8c3622c
->> ("pinctrl: core: Handling pinmux and pinconf separately") thus
->> effectively the DTS fix stopped being effective.
->>
->> Proper solution for the glitching SPI chip select must be implemented in
->> the drivers, not via ordering of entries in DTS.
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>
->> ---
->>
->> Changes since v2:
->> 1. New patch
->>
->> Not tested on hardware.
->>
->> Cc: Doug Anderson <dianders@chromium.org>
->> ---
->>  arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi | 27 +++-----------------
->>  1 file changed, 3 insertions(+), 24 deletions(-)
+> ...
 > 
-> It would have been nice for the commit message to mention the fix in
-> the driver, which has already landed as commit d21f4b7ffc22 ("pinctrl:
-> qcom: Avoid glitching lines when we first mux to output").
+> > And in some cases the differences are enormous:
+> > 
+> >  - drivers/net/wireless/ralink/rt2x00/rt2800lib.c generates a 220kB diff
+> > 
+> > which seems to be due to entirely different inlining decisions or
+> > something, and the differences are so enormous that I didn't even
+> > start looking at the cause.
+> 
+> This one is what we start the epopee from. I think Jason handled it in his last
+> patch against this certain driver.
 
-I'll add it.
+Right, and Kale is taking it for 6.1, because it fixes existing breakage
+on ARM. But it's not broken on x86 with -funsigned-char.
 
-> 
-> In any case:
-> 
-> Reviewed-by: Douglas Anderson <dianders@chromium.org>
-> 
-> I've confirmed that this patch is fine after taking the pinctrl fix.
-> 
-> Tested-by: Douglas Anderson <dianders@chromium.org>
-
-Awesome!
-
-Best regards,
-Krzysztof
-
+Jason
