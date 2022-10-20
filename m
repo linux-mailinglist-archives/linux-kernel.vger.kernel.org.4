@@ -2,125 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 688C46067E8
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 20:08:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBCAF6067F5
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 20:10:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230332AbiJTSIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 14:08:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55396 "EHLO
+        id S230163AbiJTSKy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 14:10:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230256AbiJTSH1 (ORCPT
+        with ESMTP id S230090AbiJTSKt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 14:07:27 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B631B15A977;
-        Thu, 20 Oct 2022 11:07:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=pWUVsfzWDBIXyjYnhK+XoMfAyHRpezXQSqYzXKvXWzI=; b=K/TLqvaF1o6pPDVyQVhY/896cK
-        9e5z/VznvZSDHDEJgMkAoHAilNDANxyp7gGdBt9s67nQ/koZPxYcU6STAL3axsoNmqkj3+lFEtWnK
-        NWtONsKs7kxiJlG/rIg6Ooask0AkULPvwyK8nuVmvC1mQFmj9HQ/CsVgVOeq/QeahpvQXYeNSGwmC
-        Ld2kAG3nRIEMSS63yw7Zw3XedgtNQKRm/9EoMIvC8n4O9F+lTl1gVSVMAYas4VRAYdHAbG+tveG1a
-        jyYOA7uj8U5YLvQr3mjkyVGyk47t6PDknJGAs1nqLPNDd/4STXGSvEwPuqb3TYxVacpiySZKwh9Cm
-        f0w8heEA==;
-Received: from [2601:1c2:d80:3110::a2e7]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1olZwn-0012aL-LV; Thu, 20 Oct 2022 18:07:13 +0000
-Message-ID: <69d9ee66-c312-0387-1307-62fda7bd24ae@infradead.org>
-Date:   Thu, 20 Oct 2022 11:07:12 -0700
+        Thu, 20 Oct 2022 14:10:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB71A16F74E;
+        Thu, 20 Oct 2022 11:10:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 90483B8274A;
+        Thu, 20 Oct 2022 18:09:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CA72C433D7;
+        Thu, 20 Oct 2022 18:09:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666289379;
+        bh=PBunTa7rce9oPUHewe2pTnhit7GvQJqymuWwU3QKUXM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=T6KODpSujSMwgSBYn8ps6OsFiGEP+mFua+xq2LF7eTAmVCFXap2zrS/xQskdZRnE3
+         sX6muDQriwpDR8ycL/2J8aoBIPcJnM5F8FT3aZD2wmh0qRgH8TE2NhYpZ8XQowTc4R
+         AFilFdujps4dudONDLufhK52DdFGHp5Kse+jkrtu1+fhYLGsoLLo9o3B3NUfXN39cj
+         bp65K+KJzSANN87wy8wz/IDYYuG2lN3Isu/JdpCHHbkAaYIngamdyqJiUsz+kRsyWi
+         0spb8hQKhsmznSY1j0NmKbNbcm9+G2EkHxv5sW5r8cvyfB8i6yuaQq0ADtV1rx1hKj
+         ePH7bGJEhpV6Q==
+Received: by mail-ej1-f48.google.com with SMTP id a26so1465070ejc.4;
+        Thu, 20 Oct 2022 11:09:39 -0700 (PDT)
+X-Gm-Message-State: ACrzQf3g+BfHcZ9ADJSVA4HOcQcdAMBNAar4ttqM6haFPZQnlCgjPmxh
+        tvpX5g6Txwm+6FnscNco6iImT/ms//bGSK9yaiA=
+X-Google-Smtp-Source: AMsMyM6dBHethUPJpGWt/pGXdbIIfVcM3sIT6J9dz+n7IuFyddVg1deCn3XF+9udYMoHeEpl4tupoWZ4gVhAZEyiJik=
+X-Received: by 2002:a17:906:eec1:b0:782:6384:76be with SMTP id
+ wu1-20020a170906eec100b00782638476bemr12134290ejb.756.1666289377447; Thu, 20
+ Oct 2022 11:09:37 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH] tracing/hist: add in missing * in comment blocks
-Content-Language: en-US
-To:     "Colin King (gmail)" <colin.i.king@gmail.com>,
-        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221020133019.1547587-1-colin.i.king@gmail.com>
- <20221020234423.42816821e2d09aba61db5e69@kernel.org>
- <6005e7c0-5901-ef5a-6af7-2801975e39bc@gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <6005e7c0-5901-ef5a-6af7-2801975e39bc@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20221020155104.9485-1-ubizjak@gmail.com>
+In-Reply-To: <20221020155104.9485-1-ubizjak@gmail.com>
+From:   Song Liu <song@kernel.org>
+Date:   Thu, 20 Oct 2022 11:09:25 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW4z+ttCn6zUWwz+QB_+Ddfo0YDDqLxWeTHLLuXHSDoeEQ@mail.gmail.com>
+Message-ID: <CAPhsuW4z+ttCn6zUWwz+QB_+Ddfo0YDDqLxWeTHLLuXHSDoeEQ@mail.gmail.com>
+Subject: Re: [PATCH v2] raid5-cache: use try_cmpxchg in r5l_wake_reclaim
+To:     Uros Bizjak <ubizjak@gmail.com>
+Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Oct 20, 2022 at 8:51 AM Uros Bizjak <ubizjak@gmail.com> wrote:
+>
+> Use try_cmpxchg instead of cmpxchg (*ptr, old, new) == old in
+> r5l_wake_reclaim. 86 CMPXCHG instruction returns success in ZF flag, so
+> this change saves a compare after cmpxchg (and related move instruction in
+> front of cmpxchg).
+>
+> Also, try_cmpxchg implicitly assigns old *ptr value to "old" when cmpxchg
+> fails. There is no need to re-read the value in the loop.
+>
+> Note that the value from *ptr should be read using READ_ONCE to prevent
+> the compiler from merging, refetching or reordering the read.
+>
+> No functional change intended.
+>
+> Cc: Song Liu <song@kernel.org>
+> Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
 
+Applied to md-next. Thanks!
 
-On 10/20/22 08:10, Colin King (gmail) wrote:
-> On 20/10/2022 15:44, Masami Hiramatsu (Google) wrote:
->> Hi,
->>
->> On Thu, 20 Oct 2022 14:30:19 +0100
->> Colin Ian King <colin.i.king@gmail.com> wrote:
->>
->>> There are a couple of missing * in comment blocks. Fix these.
->>> Cleans up two clang warnings:
->>>
->>> kernel/trace/trace_events_hist.c:986: warning: bad line:
->>> kernel/trace/trace_events_hist.c:3229: warning: bad line:
->>>
->>> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
->>
->> Thanks for the patch.
->>
->> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
->>
->> BTW, what version of clang are you using?
->> I couldn't see this warning with clang 15.0.0. Maybe I need a kconfig option?
-> 
-> clang-13 and kernel W=1 for this specific case, e.g. kernel built using make  CC=clang-13 HOSTCC=clang-13 W=1
-> 
+Song
 
-but those are kernel-doc warnings, not clang (AFAIK).
-
-> 
->>
->> Thank you,
->>
->>> ---
->>>   kernel/trace/trace_events_hist.c | 4 ++--
->>>   1 file changed, 2 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/kernel/trace/trace_events_hist.c b/kernel/trace/trace_events_hist.c
->>> index 48465f7e97b4..087c19548049 100644
->>> --- a/kernel/trace/trace_events_hist.c
->>> +++ b/kernel/trace/trace_events_hist.c
->>> @@ -983,7 +983,7 @@ static struct hist_field *find_any_var_ref(struct hist_trigger_data *hist_data,
->>>    * A trigger can define one or more variables.  If any one of them is
->>>    * currently referenced by any other trigger, this function will
->>>    * determine that.
->>> -
->>> + *
->>>    * Typically used to determine whether or not a trigger can be removed
->>>    * - if there are any references to a trigger's variables, it cannot.
->>>    *
->>> @@ -3226,7 +3226,7 @@ static struct field_var *create_field_var(struct hist_trigger_data *hist_data,
->>>    * events.  However, for convenience, users are allowed to directly
->>>    * specify an event field in an action, which will be automatically
->>>    * converted into a variable on their behalf.
->>> -
->>> + *
->>>    * This function creates a field variable with the name var_name on
->>>    * the hist trigger currently being defined on the target event.  If
->>>    * subsys_name and event_name are specified, this function simply
->>> -- 
->>> 2.37.3
->>>
->>
->>
-> 
-
--- 
-~Randy
+> ---
+> v2: Fix garbled subject line
+> ---
+>  drivers/md/raid5-cache.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/md/raid5-cache.c b/drivers/md/raid5-cache.c
+> index 832d8566e165..a63023aae21e 100644
+> --- a/drivers/md/raid5-cache.c
+> +++ b/drivers/md/raid5-cache.c
+> @@ -1565,11 +1565,12 @@ void r5l_wake_reclaim(struct r5l_log *log, sector_t space)
+>
+>         if (!log)
+>                 return;
+> +
+> +       target = READ_ONCE(log->reclaim_target);
+>         do {
+> -               target = log->reclaim_target;
+>                 if (new < target)
+>                         return;
+> -       } while (cmpxchg(&log->reclaim_target, target, new) != target);
+> +       } while (!try_cmpxchg(&log->reclaim_target, &target, new));
+>         md_wakeup_thread(log->reclaim_thread);
+>  }
+>
+> --
+> 2.37.3
+>
