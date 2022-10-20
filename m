@@ -2,103 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77AF7606718
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 19:34:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33FB2606715
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 19:34:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229974AbiJTReH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 13:34:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41206 "EHLO
+        id S229961AbiJTReA convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 20 Oct 2022 13:34:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229887AbiJTRd6 (ORCPT
+        with ESMTP id S229765AbiJTRd4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 13:33:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCB1C1E3EF2;
-        Thu, 20 Oct 2022 10:33:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6EB1261CCD;
-        Thu, 20 Oct 2022 17:33:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2001C4347C;
-        Thu, 20 Oct 2022 17:33:55 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Dzynx+96"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1666287232;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MhbDUQYtMRdQrM9m9jLwLVDz+Gb6Bbj2nyRKt6zUEQc=;
-        b=Dzynx+96fZREa0hAeZjjUXdgKZMQmCXwQ9tM4rOerUDP4vWNiR8vfkQJ/pSiJzFvxa9W7E
-        arerSeUhOSDZ+AOuDOnv8088NEDIwN+FXc/5i5QHTIE7vzWg78xLaXzb9IOWtOxVGUe0vA
-        zb6hON1j6wAraRWXIrMqvfN8BFXB2ps=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id ecf041e5 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Thu, 20 Oct 2022 17:33:52 +0000 (UTC)
-Received: by mail-ua1-f50.google.com with SMTP id h25so10222491uao.13;
-        Thu, 20 Oct 2022 10:33:52 -0700 (PDT)
-X-Gm-Message-State: ACrzQf22axImLLj8FiZyM1EBrnzQLWdGkjYtA62Adnsl+mPA0mdPgHfG
-        ou3saEQRXtA24FgF/BSenQqcolUaoPec1pPdm0M=
-X-Google-Smtp-Source: AMsMyM4zYz12V9544h8LhTytD/IFgrSGb0tWCQfEAgKjFqICkj7B+FJW+E1Nf1M9ctX+OKU+3Nhz8OnHAYz0dtBAKH8=
-X-Received: by 2002:a67:ec47:0:b0:3a9:682c:bc5c with SMTP id
- z7-20020a67ec47000000b003a9682cbc5cmr7756711vso.70.1666287230932; Thu, 20 Oct
- 2022 10:33:50 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221020000356.177CDC433C1@smtp.kernel.org> <Y1EZuQcO8UoN91cX@localhost.localdomain>
- <CAHmME9prEhkHqQmtDGCSFunNnxiKdE_8FHKiksyqebUN63U81Q@mail.gmail.com> <CAHk-=whFow9Wd6C8htoRUt5wXbwf1i_qbuArBbhXOPqYsTFvtw@mail.gmail.com>
-In-Reply-To: <CAHk-=whFow9Wd6C8htoRUt5wXbwf1i_qbuArBbhXOPqYsTFvtw@mail.gmail.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Thu, 20 Oct 2022 11:33:39 -0600
-X-Gmail-Original-Message-ID: <CAHmME9qBZqTd0D_gr8nE+DUzCrC0fxZNZK=7u+21jbgtFgAJBg@mail.gmail.com>
-Message-ID: <CAHmME9qBZqTd0D_gr8nE+DUzCrC0fxZNZK=7u+21jbgtFgAJBg@mail.gmail.com>
-Subject: Re: [PATCH -mm] -funsigned-char, x86: make struct p4_event_bind::cntr
- signed array
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Alexey Dobriyan <adobriyan@gmail.com>, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, mm-commits@vger.kernel.org,
-        masahiroy@kernel.org, keescook@chromium.org,
-        gregkh@linuxfoundation.org, andriy.shevchenko@linux.intel.com,
-        Stephen Rothwell <sfr@canb.auug.org.au>
+        Thu, 20 Oct 2022 13:33:56 -0400
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEA981DB261;
+        Thu, 20 Oct 2022 10:33:55 -0700 (PDT)
+Received: (Authenticated sender: hadess@hadess.net)
+        by mail.gandi.net (Postfix) with ESMTPSA id 993AB20002;
+        Thu, 20 Oct 2022 17:33:53 +0000 (UTC)
+Message-ID: <d2085225eb652a885b9c2b5700175ab820a35a35.camel@hadess.net>
+Subject: Re: [PATCH] Add rumble support to latest xbox controllers
+From:   Bastien Nocera <hadess@hadess.net>
+To:     Siarhei Vishniakou <svv@google.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 20 Oct 2022 19:33:53 +0200
+In-Reply-To: <20221020161401.941927-1-svv@google.com>
+References: <20221020161401.941927-1-svv@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.46.0 (3.46.0-2.fc37) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Thu, 2022-10-20 at 09:14 -0700, Siarhei Vishniakou wrote:
+> Currently, rumble is only supported via bluetooth on a single xbox
+> controller, called 'model 1708'. On the back of the device, it's
+> named
+> 'wireless controller for xbox one'. However, in 2021, Microsoft
+> released
+> a firmware update for this controller. As part of this update, the
+> HID
+> descriptor of the device changed. The product ID was also changed
+> from
+> 0x02fd to 0x0b20. On this controller, rumble was supported via
+> hid-microsoft, which matched against the old product id (0x02fd). As
+> a
+> result, the firmware update broke rumble support on this controller.
+> 
+> The hid-microsoft driver actually supports rumble on the new
+> firmware,
+> as well. So simply adding new product id is sufficient to bring back
+> this support.
+> 
+> After discussing further with the xbox team, it was pointed out that
+> other xbox controllers, such as xbox elite, should also be possible
+> to
+> support in a similar way. However, I could only verify this on 2
+> controllers so far.
+> 
+> In this patch, add rumble support for the following 2 controllers:
+> 1. 'wireless controller for xbox one', model 1708, after applying the
+>    most recent firmware update as of 2022-10-20.
+> 2. 'xbox wireless controller', model 1914. This is also sometimes
+>    referred to as 'xbox series S|X'.
 
-On Thu, Oct 20, 2022 at 11:15 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
-> Can we please try to collect these all in one place?
->
-> I see that Andrew picked up the original one for -mm, but I think it
-> would be better if we had one specific place for all of this (one
-> branch) to collect it all.
+This is a good summary of the different models:
+https://en.wikipedia.org/wiki/Xbox_Wireless_Controller#Summary
 
-Sure. Andrew can drop it from -mm, and I'll collect everything in:
+You can remove the mention of the other names it might have, or the
+names at the back of the joypad, and use the model numbers instead.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/zx2c4/linux.git/log/?h=unsigned-char&r
-
-And I'll ask Stephen to add that branch to -next.
-
-> I'm actually trying to do a "make allyesconfig" build on x86-64 with
-> both signed and unsigned char, and trying to see if I can script
-> something sane to show differences.
->
-> Doing the build is easy, but the differences end up being huge just
-> due to silly constants (ie the whole "one small difference ends up
-> changing layout, which then causes hundreds of megs of diff just due
-> to hex constants in the disassembly changing".
-
-If you can get a copy of IDA Pro, diaphora is quite nice:
-https://github.com/joxeankoret/diaphora
-
-Or sometimes with objdump, I've had more success by keeping debug
-symbols, and then trimming offsets from jmps.
-
-Jason
+I think I have a model of each one of the devices in the list (except
+1797 and 1537 IIRC), so I could test this if needed. Do you have a good
+test case for the various forces of rumble that would exercise both
+motors?
