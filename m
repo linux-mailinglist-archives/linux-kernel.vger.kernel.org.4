@@ -2,105 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 985AB605524
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 03:46:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83D7D605528
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 03:47:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231286AbiJTBqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 21:46:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38146 "EHLO
+        id S231515AbiJTBrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 21:47:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230456AbiJTBqa (ORCPT
+        with ESMTP id S231171AbiJTBri (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 21:46:30 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 724E6182C53;
-        Wed, 19 Oct 2022 18:46:29 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id f9so470235plb.13;
-        Wed, 19 Oct 2022 18:46:29 -0700 (PDT)
+        Wed, 19 Oct 2022 21:47:38 -0400
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D487B1D1017;
+        Wed, 19 Oct 2022 18:47:36 -0700 (PDT)
+Received: by mail-oi1-x22d.google.com with SMTP id w196so21297374oiw.8;
+        Wed, 19 Oct 2022 18:47:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Tn04uKVcL+tZBjaUZs/YKjiSbekOuRMEOqC+T3cEAyA=;
-        b=YslriB2C/MUGQ+3mDRVYdXRyAQPQCDHX6qqBLa8lfuWIIOBAmEISEAwqKwqsmW9ZEB
-         X28lS0h8JFPi44eaElEe/8D1LZx+yttIIqp+ALbuLK9+JXSjDu2bIOK1GEF01SypLXca
-         BjDRLVmEXEZFSmivvOoMxnmLFksDl14oaZTwX8XLv0Gg52YLWq2ZxBIFzuFd9Y7h86r8
-         JvRIMPzyL6M1fovyWabkX1SZG7Ya66U8fjO1Zd37hgyXLSLNEcTDKPREf8TnFMjS6too
-         PwldgdV9p/rIjoVY62doCme0hrlYQVVQiQwLTf0OA+3KbocUs32eAHHBVGt6FTCTuKxL
-         qOuw==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9vUhRSZJCY7KpJC4RI1IvvNhYQ/fmK2CLSJSd1FaYiA=;
+        b=cavVnV1m3N5NzP2tWUyolKWTQYTngRg094gtT/25DeHzYd3cgOWjrVH8E2jFKHLk51
+         7nM4JDL6aJY9FpUkYq0AOl9/Nj8I2KPsCNhMYGpJyiaHvJyWEH36gMyl2F0bsVYstF2G
+         HZLRxTqfQbFBaLai7tB4X0a8m78LCMDJ0LwWWzL1Mn0kzmzeEwUld6mMVhv0mVGaGS+j
+         +/ymesLIVt92rAXvCMBttH2YU8rukbqCynenjijaD83UcgBInFC3EqkvZneoFXeRA7Xr
+         Zj9nrObRMe8//Yr+8fCT78UJrJdMFzB2cdywEWX9ohFisY9DcNfybz/PCqkzyETz7/Z7
+         sx1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Tn04uKVcL+tZBjaUZs/YKjiSbekOuRMEOqC+T3cEAyA=;
-        b=xReD0wwFSWYDbI/ZkwVb5zNDcoliu0tlnOas0I6guY6KU/fZ4iFeztgvJzOlPT4OjG
-         HZ13JadNdXVONlh48ZhcXW+oFKK/yweE9a5LqRwXxdxQ//buXzSu2bfQvIMcg/RK5lCF
-         xZPOH96dm3uQYTA5QFr7ddNcyYevzk4F4YJP1IKMuolJMdg5YqGVtRi5dLwUNkrxRMP1
-         sY4Sbty9bhbjig1DM9Efn0qwO/BMSUmWQhGCXjuu5wXOvQUON9TTlw9DSY8koLCW5SWa
-         4C73pnfYCPwzIFxaUw+VfMFDPq7rAtHUs4I77wnKyrun9xk+KOZ8qqZy+ihBhCP3c+r9
-         qPbw==
-X-Gm-Message-State: ACrzQf2iPn4iVPLhfNP1sP0WF54eBQXtNXstEC8T+mdfxILd5amKIQSq
-        gv4VSpXiYNuRe+MaKzfaylY=
-X-Google-Smtp-Source: AMsMyM6H3onhDGXAvA4+BUQP2G6ayeuIDQOpbQmZaZ9HBOyRLXakXnRQj8NqZrfgA5Ec3rSZg/oUpg==
-X-Received: by 2002:a17:902:e88b:b0:17f:8514:cf5f with SMTP id w11-20020a170902e88b00b0017f8514cf5fmr11374761plg.163.1666230388688;
-        Wed, 19 Oct 2022 18:46:28 -0700 (PDT)
-Received: from [192.168.43.80] (subs02-180-214-232-16.three.co.id. [180.214.232.16])
-        by smtp.gmail.com with ESMTPSA id q18-20020aa79612000000b00537b6bfab7fsm12361736pfg.177.2022.10.19.18.46.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Oct 2022 18:46:28 -0700 (PDT)
-Message-ID: <a3679479-b1fd-29c6-d6b5-502b15ffbd4a@gmail.com>
-Date:   Thu, 20 Oct 2022 08:46:22 +0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: =?UTF-8?Q?Re=3a_=5bPATCH_6=2e0_659/862=5d_ARM/dma-mapp=d1=96ng=3a_d?=
- =?UTF-8?Q?ont_override_-=3edma=5fcoherent_when_set_from_a_bus_notifier?=
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9vUhRSZJCY7KpJC4RI1IvvNhYQ/fmK2CLSJSd1FaYiA=;
+        b=2+y8xlEiZUVInjotwsFwPau1VM3QDAPluEZ5s57GHt8IO6emxqQaFmj8FFPCLaP3bD
+         4s6a161BW7lSN35htKvrMQwqr5Cr39RwzEqkI0ZOvytcbzpSpkoSf39TPb3Z8/1OVxZq
+         ecK0gc68IAYwQ57MECzxAeJKwc7g8THdOuwTih9Uxa/DogNWZMe256bUD3Ola3r3Epq4
+         uIWD4My7vmB8P351zc/44He3jJ4fKQOyeYu3P+LenYfYwvoVodlqFBh4rH9L+NaJnB3z
+         bYF7Cnmok1ZYw9raub4rmUYxsEcfO+lDd45fGj8mgPSBjHM7PQ2ErmDlex7DElHSyRft
+         rYkg==
+X-Gm-Message-State: ACrzQf2zeOWBFLe9Rv0qj6xZC4Pwr11DV7aN0mwKcrXzJHZJY3WAv1WD
+        ABmE7G+gHfRVEjLU245yBh9P/KWmZ5I=
+X-Google-Smtp-Source: AMsMyM6KyAp1lPo3/Ky++XR1l54cXcru3NtP2qcPOA81rcBKjKix6JjImvrcIFGYItXw0VLJdoFzXA==
+X-Received: by 2002:a05:6871:5d3:b0:131:feaf:b826 with SMTP id v19-20020a05687105d300b00131feafb826mr7528563oan.129.1666230445909;
+        Wed, 19 Oct 2022 18:47:25 -0700 (PDT)
+Received: from macondo.. ([2804:431:e7cc:1855:8393:57eb:548f:5125])
+        by smtp.gmail.com with ESMTPSA id f10-20020a056830204a00b00661b019accbsm7659796otp.3.2022.10.19.18.47.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Oct 2022 18:47:25 -0700 (PDT)
+From:   Rafael Mendonca <rafaelmendsr@gmail.com>
+To:     Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>
+Cc:     Rafael Mendonca <rafaelmendsr@gmail.com>, io-uring@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org,
-        =?UTF-8?Q?Marek_Beh=c3=ban?= <kabel@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Sasha Levin <sashal@kernel.org>
-References: <20221019083249.951566199@linuxfoundation.org>
- <20221019083319.087440003@linuxfoundation.org>
-Content-Language: en-US
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20221019083319.087440003@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Subject: [PATCH] io-wq: Fix memory leak in worker creation
+Date:   Wed, 19 Oct 2022 22:47:09 -0300
+Message-Id: <20221020014710.902201-1-rafaelmendsr@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/19/22 15:32, Greg Kroah-Hartman wrote:
-> From: Christoph Hellwig <hch@lst.de>
-> 
-> [ Upstream commit 49bc8bebae79c8516cb12f91818f3a7907e3ebce ]
-> 
-> Commit ae626eb97376 ("ARM/dma-mapping: use dma-direct unconditionally")
-> caused a regression on the mvebu platform, wherein devices that are
-> dma-coherent are marked as dma-noncoherent, because although
-> mvebu_hwcc_notifier() after that commit still marks then as coherent,
-> the arm_coherent_dma_ops() function, which is called later, overwrites
-> this setting, since it is being called from drivers/of/device.c with
-> coherency parameter determined by of_dma_is_coherent(), and the
-> device-trees do not declare the 'dma-coherent' property.
-> 
-> Fix this by defaulting never clearing the dma_coherent flag in
-> arm_coherent_dma_ops().
-> 
+If the CPU mask allocation for a node fails, then the memory allocated for
+the 'io_wqe' struct of the current node doesn't get freed on the error
+handling path, since it has not yet been added to the 'wqes' array.
 
-The patch subject looks mangled, right?
+This was spotted when fuzzing v6.1-rc1 with Syzkaller:
+BUG: memory leak
+unreferenced object 0xffff8880093d5000 (size 1024):
+  comm "syz-executor.2", pid 7701, jiffies 4295048595 (age 13.900s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<00000000cb463369>] __kmem_cache_alloc_node+0x18e/0x720
+    [<00000000147a3f9c>] kmalloc_node_trace+0x2a/0x130
+    [<000000004e107011>] io_wq_create+0x7b9/0xdc0
+    [<00000000c38b2018>] io_uring_alloc_task_context+0x31e/0x59d
+    [<00000000867399da>] __io_uring_add_tctx_node.cold+0x19/0x1ba
+    [<000000007e0e7a79>] io_uring_setup.cold+0x1b80/0x1dce
+    [<00000000b545e9f6>] __x64_sys_io_uring_setup+0x5d/0x80
+    [<000000008a8a7508>] do_syscall_64+0x5d/0x90
+    [<000000004ac08bec>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
+Fixes: 0e03496d1967 ("io-wq: use private CPU mask")
+Signed-off-by: Rafael Mendonca <rafaelmendsr@gmail.com>
+---
+ io_uring/io-wq.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/io_uring/io-wq.c b/io_uring/io-wq.c
+index c6536d4b2da0..6f1d0e5df23a 100644
+--- a/io_uring/io-wq.c
++++ b/io_uring/io-wq.c
+@@ -1164,10 +1164,10 @@ struct io_wq *io_wq_create(unsigned bounded, struct io_wq_data *data)
+ 		wqe = kzalloc_node(sizeof(struct io_wqe), GFP_KERNEL, alloc_node);
+ 		if (!wqe)
+ 			goto err;
++		wq->wqes[node] = wqe;
+ 		if (!alloc_cpumask_var(&wqe->cpu_mask, GFP_KERNEL))
+ 			goto err;
+ 		cpumask_copy(wqe->cpu_mask, cpumask_of_node(node));
+-		wq->wqes[node] = wqe;
+ 		wqe->node = alloc_node;
+ 		wqe->acct[IO_WQ_ACCT_BOUND].max_workers = bounded;
+ 		wqe->acct[IO_WQ_ACCT_UNBOUND].max_workers =
 -- 
-An old man doll... just what I always wanted! - Clara
+2.34.1
 
