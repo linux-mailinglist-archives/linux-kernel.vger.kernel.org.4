@@ -2,108 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C225E606BFA
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 01:14:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55390606BFD
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 01:16:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229966AbiJTXOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 19:14:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34932 "EHLO
+        id S229861AbiJTXP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 19:15:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbiJTXN5 (ORCPT
+        with ESMTP id S229678AbiJTXPz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 19:13:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 977A122E0FC;
-        Thu, 20 Oct 2022 16:13:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2DEFEB828B5;
-        Thu, 20 Oct 2022 23:13:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5426C433B5;
-        Thu, 20 Oct 2022 23:13:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666307633;
-        bh=axu5Xp7Ry043Wqw4vY+2kZM7lnVF71Cg1L+qE8Jwhco=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=gV4ctlBkZHzMAjmaEvkaPMiVjmCr/ljvNWEAQYhdl/8q2fo3al5fBGohGCT+8b4Yd
-         eyNqwlDzejTU/EcgrAO1JP4sLAoBj15wjinwjGbbr/mS2Ic3BGBuQ4Z9eZ0n5sZP2m
-         ZiHQvhex2Pwzpk76Sad2/SdBUJQsAirKxCfEZiYfv8BPpaZ3vleJ1qiROXEAATN7X5
-         4HhWO904l3VblMb513WeVExeNrm1VW+Sj5Hjm9Q/fsrU8SWgnpdk6wovsBoTdfErH6
-         JNSd6OFaBwoRTTxxvu0KoJHKWSXx0j1ssn5z1X+MCJp0quR3AyRWIn63Z19MwB+W8f
-         NSioxMBgG9PqQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 6D7875C1109; Thu, 20 Oct 2022 16:13:53 -0700 (PDT)
-Date:   Thu, 20 Oct 2022 16:13:53 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Zhen Lei <thunder.leizhen@huawei.com>
-Cc:     Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] rcu: Add RCU stall diagnosis information
-Message-ID: <20221020231353.GC5600@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221017100108.2063-1-thunder.leizhen@huawei.com>
+        Thu, 20 Oct 2022 19:15:55 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09DE5228CE1
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 16:15:52 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id i127so1329848ybc.11
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 16:15:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=QQpKi+x0LxKqACw/uNBS2aGbKtD5lhFqr7fDWjj/DZQ=;
+        b=AT3Tr1In+x+ghVAY9rGnfzzQOgsij6yefZ4tFa0cTQaQQa61QFdfVTwgNj8l2ZfVmi
+         mO0/JTt5NXfhWLzTrVdVol/pguP4syq5E5kZGYWSN541/u/wNhlnGBc0Twgn0izew/13
+         07nN9lSC18EETJshcwk/N9FAqY4mnU81U+bQDyGgaFZj5ij+lq+ekU3sBj0szsKfp2qs
+         5MMHQUF2SqvVS3uoKwiMJM+A/hsiNrg7ZbEAyzoip6owdbAco6czZ74nVbCxHMSYrE0H
+         tsHmxXQAiysV8ksTLO0Nobya4Q6WoLSL7yuW0xBjpyjS0GOOPpuxGKRtgyUsbQSrM+/x
+         FtBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QQpKi+x0LxKqACw/uNBS2aGbKtD5lhFqr7fDWjj/DZQ=;
+        b=5t4rUyLAqLrmlMxUqGA9dF77yX6QHaa9EUQTTLgduWoYOB+VhQzda9JAsMuFd/2CWA
+         qkpdPektdoTkWbw4GHip87in29HG0ECh33QstlLWV1XOAJ/zUsDAdO3QSuGYDAZK660U
+         EQ/sVwrRrLxVoJKxm8g1mZbiZ2iRvYCVHFyqqD7Pxnrqy7JclCiX/hFeqY1hbvYDU4h+
+         X8IuXP7FG8L2Z2Bjq/rkSLTNdpJoUEkefu14eQBVsuQvvyzWdLHd9N5MsC6W8KavcJ22
+         WC9tlgE7jJieyCFt3UcUJ6fweUN/G1dpiaKvna90LlgqyE5c5Vqth1BMQxQRydV/euBg
+         sJhw==
+X-Gm-Message-State: ACrzQf02tpqSF8SH1Ggf73EBSFYNB8JEbXeO0HCVs7idxSzpTlWnwn7o
+        LX7kCiLqV6fwDrrmJnlkwqocdCb4u0BOtCGq1gOUSg==
+X-Google-Smtp-Source: AMsMyM7TmQlK8F3tp1t9JmyRlR6fHIN0hO5YnJsY48kwxCPCEAMI7OSOkw+fY933VPRfKPmRSk1JU85KzEik4w0uWXs=
+X-Received: by 2002:a25:32ca:0:b0:6ca:40e2:90c8 with SMTP id
+ y193-20020a2532ca000000b006ca40e290c8mr3948169yby.55.1666307751606; Thu, 20
+ Oct 2022 16:15:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221017100108.2063-1-thunder.leizhen@huawei.com>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221020143201.339599-1-luwei32@huawei.com> <20221020205730.10875-1-kuniyu@amazon.com>
+In-Reply-To: <20221020205730.10875-1-kuniyu@amazon.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Thu, 20 Oct 2022 16:15:40 -0700
+Message-ID: <CANn89iL9pbcNxWxKBqDNsRdSmiZb4F3rQS3FNVzK=yL5JshsHw@mail.gmail.com>
+Subject: Re: [PATCH -next,v2] tcp: fix a signed-integer-overflow bug in tcp_add_backlog()
+To:     Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc:     luwei32@huawei.com, asml.silence@gmail.com, ast@kernel.org,
+        davem@davemloft.net, dsahern@kernel.org, imagedong@tencent.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        martin.lau@kernel.org, ncardwell@google.com,
+        netdev@vger.kernel.org, pabeni@redhat.com, yoshfuji@linux-ipv6.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 17, 2022 at 06:01:05PM +0800, Zhen Lei wrote:
-> In some extreme cases, such as the I/O pressure test, the CPU usage may
-> be 100%, causing RCU stall. In this case, the printed information about
-> current is not useful. Displays the number and usage of hard interrupts,
-> soft interrupts, and context switches that are generated within half of
-> the CPU stall timeout, can help us make a general judgment. In other
-> cases, we can preliminarily determine whether an infinite loop occurs
-> when local_irq, local_bh or preempt is disabled.
-> 
-> Zhen Lei (3):
->   sched: Add helper kstat_cpu_softirqs_sum()
->   sched: Add helper nr_context_switches_cpu()
->   rcu: Add RCU stall diagnosis information
+On Thu, Oct 20, 2022 at 1:57 PM Kuniyuki Iwashima <kuniyu@amazon.com> wrote:
+>
+> Hi,
+>
+> The subject should be
+>
+>   [PATCH net v2] tcp: ....
+>
+> so that this patch will be backported to the stable tree.
+>
+>
+> From:   Lu Wei <luwei32@huawei.com>
+> Date:   Thu, 20 Oct 2022 22:32:01 +0800
+> > The type of sk_rcvbuf and sk_sndbuf in struct sock is int, and
+> > in tcp_add_backlog(), the variable limit is caculated by adding
+> > sk_rcvbuf, sk_sndbuf and 64 * 1024, it may exceed the max value
+> > of int and overflow. This patch limits sk_rcvbuf and sk_sndbuf
+> > to 0x7fff000 and transfers them to u32 to avoid signed-integer
+> > overflow.
+> >
+> > Fixes: c9c3321257e1 ("tcp: add tcp_add_backlog()")
+> > Signed-off-by: Lu Wei <luwei32@huawei.com>
+> > ---
+> >  include/net/sock.h  |  5 +++++
+> >  net/core/sock.c     | 10 ++++++----
+> >  net/ipv4/tcp_ipv4.c |  3 ++-
+> >  3 files changed, 13 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/include/net/sock.h b/include/net/sock.h
+> > index 9e464f6409a7..cc2d6c4047c2 100644
+> > --- a/include/net/sock.h
+> > +++ b/include/net/sock.h
+> > @@ -2529,6 +2529,11 @@ static inline void sk_wake_async(const struct sock *sk, int how, int band)
+> >  #define SOCK_MIN_SNDBUF              (TCP_SKB_MIN_TRUESIZE * 2)
+> >  #define SOCK_MIN_RCVBUF               TCP_SKB_MIN_TRUESIZE
+> >
+> > +/* limit sk_sndbuf and sk_rcvbuf to 0x7fff0000 to prevent overflow
+> > + * when adding sk_sndbuf, sk_rcvbuf and 64K in tcp_add_backlog()
+> > + */
+> > +#define SOCK_MAX_SNDRCVBUF           (INT_MAX - 0xFFFF)
+>
+> Should we apply this limit in tcp_rcv_space_adjust() ?
+>
+>         int rcvmem, rcvbuf;
+>         ...
+>         rcvbuf = min_t(u64, rcvwin * rcvmem,
+>                        READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_rmem[2]));
+>         if (rcvbuf > sk->sk_rcvbuf) {
+>                 WRITE_ONCE(sk->sk_rcvbuf, rcvbuf);
+>         ...
+>         }
+>
+> We still have 64K space if sk_rcvbuf were INT_MAX here though.
+>
 
-Interesting approach, thank you!
+Thinking more about this, I think we could solve the issue by reducing
+the budget
+we account for sndbuf.
 
-I have pulled this in for testing and review, having rescued it from my
-spam folder.
+ACK packets are much smaller than the payload.
 
-Some questions that might come up include:  (1) Can the addition of
-things like cond_resched() make RCU happier with the I/O pressure test?
-(2) Should there be a way to turn this off for environments with slow
-consoles?  (3) If this information shows heavy CPU usage, what debug
-and fix approach should be used?
+diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
+index 6376ad91576546d48ffcc8ed9cdf8a1904679e33..4bbefb50fe472f69f3eaa1983539595b6fd2e9f4
+100644
+--- a/net/ipv4/tcp_ipv4.c
++++ b/net/ipv4/tcp_ipv4.c
+@@ -1874,11 +1874,13 @@ bool tcp_add_backlog(struct sock *sk, struct
+sk_buff *skb,
+        __skb_push(skb, hdrlen);
 
-For an example of #1, if a CPU is flooded with softirq activity, one
-might hope that the call to rcu_softirq_qs() would prevent the RCU CPU
-stall warning, at least for kernels built with CONFIG_PREEMPT_RT=n.
-Similarly, if there are huge numbers of context switches, one might hope
-that the rcu_note_context_switch() would report a quiescent state sooner
-rather than later.
+ no_coalesce:
++       limit = READ_ONCE(sk->sk_rcvbuf) + (READ_ONCE(sk->sk_sndbuf) >> 1);
++
+        /* Only socket owner can try to collapse/prune rx queues
+         * to reduce memory overhead, so add a little headroom here.
+         * Few sockets backlog are possibly concurrently non empty.
+         */
+-       limit = READ_ONCE(sk->sk_rcvbuf) + READ_ONCE(sk->sk_sndbuf) + 64*1024;
++       limit += 64*1024;
 
-Thoughts?
-
-							Thanx, Paul
-
->  include/linux/kernel_stat.h | 12 +++++++++++
->  kernel/rcu/tree.h           | 11 ++++++++++
->  kernel/rcu/tree_stall.h     | 40 +++++++++++++++++++++++++++++++++++++
->  kernel/sched/core.c         |  5 +++++
->  4 files changed, 68 insertions(+)
-> 
-> -- 
-> 2.25.1
-> 
+        if (unlikely(sk_add_backlog(sk, skb, limit))) {
+                bh_unlock_sock(sk);
