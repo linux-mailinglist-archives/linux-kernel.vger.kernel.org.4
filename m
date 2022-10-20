@@ -2,119 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02E67605EB2
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 13:19:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF85D605EB7
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 13:21:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231279AbiJTLTx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 07:19:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51660 "EHLO
+        id S231270AbiJTLV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 07:21:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230131AbiJTLTo (ORCPT
+        with ESMTP id S229994AbiJTLVW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 07:19:44 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9F96D2E7;
-        Thu, 20 Oct 2022 04:19:35 -0700 (PDT)
-X-UUID: d6324221b4c8432aa2fd7fb945db3303-20221020
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=o1UOZUfKHRFNreNnfb8QigkcTVnukydqA2mmXzDsqKY=;
-        b=WX4skekIxrD9ESdnkoEGcwov57c7AZJTuZGY/Ox2a5b35FmDZVlVwCItDhH66Ev6fR4upmvbYI24cgkn6/AknaA8e3kTfxFCsVcVrjZWhHFkSvRiJUU1XjuU5KPqWCzd0aFSvSuQu0K+EMIxcOPgBibId0q89QOwUgXL8l8I8Ic=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.12,REQID:31dbd1a1-f9ac-4ba8-89f8-1d150768cba5,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:95
-X-CID-INFO: VERSION:1.1.12,REQID:31dbd1a1-f9ac-4ba8-89f8-1d150768cba5,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
-        :quarantine,TS:95
-X-CID-META: VersionHash:62cd327,CLOUDID:0ae46ca4-ebb2-41a8-a87c-97702aaf2e20,B
-        ulkID:221020191931XVBKLZPW,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
-        il,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: d6324221b4c8432aa2fd7fb945db3303-20221020
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-        (envelope-from <tinghan.shen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1106162124; Thu, 20 Oct 2022 19:19:28 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Thu, 20 Oct 2022 19:19:27 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Thu, 20 Oct 2022 19:19:27 +0800
-From:   Tinghan Shen <tinghan.shen@mediatek.com>
-To:     Ryder Lee <ryder.lee@mediatek.com>,
-        Jianjun Wang <jianjun.wang@mediatek.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     <linux-pci@vger.kernel.org>, <linux-mediatek@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Tinghan Shen <tinghan.shen@mediatek.com>,
-        Irui Wang <irui.wang@mediatek.com>
-Subject: [PATCH v2 3/3] arm64: dts: mt8195: Add venc node
-Date:   Thu, 20 Oct 2022 19:19:25 +0800
-Message-ID: <20221020111925.30002-4-tinghan.shen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20221020111925.30002-1-tinghan.shen@mediatek.com>
-References: <20221020111925.30002-1-tinghan.shen@mediatek.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+        Thu, 20 Oct 2022 07:21:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 913521863C5
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 04:21:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 84580B82665
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 11:21:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24CFAC433C1;
+        Thu, 20 Oct 2022 11:21:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666264878;
+        bh=ZqkTbSIIHiSCMMP0Aesd2axqUOQGZtqEXv7ZKLyrImU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=YIha/i3gu3KV+2jTNtUk70NvuLFSqn57fWcQYluWjgd0D1z7H0rmRBtxkWp7ZXuy+
+         /h1tsSzhviT8AOMMtxX9qetMp6ckqWcWnIlKpc7zrVsXu2FUi6wPR1lNJI+qGBp3Us
+         VfyaeXYKX2cORxH16dNcwZmnmLTKcsxI2JaaFbzknZP4COh+4D1qLefGmc5zcTsdyX
+         VRXQw3eFbCXOvUIOI0NDDMqHGdlNRDsiazrKjmuNtx6fgQppA67hWpDF0jHcbFE3o3
+         dVipxHdx5UJq2VK9vjr8fnTuB5qG4F0Yyv8hVL0SXEyW/o3Dy4S4jKTDLrcrPpsbW1
+         ySunh0QmbwbGA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1olTbw-000E6m-0y;
+        Thu, 20 Oct 2022 12:21:16 +0100
+Date:   Thu, 20 Oct 2022 12:21:15 +0100
+Message-ID: <864jvyg2qc.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Huacai Chen <chenhuacai@loongson.cn>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: Re: [PATCH] irqchip/loongarch: Adjust acpi_cascade_irqdomain_init() and sub-routines
+In-Reply-To: <20221020073346.536494-1-chenhuacai@loongson.cn>
+References: <20221020073346.536494-1-chenhuacai@loongson.cn>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: chenhuacai@loongson.cn, tglx@linutronix.de, loongarch@lists.linux.dev, linux-kernel@vger.kernel.org, lixuefeng@loongson.cn, chenhuacai@gmail.com, jiaxun.yang@flygoat.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add venc node for mt8195 SoC.
+On Thu, 20 Oct 2022 08:33:46 +0100,
+Huacai Chen <chenhuacai@loongson.cn> wrote:
+> 
+> 1, Adjust prototype of acpi_cascade_irqdomain_init() because we don't
+>    need its return value.
+> 2, Combine unnecessary short lines to one long line.
+> 
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> ---
+>  drivers/irqchip/irq-loongarch-cpu.c    | 19 +++++++------------
+>  drivers/irqchip/irq-loongson-eiointc.c | 19 +++++++------------
+>  drivers/irqchip/irq-loongson-pch-pic.c | 11 ++++-------
+>  3 files changed, 18 insertions(+), 31 deletions(-)
+> 
+> diff --git a/drivers/irqchip/irq-loongarch-cpu.c b/drivers/irqchip/irq-loongarch-cpu.c
+> index 741612ba6a52..093609c8eaa7 100644
+> --- a/drivers/irqchip/irq-loongarch-cpu.c
+> +++ b/drivers/irqchip/irq-loongarch-cpu.c
+> @@ -92,31 +92,26 @@ static const struct irq_domain_ops loongarch_cpu_intc_irq_domain_ops = {
+>  	.xlate = irq_domain_xlate_onecell,
+>  };
+>  
+> -static int __init
+> -liointc_parse_madt(union acpi_subtable_headers *header,
+> -		       const unsigned long end)
+> +static int __init liointc_parse_madt(union acpi_subtable_headers *header,
+> +					const unsigned long end)
+>  {
+>  	struct acpi_madt_lio_pic *liointc_entry = (struct acpi_madt_lio_pic *)header;
+>  
+>  	return liointc_acpi_init(irq_domain, liointc_entry);
+>  }
+>  
+> -static int __init
+> -eiointc_parse_madt(union acpi_subtable_headers *header,
+> -		       const unsigned long end)
+> +static int __init eiointc_parse_madt(union acpi_subtable_headers *header,
+> +					const unsigned long end)
+>  {
+>  	struct acpi_madt_eio_pic *eiointc_entry = (struct acpi_madt_eio_pic *)header;
+>  
+>  	return eiointc_acpi_init(irq_domain, eiointc_entry);
+>  }
+>  
+> -static int __init acpi_cascade_irqdomain_init(void)
+> +static void __init acpi_cascade_irqdomain_init(void)
+>  {
+> -	acpi_table_parse_madt(ACPI_MADT_TYPE_LIO_PIC,
+> -			      liointc_parse_madt, 0);
+> -	acpi_table_parse_madt(ACPI_MADT_TYPE_EIO_PIC,
+> -			      eiointc_parse_madt, 0);
+> -	return 0;
+> +	acpi_table_parse_madt(ACPI_MADT_TYPE_LIO_PIC, liointc_parse_madt, 0);
+> +	acpi_table_parse_madt(ACPI_MADT_TYPE_EIO_PIC, eiointc_parse_madt, 0);
 
-Signed-off-by: Irui Wang <irui.wang@mediatek.com>
-Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
----
- arch/arm64/boot/dts/mediatek/mt8195.dtsi | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+This definitely looks like it is moving in the wrong direction. The
+parsing can return an error, and you're not handling it anywhere.
+Given how often firmware tables are broken, this seems pretty bad.
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-index 2128fa007480..0779666c187c 100644
---- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-@@ -2170,6 +2170,30 @@
- 			power-domains = <&spm MT8195_POWER_DOMAIN_VENC>;
- 		};
- 
-+		venc: video-codec@1a020000 {
-+			compatible = "mediatek,mt8195-vcodec-enc";
-+			reg = <0 0x1a020000 0 0x10000>;
-+			iommus = <&iommu_vdo M4U_PORT_L19_VENC_RCPU>,
-+				 <&iommu_vdo M4U_PORT_L19_VENC_REC>,
-+				 <&iommu_vdo M4U_PORT_L19_VENC_BSDMA>,
-+				 <&iommu_vdo M4U_PORT_L19_VENC_SV_COMV>,
-+				 <&iommu_vdo M4U_PORT_L19_VENC_RD_COMV>,
-+				 <&iommu_vdo M4U_PORT_L19_VENC_CUR_LUMA>,
-+				 <&iommu_vdo M4U_PORT_L19_VENC_CUR_CHROMA>,
-+				 <&iommu_vdo M4U_PORT_L19_VENC_REF_LUMA>,
-+				 <&iommu_vdo M4U_PORT_L19_VENC_REF_CHROMA>;
-+			interrupts = <GIC_SPI 341 IRQ_TYPE_LEVEL_HIGH 0>;
-+			mediatek,scp = <&scp>;
-+			clocks = <&vencsys CLK_VENC_VENC>;
-+			clock-names = "venc_sel";
-+			assigned-clocks = <&topckgen CLK_TOP_VENC>;
-+			assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL_D4>;
-+			power-domains = <&spm MT8195_POWER_DOMAIN_VENC>;
-+			#address-cells = <2>;
-+			#size-cells = <2>;
-+			dma-ranges = <0x1 0x0 0x0 0x40000000 0x0 0xfff00000>;
-+		};
-+
- 		vencsys_core1: clock-controller@1b000000 {
- 			compatible = "mediatek,mt8195-vencsys_core1";
- 			reg = <0 0x1b000000 0 0x1000>;
+	M.
+
 -- 
-2.18.0
-
+Without deviation from the norm, progress is not possible.
