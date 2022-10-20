@@ -2,130 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A64236057DC
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 09:06:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1C036057E2
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 09:08:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229976AbiJTHG3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 03:06:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33634 "EHLO
+        id S230013AbiJTHH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 03:07:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbiJTHGR (ORCPT
+        with ESMTP id S229996AbiJTHH4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 03:06:17 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E400E12790A;
-        Thu, 20 Oct 2022 00:06:13 -0700 (PDT)
-X-UUID: 29987d01bf6142058e1ff86bbfce0777-20221020
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=tLceiQ2yPMbbzASoCZppYzDfNjICYcjauyGMThNBJlY=;
-        b=KwEJquuMZXd/yOE4kGLZD57Z+23io7UyEbMZHhp+YFLCLkhwV3FANS0AVYqMFocmg97EVsNOs0eDFI+SSuRXErqYbksqIxn6GnhK2SZybbuYuwJCAiJvPLUPnCGlGTyx0/7QPgVjrI0bEidSc5vJXSnmZWyB37YE+nLeVvwTAQc=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.12,REQID:789a8804-92fe-49b3-8129-52fefae37191,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:-5
-X-CID-META: VersionHash:62cd327,CLOUDID:c5eedfee-314c-4293-acb8-ca4299dd021f,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 29987d01bf6142058e1ff86bbfce0777-20221020
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <xinlei.lee@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1500319558; Thu, 20 Oct 2022 15:06:08 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Thu, 20 Oct 2022 15:06:02 +0800
-Received: from mszsdaap41.gcn.mediatek.inc (10.16.6.141) by
- mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Thu, 20 Oct 2022 15:06:01 +0800
-From:   <xinlei.lee@mediatek.com>
-To:     <chunkuang.hu@kernel.org>, <p.zabel@pengutronix.de>,
-        <airlied@linux.ie>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
-        <ck.hu@mediatek.com>, <jitao.shi@mediatek.com>
-CC:     <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        xinlei lee <xinlei.lee@mediatek.com>
-Subject: [PATCH,2/2] drm: mediatek: Add mt8188 dpi compatibles and platform data
-Date:   Thu, 20 Oct 2022 15:05:53 +0800
-Message-ID: <1666249553-15801-3-git-send-email-xinlei.lee@mediatek.com>
-X-Mailer: git-send-email 2.6.4
-In-Reply-To: <1666249553-15801-1-git-send-email-xinlei.lee@mediatek.com>
-References: <1666249553-15801-1-git-send-email-xinlei.lee@mediatek.com>
+        Thu, 20 Oct 2022 03:07:56 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E231414C534;
+        Thu, 20 Oct 2022 00:07:55 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29K6bZkH031911;
+        Thu, 20 Oct 2022 07:07:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=q0IYKObOpZMNiqFVVVJy1j3P8SAwe0uiRVGDkJEZCiI=;
+ b=NwiZr1Blw3fofugcqktYfpugtUPG+d4JBVdhHH/qgVIVyfeh9379+5kxXZvNdSGHbKz6
+ 89v87YoCxDB1O4rSgZOLkBO19tCwavkw0Su7tJwmXCzoKGZSPMwLA/V4H0Rl4yebpf/4
+ GVyrvPlbsym4S7oB6G/EyxhP4EauqTgJx5ZTkt49n4ZlUn7gRTDfONQJBqtQX1gXjc24
+ XOM/4srKyxCoQFUft0TlPMylJLLib8suInilK6qZHTtLVFafH/mdw9ysaOPGlc2zUaml
+ n6tJF0ML0kHpHro1BMp8mbYXx+S3julCfXbm+DBtmXGimVuPR0d8U79oS1kfBS7v1Tr0 3A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kawfaeaw8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 20 Oct 2022 07:07:33 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29K6vm7v025380;
+        Thu, 20 Oct 2022 07:07:17 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kawfae9u2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 20 Oct 2022 07:07:17 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29K75PXf018395;
+        Thu, 20 Oct 2022 07:07:05 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma03ams.nl.ibm.com with ESMTP id 3k7mg98erk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 20 Oct 2022 07:07:05 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29K772UJ39912032
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 20 Oct 2022 07:07:02 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E8D6552051;
+        Thu, 20 Oct 2022 07:07:01 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.43.103.147])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 9166B5204E;
+        Thu, 20 Oct 2022 07:06:58 +0000 (GMT)
+From:   Athira Rajeev <atrajeev@linux.vnet.ibm.com>
+To:     peterz@infradead.org, acme@kernel.org, jolsa@kernel.org,
+        namhyung@kernel.org
+Cc:     irogers@google.com, james.clark@arm.com, mpe@ellerman.id.au,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, maddy@linux.ibm.com,
+        rnsastry@linux.ibm.com, kjain@linux.ibm.com, disgoel@linux.ibm.com
+Subject: [PATCH] [perf/core: Update sample_flags for raw_data in perf_output_sample
+Date:   Thu, 20 Oct 2022 12:36:56 +0530
+Message-Id: <20221020070657.21571-1-atrajeev@linux.vnet.ibm.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: nbFTTCCZ7TptiYILTpnzocmdoF73hjwb
+X-Proofpoint-GUID: FALzTCHsWx16XgiUS273CkyFJ2I0yCaU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-20_01,2022-10-19_04,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxlogscore=999
+ priorityscore=1501 malwarescore=0 spamscore=0 lowpriorityscore=0
+ bulkscore=0 adultscore=0 impostorscore=0 suspectscore=0 mlxscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210200041
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: xinlei lee <xinlei.lee@mediatek.com>
+commit 838d9bb62d13 ("perf: Use sample_flags for raw_data")
+added check for PERF_SAMPLE_RAW in sample_flags in
+perf_prepare_sample(). But while copying the sample in memory,
+the check for sample_flags is not added in perf_output_sample().
+Fix adds the same in perf_output_sample as well.
 
-For MT8188, the vdosys0 only supports 1T1P mode, so we need to add the compatible for mt8188 edp-intf.
-
-Signed-off-by: xinlei lee <xinlei.lee@mediatek.com>
+Fixes: 838d9bb62d13 ("perf: Use sample_flags for raw_data")
+Signed-off-by: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
 ---
- drivers/gpu/drm/mediatek/mtk_dpi.c     | 17 +++++++++++++++++
- drivers/gpu/drm/mediatek/mtk_drm_drv.c |  2 ++
- 2 files changed, 19 insertions(+)
+ kernel/events/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c b/drivers/gpu/drm/mediatek/mtk_dpi.c
-index 508a6d9..5cefda4 100644
---- a/drivers/gpu/drm/mediatek/mtk_dpi.c
-+++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
-@@ -929,6 +929,20 @@ static const struct mtk_dpi_conf mt8183_conf = {
- 	.csc_enable_bit = CSC_ENABLE,
- };
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index 4ec3717003d5..daf387c75d33 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -7099,7 +7099,7 @@ void perf_output_sample(struct perf_output_handle *handle,
+ 	if (sample_type & PERF_SAMPLE_RAW) {
+ 		struct perf_raw_record *raw = data->raw;
  
-+static const struct mtk_dpi_conf mt8188_edpintf_conf = {
-+	.cal_factor = mt8195_dpintf_calculate_factor,
-+	.max_clock_khz = 600000,
-+	.output_fmts = mt8195_output_fmts,
-+	.num_output_fmts = ARRAY_SIZE(mt8195_output_fmts),
-+	.pixels_per_iter = 4,
-+	.input_2pixel = false,
-+	.dimension_mask = DPINTF_HPW_MASK,
-+	.hvsize_mask = DPINTF_HSIZE_MASK,
-+	.channel_swap_shift = DPINTF_CH_SWAP,
-+	.yuv422_en_bit = DPINTF_YUV422_EN,
-+	.csc_enable_bit = DPINTF_CSC_ENABLE,
-+};
-+
- static const struct mtk_dpi_conf mt8192_conf = {
- 	.cal_factor = mt8183_calculate_factor,
- 	.reg_h_fre_con = 0xe0,
-@@ -1079,6 +1093,9 @@ static const struct of_device_id mtk_dpi_of_ids[] = {
- 	{ .compatible = "mediatek,mt8183-dpi",
- 	  .data = &mt8183_conf,
- 	},
-+	{ .compatible = "mediatek,mt8188-edp-intf",
-+	  .data = &mt8188_edpintf_conf,
-+	},
- 	{ .compatible = "mediatek,mt8192-dpi",
- 	  .data = &mt8192_conf,
- 	},
-diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.c b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-index 91f58db..5732ed8 100644
---- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-+++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-@@ -631,6 +631,8 @@ static const struct of_device_id mtk_ddp_comp_dt_ids[] = {
- 	  .data = (void *)MTK_DPI },
- 	{ .compatible = "mediatek,mt8183-dpi",
- 	  .data = (void *)MTK_DPI },
-+	{ .compatible = "mediatek,mt8188-edp-intf",
-+	  .data = (void *)MTK_DP_INTF },
- 	{ .compatible = "mediatek,mt8192-dpi",
- 	  .data = (void *)MTK_DPI },
- 	{ .compatible = "mediatek,mt8195-dp-intf",
+-		if (raw) {
++		if (raw && (data->sample_flags & PERF_SAMPLE_RAW)) {
+ 			struct perf_raw_frag *frag = &raw->frag;
+ 
+ 			perf_output_put(handle, raw->size);
 -- 
-2.6.4
+2.31.1
 
