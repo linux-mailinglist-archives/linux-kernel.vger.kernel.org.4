@@ -2,124 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F2CB60671B
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 19:36:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DFE7606721
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 19:36:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229835AbiJTRgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 13:36:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50268 "EHLO
+        id S229980AbiJTRgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 13:36:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbiJTRf6 (ORCPT
+        with ESMTP id S229910AbiJTRgu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 13:35:58 -0400
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6891FBCF9
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 10:35:56 -0700 (PDT)
-Received: by mail-qk1-x72a.google.com with SMTP id o2so370403qkk.10
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 10:35:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=VWECp01B4Xx6nEq/eutNw6SLXu9E/6fw2YNROX2OzQ0=;
-        b=P6c+wo34AHTMfodvTE1hZyTqBtPJJ77PhKMVQAaKwNRySnWfFI9yAQGjHMkEVJisdj
-         9fZvZ6fEOePG9WvMJeKEpcZto4/3bQvN3pJJFTtHOOlxLef94+44CI9Iv65zXqL4gIi8
-         UgfZkHMq6og8I2COhZV0d/QiI51DItYR6+vNA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VWECp01B4Xx6nEq/eutNw6SLXu9E/6fw2YNROX2OzQ0=;
-        b=uq1kSU8ops15ulToFcO9lU5V1QIthCc85J/1kU+y+cH1eyrTIgCMM1q5SdoMvEt7Qg
-         CDd8eyDqLf2z8Jennmk8FlbshyZU2efAZaQUUxlPW+D4TOmIQnTYfQbIwpybKv4Z/QVo
-         8TshFMthqxeA/7kYoqxttWtx49Axo4I+S/doYvhb/KRSY4x9qw3zpdzh1ePqx4KL39Nc
-         fbWrzA9UplEQlTLSRZONJNT2ClcbC1f8VEyOMqGtPlGCLDGd0cw7wKVfvX2OpL8NC6wD
-         V/MGMGFif4r3yE2y4g9oHGQ12VV9iqxe1ycyceRfJ4pYCSVbNFQ4AbczFvOAr9WFHify
-         h+kA==
-X-Gm-Message-State: ACrzQf3dF0nFNxh3Bj+g5vGoCRWqajwyQbv7bnhjpDRSDSf2s0TwFN7/
-        MTceL98rVSJt1SWcWfbFmtX+kImN1xkalQ==
-X-Google-Smtp-Source: AMsMyM5TZ2/jwzkFTGBNequCmS+4CMxDZFp8sSG/zbd4H/3VafbViFUloFSkNSjohh84+dU3EidVEA==
-X-Received: by 2002:a05:620a:261c:b0:6ee:8dfc:3b6c with SMTP id z28-20020a05620a261c00b006ee8dfc3b6cmr10058928qko.246.1666287355775;
-        Thu, 20 Oct 2022 10:35:55 -0700 (PDT)
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
-        by smtp.gmail.com with ESMTPSA id u3-20020a05620a454300b006a6ebde4799sm7919359qkp.90.2022.10.20.10.35.55
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Oct 2022 10:35:55 -0700 (PDT)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-36847dfc5ccso981337b3.0
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 10:35:55 -0700 (PDT)
-X-Received: by 2002:a25:bb44:0:b0:6bb:a336:7762 with SMTP id
- b4-20020a25bb44000000b006bba3367762mr11999002ybk.501.1666287344812; Thu, 20
- Oct 2022 10:35:44 -0700 (PDT)
+        Thu, 20 Oct 2022 13:36:50 -0400
+Received: from sonic301-38.consmr.mail.ne1.yahoo.com (sonic301-38.consmr.mail.ne1.yahoo.com [66.163.184.207])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF73316C217
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 10:36:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1666287408; bh=90K+murjuENhFlusgWkcx5wUJTQpmjq4sbDkQy6D0II=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=Ow5+D7rGh0vTHr2ncPjKyRFEqKppFeWqmF3li3Ab2H5aqyui+8uAmrjg1jBGOYMHAOg5GgOMKoiYDgUctg2yPSvKCvhQrHzM4tAFTz+Dc82zE3d+jcnoQhAuwY84oqQwGLGIA8wPgXfuiydse+ZJZLtjdLVk9kSyYFPx9aXyhwLP9WsQ1cZmy45ELJWd/argI6FTu+0vDROtTN/R6o+DPrfwYrRtlm5FhLA9u//5GxdjwMlr5fzQ7MZK2iFNzA/D6DM2HgZQdAr6taIGxtZjrORJbPVAhzZ2igbshGmmXdMZRRuc5oiGUFzCXbt0F/agu7iZ33jMzuQLYV8KE3Xu3g==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1666287408; bh=sXZ1gseCffArYNyfyAhiNiKCkvCDMuZh1BgvMix385E=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=Ktd+Ib8hAeVfRAuRevkExqgiva6NVa3gEGpXZKESOt1NL/4oak8AkDNT0JSdT+6yFXkldfwh/u/67oemLfaLv4bN7KRHd1sT/VI6WzhJaxaE/1N4rIkhXnO3NGfhLJsAbc0LqFuWkbF+XDd/ydytWuT4/BsfhL9f7uknhFrYuoOMlLqz/Mrk6mZbc+44zUhuUR1u71uTHYWCyEwNiVOcHoJA7kn3gqu2+7vFPoiSqB5wy45Ax/aRRAyLidynDTUBE420tSixdGzMOHPmjCXJAX9n+IUqG5AsqfoUAB9QohY0A+YJEEtvOtvo+TPSYc+2VodBE2qKfPG9HDx7AECw4Q==
+X-YMail-OSG: w2wWcawVM1lpVF7NWPK8g2eFbRib56VqX7szMq0HVVJys1hMk5t.T6eQ93Bl_Gv
+ v2R5LE2Gyl8gVtmW2LDrk9uhIGSCU9owG8iEPSTKLtQbsB5JzQQ9oGmJxbkjWFK7FjEoiraNQmSG
+ o.w9PHkctV1dIYBunwm4YhhxH1.0aze8LQsbh7YunecQxBmSFK62cQq1eRhKA44en.fVnEVG0JRa
+ lWxhquh9u6EmvW0HynTZdvrd90hX.7.sOUvvGdp_Bi732FGmcf5NWswCm4hN6DBwlhB86PLvasBW
+ BIFvAKRDOEuHHu.dTV8ev7S1flT_58RUXSVjFNafz3vQ04kcRGaoO4eixoh6mjYB.0xcSBQNr89D
+ zzGCVPK53Kap7TL9OFNW8CNEG9_M1inWEG_Ri4Wc4tEYgXYIp8LCcH4HRKOKjlEn1rgxysUb4ZbE
+ M.ls..Fm0Mbk_eaGdFuvlBAczNQP.4TYhlBsj22dvn0b9o5tEpJNErv4hQ.2QLnW4JYXZgfn3ZhJ
+ BEJfxde2W.UUOxbGmp.La9vdOND1dJgeLn8NcIqWgp36vYp7Zp6NyAxc4lbWzBUAk7.t56Vy.iM_
+ DRSQrHpkWtRBkSysZHEXFZv2XHIsOpHMkGfQIRtgTvPvK4yxZk9bRLNMlmqeCQLoHcEcWy.8.FPu
+ 9Bs_NIcboHB8W9PURISf2cQYpgciljDwRDDaIUttkdemEJKb3F3Hd4CMY9ru0gdZP8n3wdG4Tzrq
+ ZECcx.3ZTo1yWxP9NOzXSqdmAmnEJ8SgDIiJqRB.K3xlfsin3cnZKePr51HG3z6oe8tay8Mf4qot
+ lpj.7_tHCW.ARE7ft5rmjHbxPekPTKLdoZujrVWTA51BQpvtmNT19_WfkUhSuPVIx66fczxfOcHw
+ 0Dnn39OGUmKtvKlK9FHiAMO3gLTvyzjYtt5pgT8KA_MtiaUJJTGrKqvGS0P9D.SaNGlhzVVwNPxs
+ rpA3iVoeUakPTPC1aIafc_6ErDFag8ZqarHz7mvhjnboEgEmW0mT5Bx5XpWx3IM90cq_Fa4DlWgQ
+ 4njn5prymMTJR5IZrDb1x8hlI3DaAY1ehgEZu08VnAtM7AZWx7c2TC4eLM2LbaE_dhbXggTeXzb2
+ RrzEqXTsA8PoynvhMJC3bjH9cxUGO63yKumR1RBAOlENaLtyE.WN5nT70QF1u4JgNx9hhcyrMDHx
+ KAQa9trzbOnuEmIpskvDMByaSQnhtPinB4kYpyO0D4RBgVCdxochIDS1QnjdI7qQ0OKOeooW7Im.
+ _3IqEANgtf22ZS5Q5P2ooFm09giuwazvITSaMr20nM0qZ0ArC_bBsCW6zAo7kM0K6oG7Ee8PJMBG
+ P_WTC2CN_8cXVnJZQHEIrWiCj737BEWaQTUCicRH4KzKWn9MLPPrgBPhBhsDkzZD0EdzMKVCcq_0
+ LVgByiE2AFeXFyPgBzl_p1MQsK9JPh0Vv2NtUJSqu0VVKIMGMOBZZZu2lnHzGS2VLxpzez0RPUgi
+ XZt84gFibJFhhmS9DlzI56jh6F2YTmXgvnvpv7r88MMCGD4JKIAaknNLgXQunkTtf3d._1Yqra2Y
+ DyZNYc3nptIRwaAk7W.qzdFLFq1aasqTE8JgKaRbX8nhSs3v8mee.Q.2lAdMHX7t.E.jqZNAssNd
+ luICX1nGPK39Jjo_TuKBVquXiG.aIXHDIu90fa4otXpqprdu3u3wez5bwmNngkedPQmPqEMCOais
+ URx3JK4FHkkBLDT5muVUq1A2lJ_v_3p2jRG7Q.abOzz4NNAF.Min5B7EoAvoLXO8QYFK6blctBSq
+ N3t4d8SAnYtB5t4y_YczyFk1tLmNo4kTxlCWZ8qZgy6yxakUCsjTjann0L1hJXXzKjKWHcusVj.w
+ f729XhxmzGci7F8y3SgrwxnD3WWZ0GqmXzKnReHERUq1fENcmC3RTIK.kU1umUDLdShCfvsVa.JU
+ ZzYwdF6lhCbCMjrnTMeoNdZvGbqNew2.7Ds_lu0aR1R7x3Y8GaIyMJVj0YpfCk.FDGRnZDzAzPzl
+ ayH421cOmNqSen_Ifg9UFUHIOzYpck.sx9fX4fswRgyoZ6w.cQ8y4JuDMpv92zajuB_IMrlOXsHr
+ 2j.DyP0EeVs8Wxe7WmLHwbEMWxVwOC3kQkDLq.hSkvQkh0MsMVMowTKd8cr.xoa6aThEYVO63liR
+ 1w56XN2dHB4JN0hp9Je2XpffkX77kuVpRUXoXk_54SDHvzYTWvQm1Wh2ops7jgbcbHtjuKL0M5mZ
+ 6BEMPPRXwv2dCRexoo_GFaZiaGeUz1bIBiFgzHccFKtC2qGKfj4wFV_Lhl9CVqjNGlY2t_AHw2J7
+ VFh21ologS1wV0pmBTtTKulB19q8sBQ--
+X-Sonic-MF: <casey@schaufler-ca.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic301.consmr.mail.ne1.yahoo.com with HTTP; Thu, 20 Oct 2022 17:36:48 +0000
+Received: by hermes--production-gq1-754cb59848-jk2dx (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 427c18a5c9fc4debfb01026bd34ebae1;
+          Thu, 20 Oct 2022 17:36:43 +0000 (UTC)
+Message-ID: <f996f66b-45c8-7ad7-49aa-4502028e2c94@schaufler-ca.com>
+Date:   Thu, 20 Oct 2022 10:36:41 -0700
 MIME-Version: 1.0
-References: <20220815071332.627393-1-yuzhao@google.com> <20220815071332.627393-9-yuzhao@google.com>
- <Y0go8wWtdcyH1+Ch@hirez.programming.kicks-ass.net> <CAOUHufa9+FTO3Pv-5jC-e3S5goPsUGu-5KcPVHa4bWb0X+d2ug@mail.gmail.com>
- <CAHk-=wj1rc2t5noMtVOgu8XXeTM4KiggEub9PdcexxeQrYPZvA@mail.gmail.com> <Y1FXpHdyvXjrjbLw@hirez.programming.kicks-ass.net>
-In-Reply-To: <Y1FXpHdyvXjrjbLw@hirez.programming.kicks-ass.net>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 20 Oct 2022 10:35:28 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whQchubuDpRGFabhmcZuzdt13OOF8wznXb+Dbi3GzBQhQ@mail.gmail.com>
-Message-ID: <CAHk-=whQchubuDpRGFabhmcZuzdt13OOF8wznXb+Dbi3GzBQhQ@mail.gmail.com>
-Subject: Re: [PATCH v14 08/14] mm: multi-gen LRU: support page table walks
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Yu Zhao <yuzhao@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org, x86@kernel.org,
-        page-reclaim@google.com, Brian Geffon <bgeffon@google.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Donald Carr <d@chaos-reins.com>,
-        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH 0/9] integrity: Move hooks into LSM
+Content-Language: en-US
+To:     Kees Cook <keescook@chromium.org>, Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Paul Moore <paul@paul-moore.com>,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
+        KP Singh <kpsingh@kernel.org>,
+        John Johansen <john.johansen@canonical.com>,
+        James Morris <jmorris@namei.org>, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-hardening@vger.kernel.org,
+        casey@schaufler-ca.com
+References: <20221013222702.never.990-kees@kernel.org>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <20221013222702.never.990-kees@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.20754 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 7:14 AM Peter Zijlstra <peterz@infradead.org> wrote:
+On 10/13/2022 3:36 PM, Kees Cook wrote:
+> Hi,
 >
-> So I've been sitting on these here patches (and never having time to
-> repost them), which is how I noticed in the first place:
+> It's been over 4 years since LSM stack was introduced. The integrity
+> subsystem is long overdue for moving to this infrastructure. Here's my
+> first pass at converting integrity and ima (and some of evm) into LSM
+> hooks. This should be enough of an example to finish evm, and introduce
+> the missing hooks for both. For example, after this, it looks like ima
+> only has a couple places it's still doing things outside of the LSM. At
+> least these stood out:
 >
->   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/log/?h=x86/mm.pae
+> fs/namei.c:     ima_post_create_tmpfile(mnt_userns, inode);
+> fs/namei.c:                             ima_post_path_mknod(mnt_userns, dentry);
+>
+> Mimi, can you please take this series and finish the conversion for
+> what's missing in ima and evm?
+>
+> I would also call attention to "175 insertions(+), 240 deletions(-)" --
+> as expected, this is a net reduction in code.
+>
+> Thanks!
+>
+> -Kees
 
-Well, that seems an improvement. I don't love how GUP_GET_PTE_LOW_HIGH
-now affects the PMD too, but if it's ok for all the three users, I
-guess it's ok. Maybe rename it now that it's not just the PTE?
+I endorse this effort.
 
-That said, I reacted to that cmpxchg loop:
-
-        } while (cmpxchg64(&pmdp->pmd, old.pmd, 0ULL) != old.pmd);
-
-is this series just so old (but rebased) that it doesn't use "try_cmpxchg64()"?
-
-
-               Linus
+>
+> Kees Cook (9):
+>   integrity: Prepare for having "ima" and "evm" available in "integrity"
+>     LSM
+>   security: Move trivial IMA hooks into LSM
+>   ima: Move xattr hooks into LSM
+>   ima: Move ima_file_free() into LSM
+>   LSM: Introduce inode_post_setattr hook
+>   fs: Introduce file_to_perms() helper
+>   ima: Move ima_file_check() into LSM
+>   integrity: Move trivial hooks into LSM
+>   integrity: Move integrity_inode_get() out of global header
+>
+>  fs/attr.c                             |  3 +-
+>  fs/file_table.c                       |  1 -
+>  fs/namei.c                            |  2 -
+>  fs/nfsd/vfs.c                         |  6 --
+>  include/linux/evm.h                   |  6 --
+>  include/linux/fs.h                    | 22 +++++++
+>  include/linux/ima.h                   | 87 ---------------------------
+>  include/linux/integrity.h             | 30 +--------
+>  include/linux/lsm_hook_defs.h         |  3 +
+>  security/Kconfig                      | 10 +--
+>  security/apparmor/include/file.h      | 18 ++----
+>  security/integrity/evm/evm_main.c     | 14 ++++-
+>  security/integrity/iint.c             | 28 +++++++--
+>  security/integrity/ima/ima.h          | 12 ++++
+>  security/integrity/ima/ima_appraise.c | 21 +++++--
+>  security/integrity/ima/ima_main.c     | 66 ++++++++++++++------
+>  security/integrity/integrity.h        |  8 +++
+>  security/security.c                   | 78 ++++++------------------
+>  18 files changed, 175 insertions(+), 240 deletions(-)
+>
