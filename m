@@ -2,96 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C896606099
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 14:50:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4DE760609D
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 14:53:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229768AbiJTMup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 08:50:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59706 "EHLO
+        id S230244AbiJTMw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 08:52:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230224AbiJTMuk (ORCPT
+        with ESMTP id S229755AbiJTMwy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 08:50:40 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0686972945
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 05:50:39 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id 10so20266660pli.0
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 05:50:39 -0700 (PDT)
+        Thu, 20 Oct 2022 08:52:54 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FD3617F288
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 05:52:53 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id d26so47138543ejc.8
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 05:52:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3T6X+tt7V+91kobXX12t6/xBrHgsUusEkXMw0L2QMKo=;
-        b=V1e+eumcTbSiXyjph0yA3r/AC6Jy3E7VdU0fC5UdvN3Jjv5eHkX+KRzb3g/5Snd3ZB
-         TO3UwH0dGpPsF3IU1lCS+drZ84tqXau9dHvtNPhV2RLawCrjLIQ8PR4P5KZqR87/eJqb
-         SE0VT26rx6WgMpUXzQiyNswQClOxqQojw78L07iPRMxPxe3bOhmP16OZQ6rbU0gwzOxU
-         KnGQSw+KJJBW8s1zOep5CjR4Fmsir+FCzi9T8L9Okp56p7CnC33SIIoZB1zuZMOvWIPD
-         RMXguy9y9Ej7zdSAjXnm6we46Y+87YtUPtndgbrZl3Bjtl/wMhRUbj0BQhxgNuJ6Dgcp
-         Y9Lw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WK/n/LhkGr1JoySFzksopsOUgF3OVJuEP860WPQR98E=;
+        b=kAMuBLNSHzFOG1rV1RUFKfDOOX5Ru/a9QO5AhLydiQs8qIxh0zsEaGi9QAGiazj4Ri
+         hi0Sr10ni0diYSRpKVxkYOBIbU7en+cwv1Ay01iXWJF2duMc5wQrwUCqAOrxotEUBe7u
+         o0VD4iU+y+qsJ25Z8mCtmsWX5Bh1oXIsdJl7tnfppDRdZGfktVLEuUfc1FozFOeFDEJD
+         MDzsfwBuC9XDa2OEbQAKVaKGNZMScjEsuy81Ok5EvdUWvudLb1lgopiiNY/3dAxVZhfG
+         /CR0D9Vk5iBQvtgHwBHZEHqeb32RUw7ZslsXOIJZ+JDrulV53Wadap2idbrF3zqQS/sb
+         Fnow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3T6X+tt7V+91kobXX12t6/xBrHgsUusEkXMw0L2QMKo=;
-        b=Ex+LThhvpvXmVuNKu6ndz9zRcNgQptYWqmgs1cSlR8XeuXekp3n3nG7IUHlLGUEuwd
-         uQ49EgZvZqeYt3J+BFDulSf0ji/6660K3ccJcgeXdYgnEo0pe/s5u/KhzRVAWL0m4VSF
-         OWrDfz1EEylzTpcMg4IfQaXjqNF+vjEvqFkCku3K+Fj4oiagxp2Qm+bIImD22Ewi2KrE
-         Fd9VRgCd+o9E7zv4QCRRS03hoBBLgi/FWwID8ApXndftEkaOQQPe6tpf16W8HvmbW57o
-         oqFABtl1WWEw1MUe2cjhMF+bRgEdh8bbcUBn6v/5biyYU6xs+DomaBq0YdMtM/KTD+MH
-         IpXw==
-X-Gm-Message-State: ACrzQf3UjvzKM4FN8Qsisf/vFQxkvyXB1S8F2feptJOEA7dsnv8WKlLB
-        rDQo5nHVu75+8+Sq9OJDaBpVXciZmW+ZNFyY
-X-Google-Smtp-Source: AMsMyM4TRzgWshHzykwjj+0oSUfvvDKlhXsmbl0EEBW/4qsIASSjpO/zYNZVz/MgLoZQ1OlX/n7zyA==
-X-Received: by 2002:a17:90b:2243:b0:20b:42a:4c0d with SMTP id hk3-20020a17090b224300b0020b042a4c0dmr49870333pjb.123.1666270238215;
-        Thu, 20 Oct 2022 05:50:38 -0700 (PDT)
-Received: from [127.0.0.1] (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
-        by smtp.gmail.com with ESMTPSA id d8-20020a170902cec800b0017f7b6e970esm12885047plg.146.2022.10.20.05.50.37
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WK/n/LhkGr1JoySFzksopsOUgF3OVJuEP860WPQR98E=;
+        b=wswxNXOpA2eGjd9RgCCxoqQh3jjvZmPqLf3AgwQLbr72p/S0kJ23lTk88Db1Jd4wSt
+         H3uIh68+ljU14Qu3JfiiMlyNkxbHSxZTDY6mjQ66PSZ5il1CWD/0kUCvqGQP6LWoT357
+         2wXcpY3evwI/DrdO5dABGRq5LWmzgfQvY+/ZVrRVGul2y9KlQX2OYSZpudZl7aff6pOj
+         JV7dgpuE58AsIEF5NEZ7v91PNm+htr+Lwlxx2mul5otD2dFdiVYN6VJ/JREMWR/oz5ri
+         7YIP/ZmrPHZJUklleLSw0qGj/6WyxPxpPaYWojwiGR/RfnNcL5ZfVw2YBYbwYPvMfeRf
+         KFCg==
+X-Gm-Message-State: ACrzQf0jftqgHL1uFViXsXxsKsToq9AoDhWcUOU6xRzRnA26S8F/3UY4
+        rXU3N4rTS8zC65krVJWPBko=
+X-Google-Smtp-Source: AMsMyM5LlHFaCljG+RAp/54cLl1ecwNq+01Y4j296DN3CdV4vyLKNt/rAy/kauNoo+SfXPKCIyRO2A==
+X-Received: by 2002:a17:907:80d:b0:73d:a576:dfbd with SMTP id wv13-20020a170907080d00b0073da576dfbdmr10866596ejb.402.1666270371786;
+        Thu, 20 Oct 2022 05:52:51 -0700 (PDT)
+Received: from pc638.lan ([155.137.26.201])
+        by smtp.gmail.com with ESMTPSA id cs2-20020a0564020c4200b004585eba4baesm12107456edb.80.2022.10.20.05.52.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 05:50:37 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     linux-block@vger.kernel.org,
-        Pavel Begunkov <asml.silence@gmail.com>
-Cc:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-In-Reply-To: <cover.1666122465.git.asml.silence@gmail.com>
-References: <cover.1666122465.git.asml.silence@gmail.com>
-Subject: Re: (subset) [RFC for-next v2 0/4] enable pcpu bio caching for IRQ I/O
-Message-Id: <166627023722.161997.8160242378689353670.b4-ty@kernel.dk>
-Date:   Thu, 20 Oct 2022 05:50:37 -0700
+        Thu, 20 Oct 2022 05:52:50 -0700 (PDT)
+From:   "Uladzislau Rezki (Sony)" <urezki@gmail.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
+Subject: [PATCH 1/1] mm: vmalloc: Simplify return boolean expression
+Date:   Thu, 20 Oct 2022 14:52:47 +0200
+Message-Id: <20221020125247.5053-1-urezki@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.11.0-dev-d9ed3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 18 Oct 2022 20:50:54 +0100, Pavel Begunkov wrote:
-> This series implements bio pcpu caching for normal / IRQ-driven I/O
-> extending REQ_ALLOC_CACHE currently limited to iopoll. The allocation side
-> still only works from non-irq context, which is the reason it's not enabled
-> by default, but turning it on for other users (e.g. filesystems) is
-> as a matter of passing a flag.
-> 
-> t/io_uring with an Optane SSD setup showed +7% for batches of 32 requests
-> and +4.3% for batches of 8.
-> 
-> [...]
+A return expression of the __purge_vmap_area_lazy() function can
+be simplified. Basically a boolean expression anyway is converted
+to boolean values either to true or false.
 
-Applied, thanks!
+Suggested-by: Christoph Hellwig <hch@infradead.org>
+Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+---
+ mm/vmalloc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-[1/4] bio: safeguard REQ_ALLOC_CACHE bio put
-      commit: d4347d50407daea6237872281ece64c4bdf1ec99
-
-Best regards,
+diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+index bd56f68bedf0..0685b477c71b 100644
+--- a/mm/vmalloc.c
++++ b/mm/vmalloc.c
+@@ -1787,7 +1787,7 @@ static bool __purge_vmap_area_lazy(unsigned long start, unsigned long end)
+ 
+ out:
+ 	trace_purge_vmap_area_lazy(start, end, num_purged_areas);
+-	return num_purged_areas > 0 ? true:false;
++	return num_purged_areas > 0;
+ }
+ 
+ /*
 -- 
-Jens Axboe
-
+2.30.2
 
