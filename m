@@ -2,69 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66E7360555C
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 04:14:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B53CF605555
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 04:11:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231509AbiJTCOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 22:14:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37416 "EHLO
+        id S230362AbiJTCLI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 22:11:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231522AbiJTCOr (ORCPT
+        with ESMTP id S229775AbiJTCLE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 22:14:47 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC9F75AC4B
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 19:14:44 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id l6so17938121pgu.7
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 19:14:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5cxlbEVDeF4plEeh62JkmWpXJNLBpkyMDDpLc8c5MkU=;
-        b=i/ZHwd6vtO8tnDAAAmZSyChgftK9wsSwRMKMhPJZoaiURvJ8gEdumCl6AOR1lR5ZKf
-         KiSg3hanIqMlz291v/w0umgZzgIlR2uzUcVqDvwEixzgGYYzFsSMdrIaIuQlV6Rw6F53
-         xPstk3O+7bTDGXwmtBKvBDzmThnbs3TbXKwf927+rJ53uQ2sN/9sRQUSqFF2vlWe+TW0
-         IDpScgosPWp7njzSoz9BBlkhTkXfAIyb7j0ZGWvQir9/DCt8HA9tw0YwQ958YU3pyPk+
-         x00xiEredWYJvKcyy8BxPhMoxSrwqcywKSGxXYxgemgV3tJp8+lcglLt5p1gphgCPvMM
-         Rldw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5cxlbEVDeF4plEeh62JkmWpXJNLBpkyMDDpLc8c5MkU=;
-        b=x+OZ7E0piVGC7n3949j0yuM4Q3BHCgGOVyoHooH2TZsqZjBRprLZx0W/hz6ETCmFAq
-         om+kJhDEIpSaYI603HNmXA2E0e5UbMk793RNZJ3mAetduYDiIZKXZU6eagm5zQv11IUr
-         FS6ngxyTX3B0d/h6lbALwrZqzV2QC1GQo+LNYVr0tZnhIpuKyQQo86hmvLyVbPDZ8wwS
-         Pk3uWJ+ru4eQwm0IdVeKVEMHrtMe4uqJW82qFJMc4RTSp+dp63Og9RDOUj8R/N1059Sd
-         UvUbFfh/UJci5wH5kgvzq4kWnbqb5qA10tQ2KRVUTQ/ASJbQqAXiyTHcQmJXgBMi0UZD
-         kNxg==
-X-Gm-Message-State: ACrzQf3eVr6VMQ0fJ2zkCwi7tUXFA9eDyxH222HNnkSiBMntny72TCf+
-        fHFppof6+iD6Gy8ArAc3bfU=
-X-Google-Smtp-Source: AMsMyM6w3Kn9m+GCRlAqC2fbXBLFG9tRtOfO2XMsER+YC571XMz1GzczedPWGtvXX0+kFvqmMtE5Qw==
-X-Received: by 2002:a63:2c8:0:b0:46e:9da9:8083 with SMTP id 191-20020a6302c8000000b0046e9da98083mr456343pgc.186.1666232083946;
-        Wed, 19 Oct 2022 19:14:43 -0700 (PDT)
-Received: from localhost.localdomain (192-184-163-51.fiber.dynamic.sonic.net. [192.184.163.51])
-        by smtp.gmail.com with ESMTPSA id n18-20020aa79852000000b005631af4ece2sm11942936pfq.182.2022.10.19.19.14.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Oct 2022 19:14:43 -0700 (PDT)
-From:   Emily Peri <eperi1024@gmail.com>
-To:     gregkh@linuxfoundation.org, outreachy@lists.linux.dev,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Cc:     Emily Peri <eperi1024@gmail.com>
-Subject: [PATCH 3/3] staging: rtl8723bs: remove unnecessary parenthesis
-Date:   Wed, 19 Oct 2022 19:10:53 -0700
-Message-Id: <a08a440eabddd8e78d045ca9898a415d81f6f6d7.1666230736.git.eperi1024@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1666230736.git.eperi1024@gmail.com>
-References: <cover.1666230736.git.eperi1024@gmail.com>
+        Wed, 19 Oct 2022 22:11:04 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDB20164BEC;
+        Wed, 19 Oct 2022 19:11:02 -0700 (PDT)
+X-UUID: 98f5b9142ff349de9ac6a3e910a87808-20221020
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=JaIR81W7uRC3RHrO6DoWqaK6YpTRAbe3E0L77VhfzRA=;
+        b=GY5OXJHiGC3wCbJ/uUXv0sru4cUlpNZz0lQ8EctPjyqqOoph1SPRm1UOgXl/j2tWQCH2oopP02XnVFaJWmm8LvsjhrvglZiFSD3H5wWtNDqhSS2Tg3wTrEJEj6OA79RBjUtE2tF6tk9eHWZ4m2ZSBlGM4WefNpG+u6+k+SP3JFg=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.12,REQID:4288b337-0a83-4b1b-a778-9d389e66fb46,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:62cd327,CLOUDID:0c6f5ba4-ebb2-41a8-a87c-97702aaf2e20,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 98f5b9142ff349de9ac6a3e910a87808-20221020
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <jianjun.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1432779166; Thu, 20 Oct 2022 10:10:57 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Thu, 20 Oct 2022 10:10:56 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Thu, 20 Oct 2022 10:10:55 +0800
+Message-ID: <ccb830693f467b59d829c7929ea3b47b2d4c029f.camel@mediatek.com>
+Subject: Re: [PATCH v1 2/3] arm64: dts: mt8195: Add pcie and pcie phy nodes
+From:   Jianjun Wang <jianjun.wang@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <linux-pci@vger.kernel.org>, <linux-mediatek@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Thu, 20 Oct 2022 10:10:55 +0800
+In-Reply-To: <c30fbc60-bcdf-71f5-0db7-bd9bb27ddd37@collabora.com>
+References: <20221017070858.13902-1-tinghan.shen@mediatek.com>
+         <20221017070858.13902-3-tinghan.shen@mediatek.com>
+         <c30fbc60-bcdf-71f5-0db7-bd9bb27ddd37@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,27 +73,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove extra parenthesis in conditional statement in rtw_ioctl_set.
-Issue found by checkpatch.
+Hi Angelo,
 
-Signed-off-by: Emily Peri <eperi1024@gmail.com>
----
- drivers/staging/rtl8723bs/core/rtw_ioctl_set.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks for your review.
 
-diff --git a/drivers/staging/rtl8723bs/core/rtw_ioctl_set.c b/drivers/staging/rtl8723bs/core/rtw_ioctl_set.c
-index ac957035bf1a..32194dabd587 100644
---- a/drivers/staging/rtl8723bs/core/rtw_ioctl_set.c
-+++ b/drivers/staging/rtl8723bs/core/rtw_ioctl_set.c
-@@ -160,7 +160,7 @@ u8 rtw_set_802_11_ssid(struct adapter *padapter, struct ndis_802_11_ssid *ssid)
- 	if (check_fwstate(pmlmepriv, _FW_LINKED|WIFI_ADHOC_MASTER_STATE) == true) {
- 		if ((pmlmepriv->assoc_ssid.ssid_length == ssid->ssid_length) &&
- 		    (!memcmp(&pmlmepriv->assoc_ssid.ssid, ssid->ssid, ssid->ssid_length))) {
--			if ((check_fwstate(pmlmepriv, WIFI_STATION_STATE) == false)) {
-+			if (check_fwstate(pmlmepriv, WIFI_STATION_STATE) == false) {
- 				if (rtw_is_same_ibss(padapter, pnetwork) == false) {
- 					/* if in WIFI_ADHOC_MASTER_STATE | WIFI_ADHOC_STATE, create bss or rejoin again */
- 					rtw_disassoc_cmd(padapter, 0, true);
--- 
-2.34.1
+On Wed, 2022-10-19 at 10:55 +0200, AngeloGioacchino Del Regno wrote:
+> Il 17/10/22 09:08, Tinghan Shen ha scritto:
+> > Add pcie and pcie phy nodes for mt8195.
+> > 
+> > Signed-off-by: Jianjun Wang <jianjun.wang@mediatek.com>
+> > Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+> > ---
+> >   arch/arm64/boot/dts/mediatek/mt8195.dtsi | 143
+> > +++++++++++++++++++++++
+> >   1 file changed, 143 insertions(+)
+> > 
+> > diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> > b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> > index d03f0c2b8233..903e92d6156f 100644
+> > --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> > +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> > @@ -1182,6 +1182,104 @@
+> >   			status = "disabled";
+> >   		};
+> >   
+> > +		pcie0: pcie@112f0000 {
+> > +			compatible = "mediatek,mt8195-pcie",
+> > +				     "mediatek,mt8192-pcie";
+> 
+> ..snip..
+> 
+> > +
+> > +			phys = <&pciephy>;
+> > +			phy-names = "pcie-phy";
+> > +
+> > +			power-domains = <&spm
+> > MT8195_POWER_DOMAIN_PCIE_MAC_P0>;
+> 
+> You're missing the resets:
+> 
+> 			resets = <&infracfg_ao
+> MT8195_INFRA_RST2_PCIE_P0_SWRST>;
+> 			reset-names = "mac";
+> 
+> > +
+> > +			#interrupt-cells = <1>;
+> > +			interrupt-map-mask = <0 0 0 7>;
+> 
+> ..snip..
+> 
+> > +		};
+> > +
+> > +		pcie1: pcie@112f8000 {
+> > +			compatible = "mediatek,mt8195-pcie",
+> > +				     "mediatek,mt8192-pcie";
+> 
+> ..snip..
+> 
+> > +			power-domains = <&spm
+> > MT8195_POWER_DOMAIN_PCIE_MAC_P1>;
+> 
+> Here too:
+> 			resets = <&infracfg_ao
+> MT8195_INFRA_RST2_USBSIF_P1_SWRST>,
+
+Reset the combo-phy in PCIe driver will cause side effect on USB2 port,
+so this reset cannot be added.
+
+We will fix others in the next version.
+
+Thanks.
+> 				 <&infracfg_ao
+> MT8195_INFRA_RST2_PCIE_P1_SWRST>;
+> 			reset-names = "phy", "mac";
+> 
+> > +
+> > +			#interrupt-cells = <1>;
+> 
+> ..snip..
+> 
+> > @@ -1241,6 +1339,34 @@
+> >   				reg = <0x189 0x2>;
+> >   				bits = <7 5>;
+> >   			};
+> > +			pciephy_rx_ln1: pciephy-rx-ln1@190 {
+> > +				reg = <0x190 0x1>;
+> > +				bits = <0 4>;
+> > +			};
+> > +			pciephy_tx_ln1_nmos: pciephy-tx-ln1-nmos@190 {
+> 
+> Please run dtbs_check and try to build the kernel before pushing
+> commits upstream.
+> This will give you a not-so-nice warning and that shall not happen.
+> 
+> You can solve it by naming these nodes like:
+> pciephy-rx-ln1@190,1
+> pciephy-tx-ln1-nmos@190,2
+> 
+> ...etc
+> 
+> Regards,
+> Angelo
+> 
+> 
 
