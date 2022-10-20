@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15C226057C2
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 08:57:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD4D16057C5
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 08:58:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229853AbiJTG5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 02:57:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37996 "EHLO
+        id S230003AbiJTG6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 02:58:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229880AbiJTG5Y (ORCPT
+        with ESMTP id S229886AbiJTG5p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 02:57:24 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49FAA12791D;
-        Wed, 19 Oct 2022 23:57:24 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id l4so19462101plb.8;
-        Wed, 19 Oct 2022 23:57:24 -0700 (PDT)
+        Thu, 20 Oct 2022 02:57:45 -0400
+Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8176812FF85;
+        Wed, 19 Oct 2022 23:57:39 -0700 (PDT)
+Received: by mail-vs1-xe2d.google.com with SMTP id s28so3656633vsr.10;
+        Wed, 19 Oct 2022 23:57:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=o9QEkVTNvZxbjrViQWFpsEggxeQOyWtEOepfRN2hpAo=;
-        b=kiuT10Hvav045F25AT0vhDVgc6hpMQqJO0FJCBvetAv4v+xI7sOmZLwWBDPs690t8S
-         CHidmb60IrxDExOOART+3+8d1iOgfFsDDLNkQOwhfY5oAFjNrFB81fy2xqB/rzsyh8iN
-         AaPl3EkuPDDXE4lHfH8rjVNtfh70+QewsFhScPFVaDT0vqEW9IGGGqkG3qQo8aEj0yam
-         g/k2YfT8ZzmR+tJwhSFxkQ7FbaiCyNSocEH+DnEAsYVckvyLHZDi9k+ORnHQmg0lE/Yn
-         5Fzm8+QLCcDNyiyvk+7qhSCJfZ8rgA9nAqx5zkGaumF3cFHBm6K+wg5GDLwxtVX5Rp0d
-         Ztaw==
+        bh=tdwtzHR+xQdJbDyYyz1o5nHG0wEHYVT1LmuGtsV2+G8=;
+        b=Xvf+5JT1BeXh1liZq0Ea+z9ZfWXaNKPGa2kKI4kpRnh408MfLKPpl+1Jv1PN1OiPzB
+         dIf9Pl8O5y3FVKXMCNa4OlxAVRmgAII56v2j0sCf4voThcOYy0K4yIT6MePnPbKwyjzF
+         ISc6Hlz5i7qGjbowkqotlE5knehv7fDa7eEp6UaWvV2AMQyec/2t8V3WrUrNO5LizgNS
+         Q5xs1YXbpI+lNOXdVJzh3L83jP/0YPOqeLZ/CxBWUeLbPq1jTVPpEZ5FXurQ9XfbXGpT
+         acziGioGwR8tHTiOGmF5r4Qz0Gu7ZCziQdvqTeZ9l8JhEIcuF6Zx5PNpfzOco60Tx0Od
+         AWgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=references:in-reply-to:message-id:date:subject:cc:to:from
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=o9QEkVTNvZxbjrViQWFpsEggxeQOyWtEOepfRN2hpAo=;
-        b=PvodPLBkOPPgcdwtLSXIko3GeYDCJc1iUYyvy1KXptG906zkqIE1mgLqYVJd1ieAjc
-         PEVvqogledpqhCCQhrL4MDvRHcO60cc8kmgFoECu0KZgdCUWuSD4ulgS1JiEZFPAQiG3
-         hESF4TL5JUilZ+g0h9gIAxocLB+0d2m5xrRcBfdHgjDeSvptWJbvkI9l7LGW2+cXEGEq
-         N2zlvISviN3d9CdcnYqzHttKruRTHlwWE52/1IObUsOo+Eoqq6l1no0Hi8Ejy9zFnbSy
-         VJ0S86Jv+ya0rqQXBsLbZtKxrYhncK12zIdgakxIkbTb7DERIZXD+vAtoeW/kBSmnlq7
-         8CMw==
-X-Gm-Message-State: ACrzQf35DzeQW3921DzZn4i9ZuwDsX2R4DThwEjGXSioAC+SBJlDS6Dc
-        RGLmoMlBZXKThIVaQ5xEbXA=
-X-Google-Smtp-Source: AMsMyM40yMUrWiyDTQ5WLKyTqk++kmoroW4+j1kWkIE/9dffMnftHGeLDzgAnyDdSajaNOi+1CbbWQ==
-X-Received: by 2002:a17:90a:d917:b0:212:a8e4:8a44 with SMTP id c23-20020a17090ad91700b00212a8e48a44mr123880pjv.2.1666249043662;
-        Wed, 19 Oct 2022 23:57:23 -0700 (PDT)
+        bh=tdwtzHR+xQdJbDyYyz1o5nHG0wEHYVT1LmuGtsV2+G8=;
+        b=6C/HE5+re4dd4nY5fvazhMrN5AWLbtq5AzUOUPeUK00s+FnKRfoHUogSR/qq7oeftf
+         jP7fNDSLB3OzFRMb7Whfx0FwGcyxxnY1fhP+KTX8ZIfWyV+6/NeocjXpRW1hQISNoOR+
+         amczw8EsyraDxzeLcD8+yq21M/Om/I2PGHHIM1wN0Sr4EEbd0T8QTqFUvcHn0dNezULv
+         oKNcbCQ9SgCRjOO3lDwMBZeOL5PPF4JvHmK8E5GqLgUZp1CGr0ABcwRJ/g+LM7g+OPdo
+         9akh4J1QO29qFl1DRVALVIUXE38gtjgSIJoOSk+bWioa1pVBEbb3g+xNuitBQY1HFbRE
+         h20Q==
+X-Gm-Message-State: ACrzQf3KwtEHW++9/F/a/kGXr1uzv5AUgPbz2Y5E/xumF3hnItZhV7kp
+        oKfh9t1YUyYaFuvaMelAXTIQKX2Xf5M=
+X-Google-Smtp-Source: AMsMyM4hQ0Yhe5iOYriwj1UOZKtgmWOg5OoNCi2NNCmYFUvTpJNL34vJ0hKTGjeazf0e0h74FXXfNw==
+X-Received: by 2002:a17:902:cf08:b0:17d:46b6:25f9 with SMTP id i8-20020a170902cf0800b0017d46b625f9mr12541613plg.67.1666249047246;
+        Wed, 19 Oct 2022 23:57:27 -0700 (PDT)
 Received: from localhost.localdomain ([2402:7500:569:a12c:444a:ed28:4831:fc95])
-        by smtp.gmail.com with ESMTPSA id s9-20020a170902ea0900b001786b712bf7sm989952plg.151.2022.10.19.23.57.21
+        by smtp.gmail.com with ESMTPSA id s9-20020a170902ea0900b001786b712bf7sm989952plg.151.2022.10.19.23.57.23
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 19 Oct 2022 23:57:23 -0700 (PDT)
+        Wed, 19 Oct 2022 23:57:26 -0700 (PDT)
 From:   cy_huang <u0084500@gmail.com>
 To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         broonie@kernel.org
 Cc:     lgirdwood@gmail.com, cy_huang@richtek.com,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] dt-bindings: regulator: Add bindings for Richtek RT6190 regulator
-Date:   Thu, 20 Oct 2022 14:57:12 +0800
-Message-Id: <1666249033-12219-2-git-send-email-u0084500@gmail.com>
+Subject: [PATCH 2/2] regulator: rt6190: Add support for Richtek RT6190 regulator
+Date:   Thu, 20 Oct 2022 14:57:13 +0800
+Message-Id: <1666249033-12219-3-git-send-email-u0084500@gmail.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1666249033-12219-1-git-send-email-u0084500@gmail.com>
 References: <1666249033-12219-1-git-send-email-u0084500@gmail.com>
@@ -71,97 +71,551 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: ChiYuan Huang <cy_huang@richtek.com>
 
-Add devicetree binding for Richtek RT6190 4-Switch buckboost controller.
+Add support for Richtek RT6190 4-Switch BuckBoost controller.
 
 Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
 ---
- .../regulator/richtek,rt6190-regulator.yaml        | 77 ++++++++++++++++++++++
- 1 file changed, 77 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/regulator/richtek,rt6190-regulator.yaml
+ drivers/regulator/Kconfig            |  11 +
+ drivers/regulator/Makefile           |   1 +
+ drivers/regulator/rt6190-regulator.c | 495 +++++++++++++++++++++++++++++++++++
+ 3 files changed, 507 insertions(+)
+ create mode 100644 drivers/regulator/rt6190-regulator.c
 
-diff --git a/Documentation/devicetree/bindings/regulator/richtek,rt6190-regulator.yaml b/Documentation/devicetree/bindings/regulator/richtek,rt6190-regulator.yaml
+diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
+index 070e440..4e4614d 100644
+--- a/drivers/regulator/Kconfig
++++ b/drivers/regulator/Kconfig
+@@ -1124,6 +1124,17 @@ config REGULATOR_RT6160
+ 	  The wide output range is from 2025mV to 5200mV and can be used on most
+ 	  common application scenario.
+ 
++config REGULATOR_RT6190
++	tristate "Richtek RT6190 4-Switch BuckBoost controller"
++	depends on I2C
++	select REGMAP_I2C
++	help
++	  The RT6190 is a 4-Switch BuckBoost controller designed for converting
++	  input voltage to output voltage that can be equal to, higher or lower
++	  than input voltage. It operates with wide input voltage range from
++	  4.5V to 36V, and the output voltage can be set from 3V to 36V by
++	  external FB pin.
++
+ config REGULATOR_RT6245
+ 	tristate "Richtek RT6245 voltage regulator"
+ 	depends on I2C
+diff --git a/drivers/regulator/Makefile b/drivers/regulator/Makefile
+index 5962307..c3b5cf6 100644
+--- a/drivers/regulator/Makefile
++++ b/drivers/regulator/Makefile
+@@ -134,6 +134,7 @@ obj-$(CONFIG_REGULATOR_RT5120)	+= rt5120-regulator.o
+ obj-$(CONFIG_REGULATOR_RT5190A) += rt5190a-regulator.o
+ obj-$(CONFIG_REGULATOR_RT5759)	+= rt5759-regulator.o
+ obj-$(CONFIG_REGULATOR_RT6160)	+= rt6160-regulator.o
++obj-$(CONFIG_REGULATOR_RT6190)	+= rt6190-regulator.o
+ obj-$(CONFIG_REGULATOR_RT6245)	+= rt6245-regulator.o
+ obj-$(CONFIG_REGULATOR_RTMV20)	+= rtmv20-regulator.o
+ obj-$(CONFIG_REGULATOR_RTQ2134) += rtq2134-regulator.o
+diff --git a/drivers/regulator/rt6190-regulator.c b/drivers/regulator/rt6190-regulator.c
 new file mode 100644
-index 00000000..be0fa7f
+index 00000000..995e028
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/regulator/richtek,rt6190-regulator.yaml
-@@ -0,0 +1,77 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/regulator/richtek,rt6190-regulator.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/drivers/regulator/rt6190-regulator.c
+@@ -0,0 +1,495 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2022 Richtek Technology Corp.
++ *
++ * Author: ChiYuan Huang <cy_huang@richtek.com>
++ *
++ */
 +
-+title: Richtek RT6190 4-Switch BuckBoost controller
++#include <linux/bits.h>
++#include <linux/delay.h>
++#include <linux/gpio/consumer.h>
++#include <linux/i2c.h>
++#include <linux/interrupt.h>
++#include <linux/kernel.h>
++#include <linux/mod_devicetable.h>
++#include <linux/module.h>
++#include <linux/pm_runtime.h>
++#include <linux/regmap.h>
++#include <linux/regulator/consumer.h>
++#include <linux/regulator/driver.h>
++#include <linux/regulator/of_regulator.h>
 +
-+maintainers:
-+  - ChiYuan Huang <cy_huang@richtek.com>
++#define RT6190_REG_VID		0x00
++#define RT6190_REG_OUTV		0x01
++#define RT6190_REG_OUTC		0x03
++#define RT6190_REG_SET1		0x0D
++#define RT6190_REG_SET2		0x0E
++#define RT6190_REG_SET4		0x10
++#define RT6190_REG_RATIO	0x11
++#define RT6190_REG_OUT_VOLT_L	0x12
++#define RT6190_REG_TEMP_H	0x1B
++#define RT6190_REG_STAT1	0x1C
++#define RT6190_REG_ALERT1	0x1E
++#define RT6190_REG_ALERT2	0x1F
++#define RT6190_REG_MASK2	0x21
++#define RT6190_REG_OCPEN	0x28
++#define RT6190_REG_SET5		0x29
++#define RT6190_REG_VBUSC_ADC	0x32
++#define RT6190_REG_BUSC_VOLT_L	0x33
++#define RT6190_REG_BUSC_VOLT_H	0x34
++#define RT6190_REG_STAT3	0x37
++#define RT6190_REG_ALERT3	0x38
++#define RT6190_REG_MASK3	0x39
 +
-+description: |
-+  The RT6190 is 4-Switch BuckBoost controller designed for converting input
-+  voltage to output voltage that can be equal to, higher or lower than input
-+  voltage. It operates with wide input voltage range from 4.5V to 36V, and
-+  the output voltage can be set from 3V to 36V by external FB pin. It's commonly
-+  used for the application like as BuckBoost bus upply, docking station and USB
-+  power delivery product.
++#define RT6190_ENPWM_MASK	BIT(7)
++#define RT6190_ENDCHG_MASK	BIT(4)
++#define RT6190_ALERT_OTPEVT	BIT(6)
++#define RT6190_ALERT_UVPEVT	BIT(5)
++#define RT6190_ALERT_OVPEVT	BIT(4)
++#define RT6190_ENGCP_MASK	BIT(1)
++#define RT6190_FCCM_MASK	BIT(7)
 +
-+  Datasheet is available at
-+  https://www.richtek.com/assets/product_file/RT6190/DS6190-02.pdf
++#define RICHTEK_VID		0x82
++#define RT6190_OUT_MIN_UV	3000000
++#define RT6190_OUT_MAX_UV	32000000
++#define RT6190_OUT_STEP_UV	20000
++#define RT6190_OUT_N_VOLT	(RT6190_OUT_MAX_UV / RT6190_OUT_STEP_UV + 1)
++#define RT6190_OUTV_MINSEL	150
++#define RT6190_OUT_MIN_UA	306000
++#define RT6190_OUT_MAX_UA	12114000
++#define RT6190_OUT_STEP_UA	24000
++#define RT6190_OUTC_MINSEL	19
++#define RT6190_EN_TIME_US	500
 +
-+allOf:
-+  - $ref: regulator.yaml#
++#define RT6190_PSM_MODE		0
++#define RT6190_FCCM_MODE	1
 +
-+properties:
-+  compatible:
-+    enum:
-+      - richtek,rt6190
++struct rt6190_data {
++	struct device *dev;
++	struct regmap *regmap;
++	struct gpio_desc *enable_gpio;
++	unsigned int cached_alert_evt;
++};
 +
-+  reg:
-+    maxItems: 1
++static int rt6190_out_set_voltage_sel(struct regulator_dev *rdev,
++				      unsigned int selector)
++{
++	struct regmap *regmap = rdev_get_regmap(rdev);
++	__le16 le_sel = cpu_to_le16(selector);
 +
-+  enable-gpios: true
++	return regmap_raw_write(regmap, RT6190_REG_OUTV, &le_sel,
++				sizeof(le_sel));
++}
 +
-+  wakeup-source: true
++static int rt6190_out_get_voltage_sel(struct regulator_dev *rdev)
++{
++	struct regmap *regmap = rdev_get_regmap(rdev);
++	__le16 le_sel;
++	int ret;
 +
-+  interrupts:
-+    maxItems: 1
++	ret = regmap_raw_read(regmap, RT6190_REG_OUTV, &le_sel, sizeof(le_sel));
 +
-+  regulator-allowed-modes:
-+    description: |
-+      buck allowed operating mode
-+        0: PSM mode (light load Power Saving Mode)
-+        1: FCCM mode (Forced-CCM mode)
-+    items:
-+      enum: [0, 1]
++	return ret ?: le16_to_cpu(le_sel);
++}
 +
-+required:
-+  - compatible
-+  - reg
++static int rt6190_out_enable(struct regulator_dev *rdev)
++{
++	struct rt6190_data *data = rdev_get_drvdata(rdev);
++	struct regmap *regmap = rdev_get_regmap(rdev);
++	u8 out_cfg[4];
++	int ret;
 +
-+unevaluatedProperties: false
++	pm_runtime_get_sync(data->dev);
 +
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
++	/*
++	 * From off to on, vout config will restore to IC default.
++	 * Read vout configs before enable, and restore them after enable
++	 */
++	ret = regmap_raw_read(regmap, RT6190_REG_OUTV, out_cfg,
++			      sizeof(out_cfg));
++	if (ret)
++		return ret;
 +
-+    i2c {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
++	ret = regulator_enable_regmap(rdev);
++	if (ret)
++		return ret;
 +
-+      regulator@2c {
-+        compatible = "richtek,rt6190";
-+        reg = <0x2c>;
-+        wakeup-source;
-+        interrupts-extended = <&gpio26 0 IRQ_TYPE_LEVEL_LOW>;
-+        enable-gpios = <&gpio26 1 GPIO_ACTIVE_HIGH>;
-+        regulator-name = "richtek,rt6190-buckboost";
-+        regulator-min-microvolt = <3000000>;
-+        regulator-max-microvolt = <32000000>;
-+        regulator-min-microamp = <306000>;
-+        regulator-max-microamp = <12114000>;
-+        regulator-allowed-modes = <0 1>;
-+      };
-+    };
++	ret = regmap_raw_write(regmap, RT6190_REG_OUTV, out_cfg,
++			       sizeof(out_cfg));
++	if (ret)
++		return ret;
++
++	return regmap_update_bits(regmap, RT6190_REG_SET5, RT6190_ENGCP_MASK,
++				  RT6190_ENGCP_MASK);
++}
++
++static int rt6190_out_disable(struct regulator_dev *rdev)
++{
++	struct rt6190_data *data = rdev_get_drvdata(rdev);
++	struct regmap *regmap = rdev_get_regmap(rdev);
++	int ret;
++
++	ret = regmap_update_bits(regmap, RT6190_REG_SET5, RT6190_ENGCP_MASK, 0);
++	if (ret)
++		return ret;
++
++	ret = regulator_disable_regmap(rdev);
++	if (ret)
++		return ret;
++
++	/* cleared cached alert event */
++	data->cached_alert_evt = 0;
++
++	pm_runtime_put(data->dev);
++
++	return 0;
++}
++
++static int rt6190_out_set_current_limit(struct regulator_dev *rdev, int min_uA,
++					int max_uA)
++{
++	struct regmap *regmap = rdev_get_regmap(rdev);
++	int csel, clim;
++	__le16 le_csel;
++
++	if (min_uA < RT6190_OUT_MIN_UA || max_uA > RT6190_OUT_MAX_UA)
++		return -EINVAL;
++
++	csel = DIV_ROUND_UP(min_uA - RT6190_OUT_MIN_UA, RT6190_OUT_STEP_UA);
++
++	clim = RT6190_OUT_MIN_UA + RT6190_OUT_STEP_UA * csel;
++	if (clim > max_uA)
++		return -EINVAL;
++
++	csel += RT6190_OUTC_MINSEL;
++	le_csel = cpu_to_le16(csel);
++
++	return regmap_raw_write(regmap, RT6190_REG_OUTC, &le_csel,
++				sizeof(le_csel));
++}
++
++static int rt6190_out_get_current_limit(struct regulator_dev *rdev)
++{
++	struct regmap *regmap = rdev_get_regmap(rdev);
++	__le16 le_csel;
++	int csel, ret;
++
++	ret = regmap_raw_read(regmap, RT6190_REG_OUTC, &le_csel,
++			      sizeof(le_csel));
++	if (ret)
++		return ret;
++
++	csel = le16_to_cpu(le_csel);
++	csel -= RT6190_OUTC_MINSEL;
++
++	return RT6190_OUT_MIN_UA + RT6190_OUT_STEP_UA * csel;
++}
++
++static int rt6190_out_set_mode(struct regulator_dev *rdev, unsigned int mode)
++{
++	struct regmap *regmap = rdev_get_regmap(rdev);
++	unsigned int val;
++
++	switch (mode) {
++	case REGULATOR_MODE_FAST:
++		val = RT6190_FCCM_MASK;
++		break;
++	case REGULATOR_MODE_NORMAL:
++		val = 0;
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	return regmap_update_bits(regmap, RT6190_REG_SET1, RT6190_FCCM_MASK,
++				  val);
++}
++
++static unsigned int rt6190_out_get_mode(struct regulator_dev *rdev)
++{
++	struct regmap *regmap = rdev_get_regmap(rdev);
++	unsigned int config;
++	int ret;
++
++	ret = regmap_read(regmap, RT6190_REG_SET1, &config);
++	if (ret)
++		return REGULATOR_MODE_INVALID;
++
++	if (config & RT6190_FCCM_MASK)
++		return REGULATOR_MODE_FAST;
++
++	return REGULATOR_MODE_NORMAL;
++}
++
++static int rt6190_out_get_error_flags(struct regulator_dev *rdev,
++				      unsigned int *flags)
++{
++	struct rt6190_data *data = rdev_get_drvdata(rdev);
++	unsigned int state, rpt_flags = 0;
++	int ret;
++
++	ret = regmap_read(data->regmap, RT6190_REG_STAT1, &state);
++	if (ret)
++		return ret;
++
++	state |= data->cached_alert_evt;
++
++	if (state & RT6190_ALERT_OTPEVT)
++		rpt_flags |= REGULATOR_ERROR_OVER_TEMP;
++
++	if (state & RT6190_ALERT_UVPEVT)
++		rpt_flags |= REGULATOR_ERROR_UNDER_VOLTAGE;
++
++	if (state & RT6190_ALERT_OVPEVT)
++		rpt_flags |= REGULATOR_ERROR_REGULATION_OUT;
++
++	*flags = rpt_flags;
++
++	return 0;
++}
++
++static unsigned int rt6190_out_of_map_mode(unsigned int mode)
++{
++	switch (mode) {
++	case RT6190_PSM_MODE:
++		return REGULATOR_MODE_NORMAL;
++	case RT6190_FCCM_MODE:
++		return REGULATOR_MODE_FAST;
++	default:
++		return REGULATOR_MODE_INVALID;
++	}
++}
++
++static const struct regulator_ops rt6190_regulator_ops = {
++	.list_voltage = regulator_list_voltage_linear,
++	.set_voltage_sel = rt6190_out_set_voltage_sel,
++	.get_voltage_sel = rt6190_out_get_voltage_sel,
++	.enable = rt6190_out_enable,
++	.disable = rt6190_out_disable,
++	.is_enabled = regulator_is_enabled_regmap,
++	.set_current_limit = rt6190_out_set_current_limit,
++	.get_current_limit = rt6190_out_get_current_limit,
++	.set_active_discharge = regulator_set_active_discharge_regmap,
++	.set_mode = rt6190_out_set_mode,
++	.get_mode = rt6190_out_get_mode,
++	.get_error_flags = rt6190_out_get_error_flags,
++};
++
++static const struct regulator_desc rt6190_regulator_desc = {
++	.name = "rt6190-regulator",
++	.type = REGULATOR_VOLTAGE,
++	.owner = THIS_MODULE,
++	.ops = &rt6190_regulator_ops,
++	.min_uV = RT6190_OUT_MIN_UV,
++	.uV_step = RT6190_OUT_STEP_UV,
++	.n_voltages = RT6190_OUT_N_VOLT,
++	.linear_min_sel = RT6190_OUTV_MINSEL,
++	.enable_reg = RT6190_REG_SET2,
++	.enable_mask = RT6190_ENPWM_MASK,
++	.active_discharge_reg = RT6190_REG_SET2,
++	.active_discharge_mask = RT6190_ENDCHG_MASK,
++	.active_discharge_on = RT6190_ENDCHG_MASK,
++	.of_map_mode = rt6190_out_of_map_mode,
++};
++
++static bool rt6190_is_volatile_reg(struct device *dev, unsigned int reg)
++{
++	switch (reg) {
++	case RT6190_REG_OUT_VOLT_L ... RT6190_REG_ALERT2:
++	case RT6190_REG_BUSC_VOLT_L ... RT6190_REG_BUSC_VOLT_H:
++	case RT6190_REG_STAT3 ... RT6190_REG_ALERT3:
++		return true;
++	default:
++		return false;
++	}
++}
++
++static const struct regmap_config rt6190_regmap_config = {
++	.name = "rt6190",
++	.cache_type = REGCACHE_FLAT,
++	.reg_bits = 8,
++	.val_bits = 8,
++	.max_register = RT6190_REG_MASK3,
++	.num_reg_defaults_raw = RT6190_REG_MASK3 + 1,
++	.volatile_reg = rt6190_is_volatile_reg,
++};
++
++static irqreturn_t rt6190_irq_handler(int irq, void *devid)
++{
++	struct regulator_dev *rdev = devid;
++	struct rt6190_data *data = rdev_get_drvdata(rdev);
++	unsigned int alert;
++	int ret;
++
++	ret = regmap_read(data->regmap, RT6190_REG_ALERT1, &alert);
++	if (ret)
++		return IRQ_NONE;
++
++	/* Write clear alert events */
++	ret = regmap_write(data->regmap, RT6190_REG_ALERT1, alert);
++	if (ret)
++		return IRQ_NONE;
++
++	data->cached_alert_evt |= alert;
++
++	if (alert & RT6190_ALERT_OTPEVT)
++		regulator_notifier_call_chain(rdev, REGULATOR_EVENT_OVER_TEMP, NULL);
++
++	if (alert & RT6190_ALERT_UVPEVT)
++		regulator_notifier_call_chain(rdev, REGULATOR_EVENT_UNDER_VOLTAGE, NULL);
++
++	if (alert & RT6190_ALERT_OVPEVT)
++		regulator_notifier_call_chain(rdev, REGULATOR_EVENT_REGULATION_OUT, NULL);
++
++	return IRQ_HANDLED;
++}
++
++static int rt6190_init_registers(struct regmap *regmap)
++{
++	int ret;
++
++	/* Enable_ADC = 1 */
++	ret = regmap_write(regmap, RT6190_REG_SET4, 0x82);
++	if (ret)
++		return ret;
++
++	/* Config default VOUT ratio to be higher */
++	ret = regmap_write(regmap, RT6190_REG_RATIO, 0x20);
++
++	/* Mask unused alert */
++	ret = regmap_write(regmap, RT6190_REG_MASK2, 0);
++	if (ret)
++		return ret;
++
++	/* OCP config */
++	ret = regmap_write(regmap, RT6190_REG_OCPEN, 0);
++	if (ret)
++		return ret;
++
++	/* Enable VBUSC ADC */
++	return regmap_write(regmap, RT6190_REG_VBUSC_ADC, 0x02);
++}
++
++static int rt6190_probe(struct i2c_client *i2c)
++{
++	struct device *dev = &i2c->dev;
++	struct rt6190_data *data;
++	struct gpio_desc *enable_gpio;
++	struct regmap *regmap;
++	struct regulator_dev *rdev;
++	struct regulator_config cfg = {};
++	unsigned int vid;
++	int ret;
++
++	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
++	if (!data)
++		return -ENOMEM;
++
++	enable_gpio = devm_gpiod_get_optional(dev, "enable", GPIOD_OUT_HIGH);
++	if (IS_ERR(enable_gpio))
++		return dev_err_probe(dev, PTR_ERR(enable_gpio), "Failed to get 'enable' gpio\n");
++	else if (enable_gpio)
++		usleep_range(RT6190_EN_TIME_US, RT6190_EN_TIME_US * 2);
++
++	regmap = devm_regmap_init_i2c(i2c, &rt6190_regmap_config);
++	if (IS_ERR(regmap))
++		return dev_err_probe(dev, PTR_ERR(regmap), "Failed to init regmap\n");
++
++	data->dev = dev;
++	data->enable_gpio = enable_gpio;
++	data->regmap = regmap;
++	i2c_set_clientdata(i2c, data);
++
++	ret = regmap_read(regmap, RT6190_REG_VID, &vid);
++	if (ret)
++		return dev_err_probe(dev, ret, "Failed to read VID\n");
++
++	if (vid != RICHTEK_VID)
++		return dev_err_probe(dev, -ENODEV, "Incorrect VID 0x%02x\n", vid);
++
++	ret = rt6190_init_registers(regmap);
++	if (ret)
++		return dev_err_probe(dev, ret, "Failed to init registers\n");
++
++	pm_runtime_set_active(dev);
++	ret = devm_pm_runtime_enable(dev);
++	if (ret)
++		return dev_err_probe(dev, ret, "Failed to set pm_runtime enable\n");
++
++	cfg.dev = dev;
++	cfg.of_node = dev->of_node;
++	cfg.driver_data = data;
++	cfg.init_data = of_get_regulator_init_data(dev, dev->of_node,
++						   &rt6190_regulator_desc);
++
++	rdev = devm_regulator_register(dev, &rt6190_regulator_desc, &cfg);
++	if (IS_ERR(rdev))
++		return dev_err_probe(dev, PTR_ERR(rdev), "Failed to register regulator\n");
++
++	if (i2c->irq) {
++		ret = devm_request_threaded_irq(dev, i2c->irq, NULL,
++						rt6190_irq_handler,
++						IRQF_ONESHOT, dev_name(dev),
++						rdev);
++		if (ret)
++			return dev_err_probe(dev, ret, "Failed to register interrupt\n");
++	}
++
++	return 0;
++}
++
++static int rt6190_runtime_suspend(struct device *dev)
++{
++	struct rt6190_data *data = dev_get_drvdata(dev);
++	struct regmap *regmap = data->regmap;
++
++	if (!data->enable_gpio)
++		return 0;
++
++	regcache_cache_only(regmap, true);
++	regcache_mark_dirty(regmap);
++
++	gpiod_set_value(data->enable_gpio, 0);
++
++	return 0;
++}
++
++static int rt6190_runtime_resume(struct device *dev)
++{
++	struct rt6190_data *data = dev_get_drvdata(dev);
++	struct regmap *regmap = data->regmap;
++
++	if (!data->enable_gpio)
++		return 0;
++
++	gpiod_set_value(data->enable_gpio, 1);
++	usleep_range(RT6190_EN_TIME_US, RT6190_EN_TIME_US * 2);
++
++	regcache_cache_only(regmap, false);
++	return regcache_sync(regmap);
++}
++
++static const struct dev_pm_ops __maybe_unused rt6190_dev_pm = {
++	RUNTIME_PM_OPS(rt6190_runtime_suspend, rt6190_runtime_resume, NULL)
++};
++
++static const struct of_device_id rt6190_of_dev_table[] = {
++	{ .compatible = "richtek,rt6190" },
++	{}
++};
++MODULE_DEVICE_TABLE(of, rt6190_of_dev_table);
++
++static struct i2c_driver rt6190_driver = {
++	.driver = {
++		.name = "rt6190",
++		.of_match_table = rt6190_of_dev_table,
++		.pm = pm_ptr(&rt6190_dev_pm),
++	},
++	.probe_new = rt6190_probe,
++};
++module_i2c_driver(rt6190_driver);
++
++MODULE_DESCRIPTION("Richtek RT6190 regulator driver");
++MODULE_AUTHOR("ChiYuan Huang <cy_huang@richtek.com>");
++MODULE_LICENSE("GPL");
 -- 
 2.7.4
 
