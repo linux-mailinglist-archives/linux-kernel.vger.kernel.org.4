@@ -2,66 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FE52606A3A
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 23:26:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D477C606A41
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 23:27:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229803AbiJTV0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 17:26:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38714 "EHLO
+        id S230037AbiJTV1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 17:27:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbiJTV0A (ORCPT
+        with ESMTP id S230056AbiJTV1S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 17:26:00 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 071F217E232;
-        Thu, 20 Oct 2022 14:25:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666301159; x=1697837159;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=vZCpdvJHfbvZBCLZsEQYW68bNUKI0Koalfz10BUIW0o=;
-  b=S6zYlvpJMgzxSXnGML8JEOoRPB6tnv146qaZb19TajNwECfNQeyyg6yw
-   ugEMrv53lXL5o9a/boqYZZ2kye49G9x6eCWCJ9OMiJAtcxOxhbb7DPxoA
-   KOrSK1Rl5IN5BdGJXlWwG8eYXBpGItGewKsQS4wwsqUBi17SCGkWTDx7l
-   7eKLMTERwvfhma6J7yGGIe7V2aOqnvAJN2yefBiG5gYOcjsnnTcRHVjw7
-   kDKpxB64Ckpm+C0GlZydknYkOE34N65IfHgABeQ7MbFZiEYJWhyUva0Ra
-   TAjCXL2XzqlUwGqwF2Tw7MtI2qjDZDIrgVFna14B8DohFDvQns5w/Ob1O
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="333412443"
-X-IronPort-AV: E=Sophos;i="5.95,199,1661842800"; 
-   d="scan'208";a="333412443"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 14:25:57 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="693260685"
-X-IronPort-AV: E=Sophos;i="5.95,199,1661842800"; 
-   d="scan'208";a="693260685"
-Received: from rhweight-wrk1.ra.intel.com ([137.102.106.139])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 14:25:57 -0700
-From:   matthew.gerlach@linux.intel.com
-To:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tianfei.zhang@intel.com, corbet@lwn.net,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        jirislaby@kernel.org, geert+renesas@glider.be,
-        andriy.shevchenko@linux.intel.com,
-        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
-        johan@kernel.org, lukas@wunner.de, ilpo.jarvinen@linux.intel.com,
-        marpagan@redhat.com
-Cc:     Matthew Gerlach <matthew.gerlach@linux.intel.com>
-Subject: [PATCH v4 4/4] tty: serial: 8250: add DFL bus driver for Altera 16550.
-Date:   Thu, 20 Oct 2022 14:26:10 -0700
-Message-Id: <20221020212610.697729-5-matthew.gerlach@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221020212610.697729-1-matthew.gerlach@linux.intel.com>
-References: <20221020212610.697729-1-matthew.gerlach@linux.intel.com>
+        Thu, 20 Oct 2022 17:27:18 -0400
+Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA3991843F2
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 14:27:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1666301212; bh=C4WHuXkx1/hKHEmHE7E8g7Yt1qxpd0UvCFzbBZyxH2U=;
+        h=X-EA-Auth:Date:From:To:Subject:Message-ID:References:MIME-Version:
+         Content-Type:In-Reply-To;
+        b=mb9/iWOtPwdpNYmGxpHJ3XV4HmSqxtkw8oWm9Aj7D+vQJUiEPrX3N7P8WX3wYRVc+
+         NDRX6Q1S5xIivZgPSa6NuBYvWoF/EKxO/aAFayyVgMD1VjLOBqp3wH5hfN1GVgF7zn
+         RXoHou1GXlv93x8JIq+IghRmvPFD77g1mQKMxego=
+Received: by b-4.in.mailobj.net [192.168.90.14] with ESMTP
+        via [213.182.55.206]
+        Thu, 20 Oct 2022 23:26:52 +0200 (CEST)
+X-EA-Auth: GzFpk7xfnmCpFAz9d7FB9xDYtPT/cfzELrX9DmLulOPZw+plv/ZVsZEs5h5JLxOYjj5XlNLpz6vN3SgwaSu9nmy7JQJfb2BU
+Date:   Fri, 21 Oct 2022 02:56:47 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     outreachy@lists.linux.dev, Larry.Finger@lwfinger.net,
+        phil@philpotter.co.uk, paskripkin@gmail.com,
+        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, kumarpraveen@linux.microsoft.com,
+        saurabh.truth@gmail.com
+Subject: [PATCH v4 01/11] staging: r8188eu: use Linux kernel variable naming
+ convention
+Message-ID: <a107c527e9032c22a62e93ff12d5fae625e70212.1666299151.git.drv@mailo.com>
+References: <cover.1666299151.git.drv@mailo.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1666299151.git.drv@mailo.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,224 +50,280 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+Follow the Linux Kernel coding style variable naming convention instead
+of using camelCase style. Issue reported by checkpatch script for
+these variables:
+        tagLen, tagType, networkAddr, ipAddr, macAddr
 
-Add a Device Feature List (DFL) bus driver for the Altera
-16550 implementation of UART.
-
-Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+Signed-off-by: Deepak R Varma <drv@mailo.com>
 ---
-v4: use dev_err_probe() everywhere that is appropriate
-    clean up noise
-    change error messages to use the word, unsupported
-    tried again to sort Makefile and KConfig better
-    reorder probe function for easier error handling
-    use new dfh_find_param API
 
-v3: use passed in location of registers
-    use cleaned up functions for parsing parameters
+Changes in v4:
+   1. Implement "use short variable name" feedback from David.Laight@ACULAB.COM
 
-v2: clean up error messages
-    alphabetize header files
-    fix 'missing prototype' error by making function static
-    tried to sort Makefile and Kconfig better
----
- drivers/tty/serial/8250/8250_dfl.c | 149 +++++++++++++++++++++++++++++
- drivers/tty/serial/8250/Kconfig    |  12 +++
- drivers/tty/serial/8250/Makefile   |   1 +
- 3 files changed, 162 insertions(+)
- create mode 100644 drivers/tty/serial/8250/8250_dfl.c
+Changes in v3:
+   -- None
 
-diff --git a/drivers/tty/serial/8250/8250_dfl.c b/drivers/tty/serial/8250/8250_dfl.c
-new file mode 100644
-index 000000000000..f02f0ba2a565
---- /dev/null
-+++ b/drivers/tty/serial/8250/8250_dfl.c
-@@ -0,0 +1,149 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Driver for FPGA UART
-+ *
-+ * Copyright (C) 2022 Intel Corporation, Inc.
-+ *
-+ * Authors:
-+ *   Ananda Ravuri <ananda.ravuri@intel.com>
-+ *   Matthew Gerlach <matthew.gerlach@linux.intel.com>
-+ */
-+
-+#include <linux/bitfield.h>
-+#include <linux/dfl.h>
-+#include <linux/io-64-nonatomic-lo-hi.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/serial.h>
-+#include <linux/serial_8250.h>
-+
-+struct dfl_uart {
-+	int line;
-+};
-+
-+static int dfl_uart_get_params(struct dfl_device *dfl_dev, struct uart_8250_port *uart)
-+{
-+	struct device *dev = &dfl_dev->dev;
-+	u64 v, fifo_len, reg_width;
-+	u64 *p;
-+
-+	p = dfh_find_param(dfl_dev, DFHv1_PARAM_ID_CLK_FRQ);
-+	if (!p)
-+		return dev_err_probe(dev, -EINVAL, "missing CLK_FRQ param\n");
-+
-+	uart->port.uartclk = *p;
-+	dev_dbg(dev, "UART_CLK_ID %u Hz\n", uart->port.uartclk);
-+
-+	p = dfh_find_param(dfl_dev, DFHv1_PARAM_ID_FIFO_LEN);
-+	if (!p)
-+		return dev_err_probe(dev, -EINVAL, "missing FIFO_LEN param\n");
-+
-+	fifo_len = *p;
-+	dev_dbg(dev, "UART_FIFO_ID fifo_len %llu\n", fifo_len);
-+
-+	switch (fifo_len) {
-+	case 32:
-+		uart->port.type = PORT_ALTR_16550_F32;
-+		break;
-+
-+	case 64:
-+		uart->port.type = PORT_ALTR_16550_F64;
-+		break;
-+
-+	case 128:
-+		uart->port.type = PORT_ALTR_16550_F128;
-+		break;
-+
-+	default:
-+		return dev_err_probe(dev, -EINVAL, "unsupported fifo_len %llu\n", fifo_len);
-+	}
-+
-+	p = dfh_find_param(dfl_dev, DFHv1_PARAM_ID_REG_LAYOUT);
-+	if (!p)
-+		return dev_err_probe(dev, -EINVAL, "missing REG_LAYOUT param\n");
-+
-+	v = *p;
-+	uart->port.regshift = FIELD_GET(DFHv1_PARAM_ID_REG_SHIFT, v);
-+	reg_width = FIELD_GET(DFHv1_PARAM_ID_REG_WIDTH, v);
-+
-+	dev_dbg(dev, "UART_LAYOUT_ID width %lld shift %d\n", reg_width, uart->port.regshift);
-+
-+	switch (reg_width) {
-+	case 4:
-+		uart->port.iotype = UPIO_MEM32;
-+		break;
-+
-+	case 2:
-+		uart->port.iotype = UPIO_MEM16;
-+		break;
-+
-+	default:
-+		return dev_err_probe(dev, -EINVAL, "unsupported reg_width %lld\n", reg_width);
-+	}
-+
-+	return 0;
-+}
-+
-+static int dfl_uart_probe(struct dfl_device *dfl_dev)
-+{
-+	struct device *dev = &dfl_dev->dev;
-+	struct uart_8250_port uart;
-+	struct dfl_uart *dfluart;
-+	int ret;
-+
-+	memset(&uart, 0, sizeof(uart));
-+	uart.port.flags = UPF_IOREMAP;
-+	uart.port.mapbase = dfl_dev->mmio_res.start;
-+	uart.port.mapsize = resource_size(&dfl_dev->mmio_res);
-+
-+	ret = dfl_uart_get_params(dfl_dev, &uart);
-+
-+	if (ret < 0)
-+		return dev_err_probe(dev, ret, "failed uart feature walk\n");
-+
-+	dev_dbg(dev, "nr_irqs %d %p\n", dfl_dev->num_irqs, dfl_dev->irqs);
-+
-+	if (dfl_dev->num_irqs == 1)
-+		uart.port.irq = dfl_dev->irqs[0];
-+
-+	dfluart = devm_kzalloc(dev, sizeof(*dfluart), GFP_KERNEL);
-+	if (!dfluart)
-+		return -ENOMEM;
-+
-+	dfluart->line = serial8250_register_8250_port(&uart);
-+	if (dfluart->line < 0)
-+		return dev_err_probe(dev, dfluart->line, "unable to register 8250 port.\n");
-+
-+	dev_set_drvdata(dev, dfluart);
-+
-+	return 0;
-+}
-+
-+static void dfl_uart_remove(struct dfl_device *dfl_dev)
-+{
-+	struct dfl_uart *dfluart = dev_get_drvdata(&dfl_dev->dev);
-+
-+	serial8250_unregister_port(dfluart->line);
-+}
-+
-+#define FME_FEATURE_ID_UART 0x24
-+
-+static const struct dfl_device_id dfl_uart_ids[] = {
-+	{ FME_ID, FME_FEATURE_ID_UART },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(dfl, dfl_uart_ids);
-+
-+static struct dfl_driver dfl_uart_driver = {
-+	.drv = {
-+		.name = "dfl-uart",
-+	},
-+	.id_table = dfl_uart_ids,
-+	.probe = dfl_uart_probe,
-+	.remove = dfl_uart_remove,
-+};
-+module_dfl_driver(dfl_uart_driver);
-+
-+MODULE_DESCRIPTION("DFL Intel UART driver");
-+MODULE_AUTHOR("Intel Corporation");
-+MODULE_LICENSE("GPL");
-diff --git a/drivers/tty/serial/8250/Kconfig b/drivers/tty/serial/8250/Kconfig
-index d0b49e15fbf5..4efc8ee51c18 100644
---- a/drivers/tty/serial/8250/Kconfig
-+++ b/drivers/tty/serial/8250/Kconfig
-@@ -370,6 +370,18 @@ config SERIAL_8250_FSL
- 	  erratum for Freescale 16550 UARTs in the 8250 driver. It also
- 	  enables support for ACPI enumeration.
- 
-+config SERIAL_8250_DFL
-+	tristate "DFL bus driver for Altera 16550 UART"
-+	depends on SERIAL_8250 && FPGA_DFL
-+	help
-+	  This option enables support for a Device Feature List (DFL) bus
-+	  driver for the Altera 16650 UART.  One or more Altera 16650 UARTs
-+	  can be instantiated in a FPGA and then be discovered during
-+	  enumeration of the DFL bus.
-+
-+	  To compile this driver as a module, chose M here: the
-+	  module will be called 8250_dfl.
-+
- config SERIAL_8250_DW
- 	tristate "Support for Synopsys DesignWare 8250 quirks"
- 	depends on SERIAL_8250
-diff --git a/drivers/tty/serial/8250/Makefile b/drivers/tty/serial/8250/Makefile
-index bee908f99ea0..65bc6ad4dd01 100644
---- a/drivers/tty/serial/8250/Makefile
-+++ b/drivers/tty/serial/8250/Makefile
-@@ -28,6 +28,7 @@ obj-$(CONFIG_SERIAL_8250_EXAR_ST16C554)	+= 8250_exar_st16c554.o
- obj-$(CONFIG_SERIAL_8250_HUB6)		+= 8250_hub6.o
- obj-$(CONFIG_SERIAL_8250_FSL)		+= 8250_fsl.o
- obj-$(CONFIG_SERIAL_8250_MEN_MCB)	+= 8250_men_mcb.o
-+obj-$(CONFIG_SERIAL_8250_DFL)		+= 8250_dfl.o
- obj-$(CONFIG_SERIAL_8250_DW)		+= 8250_dw.o
- obj-$(CONFIG_SERIAL_8250_EM)		+= 8250_em.o
- obj-$(CONFIG_SERIAL_8250_IOC3)		+= 8250_ioc3.o
--- 
-2.25.1
+Changes in v1 [actually v2]:
+   1. Improve patch description per feedback from julia.lawall@inria.fr
+
+
+ drivers/staging/r8188eu/core/rtw_br_ext.c | 112 +++++++++++-----------
+ 1 file changed, 56 insertions(+), 56 deletions(-)
+
+diff --git a/drivers/staging/r8188eu/core/rtw_br_ext.c b/drivers/staging/r8188eu/core/rtw_br_ext.c
+index 4c5f30792a46..e509b8454e25 100644
+--- a/drivers/staging/r8188eu/core/rtw_br_ext.c
++++ b/drivers/staging/r8188eu/core/rtw_br_ext.c
+@@ -50,17 +50,17 @@
+ static unsigned char *__nat25_find_pppoe_tag(struct pppoe_hdr *ph, unsigned short type)
+ {
+ 	unsigned char *cur_ptr, *start_ptr;
+-	unsigned short tagLen, tagType;
++	unsigned short tag_len, tag_type;
+
+ 	start_ptr = (unsigned char *)ph->tag;
+ 	cur_ptr = (unsigned char *)ph->tag;
+ 	while ((cur_ptr - start_ptr) < ntohs(ph->length)) {
+ 		/*  prevent un-alignment access */
+-		tagType = (unsigned short)((cur_ptr[0] << 8) + cur_ptr[1]);
+-		tagLen  = (unsigned short)((cur_ptr[2] << 8) + cur_ptr[3]);
+-		if (tagType == type)
++		tag_type = (unsigned short)((cur_ptr[0] << 8) + cur_ptr[1]);
++		tag_len  = (unsigned short)((cur_ptr[2] << 8) + cur_ptr[3]);
++		if (tag_type == type)
+ 			return cur_ptr;
+-		cur_ptr = cur_ptr + TAG_HDR_LEN + tagLen;
++		cur_ptr = cur_ptr + TAG_HDR_LEN + tag_len;
+ 	}
+ 	return NULL;
+ }
+@@ -111,32 +111,32 @@ static int  __nat25_has_expired(struct nat25_network_db_entry *fdb)
+ 	return 0;
+ }
+
+-static void __nat25_generate_ipv4_network_addr(unsigned char *networkAddr,
+-				unsigned int *ipAddr)
++static void __nat25_generate_ipv4_network_addr(unsigned char *addr,
++				unsigned int *ip_addr)
+ {
+-	memset(networkAddr, 0, MAX_NETWORK_ADDR_LEN);
++	memset(addr, 0, MAX_NETWORK_ADDR_LEN);
+
+-	networkAddr[0] = NAT25_IPV4;
+-	memcpy(networkAddr + 7, (unsigned char *)ipAddr, 4);
++	addr[0] = NAT25_IPV4;
++	memcpy(addr + 7, (unsigned char *)ip_addr, 4);
+ }
+
+-static void __nat25_generate_pppoe_network_addr(unsigned char *networkAddr,
++static void __nat25_generate_pppoe_network_addr(unsigned char *addr,
+ 				unsigned char *ac_mac, __be16 *sid)
+ {
+-	memset(networkAddr, 0, MAX_NETWORK_ADDR_LEN);
++	memset(addr, 0, MAX_NETWORK_ADDR_LEN);
+
+-	networkAddr[0] = NAT25_PPPOE;
+-	memcpy(networkAddr + 1, (unsigned char *)sid, 2);
+-	memcpy(networkAddr + 3, (unsigned char *)ac_mac, 6);
++	addr[0] = NAT25_PPPOE;
++	memcpy(addr + 1, (unsigned char *)sid, 2);
++	memcpy(addr + 3, (unsigned char *)ac_mac, 6);
+ }
+
+-static  void __nat25_generate_ipv6_network_addr(unsigned char *networkAddr,
+-				unsigned int *ipAddr)
++static  void __nat25_generate_ipv6_network_addr(unsigned char *addr,
++				unsigned int *ip_addr)
+ {
+-	memset(networkAddr, 0, MAX_NETWORK_ADDR_LEN);
++	memset(addr, 0, MAX_NETWORK_ADDR_LEN);
+
+-	networkAddr[0] = NAT25_IPV6;
+-	memcpy(networkAddr + 1, (unsigned char *)ipAddr, 16);
++	addr[0] = NAT25_IPV6;
++	memcpy(addr + 1, (unsigned char *)ip_addr, 16);
+ }
+
+ static unsigned char *scan_tlv(unsigned char *data, int len, unsigned char tag, unsigned char len8b)
+@@ -200,40 +200,40 @@ static int update_nd_link_layer_addr(unsigned char *data, int len, unsigned char
+ 	return 0;
+ }
+
+-static int __nat25_network_hash(unsigned char *networkAddr)
++static int __nat25_network_hash(unsigned char *addr)
+ {
+-	if (networkAddr[0] == NAT25_IPV4) {
++	if (addr[0] == NAT25_IPV4) {
+ 		unsigned long x;
+
+-		x = networkAddr[7] ^ networkAddr[8] ^ networkAddr[9] ^ networkAddr[10];
++		x = addr[7] ^ addr[8] ^ addr[9] ^ addr[10];
+
+ 		return x & (NAT25_HASH_SIZE - 1);
+-	} else if (networkAddr[0] == NAT25_IPX) {
++	} else if (addr[0] == NAT25_IPX) {
+ 		unsigned long x;
+
+-		x = networkAddr[1] ^ networkAddr[2] ^ networkAddr[3] ^ networkAddr[4] ^ networkAddr[5] ^
+-			networkAddr[6] ^ networkAddr[7] ^ networkAddr[8] ^ networkAddr[9] ^ networkAddr[10];
++		x = addr[1] ^ addr[2] ^ addr[3] ^ addr[4] ^ addr[5] ^
++			addr[6] ^ addr[7] ^ addr[8] ^ addr[9] ^ addr[10];
+
+ 		return x & (NAT25_HASH_SIZE - 1);
+-	} else if (networkAddr[0] == NAT25_APPLE) {
++	} else if (addr[0] == NAT25_APPLE) {
+ 		unsigned long x;
+
+-		x = networkAddr[1] ^ networkAddr[2] ^ networkAddr[3];
++		x = addr[1] ^ addr[2] ^ addr[3];
+
+ 		return x & (NAT25_HASH_SIZE - 1);
+-	} else if (networkAddr[0] == NAT25_PPPOE) {
++	} else if (addr[0] == NAT25_PPPOE) {
+ 		unsigned long x;
+
+-		x = networkAddr[0] ^ networkAddr[1] ^ networkAddr[2] ^ networkAddr[3] ^ networkAddr[4] ^ networkAddr[5] ^ networkAddr[6] ^ networkAddr[7] ^ networkAddr[8];
++		x = addr[0] ^ addr[1] ^ addr[2] ^ addr[3] ^ addr[4] ^ addr[5] ^ addr[6] ^ addr[7] ^ addr[8];
+
+ 		return x & (NAT25_HASH_SIZE - 1);
+-	} else if (networkAddr[0] == NAT25_IPV6) {
++	} else if (addr[0] == NAT25_IPV6) {
+ 		unsigned long x;
+
+-		x = networkAddr[1] ^ networkAddr[2] ^ networkAddr[3] ^ networkAddr[4] ^ networkAddr[5] ^
+-			networkAddr[6] ^ networkAddr[7] ^ networkAddr[8] ^ networkAddr[9] ^ networkAddr[10] ^
+-			networkAddr[11] ^ networkAddr[12] ^ networkAddr[13] ^ networkAddr[14] ^ networkAddr[15] ^
+-			networkAddr[16];
++		x = addr[1] ^ addr[2] ^ addr[3] ^ addr[4] ^ addr[5] ^
++			addr[6] ^ addr[7] ^ addr[8] ^ addr[9] ^ addr[10] ^
++			addr[11] ^ addr[12] ^ addr[13] ^ addr[14] ^ addr[15] ^
++			addr[16];
+
+ 		return x & (NAT25_HASH_SIZE - 1);
+ 	} else {
+@@ -241,7 +241,7 @@ static int __nat25_network_hash(unsigned char *networkAddr)
+ 		int i;
+
+ 		for (i = 0; i < MAX_NETWORK_ADDR_LEN; i++)
+-			x ^= networkAddr[i];
++			x ^= addr[i];
+
+ 		return x & (NAT25_HASH_SIZE - 1);
+ 	}
+@@ -269,17 +269,17 @@ static void __network_hash_unlink(struct nat25_network_db_entry *ent)
+ }
+
+ static void __nat25_db_network_insert(struct adapter *priv,
+-				unsigned char *macAddr, unsigned char *networkAddr)
++				unsigned char *mac_addr, unsigned char *addr)
+ {
+ 	struct nat25_network_db_entry *db;
+ 	int hash;
+
+ 	spin_lock_bh(&priv->br_ext_lock);
+-	hash = __nat25_network_hash(networkAddr);
++	hash = __nat25_network_hash(addr);
+ 	db = priv->nethash[hash];
+ 	while (db) {
+-		if (!memcmp(db->networkAddr, networkAddr, MAX_NETWORK_ADDR_LEN)) {
+-			memcpy(db->macAddr, macAddr, ETH_ALEN);
++		if (!memcmp(db->networkAddr, addr, MAX_NETWORK_ADDR_LEN)) {
++			memcpy(db->macAddr, mac_addr, ETH_ALEN);
+ 			db->ageing_timer = jiffies;
+ 			spin_unlock_bh(&priv->br_ext_lock);
+ 			return;
+@@ -291,8 +291,8 @@ static void __nat25_db_network_insert(struct adapter *priv,
+ 		spin_unlock_bh(&priv->br_ext_lock);
+ 		return;
+ 	}
+-	memcpy(db->networkAddr, networkAddr, MAX_NETWORK_ADDR_LEN);
+-	memcpy(db->macAddr, macAddr, ETH_ALEN);
++	memcpy(db->networkAddr, addr, MAX_NETWORK_ADDR_LEN);
++	memcpy(db->macAddr, mac_addr, ETH_ALEN);
+ 	atomic_set(&db->use_count, 1);
+ 	db->ageing_timer = jiffies;
+
+@@ -366,7 +366,7 @@ void nat25_db_expire(struct adapter *priv)
+ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
+ {
+ 	unsigned short protocol;
+-	unsigned char networkAddr[MAX_NETWORK_ADDR_LEN];
++	unsigned char addr[MAX_NETWORK_ADDR_LEN];
+ 	unsigned int tmp;
+
+ 	if (!skb)
+@@ -395,9 +395,9 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
+ 			if (iph->saddr == 0)
+ 				return 0;
+ 			tmp = be32_to_cpu(iph->saddr);
+-			__nat25_generate_ipv4_network_addr(networkAddr, &tmp);
++			__nat25_generate_ipv4_network_addr(addr, &tmp);
+ 			/* record source IP address and , source mac address into db */
+-			__nat25_db_network_insert(priv, skb->data + ETH_ALEN, networkAddr);
++			__nat25_db_network_insert(priv, skb->data + ETH_ALEN, addr);
+ 			return 0;
+ 		default:
+ 			return -1;
+@@ -421,8 +421,8 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
+ 			memcpy(arp_ptr, GET_MY_HWADDR(priv), ETH_ALEN);
+ 			arp_ptr += arp->ar_hln;
+ 			sender = (unsigned int *)arp_ptr;
+-			__nat25_generate_ipv4_network_addr(networkAddr, sender);
+-			__nat25_db_network_insert(priv, skb->data + ETH_ALEN, networkAddr);
++			__nat25_generate_ipv4_network_addr(addr, sender);
++			__nat25_db_network_insert(priv, skb->data + ETH_ALEN, addr);
+ 			return 0;
+ 		default:
+ 			return -1;
+@@ -495,9 +495,9 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
+ 					return -1;
+ 				}
+ 			} else {	/*  session phase */
+-				__nat25_generate_pppoe_network_addr(networkAddr, skb->data, &ph->sid);
++				__nat25_generate_pppoe_network_addr(addr, skb->data, &ph->sid);
+
+-				__nat25_db_network_insert(priv, skb->data + ETH_ALEN, networkAddr);
++				__nat25_db_network_insert(priv, skb->data + ETH_ALEN, addr);
+
+ 				if (!priv->ethBrExtInfo.addPPPoETag &&
+ 				    priv->pppoe_connection_in_progress &&
+@@ -548,8 +548,8 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
+ 			return -1;
+ 		case NAT25_INSERT:
+ 			if (memcmp(&iph->saddr, "\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0", 16)) {
+-				__nat25_generate_ipv6_network_addr(networkAddr, (unsigned int *)&iph->saddr);
+-				__nat25_db_network_insert(priv, skb->data + ETH_ALEN, networkAddr);
++				__nat25_generate_ipv6_network_addr(addr, (unsigned int *)&iph->saddr);
++				__nat25_db_network_insert(priv, skb->data + ETH_ALEN, addr);
+
+ 				if (iph->nexthdr == IPPROTO_ICMPV6 &&
+ 						skb->len > (ETH_HLEN +  sizeof(*iph) + 4)) {
+@@ -639,17 +639,17 @@ void dhcp_flag_bcast(struct adapter *priv, struct sk_buff *skb)
+ 	}
+ }
+
+-void *scdb_findEntry(struct adapter *priv, unsigned char *ipAddr)
++void *scdb_findEntry(struct adapter *priv, unsigned char *ip_addr)
+ {
+-	unsigned char networkAddr[MAX_NETWORK_ADDR_LEN];
++	unsigned char addr[MAX_NETWORK_ADDR_LEN];
+ 	struct nat25_network_db_entry *db;
+ 	int hash;
+
+-	__nat25_generate_ipv4_network_addr(networkAddr, (unsigned int *)ipAddr);
+-	hash = __nat25_network_hash(networkAddr);
++	__nat25_generate_ipv4_network_addr(addr, (unsigned int *)ip_addr);
++	hash = __nat25_network_hash(addr);
+ 	db = priv->nethash[hash];
+ 	while (db) {
+-		if (!memcmp(db->networkAddr, networkAddr, MAX_NETWORK_ADDR_LEN)) {
++		if (!memcmp(db->networkAddr, addr, MAX_NETWORK_ADDR_LEN)) {
+ 			return (void *)db;
+ 		}
+
+--
+2.30.2
+
+
 
