@@ -2,115 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52CA9605541
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 03:56:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98504605542
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 03:57:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231544AbiJTB4o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 21:56:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60624 "EHLO
+        id S231555AbiJTB5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 21:57:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230498AbiJTB4m (ORCPT
+        with ESMTP id S231244AbiJTB5N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 21:56:42 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EF601C20B5;
-        Wed, 19 Oct 2022 18:56:41 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id h185so17895956pgc.10;
-        Wed, 19 Oct 2022 18:56:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mjHLcYUUjhD+PtF02a4WQB8SZ/341O9Yc/tHe2HDPA4=;
-        b=F5RH8irn44aJjAZHV3wVq491Nl7s92REmThxweLm4GWBtRUzg4v9r+EoEy9pAru0P7
-         K7VvXdWGEDeLvfxiTzkCintYU7h5P2mai4DDSLjIp+T5AyHBHOWjosP24juf1HF8Rk4t
-         UM+yTHQzwYjyftCF06T5ggtczDcXdp2FVWjqzKj5GJIgrh7LhA5JavNXMEn0pftwFoRb
-         OHvkJZ6Mbjp00tf9ITgPgMLYkLes3k6viq/jMOnPC4HVAEMwkJ/ccdwLMkvFKwEBfj6S
-         e8SEizAh+V6sGyQAeUOtduJNkqy+QqQfJcUV8AU0DuFpS+N5TO5v+qRRJ3hdVZx5vi37
-         4smA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mjHLcYUUjhD+PtF02a4WQB8SZ/341O9Yc/tHe2HDPA4=;
-        b=6TbbwBFPM3Q3UTCFGKO5Et6MC0K4YSu+YR78R+a52bW1lOtaN9+xQwsgmWhLqUuHiw
-         /7e/+lims/ynxezpaP/ikI01hn3H5Pr9lnsjyj1TtzxKjuwP/aWsMggFS23QL9FI+07e
-         ULKA48QOKLB9TyZCONs2zf233fByHWmlXLVRjKSB/FEdkeVzbeurovNKG2NapX6T6NrQ
-         fAUxKIIAJacbxhUuCoFuhih/aAg/4+k3xozDLzTAFKQf7mMvFZyyURVeYR746RoglR+G
-         Ko7iJ2LFkzQessjD1UrUqMZQP2r0wF1LeNPfWRzVEP0cG2G6Bj/I782j6/4cUVzVZd1s
-         wR+Q==
-X-Gm-Message-State: ACrzQf0PaaYq/SETiJXC+hGZrghwsvGqKaWZagb90sst340zvZb3laPx
-        mqOUuhDhRcqyEqxzu98vefI=
-X-Google-Smtp-Source: AMsMyM4B1uBb8ajk8x/Mn2+V3BSzPBcPMUsMeSaNFcXAAvNysaiNa7XcKIpUbv3aBeb3PaFJ96acJA==
-X-Received: by 2002:a05:6a00:805:b0:563:6e88:896 with SMTP id m5-20020a056a00080500b005636e880896mr11466728pfk.57.1666231000780;
-        Wed, 19 Oct 2022 18:56:40 -0700 (PDT)
-Received: from [192.168.43.80] (subs02-180-214-232-16.three.co.id. [180.214.232.16])
-        by smtp.gmail.com with ESMTPSA id y16-20020a63e250000000b0046aff3ce339sm10455823pgj.23.2022.10.19.18.56.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Oct 2022 18:56:40 -0700 (PDT)
-Message-ID: <26810115-1325-faf2-0f6e-0d7ff164982d@gmail.com>
-Date:   Thu, 20 Oct 2022 08:56:32 +0700
+        Wed, 19 Oct 2022 21:57:13 -0400
+Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E33141C20B5
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 18:57:11 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VSccLAj_1666231025;
+Received: from 30.13.190.170(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VSccLAj_1666231025)
+          by smtp.aliyun-inc.com;
+          Thu, 20 Oct 2022 09:57:07 +0800
+Message-ID: <893b681b-726e-94e3-441e-4d68c767778a@linux.alibaba.com>
+Date:   Thu, 20 Oct 2022 09:57:04 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH V4 2/2] Documentation: kdump: describe VMCOREINFO export
- for RISCV64
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.0
+Subject: Re: [PATCH v2] mm, hwpoison: Try to recover from copy-on write faults
 Content-Language: en-US
-To:     Xianting Tian <xianting.tian@linux.alibaba.com>,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, anup@brainfault.org, heiko@sntech.de,
-        guoren@kernel.org, mick@ics.forth.gr,
-        alexandre.ghiti@canonical.com, bhe@redhat.com, vgoyal@redhat.com,
-        dyoung@redhat.com, corbet@lwn.net, Conor.Dooley@microchip.com,
-        k-hagio-ab@nec.com, lijiang@redhat.com
-Cc:     kexec@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        crash-utility@redhat.com, heinrich.schuchardt@canonical.com,
-        hschauhan@nulltrace.org, yixun.lan@gmail.com
-References: <20221019103623.7008-1-xianting.tian@linux.alibaba.com>
- <20221019103623.7008-3-xianting.tian@linux.alibaba.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20221019103623.7008-3-xianting.tian@linux.alibaba.com>
+To:     Tony Luck <tony.luck@intel.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Miaohe Lin <linmiaohe@huawei.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+References: <SJ1PR11MB60838C1F65CA293188BB442DFC289@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <20221019170835.155381-1-tony.luck@intel.com>
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <20221019170835.155381-1-tony.luck@intel.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/19/22 17:36, Xianting Tian wrote:
-> The following interrelated definitions and ranges are needed by the kdump
-> crash tool, which are exported by "arch/riscv/kernel/crash_core.c":
->     VA_BITS,
->     PAGE_OFFSET,
->     phys_ram_base,
->     KERNEL_LINK_ADDR,
->     MODULES_VADDR ~ MODULES_END,
->     VMALLOC_START ~ VMALLOC_END,
->     VMEMMAP_START ~ VMEMMAP_END,
+
+
+在 2022/10/20 AM1:08, Tony Luck 写道:
+> If the kernel is copying a page as the result of a copy-on-write
+> fault and runs into an uncorrectable error, Linux will crash because
+> it does not have recovery code for this case where poison is consumed
+> by the kernel.
 > 
-> Document these RISCV64 exports above.
+> It is easy to set up a test case. Just inject an error into a private
+> page, fork(2), and have the child process write to the page.
 > 
-> Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
+> I wrapped that neatly into a test at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/aegl/ras-tools.git
+> 
+> just enable ACPI error injection and run:
+> 
+>   # ./einj_mem-uc -f copy-on-write
+> 
+> Add a new copy_user_highpage_mc() function that uses copy_mc_to_kernel()
+> on architectures where that is available (currently x86 and powerpc).
+> When an error is detected during the page copy, return VM_FAULT_HWPOISON
+> to caller of wp_page_copy(). This propagates up the call stack. Both x86
+> and powerpc have code in their fault handler to deal with this code by
+> sending a SIGBUS to the application.
 
-Hi Xianting,
+Does it send SIGBUS to only child process or both parent and child process?
 
-Seems like you forgot to keep carrying my Reviewed-by from v3 [1].
-Anyway, here it goes...
+> 
+> Note that this patch avoids a system crash and signals the process that
+> triggered the copy-on-write action. It does not take any action for the
+> memory error that is still in the shared page. To handle that a call to
+> memory_failure() is needed. 
 
-Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+If the error page is not poisoned, should the return value of wp_page_copy
+be VM_FAULT_HWPOISON or VM_FAULT_SIGBUS? When is_hwpoison_entry(entry) or
+PageHWPoison(page) is true, do_swap_page return VM_FAULT_HWPOISON to caller.
+And when is_swapin_error_entry is true, do_swap_page return VM_FAULT_SIGBUS.
 
 Thanks.
 
-[1]: https://lore.kernel.org/linux-doc/20221018081755.6214-3-xianting.tian@linux.alibaba.com/
+Best Regards,
+Shuai
 
--- 
-An old man doll... just what I always wanted! - Clara
 
+> But this cannot be done from wp_page_copy()
+> because it holds mmap_lock(). Perhaps the architecture fault handlers
+> can deal with this loose end in a subsequent patch?
+> 
+> On Intel/x86 this loose end will often be handled automatically because
+> the memory controller provides an additional notification of the h/w
+> poison in memory, the handler for this will call memory_failure(). This
+> isn't a 100% solution. If there are multiple errors, not all may be
+> logged in this way.
+> 
+> Signed-off-by: Tony Luck <tony.luck@intel.com>
+> 
+> ---
+> Changes in V2:
+>    Naoya Horiguchi:
+> 	1) Use -EHWPOISON error code instead of minus one.
+> 	2) Poison path needs also to deal with old_page
+>    Tony Luck:
+> 	Rewrote commit message
+> 	Added some powerpc folks to Cc: list
+> ---
+>  include/linux/highmem.h | 19 +++++++++++++++++++
+>  mm/memory.c             | 28 +++++++++++++++++++---------
+>  2 files changed, 38 insertions(+), 9 deletions(-)
+> 
+> diff --git a/include/linux/highmem.h b/include/linux/highmem.h
+> index e9912da5441b..5967541fbf0e 100644
+> --- a/include/linux/highmem.h
+> +++ b/include/linux/highmem.h
+> @@ -319,6 +319,25 @@ static inline void copy_user_highpage(struct page *to, struct page *from,
+>  
+>  #endif
+>  
+> +static inline int copy_user_highpage_mc(struct page *to, struct page *from,
+> +					unsigned long vaddr, struct vm_area_struct *vma)
+> +{
+> +	unsigned long ret = 0;
+> +#ifdef copy_mc_to_kernel
+> +	char *vfrom, *vto;
+> +
+> +	vfrom = kmap_local_page(from);
+> +	vto = kmap_local_page(to);
+> +	ret = copy_mc_to_kernel(vto, vfrom, PAGE_SIZE);
+> +	kunmap_local(vto);
+> +	kunmap_local(vfrom);
+> +#else
+> +	copy_user_highpage(to, from, vaddr, vma);
+> +#endif
+> +
+> +	return ret;
+> +}
+> +
+>  #ifndef __HAVE_ARCH_COPY_HIGHPAGE
+>  
+>  static inline void copy_highpage(struct page *to, struct page *from)
+> diff --git a/mm/memory.c b/mm/memory.c
+> index f88c351aecd4..a32556c9b689 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -2848,8 +2848,14 @@ static inline int pte_unmap_same(struct vm_fault *vmf)
+>  	return same;
+>  }
+>  
+> -static inline bool __wp_page_copy_user(struct page *dst, struct page *src,
+> -				       struct vm_fault *vmf)
+> +/*
+> + * Return:
+> + *	-EHWPOISON:	copy failed due to hwpoison in source page
+> + *	0:		copied failed (some other reason)
+> + *	1:		copied succeeded
+> + */
+> +static inline int __wp_page_copy_user(struct page *dst, struct page *src,
+> +				      struct vm_fault *vmf)
+>  {
+>  	bool ret;
+>  	void *kaddr;
+> @@ -2860,8 +2866,9 @@ static inline bool __wp_page_copy_user(struct page *dst, struct page *src,
+>  	unsigned long addr = vmf->address;
+>  
+>  	if (likely(src)) {
+> -		copy_user_highpage(dst, src, addr, vma);
+> -		return true;
+> +		if (copy_user_highpage_mc(dst, src, addr, vma))
+> +			return -EHWPOISON;
+> +		return 1;
+>  	}
+>  
+>  	/*
+> @@ -2888,7 +2895,7 @@ static inline bool __wp_page_copy_user(struct page *dst, struct page *src,
+>  			 * and update local tlb only
+>  			 */
+>  			update_mmu_tlb(vma, addr, vmf->pte);
+> -			ret = false;
+> +			ret = 0;
+>  			goto pte_unlock;
+>  		}
+>  
+> @@ -2913,7 +2920,7 @@ static inline bool __wp_page_copy_user(struct page *dst, struct page *src,
+>  		if (!likely(pte_same(*vmf->pte, vmf->orig_pte))) {
+>  			/* The PTE changed under us, update local tlb */
+>  			update_mmu_tlb(vma, addr, vmf->pte);
+> -			ret = false;
+> +			ret = 0;
+>  			goto pte_unlock;
+>  		}
+>  
+> @@ -2932,7 +2939,7 @@ static inline bool __wp_page_copy_user(struct page *dst, struct page *src,
+>  		}
+>  	}
+>  
+> -	ret = true;
+> +	ret = 1;
+>  
+>  pte_unlock:
+>  	if (locked)
+> @@ -3104,6 +3111,7 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
+>  	pte_t entry;
+>  	int page_copied = 0;
+>  	struct mmu_notifier_range range;
+> +	int ret;
+>  
+>  	delayacct_wpcopy_start();
+>  
+> @@ -3121,19 +3129,21 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
+>  		if (!new_page)
+>  			goto oom;
+>  
+> -		if (!__wp_page_copy_user(new_page, old_page, vmf)) {
+> +		ret = __wp_page_copy_user(new_page, old_page, vmf);
+> +		if (ret <= 0) {
+>  			/*
+>  			 * COW failed, if the fault was solved by other,
+>  			 * it's fine. If not, userspace would re-fault on
+>  			 * the same address and we will handle the fault
+>  			 * from the second attempt.
+> +			 * The -EHWPOISON case will not be retried.
+>  			 */
+>  			put_page(new_page);
+>  			if (old_page)
+>  				put_page(old_page);
+>  
+>  			delayacct_wpcopy_end();
+> -			return 0;
+> +			return ret == -EHWPOISON ? VM_FAULT_HWPOISON : 0;
+>  		}
+>  		kmsan_copy_page_meta(new_page, old_page);
+>  	}
