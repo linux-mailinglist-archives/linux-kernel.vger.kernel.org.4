@@ -2,183 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CB286068C7
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 21:21:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9A8B6068CC
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 21:23:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229872AbiJTTVn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 15:21:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46962 "EHLO
+        id S229799AbiJTTXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 15:23:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiJTTVk (ORCPT
+        with ESMTP id S229556AbiJTTXE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 15:21:40 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76C871F9A12
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 12:21:39 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id f140so491282pfa.1
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 12:21:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=MGWd55MQb3vBkEb2MC5NHIx5pr8IGRG3XR9906nE3CU=;
-        b=TTJYvP8Sy39CMvqQXExyqYeiJNpgGzBuDkgLgRstXGV+u9l2gj387BjJvdJLf+fWSv
-         4ZGD3e9nC0Al4r2RCDU6B0nUhjOjRk18sxI7pk23EAFhfUH19TfvJOT+fA0e0nOMYD+F
-         IzjquSgkJXdSc+tOjXwF78644ZG8/ygfRc84cV1khJ9mOanhrv1TsQPtlWAFMCRJ5v6j
-         CLbO/llDW6moxiJXLyuFfp/zATSiHfozQ0MJ5jsQFBAntZaPTYh6hhtZC/LCyeauaORh
-         Tat2v1A4LbYx1XhhKO0McVOcxJ0yGzgcaLQKs2aEPFMMy8yTBDPDwThfCF1wmvGNQMgs
-         FGmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MGWd55MQb3vBkEb2MC5NHIx5pr8IGRG3XR9906nE3CU=;
-        b=ZeSuy9N5trZCC7utBOD35GY4SWoTIBtEN/hb9oAb1k2qS9+oW3fohARSJYJ+W7qGhe
-         LIMxqw4FIKRD1SDZTqjWs2CYjGaRA9INQO2IkgA3DGStY1SNfmYNOGZyjqVYFulWtHZE
-         5SQNGw2p8fYrdHwhQETubSiUHqLkEooP9ni3/atenfJ2HqI0i6qglP//tqBw6zETd8z8
-         CmVDq/uy2XzxTkXWjxUUkKHRGG3ROADxnveO9ZNlaF1o3ff8sw2vmmB11M+zJ5bdaN6q
-         XSdEJVxdlqEEeW+VD9mNvYQlFFdP8oSo0IpD1sUleHg+/teHQvecI/pwCljEfjWa+vjD
-         RZCg==
-X-Gm-Message-State: ACrzQf0mpw5Qq1GzUtzzwNCwqZ6TwPCoiXBtfoD809519EgDaTlrEnco
-        FjLfdbIojf5YV6Nu3TO8tc4Sh+E3GlkEn1FdH4s=
-X-Google-Smtp-Source: AMsMyM5wM+eGGSaToRccX+wHcPfdv3XLev25laMftlhjjePiHav3A6iPAptZaMvnGH8fQB5fGfLwBG+JS5BnQMQsBeg=
-X-Received: by 2002:aa7:9dcb:0:b0:565:89a8:c708 with SMTP id
- g11-20020aa79dcb000000b0056589a8c708mr15721779pfq.4.1666293698956; Thu, 20
- Oct 2022 12:21:38 -0700 (PDT)
+        Thu, 20 Oct 2022 15:23:04 -0400
+Received: from meesny.iki.fi (meesny.iki.fi [IPv6:2001:67c:2b0:1c1::201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FEEC1F8101;
+        Thu, 20 Oct 2022 12:23:03 -0700 (PDT)
+Received: from t60.musicnaut.iki.fi (85-76-8-144-nat.elisa-mobile.fi [85.76.8.144])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: aaro.koskinen)
+        by meesny.iki.fi (Postfix) with ESMTPSA id 204E9200C5;
+        Thu, 20 Oct 2022 22:23:00 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
+        t=1666293780;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PNxYWZtqhQJ3EBnB8jz3JWPqixt8xcwZe2p6tpEoE8Y=;
+        b=EmkHLYuM9bMA98DxeONON4fIcT90tau9h2WSMOQJOlTiCoOvC2edtD/TvifBE0LdU4FaIQ
+        xUXuj4mqFY+1rTI9OTXtplS5m6WLUcw2TMOVP4qtcmFckDRXvV845GkfqslVVsLM+e3xyF
+        +Yd9pF3j9Ko7OWtoGOOsw26o7pNr8oY=
+Date:   Thu, 20 Oct 2022 22:22:58 +0300
+From:   Aaro Koskinen <aaro.koskinen@iki.fi>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/4] watchdog: omap: Remove #ifdef guards for PM related
+ functions
+Message-ID: <20221020192258.GA3019@t60.musicnaut.iki.fi>
+References: <20221020185047.1001522-1-paul@crapouillou.net>
+ <20221020185047.1001522-4-paul@crapouillou.net>
 MIME-Version: 1.0
-References: <cc48dc1e4db8c33289f168cf380ab3641f45f8ad.1666251624.git.baolin.wang@linux.alibaba.com>
- <c44225ae71b1be21e32891e2143044863a0b91b1.1666251624.git.baolin.wang@linux.alibaba.com>
- <87mt9qnbrf.fsf@yhuang6-desk2.ccr.corp.intel.com> <dbfb24e8-e83e-5a70-618e-87e1cebdfe5e@linux.alibaba.com>
-In-Reply-To: <dbfb24e8-e83e-5a70-618e-87e1cebdfe5e@linux.alibaba.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Thu, 20 Oct 2022 12:21:26 -0700
-Message-ID: <CAHbLzkppCJ+Jpjkv6CE=fzufL+-=L=29W_oZc6X=MV9gmu85hA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] mm: migrate: Try again if THP split is failed due to
- page refcnt
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>
-Cc:     "Huang, Ying" <ying.huang@intel.com>, akpm@linux-foundation.org,
-        david@redhat.com, ziy@nvidia.com, jingshan@linux.alibaba.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221020185047.1001522-4-paul@crapouillou.net>
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=aaro.koskinen smtp.mailfrom=aaro.koskinen@iki.fi
+ARC-Seal: i=1; s=meesny; d=iki.fi; t=1666293780; a=rsa-sha256; cv=none;
+        b=d9CzQI/102zmHVRTy51I4xghMb00z3jR9v6tK95ShM9/rN9iqzhDohMFNDex46pXOdw/HO
+        O5xZOkQJYrd6LvY0gi6ebsCQqSJy4ja7aVE7YcA34irwNWO1khNa7mxXR6aLxeyjR2kt2v
+        it2/g11MZFA+G+Wf/vijRS7atoCj74s=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=meesny; t=1666293780;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PNxYWZtqhQJ3EBnB8jz3JWPqixt8xcwZe2p6tpEoE8Y=;
+        b=pZjHRPy6zdJ3wKa+yTHk+9CRs5ayFGBPqpgZR1//On2OJ2y1Vjsb/k50SpEqCZXx2A8VCC
+        4wKtjcsAp4wMOSnEC7xEsGvbOgufQxK3JVt/8NN3SKf/Wew1oCROTSJv8/e06+SliHr/kA
+        cJw5LDwhiwOa7N1ugNazSrwksPJ92LA=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 2:33 AM Baolin Wang
-<baolin.wang@linux.alibaba.com> wrote:
->
->
->
-> On 10/20/2022 4:24 PM, Huang, Ying wrote:
-> > Baolin Wang <baolin.wang@linux.alibaba.com> writes:
-> >
-> >> When creating a virtual machine, we will use memfd_create() to get
-> >> a file descriptor which can be used to create share memory mappings
-> >> using the mmap function, meanwhile the mmap() will set the MAP_POPULATE
-> >> flag to allocate physical pages for the virtual machine.
-> >>
-> >> When allocating physical pages for the guest, the host can fallback to
-> >> allocate some CMA pages for the guest when over half of the zone's free
-> >> memory is in the CMA area.
-> >>
-> >> In guest os, when the application wants to do some data transaction with
-> >> DMA, our QEMU will call VFIO_IOMMU_MAP_DMA ioctl to do longterm-pin and
-> >> create IOMMU mappings for the DMA pages. However, when calling
-> >> VFIO_IOMMU_MAP_DMA ioctl to pin the physical pages, we found it will be
-> >> failed to longterm-pin sometimes.
-> >>
-> >> After some invetigation, we found the pages used to do DMA mapping can
-> >> contain some CMA pages, and these CMA pages will cause a possible
-> >> failure of the longterm-pin, due to failed to migrate the CMA pages.
-> >> The reason of migration failure may be temporary reference count or
-> >> memory allocation failure. So that will cause the VFIO_IOMMU_MAP_DMA
-> >> ioctl returns error, which makes the application failed to start.
-> >>
-> >> I observed one migration failure case (which is not easy to reproduce) is
-> >> that, the 'thp_migration_fail' count is 1 and the 'thp_split_page_failed'
-> >> count is also 1.
-> >>
-> >> That means when migrating a THP which is in CMA area, but can not allocate
-> >> a new THP due to memory fragmentation, so it will split the THP. However
-> >> THP split is also failed, probably the reason is temporary reference count
-> >> of this THP. And the temporary reference count can be caused by dropping
-> >> page caches (I observed the drop caches operation in the system), but we
-> >> can not drop the shmem page caches due to they are already dirty at that time.
-> >>
-> >> Especially for THP split failure, which is caused by temporary reference
-> >> count, we can try again to mitigate the failure of migration in this case
-> >> according to previous discussion [1].
-> >
-> > Does the patch solved your problem?
->
-> The problem is not easy to reproduce and I will test this patch on our
-> products. However I think this is a likely case to fail the migration,
-> which need to be addressed to mitigate the failure.
+On Thu, Oct 20, 2022 at 07:50:46PM +0100, Paul Cercueil wrote:
+> Use the pm_ptr() macro to handle the .suspend/.resume callbacks.
+> 
+> This macro allows the suspend and resume functions to be automatically
+> dropped by the compiler when CONFIG_SUSPEND is disabled, without having
+> to use #ifdef guards. Not using #ifdef guards means that the code is
+> always compiled independently of any Kconfig option, and thanks to that
+> bugs and regressions are easier to catch.
+> 
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 
-You may try to trace all migrations across your fleet (or just pick
-some sample machines, this should make data analysis easier) and
-filter the migration by reasons, for example, MR_LONGTERM_PIN, then
-compare the migration success rate before and after the patch. It
-should be a good justification. But it may need some work on data
-aggregation, process and analysis, not sure how feasible it is.
+Acked-by: Aaro Koskinen <aaro.koskinen@iki.fi>
 
->
-> >> [1] https://lore.kernel.org/all/470dc638-a300-f261-94b4-e27250e42f96@redhat.com/
-> >> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> >> ---
-> >>   mm/huge_memory.c |  4 ++--
-> >>   mm/migrate.c     | 18 +++++++++++++++---
-> >>   2 files changed, 17 insertions(+), 5 deletions(-)
-> >>
-> >> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-> >> index ad17c8d..a79f03b 100644
-> >> --- a/mm/huge_memory.c
-> >> +++ b/mm/huge_memory.c
-> >> @@ -2666,7 +2666,7 @@ int split_huge_page_to_list(struct page *page, struct list_head *list)
-> >>       * split PMDs
-> >>       */
-> >>      if (!can_split_folio(folio, &extra_pins)) {
-> >> -            ret = -EBUSY;
-> >> +            ret = -EAGAIN;
-> >>              goto out_unlock;
-> >>      }
-> >>
-> >> @@ -2716,7 +2716,7 @@ int split_huge_page_to_list(struct page *page, struct list_head *list)
-> >>                      xas_unlock(&xas);
-> >>              local_irq_enable();
-> >>              remap_page(folio, folio_nr_pages(folio));
-> >> -            ret = -EBUSY;
-> >> +            ret = -EAGAIN;
-> >>      }
-> >>
-> >>   out_unlock:
-> >> diff --git a/mm/migrate.c b/mm/migrate.c
-> >> index 8e5eb6e..55c7855 100644
-> >> --- a/mm/migrate.c
-> >> +++ b/mm/migrate.c
-> >> @@ -1506,9 +1506,21 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
-> >>                              if (is_thp) {
-> >>                                      nr_thp_failed++;
-> >>                                      /* THP NUMA faulting doesn't split THP to retry. */
-> >> -                                    if (!nosplit && !try_split_thp(page, &thp_split_pages)) {
-> >> -                                            nr_thp_split++;
-> >> -                                            break;
-> >> +                                    if (!nosplit) {
-> >> +                                            rc = try_split_thp(page, &thp_split_pages);
-> >> +                                            if (!rc) {
-> >> +                                                    nr_thp_split++;
-> >> +                                                    break;
-> >> +                                            } else if (reason == MR_LONGTERM_PIN &&
-> >> +                                                       rc == -EAGAIN) {
-> >
-> > In case reason != MR_LONGTERM_PIN, you change the return value of
-> > migrate_pages().  So you need to use another variable for return value.
->
-> Good catch, will fix in next version. Thanks for your comments.
+> ---
+>  drivers/watchdog/omap_wdt.c | 11 ++---------
+>  1 file changed, 2 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/watchdog/omap_wdt.c b/drivers/watchdog/omap_wdt.c
+> index 74d785b2b478..e75aa86f63cb 100644
+> --- a/drivers/watchdog/omap_wdt.c
+> +++ b/drivers/watchdog/omap_wdt.c
+> @@ -316,8 +316,6 @@ static int omap_wdt_remove(struct platform_device *pdev)
+>  	return 0;
+>  }
+>  
+> -#ifdef	CONFIG_PM
+> -
+>  /* REVISIT ... not clear this is the best way to handle system suspend; and
+>   * it's very inappropriate for selective device suspend (e.g. suspending this
+>   * through sysfs rather than by stopping the watchdog daemon).  Also, this
+> @@ -353,11 +351,6 @@ static int omap_wdt_resume(struct platform_device *pdev)
+>  	return 0;
+>  }
+>  
+> -#else
+> -#define	omap_wdt_suspend	NULL
+> -#define	omap_wdt_resume		NULL
+> -#endif
+> -
+>  static const struct of_device_id omap_wdt_of_match[] = {
+>  	{ .compatible = "ti,omap3-wdt", },
+>  	{},
+> @@ -368,8 +361,8 @@ static struct platform_driver omap_wdt_driver = {
+>  	.probe		= omap_wdt_probe,
+>  	.remove		= omap_wdt_remove,
+>  	.shutdown	= omap_wdt_shutdown,
+> -	.suspend	= omap_wdt_suspend,
+> -	.resume		= omap_wdt_resume,
+> +	.suspend	= pm_ptr(omap_wdt_suspend),
+> +	.resume		= pm_ptr(omap_wdt_resume),
+>  	.driver		= {
+>  		.name	= "omap_wdt",
+>  		.of_match_table = omap_wdt_of_match,
+> -- 
+> 2.35.1
+> 
