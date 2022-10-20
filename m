@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A9C8606551
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 18:04:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 656A860654C
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 18:03:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231156AbiJTQEN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 12:04:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60400 "EHLO
+        id S230398AbiJTQDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 12:03:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229832AbiJTQDc (ORCPT
+        with ESMTP id S230443AbiJTQD3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 12:03:32 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDB271BA1F2;
-        Thu, 20 Oct 2022 09:03:30 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29KG37Bq005188;
-        Thu, 20 Oct 2022 11:03:07 -0500
+        Thu, 20 Oct 2022 12:03:29 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44DAB1B233E;
+        Thu, 20 Oct 2022 09:03:28 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29KG38bd119635;
+        Thu, 20 Oct 2022 11:03:08 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1666281787;
-        bh=DyQWcVMVSf1fdWTs1YaebqdYIHq4T1NiKjgf/LlvdyU=;
+        s=ti-com-17Q1; t=1666281788;
+        bh=TKssYhX3qbcy/Oe5XegiowqJBrMezDMYYYJ+ryOPph0=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=mT5t/0OtkhrHoAiHt+UCJvQxeOG8aGaCMhNgEGcFITZUV2UCJBzwafm3HpJDsGLrF
-         zLgvpmNvBN47C1EXt5zfpBPAHLrv+GTrtMMXcAm5zjUkODW/c1xZ80nLh1Rcmu0ywi
-         fwkzbgRPCNLUaGAZfWfx7yJZVDsiEuUBDGXyCTBQ=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29KG37e1014806
+        b=U0wdnibwLYoFyH4VlZbqL2EnChhRnUqD7ujwQj1941mZefifydtWAdoldnbXfF1Xi
+         BaPJhgRO1pjsB9fWjFTtKGMzagLiP76mQC0lgsXVBKlxbUE3YjFzXID2fQ4Z/2MmNY
+         yDj6RZmW+Ep95yFPiu1jrRrtNvtnGFrkEY2999rA=
+Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29KG38jE052145
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 20 Oct 2022 11:03:07 -0500
-Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+        Thu, 20 Oct 2022 11:03:08 -0500
+Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Thu, 20
- Oct 2022 11:03:07 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ Oct 2022 11:03:08 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Thu, 20 Oct 2022 11:03:07 -0500
+ Frontend Transport; Thu, 20 Oct 2022 11:03:08 -0500
 Received: from ula0226330.dal.design.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29KG3639059665;
-        Thu, 20 Oct 2022 11:03:06 -0500
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29KG363A059665;
+        Thu, 20 Oct 2022 11:03:07 -0500
 From:   Andrew Davis <afd@ti.com>
 To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
         Tero Kristo <kristo@kernel.org>,
@@ -49,9 +49,9 @@ To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
         <linux-arm-kernel@lists.infradead.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
 CC:     Andrew Davis <afd@ti.com>
-Subject: [PATCH 01/12] arm64: dts: ti: k3-j721e: Enable UART nodes at the board level
-Date:   Thu, 20 Oct 2022 11:02:54 -0500
-Message-ID: <20221020160305.18711-2-afd@ti.com>
+Subject: [PATCH 02/12] arm64: dts: ti: k3-j721e: Enable I2C nodes at the board level
+Date:   Thu, 20 Oct 2022 11:02:55 -0500
+Message-ID: <20221020160305.18711-3-afd@ti.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221020160305.18711-1-afd@ti.com>
 References: <20221020160305.18711-1-afd@ti.com>
@@ -69,247 +69,203 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-UART nodes defined in the top-level J721e SoC dtsi files are incomplete
-and may not be functional unless they are extended with pinmux
+I2C nodes defined in the top-level J721e SoC dtsi files are incomplete
+and will not be functional unless they are extended with pinmux
 information.
 
 As the pinmux is only known at the board integration level, these
 nodes should only be enabled when provided with this information.
 
-Disable the UART nodes in the dtsi files and only enable the ones that
+Disable the I2C nodes in the dtsi files and only enable the ones that
 are actually pinned out on a given board.
 
 Signed-off-by: Andrew Davis <afd@ti.com>
 ---
- .../dts/ti/k3-j721e-common-proc-board.dts     | 40 +++++++-----------
- arch/arm64/boot/dts/ti/k3-j721e-main.dtsi     | 10 +++++
- .../boot/dts/ti/k3-j721e-mcu-wakeup.dtsi      |  2 +
- arch/arm64/boot/dts/ti/k3-j721e-sk.dts        | 42 ++++---------------
- 4 files changed, 37 insertions(+), 57 deletions(-)
+ .../dts/ti/k3-j721e-common-proc-board.dts     |  4 ++++
+ arch/arm64/boot/dts/ti/k3-j721e-main.dtsi     |  7 ++++++
+ .../boot/dts/ti/k3-j721e-mcu-wakeup.dtsi      |  3 +++
+ arch/arm64/boot/dts/ti/k3-j721e-sk.dts        | 23 +++----------------
+ 4 files changed, 17 insertions(+), 20 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
-index b1691ac3442dc..01afacfe6faaa 100644
+index 01afacfe6faaa..24e9db563b234 100644
 --- a/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
 +++ b/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
-@@ -370,38 +370,30 @@ &wkup_uart0 {
- 	status = "reserved";
+@@ -529,6 +529,7 @@ adc {
  };
  
--&main_uart0 {
--	power-domains = <&k3_pds 146 TI_SCI_PD_SHARED>;
--};
--
--&main_uart3 {
--	/* UART not brought out */
--	status = "disabled";
--};
--
--&main_uart5 {
--	/* UART not brought out */
--	status = "disabled";
-+&mcu_uart0 {
-+	status = "okay";
-+	/* Default pinmux */
- };
- 
--&main_uart6 {
--	/* UART not brought out */
--	status = "disabled";
-+&main_uart0 {
-+	status = "okay";
-+	/* Shared with ATF on this platform */
-+	power-domains = <&k3_pds 146 TI_SCI_PD_SHARED>;
- };
- 
--&main_uart7 {
--	/* UART not brought out */
--	status = "disabled";
-+&main_uart1 {
-+	status = "okay";
-+	/* Default pinmux */
- };
- 
--&main_uart8 {
--	/* UART not brought out */
--	status = "disabled";
-+&main_uart2 {
-+	status = "okay";
-+	/* Default pinmux */
- };
- 
--&main_uart9 {
--	/* UART not brought out */
--	status = "disabled";
-+&main_uart4 {
-+	status = "okay";
-+	/* Default pinmux */
- };
- 
- &main_gpio2 {
-diff --git a/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
-index 917c9dc99efaa..5f85d1cc8b277 100644
---- a/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
-@@ -840,6 +840,7 @@ main_uart0: serial@2800000 {
- 		power-domains = <&k3_pds 146 TI_SCI_PD_EXCLUSIVE>;
- 		clocks = <&k3_clks 146 0>;
- 		clock-names = "fclk";
-+		status = "disabled";
- 	};
- 
- 	main_uart1: serial@2810000 {
-@@ -851,6 +852,7 @@ main_uart1: serial@2810000 {
- 		power-domains = <&k3_pds 278 TI_SCI_PD_EXCLUSIVE>;
- 		clocks = <&k3_clks 278 0>;
- 		clock-names = "fclk";
-+		status = "disabled";
- 	};
- 
- 	main_uart2: serial@2820000 {
-@@ -862,6 +864,7 @@ main_uart2: serial@2820000 {
- 		power-domains = <&k3_pds 279 TI_SCI_PD_EXCLUSIVE>;
- 		clocks = <&k3_clks 279 0>;
- 		clock-names = "fclk";
-+		status = "disabled";
- 	};
- 
- 	main_uart3: serial@2830000 {
-@@ -873,6 +876,7 @@ main_uart3: serial@2830000 {
- 		power-domains = <&k3_pds 280 TI_SCI_PD_EXCLUSIVE>;
- 		clocks = <&k3_clks 280 0>;
- 		clock-names = "fclk";
-+		status = "disabled";
- 	};
- 
- 	main_uart4: serial@2840000 {
-@@ -884,6 +888,7 @@ main_uart4: serial@2840000 {
- 		power-domains = <&k3_pds 281 TI_SCI_PD_EXCLUSIVE>;
- 		clocks = <&k3_clks 281 0>;
- 		clock-names = "fclk";
-+		status = "disabled";
- 	};
- 
- 	main_uart5: serial@2850000 {
-@@ -895,6 +900,7 @@ main_uart5: serial@2850000 {
- 		power-domains = <&k3_pds 282 TI_SCI_PD_EXCLUSIVE>;
- 		clocks = <&k3_clks 282 0>;
- 		clock-names = "fclk";
-+		status = "disabled";
- 	};
- 
- 	main_uart6: serial@2860000 {
-@@ -906,6 +912,7 @@ main_uart6: serial@2860000 {
- 		power-domains = <&k3_pds 283 TI_SCI_PD_EXCLUSIVE>;
- 		clocks = <&k3_clks 283 0>;
- 		clock-names = "fclk";
-+		status = "disabled";
- 	};
- 
- 	main_uart7: serial@2870000 {
-@@ -917,6 +924,7 @@ main_uart7: serial@2870000 {
- 		power-domains = <&k3_pds 284 TI_SCI_PD_EXCLUSIVE>;
- 		clocks = <&k3_clks 284 0>;
- 		clock-names = "fclk";
-+		status = "disabled";
- 	};
- 
- 	main_uart8: serial@2880000 {
-@@ -928,6 +936,7 @@ main_uart8: serial@2880000 {
- 		power-domains = <&k3_pds 285 TI_SCI_PD_EXCLUSIVE>;
- 		clocks = <&k3_clks 285 0>;
- 		clock-names = "fclk";
-+		status = "disabled";
- 	};
- 
- 	main_uart9: serial@2890000 {
-@@ -939,6 +948,7 @@ main_uart9: serial@2890000 {
- 		power-domains = <&k3_pds 286 TI_SCI_PD_EXCLUSIVE>;
- 		clocks = <&k3_clks 286 0>;
- 		clock-names = "fclk";
-+		status = "disabled";
- 	};
- 
- 	main_gpio0: gpio@600000 {
-diff --git a/arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi
-index df08724bbf1c5..fce88ed23596d 100644
---- a/arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi
-@@ -79,6 +79,7 @@ wkup_uart0: serial@42300000 {
- 		power-domains = <&k3_pds 287 TI_SCI_PD_EXCLUSIVE>;
- 		clocks = <&k3_clks 287 0>;
- 		clock-names = "fclk";
-+		status = "disabled";
- 	};
- 
- 	mcu_uart0: serial@40a00000 {
-@@ -90,6 +91,7 @@ mcu_uart0: serial@40a00000 {
- 		power-domains = <&k3_pds 149 TI_SCI_PD_EXCLUSIVE>;
- 		clocks = <&k3_clks 149 0>;
- 		clock-names = "fclk";
-+		status = "disabled";
- 	};
- 
- 	wkup_gpio_intr: interrupt-controller@42200000 {
-diff --git a/arch/arm64/boot/dts/ti/k3-j721e-sk.dts b/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
-index 80358cba6954c..23538c5f43575 100644
---- a/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
-+++ b/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
-@@ -475,46 +475,22 @@ &wkup_uart0 {
- 	status = "reserved";
- };
- 
-+&mcu_uart0 {
-+	status = "okay";
-+	/* Default pinmux */
-+};
-+
- &main_uart0 {
+ &main_i2c0 {
 +	status = "okay";
  	pinctrl-names = "default";
- 	pinctrl-0 = <&main_uart0_pins_default>;
- 	/* Shared with ATF on this platform */
- 	power-domains = <&k3_pds 146 TI_SCI_PD_SHARED>;
+ 	pinctrl-0 = <&main_i2c0_pins_default>;
+ 	clock-frequency = <400000>;
+@@ -565,6 +566,7 @@ p10-hog {
  };
  
--&main_uart2 {
--	/* Brought out on RPi header */
--	status = "disabled";
--};
--
--&main_uart3 {
--	/* UART not brought out */
--	status = "disabled";
--};
--
--&main_uart5 {
--	/* UART not brought out */
--	status = "disabled";
--};
--
--&main_uart6 {
--	/* UART not brought out */
--	status = "disabled";
--};
--
--&main_uart7 {
--	/* UART not brought out */
--	status = "disabled";
--};
--
--&main_uart8 {
--	/* UART not brought out */
--	status = "disabled";
--};
--
--&main_uart9 {
--	/* Brought out on M.2 E Key */
--	status = "disabled";
-+&main_uart1 {
+ &main_i2c1 {
 +	status = "okay";
-+	/* Default pinmux */
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&main_i2c1_pins_default>;
+ 	clock-frequency = <400000>;
+@@ -590,6 +592,7 @@ &k3_clks {
  };
  
- &main_sdhci0 {
+ &main_i2c3 {
++	status = "okay";
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&main_i2c3_pins_default>;
+ 	clock-frequency = <400000>;
+@@ -628,6 +631,7 @@ pcm3168a_1: audio-codec@44 {
+ };
+ 
+ &main_i2c6 {
++	status = "okay";
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&main_i2c6_pins_default>;
+ 	clock-frequency = <400000>;
+diff --git a/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
+index 5f85d1cc8b277..61bba78ce354e 100644
+--- a/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
+@@ -1229,6 +1229,7 @@ main_i2c0: i2c@2000000 {
+ 		clock-names = "fck";
+ 		clocks = <&k3_clks 187 0>;
+ 		power-domains = <&k3_pds 187 TI_SCI_PD_SHARED>;
++		status = "disabled";
+ 	};
+ 
+ 	main_i2c1: i2c@2010000 {
+@@ -1240,6 +1241,7 @@ main_i2c1: i2c@2010000 {
+ 		clock-names = "fck";
+ 		clocks = <&k3_clks 188 0>;
+ 		power-domains = <&k3_pds 188 TI_SCI_PD_EXCLUSIVE>;
++		status = "disabled";
+ 	};
+ 
+ 	main_i2c2: i2c@2020000 {
+@@ -1251,6 +1253,7 @@ main_i2c2: i2c@2020000 {
+ 		clock-names = "fck";
+ 		clocks = <&k3_clks 189 0>;
+ 		power-domains = <&k3_pds 189 TI_SCI_PD_EXCLUSIVE>;
++		status = "disabled";
+ 	};
+ 
+ 	main_i2c3: i2c@2030000 {
+@@ -1262,6 +1265,7 @@ main_i2c3: i2c@2030000 {
+ 		clock-names = "fck";
+ 		clocks = <&k3_clks 190 0>;
+ 		power-domains = <&k3_pds 190 TI_SCI_PD_EXCLUSIVE>;
++		status = "disabled";
+ 	};
+ 
+ 	main_i2c4: i2c@2040000 {
+@@ -1273,6 +1277,7 @@ main_i2c4: i2c@2040000 {
+ 		clock-names = "fck";
+ 		clocks = <&k3_clks 191 0>;
+ 		power-domains = <&k3_pds 191 TI_SCI_PD_EXCLUSIVE>;
++		status = "disabled";
+ 	};
+ 
+ 	main_i2c5: i2c@2050000 {
+@@ -1284,6 +1289,7 @@ main_i2c5: i2c@2050000 {
+ 		clock-names = "fck";
+ 		clocks = <&k3_clks 192 0>;
+ 		power-domains = <&k3_pds 192 TI_SCI_PD_EXCLUSIVE>;
++		status = "disabled";
+ 	};
+ 
+ 	main_i2c6: i2c@2060000 {
+@@ -1295,6 +1301,7 @@ main_i2c6: i2c@2060000 {
+ 		clock-names = "fck";
+ 		clocks = <&k3_clks 193 0>;
+ 		power-domains = <&k3_pds 193 TI_SCI_PD_EXCLUSIVE>;
++		status = "disabled";
+ 	};
+ 
+ 	ufs_wrapper: ufs-wrapper@4e80000 {
+diff --git a/arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi
+index fce88ed23596d..7bb6613796eab 100644
+--- a/arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi
+@@ -147,6 +147,7 @@ mcu_i2c0: i2c@40b00000 {
+ 		clock-names = "fck";
+ 		clocks = <&k3_clks 194 0>;
+ 		power-domains = <&k3_pds 194 TI_SCI_PD_EXCLUSIVE>;
++		status = "disabled";
+ 	};
+ 
+ 	mcu_i2c1: i2c@40b10000 {
+@@ -158,6 +159,7 @@ mcu_i2c1: i2c@40b10000 {
+ 		clock-names = "fck";
+ 		clocks = <&k3_clks 195 0>;
+ 		power-domains = <&k3_pds 195 TI_SCI_PD_EXCLUSIVE>;
++		status = "disabled";
+ 	};
+ 
+ 	wkup_i2c0: i2c@42120000 {
+@@ -169,6 +171,7 @@ wkup_i2c0: i2c@42120000 {
+ 		clock-names = "fck";
+ 		clocks = <&k3_clks 197 0>;
+ 		power-domains = <&k3_pds 197 TI_SCI_PD_SHARED>;
++		status = "disabled";
+ 	};
+ 
+ 	fss: fss@47000000 {
+diff --git a/arch/arm64/boot/dts/ti/k3-j721e-sk.dts b/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
+index 23538c5f43575..1d5a90d968497 100644
+--- a/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
++++ b/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
+@@ -537,6 +537,7 @@ &ospi1 {
+ };
+ 
+ &main_i2c0 {
++	status = "okay";
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&main_i2c0_pins_default>;
+ 	clock-frequency = <400000>;
+@@ -564,18 +565,15 @@ i2c@1 {
+ };
+ 
+ &main_i2c1 {
++	status = "okay";
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&main_i2c1_pins_default>;
+ 	/* i2c1 is used for DVI DDC, so we need to use 100kHz */
+ 	clock-frequency = <100000>;
+ };
+ 
+-&main_i2c2 {
+-	/* Unused */
+-	status = "disabled";
+-};
+-
+ &main_i2c3 {
++	status = "okay";
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&main_i2c3_pins_default>;
+ 	clock-frequency = <400000>;
+@@ -602,21 +600,6 @@ i2c@1 {
+ 	};
+ };
+ 
+-&main_i2c4 {
+-	/* Unused */
+-	status = "disabled";
+-};
+-
+-&main_i2c5 {
+-	/* Brought out on RPi Header */
+-	status = "disabled";
+-};
+-
+-&main_i2c6 {
+-	/* Unused */
+-	status = "disabled";
+-};
+-
+ &main_gpio2 {
+ 	status = "disabled";
+ };
 -- 
 2.37.3
 
