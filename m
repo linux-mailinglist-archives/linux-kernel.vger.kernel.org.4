@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86DF5606A57
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 23:31:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76934606A58
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 23:32:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229954AbiJTVbz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 17:31:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56618 "EHLO
+        id S230003AbiJTVce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 17:32:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbiJTVbx (ORCPT
+        with ESMTP id S229875AbiJTVcc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 17:31:53 -0400
+        Thu, 20 Oct 2022 17:32:32 -0400
 Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E73DB2248EF
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 14:31:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A28D21EA553
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 14:32:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1666301501; bh=LsgP4UwxtEr24nRtsoSyg8wVeKuuTajMpOKVYOf6LMM=;
+        t=1666301537; bh=ULNJkCs5wAlkH0b1TToLWjmNeVHzifhQ8R5fMhDfzJA=;
         h=X-EA-Auth:Date:From:To:Subject:Message-ID:References:MIME-Version:
          Content-Type:In-Reply-To;
-        b=hapW5OMY8pdFZBAQ+Clpu7GXnKmV38IPzd/H74BdajzdfLu+pQ1T82U2SK/T+oEQ7
-         OE/oeKDgauyAn4fItP3iTh9wcmQIpKhnOw34hDqklqOAn3X/N0kKcN+97/9RcK2oVu
-         iLnR5arc0xVM7SSBMEzMDvJ0qtj/xWMbV5Nejt2M=
-Received: by b-5.in.mailobj.net [192.168.90.15] with ESMTP
+        b=c2QRYEVEOomWRBqUzWCfNwlQ2RsojOjDQITYs5pJohzmFIdrGGOnpLNONTbnZX8Gp
+         BFulZbVEWA8HFGeRalSuXhvfuSuFaO1tXB3Cm1icnjayYlPcymu50ytHBLplDXwxou
+         AHt0vlQqfptn9MZJQSwAgo7aDatZkPE/Rxnm7SiQ=
+Received: by b-1.in.mailobj.net [192.168.90.11] with ESMTP
         via [213.182.55.206]
-        Thu, 20 Oct 2022 23:31:41 +0200 (CEST)
-X-EA-Auth: izWFoG7NUcdEXVwGnODSoe5tJ0O4nUX/wq/lYIvP0Q7HLVuJ+AW8kpOABC7CrSHdN7F8eAxQTWRn/ftnZ9w9uOuOukDzkUR4
-Date:   Fri, 21 Oct 2022 03:01:37 +0530
+        Thu, 20 Oct 2022 23:32:17 +0200 (CEST)
+X-EA-Auth: Y6oTBBp9auts+p/tBz8CFs4NXozmES3JnJdmAeJeVPb1xUKlt6QYemXK9SBbjjg2zrijdH7Vy/OUk1hv0nMR75ucYEONEc+a
+Date:   Fri, 21 Oct 2022 03:02:12 +0530
 From:   Deepak R Varma <drv@mailo.com>
 To:     outreachy@lists.linux.dev, Larry.Finger@lwfinger.net,
         phil@philpotter.co.uk, paskripkin@gmail.com,
         gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
         linux-kernel@vger.kernel.org, kumarpraveen@linux.microsoft.com,
         saurabh.truth@gmail.com
-Subject: [PATCH v4 09/11] staging: r8188eu: Put '{" on the symbol declaration
- line
-Message-ID: <375f742936493b562bd4dfba90eb75bd8ab84f8a.1666299151.git.drv@mailo.com>
+Subject: [PATCH v4 10/11] staging: r8188eu: Correct missing or extra space in
+ the statements
+Message-ID: <4559d1a406b9f32379ec01cfadacea13a11803ac.1666299151.git.drv@mailo.com>
 References: <cover.1666299151.git.drv@mailo.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -50,9 +50,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Open braces '{" should be placed on the line of symbol declaration as
-per the coding-style guidelines. Improves readability and matches with
-style used in rest of the code. Issue reported by checkpatch script.
+Properly spacing out code statements/instructions improves code
+readability. Add missing or remove extra space as necessary according
+to the Linux Kernel coding-style guidelines. Following errors reported
+by checkpatch script for inconsistent code spacing:
+	ERROR: space prohibited before that close parenthesis ')'
+	ERROR: space prohibited before that ',' (ctx:WxW)
+	CHECK: spaces preferred around that '&' (ctx:VxV)
 
 Signed-off-by: Deepak R Varma <drv@mailo.com>
 ---
@@ -63,65 +67,104 @@ Changes in v4:
 Changes in v3:
    1. Patch newly added to the patch set.
 
+ .../staging/r8188eu/include/rtl8188e_spec.h    | 12 ++++++------
+ drivers/staging/r8188eu/include/rtw_mlme.h     | 18 +++++++++---------
+ drivers/staging/r8188eu/include/rtw_mlme_ext.h |  2 +-
+ 3 files changed, 16 insertions(+), 16 deletions(-)
 
- drivers/staging/r8188eu/include/rtw_cmd.h | 18 ++++++------------
- 1 file changed, 6 insertions(+), 12 deletions(-)
+diff --git a/drivers/staging/r8188eu/include/rtl8188e_spec.h b/drivers/staging/r8188eu/include/rtl8188e_spec.h
+index e34ecdc09688..3fa3b3e5dd64 100644
+--- a/drivers/staging/r8188eu/include/rtl8188e_spec.h
++++ b/drivers/staging/r8188eu/include/rtl8188e_spec.h
+@@ -900,12 +900,12 @@ Current IOREG MAP
+ #define HQSEL_HIQ			BIT(5)
 
-diff --git a/drivers/staging/r8188eu/include/rtw_cmd.h b/drivers/staging/r8188eu/include/rtw_cmd.h
-index 4b6a91aefc1e..0a138f6f5bbb 100644
---- a/drivers/staging/r8188eu/include/rtw_cmd.h
-+++ b/drivers/staging/r8188eu/include/rtw_cmd.h
-@@ -445,8 +445,7 @@ struct getrfintfs_parm {
- 	u8	rfintfs;
+ /*  For normal driver, 0x10C */
+-#define _TXDMA_HIQ_MAP(x)		(((x)&0x3) << 14)
+-#define _TXDMA_MGQ_MAP(x)		(((x)&0x3) << 12)
+-#define _TXDMA_BKQ_MAP(x)		(((x)&0x3) << 10)
+-#define _TXDMA_BEQ_MAP(x)		(((x)&0x3) << 8 )
+-#define _TXDMA_VIQ_MAP(x)		(((x)&0x3) << 6 )
+-#define _TXDMA_VOQ_MAP(x)		(((x)&0x3) << 4 )
++#define _TXDMA_HIQ_MAP(x)		(((x) & 0x3) << 14)
++#define _TXDMA_MGQ_MAP(x)		(((x) & 0x3) << 12)
++#define _TXDMA_BKQ_MAP(x)		(((x) & 0x3) << 10)
++#define _TXDMA_BEQ_MAP(x)		(((x) & 0x3) << 8)
++#define _TXDMA_VIQ_MAP(x)		(((x) & 0x3) << 6)
++#define _TXDMA_VOQ_MAP(x)		(((x) & 0x3) << 4)
+
+ #define QUEUE_LOW			1
+ #define QUEUE_NORMAL			2
+diff --git a/drivers/staging/r8188eu/include/rtw_mlme.h b/drivers/staging/r8188eu/include/rtw_mlme.h
+index ebf7168a7ef9..ca539c652f26 100644
+--- a/drivers/staging/r8188eu/include/rtw_mlme.h
++++ b/drivers/staging/r8188eu/include/rtw_mlme.h
+@@ -101,17 +101,17 @@ struct rt_link_detect {
+
+ struct profile_info {
+ 	u8	ssidlen;
+-	u8	ssid[ WLAN_SSID_MAXLEN ];
+-	u8	peermac[ ETH_ALEN ];
++	u8	ssid[WLAN_SSID_MAXLEN];
++	u8	peermac[ETH_ALEN];
  };
 
--struct Tx_Beacon_param
--{
-+struct Tx_Beacon_param {
- 	struct wlan_bssid_ex network;
+ struct tx_invite_req_info {
+ 	u8	token;
+ 	u8	benable;
+-	u8	go_ssid[ WLAN_SSID_MAXLEN ];
++	u8	go_ssid[WLAN_SSID_MAXLEN];
+ 	u8	ssidlen;
+-	u8	go_bssid[ ETH_ALEN ];
+-	u8	peer_macaddr[ ETH_ALEN ];
++	u8	go_bssid[ETH_ALEN];
++	u8	peer_macaddr[ETH_ALEN];
+ 	u8	operating_ch;	/* This information will be set by using the
+ 				 * p2p_set op_ch=x */
+ 	u8	peer_ch;	/* The listen channel for peer P2P device */
+@@ -154,9 +154,9 @@ struct tx_nego_req_info {
  };
 
-@@ -682,26 +681,22 @@ struct set_ch_parm {
+ struct group_id_info {
+-	u8	go_device_addr[ ETH_ALEN ];	/* The GO's device address of
++	u8	go_device_addr[ETH_ALEN];	/* The GO's device address of
+ 						 * this P2P group */
+-	u8	ssid[ WLAN_SSID_MAXLEN ];	/* The SSID of this P2P group */
++	u8	ssid[WLAN_SSID_MAXLEN];	/* The SSID of this P2P group */
  };
 
- /*H2C Handler index: 59 */
--struct SetChannelPlan_param
--{
-+struct SetChannelPlan_param {
- 	u8 channel_plan;
- };
+ struct scan_limit_info {
+@@ -459,7 +459,7 @@ static inline void set_fwstate(struct mlme_priv *pmlmepriv, int state)
+ {
+ 	pmlmepriv->fw_state |= state;
+ 	/* FOR HW integration */
+-	if (_FW_UNDER_SURVEY==state)
++	if (_FW_UNDER_SURVEY == state)
+ 		pmlmepriv->bScanInProcess = true;
+ }
 
- /*H2C Handler index: 60 */
--struct LedBlink_param
--{
-+struct LedBlink_param {
- 	struct LED_871x *pLed;
- };
+@@ -467,7 +467,7 @@ static inline void _clr_fwstate_(struct mlme_priv *pmlmepriv, int state)
+ {
+ 	pmlmepriv->fw_state &= ~state;
+ 	/* FOR HW integration */
+-	if (_FW_UNDER_SURVEY==state)
++	if (_FW_UNDER_SURVEY == state)
+ 		pmlmepriv->bScanInProcess = false;
+ }
 
- /*H2C Handler index: 61 */
--struct SetChannelSwitch_param
--{
-+struct SetChannelSwitch_param {
- 	u8 new_ch_no;
- };
+diff --git a/drivers/staging/r8188eu/include/rtw_mlme_ext.h b/drivers/staging/r8188eu/include/rtw_mlme_ext.h
+index 413b94e38744..66aa8b497aa1 100644
+--- a/drivers/staging/r8188eu/include/rtw_mlme_ext.h
++++ b/drivers/staging/r8188eu/include/rtw_mlme_ext.h
+@@ -729,7 +729,7 @@ enum rtw_c2h_event {
+ 	GEN_EVT_CODE(_Survey),	 /*8*/
+ 	GEN_EVT_CODE(_SurveyDone),	 /*9*/
 
- /*H2C Handler index: 62 */
--struct TDLSoption_param
--{
-+struct TDLSoption_param {
- 	u8 addr[ETH_ALEN];
- 	u8 option;
- };
-@@ -859,8 +854,7 @@ enum rtw_h2c_cmd {
- #define _SetRFReg_CMD_		_Write_RFREG_CMD_
-
- #ifdef _RTW_CMD_C_
--static struct _cmd_callback	rtw_cmd_callback[] =
--{
-+static struct _cmd_callback	rtw_cmd_callback[] = {
- 	{GEN_CMD_CODE(_Read_MACREG), NULL}, /*0*/
- 	{GEN_CMD_CODE(_Write_MACREG), NULL},
- 	{GEN_CMD_CODE(_Read_BBREG), &rtw_getbbrfreg_cmdrsp_callback},
+-	GEN_EVT_CODE(_JoinBss) , /*10*/
++	GEN_EVT_CODE(_JoinBss), /*10*/
+ 	GEN_EVT_CODE(_AddSTA),
+ 	GEN_EVT_CODE(_DelSTA),
+ 	GEN_EVT_CODE(_AtimDone),
 --
 2.30.2
 
