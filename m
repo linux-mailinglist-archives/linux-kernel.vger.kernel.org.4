@@ -2,143 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10F0360696D
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 22:21:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 364C860696E
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 22:22:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbiJTUVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 16:21:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44508 "EHLO
+        id S229678AbiJTUW1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 16:22:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229988AbiJTUVN (ORCPT
+        with ESMTP id S229494AbiJTUWZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 16:21:13 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55CA31F9A0C;
-        Thu, 20 Oct 2022 13:20:52 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 061771884A7E;
-        Thu, 20 Oct 2022 20:20:51 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id DBA3025004E9;
-        Thu, 20 Oct 2022 20:20:50 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id CD02F9EC0002; Thu, 20 Oct 2022 20:20:50 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Thu, 20 Oct 2022 16:22:25 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57D8D1A8500
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 13:22:23 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id fy4so2299911ejc.5
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 13:22:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=EIPqJ4tUUqVv4kMlvwmVLXisEqmV1Wy98VDaAlo8cFI=;
+        b=CS2zvH+k5N7l3LrbqPDzVAfRb2X3xwhWeezCIDERtzeXe7n3Jc1kxEm5CvcbYFdjbt
+         sVp8d5gnhwyB+Qn5SJYvQgrR1WRBw19GHkhVrFji8LpGhZsEaN8B7em3CYtrOqJwZWmJ
+         gdFvoliSKMks6Xuigzq7/keq3/dqgAjcyQSCd7qRo7bTwbzn5uWmqrRe440YKIQRcbO1
+         K2+A7EtHArXAZqknjFS7Wmqfmxq2qjb9axcuugvyZDMfxMMKTiXzQXZapDPXYZzoiryu
+         ihjpX5P6OU84Oct6wN3fY5OGVYgnc/BeethM002chyqpXlZLsFjoQqC1klvphzOxhw1H
+         qWEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EIPqJ4tUUqVv4kMlvwmVLXisEqmV1Wy98VDaAlo8cFI=;
+        b=7XvN469wNOpSPhlc3SWl4O9iJNju2Bf+3foor1bz0hRuqBbbeR7tivk0LUKDatdw1H
+         KjEpmWidY6dI/WN5j0iwtgQi9LqT3naY3xSIrzS9YIPwnH4YfnFiGDByY5SV8Y8Cgunr
+         P3zo9CcK48WmvmZNG7lEBRvCdUcmzmFxskKO0Nqd3L+WyB1pdCh93xQzPidM+pUC8yQF
+         BNWdmDNQ0ucfprm3AqH7UamHC1XK0ebCJCxSbd4PjW6TZvR7luNWMCyB+Am2QNxzXtLz
+         K0zBmk+3yq3MZm55fq6fSzV/PbOHJeuEDZ4zy996DvzRe3Elcb4/s5UcnQMtvPlT/M7l
+         0toA==
+X-Gm-Message-State: ACrzQf33/PS+SE+bfKWCKF0epZ6sBnryvAuy7jcpGZ4x0JGlULtB7Bq0
+        Z+3X/WUIcsDo2cvDJ5KkLkk=
+X-Google-Smtp-Source: AMsMyM4f2ufX2BUCbXdG1/Dplbhqpe4VBpCycpr9+0UsaNzHZxPdhBKRRFdQffGiHCzRx/XbIFEnFQ==
+X-Received: by 2002:a17:907:c25:b0:78e:1a4:132 with SMTP id ga37-20020a1709070c2500b0078e01a40132mr12598741ejc.521.1666297341799;
+        Thu, 20 Oct 2022 13:22:21 -0700 (PDT)
+Received: from nam-dell (ip-217-105-46-158.ip.prioritytelecom.net. [217.105.46.158])
+        by smtp.gmail.com with ESMTPSA id x9-20020a170906710900b0073a20469f31sm10743281ejj.41.2022.10.20.13.22.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Oct 2022 13:22:21 -0700 (PDT)
+Date:   Thu, 20 Oct 2022 22:22:10 +0200
+From:   Nam Cao <namcaov@gmail.com>
+To:     Gautam Menghani <gautammenghani201@gmail.com>
+Cc:     gregkh@linuxfoundation.org, paulo.miguel.almeida.rodenas@gmail.com,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drivers/staging/pi433: Change data type of bit_rate to
+ be u32
+Message-ID: <20221020202210.GA16547@nam-dell>
+References: <20221020181815.31245-1-gautammenghani201@gmail.com>
 MIME-Version: 1.0
-Date:   Thu, 20 Oct 2022 22:20:50 +0200
-From:   netdev@kapio-technology.com
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Florent Fourcot <florent.fourcot@wifirst.fr>,
-        Hans Schultz <schultz.hans@gmail.com>,
-        Joachim Wiberg <troglobit@gmail.com>,
-        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v8 net-next 10/12] net: dsa: mv88e6xxx: mac-auth/MAB
- implementation
-In-Reply-To: <20221020132538.reirrskemcjwih2m@skbuf>
-References: <20221018165619.134535-1-netdev@kapio-technology.com>
- <20221018165619.134535-1-netdev@kapio-technology.com>
- <20221018165619.134535-11-netdev@kapio-technology.com>
- <20221018165619.134535-11-netdev@kapio-technology.com>
- <20221020132538.reirrskemcjwih2m@skbuf>
-User-Agent: Gigahost Webmail
-Message-ID: <2565c09bb95d69142522c3c3bcaa599e@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221020181815.31245-1-gautammenghani201@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-20 15:25, Vladimir Oltean wrote:
->> diff --git a/drivers/net/dsa/mv88e6xxx/chip.c 
->> b/drivers/net/dsa/mv88e6xxx/chip.c
->> index 352121cce77e..71843fe87f77 100644
->> --- a/drivers/net/dsa/mv88e6xxx/chip.c
->> +++ b/drivers/net/dsa/mv88e6xxx/chip.c
->> @@ -42,6 +42,7 @@
->>  #include "ptp.h"
->>  #include "serdes.h"
->>  #include "smi.h"
->> +#include "switchdev.h"
->> 
->>  static void assert_reg_lock(struct mv88e6xxx_chip *chip)
->>  {
->> @@ -924,6 +925,13 @@ static void mv88e6xxx_mac_link_down(struct 
->> dsa_switch *ds, int port,
->>  	if (err)
->>  		dev_err(chip->dev,
->>  			"p%d: failed to force MAC link down\n", port);
->> +	else
->> +		if (mv88e6xxx_port_is_locked(chip, port)) {
->> +			err = mv88e6xxx_atu_locked_entry_flush(ds, port);
->> +			if (err)
->> +				dev_err(chip->dev,
->> +					"p%d: failed to clear locked entries\n", port);
->> +		}
+On Thu, Oct 20, 2022 at 11:48:15PM +0530, Gautam Menghani wrote:
+> A TODO asks to convert the bit_rate variable to be a u32 so that bit 
+> rates up to 300kbps can be supported as per the spec.
 > 
-> This would not have been needed if dsa_port_set_state() would have
-> called dsa_port_fast_age().
+> Signed-off-by: Gautam Menghani <gautammenghani201@gmail.com>
+> ---
+> Please note that this patch is only compile tested.
 > 
-> Currently it only does that if dp->learning is true. From previous
-> conversations I get the idea that with MAB, port learning will be 
-> false.
-> But I don't understand why; isn't MAB CPU-assisted learning? I'm 
-> looking
-> at the ocelot hardware support for this and I think it could be
-> implemented using a similar mechanism, but I certainly don't want to 
-> add
-> more workarounds such as this in other drivers.
+>  drivers/staging/pi433/TODO       | 2 --
+>  drivers/staging/pi433/pi433_if.h | 4 ++--
+>  drivers/staging/pi433/rf69.c     | 2 +-
+>  drivers/staging/pi433/rf69.h     | 2 +-
+>  4 files changed, 4 insertions(+), 6 deletions(-)
 > 
-> Are there any other ways to implement MAB other than through CPU
-> assisted learning?
-> 
-> We could add one more dp->mab flag which tracks the "mab" brport flag,
-> and extend dsa_port_set_state() to also call dsa_port_fast_age() in 
-> that
-> case, but I want to make sure there isn't something extremely obvious
-> I'm missing about the "learning" flag.
-> 
+> diff --git a/drivers/staging/pi433/TODO b/drivers/staging/pi433/TODO
+> index 5cf3fd99d521..8530bbe61d70 100644
+> --- a/drivers/staging/pi433/TODO
+> +++ b/drivers/staging/pi433/TODO
+> @@ -1,5 +1,3 @@
+>  * currently the code introduces new IOCTLs. I'm afraid this is a bad idea.
+>    -> Replace this with another interface, hints are welcome!
+>  * Some missing data (marked with ###) needs to be added in the documentation
+> -* Change (struct pi433_tx_cfg)->bit_rate to be a u32 so that we can support
+> -    bit rates up to 300kbps per the spec.
+> diff --git a/drivers/staging/pi433/pi433_if.h b/drivers/staging/pi433/pi433_if.h
+> index 25ee0b77a32c..c958dcfa9f96 100644
+> --- a/drivers/staging/pi433/pi433_if.h
+> +++ b/drivers/staging/pi433/pi433_if.h
+> @@ -51,7 +51,7 @@ enum option_on_off {
+>  #define PI433_TX_CFG_IOCTL_NR	0
+>  struct pi433_tx_cfg {
+>  	__u32			frequency;
+> -	__u16			bit_rate;
+> +	__u32			bit_rate;
+>  	__u32			dev_frequency;
+>  	enum modulation		modulation;
+>  	enum mod_shaping	mod_shaping;
+> @@ -99,7 +99,7 @@ struct pi433_tx_cfg {
+>  #define PI433_RX_CFG_IOCTL_NR	1
+>  struct pi433_rx_cfg {
+>  	__u32			frequency;
+> -	__u16			bit_rate;
+> +	__u32			bit_rate;
+>  	__u32			dev_frequency;
+>  
+>  	enum modulation		modulation;
+> diff --git a/drivers/staging/pi433/rf69.c b/drivers/staging/pi433/rf69.c
+> index 8c7fab6a46bb..7e754a3aef5f 100644
+> --- a/drivers/staging/pi433/rf69.c
+> +++ b/drivers/staging/pi433/rf69.c
+> @@ -185,7 +185,7 @@ int rf69_set_modulation_shaping(struct spi_device *spi,
+>  	}
+>  }
+>  
+> -int rf69_set_bit_rate(struct spi_device *spi, u16 bit_rate)
+> +int rf69_set_bit_rate(struct spi_device *spi, u32 bit_rate)
+>  {
+>  	int retval;
+>  	u32 bit_rate_reg;
+> diff --git a/drivers/staging/pi433/rf69.h b/drivers/staging/pi433/rf69.h
+> index 78fa0b8bab8b..46a1fb2d5329 100644
+> --- a/drivers/staging/pi433/rf69.h
+> +++ b/drivers/staging/pi433/rf69.h
+> @@ -24,7 +24,7 @@ int rf69_set_data_mode(struct spi_device *spi, u8 data_mode);
+>  int rf69_set_modulation(struct spi_device *spi, enum modulation modulation);
+>  int rf69_set_modulation_shaping(struct spi_device *spi,
+>  				enum mod_shaping mod_shaping);
+> -int rf69_set_bit_rate(struct spi_device *spi, u16 bit_rate);
+> +int rf69_set_bit_rate(struct spi_device *spi, u32 bit_rate);
+>  int rf69_set_deviation(struct spi_device *spi, u32 deviation);
+>  int rf69_set_frequency(struct spi_device *spi, u32 frequency);
+>  int rf69_enable_amplifier(struct spi_device *spi, u8 amplifier_mask);
+> -- 
+> 2.34.1
+>
 
-In general locked ports block traffic from a host based on if there is a
-FDB entry or not. In the non-offloaded case, there is only CPU assisted
-learning, so the normal learning mechanism has to be disabled as any
-learned entry will open the port for the learned MAC,vlan.
-Thus learning is off for locked ports, which of course includes MAB.
+I sent (almost) the exact same patch a while ago. I received a reply
+saying that doing this is not possible. That conversation can still be
+found here:
+https://lore.kernel.org/linux-staging/20220315180820.7393-1-cvn249@gmail.com/t/#u
 
-So the 'learning' is based on authorizing MAC,vlan addresses, which
-is done by userspace daemons, e.g. hostapd or what could be called
-mabd.
+Best regards,
+Nam
