@@ -2,181 +2,556 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D325605918
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 09:55:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81F3C60591B
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 09:55:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230056AbiJTHy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 03:54:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38958 "EHLO
+        id S230235AbiJTHzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 03:55:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbiJTHy4 (ORCPT
+        with ESMTP id S230253AbiJTHzl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 03:54:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B6DA5208A
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 00:54:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 10B1E61A4F
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 07:54:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64638C433C1;
-        Thu, 20 Oct 2022 07:54:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666252491;
-        bh=BHDB8Kd2xEmYB76BxmchxxWXe2Rxre5+Q3z//+IATxA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=RmPb5jXraHNVcGs3bWrEwLwWQxMI2xFF0PYDQxUBeE52LtwpoMwskD3IdNTQiBaS5
-         U5oWoHCoaWCuHJAbG+cLOsG1HPEoH2Jz5qkkqizAxbiTW5VOh9ZIa5Svh2BjsjIkOs
-         g2Nt41VefC5X5Neiwi2SS7lwytvROIwriLziB15lIKihmHbe2lXRt7Xode56jMc9Xn
-         2wAO00k3nC8bHHUIx/u9iNjXfBbpuKVkCAGZh7b2hksECEvalEQNuGoE8dZZH4DJma
-         bJqV8WYO5aljyl0iG4S5iXa8di44fsO7d7FPM0rIUaoIH5XJe0JLVJ+2hNZj5xyqeB
-         5aysrbVT6g4Sg==
-Message-ID: <3ed1c3a5-e299-4915-a339-e2b6360635e5@kernel.org>
-Date:   Thu, 20 Oct 2022 15:54:47 +0800
+        Thu, 20 Oct 2022 03:55:41 -0400
+Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE5CB12D80B
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 00:55:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1666252520; bh=l8X11HTCARrMNDpKwlhzu+Y1r+5J7F9ToVvsm1G2LnE=;
+        h=X-EA-Auth:Date:From:To:Subject:Message-ID:References:MIME-Version:
+         Content-Type:In-Reply-To;
+        b=hKTnj6bLgKmNCPh4FIPM+3bNOtttGsCC8GltK4qraEmvWb7KlqA+LvEaL11BjJCd0
+         Uf9oxULEkppTWpwdKbcCmqysvD++lU9QdVuLHp4vF6EcJZ+Zv5+deL7R3s4JR/6ejv
+         FERqCkmE71Q6dBmvEhwFAOe8EXoqjKgBN2I/5tx4=
+Received: by b-6.in.mailobj.net [192.168.90.16] with ESMTP
+        via [213.182.55.206]
+        Thu, 20 Oct 2022 09:55:20 +0200 (CEST)
+X-EA-Auth: EMHgEQGMhj9ovRtakEZib4zu/seDHgnW2lthPC7F1+ekjzbrRp3Nfpo9Aq5oppd9HgrkEUKSEazdIBppFzLzjz8Wz/wSoiIg
+Date:   Thu, 20 Oct 2022 13:25:16 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     outreachy@lists.linux.dev, Larry.Finger@lwfinger.net,
+        phil@philpotter.co.uk, paskripkin@gmail.com,
+        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, kumarpraveen@linux.microsoft.com,
+        saurabh.truth@gmail.com
+Subject: [PATCH v3 05/10] staging: r8188eu: correct misspelled words in
+ comments
+Message-ID: <3235c0f681d817f7f89dd80537f36e1f9686fa24.1666249716.git.drv@mailo.com>
+References: <cover.1666249715.git.drv@mailo.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH] f2fs: introduce gc_urgent_mid_remaining sysfs node
-Content-Language: en-US
-To:     Yangtao Li <frank.li@vivo.com>, jaegeuk@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-References: <20221018074621.16019-1-frank.li@vivo.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20221018074621.16019-1-frank.li@vivo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1666249715.git.drv@mailo.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Yangtao,
+Incorrectly spelled words should be corrected as per the Linux
+coding-style guidelines. The corrections proposed by this patch are
+driver wide and are part of code comments.
 
-On 2022/10/18 15:46, Yangtao Li wrote:
-> Added a new sysfs node called gc_urgent_mid_remaining. The user can
-> set the trial count limit for GC urgent mid mode with this value. If
-> GC thread gets to the limit, the mode will turn back to GC normal mode.
+Signed-off-by: Deepak R Varma <drv@mailo.com>
+---
 
-Not sure, we will add gc_urgent_low_remaining later...
+Changes in v3:
+   1. Patch newly added to the patch set.
 
-Can we share the same interface for all gc_mode? since each mode is
-exclusive.
 
-Thoughts?
+ drivers/staging/r8188eu/core/rtw_ioctl_set.c  |  2 +-
+ drivers/staging/r8188eu/core/rtw_mlme_ext.c   | 36 +++++++++----------
+ drivers/staging/r8188eu/core/rtw_recv.c       |  8 ++---
+ drivers/staging/r8188eu/hal/HalPhyRf_8188e.c  |  2 +-
+ drivers/staging/r8188eu/hal/odm_RTL8188E.c    |  2 +-
+ .../staging/r8188eu/hal/rtl8188e_hal_init.c   |  2 +-
+ drivers/staging/r8188eu/hal/rtl8188e_phycfg.c |  4 +--
+ .../staging/r8188eu/include/Hal8188EPhyReg.h  |  4 +--
+ .../staging/r8188eu/include/rtl8188e_hal.h    |  2 +-
+ .../staging/r8188eu/include/rtl8188e_spec.h   |  6 ++--
+ drivers/staging/r8188eu/include/rtw_cmd.h     |  4 +--
+ drivers/staging/r8188eu/include/rtw_recv.h    |  4 +--
+ drivers/staging/r8188eu/include/rtw_xmit.h    |  2 +-
+ drivers/staging/r8188eu/include/wifi.h        | 12 +++----
+ drivers/staging/r8188eu/os_dep/ioctl_linux.c  |  6 ++--
+ 15 files changed, 48 insertions(+), 48 deletions(-)
 
-Thanks,
+diff --git a/drivers/staging/r8188eu/core/rtw_ioctl_set.c b/drivers/staging/r8188eu/core/rtw_ioctl_set.c
+index 55e6b0f41dc3..1de808832ed8 100644
+--- a/drivers/staging/r8188eu/core/rtw_ioctl_set.c
++++ b/drivers/staging/r8188eu/core/rtw_ioctl_set.c
+@@ -287,7 +287,7 @@ u8 rtw_set_802_11_infrastructure_mode(struct adapter *padapter,
 
-> 
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
-> ---
->   Documentation/ABI/testing/sysfs-fs-f2fs |  7 +++++++
->   fs/f2fs/f2fs.h                          |  2 ++
->   fs/f2fs/gc.c                            |  8 ++++++++
->   fs/f2fs/super.c                         |  1 +
->   fs/f2fs/sysfs.c                         | 10 ++++++++++
->   5 files changed, 28 insertions(+)
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-fs-f2fs b/Documentation/ABI/testing/sysfs-fs-f2fs
-> index 483639fb727b..11ce4a8bdacd 100644
-> --- a/Documentation/ABI/testing/sysfs-fs-f2fs
-> +++ b/Documentation/ABI/testing/sysfs-fs-f2fs
-> @@ -599,6 +599,13 @@ Description:	You can set the trial count limit for GC urgent high mode with this
->   		If GC thread gets to the limit, the mode will turn back to GC normal mode.
->   		By default, the value is zero, which means there is no limit like before.
->   
-> +What:		/sys/fs/f2fs/<disk>/gc_urgent_mid_remaining
-> +Date:		October 2022
-> +Contact:	"Yangtao Li" <frank.li@vivo.com>
-> +Description:	You can set the trial count limit for GC urgent mid mode with this value.
-> +		If GC thread gets to the limit, the mode will turn back to GC normal mode.
-> +		By default, the value is zero.
-> +
->   What:		/sys/fs/f2fs/<disk>/max_roll_forward_node_blocks
->   Date:		January 2022
->   Contact:	"Jaegeuk Kim" <jaegeuk@kernel.org>
-> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-> index e6355a5683b7..2f33d6f23a26 100644
-> --- a/fs/f2fs/f2fs.h
-> +++ b/fs/f2fs/f2fs.h
-> @@ -1736,6 +1736,8 @@ struct f2fs_sb_info {
->   	unsigned int next_victim_seg[2];	/* next segment in victim section */
->   	spinlock_t gc_urgent_high_lock;
->   	unsigned int gc_urgent_high_remaining;	/* remaining trial count for GC_URGENT_HIGH */
-> +	spinlock_t gc_urgent_mid_lock;
-> +	unsigned int gc_urgent_mid_remaining;	/* remaining trial count for GC_URGENT_MID */
->   
->   	/* for skip statistic */
->   	unsigned long long skipped_gc_rwsem;		/* FG_GC only */
-> diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
-> index 4546e01b2ee0..39d794b33d27 100644
-> --- a/fs/f2fs/gc.c
-> +++ b/fs/f2fs/gc.c
-> @@ -104,6 +104,14 @@ static int gc_thread_func(void *data)
->   					sbi->gc_mode = GC_NORMAL;
->   			}
->   			spin_unlock(&sbi->gc_urgent_high_lock);
-> +		} else if (sbi->gc_mode == GC_URGENT_MID) {
-> +			spin_lock(&sbi->gc_urgent_mid_lock);
-> +			if (sbi->gc_urgent_mid_remaining) {
-> +				sbi->gc_urgent_mid_remaining--;
-> +				if (!sbi->gc_urgent_mid_remaining)
-> +					sbi->gc_mode = GC_NORMAL;
-> +			}
-> +			spin_unlock(&sbi->gc_urgent_mid_lock);
->   		}
->   
->   		if (sbi->gc_mode == GC_URGENT_HIGH ||
-> diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
-> index 3834ead04620..13919ad152b7 100644
-> --- a/fs/f2fs/super.c
-> +++ b/fs/f2fs/super.c
-> @@ -3617,6 +3617,7 @@ static void init_sb_info(struct f2fs_sb_info *sbi)
->   	sbi->max_fragment_chunk = DEF_FRAGMENT_SIZE;
->   	sbi->max_fragment_hole = DEF_FRAGMENT_SIZE;
->   	spin_lock_init(&sbi->gc_urgent_high_lock);
-> +	spin_lock_init(&sbi->gc_urgent_mid_lock);
->   	atomic64_set(&sbi->current_atomic_write, 0);
->   
->   	sbi->dir_level = DEF_DIR_LEVEL;
-> diff --git a/fs/f2fs/sysfs.c b/fs/f2fs/sysfs.c
-> index df27afd71ef4..b4476adea776 100644
-> --- a/fs/f2fs/sysfs.c
-> +++ b/fs/f2fs/sysfs.c
-> @@ -539,6 +539,14 @@ static ssize_t __sbi_store(struct f2fs_attr *a,
->   		return count;
->   	}
->   
-> +	if (!strcmp(a->attr.name, "gc_urgent_mid_remaining")) {
-> +		spin_lock(&sbi->gc_urgent_mid_lock);
-> +		sbi->gc_urgent_mid_remaining = t;
-> +		spin_unlock(&sbi->gc_urgent_mid_lock);
-> +
-> +		return count;
-> +	}
-> +
->   #ifdef CONFIG_F2FS_IOSTAT
->   	if (!strcmp(a->attr.name, "iostat_enable")) {
->   		sbi->iostat_enable = !!t;
-> @@ -826,6 +834,7 @@ F2FS_RW_ATTR(FAULT_INFO_TYPE, f2fs_fault_info, inject_type, inject_type);
->   F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, data_io_flag, data_io_flag);
->   F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, node_io_flag, node_io_flag);
->   F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, gc_urgent_high_remaining, gc_urgent_high_remaining);
-> +F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, gc_urgent_mid_remaining, gc_urgent_mid_remaining);
->   F2FS_RW_ATTR(CPRC_INFO, ckpt_req_control, ckpt_thread_ioprio, ckpt_thread_ioprio);
->   F2FS_GENERAL_RO_ATTR(dirty_segments);
->   F2FS_GENERAL_RO_ATTR(free_segments);
-> @@ -953,6 +962,7 @@ static struct attribute *f2fs_attrs[] = {
->   	ATTR_LIST(data_io_flag),
->   	ATTR_LIST(node_io_flag),
->   	ATTR_LIST(gc_urgent_high_remaining),
-> +	ATTR_LIST(gc_urgent_mid_remaining),
->   	ATTR_LIST(ckpt_thread_ioprio),
->   	ATTR_LIST(dirty_segments),
->   	ATTR_LIST(free_segments),
+ 		if ((*pold_state == Ndis802_11Infrastructure) || (*pold_state == Ndis802_11IBSS)) {
+ 			if (check_fwstate(pmlmepriv, _FW_LINKED))
+-				rtw_indicate_disconnect(padapter); /* will clr Linked_state; before this function, we must have chked whether  issue dis-assoc_cmd or not */
++				rtw_indicate_disconnect(padapter); /* will clr Linked_state; before this function, we must have cheked whether  issue dis-assoc_cmd or not */
+ 	       }
+
+ 		*pold_state = networktype;
+diff --git a/drivers/staging/r8188eu/core/rtw_mlme_ext.c b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
+index 07905e2ae8e0..e305f24f6f9f 100644
+--- a/drivers/staging/r8188eu/core/rtw_mlme_ext.c
++++ b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
+@@ -137,7 +137,7 @@ static struct rt_channel_plan_map	RTW_ChannelPlanMap[RT_CHANNEL_DOMAIN_MAX] = {
+ 	{0x03},	/* 0x41, RT_CHANNEL_DOMAIN_GLOBAL_DOAMIN_2G */
+ };
+
+-static struct rt_channel_plan_map RTW_CHANNEL_PLAN_MAP_REALTEK_DEFINE = {0x03}; /* use the conbination for max channel numbers */
++static struct rt_channel_plan_map RTW_CHANNEL_PLAN_MAP_REALTEK_DEFINE = {0x03}; /* use the combination for max channel numbers */
+
+ /*
+  * Search the @param channel_num in given @param channel_set
+@@ -1754,7 +1754,7 @@ void issue_p2p_GO_request(struct adapter *padapter, u8 *raddr)
+ 	p2pie[p2pielen++] = 0x09;	/*	WFA P2P v1.0 */
+
+ 	/*	Commented by Albert 20110306 */
+-	/*	According to the P2P Specification, the group negoitation request frame should contain 9 P2P attributes */
++	/*	According to the P2P Specification, the group negotiation request frame should contain 9 P2P attributes */
+ 	/*	1. P2P Capability */
+ 	/*	2. Group Owner Intent */
+ 	/*	3. Configuration Timeout */
+@@ -2109,7 +2109,7 @@ static void issue_p2p_GO_response(struct adapter *padapter, u8 *raddr, u8 *frame
+ 	p2pie[p2pielen++] = 0x09;	/*	WFA P2P v1.0 */
+
+ 	/*	Commented by Albert 20100908 */
+-	/*	According to the P2P Specification, the group negoitation response frame should contain 9 P2P attributes */
++	/*	According to the P2P Specification, the group negotiation response frame should contain 9 P2P attributes */
+ 	/*	1. Status */
+ 	/*	2. P2P Capability */
+ 	/*	3. Group Owner Intent */
+@@ -2405,7 +2405,7 @@ static void issue_p2p_GO_confirm(struct adapter *padapter, u8 *raddr, u8 result)
+ 	p2pie[p2pielen++] = 0x09;	/*	WFA P2P v1.0 */
+
+ 	/*	Commented by Albert 20110306 */
+-	/*	According to the P2P Specification, the group negoitation request frame should contain 5 P2P attributes */
++	/*	According to the P2P Specification, the group negotiation request frame should contain 5 P2P attributes */
+ 	/*	1. Status */
+ 	/*	2. P2P Capability */
+ 	/*	3. Operating Channel */
+@@ -4013,7 +4013,7 @@ struct xmit_frame *alloc_mgtxmitframe(struct xmit_priv *pxmitpriv)
+
+ /****************************************************************************
+
+-Following are some TX fuctions for WiFi MLME
++Following are some TX functions for WiFi MLME
+
+ *****************************************************************************/
+
+@@ -4615,7 +4615,7 @@ int issue_probereq_ex(struct adapter *padapter, struct ndis_802_11_ssid *pssid,
+ 	return ret;
+ }
+
+-/*  if psta == NULL, indiate we are station(client) now... */
++/*  if psta == NULL, indicate we are station(client) now... */
+ void issue_auth(struct adapter *padapter, struct sta_info *psta, unsigned short status)
+ {
+ 	struct xmit_frame *pmgntframe;
+@@ -5014,7 +5014,7 @@ void issue_assocreq(struct adapter *padapter)
+ 				if (!padapter->registrypriv.wifi_spec) {
+ 					/* Commented by Kurt 20110629 */
+ 					/* In some older APs, WPS handshake */
+-					/* would be fail if we append vender extensions informations to AP */
++					/* would be fail if we append vender extensions information to AP */
+ 					if (!memcmp(pIE->data, WPS_OUI, 4))
+ 						pIE->Length = 14;
+ 				}
+@@ -5169,7 +5169,7 @@ void issue_assocreq(struct adapter *padapter)
+ 		kfree(pmlmepriv->assoc_req);
+ }
+
+-/* when wait_ack is ture, this function shoule be called at process context */
++/* when wait_ack is true, this function should be called at process context */
+ static int _issue_nulldata(struct adapter *padapter, unsigned char *da, unsigned int power_mode, int wait_ack)
+ {
+ 	int ret = _FAIL;
+@@ -5238,7 +5238,7 @@ static int _issue_nulldata(struct adapter *padapter, unsigned char *da, unsigned
+ 	return ret;
+ }
+
+-/* when wait_ms > 0 , this function shoule be called at process context */
++/* when wait_ms > 0 , this function should be called at process context */
+ /* da == NULL for station mode */
+ int issue_nulldata(struct adapter *padapter, unsigned char *da, unsigned int power_mode, int try_cnt, int wait_ms)
+ {
+@@ -5247,7 +5247,7 @@ int issue_nulldata(struct adapter *padapter, unsigned char *da, unsigned int pow
+ 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
+ 	struct mlme_ext_info	*pmlmeinfo = &pmlmeext->mlmext_info;
+
+-	/* da == NULL, assum it's null data for sta to ap*/
++	/* da == NULL, assume it's null data for sta to ap*/
+ 	if (!da)
+ 		da = get_my_bssid(&pmlmeinfo->network);
+
+@@ -5271,7 +5271,7 @@ int issue_nulldata(struct adapter *padapter, unsigned char *da, unsigned int pow
+ 	return ret;
+ }
+
+-/* when wait_ack is ture, this function shoule be called at process context */
++/* when wait_ack is true, this function should be called at process context */
+ static int _issue_qos_nulldata(struct adapter *padapter, unsigned char *da, u16 tid, int wait_ack)
+ {
+ 	int ret = _FAIL;
+@@ -5344,7 +5344,7 @@ static int _issue_qos_nulldata(struct adapter *padapter, unsigned char *da, u16
+ 	return ret;
+ }
+
+-/* when wait_ms > 0 , this function shoule be called at process context */
++/* when wait_ms > 0 , this function should be called at process context */
+ /* da == NULL for station mode */
+ int issue_qos_nulldata(struct adapter *padapter, unsigned char *da, u16 tid, int try_cnt, int wait_ms)
+ {
+@@ -5353,7 +5353,7 @@ int issue_qos_nulldata(struct adapter *padapter, unsigned char *da, u16 tid, int
+ 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
+ 	struct mlme_ext_info	*pmlmeinfo = &pmlmeext->mlmext_info;
+
+-	/* da == NULL, assum it's null data for sta to ap*/
++	/* da == NULL, assume it's null data for sta to ap*/
+ 	if (!da)
+ 		da = get_my_bssid(&pmlmeinfo->network);
+
+@@ -5885,7 +5885,7 @@ static void rtw_set_opmode(struct adapter *adapter, u8 mode)
+
+ /****************************************************************************
+
+-Following are some utitity fuctions for WiFi MLME
++Following are some utility functions for WiFi MLME
+
+ *****************************************************************************/
+
+@@ -6058,7 +6058,7 @@ void site_survey(struct adapter *padapter)
+ 		} else {
+ 			/*  20100721:Interrupt scan operation here. */
+ 			/*  For SW antenna diversity before link, it needs to switch to another antenna and scan again. */
+-			/*  It compares the scan result and select beter one to do connection. */
++			/*  It compares the scan result and select better one to do connection. */
+ 			if (AntDivBeforeLink8188E(padapter)) {
+ 				pmlmeext->sitesurvey_res.bss_cnt = 0;
+ 				pmlmeext->sitesurvey_res.channel_idx = -1;
+@@ -6328,7 +6328,7 @@ void start_create_ibss(struct adapter *padapter)
+ 	/* update wireless mode */
+ 	update_wireless_mode(padapter);
+
+-	/* udpate capability */
++	/* update capability */
+ 	caps = rtw_get_capability((struct wlan_bssid_ex *)pnetwork);
+ 	update_capinfo(padapter, caps);
+ 	if (caps & cap_IBSS) {/* adhoc master */
+@@ -6378,7 +6378,7 @@ void start_clnt_join(struct adapter *padapter)
+ 	/* update wireless mode */
+ 	update_wireless_mode(padapter);
+
+-	/* udpate capability */
++	/* update capability */
+ 	caps = rtw_get_capability((struct wlan_bssid_ex *)pnetwork);
+ 	update_capinfo(padapter, caps);
+ 	if (caps & cap_ESS) {
+@@ -6972,7 +6972,7 @@ void mlmeext_joinbss_event_callback(struct adapter *padapter, int join_res)
+ 	/* BCN interval */
+ 	rtw_write16(padapter, REG_BCN_INTERVAL, pmlmeinfo->bcn_interval);
+
+-	/* udpate capability */
++	/* update capability */
+ 	update_capinfo(padapter, pmlmeinfo->capability);
+
+ 	/* WMM, Update EDCA param */
+diff --git a/drivers/staging/r8188eu/core/rtw_recv.c b/drivers/staging/r8188eu/core/rtw_recv.c
+index bb5c3b3888e0..4b68a543f68b 100644
+--- a/drivers/staging/r8188eu/core/rtw_recv.c
++++ b/drivers/staging/r8188eu/core/rtw_recv.c
+@@ -972,7 +972,7 @@ static void validate_recv_ctrl_frame(struct adapter *padapter,
+ 			if (psta->sleepq_len == 0) {
+ 				pstapriv->tim_bitmap &= ~BIT(psta->aid);
+
+-				/* upate BCN for TIM IE */
++				/* update BCN for TIM IE */
+ 				/* update_BCNTIM(padapter); */
+ 				update_beacon(padapter, _TIM_IE_, NULL, false);
+ 			}
+@@ -986,7 +986,7 @@ static void validate_recv_ctrl_frame(struct adapter *padapter,
+
+ 				pstapriv->tim_bitmap &= ~BIT(psta->aid);
+
+-				/* upate BCN for TIM IE */
++				/* update BCN for TIM IE */
+ 				/* update_BCNTIM(padapter); */
+ 				update_beacon(padapter, _TIM_IE_, NULL, false);
+ 			}
+@@ -1984,13 +1984,13 @@ static void rtw_signal_stat_timer_hdl(struct timer_list *t)
+ 	} else {
+ 		if (recvpriv->signal_strength_data.update_req == 0) {/*  update_req is clear, means we got rx */
+ 			avg_signal_strength = recvpriv->signal_strength_data.avg_val;
+-			/*  after avg_vals are accquired, we can re-stat the signal values */
++			/*  after avg_vals are acquired, we can re-stat the signal values */
+ 			recvpriv->signal_strength_data.update_req = 1;
+ 		}
+
+ 		if (recvpriv->signal_qual_data.update_req == 0) {/*  update_req is clear, means we got rx */
+ 			avg_signal_qual = recvpriv->signal_qual_data.avg_val;
+-			/*  after avg_vals are accquired, we can re-stat the signal values */
++			/*  after avg_vals are acquired, we can re-stat the signal values */
+ 			recvpriv->signal_qual_data.update_req = 1;
+ 		}
+
+diff --git a/drivers/staging/r8188eu/hal/HalPhyRf_8188e.c b/drivers/staging/r8188eu/hal/HalPhyRf_8188e.c
+index 525deab10820..60cdfcf80daa 100644
+--- a/drivers/staging/r8188eu/hal/HalPhyRf_8188e.c
++++ b/drivers/staging/r8188eu/hal/HalPhyRf_8188e.c
+@@ -69,7 +69,7 @@ void ODM_TxPwrTrackAdjust88E(struct odm_dm_struct *dm_odm, u8 Type,/*  0 = OFDM,
+ /*-----------------------------------------------------------------------------
+  * Function:	odm_TxPwrTrackSetPwr88E()
+  *
+- * Overview:	88E change all channel tx power accordign to flag.
++ * Overview:	88E change all channel tx power according to flag.
+  *				OFDM & CCK are all different.
+  *
+  * Input:		NONE
+diff --git a/drivers/staging/r8188eu/hal/odm_RTL8188E.c b/drivers/staging/r8188eu/hal/odm_RTL8188E.c
+index c8a3c521bd60..dd9c8291f025 100644
+--- a/drivers/staging/r8188eu/hal/odm_RTL8188E.c
++++ b/drivers/staging/r8188eu/hal/odm_RTL8188E.c
+@@ -194,7 +194,7 @@ static void odm_HWAntDiv(struct odm_dm_struct *dm_odm)
+ 	for (i = 0; i < ODM_ASSOCIATE_ENTRY_NUM; i++) {
+ 		pEntry = dm_odm->pODM_StaInfo[i];
+ 		if (IS_STA_VALID(pEntry)) {
+-			/* 2 Caculate RSSI per Antenna */
++			/* 2 Calculate RSSI per Antenna */
+ 			Main_RSSI = (dm_fat_tbl->MainAnt_Cnt[i] != 0) ? (dm_fat_tbl->MainAnt_Sum[i] / dm_fat_tbl->MainAnt_Cnt[i]) : 0;
+ 			Aux_RSSI = (dm_fat_tbl->AuxAnt_Cnt[i] != 0) ? (dm_fat_tbl->AuxAnt_Sum[i] / dm_fat_tbl->AuxAnt_Cnt[i]) : 0;
+ 			TargetAnt = (Main_RSSI >= Aux_RSSI) ? MAIN_ANT : AUX_ANT;
+diff --git a/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c b/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c
+index 158260547f2b..cc29963f4b49 100644
+--- a/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c
++++ b/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c
+@@ -355,7 +355,7 @@ void rtl8188e_EfusePowerSwitch(struct adapter *pAdapter, u8 PwrState)
+ 	if (PwrState) {
+ 		rtw_write8(pAdapter, REG_EFUSE_ACCESS, EFUSE_ACCESS_ON);
+
+-		/*  1.2V Power: From VDDON with Power Cut(0x0000h[15]), defualt valid */
++		/*  1.2V Power: From VDDON with Power Cut(0x0000h[15]), default valid */
+ 		res = rtw_read16(pAdapter, REG_SYS_ISO_CTRL, &tmpV16);
+ 		if (res)
+ 			return;
+diff --git a/drivers/staging/r8188eu/hal/rtl8188e_phycfg.c b/drivers/staging/r8188eu/hal/rtl8188e_phycfg.c
+index 532c63bce0bf..1e4d290b37b4 100644
+--- a/drivers/staging/r8188eu/hal/rtl8188e_phycfg.c
++++ b/drivers/staging/r8188eu/hal/rtl8188e_phycfg.c
+@@ -94,7 +94,7 @@ void rtl8188e_PHY_SetBBReg(struct adapter *Adapter, u32 RegAddr, u32 BitMask, u3
+ /**
+ * Function:	phy_RFSerialRead
+ *
+-* OverView:	Read regster from RF chips
++* OverView:	Read register from RF chips
+ *
+ * Input:
+ *			struct adapter *Adapter,
+@@ -363,7 +363,7 @@ phy_InitBBRFRegisterDefinition(
+ 	/*  RF Interface (Output and)  Enable */
+ 	pHalData->PHYRegDef.rfintfe = rFPGA0_XA_RFInterfaceOE; /*  16 MSBs if read 32-bit from 0x860 (16-bit for 0x862) */
+
+-	/* Addr of LSSI. Wirte RF register by driver */
++	/* Addr of LSSI. Write RF register by driver */
+ 	pHalData->PHYRegDef.rf3wireOffset = rFPGA0_XA_LSSIParameter; /* LSSI Parameter */
+
+ 	/*  RF parameter */
+diff --git a/drivers/staging/r8188eu/include/Hal8188EPhyReg.h b/drivers/staging/r8188eu/include/Hal8188EPhyReg.h
+index 8b8c75a1f149..da2329be4474 100644
+--- a/drivers/staging/r8188eu/include/Hal8188EPhyReg.h
++++ b/drivers/staging/r8188eu/include/Hal8188EPhyReg.h
+@@ -92,7 +92,7 @@
+ #define	rFPGA0_AdDaClockEn		0x888
+ #define	rFPGA0_AnalogParameter4		0x88c
+
+-#define	rFPGA0_XA_LSSIReadBack		0x8a0	/*  Tranceiver LSSI Readback */
++#define	rFPGA0_XA_LSSIReadBack		0x8a0	/*  Transceiver LSSI Readback */
+ #define	rFPGA0_XB_LSSIReadBack		0x8a4
+ #define	rFPGA0_XC_LSSIReadBack		0x8a8
+ #define	rFPGA0_XD_LSSIReadBack		0x8ac
+@@ -167,7 +167,7 @@
+
+ /* RxIQ DC offset, Rx digital filter, DC notch filter */
+ #define	rOFDM0_XARxAFE			0xc10
+-#define	rOFDM0_XARxIQImbalance		0xc14  /* RxIQ imblance matrix */
++#define	rOFDM0_XARxIQImbalance		0xc14  /* RxIQ imbalance matrix */
+ #define	rOFDM0_XBRxAFE			0xc18
+ #define	rOFDM0_XBRxIQImbalance		0xc1c
+ #define	rOFDM0_XCRxAFE			0xc20
+diff --git a/drivers/staging/r8188eu/include/rtl8188e_hal.h b/drivers/staging/r8188eu/include/rtl8188e_hal.h
+index ed4091e7cc7e..25f9200b1151 100644
+--- a/drivers/staging/r8188eu/include/rtl8188e_hal.h
++++ b/drivers/staging/r8188eu/include/rtl8188e_hal.h
+@@ -88,7 +88,7 @@ struct txpowerinfo24g {
+ /*  9bytes + 1byt + 5bytes and pre 1byte. */
+ /*  For worst case: */
+ /*  | 2byte|----8bytes----|1byte|--7bytes--| 92D */
+-/*  PG data exclude header, dummy 7 bytes frome CP test and reserved 1byte. */
++/*  PG data exclude header, dummy 7 bytes from CP test and reserved 1byte. */
+ #define		EFUSE_OOB_PROTECT_BYTES_88E	18
+
+ #define EFUSE_PROTECT_BYTES_BANK	16
+diff --git a/drivers/staging/r8188eu/include/rtl8188e_spec.h b/drivers/staging/r8188eu/include/rtl8188e_spec.h
+index e34619140e33..e34ecdc09688 100644
+--- a/drivers/staging/r8188eu/include/rtl8188e_spec.h
++++ b/drivers/staging/r8188eu/include/rtl8188e_spec.h
+@@ -4,7 +4,7 @@
+ #ifndef __RTL8188E_SPEC_H__
+ #define __RTL8188E_SPEC_H__
+
+-/*        8192C Regsiter offset definition */
++/*        8192C Register offset definition */
+
+ #define		HAL_PS_TIMER_INT_DELAY	50	/*   50 microseconds */
+ #define		HAL_92C_NAV_UPPER_UNIT	128	/*  micro-second */
+@@ -674,7 +674,7 @@ Current IOREG MAP
+
+ #define REG_USB_HRPWM			0xFE58
+ #define REG_USB_HCPWM			0xFE57
+-/*        8192C Regsiter Bit and Content definition */
++/*        8192C Register Bit and Content definition */
+ /* 	0x0000h ~ 0x00FFh	System Configuration */
+
+ /* 2 SYS_ISO_CTRL */
+@@ -1135,7 +1135,7 @@ Current IOREG MAP
+ #define EEPROM_Default_CrystalCap_88E		0x20
+ #define	EEPROM_Default_ThermalMeter_88E		0x18
+
+-/* New EFUSE deafult value */
++/* New EFUSE default value */
+ #define		EEPROM_DEFAULT_24G_INDEX	0x2D
+ #define		EEPROM_DEFAULT_24G_HT20_DIFF	0X02
+ #define		EEPROM_DEFAULT_24G_OFDM_DIFF	0X04
+diff --git a/drivers/staging/r8188eu/include/rtw_cmd.h b/drivers/staging/r8188eu/include/rtw_cmd.h
+index 9a76aa85de94..d0d6c53e2aa7 100644
+--- a/drivers/staging/r8188eu/include/rtw_cmd.h
++++ b/drivers/staging/r8188eu/include/rtw_cmd.h
+@@ -455,7 +455,7 @@ struct Tx_Beacon_param
+
+ 	mac[0] == 0
+ 	==> CMD mode, return H2C_SUCCESS.
+-	The following condition must be ture under CMD mode
++	The following condition must be true under CMD mode
+ 		mac[1] == mac[4], mac[2] == mac[3], mac[0]=mac[5]= 0;
+ 		s0 == 0x1234, s1 == 0xabcd, w0 == 0x78563412, w1 == 0x5aa5def7;
+ 		s2 == (b1 << 8 | b0);
+@@ -508,7 +508,7 @@ struct drvextra_cmd_parm {
+ 	unsigned char *pbuf;
+ };
+
+-/*------------------- Below are used for RF/BB tunning ---------------------*/
++/*------------------- Below are used for RF/BB tuning ---------------------*/
+
+ struct	setantenna_parm {
+ 	u8	tx_antset;
+diff --git a/drivers/staging/r8188eu/include/rtw_recv.h b/drivers/staging/r8188eu/include/rtw_recv.h
+index 7768b0c5988c..12026431a3d2 100644
+--- a/drivers/staging/r8188eu/include/rtw_recv.h
++++ b/drivers/staging/r8188eu/include/rtw_recv.h
+@@ -92,7 +92,7 @@ struct rx_pkt_attrib {
+ 	u8	privacy; /* in frame_ctrl field */
+ 	u8	bdecrypted;
+ 	u8	encrypt; /* when 0 indicate no encrypt. when non-zero,
+-			  * indicate the encrypt algorith */
++			  * indicate the encrypt algorithm */
+ 	u8	iv_len;
+ 	u8	icv_len;
+ 	u8	crc_err;
+@@ -175,7 +175,7 @@ struct recv_priv {
+ 	u8 *precv_buf;    /*  4 alignment */
+ 	struct __queue free_recv_buf_queue;
+ 	u32	free_recv_buf_queue_cnt;
+-	/* For display the phy informatiom */
++	/* For display the phy information */
+ 	u8 is_signal_dbg;	/*  for debug */
+ 	u8 signal_strength_dbg;	/*  for debug */
+ 	s8 rssi;
+diff --git a/drivers/staging/r8188eu/include/rtw_xmit.h b/drivers/staging/r8188eu/include/rtw_xmit.h
+index 82efcd54af3f..cff065554608 100644
+--- a/drivers/staging/r8188eu/include/rtw_xmit.h
++++ b/drivers/staging/r8188eu/include/rtw_xmit.h
+@@ -116,7 +116,7 @@ struct pkt_attrib {
+ 	u32	last_txcmdsz;
+ 	u8	nr_frags;
+ 	u8	encrypt;	/* when 0 indicate no encrypt. when non-zero,
+-				 * indicate the encrypt algorith */
++				 * indicate the encrypt algorithm */
+ 	u8	iv_len;
+ 	u8	icv_len;
+ 	u8	iv[18];
+diff --git a/drivers/staging/r8188eu/include/wifi.h b/drivers/staging/r8188eu/include/wifi.h
+index 0254310bdf44..381385a7e118 100644
+--- a/drivers/staging/r8188eu/include/wifi.h
++++ b/drivers/staging/r8188eu/include/wifi.h
+@@ -701,7 +701,7 @@ struct ADDBA_request {
+
+ #define	P2P_WILDCARD_SSID_LEN			7
+
+-/* default value, used when: (1)p2p disabed or (2)p2p enabled
++/* default value, used when: (1)p2p disabled or (2)p2p enabled
+  * but only do 1 scan phase */
+ #define	P2P_FINDPHASE_EX_NONE		0
+ /*  used when p2p enabled and want to do 1 scan phase and
+@@ -766,11 +766,11 @@ enum P2P_STATE {
+ 	P2P_STATE_TX_PROVISION_DIS_REQ = 6,
+ 	P2P_STATE_RX_PROVISION_DIS_RSP = 7,
+ 	P2P_STATE_RX_PROVISION_DIS_REQ = 8,
+-	/* Doing the group owner negoitation handshake */
++	/* Doing the group owner negotiation handshake */
+ 	P2P_STATE_GONEGO_ING = 9,
+-	/* finish the group negoitation handshake with success */
++	/* finish the group negotiation handshake with success */
+ 	P2P_STATE_GONEGO_OK = 10,
+-	/* finish the group negoitation handshake with failure */
++	/* finish the group negotiation handshake with failure */
+ 	P2P_STATE_GONEGO_FAIL = 11,
+ 	/* receiving the P2P Inviation request and match with the profile. */
+ 	P2P_STATE_RECV_INVITE_REQ_MATCH = 12,
+@@ -790,9 +790,9 @@ enum P2P_STATE {
+ 	P2P_STATE_RECV_INVITE_REQ_JOIN = 19,
+ 	/* recveing the P2P Inviation response with failure */
+ 	P2P_STATE_RX_INVITE_RESP_FAIL = 20,
+-	/* receiving p2p negoitation response with information is not available */
++	/* receiving p2p negotiation response with information is not available */
+ 	P2P_STATE_RX_INFOR_NOREADY = 21,
+-	/* sending p2p negoitation response with information is not available */
++	/* sending p2p negotiation response with information is not available */
+ 	P2P_STATE_TX_INFOR_NOREADY = 22,
+ };
+
+diff --git a/drivers/staging/r8188eu/os_dep/ioctl_linux.c b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
+index 2de2e1e32738..8516e253bb03 100644
+--- a/drivers/staging/r8188eu/os_dep/ioctl_linux.c
++++ b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
+@@ -2647,7 +2647,7 @@ static int rtw_p2p_connect(struct net_device *dev,
+ 	u32 peer_channel = 0;
+
+ 	/*	Commented by Albert 20110304 */
+-	/*	The input data contains two informations. */
++	/*	The input data contains two information. */
+ 	/*	1. First information is the MAC address which wants to formate with */
+ 	/*	2. Second information is the WPS PINCode or "pbc" string for push button method */
+ 	/*	Format: 00:E0:4C:00:00:05 */
+@@ -2721,7 +2721,7 @@ static void rtw_p2p_invite_req(struct net_device *dev,
+ 	uint p2pielen = 0, attr_contentlen = 0;
+ 	struct tx_invite_req_info *pinvite_req_info = &pwdinfo->invitereq_info;
+
+-	/*	The input data contains two informations. */
++	/*	The input data contains two information items. */
+ 	/*	1. First information is the P2P device address which you want to send to. */
+ 	/*	2. Second information is the group id which combines with GO's mac address, space and GO's ssid. */
+ 	/*	Command line sample: iwpriv wlan0 p2p_set invite ="00:11:22:33:44:55 00:E0:4C:00:00:05 DIRECT-xy" */
+@@ -2845,7 +2845,7 @@ static void rtw_p2p_prov_disc(struct net_device *dev,
+ 	u8 *p2pie;
+ 	uint p2pielen = 0, attr_contentlen = 0;
+
+-	/*	The input data contains two informations. */
++	/*	The input data contains two information items. */
+ 	/*	1. First information is the MAC address which wants to issue the provisioning discovery request frame. */
+ 	/*	2. Second information is the WPS configuration method which wants to discovery */
+ 	/*	Format: 00:E0:4C:00:00:05_display */
+--
+2.30.2
+
+
+
