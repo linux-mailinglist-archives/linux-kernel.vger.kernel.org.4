@@ -2,115 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 644AC6059F1
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 10:34:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1213C6059DF
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 10:33:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230322AbiJTIeX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 04:34:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36998 "EHLO
+        id S230274AbiJTIdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 04:33:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230305AbiJTIdj (ORCPT
+        with ESMTP id S229543AbiJTIdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 04:33:39 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 278B918D469;
-        Thu, 20 Oct 2022 01:33:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=V+1ef8CY4rNU4mQk37SBqFAMHnpg/IcaHQ4AFvuNoks=; b=GIL9tOLjjdtmPdIM56MUg3cw+p
-        q/vk9cqNJnqbmMS7KTOWoEWU83QMLOIuz74N0QNs5F4IdZEXwhpuQnnMnEg+kS1Vwj4ESaMeTsZ6v
-        thzoxV6W6b7tBNawqRCx/aPDaRFAvnA4wZ6+9X3pWX9CHgN/qQJplDRGtQQVIAh/BTUOr1Tabszl8
-        v4N2z+vPWDHo/wbwHxfbWgL46ZgPHJ47CWnDFgPn+DJPR5I+C57B6kHquYYsZdWhd6LUwhCXlbuOc
-        VrecXyGNCXTUMtamT+vZRsTcwYVr9hH9ueUauV1KTejAlhZWpcUtupe2JxRTbZughvjkLuVLTU8t0
-        q60AoVvQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34818)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1olQzP-0006j5-TT; Thu, 20 Oct 2022 09:33:19 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1olQzL-00031C-LG; Thu, 20 Oct 2022 09:33:15 +0100
-Date:   Thu, 20 Oct 2022 09:33:15 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Frank Wunderlich <frank-w@public-files.de>
-Cc:     Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org,
-        Alexander Couzens <lynxis@fe80.eu>,
-        Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: mtk_sgmii: implement mtk_pcs_ops
-Message-ID: <Y1EHy0t5nXOF/3Mw@shell.armlinux.org.uk>
-References: <20221018153506.60944-1-linux@fw-web.de>
- <Y07Wpd1A1xxLhIVc@shell.armlinux.org.uk>
- <949F5EE5-B22D-40E2-9783-0F75ACFE2C1F@public-files.de>
+        Thu, 20 Oct 2022 04:33:25 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7862A18C950
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 01:33:21 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id az22-20020a05600c601600b003c6b72797fdso1624178wmb.5
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 01:33:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8No91Jlr62TzzqqG4EX/7FEyIOABJR/Luu7N+fsFjr8=;
+        b=kMV7arw3FQxfaczzkgEp3/SYzecH/x101eVMQHcCw4jW1if+tUYJ2cI+Vo9kz3g+8L
+         vkzqIFVyteWNVErEGTBAkz6qmhPRbW9YphziunO///SmA2vTnR/6uK1cmvvdUveS4y7a
+         2S3MEaVtKXnx2ZGYB1CYfEdjUS8j5GapXYCB0j+aHq9On0IoQj4H+cfo2sOCn5HS9phg
+         5yHKRAYoZvFNBAZmlfTNHOu8eLY6GUP29tYWImu1pY8Y2vUwyXr5edSq09IisTT+oNZa
+         Pkm5jcvV13Nk66NNvz4Zk5lyNcjsny/NEWlDGV0A9qqQCzX7SzQKYgDrtX+Ga/q53StG
+         1sWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8No91Jlr62TzzqqG4EX/7FEyIOABJR/Luu7N+fsFjr8=;
+        b=lvc+XGEeEpQHZuOqp0hKHXkLG3ACCBcmYT7kV4khor8h5gC2ZctjfPewU1upjWZISZ
+         gxu+As5z0vve8K9VSCPavWQmng7u1OVdqLmXyVXPb6N5toYPBWGGY6qth4Xvrs7Cnrzz
+         4ysPia5Z/5ELFH6LXxQCB4Vo2s0X5zQrTthTFshNAlQYm69xORbz3msvWpxDzzV+6w02
+         gqNYjz4y3jUknW1o60q+ZdAvtW2dYms3rUzgl7O4YTApjw0+mRXdIGR6FTOajdOxKwi1
+         f7azYjId1qrql6tmpqb72ejGTClzOBvhaCIHguVhqWwwN4AcY9gb7CLTO/xchB+kWp26
+         MkLA==
+X-Gm-Message-State: ACrzQf1V4mFj2Y44Areh/2YB/vbXJ/HRg/SNZN+evMOh99sL7UR7Cz0q
+        C7zDYmNJwb8wxdRm1xc7nS2B0NG73mip3g==
+X-Google-Smtp-Source: AMsMyM7xtCUDicS9AVRBxr/kOxnNo2jMiXOXtCv0qEiWNiYI4Stm+Ybr63U8IdF3BiFuBmhqGs5E6w==
+X-Received: by 2002:a05:600c:314f:b0:3c6:f3fa:cfec with SMTP id h15-20020a05600c314f00b003c6f3facfecmr14834261wmo.68.1666254799058;
+        Thu, 20 Oct 2022 01:33:19 -0700 (PDT)
+Received: from localhost ([82.66.159.240])
+        by smtp.gmail.com with ESMTPSA id p10-20020a05600c358a00b003bdd2add8fcsm2253725wmq.24.2022.10.20.01.33.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Oct 2022 01:33:18 -0700 (PDT)
+From:   Mattijs Korpershoek <mkorpershoek@baylibre.com>
+To:     wangjianli <wangjianli@cdjrlc.com>, dmitry.torokhov@gmail.com
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        wangjianli <wangjianli@cdjrlc.com>
+Subject: Re: [PATCH] input/serio: fix typo in comments
+In-Reply-To: <20221019123049.26196-1-wangjianli@cdjrlc.com>
+References: <20221019123049.26196-1-wangjianli@cdjrlc.com>
+Date:   Thu, 20 Oct 2022 10:33:17 +0200
+Message-ID: <87wn8u99o2.fsf@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <949F5EE5-B22D-40E2-9783-0F75ACFE2C1F@public-files.de>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 07:54:49AM +0200, Frank Wunderlich wrote:
-> Am 18. Oktober 2022 18:39:01 MESZ schrieb "Russell King (Oracle)" <linux@armlinux.org.uk>:
-> >Hi,
-> >
-> >A couple of points:
-> >
-> >On Tue, Oct 18, 2022 at 05:35:06PM +0200, Frank Wunderlich wrote:
-> 
-> >> +	regmap_read(mpcs->regmap, SGMSYS_PCS_CONTROL_1, &val);
-> >> +	state->an_complete = !!(val & SGMII_AN_COMPLETE);
-> >> +	state->link = !!(val & SGMII_LINK_STATYS);
-> >> +	state->pause = 0;
-> >
-> >Finally, something approaching a reasonable implementation for this!
-> >Two points however:
-> >1) There's no need to set state->pause if there is no way to get that
-> >   state.
-> >2) There should also be a setting for state->pause.
-> 
-> Currently it looks like pause cannot be controlled in sgmii-mode so we disabled it here to not leave it undefined. Should i drop assignment here?
+On Wed, Oct 19, 2022 at 20:30, wangjianli <wangjianli@cdjrlc.com> wrote:
 
-Why do you think it would be undefined?
+> Delete the redundant word 'in', and add a word it.
+>
+> Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
 
-static void phylink_mac_pcs_get_state(struct phylink *pl,
-                                      struct phylink_link_state *state)
-{
-...
-        if  (state->an_enabled) {
-...
-                state->pause = MLO_PAUSE_NONE;
-        } else {
-,,,
-                state->pause = pl->link_config.pause;
-	}
-...
-        if (pl->pcs)
-                pl->pcs->ops->pcs_get_state(pl->pcs, state);
+Reviewed-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
 
-So, phylink will call your pcs_get_state() function having initialised
-it to something sensible.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+> ---
+>  drivers/input/serio/q40kbd.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/input/serio/q40kbd.c b/drivers/input/serio/q40kbd.c
+> index bd248398556a..ebc9f9941be0 100644
+> --- a/drivers/input/serio/q40kbd.c
+> +++ b/drivers/input/serio/q40kbd.c
+> @@ -81,7 +81,7 @@ static void q40kbd_stop(void)
+>  
+>  /*
+>   * q40kbd_open() is called when a port is open by the higher layer.
+> - * It allocates the interrupt and enables in in the chip.
+> + * It allocates the interrupt and enables it in the chip.
+>   */
+>  
+>  static int q40kbd_open(struct serio *port)
+> -- 
+> 2.36.1
