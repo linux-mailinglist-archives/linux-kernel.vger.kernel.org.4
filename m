@@ -2,102 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D20EF605F76
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 13:55:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4234605F78
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 13:56:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbiJTLzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 07:55:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40564 "EHLO
+        id S229744AbiJTL4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 07:56:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbiJTLza (ORCPT
+        with ESMTP id S229615AbiJTL4G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 07:55:30 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 397EA133323
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 04:55:29 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id r14so33130095lfm.2
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 04:55:29 -0700 (PDT)
+        Thu, 20 Oct 2022 07:56:06 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F289616E284;
+        Thu, 20 Oct 2022 04:56:04 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id l4so20075535plb.8;
+        Thu, 20 Oct 2022 04:56:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=LsYCCTAqbxl1nYegcA6XVTC9x8A8DOyUVzkeALJAq+8=;
-        b=NBtRzRBtf3CHp+ZqCc1ugzJAxtf+FQVKg2znqKAHKcyqQD28FLc1pZigowJDa5b4cx
-         T14yJBOg6h/DCw82V1QIGM5NujztBo7z5POKBdEh5+GvZIpQO2i62wrTbaUya4zjj0Jw
-         nGJDa6LGC2eIuoWcU+F57K/9Qxd4SMDa/bgId48bb9tHTIDzwE95NvzZQyMscY4iPcD6
-         UZwmxGMzeB2fHWb5jDfOtSSwUjZ3KGnLsHuHwaicwmoEa7hdVRhuEFI3rTONtWv3Ijlv
-         OvKXGcaJibok55AsceVFipb8FoGx2bs8Kyk/0c5y0e2+o4xRRqSkc+sJnYg66ADBpmj8
-         VOpw==
+        bh=QfEMq48V5eFN0VrM2HYUoVegivK/iVeEKYnMwW6hA7w=;
+        b=Cyl5KTkXEp2CRgTe1763UrkbTjbp8kN8IbZfihSeKtAuINP1JR4IcJpEWZBlSPlzHm
+         6/e9CSHukaC/m5T380e7Di+F+GFOmyLyDf8OeoLzFbDUsveRwq535x5LyuDVpIMm27Qh
+         E2KWhNjZ8sWvXYOs/qM32lBg9RED1lgMHTGjaZk4P41pY0zmWUQBZB60xgcpRrt2nX62
+         SKJLtJVEv9N6wpr1RS9vGNjgirkF521NhrXlSufwRbKhvO2D2s3hzvnib0OcFcn5rEDp
+         6+hgMJZEZVQ4DX5y4gqCf/ogS33bM5B25zOLZHKeP1m7SSWNfNe+8ybAWTuDpiHWjthx
+         1WzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=LsYCCTAqbxl1nYegcA6XVTC9x8A8DOyUVzkeALJAq+8=;
-        b=xeQoBKM0j7hZjCKUy17HAwfcIwMZyY9UeilZYY/NXWdhc9L5iKHxoxu3P8TQF8fu+h
-         V2B9xHorqwNNF3ipdPjJbc6tQn+u8bJ1KojHnCtOwopfckgzkqWxavUEDwIHc/cpDqyP
-         5JmMzkTgfOMpg6ZXloNzfWltsACNxl+i086yuuszS3p+I6tGVejsbso2EcqKxR8A7sje
-         fbVpyFYUq2RhGCSxEzZljYKk0ncvEUDFmrl/g23v/J5VZpFhMhWw7d+zxicr36vCdAF1
-         j0NDru5iSRVuL9DkHkrBqmBeIfYEMgym4EbTgkEY7bt1rVL7WMuCIqd8mk6Gt17i64i2
-         4ehQ==
-X-Gm-Message-State: ACrzQf0z2VeTIsA00GiyYuObysDmY/C95qZgVYZ6KwlDgvMG4Y8MGIT0
-        fKKxhLlWrl/s1Toht9SDgX9dFw==
-X-Google-Smtp-Source: AMsMyM5ipN3ArP3zHYOiQQl4eLE64TxXPn3wOxrn/2+hiWFMuiv5mEYk8Kq5Z/mO5CmICg29fehyZw==
-X-Received: by 2002:a05:6512:40d:b0:4a2:d61d:6c82 with SMTP id u13-20020a056512040d00b004a2d61d6c82mr4378263lfk.381.1666266927538;
-        Thu, 20 Oct 2022 04:55:27 -0700 (PDT)
-Received: from uffe-XPS13.. (h-94-254-63-18.NA.cust.bahnhof.se. [94.254.63.18])
-        by smtp.gmail.com with ESMTPSA id s16-20020a056512215000b0049adf925d00sm2701626lfr.1.2022.10.20.04.55.26
+        bh=QfEMq48V5eFN0VrM2HYUoVegivK/iVeEKYnMwW6hA7w=;
+        b=Z13i4thZHtXZ8EOhxCAjpps0ArhOZtIZ8NQqcchQLTVq4z+5ruaYq25z9Q9usy75+r
+         xWmWh8m6NckkQMEuWjyRhKSTru5iY4xrMOdhoqnWym/bt8hZUTlQrkxMTYkGH6YokjVb
+         JOVkng2koYNob9A9bXPw/1/1zDiBgvHiJVem4g5lcxpvjUX7yk5QFIWm139nkwMdvpb8
+         DjjrUB7KANxhl2kfhRdSYoTeXK6+1TZo3BpsegRuu9r7ORsQi0Z4egH680e7w7ubkNnB
+         DFOhatpKOLk1bW7HAFQweaVB+gRHM1oPIoF//Lt6LDQRi1ibXa8jGXaGeD6EHUJ7CoY6
+         +uIA==
+X-Gm-Message-State: ACrzQf2wTBy5ubi3+OReTnFngG5U86o9QZyOuEdSCOqLU0fpj6fKUoIe
+        0B0kbR0M3sZs6JWPRQtcFCg=
+X-Google-Smtp-Source: AMsMyM7yLdXwgSS3YZrB6gbeJtcSboqSM6NN6zlyigcL6QP9UsA3LJx3j3kTyOQ0B+qgypo7xy1aeg==
+X-Received: by 2002:a17:902:f78c:b0:17a:ef1:e902 with SMTP id q12-20020a170902f78c00b0017a0ef1e902mr13483537pln.5.1666266964456;
+        Thu, 20 Oct 2022 04:56:04 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id u13-20020a170903124d00b0017f80305239sm12784647plh.136.2022.10.20.04.56.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 04:55:26 -0700 (PDT)
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org
-Cc:     Johan Hovold <johan@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] cpuidle: psci: Extend information in log about OSI/PC mode
-Date:   Thu, 20 Oct 2022 13:55:13 +0200
-Message-Id: <20221020115513.93809-1-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Thu, 20 Oct 2022 04:56:03 -0700 (PDT)
+From:   yexingchen116@gmail.com
+X-Google-Original-From: ye.xingchen@zte.com.cn
+To:     viro@zeniv.linux.org.uk
+Cc:     ebiederm@xmission.com, keescook@chromium.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, ye xingchen <ye.xingchen@zte.com.cn>
+Subject: [PATCH linux-next] binfmt_elf: Replace IS_ERR() with IS_ERR_VALUE()
+Date:   Thu, 20 Oct 2022 11:55:58 +0000
+Message-Id: <20221020115558.400359-1-ye.xingchen@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's useful to understand whether we are using OS-initiated (OSI) mode or
-Platform Coordinated (PC) mode, when initializing the CPU PM domains.
-Therefore, let's extend the print in the log after a successful probe with
-this information.
+From: ye xingchen <ye.xingchen@zte.com.cn>
 
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Avoid type casts that are needed for IS_ERR() and use
+IS_ERR_VALUE() instead.
+
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 ---
- drivers/cpuidle/cpuidle-psci-domain.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ fs/binfmt_elf.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
-index 821984947ed9..c80cf9ddabd8 100644
---- a/drivers/cpuidle/cpuidle-psci-domain.c
-+++ b/drivers/cpuidle/cpuidle-psci-domain.c
-@@ -181,7 +181,8 @@ static int psci_cpuidle_domain_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto remove_pd;
- 
--	pr_info("Initialized CPU PM domain topology\n");
-+	pr_info("Initialized CPU PM domain topology using %s mode\n",
-+		use_osi ? "OSI" : "PC");
- 	return 0;
- 
- put_node:
+diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
+index 72f0672b4b74..afd2d6f1c21c 100644
+--- a/fs/binfmt_elf.c
++++ b/fs/binfmt_elf.c
+@@ -1166,7 +1166,7 @@ static int load_elf_binary(struct linux_binprm *bprm)
+ 		error = elf_map(bprm->file, load_bias + vaddr, elf_ppnt,
+ 				elf_prot, elf_flags, total_size);
+ 		if (BAD_ADDR(error)) {
+-			retval = IS_ERR((void *)error) ?
++			retval = IS_ERR_VALUE(error) ?
+ 				PTR_ERR((void*)error) : -EINVAL;
+ 			goto out_free_dentry;
+ 		}
+@@ -1251,7 +1251,7 @@ static int load_elf_binary(struct linux_binprm *bprm)
+ 					    interpreter,
+ 					    load_bias, interp_elf_phdata,
+ 					    &arch_state);
+-		if (!IS_ERR((void *)elf_entry)) {
++		if (!IS_ERR_VALUE(elf_entry)) {
+ 			/*
+ 			 * load_elf_interp() returns relocation
+ 			 * adjustment
+@@ -1260,7 +1260,7 @@ static int load_elf_binary(struct linux_binprm *bprm)
+ 			elf_entry += interp_elf_ex->e_entry;
+ 		}
+ 		if (BAD_ADDR(elf_entry)) {
+-			retval = IS_ERR((void *)elf_entry) ?
++			retval = IS_ERR_VALUE(elf_entry) ?
+ 					(int)elf_entry : -EINVAL;
+ 			goto out_free_dentry;
+ 		}
 -- 
-2.34.1
+2.25.1
 
