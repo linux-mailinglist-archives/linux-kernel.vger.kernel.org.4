@@ -2,114 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1279606213
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 15:45:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4C1A606219
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 15:46:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbiJTNpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 09:45:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55060 "EHLO
+        id S229785AbiJTNqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 09:46:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229777AbiJTNpa (ORCPT
+        with ESMTP id S229786AbiJTNqG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 09:45:30 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B432F88A39;
-        Thu, 20 Oct 2022 06:45:25 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id 186-20020a1c02c3000000b003c6c154d528so2361772wmc.4;
-        Thu, 20 Oct 2022 06:45:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6To4dqhauA/lNuhZyK3fZtVSZbHxlKTu7B0L5LEK/Yo=;
-        b=CzlLc1mjdc+QchcuDhLaaelFcrROLlu4x7FS9NFybcqcK8EAFZrjWi+DWHJDza4G1H
-         TrPzzWUKo19v67l4zT/DWiI0XmYlpYMtvQ267/VC+YcLsrHYOWFMN+c+AEr8X4sgdlj9
-         1cRPsuBYg8n80NtO+MHCXVFk+Rt4mZTVpn6WwjXmmIVFYPDmmAzraV69k4NuhpUXlxIz
-         3jDaU9QZypNNSM4/mZ5N0NYcEdE1wPjYWfG48XNJCe8tEJFW/CpK840/X4+AXfJCNEDc
-         OjIELKUFc3GprMUa5OeukbxTWzQeCE9DT+A+sMaj2o/7ip3hHcDMieTwC9dG3eRLRpMJ
-         ZIvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=6To4dqhauA/lNuhZyK3fZtVSZbHxlKTu7B0L5LEK/Yo=;
-        b=bhoo2i3HpNjWk4Eaa+Bt+Mb40NMWK2sISpetQJDBgYwGQLfMNkP+19KKhgjsQYLMLS
-         Cn6v9M09Kl5+Z4UA9ZNkwk5wKdgXMsdS/6eM//aLkQr0rdjIAvX21JyCUCF/IElWgO0n
-         7GZIwCE7BeeWfBuRFC52jX5hsuLvDQEEZ647dsfS4ECHf/bU8pIV8LOO/aAjAfMeDjfp
-         WuhifzaSOUJ4L8ZCmJmFLUNGSpci1yKUC7/sOqBGVqUKcDsCw8CAFd6omstDRi3QlR4l
-         htjf0/xRlIHl43ADuJUDfcdd3N2cikgGB5mWF3Pmwo2bnlwJjC7wQRMZZpM8fzEhr98J
-         ElXw==
-X-Gm-Message-State: ACrzQf1fOH7l+kYwjvFzmrYtEH+GVqPMlR/6cYrV7rmr1PT1aphUm+si
-        W93m/qbY5XwA2/bS4dB3SSM=
-X-Google-Smtp-Source: AMsMyM76T/qopuD0DaE6ZJN9tzIHPuUatWBeKmIGrdkD0rnWEouWSaE+JVHoBokPUiZ7yvTzg/L6Zw==
-X-Received: by 2002:a1c:2743:0:b0:3b3:4066:fa61 with SMTP id n64-20020a1c2743000000b003b34066fa61mr31145675wmn.79.1666273524099;
-        Thu, 20 Oct 2022 06:45:24 -0700 (PDT)
-Received: from [192.168.0.210] (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.googlemail.com with ESMTPSA id k33-20020a05600c1ca100b003c6cd82596esm3110001wms.43.2022.10.20.06.45.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Oct 2022 06:45:23 -0700 (PDT)
-Message-ID: <01410678-ab7d-1733-8d5a-e06d1a4b6c9e@gmail.com>
-Date:   Thu, 20 Oct 2022 14:45:22 +0100
+        Thu, 20 Oct 2022 09:46:06 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCECC11874B;
+        Thu, 20 Oct 2022 06:45:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id D34C4CE252D;
+        Thu, 20 Oct 2022 13:45:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4AC2C433C1;
+        Thu, 20 Oct 2022 13:45:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666273549;
+        bh=gEzBsG2afAcJArkvwrtS1d1ZrUezVmRH4opGNtVPXAQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=VJGp3AgHy1aLrltfoH3ZUIY2vPiG8odz2T6+x6jMCxcJgZCwTqS9qB3icoBC8o4E8
+         E1gfpoW8H0h3qQq/0/EZYuKYCvQC8HL2tkyrpL4XwUeqKy9JVjs4nQoNI/bL0fqMMC
+         fht4bNrhgVpd8SagpFnXZ9RE9junpC95FZ9mZIXzSFLwxrvemWT4v9YJzydgYmRwr9
+         Dq/0vR7MpzhoHTTfYTeffDWxoum67vJnPgSuWd0+edba3zhaABe6sytQ7LWcvC1QV0
+         OeDSrpxLauYQmP8C3WM0IafIX95qvt1v+oz6aA+EnOZHYUsc8+crMpW+Mx2cnmWOWH
+         H+9jYGQE6tu6w==
+Date:   Thu, 20 Oct 2022 08:45:47 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     kernel test robot <lkp@intel.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Heiko Stuebner <heiko@sntech.de>, linux-pci@vger.kernel.org,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        llvm@lists.linux.dev, Minghuan Lian <minghuan.Lian@nxp.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Bharat Kumar Gogada <bharat.kumar.gogada@amd.com>,
+        Toan Le <toan@os.amperecomputing.com>,
+        linux-riscv@lists.infradead.org,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Joyce Ooi <joyce.ooi@intel.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-arm-kernel@lists.infradead.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        Shawn Lin <shawn.lin@rock-chips.com>,
+        Ray Jui <rjui@broadcom.com>, linux-tegra@vger.kernel.org,
+        linux-omap@vger.kernel.org, Mingkai Hu <mingkai.hu@nxp.com>,
+        Roy Zang <roy.zang@nxp.com>, Michal Simek <monstr@monstr.eu>,
+        kbuild-all@lists.01.org, Scott Branden <sbranden@broadcom.com>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        linux-kernel@vger.kernel.org, Tom Joseph <tjoseph@cadence.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Subject: Re: [PATCH] PCI: Remove unnecessary of_irq.h includes
+Message-ID: <20221020134547.GA94120@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Content-Language: en-US
-To:     =?UTF-8?Q?Tomislav_Po=c5=beega?= <pozega.tomislav@gmail.com>
-Cc:     Stanislaw Gruszka <stf_xl@wp.pl>,
-        Helmut Schaa <helmut.schaa@googlemail.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-From:   "Colin King (gmail)" <colin.i.king@gmail.com>
-Subject: re: wifi: rt2x00: add TX LOFT calibration for MT7620
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1D2ubkwXqwx9LWD@wendy>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+[+cc Pali, heads-up for trivial addition of <linux/irqdomain.h> to
+pci-mvebu.c]
 
-I noticed a signed / unsigned comparison warning when building 
-linux-next with clang. I believe it was introduced in the following commit:
+On Thu, Oct 20, 2022 at 08:20:25AM +0100, Conor Dooley wrote:
+> On Thu, Oct 20, 2022 at 03:08:50PM +0800, kernel test robot wrote:
+> > Hi Bjorn,
+> > 
+> > I love your patch! Yet something to improve:
+> > 
+> > >> drivers/pci/controller/pcie-microchip-host.c:473:31: error: incomplete definition of type 'struct irq_domain'
+> >            struct mc_pcie *port = domain->host_data;
+> 
+> That's what I get for only visually inspecting the patch before Acking
+> it.. Un-ack I suppose.
 
-commit dab902fe1d29dc0fa1dccc8d13dc89ffbf633881
-Author: Tomislav Požega <pozega.tomislav@gmail.com>
-Date:   Sat Sep 17 21:28:43 2022 +0100
+No problem!
 
-     wifi: rt2x00: add TX LOFT calibration for MT7620
+I think what happened is the pcie-microchip-host.c uses
+irq_domain_add_linear() so it needs <linux/irqdomain.h>, but it
+currently gets it via <linux/of_irq.h>, which it doesn't otherwise
+need.
 
+I added a preparatory patch to include <linux/irqdomain.h> explicitly,
+but I haven't been able to cross-build either riscv or ia64 to verify
+this fix.  I'll wait a few days and post an updated series for the
+0-day bot to test.
 
-The warning is as follows:
+Same situation for pcie-altera-msi.c.
 
-drivers/net/wireless/ralink/rt2x00/rt2800lib.c:9472:15: warning: result 
-of comparison of constant -7 with expression of type 'char' is always 
-false [-Wtautological-constant-out-of-range-compare]
-         gerr = (gerr < -0x07) ? -0x07 : (gerr > 0x05) ? 0x05 : gerr;
-                 ~~~~ ^ ~~~~~
-drivers/net/wireless/ralink/rt2x00/rt2800lib.c:9476:15: warning: result 
-of comparison of constant -31 with expression of type 'char' is always 
-false [-Wtautological-constant-out-of-range-compare]
-         perr = (perr < -0x1f) ? -0x1f : (perr > 0x1d) ? 0x1d : perr;
-                 ~~~~ ^ ~~~~~
+pci-mvebu.c also relies on getting <linux/irqdomain.h> via
+<linux/of_irq.h>, but it actually depends on of_irq.h, so I'll just
+add an irqdomain.h include there.
 
-The variables gerr and perr are declared as a char, which in this case 
-seems to be defaulting to signed on the clang build for x86-64 and hence 
-this warning. I suspect making it signed char will do the trick, but I 
-wanted to flag this up in-case there were some other issues with making 
-them signed.
+Bjorn
 
-Colin
