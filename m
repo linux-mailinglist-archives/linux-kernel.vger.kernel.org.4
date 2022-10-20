@@ -2,66 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCE04606A04
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 23:04:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EBC5606A06
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 23:04:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230052AbiJTVD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 17:03:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47630 "EHLO
+        id S230037AbiJTVEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 17:04:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229934AbiJTVDr (ORCPT
+        with ESMTP id S229961AbiJTVDt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 17:03:47 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DEC3CABC0;
-        Thu, 20 Oct 2022 14:03:46 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id g27so1374018edf.11;
-        Thu, 20 Oct 2022 14:03:46 -0700 (PDT)
+        Thu, 20 Oct 2022 17:03:49 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 072BCCABC7;
+        Thu, 20 Oct 2022 14:03:47 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id a67so1365396edf.12;
+        Thu, 20 Oct 2022 14:03:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=googlemail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=VcGsClt3EeHDOcwNreFbmj7M3tyyEYsggkdvW5UHGGM=;
-        b=oLpOq5hMgEz8wPlei0nKhKh1Xpou/ksdbhusfa3NMyvCI+C68vxtrpTI3riwbsjvlY
-         Qle2gY108r3XtwAq8ZMxr0pFoh2T0KANSzSE+E46ZQJ9WzE0qznHwSI47NAJ8n4diFjJ
-         7Mbn61S6+dLcsKHBhLkyWAPq6kjruhblVmQqXCueZsTBp1WU1dLT8n07EyyLejdsz78v
-         CIznAV8C0b5gW3xtPT/fduziMZK6MxewF+sHN4jTqPbhARuwsiuO0wnE9YgoU+zhDLke
-         4Xxm6RFVoddWhPQiRdmsxGTBq7zek+LIl7kCWuEixLji89BK1eZJGgYe849e+t2F9Sz4
-         78IA==
+        bh=qxDfXjVat7Kys3E9Hetmxuq6ShOthTcFMt0dPFfzKbQ=;
+        b=D8hXj+ChWswhe8UJrupSd4sNYASfYoDr07zqXfug9iPu9Ljxrsd/WQ84QMLzpJT46p
+         IMwKw2MgZ103Ax6dPFPeJ+Vedme4vcFZUOdwa1l6Khkk2NItYJeIFc1Ve1e+d0XcCXml
+         b+5qHBcLEwVlan/fAyjDXlV6qZnVKyLaPrfhQHA6k5mGpZZ2pKPEBmOramwK4Qwj7vrN
+         q3rX54KOWu+u6DW3iZCG0iVPhddJOj+ZKeQMs/d7I77aiwzrkFVp/JOkM4LsotLW7n8i
+         2fx+ZdVJOG6tW0EjS3mQv7hTTjNHv61NAVcToRYOriTrBUcXShIx+Zhh4doR9tjRGX0K
+         iPrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=VcGsClt3EeHDOcwNreFbmj7M3tyyEYsggkdvW5UHGGM=;
-        b=vZzY93TsHc302d2Rgl/GU2pJnNNjmrYpcqboBKatEi9q+i/bVKkTwfnFNxN1+aOQ5I
-         fuTB7xAsA9mvKwA2G07zNz1kc3vy9EGxZrTXfiHMpZcmaFc0OtJx2833cWDvZFubl2rG
-         xzvdJhtgKpotUZmwHgab+z6r90H9c4THs91Mmyip/aIbuztVNcI+XGWNBg7YO/tWd/03
-         kYKLmDikmvvF0HsT5Wf4y3pVyhbZ1i5c/tRikLy+8XYVO6MIIm3+fjsHWJiWX4GJNrS9
-         ++QUSkTqlJUatzRCg6FKGm4xKCC3COkuitB1stt1nJBMWx9ke9S+tsZFHiwxf4hXObKZ
-         5DCA==
-X-Gm-Message-State: ACrzQf1r/s4xDS9cJcnPnxQXQOiSD6Rcc8TRwfTqs5HBQW50TM4jPcjj
-        ssQcyWsMtWTARQaLl+wKbxY=
-X-Google-Smtp-Source: AMsMyM53hf5WFVTFQ/0Etgg2GbkKIWsfEPAwVjQ8peO0OvmUyC9OYc9QlAIQHgybBr3PzknZ6m7aZw==
-X-Received: by 2002:a05:6402:26d2:b0:45d:280b:5878 with SMTP id x18-20020a05640226d200b0045d280b5878mr14204625edd.385.1666299824877;
-        Thu, 20 Oct 2022 14:03:44 -0700 (PDT)
+        bh=qxDfXjVat7Kys3E9Hetmxuq6ShOthTcFMt0dPFfzKbQ=;
+        b=RzKH8ykXPOxzYYFvx9koh5yb/0FAQ/H9PlJDdEo2t80dmpaJ2lideLYQOyuR0ZppQV
+         kbRmShLAQMaj0yNwYElGIU4ERXXdomI4cjt1jud6YMqK0G0lgdgUqvhvcXpE4UAs+mfD
+         U4CB5BU6+fyxbbV5ZqWzfXahw2TMWje5qzrRQV/NfZ+4BeuYoS7qE9PwOr2Ewe4x5hXI
+         3pUb2yyeEYKk+r+m/d+JNUoLmu5ZikBnmfuLqaWDPccMyNNZuYuzh+lqMISuYlO8k0mX
+         AGKWQeSO+WhKCerBUWiQBDipofjJur9WcfAadLCq1tFWTpKNZwxwzCrRFTaRSbMtNTrF
+         NMVA==
+X-Gm-Message-State: ACrzQf2iHvyoZtgOh0ifGkJqe59l2VFQsJzK7Xr0b3djR1gCKhViDjSd
+        Kq/bih8u1lJe4pJkZJ0T1jk=
+X-Google-Smtp-Source: AMsMyM7fmIolWQu5P5hRljBOaKGe/fWqGpMhwL4KbCOrpkKS/YAp8rcw6q3b6koeaLGzX/5Uy4TGsw==
+X-Received: by 2002:a05:6402:148a:b0:459:2eab:9b0a with SMTP id e10-20020a056402148a00b004592eab9b0amr13877085edv.139.1666299826177;
+        Thu, 20 Oct 2022 14:03:46 -0700 (PDT)
 Received: from localhost.localdomain (dynamic-2a01-0c23-c046-3500-0000-0000-0000-0e63.c23.pool.telefonica.de. [2a01:c23:c046:3500::e63])
-        by smtp.googlemail.com with ESMTPSA id 18-20020a170906211200b00779cde476e4sm10748721ejt.62.2022.10.20.14.03.43
+        by smtp.googlemail.com with ESMTPSA id 18-20020a170906211200b00779cde476e4sm10748721ejt.62.2022.10.20.14.03.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 14:03:44 -0700 (PDT)
+        Thu, 20 Oct 2022 14:03:45 -0700 (PDT)
 From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 To:     linux@roeck-us.net, linux-hwmon@vger.kernel.org
 Cc:     jdelvare@suse.com, linux-kernel@vger.kernel.org,
         Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: [RFC PATCH v2 3/4] hwmon: (jc42) Restore the min/max/critical temperatures on resume
-Date:   Thu, 20 Oct 2022 23:03:19 +0200
-Message-Id: <20221020210320.1624617-4-martin.blumenstingl@googlemail.com>
+Subject: [RFC PATCH v2 4/4] hwmon: (jc42) Don't cache the temperature register
+Date:   Thu, 20 Oct 2022 23:03:20 +0200
+Message-Id: <20221020210320.1624617-5-martin.blumenstingl@googlemail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221020210320.1624617-1-martin.blumenstingl@googlemail.com>
 References: <20221020210320.1624617-1-martin.blumenstingl@googlemail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -73,73 +72,137 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The JC42 compatible thermal sensor on Kingston KSM32ES8/16ME DIMMs
-(using Micron E-Die) is an ST Microelectronics STTS2004 (manufacturer
-0x104a, device 0x2201). It does not keep the previously programmed
-minimum, maximum and critical temperatures after system suspend and
-resume (which is a shutdown / startup cycle for the JC42 temperature
-sensor). This results in an alarm on system resume because the hardware
-default for these values is 0°C (so any environment temperature greater
-than 0°C will trigger the alarm).
+Now that we're utilizing regmap and it's regcache for the
+minimum/maximum/critical temperature registers the only cached register
+that's left is the actual temperature register. Drop the custom cache
+implementation as it just complicates things.
 
-Example before system suspend:
-  jc42-i2c-0-1a
-  Adapter: SMBus PIIX4 adapter port 0 at 0b00
-  temp1:        +34.8°C  (low  =  +0.0°C)
-                         (high = +85.0°C, hyst = +85.0°C)
-                         (crit = +95.0°C, hyst = +95.0°C)
-
-Example after system resume (without this change):
-  jc42-i2c-0-1a
-  Adapter: SMBus PIIX4 adapter port 0 at 0b00
-  temp1:        +34.8°C  (low  =  +0.0°C)             ALARM (HIGH, CRIT)
-                         (high =  +0.0°C, hyst =  +0.0°C)
-                         (crit =  +0.0°C, hyst =  +0.0°C)
-
-Apply the cached values from the JC42_REG_TEMP_UPPER,
-JC42_REG_TEMP_LOWER, JC42_REG_TEMP_CRITICAL and JC42_REG_SMBUS (where
-the SMBUS register is not related to this issue but a side-effect of
-using regcache_sync() during system resume with the previously
-cached/programmed values. This fixes the alarm due to the hardware
-defaults of 0°C because the previously applied limits (set by userspace)
-are re-applied on system resume.
-
-Fixes: 175c490c9e7f ("hwmon: (jc42) Add support for STTS2004 and AT30TSE004")
 Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 ---
- drivers/hwmon/jc42.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ drivers/hwmon/jc42.c | 59 ++++++++++++++++----------------------------
+ 1 file changed, 21 insertions(+), 38 deletions(-)
 
 diff --git a/drivers/hwmon/jc42.c b/drivers/hwmon/jc42.c
-index 3f524ab5451c..61311483a5c6 100644
+index 61311483a5c6..52a60eb0791b 100644
 --- a/drivers/hwmon/jc42.c
 +++ b/drivers/hwmon/jc42.c
-@@ -582,6 +582,10 @@ static int jc42_suspend(struct device *dev)
+@@ -203,13 +203,10 @@ static struct jc42_chips jc42_chips[] = {
+ /* Each client has this additional data */
+ struct jc42_data {
+ 	struct regmap	*regmap;
+-	struct mutex	update_lock;	/* protect register access */
+ 	bool		extended;	/* true if extended range supported */
+ 	bool		valid;
+-	unsigned long	last_updated;	/* In jiffies */
+ 	u16		orig_config;	/* original configuration */
+ 	u16		config;		/* current configuration */
+-	u16		temp;		/* Cached temperature register value */
+ };
  
- 	data->config |= JC42_CFG_SHUTDOWN;
- 	regmap_write(data->regmap, JC42_REG_CONFIG, data->config);
-+
-+	regcache_cache_only(data->regmap, true);
-+	regcache_mark_dirty(data->regmap);
-+
- 	return 0;
+ #define JC42_TEMP_MIN_EXTENDED	(-40000)
+@@ -234,41 +231,20 @@ static int jc42_temp_from_reg(s16 reg)
+ 	return reg * 125 / 2;
  }
  
-@@ -589,9 +593,13 @@ static int jc42_resume(struct device *dev)
+-static struct jc42_data *jc42_update_device(struct device *dev)
+-{
+-	struct jc42_data *data = dev_get_drvdata(dev);
+-	unsigned int val;
+-	int ret;
+-
+-	mutex_lock(&data->update_lock);
+-
+-	if (time_after(jiffies, data->last_updated + HZ) || !data->valid) {
+-		ret = regmap_read(data->regmap, JC42_REG_TEMP, &val);
+-		if (ret)
+-			goto abort;
+-
+-		data->temp = val;
+-		data->last_updated = jiffies;
+-		data->valid = true;
+-	}
+-abort:
+-	mutex_unlock(&data->update_lock);
+-	return ret ? ERR_PTR(ret) : data;
+-}
+-
+ static int jc42_read(struct device *dev, enum hwmon_sensor_types type,
+ 		     u32 attr, int channel, long *val)
  {
- 	struct jc42_data *data = dev_get_drvdata(dev);
+-	struct jc42_data *data = jc42_update_device(dev);
++	struct jc42_data *data = dev_get_drvdata(dev);
+ 	unsigned int regval;
+ 	int ret, temp, hyst;
  
-+	regcache_cache_only(data->regmap, false);
+-	if (IS_ERR(data))
+-		return PTR_ERR(data);
+-
+ 	switch (attr) {
+ 	case hwmon_temp_input:
+-		*val = jc42_temp_from_reg(data->temp);
++		ret = regmap_read(data->regmap, JC42_REG_TEMP, &regval);
++		if (ret)
++			return ret;
 +
- 	data->config &= ~JC42_CFG_SHUTDOWN;
- 	regmap_write(data->regmap, JC42_REG_CONFIG, data->config);
--	return 0;
++		*val = jc42_temp_from_reg(regval);
+ 		return 0;
+ 	case hwmon_temp_min:
+ 		ret = regmap_read(data->regmap, JC42_REG_TEMP_LOWER, &regval);
+@@ -314,13 +290,25 @@ static int jc42_read(struct device *dev, enum hwmon_sensor_types type,
+ 		*val = temp - hyst;
+ 		return 0;
+ 	case hwmon_temp_min_alarm:
+-		*val = (data->temp >> JC42_ALARM_MIN_BIT) & 1;
++		ret = regmap_read(data->regmap, JC42_REG_TEMP, &regval);
++		if (ret)
++			return ret;
 +
-+	/* Restore cached register values to hardware */
-+	return regcache_sync(data->regmap);
++		*val = (regval >> JC42_ALARM_MIN_BIT) & 1;
+ 		return 0;
+ 	case hwmon_temp_max_alarm:
+-		*val = (data->temp >> JC42_ALARM_MAX_BIT) & 1;
++		ret = regmap_read(data->regmap, JC42_REG_TEMP, &regval);
++		if (ret)
++			return ret;
++
++		*val = (regval >> JC42_ALARM_MAX_BIT) & 1;
+ 		return 0;
+ 	case hwmon_temp_crit_alarm:
+-		*val = (data->temp >> JC42_ALARM_CRIT_BIT) & 1;
++		ret = regmap_read(data->regmap, JC42_REG_TEMP, &regval);
++		if (ret)
++			return ret;
++
++		*val = (regval >> JC42_ALARM_CRIT_BIT) & 1;
+ 		return 0;
+ 	default:
+ 		return -EOPNOTSUPP;
+@@ -335,8 +323,6 @@ static int jc42_write(struct device *dev, enum hwmon_sensor_types type,
+ 	int diff, hyst;
+ 	int ret;
+ 
+-	mutex_lock(&data->update_lock);
+-
+ 	switch (attr) {
+ 	case hwmon_temp_min:
+ 		ret = regmap_write(data->regmap, JC42_REG_TEMP_LOWER,
+@@ -383,8 +369,6 @@ static int jc42_write(struct device *dev, enum hwmon_sensor_types type,
+ 		break;
+ 	}
+ 
+-	mutex_unlock(&data->update_lock);
+-
+ 	return ret;
  }
  
- static const struct dev_pm_ops jc42_dev_pm_ops = {
+@@ -521,7 +505,6 @@ static int jc42_probe(struct i2c_client *client)
+ 		return PTR_ERR(data->regmap);
+ 
+ 	i2c_set_clientdata(client, data);
+-	mutex_init(&data->update_lock);
+ 
+ 	ret = regmap_read(data->regmap, JC42_REG_CAP, &cap);
+ 	if (ret)
 -- 
 2.38.1
 
