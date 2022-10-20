@@ -2,76 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3C6560562E
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 05:58:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3D12605634
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 06:04:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229817AbiJTD6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 23:58:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33288 "EHLO
+        id S229449AbiJTEEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 00:04:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbiJTD6n (ORCPT
+        with ESMTP id S229705AbiJTEEM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 23:58:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC971197FA2;
-        Wed, 19 Oct 2022 20:58:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 50D0661995;
-        Thu, 20 Oct 2022 03:58:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47030C433C1;
-        Thu, 20 Oct 2022 03:58:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666238321;
-        bh=tZLEOSmLZX9fAjwEpzjOiiXPK8cCgzbSv+ofgqwpMjE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qpNkVYQ7zj1ggo48POKzGIxFc3C6BqZ7K0a/4IKbrEm/NbcPgtX68orL9nKLdueuz
-         wR297dV/gmel1valM0nTLGZC5nC1ec5q8NNyF8r321gIJ3/W8JKGFxWRFKMIifC/+0
-         8B93SV0m4THHI9hK4/wU0y+wnHJIKc1PwavtTRD7pjLkv0OUS4i4mcI1CLIh8N8p/o
-         Nx4T+b9CeNhCuBO9+wsjjTFV0DhUcPg2CbTZIZ2vIqgtGjcCdqQrgKxAQLEAE3GBLU
-         0GOCd7eJ1c6qWXY07/LO4NYGa0sskglW3OlAIcoWj2HEeCiQOTA4uD0sNDjPwb25d6
-         ZMSceoXYCOiOA==
-Date:   Wed, 19 Oct 2022 20:58:39 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jussi Kivilinna <jussi.kivilinna@iki.fi>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Subject: Re: [PATCH v2 12/15] crypto: arm64/sm4 - add CE implementation for
- ESSIV mode
-Message-ID: <Y1DHb66VYPzFlTwh@sol.localdomain>
-References: <20221018071006.5717-1-tianjia.zhang@linux.alibaba.com>
- <20221018071006.5717-13-tianjia.zhang@linux.alibaba.com>
+        Thu, 20 Oct 2022 00:04:12 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0E3F0181D97
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 21:04:11 -0700 (PDT)
+Received: from [192.168.1.139] (unknown [122.171.21.142])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 94EE920FCF6F;
+        Wed, 19 Oct 2022 21:04:09 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 94EE920FCF6F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1666238650;
+        bh=ZxKeui9DDYM5zMtc/eLYUVIUvOOnKSjXi5ZjbM8qn5I=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=OPycTYoDbKI+GsVsg6X01LXGyMsdDUarjXCdiWfCt4VuuWqIVTrHG67P+R1iRnq4N
+         UI7GyxokT/PUe4jm+59sFIpjJlxqnfBh+iykKy4083rytW/mLBjZYHPeKAmbpNoRPr
+         AX5mo7cNmkXzfQ23baAylUsznIOCxOw0O0ohOMlo=
+Message-ID: <7025b8d8-e23a-0148-75b5-a06c18c6dbcb@linux.microsoft.com>
+Date:   Thu, 20 Oct 2022 09:34:07 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221018071006.5717-13-tianjia.zhang@linux.alibaba.com>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH 1/3] staging: rtl8723bs: fix white space warnings
+Content-Language: en-US
+To:     Emily Peri <eperi1024@gmail.com>, gregkh@linuxfoundation.org,
+        outreachy@lists.linux.dev, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <cover.1666230736.git.eperi1024@gmail.com>
+ <45558673b486808e7978e2e4838c6ce5a2485b8b.1666230736.git.eperi1024@gmail.com>
+From:   Praveen Kumar <kumarpraveen@linux.microsoft.com>
+In-Reply-To: <45558673b486808e7978e2e4838c6ce5a2485b8b.1666230736.git.eperi1024@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 03:10:03PM +0800, Tianjia Zhang wrote:
-> This patch is a CE-optimized assembly implementation for ESSIV mode.
-> The assembly part is realized by reusing the CBC mode.
+On 20-10-2022 07:40, Emily Peri wrote:
+> Fix the following checkpatch warnings in rtw_ioctl_set:
+> 1) Add missing blankline after declaration
+> 2) Replace spaces used for indent with tab
+> 3) Remove space before tab
 > 
-> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+> Signed-off-by: Emily Peri <eperi1024@gmail.com>
+> ---
+>  drivers/staging/rtl8723bs/core/rtw_ioctl_set.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/staging/rtl8723bs/core/rtw_ioctl_set.c b/drivers/staging/rtl8723bs/core/rtw_ioctl_set.c
+> index 8c11daff2d59..354e61a8f2bd 100644
+> --- a/drivers/staging/rtl8723bs/core/rtw_ioctl_set.c
+> +++ b/drivers/staging/rtl8723bs/core/rtw_ioctl_set.c
+> @@ -78,6 +78,7 @@ u8 rtw_do_join(struct adapter *padapter)
+>  		goto exit;
+>  	} else {
+>  		int select_ret;
+> +
+>  		spin_unlock_bh(&(pmlmepriv->scanned_queue.lock));
+>  		select_ret = rtw_select_and_join_from_scanned_queue(pmlmepriv);
+>  		if (select_ret == _SUCCESS) {
+> @@ -311,7 +312,7 @@ u8 rtw_set_802_11_infrastructure_mode(struct adapter *padapter,
+>  		if ((*pold_state == Ndis802_11Infrastructure) || (*pold_state == Ndis802_11IBSS)) {
+>  			if (check_fwstate(pmlmepriv, _FW_LINKED) == true)
+>  				rtw_indicate_disconnect(padapter); /* will clr Linked_state; before this function, we must have checked whether issue dis-assoc_cmd or not */
+> -	       }
+> +		}
 
-Is there still a use case for CBC-ESSIV mode these days, now that everyone is
-using XTS instead?
+I think indentation is wrong here, it should be only 1 tab instead of 2 tabs ?
 
-- Eric
+>  
+>  		*pold_state = networktype;
+>  
+> @@ -367,7 +368,7 @@ u8 rtw_set_802_11_disassociate(struct adapter *padapter)
+>  
+>  u8 rtw_set_802_11_bssid_list_scan(struct adapter *padapter, struct ndis_802_11_ssid *pssid, int ssid_max_num)
+>  {
+> -	struct	mlme_priv 	*pmlmepriv = &padapter->mlmepriv;
+> +	struct	mlme_priv	*pmlmepriv = &padapter->mlmepriv;
+>  	u8 res = true;
+>  
+>  	if (!padapter) {
+
+Regards,
+
+~Praveen.
