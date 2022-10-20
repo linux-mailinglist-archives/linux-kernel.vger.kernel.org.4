@@ -2,110 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90C256055B1
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 05:00:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41E8E6055B5
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 05:02:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230127AbiJTDAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 23:00:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53996 "EHLO
+        id S230166AbiJTDCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 23:02:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbiJTDAF (ORCPT
+        with ESMTP id S229774AbiJTDB7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 23:00:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 690E1E09C1;
-        Wed, 19 Oct 2022 20:00:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 30053B82660;
-        Thu, 20 Oct 2022 03:00:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E02FBC433D6;
-        Thu, 20 Oct 2022 02:59:57 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="fU541ryY"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1666234796;
+        Wed, 19 Oct 2022 23:01:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9783D16D884
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 20:01:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666234917;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=JZNUaZDaHnzZsUmQctOVwbGgLyndW6prLbOXUbqsna0=;
-        b=fU541ryY3FgZlW4sy4ZBU2+3tuFup0EiTiAzLaXAMN1R88EcqVK7kqDHzbrgpE8O2EDtdx
-        z3NaSZd3R3nk15Y1zIh3kjGP3UgbUcUFi8+xMhwPm5vTuWVK7SET0bG61Nty/K7ytPES2t
-        ocFi3PpAuYJskEbIOHYho0vam5dn0vA=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 3befa121 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Thu, 20 Oct 2022 02:59:55 +0000 (UTC)
-Date:   Wed, 19 Oct 2022 20:59:53 -0600
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-toolchains@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v2] kbuild: treat char as always unsigned
-Message-ID: <Y1C5qZ4sSGuUfXmF@zx2c4.com>
-References: <Y1BcpXAjR4tmV6RQ@zx2c4.com>
- <20221019203034.3795710-1-Jason@zx2c4.com>
- <CAHk-=wit-67VU=kt-8Ojtx04m6wxfqypKLzW7CuSeEH_9MYZvw@mail.gmail.com>
- <Y1CP/uJb1SQjyS0n@zx2c4.com>
- <CAHk-=whg00wpUzNLs0obmMKA3GhUnLzat9syA1=_tfi8Ms8TLg@mail.gmail.com>
+        bh=PPx6biVCwCmDLHbyfgRVu6pD3jK8NBhZWYxkf20TYNE=;
+        b=HM0A9+wNBjkMrgC89kjv1xAs7+9NqLRKnkk8MbftLQAgJVxu3SCPvsvMvXaHDECR86M14d
+        VFK29QdvLbop8j1h83gVSQePKUm09FgGxp4O3NnwDH9cspsTJWbXNOY6nsCLR8jR2/IvzS
+        zLIjXWmM6/m9jfb7fi+ejYTnvwPGW5c=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-596-klqOnZwrMn-qOD5VKe0MXQ-1; Wed, 19 Oct 2022 23:01:51 -0400
+X-MC-Unique: klqOnZwrMn-qOD5VKe0MXQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 75C3A185A78B;
+        Thu, 20 Oct 2022 03:01:51 +0000 (UTC)
+Received: from [10.22.33.65] (unknown [10.22.33.65])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0D63440C6EC2;
+        Thu, 20 Oct 2022 03:01:51 +0000 (UTC)
+Message-ID: <df0960dc-86d4-984f-8dd8-c9d118aae449@redhat.com>
+Date:   Wed, 19 Oct 2022 23:01:50 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAHk-=whg00wpUzNLs0obmMKA3GhUnLzat9syA1=_tfi8Ms8TLg@mail.gmail.com>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH clocksource] Reject bogus watchdog clocksource
+ measurements
+Content-Language: en-US
+To:     paulmck@kernel.org, linux-kernel@vger.kernel.org
+Cc:     clm@meta.com, jstultz@google.com, tglx@linutronix.de,
+        sboyd@kernel.org, feng.tang@intel.com
+References: <20221019230904.GA2502730@paulmck-ThinkPad-P17-Gen-1>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20221019230904.GA2502730@paulmck-ThinkPad-P17-Gen-1>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 05:38:55PM -0700, Linus Torvalds wrote:
-> On Wed, Oct 19, 2022 at 5:02 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
-> >
-> > Given I've started with cleaning up one driver already, I'll keep my eye
-> > on further breakage.
-> 
-> I wonder if we could just check for code generation differences some way.
-> Having some scripting automation that just notices "this changes code
-> generation in function X" might actually be interesting, and judging
-> by my quick tests might not be *too* verbose.
+On 10/19/22 19:09, Paul E. McKenney wrote:
+> One remaining clocksource-skew issue involves extreme CPU overcommit,
+> which can cause the clocksource watchdog measurements to be delayed by
+> tens of seconds.  This in turn means that a clock-skew criterion that
+> is appropriate for a 500-millisecond interval will instead give lots of
+> false positives.
 
-Or even just some allyesconfig diffing. 
+CPU overcommit means it is running in a VM. Right? Unfortunately, there 
+is not a consistent cross-arch way to check for running under a 
+hypervisor or we may want to add such a test if available. However, 
+CLOCKSOURCE_WATCHDOG is only enabled in x86 and mips. Maybe we can add a 
+helper function to do that.
 
-> I tested a couple of files, and was able to find differences, eg
-> 
->   # kernel/sched/core.c:8861: pr_info("task:%-15.15s state:%c",
-> p->comm, task_state_to_char(p));
->  - movzbl state_char.149(%rax), %edx # state_char[_60], state_char[_60]
->  + movsbl state_char.149(%rax), %edx # state_char[_60], state_char[_60]
->    call _printk #
-> 
-> because the 'char' for the '%c' is passed as an integer. And the
 
-Seems harmless though.
+>
+> Therefore, check for the watchdog clocksource reporting much larger or
+> much less than the time specified by WATCHDOG_INTERVAL.  In these cases,
+> print a pr_warn() warning and refrain from marking the clocksource under
+> test as being unstable.
+>
+> Reported-by: Chris Mason <clm@meta.com>
+> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> Cc: John Stultz <jstultz@google.com>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: Feng Tang <feng.tang@intel.com>
+> Cc: Waiman Long <longman@redhat.com>
+>
+> diff --git a/kernel/time/clocksource.c b/kernel/time/clocksource.c
+> index 8058bec87acee..dcaf38c062161 100644
+> --- a/kernel/time/clocksource.c
+> +++ b/kernel/time/clocksource.c
+> @@ -386,7 +386,7 @@ EXPORT_SYMBOL_GPL(clocksource_verify_percpu);
+>   
+>   static void clocksource_watchdog(struct timer_list *unused)
+>   {
+> -	u64 csnow, wdnow, cslast, wdlast, delta;
+> +	u64 csnow, wdnow, cslast, wdlast, delta, wdi;
+>   	int next_cpu, reset_pending;
+>   	int64_t wd_nsec, cs_nsec;
+>   	struct clocksource *cs;
+> @@ -440,6 +440,17 @@ static void clocksource_watchdog(struct timer_list *unused)
+>   		if (atomic_read(&watchdog_reset_pending))
+>   			continue;
+>   
+> +		/* Check for bogus measurements. */
+> +		wdi = jiffies_to_nsecs(WATCHDOG_INTERVAL);
+> +		if (wd_nsec < (wdi >> 2)) {
+> +			pr_warn("timekeeping watchdog on CPU%d: Watchdog clocksource '%s' advanced only %lld ns during %d-jiffy time interval, skipping watchdog check.\n", smp_processor_id(), watchdog->name, wd_nsec, WATCHDOG_INTERVAL);
+> +			continue;
+> +		}
+> +		if (wd_nsec > (wdi << 2)) {
+> +			pr_warn("timekeeping watchdog on CPU%d: Watchdog clocksource '%s' advanced an excessive %lld ns during %d-jiffy time interval, probable CPU overutilization, skipping watchdog check.\n", smp_processor_id(), watchdog->name, wd_nsec, WATCHDOG_INTERVAL);
+> +			continue;
+> +		}
+> +
+>   		/* Check the deviation from the watchdog clocksource. */
+>   		md = cs->uncertainty_margin + watchdog->uncertainty_margin;
+>   		if (abs(cs_nsec - wd_nsec) > md) {
 
-> tracing code has the
-> 
->         .is_signed = is_signed_type(_type)
-> 
-> initializers, which obviously change when the type is 'char'.
+In the worst case, there will be a warning every half second or so. 
+Should we rate limit the number of these warnings in some way?
 
-And likewise, looking at the types of initializers that's used with.
-Actually, for the array one, unsigned is probably more sensible anyway.
+Cheers,
+Longman
 
-The thing is, anyhow, that most code that works without -funsigned-char
-*will* work with it, because the core of the kernel obviously works fine
-on ARM already. The problematic areas will be x86-specific drivers that
-have never been tested on other archs. i915 comes to mind -- as a
-general rule, it already does all manner of insane things. But there's
-obviously a lot of other hardware that's only ever run on Intel. So I'm
-much more concerned about that than I am about code in, say, kernel/sched.
-
-Jason
