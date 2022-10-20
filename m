@@ -2,126 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF140606B20
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 00:17:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B64E606B21
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 00:17:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbiJTWRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 18:17:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53664 "EHLO
+        id S229911AbiJTWRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 18:17:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229861AbiJTWRL (ORCPT
+        with ESMTP id S229843AbiJTWRM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 18:17:11 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 395D321551B;
-        Thu, 20 Oct 2022 15:17:08 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29KMGmK2058047;
-        Thu, 20 Oct 2022 17:16:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1666304208;
-        bh=zQnSES82ipiGqNM7gc4jpefdaGHRyDoGL9iPjKpkoyU=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=ACL3SPCxxjsb/0PTbeY5uC7GHrhOjlfRLnKNpXCA7rO06iDVj/mYogHdYX2kXOBrZ
-         BdX0oIU65+djzlM5b0d4D1tjipgdyEPj0FBtqvmO0PV6ilLuzmRQSCCLrCIQdT8Ztg
-         UyLVv8pFXxo3HTYVM93PKG8FSsyJMO1zKCTQRU/g=
-Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29KMGmLF009684
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 20 Oct 2022 17:16:48 -0500
-Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Thu, 20
- Oct 2022 17:16:47 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Thu, 20 Oct 2022 17:16:47 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29KMGlJK014120;
-        Thu, 20 Oct 2022 17:16:47 -0500
-Date:   Thu, 20 Oct 2022 17:16:47 -0500
-From:   Bryan Brattlof <bb@ti.com>
-To:     Andrew Davis <afd@ti.com>
-CC:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 00/12] TI J7x Disable Incomplete DT Nodes
-Message-ID: <20221020221647.d6pifdm2jtjpt4yk@bryanbrattlof.com>
-References: <20221020160305.18711-1-afd@ti.com>
+        Thu, 20 Oct 2022 18:17:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3316A219FDD;
+        Thu, 20 Oct 2022 15:17:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C3A8261D40;
+        Thu, 20 Oct 2022 22:17:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29C46C433D6;
+        Thu, 20 Oct 2022 22:17:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666304230;
+        bh=Il3d0PlX0wY6nzksO56o3AO8e9bOL8S6BjAlHket0ug=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=jd41YewXS1bdCjMK58vj9ft4COtTK5GVIjLuBXrSQzggVFdwxOEDlSGnLXPLopykT
+         ZGXWTuUA8j9vDuvx3WwAboeAFWj8F+RZaDC77DkSPGcaMlS34cnYOMhD7TAmFV9VX2
+         Ry+zqeOa+uJiFbtS1BBm4JXR5N4Xzq6G3Zq/KHVeddOSlH3EjVpZ/5fkrBXjRyA82g
+         03oicmFFS1N8ffnTOM2kj4QZ/h8WYvXfzRqw9kJ+NB01rMk1P1iq5yOIGQmbMXT56f
+         aYuaorvNHsAssCdNf+gH+sLrU/nMNXU2on16O0A68B51DQb+/rhEcMl9t+DAkbFGF1
+         dxd/j5Kg5dlRA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id C29315C1109; Thu, 20 Oct 2022 15:17:09 -0700 (PDT)
+Date:   Thu, 20 Oct 2022 15:17:09 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Zqiang <qiang1.zhang@intel.com>, frederic@kernel.org,
+        rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH] rcu: Make call_rcu() lazy only when CONFIG_RCU_LAZY is
+ enabled
+Message-ID: <20221020221709.GX5600@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <95331C23-3632-4E0B-9959-43CE159FE60F@joelfernandes.org>
+ <DC93C5EB-91A5-4291-A642-8A57179930E4@joelfernandes.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221020160305.18711-1-afd@ti.com>
-X-PGP-Fingerprint: D3D1 77E4 0A38 DF4D 1853 FEEF 41B9 0D5D 71D5 6CE0
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <DC93C5EB-91A5-4291-A642-8A57179930E4@joelfernandes.org>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On October 20, 2022 thus sayeth Andrew Davis:
-> Hello all,
+On Thu, Oct 20, 2022 at 05:33:37PM -0400, Joel Fernandes wrote:
 > 
-> Same story as for AM64x[0] and AM62x[1], this time for J7x.
 > 
-> This one was a little more involved that the last 2 rounds as some IP
-> (like UART) are pinned out using the default pinmux. Perhaps we should be
-> explicit here and have pinmux nodes that simply restate the defaults. I
-> can go solve that in a follow up series if we think that is what we
-> want to do.
+> > On Oct 20, 2022, at 2:46 PM, Joel Fernandes <joel@joelfernandes.org> wrote:
+> >>> 
+> >>>>> More comments below:
+> >>>>>> 
+> >>>>>>>> Looks like though I made every one test the patch without having to enable the config option ;-). Hey, I’m a half glass full kind of guy, why do you ask?
+> >>>>>>>> 
+> >>>>>>>> Paul, I’ll take a closer look once I’m at the desk, but would you prefer to squash a diff into the existing patch, or want a new patch altogether?
+> >>>>>>> 
+> >>>>>>> On the other hand, what I’d want is to nuke the config option altogether or make it default y, we want to catch issues sooner than later.
+> >>>>>> 
+> >>>>>> That might be what we do at some point, but one thing at a time.  Let's
+> >>>>>> not penalize innocent bystanders, at least not just yet.
+> >>>>> 
+> >>>>> It’s a trade off, I thought that’s why we wanted to have the binary search stuff. If no one reports issue on Linux-next, then that code won’t be put to use in the near future at least.
+> >>>> 
+> >>>> Well, not to put too fine a point on it, but we currently really are
+> >>>> exposing -next to lazy call_rcu().  ;-)
+> >>> 
+> >>> This is true. I think I assumed nobody will enable a default off config option but I probably meant a smaller percentage will.
+> >>> 
+> >>>>>> I do very strongly encourage the ChromeOS and Android folks to test this
+> >>>>>> very severely, however.
+> >>>>> 
+> >>>>> Agreed. Yes that will happen, though I have to make a note for Android folks other than Vlad, to backports these (and enable the config option), carefully! Especially on pre-5.15 kernels. Luckily I had to do this (not so trivial) exercise myself.
+> >>>> 
+> >>>> And this is another situation in which the binary search stuff may prove
+> >>>> extremely useful.
+> >>> 
+> >>> Agreed. Thanks. Very least I owe per-rdp splitting of the hashtable, to that code.  Steven and me talked today that probably the hashtable can go into the rcu_segcblist itself, and protect it by the nocb lock.
+> >> 
+> >> I have to ask...
+> >> 
+> >> How does this fit in with CPU-hotplug and callback migration?
+> > 
+> > Yes it will require change and I already thought of that, have to update the hashtable on all such events.
+> > 
+> >> More to the point, what events would cause us to decide that this is
+> >> required?  For example, shouldn't we give your current binary-search
+> >> code at least a few chances to save the day?
+> > 
+> > Totally, if you’re taking the patch as is, I would be very happy. And I’ll continue to improve it with the above. But I was not sure yet if you’re taking it.
+> > 
+> > I think it’s a worthwhile to take it for mainline in the current state and I’ll also add more data about callbacks to it in future (queuing time of callback, etc) — basically all the stuff I wanted to add to rcu_head.
+> > 
+> > One reason for the above proposal is I also want to keep it turned on in production, and the current solution cannot be, due to the global locking and is not expected to be kept on in production. But is still a worthwhile addition for debug kernels IMO.
 > 
-> I have the last round for AM65x ready to post, but that involves a few
-> boards that I do not have (Simatic IOT2050) but would like to do some
-> additional re-work with, so holding off until after I get that sorted.
-> 
+> I realized while talking to Steve that the hashtable has to be per CPU if we are to store more than a lazy flag, such as queuing timestamps. This is because you can have multiple callbacks of the same function pointer queued on multiple CPUs. So you can have multiple timestamps to store. Same thing if we stored automata. It’s per callback instance, not per callback function.
+
+Agreed, to be useful, this must be per callback instance.
+
+							Thanx, Paul
+
 > Thanks,
-> Andrew
 > 
-> [0] https://www.spinics.net/lists/arm-kernel/msg1018532.html
-> [1] https://www.spinics.net/lists/arm-kernel/msg1018864.html
+>  - Joel
 > 
-> Andrew Davis (12):
->   arm64: dts: ti: k3-j721e: Enable UART nodes at the board level
->   arm64: dts: ti: k3-j721e: Enable I2C nodes at the board level
->   arm64: dts: ti: k3-j721e: Enable MCASP nodes at the board level
->   arm64: dts: ti: k3-j721e: Enable MCAN nodes at the board level
->   arm64: dts: ti: k3-j7200: Enable UART nodes at the board level
->   arm64: dts: ti: k3-j7200: Enable I2C nodes at the board level
->   arm64: dts: ti: k3-j721s2: Enable UART nodes at the board level
->   arm64: dts: ti: k3-j721e: Enable Mailbox nodes at the board level
->   arm64: dts: ti: k3-j7200: Enable Mailbox nodes at the board level
->   arm64: dts: ti: k3-j721s2: Enable Mailbox nodes at the board level
->   arm64: dts: ti: k3-j721s2: Enable MCAN nodes at the board level
->   arm64: dts: ti: k3-j721s2: Enable I2C nodes at the board level
 > 
->  .../dts/ti/k3-j7200-common-proc-board.dts     |  48 ++----
->  arch/arm64/boot/dts/ti/k3-j7200-main.dtsi     |  29 ++++
->  .../boot/dts/ti/k3-j7200-mcu-wakeup.dtsi      |   5 +
->  arch/arm64/boot/dts/ti/k3-j7200-som-p0.dtsi   |  42 +----
->  .../dts/ti/k3-j721e-common-proc-board.dts     | 141 +++-------------
->  arch/arm64/boot/dts/ti/k3-j721e-main.dtsi     |  55 ++++++
->  .../boot/dts/ti/k3-j721e-mcu-wakeup.dtsi      |   7 +
->  arch/arm64/boot/dts/ti/k3-j721e-sk.dts        | 158 ++----------------
->  arch/arm64/boot/dts/ti/k3-j721e-som-p0.dtsi   |  33 +---
->  .../dts/ti/k3-j721s2-common-proc-board.dts    | 132 +--------------
->  arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi    |  58 +++++++
->  .../boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi     |   7 +
->  arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi  |  98 +----------
->  13 files changed, 231 insertions(+), 582 deletions(-)
-> 
-
-*whew* these Jacinto boards have a lot of stuff on them :) but it LGTM
-
-Reviewed-by: Bryan Brattlof <bb@ti.com>
-
-~Bryan
+> > 
+> > Thanks,
+> > 
+> > - Joel
+> > 
+> > 
+> >>                           Thanx, Paul
+> >> 
+> >>>>>>>>> +}
+> >>>>>>>>> +EXPORT_SYMBOL_GPL(call_rcu);
+> >>>>>>>>> +#endif
+> >>>>>>>>> 
+> >>>>>>>>> /* Maximum number of jiffies to wait before draining a batch. */
+> >>>>>>>>> #define KFREE_DRAIN_JIFFIES (5 * HZ)
+> >>>>>>>>> -- 
+> >>>>>>>>> 2.25.1
+> >>>>>>>>> 
