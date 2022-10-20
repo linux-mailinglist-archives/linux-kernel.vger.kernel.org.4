@@ -2,80 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3E62605910
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 09:53:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7069D605913
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 09:54:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231171AbiJTHxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 03:53:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35296 "EHLO
+        id S231172AbiJTHyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 03:54:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231126AbiJTHxU (ORCPT
+        with ESMTP id S231124AbiJTHxw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 03:53:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 967EE10C4F6
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 00:53:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B4FFBB8265F
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 07:53:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15CD8C433C1;
-        Thu, 20 Oct 2022 07:53:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666252395;
-        bh=AUCcxQX+3OrFrZYEaeAKfPk2+T4/m43Mh3bvc3iiCLM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=I4pVmq4Kha4+7FlaH0QBsbIpgQ3hjkl1Zq1mVKMCpXR8u5JWIXc6gG4lYbSvue9/y
-         v8bvi1ilTWnuGFdkIgw4L19X6Tqtz0KJrV0nZrQB/N4bIv/67yLrBOCkeiYR9VMEkR
-         AqI5i8Ja/gEJAfrlHhXcBSUzg8j4HzIM+u9JN9fY=
-Date:   Thu, 20 Oct 2022 09:53:12 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH printk v2 33/38] printk: introduce console_list_lock
-Message-ID: <Y1D+aPltJYNGhucW@kroah.com>
-References: <20221019145600.1282823-1-john.ogness@linutronix.de>
- <20221019145600.1282823-34-john.ogness@linutronix.de>
+        Thu, 20 Oct 2022 03:53:52 -0400
+Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D98E613728E
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 00:53:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1666252417; bh=zHYAYQCcnlsxx2uC96j0anWRnyR5lcqsPx8S7lulGuw=;
+        h=X-EA-Auth:Date:From:To:Subject:Message-ID:References:MIME-Version:
+         Content-Type:In-Reply-To;
+        b=kZt9Qh5uE3ToX8QkJapntuXJRsV8Xu17ntQb90uyMOngJnKhwiZIAO3IhwmKHKE9N
+         IzH6IaiTCQ6HzxQn9714R33WvPzMOpfkxQkiwlAF0A+Lao5X0DAhqN2zT/yZphv7Ft
+         GjkFmuet1VipI+hQ0NnfkY8n0ib6Nbjl2KdPn3jY=
+Received: by b-5.in.mailobj.net [192.168.90.15] with ESMTP
+        via [213.182.55.206]
+        Thu, 20 Oct 2022 09:53:37 +0200 (CEST)
+X-EA-Auth: kxwkC+LfXIT3Z/qsXSiQHzyS/fMd9zQmbbMn0YHsvakVQZbis0gT72PNJ4vhhmSFLi1hIqNbSWVER2GXr+cVDYjGicv9xkwL
+Date:   Thu, 20 Oct 2022 13:23:32 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     outreachy@lists.linux.dev, Larry.Finger@lwfinger.net,
+        phil@philpotter.co.uk, paskripkin@gmail.com,
+        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, kumarpraveen@linux.microsoft.com,
+        saurabh.truth@gmail.com
+Subject: [PATCH v3 02/10] staging: r8188eu: reformat long computation lines
+Message-ID: <5c3c0ef7c90ab2eec73067e1dd88f337932363e3.1666249716.git.drv@mailo.com>
+References: <cover.1666249715.git.drv@mailo.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221019145600.1282823-34-john.ogness@linutronix.de>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <cover.1666249715.git.drv@mailo.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 05:01:55PM +0206, John Ogness wrote:
-> Currently there exist races in console_register(), where the types
-> of registered consoles are checked (without holding the console_lock)
-> and then after acquiring the console_lock, it is assumed that the list
-> has not changed. Also, some code that performs console_unregister()
-> make similar assumptions.
-> 
-> Introduce a console_list_lock to provide full synchronization for any
-> console list changes. The console_list_lock also provides
-> synchronization for updates to console->flags.
-> 
-> Note that one of the various responsibilities of the console_lock is
-> also intended to provide this synchronization. Later changes will
-> update call sites relying on the console_lock for this purpose. Once
-> all call sites have been updated, the console_lock will be relieved
-> of synchronizing console_list and console->flags updates.
-> 
-> Signed-off-by: John Ogness <john.ogness@linutronix.de>
-> ---
->  include/linux/console.h | 20 ++++++++--
->  kernel/printk/printk.c  | 82 +++++++++++++++++++++++++++++++++++------
->  2 files changed, 88 insertions(+), 14 deletions(-)
+Reformat long running computation instructions to improve code readability.
+Address checkpatch script complaints like:
+	CHECK: line length of 171 exceeds 100 columns
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Deepak R Varma <drv@mailo.com>
+---
+
+Changes in v3:
+   -- None
+
+Changes in v1 [actually v2]:
+   1. Further improve the formatting per feedback from gregkh@linuxfoundation.org
+
+
+ drivers/staging/r8188eu/core/rtw_br_ext.c | 17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/staging/r8188eu/core/rtw_br_ext.c b/drivers/staging/r8188eu/core/rtw_br_ext.c
+index 79daf8f269d6..8b1c9fdf6ed2 100644
+--- a/drivers/staging/r8188eu/core/rtw_br_ext.c
++++ b/drivers/staging/r8188eu/core/rtw_br_ext.c
+@@ -211,8 +211,9 @@ static int __nat25_network_hash(unsigned char *network_addr)
+ 	} else if (network_addr[0] == NAT25_IPX) {
+ 		unsigned long x;
+
+-		x = network_addr[1] ^ network_addr[2] ^ network_addr[3] ^ network_addr[4] ^ network_addr[5] ^
+-			network_addr[6] ^ network_addr[7] ^ network_addr[8] ^ network_addr[9] ^ network_addr[10];
++		x = network_addr[1] ^ network_addr[2] ^ network_addr[3] ^ network_addr[4] ^
++		    network_addr[5] ^ network_addr[6] ^ network_addr[7] ^ network_addr[8] ^
++		    network_addr[9] ^ network_addr[10];
+
+ 		return x & (NAT25_HASH_SIZE - 1);
+ 	} else if (network_addr[0] == NAT25_APPLE) {
+@@ -224,16 +225,18 @@ static int __nat25_network_hash(unsigned char *network_addr)
+ 	} else if (network_addr[0] == NAT25_PPPOE) {
+ 		unsigned long x;
+
+-		x = network_addr[0] ^ network_addr[1] ^ network_addr[2] ^ network_addr[3] ^ network_addr[4] ^ network_addr[5] ^ network_addr[6] ^ network_addr[7] ^ network_addr[8];
++		x = network_addr[0] ^ network_addr[1] ^ network_addr[2] ^ network_addr[3] ^
++		    network_addr[4] ^ network_addr[5] ^ network_addr[6] ^ network_addr[7] ^
++		    network_addr[8];
+
+ 		return x & (NAT25_HASH_SIZE - 1);
+ 	} else if (network_addr[0] == NAT25_IPV6) {
+ 		unsigned long x;
+
+-		x = network_addr[1] ^ network_addr[2] ^ network_addr[3] ^ network_addr[4] ^ network_addr[5] ^
+-			network_addr[6] ^ network_addr[7] ^ network_addr[8] ^ network_addr[9] ^ network_addr[10] ^
+-			network_addr[11] ^ network_addr[12] ^ network_addr[13] ^ network_addr[14] ^ network_addr[15] ^
+-			network_addr[16];
++		x = network_addr[1] ^ network_addr[2] ^ network_addr[3] ^ network_addr[4] ^
++		    network_addr[5] ^ network_addr[6] ^ network_addr[7] ^ network_addr[8] ^
++		    network_addr[9] ^ network_addr[10] ^ network_addr[11] ^ network_addr[12] ^
++		    network_addr[13] ^ network_addr[14] ^ network_addr[15] ^ network_addr[16];
+
+ 		return x & (NAT25_HASH_SIZE - 1);
+ 	} else {
+--
+2.30.2
+
+
+
