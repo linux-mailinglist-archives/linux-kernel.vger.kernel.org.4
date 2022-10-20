@@ -2,117 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A0D96066BE
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 19:08:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB6A66066BF
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 19:08:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229991AbiJTRIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 13:08:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45406 "EHLO
+        id S230055AbiJTRIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 13:08:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229867AbiJTRIR (ORCPT
+        with ESMTP id S230006AbiJTRI2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 13:08:17 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EBED1A0471
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 10:08:16 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id q9so1193061ejd.0
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 10:08:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=brQMIRceaTVvRhjMDwEog122afcHskOShD8yzAFIE2Y=;
-        b=FQSfOyhjtOsFj5iQ5ZyvmklzwffTcJBx2xDNixBd8SqoxYcvPpMzNpkLfs4Qt/zoXh
-         +bsVoPClhOlaIp166/JQb4BCD3BVuvNA+3zWzfp5SVH9osX2BTTouVhGBu/hKOSKts00
-         OZQwQyAoakJss3u0exSOfHIY/+z+o5XsWU5Q1jwF/WhsBDlwwg72yur3GJWNkObKAXK+
-         GCSwX4WIB+Bbd5JQTF8GvnfSm16QpuUe+BKmgYR2xlsDNTYrHN/dRWM9qG+PeTGHfdkL
-         g+Kpb3miBPCadUrfqJqjjhO6fEx1Y9MP1kV8rNFryYy12bVd2XT7sktNk2lv4f3vodZZ
-         sTYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=brQMIRceaTVvRhjMDwEog122afcHskOShD8yzAFIE2Y=;
-        b=4YG/RrptTPfA4bm67itKAsIqnbQDUIJaY0fzFMs3k0fhrOWVToEmp6hUX26/bUIy7q
-         rEfQMvoUcsERKULOsdrl7UND+BG1+AvcCgB3TuG+5EjnIjpCIuO2G0vL3dBQ6ocNv5v/
-         R9vtdH0+j2czEGt851ZdHXKxFFWhkVQ2I+0YpI964RKvg/UB2mrAsoEMyocE54d+cQvG
-         xjn4jdL/n4WEpKIAwAd+96bdtjxq96S6mLdX90GbwJJRIZB/87eVontsjwZjdIcisJh7
-         RoHqLh/rmGJdgK6fVZN5d3cZL+QeIVjjtvFCRz7tsz67lYy4CZvKpFuBvU2BTMdWhRVz
-         XYXA==
-X-Gm-Message-State: ACrzQf2iTw/fJA5h/K1lNc1SnClON8BGHsOpJ6ZG0V19FsySFLXwdpo3
-        XWGw+Q3ZFDW+bSeRUGzxivE=
-X-Google-Smtp-Source: AMsMyM52oCmtAEujXlp4+mCUCpgc1VFq2XIhqa0rqlHzjABZPCieMXu7UrOULwfspjwTCgCt5c+7Gw==
-X-Received: by 2002:a17:907:1c10:b0:791:a716:5089 with SMTP id nc16-20020a1709071c1000b00791a7165089mr8121458ejc.672.1666285694675;
-        Thu, 20 Oct 2022 10:08:14 -0700 (PDT)
-Received: from ?IPV6:2a02:1210:866e:6400:218:deff:fe4b:3db8? ([2a02:1210:866e:6400:218:deff:fe4b:3db8])
-        by smtp.gmail.com with ESMTPSA id w19-20020a1709067c9300b00770880dfc4fsm10582077ejo.29.2022.10.20.10.08.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Oct 2022 10:08:13 -0700 (PDT)
-Message-ID: <5d44ffd2-df31-d771-6395-819b47fe2181@gmail.com>
-Date:   Thu, 20 Oct 2022 19:08:12 +0200
+        Thu, 20 Oct 2022 13:08:28 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45B1A1A5B1C
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 10:08:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Kpn8YsdQvhY0DWQ+ycOQ/aGzOPoScQBkvytFfq3DwZs=; b=L9bQ9wrKo+47eo1YY4g/TZOSXH
+        1hXPatD4S/EgEA01uMln6dOg0g/QSIsmit+HGybZSxdPJ6jOb69zN0H+H0TYMXlCSzeJLV8miv21B
+        huHRN+ycDHP3Be0tgmTkYUGVp1ZgzIidKxiqcF3elgQlKvpRBHol7my7BKO2HHJjqpJISGnskl5g7
+        OJNnvcEqCDIde+toKFsNZ2hrG2AXmtBO2nnpKkj/w/TsqCQHsQ3MTmSQWL5eLQQWFA+fr/VDsRolJ
+        qU/yXVYsHIJ3WTyjCt0DUK5US7uuwsS+QLMj1wJOWuj6xc0K6nAWnKgDQPlPYh0ExpNOuzNuNlYd0
+        2ffLbTlQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1olZ1i-0055LV-CT; Thu, 20 Oct 2022 17:08:15 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id F0350300209;
+        Thu, 20 Oct 2022 19:08:13 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id BCC902BF8156A; Thu, 20 Oct 2022 19:08:13 +0200 (CEST)
+Date:   Thu, 20 Oct 2022 19:08:13 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Chuyi Zhou <zhouchuyi@bytedance.com>, mingo@redhat.com,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        linux-kernel@vger.kernel.org, htejun@gmail.com,
+        lizefan.x@bytedance.com, vschneid@redhat.com, bsegall@google.com,
+        Abel Wu <wuyun.abel@bytedance.com>
+Subject: Re: [RESEND] sched/fair: Add min_ratio for cfs bandwidth_control
+Message-ID: <Y1GAffm4aHCpvoBB@hirez.programming.kicks-ass.net>
+References: <20221019031551.24312-1-zhouchuyi@bytedance.com>
+ <Y1BqT59ovFitahJa@slm.duckdns.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH 04/17] ARM: ep93xx: remove old board files
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Hartley Sweeten <hsweeten@visionengravers.com>
-Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Lennert Buytenhek <kernel@wantstofly.org>,
-        Hubert Feurstein <hubert.feurstein@contec.at>
-References: <20221019144119.3848027-1-arnd@kernel.org>
- <20221019150410.3851944-1-arnd@kernel.org>
- <20221019150410.3851944-4-arnd@kernel.org>
-From:   Alexander Sverdlin <alexander.sverdlin@gmail.com>
-In-Reply-To: <20221019150410.3851944-4-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1BqT59ovFitahJa@slm.duckdns.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd!
-
-On 19/10/2022 17:03, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Wed, Oct 19, 2022 at 11:21:19AM -1000, Tejun Heo wrote:
+> Hello,
 > 
-> These five board files were marked as unused a while ago, and
-> nobody wanted to keep them around for longer, so remove them
-> now.
+> On Wed, Oct 19, 2022 at 11:15:51AM +0800, Chuyi Zhou wrote:
+> > Tasks may be throttled when holding locks for a long time by current
+> > cfs bandwidth control mechanism once users set a too small quota/period
+> > ratio, which can result whole system get stuck[1].
+> > 
+> > In order to prevent the above situation from happening, this patch adds
+> > sysctl_sched_cfs_bandwidth_min_ratio in /proc/sys/kernel, which indicates
+> > the minimum percentage of quota/period users can set. The default value is
+> > zero and users can set quota and period without triggering this constraint.
+> > 
+> > Link[1]:https://lore.kernel.org/lkml/5987be34-b527-4ff5-a17d-5f6f0dc94d6d@huawei.com/T/
+> > Signed-off-by: Chuyi Zhou <zhouchuyi@bytedance.com>
+> > Suggested-by: Abel Wu <wuyun.abel@bytedance.com>
 > 
-> We still have the edb93xx, visision_ep9307 and ts72xx files,
-> which can hopefully be converted to device tree in the future.
-> 
-> Cc: Lennert Buytenhek <kernel@wantstofly.org>
-> Cc: Hubert Feurstein <hubert.feurstein@contec.at>
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> This is a bit of a bandaid. I think what we really need to do is only
+> throttling when running in userspace. In kernel space, it should just keep
+> accumulating used cycles as debt which should be paid back before userspace
+> code can run again so that we don't throttle at random places in the kernel.
 
-Acked-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-
-> ---
->  MAINTAINERS                            |  10 --
->  arch/arm/boot/compressed/misc-ep93xx.h |  13 +-
->  arch/arm/mach-ep93xx/Kconfig           |  63 ----------
->  arch/arm/mach-ep93xx/Makefile          |   5 -
->  arch/arm/mach-ep93xx/adssphere.c       |  41 -------
->  arch/arm/mach-ep93xx/gesbc9312.c       |  41 -------
->  arch/arm/mach-ep93xx/micro9.c          | 125 -------------------
->  arch/arm/mach-ep93xx/simone.c          | 128 -------------------
->  arch/arm/mach-ep93xx/snappercl15.c     | 162 -------------------------
->  9 files changed, 1 insertion(+), 587 deletions(-)
->  delete mode 100644 arch/arm/mach-ep93xx/adssphere.c
->  delete mode 100644 arch/arm/mach-ep93xx/gesbc9312.c
->  delete mode 100644 arch/arm/mach-ep93xx/micro9.c
->  delete mode 100644 arch/arm/mach-ep93xx/simone.c
->  delete mode 100644 arch/arm/mach-ep93xx/snappercl15.c
-
-[...]
+That's just moving the problem. But yeah; perhaps. Starving random
+userspace is less of a problem I suppose.
