@@ -2,120 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38CDF6065CB
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 18:29:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB9CA6065D1
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 18:31:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229751AbiJTQ3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 12:29:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45572 "EHLO
+        id S229792AbiJTQbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 12:31:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbiJTQ3A (ORCPT
+        with ESMTP id S229664AbiJTQbo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 12:29:00 -0400
-Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49C65138BAB
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 09:28:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1666283318; bh=QrbH8ZlnlI+VbcMy6Hlu3J19WCIXjbJ5GTHzbmUSm2g=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:In-Reply-To;
-        b=AGwOUilnyB5IDjnY5sVaQFc8Z7/gZ/d71nT18CpZBVJTLD36MCW5hCYNrja/Xu5V5
-         MIbjw3uR7GpHGpaH05BpBMeddQdttSmSP1CMxnJLjaN+H3IjhiJwzkxtdlzpI2/bko
-         7dk/549VBSpAo/zzulMZaNWYgYqHKw8ChNW/dq+M=
-Received: by b-2.in.mailobj.net [192.168.90.12] with ESMTP
-        via [213.182.55.206]
-        Thu, 20 Oct 2022 18:28:38 +0200 (CEST)
-X-EA-Auth: 6Al72bKYPQ7R+pUm09MhmDMG6GnIPgd8P8WfhJUlVlzguoPlasZL+/X6202mxzfGxpNtJsmZvETVMSHGIOl1jfX3T908+M5W
-Date:   Thu, 20 Oct 2022 21:58:33 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     outreachy@lists.linux.dev, Larry.Finger@lwfinger.net,
-        phil@philpotter.co.uk, paskripkin@gmail.com,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kumarpraveen@linux.microsoft.com, saurabh.truth@gmail.com
-Subject: Re: [PATCH v3 01/10] staging: r8188eu: use Linux kernel variable
- naming convention
-Message-ID: <Y1F3MTzzq1axUyec@debian-BULLSEYE-live-builder-AMD64>
-References: <cover.1666249715.git.drv@mailo.com>
- <5226d30242be78ab1ee32bfdd87239ca82569642.1666249716.git.drv@mailo.com>
- <Y1Ftx/Q69AHVR4oZ@kroah.com>
+        Thu, 20 Oct 2022 12:31:44 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FBC71A0F92
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 09:31:42 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id l28so14042540qtv.4
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 09:31:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QEI09DLi91fKmCAbw4cjgGkaMfuDv4RZD1BULECPvY8=;
+        b=isrhw6eVwYYx+2Hi+NI1YXI+7q1QPWt0s+2F8FeRVQop05DYDdlrTWFg4QcLio9JbL
+         tPnJ3V67EBpl8XyxB8G+vshiYvgGz4fXbe2bNhR4/62Zwu0QQU7C+TAMb1FXj3UfQqKB
+         FhCy/hidGlWifrnr8Tf8kydO6XxoCrjre4EeAh7kqCwY6KuUflsFAD0xlHBR+8a7rDpX
+         cBrDDNfsTZxQW65vr0AWMsLBd2PlpAgc8k3gUDZbVAMG4hOIte5wFtCbhicSDtuqpKnw
+         20a/JJP2Lq6SIXFTi4SORyLc4bmIdohfBHKELjDrrbLwFa1ajCr/SBe4v2hPVa0l89xe
+         pkuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QEI09DLi91fKmCAbw4cjgGkaMfuDv4RZD1BULECPvY8=;
+        b=Kja50h1846VL/6wWqPKvyHrXnPzgc+1FoyCbYrLoQuz1V01yWhnYtn3j1DCDLTh34W
+         OTtzWHrBHrh8hKyomnwracyaOWsHQ7FJZ96Iv/1CR2Qk5j756wQwt74D/me6kmz03dzz
+         rxWXp9kZSI8RzN9/XRUTXIoUtNkK+lXaafp6Y91fznNuaHfRw6B0j8TnygZni40OtHsY
+         IZnh/Mhgr030ECNQk4rZjOPCwrCuZbb44FDGdRJGUAYxhWGTFNn9wsgga8P0qmWNpDxr
+         /Nd5JrthRghxPrb16tk3bTs9xWUio4Kd1ZDwwb16DFWpXOPlqQkDBCQnvoUOClA3wHvh
+         60Hw==
+X-Gm-Message-State: ACrzQf04vxs9Vd15M/iZC5NQGa/6mWLre3jO/umpQWufBV2Q85NzRsCW
+        L9Gx01jZ0pIdAlHeCQAw9d5xTw==
+X-Google-Smtp-Source: AMsMyM4YVTimrtk2xF6RM3xXt+mPnRJQBhDGxbdwCTRCKJ4uhuq7xdMD9IJ8fG/530M69TM100Cyfw==
+X-Received: by 2002:ac8:5bc9:0:b0:39a:348b:857e with SMTP id b9-20020ac85bc9000000b0039a348b857emr11805159qtb.462.1666283501208;
+        Thu, 20 Oct 2022 09:31:41 -0700 (PDT)
+Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
+        by smtp.gmail.com with ESMTPSA id p12-20020ae9f30c000000b006eec09eed39sm7360114qkg.40.2022.10.20.09.31.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Oct 2022 09:31:40 -0700 (PDT)
+Message-ID: <caae2af7-96ea-195f-6f33-05d9e79fa518@linaro.org>
+Date:   Thu, 20 Oct 2022 12:31:39 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y1Ftx/Q69AHVR4oZ@kroah.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v7 1/2] dt-bindings: fsl-imx-sdma: Convert imx sdma to DT
+ schema
+Content-Language: en-US
+To:     Joy Zou <joy.zou@nxp.com>, vkoul@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com
+Cc:     shengjiu.wang@nxp.com, martink@posteo.de, dev@lynxeye.de,
+        alexander.stein@ew.tq-group.com, peng.fan@nxp.com, david@ixit.cz,
+        aford173@gmail.com, hongxing.zhu@nxp.com, linux-imx@nxp.com,
+        dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20221020101402.1856818-1-joy.zou@nxp.com>
+ <20221020101402.1856818-2-joy.zou@nxp.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221020101402.1856818-2-joy.zou@nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 05:48:23PM +0200, Greg KH wrote:
-> On Thu, Oct 20, 2022 at 01:22:50PM +0530, Deepak R Varma wrote:
-> > Follow the Linux Kernel coding style variable naming convention instead
-> > of using camelCase style. Issue reported by checkpatch script for
-> > these variables:
-> >         tagLen, tagType, networkAddr, ipAddr, macAddr
-> >
-> > Signed-off-by: Deepak R Varma <drv@mailo.com>
-> > ---
-> >
-> > Changes in v3:
-> >    -- None
-> >
-> > Changes in v1 [actually v2]:
-> >    1. Improve patch description per feedback from julia.lawall@inria.fr
-> >
-> >
-> >  drivers/staging/r8188eu/core/rtw_br_ext.c | 112 +++++++++++-----------
-> >  1 file changed, 56 insertions(+), 56 deletions(-)
-> >
-> > diff --git a/drivers/staging/r8188eu/core/rtw_br_ext.c b/drivers/staging/r8188eu/core/rtw_br_ext.c
-> > index 4c5f30792a46..79daf8f269d6 100644
-> > --- a/drivers/staging/r8188eu/core/rtw_br_ext.c
-> > +++ b/drivers/staging/r8188eu/core/rtw_br_ext.c
-> > @@ -50,17 +50,17 @@
-> >  static unsigned char *__nat25_find_pppoe_tag(struct pppoe_hdr *ph, unsigned short type)
-> >  {
-> >  	unsigned char *cur_ptr, *start_ptr;
-> > -	unsigned short tagLen, tagType;
-> > +	unsigned short tag_len, tag_type;
-> >
-> >  	start_ptr = (unsigned char *)ph->tag;
-> >  	cur_ptr = (unsigned char *)ph->tag;
-> >  	while ((cur_ptr - start_ptr) < ntohs(ph->length)) {
-> >  		/*  prevent un-alignment access */
-> > -		tagType = (unsigned short)((cur_ptr[0] << 8) + cur_ptr[1]);
-> > -		tagLen  = (unsigned short)((cur_ptr[2] << 8) + cur_ptr[3]);
-> > -		if (tagType == type)
-> > +		tag_type = (unsigned short)((cur_ptr[0] << 8) + cur_ptr[1]);
-> > +		tag_len  = (unsigned short)((cur_ptr[2] << 8) + cur_ptr[3]);
-> > +		if (tag_type == type)
-> >  			return cur_ptr;
-> > -		cur_ptr = cur_ptr + TAG_HDR_LEN + tagLen;
-> > +		cur_ptr = cur_ptr + TAG_HDR_LEN + tag_len;
-> >  	}
-> >  	return NULL;
-> >  }
-> > @@ -111,32 +111,32 @@ static int  __nat25_has_expired(struct nat25_network_db_entry *fdb)
-> >  	return 0;
-> >  }
-> >
-> > -static void __nat25_generate_ipv4_network_addr(unsigned char *networkAddr,
->
-> As others have said, just make "networkAddr" be "addr" and then it will
-> be a lot cleaner and smaller overall.
+On 20/10/2022 06:14, Joy Zou wrote:
+> Convert the i.MX SDMA binding to DT schema format using json-schema.
+> 
 
-Sounds good. Noted for next revision.
 
-Thank you.
-./drv
+> ---
+>  .../devicetree/bindings/dma/fsl,imx-sdma.yaml | 147 ++++++++++++++++++
+>  .../devicetree/bindings/dma/fsl-imx-sdma.txt  | 118 --------------
+>  2 files changed, 147 insertions(+), 118 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/dma/fsl,imx-sdma.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/dma/fsl-imx-sdma.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/dma/fsl,imx-sdma.yaml b/Documentation/devicetree/bindings/dma/fsl,imx-sdma.yaml
+> new file mode 100644
+> index 000000000000..3da65d3ea4af
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/dma/fsl,imx-sdma.yaml
+> @@ -0,0 +1,147 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/dma/fsl,imx-sdma.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Freescale Smart Direct Memory Access (SDMA) Controller for i.MX
+> +
+> +maintainers:
+> +  - Joy Zou <joy.zou@nxp.com>
+> +
 
->
-> thanks,
->
-> greg k-h
+You need to reference dma-controller.yaml schema.
 
+> +properties:
+> +  compatible:
+> +    oneOf:
+
+
+(...)
+
+> +
+> +  gpr:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description: The phandle to the General Purpose Register (GPR) node
+> +
+> +  fsl,sdma-event-remap:
+> +    $ref: /schemas/types.yaml#/definitions/uint32-matrix
+> +    maxItems: 2
+> +    items:
+> +      items:
+> +        - description: GPR register offset
+> +        - description: GPR register shift
+> +        - description: GPR register value
+> +    description: |
+> +      Register bits of sdma event remap, the format is <reg shift val>.
+> +      The order is <RX>, <TX>.
+> +
+> +  clocks:
+> +    maxItems: 2
+> +
+> +  clock-names:
+> +    items:
+> +      - const: ipg
+> +      - const: ahb
+> +
+> +  iram:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description: The phandle to the On-chip RAM (OCRAM) node.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - fsl,sdma-ram-script-name
+> +  - "#dma-cells"
+
+and then this can one be dropped.
+
+> +
+> +additionalProperties: false
+
+Best regards,
+Krzysztof
 
