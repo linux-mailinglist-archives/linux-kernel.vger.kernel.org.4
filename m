@@ -2,83 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DD4F605EA7
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 13:19:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABE29605EB4
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 13:20:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230471AbiJTLS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 07:18:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49036 "EHLO
+        id S231284AbiJTLUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 07:20:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230132AbiJTLSw (ORCPT
+        with ESMTP id S229950AbiJTLTo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 07:18:52 -0400
-Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E7191B76F1
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 04:18:51 -0700 (PDT)
-Received: by mail-ua1-x933.google.com with SMTP id n5so260580uap.2
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 04:18:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=j4yNfgdYt57OohzxwCH1esBxLVu69+vmUe2ikK/4LWY=;
-        b=49vtJf0c5It2Iknt3l/k7+opjdNuUF0nINt5E5Jy21NUgXQ1441CnbelIb+Zb8Iei7
-         tbadreJlDzHpoy9h6p81ZK959n3IfECQX9ifwUelTq3Vn3krsB1RSrDzt5XhNOzqLBWB
-         RLwqkOxaKd0U5WSQEyvmtJXOf4eZbSwo+r1a1HEmJG+kpflgcYM8RHdJg1D8MfrdE/ar
-         PngTM8W/U0BR1Fdoekw0M+/ghlnZCqvnq1Wn5VEVkLLB7rh6gjALftzuadmFoLHngmpl
-         K2ID3O6/sb7ssamZDFSise9IRPr+GL1uxwuMFn/yS5vpgdhRlxNBuLmOYlchGGlpJW4b
-         DV8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=j4yNfgdYt57OohzxwCH1esBxLVu69+vmUe2ikK/4LWY=;
-        b=HAxASmBBlCam5ecQAQln7ASUM3ehVZ5tpZXtNc69y5RiJkWYryNSGtflBaAtUOijSa
-         GpP6TgqOdksHxGW0LHboEcH0wXSHhE4EcTmaB98Yj4ICfZYuJBgtu6svSTMklYPxboKf
-         8S5v+zD4yYZnwyTmBc8IsPYTazVZJ8k8VDtxUtam810Pi8SFUDe0beg/4XUaHlruIC1N
-         N/9RefxlQc2oR9UqPBOwnosiG2rhXJMOW8aRdKwbgWWxsu6lVkWfPf6VyiBw27dwg5AO
-         BoIBcTTJYnzApcqvNUOnmKUXQ0JERShidfgoNC6wUkk+bXNnM8sHhcXYjnO5dZBC0L2z
-         haOg==
-X-Gm-Message-State: ACrzQf01kvFSjm+E26SF3iazTCX8YvtiH181XsvqoHYP85jOcOrgfQhN
-        rpTxo/MWc0BCZ57j8f0f8PXZggY4Zr2zPxzxR87H9Q==
-X-Google-Smtp-Source: AMsMyM762bnsENd96YRg5cs5iK+jXaUnjmTAxCH71GWL6OADkqGRfA+/Q9MVteIpYcE1xjQ6HSh4XXVvA4ehsuW7v9c=
-X-Received: by 2002:a67:ab02:0:b0:3a9:9953:6471 with SMTP id
- u2-20020a67ab02000000b003a999536471mr4291701vse.47.1666264730567; Thu, 20 Oct
- 2022 04:18:50 -0700 (PDT)
+        Thu, 20 Oct 2022 07:19:44 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6B3712089;
+        Thu, 20 Oct 2022 04:19:35 -0700 (PDT)
+X-UUID: 15102183a74e45cfa73792051820af5c-20221020
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=opOjBz4YXQMkku/b+s8cixkeDvpolqYi8tbCP8NecmU=;
+        b=YoPKMOB/3izsOGR4+e+ZvfPUfjiUuE4JsU9CbS4Zz0N7FCwtIeUmrs6rkdF5cvAKd2v+J1tidr5uK+JNhcvuC2QwuYAZXg29XknxceeMnmVQkCFgKG9FLkJSycW0QCCU2zoaGneLUwVPKhZQ/8MmeJrNkfSrhT8QFCYzBoXod5Y=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.12,REQID:151b4e64-6491-4eb2-9d8b-78fe0c197f0c,IP:0,U
+        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:-5
+X-CID-META: VersionHash:62cd327,CLOUDID:fb927233-7d3c-46b3-a6e9-0ba03eeda632,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 15102183a74e45cfa73792051820af5c-20221020
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
+        (envelope-from <tinghan.shen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1793700684; Thu, 20 Oct 2022 19:19:28 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Thu, 20 Oct 2022 19:19:26 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Thu, 20 Oct 2022 19:19:26 +0800
+From:   Tinghan Shen <tinghan.shen@mediatek.com>
+To:     Ryder Lee <ryder.lee@mediatek.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <linux-pci@vger.kernel.org>, <linux-mediatek@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Tinghan Shen <tinghan.shen@mediatek.com>
+Subject: [PATCH v2 0/3] Add driver nodes for MT8195 SoC
+Date:   Thu, 20 Oct 2022 19:19:22 +0800
+Message-ID: <20221020111925.30002-1-tinghan.shen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-References: <20221019152947.3857217-1-arnd@kernel.org> <20221019152947.3857217-12-arnd@kernel.org>
-In-Reply-To: <20221019152947.3857217-12-arnd@kernel.org>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Thu, 20 Oct 2022 13:18:39 +0200
-Message-ID: <CAMRc=Mcph92ir5KgSr5C4UHAwCz8MkyykR2hBfgv4NS2rMcLHw@mail.gmail.com>
-Subject: Re: [PATCH 11/14] pata: remove palmchip bk3710 driver
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Sekhar Nori <nsekhar@ti.com>, linux-arm-kernel@lists.infradead.org,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        linux-kernel@vger.kernel.org, Kevin Hilman <khilman@baylibre.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Hannes Reinecke <hare@suse.de>, linux-ide@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 5:38 PM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> This device was used only on the davinci dm644x platform that
-> is now gone, and no references to the device remain in the
-> kernel.
->
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
+Add pcie and venc nodes for MT8195 SoC.
 
-Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+This series is based on linux-next/next-20221020.
+Depends on https://lore.kernel.org/all/20221001030752.14486-1-irui.wang@mediatek.com/ 
+
+v1 -> v2:
+- remove 8195 example from pcie yaml
+- update reset-names of pcie yaml
+- add resets and reset-names to pcie node 
+- rename venc node
+
+---
+Jianjun Wang (1):
+  dt-bindings: PCI: mediatek-gen3: Add iommu and power-domain support
+
+Tinghan Shen (2):
+  arm64: dts: mt8195: Add pcie and pcie phy nodes
+  arm64: dts: mt8195: Add venc node
+
+ .../bindings/pci/mediatek-pcie-gen3.yaml      |  16 +-
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi      | 174 ++++++++++++++++++
+ 2 files changed, 187 insertions(+), 3 deletions(-)
+
+-- 
+2.18.0
+
