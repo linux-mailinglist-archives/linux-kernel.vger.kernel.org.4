@@ -2,310 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71600605671
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 06:45:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7788605673
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 06:48:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229763AbiJTEpP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 00:45:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33998 "EHLO
+        id S229765AbiJTEsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 00:48:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbiJTEpM (ORCPT
+        with ESMTP id S229448AbiJTEsR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 00:45:12 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F5FA7AA6
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 21:44:56 -0700 (PDT)
+        Thu, 20 Oct 2022 00:48:17 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F8AD1B6C9A;
+        Wed, 19 Oct 2022 21:48:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666241096; x=1697777096;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=g45KvcewmINfptBZBUF+3OlimHuOA9LmNZ6fj8rNr/o=;
-  b=WhbivE8HM89TxPvPQ72E6bm/zkdteLict6pQIs165x0ow0wCS7Kdevm4
-   1ERD2bByJO8JbqPXDV0+2IhWVIFqaj1M3+1dUeX/BV6m6X+clWW3jzjQx
-   KeDibJQnNkb4ruc6UWoLvbidPd99v1VLKsUnNtJcA5KowitkyjHXtjCbL
-   SogU4GefwC9OwWCrsXToEe8Z4EcLTNhFbkDfuGx2s4Zx34nbpiV4wUJWM
-   LDZgN4gpsM0lwDVMv0w8EAjr4sI0yx+TVeOhXDeyOYcE2k/D72ixvKplH
-   CzY3zz/ynjoG0pKztXmrPyGBuB9YBsE+C/5vupsFBcirNOnFWatY00UDh
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="306592895"
-X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
-   d="scan'208";a="306592895"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 21:44:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="754907993"
-X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
-   d="scan'208";a="754907993"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by orsmga004.jf.intel.com with ESMTP; 19 Oct 2022 21:44:49 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1666241295; x=1697777295;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=gshS3aCBHKyv/YqU570k+jtlEDuwUaxHxjVhV6AJdfs=;
+  b=Bi42hY4cpRyHOTj8uQoSP3/ta6njsJAAhH5moBquZxLRWGtATdOx6x/q
+   lmtZEnJcstdfJdVyiH4iIHZ03TH6vf7WdYAwEBfLSo71Nl/e2KYq8O5oV
+   0BYN1/XE9feUe94TsxUpLkxxyciCKjwY+OB/muhbl7O7yK12ssHLC4D7/
+   vgnVe3QpvvdTbjHqfxz++Kk7nBajruiAQSazuXiStgWtnMP8vHErEcc6c
+   m2KUuKy3/mGqZqvxIMuxOq8KqG9vRsi5xtiie2+Bn/YdaqikOblztF/jn
+   QCyIRbAI0HQe+Vk3RHGLTUrUYKj8nBt+D2BUfPc3Dmadd7sEbldDLt6RK
+   g==;
+X-IronPort-AV: E=Sophos;i="5.95,198,1661842800"; 
+   d="scan'208";a="185623524"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 19 Oct 2022 21:48:14 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 19 Oct 2022 21:44:48 -0700
-Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
- ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ 15.1.2507.12; Wed, 19 Oct 2022 21:48:14 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 19 Oct 2022 21:44:48 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Wed, 19 Oct 2022 21:44:48 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.177)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Wed, 19 Oct 2022 21:44:46 -0700
+ 15.1.2507.12 via Frontend Transport; Wed, 19 Oct 2022 21:48:14 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Xu9/eTXbKWLopVo8COpDCztbH/QJxzBb789xKx6ZZB54n5ufrD+QWQ3SKiPzY+Wvb2ThX6MjtzH5Xx5hTPKoNwmrqy1gKrprMXrzMwGP0mmGtjmoH51x4DUsJgcasnoEur1W/f2+S1ts/Eo25cuwpg2N1kpFaoAMKB9CHBTAa7jY7bc0M3nIsZF4Lc0O7vGYZ2hh0bk6Pv/kwJQ+mTJW7tW6E94r2sD048lrVVI4Hb21bTZTGMqwTCfzUKxOdfxOUJVVhPDLS8lHC3WQcKLuWBmmdjKgg9gZe7nnf0mddhbP+A4N9h7zmV4xSxSScOR3Vu1jyJuThIwiF+zfTxK8eQ==
+ b=hByBj0etSIBVxiz1mxVmlQL+iW5+rcccPJZEj3frab5HyWBDHlRUk68C5tNzn1bu6uK19N0ku20zSxhNuG8+SNJNiDDkgjUARa36lEnxLJMqDzqjQQdJGgMeAxfWxyiPFUrFg73B8Q1pIwP8JVltPB+tEbeOkxvMp57i27HhYIQ27Ymb96kNkMEKmlATglTX9OYDE2FQwoYZj5XTm89anMwtWxMcI3J7jEmPkIC/3MYvDvDmdSQJK5kS9jMaPQGrWF7gZgjaL6WCoTC1W+90Y1DgskdmYZZhdBCaKHrxwuhH7bXyX3rO3gOaiOPJuWoQVuKywxHrLQFqmoRLg+62Ew==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PrRggLo46dvAT4BsydqxdppQQ7IDBy3zWShRUxL9Ex8=;
- b=CB78I5jbaNg1MC0tmVjvHBzEZ8SOgT4lkPQ1FHrcga3vvCdeZjRjh3WRFLFtfZ0WELb8IjL4HjOb2D+QkFi5/BRY/C1Ye4wEzdfMKbaUvfSGXjo5G/752vA71ddi/VUitDODHvEUAcKVFKQGjCawH0VLc9j++loEIoMW0vTQqEHBt4hD+m4Ehw9dQYlvKkiCe6bGabl4kKjZvn9AGc028BkWdZ55IrDHqWZBTZA2YzdswnaJjQFEZEFpt5zQedjidgC4nulOSWucwVHPi/5WWd1prCdvgDVbKdnE+z1dQKw7WjdMBJZFC18bTxx18WBjkbU5BGWDRGRpmWThsdGKxw==
+ bh=gshS3aCBHKyv/YqU570k+jtlEDuwUaxHxjVhV6AJdfs=;
+ b=cQ7h7pDYsRrct6eVv63KJP6s5xoiaF3RsSa6/e0YhDEbOPTCbXwUrw5q31IWuNPFI2TJx/ADvkCnKnG0Vl1Lz8bsm6m+GD93Glma4aUYqJ8+F9DbkW4TnB5Fi0RWRJg8+FI1DVlaMLKpiagGvIbEosnnjrsAN1DZA4s3ucFXtRlbSFQnZobRvlT2x6aeUUHo0XEb4fInjoVU9m9vMW7883OmJ24bo2b+kdhz05o6ixDIagetVrwC5rqOGVLJMdD6Xst28ZtC4q4TieUOlAwZnuKUg4m6hBI8nDyXvQO89SH8cooCO6p/3l4Iy55sL0x6MgTyWYB1LnWQe5Locq1oOA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MN0PR11MB6304.namprd11.prod.outlook.com (2603:10b6:208:3c0::7)
- by PH7PR11MB7002.namprd11.prod.outlook.com (2603:10b6:510:209::17) with
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gshS3aCBHKyv/YqU570k+jtlEDuwUaxHxjVhV6AJdfs=;
+ b=Cq1JvO7jAyx8EgALXg6mflkFfRlyN5m2+8o3ehIozD4f3LkS6dHyNJHPmzPW6LTvqKxDxQXIKsldr8qJWwbJYNkSxqwqt/LQ9W2CiaKgj7N3YqPOw+2ZNZG6prCHM02K/kturU9ipMGjlF/27artIucRcINmiHylwBWG/WTVkRw=
+Received: from PH0PR11MB5096.namprd11.prod.outlook.com (2603:10b6:510:3c::5)
+ by SJ0PR11MB4848.namprd11.prod.outlook.com (2603:10b6:a03:2af::5) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.29; Thu, 20 Oct
- 2022 04:44:44 +0000
-Received: from MN0PR11MB6304.namprd11.prod.outlook.com
- ([fe80::3f8d:1406:50e2:7bcc]) by MN0PR11MB6304.namprd11.prod.outlook.com
- ([fe80::3f8d:1406:50e2:7bcc%3]) with mapi id 15.20.5723.033; Thu, 20 Oct 2022
- 04:44:43 +0000
-Date:   Thu, 20 Oct 2022 12:44:30 +0800
-From:   Feng Tang <feng.tang@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-CC:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "Dave Hansen" <dave.hansen@intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Peter Zijlstra" <peterz@infradead.org>, <x86@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <rui.zhang@intel.com>,
-        <tim.c.chen@intel.com>, Xiongfeng Wang <wangxiongfeng2@huawei.com>,
-        Yu Liao <liaoyu15@huawei.com>
-Subject: Re: [PATCH v2] x86/tsc: Extend watchdog check exemption to 4-Sockets
- platform
-Message-ID: <Y1DSLnfMakCrWux/@feng-clx>
-References: <20221013131200.973649-1-feng.tang@intel.com>
- <87tu40p3ws.ffs@tglx>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <87tu40p3ws.ffs@tglx>
-X-ClientProxiedBy: SG2PR04CA0201.apcprd04.prod.outlook.com
- (2603:1096:4:187::23) To MN0PR11MB6304.namprd11.prod.outlook.com
- (2603:10b6:208:3c0::7)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.34; Thu, 20 Oct
+ 2022 04:48:09 +0000
+Received: from PH0PR11MB5096.namprd11.prod.outlook.com
+ ([fe80::3c5c:7050:7ea3:6ac]) by PH0PR11MB5096.namprd11.prod.outlook.com
+ ([fe80::3c5c:7050:7ea3:6ac%6]) with mapi id 15.20.5723.035; Thu, 20 Oct 2022
+ 04:48:09 +0000
+From:   <Tharunkumar.Pasumarthi@microchip.com>
+To:     <broonie@kernel.org>
+CC:     <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <UNGLinuxDriver@microchip.com>
+Subject: Re: [PATCH v2 SPI for-next 2/2] spi: microchip: pci1xxxx: Add suspend
+ and resume support for PCI1XXXX SPI driver
+Thread-Topic: [PATCH v2 SPI for-next 2/2] spi: microchip: pci1xxxx: Add
+ suspend and resume support for PCI1XXXX SPI driver
+Thread-Index: AQHY2UFBTyfpeUhNekua+ha6owgtXq4MXsyAgAptewA=
+Date:   Thu, 20 Oct 2022 04:48:09 +0000
+Message-ID: <54e27d957050c66a3dd2de2e12c5adae26cd904e.camel@microchip.com>
+References: <20221006050514.115564-1-tharunkumar.pasumarthi@microchip.com>
+         <20221006050514.115564-3-tharunkumar.pasumarthi@microchip.com>
+         <Y0gUH1fbB/LijKLw@sirena.org.uk>
+In-Reply-To: <Y0gUH1fbB/LijKLw@sirena.org.uk>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH0PR11MB5096:EE_|SJ0PR11MB4848:EE_
+x-ms-office365-filtering-correlation-id: dc46dffa-6600-4cd7-8f60-08dab256492b
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: sChmNTVAZzaXh9gwM3G/Iyio1UT6iKLHtpMMo4L1V6mKWTr3RFGGHdjgoxwwk6Aj89N2c7XVP/wQPlAauaMGHgzzDHsQEbR6S57xgREGjmPy4yz+iSmI4QHAWZwd5I1pd+VUjlQWLjssFlV6UscCecgRA0l9xWHdssgiUSUWx7r913u7CVUSn8rrHHTJ7PJ1i54otGyOidd2axnQ8VURuZAI6ZXdDo1jedeUjbimS3BnEyB1PKamVQMaYwCEvLXrxkVuI4IUwMhmMbg/FSfYMWsc6VSN6K4+QDe+1WNEjKQ5rwwk7voRuMdJfTPrYPATCWAIcym6Aqa6HMc1j3QCA1i9YdpZgGB3f4Dj6hwWkb+zLjckbV9l7IiZqz9ymmQ3UtzulLUS3PwFYc3OEnQnr16vbkt9R0VYT9hClm4Ss3nZYW0s2cWsygs9LoKgePyYS3SK6WDVUEEMxJlc7fe34VNXYcyvLPzlqnH/68/nF/jCZkjU0cEt8PUoXV3nazP/pgiYVU002y8CKZiZrlqoP9cKkZAcoCuk57MXgc8w5D89ygC1n1lewqyiTO05mfKo9IikDjGjhEFAKOuuJb/KJ5IEa4pjpceKKHyBF6qPTzHlPLwfN5BuV+ETSTdkMpXsF/1FbsLWIeMtiaAkdk60XiOBDH8NG9jTPKJptX6GtRiq3DOOsKdZDBeWVfu/1q5pp/f8EY0zgwjnhJOdI33nxF9nlod8C4iIQPoLxRa3sIp4orbgf/4R/tdIuGm1wAqNYp9hMY6s3eCW9DuwMEYm4w==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB5096.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(396003)(39860400002)(376002)(346002)(366004)(451199015)(478600001)(71200400001)(83380400001)(86362001)(6486002)(107886003)(66946007)(36756003)(91956017)(66476007)(66556008)(6506007)(66446008)(8676002)(4326008)(26005)(316002)(41300700001)(6512007)(8936002)(6916009)(4744005)(5660300002)(54906003)(2616005)(186003)(4001150100001)(2906002)(15650500001)(76116006)(64756008)(38070700005)(38100700002)(122000001)(32563001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VXZKeUUrc3Nua1YxeHNVZGlhMTBiakhGMHFtbFI4RmlVUDBvVFhwZ05Yd1l0?=
+ =?utf-8?B?NzI3TGpUdnFhTWNVcFJMRS9ycEZRMERtU0M4aFo2L2NFcUprU21Fc2ZIMXV1?=
+ =?utf-8?B?YVEybkEwYlNYMEIvZksyaHlGVFY2UklxK05mT3FjZXhnM0NxWTdRVWpxQUJy?=
+ =?utf-8?B?T0pSdzlYWGVjemN1UzRJbFpRV0pRVmZ5Z2tseVc4T0NxWXRvazhhL0N5aDJG?=
+ =?utf-8?B?OFd5VHdYQXFOS3RaZUVSTGd0OU9IUStLTVVoZllwelp5MUxpRmpVNDgzN0RG?=
+ =?utf-8?B?SlBIVnphb3FsWjVqcWc2a0NHU2sxTWZFcFYrVHdPWjJGdmpjbll1QUR6Q0lW?=
+ =?utf-8?B?OVlUUVplSDRDSWVpRnJQdDNpOTF4UGV6VHJCQS83Kzkwd1ppdDJjTGkyVmcr?=
+ =?utf-8?B?VUdDK0FONWxwbGtVMlE4VGorNHBKanI3NHZRc3B2alJSS1ZiMktLZXdjM3d1?=
+ =?utf-8?B?QTgvdEdCTWEvc2o3eGR2cUV5Y2p2QWw0Y09ObjExeVRsTXErTFExczk0eHgv?=
+ =?utf-8?B?UlpvZUhwUStXNWl3UGNwUXh1NHZ3YkIyN0pIQ1VWNlZ5bURXaTh0UE5FNGpz?=
+ =?utf-8?B?Si84dU4yNmNJaVF4NURiZGdVb25QNXl4YzFMZC9Kdkp3dzNWL1hUeVh5STZP?=
+ =?utf-8?B?emNwWmZQUldxQ2ZYc1ExcGhXMWNMRGNjL1pyMFZFSGtZKzVvVWZmR0FCTnJq?=
+ =?utf-8?B?VmIwL0lSaGQwYkd2Q1RQSjlqVDAwMUkzWHQxcnFCSi9TeGhVNHh0WUduRVNw?=
+ =?utf-8?B?U2I2bW9WM28vM2cwYXljUTR6bWt6dUp2NmNrUCtGRmlTaUN1YjZyT3gzZEF0?=
+ =?utf-8?B?eFVrdWt4c2E0NlFtc1BZNnZFMlJvV1hYRUE5TTQxRzZoSnR1ZXR1OExlWG1m?=
+ =?utf-8?B?QkUwVWltMHJKOXorQjBhMHdaanB4VERBUEJlK1EzOXpvQTFxYmdJUVFZNlZx?=
+ =?utf-8?B?SmVkTnM4ZG5xbEc3NDZYcElzbmlDVjlwMEFjQ2M0OUVsNDY5d2pRMlltcHI3?=
+ =?utf-8?B?ZHhUbit0QUNYRmh1c2t2c21GZmFvU1JRa1Aycm9VSVRwMU5LUXhLVk1SSUJo?=
+ =?utf-8?B?TGRWcjFEcTl3MU4yY21MYWVPTDRicnlQU051SGV1RHBTUjJjQ2pHZkh6RlBR?=
+ =?utf-8?B?U1BBbFBMQTNLNzZodUJNRUFPaWhIcmtiWFVYUnR1ZHFON2xRaUdENzJFVG9h?=
+ =?utf-8?B?bmxJZUtRMitSdmdOSUlaYU1vbVFxWEdDRkNVMkNacmIxMkVUaERxckRjcFZE?=
+ =?utf-8?B?NjFWRW0zblFqQWtJNFE0ZDlhT0srb1Vxc2pya1lHa284SkoxVlJlN1FPenZx?=
+ =?utf-8?B?SzZuM2hFRVJSQUlCM0piWmRkYkpPZk5rUkgzT3hGaUNrVEovOCtGMHJDMm55?=
+ =?utf-8?B?QkgzTFgwZzRCNzQ2VXY0emtJUXhSOUU2Um05T1psN3VWYUh3ZWJ5dlVEdjVE?=
+ =?utf-8?B?QmFnOXFSa1ZxZGtJdm80SWJoUWhKK3V5MzBBbXBBNWN6L1N1Sy9kRDBBRkhG?=
+ =?utf-8?B?MXFnSEJyN3dWNFhpVUtvZjczZVB2eG5Mc0hRVTByNktCS1VadzJXdUVqbXpL?=
+ =?utf-8?B?SGZZc1BLT1pRdnBnekxxQUZyZWlETFE0aHZXeWMycDdaYjN0bkt5MmdIZ3Qw?=
+ =?utf-8?B?Sk9HY1FFeXNqOFZFUzBnd1NnZXh2Y2JUVm8zSENVOGE0eG9sdEt1Ykl3dW9U?=
+ =?utf-8?B?OGRjNVJkTWk1WkRuSTZITEwyWitNcEJ0WWFPeno4aEIxRWxTR2M2cGViMmNq?=
+ =?utf-8?B?czhWWjAwaitGYnVwMmRMcU1GWWcxbzdjeXJJWkpoUVFBL2V2L3d5eUY3S2U5?=
+ =?utf-8?B?dUtheFZBS2V0eVdKd2c2d00xTmlNL2tadHVoRmlpc0FrTlVVVm9ueDNVM3RF?=
+ =?utf-8?B?TEIwUDRPWFZWc2lKNGs3OVhRTVRGL1JnaWlzUHh1dWwxSi9vc1NYNXBzdnA3?=
+ =?utf-8?B?UVJacnBta01MamdzcnNvU0YrdVNhWDYyb1NRTHhXRTZwUUFMVUFkb2NTVkV3?=
+ =?utf-8?B?L1R2akxoZTM1NUVaT2N6S0F2akpnT3FJUG9acVRyNUhPanA5WFhSaUU0NGpK?=
+ =?utf-8?B?Ymc0aDF0cHRLS1p1Q2xucFZIMXl3Ymw4bWltY1YvOFd3VWF4amd3MG5kNVAw?=
+ =?utf-8?B?Vks0OWgvSHQ0WmRpRjNQaWJPYUtkOXNSdjZkZFJZOTVKMmZJeHRvSk5kZHda?=
+ =?utf-8?Q?fvDVCRNuLGxZRkIypdbyMoj6vuO9eURXQVlGOmyOAXiB?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <902468D931373E4BA15523E7C6E0BC82@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR11MB6304:EE_|PH7PR11MB7002:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0b24b7c4-e894-4207-dcf8-08dab255ceb0
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: MK0jz+9k56h7pi2/IyDBhBJFBCQ6F0H97JdEubpC1+fwr7Ysz5x0eFM3qEJHDmdhcvMNTYfnCqxhtGDxczgC1X48wTKgAFW4CiGULd6ye3ZE/6aXjRtXqX5V/IF9H8Y1ISjX6UsmyQy0QLkCcvwZN5SvioJKXUBmctxE/rFSXXKO8JoIbBcvNT8Ln1eBG9+Ud7qwlAkVQsgNNODTfHdt+X5lgNp7hnGIhjeGb2Uglh4DGjukkG+JdtE2pyf5MU11WapfV1BFpLmE9IImiX/EhSXyMkHDtXyx8PKM+d88vEX9Kzj6CYwh1DfzWZeJBob4H/axDhACq9j7JfVbWnSbtoAEAY8p+sNN0yyOjDfsLCFFvjshQ2vkx17nZUzBCqkTznU9IBhV9lrXpGn7g8ewZ6400yzCuDuTML5ZWRgMlbs2stODNYFRasjGvnXNMPBnjy3XNZtNyceoLF0mus+kCLNvnYmbEC0AzPDEaGPO2Ecc1ZBrjfG3TqFm/PIoPlAHBPR2/yT0EISFuemydzrE8eKh9V30CRNLNYP5w459rCBsyMJ+n0039rZRc/4NI6jRbTyPfe+UpPpnYK221AMdnwT+BWw+ZGOtqkYsQ5nalaGYlyCO0EA0NPGH7bygoncGHuzjke1akfQQZbbJkM9kg/p2/wullWqPmOy3oYVH4mms/cSpOIXo0RuLoRnEeA2JHvhZkJlvQEHfYfXHS0WXVwPeh7MT111UI8poNkfrWmw=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6304.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(396003)(346002)(376002)(39860400002)(366004)(136003)(451199015)(5660300002)(86362001)(26005)(33716001)(4326008)(41300700001)(6512007)(8676002)(82960400001)(6506007)(9686003)(66556008)(6486002)(8936002)(66946007)(6916009)(478600001)(54906003)(6666004)(316002)(66476007)(44832011)(966005)(38100700002)(83380400001)(186003)(66899015)(2906002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?0ROAUykrCr6kPrPw+3r+IYz8mnhZgXLnxbsEjPCZKaO5MfFF+zhDdBlDdk6z?=
- =?us-ascii?Q?GfLy6BCjEy17j2yw7TpNAPRYuU8tsmpNweLug5YYvLJbzHXkXGnWeVu10Nfh?=
- =?us-ascii?Q?HviyVHustRa+IO1I3Rr3r00cq30JSn151VVzsh8Rm224eGxhdlpDF25laaMn?=
- =?us-ascii?Q?WWKTG6YFRSnUj+aFh/3XgvnqWWmOcl6Uee7o0GNUpG4KhHXumPkon8/aROLv?=
- =?us-ascii?Q?Zro15LQ9n4w2JXPOp35vS7lLWNo+9kQUdlq2CVYga4UW2snVoI+ZK31JhE0U?=
- =?us-ascii?Q?8gqw8lEqi53UpsJcebYxGDk/JJu43NehV1OEYuPuJlrMZqzyfc9UXNohb1Xa?=
- =?us-ascii?Q?Bu68AZXyu1MWXT0AMY7bOTY0nLMTBUB8c0ZdP5ovY25jRKGiNqlBdwXh8R2Z?=
- =?us-ascii?Q?rT3W6CZw2B6tql6zGt+53Hkrf5i1Q8pTYUGFwsMxCPBeWvo4FCH3jeqLJj3E?=
- =?us-ascii?Q?y92D4NVcC53OMTW136R8JAcQYAcJL+25QWF+hbFRB8twKIDb0lvHh64w90fg?=
- =?us-ascii?Q?KSw0+AYOCrvLlnzUzlN+jYiU2143UhYxMChI6bUUV7dzlETifW0jL0IbKY6b?=
- =?us-ascii?Q?2U3ORFeseCD8KyZ87BrCvGo3dA4dWez67iZn5NwggJxLYwXvLiptD+2wdUAm?=
- =?us-ascii?Q?a704psG2tD9KqBkCGs1UXIEakUcNr26aw4EUMTLjmQigUXc8rs4GT0xyNvVA?=
- =?us-ascii?Q?eQ9nZOa2CCdEyoA7+vyQPLt1bTgEJckSK4aaNyWmqyG/EqAbeB46ASBcx8D9?=
- =?us-ascii?Q?hmK99uF7FxYzbpYJrSVWft4sLk6DJ3yO2rOopI7MvALUy8W1XhUxFmVPuTon?=
- =?us-ascii?Q?4mwTqZhgSOFkvp9Q2m2EkB4hgSbve7W7MIKDzOF9rJVqVDGeCZJ+u4cdma0p?=
- =?us-ascii?Q?IGa3/KVWE4XloV2tkI9M2q+Dltvo5KxvmG2SxySxmXlbH13yhYvyJ5PVYuSA?=
- =?us-ascii?Q?waX5w9fQNx8Ql/WpRTOVSWFNDa2WyVXsZfZiSesdT0VCk9p/E8wOiQpRiFHU?=
- =?us-ascii?Q?Es5M7c0OkXv6/Y0xfQ+qytKv1zE/2GKXxAI0pJloyLJQTJ0CXYYret73n9mr?=
- =?us-ascii?Q?mdkfxevqj6H0N90tBmf2AZbKPxVHcBdg/h9L0p0Bbo12vGhJDJeRNC6gVT8y?=
- =?us-ascii?Q?x9/lPqigskiMHF4Kc51haGNNXGFIoSSJSHnDB9iEMMHsNBV0gbpFu69RRxku?=
- =?us-ascii?Q?81h+CuXoyjEHeCRchTQ7RFL0kT811VpMac6AY9siDZMZ4kp0SMqctcT/1arl?=
- =?us-ascii?Q?4UKNRRI5OddsK2PoQt/oKUYPcjAqLvLRfY+xE/8H0cddf8txN5nPzJ91mhGb?=
- =?us-ascii?Q?xMzsI/bqzF0OEW/+vI++OMQPfOnVL/f4PnIzxNWl3wigucMUSa06oZuMZ8I+?=
- =?us-ascii?Q?ygyMsUuqMqkxTrNNSg+lclcbqLH5rydZcNnPeOSw2zDhcD7Nx+IliWY09EC1?=
- =?us-ascii?Q?h02f10SQQjgbEgd3GLh8VErtaYLrqGvr5Jj6cfHLd21qnUCK362TMKPHlwe5?=
- =?us-ascii?Q?b5ZUhT+KYukMrT1n1h0gJ1MgQgwrnAXAH8W39Ee4lwHLy9RE+1hC9zHY9tRV?=
- =?us-ascii?Q?lCM/fLG2H2Mv4XSi5Y2ow36lOKjvUAHBh0+LN9ux?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0b24b7c4-e894-4207-dcf8-08dab255ceb0
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6304.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Oct 2022 04:44:43.8820
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB5096.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dc46dffa-6600-4cd7-8f60-08dab256492b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Oct 2022 04:48:09.0244
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kIf/SZu79Y36kUAfRHDivY32LZheQLynCQjj37Aa0IimPeDRX0tzxF/5ISSESrIrnD65zfjlzvzaPWd+QW+0kg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB7002
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: d01E6d6YKJA2N/SAydxuDsMfWmz/9gXgx78W3QCNcNHitWuZN71+uyU1dUk3bpkyfrz2ZLSObWkauXF3jxQdfjkG+9xn1JXLNlH1o/p5vQuKtc2jtY0O9J3dOXc4/qWy
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB4848
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 11:18:43AM +0200, Thomas Gleixner wrote:
-> On Thu, Oct 13 2022 at 21:12, Feng Tang wrote:
-> > There is report again that the tsc clocksource on a 4 sockets x86
-> > Skylake server was wrongly judged as 'unstable' by 'jiffies' watchdog,
-> > and disabled [1].
-> >
-> > Commit b50db7095fe0 ("x86/tsc: Disable clocksource watchdog for TSC
-> > on qualified platorms") was introduce to deal with these false
-> > alarms of tsc unstable issues, covering qualified platforms for 2
-> > sockets or smaller ones.
-> >
-> > Extend the exemption to 4 sockets to fix the issue.
-> >
-> > We also got similar reports on 8 sockets platform from internal test,
-> > but as Peter pointed out, there was tsc sync issues for 8-sockets
-> > platform, and it'd better be handled architecture by architecture,
-> > instead of directly changing the threshold to 8 here.
-> >
-> > Rui also proposed another way to disable 'jiffies' as clocksource
-> > watchdog [2], which can also solve this specific problem in an
-> > architecture independent way, with one limitation that some tsc false
-> > alarms are reported by other watchdogs like HPET in post-boot time,
-> > while 'jiffies' is mostly used in boot phase before hardware
-> > clocksources are initialized.
-> 
-> HPET is initialized early, but if HPET is disabled or not advertised
-> then the only other hardware clocksource is PMTIMER which is initialized
-> late via fs_initcall. PMTIMER is initialized late due to broken Pentium
-> era chipsets which are sorted with PCI quirks. For anything else we can
-> initialize it early. Something like the below.
-
-Thanks for sharing the background and the code! It can reduce the
-time of 'jiffies' being a watchdog on client platforms whose HPET
-are disabled. And there were still false positive reports for
-HPET/PMTIMER as watchdogs, so I still vote to your suggestion of
-lifting the check for qualified platforms.
-
-For that, Dave raised the accuracy issue of 'nr_online_nodes' and
-we proposed new patch in https://lore.kernel.org/lkml/20221017132942.1646934-1-feng.tang@intel.com/
-while the topology_max_packages() still has issue as providing socket
-number, and I plan to use 'logical_packages' instead. Do you think
-it's in the right direction?
-
-> I'm sure I said this more than once, but I'm happy to repeat myself
-> forever:
-> 
->   Instead of proliferating lousy hacks, can the X86 vendors finaly get
->   their act together and provide some architected information whether
->   the TSC is trustworthy or not?
- 
-Yes it will save us a lot of trouble. Maybe better in CPUID info, as
-if there is some bug in HW/BIOS, it may get fixed with microcode update.
-
-Thanks,
-Feng
-
-> Thanks,
-> 
->         tglx
-> ---
-> 
-> --- a/arch/x86/kernel/time.c
-> +++ b/arch/x86/kernel/time.c
-> @@ -10,6 +10,7 @@
->   *
->   */
->  
-> +#include <linux/acpi_pmtmr.h>
->  #include <linux/clocksource.h>
->  #include <linux/clockchips.h>
->  #include <linux/interrupt.h>
-> @@ -75,6 +76,14 @@ static void __init setup_default_timer_i
->  void __init hpet_time_init(void)
->  {
->  	if (!hpet_enable()) {
-> +		/*
-> +		 * Some Pentium chipsets have broken HPETs and need
-> +		 * PCI quirks to run before init.
-> +		 */
-> +		if (boot_cpu_data.x86_vendor != X86_VENDOR_INTEL ||
-> +		    boot_cpu_data.family != 5)
-> +			init_acpi_pm_clocksource();
-> +
->  		if (!pit_timer_init())
->  			return;
->  	}
-> --- a/drivers/clocksource/acpi_pm.c
-> +++ b/drivers/clocksource/acpi_pm.c
-> @@ -30,6 +30,7 @@
->   * in arch/i386/kernel/acpi/boot.c
->   */
->  u32 pmtmr_ioport __read_mostly;
-> +static bool pmtmr_initialized __init_data;
->  
->  static inline u32 read_pmtmr(void)
->  {
-> @@ -142,7 +143,7 @@ DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_SE
->   * Some boards have the PMTMR running way too fast. We check
->   * the PMTMR rate against PIT channel 2 to catch these cases.
->   */
-> -static int verify_pmtmr_rate(void)
-> +static int __init verify_pmtmr_rate(void)
->  {
->  	u64 value1, value2;
->  	unsigned long count, delta;
-> @@ -172,14 +173,18 @@ static int verify_pmtmr_rate(void)
->  /* Number of reads we try to get two different values */
->  #define ACPI_PM_READ_CHECKS 10000
->  
-> -static int __init init_acpi_pm_clocksource(void)
-> +int __init init_acpi_pm_clocksource(void)
->  {
->  	u64 value1, value2;
->  	unsigned int i, j = 0;
-> +	int ret;
->  
->  	if (!pmtmr_ioport)
->  		return -ENODEV;
->  
-> +	if (pmtmr_initialized)
-> +		return 0;
-> +
->  	/* "verify" this timing source: */
->  	for (j = 0; j < ACPI_PM_MONOTONICITY_CHECKS; j++) {
->  		udelay(100 * j);
-> @@ -210,10 +215,11 @@ static int __init init_acpi_pm_clocksour
->  		return -ENODEV;
->  	}
->  
-> -	return clocksource_register_hz(&clocksource_acpi_pm,
-> -						PMTMR_TICKS_PER_SEC);
-> +	ret = clocksource_register_hz(&clocksource_acpi_pm, PMTMR_TICKS_PER_SEC);
-> +	if (!ret)
-> +		pmtimer_initialized = true;
-> +	return ret;
->  }
-> -
->  /* We use fs_initcall because we want the PCI fixups to have run
->   * but we still need to load before device_initcall
->   */
-> --- a/include/linux/acpi_pmtmr.h
-> +++ b/include/linux/acpi_pmtmr.h
-> @@ -13,6 +13,8 @@
->  /* Overrun value */
->  #define ACPI_PM_OVRRUN	(1<<24)
->  
-> +extern int __init init_acpi_pm_clocksource(void);
-> +
->  #ifdef CONFIG_X86_PM_TIMER
->  
->  extern u32 acpi_pm_read_verified(void);
-> 
-> 
+T24gVGh1LCAyMDIyLTEwLTEzIGF0IDE0OjM1ICswMTAwLCBNYXJrIEJyb3duIHdyb3RlOg0KPiBF
+WFRFUk5BTCBFTUFJTDogRG8gbm90IGNsaWNrIGxpbmtzIG9yIG9wZW4gYXR0YWNobWVudHMgdW5s
+ZXNzIHlvdSBrbm93IHRoZQ0KPiBjb250ZW50IGlzIHNhZmUNCj4NCj4gVGhlcmUgc2hvdWxkIGJl
+IGEgY2FsbCB0byBzcGlfY29udHJvbGxlcl9zdXNwZW5kKCkgaW4gaGVyZSAoYW5kIHNpbWlsYXJs
+eSBpbg0KPiByZXN1bWUpIHRvIHRlbGwgdGhlIGNvbnRyb2xsZXIgdG8gc3RvcCB0aGUgcXVldWUg
+b2Ygb3BlcmF0aW9ucy4NCg0KSW4gdGhlIHN1c3BlbmQgYW5kIHJlc3VtZSBjYWxsYmFja3MsIHNw
+aV9tYXN0ZXJfc3VzcGVuZCBhbmQgc3BpX21hc3Rlcl9yZXN1bWUNCkFQSXMgYXJlIHVzZWQgd2hp
+Y2ggaW4gdHVybiBjYWxscyBzcGlfY29udHJvbGxlcl9zdXNwZW5kIGFuZA0Kc3BpX2NvbnRyb2xs
+ZXJfcmVzdW1lIEFQSXMgcmVzcGVjdGl2ZWx5Lg0KDQoNClRoYW5rcywNClRoYXJ1biBLdW1hciBQ
+DQo=
