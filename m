@@ -2,165 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D45B606BB9
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 00:55:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD0CE606BC8
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 00:57:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbiJTWzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 18:55:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48186 "EHLO
+        id S229968AbiJTW5j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 18:57:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229889AbiJTWzL (ORCPT
+        with ESMTP id S229893AbiJTW5h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 18:55:11 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D0B6EA6B8
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 15:55:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=6VyHB2mpLc7BFJBIg1MpS4fR1ENCvjLPztkC/qwZDhU=; b=CvXb4BgSCUD0xdnk+d/zfEFo2M
-        d6SuQ3xJpfCddMYFWrxlizI77feC3+SiB1yLf8xewtNqIl+UyyQ9gJtNmUxfbzIEE3YvtkUQeJMpA
-        4t3iRAXqNIdVIhsg3FyJsYZgUzIhQh19QX27yHUuqrZYssUh92IzZgmNRvPtCHIEcAT0HXT8wv68O
-        rVL9xaRZ93znzq045hxM+Gu65S7zQENonYxw5mIP5OfUgmjEx+YJA/Nu1iHLTbwhMk541opJdQ5qh
-        0gTRoNz+sAWdYGgTUvAqcAJCoijWGC/NQ7j0IemIn4SeLivUSU0qqq5CphDJ77Zi0Au5OsWWYjL+O
-        eEY3WuyA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34840)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1oleRL-000803-08; Thu, 20 Oct 2022 23:55:03 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1oleRI-0003YW-GO; Thu, 20 Oct 2022 23:55:00 +0100
-Date:   Thu, 20 Oct 2022 23:55:00 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
+        Thu, 20 Oct 2022 18:57:37 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4AEA22E0D4;
+        Thu, 20 Oct 2022 15:57:35 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id k2so3126022ejr.2;
+        Thu, 20 Oct 2022 15:57:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JuxcgTkIRC5WG6rM4q/CSaRgfUH0Ti3MoOBIFAp7H8s=;
+        b=XBJzFhduueKPu1ACZxmcj5cXRa0nb0p5dX8b6x8utN2F40sVgNnz2Vwo93T3WLnBcx
+         Yx3WwrvmN9Nuh/q4vOjOu0pqXnDTWqYB4KV9B3sCwZOf7c8OCwjoNM/D1TNvmc045ZzX
+         Poo3JVc6Gu+DF650q6sVaij7GSbGVXbKX5JW9xSnGo2M+EdB4pcsbE0152s/sylYv+Nc
+         ALPztrqDuyQF/Ci2P4snXxWjZKRtHnNH3GhbYR/zFvz6RX+vOKF1y9KazvTME97oRexc
+         94w80ZyNJO0Z5bBflaDs/V5ISm1JA/Dg+OYU7d/pyJvJYa/mJ0Vv6e7Q6YanX5FVgqB4
+         eYew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JuxcgTkIRC5WG6rM4q/CSaRgfUH0Ti3MoOBIFAp7H8s=;
+        b=4kUdMb+u2XRrHmLU+EuuqbCdyOLgAcdkFgOu3kjz+hT63LZn9HJN8JLgOG3m1fcFSs
+         ciwI27DxgE7r3MPhcJz+0geVtmW/fyvjfnjkrQVm58QLC3D2cWNLikxhCxe6ijJJwwGc
+         i4XoZtEffNkwbqSnazLDctBLW7pTyKVnAFUpfoGcPrH5pUqK/mpKJVIxzzVh4YwjB9C7
+         E69LIXrT6zmbMcTGInfAnsdIadX7Jpt63bdJLCvOzkyF0N37QwxGwzWnE/Xw8Vjis6xs
+         JCHveLz1vaXGEerP/VAldmnFM/xpr3YerlKqu4jOx7MKtnomlae6WrWIcDF6NOu/Nlnj
+         vm0w==
+X-Gm-Message-State: ACrzQf1Wqw1ZAfXF4phW1hSUJexp1pXGNAXHSk3DUKopWpm/KP2ag+s0
+        toc0VvqFAQ4dydTSKuplXm7zQW6khpPfOQ==
+X-Google-Smtp-Source: AMsMyM7/vnHFskrIzjNC7ybOEBIlorfKrTTq/Ou6mds57aeFaKcu+F9HahwfD0wuLF52vhDnh4xpcw==
+X-Received: by 2002:a17:906:58cc:b0:78d:ce9c:3787 with SMTP id e12-20020a17090658cc00b0078dce9c3787mr12707611ejs.715.1666306643405;
+        Thu, 20 Oct 2022 15:57:23 -0700 (PDT)
+Received: from skbuf ([188.27.184.197])
+        by smtp.gmail.com with ESMTPSA id l6-20020a1709062a8600b0073d796a1043sm10750046eje.123.2022.10.20.15.57.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Oct 2022 15:57:22 -0700 (PDT)
+Date:   Fri, 21 Oct 2022 01:57:19 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     netdev@kapio-technology.com
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Florent Fourcot <florent.fourcot@wifirst.fr>,
+        Hans Schultz <schultz.hans@gmail.com>,
+        Joachim Wiberg <troglobit@gmail.com>,
+        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alexey Klimov <klimov.linux@gmail.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Andy Whitcroft <apw@canonical.com>,
-        Dennis Zhou <dennis@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Kees Cook <keescook@chromium.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Subject: Re: [RFC PATCH 0/2] Switch ARM to generic find_bit() API
-Message-ID: <Y1HRxNpxYcFHf/8R@shell.armlinux.org.uk>
-References: <20221020032024.1804535-1-yury.norov@gmail.com>
- <Y1F8ljDDqYElE3aT@shell.armlinux.org.uk>
- <Y1GpP+aY0o40MTNS@yury-laptop>
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v8 net-next 10/12] net: dsa: mv88e6xxx: mac-auth/MAB
+ implementation
+Message-ID: <20221020225719.l5iw6vndmm7gvjo3@skbuf>
+References: <20221018165619.134535-1-netdev@kapio-technology.com>
+ <20221018165619.134535-1-netdev@kapio-technology.com>
+ <20221018165619.134535-11-netdev@kapio-technology.com>
+ <20221018165619.134535-11-netdev@kapio-technology.com>
+ <20221020132538.reirrskemcjwih2m@skbuf>
+ <2565c09bb95d69142522c3c3bcaa599e@kapio-technology.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y1GpP+aY0o40MTNS@yury-laptop>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+In-Reply-To: <2565c09bb95d69142522c3c3bcaa599e@kapio-technology.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 01:02:07PM -0700, Yury Norov wrote:
-> On Thu, Oct 20, 2022 at 05:51:34PM +0100, Russell King (Oracle) wrote:
-> > On Wed, Oct 19, 2022 at 08:20:22PM -0700, Yury Norov wrote:
-> > > Hi Russell, all,
-> > > 
-> > > I'd like to respin a patch that switches ARM to generic find_bit()
-> > > functions.
-> > > 
-> > > Generic code works on par with arch or better, according to my
-> > > testing [1], and with recent improvements merged in v6.1, it should
-> > > be even faster.
-> > > 
-> > > ARM already uses many generic find_bit() functions - those that it
-> > > doesn't implement. So we are talking about migrating a subset of the
-> > > API; most of find_bit() family has only generic implementation on ARM.
-> > > 
-> > > The only concern about this migration is that ARM code supports
-> > > byte-aligned bitmap addresses, while generic code is optimized for
-> > > word-aligned bitmaps.
-> > > 
-> > > In my practice, I've never seen unaligned bitmaps. But to check that on
-> > > ARM, I added a run-time check for bitmap alignment. I gave it run on
-> > > several architectures and found nothing.
-> > > 
-> > > Can you please check that on your hardware and compare performance of
-> > > generic vs arch code for you? If everything is OK, I suggest switching
-> > > ARM to generic find_bit() completely.
-> > > 
-> > > Thanks,
-> > > Yury
-> > > 
-> > > [1] https://lore.kernel.org/all/YuWk3titnOiQACzC@yury-laptop/
-> > 
-> > I _really_ don't want to play around with this stuff right now... 6.0
-> > appears to have a regression on arm32 early on during boot:
-> > 
-> > [    1.410115] EXT4-fs error (device sda1): htree_dirblock_to_tree:1093: inode #256: block 8797: comm systemd: bad entry in directory: rec_len % 4 != 0 - offset=0, inode=33188, rec_len=35097, size=4096 fake=0
-> > 
-> > Booting 5.19 with the same filesystem works without issue and without
-> > even a fsck, but booting 6.0 always results in some problem that
-> > prevents it booting.
-> > 
-> > Debugging this is not easy, because there also seems to be something
-> > up with the bloody serial console - sometimes I get nothing, other
-> > times I get nothing more than:
-> > 
-> > [    2.929502] EXT4-fs error (de
-> > 
-> > and then the output stops. Is the console no longer synchronous? If it
-> > isn't, that's a huge mistake which can be seen right here with the
-> > partial message output... so I also need to work out how to make the
-> > console output synchronous again.
+On Thu, Oct 20, 2022 at 10:20:50PM +0200, netdev@kapio-technology.com wrote:
+> In general locked ports block traffic from a host based on if there is a
+> FDB entry or not. In the non-offloaded case, there is only CPU assisted
+> learning, so the normal learning mechanism has to be disabled as any
+> learned entry will open the port for the learned MAC,vlan.
+
+Does it have to be that way? Why can't BR_LEARNING on a BR_PORT_LOCKED
+cause the learned FDB entries to have BR_FDB_LOCKED, and everything
+would be ok in that case (the port will not be opened for the learned
+MAC/VLAN)?
+
+> Thus learning is off for locked ports, which of course includes MAB.
 > 
-> Got it.
-> 
-> I you think that EXT4 problems are due to unaligned bitmaps, you can take
-> 1st patch from this series to check.
-
-Got to the bottom of it, it wasn't the bit array functions, it was DMA
-API issues.
-
-Okay, I've now tested the generic ops vs my updated optimised ops,
-and my version still comes out faster (based on three runs). The
-random-filled show less difference, but the sparse bitmaps show a
-much better win for my optimised code over the generic code where
-they exist:
-
-arm: [  694.614773] find_next_bit:                   40078 ns,    656 iterations
-gen: [   88.611973] find_next_bit:                   69943 ns,    655 iterations
-arm: [  694.625436] find_next_zero_bit:            3939309 ns, 327025 iterations
-gen: [   88.624227] find_next_zero_bit:            5529553 ns, 327026 iterations
-arm: [  694.646236] find_first_bit:                7301363 ns,    656 iterations
-gen: [   88.645313] find_first_bit:                7589120 ns,    655 iterations
-
-These figures appear to be pretty consistent across the three
-runs.
-
-For completness, here's the random-filled results:
-
-arm: [  694.109190] find_next_bit:                 2242618 ns, 163949 iterations
-gen: [   88.167340] find_next_bit:                 2632859 ns, 163743 iterations
-arm: [  694.117968] find_next_zero_bit:            2049129 ns, 163732 iterations
-gen: [   88.176912] find_next_zero_bit:            2844221 ns, 163938 iterations
-arm: [  694.151421] find_first_bit:               17778911 ns,  16448 iterations
-gen: [   88.211167] find_first_bit:               18596622 ns,  16401 iterations
-
-So, I don't see much reason to switch to the generic ops for
-these, not when we have such a significant speedup on the
-find_next_* functions for sparse-filled results..
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+> So the 'learning' is based on authorizing MAC,vlan addresses, which
+> is done by userspace daemons, e.g. hostapd or what could be called
+> mabd.
