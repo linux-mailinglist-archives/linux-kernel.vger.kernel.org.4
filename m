@@ -2,108 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE5096060D8
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 15:02:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B31936060DA
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 15:02:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbiJTNCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 09:02:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38486 "EHLO
+        id S230293AbiJTNCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 09:02:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230128AbiJTNCA (ORCPT
+        with ESMTP id S230285AbiJTNCL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 09:02:00 -0400
-Received: from sonic301-37.consmr.mail.ne1.yahoo.com (sonic301-37.consmr.mail.ne1.yahoo.com [66.163.184.206])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A8B55805A
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 06:01:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1666270914; bh=rP286mmtk9KIbfA1DBkXxmhjA87S2nuEH0V1KSBdLHc=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=fBBdnSiYKZbAx/eNkoYxsq9Sya7x9bXJtAma05mPHMWeT6jrstlVbPeTM5q6+yGR9cps2hpv0egoUaTS1o8yUsW4BzdhgGT2TvzDtmSQMiz6v8iuuKmWj5kyg6DUMIChJIwoHb5h//zxYZGN2lvZlr1wTXBNvDsKt8uQU3gxjxRDxbFn+n1C2NLy/YNfMFiD2FAEtW9rqguAYmGbVQHZwLYuVjHPayaDZZXeE8tmyqE5UgxSZxYNwj7+Vp6w7Z4DIPTcCveUFAsB+PeZNK0ErxrBK5uszQk1oY5YZpk6VlHXB+YoeP6mqMpowSICU3eCnDlkw9oJ4xp8D+RmCimirA==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1666270914; bh=RFNSL0oFl5VpMn57bqyG2/geTNY3ZQSki2Qe0IqKdkj=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=HTXvASF22muFMLPVz60rs0py2gCxz6Ky7imSmklo2t4q1xlZvI4w/30oWP2w322iAdfknLDlp5jBOS2e3rtctef+MSiEwth1hUCfMcEZZM+CimC69mj2u65Yb5YZBanwprSfA77mvB8z0OmlYg2bg85LBiLJH+TFWZZ7X/fLG+yh8hkjeGvF3L8FdM/wLK/DUjVmVVBYJ9GgPj0PRMOsx3TJwUDpacDjYbT7gGgjUs1i8qmloAFMbOtctHVZAp1kJvgsdUSWYBGw6XMn47DAMMnfv4geQ1Vt+CeRR1JyaM4OmEQiflw5AGZSaSJm8PF0YxAuSSPO0tc4aJmYVik8gQ==
-X-YMail-OSG: uq0VG2cVM1kEwNPECXe79JUAzh_4wAtstRNCFtQDLEBbYYXl_c.ZZh2oaoFNJ8q
- jud5mWSG5kxyFyBhWKuwZ4Q8FRgg0HFZBKDCdbGbs79KmhljWD9TsPqlHp7l0r3PKlyOl6ap8Pgl
- a4Xq0vaESI_.n9JU.wHeP_q9emEEJRTxGN3e0dc8rfcSwQSRjfmsG2q0jMdOBrJEDSSG.R3DnFNo
- X_lifO.8I54RmldhThvMJBh2rtgdFgRIZxHAH4gl6Fode9ZV3wSguTW9kO9gclLR2E_kXkdEioq5
- cjePubZGzUoooameO7LdXst4naaeg_GSHDFfkxm3Gdsd8nD957wc5x3SK9dsNHZuxH4_B3o0DuCz
- T2xhKauTRVzoh4I.dV8RQszT4tKuPWEvQazj9kZ7QWakcx4wl.6JPFOodmDspY7Utl3ZTVXimft6
- 8qGMtAq0DEwzCew5hhAxz63NEF1hHSvA118IzyMO49CJ5aC0faN3Klsd9HeDVVqg759znz45hePo
- B9qu5WanjSF7pfaVCa2TUNUx.NEFXjAyJcZm3AUFWSDmcuSUfcWlzWNd6PYSOPILJnlKCpWu5jBZ
- YpjyLSiQ2hQuoniT7TwSwEhx9H6Ld5Jxea39rYiWQQCNGrWpmZ050cBKrlYuJSsaKZLKUJn__4ba
- FuERvIzuhXcpo5k6ak6ZeNNFJ1KDr4mdmOcs1lV_ptHa8h2h64y9_5y.0StKudSOG1Tc5UEZRZWL
- ncvX2xtw7.3bxrdclYoutViw_ApPwuU_xfMZpgsQa4PgagdiBK1vlrRtfohe1sKz05LKv1OPIeXA
- bYZD3Qs7aezsAJTVjvJ_17HTREbAto_1xqc01IubFsTvQrIVTRnZXpwEiLyk3H_pDRZi7aLhi1qp
- EZUctLwF7fJB4Otz9iEKHzqRweJ2Hu6byOfEjXfHFtlpS6briX9Nhzchsh5.ouhJoHRZZ6Ea6t1u
- 2YipdX3x1mDicurpb5UGyznRbngm_oCCpZiR336LU8_qQoUA.NreF9dr_l_yX4f.lSbTtQQ2H58A
- CD7Sy1P8UuBNkVEbYU8seDxk7Nb5gmPDAgs13xXyFZBMdCoGRMylBwVauNKXHacKoS3hMn6HaHeI
- _fLryb0c1TKyDMuxm7SvLK82renc_w32PymglM5rRGfN6IIURiMGlGFIVRBM6DSuQg0Wl297BQgW
- d2dEvFRtsbDMXXQSMhXIMN7DfAAL0r4WpqOz4CjKUnAJJPOr.PSkuKUNyTfFrzsE9OsGpQZgeZO5
- _dsfmutRDtYZ79YW20aer_hmTzDKRKP0NmIfOtDYHTE5LTj1EdRHKoZWshv4VSLR6_uzUyCXyHqJ
- GGhAijW8eOOOqaGF0WUOw5v.WSvj.rtnrlnaYvP9Ofjm56XcIIDZ1e9k8kWXsk4lzUIW1ry.6F92
- 7gP.nTIhdBk8_xUyvD04SCmxQeqCshWKhbGnhRVFf0_idKxfj.k8YKXIilOhGCasGRLjIePQz5dR
- 2x4iioAoZZ8fDOhEISCjtBqPSI1KSg._Brd5coehYHv3A_ujurp7tLt7D.8VJDQmIZAuROmxG_iF
- 1Peh9XWaE.vfnUeUJSab_t5cLgkBpgMZjAo90WizAZlPwAKeK4kk1jYbFbDk04Gxwuw6RZOIfW36
- PXGxMLG8JJ6Sloz_qo71YADhlJz7_17iWvKSrlMPDc_1enKdoZFxvOZYkzNGKMhgoWbkwwOaNafb
- P0dudM4TrmUn4Ant_cmFF.QB3Vt43EnNmye0D5XnkAB.jOAbBKglbd6KV41rOHR8l_Nn2UJZISt1
- z9_lwL0WxLa9w1m2O7MIhDdaYZk_i9MtlJgHkMvqkDF5zcLIOHLUGFM9DMNUykF2c9_30OebsGu7
- gm2jmvNHaGkf.yn3eo9q.bMeN0puayp68xEroEjeGedk3PSLKkrtqIpZbLrZALHo09igcWAg_lDL
- 5Ib3Pxr26ANFpWIreg2esdFgA7k1kpj1G_y4YF1pKwg9hAb9Lh7fcRB6EL25RXVlbk84TYDRrTEc
- 2kXUuePGH9EMPGjo4FcQjROCDVfPSr6.Knjq8H7qEfmDoWZ2pX6tVacUmAvUfQT1WznjOXuXZ4hB
- poZSCtImWR53JT6oQ2k0RbZPoo9dR5oRvieuUCRCzipDR.Uw8g78oZMC7Hum8LmsMAyxNlsyTnWD
- dRBc_1xgxLJUZJQs4kycnRAntkhsExa11hzP5S7tbhcGnvqA3o7M5Hq7YlUeSSqg_O6iSf5qSYp1
- 278.z95bbBcEscMOJ_1Ukti04qACo.aMPNggpKQj_oSg51M54nBKBZy7GlszifA1NT0BBzheggJe
- uypOFGzoqaGSO
-X-Sonic-MF: <casey@schaufler-ca.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic301.consmr.mail.ne1.yahoo.com with HTTP; Thu, 20 Oct 2022 13:01:54 +0000
-Received: by hermes--production-gq1-754cb59848-vz6ds (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 0de3fc44211939ffe7978027b212fee6;
-          Thu, 20 Oct 2022 13:01:52 +0000 (UTC)
-Message-ID: <35af7779-d28c-27af-1038-b6bb4cf953d2@schaufler-ca.com>
-Date:   Thu, 20 Oct 2022 06:01:51 -0700
+        Thu, 20 Oct 2022 09:02:11 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D69658048
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 06:02:09 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id r18so19132340pgr.12
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 06:02:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OyZV+5dHPEm9y2grR1cTVbSv6PIoW3rFM516q3trw+c=;
+        b=hYsLr5so2u6zRKph8E5hlUdCPTFdmUEsuA+JUsFndgKNpB1tZEOigIt6Rb/5RoRPHt
+         qKpNsT7hDrl61cITpT4k1OU7+QEIKd1bIkS5tE0+jeAmZ+ta0MGZpGWQ9TuBvz+EHo9m
+         vwrzgPNKcHCHHquWxkD+f3MJp9QtesaVsHA4GInnePmjyAZhdH5+8A0hCE6KT2ndRaTs
+         YOQ2BSXjvUq5WrfllUi2hwkxbafEjXe9zwBBHqmwNP6A65ZGoZArI9QRDLhpdWKygAh6
+         T/v0BhTH8swSJF3G3kiGzUpH2vZAH4pDJxG5iYMsCx0NDoupeUSEbza2bAgOHsA47UEv
+         Y4Qg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OyZV+5dHPEm9y2grR1cTVbSv6PIoW3rFM516q3trw+c=;
+        b=fmywQZO+RmuL7Aueuwo6sb6qf0HRbnyiiW+5pxEUReJ3/+VCvvYfL5WgCe4mkiSDMk
+         W/2cEDBxf6IO2KPpRjhADcEisK46rH6vb1ffJUmewl3hNe/EcBv8/GiTHWpYQjMLzAtU
+         BqroP5yUeOt+4a6/a/wm805hIb1ujaCEGbL9buE8AiNIM0juZ/GD0OCFoql73HQ6nfj8
+         jQ9LbOd8Bj0UWivq3/Z/CBcWAC9xufZd9RV22D0O6STJRBq8TAiYPcTisj6+JRirxGiN
+         Q7/XecRtKqA+kiAtMbr48Q9cTtNqFALI94txyNxuPL9KV92jWSIKWDeMDb+ZysTFwE/Z
+         wnYg==
+X-Gm-Message-State: ACrzQf0XlWsZmPGJOlxCZfWSsbTCOt3Tiz1TMJcvyeKmLzPj8F49W2t7
+        rqNtP/iL44Lgz29NXXELMbk=
+X-Google-Smtp-Source: AMsMyM46qEZekBEhBsL2rQCglZLJDHG7q8ndkFW/p46TQddKcn21DGoW5OUV0AiB9/w7YBS/i3nxOA==
+X-Received: by 2002:a63:7e4d:0:b0:43c:8ce9:2a9f with SMTP id o13-20020a637e4d000000b0043c8ce92a9fmr11471320pgn.528.1666270928509;
+        Thu, 20 Oct 2022 06:02:08 -0700 (PDT)
+Received: from [192.168.43.80] (subs28-116-206-12-50.three.co.id. [116.206.12.50])
+        by smtp.gmail.com with ESMTPSA id h10-20020a170902680a00b0017300ec80b0sm12655901plk.308.2022.10.20.06.02.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Oct 2022 06:02:08 -0700 (PDT)
+Message-ID: <9e2e61c9-9d01-bb3a-1dc5-2f48fa7d94cd@gmail.com>
+Date:   Thu, 20 Oct 2022 20:02:02 +0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.3
-Subject: Re: [PATCH] apparmor: Use pointer to struct aa_label for lbs_cred
-To:     Xiu Jianfeng <xiujianfeng@huawei.com>, john.johansen@canonical.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        keescook@chromium.org
-Cc:     apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, casey@schaufler-ca.com
-References: <20221020023621.223121-1-xiujianfeng@huawei.com>
+Subject: Re: BISECT result: 6.0.0-RC kernels trigger Firefox snap bug with
+ 6.0.0-rc3 through 6.0.0-rc7
 Content-Language: en-US
-From:   Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <20221020023621.223121-1-xiujianfeng@huawei.com>
+To:     Jintao Yin <nicememory@gmail.com>, phillip@squashfs.org.uk
+Cc:     hsinyi@chromium.org, linux-kernel@vger.kernel.org,
+        marcmiltenberger@gmail.com, mirsad.todorovac@alu.unizg.hr,
+        regressions@leemhuis.info, regressions@lists.linux.dev,
+        srw@sladewatkins.net
+References: <20221018174157.1897-1-phillip@squashfs.org.uk>
+ <20221020074341.1431-1-nicememory@gmail.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20221020074341.1431-1-nicememory@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.20754 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/19/2022 7:36 PM, Xiu Jianfeng wrote:
-> According to the implementations of cred_label and set_cred_label, we
-> should use pointer to struct aa_label for lbs_cred instead of struct
-> aa_task_ctx, this patch fix it.
->
-> Fixes: bbd3662a8348 ("Infrastructure management of the cred security blob")
-> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
-> ---
->  security/apparmor/lsm.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
-> index f56070270c69..fd2f57972a17 100644
-> --- a/security/apparmor/lsm.c
-> +++ b/security/apparmor/lsm.c
-> @@ -1197,7 +1197,7 @@ static int apparmor_inet_conn_request(const struct sock *sk, struct sk_buff *skb
->   * The cred blob is a pointer to, not an instance of, an aa_task_ctx.
+On 10/20/22 14:43, Jintao Yin wrote:
+> Ignore my before diff. I didn't notice the end_index caculation greater
+> than file_end part. Use the following diff instead.
+> 
+> This diff is based on Phillip's latest two patches and improves the logic
+> to update the status of pages only if page actor touches them.
+> 
+> Please help test and feedbacks are welcome.
+> 
+> Thanks,
+> 
+> Jintao
+> 
+> diff --git a/fs/squashfs/file.c b/fs/squashfs/file.c
+> index e56510964b22..5efa2a9f9630 100644
+> --- a/fs/squashfs/file.c
+> +++ b/fs/squashfs/file.c
+> @@ -506,8 +506,9 @@ static int squashfs_readahead_fragment(struct page **page,
+>  		squashfs_i(inode)->fragment_size);
+>  	struct squashfs_sb_info *msblk = inode->i_sb->s_fs_info;
+>  	unsigned int n, mask = (1 << (msblk->block_log - PAGE_SHIFT)) - 1;
+> +	int res = buffer->error;
+>  
+> -	if (buffer->error)
+> +	if (res)
+>  		goto out;
+>  
+>  	expected += squashfs_i(inode)->fragment_offset;
+> @@ -529,7 +530,7 @@ static int squashfs_readahead_fragment(struct page **page,
+>  
+>  out:
+>  	squashfs_cache_put(buffer);
+> -	return buffer->error;
+> +	return res;
+>  }
+>  
+>  static void squashfs_readahead(struct readahead_control *ractl)
+> @@ -557,6 +558,7 @@ static void squashfs_readahead(struct readahead_control *ractl)
+>  		int res, bsize;
+>  		u64 block = 0;
+>  		unsigned int expected;
+> +		int nr_used_pages;
+>  
+>  		nr_pages = __readahead_batch(ractl, pages, max_pages);
+>  		if (!nr_pages)
+> @@ -593,18 +595,18 @@ static void squashfs_readahead(struct readahead_control *ractl)
+>  
+>  		res = squashfs_read_data(inode->i_sb, block, bsize, NULL, actor);
+>  
+> -		squashfs_page_actor_free(actor);
+> +		nr_used_pages = squashfs_page_actor_free(actor);
+>  
+>  		if (res == expected) {
+>  			int bytes;
+>  
+>  			/* Last page (if present) may have trailing bytes not filled */
+>  			bytes = res % PAGE_SIZE;
+> -			if (pages[nr_pages - 1]->index == file_end && bytes)
+> -				memzero_page(pages[nr_pages - 1], bytes,
+> +			if (index == file_end && bytes && nr_used_pages > 0)
+> +				memzero_page(pages[nr_used_pages - 1], bytes,
+>  					     PAGE_SIZE - bytes);
+>  
+> -			for (i = 0; i < nr_pages; i++) {
+> +			for (i = 0; i < nr_used_pages; i++) {
+>  				flush_dcache_page(pages[i]);
+>  				SetPageUptodate(pages[i]);
+>  			}
+> diff --git a/fs/squashfs/file_direct.c b/fs/squashfs/file_direct.c
+> index f1ccad519e28..1bb0347f98b0 100644
+> --- a/fs/squashfs/file_direct.c
+> +++ b/fs/squashfs/file_direct.c
+> @@ -30,10 +30,9 @@ int squashfs_readpage_block(struct page *target_page, u64 block, int bsize,
+>  	int mask = (1 << (msblk->block_log - PAGE_SHIFT)) - 1;
+>  	int start_index = target_page->index & ~mask;
+>  	int end_index = start_index | mask;
+> -	int i, n, pages, bytes, res = -ENOMEM;
+> +	int i, n, pages, used_pages, bytes, res = -ENOMEM;
+>  	struct page **page;
+>  	struct squashfs_page_actor *actor;
+> -	void *pageaddr;
+>  
+>  	if (end_index > file_end)
+>  		end_index = file_end;
+> @@ -74,7 +73,7 @@ int squashfs_readpage_block(struct page *target_page, u64 block, int bsize,
+>  	/* Decompress directly into the page cache buffers */
+>  	res = squashfs_read_data(inode->i_sb, block, bsize, NULL, actor);
+>  
+> -	squashfs_page_actor_free(actor);
+> +	used_pages = squashfs_page_actor_free(actor);
+>  
+>  	if (res < 0)
+>  		goto mark_errored;
+> @@ -86,16 +85,18 @@ int squashfs_readpage_block(struct page *target_page, u64 block, int bsize,
+>  
+>  	/* Last page (if present) may have trailing bytes not filled */
+>  	bytes = res % PAGE_SIZE;
+> -	if (page[pages - 1]->index == end_index && bytes) {
+> -		pageaddr = kmap_local_page(page[pages - 1]);
+> -		memset(pageaddr + bytes, 0, PAGE_SIZE - bytes);
+> -		kunmap_local(pageaddr);
+> +	if (used_pages > 0 && page[used_pages - 1]->index == end_index &&
+> +	    bytes) {
+> +		memzero_page(page[used_pages - 1], bytes,
+> +			     PAGE_SIZE - bytes);
+>  	}
+>  
+>  	/* Mark pages as uptodate, unlock and release */
+>  	for (i = 0; i < pages; i++) {
+> -		flush_dcache_page(page[i]);
+> -		SetPageUptodate(page[i]);
+> +		if (i < used_pages) {
+> +			flush_dcache_page(page[i]);
+> +			SetPageUptodate(page[i]);
+> +		}
+>  		unlock_page(page[i]);
+>  		if (page[i] != target_page)
+>  			put_page(page[i]);
+> @@ -112,8 +113,10 @@ int squashfs_readpage_block(struct page *target_page, u64 block, int bsize,
+>  	for (i = 0; i < pages; i++) {
+>  		if (page[i] == NULL || page[i] == target_page)
+>  			continue;
+> -		flush_dcache_page(page[i]);
+> -		SetPageError(page[i]);
+> +		if (i < used_pages) {
+> +			flush_dcache_page(page[i]);
+> +			SetPageError(page[i]);
+> +		}
+>  		unlock_page(page[i]);
+>  		put_page(page[i]);
+>  	}
+> diff --git a/fs/squashfs/page_actor.h b/fs/squashfs/page_actor.h
+> index 95ffbb543d91..c2c5c3937ef9 100644
+> --- a/fs/squashfs/page_actor.h
+> +++ b/fs/squashfs/page_actor.h
+> @@ -29,10 +29,12 @@ extern struct squashfs_page_actor *squashfs_page_actor_init(void **buffer,
+>  extern struct squashfs_page_actor *squashfs_page_actor_init_special(
+>  				struct squashfs_sb_info *msblk,
+>  				struct page **page, int pages, int length);
+> -static inline void squashfs_page_actor_free(struct squashfs_page_actor *actor)
+> +static inline int squashfs_page_actor_free(struct squashfs_page_actor *actor)
+>  {
+> +	int res = actor->next_page;
+>  	kfree(actor->tmp_buffer);
+>  	kfree(actor);
+> +	return res;
+>  }
+>  static inline void *squashfs_first_page(struct squashfs_page_actor *actor)
+>  {
 
-If your premise is true you'll want to fix this comment as well as the code.
+Hi Jintao,
 
->   */
->  struct lsm_blob_sizes apparmor_blob_sizes __lsm_ro_after_init = {
-> -	.lbs_cred = sizeof(struct aa_task_ctx *),
-> +	.lbs_cred = sizeof(struct aa_label *),
->  	.lbs_file = sizeof(struct aa_file_ctx),
->  	.lbs_task = sizeof(struct aa_task_ctx),
->  };
+Booting v6.1-rc1 with your patch applied, I got mixed results. On hello-world
+snap, it runs without errors. On lxd, I got the Verneed regression as
+originally reported. Sometimes I also get snapd panic.
+
+Thanks.
+
+-- 
+An old man doll... just what I always wanted! - Clara
+
