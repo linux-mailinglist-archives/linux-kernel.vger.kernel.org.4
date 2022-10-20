@@ -2,121 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 700B0606B15
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 00:13:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9924606B17
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 00:14:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbiJTWNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 18:13:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38510 "EHLO
+        id S229760AbiJTWOX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 18:14:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbiJTWNi (ORCPT
+        with ESMTP id S229667AbiJTWOU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 18:13:38 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A07F1DDDE6;
-        Thu, 20 Oct 2022 15:13:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666304017; x=1697840017;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=aw6d6bWnln28MF2jEzl2niRBEvZWaM/GCIo3nTnrPNY=;
-  b=Tx36d1QjZhmx98RE8JZAk6PzEJBsBNFL+XMHuGOQ/fevJEXflb7MQO4d
-   42Ht0DrMK0yLHylsNAAntdlt3c6vYqm1ehyA79INSmGRUr/FA1scXGPiW
-   8tPJrgBFHsKFx13YdFgwUYQkS3dljLUms/BS5+zw5Kk4cWMigSh48RzDJ
-   GN74ztkcJdH+ViOhQk335TIaC034j8yyY69yhf5bibmp0ZWHhI0STVj6H
-   cYl/jZJ4BLj/Ofa9Ox1M5+ctErjMe+0cevZKo63HP6OTo14Qun1F4WRSU
-   uIhZi0Iwrc/dwyPKVnVog2u4Ccd3ixull0EM7OpuE3zxZwY66aiOcT3v6
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="304463661"
-X-IronPort-AV: E=Sophos;i="5.95,199,1661842800"; 
-   d="scan'208";a="304463661"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 15:13:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="630098738"
-X-IronPort-AV: E=Sophos;i="5.95,199,1661842800"; 
-   d="scan'208";a="630098738"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga002.jf.intel.com with ESMTP; 20 Oct 2022 15:13:31 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oldn6-00AnNS-2p;
-        Fri, 21 Oct 2022 01:13:28 +0300
-Date:   Fri, 21 Oct 2022 01:13:28 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     matthew.gerlach@linux.intel.com
-Cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tianfei.zhang@intel.com, corbet@lwn.net,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        jirislaby@kernel.org, geert+renesas@glider.be,
-        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
-        johan@kernel.org, lukas@wunner.de, ilpo.jarvinen@linux.intel.com,
-        marpagan@redhat.com
-Subject: Re: [PATCH v4 4/4] tty: serial: 8250: add DFL bus driver for Altera
- 16550.
-Message-ID: <Y1HICEwvk+ZdgdqU@smile.fi.intel.com>
-References: <20221020212610.697729-1-matthew.gerlach@linux.intel.com>
- <20221020212610.697729-5-matthew.gerlach@linux.intel.com>
+        Thu, 20 Oct 2022 18:14:20 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33F961162EE;
+        Thu, 20 Oct 2022 15:14:19 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-131dda37dddso1390574fac.0;
+        Thu, 20 Oct 2022 15:14:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=U2yL2JYiiYo5wxOHBFlWJbQVB/KL1l9XmIZ5Wp92msU=;
+        b=kVKw/fp9G6GT4CxQqCJyoDOo7CLCjonPowXdWwulqlbSp/sLZloTrJDl1QSQPYr6it
+         P/Tlf6SpuZvWkmOyprhVlC1CV3wGXnzxtLiMY0qFQjJHOSC6u+yVMKKjd6C/Tf/X1GQv
+         LESVwNt2gZ3cqyV/UxuiqIcEfngzSYAv+cRGxKBa1ayMup0EXAXjJ8OtiUxIBUIdQFCM
+         rb/CbdqATE6C28nSrKbdlCT9c8xxL5xKCXN7nDjfMYbyY9aMuXSNFvhchAOEy0viRqV+
+         rJtmXTaIPip1TXmArCDo5E6yfm1ewpSJXjHduJtUBSRZfZsQ2ybBjGTrbHXtJWqJu2tr
+         EqAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=U2yL2JYiiYo5wxOHBFlWJbQVB/KL1l9XmIZ5Wp92msU=;
+        b=oB08FGR7s0xM5IijX9Qq3SvHXZwzIThjvnDnGzbRtNkjwJy/Wsg8pVxe5BtS4ZPlob
+         YM39vz/D0e3zg6nSiulFDI26fjZiKQfpv29xU5dsPcOhFqzNtwpXxRB9ojETQh8WSO/w
+         cGGTAzPwQPMCB5p3t8Mn5Vhjgtd9qJ3gAXOgLSMjaE5YoRuZA7Ir/JXRzjPw4XtVlOsN
+         zyN04Sxey0DkfeEsQQmE7Y+cGyg2A9ghZaQ9nYRiLnrftzf3p+LgPsNLAA816Kw9KXU1
+         Z0SPzJdUe3E2CPyVKBJ3n3AZCH+NT3sAIN0Ma0hMTtADEDzDR5jeq5N5imNwq2DL0+DP
+         GHug==
+X-Gm-Message-State: ACrzQf1b9CoRU1uTAl21sT6RHUH6Lac35s7t/w3FoAfCKMIv+xbURpa3
+        ugmRdyTZg8dBbIHLdhNWDhpr+/KAIic=
+X-Google-Smtp-Source: AMsMyM7ae2CccRqM1B9VaM4rk0CNtnIrM3lyG88WmZSiz/jq5Gn4J4onMLBjfQwcSq1WNShIPjshJA==
+X-Received: by 2002:a05:6870:587:b0:137:5188:cea9 with SMTP id m7-20020a056870058700b001375188cea9mr10396086oap.170.1666304058482;
+        Thu, 20 Oct 2022 15:14:18 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d10-20020a4aaa8a000000b0047644a9b49asm8104028oon.19.2022.10.20.15.14.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Oct 2022 15:14:18 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 20 Oct 2022 15:14:17 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     linux-hwmon@vger.kernel.org, jdelvare@suse.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v2 4/4] hwmon: (jc42) Don't cache the temperature
+ register
+Message-ID: <20221020221417.GG4035307@roeck-us.net>
+References: <20221020210320.1624617-1-martin.blumenstingl@googlemail.com>
+ <20221020210320.1624617-5-martin.blumenstingl@googlemail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221020212610.697729-5-matthew.gerlach@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221020210320.1624617-5-martin.blumenstingl@googlemail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 02:26:10PM -0700, matthew.gerlach@linux.intel.com wrote:
-> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+On Thu, Oct 20, 2022 at 11:03:20PM +0200, Martin Blumenstingl wrote:
+> Now that we're utilizing regmap and it's regcache for the
+> minimum/maximum/critical temperature registers the only cached register
+> that's left is the actual temperature register. Drop the custom cache
+> implementation as it just complicates things.
 > 
-> Add a Device Feature List (DFL) bus driver for the Altera
-> 16550 implementation of UART.
 
-...
+Ah, you got there eventually. Just combine this patch into the first
+patch of the series. No need to keep separate patches, especially since
+a lot of the code changed in patch 1 and 2 is just thrown away here.
 
-> +#include <linux/bitfield.h>
+That reminds me, though: Make sure that the alarm bits are not dropped
+after reading the temperature (running the 'sensors' command with
+alarms active should do). I have some JC42 chips here and will do the
+same.
 
-Where is device.h?
-
-> +#include <linux/dfl.h>
-
-> +#include <linux/io-64-nonatomic-lo-hi.h>
-
-User?
-
-> +#include <linux/kernel.h>
-
-Try to use what is really needed, yet this one may be still needed for
-something like ARRAY_SIZE().
-
-> +#include <linux/module.h>
-> +#include <linux/serial.h>
-> +#include <linux/serial_8250.h>
-
-Missed types.h.
-
-...
-
-> +	ret = dfl_uart_get_params(dfl_dev, &uart);
-
-> +
-
-Redundant blank line.
-
-> +	if (ret < 0)
-> +		return dev_err_probe(dev, ret, "failed uart feature walk\n");
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Thanks,
+Guenter
