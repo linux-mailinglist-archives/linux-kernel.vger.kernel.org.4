@@ -2,39 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC452606A56
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 23:31:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86DF5606A57
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 23:31:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229918AbiJTVb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 17:31:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54906 "EHLO
+        id S229954AbiJTVbz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 17:31:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbiJTVbX (ORCPT
+        with ESMTP id S229753AbiJTVbx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 17:31:23 -0400
+        Thu, 20 Oct 2022 17:31:53 -0400
 Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C5011F0401
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 14:31:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E73DB2248EF
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 14:31:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1666301469; bh=8t4ENBloG+Phz6je0+udV+4mU06+0QlLLRBDLTgn02w=;
+        t=1666301501; bh=LsgP4UwxtEr24nRtsoSyg8wVeKuuTajMpOKVYOf6LMM=;
         h=X-EA-Auth:Date:From:To:Subject:Message-ID:References:MIME-Version:
          Content-Type:In-Reply-To;
-        b=admlx2Nzxjt+bxTrkhm1Y5ZvwkIpI7ySwaICBatU4Dk4GndaGdvcdTBNiJ1YsDUU2
-         eawjmAoBGpph/Gzxa2kjXlIFaQFPXQz4qKWBA3xtooSDw+57jI014OZ0uLji0Hboun
-         k8yZoRSSrNfDkTBw5RSef4KaMDo29zrBtA6XxMqo=
-Received: by b-6.in.mailobj.net [192.168.90.16] with ESMTP
+        b=hapW5OMY8pdFZBAQ+Clpu7GXnKmV38IPzd/H74BdajzdfLu+pQ1T82U2SK/T+oEQ7
+         OE/oeKDgauyAn4fItP3iTh9wcmQIpKhnOw34hDqklqOAn3X/N0kKcN+97/9RcK2oVu
+         iLnR5arc0xVM7SSBMEzMDvJ0qtj/xWMbV5Nejt2M=
+Received: by b-5.in.mailobj.net [192.168.90.15] with ESMTP
         via [213.182.55.206]
-        Thu, 20 Oct 2022 23:31:09 +0200 (CEST)
-X-EA-Auth: u+4RCJmYiwvXpI1NQdr//izPrZSCt2itNnWJ85yVDcFQOVL6aLGVwyZAGV5UEcK14QOVeNeb5t9gxm5KJt1hVQgwaHzLwGpF
-Date:   Fri, 21 Oct 2022 03:01:05 +0530
+        Thu, 20 Oct 2022 23:31:41 +0200 (CEST)
+X-EA-Auth: izWFoG7NUcdEXVwGnODSoe5tJ0O4nUX/wq/lYIvP0Q7HLVuJ+AW8kpOABC7CrSHdN7F8eAxQTWRn/ftnZ9w9uOuOukDzkUR4
+Date:   Fri, 21 Oct 2022 03:01:37 +0530
 From:   Deepak R Varma <drv@mailo.com>
 To:     outreachy@lists.linux.dev, Larry.Finger@lwfinger.net,
         phil@philpotter.co.uk, paskripkin@gmail.com,
         gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
         linux-kernel@vger.kernel.org, kumarpraveen@linux.microsoft.com,
         saurabh.truth@gmail.com
-Subject: [PATCH v4 08/11] staging: r8188eu: replace leading spaces by tabs
-Message-ID: <c32b702c61ea3367d60f0a4c2443093d6ce45a69.1666299151.git.drv@mailo.com>
+Subject: [PATCH v4 09/11] staging: r8188eu: Put '{" on the symbol declaration
+ line
+Message-ID: <375f742936493b562bd4dfba90eb75bd8ab84f8a.1666299151.git.drv@mailo.com>
 References: <cover.1666299151.git.drv@mailo.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -49,9 +50,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Spaces are prohibited as per the Linux coding style guidelines. Replace
-those by tabs wherever possible to improve code alignment. Error
-reported by checkpatch script.
+Open braces '{" should be placed on the line of symbol declaration as
+per the coding-style guidelines. Improves readability and matches with
+style used in rest of the code. Issue reported by checkpatch script.
 
 Signed-off-by: Deepak R Varma <drv@mailo.com>
 ---
@@ -60,63 +61,67 @@ Changes in v4:
    -- None.
 
 Changes in v3:
-   1. Patch newly added in the patch set.
+   1. Patch newly added to the patch set.
 
- drivers/staging/r8188eu/include/rtw_cmd.h      | 10 +++++-----
- drivers/staging/r8188eu/include/rtw_mlme.h     |  2 +-
- drivers/staging/r8188eu/include/rtw_mlme_ext.h |  2 +-
- 3 files changed, 7 insertions(+), 7 deletions(-)
+
+ drivers/staging/r8188eu/include/rtw_cmd.h | 18 ++++++------------
+ 1 file changed, 6 insertions(+), 12 deletions(-)
 
 diff --git a/drivers/staging/r8188eu/include/rtw_cmd.h b/drivers/staging/r8188eu/include/rtw_cmd.h
-index 61fb523afb08..4b6a91aefc1e 100644
+index 4b6a91aefc1e..0a138f6f5bbb 100644
 --- a/drivers/staging/r8188eu/include/rtw_cmd.h
 +++ b/drivers/staging/r8188eu/include/rtw_cmd.h
-@@ -592,14 +592,14 @@ struct setratable_parm {
+@@ -445,8 +445,7 @@ struct getrfintfs_parm {
+ 	u8	rfintfs;
  };
 
- struct getratable_parm {
--                uint rsvd;
-+	uint rsvd;
+-struct Tx_Beacon_param
+-{
++struct Tx_Beacon_param {
+ 	struct wlan_bssid_ex network;
  };
 
- struct getratable_rsp {
--        u8 ss_ForceUp[NumRates];
--        u8 ss_ULevel[NumRates];
--        u8 ss_DLevel[NumRates];
--        u8 count_judge[NumRates];
-+	u8 ss_ForceUp[NumRates];
-+	u8 ss_ULevel[NumRates];
-+	u8 ss_DLevel[NumRates];
-+	u8 count_judge[NumRates];
+@@ -682,26 +681,22 @@ struct set_ch_parm {
  };
 
- /* to get TX,RX retry count */
-diff --git a/drivers/staging/r8188eu/include/rtw_mlme.h b/drivers/staging/r8188eu/include/rtw_mlme.h
-index 7658f864136e..ebf7168a7ef9 100644
---- a/drivers/staging/r8188eu/include/rtw_mlme.h
-+++ b/drivers/staging/r8188eu/include/rtw_mlme.h
-@@ -528,7 +528,7 @@ void rtw_indicate_scan_done(struct adapter *padapter);
- int rtw_restruct_sec_ie(struct adapter *adapter, u8 *in_ie, u8 *out_ie,
- 			uint in_len);
- int rtw_restruct_wmm_ie(struct adapter *adapter, u8 *in_ie, u8 *out_ie,
--		        uint in_len, uint initial_out_len);
-+			uint in_len, uint initial_out_len);
- void rtw_init_registrypriv_dev_network(struct adapter *adapter);
+ /*H2C Handler index: 59 */
+-struct SetChannelPlan_param
+-{
++struct SetChannelPlan_param {
+ 	u8 channel_plan;
+ };
 
- void rtw_update_registrypriv_dev_network(struct adapter *adapter);
-diff --git a/drivers/staging/r8188eu/include/rtw_mlme_ext.h b/drivers/staging/r8188eu/include/rtw_mlme_ext.h
-index be470f913a94..413b94e38744 100644
---- a/drivers/staging/r8188eu/include/rtw_mlme_ext.h
-+++ b/drivers/staging/r8188eu/include/rtw_mlme_ext.h
-@@ -449,7 +449,7 @@ void ERP_IE_handler(struct adapter *padapter, struct ndis_802_11_var_ie *pIE);
- void VCS_update(struct adapter *padapter, struct sta_info *psta);
+ /*H2C Handler index: 60 */
+-struct LedBlink_param
+-{
++struct LedBlink_param {
+ 	struct LED_871x *pLed;
+ };
 
- void update_beacon_info(struct adapter *padapter, u8 *pframe, uint len,
--		        struct sta_info *psta);
-+			struct sta_info *psta);
- int rtw_check_bcn_info(struct adapter  *Adapter, u8 *pframe, u32 packet_len);
- void update_IOT_info(struct adapter *padapter);
- void update_capinfo(struct adapter *adapter, u16 updatecap);
+ /*H2C Handler index: 61 */
+-struct SetChannelSwitch_param
+-{
++struct SetChannelSwitch_param {
+ 	u8 new_ch_no;
+ };
+
+ /*H2C Handler index: 62 */
+-struct TDLSoption_param
+-{
++struct TDLSoption_param {
+ 	u8 addr[ETH_ALEN];
+ 	u8 option;
+ };
+@@ -859,8 +854,7 @@ enum rtw_h2c_cmd {
+ #define _SetRFReg_CMD_		_Write_RFREG_CMD_
+
+ #ifdef _RTW_CMD_C_
+-static struct _cmd_callback	rtw_cmd_callback[] =
+-{
++static struct _cmd_callback	rtw_cmd_callback[] = {
+ 	{GEN_CMD_CODE(_Read_MACREG), NULL}, /*0*/
+ 	{GEN_CMD_CODE(_Write_MACREG), NULL},
+ 	{GEN_CMD_CODE(_Read_BBREG), &rtw_getbbrfreg_cmdrsp_callback},
 --
 2.30.2
 
