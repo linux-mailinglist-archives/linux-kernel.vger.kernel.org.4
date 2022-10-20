@@ -2,173 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C8AA605A5E
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 10:59:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 265CB605A5F
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 10:59:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229817AbiJTI7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 04:59:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45884 "EHLO
+        id S229889AbiJTI7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 04:59:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229918AbiJTI67 (ORCPT
+        with ESMTP id S230173AbiJTI7N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 04:58:59 -0400
+        Thu, 20 Oct 2022 04:59:13 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8F3194221
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 01:58:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33B82194221
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 01:59:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666256338;
+        s=mimecast20190719; t=1666256351;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=z4JdVTNocmv+5C7FFGGGdfOf1ttmjLbFkFJntY9Bfk4=;
-        b=Zax5i9ayjz8anF3R1dvhueLGwcykDdKonXoTXAxpPEO6EpDS1Ei5MdnH1O3YyH0eOysSok
-        21CWRRwb6H9R5GrEBh/DVRMwOkBn0rVJPWZS0KYrBt19q2Ta9dkeSSD3usuVX3XgQEtdAX
-        cm6d674C8dAKQGeCTepqF6EzDIJhEqI=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=VDOSs9w5teSY0v64EoGV9ODDZzj4sY8LViTNwvI0Fl4=;
+        b=NW22ExdoqqmA3lvQwVbRAiLSE9ZGxawDDcZS+EaYOc8y2dgKg5Vw44pX2/6MAdscXTloxB
+        1CgzY9i5nlEtcLHEU8fzDAMBSbabv0ww9Oi19ogD88DALXZzTdott3fcreRYI25u1B6Ui5
+        En+UAiPuMV41c+AEguwTFJqTxCbkHYk=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-584-o2YQCuwdPleR911od18Hjw-1; Thu, 20 Oct 2022 04:58:56 -0400
-X-MC-Unique: o2YQCuwdPleR911od18Hjw-1
-Received: by mail-qt1-f197.google.com with SMTP id 22-20020ac85756000000b0039cf0d41e2cso6599333qtx.13
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 01:58:56 -0700 (PDT)
+ us-mta-16-4dM0fvDgNfy12MuX8Z6TKA-1; Thu, 20 Oct 2022 04:59:09 -0400
+X-MC-Unique: 4dM0fvDgNfy12MuX8Z6TKA-1
+Received: by mail-wm1-f70.google.com with SMTP id t20-20020a7bc3d4000000b003c6bfea856aso770212wmj.1
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 01:59:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=z4JdVTNocmv+5C7FFGGGdfOf1ttmjLbFkFJntY9Bfk4=;
-        b=zedjQLAYtPSew5SKu/GQ7NIkAEi6gdib0FT4QgU5/TUs4PLFoj19w7wgE6yBYb+GIV
-         3xUOEs3BCwCPK9qpZcgllT8nRYrR7/j3gWLleLtt7iJs+b2kyrsnRM2z4Rhvpg2pw8aq
-         d6twertSSgFNybyUiEnWnosWfmFDL8ezXWCXriBMYUHe/BUZDhAeGWXyHluz0LTalbt4
-         Ng5l11TgYmOVyIq0Z6h5TDJz4WZHNlC40posFbNy2FrS9WpV56jAm8plrjkAAyDHYmuW
-         GzfjcY++ZvJM2hL+0DEBPTxB//ch5j1OoEzI26VioPKcA17q0byZ/GC9FvIywc/F9cw5
-         +o6A==
-X-Gm-Message-State: ACrzQf31tdV0EamU8X4h8zK+OWVAPgOjkPLh8oxT2s2HwcnhO8iQls8P
-        7jQVj0GlhNMgOVQyIbhEyX6jAN+kwZX6Qm7DlbrGZeQVsF44Dan1duTol9dBml35RYICpecC4jy
-        1Uuu8cJcil/SproIf1Wn8vvDJ
-X-Received: by 2002:a0c:cb88:0:b0:4b8:d79e:b2c1 with SMTP id p8-20020a0ccb88000000b004b8d79eb2c1mr694650qvk.85.1666256336284;
-        Thu, 20 Oct 2022 01:58:56 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4bXCasRwb46Qr+S4wxdTnTzsOhS4+ji7UC6MR7ZQFF8dYmBWGwTTEIKInkUbNKjOcrOIHvKQ==
-X-Received: by 2002:a0c:cb88:0:b0:4b8:d79e:b2c1 with SMTP id p8-20020a0ccb88000000b004b8d79eb2c1mr694632qvk.85.1666256336012;
-        Thu, 20 Oct 2022 01:58:56 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-103-235.dyn.eolo.it. [146.241.103.235])
-        by smtp.gmail.com with ESMTPSA id z15-20020a05622a124f00b0039a08c0a594sm5671319qtx.82.2022.10.20.01.58.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 01:58:55 -0700 (PDT)
-Message-ID: <bd11473cd4e2a92c4ce2a32d370800522862ad4b.camel@redhat.com>
-Subject: Re: [PATCH][next] net: dev: Convert sa_data to flexible array in
- struct sockaddr
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Kees Cook <keescook@chromium.org>, Jakub Kicinski <kuba@kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Dylan Yudaken <dylany@fb.com>,
-        Yajun Deng <yajun.deng@linux.dev>,
-        Petr Machata <petrm@nvidia.com>,
-        Hangbin Liu <liuhangbin@gmail.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        syzbot <syzkaller@googlegroups.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        netdev@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        "D. Wythe" <alibuda@linux.alibaba.com>,
-        Jeremy Kerr <jk@codeconstruct.com.au>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Menglong Dong <imagedong@tencent.com>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Congyu Liu <liu3101@purdue.edu>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Ziyang Xuan <william.xuanziyang@huawei.com>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        linux-hardening@vger.kernel.org
-Date:   Thu, 20 Oct 2022 10:58:50 +0200
-In-Reply-To: <20221018095503.never.671-kees@kernel.org>
-References: <20221018095503.never.671-kees@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VDOSs9w5teSY0v64EoGV9ODDZzj4sY8LViTNwvI0Fl4=;
+        b=4o/VNMLn3ckmLazzwtOT6BoHuj2898kIauakkvrf1HQ4qpSI2xqk1NOmYhPJVKXg9m
+         B7KNJ2Iy4RxRfqT8GWm8NPziIvf2bH4XbWU2YYdd7/D9FRAI/EAJGBH208xnUs8Rusdv
+         WxOzW2U9MyDVkZugxaz3sNOHt8Tpp30A8G4n378x1BrldKc2d1KYxBRY782OPb0Lxeru
+         Dq7ct+dRi5pAZv4jydRYcX4xfmLTa5/2TYt7iVDPXpfpHEV8EUDztCUfvXrKVvm/un0p
+         qWyMwqGU3MdJPTif1GAhF0mVxwQwXt2PhyikmXGHXJydFPwU28DVT/IBPX9wYZvfwuDz
+         NHQA==
+X-Gm-Message-State: ACrzQf1iVBv/qfCLOnUsDLnwKLEYYQQm+u1a7Ci4L6UuHDUiYnwaj8JS
+        wrkcsfzIR8U3BFhtTNU5ZyYYT7Clgp6tlpDf5AwQq9kb3c5oeRlyc5/UTGn5PPIKJsuKvLZXtcf
+        NVpJo9ULrzU9U25Kq+Xjj8XYVIYK0NixwTWLuKGBNAOYvV6QCIAfNHsO1BD/XKvPWwMA8t8sv
+X-Received: by 2002:adf:e109:0:b0:225:4ca5:80d5 with SMTP id t9-20020adfe109000000b002254ca580d5mr7689865wrz.465.1666256348046;
+        Thu, 20 Oct 2022 01:59:08 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM63uXuoBvlTjpQoi4bGhWEu0SeX2qIwjG13vznZ+D0K6xJzclcC/En1SF+lZRoN0ncGrVs7zA==
+X-Received: by 2002:adf:e109:0:b0:225:4ca5:80d5 with SMTP id t9-20020adfe109000000b002254ca580d5mr7689829wrz.465.1666256347642;
+        Thu, 20 Oct 2022 01:59:07 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c708:b100:1443:78d5:341f:c97a? (p200300cbc708b100144378d5341fc97a.dip0.t-ipconnect.de. [2003:cb:c708:b100:1443:78d5:341f:c97a])
+        by smtp.gmail.com with ESMTPSA id b21-20020a05600c4e1500b003b476cabf1csm1411944wmq.26.2022.10.20.01.59.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Oct 2022 01:59:07 -0700 (PDT)
+Message-ID: <8c86678a-3bfb-3854-b1a9-ae5969e730b8@redhat.com>
+Date:   Thu, 20 Oct 2022 10:59:05 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH v1 6/7] mm/ksm: convert break_ksm() to use
+ walk_page_range_vma()
+Content-Language: en-US
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Hugh Dickins <hughd@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Peter Xu <peterx@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Janosch Frank <frankja@linux.ibm.com>
+References: <20220930141931.174362-1-david@redhat.com>
+ <20220930141931.174362-7-david@redhat.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220930141931.174362-7-david@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-On Tue, 2022-10-18 at 02:56 -0700, Kees Cook wrote:
-> One of the worst offenders of "fake flexible arrays" is struct sockaddr,
-> as it is the classic example of why GCC and Clang have been traditionally
-> forced to treat all trailing arrays as fake flexible arrays: in the
-> distant misty past, sa_data became too small, and code started just
-> treating it as a flexible array, even though it was fixed-size. The
-> special case by the compiler is specifically that sizeof(sa->sa_data)
-> and FORTIFY_SOURCE (which uses __builtin_object_size(sa->sa_data, 1))
-> do not agree (14 and -1 respectively), which makes FORTIFY_SOURCE treat
-> it as a flexible array.
+On 30.09.22 16:19, David Hildenbrand wrote:
+> FOLL_MIGRATION exists only for the purpose of break_ksm(), and
+> actually, there is not even the need to wait for the migration to
+> finish, we only want to know if we're dealing with a KSM page.
 > 
-> However, the coming -fstrict-flex-arrays compiler flag will remove
-> these special cases so that FORTIFY_SOURCE can gain coverage over all
-> the trailing arrays in the kernel that are _not_ supposed to be treated
-> as a flexible array. To deal with this change, convert sa_data to a true
-> flexible array. To keep the structure size the same, move sa_data into
-> a union with a newly introduced sa_data_min with the original size. The
-> result is that FORTIFY_SOURCE can continue to have no idea how large
-> sa_data may actually be, but anything using sizeof(sa->sa_data) must
-> switch to sizeof(sa->sa_data_min).
+> Using follow_page() just to identify a KSM page overcomplicates GUP
+> code. Let's use walk_page_range_vma() instead, because we don't actually
+> care about the page itself, we only need to know a single property --
+> no need to even grab a reference on the page.
 > 
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: Jens Axboe <axboe@kernel.dk>
-> Cc: Pavel Begunkov <asml.silence@gmail.com>
-> Cc: David Ahern <dsahern@kernel.org>
-> Cc: Dylan Yudaken <dylany@fb.com>
-> Cc: Yajun Deng <yajun.deng@linux.dev>
-> Cc: Petr Machata <petrm@nvidia.com>
-> Cc: Hangbin Liu <liuhangbin@gmail.com>
-> Cc: Leon Romanovsky <leon@kernel.org>
-> Cc: syzbot <syzkaller@googlegroups.com>
-> Cc: Willem de Bruijn <willemb@google.com>
-> Cc: Pablo Neira Ayuso <pablo@netfilter.org>
-> Cc: netdev@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+> In my setup (AMD Ryzen 9 3900X), running the KSM selftest to test unmerge
+> performance on 2 GiB (taskset 0x8 ./ksm_tests -D -s 2048), this results in
+> a performance degradation of ~4% (old: ~5010 MiB/s, new: ~4800 MiB/s).
+> I don't think we particularly care for now.
+> 
+> Signed-off-by: David Hildenbrand <david@redhat.com>
 > ---
->  include/linux/socket.h |  5 ++++-
->  net/core/dev.c         |  2 +-
->  net/core/dev_ioctl.c   |  2 +-
->  net/packet/af_packet.c | 10 +++++-----
->  4 files changed, 11 insertions(+), 8 deletions(-)
+>   mm/ksm.c | 70 +++++++++++++++++++++++++++++++++++++++++++++++++-------
+>   1 file changed, 62 insertions(+), 8 deletions(-)
 > 
-> diff --git a/include/linux/socket.h b/include/linux/socket.h
-> index de3701a2a212..13c3a237b9c9 100644
-> --- a/include/linux/socket.h
-> +++ b/include/linux/socket.h
-> @@ -33,7 +33,10 @@ typedef __kernel_sa_family_t	sa_family_t;
->  
->  struct sockaddr {
->  	sa_family_t	sa_family;	/* address family, AF_xxx	*/
-> -	char		sa_data[14];	/* 14 bytes of protocol address	*/
-> +	union {
-> +		char sa_data_min[14];		/* Minimum 14 bytes of protocol address	*/
-> +		DECLARE_FLEX_ARRAY(char, sa_data);
+> diff --git a/mm/ksm.c b/mm/ksm.c
+> index 4d7bcf7da7c3..814c1a37c323 100644
+> --- a/mm/ksm.c
+> +++ b/mm/ksm.c
+> @@ -39,6 +39,7 @@
+>   #include <linux/freezer.h>
+>   #include <linux/oom.h>
+>   #include <linux/numa.h>
+> +#include <linux/pagewalk.h>
+>   
+>   #include <asm/tlbflush.h>
+>   #include "internal.h"
+> @@ -452,6 +453,60 @@ static inline bool ksm_test_exit(struct mm_struct *mm)
+>   	return atomic_read(&mm->mm_users) == 0;
+>   }
+>   
+> +int break_ksm_pud_entry(pud_t *pud, unsigned long addr, unsigned long next,
+> +			struct mm_walk *walk)
+> +{
+> +	/* We only care about page tables to walk to a single base page. */
+> +	if (pud_leaf(*pud) || !pud_present(*pud))
+> +		return 1;
+> +	return 0;
+> +}
+> +
+> +int break_ksm_pmd_entry(pmd_t *pmd, unsigned long addr, unsigned long next,
+> +			struct mm_walk *walk)
+> +{
+> +	bool *ksm_page = walk->private;
+> +	struct page *page = NULL;
+> +	pte_t *pte, ptent;
+> +	spinlock_t *ptl;
+> +
+> +	/* We only care about page tables to walk to a single base page. */
+> +	if (pmd_leaf(*pmd) || !pmd_present(*pmd))
+> +		return 1;
+> +
+> +	/*
+> +	 * We only lookup a single page (a) no need to iterate; and (b)
+> +	 * always return 1 to exit immediately and not iterate in the caller.
+> +	 */
+> +	pte = pte_offset_map_lock(walk->mm, pmd, addr, &ptl);
+> +	ptent = *pte;
+> +
+> +	if (pte_none(ptent))
+> +		return 1;
 
-Any special reason to avoid preserving the old name for the array and
-e.g. using sa_data_flex for the new field, so we don't have to touch
-the sockaddr users?
+As reported by Janosch, we fail to drop the lock here.
 
-Thanks!
 
-Paolo
+t480s: ~/git/linux ksm_unshare $ git diff
+diff --git a/mm/ksm.c b/mm/ksm.c
+index 26aec41b127c..94f8e114c89f 100644
+--- a/mm/ksm.c
++++ b/mm/ksm.c
+@@ -435,7 +435,7 @@ int break_ksm_pmd_entry(pmd_t *pmd, unsigned long addr, unsigned long next,
+         pte = pte_offset_map_lock(walk->mm, pmd, addr, &ptl);
+  
+         if (pte_none(*pte))
+-               return 1;
++               goto out_unlock;
+         if (!pte_present(*pte)) {
+                 swp_entry_t entry = pte_to_swp_entry(*pte);
+  
+@@ -451,6 +451,7 @@ int break_ksm_pmd_entry(pmd_t *pmd, unsigned long addr, unsigned long next,
+         }
+         if (page && PageKsm(page))
+                 *ksm_page = true;
++out_unlock:
+         pte_unmap_unlock(pte, ptl);
+         return 1;
+  }
+
+
+
+-- 
+Thanks,
+
+David / dhildenb
 
