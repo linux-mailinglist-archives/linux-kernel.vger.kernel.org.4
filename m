@@ -2,72 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E773606499
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 17:33:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F172E60649F
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 17:33:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230012AbiJTPdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 11:33:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34640 "EHLO
+        id S230239AbiJTPd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 11:33:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230400AbiJTPc5 (ORCPT
+        with ESMTP id S230245AbiJTPdX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 11:32:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8B951D1E24
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 08:32:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D16D61BDF
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 15:32:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CCCCC433D7;
-        Thu, 20 Oct 2022 15:32:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666279971;
-        bh=MIwXW+lRvthZkwxf5Rk6tHYJaZ3mnMTh3sSJ4bAV7t8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=0TCq97O92tT1p+gRJMlxmAMNOiJopBZSiazSkr4s39n4uwHs4Ry5+kPoMJhmWHzVL
-         eWTyaX/PK5lcSYVmfmBrMKYAoGFgKpdSeEZ4HcvN0d8PEIVbk4N0AJNYxgszzHYRgU
-         JEAwn3r3/ZJnkFKbfkHg8awaLUiL3DfUbzv9ezJc=
-Date:   Thu, 20 Oct 2022 17:32:49 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Dragan Cvetic <dragan.m.cvetic@gmail.com>
-Cc:     philipp.g.hortmann@gmail.com, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] staging: rtl8192e: Rename Enable, cck_Rx_path and
- disabledRF
-Message-ID: <Y1FqIYgP4F6hhyAY@kroah.com>
-References: <20221010190457.13199-1-dragan.m.cvetic@gmail.com>
- <20221010190457.13199-3-dragan.m.cvetic@gmail.com>
+        Thu, 20 Oct 2022 11:33:23 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 449D91B65EF
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 08:33:19 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id d13so124372qko.5
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 08:33:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7HUxkh6qlwBPEzlvP9/xhAHaR3FqYhNfBKYj/tNf7PA=;
+        b=HJklLCQLdYFpnP5xyffmVbRdWBwhkQ/6rqkWdwlyJt7dry8F+hezpx/EXR0kue7fhH
+         rrm/qTmP9B6OtQwcpdvWKvrBMM7GhX6PxRsl1xp5ewMVDHAEMXHzpCHWhLpNwESLfrV3
+         vFZDOpxbmhc7NjasI9J0rxeOoeg45VL929G7jak40RlJRBgkghMLheHa++PJn7ITC0tQ
+         A/8WJKMghNEyvWpR8L0CCIb6Ai7CdNikMW09XhY5XapQyRAib/dZjbH7Qoi8tKQnA/CR
+         CcFzX4RMKS+WJeWXllDnzRctiaeWaPWz9MFyrMf/+TcALg6ZTx6d4j7COimXzDjLvqs0
+         wqlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7HUxkh6qlwBPEzlvP9/xhAHaR3FqYhNfBKYj/tNf7PA=;
+        b=U3qxCT+/ZxhvAXZt6GJ2um3lpQAI9uoRnXlor4y+NTjmO00a5uUQ7MVM/AsIrpDYJx
+         cxzTYqUlxXAwUJEL0HwGKdJ8NzzY5co1AkHUeZvm4ndepyWRmzsZn1uo0px8UXFqnVt2
+         uoAt8Qoi++4GiopZAbnrD7dhq9IP0QHIvvAHlFf1kXEsLAz4w5LmLWcLe7VpkKX7gV7W
+         dhhDjy1Inzs19qTuwMcJoF6W2iFtj7mdJ+rRizV1jc5GXQX7FlrPccpykyuM4FB1+I6t
+         MkXANhXO3C1TOOF3tQjEHq+VkWq0ZVNknpLy+J8l52i9dIHXDkBr3jJKwBGQdF/Whzoo
+         TKQQ==
+X-Gm-Message-State: ACrzQf28qa6TWJ82yRbUuejurtrlrhuwYVKKpGHCKu9IHn8WGIPRsr9o
+        n998kz2aSK17/eOxbShMIELP1A==
+X-Google-Smtp-Source: AMsMyM7fbfzfUbQBTjbq0KwtSpFbinTm7Ze4xD696dbgFpTmqpYHuP0DOiT72Wu1R1/5TKojB+yxcQ==
+X-Received: by 2002:a37:5d2:0:b0:6ee:7931:825a with SMTP id 201-20020a3705d2000000b006ee7931825amr9581420qkf.591.1666279997876;
+        Thu, 20 Oct 2022 08:33:17 -0700 (PDT)
+Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
+        by smtp.gmail.com with ESMTPSA id hh6-20020a05622a618600b00343057845f7sm6064722qtb.20.2022.10.20.08.33.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Oct 2022 08:33:17 -0700 (PDT)
+Message-ID: <dee7f119-551f-3163-7148-aeb822a0be38@linaro.org>
+Date:   Thu, 20 Oct 2022 11:33:10 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221010190457.13199-3-dragan.m.cvetic@gmail.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH 2/2] dt-bindings: rtc: add bindings for max313xx RTCs
+Content-Language: en-US
+To:     Ibrahim Tilki <Ibrahim.Tilki@analog.com>, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, jdelvare@suse.com,
+        linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
+References: <20221019133910.282-1-Ibrahim.Tilki@analog.com>
+ <20221019133910.282-2-Ibrahim.Tilki@analog.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221019133910.282-2-Ibrahim.Tilki@analog.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 10, 2022 at 08:04:56PM +0100, Dragan Cvetic wrote:
-> Rename variable Enable to enable, cck_Rx_path to cck_rx_path and
-> disabledRF to disabled_rf to avoid CamelCase which is not accepted
-> by checkpatch.
+On 19/10/2022 09:39, Ibrahim Tilki wrote:
+> Devicetree binding documentation for Analog Devices MAX313XX RTCs
 > 
-> Signed-off-by: Dragan Cvetic <dragan.m.cvetic@gmail.com>
+> Signed-off-by: Ibrahim Tilki <Ibrahim.Tilki@analog.com>
+> Signed-off-by: Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
 > ---
->  drivers/staging/rtl8192e/rtl8192e/rtl_dm.c | 20 ++++++++++----------
->  drivers/staging/rtl8192e/rtl8192e/rtl_dm.h |  6 +++---
->  2 files changed, 13 insertions(+), 13 deletions(-)
+>  .../devicetree/bindings/rtc/adi,max313xx.yaml | 163 ++++++++++++++++++
+>  1 file changed, 163 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/rtc/adi,max313xx.yaml
+> 
 
-This change did not apply to my tree.
+Thank you for your patch. There is something to discuss/improve.
 
-Please rebase and resend.
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        rtc@68 {
+> +            reg = <0x68>;
+> +            compatible = "adi,max31329";
+> +            clocks = <&clkin>;
+> +            interrupt-parent = <&gpio>;
+> +            interrupts = <26 IRQ_TYPE_EDGE_FALLING>;
+> +            interrupt-names = "INTB";
+> +        };
+> +    };
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        rtc@68 {
+> +            reg = <0x68>;
+> +            compatible = "adi,max31331";
+> +            #clock-cells = <0>;
+> +            interrupt-parent = <&gpio>;
+> +            interrupts = <25 IRQ_TYPE_EDGE_FALLING>, <26 IRQ_TYPE_EDGE_FALLING>;
+> +            interrupt-names = "INTA", "INTB";
+> +        };
+> +    };
+> +  - |
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        rtc@69 {
+> +            reg = <0x69>;
+> +            compatible = "adi,max31341";
+> +            #clock-cells = <0>;
+> +            clocks = <&clkin>;
 
-thanks,
 
-greg k-h
+Drop the last example - it's basically the same as first, without
+interrupts.
+
+With that:
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
