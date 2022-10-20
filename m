@@ -2,430 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76CF0606332
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 16:35:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBBEC606337
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 16:35:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230108AbiJTOfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 10:35:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40524 "EHLO
+        id S230111AbiJTOfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 10:35:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230052AbiJTOe4 (ORCPT
+        with ESMTP id S229726AbiJTOfh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 10:34:56 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F2CD5A2F9;
-        Thu, 20 Oct 2022 07:34:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666276492; x=1697812492;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=zFTFNiV92NX50PnQOqzwKZWlpo7k25DwAW2u5qQ5P9Y=;
-  b=OY5D08iaPL1qmz7dsIf/21IYAYL9vBeH1gaSSGFcfFcGgzLad0eh3a4m
-   LP+y2RIbem9WCWbeU6hBr8KE6vXNGQJfrCQjO49w3K2mzK9d2qvMYZYtV
-   VPp+ymfZ0wFjXh5LUQnZdQ9rIG5v0j2QEQtWpOsB/4ICCPxUX0VHa9TpL
-   fJmRF4Q2Ce+6fC+0BPHw1xPYm7LbcBuRFgV8pz6RPOi+Au+Rl21eJhxKC
-   BvCsCaEBYAKpcUmNfxwsXzf+vMBlRzw1TBarNWI9HWFut8Z8s8tGBMntw
-   q2mB+LBaW6deINpo/RGEz5V+7U5YkLdxZjFZhwqpOZgEeap1FuSTa98pA
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="370935723"
-X-IronPort-AV: E=Sophos;i="5.95,198,1661842800"; 
-   d="scan'208";a="370935723"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 07:34:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="580938420"
-X-IronPort-AV: E=Sophos;i="5.95,198,1661842800"; 
-   d="scan'208";a="580938420"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga003.jf.intel.com with ESMTP; 20 Oct 2022 07:34:40 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1olWd4-00AadZ-2V;
-        Thu, 20 Oct 2022 17:34:38 +0300
-Date:   Thu, 20 Oct 2022 17:34:38 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
-        Dmitry Rokosov <DDRokosov@sberdevices.ru>,
-        Jagath Jog J <jagathjog1996@gmail.com>,
-        Cosmin Tanislav <demonsingur@gmail.com>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/3] iio: accel: Support Kionix/ROHM KX022A
- accelerometer
-Message-ID: <Y1FcftQKimmvcOej@smile.fi.intel.com>
-References: <cover.1666263249.git.mazziesaccount@gmail.com>
- <5000bd61650554658d13619c8244f02cedbc182a.1666263249.git.mazziesaccount@gmail.com>
+        Thu, 20 Oct 2022 10:35:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65FA513C3FC;
+        Thu, 20 Oct 2022 07:35:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C3A66191F;
+        Thu, 20 Oct 2022 14:35:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A035BC43149;
+        Thu, 20 Oct 2022 14:35:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666276533;
+        bh=LCGJBSRGVbeIJ5hd+BFarnFeqPOj/yT1VOE+UzJXnLM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=t3MpQXzCAzbPYYQNCi/X7lFDoOgS/9UqN8kv4rFh4vkJRSmayfFAIgng+dPgApu1h
+         K+HkCsugLs4cxx02GB0HCy+LSlw+v1eOTP6GY+w5qcO0y/ZI5LDm5jL5mAmG9IE84c
+         MTsIWr/WgL6ioL5xnjn7gnAINWnMKEekKZj+Os+AbGAxpxKh/PpZlOTpL5Xc2Ikkq1
+         NXJbl/pkOxMM6pC1bsU1CqeTvRUhktRu+ntO8oJxI03jA7rrxBZSmsZnXknUzNighM
+         l3m0ThTZaFc/SCttY1PpOBpAPStSDMzZPMAm5nBdUtf0TPM9RQs8TajKziT/d56V8K
+         NEyW01RiuzcVA==
+Received: by mail-ot1-f41.google.com with SMTP id f4-20020a9d0384000000b0066208c73094so29869otf.0;
+        Thu, 20 Oct 2022 07:35:33 -0700 (PDT)
+X-Gm-Message-State: ACrzQf05ZtMzXGwIqj4YOpnzGCmjtmTSYhWz9qchwgmHQAtgh38xf74l
+        NvwwASleWukfbeyNgMP4ELXzxspE9kiLRDzMEC0=
+X-Google-Smtp-Source: AMsMyM5qQ4ar9uJ0SPnN8rvwMF93C3T7WFzeBCvLwriEpZzXOZp8MGndWxMLk8oh/dMvf6wpqmkRhydSYqZeY40cZIY=
+X-Received: by 2002:a9d:60dd:0:b0:661:b6ae:aa7a with SMTP id
+ b29-20020a9d60dd000000b00661b6aeaa7amr6998580otk.140.1666276532511; Thu, 20
+ Oct 2022 07:35:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5000bd61650554658d13619c8244f02cedbc182a.1666263249.git.mazziesaccount@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20221019103623.7008-1-xianting.tian@linux.alibaba.com> <20221019103623.7008-2-xianting.tian@linux.alibaba.com>
+In-Reply-To: <20221019103623.7008-2-xianting.tian@linux.alibaba.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Thu, 20 Oct 2022 22:35:20 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSWX75fNMYeAK4ckGB9SQvJgfr-zSczirbdaBxHK6opVw@mail.gmail.com>
+Message-ID: <CAJF2gTSWX75fNMYeAK4ckGB9SQvJgfr-zSczirbdaBxHK6opVw@mail.gmail.com>
+Subject: Re: [PATCH V4 1/2] RISC-V: Add arch_crash_save_vmcoreinfo support
+To:     Xianting Tian <xianting.tian@linux.alibaba.com>
+Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, anup@brainfault.org, heiko@sntech.de,
+        mick@ics.forth.gr, alexandre.ghiti@canonical.com, bhe@redhat.com,
+        vgoyal@redhat.com, dyoung@redhat.com, corbet@lwn.net,
+        Conor.Dooley@microchip.com, bagasdotme@gmail.com,
+        k-hagio-ab@nec.com, lijiang@redhat.com, kexec@lists.infradead.org,
+        linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, crash-utility@redhat.com,
+        heinrich.schuchardt@canonical.com, hschauhan@nulltrace.org,
+        yixun.lan@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 02:37:15PM +0300, Matti Vaittinen wrote:
-> KX022A is a 3-axis accelerometer from ROHM/Kionix. The sensor features
-> include variable ODRs, I2C and SPI control, FIFO/LIFO with watermark IRQ,
-> tap/motion detection, wake-up & back-to-sleep events, four acceleration
-> ranges (2, 4, 8 and 16g) and probably some other cool features.
-> 
-> Add support for the basic accelerometer features such as getting the
-> acceleration data via IIO. (raw reads, triggered buffer [data-ready] or
-> using the WMI IRQ).
-> 
-> Important things to be added include the double-tap, motion
-> detection and wake-up as well as the runtime power management.
+Tested-by: Guo Ren <guoren@kernel.org>
 
-...
+Don't forget the another two kdump fixups [1]
+[1] https://lore.kernel.org/all/20221020141603.2856206-3-guoren@kernel.org/
 
-> +	if (!i2c->irq) {
-> +		dev_err(dev, "No IRQ configured\n");
-> +		return -EINVAL;
+    Only the patch without [1]:
+    crash> help -r
+    CPU 0: [OFFLINE]
 
-At least
+    CPU 1:
+    epc : ffffffff80009ff0 ra : ffffffff800b789a sp : ff2000001098bb40
+     gp : ffffffff815fca60 tp : ff60000004680000 t0 : 6666666666663c5b
+     t1 : 0000000000000000 t2 : 666666666666663c s0 : ff2000001098bc90
+     s1 : ffffffff81600798 a0 : ff2000001098bb48 a1 : 0000000000000000
+     a2 : 0000000000000000 a3 : 0000000000000001 a4 : 0000000000000000
+     a5 : ff60000004690800 a6 : 0000000000000000 a7 : 0000000000000000
+     s2 : ff2000001098bb48 s3 : ffffffff81093ec8 s4 : ffffffff816004ac
+     s5 : 0000000000000000 s6 : 0000000000000007 s7 : ffffffff80e7f720
+     s8 : 00fffffffffff3f0 s9 : 0000000000000007 s10: 00aaaaaaaab98700
+     s11: 0000000000000001 t3 : ffffffff819a8097 t4 : ffffffff819a8097
+     t5 : ffffffff819a8098 t6 : ff2000001098b9a8
 
-	return dev_err_probe(...);
+    CPU 2: [OFFLINE]
 
-for know error codes (or when we know that there won't be EPROBE_DEFER), takes
-less LoCs in the source file.
+    CPU 3: [OFFLINE]
 
-> +	}
+    The patch with [1]:
+    crash> help -r
+    CPU 0:
+    epc : ffffffff80003f34 ra : ffffffff808caa7c sp : ffffffff81403eb0
+     gp : ffffffff815fcb48 tp : ffffffff81413400 t0 : 0000000000000000
+     t1 : 0000000000000000 t2 : 0000000000000000 s0 : ffffffff81403ec0
+     s1 : 0000000000000000 a0 : 0000000000000000 a1 : 0000000000000000
+     a2 : 0000000000000000 a3 : 0000000000000000 a4 : 0000000000000000
+     a5 : 0000000000000000 a6 : 0000000000000000 a7 : 0000000000000000
+     s2 : ffffffff816001c8 s3 : ffffffff81600370 s4 : ffffffff80c32e18
+     s5 : ffffffff819d3018 s6 : ffffffff810e2110 s7 : 0000000000000000
+     s8 : 0000000000000000 s9 : 0000000080039eac s10: 0000000000000000
+     s11: 0000000000000000 t3 : 0000000000000000 t4 : 0000000000000000
+     t5 : 0000000000000000 t6 : 0000000000000000
 
-...
+    CPU 1:
+    epc : ffffffff80003f34 ra : ffffffff808caa7c sp : ff2000000068bf30
+     gp : ffffffff815fcb48 tp : ff6000000240d400 t0 : 0000000000000000
+     t1 : 0000000000000000 t2 : 0000000000000000 s0 : ff2000000068bf40
+     s1 : 0000000000000001 a0 : 0000000000000000 a1 : 0000000000000000
+     a2 : 0000000000000000 a3 : 0000000000000000 a4 : 0000000000000000
+     a5 : 0000000000000000 a6 : 0000000000000000 a7 : 0000000000000000
+     s2 : ffffffff816001c8 s3 : ffffffff81600370 s4 : ffffffff80c32e18
+     s5 : ffffffff819d3018 s6 : ffffffff810e2110 s7 : 0000000000000000
+     s8 : 0000000000000000 s9 : 0000000080039ea8 s10: 0000000000000000
+     s11: 0000000000000000 t3 : 0000000000000000 t4 : 0000000000000000
+     t5 : 0000000000000000 t6 : 0000000000000000
 
-> +	regmap = devm_regmap_init_i2c(i2c, &kx022a_regmap);
-> +	if (IS_ERR(regmap)) {
-> +		dev_err(dev, "Failed to initialize Regmap\n");
-> +		return PTR_ERR(regmap);
+    CPU 2:
+    epc : ffffffff80003f34 ra : ffffffff808caa7c sp : ff20000000693f30
+     gp : ffffffff815fcb48 tp : ff6000000240e900 t0 : 0000000000000000
+     t1 : 0000000000000000 t2 : 0000000000000000 s0 : ff20000000693f40
+     s1 : 0000000000000002 a0 : 0000000000000000 a1 : 0000000000000000
+     a2 : 0000000000000000 a3 : 0000000000000000 a4 : 0000000000000000
+     a5 : 0000000000000000 a6 : 0000000000000000 a7 : 0000000000000000
+     s2 : ffffffff816001c8 s3 : ffffffff81600370 s4 : ffffffff80c32e18
+     s5 : ffffffff819d3018 s6 : ffffffff810e2110 s7 : 0000000000000000
+     s8 : 0000000000000000 s9 : 0000000080039eb0 s10: 0000000000000000
+     s11: 0000000000000000 t3 : 0000000000000000 t4 : 0000000000000000
+     t5 : 0000000000000000 t6 : 0000000000000000
 
-Ditto here and anywhere else for the similar cases.
+    CPU 3:
+    epc : ffffffff8000a1e4 ra : ffffffff800b7bba sp : ff200000109bbb40
+     gp : ffffffff815fcb48 tp : ff6000000373aa00 t0 : 6666666666663c5b
+     t1 : 0000000000000000 t2 : 666666666666663c s0 : ff200000109bbc90
+     s1 : ffffffff816007a0 a0 : ff200000109bbb48 a1 : 0000000000000000
+     a2 : 0000000000000000 a3 : 0000000000000001 a4 : 0000000000000000
+     a5 : ff60000002c61c00 a6 : 0000000000000000 a7 : 0000000000000000
+     s2 : ff200000109bbb48 s3 : ffffffff810941a8 s4 : ffffffff816004b4
+     s5 : 0000000000000000 s6 : 0000000000000007 s7 : ffffffff80e7f7a0
+     s8 : 00fffffffffff3f0 s9 : 0000000000000007 s10: 00aaaaaaaab98700
+     s11: 0000000000000001 t3 : ffffffff819a8097 t4 : ffffffff819a8097
+     t5 : ffffffff819a8098 t6 : ff200000109bb9a8
 
-> +	}
-
-...
-
-> +	case IIO_CHAN_INFO_SAMP_FREQ:
-> +		*vals = (const int *)kx022a_accel_samp_freq_table;
-> +		*length = ARRAY_SIZE(kx022a_accel_samp_freq_table) * 2;
-> +		*type = IIO_VAL_INT_PLUS_MICRO;
-> +		return IIO_AVAIL_LIST;
-> +	case IIO_CHAN_INFO_SCALE:
-> +		*vals = (const int *)kx022a_scale_table;
-> +		*length = ARRAY_SIZE(kx022a_scale_table) * 2;
-> +		*type = IIO_VAL_INT_PLUS_MICRO;
-> +		return IIO_AVAIL_LIST;
-
-These  ' * 2' can be replaced with respective ARRAY_SIZE() of nested element
-for robustness, but I don't think it worth it. What we need is to provide
-IIO specific type for these tables and use it.
-
-...
-
-> +static int kx022a_turn_on_off_unlocked(struct kx022a_data *data, bool on)
+On Wed, Oct 19, 2022 at 6:36 PM Xianting Tian
+<xianting.tian@linux.alibaba.com> wrote:
+>
+> Add arch_crash_save_vmcoreinfo(), which exports VM layout(MODULES, VMALLOC,
+> VMEMMAP ranges and KERNEL_LINK_ADDR), va bits and ram base for vmcore.
+>
+> Default pagetable levels and PAGE_OFFSET aren't same for different kernel
+> version as below. For pagetable levels, it sets sv57 by default and falls
+> back to setting sv48 at boot time if sv57 is not supported by the hardware.
+>
+> For ram base, the default value is 0x80200000 for qemu riscv64 env and,
+> for example, is 0x200000 on the XuanTie 910 CPU.
+>
+>  * Linux Kernel 5.18 ~
+>  *      PGTABLE_LEVELS = 5
+>  *      PAGE_OFFSET = 0xff60000000000000
+>  * Linux Kernel 5.17 ~
+>  *      PGTABLE_LEVELS = 4
+>  *      PAGE_OFFSET = 0xffffaf8000000000
+>  * Linux Kernel 4.19 ~
+>  *      PGTABLE_LEVELS = 3
+>  *      PAGE_OFFSET = 0xffffffe000000000
+>
+> Since these configurations change from time to time and version to version,
+> it is preferable to export them via vmcoreinfo than to change the crash's
+> code frequently, it can simplify the development of crash tool.
+>
+> Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
+> ---
+>  arch/riscv/kernel/Makefile     |  1 +
+>  arch/riscv/kernel/crash_core.c | 23 +++++++++++++++++++++++
+>  2 files changed, 24 insertions(+)
+>  create mode 100644 arch/riscv/kernel/crash_core.c
+>
+> diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
+> index db6e4b1294ba..4cf303a779ab 100644
+> --- a/arch/riscv/kernel/Makefile
+> +++ b/arch/riscv/kernel/Makefile
+> @@ -81,6 +81,7 @@ obj-$(CONFIG_KGDB)            += kgdb.o
+>  obj-$(CONFIG_KEXEC_CORE)       += kexec_relocate.o crash_save_regs.o machine_kexec.o
+>  obj-$(CONFIG_KEXEC_FILE)       += elf_kexec.o machine_kexec_file.o
+>  obj-$(CONFIG_CRASH_DUMP)       += crash_dump.o
+> +obj-$(CONFIG_CRASH_CORE)       += crash_core.o
+>
+>  obj-$(CONFIG_JUMP_LABEL)       += jump_label.o
+>
+> diff --git a/arch/riscv/kernel/crash_core.c b/arch/riscv/kernel/crash_core.c
+> new file mode 100644
+> index 000000000000..3e889d0ed7bd
+> --- /dev/null
+> +++ b/arch/riscv/kernel/crash_core.c
+> @@ -0,0 +1,23 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +
+> +#include <linux/crash_core.h>
+> +#include <linux/pagemap.h>
+> +
+> +void arch_crash_save_vmcoreinfo(void)
 > +{
-> +	int ret;
+> +       VMCOREINFO_NUMBER(VA_BITS);
+> +       VMCOREINFO_NUMBER(phys_ram_base);
 > +
-> +	if (on)
-> +		ret = regmap_set_bits(data->regmap, KX022A_REG_CNTL,
-> +				      KX022A_MASK_PC1);
-> +	else
-> +		ret = regmap_clear_bits(data->regmap, KX022A_REG_CNTL,
-> +					KX022A_MASK_PC1);
+> +       vmcoreinfo_append_str("NUMBER(PAGE_OFFSET)=0x%lx\n", PAGE_OFFSET);
+> +       vmcoreinfo_append_str("NUMBER(VMALLOC_START)=0x%lx\n", VMALLOC_START);
+> +       vmcoreinfo_append_str("NUMBER(VMALLOC_END)=0x%lx\n", VMALLOC_END);
+> +       vmcoreinfo_append_str("NUMBER(VMEMMAP_START)=0x%lx\n", VMEMMAP_START);
+> +       vmcoreinfo_append_str("NUMBER(VMEMMAP_END)=0x%lx\n", VMEMMAP_END);
+> +#ifdef CONFIG_64BIT
+> +       vmcoreinfo_append_str("NUMBER(MODULES_VADDR)=0x%lx\n", MODULES_VADDR);
+> +       vmcoreinfo_append_str("NUMBER(MODULES_END)=0x%lx\n", MODULES_END);
+> +#endif
 > +
-> +	if (ret)
-> +		dev_err(data->dev, "Turn %s fail %d\n", (on) ? "ON" : "OFF",
-> +			ret);
-
-str_on_off() ?
-
-> +	return ret;
-> +
+> +       if (IS_ENABLED(CONFIG_64BIT))
+> +               vmcoreinfo_append_str("NUMBER(KERNEL_LINK_ADDR)=0x%lx\n", KERNEL_LINK_ADDR);
 > +}
+> --
+> 2.17.1
+>
 
-...
-
-> +	switch (mask) {
-> +	case IIO_CHAN_INFO_SAMP_FREQ:
-> +		n = ARRAY_SIZE(kx022a_accel_samp_freq_table);
-> +
-> +		while (n--)
-> +			if (val == kx022a_accel_samp_freq_table[n][0] &&
-> +			    kx022a_accel_samp_freq_table[n][1] == val2)
-
-Why not to use the same kind of l and r arguments in == lines?
-In current form it's a bit harder to see what the catch here.
-
-> +				break;
-> +		if (n < 0) {
-> +			ret = -EINVAL;
-> +			goto unlock_out;
-> +		}
-> +		ret = kx022a_turn_off_lock(data);
-> +		if (ret)
-> +			break;
-> +
-> +		ret = regmap_update_bits(data->regmap,
-> +					 KX022A_REG_ODCNTL,
-> +					 KX022A_MASK_ODR, n);
-> +		data->odr_ns = kx022a_odrs[n];
-> +		kx022a_turn_on_unlock(data);
-> +		break;
-> +	case IIO_CHAN_INFO_SCALE:
-> +		n = ARRAY_SIZE(kx022a_scale_table);
-> +
-> +		while (n-- > 0)
-> +			if (val == kx022a_scale_table[n][0] &&
-> +			    kx022a_scale_table[n][1] == val2)
-
-Ditto.
-
-> +				break;
-> +		if (n < 0) {
-> +			ret = -EINVAL;
-> +			goto unlock_out;
-> +		}
-> +
-> +		ret = kx022a_turn_off_lock(data);
-> +		if (ret)
-> +			break;
-> +
-> +		ret = regmap_update_bits(data->regmap, KX022A_REG_CNTL,
-> +					 KX022A_MASK_GSEL,
-> +					 n << KX022A_GSEL_SHIFT);
-> +		kx022a_turn_on_unlock(data);
-> +		break;
-> +	default:
-> +		ret = -EINVAL;
-> +		break;
-> +	}
-
-...
-
-> +static int kx022a_get_axis(struct kx022a_data *data,
-> +			   struct iio_chan_spec const *chan,
-> +			   int *val)
-> +{
-> +	int ret;
-> +
-> +	ret = regmap_bulk_read(data->regmap, chan->address, &data->buffer,
-> +			       sizeof(__le16));
-> +	if (ret)
-> +		return ret;
-> +
-> +	*val = le16_to_cpu(data->buffer[0]);
-
-'p'-variant of the above would look better
-
-	*val = le16_to_cpup(data->buffer);
-
-since it will be the same as above address without any additional arithmetics.
-
-> +	return IIO_VAL_INT;
-> +}
-
-
-...
-
-> +	case IIO_CHAN_INFO_SAMP_FREQ:
-> +		ret = regmap_read(data->regmap, KX022A_REG_ODCNTL, &regval);
-> +		if (ret)
-> +			return ret;
-> +
-> +		if ((regval & KX022A_MASK_ODR) >
-> +		    ARRAY_SIZE(kx022a_accel_samp_freq_table)) {
-> +			dev_err(data->dev, "Invalid ODR\n");
-> +			return -EINVAL;
-> +		}
-> +
-> +		kx022a_reg2freq(regval, val, val2);
-
-> +		ret = IIO_VAL_INT_PLUS_MICRO;
-> +
-> +		break;
-
-return IIO_VAL_INT_PLUS_MICRO;
-
-> +
-> +	case IIO_CHAN_INFO_SCALE:
-> +		ret = regmap_read(data->regmap, KX022A_REG_CNTL, &regval);
-> +		if (ret < 0)
-> +			return ret;
-> +
-> +		kx022a_reg2scale(regval, val, val2);
-> +
-> +		ret = IIO_VAL_INT_PLUS_MICRO;
-> +		break;
-
-Ditto.
-
-...
-
-> +	return regmap_write(data->regmap, KX022A_REG_BUF_CLEAR, 0x0);
-
-Would simple '0' suffice?
-
-...
-
-> +	for (i = 0; i < count; i++) {
-> +		int bit;
-> +		u16 *samples = &buffer[i * 3];
-
-I would put it as
-
-		u16 *samples = &buffer[i * 3];
-		int bit;
-
-> +		for_each_set_bit(bit, idev->active_scan_mask, AXIS_MAX)
-> +			memcpy(&data->scan.channels[bit], &samples[bit],
-> +			       sizeof(data->scan.channels[0]));
-
-Why not use bit instead of 0 for the sake of consistency?
-
-Also might be good to have a temporary for channels:
-
-		... *chs = data->scan.channels;
-
-
-		for_each_set_bit(bit, idev->active_scan_mask, AXIS_MAX)
-			memcpy(&chs[bit], &samples[bit], sizeof(chs[bit]));
-
-> +		iio_push_to_buffers_with_timestamp(idev, &data->scan, tstamp);
-> +
-> +		tstamp += sample_period;
-> +	}
-
-...
-
-> +	ret = regmap_clear_bits(data->regmap, data->ien_reg,
-> +				KX022A_MASK_WMI);
-
-I don't see why it's not on a single line. Even if you are a conservative
-adept of 80.
-
-Maybe other lines also need to be revised?
-
-> +	if (ret)
-> +		goto unlock_out;
-
-...
-
-> +	int ret = IRQ_NONE;
-> +
-> +	mutex_lock(&data->mutex);
-> +
-> +	if (data->trigger_enabled) {
-> +		iio_trigger_poll_chained(data->trig);
-> +		ret = IRQ_HANDLED;
-> +	}
-> +
-> +	if (data->state & KX022A_STATE_FIFO) {
-
-> +		ret = __kx022a_fifo_flush(idev, KX022A_FIFO_LENGTH, true);
-> +		if (ret > 0)
-> +			ret = IRQ_HANDLED;
-
-I don't like it. Perhaps
-
-	bool handled = false;
-	int ret;
-
-	...
-		ret = ...
-		if (ret > 0)
-			handled = true;
-	...
-
-	return IRQ_RETVAL(handled);
-
-> +	}
-> +
-> +	mutex_unlock(&data->mutex);
-> +
-> +	return ret;
-
-...
-
-> +	if (!dev)
-> +		return -ENODEV;
-
-Do you really need this check?
-
-...
-
-> +	fw = dev_fwnode(dev);
-> +	if (!fw)
-> +		return -ENODEV;
-
-You may combine these two in one.
-
-	struct fwnode_handle *fwnode;
-
-
-	fwnode = dev ? dev_fwnode(dev) : NULL;
-	if (!fwnode)
-		return -ENODEV;
-
-And please, call it fwnode.
-
-...
-
-> +	irq = fwnode_irq_get_byname(fw, "INT1");
-> +	if (irq > 0) {
-> +		data->inc_reg = KX022A_REG_INC1;
-> +		data->ien_reg = KX022A_REG_INC4;
-> +
-> +		if (fwnode_irq_get_byname(dev_fwnode(dev), "INT2") > 0)
-
-Why not use fwnode again
-
-> +			dev_warn(dev, "Only one IRQ supported\n");
-> +	} else {
-> +		irq = fwnode_irq_get_byname(dev_fwnode(dev), "INT2");
-
-Ditto.
-
-> +		if (irq <= 0)
-> +			return dev_err_probe(dev, irq, "No suitable IRQ\n");
-> +
-> +		data->inc_reg = KX022A_REG_INC5;
-> +		data->ien_reg = KX022A_REG_INC6;
-> +	}
-
-...
-
-> +	if (ret)
-> +		return dev_err_probe(data->dev, ret,
-> +				     "iio_triggered_buffer_setup_ext FAIL %d\n",
-> +				     ret);
-
-Drop dup ret at the end, dev_err_probe() has been adding it to each message.
-
-...
-
-> +	/*
-> +	 * No need to check for NULL. request_threadedI_irq() defaults to
-> +	 * dev_name() should the alloc fail.
-> +	 */
-> +	name = devm_kasprintf(data->dev, GFP_KERNEL, "%s-kx022a",
-> +			      dev_name(data->dev));
-
-It's not clear why do you need a suffix here.
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Best Regards
+ Guo Ren
