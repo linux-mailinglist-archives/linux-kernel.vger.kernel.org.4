@@ -2,110 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C8E56066F5
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 19:26:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6BB56066F7
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 19:26:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229746AbiJTR0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 13:26:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55426 "EHLO
+        id S229822AbiJTR0v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 13:26:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbiJTR0K (ORCPT
+        with ESMTP id S229519AbiJTR0s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 13:26:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E03519DD81;
-        Thu, 20 Oct 2022 10:26:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 115EDB82886;
-        Thu, 20 Oct 2022 17:26:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D8FAC433C1;
-        Thu, 20 Oct 2022 17:26:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666286766;
-        bh=jDUzTYdJaq0kvJ+zhN0GDLnOVjiyj/xD/YSMO5d3900=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=l8lCNqPXg51ULWkqAEWqjWobGPnkkduoAkLVcyO/Ewve06HbvkvFa8DqGcSwXzcRx
-         A6s0mU7SiZgKP0TDDdtaVKJi9uTEELW6o9efC//Q7hNKwwJBmL4GVKfIgi2sKTjC/Q
-         3RrYS7hainlqrYp5GD3QNTnZZPpXfsb82tQyeY1iZH9vy+HeJ7ih4n3ize5U4nKcyX
-         NvJaILNOawwjfaRoDGOwDsqa1gzQq1RYVrVCYRpajVQCpgH6pY5Y8akI9VM0n3C9b5
-         FZWz+xCiu/t+ID0j21zY5BqESUmX3iD02ocllNvjaMvBdGAQM6CaQyaAXkyZGaCrZr
-         CuGkGPmA79ckg==
-Date:   Thu, 20 Oct 2022 18:26:01 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>
-Subject: Re: [PATCH v1 3/6] spi: pxa2xx: Remove no more needed PCI ID table
-Message-ID: <Y1GEqa07/b25utui@sirena.org.uk>
-References: <Y02TR0UBseEKUjq8@sirena.org.uk>
- <Y02TxHp53XQo34ql@smile.fi.intel.com>
- <Y06RCxzwrPZwIETp@sirena.org.uk>
- <Y1ASXFOuc2uGXOlV@smile.fi.intel.com>
- <Y1AczgwCEQO2gvQ2@sirena.org.uk>
- <Y1F0z5aP3MsqnMan@smile.fi.intel.com>
- <Y1F2a6CR+9sY66Zz@sirena.org.uk>
- <Y1F6YRzRS2DR+cKL@smile.fi.intel.com>
- <Y1F+Pw52nN195qDO@sirena.org.uk>
- <Y1F/aVEYn3GIVEN2@smile.fi.intel.com>
+        Thu, 20 Oct 2022 13:26:48 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B00A2A971;
+        Thu, 20 Oct 2022 10:26:47 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id p6-20020a17090a748600b002103d1ef63aso223535pjk.1;
+        Thu, 20 Oct 2022 10:26:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=FSWnRxtqE96/g59wuJmgIQrOE2XEcx+NdrwZOCesEeY=;
+        b=Lc3/Qqy0FWXejyUn2ZGcudk75Sb5MrnTavlEcsFv+zx5wsK3El2aW6ggg8B/BhU77J
+         SNTm6ObFWwRa1ssCp0ju1iUQKQlQt/iP3hD9AvY7PSFoEWsGKQ5tFvqY37j0BZa/ZZ/C
+         EAZvNK13xlD5jcB7nXnKlt5n0I4CXX4neqpT4TZOlEkyokwe9zYQbfW1nmKJk0RffMQJ
+         pmlw4gufyUYiDh7EwxdIvh4RpQOMV+XWKYZPQtRf8b0mRWZLrtHm5yHl/9snjuWAPVsp
+         un4NgZUzBh6NRpljNfBphrH73MQltXfCK6WgGo8VfDuZAD7q/W9Dzf4LHt06CJ1hMQ+l
+         vm9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FSWnRxtqE96/g59wuJmgIQrOE2XEcx+NdrwZOCesEeY=;
+        b=HL0Iz3nScNNMPO8Ift/c+AOb2Mk+SPmcNU4z8ubOsnvmCAqzWMCRWI+QE7OG8oDP0+
+         KWPrku9N+Wqao0Vddj+paaOT+VST9K3KsdA97T5EnVvA8/0W9lXM9o6mzbK086cXJdN3
+         kL6e0EXAN/TOxISsCPNROQVHc7aVmGneLQq6aC34jKUSfhIpgnGhQjyu1XA3ZiGIY6x+
+         JywBAnHKoekqFzJnbUeQbbYcAe65Fqpp1bR/pGOZItxnygZIHt3QNDe67zgle4plvSN5
+         DCX8tKJYBsDlwjUERb2ZkVAyr1LwxIYvF5vgRmLKSINUFxaPOEWJOe1XxvEG0cws2G0+
+         ytGQ==
+X-Gm-Message-State: ACrzQf3UXZTprZTqCRxhXVaUKT5qrSQDjGS2zzwXKwpd2dt/ielReJ1V
+        roabQdinlfyjVdGoqYK9zknroqGikhQ=
+X-Google-Smtp-Source: AMsMyM6qgSpZKhOE+HrZHAp2sTf+//3IsfuB9TQ7IKy4Hu7JpZE5Hp3lEQrhI97MCwpEe6ncpBhFvQ==
+X-Received: by 2002:a17:90b:2691:b0:20c:d655:c67d with SMTP id pl17-20020a17090b269100b0020cd655c67dmr53307076pjb.36.1666286806758;
+        Thu, 20 Oct 2022 10:26:46 -0700 (PDT)
+Received: from youngsil.svl.corp.google.com ([2620:15c:2d4:203:637f:7dcc:4bbf:4981])
+        by smtp.gmail.com with ESMTPSA id q13-20020a170902f34d00b0017680faa1a8sm12951754ple.112.2022.10.20.10.26.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Oct 2022 10:26:46 -0700 (PDT)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org
+Subject: [PATCHSET 0/8] perf test: Improve perf record tests (v2)
+Date:   Thu, 20 Oct 2022 10:26:35 -0700
+Message-Id: <20221020172643.3458767-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.38.0.135.g90850a2211-goog
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2f/UF7IsDLgeMiKs"
-Content-Disposition: inline
-In-Reply-To: <Y1F/aVEYn3GIVEN2@smile.fi.intel.com>
-X-Cookie: Today is what happened to yesterday.
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
---2f/UF7IsDLgeMiKs
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+This patchset improves the perf record tests to check more cases so that it
+can find problems early.  The motivation was a failure per-thread mmap with
+multi-threaded targets which Adrian is working on the fix.
 
-On Thu, Oct 20, 2022 at 08:03:37PM +0300, Andy Shevchenko wrote:
-> On Thu, Oct 20, 2022 at 05:58:39PM +0100, Mark Brown wrote:
+Changes in v2)
+ * fix shellcheck issues
+ * drop unsupported --per-thread and --threads combination
+ * do not use initial delay (-D option); instead it runs the target
+   and wait for it separately using the recent waiting.sh library
+ * add Adrian's Reviewed-by tags
 
-> > The driver won't even match and therefore load if it doesn't have a
-> > lookup for the device with the current code, the type code comes from
-> > the match.  If it has to go querying a device property then the driver
-> > can load but end up with a device property it hasn't ever heard of and
-> > end up misbehaving as a result.
+I added a custom test program and more combinations like system-wide and
+command line workload (in per-process mode) testing with multi-threaded
+recording mode.
 
-> That's how all MFD devices work nowadays, right? What's so special about
-> this driver? It's being used as a child by MFD. If what you are telling
-> is a real concern, we have to have a way to assure that all drivers that
-> are children of the MFDs should provide a match. IIRC there is no such
-> mechanism exists in the kernel these days.
+Currently it succeeds every tests when running as root!
 
-Most of the MFDs don't actually have multiple options for a given child
-driver, and it's common where there are multiple options to either bind
-with a different name representing the different child device or have
-something that looks like a switch statement for the IDs which will
-error out if it hits an ID that's not one the driver knows about (like
-spi-pxa2xx-pci does with lpss_spi_setup()).
+  $ sudo ./perf test -v 91
+   91: perf record tests                                               :
+  --- start ---
+  test child forked, pid 108975
+  Build a test program
+  Basic --per-thread mode test
+  Basic --per-thread mode test [Success]
+  Register capture test
+  Register capture test [Success]
+  Basic --system-wide mode test
+  Basic --system-wide mode test [Success]
+  Basic target workload test
+  Basic target workload test [Success]
+  test child finished with 0
+  ---- end ----
+  perf record tests: Ok
 
---2f/UF7IsDLgeMiKs
-Content-Type: application/pgp-signature; name="signature.asc"
+You can find it in 'perf/record-test-v2' branch in
 
------BEGIN PGP SIGNATURE-----
+  git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNRhKkACgkQJNaLcl1U
-h9CJVQf/XOSG1w2v36RyWWqCnTu0eMfZ0rDC4uI3VpZKIdGeTANO9iobrKwOCDAb
-MPnzsjKYHjdgJ/EGQIDBIH1oQ59WmyUPjoFucyViXyE9L5JslPW3EvcX08WXGzDm
-fnaUVzPTT7CvhI31RVTz5w14xzOSUyMGj1Ua4NM3iXAnqa7gjCSTpGwzvCcvPBmP
-jSBuN6sTicOhQmvXMFiixUE6R95eg7N3oq+mfhuHbrw46TcNG9JsYw21g+jJyVKT
-a1dm18UC+eoXNKmiKX5A36po9BD40yCySfo3tmBZlJ7xvjLrvPhotfJRwa/fqRHs
-7GQx+5TdlDTOlZeGr4/vT6Fs4dC7Yw==
-=TcKn
------END PGP SIGNATURE-----
+Thanks,
+Namhyung
 
---2f/UF7IsDLgeMiKs--
+
+Namhyung Kim (8):
+  perf test: Do not use instructions:u explicitly
+  perf test: Fix shellcheck issues in the record test
+  perf test: Use a test program in perf record tests
+  perf test: Wait for a new thread when testing --per-thread record
+  perf test: Add system-wide mode in perf record tests
+  perf test: Add target workload test in perf record tests
+  perf test: Test record with --threads option
+  perf test: Do not set TEST_SKIP for record subtests
+
+ tools/perf/tests/shell/record.sh | 180 +++++++++++++++++++++++++++----
+ 1 file changed, 158 insertions(+), 22 deletions(-)
+
+
+base-commit: a3a365655a28f12f07eddf4f3fd596987b175e1d
+-- 
+2.38.0.135.g90850a2211-goog
+
