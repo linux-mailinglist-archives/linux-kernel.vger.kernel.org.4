@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6849560640D
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 17:16:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97694606413
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 17:16:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229850AbiJTPQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 11:16:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56918 "EHLO
+        id S229552AbiJTPQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 11:16:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229986AbiJTPQT (ORCPT
+        with ESMTP id S230030AbiJTPQU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 11:16:19 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ED32147053
+        Thu, 20 Oct 2022 11:16:20 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45801136409
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 08:16:19 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id f11so35064786wrm.6
         for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 08:16:18 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id a3so34989691wrt.0
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 08:16:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=sifive.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pOKidRu+yxajr1o110Z9rt8XpJh4zLytmd2a75/kdaY=;
-        b=kJeYraV+chjx4w/MZhjgD8d2xGVua4ZGuZHWlb758KSGO9ChppIikvGNbRU5JuDcMT
-         5q4sTiPl4qmad1XKgrkucu5HEcOejc4GFcu5wgdG9SqJ+q8uPkF7hPhQAOrjX7S6SMQq
-         tMzzBzDxpSbVvqT3yGk4CY5K6Q4lfhQx/5JB6gQsuCpzeiXERrCjLmyreJDqzO599NZw
-         9DzW4wTv5O3ttQZunV8Dh3TUQta4hnsv+4LwJj96Hy9dULjjR+puxvkxBClUPcltAQhV
-         m0sjJHT4Vqaf0GUfjhy8hFaxm4Qh3/YDjo1HIlFdeEq1YLeGuCi2ZiwFsnaGDyPsHham
-         pjYQ==
+        bh=BEOpRioXienSDDf6vjruAkPlsDKDhUNbn1dmZioZ4X4=;
+        b=lTDMDCDikO894I2FgciNbIL2IAOM8w7a+kTIfkIAPMwv51/V0acIRNTjlCEZ36RRDf
+         PrsjV5wL1wTdai5/OpGT0qbDSu7AVPrwsfBps+tv4PY6lziaO0t9PiDxLdlddWVQFfAX
+         yEKWIO62oUZjNtUyDXWXKAbByzuUkDx4XaskF4U0qYozpx4r0glx4Qcu/NraN2nyHfCG
+         dby0HW4oZUkeQjS/500DpVkziMRCU2uN9HFWfuwGluZiGsC/Cdd5RtNvecKSqUqYLbow
+         t0UBemQ2wgh3cziVOGtmBUNXJDyAI14+NmHv+py383JAfYGMWFNqJxLqrTNuw7N4Odi5
+         1Utw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=pOKidRu+yxajr1o110Z9rt8XpJh4zLytmd2a75/kdaY=;
-        b=UFce9ih7UVOGlSr/qjUL47edfvl03ym/1Uv3Eodc2jxe3jnH4x6sQNI3bQ2TJaO1ke
-         BOGv1s/as+vAg4pqruPa/FSjj+LbUrwzdepjWBnwgeEBNbuourRVGlFJINWYl8OzuEEx
-         XzBNCWulASvgJdF8TJcD93wBVvKp52LIdIgMT1Xv0fsoSTbcQdumhpgSa0mLpwFCEwlB
-         T7ltNk/LmFO0ynZDjjAloOXicxDBPaSZ57gCu+LRLxZa9Ag1QOObG73wI9nVLuuzgoZT
-         pixMpG2+2hA9OW2n6Krxjv4lHv6oz137dolpVYMJYudgPQdfUhjKoGe9ClaGIIydyxXn
-         j1FA==
-X-Gm-Message-State: ACrzQf2C3dEKrYZyrj27hIPTnpM4c7dKm2BN5+8+QUyngVzb0U5YSWJY
-        Yc6zWCA/aUEibFiZHJyQQ2W2Sw==
-X-Google-Smtp-Source: AMsMyM5qyB4bwOpUIYl9vi1zgJNgu2I+7YGLZ5w0AMEMM42WxAUOza4QELi8lmWd2SJCPtFdIwIfmg==
-X-Received: by 2002:a5d:494a:0:b0:235:4b14:4c7e with SMTP id r10-20020a5d494a000000b002354b144c7emr3453423wrs.174.1666278976603;
-        Thu, 20 Oct 2022 08:16:16 -0700 (PDT)
+        bh=BEOpRioXienSDDf6vjruAkPlsDKDhUNbn1dmZioZ4X4=;
+        b=X39fQx6pyzD4Xw6EVWqhLRm8KtZUxDR1Qan5TpFfsz1nrYnYmniD/Ma6iC4PAPPBrv
+         0AtqJj8RNVza0sVBdTOmLeTgVnJdT/+/rEJu+tB6wosO/ZCiA++EwCgkrD9XjqFSCfXU
+         NT+L+7Wij3aNjLS7g6q1HdTbsjfrLcyPF5+1NKn1fKPdE4zG8mqeHlbdzJvE4NCwtf7Z
+         P1UEbykMeKSgQf1VPdPgBE3cp++M8nNrzZ9Y84yPRxN2PI5U7smPPVE4KwujAJAdnepQ
+         kiJuENo/cV5W1ybDExpk53sshEtDhjORb57vpJaNmsPyZT3qgVis4mic02mSHLZWoEwW
+         /5hw==
+X-Gm-Message-State: ACrzQf3Tl2RtS17JxQwVEzQZOwV4qGyXqAtGgwu+a0jEdUf0Y7zvwCZB
+        NzH+hoaKTmaLOqKw7WsC9ytwDw==
+X-Google-Smtp-Source: AMsMyM5BRAOxV+stH3UEOXaLk809vn4lxaZpN1GqorG7LeUTaIxAv4QERtw4FMEAanYlhzJgrnf9LA==
+X-Received: by 2002:a5d:4f12:0:b0:22e:3920:a09c with SMTP id c18-20020a5d4f12000000b0022e3920a09cmr8693613wru.95.1666278977636;
+        Thu, 20 Oct 2022 08:16:17 -0700 (PDT)
 Received: from rainbowdash.guest.codethink.co.uk ([167.98.27.226])
-        by smtp.gmail.com with ESMTPSA id bg6-20020a05600c3c8600b003c6f3e5ba42sm41362wmb.46.2022.10.20.08.16.14
+        by smtp.gmail.com with ESMTPSA id bg6-20020a05600c3c8600b003c6f3e5ba42sm41362wmb.46.2022.10.20.08.16.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 08:16:15 -0700 (PDT)
+        Thu, 20 Oct 2022 08:16:17 -0700 (PDT)
 From:   Ben Dooks <ben.dooks@sifive.com>
 To:     linux-pwm@vger.kernel.org
 Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -62,50 +62,72 @@ Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         William Salmon <william.salmon@sifive.com>,
         Jude Onyenegecha <jude.onyenegecha@sifive.com>,
         Ben Dooks <ben.dooks@sifive.com>
-Subject: [PATCH v6 02/10] pwm: dwc: allow driver to be built with COMPILE_TEST
-Date:   Thu, 20 Oct 2022 16:16:02 +0100
-Message-Id: <20221020151610.59443-3-ben.dooks@sifive.com>
+Subject: [PATCH v6 03/10] pwm: dwc: change &pci->dev to dev in probe
+Date:   Thu, 20 Oct 2022 16:16:03 +0100
+Message-Id: <20221020151610.59443-4-ben.dooks@sifive.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221020151610.59443-1-ben.dooks@sifive.com>
 References: <20221020151610.59443-1-ben.dooks@sifive.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allow dwc driver to be built with COMPILE_TEST should allow
-better coverage when build testing.
+The dwc_pwm_probe() assignes dev to be &pci->dev but then uses
+&pci->dev throughout the function. Change these all to the be
+'dev' variable to make lines shorter.
 
 Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
+Acked-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
-v4:
- - moved to earlier in the series
-v3:
- - add HAS_IOMEM depdency for compile testing
----
- drivers/pwm/Kconfig | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/pwm/pwm-dwc.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/pwm/Kconfig b/drivers/pwm/Kconfig
-index 60d13a949bc5..3f3c53af4a56 100644
---- a/drivers/pwm/Kconfig
-+++ b/drivers/pwm/Kconfig
-@@ -176,7 +176,8 @@ config PWM_CROS_EC
+diff --git a/drivers/pwm/pwm-dwc.c b/drivers/pwm/pwm-dwc.c
+index 7568300bb11e..c706ef9a7ba1 100644
+--- a/drivers/pwm/pwm-dwc.c
++++ b/drivers/pwm/pwm-dwc.c
+@@ -202,14 +202,13 @@ static int dwc_pwm_probe(struct pci_dev *pci, const struct pci_device_id *id)
+ 	struct dwc_pwm *dwc;
+ 	int ret;
  
- config PWM_DWC
- 	tristate "DesignWare PWM Controller"
--	depends on PCI
-+	depends on PCI || COMPILE_TEST
-+	depends on HAS_IOMEM
- 	help
- 	  PWM driver for Synopsys DWC PWM Controller attached to a PCI bus.
+-	dwc = devm_kzalloc(&pci->dev, sizeof(*dwc), GFP_KERNEL);
++	dwc = devm_kzalloc(dev, sizeof(*dwc), GFP_KERNEL);
+ 	if (!dwc)
+ 		return -ENOMEM;
+ 
+ 	ret = pcim_enable_device(pci);
+ 	if (ret) {
+-		dev_err(&pci->dev,
+-			"Failed to enable device (%pe)\n", ERR_PTR(ret));
++		dev_err(dev, "Failed to enable device (%pe)\n", ERR_PTR(ret));
+ 		return ret;
+ 	}
+ 
+@@ -217,14 +216,13 @@ static int dwc_pwm_probe(struct pci_dev *pci, const struct pci_device_id *id)
+ 
+ 	ret = pcim_iomap_regions(pci, BIT(0), pci_name(pci));
+ 	if (ret) {
+-		dev_err(&pci->dev,
+-			"Failed to iomap PCI BAR (%pe)\n", ERR_PTR(ret));
++		dev_err(dev, "Failed to iomap PCI BAR (%pe)\n", ERR_PTR(ret));
+ 		return ret;
+ 	}
+ 
+ 	dwc->base = pcim_iomap_table(pci)[0];
+ 	if (!dwc->base) {
+-		dev_err(&pci->dev, "Base address missing\n");
++		dev_err(dev, "Base address missing\n");
+ 		return -ENOMEM;
+ 	}
  
 -- 
 2.35.1
