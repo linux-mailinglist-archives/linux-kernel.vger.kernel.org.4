@@ -2,124 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98B3860608B
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 14:48:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B413560608E
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 14:49:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbiJTMsb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 08:48:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51522 "EHLO
+        id S230255AbiJTMtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 08:49:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbiJTMs3 (ORCPT
+        with ESMTP id S229740AbiJTMs5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 08:48:29 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09D0D18B088
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 05:48:29 -0700 (PDT)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29KCgBb5025331;
-        Thu, 20 Oct 2022 12:48:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=A+R6BZyBdGsGi3pqm84jvpPT5bx2cC2UatHjLOzWzrc=;
- b=T3ZC5/q8lmbek4vXDQPny+A83BfRWzxwArIGYn6YxdmqnqkzCC3n1HPEtbAwoRgqOJlZ
- yjXT+Hqo2TCvsmyEKtdAIrCORZt1uM5EC3dUC5wFgycOJEILYIwWVHwqcweBIeogmdaE
- HlsqndsWUemMHKza9yfebaz1de6GDScdNE9dzOnf/AYJ32VXCNWeD+Gq2d8lp77ZcvyR
- u8Id9cm0irrdpYVdmQVBfchGHfUQn3KpfAcSVu03TVC5vjtUxGJ17SbOKe5pGl25wOWr
- HNY1YfsBY002GXruiBkuPikVBiVZtHHSXqiT+ZZxLfUXBVlv+AFvP1dQM7/yWKjxodBs ew== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kb6jj85e3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 20 Oct 2022 12:48:03 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29KCjcxi013971;
-        Thu, 20 Oct 2022 12:48:03 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kb6jj85c5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 20 Oct 2022 12:48:03 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29KCZSNI023714;
-        Thu, 20 Oct 2022 12:48:00 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma03ams.nl.ibm.com with ESMTP id 3k7mg98xq5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 20 Oct 2022 12:48:00 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29KClw3Y45482372
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 20 Oct 2022 12:47:58 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 34107AE04D;
-        Thu, 20 Oct 2022 12:47:58 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5371FAE045;
-        Thu, 20 Oct 2022 12:47:57 +0000 (GMT)
-Received: from li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com (unknown [9.145.50.75])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Thu, 20 Oct 2022 12:47:57 +0000 (GMT)
-Date:   Thu, 20 Oct 2022 14:47:54 +0200
-From:   Alexander Gordeev <agordeev@linux.ibm.com>
-To:     John Stultz <jstultz@google.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "Connor O'Brien" <connoro@google.com>,
-        John Dias <joaodias@google.com>, Rick Yiu <rickyiu@google.com>,
-        John Kacur <jkacur@redhat.com>,
-        Qais Yousef <qais.yousef@arm.com>,
-        Chris Redpath <chris.redpath@arm.com>,
-        Abhijeet Dharmapurikar <adharmap@quicinc.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>, kernel-team@android.com,
-        "J . Avila" <elavila@google.com>
-Subject: Re: [PATCH RFC v4 2/3] sched: Avoid placing RT threads on cores
- handling long softirqs
-Message-ID: <Y1FDegctcU2LrYGT@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
-References: <20221003232033.3404802-1-jstultz@google.com>
- <20221003232033.3404802-3-jstultz@google.com>
- <Y01NPB4sa8Z98ntK@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
- <CANDhNCoTGNANDnOQ6touhreG_UEn1-N4T4BktWFxpLPSWVfrdA@mail.gmail.com>
- <Y0+/SAWUNRnhIW9b@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
- <CANDhNCpQuQn_84yqErF2noAYDwdwNJQF-pr4JKVp1eZzH=+f9w@mail.gmail.com>
+        Thu, 20 Oct 2022 08:48:57 -0400
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF68A18B09D
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 05:48:55 -0700 (PDT)
+Received: by mail-qv1-xf29.google.com with SMTP id h10so13403599qvq.7
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 05:48:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Q1M+ZjygcTh+wQj/LaxDBpu7tJHisiKmS4wQI9QNJcE=;
+        b=f70jO+rGeNbNXJzEkd45j6Ddwl2FJ+n3aWFgYESzO4HCa4/8nk+a1IpfagfnXXpfFS
+         uAZ2YSiq6H4q7djpGDD+k+mZJQigOaOEGUBPc5N6ECV8WmJcYtZb8Ir2ocoNJOf24t7p
+         I7NAMptGN6/CGe84jawcV62mxzbk3AFe1U0kSlOdnWllShr3cE83dRDn3mpaIRIwvvCR
+         C6QiNQcZ00H9FGHVOkfj6L0KXjnTF0hqFFSbwsggf4pPKY19Mvi0sQ4+X95rVTOG2xpA
+         xESOirAxOqMbK7lKhEFjTT+grQ8TY7roHA8p4OFWN6BJ4CMS1fUnsnHlpkA4mn4S5/eQ
+         2OPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q1M+ZjygcTh+wQj/LaxDBpu7tJHisiKmS4wQI9QNJcE=;
+        b=1OKjw7uWPQ9seG5F+guOg+6ipeLCcR+VVgH0QDV1SoFc46LDy3atAgIh+GJBAjvsfU
+         ungRnsXlCcDDmslCfXrSqWTlaFnnAWQbe8FzoR88eqyMe3Guxjmg2ySpNGioSJDu2RiR
+         MZVD1Z3Xrnl/EnUQmYctapn1fxKsROWtfZuA7sbyXVWE6/+WQPfhP93RTZH5W4kZUXF5
+         xvesL/dQmP08AOqpeB0S6ejd9R3NPAZH+0HrSJB1QPxHc6XktyR8mnNExI8n2SE9UwwS
+         6YSp4xMe5hq/3mBh3s8WxMyCgpmcU2eW3YPIjwJK54YUsN/6A1QcDx4zhlP9iX85XnoB
+         i5IA==
+X-Gm-Message-State: ACrzQf3kdgRGey65XAtHSg0tfxF9D8km/lqkBpx8RYezpoWns/Lw/aTg
+        D/h5Ncrj3bHfYMXX8meuj0iPaw==
+X-Google-Smtp-Source: AMsMyM7I9aV/f95bj7v+lreXR9VyQcLP8Abt+ZwUvcSxkF81/hwGk36S5tUn8jCXLGR9ascLThvvEg==
+X-Received: by 2002:a0c:e1c6:0:b0:4af:aa3c:987c with SMTP id v6-20020a0ce1c6000000b004afaa3c987cmr11230613qvl.60.1666270134922;
+        Thu, 20 Oct 2022 05:48:54 -0700 (PDT)
+Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
+        by smtp.gmail.com with ESMTPSA id dm10-20020a05620a1d4a00b006bb87c4833asm7232789qkb.109.2022.10.20.05.48.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Oct 2022 05:48:53 -0700 (PDT)
+Message-ID: <730eec7e-deb2-2d04-6ba9-132a41ebed58@linaro.org>
+Date:   Thu, 20 Oct 2022 08:48:47 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANDhNCpQuQn_84yqErF2noAYDwdwNJQF-pr4JKVp1eZzH=+f9w@mail.gmail.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: KxCxNSzAfLsdmfurS5LGG_jdHkiHK9xV
-X-Proofpoint-ORIG-GUID: ODVnp4hg9pQZmEQzWk9AMOVApp4C_Gzi
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-20_04,2022-10-20_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
- priorityscore=1501 bulkscore=0 spamscore=0 mlxlogscore=724
- lowpriorityscore=0 clxscore=1015 suspectscore=0 mlxscore=0 malwarescore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210200074
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH] dt-bindings: nvmem: add new stm32mp13 compatible for
+ stm32-romem
+Content-Language: en-US
+To:     Patrick DELAUNAY <patrick.delaunay@foss.st.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+References: <20221014172324.1.Ifc1812116ff63f5501f3edd155d3cf5c0ecc846c@changeid>
+ <7ada410d-8d13-b29a-869c-3f5d032528bf@linaro.org>
+ <4d113cfd-4c22-780e-2a13-48ca0e2b28ab@foss.st.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <4d113cfd-4c22-780e-2a13-48ca0e2b28ab@foss.st.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 03:09:15PM -0700, John Stultz wrote:
+On 19/10/2022 13:23, Patrick DELAUNAY wrote:
+> Hi,
+> 
+> On 10/18/22 03:56, Krzysztof Kozlowski wrote:
+>> On 14/10/2022 11:23, Patrick Delaunay wrote:
+>>> Add a new compatible for stm32mp13 support.
+>>>
+>>> Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
+>>> ---
+>>>
+>>>   Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml | 1 +
+>>>   1 file changed, 1 insertion(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml b/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml
+>>> index 448a2678dc62..16f4cad2fa55 100644
+>>> --- a/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml
+>>> +++ b/Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml
+>>> @@ -22,6 +22,7 @@ properties:
+>>>     compatible:
+>>>       enum:
+>>>         - st,stm32f4-otp
+>>> +      - st,stm32mp13-bsec
+>>>         - st,stm32mp15-bsec
+>> According to usage in DTS (separate patch for some reason), the devices
+>> are compatible, so please describe them like that.
+> 
+> 
+> I push the separate patch "ARM: dts: stm32mp13: fix compatible for BSEC"
+> 
+> It is a advice of my colleagues: send an update of device tree
+> 
+> only when the binding modification is acked.
 
-Hi John,
+That's not correct advice - only for few cases it's valid (when
+subsystem maintainer wants to take entire patchset, so there should be
+no DTS inside). We want to see the bindings and its usage, so one of:
+1. the same patchset
+2. if two patchsets, then cross linked to each other with URLs to
+lore.kernel.org. I see DTS had link but not this one.
 
-[...]
+Driver changes also must be sent together with the bindings. Since there
+are no driver changes here, it means for us the devices are compatible
+from Linux point of view.
 
-> So I'll go ahead and simplify the check to just the LONG_SOFTIRQ_MASK
-> & (active | pending softirqs) check. This should avoid the need to
-> pull the cpu_rq(cpu)->curr value and simplify things.
+> 
+> 
+> Sorry for disturbance, I can sent a V2 with the 2 patches.
+> 
+> 
+> The STM32MP15 and STM32MP13 don't use the same version of the BSEC device,
+> 
+> and the driver need to handle it.
+> 
+> 
+> In these 2 patches:
+> 
+> - [PATCH] dt-bindings: nvmem: add new stm32mp13 compatible for stm32-romem
+> 
+> - [PATCH] ARM: dts: stm32mp13: fix compatible for BSEC
+> 
+> 
+> I fix a error for BSEC node in the initial patch to support STM32MP13x,
 
-In my reading of your approach if you find a way to additionally
-indicate long softirqs being handled by the remote ksoftirqd, it
-would cover all obvious/not-corner cases.
+The question is then whether device was working before or not. If it was
+working, you fix one error but break DTS usage on any system which does
+not have updated driver (so BSD, u-boot, other firmware, other Linux
+kernel versions).
 
-> -john
+If it was not working, then it's okay, but such case was not explained
+in DTS patch, I think.
+
+> 
+> the DTS "stm32mp131.dtsi" should not used/accepted with the a BSEC node 
+> using
+> 
+> the compatible "st,stm32mp15-bsec" in commit 1da8779c0029 ("ARM: dts: 
+> stm32: add STM32MP13 SoCs support")
+> 
+> 
+> It is a preliminary step to add support of STM32MP13x in STM32 ROMEM driver.
+> 
+> 
+> I don't indicate these patches as "Fixes:" to avoid a dts check issue
+> 
+> if only the DTS patch was backported.
+> 
+> 
+> Today it not blocking for STM32MP13x users because this SoC is not yet 
+> available for customers
+> 
+> and it is only used internally on the ST Microelectronics board 
+> STM32MP135F-DK.
+
+DTS patch says nothing about it...
+
+> 
+> 
+> Nobody (except STMicroelectronics) use this SoC  STM32MP13x with the 
+> current DTS / Linux version.
+> 
+> 
+> Moreover, by default, the STM32 ROMEM driver in not activated in any 
+> defconfig,
+
+Independent issue.
+
+> 
+> I prepare a other patch to activated it by default in arm_multiv7_defconfig.
+> 
+> but I am waiting this DTS correction to avoid to probe the stm32 romen 
+> driver with STM32MP15
+> 
+> configuration on STM32MP13x SoC.
+> 
+> 
+> I think is a good time to update this DTS error before the SoC availability,
+> 
+> agreed with SoC Maintainer, Alexandre Torgue, even if this patch breaks 
+> surrent users
+> 
+> of STM32MP13x DTS (but it is only internals user STMicroelectronics 
+> until now).
+> 
+> 
+> but perhaps you prefer a other solution ?
+
+With that explanation it is fine, but the DTS commit was not mentioning
+explanation.
+
+> 
+> add Fixes in the DTS patch ?
+> 
+> + Fixes: 1da8779c0029 ("ARM: dts: stm32: add STM32MP13 SoCs support")
+> 
+> or
+> 
+> 
+>          bsec: efuse@5c005000 {
+>              compatible = "st,stm32mp13-bsec", "st,stm32mp15-bsec";
+
+
+Depends whether devices are compatible or not.
+
+Best regards,
+Krzysztof
+
