@@ -2,68 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64F8D605B7F
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 11:49:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09C18605B83
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 11:50:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbiJTJtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 05:49:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43166 "EHLO
+        id S229768AbiJTJuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 05:50:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229718AbiJTJtd (ORCPT
+        with ESMTP id S229718AbiJTJuC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 05:49:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3137226FC;
-        Thu, 20 Oct 2022 02:49:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5AC31B8269E;
-        Thu, 20 Oct 2022 09:49:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8456C433D6;
-        Thu, 20 Oct 2022 09:49:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666259360;
-        bh=7h0QGpJnCc0vidIZ0+ecsmfVGx8Hw0AmYaoBuW2o/hE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=w+fAnxcTKy2pgsxndjRBGZHEkTYpANsfABAzcDnLosNy6SGsTxOdlF5psr6o+/oUb
-         V8tTZO2C2zeYDvaur7X60ARuxret9TFwCG9GTfEpe8NtkhyraGjXIkELQ/7cmId/5m
-         bctNPyh36nWfSP/4ygqxAvsavi1MYv+i2OWR7piw=
-Date:   Thu, 20 Oct 2022 11:49:17 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     cuijinpeng666@gmail.com
-Cc:     akpm@linux-foundation.org, liushixin2@huawei.com, deller@gmx.de,
-        cui.jinpeng2@zte.com.cn, guoren@kernel.org,
-        wangkefeng.wang@huawei.com, jakobkoschel@gmail.com,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH linux-next] fs/proc/kcore.c: Use strscpy() instead of
- strlcpy()
-Message-ID: <Y1EZnRepnoYqEtEo@kroah.com>
-References: <20221020092044.399139-1-cui.jinpeng2@zte.com.cn>
+        Thu, 20 Oct 2022 05:50:02 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B50E95600D;
+        Thu, 20 Oct 2022 02:49:54 -0700 (PDT)
+Received: from p57b7734d.dip0.t-ipconnect.de ([87.183.115.77] helo=phil.fritz.box)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1olSBM-0005RY-FO; Thu, 20 Oct 2022 11:49:44 +0200
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Quentin Schulz <foss+kernel@0leil.net>
+Cc:     Heiko Stuebner <heiko@sntech.de>,
+        linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        Jakob Unterwurzacher <jakob.unterwurzacher@theobroma-systems.com>,
+        devicetree@vger.kernel.org,
+        Quentin Schulz <quentin.schulz@theobroma-systems.com>,
+        stable@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: dts: rockchip: lower rk3399-puma-haikou SD controller clock frequency
+Date:   Thu, 20 Oct 2022 11:49:42 +0200
+Message-Id: <166625937155.645772.13090619800244842653.b4-ty@sntech.de>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20221019-upstream-puma-sd-40mhz-v1-0-754a76421518@theobroma-systems.com>
+References: <20221019-upstream-puma-sd-40mhz-v1-0-754a76421518@theobroma-systems.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221020092044.399139-1-cui.jinpeng2@zte.com.cn>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 09:20:44AM +0000, cuijinpeng666@gmail.com wrote:
-> From: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
+On Wed, 19 Oct 2022 16:27:27 +0200, Quentin Schulz wrote:
+> From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 > 
-> The implementation of strscpy() is more robust and safer.
+> From: Jakob Unterwurzacher <jakob.unterwurzacher@theobroma-systems.com>
 > 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
+> CRC errors (code -84 EILSEQ) have been observed for some SanDisk
+> Ultra A1 cards when running at 50MHz.
+> 
+> [...]
 
+Applied, thanks!
 
-Please ignore based on this response:
-	https://lore.kernel.org/r/Y1EVnZS9BalesrC1@kroah.com
+[1/1] arm64: dts: rockchip: lower rk3399-puma-haikou SD controller clock frequency
+      commit: 91e8b74fe6381e083f8aa55217bb0562785ab398
 
+Best regards,
+-- 
+Heiko Stuebner <heiko@sntech.de>
