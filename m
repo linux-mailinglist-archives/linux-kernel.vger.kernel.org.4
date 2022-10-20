@@ -2,51 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 675B86060CE
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 14:59:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8501D6060D6
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 15:01:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230118AbiJTM7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 08:59:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55594 "EHLO
+        id S229961AbiJTNBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 09:01:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230285AbiJTM7s (ORCPT
+        with ESMTP id S229959AbiJTNBh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 08:59:48 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EAD3BAE
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 05:59:42 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id x6-20020a056e021bc600b002fc96f780e7so20125511ilv.10
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 05:59:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4hi8rEJq2YX1jSHUhJLl2Vtr/5VvQ8mSGRcQz0nCmo4=;
-        b=u4A5GZNB0sdU/Ffu0fU9fEOqE02kgiF5/WhycoYpnM1Be9Es5dPRAvjV6WRsfMcAEN
-         asUVf4MXpkpno8fXw/ua+WHZ43rCAoO+lJqyZb8LsfC6FlhM+gk9v2YH8i50bKuyWLXM
-         CK0Bi+m38pr1lj26ouybNer0pA4Fgd8Od7+xdReExSKgUQ2n5zp4n+IhZg827Z1CDf0A
-         ZlozHHwgQc+iH2h0QnIdWl2m9sdLB5N1bmZhqfWbfUq+d/qjdeYbJRGT1naiHwXLJJ0F
-         Tb2UF1OemPG7I706H7Wp3Ws7tMh8yHnSHUfe79r6n7sViKaH07yo705QXFdjHlorUSyL
-         b71A==
-X-Gm-Message-State: ACrzQf0kT74fEPNnpiaLrjRGDc+KH+Zk+hWmhvlZP61Abq9HaaWr4vT0
-        QeQLmT3UG69+i/QfAbgwDSRr9duD9p0jv0Lq2XuP0I1g0Ioz
-X-Google-Smtp-Source: AMsMyM5GC6iijSslBJ5Vnh4I4n+l4Nuk9X0UMEuoC/LcrNCyEA2I8Ko2vIXOSi8ksKxGFSK4zaQPTkmNsDpv8H8dj71ud5By+kyr
+        Thu, 20 Oct 2022 09:01:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56D0B1C117C
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 06:01:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666270895;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=boz0mjP9HzHGnihw8bMwD1zsGSVQM8PZMj4EPnj2Odk=;
+        b=hmvpEHBpRxJc3cPk5vtDUn8kV1T6eI3FYuvSBZiGPEbCyFvil+9o4TQdpfiPiLPFT8DYeW
+        FXoLr4wZBtOhDQPxpcw82lnOrekU4SL7LW5HCfwbXlg18VRhGbV1yQFfDBLRaFeo8wGcQ+
+        Ud2sIWDCNyqzR3MxrP/G7FlycaIxr6k=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-260-p-p6r2FDMM2s5GNRlRdGAw-1; Thu, 20 Oct 2022 09:01:32 -0400
+X-MC-Unique: p-p6r2FDMM2s5GNRlRdGAw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8CC5E29AB405;
+        Thu, 20 Oct 2022 13:01:31 +0000 (UTC)
+Received: from gerbillo.redhat.com (unknown [10.39.194.216])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 642E81121315;
+        Thu, 20 Oct 2022 13:01:30 +0000 (UTC)
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     torvalds@linux-foundation.org
+Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Networking for 6.1-rc2
+Date:   Thu, 20 Oct 2022 15:01:14 +0200
+Message-Id: <20221020130114.34410-1-pabeni@redhat.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1c05:b0:2fc:2f37:75c3 with SMTP id
- l5-20020a056e021c0500b002fc2f3775c3mr10363032ilh.149.1666270781978; Thu, 20
- Oct 2022 05:59:41 -0700 (PDT)
-Date:   Thu, 20 Oct 2022 05:59:41 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000000f3fec05eb76e68f@google.com>
-Subject: [syzbot] BUG: sleeping function called from invalid context in break_ksm
-From:   syzbot <syzbot+78a0878b3076f71313b3@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,URIBL_SBL_A autolearn=no
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,72 +58,228 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Linus!
 
-syzbot found the following issue on:
+There is a small conflict with your current tree between:
+  7e3cf0843fe5 ("treewide: use get_random_{u8,u16}() when possible, part 1")
+  69421bf98482 ("udp: Update reuse->has_conns under reuseport_lock.")
 
-HEAD commit:    acee3e83b493 Add linux-next specific files for 20221020
-git tree:       linux-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=15961f62880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c82245cfb913f766
-dashboard link: https://syzkaller.appspot.com/bug?extid=78a0878b3076f71313b3
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1255612c880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12a1bed2880000
+with trivial solution - accept new code from both commits.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/98cc5896cded/disk-acee3e83.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/b3d3eb3aa10a/vmlinux-acee3e83.xz
+The following changes since commit 66ae04368efbe20eb8951c9a76158f99ce672f25:
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+78a0878b3076f71313b3@syzkaller.appspotmail.com
+  Merge tag 'net-6.1-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net (2022-10-13 10:51:01 -0700)
 
-BUG: sleeping function called from invalid context at mm/ksm.c:500
-in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 3610, name: syz-executor212
-preempt_count: 1, expected: 0
-RCU nest depth: 0, expected: 0
-INFO: lockdep is turned off.
-Preemption disabled at:
-[<0000000000000000>] 0x0
-CPU: 0 PID: 3610 Comm: syz-executor212 Not tainted 6.1.0-rc1-next-20221020-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- __might_resched.cold+0x222/0x26b kernel/sched/core.c:9890
- break_ksm.part.0+0xbe/0x160 mm/ksm.c:500
- break_ksm mm/ksm.c:875 [inline]
- unmerge_ksm_pages+0x1a0/0x240 mm/ksm.c:881
- unmerge_and_remove_all_rmap_items mm/ksm.c:1021 [inline]
- run_store+0x3cf/0xa30 mm/ksm.c:2983
- kobj_attr_store+0x50/0x80 lib/kobject.c:824
- sysfs_kf_write+0x110/0x160 fs/sysfs/file.c:136
- kernfs_fop_write_iter+0x3f8/0x610 fs/kernfs/file.c:330
- call_write_iter include/linux/fs.h:2191 [inline]
- new_sync_write fs/read_write.c:491 [inline]
- vfs_write+0x9e9/0xdd0 fs/read_write.c:584
- ksys_write+0x127/0x250 fs/read_write.c:637
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fc23ce26b39
-Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fff3f50c3a8 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fc23ce26b39
-RDX: 0000000000000002 RSI: 0000000020000000 RDI: 0000000000000003
-RBP: 00007fc23cdeace0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007fc23cdead70
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
+are available in the Git repository at:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-6.1-rc2
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+for you to fetch changes up to 7f378c03aa4952507521174fb0da7b24a9ad0be6:
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+  net: phy: dp83822: disable MDI crossover status change interrupt (2022-10-19 18:46:17 -0700)
+
+----------------------------------------------------------------
+Networking fixes for 6.1-rc2, including fixes from netfilter
+
+Current release - regressions:
+  - revert "net: fix cpu_max_bits_warn() usage in netif_attrmask_next{,_and}"
+
+  - revert "net: sched: fq_codel: remove redundant resource cleanup in fq_codel_init()"
+
+  - dsa: uninitialized variable in dsa_slave_netdevice_event()
+
+  - eth: sunhme: uninitialized variable in happy_meal_init()
+
+Current release - new code bugs:
+  - eth: octeontx2: fix resource not freed after malloc
+
+Previous releases - regressions:
+  - sched: fix return value of qdisc ingress handling on success
+
+  - sched: fix race condition in qdisc_graft()
+
+  - udp: update reuse->has_conns under reuseport_lock.
+
+  - tls: strp: make sure the TCP skbs do not have overlapping data
+
+  - hsr: avoid possible NULL deref in skb_clone()
+
+  - tipc: fix an information leak in tipc_topsrv_kern_subscr
+
+  - phylink: add mac_managed_pm in phylink_config structure
+
+  - eth: i40e: fix DMA mappings leak
+
+  - eth: hyperv: fix a RX-path warning
+
+  - eth: mtk: fix memory leaks
+
+Previous releases - always broken:
+  - sched: cake: fix null pointer access issue when cake_init() fails
+
+----------------------------------------------------------------
+Alexander Potapenko (1):
+      tipc: fix an information leak in tipc_topsrv_kern_subscr
+
+Brett Creeley (1):
+      ionic: catch NULL pointer issue on reconfig
+
+Cezar Bulinaru (1):
+      net: hv_netvsc: Fix a warning triggered by memcpy in rndis_filter
+
+Christian Marangi (2):
+      net: dsa: qca8k: fix inband mgmt for big-endian systems
+      net: dsa: qca8k: fix ethtool autocast mib for big-endian systems
+
+Dan Carpenter (3):
+      net/smc: Fix an error code in smc_lgr_create()
+      sunhme: Uninitialized variable in happy_meal_init()
+      net: dsa: uninitialized variable in dsa_slave_netdevice_event()
+
+David S. Miller (4):
+      Merge branch 'phylink_set_mac_pm'
+      Merge branch 'mtk_eth_wed-leak-fixes'
+      Merge branch 'qdisc-null-deref'
+      Merge branch 'qdisc-ingress-success'
+
+Eric Dumazet (3):
+      skmsg: pass gfp argument to alloc_sk_msg()
+      net: hsr: avoid possible NULL deref in skb_clone()
+      net: sched: fix race condition in qdisc_graft()
+
+Felix Riemann (1):
+      net: phy: dp83822: disable MDI crossover status change interrupt
+
+Guillaume Nault (1):
+      netfilter: rpfilter/fib: Set ->flowic_uid correctly for user namespaces.
+
+Harini Katakam (1):
+      net: phy: dp83867: Extend RX strap quirk for SGMII mode
+
+Jakub Kicinski (4):
+      tls: strp: make sure the TCP skbs do not have overlapping data
+      Revert "net: fix cpu_max_bits_warn() usage in netif_attrmask_next{,_and}"
+      genetlink: fix kdoc warnings
+      Merge git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf
+
+Jan Sokolowski (1):
+      i40e: Fix DMA mappings leak
+
+Jiapeng Chong (1):
+      net: ethernet: mediatek: ppe: Remove the unused function mtk_foe_entry_usable()
+
+Jonathan Cooper (1):
+      sfc: Change VF mac via PF as first preference if available.
+
+Krzysztof Kozlowski (1):
+      MAINTAINERS: nfc: s3fwrn5: Drop Krzysztof Opasiak
+
+Kuniyuki Iwashima (1):
+      udp: Update reuse->has_conns under reuseport_lock.
+
+Manank Patel (1):
+      ethernet: marvell: octeontx2 Fix resource not freed after malloc
+
+Mark Tomlinson (1):
+      tipc: Fix recognition of trial period
+
+Pablo Neira Ayuso (1):
+      netfilter: nf_tables: relax NFTA_SET_ELEM_KEY_END set flags requirements
+
+Palmer Dabbelt (1):
+      MAINTAINERS: git://github -> https://github.com for petkan
+
+Paul Blakey (2):
+      net: Fix return value of qdisc ingress handling on success
+      selftests: add selftest for chaining of tc ingress handling to egress
+
+Pieter Jansen van Vuuren (1):
+      sfc: include vport_id in filter spec hash and equal()
+
+Shenwei Wang (2):
+      net: phylink: add mac_managed_pm in phylink_config structure
+      net: stmmac: Enable mac_managed_pm phylink config
+
+Vikas Gupta (1):
+      bnxt_en: fix memory leak in bnxt_nvm_test()
+
+Xiaobo Liu (1):
+      net/atm: fix proc_mpc_write incorrect return value
+
+Yang Yingliang (5):
+      net: ethernet: mtk_eth_soc: fix possible memory leak in mtk_probe()
+      net: ethernet: mtk_eth_wed: add missing put_device() in mtk_wed_add_hw()
+      net: ethernet: mtk_eth_wed: add missing of_node_put()
+      wwan_hwsim: fix possible memory leak in wwan_hwsim_dev_new()
+      net: hns: fix possible memory leak in hnae_ae_register()
+
+Zhengchao Shao (4):
+      ip6mr: fix UAF issue in ip6mr_sk_done() when addrconf_init_net() failed
+      net: sched: cake: fix null pointer access issue when cake_init() fails
+      Revert "net: sched: fq_codel: remove redundant resource cleanup in fq_codel_init()"
+      net: sched: sfb: fix null pointer access issue when sfb_init() fails
+
+zhangxiangqian (1):
+      net: macvlan: change schedule system_wq to system_unbound_wq
+
+ .../bindings/net/nfc/samsung,s3fwrn5.yaml          |  1 -
+ MAINTAINERS                                        |  5 +-
+ drivers/net/dsa/qca/qca8k-8xxx.c                   | 83 ++++++++++++++--------
+ drivers/net/ethernet/broadcom/bnxt/bnxt_devlink.c  | 11 +--
+ drivers/net/ethernet/hisilicon/hns/hnae.c          |  4 +-
+ drivers/net/ethernet/intel/i40e/i40e_ethtool.c     |  3 -
+ drivers/net/ethernet/intel/i40e/i40e_main.c        | 16 +++--
+ drivers/net/ethernet/intel/i40e/i40e_txrx.c        | 13 ++--
+ drivers/net/ethernet/intel/i40e/i40e_txrx.h        |  1 -
+ drivers/net/ethernet/intel/i40e/i40e_xsk.c         | 67 ++++++++++++++---
+ drivers/net/ethernet/intel/i40e/i40e_xsk.h         |  2 +-
+ .../ethernet/marvell/octeontx2/nic/cn10k_macsec.c  |  2 +
+ drivers/net/ethernet/mediatek/mtk_eth_soc.c        | 17 +++--
+ drivers/net/ethernet/mediatek/mtk_ppe.c            |  6 --
+ drivers/net/ethernet/mediatek/mtk_wed.c            | 15 +++-
+ drivers/net/ethernet/pensando/ionic/ionic_lif.c    | 12 ++--
+ drivers/net/ethernet/sfc/ef10.c                    | 58 +++++++--------
+ drivers/net/ethernet/sfc/filter.h                  |  4 +-
+ drivers/net/ethernet/sfc/rx_common.c               | 10 +--
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c  |  1 +
+ drivers/net/ethernet/sun/sunhme.c                  |  2 +-
+ drivers/net/hyperv/rndis_filter.c                  |  6 +-
+ drivers/net/macvlan.c                              |  2 +-
+ drivers/net/phy/dp83822.c                          |  3 +-
+ drivers/net/phy/dp83867.c                          |  8 +++
+ drivers/net/phy/phylink.c                          |  3 +
+ drivers/net/wwan/wwan_hwsim.c                      |  2 +-
+ include/linux/dsa/tag_qca.h                        |  8 +--
+ include/linux/netdevice.h                          | 10 +--
+ include/linux/phylink.h                            |  2 +
+ include/net/genetlink.h                            |  8 ++-
+ include/net/sock_reuseport.h                       | 11 ++-
+ net/atm/mpoa_proc.c                                |  3 +-
+ net/core/dev.c                                     |  4 ++
+ net/core/skmsg.c                                   |  8 +--
+ net/core/sock_reuseport.c                          | 16 +++++
+ net/dsa/slave.c                                    |  2 +-
+ net/hsr/hsr_forward.c                              | 12 ++--
+ net/ipv4/datagram.c                                |  2 +-
+ net/ipv4/netfilter/ipt_rpfilter.c                  |  1 +
+ net/ipv4/netfilter/nft_fib_ipv4.c                  |  1 +
+ net/ipv4/udp.c                                     |  2 +-
+ net/ipv6/addrconf.c                                |  2 +
+ net/ipv6/datagram.c                                |  2 +-
+ net/ipv6/netfilter/ip6t_rpfilter.c                 |  1 +
+ net/ipv6/netfilter/nft_fib_ipv6.c                  |  2 +
+ net/ipv6/udp.c                                     |  2 +-
+ net/netfilter/nf_tables_api.c                      |  5 +-
+ net/sched/sch_api.c                                |  5 +-
+ net/sched/sch_cake.c                               |  4 ++
+ net/sched/sch_fq_codel.c                           | 25 ++++---
+ net/sched/sch_sfb.c                                |  3 +-
+ net/smc/smc_core.c                                 |  3 +-
+ net/tipc/discover.c                                |  2 +-
+ net/tipc/topsrv.c                                  |  2 +-
+ net/tls/tls_strp.c                                 | 32 +++++++--
+ tools/testing/selftests/net/Makefile               |  1 +
+ .../selftests/net/test_ingress_egress_chaining.sh  | 79 ++++++++++++++++++++
+ 58 files changed, 432 insertions(+), 185 deletions(-)
+ create mode 100644 tools/testing/selftests/net/test_ingress_egress_chaining.sh
+
