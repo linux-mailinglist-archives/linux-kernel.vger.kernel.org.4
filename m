@@ -2,86 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CDD0606010
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 14:21:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27A2B60602A
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 14:27:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230116AbiJTMVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 08:21:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53356 "EHLO
+        id S229980AbiJTM1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 08:27:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230099AbiJTMVs (ORCPT
+        with ESMTP id S229921AbiJTM1l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 08:21:48 -0400
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE0331D3A5F
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 05:21:46 -0700 (PDT)
-Received: by mail-qk1-x72d.google.com with SMTP id s17so11432945qkj.12
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 05:21:46 -0700 (PDT)
+        Thu, 20 Oct 2022 08:27:41 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 158701D3EB3;
+        Thu, 20 Oct 2022 05:27:40 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id fn7-20020a05600c688700b003b4fb113b86so2075137wmb.0;
+        Thu, 20 Oct 2022 05:27:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=QU8wwIsX2qw3YuWPGoLshZE9nKsPTHBQ9xDkmS6/43A=;
-        b=kxmoe7LVcj5YaehnNatSaJ+sgWuAJIYUVHZi7kkFgy1BEN3isRtJwl+XDqqRPPIZJj
-         6s7x2UMRz8IIyEz9CG+9FZuWlnOp6z8CtYGL0HpbUwumjlPwEUL7JTYZnOw+7vLar7Wn
-         SoejmHXPColW7UfWN1jaHbvq/J4jPIXfeVpcUjNSujJJQqIYqcju2EzMxd6ddY48LDQX
-         A1tlt8aK/n1lBw74+4cxPpCUdH2/KVZeZ5LBmsVzHgDj8NvbpqyCTdE4hM1vBaoNFNP+
-         /w6dwgz1OGuvcIigUDxMGAdY/RqReLRuxIk+SE9k8Pg10v6FmZsbmpismQgzrdFyEVWL
-         qTOw==
+        bh=29Xo6HXwmoJVWJYrYPfltdI8ZtK22sePqNB82FGfT2k=;
+        b=TOlduXdIFuZuhrqzj6+PH1Bb9Q14uByPeFG7jufuEHncgs055zW1/cWz4MxRoy/Rnb
+         6YH76hSD+xnQXYAQglRP0DWj7SvFmve2IoHrW5WnLnSrM161xDm2+tYca/iD6uwxM9hI
+         ZW7ful55h4Qlb6i5rJxw/SjvCI+AwVZFG5XpOp7s8bnxMIIqLjYVqm1cnGMdtBCU4Q49
+         Lozwbk2bvRySkBoPeM5HeByF7rGVvN8fyhSY0yK4v+5sfNxfh6eC1ia5TmwUzJKDjh02
+         nI7ie5v1hLZ5lLTiRmlhkeZVcJOo2sxciIx1qHluXrNNvJEA81F36b2ghHO92Zk/WFZB
+         Hskg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QU8wwIsX2qw3YuWPGoLshZE9nKsPTHBQ9xDkmS6/43A=;
-        b=pT+gavyg24S2NZlSIVAOIo32+wvgqsPpM7LXIk+dTDnRcALehxhozSU8A6OjS8qrUI
-         lWozcqjB5JPcLHiidyh6OhlxHDn4SD20X5E5eVAcytxrDh4p6CiPW+Oji9x3FIxoF+q3
-         AvQJK6+yee/rIVYNLPjaMIeK3EOeZ5wxd7HsY62+TDi4+OUIJZdj5Z+Yc1Ssmm37N752
-         58URMWlr6qR7UJq7uvHQNKleV8pkqOhOhUmoLPE+Dnuc3IwS+B8TteFCrXC4CapEgarZ
-         OfmaFzU1FXgPQU+MT96r1cqBYjPEO+FfHBdQrtRY6Eg3tsdchvDi31LE0ZY2BhQ31wXu
-         YaIQ==
-X-Gm-Message-State: ACrzQf38ITaFuvp1xU5ZCyvXVUnQuqCMREiMvj6WNa90d1DcIYyVZci+
-        fQLfQ64P8rNjZPsGeSRLYlJA8A==
-X-Google-Smtp-Source: AMsMyM7gpLAbDdzem95MlHk1VJuHxCQq2NFZ0KtsUUKL2BU/4obX35xeH+M4i4rRIL7C7psdPxWaKA==
-X-Received: by 2002:a05:620a:2489:b0:6ee:6244:a225 with SMTP id i9-20020a05620a248900b006ee6244a225mr8971714qkn.112.1666268505870;
-        Thu, 20 Oct 2022 05:21:45 -0700 (PDT)
-Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
-        by smtp.gmail.com with ESMTPSA id cg15-20020a05622a408f00b0039c37a7914csm5877409qtb.23.2022.10.20.05.21.44
+        bh=29Xo6HXwmoJVWJYrYPfltdI8ZtK22sePqNB82FGfT2k=;
+        b=7Y2EbnXzo9IUXyEzkTwdVshmI5hNeH3F7ZkqGTvaQlq8MRvRSvkEAYCXrWzeukyDP2
+         27dqUxu/0nsa5ctoUPZm+zT9viMiCH7ULnAfNULFFd6/YpLTy5NrF1glCUD2UYyByWLH
+         cVQ9ZC8pFJKwVEclhDozG7ROZUeUhZlMhjz2qq3sGMKuzqlCMcIHY03KycaolbX0rGGB
+         cTa9eudDTGFtdDastihdnkUeiLx0pQYdffkTSakB0oE+BQpa9g/CQ63W5krtHagjpGhT
+         I2+a3fIuVJwTi3BYCeO1CBPhB6Yov4ZqNbcPmBd1lKJ/EonHRXikUb4R5on+uJ8KtvzY
+         xZ/Q==
+X-Gm-Message-State: ACrzQf3DFtsMRSHOO1lEJ8DIUutlrU3Hk4HpMSlfFrV4csxx1kKPEOEu
+        gLaePiYOCDIN6CqmDigE8aRtJdwbKEM=
+X-Google-Smtp-Source: AMsMyM7WwMr9xBD7uZTUqdfHU8/9lzn+n/gf8PJx/zT+wDovjVHfBfxIP6RdaWaCwiuHiqmkJvRfZw==
+X-Received: by 2002:a7b:c40e:0:b0:3c6:cedc:f874 with SMTP id k14-20020a7bc40e000000b003c6cedcf874mr30841043wmi.5.1666268858374;
+        Thu, 20 Oct 2022 05:27:38 -0700 (PDT)
+Received: from ?IPV6:2620:10d:c096:310::22ef? ([2620:10d:c092:600::2:93dd])
+        by smtp.gmail.com with ESMTPSA id m2-20020adfe0c2000000b0022e6178bd84sm17069433wri.8.2022.10.20.05.27.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Oct 2022 05:21:45 -0700 (PDT)
-Message-ID: <2cfed688-f401-e69e-1ff4-f775c6d90f64@linaro.org>
-Date:   Thu, 20 Oct 2022 08:21:43 -0400
+        Thu, 20 Oct 2022 05:27:37 -0700 (PDT)
+Message-ID: <2b29a76c-682e-208f-8a0f-d693b6823482@gmail.com>
+Date:   Thu, 20 Oct 2022 13:26:16 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v3 06/10] dt-bindings: pinctrl: mediatek,mt6779-pinctrl:
- Add MT6795
+ Thunderbird/102.3.1
+Subject: Re: [RFC for-next v2 3/4] block/bio: add pcpu caching for non-polling
+ bio_put
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+        io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+References: <cover.1666122465.git.asml.silence@gmail.com>
+ <9fd04486d972c1f3ef273fa26b4b6bf51a5e4270.1666122465.git.asml.silence@gmail.com>
+ <Y1EHb36rQgqwbsXD@infradead.org>
 Content-Language: en-US
-To:     Yassine Oudjana <yassine.oudjana@gmail.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        Andy Teng <andy.teng@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Yassine Oudjana <y.oudjana@protonmail.com>,
-        linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20221007125904.55371-1-y.oudjana@protonmail.com>
- <20221007125904.55371-7-y.oudjana@protonmail.com>
- <0f078a85-056a-c11e-377b-27764a34485d@linaro.org>
- <8WU1KR.065JU8WYUX9C3@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <8WU1KR.065JU8WYUX9C3@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+From:   Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <Y1EHb36rQgqwbsXD@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,246 +79,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/10/2022 07:36, Yassine Oudjana wrote:
+On 10/20/22 09:31, Christoph Hellwig wrote:
+>> +	unsigned long flags;
+>>   
+>>   	cache = per_cpu_ptr(bio->bi_pool->cache, get_cpu());
+>>   	bio_uninit(bio);
+>> @@ -737,12 +776,15 @@ static inline void bio_put_percpu_cache(struct bio *bio)
+>>   		cache->free_list = bio;
+>>   		cache->nr++;
+>>   	} else {
+>> -		put_cpu();
+>> -		bio_free(bio);
+>> -		return;
+>> +		local_irq_save(flags);
+>> +		bio->bi_next = cache->free_list_irq;
+>> +		cache->free_list_irq = bio;
+>> +		cache->nr_irq++;
+>> +		local_irq_restore(flags);
+>>   	}
 > 
-> On Mon, Oct 10 2022 at 07:24:59 -04:00:00, Krzysztof Kozlowski 
-> <krzysztof.kozlowski@linaro.org> wrote:
->> On 07/10/2022 08:59, Yassine Oudjana wrote:
->>>  From: Yassine Oudjana <y.oudjana@protonmail.com>
->>>
->>>  Combine MT6795 pin controller document into MT6779 one. In the
->>>  process, replace the current interrupts property description with
->>>  the one from the MT6795 document since it makes more sense. Also
->>>  amend property descriptions and examples with more detailed
->>>  information that was available in the MT6795 document, and replace
->>>  the current pinmux node name patterns with ones from it since they
->>>  are more common across mediatek pin controller bindings.
->>>
->>>  Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
->>>  ---
->>>   .../pinctrl/mediatek,mt6779-pinctrl.yaml      |  94 ++++++--
->>>   .../pinctrl/mediatek,pinctrl-mt6795.yaml      | 227 
->>> ------------------
->>>   2 files changed, 77 insertions(+), 244 deletions(-)
->>>   delete mode 100644 
->>> Documentation/devicetree/bindings/pinctrl/mediatek,pinctrl-mt6795.yaml
->>>
->>>  diff --git 
->>> a/Documentation/devicetree/bindings/pinctrl/mediatek,mt6779-pinctrl.yaml 
->>> b/Documentation/devicetree/bindings/pinctrl/mediatek,mt6779-pinctrl.yaml
->>>  index a2141eb0854e..cada3530dd0a 100644
->>>  --- 
->>> a/Documentation/devicetree/bindings/pinctrl/mediatek,mt6779-pinctrl.yaml
->>>  +++ 
->>> b/Documentation/devicetree/bindings/pinctrl/mediatek,mt6779-pinctrl.yaml
->>>  @@ -8,6 +8,7 @@ title: Mediatek MT6779 Pin Controller
->>>
->>>   maintainers:
->>>     - Andy Teng <andy.teng@mediatek.com>
->>>  +  - AngeloGioacchino Del Regno 
->>> <angelogioacchino.delregno@collabora.com>
->>>     - Sean Wang <sean.wang@kernel.org>
->>>
->>>   description:
->>>  @@ -18,6 +19,7 @@ properties:
->>>     compatible:
->>>       enum:
->>>         - mediatek,mt6779-pinctrl
->>>  +      - mediatek,mt6795-pinctrl
->>>         - mediatek,mt6797-pinctrl
->>>
->>>     reg:
->>>  @@ -43,9 +45,10 @@ properties:
->>>     interrupt-controller: true
->>>
->>>     interrupts:
->>>  -    maxItems: 1
->>>  +    minItems: 1
->>>  +    maxItems: 2
->>>       description: |
->>>  -      Specifies the summary IRQ.
->>>  +      The interrupt outputs to sysirq.
->>
->> I am not sure if description is relevant now for all variants... what 
->> is
->> the sysirq? You have two interrupts so both go to one sysirq?
-> 
-> It's the system interrupt controller and it has several inputs. Both 
-> interrupts go to it.
+> Ok, I guess with that my previous comments don't make quite
+> as much sense any more.  I think youcan keep flags local in
 
-Then the naming is confusing because "sysirq" sounds like "system
-interrupt".
+Yeah, a little bit of oracle coding
 
-> 
->>
->>>
->>>     "#interrupt-cells":
->>>       const: 2
->>>  @@ -81,6 +84,30 @@ allOf:
->>>               - const: iocfg_lt
->>>               - const: iocfg_tl
->>>               - const: eint
->>>  +
->>>  +        interrupts:
->>>  +          items:
->>>  +            - description: EINT interrupt
->>>  +
->>>  +  - if:
->>>  +      properties:
->>>  +        compatible:
->>>  +          contains:
->>>  +            const: mediatek,mt6795-pinctrl
->>>  +    then:
->>>  +      properties:
->>>  +        reg:
->>>  +          minItems: 2
->>
->> What's the maxItems? You declared reg and reg-names in top-level
->> properties as accepting anything, therefore you cannot have loose
->> constraints here.
-> 
-> That was an oversight. I'll fix it.
->>
->>>  +
->>>  +        reg-names:
->>>  +          items:
->>>  +            - const: base
->>>  +            - const: eint
->>>  +
->>>  +        interrupts:
->>>  +          items:
->>>  +            - description: EINT interrupt
->>>  +            - description: EINT event_b interrupt
->>
->> Blank line
->>
->>>     - if:
->>>         properties:
->>>           compatible:
->>>  @@ -111,32 +138,50 @@ allOf:
->>>           - "#interrupt-cells"
->>>
->>>   patternProperties:
->>>  -  '-[0-9]*$':
->>>  +  '-pins$':
->>>       type: object
->>>       additionalProperties: false
->>>
->>>       patternProperties:
->>>  -      '-pins*$':
->>>  +      '^pins':
->>>           type: object
->>>           description: |
->>>             A pinctrl node should contain at least one subnodes 
->>> representing the
->>>             pinctrl groups available on the machine. Each subnode 
->>> will list the
->>>             pins it needs, and how they should be configured, with 
->>> regard to muxer
->>>  -          configuration, pullups, drive strength, input 
->>> enable/disable and input schmitt.
->>>  -        $ref: "/schemas/pinctrl/pincfg-node.yaml"
->>>  +          configuration, pullups, drive strength, input 
->>> enable/disable and
->>>  +          input schmitt.
->>>  +        $ref: "pinmux-node.yaml"
->>
->> Drop quotes
->>
->> Why this one is not pincfg-node anymore? All your properties are not
->> valid then? You mix here so many changes it is a bit difficult to
->> understand the concept.
-> 
-> Seems like I didn't pay enough attention to that. This node actually 
-> takes both pinmux-node (pinmux specifically) and pincfg-node 
-> properties, so would it make sense to add ref for both?
+> the branch here, though.
 
-Yes, and make changes in organized way, easier to read...
+Not like it makes any difference but can move it
 
-> 
->>
->>>
->>>           properties:
->>>             pinmux:
->>>               description:
->>>  -              integer array, represents gpio pin number and mux 
->>> setting.
->>>  -              Supported pin number and mux varies for different 
->>> SoCs, and are defined
->>>  -              as macros in boot/dts/<soc>-pinfunc.h directly.
->>>  +              Integer array, represents gpio pin number and mux 
->>> setting.
->>>  +              Supported pin number and mux varies for different 
->>> SoCs, and are
->>>  +              defined as macros in 
->>> dt-bindings/pinctrl/<soc>-pinfunc.h
->>>  +              directly.
->>>
->>>             bias-disable: true
->>>
->>>  -          bias-pull-up: true
->>>  -
->>>  -          bias-pull-down: true
->>>  +          bias-pull-up:
->>>  +            oneOf:
->>>  +              - type: boolean
->>>  +              - enum: [100, 101, 102, 103]
->>
->> Missing ref
->>
->>>  +                description: Pull up PUPD/R0/R1 type define value.
->>>  +            description: |
->>>  +               For normal pull up type, it is not necessary to 
->>> specify R1R0
->>>  +               values; When pull up type is PUPD/R0/R1, adding 
->>> R1R0 defines
->>>  +               will set different resistance values.
->>>  +
->>>  +          bias-pull-down:
->>>  +            oneOf:
->>>  +              - type: boolean
->>>  +              - enum: [100, 101, 102, 103]
->>
->> Missing ref
->>
->>>  +                description: Pull down PUPD/R0/R1 type define 
->>> value.
->>>  +            description: |
->>>  +               For normal pull down type, it is not necessary to 
->>> specify R1R0
->>>  +               values; When pull down type is PUPD/R0/R1, adding 
->>> R1R0 defines
->>>  +               will set different resistance values.
->>>
->>>             input-enable: true
->>>
->>>  @@ -151,7 +196,7 @@ patternProperties:
->>>             input-schmitt-disable: true
->>>
->>>             drive-strength:
->>>  -            enum: [2, 4, 8, 12, 16]
->>>  +            enum: [2, 4, 6, 8, 10, 12, 14, 16]
->>
->> Now you are missing ref - you do not have a type now, because you
->> removed pincfg-node. Split the merging of different pinctrl bindings 
->> and
->> reorganization.
-> 
-> Will do.
-> 
->>
->> The drive strengths are also not valid for the other variant...
-> 
-> Actually the supported drive strengths vary between pins of a single 
-> variant, so technically they have never been described completely 
-> accurately. The old drive strenghs are a superset of strengths 
-> supported by pins on the MT6779 pin controller, and this change expands 
-> the superset with values supported by some pins in MT6795. Would it be 
-> better to move this to the conditionals to have it defined per variant?
-
-If they vary, then yes.
-
-
-Best regards,
-Krzysztof
-
+-- 
+Pavel Begunkov
