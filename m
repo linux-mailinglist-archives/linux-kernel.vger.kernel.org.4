@@ -2,137 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 822C360565F
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 06:36:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52530605665
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 06:38:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbiJTEgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 00:36:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45972 "EHLO
+        id S229905AbiJTEiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 00:38:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229894AbiJTEgf (ORCPT
+        with ESMTP id S229584AbiJTEil (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 00:36:35 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02277161FCD
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 21:36:35 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id f9so753375plb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 21:36:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=hQl2xZYeQM+maPS5+wYcZN71xZnoLpUn4u2n9e80A1k=;
-        b=VVCyCBne3egzpFuhrKEfIJkrp75Jz1ao+512Mq7obhK9H2gHLqxnb0fOSyHPyUCWPY
-         H+pga1QGEb8LKqRW6F5bZ8oOGRgEPnHt3atLKn2x4swvheId21kGBqC7Xg3q8yaTPHfc
-         M+mYcRu/ofWtNUyJvpeFFjquHqKNtAiXiQhfT2e5uTnjeyEzMVMMwuqcMp0F1exuspjV
-         7gDs9b3vI/SbdTW44+/ZordSgddEgDQPAEPXaOH8R5dpTNFbDudY1EFC1vwaxxBZrQPL
-         3N/LBQLk6Eil69yQ8IUTa3UkMzozOEpUA93eySIPuF8Lqbw/LnMx2aMykdMXiCfY5/0U
-         nuAw==
+        Thu, 20 Oct 2022 00:38:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7BC5161FFD
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 21:38:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666240718;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Kyv8nGXj9Ah4DccAJThYdzgEzvLEuADjYtSpDgDrIrY=;
+        b=ilkpoW9OgrBvWHcesYY8J8Oi3kgJKhLM3r9aQcu/78Y9Z8Fr3d97pA23XDyjcT2PuQPHVS
+        6yd1a4+nmg2kTT5sMvXJeySBteQ02J/7QPnnLrsBPPWAsNzh5gQ4Ef/LM+KOYkK98fLHdc
+        0kYXVb9k/U1oSU19U3tRQ3WAkPLzEqQ=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-592-UG4APNjgNX2bVfojPeyamw-1; Thu, 20 Oct 2022 00:38:36 -0400
+X-MC-Unique: UG4APNjgNX2bVfojPeyamw-1
+Received: by mail-ed1-f72.google.com with SMTP id s8-20020a056402520800b0045cab560d5eso15477631edd.1
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 21:38:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hQl2xZYeQM+maPS5+wYcZN71xZnoLpUn4u2n9e80A1k=;
-        b=VAHYeKdB+rgNcMxj4q/nbICC8URWNZfTfRYtFSb8861xS28eEnYUq5lORKbulaHXMa
-         WphBf7ssJ4+sSPwETBjyhgjCC0b+UksyZAo3y0y+k9YbNLQw25Ig1renUVO6SOfHipI4
-         4ZdzaXOfZDZwT8pLDowwh5mV6tgWbhZvpwvkudIgSG9Un5fWIo6WdSfd8Giub64Qb1W/
-         v04EcbawuKmaU3BW22ZvQmv9WeoEvSJ4A1e124xXRTP3ErsURmLlIwmcplXiBfzUM26K
-         YEOu6JTsek5T7HVGzO9EdQDzV5NCWocCMlpd8zyDZBU7jmppYjQRozMZ0xvNAr1ochNs
-         gcIg==
-X-Gm-Message-State: ACrzQf3fJBQS+gEe7RywsAqxKGZpfZIzOY3O+EJ/3Kb8cusItOPXawPK
-        8tKDBQLZx6g6odZoZyY3H6pChw==
-X-Google-Smtp-Source: AMsMyM5zzjWfS/DI9BhJnlbWYlBt7rgwoFs02MxbqPnbIHLzHL2X4Z2CL+tsFOb7bIpWQg9BvHojZg==
-X-Received: by 2002:a17:902:7b95:b0:178:ab50:76b5 with SMTP id w21-20020a1709027b9500b00178ab5076b5mr12139210pll.161.1666240594345;
-        Wed, 19 Oct 2022 21:36:34 -0700 (PDT)
-Received: from localhost ([122.172.86.128])
-        by smtp.gmail.com with ESMTPSA id y2-20020a170902864200b001754cfb5e21sm11614884plt.96.2022.10.19.21.36.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Oct 2022 21:36:33 -0700 (PDT)
-Date:   Thu, 20 Oct 2022 10:06:32 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     =?utf-8?B?S8O2cnk=?= Maincent <kory.maincent@bootlin.com>
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, thomas.petazzoni@bootlin.com,
-        Viresh Kumar <vireshk@kernel.org>,
-        Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Subject: Re: [PATCH 5/6] arm: dts: spear600: Add ssp controller nodes
-Message-ID: <20221020043632.cbofx5jvajhy4xba@vireshk-i7>
-References: <20221019133208.319626-1-kory.maincent@bootlin.com>
- <20221019133208.319626-6-kory.maincent@bootlin.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Kyv8nGXj9Ah4DccAJThYdzgEzvLEuADjYtSpDgDrIrY=;
+        b=6gjVknf69cGEB5yVETBktraJEm6dWY50v/q0wPTYFr8zw6HZTC3Q8Gl7KMG4Ez+Xmw
+         SF4UARC8uPkxGk8ONrCx5yV1l81sTrqRnKojSp7ojQxHitq0USqbVAzPtFHDBQd3dfCD
+         rsECYUAq+RqZAqONQhfAXKG3BCUHYTdlZ24nH6U3PHQVWN0fceXw5cFEYCC1vqwg/Ai9
+         itudkrEfAZ7FrUMCR0r3SGmsoVkH+MHbwJ5XVs08bupIxmIfMFS2HOfXyvmGa1vvcAx0
+         3/jDT4N4/nm36j6XZf2mts6qwoJRqUScz63qF5/fgR3hkgDGt8YPQgiujfJ01w3lKMUH
+         mNsQ==
+X-Gm-Message-State: ACrzQf3iTuPJujxupaosiarNJ8Y7fwJM/r6RD41/NPqtO45BJlX3ey5n
+        D2CXnIsOcugbbttZlsL6aMv0MAPGWdbe178pXl3dg4GINxqpQkWSQx1/7wYeC8tjX9rAh0HO038
+        Bu/BfVHyinNeDPoTFN/btW0BHnSTEyHTqpNC3KraD
+X-Received: by 2002:a17:906:8a62:b0:78d:a05c:c37f with SMTP id hy2-20020a1709068a6200b0078da05cc37fmr9268197ejc.159.1666240715759;
+        Wed, 19 Oct 2022 21:38:35 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5ZwOFEZM8doQCzml9WL1ee9yuCrqJnl7mDRSvjurlf1Q90Jp73KqKd+JTzUxzcUph64t0ai8+bt62iwoatemI=
+X-Received: by 2002:a17:906:8a62:b0:78d:a05c:c37f with SMTP id
+ hy2-20020a1709068a6200b0078da05cc37fmr9268186ejc.159.1666240715492; Wed, 19
+ Oct 2022 21:38:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221019133208.319626-6-kory.maincent@bootlin.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <1666137032-28192-1-git-send-email-si-wei.liu@oracle.com> <1666137032-28192-2-git-send-email-si-wei.liu@oracle.com>
+In-Reply-To: <1666137032-28192-2-git-send-email-si-wei.liu@oracle.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Thu, 20 Oct 2022 12:38:22 +0800
+Message-ID: <CACGkMEv_fKZa9qN+ytnViCdvcR4Cbr8KyT71UnWzWjrtsFMyBg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] vdpa: save vdpa_dev_set_config in struct vdpa_device
+To:     Si-Wei Liu <si-wei.liu@oracle.com>
+Cc:     mst@redhat.com, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19-10-22, 15:32, Köry Maincent wrote:
-> From: Kory Maincent <kory.maincent@bootlin.com>
-> 
-> The SPEAr600 has three Synchronous serial port to enables synchronous
-> serial communication with slave or master peripherals (SPI). Lets add these
-> nodes to be able to use them.
-> 
-> Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
+On Wed, Oct 19, 2022 at 8:56 AM Si-Wei Liu <si-wei.liu@oracle.com> wrote:
+>
+> In order to allow live migration orchestration software to export the
+> initial set of vdpa attributes with which the device was created, it
+> will be useful if the vdpa tool can report the config on demand with
+> simple query. This will ease the orchestration software implementation
+> so that it doesn't have to keep track of vdpa config change, or have
+> to persist vdpa attributes across failure and recovery, in fear of
+> being killed due to accidental software error.
+>
+> This commit attempts to make struct vdpa_device contain the struct
+> vdpa_dev_set_config, where all config attributes upon vdpa creation
+> are carried over. Which will be used in subsequent commits.
+>
+> Signed-off-by: Si-Wei Liu <si-wei.liu@oracle.com>
 > ---
->  arch/arm/boot/dts/spear600.dtsi | 30 ++++++++++++++++++++++++++++++
->  1 file changed, 30 insertions(+)
-> 
-> diff --git a/arch/arm/boot/dts/spear600.dtsi b/arch/arm/boot/dts/spear600.dtsi
-> index 9d5a04a46b14..6b67c0ceaed9 100644
-> --- a/arch/arm/boot/dts/spear600.dtsi
-> +++ b/arch/arm/boot/dts/spear600.dtsi
-> @@ -207,6 +207,36 @@ adc: adc@d820b000 {
->  				interrupts = <6>;
->  				status = "disabled";
->  			};
-> +
-> +			ssp1: spi@d0100000 {
-> +				compatible = "arm,pl022", "arm,primecell";
-> +				reg = <0xd0100000 0x1000>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +				interrupt-parent = <&vic0>;
-> +				interrupts = <26>;
-> +				status = "disabled";
-> +			};
-> +
-> +			ssp2: spi@d0180000 {
-> +				compatible = "arm,pl022", "arm,primecell";
-> +				reg = <0xd0180000 0x1000>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +				interrupt-parent = <&vic0>;
-> +				interrupts = <27>;
-> +				status = "disabled";
-> +			};
-> +
-> +			ssp3: spi@d8180000 {
-> +				compatible = "arm,pl022", "arm,primecell";
-> +				reg = <0xd8180000 0x1000>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +				interrupt-parent = <&vic1>;
-> +				interrupts = <5>;
-> +				status = "disabled";
-> +			};
->  		};
->  	};
+>  include/linux/vdpa.h | 23 +++++++++++++----------
+>  1 file changed, 13 insertions(+), 10 deletions(-)
+>
+> diff --git a/include/linux/vdpa.h b/include/linux/vdpa.h
+> index 6d0f5e4..f1838f5 100644
+> --- a/include/linux/vdpa.h
+> +++ b/include/linux/vdpa.h
+> @@ -58,6 +58,16 @@ struct vdpa_vq_state {
+>         };
 >  };
+>
+> +struct vdpa_dev_set_config {
+> +       u64 device_features;
+> +       struct {
+> +               u8 mac[ETH_ALEN];
+> +               u16 mtu;
+> +               u16 max_vq_pairs;
+> +       } net;
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Not for this patch but I think there should be a union container for
+this structure to make it usable for other types of devices.
 
--- 
-viresh
+> +       u64 mask;
+> +};
+> +
+>  struct vdpa_mgmt_dev;
+>
+>  /**
+> @@ -77,6 +87,8 @@ struct vdpa_vq_state {
+>   * @nvqs: maximum number of supported virtqueues
+>   * @mdev: management device pointer; caller must setup when registering device as part
+>   *       of dev_add() mgmtdev ops callback before invoking _vdpa_register_device().
+> + * @vdev_cfg: initial device config on vdpa creation; useful when instantiate with
+> + *            the exact same config is needed.
+
+Not a native speaker, but I guess it should be better named as "init_cfg"?
+
+Thanks
+
+>   */
+>  struct vdpa_device {
+>         struct device dev;
+> @@ -91,6 +103,7 @@ struct vdpa_device {
+>         struct vdpa_mgmt_dev *mdev;
+>         unsigned int ngroups;
+>         unsigned int nas;
+> +       struct vdpa_dev_set_config vdev_cfg;
+>  };
+>
+>  /**
+> @@ -103,16 +116,6 @@ struct vdpa_iova_range {
+>         u64 last;
+>  };
+>
+> -struct vdpa_dev_set_config {
+> -       u64 device_features;
+> -       struct {
+> -               u8 mac[ETH_ALEN];
+> -               u16 mtu;
+> -               u16 max_vq_pairs;
+> -       } net;
+> -       u64 mask;
+> -};
+> -
+>  /**
+>   * Corresponding file area for device memory mapping
+>   * @file: vma->vm_file for the mapping
+> --
+> 1.8.3.1
+>
+
