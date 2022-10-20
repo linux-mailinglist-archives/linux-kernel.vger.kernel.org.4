@@ -2,198 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E00C660673F
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 19:47:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 811A4606741
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 19:47:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbiJTRrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 13:47:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53990 "EHLO
+        id S230037AbiJTRrY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 13:47:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbiJTRrM (ORCPT
+        with ESMTP id S230029AbiJTRrR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 13:47:12 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B9419847C;
-        Thu, 20 Oct 2022 10:47:11 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id g10so414805oif.10;
-        Thu, 20 Oct 2022 10:47:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=YOIx3Gp+OOth7iTTSTnmRVvtuHwOIWSfbp7MBZ3lhr8=;
-        b=ceHhsn9vxuGQt25KzxXHZksQqJdv+wXeDC9dgm/Be5N0xH074n4BNy4bxSmeJ5WMg6
-         J1GutrjG75o0z+HoVCBr+DkpSYi+MccZTPWA15z/nRcoDKgfEhi/evz3jVvN6jRL34H+
-         q8SAXttOdUgBUnbZQQwbsthuPlOU5DoAioYU3tSHxiKfAtFf03gChBwL3cIqMOKKkms7
-         i4CAwjG1iTKCNXx/ql+3kr+muc7PFX+pJMVJTNIsgTT4LQPT8Va2mnYskG5f+jp5PBWH
-         5Ns3zqHqihgUsJv9okTVUNrrdR2ajMudytIys3/e7gupi/va8FwsgRkeKvHIrWmBcYGn
-         LvCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YOIx3Gp+OOth7iTTSTnmRVvtuHwOIWSfbp7MBZ3lhr8=;
-        b=BkiObMVBpBrAy05RTsB6BKZyErsYU6qFxTmqgLzHZZI9krptSuLDBBrRk0mNPrA14R
-         zkoK1iQP12QWmct4hrR3xLiMoGV6sJIQoLYNqB4TNSnLa/WSoE3TEFJXUHXiz1OVShrk
-         olUApn2hWkXEAgp4ClCwpKCNPOuYVUShXsIC7VQCHToiinup9OGcCoTtoVAvXWToSUFR
-         4KZUvNMeNQLmxghYpCSYUpRFSXaOMAExWzbHMHWLgZx7cDnbPFGSwy7vJx81RkmhofLX
-         C/SMwp4UP6uzeM+HqF+o93Has8DTGAvyXdJcWmG0XCPL6YR3pLCT+jBhBu1hsC9C/c24
-         4qkA==
-X-Gm-Message-State: ACrzQf0JqrRXD9c0wi1v1qsebtgt1JGnx5FXfJDDrA+WALRNrtEYGKNt
-        MhERuclnUimDXfVvJtR/GiGdHT/VXUO6QXcMAI8=
-X-Google-Smtp-Source: AMsMyM7uPjt1yjlFLRaDPeqL3b5RFJP0n+1456Mp5LpP/6RJfVA9PHEg90rIGRKgDpkV+98vbmMvFWcgQ1pknqu2CkY=
-X-Received: by 2002:a05:6808:e8e:b0:34d:7829:135 with SMTP id
- k14-20020a0568080e8e00b0034d78290135mr7842845oil.252.1666288030741; Thu, 20
- Oct 2022 10:47:10 -0700 (PDT)
+        Thu, 20 Oct 2022 13:47:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FCF9198462;
+        Thu, 20 Oct 2022 10:47:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DC3E61B4B;
+        Thu, 20 Oct 2022 17:47:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 088C8C43470;
+        Thu, 20 Oct 2022 17:47:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666288035;
+        bh=R58SloSkZJNs2f+jMVp8OnePu6OrZOnezUSWXEqsdSY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=LNRZ8u+1uS7SqR6aYqxwSUzHahgXN7Jv59k+yzRPxbhkgrEKM91A4yRAxuF9c5KdU
+         cuAu4qjkT3ki41W2HR3AjrpeRYilOSgMhSDdgWBxbxQYVHkJw0FZsIBm8A0geFDS3k
+         psvmQGR9Cbi2ft6XXB68wlbvMN3yZDfh7FFBkxbnYmbYqyiOxbI+uWVxk5eowIDr0j
+         NZm7UH2Xkxrd+hbGCjy3hZeeCBBpneBSnI7tfEqTIwFwK8xySl8Ib/bC7ECNaiyLW1
+         d053pTrph2z8phwZvMD49tfI5CXqQ5VL1uAj1Oi+1zYmXYPAxQoW86fpu0XR7dhRnt
+         YGzVXN9iGq5GA==
+Received: by mail-ej1-f49.google.com with SMTP id d26so1231980eje.10;
+        Thu, 20 Oct 2022 10:47:14 -0700 (PDT)
+X-Gm-Message-State: ACrzQf171s3ZI+OLUt3mWMhb1TUdrlyubxmYOCM4dsVjq5VrxwW8xbeN
+        g/4CD0Rwepy1SlKQqAcHMLnJ8beHMFAo8EDpPIA=
+X-Google-Smtp-Source: AMsMyM5D+R4LuYsDY86sucPnjTGdvXhl9R6Bd6whGckMGXpbxicb2Yyd7qTB4DoNw2h7V82yV/a5ujl82rwIxMj74EI=
+X-Received: by 2002:a17:906:58c6:b0:78d:b37f:5ce5 with SMTP id
+ e6-20020a17090658c600b0078db37f5ce5mr12019188ejs.707.1666288033278; Thu, 20
+ Oct 2022 10:47:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <DU0PR03MB8319B83F92372CA86A42C089F3289@DU0PR03MB8319.eurprd03.prod.outlook.com>
- <CABCJKue6M4cXyTP9wgaBx0oZ+5K7sQna9UQF88Pxcknv-kzcMg@mail.gmail.com>
- <DU0PR03MB83196C180979F74ABEEB0562F32A9@DU0PR03MB8319.eurprd03.prod.outlook.com>
- <CAKwvOdncRqrTNqmiDhtkj74V4eU03FBgDr25H4+npwHYgrYQRw@mail.gmail.com> <CAKwvOd=7GZfdmtAG2W3Tjo1sPUA0eGnXFpUPWHp-3WJOgVpDEg@mail.gmail.com>
-In-Reply-To: <CAKwvOd=7GZfdmtAG2W3Tjo1sPUA0eGnXFpUPWHp-3WJOgVpDEg@mail.gmail.com>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Thu, 20 Oct 2022 19:46:34 +0200
-Message-ID: <CA+icZUWKnw=eKZghzADQRse242dsx1WwGpF0hcSCUby_Wz7=QA@mail.gmail.com>
-Subject: Re: Update15.x/kcfi to LLVM 15.0.3 (ZSTD + DWARFv5)
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     "Sedat Dilek (DHL Supply Chain)" <sedat.dilek@dhl.com>,
-        Fangrui Song <maskray@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>
+References: <20220909040936.2610780-1-floridsleeves@gmail.com>
+In-Reply-To: <20220909040936.2610780-1-floridsleeves@gmail.com>
+From:   Song Liu <song@kernel.org>
+Date:   Thu, 20 Oct 2022 10:47:01 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW6JJLsdcv2gQY6QEhbTSRiamTtGo4GBL1uSoUx8ZsdKgw@mail.gmail.com>
+Message-ID: <CAPhsuW6JJLsdcv2gQY6QEhbTSRiamTtGo4GBL1uSoUx8ZsdKgw@mail.gmail.com>
+Subject: Re: [PATCH v1] drivers/md/md-bitmap: check the return value of md_bitmap_get_counter()
+To:     Li Zhong <floridsleeves@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 7:18 PM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
+On Thu, Sep 8, 2022 at 9:09 PM Li Zhong <floridsleeves@gmail.com> wrote:
 >
-> On Thu, Oct 20, 2022 at 9:56 AM Nick Desaulniers
-> <ndesaulniers@google.com> wrote:
-> >
-> > On Wed, Oct 19, 2022 at 10:44 PM Sedat Dilek (DHL Supply Chain)
-> > <sedat.dilek@dhl.com> wrote:
-> > >
-> > > -----Urspr=C3=BCngliche Nachricht-----
-> > > Von: Sami Tolvanen <samitolvanen@google.com>
-> > > Gesendet: Dienstag, 18. Oktober 2022 18:00
-> > > An: Sedat Dilek (DHL Supply Chain) <sedat.dilek@dhl.com>
-> > > Betreff: Re: Update15.x/kcfi to LLVM 15.0.3
-> > >
-> > > On Tue, Oct 18, 2022 at 4:54 AM Sedat Dilek (DHL Supply Chain) <sedat=
-.dilek@dhl.com> wrote:
-> > > >
-> > > [ CC Nick + Fangrui ]
-> > >
-> > > You happen to know or use the ZSTD cmake-option (see [1] and [2]) - c=
-ame in with changes post-15.0.2?
-> > >
-> > > AFAICS Fangrui Song had some patches to use ZSTD debug-compression wi=
-th DWARFv5.
-> > >
-> > > Unsure, if that combination is now possible in v15.0.3 or is a featur=
-e of LLVM-16.
-> > >
-> > > [3] says:
-> > >
-> > > [ lib/Kconfig.debug ]
-> > >
-> > > config DEBUG_INFO_COMPRESSED
-> > >         bool "Compressed debugging information"
-> > >         depends on $(cc-option,-gz=3Dzlib)
-> > >         depends on $(ld-option,--compress-debug-sections=3Dzlib)
-> > >         help
-> > >           Compress the debug information using zlib.  Requires GCC 5.=
-0+ or Clang
-> > >           5.0+, binutils 2.26+, and zlib.
-> > >
-> > >           Users of dpkg-deb via scripts/package/builddeb may find an =
-increase in
-> > >           size of their debug .deb packages with this config set, due=
- to the
-> > >           debug info being compressed with zlib, then the object file=
-s being
-> > >           recompressed with a different compression scheme. But this =
-is still
-> > >           preferable to setting $KDEB_COMPRESS to "none" which would =
-be even
-> > >           larger.
-> > >
-> > > I am interested in the equivalent changes to cc-option/ld-option with=
- ZSTD (usable with DWARFv5).
-> >
-> > Good idea.  It looks like there's still a blocker to using -gz=3Dzstd w=
-ith clang:
-> > $ clang -gz=3Dzstd -x c - < /dev/null
-> > clang-16: warning: cannot compress debug sections (zstd not enabled)
-> > [-Wdebug-compression-unavailable]
+> Check the return value of md_bitmap_get_counter() in case it returns
+> NULL pointer, which will result in a null pointer dereference.
 >
-> PEBKAC
-> $ sudo apt install libzstd-dev
-> <rebuild clang>
+> Signed-off-by: Li Zhong <floridsleeves@gmail.com>
+
+Somehow I didn't get v2 of this in my inbox. So replying to v1:
+
+Applied v2 to md-next.
+
+Thanks,
+Song
+
+> ---
+>  drivers/md/md-bitmap.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-
-Hi Nick,
-
-Hehe, yes you need the ZSTD *-dev package on Debian.
-
-Interesting:
-
-"libzstd-dev: cmake file is unavailable"
-https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=3D1020403
-
-Looks like Clang-16+ is needed as well.
-
-The WIP kernel patch looks promising.
-
-Please, let me know after your rebuild of clang if it works OK not
-only compile-tested but also debug-info is OK.
-
--Sedat-
-
-> >
-> > https://github.com/facebook/zstd/issues/3271
-> >
-> > Attaching a WIP patch.
-> >
-> > >
-> > > Thanks.
-> > >
-> > > Best regards,
-> > > -Sedat-
-> > >
-> > > [1] https://github.com/llvm/llvm-project/commit/6fba7854a2f0b6b3899bb=
-156c1a0c4ae35c96e24
-> > > [2] https://github.com/llvm/llvm-project/commit/b4840279846e1eea44c3d=
-ca575395a90c9d77ca0
-> > > [3] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.gi=
-t/tree/lib/Kconfig.debug#n315
-> > > [4] https://metadata.ftp-master.debian.org/changelogs//main/l/llvm-to=
-olchain-15/llvm-toolchain-15_15.0.3-1~exp1_changelog
-> > >
-> > >
-> > >
-> >
-> >
-> > --
-> > Thanks,
-> > ~Nick Desaulniers
+> diff --git a/drivers/md/md-bitmap.c b/drivers/md/md-bitmap.c
+> index bf6dffadbe6f..06ab1098ff99 100644
+> --- a/drivers/md/md-bitmap.c
+> +++ b/drivers/md/md-bitmap.c
+> @@ -2195,7 +2195,7 @@ int md_bitmap_resize(struct bitmap *bitmap, sector_t blocks,
 >
->
->
+>                 if (set) {
+>                         bmc_new = md_bitmap_get_counter(&bitmap->counts, block, &new_blocks, 1);
+> -                       if (*bmc_new == 0) {
+> +                       if (bmc_new && *bmc_new == 0) {
+>                                 /* need to set on-disk bits too. */
+>                                 sector_t end = block + new_blocks;
+>                                 sector_t start = block >> chunkshift;
 > --
-> Thanks,
-> ~Nick Desaulniers
+> 2.25.1
+>
