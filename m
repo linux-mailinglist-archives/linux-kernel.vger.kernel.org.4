@@ -2,87 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3585A606C27
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 01:44:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B625606C28
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 01:44:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229497AbiJTXoc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 19:44:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50396 "EHLO
+        id S229657AbiJTXog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 19:44:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiJTXo3 (ORCPT
+        with ESMTP id S229454AbiJTXo3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 20 Oct 2022 19:44:29 -0400
-X-Greylist: delayed 356 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 20 Oct 2022 16:44:25 PDT
-Received: from 004.mia.mailroute.net (004.mia.mailroute.net [199.89.3.7])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53178BC2B
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 16:44:23 -0700 (PDT)
-Received: from localhost (004.mia.mailroute.net [127.0.0.1])
-        by 004.mia.mailroute.net (Postfix) with ESMTP id 4Mtkhk3MSGzHpk3
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 23:44:22 +0000 (UTC)
-X-Virus-Scanned: by MailRoute
-Received: from 004.mia.mailroute.net ([199.89.3.7])
-        by localhost (004.mia [127.0.0.1]) (mroute_mailscanner, port 10026)
-        with LMTP id V_ZDC_paeMSG for <linux-kernel@vger.kernel.org>;
-        Thu, 20 Oct 2022 23:44:20 +0000 (UTC)
-Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by 004.mia.mailroute.net (Postfix) with ESMTPS id 4Mtkhh2gRpzHpYr
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 23:44:20 +0000 (UTC)
-Received: by mail-pl1-f198.google.com with SMTP id c12-20020a170903234c00b0017f695bf8f0so490502plh.6
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 16:44:20 -0700 (PDT)
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2336E11A11
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 16:44:27 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id bv10so2099684wrb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 16:44:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sladewatkins.net; s=googled;
+        d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=YX1dOQSRsve78QezUb/eXdj5VKCyEMPTdvcMB3RYrOQ=;
-        b=WbIhvWU8CfHx8GVDZGCjoiNp8HwXpcmXBtrDYeXkgwCxun52M4sXTAU7fvjDWmQIDa
-         m14lf2Dkr9vaxUNBrV1dEzQyAjrofbS6nbkuPY5HluitUiRVsA2qCA63DDZQAz1pnhcb
-         9iZhdMitQh2kG5RWefsNKLOf+SolbgeiSnXrS0C/is8Ow+7OT2IKl2kPTbFABWHB3Zj8
-         m4OfxPhnXDMPtRJCcRHwL0c7694ItA0+ePqTw9SoCgg9RHlgnrw58FPqMZL0VrC+5tMf
-         ssP3zJa8OvnvQndg9B9LLvvpYWX/dCw8asU4LC2qxWe+v8RTas2J7rREyzqEQLYiMJ7C
-         rJ2A==
+        bh=l8+bpSsSM29uvKB9yhvqF2P3Y/EvB9KhDMV5DKiLMeg=;
+        b=HwApiV25u97jgY5tcdykxHIALxKtfLwpzsTiSDbMD39DiW8gtNtbKSyHc+erK+uvy3
+         IqyPwwWQ256XIjMC+5SVYpZD9RTKU1yzc4g1EvadMAi1gx9qiXrXGmKC/cNttHLkM/sw
+         IVakHqctix9Y/tm80eZ/MOVgmCH2WKg/TF8KO9nfeVbomUTqmgDidUUxKcpa4dOFY4zp
+         yjI7q6ct4nerpubjMvZk7BUBJTwNSRSStX9WM7KcmpsmiM+T/sjy+FqEkdckYEDF7XE6
+         Qw5eJHpHN9bEBmAUceYA/XmKi+qYfmck4zb38TgX+25aDkLq6SVtfoRm/gKY+TlAzs2Z
+         uYAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=YX1dOQSRsve78QezUb/eXdj5VKCyEMPTdvcMB3RYrOQ=;
-        b=re/54aNUaDk+kWzeXnjzioNNdq0hM0M1+EoPxTS7FlmirbOH8j1YpBUSR6Xq6oC/Yo
-         uA1hP+Tbobqkw6E6nZBILQIa6ppLl2MT5p/4wKF8h5f0+J+j/yFJRMNEliEnbQqsJv5r
-         1zZt//wcek+7obfJ9bhpbHvmBDgOayfSwRzaJadQIXxzhtQiX+dFBJj6xzYL5VfzCz0W
-         T6wudEfZPWRPP01/peNhI0AWYm5EOkoGYN+wbDydytlxJXLR8DL08rawEDAa+KSK4ZDN
-         8RMYjW3kMSNDGOVYX7nlwrXiihFIEWbvSbOLLij0GMYxbmAAUChdKW0mbQgUanqyx4IA
-         UuJA==
-X-Gm-Message-State: ACrzQf1Icuvs+p40JB7yjZe/8VjzAvFNImkQ7Cvj+SGXaqH67aKZGVF/
-        ZFBUtHOGOAkm+STxYczslDHk3kdIMbxnbN2MeVH2kJrQpeAoMDpglRypGBERxl9qVH7mMq9mkqH
-        O7J6LI0RxtumKNXG/zTVqACEO15HwbE9GDFBYFbwOJCjcY5ICrWPYsKY=
-X-Received: by 2002:a63:df03:0:b0:462:cfa2:2871 with SMTP id u3-20020a63df03000000b00462cfa22871mr13685278pgg.225.1666309459071;
-        Thu, 20 Oct 2022 16:44:19 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM75NxUHYbQaS3LgwG5b/WXaDO1a4BYysaF3eePJ2McKsaOhV8OIsrv2zZdZ2WzF6btIac6cwDHaWtY7Ngc0h+A=
-X-Received: by 2002:a63:df03:0:b0:462:cfa2:2871 with SMTP id
- u3-20020a63df03000000b00462cfa22871mr13685264pgg.225.1666309458800; Thu, 20
- Oct 2022 16:44:18 -0700 (PDT)
+        bh=l8+bpSsSM29uvKB9yhvqF2P3Y/EvB9KhDMV5DKiLMeg=;
+        b=wvGxwf7MOGdJPksLjivrw1FwkCp64pWV8E1uNTHPoR84GpddEi0TzVX9G7rId+x3KJ
+         tLaSEmQdcqAtSV5Zw2PRmcF0idWKA0MDHEkTCfDa4zXAdNSdNgO1YFJX4/tRbJeN/WD2
+         6CpUX6JQN09o/TcsWTH5M53VieSHWvTH1yh3HmuHmdguORQWSMRKlOk5YW/5L8VcB3l6
+         aFxvQqZBHpWaKL1TkpAyUAJLWm5LYrN0CH2zelDSaZ5Y8Rk1Nc8gMmR9bCEkEX+zfUtr
+         46el2or5TZJBe4GqMTdbDepZAgLAYwK7vKKBRXyGJAaYUTXvotbGMg8PhPeL8ZEDdDrI
+         xzCQ==
+X-Gm-Message-State: ACrzQf3DZmMkKgJzLKyzkqQWOVKipTJJPy2JhYjlfSVnuYkR5+pgf3AX
+        iYkze/y6Wa9DmIvbU5aRPbEAl46YO25H+gLckLoHew==
+X-Google-Smtp-Source: AMsMyM5kRkmtVfi1zNhkyd6DLtpbcmuur0WfSqDe4oDduAdiz2XDPaMp09Ruu8USgyt6pHhlG9q3y78T/Y0V2HH7O/I=
+X-Received: by 2002:a5d:4c92:0:b0:236:4b97:6828 with SMTP id
+ z18-20020a5d4c92000000b002364b976828mr2228410wrs.300.1666309464991; Thu, 20
+ Oct 2022 16:44:24 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221018174157.1897-1-phillip@squashfs.org.uk>
- <20221020135545.586-1-nicememory@gmail.com> <41ef4b22-eea8-2d67-99d8-6aaae7d25ac1@squashfs.org.uk>
- <02b72b86-7240-5530-477a-c8bdcfd35ef5@gmail.com>
-In-Reply-To: <02b72b86-7240-5530-477a-c8bdcfd35ef5@gmail.com>
-From:   Slade Watkins <srw@sladewatkins.net>
-Date:   Thu, 20 Oct 2022 19:44:07 -0400
-Message-ID: <CA+pv=HO36vMH6Uqu412MF+Hmu-+57QeapGt6k+QDDxr-AsbJkw@mail.gmail.com>
-Subject: Re: BISECT result: 6.0.0-RC kernels trigger Firefox snap bug with
- 6.0.0-rc3 through 6.0.0-rc7
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Phillip Lougher <phillip@squashfs.org.uk>,
-        Jintao Yin <nicememory@gmail.com>, hsinyi@chromium.org,
-        linux-kernel@vger.kernel.org, marcmiltenberger@gmail.com,
-        mirsad.todorovac@alu.unizg.hr, regressions@leemhuis.info,
-        regressions@lists.linux.dev
+References: <20221020192917.3542757-1-namhyung@kernel.org>
+In-Reply-To: <20221020192917.3542757-1-namhyung@kernel.org>
+From:   Ian Rogers <irogers@google.com>
+Date:   Thu, 20 Oct 2022 16:44:12 -0700
+Message-ID: <CAP-5=fXxckG+-WK6_QSvrTZiczXdcc=42_42hE0DfK4_5wmXxw@mail.gmail.com>
+Subject: Re: [PATCH] perf test: Do not fail Intel-PT misc test w/o libpython
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, Ammy Yi <ammy.yi@intel.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,13 +72,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Resend due to formatting issue, thanks gmail.]
-
-On Thu, Oct 20, 2022 at 7:23 PM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
+On Thu, Oct 20, 2022 at 12:29 PM Namhyung Kim <namhyung@kernel.org> wrote:
 >
-> Ah! I was about to test his third fixup patch. I prefer to go
-> with your fix instead (as the formal patch).
+> The virtuall LBR test uses a python script to check the max size of
+> branch stack in the Intel-PT generated LBR.  But it didn't check whether
+> python scripting is available (as it's optional).
+>
+> Let's skip the test if the python support is not available.
+>
+> Fixes: f77811a0f625 ("perf test: test_intel_pt.sh: Add 9 tests")
+> Cc: Ammy Yi <ammy.yi@intel.com>
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> ---
+>  tools/perf/tests/shell/test_intel_pt.sh | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>
+> diff --git a/tools/perf/tests/shell/test_intel_pt.sh b/tools/perf/tests/shell/test_intel_pt.sh
+> index 4c0aabbe33bd..e66b7d977462 100755
+> --- a/tools/perf/tests/shell/test_intel_pt.sh
+> +++ b/tools/perf/tests/shell/test_intel_pt.sh
+> @@ -526,6 +526,12 @@ test_kernel_trace()
+>  test_virtual_lbr()
+>  {
+>         echo "--- Test virtual LBR ---"
+> +       # Check if python script is supported
+> +       libpython=$(ldd $(which perf) | grep -c python)
+> +       if [ "${libpython}" != "1" ] ; then
 
-+1, agreed.
+Perhaps use -vv (taking care not to match "on" against "python"):
 
--srw
+if perf -vv|grep libpython|grep -q " on"; then
+
+Thanks,
+Ian
+
+> +               echo "SKIP: python scripting is not supported"
+> +               return 2
+> +       fi
+>
+>         # Python script to determine the maximum size of branch stacks
+>         cat << "_end_of_file_" > "${maxbrstack}"
+> --
+> 2.38.0.135.g90850a2211-goog
+>
