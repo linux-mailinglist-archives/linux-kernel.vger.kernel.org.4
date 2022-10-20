@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB8FA6069C9
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 22:47:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6826E6069CC
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 22:47:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229763AbiJTUrg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 16:47:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46408 "EHLO
+        id S229923AbiJTUrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 16:47:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbiJTUrd (ORCPT
+        with ESMTP id S229788AbiJTUri (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 16:47:33 -0400
+        Thu, 20 Oct 2022 16:47:38 -0400
 Received: from vps-vb.mhejs.net (vps-vb.mhejs.net [37.28.154.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B91597B59E
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 13:47:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF5521F96D
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 13:47:26 -0700 (PDT)
 Received: from MUA
         by vps-vb.mhejs.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <mail@maciej.szmigiero.name>)
-        id 1olcR9-0007Ur-7p; Thu, 20 Oct 2022 22:46:43 +0200
+        id 1olcRE-0007V3-Jm; Thu, 20 Oct 2022 22:46:48 +0200
 From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
 To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
 Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/6] ALSA: usb-audio: Use snd_ctl_rename() to rename a control
-Date:   Thu, 20 Oct 2022 22:46:22 +0200
-Message-Id: <723877882e3a56bb42a2a2214cfc85f347d36e19.1666296963.git.maciej.szmigiero@oracle.com>
+Subject: [PATCH 3/6] ALSA: hda/realtek: Use snd_ctl_rename() to rename a control
+Date:   Thu, 20 Oct 2022 22:46:23 +0200
+Message-Id: <37496bd80f91f373268148f877fd735917d97287.1666296963.git.maciej.szmigiero@oracle.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <cover.1666296963.git.maciej.szmigiero@oracle.com>
 References: <cover.1666296963.git.maciej.szmigiero@oracle.com>
@@ -52,19 +52,19 @@ Fixes: c27e1efb61c5 ("ALSA: control: Use xarray for faster lookups")
 Cc: stable@vger.kernel.org
 Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
 ---
- sound/usb/mixer.c | 2 +-
+ sound/pci/hda/patch_realtek.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/sound/usb/mixer.c b/sound/usb/mixer.c
-index a5641956ef102..9105ec623120a 100644
---- a/sound/usb/mixer.c
-+++ b/sound/usb/mixer.c
-@@ -1631,7 +1631,7 @@ static void check_no_speaker_on_headset(struct snd_kcontrol *kctl,
- 	if (!found)
- 		return;
+diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+index 79acd2a2caf20..9945861f02efa 100644
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -2142,7 +2142,7 @@ static void rename_ctl(struct hda_codec *codec, const char *oldname,
  
--	strscpy(kctl->id.name, "Headphone", sizeof(kctl->id.name));
-+	snd_ctl_rename(card, kctl, "Headphone");
+ 	kctl = snd_hda_find_mixer_ctl(codec, oldname);
+ 	if (kctl)
+-		strcpy(kctl->id.name, newname);
++		snd_ctl_rename(codec->card, kctl, newname);
  }
  
- static const struct usb_feature_control_info *get_feature_control_info(int control)
+ static void alc1220_fixup_gb_dual_codecs(struct hda_codec *codec,
