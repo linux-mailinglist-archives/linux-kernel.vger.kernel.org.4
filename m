@@ -2,79 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DA0B6054B6
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 03:11:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 342B46054B3
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 03:11:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230390AbiJTBLc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 21:11:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59876 "EHLO
+        id S230064AbiJTBLR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 21:11:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230150AbiJTBLK (ORCPT
+        with ESMTP id S229957AbiJTBLF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 21:11:10 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DAD4169128
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 18:11:08 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id z20so18850604plb.10
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 18:11:08 -0700 (PDT)
+        Wed, 19 Oct 2022 21:11:05 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8164A165501
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 18:11:04 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id u71so17851129pgd.2
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 18:11:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=q+qrgR/MUitgGFEN28UdJxxU/RHOuYqlke4g/Y2iteA=;
-        b=PItxHKiLj7J1/b4y394GFbYMnhiM8mYdu7R5SmT7+rG7QCwJLP9WX/xaTofobo5zcF
-         BFFbGFIOcE56vQVKV+aLrB/kkys2OJPRGMdh3LkbM7ILqHzQSPTpMkpsfYrJjbBFozb9
-         CrVUWsRr2XPaeINndMHVm+D5mafY3zu1gKOhP9/xXI79mRF3gpEfoBG3+6G2Zh0X1r+6
-         CPSXlEkiXzPX6WaTdZmS89/mnmTJQqxrwe9Kvfpkh2emabi/3l4P/FzsupCLxw/b7Qh3
-         dpQOFRpXpHkug6mZQP+WZPn9VDBHONioWZqI5Ic5YwAnmWQ1Pi+dRlDNUXYEWECgtbpA
-         wGZw==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=S8Tpplgbg87qo0/g/zAMmb2z5RHSuiV5J2IUDMBNfEc=;
+        b=G0hL1zoRGGsjihjXU32+8JsjEhOY2MncZzEc20xvMpburVkRNBdPHXW3Q3WqNbr86j
+         n+oXDnwOm+QoLBvITuRWiejRu622H8Gw8M3O/w/I30IjGItXzFVMlKtGYvYxP8hcGC+X
+         1EQ9kJfImQkOipmNnUODUFe2QuOUU8bqqp31w=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=q+qrgR/MUitgGFEN28UdJxxU/RHOuYqlke4g/Y2iteA=;
-        b=sQkk0obZrz+uD3bHXJ0nXpTOVF161sYG/qKb6XBqEEA5RcIntX2vEjfwmp13DeRLSE
-         DjYzEVKjLAJgDS1FYPH5Q/r0KoNb7zAfOwgHC9vrMTlLWYJecarGJ3SAhDCOXqawDxrn
-         N9+m1YzPeXp1IxJhYuoiugPW3fGHn+9h7K0jzbozfrQifqEqpMVu3qN2hvOcyfNxYcFK
-         iPe+aThZ9ZipwF6RWgolBiMjfICwzn3TZdvq+y8U8gZWyQOFJBc0pu7hUsn0g+DojGcW
-         svLftBVEghQI1V4KzJEVSRDr9lQRmKoLj/g1dUUwbbXB4O4EYMwRU4elzOW9DSiTHRwE
-         12XQ==
-X-Gm-Message-State: ACrzQf0wcKxA99Psp6Qp5CeAT4nqcpiWsTTFHXR4OUMXwerPFihVsxFh
-        0hC1IWqUYSblxUt9sYEmquUr63gxtQU0kQ==
-X-Google-Smtp-Source: AMsMyM6W8l1/D68cbEN7AH/zxubj1mhzo9lUFVqu/5WIYWNGXtcjYbVMYgQmarBjSwBZ92kWpOXzQw==
-X-Received: by 2002:a17:90a:1c02:b0:1e0:df7:31f2 with SMTP id s2-20020a17090a1c0200b001e00df731f2mr47334791pjs.222.1666228266940;
-        Wed, 19 Oct 2022 18:11:06 -0700 (PDT)
-Received: from laptop.hsd1.wa.comcast.net ([2601:600:8500:5f14:d627:c51e:516e:a105])
-        by smtp.gmail.com with ESMTPSA id b14-20020a170902650e00b00174fa8cbf31sm11242938plk.303.2022.10.19.18.11.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Oct 2022 18:11:06 -0700 (PDT)
-From:   Andrei Vagin <avagin@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Andrei Vagin <avagin@gmail.com>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Christian Brauner <brauner@kernel.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Kees Cook <keescook@chromium.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Peter Oskolkov <posk@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Tycho Andersen <tycho@tycho.pizza>,
-        Will Drewry <wad@chromium.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Subject: [PATCH 5/5] selftest/seccomp: add a new test for the sync mode of seccomp_user_notify
-Date:   Wed, 19 Oct 2022 18:10:48 -0700
-Message-Id: <20221020011048.156415-6-avagin@gmail.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20221020011048.156415-1-avagin@gmail.com>
-References: <20221020011048.156415-1-avagin@gmail.com>
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=S8Tpplgbg87qo0/g/zAMmb2z5RHSuiV5J2IUDMBNfEc=;
+        b=qt99+J9zN7Ip+1CMLSPPDAdnJMiQc64Iw8a8Mbkts3l3XDxsL/2ok3syLeJjlQlkna
+         YeEumltwZSRlpf5yY2bsgAmKMFGSd+Yt/EqZBCYYOBnAjHTFhejsPk50Z9UrzNPQQaeU
+         eVz6vxMhSSesZJ0CBKYtoVXY66r7m+TqOCmsIxSv14/VmKdgAZmK4+gzHqUy9wyD1seA
+         Kk/OM19yt4WewsA7/q0vJW4A2A7dQXyRyePKrBqQJU0XS3VT9+EsHKQLDI25QQFHis4v
+         DTRGeI1rEsfBcrxXJP3/WU4rvBb/DkrujWvzFuYugMEZ/UZug40wOJ/BRQVgFgrA4NIK
+         0RuA==
+X-Gm-Message-State: ACrzQf3x1xEvftUsWI2pcaRq4QdjXQtTsxO3i5gfb9CpYQsB6Oj7wcfG
+        7CS2iggVpomNAXABJ2BxlNfnMw==
+X-Google-Smtp-Source: AMsMyM4uymnmTN6r6gP9WHfrd/3VsQnKPB6jSs7M3NKJ/LxjDbjWWI4YM0eHxB1y39zawjtNR92KEA==
+X-Received: by 2002:a63:54b:0:b0:464:8e6:11e7 with SMTP id 72-20020a63054b000000b0046408e611e7mr9745907pgf.212.1666228263924;
+        Wed, 19 Oct 2022 18:11:03 -0700 (PDT)
+Received: from localhost ([2620:15c:9d:2:57b7:1f0e:44d1:f252])
+        by smtp.gmail.com with UTF8SMTPSA id bf1-20020a170902b90100b0017f7d7e95d3sm11330738plb.167.2022.10.19.18.11.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Oct 2022 18:11:03 -0700 (PDT)
+From:   Brian Norris <briannorris@chromium.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Benson Leung <bleung@chromium.org>,
+        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Samuel Holland <samuel@sholland.org>,
+        Julius Werner <jwerner@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Brian Norris <briannorris@chromium.org>, stable@vger.kernel.org
+Subject: [PATCH] firmware: coreboot: Register bus in module init
+Date:   Wed, 19 Oct 2022 18:10:53 -0700
+Message-Id: <20221019180934.1.If29e167d8a4771b0bf4a39c89c6946ed764817b9@changeid>
+X-Mailer: git-send-email 2.38.0.413.g74048e4d9e-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,108 +71,130 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Test output:
-RUN           global.user_notification_sync ...
-seccomp_bpf.c:4279:user_notification_sync:basic: 8655 nsec/syscall
-seccomp_bpf.c:4279:user_notification_sync:sync:	 2919 nsec/syscall
-OK  global.user_notification_sync
+The coreboot_table driver registers a coreboot bus while probing a
+"coreboot_table" device representing the coreboot table memory region.
+Probing this device (i.e., registering the bus) is a dependency for the
+module_init() functions of any driver for this bus (e.g.,
+memconsole-coreboot.c / memconsole_driver_init()).
 
-Signed-off-by: Andrei Vagin <avagin@gmail.com>
+With synchronous probe, this dependency works OK, as the link order in
+the Makefile ensures coreboot_table_driver_init() (and thus,
+coreboot_table_probe()) completes before a coreboot device driver tries
+to add itself to the bus.
+
+With asynchronous probe, however, coreboot_table_probe() may race with
+memconsole_driver_init(), and so we're liable to hit one of these two:
+
+1. coreboot_driver_register() eventually hits "[...] the bus was not
+   initialized.", and the memconsole driver fails to register; or
+2. coreboot_driver_register() gets past #1, but still races with
+   bus_register() and hits some other undefined/crashing behavior (e.g.,
+   in driver_find() [1])
+
+We can resolve this by registering the bus in our initcall, and only
+deferring "device" work (scanning the coreboot memory region and
+creating sub-devices) to probe().
+
+[1] Example failure, using 'driver_async_probe=*' kernel command line:
+
+[    0.114217] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000010
+...
+[    0.114307] CPU: 1 PID: 1 Comm: swapper/0 Not tainted 6.1.0-rc1 #63
+[    0.114316] Hardware name: Google Scarlet (DT)
+...
+[    0.114488] Call trace:
+[    0.114494]  _raw_spin_lock+0x34/0x60
+[    0.114502]  kset_find_obj+0x28/0x84
+[    0.114511]  driver_find+0x30/0x50
+[    0.114520]  driver_register+0x64/0x10c
+[    0.114528]  coreboot_driver_register+0x30/0x3c
+[    0.114540]  memconsole_driver_init+0x24/0x30
+[    0.114550]  do_one_initcall+0x154/0x2e0
+[    0.114560]  do_initcall_level+0x134/0x160
+[    0.114571]  do_initcalls+0x60/0xa0
+[    0.114579]  do_basic_setup+0x28/0x34
+[    0.114588]  kernel_init_freeable+0xf8/0x150
+[    0.114596]  kernel_init+0x2c/0x12c
+[    0.114607]  ret_from_fork+0x10/0x20
+[    0.114624] Code: 5280002b 1100054a b900092a f9800011 (885ffc01)
+[    0.114631] ---[ end trace 0000000000000000 ]---
+
+Fixes: b81e3140e412 ("firmware: coreboot: Make bus registration symmetric")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Brian Norris <briannorris@chromium.org>
 ---
- tools/testing/selftests/seccomp/seccomp_bpf.c | 80 +++++++++++++++++++
- 1 file changed, 80 insertions(+)
+Currently, get_maintainers.pl tells me Greg should pick this up. But I
+CC the chrome-platform list too, since it seems reasonable for Google
+folks (probably ChromeOS folks are most active here?) to maintain
+Google/Chrome drivers.
 
-diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-index 4ae6c8991307..01f872415c17 100644
---- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-+++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-@@ -4241,6 +4241,86 @@ TEST(user_notification_addfd_rlimit)
- 	close(memfd);
+Let me know if y'all would like this official, and I'll push out a
+MAINTAINERS patch.
+
+ drivers/firmware/google/coreboot_table.c | 37 +++++++++++++++++++-----
+ 1 file changed, 29 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/firmware/google/coreboot_table.c b/drivers/firmware/google/coreboot_table.c
+index c52bcaa9def6..9ca21feb9d45 100644
+--- a/drivers/firmware/google/coreboot_table.c
++++ b/drivers/firmware/google/coreboot_table.c
+@@ -149,12 +149,8 @@ static int coreboot_table_probe(struct platform_device *pdev)
+ 	if (!ptr)
+ 		return -ENOMEM;
+ 
+-	ret = bus_register(&coreboot_bus_type);
+-	if (!ret) {
+-		ret = coreboot_table_populate(dev, ptr);
+-		if (ret)
+-			bus_unregister(&coreboot_bus_type);
+-	}
++	ret = coreboot_table_populate(dev, ptr);
++
+ 	memunmap(ptr);
+ 
+ 	return ret;
+@@ -169,7 +165,6 @@ static int __cb_dev_unregister(struct device *dev, void *dummy)
+ static int coreboot_table_remove(struct platform_device *pdev)
+ {
+ 	bus_for_each_dev(&coreboot_bus_type, NULL, NULL, __cb_dev_unregister);
+-	bus_unregister(&coreboot_bus_type);
+ 	return 0;
  }
  
-+/* USER_NOTIF_BENCH_TIMEOUT is 100 miliseconds. */
-+#define USER_NOTIF_BENCH_TIMEOUT  100000000ULL
-+#define NSECS_PER_SEC            1000000000ULL
+@@ -199,6 +194,32 @@ static struct platform_driver coreboot_table_driver = {
+ 		.of_match_table = of_match_ptr(coreboot_of_match),
+ 	},
+ };
+-module_platform_driver(coreboot_table_driver);
 +
-+#ifndef SECCOMP_USER_NOTIF_FD_SYNC_WAKE_UP
-+#define SECCOMP_USER_NOTIF_FD_SYNC_WAKE_UP (1UL << 0)
-+#define SECCOMP_IOCTL_NOTIF_SET_FLAGS  SECCOMP_IOW(4, __u64)
-+#endif
-+
-+static void user_notification_sync_loop(struct __test_metadata *_metadata,
-+					char *test_name, int listener)
++static int __init coreboot_table_driver_init(void)
 +{
-+	struct timespec ts;
-+	uint64_t start, end, nr;
-+	struct seccomp_notif req = {};
-+	struct seccomp_notif_resp resp = {};
++	int ret;
 +
-+	clock_gettime(CLOCK_MONOTONIC, &ts);
-+	start = ts.tv_nsec + ts.tv_sec * NSECS_PER_SEC;
-+	for (end = start, nr = 0; end - start < USER_NOTIF_BENCH_TIMEOUT; nr++) {
-+		memset(&req, 0, sizeof(req));
-+		req.pid = 0;
-+		EXPECT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_RECV, &req), 0);
++	ret = bus_register(&coreboot_bus_type);
++	if (ret)
++		return ret;
 +
-+		EXPECT_EQ(req.data.nr,  __NR_getppid);
-+
-+		resp.id = req.id;
-+		resp.error = 0;
-+		resp.val = USER_NOTIF_MAGIC;
-+		resp.flags = 0;
-+		EXPECT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_SEND, &resp), 0);
-+
-+		clock_gettime(CLOCK_MONOTONIC, &ts);
-+		end = ts.tv_nsec + ts.tv_sec * NSECS_PER_SEC;
++	ret = platform_driver_register(&coreboot_table_driver);
++	if (ret) {
++		bus_unregister(&coreboot_bus_type);
++		return ret;
 +	}
-+	TH_LOG("%s:\t%lld nsec/syscall", test_name, USER_NOTIF_BENCH_TIMEOUT / nr);
++
++	return 0;
 +}
 +
-+TEST(user_notification_sync)
++static void __exit coreboot_table_driver_exit(void)
 +{
-+	pid_t pid;
-+	long ret;
-+	int status, listener;
-+
-+	ret = prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
-+	ASSERT_EQ(0, ret) {
-+		TH_LOG("Kernel does not support PR_SET_NO_NEW_PRIVS!");
-+	}
-+
-+	listener = user_notif_syscall(__NR_getppid,
-+				      SECCOMP_FILTER_FLAG_NEW_LISTENER);
-+	ASSERT_GE(listener, 0);
-+
-+	pid = fork();
-+	ASSERT_GE(pid, 0);
-+
-+	if (pid == 0) {
-+		while (1) {
-+			ret = syscall(__NR_getppid);
-+			if (ret == USER_NOTIF_MAGIC)
-+				continue;
-+			break;
-+		}
-+		_exit(1);
-+	}
-+
-+	user_notification_sync_loop(_metadata, "basic", listener);
-+
-+	EXPECT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_SET_FLAGS,
-+			SECCOMP_USER_NOTIF_FD_SYNC_WAKE_UP, 0), 0);
-+
-+	user_notification_sync_loop(_metadata, "sync", listener);
-+
-+	kill(pid, SIGKILL);
-+	EXPECT_EQ(waitpid(pid, &status, 0), pid);
-+	EXPECT_EQ(true, WIFSIGNALED(status));
-+	EXPECT_EQ(SIGKILL, WTERMSIG(status));
++	platform_driver_unregister(&coreboot_table_driver);
++	bus_unregister(&coreboot_bus_type);
 +}
 +
++module_init(coreboot_table_driver_init);
++module_exit(coreboot_table_driver_exit);
 +
- /* Make sure PTRACE_O_SUSPEND_SECCOMP requires CAP_SYS_ADMIN. */
- FIXTURE(O_SUSPEND_SECCOMP) {
- 	pid_t pid;
+ MODULE_AUTHOR("Google, Inc.");
+ MODULE_LICENSE("GPL");
 -- 
-2.37.2
+2.38.0.413.g74048e4d9e-goog
 
