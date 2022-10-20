@@ -2,73 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 089E86063DE
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 17:10:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 713EE6063E5
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 17:11:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229850AbiJTPKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 11:10:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39874 "EHLO
+        id S230108AbiJTPLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 11:11:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230018AbiJTPKO (ORCPT
+        with ESMTP id S229779AbiJTPLH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 11:10:14 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F61D8F54;
-        Thu, 20 Oct 2022 08:10:13 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id bu30so35048933wrb.8;
-        Thu, 20 Oct 2022 08:10:13 -0700 (PDT)
+        Thu, 20 Oct 2022 11:11:07 -0400
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9353D1885BF
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 08:10:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fQQpq6L0etG4WsZJNoc8BsJzIxOLgNyKPl0arkE7fVI=;
-        b=iZkh/1JnKPx7ySBUolSfT7kJEXRaJj+FB/5pU2Gr6AIZiILZ1zcTe/9YpqELP2qGX6
-         9ljL5Ab9PeCF/cYw7gcdpBXArRlBl0de+NRqou9zVAbHx5OKJq5EOtqaw3KiY0K9zIYt
-         DjIUuWRI6JswaVkTbU0A1zfPMteHI7lKvzJQwDQwcZicJLeQisvSXHSQErYcU5sM7xIU
-         Ozg91DhPKCeHd00Lsin7PUaeWgIWr+dMX97k2AI6h57qppOLxyAjnJHum2Yk6d47iA9u
-         B4+LJfOBSVWEsszgLplsD7c9RU7voEwEj5mkFQa8CKNVXLj2azGlBHacJ0SkD1oY0WAD
-         pjXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fQQpq6L0etG4WsZJNoc8BsJzIxOLgNyKPl0arkE7fVI=;
-        b=aNSY5dKiRsKCp3YQJ7NR26O0T7Z6KVycA8Uk23AW7seNxbWSQq5+qOxWaSuEWaeTo2
-         rtSceOO4KZaU9y3G1Uy14EMJ6AV0HkiAPFYoNYaih/2Om+54HyGJnALwlrQSdz71mEOO
-         K/5I7qGeEOFKFukz2iNjLukpJ0bIpUpmsKndCf8adz23MP48hdYvbo9Gpomm0Ows4MqD
-         +kgvhgYzQKpL1QRvitkxcx5VqQheEIrnRSD0vurWf3W4pPo3q+ocMGcgDbb0DJmnggxE
-         /cJZg1aHYI8miQnqoQi9ltUO+e/Yewz7ak+jpNPl9ddgEvNglFrJRyDEJ9BcOEf/nskb
-         tU7Q==
-X-Gm-Message-State: ACrzQf2V+XqMfuSxMQJseBMmXMze5NMVapnQJjKwx84MqDtqPqHK3V14
-        U0cClXH3g0xffzka4BYsVe0=
-X-Google-Smtp-Source: AMsMyM6mgrczjlSKxTmE0ayh8j9cS6feXrWJ5OWFEQNRc+1u3UUg4rwyvehdsIfgJDcZvgtUVL+5aQ==
-X-Received: by 2002:a5d:6d86:0:b0:22e:4049:441f with SMTP id l6-20020a5d6d86000000b0022e4049441fmr9103054wrs.198.1666278611695;
-        Thu, 20 Oct 2022 08:10:11 -0700 (PDT)
-Received: from [192.168.0.210] (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.googlemail.com with ESMTPSA id s2-20020adfea82000000b002364835caacsm1308611wrm.112.2022.10.20.08.10.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Oct 2022 08:10:11 -0700 (PDT)
-Message-ID: <6005e7c0-5901-ef5a-6af7-2801975e39bc@gmail.com>
-Date:   Thu, 20 Oct 2022 16:10:10 +0100
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=KQh3yOCx6uZIZGmytqUUlx3xfa3GjgJbDjuJZbw4Egg=;
+  b=rsuJfWpvgYFQHC+yklK1JR85uB4sEYmvzC4esE2Bg8vW1gn2G7PCHueX
+   B7Y9pgR03DibE2MzxPlu3l/9V8cuWDdUcCzwkyfna/sf+p16LhzfMuiMM
+   yt6VLaUChl7G/MU2/7Q8ddFzFjzZshRSoyHjAmk5WW6DKBzSbOI3554cu
+   0=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.95,198,1661810400"; 
+   d="scan'208";a="66219190"
+Received: from dt-lawall.paris.inria.fr ([128.93.67.65])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 17:10:41 +0200
+Date:   Thu, 20 Oct 2022 17:10:41 +0200 (CEST)
+From:   Julia Lawall <julia.lawall@inria.fr>
+To:     Deepak R Varma <drv@mailo.com>
+cc:     outreachy@lists.linux.dev, gregkh@linuxfoundation.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kumarpraveen@linux.microsoft.com, saurabh.truth@gmail.com
+Subject: Re: [PATCH v4 2/2] staging: most: dim2: correct misleading struct
+ type name
+In-Reply-To: <Y1FFbB8BWi1IHYgB@debian-BULLSEYE-live-builder-AMD64>
+Message-ID: <d4b0ff4e-53e8-7f10-c36c-9a792de67c6@inria.fr>
+References: <cover.1666208065.git.drv@mailo.com> <6b772a1ac06ae3b0d63e198e7238c1590b14703a.1666208065.git.drv@mailo.com> <alpine.DEB.2.22.394.2210192208290.3068@hadrien> <Y1BeZYBf/xsW8F4O@debian-BULLSEYE-live-builder-AMD64> <Y1E1kv6YSmxVzjkf@debian-BULLSEYE-live-builder-AMD64>
+ <404cc67c-efd6-4a70-c3ca-7958db21bcb@inria.fr> <Y1FFbB8BWi1IHYgB@debian-BULLSEYE-live-builder-AMD64>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH] tracing/hist: add in missing * in comment blocks
-Content-Language: en-US
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221020133019.1547587-1-colin.i.king@gmail.com>
- <20221020234423.42816821e2d09aba61db5e69@kernel.org>
-From:   "Colin King (gmail)" <colin.i.king@gmail.com>
-In-Reply-To: <20221020234423.42816821e2d09aba61db5e69@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,63 +53,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/10/2022 15:44, Masami Hiramatsu (Google) wrote:
-> Hi,
-> 
-> On Thu, 20 Oct 2022 14:30:19 +0100
-> Colin Ian King <colin.i.king@gmail.com> wrote:
-> 
->> There are a couple of missing * in comment blocks. Fix these.
->> Cleans up two clang warnings:
->>
->> kernel/trace/trace_events_hist.c:986: warning: bad line:
->> kernel/trace/trace_events_hist.c:3229: warning: bad line:
->>
->> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-> 
-> Thanks for the patch.
-> 
-> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> 
-> BTW, what version of clang are you using?
-> I couldn't see this warning with clang 15.0.0. Maybe I need a kconfig option?
-
-clang-13 and kernel W=1 for this specific case, e.g. kernel built using 
-make  CC=clang-13 HOSTCC=clang-13 W=1
 
 
-> 
-> Thank you,
-> 
->> ---
->>   kernel/trace/trace_events_hist.c | 4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/kernel/trace/trace_events_hist.c b/kernel/trace/trace_events_hist.c
->> index 48465f7e97b4..087c19548049 100644
->> --- a/kernel/trace/trace_events_hist.c
->> +++ b/kernel/trace/trace_events_hist.c
->> @@ -983,7 +983,7 @@ static struct hist_field *find_any_var_ref(struct hist_trigger_data *hist_data,
->>    * A trigger can define one or more variables.  If any one of them is
->>    * currently referenced by any other trigger, this function will
->>    * determine that.
->> -
->> + *
->>    * Typically used to determine whether or not a trigger can be removed
->>    * - if there are any references to a trigger's variables, it cannot.
->>    *
->> @@ -3226,7 +3226,7 @@ static struct field_var *create_field_var(struct hist_trigger_data *hist_data,
->>    * events.  However, for convenience, users are allowed to directly
->>    * specify an event field in an action, which will be automatically
->>    * converted into a variable on their behalf.
->> -
->> + *
->>    * This function creates a field variable with the name var_name on
->>    * the hist trigger currently being defined on the target event.  If
->>    * subsys_name and event_name are specified, this function simply
->> -- 
->> 2.37.3
->>
-> 
-> 
+On Thu, 20 Oct 2022, Deepak R Varma wrote:
 
+> On Thu, Oct 20, 2022 at 02:06:41PM +0200, Julia Lawall wrote:
+> >
+> >
+> > On Thu, 20 Oct 2022, Deepak R Varma wrote:
+> >
+> > > On Thu, Oct 20, 2022 at 02:00:29AM +0530, Deepak R Varma wrote:
+> > > > On Wed, Oct 19, 2022 at 10:08:53PM +0200, Julia Lawall wrote:
+> > > > >
+> > > > >
+> > > > > On Thu, 20 Oct 2022, Deepak R Varma wrote:
+> > > > >
+> > > > > > Correct misleading struct type name dim_ch_state_t to dim_ch_state
+> > > > > > since this not a typedef but a normal structure declaration.
+> > > > > >
+> > > > > > Suggested-by: Julia Lawall <julia.lawall@inria.fr>
+> > > > > > Signed-off-by: Deepak R Varma <drv@mailo.com>
+> > > > > > ---
+> > > > > >
+> > > > > > Changes in v4:
+> > > > > >    1. Correct patch subject and log message. Use struct type name instead of
+> > > > > >       variable name for the change description. Feedback from julia.lawall@inria.fr
+> > > > > >
+> > > > > > Changes in v3:
+> > > > > >    1. Patch introduced in the patch set
+> > > > > >
+> > > > > >  drivers/staging/most/dim2/dim2.c | 2 +-
+> > > > > >  drivers/staging/most/dim2/hal.c  | 4 ++--
+> > > > > >  drivers/staging/most/dim2/hal.h  | 6 +++---
+> > > > > >  3 files changed, 6 insertions(+), 6 deletions(-)
+> > > > > >
+> > > > > > diff --git a/drivers/staging/most/dim2/dim2.c b/drivers/staging/most/dim2/dim2.c
+> > > > > > index 4c1f27898a29..a69a61a69283 100644
+> > > > > > --- a/drivers/staging/most/dim2/dim2.c
+> > > > > > +++ b/drivers/staging/most/dim2/dim2.c
+> > > > > > @@ -161,7 +161,7 @@ static int try_start_dim_transfer(struct hdm_channel *hdm_ch)
+> > > > > >  	struct list_head *head = &hdm_ch->pending_list;
+> > > > > >  	struct mbo *mbo;
+> > > > > >  	unsigned long flags;
+> > > > > > -	struct dim_ch_state_t st;
+> > > > > > +	struct dim_ch_state st;
+> > > > >
+> > > > > Is there another use in service_done_flag?
+> > > >
+> > > > Hi,
+> > > > I did not understand your question fully. This is from a different function
+> > > > try_start_dim_transfer where the variable st is used down the line in the
+> > > > execution. This time the channel state is retrieved by calling
+> > > > dim_get_channel_state function. The state is simply computed and set. Should I
+> > > > improve this as well?
+> > > >
+> > > > If you are asking something different, could you please elaborate?
+> > >
+> > > Hi Julia,
+> > > Can you please review and comment on my response?
+> >
+> > In my kernel there is an occurrence of the type name in service_done_flag.
+> > But I have the mainline, not Greg's staging tree, so there could be some
+> > differences.
+> >
+> > When I do git grep dim_ch_state_t, I get two occurrences in
+> > drivers/staging/most/dim2/dim2.c
+>
+> Okay. Still unclear. Following snip is what I see in my local staging-testing branch.
+>
+> <snip>
+> 	drv@debian:~/git/kernels/staging$ git grep dim_ch_state_t
+> 	drivers/staging/most/dim2/dim2.c:       struct dim_ch_state_t st;
+> 	drivers/staging/most/dim2/dim2.c:       struct dim_ch_state_t st;
+> 	drivers/staging/most/dim2/hal.c:struct dim_ch_state_t *dim_get_channel_state(struct dim_channel *ch,
+> 	drivers/staging/most/dim2/hal.c:                                             struct dim_ch_state_t *state_ptr)
+> 	drivers/staging/most/dim2/hal.h:struct dim_ch_state_t {
+> 	drivers/staging/most/dim2/hal.h:struct dim_ch_state_t *dim_get_channel_state(struct dim_channel *ch,
+> 	drivers/staging/most/dim2/hal.h:                                             struct dim_ch_state_t *state_ptr);
+> 	drv@debian:~/git/kernels/staging$
+> </snip>
+>
+> Does that help?
+
+You also have two occurrences in dim2.c.
+
+julia
