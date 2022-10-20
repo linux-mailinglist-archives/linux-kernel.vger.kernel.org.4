@@ -2,50 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA9C660616C
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 15:21:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4B506060C3
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 14:58:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231201AbiJTNVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 09:21:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41152 "EHLO
+        id S229973AbiJTM6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 08:58:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230481AbiJTNUy (ORCPT
+        with ESMTP id S229679AbiJTM6w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 09:20:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D0F51A0B;
-        Thu, 20 Oct 2022 06:20:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 27B74B82648;
-        Thu, 20 Oct 2022 13:20:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A9CFC433D6;
-        Thu, 20 Oct 2022 13:20:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666272015;
-        bh=Rsn6bw20rlalxQ/SID97AXkpPfvVGG+5j06netqtMyk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=j59LDTD/B7Zaiswj1/PchAfkOEHRbpLbB3ej8uTyuF4x8nxPjkCVDcpYZIGSe+WbC
-         tYZoUNuBOPEssrYxUaCuOKmEsUphZs/87kBa/sHjolGygCZ+BtGkjWrFJT2L68ZHQ5
-         z5mjihBA2IWYiWYFG4we8OU1ztD3lRT/1jWeAWzr+g+F9GtziARY1vSyRX/xu8Y/pk
-         JJDSjbW6Bkia95/dtwPsuYqpEgdHfrtLH160heyKobnAw4xrDAKbN4Sqm4mxMYVMNs
-         u9ly/5LBRY5g3MlZwIlKrsOeU+/QN00SV6C6AcRpDDhHVvP2JrCnxHaG1STuqvFgKu
-         wpTDeqEBA3Lyw==
-Date:   Thu, 20 Oct 2022 21:20:10 +0800
-From:   Peter Chen <peter.chen@kernel.org>
-To:     Pawel Laszczak <pawell@cadence.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] usb: cdnsp: fix issue with ZLP - added TD_SIZE = 1
-Message-ID: <20221020132010.GA29690@nchen-desktop>
-References: <1666159637-161135-1-git-send-email-pawell@cadence.com>
+        Thu, 20 Oct 2022 08:58:52 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EA1318A00B;
+        Thu, 20 Oct 2022 05:58:51 -0700 (PDT)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MtSGM3QBlzmV9g;
+        Thu, 20 Oct 2022 20:54:03 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 20 Oct 2022 20:58:48 +0800
+Received: from huawei.com (10.175.127.227) by kwepemm600009.china.huawei.com
+ (7.193.23.164) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 20 Oct
+ 2022 20:58:47 +0800
+From:   Yu Kuai <yukuai3@huawei.com>
+To:     <axboe@kernel.dk>, <hch@lst.de>, <willy@infradead.org>,
+        <kch@nvidia.com>, <martin.petersen@oracle.com>,
+        <johannes.thumshirn@wdc.com>, <yukuai3@huawei.com>,
+        <ming.lei@redhat.com>
+CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <yukuai1@huaweicloud.com>, <yi.zhang@huawei.com>
+Subject: [PATCH -nect RFC v2 0/2] block: fix uaf in bd_link_disk_holder()
+Date:   Thu, 20 Oct 2022 21:20:47 +0800
+Message-ID: <20221020132049.3947415-1-yukuai3@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1666159637-161135-1-git-send-email-pawell@cadence.com>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,61 +52,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-10-19 02:07:17, Pawel Laszczak wrote:
-> Patch modifies the TD_SIZE in TRB before ZLP TRB.
-> The TD_SIZE in TRB before ZLP TRB must be set to 1 to force
-> processing ZLP TRB by controller.
-> 
-> Cc: <stable@vger.kernel.org>
-> Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
-> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
-> ---
->  drivers/usb/cdns3/cdnsp-ring.c | 15 ++++++++-------
->  1 file changed, 8 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/usb/cdns3/cdnsp-ring.c b/drivers/usb/cdns3/cdnsp-ring.c
-> index 794e413800ae..4809d0e894bb 100644
-> --- a/drivers/usb/cdns3/cdnsp-ring.c
-> +++ b/drivers/usb/cdns3/cdnsp-ring.c
-> @@ -1765,18 +1765,19 @@ static u32 cdnsp_td_remainder(struct cdnsp_device *pdev,
->  			      struct cdnsp_request *preq,
->  			      bool more_trbs_coming)
->  {
-> -	u32 maxp, total_packet_count;
-> -
-> -	/* One TRB with a zero-length data packet. */
-> -	if (!more_trbs_coming || (transferred == 0 && trb_buff_len == 0) ||
-> -	    trb_buff_len == td_total_len)
-> -		return 0;
-> +	u32 maxp, total_packet_count, remainder;
->  
->  	maxp = usb_endpoint_maxp(preq->pep->endpoint.desc);
->  	total_packet_count = DIV_ROUND_UP(td_total_len, maxp);
->  
->  	/* Queuing functions don't count the current TRB into transferred. */
-> -	return (total_packet_count - ((transferred + trb_buff_len) / maxp));
-> +	remainder = (total_packet_count - ((transferred + trb_buff_len) / maxp));
-> +
-> +	/* Before ZLP driver needs set TD_SIZE=1. */
-> +	if (!remainder && more_trbs_coming)
-> +		remainder = 1;
+Changes in v2:
+ - in order to know when bd_holder_dir will be freed, instead of changing
+kobject_put(), add a new field in block_device.
 
-Without ZLP, TD_SIZE = 0 for the last TRB.
-With ZLP, TD_SIZE = 1 for current TRB, and TD_SIZE = 0 for the next TRB
-(the last zero-length packet) right?
+Yu Kuai (2):
+  block: add helpers for bd_holder_dir refcount management
+  block: fix uaf for bd_holder_dir
 
-Peter
-
-> +
-> +	return remainder;
->  }
->  
->  static int cdnsp_align_td(struct cdnsp_device *pdev,
-> -- 
-> 2.25.1
-> 
+ block/blk.h               |  3 +++
+ block/genhd.c             | 33 ++++++++++++++++++++++++++++++++-
+ block/holder.c            | 19 +++++++++++++------
+ block/partitions/core.c   |  5 ++++-
+ include/linux/blk_types.h |  1 +
+ 5 files changed, 53 insertions(+), 8 deletions(-)
 
 -- 
+2.31.1
 
-Thanks,
-Peter Chen
