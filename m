@@ -2,207 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5364260554B
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 04:05:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FE8960554D
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 04:05:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230397AbiJTCFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 22:05:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46952 "EHLO
+        id S230427AbiJTCFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 22:05:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229916AbiJTCE5 (ORCPT
+        with ESMTP id S229916AbiJTCFh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 22:04:57 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BCF5857C7
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 19:04:56 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id d10so18948305pfh.6
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 19:04:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=C5913yuT7OHnydXh0goEOs2trFBFfmtyAZq5Ppe1lGY=;
-        b=pmvVYwMRiFmZeRC0NmGKeTj4N79Gml892HE066U9X73Y9FIWX6zboxQPr1eKe2w/WV
-         Y1aIfzVYl+pp5jGyFgYOnfhGjMrYXGgFVD8fdHBMeyRLK/ZIUXKh+YO0p8j983BJzO/6
-         a6zk0OEQ+YRPGv8YG5N0UJ1UIVA3v4qxnXy/GYWHRZZNosKGt6vLWJmgT6Wy7eZJRvg/
-         ik053gZgGVbtTGPBHqy7XYB1djshu+dPZGyY3xLrt+uTpX5q+nlpXJpg6r5CJtibFxHU
-         Z7IJnMx4v+Ij4vOCOYfvcz+gzv3jlzw5dC6zDGLGziXD4nXOrVK6yk3YN1Hejrpsm9ZY
-         os9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=C5913yuT7OHnydXh0goEOs2trFBFfmtyAZq5Ppe1lGY=;
-        b=W+ePTh8nfQa4PmPzqM2SYPinVYCs/qOgh/wY2I/bSjp586oVu5yQaWD2q3A4l1b1JH
-         9PVMMY5wulXxc1Y+q58L4HHwB+DOSeOpuggmqHuPmhhDzBAdYnPKrGS9xxKvJg74b7Yi
-         xjKiOSEuiRs6pZEk7+bI3Hym0cDvdEJlSwagxULiohoT80sxDKu8r7NlM6DbGxzgQCbw
-         JSsjwiZvUHjZOyt5maofQFbMTkz4sp2rI5Cmbe1Rpt0OPs9MmhV/Xi8Srn5F8kxMWlE0
-         ViZltiG6W1yaX5R8yqRavAhdF1ghtbsdFWrdEp1WAfUNqo30n5X8XpMq86A5riSo9to/
-         EGzg==
-X-Gm-Message-State: ACrzQf1Tp5UNIqciwezYfAI4cN96ZDcN2c8SCV98+06x2Yg2ht4tYeMo
-        tAeiqCRKm2JF8hm7ceawwLmZOw==
-X-Google-Smtp-Source: AMsMyM4cmoMfelOrD/hdUgbMXsDIlPU2dTS9HMqc1PC5PAdmhotT0iN8eOZurGnlx/oTE+Iec5OkMQ==
-X-Received: by 2002:a62:584:0:b0:55a:a7a5:b597 with SMTP id 126-20020a620584000000b0055aa7a5b597mr11672276pff.71.1666231495594;
-        Wed, 19 Oct 2022 19:04:55 -0700 (PDT)
-Received: from dread.disaster.area (pa49-181-106-210.pa.nsw.optusnet.com.au. [49.181.106.210])
-        by smtp.gmail.com with ESMTPSA id i4-20020a170902e48400b00176c6738d13sm11369139ple.169.2022.10.19.19.04.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Oct 2022 19:04:54 -0700 (PDT)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1olKvT-00457F-F5; Thu, 20 Oct 2022 13:04:51 +1100
-Date:   Thu, 20 Oct 2022 13:04:51 +1100
-From:   Dave Chinner <david@fromorbit.com>
-To:     Brian Foster <bfoster@redhat.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Zhaoyang Huang <huangzhaoyang@gmail.com>,
-        "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, ke.wang@unisoc.com,
-        steve.kang@unisoc.com, baocong.liu@unisoc.com,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [RFC PATCH] mm: move xa forward when run across zombie page
-Message-ID: <20221020020451.GS2703033@dread.disaster.area>
-References: <1665725448-31439-1-git-send-email-zhaoyang.huang@unisoc.com>
- <Y0lSChlclGPkwTeA@casper.infradead.org>
- <CAGWkznG=_A-3A8JCJEoWXVcx+LUNH=gvXjLpZZs0cRX4dhUJfQ@mail.gmail.com>
- <Y017BeC64GDb3Kg7@casper.infradead.org>
- <CAGWkznEdtGPPZkHrq6Y_+XLL37w12aC8XN8R_Q-vhq48rFhkSA@mail.gmail.com>
- <Y04Y3RNq6D2T9rVw@casper.infradead.org>
- <20221018223042.GJ2703033@dread.disaster.area>
- <Y0/kZbIvMgkNhWpM@bfoster>
+        Wed, 19 Oct 2022 22:05:37 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00670129756;
+        Wed, 19 Oct 2022 19:05:28 -0700 (PDT)
+X-UUID: 20feeda39a5942278c66c40810c63f14-20221020
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=VO5xvhLVQhzMCqtvS6hNx0N5unp8zokjIFS9QG53Czc=;
+        b=cgtZ90yVJBMD/NNXA2lDVvu8VmY3DDNey99o0ywOVB3jM7h7kyW9ZAu801iaoRGWKDv+fiXiwcTo1NQdFtjrJETmclFy3Xeo+NGSqGNDiyEwEOEnmlTA0xXn8XQpApkM5oaG1LBCbj5EW5XAzxomG5b5S0g0JES6Hm6P/oX+S+4=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.12,REQID:bbd6fbd9-774d-42bd-8490-38af96895deb,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:62cd327,CLOUDID:26315ba4-ebb2-41a8-a87c-97702aaf2e20,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 20feeda39a5942278c66c40810c63f14-20221020
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <biao.huang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 345631413; Thu, 20 Oct 2022 10:05:22 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Thu, 20 Oct 2022 10:05:21 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Thu, 20 Oct 2022 10:05:21 +0800
+Message-ID: <d4a6eb562dfd06f616267be6beaf9c37d88cff37.camel@mediatek.com>
+Subject: Re: [PATCH v2] arm64: dts: mt8195: Add Ethernet controller
+From:   Biao Huang <biao.huang@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <macpaul.lin@mediatek.com>
+Date:   Thu, 20 Oct 2022 10:05:20 +0800
+In-Reply-To: <cf0d4a88-16d0-bb10-8402-30d60feafa1b@collabora.com>
+References: <20221019091515.21878-1-biao.huang@mediatek.com>
+         <20221019091515.21878-2-biao.huang@mediatek.com>
+         <cf0d4a88-16d0-bb10-8402-30d60feafa1b@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y0/kZbIvMgkNhWpM@bfoster>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 07:49:57AM -0400, Brian Foster wrote:
-> On Wed, Oct 19, 2022 at 09:30:42AM +1100, Dave Chinner wrote:
-> > On Tue, Oct 18, 2022 at 04:09:17AM +0100, Matthew Wilcox wrote:
-> > > On Tue, Oct 18, 2022 at 10:52:19AM +0800, Zhaoyang Huang wrote:
-> > > > On Mon, Oct 17, 2022 at 11:55 PM Matthew Wilcox <willy@infradead.org> wrote:
-> > > > >
-> > > > > On Mon, Oct 17, 2022 at 01:34:13PM +0800, Zhaoyang Huang wrote:
-> > > > > > On Fri, Oct 14, 2022 at 8:12 PM Matthew Wilcox <willy@infradead.org> wrote:
-> > > > > > >
-> > > > > > > On Fri, Oct 14, 2022 at 01:30:48PM +0800, zhaoyang.huang wrote:
-> > > > > > > > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-> > > > > > > >
-> > > > > > > > Bellowing RCU stall is reported where kswapd traps in a live lock when shrink
-> > > > > > > > superblock's inode list. The direct reason is zombie page keeps staying on the
-> > > > > > > > xarray's slot and make the check and retry loop permanently. The root cause is unknown yet
-> > > > > > > > and supposed could be an xa update without synchronize_rcu etc. I would like to
-> > > > > > > > suggest skip this page to break the live lock as a workaround.
-> > > > > > >
-> > > > > > > No, the underlying bug should be fixed.
-> > > > >
-> > > > >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> > > > Understand. IMHO, find_get_entry actruely works as an open API dealing
-> > > > with different kinds of address_spaces page cache, which requires high
-> > > > robustness to deal with any corner cases. Take the current problem as
-> > > > example, the inode with fault page(refcount=0) could remain on the
-> > > > sb's list without live lock problem.
-> > > 
-> > > But it's a corner case that shouldn't happen!  What else is going on
-> > > at the time?  Can you reproduce this problem easily?  If so, how?
+Dear Angelo,
+	Thanks for your comments!
+
+On Wed, 2022-10-19 at 15:57 +0200, AngeloGioacchino Del Regno wrote:
+> Il 19/10/22 11:15, Biao Huang ha scritto:
+> > Add Ethernet controller node for mt8195.
 > > 
-> > I've been seeing this livelock, too. The reproducer is,
-> > unfortunately, something I can't share - it's a massive program that
-> > triggers a data corruption I'm working on solving.
-> > 
-> > Now that I've
-> > mostly fixed the data corruption, long duration test runs end up
-> > livelocking in page cache lookup after several hours.
-> > 
-> > The test is effectively writing a 100MB file with multiple threads
-> > doing reverse adjacent racing 1MB unaligned writes. Once the file is
-> > written, it is then mmap()d and read back from the filesystem for
-> > verification.
-> > 
-> > THis is then run with tens of processes concurrently, and then under
-> > a massively confined memcg (e.g. 32 processes/files are run in a
-> > memcg with only 200MB of memory allowed). This causes writeback,
-> > readahead and memory reclaim to race with incoming mmap read faults
-> > and writes.  The livelock occurs on file verification and it appears
-> > to be an interaction with readahead thrashing.
-> > 
-> > On my test rig, the physical read to write ratio is at least 20:1 -
-> > with 32 processes running, the 5s IO rates are:
-> > 
-> > Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
-> > dm-0          52187.20      3677.42      1345.92         0.00      18387       6729          0
-> > dm-0          62865.60      5947.29         0.08         0.00      29736          0          0
-> > dm-0          62972.80      5911.20         0.00         0.00      29556          0          0
-> > dm-0          59803.00      5516.72       133.47         0.00      27583        667          0
-> > dm-0          63068.20      5292.34       511.52         0.00      26461       2557          0
-> > dm-0          56775.60      4184.52      1248.38         0.00      20922       6241          0
-> > dm-0          63087.40      5901.26        43.77         0.00      29506        218          0
-> > dm-0          62769.00      5833.97        60.54         0.00      29169        302          0
-> > dm-0          64810.20      5636.13       305.63         0.00      28180       1528          0
-> > dm-0          65222.60      5598.99       349.48         0.00      27994       1747          0
-> > dm-0          62444.00      4887.05       926.67         0.00      24435       4633          0
-> > dm-0          63812.00      5622.68       294.66         0.00      28113       1473          0
-> > dm-0          63482.00      5728.43       195.74         0.00      28642        978          0
-> > 
-> > This is reading and writing the same amount of file data at the
-> > application level, but once the data has been written and kicked out
-> > of the page cache it seems to require an awful lot more read IO to
-> > get it back to the application. i.e. this looks like mmap() is
-> > readahead thrashing severely, and eventually it livelocks with this
-> > sort of report:
-> > 
-> > [175901.982484] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
-> > [175901.985095] rcu:    Tasks blocked on level-1 rcu_node (CPUs 0-15): P25728
-> > [175901.987996]         (detected by 0, t=97399871 jiffies, g=15891025, q=1972622 ncpus=32)
-> > [175901.991698] task:test_write      state:R  running task     stack:12784 pid:25728 ppid: 25696 flags:0x00004002
-> > [175901.995614] Call Trace:
-> > [175901.996090]  <TASK>
-> > [175901.996594]  ? __schedule+0x301/0xa30
-> > [175901.997411]  ? sysvec_apic_timer_interrupt+0xb/0x90
-> > [175901.998513]  ? sysvec_apic_timer_interrupt+0xb/0x90
-> > [175901.999578]  ? asm_sysvec_apic_timer_interrupt+0x16/0x20
-> > [175902.000714]  ? xas_start+0x53/0xc0
-> > [175902.001484]  ? xas_load+0x24/0xa0
-> > [175902.002208]  ? xas_load+0x5/0xa0
-> > [175902.002878]  ? __filemap_get_folio+0x87/0x340
-> > [175902.003823]  ? filemap_fault+0x139/0x8d0
-> > [175902.004693]  ? __do_fault+0x31/0x1d0
-> > [175902.005372]  ? __handle_mm_fault+0xda9/0x17d0
-> > [175902.006213]  ? handle_mm_fault+0xd0/0x2a0
-> > [175902.006998]  ? exc_page_fault+0x1d9/0x810
-> > [175902.007789]  ? asm_exc_page_fault+0x22/0x30
-> > [175902.008613]  </TASK>
-> > 
-> > Given that filemap_fault on XFS is probably trying to map large
-> > folios, I do wonder if this is a result of some kind of race with
-> > teardown of a large folio...
+> > Signed-off-by: Biao Huang <biao.huang@mediatek.com>
+> > ---
+> >   arch/arm64/boot/dts/mediatek/mt8195-demo.dts | 88
+> > ++++++++++++++++++++
+> >   arch/arm64/boot/dts/mediatek/mt8195.dtsi     | 86
+> > +++++++++++++++++++
+> >   2 files changed, 174 insertions(+)
 > > 
 > 
-> I somewhat recently tracked down a hugepage/swap problem that could
-> manifest as a softlockup in the folio lookup path (due to indefinite
-> folio_try_get_rcu() failure):
+> ..snip..
 > 
-> https://lore.kernel.org/linux-mm/20220906190602.1626037-1-bfoster@redhat.com/
+> > diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> > b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> > index 905d1a90b406..7f7d9f8e72ee 100644
+> > --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> > +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> > @@ -1042,6 +1042,92 @@ spis1: spi@1101e000 {
+> >   			status = "disabled";
+> >   		};
+> >   
+> > +		stmmac_axi_setup: stmmac-axi-config {
 > 
-> It could easily be something different leading to the same side effect,
-> particularly since I believe the issue I saw was introduced in v5.19,
-> but might be worth a test if you have a reliable reproducer.
+> Didn't you get a warning during dtb build for these ones?
+> And if you did, why have you ignored it? :-)
+I checked some dts, they keep stmmac-axi-config outside ethernet node,
+so I keep the similar way with them, maybe that's old style.
+> 
+> > +			snps,wr_osr_lmt = <0x7>;
+> > +			snps,rd_osr_lmt = <0x7>;
+> > +			snps,blen = <0 0 0 0 16 8 4>;
+> > +		};
+> > +
+> 
+> ..snip..
+> 
+> > +
+> > +		eth: ethernet@11021000 {
+> > +			compatible = "mediatek,mt8195-gmac",
+> > "snps,dwmac-5.10a";
+> > +			reg = <0 0x11021000 0 0x4000>;
+> > +			interrupts = <GIC_SPI 716 IRQ_TYPE_LEVEL_HIGH
+> > 0>;
+> > +			interrupt-names = "macirq";
+> > +			clock-names = "axi",
+> > +				      "apb",
+> > +				      "mac_cg",
+> > +				      "mac_main",
+> > +				      "ptp_ref",
+> > +				      "rmii_internal";
+> > +			clocks = <&pericfg_ao CLK_PERI_AO_ETHERNET>,
+> > +				 <&pericfg_ao
+> > CLK_PERI_AO_ETHERNET_BUS>,
+> > +				 <&pericfg_ao
+> > CLK_PERI_AO_ETHERNET_MAC>,
+> > +				 <&topckgen CLK_TOP_SNPS_ETH_250M>,
+> > +				 <&topckgen
+> > CLK_TOP_SNPS_ETH_62P4M_PTP>,
+> > +				 <&topckgen CLK_TOP_SNPS_ETH_50M_RMII>;
+> > +			assigned-clocks = <&topckgen
+> > CLK_TOP_SNPS_ETH_250M>,
+> > +					  <&topckgen
+> > CLK_TOP_SNPS_ETH_62P4M_PTP>,
+> > +					  <&topckgen
+> > CLK_TOP_SNPS_ETH_50M_RMII>;
+> > +			assigned-clock-parents = <&topckgen
+> > CLK_TOP_ETHPLL_D2>,
+> > +						 <&topckgen
+> > CLK_TOP_ETHPLL_D8>,
+> > +						 <&topckgen
+> > CLK_TOP_ETHPLL_D10>;
+> > +			power-domains = <&spm
+> > MT8195_POWER_DOMAIN_ETHER>;
+> > +			mediatek,pericfg = <&infracfg_ao>;
+> > +			snps,axi-config = <&stmmac_axi_setup>;
+> > +			snps,mtl-rx-config = <&mtl_rx_setup>;
+> > +			snps,mtl-tx-config = <&mtl_tx_setup>;
+> > +			snps,txpbl = <16>;
+> > +			snps,rxpbl = <16>;
+> > +			snps,clk-csr = <0>;
+> > +			status = "disabled";
+> 
+> Please move stmmac-axi-config, rx-queues-config, tx-queues-config
+> here as a subnode
+> or in the root node, respecting address/size cells being zero.
+> Of course adding that here means also specifying {address,size}-cells 
+> = <0> in this
+> ethernet node.
+OK, I'll move them to ethernet node, and add address/size-cells in
+thernet node.
+> 
+> Regards,
+> Angelo
+Best Regards!
+Biao
 
-Tests run and, unfortunately, that patch doesn't prevent/fix the
-problem either.
-
-Cheers,
-
-Dave.
--- 
-Dave Chinner
-david@fromorbit.com
