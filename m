@@ -2,67 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 754006058F6
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 09:47:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 077B26058F8
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 09:48:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230458AbiJTHrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 03:47:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50504 "EHLO
+        id S230459AbiJTHsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 03:48:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230307AbiJTHrt (ORCPT
+        with ESMTP id S230307AbiJTHsL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 03:47:49 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF07B17579B
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 00:47:47 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id pq16so19072919pjb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 00:47:47 -0700 (PDT)
+        Thu, 20 Oct 2022 03:48:11 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75FE4175358;
+        Thu, 20 Oct 2022 00:48:10 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id v11so4351146wmd.1;
+        Thu, 20 Oct 2022 00:48:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shopee.com; s=shopee.com;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=WEv0DAtYrQBEKc4KQv+MDWqqO4sqebBTQ3kaboRnQNg=;
-        b=GTQ3+2aB72+kOTV0y/y2Ncy5TWnk/z4Cj5D2tlFLPIwoT+7QGZOijPWbsL6YlAkTR2
-         WH6rXobe+/n1Op2T4Bkpy9k87M8Eihx9tndD/7jNX/1bQbEeceTVqzY0GKTOKj5mSIYn
-         yX+uFQLqGCfD2BwOppd9RVzffo/ZpfeFt1SGkK9aFWDcLq0Kh8AtY+WHaxEzRe20mDnG
-         MKjRrA2S3k7IDrGfHDygEhy5zVbNDzzFDKhkI2oBWOeH0zGZs9+Wa4SbJPTHgw7hGfW4
-         7mgZq9Rt5Gr+HE7ElBc8URsjfh7LITM/q6YvddDawZP1iiwOGdcQnuNR/b5RG5tmqDah
-         /G3w==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references
+         :organization:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=qf5Po+dJdVElVGspHE8VFD4buBHmcH+O3lP8/s/tkhw=;
+        b=bOY3CcvGgLZa/ZvdMRPovqAK3wnEadOjVdcxOoEW8gj33k3x2+4xzRTt/GrdNBD61C
+         stE3UZo9XJeKSLmi9ZelXeUpoxZsVzcJ8yW17Hqc3/ODhaLkz0ybt+5KhBvzSiTY+myF
+         o8tZ5lG+tkrNsQyh1dmbRlxR1tOLViDAWb6kPGqtp9OAJbI+f+Xb+r2OWWvQpn6zD167
+         bHZBYiUxrAKw/FbEToeyvFaADyaG2G7enKWeSiQzgifha53qF3s6IXsZkVTHk2/ImTzN
+         K5A8L7yrSoCGGeVT17ob0uq5Pf2sBTTW/7tFGYt3vQCL0KalAEHjrY95aedxT62BAznJ
+         L8Mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WEv0DAtYrQBEKc4KQv+MDWqqO4sqebBTQ3kaboRnQNg=;
-        b=nlO9SuDFDF+FVwgsutrARTOW+04iNDLVItxiq7ebQ8mieduRQdrzD2RydDj/QPAqZ7
-         ealQUGdlutwvzsLYO9kkGYJnJPmnH952ix6Y+SP/wOFBahVHG9rQhadfKklTtpBW1Mz6
-         7gW+Zjndz6Bn01VslMtkhHwIKHNKUDZAdcLQf33Vv1hPAxWmykcD3JV8POLUSjPDb08k
-         BKALSU5CIDZTZnDMS+5oNSI3N5zIi6VTN2C36GBucc89bLgrWI/c6sfabX6ijmdk5VCa
-         Dx0fG9LM0JRw8Hh6CokcH4epG0NX5wWDwORd3YYn6Bfe5HoOqEfQwzZK0s0aRKhFyssG
-         wyWg==
-X-Gm-Message-State: ACrzQf0g05nPqSdhPnRQyy30uEFTsgp+8gKb/RlpRn2G6cWG2nMrROJC
-        OumvWEmNKS+rOjK9yu3kxrIFkw==
-X-Google-Smtp-Source: AMsMyM7bzxbNxD1oZJNsw+ps7HAQcODla99hUEqrBbvHJA21N6bNPsnKR75kUNkHweOKKaUdu6IEdg==
-X-Received: by 2002:a17:903:2286:b0:185:3948:be93 with SMTP id b6-20020a170903228600b001853948be93mr12818567plh.121.1666252067220;
-        Thu, 20 Oct 2022 00:47:47 -0700 (PDT)
-Received: from ubuntu-haifeng.default.svc.cluster.local ([101.127.248.173])
-        by smtp.gmail.com with ESMTPSA id q8-20020a170902eb8800b00176a2d23d1asm11939007plg.56.2022.10.20.00.47.45
+        h=in-reply-to:content-disposition:mime-version:references
+         :organization:message-id:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qf5Po+dJdVElVGspHE8VFD4buBHmcH+O3lP8/s/tkhw=;
+        b=hnJvVTTO2U9chywiXy2i2StvNA1jcXZBINjc7PbODOxRgy/yAa4eD6ROOlM0pHsgdR
+         1/9inVvWAY2R0uwpd2joWpJ80Av6jHLUtrcf5LxGT7c+7ZG4mKPHsdsD4xc9vbEyP36n
+         va8Vc783vlj9xWRo2dgmyW//+HhTXkibIzY9kyUd22Bx/DU7SRN2Fn3HdOrLeOjrdfV7
+         J/P04RMStQLu1Vm+OTH3hyVlDglvfQ1c3TiWISsGFWv8gu7VjGnh3lNtShJ7IKOY4WDK
+         3azR2kUHzey5S8H9wKPSDWVzU1o2poEV7tEXD+hLOwgZjS9XBQ5WY5S7y6DJ/dU/GK9P
+         iCbw==
+X-Gm-Message-State: ACrzQf3Wgzgdhz7FBurJQlMACiBmzxzfLd1mdCR1+3VjP4MvSoG4Bwba
+        iTJVuuLWYsQbDLN0ryWELlg=
+X-Google-Smtp-Source: AMsMyM7KSr1GHJz5ONftQT7jUuF0SxuIuDR1sPSbyDStKV6tLpmvFbXydk75lR4fWvK/u9eMo+ymsQ==
+X-Received: by 2002:a05:600c:3b88:b0:3c6:cef8:8465 with SMTP id n8-20020a05600c3b8800b003c6cef88465mr28767169wms.64.1666252089050;
+        Thu, 20 Oct 2022 00:48:09 -0700 (PDT)
+Received: from wse-c0155 (static-193-12-47-89.cust.tele2.se. [193.12.47.89])
+        by smtp.gmail.com with ESMTPSA id n20-20020a1c7214000000b003b5054c6f87sm2055807wmc.21.2022.10.20.00.48.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 00:47:46 -0700 (PDT)
-From:   "haifeng.xu" <haifeng.xu@shopee.com>
-To:     tj@kernel.org
-Cc:     lizefan.x@bytedance.com, hannes@cmpxchg.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "haifeng.xu" <haifeng.xu@shopee.com>
-Subject: [PATCH] cgroup: Simplify code in css_set_move_task
-Date:   Thu, 20 Oct 2022 07:47:01 +0000
-Message-Id: <20221020074701.84326-1-haifeng.xu@shopee.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 20 Oct 2022 00:48:08 -0700 (PDT)
+Date:   Thu, 20 Oct 2022 09:48:06 +0200
+From:   Casper Andersson <casper.casan@gmail.com>
+To:     Steen Hegelund <steen.hegelund@microchip.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, UNGLinuxDriver@microchip.com,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Wan Jiabing <wanjiabing@vivo.com>,
+        Nathan Huckleberry <nhuck@google.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH net-next v2 7/9] net: microchip: sparx5: Writing rules to
+ the IS2 VCAP
+Message-ID: <20221020074806.ys7lyfkn7f7zpkcp@wse-c0155>
+Organization: Westermo Network Technologies AB
+References: <20221019114215.620969-1-steen.hegelund@microchip.com>
+ <20221019114215.620969-8-steen.hegelund@microchip.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221019114215.620969-8-steen.hegelund@microchip.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,54 +83,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Check the populated state of css_set in css_set_update_populated
-and update the populated state of to_cset after from_cset is updated.
+On 2022-10-19 13:42, Steen Hegelund wrote:
+> +static void vcap_iter_skip_tg(struct vcap_stream_iter *itr)
+> +{
+> +	/* Compensate the field offset for preceding typegroups */
+> +	while (itr->tg->width && itr->offset >= itr->tg->offset) {
+> +		itr->offset += itr->tg->width;
+> +		itr->tg++; /* next typegroup */
+> +	}
+> +}
 
-Signed-off-by: haifeng.xu <haifeng.xu@shopee.com>
----
- kernel/cgroup/cgroup.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+It was not immediately obvious to me why it should stop iterating when
+tg->width is zero. But after some digging I saw that the tg iterators
+always ends with an empty element (all bits zero, and therefore width is
+zero). Could this be made clearer? Or maybe this is something common
+that I'm just not used to seeing.
 
-diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-index d922773fa90b..6c474be57f91 100644
---- a/kernel/cgroup/cgroup.c
-+++ b/kernel/cgroup/cgroup.c
-@@ -861,7 +861,8 @@ static void css_set_update_populated(struct css_set *cset, bool populated)
- {
- 	struct cgrp_cset_link *link;
- 
--	lockdep_assert_held(&css_set_lock);
-+	if (!cset || css_set_populated(cset))
-+		return;
- 
- 	list_for_each_entry(link, &cset->cgrp_links, cgrp_link)
- 		cgroup_update_populated(link->cgrp, populated);
-@@ -903,16 +904,12 @@ static void css_set_move_task(struct task_struct *task,
- {
- 	lockdep_assert_held(&css_set_lock);
- 
--	if (to_cset && !css_set_populated(to_cset))
--		css_set_update_populated(to_cset, true);
--
- 	if (from_cset) {
- 		WARN_ON_ONCE(list_empty(&task->cg_list));
- 
- 		css_set_skip_task_iters(from_cset, task);
- 		list_del_init(&task->cg_list);
--		if (!css_set_populated(from_cset))
--			css_set_update_populated(from_cset, false);
-+		css_set_update_populated(from_cset, false);
- 	} else {
- 		WARN_ON_ONCE(!list_empty(&task->cg_list));
- 	}
-@@ -926,6 +923,7 @@ static void css_set_move_task(struct task_struct *task,
- 		WARN_ON_ONCE(task->flags & PF_EXITING);
- 
- 		cgroup_move_task(task, to_cset);
-+		css_set_update_populated(to_cset, true);
- 		list_add_tail(&task->cg_list, use_mg_tasks ? &to_cset->mg_tasks :
- 							     &to_cset->tasks);
- 	}
--- 
-2.25.1
+> +static void vcap_encode_bit(u32 *stream, struct vcap_stream_iter *itr, bool val)
+> +{
+> +	/* When intersected by a type group field, stream the type group bits
+> +	 * before continuing with the value bit
+> +	 */
+> +	while (itr->tg->width &&
+> +	       itr->offset >= itr->tg->offset &&
+> +	       itr->offset < itr->tg->offset + itr->tg->width) {
+> +		int tg_bitpos = itr->tg->offset - itr->offset;
+> +
+> +		vcap_set_bit(stream, itr, (itr->tg->value >> tg_bitpos) & 0x1);
+> +		itr->offset++;
+> +		vcap_iter_update(itr);
+> +	}
 
+Same as above.
+
+> +static void vcap_encode_typegroups(u32 *stream, int sw_width,
+> +				   const struct vcap_typegroup *tg,
+> +				   bool mask)
+> +{
+> +	struct vcap_stream_iter iter;
+> +	int idx;
+> +
+> +	/* Mask bits must be set to zeros (inverted later when writing to the
+> +	 * mask cache register), so that the mask typegroup bits consist of
+> +	 * match-1 or match-0, or both
+> +	 */
+> +	vcap_iter_set(&iter, sw_width, tg, 0);
+> +	while (iter.tg->width) {
+> +		/* Set position to current typegroup bit */
+> +		iter.offset = iter.tg->offset;
+> +		vcap_iter_update(&iter);
+> +		for (idx = 0; idx < iter.tg->width; idx++) {
+> +			/* Iterate over current typegroup bits. Mask typegroup
+> +			 * bits are always set
+> +			 */
+> +			if (mask)
+> +				vcap_set_bit(stream, &iter, 0x1);
+> +			else
+> +				vcap_set_bit(stream, &iter,
+> +					     (iter.tg->value >> idx) & 0x1);
+> +			iter.offset++;
+> +			vcap_iter_update(&iter);
+> +		}
+> +		iter.tg++; /* next typegroup */
+> +	}
+
+Same as above.
+
+Tested on Microchip PCB135 switch.
+
+Tested-by: Casper Andersson <casper.casan@gmail.com>
+Reviewed-by: Casper Andersson <casper.casan@gmail.com>
+
+Best Regards,
+Casper
