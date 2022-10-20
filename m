@@ -2,81 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38002605E63
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 13:02:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F995605E65
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 13:03:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231175AbiJTLCh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 07:02:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39580 "EHLO
+        id S231195AbiJTLDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 07:03:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231148AbiJTLCe (ORCPT
+        with ESMTP id S231148AbiJTLDH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 07:02:34 -0400
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48FA61C881A;
-        Thu, 20 Oct 2022 04:02:32 -0700 (PDT)
-Received: from [192.168.1.103] (31.173.87.29) by msexch01.omp.ru (10.188.4.12)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Thu, 20 Oct
- 2022 14:02:23 +0300
-Subject: Re: [PATCH 11/14] pata: remove palmchip bk3710 driver
-To:     Arnd Bergmann <arnd@kernel.org>, Sekhar Nori <nsekhar@ti.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>
-CC:     <linux-kernel@vger.kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Arnd Bergmann <arnd@arndb.de>, Hannes Reinecke <hare@suse.de>,
-        <linux-ide@vger.kernel.org>
-References: <20221019152947.3857217-1-arnd@kernel.org>
- <20221019152947.3857217-12-arnd@kernel.org>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <52f99ca0-5dcc-9759-e089-47bd301577e4@omp.ru>
-Date:   Thu, 20 Oct 2022 14:02:24 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Thu, 20 Oct 2022 07:03:07 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEB6B1CBAB9
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 04:03:06 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1olTKE-0004VL-Qb; Thu, 20 Oct 2022 13:02:58 +0200
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1olTKD-0003RO-No; Thu, 20 Oct 2022 13:02:57 +0200
+Date:   Thu, 20 Oct 2022 13:02:57 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de,
+        devicetree@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
+        linux-kernel@vger.kernel.org, linux-imx@nxp.com,
+        kernel@pengutronix.de, festevam@gmail.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 03/15] arm64: dts: imx8mp-evk: fix BUCK/LDO voltage
+Message-ID: <20221020110257.5ojjq2j2c53hevnt@pengutronix.de>
+References: <20221020095934.1659449-1-peng.fan@oss.nxp.com>
+ <20221020095934.1659449-4-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
-In-Reply-To: <20221019152947.3857217-12-arnd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [31.173.87.29]
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 10/20/2022 10:25:24
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 59
-X-KSE-AntiSpam-Info: Lua profiles 173210 [Oct 20 2022]
-X-KSE-AntiSpam-Info: Version: 5.9.20.0
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 502 502 69dee8ef46717dd3cb3eeb129cb7cc8dab9e30f6
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: {relay has no DNS name}
-X-KSE-AntiSpam-Info: {SMTP from is not routable}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.87.29 in (user)
- b.barracudacentral.org}
-X-KSE-AntiSpam-Info: omp.ru:7.1.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
-X-KSE-AntiSpam-Info: ApMailHostAddress: 31.173.87.29
-X-KSE-AntiSpam-Info: {DNS response errors}
-X-KSE-AntiSpam-Info: Rate: 59
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 10/20/2022 10:32:00
-X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 10/20/2022 7:12:00 AM
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221020095934.1659449-4-peng.fan@oss.nxp.com>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,23 +54,135 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/19/22 6:29 PM, Arnd Bergmann wrote:
+Hi Peng,
 
-> From: Arnd Bergmann <arnd@arndb.de>
+On 22-10-20, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
 > 
-> This device was used only on the davinci dm644x platform that
+> Per PCA9450C datasheet, the voltage range as below:
+> BUCK1 0.6 - 2.1875
+> BUCK2 0.6 - 2.1875
+> BUCK4 0.6 - 3.4
+> BUCK5 0.6 - 3.4
+> BUCK6 0.6 - 3.4
+> 
+> LDO1 1.6-1.9, 3.0-3.3
+> LDO2 0.8 – 1.15
+> LDO3 0.8 - 3.3
+> LDO4 0.8 - 3.3
+> LDO5 1.8 - 3.3
+> 
+> So correct them, and also add LDO[2,4]
 
-  Well, DM646x too but...
+In the DTS you specify voltage constraints for a specific hardware and
+not the one supported by the PMIC. What the PMIC supports (min/max) is
+specified within the driver.
 
-> is now gone, and no references to the device remain in the
-> kernel.
+Regards,
+  Marco
 
-   ... in fact, I'm not seeing davinci_init_ide() called anywhere... :-/
-
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-
-Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
-
-[...]
-
-MBR, Sergey
+> 
+> Fixes: 5497bc2a2bff ("arm64: dts: imx8mp-evk: Add PMIC device")
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  arch/arm64/boot/dts/freescale/imx8mp-evk.dts | 44 +++++++++++++-------
+>  1 file changed, 30 insertions(+), 14 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
+> index b4c1ef2559f2..a4cddc5a8620 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
+> +++ b/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
+> @@ -248,8 +248,8 @@ pmic@25 {
+>  		regulators {
+>  			BUCK1 {
+>  				regulator-name = "BUCK1";
+> -				regulator-min-microvolt = <720000>;
+> -				regulator-max-microvolt = <1000000>;
+> +				regulator-min-microvolt = <600000>;
+> +				regulator-max-microvolt = <2187500>;
+>  				regulator-boot-on;
+>  				regulator-always-on;
+>  				regulator-ramp-delay = <3125>;
+> @@ -257,8 +257,8 @@ BUCK1 {
+>  
+>  			reg_arm: BUCK2 {
+>  				regulator-name = "BUCK2";
+> -				regulator-min-microvolt = <720000>;
+> -				regulator-max-microvolt = <1025000>;
+> +				regulator-min-microvolt = <600000>;
+> +				regulator-max-microvolt = <2187500>;
+>  				regulator-boot-on;
+>  				regulator-always-on;
+>  				regulator-ramp-delay = <3125>;
+> @@ -268,40 +268,56 @@ reg_arm: BUCK2 {
+>  
+>  			BUCK4 {
+>  				regulator-name = "BUCK4";
+> -				regulator-min-microvolt = <3000000>;
+> -				regulator-max-microvolt = <3600000>;
+> +				regulator-min-microvolt = <600000>;
+> +				regulator-max-microvolt = <3400000>;
+>  				regulator-boot-on;
+>  				regulator-always-on;
+>  			};
+>  
+>  			BUCK5 {
+>  				regulator-name = "BUCK5";
+> -				regulator-min-microvolt = <1650000>;
+> -				regulator-max-microvolt = <1950000>;
+> +				regulator-min-microvolt = <600000>;
+> +				regulator-max-microvolt = <3400000>;
+>  				regulator-boot-on;
+>  				regulator-always-on;
+>  			};
+>  
+>  			BUCK6 {
+>  				regulator-name = "BUCK6";
+> -				regulator-min-microvolt = <1045000>;
+> -				regulator-max-microvolt = <1155000>;
+> +				regulator-min-microvolt = <600000>;
+> +				regulator-max-microvolt = <3400000>;
+>  				regulator-boot-on;
+>  				regulator-always-on;
+>  			};
+>  
+>  			LDO1 {
+>  				regulator-name = "LDO1";
+> -				regulator-min-microvolt = <1650000>;
+> -				regulator-max-microvolt = <1950000>;
+> +				regulator-min-microvolt = <1600000>;
+> +				regulator-max-microvolt = <3300000>;
+> +				regulator-boot-on;
+> +				regulator-always-on;
+> +			};
+> +
+> +			LDO2 {
+> +				regulator-name = "LDO2";
+> +				regulator-min-microvolt = <800000>;
+> +				regulator-max-microvolt = <1150000>;
+>  				regulator-boot-on;
+>  				regulator-always-on;
+>  			};
+>  
+>  			LDO3 {
+>  				regulator-name = "LDO3";
+> -				regulator-min-microvolt = <1710000>;
+> -				regulator-max-microvolt = <1890000>;
+> +				regulator-min-microvolt = <800000>;
+> +				regulator-max-microvolt = <3300000>;
+> +				regulator-boot-on;
+> +				regulator-always-on;
+> +			};
+> +
+> +			ldo4: LDO4 {
+> +				regulator-name = "LDO4";
+> +				regulator-min-microvolt = <800000>;
+> +				regulator-max-microvolt = <3300000>;
+>  				regulator-boot-on;
+>  				regulator-always-on;
+>  			};
+> -- 
+> 2.37.1
+> 
+> 
+> 
