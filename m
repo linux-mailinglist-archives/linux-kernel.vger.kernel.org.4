@@ -2,147 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99374605E59
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 12:59:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8E40605E5D
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 13:01:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230360AbiJTK74 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 06:59:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59406 "EHLO
+        id S231137AbiJTLBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 07:01:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbiJTK7w (ORCPT
+        with ESMTP id S230472AbiJTLBo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 06:59:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9521A2F001;
-        Thu, 20 Oct 2022 03:59:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 323A861AF6;
-        Thu, 20 Oct 2022 10:59:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B3E6C433D6;
-        Thu, 20 Oct 2022 10:59:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666263590;
-        bh=oNTahkkZ6EJ/BED5DDzmzj9s5hQoDekb/BIBiCvXL04=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GAneG2oc8jEpfBXNZcINY8mPfqRun9rCjs2s+ctvZqqTjpqmE3wsnjWWsfjED+HJn
-         fTNMJN/ptqz9FAneZtb5g2EezpCVMhhG7w7rjqYBpT0VixHap1C/j27J8JSRAmRsVr
-         ijran+p0y7xHfvK/YC9dsgDe4lIjS7eidIEIWP5KybDUJ3kvdEsLILNDURjxZJwInc
-         NYlKw/yqMmr69gjxs8e5pQsh2Tdfd3ldFtqLs4QxQVuzNujrjj36T/dlnrWZyefFqn
-         vjlAtOQjbfBDoMaAfhq8Z5YBv2vLFNlU+MFD+Mz24blovOlCMDVlQkGNKFC1qUVm/i
-         dS+zgsDhjXyEQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1olTGy-0002Ib-EE; Thu, 20 Oct 2022 12:59:37 +0200
-Date:   Thu, 20 Oct 2022 12:59:36 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 15/15] phy: qcom-qmp-pcie: add support for sc8280xp
- 4-lane PHYs
-Message-ID: <Y1EqGPc/UzZJmGcz@hovoldconsulting.com>
-References: <20221019113552.22353-1-johan+linaro@kernel.org>
- <20221019113552.22353-16-johan+linaro@kernel.org>
- <2902e7e8-eddf-149c-06fd-86b85d8af326@linaro.org>
- <Y1DuB6hzb3V5Lqdy@hovoldconsulting.com>
- <004a6ab9-690b-db13-08a9-c42d09368814@linaro.org>
+        Thu, 20 Oct 2022 07:01:44 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2059.outbound.protection.outlook.com [40.107.223.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9DAE1C881A
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 04:01:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Kmr0OuvVFJ+0kRNDQ+7RBCsLNQEWNJzpz1wsWkSmx5Yin20EYjnRnUXAk0FWcHpgkRRv7TJoOTLE4LBv/FLo6n72mS8HmX0rlUu11YdwYp1zITGplwAhB6aze/1gP9FbMAPCEEMebX1c/EQImISjp3r3ZF0ohD9GaWOGUtVSho16AWmC+mR5gJmQB3Dym+fkWci3BRtFnX6YvOFuGszQjII7bYxfC3IwsVyX93Xw87/I3WITo26mV8pfZwGpMrffsiqmB03awdNgCOnE4Wy9Qi50Iq2LXn/BRql8JGrKVtthzVt9DOakmtCDqMRZSh4FqMiUkpVU65d3UXzBQ01y2g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/9gXseAVEO4QsLPZNzUqKIFl/L2H49J1TsOZzGDObJ8=;
+ b=eX1/r0yVc6yYzXv8H/x4auglgfIxAR8X7G4xaS5aXPpGZF6tgXHv+f1r7ijH0SlpRe0hxor1nDJ1fAJ1Xnd7tIPLpSQrlW/IRp0DZ3mqFXrS42qGSXu12v6ch3Yl1QE7oV65hMJ9I7+EH72kEkdCVtE0Sk4wFKn6WfbEBE3HucqFSAYHnpP8dFRxjGU6relEaUOCIC6McJsQFfOAXEaFgsKPtlDsQSAUeYvEsx1Hj6npOVPRBc/SiZlBF8Ecv7lMswmQZcQG3txeMpCD4fC7IbQTZ3F9x4hzkEVftI6w3wOkfPM8Hm2+smoloMkwsLjSth/7rd3wJjLzILp22e5Log==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/9gXseAVEO4QsLPZNzUqKIFl/L2H49J1TsOZzGDObJ8=;
+ b=47/hEmvNncdPSEDBPImjziOAAK9I1Jk1SSvJ+eLjiGJ5pjT6+0S2a2iGuo7HheiywNX127r4UWlSEIt5AxHqHW7zKJRwTwtx0AIvb6upxu6ZCwbxNg+UGb7EO1b/WkzcjQaB0dK15n673jteeqazA8mWEZVVDIlfOZPPI59ztoE=
+Received: from MW2PR16CA0037.namprd16.prod.outlook.com (2603:10b6:907:1::14)
+ by LV2PR12MB5989.namprd12.prod.outlook.com (2603:10b6:408:171::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.30; Thu, 20 Oct
+ 2022 11:01:38 +0000
+Received: from CO1NAM11FT093.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:907:1:cafe::44) by MW2PR16CA0037.outlook.office365.com
+ (2603:10b6:907:1::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.26 via Frontend
+ Transport; Thu, 20 Oct 2022 11:01:38 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT093.mail.protection.outlook.com (10.13.175.59) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5746.16 via Frontend Transport; Thu, 20 Oct 2022 11:01:38 +0000
+Received: from amd.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 20 Oct
+ 2022 06:01:34 -0500
+From:   Arvind Yadav <Arvind.Yadav@amd.com>
+To:     <Christian.Koenig@amd.com>, <andrey.grodzovsky@amd.com>,
+        <shashank.sharma@amd.com>, <amaranath.somalapuram@amd.com>,
+        <Arunpravin.PaneerSelvam@amd.com>,
+        <maarten.lankhorst@linux.intel.com>, <mripard@kernel.org>,
+        <tzimmermann@suse.de>, <airlied@linux.ie>, <daniel@ffwll.ch>,
+        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+CC:     Arvind Yadav <Arvind.Yadav@amd.com>
+Subject: [PATCH] drm/syncobj : Enable signaling on fence for syncobj
+Date:   Thu, 20 Oct 2022 16:30:03 +0530
+Message-ID: <20221020110003.582831-1-Arvind.Yadav@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <004a6ab9-690b-db13-08a9-c42d09368814@linaro.org>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT093:EE_|LV2PR12MB5989:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9fb5a56e-b450-4892-6dfa-08dab28a763d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: QSi4awRTTd2PinARDbrzhI8wo7a2L0X0ApcmYOg2lBneNJ8SGmRA+qaLQd3fRzlFt4aL27WqFDr8ALwoX1R9kjT3v570rT6o4XZWIRiFFZz7M3+v6GvdcPU9bSu4lLmKVVx72xFT3Xkz5PpbhVGuMM32WPGP9Bfj8bU9K5HdO9YiBdJ6jeXt8nCW/iFjyq7jlkUho82xywwH/DN9J0i2FyzSoF41sPANCTu6oKAS0ShE+S3fq3kn2SjvvxejjVfHSCeZliAKJzx35GSgYM5B80tmtqLgqNyjFbDfq0575xxDB9Bjja/yKbvG1tgKn9UWKJxCRZqnd1lMRtAPYuBc9TDwUV2G2E+O9MVQNUpzjmp5MqR/GvEkyOctE4gDP9+nK5t1M299SSO/O7mVJDbZNhiCShxx0gx8N6udCXLlmnXgnidnImuXAqEooKTrGS3VqHGVjcZwH7wx7Vm9a00Nnc4xVeCyDfOd0xkOJY0KHD6gY6W1HTVuHt1R99n68u2QsfS89DXSYu8XOEhmlE/0HPqz3adBWOVbXRuBvVch1xEvGr28NmkDaA5mpp+RrPJaP9drojLae9BukPSf2Cn7evuL7CtLeKu65K8YQRfbGlhWc2Wb6bIdsupGa5RvYDhYc2i23JakEo6ZJqemLJvBTQxSM64VQhLll9a7QfN9Ys/qujOq0Z8aJ5rhmBsOkkkMVtCMkIZGjuBd1c5OyNYXaMrrGqQaxbPPAAUM2sxGFdOuT3LZ3Lf7AzhTkiFgzfYf/W0nrfWVNb3a/DD0XaKovRVbeLb6TGk7aN/XiaCRWiO6dA6PWpB9XHPfbZVB7xififBl3RmdioaNISbrz9Ig0WsjHgMjpj0zfRjHP6cJDhk=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(396003)(346002)(376002)(39860400002)(136003)(451199015)(46966006)(36840700001)(40470700004)(316002)(4744005)(336012)(426003)(110136005)(26005)(2906002)(1076003)(2616005)(41300700001)(7696005)(186003)(16526019)(36756003)(5660300002)(40460700003)(83380400001)(6666004)(4326008)(8936002)(40480700001)(70586007)(70206006)(47076005)(82310400005)(8676002)(921005)(82740400003)(36860700001)(356005)(86362001)(478600001)(81166007)(36900700001)(2101003)(83996005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Oct 2022 11:01:38.3752
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9fb5a56e-b450-4892-6dfa-08dab28a763d
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT093.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5989
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 12:32:13PM +0300, Dmitry Baryshkov wrote:
-> On 20/10/2022 09:43, Johan Hovold wrote:
-> > On Thu, Oct 20, 2022 at 06:43:47AM +0300, Dmitry Baryshkov wrote:
-> >> On 19/10/2022 14:35, Johan Hovold wrote:
-> >>> The PCIe2 and PCIe3 controllers and PHYs on SC8280XP can be used in
-> >>> 4-lane mode or as separate controllers and PHYs in 2-lane mode (e.g. as
-> >>> PCIe2A and PCIe2B).
-> >>>
-> >>> Add support for fetching the 4-lane configuration from the TCSR and
-> >>> programming the lane registers of the second port when in 4-lane mode.
-> >>>
-> >>> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+Here's enabling software signaling on fence for syncobj.
 
-> > The gen3x4 PHYs can be in either 4-lane or 2-lane mode depending on the
-> > TCSR configuration. Port A is programmed identically in both cases
-> > except for this serdes register, and in 4-lane mode tx/rx also needs
-> > to be programmed for port B.
-> >   
-> >>> +
-> >>>    	/* clock ids to be requested */
-> >>>    	const char * const *clk_list;
-> >>>    	int num_clks;
-> >>> @@ -1518,6 +1527,7 @@ struct qmp_pcie {
-> >>>    	struct device *dev;
-> >>>    
-> >>>    	const struct qmp_phy_cfg *cfg;
-> >>> +	bool tcsr_4ln_config;
-> >>
-> >> As a matter of preference, this seems too specific. I'd rename it to
-> >> split_config or split_4ln_config.
-> > 
-> > I'm afraid those names do not make much sense. This TCSR register
-> > controls whether the PHY is in 4-lane mode (instead of 2-lane mode).
-> 
-> Well, we just need the info that it's 4-lane. It doesn't really matter 
-> if this information comes from TCSR, DT or e.g. fuses. I'd say that TCSR 
-> is a platform detail. Thus I'm suggesting a more generic name.
+Signed-off-by: Arvind Yadav <Arvind.Yadav@amd.com>
+---
+ drivers/gpu/drm/drm_syncobj.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-No, it's a specific configuration flag for this (and possibly coming
-platforms) to control whether the two PHY ports are used as individual x2
-PHYs or as a combined x4 PHY.
+diff --git a/drivers/gpu/drm/drm_syncobj.c b/drivers/gpu/drm/drm_syncobj.c
+index 0c2be8360525..2ab7a1a9eeb4 100644
+--- a/drivers/gpu/drm/drm_syncobj.c
++++ b/drivers/gpu/drm/drm_syncobj.c
+@@ -302,6 +302,8 @@ void drm_syncobj_add_point(struct drm_syncobj *syncobj,
+ 	dma_fence_chain_init(chain, prev, fence, point);
+ 	rcu_assign_pointer(syncobj->fence, &chain->base);
+ 
++	dma_fence_enable_sw_signaling(&chain->base);
++
+ 	list_for_each_entry_safe(cur, tmp, &syncobj->cb_list, node)
+ 		syncobj_wait_syncobj_func(syncobj, cur);
+ 	spin_unlock(&syncobj->lock);
+-- 
+2.25.1
 
-It's not just about number of lanes and can definitely not come from DT
-or somewhere else as that TCSR bit drives a signal that's needed during
-programming.
-
-> >>> +static void qmp_pcie_init_port_b(struct qmp_pcie *qmp, const struct qmp_phy_cfg_tables *tbls)
-> >>> +{
-> >>> +	const struct qmp_phy_cfg *cfg = qmp->cfg;
-> >>> +	const struct qmp_pcie_offsets *offs = cfg->offsets;
-> >>> +	void __iomem *tx3, *rx3, *tx4, *rx4;
-> >>> +
-> >>> +	tx3 = qmp->port_b + offs->tx;
-> >>> +	rx3 = qmp->port_b + offs->rx;
-> >>> +	tx4 = qmp->port_b + offs->tx2;
-> >>> +	rx4 = qmp->port_b + offs->rx2;
-> >>> +
-> >>> +	qmp_pcie_configure_lane(tx3, tbls->tx, tbls->tx_num, 1);
-> >>> +	qmp_pcie_configure_lane(rx3, tbls->rx, tbls->rx_num, 1);
-> >>> +
-> >>> +	qmp_pcie_configure_lane(tx4, tbls->tx, tbls->tx_num, 2);
-> >>> +	qmp_pcie_configure_lane(rx4, tbls->rx, tbls->rx_num, 2);
-> >>
-> >> I'd use BIT(2) and BIT(3) here. This would allow one to make a
-> >> difference between programming first pair of lanes and second pair of
-> >> lanes if necessary.
-> > 
-> > No, the tx and tx registers of the second port should be programmed
-> > identically to that of the first port.
-> 
-> As you would prefer. As a matter of fact, we do not have CFG_LANES in 
-> the PCIe PHY. Thus I'm surprised that you didn't drop this. I think 
-> CFG_LANES usage is limited to sm8250 USB and combo PHY configurations.
-
-It's actually also used by SC8280XP so we cannot drop it (see
-sc8280xp_qmp_gen3x2_pcie_tx_tbl) here. Appears to be unused for UFS
-currently, though.
-
-Johan
