@@ -2,64 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAA19605EDE
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 13:30:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6132605EE0
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 13:30:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbiJTLaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 07:30:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51472 "EHLO
+        id S229864AbiJTLaq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 07:30:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbiJTLaM (ORCPT
+        with ESMTP id S230168AbiJTLal (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 07:30:12 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A67E108DC6;
-        Thu, 20 Oct 2022 04:30:10 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id y4so1165772plb.2;
-        Thu, 20 Oct 2022 04:30:10 -0700 (PDT)
+        Thu, 20 Oct 2022 07:30:41 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D62F11958FC
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 04:30:39 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id b2so33034331lfp.6
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 04:30:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=oxkGsht8Um+eQ+AA7QKGJnPL5aBRWvNYoBIpMYroGm4=;
-        b=jZtD2P3GIVjFPZkSUmowjCEhkSQTvPcvND+AfjIb6qweRdwnG03O+zmnmEYQ5osRtL
-         teoCIB2sLgezbRp+C2Qfv/12yC4p3fYkTT8MzqaK6FfKbdFyGWC/AT6liTuG3gMn+iVm
-         JdpVOvZvxPN2DvTAMpe9vU+/PxU/+TcPKRj7LSE8/ojly6rBd0ggiVjAh/OPEa6EGayd
-         n0XPjUozMyNbzMpdiwJGBdHNUul1c5rO8wWDcxZEj5RbIiFri2LHODT0twLn+XOYdIrg
-         ytADM1bsY2IkS0QHbct0LkFcd7kEi/JNwXf1aZx/EZ7GrEBe7EWIcy03G6J4ECChl43a
-         77Ig==
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2HlZkA9cMQXxGdkJxrvcIgpC4zTHT7PCGOSCarF98fw=;
+        b=Qddp436yqykHlrELlixj3k7NnlnNDEqKzvEbjFUTOqsb4kZr/FoIo7TuVLPE1LB/lp
+         AVHcLPErhpjht6pRQ6uTZGC6cM4/RJejveNBDaEBt+SlBZfNr/MzgahIbsbidQOUNwPf
+         KqP3hZ0imeFVyj3wqtv0mzCV94GTtTPi1Pd45O0vg334rnq81qrg9rI8xMuXFyna4GIX
+         WwOLc6yuKOCXGWSORC8SGgNgOaP7FRGIRb/g/B9Z0BzPfUz9piBNHQRN8daYyxMJZDKL
+         V5rUJV35otovgOI7gHWaUOeHPTxIOoRdIG3orBL7e12ssR1PiCsoah2z2lfbI9CdHu3/
+         giIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oxkGsht8Um+eQ+AA7QKGJnPL5aBRWvNYoBIpMYroGm4=;
-        b=hr7XU92Us7IbsIyT8mMtZ4bqolrB/4EhiJ4SeZOOa6zodwXBw59Ox6/h7t/05Ksv8t
-         NzcmMGT7LhYfwLkdKPVYhcfum82lKrWfk5jOtbq8rVPPsfzGHoThvp+HbW9Xl5g9OHK8
-         GFAiAlXzBctAMOLX14nMScL/JrmIQbH8NO0qLSwPe1hiNYZNYZGg32ja2pCI2OxIzJE+
-         FcowMkvwh0TC8LD9sb8aPIJvFMrB29dPE0p9jxhUUVm2HuG/a4+NcRku0iR0quN5GBON
-         sUNTMjXjsMjIntolhYa9V+seGyXeG7CfPDhoFwaIMLDsSLwwPZLJ+QE3+eZnagncp4My
-         WSRQ==
-X-Gm-Message-State: ACrzQf1PZisQYqOt7VfGX0WgtWTkjAQS4vzzWRSv7wwZFVKLLTZlfCgS
-        50e1dhfMh0Sue1kdviP9BUk=
-X-Google-Smtp-Source: AMsMyM4uzCN4Fy0l5xIt4oMVRAoHTiGctlsItIuQgXL2SYAEs0yARZdIleQ97SzmJVT0qrPbCFMO1w==
-X-Received: by 2002:a17:90b:1a84:b0:20d:5086:3694 with SMTP id ng4-20020a17090b1a8400b0020d50863694mr15913301pjb.74.1666265409872;
-        Thu, 20 Oct 2022 04:30:09 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id p7-20020a17090a284700b00200461cfa99sm1539369pjf.11.2022.10.20.04.30.08
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2HlZkA9cMQXxGdkJxrvcIgpC4zTHT7PCGOSCarF98fw=;
+        b=CBtY56NF09pT5pCQYTac5rHLZ55sTpnpnWlH4+fbi1cVAjOxdHFGg9uD8UF8wejD8C
+         mGzRqu+u7++nmdtYCAAhVvTeS26Z8xR470lemGNzG8kvV0cW0vkG9m56hV1jjWC0xfcO
+         fTo6qGYzW4uELe0OKav1Wa93PZ6FeGwhdNl0b1HSk2vQgnO1Zrlsw+luL0MNa9pT3VVH
+         1vWqR3pMsYBURVAjMpSjVEHT2fW2HLu90Hr1gq0w13evfcXugJdYnoqNCUj0mGKjllT0
+         cDUketvf9CinKl7EKRfAo+HneVlU7w6hCmH8uuA829pO6PcaTkmu8lBEes1djE49noSD
+         oCYQ==
+X-Gm-Message-State: ACrzQf2JWiw2CycX+Bcinv+VaeUGR7p5XcncworPbaMNy17FV2UVjf4y
+        aKGND7+S67mdV0YNXTMUKvuEU4A0O/AbpSGB
+X-Google-Smtp-Source: AMsMyM5xkAS9ayI6cah9ixTnnB2Rip+uKkfjC69qVdQiWrA2av434aXTqVsInhtUCy6EpyERywbnTQ==
+X-Received: by 2002:ac2:5b9b:0:b0:4a2:3d0d:cb47 with SMTP id o27-20020ac25b9b000000b004a23d0dcb47mr5002714lfn.610.1666265437643;
+        Thu, 20 Oct 2022 04:30:37 -0700 (PDT)
+Received: from elroy-temp-vm ([20.240.130.248])
+        by smtp.gmail.com with ESMTPSA id s5-20020a05651c200500b0026ddaf38b0fsm2885429ljo.96.2022.10.20.04.30.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 04:30:09 -0700 (PDT)
-From:   yexingchen116@gmail.com
-X-Google-Original-From: ye.xingchen@zte.com.cn
-To:     akpm@linux-foundation.org
-Cc:     slyich@gmail.com, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ye xingchen <ye.xingchen@zte.com.cn>
-Subject: [PATCH linux-next] ia64: Replace IS_ERR() with IS_ERR_VALUE()
-Date:   Thu, 20 Oct 2022 11:30:04 +0000
-Message-Id: <20221020113004.400031-1-ye.xingchen@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Thu, 20 Oct 2022 04:30:37 -0700 (PDT)
+Date:   Thu, 20 Oct 2022 11:30:36 +0000
+From:   Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+To:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
+Subject: [PATCH v3] staging: vt6655: Fix Lines should not end with a '('
+Message-ID: <Y1ExXEuhV3cJnTiD@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -70,47 +67,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
+Code style warnings reported by checkpatch.
+Improve the layout of a function header:
+Put the first parameter immediately after the '(' and align the other
+parameters underneath it.
 
-Avoid type casts that are needed for IS_ERR() and use
-IS_ERR_VALUE() instead.
+Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
 
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 ---
- arch/ia64/kernel/sys_ia64.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+v2: put static and void on the same line and adjusted the indentation as
+suggested by Greg KH
+---
+v3: Reformat the code by inserting tabs and white space as recommended
+by Nam Cao and Julia Lawall
 
-diff --git a/arch/ia64/kernel/sys_ia64.c b/arch/ia64/kernel/sys_ia64.c
-index 215bf3f8cb20..f6a502e8f02c 100644
---- a/arch/ia64/kernel/sys_ia64.c
-+++ b/arch/ia64/kernel/sys_ia64.c
-@@ -140,7 +140,7 @@ asmlinkage unsigned long
- sys_mmap2 (unsigned long addr, unsigned long len, int prot, int flags, int fd, long pgoff)
- {
- 	addr = ksys_mmap_pgoff(addr, len, prot, flags, fd, pgoff);
--	if (!IS_ERR((void *) addr))
-+	if (!IS_ERR_VALUE(addr))
- 		force_successful_syscall_return();
- 	return addr;
- }
-@@ -152,7 +152,7 @@ sys_mmap (unsigned long addr, unsigned long len, int prot, int flags, int fd, lo
- 		return -EINVAL;
+ drivers/staging/vt6655/rxtx.c | 78 +++++++++++++++--------------------
+ 1 file changed, 33 insertions(+), 45 deletions(-)
+
+diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
+index 5bdb5176772c..1e5036121665 100644
+--- a/drivers/staging/vt6655/rxtx.c
++++ b/drivers/staging/vt6655/rxtx.c
+@@ -85,35 +85,27 @@ static const unsigned short wFB_Opt1[2][5] = {
+ #define DATADUR_A_F1    13
  
- 	addr = ksys_mmap_pgoff(addr, len, prot, flags, fd, off >> PAGE_SHIFT);
--	if (!IS_ERR((void *) addr))
-+	if (!IS_ERR_VALUE(addr))
- 		force_successful_syscall_return();
- 	return addr;
- }
-@@ -162,7 +162,7 @@ ia64_mremap (unsigned long addr, unsigned long old_len, unsigned long new_len, u
- 	     unsigned long new_addr)
- {
- 	addr = sys_mremap(addr, old_len, new_len, flags, new_addr);
--	if (!IS_ERR((void *) addr))
-+	if (!IS_ERR_VALUE(addr))
- 		force_successful_syscall_return();
- 	return addr;
- }
+ /*---------------------  Static Functions  --------------------------*/
+-static
+-void
+-s_vFillRTSHead(
+-	struct vnt_private *pDevice,
+-	unsigned char byPktType,
+-	void *pvRTS,
+-	unsigned int	cbFrameLength,
+-	bool bNeedAck,
+-	bool bDisCRC,
+-	struct ieee80211_hdr *hdr,
+-	unsigned short wCurrentRate,
+-	unsigned char byFBOption
+-);
+-
+-static
+-void
+-s_vGenerateTxParameter(
+-	struct vnt_private *pDevice,
+-	unsigned char byPktType,
+-	struct vnt_tx_fifo_head *,
+-	void *pvRrvTime,
+-	void *pvRTS,
+-	void *pvCTS,
+-	unsigned int	cbFrameSize,
+-	bool bNeedACK,
+-	unsigned int	uDMAIdx,
+-	void *psEthHeader,
+-	unsigned short wCurrentRate
+-);
++static void s_vFillRTSHead(struct vnt_private *pDevice,
++			   unsigned char byPktType,
++			   void *pvRTS,
++			   unsigned int	cbFrameLength,
++			   bool bNeedAck,
++			   bool bDisCRC,
++			   struct ieee80211_hdr *hdr,
++			   unsigned short wCurrentRate,
++			   unsigned char byFBOption);
++
++static void s_vGenerateTxParameter(struct vnt_private *pDevice,
++				   unsigned char byPktType,
++				   struct vnt_tx_fifo_head *,
++				   void *pvRrvTime,
++				   void *pvRTS,
++				   void *pvCTS,
++				   unsigned int	cbFrameSize,
++				   bool bNeedACK,
++				   unsigned int	uDMAIdx,
++				   void *psEthHeader,
++				   unsigned short wCurrentRate);
+ 
+ static unsigned int
+ s_cbFillTxBufHead(struct vnt_private *pDevice, unsigned char byPktType,
+@@ -121,22 +113,18 @@ s_cbFillTxBufHead(struct vnt_private *pDevice, unsigned char byPktType,
+ 		  unsigned int uDMAIdx, struct vnt_tx_desc *pHeadTD,
+ 		  unsigned int uNodeIndex);
+ 
+-static
+-__le16
+-s_uFillDataHead(
+-	struct vnt_private *pDevice,
+-	unsigned char byPktType,
+-	void *pTxDataHead,
+-	unsigned int cbFrameLength,
+-	unsigned int uDMAIdx,
+-	bool bNeedAck,
+-	unsigned int uFragIdx,
+-	unsigned int cbLastFragmentSize,
+-	unsigned int uMACfragNum,
+-	unsigned char byFBOption,
+-	unsigned short wCurrentRate,
+-	bool is_pspoll
+-);
++static __le16 s_uFillDataHead(struct vnt_private *pDevice,
++			      unsigned char byPktType,
++			      void *pTxDataHead,
++			      unsigned int cbFrameLength,
++			      unsigned int uDMAIdx,
++			      bool bNeedAck,
++			      unsigned int uFragIdx,
++			      unsigned int cbLastFragmentSize,
++			      unsigned int uMACfragNum,
++			      unsigned char byFBOption,
++			      unsigned short wCurrentRate,
++			      bool is_pspoll);
+ 
+ /*---------------------  Export Variables  --------------------------*/
+ 
 -- 
-2.25.1
+2.34.1
 
