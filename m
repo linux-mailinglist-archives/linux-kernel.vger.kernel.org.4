@@ -2,163 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07CB760684C
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 20:39:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB2DA60684E
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 20:40:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229967AbiJTSjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 14:39:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48010 "EHLO
+        id S229996AbiJTSkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 14:40:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiJTSjK (ORCPT
+        with ESMTP id S229556AbiJTSj7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 14:39:10 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D8861FAE6A;
-        Thu, 20 Oct 2022 11:39:05 -0700 (PDT)
+        Thu, 20 Oct 2022 14:39:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 000BC402CD;
+        Thu, 20 Oct 2022 11:39:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 4A236CE2781;
-        Thu, 20 Oct 2022 18:39:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52297C433D6;
-        Thu, 20 Oct 2022 18:39:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E2AC261CE8;
+        Thu, 20 Oct 2022 18:39:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F428C433C1;
+        Thu, 20 Oct 2022 18:39:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666291142;
-        bh=2IEnIhsZ/ggObgGJtVdutDm0mfUrlryP2aN6GgYhzbo=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=eoHmo9VrfhPUqdAno6Fc/em/BqOzlL1/Gc1/rY6YH1xU3PnywwH8SMML28C5xWruk
-         IJEZdglKxXWbQfDILzcoUPBRhXun3uNFqr1pQbPUJTl5+iOf/+SubSgxc0qIlbc9XT
-         Fr2rtyELnHekimMN5kY/u2HV5+rcQtPmssi+5JMnAI1jEi9caowW7eZTrHfsPzNtgX
-         zB+rxW9rHx7SdCOqun4XRIRjXV24LpmBHd4C6wKWJi0Okr19J+h3rQ+TZ9DISsUPIm
-         ZH1Cnpt9yos3uEDIMxlhMPdah76c6/BN89yNZoNyrq7t5rUmHVMIW8gYNcfycKbYcK
-         heCGuc/3eCqFw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id E76A05C0624; Thu, 20 Oct 2022 11:39:01 -0700 (PDT)
-Date:   Thu, 20 Oct 2022 11:39:01 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Zqiang <qiang1.zhang@intel.com>, frederic@kernel.org,
-        rcu@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rcu: Make call_rcu() lazy only when CONFIG_RCU_LAZY is
- enabled
-Message-ID: <20221020183901.GU5600@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221019233419.GI5600@paulmck-ThinkPad-P17-Gen-1>
- <D7F0EE3F-0A06-4868-87E3-B88B9BD6480C@joelfernandes.org>
+        s=k20201202; t=1666291193;
+        bh=FDv2Svu9pqn2gMWl0C7lBVdMvYtGOHeCs2L3R1GVwQQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cQpjqGDIDhV/mzDVim1AVFxDID8K+I2faufh6WUlNs2QIA62oYBKtrIe38CAMQXJs
+         CmNhV/YBbbWxrFNTZYVARAQ4teaZbEOKiUQ1RGiVnX+7/vJ+AzafRyS/aMxwzdmtXz
+         X/UOk71HPCkMICnDSraFVYYO/JYFotfQcHUgDaTT6ZE66fa2EW0yuYSVwlWouEtGuu
+         /6l1hw2PykoBB4ZhzPrFOVcLpKGC6o3I0y0w4e/eJp3shn1/wIJEoPzJJR6LY3z/u8
+         bLG/cs3R9SeRSYSU5VTRwSBUdcipD7qM1/26b5HDkOv8YYguTGSDtFG3UYjxkaq1QM
+         Lx10G8meS3mCg==
+Date:   Thu, 20 Oct 2022 11:39:50 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Fangrui Song <maskray@google.com>,
+        Sedat Dilek <sedat.dilek@dhl.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Terrell <terrelln@fb.com>, Tom Rix <trix@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        David Gow <davidgow@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Isabella Basso <isabbasso@riseup.net>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH] Makefile.debug: support for -gz=zstd
+Message-ID: <Y1GV9sHyODVmBbFW@dev-arch.thelio-3990X>
+References: <20221020175655.1660864-1-ndesaulniers@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <D7F0EE3F-0A06-4868-87E3-B88B9BD6480C@joelfernandes.org>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+In-Reply-To: <20221020175655.1660864-1-ndesaulniers@google.com>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 04:42:05AM -0400, Joel Fernandes wrote:
-> > On Oct 19, 2022, at 7:34 PM, Paul E. McKenney <paulmck@kernel.org> wrote:
-> > 
-> > ﻿On Wed, Oct 19, 2022 at 02:25:29PM -0400, Joel Fernandes wrote:
-> >> 
-> >> 
-> >>>> On Oct 19, 2022, at 1:45 PM, Paul E. McKenney <paulmck@kernel.org> wrote:
-> >>> 
-> >>> ﻿On Wed, Oct 19, 2022 at 08:12:30AM -0400, Joel Fernandes wrote:
-> >>>>> On Oct 19, 2022, at 8:10 AM, Joel Fernandes <joel@joelfernandes.org> wrote:
-> >>>>>>> On Oct 19, 2022, at 6:34 AM, Zqiang <qiang1.zhang@intel.com> wrote:
-> >>>>>>> 
-> >>>>>>> ﻿Currently, regardless of whether the CONFIG_RCU_LAZY is enabled,
-> >>>>>>> invoke the call_rcu() is always lazy, it also means that when
-> >>>>>>> CONFIG_RCU_LAZY is disabled, invoke the call_rcu_flush() is also
-> >>>>>>> lazy. therefore, this commit make call_rcu() lazy only when
-> >>>>>>> CONFIG_RCU_LAZY is enabled.
-> >>>> 
-> >>>> First, good eyes!  Thank you for spotting this!!
+On Thu, Oct 20, 2022 at 10:56:49AM -0700, Nick Desaulniers wrote:
+> Make DEBUG_INFO_COMPRESSED a choice; DEBUG_INFO_UNCOMPRESSED is the
+> default, DEBUG_INFO_COMPRESSED uses zlib, DEBUG_INFO_COMPRESSED_ZSTD
+> uses zstd.
 > 
-> Indeed.
+> Some quick N=1 measurements with du, /usr/bin/time -v, and bloaty:
 > 
-> >>>>>>> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-> >>>>>>> ---
-> >>>>>>> kernel/rcu/tree.c | 8 +++++++-
-> >>>>>>> 1 file changed, 7 insertions(+), 1 deletion(-)
-> >>>>>>> 
-> >>>>>>> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> >>>>>>> index abc615808b6e..97ef602da3d5 100644
-> >>>>>>> --- a/kernel/rcu/tree.c
-> >>>>>>> +++ b/kernel/rcu/tree.c
-> >>>>>>> @@ -2839,7 +2839,6 @@ void call_rcu_flush(struct rcu_head *head, rcu_callback_t func)
-> >>>>>>> return __call_rcu_common(head, func, false);
-> >>>>>>> }
-> >>>>>>> EXPORT_SYMBOL_GPL(call_rcu_flush);
-> >>>>>>> -#endif
-> >>>>>>> 
-> >>>>>>> /**
-> >>>>>>> * call_rcu() - Queue an RCU callback for invocation after a grace period.
-> >>>>>>> @@ -2890,6 +2889,13 @@ void call_rcu(struct rcu_head *head, rcu_callback_t func)
-> >>>>>>> return __call_rcu_common(head, func, true);
-> >>>>>>> }
-> >>>>>>> EXPORT_SYMBOL_GPL(call_rcu);
-> >>>>>>> +#else
-> >>>>>>> +void call_rcu(struct rcu_head *head, rcu_callback_t func)
-> >>>>>>> +{
-> >>>>>>> +    return __call_rcu_common(head, func, false);
-> >>>>> 
-> >>>>> Thanks. Instead of adding new function, you can also pass IS_ENABLED(CONFIG…) to the existing function of the same name.
-> >>> 
-> >>> I do like this approach better -- less code, more obvious what is going on.
-> >> 
-> >> Sounds good. Zqiang, do you mind updating your patch along these lines? That way you get the proper attribution.
+> clang-16, x86_64 defconfig plus
+> CONFIG_DEBUG_INFO=y CONFIG_DEBUG_INFO_UNCOMPRESSED=y:
+> Elapsed (wall clock) time (h:mm:ss or m:ss): 0:55.43
+> 488M vmlinux
+> 27.6%   136Mi   0.0%       0    .debug_info
+>  6.1%  30.2Mi   0.0%       0    .debug_str_offsets
+>  3.5%  17.2Mi   0.0%       0    .debug_line
+>  3.3%  16.3Mi   0.0%       0    .debug_loclists
+>  0.9%  4.62Mi   0.0%       0    .debug_str
 > 
-> Acked that patch.
+> clang-16, x86_64 defconfig plus
+> CONFIG_DEBUG_INFO=y CONFIG_DEBUG_INFO_COMPRESSED=y (zlib):
+> Elapsed (wall clock) time (h:mm:ss or m:ss): 1:00.35
+> 385M vmlinux
+> 21.8%  85.4Mi   0.0%       0    .debug_info
+>  2.1%  8.26Mi   0.0%       0    .debug_str_offsets
+>  2.1%  8.24Mi   0.0%       0    .debug_loclists
+>  1.9%  7.48Mi   0.0%       0    .debug_line
+>  0.5%  1.94Mi   0.0%       0    .debug_str
 > 
-> >> More comments below:
-> >>> 
-> >>>>> Looks like though I made every one test the patch without having to enable the config option ;-). Hey, I’m a half glass full kind of guy, why do you ask?
-> >>>>> 
-> >>>>> Paul, I’ll take a closer look once I’m at the desk, but would you prefer to squash a diff into the existing patch, or want a new patch altogether?
-> >>>> 
-> >>>> On the other hand, what I’d want is to nuke the config option altogether or make it default y, we want to catch issues sooner than later.
-> >>> 
-> >>> That might be what we do at some point, but one thing at a time.  Let's
-> >>> not penalize innocent bystanders, at least not just yet.
-> >> 
-> >> It’s a trade off, I thought that’s why we wanted to have the binary search stuff. If no one reports issue on Linux-next, then that code won’t be put to use in the near future at least.
-> > 
-> > Well, not to put too fine a point on it, but we currently really are
-> > exposing -next to lazy call_rcu().  ;-)
+> clang-16, x86_64 defconfig plus
+> CONFIG_DEBUG_INFO=y CONFIG_DEBUG_INFO_COMPRESSED_ZSTD=y (zstd):
+> Elapsed (wall clock) time (h:mm:ss or m:ss): 0:59.69
+> 373M vmlinux
+> 21.4%  81.4Mi   0.0%       0    .debug_info
+>  2.3%  8.85Mi   0.0%       0    .debug_loclists
+>  1.5%  5.71Mi   0.0%       0    .debug_line
+>  0.5%  1.95Mi   0.0%       0    .debug_str_offsets
+>  0.4%  1.62Mi   0.0%       0    .debug_str
 > 
-> This is true. I think I assumed nobody will enable a default off config option but I probably meant a smaller percentage will.
+> That's only a 3.11% overall binary size savings over zlib, but at no
+> performance regression.
 > 
-> >>> I do very strongly encourage the ChromeOS and Android folks to test this
-> >>> very severely, however.
-> >> 
-> >> Agreed. Yes that will happen, though I have to make a note for Android folks other than Vlad, to backports these (and enable the config option), carefully! Especially on pre-5.15 kernels. Luckily I had to do this (not so trivial) exercise myself.
-> > 
-> > And this is another situation in which the binary search stuff may prove
-> > extremely useful.
-> 
-> Agreed. Thanks. Very least I owe per-rdp splitting of the hashtable, to that code.  Steven and me talked today that probably the hashtable can go into the rcu_segcblist itself, and protect it by the nocb lock.
+> Link: https://maskray.me/blog/2022-09-09-zstd-compressed-debug-sections
+> Link: https://maskray.me/blog/2022-01-23-compressed-debug-sections
+> Suggested-by: Sedat Dilek (DHL Supply Chain) <sedat.dilek@dhl.com>
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
 
-I have to ask...
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-How does this fit in with CPU-hotplug and callback migration?
+One small comment below.
 
-More to the point, what events would cause us to decide that this is
-required?  For example, shouldn't we give your current binary-search
-code at least a few chances to save the day?
+> ---
+>  lib/Kconfig.debug      | 26 +++++++++++++++++++++++++-
+>  scripts/Makefile.debug |  4 ++++
+>  2 files changed, 29 insertions(+), 1 deletion(-)
+> 
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index 3fc7abffc7aa..4085ac77dc12 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -312,8 +312,22 @@ config DEBUG_INFO_REDUCED
+>  	  DEBUG_INFO build and compile times are reduced too.
+>  	  Only works with newer gcc versions.
+>  
+> +choice
+> +	prompt "Compressed Debug information"
+> +	depends on DEBUG_KERNEL
 
-							Thanx, Paul
+I think you can drop this depends. The entire block is in an
+'if DEBUG_INFO', which can only be true if CONFIG_DEBUG_KERNEL is set
+because of the dependencies of the "Debug information" prompt above this
+file, which is how CONFIG_DEBUG_INFO is selected.
 
-> >>>>>> +}
-> >>>>>> +EXPORT_SYMBOL_GPL(call_rcu);
-> >>>>>> +#endif
-> >>>>>> 
-> >>>>>> /* Maximum number of jiffies to wait before draining a batch. */
-> >>>>>> #define KFREE_DRAIN_JIFFIES (5 * HZ)
-> >>>>>> -- 
-> >>>>>> 2.25.1
-> >>>>>> 
+> +	help
+> +	  Compress the resulting debug info. Results in smaller debug info sections,
+> +	  but requires that consumers are able to decompress the results.
+> +
+> +	  If unsure, choose DEBUG_INFO_UNCOMPRESSED.
+> +
+> +config DEBUG_INFO_UNCOMPRESSED
+> +	bool "Don't compress debug information"
+> +	help
+> +	  Don't compress debug info sections.
+> +
+>  config DEBUG_INFO_COMPRESSED
+> -	bool "Compressed debugging information"
+> +	bool "Compress debugging information with zlib"
+>  	depends on $(cc-option,-gz=zlib)
+>  	depends on $(ld-option,--compress-debug-sections=zlib)
+>  	help
+> @@ -327,6 +341,16 @@ config DEBUG_INFO_COMPRESSED
+>  	  preferable to setting $KDEB_COMPRESS to "none" which would be even
+>  	  larger.
+>  
+> +config DEBUG_INFO_COMPRESSED_ZSTD
+> +	bool "Compress debugging information with zstd"
+> +	depends on $(cc-option,-gz=zstd)
+> +	depends on $(ld-option,--compress-debug-sections=zstd)
+> +	help
+> +	  Compress the debug information using zstd.  Requires GCC 13.0+ or Clang
+> +	  16.0+, binutils 2.40+, and zstd.
+> +
+> +endchoice # "Compressed Debug information"
+> +
+>  config DEBUG_INFO_SPLIT
+>  	bool "Produce split debuginfo in .dwo files"
+>  	depends on $(cc-option,-gsplit-dwarf)
+> diff --git a/scripts/Makefile.debug b/scripts/Makefile.debug
+> index 332c486f705f..8ac3379d2255 100644
+> --- a/scripts/Makefile.debug
+> +++ b/scripts/Makefile.debug
+> @@ -31,6 +31,10 @@ ifdef CONFIG_DEBUG_INFO_COMPRESSED
+>  DEBUG_CFLAGS	+= -gz=zlib
+>  KBUILD_AFLAGS	+= -gz=zlib
+>  KBUILD_LDFLAGS	+= --compress-debug-sections=zlib
+> +else ifdef CONFIG_DEBUG_INFO_COMPRESSED_ZSTD
+> +DEBUG_CFLAGS	+= -gz=zstd
+> +KBUILD_AFLAGS	+= -gz=zstd
+> +KBUILD_LDFLAGS	+= --compress-debug-sections=zstd
+>  endif
+>  
+>  KBUILD_CFLAGS	+= $(DEBUG_CFLAGS)
+> -- 
+> 2.38.0.135.g90850a2211-goog
+> 
