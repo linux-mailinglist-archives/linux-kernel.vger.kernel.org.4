@@ -2,49 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A27C60554F
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 04:07:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58067605552
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 04:09:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230054AbiJTCHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 22:07:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52010 "EHLO
+        id S229850AbiJTCJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 22:09:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230519AbiJTCGy (ORCPT
+        with ESMTP id S229760AbiJTCI6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 22:06:54 -0400
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0885159D5F
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 19:06:52 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=joseph.qi@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VScf.A8_1666231608;
-Received: from 30.221.128.181(mailfrom:joseph.qi@linux.alibaba.com fp:SMTPD_---0VScf.A8_1666231608)
-          by smtp.aliyun-inc.com;
-          Thu, 20 Oct 2022 10:06:49 +0800
-Message-ID: <30747fd7-fe79-2ed8-ce63-425a008e3e4f@linux.alibaba.com>
-Date:   Thu, 20 Oct 2022 10:06:48 +0800
+        Wed, 19 Oct 2022 22:08:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5A5E15B12C
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 19:08:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666231736;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ba5NE9Dt+mVGgzTdquEVzfX/7nF3Hbru1aJHQKnQt9M=;
+        b=dZdDavNUWbpIJPbZu3/BVQjAOmHEApfgBD/0r83B76eO+zdviDEJrUt+BZdE+SdP8DOqWU
+        rLRZiWfDFZAstSdR+tXCIdLzyhL4AsuUOhs5xg+MkDlTjd+0j9GEWxgwJB0+sOqCEIuGUc
+        fMlswG41H6e0JC/13+7ZiKGVvDl/CHc=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-220-kT1rBtH6NWe_Eb20E9SHwA-1; Wed, 19 Oct 2022 22:08:51 -0400
+X-MC-Unique: kT1rBtH6NWe_Eb20E9SHwA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1BA121C068C2;
+        Thu, 20 Oct 2022 02:08:51 +0000 (UTC)
+Received: from localhost (ovpn-12-35.pek2.redhat.com [10.72.12.35])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id F0D58140EBF3;
+        Thu, 20 Oct 2022 02:08:48 +0000 (UTC)
+Date:   Thu, 20 Oct 2022 10:08:45 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Xianting Tian <xianting.tian@linux.alibaba.com>
+Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, anup@brainfault.org, heiko@sntech.de,
+        guoren@kernel.org, mick@ics.forth.gr,
+        alexandre.ghiti@canonical.com, vgoyal@redhat.com,
+        dyoung@redhat.com, corbet@lwn.net, Conor.Dooley@microchip.com,
+        bagasdotme@gmail.com, k-hagio-ab@nec.com, lijiang@redhat.com,
+        kexec@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        crash-utility@redhat.com, heinrich.schuchardt@canonical.com,
+        hschauhan@nulltrace.org, yixun.lan@gmail.com
+Subject: Re: [PATCH V4 1/2] RISC-V: Add arch_crash_save_vmcoreinfo support
+Message-ID: <Y1CtreAKT/SEh4vN@MiWiFi-R3L-srv>
+References: <20221019103623.7008-1-xianting.tian@linux.alibaba.com>
+ <20221019103623.7008-2-xianting.tian@linux.alibaba.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.3.3
-Subject: Re: [PATCH] ocfs2: possible memory leak in mlog_sys_init()
-Content-Language: en-US
-To:     Yang Yingliang <yangyingliang@huawei.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     mark@fasheh.com, jlbec@evilplan.org, akpm@linux-foundation.org,
-        ocfs2-devel <ocfs2-devel@oss.oracle.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20221018075213.736562-1-yangyingliang@huawei.com>
- <bf27f347-5ced-98e5-f188-659cc2a9736f@linux.alibaba.com>
- <09bb2844-e20a-98e8-c2af-5b6c4795d48e@huawei.com>
- <c7a3bdac-3ed6-e695-5c45-e7007615a4d9@linux.alibaba.com>
- <0db486eb-6927-927e-3629-958f8f211194@huawei.com>
- <1adbbf98-2700-27c8-4aca-9510bca91458@linux.alibaba.com>
- <f6bc6dd3-f7b7-e757-fc36-d1cfbc7305e5@huawei.com>
-From:   Joseph Qi <joseph.qi@linux.alibaba.com>
-In-Reply-To: <f6bc6dd3-f7b7-e757-fc36-d1cfbc7305e5@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221019103623.7008-2-xianting.tian@linux.alibaba.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,96 +69,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 10/19/22 10:57 AM, Yang Yingliang wrote:
+On 10/19/22 at 06:36pm, Xianting Tian wrote:
+> Add arch_crash_save_vmcoreinfo(), which exports VM layout(MODULES, VMALLOC,
+> VMEMMAP ranges and KERNEL_LINK_ADDR), va bits and ram base for vmcore.
 > 
-> On 2022/10/19 10:26, Joseph Qi wrote:
->>
->> On 10/18/22 10:28 PM, Yang Yingliang wrote:
->>> On 2022/10/18 21:39, Joseph Qi wrote:
->>>> On 10/18/22 6:33 PM, Yang Yingliang wrote:
->>>>> Hi,
->>>>>
->>>>> On 2022/10/18 17:02, Joseph Qi wrote:
->>>>>> Hi,
->>>>>>
->>>>>> On 10/18/22 3:52 PM, Yang Yingliang wrote:
->>>>>>> Inject fault while probing module, kset_register() may fail,
->>>>>>> if it fails, but the refcount of kobject is not decreased to
->>>>>>> 0, the name allocated in kobject_set_name() is leaked. Fix
->>>>>>> this by calling kset_put(), so that name can be freed in
->>>>>>> callback function kobject_cleanup().
->>>>>>>
->>>>>>> unreferenced object 0xffff888100da9348 (size 8):
->>>>>>>      comm "modprobe", pid 257, jiffies 4294701096 (age 33.334s)
->>>>>>>      hex dump (first 8 bytes):
->>>>>>>        6c 6f 67 6d 61 73 6b 00                          logmask.
->>>>>>>      backtrace:
->>>>>>>        [<00000000306e441c>] __kmalloc_node_track_caller+0x44/0x1b0
->>>>>>>        [<000000007c491a9e>] kstrdup+0x3a/0x70
->>>>>>>        [<0000000015719a3b>] kstrdup_const+0x63/0x80
->>>>>>>        [<0000000084e458ea>] kvasprintf_const+0x149/0x180
->>>>>>>        [<0000000091302b42>] kobject_set_name_vargs+0x56/0x150
->>>>>>>        [<000000005f48eeac>] kobject_set_name+0xab/0xe0
->>>>>>>
->>>>>>> Fixes: 34980ca8faeb ("Drivers: clean up direct setting of the name of a kset")
->>>>>>> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
->>>>>>> ---
->>>>>>>     fs/ocfs2/cluster/masklog.c | 7 ++++++-
->>>>>>>     1 file changed, 6 insertions(+), 1 deletion(-)
->>>>>>>
->>>>>>> diff --git a/fs/ocfs2/cluster/masklog.c b/fs/ocfs2/cluster/masklog.c
->>>>>>> index 563881ddbf00..7f9ba816d955 100644
->>>>>>> --- a/fs/ocfs2/cluster/masklog.c
->>>>>>> +++ b/fs/ocfs2/cluster/masklog.c
->>>>>>> @@ -156,6 +156,7 @@ static struct kset mlog_kset = {
->>>>>>>     int mlog_sys_init(struct kset *o2cb_kset)
->>>>>>>     {
->>>>>>>         int i = 0;
->>>>>>> +    int ret;
->>>>>>>           while (mlog_attrs[i].attr.mode) {
->>>>>>>             mlog_default_attrs[i] = &mlog_attrs[i].attr;
->>>>>>> @@ -165,7 +166,11 @@ int mlog_sys_init(struct kset *o2cb_kset)
->>>>>>>           kobject_set_name(&mlog_kset.kobj, "logmask");
->>>>>>>         mlog_kset.kobj.kset = o2cb_kset;
->>>>>>> -    return kset_register(&mlog_kset);
->>>>>>> +    ret = kset_register(&mlog_kset);
->>>>>> If register fails, it will call unregister in o2cb_sys_init(), which
->>>>>> will put kobject.
->>>>> They are different ksets, the kset unregistered in o2cb_sys_init() is 'o2cb_kset', the
->>>>> kset used to registered in mlog_sys_init() is 'mlog_kset', and they hold difference
->>>>> refcounts.
->>>>> Yes, you are right. I've mixed the two ksets up.
->>>> In theory, kset_register() may return error because of a NULL kset, so
->>>> here we may not call kset_put() directly, I'm not sure if a static
->>>> checker will happy.
->>>> Though this can't happen since it's already statically allocated...
->>> kset_register() may fail if kobject_add_internal() return error (can't allocate memory), the name
->>> "logmask" is dynamically alloctated while ocfs2 is compile as module and insert it (if ocfs2 is
->>> built in kernel, the name is constant, it won't cause a leak), so the name can be leaked.
->> What I mean is kset_register() may fail with many reasons, or even
->> without kset_init().
->> I wonder if we have to handle this internal kset_register(), but not
->> leave it to caller. This may benefit other callers as well.
->>
->> Something like:
->> err = kobject_add_internal(&k->kobj);
->> if (err) {
->>     kset_put(k);
->>     return err;
->> }
-> I had think about this method to fix this, but some kset is allocated dynamically in driver and
-> it's freed in callback function which is called after kset_put() and in error path in driver will free
-> it again, it leads double free in some drivers.
+> Default pagetable levels and PAGE_OFFSET aren't same for different kernel
+> version as below. For pagetable levels, it sets sv57 by default and falls
+> back to setting sv48 at boot time if sv57 is not supported by the hardware.
 > 
-I don't think it's good idea that caller has to take care part of the
-internal logic of kset_register() in case of error.
-Hi Greg, what do you think?
-
-Thanks,
-Joseph
-
-> I think kset_register() is similar with device_register(), if it fails need another put function to give
-> up reference in driver.
+> For ram base, the default value is 0x80200000 for qemu riscv64 env and,
+> for example, is 0x200000 on the XuanTie 910 CPU.
 > 
+>  * Linux Kernel 5.18 ~
+>  *      PGTABLE_LEVELS = 5
+>  *      PAGE_OFFSET = 0xff60000000000000
+>  * Linux Kernel 5.17 ~
+>  *      PGTABLE_LEVELS = 4
+>  *      PAGE_OFFSET = 0xffffaf8000000000
+>  * Linux Kernel 4.19 ~
+>  *      PGTABLE_LEVELS = 3
+>  *      PAGE_OFFSET = 0xffffffe000000000
+> 
+> Since these configurations change from time to time and version to version,
+> it is preferable to export them via vmcoreinfo than to change the crash's
+> code frequently, it can simplify the development of crash tool.
+> 
+> Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
+> ---
+>  arch/riscv/kernel/Makefile     |  1 +
+>  arch/riscv/kernel/crash_core.c | 23 +++++++++++++++++++++++
+>  2 files changed, 24 insertions(+)
+>  create mode 100644 arch/riscv/kernel/crash_core.c
+> 
+> diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
+> index db6e4b1294ba..4cf303a779ab 100644
+> --- a/arch/riscv/kernel/Makefile
+> +++ b/arch/riscv/kernel/Makefile
+> @@ -81,6 +81,7 @@ obj-$(CONFIG_KGDB)		+= kgdb.o
+>  obj-$(CONFIG_KEXEC_CORE)	+= kexec_relocate.o crash_save_regs.o machine_kexec.o
+>  obj-$(CONFIG_KEXEC_FILE)	+= elf_kexec.o machine_kexec_file.o
+>  obj-$(CONFIG_CRASH_DUMP)	+= crash_dump.o
+> +obj-$(CONFIG_CRASH_CORE)	+= crash_core.o
+>  
+>  obj-$(CONFIG_JUMP_LABEL)	+= jump_label.o
+>  
+> diff --git a/arch/riscv/kernel/crash_core.c b/arch/riscv/kernel/crash_core.c
+> new file mode 100644
+> index 000000000000..3e889d0ed7bd
+> --- /dev/null
+> +++ b/arch/riscv/kernel/crash_core.c
+> @@ -0,0 +1,23 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +
+> +#include <linux/crash_core.h>
+> +#include <linux/pagemap.h>
+> +
+> +void arch_crash_save_vmcoreinfo(void)
+> +{
+> +	VMCOREINFO_NUMBER(VA_BITS);
+> +	VMCOREINFO_NUMBER(phys_ram_base);
+> +
+> +	vmcoreinfo_append_str("NUMBER(PAGE_OFFSET)=0x%lx\n", PAGE_OFFSET);
+> +	vmcoreinfo_append_str("NUMBER(VMALLOC_START)=0x%lx\n", VMALLOC_START);
+> +	vmcoreinfo_append_str("NUMBER(VMALLOC_END)=0x%lx\n", VMALLOC_END);
+> +	vmcoreinfo_append_str("NUMBER(VMEMMAP_START)=0x%lx\n", VMEMMAP_START);
+> +	vmcoreinfo_append_str("NUMBER(VMEMMAP_END)=0x%lx\n", VMEMMAP_END);
+> +#ifdef CONFIG_64BIT
+> +	vmcoreinfo_append_str("NUMBER(MODULES_VADDR)=0x%lx\n", MODULES_VADDR);
+> +	vmcoreinfo_append_str("NUMBER(MODULES_END)=0x%lx\n", MODULES_END);
+> +#endif
+> +
+> +	if (IS_ENABLED(CONFIG_64BIT))
+> +		vmcoreinfo_append_str("NUMBER(KERNEL_LINK_ADDR)=0x%lx\n", KERNEL_LINK_ADDR);
+
+Wondering why you don't put KERNEL_LINK_ADDR exporting into the above
+ifdeffery scope, with that you can save one line of "IS_ENABLED(CONFIG_64BIT)".
+
