@@ -2,67 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 145CE605B04
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 11:21:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39FAD605B0B
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 11:24:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230125AbiJTJVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 05:21:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55250 "EHLO
+        id S230074AbiJTJYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 05:24:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229789AbiJTJVP (ORCPT
+        with ESMTP id S230389AbiJTJYT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 05:21:15 -0400
-Received: from smtp-fw-9103.amazon.com (smtp-fw-9103.amazon.com [207.171.188.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 480D8FF25E
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 02:21:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1666257674; x=1697793674;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=gUzH+1qdyWGYtFXjCxZ0XI1LQRnYPZ2F7W0BfgT0mUQ=;
-  b=QHL0zXqBYBVAhGpdMIquWR+eMI6Ex29VWrdGatMIp7zYaqWt8BnNvjW3
-   hYDdp/fQOMwHXXoYrvPm0IRR4ihD0oppM6Ef7urzhl4icR5oC2A34HXzX
-   B2U92eLPlL/ehK+YDAbT50oRJsgyz5icJ3eSaBpB70FRc3T6iuQEyGMBu
-   A=;
-X-IronPort-AV: E=Sophos;i="5.95,198,1661817600"; 
-   d="scan'208";a="1065876450"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1e-90d70b14.us-east-1.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-9103.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 09:21:03 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1e-90d70b14.us-east-1.amazon.com (Postfix) with ESMTPS id AA9B9C4680;
-        Thu, 20 Oct 2022 09:21:00 +0000 (UTC)
-Received: from EX19D013UWB004.ant.amazon.com (10.13.138.62) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
- id 15.0.1497.42; Thu, 20 Oct 2022 09:21:00 +0000
-Received: from EX13MTAUEA001.ant.amazon.com (10.43.61.82) by
- EX19D013UWB004.ant.amazon.com (10.13.138.62) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.15; Thu, 20 Oct 2022 09:20:59 +0000
-Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
- (172.19.116.181) by mail-relay.amazon.com (10.43.61.243) with Microsoft SMTP
- Server id 15.0.1497.42 via Frontend Transport; Thu, 20 Oct 2022 09:20:58
- +0000
-Received: by dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com (Postfix, from userid 14301484)
-        id BF3FC4B99; Thu, 20 Oct 2022 09:20:58 +0000 (UTC)
-From:   Eliav Farber <farbere@amazon.com>
-To:     <tudor.ambarus@microchip.com>, <pratyush@kernel.org>,
-        <michael@walle.cc>, <miquel.raynal@bootlin.com>, <richard@nod.at>,
-        <vigneshr@ti.com>, <linux-mtd@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <talel@amazon.com>, <jonnyc@amazon.com>, <hhhawa@amazon.com>,
-        <hanochu@amazon.com>, <farbere@amazon.com>, <itamark@amazon.com>,
-        <shellykz@amazon.com>, <amitlavi@amazon.com>, <dkl@amazon.com>
-Subject: [PATCH v3 1/1] mtd: spi-nor: micron-st: Enable locking for mt25qu256a
-Date:   Thu, 20 Oct 2022 09:20:58 +0000
-Message-ID: <20221020092058.33844-1-farbere@amazon.com>
-X-Mailer: git-send-email 2.37.1
+        Thu, 20 Oct 2022 05:24:19 -0400
+Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0255123457
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 02:24:17 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VSebxZI_1666257853;
+Received: from 30.97.48.62(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VSebxZI_1666257853)
+          by smtp.aliyun-inc.com;
+          Thu, 20 Oct 2022 17:24:14 +0800
+Message-ID: <b2b44837-045a-a5ac-319e-216f6b2491bb@linux.alibaba.com>
+Date:   Thu, 20 Oct 2022 17:24:13 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-12.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH 1/2] mm: gup: Re-pin pages in case of trying several times
+ to migrate
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     akpm@linux-foundation.org, david@redhat.com, ziy@nvidia.com,
+        shy828301@gmail.com, jingshan@linux.alibaba.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <cc48dc1e4db8c33289f168cf380ab3641f45f8ad.1666251624.git.baolin.wang@linux.alibaba.com>
+ <87r0z2nc6j.fsf@yhuang6-desk2.ccr.corp.intel.com>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <87r0z2nc6j.fsf@yhuang6-desk2.ccr.corp.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
         USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,58 +46,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-mt25qu256a [1] uses the 4 bit Block Protection scheme and supports
-Top/Bottom protection via the BP and TB bits of the Status Register.
-BP3 is located in bit 6 of the Status Register.
-Tested on MT25QU256ABA8ESF-0SIT.
 
-[1] https://www.micron.com/-/media/client/global/documents/products/data-sheet/nor-flash/serial-nor/mt25q/die-rev-a/mt25q_qljs_u_256_aba_0.pdf
 
-Signed-off-by: Eliav Farber <farbere@amazon.com>
-Link: https://lore.kernel.org/lkml/20221019071631.15191-1-farbere@amazon.com
----
-xxd -p /sys/devices/platform/soc/fd882000.spi/spi_master/spi0/spi0.0/spi-nor/sfdp
-53464450060101ff00060110300000ff84000102800000ffffffffffffff
-ffffffffffffffffffffffffffffffffffffe520fbffffffff0f29eb276b
-273b27bbffffffffffff27bbffff29eb0c2010d80f520000244a99008b8e
-03d4ac0127387a757a75fbbdd55c4a0f82ff81bd3d36ffffffffffffffff
-ffffffffffffffffffe7ffff21dcffff
+On 10/20/2022 4:15 PM, Huang, Ying wrote:
+> Baolin Wang <baolin.wang@linux.alibaba.com> writes:
+> 
+>> The migrate_pages() will return the number of {normal page, THP, hugetlb}
+>> that were not migrated, or an error code. That means it can still return
+>> the number of failure count, though the pages have been migrated
+>> successfully with several times re-try.
+> 
+> If my understanding were correct, if pages are migrated successfully
+> after several times re-tries, the return value will be 0.  There's one
+> possibility for migrate_pages() to return non-zero but all pages are
+> migrated.  That is, when THP is split and all subpages are migrated
+> successfully.
 
-md5sum /sys/devices/platform/soc/fd882000.spi/spi_master/spi0/spi0.0/spi-nor/sfdp
-5ea738216f68c9f98987bb3725699a32  /sys/devices/platform/soc/fd882000.spi/spi_master/spi0/spi0.0/spi-nor/sfdp
+Yeah, that's the case I tested. Thanks for pointing out. I'll re-write 
+my incorrect commit message next time.
 
-cat /sys/devices/platform/soc/fd882000.spi/spi_master/spi0/spi0.0/spi-nor/jedec_id
-20bb19104400
+> 
+>> So we should not use the return value of migrate_pages() to determin
+>> if there are pages are failed to migrate. Instead we can validate the
+>> 'movable_page_list' to see if there are pages remained in the list,
+>> which are failed to migrate. That can mitigate the failure of longterm
+>> pinning.
+> 
+> Another choice is to use a special return value for split THP + success
+> migration.  But I'm fine to use list_empty(return_pages).
 
-cat /sys/devices/platform/soc/fd882000.spi/spi_master/spi0/spi0.0/spi-nor/partname
-mt25qu256a
+OK. Using list_empty(return_pages) looks more simple.
 
-cat /sys/devices/platform/soc/fd882000.spi/spi_master/spi0/spi0.0/spi-nor/manufacturer
-st
+> 
+>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+>> ---
+>>   mm/gup.c | 7 ++++---
+>>   1 file changed, 4 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/mm/gup.c b/mm/gup.c
+>> index 5182aba..bd8cfcd 100644
+>> --- a/mm/gup.c
+>> +++ b/mm/gup.c
+>> @@ -1914,9 +1914,10 @@ static int migrate_longterm_unpinnable_pages(
+>>   			.gfp_mask = GFP_USER | __GFP_NOWARN,
+>>   		};
+>>   
+>> -		if (migrate_pages(movable_page_list, alloc_migration_target,
+>> -				  NULL, (unsigned long)&mtc, MIGRATE_SYNC,
+>> -				  MR_LONGTERM_PIN, NULL)) {
+>> +		ret = migrate_pages(movable_page_list, alloc_migration_target,
+>> +				    NULL, (unsigned long)&mtc, MIGRATE_SYNC,
+>> +				    MR_LONGTERM_PIN, NULL);
+>> +		if (ret < 0 || !list_empty(movable_page_list)) {
+> 
+> It seems that !list_empty() is sufficient here.
 
-v3 --> v2:
-- Minimize change only to mt25qu256a which it was tested on.
+OK. Drop the 'ret < 0'
 
-v2 --> v1:
-- Enable locking also for mt25qu256a.
-- Dump the SFDP tables.
+>>   			ret = -ENOMEM;
+> 
+> Why change the error code?  I don't think it's a good idea to do that.
 
- drivers/mtd/spi-nor/micron-st.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/mtd/spi-nor/micron-st.c b/drivers/mtd/spi-nor/micron-st.c
-index 3c9681a3f7a3..53ff41534977 100644
---- a/drivers/mtd/spi-nor/micron-st.c
-+++ b/drivers/mtd/spi-nor/micron-st.c
-@@ -201,6 +201,8 @@ static const struct flash_info st_nor_parts[] = {
- 		MFR_FLAGS(USE_FSR)
- 	},
- 	{ "mt25qu256a",  INFO6(0x20bb19, 0x104400, 64 * 1024,  512)
-+		FLAGS(SPI_NOR_HAS_LOCK | SPI_NOR_HAS_TB | SPI_NOR_4BIT_BP |
-+		      SPI_NOR_BP3_SR_BIT6)
- 		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ)
- 		FIXUP_FLAGS(SPI_NOR_4B_OPCODES)
- 		MFR_FLAGS(USE_FSR)
--- 
-2.37.1
-
+The GUP need a -errno for failure or partial success when migration, and 
+we can not return the number of pages failed to migrate. So returning 
+-ENOMEM seems suitable for both cases?
