@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E71846069AC
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 22:43:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B1DB6069B5
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 22:43:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229736AbiJTUnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 16:43:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33934 "EHLO
+        id S229710AbiJTUnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 16:43:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiJTUnL (ORCPT
+        with ESMTP id S229597AbiJTUnL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 20 Oct 2022 16:43:11 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D0811F1836;
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 777FF1FB79C;
         Thu, 20 Oct 2022 13:42:56 -0700 (PDT)
 Received: from jupiter.universe (dyndsl-091-096-059-009.ewe-ip-backbone.de [91.96.59.9])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8B8FB6602482;
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8BA8A66024E8;
         Thu, 20 Oct 2022 21:42:54 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
         s=mail; t=1666298574;
-        bh=SXFHuXAImIW5KxKaa3GfthpiL4VGK2Iq7UKJ0GqtMv0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=M8P+o5Dbg/xCPJ0gGa4vlt5/cbMUwmFVowfEXaAUEMQk0kCanz4V7yfM+mRJw1Ijy
-         XEvAs+9rYBs9MPJDmEtrjUjwWoPDZxQFzG64AUobM8sywepSFRvIxhJkjDRwoNtt8i
-         AnBy3fgdkVX+0JbUEzsMWu2jAHOU39zsHLaP0Dj2kTuqEM4LfpA7GEQ23c/Gtxmxq7
-         de1G6k/iyboT9hHtXd9dSB9s96vAFTAhM5xb1wDNcac498VU7EHuGhB4C7PqEIpa4h
-         sKuRuyzLhzmkML9Ud18F0ZxA9gOSzN8ICSRUrAwB0UM44zJ+2CpD6+BKnu+RIqRGcy
-         6mdoUtQGNnJWg==
+        bh=s6um36bR3kLKecIG+7jDV13ngBnOF98lUyD4ZvCww6w=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=oU13qj5DC0Wiuj19fSfuFOYcdSJAPIxrIiFXqAOBPXsySh3cRojkQwBLOaNA7G0QG
+         wrTQVn+LZSoZMP7NSIL4vls7I85vn0f9mMYQjYGVGJ5TTuntGHuo3zvJ1m4xilqV9J
+         hCOayxd5eLSjVCRnosi0ASWJvZvmqhDm4JWErZ6Y27o9jIKSfDOM3JvsgUfFpe09yf
+         aV7kN5nc6DZfAyhKNlDq6uCvqNWr2prb11wuKRv6u38tAGcMiBm+498spARmOHYl1B
+         v8tyqmuew8CW7/gLUIe94+jxgfO1nKTu1WHO2WceM1dcvm0BVIJ96boG4kac/oECxg
+         +bcfBWSuTPEWA==
 Received: by jupiter.universe (Postfix, from userid 1000)
-        id 4E51048082E; Thu, 20 Oct 2022 22:42:52 +0200 (CEST)
+        id 50001480896; Thu, 20 Oct 2022 22:42:52 +0200 (CEST)
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
 To:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -49,10 +49,12 @@ Cc:     Michael Turquette <mturquette@baylibre.com>,
         linux-kernel@vger.kernel.org,
         Sebastian Reichel <sebastian.reichel@collabora.com>,
         kernel@collabora.com
-Subject: [PATCHv4 00/13] Introduce RK806 Support
-Date:   Thu, 20 Oct 2022 22:42:38 +0200
-Message-Id: <20221020204251.108565-1-sebastian.reichel@collabora.com>
+Subject: [PATCHv4 01/13] clk: RK808: reduce 'struct rk808' usage
+Date:   Thu, 20 Oct 2022 22:42:39 +0200
+Message-Id: <20221020204251.108565-2-sebastian.reichel@collabora.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20221020204251.108565-1-sebastian.reichel@collabora.com>
+References: <20221020204251.108565-1-sebastian.reichel@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -64,94 +66,130 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Reduce usage of 'struct rk808' (driver data of the parent MFD), so
+that only the chip variant field is still being accessed directly.
+This allows restructuring the MFD driver to support SPI based
+PMICs.
 
-The Rockchip RK3588 Evaluation Boards use SPI connected RK806
-PMICs. Downstream this is handled by a new driver, but apart
-from being SPI connected this chip is quite similar to the
-ther Rockchip PMICs (also RK806 is promoted to also support
-I2C). Thus this series instead updates the RK808 driver(s).
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+---
+ drivers/clk/clk-rk808.c | 34 ++++++++++++++++------------------
+ 1 file changed, 16 insertions(+), 18 deletions(-)
 
-Changelog since PATCHv3:
- * https://lore.kernel.org/all/20220909175522.179175-1-sebastian.reichel@collabora.com/
- * Dropped removing REGMAP_I2C dependency from RK817 ASoC driver (applied)
- * Rename MFD_RK808 to MFD_RK8XX to be consistent. It makes sense to do this now,
-   since the patchset touches all the child drivers anyways.
- * rebase to v6.1-rc1
- * collected a couple of Acks
- * update rk806 DT binding according to DT maintainer feedback
- * add missing pinmux config to the rk806 DT binding
- * update rk806_spi_bus_write and rk806_spi_bus_read
- * replaced some constants with sizeof or defines
- * used capitalized comments
- * rename regmap_find_closest_bigger to regulator_find_closest_bigger, not sure
-   why I prefixed it with regmap_ in the first place
- * use rk8xx_is_enabled_wmsk_regmap instead of regulator_is_enabled_regmap for
-   the switching regulators to correctly report the state
- * reordered the first few patches grouping the MFD patches together
-
-Changelog since PATCHv2:
- * https://lore.kernel.org/all/20220908003107.220143-1-sebastian.reichel@collabora.com/
- * Change DT binding to not allow nldo-reg6
- * Fix DT binding to check for [np]ldo-reg instead of [np]ldo_reg
- * remove rk806_get_voltage_sel_regmap in favour of regulator_get_voltage_sel_regmap
- * drop rk806_set_voltage in favour of regulator_set_voltage_sel_regmap
- * use regulator_set_ramp_delay_regmap
- * drop possibly incorrect printing of chip id register address in case of errors
-
-Changelog since PATCHv1:
- * https://lore.kernel.org/all/20220831215437.117880-1-sebastian.reichel@collabora.com/
- * Collect Acked-by
- * Avoid if/else checks for regulator id in rk806 regulator driver
- * Fix indentation in DTS example section of the rk806 binding
- * Use absolute path for regulator.yaml referencing in the rk806 binding
- * Reduce pattern for DCDC regulators to only allow 1-10
- * replace uppercase name with lowercase ones in regulator names
- * replace _ with - in regulator names
-
--- Sebastian
-
-Sebastian Reichel (13):
-  clk: RK808: reduce 'struct rk808' usage
-  regulator: rk808: reduce 'struct rk808' usage
-  rtc: rk808: reduce 'struct rk808' usage
-  mfd: rk808: convert to device managed resources
-  mfd: rk808: use dev_err_probe
-  mfd: rk808: replace 'struct i2c_client' with 'struct device'
-  mfd: rk808: split into core and i2c
-  dt-bindings: mfd: add rk806 binding
-  mfd: rk8xx: add rk806 support
-  pinctrl: rk805: add rk806 pinctrl support
-  regulator: rk808: Use dev_err_probe
-  regulator: expose regulator_find_closest_bigger
-  regulator: rk808: add rk806 support
-
- .../bindings/mfd/rockchip,rk806.yaml          | 405 +++++++++++++++++
- drivers/clk/Kconfig                           |   2 +-
- drivers/clk/clk-rk808.c                       |  34 +-
- drivers/input/misc/Kconfig                    |   2 +-
- drivers/mfd/Kconfig                           |  21 +-
- drivers/mfd/Makefile                          |   4 +-
- drivers/mfd/{rk808.c => rk8xx-core.c}         | 351 +++++----------
- drivers/mfd/rk8xx-i2c.c                       | 209 +++++++++
- drivers/mfd/rk8xx-spi.c                       | 115 +++++
- drivers/pinctrl/Kconfig                       |   2 +-
- drivers/pinctrl/pinctrl-rk805.c               | 189 +++++++-
- drivers/power/supply/Kconfig                  |   2 +-
- drivers/regulator/Kconfig                     |   2 +-
- drivers/regulator/helpers.c                   |  22 +-
- drivers/regulator/rk808-regulator.c           | 409 ++++++++++++++++-
- drivers/rtc/Kconfig                           |   2 +-
- drivers/rtc/rtc-rk808.c                       |  47 +-
- include/linux/mfd/rk808.h                     | 417 +++++++++++++++++-
- include/linux/regulator/driver.h              |   2 +
- sound/soc/codecs/Kconfig                      |   2 +-
- 20 files changed, 1913 insertions(+), 326 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/mfd/rockchip,rk806.yaml
- rename drivers/mfd/{rk808.c => rk8xx-core.c} (70%)
- create mode 100644 drivers/mfd/rk8xx-i2c.c
- create mode 100644 drivers/mfd/rk8xx-spi.c
-
+diff --git a/drivers/clk/clk-rk808.c b/drivers/clk/clk-rk808.c
+index 32f833d732ed..f7412b137e5e 100644
+--- a/drivers/clk/clk-rk808.c
++++ b/drivers/clk/clk-rk808.c
+@@ -12,10 +12,9 @@
+ #include <linux/slab.h>
+ #include <linux/platform_device.h>
+ #include <linux/mfd/rk808.h>
+-#include <linux/i2c.h>
+ 
+ struct rk808_clkout {
+-	struct rk808 *rk808;
++	struct regmap		*regmap;
+ 	struct clk_hw		clkout1_hw;
+ 	struct clk_hw		clkout2_hw;
+ };
+@@ -31,9 +30,8 @@ static int rk808_clkout2_enable(struct clk_hw *hw, bool enable)
+ 	struct rk808_clkout *rk808_clkout = container_of(hw,
+ 							 struct rk808_clkout,
+ 							 clkout2_hw);
+-	struct rk808 *rk808 = rk808_clkout->rk808;
+ 
+-	return regmap_update_bits(rk808->regmap, RK808_CLK32OUT_REG,
++	return regmap_update_bits(rk808_clkout->regmap, RK808_CLK32OUT_REG,
+ 				  CLK32KOUT2_EN, enable ? CLK32KOUT2_EN : 0);
+ }
+ 
+@@ -52,10 +50,9 @@ static int rk808_clkout2_is_prepared(struct clk_hw *hw)
+ 	struct rk808_clkout *rk808_clkout = container_of(hw,
+ 							 struct rk808_clkout,
+ 							 clkout2_hw);
+-	struct rk808 *rk808 = rk808_clkout->rk808;
+ 	uint32_t val;
+ 
+-	int ret = regmap_read(rk808->regmap, RK808_CLK32OUT_REG, &val);
++	int ret = regmap_read(rk808_clkout->regmap, RK808_CLK32OUT_REG, &val);
+ 
+ 	if (ret < 0)
+ 		return ret;
+@@ -93,9 +90,8 @@ static int rk817_clkout2_enable(struct clk_hw *hw, bool enable)
+ 	struct rk808_clkout *rk808_clkout = container_of(hw,
+ 							 struct rk808_clkout,
+ 							 clkout2_hw);
+-	struct rk808 *rk808 = rk808_clkout->rk808;
+ 
+-	return regmap_update_bits(rk808->regmap, RK817_SYS_CFG(1),
++	return regmap_update_bits(rk808_clkout->regmap, RK817_SYS_CFG(1),
+ 				  RK817_CLK32KOUT2_EN,
+ 				  enable ? RK817_CLK32KOUT2_EN : 0);
+ }
+@@ -115,10 +111,9 @@ static int rk817_clkout2_is_prepared(struct clk_hw *hw)
+ 	struct rk808_clkout *rk808_clkout = container_of(hw,
+ 							 struct rk808_clkout,
+ 							 clkout2_hw);
+-	struct rk808 *rk808 = rk808_clkout->rk808;
+ 	unsigned int val;
+ 
+-	int ret = regmap_read(rk808->regmap, RK817_SYS_CFG(1), &val);
++	int ret = regmap_read(rk808_clkout->regmap, RK817_SYS_CFG(1), &val);
+ 
+ 	if (ret < 0)
+ 		return 0;
+@@ -153,18 +148,21 @@ static const struct clk_ops *rkpmic_get_ops(long variant)
+ static int rk808_clkout_probe(struct platform_device *pdev)
+ {
+ 	struct rk808 *rk808 = dev_get_drvdata(pdev->dev.parent);
+-	struct i2c_client *client = rk808->i2c;
+-	struct device_node *node = client->dev.of_node;
++	struct device *dev = &pdev->dev;
+ 	struct clk_init_data init = {};
+ 	struct rk808_clkout *rk808_clkout;
+ 	int ret;
+ 
+-	rk808_clkout = devm_kzalloc(&client->dev,
++	dev->of_node = pdev->dev.parent->of_node;
++
++	rk808_clkout = devm_kzalloc(dev,
+ 				    sizeof(*rk808_clkout), GFP_KERNEL);
+ 	if (!rk808_clkout)
+ 		return -ENOMEM;
+ 
+-	rk808_clkout->rk808 = rk808;
++	rk808_clkout->regmap = dev_get_regmap(pdev->dev.parent, NULL);
++	if (!rk808_clkout->regmap)
++		return -ENODEV;
+ 
+ 	init.parent_names = NULL;
+ 	init.num_parents = 0;
+@@ -173,10 +171,10 @@ static int rk808_clkout_probe(struct platform_device *pdev)
+ 	rk808_clkout->clkout1_hw.init = &init;
+ 
+ 	/* optional override of the clockname */
+-	of_property_read_string_index(node, "clock-output-names",
++	of_property_read_string_index(dev->of_node, "clock-output-names",
+ 				      0, &init.name);
+ 
+-	ret = devm_clk_hw_register(&client->dev, &rk808_clkout->clkout1_hw);
++	ret = devm_clk_hw_register(dev, &rk808_clkout->clkout1_hw);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -185,10 +183,10 @@ static int rk808_clkout_probe(struct platform_device *pdev)
+ 	rk808_clkout->clkout2_hw.init = &init;
+ 
+ 	/* optional override of the clockname */
+-	of_property_read_string_index(node, "clock-output-names",
++	of_property_read_string_index(dev->of_node, "clock-output-names",
+ 				      1, &init.name);
+ 
+-	ret = devm_clk_hw_register(&client->dev, &rk808_clkout->clkout2_hw);
++	ret = devm_clk_hw_register(dev, &rk808_clkout->clkout2_hw);
+ 	if (ret)
+ 		return ret;
+ 
 -- 
 2.35.1
 
