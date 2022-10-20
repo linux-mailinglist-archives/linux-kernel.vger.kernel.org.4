@@ -2,156 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 477B8605750
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 08:29:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8D02605757
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 08:33:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbiJTG31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 02:29:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57966 "EHLO
+        id S229871AbiJTGdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 02:33:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbiJTG3Y (ORCPT
+        with ESMTP id S229615AbiJTGdQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 02:29:24 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0CD223E;
-        Wed, 19 Oct 2022 23:29:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666247360; x=1697783360;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ZCZxqxkxlhv4qXWNtnj/k+0pRzItxdl7yKBQyZzESDw=;
-  b=dE9qVrQdeA7rs/O8hwJyzshJpOCh/NcAUUnUOM+hpBfgjQpJ3f/VYonj
-   3/ryuiiGXzj8WAw6LSF3cd/fmfZGrCTKhzf5dGZvdrzWDFOq1InLpdKsQ
-   ex25cJ8oB1jRtAoBZ64VE0gtJKBE+QpIBzklZ2lazbItt2YGDhIGXTf03
-   XjcycY0MG3yHAuiMZYVHjDAsPROr/X8GT1Jx0VVUawvSTTPTYgD6e+L2V
-   +Amy4L8+PkFZcVjwuiR25cJSzUrU/Ypbgwi9G4oCqo2/o1V91poFDHjWU
-   1PZkE9bo0t+50TtEjxIGgXlYozvoi75Yw+lYuyHhv+An2ePn5K5kd/Tdb
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="370831246"
-X-IronPort-AV: E=Sophos;i="5.95,198,1661842800"; 
-   d="scan'208";a="370831246"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 23:29:19 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="607479841"
-X-IronPort-AV: E=Sophos;i="5.95,198,1661842800"; 
-   d="scan'208";a="607479841"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.53.25])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 23:29:14 -0700
-Message-ID: <5f1adbf7-b477-914e-0a07-5c76532e85cd@intel.com>
-Date:   Thu, 20 Oct 2022 09:29:10 +0300
+        Thu, 20 Oct 2022 02:33:16 -0400
+Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B40AF159971;
+        Wed, 19 Oct 2022 23:33:15 -0700 (PDT)
+Received: by mail-qv1-f41.google.com with SMTP id u7so1036060qvn.13;
+        Wed, 19 Oct 2022 23:33:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ID6ULUicIzzzJTDZRhlwX73uCvo0CI37TULGJDLP9tc=;
+        b=lldxepna6TuHKW+MeT/x7Cu1bhRlPlamg1i0dGpZp6jfUcRGbfEG6sVUy9jPcp+rUs
+         8NquQME6f40pjkzlzdj7IfSTM6elwVrus/upTuYZIrHHxDL3YTBgkyDKWrc35D9oX6Ps
+         KAOQwQw9z89d6P+naSLx71tjGpHapT4ExEKJfw0Knp5VdPMzkpvzCysmaGqKizAWxUbL
+         +p7KwC8dh5xWsBTfEcyr4hVFGJXoNvWo9rMlQ3GRd7kyaMEYd7sLwT4rKchSlBsKNrSu
+         cUhfOPu3VDo0gtXbHms3cAkUqz50CFwixyFnwH+6sgHmWz15xqEt1QGEIeftLo7kT1mf
+         1/mg==
+X-Gm-Message-State: ACrzQf14so3HFahBMuYTwtla4jfO/8/kNF6zEfn1VBIT5tkNEfwp3blL
+        ITXZJjP9qgcGocp92unF7Hk=
+X-Google-Smtp-Source: AMsMyM6XeZTaDTUWvPvBJ1A9Y5y5bir5mrP2uJspsvQaw+k+qWLKswa9elhwRaZgYy55wfEDQOWiRw==
+X-Received: by 2002:a05:6214:4101:b0:4af:8cdc:20c4 with SMTP id kc1-20020a056214410100b004af8cdc20c4mr9856806qvb.6.1666247594645;
+        Wed, 19 Oct 2022 23:33:14 -0700 (PDT)
+Received: from maniforge.dhcp.thefacebook.com ([2620:10d:c091:480::9f20])
+        by smtp.gmail.com with ESMTPSA id w22-20020a05620a445600b006bbc09af9f5sm628988qkp.101.2022.10.19.23.33.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Oct 2022 23:33:13 -0700 (PDT)
+Date:   Thu, 20 Oct 2022 01:33:16 -0500
+From:   David Vernet <void@manifault.com>
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com, tj@kernel.org
+Subject: Re: [PATCH v5 3/3] bpf/selftests: Add selftests for new task kfuncs
+Message-ID: <Y1DrrAfXA3rTq5us@maniforge.dhcp.thefacebook.com>
+References: <20221014212133.2520531-1-void@manifault.com>
+ <20221014212133.2520531-4-void@manifault.com>
+ <Y1A2OUuUn4z/Du+j@maniforge.dhcp.thefacebook.com>
+ <20221020061903.brfxt7ktxfajreer@apollo>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.0
-Subject: Re: [PATCH v2 2/7] mmc: sdhci-of-arasan: Fix SDHCI_RESET_ALL for
- CQHCI
-Content-Language: en-US
-To:     Brian Norris <briannorris@chromium.org>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Shawn Lin <shawn.lin@rock-chips.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Haibo Chen <haibo.chen@nxp.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Faiz Abbas <faiz_abbas@ti.com>, linux-mmc@vger.kernel.org,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Al Cooper <alcooperx@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        linux-kernel@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>, stable@vger.kernel.org
-References: <20221019215440.277643-1-briannorris@chromium.org>
- <20221019145246.v2.2.I29f6a2189e84e35ad89c1833793dca9e36c64297@changeid>
- <14efb3e6-96cf-f42e-16aa-c45001ec632e@gmail.com>
- <Y1B36AnqJtolGQEP@google.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <Y1B36AnqJtolGQEP@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221020061903.brfxt7ktxfajreer@apollo>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/10/22 01:19, Brian Norris wrote:
-> On Wed, Oct 19, 2022 at 02:59:39PM -0700, Florian Fainelli wrote:
->> On 10/19/22 14:54, Brian Norris wrote:
->>> The same bug was already found and fixed for two other drivers, in v5.7
->>> and v5.9:
->>>
->>> 5cf583f1fb9c mmc: sdhci-msm: Deactivate CQE during SDHC reset
->>> df57d73276b8 mmc: sdhci-pci: Fix SDHCI_RESET_ALL for CQHCI for Intel GLK-based controllers
->>>
->>> The latter is especially prescient, saying "other drivers using CQHCI
->>> might benefit from a similar change, if they also have CQHCI reset by
->>> SDHCI_RESET_ALL."
+On Thu, Oct 20, 2022 at 11:49:03AM +0530, Kumar Kartikeya Dwivedi wrote:
+> On Wed, Oct 19, 2022 at 11:09:05PM IST, David Vernet wrote:
+> > > On Sat, 15 Oct 2022 at 01:45, David Vernet <void@manifault.com> wrote:
+> > > >
+> > > > A previous change added a series of kfuncs for storing struct
+> > > > task_struct objects as referenced kptrs. This patch adds a new
+> > > > task_kfunc test suite for validating their expected behavior.
+> > > >
+> > > > Signed-off-by: David Vernet <void@manifault.com>
+> > > > ---
+> > > > [...]
+> > > > +
+> > > > +SEC("tp_btf/task_newtask")
+> > > > +int BPF_PROG(task_kfunc_acquire_trusted_nested, struct task_struct *task, u64 clone_flags)
+> > > > +{
+> > > > +       struct task_struct *acquired;
+> > > > +
+> > > > +       if (!is_test_kfunc_task())
+> > > > +               return 0;
+> > > > +
+> > > > +       /* Can't invoke bpf_task_acquire() on a trusted pointer at a nonzero offset. */
+> > > > +       acquired = bpf_task_acquire(task->last_wakee);
+> > >
+> > > The comment is incorrect, that would be &task->last_wakee instead,
+> > > this is PTR_TO_BTF_ID | PTR_NESTED.
+> >
+> > Well, it's a nonzero offset from task. But yes, to your point, it's a
+> > misleading comment because the offset is 0 in the verifier. I'll
 > 
->>> --- a/drivers/mmc/host/sdhci-of-arasan.c
->>> +++ b/drivers/mmc/host/sdhci-of-arasan.c
->>> @@ -366,6 +366,9 @@ static void sdhci_arasan_reset(struct sdhci_host *host, u8 mask)
->>>   	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
->>>   	struct sdhci_arasan_data *sdhci_arasan = sdhci_pltfm_priv(pltfm_host);
->>> +	if ((host->mmc->caps2 & MMC_CAP2_CQE) && (mask & SDHCI_RESET_ALL))
->>> +		cqhci_deactivate(host->mmc);
->>> +
->>>   	sdhci_reset(host, mask);
->>
->> Cannot this be absorbed by sdhci_reset() that all of these drivers appear to
->> be utilizing since you have access to the host and the mask to make that
->> decision?
+> The load insn has a non-zero offset, but not the destination reg.
+
+Yeah, this is what I meant by hand-wavily saying "0 in the verifier". I
+agree that the comment is incorrect as stated, I'll fix it in the next
+revision per your suggestion.
+
+> What you did was:
+> r1 = rX + offsetof(task_struct, last_wakee); // r1 == rX + off
+> r1 = *(r1); // r1 == PTR_TO_BTF_ID of task_struct, off = 0
 > 
-> It potentially could.
+> Embedded structs are different,
+> &file->f_path means non-zero offset into PTR_TO_BTF_ID of struct file
 > 
-> I don't know if this is a specified SDHCI behavior that really belongs
-> in the common helper, or if this is just a commonly-shared behavior. Per
-> the comments I quote above ("if they also have CQHCI reset by
-> SDHCI_RESET_ALL"), I chose to leave that as an implementation-specific
-> behavior.
+> > rephrase this to reflect that it's a nested pointer (or a walked
+> > pointer, whatever nomenclature we end up going with).
+> >
+> > > > +       if (!acquired)
+> > > > +               return 0;
+> > > > +       bpf_task_release(acquired);
+> > > > +
+> > > > +       return 0;
+> > > > +}
+> > > > +
+> > > > [...]
+> > > > +
+> > > > +static int test_acquire_release(struct task_struct *task)
+> > > > +{
+> > > > +       struct task_struct *acquired;
+> > > > +
+> > > > +       acquired = bpf_task_acquire(task);
+> > >
+> > > Unfortunately a side effect of this change is that now since
+> > > PTR_TO_BTF_ID without ref_obj_id is considered trusted, the bpf_ct_*
+> > > functions would begin working with tp_btf args. That probably needs
+> > > be fixed so that they reject them (ideally with a failing test case to
+> > > make sure it doesn't resurface), probably with a new suffix __ref/or
+> > > __owned as added here [0].
+> > >
+> > > Alexei, since you've suggested avoiding adding that suffix, do you see
+> > > any other way out here?
+> > > It's questionable whether bpf_ct_set_timeout/status should work for CT
+> > > not owned by the BPF program.
+> > >
+> > >   [0]: https://lore.kernel.org/bpf/dfb859a6b76a9234baa194e795ae89cb7ca5694b.1662383493.git.lorenzo@kerne
+> >
+> > Ah, yeah, it makes sense that some kfuncs really should only ever be
+> > passed an object if the program owns a reference on it. Specifically for
+> > e.g. bpf_ct_set_timeout/status() as you point out, which should only be
+> > passed a struct nf_conn__init that was allocated by bpf_skb_ct_alloc().
+> >
+> > It'd be nice if we could just add another flag like KF_REFERENCED_ARGS
+> > or KF_OWNED_ARGS, which would allow a subset of arguments affored by
+> > KF_TRUSTED_ARGS, only those with ref_obj_id > 0. That approach wouldn't
+> > allow the flexibility of having per-argument specifications as your
+> > proposal to use __ref or __owned suffixes on the names, but that already
+> > applies to KF_TRUSTED_ARGS as well.
+> >
+> > Personally I'm in agreement with Alexei that it's not a user friendly
+> > API to use suffixes in the name like this. If we want to allow kfunc
+> > authors to have per-argument specifiers, using compiler attributes
+> > and/or some kind of tagging is probably the way to do it?
 > 
-> I suppose it's not all that harmful to do this even if some SDHCI
-> controller doesn't have the same behavior/quirk.
+> Sadly GCC doesn't support BTF tags. So this is the next best tagging approach.
 > 
-> I guess I also don't know if any SDHCI controllers will support command
-> queueing (MMC_CAP2_CQE) via somethings *besides* CQHCI. I see
-> CQE support in sdhci-sprd.c without CQHCI, although that driver doesn't
-> set MMC_CAP2_CQE.
+> There was also another horrendous proposal from me to add flags to each argument:
+> https://gist.github.com/kkdwivedi/7839cc9e4f002acc3e15350b1b86c88c#file-kfunc-arg-patch-L137
 
-SDHCI and CQHCI are separate modules and are not dependent, so they cannot
-call into each other directly (and should not).  A new CQE API would be
-needed in mmc_cqe_ops e.g. (*cqe_notify_reset)(struct mmc_host *host),
-and wrapped in mmc/host.h:
+I feel like I must be missing something given that you said this was
+horrendous, but I actually don't hate this. This is pretty similar to
+what we do for helpers anyways, no? I certainly prefer it over the
+suffix naming approach. IMO the problem with that is it kind of requires
+users to dive into the verifier to understand how to implement kfuncs.
+That also reminds me that in the next revision, I'll also update the
+documentation for KF_TRUSTED_ARGS (and KF_OWNED_ARGS) to reflect the new
+state of things.
 
-static inline void mmc_cqe_notify_reset(struct mmc_host *host)
-{
-	if (host->cqe_ops->cqe_notify_reset)
-		host->cqe_ops->cqe_notify_reset(host);
-}
+> > My proposal for now is to add a new KF_OWNED_ARGS flag, and to very
+> > clearly document exactly what that and KF_TRUSTED_ARGS implies for
+> > kfuncs. Later on, we could explore solutions for having per-arg
+> > specifiers. What do you and Alexei think?
+> 
+> Based on your proposal above:
+> 
+> For KF_OWNED_ARGS, any PTR_TO_BTF_ID should have non-zero ref_obj_id, for
+> KF_TRUSTED_ARGS there will be no such condition. Otherwise they will be the
+> same. Then switch all CT helpers to KF_OWNED_ARGS.
 
-Alternatively, you could make a new module for SDHCI/CQHCI helper functions,
-although in this case there is so little code it could be static inline and
-added in a new include file instead, say sdhci-cqhci.h e.g.
+Exactly
 
-#include "cqhci.h"
-#include "sdhci.h"
+> This should work fine.
 
-static inline void sdhci_cqhci_reset(struct sdhci_host *host, u8 mask)
-{
-	if ((host->mmc->caps2 & MMC_CAP2_CQE) && (mask & SDHCI_RESET_ALL) &&
-	    host->mmc->cqe_private)
-		cqhci_deactivate(host->mmc);
-	sdhci_reset(host, mask);
-}
-
+Great, I'll get to work on this. Unless Alexei or anyone else objects?
