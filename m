@@ -2,173 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FE8960554D
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 04:05:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A27C60554F
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 04:07:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230427AbiJTCFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 22:05:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50506 "EHLO
+        id S230054AbiJTCHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 22:07:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229916AbiJTCFh (ORCPT
+        with ESMTP id S230519AbiJTCGy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 22:05:37 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00670129756;
-        Wed, 19 Oct 2022 19:05:28 -0700 (PDT)
-X-UUID: 20feeda39a5942278c66c40810c63f14-20221020
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=VO5xvhLVQhzMCqtvS6hNx0N5unp8zokjIFS9QG53Czc=;
-        b=cgtZ90yVJBMD/NNXA2lDVvu8VmY3DDNey99o0ywOVB3jM7h7kyW9ZAu801iaoRGWKDv+fiXiwcTo1NQdFtjrJETmclFy3Xeo+NGSqGNDiyEwEOEnmlTA0xXn8XQpApkM5oaG1LBCbj5EW5XAzxomG5b5S0g0JES6Hm6P/oX+S+4=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.12,REQID:bbd6fbd9-774d-42bd-8490-38af96895deb,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:62cd327,CLOUDID:26315ba4-ebb2-41a8-a87c-97702aaf2e20,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 20feeda39a5942278c66c40810c63f14-20221020
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <biao.huang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 345631413; Thu, 20 Oct 2022 10:05:22 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Thu, 20 Oct 2022 10:05:21 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Thu, 20 Oct 2022 10:05:21 +0800
-Message-ID: <d4a6eb562dfd06f616267be6beaf9c37d88cff37.camel@mediatek.com>
-Subject: Re: [PATCH v2] arm64: dts: mt8195: Add Ethernet controller
-From:   Biao Huang <biao.huang@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <macpaul.lin@mediatek.com>
-Date:   Thu, 20 Oct 2022 10:05:20 +0800
-In-Reply-To: <cf0d4a88-16d0-bb10-8402-30d60feafa1b@collabora.com>
-References: <20221019091515.21878-1-biao.huang@mediatek.com>
-         <20221019091515.21878-2-biao.huang@mediatek.com>
-         <cf0d4a88-16d0-bb10-8402-30d60feafa1b@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Wed, 19 Oct 2022 22:06:54 -0400
+Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0885159D5F
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 19:06:52 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=joseph.qi@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VScf.A8_1666231608;
+Received: from 30.221.128.181(mailfrom:joseph.qi@linux.alibaba.com fp:SMTPD_---0VScf.A8_1666231608)
+          by smtp.aliyun-inc.com;
+          Thu, 20 Oct 2022 10:06:49 +0800
+Message-ID: <30747fd7-fe79-2ed8-ce63-425a008e3e4f@linux.alibaba.com>
+Date:   Thu, 20 Oct 2022 10:06:48 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.3.3
+Subject: Re: [PATCH] ocfs2: possible memory leak in mlog_sys_init()
+Content-Language: en-US
+To:     Yang Yingliang <yangyingliang@huawei.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     mark@fasheh.com, jlbec@evilplan.org, akpm@linux-foundation.org,
+        ocfs2-devel <ocfs2-devel@oss.oracle.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20221018075213.736562-1-yangyingliang@huawei.com>
+ <bf27f347-5ced-98e5-f188-659cc2a9736f@linux.alibaba.com>
+ <09bb2844-e20a-98e8-c2af-5b6c4795d48e@huawei.com>
+ <c7a3bdac-3ed6-e695-5c45-e7007615a4d9@linux.alibaba.com>
+ <0db486eb-6927-927e-3629-958f8f211194@huawei.com>
+ <1adbbf98-2700-27c8-4aca-9510bca91458@linux.alibaba.com>
+ <f6bc6dd3-f7b7-e757-fc36-d1cfbc7305e5@huawei.com>
+From:   Joseph Qi <joseph.qi@linux.alibaba.com>
+In-Reply-To: <f6bc6dd3-f7b7-e757-fc36-d1cfbc7305e5@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Angelo,
-	Thanks for your comments!
 
-On Wed, 2022-10-19 at 15:57 +0200, AngeloGioacchino Del Regno wrote:
-> Il 19/10/22 11:15, Biao Huang ha scritto:
-> > Add Ethernet controller node for mt8195.
-> > 
-> > Signed-off-by: Biao Huang <biao.huang@mediatek.com>
-> > ---
-> >   arch/arm64/boot/dts/mediatek/mt8195-demo.dts | 88
-> > ++++++++++++++++++++
-> >   arch/arm64/boot/dts/mediatek/mt8195.dtsi     | 86
-> > +++++++++++++++++++
-> >   2 files changed, 174 insertions(+)
-> > 
-> 
-> ..snip..
-> 
-> > diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> > b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> > index 905d1a90b406..7f7d9f8e72ee 100644
-> > --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> > +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> > @@ -1042,6 +1042,92 @@ spis1: spi@1101e000 {
-> >   			status = "disabled";
-> >   		};
-> >   
-> > +		stmmac_axi_setup: stmmac-axi-config {
-> 
-> Didn't you get a warning during dtb build for these ones?
-> And if you did, why have you ignored it? :-)
-I checked some dts, they keep stmmac-axi-config outside ethernet node,
-so I keep the similar way with them, maybe that's old style.
-> 
-> > +			snps,wr_osr_lmt = <0x7>;
-> > +			snps,rd_osr_lmt = <0x7>;
-> > +			snps,blen = <0 0 0 0 16 8 4>;
-> > +		};
-> > +
-> 
-> ..snip..
-> 
-> > +
-> > +		eth: ethernet@11021000 {
-> > +			compatible = "mediatek,mt8195-gmac",
-> > "snps,dwmac-5.10a";
-> > +			reg = <0 0x11021000 0 0x4000>;
-> > +			interrupts = <GIC_SPI 716 IRQ_TYPE_LEVEL_HIGH
-> > 0>;
-> > +			interrupt-names = "macirq";
-> > +			clock-names = "axi",
-> > +				      "apb",
-> > +				      "mac_cg",
-> > +				      "mac_main",
-> > +				      "ptp_ref",
-> > +				      "rmii_internal";
-> > +			clocks = <&pericfg_ao CLK_PERI_AO_ETHERNET>,
-> > +				 <&pericfg_ao
-> > CLK_PERI_AO_ETHERNET_BUS>,
-> > +				 <&pericfg_ao
-> > CLK_PERI_AO_ETHERNET_MAC>,
-> > +				 <&topckgen CLK_TOP_SNPS_ETH_250M>,
-> > +				 <&topckgen
-> > CLK_TOP_SNPS_ETH_62P4M_PTP>,
-> > +				 <&topckgen CLK_TOP_SNPS_ETH_50M_RMII>;
-> > +			assigned-clocks = <&topckgen
-> > CLK_TOP_SNPS_ETH_250M>,
-> > +					  <&topckgen
-> > CLK_TOP_SNPS_ETH_62P4M_PTP>,
-> > +					  <&topckgen
-> > CLK_TOP_SNPS_ETH_50M_RMII>;
-> > +			assigned-clock-parents = <&topckgen
-> > CLK_TOP_ETHPLL_D2>,
-> > +						 <&topckgen
-> > CLK_TOP_ETHPLL_D8>,
-> > +						 <&topckgen
-> > CLK_TOP_ETHPLL_D10>;
-> > +			power-domains = <&spm
-> > MT8195_POWER_DOMAIN_ETHER>;
-> > +			mediatek,pericfg = <&infracfg_ao>;
-> > +			snps,axi-config = <&stmmac_axi_setup>;
-> > +			snps,mtl-rx-config = <&mtl_rx_setup>;
-> > +			snps,mtl-tx-config = <&mtl_tx_setup>;
-> > +			snps,txpbl = <16>;
-> > +			snps,rxpbl = <16>;
-> > +			snps,clk-csr = <0>;
-> > +			status = "disabled";
-> 
-> Please move stmmac-axi-config, rx-queues-config, tx-queues-config
-> here as a subnode
-> or in the root node, respecting address/size cells being zero.
-> Of course adding that here means also specifying {address,size}-cells 
-> = <0> in this
-> ethernet node.
-OK, I'll move them to ethernet node, and add address/size-cells in
-thernet node.
-> 
-> Regards,
-> Angelo
-Best Regards!
-Biao
 
+On 10/19/22 10:57 AM, Yang Yingliang wrote:
+> 
+> On 2022/10/19 10:26, Joseph Qi wrote:
+>>
+>> On 10/18/22 10:28 PM, Yang Yingliang wrote:
+>>> On 2022/10/18 21:39, Joseph Qi wrote:
+>>>> On 10/18/22 6:33 PM, Yang Yingliang wrote:
+>>>>> Hi,
+>>>>>
+>>>>> On 2022/10/18 17:02, Joseph Qi wrote:
+>>>>>> Hi,
+>>>>>>
+>>>>>> On 10/18/22 3:52 PM, Yang Yingliang wrote:
+>>>>>>> Inject fault while probing module, kset_register() may fail,
+>>>>>>> if it fails, but the refcount of kobject is not decreased to
+>>>>>>> 0, the name allocated in kobject_set_name() is leaked. Fix
+>>>>>>> this by calling kset_put(), so that name can be freed in
+>>>>>>> callback function kobject_cleanup().
+>>>>>>>
+>>>>>>> unreferenced object 0xffff888100da9348 (size 8):
+>>>>>>>      comm "modprobe", pid 257, jiffies 4294701096 (age 33.334s)
+>>>>>>>      hex dump (first 8 bytes):
+>>>>>>>        6c 6f 67 6d 61 73 6b 00                          logmask.
+>>>>>>>      backtrace:
+>>>>>>>        [<00000000306e441c>] __kmalloc_node_track_caller+0x44/0x1b0
+>>>>>>>        [<000000007c491a9e>] kstrdup+0x3a/0x70
+>>>>>>>        [<0000000015719a3b>] kstrdup_const+0x63/0x80
+>>>>>>>        [<0000000084e458ea>] kvasprintf_const+0x149/0x180
+>>>>>>>        [<0000000091302b42>] kobject_set_name_vargs+0x56/0x150
+>>>>>>>        [<000000005f48eeac>] kobject_set_name+0xab/0xe0
+>>>>>>>
+>>>>>>> Fixes: 34980ca8faeb ("Drivers: clean up direct setting of the name of a kset")
+>>>>>>> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+>>>>>>> ---
+>>>>>>>     fs/ocfs2/cluster/masklog.c | 7 ++++++-
+>>>>>>>     1 file changed, 6 insertions(+), 1 deletion(-)
+>>>>>>>
+>>>>>>> diff --git a/fs/ocfs2/cluster/masklog.c b/fs/ocfs2/cluster/masklog.c
+>>>>>>> index 563881ddbf00..7f9ba816d955 100644
+>>>>>>> --- a/fs/ocfs2/cluster/masklog.c
+>>>>>>> +++ b/fs/ocfs2/cluster/masklog.c
+>>>>>>> @@ -156,6 +156,7 @@ static struct kset mlog_kset = {
+>>>>>>>     int mlog_sys_init(struct kset *o2cb_kset)
+>>>>>>>     {
+>>>>>>>         int i = 0;
+>>>>>>> +    int ret;
+>>>>>>>           while (mlog_attrs[i].attr.mode) {
+>>>>>>>             mlog_default_attrs[i] = &mlog_attrs[i].attr;
+>>>>>>> @@ -165,7 +166,11 @@ int mlog_sys_init(struct kset *o2cb_kset)
+>>>>>>>           kobject_set_name(&mlog_kset.kobj, "logmask");
+>>>>>>>         mlog_kset.kobj.kset = o2cb_kset;
+>>>>>>> -    return kset_register(&mlog_kset);
+>>>>>>> +    ret = kset_register(&mlog_kset);
+>>>>>> If register fails, it will call unregister in o2cb_sys_init(), which
+>>>>>> will put kobject.
+>>>>> They are different ksets, the kset unregistered in o2cb_sys_init() is 'o2cb_kset', the
+>>>>> kset used to registered in mlog_sys_init() is 'mlog_kset', and they hold difference
+>>>>> refcounts.
+>>>>> Yes, you are right. I've mixed the two ksets up.
+>>>> In theory, kset_register() may return error because of a NULL kset, so
+>>>> here we may not call kset_put() directly, I'm not sure if a static
+>>>> checker will happy.
+>>>> Though this can't happen since it's already statically allocated...
+>>> kset_register() may fail if kobject_add_internal() return error (can't allocate memory), the name
+>>> "logmask" is dynamically alloctated while ocfs2 is compile as module and insert it (if ocfs2 is
+>>> built in kernel, the name is constant, it won't cause a leak), so the name can be leaked.
+>> What I mean is kset_register() may fail with many reasons, or even
+>> without kset_init().
+>> I wonder if we have to handle this internal kset_register(), but not
+>> leave it to caller. This may benefit other callers as well.
+>>
+>> Something like:
+>> err = kobject_add_internal(&k->kobj);
+>> if (err) {
+>>     kset_put(k);
+>>     return err;
+>> }
+> I had think about this method to fix this, but some kset is allocated dynamically in driver and
+> it's freed in callback function which is called after kset_put() and in error path in driver will free
+> it again, it leads double free in some drivers.
+> 
+I don't think it's good idea that caller has to take care part of the
+internal logic of kset_register() in case of error.
+Hi Greg, what do you think?
+
+Thanks,
+Joseph
+
+> I think kset_register() is similar with device_register(), if it fails need another put function to give
+> up reference in driver.
+> 
