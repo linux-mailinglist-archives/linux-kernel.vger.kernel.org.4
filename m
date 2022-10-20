@@ -2,114 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6629E606BC4
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 00:57:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 427E8606BD0
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 01:01:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbiJTW52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 18:57:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56532 "EHLO
+        id S229891AbiJTXBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 19:01:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbiJTW5Z (ORCPT
+        with ESMTP id S229454AbiJTXBB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 18:57:25 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5898A22E0D4
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 15:57:23 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id p6so657245plr.7
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 15:57:23 -0700 (PDT)
+        Thu, 20 Oct 2022 19:01:01 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F0251A6522;
+        Thu, 20 Oct 2022 16:01:00 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id b2so3085473eja.6;
+        Thu, 20 Oct 2022 16:00:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=TMshH9biaVXQs7+fRI1qPbg8/Vmgf41zzdE8Ax9DFYA=;
-        b=UxXF8cbs/icsMsb/bPq8qttNDmiXRbLXaFp21el0sK2dq1lWLpxMZFArsRK0mkWhEU
-         yH4Std6R7RGYgzqSZ9NFNY44SR/8k2wJ6QyM+mBSFV9D+hNdowYlrtXHMJQwwC6UoW6B
-         hzj2LHb7fOguUuRiCYaSJ8vUl7YrNcGUVd+Us=
+        bh=KSyGYu5mB1+N4wjZMirWYKsm/OR0IsapLyRpo6UTXsY=;
+        b=Q56oC/qBd5xz35WvyWQaS0SIowWdUGsQJGKXPYPkAnTa/HBtAJArmBFWpYa4LsxwZM
+         dRlIx8DC4hBSeGgM//j/8NzY/dw+Mei+dUBUkDFIh3SWNbBNewoDZE8vZ/mFvCJkaweH
+         0CKHQ+Vq2hMhLVz/iryTvkBEYh0mrRiBrB4oYDVCPYsjTyYcfL3/8OWk6wBEmwcnyunB
+         bfZj7X3bwD0eLmPx25r+dHE2SgvNwcmrhiVxN7WFCmB6G9CggNc4ICHBDYecYO19eAPq
+         BVOtx5Sl6l9g0jIebCbhH8xJIrdO3wx8ylyCdfSuAbVFe17RATgQJ8cNesesZpShl+Zx
+         k8vg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=TMshH9biaVXQs7+fRI1qPbg8/Vmgf41zzdE8Ax9DFYA=;
-        b=YVZA6twhKYPYT8u1Jy4L9z6Vsq+HtTgkbSFI6Ocz19t+rCjgAv97OYnTcdHMW/dtRh
-         UvrQEyD/ILAyKJk6Sd8obA3nGpDueJJ2er4KpG+6NOnJMI4amZY/hj6W92NGvVrFFwxV
-         UMEEAI23Y1pb5fwQgYn8sn4W3vjjRNxkV50x9MzyoKuf6Z79GmBytopZh0Y32N10Enhv
-         HdVncui3zU/+BgV4hc+hF+wcGRv0BK47g2XAmfLpD1b2atzXTgUlXuirlQKZHBfRO1Ov
-         jzNajG1aFJtX5RctpgDy592fJr08jTCrphRDTOPGZKyvv1gYmaA31nwayOf0hAuv40Cg
-         lU4A==
-X-Gm-Message-State: ACrzQf2hJAr5quA+pq/NHIjvu0UYveeDrJFChAts5o0RvLQWzV67GwWP
-        WZqhHuL+8GNnaW+6Ov3nUzUxdg==
-X-Google-Smtp-Source: AMsMyM5lZ4Dia253exhcKwnxHFmBcVrokulHdGNf45q/7BqKwj7LyyrZSMwZCU9ocNupwEMC8xBjeQ==
-X-Received: by 2002:a17:902:b708:b0:184:3921:df30 with SMTP id d8-20020a170902b70800b001843921df30mr16498236pls.43.1666306642632;
-        Thu, 20 Oct 2022 15:57:22 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id cp15-20020a170902e78f00b00176dc67df44sm3361025plb.132.2022.10.20.15.57.21
+        bh=KSyGYu5mB1+N4wjZMirWYKsm/OR0IsapLyRpo6UTXsY=;
+        b=772rIMpKKObUMlNT2FZl3N58UhovdTai2x6beGngYZ25DuYdTrFXXRcjclNAt8XU4N
+         2ftvhNKjw4pfo//N6sA/mSoBb6GkiSH0TmAc0v6pqo3Jh8s9y25n/ta6qJsUGjnXUZv2
+         soWjQvkhWF6E0Xxv56PuOtBb8KZFOSxYgTVT5KglI1SfOpL2pJ32MLNL2BR6c/YXgZ/S
+         y8y7VPRqKIJ23OZqvXvTXISL27Gf0ZH3KEINFxL7VS7k5YAkxk8gqTnlaBm2dNDefYy/
+         wrzVc6FqceSEGAM0Ku+yh4q2PH6lzXWlXwT3lokqNk8a3wWDpGvvmUlDUU6Y1Gl304wP
+         bzVQ==
+X-Gm-Message-State: ACrzQf0Ijm8XhVkmUrCK2MklpUqsK9mepHjjHrE0TpHsKbBxxLaRs+/e
+        jIaqurxB8+q3ejcuzo3xDWQ=
+X-Google-Smtp-Source: AMsMyM6W8HBBWWLJ65JA6laSIwE+MvNKCBJ9YiwTN1w3VFyEQBNnKUt3QnC4rR1yG5+HdC0wZCFkKA==
+X-Received: by 2002:a17:906:fd8d:b0:780:997:8b7b with SMTP id xa13-20020a170906fd8d00b0078009978b7bmr13065061ejb.635.1666306858463;
+        Thu, 20 Oct 2022 16:00:58 -0700 (PDT)
+Received: from skbuf ([188.27.184.197])
+        by smtp.gmail.com with ESMTPSA id x24-20020a170906b09800b0078d46aa3b82sm10779489ejy.21.2022.10.20.16.00.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 15:57:21 -0700 (PDT)
-Date:   Thu, 20 Oct 2022 15:57:21 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "kcc@google.com" <kcc@google.com>, "bp@alien8.de" <bp@alien8.de>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "arnd@arndb.de" <arnd@arndb.de>,
-        "Moreira, Joao" <joao.moreira@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>
-Subject: Re: [PATCH v2 27/39] x86/cet/shstk: Handle signals for shadow stack
-Message-ID: <202210201556.EF52D322@keescook>
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <20220929222936.14584-28-rick.p.edgecombe@intel.com>
- <202210031347.6DBE61199@keescook>
- <56095eac64e95b79ea04e84909d8ba0ab49d9246.camel@intel.com>
+        Thu, 20 Oct 2022 16:00:57 -0700 (PDT)
+Date:   Fri, 21 Oct 2022 02:00:54 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     netdev@kapio-technology.com
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Florent Fourcot <florent.fourcot@wifirst.fr>,
+        Hans Schultz <schultz.hans@gmail.com>,
+        Joachim Wiberg <troglobit@gmail.com>,
+        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v8 net-next 10/12] net: dsa: mv88e6xxx: mac-auth/MAB
+ implementation
+Message-ID: <20221020230054.542nmf66rvaswr32@skbuf>
+References: <20221018165619.134535-1-netdev@kapio-technology.com>
+ <20221018165619.134535-1-netdev@kapio-technology.com>
+ <20221018165619.134535-11-netdev@kapio-technology.com>
+ <20221018165619.134535-11-netdev@kapio-technology.com>
+ <20221020132538.reirrskemcjwih2m@skbuf>
+ <3e58594c1223f4591e56409cd5061de7@kapio-technology.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <56095eac64e95b79ea04e84909d8ba0ab49d9246.camel@intel.com>
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <3e58594c1223f4591e56409cd5061de7@kapio-technology.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 10:08:17PM +0000, Edgecombe, Rick P wrote:
-> Kees, sorry for the delayed response. There was so much feedback, I
-> missed responding to some.
+On Thu, Oct 20, 2022 at 11:09:40PM +0200, netdev@kapio-technology.com wrote:
+> > Again, dsa_port_fast_age() is also called when dp->learning is turned
+> > off in dsa_port_bridge_flags(). I don't want to see the mv88e6xxx driver
+> > doing this manually.
+> 
+> Maybe I am wrong, but I have only been able to trigger fast ageing by setting
+> the STP state of the port to blocked...
 
-No worries! Most of my feedback was just to get help filling gaps in my
-understanding. :) I appreciate the replies -- I'm looking forward to v3!
-
--- 
-Kees Cook
+Maybe you didn't try hard enough? On a DSA bridge port that is up and in
+the FORWARDING state and with 'learning' on, running "ip link set dev
+swp0 type bridge_slave learning off" triggers dsa_port_fast_age().
