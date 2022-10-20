@@ -2,69 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45FF1606AEE
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 00:00:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F7C6606AF0
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 00:00:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230108AbiJTWAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 18:00:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42414 "EHLO
+        id S230078AbiJTWAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 18:00:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230136AbiJTWAN (ORCPT
+        with ESMTP id S230115AbiJTWAe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 18:00:13 -0400
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A74210B78E;
-        Thu, 20 Oct 2022 15:00:08 -0700 (PDT)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-13ae8117023so1257841fac.9;
-        Thu, 20 Oct 2022 15:00:08 -0700 (PDT)
+        Thu, 20 Oct 2022 18:00:34 -0400
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 828CC110B2D;
+        Thu, 20 Oct 2022 15:00:31 -0700 (PDT)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-13af2d12469so1231414fac.13;
+        Thu, 20 Oct 2022 15:00:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=mADrD5kqZ/aWrDx8+xfVy4IIeq0xlwp2VEYiTpJwCPg=;
-        b=Q7t7Sk3IMTefNmRlElWe23sXJSE+xUcHKmdPRosUNJY9MKcRBkV16rF92pkbmJj3y9
-         TshRhELiOAVYg2+voo6loNbXHIJhAACYivxSq/Wy11q8y1JnOLSJ9wEFU7qVO9hUSv9k
-         h8GWf/zt6QIkxDmOJBwPqGe9Iq9P1WozuQHEGh433mvN2vxj1BQ3xPNfLXj5yJdF21nb
-         oQ/3TzGbyP6l3Vpac3ppfDHznMGaYw3UZbinK+4pNYhBiX+QVL/xIR6+quVL1mD2Bq7p
-         XdnKQ1gkxLGZY4uv3yfpCQb8R5GjksUAcqCtEN5JfnVEmoO8BxUZDUygb25Rtr4QE2S3
-         vuQw==
+        bh=VOAmf6LMMzFHHFyiTHvOQ6ROsuoWD0GGZVua/cd2o40=;
+        b=B4KqYc2mv+RbpdPMtvqHy8+rA10bS0giGabR5xTKZuTPhRhmafJGmENMZXNYMA9xZb
+         s0KCzll9kgG2KMZcPUk91nJexwZF5/H9gIPpyrmCletvr91HnDC1VYiBFhyRnmy3+gY1
+         lofO5PPd8jsGK1p9B2Ls2oo4SyIEO/BV5v54Z934nxL1t1+irulUisARVx9JkNmjMtJq
+         1znBdnGP1ar0qWpMWYU/QrDwKzWlOse9rA2f0oMjXZgpJTMiDxgxXPnAjS9LWQTroBv0
+         81OQSJ+kgc/hDR5LIdrRNQ5x2bOE+g0R4PGCJh4VTPTCqV5roALsiEmpXlVRWSZLdPbC
+         jrOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=mADrD5kqZ/aWrDx8+xfVy4IIeq0xlwp2VEYiTpJwCPg=;
-        b=cbMGnKSAHAmIi/zGmhM7TyIFwZDf1HObFLqhd+xYA2kG3FqDUTm70ffJiHP7I/hsLF
-         CNLwBWxrk3uRMuvc29ElQwHoBPBKDkGtEo6iZVRuvR7zuYeTQdI4ukRZFEBIRE4slTdB
-         J5BoVMsrAMB27zG9YwGD66re5VO2+izUEDPE7BIcERRH/AnD/CC3Gqgin634dnJBlG79
-         PP3UCaUdSfz4hdJZ3YF6MOYvMynJ4CDYcDk6GkgKn7g/IW7G51yH4ymQWuFC9GTEhPNx
-         tefdsO3OVTNvUVhxT/H3WWDNYeM7ojNbnEf38EQ9nCibPAd3sHUjHdV+Ab/HuRasdrgl
-         o7GA==
-X-Gm-Message-State: ACrzQf3p0yehiOovvXmxjkwLMQD9J9/aVoG6xYC/S8OoXCEj/ywKOexq
-        soRWgS055elhM5bfBXcCOck=
-X-Google-Smtp-Source: AMsMyM7a2jcQriM9sV+NON7Zf7PX03Znjkv4gAjl8Lhp5FKb1qq4xwyietbaenKl9y1nU4ARxwH9og==
-X-Received: by 2002:a05:6870:a198:b0:136:6459:b294 with SMTP id a24-20020a056870a19800b001366459b294mr10505915oaf.43.1666303207397;
-        Thu, 20 Oct 2022 15:00:07 -0700 (PDT)
+        bh=VOAmf6LMMzFHHFyiTHvOQ6ROsuoWD0GGZVua/cd2o40=;
+        b=Zl0HBGz+VB1/QHiX3m671sDoPOg/Cmc5xs2Qjjgy4V0KqboWa3CAvaJMQbrvfYRFWh
+         mEHE20AB5sFcSyDKa9qv4Fchn8K0xhQiu69IUGkPiAZelo8Oo34Fqx6KvAJ//e/4gNJQ
+         VUT1AvU0ep/20dJkk0jUbJm3xaKFyZ2XP+Bjnr9cefH8gN5lLyftFQtfhXQXMQA/0bUt
+         vutApGZFTsfCqP4v5t2B9RHJmnACy2Rix6dkCBAZX8NC+HmXtzEGzeJ5B1FSaMb65vUj
+         qZgs7s4s23P5+GTCTojjzPTMebGOtvZm4Mz+6x8phlTT60FwiuE/zD/lSe3tzxSfbbl2
+         YCMQ==
+X-Gm-Message-State: ACrzQf1sBrXZm3gexO8JnsFxBYHt1QcpnZ4IxRFEAAEvmok1vEp6yD4Z
+        B77sMo2hEmuqEyKV76RDVUQ=
+X-Google-Smtp-Source: AMsMyM5ep75R4Y+KYb34yU+as//zw7oUEUnGn7n3/9oF7uhoadLDyjBFhT/7JdD1Vp+UVCYuRVMp+A==
+X-Received: by 2002:a05:6870:c147:b0:136:90c4:ee84 with SMTP id g7-20020a056870c14700b0013690c4ee84mr10385807oad.295.1666303231308;
+        Thu, 20 Oct 2022 15:00:31 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id db10-20020a0568306b0a00b00661a80d555fsm398041otb.40.2022.10.20.15.00.06
+        by smtp.gmail.com with ESMTPSA id e25-20020aca1319000000b00342eade43d4sm443013oii.13.2022.10.20.15.00.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 15:00:06 -0700 (PDT)
+        Thu, 20 Oct 2022 15:00:30 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 20 Oct 2022 15:00:05 -0700
+Date:   Thu, 20 Oct 2022 15:00:29 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Paul Cercueil <paul@crapouillou.net>
 Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/4] watchdog: omap: Remove #ifdef guards for PM related
- functions
-Message-ID: <20221020220005.GC4035307@roeck-us.net>
+Subject: Re: [PATCH 4/4] watchdog: kempld: Remove #ifdef guards for PM
+ related functions
+Message-ID: <20221020220029.GD4035307@roeck-us.net>
 References: <20221020185047.1001522-1-paul@crapouillou.net>
- <20221020185047.1001522-4-paul@crapouillou.net>
+ <20221020185047.1001522-5-paul@crapouillou.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221020185047.1001522-4-paul@crapouillou.net>
+In-Reply-To: <20221020185047.1001522-5-paul@crapouillou.net>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -76,7 +76,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 07:50:46PM +0100, Paul Cercueil wrote:
+On Thu, Oct 20, 2022 at 07:50:47PM +0100, Paul Cercueil wrote:
 > Use the pm_ptr() macro to handle the .suspend/.resume callbacks.
 > 
 > This macro allows the suspend and resume functions to be automatically
@@ -90,45 +90,52 @@ On Thu, Oct 20, 2022 at 07:50:46PM +0100, Paul Cercueil wrote:
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->  drivers/watchdog/omap_wdt.c | 11 ++---------
+>  drivers/watchdog/kempld_wdt.c | 11 ++---------
 >  1 file changed, 2 insertions(+), 9 deletions(-)
 > 
-> diff --git a/drivers/watchdog/omap_wdt.c b/drivers/watchdog/omap_wdt.c
-> index 74d785b2b478..e75aa86f63cb 100644
-> --- a/drivers/watchdog/omap_wdt.c
-> +++ b/drivers/watchdog/omap_wdt.c
-> @@ -316,8 +316,6 @@ static int omap_wdt_remove(struct platform_device *pdev)
->  	return 0;
->  }
->  
-> -#ifdef	CONFIG_PM
-> -
->  /* REVISIT ... not clear this is the best way to handle system suspend; and
->   * it's very inappropriate for selective device suspend (e.g. suspending this
->   * through sysfs rather than by stopping the watchdog daemon).  Also, this
-> @@ -353,11 +351,6 @@ static int omap_wdt_resume(struct platform_device *pdev)
->  	return 0;
->  }
->  
-> -#else
-> -#define	omap_wdt_suspend	NULL
-> -#define	omap_wdt_resume		NULL
+> diff --git a/drivers/watchdog/kempld_wdt.c b/drivers/watchdog/kempld_wdt.c
+> index 40bd518ed873..e6c7a2906680 100644
+> --- a/drivers/watchdog/kempld_wdt.c
+> +++ b/drivers/watchdog/kempld_wdt.c
+> @@ -75,9 +75,7 @@ struct kempld_wdt_data {
+>  	struct watchdog_device		wdd;
+>  	unsigned int			pretimeout;
+>  	struct kempld_wdt_stage		stage[KEMPLD_WDT_MAX_STAGES];
+> -#ifdef CONFIG_PM
+>  	u8				pm_status_store;
 > -#endif
-> -
->  static const struct of_device_id omap_wdt_of_match[] = {
->  	{ .compatible = "ti,omap3-wdt", },
->  	{},
-> @@ -368,8 +361,8 @@ static struct platform_driver omap_wdt_driver = {
->  	.probe		= omap_wdt_probe,
->  	.remove		= omap_wdt_remove,
->  	.shutdown	= omap_wdt_shutdown,
-> -	.suspend	= omap_wdt_suspend,
-> -	.resume		= omap_wdt_resume,
-> +	.suspend	= pm_ptr(omap_wdt_suspend),
-> +	.resume		= pm_ptr(omap_wdt_resume),
+>  };
+>  
+>  #define DEFAULT_TIMEOUT		30 /* seconds */
+> @@ -495,7 +493,6 @@ static int kempld_wdt_probe(struct platform_device *pdev)
+>  	return 0;
+>  }
+>  
+> -#ifdef CONFIG_PM
+>  /* Disable watchdog if it is active during suspend */
+>  static int kempld_wdt_suspend(struct platform_device *pdev,
+>  				pm_message_t message)
+> @@ -531,18 +528,14 @@ static int kempld_wdt_resume(struct platform_device *pdev)
+>  	else
+>  		return kempld_wdt_stop(wdd);
+>  }
+> -#else
+> -#define kempld_wdt_suspend	NULL
+> -#define kempld_wdt_resume	NULL
+> -#endif
+>  
+>  static struct platform_driver kempld_wdt_driver = {
 >  	.driver		= {
->  		.name	= "omap_wdt",
->  		.of_match_table = omap_wdt_of_match,
+>  		.name	= "kempld-wdt",
+>  	},
+>  	.probe		= kempld_wdt_probe,
+> -	.suspend	= kempld_wdt_suspend,
+> -	.resume		= kempld_wdt_resume,
+> +	.suspend	= pm_ptr(kempld_wdt_suspend),
+> +	.resume		= pm_ptr(kempld_wdt_resume),
+>  };
+>  
+>  module_platform_driver(kempld_wdt_driver);
 > -- 
 > 2.35.1
 > 
