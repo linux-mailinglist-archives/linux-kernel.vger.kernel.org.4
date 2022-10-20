@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09043605841
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 09:19:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1C99605840
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 09:19:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230415AbiJTHS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 03:18:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44514 "EHLO
+        id S230346AbiJTHSz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 03:18:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230292AbiJTHSd (ORCPT
+        with ESMTP id S230294AbiJTHSd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 20 Oct 2022 03:18:33 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0293316E28A;
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02CD216E2A0;
         Thu, 20 Oct 2022 00:18:16 -0700 (PDT)
-X-UUID: 290b9489e2ba47dfab88a0062c69811b-20221020
+X-UUID: 30801a809907421980614ac785b065f5-20221020
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=Nu8CkHwHdOQOx7g9RjxSew+cd3IBxJ5lzu2JmyM7sys=;
-        b=phAgXv7GnpmYWnKoLipNW/je0X4bJyaPQwZz5czIkl0T2j8AUHsWDFIAEFpLHRZwlcFUV5eeSteYAIXojKe1lPaH6Hi5h9FFlu2OQO2GGxYtWSAt6Jvweqzj77Uu1QD8feFrWVPnY0JSnQLIWm8MaqI8G+isKPBypnDrthoVOCI=;
+        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=oyQcrxZYCAvggulovd4FRHdXOU2WjZQVKRd7NG1+zj8=;
+        b=ByhDzTpYCFzjWm1qSQJjbRkLtm2f8JTZfj4d6d1o8DPc4UaTRpqRfpVDCYZYSgHyLbkMLSRX9uxPcGd70Q0iTA8nkVUlTF37BsC2cjuy4IUXTxDNdPZGyE9Ap9RF7J4/KY1qrg5Oh1W7Y5qoHnfVWWeL/u6hxwq0q0IYwxn3Fyc=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.12,REQID:7fc3df9a-5f23-4374-9dc4-9874d07179d6,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:62cd327,CLOUDID:f7cd64a3-73e4-48dd-a911-57b5d5484f14,B
+X-CID-O-INFO: VERSION:1.1.12,REQID:e6256586-8665-42f6-9e5d-9e85b35cc3bd,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:-25
+X-CID-META: VersionHash:62cd327,CLOUDID:3a4fe0ee-314c-4293-acb8-ca4299dd021f,B
         ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
         RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 290b9489e2ba47dfab88a0062c69811b-20221020
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
+X-UUID: 30801a809907421980614ac785b065f5-20221020
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
         (envelope-from <moudy.ho@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 949885667; Thu, 20 Oct 2022 15:18:03 +0800
+        with ESMTP id 1287693578; Thu, 20 Oct 2022 15:18:03 +0800
 Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Thu, 20 Oct 2022 15:18:02 +0800
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Thu, 20 Oct 2022 15:18:02 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
  mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
  15.2.792.15 via Frontend Transport; Thu, 20 Oct 2022 15:18:02 +0800
@@ -48,9 +48,9 @@ CC:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
         <linux-kernel@vger.kernel.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>,
         Moudy Ho <moudy.ho@mediatek.com>
-Subject: [PATCH v3 2/3] media: platform: mtk-mdp3: fix error handling about components clock_on
-Date:   Thu, 20 Oct 2022 15:17:59 +0800
-Message-ID: <20221020071800.20487-3-moudy.ho@mediatek.com>
+Subject: [PATCH v3 3/3] media: platform: mtk-mdp3: fix error handling in mdp_probe()
+Date:   Thu, 20 Oct 2022 15:18:00 +0800
+Message-ID: <20221020071800.20487-4-moudy.ho@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20221020071800.20487-1-moudy.ho@mediatek.com>
 References: <20221020071800.20487-1-moudy.ho@mediatek.com>
@@ -67,81 +67,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add goto statement in mdp_comp_clock_on() to avoid error code not being
-propagated or returning positive values.
-This change also performs a well-timed clock_off when an error occurs, and
-reduces unnecessary error logging in mdp_cmdq_send().
+Adjust label "err_return" order to avoid double freeing, and
+add two labels for easy traceability.
 
 Fixes: 61890ccaefaf ("media: platform: mtk-mdp3: add MediaTek MDP3 driver")
 Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- .../platform/mediatek/mdp3/mtk-mdp3-cmdq.c    |  4 +---
- .../platform/mediatek/mdp3/mtk-mdp3-comp.c    | 24 ++++++++++++++-----
- 2 files changed, 19 insertions(+), 9 deletions(-)
+ .../media/platform/mediatek/mdp3/mtk-mdp3-core.c  | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-cmdq.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-cmdq.c
-index e194dec8050a..124c1b96e96b 100644
---- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-cmdq.c
-+++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-cmdq.c
-@@ -433,10 +433,8 @@ int mdp_cmdq_send(struct mdp_dev *mdp, struct mdp_cmdq_param *param)
- 	cmd->mdp_ctx = param->mdp_ctx;
+diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
+index c413e59d4286..2d1f6ae9f080 100644
+--- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
++++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
+@@ -196,27 +196,27 @@ static int mdp_probe(struct platform_device *pdev)
+ 	mm_pdev = __get_pdev_by_id(pdev, MDP_INFRA_MMSYS);
+ 	if (!mm_pdev) {
+ 		ret = -ENODEV;
+-		goto err_return;
++		goto err_destroy_device;
+ 	}
+ 	mdp->mdp_mmsys = &mm_pdev->dev;
  
- 	ret = mdp_comp_clocks_on(&mdp->pdev->dev, cmd->comps, cmd->num_comps);
--	if (ret) {
--		dev_err(dev, "comp %d failed to enable clock!\n", ret);
-+	if (ret)
- 		goto err_free_path;
--	}
- 
- 	dma_sync_single_for_device(mdp->cmdq_clt->chan->mbox->dev,
- 				   cmd->pkt.pa_base, cmd->pkt.cmd_buf_size,
-diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c
-index d3eaf8884412..7bc05f42a23c 100644
---- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c
-+++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c
-@@ -699,12 +699,22 @@ int mdp_comp_clock_on(struct device *dev, struct mdp_comp *comp)
- 			dev_err(dev,
- 				"Failed to enable clk %d. type:%d id:%d\n",
- 				i, comp->type, comp->id);
--			pm_runtime_put(comp->comp_dev);
--			return ret;
-+			goto err_revert;
+ 	mm_pdev = __get_pdev_by_id(pdev, MDP_INFRA_MUTEX);
+ 	if (WARN_ON(!mm_pdev)) {
+ 		ret = -ENODEV;
+-		goto err_return;
++		goto err_destroy_device;
+ 	}
+ 	for (i = 0; i < MDP_PIPE_MAX; i++) {
+ 		mdp->mdp_mutex[i] = mtk_mutex_get(&mm_pdev->dev);
+ 		if (!mdp->mdp_mutex[i]) {
+ 			ret = -ENODEV;
+-			goto err_return;
++			goto err_free_mutex;
  		}
  	}
  
- 	return 0;
-+
-+err_revert:
-+	while (--i >= 0) {
-+		if (IS_ERR_OR_NULL(comp->clks[i]))
-+			continue;
-+		clk_disable_unprepare(comp->clks[i]);
-+	}
-+	if (comp->comp_dev)
-+		pm_runtime_put_sync(comp->comp_dev);
-+
-+	return ret;
- }
+ 	ret = mdp_comp_config(mdp);
+ 	if (ret) {
+ 		dev_err(dev, "Failed to config mdp components\n");
+-		goto err_return;
++		goto err_free_mutex;
+ 	}
  
- void mdp_comp_clock_off(struct device *dev, struct mdp_comp *comp)
-@@ -723,11 +733,13 @@ void mdp_comp_clock_off(struct device *dev, struct mdp_comp *comp)
- 
- int mdp_comp_clocks_on(struct device *dev, struct mdp_comp *comps, int num)
- {
--	int i;
-+	int i, ret;
- 
--	for (i = 0; i < num; i++)
--		if (mdp_comp_clock_on(dev, &comps[i]) != 0)
--			return ++i;
-+	for (i = 0; i < num; i++) {
-+		ret = mdp_comp_clock_on(dev, &comps[i]);
-+		if (ret)
-+			return ret;
-+	}
- 
- 	return 0;
+ 	mdp->job_wq = alloc_workqueue(MDP_MODULE_NAME, WQ_FREEZABLE, 0);
+@@ -287,11 +287,12 @@ static int mdp_probe(struct platform_device *pdev)
+ 	destroy_workqueue(mdp->job_wq);
+ err_deinit_comp:
+ 	mdp_comp_destroy(mdp);
+-err_return:
++err_free_mutex:
+ 	for (i = 0; i < MDP_PIPE_MAX; i++)
+-		if (mdp)
+-			mtk_mutex_put(mdp->mdp_mutex[i]);
++		mtk_mutex_put(mdp->mdp_mutex[i]);
++err_destroy_device:
+ 	kfree(mdp);
++err_return:
+ 	dev_dbg(dev, "Errno %d\n", ret);
+ 	return ret;
  }
 -- 
 2.18.0
