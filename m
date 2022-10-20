@@ -2,74 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD72B605476
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 02:23:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AF1D605481
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 02:31:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230351AbiJTAXR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 20:23:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49784 "EHLO
+        id S230235AbiJTAbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 20:31:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbiJTAXO (ORCPT
+        with ESMTP id S229525AbiJTAbJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 20:23:14 -0400
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD7B01AC1D6;
-        Wed, 19 Oct 2022 17:23:12 -0700 (PDT)
-Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-136b5dd6655so22717500fac.3;
-        Wed, 19 Oct 2022 17:23:12 -0700 (PDT)
+        Wed, 19 Oct 2022 20:31:09 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F1A112501B;
+        Wed, 19 Oct 2022 17:31:08 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id h8so24273588lja.11;
+        Wed, 19 Oct 2022 17:31:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RcgBR9DwOSrBf/0ljr87AbnIU6+NrjI9Oo0c86WOxrU=;
-        b=agMQLHLM5lTY2C6+kfgASeqc29WT1rDu0kBr1gEgYXxdIYnYORNzPwzbO2KRI1V976
-         kef1lHPlbmSmqHrtgP+H6AcS4uoIJtWhHsMeNKQQpgQv19d9GbL27kNqQglqcuf3Y1e/
-         rwACpfK/cRHm1YeTFThnyKrxzKDgZF1EbBAX7l2450iBZEf/re+BpxT9I5sPraovwjcK
-         agPF2yF0Ia58t8ou5kP9OR3wUNaWVorWunpIiMRa3AEi6LWUjGv/NHE2LBDM5LBONm8N
-         5QTY6Cr26aaQTURJaPY4B7tfB7Ww1aCPb3XYlfs8UkccVvo8XOLvga/9kUPPYUYsccLz
-         o7fA==
+        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
+         :subject:cc:to:from:user-agent:references:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=94WcgxukPF6gv4pDOFyGQ6vmA1VsSrDLSZYCmZeRwZE=;
+        b=hMMng2873LOYHjPWBufkIHKX2xniBXhoodFpR4Sy2b1L3b0XWVrhBq2M6NFvemrTvv
+         u/6dzXIZevldyktqipZDxPF0Fa/gwVTrivhfjhHfSMYPV5qzth6pUhxtOe0A8wdNPbjH
+         D2chnySbz8ate2IMB4CRoq33aD9Jfl5gQuEG8xamr1MyCFua9wcBnnyTJiptaGDdp05p
+         R5UyNPyQCCWweEAjNBUahSfzifedFBpC0ZlZ3NuTXy2GDZIybPMLuaPXky/cRt/hjffi
+         cPLc2BC9IJ452XEKMS4n7QXnAq5nKM43z/gTMFwIRA9R3yxjjD+lY0ZgL3P03IaWgsxY
+         dr+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RcgBR9DwOSrBf/0ljr87AbnIU6+NrjI9Oo0c86WOxrU=;
-        b=L+hvhiFQ6B2p1Dkbgt3YbRAhc3Tqragzl3ec+5nzNaUHawQ2hvVHNy6FjzelW9iYWs
-         10lwG1OkBDkdXZHhq3eqmUwAZuwCx9Sob1NFchpqzwpWXcYlefkoXvFfFuWCRMYuybCa
-         X6fNegF/JOpqAqN+xGkzRvhSIWAlaA3O2nSdRQU5RJkYbcxasL095i6G8/ZSuO2JN0gH
-         HP7Cw59qRInZEvUa+cIlJe00CtZyopYtXJHvRYZjVnr5P/2lAAuX/uRmEatnNXHllMg1
-         Tuy/utTKNfhpa4aFhDw3XdAoM4ZKbQp9KJ/t1xUicUZv8ZI2RA9RmwKaEHdbvSqLpB4K
-         RRoA==
-X-Gm-Message-State: ACrzQf39vTrnLfsDCTuhxgq+k36uG2HalCD0Qvv5kjyW++MENVQmSwQv
-        X+4y2fjHf+a9+dsfjDOYUYU=
-X-Google-Smtp-Source: AMsMyM6SsmLuTF5/sUvoPdUlq5roUWAgcLo8It0vZR8JpW500msOyZT6mZHBOkWtD31FWR8Y9iUARA==
-X-Received: by 2002:a05:6870:c68b:b0:127:36e4:d437 with SMTP id cv11-20020a056870c68b00b0012736e4d437mr6926105oab.40.1666225391949;
-        Wed, 19 Oct 2022 17:23:11 -0700 (PDT)
-Received: from localhost ([12.97.180.36])
-        by smtp.gmail.com with ESMTPSA id bj21-20020a056808199500b0035485b54caesm7372610oib.28.2022.10.19.17.23.11
+        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
+         :subject:cc:to:from:user-agent:references:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=94WcgxukPF6gv4pDOFyGQ6vmA1VsSrDLSZYCmZeRwZE=;
+        b=H8ksVVTD8qzfIDkceZQmiH792JQOpSVR0jsMrIB+ME8A3+JbKelVmIY+cmUlY4mRxw
+         /TM2SMEHgpwjMsr+Vh2IcBYrKL4EZIW/qvw25OnDDqE8UNc1RUlNHdK6aZ7D05v0ZFsn
+         hnKBr7U6UIByrVqaZSgBTaXy43NOhNPmXzhVZG0I+G/1l1a4RT0M+GsvqE4vh+UgzAfN
+         aculFWOOyv+ch54I2ypMGVYMIUgzl6slHtux9JH+kKulselB2YeTKGhrC8dTMT7+1eis
+         7aX9Y7oRIW8Dt0wNqDb71iOLbLLWfE/Bl2ZjJ9OAWsW5QZU1L6A2Yyg1ZWcqlbmg3hxv
+         sg3A==
+X-Gm-Message-State: ACrzQf0Wc8x+CGZOXBgjL15sowKA8uKAhRrybb8uJ993lxRwoRHV6+sk
+        A+P1rH0Qp9evheou8s8k6XQ=
+X-Google-Smtp-Source: AMsMyM69j2GE8wVFWhJF4YgJtyaMWeBwu1z6rDhGxdfcgUUUt9VDRqT/gfGlxvJuJuVx5qSO94ugGw==
+X-Received: by 2002:a05:651c:242:b0:26d:fb4b:9c8 with SMTP id x2-20020a05651c024200b0026dfb4b09c8mr3836993ljn.353.1666225866785;
+        Wed, 19 Oct 2022 17:31:06 -0700 (PDT)
+Received: from razdolb (95-31-187-187.broadband.corbina.ru. [95.31.187.187])
+        by smtp.gmail.com with ESMTPSA id q9-20020a19a409000000b00498f871f33fsm2503088lfc.86.2022.10.19.17.31.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Oct 2022 17:23:11 -0700 (PDT)
-Date:   Wed, 19 Oct 2022 17:21:01 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 net-next 2/6] bitmap: add a couple more helpers to
- work with arrays of u32s
-Message-ID: <Y1CUbRA6hC6PO3IH@yury-laptop>
-References: <20221018140027.48086-1-alexandr.lobakin@intel.com>
- <20221018140027.48086-3-alexandr.lobakin@intel.com>
+        Wed, 19 Oct 2022 17:31:06 -0700 (PDT)
+References: <20220927222152.132951-1-mike.rudenko@gmail.com>
+ <20220927222152.132951-3-mike.rudenko@gmail.com>
+ <15ebc256-1855-7720-05e1-6673b1da7d93@wanadoo.fr>
+User-agent: mu4e 1.9.0; emacs 28.2
+From:   Mikhail Rudenko <mike.rudenko@gmail.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     arec.kao@intel.com, c.hemp@phytec.de,
+        dave.stevenson@raspberrypi.com, devicetree@vger.kernel.org,
+        hverkuil@xs4all.nl, jimmy.su@intel.com,
+        krzysztof.kozlowski+dt@linaro.org,
+        laurent.pinchart+renesas@ideasonboard.com,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        marex@denx.de, mchehab@kernel.org, rdunlap@infradead.org,
+        robh+dt@kernel.org, sakari.ailus@linux.intel.com,
+        shawnx.tu@intel.com, tommaso.merciai@amarulasolutions.com
+Subject: Re: [PATCH v3 2/2] media: i2c: add support for OV4689
+Date:   Thu, 20 Oct 2022 03:22:59 +0300
+In-reply-to: <15ebc256-1855-7720-05e1-6673b1da7d93@wanadoo.fr>
+Message-ID: <87fsfjz67r.fsf@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221018140027.48086-3-alexandr.lobakin@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -80,165 +82,193 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 04:00:23PM +0200, Alexander Lobakin wrote:
-> Add two new functions to work on arr32s:
-> 
-> * bitmap_arr32_size() - takes number of bits to be stored in arr32
->   and returns number of bytes required to store such arr32, can be
->   useful when allocating memory for arr32 containers;
-> * bitmap_validate_arr32() - takes pointer to an arr32 and its size
->   in bytes, plus expected number of bits. Ensures that the size is
->   valid (must be a multiply of `sizeof(u32)`) and no bits past the
->   number is set.
-> 
-> Also add BITMAP_TO_U64() macro to help return a u64 from
-> a DECLARE_BITMAP(1-64) (it may pick one or two longs depending
-> on the platform).
 
-Can you make BITMAP_TO_U64() a separate patch? Maybe fold it into a
-first patch that uses it, but I think it worth to be a real commit.
- 
-> Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-> ---
->  include/linux/bitmap.h | 20 +++++++++++++++++++-
->  lib/bitmap.c           | 40 ++++++++++++++++++++++++++++++++++++++++
->  2 files changed, 59 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/bitmap.h b/include/linux/bitmap.h
-> index 79d12e0f748b..c737b0fe2f41 100644
-> --- a/include/linux/bitmap.h
-> +++ b/include/linux/bitmap.h
-> @@ -7,7 +7,7 @@
->  #include <linux/align.h>
->  #include <linux/bitops.h>
->  #include <linux/find.h>
-> -#include <linux/limits.h>
-> +#include <linux/overflow.h>
->  #include <linux/string.h>
->  #include <linux/types.h>
->  
-> @@ -75,6 +75,8 @@ struct device;
->   *  bitmap_from_arr64(dst, buf, nbits)          Copy nbits from u64[] buf to dst
->   *  bitmap_to_arr32(buf, src, nbits)            Copy nbits from buf to u32[] dst
->   *  bitmap_to_arr64(buf, src, nbits)            Copy nbits from buf to u64[] dst
-> + *  bitmap_validate_arr32(buf, len, nbits)      Validate u32[] buf of len bytes
-> + *  bitmap_arr32_size(nbits)                    Get size of u32[] arr for nbits
->   *  bitmap_get_value8(map, start)               Get 8bit value from map at start
->   *  bitmap_set_value8(map, value, start)        Set 8bit value to map at start
->   *
-> @@ -324,6 +326,20 @@ static inline void bitmap_to_arr32(u32 *buf, const unsigned long *bitmap,
->  		__bitmap_to_arr32(buf, bitmap, nbits);
->  }
->  
-> +bool bitmap_validate_arr32(const u32 *arr, size_t len, size_t nbits);
-> +
-> +/**
-> + * bitmap_arr32_size - determine the size of array of u32s for a number of bits
-> + * @nbits: number of bits to store in the array
-> + *
-> + * Returns the size in bytes of a u32s-array needed to carry the specified
-> + * number of bits.
-> + */
-> +static inline size_t bitmap_arr32_size(size_t nbits)
-> +{
-> +	return array_size(BITS_TO_U32(nbits), sizeof(u32));
+Hi Christophe,
 
-To me this looks simpler: round_up(nbits, 32) / BITS_PER_BYTE.
-Can you check which generates better code?
+Thanks for the review! See my comments below.
 
-> +}
+On 2022-10-18 at 20:55 +02, Christophe JAILLET <christophe.jaillet@wanadoo.=
+fr> wrote:
 
-This is not specific to bitmaps in general. Can you put it somewhere in
-include/linux/bitops.h next to BITS_TO_U32().
+> Le 28/09/2022 =C3=A0 00:21, Mikhail Rudenko a =C3=A9crit=C2=A0:
+>> Add a V4L2 sub-device driver for OmniVision OV4689 image sensor. This
+>> is a 4 Mpx image sensor using the I2C bus for control and the CSI-2
+>> bus for data.
+>> This driver supports following features:
+>> - manual exposure and analog gain control support
+>> - test pattern support
+>> - media controller support
+>> - runtime PM support
+>> - support following resolutions:
+>>    + 2688x1520 at 30 fps
+>> The driver provides all mandatory V4L2 controls for compatibility
+>> with
+>> libcamera. The sensor supports 1/2/4-lane CSI-2 modes, but the driver
+>> implements 4 lane mode only at this moment.
+>
+> Hi,
+>
+> a few nitpick below.
+>
+> CJ
+>
+>> Signed-off-by: Mikhail Rudenko
+>> <mike.rudenko-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
+>> ---
+>
+> [...]
+>
+>> +static int ov4689_check_sensor_id(struct ov4689 *ov4689,
+>> +				  struct i2c_client *client)
+>> +{
+>> +	struct device *dev =3D &ov4689->client->dev;
+>> +	u32 id =3D 0;
+>> +	int ret;
+>> +
+>> +	ret =3D ov4689_read_reg(client, OV4689_REG_CHIP_ID,
+>> +			      OV4689_REG_VALUE_16BIT, &id);
+>> +	if (id !=3D CHIP_ID) {
+>> +		dev_err(dev, "Unexpected sensor id(%06x), ret(%d)\n", id, ret);
+>> +		return -ENODEV;
+>
+> return ret?
+> (otherwise what is the point of -EINVAL and -EIO in ov4689_read_reg()?)
+>
 
-Regarding a name - maybe BITS_TO_U32_SIZE()? Not very elegant, but
-assuming that size is always measured in bytes, it should be
-understandable
+Maybe we should reserve -ENODEV for the case when
+ret=3D=3D0 && id !=3D CHIP_ID and return ret otherwise?
+What do you think about it?
 
->  /*
->   * On 64-bit systems bitmaps are represented as u64 arrays internally. On LE32
->   * machines the order of hi and lo parts of numbers match the bitmap structure.
-> @@ -571,9 +587,11 @@ static inline void bitmap_next_set_region(unsigned long *bitmap,
->   */
->  #if __BITS_PER_LONG == 64
->  #define BITMAP_FROM_U64(n) (n)
-> +#define BITMAP_TO_U64(map) ((u64)(map)[0])
->  #else
->  #define BITMAP_FROM_U64(n) ((unsigned long) ((u64)(n) & ULONG_MAX)), \
->  				((unsigned long) ((u64)(n) >> 32))
-> +#define BITMAP_TO_U64(map) (((u64)(map)[1] << 32) | (u64)(map)[0])
->  #endif
->  
->  /**
-> diff --git a/lib/bitmap.c b/lib/bitmap.c
-> index e3eb12ff1637..e0045ecf34d6 100644
-> --- a/lib/bitmap.c
-> +++ b/lib/bitmap.c
-> @@ -1495,6 +1495,46 @@ void __bitmap_to_arr32(u32 *buf, const unsigned long *bitmap, unsigned int nbits
->  EXPORT_SYMBOL(__bitmap_to_arr32);
->  #endif
->  
-> +/**
-> + * bitmap_validate_arr32 - perform validation of a u32-array bitmap
-> + * @arr: array of u32s, the dest bitmap
-> + * @len: length of the array, in bytes
-> + * @nbits: expected/supported number of bits in the bitmap
-> + *
-> + * Returns true if the array passes the checks (see below), false otherwise.
-> + */
+>> +	}
+>> +
+>> +	dev_info(dev, "Detected OV%06x sensor\n", CHIP_ID);
+>> +
+>> +	return 0;
+>> +}
+>
+> [...]
+>
+>> +static int ov4689_probe(struct i2c_client *client)
+>> +{
+>> +	struct device *dev =3D &client->dev;
+>> +	struct v4l2_subdev *sd;
+>> +	struct ov4689 *ov4689;
+>> +	int ret;
+>> +
+>> +	ret =3D ov4689_check_hwcfg(dev);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	ov4689 =3D devm_kzalloc(dev, sizeof(*ov4689), GFP_KERNEL);
+>> +	if (!ov4689)
+>> +		return -ENOMEM;
+>> +
+>> +	ov4689->client =3D client;
+>> +	ov4689->cur_mode =3D &supported_modes[OV4689_MODE_2688_1520];
+>> +
+>> +	ov4689->xvclk =3D devm_clk_get_optional(dev, NULL);
+>> +	if (IS_ERR(ov4689->xvclk)) {
+>> +		return dev_err_probe(dev, PTR_ERR(ov4689->xvclk),
+>> +				     "Failed to get external clock\n");
+>> +	}
+>> +
+>> +	if (!ov4689->xvclk) {
+>> +		dev_dbg(dev,
+>> +			"No clock provided, using clock-frequency property\n");
+>> +		device_property_read_u32(dev, "clock-frequency", &ov4689->clock_rate);
+>> +	} else {
+>> +		ov4689->clock_rate =3D clk_get_rate(ov4689->xvclk);
+>> +	}
+>> +
+>> +	if (ov4689->clock_rate !=3D OV4689_XVCLK_FREQ) {
+>> +		dev_err(dev,
+>> +			"External clock rate mismatch: got %d Hz, expected %d Hz\n",
+>> +			ov4689->clock_rate, OV4689_XVCLK_FREQ);
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	ov4689->reset_gpio =3D devm_gpiod_get_optional(dev, "reset",
+>> +						     GPIOD_OUT_LOW);
+>> +	if (IS_ERR(ov4689->reset_gpio)) {
+>> +		dev_err(dev, "Failed to get reset-gpios\n");
+>> +		return PTR_ERR(ov4689->reset_gpio);
+>> +	}
+>> +
+>> +	ov4689->pwdn_gpio =3D devm_gpiod_get_optional(dev, "pwdn", GPIOD_OUT_L=
+OW);
+>> +	if (IS_ERR(ov4689->pwdn_gpio)) {
+>> +		dev_err(dev, "Failed to get pwdn-gpios\n");
+>> +		return PTR_ERR(ov4689->pwdn_gpio);
+>> +	}
+>> +
+>> +	ret =3D ov4689_configure_regulators(ov4689);
+>> +	if (ret) {
+>> +		dev_err(dev, "Failed to get power regulators\n");
+>
+> dev_err_probe()?
+> I think that devm_regulator_bulk_get() can return -EPROBE_DEFER)
+>
 
-In kernel-docs this would look completely useless. Can you explain
-what it checks in the comment too?
+Nice catch, will fix in v4.
 
-> +bool bitmap_validate_arr32(const u32 *arr, size_t len, size_t nbits)
-> +{
-> +	size_t word = (nbits - 1) / BITS_PER_TYPE(u32);
-> +	u32 pos = (nbits - 1) % BITS_PER_TYPE(u32);
+>> +		return ret;
+>> +	}
+>> +
+>> +	mutex_init(&ov4689->mutex);
+>> +
+>> +	sd =3D &ov4689->subdev;
+>> +	v4l2_i2c_subdev_init(sd, client, &ov4689_subdev_ops);
+>> +	ret =3D ov4689_initialize_controls(ov4689);
+>> +	if (ret)
+>> +		goto err_destroy_mutex;
+>> +
+>> +	ret =3D ov4689_power_on(dev);
+>> +	if (ret)
+>> +		goto err_free_handler;
+>> +
+>> +	ret =3D ov4689_check_sensor_id(ov4689, client);
+>> +	if (ret)
+>> +		goto err_power_off;
+>> +
+>> +#ifdef CONFIG_VIDEO_V4L2_SUBDEV_API
+>> +	sd->internal_ops =3D &ov4689_internal_ops;
+>> +	sd->flags |=3D V4L2_SUBDEV_FL_HAS_DEVNODE;
+>> +#endif
+>> +#if defined(CONFIG_MEDIA_CONTROLLER)
+>> +	ov4689->pad.flags =3D MEDIA_PAD_FL_SOURCE;
+>> +	sd->entity.function =3D MEDIA_ENT_F_CAM_SENSOR;
+>> +	ret =3D media_entity_pads_init(&sd->entity, 1, &ov4689->pad);
+>> +	if (ret < 0)
+>> +		goto err_power_off;
+>> +#endif
+>> +
+>> +	ret =3D v4l2_async_register_subdev_sensor(sd);
+>> +	if (ret) {
+>> +		dev_err(dev, "v4l2 async register subdev failed\n");
+>> +		goto err_clean_entity;
+>> +	}
+>> +
+>> +	pm_runtime_set_active(dev);
+>> +	pm_runtime_enable(dev);
+>> +	pm_runtime_idle(dev);
+>> +
+>> +	return 0;
+>> +
+>> +err_clean_entity:
+>> +	media_entity_cleanup(&sd->entity);
+>> +err_power_off:
+>> +	ov4689_power_off(dev);
+>> +err_free_handler:
+>> +	v4l2_ctrl_handler_free(&ov4689->ctrl_handler);
+>> +err_destroy_mutex:
+>> +	mutex_destroy(&ov4689->mutex);
+>> +
+>> +	return ret;
+>> +}
+>
+> [...]
 
-What if nbits == 0? What if arr == NULL or unaligned? Assuming you don't
-trust caller too much, you'd check arguments better. 
 
-> +
-> +	/* Must consist of 1...n full u32s */
-> +	if (!len || len % sizeof(u32))
-> +		return false;
-
-Can you check this before calculating word and pos?
-
-> +	/*
-> +	 * If the array is shorter than expected, assume we support
-> +	 * all of the bits set there.
-> +	 */
-> +	if (word >= len / sizeof(u32))
-> +		return true;
-
-If an array is shorter than expected, it usually means ENOMEM. Is
-there a real use-case for this check?
-
-> +	/* Last word must not contain any bits past the expected number */
-> +	if (arr[word] & (u32)~GENMASK(pos, 0))
-> +		return false;
-
-We have BITMAP_LAST_WORD_MASK() macro for this.
-
-> +	/*
-> +	 * If the array is longer than expected, make sure all the bytes
-> +	 * past the expected length are zeroed.
-> +	 */
-> +	len -= bitmap_arr32_size(nbits);
-> +	if (memchr_inv(&arr[word + 1], 0, len))
-> +		return false;
-
-Instead of true/false, I would return a meaningful error or 0. In this
-case, ERANGE or EDOM would seemingly fit well.
-
-> +
-> +	return true;
-> +}
-> +EXPORT_SYMBOL(bitmap_validate_arr32);
-> +
->  #if (BITS_PER_LONG == 32) && defined(__BIG_ENDIAN)
->  /**
->   * bitmap_from_arr64 - copy the contents of u64 array of bits to bitmap
-> -- 
-> 2.37.3
+--
+Best regards,
+Mikhail Rudenko
