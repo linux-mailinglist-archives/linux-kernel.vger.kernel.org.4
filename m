@@ -2,102 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A08C46059B1
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 10:26:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D274C6059B5
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 10:26:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbiJTI0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 04:26:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48728 "EHLO
+        id S229719AbiJTI0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 04:26:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229909AbiJTI0L (ORCPT
+        with ESMTP id S229768AbiJTI0l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 04:26:11 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 78AE5BC61F;
-        Thu, 20 Oct 2022 01:26:07 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 29K8P8KM0007657, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 29K8P8KM0007657
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Thu, 20 Oct 2022 16:25:08 +0800
-Received: from RTEXDAG01.realtek.com.tw (172.21.6.100) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.9; Thu, 20 Oct 2022 16:25:40 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXDAG01.realtek.com.tw (172.21.6.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Thu, 20 Oct 2022 16:25:39 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::add3:284:fd3d:8adb]) by
- RTEXMBS04.realtek.com.tw ([fe80::add3:284:fd3d:8adb%5]) with mapi id
- 15.01.2375.007; Thu, 20 Oct 2022 16:25:39 +0800
-From:   Ping-Ke Shih <pkshih@realtek.com>
-To:     Colin Ian King <colin.i.king@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-CC:     "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH][next] wifi: rtw89: 8852b: Fix spelling mistake KIP_RESOTRE -> KIP_RESTORE
-Thread-Topic: [PATCH][next] wifi: rtw89: 8852b: Fix spelling mistake
- KIP_RESOTRE -> KIP_RESTORE
-Thread-Index: AQHY5FVYzEwt5nqXEUGEagTPXukM1q4W8X9g
-Date:   Thu, 20 Oct 2022 08:25:39 +0000
-Message-ID: <bef9e90fb8bd44eb8fc3acb26103314a@realtek.com>
-References: <20221020072646.1513307-1-colin.i.king@gmail.com>
-In-Reply-To: <20221020072646.1513307-1-colin.i.king@gmail.com>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.69.188]
-x-kse-serverinfo: RTEXDAG01.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?utf-8?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzEwLzIwIOS4iuWNiCAwNjozNjowMA==?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Thu, 20 Oct 2022 04:26:41 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FDE4188A85;
+        Thu, 20 Oct 2022 01:26:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=nzKugFjin02AsmVSO2SO0VwhTWFBPSTkNTSFyYe251I=; b=giFg8cmWtAJ+oOhF6XZcXqFAPi
+        jZ/26cqTs4SRs/bBLLzAIglFyvHeG1I/OG+TVy1zvB1DTnenH+rJQBm41hPJZxzV1yCvCms87Q1x6
+        ATqWDUE3mwDLrZvVCF9+2U4Kh3hL3H1lXjce7om1NWsEeRCgegLpZooIQVUC9YDmFbjZxU5mqz7+z
+        79DHJD2eHUKtEj8V/EnOBvCH7apHoICpdmevMPSDBRfFZfpqJRPz2ciiVw56pL7IGHs2WmVbheyOu
+        8xF7aRZF7jLWy5LctIP/N4LGJ0O7AWxdW2YLSTIAmygSn6oyPM6GxEodfZVIxguCUiuTmBACU6fOm
+        Kf05jfww==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1olQsx-00CBhc-8o; Thu, 20 Oct 2022 08:26:39 +0000
+Date:   Thu, 20 Oct 2022 01:26:39 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Pavel Begunkov <asml.silence@gmail.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+        io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [RFC for-next v2 1/4] bio: safeguard REQ_ALLOC_CACHE bio put
+Message-ID: <Y1EGP30UotgnCc6a@infradead.org>
+References: <cover.1666122465.git.asml.silence@gmail.com>
+ <558d78313476c4e9c233902efa0092644c3d420a.1666122465.git.asml.silence@gmail.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <558d78313476c4e9c233902efa0092644c3d420a.1666122465.git.asml.silence@gmail.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IENvbGluIElhbiBLaW5nIDxj
-b2xpbi5pLmtpbmdAZ21haWwuY29tPg0KPiBTZW50OiBUaHVyc2RheSwgT2N0b2JlciAyMCwgMjAy
-MiAzOjI3IFBNDQo+IFRvOiBQaW5nLUtlIFNoaWggPHBrc2hpaEByZWFsdGVrLmNvbT47IEthbGxl
-IFZhbG8gPGt2YWxvQGtlcm5lbC5vcmc+OyBEYXZpZCBTIC4gTWlsbGVyDQo+IDxkYXZlbUBkYXZl
-bWxvZnQubmV0PjsgRXJpYyBEdW1hemV0IDxlZHVtYXpldEBnb29nbGUuY29tPjsgSmFrdWIgS2lj
-aW5za2kgPGt1YmFAa2VybmVsLm9yZz47IFBhb2xvIEFiZW5pDQo+IDxwYWJlbmlAcmVkaGF0LmNv
-bT47IGxpbnV4LXdpcmVsZXNzQHZnZXIua2VybmVsLm9yZzsgbmV0ZGV2QHZnZXIua2VybmVsLm9y
-Zw0KPiBDYzoga2VybmVsLWphbml0b3JzQHZnZXIua2VybmVsLm9yZzsgbGludXgta2VybmVsQHZn
-ZXIua2VybmVsLm9yZw0KPiBTdWJqZWN0OiBbUEFUQ0hdW25leHRdIHdpZmk6IHJ0dzg5OiA4ODUy
-YjogRml4IHNwZWxsaW5nIG1pc3Rha2UgS0lQX1JFU09UUkUgLT4gS0lQX1JFU1RPUkUNCj4gDQo+
-IFRoZXIgaXMgYSBzcGVsbGluZyBtaXN0YWtlIGluIGEgcnR3ODlfZGVidWcgbWVzc2FnZS4gRml4
-IGl0Lg0KPiANCj4gU2lnbmVkLW9mZi1ieTogQ29saW4gSWFuIEtpbmcgPGNvbGluLmkua2luZ0Bn
-bWFpbC5jb20+DQoNCkFja2VkLWJ5OiBQaW5nLUtlIFNoaWggPHBrc2hpaEByZWFsdGVrLmNvbT4N
-Cg0KPiAtLS0NCj4gIGRyaXZlcnMvbmV0L3dpcmVsZXNzL3JlYWx0ZWsvcnR3ODkvcnR3ODg1MmJf
-cmZrLmMgfCAyICstDQo+ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRp
-b24oLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL25ldC93aXJlbGVzcy9yZWFsdGVrL3J0
-dzg5L3J0dzg4NTJiX3Jmay5jDQo+IGIvZHJpdmVycy9uZXQvd2lyZWxlc3MvcmVhbHRlay9ydHc4
-OS9ydHc4ODUyYl9yZmsuYw0KPiBpbmRleCA4ZmQwMTUwMmFjNWIuLjcyMmFlMzRiMDljMSAxMDA2
-NDQNCj4gLS0tIGEvZHJpdmVycy9uZXQvd2lyZWxlc3MvcmVhbHRlay9ydHc4OS9ydHc4ODUyYl9y
-ZmsuYw0KPiArKysgYi9kcml2ZXJzL25ldC93aXJlbGVzcy9yZWFsdGVrL3J0dzg5L3J0dzg4NTJi
-X3Jmay5jDQo+IEBAIC0xNzU0LDcgKzE3NTQsNyBAQCBzdGF0aWMgdm9pZCBfZHBrX29uZV9zaG90
-KHN0cnVjdCBydHc4OV9kZXYgKnJ0d2RldiwgZW51bSBydHc4OV9waHlfaWR4IHBoeSwNCj4gIAkJ
-ICAgIGlkID09IDB4MTQgPyAiUFdSX0NBTCIgOg0KPiAgCQkgICAgaWQgPT0gMHgxNSA/ICJEUEtf
-UlhBR0MiIDoNCj4gIAkJICAgIGlkID09IDB4MTYgPyAiS0lQX1BSRVNFVCIgOg0KPiAtCQkgICAg
-aWQgPT0gMHgxNyA/ICJLSVBfUkVTT1RSRSIgOiAiRFBLX1RYQUdDIiwNCj4gKwkJICAgIGlkID09
-IDB4MTcgPyAiS0lQX1JFU1RPUkUiIDogIkRQS19UWEFHQyIsDQo+ICAJCSAgICBkcGtfY21kKTsN
-Cj4gIH0NCj4gDQo+IC0tDQo+IDIuMzcuMw0KPiANCj4gDQo+IC0tLS0tLVBsZWFzZSBjb25zaWRl
-ciB0aGUgZW52aXJvbm1lbnQgYmVmb3JlIHByaW50aW5nIHRoaXMgZS1tYWlsLg0K
+On Tue, Oct 18, 2022 at 08:50:55PM +0100, Pavel Begunkov wrote:
+> bio_put() with REQ_ALLOC_CACHE assumes that it's executed not from
+> an irq context. Let's add a warning if the invariant is not respected,
+> especially since there is a couple of places removing REQ_POLLED by hand
+> without also clearing REQ_ALLOC_CACHE.
+
+Looks good:
+
+Reviewed-by: Christoph Hellwig <hch@lst.de>
