@@ -2,172 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2607F605928
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 09:57:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D8AF60592A
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 09:58:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229975AbiJTH52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 03:57:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48956 "EHLO
+        id S230343AbiJTH6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 03:58:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231145AbiJTH5Z (ORCPT
+        with ESMTP id S229542AbiJTH6K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 03:57:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 848E517D872;
-        Thu, 20 Oct 2022 00:57:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B295E61A5E;
-        Thu, 20 Oct 2022 07:57:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B678C433C1;
-        Thu, 20 Oct 2022 07:57:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666252643;
-        bh=/25+cqbt4mdOvWwj1tRncSUFWAEXYfCK1XMU8Ih3Wfo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qKMTB3PbxAYXjK4E3aFxRztZxLImdaTVL1YtLp13eOaypLl8hvvPkKgLZmK2lViBt
-         uANJOFraxhoCIEscKFklvRz+IIccDdGEnIvwP4EFcHchLgrQZHuo0vaHAeVhf+u1fK
-         kjryITDXpSbhtK7LVbYUv13GxO/1mJ5EnQTUlacmIQ3eDW4L2cUqhk1hNTNOXt++AV
-         f17Na3PdsiwN+LK0HEsCAA+goNpWKOf3i+ADUskSAAhpAeb1DZEWN4lVmWC8INUqK/
-         BDXnImdJjUicuPYUroC2d/DX4t7Y+sfRgWBk7w1hChOFd3p/CNLd8vnJ7z58VM+GUP
-         BDWDx4Sr66nQw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1olQQP-0000NY-6O; Thu, 20 Oct 2022 09:57:09 +0200
-Date:   Thu, 20 Oct 2022 09:57:09 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Stanimir Varbanov <svarbanov@mm-sol.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Krishna chaitanya chundru <quic_krichai@quicinc.com>,
-        quic_vbadigan@quicinc.com, linux-arm-msm@vger.kernel.org,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: PCI: qcom: Add SC8280XP/SA8540P
- interconnects
-Message-ID: <Y1D/Vaa/3zKP4Cxj@hovoldconsulting.com>
-References: <20221017112449.2146-1-johan+linaro@kernel.org>
- <20221017112449.2146-2-johan+linaro@kernel.org>
- <010b6de2-5df6-77c9-2f04-43f2edc89ff2@linaro.org>
+        Thu, 20 Oct 2022 03:58:10 -0400
+Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A05AC175342
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 00:58:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1666252675; bh=3ySRDoaptin4+jmUBPTOdjuCbvv18HJH5X4rrMOB2hA=;
+        h=X-EA-Auth:Date:From:To:Subject:Message-ID:References:MIME-Version:
+         Content-Type:In-Reply-To;
+        b=YojCcScZ9IflRhy/MKHnXyzB0TzFHM19jOHnPiAoWYNl/vW9aRQ4Nmv80z9iBVvC4
+         Ghb+rC5revR6wcA6WO6gSJ02hOD85g36Xxjzdf+Xm77kyockUYmyXD/5PsnqkbT235
+         YYm0U3cJXHuSghSIKbeYWLj3L328V/euAJbRo9rU=
+Received: by b-1.in.mailobj.net [192.168.90.11] with ESMTP
+        via [213.182.55.206]
+        Thu, 20 Oct 2022 09:57:55 +0200 (CEST)
+X-EA-Auth: sUhre9kPbbfbHfDq4evUjxpMs/B0lQrJDNcGdNua4q7Y2zl/DG8KanJ6fOhndfzu0btL9skcGZlHWNzLZsCxQnJ+PwEzxF0/
+Date:   Thu, 20 Oct 2022 13:27:50 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     outreachy@lists.linux.dev, Larry.Finger@lwfinger.net,
+        phil@philpotter.co.uk, paskripkin@gmail.com,
+        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, kumarpraveen@linux.microsoft.com,
+        saurabh.truth@gmail.com
+Subject: [PATCH v3 07/10] staging: r8188eu: Associate pointer symbol with
+ parameter name
+Message-ID: <22b8f1bc0371c90d594c4b6377bff731c7a1a631.1666249716.git.drv@mailo.com>
+References: <cover.1666249715.git.drv@mailo.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <010b6de2-5df6-77c9-2f04-43f2edc89ff2@linaro.org>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <cover.1666249715.git.drv@mailo.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 10:37:31AM -0400, Krzysztof Kozlowski wrote:
-> On 17/10/2022 07:24, Johan Hovold wrote:
-> > Add the missing SC8280XP/SA8540P "pcie-mem" and "cpu-pcie" interconnect
-> > paths to the bindings.
-> > 
-> > Fixes: 76d777ae045e ("dt-bindings: PCI: qcom: Add SC8280XP to binding")
-> > Fixes: 76c4207f4085 ("dt-bindings: PCI: qcom: Add SA8540P to binding")
-> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> > ---
-> >  .../devicetree/bindings/pci/qcom,pcie.yaml    | 25 +++++++++++++++++++
-> >  1 file changed, 25 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
-> > index 22a2aac4c23f..a55434f95edd 100644
-> > --- a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
-> > +++ b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
-> > @@ -62,6 +62,12 @@ properties:
-> >      minItems: 3
-> >      maxItems: 12
-> >  
-> > +  interconnects:
-> > +    maxItems: 2
-> > +
-> > +  interconnect-names:
-> > +    maxItems: 2
-> > +
-> >    resets:
-> >      minItems: 1
-> >      maxItems: 12
-> > @@ -629,6 +635,25 @@ allOf:
-> >            items:
-> >              - const: pci # PCIe core reset
-> >  
-> > +  - if:
-> > +      properties:
-> > +        compatible:
-> > +          contains:
-> > +            enum:
-> > +              - qcom,pcie-sa8540p
-> > +              - qcom,pcie-sc8280xp
-> > +    then:
-> > +      properties:
-> > +        interconnects:
-> > +          maxItems: 2
-> 
-> No need for this.
-> 
-> > +        interconnect-names:
-> > +          items:
-> > +            - const: pcie-mem
-> > +            - const: cpu-pcie
-> > +      required:
-> > +        - interconnects
-> > +        - interconnect-names
-> 
-> else:
->   ??
-> 
-> Otherwise, you allow any names for other variants.
+The pointer symbol '*' should be associated with the function parameter
+name and not its type. This improves code readability and adheres to the
+coding-style guidelines. Address following checkpatch reported error:
+	ERROR: "foo *   bar" should be "foo *bar"
 
-Are you suggesting something like moving the names to the common
-constraints for now:
+While in there, update parameter name at one place to match other function
+declarations.
 
-  interconnects:
-    maxItems: 2
+Signed-off-by: Deepak R Varma <drv@mailo.com>
+---
 
-  interconnect-names:
-    items:
-      - const: pcie-mem
-      - const: cpu-pcie
+Changes in v3:
+   1. Patch newly added to the patch set.
 
-and then in the allOf:
+ .../staging/r8188eu/include/rtl8188e_hal.h    |  2 +-
+ drivers/staging/r8188eu/include/rtw_cmd.h     | 20 +++++++++----------
+ .../staging/r8188eu/include/rtw_ioctl_set.h   |  4 ++--
+ drivers/staging/r8188eu/include/rtw_mlme.h    |  2 +-
+ .../staging/r8188eu/include/rtw_mlme_ext.h    |  8 ++++----
+ 5 files changed, 18 insertions(+), 18 deletions(-)
 
-  - if:
-      properties:
-        compatible:
-          contains:
-            enum:
-              - qcom,pcie-sa8540p
-              - qcom,pcie-sc8280xp
-    then:
-      required:
-        - interconnects
-        - interconnect-names
-    else:
-      properties:
-        interconnects: false
-        interconnect-names: false
+diff --git a/drivers/staging/r8188eu/include/rtl8188e_hal.h b/drivers/staging/r8188eu/include/rtl8188e_hal.h
+index 577cd3f4f797..ae33a0f8b5ce 100644
+--- a/drivers/staging/r8188eu/include/rtl8188e_hal.h
++++ b/drivers/staging/r8188eu/include/rtl8188e_hal.h
+@@ -167,7 +167,7 @@ void rtl8188e_EfuseParseChnlPlan(struct adapter *padapter, u8 *hwinfo,
+ 				 bool AutoLoadFail);
+ void Hal_ReadAntennaDiversity88E(struct adapter *pAdapter, u8 *PROMContent,
+ 				 bool AutoLoadFail);
+-void Hal_ReadThermalMeter_88E(struct adapter *	dapter, u8 *PROMContent,
++void Hal_ReadThermalMeter_88E(struct adapter *padapter, u8 *PROMContent,
+ 			      bool AutoloadFail);
+ void Hal_EfuseParseXtal_8188E(struct adapter *pAdapter, u8 *hwinfo,
+ 			      bool AutoLoadFail);
+diff --git a/drivers/staging/r8188eu/include/rtw_cmd.h b/drivers/staging/r8188eu/include/rtw_cmd.h
+index e47382ac64a0..ff6ed4f2a1d8 100644
+--- a/drivers/staging/r8188eu/include/rtw_cmd.h
++++ b/drivers/staging/r8188eu/include/rtw_cmd.h
+@@ -734,27 +734,27 @@ u8 rtw_sitesurvey_cmd(struct adapter  *padapter, struct ndis_802_11_ssid *ssid,
+ u8 rtw_createbss_cmd(struct adapter  *padapter);
+ u8 rtw_setstakey_cmd(struct adapter *padapter, u8 *psta, u8 unicast_key);
+ u8 rtw_clearstakey_cmd(struct adapter *padapter, u8 *psta, u8 entry, u8 enqueue);
+-u8 rtw_joinbss_cmd(struct adapter  *padapter, struct wlan_network* pnetwork);
++u8 rtw_joinbss_cmd(struct adapter  *padapter, struct wlan_network *pnetwork);
+ u8 rtw_disassoc_cmd(struct adapter *padapter, u32 deauth_timeout_ms, bool enqueue);
+ u8 rtw_setopmode_cmd(struct adapter  *padapter, enum ndis_802_11_network_infra networktype);
+ u8 rtw_setdatarate_cmd(struct adapter  *padapter, u8 *rateset);
+ u8 rtw_setrfintfs_cmd(struct adapter  *padapter, u8 mode);
 
-This way we'd catch anyone adding interconnects to a DTS without first
-updating the bindings, but it also seems to go against the idea of
-bindings fully describing the hardware by saying that no other platforms
-have interconnects (when they actually do even if we don't describe it
-just yet).
+-u8 rtw_gettssi_cmd(struct adapter  *padapter, u8 offset, u8 *pval);
+-u8 rtw_setfwdig_cmd(struct adapter*padapter, u8 type);
+-u8 rtw_setfwra_cmd(struct adapter*padapter, u8 type);
++u8 rtw_gettssi_cmd(struct adapter *padapter, u8 offset, u8 *pval);
++u8 rtw_setfwdig_cmd(struct adapter *padapter, u8 type);
++u8 rtw_setfwra_cmd(struct adapter *padapter, u8 type);
 
-Or should we do the above but without the else clause to have some
-constraints in place on the names at least?
+-u8 rtw_addbareq_cmd(struct adapter*padapter, u8 tid, u8 *addr);
++u8 rtw_addbareq_cmd(struct adapter *padapter, u8 tid, u8 *addr);
 
-Johan
+ u8 rtw_dynamic_chk_wk_cmd(struct adapter *adapter);
+
+-u8 rtw_lps_ctrl_wk_cmd(struct adapter*padapter, u8 lps_ctrl_type, u8 enqueue);
+-u8 rtw_rpt_timer_cfg_cmd(struct adapter*padapter, u16 minRptTime);
++u8 rtw_lps_ctrl_wk_cmd(struct adapter *padapter, u8 lps_ctrl_type, u8 enqueue);
++u8 rtw_rpt_timer_cfg_cmd(struct adapter *padapter, u16 minRptTime);
+
+- u8 rtw_antenna_select_cmd(struct adapter*padapter, u8 antenna, u8 enqueue);
+-u8 rtw_ps_cmd(struct adapter*padapter);
++ u8 rtw_antenna_select_cmd(struct adapter *padapter, u8 antenna, u8 enqueue);
++u8 rtw_ps_cmd(struct adapter *padapter);
+
+-u8 rtw_chk_hi_queue_cmd(struct adapter*padapter);
++u8 rtw_chk_hi_queue_cmd(struct adapter *padapter);
+
+ u8 rtw_set_chplan_cmd(struct adapter *padapter, u8 chplan);
+
+diff --git a/drivers/staging/r8188eu/include/rtw_ioctl_set.h b/drivers/staging/r8188eu/include/rtw_ioctl_set.h
+index 7365079c704f..abe460d6504d 100644
+--- a/drivers/staging/r8188eu/include/rtw_ioctl_set.h
++++ b/drivers/staging/r8188eu/include/rtw_ioctl_set.h
+@@ -10,10 +10,10 @@ typedef u8 NDIS_802_11_PMKID_VALUE[16];
+
+ u8 rtw_set_802_11_authentication_mode(struct adapter *adapt,
+ 				      enum ndis_802_11_auth_mode authmode);
+-u8 rtw_set_802_11_bssid(struct adapter*adapter, u8 *bssid);
++u8 rtw_set_802_11_bssid(struct adapter *adapter, u8 *bssid);
+ u8 rtw_set_802_11_add_wep(struct adapter *adapter, struct ndis_802_11_wep *wep);
+ u8 rtw_set_802_11_disassociate(struct adapter *adapter);
+-u8 rtw_set_802_11_bssid_list_scan(struct adapter*adapter,
++u8 rtw_set_802_11_bssid_list_scan(struct adapter *adapter,
+ 				  struct ndis_802_11_ssid *pssid,
+ 				  int ssid_max_num);
+ u8 rtw_set_802_11_infrastructure_mode(struct adapter *adapter,
+diff --git a/drivers/staging/r8188eu/include/rtw_mlme.h b/drivers/staging/r8188eu/include/rtw_mlme.h
+index b69989cbab21..7658f864136e 100644
+--- a/drivers/staging/r8188eu/include/rtw_mlme.h
++++ b/drivers/staging/r8188eu/include/rtw_mlme.h
+@@ -547,7 +547,7 @@ void _rtw_free_network(struct mlme_priv *pmlmepriv,
+ void _rtw_free_network_nolock(struct mlme_priv *pmlmepriv,
+ 			      struct wlan_network *pnetwork);
+
+-struct wlan_network* _rtw_find_network(struct __queue *scanned_queue, u8 *addr);
++struct wlan_network *_rtw_find_network(struct __queue *scanned_queue, u8 *addr);
+
+ void _rtw_free_network_queue(struct adapter *padapter, u8 isfreeall);
+
+diff --git a/drivers/staging/r8188eu/include/rtw_mlme_ext.h b/drivers/staging/r8188eu/include/rtw_mlme_ext.h
+index b322d0848db9..be470f913a94 100644
+--- a/drivers/staging/r8188eu/include/rtw_mlme_ext.h
++++ b/drivers/staging/r8188eu/include/rtw_mlme_ext.h
+@@ -479,11 +479,11 @@ void report_survey_event(struct adapter *padapter, struct recv_frame *precv_fram
+ void report_surveydone_event(struct adapter *padapter);
+ void report_del_sta_event(struct adapter *padapter,
+ 			  unsigned char *addr, unsigned short reason);
+-void report_add_sta_event(struct adapter *padapter, unsigned char* addr,
++void report_add_sta_event(struct adapter *padapter, unsigned char *addr,
+ 			  int cam_idx);
+
+ void beacon_timing_control(struct adapter *padapter);
+-extern u8 set_tx_beacon_cmd(struct adapter*padapter);
++extern u8 set_tx_beacon_cmd(struct adapter *padapter);
+ unsigned int setup_beacon_frame(struct adapter *padapter,
+ 				unsigned char *beacon_frame);
+ void update_mgnt_tx_rate(struct adapter *padapter, u8 rate);
+@@ -502,7 +502,7 @@ void issue_p2p_GO_request(struct adapter *padapter, u8 *raddr);
+ void issue_probereq_p2p(struct adapter *padapter, u8 *da);
+ void issue_p2p_invitation_response(struct adapter *padapter, u8 *raddr,
+ 				   u8 dialogToken, u8 success);
+-void issue_p2p_invitation_request(struct adapter *padapter, u8* raddr);
++void issue_p2p_invitation_request(struct adapter *padapter, u8 *raddr);
+ void issue_beacon(struct adapter *padapter, int timeout_ms);
+ void issue_probersp(struct adapter *padapter, unsigned char *da,
+ 		    u8 is_valid_p2p_probereq);
+@@ -514,7 +514,7 @@ void issue_auth(struct adapter *padapter, struct sta_info *psta,
+ void issue_probereq(struct adapter *padapter, struct ndis_802_11_ssid *pssid,
+ 		    u8 *da);
+ s32 issue_probereq_ex(struct adapter *adapter, struct ndis_802_11_ssid *pssid,
+-		      u8* da, int try_cnt, int wait_ms);
++		      u8 *da, int try_cnt, int wait_ms);
+ int issue_nulldata(struct adapter *padapter, unsigned char *da,
+ 		   unsigned int power_mode, int try_cnt, int wait_ms);
+ int issue_qos_nulldata(struct adapter *padapter, unsigned char *da,
+--
+2.30.2
+
+
+
