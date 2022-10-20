@@ -2,80 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6717F605611
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 05:44:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B0D7605617
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 05:49:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229679AbiJTDn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 23:43:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59174 "EHLO
+        id S229731AbiJTDs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 23:48:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbiJTDnw (ORCPT
+        with ESMTP id S229707AbiJTDsz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 23:43:52 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F8091ABEF0
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 20:43:50 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id bu25so31470034lfb.3
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 20:43:50 -0700 (PDT)
+        Wed, 19 Oct 2022 23:48:55 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CE221911ED
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 20:48:54 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id g8-20020a17090a128800b0020c79f987ceso2116049pja.5
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 20:48:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Mbb+ms7dDLns10UB111selnMgeoJrimy+PQGWTgS8os=;
-        b=GRtyKqUh+xv5psvLq7nIc/uv5P0r3/660TF9/kxeZxN52qyJUhRib44NzMiYTxaTEr
-         gt0lMlGyjzA2fjCTFjSW50BtLm0XQH2pKDal/noPsgy7J3PDU64LVzMWZpucBvLQho6M
-         zHAzs1fhiXK0EJH+/SYu13RkaENktAnPyvrHPHJ5XA5Lg85aDFJNuqc6MGxXU5yki90H
-         8fLy/lFuZNXgd+iJFajRLxxb0BpzC/EhocRwnh+WBeqX4yVD4kviu6GNaIivVLuHslp+
-         fM9/aVVU2yvR4xHnLv20NA8DnJfnCUEkTDSMO3XxFAUW50cU0CmyAloZtVExGDq1S6hF
-         97lg==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=B380SWXebweddYWftA/qmfI+PBISJKmsY//1dGFA34Y=;
+        b=BrcYjOt+lNbt807LHYSocYLkoCaQNb83vMwI/1ctLUHaxHhLhyKv9Ij1+8ks4RneKJ
+         J/g8aXjdp3XQ3Etk5c068Ho2u5JmBVPCPpmDcNWojCbnWxaRiBCFlbGvIo2E4zJ4tHH5
+         ZlTIi0qeIkj7ox9z/VSBhzUptUrnzvGCna5JpAEc1IA3WqmUccttjWVOjUkaUxy6vrt0
+         n7acSvKhjQs3ihYdWCpf+YU3A0mxgqyv/kGusUeBG+sycELh0aDyOS1pwKmbb5JtMSZj
+         DjUjjgLLeiuKHjPPnYTXOIJ+vHwFS30pDK7J6Fg9sQHpCCWVOoOXDAcnGgFb9fvzrKuj
+         czMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Mbb+ms7dDLns10UB111selnMgeoJrimy+PQGWTgS8os=;
-        b=1wIxxZhS2wZKpHSuOBNZO8jHCIO9cu68KRWuGWEaBOg3VaGwUD0UFYTlc1+pslG0hG
-         2WkzIYKB2j+xfE099lHS6BoRW0MueX/9kU8TAC01kBx7qD7p40qkV3VAJ/DeupXG1U/t
-         TJKOPF/JquPVEjOzJly2qKLay7RGGSAx+dE0ID4VqJHS5MwUkT8REWbhEBOSXozy4st2
-         WtRGnzsKpx1pdPRrpo+coQ8bkV0HzSREpiDEkNsXxrZ+lC+QQ75jk3H/S/ebcj3ltyi9
-         Z02b+hAPedSFUA+W9A7cb4MI+0Q6U6U/cd4nZbqpxE5O4+1gs6xf2fdW9dAumQM5Mp/r
-         qx4w==
-X-Gm-Message-State: ACrzQf1OPyAf9iypvke2W35cjEIsEmdDx8WwEjdXQ+qDODgDLQVvnVTQ
-        llDcuF3LzRg012JcYoThN6G42w==
-X-Google-Smtp-Source: AMsMyM6MKUT7PHDVARV6rvHpxydEsT1vycmI5y9FVGzscxrHq1b3OZzmwF1HsCbazGeU+aREwzCNOQ==
-X-Received: by 2002:ac2:443a:0:b0:4a2:623d:6022 with SMTP id w26-20020ac2443a000000b004a2623d6022mr4379478lfl.372.1666237428674;
-        Wed, 19 Oct 2022 20:43:48 -0700 (PDT)
-Received: from [10.27.10.248] ([195.165.23.90])
-        by smtp.gmail.com with ESMTPSA id k3-20020a2eb743000000b0026fd3d906d7sm2725364ljo.133.2022.10.19.20.43.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Oct 2022 20:43:48 -0700 (PDT)
-Message-ID: <2902e7e8-eddf-149c-06fd-86b85d8af326@linaro.org>
-Date:   Thu, 20 Oct 2022 06:43:47 +0300
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=B380SWXebweddYWftA/qmfI+PBISJKmsY//1dGFA34Y=;
+        b=iCazglxhbB+ySikIvTvlKun21KEGvcsyrd8Oy+sqePfNswIqpLZZRMSLCiFB+lMnLD
+         wXYX1BhPhfw5tEk3VehWra7mw4cUcVLW+CVy1QFoKXOChnnjcKT/XT2jb5BXYZz821yx
+         X+meaxvtGuwNwsUA6fjbSb4djp38wFh1twc89A23OWYAClIQPVINTggF2wkaHMiTSU3a
+         GV5DraTHDv2eXn1bETExdu46ik7im0ss2zB8gyWxhpPvapAYuTh/kVc/+dGgQIu040cr
+         yMHB37mcJiPKbxypIHlxHVi10qhgOKRbg2uIIxFy101+aj3gegoBnhGFyYCZ2PQ8VY6O
+         U6aw==
+X-Gm-Message-State: ACrzQf3UCphOsH3c8egeNqeXgcSDX/s4y51MFo7gaLJracp94Gtd/5gO
+        Ev1YVa/ZkAmGJMLc4Sk2KEfGRulUnVbXgPkjiAFBWg==
+X-Google-Smtp-Source: AMsMyM6A31FdFe4Ict2geH7wrxfgdUz7KrLM3nmEIPCNt/BBVnzE9MQUlNTc6j6lJqsIUZHjriQPE4vhPXmq5heIgZE=
+X-Received: by 2002:a17:90b:1c82:b0:1ee:eb41:b141 with SMTP id
+ oo2-20020a17090b1c8200b001eeeb41b141mr14026932pjb.143.1666237733772; Wed, 19
+ Oct 2022 20:48:53 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v2 15/15] phy: qcom-qmp-pcie: add support for sc8280xp
- 4-lane PHYs
-Content-Language: en-GB
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221019113552.22353-1-johan+linaro@kernel.org>
- <20221019113552.22353-16-johan+linaro@kernel.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20221019113552.22353-16-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+References: <20221020015122.290097-1-ying.huang@intel.com>
+In-Reply-To: <20221020015122.290097-1-ying.huang@intel.com>
+From:   Wei Xu <weixugc@google.com>
+Date:   Wed, 19 Oct 2022 20:48:41 -0700
+Message-ID: <CAAPL-u9M+TfSVX-__SyicDURywn6b163WqmdRNhc0yr6ScdFYA@mail.gmail.com>
+Subject: Re: [PATCH] memory tier, sysfs: rename attribute "nodes" to "nodelist"
+To:     Huang Ying <ying.huang@intel.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Bharata B Rao <bharata@amd.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Jagdish Gediya <jvgediya.oss@gmail.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Tim Chen <tim.c.chen@intel.com>, Yang Shi <shy828301@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,272 +80,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/10/2022 14:35, Johan Hovold wrote:
-> The PCIe2 and PCIe3 controllers and PHYs on SC8280XP can be used in
-> 4-lane mode or as separate controllers and PHYs in 2-lane mode (e.g. as
-> PCIe2A and PCIe2B).
-> 
-> Add support for fetching the 4-lane configuration from the TCSR and
-> programming the lane registers of the second port when in 4-lane mode.
-> 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+Acked-by: Wei Xu <weixugc@google.com>
+
+On Wed, Oct 19, 2022 at 6:51 PM Huang Ying <ying.huang@intel.com> wrote:
+>
+> In sysfs, we use attribute name "cpumap" or "cpus" for cpu mask and
+> "cpulist" or "cpus_list" for cpu list.  For example, in my system,
+>
+>  $ cat /sys/devices/system/node/node0/cpumap
+>  f,ffffffff
+>  $ cat /sys/devices/system/cpu/cpu2/topology/core_cpus
+>  0,00100004
+>  $ cat cat /sys/devices/system/node/node0/cpulist
+>  0-35
+>  $ cat /sys/devices/system/cpu/cpu2/topology/core_cpus_list
+>  2,20
+>
+> It looks reasonable to use "nodemap" for node mask and "nodelist" for
+> node list.  So, rename the attribute to follow the naming convention.
+>
+> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+> Cc: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+> Cc: Alistair Popple <apopple@nvidia.com>
+> Cc: Bharata B Rao <bharata@amd.com>
+> Cc: Dan Williams <dan.j.williams@intel.com>
+> Cc: Dave Hansen <dave.hansen@intel.com>
+> Cc: Davidlohr Bueso <dave@stgolabs.net>
+> Cc: Hesham Almatary <hesham.almatary@huawei.com>
+> Cc: Jagdish Gediya <jvgediya.oss@gmail.com>
+> Cc: Johannes Weiner <hannes@cmpxchg.org>
+> Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Cc: Michal Hocko <mhocko@kernel.org>
+> Cc: Tim Chen <tim.c.chen@intel.com>
+> Cc: Wei Xu <weixugc@google.com>
+> Cc: Yang Shi <shy828301@gmail.com>
 > ---
->   drivers/phy/qualcomm/Kconfig             |   1 +
->   drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 118 +++++++++++++++++++++++
->   2 files changed, 119 insertions(+)
-> 
-> diff --git a/drivers/phy/qualcomm/Kconfig b/drivers/phy/qualcomm/Kconfig
-> index 5c98850f5a36..eb9ddc685b38 100644
-> --- a/drivers/phy/qualcomm/Kconfig
-> +++ b/drivers/phy/qualcomm/Kconfig
-> @@ -54,6 +54,7 @@ config PHY_QCOM_QMP
->   	tristate "Qualcomm QMP PHY Driver"
->   	depends on OF && COMMON_CLK && (ARCH_QCOM || COMPILE_TEST)
->   	select GENERIC_PHY
-> +	select MFD_SYSCON
->   	help
->   	  Enable this to support the QMP PHY transceiver that is used
->   	  with controllers such as PCIe, UFS, and USB on Qualcomm chips.
-> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-> index ea5228bd9ecc..e5bce4810bb5 100644
-> --- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-> @@ -10,6 +10,7 @@
->   #include <linux/io.h>
->   #include <linux/iopoll.h>
->   #include <linux/kernel.h>
-> +#include <linux/mfd/syscon.h>
->   #include <linux/module.h>
->   #include <linux/of.h>
->   #include <linux/of_device.h>
-> @@ -17,6 +18,7 @@
->   #include <linux/phy/pcie.h>
->   #include <linux/phy/phy.h>
->   #include <linux/platform_device.h>
-> +#include <linux/regmap.h>
->   #include <linux/regulator/consumer.h>
->   #include <linux/reset.h>
->   #include <linux/slab.h>
-> @@ -886,6 +888,10 @@ static const struct qmp_phy_init_tbl sc8280xp_qmp_gen3x2_pcie_rc_serdes_tbl[] =
->   	QMP_PHY_INIT_CFG(QSERDES_V5_COM_BIAS_EN_CLKBUFLR_EN, 0x14),
->   };
->   
-> +static const struct qmp_phy_init_tbl sc8280xp_qmp_gen3x4_pcie_serdes_4ln_tbl[] = {
-> +	QMP_PHY_INIT_CFG(QSERDES_V5_COM_BIAS_EN_CLKBUFLR_EN, 0x1c),
-> +};
-> +
->   static const struct qmp_phy_init_tbl sc8280xp_qmp_gen3x1_pcie_tx_tbl[] = {
->   	QMP_PHY_INIT_CFG(QSERDES_V5_TX_PI_QEC_CTRL, 0x20),
->   	QMP_PHY_INIT_CFG(QSERDES_V5_TX_LANE_MODE_1, 0x75),
-> @@ -1491,6 +1497,9 @@ struct qmp_phy_cfg {
->   	const struct qmp_phy_cfg_tables *tables_rc;
->   	const struct qmp_phy_cfg_tables *tables_ep;
->   
-> +	const struct qmp_phy_init_tbl *serdes_4ln_tbl;
-> +	int serdes_4ln_num;
-
-Would it make more sense to change this into the proper 
-qmp_phy_cfg_tables entry and then use the existing API for programming 
-the table?
-
-> +
->   	/* clock ids to be requested */
->   	const char * const *clk_list;
->   	int num_clks;
-> @@ -1518,6 +1527,7 @@ struct qmp_pcie {
->   	struct device *dev;
->   
->   	const struct qmp_phy_cfg *cfg;
-> +	bool tcsr_4ln_config;
-
-As a matter of preference, this seems too specific. I'd rename it to 
-split_config or split_4ln_config.
-
->   
->   	void __iomem *serdes;
->   	void __iomem *pcs;
-> @@ -1527,6 +1537,8 @@ struct qmp_pcie {
->   	void __iomem *tx2;
->   	void __iomem *rx2;
->   
-> +	void __iomem *port_b;
-> +
->   	struct clk *pipe_clk;
->   	struct clk *pipediv2_clk;
->   	struct clk_bulk_data *clks;
-> @@ -1932,6 +1944,44 @@ static const struct qmp_phy_cfg sc8280xp_qmp_gen3x2_pciephy_cfg = {
->   	.phy_status		= PHYSTATUS,
->   };
->   
-> +static const struct qmp_phy_cfg sc8280xp_qmp_gen3x4_pciephy_cfg = {
-> +	.lanes			= 4,
-> +
-> +	.offsets		= &qmp_pcie_offsets_v5,
-> +
-> +	.tables = {
-> +		.serdes		= sc8280xp_qmp_pcie_serdes_tbl,
-> +		.serdes_num	= ARRAY_SIZE(sc8280xp_qmp_pcie_serdes_tbl),
-> +		.tx		= sc8280xp_qmp_gen3x2_pcie_tx_tbl,
-> +		.tx_num		= ARRAY_SIZE(sc8280xp_qmp_gen3x2_pcie_tx_tbl),
-> +		.rx		= sc8280xp_qmp_gen3x2_pcie_rx_tbl,
-> +		.rx_num		= ARRAY_SIZE(sc8280xp_qmp_gen3x2_pcie_rx_tbl),
-> +		.pcs		= sc8280xp_qmp_gen3x2_pcie_pcs_tbl,
-> +		.pcs_num	= ARRAY_SIZE(sc8280xp_qmp_gen3x2_pcie_pcs_tbl),
-> +		.pcs_misc	= sc8280xp_qmp_gen3x2_pcie_pcs_misc_tbl,
-> +		.pcs_misc_num	= ARRAY_SIZE(sc8280xp_qmp_gen3x2_pcie_pcs_misc_tbl),
-> +	},
-> +
-> +	.tables_rc = &(const struct qmp_phy_cfg_tables) {
-> +		.serdes		= sc8280xp_qmp_gen3x2_pcie_rc_serdes_tbl,
-> +		.serdes_num	= ARRAY_SIZE(sc8280xp_qmp_gen3x2_pcie_rc_serdes_tbl),
-> +	},
-> +
-> +	.serdes_4ln_tbl		= sc8280xp_qmp_gen3x4_pcie_serdes_4ln_tbl,
-> +	.serdes_4ln_num		= ARRAY_SIZE(sc8280xp_qmp_gen3x4_pcie_serdes_4ln_tbl),
-> +
-> +	.clk_list		= sc8280xp_pciephy_clk_l,
-> +	.num_clks		= ARRAY_SIZE(sc8280xp_pciephy_clk_l),
-> +	.reset_list		= sdm845_pciephy_reset_l,
-> +	.num_resets		= ARRAY_SIZE(sdm845_pciephy_reset_l),
-> +	.vreg_list		= qmp_phy_vreg_l,
-> +	.num_vregs		= ARRAY_SIZE(qmp_phy_vreg_l),
-> +	.regs			= sm8250_pcie_regs_layout,
-> +
-> +	.pwrdn_ctrl		= SW_PWRDN | REFCLK_DRV_DSBL,
-> +	.phy_status		= PHYSTATUS,
-> +};
-> +
->   static const struct qmp_phy_cfg sdx55_qmp_pciephy_cfg = {
->   	.lanes			= 2,
->   
-> @@ -2054,6 +2104,24 @@ static void qmp_pcie_configure(void __iomem *base,
->   	qmp_pcie_configure_lane(base, tbl, num, 0xff);
->   }
->   
-> +static void qmp_pcie_init_port_b(struct qmp_pcie *qmp, const struct qmp_phy_cfg_tables *tbls)
-> +{
-> +	const struct qmp_phy_cfg *cfg = qmp->cfg;
-> +	const struct qmp_pcie_offsets *offs = cfg->offsets;
-> +	void __iomem *tx3, *rx3, *tx4, *rx4;
-> +
-> +	tx3 = qmp->port_b + offs->tx;
-> +	rx3 = qmp->port_b + offs->rx;
-> +	tx4 = qmp->port_b + offs->tx2;
-> +	rx4 = qmp->port_b + offs->rx2;
-> +
-> +	qmp_pcie_configure_lane(tx3, tbls->tx, tbls->tx_num, 1);
-> +	qmp_pcie_configure_lane(rx3, tbls->rx, tbls->rx_num, 1);
-> +
-> +	qmp_pcie_configure_lane(tx4, tbls->tx, tbls->tx_num, 2);
-> +	qmp_pcie_configure_lane(rx4, tbls->rx, tbls->rx_num, 2);
-
-I'd use BIT(2) and BIT(3) here. This would allow one to make a 
-difference between programming first pair of lanes and second pair of 
-lanes if necessary.
-
-
-> +}
-> +
->   static void qmp_pcie_init_registers(struct qmp_pcie *qmp, const struct qmp_phy_cfg_tables *tbls)
->   {
->   	const struct qmp_phy_cfg *cfg = qmp->cfg;
-> @@ -2080,6 +2148,11 @@ static void qmp_pcie_init_registers(struct qmp_pcie *qmp, const struct qmp_phy_c
->   
->   	qmp_pcie_configure(pcs, tbls->pcs, tbls->pcs_num);
->   	qmp_pcie_configure(pcs_misc, tbls->pcs_misc, tbls->pcs_misc_num);
-> +
-> +	if (cfg->lanes >= 4 && qmp->tcsr_4ln_config) {
-> +		qmp_pcie_configure(serdes, cfg->serdes_4ln_tbl, cfg->serdes_4ln_num);
-> +		qmp_pcie_init_port_b(qmp, tbls);
-> +	}
-
-As you have been refactoring this piece of code, maybe it would make 
-more sense to change qmp->tx/tx2 into an array of two elements? Then we 
-can extend it to 4 in this patch, and just always write the whole array 
-in a loop?
-
->   }
->   
->   static int qmp_pcie_init(struct phy *phy)
-> @@ -2477,6 +2550,37 @@ static int qmp_pcie_parse_dt_legacy(struct qmp_pcie *qmp, struct device_node *np
->   	return 0;
->   }
->   
-> +static int qmp_pcie_get_4ln_config(struct qmp_pcie *qmp)
-> +{
-> +	struct regmap *tcsr;
-> +	unsigned int args[2];
-> +	int ret;
-> +
-> +	tcsr = syscon_regmap_lookup_by_phandle_args(qmp->dev->of_node,
-> +						    "qcom,4ln-config-sel",
-> +						    ARRAY_SIZE(args), args);
-> +	if (IS_ERR(tcsr)) {
-> +		ret = PTR_ERR(tcsr);
-> +		if (ret == -ENOENT)
-> +			return 0;
-> +
-> +		dev_err(qmp->dev, "failed to lookup syscon: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	ret = regmap_test_bits(tcsr, args[0], BIT(args[1]));
-> +	if (ret < 0) {
-> +		dev_err(qmp->dev, "failed to read tcsr: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	qmp->tcsr_4ln_config = ret;
-> +
-> +	dev_dbg(qmp->dev, "4ln_config_sel = %d\n", qmp->tcsr_4ln_config);
-> +
-> +	return 0;
-> +}
-> +
->   static int qmp_pcie_parse_dt(struct qmp_pcie *qmp)
->   {
->   	struct platform_device *pdev = to_platform_device(qmp->dev);
-> @@ -2484,10 +2588,15 @@ static int qmp_pcie_parse_dt(struct qmp_pcie *qmp)
->   	const struct qmp_pcie_offsets *offs = cfg->offsets;
->   	struct device *dev = qmp->dev;
->   	void __iomem *base;
-> +	int ret;
->   
->   	if (!offs)
->   		return -EINVAL;
->   
-> +	ret = qmp_pcie_get_4ln_config(qmp);
-> +	if (ret)
-> +		return ret;
-> +
->   	base = devm_platform_ioremap_resource(pdev, 0);
->   	if (IS_ERR(base))
->   		return PTR_ERR(base);
-> @@ -2503,6 +2612,12 @@ static int qmp_pcie_parse_dt(struct qmp_pcie *qmp)
->   		qmp->rx2 = base + offs->rx2;
->   	}
->   
-> +	if (qmp->cfg->lanes >= 4 && qmp->tcsr_4ln_config) {
-> +		qmp->port_b = devm_platform_ioremap_resource(pdev, 1);
-> +		if (IS_ERR(qmp->port_b))
-> +			return PTR_ERR(qmp->port_b);
-> +	}
-> +
->   	qmp->pipe_clk = devm_clk_get(dev, "pipe");
->   	if (IS_ERR(qmp->pipe_clk)) {
->   		return dev_err_probe(dev, PTR_ERR(qmp->pipe_clk),
-> @@ -2610,6 +2725,9 @@ static const struct of_device_id qmp_pcie_of_match_table[] = {
->   	}, {
->   		.compatible = "qcom,sc8280xp-qmp-gen3x2-pcie-phy",
->   		.data = &sc8280xp_qmp_gen3x2_pciephy_cfg,
-> +	}, {
-> +		.compatible = "qcom,sc8280xp-qmp-gen3x4-pcie-phy",
-> +		.data = &sc8280xp_qmp_gen3x4_pciephy_cfg,
->   	}, {
->   		.compatible = "qcom,sdm845-qhp-pcie-phy",
->   		.data = &sdm845_qhp_pciephy_cfg,
-
--- 
-With best wishes
-Dmitry
-
+>  Documentation/ABI/testing/sysfs-kernel-mm-memory-tiers | 4 ++--
+>  mm/memory-tiers.c                                      | 8 ++++----
+>  2 files changed, 6 insertions(+), 6 deletions(-)
+>
+> diff --git a/Documentation/ABI/testing/sysfs-kernel-mm-memory-tiers b/Documentation/ABI/testing/sysfs-kernel-mm-memory-tiers
+> index 45985e411f13..721a05b90109 100644
+> --- a/Documentation/ABI/testing/sysfs-kernel-mm-memory-tiers
+> +++ b/Documentation/ABI/testing/sysfs-kernel-mm-memory-tiers
+> @@ -10,7 +10,7 @@ Description:  A collection of all the memory tiers allocated.
+>
+>
+>  What:          /sys/devices/virtual/memory_tiering/memory_tierN/
+> -               /sys/devices/virtual/memory_tiering/memory_tierN/nodes
+> +               /sys/devices/virtual/memory_tiering/memory_tierN/nodelist
+>  Date:          August 2022
+>  Contact:       Linux memory management mailing list <linux-mm@kvack.org>
+>  Description:   Directory with details of a specific memory tier
+> @@ -21,5 +21,5 @@ Description:  Directory with details of a specific memory tier
+>                 A smaller value of N implies a higher (faster) memory tier in the
+>                 hierarchy.
+>
+> -               nodes: NUMA nodes that are part of this memory tier.
+> +               nodelist: NUMA nodes that are part of this memory tier.
+>
+> diff --git a/mm/memory-tiers.c b/mm/memory-tiers.c
+> index f116b7b6333e..fa8c9d07f9ce 100644
+> --- a/mm/memory-tiers.c
+> +++ b/mm/memory-tiers.c
+> @@ -131,8 +131,8 @@ static void memory_tier_device_release(struct device *dev)
+>         kfree(tier);
+>  }
+>
+> -static ssize_t nodes_show(struct device *dev,
+> -                         struct device_attribute *attr, char *buf)
+> +static ssize_t nodelist_show(struct device *dev,
+> +                            struct device_attribute *attr, char *buf)
+>  {
+>         int ret;
+>         nodemask_t nmask;
+> @@ -143,10 +143,10 @@ static ssize_t nodes_show(struct device *dev,
+>         mutex_unlock(&memory_tier_lock);
+>         return ret;
+>  }
+> -static DEVICE_ATTR_RO(nodes);
+> +static DEVICE_ATTR_RO(nodelist);
+>
+>  static struct attribute *memtier_dev_attrs[] = {
+> -       &dev_attr_nodes.attr,
+> +       &dev_attr_nodelist.attr,
+>         NULL
+>  };
+>
+> --
+> 2.35.1
+>
