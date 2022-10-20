@@ -2,65 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 035EB606BE8
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 01:02:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 547DE606BE9
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 01:03:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230214AbiJTXCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 19:02:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40390 "EHLO
+        id S229862AbiJTXDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 19:03:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230102AbiJTXCP (ORCPT
+        with ESMTP id S229739AbiJTXDx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 19:02:15 -0400
-Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CABD22EC8A;
-        Thu, 20 Oct 2022 16:01:52 -0700 (PDT)
-Received: by mail-oi1-f169.google.com with SMTP id y72so1346668oia.3;
-        Thu, 20 Oct 2022 16:01:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9vKR6Ubf6NLut4evrO2911luI/V0iLPIfihaRv6pSUQ=;
-        b=jc9+o5pVBuKvVqiqzSgmYKFFr3A4zp8et/1CVYxJJm10EOe3bcAUR15UFAqJ158VMG
-         tfqMEkZCvjbx54Eb0iTuOt5jKHH/jy2MCPsyf7MA3MohIXZ9BtUPTaEmFbyCtaf834UO
-         YkfRkBstU1AvPDSJ5yd6twohGYQ5ikDk8Glm0FqAe9NNepWDuJSsThoIuJ8q42cX86Li
-         SfYDIsG2+Z/5IMHCTp8TRzZG2wfX+YotvmbaAY9TAir+QlSeM+3dw3xKIoygZ420MGQ/
-         X7bI+4mDu7tkZt6a9BEE25kjthL0fpZ3lbsze+yaGyzN7b59ZDbAaUUT1eFXiw9qORcI
-         XBaw==
-X-Gm-Message-State: ACrzQf0OuEa9H/4Ygwna3X190cFewlST1DnSm0EEWqBvvQ1/SMjfpFGS
-        lvTgYnByLXqbkNmCA5iL8A==
-X-Google-Smtp-Source: AMsMyM6WL6nqyQzSAS6vpGVeeJq/qC6laTr8Ta6Umw0ZOh8KuscLrjdmPHtIMgkBeB2488ZYBELfLw==
-X-Received: by 2002:a05:6808:1986:b0:355:3525:8fb with SMTP id bj6-20020a056808198600b00355352508fbmr8630049oib.3.1666306911273;
-        Thu, 20 Oct 2022 16:01:51 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id x3-20020a4ac583000000b00476989d42ebsm8050817oop.8.2022.10.20.16.01.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 16:01:50 -0700 (PDT)
-Received: (nullmailer pid 1969510 invoked by uid 1000);
-        Thu, 20 Oct 2022 23:01:51 -0000
-Date:   Thu, 20 Oct 2022 18:01:51 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Dinh Nguyen <dinguyen@kernel.org>
-Cc:     linux-mmc@vger.kernel.org, ulf.hansson@linaro.org,
-        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org, jh80.chung@samsung.com,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: Re: [PATCHv5 1/6] dt-bindings: mmc: synopsys-dw-mshc: document
- "altr,sysmgr-syscon"
-Message-ID: <20221020230151.GA1957503-robh@kernel.org>
-References: <20221019170657.68014-1-dinguyen@kernel.org>
- <20221019170657.68014-2-dinguyen@kernel.org>
- <166622207591.14373.6525811988033372211.robh@kernel.org>
+        Thu, 20 Oct 2022 19:03:53 -0400
+Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D44C022EC83
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 16:03:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1666307025; x=1697843025;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=LE+uK/qoTMEybIbQv0Zk753SwzykBZitfS4zR6YuQjU=;
+  b=BMXyxBHNGur5lFPq0ooaMV78ln66FZY+WYTLOrZ1/2g6LgJKRum/LLgF
+   76EZlaUQqQjoW+bDLPd555Y/xTXFHevo3gNS4ASyxOP1wLRiMsithYBZA
+   EFEJHMzJcxmB9+1VWtCgdd8JwKBsvzBroZnFWYVJjZIXHTpiLr11CpSi0
+   ylp+LO/NUx8QJ2Qr0LvHKSTFxBUWa9K6XDgfimGmKD+ushcaHraKr6Ljt
+   HcSP/CgpyQGGVsLjlaeLRNsl+UOH3aaeJogPhXmiNOqHwuZIij/+a96a6
+   AUnKX0/drmgfqUJhquiCDC3vGab2KKzYolopzK1Y/hnkzeb2y8bW8tddD
+   g==;
+X-IronPort-AV: E=Sophos;i="5.95,200,1661788800"; 
+   d="scan'208";a="326488333"
+Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 21 Oct 2022 07:03:44 +0800
+IronPort-SDR: ehQAeaLlKBIl/VKlYOgieOfLxiY5WWl0tPJ0Nx+QYE6UExp8C5JZ7Y8/4TYCbchhh7Qnk2i++W
+ VI1OeOI6ldRb7a8l2JZr5AqxfY5SbHmJ+maxk4q/phCjAB1oxN+p5gQh4xEwIrTMX4GUezGBI3
+ Bl/KLnWMVYo8VgjsTg7CRv0RHMUj5WdgsSxLZZXIkPDart2vm+CVW6A8r6wIA/5sSOETGxdWJ8
+ 1EIbdmGoiimvg1RJfd7lRtwXV/RVW9rj0efLpEb65GnQCQQ0Iv0oLLwSH0e9w0hP384axDmmdj
+ rqn9xU2wlgohB9cd5yDEnsyX
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 20 Oct 2022 15:17:33 -0700
+IronPort-SDR: VvsXf0X+nlpJwHTt6FEZFD5wVpFGeKjW1W1a/c/cJnoVTpYnwAqyco7w1W059dz4m1LXsymeYC
+ N7dckCO3/Vwx5F4bD4FT6hX86VC5Ke5hISivEWaaZ4ZPiQsbp2hflabz/K/OfsRQMy+rAIfEAa
+ tcvx3i+cHymvln7g8MGE8OgW8d2rkuiA5xwkliTVIy9A58Drx9n0aHq6E5TmrDYVFVWb9Sl3Cr
+ VVCKOxt4/L9daObHBOTuPNOyplB3WVespPlbl4yM9EujkyNrBhsua86LuJxKO3KYSkyutcqlCY
+ Ub0=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 20 Oct 2022 16:03:44 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Mtjnr2ys5z1RwqL
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 16:03:44 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1666307021; x=1668899022; bh=LE+uK/qoTMEybIbQv0Zk753SwzykBZitfS4
+        zR6YuQjU=; b=CG6neP1/go3LqnQd5gso/bZ6iAkb5mhyAbeOHhIy3zS9DXw+mYt
+        CEpaNzE6qFe1lRCu0Dm6OyLObK58vg+6nK16XYaamh3rHnal9KRtaXTvO3DAtUrk
+        AdiSfrqroDTamIRwffVVnbJXkk+S9JILYcpzXzGOmtWvovjXGN3otJe1etj1NpOP
+        T/UKezvTDcT7UWGHw1h1plMDx0eNnRHmfnvIgEMbBqAStYaxMjibPliwMECmupzc
+        6Mz6jkf74WBhj7pYbLHxZrYow/BsTcwLGbsRxgJC6DetQmLtX0ABxQBT+5+2wEXm
+        PsL9HFKg1Jqf3uDiyoPbJ+OJLc/03XaD5zQ==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id hG5tqn-YQgM6 for <linux-kernel@vger.kernel.org>;
+        Thu, 20 Oct 2022 16:03:41 -0700 (PDT)
+Received: from [10.225.163.126] (unknown [10.225.163.126])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Mtjnm0vpJz1RvLy;
+        Thu, 20 Oct 2022 16:03:39 -0700 (PDT)
+Message-ID: <3213cf28-80a4-b3e5-274c-d51b1e9e04d5@opensource.wdc.com>
+Date:   Fri, 21 Oct 2022 08:03:38 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <166622207591.14373.6525811988033372211.robh@kernel.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH 11/14] pata: remove palmchip bk3710 driver
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@kernel.org>, Sekhar Nori <nsekhar@ti.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org, Kevin Hilman <khilman@baylibre.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Hannes Reinecke <hare@suse.de>, linux-ide@vger.kernel.org
+References: <20221019152947.3857217-1-arnd@kernel.org>
+ <20221019152947.3857217-12-arnd@kernel.org>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20221019152947.3857217-12-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,66 +103,450 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 06:31:53PM -0500, Rob Herring wrote:
-> On Wed, 19 Oct 2022 12:06:52 -0500, Dinh Nguyen wrote:
-> > Document the optional "altr,sysmgr-syscon" binding that is used to
-> > access the System Manager register that controls the SDMMC clock
-> > phase.
-> > 
-> > Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
-> > ---
-> > v5: document reg shift
-> > v4: add else statement
-> > v3: document that the "altr,sysmgr-syscon" binding is only applicable to
-> >     "altr,socfpga-dw-mshc"
-> > v2: document "altr,sysmgr-syscon" in the MMC section
-> > ---
-> >  .../bindings/mmc/synopsys-dw-mshc.yaml        | 32 +++++++++++++++++--
-> >  1 file changed, 29 insertions(+), 3 deletions(-)
-> > 
+On 10/20/22 00:29, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> Running 'make dtbs_check' with the schema in this patch gives the
-> following warnings. Consider if they are expected or the schema is
-> incorrect. These may not be new warnings.
+> This device was used only on the davinci dm644x platform that
+> is now gone, and no references to the device remain in the
+> kernel.
 > 
-> Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-> This will change in the future.
-> 
-> Full log is available here: https://patchwork.ozlabs.org/patch/
-> 
-> 
-> dwmmc0@ff704000: $nodename:0: 'dwmmc0@ff704000' does not match '^mmc(@.*)?$'
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Not necessary for this series, but it would be nice if existing warnings 
-were fixed before adding new things. Especially since most of the  
-warnings on this common bindings are all socfpga. It may become 
-required at some point, not just nice.
+Applied to libata tree for-6.2 branch (and for-next).
+Note that I fixed-up the patch title to:
 
-The node name is the cause of most/all the unevaluated property 
-warnings.
+ata: remove palmchip pata_bk3710 driver
 
-> 	arch/arm/boot/dts/socfpga_arria5_socdk.dtb
-> 	arch/arm/boot/dts/socfpga_cyclone5_chameleon96.dtb
-> 	arch/arm/boot/dts/socfpga_cyclone5_de0_nano_soc.dtb
-> 	arch/arm/boot/dts/socfpga_cyclone5_mcvevk.dtb
-> 	arch/arm/boot/dts/socfpga_cyclone5_socdk.dtb
-> 	arch/arm/boot/dts/socfpga_cyclone5_sockit.dtb
-> 	arch/arm/boot/dts/socfpga_cyclone5_socrates.dtb
-> 	arch/arm/boot/dts/socfpga_cyclone5_sodia.dtb
-> 	arch/arm/boot/dts/socfpga_cyclone5_vining_fpga.dtb
-> 	arch/arm/boot/dts/socfpga_vt.dtb
+Thanks !
+
+> ---
+>  drivers/ata/Kconfig       |  10 -
+>  drivers/ata/Makefile      |   1 -
+>  drivers/ata/pata_bk3710.c | 380 --------------------------------------
+>  3 files changed, 391 deletions(-)
+>  delete mode 100644 drivers/ata/pata_bk3710.c
 > 
-> dwmmc0@ff704000: 'altr,sysmgr-syscon' is a required property
-> 	arch/arm/boot/dts/socfpga_arria5_socdk.dtb
-> 	arch/arm/boot/dts/socfpga_cyclone5_chameleon96.dtb
-> 	arch/arm/boot/dts/socfpga_cyclone5_de0_nano_soc.dtb
-> 	arch/arm/boot/dts/socfpga_cyclone5_mcvevk.dtb
-> 	arch/arm/boot/dts/socfpga_cyclone5_socdk.dtb
-> 	arch/arm/boot/dts/socfpga_cyclone5_sockit.dtb
-> 	arch/arm/boot/dts/socfpga_cyclone5_socrates.dtb
-> 	arch/arm/boot/dts/socfpga_cyclone5_sodia.dtb
+> diff --git a/drivers/ata/Kconfig b/drivers/ata/Kconfig
+> index 36833a862998..2986fc9c797e 100644
+> --- a/drivers/ata/Kconfig
+> +++ b/drivers/ata/Kconfig
+> @@ -609,16 +609,6 @@ config PATA_ATP867X
+>  
+>  	  If unsure, say N.
+>  
+> -config PATA_BK3710
+> -	tristate "Palmchip BK3710 PATA support"
+> -	depends on ARCH_DAVINCI || COMPILE_TEST
+> -	select PATA_TIMINGS
+> -	help
+> -	  This option enables support for the integrated IDE controller on
+> -	  the TI DaVinci SoC.
+> -
+> -	  If unsure, say N.
+> -
+>  config PATA_CMD64X
+>  	tristate "CMD64x PATA support"
+>  	depends on PCI
+> diff --git a/drivers/ata/Makefile b/drivers/ata/Makefile
+> index 34623365d9a6..d2e36d367274 100644
+> --- a/drivers/ata/Makefile
+> +++ b/drivers/ata/Makefile
+> @@ -54,7 +54,6 @@ obj-$(CONFIG_PATA_AMD)		+= pata_amd.o
+>  obj-$(CONFIG_PATA_ARTOP)	+= pata_artop.o
+>  obj-$(CONFIG_PATA_ATIIXP)	+= pata_atiixp.o
+>  obj-$(CONFIG_PATA_ATP867X)	+= pata_atp867x.o
+> -obj-$(CONFIG_PATA_BK3710)	+= pata_bk3710.o
+>  obj-$(CONFIG_PATA_CMD64X)	+= pata_cmd64x.o
+>  obj-$(CONFIG_PATA_CS5520)	+= pata_cs5520.o
+>  obj-$(CONFIG_PATA_CS5530)	+= pata_cs5530.o
+> diff --git a/drivers/ata/pata_bk3710.c b/drivers/ata/pata_bk3710.c
+> deleted file mode 100644
+> index fad95cfecced..000000000000
+> --- a/drivers/ata/pata_bk3710.c
+> +++ /dev/null
+> @@ -1,380 +0,0 @@
+> -// SPDX-License-Identifier: GPL-2.0
+> -
+> -/*
+> - * Palmchip BK3710 PATA controller driver
+> - *
+> - * Copyright (c) 2017 Samsung Electronics Co., Ltd.
+> - *		http://www.samsung.com
+> - *
+> - * Based on palm_bk3710.c:
+> - *
+> - * Copyright (C) 2006 Texas Instruments.
+> - * Copyright (C) 2007 MontaVista Software, Inc., <source@mvista.com>
+> - */
+> -
+> -#include <linux/ata.h>
+> -#include <linux/clk.h>
+> -#include <linux/delay.h>
+> -#include <linux/init.h>
+> -#include <linux/ioport.h>
+> -#include <linux/kernel.h>
+> -#include <linux/libata.h>
+> -#include <linux/module.h>
+> -#include <linux/platform_device.h>
+> -#include <linux/types.h>
+> -
+> -#define DRV_NAME "pata_bk3710"
+> -
+> -#define BK3710_TF_OFFSET	0x1F0
+> -#define BK3710_CTL_OFFSET	0x3F6
+> -
+> -#define BK3710_BMISP		0x02
+> -#define BK3710_IDETIMP		0x40
+> -#define BK3710_UDMACTL		0x48
+> -#define BK3710_MISCCTL		0x50
+> -#define BK3710_REGSTB		0x54
+> -#define BK3710_REGRCVR		0x58
+> -#define BK3710_DATSTB		0x5C
+> -#define BK3710_DATRCVR		0x60
+> -#define BK3710_DMASTB		0x64
+> -#define BK3710_DMARCVR		0x68
+> -#define BK3710_UDMASTB		0x6C
+> -#define BK3710_UDMATRP		0x70
+> -#define BK3710_UDMAENV		0x74
+> -#define BK3710_IORDYTMP		0x78
+> -
+> -static struct scsi_host_template pata_bk3710_sht = {
+> -	ATA_BMDMA_SHT(DRV_NAME),
+> -};
+> -
+> -static unsigned int ideclk_period; /* in nanoseconds */
+> -
+> -struct pata_bk3710_udmatiming {
+> -	unsigned int rptime;	/* tRP -- Ready to pause time (nsec) */
+> -	unsigned int cycletime;	/* tCYCTYP2/2 -- avg Cycle Time (nsec) */
+> -				/* tENV is always a minimum of 20 nsec */
+> -};
+> -
+> -static const struct pata_bk3710_udmatiming pata_bk3710_udmatimings[6] = {
+> -	{ 160, 240 / 2 },	/* UDMA Mode 0 */
+> -	{ 125, 160 / 2 },	/* UDMA Mode 1 */
+> -	{ 100, 120 / 2 },	/* UDMA Mode 2 */
+> -	{ 100,  90 / 2 },	/* UDMA Mode 3 */
+> -	{ 100,  60 / 2 },	/* UDMA Mode 4 */
+> -	{  85,  40 / 2 },	/* UDMA Mode 5 */
+> -};
+> -
+> -static void pata_bk3710_setudmamode(void __iomem *base, unsigned int dev,
+> -				    unsigned int mode)
+> -{
+> -	u32 val32;
+> -	u16 val16;
+> -	u8 tenv, trp, t0;
+> -
+> -	/* DMA Data Setup */
+> -	t0 = DIV_ROUND_UP(pata_bk3710_udmatimings[mode].cycletime,
+> -			  ideclk_period) - 1;
+> -	tenv = DIV_ROUND_UP(20, ideclk_period) - 1;
+> -	trp = DIV_ROUND_UP(pata_bk3710_udmatimings[mode].rptime,
+> -			   ideclk_period) - 1;
+> -
+> -	/* udmastb Ultra DMA Access Strobe Width */
+> -	val32 = ioread32(base + BK3710_UDMASTB) & (0xFF << (dev ? 0 : 8));
+> -	val32 |= t0 << (dev ? 8 : 0);
+> -	iowrite32(val32, base + BK3710_UDMASTB);
+> -
+> -	/* udmatrp Ultra DMA Ready to Pause Time */
+> -	val32 = ioread32(base + BK3710_UDMATRP) & (0xFF << (dev ? 0 : 8));
+> -	val32 |= trp << (dev ? 8 : 0);
+> -	iowrite32(val32, base + BK3710_UDMATRP);
+> -
+> -	/* udmaenv Ultra DMA envelop Time */
+> -	val32 = ioread32(base + BK3710_UDMAENV) & (0xFF << (dev ? 0 : 8));
+> -	val32 |= tenv << (dev ? 8 : 0);
+> -	iowrite32(val32, base + BK3710_UDMAENV);
+> -
+> -	/* Enable UDMA for Device */
+> -	val16 = ioread16(base + BK3710_UDMACTL) | (1 << dev);
+> -	iowrite16(val16, base + BK3710_UDMACTL);
+> -}
+> -
+> -static void pata_bk3710_setmwdmamode(void __iomem *base, unsigned int dev,
+> -				     unsigned short min_cycle,
+> -				     unsigned int mode)
+> -{
+> -	const struct ata_timing *t;
+> -	int cycletime;
+> -	u32 val32;
+> -	u16 val16;
+> -	u8 td, tkw, t0;
+> -
+> -	t = ata_timing_find_mode(mode);
+> -	cycletime = max_t(int, t->cycle, min_cycle);
+> -
+> -	/* DMA Data Setup */
+> -	t0 = DIV_ROUND_UP(cycletime, ideclk_period);
+> -	td = DIV_ROUND_UP(t->active, ideclk_period);
+> -	tkw = t0 - td - 1;
+> -	td--;
+> -
+> -	val32 = ioread32(base + BK3710_DMASTB) & (0xFF << (dev ? 0 : 8));
+> -	val32 |= td << (dev ? 8 : 0);
+> -	iowrite32(val32, base + BK3710_DMASTB);
+> -
+> -	val32 = ioread32(base + BK3710_DMARCVR) & (0xFF << (dev ? 0 : 8));
+> -	val32 |= tkw << (dev ? 8 : 0);
+> -	iowrite32(val32, base + BK3710_DMARCVR);
+> -
+> -	/* Disable UDMA for Device */
+> -	val16 = ioread16(base + BK3710_UDMACTL) & ~(1 << dev);
+> -	iowrite16(val16, base + BK3710_UDMACTL);
+> -}
+> -
+> -static void pata_bk3710_set_dmamode(struct ata_port *ap,
+> -				    struct ata_device *adev)
+> -{
+> -	void __iomem *base = (void __iomem *)ap->ioaddr.bmdma_addr;
+> -	int is_slave = adev->devno;
+> -	const u8 xferspeed = adev->dma_mode;
+> -
+> -	if (xferspeed >= XFER_UDMA_0)
+> -		pata_bk3710_setudmamode(base, is_slave,
+> -					xferspeed - XFER_UDMA_0);
+> -	else
+> -		pata_bk3710_setmwdmamode(base, is_slave,
+> -					 adev->id[ATA_ID_EIDE_DMA_MIN],
+> -					 xferspeed);
+> -}
+> -
+> -static void pata_bk3710_setpiomode(void __iomem *base, struct ata_device *pair,
+> -				   unsigned int dev, unsigned int cycletime,
+> -				   unsigned int mode)
+> -{
+> -	const struct ata_timing *t;
+> -	u32 val32;
+> -	u8 t2, t2i, t0;
+> -
+> -	t = ata_timing_find_mode(XFER_PIO_0 + mode);
+> -
+> -	/* PIO Data Setup */
+> -	t0 = DIV_ROUND_UP(cycletime, ideclk_period);
+> -	t2 = DIV_ROUND_UP(t->active, ideclk_period);
+> -
+> -	t2i = t0 - t2 - 1;
+> -	t2--;
+> -
+> -	val32 = ioread32(base + BK3710_DATSTB) & (0xFF << (dev ? 0 : 8));
+> -	val32 |= t2 << (dev ? 8 : 0);
+> -	iowrite32(val32, base + BK3710_DATSTB);
+> -
+> -	val32 = ioread32(base + BK3710_DATRCVR) & (0xFF << (dev ? 0 : 8));
+> -	val32 |= t2i << (dev ? 8 : 0);
+> -	iowrite32(val32, base + BK3710_DATRCVR);
+> -
+> -	/* FIXME: this is broken also in the old driver */
+> -	if (pair) {
+> -		u8 mode2 = pair->pio_mode - XFER_PIO_0;
+> -
+> -		if (mode2 < mode)
+> -			mode = mode2;
+> -	}
+> -
+> -	/* TASKFILE Setup */
+> -	t0 = DIV_ROUND_UP(t->cyc8b, ideclk_period);
+> -	t2 = DIV_ROUND_UP(t->act8b, ideclk_period);
+> -
+> -	t2i = t0 - t2 - 1;
+> -	t2--;
+> -
+> -	val32 = ioread32(base + BK3710_REGSTB) & (0xFF << (dev ? 0 : 8));
+> -	val32 |= t2 << (dev ? 8 : 0);
+> -	iowrite32(val32, base + BK3710_REGSTB);
+> -
+> -	val32 = ioread32(base + BK3710_REGRCVR) & (0xFF << (dev ? 0 : 8));
+> -	val32 |= t2i << (dev ? 8 : 0);
+> -	iowrite32(val32, base + BK3710_REGRCVR);
+> -}
+> -
+> -static void pata_bk3710_set_piomode(struct ata_port *ap,
+> -				    struct ata_device *adev)
+> -{
+> -	void __iomem *base = (void __iomem *)ap->ioaddr.bmdma_addr;
+> -	struct ata_device *pair = ata_dev_pair(adev);
+> -	const struct ata_timing *t = ata_timing_find_mode(adev->pio_mode);
+> -	const u16 *id = adev->id;
+> -	unsigned int cycle_time = 0;
+> -	int is_slave = adev->devno;
+> -	const u8 pio = adev->pio_mode - XFER_PIO_0;
+> -
+> -	if (id[ATA_ID_FIELD_VALID] & 2) {
+> -		if (ata_id_has_iordy(id))
+> -			cycle_time = id[ATA_ID_EIDE_PIO_IORDY];
+> -		else
+> -			cycle_time = id[ATA_ID_EIDE_PIO];
+> -
+> -		/* conservative "downgrade" for all pre-ATA2 drives */
+> -		if (pio < 3 && cycle_time < t->cycle)
+> -			cycle_time = 0; /* use standard timing */
+> -	}
+> -
+> -	if (!cycle_time)
+> -		cycle_time = t->cycle;
+> -
+> -	pata_bk3710_setpiomode(base, pair, is_slave, cycle_time, pio);
+> -}
+> -
+> -static void pata_bk3710_chipinit(void __iomem *base)
+> -{
+> -	/*
+> -	 * REVISIT:  the ATA reset signal needs to be managed through a
+> -	 * GPIO, which means it should come from platform_data.  Until
+> -	 * we get and use such information, we have to trust that things
+> -	 * have been reset before we get here.
+> -	 */
+> -
+> -	/*
+> -	 * Program the IDETIMP Register Value based on the following assumptions
+> -	 *
+> -	 * (ATA_IDETIMP_IDEEN		, ENABLE ) |
+> -	 * (ATA_IDETIMP_PREPOST1	, DISABLE) |
+> -	 * (ATA_IDETIMP_PREPOST0	, DISABLE) |
+> -	 *
+> -	 * DM6446 silicon rev 2.1 and earlier have no observed net benefit
+> -	 * from enabling prefetch/postwrite.
+> -	 */
+> -	iowrite16(BIT(15), base + BK3710_IDETIMP);
+> -
+> -	/*
+> -	 * UDMACTL Ultra-ATA DMA Control
+> -	 * (ATA_UDMACTL_UDMAP1	, 0 ) |
+> -	 * (ATA_UDMACTL_UDMAP0	, 0 )
+> -	 *
+> -	 */
+> -	iowrite16(0, base + BK3710_UDMACTL);
+> -
+> -	/*
+> -	 * MISCCTL Miscellaneous Conrol Register
+> -	 * (ATA_MISCCTL_HWNHLD1P	, 1 cycle)
+> -	 * (ATA_MISCCTL_HWNHLD0P	, 1 cycle)
+> -	 * (ATA_MISCCTL_TIMORIDE	, 1)
+> -	 */
+> -	iowrite32(0x001, base + BK3710_MISCCTL);
+> -
+> -	/*
+> -	 * IORDYTMP IORDY Timer for Primary Register
+> -	 * (ATA_IORDYTMP_IORDYTMP	, DISABLE)
+> -	 */
+> -	iowrite32(0, base + BK3710_IORDYTMP);
+> -
+> -	/*
+> -	 * Configure BMISP Register
+> -	 * (ATA_BMISP_DMAEN1	, DISABLE )	|
+> -	 * (ATA_BMISP_DMAEN0	, DISABLE )	|
+> -	 * (ATA_BMISP_IORDYINT	, CLEAR)	|
+> -	 * (ATA_BMISP_INTRSTAT	, CLEAR)	|
+> -	 * (ATA_BMISP_DMAERROR	, CLEAR)
+> -	 */
+> -	iowrite16(0xE, base + BK3710_BMISP);
+> -
+> -	pata_bk3710_setpiomode(base, NULL, 0, 600, 0);
+> -	pata_bk3710_setpiomode(base, NULL, 1, 600, 0);
+> -}
+> -
+> -static struct ata_port_operations pata_bk3710_ports_ops = {
+> -	.inherits		= &ata_bmdma_port_ops,
+> -	.cable_detect		= ata_cable_80wire,
+> -
+> -	.set_piomode		= pata_bk3710_set_piomode,
+> -	.set_dmamode		= pata_bk3710_set_dmamode,
+> -};
+> -
+> -static int __init pata_bk3710_probe(struct platform_device *pdev)
+> -{
+> -	struct clk *clk;
+> -	struct resource *mem;
+> -	struct ata_host *host;
+> -	struct ata_port *ap;
+> -	void __iomem *base;
+> -	unsigned long rate;
+> -	int irq;
+> -
+> -	clk = devm_clk_get(&pdev->dev, NULL);
+> -	if (IS_ERR(clk))
+> -		return -ENODEV;
+> -
+> -	clk_enable(clk);
+> -	rate = clk_get_rate(clk);
+> -	if (!rate)
+> -		return -EINVAL;
+> -
+> -	/* NOTE:  round *down* to meet minimum timings; we count in clocks */
+> -	ideclk_period = 1000000000UL / rate;
+> -
+> -	mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> -
+> -	irq = platform_get_irq(pdev, 0);
+> -	if (irq < 0) {
+> -		pr_err(DRV_NAME ": failed to get IRQ resource\n");
+> -		return irq;
+> -	}
+> -
+> -	base = devm_ioremap_resource(&pdev->dev, mem);
+> -	if (IS_ERR(base))
+> -		return PTR_ERR(base);
+> -
+> -	/* configure the Palmchip controller */
+> -	pata_bk3710_chipinit(base);
+> -
+> -	/* allocate host */
+> -	host = ata_host_alloc(&pdev->dev, 1);
+> -	if (!host)
+> -		return -ENOMEM;
+> -	ap = host->ports[0];
+> -
+> -	ap->ops = &pata_bk3710_ports_ops;
+> -	ap->pio_mask = ATA_PIO4;
+> -	ap->mwdma_mask = ATA_MWDMA2;
+> -	ap->udma_mask = rate < 100000000 ? ATA_UDMA4 : ATA_UDMA5;
+> -	ap->flags |= ATA_FLAG_SLAVE_POSS;
+> -
+> -	ap->ioaddr.data_addr		= base + BK3710_TF_OFFSET;
+> -	ap->ioaddr.error_addr		= base + BK3710_TF_OFFSET + 1;
+> -	ap->ioaddr.feature_addr		= base + BK3710_TF_OFFSET + 1;
+> -	ap->ioaddr.nsect_addr		= base + BK3710_TF_OFFSET + 2;
+> -	ap->ioaddr.lbal_addr		= base + BK3710_TF_OFFSET + 3;
+> -	ap->ioaddr.lbam_addr		= base + BK3710_TF_OFFSET + 4;
+> -	ap->ioaddr.lbah_addr		= base + BK3710_TF_OFFSET + 5;
+> -	ap->ioaddr.device_addr		= base + BK3710_TF_OFFSET + 6;
+> -	ap->ioaddr.status_addr		= base + BK3710_TF_OFFSET + 7;
+> -	ap->ioaddr.command_addr		= base + BK3710_TF_OFFSET + 7;
+> -
+> -	ap->ioaddr.altstatus_addr	= base + BK3710_CTL_OFFSET;
+> -	ap->ioaddr.ctl_addr		= base + BK3710_CTL_OFFSET;
+> -
+> -	ap->ioaddr.bmdma_addr		= base;
+> -
+> -	ata_port_desc(ap, "cmd 0x%lx ctl 0x%lx",
+> -		      (unsigned long)base + BK3710_TF_OFFSET,
+> -		      (unsigned long)base + BK3710_CTL_OFFSET);
+> -
+> -	/* activate */
+> -	return ata_host_activate(host, irq, ata_sff_interrupt, 0,
+> -				 &pata_bk3710_sht);
+> -}
+> -
+> -/* work with hotplug and coldplug */
+> -MODULE_ALIAS("platform:palm_bk3710");
+> -
+> -static struct platform_driver pata_bk3710_driver = {
+> -	.driver = {
+> -		.name = "palm_bk3710",
+> -	},
+> -};
+> -
+> -static int __init pata_bk3710_init(void)
+> -{
+> -	return platform_driver_probe(&pata_bk3710_driver, pata_bk3710_probe);
+> -}
+> -
+> -module_init(pata_bk3710_init);
+> -MODULE_LICENSE("GPL v2");
 
-I thought it was optional? New required properties are a possible ABI 
-break.
+-- 
+Damien Le Moal
+Western Digital Research
 
-Rob
