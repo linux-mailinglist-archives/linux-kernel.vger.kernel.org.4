@@ -2,75 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51A846066D2
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 19:14:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ACA46066D5
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 19:15:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229882AbiJTRNz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 13:13:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55780 "EHLO
+        id S229659AbiJTRPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 13:15:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230054AbiJTRNi (ORCPT
+        with ESMTP id S229987AbiJTRPR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 13:13:38 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18F001A910B;
-        Thu, 20 Oct 2022 10:13:37 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id bk15so35724579wrb.13;
-        Thu, 20 Oct 2022 10:13:37 -0700 (PDT)
+        Thu, 20 Oct 2022 13:15:17 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D96CA11CB6E
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 10:15:14 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id bb5so14117646qtb.11
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 10:15:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TUR9UP15QsroU59W9N2OvgMcXwfXPj1HigJZQ6HBl4s=;
-        b=nYbt0LiN2JHu2xyzaE3qLJP8Oh7Rzry1IfknyRHx7vYRnQZwjn1ifPrJaTyN8tu7Em
-         FXOJXL8JuEA6M0GUVfFPuI9rX8dl8hmCXcFWXWOHEnDmcs8NL1C4IFmcg1uRq3HQg8eL
-         lxiARDBtWJ6llNb4RaV7mXfCn9xPIOThgQRTtxd13RdQlfRk28ozCXqZnfhAZ6IraMig
-         BNUJXtdF5ZKWy8hdf6ShDBY/HUDEuy4uLqKu3rcXZ0tB5M1HsPkXx2Fs3ESEP/IY21b1
-         bH0mgt2jp/GlRVcrf+iVsJjkN1dukXli8ayi6k3zgca6a8QQBCNXjymXY0p7PLUEMoTe
-         fqng==
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=bjCIvltI0ARLYzme57GBWPzsPtp5yIBno5BxRybpBv4=;
+        b=Mlaw76yVOCJBJ1ofH8MPx8eyepdOSsu+famkgGAMJrc95zrEp6DmfTCo0zuyLDWSiE
+         iFlMT4mxm9bQY+JL+GZWhgnHt5O77Bzgu3q2a+cy6zyfJQZ3FbJWoKpdOg+X4kQ2No2C
+         J1g+GUToVB+LNJXErAbrKYJGoEhsy/OrFwJKE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TUR9UP15QsroU59W9N2OvgMcXwfXPj1HigJZQ6HBl4s=;
-        b=UwYDFwvfHINyr7MTq6QsQFNLSXcqCD9gzGNoBZoMiNAcGwyTLKeKfV+XUE4oDvDuiV
-         5Q6jtvO1nKVN4QOlzMAERCkR1CmE+c/svEpenISsUL5EtfQ8eWXW859IVQ/lU5s3yYwp
-         pxN2mgLYNd86yJzfZ8zexIxQeCtG5AlY226vzl9XfT5GdVJqAnO6TZ8AajWPCAgNTubi
-         kuSBa4fDI/JTuJUoFX5DYXY2cRBwgf256TSSHVT7JmrdL/5I74OVJwfb6PIjI+J96r4U
-         XjKCU9t8/S3fZDo38XKPYiIK4ddUyLnUfDI5J06WNkfEe26iEV087Q9eYpY9Lu50oHCI
-         9CCw==
-X-Gm-Message-State: ACrzQf1mp/s0gmWIuaGvDOJ1v80QAD/T2etNUyD6Vi2TRpBtPJuM9B5h
-        BhdUOYNjwoPH8uO0UmaiukktMk8By3A=
-X-Google-Smtp-Source: AMsMyM78Y15sou0S6xhBnRpH9lQP6a4ksqQetLS76/lBZjZmqOFcqwGJLwBXzbJU13hwo89TjWoTlg==
-X-Received: by 2002:a5d:4e4b:0:b0:22e:47b3:6b5d with SMTP id r11-20020a5d4e4b000000b0022e47b36b5dmr9408377wrt.443.1666286015593;
-        Thu, 20 Oct 2022 10:13:35 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:cc83:eef0:7bf1:a0f8:a9aa:ac98? (ptr-dtfv0pmq82wc9dcpm6w.18120a2.ip6.access.telenet.be. [2a02:1811:cc83:eef0:7bf1:a0f8:a9aa:ac98])
-        by smtp.gmail.com with ESMTPSA id z23-20020a1cf417000000b003c6b874a0dfsm221022wma.14.2022.10.20.10.13.33
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bjCIvltI0ARLYzme57GBWPzsPtp5yIBno5BxRybpBv4=;
+        b=cNAtJlepCC2HWA+AA/lyJu78NF59H9nWzX07JcL7ViTRKuuYEhQmTlvK7VsJWmew1x
+         aGCDF1o6C+Y/09Qy+bRkZ1vKUpdSqLYjbDt5TiQLSgwsggTWxd08Km7DBHnpBVYog4Ge
+         1zN2WQqTX8QjjXhEn2uVHgbkLxVpJU+Dn1wZhxOoXEUpkLRWAFzYmG9AlbbyQhN75VR0
+         cSLi2lEfCCFgsZz2XLZaNfbibhfAp0PJzMYB9WEp0GOTUrRlsLPbtdChiYpMNhLkLa1j
+         mGTVgw3/CQp2GBr+Mx/MFDXn94aOnW8dvJ6x/DU8rxr+qN1PLN4xPvH79eELCPB2zjAz
+         2cwA==
+X-Gm-Message-State: ACrzQf0YTjE4B8AJSWI2DekZHu/TWZQJs/+FAHha/qfVy2VyzcuR4km4
+        frLx/q9eksJZCjWvAbX3/aMRhnajtzZySg==
+X-Google-Smtp-Source: AMsMyM40NwVSP2YuVFeBxF3jO6y7puCVkyFY2RFvQQw8+QXE5s4PtmZxUybpJaataOS2H8KOqw2gbw==
+X-Received: by 2002:a05:622a:449:b0:39c:d73a:e7d5 with SMTP id o9-20020a05622a044900b0039cd73ae7d5mr12165400qtx.276.1666286113439;
+        Thu, 20 Oct 2022 10:15:13 -0700 (PDT)
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
+        by smtp.gmail.com with ESMTPSA id p12-20020ae9f30c000000b006eec09eed39sm7432165qkg.40.2022.10.20.10.15.11
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Oct 2022 10:13:34 -0700 (PDT)
-Message-ID: <6e038fa4-563a-2690-2a62-b92df117714a@gmail.com>
-Date:   Thu, 20 Oct 2022 19:13:32 +0200
+        Thu, 20 Oct 2022 10:15:11 -0700 (PDT)
+Received: by mail-yb1-f172.google.com with SMTP id r3so365358yba.5
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 10:15:11 -0700 (PDT)
+X-Received: by 2002:a25:bb44:0:b0:6bb:a336:7762 with SMTP id
+ b4-20020a25bb44000000b006bba3367762mr11908187ybk.501.1666286110963; Thu, 20
+ Oct 2022 10:15:10 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [BUG] infiniband: sw: rdmavt: possible ABBA deadlocks in
- rvt_ruc_loopback()
-Content-Language: en-US
-To:     Jia-Ju Bai <baijiaju1990@gmail.com>,
-        dennis.dalessandro@cornelisnetworks.com, jgg@ziepe.ca,
-        Leon Romanovsky <leon@kernel.org>
-Cc:     linux-rdma@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <afe67a8e-82b8-9a47-0832-527c652cc66e@gmail.com>
-From:   Niels Dossche <dossche.niels@gmail.com>
-In-Reply-To: <afe67a8e-82b8-9a47-0832-527c652cc66e@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221020000356.177CDC433C1@smtp.kernel.org> <Y1EZuQcO8UoN91cX@localhost.localdomain>
+ <CAHmME9prEhkHqQmtDGCSFunNnxiKdE_8FHKiksyqebUN63U81Q@mail.gmail.com>
+In-Reply-To: <CAHmME9prEhkHqQmtDGCSFunNnxiKdE_8FHKiksyqebUN63U81Q@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 20 Oct 2022 10:14:54 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whFow9Wd6C8htoRUt5wXbwf1i_qbuArBbhXOPqYsTFvtw@mail.gmail.com>
+Message-ID: <CAHk-=whFow9Wd6C8htoRUt5wXbwf1i_qbuArBbhXOPqYsTFvtw@mail.gmail.com>
+Subject: Re: [PATCH -mm] -funsigned-char, x86: make struct p4_event_bind::cntr
+ signed array
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Alexey Dobriyan <adobriyan@gmail.com>, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, mm-commits@vger.kernel.org,
+        masahiroy@kernel.org, keescook@chromium.org,
+        gregkh@linuxfoundation.org, andriy.shevchenko@linux.intel.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,62 +78,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/10/2022 15:37, Jia-Ju Bai wrote:
-> Hello,
-> 
-> My static analysis tool reports several possible ABBA deadlock in the rdmavt driver in Linux 5.18:
-> 
-> rvt_ruc_loopback()
->   spin_lock_irqsave(&sqp->s_lock, flags); --> Line 3190 (Lock A)
->   spin_lock(&sqp->r_lock); --> Line 3195 (Lock B)
-> 
-> rvt_qp_mr_clean()
->   spin_lock_irq(&qp->r_lock); --> Line 698 (Lock B)
->   spin_lock(&qp->s_lock); --> Line 700 (Lock A)
-> 
-> rvt_rc_timeout()
->   spin_lock_irqsave(&qp->r_lock, flags); --> Line 2595 (Lock B)
->   spin_lock(&qp->s_lock); --> Line 2596 (Lock A)
-> 
-> rvt_modify_qp()
->   spin_lock_irq(&qp->r_lock); --> Line 1419 (Lock B)
->   spin_lock(&qp->s_lock); --> Line 1421(Lock A)
-> 
-> _rvt_reset_qp()
->   spin_lock_irq(&qp->r_lock); --> Line 907 (Lock B)
->   spin_lock(&qp->s_lock); --> Line 909 (Lock A)
-> 
-> rvt_reset_qp()
->   spin_lock_irq(&qp->r_lock); --> Line 936 (Lock B)
->   spin_lock(&qp->s_lock); --> Line 938 (Lock A)
-> 
-> When rvt_ruc_loopback() is concurrently executed with rvt_qp_mr_clean(), rvt_rc_timeout(), rvt_modify_qp(), _rvt_reset_qp() or rvt_reset_qp(), the deadlocks can occur.
-> 
-> I am not quite sure whether these possible deadlocks are real and how to fix them if real.
-> Any feedback would be appreciated, thanks :)
-> 
-> Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-> 
-> 
-> Best wishes,
-> Jia-Ju Bai
+On Thu, Oct 20, 2022 at 9:28 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+>
+> Nice catch.
+>
+> Reviewed-by: Jason A. Donenfeld <Jason@zx2c4.com>
 
+Can we please try to collect these all in one place?
 
-Hi
+I see that Andrew picked up the original one for -mm, but I think it
+would be better if we had one specific place for all of this (one
+branch) to collect it all.
 
+I'm actually trying to do a "make allyesconfig" build on x86-64 with
+both signed and unsigned char, and trying to see if I can script
+something sane to show differences.
 
-I don't know whether this deadlock is real or not, but I wrote the offending code.
-If it's a real bug, I'm sorry about that.
-If that's the case the bug is also present in 2 other places of rvt_ruc_loopback() in v5.19+:
+Doing the build is easy, but the differences end up being huge just
+due to silly constants (ie the whole "one small difference ends up
+changing layout, which then causes hundreds of megs of diff just due
+to hex constants in the disassembly changing".
 
-1)
-spin_lock_irqsave(&sqp->s_lock, flags); --> Line 3133
-spin_lock(&sqp->r_lock); --> Line 3137
+I think the problem is that I tried to do the vmlinux file after
+linking to make it easier. Doing the individual object files
+separately would probably have been a better idea, just to avoid this
+kind of relocation offset issues.
 
-2)
-spin_lock_irqsave(&sqp->s_lock, flags); --> Line 3192
-spin_lock(&sqp->r_lock); --> Line 3193
+There's not a huge amount of pull requests (the week after -rc1 tends
+to be quiet for me), so I'll continue to waste my time on this.
 
-
-Kind regards
-Niels
+                 Linus
