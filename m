@@ -2,111 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A1E1605E28
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 12:48:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85A03605E2C
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 12:49:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230419AbiJTKs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 06:48:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33520 "EHLO
+        id S230440AbiJTKto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 06:49:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiJTKsZ (ORCPT
+        with ESMTP id S229667AbiJTKtj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 06:48:25 -0400
-Received: from hermod.demsh.org (hermod.demsh.org [45.140.147.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF5A11DC821;
-        Thu, 20 Oct 2022 03:48:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=demsh.org; s=022020;
-        t=1666262900;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ETkbRpvmDPnr18kYQQ0G/Rg2H1mJOLWgSuqFKhzOm3E=;
-        b=OS63sYgbwTHI9M9z/xNpLVHTrX2fEs16wlGEYH39W36mpTaNOzyAN9XAOT1sxTYt8JjebZ
-        Lt0QvG5j2WDJpa0k8efxT+MuL5LlC/RFdz7KLu0zKeryjViP6+XE3nmXdxvLUCA6tmlOEE
-        NY9wGYvSTS71L9P9VZYYP7LphO8PsWHtG/Wx0Ye9+XPGnbYWo+BwFFpl6hv4i5aEPXpFSD
-        94B/PC8s3lVPZ94o3gQ95mWPDJc7rmNkPUyc65HOXkcxohpZjpSoHGgWg0xJr0zgCDUmMq
-        fkG2q2krPx/LTZuw6dwjCGILepf54jGRh1CuRMJQy6QNBrubk1TA1SxnZ7N6Ow==
-Received: from xps.demsh.org (algiz.demsh.org [94.103.82.47])
-        by hermod.demsh.org (OpenSMTPD) with ESMTPSA id 4bb7512b (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO) auth=yes user=me;
-        Thu, 20 Oct 2022 10:48:20 +0000 (UTC)
-Date:   Thu, 20 Oct 2022 13:48:18 +0300
-From:   Dmitrii Tcvetkov <me@demsh.org>
-To:     Keith Busch <kbusch@kernel.org>
-Cc:     Keith Busch <kbusch@fb.com>, Jens Axboe <axboe@kernel.dk>,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [bisected] QEMU guest boot failure since 6.0 on x86_64 host
-Message-ID: <20221020134818.30961090@xps.demsh.org>
-In-Reply-To: <Y1CkMS+xbwbvn8My@kbusch-mbp.dhcp.thefacebook.com>
-References: <20221020031725.7d01051a@xps.demsh.org>
-        <Y1CkMS+xbwbvn8My@kbusch-mbp.dhcp.thefacebook.com>
+        Thu, 20 Oct 2022 06:49:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C84A193FE;
+        Thu, 20 Oct 2022 03:49:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5FAB2B82703;
+        Thu, 20 Oct 2022 10:49:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F26F6C433C1;
+        Thu, 20 Oct 2022 10:49:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666262975;
+        bh=6KPTvy+J6w0Z1UUTzZ1Zf+/lhxrtVWfefrzE1t3fxmE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sRIF6UndSpcjnUsWH+RdWi4ByH8QiLokAyMTzGWQ731ypPJSzf2QGpQ8l0B+aM49g
+         mZO/C3niqAq/RjrwYn8k4JLP0x4n+2fS1/rcmzDdN9Sma1KcKFDdmcU3lLHCZsk0vs
+         9ZjHAW9s5sWuMxSS4QpYfiFGPCzK5PLty3HaWrgqJJiq9IfKQzj7Y5jTNaGMtQO2Vx
+         UgcD/qz3R+2wxYP+bPAmdLhFL5VxXFlhg0Qb+B2K34zQvRM0xVLGW2vqS37Oa1ZAuv
+         woWIAx6BUcTffBOzaGdBD7rERR/KSRV9A6S/ETvcFDBzSTqjxsqo6f5sSsnAoscYTK
+         9/CO681LB5pcA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1olT72-0002C5-Oj; Thu, 20 Oct 2022 12:49:21 +0200
+Date:   Thu, 20 Oct 2022 12:49:20 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 13/15] phy: qcom-qmp-pcie: add support for pipediv2
+ clock
+Message-ID: <Y1EnsKMhoWo+cIWo@hovoldconsulting.com>
+References: <20221019113552.22353-1-johan+linaro@kernel.org>
+ <20221019113552.22353-14-johan+linaro@kernel.org>
+ <325d6c7b-ca96-df73-a792-4d156a710267@linaro.org>
+ <Y1EPZBinv0tyZVqW@hovoldconsulting.com>
+ <7eb3fb9a-ce4a-eee0-b6bc-cee6aa6bf37b@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7eb3fb9a-ce4a-eee0-b6bc-cee6aa6bf37b@linaro.org>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 19 Oct 2022 19:28:17 -0600
-Keith Busch <kbusch@kernel.org> wrote:
+On Thu, Oct 20, 2022 at 12:28:14PM +0300, Dmitry Baryshkov wrote:
+> On 20/10/2022 12:05, Johan Hovold wrote:
 
-> On Thu, Oct 20, 2022 at 03:17:25AM +0300, Dmitrii Tcvetkov wrote:
-> > 
-> > Bisect led me to commit b1a000d3b8ec5  ("block: relax direct io
-> > memory alignment"). I was unable to resolve revert conflicts when
-> > tried to revert b1a000d3b8ec5  ("block: relax direct io memory
-> > alignment") as I lack necessary understanding of block subsystem.
-> 
-> Background info: when your virtual block device's logical block size
-> is smaller than the host's block device backing it, qemu needs to
-> bounce unaligned buffers when using direct-io.
-> 
-> Historically for direct-io, the logical block size happened to also be
-> the memory page offset alignment. QEMU did this the other way around:
-> it used the memory offset as the block size, and that was not
-> intended:
-> 
->   https://lore.kernel.org/lkml/32db4f89-a83f-aac4-5d27-0801bdca60bf@redhat.com/
-> 
-> The kernel patch you bisected to detangled memory alignment from
-> logical block size, so now older qemu versions have the wrong idea of
-> the minimum vector size. That is fixed in the qemu repository here:
-> 
->   https://git.qemu.org/?p=qemu.git;a=commitdiff;h=25474d90aa50bd32e0de395a33d8de42dd6f2aef
-> > 
-> > This fails to boot on 6.0+ host:
-> > # losetup -b 4096 -f image.raw
-> > # qemu-system-x86_64 -enable-kvm -drive
-> > file=/dev/loop0,format=raw,cache=none
-> 
-> In the above, your backing storage is 4k, and the default virtual
-> device block size is 512b, so qemu needs to bounce that, but older
-> versions might not do that as intended.
-> 
-> It should work if you include logical_block_size=4096 to the -drive
-> parameters.
-> 
-> > These boot fine on 6.0+ host:
-> > # losetup -b 4096 -f image.raw
-> > # qemu-system-x86_64 -enable-kvm -drive
-> > file=/dev/loop0,format=raw
-> 
-> The above is using cache, which doesn't have any alignment and size
-> constraints, so works with anything sizes.
->  
-> > # losetup -f image.raw
-> > # qemu-system-x86_64 -enable-kvm -drive
-> > file=/dev/loop0,format=raw,cache=none
-> 
-> The above is using a 512b formated backing store to a 512b emulated
-> drive, so the matching means qemu never needs to bounce.
+> > Here's your example diff inline:
 
-Thanks! Specifying logical_block_size=4096 indeed helps, guest still
-doesn't boot but because it has partition table with an assumption of 512
-sectors. After reinstall with logical_block_size=4096 specified it
-boots.
+> > @@ -2206,12 +2207,17 @@ static int qmp_pcie_parse_dt_legacy(struct qmp_pcie *qmp, struct device_node *np
+> >   		}
+> >   	}
+> >   
+> > -	qmp->pipe_clk = devm_get_clk_from_child(dev, np, NULL);
+> > -	if (IS_ERR(qmp->pipe_clk)) {
+> > -		return dev_err_probe(dev, PTR_ERR(qmp->pipe_clk),
+> > +	clk = devm_get_clk_from_child(dev, np, NULL);
+> > +	if (IS_ERR(clk)) {
+> > +		return dev_err_probe(dev, PTR_ERR(clk),
+> >   				     "failed to get pipe clock\n");
+> >   	}
+> >   
+> > +	qmp->num_pipe_clks = 1;
+> > +	qmp->pipe_clks = devm_kcalloc(dev, qmp->num_pipe_clks,
+> > +				      sizeof(*qmp->pipe_clks), GFP_KERNEL);
+> > +	qmp->pipe_clks[0].clk = clk;
+> > 
+> > So here you're poking at bulk API internals and forgot to set the id
+> > string, which the implementation uses.
+> 
+> I didn't forget, I just skipped setting it. Hmm. I thought that it is 
+> used only for clk_bulk_get. But after checking, it seems it's also used 
+> for error messages. Mea culpa.
+> 
+> But it's not that I was poking into the internals. These items are in 
+> the public header.
+
+My point is that you're not using the bulk API as it was intended (e.g.
+with clk_bulk_get()) and you risk running into issues like the above.
+
+And looking up the actual clock name for this is overkill, even in the
+case were it is provided, so we'd need to set it unconditionally to
+"pipe" (which is fine).
+
+> > For reasons like this, and the fact that will likely never have a third
+> > pipe clock, I'm reluctant to using the bulk API.
+> 
+> Let's resort to the maintainer opinion then.
+
+I'll take another look at it too.
+
+Johan
