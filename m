@@ -2,189 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43B90606B42
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 00:27:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0ADC606B47
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 00:31:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbiJTW1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 18:27:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55452 "EHLO
+        id S229608AbiJTWbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 18:31:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiJTW1W (ORCPT
+        with ESMTP id S229456AbiJTWbc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 18:27:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D98922BAC9;
-        Thu, 20 Oct 2022 15:27:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 20 Oct 2022 18:31:32 -0400
+Received: from beige.elm.relay.mailchannels.net (beige.elm.relay.mailchannels.net [23.83.212.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B931316DC3A;
+        Thu, 20 Oct 2022 15:31:30 -0700 (PDT)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id B9DFF411F4;
+        Thu, 20 Oct 2022 22:31:29 +0000 (UTC)
+Received: from pdx1-sub0-mail-a280.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 291354148F;
+        Thu, 20 Oct 2022 22:31:29 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1666305089; a=rsa-sha256;
+        cv=none;
+        b=5rMRsuDHcJfvh/LZx+tIr2jMlE8cbUL85NxxrryJ/xm2llSRqXaU3nNqYzfKuhnoyJOA+l
+        8kEOeI3+5ZzUf1r29/JPIclHsaBqAJVDmg3E+/cQbjxSZFuI4FIMk498qDOVZJOOV00Y15
+        zpSqlLScgxne1EEPYh9vXw+2knZXux0uyP+wC5+JTnGZU26vsaUauYUADAqg4OBWGINnYu
+        7Sd8TdyMDrqF9en0qwMm4XpHtTqRgSry3/+kZoB5ze/dhNERPa59sBMNRgz1fNTGUIfe/H
+        nRtEws1mVAaZg/xuPV2F55lA/iuxXeW98VSW0O5GOoC/Kz/sWs4kiNgSnO3ZGg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1666305089;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=FiZrMkrbNubHQO8sAmPoXSgTBVbDs1cimp79mld8fpA=;
+        b=wZmErFDsVUFUy/Jh2ZQuh4BFywNduP1aba9E4F85nS3F9hO0fPF88M41gXQRLoJShoZSfm
+        pb6mkwXAB3qkaO0C9rNSYnMbEN3yM8E6vFRk3OIs4T71CPeW8Fphy76mYIGQhxRSd7029X
+        8oFHMcQsNHvi0AsyZHVEvRsJFqsq/NF1EcqbhTZFgPPqGW1MHUG6VJQcYNlpkq+T5GQaBY
+        VFNstsG6Y4/DcMWhek+scAhfQDUeiDzWGrZcNe1axzEa5JZm4xl5rSk8RR8aLOq4dcPHlf
+        rW6tnNUxyNLRyXXyck0hRQEL4aOGcV0ihuXaGUYqyNq186Jg09Jfkya+p7EhfQ==
+ARC-Authentication-Results: i=1;
+        rspamd-6955c7cd5b-xbdk9;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Soft-Plucky: 6601109c31f79505_1666305089527_1996093706
+X-MC-Loop-Signature: 1666305089527:846727707
+X-MC-Ingress-Time: 1666305089527
+Received: from pdx1-sub0-mail-a280.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.126.129.222 (trex/6.7.1);
+        Thu, 20 Oct 2022 22:31:29 +0000
+Received: from offworld (ip72-199-50-187.sd.sd.cox.net [72.199.50.187])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CB342B8238D;
-        Thu, 20 Oct 2022 22:27:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CB16C433D6;
-        Thu, 20 Oct 2022 22:27:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666304838;
-        bh=Hplm7yNv/x7EyeXp8SfEb20uj/fqyD9O6uJA3g5LIrI=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=vJ8sA+wiQF4XIzA+76+EQxH5rvFbrJDxIsxHj5Rp+iJ/n4t+dQSRas9krLQmExXWj
-         DxzJPCbEAi5fE8d64TvDhBERvhy5Ai3sP339Z/J7aEbr/ERR3xZvl2k4QhuZZNWJAm
-         mhTbY3UVicyH61NAL5n71UaYjWqd8KqyqODlSfaq/Hq64gYkNWweKdaOrYEMND1Ndg
-         RjeEI2nDQgvsWh/IQql6INCiQcmsYG5aMMxN7lAPyoRElI6g1GW1rn26PAkaNi2kBc
-         UqaedyD/A11SXRYzuKF7uCjDDmIqTTahVW+WoDAlTF30JS2Ii25TuBsVqalT/Umej7
-         w5YwR0CVrhxPg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 1D8B15C1109; Thu, 20 Oct 2022 15:27:18 -0700 (PDT)
-Date:   Thu, 20 Oct 2022 15:27:18 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     John Ogness <john.ogness@linutronix.de>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com,
-        rostedt@goodmis.org, tglx@linutronix.de, pmladek@suse.com
-Subject: Re: [PATCH v2 rcu 0/8] NMI-safe SRCU reader API
-Message-ID: <20221020222718.GA5600@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220921144620.GA1200846@paulmck-ThinkPad-P17-Gen-1>
- <20220929180714.GA2874192@paulmck-ThinkPad-P17-Gen-1>
- <87k04x4e0r.fsf@jogness.linutronix.de>
- <20221018152418.GR5600@paulmck-ThinkPad-P17-Gen-1>
- <87ilkh0y52.fsf@jogness.linutronix.de>
- <20221018185936.GX5600@paulmck-ThinkPad-P17-Gen-1>
- <20221018215721.GA1716567@paulmck-ThinkPad-P17-Gen-1>
- <87pmeoawwe.fsf@jogness.linutronix.de>
- <20221019191418.GF5600@paulmck-ThinkPad-P17-Gen-1>
- <20221019220537.GA1234896@lothringen>
+        (Authenticated sender: dave@stgolabs.net)
+        by pdx1-sub0-mail-a280.dreamhost.com (Postfix) with ESMTPSA id 4Mtj4c2HL0z5h;
+        Thu, 20 Oct 2022 15:31:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+        s=dreamhost; t=1666305088;
+        bh=FiZrMkrbNubHQO8sAmPoXSgTBVbDs1cimp79mld8fpA=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=lFUWZ1HJ7mmYeXIfNiicNJE0dqTPoTi2U4KK0rnhhmzHnnhyujr2zjjISe4Qh9y1E
+         anJ/DuBCb8G8WfHRY/U2DYpscNQMSu2HoreF3ypP2ICRL407+JFZWL7PIoAZks6uYT
+         sijaNFmupE/KaIlbkK7Y3Bp0/4Q7tcDP4giwELxs1GaUP5hYdsnj5dUZW74tIH2cId
+         +Gy08RBSU/HzhaSfgLbBt9BTy4VvX2Z/Ib3WaCXJszqywGe/pHjjtVJHdlW7GmtTx/
+         a89+yMYhEcb0IEsneQISmRtI8BqhFsx/CDW/hS9smUxHB80pwY3BqkrEQs2hN5dNNy
+         muNhtGg5ceHYg==
+Date:   Thu, 20 Oct 2022 15:31:25 -0700
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     dan.j.williams@intel.com, ira.weiny@intel.com,
+        dave.jiang@intel.com, alison.schofield@intel.com,
+        bwidawsk@kernel.org, vishal.l.verma@intel.com,
+        a.manzanares@samsung.com, linux-cxl@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] cxl/pci: Add generic MSI-X/MSI irq support
+Message-ID: <20221020223125.hyrfpt2noiicisxa@offworld>
+References: <20221018030010.20913-1-dave@stgolabs.net>
+ <20221018030010.20913-2-dave@stgolabs.net>
+ <20221018103619.00004c39@huawei.com>
+ <20221018115227.00002a4c@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20221019220537.GA1234896@lothringen>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221018115227.00002a4c@huawei.com>
+User-Agent: NeoMutt/20220429
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 12:05:37AM +0200, Frederic Weisbecker wrote:
-> On Wed, Oct 19, 2022 at 12:14:18PM -0700, Paul E. McKenney wrote:
-> > On Wed, Oct 19, 2022 at 01:19:53PM +0206, John Ogness wrote:
-> > > On 2022-10-18, "Paul E. McKenney" <paulmck@kernel.org> wrote:
-> > > > And the v6.1-rc1 stack is now at srcunmisafe.2022.10.18b.
-> > > 
-> > > Thanks!
-> > > 
-> > > I guess the kernel test robot will catch this, but if you checkout
-> > > commit 79c95dc428ad ("arch/x86: Add ARCH_HAS_NMI_SAFE_THIS_CPU_OPS
-> > > Kconfig option") and build for x86_64, you will get:
-> > > 
-> > > x86_64-linux-gnu-ld: kernel/rcu/srcutree.o: in function `srcu_gp_start_if_needed':
-> > > srcutree.c:(.text+0x133a): undefined reference to `__srcu_read_lock_nmisafe'
-> > > x86_64-linux-gnu-ld: srcutree.c:(.text+0x1490): undefined reference to `__srcu_read_unlock_nmisafe'
-> > > x86_64-linux-gnu-ld: kernel/rcu/srcutree.o: in function `srcu_barrier':
-> > > srcutree.c:(.text+0x1b03): undefined reference to `__srcu_read_lock_nmisafe'
-> > > x86_64-linux-gnu-ld: srcutree.c:(.text+0x1b38): undefined reference to `__srcu_read_unlock_nmisafe'
-> > > 
-> > > Note that this error is fixed with a later commit:
-> > > 
-> > > commit c2d158a284ab ("srcu: Debug NMI safety even on archs that don't
-> > > require it").
-> > > 
-> > > This does not affect what I am working on, so feel free to take care of
-> > > it whenever it fits your schedule.
-> > 
-> > Good catch, thank you!
-> > 
-> > It looks like the first two hunks in include/linux/srcu.h from that
-> > later commit need to be in that earlier commit.
-> > 
-> > Frederic, does this make sense, or am I off in the weeds?
-> 
-> Actually you need to do that earlier, in
-> 6584822b1be1 ("srcu: Create an srcu_read_lock_nmisafe() and srcu_read_unlock_nmisafe()")
-> 
-> This way you don't only fix x86 bisectability but also the one of all the other safe archs.
-> 
-> And it's not just the first two hunks, you also need to include
-> the removal of the srcutiny.h/srcutree.h definitions.
-> 
-> So namely you need to apply the following to 6584822b1be1. You might
-> meet some minor retro-conflicts (the chknmisafe parameter didn't exist yet),
-> but that's pretty much it:
+On Tue, 18 Oct 2022, Jonathan Cameron wrote:
 
-Thank you both!
+>Reality is that it is cleaner to more or less ignore the infrastructure
+>proposed in this patch.
+>
+>1. Query how many CPMU devices there are. Whilst there stash the maximim
+>   cpmu vector number in the cxlds.
+>2. Run a stub in this infrastructure that does max(irq, cxlds->irq_num);
+>3. Carry on as before.
+>
+>Thus destroying the point of this infrastructure for that usecase at least
+>and leaving an extra bit of state in the cxl_dev_state that is just
+>to squirt a value into the callback...
 
-I have an untested but allegedly fixed branch on -rcu on branch
-srcunmisafe.2022.10.20a.
+If it doesn't fit, then it doesn't fit.
 
-							Thanx, Paul
+However, while I was expecting pass one to be in the callback, I wasn't
+expecting that both pass 1 and 2 shared the cpmu_regs_array. If the array
+could be reconstructed during pass 2, then it would fit a bit better;
+albeit the extra allocation, cycles etc., but this is probing phase, so
+overhead isn't that important (and cpmu_count isn't big enough to matter).
 
-> diff --git a/include/linux/srcu.h b/include/linux/srcu.h
-> index 565f60d57484..f0814ffca34b 100644
-> --- a/include/linux/srcu.h
-> +++ b/include/linux/srcu.h
-> @@ -52,8 +52,6 @@ int init_srcu_struct(struct srcu_struct *ssp);
->  #else
->  /* Dummy definition for things like notifiers.  Actual use gets link error. */
->  struct srcu_struct { };
-> -int __srcu_read_lock_nmisafe(struct srcu_struct *ssp, bool chknmisafe) __acquires(ssp);
-> -void __srcu_read_unlock_nmisafe(struct srcu_struct *ssp, int idx, bool chknmisafe) __releases(ssp);
->  #endif
->  
->  void call_srcu(struct srcu_struct *ssp, struct rcu_head *head,
-> @@ -66,6 +64,20 @@ unsigned long get_state_synchronize_srcu(struct srcu_struct *ssp);
->  unsigned long start_poll_synchronize_srcu(struct srcu_struct *ssp);
->  bool poll_state_synchronize_srcu(struct srcu_struct *ssp, unsigned long cookie);
->  
-> +#ifdef CONFIG_NEED_SRCU_NMI_SAFE
-> +int __srcu_read_lock_nmisafe(struct srcu_struct *ssp) __acquires(ssp);
-> +void __srcu_read_unlock_nmisafe(struct srcu_struct *ssp, int idx) __releases(ssp);
-> +#else
-> +static inline int __srcu_read_lock_nmisafe(struct srcu_struct *ssp)
-> +{
-> +	return __srcu_read_lock(ssp);
-> +}
-> +static inline void __srcu_read_unlock_nmisafe(struct srcu_struct *ssp, int idx)
-> +{
-> +	__srcu_read_unlock(ssp, idx);
-> +}
-> +#endif /* CONFIG_NEED_SRCU_NMI_SAFE */
-> +
->  #ifdef CONFIG_SRCU
->  void srcu_init(void);
->  #else /* #ifdef CONFIG_SRCU */
-> diff --git a/include/linux/srcutiny.h b/include/linux/srcutiny.h
-> index f890301f123d..f3a4d65b91ef 100644
-> --- a/include/linux/srcutiny.h
-> +++ b/include/linux/srcutiny.h
-> @@ -89,16 +89,4 @@ static inline void srcu_torture_stats_print(struct srcu_struct *ssp,
->  		 data_race(READ_ONCE(ssp->srcu_idx)),
->  		 data_race(READ_ONCE(ssp->srcu_idx_max)));
->  }
-> -
-> -static inline int __srcu_read_lock_nmisafe(struct srcu_struct *ssp, bool chknmisafe)
-> -{
-> -	BUG();
-> -	return 0;
-> -}
-> -
-> -static inline void __srcu_read_unlock_nmisafe(struct srcu_struct *ssp, int idx, bool chknmisafe)
-> -{
-> -	BUG();
-> -}
-> -
->  #endif
-> diff --git a/include/linux/srcutree.h b/include/linux/srcutree.h
-> index 35ffdedf86cc..c689a81752c9 100644
-> --- a/include/linux/srcutree.h
-> +++ b/include/linux/srcutree.h
-> @@ -159,7 +155,4 @@ void synchronize_srcu_expedited(struct srcu_struct *ssp);
->  void srcu_barrier(struct srcu_struct *ssp);
->  void srcu_torture_stats_print(struct srcu_struct *ssp, char *tt, char *tf);
->  
-> -int __srcu_read_lock_nmisafe(struct srcu_struct *ssp, bool chknmisafe) __acquires(ssp);
-> -void __srcu_read_unlock_nmisafe(struct srcu_struct *ssp, int idx, bool chknmisafe) __releases(ssp);
-> -
->  #endif
-> 
-> 
+But if we're going to go with a free-for-all approach, can we establish
+who goes for the initial pci_alloc_irq_vectors()? I think perhaps mbox
+since it's the most straightforward and with least requirements, I'm
+also unsure of the status yet to merge events and pmu, but regardless
+they are still larger patchsets. If folks agree I can send a new mbox-only
+patch.
+
+Thanks,
+Davidlohr
