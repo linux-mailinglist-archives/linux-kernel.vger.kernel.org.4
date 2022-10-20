@@ -2,249 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EEAE606A17
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 23:13:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB366606A1C
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 23:14:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbiJTVNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 17:13:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41008 "EHLO
+        id S229739AbiJTVOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 17:14:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiJTVNO (ORCPT
+        with ESMTP id S229552AbiJTVOB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 17:13:14 -0400
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2064.outbound.protection.outlook.com [40.107.96.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6A5221CD76
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 14:13:12 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kko+LRlqXx31WTjBIy49XXnlcW0ZJvP82xHT5CWLNh1o/QnSUd0/H0m59pxh0ib629amEPpe232zSFAVtfkgRSE/jTzhRzf9paEglSVyxpthcyRzKdkbiqBqIUhdIGdoXk7nsDjeWNAvUaRt2uYtqitS8eb3Jt2ovvkyeJ9DIpHrb/BonYYdhFHIY5KipBtGCzHHpU8AvKAsuMkzTFXjboJOQ8Rzd/OnnS212jVktSQaSAnA3p5Lm1YhukWx76/7DgAsWasGuXAEI7hjN/fZSM8RculDh7DBpvCCtVpSc79L7C8lWpMrR3n7XTddJK8DtZXtJjAy+toT+4uaEpnPKw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IKzq3+k7/7hyvIFXqExbKj4vm3MbFW9sZPH6gIJjT5Q=;
- b=XrwO41VSSG2CBs94c46oX1p9IDNxqb/nU8EiGd4W2OtgcZDPHqo25fTYu5v2YwZObNWQ3/H3SpEmpP5B8rYxoAEjosHBAJOcbMXzLnVkXhxAH/E8DfpCBfnB2CnqRrZ6xXgdL4Dsir+Y4cdXcj9X2AhC1FW9/4891VvtnaT1oCek8ANsOPqTwafAt/WKvUzOilmqEZqwADpr3KLdiSnLn/v9aTuh3kXup11U/ntrnSKyIl74umVpY8iqNk/phYPnZnLsOb+nTnoB1AvTQxdhJZbswLnJeY5SPN+wNsDklEC5YW/5c7mdTpynSbI5aCRFGyE7/feegHFWee9/HJQoyQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IKzq3+k7/7hyvIFXqExbKj4vm3MbFW9sZPH6gIJjT5Q=;
- b=q0+5VG2xCZM3Rcx4bDb1sd17vZH/Fpg7qpIG2+vtbPriCiGuN6mCFEUzuAcXLDH8BmkM40DjNt2P3kyQkIZjEstiZemEKNGfPQT2gRlxJLyQ6mXfBC8dTUrV3F8pa2GQdNcdbevvB62Rcu3eBGtynFFWN3JZtssVpb4ROOCSpHkwungIPeZurfDgyqNvkhoLpI6IRfoXaQg33UYFxOgQ8uJKp1iPAv77fMoxU0T65h31yPEKoi7yex9jMmqTwxd7dj6kOLb1ogMatucMlzuapamoDYBtaRTyl7jWn827ERj857GVjO7BZOnMtM7ElBF3I0Ej4me+WRA+RPhp6s0xeg==
-Received: from PH0PR12MB5481.namprd12.prod.outlook.com (2603:10b6:510:d4::15)
- by DS7PR12MB5983.namprd12.prod.outlook.com (2603:10b6:8:7e::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.35; Thu, 20 Oct
- 2022 21:13:11 +0000
-Received: from PH0PR12MB5481.namprd12.prod.outlook.com
- ([fe80::d756:c945:3194:629e]) by PH0PR12MB5481.namprd12.prod.outlook.com
- ([fe80::d756:c945:3194:629e%9]) with mapi id 15.20.5723.033; Thu, 20 Oct 2022
- 21:13:11 +0000
-From:   Parav Pandit <parav@nvidia.com>
-To:     Si-Wei Liu <si-wei.liu@oracle.com>,
-        Jason Wang <jasowang@redhat.com>
-CC:     "mst@redhat.com" <mst@redhat.com>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2 3/4] vdpa: show dev config as-is in "vdpa dev show"
- output
-Thread-Topic: [PATCH v2 3/4] vdpa: show dev config as-is in "vdpa dev show"
- output
-Thread-Index: AQHY41WbPQEI6wXxKESCU7kV+N18k64Wwi+AgADWKICAACry0A==
-Date:   Thu, 20 Oct 2022 21:13:10 +0000
-Message-ID: <PH0PR12MB5481094D34C15C5C442F219DDC2A9@PH0PR12MB5481.namprd12.prod.outlook.com>
-References: <1666137032-28192-1-git-send-email-si-wei.liu@oracle.com>
- <1666137032-28192-4-git-send-email-si-wei.liu@oracle.com>
- <CACGkMEuDn+Y8OEw6uK+FC0oOOd6+kj0EXS4Fm-+54GjrqY3_Gw@mail.gmail.com>
- <86529a16-6358-ad9e-7ae3-ea1580db015c@oracle.com>
-In-Reply-To: <86529a16-6358-ad9e-7ae3-ea1580db015c@oracle.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH0PR12MB5481:EE_|DS7PR12MB5983:EE_
-x-ms-office365-filtering-correlation-id: ffa6d0fc-37d5-487e-74b2-08dab2dfe4b4
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: HzHngn4HVggYiFwpOJm80VSdg5T/Q8nEVi2ARj2TuJXYwQVq0W2i4AZXzqkxfV6PK5CbMm2UFuvm8dON1EVNskea5iZTFzI5z5VZs7UNJo9fJ4whTFOhzpdYlNJA/j/iOONAbQqkJKXlrpBqm9QFDbkdzkPRVgl4Snk6j8sa6YEr/LTui12RGmH1FGl9dCSaF88Caf8GsLdkTG56WgR+KVdTjCtI2q9wdP6gfUhUWqbkWTuWv5B+bV6XjIG79m0q2p/uB8XqlbiUNb2DNVfV8bL1HI22XpSSRqpkzAnbg4S8sY7Ww1FfwckfmNHC6gEsGFjmJRFglWnNYdUKLoHXFQmM2UE4KdW9ihPaCYEtc4TSpeWQfkimtGsAfWtsG04eaO+TEeGi1bzrtKfNwk3q9aAClD6UiGOuAfR+HID20SbMHjKCbqzI+1HZxohqKD7OBBe4e01z3eb3zLQLFZKf0JCPaenGGGEOzRZ6g4YpfTjCG5jb6cprPRMHhAW9RlcilUY07bRu+rI1XEXupTifc63p0AqKM3ffY/q3REvQe94EUSEo2BqzGRg4WJOFfnigSREBaI6LUyMKrrYNl2v8uWH06TfmmjdyYXeoGxoacZpsuTnlq8BsJXEV9+OTv7p30S7V+9s1yNi6OBtIlJOUpbXm94TFn+u0JNj2ZA4odKj5wM/aMPWv2fcq8YS2m7uWRgc+ZPFf2IA3UEA1h75c5YoKilsaL0h7FvuMDSSt2hKzjcJSEcPRT39Td26/9PvNwqd21IsLqeLtYoNH6HVqGw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR12MB5481.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(39860400002)(366004)(346002)(136003)(376002)(451199015)(4326008)(8936002)(478600001)(38070700005)(76116006)(66946007)(71200400001)(9686003)(55016003)(64756008)(52536014)(66446008)(6506007)(2906002)(5660300002)(41300700001)(26005)(7696005)(53546011)(186003)(66476007)(8676002)(110136005)(86362001)(83380400001)(54906003)(122000001)(33656002)(316002)(38100700002)(66556008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?bmZNRXdqRVdmeVFISmo1TWltWk9XN0JmZnBPUVNaMDZPcDVNRm9vcDhBQWM3?=
- =?utf-8?B?eWJiWWUxVlhaME80Q0Q0MU5ZVEdUYlFtY0pyNzhUVy9yVHB3NE5ERXN6WDRH?=
- =?utf-8?B?Skcwc2h0dUhMYVpqYTdZZDlvRlZwM2N3L2JQdk1NVGs4bVhobDdvVUxhNkY1?=
- =?utf-8?B?OUZVaVdDMGpDWmJhRE9saEU4QS9ZUTZnSDlITjBpeG00dmJoU2lPb1FHbkcr?=
- =?utf-8?B?SlpWeUNOYndFU3dIa0JRa2dyVEZWSEdjZGphcWl3ZHlXSnloSFVDUVJzRWYw?=
- =?utf-8?B?UmVhcmdYQ2t5SFFibUhzdE93Nk9kSlExYU83ZjNEN1pJcS9OQkdOOFZ3RVBZ?=
- =?utf-8?B?bDFmMzVwZEFKSlBta3FMdzMxT1hyYlQzaXJBRFdDY3QxLzFOait0azEzSXVO?=
- =?utf-8?B?L29mSG5Za2lrYmNLcUM4aFJEZjcvNGxCNVg0V2dyTkZrblR1WEVwNVpXQmZH?=
- =?utf-8?B?K2lQeXhuQjBQZ1lvYVpaL0FHVDBIN0ZxSWNUc2pwWitQdFZKTUlnRE43bHVl?=
- =?utf-8?B?aTZ0clF6N2FydkNtZW8zTnVqcFVZY1h3UzB4eWptcEJnbU1zT29ENllva1Fx?=
- =?utf-8?B?dTNUMTNiWnBDc1l5dDRZZitDWFMwcGJLZ1AybnlFdTlYci9aYk5Ib0pRMW5Q?=
- =?utf-8?B?bHpVVU5lVTg4TmFERnd2YmsrN0NBVERzUlFBc2VaekNvdFJJRWt3TlJFTnZx?=
- =?utf-8?B?em9ZTE4wRmdwem02VndxWndJOU14dy9ZV0RBa2ZEeHRLVnhSNVVqVUR1Um1l?=
- =?utf-8?B?MEFIU3VSdjZVZEhGTWFuUnB5Y3RkY3dxQ1dHTnNZcDlNUnJEa0hjYVVqL1o5?=
- =?utf-8?B?aEg3Y2JVWE9PNkR2VEJwbjF4UHVWb1RidVRRbEttcjdQdmsydHgxZjZGY05x?=
- =?utf-8?B?WUFUc0hBb1BPM3JURWZxT3RtaW9EMXpxMzd1aEFRZDVkN2l0ZkRCRUo3UDNX?=
- =?utf-8?B?cmVBMGM4TkE1SE5YM3g3UFVzMUh2ay9RbTN0THJ2L0FObUJralZpUjlIZUUv?=
- =?utf-8?B?U1hKV0dnc2xNSEYyMjZzbzhYVmtlblhlak8xSFpiSUN6VTR2cWhuOWUzNTVL?=
- =?utf-8?B?aFovbjUzM3VsS2N6T0gzcjFYL1Z4c05EcldvbnhrZE1rNzNVT3RjZ2s2cmsv?=
- =?utf-8?B?TjBXZW1UY1JlOHJuT0drUFE0Rk15OFpVaFQxdzMzM2ZwNm9VNm1qK043clNR?=
- =?utf-8?B?WmZRTUR6cmpvdnhLR08zem5WbUdZZ0JxMmZTQ05OQ25Od3JKa1BwbytvUVhS?=
- =?utf-8?B?OG04cWJheG0vb1RmTnBFQ1FneEpxNkdQbENBNlRBYWh1akJ4clgxYjEzMHB4?=
- =?utf-8?B?ZHdvSnlQZTNpZDg0NWh3Z1kzMEppQ1FHQWs1dm5lTnhLNVB0TDVUU2E4aldp?=
- =?utf-8?B?ZndNL2xGbzVpdWhBMzA0N1ZibWVhNk1maGZHcFllUVIrVHlLN0I5LzFtNmMx?=
- =?utf-8?B?aDVucUJ2V1FWQlk5c29MVXV5MGhmaWFlaElaOVRuUXlKUWVXS2JnRUpnVjYy?=
- =?utf-8?B?dWkyZXN5TDVaUm8yS0hVYnA2SkFGVTVYSDR3L2hZWFNQbkphTnBaVkpqY2J5?=
- =?utf-8?B?a2hsMEtaU3ZnMFJtY2YvdmpxcTlLZ001N1NDYzRRWmdMRGRYSWwzL1JBcFBx?=
- =?utf-8?B?ZlA2b0Q3ZkZMMXJRWTlSV2pta2Y0NDZBeDMrb1NBcFlFUDJWeUtaZnhSVlJ6?=
- =?utf-8?B?SEg4V1JxTUltSHpkVU9hZ1Jvd05aL3NBVmhKMGdDTGZ6cU5VTEc2bWFZRTdV?=
- =?utf-8?B?YjYzMEVaZVdzV1lvd3R3NG9iV1VGbnhmTDk1c1Jpb1hCcnA5SDcrUVFDSjBT?=
- =?utf-8?B?TjZiL2VWRkVhOHgxdHhkU2NUQ25JTEJMRjRGVDVBUmpjdE1MeFNLaHJvaWNH?=
- =?utf-8?B?OGh0MTBlV25MWDNUSkhRYmdtVFlpRWIvTFl2QUkwcFhFZFpqWmRXQWJzbFB5?=
- =?utf-8?B?dU1WeXJNdHltNHNWbUZMazg0ckZRNkdoVHZIQTNmN2UvTGpNc0hMK0hQZ2Jy?=
- =?utf-8?B?VGU2UTdMc0ZaZG5McVY1VDU2cmJPM25kVXNnUWdoNlZKVHdsUVJKUnIyNXlp?=
- =?utf-8?B?WkhMVDRGVzIyZVo4cUQrTWNyS3pWVVd4NHFDZ2djMFJGWHRvNXJkaU9wRnR5?=
- =?utf-8?Q?VBwE=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Thu, 20 Oct 2022 17:14:01 -0400
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC42421CD76;
+        Thu, 20 Oct 2022 14:13:59 -0700 (PDT)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 131C2100003;
+        Thu, 20 Oct 2022 21:13:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1666300438;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=I4LMS7M24fpjh0kpPQ6wTQki84VuHmXWkbDR03Gia6E=;
+        b=d7huTAh7uLOSo8nMo7dzpL+0zLckuH1/c/CLaY2BHtCjfzSsFCJ/PjEhgj2L/2nKki3qOI
+        ygkHRiJHyyqCO2V48uv++SuQAzODf0f5L+bEg9ABu79yZLmPfYEvC+BT7TRjKZEu6AI9zy
+        UuXP10bJlwGL6se+a5UGwz/1STX7bLKeIFa6DfDaUyxEOZvfluZQpXsumcjKUjslKkkuoc
+        1sXc3q3/JJNoKNDpQCOdt0Uz0b6Oz+RlxYR1HMVs+6H++bv2HxFeSgz2hhBwQCOTizu3gs
+        BBQmR+TR/qiRCuhHxlQT67DoKwytuxELo9ll3uqSvWheRTN3teZf5wjDWl5JXA==
+Date:   Thu, 20 Oct 2022 23:13:56 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Ibrahim Tilki <Ibrahim.Tilki@analog.com>
+Cc:     a.zummo@towertech.it, jdelvare@suse.com, linux@roeck-us.net,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
+Subject: Re: [PATCH 2/2] dt-bindings: rtc: add bindings for max313xx RTCs
+Message-ID: <Y1G6FIvS6WD57GXW@mail.local>
+References: <20221019133910.282-1-Ibrahim.Tilki@analog.com>
+ <20221019133910.282-2-Ibrahim.Tilki@analog.com>
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR12MB5481.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ffa6d0fc-37d5-487e-74b2-08dab2dfe4b4
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Oct 2022 21:13:11.0204
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 06dJ5YN2rOx+m2zYSFgb/O7KVZcVgt3FWNWsKL9SR+jXtaugHgDOchflI5/N1y5/+thXoV4u6GsnMgQaownT/g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5983
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221019133910.282-2-Ibrahim.Tilki@analog.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBGcm9tOiBTaS1XZWkgTGl1IDxzaS13ZWkubGl1QG9yYWNsZS5jb20+DQo+IFNlbnQ6IFRodXJz
-ZGF5LCBPY3RvYmVyIDIwLCAyMDIyIDI6MTIgUE0NCj4gDQo+IA0KPiBPbiAxMC8xOS8yMDIyIDEw
-OjI1IFBNLCBKYXNvbiBXYW5nIHdyb3RlOg0KPiA+IE9uIFdlZCwgT2N0IDE5LCAyMDIyIGF0IDg6
-NTYgQU0gU2ktV2VpIExpdSA8c2ktd2VpLmxpdUBvcmFjbGUuY29tPg0KPiB3cm90ZToNCj4gPj4g
-TGl2ZSBtaWdyYXRpb24gb2YgdmRwYSB3b3VsZCB0eXBpY2FsbHkgcmVxdWlyZSByZS1pbnN0YXRl
-IHZkcGEgZGV2aWNlDQo+ID4+IHdpdGggYW4gaWRlbnRpYWwgc2V0IG9mIGNvbmZpZ3Mgb24gdGhl
-IGRlc3RpbmF0aW9uIG5vZGUsIHNhbWUgd2F5IGFzDQo+ID4+IGhvdyBzb3VyY2Ugbm9kZSBjcmVh
-dGVkIHRoZSBkZXZpY2UgaW4gdGhlIGZpcnN0IHBsYWNlLiBJbiBvcmRlciB0bw0KPiA+PiBzYXZl
-IG9yY2hlc3RyYXRpb24gc29mdHdhcmUgZnJvbSBtZW1vcml6aW5nIGFuZCBrZWVwaW5nIHRyYWNr
-IG9mIHZkcGENCj4gPj4gY29uZmlnLCBpdCB3aWxsIGJlIGhlbHBmdWwgaWYgdGhlIHZkcGEgdG9v
-bCBwcm92aWRlcyB0aGUgYWlkcyBmb3INCj4gPj4gZXhwb3J0aW5nIHRoZSBpbml0aWFsIGNvbmZp
-Z3MgZnJvbSB3aGljaCB2ZHBhIGRldmljZSB3YXMgY3JlYXRlZA0KPiA+PiBhcy1pcy4gVGhlICJ2
-ZHBhIGRldiBzaG93IiBjb21tYW5kIHNlZW1zIHRvIGJlIHRoZSByaWdodCB2ZWhpY2xlIGZvcg0K
-PiA+PiB0aGF0LiBJdCBpcyB1bmxpa2UgdGhlICJ2ZHBhIGRldiBjb25maWcgc2hvdyIgY29tbWFu
-ZCBvdXRwdXQgdGhhdA0KPiA+PiB1c3VhbGx5IGdvZXMgd2l0aCB0aGUgbGl2ZSB2YWx1ZSBpbiB0
-aGUgZGV2aWNlIGNvbmZpZyBzcGFjZSwgd2hpY2ggaXMNCj4gPj4gbm90IHF1aXRlIHJlbGlhYmxl
-IHN1YmplY3QgdG8gdGhlIGR5bmFtaWNzIG9mIGZlYXR1cmUgbmVnb3RpYXRpb24gYW5kDQo+ID4+
-IHBvc3NpYmxlIGNoYW5nZSBpbiBkZXZpY2UgY29uZmlnIHNwYWNlLg0KPiA+Pg0KPiA+PiBFeGFt
-cGxlczoNCj4gPj4NCj4gPj4gMSkgQ3JlYXRlIHZEUEEgYnkgZGVmYXVsdCB3aXRob3V0IGFueSBj
-b25maWcgYXR0cmlidXRlDQo+ID4+DQo+ID4+ICQgdmRwYSBkZXYgYWRkIG1nbXRkZXYgcGNpLzAw
-MDA6NDE6MDQuMiBuYW1lIHZkcGEwICQgdmRwYSBkZXYgc2hvdw0KPiA+PiB2ZHBhMA0KPiA+PiB2
-ZHBhMDogdHlwZSBuZXR3b3JrIG1nbXRkZXYgcGNpLzAwMDA6NDE6MDQuMiB2ZW5kb3JfaWQgNTU1
-NSBtYXhfdnFzDQo+IDkNCj4gPj4gbWF4X3ZxX3NpemUgMjU2ICQgdmRwYSBkZXYgLWpwIHNob3cg
-dmRwYTAgew0KPiA+PiAgICAgICJkZXYiOiB7DQo+ID4+ICAgICAgICAgICJ2ZHBhMCI6IHsNCj4g
-Pj4gICAgICAgICAgICAgICJ0eXBlIjogIm5ldHdvcmsiLA0KPiA+PiAgICAgICAgICAgICAgIm1n
-bXRkZXYiOiAicGNpLzAwMDA6NDE6MDQuMiIsDQo+ID4+ICAgICAgICAgICAgICAidmVuZG9yX2lk
-IjogNTU1NSwNCj4gPj4gICAgICAgICAgICAgICJtYXhfdnFzIjogOSwNCj4gPj4gICAgICAgICAg
-ICAgICJtYXhfdnFfc2l6ZSI6IDI1NiwNCj4gPj4gICAgICAgICAgfQ0KPiA+PiAgICAgIH0NCj4g
-Pj4gfQ0KPiA+Pg0KPiA+PiAyKSBDcmVhdGUgdkRQQSB3aXRoIGNvbmZpZyBhdHRyaWJ1dGUocykg
-c3BlY2lmaWVkDQo+ID4+DQo+ID4+ICQgdmRwYSBkZXYgYWRkIG1nbXRkZXYgcGNpLzAwMDA6NDE6
-MDQuMiBuYW1lIHZkcGEwIFwNCj4gPj4gICAgICBtYWMgZTQ6MTE6YzY6ZDM6NDU6ZjAgbWF4X3Zx
-X3BhaXJzIDQgJCB2ZHBhIGRldiBzaG93DQo+ID4+IHZkcGEwOiB0eXBlIG5ldHdvcmsgbWdtdGRl
-diBwY2kvMDAwMDo0MTowNC4yIHZlbmRvcl9pZCA1NTU1IG1heF92cXMNCj4gOSBtYXhfdnFfc2l6
-ZSAyNTYNCj4gPj4gICAgdmlydGlvX2NvbmZpZzogbWFjIGU0OjExOmM2OmQzOjQ1OmYwIG1heF92
-cV9wYWlycyA0ICQgdmRwYSBkZXYgLWpwDQo+ID4+IHNob3cgew0KPiA+PiAgICAgICJkZXYiOiB7
-DQo+ID4+ICAgICAgICAgICJ2ZHBhMCI6IHsNCj4gPj4gICAgICAgICAgICAgICJ0eXBlIjogIm5l
-dHdvcmsiLA0KPiA+PiAgICAgICAgICAgICAgIm1nbXRkZXYiOiAicGNpLzAwMDA6NDE6MDQuMiIs
-DQo+ID4+ICAgICAgICAgICAgICAidmVuZG9yX2lkIjogNTU1NSwNCj4gPj4gICAgICAgICAgICAg
-ICJtYXhfdnFzIjogOSwNCj4gPj4gICAgICAgICAgICAgICJtYXhfdnFfc2l6ZSI6IDI1NiwNCj4g
-Pj4gICAgICAgICAgICAgICJ2aXJ0aW9fY29uZmlnIjogew0KU2luY2UgbW9zdCBjb25maWcgaXMg
-cmVsYXRlZCB0byB2aXJ0aW8uDQpNYXkgYmUgYmV0dGVyIHRvIGRvDQpzL3ZpcnRpb19jb25maWcv
-c3RhdGljX2NvbmZpZyBvcg0Kcy92aXJ0b19jb25maWcvZGV2X2NvbmZpZw0KDQpUaGlzIGNsZWFy
-bHkgaW5kaWNhdGVzIHRoYXQgdGhpcyB3YXMgdGhlIGRldmljZSBzdGF0aWMgY29uZmlndXJhdGlv
-bi4NCg0KPiA+PiAgICAgICAgICAgICAgICAgICJtYWMiOiAiZTQ6MTE6YzY6ZDM6NDU6ZjAiLA0K
-PiA+PiAgICAgICAgICAgICAgICAgICJtYXhfdnFfcGFpcnMiOiA0DQo+ID4+ICAgICAgICAgICAg
-ICB9DQo+ID4+ICAgICAgICAgIH0NCj4gPj4gICAgICB9DQo+ID4+IH0NCj4gPj4NCj4gPj4gU2ln
-bmVkLW9mZi1ieTogU2ktV2VpIExpdSA8c2ktd2VpLmxpdUBvcmFjbGUuY29tPg0KPiA+PiAtLS0N
-Cj4gPj4gICBkcml2ZXJzL3ZkcGEvdmRwYS5jIHwgMzkgKysrKysrKysrKysrKysrKysrKysrKysr
-KysrKysrKysrKysrKysrDQo+ID4+ICAgMSBmaWxlIGNoYW5nZWQsIDM5IGluc2VydGlvbnMoKykN
-Cj4gPj4NCj4gPj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdmRwYS92ZHBhLmMgYi9kcml2ZXJzL3Zk
-cGEvdmRwYS5jIGluZGV4DQo+ID4+IDU2NmMxYzYuLjkxZWNhNmQgMTAwNjQ0DQo+ID4+IC0tLSBh
-L2RyaXZlcnMvdmRwYS92ZHBhLmMNCj4gPj4gKysrIGIvZHJpdmVycy92ZHBhL3ZkcGEuYw0KPiA+
-PiBAQCAtNjc3LDYgKzY3Nyw0MSBAQCBzdGF0aWMgaW50IHZkcGFfbmxfY21kX2Rldl9kZWxfc2V0
-X2RvaXQoc3RydWN0DQo+IHNrX2J1ZmYgKnNrYiwgc3RydWN0IGdlbmxfaW5mbyAqaQ0KPiA+PiAg
-IH0NCj4gPj4NCj4gPj4gICBzdGF0aWMgaW50DQo+ID4+ICt2ZHBhX2Rldl9jZmdhdHRyc19maWxs
-KHN0cnVjdCB2ZHBhX2RldmljZSAqdmRldiwgc3RydWN0IHNrX2J1ZmYNCj4gPj4gKyptc2csIHUz
-MiBkZXZpY2VfaWQpIHsNCj4gPj4gKyAgICAgICBzdHJ1Y3QgdmRwYV9kZXZfc2V0X2NvbmZpZyAq
-Y2ZnID0gJnZkZXYtPnZkZXZfY2ZnOw0KPiA+PiArICAgICAgIGludCBlcnIgPSAtRU1TR1NJWkU7
-DQo+ID4+ICsNCj4gPj4gKyAgICAgICBpZiAoIWNmZy0+bWFzaykNCj4gPj4gKyAgICAgICAgICAg
-ICAgIHJldHVybiAwOw0KPiA+PiArDQo+ID4+ICsgICAgICAgc3dpdGNoIChkZXZpY2VfaWQpIHsN
-Cj4gPj4gKyAgICAgICBjYXNlIFZJUlRJT19JRF9ORVQ6DQo+ID4+ICsgICAgICAgICAgICAgICBp
-ZiAoKGNmZy0+bWFzayAmDQo+IEJJVF9VTEwoVkRQQV9BVFRSX0RFVl9ORVRfQ0ZHX01BQ0FERFIp
-KSAhPSAwICYmDQo+ID4+ICsgICAgICAgICAgICAgICAgICAgbmxhX3B1dChtc2csIFZEUEFfQVRU
-Ul9ERVZfTkVUX0NGR19NQUNBRERSLA0KPiA+PiArICAgICAgICAgICAgICAgICAgICAgICAgICAg
-c2l6ZW9mKGNmZy0+bmV0Lm1hYyksIGNmZy0+bmV0Lm1hYykpDQo+ID4+ICsgICAgICAgICAgICAg
-ICAgICAgICAgIHJldHVybiBlcnI7DQo+ID4+ICsgICAgICAgICAgICAgICBpZiAoKGNmZy0+bWFz
-ayAmIEJJVF9VTEwoVkRQQV9BVFRSX0RFVl9ORVRfQ0ZHX01UVSkpICE9DQo+IDAgJiYNCj4gPj4g
-KyAgICAgICAgICAgICAgICAgICBubGFfcHV0X3UxNihtc2csIFZEUEFfQVRUUl9ERVZfTkVUX0NG
-R19NVFUsIGNmZy0NCj4gPm5ldC5tdHUpKQ0KPiA+PiArICAgICAgICAgICAgICAgICAgICAgICBy
-ZXR1cm4gZXJyOw0KPiA+PiArICAgICAgICAgICAgICAgaWYgKChjZmctPm1hc2sgJg0KPiBCSVRf
-VUxMKFZEUEFfQVRUUl9ERVZfTkVUX0NGR19NQVhfVlFQKSkgIT0gMCAmJg0KPiA+PiArICAgICAg
-ICAgICAgICAgICAgIG5sYV9wdXRfdTE2KG1zZywgVkRQQV9BVFRSX0RFVl9ORVRfQ0ZHX01BWF9W
-UVAsDQo+ID4+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgY2ZnLT5uZXQubWF4X3Zx
-X3BhaXJzKSkNCj4gPj4gKyAgICAgICAgICAgICAgICAgICAgICAgcmV0dXJuIGVycjsNCj4gPj4g
-KyAgICAgICAgICAgICAgIGJyZWFrOw0KPiA+IFRoaXMgbWFrZXMgbWUgdGhpbmsgaWYgd2UgY2Fu
-IHJldXNlIHRoZSB2aXJ0aW9fbmV0X2NvbmZpZyBzdHJ1Y3R1cmUNCj4gPiBvdGhlciB0aGFuIGR1
-cGxpY2F0ZSBpdCBzbG93bHkgd2l0aCBhIGRlZGljYXRlZCBuZXN0ZWQgc3RydWN0dXJlDQo+ID4g
-aW5zaWRlIHZkcGFfZGV2X3NldF9jb25maWcgdGhlbiB3ZSBjYW4gcmV1c2UgdGhlDQo+ID4gdmRw
-YV9kZXZfbmV0X2NvbmZpZ19maWxsKCkuDQo+IEFkZGluZyBQYXJhdi4NCj4gDQo+IEkgdGhpbmsg
-Zm9yIG5vdyB0aGUgc3RydWN0IHZkcGFfZGV2X3NldF9jb25maWcgaGFzIGp1c3QgYSBmZXcgZmll
-bGRzLCBzbyBpdCdzDQo+IG5vdCB2ZXJ5IG9idmlvdXMuIEJ1dCBmcm9tIHdoYXQgSSB1bmRlcnN0
-YW5kLCB0aGUgdmRwYV9kZXZfc2V0X2NvbmZpZw0KPiBzdHJ1Y3QgaXMgZGVzaWduZWQgdG8gYmUg
-YnVpbHQgYXJvdW5kIHZkcGEgY29uZmlndXJhYmxlcywgd2l0aG91dCBnZXR0aW5nIGl0DQo+IGxp
-bWl0ZWQgYnkgd2hhdCdzIGV4cG9zZWQgYnkgdGhlIHZpcnRpbyBkZXZpY2UgY29uZmlnIHN0cnVj
-dHVyZSwgc3VjaCBhcw0KPiB2aXJ0aW9fbmV0X2NvbmZpZy4gDQpTdXJlLiBWZHBhX2Rldl9zZXRf
-Y29uZmlnIGNhbiBleHBhbmQgZm9yIGZpZWxkcyBvdXRzaWRlIG9mIHZpcnRpb19uZXRfY29uZmln
-IHN0cnVjdHVyZSBzcGFjZSwgYnV0IGl0IHNob3VsZCBiZSBjbG9zZSB0byB2aXJ0aW8gc3BlYyBk
-ZWZpbml0aW9uIGxpa2UgeW91IGRlc2NyaWJlZCBiZWxvdyBvciBjbG9zZSB0byBMaW51eCBrZXJu
-ZWwgb2JqZWN0cy4NCg0KQXQgcHJlc2VudCBpdCBjYW4gaGFuZGxlIGFub3RoZXIgNjIgbW9yZSBm
-aWVsZHMsIHdoaWNoIEkgdGhpbmsgaXMgZ29vZCBlbm91Z2ggZm9yIG1pZHRlcm0uDQoNCj4gRm9y
-IGluc3RhbmNlLCB0aGVyZSBjb3VsZCBiZSBwb3NzaWJpbGl0eSBmb3IgdmRwYSB1c2VyIHRvDQo+
-IHNwZWNpZnkgdGhlIHNpemUgb2YgTUFDIHVuaWNhc3Qgb3IgbXVsdGljYXN0IGFkZHJlc3MgdGFi
-bGUsIHdoaWNoIGlzIG5vdA0KPiBkZWZpbmVkIGFueXdoZXJlIGluIHRoZSB2aXJ0aW9fbmV0X2Nv
-bmZpZy4gSSB0aGluayBpdCdzIGltcG9ydGFudCB0byBtYXRjaA0KPiBzdWNoIGNvbmZpZ3VyYXRp
-b24gKHdoaWNoIG1heSBub3QgZXZlbiBiZSBkZWZpbmVkIGluIHNwZWMpIGZvciBzcmMmZHN0IHZk
-cGENCj4gZGV2aWNlcyBpbnZvbHZpbmcgdGhlIGxpdmUgbWlncmF0aW9uLg0KPiANCj4gLVNpd2Vp
-DQo+ID4NCj4gPiBUaGFua3MNCj4gPg0KPiA+PiArICAgICAgIGRlZmF1bHQ6DQo+ID4+ICsgICAg
-ICAgICAgICAgICBicmVhazsNCj4gPj4gKyAgICAgICB9DQo+ID4+ICsNCj4gPj4gKyAgICAgICBp
-ZiAoKGNmZy0+bWFzayAmIEJJVF9VTEwoVkRQQV9BVFRSX0RFVl9GRUFUVVJFUykpICE9IDAgJiYN
-Cj4gPj4gKyAgICAgICAgICAgbmxhX3B1dF91NjRfNjRiaXQobXNnLCBWRFBBX0FUVFJfREVWX0ZF
-QVRVUkVTLA0KPiA+PiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICBjZmctPmRldmljZV9m
-ZWF0dXJlcywgVkRQQV9BVFRSX1BBRCkpDQo+ID4+ICsgICAgICAgICAgICAgICByZXR1cm4gZXJy
-Ow0KPiA+PiArDQo+ID4+ICsgICAgICAgcmV0dXJuIDA7DQo+ID4+ICt9DQo+ID4+ICsNCj4gPj4g
-K3N0YXRpYyBpbnQNCj4gPj4gICB2ZHBhX2Rldl9maWxsKHN0cnVjdCB2ZHBhX2RldmljZSAqdmRl
-diwgc3RydWN0IHNrX2J1ZmYgKm1zZywgdTMyIHBvcnRpZCwNCj4gdTMyIHNlcSwNCj4gPj4gICAg
-ICAgICAgICAgICAgaW50IGZsYWdzLCBzdHJ1Y3QgbmV0bGlua19leHRfYWNrICpleHRhY2spDQo+
-ID4+ICAgew0KPiA+PiBAQCAtNzE1LDYgKzc1MCwxMCBAQCBzdGF0aWMgaW50IHZkcGFfbmxfY21k
-X2Rldl9kZWxfc2V0X2RvaXQoc3RydWN0DQo+IHNrX2J1ZmYgKnNrYiwgc3RydWN0IGdlbmxfaW5m
-byAqaQ0KPiA+PiAgICAgICAgICBpZiAobmxhX3B1dF91MTYobXNnLCBWRFBBX0FUVFJfREVWX01J
-Tl9WUV9TSVpFLCBtaW5fdnFfc2l6ZSkpDQo+ID4+ICAgICAgICAgICAgICAgICAgZ290byBtc2df
-ZXJyOw0KPiA+Pg0KPiA+PiArICAgICAgIGVyciA9IHZkcGFfZGV2X2NmZ2F0dHJzX2ZpbGwodmRl
-diwgbXNnLCBkZXZpY2VfaWQpOw0KPiA+PiArICAgICAgIGlmIChlcnIpDQo+ID4+ICsgICAgICAg
-ICAgICAgICBnb3RvIG1zZ19lcnI7DQo+ID4+ICsNCj4gPj4gICAgICAgICAgZ2VubG1zZ19lbmQo
-bXNnLCBoZHIpOw0KPiA+PiAgICAgICAgICByZXR1cm4gMDsNCj4gPj4NCj4gPj4gLS0NCj4gPj4g
-MS44LjMuMQ0KPiA+Pg0KDQo=
+On 19/10/2022 16:39:10+0300, Ibrahim Tilki wrote:
+> Devicetree binding documentation for Analog Devices MAX313XX RTCs
+> 
+> Signed-off-by: Ibrahim Tilki <Ibrahim.Tilki@analog.com>
+> Signed-off-by: Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
+> ---
+>  .../devicetree/bindings/rtc/adi,max313xx.yaml | 163 ++++++++++++++++++
+>  1 file changed, 163 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/rtc/adi,max313xx.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/rtc/adi,max313xx.yaml b/Documentation/devicetree/bindings/rtc/adi,max313xx.yaml
+> new file mode 100644
+> index 000000000..1aa491799
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/rtc/adi,max313xx.yaml
+> @@ -0,0 +1,163 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +# Copyright 2022 Analog Devices Inc.
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/rtc/adi,max313xx.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Analog Devices MAX313XX series I2C RTC driver
+> +
+> +maintainers:
+> +  - Ibrahim Tilki <Ibrahim.Tilki@analog.com>
+> +  - Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
+> +
+> +description: Bindings for the Analog Devices MAX313XX series RTCs.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - adi,max31328
+> +      - adi,max31329
+> +      - adi,max31331
+> +      - adi,max31334
+> +      - adi,max31341
+> +      - adi,max31342
+> +      - adi,max31343
+> +
+> +  reg:
+> +    description: I2C address of the RTC
+> +    items:
+> +      - enum: [0x68, 0x69]
+> +
+> +  interrupts:
+> +    minItems: 1
+> +    maxItems: 2
+> +
+> +  interrupt-names:
+> +    description: |
+> +      Name of the interrupt pin of the RTC used for IRQ. Not required for
+> +      RTCs that only have single interrupt pin available. Some of the RTCs
+> +      share interrupt pins with clock input/output pins.
+> +    minItems: 1
+> +    items:
+> +      - enum: [INTA, INTB]
+> +      - enum: [INTA, INTB]
+> +
+
+I don't think this is right, what this is doing is essentially pinmuxing
+interrupts versus clocks. What happens if you want INTB but this goes
+directly to a PMIC instead of the SoC?
+It is not something you can express with your current bindings.
+
+
+> +  "#clock-cells":
+> +    description: |
+> +      RTC can be used as a clock source through its clock output pin when
+> +      supplied.
+> +    const: 0
+> +
+> +  clocks:
+> +    description: |
+> +      RTC uses this clock for clock input when supplied. Clock has to provide
+> +      one of these four frequencies: 1Hz, 50Hz, 60Hz or 32.768kHz.
+> +    maxItems: 1
+> +
+> +  trickle-diode-disable: true
+> +
+> +  trickle-resistor-ohms:
+> +    description: Enables trickle charger with specified resistor value.
+> +    enum: [3000, 6000, 11000]
+> +
+> +  wakeup-source: true
+> +
+> +additionalProperties: false
+> +
+> +allOf:
+> +  - $ref: rtc.yaml#
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - adi,max31328
+> +              - adi,max31342
+> +
+> +    then:
+> +      properties:
+> +        trickle-diode-disable: false
+> +        trickle-resistor-ohms: false
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - adi,max31328
+> +              - adi,max31331
+> +              - adi,max31334
+> +              - adi,max31343
+> +
+> +    then:
+> +      properties:
+> +        clocks: false
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - adi,max31341
+> +              - adi,max31342
+> +
+> +    then:
+> +      properties:
+> +        reg:
+> +          items:
+> +            - const: 0x69
+> +
+> +    else:
+> +      properties:
+> +        reg:
+> +          items:
+> +            - const: 0x68
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        rtc@68 {
+> +            reg = <0x68>;
+> +            compatible = "adi,max31329";
+> +            clocks = <&clkin>;
+> +            interrupt-parent = <&gpio>;
+> +            interrupts = <26 IRQ_TYPE_EDGE_FALLING>;
+> +            interrupt-names = "INTB";
+> +        };
+> +    };
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        rtc@68 {
+> +            reg = <0x68>;
+> +            compatible = "adi,max31331";
+> +            #clock-cells = <0>;
+> +            interrupt-parent = <&gpio>;
+> +            interrupts = <25 IRQ_TYPE_EDGE_FALLING>, <26 IRQ_TYPE_EDGE_FALLING>;
+> +            interrupt-names = "INTA", "INTB";
+> +        };
+> +    };
+> +  - |
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        rtc@69 {
+> +            reg = <0x69>;
+> +            compatible = "adi,max31341";
+> +            #clock-cells = <0>;
+> +            clocks = <&clkin>;
+> +        };
+> +    };
+> -- 
+> 2.25.1
+> 
+
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
