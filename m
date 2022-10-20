@@ -2,611 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8108606191
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 15:26:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB95E606195
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 15:26:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231147AbiJTNZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 09:25:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54712 "EHLO
+        id S231199AbiJTN0F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 09:26:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229959AbiJTNZr (ORCPT
+        with ESMTP id S230436AbiJTNZp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 09:25:47 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF2F03642E;
-        Thu, 20 Oct 2022 06:25:44 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id t16so10640249edd.2;
-        Thu, 20 Oct 2022 06:25:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MIQbIsCXagkIWp6OQOXf/pk6LODllhevise+dRbp3NU=;
-        b=hswcP9z4CxFmTub0Z9GFU0awq72EsftWFWsnB6Ft0mxE3n04GhCy7hxQ3SaQ9QHCV6
-         aWZ9AwU1mJSKG9RaYr4y8t/GIIQj72Hl11rYaxMi5wkNPNpn2O6sb4WslHOLl9Xmgj5S
-         +VmIZGphzo2cbUemZSLc4QR0DC049Lyla+XFd8Ha4KDwLiNYdXTNfNSN6siaEI1O0U24
-         dfkNSxdUcUJ11RpgFs0RD1tJijZsQVy75LhFPz7Z6i2R8MRmhCjFyizb0jWZOmdd/eZS
-         3DQq2y46/JEVyLoQ8RMtWy3mM69rzH4H2HC7VBBtcsISRUa4yg58e2STCLgLU9MQjQey
-         tQhQ==
+        Thu, 20 Oct 2022 09:25:45 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A30E83237
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 06:25:44 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id g13-20020a056e021e0d00b002fc57cd18e3so20375378ila.11
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 06:25:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MIQbIsCXagkIWp6OQOXf/pk6LODllhevise+dRbp3NU=;
-        b=e6KCrwlTaR8aJDb941QjEHSUncO9p5TVRuNd6KuXJiIGF9AeLJfAWb5x08pA91z/rt
-         H6x8vJZkYj1T/O4IPfF7BN/vh/2F2GrANjVYEua1Vna8ei/qdvf5GvM/dGDncSdEtWNR
-         5numeve2BIsi3f7/2DKE0yFzxw5iEUq9qD1GRZJSeJxq8guXGVZ2GZ7EiMArvV1aHilZ
-         WcMSbkxYw4sEKRgxniQbTmmcoZ/iCArqb5XxzWcSuOROPzlb9HJCrsYw0yRCyjhvUJyx
-         M09dOnAFCbt94xWbq+U7b4IA5eTxq8LN1ywu058xSjG32+bEp+EsTWYgml2tl4gJS+I/
-         FgEg==
-X-Gm-Message-State: ACrzQf16c1sLAGBy5cULjWoYHEj7Jz/a0F/3Ds2WfsY4KEjzh2x1KUhI
-        2+wn4DLa90VNboJwth/hXc0=
-X-Google-Smtp-Source: AMsMyM4Jm6SyuC0Kh412QvxhF05Ma5LkdqCnHyybuUNdBmvhwnWSKdUXZisteTLtjJqTB3ZtOG6XHw==
-X-Received: by 2002:a05:6402:3547:b0:45d:1578:9424 with SMTP id f7-20020a056402354700b0045d15789424mr11925527edd.281.1666272343068;
-        Thu, 20 Oct 2022 06:25:43 -0700 (PDT)
-Received: from skbuf ([188.27.184.197])
-        by smtp.gmail.com with ESMTPSA id k17-20020aa7c391000000b00456cbd8c65bsm12187179edq.6.2022.10.20.06.25.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 06:25:42 -0700 (PDT)
-Date:   Thu, 20 Oct 2022 16:25:38 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     "Hans J. Schultz" <netdev@kapio-technology.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Florent Fourcot <florent.fourcot@wifirst.fr>,
-        Hans Schultz <schultz.hans@gmail.com>,
-        Joachim Wiberg <troglobit@gmail.com>,
-        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v8 net-next 10/12] net: dsa: mv88e6xxx: mac-auth/MAB
- implementation
-Message-ID: <20221020132538.reirrskemcjwih2m@skbuf>
-References: <20221018165619.134535-1-netdev@kapio-technology.com>
- <20221018165619.134535-1-netdev@kapio-technology.com>
- <20221018165619.134535-11-netdev@kapio-technology.com>
- <20221018165619.134535-11-netdev@kapio-technology.com>
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TaMuVZaq7QDAGspjNdrRvPMQ7xoVTTFuG6MtyPa0984=;
+        b=vpkQepe2mIZL4MDOz6RlKcmpS3Wf/3bPNEDnaDW5Kjy3LD4qGl13jy3SVxLdx9dBec
+         2BBafvs+4j6/Ey2Y4dF5p+v22owl3RJmV23WAOMsq+nfwdHYQFjEfegUIXLpTZOa1rcy
+         P0qhBT68jmUrRoAD9GzwrUrIQlFqTUDj/FEASxgF6AzXyl0DbIndhrf8KCyG5dlmQEnG
+         pC3HtNlVT4aZWUMHwjrIcPWjzWh9kjLIx9iGRXXAaDu8Ru8TcyT1GREpUllG0iB9bfeX
+         gQwmP90YC8qTvE+u9NOXz2UVojCNIoIyVd/1GyubjGO3PV44fvON0wKiOtg/lWNSKp/z
+         Kxtw==
+X-Gm-Message-State: ACrzQf2vL4O8YIuLKRbm0tH++IE0eGriEkV8yXLODVLBBWz+y5lj8ASQ
+        k1q3D/bbrSqKqSBDHIHeq5rNVy5sMHub7h/5LioTqLZUuTa0
+X-Google-Smtp-Source: AMsMyM5TMH6VrbfNN4/4llwU6k/STxE4cOarQ2+HTKp6p9tffQI+w3vyTgnoOiJSQH/94mb4uwWECzNlSAfPp2GCzoJxh1i6TK9F
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221018165619.134535-11-netdev@kapio-technology.com>
- <20221018165619.134535-11-netdev@kapio-technology.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:c735:0:b0:363:c669:9933 with SMTP id
+ h21-20020a02c735000000b00363c6699933mr10904626jao.29.1666272343419; Thu, 20
+ Oct 2022 06:25:43 -0700 (PDT)
+Date:   Thu, 20 Oct 2022 06:25:43 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000020f00f05eb774338@google.com>
+Subject: [syzbot] BUG: unable to handle kernel NULL pointer dereference in filemap_read_folio
+From:   syzbot <syzbot+e33c2a7e25ff31df5297@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        syzkaller-bugs@googlegroups.com, willy@infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 06:56:17PM +0200, Hans J. Schultz wrote:
-> This implementation for the Marvell mv88e6xxx chip series,
-> is based on handling ATU miss violations occurring when packets
-> ingress on a port that is locked. The mac address triggering
-> the ATU miss violation will be added to the ATU with a zero-DPV,
-> and is then communicated through switchdev to the bridge module,
-> which adds a fdb entry with the fdb locked flag set. The entry
-> is kept according to the bridges ageing time, thus simulating a
-> dynamic entry.
-> 
-> Additionally the driver will set the sticky and masked flags, as
-> the driver does not support roaming and forwarding from any port
-> to a locked entry.
-> 
-> As this is essentially a form of CPU based learning, the amount
-> of locked entries will be limited by a hardcoded value for now,
-> so as to prevent DOS attacks.
-> 
-> Signed-off-by: Hans J. Schultz <netdev@kapio-technology.com>
-> ---
->  drivers/net/dsa/mv88e6xxx/Makefile      |   1 +
->  drivers/net/dsa/mv88e6xxx/chip.c        |  76 +++++--
->  drivers/net/dsa/mv88e6xxx/chip.h        |  19 ++
->  drivers/net/dsa/mv88e6xxx/global1.h     |   1 +
->  drivers/net/dsa/mv88e6xxx/global1_atu.c |  12 +-
->  drivers/net/dsa/mv88e6xxx/port.c        |  15 +-
->  drivers/net/dsa/mv88e6xxx/port.h        |   6 +
->  drivers/net/dsa/mv88e6xxx/switchdev.c   | 284 ++++++++++++++++++++++++
->  drivers/net/dsa/mv88e6xxx/switchdev.h   |  37 +++
->  9 files changed, 429 insertions(+), 22 deletions(-)
->  create mode 100644 drivers/net/dsa/mv88e6xxx/switchdev.c
->  create mode 100644 drivers/net/dsa/mv88e6xxx/switchdev.h
-> 
-> diff --git a/drivers/net/dsa/mv88e6xxx/Makefile b/drivers/net/dsa/mv88e6xxx/Makefile
-> index c8eca2b6f959..be903a983780 100644
-> --- a/drivers/net/dsa/mv88e6xxx/Makefile
-> +++ b/drivers/net/dsa/mv88e6xxx/Makefile
-> @@ -15,3 +15,4 @@ mv88e6xxx-objs += port_hidden.o
->  mv88e6xxx-$(CONFIG_NET_DSA_MV88E6XXX_PTP) += ptp.o
->  mv88e6xxx-objs += serdes.o
->  mv88e6xxx-objs += smi.o
-> +mv88e6xxx-objs += switchdev.o
-> diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
-> index 352121cce77e..71843fe87f77 100644
-> --- a/drivers/net/dsa/mv88e6xxx/chip.c
-> +++ b/drivers/net/dsa/mv88e6xxx/chip.c
-> @@ -42,6 +42,7 @@
->  #include "ptp.h"
->  #include "serdes.h"
->  #include "smi.h"
-> +#include "switchdev.h"
->  
->  static void assert_reg_lock(struct mv88e6xxx_chip *chip)
->  {
-> @@ -924,6 +925,13 @@ static void mv88e6xxx_mac_link_down(struct dsa_switch *ds, int port,
->  	if (err)
->  		dev_err(chip->dev,
->  			"p%d: failed to force MAC link down\n", port);
-> +	else
-> +		if (mv88e6xxx_port_is_locked(chip, port)) {
-> +			err = mv88e6xxx_atu_locked_entry_flush(ds, port);
-> +			if (err)
-> +				dev_err(chip->dev,
-> +					"p%d: failed to clear locked entries\n", port);
-> +		}
+Hello,
 
-This would not have been needed if dsa_port_set_state() would have
-called dsa_port_fast_age().
+syzbot found the following issue on:
 
-Currently it only does that if dp->learning is true. From previous
-conversations I get the idea that with MAB, port learning will be false.
-But I don't understand why; isn't MAB CPU-assisted learning? I'm looking
-at the ocelot hardware support for this and I think it could be
-implemented using a similar mechanism, but I certainly don't want to add
-more workarounds such as this in other drivers.
+HEAD commit:    55be6084c8e0 Merge tag 'timers-core-2022-10-05' of git://g..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=108783e6880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c29b6436e994d72e
+dashboard link: https://syzkaller.appspot.com/bug?extid=e33c2a7e25ff31df5297
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Are there any other ways to implement MAB other than through CPU
-assisted learning?
+Unfortunately, I don't have any reproducer for this issue yet.
 
-We could add one more dp->mab flag which tracks the "mab" brport flag,
-and extend dsa_port_set_state() to also call dsa_port_fast_age() in that
-case, but I want to make sure there isn't something extremely obvious
-I'm missing about the "learning" flag.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/c8f5131ab57d/disk-55be6084.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/77167f226f35/vmlinux-55be6084.xz
 
->  }
->  
->  static void mv88e6xxx_mac_link_up(struct dsa_switch *ds, int port,
-> @@ -1690,6 +1698,13 @@ static void mv88e6xxx_port_fast_age(struct dsa_switch *ds, int port)
->  	struct mv88e6xxx_chip *chip = ds->priv;
->  	int err;
->  
-> +	if (mv88e6xxx_port_is_locked(chip, port)) {
-> +		err = mv88e6xxx_atu_locked_entry_flush(ds, port);
-> +		if (err)
-> +			dev_err(chip->ds->dev, "p%d: failed to clear locked entries: %d\n",
-> +				port, err);
-> +	}
-> +
->  	mv88e6xxx_reg_lock(chip);
->  	err = mv88e6xxx_port_fast_age_fid(chip, port, 0);
->  	mv88e6xxx_reg_unlock(chip);
-> @@ -1726,11 +1741,11 @@ static int mv88e6xxx_vtu_get(struct mv88e6xxx_chip *chip, u16 vid,
->  	return err;
->  }
->  
-> -static int mv88e6xxx_vtu_walk(struct mv88e6xxx_chip *chip,
-> -			      int (*cb)(struct mv88e6xxx_chip *chip,
-> -					const struct mv88e6xxx_vtu_entry *entry,
-> -					void *priv),
-> -			      void *priv)
-> +int mv88e6xxx_vtu_walk(struct mv88e6xxx_chip *chip,
-> +		       int (*cb)(struct mv88e6xxx_chip *chip,
-> +				 const struct mv88e6xxx_vtu_entry *entry,
-> +				 void *priv),
-> +		       void *priv)
->  {
->  	struct mv88e6xxx_vtu_entry entry = {
->  		.vid = mv88e6xxx_max_vid(chip),
-> @@ -2731,6 +2746,9 @@ static int mv88e6xxx_port_fdb_add(struct dsa_switch *ds, int port,
->  	if (fdb_flags)
->  		return 0;
->  
-> +	if (mv88e6xxx_port_is_locked(chip, port))
-> +		mv88e6xxx_atu_locked_entry_find_purge(ds, port, addr, vid);
-> +
->  	mv88e6xxx_reg_lock(chip);
->  	err = mv88e6xxx_port_db_load_purge(chip, port, addr, vid,
->  					   MV88E6XXX_G1_ATU_DATA_STATE_UC_STATIC);
-> @@ -2744,16 +2762,21 @@ static int mv88e6xxx_port_fdb_del(struct dsa_switch *ds, int port,
->  				  u16 fdb_flags, struct dsa_db db)
->  {
->  	struct mv88e6xxx_chip *chip = ds->priv;
-> -	int err;
-> +	bool locked_found = false;
-> +	int err = 0;
->  
->  	/* Ignore entries with flags set */
->  	if (fdb_flags)
->  		return 0;
->  
-> -	mv88e6xxx_reg_lock(chip);
-> -	err = mv88e6xxx_port_db_load_purge(chip, port, addr, vid, 0);
-> -	mv88e6xxx_reg_unlock(chip);
-> +	if (mv88e6xxx_port_is_locked(chip, port))
-> +		locked_found = mv88e6xxx_atu_locked_entry_find_purge(ds, port, addr, vid);
->  
-> +	if (!locked_found) {
-> +		mv88e6xxx_reg_lock(chip);
-> +		err = mv88e6xxx_port_db_load_purge(chip, port, addr, vid, 0);
-> +		mv88e6xxx_reg_unlock(chip);
-> +	}
->  	return err;
->  }
->  
-> @@ -3849,11 +3872,18 @@ static int mv88e6xxx_setup(struct dsa_switch *ds)
->  
->  static int mv88e6xxx_port_setup(struct dsa_switch *ds, int port)
->  {
-> -	return mv88e6xxx_setup_devlink_regions_port(ds, port);
-> +	int err;
-> +
-> +	err = mv88e6xxx_setup_devlink_regions_port(ds, port);
-> +	if (!err)
-> +		return mv88e6xxx_init_violation_handler(ds, port);
-> +
-> +	return err;
->  }
->  
->  static void mv88e6xxx_port_teardown(struct dsa_switch *ds, int port)
->  {
-> +	mv88e6xxx_teardown_violation_handler(ds, port);
->  	mv88e6xxx_teardown_devlink_regions_port(ds, port);
->  }
->  
-> @@ -6528,7 +6558,7 @@ static int mv88e6xxx_port_pre_bridge_flags(struct dsa_switch *ds, int port,
->  	const struct mv88e6xxx_ops *ops;
->  
->  	if (flags.mask & ~(BR_LEARNING | BR_FLOOD | BR_MCAST_FLOOD |
-> -			   BR_BCAST_FLOOD | BR_PORT_LOCKED))
-> +			   BR_BCAST_FLOOD | BR_PORT_LOCKED | BR_PORT_MAB))
->  		return -EINVAL;
->  
->  	ops = chip->info->ops;
-> @@ -6549,13 +6579,13 @@ static int mv88e6xxx_port_bridge_flags(struct dsa_switch *ds, int port,
->  	struct mv88e6xxx_chip *chip = ds->priv;
->  	int err = -EOPNOTSUPP;
->  
-> -	mv88e6xxx_reg_lock(chip);
-> -
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+e33c2a7e25ff31df5297@syzkaller.appspotmail.com
 
-Separate commit which changes the locking?
+ntfs: volume version 3.1.
+BUG: kernel NULL pointer dereference, address: 0000000000000000
+#PF: supervisor instruction fetch in kernel mode
+#PF: error_code(0x0010) - not-present page
+PGD a5bf9067 P4D a5bf9067 PUD 37d2e067 PMD 0 
+Oops: 0010 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 11041 Comm: syz-executor.1 Not tainted 6.0.0-syzkaller-09589-g55be6084c8e0 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+RIP: 0010:0x0
+Code: Unable to access opcode bytes at 0xffffffffffffffd6.
+RSP: 0018:ffffc9001504f618 EFLAGS: 00010287
+RAX: ffffffff81b64c0e RBX: ffffc9001504f680 RCX: 0000000000040000
+RDX: ffffc9000ae14000 RSI: ffffea0002a61580 RDI: 0000000000000000
+RBP: ffffc9001504f6f8 R08: dffffc0000000000 R09: fffff9400054c2b1
+R10: fffff9400054c2b1 R11: 1ffffd400054c2b0 R12: ffffea0002a61580
+R13: 1ffffd400054c2b1 R14: 0000000000000000 R15: ffffea0002a61588
+FS:  00007f0f425d5700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffffffffffffd6 CR3: 00000000a32e1000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ filemap_read_folio+0x1ba/0x7f0 mm/filemap.c:2399
+ do_read_cache_folio+0x2d3/0x790 mm/filemap.c:3526
+ do_read_cache_page mm/filemap.c:3568 [inline]
+ read_cache_page+0x57/0x250 mm/filemap.c:3577
+ read_mapping_page include/linux/pagemap.h:756 [inline]
+ ntfs_map_page fs/ntfs/aops.h:75 [inline]
+ ntfs_check_logfile+0x3f1/0x2a50 fs/ntfs/logfile.c:532
+ load_and_check_logfile+0x6f/0xd0 fs/ntfs/super.c:1215
+ load_system_files+0x3376/0x48d0 fs/ntfs/super.c:1941
+ ntfs_fill_super+0x19a9/0x2bf0 fs/ntfs/super.c:2892
+ mount_bdev+0x26c/0x3a0 fs/super.c:1400
+ legacy_get_tree+0xea/0x180 fs/fs_context.c:610
+ vfs_get_tree+0x88/0x270 fs/super.c:1530
+ do_new_mount+0x289/0xad0 fs/namespace.c:3040
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount+0x2e3/0x3d0 fs/namespace.c:3568
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f0f4148cada
+Code: 48 c7 c2 b8 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 b8 04 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f0f425d4f88 EFLAGS: 00000202 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 0000000020000200 RCX: 00007f0f4148cada
+RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007f0f425d4fe0
+RBP: 00007f0f425d5020 R08: 00007f0f425d5020 R09: 0000000020000000
+R10: 0000000000000000 R11: 0000000000000202 R12: 0000000020000000
+R13: 0000000020000100 R14: 00007f0f425d4fe0 R15: 00000000200026c0
+ </TASK>
+Modules linked in:
+CR2: 0000000000000000
+---[ end trace 0000000000000000 ]---
+RIP: 0010:0x0
+Code: Unable to access opcode bytes at 0xffffffffffffffd6.
+RSP: 0018:ffffc9001504f618 EFLAGS: 00010287
+RAX: ffffffff81b64c0e RBX: ffffc9001504f680 RCX: 0000000000040000
+RDX: ffffc9000ae14000 RSI: ffffea0002a61580 RDI: 0000000000000000
+RBP: ffffc9001504f6f8 R08: dffffc0000000000 R09: fffff9400054c2b1
+R10: fffff9400054c2b1 R11: 1ffffd400054c2b0 R12: ffffea0002a61580
+R13: 1ffffd400054c2b1 R14: 0000000000000000 R15: ffffea0002a61588
+FS:  00007f0f425d5700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffffffffffffd6 CR3: 00000000a32e1000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
->  	if (flags.mask & BR_LEARNING) {
->  		bool learning = !!(flags.val & BR_LEARNING);
->  		u16 pav = learning ? (1 << port) : 0;
->  
-> +		mv88e6xxx_reg_lock(chip);
->  		err = mv88e6xxx_port_set_assoc_vector(chip, port, pav);
-> +		mv88e6xxx_reg_unlock(chip);
->  		if (err)
->  			goto out;
->  	}
-> @@ -6563,8 +6593,10 @@ static int mv88e6xxx_port_bridge_flags(struct dsa_switch *ds, int port,
->  	if (flags.mask & BR_FLOOD) {
->  		bool unicast = !!(flags.val & BR_FLOOD);
->  
-> +		mv88e6xxx_reg_lock(chip);
->  		err = chip->info->ops->port_set_ucast_flood(chip, port,
->  							    unicast);
-> +		mv88e6xxx_reg_unlock(chip);
->  		if (err)
->  			goto out;
->  	}
-> @@ -6572,8 +6604,10 @@ static int mv88e6xxx_port_bridge_flags(struct dsa_switch *ds, int port,
->  	if (flags.mask & BR_MCAST_FLOOD) {
->  		bool multicast = !!(flags.val & BR_MCAST_FLOOD);
->  
-> +		mv88e6xxx_reg_lock(chip);
->  		err = chip->info->ops->port_set_mcast_flood(chip, port,
->  							    multicast);
-> +		mv88e6xxx_reg_unlock(chip);
->  		if (err)
->  			goto out;
->  	}
-> @@ -6581,20 +6615,34 @@ static int mv88e6xxx_port_bridge_flags(struct dsa_switch *ds, int port,
->  	if (flags.mask & BR_BCAST_FLOOD) {
->  		bool broadcast = !!(flags.val & BR_BCAST_FLOOD);
->  
-> +		mv88e6xxx_reg_lock(chip);
->  		err = mv88e6xxx_port_broadcast_sync(chip, port, broadcast);
-> +		mv88e6xxx_reg_unlock(chip);
->  		if (err)
->  			goto out;
->  	}
->  
-> +	if (flags.mask & BR_PORT_MAB) {
-> +		chip->ports[port].mab = !!(flags.val & BR_PORT_MAB);
-> +
-> +		if (!chip->ports[port].mab)
-> +			err = mv88e6xxx_atu_locked_entry_flush(ds, port);
-> +		else
-> +			err = 0;
 
-Again, dsa_port_fast_age() is also called when dp->learning is turned
-off in dsa_port_bridge_flags(). I don't want to see the mv88e6xxx driver
-doing this manually.
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-> +	}
-> +
->  	if (flags.mask & BR_PORT_LOCKED) {
->  		bool locked = !!(flags.val & BR_PORT_LOCKED);
->  
-> +		mv88e6xxx_reg_lock(chip);
->  		err = mv88e6xxx_port_set_lock(chip, port, locked);
-> +		mv88e6xxx_reg_unlock(chip);
->  		if (err)
->  			goto out;
-> +
-> +		chip->ports[port].locked = locked;
->  	}
->  out:
-> -	mv88e6xxx_reg_unlock(chip);
->  
->  	return err;
->  }
-> diff --git a/drivers/net/dsa/mv88e6xxx/chip.h b/drivers/net/dsa/mv88e6xxx/chip.h
-> index e693154cf803..180fbcf596fa 100644
-> --- a/drivers/net/dsa/mv88e6xxx/chip.h
-> +++ b/drivers/net/dsa/mv88e6xxx/chip.h
-> @@ -280,6 +280,16 @@ struct mv88e6xxx_port {
->  	unsigned int serdes_irq;
->  	char serdes_irq_name[64];
->  	struct devlink_region *region;
-> +
-> +	/* Locked port and MacAuth control flags */
-> +	bool locked;
-> +	bool mab;
-> +
-> +	/* List and maintenance of ATU locked entries */
-> +	struct mutex ale_list_lock;
-> +	struct list_head ale_list;
-> +	struct delayed_work ale_work;
-> +	int ale_cnt;
->  };
->  
->  enum mv88e6xxx_region_id {
-> @@ -399,6 +409,9 @@ struct mv88e6xxx_chip {
->  	int egress_dest_port;
->  	int ingress_dest_port;
->  
-> +	/* Keep the register written age time for easy access */
-> +	u8 age_time;
-> +
->  	/* Per-port timestamping resources. */
->  	struct mv88e6xxx_port_hwtstamp port_hwtstamp[DSA_MAX_PORTS];
->  
-> @@ -802,6 +815,12 @@ static inline void mv88e6xxx_reg_unlock(struct mv88e6xxx_chip *chip)
->  	mutex_unlock(&chip->reg_lock);
->  }
->  
-> +int mv88e6xxx_vtu_walk(struct mv88e6xxx_chip *chip,
-> +		       int (*cb)(struct mv88e6xxx_chip *chip,
-> +				 const struct mv88e6xxx_vtu_entry *entry,
-> +				 void *priv),
-> +		       void *priv);
-> +
->  int mv88e6xxx_fid_map(struct mv88e6xxx_chip *chip, unsigned long *bitmap);
->  
->  #endif /* _MV88E6XXX_CHIP_H */
-> diff --git a/drivers/net/dsa/mv88e6xxx/global1.h b/drivers/net/dsa/mv88e6xxx/global1.h
-> index 65958b2a0d3a..503fbf216670 100644
-> --- a/drivers/net/dsa/mv88e6xxx/global1.h
-> +++ b/drivers/net/dsa/mv88e6xxx/global1.h
-> @@ -136,6 +136,7 @@
->  #define MV88E6XXX_G1_ATU_DATA_TRUNK				0x8000
->  #define MV88E6XXX_G1_ATU_DATA_TRUNK_ID_MASK			0x00f0
->  #define MV88E6XXX_G1_ATU_DATA_PORT_VECTOR_MASK			0x3ff0
-> +#define MV88E6XXX_G1_ATU_DATA_PORT_VECTOR_NO_EGRESS		0x0000
->  #define MV88E6XXX_G1_ATU_DATA_STATE_MASK			0x000f
->  #define MV88E6XXX_G1_ATU_DATA_STATE_UC_UNUSED			0x0000
->  #define MV88E6XXX_G1_ATU_DATA_STATE_UC_AGE_1_OLDEST		0x0001
-> diff --git a/drivers/net/dsa/mv88e6xxx/global1_atu.c b/drivers/net/dsa/mv88e6xxx/global1_atu.c
-> index d9dfa1159cde..67907cd00b87 100644
-> --- a/drivers/net/dsa/mv88e6xxx/global1_atu.c
-> +++ b/drivers/net/dsa/mv88e6xxx/global1_atu.c
-> @@ -12,6 +12,8 @@
->  
->  #include "chip.h"
->  #include "global1.h"
-> +#include "port.h"
-> +#include "switchdev.h"
->  
->  /* Offset 0x01: ATU FID Register */
->  
-> @@ -54,6 +56,7 @@ int mv88e6xxx_g1_atu_set_age_time(struct mv88e6xxx_chip *chip,
->  
->  	/* Round to nearest multiple of coeff */
->  	age_time = (msecs + coeff / 2) / coeff;
-> +	chip->age_time = age_time;
->  
->  	err = mv88e6xxx_g1_read(chip, MV88E6XXX_G1_ATU_CTL, &val);
->  	if (err)
-> @@ -426,6 +429,8 @@ static irqreturn_t mv88e6xxx_g1_atu_prob_irq_thread_fn(int irq, void *dev_id)
->  	if (err)
->  		goto out;
->  
-> +	mv88e6xxx_reg_unlock(chip);
-> +
->  	spid = entry.state;
->  
->  	if (val & MV88E6XXX_G1_ATU_OP_AGE_OUT_VIOLATION) {
-> @@ -446,6 +451,12 @@ static irqreturn_t mv88e6xxx_g1_atu_prob_irq_thread_fn(int irq, void *dev_id)
->  				    "ATU miss violation for %pM portvec %x spid %d\n",
->  				    entry.mac, entry.portvec, spid);
->  		chip->ports[spid].atu_miss_violation++;
-> +
-> +		if (fid && chip->ports[spid].mab)
-> +			err = mv88e6xxx_handle_violation(chip, spid, &entry, fid,
-> +							 MV88E6XXX_G1_ATU_OP_MISS_VIOLATION);
-> +		if (err)
-> +			goto out;
->  	}
->  
->  	if (val & MV88E6XXX_G1_ATU_OP_FULL_VIOLATION) {
-> @@ -454,7 +465,6 @@ static irqreturn_t mv88e6xxx_g1_atu_prob_irq_thread_fn(int irq, void *dev_id)
->  				    entry.mac, entry.portvec, spid);
->  		chip->ports[spid].atu_full_violation++;
->  	}
-> -	mv88e6xxx_reg_unlock(chip);
->  
->  	return IRQ_HANDLED;
->  
-> diff --git a/drivers/net/dsa/mv88e6xxx/port.c b/drivers/net/dsa/mv88e6xxx/port.c
-> index 5c4195c635b0..67e457ce67ae 100644
-> --- a/drivers/net/dsa/mv88e6xxx/port.c
-> +++ b/drivers/net/dsa/mv88e6xxx/port.c
-> @@ -14,9 +14,11 @@
->  #include <linux/phylink.h>
->  
->  #include "chip.h"
-> +#include "global1.h"
->  #include "global2.h"
->  #include "port.h"
->  #include "serdes.h"
-> +#include "switchdev.h"
->  
->  int mv88e6xxx_port_read(struct mv88e6xxx_chip *chip, int port, int reg,
->  			u16 *val)
-> @@ -1240,13 +1242,12 @@ int mv88e6xxx_port_set_lock(struct mv88e6xxx_chip *chip, int port,
->  	if (err)
->  		return err;
->  
-> -	err = mv88e6xxx_port_read(chip, port, MV88E6XXX_PORT_ASSOC_VECTOR, &reg);
-> -	if (err)
-> -		return err;
-> -
-> -	reg &= ~MV88E6XXX_PORT_ASSOC_VECTOR_LOCKED_PORT;
-> -	if (locked)
-> -		reg |= MV88E6XXX_PORT_ASSOC_VECTOR_LOCKED_PORT;
-> +	reg = 0;
-> +	if (locked) {
-> +		reg = (1 << port);
-> +		reg |= MV88E6XXX_PORT_ASSOC_VECTOR_IGNORE_WRONG |
-> +			MV88E6XXX_PORT_ASSOC_VECTOR_LOCKED_PORT;
-> +	}
->  
->  	return mv88e6xxx_port_write(chip, port, MV88E6XXX_PORT_ASSOC_VECTOR, reg);
->  }
-> diff --git a/drivers/net/dsa/mv88e6xxx/port.h b/drivers/net/dsa/mv88e6xxx/port.h
-> index cb04243f37c1..9475bc6e95a2 100644
-> --- a/drivers/net/dsa/mv88e6xxx/port.h
-> +++ b/drivers/net/dsa/mv88e6xxx/port.h
-> @@ -231,6 +231,7 @@
->  #define MV88E6XXX_PORT_ASSOC_VECTOR_LOCKED_PORT		0x2000
->  #define MV88E6XXX_PORT_ASSOC_VECTOR_IGNORE_WRONG	0x1000
->  #define MV88E6XXX_PORT_ASSOC_VECTOR_REFRESH_LOCKED	0x0800
-> +#define MV88E6XXX_PORT_ASSOC_VECTOR_PAV_MASK		0x07ff
->  
->  /* Offset 0x0C: Port ATU Control */
->  #define MV88E6XXX_PORT_ATU_CTL		0x0c
-> @@ -375,6 +376,11 @@ int mv88e6xxx_port_set_pvid(struct mv88e6xxx_chip *chip, int port, u16 pvid);
->  int mv88e6xxx_port_set_lock(struct mv88e6xxx_chip *chip, int port,
->  			    bool locked);
->  
-> +static inline bool mv88e6xxx_port_is_locked(struct mv88e6xxx_chip *chip, int port)
-> +{
-> +	return chip->ports[port].locked;
-> +}
-> +
->  int mv88e6xxx_port_set_8021q_mode(struct mv88e6xxx_chip *chip, int port,
->  				  u16 mode);
->  int mv88e6095_port_tag_remap(struct mv88e6xxx_chip *chip, int port);
-> diff --git a/drivers/net/dsa/mv88e6xxx/switchdev.c b/drivers/net/dsa/mv88e6xxx/switchdev.c
-> new file mode 100644
-> index 000000000000..cd332a10fad5
-> --- /dev/null
-> +++ b/drivers/net/dsa/mv88e6xxx/switchdev.c
-> @@ -0,0 +1,284 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * switchdev.c
-> + *
-> + *	Authors:
-> + *	Hans J. Schultz		<hans.schultz@westermo.com>
-> + *
-> + */
-> +
-> +#include <net/switchdev.h>
-> +#include <linux/list.h>
-> +#include "chip.h"
-> +#include "global1.h"
-> +#include "switchdev.h"
-> +
-> +static void mv88e6xxx_atu_locked_entry_purge(struct mv88e6xxx_atu_locked_entry *ale,
-> +					     bool notify, bool take_nl_lock)
-> +{
-> +	struct switchdev_notifier_fdb_info info = {
-> +		.addr = ale->mac,
-> +		.vid = ale->vid,
-> +		.locked = true,
-> +		.offloaded = true,
-> +	};
-> +	struct mv88e6xxx_atu_entry entry;
-> +	struct net_device *brport;
-> +	struct dsa_port *dp;
-> +
-> +	entry.portvec = MV88E6XXX_G1_ATU_DATA_PORT_VECTOR_NO_EGRESS;
-> +	entry.state = MV88E6XXX_G1_ATU_DATA_STATE_UC_UNUSED;
-> +	entry.trunk = false;
-> +	ether_addr_copy(entry.mac, ale->mac);
-> +
-> +	mv88e6xxx_reg_lock(ale->chip);
-> +	mv88e6xxx_g1_atu_loadpurge(ale->chip, ale->fid, &entry);
-> +	mv88e6xxx_reg_unlock(ale->chip);
-> +
-> +	dp = dsa_to_port(ale->chip->ds, ale->port);
-> +
-> +	if (notify) {
-> +		if (take_nl_lock)
-> +			rtnl_lock();
-
-Is this tested with lockdep? I see the function is called with other
-locks held (p->ale_list_lock). Isn't there a lock inversion anywhere?
-Locks always need to be taken in the same order, and rtnl_lock is a
-pretty high level lock, not exactly the kind you could take just like
-that.
-
-> +		brport = dsa_port_to_bridge_port(dp);
-> +
-> +		if (brport) {
-> +			call_switchdev_notifiers(SWITCHDEV_FDB_DEL_TO_BRIDGE,
-> +						 brport, &info.info, NULL);
-> +		} else {
-> +			dev_err(ale->chip->dev, "No bridge port for dsa port belonging to port %d\n",
-> +				ale->port);
-> +		}
-> +		if (take_nl_lock)
-> +			rtnl_unlock();
-> +	}
-> +
-> +	list_del(&ale->list);
-> +	kfree(ale);
-> +}
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
