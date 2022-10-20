@@ -2,82 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85533605474
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 02:22:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB75F60544F
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 02:02:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230344AbiJTAWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 20:22:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49120 "EHLO
+        id S230440AbiJTACb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 20:02:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229958AbiJTAWT (ORCPT
+        with ESMTP id S229889AbiJTACU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 20:22:19 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D47101ACA8A;
-        Wed, 19 Oct 2022 17:22:16 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id r14so30868753lfm.2;
-        Wed, 19 Oct 2022 17:22:16 -0700 (PDT)
+        Wed, 19 Oct 2022 20:02:20 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF7EB16D882
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 17:02:19 -0700 (PDT)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29JM4jZq032011;
+        Thu, 20 Oct 2022 00:02:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2022-7-12;
+ bh=g2rDt0HxEKaXibvyik57UYA4b+8OS9QLQHJVC4Q9zYs=;
+ b=Rvn9kF9D+DV6liMPBpt2Z/IMEroE0A696f2TuZESGvPLFgfpFLmQWXaI+NAOKEX7lA2D
+ WLVyaShehxMsMdI0uTP+fbz3iQygcuFbYrg5xXVIsvzYID9PYojKIT7QhXPPp3afAJtx
+ DhxOoRfKxZF6l+tukjz/Ds4ZS/SQ5CzLib7q+lZjeVEDumEGbj2sk3CQ7wIER2Qr7y+p
+ hJPM2e2DuMG1Ka/74Mg4Jw1alQXA1fCPngpE33YtGdlbPZjucx2lpk8L3P3mKd7k7Mfh
+ WxXG6ZILGIt4DGhBdFDL/rl9k0eJYBegZDWqPIowOi/FvKKwDFxsSL38lrSo6YS3iLD0 mA== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3k9aww750d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 20 Oct 2022 00:02:09 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 29JKjBg2002735;
+        Thu, 20 Oct 2022 00:02:08 GMT
+Received: from nam04-dm6-obe.outbound.protection.outlook.com (mail-dm6nam04lp2048.outbound.protection.outlook.com [104.47.73.48])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3k8htj1tyd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 20 Oct 2022 00:02:07 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OuIFuO3ueI203JtcdDQUwPJNi5i3FnfOaKOlwFbvWXOpEjSqNZ68How9DgoPZ09ksgNOv/tfeOHp84hkh56dQK9i8tFCU0CNbg1BBIYSnf+WxtcvZOjml7f5tjKnyww/Kzwe9oQxdgA4QYlcmVshIAcWpydEjLth9tVnfbDtbQ2hhgPpbpSQmqoLTWhpb1r7dUHS4t4pO+vf/p2Pout899rYAt4O6g/1vXsFGXBPlEESSfv+XbQ+xpqB/h4+tKUfOcpyMKqGVvubxBLzGDBcIcJpof1qo2OGZYEITsfemFNfUeUF3qX1VY2VCc2oUw72TRXy7f1Q/C0rpabs5GlClQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=g2rDt0HxEKaXibvyik57UYA4b+8OS9QLQHJVC4Q9zYs=;
+ b=HK+1pBBZOmAo/nXD2nfkgn4YzsuviKONnTYeGCNGJfPS3TeInyfkeG2HuneW60WFOeHm8cXyCmXr84vCU51DnPCfrk6ppkV2HqBMxW02s49UdcoP6NcVWOSfMo/LZVnxQSfASafL6HEkC57LgxicRhprhOKdYrOkQLxJglpt6ztn00nBBVL0HEi/IJXCgxHAvDhJXZHhhnMV4q9Xd2Oy3KN0pdIOk03YlJb3RSpmZVqxOkTv9/SgAHZGYl7pwHvKUcsaewSbTujBmkM34XKbuqT+XcA8dH1seEVRvFU0cDJ1kr9e0LY1meYtgwHlvvfSJ0oNL+WOOQoMRadEEhaKdg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=asRY2X5Rr1Ewc67jDN1nohrzRfFAbG4o6G3cqJZFzEA=;
-        b=fGq0UO4ebAsVjQ/LfQ+2kjGelt7YwlXAos7pFqE8Hn2RXOqM1vRjA03Q195PYMTtXa
-         4BfYXV5LBdPFyc8weprAKlGvkYbrdaPTrS14KkIeKsUHeTjO6rJ2pSbAiJef8YkaunSW
-         pmRYEvH6rCi2UAzVCfLXiEBIv7uE+CrJvfnP+Ek2Be5eeYCBWh5Yj4C4GBxOT0Ja9ybK
-         ppZLMsMc6V0m8v0uJ1is27hXreKgbPiI+KJQ58hWmeoJx31mWb7cT279Mn4htIdELXuS
-         ZzxftIXABrG57R4J6LGq/ZRC82MW7ns/REGlAVK1qd719SwCv/o/gDhlFtcRIghm2gI9
-         XvFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=asRY2X5Rr1Ewc67jDN1nohrzRfFAbG4o6G3cqJZFzEA=;
-        b=NdWoBeTjykQxbpaQdHIiabutOQeLIaauPo9TRwZYXehOpjdaNQnT1UB9xUHUqryQHb
-         SfKJEA3nPH+j4FBsXleLNEupPrKIEhs4lXfdhIJ5u2i2h9sRmp4kQkUCWktujL/JJpMF
-         aF8pR58n/hGqcPRqx4jZu4nkh+UgCrDg0SN1xhKqw6mA50MXFgeAPhJmn6565hjaKoGm
-         u+QSCR17IAFOqshWS4ATsCdrLnOGf5O7u2+ATdAeaKNgLJu1QFF0J1aiCQJ3IUUhI8Bd
-         dOmktrgU+Y5fP6cBTt55mUnLT1ECh687ifxYwnIheGNEeS8UFsOXrJ6ewTYII/ilmdYD
-         vrpw==
-X-Gm-Message-State: ACrzQf1YiH/b7tv35ga81UiMESdk5lamWSnDCCzdE+FStAegB23R8lNh
-        HV9ZPatXtSsYY7YHxFhhfQWieetnXlaTWg==
-X-Google-Smtp-Source: AMsMyM6ZL0F8sg6jWGE5fLxM/CYjmcaJ7th56MRtstuXLN6dFiht+jNCTyL58qiz/SZk13fa+L07hA==
-X-Received: by 2002:a05:6512:12c4:b0:4a2:5598:f6a2 with SMTP id p4-20020a05651212c400b004a25598f6a2mr3656039lfg.409.1666225334397;
-        Wed, 19 Oct 2022 17:22:14 -0700 (PDT)
-Received: from razdolb (95-31-187-187.broadband.corbina.ru. [95.31.187.187])
-        by smtp.gmail.com with ESMTPSA id g22-20020a2eb5d6000000b0026de1bf528esm2598912ljn.119.2022.10.19.17.22.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Oct 2022 17:22:13 -0700 (PDT)
-References: <20220927222152.132951-1-mike.rudenko@gmail.com>
- <20220927222152.132951-3-mike.rudenko@gmail.com>
- <20221018175844.737kplwsvbhe4qut@uno.localdomain>
-User-agent: mu4e 1.9.0; emacs 28.2
-From:   Mikhail Rudenko <mike.rudenko@gmail.com>
-To:     Jacopo Mondi <jacopo@jmondi.org>
-Cc:     Tommaso Merciai <tommaso.merciai@amarulasolutions.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Christian Hemp <c.hemp@phytec.de>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Arec Kao <arec.kao@intel.com>, Marek Vasut <marex@denx.de>,
-        Jimmy Su <jimmy.su@intel.com>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] media: i2c: add support for OV4689
-Date:   Thu, 20 Oct 2022 02:34:54 +0300
-In-reply-to: <20221018175844.737kplwsvbhe4qut@uno.localdomain>
-Message-ID: <87mt9rz6mj.fsf@gmail.com>
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=g2rDt0HxEKaXibvyik57UYA4b+8OS9QLQHJVC4Q9zYs=;
+ b=MWAlyB3Jky5+8GY5nEbBVvUOVp8i5H8rFehpIdnSViXhtNRHuYD99t/zyG0o3H6KryzpHmR4DuYsEBjB725gBmusoDIiAJoUAXm/at8GFWW3k9Dnu+fkVHAvO/2cKyj00E5+oAztarMKLY5koub01ukTM6bNu3TURCAeyPvdPTk=
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
+ by CO1PR10MB4513.namprd10.prod.outlook.com (2603:10b6:303:93::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.30; Thu, 20 Oct
+ 2022 00:02:05 +0000
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::e41f:b75b:3246:c1c7]) by BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::e41f:b75b:3246:c1c7%4]) with mapi id 15.20.5723.034; Thu, 20 Oct 2022
+ 00:02:05 +0000
+Date:   Wed, 19 Oct 2022 17:02:02 -0700
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+To:     James Houghton <jthoughton@google.com>
+Cc:     Muchun Song <songmuchun@bytedance.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Axel Rasmussen <axelrasmussen@google.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hugetlbfs: don't delete error page from pagecache
+Message-ID: <Y1CP+jEO+cIEOejb@monkey>
+References: <20221018200125.848471-1-jthoughton@google.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221018200125.848471-1-jthoughton@google.com>
+X-ClientProxiedBy: MW4P222CA0023.NAMP222.PROD.OUTLOOK.COM
+ (2603:10b6:303:114::28) To BY5PR10MB4196.namprd10.prod.outlook.com
+ (2603:10b6:a03:20d::23)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,PDS_OTHER_BAD_TLD,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR10MB4196:EE_|CO1PR10MB4513:EE_
+X-MS-Office365-Filtering-Correlation-Id: 988f3a86-50b7-4b2d-99db-08dab22e52f2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Bk57bGv7FlH2Al3pNehVNB0NCCoc8mk8JUidMQiXnJWduJ8PcvLhVF+/rAYPcA2RG9Ja3JSQWyg+b9lzYaQnQgH1NjnCwSL9K/6N9TbQ696SRvxNgsaqkqksq+7iqBlSKTMKxiT6EwVxqMY0Kikj2Z8zgA53jouj5jDueFGMLjl/ympSnQ9FDjm3O6/mEYW8lHFuWq4JGIZkn9k4v3mEeBHauTf2BScv7chfG7Vfc/Y2oedpRnLveE7mPTXpoEZQBXM4Dq7QBXVZYQRFPzA/4wHirutm+5vcDQyG9BOgO6sqf32D7lI002G2NK+/00idBQpKDyYLSIxyxwlHh5miGjH2NgKmwsKaF/vWvnAqoaVnh8Io3YL4Q93VUsEA55GrkiGtH59gb8IcmAS+j9EUE0ePrzj3gVj1C/w2WOcvcyUz5wH3oC8txa/zBW5/oHpIjiF/qR/QSS766xgazmeoUTfHlqdx1hyAz5Cb9Y2TBesLlMqX2r6XK8n8eJYsh2jwx+ZDq7xpUA8TKkmIIh7nmNdlFOR2FMuSLgDXoXErupdGvUtpS3YFci4NurttNIXMabkFCuyeFA2je7g4yIKynqvTwcG/tX+ycaFBSDNcZVcnwjFVXhLS/2lZiJhVcQUqDNGWi99fUOLJ219wKHHKoNQZZ3576LiBKqq4GZQT0SZlwhxkoATu23yG+NYflXNcz5DQLpJHR4M1OMazvGgCrg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(136003)(39860400002)(366004)(376002)(346002)(396003)(451199015)(2906002)(5660300002)(6916009)(54906003)(8676002)(4326008)(316002)(33716001)(66946007)(478600001)(6666004)(6506007)(8936002)(41300700001)(6486002)(9686003)(6512007)(26005)(66556008)(44832011)(53546011)(38100700002)(186003)(66476007)(86362001)(83380400001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?lf0eeSsigCtcUgaeUcJbRlcjg9Tcv+HIODlMhTudAtVkLnWLWEiH3fQlylff?=
+ =?us-ascii?Q?tLK7jIBd5yo9mnFlN5z5xNXU9XY5Luza+4srmGYOCha9IPocVk60auIaumlw?=
+ =?us-ascii?Q?I039eb3UM8F1nsPjP1qtOMURswMFnsbZ8yfVv4XPnzQAttbwA/Cox9HNxTgf?=
+ =?us-ascii?Q?IMzudmLZOYSi6cXRvKUl5tq5oZ+foFPzP4axPyWzaiP+hOmMup6hIT2dw5pJ?=
+ =?us-ascii?Q?/bWDL7NIebPlVnoJBDU66fRDU89TxXTJguorlyvJrC0v0hK0aMQmP++LyZh0?=
+ =?us-ascii?Q?ccI4XrdSWxYNzNo6eELEssmslMeN13ogUqFnsu5+rBI51PbGfU6ObHtaDkrW?=
+ =?us-ascii?Q?X2DTj4vzK8YzPvsN2fb5EPJAAOltd3DVH+H0t9rabXHY1afnkq+DsnBqecNa?=
+ =?us-ascii?Q?gIW/ubU+rhhOV/oHI9Pa2iHLVVHq6AWAj2LzVe7vNMPrUEoiBMak9yHUWypn?=
+ =?us-ascii?Q?Z5r8B8/IhKtzG230FUExbpT47naNr1Gaaikf1cgM7iFVbid2SwKCO346CT0w?=
+ =?us-ascii?Q?oDBf3e6kwCKltGkuAnz3XkHRxMPPWUjz30s61ZFWcLlH1I3SVT3nX1iYER4G?=
+ =?us-ascii?Q?iuciPdcXqUgWKWa4o7Emnl5JmCrrTtqSPL4kKVMUDRHSp3ye4YK/Z9nNKsdS?=
+ =?us-ascii?Q?pHE9uZi9H60BTjYZtWIy3LVrNA6HTQWulSh5ONPcLM9vS45FjFLEnyzrULP7?=
+ =?us-ascii?Q?KBrRjCPS6bBjnocky+rL8LQs9zU8QU34yNnLHpVXZwuQuMTLYoARkIZwkPeY?=
+ =?us-ascii?Q?W6ZrwCfD6kOau8nAyJPSYovV0MdE8k36EznrhFLuSh6lDqSJjDab8exWm3qs?=
+ =?us-ascii?Q?pvfb8sdAUEBHBPgUod9bRTT7pA1LU1MbW4RgKROijXjN2wsrM0Th4mp7dlsv?=
+ =?us-ascii?Q?U/mXzEi43taUuvAuq+EmL/DQr3pPtRNpNCtH5OzYoXrKlxxP6lzq7U2VDvtZ?=
+ =?us-ascii?Q?MqEe8EIbhwoni+NY4+i7fOVSsyBmHiw/ut2U0luGjQ3w2FPsrsNDipWZSdK+?=
+ =?us-ascii?Q?KrJSG9gPKwED66zX0Onf3beljyh7wS5kDdJ4alu164CWWy3QxYO52FIWWEsp?=
+ =?us-ascii?Q?X3SW+ZSsIjq7OCDMr9uLlabjkzzDPUoSiGa2eGLG+XfIN30C1NvbECi/ZgkU?=
+ =?us-ascii?Q?3fWkPQIVXuiF9bd0/bDH3ut7Z/YJ5zM6jC1e7606IXvp+Uyd65OsBkd+YQaQ?=
+ =?us-ascii?Q?xGkvgqyM6B9FiXIPFLwONzpG5WvhbaQk8tKAlFrgYrDl4hlCtKOKGztSs/Kv?=
+ =?us-ascii?Q?pMt0unV2rdTY1aybkbQ8HEoBKhzTO51yT3O/Q2kHtRn5Ig3xEeY/ksUf6IT5?=
+ =?us-ascii?Q?vc0AEb9EzBIYCFV1S5HOG3S/LalbZwvvEEJbdgC6Tto1+ssZdUgCSR09XN07?=
+ =?us-ascii?Q?81LSOeD7pFLO0LyIvj3+Oe6Gb7G1bLQTgHI4RIPhqobbDxPz+Gg2cWhDWh0e?=
+ =?us-ascii?Q?fTE+pjpBahLXGZ9hTkCjyNNDZjFT8Nux0EM1OqKIRKEsxAUXypPrtRAHjffC?=
+ =?us-ascii?Q?rmedaIQsYSro/gwX/zky9hs5GoeaZlUW8bXNivzQz5TwHif2cSJSxv3jjQx/?=
+ =?us-ascii?Q?MxUkyHfj/x9oM3YxHWrvzMYIMQC3zhPO/pX8Vb0bWW00s1zYZFkmpA8NZtnj?=
+ =?us-ascii?Q?wA=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 988f3a86-50b7-4b2d-99db-08dab22e52f2
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Oct 2022 00:02:05.7935
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: gQjCTmKdVWmAQ3YWpKZ7SpXAtZKUDyNq7/RIL01iZn3KWwjDlEnoAphYGDuUJ9vV6jp6NyLx6MBRpRoB8Lg4yA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR10MB4513
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-19_13,2022-10-19_04,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 phishscore=0
+ suspectscore=0 spamscore=0 adultscore=0 mlxscore=0 malwarescore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210190134
+X-Proofpoint-GUID: KIR28bsMWrclQ26tPdoribFGnllctSgG
+X-Proofpoint-ORIG-GUID: KIR28bsMWrclQ26tPdoribFGnllctSgG
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,1264 +149,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 10/18/22 20:01, James Houghton wrote:
+> This change is very similar to the change that was made for shmem [1],
+> and it solves the same problem but for HugeTLBFS instead.
+> 
+> Currently, when poison is found in a HugeTLB page, the page is removed
+> from the page cache. That means that attempting to map or read that
+> hugepage in the future will result in a new hugepage being allocated
+> instead of notifying the user that the page was poisoned. As [1] states,
+> this is effectively memory corruption.
+> 
+> The fix is to leave the page in the page cache. If the user attempts to
+> use a poisoned HugeTLB page with a syscall, the syscall will fail with
+> EIO, the same error code that shmem uses. For attempts to map the page,
+> the thread will get a BUS_MCEERR_AR SIGBUS.
+> 
+> [1]: commit a76054266661 ("mm: shmem: don't truncate page if memory failure happens")
+> 
+> Signed-off-by: James Houghton <jthoughton@google.com>
+> ---
+>  fs/hugetlbfs/inode.c | 13 ++++++-------
+>  mm/hugetlb.c         |  4 ++++
+>  mm/memory-failure.c  |  5 ++++-
+>  3 files changed, 14 insertions(+), 8 deletions(-)
 
-Hi Jacopo,
+Thanks James!
 
-Thanks for the review! See my comments below.
+Code looks correct.  One observation below, but I do not suggest changing.
 
-On 2022-10-18 at 19:58 +02, Jacopo Mondi <jacopo@jmondi.org> wrote:
+Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
 
-> Hi Mikhail
->
-> On Wed, Sep 28, 2022 at 01:21:34AM +0300, Mikhail Rudenko wrote:
->> Add a V4L2 sub-device driver for OmniVision OV4689 image sensor. This
->> is a 4 Mpx image sensor using the I2C bus for control and the CSI-2
->> bus for data.
->>
->> This driver supports following features:
->> - manual exposure and analog gain control support
->> - test pattern support
->> - media controller support
->> - runtime PM support
->> - support following resolutions:
->>   + 2688x1520 at 30 fps
->>
->> The driver provides all mandatory V4L2 controls for compatibility with
->> libcamera. The sensor supports 1/2/4-lane CSI-2 modes, but the driver
->> implements 4 lane mode only at this moment.
->>
->> Signed-off-by: Mikhail Rudenko <mike.rudenko@gmail.com>
->> ---
->>  MAINTAINERS                |    1 +
->>  drivers/media/i2c/Kconfig  |   14 +
->>  drivers/media/i2c/Makefile |    1 +
->>  drivers/media/i2c/ov4689.c | 1027 ++++++++++++++++++++++++++++++++++++
->>  4 files changed, 1043 insertions(+)
->>  create mode 100644 drivers/media/i2c/ov4689.c
->>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index aed316c5c1ef..12cf1f3237c5 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -15034,6 +15034,7 @@ L:	linux-media@vger.kernel.org
->>  S:	Maintained
->>  T:	git git://linuxtv.org/media_tree.git
->>  F:	Documentation/devicetree/bindings/media/i2c/ovti,ov4689.yaml
->> +F:	drivers/media/i2c/ov5647.c
->>
->>  OMNIVISION OV5640 SENSOR DRIVER
->>  M:	Steve Longerbeam <slongerbeam@gmail.com>
->> diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
->> index 7806d4b81716..00a164eccf30 100644
->> --- a/drivers/media/i2c/Kconfig
->> +++ b/drivers/media/i2c/Kconfig
->> @@ -445,6 +445,20 @@ config VIDEO_OV2740
->>  	  To compile this driver as a module, choose M here: the
->>  	  module will be called ov2740.
->>
->> +config VIDEO_OV4689
->> +	tristate "OmniVision OV4689 sensor support"
->> +	depends on OF
->> +	depends on GPIOLIB && VIDEO_DEV && I2C
->> +	select MEDIA_CONTROLLER
->> +	select VIDEO_V4L2_SUBDEV_API
->> +	select V4L2_FWNODE
->> +	help
->> +	  This is a Video4Linux2 sensor-level driver for the OmniVision
->> +	  OV4689 camera.
->> +
->> +	  To compile this driver as a module, choose M here: the
->> +	  module will be called ov4689.
->> +
->>  config VIDEO_OV5640
->>  	tristate "OmniVision OV5640 sensor support"
->>  	depends on OF
->> diff --git a/drivers/media/i2c/Makefile b/drivers/media/i2c/Makefile
->> index 0a2933103dd9..c1a2cb351c0f 100644
->> --- a/drivers/media/i2c/Makefile
->> +++ b/drivers/media/i2c/Makefile
->> @@ -79,6 +79,7 @@ obj-$(CONFIG_VIDEO_OV2659) += ov2659.o
->>  obj-$(CONFIG_VIDEO_OV2680) += ov2680.o
->>  obj-$(CONFIG_VIDEO_OV2685) += ov2685.o
->>  obj-$(CONFIG_VIDEO_OV2740) += ov2740.o
->> +obj-$(CONFIG_VIDEO_OV4689) += ov4689.o
->>  obj-$(CONFIG_VIDEO_OV5640) += ov5640.o
->>  obj-$(CONFIG_VIDEO_OV5645) += ov5645.o
->>  obj-$(CONFIG_VIDEO_OV5647) += ov5647.o
->> diff --git a/drivers/media/i2c/ov4689.c b/drivers/media/i2c/ov4689.c
->> new file mode 100644
->> index 000000000000..617276f8722e
->> --- /dev/null
->> +++ b/drivers/media/i2c/ov4689.c
->> @@ -0,0 +1,1027 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * ov4689 driver
->> + *
->> + * Copyright (C) 2017 Fuzhou Rockchip Electronics Co., Ltd.
->
-> Maybe you want your copyright too ?
->
+> 
+> diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
+> index fef5165b73a5..7f836f8f9db1 100644
+> --- a/fs/hugetlbfs/inode.c
+> +++ b/fs/hugetlbfs/inode.c
+> @@ -328,6 +328,12 @@ static ssize_t hugetlbfs_read_iter(struct kiocb *iocb, struct iov_iter *to)
+>  		} else {
+>  			unlock_page(page);
+>  
+> +			if (PageHWPoison(page)) {
+> +				put_page(page);
+> +				retval = -EIO;
+> +				break;
+> +			}
+> +
+>  			/*
+>  			 * We have the page, copy it to user space buffer.
+>  			 */
+> @@ -1111,13 +1117,6 @@ static int hugetlbfs_migrate_folio(struct address_space *mapping,
+>  static int hugetlbfs_error_remove_page(struct address_space *mapping,
+>  				struct page *page)
+>  {
+> -	struct inode *inode = mapping->host;
+> -	pgoff_t index = page->index;
+> -
+> -	hugetlb_delete_from_page_cache(page_folio(page));
+> -	if (unlikely(hugetlb_unreserve_pages(inode, index, index + 1, 1)))
+> -		hugetlb_fix_reserve_counts(inode);
+> -
+>  	return 0;
+>  }
+>  
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index 97896165fd3f..5120a9ccbf5b 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -6101,6 +6101,10 @@ int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
+>  
+>  	ptl = huge_pte_lock(h, dst_mm, dst_pte);
+>  
+> +	ret = -EIO;
+> +	if (PageHWPoison(page))
+> +		goto out_release_unlock;
+> +
+>  	/*
+>  	 * We allow to overwrite a pte marker: consider when both MISSING|WP
+>  	 * registered, we firstly wr-protect a none pte which has no page cache
+> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+> index 145bb561ddb3..bead6bccc7f2 100644
+> --- a/mm/memory-failure.c
+> +++ b/mm/memory-failure.c
+> @@ -1080,6 +1080,7 @@ static int me_huge_page(struct page_state *ps, struct page *p)
+>  	int res;
+>  	struct page *hpage = compound_head(p);
+>  	struct address_space *mapping;
+> +	bool extra_pins = false;
+>  
+>  	if (!PageHuge(hpage))
+>  		return MF_DELAYED;
+> @@ -1087,6 +1088,8 @@ static int me_huge_page(struct page_state *ps, struct page *p)
+>  	mapping = page_mapping(hpage);
+>  	if (mapping) {
+>  		res = truncate_error_page(hpage, page_to_pfn(p), mapping);
+> +		/* The page is kept in page cache. */
 
-Looks like a good idea. Will update copyright in v4.
+That looks a bit silly as we are know truncate_error_page() is a noop and call
+it anyway.  I suppose we could just set 'res = MF_RECOVERED'.  However, it
+really should be left as is in case more non-hugetlb functionality is added to
+truncate_error_page() in the future.
+-- 
+Mike Kravetz
 
->> + */
->> +
->> +#include <linux/clk.h>
->> +#include <linux/device.h>
->> +#include <linux/delay.h>
->> +#include <linux/gpio/consumer.h>
->> +#include <linux/i2c.h>
->
-> Maybe
-> #include <linux/mod_devicetable.h>
->
-> for of_device_id
->
-> (maybe you can drop linux/device.h with this)
->
-
-I tried just dropping linux/device.h, and got no compile errors. Looks
-like linux/mod_devicetable.h is included via linux/i2c.h. So what is
-better: drop device.h and add mod_devicetable.h as you suggest, or just
-drop device.h?
-
->> +#include <linux/module.h>
->> +#include <linux/pm_runtime.h>
->> +#include <linux/regulator/consumer.h>
->> +#include <media/media-entity.h>
->> +#include <media/v4l2-async.h>
->> +#include <media/v4l2-ctrls.h>
->> +#include <media/v4l2-subdev.h>
->> +#include <media/v4l2-fwnode.h>
->> +
->> +#define CHIP_ID				0x004688
->> +#define OV4689_REG_CHIP_ID		0x300a
->> +
->> +#define OV4689_XVCLK_FREQ		24000000
->> +
->> +#define OV4689_REG_CTRL_MODE		0x0100
->> +#define OV4689_MODE_SW_STANDBY		0x0
->> +#define OV4689_MODE_STREAMING		BIT(0)
->> +
->> +#define OV4689_REG_EXPOSURE		0x3500
->> +#define OV4689_EXPOSURE_MIN		4
->> +#define OV4689_EXPOSURE_STEP		1
->> +#define OV4689_VTS_MAX			0x7fff
->> +
->> +#define OV4689_REG_GAIN_H		0x3508
->> +#define OV4689_REG_GAIN_L		0x3509
->> +#define OV4689_GAIN_H_MASK		0x07
->> +#define OV4689_GAIN_H_SHIFT		8
->> +#define OV4689_GAIN_L_MASK		0xff
->> +#define OV4689_GAIN_STEP		1
->> +#define OV4689_GAIN_DEFAULT		0x80
->> +
->> +#define OV4689_REG_TEST_PATTERN		0x5040
->> +#define OV4689_TEST_PATTERN_ENABLE	0x80
->> +#define OV4689_TEST_PATTERN_DISABLE	0x0
->> +
->> +#define OV4689_REG_VTS			0x380e
->> +
->> +#define REG_NULL			0xFFFF
->> +
->> +#define OV4689_REG_VALUE_08BIT		1
->> +#define OV4689_REG_VALUE_16BIT		2
->> +#define OV4689_REG_VALUE_24BIT		3
->> +
->> +#define OV4689_LANES			4
->> +
->> +static const char *const ov4689_supply_names[] = {
->> +	"avdd", /* Analog power */
->> +	"dovdd", /* Digital I/O power */
->> +	"dvdd", /* Digital core power */
->> +};
->> +
->> +struct regval {
->> +	u16 addr;
->> +	u8 val;
->> +};
->> +
->> +enum ov4689_mode_id {
->> +	OV4689_MODE_2688_1520 = 0,
->> +	OV4689_NUM_MODES,
->> +};
->> +
->> +struct ov4689_mode {
->> +	enum ov4689_mode_id id;
->> +	u32 width;
->> +	u32 height;
->> +	u32 max_fps;
->> +	u32 hts_def;
->> +	u32 vts_def;
->> +	u32 exp_def;
->> +	u32 pixel_rate;
->> +	const struct regval *reg_list;
->> +};
->> +
->> +struct ov4689 {
->> +	struct i2c_client *client;
->> +	struct clk *xvclk;
->> +	struct gpio_desc *reset_gpio;
->> +	struct gpio_desc *pwdn_gpio;
->> +	struct regulator_bulk_data supplies[ARRAY_SIZE(ov4689_supply_names)];
->
-> You use ARRAY_SIZE(ov4689_supply_names) in multiple places, maybe you
-> can define it (I know Sakari sometimes suggests against this, so if
-> you changed this because of his comment feel free to ignore mine, it's
-> not necessary to go back and forth).
->
-
-This was made this way in v3 following Sakari's suggestion, so leaving
-it as is for now.
-
->> +
->> +	struct v4l2_subdev subdev;
->> +	struct media_pad pad;
->> +
->> +	u32 clock_rate;
->> +
->> +	struct mutex mutex; /* lock to protect streaming, ctrls and cur_mode */
->> +	bool streaming;
->> +	struct v4l2_ctrl_handler ctrl_handler;
->> +	struct v4l2_ctrl *exposure;
->> +
->> +	const struct ov4689_mode *cur_mode;
->> +};
->> +
->> +#define to_ov4689(sd) container_of(sd, struct ov4689, subdev)
->> +
->> +struct ov4689_gain_range {
->> +	u32 logical_min;
->> +	u32 logical_max;
->> +	u32 offset;
->> +	u32 divider;
->> +	u32 physical_min;
->> +	u32 physical_max;
->> +};
->> +
->> +/*
->> + * Xclk 24Mhz
->> + * max_framerate 30fps
->> + * mipi_datarate per lane 1008Mbps
->> + */
->> +static const struct regval ov4689_2688x1520_regs[] = {
->> +	{0x0103, 0x01}, {0x3638, 0x00}, {0x0300, 0x00},
->> +	{0x0302, 0x2a}, {0x0303, 0x00}, {0x0304, 0x03},
->> +	{0x030b, 0x00}, {0x030d, 0x1e}, {0x030e, 0x04},
->> +	{0x030f, 0x01}, {0x0312, 0x01}, {0x031e, 0x00},
->> +	{0x3000, 0x20}, {0x3002, 0x00}, {0x3018, 0x72},
->> +	{0x3020, 0x93}, {0x3021, 0x03}, {0x3022, 0x01},
->> +	{0x3031, 0x0a}, {0x303f, 0x0c}, {0x3305, 0xf1},
->> +	{0x3307, 0x04}, {0x3309, 0x29}, {0x3500, 0x00},
->> +	{0x3501, 0x60}, {0x3502, 0x00}, {0x3503, 0x04},
->> +	{0x3504, 0x00}, {0x3505, 0x00}, {0x3506, 0x00},
->> +	{0x3507, 0x00}, {0x3508, 0x00}, {0x3509, 0x80},
->> +	{0x350a, 0x00}, {0x350b, 0x00}, {0x350c, 0x00},
->> +	{0x350d, 0x00}, {0x350e, 0x00}, {0x350f, 0x80},
->> +	{0x3510, 0x00}, {0x3511, 0x00}, {0x3512, 0x00},
->> +	{0x3513, 0x00}, {0x3514, 0x00}, {0x3515, 0x80},
->> +	{0x3516, 0x00}, {0x3517, 0x00}, {0x3518, 0x00},
->> +	{0x3519, 0x00}, {0x351a, 0x00}, {0x351b, 0x80},
->> +	{0x351c, 0x00}, {0x351d, 0x00}, {0x351e, 0x00},
->> +	{0x351f, 0x00}, {0x3520, 0x00}, {0x3521, 0x80},
->> +	{0x3522, 0x08}, {0x3524, 0x08}, {0x3526, 0x08},
->> +	{0x3528, 0x08}, {0x352a, 0x08}, {0x3602, 0x00},
->> +	{0x3603, 0x40}, {0x3604, 0x02}, {0x3605, 0x00},
->> +	{0x3606, 0x00}, {0x3607, 0x00}, {0x3609, 0x12},
->> +	{0x360a, 0x40}, {0x360c, 0x08}, {0x360f, 0xe5},
->> +	{0x3608, 0x8f}, {0x3611, 0x00}, {0x3613, 0xf7},
->> +	{0x3616, 0x58}, {0x3619, 0x99}, {0x361b, 0x60},
->> +	{0x361c, 0x7a}, {0x361e, 0x79}, {0x361f, 0x02},
->> +	{0x3632, 0x00}, {0x3633, 0x10}, {0x3634, 0x10},
->> +	{0x3635, 0x10}, {0x3636, 0x15}, {0x3646, 0x86},
->> +	{0x364a, 0x0b}, {0x3700, 0x17}, {0x3701, 0x22},
->> +	{0x3703, 0x10}, {0x370a, 0x37}, {0x3705, 0x00},
->> +	{0x3706, 0x63}, {0x3709, 0x3c}, {0x370b, 0x01},
->> +	{0x370c, 0x30}, {0x3710, 0x24}, {0x3711, 0x0c},
->> +	{0x3716, 0x00}, {0x3720, 0x28}, {0x3729, 0x7b},
->> +	{0x372a, 0x84}, {0x372b, 0xbd}, {0x372c, 0xbc},
->> +	{0x372e, 0x52}, {0x373c, 0x0e}, {0x373e, 0x33},
->> +	{0x3743, 0x10}, {0x3744, 0x88}, {0x3745, 0xc0},
->> +	{0x374a, 0x43}, {0x374c, 0x00}, {0x374e, 0x23},
->> +	{0x3751, 0x7b}, {0x3752, 0x84}, {0x3753, 0xbd},
->> +	{0x3754, 0xbc}, {0x3756, 0x52}, {0x375c, 0x00},
->> +	{0x3760, 0x00}, {0x3761, 0x00}, {0x3762, 0x00},
->> +	{0x3763, 0x00}, {0x3764, 0x00}, {0x3767, 0x04},
->> +	{0x3768, 0x04}, {0x3769, 0x08}, {0x376a, 0x08},
->> +	{0x376b, 0x20}, {0x376c, 0x00}, {0x376d, 0x00},
->> +	{0x376e, 0x00}, {0x3773, 0x00}, {0x3774, 0x51},
->> +	{0x3776, 0xbd}, {0x3777, 0xbd}, {0x3781, 0x18},
->> +	{0x3783, 0x25}, {0x3798, 0x1b}, {0x3800, 0x00},
->> +	{0x3801, 0x08}, {0x3802, 0x00}, {0x3803, 0x04},
->> +	{0x3804, 0x0a}, {0x3805, 0x97}, {0x3806, 0x05},
->> +	{0x3807, 0xfb}, {0x3808, 0x0a}, {0x3809, 0x80},
->> +	{0x380a, 0x05}, {0x380b, 0xf0}, {0x380c, 0x0a},
->> +	{0x380d, 0x0e}, {0x380e, 0x06}, {0x380f, 0x12},
->> +	{0x3810, 0x00}, {0x3811, 0x08}, {0x3812, 0x00},
->> +	{0x3813, 0x04}, {0x3814, 0x01}, {0x3815, 0x01},
->> +	{0x3819, 0x01}, {0x3820, 0x00}, {0x3821, 0x06},
->> +	{0x3829, 0x00}, {0x382a, 0x01}, {0x382b, 0x01},
->> +	{0x382d, 0x7f}, {0x3830, 0x04}, {0x3836, 0x01},
->> +	{0x3837, 0x00}, {0x3841, 0x02}, {0x3846, 0x08},
->> +	{0x3847, 0x07}, {0x3d85, 0x36}, {0x3d8c, 0x71},
->> +	{0x3d8d, 0xcb}, {0x3f0a, 0x00}, {0x4000, 0xf1},
->> +	{0x4001, 0x40}, {0x4002, 0x04}, {0x4003, 0x14},
->> +	{0x400e, 0x00}, {0x4011, 0x00}, {0x401a, 0x00},
->> +	{0x401b, 0x00}, {0x401c, 0x00}, {0x401d, 0x00},
->> +	{0x401f, 0x00}, {0x4020, 0x00}, {0x4021, 0x10},
->> +	{0x4022, 0x07}, {0x4023, 0xcf}, {0x4024, 0x09},
->> +	{0x4025, 0x60}, {0x4026, 0x09}, {0x4027, 0x6f},
->> +	{0x4028, 0x00}, {0x4029, 0x02}, {0x402a, 0x06},
->> +	{0x402b, 0x04}, {0x402c, 0x02}, {0x402d, 0x02},
->> +	{0x402e, 0x0e}, {0x402f, 0x04}, {0x4302, 0xff},
->> +	{0x4303, 0xff}, {0x4304, 0x00}, {0x4305, 0x00},
->> +	{0x4306, 0x00}, {0x4308, 0x02}, {0x4500, 0x6c},
->> +	{0x4501, 0xc4}, {0x4502, 0x40}, {0x4503, 0x01},
->> +	{0x4601, 0xa7}, {0x4800, 0x04}, {0x4813, 0x08},
->> +	{0x481f, 0x40}, {0x4829, 0x78}, {0x4837, 0x10},
->> +	{0x4b00, 0x2a}, {0x4b0d, 0x00}, {0x4d00, 0x04},
->> +	{0x4d01, 0x42}, {0x4d02, 0xd1}, {0x4d03, 0x93},
->> +	{0x4d04, 0xf5}, {0x4d05, 0xc1}, {0x5000, 0xf3},
->> +	{0x5001, 0x11}, {0x5004, 0x00}, {0x500a, 0x00},
->> +	{0x500b, 0x00}, {0x5032, 0x00}, {0x5040, 0x00},
->> +	{0x5050, 0x0c}, {0x5500, 0x00}, {0x5501, 0x10},
->> +	{0x5502, 0x01}, {0x5503, 0x0f}, {0x8000, 0x00},
->> +	{0x8001, 0x00}, {0x8002, 0x00}, {0x8003, 0x00},
->> +	{0x8004, 0x00}, {0x8005, 0x00}, {0x8006, 0x00},
->> +	{0x8007, 0x00}, {0x8008, 0x00}, {0x3638, 0x00},
->> +	{REG_NULL, 0x00},
->> +};
->> +
->> +static const struct ov4689_mode supported_modes[] = {
->> +	{
->> +		.id = OV4689_MODE_2688_1520,
->> +		.width = 2688,
->> +		.height = 1520,
->> +		.max_fps = 30,
->> +		.exp_def = 1536,
->> +		.hts_def = 4*2574,
->> +		.vts_def = 1554,
->> +		.pixel_rate = 480000000,
->> +		.reg_list = ov4689_2688x1520_regs,
->> +	},
->> +};
->> +
->> +static const u64 link_freq_menu_items[] = { 504000000 };
->> +
->> +static const char *const ov4689_test_pattern_menu[] = {
->> +	"Disabled",
->> +	"Vertical Color Bar Type 1",
->> +	"Vertical Color Bar Type 2",
->> +	"Vertical Color Bar Type 3",
->> +	"Vertical Color Bar Type 4"
->> +};
->> +
->> +/*
->> + * These coefficients are based on those used in Rockchip's camera
->> + * engine, with minor tweaks for continuity.
->> + */
->> +static const struct ov4689_gain_range ov4689_gain_ranges[] = {
->> +	{
->> +		.logical_min = 0,
->> +		.logical_max = 255,
->> +		.offset = 0,
->> +		.divider = 1,
->> +		.physical_min = 0,
->> +		.physical_max = 255,
->> +	},
->> +	{
->> +		.logical_min = 256,
->> +		.logical_max = 511,
->> +		.offset = 252,
->> +		.divider = 2,
->> +		.physical_min = 376,
->> +		.physical_max = 504,
->> +	},
->> +	{
->> +		.logical_min = 512,
->> +		.logical_max = 1023,
->> +		.offset = 758,
->> +		.divider = 4,
->> +		.physical_min = 884,
->> +		.physical_max = 1012,
->> +	},
->> +	{
->> +		.logical_min = 1024,
->> +		.logical_max = 2047,
->> +		.offset = 1788,
->> +		.divider = 8,
->> +		.physical_min = 1912,
->> +		.physical_max = 2047,
->> +	},
->> +};
->> +
->> +/* Write registers up to 4 at a time */
->> +static int ov4689_write_reg(struct i2c_client *client, u16 reg, u32 len,
->> +			    u32 val)
->> +{
->> +	u32 buf_i, val_i;
->> +	__be32 val_be;
->> +	u8 *val_p;
->> +	u8 buf[6];
->> +
->> +	if (len > 4)
->> +		return -EINVAL;
->> +
->> +	buf[0] = reg >> 8;
->> +	buf[1] = reg & 0xff;
->> +
->> +	val_be = cpu_to_be32(val);
->> +	val_p = (u8 *)&val_be;
->> +	buf_i = 2;
->> +	val_i = 4 - len;
->> +
->> +	while (val_i < 4)
->> +		buf[buf_i++] = val_p[val_i++];
->> +
->> +	if (i2c_master_send(client, buf, len + 2) != len + 2)
->> +		return -EIO;
->> +
->> +	return 0;
->> +}
->> +
->> +static int ov4689_write_array(struct i2c_client *client,
->> +			      const struct regval *regs)
->> +{
->> +	int ret = 0;
->> +	u32 i;
->> +
->> +	for (i = 0; ret == 0 && regs[i].addr != REG_NULL; i++)
->> +		ret = ov4689_write_reg(client, regs[i].addr,
->> +				       OV4689_REG_VALUE_08BIT, regs[i].val);
->> +
->> +	return ret;
->> +}
->> +
->> +/* Read registers up to 4 at a time */
->> +static int ov4689_read_reg(struct i2c_client *client, u16 reg, unsigned int len,
->> +			   u32 *val)
->> +{
->> +	__be16 reg_addr_be = cpu_to_be16(reg);
->> +	struct i2c_msg msgs[2];
->> +	__be32 data_be = 0;
->> +	u8 *data_be_p;
->> +	int ret;
->> +
->> +	if (len > 4 || !len)
->> +		return -EINVAL;
->> +
->> +	data_be_p = (u8 *)&data_be;
->> +	/* Write register address */
->> +	msgs[0].addr = client->addr;
->> +	msgs[0].flags = 0;
->> +	msgs[0].len = 2;
->> +	msgs[0].buf = (u8 *)&reg_addr_be;
->> +
->> +	/* Read data from register */
->> +	msgs[1].addr = client->addr;
->> +	msgs[1].flags = I2C_M_RD;
->> +	msgs[1].len = len;
->> +	msgs[1].buf = &data_be_p[4 - len];
->> +
->> +	ret = i2c_transfer(client->adapter, msgs, ARRAY_SIZE(msgs));
->> +	if (ret != ARRAY_SIZE(msgs))
->> +		return -EIO;
->> +
->> +	*val = be32_to_cpu(data_be);
->> +
->> +	return 0;
->> +}
->> +
->> +static void ov4689_fill_fmt(const struct ov4689_mode *mode,
->> +			    struct v4l2_mbus_framefmt *fmt)
->> +{
->> +	fmt->code = MEDIA_BUS_FMT_SBGGR10_1X10;
->> +	fmt->width = mode->width;
->> +	fmt->height = mode->height;
->> +	fmt->field = V4L2_FIELD_NONE;
->> +}
->> +
->> +static int ov4689_set_fmt(struct v4l2_subdev *sd,
->> +			  struct v4l2_subdev_state *sd_state,
->> +			  struct v4l2_subdev_format *fmt)
->> +{
->> +	struct v4l2_mbus_framefmt *mbus_fmt = &fmt->format;
->> +	struct ov4689 *ov4689 = to_ov4689(sd);
->> +
->> +	/* only one mode supported for now */
->> +	ov4689_fill_fmt(ov4689->cur_mode, mbus_fmt);
->> +
->> +	return 0;
->> +}
->> +
->> +static int ov4689_get_fmt(struct v4l2_subdev *sd,
->> +			  struct v4l2_subdev_state *sd_state,
->> +			  struct v4l2_subdev_format *fmt)
->> +{
->> +	struct v4l2_mbus_framefmt *mbus_fmt = &fmt->format;
->> +	struct ov4689 *ov4689 = to_ov4689(sd);
->> +
->> +	/* only one mode supported for now */
->> +	ov4689_fill_fmt(ov4689->cur_mode, mbus_fmt);
->> +
->> +	return 0;
->> +}
->> +
->> +static int ov4689_enum_mbus_code(struct v4l2_subdev *sd,
->> +				 struct v4l2_subdev_state *sd_state,
->> +				 struct v4l2_subdev_mbus_code_enum *code)
->> +{
->> +	if (code->index != 0)
->> +		return -EINVAL;
->> +	code->code = MEDIA_BUS_FMT_SBGGR10_1X10;
->> +
->> +	return 0;
->> +}
->> +
->> +static int ov4689_enum_frame_sizes(struct v4l2_subdev *sd,
->> +				   struct v4l2_subdev_state *sd_state,
->> +				   struct v4l2_subdev_frame_size_enum *fse)
->> +{
->> +	if (fse->index >= ARRAY_SIZE(supported_modes))
->> +		return -EINVAL;
->> +
->> +	if (fse->code != MEDIA_BUS_FMT_SBGGR10_1X10)
->> +		return -EINVAL;
->> +
->> +	fse->min_width = supported_modes[fse->index].width;
->> +	fse->max_width = supported_modes[fse->index].width;
->> +	fse->max_height = supported_modes[fse->index].height;
->> +	fse->min_height = supported_modes[fse->index].height;
->> +
->> +	return 0;
->> +}
->> +
->> +static int ov4689_enable_test_pattern(struct ov4689 *ov4689, u32 pattern)
->> +{
->> +	u32 val;
->> +
->> +	if (pattern)
->> +		val = (pattern - 1) | OV4689_TEST_PATTERN_ENABLE;
->> +	else
->> +		val = OV4689_TEST_PATTERN_DISABLE;
->> +
->> +	return ov4689_write_reg(ov4689->client, OV4689_REG_TEST_PATTERN,
->> +				OV4689_REG_VALUE_08BIT, val);
->> +}
->> +
->> +static int ov4689_get_selection(struct v4l2_subdev *sd,
->> +				struct v4l2_subdev_state *state,
->> +				struct v4l2_subdev_selection *sel)
->> +{
->> +	if (sel->which != V4L2_SUBDEV_FORMAT_ACTIVE)
->> +		return -EINVAL;
->> +
->> +	switch (sel->target) {
->> +	case V4L2_SEL_TGT_CROP_BOUNDS:
->> +		sel->r.top = 0;
->> +		sel->r.left = 0;
->> +		sel->r.width = 2720;
->> +		sel->r.height = 1536;
->> +		return 0;
->> +	case V4L2_SEL_TGT_CROP:
->> +	case V4L2_SEL_TGT_CROP_DEFAULT:
->> +		sel->r.top = 8;
->> +		sel->r.left = 16;
->> +		sel->r.width = 2688;
->> +		sel->r.height = 1520;
->> +		return 0;
->> +	}
->> +	return -EINVAL;
->> +}
->> +
->> +static int ov4689_s_stream(struct v4l2_subdev *sd, int on)
->> +{
->> +	struct ov4689 *ov4689 = to_ov4689(sd);
->> +	struct i2c_client *client = ov4689->client;
->> +	int ret = 0;
->> +
->> +	mutex_lock(&ov4689->mutex);
->> +
->> +	on = !!on;
->> +	if (on == ov4689->streaming)
->> +		goto unlock_and_return;
->> +
->> +	if (on) {
->> +		ret = pm_runtime_resume_and_get(&client->dev);
->> +		if (ret < 0)
->> +			goto unlock_and_return;
->> +
->> +		ret = ov4689_write_array(ov4689->client,
->> +					 ov4689->cur_mode->reg_list);
->> +		if (ret) {
->> +			pm_runtime_put(&client->dev);
->> +			goto unlock_and_return;
->> +		}
->> +
->> +		ret = __v4l2_ctrl_handler_setup(&ov4689->ctrl_handler);
->> +		if (ret) {
->> +			pm_runtime_put(&client->dev);
->> +			goto unlock_and_return;
->> +		}
->> +
->> +		ret = ov4689_write_reg(ov4689->client, OV4689_REG_CTRL_MODE,
->> +				       OV4689_REG_VALUE_08BIT,
->> +				       OV4689_MODE_STREAMING);
->> +		if (ret) {
->> +			pm_runtime_put(&client->dev);
->> +			goto unlock_and_return;
->> +		}
->> +	} else {
->> +		ov4689_write_reg(ov4689->client, OV4689_REG_CTRL_MODE,
->> +				 OV4689_REG_VALUE_08BIT,
->> +				 OV4689_MODE_SW_STANDBY);
->> +		pm_runtime_put(&client->dev);
->> +	}
->> +
->> +	ov4689->streaming = on;
->> +
->> +unlock_and_return:
->> +	mutex_unlock(&ov4689->mutex);
->> +
->> +	return ret;
->> +}
->> +
->> +/* Calculate the delay in us by clock rate and clock cycles */
->> +static inline u32 ov4689_cal_delay(struct ov4689 *ov4689, u32 cycles)
->> +{
->> +	return DIV_ROUND_UP(cycles, ov4689->clock_rate / 1000 / 1000);
->> +}
->> +
->> +static int __maybe_unused ov4689_power_on(struct device *dev)
->> +{
->> +	struct v4l2_subdev *sd = dev_get_drvdata(dev);
->> +	struct ov4689 *ov4689 = to_ov4689(sd);
->> +	u32 delay_us;
->> +	int ret;
->> +
->> +	ret = clk_prepare_enable(ov4689->xvclk);
->> +	if (ret < 0) {
->> +		dev_err(dev, "Failed to enable xvclk\n");
->> +		return ret;
->> +	}
->> +
->> +	gpiod_set_value_cansleep(ov4689->reset_gpio, 1);
->> +
->> +	ret = regulator_bulk_enable(ARRAY_SIZE(ov4689_supply_names), ov4689->supplies);
->> +	if (ret < 0) {
->> +		dev_err(dev, "Failed to enable regulators\n");
->> +		goto disable_clk;
->> +	}
->> +
->> +	gpiod_set_value_cansleep(ov4689->reset_gpio, 0);
->> +	usleep_range(500, 1000);
->> +	gpiod_set_value_cansleep(ov4689->pwdn_gpio, 0);
->> +
->> +	/* 8192 cycles prior to first SCCB transaction */
->> +	delay_us = ov4689_cal_delay(ov4689, 8192);
->> +	usleep_range(delay_us, delay_us * 2);
->> +
->> +	return 0;
->> +
->> +disable_clk:
->> +	clk_disable_unprepare(ov4689->xvclk);
->> +
->> +	return ret;
->> +}
->> +
->> +static int __maybe_unused ov4689_power_off(struct device *dev)
->> +{
->> +	struct v4l2_subdev *sd = dev_get_drvdata(dev);
->> +	struct ov4689 *ov4689 = to_ov4689(sd);
->> +
->> +	gpiod_set_value_cansleep(ov4689->pwdn_gpio, 1);
->> +	clk_disable_unprepare(ov4689->xvclk);
->> +	gpiod_set_value_cansleep(ov4689->reset_gpio, 1);
->> +	regulator_bulk_disable(ARRAY_SIZE(ov4689_supply_names), ov4689->supplies);
->> +
->> +	return 0;
->> +}
->> +
->> +#ifdef CONFIG_VIDEO_V4L2_SUBDEV_API
->> +static int ov4689_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
->> +{
->> +	struct ov4689 *ov4689 = to_ov4689(sd);
->> +	struct v4l2_mbus_framefmt *try_fmt;
->> +
->> +	mutex_lock(&ov4689->mutex);
->> +
->> +	try_fmt = v4l2_subdev_get_try_format(sd, fh->state, 0);
->> +	/* Initialize try_fmt */
->> +	ov4689_fill_fmt(&supported_modes[OV4689_MODE_2688_1520], try_fmt);
->> +
->> +	mutex_unlock(&ov4689->mutex);
->> +
->> +	return 0;
->> +}
->> +#endif
->> +
->> +static const struct dev_pm_ops ov4689_pm_ops = {
->> +	SET_RUNTIME_PM_OPS(ov4689_power_off, ov4689_power_on, NULL)
->> +};
->> +
->> +#ifdef CONFIG_VIDEO_V4L2_SUBDEV_API
->> +static const struct v4l2_subdev_internal_ops ov4689_internal_ops = {
->> +	.open = ov4689_open,
->> +};
->> +#endif
->> +
->> +static const struct v4l2_subdev_video_ops ov4689_video_ops = {
->> +	.s_stream = ov4689_s_stream,
->> +};
->> +
->> +static const struct v4l2_subdev_pad_ops ov4689_pad_ops = {
->> +	.enum_mbus_code = ov4689_enum_mbus_code,
->> +	.enum_frame_size = ov4689_enum_frame_sizes,
->> +	.get_fmt = ov4689_get_fmt,
->> +	.set_fmt = ov4689_set_fmt,
->> +	.get_selection = ov4689_get_selection,
->> +};
->> +
->> +static const struct v4l2_subdev_ops ov4689_subdev_ops = {
->> +	.video = &ov4689_video_ops,
->> +	.pad = &ov4689_pad_ops,
->> +};
->> +
->> +/*
->> + * Map userspace (logical) gain to sensor (physical) gain using
->> + * ov4689_gain_ranges table.
->> + */
->
-> Ah, I see quite some discussions on your previous version on this so
-> part..
->
-> The design is very weird, so I'm afraid modeling that in userspace
-> might result in an implementation quite specific for this sensor, and
-> even if libcamera has camera sensor helpers so far we have modeled
-> there "generic" gain models, something I'm afraid this is not.
->
-> Does the linearization work with the sensor gain format (0x3035 =
-> 0x04) or the real gain format (0x3035 = 0x00) ?
->
-> Looking at your gain ranges you seem to map on the intervals of "real
-> gain format" according to the last plot you sent, but I see in the
-> driver 0x3035 being set to 0x04 at init time and not changed. Have I
-> missed that ?
->
-
-This mapping uses [0x3503] = 0x4. Logical gain ranges (which are exposed
-to userspace) are set up this way to satisfy two conditions: (1)
-physical and logical gain are 1-to-1 mapping for 0x-2x range and (2)
-observed gain is linear in logical gain. Logical gain ranges are mapped
-to the ranges of physical (sensor) gain of approximately 128 units long
-(except the first one, which is 256 units long). The tests I ran with
-this driver show monotonic and almost linear gain from the userspace
-perspective, so I believe that present mapping implementation is
-correct.
-
-
->> +static int ov4689_map_gain(struct ov4689 *ov4689, int logical_gain, int *result)
->> +{
->> +	int num_ranges = ARRAY_SIZE(ov4689_gain_ranges);
->> +	const struct device *dev = &ov4689->client->dev;
->> +	const struct ov4689_gain_range *range;
->> +	int n;
->> +
->> +	for (n = 0; n < num_ranges; n++) {
->> +		if (logical_gain >= ov4689_gain_ranges[n].logical_min &&
->> +		    logical_gain <= ov4689_gain_ranges[n].logical_max) {
->> +			break;
->> +		}
->> +	}
->> +
->> +	if (n == num_ranges) {
->> +		dev_warn_ratelimited(dev, "no mapping found for gain %d\n",
->> +				     logical_gain);
->> +		return -EINVAL;
->> +	}
->> +
->> +	range = &ov4689_gain_ranges[n];
->> +
->> +	*result = clamp(range->offset + (logical_gain) / range->divider,
->> +			range->physical_min, range->physical_max);
->> +	return 0;
->> +}
->> +
->> +static int ov4689_set_ctrl(struct v4l2_ctrl *ctrl)
->> +{
->> +	struct ov4689 *ov4689 =
->> +		container_of(ctrl->handler, struct ov4689, ctrl_handler);
->> +	struct i2c_client *client = ov4689->client;
->> +	int sensor_gain;
->> +	s64 max_expo;
->> +	int ret;
->> +
->> +	/* Propagate change of current control to all related controls */
->> +	switch (ctrl->id) {
->> +	case V4L2_CID_VBLANK:
->> +		/* Update max exposure while meeting expected vblanking */
->> +		max_expo = ov4689->cur_mode->height + ctrl->val - 4;
->> +		__v4l2_ctrl_modify_range(ov4689->exposure,
->> +					 ov4689->exposure->minimum, max_expo,
->> +					 ov4689->exposure->step,
->> +					 ov4689->exposure->default_value);
->> +		break;
->> +	}
->> +
->> +	if (!pm_runtime_get_if_in_use(&client->dev))
->> +		return 0;
->> +
->> +	switch (ctrl->id) {
->> +	case V4L2_CID_EXPOSURE:
->> +		/* 4 least significant bits of expsoure are fractional part */
->> +		ret = ov4689_write_reg(ov4689->client, OV4689_REG_EXPOSURE,
->> +				       OV4689_REG_VALUE_24BIT, ctrl->val << 4);
->> +		break;
->> +	case V4L2_CID_ANALOGUE_GAIN:
->> +		ret = ov4689_map_gain(ov4689, ctrl->val, &sensor_gain);
->> +
->> +		ret = ret ?:
->> +			ov4689_write_reg(
->> +				ov4689->client, OV4689_REG_GAIN_H,
->> +				OV4689_REG_VALUE_08BIT,
->> +				(sensor_gain >> OV4689_GAIN_H_SHIFT) &
->> +				OV4689_GAIN_H_MASK);
->> +		ret = ret ?:
->> +			ov4689_write_reg(
->> +				ov4689->client, OV4689_REG_GAIN_L,
->> +				OV4689_REG_VALUE_08BIT,
->> +				sensor_gain & OV4689_GAIN_L_MASK);
->
-> I see also 0x3507[1:0] being documented as "Long gain[17:16]"
->
-
-In this driver we never use gain register values above 2047, so 0x3507
-is always set to zero. This gives us analog gains up to 16x, which is
-sufficient for typical use cases. If someone needs to extend gain range,
-we could try to use greater register values, but that needs additional
-research.
-
->> +		break;
->> +	case V4L2_CID_VBLANK:
->> +		ret = ov4689_write_reg(ov4689->client, OV4689_REG_VTS,
->> +				       OV4689_REG_VALUE_16BIT,
->> +				       ctrl->val + ov4689->cur_mode->height);
->> +		break;
->> +	case V4L2_CID_TEST_PATTERN:
->> +		ret = ov4689_enable_test_pattern(ov4689, ctrl->val);
->> +		break;
->> +	default:
->> +		dev_warn(&client->dev, "%s Unhandled id:0x%x, val:0x%x\n",
->> +			 __func__, ctrl->id, ctrl->val);
->> +		ret = -EINVAL;
->> +		break;
->> +	}
->> +
->> +	pm_runtime_put(&client->dev);
->> +
->> +	return ret;
->> +}
->> +
->> +static const struct v4l2_ctrl_ops ov4689_ctrl_ops = {
->> +	.s_ctrl = ov4689_set_ctrl,
->> +};
->> +
->> +static int ov4689_initialize_controls(struct ov4689 *ov4689)
->> +{
->> +	struct i2c_client *client = v4l2_get_subdevdata(&ov4689->subdev);
->> +	struct v4l2_fwnode_device_properties props;
->> +	struct v4l2_ctrl_handler *handler;
->> +	const struct ov4689_mode *mode;
->> +	s64 exposure_max, vblank_def;
->> +	struct v4l2_ctrl *ctrl;
->> +	s64 h_blank_dev;
->> +	int ret;
->> +
->> +	handler = &ov4689->ctrl_handler;
->> +	mode = ov4689->cur_mode;
->> +	ret = v4l2_ctrl_handler_init(handler, 10);
->> +	if (ret)
->> +		return ret;
->> +	handler->lock = &ov4689->mutex;
->> +
->> +	ctrl = v4l2_ctrl_new_int_menu(handler, NULL, V4L2_CID_LINK_FREQ, 0, 0,
->> +				      link_freq_menu_items);
->> +	if (ctrl)
->> +		ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
->> +
->> +	v4l2_ctrl_new_std(handler, NULL, V4L2_CID_PIXEL_RATE, 0,
->> +			  mode->pixel_rate, 1, mode->pixel_rate);
->> +
->> +	h_blank_dev = mode->hts_def - mode->width;
->
-> s/dev/def ?
->
-
-Will rename in v4.
-
->> +	ctrl = v4l2_ctrl_new_std(handler, NULL, V4L2_CID_HBLANK, h_blank_dev,
->> +				 h_blank_dev, 1, h_blank_dev);
->> +	if (ctrl)
->> +		ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
->> +
->> +	vblank_def = mode->vts_def - mode->height;
->> +	v4l2_ctrl_new_std(handler, &ov4689_ctrl_ops, V4L2_CID_VBLANK,
->> +			  vblank_def, OV4689_VTS_MAX - mode->height, 1,
->
-> Usually the minimum vertical blanking is smaller than the default you
-> have here calculated. Unfortunately is not always documented...
->
-
-I've done some experiments with HTS and VTS, and when setting HTS to the
-minimum working value (886), reducing VTS below 1554 resulted in stream
-errors. So I'll prefer to stay on the safe side and leave minimum vblank
-as is.
-
->> +			  vblank_def);
->> +
->> +	exposure_max = mode->vts_def - 4;
->> +	ov4689->exposure =
->> +		v4l2_ctrl_new_std(handler, &ov4689_ctrl_ops, V4L2_CID_EXPOSURE,
->> +				  OV4689_EXPOSURE_MIN, exposure_max,
->> +				  OV4689_EXPOSURE_STEP, mode->exp_def);
->> +
->> +	v4l2_ctrl_new_std(handler, &ov4689_ctrl_ops, V4L2_CID_ANALOGUE_GAIN,
->> +			  ov4689_gain_ranges[0].logical_min,
->> +			  ov4689_gain_ranges[ARRAY_SIZE(ov4689_gain_ranges) - 1]
->> +				  .logical_max,
->> +			  OV4689_GAIN_STEP, OV4689_GAIN_DEFAULT);
->> +
->> +	v4l2_ctrl_new_std_menu_items(handler, &ov4689_ctrl_ops,
->> +				     V4L2_CID_TEST_PATTERN,
->> +				     ARRAY_SIZE(ov4689_test_pattern_menu) - 1,
->> +				     0, 0, ov4689_test_pattern_menu);
->> +
->> +	if (handler->error) {
->> +		ret = handler->error;
->> +		dev_err(&ov4689->client->dev, "Failed to init controls(%d)\n",
->> +			ret);
->> +		goto err_free_handler;
->> +	}
->> +
->> +	ret = v4l2_fwnode_device_parse(&client->dev, &props);
->> +	if (ret)
->> +		goto err_free_handler;
->> +
->> +	ret = v4l2_ctrl_new_fwnode_properties(handler, &ov4689_ctrl_ops,
->> +					      &props);
->> +	if (ret)
->> +		goto err_free_handler;
->> +
->> +	ov4689->subdev.ctrl_handler = handler;
->> +
->> +	return 0;
->> +
->> +err_free_handler:
->> +	v4l2_ctrl_handler_free(handler);
->> +
->> +	return ret;
->> +}
->> +
->> +static int ov4689_check_sensor_id(struct ov4689 *ov4689,
->> +				  struct i2c_client *client)
->> +{
->> +	struct device *dev = &ov4689->client->dev;
->> +	u32 id = 0;
->> +	int ret;
->> +
->> +	ret = ov4689_read_reg(client, OV4689_REG_CHIP_ID,
->> +			      OV4689_REG_VALUE_16BIT, &id);
->> +	if (id != CHIP_ID) {
->> +		dev_err(dev, "Unexpected sensor id(%06x), ret(%d)\n", id, ret);
->> +		return -ENODEV;
->> +	}
->> +
->> +	dev_info(dev, "Detected OV%06x sensor\n", CHIP_ID);
->> +
->> +	return 0;
->> +}
->> +
->> +static int ov4689_configure_regulators(struct ov4689 *ov4689)
->> +{
->> +	unsigned int supplies_count = ARRAY_SIZE(ov4689_supply_names);
->> +	unsigned int i;
->> +
->> +	for (i = 0; i < supplies_count; i++)
->> +		ov4689->supplies[i].supply = ov4689_supply_names[i];
->> +
->> +	return devm_regulator_bulk_get(&ov4689->client->dev, supplies_count,
->> +				       ov4689->supplies);
->> +}
->> +
->> +static u64 ov4689_check_link_frequency(struct v4l2_fwnode_endpoint *ep)
->> +{
->> +	unsigned int freqs_count = ARRAY_SIZE(link_freq_menu_items);
->> +	const u64 *freqs = link_freq_menu_items;
->> +	unsigned int i, j;
->> +
->> +	for (i = 0; i < freqs_count; i++) {
->> +		for (j = 0; j < ep->nr_of_link_frequencies; j++)
->> +			if (freqs[i] == ep->link_frequencies[j])
->> +				return freqs[i];
->> +	}
->
-> What is the purpose of this function ? It verifies that at least one
-> of the frequencies specified in dt matches one registered in the driver.
-> As long as you have a single frequency that's fine and you could
-> simplify this, as soon as you have more frequencies in the driver
-> should you make sure all of them are listed in dts ?
->
-
-Before v3 I just compared the only link frequency we actually support to
-the value from dts. This function was implemented per Sakari's
-suggestion "Please instead compare with array entries" in [1].
-
-
-> Or maybe you should just populate the list of driver's frequencies using
-> what comes from DTS ? Sakari what is your opinion here ?
->
-
-
->> +
->> +	return 0;
->> +}
->> +
->> +static int ov4689_check_hwcfg(struct device *dev)
->> +{
->> +	struct fwnode_handle *fwnode = dev_fwnode(dev);
->> +	struct v4l2_fwnode_endpoint bus_cfg = {
->> +		.bus_type = V4L2_MBUS_CSI2_DPHY,
->> +	};
->> +	struct fwnode_handle *endpoint;
->> +	int ret;
->> +
->> +	endpoint = fwnode_graph_get_next_endpoint(fwnode, NULL);
->> +	if (!endpoint)
->> +		return -EPROBE_DEFER;
->
-> Why EPROBE_DEFER ? The endpoint doesn't depend on the probing order
-> afaict, either it's there or not, and if it is not the DTS is
-> malformed. I would return -ENXIO or -EINVAL
->
-
-Will fix in v4.
-
->> +
->> +	ret = v4l2_fwnode_endpoint_alloc_parse(endpoint, &bus_cfg);
->> +	fwnode_handle_put(endpoint);
->> +	if (ret)
->> +		return ret;
->> +
->> +	if (bus_cfg.bus.mipi_csi2.num_data_lanes != OV4689_LANES) {
->> +		dev_err(dev, "Only a 4-lane CSI2 config is supported");
->> +		ret = -EINVAL;
->> +		goto out_free_bus_cfg;
->> +	}
->> +
->> +	if (!bus_cfg.nr_of_link_frequencies) {
->> +		dev_err(dev, "No link frequencies defined\n");
->> +		ret = -EINVAL;
->> +		goto out_free_bus_cfg;
->> +	}
->> +
->> +	if (!ov4689_check_link_frequency(&bus_cfg)) {
->> +		dev_err(dev, "No supported link frequency found\n");
->> +		ret = -EINVAL;
->> +	}
->> +
->> +out_free_bus_cfg:
->> +	v4l2_fwnode_endpoint_free(&bus_cfg);
->> +
->> +	return ret;
->> +}
->> +
->> +static int ov4689_probe(struct i2c_client *client)
->> +{
->> +	struct device *dev = &client->dev;
->> +	struct v4l2_subdev *sd;
->> +	struct ov4689 *ov4689;
->> +	int ret;
->> +
->> +	ret = ov4689_check_hwcfg(dev);
->> +	if (ret)
->> +		return ret;
->> +
->> +	ov4689 = devm_kzalloc(dev, sizeof(*ov4689), GFP_KERNEL);
->> +	if (!ov4689)
->> +		return -ENOMEM;
->> +
->> +	ov4689->client = client;
->> +	ov4689->cur_mode = &supported_modes[OV4689_MODE_2688_1520];
->> +
->> +	ov4689->xvclk = devm_clk_get_optional(dev, NULL);
->> +	if (IS_ERR(ov4689->xvclk)) {
->> +		return dev_err_probe(dev, PTR_ERR(ov4689->xvclk),
->> +				     "Failed to get external clock\n");
->> +	}
->> +
->> +	if (!ov4689->xvclk) {
->> +		dev_dbg(dev,
->> +			"No clock provided, using clock-frequency property\n");
->> +		device_property_read_u32(dev, "clock-frequency", &ov4689->clock_rate);
->
-> This is only valid on ACPI afaict, and this driver depends on OF. I
-> would just make the clock mandatory and that's it.
->
-> But I see this has been suggested in previous review, so don't bother
-> with back and forth.
->
-
-Okay, will also remove dependency on OF in v4 as per Sakari's
-suggestion.
-
->> +	} else {
->> +		ov4689->clock_rate = clk_get_rate(ov4689->xvclk);
->> +	}
->> +
->> +	if (ov4689->clock_rate != OV4689_XVCLK_FREQ) {
->> +		dev_err(dev,
->> +			"External clock rate mismatch: got %d Hz, expected %d Hz\n",
->> +			ov4689->clock_rate, OV4689_XVCLK_FREQ);
->> +		return -EINVAL;
->> +	}
->> +
->> +	ov4689->reset_gpio = devm_gpiod_get_optional(dev, "reset",
->> +						     GPIOD_OUT_LOW);
->> +	if (IS_ERR(ov4689->reset_gpio)) {
->> +		dev_err(dev, "Failed to get reset-gpios\n");
->> +		return PTR_ERR(ov4689->reset_gpio);
->> +	}
->> +
->> +	ov4689->pwdn_gpio = devm_gpiod_get_optional(dev, "pwdn", GPIOD_OUT_LOW);
->> +	if (IS_ERR(ov4689->pwdn_gpio)) {
->> +		dev_err(dev, "Failed to get pwdn-gpios\n");
->> +		return PTR_ERR(ov4689->pwdn_gpio);
->> +	}
->> +
->> +	ret = ov4689_configure_regulators(ov4689);
->> +	if (ret) {
->> +		dev_err(dev, "Failed to get power regulators\n");
->> +		return ret;
->> +	}
->> +
->> +	mutex_init(&ov4689->mutex);
->> +
->> +	sd = &ov4689->subdev;
->> +	v4l2_i2c_subdev_init(sd, client, &ov4689_subdev_ops);
->> +	ret = ov4689_initialize_controls(ov4689);
->> +	if (ret)
->> +		goto err_destroy_mutex;
->> +
->> +	ret = ov4689_power_on(dev);
->> +	if (ret)
->> +		goto err_free_handler;
->> +
->> +	ret = ov4689_check_sensor_id(ov4689, client);
->> +	if (ret)
->> +		goto err_power_off;
->> +
->> +#ifdef CONFIG_VIDEO_V4L2_SUBDEV_API
->
-> Any reason not to select this symbol ?
->
->> +	sd->internal_ops = &ov4689_internal_ops;
->> +	sd->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
->> +#endif
->> +#if defined(CONFIG_MEDIA_CONTROLLER)
->
-> Same question really.
->
-> It's not wrong having it here, I just wonder if sensor driver should
-> have this ifdef dance or they can just select those symbols and that's
-> it. Any opinion from others ?
-
-Sakari suggest we should drop these, so will do it in v4.
-
->
->> +	ov4689->pad.flags = MEDIA_PAD_FL_SOURCE;
->> +	sd->entity.function = MEDIA_ENT_F_CAM_SENSOR;
->> +	ret = media_entity_pads_init(&sd->entity, 1, &ov4689->pad);
->> +	if (ret < 0)
->> +		goto err_power_off;
->> +#endif
->> +
->> +	ret = v4l2_async_register_subdev_sensor(sd);
->> +	if (ret) {
->> +		dev_err(dev, "v4l2 async register subdev failed\n");
->> +		goto err_clean_entity;
->> +	}
->> +
->> +	pm_runtime_set_active(dev);
->> +	pm_runtime_enable(dev);
->> +	pm_runtime_idle(dev);
->> +
->> +	return 0;
->> +
->> +err_clean_entity:
->> +	media_entity_cleanup(&sd->entity);
->> +err_power_off:
->> +	ov4689_power_off(dev);
->> +err_free_handler:
->> +	v4l2_ctrl_handler_free(&ov4689->ctrl_handler);
->> +err_destroy_mutex:
->> +	mutex_destroy(&ov4689->mutex);
->> +
->> +	return ret;
->> +}
->> +
->> +static int ov4689_remove(struct i2c_client *client)
->> +{
->> +	struct v4l2_subdev *sd = i2c_get_clientdata(client);
->> +	struct ov4689 *ov4689 = to_ov4689(sd);
->> +
->> +	v4l2_async_unregister_subdev(sd);
->> +	media_entity_cleanup(&sd->entity);
->> +
->> +	v4l2_ctrl_handler_free(&ov4689->ctrl_handler);
->> +	mutex_destroy(&ov4689->mutex);
->> +
->> +	pm_runtime_disable(&client->dev);
->> +	if (!pm_runtime_status_suspended(&client->dev))
->> +		ov4689_power_off(&client->dev);
->> +	pm_runtime_set_suspended(&client->dev);
->> +
->> +	return 0;
->> +}
->> +
->> +static const struct i2c_device_id ov4689_id[] = {
->> +	{ "ov4689", 0 },
->> +	{},
->> +};
->> +MODULE_DEVICE_TABLE(i2c, ov4689_id);
->> +
->> +static const struct of_device_id ov4689_of_match[] = {
->> +	{ .compatible = "ovti,ov4689" },
->> +	{},
->> +};
->> +MODULE_DEVICE_TABLE(of, ov4689_of_match);
->> +
->> +static struct i2c_driver ov4689_i2c_driver = {
->> +	.driver = {
->> +		.name = "ov4689",
->> +		.pm = &ov4689_pm_ops,
->> +		.of_match_table = ov4689_of_match,
->> +	},
->> +	.probe_new = ov4689_probe,
->> +	.remove	= ov4689_remove,
->> +	.id_table = ov4689_id,
->> +};
->> +
->> +module_i2c_driver(ov4689_i2c_driver);
->> +
->> +MODULE_DESCRIPTION("OmniVision ov4689 sensor driver");
->> +MODULE_LICENSE("GPL");
->> --
->> 2.37.3
->>
-
-[1] https://lore.kernel.org/all/YywwjmN9qqwFoEc5@paasikivi.fi.intel.com/
-
---
-Best regards,
-Mikhail Rudenko
+> +		extra_pins = true;
+>  		unlock_page(hpage);
+>  	} else {
+>  		unlock_page(hpage);
+> @@ -1104,7 +1107,7 @@ static int me_huge_page(struct page_state *ps, struct page *p)
+>  		}
+>  	}
+>  
+> -	if (has_extra_refcount(ps, p, false))
+> +	if (has_extra_refcount(ps, p, extra_pins))
+>  		res = MF_FAILED;
+>  
+>  	return res;
+> -- 
+> 2.38.0.413.g74048e4d9e-goog
+> 
