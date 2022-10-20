@@ -2,269 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4D0C605F7B
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 13:56:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A9A4605F7C
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 13:57:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbiJTL40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 07:56:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44478 "EHLO
+        id S229760AbiJTL47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 07:56:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbiJTL4X (ORCPT
+        with ESMTP id S229757AbiJTL4y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 07:56:23 -0400
-Received: from mail-4318.protonmail.ch (mail-4318.protonmail.ch [185.70.43.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20C4312E0E7
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 04:56:20 -0700 (PDT)
-Date:   Thu, 20 Oct 2022 11:56:08 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1666266978; x=1666526178;
-        bh=8+35NVO0c0UvUjwWAVqxXJYRfNgUQLbju4mSBPabbg8=;
-        h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
-         Subject:Reply-To:Feedback-ID:Message-ID;
-        b=eun3vO++Su1XSxTdmdJs/WC6r519scdeMdkVcc58v2ILdhhqVZbRknNO+hRWBpHPW
-         CHleG38sTeJzGTY2EJdGlDIiYHjRjjgr1mjzi9zt+eQ7HloGRS4ZhiErtTJW2e0PhC
-         3FO1JcCT5HePfUJArvGI3q3Tl3VKXaYEydJO5msK86lXXsfuLdHLZfyrAPlvaGz56w
-         fSYzggmDNAe+To1M+b5x9Bn6uU2vnC0z9ngsNan0Rn0JweRcCtSR5jQeX56FNDpL1I
-         H0FYfd1tgHVNnnxzXxVxuU+SedW9D+izfgeP5IACSs1hqqPAbUgBhIMw7CKZfNkG+i
-         3pb/BqKhJ3ceg==
-To:     devicetree@vger.kernel.org
-From:   "Lin, Meng-Bo" <linmengbo0689@protonmail.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nikita Travkin <nikita@trvn.ru>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        ~postmarketos/upstreaming@lists.sr.ht
-Subject: [PATCH] arm64: dts: msm8916-samsung-a2015: Add vibrator
-Message-ID: <20221020115255.2026-1-linmengbo0689@protonmail.com>
-Feedback-ID: 40467236:user:proton
+        Thu, 20 Oct 2022 07:56:54 -0400
+Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E120F134DEB
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 04:56:47 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1666267005;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=h1eg7lftjZwHwlpEPa2PsbvY+k99P5M493CYWmMhT+A=;
+        b=xf9AYapUBZUAGvR3RM/0QQx+r4Tq4xSLh6VVr3HNNhTd8MlciibOzWzz6dChqyjCUQv0xP
+        Pyn5bEHKcBAc9ZMNQAoB3K+YgfgUEvTdM0l0g3whJ6x4PCUsBiV2BiiiX0VYdBiJYBZCWA
+        5ASBtXK667niNnJ1zYxgS7BLuxd17gE=
+From:   Yajun Deng <yajun.deng@linux.dev>
+To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com
+Cc:     noodles@fb.com, ross.philipson@oracle.com, daniel.kiper@oracle.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        Yajun Deng <yajun.deng@linux.dev>
+Subject: [PATCH] x86/e820: make e820 type string uniform
+Date:   Thu, 20 Oct 2022 19:56:09 +0800
+Message-Id: <20221020115609.223940-1-yajun.deng@linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nikita Travkin <nikita@trvn.ru>
+These e820_print_type() and e820_type_to_string() functions are similar,
+the former used in dmesg and the latter used in /proc/iomem.
 
-Both a2015 devices use motor drivers controlled with PWM signal.
-A5 additionally has a fixed regulator that powers the driver and is
-controlled by enable signal. A3 routes that enable signal to the
-motor driver itself.
-To simplify the description, add the motor to the common dtsi and
-assume a regulator is used for both.
+Make them uniform, so that we can find the correspondence between dmesg
+and /proc/iomem.
 
-Signed-off-by: Nikita Travkin <nikita@trvn.ru>
-[Rename the nodes to be reusable in msm8916-sansung-e2015]
-Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
+It may be confusing in dmesg. The e820 type update seems no change, but
+the log like that:
+...
+[    0.000000] e820: update [mem 0x81004018-0x81023c57] usable ==> usable
+[    0.000000] e820: update [mem 0x81004018-0x81023c57] usable ==> usable
+[    0.000000] e820: update [mem 0x80ff3018-0x81003e57] usable ==> usable
+[    0.000000] e820: update [mem 0x80ff3018-0x81003e57] usable ==> usable
+...
+
+Another confusion in /proc/iomem, the continuous area may be divided
+into multiple parts, but they have same name, like that:
+
+...
+00100000-80ff3017 : System RAM
+80ff3018-81003e57 : System RAM
+81003e58-81004017 : System RAM
+81004018-81023c57 : System RAM
+81023c58-87672fff : System RAM
+...
+
+Separate the string of E820_TYPE_RESERVED_KERN and E820_TYPE_RAM, this
+makes more clearer.
+
+After patch:
+dmesg:
+...
+[    0.000000] BIOS-provided physical RAM map:
+[    0.000000] BIOS-e820: [mem 0x0000000000000000-0x000000000005efff] System RAM
+[    0.000000] BIOS-e820: [mem 0x000000000005f000-0x000000000005ffff] Reserved
+[    0.000000] BIOS-e820: [mem 0x0000000000060000-0x000000000009ffff] System RAM
+[    0.000000] BIOS-e820: [mem 0x00000000000a0000-0x00000000000fffff] Reserved
+[    0.000000] BIOS-e820: [mem 0x0000000000100000-0x000000008c7b5fff] System RAM
+[    0.000000] BIOS-e820: [mem 0x000000008c7b6000-0x000000008e025fff] Reserved
+[    0.000000] BIOS-e820: [mem 0x000000008e026000-0x000000008e200fff] ACPI Tables
+[    0.000000] BIOS-e820: [mem 0x000000008e201000-0x000000008e689fff] ACPI Non-volatile Storage
+[    0.000000] BIOS-e820: [mem 0x000000008e68a000-0x000000008f40dfff] Reserved
+[    0.000000] BIOS-e820: [mem 0x000000008f40e000-0x000000008f40efff] System RAM
+[    0.000000] BIOS-e820: [mem 0x000000008f40f000-0x000000008fffffff] Reserved
+[    0.000000] BIOS-e820: [mem 0x00000000e0000000-0x00000000efffffff] Reserved
+[    0.000000] BIOS-e820: [mem 0x00000000fe000000-0x00000000fe010fff] Reserved
+[    0.000000] BIOS-e820: [mem 0x00000000fec00000-0x00000000fec00fff] Reserved
+[    0.000000] BIOS-e820: [mem 0x00000000fed00000-0x00000000fed03fff] Reserved
+[    0.000000] BIOS-e820: [mem 0x00000000fee00000-0x00000000fee00fff] Reserved
+[    0.000000] BIOS-e820: [mem 0x00000000ff000000-0x00000000ffffffff] Reserved
+[    0.000000] BIOS-e820: [mem 0x0000000100000000-0x000000086dffffff] System RAM
+[    0.000000] NX (Execute Disable) protection: active
+[    0.000000] e820: update [mem 0x81004018-0x81023c57] System RAM ==> System RAM (kernel)
+[    0.000000] e820: update [mem 0x81004018-0x81023c57] System RAM ==> System RAM (kernel)
+[    0.000000] e820: update [mem 0x80ff3018-0x81003e57] System RAM ==> System RAM (kernel)
+[    0.000000] e820: update [mem 0x80ff3018-0x81003e57] System RAM ==> System RAM (kernel)
+...
+
+/proc/iomem:
+...
+00000000-00000fff : Reserved
+00001000-0005efff : System RAM
+0005f000-0005ffff : Reserved
+00060000-0009ffff : System RAM
+000a0000-000fffff : Reserved
+  000a0000-000bffff : PCI Bus 0000:00
+  000c0000-000cddff : Video ROM
+  000f0000-000fffff : System ROM
+00100000-80ff3017 : System RAM
+80ff3018-81003e57 : System RAM (kernel)
+81003e58-81004017 : System RAM
+81004018-81023c57 : System RAM (kernel)
+81023c58-87672fff : System RAM
+...
+
+Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
 ---
- .../qcom/msm8916-samsung-a2015-common.dtsi    | 52 +++++++++++++++++++
- .../boot/dts/qcom/msm8916-samsung-a3u-eur.dts |  8 +++
- .../boot/dts/qcom/msm8916-samsung-a5u-eur.dts |  8 +++
- .../qcom/msm8916-samsung-e2015-common.dtsi    | 26 ++--------
- 4 files changed, 73 insertions(+), 21 deletions(-)
+ arch/x86/kernel/e820.c | 54 ++++++++++++++----------------------------
+ 1 file changed, 18 insertions(+), 36 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-a2015-common.dtsi b/a=
-rch/arm64/boot/dts/qcom/msm8916-samsung-a2015-common.dtsi
-index 3255bd3fcb55..16935de738af 100644
---- a/arch/arm64/boot/dts/qcom/msm8916-samsung-a2015-common.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-a2015-common.dtsi
-@@ -23,6 +23,17 @@ tz-apps@85500000 {
- =09=09};
- =09};
-=20
-+=09clk_pwm: pwm {
-+=09=09compatible =3D "clk-pwm";
-+=09=09#pwm-cells =3D <2>;
-+
-+=09=09clocks =3D <&gcc GCC_GP2_CLK>;
-+
-+=09=09pinctrl-names =3D "default";
-+=09=09pinctrl-0 =3D <&motor_pwm_default>;
-+=09=09status =3D "disabled";
-+=09};
-+
- =09gpio-keys {
- =09=09compatible =3D "gpio-keys";
-=20
-@@ -61,6 +72,24 @@ event-hall-sensor {
- =09=09};
- =09};
-=20
-+=09/*
-+=09 * NOTE: A5 connects GPIO 76 to a reglator powering the motor
-+=09 * driver IC but A3 connects the same signal to an ENABLE pin of
-+=09 * the driver.
-+=09 */
-+=09reg_motor_vdd: regulator-motor-vdd {
-+=09=09compatible =3D "regulator-fixed";
-+=09=09regulator-name =3D "motor_vdd";
-+=09=09regulator-min-microvolt =3D <3000000>;
-+=09=09regulator-max-microvolt =3D <3000000>;
-+
-+=09=09gpio =3D <&msmgpio 76 GPIO_ACTIVE_HIGH>;
-+=09=09enable-active-high;
-+
-+=09=09pinctrl-names =3D "default";
-+=09=09pinctrl-0 =3D <&motor_en_default>;
-+=09};
-+
- =09reg_vdd_tsp_a: regulator-vdd-tsp-a {
- =09=09compatible =3D "regulator-fixed";
- =09=09regulator-name =3D "vdd_tsp_a";
-@@ -153,6 +182,16 @@ nfc@27 {
- =09=09=09pinctrl-0 =3D <&nfc_default &nfc_clk_req>;
- =09=09};
- =09};
-+
-+=09vibrator: vibrator {
-+=09=09compatible =3D "pwm-vibrator";
-+
-+=09=09pwms =3D <&clk_pwm 0 100000>;
-+=09=09pwm-names =3D "enable";
-+
-+=09=09vcc-supply =3D <&reg_motor_vdd>;
-+=09=09status =3D "disabled";
-+=09};
- };
-=20
- &blsp_i2c2 {
-@@ -397,6 +436,19 @@ mdss_sleep: mdss-sleep {
- =09=09};
- =09};
-=20
-+=09motor_en_default: motor-en-default {
-+=09=09pins =3D "gpio76";
-+=09=09function =3D "gpio";
-+
-+=09=09drive-strength =3D <2>;
-+=09=09bias-disable;
-+=09};
-+
-+=09motor_pwm_default: motor-pwm-default {
-+=09=09pins =3D "gpio50";
-+=09=09function =3D "gcc_gp2_clk_a";
-+=09};
-+
- =09muic_i2c_default: muic-i2c-default {
- =09=09pins =3D "gpio105", "gpio106";
- =09=09function =3D "gpio";
-diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-a3u-eur.dts b/arch/ar=
-m64/boot/dts/qcom/msm8916-samsung-a3u-eur.dts
-index 6db5f78ca286..d495d5ae5cc3 100644
---- a/arch/arm64/boot/dts/qcom/msm8916-samsung-a3u-eur.dts
-+++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-a3u-eur.dts
-@@ -81,6 +81,10 @@ touchscreen@20 {
- =09};
- };
-=20
-+&clk_pwm {
-+=09status =3D "okay";
-+};
-+
- &dsi0 {
- =09panel@0 {
- =09=09reg =3D <0>;
-@@ -104,6 +108,10 @@ &dsi0_out {
- =09remote-endpoint =3D <&panel_in>;
- };
-=20
-+&vibrator {
-+=09status =3D "okay";
-+};
-+
- &msmgpio {
- =09panel_vdd3_default: panel-vdd3-default {
- =09=09pins =3D "gpio9";
-diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-a5u-eur.dts b/arch/ar=
-m64/boot/dts/qcom/msm8916-samsung-a5u-eur.dts
-index 5fb8ecd0c9ca..c03504ab27b7 100644
---- a/arch/arm64/boot/dts/qcom/msm8916-samsung-a5u-eur.dts
-+++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-a5u-eur.dts
-@@ -50,6 +50,10 @@ touchscreen@48 {
- =09};
- };
-=20
-+&clk_pwm {
-+=09status =3D "okay";
-+};
-+
- &pronto {
- =09iris {
- =09=09compatible =3D "qcom,wcn3660b";
-@@ -61,6 +65,10 @@ &touchkey {
- =09vdd-supply =3D <&reg_touch_key>;
- };
-=20
-+&vibrator {
-+=09status =3D "okay";
-+};
-+
- &msmgpio {
- =09tkey_en_default: tkey-en-default {
- =09=09pins =3D "gpio97";
-diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-e2015-common.dtsi b/a=
-rch/arm64/boot/dts/qcom/msm8916-samsung-e2015-common.dtsi
-index 542010fdfb8a..edd24b597a15 100644
---- a/arch/arm64/boot/dts/qcom/msm8916-samsung-e2015-common.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-e2015-common.dtsi
-@@ -26,19 +26,6 @@ muic: extcon@14 {
- =09=09};
- =09};
-=20
--=09reg_motor_vdd: regulator-motor-vdd {
--=09=09compatible =3D "regulator-fixed";
--=09=09regulator-name =3D "motor_vdd";
--=09=09regulator-min-microvolt =3D <3300000>;
--=09=09regulator-max-microvolt =3D <3300000>;
+diff --git a/arch/x86/kernel/e820.c b/arch/x86/kernel/e820.c
+index 9dac24680ff8..8a0fb22bd740 100644
+--- a/arch/x86/kernel/e820.c
++++ b/arch/x86/kernel/e820.c
+@@ -184,19 +184,19 @@ void __init e820__range_add(u64 start, u64 size, enum e820_type type)
+ 	__e820__range_add(e820_table, start, size, type);
+ }
+ 
+-static void __init e820_print_type(enum e820_type type)
++static const char *__init e820_type_to_string(enum e820_type type)
+ {
+ 	switch (type) {
+-	case E820_TYPE_RAM:		/* Fall through: */
+-	case E820_TYPE_RESERVED_KERN:	pr_cont("usable");			break;
+-	case E820_TYPE_RESERVED:	pr_cont("reserved");			break;
+-	case E820_TYPE_SOFT_RESERVED:	pr_cont("soft reserved");		break;
+-	case E820_TYPE_ACPI:		pr_cont("ACPI data");			break;
+-	case E820_TYPE_NVS:		pr_cont("ACPI NVS");			break;
+-	case E820_TYPE_UNUSABLE:	pr_cont("unusable");			break;
+-	case E820_TYPE_PMEM:		/* Fall through: */
+-	case E820_TYPE_PRAM:		pr_cont("persistent (type %u)", type);	break;
+-	default:			pr_cont("type %u", type);		break;
++	case E820_TYPE_RESERVED_KERN:	return "System RAM (kernel)";
++	case E820_TYPE_RAM:		return "System RAM";
++	case E820_TYPE_ACPI:		return "ACPI Tables";
++	case E820_TYPE_NVS:		return "ACPI Non-volatile Storage";
++	case E820_TYPE_UNUSABLE:	return "Unusable memory";
++	case E820_TYPE_PRAM:		return "Persistent Memory (legacy)";
++	case E820_TYPE_PMEM:		return "Persistent Memory";
++	case E820_TYPE_RESERVED:	return "Reserved";
++	case E820_TYPE_SOFT_RESERVED:	return "Soft Reserved";
++	default:			return "Unknown E820 type";
+ 	}
+ }
+ 
+@@ -210,8 +210,7 @@ void __init e820__print_table(char *who)
+ 			e820_table->entries[i].addr,
+ 			e820_table->entries[i].addr + e820_table->entries[i].size - 1);
+ 
+-		e820_print_type(e820_table->entries[i].type);
+-		pr_cont("\n");
++		pr_info("%s\n", e820_type_to_string(e820_table->entries[i].type));
+ 	}
+ }
+ 
+@@ -473,10 +472,8 @@ __e820__range_update(struct e820_table *table, u64 start, u64 size, enum e820_ty
+ 
+ 	end = start + size;
+ 	printk(KERN_DEBUG "e820: update [mem %#010Lx-%#010Lx] ", start, end - 1);
+-	e820_print_type(old_type);
+-	pr_cont(" ==> ");
+-	e820_print_type(new_type);
+-	pr_cont("\n");
++	pr_info("%s ==> %s\n", e820_type_to_string(old_type),
++		e820_type_to_string(new_type));
+ 
+ 	for (i = 0; i < table->nr_entries; i++) {
+ 		struct e820_entry *entry = &table->entries[i];
+@@ -550,7 +547,7 @@ u64 __init e820__range_remove(u64 start, u64 size, enum e820_type old_type, bool
+ 	end = start + size;
+ 	printk(KERN_DEBUG "e820: remove [mem %#010Lx-%#010Lx] ", start, end - 1);
+ 	if (check_type)
+-		e820_print_type(old_type);
++		pr_info("%s", e820_type_to_string(old_type));
+ 	pr_cont("\n");
+ 
+ 	for (i = 0; i < e820_table->nr_entries; i++) {
+@@ -1071,22 +1068,6 @@ void __init e820__finish_early_params(void)
+ 	}
+ }
+ 
+-static const char *__init e820_type_to_string(struct e820_entry *entry)
+-{
+-	switch (entry->type) {
+-	case E820_TYPE_RESERVED_KERN:	/* Fall-through: */
+-	case E820_TYPE_RAM:		return "System RAM";
+-	case E820_TYPE_ACPI:		return "ACPI Tables";
+-	case E820_TYPE_NVS:		return "ACPI Non-volatile Storage";
+-	case E820_TYPE_UNUSABLE:	return "Unusable memory";
+-	case E820_TYPE_PRAM:		return "Persistent Memory (legacy)";
+-	case E820_TYPE_PMEM:		return "Persistent Memory";
+-	case E820_TYPE_RESERVED:	return "Reserved";
+-	case E820_TYPE_SOFT_RESERVED:	return "Soft Reserved";
+-	default:			return "Unknown E820 type";
+-	}
+-}
 -
--=09=09gpio =3D <&msmgpio 76 GPIO_ACTIVE_HIGH>;
--=09=09enable-active-high;
--
--=09=09pinctrl-names =3D "default";
--=09=09pinctrl-0 =3D <&motor_en_default>;
--=09};
--
- =09reg_touch_key: regulator-touch-key {
- =09=09compatible =3D "regulator-fixed";
- =09=09regulator-name =3D "touch_key";
-@@ -61,20 +48,17 @@ &blsp_i2c2 {
- =09/delete-node/ magnetometer@12;
- };
-=20
-+&reg_motor_vdd {
-+=09regulator-min-microvolt =3D <3300000>;
-+=09regulator-max-microvolt =3D <3300000>;
-+};
-+
- &touchkey {
- =09vcc-supply =3D <&reg_touch_key>;
- =09vdd-supply =3D <&reg_touch_key>;
- };
-=20
- &msmgpio {
--=09motor_en_default: motor-en-default {
--=09=09pins =3D "gpio76";
--=09=09function =3D "gpio";
--
--=09=09drive-strength =3D <2>;
--=09=09bias-disable;
--=09};
--
- =09tkey_en_default: tkey-en-default {
- =09=09pins =3D "gpio97";
- =09=09function =3D "gpio";
---=20
-2.30.2
-
+ static unsigned long __init e820_type_to_iomem_type(struct e820_entry *entry)
+ {
+ 	switch (entry->type) {
+@@ -1174,7 +1155,7 @@ void __init e820__reserve_resources(void)
+ 		}
+ 		res->start = entry->addr;
+ 		res->end   = end;
+-		res->name  = e820_type_to_string(entry);
++		res->name  = e820_type_to_string(entry->type);
+ 		res->flags = e820_type_to_iomem_type(entry);
+ 		res->desc  = e820_type_to_iores_desc(entry);
+ 
+@@ -1194,7 +1175,8 @@ void __init e820__reserve_resources(void)
+ 	for (i = 0; i < e820_table_firmware->nr_entries; i++) {
+ 		struct e820_entry *entry = e820_table_firmware->entries + i;
+ 
+-		firmware_map_add_early(entry->addr, entry->addr + entry->size, e820_type_to_string(entry));
++		firmware_map_add_early(entry->addr,
++			entry->addr + entry->size, e820_type_to_string(entry->type));
+ 	}
+ }
+ 
+-- 
+2.25.1
 
