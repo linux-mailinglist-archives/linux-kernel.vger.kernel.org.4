@@ -2,96 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E7C1606744
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 19:47:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B507606754
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 19:54:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230053AbiJTRrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 13:47:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55308 "EHLO
+        id S229980AbiJTRx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 13:53:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbiJTRrq (ORCPT
+        with ESMTP id S229484AbiJTRxy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 13:47:46 -0400
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0026F1A2E03;
-        Thu, 20 Oct 2022 10:47:45 -0700 (PDT)
-Received: by mail-pl1-f178.google.com with SMTP id p6so11656plr.7;
-        Thu, 20 Oct 2022 10:47:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ubHPEpEE91JnOIoaIT4hlW8hHg5fJdATVwQ91Dm4tLg=;
-        b=kTZU6DLluc4VRliEjybd9kxI82JOzCr3S8KNfyDVplsHKul1YDMY1hgK0ONRFXCL6c
-         RgMS9BbOuQZqm8+HNgVJ1eZwMfNBXZaFu1lCtcWcV3V0ju2cdnHtFsylyIeYVWxkYUoA
-         sSRRKYA3RaWrFuoB3hmUoi7v2RGSy06cYJi19lOLcv947trBm3/OKs0moHE/gzR57g/Y
-         9GtUzBw1CNcUZ5mBVAI4J2Ip3XEuiuT+BQ60KOSht3VcaDXXwkxR4ObdzEH1kEsAiw0V
-         Ck7gnrEjlUfrWKOI5w9irw26eeXIXl7OLW4FHEf6wA1A69L1wSeespk4Uj2WQuJvmkCW
-         jFKA==
-X-Gm-Message-State: ACrzQf3VqGrERZ6YhD1P7V3/HpSs3rxFsEFvNhRYlVqmM1uWrlLmvES2
-        fGKBgCsxJ6YxAR6+mlDf0Hw=
-X-Google-Smtp-Source: AMsMyM4zjYZrPLmloYRRsvabfTKbMbsj/5xF8KNUlV7+rK/24XNFdd7JuzIEglrWrPIF83vIuGj38Q==
-X-Received: by 2002:a17:902:6945:b0:17b:f38b:900f with SMTP id k5-20020a170902694500b0017bf38b900fmr15091774plt.85.1666288065168;
-        Thu, 20 Oct 2022 10:47:45 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:e10c:786f:1f97:68bc? ([2620:15c:211:201:e10c:786f:1f97:68bc])
-        by smtp.gmail.com with ESMTPSA id e10-20020a17090301ca00b00177f4ef7970sm13496362plh.11.2022.10.20.10.47.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Oct 2022 10:47:44 -0700 (PDT)
-Message-ID: <828a4157-09c3-3fc5-175e-b4da508a35d0@acm.org>
-Date:   Thu, 20 Oct 2022 10:47:41 -0700
+        Thu, 20 Oct 2022 13:53:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D2B31E7446;
+        Thu, 20 Oct 2022 10:53:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 38BC761B4B;
+        Thu, 20 Oct 2022 17:53:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ADCCC433D6;
+        Thu, 20 Oct 2022 17:53:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666288432;
+        bh=ENyBHTU+PlCOFSNauBVolLBO7eB6Z+yD7cAHq5oAFfc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=itsqb22tDrJn/TaivCWnwHoR/9a1Q/K3QjttRaDQ6N0wPGbj3sGv4KhTbdN4/5Nxy
+         qe9lpYkzAHrw8iXhNx+gUH/eJBvgfpinLFdJht+aIV7B43iS5L474MXiI9lVQER+YZ
+         YTk7aj6vm6U8rTbfb7xKZUYPy+pGcWR7F8pJu2zwTF87vqlR9Ehr4jsb3uNftkF6wX
+         W433vYi8ytZV2h2vgJcXNFub79eBqffDd5s+X9Ii4M3CXEkxnezmYYWH1bZSoXfnhK
+         /DRZwynNDXEwrQwvO3QTUtZeYnREpKChG+YqGe2lhRXJ0yI7Xzeaa98a9j5d59l671
+         vlXEDoBoA2chA==
+Date:   Thu, 20 Oct 2022 10:53:50 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     "Li, Xin3" <xin3.li@intel.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "H.Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>
+Subject: Re: upgrade the orphan section warning to a hard link error
+Message-ID: <Y1GLLnYsEC8lYTdp@dev-arch.thelio-3990X>
+References: <BN6PR1101MB216105D169D482FC8C539059A8269@BN6PR1101MB2161.namprd11.prod.outlook.com>
+ <Y02eZ6A/vlj8+B/c@dev-arch.thelio-3990X>
+ <202210171230.CC40461C@keescook>
+ <Y02zWFxC92VDSpdZ@dev-arch.thelio-3990X>
+ <BN6PR1101MB216126260E3A9AFEE3F9CFB8A82A9@BN6PR1101MB2161.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH] ufs: core: Disable auto h8 before ssu
-Content-Language: en-US
-To:     =?UTF-8?B?6auY5Lil5Yev?= <gaoyankaigeren@gmail.com>,
-        Bean Huo <huobean@gmail.com>
-Cc:     Avri Altman <Avri.Altman@wdc.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20221011021653.27277-1-gaoyankaigeren@gmail.com>
- <DM6PR04MB6575AE77585D584652179089FC239@DM6PR04MB6575.namprd04.prod.outlook.com>
- <CAFN68yVajOkV++gCp-y1+SD5VOKLgUeBhfgskrJZOX5dfGi07A@mail.gmail.com>
- <bee1807b7d072b221c44ac8c2ed8064939d33696.camel@gmail.com>
- <CAFN68yVdwrECaDvNuok_4V-54UZUJU9+dn5icaiPdj6BXEZuVA@mail.gmail.com>
- <8678f69aa94003b357c4c8ef42cd6ce5c7487f8d.camel@gmail.com>
- <CAFN68yUKXquOLqL_6oBRjfDGDT=NgQPF3cpo7bkHyJ1gNTDbZA@mail.gmail.com>
- <CAFN68yVLdwrJBivqjGfGd7qiGp_h8FwucBLvSH97wNiyik4nQw@mail.gmail.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <CAFN68yVLdwrJBivqjGfGd7qiGp_h8FwucBLvSH97wNiyik4nQw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BN6PR1101MB216126260E3A9AFEE3F9CFB8A82A9@BN6PR1101MB2161.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/19/22 22:15, 高严凯 wrote:
-> Do you agree this patch? I'd like to hear your opinion about this.
+On Thu, Oct 20, 2022 at 05:17:35AM +0000, Li, Xin3 wrote:
+> Hi Nathan,
+> 
+> > On Mon, Oct 17, 2022 at 12:32:39PM -0700, Kees Cook wrote:
+> > > On Mon, Oct 17, 2022 at 11:26:47AM -0700, Nathan Chancellor wrote:
+> > > > It might be interesting to turn orphan sections into an error if
+> > > > CONFIG_WERROR is set. Perhaps something like the following (FYI, not
+> > > > even compile tested)?
+> > > >
+> > > > diff --git a/Makefile b/Makefile
+> > > > index 0837445110fc..485f47fc2c07 100644
+> > > > --- a/Makefile
+> > > > +++ b/Makefile
+> > > > @@ -1119,7 +1119,7 @@ endif
+> > > >  # We never want expected sections to be placed heuristically by the
+> > > > # linker. All sections should be explicitly named in the linker script.
+> > > >  ifdef CONFIG_LD_ORPHAN_WARN
+> > > > -LDFLAGS_vmlinux += --orphan-handling=warn
+> > > > +LDFLAGS_vmlinux += --orphan-handling=$(if
+> > > > +$(CONFIG_WERROR),error,warn)
+> > > >  endif
+> > >
+> > > Yes, this is much preferred.
+> > >
+> > > > Outright turning the warning into an error with no escape hatch
+> > > > might be too aggressive, as we have had these warnings triggered by
+> > > > new compiler generated sections, such as in commit 848378812e40
+> > ("vmlinux.lds.h:
+> > > > Handle clang's module.{c,d}tor sections"). Unconditionally breaking
+> > > > the build in these situations is unfortunate but the warnings do
+> > > > need to be dealt with so I think having it error by default with the
+> > > > ability to opt-out is probably worth doing. I do not have a strong opinion
+> > though.
+> > >
+> > > Correct; the mandate from Linus (disregarding his addition of
+> > > CONFIG_WERROR for all*config builds), is that we should avoid breaking
+> > > builds. It wrecks bisection, it causes problems across compiler
+> > > versions, etc.
+> > >
+> > > So, yes, only on CONFIG_WERROR=y.
+> > 
+> > We would probably want to alter the text of CONFIG_WERROR in some manner
+> > to convey this, perhaps like so:
+> > 
+> > diff --git a/init/Kconfig b/init/Kconfig index a19314933e54..1fc03e4b2af2
+> > 100644
+> > --- a/init/Kconfig
+> > +++ b/init/Kconfig
+> > @@ -165,10 +165,12 @@ config WERROR
+> >  	help
+> >  	  A kernel build should not cause any compiler warnings, and this
+> >  	  enables the '-Werror' (for C) and '-Dwarnings' (for Rust) flags
+> > -	  to enforce that rule by default.
+> > +	  to enforce that rule by default. Certain warnings from other tools
+> > +	  such as the linker may be upgraded to errors with this option as
+> > +	  well.
+> > 
+> > -	  However, if you have a new (or very old) compiler with odd and
+> > -	  unusual warnings, or you have some architecture with problems,
+> > +	  However, if you have a new (or very old) compiler or linker with odd
+> > +	  and unusual warnings, or you have some architecture with problems,
+> >  	  you may need to disable this config option in order to
+> >  	  successfully build the kernel.
+> 
+> Thanks a lot for making this crystal clear.
+> 
+> Do you want me to continue?  Or maybe it's easier for you to complete it?
 
-Hi,
+Sure, I think it is reasonable for you to continue with this as you
+brought up the idea initially! Feel free to just take those diffs
+wholesale if they work and stick a
 
-On Linux kernel mailing lists it is expected that replies are posted 
-below the original email instead of above. Please follow this 
-convention. More information is available at 
-https://en.wikipedia.org/wiki/Posting_style#Bottom-posting.
+    Suggested-by: Nathan Chancellor <nathan@kernel.org>
 
-Please also do the following:
-* Fix the issues reported by the kernel test robot.
-* Follow the recommendations from Avri and Bean.
+or
 
-Thanks,
+    Co-developed-by: Nathan Chancellor <nathan@kernel.org>
+    Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-Bart.
+on the patch if you are so inclined or rework them in a way you see fit,
+I do not have a strong opinion.
 
+> I will need to find resources to test the patch on other platforms besides x86.
+
+In theory, we should have already cleaned up all these warnings when we
+enabled CONFIG_LD_ORPHAN_WARN for all these architectures, so that
+change should be a no-op. More testing is never a bad idea though :)
+
+I can throw it into my LLVM testing matrix as well.
+
+Cheers,
+Nathan
