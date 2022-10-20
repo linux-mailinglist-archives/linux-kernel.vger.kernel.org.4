@@ -2,141 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 336F9606903
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 21:37:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A642606905
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 21:39:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229894AbiJTThX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 15:37:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58052 "EHLO
+        id S230009AbiJTTiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 15:38:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbiJTThT (ORCPT
+        with ESMTP id S229449AbiJTTit (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 15:37:19 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB8E31BF224;
-        Thu, 20 Oct 2022 12:37:18 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 6A2B11884C9D;
-        Thu, 20 Oct 2022 19:37:17 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 4A5F225001FA;
-        Thu, 20 Oct 2022 19:37:17 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id 4377E9EC0002; Thu, 20 Oct 2022 19:37:17 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Thu, 20 Oct 2022 15:38:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A32821CCCD0
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 12:38:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666294727;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=85S5u2Kj0kLXjbV1eC6tH45ETLd1PtrOIvBagjXXKHg=;
+        b=S5HLCpSBNiaaaxrQJTygDSkRq86ZdlTGSULHsqZJOzHhwWlwyJBxTcGbT8PrSJlFlY6C+M
+        dsA+RCXHSmthCTCIG4CfyJ4tNsYtDJsgDiS3iHq7ljutUBSBO5CBJ0eBzHRBeSxPCtihbU
+        Zd4yvoxnKmCVHFivQSNkTbjGOnuyjeI=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-81-gtH7siwZOdqJrykh_T2NGw-1; Thu, 20 Oct 2022 15:38:46 -0400
+X-MC-Unique: gtH7siwZOdqJrykh_T2NGw-1
+Received: by mail-qt1-f198.google.com with SMTP id u11-20020a05622a198b00b0039cca1826c8so354020qtc.11
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 12:38:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=85S5u2Kj0kLXjbV1eC6tH45ETLd1PtrOIvBagjXXKHg=;
+        b=itYGGt1sbLsGGDQb7pPfBLtDC7YyYbGkOmZJkGC5KfdAX0JIYDDw9nntWOHsQgs2Eq
+         4WfQWFaMjN1dHzGizsNqthlhASi8J9US+eQUTHcZYUrPpv2WEJ8t5oAst5FP7cVwcMBW
+         F1H4A3KL5ITz4g5uEgaC0Qsq5zKyZ0eFHaulIQNhE+GwjkZNuqbWNV7Xf2FIx6ajDP+y
+         Vl9igrdbgcNRPK62q4ZJnk8DZ+E+pUWD5tQrxoBr88/UzJXCoKyszr451Zjs0G8/BMF0
+         Zi8adYF/4bNrggwZYsOjsxlCV3V0Op7o5r6vNo/AbMANqsv4MdRyTW+eaeso2X5mLnMi
+         AEyQ==
+X-Gm-Message-State: ACrzQf09XPbwcBN4plVQNb2NqZiVaeGm/6aO7d5qj2y5DNCOcWtTLoFI
+        Bd1nvYP2Bhh9goAAmzuoB6WQj4XQ++ywgRC6N1c+yK8elTdJg8ScolEfPmmNeSroKD0nzHyOnqO
+        9Hr6QFyOwhy+RZk6AzjAnPEnW6NoxDynFVg6Xc9rmr/9ZYBftZPsws3ri6YGl2rmZOYTNPL1jbQ
+        ==
+X-Received: by 2002:ac8:5b15:0:b0:39c:d63a:d82 with SMTP id m21-20020ac85b15000000b0039cd63a0d82mr12737545qtw.8.1666294725627;
+        Thu, 20 Oct 2022 12:38:45 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5+lZIN+opAk1J1sWYCJQufRZwqLE9h0Kf49Du8fY7l1ltie0di6XohikrUIV3lzIMrn1ey0A==
+X-Received: by 2002:a05:622a:1312:b0:39c:fbd3:6dbf with SMTP id v18-20020a05622a131200b0039cfbd36dbfmr9453063qtk.335.1666294714733;
+        Thu, 20 Oct 2022 12:38:34 -0700 (PDT)
+Received: from x1n.redhat.com (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
+        by smtp.gmail.com with ESMTPSA id y13-20020a05620a25cd00b006bbf85cad0fsm8074982qko.20.2022.10.20.12.38.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Oct 2022 12:38:34 -0700 (PDT)
+From:   Peter Xu <peterx@redhat.com>
+To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Muchun Song <songmuchun@bytedance.com>, peterx@redhat.com,
+        Mike Kravetz <mike.kravetz@oracle.com>
+Subject: [PATCH] mm/hugetlb: Unify clearing of RestoreReserve for private pages
+Date:   Thu, 20 Oct 2022 15:38:32 -0400
+Message-Id: <20221020193832.776173-1-peterx@redhat.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Date:   Thu, 20 Oct 2022 21:37:17 +0200
-From:   netdev@kapio-technology.com
-To:     Ido Schimmel <idosch@nvidia.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Florent Fourcot <florent.fourcot@wifirst.fr>,
-        Hans Schultz <schultz.hans@gmail.com>,
-        Joachim Wiberg <troglobit@gmail.com>,
-        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v8 net-next 01/12] net: bridge: add locked entry fdb flag
- to extend locked port feature
-In-Reply-To: <Y1FE6WFnsH8hcFY2@shredder>
-References: <20221018165619.134535-1-netdev@kapio-technology.com>
- <20221018165619.134535-2-netdev@kapio-technology.com>
- <Y1FE6WFnsH8hcFY2@shredder>
-User-Agent: Gigahost Webmail
-Message-ID: <1c71e62ee5d6c0a7fc54d3e666aca619@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-20 14:54, Ido Schimmel wrote:
-> On Tue, Oct 18, 2022 at 06:56:08PM +0200, Hans J. Schultz wrote:
->> Add an intermediate state for clients behind a locked port to allow 
->> for
->> possible opening of the port for said clients. The clients mac address
->> will be added with the locked flag set, denying access through the 
->> port
-> 
-> The entry itself is not denying the access through the port, but
-> rather the fact that the port is locked and there is no matching FDB
-> entry.
-> 
->> for the mac address, but also creating a new FDB add event giving
->> userspace daemons the ability to unlock the mac address. This feature
->> corresponds to the Mac-Auth and MAC Authentication Bypass (MAB) named
->> features. The latter defined by Cisco.
-> 
-> Worth mentioning that the feature is enabled via the 'mab' bridge port
-> option (BR_PORT_MAB).
-> 
->> 
->> Only the kernel can set this FDB entry flag, while userspace can read
->> the flag and remove it by replacing or deleting the FDB entry.
->> 
->> Locked entries will age out with the set bridge ageing time.
->> 
->> Signed-off-by: Hans J. Schultz <netdev@kapio-technology.com>
-> 
-> Overall looks OK to me. See one comment below.
-> 
-> Reviewed-by: Ido Schimmel <idosch@nvidia.com>
-> 
-> [...]
-> 
->> @@ -1178,6 +1192,14 @@ int br_fdb_add(struct ndmsg *ndm, struct nlattr 
->> *tb[],
->>  		vg = nbp_vlan_group(p);
->>  	}
->> 
->> +	if (tb[NDA_FLAGS_EXT])
->> +		ext_flags = nla_get_u32(tb[NDA_FLAGS_EXT]);
->> +
->> +	if (ext_flags & NTF_EXT_LOCKED) {
->> +		pr_info("bridge: RTM_NEWNEIGH has invalid extended flags\n");
-> 
-> I understand this function makes use of pr_info(), but it already gets
-> extack and it's a matter of time until the pr_info() instances will be
-> converted to extack. I would just use extack here like you are doing in
-> the next patch.
-> 
-> Also, I find this message more helpful:
-> 
-> "Cannot add FDB entry with \"locked\" flag set"
-> 
+A trivial cleanup to move clearing of RestoreReserve into adding anon rmap
+of private hugetlb mappings.  It matches with the shared mappings where we
+only clear the bit when adding into page cache, rather than spreading it
+around the code paths.
 
-Okay, since Jakub says that this patch set must be resent, the question 
-remains
-to me if I shall make these changes and resend the patch set as v8?
+Cc: Mike Kravetz <mike.kravetz@oracle.com>
+Signed-off-by: Peter Xu <peterx@redhat.com>
+---
+ mm/hugetlb.c | 14 ++++----------
+ mm/rmap.c    |  2 +-
+ 2 files changed, 5 insertions(+), 11 deletions(-)
+
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index 1a7dc7b2e16c..931789a8f734 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -4784,7 +4784,6 @@ hugetlb_install_page(struct vm_area_struct *vma, pte_t *ptep, unsigned long addr
+ 	hugepage_add_new_anon_rmap(new_page, vma, addr);
+ 	set_huge_pte_at(vma->vm_mm, addr, ptep, make_huge_pte(vma, new_page, 1));
+ 	hugetlb_count_add(pages_per_huge_page(hstate_vma(vma)), vma->vm_mm);
+-	ClearHPageRestoreReserve(new_page);
+ 	SetHPageMigratable(new_page);
+ }
+ 
+@@ -5447,8 +5446,6 @@ static vm_fault_t hugetlb_wp(struct mm_struct *mm, struct vm_area_struct *vma,
+ 	spin_lock(ptl);
+ 	ptep = huge_pte_offset(mm, haddr, huge_page_size(h));
+ 	if (likely(ptep && pte_same(huge_ptep_get(ptep), pte))) {
+-		ClearHPageRestoreReserve(new_page);
+-
+ 		/* Break COW or unshare */
+ 		huge_ptep_clear_flush(vma, haddr, ptep);
+ 		mmu_notifier_invalidate_range(mm, range.start, range.end);
+@@ -5743,10 +5740,9 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
+ 	if (!pte_same(huge_ptep_get(ptep), old_pte))
+ 		goto backout;
+ 
+-	if (anon_rmap) {
+-		ClearHPageRestoreReserve(page);
++	if (anon_rmap)
+ 		hugepage_add_new_anon_rmap(page, vma, haddr);
+-	} else
++	else
+ 		page_dup_file_rmap(page, true);
+ 	new_pte = make_huge_pte(vma, page, ((vma->vm_flags & VM_WRITE)
+ 				&& (vma->vm_flags & VM_SHARED)));
+@@ -6133,12 +6129,10 @@ int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
+ 	if (!huge_pte_none_mostly(huge_ptep_get(dst_pte)))
+ 		goto out_release_unlock;
+ 
+-	if (page_in_pagecache) {
++	if (page_in_pagecache)
+ 		page_dup_file_rmap(page, true);
+-	} else {
+-		ClearHPageRestoreReserve(page);
++	else
+ 		hugepage_add_new_anon_rmap(page, dst_vma, dst_addr);
+-	}
+ 
+ 	/*
+ 	 * For either: (1) CONTINUE on a non-shared VMA, or (2) UFFDIO_COPY
+diff --git a/mm/rmap.c b/mm/rmap.c
+index 9bba65b30e4d..3b2d18bbdc44 100644
+--- a/mm/rmap.c
++++ b/mm/rmap.c
+@@ -2571,7 +2571,7 @@ void hugepage_add_new_anon_rmap(struct page *page,
+ 	BUG_ON(address < vma->vm_start || address >= vma->vm_end);
+ 	atomic_set(compound_mapcount_ptr(page), 0);
+ 	atomic_set(compound_pincount_ptr(page), 0);
+-
++	ClearHPageRestoreReserve(page);
+ 	__page_set_anon_rmap(page, vma, address, 1);
+ }
+ #endif /* CONFIG_HUGETLB_PAGE */
+-- 
+2.37.3
 
