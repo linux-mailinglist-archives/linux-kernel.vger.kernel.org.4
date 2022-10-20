@@ -2,73 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 250F26054DE
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 03:17:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21B6D605507
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 03:32:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230023AbiJTBRr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 21:17:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44522 "EHLO
+        id S231294AbiJTBb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 21:31:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230133AbiJTBRX (ORCPT
+        with ESMTP id S231435AbiJTBbs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 21:17:23 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0B8614D8CA
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 18:16:54 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id e15so16041990iof.2
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 18:16:54 -0700 (PDT)
+        Wed, 19 Oct 2022 21:31:48 -0400
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3AF61AC1E4;
+        Wed, 19 Oct 2022 18:31:08 -0700 (PDT)
+Received: by mail-oi1-x235.google.com with SMTP id j188so21276877oih.4;
+        Wed, 19 Oct 2022 18:31:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JnQOI3JWp7SXWPSReamQB4RFtAu5Vv0pd/V8+uGydZk=;
-        b=ZgEgsh5n9ts2p8p1nciPXMTf4Z0plZE3ifLKT2Dgyeeg/JgxCRc2DkMp5a/Rg0THNX
-         LH1fPTmVU7yS/+Hc8KKUr//ABfSbWbBd+yeYDZY1PQTl2SVCzpPgQag9IDuMuAsnQjQ6
-         CbczFBrKPPHZi9GtpNtQ1MQM8GqtX8OFNgUqg=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=RJO+SrFx8b82JC/t8YfOKfOIRkKpUnK8IXg5Ia+QCu4=;
+        b=Ewl56HdxecrV5goNLmTNhw+GD0PPcgoLRLGdLCZsDOFBMqgELBsczmNEZcHYZwiBHo
+         OZImzR13Z4S8IEhBcjCTxguiPhWn3W3JSa0m5fQ8Mz4nYNszNSfGIAQNMUKgCxqiSmE8
+         6VqyaFIIahs1NZ7uXSm7SXN04UE7Qqj7KoIjkM+wmHjpo2peWwtnOpLxMUvWdPRRjjWz
+         GguI93fAap4Uk6geXpMSsJBTVFO/ARauMDOx0buujbw2T2qUTu94Pidro3sQK96W0Crc
+         FolL+HOHg1gzZ12s9yOXuBmv6JUKg7AgauTCInoZHOz0aChKEjqp5PasTAvD9JClcaGB
+         K4lA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JnQOI3JWp7SXWPSReamQB4RFtAu5Vv0pd/V8+uGydZk=;
-        b=uZR1tndHFkjE55kWac/oBcxFE8qUuoZbPetdn3negs7I2TzgXttzRLO2+BjJDxfBTg
-         mzweGT/NcvFHVH7Ynlev1rP74VOlKTiRrEMLiteaTWPJ8MEBEj19x3YpTuZ/gCkfeerp
-         dLYizJ8+D3Y/gHSoGoV5FpLCby0mpV6PhoYWzsB3nWEw/fBNssM/AP1iYhaPOMqaDFTr
-         dTnf+EIRT3ZF1D9OZO2Ei5xvSVZO6bfEO23WxqNvfT51157yofWVmL1RcvifiX6S/7Lj
-         nSh6KLLmS1XX6R91BItQeW8AQJc40kaZMAvlTYWUyf9bVqdVOOdhy4D6YECD1bWzYiuE
-         9M4A==
-X-Gm-Message-State: ACrzQf3uuoB5lcXNvYLTHqc1CnXuPeorlUU7YRfnWyEJ0oGMoSOq07cT
-        mQfbTUCrgHFx3EJ0VdrzcRpuLkx4EBZlvQ==
-X-Google-Smtp-Source: AMsMyM7PPUqXOhP+/7iEm6ku5ltSODVSKIvdLD9C7jIH1S5SazSNLfCWqu/1vctVkcqlgNdvhGJKog==
-X-Received: by 2002:a05:6638:3c49:b0:363:c8dc:fb2f with SMTP id bg9-20020a0566383c4900b00363c8dcfb2fmr8598426jab.119.1666228594069;
-        Wed, 19 Oct 2022 18:16:34 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id x3-20020a029703000000b0035ad8fd5ce9sm2703864jai.147.2022.10.19.18.16.32
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RJO+SrFx8b82JC/t8YfOKfOIRkKpUnK8IXg5Ia+QCu4=;
+        b=TGjnG2MlXeRWDDI4Raj+MBvyDByouYYG5VIsbgiolDWtB28Wy4neBzif3WNd3Ft9tj
+         aih8iBeR5rrn7vq4aa+q4E+1Xx8y7ot75Dxb24iAwQya4D1qpWAGldVuxwNETjgVhquu
+         ozB0JsvSnN59wfwfUMXW4PR/+NTBDg+5nYv/pjXmapBkJQ3QS66Kw/AyKbedugat92IY
+         SQ9cmVzb7W7r64oFMHUkA6k02y2dY0KFtLCTV0r90eghvxKfsdhVtXOL0xOBOyOTF4c5
+         vf7AMUVYQgvC0n8Teb+2POj4YS2mR7BvUfcbXZdQDPV+fxTVj5qwxYR+5CvBRpa5m/+M
+         iQ+w==
+X-Gm-Message-State: ACrzQf1QgBOb0NM1XqfzZBbJJgdXEJZK1SvWuTGIFBEw5nfJqeY2IlRR
+        o2CLUu05eDoUeQsclKnCBFXDNYs5oT4=
+X-Google-Smtp-Source: AMsMyM7hFeQMBAUH756PTYS2NRHkZq9yDIbQ5P/FNAuhHwiEH5Ej0tGLEpqZXgspuurQmt2W/LSGJA==
+X-Received: by 2002:a05:6870:73cc:b0:13a:e524:6438 with SMTP id a12-20020a05687073cc00b0013ae5246438mr1588846oan.120.1666228812403;
+        Wed, 19 Oct 2022 18:20:12 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id a130-20020acab188000000b00354978180d8sm7310422oif.22.2022.10.19.18.20.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Oct 2022 18:16:32 -0700 (PDT)
-Message-ID: <bf250f10-fecf-7d42-e308-e817ee7a6a3a@linuxfoundation.org>
-Date:   Wed, 19 Oct 2022 19:16:31 -0600
+        Wed, 19 Oct 2022 18:20:10 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <af9c4bfd-d3fb-1c7a-fb38-0d8bbd507449@roeck-us.net>
+Date:   Wed, 19 Oct 2022 18:20:08 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.2
-Subject: Re: Linux 6.1-rc1 drm/amdgpu regression
-To:     "Deucher, Alexander" <Alexander.Deucher@amd.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <efe5a0a4-775e-bc6b-27c2-aa506f5613fa@linuxfoundation.org>
- <BL1PR12MB514408C626FE2D056C293693F72B9@BL1PR12MB5144.namprd12.prod.outlook.com>
- <07c574f3-f523-a677-3597-aad4d5546869@linuxfoundation.org>
- <BL1PR12MB5144DF4E69621E99F99F1DA3F72B9@BL1PR12MB5144.namprd12.prod.outlook.com>
+Subject: Re: [PATCH] firmware: coreboot: Register bus in module init
 Content-Language: en-US
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <BL1PR12MB5144DF4E69621E99F99F1DA3F72B9@BL1PR12MB5144.namprd12.prod.outlook.com>
+To:     Brian Norris <briannorris@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Benson Leung <bleung@chromium.org>,
+        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Samuel Holland <samuel@sholland.org>,
+        Julius Werner <jwerner@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>, stable@vger.kernel.org
+References: <20221019180934.1.If29e167d8a4771b0bf4a39c89c6946ed764817b9@changeid>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20221019180934.1.If29e167d8a4771b0bf4a39c89c6946ed764817b9@changeid>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,85 +82,137 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/19/22 15:24, Deucher, Alexander wrote:
-> [Public]
+On 10/19/22 18:10, Brian Norris wrote:
+> The coreboot_table driver registers a coreboot bus while probing a
+> "coreboot_table" device representing the coreboot table memory region.
+> Probing this device (i.e., registering the bus) is a dependency for the
+> module_init() functions of any driver for this bus (e.g.,
+> memconsole-coreboot.c / memconsole_driver_init()).
 > 
->> -----Original Message-----
->> From: Shuah Khan <skhan@linuxfoundation.org>
->> Sent: Wednesday, October 19, 2022 5:00 PM
->> To: Deucher, Alexander <Alexander.Deucher@amd.com>
->> Cc: Linus Torvalds <torvalds@linux-foundation.org>; linux-
->> kernel@vger.kernel.org; Shuah Khan <skhan@linuxfoundation.org>
->> Subject: Re: Linux 6.1-rc1 drm/amdgpu regression
->>
->> On 10/19/22 14:27, Deucher, Alexander wrote:
->>> [AMD Official Use Only - General]
->>>
->>>> -----Original Message-----
->>>> From: Shuah Khan <skhan@linuxfoundation.org>
->>>> Sent: Wednesday, October 19, 2022 4:00 PM
->>>> To: Deucher, Alexander <Alexander.Deucher@amd.com>
->>>> Cc: Linus Torvalds <torvalds@linux-foundation.org>; Shuah Khan
->>>> <skhan@linuxfoundation.org>; linux-kernel@vger.kernel.org
->>>> Subject: Linux 6.1-rc1 drm/amdgpu regression
->>>>
->>>> Hi Alex,
->>>>
->>>> I am seeing the same problem I sent reverts for on 5.10.147 on Linux
->>>> 6.1-rc1 on my laptop with AMD Ryzen 7 PRO 5850U with Radeon Graphics.
->>>>
->>>> commit e3163bc8ffdfdb405e10530b140135b2ee487f89
->>>> Author: Alex Deucher <alexander.deucher@amd.com>
->>>> Date:   Fri Sep 9 11:53:27 2022 -0400
->>>>
->>>>        drm/amdgpu: move nbio sdma_doorbell_range() into sdma code for
->>>> vega
->>>>
->>>> I see that the following has been reverted in Linux 6.1-rc1
->>>>
->>>> commit 66f99628eb24409cb8feb5061f78283c8b65f820
->>>> Author: Hamza Mahfooz <hamza.mahfooz@amd.com>
->>>> Date:   Tue Sep 6 15:01:49 2022 -0400
->>>>
->>>>        drm/amdgpu: use dirty framebuffer helper
->>>>
->>>> However I still see the following filling dmesg and system is unusable.
->>>> For now I switched back to Linux 6.0 as this is my primary system.
->>>>
->>>> [drm] Fence fallback timer expired on ring sdma0 [drm] Fence fallback
->>>> timer expired on ring gfx [drm] Fence fallback timer expired on ring
->>>> sdma0 [drm] Fence fallback timer expired on ring gfx [drm] Fence
->>>> fallback timer expired on ring sdma0 [drm] Fence fallback timer
->>>> expired on ring sdma0 [drm] Fence fallback timer expired on ring
->>>> sdma0 [drm] Fence fallback timer expired on ring gfx
->>>>
->>>> Please let me know if I should send revert for this for the mainline as well.
->>>>
->>>
->>> Can you file a bug report
->> (https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgitl
->> ab.freedesktop.org%2Fdrm%2Famd%2F-
->> %2Fissues&amp;data=05%7C01%7CAlexander.Deucher%40amd.com%7C61b
->> 64b1be7294b27eb2308dab214dbe2%7C3dd8961fe4884e608e11a82d994e183d
->> %7C0%7C0%7C638018099904584274%7CUnknown%7CTWFpbGZsb3d8eyJWIj
->> oiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3
->> 000%7C%7C%7C&amp;sdata=ZYA0bWZAGsxB91Bqcg1YAI704LhpISQX63bE67
->> UVO%2Bs%3D&amp;reserved=0) and attach your dmesg output?  I'd like to
->> try and repro the issue if I can and provide some patches to test.  I'd like to
->> avoid reverting the patch as that will break the driver for users using vega
->> dGPUs.
->>
->> Makes sense. I will file the bug and aattach dmesg. Since this is my primary
->> system, there will be some delay in getting this info. to you and testing any
->> patches you provide for testing.
->>
+> With synchronous probe, this dependency works OK, as the link order in
+> the Makefile ensures coreboot_table_driver_init() (and thus,
+> coreboot_table_probe()) completes before a coreboot device driver tries
+> to add itself to the bus.
 > 
-> Actually I think I see what's wrong.  Can you try the attached patch?
+> With asynchronous probe, however, coreboot_table_probe() may race with
+> memconsole_driver_init(), and so we're liable to hit one of these two:
+> 
+> 1. coreboot_driver_register() eventually hits "[...] the bus was not
+>     initialized.", and the memconsole driver fails to register; or
+> 2. coreboot_driver_register() gets past #1, but still races with
+>     bus_register() and hits some other undefined/crashing behavior (e.g.,
+>     in driver_find() [1])
+> 
+> We can resolve this by registering the bus in our initcall, and only
+> deferring "device" work (scanning the coreboot memory region and
+> creating sub-devices) to probe().
+> 
+> [1] Example failure, using 'driver_async_probe=*' kernel command line:
+> 
+> [    0.114217] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000010
+> ...
+> [    0.114307] CPU: 1 PID: 1 Comm: swapper/0 Not tainted 6.1.0-rc1 #63
+> [    0.114316] Hardware name: Google Scarlet (DT)
+> ...
+> [    0.114488] Call trace:
+> [    0.114494]  _raw_spin_lock+0x34/0x60
+> [    0.114502]  kset_find_obj+0x28/0x84
+> [    0.114511]  driver_find+0x30/0x50
+> [    0.114520]  driver_register+0x64/0x10c
+> [    0.114528]  coreboot_driver_register+0x30/0x3c
+> [    0.114540]  memconsole_driver_init+0x24/0x30
+> [    0.114550]  do_one_initcall+0x154/0x2e0
+> [    0.114560]  do_initcall_level+0x134/0x160
+> [    0.114571]  do_initcalls+0x60/0xa0
+> [    0.114579]  do_basic_setup+0x28/0x34
+> [    0.114588]  kernel_init_freeable+0xf8/0x150
+> [    0.114596]  kernel_init+0x2c/0x12c
+> [    0.114607]  ret_from_fork+0x10/0x20
+> [    0.114624] Code: 5280002b 1100054a b900092a f9800011 (885ffc01)
+> [    0.114631] ---[ end trace 0000000000000000 ]---
+> 
+> Fixes: b81e3140e412 ("firmware: coreboot: Make bus registration symmetric")
+> Cc: <stable@vger.kernel.org>
+> Signed-off-by: Brian Norris <briannorris@chromium.org>
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+> ---
+> Currently, get_maintainers.pl tells me Greg should pick this up. But I
+> CC the chrome-platform list too, since it seems reasonable for Google
+> folks (probably ChromeOS folks are most active here?) to maintain
+> Google/Chrome drivers.
+> 
+> Let me know if y'all would like this official, and I'll push out a
+> MAINTAINERS patch.
 > 
 
-This patch worked. Clean boot without any warns and timer expiry messages
-from drm/amdgpu.
+I think that would be a good idea.
 
-thanks,
--- Shuah
+Guenter
+
+>   drivers/firmware/google/coreboot_table.c | 37 +++++++++++++++++++-----
+>   1 file changed, 29 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/firmware/google/coreboot_table.c b/drivers/firmware/google/coreboot_table.c
+> index c52bcaa9def6..9ca21feb9d45 100644
+> --- a/drivers/firmware/google/coreboot_table.c
+> +++ b/drivers/firmware/google/coreboot_table.c
+> @@ -149,12 +149,8 @@ static int coreboot_table_probe(struct platform_device *pdev)
+>   	if (!ptr)
+>   		return -ENOMEM;
+>   
+> -	ret = bus_register(&coreboot_bus_type);
+> -	if (!ret) {
+> -		ret = coreboot_table_populate(dev, ptr);
+> -		if (ret)
+> -			bus_unregister(&coreboot_bus_type);
+> -	}
+> +	ret = coreboot_table_populate(dev, ptr);
+> +
+>   	memunmap(ptr);
+>   
+>   	return ret;
+> @@ -169,7 +165,6 @@ static int __cb_dev_unregister(struct device *dev, void *dummy)
+>   static int coreboot_table_remove(struct platform_device *pdev)
+>   {
+>   	bus_for_each_dev(&coreboot_bus_type, NULL, NULL, __cb_dev_unregister);
+> -	bus_unregister(&coreboot_bus_type);
+>   	return 0;
+>   }
+>   
+> @@ -199,6 +194,32 @@ static struct platform_driver coreboot_table_driver = {
+>   		.of_match_table = of_match_ptr(coreboot_of_match),
+>   	},
+>   };
+> -module_platform_driver(coreboot_table_driver);
+> +
+> +static int __init coreboot_table_driver_init(void)
+> +{
+> +	int ret;
+> +
+> +	ret = bus_register(&coreboot_bus_type);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = platform_driver_register(&coreboot_table_driver);
+> +	if (ret) {
+> +		bus_unregister(&coreboot_bus_type);
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static void __exit coreboot_table_driver_exit(void)
+> +{
+> +	platform_driver_unregister(&coreboot_table_driver);
+> +	bus_unregister(&coreboot_bus_type);
+> +}
+> +
+> +module_init(coreboot_table_driver_init);
+> +module_exit(coreboot_table_driver_exit);
+> +
+>   MODULE_AUTHOR("Google, Inc.");
+>   MODULE_LICENSE("GPL");
 
