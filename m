@@ -2,125 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD0CE606BC8
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 00:57:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6629E606BC4
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 00:57:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229968AbiJTW5j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 18:57:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56900 "EHLO
+        id S229732AbiJTW52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 18:57:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229893AbiJTW5h (ORCPT
+        with ESMTP id S229876AbiJTW5Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 18:57:37 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4AEA22E0D4;
-        Thu, 20 Oct 2022 15:57:35 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id k2so3126022ejr.2;
-        Thu, 20 Oct 2022 15:57:35 -0700 (PDT)
+        Thu, 20 Oct 2022 18:57:25 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5898A22E0D4
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 15:57:23 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id p6so657245plr.7
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 15:57:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JuxcgTkIRC5WG6rM4q/CSaRgfUH0Ti3MoOBIFAp7H8s=;
-        b=XBJzFhduueKPu1ACZxmcj5cXRa0nb0p5dX8b6x8utN2F40sVgNnz2Vwo93T3WLnBcx
-         Yx3WwrvmN9Nuh/q4vOjOu0pqXnDTWqYB4KV9B3sCwZOf7c8OCwjoNM/D1TNvmc045ZzX
-         Poo3JVc6Gu+DF650q6sVaij7GSbGVXbKX5JW9xSnGo2M+EdB4pcsbE0152s/sylYv+Nc
-         ALPztrqDuyQF/Ci2P4snXxWjZKRtHnNH3GhbYR/zFvz6RX+vOKF1y9KazvTME97oRexc
-         94w80ZyNJO0Z5bBflaDs/V5ISm1JA/Dg+OYU7d/pyJvJYa/mJ0Vv6e7Q6YanX5FVgqB4
-         eYew==
+        bh=TMshH9biaVXQs7+fRI1qPbg8/Vmgf41zzdE8Ax9DFYA=;
+        b=UxXF8cbs/icsMsb/bPq8qttNDmiXRbLXaFp21el0sK2dq1lWLpxMZFArsRK0mkWhEU
+         yH4Std6R7RGYgzqSZ9NFNY44SR/8k2wJ6QyM+mBSFV9D+hNdowYlrtXHMJQwwC6UoW6B
+         hzj2LHb7fOguUuRiCYaSJ8vUl7YrNcGUVd+Us=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JuxcgTkIRC5WG6rM4q/CSaRgfUH0Ti3MoOBIFAp7H8s=;
-        b=4kUdMb+u2XRrHmLU+EuuqbCdyOLgAcdkFgOu3kjz+hT63LZn9HJN8JLgOG3m1fcFSs
-         ciwI27DxgE7r3MPhcJz+0geVtmW/fyvjfnjkrQVm58QLC3D2cWNLikxhCxe6ijJJwwGc
-         i4XoZtEffNkwbqSnazLDctBLW7pTyKVnAFUpfoGcPrH5pUqK/mpKJVIxzzVh4YwjB9C7
-         E69LIXrT6zmbMcTGInfAnsdIadX7Jpt63bdJLCvOzkyF0N37QwxGwzWnE/Xw8Vjis6xs
-         JCHveLz1vaXGEerP/VAldmnFM/xpr3YerlKqu4jOx7MKtnomlae6WrWIcDF6NOu/Nlnj
-         vm0w==
-X-Gm-Message-State: ACrzQf1Wqw1ZAfXF4phW1hSUJexp1pXGNAXHSk3DUKopWpm/KP2ag+s0
-        toc0VvqFAQ4dydTSKuplXm7zQW6khpPfOQ==
-X-Google-Smtp-Source: AMsMyM7/vnHFskrIzjNC7ybOEBIlorfKrTTq/Ou6mds57aeFaKcu+F9HahwfD0wuLF52vhDnh4xpcw==
-X-Received: by 2002:a17:906:58cc:b0:78d:ce9c:3787 with SMTP id e12-20020a17090658cc00b0078dce9c3787mr12707611ejs.715.1666306643405;
-        Thu, 20 Oct 2022 15:57:23 -0700 (PDT)
-Received: from skbuf ([188.27.184.197])
-        by smtp.gmail.com with ESMTPSA id l6-20020a1709062a8600b0073d796a1043sm10750046eje.123.2022.10.20.15.57.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        bh=TMshH9biaVXQs7+fRI1qPbg8/Vmgf41zzdE8Ax9DFYA=;
+        b=YVZA6twhKYPYT8u1Jy4L9z6Vsq+HtTgkbSFI6Ocz19t+rCjgAv97OYnTcdHMW/dtRh
+         UvrQEyD/ILAyKJk6Sd8obA3nGpDueJJ2er4KpG+6NOnJMI4amZY/hj6W92NGvVrFFwxV
+         UMEEAI23Y1pb5fwQgYn8sn4W3vjjRNxkV50x9MzyoKuf6Z79GmBytopZh0Y32N10Enhv
+         HdVncui3zU/+BgV4hc+hF+wcGRv0BK47g2XAmfLpD1b2atzXTgUlXuirlQKZHBfRO1Ov
+         jzNajG1aFJtX5RctpgDy592fJr08jTCrphRDTOPGZKyvv1gYmaA31nwayOf0hAuv40Cg
+         lU4A==
+X-Gm-Message-State: ACrzQf2hJAr5quA+pq/NHIjvu0UYveeDrJFChAts5o0RvLQWzV67GwWP
+        WZqhHuL+8GNnaW+6Ov3nUzUxdg==
+X-Google-Smtp-Source: AMsMyM5lZ4Dia253exhcKwnxHFmBcVrokulHdGNf45q/7BqKwj7LyyrZSMwZCU9ocNupwEMC8xBjeQ==
+X-Received: by 2002:a17:902:b708:b0:184:3921:df30 with SMTP id d8-20020a170902b70800b001843921df30mr16498236pls.43.1666306642632;
         Thu, 20 Oct 2022 15:57:22 -0700 (PDT)
-Date:   Fri, 21 Oct 2022 01:57:19 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     netdev@kapio-technology.com
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Florent Fourcot <florent.fourcot@wifirst.fr>,
-        Hans Schultz <schultz.hans@gmail.com>,
-        Joachim Wiberg <troglobit@gmail.com>,
-        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v8 net-next 10/12] net: dsa: mv88e6xxx: mac-auth/MAB
- implementation
-Message-ID: <20221020225719.l5iw6vndmm7gvjo3@skbuf>
-References: <20221018165619.134535-1-netdev@kapio-technology.com>
- <20221018165619.134535-1-netdev@kapio-technology.com>
- <20221018165619.134535-11-netdev@kapio-technology.com>
- <20221018165619.134535-11-netdev@kapio-technology.com>
- <20221020132538.reirrskemcjwih2m@skbuf>
- <2565c09bb95d69142522c3c3bcaa599e@kapio-technology.com>
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id cp15-20020a170902e78f00b00176dc67df44sm3361025plb.132.2022.10.20.15.57.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Oct 2022 15:57:21 -0700 (PDT)
+Date:   Thu, 20 Oct 2022 15:57:21 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "kcc@google.com" <kcc@google.com>, "bp@alien8.de" <bp@alien8.de>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "arnd@arndb.de" <arnd@arndb.de>,
+        "Moreira, Joao" <joao.moreira@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>
+Subject: Re: [PATCH v2 27/39] x86/cet/shstk: Handle signals for shadow stack
+Message-ID: <202210201556.EF52D322@keescook>
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
+ <20220929222936.14584-28-rick.p.edgecombe@intel.com>
+ <202210031347.6DBE61199@keescook>
+ <56095eac64e95b79ea04e84909d8ba0ab49d9246.camel@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2565c09bb95d69142522c3c3bcaa599e@kapio-technology.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <56095eac64e95b79ea04e84909d8ba0ab49d9246.camel@intel.com>
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 10:20:50PM +0200, netdev@kapio-technology.com wrote:
-> In general locked ports block traffic from a host based on if there is a
-> FDB entry or not. In the non-offloaded case, there is only CPU assisted
-> learning, so the normal learning mechanism has to be disabled as any
-> learned entry will open the port for the learned MAC,vlan.
+On Thu, Oct 20, 2022 at 10:08:17PM +0000, Edgecombe, Rick P wrote:
+> Kees, sorry for the delayed response. There was so much feedback, I
+> missed responding to some.
 
-Does it have to be that way? Why can't BR_LEARNING on a BR_PORT_LOCKED
-cause the learned FDB entries to have BR_FDB_LOCKED, and everything
-would be ok in that case (the port will not be opened for the learned
-MAC/VLAN)?
+No worries! Most of my feedback was just to get help filling gaps in my
+understanding. :) I appreciate the replies -- I'm looking forward to v3!
 
-> Thus learning is off for locked ports, which of course includes MAB.
-> 
-> So the 'learning' is based on authorizing MAC,vlan addresses, which
-> is done by userspace daemons, e.g. hostapd or what could be called
-> mabd.
+-- 
+Kees Cook
