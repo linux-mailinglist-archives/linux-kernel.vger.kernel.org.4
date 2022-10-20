@@ -2,104 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D701606607
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 18:42:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB65A60660A
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 18:42:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229815AbiJTQmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 12:42:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59548 "EHLO
+        id S230157AbiJTQmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 12:42:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbiJTQmA (ORCPT
+        with ESMTP id S229918AbiJTQmH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 12:42:00 -0400
-Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDA7F578A7
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 09:41:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1666284109; bh=eU4dltmhwC23olawmmrVxzQRXFJ5uD5ED2m42yk39gY=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:In-Reply-To;
-        b=nUhwL0Pplz+Y15YoZrIdU3PLW3+NqNpHSundxXqpeM++hDMDAaYaxJdNWkD3HmG8P
-         Y2LLqoIUwrG+Xf+1bmJvfa/2FYND5PHIMuSL0uRjoJWWKXsPCvztF3md9XZpmwVCKy
-         ladIJhCDL/QlE15VBT/I7aZ1yfcJnfrZzMJSXr78=
-Received: by b-2.in.mailobj.net [192.168.90.12] with ESMTP
-        via [213.182.55.206]
-        Thu, 20 Oct 2022 18:41:49 +0200 (CEST)
-X-EA-Auth: oaKrrkylZFZT71L4Q8fHIOD96HtL5xU2LXsbcHyIbgfFFTV9OHbWZlDZIOaS0DYEEFcARVgTG4zGv9EdnbDD1PXEBmKIWAwW
-Date:   Thu, 20 Oct 2022 22:11:44 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     outreachy@lists.linux.dev, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, kumarpraveen@linux.microsoft.com,
-        saurabh.truth@gmail.com
-Subject: Re: [PATCH v4 1/2] staging: most: dim2: read done_buffers count
- locally from HDM channel
-Message-ID: <Y1F6SH+k2erboMmu@debian-BULLSEYE-live-builder-AMD64>
-References: <cover.1666208065.git.drv@mailo.com>
- <83fd237d2ac157d234e9c7cce1206904c2d8773d.1666208065.git.drv@mailo.com>
- <Y1FjMrGHc2CdDCPQ@kroah.com>
+        Thu, 20 Oct 2022 12:42:07 -0400
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AD7E19899D
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 09:42:05 -0700 (PDT)
+Received: by mail-qt1-x835.google.com with SMTP id s3so14051910qtn.12
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 09:42:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cGAAR2BMfaAANWL2R8YcIVSEZh0G1rs0+++u0ybOJWQ=;
+        b=n9XO8dfIA6PtGSlMXzxeoH5vZLkJN/qPgV+9tdRknUZG9vkEbK+vAr02Hje6yei4YG
+         WqFrxGj8dglk1yNeyhUhkGK2nnlp7t1KTi6BqKbtRDDIsWayM0Pris8nlEorXXLQXfkq
+         GKQfpFwTu7EKpyQ02ojTPzNq9mWTw1Gmd0zNpqmIYJevGw1Owa+VXYqqEyVOiLvgPYb1
+         8Ap1gf/q6OFbelFhFyQUnS46Vj5IR0j+7uEK3XCdaI48VlVQfLEUyDjSP0X+BXPPoxaM
+         SPFL/YxjgVxxaEUz6ZfAfoX0ZymwnTJiAQL7Vd5vZMFvNn/0w1/isSUIGKljQtqmhvuq
+         ATcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cGAAR2BMfaAANWL2R8YcIVSEZh0G1rs0+++u0ybOJWQ=;
+        b=B+g073bZZCCJeaZHMBnv2yeGqJJTUnSczmLC+uzyvmBVWTm4vIIaqzoLm17OY0GAxT
+         XKWlEn/yq0e5/F/+7TDypBp6Ufi75sz2ZXi3RRWmPa9IOJYY3E5/SaUIbRZ3Agu2KmjR
+         ZX3zJX7u4JDYtyT4+UO3EFM5G/yWmkH1WRNI9Gh17OUODttQMWyHqmvWLQLRC2VVWl+3
+         psAw7hKIO6uVhaoc9lNL0nCClys3FjpAfYlk624uKt2mkVLYqCz1l9YS4istce/b6a2W
+         ZEOXApgWC/X1h5PcxvBIOaXHg0poYSOyt+rNflOGYKxLLudViioRC6h4GdsRMCnKZARU
+         o2MA==
+X-Gm-Message-State: ACrzQf1VdO3uTvevR5ctu2exoKlr73RkLjIHqfnnmeyVA8m0Q1HPiF1c
+        TSojOz3yC65GOx78F8yKFf9rww==
+X-Google-Smtp-Source: AMsMyM5IomthQmzdC4Dq9NmLfyL4YqW1be9IT8LtgUzuYA0I8nVmUicKpJz0j8BzM1Xg/OxBPyArow==
+X-Received: by 2002:ac8:5d88:0:b0:39d:804:90a5 with SMTP id d8-20020ac85d88000000b0039d080490a5mr5811848qtx.20.1666284124103;
+        Thu, 20 Oct 2022 09:42:04 -0700 (PDT)
+Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
+        by smtp.gmail.com with ESMTPSA id w28-20020a05622a191c00b0039bfe8acff6sm6249223qtc.58.2022.10.20.09.42.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Oct 2022 09:42:03 -0700 (PDT)
+Message-ID: <3cf2801c-9be5-c012-606e-d8fb7c4a218f@linaro.org>
+Date:   Thu, 20 Oct 2022 12:42:01 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y1FjMrGHc2CdDCPQ@kroah.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v3 3/5] dt-bindings: regulator: Add binding schema for
+ mt6357 regulators
+Content-Language: en-US
+To:     Alexandre Mergnat <amergnat@baylibre.com>,
+        Mark Brown <broonie@kernel.org>,
+        Chen Zhong <chen.zhong@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Lee Jones <lee@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Fabien Parent <fabien.parent@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Rob Herring <robh@kernel.org>,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
+        devicetree@vger.kernel.org, linux-input@vger.kernel.org
+References: <20221005-mt6357-support-v3-0-7e0bd7c315b2@baylibre.com>
+ <20221005-mt6357-support-v3-3-7e0bd7c315b2@baylibre.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221005-mt6357-support-v3-3-7e0bd7c315b2@baylibre.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 05:03:14PM +0200, Greg KH wrote:
-> On Thu, Oct 20, 2022 at 01:24:53AM +0530, Deepak R Varma wrote:
-> > The function dim_get_channel_state only serves to initialize the ready and
-> > done_buffers fields of the structure passed as its second argument. In
-> > service_done_flag, this structure is never used again and the only purpose
-> > of the call is to get the value that is put in the done_buffers field.
-> > But that value is just the done_sw_buffers_number field of the call's
-> > first argument.  So the whole call is useless, and we can just replace it
-> > with an access to this field.
->
-> Are you sure it is useless?
+On 20/10/2022 12:20, Alexandre Mergnat wrote:
+> From: Fabien Parent <fparent@baylibre.com>
+> 
+> Add YAML schema for the MediaTek MT6357 regulators.
+> 
+> Signed-off-by: Fabien Parent <fparent@baylibre.com>
+> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+> ---
+>  .../regulator/mediatek,mt6357-regulator.yaml       | 292 +++++++++++++++++++++
+>  1 file changed, 292 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/regulator/mediatek,mt6357-regulator.yaml b/Documentation/devicetree/bindings/regulator/mediatek,mt6357-regulator.yaml
+> new file mode 100644
+> index 000000000000..8dc1245304be
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/regulator/mediatek,mt6357-regulator.yaml
+> @@ -0,0 +1,292 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/regulator/mediatek,mt6357-regulator.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MediaTek MT6357 Regulators
+> +
+> +maintainers:
+> +  - Fabien Parent <fabien.parent@linaro.org>
+> +  - Alexandre Mergnat <amergnat@baylibre.com>
+> +
 
-Hello,
-pardon my limited understanding, but I think this function call is not
-necessary.
+The binding looks ok, but to be sure: you are aware that this schema is
+not effective, does nothing without being referenced somewhere? And that
+we do not see this reference neither in the patchset nor in cover letter?
 
->
-> You have changed the logic here, you are now thinking that this value
-> can never change, while before you were ensured of getting the "correct"
-> value as it is under the lock when the function is called.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-I may be wrong, but I do not think there is a change in the long, but I may
-entirely wrong. The function was called from inside the lock scope, now we are
-extracting the value directly, still inside the lock scope. This should be safe.
-
->
-> I can't take this type of change as a "cleanup" patch for outreachy
-> unless you have the hardware as it is NOT a basic "checkpatch" style
-> cleanup at all.
-
-Sure. That is fine.
-
->
-> If you want to get this change accepted, please work with the maintainer
-> of the code and get them to agree that the change is correct.  And if it
-> is, odds are more things also would need to be cleaned up at the same
-> time, right?
-
-I am eagerly waiting for a feedback from the maintainer. If they agree with my
-viewpoint, I will continue to work on this change outside of the clean up patch
-tasks. I will be happy to :)
-
-Thank you Greg!
-./drv
-
->
-> thanks,
->
-> greg k-h
->
-
+Best regards,
+Krzysztof
 
