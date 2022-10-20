@@ -2,159 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1372605BCA
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 12:03:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0533605BD7
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 12:05:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229983AbiJTKDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 06:03:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43374 "EHLO
+        id S229717AbiJTKFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 06:05:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiJTKC6 (ORCPT
+        with ESMTP id S229866AbiJTKFj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 06:02:58 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0DC8A17579C
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 03:02:37 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 075DCED1;
-        Thu, 20 Oct 2022 03:02:39 -0700 (PDT)
-Received: from [10.57.5.187] (unknown [10.57.5.187])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 60FF93F792;
-        Thu, 20 Oct 2022 03:02:30 -0700 (PDT)
-Message-ID: <5933d917-a026-7150-2e05-2cb283a73174@arm.com>
-Date:   Thu, 20 Oct 2022 11:02:23 +0100
+        Thu, 20 Oct 2022 06:05:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2500C169CFE
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 03:05:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666260334;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=b6yK6XC2fpvM5GYufymBVihPn45YwUGwSfARH9fFd4M=;
+        b=Y+jcC3NhgyxsKN3cmKlZr7ZWBxRQEQCu08y0r1Kg55AlbRi8IR8+F87QDBGG6id34ouqFi
+        ebW3hOTgnzpQVcvoiL+pQP7H8jB3PtAm3Ns92Ng9f5w7RHca+IkOujpeovPWHbWInIT1CD
+        NyOfSi3SrpLUpu4nkt5PTXMAco7CZrg=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-644-Od03DG_lNZO6sSvUZrOaYQ-1; Thu, 20 Oct 2022 06:05:33 -0400
+X-MC-Unique: Od03DG_lNZO6sSvUZrOaYQ-1
+Received: by mail-wm1-f72.google.com with SMTP id i203-20020a1c3bd4000000b003c6d18a7ee5so3275774wma.6
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 03:05:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=b6yK6XC2fpvM5GYufymBVihPn45YwUGwSfARH9fFd4M=;
+        b=iRFE1eJiOKqweuYnZWvdqMCqtFNoDgKG//IswAxUESPIHO5pDamx9+ZM5Y2X0jvfIF
+         1G/KQ2E6/ouau7toFqfEz7Lpa9m8PG+B1OhkvDGJYP+DXJxNNrf4CK2uAoXIK2FZ01Jb
+         cMhFzku+sEofFqB0QFoa7E/G2gAaJCmsXSjskKbc7H7xaw6JH+PRC+fUin+SG07kZsQ3
+         B1yeFlAyPyBTj4hSjiz4HTTPCPXF/TEstApwXJiFZDAENuunulUuonwDLtUGB1YqTvfV
+         it/je7kCp9BfmoUMxgzxTT54qNJIuVe8s4FNurcc68if8WtLzYIzgcvXf5g7Xz8twc+t
+         N1UA==
+X-Gm-Message-State: ACrzQf0TkJ0vSHSTbYrzrFU2JVuxdauttCvVMCRfQ3zhh5m+mlSNIh0R
+        iWVX8TtRlF0BKUBwbXyRABMdS7oQ6x7yM2cY6C+MtF7HSmAcmrJPSqr7U+MrcC54CWIXvWSFAdo
+        I0f8JjckuXAMY4GviqzF/cPNd
+X-Received: by 2002:adf:dc4b:0:b0:230:5fe6:69d2 with SMTP id m11-20020adfdc4b000000b002305fe669d2mr7935508wrj.469.1666260331787;
+        Thu, 20 Oct 2022 03:05:31 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4g+BdVVhP/DCqSzgafKraJ4+5xJgtnKBLUIP0W7QYfpF3Ib4HNHfxW8nd9OyuxmutH2d9vcA==
+X-Received: by 2002:adf:dc4b:0:b0:230:5fe6:69d2 with SMTP id m11-20020adfdc4b000000b002305fe669d2mr7935479wrj.469.1666260331411;
+        Thu, 20 Oct 2022 03:05:31 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c708:b100:1443:78d5:341f:c97a? (p200300cbc708b100144378d5341fc97a.dip0.t-ipconnect.de. [2003:cb:c708:b100:1443:78d5:341f:c97a])
+        by smtp.gmail.com with ESMTPSA id v10-20020a5d4a4a000000b00236492b3315sm413315wrs.104.2022.10.20.03.05.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Oct 2022 03:05:30 -0700 (PDT)
+Message-ID: <95c44cc0-31db-88cf-7296-7c18a1e7f42a@redhat.com>
+Date:   Thu, 20 Oct 2022 12:05:29 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: 6.1-rc1 regression: bisected to 57365a04c921 iommu: Move bus
- setup to IOMMU device registration
-Content-Language: en-GB
-To:     Brian Norris <briannorris@chromium.org>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Krishna Reddy <vdumpa@nvidia.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        Joerg Roedel <jroedel@suse.de>, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-References: <Y1CHh2oM5wyHs06J@google.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <Y1CHh2oM5wyHs06J@google.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Hugh Dickins <hughd@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>
+References: <20220930141931.174362-1-david@redhat.com>
+ <20220930141931.174362-5-david@redhat.com> <Yz3qekna97ndP4FK@x1n>
+ <bdddfd01-bc7e-2f99-21b9-2762a7041096@redhat.com> <Yz8m0J+UV/O9K5Lk@x1n>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v1 4/7] mm/ksm: fix KSM COW breaking with userfaultfd-wp
+ via FAULT_FLAG_UNSHARE
+In-Reply-To: <Yz8m0J+UV/O9K5Lk@x1n>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-20 00:25, Brian Norris wrote:
-> Hi all,
-> 
-> I'm testing out asynchronous probe (that's, kernel cmdline
-> 'driver_async_probe=*' or similar), and I've identified a regression in
-> v6.1-rc1 due to this:
-> 
-> commit 57365a04c92126525a58bf7a1599ddfa832415e9
-> Author: Robin Murphy <robin.murphy@arm.com>
-> Date:   Mon Aug 15 17:20:06 2022 +0100
-> 
->      iommu: Move bus setup to IOMMU device registration
-> 
-> In particular, I'm testing a Rockchip RK3399 system with
-> 'driver_async_probe=rk_iommu', and finding I crash like this:
-> 
-> [    0.180480] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000030
-> ...
-> [    0.180583] CPU: 2 PID: 49 Comm: kworker/u12:1 Not tainted 6.1.0-rc1 #57
-> [    0.180593] Hardware name: Google Scarlet (DT)
-> [    0.180602] Workqueue: events_unbound async_run_entry_fn
-> [    0.180622] pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> [    0.180632] pc : dev_iommu_free+0x24/0x54
-> [    0.180644] lr : __iommu_probe_device+0x110/0x180
-> ...
-> [    0.180785] Call trace:
-> [    0.180791]  dev_iommu_free+0x24/0x54
-> [    0.180800]  __iommu_probe_device+0x110/0x180
-> [    0.180807]  probe_iommu_group+0x40/0x58
-> [    0.180816]  bus_for_each_dev+0x8c/0xd8
-> [    0.180829]  bus_iommu_probe+0x5c/0x2d0
-> [    0.180840]  iommu_device_register+0xbc/0x104
-> [    0.180851]  rk_iommu_probe+0x260/0x354
-> [    0.180861]  platform_probe+0xb4/0xd4
-> [    0.180872]  really_probe+0xfc/0x284
-> [    0.180884]  __driver_probe_device+0xc0/0xec
-> [    0.180894]  driver_probe_device+0x4c/0xd4
-> [    0.180905]  __driver_attach_async_helper+0x3c/0x60
-> [    0.180915]  async_run_entry_fn+0x34/0xd4
-> [    0.180926]  process_one_work+0x1e0/0x3b4
-> [    0.180936]  worker_thread+0x120/0x404
-> [    0.180942] [drm] Initialized vgem 1.0.0 20120112 for vgem on minor 0
-> [    0.180944]  kthread+0xf4/0x14c
-> [    0.180953]  ret_from_fork+0x10/0x20
-> [    0.180968] Code: f9000bf3 910003fd f9416c13 f9016c1f (f9401a68)
-> [    0.180981] ---[ end trace 0000000000000000 ]---
+Hi Peter,
 
-Hmm, on the face of it that callstack doesn't even make much sense -
-dev_iommu_free+0x24 presumably has to be the dereference of
-param->fwspec, but __iommu_probe_device can only hit that failure path
-after a successful dev_iommu_get(), so dev->iommu should not be NULL.
+sorry for replying so late, I only managed now to get back to this patch 
+set.
 
-> I find if I revert the above commit (and 29e932295bfa ("iommu: Clean up
-> bus_set_iommu()"), to keep the reverts clean), things start working again.
+>> Yes, I can give it a try. What I dislike about ksm_test is that it's a
+>> mixture of benchmarks and test cases that have to explicitly triggered by
+>> parameters. It's not a simple "run all available test cases" tests as we
+>> know it. So maybe something separate (or having it as part of the uffd
+>> tests) makes more sense.
 > 
-> I haven't worked out exactly what's going wrong, but the patch looks like it
-> isn't async safe at all, due to the way each device is poking (without locking)
-> at the global iommu_buses[].
+> We can add an entry into run_vmtests.sh.  That's also what current ksm_test
+> does.
 
-We shouldn't really need locking for iommu_buses itself, but I guess to
-support async probe we would need per-device locking in
-iommu_probe_device() to prevent multiple threads trying to probe the
-same device at once, which must be what's happening in your case to
-cause a double-dev_iommu_free(). I'll see what I can do ASAP, since I
-think that's worthwhile. In the meantime, as to why you're hitting the
-failure path at all, I think that's another subtle oversight on my part,
-does something like the diff below help?
+Right, but I kind-of don't like that way at all and would much rather do 
+it cleaner...
 
+> 
+> Yes adding into uffd test would work too, but I do have a plan that we
+> should move functional tests out of userfaultfd.c, leaving that with the
+> stress test only.  Not really a big deal, though.
+
+... similar to what you want to do with userfaultfd.c
+
+So maybe I'll just add a new test for ksm functional tests.
+
+> 
+>>
+>>>
+>>>>
+>>>> Consequently, we will no longer trigger a fake write fault and break COW
+>>>> without any such side-effects.
+>>>>
+>>>> This is primarily a fix for KSM+userfaultfd-wp, however, the fake write
+>>>> fault was always questionable. As this fix is not easy to backport and it's
+>>>> not very critical, let's not cc stable.
+>>>
+>>> A patch to cc most of the stable would probably need to still go with the
+>>> old write approach but attaching ALLOW_RETRY.  But I agree maybe that may
+>>> not need to bother, or a report should have arrived earlier..  The unshare
+>>> approach looks much cleaner indeed.
+>>
+>> A fix without FAULT_FLAG_UNSHARE is not straight forward. We really don't
+>> want to notify user space about write events here (because there is none).
+>> And there is no way around the uffd handling in WP code without that.
+>>
+>> FAULT_FLAG_ALLOW_RETRY would rely on userfaultfd triggering and having to
+>> resolve the WP event.
+> 
+> Right it'll be very much a false positive, but the userspace should be fine
+> with it e.g. for live snapshot we need to copy page earlier; it still won't
+> stop the process from running along the way.  But I agree that's not ideal.
+
+At least the test case at hand will wait until infinitely, because there 
+is no handler that would allow break_cow to make progress (well, we 
+don't expect write events in the test :) ).
+
+Anyhow, I don't think messing with that for stable kernels is worth the 
+pain / complexity / possible issues.
+
+-- 
 Thanks,
-Robin.
 
------>8-----
-diff --git a/drivers/iommu/rockchip-iommu.c b/drivers/iommu/rockchip-iommu.c
-index 4f2039789897..00fc57c86ea4 100644
---- a/drivers/iommu/rockchip-iommu.c
-+++ b/drivers/iommu/rockchip-iommu.c
-@@ -1163,6 +1163,14 @@ static struct iommu_group *rk_iommu_device_group(struct device *dev)
-  
-  	iommu = rk_iommu_from_dev(dev);
-  
-+	/*
-+	 * Use the first registered IOMMU device for domain to use with DMA
-+	 * API, since a domain might not physically correspond to a single
-+	 * IOMMU device..
-+	 */
-+	if (!dma_dev)
-+		dma_dev = iommu->dev;
-+
-  	return iommu_group_ref_get(iommu->group);
-  }
-  
-@@ -1293,14 +1301,6 @@ static int rk_iommu_probe(struct platform_device *pdev)
-  	if (err)
-  		goto err_remove_sysfs;
-  
--	/*
--	 * Use the first registered IOMMU device for domain to use with DMA
--	 * API, since a domain might not physically correspond to a single
--	 * IOMMU device..
--	 */
--	if (!dma_dev)
--		dma_dev = &pdev->dev;
--
-  	pm_runtime_enable(dev);
-  
-  	for (i = 0; i < iommu->num_irq; i++) {
+David / dhildenb
+
