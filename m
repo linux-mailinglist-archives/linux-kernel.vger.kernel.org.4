@@ -2,89 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0CD2605FC7
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 14:11:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33B40605FC9
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 14:11:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229767AbiJTMK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 08:10:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55960 "EHLO
+        id S229998AbiJTMLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 08:11:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229874AbiJTMKu (ORCPT
+        with ESMTP id S229991AbiJTMLM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 08:10:50 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58CAC114DF5;
-        Thu, 20 Oct 2022 05:10:47 -0700 (PDT)
-Received: from mail.ispras.ru (unknown [83.149.199.84])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 9E21C419E9CC;
-        Thu, 20 Oct 2022 12:10:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 9E21C419E9CC
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1666267845;
-        bh=qeYD9cbarvWNZmLV47q82H3noKNX8HJcybkzKWDNm5k=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=plTmaq2eJY8V20R9/dtzGjcnBpOp78CU/1JPlKFv4UDm8EX7JMA5Kjg/MOh8uoO10
-         m7iYJgsdkSo9jzTx8+I7wq1Zk/9lEvMq8ZT5hsBywxnDRrpY9drHm3i3yXkzz8hAQS
-         biHiGqAKVq8xjItOrIMg+KZcFCaWPquPR65hA5pQ=
+        Thu, 20 Oct 2022 08:11:12 -0400
+Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A045C147D3F
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 05:11:10 -0700 (PDT)
+Received: by mail-ua1-x936.google.com with SMTP id p89so8879988uap.12
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 05:11:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZAYy9wtWo5VVBpt05/j32BMqpTHXKRzHcjb7mtgwB0U=;
+        b=FBcqjES0ZejRGI6yy0431s2WK3WgKYS89/YnvDq8Ygh87hTcvPTau7tlHAnlnRflO8
+         FERaL4Wh4qYYimwpX2KFYgeH07IxKHQnyFNIRy3bJhLJihMM3zMbHL8BB3ehDrlkmaJ8
+         OyB0djiO2/v02NziHVW0S2lItuf0iAhUX0y2e1PNUb7I8UipBq62nLhghQt4kW3K5Xtz
+         gLA7sEoXj6gGppzar7MAsUINgfTVuPJUFd8T7zvwbyFEcJ40yf1go2OEEf/553Ek1k+S
+         1HEFlyXGmgAUv6vcq+H3w9+NTtAXc2M4dhymefEAKstPLEz2D1fLJUlXLn9JqOhjZ02u
+         oqIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZAYy9wtWo5VVBpt05/j32BMqpTHXKRzHcjb7mtgwB0U=;
+        b=WoDTLIOTAm2i1CkkK+1a2ErgQ/9zx8R3fDOaaCRA1hvqAgxZRhAEFneyPvnZLMicGD
+         lQoCuTbXp5GWYllvvBvPYcFgt5rjGrssCMdbrM6AHLS6DmhAG1OanRWXXfoCNIXdIBq9
+         02omZqQCpzQaK28VXtdt30/VTuyvflXS6FP/cJ0QQBt4PL7dpZkcgKKRNqty7bBeRPZg
+         k+hoXQ1mVXELut204Crarhed/KkQFxRP/DUF7kgNxidGJ40n9oZPHACAvWSTkDP0Ovka
+         VYahpwaUYn6stOZLq1DMg7vg9Sw4u6EUiebBNw5rXO3IPgloQlz1tgGJJ7srktWfuQD2
+         DAFQ==
+X-Gm-Message-State: ACrzQf0L1YXOpfs3ennZOON8DEJic0IQLsa7OTRuQtv79ijE5hohxEE1
+        e8zWY706XshqhglgSlUj6+sfl4MqpxgvLOqEe3ZH4Iv/2+0=
+X-Google-Smtp-Source: AMsMyM50Iqg4begwqkLowuX5dzS4dkHuts4D+yZVKunL1BzhnhCRhsMKk4ZoP0NYS3hYmZJgPceIiLDn/45J6sB82Es=
+X-Received: by 2002:ab0:2155:0:b0:3e2:bdc:cfa5 with SMTP id
+ t21-20020ab02155000000b003e20bdccfa5mr6822463ual.119.1666267869676; Thu, 20
+ Oct 2022 05:11:09 -0700 (PDT)
 MIME-Version: 1.0
-Date:   Thu, 20 Oct 2022 15:10:45 +0300
-From:   Evgeniy Baskov <baskov@ispras.ru>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        lvc-project@linuxtesting.org, x86@kernel.org,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 10/16] x86/boot: Make console interface more abstract
-In-Reply-To: <CAMj1kXE5g7=CuHvEj0Z4F9Y91W-5K0OzorC_Z1-JL-vvc9kksQ@mail.gmail.com>
-References: <cover.1662459668.git.baskov@ispras.ru>
- <7a4b8d6827503ae0e30745014504c72f0c5d6316.1662459668.git.baskov@ispras.ru>
- <CAMj1kXE5g7=CuHvEj0Z4F9Y91W-5K0OzorC_Z1-JL-vvc9kksQ@mail.gmail.com>
-User-Agent: Roundcube Webmail/1.4.4
-Message-ID: <3397e4295c9a1d5ffcd311027dd3b933@ispras.ru>
-X-Sender: baskov@ispras.ru
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1663519546.git.william.gray@linaro.org>
+In-Reply-To: <cover.1663519546.git.william.gray@linaro.org>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Thu, 20 Oct 2022 14:10:58 +0200
+Message-ID: <CAMRc=McQa0iDS+6OCOt9R1B-DdR7t1jD3D-Q3DTKbm=zidXpAQ@mail.gmail.com>
+Subject: Re: [PATCH v2 0/3] Introduce the ACCES IDIO-16 GPIO library module
+To:     William Breathitt Gray <william.gray@linaro.org>
+Cc:     linus.walleij@linaro.org, linux-kernel@vger.kernel.org,
+        andriy.shevchenko@intel.com, linux-gpio@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-19 10:23, Ard Biesheuvel wrote:
-> On Tue, 6 Sept 2022 at 12:42, Evgeniy Baskov <baskov@ispras.ru> wrote:
->> 
->> To be able to extract kernel from EFI, console output functions
->> need to be replaceable by alternative implementations.
->> 
->> Make all of those functions pointers.
->> Move serial console code to separate file.
->> 
-> 
-> What does kernel_add_identity_map() have to do with the above? Should
-> that be a separate patch?
+On Sun, Sep 18, 2022 at 9:54 PM William Breathitt Gray
+<william.gray@linaro.org> wrote:
+>
+> Changes in v2:
+>  - Added offset check for last byte of inputs in idio_16_get() for
+>    robustness
+>  - Replaced hardcoded '16' with IDIO_16_NOUT constant in idio_16_get*()
+>  - Renamed IDIO_16 namespace to GPIO_IDIO_16; adjusted 104-idio-16 and
+>    pci-idio-16 drivers accordingly
+>  - Utilized DEFAULT_SYMBOL_NAMESPACE to simplify namespace exports
+>  - Refactored callbacks to utilize cached output states; idio_16_get()
+>    callback now requires struct idio_16_state state; adjusted
+>    104-idio-16 and pci-idio-16 drivers accordingly
+>  - Moved bitmap_fill() to after idio_16_state_init() in idio_16_probe()
+>    to prevent clobbering out_state if the implementation of
+>    idio_16_state_init changes in the future
+>  - Adjusted offset checks in idio_16_set() and idio_16_get_direction()
+>    to ">= IDIO_16_NOUT" for consistency
+>  - Utilized __assign_bit() in idio_16_set()
+>  - Refactored idio_16_*_multiple() callbacks to utilize bitmap_replace()
+>
+> In a similar vein as the Intel 8255 interface library module [0], the
+> ACCES IDIO-16 GPIO library module is introduced to consolidate much of
+> the shared code between the existing 104-IDIO-16 and PCI-IDIO-16 GPIO
+> drivers.
+>
+> The idio-16 module exposes consumer library functions to facilitate
+> communication with devices within the ACCES IDIO-16 family such as the
+> 104-IDIO-16 and the PCI-IDIO-16.
+>
+> A CONFIG_GPIO_IDIO_16 Kconfig option is introduced by this patch.
+> Modules wanting access to these idio-16 library functions should select
+> this Kconfig option and import the GPIO_IDIO_16 symbol namespace.
+>
+> [0] https://lore.kernel.org/all/d1a24895f2ea67f689c24c34a20ddb43cd7246af.1658324498.git.william.gray@linaro.org/
+>
+> William Breathitt Gray (3):
+>   gpio: idio-16: Introduce the ACCES IDIO-16 GPIO library module
+>   gpio: 104-idio-16: Utilize the idio-16 GPIO library
+>   gpio: pci-idio-16: Utilize the idio-16 GPIO library
+>
+>  MAINTAINERS                     |   7 ++
+>  drivers/gpio/Kconfig            |  11 +++
+>  drivers/gpio/Makefile           |   1 +
+>  drivers/gpio/gpio-104-idio-16.c |  88 ++++---------------
+>  drivers/gpio/gpio-idio-16.c     | 146 ++++++++++++++++++++++++++++++++
+>  drivers/gpio/gpio-idio-16.h     |  71 ++++++++++++++++
+>  drivers/gpio/gpio-pci-idio-16.c | 119 +++-----------------------
+>  7 files changed, 265 insertions(+), 178 deletions(-)
+>  create mode 100644 drivers/gpio/gpio-idio-16.c
+>  create mode 100644 drivers/gpio/gpio-idio-16.h
+>
+>
+> base-commit: d9e7f0e320516c660d6f33e6c16a3d99970eb14e
+> --
+> 2.37.3
+>
 
-It used to be dependent, but no longer is.
-I'll split making kernel_add_identity_map() a function pointer
-out into separate patch.
+This series looks good to me, Andy do you have any objections?
+Otherwise, I'll queue it soon.
 
-> 
->> Signed-off-by: Evgeniy Baskov <baskov@ispras.ru>
->> ---
->>  arch/x86/boot/compressed/Makefile       |   2 +-
->>  arch/x86/boot/compressed/ident_map_64.c |  15 ++-
->>  arch/x86/boot/compressed/misc.c         | 109 +--------------------
->>  arch/x86/boot/compressed/misc.h         |  13 ++-
->>  arch/x86/boot/compressed/putstr.c       | 124 
->> ++++++++++++++++++++++++
->>  5 files changed, 146 insertions(+), 117 deletions(-)
->>  create mode 100644 arch/x86/boot/compressed/putstr.c
-...
+Bartosz
