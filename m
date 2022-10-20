@@ -2,96 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B13D6060FC
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 15:07:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B4DF606126
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 15:11:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230339AbiJTNHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 09:07:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54784 "EHLO
+        id S230408AbiJTNLM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 09:11:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230346AbiJTNH1 (ORCPT
+        with ESMTP id S230401AbiJTNKF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 09:07:27 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4171115DB03;
-        Thu, 20 Oct 2022 06:07:24 -0700 (PDT)
-Received: from mail.ispras.ru (unknown [83.149.199.84])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 885DD40D403D;
-        Thu, 20 Oct 2022 13:07:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 885DD40D403D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1666271239;
-        bh=Fm3xulfEjrseVDMk6eOF4edzLS36E5lkjUcNbZAms6E=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Yps6bo4xui0X6APcx20IjhqluRZUsPCmjPVkpw5gTEMQeLVLF30EAM634Mtp5wf98
-         xnsVWJFV4VuQVP2379f1JWbvi6aAD41Ns1HnwmNTiMhVCkdG/IfqWRQgJ+tHTWJi1k
-         xgr+KSa5Dtjp0wyjhb7MEA+dF+k4kyJvcMQlvURw=
+        Thu, 20 Oct 2022 09:10:05 -0400
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A15D175AA;
+        Thu, 20 Oct 2022 06:09:35 -0700 (PDT)
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29KAsCVU003321;
+        Thu, 20 Oct 2022 09:09:21 -0400
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3kb215sxet-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 20 Oct 2022 09:09:12 -0400
+Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
+        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 29KD9BIH053247
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 20 Oct 2022 09:09:11 -0400
+Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by ASHBMBX8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Thu, 20 Oct
+ 2022 09:09:10 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Thu, 20 Oct 2022 09:09:10 -0400
+Received: from tachici-Precision-5530.analog.com ([10.48.65.157])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 29KD8qO2031891;
+        Thu, 20 Oct 2022 09:08:57 -0400
+From:   Alexandru Tachici <alexandru.tachici@analog.com>
+To:     <linux@armlinux.org.uk>
+CC:     <alexandru.tachici@analog.com>, <andrew@lunn.ch>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <lennart@lfdomain.com>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <pabeni@redhat.com>
+Subject: Re: [net v2 1/1] net: ethernet: adi: adin1110: Fix notifiers
+Date:   Thu, 20 Oct 2022 16:08:50 +0300
+Message-ID: <20221020130850.18780-1-alexandru.tachici@analog.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <Y1EwzRa3SNpA0++W@shell.armlinux.org.uk>
+References: <Y1EwzRa3SNpA0++W@shell.armlinux.org.uk>
 MIME-Version: 1.0
-Date:   Thu, 20 Oct 2022 16:07:19 +0300
-From:   Evgeniy Baskov <baskov@ispras.ru>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        lvc-project@linuxtesting.org, x86@kernel.org,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 14/16] x86/build: Make generated PE more spec compliant
-In-Reply-To: <CAMj1kXHeirfD07He4TDZepZr2HSXqwvDcuFG=iT8sgRA3t5-SQ@mail.gmail.com>
-References: <cover.1662459668.git.baskov@ispras.ru>
- <f417e037d2967d9c1b387c63c66a7c050763a48c.1662459668.git.baskov@ispras.ru>
- <CAMj1kXHeirfD07He4TDZepZr2HSXqwvDcuFG=iT8sgRA3t5-SQ@mail.gmail.com>
-User-Agent: Roundcube Webmail/1.4.4
-Message-ID: <9c9192e0509b696f46e559d447769b30@ispras.ru>
-X-Sender: baskov@ispras.ru
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: q-jbGGrNWj4EGzcHz31gSRwm98bQJjXZ
+X-Proofpoint-ORIG-GUID: q-jbGGrNWj4EGzcHz31gSRwm98bQJjXZ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-20_05,2022-10-20_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ priorityscore=1501 clxscore=1015 phishscore=0 bulkscore=0 impostorscore=0
+ mlxscore=0 malwarescore=0 spamscore=0 mlxlogscore=667 adultscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210200078
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-19 10:39, Ard Biesheuvel wrote:
-> On Tue, 6 Sept 2022 at 12:42, Evgeniy Baskov <baskov@ispras.ru> wrote:
->> 
->> Currently kernel image is not fully compliant PE image, so it may
->> fail to boot with stricter implementations of UEFI PE loaders.
->> 
->> Set minimal alignments and sizes specified by PE documentation [1]
->> referenced by UEFI specification [2]. Align PE header to 8 bytes.
-> 
-> 
->> Generate '.reloc' section with 2 entries and set reloc data directory.
-> 
-> Why?
+> > +
+> > +	err = adin1110_setup_notifiers();
+> > +	if (err) {
+> > +		spi_unregister_driver(&adin1110_driver);
+> > +		return err;
+> > +	}
+>
+> And you setup the notifier after, so there is a window when
+> notifications could be lost. Is this safe?
 
-It seems to me that I saw minimal size requirement in MS documentation,
-but now I cannot find the proof of my words, so I've probably misread.
-So I'll drop this change.
-> 
-> 
->> 
->> To make code more readable refactor tools/build.c:
->>         - Use mmap() to access kernel image.
->>         - Generate sections dynamically.
->>         - Setup sections protection. Since we cannot fit every
->>           needed section, set a part of protection flags
->>           dynamically during initialization. This step is omitted
->>           if CONFIG_EFI_DXE_MEM_ATTRIBUTES is not set.
->> 
-> 
-> If the commit log of a patch contains a bulleted list of the changes
-> that it implements, it is a very strong indicator that it needs to be
-> split up. Presenting this as a big ball of changes makes the life of a
-> reviewed unnecessarily hard.
-> 
+At boot time this should be ok. If the module is inserted and then user starts
+bridging/bonding etc. will lose some events. Will move notifiers registration
+before registering device. Should be fine as the driver checks in all callbacks
+if it is meant for him or not the event.
 
-Sorry for that, I'll try to separate this into several patches.
+Thanks,
+Alexandru
