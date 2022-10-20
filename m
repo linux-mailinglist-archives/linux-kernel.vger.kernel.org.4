@@ -2,144 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 482A460694D
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 22:04:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95E1C606952
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 22:05:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229835AbiJTUE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 16:04:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51042 "EHLO
+        id S230000AbiJTUFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 16:05:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbiJTUEZ (ORCPT
+        with ESMTP id S229606AbiJTUFt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 16:04:25 -0400
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C89218A
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 13:04:21 -0700 (PDT)
-Received: by mail-oi1-x235.google.com with SMTP id g10so841894oif.10
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 13:04:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FSU5vZGhDL5YE71yQgT2MCPFUtVB8F01lbEJpFp9jbA=;
-        b=Q6F9AqN3FN/RTaVkWHIa3ScXqM05Qtup60Em3+Rz76spzTfg1C/MkzL+NIqHGDcf01
-         0rJD8BSjrTMbwQsIgE2MiB+iNrdYDZQPqx841hNZiy/cVA67zPIy+VDYXlFKczVxMa6n
-         57I5om8tS3qGSUKHTS+b9ZQR39LzbPJcBqCF+FRd8girnE1rnxeza9cVL1/otV0DkmU3
-         udLrdRHUVrMJvbQiyweKSeUX0QOn27QdsS0+gp1K7UD75yt5Th+A/aEJzDAxOV62uXG4
-         dTMwBhY4Kpt4QHC9CuAEfebfF53/FkCRTRG4eJAFnlGWIr3CF30sDs6ZXWTLZbKNskG7
-         rqWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FSU5vZGhDL5YE71yQgT2MCPFUtVB8F01lbEJpFp9jbA=;
-        b=I9krPjFn6/vjdqVRqjHVRxxuMjtKDljuH1ySZZHWcZYJINq4VUFjx/WhJv/T3QIlcF
-         danVOFiFYFYW/Bx9MNggfRLk12fhNzla471Bjp3JuuVOR6jDz9aSiUxoU6TmK1qQY7KH
-         DsQm4D1vqrI2qZGfJIG+I2iCJFF1qMGjKZHxYWZ1KitTfJnTb3af2OjSVSkpgForxo2H
-         a6NmcXT+/Z5ASy+bItQOTEvyCHJpTCJFBpc5nADtUmMDeW6JRcagV8GVKesxd+8xaMZk
-         uzGwfli0OBM0qHoijqghNPASFypg+rwTczrqm6V+Z0lbLNRWWIlh+mLlnlI0/P17s+Ot
-         /TtQ==
-X-Gm-Message-State: ACrzQf0BGz7++Y9CZ/s7JwM9PQSXxJ34UEPP3FgAINZLSHWBHro7pHJ7
-        amflzJq4N/wp3k2xzUr+ZJE=
-X-Google-Smtp-Source: AMsMyM5nv9xsZ1BmIlThgWA9q+BIVrSil2nTeD7KA1/FccIg0h2nXg7E8StyDJuEcqfWv0kKk+/DVg==
-X-Received: by 2002:a05:6808:138e:b0:355:2b42:1580 with SMTP id c14-20020a056808138e00b003552b421580mr14067581oiw.91.1666296260944;
-        Thu, 20 Oct 2022 13:04:20 -0700 (PDT)
-Received: from localhost ([12.97.180.36])
-        by smtp.gmail.com with ESMTPSA id 22-20020a544196000000b00354978180d8sm337695oiy.22.2022.10.20.13.04.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 13:04:20 -0700 (PDT)
-Date:   Thu, 20 Oct 2022 13:02:07 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alexey Klimov <klimov.linux@gmail.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Andy Whitcroft <apw@canonical.com>,
-        Dennis Zhou <dennis@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Kees Cook <keescook@chromium.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Subject: Re: [RFC PATCH 0/2] Switch ARM to generic find_bit() API
-Message-ID: <Y1GpP+aY0o40MTNS@yury-laptop>
-References: <20221020032024.1804535-1-yury.norov@gmail.com>
- <Y1F8ljDDqYElE3aT@shell.armlinux.org.uk>
+        Thu, 20 Oct 2022 16:05:49 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56DC5134DE8
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 13:05:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666296347; x=1697832347;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=Df31rUtnrw/F7hIheI4Cx6bl73pYnzh4BvNXaOx9ZRU=;
+  b=ls8JcQ8tvpbfgIk9cbNwS+szM9Alj7gqiq9XdW4ozZhEQ0j5yiWk0yNU
+   gYwgLVnhQRyDUDXEvLmRma5/z0QY7+qK+K+FYwL1nGCB9Ghg1U+w3MR8M
+   bHpLc0FotI2GGyGNEy5S4JMmbVB+bhzlbqzyt06kKz8GVRm5RsJ9J0LDn
+   F81hfGg0ZD8yYv8CHsTeGkRwwdN5wkjWMcBMx4VBmzJaoelECfUA/JSHY
+   BjACBvBKCxsyjTc+unNQCe9RS1eQtpRESybQQmzu287Q85bYtiFQDz6Wm
+   TYkmZtyzGFTsBmRYl1unMq378akWOwOchqej4Y4PmThjtUo2oVAeh6KAt
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="290132342"
+X-IronPort-AV: E=Sophos;i="5.95,199,1661842800"; 
+   d="scan'208";a="290132342"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 13:05:46 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="632471154"
+X-IronPort-AV: E=Sophos;i="5.95,199,1661842800"; 
+   d="scan'208";a="632471154"
+Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 13:05:46 -0700
+Date:   Thu, 20 Oct 2022 13:05:45 -0700
+From:   Tony Luck <tony.luck@intel.com>
+To:     Shuai Xue <xueshuai@linux.alibaba.com>
+Cc:     Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH v2] mm, hwpoison: Try to recover from copy-on write faults
+Message-ID: <Y1GqGbBNk6fX/OnD@agluck-desk3.sc.intel.com>
+References: <SJ1PR11MB60838C1F65CA293188BB442DFC289@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <20221019170835.155381-1-tony.luck@intel.com>
+ <893b681b-726e-94e3-441e-4d68c767778a@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y1F8ljDDqYElE3aT@shell.armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <893b681b-726e-94e3-441e-4d68c767778a@linux.alibaba.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 05:51:34PM +0100, Russell King (Oracle) wrote:
-> On Wed, Oct 19, 2022 at 08:20:22PM -0700, Yury Norov wrote:
-> > Hi Russell, all,
-> > 
-> > I'd like to respin a patch that switches ARM to generic find_bit()
-> > functions.
-> > 
-> > Generic code works on par with arch or better, according to my
-> > testing [1], and with recent improvements merged in v6.1, it should
-> > be even faster.
-> > 
-> > ARM already uses many generic find_bit() functions - those that it
-> > doesn't implement. So we are talking about migrating a subset of the
-> > API; most of find_bit() family has only generic implementation on ARM.
-> > 
-> > The only concern about this migration is that ARM code supports
-> > byte-aligned bitmap addresses, while generic code is optimized for
-> > word-aligned bitmaps.
-> > 
-> > In my practice, I've never seen unaligned bitmaps. But to check that on
-> > ARM, I added a run-time check for bitmap alignment. I gave it run on
-> > several architectures and found nothing.
-> > 
-> > Can you please check that on your hardware and compare performance of
-> > generic vs arch code for you? If everything is OK, I suggest switching
-> > ARM to generic find_bit() completely.
-> > 
-> > Thanks,
-> > Yury
-> > 
-> > [1] https://lore.kernel.org/all/YuWk3titnOiQACzC@yury-laptop/
+On Thu, Oct 20, 2022 at 09:57:04AM +0800, Shuai Xue wrote:
 > 
-> I _really_ don't want to play around with this stuff right now... 6.0
-> appears to have a regression on arm32 early on during boot:
 > 
-> [    1.410115] EXT4-fs error (device sda1): htree_dirblock_to_tree:1093: inode #256: block 8797: comm systemd: bad entry in directory: rec_len % 4 != 0 - offset=0, inode=33188, rec_len=35097, size=4096 fake=0
+> 在 2022/10/20 AM1:08, Tony Luck 写道:
+> > If the kernel is copying a page as the result of a copy-on-write
+> > fault and runs into an uncorrectable error, Linux will crash because
+> > it does not have recovery code for this case where poison is consumed
+> > by the kernel.
+> > 
+> > It is easy to set up a test case. Just inject an error into a private
+> > page, fork(2), and have the child process write to the page.
+> > 
+> > I wrapped that neatly into a test at:
+> > 
+> >   git://git.kernel.org/pub/scm/linux/kernel/git/aegl/ras-tools.git
+> > 
+> > just enable ACPI error injection and run:
+> > 
+> >   # ./einj_mem-uc -f copy-on-write
+> > 
+> > Add a new copy_user_highpage_mc() function that uses copy_mc_to_kernel()
+> > on architectures where that is available (currently x86 and powerpc).
+> > When an error is detected during the page copy, return VM_FAULT_HWPOISON
+> > to caller of wp_page_copy(). This propagates up the call stack. Both x86
+> > and powerpc have code in their fault handler to deal with this code by
+> > sending a SIGBUS to the application.
 > 
-> Booting 5.19 with the same filesystem works without issue and without
-> even a fsck, but booting 6.0 always results in some problem that
-> prevents it booting.
-> 
-> Debugging this is not easy, because there also seems to be something
-> up with the bloody serial console - sometimes I get nothing, other
-> times I get nothing more than:
-> 
-> [    2.929502] EXT4-fs error (de
-> 
-> and then the output stops. Is the console no longer synchronous? If it
-> isn't, that's a huge mistake which can be seen right here with the
-> partial message output... so I also need to work out how to make the
-> console output synchronous again.
+> Does it send SIGBUS to only child process or both parent and child process?
 
-Got it.
+This only sends a SIGBUS to the process that wrote the page (typically
+the child, but also possible that the parent is the one that does the
+write that causes the COW).
 
-I you think that EXT4 problems are due to unaligned bitmaps, you can take
-1st patch from this series to check.
+> > 
+> > Note that this patch avoids a system crash and signals the process that
+> > triggered the copy-on-write action. It does not take any action for the
+> > memory error that is still in the shared page. To handle that a call to
+> > memory_failure() is needed. 
+> 
+> If the error page is not poisoned, should the return value of wp_page_copy
+> be VM_FAULT_HWPOISON or VM_FAULT_SIGBUS? When is_hwpoison_entry(entry) or
+> PageHWPoison(page) is true, do_swap_page return VM_FAULT_HWPOISON to caller.
+> And when is_swapin_error_entry is true, do_swap_page return VM_FAULT_SIGBUS.
 
-Thanks,
-Yury
+The page has uncorrected data in it, but this patch doesn't mark it
+as poisoned.  Returning VM_FAULT_SIGBUS would send an "ordinary" SIGBUS
+that doesn't include the BUS_MCEERR_AR and "lsb" information. It would
+also skip the:
+
+	"MCE: Killing %s:%d due to hardware memory corruption fault at %lx\n"
+
+console message. So might result in confusion and attepmts to debug a
+s/w problem with the application instead of blaming the death on a bad
+DIMM.
+
+> > But this cannot be done from wp_page_copy()
+> > because it holds mmap_lock(). Perhaps the architecture fault handlers
+> > can deal with this loose end in a subsequent patch?
+
+I started looking at this for x86 ... but I have changed my mind
+about this being a good place for a fix. When control returns back
+to the architecture fault handler it no longer has easy access to
+the physical page frame number. It has the virtual address, so it
+could descend back into somee new mm/memory.c function to get the
+physical address ... but that seems silly.
+
+I'm experimenting with using sched_work() to handle the call to
+memory_failure() (echoing what the machine check handler does using
+task_work)_add() to avoid the same problem of not being able to directly
+call memory_failure()).
+
+So far it seems to be working. Patch below (goes on top of original
+patch ... well on top of the internal version with mods based on
+feedback from Dan Williams ... but should show the general idea)
+
+With this patch applied the page does get unmapped from all users.
+Other tasks that shared the page will get a SIGBUS if they attempt
+to access it later (from the page fault handler because of
+is_hwpoison_entry() as you mention above.
+
+-Tony
+
+From d3879e83bf91cd6c61e12d32d3e15eb6ef069204 Mon Sep 17 00:00:00 2001
+From: Tony Luck <tony.luck@intel.com>
+Date: Thu, 20 Oct 2022 09:57:28 -0700
+Subject: [PATCH] mm, hwpoison: Call memory_failure() for source page of COW
+ failure
+
+Cannot call memory_failure() directly from the fault handler because
+mmap_lock (and others) are held.
+
+It is important, but not urgent, to mark the source page as h/w poisoned
+and unmap it from other tasks.
+
+Use schedule_work() to queue a request to call memory_failure() for the
+page with the error.
+
+Signed-off-by: Tony Luck <tony.luck@intel.com>
+---
+ mm/memory.c | 35 ++++++++++++++++++++++++++++++++++-
+ 1 file changed, 34 insertions(+), 1 deletion(-)
+
+diff --git a/mm/memory.c b/mm/memory.c
+index b6056eef2f72..4a1304cf1f4e 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -2848,6 +2848,37 @@ static inline int pte_unmap_same(struct vm_fault *vmf)
+ 	return same;
+ }
+ 
++#ifdef CONFIG_MEMORY_FAILURE
++struct pfn_work {
++	struct work_struct work;
++	unsigned long pfn;
++};
++
++static void do_sched_memory_failure(struct work_struct *w)
++{
++	struct pfn_work *p = container_of(w, struct pfn_work, work);
++
++	memory_failure(p->pfn, 0);
++	kfree(p);
++}
++
++static void sched_memory_failure(unsigned long pfn)
++{
++	struct pfn_work *p;
++
++	p = kmalloc(sizeof *p, GFP_KERNEL);
++	if (!p)
++		return;
++	INIT_WORK(&p->work, do_sched_memory_failure);
++	p->pfn = pfn;
++	schedule_work(&p->work);
++}
++#else
++static void sched_memory_failure(unsigned long pfn)
++{
++}
++#endif
++
+ /*
+  * Return:
+  *	0:		copied succeeded
+@@ -2866,8 +2897,10 @@ static inline int __wp_page_copy_user(struct page *dst, struct page *src,
+ 	unsigned long addr = vmf->address;
+ 
+ 	if (likely(src)) {
+-		if (copy_mc_user_highpage(dst, src, addr, vma))
++		if (copy_mc_user_highpage(dst, src, addr, vma)) {
++			sched_memory_failure(page_to_pfn(src));
+ 			return -EHWPOISON;
++		}
+ 		return 0;
+ 	}
+ 
+-- 
+2.37.3
+
