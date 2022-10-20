@@ -2,212 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 497716055DF
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 05:17:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20AAA6055E6
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 05:22:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbiJTDRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 19 Oct 2022 23:17:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60562 "EHLO
+        id S229515AbiJTDWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 19 Oct 2022 23:22:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbiJTDRq (ORCPT
+        with ESMTP id S229497AbiJTDWo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 19 Oct 2022 23:17:46 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF28C152013
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 20:17:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666235864; x=1697771864;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=OY9irz+FwX4g+mZC2EUVo7b3vP0XeFPrKW4Zzx8Hyx4=;
-  b=icb+X2utiaWx1tkWseWQzYcZGrWnmKQZE8M2kMsBoCwAMhr4pTeNlZxo
-   J11cwqVgR+zIkApdP/Z3B0Y19xHXQHyEldFKuITjHS2k0Guv+OxhcHFHE
-   P9qP6WeBqq3iqh5pqZ8DeURWsc9WzUl+POH+4RKbERCZF8HrILENT9VPa
-   V5pGts56+s02rXfs8EzIIRYpYeqKU9Ou6PnyyV0+QYg1QEVldc8eNv3HK
-   9HMUI+s9r8vhsZQCMfciPCp1B2ueHcQ9C0IFVaf2rSTvW40AI12SgLPi7
-   8FBpbNwzZT18SoqOyZjxlQ/dJvu2zN5tFMkdpnc+UseWGvGGodk4BbORm
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="333155575"
-X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
-   d="scan'208";a="333155575"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 20:17:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="804615720"
-X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
-   d="scan'208";a="804615720"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by orsmga005.jf.intel.com with ESMTP; 19 Oct 2022 20:17:44 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 19 Oct 2022 20:17:43 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Wed, 19 Oct 2022 20:17:43 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.102)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Wed, 19 Oct 2022 20:17:42 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dbmSddujV0DtZ5sq3HYWxcR9fQvzlPffGQwi2ksAk86rqH/tjnya9wzpcWYlPY7LwGXG1GM2hW25GmMYt8LI11U7meYqwMuRhXDmMGvLsiC4xN0pFkPI1wvh7Vkcd4BEX3RidOyvkchZxypRP3ERJ5iwzwZrcvNYwV/CWWLcUU6C5cAfWXS1xaL3wosUivusqupJjw1dXa0ufjFWdq7fqvia6tr0BQ8+NXRLC6h9xhA8dD1CNLa6ixvaEMh1iAtlB0e7Y8O0qIcLv+DjobSb2vtTvYTLi1+TtUTlHYeH4nKxuXSrG1cQYoQhevCLCz+uZIRLVFF5MhZo7W2UhDstyg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=A7AG2VJCcaW4jerCeWPeszyWYfygCqiiJgx/HLEMWLU=;
- b=Blj6F6qDy1rvGOLleOe5JmK6tbtWMBTMroStkrx5fmCLDimcmAvAqn64wlwAbwwOhVJ/ri+fwVZf7SIpogMgQVP5cjGFj/ZIL4SYsLJJp3+lvUOVjzjSJpKp7XLxPtwZ0DLezZTozA00ON/YCRNvsaZPr6U4xjw7XSMejQyri3gJ7wXU5KoNYJONuRrN4aiJC7PX6suzNtCvsZGGNTWsEy8NRKp56pJcod6hiCBFXSXIoy+5bNjxgLUCRghGmK6FLfK3Oxb8NDKLqG5pyoX8NhpXCsN8M0PuCM3lBh84J6qpCCJNz8d81YrTZf9nKXLKgbbPPWglXrgJzLXx05m/uQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SA1PR11MB6733.namprd11.prod.outlook.com (2603:10b6:806:25c::17)
- by SJ0PR11MB5896.namprd11.prod.outlook.com (2603:10b6:a03:42c::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.30; Thu, 20 Oct
- 2022 03:17:35 +0000
-Received: from SA1PR11MB6733.namprd11.prod.outlook.com
- ([fe80::6f83:c165:aa0c:efae]) by SA1PR11MB6733.namprd11.prod.outlook.com
- ([fe80::6f83:c165:aa0c:efae%8]) with mapi id 15.20.5723.033; Thu, 20 Oct 2022
- 03:17:35 +0000
-Date:   Wed, 19 Oct 2022 20:17:31 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Gao Xiang <hsiangkao@linux.alibaba.com>
-CC:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        <linux-erofs@lists.ozlabs.org>, Chao Yu <chao@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] erofs: use kmap_local_page() only for erofs_bread()
-Message-ID: <Y1C9y2y/87tIgfia@iweiny-mobl>
-References: <20221018105313.4940-1-hsiangkao@linux.alibaba.com>
- <2019477.yKVeVyVuyW@mypc>
- <Y084l0m88JGOqGRN@B-P7TQMD6M-0146.lan>
- <12077010.O9o76ZdvQC@mypc>
- <Y1Cv/LuiGpVdO5im@B-P7TQMD6M-0146.local>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <Y1Cv/LuiGpVdO5im@B-P7TQMD6M-0146.local>
-X-ClientProxiedBy: BYAPR04CA0002.namprd04.prod.outlook.com
- (2603:10b6:a03:40::15) To SA1PR11MB6733.namprd11.prod.outlook.com
- (2603:10b6:806:25c::17)
+        Wed, 19 Oct 2022 23:22:44 -0400
+Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68F3B1D2B54
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 20:22:43 -0700 (PDT)
+Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-1322fa1cf6fso23078922fac.6
+        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 20:22:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XZo2P0btegWzJjzezfawR0r1cS5ypDKFjzgQbfC4/vQ=;
+        b=XB/FWk7GqUsa9t0mEGZQrGtNDBVz24LAJAge3DYogCxHXy9qgpHxwopFhZO2US4vQc
+         aZTz1DPlSinA0LEC4Sa00ZTxeh/0HHs8U+W52L2C1c5y5e8GM07o5fBXhECIzVcZPBCa
+         P9MAaSckHuZJS8aJ0mORgERwKUiFDe8ZwfAXJ2nV5F/IybzbIs7xmOkgM/UbjxcWBUZA
+         si/EEMGGuLQU+sangBokqcTPuldoXiOGkVGx+iLkMw3op+Qf8JWLy426CMIi6B4bqVqX
+         dVDFnn8vVv8AbfAm13EurfhSOdeecbOc5FExU66tymM7vBcUyHH3NYXwouxZ2gvOj81o
+         92Mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XZo2P0btegWzJjzezfawR0r1cS5ypDKFjzgQbfC4/vQ=;
+        b=2XgNEe9eHrd/hN6S/RJA/I4MBlqHH7GyQi+IU2pZbG8N+Z2hbrtiS89Bmjubi3cbl/
+         xbhAXTl6LP+wfCp2jkKiPL1hybW0lg7gN7Wxn8c1EAuK2uBdSn1eIrih4zJrWwW/OHNm
+         wEbT5oWfw1wS8W7PA00pdb5wFm1ijT5uIyR5ZaesTDrAMvLcuQlVrsJmXfEd6F7yN2U7
+         TBC91oMUkm9GPKYQsTRs/LEQDRS5dvjAVeYjvaRTQ+xyOt+MCYhiD4A6cryk9+pBcMX7
+         0hmygV94etI90sPxVkccHTaZs8+SEqQEwXj0j4OwcRLyYBcsHHpbZpeiPdvb+Z5xqEJV
+         RUGw==
+X-Gm-Message-State: ACrzQf12a7S1SgQ7jTXdaBMDc9tOvb/E44NqGDB4xsyJTg1TtUtIXDrb
+        rHCvnHnrUhqYSkgQ1ir21gE=
+X-Google-Smtp-Source: AMsMyM4AaB2l+THPi7j2p1SeZ7w0ABcLBVqTmvJey6coQB8VRdU/jFmzlPitgDAYh2l3ZasYT5WKAQ==
+X-Received: by 2002:a05:6870:41ca:b0:12b:9637:1cda with SMTP id z10-20020a05687041ca00b0012b96371cdamr7307113oac.114.1666236162649;
+        Wed, 19 Oct 2022 20:22:42 -0700 (PDT)
+Received: from localhost ([12.97.180.36])
+        by smtp.gmail.com with ESMTPSA id a19-20020a056808129300b00354b619a375sm7596815oiw.0.2022.10.19.20.22.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Oct 2022 20:22:42 -0700 (PDT)
+From:   Yury Norov <yury.norov@gmail.com>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Yury Norov <yury.norov@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Alexey Klimov <klimov.linux@gmail.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Andy Whitcroft <apw@canonical.com>,
+        Dennis Zhou <dennis@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Kees Cook <keescook@chromium.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Subject: [RFC PATCH 0/2] Switch ARM to generic find_bit() API
+Date:   Wed, 19 Oct 2022 20:20:22 -0700
+Message-Id: <20221020032024.1804535-1-yury.norov@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA1PR11MB6733:EE_|SJ0PR11MB5896:EE_
-X-MS-Office365-Filtering-Correlation-Id: 14d4b096-0185-40a2-c429-08dab249a25d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Ub7CGsXJ1PYDR8tzr5+rIo/+Zx0kfux+CqUx8XPaluomWS7N30FIWyxAE8reE06EwREiLW88c5hV19xakblnb6tMHq1Yj4aKOjfYCHVKXodzWEkP2PWMxiYPiLp4gsgmu9BWD4YWAHZ6Sqo8vJ7rBa8bk0mKcy+QHrYx2wPihWZcgpDX1acz+CmImNznkQ1cZ2HGRtUuUvtBbediFeKA5LWaZ55Lr4aRyMxvPVyRpD0V+4Yybxp9qkYiqBleMfVLPRrXIej2xjcLlW6yRGvAMug2rdZ5BCB43getjdeUxCKH3zv9A8llxaIfp1LkbwlLQB2/NuEeu2fAnTZ4NUuxgkvXnaoz4jS/+p5+WrfcNTNDtu3Q56lKtFHfP0FYn+knKhcnCDhXk0uvMz0sUwrgN2HKm0wYpmwS9TuGy4IEsKQkR8XR9kngmGNVE1tLQHccROE7KaddFxNHmbHbEPUoVCnRegIuTUxgiV0UWSgLPwU7CwSwMvQIBGG/B5oGmmR3ajQxtMPXABHKoV4ctov7u1uJClRyu0ZOkUke+KnIX7ucdemKdwIuVKl7HMp4HZCw2yn0rmTwKR/hMH2J0KHVds57gaB07VS6C7kByFwgruV2qzbhUBNZTgyXmAc8bii6A503ZEVsv5+ebjnq4FOHgW2mXgiW26MgH1x6taHollpZsl2Vg4gR3OnBudRMRebORpuF8/bmNxkWgjoehUSP/Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6733.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(366004)(376002)(136003)(346002)(39860400002)(396003)(451199015)(316002)(54906003)(6916009)(66476007)(83380400001)(8936002)(53546011)(8676002)(66556008)(41300700001)(6506007)(5660300002)(66946007)(86362001)(26005)(9686003)(6666004)(6512007)(2906002)(33716001)(82960400001)(4326008)(186003)(38100700002)(6486002)(478600001)(44832011);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?PBV/K+bLLa2fF5zQ+5Cjz3+ImfpmmO5SDoJ2N/5ii/JHJMsQ/BzhhvKsBPnZ?=
- =?us-ascii?Q?cvyFxIUmcR6PY9S78oftKtbghaX9wOBr59hNC/3gfszt3BBdD3/QhrHDJJ+j?=
- =?us-ascii?Q?HKcRU4bsWJkPk9lLX4GVMGPufpy/STKB8F8TPwUxv24rv/4YJWIWF6rMruOC?=
- =?us-ascii?Q?98CSZvjEeX/V5L+t061gSRMGDGSzR18bPDz3sGXEANJ84TJMRR97xDEVySzh?=
- =?us-ascii?Q?v9vHZ/amJ3erQvgNvYRWfwnm4OUebOyRqhjC/KWCYNApUJMcxeAB9UA22sIk?=
- =?us-ascii?Q?4fZYiFqYKV59lpT3dya6edjG+1dNenh19AK4bruy//fJH3We4Fz8PglFTwPG?=
- =?us-ascii?Q?5q7LTqfATJdS88TZnIZ1TksVMt/lgV8dVCGDu1xP9D0fmru3x2b739Uld8jK?=
- =?us-ascii?Q?VIPmgrge1QCjVKBltlVez0lRndu/dGp1HNEVdnhgr45NMAuNKagtpPfTJPxJ?=
- =?us-ascii?Q?b8FyK4KEuMwJJgxv/LM7YESPrFzs/QLAVlQfSs+mW4HML9mHXpNw7PHDo0Rb?=
- =?us-ascii?Q?D9CQI1QJpKkWtpiQoFGwCkxFsQ5l5T0rUpm5IYopD6CvH+rFX9ux6EVKb3pH?=
- =?us-ascii?Q?Ix9xZbxnscGdu8aigsKhixqWQ+HTfXLw90HDRZj/u08PRvr/7WlGtINDCAkd?=
- =?us-ascii?Q?dstKReUPkG6cYPeA11NBmJ19QU2/OBvWEaMqoWf/Cbqw9F8YLYoMwayt0qbK?=
- =?us-ascii?Q?e2FT3hmSzlEIOW3irz1JNxImiOGgWVq32HILCsDZnuYR2qjwFxvn2Zq9ZPjR?=
- =?us-ascii?Q?H5GOd7OaEIZExLlGjLwVquJRNkMO4gjHrMvPa/rnq7M65L2MvLhm9ruHjfh8?=
- =?us-ascii?Q?1hOxMcvnS7q8HBW0cWntV3qVbjushnSGtIV5oI5q5g86YjOwGFsXNwnqP5To?=
- =?us-ascii?Q?aLXbenLE+xVuMVoAoJLgR6JOJ96fRqso4gqSK5fw7l7Q0n4Yd5DC/aYkHjF7?=
- =?us-ascii?Q?aw+IIxusaUHBgWnF2ImI5fDr7b13tXn6VX8t6oC2dDiZqy9aGPvqEhHJjift?=
- =?us-ascii?Q?OTqvDzwurz/tIaJhd4/Jlp/CThzeSX/efmSSj53fqz5huuo56cQgwDWlvhRA?=
- =?us-ascii?Q?NxghUaKOE0qYdkP/W3Vhbvvl9d38PyOvFVIa4Xf6aFIi0PGr8stYZ1diTw3y?=
- =?us-ascii?Q?dc03FotOjhbE21yzfGm3z71fco8XW/Ai2C8Fsg5UGLHYooRDzqj5Y/s4FB69?=
- =?us-ascii?Q?MDuLU2VKnfh51igg+ztJ62hNrqJrorGTlX2ZYA76MqYBgINKsDfTWlhwXU97?=
- =?us-ascii?Q?dqxEuECqFcfxeteOUCcptLDDhPJoDk6XhMRCTjH+geyMWNz5b9agZU+YFzs0?=
- =?us-ascii?Q?mSpyeuO0XXSJx4XXbxVak+TaIS2YemHtq1wiWn7uACYleAADOWd8gdQWKB40?=
- =?us-ascii?Q?ii+5f7UtSZz2X3wPe/+BVz0P00yhto7g0pIC1G7I5wBHZzXyA3tGZxiGt+xM?=
- =?us-ascii?Q?T5ZVKuRIdSMsmCfgQr+qfxUq3xEFclLrMDv9RgwpJx3JPW4wG9s2Xkqzg9+N?=
- =?us-ascii?Q?O3St1X6Rslfxq/6eHWhcypdUlOpYFlYtu1cEu0Y70lCTEC1XilEMpyqmrtd+?=
- =?us-ascii?Q?qkl8vxV/S2ErOYpZMNdFuXPfdAviOhmLFHfmuW1A?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 14d4b096-0185-40a2-c429-08dab249a25d
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6733.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Oct 2022 03:17:35.4319
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4E0/LnDsX1Jtn6GxVkXJ6OGy7mJ3Whs1xmv6h/mJeQNqUK2ygKqj2AlmGjNZkjTB+4olvemMrgFxuCM6MMKTWA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB5896
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 10:18:36AM +0800, Gao Xiang wrote:
-> On Wed, Oct 19, 2022 at 08:17:05PM +0200, Fabio M. De Francesco wrote:
-> > On Wednesday, October 19, 2022 1:36:55 AM CEST Gao Xiang wrote:
-> > > On Wed, Oct 19, 2022 at 01:21:27AM +0200, Fabio M. De Francesco wrote:
-> > > > On Tuesday, October 18, 2022 11:29:21 PM CEST Gao Xiang wrote:
+Hi Russell, all,
 
-[snip]
+I'd like to respin a patch that switches ARM to generic find_bit()
+functions.
 
-> 
-> That is not the simple nested unmapped case as you said above, I could take
-> a very brief example:
+Generic code works on par with arch or better, according to my
+testing [1], and with recent improvements merged in v6.1, it should
+be even faster.
 
-Building on this.  The uncompressed pages always outnumber the compressed
-pages, right?
+ARM already uses many generic find_bit() functions - those that it
+doesn't implement. So we are talking about migrating a subset of the
+API; most of find_bit() family has only generic implementation on ARM.
 
-> 
-> 1. map a decompresed page
-> 2. map a compressed page
+The only concern about this migration is that ARM code supports
+byte-aligned bitmap addresses, while generic code is optimized for
+word-aligned bitmaps.
 
-First reverse these because you are going to need to map a new decompressed
-page before another compressed page.  So:
+In my practice, I've never seen unaligned bitmaps. But to check that on
+ARM, I added a run-time check for bitmap alignment. I gave it run on
+several architectures and found nothing.
 
-1. map compressed
-2. map decompressed
+Can you please check that on your hardware and compare performance of
+generic vs arch code for you? If everything is OK, I suggest switching
+ARM to generic find_bit() completely.
 
-Then 4/5 and 7/8 become unmap/map new without issue.
+Thanks,
+Yury
 
-> 3. working
-> 4. decompressed page is all consumed, unmap the current decompressed page
-> 5. map the next decompressed page
-> 6. working
-> 7. decompressed page is all consumed, unmap the current decompressed page
-> 8. map the next decompressed page
-> 9. working
+[1] https://lore.kernel.org/all/YuWk3titnOiQACzC@yury-laptop/
 
-This is more complicated but not overly so.
+Yury Norov (2):
+  bitmap: add sanity check function for find_bit()
+  arm: drop arch implementation for find_bit() functions
 
-Simply
+ arch/arm/include/asm/bitops.h |  63 -----------
+ arch/arm/kernel/armksyms.c    |  11 --
+ arch/arm/lib/Makefile         |   2 +-
+ arch/arm/lib/findbit.S        | 193 ----------------------------------
+ include/linux/find.h          |  35 ++++++
+ lib/Kconfig.debug             |   7 ++
+ 6 files changed, 43 insertions(+), 268 deletions(-)
+ delete mode 100644 arch/arm/lib/findbit.S
 
-9.1 unmap decompressed
+-- 
+2.34.1
 
-> 10. compressed page is all consumed, unmap the current compressed page
-> 11. map the next compressed page
-
-11.1 remap decompressed
-
-> 12. working
-> 13. ... (anyway, unmap and remap a compressed page or a decompressed page
->          in any order.)
-> 
-> until all process is finished.  by using kmap(), it's much simple to
-> implement this, but kmap_local(), it only complexes the code.
-
-Agreed kmap() is easier but I think this could work.
-
-Basically you keep the compressed mapped first.
-
-I also assume there is also a reverse of this so reverse the pages in that
-case.
-
-Thoughts?
-Ira
