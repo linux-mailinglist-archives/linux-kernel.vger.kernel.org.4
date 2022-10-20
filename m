@@ -2,111 +2,475 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBCAF6067F5
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 20:10:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC45C6067FC
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 20:12:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230163AbiJTSKy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 14:10:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42078 "EHLO
+        id S230091AbiJTSMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 14:12:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230090AbiJTSKt (ORCPT
+        with ESMTP id S230243AbiJTSLy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 14:10:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB71A16F74E;
-        Thu, 20 Oct 2022 11:10:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 90483B8274A;
-        Thu, 20 Oct 2022 18:09:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CA72C433D7;
-        Thu, 20 Oct 2022 18:09:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666289379;
-        bh=PBunTa7rce9oPUHewe2pTnhit7GvQJqymuWwU3QKUXM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=T6KODpSujSMwgSBYn8ps6OsFiGEP+mFua+xq2LF7eTAmVCFXap2zrS/xQskdZRnE3
-         sX6muDQriwpDR8ycL/2J8aoBIPcJnM5F8FT3aZD2wmh0qRgH8TE2NhYpZ8XQowTc4R
-         AFilFdujps4dudONDLufhK52DdFGHp5Kse+jkrtu1+fhYLGsoLLo9o3B3NUfXN39cj
-         bp65K+KJzSANN87wy8wz/IDYYuG2lN3Isu/JdpCHHbkAaYIngamdyqJiUsz+kRsyWi
-         0spb8hQKhsmznSY1j0NmKbNbcm9+G2EkHxv5sW5r8cvyfB8i6yuaQq0ADtV1rx1hKj
-         ePH7bGJEhpV6Q==
-Received: by mail-ej1-f48.google.com with SMTP id a26so1465070ejc.4;
-        Thu, 20 Oct 2022 11:09:39 -0700 (PDT)
-X-Gm-Message-State: ACrzQf3g+BfHcZ9ADJSVA4HOcQcdAMBNAar4ttqM6haFPZQnlCgjPmxh
-        tvpX5g6Txwm+6FnscNco6iImT/ms//bGSK9yaiA=
-X-Google-Smtp-Source: AMsMyM6dBHethUPJpGWt/pGXdbIIfVcM3sIT6J9dz+n7IuFyddVg1deCn3XF+9udYMoHeEpl4tupoWZ4gVhAZEyiJik=
-X-Received: by 2002:a17:906:eec1:b0:782:6384:76be with SMTP id
- wu1-20020a170906eec100b00782638476bemr12134290ejb.756.1666289377447; Thu, 20
- Oct 2022 11:09:37 -0700 (PDT)
+        Thu, 20 Oct 2022 14:11:54 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EB3C20272F
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 11:11:52 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id m29-20020a05600c3b1d00b003c6bf423c71so3122657wms.0
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 11:11:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6tbvR8liwmRMUZzHJk6Yh3h8ihkkHrt+7l54fpW+xg0=;
+        b=i9MWjTTtmwMkSm8Lb1he8IxlnpgPSqcwtV6Of2M7vzpB7JdiLJLngQxacxN/9bemps
+         DOPKK/wbw2Abutn+4TL3ikpFP7xoxmi0nHpkRgNf7O8BmtlT66Ce2eFz8R3hIc0b1LwQ
+         oPiy7FujyTN/HI+3fp2+hFk6c9asFTSEbuCrRypumUIsOj+D36qv3SihBrVEQf8G7sbH
+         aEhXBBrBOFxB1t1Z58p6/GXgl3FJ4+0REqFVSpe3nWzfKGOv+APV//qtdik4d+B81jNo
+         thaeMZPvGSCEhqpkCioxawvPzVwLru+H/RNXdYM1U0eB5B2zrriAJIOH96V2MTQPBWrs
+         gsPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6tbvR8liwmRMUZzHJk6Yh3h8ihkkHrt+7l54fpW+xg0=;
+        b=PF/VPzG0oQEnI7ebcwf/0WgPIMQKtK6jxlD1nriLnT7ksWb5lhWJAGZHn0b5r7PZZO
+         kR9W8kAV3G+/rqkG2WXP8Hy4yzeVWBtCH17tLttbylLDif1vJoAlnM39a+nQwOLR0CYL
+         182XInf5GJUtGbmFaRmMLbZq50aALpar3nOS5zRSRkpr6wHtr+WO6nctwi2Qr0M6C6x0
+         AYH0EbcVlWaTY1emI5RUu1rd7l2pBR/CzIKFwQGG9vpHeChVdiwEEHldZFH5XeEASdXB
+         x4JnQhW/Ws3r4fXdOSIsu6xrz14PtF7TW+32v1LdqSErjWPx6BLxCFf1OV0WD9aebp6s
+         ma9g==
+X-Gm-Message-State: ACrzQf3PWmWDyL44egrW7kvIWFJu6MR+183galec9vVTutm2BPvDqfh9
+        gZf1yGmcNMXev2SIMg4Hin0=
+X-Google-Smtp-Source: AMsMyM4d4pOnVkhOGxOVg7xfSjhRWrXwApSBU8/qpFZsQTRVq5lb9jNCpIfhXs6JoWoIWB23Fl78fA==
+X-Received: by 2002:a05:600c:1614:b0:3c6:ca05:3e02 with SMTP id m20-20020a05600c161400b003c6ca053e02mr32130985wmn.116.1666289510311;
+        Thu, 20 Oct 2022 11:11:50 -0700 (PDT)
+Received: from [192.168.1.93] (adsl-46.176.58.194.tellas.gr. [176.58.194.46])
+        by smtp.gmail.com with ESMTPSA id b21-20020a05600c4e1500b003a83ca67f73sm357594wmq.3.2022.10.20.11.11.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Oct 2022 11:11:49 -0700 (PDT)
+Message-ID: <44fdaba0-15eb-0778-bacf-3937a36b0841@gmail.com>
+Date:   Thu, 20 Oct 2022 21:11:46 +0300
 MIME-Version: 1.0
-References: <20221020155104.9485-1-ubizjak@gmail.com>
-In-Reply-To: <20221020155104.9485-1-ubizjak@gmail.com>
-From:   Song Liu <song@kernel.org>
-Date:   Thu, 20 Oct 2022 11:09:25 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW4z+ttCn6zUWwz+QB_+Ddfo0YDDqLxWeTHLLuXHSDoeEQ@mail.gmail.com>
-Message-ID: <CAPhsuW4z+ttCn6zUWwz+QB_+Ddfo0YDDqLxWeTHLLuXHSDoeEQ@mail.gmail.com>
-Subject: Re: [PATCH v2] raid5-cache: use try_cmpxchg in r5l_wake_reclaim
-To:     Uros Bizjak <ubizjak@gmail.com>
-Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH V2] xen/virtio: Handle PCI devices which Host controller
+ is described in DT
+Content-Language: en-US
+To:     Oleksandr Tyshchenko <Oleksandr_Tyshchenko@epam.com>
+Cc:     "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <olekstysh@gmail.com>
+References: <20221015153409.918775-1-olekstysh@gmail.com>
+ <alpine.DEB.2.22.394.2210181734440.4587@ubuntu-linux-20-04-desktop>
+ <19823a2a-bc84-5458-bb69-7ac0c1b81573@gmail.com>
+ <41b56c3f-1b81-a953-2e75-5a3ab8ef82a2@epam.com>
+ <da0d72d1-3398-8005-1c40-b5f341ff9fc8@gmail.com>
+ <ded6c520-8f1a-6ee3-bbfa-3de7e1f74779@epam.com>
+From:   Xenia Ragiadakou <burzalodowa@gmail.com>
+In-Reply-To: <ded6c520-8f1a-6ee3-bbfa-3de7e1f74779@epam.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 8:51 AM Uros Bizjak <ubizjak@gmail.com> wrote:
->
-> Use try_cmpxchg instead of cmpxchg (*ptr, old, new) == old in
-> r5l_wake_reclaim. 86 CMPXCHG instruction returns success in ZF flag, so
-> this change saves a compare after cmpxchg (and related move instruction in
-> front of cmpxchg).
->
-> Also, try_cmpxchg implicitly assigns old *ptr value to "old" when cmpxchg
-> fails. There is no need to re-read the value in the loop.
->
-> Note that the value from *ptr should be read using READ_ONCE to prevent
-> the compiler from merging, refetching or reordering the read.
->
-> No functional change intended.
->
-> Cc: Song Liu <song@kernel.org>
-> Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+On 10/20/22 17:12, Oleksandr Tyshchenko wrote:
+> 
+> On 20.10.22 11:24, Xenia Ragiadakou wrote:
+>> On 10/19/22 22:41, Oleksandr Tyshchenko wrote:
+>>
+>> Hi Oleksandr
+> 
+> 
+> Hello Xenia
+> 
+> 
+>>
+>>>
+>>> On 19.10.22 11:47, Xenia Ragiadakou wrote:
+>>>
+>>> Hello Xenia
+>>>
+>>>> On 10/19/22 03:58, Stefano Stabellini wrote:
+>>>>> On Sat, 15 Oct 2022, Oleksandr Tyshchenko wrote:
+>>>>>> From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+>>>>>>
+>>>>>> Use the same "xen-grant-dma" device concept for the PCI devices
+>>>>>> behind device-tree based PCI Host controller, but with one
+>>>>>> modification.
+>>>>>> Unlike for platform devices, we cannot use generic IOMMU bindings
+>>>>>> (iommus property), as we need to support more flexible configuration.
+>>>>>> The problem is that PCI devices under the single PCI Host controller
+>>>>>> may have the backends running in different Xen domains and thus have
+>>>>>> different endpoints ID (backend domains ID).
+>>>>>>
+>>>>>> So use generic PCI-IOMMU bindings instead (iommu-map/iommu-map-mask
+>>>>>> properties) which allows us to describe relationship between PCI
+>>>>>> devices and backend domains ID properly.
+>>>>>>
+>>>>>> Signed-off-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+>>>>>
+>>>>> Now that I understood the approach and the reasons for it, I can
+>>>>> review
+>>>>> the patch :-)
+>>>>>
+>>>>> Please add an example of the bindings in the commit message.
+>>>>>
+>>>>>
+>>>>>> ---
+>>>>>> Slightly RFC. This is needed to support Xen grant mappings for
+>>>>>> virtio-pci devices
+>>>>>> on Arm at some point in the future. The Xen toolstack side is not
+>>>>>> completely ready yet.
+>>>>>> Here, for PCI devices we use more flexible way to pass backend domid
+>>>>>> to the guest
+>>>>>> than for platform devices.
+>>>>>>
+>>>>>> Changes V1 -> V2:
+>>>>>>       - update commit description
+>>>>>>       - rebase
+>>>>>>       - rework to use generic PCI-IOMMU bindings instead of generic
+>>>>>> IOMMU bindings
+>>>>>>
+>>>>>> Previous discussion is at:
+>>>>>> https://urldefense.com/v3/__https://lore.kernel.org/xen-devel/20221006174804.2003029-1-olekstysh@gmail.com/__;!!GF_29dbcQIUBPA!3-vq7Edm3XfKtD5cnNjnOzDQvuo_XrhJ73yH-nPfqOkGGU0IjLG7R7MR_nAJCAPeOutHRLT44wKYwQwz3SauACie_ZAy$
+>>>>>>
+>>>>>> [lore[.]kernel[.]org]
+>>>>>>
+>>>>>> Based on:
+>>>>>> https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/xen/tip.git/log/?h=for-linus-6.1__;!!GF_29dbcQIUBPA!3-vq7Edm3XfKtD5cnNjnOzDQvuo_XrhJ73yH-nPfqOkGGU0IjLG7R7MR_nAJCAPeOutHRLT44wKYwQwz3SauAEnMDHAq$
+>>>>>>
+>>>>>> [git[.]kernel[.]org]
+>>>>>> ---
+>>>>>>     drivers/xen/grant-dma-ops.c | 87
+>>>>>> ++++++++++++++++++++++++++++++++-----
+>>>>>>     1 file changed, 76 insertions(+), 11 deletions(-)
+>>>>>>
+>>>>>> diff --git a/drivers/xen/grant-dma-ops.c
+>>>>>> b/drivers/xen/grant-dma-ops.c
+>>>>>> index daa525df7bdc..b79d9d6ce154 100644
+>>>>>> --- a/drivers/xen/grant-dma-ops.c
+>>>>>> +++ b/drivers/xen/grant-dma-ops.c
+>>>>>> @@ -10,6 +10,7 @@
+>>>>>>     #include <linux/module.h>
+>>>>>>     #include <linux/dma-map-ops.h>
+>>>>>>     #include <linux/of.h>
+>>>>>> +#include <linux/pci.h>
+>>>>>>     #include <linux/pfn.h>
+>>>>>>     #include <linux/xarray.h>
+>>>>>>     #include <linux/virtio_anchor.h>
+>>>>>> @@ -292,12 +293,55 @@ static const struct dma_map_ops
+>>>>>> xen_grant_dma_ops = {
+>>>>>>         .dma_supported = xen_grant_dma_supported,
+>>>>>>     };
+>>>>>>     +static struct device_node *xen_dt_get_pci_host_node(struct device
+>>>>>> *dev)
+>>>>>> +{
+>>>>>> +    struct pci_dev *pdev = to_pci_dev(dev);
+>>>>>> +    struct pci_bus *bus = pdev->bus;
+>>>>>> +
+>>>>>> +    /* Walk up to the root bus to look for PCI Host controller */
+>>>>>> +    while (!pci_is_root_bus(bus))
+>>>>>> +        bus = bus->parent;
+>>>>>> +
+>>>>>> +    return of_node_get(bus->bridge->parent->of_node);
+>>>>>> +}
+>>>>>
+>>>>> It seems silly that we need to walk the hierachy that way, but I
+>>>>> couldn't find another way to do it
+>>>>>
+>>>>>
+>>>>>> +static struct device_node *xen_dt_get_node(struct device *dev)
+>>>>>> +{
+>>>>>> +    if (dev_is_pci(dev))
+>>>>>> +        return xen_dt_get_pci_host_node(dev);
+>>>>>> +
+>>>>>> +    return of_node_get(dev->of_node);
+>>>>>> +}
+>>>>>> +
+>>>>>> +static int xen_dt_map_id(struct device *dev, struct device_node
+>>>>>> **iommu_np,
+>>>>>> +             u32 *sid)
+>>>>>> +{
+>>>>>> +    struct pci_dev *pdev = to_pci_dev(dev);
+>>>>>> +    u32 rid = PCI_DEVID(pdev->bus->number, pdev->devfn);
+>>>>>> +    struct device_node *host_np;
+>>>>>> +    int ret;
+>>>>>> +
+>>>>>> +    host_np = xen_dt_get_pci_host_node(dev);
+>>>>>> +    if (!host_np)
+>>>>>> +        return -ENODEV;
+>>>>>> +
+>>>>>> +    ret = of_map_id(host_np, rid, "iommu-map", "iommu-map-mask",
+>>>>>> iommu_np, sid);
+>>>>>> +    of_node_put(host_np);
+>>>>>> +    return ret;
+>>>>>> +}
+>>>>>> +
+>>>>>>     static bool xen_is_dt_grant_dma_device(struct device *dev)
+>>>>>>     {
+>>>>>> -    struct device_node *iommu_np;
+>>>>>> +    struct device_node *iommu_np = NULL;
+>>>>>>         bool has_iommu;
+>>>>>>     -    iommu_np = of_parse_phandle(dev->of_node, "iommus", 0);
+>>>>>> +    if (dev_is_pci(dev)) {
+>>>>>> +        if (xen_dt_map_id(dev, &iommu_np, NULL))
+>>>>>> +            return false;
+>>>>>> +    } else
+>>>>>> +        iommu_np = of_parse_phandle(dev->of_node, "iommus", 0);
+>>>>>> +
+>>>>>>         has_iommu = iommu_np &&
+>>>>>>                 of_device_is_compatible(iommu_np, "xen,grant-dma");
+>>>>>>         of_node_put(iommu_np);
+>>>>>> @@ -307,9 +351,17 @@ static bool xen_is_dt_grant_dma_device(struct
+>>>>>> device *dev)
+>>>>>>       bool xen_is_grant_dma_device(struct device *dev)
+>>>>>>     {
+>>>>>> +    struct device_node *np;
+>>>>>> +
+>>>>>>         /* XXX Handle only DT devices for now */
+>>>>>> -    if (dev->of_node)
+>>>>>> -        return xen_is_dt_grant_dma_device(dev);
+>>>>>> +    np = xen_dt_get_node(dev);
+>>>>>> +    if (np) {
+>>>>>> +        bool ret;
+>>>>>> +
+>>>>>> +        ret = xen_is_dt_grant_dma_device(dev);
+>>>>>> +        of_node_put(np);
+>>>>>> +        return ret;
+>>>>>> +    }
+>>>>>
+>>>>> We don't need to walk the PCI hierachy twice. Maybe we can add the
+>>>>> of_node check directly to xen_is_dt_grant_dma_device?
+>>>>>
+>>>>
+>>>> I think in general we could pass directly the host bridge device if
+>>>> dev_is_pci(dev) (which can be retrieved with
+>>>> pci_get_host_bridge_device(to_pci_dev(dev), and after done with it
+>>>> pci_put_host_bridge_device(phb)).
+>>>> So that, xen_is_dt_grant_dma_device() and
+>>>> xen_dt_grant_init_backend_domid() won't need to discover it themselves.
+>>>> This will simplify the code.
+>>>
+>>>
+>>> Good point. I have some remark. Can we use pci_find_host_bridge()
+>>> instead? This way we don't have to add #include "../pci/pci.h", and have
+>>> to drop reference afterwards.
+>>>
+>>> With that xen_dt_get_pci_host_node() will became the following:
+>>>
+>>>
+>>> static struct device_node *xen_dt_get_pci_host_node(struct device *dev)
+>>> {
+>>>        struct pci_host_bridge *bridge =
+>>> pci_find_host_bridge(to_pci_dev(dev)->bus);
+>>>
+>>>        return of_node_get(bridge->dev.parent->of_node);
+>>> }
+>>>
+>>
+>> You are right. I prefer your version instead of the above.
+> 
+> 
+> ok, thanks
+> 
+> 
+>>
+>>
+>>>
+>>> With Stefano's suggestion, we won't walk the PCI hierarchy twice when
+>>> executing xen_is_grant_dma_device() for PCI device:
+>>>
+>>> xen_is_grant_dma_device() -> xen_is_dt_grant_dma_device() ->
+>>> xen_dt_map_id() -> xen_dt_get_pci_host_node()
+>>>
+>>>
+>>> What do you think?
+>>>
+>>
+>> I was thinking passing the device_node along with the device in the
+>> function arguments. More specifically, of doing this (not tested, just
+>> an idea):
+>>
+>> bool xen_is_grant_dma_device(struct device *dev)
+>> {
+>>      struct device_node *np;
+>>      bool has_iommu = false;
+>>
+>>      /* XXX Handle only DT devices for now */
+>>      np = xen_dt_get_node(dev);
+>>      if (np)
+>>          has_iommu = xen_is_dt_grant_dma_device(dev, np);
+>>      of_node_put(np);
+>>      return has_iommu;
+>> }
+>>
+>> static bool xen_is_dt_grant_dma_device(struct device *dev,
+>>                                         struct device_node *np)
+>> {
+>>      struct device_node *iommu_np = NULL;
+>>      bool has_iommu;
+>>
+>>      if (dev_is_pci(dev)) {
+>>          struct pci_dev *pdev = to_pci_dev(dev);
+>>      u32 id = PCI_DEVID(pdev->bus->number, pdev->devfn);
+>>          of_map_id(np, id, "iommu-map", "iommu-map-mask", &iommu_np,
+>> NULL);
+>>      } else {
+>>          iommu_np = of_parse_phandle(np, "iommus", 0);
+>>      }
+>>
+>>      has_iommu = iommu_np && of_device_is_compatible(iommu_np,
+>> "xen,grant-dma");
+>>      of_node_put(iommu_np);
+>>
+>>      return has_iommu;
+>> }
+> 
+> 
+> I got it.
+> 
+> xen_is_grant_dma_device() for V3 won't call xen_dt_get_node(), but call
+> xen_is_dt_grant_dma_device() directly.
+> 
+> static bool xen_is_dt_grant_dma_device(struct device *dev)
+> {
+>       struct device_node *iommu_np = NULL;
+>       bool has_iommu;
+> 
+>       if (dev_is_pci(dev)) {
+>           if (xen_dt_map_id(dev, &iommu_np, NULL))
+>               return false;
+>       } else if (dev->of_node)
+>           iommu_np = of_parse_phandle(dev->of_node, "iommus", 0);
+>       else
+>           return false;
+> 
+>       has_iommu = iommu_np &&
+>               of_device_is_compatible(iommu_np, "xen,grant-dma");
+>       of_node_put(iommu_np);
+> 
+>       return has_iommu;
+> }
+> 
+> bool xen_is_grant_dma_device(struct device *dev)
+> {
+>       /* XXX Handle only DT devices for now */
+>       return xen_is_dt_grant_dma_device(dev);
+> }
+> 
+> 
 
-Applied to md-next. Thanks!
+Ok. One difference, that I see from the previous, is that here you don't 
+use the dynamic interface when you access the dev->of_node 
+(of_node_get/of_node_put). Before, this was guarded through the external 
+xen_dt_get_node().
 
-Song
+I suspect that the same needs to be done for the function 
+xen_grant_setup_dma_ops(). There, also, the code walks up to the root 
+bus twice.
 
-> ---
-> v2: Fix garbled subject line
-> ---
->  drivers/md/raid5-cache.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/md/raid5-cache.c b/drivers/md/raid5-cache.c
-> index 832d8566e165..a63023aae21e 100644
-> --- a/drivers/md/raid5-cache.c
-> +++ b/drivers/md/raid5-cache.c
-> @@ -1565,11 +1565,12 @@ void r5l_wake_reclaim(struct r5l_log *log, sector_t space)
->
->         if (!log)
->                 return;
-> +
-> +       target = READ_ONCE(log->reclaim_target);
->         do {
-> -               target = log->reclaim_target;
->                 if (new < target)
->                         return;
-> -       } while (cmpxchg(&log->reclaim_target, target, new) != target);
-> +       } while (!try_cmpxchg(&log->reclaim_target, &target, new));
->         md_wakeup_thread(log->reclaim_thread);
->  }
->
-> --
-> 2.37.3
->
+>>
+>> I 'm wondering ... is it possible for the host bridge device node to
+>> have the iommus property set? meaning that all of its pci devs will
+>> have the same backend?
+> 
+> Good question. I think, it is possible... This is technically what V1 is
+> doing.
+> 
+> 
+> Are you asking because to support "iommus" for PCI devices as well to
+> describe that use-case with all PCI devices having the same endpoint ID
+> (backend ID)?
+> If yes, I think, this could be still described by "iommu-map" property,
+> something like that (if we don't want to describe mapping for each PCI
+> device one-by-one).
+> 
+> iommu-map = <0x0 &iommu X 0x1>;
+> 
+> iommu-map-mask = <0x0>;
+> 
+> where the X is backend ID.
+> 
+> 
+> It feels to me that it should be written down somewhere that for
+> platform devices we expect "iommus" and for PCI devices we expect
+> "iommu-map/iommu-map-mask" to be present.
+
+Thanks for the clarification, now I got it. Yes I agree.
+
+>>
+>>
+>>>>
+>>>>>
+>>>>>>         return false;
+>>>>>>     }
+>>>>>> @@ -325,12 +377,19 @@ bool xen_virtio_mem_acc(struct virtio_device
+>>>>>> *dev)
+>>>>>>     static int xen_dt_grant_init_backend_domid(struct device *dev,
+>>>>>>                            struct xen_grant_dma_data *data)
+>>>>>>     {
+>>>>>> -    struct of_phandle_args iommu_spec;
+>>>>>> +    struct of_phandle_args iommu_spec = { .args_count = 1 };
+>>>>>>     -    if (of_parse_phandle_with_args(dev->of_node, "iommus",
+>>>>>> "#iommu-cells",
+>>>>>> -            0, &iommu_spec)) {
+>>>>>> -        dev_err(dev, "Cannot parse iommus property\n");
+>>>>>> -        return -ESRCH;
+>>>>>> +    if (dev_is_pci(dev)) {
+>>>>>> +        if (xen_dt_map_id(dev, &iommu_spec.np, iommu_spec.args)) {
+>>>>>> +            dev_err(dev, "Cannot translate ID\n");
+>>>>>> +            return -ESRCH;
+>>>>>> +        }
+>>>>>> +    } else {
+>>>>>> +        if (of_parse_phandle_with_args(dev->of_node, "iommus",
+>>>>>> "#iommu-cells",
+>>>>>> +                0, &iommu_spec)) {
+>>>>>> +            dev_err(dev, "Cannot parse iommus property\n");
+>>>>>> +            return -ESRCH;
+>>>>>> +        }
+>>>>>>         }
+>>>>>>           if (!of_device_is_compatible(iommu_spec.np,
+>>>>>> "xen,grant-dma") ||
+>>>>>> @@ -354,6 +413,7 @@ static int
+>>>>>> xen_dt_grant_init_backend_domid(struct device *dev,
+>>>>>>     void xen_grant_setup_dma_ops(struct device *dev)
+>>>>>>     {
+>>>>>>         struct xen_grant_dma_data *data;
+>>>>>> +    struct device_node *np;
+>>>>>>           data = find_xen_grant_dma_data(dev);
+>>>>>>         if (data) {
+>>>>>> @@ -365,8 +425,13 @@ void xen_grant_setup_dma_ops(struct device *dev)
+>>>>>>         if (!data)
+>>>>>>             goto err;
+>>>>>>     -    if (dev->of_node) {
+>>>>>> -        if (xen_dt_grant_init_backend_domid(dev, data))
+>>>>>> +    np = xen_dt_get_node(dev);
+>>>>>> +    if (np) {
+>>>>>> +        int ret;
+>>>>>> +
+>>>>>> +        ret = xen_dt_grant_init_backend_domid(dev, data);
+>>>>>> +        of_node_put(np);
+>>>>>> +        if (ret)
+>>>>>>                 goto err;
+>>>>>>         } else if (IS_ENABLED(CONFIG_XEN_VIRTIO_FORCE_GRANT)) {
+>>>>>>             dev_info(dev, "Using dom0 as backend\n");
+>>>>>> -- 
+>>>>>> 2.25.1
+>>>>>>
+>>>>>
+>>>>
+>>
+
+-- 
+Xenia
