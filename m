@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D075D606139
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 15:13:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B38C606144
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 15:14:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230410AbiJTNNf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 09:13:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45074 "EHLO
+        id S230494AbiJTNOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 09:14:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230243AbiJTNNc (ORCPT
+        with ESMTP id S230476AbiJTNOf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 09:13:32 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5BBF6D9C4
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 06:13:01 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id bv10so34287302wrb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 06:13:01 -0700 (PDT)
+        Thu, 20 Oct 2022 09:14:35 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35FF714D8CE
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 06:13:58 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id v11so4879735wmd.1
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 06:13:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=J4boSMDIMSEVQTaENzgDytuelvqQTNOGg+C0gp1qMNY=;
-        b=E/Hioe+jZMzRIQ7yMGUhSU9ay7uPXjwm6UBqcrUgwU3IgoI5pSLHBPSmJ/pTFqxz5O
-         roKsqMeS6FiuhGGMda7XTJ+1FNRXTc+pghU8rh44mD8Ycu1kaDyBDPqYJcIKudLuI3jQ
-         dTDishgLlhpzIHyUch61+aiJxjLDxmT+ybnyQ2/D99l6jz71IPm7l1MV6gsmZlJWQtjX
-         3XcQqZJcsUHES4z20q/BGKRDN03p8cAUamKq+2i1FvjVCsyy92/vlLydwwdf/IGpOB8m
-         R1k5Bs6QcyfQIBZRtzbYZXkUfHZ2Fxc2UuTPgBhyUrtSbJZHkAmkOfbCpdjL5JqiUrhW
-         CugA==
+        bh=Ot9nuC1I4qAigSvkVZLdiUhVV5F8thjtHAvIFE60P0s=;
+        b=RfQd7pCu5JXtfHFtctkAdsV36AfpV51SnjlbQNPKe4zwbwR37DsF3XdxzHBe/dNAhU
+         OLEFcUxJrTLfxU4wEyp82PJd03MrmVZIN4a67O2rTxIbHIrPFJRUFvqvlhwS3TzbhDY0
+         YJ+aMgWruFtNr0CksFwNGKe1kxUsT0/1qPsDhykcmk5LmVFgYmKYTMcXnNcjm5vK5edw
+         4YwkmOL7NOmFsPR9mX1QYF5zSi1Bs6EIvyfSRSMWAZhuAxF5j8yjpEVAjMOa8Y794+Ue
+         XUd1zmboEzkUiiHzbKB7H9vHotDh4nroJv7yS2l42Skdh11REWPhwrJw9XAL5jQQCQ3n
+         tsUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=J4boSMDIMSEVQTaENzgDytuelvqQTNOGg+C0gp1qMNY=;
-        b=Mqfzj1D9vLLDsb5Qs/NdbrqXalaAJ4rKpsvdPqn+fhWMMMELCV6OmvxaqdmuRg6WS9
-         /H3gK+FpVHLuM64fDSNqB8TaMen0FsWHzezTf99Hdpg6I0EdI8E4AATZ3ATtTROXulGu
-         ZDtHza1YV/HwoVEW7yoIERsxax2PVhUoNR4w44A8NpFHqmIvYfD1ja61NaQqHJJh5tTi
-         9bjFbXCIF67O+D5hVF/TVFh/Qxa3pkuebGo5av5eXelScXDX+kyWsUUFPNz7wm+yGUGh
-         t2IAp2eRW4hUii5YGU7DR8avOLvutMdARidmsgXr/Ibs746Mj5XZIbNTpRpzwZ5aPFMv
-         q/sQ==
-X-Gm-Message-State: ACrzQf0C9MYNtOuxY0IdaMHqff46QyeZZtkx4F94CZ9yb2+bnqcXiXXg
-        jRIDfcW/CCF/rlpky+lTkewtqQ==
-X-Google-Smtp-Source: AMsMyM7XcWdQ45niE9823OodhnElezdZeoxDyltFVuQkpfyfcKWrLtK2eKa6PRbx8t6awEeRiArqjQ==
-X-Received: by 2002:a05:6000:1842:b0:22e:7bbf:c75 with SMTP id c2-20020a056000184200b0022e7bbf0c75mr8601406wri.547.1666271488170;
-        Thu, 20 Oct 2022 06:11:28 -0700 (PDT)
+        bh=Ot9nuC1I4qAigSvkVZLdiUhVV5F8thjtHAvIFE60P0s=;
+        b=MXCeAKDS38XR6OpbmJmHblOJIEju4jg6bpNb9LaMLqpfSyJ4Kd/HEMS5e+S5CVgGLK
+         6MrOgHWQXK5/e7/Zds8ti/3KskLc3SZg/vdqXpTSlH9lj6YKdUqhFORiV4vo7iQuZECc
+         SnzN1lOPwfJO3MWf+p0HgdmZFS2iF0cfXunTqragjCThIYIIT0jAJe8exjtv+QrNitY2
+         FQoYSa2tsOry1dOuSoechd9nHdvhtgWNyfwYPKynuX8Y2tjAyFL8yvQeiZa23bqWMUXt
+         IyPMtzFaJoPrgoOYDgDV0NtkDHOA9dmOpFTj6F17wNp+zmwikRGbcnJHWfqdaaVTzHBV
+         NlJA==
+X-Gm-Message-State: ACrzQf3r6BSrGzR7cejGx0+jk0batIKp6ega373byvXxXRvO3p28KCep
+        QGgNUrxNfgxYp6y5uAOyEUZ+8qJQhjn+xA==
+X-Google-Smtp-Source: AMsMyM7eTn/HY8TMG4XXER2zpBfU9Os0yTIHlNciY86QkvzG+I7D/GNHezch8CN5w1iKmaPS8yF1Rg==
+X-Received: by 2002:a05:600c:4f13:b0:3c6:eb72:51e3 with SMTP id l19-20020a05600c4f1300b003c6eb7251e3mr21174576wmq.34.1666271509601;
+        Thu, 20 Oct 2022 06:11:49 -0700 (PDT)
 Received: from localhost.localdomain ([2001:861:3a82:90b0:2979:1615:9a68:f204])
-        by smtp.gmail.com with ESMTPSA id x8-20020a5d6508000000b00228dff8d975sm16453927wru.109.2022.10.20.06.11.27
+        by smtp.gmail.com with ESMTPSA id x8-20020a5d6508000000b00228dff8d975sm16453927wru.109.2022.10.20.06.11.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 06:11:27 -0700 (PDT)
+        Thu, 20 Oct 2022 06:11:49 -0700 (PDT)
 From:   fchiby@baylibre.com
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -59,12 +59,13 @@ To:     Rob Herring <robh+dt@kernel.org>,
         Johnson Wang <johnson.wang@mediatek.com>,
         "Zhiyong.Tao" <zhiyong.tao@mediatek.com>
 Cc:     Fabien Parent <fparent@baylibre.com>,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
         Sen Chu <sen.chu@mediatek.com>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org
-Subject: [PATCH 2/3] soc: mediatek: pwrap: add support for sys & tmr clocks
-Date:   Thu, 20 Oct 2022 15:09:56 +0200
-Message-Id: <20221020130957.25197-3-fchiby@baylibre.com>
+Subject: [PATCH 3/3] soc: mediatek: pwrap: add mt8365 SoC support
+Date:   Thu, 20 Oct 2022 15:09:57 +0200
+Message-Id: <20221020130957.25197-4-fchiby@baylibre.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221020130957.25197-1-fchiby@baylibre.com>
 References: <20221020130957.25197-1-fchiby@baylibre.com>
@@ -81,108 +82,130 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Fabien Parent <fparent@baylibre.com>
 
-MT8365 requires an extra 2 clocks to be enabled to behave correctly.
-Add support these 2 clocks, they are made optional since they seem to
-be present only on MT8365.
+Add PMIC Wrap support for MT8365 SoC.
 
 Signed-off-by: Fabien Parent <fparent@baylibre.com>
 ---
- drivers/soc/mediatek/mtk-pmic-wrap.c | 36 ++++++++++++++++++++++++----
- 1 file changed, 32 insertions(+), 4 deletions(-)
+ drivers/soc/mediatek/mtk-pmic-wrap.c | 78 ++++++++++++++++++++++++++++
+ 1 file changed, 78 insertions(+)
 
 diff --git a/drivers/soc/mediatek/mtk-pmic-wrap.c b/drivers/soc/mediatek/mtk-pmic-wrap.c
-index eb82ae06697f..d56b00023ccd 100644
+index d56b00023ccd..15789a03e6c6 100644
 --- a/drivers/soc/mediatek/mtk-pmic-wrap.c
 +++ b/drivers/soc/mediatek/mtk-pmic-wrap.c
-@@ -1171,6 +1171,8 @@ struct pmic_wrapper {
- 	const struct pwrap_slv_type *slave;
- 	struct clk *clk_spi;
- 	struct clk *clk_wrap;
-+	struct clk *clk_sys;
-+	struct clk *clk_tmr;
- 	struct reset_control *rstc;
+@@ -983,6 +983,68 @@ static int mt8195_regs[] = {
+ 	[PWRAP_WACS2_RDATA] =		0x8A8,
+ };
  
- 	struct reset_control *rstc_bridge;
-@@ -2214,6 +2216,20 @@ static int pwrap_probe(struct platform_device *pdev)
- 		return PTR_ERR(wrp->clk_wrap);
- 	}
- 
-+	wrp->clk_sys = devm_clk_get_optional(wrp->dev, "sys");
-+	if (IS_ERR(wrp->clk_sys)) {
-+		return dev_err_probe(wrp->dev, PTR_ERR(wrp->clk_sys),
-+				     "failed to get clock: %pe\n",
-+				     wrp->clk_sys);
-+	}
++static int mt8365_regs[] = {
++	[PWRAP_MUX_SEL] =		0x0,
++	[PWRAP_WRAP_EN] =		0x4,
++	[PWRAP_DIO_EN] =		0x8,
++	[PWRAP_CSHEXT_WRITE] =		0x24,
++	[PWRAP_CSHEXT_READ] =		0x28,
++	[PWRAP_STAUPD_PRD] =		0x3c,
++	[PWRAP_STAUPD_GRPEN] =		0x40,
++	[PWRAP_STAUPD_MAN_TRIG] =	0x58,
++	[PWRAP_STAUPD_STA] =		0x5c,
++	[PWRAP_WRAP_STA] =		0x60,
++	[PWRAP_HARB_INIT] =		0x64,
++	[PWRAP_HARB_HPRIO] =		0x68,
++	[PWRAP_HIPRIO_ARB_EN] =		0x6c,
++	[PWRAP_HARB_STA0] =		0x70,
++	[PWRAP_HARB_STA1] =		0x74,
++	[PWRAP_MAN_EN] =		0x7c,
++	[PWRAP_MAN_CMD] =		0x80,
++	[PWRAP_MAN_RDATA] =		0x84,
++	[PWRAP_MAN_VLDCLR] =		0x88,
++	[PWRAP_WACS0_EN] =		0x8c,
++	[PWRAP_INIT_DONE0] =		0x90,
++	[PWRAP_WACS0_CMD] =		0xc00,
++	[PWRAP_WACS0_RDATA] =		0xc04,
++	[PWRAP_WACS0_VLDCLR] =		0xc08,
++	[PWRAP_WACS1_EN] =		0x94,
++	[PWRAP_INIT_DONE1] =		0x98,
++	[PWRAP_WACS2_EN] =		0x9c,
++	[PWRAP_INIT_DONE2] =		0xa0,
++	[PWRAP_WACS2_CMD] =		0xc20,
++	[PWRAP_WACS2_RDATA] =		0xc24,
++	[PWRAP_WACS2_VLDCLR] =		0xc28,
++	[PWRAP_INT_EN] =		0xb4,
++	[PWRAP_INT_FLG_RAW] =		0xb8,
++	[PWRAP_INT_FLG] =		0xbc,
++	[PWRAP_INT_CLR] =		0xc0,
++	[PWRAP_SIG_ADR] =		0xd4,
++	[PWRAP_SIG_MODE] =		0xd8,
++	[PWRAP_SIG_VALUE] =		0xdc,
++	[PWRAP_SIG_ERRVAL] =		0xe0,
++	[PWRAP_CRC_EN] =		0xe4,
++	[PWRAP_TIMER_EN] =		0xe8,
++	[PWRAP_TIMER_STA] =		0xec,
++	[PWRAP_WDT_UNIT] =		0xf0,
++	[PWRAP_WDT_SRC_EN] =		0xf4,
++	[PWRAP_WDT_FLG] =		0xfc,
++	[PWRAP_DEBUG_INT_SEL] =		0x104,
++	[PWRAP_CIPHER_KEY_SEL] =	0x1c4,
++	[PWRAP_CIPHER_IV_SEL] =		0x1c8,
++	[PWRAP_CIPHER_RDY] =		0x1d0,
++	[PWRAP_CIPHER_MODE] =		0x1d4,
++	[PWRAP_CIPHER_SWRST] =		0x1d8,
++	[PWRAP_DCM_EN] =		0x1dc,
++	[PWRAP_DCM_DBC_PRD] =		0x1e0,
++	[PWRAP_EINT_STA0_ADR] =		0x44,
++	[PWRAP_EINT_STA1_ADR] =		0x48,
++	[PWRAP_INT1_EN] =		0xc4,
++	[PWRAP_INT1_FLG] =		0xcc,
++	[PWRAP_INT1_CLR] =		0xd0,
++	[PWRAP_WDT_SRC_EN_1] =		0xf8,
++};
 +
-+	wrp->clk_tmr = devm_clk_get_optional(wrp->dev, "tmr");
-+	if (IS_ERR(wrp->clk_tmr)) {
-+		return dev_err_probe(wrp->dev, PTR_ERR(wrp->clk_tmr),
-+				     "failed to get clock: %pe\n",
-+				     wrp->clk_tmr);
-+	}
+ static int mt8516_regs[] = {
+ 	[PWRAP_MUX_SEL] =		0x0,
+ 	[PWRAP_WRAP_EN] =		0x4,
+@@ -1139,6 +1201,7 @@ enum pwrap_type {
+ 	PWRAP_MT8183,
+ 	PWRAP_MT8186,
+ 	PWRAP_MT8195,
++	PWRAP_MT8365,
+ 	PWRAP_MT8516,
+ };
+ 
+@@ -1598,6 +1661,7 @@ static int pwrap_init_cipher(struct pmic_wrapper *wrp)
+ 	case PWRAP_MT6797:
+ 	case PWRAP_MT8173:
+ 	case PWRAP_MT8186:
++	case PWRAP_MT8365:
+ 	case PWRAP_MT8516:
+ 		pwrap_writel(wrp, 1, PWRAP_CIPHER_EN);
+ 		break;
+@@ -2106,6 +2170,19 @@ static struct pmic_wrapper_type pwrap_mt8195 = {
+ 	.init_soc_specific = NULL,
+ };
+ 
++static const struct pmic_wrapper_type pwrap_mt8365 = {
++	.regs = mt8365_regs,
++	.type = PWRAP_MT8365,
++	.arb_en_all = 0x3ffff,
++	.int_en_all = 0x7f1fffff,
++	.int1_en_all = 0x0,
++	.spi_w = PWRAP_MAN_CMD_SPI_WRITE,
++	.wdt_src = PWRAP_WDT_SRC_MASK_ALL,
++	.caps = PWRAP_CAP_INT1_EN | PWRAP_CAP_WDT_SRC1,
++	.init_reg_clock = pwrap_common_init_reg_clock,
++	.init_soc_specific = NULL,
++};
 +
- 	ret = clk_prepare_enable(wrp->clk_spi);
- 	if (ret)
- 		return ret;
-@@ -2222,6 +2238,14 @@ static int pwrap_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto err_out1;
- 
-+	ret = clk_prepare_enable(wrp->clk_sys);
-+	if (ret)
-+		goto err_out2;
-+
-+	ret = clk_prepare_enable(wrp->clk_tmr);
-+	if (ret)
-+		goto err_out3;
-+
- 	/* Enable internal dynamic clock */
- 	if (HAS_CAP(wrp->master->caps, PWRAP_CAP_DCM)) {
- 		pwrap_writel(wrp, 1, PWRAP_DCM_EN);
-@@ -2236,7 +2260,7 @@ static int pwrap_probe(struct platform_device *pdev)
- 		ret = pwrap_init(wrp);
- 		if (ret) {
- 			dev_dbg(wrp->dev, "init failed with %d\n", ret);
--			goto err_out2;
-+			goto err_out4;
- 		}
- 	}
- 
-@@ -2250,7 +2274,7 @@ static int pwrap_probe(struct platform_device *pdev)
- 	if (!(pwrap_readl(wrp, PWRAP_WACS2_RDATA) & mask_done)) {
- 		dev_dbg(wrp->dev, "initialization isn't finished\n");
- 		ret = -ENODEV;
--		goto err_out2;
-+		goto err_out4;
- 	}
- 
- 	/* Initialize watchdog, may not be done by the bootloader */
-@@ -2288,7 +2312,7 @@ static int pwrap_probe(struct platform_device *pdev)
- 			       IRQF_TRIGGER_HIGH,
- 			       "mt-pmic-pwrap", wrp);
- 	if (ret)
--		goto err_out2;
-+		goto err_out4;
- 
- 	wrp->regmap = devm_regmap_init(wrp->dev, NULL, wrp, wrp->slave->regops->regmap);
- 	if (IS_ERR(wrp->regmap)) {
-@@ -2300,11 +2324,15 @@ static int pwrap_probe(struct platform_device *pdev)
- 	if (ret) {
- 		dev_dbg(wrp->dev, "failed to create child devices at %pOF\n",
- 				np);
--		goto err_out2;
-+		goto err_out4;
- 	}
- 
- 	return 0;
- 
-+err_out4:
-+	clk_disable_unprepare(wrp->clk_tmr);
-+err_out3:
-+	clk_disable_unprepare(wrp->clk_sys);
- err_out2:
- 	clk_disable_unprepare(wrp->clk_wrap);
- err_out1:
+ static struct pmic_wrapper_type pwrap_mt8516 = {
+ 	.regs = mt8516_regs,
+ 	.type = PWRAP_MT8516,
+@@ -2143,6 +2220,7 @@ static const struct of_device_id of_pwrap_match_tbl[] = {
+ 	{ .compatible = "mediatek,mt8183-pwrap", .data = &pwrap_mt8183 },
+ 	{ .compatible = "mediatek,mt8186-pwrap", .data = &pwrap_mt8186 },
+ 	{ .compatible = "mediatek,mt8195-pwrap", .data = &pwrap_mt8195 },
++	{ .compatible = "mediatek,mt8365-pwrap", .data = &pwrap_mt8365 },
+ 	{ .compatible = "mediatek,mt8516-pwrap", .data = &pwrap_mt8516 },
+ 	{ /* sentinel */ }
+ };
 -- 
 2.25.1
 
