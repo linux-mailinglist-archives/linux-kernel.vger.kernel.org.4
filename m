@@ -2,157 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E480606866
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 20:47:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 484C7606867
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 20:48:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbiJTSrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 14:47:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45264 "EHLO
+        id S230143AbiJTSsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 14:48:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229861AbiJTSrp (ORCPT
+        with ESMTP id S230090AbiJTSr6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 14:47:45 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFCDD20B110;
-        Thu, 20 Oct 2022 11:47:41 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 56E301884CB9;
-        Thu, 20 Oct 2022 18:47:39 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 4421F25001FA;
-        Thu, 20 Oct 2022 18:47:39 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id 38C139EC0005; Thu, 20 Oct 2022 18:47:39 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Thu, 20 Oct 2022 14:47:58 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D3520B13F
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 11:47:54 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id i3so363407pfc.11
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 11:47:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=XES49IrsE/SNg2Wiu5FQcJL1HnVmIEJ2XPODG9d1kGs=;
+        b=TGOPgfy40MWjEd7IhcI1/ZW6PxJ+EOtNf6zzdZbHKPpf+3R7WFtDhCDtLiFdmN9REE
+         D7EiKdWDaucHF/mgXN/rznmUkhCewUtED5WBFM1MYa3eUevu75Fb5U0uigdkyRsb9vKZ
+         fAAAYkbVrEQhWKWPp+6hvS6ttYZZZI9IbrHulloOQxkYnB5uKnfgekkeTsl3oDqKlHpu
+         otcVRlTtkB0slFRegMp1ezvKn6Edzw4/aPc228rKocalKthJOy/MgEFXKw7vj3yZbsJn
+         LS9zdfvUX1Y0DQ+jjQvOrCHAiy5/YfaIJEHZRW/hvApi8kPTZgNC2zQRw/J2A9EXtelD
+         cs8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XES49IrsE/SNg2Wiu5FQcJL1HnVmIEJ2XPODG9d1kGs=;
+        b=4IRaHtMdTuHBL/m4nqEgigxGwngw52c9fyyrCZE7PhEu5IHDIaW0eTnqKMdVILum6z
+         vvTlfhCCA8tMzvRD0UkbQ5qJyBDjL95w09QbpunCWKrsTgZZsYLabRTRoh6uYXkyQqqZ
+         6JEzIb41/gejLci61X/0OF1XsxJMH1gkXEDm+WPEy+GBXCC8dM1ALAh2dqRz9ZPrkon0
+         srndK+1JYGtmMjSFALQuFQk5qihxqh7QXW0IJe33bRs98TZ6vHpHHI87P925gNkU2iMy
+         9cpeU1ZWzfowX8cRUutRJwKFq4Xzlq4MJDtCB1PEn9UyfQpcb4QNC3Odi8ZhBH13ov2M
+         4H7w==
+X-Gm-Message-State: ACrzQf03vqJFDDtseDkm1Rc+Ar8I25i0am4GPPEbiB9n6GZ6PXVFXeoT
+        TrnuOyxia4A8xeCoOpuCwoy5J9e7jGb/N6jOerg=
+X-Google-Smtp-Source: AMsMyM5ebdgIUi5uCKboyyRksMvDQjr91KEFedSkJbNcScR1hzEnwJL775AUWPR+H9D9E6Ry/4kaqDau0rrS8pOuzsc=
+X-Received: by 2002:aa7:9dcb:0:b0:565:89a8:c708 with SMTP id
+ g11-20020aa79dcb000000b0056589a8c708mr15595214pfq.4.1666291674290; Thu, 20
+ Oct 2022 11:47:54 -0700 (PDT)
 MIME-Version: 1.0
-Date:   Thu, 20 Oct 2022 20:47:39 +0200
-From:   netdev@kapio-technology.com
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Ido Schimmel <idosch@nvidia.com>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Florent Fourcot <florent.fourcot@wifirst.fr>,
-        Hans Schultz <schultz.hans@gmail.com>,
-        Joachim Wiberg <troglobit@gmail.com>,
-        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v8 net-next 05/12] net: dsa: propagate the locked flag
- down through the DSA layer
-In-Reply-To: <20221020133506.76wroc7owpwjzrkg@skbuf>
-References: <20221018165619.134535-1-netdev@kapio-technology.com>
- <20221018165619.134535-1-netdev@kapio-technology.com>
- <20221018165619.134535-6-netdev@kapio-technology.com>
- <20221018165619.134535-6-netdev@kapio-technology.com>
- <20221020130224.6ralzvteoxfdwseb@skbuf> <Y1FMAI9BzDRUPi5Y@shredder>
- <20221020133506.76wroc7owpwjzrkg@skbuf>
-User-Agent: Gigahost Webmail
-Message-ID: <8456155b8e0f6327e4fb595c7a08399b@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221020015122.290097-1-ying.huang@intel.com>
+In-Reply-To: <20221020015122.290097-1-ying.huang@intel.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Thu, 20 Oct 2022 11:47:41 -0700
+Message-ID: <CAHbLzko3sz9wAYidPr7NjMUWYrB0oN1R0MuCHdyDe=FdWRwWUQ@mail.gmail.com>
+Subject: Re: [PATCH] memory tier, sysfs: rename attribute "nodes" to "nodelist"
+To:     Huang Ying <ying.huang@intel.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Bharata B Rao <bharata@amd.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Jagdish Gediya <jvgediya.oss@gmail.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Tim Chen <tim.c.chen@intel.com>, Wei Xu <weixugc@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-20 15:35, Vladimir Oltean wrote:
-> On Thu, Oct 20, 2022 at 04:24:16PM +0300, Ido Schimmel wrote:
->> On Thu, Oct 20, 2022 at 04:02:24PM +0300, Vladimir Oltean wrote:
->> > On Tue, Oct 18, 2022 at 06:56:12PM +0200, Hans J. Schultz wrote:
->> > > @@ -3315,6 +3316,7 @@ static int dsa_slave_fdb_event(struct net_device *dev,
->> > >  	struct dsa_port *dp = dsa_slave_to_port(dev);
->> > >  	bool host_addr = fdb_info->is_local;
->> > >  	struct dsa_switch *ds = dp->ds;
->> > > +	u16 fdb_flags = 0;
->> > >
->> > >  	if (ctx && ctx != dp)
->> > >  		return 0;
->> > > @@ -3361,6 +3363,9 @@ static int dsa_slave_fdb_event(struct net_device *dev,
->> > >  		   orig_dev->name, fdb_info->addr, fdb_info->vid,
->> > >  		   host_addr ? " as host address" : "");
->> > >
->> > > +	if (fdb_info->locked)
->> > > +		fdb_flags |= DSA_FDB_FLAG_LOCKED;
->> >
->> > This is the bridge->driver direction. In which of the changes up until
->> > now/through which mechanism will the bridge emit a
->> > SWITCHDEV_FDB_ADD_TO_DEVICE with fdb_info->locked = true?
->> 
->> I believe it can happen in the following call chain:
->> 
->> br_handle_frame_finish
->>    br_fdb_update // p->flags & BR_PORT_MAB
->>        fdb_notify
->>            br_switchdev_fdb_notify
->> 
->> This can happen with Spectrum when a packet ingresses via a locked 
->> port
->> and incurs an FDB miss in hardware. The packet will be trapped and
->> injected to the Rx path where it should invoke the above call chain.
-> 
-> Ah, so this is the case which in mv88e6xxx would generate an ATU
-> violation interrupt; in the Spectrum case it generates a special 
-> packet.
-> Right now this packet isn't generated, right?
-> 
-> I think we have the same thing in ocelot, a port can be configured to
-> send "learn frames" to the CPU.
-> 
-> Should these packets be injected into the bridge RX path in the first
-> place? They reach the CPU because of an FDB miss, not because the CPU
-> was the intended destination.
+On Wed, Oct 19, 2022 at 6:51 PM Huang Ying <ying.huang@intel.com> wrote:
+>
+> In sysfs, we use attribute name "cpumap" or "cpus" for cpu mask and
+> "cpulist" or "cpus_list" for cpu list.  For example, in my system,
+>
+>  $ cat /sys/devices/system/node/node0/cpumap
+>  f,ffffffff
+>  $ cat /sys/devices/system/cpu/cpu2/topology/core_cpus
+>  0,00100004
+>  $ cat cat /sys/devices/system/node/node0/cpulist
+>  0-35
+>  $ cat /sys/devices/system/cpu/cpu2/topology/core_cpus_list
+>  2,20
+>
+> It looks reasonable to use "nodemap" for node mask and "nodelist" for
+> node list.  So, rename the attribute to follow the naming convention.
+>
+> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+> Cc: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+> Cc: Alistair Popple <apopple@nvidia.com>
+> Cc: Bharata B Rao <bharata@amd.com>
+> Cc: Dan Williams <dan.j.williams@intel.com>
+> Cc: Dave Hansen <dave.hansen@intel.com>
+> Cc: Davidlohr Bueso <dave@stgolabs.net>
+> Cc: Hesham Almatary <hesham.almatary@huawei.com>
+> Cc: Jagdish Gediya <jvgediya.oss@gmail.com>
+> Cc: Johannes Weiner <hannes@cmpxchg.org>
+> Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Cc: Michal Hocko <mhocko@kernel.org>
+> Cc: Tim Chen <tim.c.chen@intel.com>
+> Cc: Wei Xu <weixugc@google.com>
+> Cc: Yang Shi <shy828301@gmail.com>
+> ---
+>  Documentation/ABI/testing/sysfs-kernel-mm-memory-tiers | 4 ++--
+>  mm/memory-tiers.c                                      | 8 ++++----
+>  2 files changed, 6 insertions(+), 6 deletions(-)
 
-Just to add to it, now that there is a u16 for flags in the 
-bridge->driver
-direction, making it easier to add such flags, I expect that for the
-mv88e6xxx driver there shall be a 'IS_DYNAMIC' flag also, as authorized
-hosts will have their authorized FDB entries added with dynamic 
-entries...
+Reviewed-by: Yang Shi <shy828301@gmail.com>
 
-Now as the bridge will not be able to refresh such authorized FDB 
-entries
-based on unicast incoming traffic on the locked port in the offloaded 
-case,
-besides we don't want the CPU to do such in this case anyway, to keep 
-the
-authorized line alive without having to reauthorize in like every 5 
-minutes,
-the driver needs to do the ageing (and refreshing) of the dynamic entry
-added from userspace. When the entry "ages" out, there is the HoldAt1
-feature and Age Out Violations that should be used to tell userspace
-(plus bridge) that this authorization has been removed by the driver as
-the host has gone quiet.
-
-So all in all, there is the need of another flag from
-userspace->bridge->driver, telling that we want a dynamic ATU entry 
-(with
-mv88e6xxx it will start at age 7).
+>
+> diff --git a/Documentation/ABI/testing/sysfs-kernel-mm-memory-tiers b/Documentation/ABI/testing/sysfs-kernel-mm-memory-tiers
+> index 45985e411f13..721a05b90109 100644
+> --- a/Documentation/ABI/testing/sysfs-kernel-mm-memory-tiers
+> +++ b/Documentation/ABI/testing/sysfs-kernel-mm-memory-tiers
+> @@ -10,7 +10,7 @@ Description:  A collection of all the memory tiers allocated.
+>
+>
+>  What:          /sys/devices/virtual/memory_tiering/memory_tierN/
+> -               /sys/devices/virtual/memory_tiering/memory_tierN/nodes
+> +               /sys/devices/virtual/memory_tiering/memory_tierN/nodelist
+>  Date:          August 2022
+>  Contact:       Linux memory management mailing list <linux-mm@kvack.org>
+>  Description:   Directory with details of a specific memory tier
+> @@ -21,5 +21,5 @@ Description:  Directory with details of a specific memory tier
+>                 A smaller value of N implies a higher (faster) memory tier in the
+>                 hierarchy.
+>
+> -               nodes: NUMA nodes that are part of this memory tier.
+> +               nodelist: NUMA nodes that are part of this memory tier.
+>
+> diff --git a/mm/memory-tiers.c b/mm/memory-tiers.c
+> index f116b7b6333e..fa8c9d07f9ce 100644
+> --- a/mm/memory-tiers.c
+> +++ b/mm/memory-tiers.c
+> @@ -131,8 +131,8 @@ static void memory_tier_device_release(struct device *dev)
+>         kfree(tier);
+>  }
+>
+> -static ssize_t nodes_show(struct device *dev,
+> -                         struct device_attribute *attr, char *buf)
+> +static ssize_t nodelist_show(struct device *dev,
+> +                            struct device_attribute *attr, char *buf)
+>  {
+>         int ret;
+>         nodemask_t nmask;
+> @@ -143,10 +143,10 @@ static ssize_t nodes_show(struct device *dev,
+>         mutex_unlock(&memory_tier_lock);
+>         return ret;
+>  }
+> -static DEVICE_ATTR_RO(nodes);
+> +static DEVICE_ATTR_RO(nodelist);
+>
+>  static struct attribute *memtier_dev_attrs[] = {
+> -       &dev_attr_nodes.attr,
+> +       &dev_attr_nodelist.attr,
+>         NULL
+>  };
+>
+> --
+> 2.35.1
+>
