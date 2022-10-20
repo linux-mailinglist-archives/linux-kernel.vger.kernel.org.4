@@ -2,96 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 870B1605F8A
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 13:59:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19E78605F8B
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 14:00:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229834AbiJTL7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 07:59:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51486 "EHLO
+        id S229874AbiJTL75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 07:59:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229874AbiJTL72 (ORCPT
+        with ESMTP id S229956AbiJTL7x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 07:59:28 -0400
-Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5195713C1D4
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 04:59:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=RmB53N3zcCqqM2YVI7EHCvcS0/0+T5CMq3VyOkBQo/g=;
-  b=M045BzmS2fnNhVvxDPiH4JZEQjIfnLj0rPjshkjch7M+gTLebh80ygCl
-   7FYX/KmaSNXCoVYh3fofR1G/JWNgAmY/U82STIatsxwtAWpttSUrZwAsA
-   v4aOB0dslGwdy1Fw6YOOGhyyu2n2J0GsY8kDaILTJbgZBUmdgstL4264k
-   k=;
-Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.95,198,1661810400"; 
-   d="scan'208";a="31969425"
-Received: from dt-lawall.paris.inria.fr ([128.93.67.65])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 13:59:13 +0200
-Date:   Thu, 20 Oct 2022 13:59:12 +0200 (CEST)
-From:   Julia Lawall <julia.lawall@inria.fr>
-To:     Tanju Brunostar <tanjubrunostar0@gmail.com>
-cc:     Greg KH <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev
-Subject: Re: Request for assistance
-In-Reply-To: <CAHJEyKXLFyYkz2sVxSu_GDgT878=qcHOmvT=38gBGqJvaz3tTQ@mail.gmail.com>
-Message-ID: <476b0f0-2b9-a9c1-f5c-67d6b6158d0@inria.fr>
-References: <Y1Eqa7uKB+Wk+Mb+@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net> <Y1EskCZF7qkiPW2O@kroah.com> <CAHJEyKXLFyYkz2sVxSu_GDgT878=qcHOmvT=38gBGqJvaz3tTQ@mail.gmail.com>
+        Thu, 20 Oct 2022 07:59:53 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9DCE3C8FE
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 04:59:50 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 53C0920A44;
+        Thu, 20 Oct 2022 11:59:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1666267188; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=oySpgM5g+r0WCk6Eq8kGRfyxgEAOWxWakiY/c8kh3qw=;
+        b=JGPhQj1ZV+Sm3I4LVtq4L2JrCJZGFxiejo9qvyBgS68IuVh2HOzZyizIwaITr4r3lBXAam
+        rB78ZqWe8tgRiWX2mcORmHaemwL1xdxp0yjq8zNmUfeecmJtUvLa7dUoD6pFb8YPEHLFd4
+        /SlQGRy9MJC4I/CPIUhDGbvRjCNvmiM=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1077413494;
+        Thu, 20 Oct 2022 11:59:48 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id zs6/AjQ4UWNSFAAAMHmgww
+        (envelope-from <jgross@suse.com>); Thu, 20 Oct 2022 11:59:48 +0000
+From:   Juergen Gross <jgross@suse.com>
+To:     linux-kernel@vger.kernel.org, x86@kernel.org
+Cc:     Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, xen-devel@lists.xenproject.org
+Subject: [PATCH v2] x86/xen: simplify sysenter and syscall setup
+Date:   Thu, 20 Oct 2022 13:59:46 +0200
+Message-Id: <20221020115946.18772-1-jgross@suse.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+xen_enable_sysenter() and xen_enable_syscall() can be simplified a lot.
 
+While at it, switch to use cpu_feature_enabled() instead of
+boot_cpu_has().
 
-On Thu, 20 Oct 2022, Tanju Brunostar wrote:
+Signed-off-by: Juergen Gross <jgross@suse.com>
+---
+V2:
+- use cpu_feature_enabled() (Borislav Petkov)
+---
+ arch/x86/xen/setup.c | 23 ++++++-----------------
+ 1 file changed, 6 insertions(+), 17 deletions(-)
 
-> On Thu, Oct 20, 2022 at 12:10 PM Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Thu, Oct 20, 2022 at 11:00:59AM +0000, Ubuntu wrote:
-> > > Hello,
-> > > I have a diffictly deciding where exactly to split a long line of code. for example, this line of code is too long
-> > >
-> > > uCTSTime = bb_get_frame_time(pDevice->preamble_type, byPktType, 14, pDevice->byTopCCKBasicRate);
-> > >
-> > > if i spit it this way:
-> > > uCTSTime =
-> > >         bb_get_frame_time(pDevice->preamble_type, byPktType, 14, pDevice->byTopCCKBasicRate);
-> > >
-> > > It does not help as the second line is still too long. I considered doing it this way instead:
-> > > uCTSTime = bb_get_frame_time(pDevice->preamble_type, byPktType, 14,
-> > >                                 pDevice->byTopCCKBasicRate);
-> > > But i did this on one of my patches and i was told it is not advisable to split a line between
-> > > parenthesis '(' and ')'
-> >
-> > Who told you that?
+diff --git a/arch/x86/xen/setup.c b/arch/x86/xen/setup.c
+index cfa99e8f054b..4f4309500559 100644
+--- a/arch/x86/xen/setup.c
++++ b/arch/x86/xen/setup.c
+@@ -910,17 +910,9 @@ static int register_callback(unsigned type, const void *func)
+ 
+ void xen_enable_sysenter(void)
+ {
+-	int ret;
+-	unsigned sysenter_feature;
+-
+-	sysenter_feature = X86_FEATURE_SYSENTER32;
+-
+-	if (!boot_cpu_has(sysenter_feature))
+-		return;
+-
+-	ret = register_callback(CALLBACKTYPE_sysenter, xen_entry_SYSENTER_compat);
+-	if(ret != 0)
+-		setup_clear_cpu_cap(sysenter_feature);
++	if (cpu_feature_enabled(X86_FEATURE_SYSENTER32) &&
++	    register_callback(CALLBACKTYPE_sysenter, xen_entry_SYSENTER_compat))
++		setup_clear_cpu_cap(X86_FEATURE_SYSENTER32);
+ }
+ 
+ void xen_enable_syscall(void)
+@@ -934,12 +926,9 @@ void xen_enable_syscall(void)
+ 		   mechanism for syscalls. */
+ 	}
+ 
+-	if (boot_cpu_has(X86_FEATURE_SYSCALL32)) {
+-		ret = register_callback(CALLBACKTYPE_syscall32,
+-					xen_entry_SYSCALL_compat);
+-		if (ret != 0)
+-			setup_clear_cpu_cap(X86_FEATURE_SYSCALL32);
+-	}
++	if (cpu_feature_enabled(X86_FEATURE_SYSCALL32) &&
++	    register_callback(CALLBACKTYPE_syscall32, xen_entry_SYSCALL_compat))
++		setup_clear_cpu_cap(X86_FEATURE_SYSCALL32);
+ }
+ 
+ static void __init xen_pvmmu_arch_setup(void)
+-- 
+2.35.3
 
-I did, but the context was different.  It's fine to have a newline among
-the of arguments of a function call.  It's less desirable to put a newline
-in the middle of (A | B), it if can be avoided.
-
-julia
-
-> >
-> > You are close, the code should look like:
-> >         uCTSTime = bb_get_frame_time(pDevice->preamble_type, byPktType, 14,
-> >                                      pDevice->byTopCCKBasicRate);
-> >
-> > Like millions of other lines in the kernel source tree.  When in doubt,
-> > look at existing implementations.
-> >
-> > hope this helps,
-> >
-> > greg k-h
-> Thank you for the clarification
->
->
