@@ -2,101 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3D12605634
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 06:04:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75707605638
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 06:12:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229449AbiJTEEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 00:04:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42786 "EHLO
+        id S229833AbiJTEMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 00:12:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbiJTEEM (ORCPT
+        with ESMTP id S229447AbiJTEMb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 00:04:12 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0E3F0181D97
-        for <linux-kernel@vger.kernel.org>; Wed, 19 Oct 2022 21:04:11 -0700 (PDT)
-Received: from [192.168.1.139] (unknown [122.171.21.142])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 94EE920FCF6F;
-        Wed, 19 Oct 2022 21:04:09 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 94EE920FCF6F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1666238650;
-        bh=ZxKeui9DDYM5zMtc/eLYUVIUvOOnKSjXi5ZjbM8qn5I=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=OPycTYoDbKI+GsVsg6X01LXGyMsdDUarjXCdiWfCt4VuuWqIVTrHG67P+R1iRnq4N
-         UI7GyxokT/PUe4jm+59sFIpjJlxqnfBh+iykKy4083rytW/mLBjZYHPeKAmbpNoRPr
-         AX5mo7cNmkXzfQ23baAylUsznIOCxOw0O0ohOMlo=
-Message-ID: <7025b8d8-e23a-0148-75b5-a06c18c6dbcb@linux.microsoft.com>
-Date:   Thu, 20 Oct 2022 09:34:07 +0530
+        Thu, 20 Oct 2022 00:12:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF7AC164BE1;
+        Wed, 19 Oct 2022 21:12:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 33CE7B8265D;
+        Thu, 20 Oct 2022 04:12:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53090C433D6;
+        Thu, 20 Oct 2022 04:12:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666239146;
+        bh=8Sy3yjbG4x+58rCR96ZxpH5efyxWTXR5EzlYoAF02Y8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=T9QKV7oX1tGOYm7q9C3NfFgwmw4NiaixAwz2JXzeDYqRM4BXBMMqRhn2tNTZJh9A3
+         hOwPpiOZMQhdxNWRHxrtmg9UW614jyUigx4HyhOPPWdH5ibe+XjgpGyZmkcmnc0V6L
+         tT0KO/q5sy6N2B5EKFL3mgjSZxS6mYN5fShfDYKYXO9ir7kXufxX0eylGFo+6hF30H
+         0TayjJkcW8c4TpV+v1qMVkOzZ1w/K2nwTUhuflbII/JVNH4la5bqY2FwGgCkc/PQ9d
+         2QrylT8QKR3yYNp49Vqo8CF79LedNC/q+cu3nrWHUvpd77FFOzT/j1h0MDn1fYzBDA
+         f3/zM4UfpBcBQ==
+Date:   Thu, 20 Oct 2022 09:42:22 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     "Walker, Benjamin" <benjamin.walker@intel.com>
+Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 4/7] dmaengine: Add provider documentation on cookie
+ assignment
+Message-ID: <Y1DKpnOdP5MbSGeO@matsya>
+References: <20220622193753.3044206-1-benjamin.walker@intel.com>
+ <20220829203537.30676-1-benjamin.walker@intel.com>
+ <20220829203537.30676-5-benjamin.walker@intel.com>
+ <Y1Am/RpgWv3PAVaU@matsya>
+ <297dff63-e199-d14b-7148-916888030740@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH 1/3] staging: rtl8723bs: fix white space warnings
-Content-Language: en-US
-To:     Emily Peri <eperi1024@gmail.com>, gregkh@linuxfoundation.org,
-        outreachy@lists.linux.dev, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-References: <cover.1666230736.git.eperi1024@gmail.com>
- <45558673b486808e7978e2e4838c6ce5a2485b8b.1666230736.git.eperi1024@gmail.com>
-From:   Praveen Kumar <kumarpraveen@linux.microsoft.com>
-In-Reply-To: <45558673b486808e7978e2e4838c6ce5a2485b8b.1666230736.git.eperi1024@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <297dff63-e199-d14b-7148-916888030740@intel.com>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20-10-2022 07:40, Emily Peri wrote:
-> Fix the following checkpatch warnings in rtw_ioctl_set:
-> 1) Add missing blankline after declaration
-> 2) Replace spaces used for indent with tab
-> 3) Remove space before tab
+On 19-10-22, 10:21, Walker, Benjamin wrote:
+> On 10/19/2022 9:34 AM, Vinod Koul wrote:
+> > On 29-08-22, 13:35, Ben Walker wrote:
+> > > Clarify the rules on assigning cookies to DMA transactions.
+> > > 
+> > > Signed-off-by: Ben Walker <benjamin.walker@intel.com>
+> > > ---
+> > >   .../driver-api/dmaengine/provider.rst         | 45 +++++++++++++++----
+> > >   1 file changed, 37 insertions(+), 8 deletions(-)
+> > > 
+> > > diff --git a/Documentation/driver-api/dmaengine/provider.rst b/Documentation/driver-api/dmaengine/provider.rst
+> > > index 1d0da2777921d..a5539f816d125 100644
+> > > --- a/Documentation/driver-api/dmaengine/provider.rst
+> > > +++ b/Documentation/driver-api/dmaengine/provider.rst
+> > > @@ -417,7 +417,9 @@ supported.
+> > >       - tx_submit: A pointer to a function you have to implement,
+> > >         that is supposed to push the current transaction descriptor to a
+> > > -      pending queue, waiting for issue_pending to be called.
+> > > +      pending queue, waiting for issue_pending to be called. Each
+> > > +      descriptor is given a cookie to identify it. See the section
+> > > +      "Cookie Management" below.
+> > >     - In this structure the function pointer callback_result can be
+> > >       initialized in order for the submitter to be notified that a
+> > > @@ -522,6 +524,40 @@ supported.
+> > >     - May sleep.
+> > > +Cookie Management
+> > > +------------------
+> > > +
+> > > +When a transaction is queued for submission via tx_submit(), the provider
+> > > +must assign that transaction a cookie (dma_cookie_t) to uniquely identify it.
+> > > +The provider is allowed to perform this assignment however it wants, but for
+> > 
+> > We assumes that we have monotonically increasing cookie and
+> > if cookie 10 is marked complete cookie 8 is assumed complete too...
 > 
-> Signed-off-by: Emily Peri <eperi1024@gmail.com>
-> ---
->  drivers/staging/rtl8723bs/core/rtw_ioctl_set.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+> That's exactly what this patch series is changing. The earlier patches make
+> changes to no longer report to the client the "last" or "used" cookie (to
+> compare against) in the client APIs, and it turns out that nothing in the
+> kernel actually cares about this behavior. So it's simply a documentation
+> change to indicate that the client no longer has any visibility into the
+> cookie behavior.
+
+Not really, there are some engines which will notify that descriptor X
+completed which also implies that all descriptors before X have
+completed as well...
+
+If we change the default behaviour, we risk breaking those.
 > 
-> diff --git a/drivers/staging/rtl8723bs/core/rtw_ioctl_set.c b/drivers/staging/rtl8723bs/core/rtw_ioctl_set.c
-> index 8c11daff2d59..354e61a8f2bd 100644
-> --- a/drivers/staging/rtl8723bs/core/rtw_ioctl_set.c
-> +++ b/drivers/staging/rtl8723bs/core/rtw_ioctl_set.c
-> @@ -78,6 +78,7 @@ u8 rtw_do_join(struct adapter *padapter)
->  		goto exit;
->  	} else {
->  		int select_ret;
-> +
->  		spin_unlock_bh(&(pmlmepriv->scanned_queue.lock));
->  		select_ret = rtw_select_and_join_from_scanned_queue(pmlmepriv);
->  		if (select_ret == _SUCCESS) {
-> @@ -311,7 +312,7 @@ u8 rtw_set_802_11_infrastructure_mode(struct adapter *padapter,
->  		if ((*pold_state == Ndis802_11Infrastructure) || (*pold_state == Ndis802_11IBSS)) {
->  			if (check_fwstate(pmlmepriv, _FW_LINKED) == true)
->  				rtw_indicate_disconnect(padapter); /* will clr Linked_state; before this function, we must have checked whether issue dis-assoc_cmd or not */
-> -	       }
-> +		}
-
-I think indentation is wrong here, it should be only 1 tab instead of 2 tabs ?
-
->  
->  		*pold_state = networktype;
->  
-> @@ -367,7 +368,7 @@ u8 rtw_set_802_11_disassociate(struct adapter *padapter)
->  
->  u8 rtw_set_802_11_bssid_list_scan(struct adapter *padapter, struct ndis_802_11_ssid *pssid, int ssid_max_num)
->  {
-> -	struct	mlme_priv 	*pmlmepriv = &padapter->mlmepriv;
-> +	struct	mlme_priv	*pmlmepriv = &padapter->mlmepriv;
->  	u8 res = true;
->  
->  	if (!padapter) {
-
-Regards,
-
-~Praveen.
+> Immediately below here the documentation then says that there's some
+> convenience functions that providers can use that do produce monotonically
+> increasing cookies. These are now optional for providers to use, if they
+> find them useful, rather than the required way to manage the cookies.
+> 
+> > 
+> > Completion is always in order unless we specify DMA_COMPLETION_NO_ORDER
+> 
+> The final patch in this series eliminates DMA_COMPLETION_NO_ORDER entirely.
+> It was only used by the IDXD driver, and the reason I'm doing these patches
+> is so that we can poll the IDXD driver for completions even though it can
+> complete out of order.
+-- 
+~Vinod
