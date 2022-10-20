@@ -2,120 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A42D6605C6B
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 12:35:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4039605C70
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 12:36:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229460AbiJTKfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 06:35:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53024 "EHLO
+        id S230185AbiJTKf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 06:35:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbiJTKfm (ORCPT
+        with ESMTP id S230158AbiJTKfz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 06:35:42 -0400
-Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ED024B0C4
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 03:35:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1666262125; bh=VhN67bXT0itmKjXgVI45C2R1vHjRepe0Kb9Pi+xEtqQ=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:In-Reply-To;
-        b=Mif79EZLoeznCgQ0lXr1SVfFtqssM1xVfL4aplIsnm4ziVIdnBoNLWftuGLRblNYM
-         HdWWBqOwgbaTp2FuEKMosZoSLhCbuI+wuN4fZVkItD3jJia/O/w7bVBzKW3weDHdXo
-         xEWbdQVqJqxmVpArES10HSImc1NEvooCN9MGDUpM=
-Received: by b-3.in.mailobj.net [192.168.90.13] with ESMTP
-        via [213.182.55.206]
-        Thu, 20 Oct 2022 12:35:25 +0200 (CEST)
-X-EA-Auth: 3fqsQwinURa5yNBDG3ytptSeV5h8uXROphmeEhi6S4t+vud9l8NgbbMmBkXc5IAaXX1mjKyMlnqBLwgLXF2aLKXcNYG6g8YK
-Date:   Thu, 20 Oct 2022 16:05:19 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Julia Lawall <julia.lawall@inria.fr>
-Cc:     outreachy@lists.linux.dev, Larry.Finger@lwfinger.net,
-        phil@philpotter.co.uk, paskripkin@gmail.com,
-        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, kumarpraveen@linux.microsoft.com,
-        saurabh.truth@gmail.com
-Subject: Re: [PATCH v3 06/10] staging: r8188eu: Add space between function &
- macro parameters
-Message-ID: <Y1EkZ7+1yiH8PI0a@debian-BULLSEYE-live-builder-AMD64>
-References: <cover.1666249715.git.drv@mailo.com>
- <79e0aa96b1c8b2bc0c0f8ef9e651ab254629c7a8.1666249716.git.drv@mailo.com>
- <114d7521-a15-9569-cb38-69f4bb8990f7@inria.fr>
- <Y1EcmphZyExVVttR@debian-BULLSEYE-live-builder-AMD64>
- <8e7c457c-a58a-9c2a-ba0-d520c5e0f53e@inria.fr>
+        Thu, 20 Oct 2022 06:35:55 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 938FE11F48B;
+        Thu, 20 Oct 2022 03:35:53 -0700 (PDT)
+Received: from fraeml710-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MtP9b6J9Sz6HJVl;
+        Thu, 20 Oct 2022 18:34:43 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml710-chm.china.huawei.com (10.206.15.59) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 20 Oct 2022 12:35:42 +0200
+Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 20 Oct
+ 2022 11:35:42 +0100
+Date:   Thu, 20 Oct 2022 11:35:41 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To:     Wolfram Sang <wsa-dev@sang-engineering.com>
+CC:     Jason Gerecke <killertofu@gmail.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        "Lars-Peter Clausen" <lars@metafoo.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ping Cheng <pinglinux@gmail.com>,
+        "Tobita, Tatsunosuke" <tatsunosuke.tobita@wacom.com>,
+        Jason Gerecke <jason.gerecke@wacom.com>,
+        Ping Cheng <ping.cheng@wacom.com>
+Subject: Re: [PATCH v2] i2c: Use u8 type in i2c transfer calls
+Message-ID: <20221020113541.0000490e@huawei.com>
+In-Reply-To: <Y1BuLyxEKLIAgF+5@shikoro>
+References: <20220718153448.173652-1-jason.gerecke@wacom.com>
+        <20220803145937.698603-1-jason.gerecke@wacom.com>
+        <CAHp75Vd6yEctJoNT6TpJ1+h4ZQckyLsaUSeSCV4MHqg+LUDkcg@mail.gmail.com>
+        <CANRwn3TutF6skHQHk08dFUa8gLMVGxui_QN7YK6nDacSpRHtLg@mail.gmail.com>
+        <Y1BZ8CjSnrKi+Yos@shikoro>
+        <CANRwn3SmrGX2-cqMK=dDTJR=OaxoVM9C+fsaa8jz96ADtH02DA@mail.gmail.com>
+        <Y1BuLyxEKLIAgF+5@shikoro>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8e7c457c-a58a-9c2a-ba0-d520c5e0f53e@inria.fr>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.226.42]
+X-ClientProxiedBy: lhrpeml500005.china.huawei.com (7.191.163.240) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 12:21:35PM +0200, Julia Lawall wrote:
-> > > > -#define PlatformEFIOWrite1Byte(_a,_b,_c)		\
-> > > > -	rtw_write8(_a,_b,_c)
-> > > > -#define PlatformEFIOWrite2Byte(_a,_b,_c)		\
-> > > > -	rtw_write16(_a,_b,_c)
-> > > > -#define PlatformEFIOWrite4Byte(_a,_b,_c)		\
-> > > > -	rtw_write32(_a,_b,_c)
-> > > > -
-> > > > -#define PlatformEFIORead1Byte(_a,_b)		\
-> > > > -		rtw_read8(_a,_b)
-> > > > -#define PlatformEFIORead2Byte(_a,_b)		\
-> > > > -		rtw_read16(_a,_b)
-> > > > -#define PlatformEFIORead4Byte(_a,_b)		\
-> > > > -		rtw_read32(_a,_b)
-> > > > +#define PlatformEFIOWrite1Byte(_a, _b, _c)		\
-> > > > +	rtw_write8(_a, _b, _c)
-> > > > +#define PlatformEFIOWrite2Byte(_a, _b, _c)		\
-> > > > +	rtw_write16(_a, _b, _c)
-> > > > +#define PlatformEFIOWrite4Byte(_a, _b, _c)		\
-> > > > +	rtw_write32(_a, _b, _c)
-> > > > +
-> > > > +#define PlatformEFIORead1Byte(_a, _b)		\
-> > > > +		rtw_read8(_a, _b)
-> > > > +#define PlatformEFIORead2Byte(_a, _b)		\
-> > > > +		rtw_read16(_a, _b)
-> > > > +#define PlatformEFIORead4Byte(_a, _b)		\
-> > > > +		rtw_read32(_a, _b)
-> > >
-> > > Could these be inline functions?
-> >
-> > I am actually not seeing these macros being used anywhere. These macros were
-> > added recently [commit ID: 7884fc0a1473c2721f496f1d1ddc9d2c91aefa53] in 2021. I
-> > am unsure if they are intended to be used in the future or can removed entirely.
-> >
-> > Making these inline functions can be done, however, will we need to measure
-> > performance impact? I will need help and time for this evaluation.
->
-> Inline functions shouldn't have any performance impact.  For these simple
-> things the compiler should inline them.
+On Wed, 19 Oct 2022 23:37:51 +0200
+Wolfram Sang <wsa-dev@sang-engineering.com> wrote:
 
-Understood. For these simple cases, it should not.
->
-> The reason why a macro may be needed is if it is not possible to find a
-> single type for all of the possible argument values, or if some argument
-> values are assigned to by the macro definition, and not just read.
+> > I spent a little time trying to put together a Coccinelle script to
+> > take care of everything but I eventually realized the size of the task
+> > was larger than I was comfortable with. In particular, even though I
+> > might be able to put together a script, I worry I don't have a good
+> > way to test the resulting treewide changes to avoid regression.  
+> 
+> The coccinelle scripts are one thing. I am quite familiar with it, so I
+> regard this as "work but doable". My main headache is that I am not sure
+> about the best way to upstream the result. I'd like to avoid a flag-day
+> where all drivers across all subsystems need to be converted, but I
+> don't really see a way around it. Preparing such a branch and make sure
+> it does not regress is quite some work on a moving target.
 
-Okay. This is helpful. Thank you.
+Horrendous though it is, you 'could' take it via a void * intermediate
+step.   That way all the warnings will disappear (I think).
+You then move all the callers to providing u8 * then switch the function
+to that.  Could happen over several cycles with coccicheck moaning about
+any new entries in the meantime.
 
->
-> I would have suggested to look at all of the uses to see if there are any
-> concerns like this, but if there aren't any uses, that won't be possible.
-> There seems to be no special knowledge in these macros that is worth
-> preserving, so I think that they can just be dropped.
+Jonathan
 
-Sounds good. I will drop them in the revision.
 
-Thank you Julia.
-./drv
-
->
-> julia
->
-
+> 
+> 
 
