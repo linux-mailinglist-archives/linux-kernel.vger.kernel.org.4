@@ -2,178 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1D2F6061A9
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 15:30:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F8C76061AC
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 15:31:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230257AbiJTNat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 09:30:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44746 "EHLO
+        id S229948AbiJTNbn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 09:31:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229948AbiJTNam (ORCPT
+        with ESMTP id S229817AbiJTNbk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 09:30:42 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F5B1167F43
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 06:30:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666272636;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BUyrMnRAetKWDyqMvz4lmBgnabUoXRa1KogD0K2jzUY=;
-        b=BlaPC+o6q+SMWy59Xj7M336EbYfK05hi3VxcV6Pb/rFXc+SrkPnJ1Hq/VxmctgHVk8krN9
-        hx5OpzmLuCg1jadqnLggzo4BzHEmbt2jI+I0/lPjD4c66ltngchi4L+biJE+em2JNssN//
-        O3gJv1zBIJLp9gbpjETQBVbEUVdD7CQ=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-561-Jndec4jAOT6hYvw9kUD_WQ-1; Thu, 20 Oct 2022 09:30:34 -0400
-X-MC-Unique: Jndec4jAOT6hYvw9kUD_WQ-1
-Received: by mail-qt1-f200.google.com with SMTP id bq21-20020a05622a1c1500b0039cdae506e6so12174565qtb.10
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 06:30:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BUyrMnRAetKWDyqMvz4lmBgnabUoXRa1KogD0K2jzUY=;
-        b=PFfBiKfDxsw7UUkUwjnqfIWPW4jiLluPTKfxfV3Q+FP/R09XdyD9Q9bjhf35yrVuK1
-         sbX18eKbUUsbh7eoC7p67UNXaAjbRZJejieAVqbZKDjnBxINjpzvwtaJBO1tjSia35EK
-         Xgu0akiWAfQiV1NtM1clXBMJy7pxvbaAyrvrZeoGHTDV+0kwKwY48fCclIOcZbkEF4aT
-         C47uyUKT9+WTKn0z4SpHzPSPO5FEHn0XyF/vQrC/SA+nnXq0LV+L4AFfuWEf3uaH5L9M
-         qpOxM+ww2zJ5w9WOjp91V2tURjg0C62cfmPRtAHfrQfVyuiwbGUFFPtVpJ9MIQC+HG1o
-         RjaA==
-X-Gm-Message-State: ACrzQf0NyhVOWF+96GlriOy/0n7Rk6FxHsOxcTql+iabKvd9dZ51lEbB
-        tdR5OV7mME7b0J1x5yEpfnIdEOfM56m152yMh1paTqUOdrLSJl5BcYDEGtetPhrwmfALABSEnYx
-        CIIgBTNOC9F94GeMi5VLqRxWt
-X-Received: by 2002:a05:6214:c6d:b0:4b1:c751:ac7 with SMTP id t13-20020a0562140c6d00b004b1c7510ac7mr11416892qvj.96.1666272633328;
-        Thu, 20 Oct 2022 06:30:33 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5/Fv+9ImOl6uqDgax7bpb3ftqmq2BNdXPKHvwEHE15DMkWQkQYLzHLnOe8hIcF7T3D+P+MeQ==
-X-Received: by 2002:a05:6214:c6d:b0:4b1:c751:ac7 with SMTP id t13-20020a0562140c6d00b004b1c7510ac7mr11416833qvj.96.1666272632981;
-        Thu, 20 Oct 2022 06:30:32 -0700 (PDT)
-Received: from localhost.localdomain ([151.29.54.101])
-        by smtp.gmail.com with ESMTPSA id x5-20020a05620a258500b006bb366779a4sm7077880qko.6.2022.10.20.06.30.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 06:30:32 -0700 (PDT)
-Date:   Thu, 20 Oct 2022 15:30:26 +0200
-From:   Juri Lelli <juri.lelli@redhat.com>
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     Connor O'Brien <connoro@google.com>, linux-kernel@vger.kernel.org,
-        kernel-team@android.com, John Stultz <jstultz@google.com>,
-        Joel Fernandes <joelaf@google.com>,
-        Qais Yousef <qais.yousef@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>
-Subject: Re: [RFC PATCH 09/11] sched/rt: Fix proxy/current (push,pull)ability
-Message-ID: <Y1FNcmLl678L/3Ah@localhost.localdomain>
-References: <20221003214501.2050087-1-connoro@google.com>
- <20221003214501.2050087-10-connoro@google.com>
- <xhsmhv8orgb59.mognet@vschneid.remote.csb>
- <CALE1s+ODz2FUJoSHcORa25kckk81qSHuZ6RSE6-k=s2gzQ+eOQ@mail.gmail.com>
- <xhsmhtu3zwxpt.mognet@vschneid.remote.csb>
+        Thu, 20 Oct 2022 09:31:40 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B9C61918BA;
+        Thu, 20 Oct 2022 06:31:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Ub1/BqWnc+u3S6gZuqlIRI6PL3Nk/sdK2+QXvb0/fQU=; b=RN5JK4lTNkV7unSEKrdF+0s9/3
+        cAJwWtWZWcVCoR1k83daYisqZj0q+OX25fIvm0RQko13gvAImNqVuHFIcq4RGlj4GCNZyocIbo58m
+        DjU9444DUyGtC/X4QMzvfdl6SmXjYAvDk6EX/slC2TjYSnmYZKfYCme/5FgRN5p15pfWskTRAPCO+
+        JrDtRGG1lHvNI7eIe12Y3zewqUgvvx8wBHzS+PiPGICEbXMbEeZI997mTacqnYJ8uus7tjmJOaQHz
+        NH+LEqZtVhB11qij3EOkGj9+e5++8799XHfFLyvy0Vfts2zq9vS/KMfuzBwwtLqxjoayZBSVDnEN1
+        1okF8/vg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1olVe7-00CPQP-8e; Thu, 20 Oct 2022 13:31:39 +0000
+Date:   Thu, 20 Oct 2022 14:31:39 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     syzbot <syzbot+e33c2a7e25ff31df5297@syzkaller.appspotmail.com>
+Cc:     akpm@linux-foundation.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        syzkaller-bugs@googlegroups.com,
+        Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
+        ntfs3@lists.linux.dev
+Subject: Re: [syzbot] BUG: unable to handle kernel NULL pointer dereference
+ in filemap_read_folio
+Message-ID: <Y1FNu60vwt7oJRSu@casper.infradead.org>
+References: <00000000000020f00f05eb774338@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <xhsmhtu3zwxpt.mognet@vschneid.remote.csb>
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <00000000000020f00f05eb774338@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/10/22 18:05, Valentin Schneider wrote:
-> On 14/10/22 15:32, Connor O'Brien wrote:
-> > On Mon, Oct 10, 2022 at 4:40 AM Valentin Schneider <vschneid@redhat.com> wrote:
-> >> Consider:
-> >>
-> >>    p0 (FIFO42)
-> >>     |
-> >>     | blocked_on
-> >>     v
-> >>    p1 (FIFO41)
-> >>     |
-> >>     | blocked_on
-> >>     v
-> >>    p2 (FIFO40)
-> >>
-> >>   Add on top p3 an unrelated FIFO1 task, and p4 an unrelated CFS task.
-> >>
-> >>   CPU0
-> >>   current:  p0
-> >>   proxy:    p2
-> >>   enqueued: p0, p1, p2, p3
-> >>
-> >>   CPU1
-> >>   current:  p4
-> >>   proxy:    p4
-> >>   enqueued: p4
-> >>
-> >>
-> >> pick_next_pushable_task() on CPU0 would pick p1 as the next highest
-> >> priority task to push away to e.g. CPU1, but that would be undone as soon
-> >> as proxy() happens on CPU1: we'd notice the CPU boundary and punt it back
-> >> to CPU0. What we would want here is to pick p3 instead to have it run on
-> >> CPU1.
-> >
-> > Given this point, is there any reason that blocked tasks should ever
-> > be pushable, even if they are not part of the blocked chain for the
-> > currently running task? If we could just check task_is_blocked()
-> > rather than needing to know whether the task is in the middle of the
-> > "active" chain, that would seem to simplify things greatly. I think
-> > that approach might also require another dequeue/enqueue, in
-> > ttwu_runnable(), to catch non-proxy blocked tasks becoming unblocked
-> > (and therefore pushable), but that *seems* OK...though I could
-> > certainly be missing something.
-> >
+On Thu, Oct 20, 2022 at 06:25:43AM -0700, syzbot wrote:
+> Hello,
 > 
-> So for an active chain yes we probably don't want any task in the chain to
-> be visible to load-balance - proxy and curr because they both make up the
-> currently-executed task (but there are active load balances in
-> e.g. CFS...), and the rest of the chain because of the above issues.
-> 
-> As for blocked tasks in a separate chain, ideally we would want them to be
-> picked up by load-balance. Consider:
-> 
->       blocked_on       owner
->   p0 ------------> m0 -------> p1
-> FIFO4                         FIFO3
-> 
->       blocked_on       owner
->   p2 ------------> m1 -------> p3
-> FIFO2                         FIFO1
-> 
-> 
-> If all those tasks end up on a single CPU for whatever reason, we'll pick
-> p0, go through proxy(), and run p1.
-> 
-> If p2 isn't made visible to load-balance, we'll try to move p3 away -
-> unfortunately nothing will make it bring p2 with it. So if all other CPUs
-> are running FIFO1 tasks, load-balance will do nothing.
-> 
-> If p2 is made visible to load-balance, we'll try to move it away, but
-> if/when we try to pick it we'll move it back to where p3 is...
-> One possible change here is to make the blocked chain migrate towards the
-> proxy rather than the owner - this makes scheduling priority considerations
-> a bit saner, but is bad towards the owner (migrating blocked tasks is
-> "cheap", migrating running tasks isn't).
+> syzbot found the following issue on:
 
-Plus we need to consider owner's affinity, maybe it can't really migrate
-towards proxy's CPU.
+NTFS.  Ignored.
 
-It looks like in general we would like to perform load balancing
-decisions considering potential proxies attributes? Guess it might soon
-turn into a mess to implement, though.
-
+> HEAD commit:    55be6084c8e0 Merge tag 'timers-core-2022-10-05' of git://g..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=108783e6880000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=c29b6436e994d72e
+> dashboard link: https://syzkaller.appspot.com/bug?extid=e33c2a7e25ff31df5297
+> compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+> 
+> Unfortunately, I don't have any reproducer for this issue yet.
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/c8f5131ab57d/disk-55be6084.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/77167f226f35/vmlinux-55be6084.xz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+e33c2a7e25ff31df5297@syzkaller.appspotmail.com
+> 
+> ntfs: volume version 3.1.
+> BUG: kernel NULL pointer dereference, address: 0000000000000000
+> #PF: supervisor instruction fetch in kernel mode
+> #PF: error_code(0x0010) - not-present page
+> PGD a5bf9067 P4D a5bf9067 PUD 37d2e067 PMD 0 
+> Oops: 0010 [#1] PREEMPT SMP KASAN
+> CPU: 1 PID: 11041 Comm: syz-executor.1 Not tainted 6.0.0-syzkaller-09589-g55be6084c8e0 #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+> RIP: 0010:0x0
+> Code: Unable to access opcode bytes at 0xffffffffffffffd6.
+> RSP: 0018:ffffc9001504f618 EFLAGS: 00010287
+> RAX: ffffffff81b64c0e RBX: ffffc9001504f680 RCX: 0000000000040000
+> RDX: ffffc9000ae14000 RSI: ffffea0002a61580 RDI: 0000000000000000
+> RBP: ffffc9001504f6f8 R08: dffffc0000000000 R09: fffff9400054c2b1
+> R10: fffff9400054c2b1 R11: 1ffffd400054c2b0 R12: ffffea0002a61580
+> R13: 1ffffd400054c2b1 R14: 0000000000000000 R15: ffffea0002a61588
+> FS:  00007f0f425d5700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: ffffffffffffffd6 CR3: 00000000a32e1000 CR4: 00000000003506e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  filemap_read_folio+0x1ba/0x7f0 mm/filemap.c:2399
+>  do_read_cache_folio+0x2d3/0x790 mm/filemap.c:3526
+>  do_read_cache_page mm/filemap.c:3568 [inline]
+>  read_cache_page+0x57/0x250 mm/filemap.c:3577
+>  read_mapping_page include/linux/pagemap.h:756 [inline]
+>  ntfs_map_page fs/ntfs/aops.h:75 [inline]
+>  ntfs_check_logfile+0x3f1/0x2a50 fs/ntfs/logfile.c:532
+>  load_and_check_logfile+0x6f/0xd0 fs/ntfs/super.c:1215
+>  load_system_files+0x3376/0x48d0 fs/ntfs/super.c:1941
+>  ntfs_fill_super+0x19a9/0x2bf0 fs/ntfs/super.c:2892
+>  mount_bdev+0x26c/0x3a0 fs/super.c:1400
+>  legacy_get_tree+0xea/0x180 fs/fs_context.c:610
+>  vfs_get_tree+0x88/0x270 fs/super.c:1530
+>  do_new_mount+0x289/0xad0 fs/namespace.c:3040
+>  do_mount fs/namespace.c:3383 [inline]
+>  __do_sys_mount fs/namespace.c:3591 [inline]
+>  __se_sys_mount+0x2e3/0x3d0 fs/namespace.c:3568
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> RIP: 0033:0x7f0f4148cada
+> Code: 48 c7 c2 b8 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 b8 04 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+> RSP: 002b:00007f0f425d4f88 EFLAGS: 00000202 ORIG_RAX: 00000000000000a5
+> RAX: ffffffffffffffda RBX: 0000000020000200 RCX: 00007f0f4148cada
+> RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007f0f425d4fe0
+> RBP: 00007f0f425d5020 R08: 00007f0f425d5020 R09: 0000000020000000
+> R10: 0000000000000000 R11: 0000000000000202 R12: 0000000020000000
+> R13: 0000000020000100 R14: 00007f0f425d4fe0 R15: 00000000200026c0
+>  </TASK>
+> Modules linked in:
+> CR2: 0000000000000000
+> ---[ end trace 0000000000000000 ]---
+> RIP: 0010:0x0
+> Code: Unable to access opcode bytes at 0xffffffffffffffd6.
+> RSP: 0018:ffffc9001504f618 EFLAGS: 00010287
+> RAX: ffffffff81b64c0e RBX: ffffc9001504f680 RCX: 0000000000040000
+> RDX: ffffc9000ae14000 RSI: ffffea0002a61580 RDI: 0000000000000000
+> RBP: ffffc9001504f6f8 R08: dffffc0000000000 R09: fffff9400054c2b1
+> R10: fffff9400054c2b1 R11: 1ffffd400054c2b0 R12: ffffea0002a61580
+> R13: 1ffffd400054c2b1 R14: 0000000000000000 R15: ffffea0002a61588
+> FS:  00007f0f425d5700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: ffffffffffffffd6 CR3: 00000000a32e1000 CR4: 00000000003506e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> 
+> 
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
