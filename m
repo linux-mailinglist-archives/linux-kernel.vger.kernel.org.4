@@ -2,133 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3DF8606A49
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 23:29:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD635606A4A
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 23:29:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229867AbiJTV26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 17:28:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45232 "EHLO
+        id S229925AbiJTV3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 17:29:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbiJTV24 (ORCPT
+        with ESMTP id S229875AbiJTV27 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 17:28:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A26E41D0D51;
-        Thu, 20 Oct 2022 14:28:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5CE85B8295E;
-        Thu, 20 Oct 2022 21:28:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AF24C433C1;
-        Thu, 20 Oct 2022 21:28:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666301327;
-        bh=rWfQzP6/H9EAAjSIpr3p+kEno6vt0QBXq32WDxAfruU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ETkFoNIwV/rtQAkC6D0iTcGP48Lv+lCWAEfot85DN9OQs9Tnc4XCjUH5pFR4ztre3
-         nZG3MyrrlnpUwkuUnr8qqsNqMuBZLyf3vg2OnfSLc6jwAG2RU3bUAT3bCYrl0AB8hU
-         vQCBfUbT4Oumto+b5K8TtrWcQcS8zVuk03inW/pg54jeZ4LIRRbIFljLOIshOzyEkK
-         hwdxurKtatrsk+N9iliJjkw2fSpEIAyydd60T7KEQuXbYs69SJ++9ed0+eCzxZLbXt
-         7OpqMh3jh+wdkBlBIgy2DSpm9HBuBMrAarmBV2qy7MEl/1f/KGnvP/KZZvy58CION1
-         li7bd6SYatLqA==
-Date:   Thu, 20 Oct 2022 14:28:36 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Pankaj Gupta <pankaj.gupta@nxp.com>,
-        "jarkko@kernel.org" <jarkko@kernel.org>,
-        "a.fatoum@pengutronix.de" <a.fatoum@pengutronix.de>,
-        "gilad@benyossef.com" <gilad@benyossef.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "sumit.garg@linaro.org" <sumit.garg@linaro.org>,
-        "david@sigma-star.at" <david@sigma-star.at>,
-        "michael@walle.cc" <michael@walle.cc>,
-        "john.ernberg@actia.se" <john.ernberg@actia.se>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "j.luebbe@pengutronix.de" <j.luebbe@pengutronix.de>,
-        "richard@nod.at" <richard@nod.at>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        Sahil Malhotra <sahil.malhotra@nxp.com>,
-        Kshitiz Varshney <kshitiz.varshney@nxp.com>,
-        Horia Geanta <horia.geanta@nxp.com>,
-        Varun Sethi <V.Sethi@nxp.com>
-Subject: Re: [EXT] Re: [PATCH v0 3/8] crypto: hbk flags & info added to the
- tfm
-Message-ID: <Y1G9hKPT1MNQQxcG@sol.localdomain>
-References: <20221006130837.17587-4-pankaj.gupta@nxp.com>
- <Yz/OEwDtyTm+VH0p@gondor.apana.org.au>
- <DU2PR04MB8630CBBB8ABDC3768320C18195209@DU2PR04MB8630.eurprd04.prod.outlook.com>
- <Y0Q3JKnWSNIC4Xlu@zx2c4.com>
- <Y0UxY51KQoKCq59o@gondor.apana.org.au>
- <Y0XLqd/+C1sxq2G0@zx2c4.com>
- <Y0aDiLp7BztzwNez@gondor.apana.org.au>
- <Y0m2TU5k78I1AR+p@ziepe.ca>
- <Y1DN3SqEyFZd9i37@sol.localdomain>
- <Y1GgSX+ZmOsxhB2N@ziepe.ca>
+        Thu, 20 Oct 2022 17:28:59 -0400
+Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 498171A044A
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 14:28:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1666301324; bh=+D5i5YAW0v+FHBQ6QCrtrhRjGBTE/RrYIjjNrkBdjj4=;
+        h=X-EA-Auth:Date:From:To:Subject:Message-ID:References:MIME-Version:
+         Content-Type:In-Reply-To;
+        b=A37Nr65/D2dcsKbQtBdpnVHEDAyROUC/nYZ3/0+fYNu5ellsArjU9LhAp4fx1M0IS
+         CPMOPQVJXEkTs6n3AhPb5I+E+RQ+5rvrrpuIwtsK0Y9ygB5/6ugpDxTqkao/giH4Oz
+         54saFkF4aE8uYHcSbLklzSRvFyhEmNuQBGVNnpxk=
+Received: by b-6.in.mailobj.net [192.168.90.16] with ESMTP
+        via [213.182.55.206]
+        Thu, 20 Oct 2022 23:28:44 +0200 (CEST)
+X-EA-Auth: CyLcF3VfroT4pXZI0VzvRRNpJ3VaUuKb2iSqeqe617a37HYTO0EI3Y0ELdHaS8zezYCM+UFghpkGOvnV4eCs+JaQRitBM+q9
+Date:   Fri, 21 Oct 2022 02:58:39 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     outreachy@lists.linux.dev, Larry.Finger@lwfinger.net,
+        phil@philpotter.co.uk, paskripkin@gmail.com,
+        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, kumarpraveen@linux.microsoft.com,
+        saurabh.truth@gmail.com
+Subject: [PATCH v4 04/11] staging: r8188eu: use htons macro instead of
+ __constant_htons
+Message-ID: <b46adfbdce0362ed0dbe0fc957ef2f47a93c24bb.1666299151.git.drv@mailo.com>
+References: <cover.1666299151.git.drv@mailo.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y1GgSX+ZmOsxhB2N@ziepe.ca>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <cover.1666299151.git.drv@mailo.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 04:23:53PM -0300, Jason Gunthorpe wrote:
-> On Wed, Oct 19, 2022 at 09:26:05PM -0700, Eric Biggers wrote:
-> 
-> > Are you referring to the support for hardware-wrapped inline crypto keys?  It
-> > isn't upstream yet, but my latest patchset is at
-> > https://lore.kernel.org/linux-fscrypt/20220927014718.125308-2-ebiggers@kernel.org/T/#u.
-> > There's also a version of it used by some Android devices already.  Out of
-> > curiosity, are you using it in an Android device, or have you adopted it in some
-> > other downstream?
-> 
-> Unrelated to Android, similar functionality, but slightly different
-> ultimate purpose. We are going to be sending a fscrypt patch series
-> for mlx5 and nvme soonish.
+Macro "htons" is more efficient and clearer. It should be used for
+constants instead of the __constant_htons macro. Resolves following
+checkpatch script complaint:
+        WARNING: __constant_htons should be htons
 
-That's interesting, though also slightly scary in that it sounds like you've
-already shipped some major fscrypt changes without review!
+Signed-off-by: Deepak R Varma <drv@mailo.com>
+---
 
-> > > Yes, it would be nice to see a comprehensive understand on how HW
-> > > resident keys can be modeled in the keyring.
-> > 
-> > Note that the keyrings subsystem is not as useful as it might seem.  It sounds
-> > like something you want (you have keys, and there is a subsystem called
-> > "keyrings", so it should be used, right?), but often it isn't.  fscrypt has
-> > mostly moved away from using it, as it caused lots of problems.  I would caution
-> > against assuming that it needs to be part of any solution.
-> 
-> That sounds disappointing that we are now having parallel ways for the
-> admin to manipulate kernel owned keys.
+Changes in v4:
+   -- None.
 
-Well, the keyrings subsystem never worked properly for fscrypt anyway.  At most,
-it's only useful for providing the key to the filesystem initially (by passing a
-key ID to FS_IOC_ADD_ENCRYPTION_KEY, instead of the key bytes), similar to what
-dm-crypt allows.  After that, the keyrings subsystem plays no role.
+Changes in v3:
+   1. Make this a driver-wide change. Feedback from philipp.g.hortmann@gmail.com
+   2. Correct spelling in patch log. Feedback from joe@perches.com
 
-I'm open to making FS_IOC_ADD_ENCRYPTION_KEY accept other 'struct key' types,
-like "trusted" which has been discussed before and which dm-crypt supports.
 
-Just don't assume that just because you have a key, that you automatically
-*need* the keyrings subsystem.  Normally just passing the key bytes in the ioctl
-works just as well and is much simpler.  Same for dm-crypt, which normally takes
-the key bytes in the device-mapper table parameters...
+ drivers/staging/r8188eu/core/rtw_br_ext.c |  6 +++---
+ drivers/staging/r8188eu/core/rtw_xmit.c   | 14 +++++++-------
+ 2 files changed, 10 insertions(+), 10 deletions(-)
 
-- Eric
+diff --git a/drivers/staging/r8188eu/core/rtw_br_ext.c b/drivers/staging/r8188eu/core/rtw_br_ext.c
+index b418cbc307b3..a23f7df373ed 100644
+--- a/drivers/staging/r8188eu/core/rtw_br_ext.c
++++ b/drivers/staging/r8188eu/core/rtw_br_ext.c
+@@ -606,14 +606,14 @@ void dhcp_flag_bcast(struct adapter *priv, struct sk_buff *skb)
+ 	if (!priv->ethBrExtInfo.dhcp_bcst_disable) {
+ 		__be16 protocol = *((__be16 *)(skb->data + 2 * ETH_ALEN));
+
+-		if (protocol == __constant_htons(ETH_P_IP)) { /*  IP */
++		if (protocol == htons(ETH_P_IP)) { /*  IP */
+ 			struct iphdr *iph = (struct iphdr *)(skb->data + ETH_HLEN);
+
+ 			if (iph->protocol == IPPROTO_UDP) { /*  UDP */
+ 				struct udphdr *udph = (struct udphdr *)((size_t)iph + (iph->ihl << 2));
+
+-				if ((udph->source == __constant_htons(CLIENT_PORT)) &&
+-				    (udph->dest == __constant_htons(SERVER_PORT))) { /*  DHCP request */
++				if ((udph->source == htons(CLIENT_PORT)) &&
++				    (udph->dest == htons(SERVER_PORT))) { /*  DHCP request */
+ 					struct dhcpMessage *dhcph =
+ 						(struct dhcpMessage *)((size_t)udph + sizeof(struct udphdr));
+ 					u32 cookie = be32_to_cpu((__be32)dhcph->cookie);
+diff --git a/drivers/staging/r8188eu/core/rtw_xmit.c b/drivers/staging/r8188eu/core/rtw_xmit.c
+index 873d2c5c3634..4f8220428328 100644
+--- a/drivers/staging/r8188eu/core/rtw_xmit.c
++++ b/drivers/staging/r8188eu/core/rtw_xmit.c
+@@ -1622,14 +1622,14 @@ static int rtw_br_client_tx(struct adapter *padapter, struct sk_buff **pskb)
+ 	spin_lock_bh(&padapter->br_ext_lock);
+ 	if (!(skb->data[0] & 1) && br_port &&
+ 	    memcmp(skb->data + ETH_ALEN, padapter->br_mac, ETH_ALEN) &&
+-	    *((__be16 *)(skb->data + ETH_ALEN * 2)) != __constant_htons(ETH_P_8021Q) &&
+-	    *((__be16 *)(skb->data + ETH_ALEN * 2)) == __constant_htons(ETH_P_IP) &&
++	    *((__be16 *)(skb->data + ETH_ALEN * 2)) != htons(ETH_P_8021Q) &&
++	    *((__be16 *)(skb->data + ETH_ALEN * 2)) == htons(ETH_P_IP) &&
+ 	    !memcmp(padapter->scdb_mac, skb->data + ETH_ALEN, ETH_ALEN) && padapter->scdb_entry) {
+ 		memcpy(skb->data + ETH_ALEN, GET_MY_HWADDR(padapter), ETH_ALEN);
+ 		padapter->scdb_entry->ageing_timer = jiffies;
+ 		spin_unlock_bh(&padapter->br_ext_lock);
+ 	} else {
+-		if (*((__be16 *)(skb->data + ETH_ALEN * 2)) == __constant_htons(ETH_P_8021Q)) {
++		if (*((__be16 *)(skb->data + ETH_ALEN * 2)) == htons(ETH_P_8021Q)) {
+ 			is_vlan_tag = 1;
+ 			vlan_hdr = *((unsigned short *)(skb->data + ETH_ALEN * 2 + 2));
+ 			for (i = 0; i < 6; i++)
+@@ -1637,10 +1637,10 @@ static int rtw_br_client_tx(struct adapter *padapter, struct sk_buff **pskb)
+ 			skb_pull(skb, 4);
+ 		}
+ 		if (!memcmp(skb->data + ETH_ALEN, padapter->br_mac, ETH_ALEN) &&
+-		    (*((__be16 *)(skb->data + ETH_ALEN * 2)) == __constant_htons(ETH_P_IP)))
++		    (*((__be16 *)(skb->data + ETH_ALEN * 2)) == htons(ETH_P_IP)))
+ 			memcpy(padapter->br_ip, skb->data + WLAN_ETHHDR_LEN + 12, 4);
+
+-		if (*((__be16 *)(skb->data + ETH_ALEN * 2)) == __constant_htons(ETH_P_IP)) {
++		if (*((__be16 *)(skb->data + ETH_ALEN * 2)) == htons(ETH_P_IP)) {
+ 			if (memcmp(padapter->scdb_mac, skb->data + ETH_ALEN, ETH_ALEN)) {
+ 				padapter->scdb_entry = (struct nat25_network_db_entry *)scdb_findEntry(padapter,
+ 							skb->data + WLAN_ETHHDR_LEN + 12);
+@@ -1669,7 +1669,7 @@ static int rtw_br_client_tx(struct adapter *padapter, struct sk_buff **pskb)
+ 					skb_push(skb, 4);
+ 					for (i = 0; i < 6; i++)
+ 						*((unsigned short *)(skb->data + i * 2)) = *((unsigned short *)(skb->data + 4 + i * 2));
+-					*((__be16 *)(skb->data + ETH_ALEN * 2)) = __constant_htons(ETH_P_8021Q);
++					*((__be16 *)(skb->data + ETH_ALEN * 2)) = htons(ETH_P_8021Q);
+ 					*((unsigned short *)(skb->data + ETH_ALEN * 2 + 2)) = vlan_hdr;
+ 				}
+
+@@ -1708,7 +1708,7 @@ static int rtw_br_client_tx(struct adapter *padapter, struct sk_buff **pskb)
+ 			skb_push(skb, 4);
+ 			for (i = 0; i < 6; i++)
+ 				*((unsigned short *)(skb->data + i * 2)) = *((unsigned short *)(skb->data + 4 + i * 2));
+-			*((__be16 *)(skb->data + ETH_ALEN * 2)) = __constant_htons(ETH_P_8021Q);
++			*((__be16 *)(skb->data + ETH_ALEN * 2)) = htons(ETH_P_8021Q);
+ 			*((unsigned short *)(skb->data + ETH_ALEN * 2 + 2)) = vlan_hdr;
+ 		}
+ 	}
+--
+2.30.2
+
+
+
