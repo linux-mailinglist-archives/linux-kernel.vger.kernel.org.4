@@ -2,84 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0862606373
-	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 16:45:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7CE5606379
+	for <lists+linux-kernel@lfdr.de>; Thu, 20 Oct 2022 16:47:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230084AbiJTOpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 10:45:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40472 "EHLO
+        id S230228AbiJTOrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 10:47:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230249AbiJTOpC (ORCPT
+        with ESMTP id S229982AbiJTOrE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 10:45:02 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52B5FA5700;
-        Thu, 20 Oct 2022 07:44:55 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id 7587132008FC;
-        Thu, 20 Oct 2022 10:44:52 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Thu, 20 Oct 2022 10:44:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1666277092; x=1666363492; bh=XOzeuPW2Qi
-        ixpmZ2B6KTbuBWjAk7F4JwVSLfTWQZDNg=; b=wM+Q8gXUrHCWLCViwZYO05VfRi
-        4xa1M1EZWWz9hleo5goER29t2I4OGeSGsBXi+eTTXFFS+aYSWHRoIMSm24gSwdTX
-        efcXhFeohUWTthOfbOXo3XdlhYXeZ5byABmOitDhzwGk3qxKra+IwfkvEVc0u28v
-        I8PEFjfOMPvb43M1Faspt8yzEAkSWgp5P6QVJSaFbDj6Ez6SiaH9f5EIBFrz3m7b
-        VQM8NH9dq0d2tp8UT8n/k/oWIZ/rRExJNp4aSrMCBNdtGo1P9sBoKLa58gPJ3qdF
-        63lJuzvj4VkoNlF8c+Zix2rDoJ+Luy6u3ARufhu8LqLOLN4i+wEeQ67jNP2Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1666277092; x=1666363492; bh=XOzeuPW2QiixpmZ2B6KTbuBWjAk7
-        F4JwVSLfTWQZDNg=; b=CiVUC37ZiOnHfYOBUKFULR6rrg2C8rSwK3cwurnx7WPO
-        SqzarpayTFTtIIxOQLvyvXAlT5HYUuOfXHv16wxDsKaxlh9ZRF6TsCD7DiBiPEo5
-        S+piUdtwlz9BczvT8eDDapiTq+0AwZUgRQaGhnhX5HAuHwresz2fg13c1lCvf3yz
-        9M+3vOkiKuafq/tV6eXUN0PaEcyMCYCC/76tXe2tnu2lksUJ53nZ/eZQyP1xJuHB
-        WjvOUbt/SLG4+UjplBAsmGgCQ7zwoQSrNx+JiZ1SmWPBTlNYP5ZeR33Z45vAVlLO
-        9d/FLEFBSBgMzucUUuojBNki3ryH/O7BLkFv4Waneg==
-X-ME-Sender: <xms:415RY6tmrYaacvPfoKGnXNMPTlnlow_gkNSqkTDuClFpQyGDMfLzTw>
-    <xme:415RY_d0rFnr69p-qJw2AkV0vnuz9muqBT6kh30vZZTKTAWPDhIVMsyv1z_v1XiaK
-    bMYIdA7mgON7fHRm5Q>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeliedgjeelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:415RY1wPmByBBRXqYhiOJyqyP3wLtQRowAz8HFPbrHBE3wbfL9yXVg>
-    <xmx:415RY1OePgC_TuhO0xdoKhZKq3OHmFni1na-aEiPCSVU1PqruCzrBg>
-    <xmx:415RY6-_r4d_mcBO3eqU_FGbcNXxUP3BM6F6rlBatpi6UeklbNVzlA>
-    <xmx:5F5RYxafd92hLUatBzWC59HkhTe4n7YA9PMMRB_n5Sa2XYIM3PFYyg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id CDCAEB60086; Thu, 20 Oct 2022 10:44:51 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1047-g9e4af4ada4-fm-20221005.001-g9e4af4ad
-Mime-Version: 1.0
-Message-Id: <ef23d179-15fa-4ad9-8ddc-ccad7790f8d0@app.fastmail.com>
-In-Reply-To: <0f29aa0297d6fc5daa86f81925754c1f6d3f679c.camel@savoirfairelinux.com>
-References: <20221018133800.10636-1-firas.ashkar@savoirfairelinux.com>
- <a577dfcf-5a0a-4568-8f6d-872a8324dfcc@app.fastmail.com>
- <0f29aa0297d6fc5daa86f81925754c1f6d3f679c.camel@savoirfairelinux.com>
-Date:   Thu, 20 Oct 2022 16:44:31 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Firas Ashkar" <firas.ashkar@savoirfairelinux.com>,
-        alex@digriz.org.uk, "Ulf Hansson" <ulf.hansson@linaro.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        "linux-mmc @ vger . kernel . org" <linux-mmc@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] mmc: add TS7800 FPGA based MMC controller driver
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        Thu, 20 Oct 2022 10:47:04 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3994B03E0
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 07:47:02 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id be13so18351864lfb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 07:47:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=p+QLcntPNquWGA1ARPKGqcsFovLnDGGACStBc6YWpJE=;
+        b=WGaWzXNmStE18xevdTnFF7SFzon6bb6zpTKu05Cvb/sWRr/Yl798OoETjUYO0PRSYp
+         xRaZFTO78m3ojbvMzB3MOPK02Q8D/5tdJ3wrtzc/6Pc/TuW6k/QG5Utr1RkkNePw8a9y
+         EXUT1qHq/rVQK+Cl99tY0X3OhaIsKSyBATMqS1cacvvIpyss1fdkHjtbqmggiDzmKqBT
+         LTaIbA77mDafWDX39O3WcdQnQrWGT2DrVvZi2MOaVhu/WqHRMX3snvdWmrTjZ0yGf4gF
+         MiPpMDC+dCVKj3+lDH3YOFy3lSYNehZEXMfmgiK1hjRjvfeIqeYZZBR5NadIh35vUVrZ
+         D5gQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=p+QLcntPNquWGA1ARPKGqcsFovLnDGGACStBc6YWpJE=;
+        b=Ev9l+w1W5+qT9QIt0bjcpszZNHnL0HFfIsYZXwnSs0OA3om0js2HNB4sFub4JZCbtL
+         5MrvSiKgAO13Hb7j/G3U1IhGBzPaJBclLijf/AdazAGSt4iwrSavaDQw1pV8NmraYmcf
+         UhDl893HZbAQZOuqYiJh/ZilgRwjsyqgguCJsAOC7XEt06robbXRbTnkSLmVndBwOhEL
+         58bs3PkxQNWKSmKpBWHiVB+zySIMxaZfxnbcHmd8+P/6Z7ir6DaujM3lhunX6ITebEw3
+         tU1/e6/uBqc0P3raAH3KjoLUbYOK4IMtsog2AgEoKNmK30I9Alxn+Zy4F2mntk/vWhkm
+         q7GQ==
+X-Gm-Message-State: ACrzQf1n4eJM+aGa5GslgpRpGrpr6zAqqrOqj+8pCzjySoSk0H7MOEIi
+        rJgGNiDp/amH58m4MWEplE3ATYeGgWAgiqW0kTGFUg==
+X-Google-Smtp-Source: AMsMyM6kt+/AcdRolhlWvfCUWwkN1TI+8ZVTwkmYAf3ufmRK1hu/bT4Q1AWe2MNyQhIWzOKq/NcU+haMFp+R7RpkDDc=
+X-Received: by 2002:a05:6512:521:b0:4a2:7576:82f4 with SMTP id
+ o1-20020a056512052100b004a2757682f4mr5236360lfc.558.1666277220192; Thu, 20
+ Oct 2022 07:47:00 -0700 (PDT)
+MIME-Version: 1.0
+References: <20221019150333.1047423-1-pgonda@google.com> <528937ab-8046-d5d1-26ff-50ef35f5635f@amd.com>
+ <CAMkAt6ritG1zmOreh9WYLYAGww0EJQy+m-Y0nfxD5+gpTkpJ1w@mail.gmail.com>
+ <821e750b-26c9-3331-7577-5cb832a35afa@amd.com> <CAAH4kHYhLkiN7H03GKgMU+3h9rhp2a03gNFGLbrNtjp=PYYHQw@mail.gmail.com>
+ <5621c2b6-a5eb-c786-afee-020e97c0e4c8@amd.com> <CAMkAt6pCPmf++Dg=x5bSN4-gR-s7BuYiryOGvGezLupFN9aEKw@mail.gmail.com>
+ <948704a4-2348-041f-4f46-bbf42d985549@amd.com> <CAMkAt6rb-f3qCb7Np-SdHd7u87-zShFpYkWcA910uYXUafqtPQ@mail.gmail.com>
+ <195a9a2d-d758-e70f-335f-c394b0c587ad@amd.com>
+In-Reply-To: <195a9a2d-d758-e70f-335f-c394b0c587ad@amd.com>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Thu, 20 Oct 2022 08:46:48 -0600
+Message-ID: <CAMkAt6qFDS3GgCPZD-T6Ro4VSrTwy7oww9NnAw5Vyu_9SBRpZg@mail.gmail.com>
+Subject: Re: [PATCH] virt: Prevent AES-GCM IV reuse in SNP guest driver
+To:     Tom Lendacky <thomas.lendacky@amd.com>
+Cc:     Dionna Amalie Glaze <dionnaglaze@google.com>,
+        Borislav Petkov <bp@suse.de>,
+        Michael Roth <michael.roth@amd.com>,
+        Haowen Bai <baihaowen@meizu.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Marc Orr <marcorr@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Ashish Kalra <Ashish.Kalra@amd.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,16 +80,142 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022, at 16:42, firas ashkar wrote:
->> 
->> > +
->> > +#define DRIVER_NAME "ts7800v1_sdmmc"
->> 
->> Maybe drop this macro and just use the string directly.
-> This define macro used in multiple locations
+On Thu, Oct 20, 2022 at 8:02 AM Tom Lendacky <thomas.lendacky@amd.com> wrote:
+>
+> On 10/19/22 16:47, Peter Gonda wrote:
+> > On Wed, Oct 19, 2022 at 2:58 PM Tom Lendacky <thomas.lendacky@amd.com> wrote:
+> >> On 10/19/22 15:39, Peter Gonda wrote:
+> >>> On Wed, Oct 19, 2022 at 1:56 PM Tom Lendacky <thomas.lendacky@amd.com> wrote:
+> >>>> On 10/19/22 14:17, Dionna Amalie Glaze wrote:
+> >>>>> On Wed, Oct 19, 2022 at 11:44 AM Tom Lendacky <thomas.lendacky@amd.com> wrote:
+> >>>>>> On 10/19/22 12:40, Peter Gonda wrote:
+> >>>>>>> On Wed, Oct 19, 2022 at 11:03 AM Tom Lendacky <thomas.lendacky@amd.com> wrote:
+> >>>>>>>> On 10/19/22 10:03, Peter Gonda wrote:
+> >>>>>>>>> The ASP and an SNP guest use a series of AES-GCM keys called VMPCKs to
+> >>>>>>>>> communicate securely with each other. The IV to this scheme is a
+> >>>>>>>>> sequence number that both the ASP and the guest track. Currently this
+> >>>>>>>>> sequence number in a guest request must exactly match the sequence
+> >>>>>>>>> number tracked by the ASP. This means that if the guest sees an error
+> >>>>>>>>> from the host during a request it can only retry that exact request or
+> >>>>>>>>> disable the VMPCK to prevent an IV reuse. AES-GCM cannot tolerate IV
+> >>>>>>>>> reuse see:
+> >>>>>>>>> https://csrc.nist.gov/csrc/media/projects/block-cipher-techniques/documents/bcm/comments/800-38-series-drafts/gcm/joux_comments.pdf
+>
+> >>> OK so the guest retires with the same request when it gets an
+> >>> SNP_GUEST_REQ_INVALID_LEN error. It expands its internal buffer to
+> >>
+> >> It would just use the pre-allocated snp_dev->certs_data buffer with npages
+> >> set to the full size of that buffer.
+> >
+> > Actually we allocate that buffer with size SEV_FW_BLOB_MAX_SIZE. Maybe
+> > we want to just allocate this buffer which we think is sufficient and
+> > never increase the allocation?
+> >
+> > I see the size of
+> > https://developer.amd.com/wp-content/resources/ask_ark_milan.cert is
+> > 3200 bytes. Assuming the VCEK cert is the same size (which it should
+> > be since this .cert is 2 certificates). 16K seems to leave enough room
+> > even for some vendor certificates?
+>
+> I think just using the 16K buffer (4 pages) as it is allocated today is
+> ok. If we get a SNP_GUEST_REQ_INVALID_LEN error that is larger than 4
+> pages, then we won't ever be able to pull the certs given how the driver
+> is coded today. In that case, disabling the VMPCK is in order.
+>
+> A separate patch could be submitted later to improve this overall aspect
+> of the certs buffer if needed.
 
-Yes, exactly that is the problem. Other drivers use the
-same macro name, so it's very hard to grep for the actual
-string.
+If that sounds OK I'd prefer that. This keeps the drivers current limit:
 
-    Arnd
+static int get_ext_report(struct snp_guest_dev *snp_dev, struct
+snp_guest_request_ioctl *arg)
+...
+if (req.certs_len > SEV_FW_BLOB_MAX_SIZE ||
+    !IS_ALIGNED(req.certs_len, PAGE_SIZE))
+return -EINVAL;
+
+I'd prefer not to add extra features during the bug fix. But happy to
+make this work with buffers greater than SEV_FW_BLOB_MAX_SIZE as
+follow up if you want.
+
+>
+> Thanks,
+> Tom
+>
+> >
+> >>
+> >>> hold the certificates. When it finally gets a successful request w/
+> >>> certs. Do we want to return the attestation bits to userspace, but
+> >>> leave out the certificate data. Or just error out the ioctl
+> >>> completely?
+> >>
+> >> We need to be able to return the attestation bits that came back with the
+> >> extra certs. So just error out of the ioctl with the length error and let
+> >> user-space retry with the recommended number of pages.
+> >
+> > That sounded simpler to me. Will do.
+> >
+> >>
+> >>>
+> >>> I can do that in this series.
+> >>
+> >> Thanks!
+> >>
+> >>>
+> >>>>
+> >>>>>
+> >>>>>>>
+> >>>>>>>>
+> >>>>>>>> For the rate-limiting patch series [1], the rate-limiting will have to be
+> >>>>>>>> performed within the kernel, while the mutex is held, and then retry the
+> >>>>>>>> exact request again. Otherwise, that error will require disabling the
+> >>>>>>>> VMPCK. Either that, or the hypervisor must provide the rate limiting.
+> >>>>>>>>
+> >>>>>>>> Thoughts?
+> >>>>>>>>
+> >>>>>>>> [1] https://lore.kernel.org/lkml/20221013160040.2858732-1-dionnaglaze@google.com/
+> >>>>>>>
+> >>>>>>> Yes I think if the host rate limits the guest. The guest kernel should
+> >>>>>>> retry the exact message. Which mutex are you referring too?
+> >>>>>>
+> >>>>>> Or the host waits and then submits the request and the guest kernel
+> >>>>>> doesn't have to do anything. The mutex I'm referring to is the
+> >>>>>> snp_cmd_mutex that is taken in snp_guest_ioctl().
+> >>>>>
+> >>>>> I think that either the host kernel or guest kernel waiting can lead
+> >>>>> to unacceptable delays.
+> >>>>> I would recommend that we add a zero argument ioctl to /dev/sev-guest
+> >>>>> specifically for retrying the last request.
+> >>>>>
+> >>>>> We can know what the last request is due to the sev_cmd_mutex serialization.
+> >>>>> The driver will just keep a scratch buffer for this. Any other request
+> >>>>> that comes in without resolving the retry will get an -EBUSY error
+> >>>>> code.
+> >>>>
+> >>>> And the first caller will have received an -EAGAIN in order to
+> >>>> differentiate between the two situations?
+> >>>>
+> >>>>>
+> >>>>> Calling the retry ioctl without a pending command will result in -EINVAL.
+> >>>>>
+> >>>>> Let me know what you think.
+> >>>>
+> >>>> I think that sounds reasonable, but there are some catches. You will need
+> >>>> to ensure that the caller that is supposed to retry does actually retry
+> >>>> and that a caller that does retry is the same caller that was told to retry.
+> >>>
+> >>> Whats the issue with the guest driver taking some time?
+> >>>
+> >>> This sounds complex because there may be many users of the driver. How
+> >>> do multiple users coordinate when they need to use the retry ioctl?
+> >>>
+> >>>>
+> >>>> Thanks,
+> >>>> Tom
+> >>>>
+> >>>>>>
+> >>>>>> Thanks,
+> >>>>>> Tom
+> >>>>>
+> >>>>>
+> >>>>>
