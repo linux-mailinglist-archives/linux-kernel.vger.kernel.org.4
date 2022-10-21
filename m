@@ -2,106 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF326607041
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 08:44:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B892B60704A
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 08:45:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbiJUGnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 02:43:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45142 "EHLO
+        id S229885AbiJUGpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 02:45:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230030AbiJUGns (ORCPT
+        with ESMTP id S229911AbiJUGo7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 02:43:48 -0400
+        Fri, 21 Oct 2022 02:44:59 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DAF62413CD;
-        Thu, 20 Oct 2022 23:43:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08B608A1F9;
+        Thu, 20 Oct 2022 23:44:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DB41961DD2;
-        Fri, 21 Oct 2022 06:43:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2CC2C433D6;
-        Fri, 21 Oct 2022 06:43:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666334625;
-        bh=sEwMq2j5fjO07u3xyI2MdfOg2PhiXrflPNSl+1UnYnQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=p35BnNfZPMnmjAztGM+SVzJPSQLvzbn4xPbC/SN4po2T9VkG2rTnk+kmA0AlVvMoa
-         OZJQ5iwoswxe5tWoHusob88QqBXioMBVWB5RcbY6e39dv7zWqslEHVzy0oGlobvJiG
-         RFbeSWjIe9n3yOguBmIO4jzeFqd0ZbPPZYS8hW9jqCI00juDwYj0u5UQ57a7JL0Uxp
-         WPyDBY8oEaLI4MQsQKVzyn0lWUENtw2mYsCxtkm2JVDAShlvxWgB1B7jjkiFWTxFbN
-         9ds+LgrUpoV6/ObsCWhfVPBvHm5fGG5NIfX0D8HCakUn1R5s03ZlYJ8yoVSyeKpEau
-         ZhNzmEt01Qnvg==
-Date:   Fri, 21 Oct 2022 08:43:17 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Adam Borowski <kilobyte@angband.pl>
-Cc:     Khalil Blaiech <kblaiech@nvidia.com>,
-        Asmaa Mnebhi <asmaa@nvidia.com>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/6] i2c: mlxbf: depend on ACPI; clean away ifdeffage
-Message-ID: <Y1I/hRG9XGTFDTr3@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Adam Borowski <kilobyte@angband.pl>,
-        Khalil Blaiech <kblaiech@nvidia.com>,
-        Asmaa Mnebhi <asmaa@nvidia.com>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <S229853AbiJTWkg/20221020224036Z+12888@vger.kernel.org>
- <S229897AbiJTWqk/20221020224640Z+957@vger.kernel.org>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9917061B39;
+        Fri, 21 Oct 2022 06:44:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82F38C433B5;
+        Fri, 21 Oct 2022 06:44:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1666334697;
+        bh=Lh39dsSR2kSBUfou8Tu7BCiRrPulwLvLeS/qMsODS1s=;
+        h=From:To:Cc:Subject:Date:From;
+        b=CB7H0A4ZiBfH7FVc3Lc7ipzsK2/dBVP4OCKdl8GxWDL86BFWVJUxCZ0ZCfUO+vxej
+         Vri98ayv2EJ5QNqBf40vZatfVuFFA4tqWkFhKmW0Aa4EGCQW7iV0wzHokPugCuobAi
+         E4XmKtRgiLLbtHKesoGq4nkfvF3htpjWobmycpNc=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-usb@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Jakob Koschel <jakobkoschel@gmail.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH] USB: gadget: dummy_hcd: switch char * to u8 *
+Date:   Fri, 21 Oct 2022 08:44:53 +0200
+Message-Id: <20221021064453.3341050-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="iApmyqhp3K52o8pq"
-Content-Disposition: inline
-In-Reply-To: <S229897AbiJTWqk/20221020224640Z+957@vger.kernel.org>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1528; i=gregkh@linuxfoundation.org; h=from:subject; bh=Lh39dsSR2kSBUfou8Tu7BCiRrPulwLvLeS/qMsODS1s=; b=owGbwMvMwCRo6H6F97bub03G02pJDMlB9o/D/S72sPYcWagmYZi1s8eZVSl4z+xKKeu/BztnWzN9 dBPsiGVhEGRikBVTZPmyjefo/opDil6Gtqdh5rAygQxh4OIUgIkYHWeY7//j275+Vaa8Uvbvd983H2 +2CH41j2F+uYPzhicx03i0PRRPyAWItZhGCbMCAA==
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The function handle_control_request() casts the urb buffer to a char *,
+and then treats it like a unsigned char buffer when assigning data to
+it.  On some architectures, "char" is really signed, so let's just
+properly set this pointer to a u8 to take away any potential problems as
+that's what is really wanted here.
 
---iApmyqhp3K52o8pq
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Cc: Felipe Balbi <balbi@kernel.org>
+Cc: Jakob Koschel <jakobkoschel@gmail.com>
+Cc: Randy Dunlap <rdunlap@infradead.org>
+Cc: Ira Weiny <ira.weiny@intel.com>
+Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/usb/gadget/udc/dummy_hcd.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-On Mon, Oct 10, 2022 at 08:33:51PM +0200, Adam Borowski wrote:
-> This fixes maybe_unused warnings/errors.
->=20
-> According to a comment during device tree removal, only ACPI is supported,
-> thus let's actually require it.
->=20
-> Fixes: be18c5ede25da39a0eda541f6de3620a30cf731f
-> Signed-off-by: Adam Borowski <kilobyte@angband.pl>
+diff --git a/drivers/usb/gadget/udc/dummy_hcd.c b/drivers/usb/gadget/udc/dummy_hcd.c
+index 899ac9f9c279..774781968e55 100644
+--- a/drivers/usb/gadget/udc/dummy_hcd.c
++++ b/drivers/usb/gadget/udc/dummy_hcd.c
+@@ -1740,13 +1740,13 @@ static int handle_control_request(struct dummy_hcd *dum_hcd, struct urb *urb,
+ 		if (setup->bRequestType == Dev_InRequest
+ 				|| setup->bRequestType == Intf_InRequest
+ 				|| setup->bRequestType == Ep_InRequest) {
+-			char *buf;
++			u8 *buf;
+ 			/*
+ 			 * device: remote wakeup, selfpowered
+ 			 * interface: nothing
+ 			 * endpoint: halt
+ 			 */
+-			buf = (char *)urb->transfer_buffer;
++			buf = urb->transfer_buffer;
+ 			if (urb->transfer_buffer_length > 0) {
+ 				if (setup->bRequestType == Ep_InRequest) {
+ 					ep2 = find_endpoint(dum, w_index);
+-- 
+2.38.1
 
-Applied to for-current, thanks!
-
-@Asmaa, @Khalil: normally, I will not skip the driver maintainer's ack
-but wait for it. I'd like to make an exception this time because I don't
-want to get another dozen of patches fixing this build warning. Since
-Asmaa already acked a similar patch, I hope this is okay with you.
-
-
---iApmyqhp3K52o8pq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNSP4EACgkQFA3kzBSg
-KbaKpA//UbFxu/KCQ6nmi/cix+XNC2Jodbf/CpEn81lRISMmrLzIe78d35NXtgq+
-qY8Yq3F7sm9a4eyklMQlAX8qLRr6XggCEltkI+ZcvshnvMg4rpNEzwFu2s+7YtwU
-+S7julqS0h8AWUze4f3nGtM3w/hBSuj2tclZ0shKZX64COCBho2FmIQrDJbZu5um
-hmB5R7Gis9c853pOGf0rdINA2x3Uod9tV+RddnBhmiq2ATkP0SBA1xXZ3/XbM3On
-nrMtvMvJp0C8KTgwJF+2IovW95OQamCG/9/tgqt1/7N4Y6sdXwBQ8G6YtneqWunR
-jmoaNbTUSulLM3imHqgyA2wyE1Heao3WyAOwusLVXepUHcEKALGlZEaVtPp15CvD
-ICbMviweiENLD9RfSHmSaORlsRIiJevlNY2rq8omzRVP4NEDXUZiHEydjLay5jU1
-pjWi1iRKtraDWr3T5/zalNuhKLLFBZjZboTDm2TdQoYj0aAzS96LSDmt4m8d7D0W
-BMPqLFSMBlLNJvmuSE2w4j4RjW+r9vLn0kYeJqWAonjqITiMLoY4Vpl8452vTvXL
-KuA5jDZSJl0KIlikXZ+Fd1+6GEuX2QxAbrF9FVvI1wJAxzcKYR6M7T66As1LfJ6t
-aYqL9JJ+YSL0oMbIBwUeH0HnYW5/RSTojOl82KW+7/8nrgJlhDM=
-=Bmm/
------END PGP SIGNATURE-----
-
---iApmyqhp3K52o8pq--
