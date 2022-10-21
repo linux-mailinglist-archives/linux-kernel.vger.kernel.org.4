@@ -2,306 +2,339 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DF3A607D94
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 19:33:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E1B9607D96
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 19:34:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbiJURdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 13:33:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35272 "EHLO
+        id S229875AbiJUReG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 13:34:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiJURdh (ORCPT
+        with ESMTP id S230489AbiJUReB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 13:33:37 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 919D0261AE1
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 10:33:36 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id bx24-20020a17090af49800b0020d9ac4b475so1476912pjb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 10:33:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Rm31qAFaq+M5EgnK0auSpdF+G0fRaJUMCym7D7tYLvw=;
-        b=YrHCpg3QEb9QJEUkOK3NXTmjU0qVBg1fZfBzLdxZoVUVe0ZbDSdSlLJs50rvbe0zL6
-         2i2fHKgaCdM4MDMWA5FB4J4yF4zEfp+172NtQvekyq98xeDI6wNceG2aYhaUu/hujtnI
-         YofEh9QFhpuWWjI9yEK5Ctgai33+KfV9F5nHvKjHs6OOgZRrC9TeP4Id6FfXZOYFx1ks
-         zVArlk9s0+tGOBcHEMb61aVIfLhlw1x8KzO95Zn1gAq/c+BgeUb/hVGf43b04o7hLrr5
-         3ktFYcBGfUHLyUkDqJXHQIZ/ynGYfinJFlUSXEIMvDpv47Hq+Ur+ogXGIiUf+MdJxl7L
-         ijXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Rm31qAFaq+M5EgnK0auSpdF+G0fRaJUMCym7D7tYLvw=;
-        b=c+F/Xb/2qFNXSdyy3x626P2BmwLOXueztHFTzzpeLr8gcucGl8T75WsH0vSNnXpXdu
-         RtgAf8VxY0Sor4j5BHiWvaBjFUp1Jl0DR4g87CWHYT60RbkWYxPlwFMc2RnKAKhrMXNR
-         wjXjPtZLo/wWcD2e97KcmkljjWWMIXFcd9fVEhYHnblG13xErEe5dBAEAB+YiK4pvtPi
-         COTDTS9l1EWW4XVDHgYarRgvJLLu5+VzQVWmwA74fVWlOATO9jntrhHiHAe115FgWHxa
-         pIlCpVuwJZXo/pvWJRWkRrlMwZHjCZ+mYu38Qs3ogVuFEjn5xh6lM4YKsevz0ZrC+iog
-         cYfg==
-X-Gm-Message-State: ACrzQf0W4Nu9VUi/YC7U/dMbldWwcQzYDTju9pOAfl8W7v2T/A4Fwroo
-        LllzQvNM7uAii7iIEEEfrzZj8SO3Uqo=
-X-Google-Smtp-Source: AMsMyM4fVZqqp2S5uhWZHjdVvRNZU+skQdKq/j16fQ/MICKD5HU6uWA/WkxAVI1JxfGo+yZxrVtCIqMNGng=
-X-Received: from pgonda1.kir.corp.google.com ([2620:15c:29:203:3e70:6547:73ac:76aa])
- (user=pgonda job=sendgmr) by 2002:a17:902:cecf:b0:185:475a:4073 with SMTP id
- d15-20020a170902cecf00b00185475a4073mr20663741plg.60.1666373616083; Fri, 21
- Oct 2022 10:33:36 -0700 (PDT)
-Date:   Fri, 21 Oct 2022 10:33:28 -0700
-Message-Id: <20221021173328.2489411-1-pgonda@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.38.0.135.g90850a2211-goog
-Subject: [PATCH V2] virt: Prevent IV reuse in SNP guest driver
-From:   Peter Gonda <pgonda@google.com>
-To:     thomas.lendacky@amd.com
-Cc:     Peter Gonda <pgonda@google.com>,
-        Dionna Glaze <dionnaglaze@google.com>,
-        Borislav Petkov <bp@suse.de>,
-        Michael Roth <michael.roth@amd.com>,
-        Haowen Bai <baihaowen@meizu.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Marc Orr <marcorr@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Ashish Kalra <Ashish.Kalra@amd.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 21 Oct 2022 13:34:01 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AC79263951;
+        Fri, 21 Oct 2022 10:34:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666373640; x=1697909640;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=6Yk4G74KAy8BRpgqm/QcpsBGHm9XsCeE6fsG2TpQF2s=;
+  b=mFzYr8rO4O6+VGMDLsCN+gNDCW5rcT718BHK6XUputB94WJUm+F/8Huf
+   yOB6U/H2dcifAsvWOA//5VR3iEpWCUEdJaGO5aW618aYAcpKCb24U81I1
+   gP97TsySpqHLshd94zICpnWcjIdTLSgvGmaGK7A8TuO/zRXPrRvT6Rj2V
+   uhFvpYeRFOacYJb7diJ3GzCADglpKCTyjBDPRTpZalW7HhJu/4YerztKp
+   gh0DVGQiQVYSYknKDQexk0wpZL8mZm/LhHVuOEDhvd7ZpAg+uEMZ/OEd9
+   no6LiKfxQBhWrUA6MZ6gqH+VIZStAJU6pfyilqJUx3LqtOJ1ZylxWo4JK
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10507"; a="294459349"
+X-IronPort-AV: E=Sophos;i="5.95,202,1661842800"; 
+   d="scan'208";a="294459349"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2022 10:34:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10507"; a="959728395"
+X-IronPort-AV: E=Sophos;i="5.95,202,1661842800"; 
+   d="scan'208";a="959728395"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmsmga005.fm.intel.com with ESMTP; 21 Oct 2022 10:33:59 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 21 Oct 2022 10:33:59 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Fri, 21 Oct 2022 10:33:59 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.46) by
+ edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Fri, 21 Oct 2022 10:33:58 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cbPcN9wtJ5LVLWFYXz4jqyCVbuMeKp5IkvY0gVOfdmGVQC0DwEFGwWR01wFMYJmTnK8yOYxIyph+AeiecH/PA6wQPCEr4MLQVuKh+7O5mnU/Zjf2K/759dqJP3m+7zLP+LV1i+IuxdNZd6q2OfrO2dnYWx2b4w8JQyv19W/u+foH7L2OpKzKLji2sGsXSYrANBaK+CSLS/BKYCk1mhf2kR9bsHqk/29rR0xwD0zrLVw7W8xgIjnDYT5AQQQ0LTfUJIphwTTHQu1DczJ4goPZ7rxb3GOoMVKwwepSUT1TFq/L1HuknZP6OR6bWM2Ulreqo83gsRfkKThwxsQoqAVz1Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QEE2mtEbyh2JzRWMv2xI5mQOWbih11Nv37KwZ4TIMJo=;
+ b=KqCLct4awrUaeguggxJP1UDgDddlfK4H/8/J0zcoJI0crF/qupiosIXEdNSyzenIvEeAUchp7o5me2ncQf0/b0LY6Y0BZfvv57a670aA9Hyt4iSTEdL6QTHk2kvYpS/pXRuHzfPU5eKfyo/+Rfzz3yneJjlcSXs+YW8uwjxFbxwyYouy5thPWT5bT/bkQGRTuApQ9JXi2Y0ymZvyDyn0XdPzAyiu9YPvO9odqz2TR2Eka9majGsv/P0aaRrEsaRmkBq8HYMf7yKRkcZNrf4Alad8DksZz4+tx30mE43Xlrht7blTbQ2zLiv0Xac224Hh8zUCjJ6T7hQVW4A6ns9SxQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from BYAPR11MB2824.namprd11.prod.outlook.com (2603:10b6:a02:c3::12)
+ by SJ0PR11MB5165.namprd11.prod.outlook.com (2603:10b6:a03:2ad::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.26; Fri, 21 Oct
+ 2022 17:33:57 +0000
+Received: from BYAPR11MB2824.namprd11.prod.outlook.com
+ ([fe80::1154:76ff:3b33:3ee2]) by BYAPR11MB2824.namprd11.prod.outlook.com
+ ([fe80::1154:76ff:3b33:3ee2%7]) with mapi id 15.20.5723.034; Fri, 21 Oct 2022
+ 17:33:57 +0000
+Message-ID: <14399464-919f-3834-5dea-e3b80635f0e0@intel.com>
+Date:   Fri, 21 Oct 2022 10:33:54 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.13.1
+Subject: Re: [PATCH v5 4/7] dmaengine: Add provider documentation on cookie
+ assignment
+Content-Language: en-US
+To:     Vinod Koul <vkoul@kernel.org>
+CC:     <dmaengine@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20220622193753.3044206-1-benjamin.walker@intel.com>
+ <20220829203537.30676-1-benjamin.walker@intel.com>
+ <20220829203537.30676-5-benjamin.walker@intel.com> <Y1Am/RpgWv3PAVaU@matsya>
+ <297dff63-e199-d14b-7148-916888030740@intel.com> <Y1DKpnOdP5MbSGeO@matsya>
+From:   "Walker, Benjamin" <benjamin.walker@intel.com>
+In-Reply-To: <Y1DKpnOdP5MbSGeO@matsya>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BYAPR21CA0030.namprd21.prod.outlook.com
+ (2603:10b6:a03:114::40) To BYAPR11MB2824.namprd11.prod.outlook.com
+ (2603:10b6:a02:c3::12)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BYAPR11MB2824:EE_|SJ0PR11MB5165:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5eb61fbd-9bda-4f39-ffb3-08dab38a6eb7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: VA1an6LmJaKeu+bCYgBXNLRJBwYZ6gO/c46k89oxfHwsedrh5Z3z2DTbUdb+3VoUN2lkypQCGGNdROdLkAIw+7/2XpoJ3zW8cpJhoJ5oax2IBXMNM7AFksVAxmLrOlg/isr/Ol32vC+cMbgX4Lusx5LlenfMBNyBAP2BUuC5hEsTWzhQbTbAzG72LfvBHdJHtd6eYVBHAgbDXrz2Z0w5bAgPyBDo5+EaxJNldZGncY9lWa5YCZ56AmLvfhaSi5fnVe3rs4g7Sw0yYJksKms2bLeRV+H7pHl9xaNoa3tz4rLK6nfE2qg5bzjSsqtbV3CN7j+vhzdbh9Ks5RLcRlpwtwp3zziTtUV4w0sVFrc9hF9ECcTq5T9ySjCiu97E9IH59LLOFck0vW8Lnb8ZwHlr8SSvybGidi3GDaAh01HoFfDB2+4UXGjnGt//GXsAzK/9g5on4IvCma18oEVNLyOHN8Bqz0ZG4yQHI4YIEHIZ5yWoWrnz026CkCg+eg0o/w7dSnxAhO7klIrbnpIiW+VOtPz3OThNft2H8mgUFyK6PORpz3hzK/B3/pK7oPW4rDtaIbLIurIsrPHMCI+tohxXcR12HlCQoBlBsAYtYLjV7mzDznjJG6IIP/5sXfmrv4sh5z3RklYP8Gv6t/9Dk3zUCh25Awq3MicDIWd7P8nSJnuLtHxTj8Ef7+rNbUE/z4g0EFn9cBQnN4WQZWAalt0kOVdRWZIT06JOMxju2sSW8J6efebMHEg7TrZiw907zSa/PQVT0DD1g0f3EeU9FyMnVW89ICIhvd+mZaEhHdba0FI=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB2824.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(396003)(376002)(136003)(39860400002)(366004)(451199015)(82960400001)(6486002)(478600001)(4326008)(38100700002)(31686004)(83380400001)(8936002)(316002)(6512007)(31696002)(6916009)(41300700001)(53546011)(6506007)(36756003)(66556008)(2906002)(186003)(8676002)(2616005)(6666004)(66946007)(5660300002)(66476007)(86362001)(26005)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WEM1dFZxS0hrdDJEZTZFdmtUTU5MSVgxaGp2YnN0VHAzdnpYNmtDZWRDMjJl?=
+ =?utf-8?B?QmQvaGFyS1JINXVXYmhtbkxVMTRuS2dLWEdiWVJMbEU3KzI2aXRuT25PQnlj?=
+ =?utf-8?B?emJnaVFKajlNREZwMXZLblBsNGhSeE9HM0UvTzc3b2U4WGdjdFJEQ3N5c0xj?=
+ =?utf-8?B?b0FYdDJEcjgwWjBremxya3VrTE1OMWtremRpdzRSZHJodnhTb1N1bVIrUHgv?=
+ =?utf-8?B?NDdKR3RuNk1yUXQ0R25TYXNwR1lMYUFVSnFiYmN1K0FVWnJFZ2lMY1NhaEQ4?=
+ =?utf-8?B?U25VVStUQ1VUcnNGcCs2dWIyZXRtSFcwNHJQcldLQjlYTFFEa1VFbVNWTkEr?=
+ =?utf-8?B?REoxenBDTjlwZzdJNDM3RElmUmRiTDZkWXFsUk8zRGFvSlpONSs3a2Q5QjY5?=
+ =?utf-8?B?S21LU2RrU002M3hKN1RpV0xGMEJjbDRKY1l3Z3RNVHFWbG5HMGdFdEN3ZGhJ?=
+ =?utf-8?B?alhJUkNheWZxZ3N5UVg0UkZyeUFpSkZVNUJ5eUpUeEVxOTk3a2RVUEJMZlZE?=
+ =?utf-8?B?elo0bGlPVTlleWx3OUg4OTlTSmx5WTB4OEFBdDUrRnd3R05ML0d0SlpWTm14?=
+ =?utf-8?B?SkdvK3FwQnZ1Wm5QM1RGdGRyQ29XRC9HNE1wVUhYT3lVREVndWJnUHFKa0Vl?=
+ =?utf-8?B?bnMxSVZHWWI5amVoakRwTmJTemkreDVSNVlNN1Z4Yksram9oRVptZlZaalJn?=
+ =?utf-8?B?TzRxUlR5MXhnREQxVzQ1dzAvcUhMS3ppcG5PZExyL0dlc1hKQlhrK0t6Qmpx?=
+ =?utf-8?B?WHRneS9XOWZiMUpiZjNrWm00MFMwZjljekdja1hKMVBuaHltdGVXcWVUK0pJ?=
+ =?utf-8?B?RTRxclB0WlFTT0hJbTkyaVBPSm1RMnhCeFpFL2tmd1RQd01IU3RERkV2VWpz?=
+ =?utf-8?B?NnRzNThUSm5KeXJCRjBVUyswb0hPU0RCek5tMEpxM2g1Z0UvRXhjWllybnFk?=
+ =?utf-8?B?aW5UaVQ3R0xZc1ZBVHJvUkdNTmhXRTZxVkhjV3RLbDlJR0lCeDRvV3pkQjRJ?=
+ =?utf-8?B?OFZDcVRsTXZEdlYxUTdoRlFydWs3VW9OZ1NKcjdXVnVRa1pvek9RQVR2RU93?=
+ =?utf-8?B?SGF1VzRVYUVmZjllNjNUZFZQZ25SU2hkbHNaODZSdFdFWDBCVVhrZnFIVjYx?=
+ =?utf-8?B?aTkrRVF2dGNrQS9tNWt6RCtSMXVkM3NJTERRZmNPdHFDZDdhU2ZQTTRhMUZP?=
+ =?utf-8?B?RVZCT3dCSUtDM3BOejNaOVRSalpVWHBMSVNOempzcmxxL1hLVVlMWkJpSDg0?=
+ =?utf-8?B?aC85VVRpMkVqUEUrelhZbk5sSjVwUGdTTHM1Z2UrV081cE5NeW9KVmJZbm90?=
+ =?utf-8?B?YTZWU1lXaEd2NmE4M0VFWkFWU3Izd2wwRVlEd2g5UEFuczlQVVVrWmU4NlpX?=
+ =?utf-8?B?UEdXN0xQTm8rZFQyTE9sU0N0TEpNcmd4cm1sSVZUZVNDQW5DbkhFL1U2OHBx?=
+ =?utf-8?B?d0NyMytSQTZhUWpyUXhxMGpDTkhMeFAyUEk5ak9LYWRTVnQxTXlGMThhdks5?=
+ =?utf-8?B?RWFmT1dHTnNML0xUcmo3RXlCbFFCTXBkMjNKcHV2dGNDams4ODQvdC9BbkU0?=
+ =?utf-8?B?ai9xVDd6MmRWdG9UNHIzdmRaRXY2NDllSTdGTFRFMzVTdW9oRnU2b0tlNjdL?=
+ =?utf-8?B?Tks3bmFFdXhiY1U5MkE1NkdYTHFpbDhoQnA2RWhMTnhzWkpCU1hHeDR2bmtN?=
+ =?utf-8?B?SGRhbmh6VDI0bUxpWWFjOEU4b2Qrb2M3Uk9OVUxUVUFndGNVYnZzWkhPOGdV?=
+ =?utf-8?B?Yk54NGN5OEFWdlZyOEVUcDVCYUxnNlExRXNOK09LWk0rdEg2aGFxaTM4a3pR?=
+ =?utf-8?B?K1MwQXI2Tk5lT0JXOERVUnIyTnNrcVBRdUF0WmpmZTQ2ZTh3S1B3RmpYSEVM?=
+ =?utf-8?B?bWZ0OGh5WlcxdEJuVldpQmUwYWg1c3p4ZHBzakE2TWlUN1dlKzdXYUJQaDh0?=
+ =?utf-8?B?Z21kQm9DRXI2RjZnN0Y2SytTYnltS1pIQmVxYlBCdS94Yk1Eaks0MmRHUWh4?=
+ =?utf-8?B?YmhHaXk5TmIwYmtYWnB2QUtXVE1CYVpCV3R6STdhckQrelZRM21QWHNzSHQw?=
+ =?utf-8?B?ZDNSVDBSZWMzeVk0amYwUSs1bVNJYzg2QlNXZTdlaUNJVU9GcDRXZ0VyWkxW?=
+ =?utf-8?B?WWc4c2RnY2creFA4dFQ3K2FmUkx2RlBtQUtPUWhvdGY4OUZydGRIUWYyZkhE?=
+ =?utf-8?B?cUE9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5eb61fbd-9bda-4f39-ffb3-08dab38a6eb7
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB2824.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Oct 2022 17:33:57.5913
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: rb68QDNRIeZiIRBZnitKMqxBErO1SNz82EWPBQSMRa1wlgnX8l8o3C4aLKGFNNesIfXnvCgiJwgZZ8lY23+8M0CFpZ39NBE1MXXfJfgUOZI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB5165
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ASP and an SNP guest use a series of AES-GCM keys called VMPCKs to
-communicate securely with each other. The IV to this scheme is a
-sequence number that both the ASP and the guest track. Currently this
-sequence number in a guest request must exactly match the sequence
-number tracked by the ASP. This means that if the guest sees an error
-from the host during a request it can only retry that exact request or
-disable the VMPCK to prevent an IV reuse. AES-GCM cannot tolerate IV
-reuse see:
-https://csrc.nist.gov/csrc/media/projects/block-cipher-techniques/documents/bcm/comments/800-38-series-drafts/gcm/joux_comments.pdf
+On 10/19/2022 9:12 PM, Vinod Koul wrote:
+> On 19-10-22, 10:21, Walker, Benjamin wrote:
+>> On 10/19/2022 9:34 AM, Vinod Koul wrote:
+>>> On 29-08-22, 13:35, Ben Walker wrote:
+>>>> Clarify the rules on assigning cookies to DMA transactions.
+>>>>
+>>>> Signed-off-by: Ben Walker <benjamin.walker@intel.com>
+>>>> ---
+>>>>    .../driver-api/dmaengine/provider.rst         | 45 +++++++++++++++----
+>>>>    1 file changed, 37 insertions(+), 8 deletions(-)
+>>>>
+>>>> diff --git a/Documentation/driver-api/dmaengine/provider.rst b/Documentation/driver-api/dmaengine/provider.rst
+>>>> index 1d0da2777921d..a5539f816d125 100644
+>>>> --- a/Documentation/driver-api/dmaengine/provider.rst
+>>>> +++ b/Documentation/driver-api/dmaengine/provider.rst
+>>>> @@ -417,7 +417,9 @@ supported.
+>>>>        - tx_submit: A pointer to a function you have to implement,
+>>>>          that is supposed to push the current transaction descriptor to a
+>>>> -      pending queue, waiting for issue_pending to be called.
+>>>> +      pending queue, waiting for issue_pending to be called. Each
+>>>> +      descriptor is given a cookie to identify it. See the section
+>>>> +      "Cookie Management" below.
+>>>>      - In this structure the function pointer callback_result can be
+>>>>        initialized in order for the submitter to be notified that a
+>>>> @@ -522,6 +524,40 @@ supported.
+>>>>      - May sleep.
+>>>> +Cookie Management
+>>>> +------------------
+>>>> +
+>>>> +When a transaction is queued for submission via tx_submit(), the provider
+>>>> +must assign that transaction a cookie (dma_cookie_t) to uniquely identify it.
+>>>> +The provider is allowed to perform this assignment however it wants, but for
+>>>
+>>> We assumes that we have monotonically increasing cookie and
+>>> if cookie 10 is marked complete cookie 8 is assumed complete too...
+>>
+>> That's exactly what this patch series is changing. The earlier patches make
+>> changes to no longer report to the client the "last" or "used" cookie (to
+>> compare against) in the client APIs, and it turns out that nothing in the
+>> kernel actually cares about this behavior. So it's simply a documentation
+>> change to indicate that the client no longer has any visibility into the
+>> cookie behavior.
+> 
+> Not really, there are some engines which will notify that descriptor X
+> completed which also implies that all descriptors before X have
+> completed as well...
+> 
+> If we change the default behaviour, we risk breaking those.
 
-To handle userspace querying the cert_data length. Instead of requesting
-the cert length from userspace use the size of the drivers allocated
-shared buffer. Then copy that buffer to userspace, or give userspace an
-error depending on the size of the buffer given by userspace.
+I actually don't believe it's true that any clients rely on this 
+behavior today. Certainly, that's the defined behavior prior to this 
+patch series and a client could have relied on that. But I did a big 
+audit and I don't believe any of them actually do. Prior to submitting 
+this patch series I was thinking I needed to create new APIs that code 
+could opt into and convert over to gradually, but it seems we're 
+fortunate enough to get away with just changing the documentation.
 
-Fixes: fce96cf044308 ("virt: Add SEV-SNP guest driver")
-Signed-off-by: Peter Gonda <pgonda@google.com>
-Reported-by: Peter Gonda <pgonda@google.com>
-Reviewed-by: Dionna Glaze <dionnaglaze@google.com>
-Cc: Borislav Petkov <bp@suse.de>
-Cc: Tom Lendacky <thomas.lendacky@amd.com>
-Cc: Michael Roth <michael.roth@amd.com>
-Cc: Haowen Bai <baihaowen@meizu.com>
-Cc: Yang Yingliang <yangyingliang@huawei.com>
-Cc: Marc Orr <marcorr@google.com>
-Cc: David Rientjes <rientjes@google.com>
-Cc: Ashish Kalra <Ashish.Kalra@amd.com>
-Cc: linux-kernel@vger.kernel.org
-Cc: kvm@vger.kernel.org
----
- drivers/virt/coco/sev-guest/sev-guest.c | 93 ++++++++++++++++---------
- 1 file changed, 62 insertions(+), 31 deletions(-)
+As a quick justification, it's worth doing the work to audit and confirm 
+all of this because this is such an important change for the future 
+usefulness of the dmaengine framework. Modern DMA devices are best used 
+by polling for completions, and they certainly can complete out of 
+order. As more of the kernel moves to performing asynchronous operations 
+(mostly via io_uring), this is becoming very important. The rest of this 
+email is me repeating my big audit and taking notes along the way. I 
+apologize if it's long, but it's important to document the findings.
 
-diff --git a/drivers/virt/coco/sev-guest/sev-guest.c b/drivers/virt/coco/sev-guest/sev-guest.c
-index f422f9c58ba7..8c54ea84bc57 100644
---- a/drivers/virt/coco/sev-guest/sev-guest.c
-+++ b/drivers/virt/coco/sev-guest/sev-guest.c
-@@ -41,7 +41,7 @@ struct snp_guest_dev {
- 	struct device *dev;
- 	struct miscdevice misc;
- 
--	void *certs_data;
-+	u8 (*certs_data)[SEV_FW_BLOB_MAX_SIZE];
- 	struct snp_guest_crypto *crypto;
- 	struct snp_guest_msg *request, *response;
- 	struct snp_secrets_page_layout *layout;
-@@ -67,8 +67,27 @@ static bool is_vmpck_empty(struct snp_guest_dev *snp_dev)
- 	return true;
- }
- 
-+/*
-+ * If we receive an error from the host or ASP we have two options. We can
-+ * either retry the exact same encrypted request or we can discontinue using the
-+ * VMPCK.
-+ *
-+ * This is because in the current encryption scheme GHCB v2 uses AES-GCM to
-+ * encrypt the requests. The IV for this scheme is the sequence number. GCM
-+ * cannot tolerate IV reuse.
-+ *
-+ * The ASP FW v1.51 only increments the sequence numbers on a successful
-+ * guest<->ASP back and forth and only accepts messages at its exact sequence
-+ * number.
-+ *
-+ * So if we were to reuse the sequence number the encryption scheme is
-+ * vulnerable. If we encrypt the sequence number for a fresh IV the ASP will
-+ * reject our request.
-+ */
- static void snp_disable_vmpck(struct snp_guest_dev *snp_dev)
- {
-+	dev_alert(snp_dev->dev, "Disabling vmpck_id: %d to prevent IV reuse.\n",
-+		  vmpck_id);
- 	memzero_explicit(snp_dev->vmpck, VMPCK_KEY_LEN);
- 	snp_dev->vmpck = NULL;
- }
-@@ -326,29 +345,29 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
- 	if (fw_err)
- 		*fw_err = err;
- 
--	if (rc)
--		return rc;
-+	if (rc) {
-+		dev_alert(snp_dev->dev,
-+			  "Detected error from ASP request. rc: %d, fw_err: %llu\n",
-+			  rc, *fw_err);
-+		goto disable_vmpck;
-+	}
- 
--	/*
--	 * The verify_and_dec_payload() will fail only if the hypervisor is
--	 * actively modifying the message header or corrupting the encrypted payload.
--	 * This hints that hypervisor is acting in a bad faith. Disable the VMPCK so that
--	 * the key cannot be used for any communication. The key is disabled to ensure
--	 * that AES-GCM does not use the same IV while encrypting the request payload.
--	 */
- 	rc = verify_and_dec_payload(snp_dev, resp_buf, resp_sz);
- 	if (rc) {
- 		dev_alert(snp_dev->dev,
--			  "Detected unexpected decode failure, disabling the vmpck_id %d\n",
--			  vmpck_id);
--		snp_disable_vmpck(snp_dev);
--		return rc;
-+			  "Detected unexpected decode failure from ASP. rc: %d\n",
-+			  rc);
-+		goto disable_vmpck;
- 	}
- 
- 	/* Increment to new message sequence after payload decryption was successful. */
- 	snp_inc_msg_seqno(snp_dev);
- 
- 	return 0;
-+
-+disable_vmpck:
-+	snp_disable_vmpck(snp_dev);
-+	return rc;
- }
- 
- static int get_report(struct snp_guest_dev *snp_dev, struct snp_guest_request_ioctl *arg)
-@@ -437,7 +456,7 @@ static int get_ext_report(struct snp_guest_dev *snp_dev, struct snp_guest_reques
- 	struct snp_guest_crypto *crypto = snp_dev->crypto;
- 	struct snp_ext_report_req req;
- 	struct snp_report_resp *resp;
--	int ret, npages = 0, resp_len;
-+	int ret, resp_len, req_cert_len, resp_cert_len;
- 
- 	lockdep_assert_held(&snp_cmd_mutex);
- 
-@@ -448,14 +467,15 @@ static int get_ext_report(struct snp_guest_dev *snp_dev, struct snp_guest_reques
- 		return -EFAULT;
- 
- 	/* userspace does not want certificate data */
--	if (!req.certs_len || !req.certs_address)
-+	req_cert_len = req.certs_len;
-+	if (!req_cert_len || !req.certs_address)
- 		goto cmd;
- 
--	if (req.certs_len > SEV_FW_BLOB_MAX_SIZE ||
--	    !IS_ALIGNED(req.certs_len, PAGE_SIZE))
-+	if (req_cert_len > sizeof(*snp_dev->certs_data) ||
-+	    !IS_ALIGNED(req_cert_len, PAGE_SIZE))
- 		return -EINVAL;
- 
--	if (!access_ok((const void __user *)req.certs_address, req.certs_len))
-+	if (!access_ok((const void __user *)req.certs_address, req_cert_len))
- 		return -EFAULT;
- 
- 	/*
-@@ -464,8 +484,7 @@ static int get_ext_report(struct snp_guest_dev *snp_dev, struct snp_guest_reques
- 	 * the host. If host does not supply any certs in it, then copy
- 	 * zeros to indicate that certificate data was not provided.
- 	 */
--	memset(snp_dev->certs_data, 0, req.certs_len);
--	npages = req.certs_len >> PAGE_SHIFT;
-+	memset(snp_dev->certs_data, 0, sizeof(*snp_dev->certs_data));
- cmd:
- 	/*
- 	 * The intermediate response buffer is used while decrypting the
-@@ -477,25 +496,37 @@ static int get_ext_report(struct snp_guest_dev *snp_dev, struct snp_guest_reques
- 	if (!resp)
- 		return -ENOMEM;
- 
--	snp_dev->input.data_npages = npages;
-+	snp_dev->input.data_npages = sizeof(*snp_dev->certs_data) >> PAGE_SHIFT;
- 	ret = handle_guest_request(snp_dev, SVM_VMGEXIT_EXT_GUEST_REQUEST, arg->msg_version,
- 				   SNP_MSG_REPORT_REQ, &req.data,
- 				   sizeof(req.data), resp->data, resp_len, &arg->fw_err);
- 
-+	resp_cert_len = snp_dev->input.data_npages << PAGE_SHIFT;
-+
- 	/* If certs length is invalid then copy the returned length */
- 	if (arg->fw_err == SNP_GUEST_REQ_INVALID_LEN) {
--		req.certs_len = snp_dev->input.data_npages << PAGE_SHIFT;
-+		dev_alert(snp_dev->dev,
-+			  "Certificate data from host: %d, Max size allocated by driver: %lu.\n",
-+			  resp_cert_len, sizeof(*snp_dev->certs_data));
-+		ret = -EFAULT;
-+	}
-+
-+	if (ret)
-+		goto e_free;
-+
-+	/* Pass the actual certificate data size back to userspace */
-+	req.certs_len = resp_cert_len;
-+	if (resp_cert_len > req_cert_len) {
-+		arg->fw_err = SNP_GUEST_REQ_INVALID_LEN;
- 
- 		if (copy_to_user((void __user *)arg->req_data, &req, sizeof(req)))
- 			ret = -EFAULT;
--	}
- 
--	if (ret)
- 		goto e_free;
-+	}
- 
--	if (npages &&
--	    copy_to_user((void __user *)req.certs_address, snp_dev->certs_data,
--			 req.certs_len)) {
-+	if (copy_to_user((void __user *)req.certs_address, snp_dev->certs_data,
-+			 resp_cert_len)) {
- 		ret = -EFAULT;
- 		goto e_free;
- 	}
-@@ -676,7 +707,7 @@ static int __init sev_guest_probe(struct platform_device *pdev)
- 	if (!snp_dev->response)
- 		goto e_free_request;
- 
--	snp_dev->certs_data = alloc_shared_pages(dev, SEV_FW_BLOB_MAX_SIZE);
-+	snp_dev->certs_data = alloc_shared_pages(dev, sizeof(*snp_dev->certs_data));
- 	if (!snp_dev->certs_data)
- 		goto e_free_response;
- 
-@@ -703,7 +734,7 @@ static int __init sev_guest_probe(struct platform_device *pdev)
- 	return 0;
- 
- e_free_cert_data:
--	free_shared_pages(snp_dev->certs_data, SEV_FW_BLOB_MAX_SIZE);
-+	free_shared_pages(snp_dev->certs_data, sizeof(*snp_dev->certs_data));
- e_free_response:
- 	free_shared_pages(snp_dev->response, sizeof(struct snp_guest_msg));
- e_free_request:
-@@ -717,7 +748,7 @@ static int __exit sev_guest_remove(struct platform_device *pdev)
- {
- 	struct snp_guest_dev *snp_dev = platform_get_drvdata(pdev);
- 
--	free_shared_pages(snp_dev->certs_data, SEV_FW_BLOB_MAX_SIZE);
-+	free_shared_pages(snp_dev->certs_data, sizeof(*snp_dev->certs_data));
- 	free_shared_pages(snp_dev->response, sizeof(struct snp_guest_msg));
- 	free_shared_pages(snp_dev->request, sizeof(struct snp_guest_msg));
- 	deinit_crypto(snp_dev->crypto);
--- 
-2.38.0.135.g90850a2211-goog
+If we look at the client-facing API, we can identify all of the points 
+at which a cookie is returned to the user or consumed by the the API as 
+input.
+
+
+As input:
+dma_submit_error
+dmaengine_tx_status
+dma_async_is_tx_complete
+dmaengine_is_tx_complete
+dma_sync_wait
+
+As a returned value:
+dmaengine_submit
+dmaengine_tx_status (via the returned state parameter)
+dma_async_is_tx_complete (via last/user parameters)
+
+It's also in the following data structures (which are visible to clients):
+dma_chan
+dma_async_tx_descriptor (returned from the tx_submit function pointer)
+dma_tx_state (only returned by dmaengine_tx_status)
+
+So auditing all of those uses:
+- dma_submit_error doesn't assume it's monotonically increasing
+
+- dmaengine_tx_status itself doesn't assume (in the generic dmaengine 
+code) it's monotonically increasing. Providers implementing this call 
+may assume that, but they're in control of making it so. This call can 
+also return cookies via the optional state parameter. Except every call 
+either passes NULL for state to ignore it, or allocates state on the 
+stack and never stores it outside of the local function. Within those 
+functions, only state.residue is ever used - the cookies are never touched.
+
+- dma_sync_wait is called in 5 places. In 3 places it's called 
+immediately after a dmaengine_submit and the cookie is only ever on the 
+stack and never compared to anything. The other two spots are during 
+shutdown in ntb_transport_free_queue(). All it's doing here is waiting 
+for the last *submitted* cookie to finish, then aborting anything that 
+is still outstanding. This driver already works with devices that 
+complete out of order (idxd), so it has a comment saying that waiting 
+for the last submitted may not wait for all, and that's why it does the 
+abort. No issue there.
+
+- dmaengine_is_tx_complete isn't used anywhere. We just added it in this 
+series. It's intended to replace dma_async_is_tx_complete.
+
+- dma_async_is_tx_complete is called in 4 places:
+-- stm32-hash.c calls dmaengine_submit to get a cookie, then calls 
+dma_async_is_tx_complete with that value. The cookie only exists on the 
+stack and it's value is never compared with anything. The last/used 
+return values are not used.
+
+-- rio_mport_cdev.c calls dmaengine_submit and stores the cookie into a 
+request object. That's then passed into dma_async_is_tx_complete later 
+and the last/used parameters are not captured. This cookie is only 
+compared to other cookies using equality, so this one is safe.
+
+-- omap_vout_vrfb.c is the same story as stm32-hash.c. The cookie is 
+only used within a single function and it's never compared to another 
+cookie.
+
+-- pxa_camera.c does appear to rely on cookie values monotonically 
+increasing. Except we get off easy here, because this driver only works 
+with dma channels for one specific provider. It can't use just any 
+provider. This particular provider elects to make it's cookies 
+monotonically increasing still, so nothing breaks. In general, I have 
+some real concerns on layering in this driver since the DMA engine it's 
+using does not appear to be generic and instead only works with this 
+particular camera device. I don't feel like it should be using the 
+dmaengine framework at all.
+
+- dmaengine_submit returns a cookie to the user, and the remaining uses 
+of the cookie are embedded into structs. To audit these I created a 
+patch that changes the type of dma_cookie_t to a struct like so:
+
+typedef struct {
+     s32 val;
+} dma_cookie_t;
+
+I then fixed up the utility functions in the dmaengine framework, 
+commented out all of the printk stuff that was complaining about casting 
+a struct to %d, and let the compiler find all of the places where math 
+or comparisons were performed on it. Filtering out comparisons against 0 
+to detect errors, assignments to negative values, equality comparisons 
+to other cookies, and any uses by DMA providers, which all still work 
+after this patch series, we're left with... nothing.
+
+So the summary is:
+
+- pxa_camera is the only client that cares about the cookie behavior, 
+but it's tied in to exactly one provider that happens to do the cookies 
+the way it wants. This patch series doesn't force any provider to change 
+what it does currently.
+
+It really is the case that none of the clients care about the cookie 
+behavior, and we really can just make a documentation change to modify 
+cookies to become opaque handles.
+
+>>
+>> Immediately below here the documentation then says that there's some
+>> convenience functions that providers can use that do produce monotonically
+>> increasing cookies. These are now optional for providers to use, if they
+>> find them useful, rather than the required way to manage the cookies.
+>>
+>>>
+>>> Completion is always in order unless we specify DMA_COMPLETION_NO_ORDER
+>>
+>> The final patch in this series eliminates DMA_COMPLETION_NO_ORDER entirely.
+>> It was only used by the IDXD driver, and the reason I'm doing these patches
+>> is so that we can poll the IDXD driver for completions even though it can
+>> complete out of order.
 
