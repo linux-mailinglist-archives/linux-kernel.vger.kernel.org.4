@@ -2,103 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFE20607752
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 14:53:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CE4D607755
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 14:54:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229864AbiJUMxp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 08:53:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35194 "EHLO
+        id S229908AbiJUMxy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 08:53:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiJUMxn (ORCPT
+        with ESMTP id S229897AbiJUMxv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 08:53:43 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 327462639E3;
-        Fri, 21 Oct 2022 05:53:42 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id f8-20020a17090a664800b00212464cd49fso2770270pjm.4;
-        Fri, 21 Oct 2022 05:53:42 -0700 (PDT)
+        Fri, 21 Oct 2022 08:53:51 -0400
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF8B26B6D6
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 05:53:49 -0700 (PDT)
+Received: by mail-qk1-x732.google.com with SMTP id z30so1882991qkz.13
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 05:53:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pT1o9kqIltk7ZKL7Tu5WfqsXDrhfDokaIOWcgHyIEiw=;
-        b=ZrsfS3xN6RCS5WKPg2c5leRsUt4fdfk//OoFozxjvdPQKLGMhmtD8rI9ngnbfwRyIW
-         dzabdvxvxLQSQW43SBr5Dg/Ge/m86ce+2ZKFj0modIcUtkRoz+mAPjXGHBlbF0AfO9PC
-         IH2MxVcecWmhIEOlD/0ERURbDVz9+ne7wJv6mDloodOfGjzQjZGlV53aKQq99lXPK+2W
-         tI7tVWp4muVk8Q/R6z81Se48tgOVYQY/CmvDbuRsVVIziQXyYSTmf8hvqQ8KlXBPgmM3
-         ch7U0hmR3vQsjSPxQMkx8xr2BRyBtvOpzHvIxuM11DdaZdIiJXPXgZwuxnKsGgKl58Ox
-         DiiQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/oSeaW5mIul8TIhIXdrPxIKt9VEUuWQxs7k14eD/1Ss=;
+        b=sNK2bvtb0ckWlAzBW2zlR/iBOi7oAQTHNcdG3EQDc0gDVdJvQWJSne5nmtCTDeKv01
+         LEFxTjBtiZGtP76wki/rZRcTfgMtxgXQ2fIVgTZvHVZxhvQWXGHWV+LR/IHyhLuZburc
+         9rUKFqAC+xjzt721U30STNJfbv76tSnlTFjbzuaMOk9wEsDfYJNh3vHB6+BaUvOoG2p5
+         OtuPWxE7KbYy7QIy3Y7DKlKwULDiMVgLJTWdUMpntiC6Oih/Lnt7UoaAvTTT28BXeegI
+         6d+xkHbZ3qQGW87JffuysvRdnff8FaHQGRcmJjJ51D7lpVozc2ViYex1iqvmZ1ymuZWJ
+         X8nQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pT1o9kqIltk7ZKL7Tu5WfqsXDrhfDokaIOWcgHyIEiw=;
-        b=jLsjwlAQKsIMAVqDMebO07A27V7zL5vZiNZZI3kbhdaBC38nc8J4htBYDntx5lBg3V
-         3dgMZA01Kb1O9Xu1p+y9slfR5a5Zi13iuX/C6WsxkiK5H7/XIWqtKfadi6eEGypf6Zeg
-         BPnuKkVzMaEbr7e8vwjF/cTiUqvZyLMWnXlBLNdIRVko7xExv+r4XDHQWazJ0ih49QUp
-         RiP6PTW76h4Y3Af7W+BhyvjsTAmuEY3xQd406aK7qN1U9tPZdQ33QbDTkEaHskRp8gLD
-         iOlEZ/1AD5VIBVl3GHPDTQTqB6pjhCH4THp8IDctBMznZsspKLST5Q+wu8bmCG6SrXdS
-         AspA==
-X-Gm-Message-State: ACrzQf3CHRpLxZ6ml6FDwRrlHo4CCPRfmftvt1ONiXCCJ3pkHnWS6EUb
-        upsJI14uHBbJmGuRKhFkhpg=
-X-Google-Smtp-Source: AMsMyM5YPBLfSlrT7YSI2ggdctMXp08tYqatA2M13f6pm4t/Bd0vHCQcZzkmbJBxDUBeaQ1wlnEamg==
-X-Received: by 2002:a17:90b:1a88:b0:20d:8df0:ac64 with SMTP id ng8-20020a17090b1a8800b0020d8df0ac64mr21787422pjb.140.1666356821683;
-        Fri, 21 Oct 2022 05:53:41 -0700 (PDT)
-Received: from sol (14-203-42-90.tpgi.com.au. [14.203.42.90])
-        by smtp.gmail.com with ESMTPSA id i13-20020a170902c94d00b0017f48a9e2d6sm14826611pla.292.2022.10.21.05.53.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Oct 2022 05:53:41 -0700 (PDT)
-Date:   Fri, 21 Oct 2022 20:53:36 +0800
-From:   Kent Gibson <warthog618@gmail.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: Re: [PATCH v1 1/1] gpiolib: cdev: Fix typo in kernel doc for struct
- line
-Message-ID: <Y1KWULsdyTvmuN/k@sol>
-References: <20221020153914.63260-1-andriy.shevchenko@linux.intel.com>
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/oSeaW5mIul8TIhIXdrPxIKt9VEUuWQxs7k14eD/1Ss=;
+        b=8ITrXQoJ3oQiaCdtzYUjHAhSckXupuRPZpqaN5h/hAQIiZA8Z2lPyymEaFVFwnlQV0
+         E+EavcFfcXOPdc18zzWNOYxt77p3gx5LoBplpdpvU5u76yBuiD0vdBduAQ6v+V+wzKmY
+         tk60jN1db5S86hhbsjDAVwCoGlVaeF3cFTWp9O5zXQ/mgfxJVgIAfjMnzmh8ETYv7qiu
+         GuBguB76BAK7YjG82Ic/xRsjlksmQ9VWa0ak4P4efcw1Ty7Dk8FSHzt3Qp6DIiLdj5cP
+         ZOq0voVBNMu5e7RVdxdaKF37xbeY+i1P++x3X/XGsfwE/93uU2n1pAd8BVcZC8temNLC
+         GL8A==
+X-Gm-Message-State: ACrzQf1Yy/Ocn4NVzIgyY1660hB0JqHEB7rsN1KYXbIhQRw3kKXcd88B
+        mhJ0wfG9IngPe1DCqKcmBxEblg==
+X-Google-Smtp-Source: AMsMyM6L4xxVRWdbLocFykTdac6DlxEUJbXwJLGOhwqvAy4RhLV8T3Niy3e9l/kTxGIuF9J8/g+4jQ==
+X-Received: by 2002:a05:620a:2487:b0:6ee:74a7:934b with SMTP id i7-20020a05620a248700b006ee74a7934bmr14077470qkn.625.1666356828594;
+        Fri, 21 Oct 2022 05:53:48 -0700 (PDT)
+Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
+        by smtp.gmail.com with ESMTPSA id w27-20020a05620a0e9b00b006cdd0939ffbsm9345492qkm.86.2022.10.21.05.53.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Oct 2022 05:53:47 -0700 (PDT)
+Message-ID: <89340edb-2451-e648-e2e6-94c8f2410084@linaro.org>
+Date:   Fri, 21 Oct 2022 08:53:45 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221020153914.63260-1-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH 6/6] arm64: dts: fsd: Add sound card node for Tesla FSD
+To:     Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>,
+        'Alim Akhtar' <alim.akhtar@samsung.com>, lgirdwood@gmail.com,
+        broonie@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, s.nawrocki@samsung.com,
+        perex@perex.cz, tiwai@suse.com, pankaj.dubey@samsung.com,
+        rcsekar@samsung.com, aswani.reddy@samsung.com
+Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org
+References: <20221014102151.108539-1-p.rajanbabu@samsung.com>
+ <CGME20221014104915epcas5p12414b87ea127b2d5bf521556bf841b00@epcas5p1.samsung.com>
+ <20221014102151.108539-7-p.rajanbabu@samsung.com>
+ <00c301d8dfd0$f55ca230$e015e690$@samsung.com>
+ <04aa01d8e524$d253f2d0$76fbd870$@samsung.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <04aa01d8e524$d253f2d0$76fbd870$@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 06:39:14PM +0300, Andy Shevchenko wrote:
-> When eflags has been renamed to the edflags, the kernel doc change were
-> missed. Update kernel doc accordingly.
+On 21/10/2022 04:12, Padmanabhan Rajanbabu wrote:
 > 
-> Fixes: b1a92e94560d ("gpiolib: cdev: consolidate edge detector configuration flags")
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> 
+>> -----Original Message-----
+>> From: Alim Akhtar [mailto:alim.akhtar@samsung.com]
+>> Sent: 14 October 2022 06:59 PM
+>> To: 'Padmanabhan Rajanbabu' <p.rajanbabu@samsung.com>;
+>> lgirdwood@gmail.com; broonie@kernel.org; robh+dt@kernel.org;
+>> krzysztof.kozlowski+dt@linaro.org; s.nawrocki@samsung.com;
+>> perex@perex.cz; tiwai@suse.com; pankaj.dubey@samsung.com;
+>> rcsekar@samsung.com; aswani.reddy@samsung.com
+>> Cc: alsa-devel@alsa-project.org; devicetree@vger.kernel.org; linux-
+>> kernel@vger.kernel.org; linux-samsung-soc@vger.kernel.org
+>> Subject: RE: [PATCH 6/6] arm64: dts: fsd: Add sound card node for Tesla FSD
+>>
+>>
+>>
+>>> -----Original Message-----
+>>> From: Padmanabhan Rajanbabu [mailto:p.rajanbabu@samsung.com]
+>>> Sent: Friday, October 14, 2022 3:52 PM
+>>> To: lgirdwood@gmail.com; broonie@kernel.org; robh+dt@kernel.org;
+>>> krzysztof.kozlowski+dt@linaro.org; s.nawrocki@samsung.com;
+>>> perex@perex.cz; tiwai@suse.com; pankaj.dubey@samsung.com;
+>>> alim.akhtar@samsung.com; rcsekar@samsung.com;
+>> aswani.reddy@samsung.com
+>>> Cc: alsa-devel@alsa-project.org; devicetree@vger.kernel.org; linux-
+>>> kernel@vger.kernel.org; linux-samsung-soc@vger.kernel.org;
+>> Padmanabhan
+>>> Rajanbabu <p.rajanbabu@samsung.com>
+>>> Subject: [PATCH 6/6] arm64: dts: fsd: Add sound card node for Tesla FSD
+>>>
+>>> Add device tree node support for sound card on Tesla FSD board
+>>>
+>>> Signed-off-by: Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>
+>>> ---
+>>> arch/arm64/boot/dts/tesla/fsd-evb.dts | 49
+>>> +++++++++++++++++++++++++++
+>>> arch/arm64/boot/dts/tesla/fsd.dtsi    |  3 ++
+>>> 2 files changed, 52 insertions(+)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/tesla/fsd-evb.dts
+>>> b/arch/arm64/boot/dts/tesla/fsd-evb.dts
+>>> index c0a4509499ab..ecaa3c2e3045 100644
+>>> --- a/arch/arm64/boot/dts/tesla/fsd-evb.dts
+>>> +++ b/arch/arm64/boot/dts/tesla/fsd-evb.dts
+>>> @@ -49,3 +49,52 @@
+>>> &tdm_1 {
+>>> 	status = "okay";
+>>> };
+>>> +
+>>> +&sound {
+>>> +	compatible = "tesla,fsd-sndcard";
+>>> +	status = "okay";
+>>> +	model = "fsd-i2s";
+>>> +	widgets =
+>>> +		"Speaker", "MAIN SPK",
+>>> +		"Microphone", "MAIN MIC";
+>>> +
+>>> +	primary-dai-link-0 {
+>>> +		link-name = "fsd-primary-0";
+>>> +		dai-format = "i2s";
+>>> +		tesla,bitclock-master = <&tdm_0>;
+>>> +		tesla,frame-master = <&tdm_0>;
+>>> +		cpu {
+>>> +			sound-dai = <&tdm_0 0>;
+>>> +		};
+>>> +	};
+>>> +
+>>> +	secondary-dai-link-0 {
+>>> +		link-name = "fsd-secondary-0";
+>>> +		dai-format = "i2s";
+>>> +		tesla,bitclock-master = <&tdm_0>;
+>>> +		tesla,frame-master = <&tdm_0>;
+>>> +		cpu {
+>>> +			sound-dai = <&tdm_0 1>;
+>>> +		};
+>>> +	};
+>>> +
+>>> +	primary-dai-link-1 {
+>>> +		link-name = "fsd-primary-1";
+>>> +		dai-format = "i2s";
+>>> +		tesla,bitclock-master = <&tdm_1>;
+>>> +		tesla,frame-master = <&tdm_1>;
+>>> +		cpu {
+>>> +			sound-dai = <&tdm_1 0>;
+>>> +		};
+>>> +	};
+>>> +
+>>> +	secondary-dai-link-1 {
+>>> +		link-name = "fsd-secondary-1";
+>>> +		dai-format = "i2s";
+>>> +		tesla,bitclock-master = <&tdm_1>;
+>>> +		tesla,frame-master = <&tdm_1>;
+>>> +		cpu {
+>>> +			sound-dai = <&tdm_1 1>;
+>>> +		};
+>>> +	};
+>>> +};
+>>> diff --git a/arch/arm64/boot/dts/tesla/fsd.dtsi
+>>> b/arch/arm64/boot/dts/tesla/fsd.dtsi
+>>> index 5decad45a1b6..fc8931f830a7 100644
+>>> --- a/arch/arm64/boot/dts/tesla/fsd.dtsi
+>>> +++ b/arch/arm64/boot/dts/tesla/fsd.dtsi
+>>> @@ -847,6 +847,9 @@
+>>> 			status = "disabled";
+>>> 		};
+>>>
+>>> +		sound: sound {
+>>> +		};
+>>> +
+>> Why to have an empty node in dtsi?
+> This is required as every node we use in dts should have the same declared in
 
-Reviewed-by: Kent Gibson <warthog618@gmail.com>
+I see no reason why this is required.
 
-> ---
->  drivers/gpio/gpiolib-cdev.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpio/gpiolib-cdev.c b/drivers/gpio/gpiolib-cdev.c
-> index 0c84b011a64a..f9288e41e3a7 100644
-> --- a/drivers/gpio/gpiolib-cdev.c
-> +++ b/drivers/gpio/gpiolib-cdev.c
-> @@ -412,7 +412,7 @@ static int linehandle_create(struct gpio_device *gdev, void __user *ip)
->   * @desc: the GPIO descriptor for this line.
->   * @req: the corresponding line request
->   * @irq: the interrupt triggered in response to events on this GPIO
-> - * @eflags: the edge flags, GPIO_V2_LINE_FLAG_EDGE_RISING and/or
-> + * @edflags: the edge flags, GPIO_V2_LINE_FLAG_EDGE_RISING and/or
->   * GPIO_V2_LINE_FLAG_EDGE_FALLING, indicating the edge detection applied
->   * @timestamp_ns: cache for the timestamp storing it between hardirq and
->   * IRQ thread, used to bring the timestamp close to the actual event
-> -- 
-> 2.35.1
-> 
+> dtsi. Sound nodes in most of the platform is only declared (dummy node) in
+> dtsi and defining only in dts. Thus we are following the same.
+
+Can you point me to Samsung platform doing this?
+
+Keep the code consistent with Exynos style.
+
+Best regards,
+Krzysztof
+
