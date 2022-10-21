@@ -2,173 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EFE260719A
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 10:03:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4076B607199
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 10:03:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbiJUIDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 04:03:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58284 "EHLO
+        id S229799AbiJUIDE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 04:03:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229789AbiJUIDD (ORCPT
+        with ESMTP id S229515AbiJUIDB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 04:03:03 -0400
-Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6777B244C5B
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 01:03:02 -0700 (PDT)
-Received: by mail-oi1-x244.google.com with SMTP id g130so2334474oia.13
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 01:03:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=lGX3vc2vp0tWTgj5dceXTDdECHCM1PURTK7sil/Mtbs=;
-        b=nzlUGEmAjA0vepO6HV/D5CRZ8RzzVkKCwsP8VsehdS7eAzgB2CG7duh6KtmS1UEbKe
-         RDZOyg78xdcLVLw5R3fDd2XMtQMeTebrhE/lVbDZOgKtUzIK0D0ZOs8WVQ4evqgA3yh5
-         185+0eqPUj1zVaQDvYzRoko3SsQmxmQmUIUWyfPq63nNKDEDCTYaTDoX0VtqW2BVkBH2
-         OEHy25ArgcGX+H28KP+INGcbQk4LDO+9FZJOQSANoN4J2IxL9/AVlKdZpnLft1XWMybl
-         IDH5u4jqHuOvWhj1zvfB7v5rqrMCcNQAEPkULHm7qPDQaVz1iL2BYVQUc0591zSTjGZk
-         hsyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lGX3vc2vp0tWTgj5dceXTDdECHCM1PURTK7sil/Mtbs=;
-        b=NUXkQJP7JBxA2Y60r16MOfiU2U13bc1OOZUM194C8a5LMvq7Rpu573xfieTle6QTGa
-         bZFdcsP+8fazcpt/TrRIJ1a1pfSd+Q/Hy55DPsMVk/T0aQenWF20v6MBQIjJyeK09gpS
-         RhbXmUFnzp+z3VcQciir8TEO/OSd91Ho9xWST3omPzOgQ2eSg2rpXnQa7dZKj+BK8Qn/
-         p8J9yy4fhP1cm4xDkbwwPb+6e06zfpvfB/ueRhNRosvXyG8ngAZCorSAAA1p3DtaEY84
-         Uf1hGtR1IhhZnawWymtKuRbm18TQ/4Iy4Iqad5+tlbMCwsijX0W/+YfRfOcRQQ5iwakb
-         155Q==
-X-Gm-Message-State: ACrzQf3ngoWiQzrw1ZO45WKl5APF6dr7/z6rG31fweCxYJXRC/DgMfFT
-        GrO5JxBH8TGdTU87uYpwsQjT7Z7iliW6ANdKeA==
-X-Google-Smtp-Source: AMsMyM6NSY01MvaZQBA+ft+t5aG0+C3U/bjtwNTkLjLO9MWUJBeNUpY5M99WTE9iboZ2WtLGkv+4uQ==
-X-Received: by 2002:a17:90b:3b8b:b0:20d:4fd9:9a0f with SMTP id pc11-20020a17090b3b8b00b0020d4fd99a0fmr53847248pjb.17.1666339370445;
-        Fri, 21 Oct 2022 01:02:50 -0700 (PDT)
-Received: from thinkpad ([117.193.215.105])
-        by smtp.gmail.com with ESMTPSA id d4-20020a62f804000000b005628a30a500sm14597701pfh.41.2022.10.21.01.02.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Oct 2022 01:02:49 -0700 (PDT)
-Date:   Fri, 21 Oct 2022 13:32:41 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        rafael@kernel.org, robh+dt@kernel.org, johan@kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 0/4] qcom-cpufreq-hw: Add CPU clock provider support
-Message-ID: <20221021080241.GB93287@thinkpad>
-References: <20221019135925.366162-1-manivannan.sadhasivam@linaro.org>
- <20221020052230.m2ndqmjxlojdm4ie@vireshk-i7>
+        Fri, 21 Oct 2022 04:03:01 -0400
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-eopbgr150122.outbound.protection.outlook.com [40.107.15.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03FEF244C5A
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 01:02:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OfXryvEf3ZKd5iFoT7PCNw+iSXk+a8IjhdHYA6mzpByhBq4ZQ0u6fgW6ROLcrJ4xz8QvvEJcgFrgJHz8+IdlH2UpUwyzBGtck4si4OZCo2UDvSIDJt40B0Q1M9TGGlXq70GsMU7jX1xcQKkidTyb5mMYazp1fHLsfxqAxmyoQ8hc4OQOg3HUUoSomS7v/Mz3MPQ7lVDWY0SCIJr8o/ImMhmanup9fRAJ3+oInEYAcnIIv0sMxVRdN/uPW0A8SaETnFnN//HTC+xM6J3y9JqCssil3NYzcuhnN9S0IyUCqtIswF1Ob2RFdYQxILeYRkwVfjmbBud2LVEWwT9Vq9hrgg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+aL203TCkgk/7HSkXr7KZ0wtWkP//ZvSOKoc0iyHdrk=;
+ b=YpnCSF0Mze6jH2q0Xz8BlC0cDOVbGQOwPfgE7+aezXlKsdQmWAXwzgj1wA7Oh5k5T8Tt3mFgy72XA4PbOMtDanNJWNeA77K/Z4AYnx0/3xPu67bMBJjzuxTUm8RL7JGMlhTzTioNHqBKavm9RKYTJ3U5I05yPwR20a5n48iDQjZEJv0IUTD/k26fs4n8Ge4OrwXQHry/z42cAIRLFpAlkxiiLXUbZDXdZIcgdN4Wj8AdIPVVUWe7HGwFVjkBwaicbatZcDTj+/ZPMyBv7CRmqsTmc+9WmB0J62i5IAmNhoSPlbV5BnArQN+DMINhX5+kAEzzGwmuFQvllmVeqKcPAA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=virtuozzo.com; dmarc=pass action=none
+ header.from=virtuozzo.com; dkim=pass header.d=virtuozzo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=virtuozzo.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+aL203TCkgk/7HSkXr7KZ0wtWkP//ZvSOKoc0iyHdrk=;
+ b=hNIQBhoVPOOK5G6nKfof0+kQS961bbt6AMrMcv4/Rjwf/JXQeXkfKXRbFu4zLEbAsaHk2ea+bxtTSnYzQ7IrTU9/xgOcURHNhWR1NGkA8AbNTZL6g1ZggIhWjJRpcgHSJuveRRwkoJFx1JxHBnXVdFtpoZ1RLXzOq8t6cdugjFkFfGPqnhQkXGEfcN/Pm1o6ohvTV1UeQA8cJKsvumhfi+p/QlTruL0CpJOeAhwAoGT6i3fgkAm4ZoSy8rifxUCZ4l2GUtjAQC4qk2myRSHg9a6jsb6s7DG7vuqnZqIr5QlCKUjwSCpTH7QX8xIkHhtWnRiA0QU4EPGCwycG/dMj+g==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=virtuozzo.com;
+Received: from DBBPR08MB4758.eurprd08.prod.outlook.com (2603:10a6:10:da::16)
+ by GV1PR08MB8428.eurprd08.prod.outlook.com (2603:10a6:150:81::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.34; Fri, 21 Oct
+ 2022 08:02:50 +0000
+Received: from DBBPR08MB4758.eurprd08.prod.outlook.com
+ ([fe80::abdc:cee5:91bf:4c78]) by DBBPR08MB4758.eurprd08.prod.outlook.com
+ ([fe80::abdc:cee5:91bf:4c78%7]) with mapi id 15.20.5723.034; Fri, 21 Oct 2022
+ 08:02:50 +0000
+Message-ID: <0ed00686-4355-7f3b-4c73-cc6b5a0317b3@virtuozzo.com>
+Date:   Fri, 21 Oct 2022 11:02:47 +0300
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.0
+Subject: Re: [RFC PATCH v5 6/8] drivers: vmware: balloon - report inflated
+ memory
+To:     Nadav Amit <namit@vmware.com>
+Cc:     Pv-drivers <Pv-drivers@vmware.com>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "kernel@openvz.org" <kernel@openvz.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20221019095620.124909-1-alexander.atanasov@virtuozzo.com>
+ <20221019095620.124909-7-alexander.atanasov@virtuozzo.com>
+ <39FA848F-290D-4110-B27C-8822377E6AA5@vmware.com>
+ <627d2c7f-8ba0-2910-a98d-ef42b9dd5ade@virtuozzo.com>
+ <CEA2F8DE-DA49-4DB9-95F8-D0864048353C@vmware.com>
+From:   Alexander Atanasov <alexander.atanasov@virtuozzo.com>
+In-Reply-To: <CEA2F8DE-DA49-4DB9-95F8-D0864048353C@vmware.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: VI1PR0701CA0041.eurprd07.prod.outlook.com
+ (2603:10a6:800:90::27) To DBBPR08MB4758.eurprd08.prod.outlook.com
+ (2603:10a6:10:da::16)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221020052230.m2ndqmjxlojdm4ie@vireshk-i7>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DBBPR08MB4758:EE_|GV1PR08MB8428:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0080ca26-183a-47d6-3184-08dab33aa609
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: yb9DwDnn42KjDmMjPAtUlBuq0fiu4W1CtmbIxAqJ5Jcy7pqxGClNVY2xQcYLoYl0PLKJqrE18uF1Y/ony3wjPwklH6GRqmIzPB8c0KhYnUg9r8HHuAMSczUL4eedCU81udSGazgqspMkgBayvcQVhtKDgiGKWHI44sMhXnSbzGlN9U9BXr6DVxU29As1em0IUR2qZFWZC2vT7iLbb6qdbqliWQT80c9iNfNP277jjrBY6s/SF8UPNmRoJkgdCru1qX6fesLavybjwTGhB8auSIk4gDVoV2M1F1XWHlss7kcr+Ij8XaPyxfZI290xX62A3hbE6VSErJK8DBI0muJEF6pfhHe4sIsla0SIFxUvKQbn1iKR4D+Owl6FGA/ZFyDmAkauljSGjbY6DdpP62uWg5S9bNfzaIFHun5ygGOBgE2qdnjeKrwygr7zV1u6NMWVFCnlNNp9w8/1CxSAo7EIJaPJ2ECAy4QJclnjUUvt+dUMweVMcILHzTGoTGZRijugwHbCmN2Ktjbo4G07vhCZ19Gf+VqYNJd7ch27sn/CHG7+M0TuCdVRn+8eQwj9Z0z0iZ3TjTF8BbcQbCQwgXNRJUXenPddRKquJ2AuHkZLiXQ/g1SdCZFgJNDPeI31h3Q5/EUj1XiHpfnovKVaUDkAYCHaulp7BhrumZJ2+YhYt7N8WF+Ocor8iZy5ixpI6uZOqBkil0BKz0o61lZvOLdb1Rp5MfNxuqk8wFQ6a2/j8ZF0vXpcvNPSnnRv1OYVuGqekvFTYOiDJOStpKtOrbZaoSSSG7MD0/LwHzOFVj3UUcA=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBBPR08MB4758.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(376002)(39850400004)(136003)(366004)(396003)(451199015)(31686004)(86362001)(6512007)(6506007)(26005)(4744005)(66476007)(8676002)(2906002)(44832011)(66556008)(41300700001)(31696002)(4326008)(38100700002)(5660300002)(316002)(66946007)(36756003)(2616005)(8936002)(54906003)(6916009)(6486002)(83380400001)(53546011)(478600001)(6666004)(186003)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VXhiNGcwVWJBZ21ROFlGdkQwRXpNdTZFQ1lzaWp1dDFwQTN2K0dZeWRlTm9w?=
+ =?utf-8?B?ZWgvVW1BL3FXS0Iva1pVN3ZEbXUyVG5IZkpwcnZCU3lXeWpPVkRSYUo5Y0hS?=
+ =?utf-8?B?OGlrV0MxQ3BlOEZiNjdOQWphcXI0R1RVL0tQMFhOeVphRXRmRm8yVmErYlJM?=
+ =?utf-8?B?SWtLaWd2RlArNGFRZ21xdVVkeW1MTCtoRnRYcWZWdHZiSDcvOEJ6dXQwRnhP?=
+ =?utf-8?B?MXRuNWdrOWgrQnB4djdkcVQ0bmRSazV4UjRaRDZOVjZGNjc3NFZKMTd6QlJQ?=
+ =?utf-8?B?RVF0ZzEza3VCSGl3TzRZeTF2elBkbGlhZWtFY055eElyMWFGU0JlNFczOHdG?=
+ =?utf-8?B?S2VqVVBuWmpKOFVHK0lERXNUY29uemU2ODZVcXFHY1o1TFl6UnRpQ1lqN2o1?=
+ =?utf-8?B?NHFFOTBNcXYwbjFjL1o3em91R1QyZjFXLytnOTJ4TytoZ0VuWEV0b1lLYndn?=
+ =?utf-8?B?OTJmVDQvMTNuVzJ6REx1Q3lnTjhpSEZJLzJjWEx0cGRreWZNdU95VC9PdWFm?=
+ =?utf-8?B?QmVRWUFxZ1dMeWhmTVZKUE5GMUFrVXJPZTVyWGlCdWY2dXZZRFBGQzgzL1RP?=
+ =?utf-8?B?L09sL0RrbnVLejJiUWRXaVBaU1RHY2lyZ3lXYjFxSlRCdHMwb0JJaE03eDFQ?=
+ =?utf-8?B?aWxBaXJYbEJKYWJKQ3dQS0Jha0ZHS2JoTGpyY3hkRkZoNkZ2RVJFUytwOVlr?=
+ =?utf-8?B?TDlaQnY2dlVwM1MvN2NQSVgxamliMHNINGZVMURwMlY5RE8wQ1VJazVub2hX?=
+ =?utf-8?B?b2ltYTJrVzRDUFRnRmZvV056dnZ5aG1WdncyZE9CV0Q3SVJpQ040V25JQWly?=
+ =?utf-8?B?OHN6OXJCM3krc0pOb0FiM3JEendCWG9jVXZJQ1pNK0ordGdkSU5DbUsvckQy?=
+ =?utf-8?B?RGR1RUcvSnFrSy84OHNoc0J0eTVuZlNDK2R4S2JiK1J0djlUK2RzSWdxNkQr?=
+ =?utf-8?B?OXZDMGFnMWdNNU13V1FKWUFORzhiUVNDQi90VDc0QTVXZWMycTA1NUNOd1ox?=
+ =?utf-8?B?Nk16bDNnNVYydWdaYUd4WUdvUTQvcmlZSW5WWHlwMTh0SnpxYzRyKzJUS0gz?=
+ =?utf-8?B?SmNBK1A3Y29OR0l4ZnIvWEZ4SUlBdmYvYzhlTlJBOHpYaTVCM2FiMWlJNTJP?=
+ =?utf-8?B?QnBMeTJtcmcvOEt3d2NwcEJzbFhvSGpubU9EaUg0bk1XYXJJeVhtdEtPN3lD?=
+ =?utf-8?B?MUNwdDM1VS9ZUWdjZnpVNEh0OE14YkxXNWZsdWhGV1BkdUYvcmxJTzNNQUFC?=
+ =?utf-8?B?czRBd1FlNlRHQ3ZMTmRZbU8ydG1Hb1BsMTROdHJZVUxKTTl2c0NDb29wdWRs?=
+ =?utf-8?B?NEY0QmJWemhDNzNKT0sxNnN4MmhPblZ1U282VnRITGUvVFNBSVQ4ZlNWeVJW?=
+ =?utf-8?B?cEl6WjdHeUtFOUx1cEJOdDhxaDRYM1daUmMrcHJpbjlSL3hOaVRLRVE4SEpw?=
+ =?utf-8?B?MW01VXFXeXJTcWpFdTR1YisxMmU0SXA1R0FpOHlGUDZCdHRWaTVjOGlhSm5L?=
+ =?utf-8?B?QkxCYnY5Y21sMTE2ckdmN0JDanhGcGJqai91a2pVbzcvUkFCQlZPYXFDM29P?=
+ =?utf-8?B?dGtuRG5haGJDdlFkdndkN3BlS2FVOGJjV1NXbGsxYUxCRjdGYkh5UmRrQmVF?=
+ =?utf-8?B?S3Y1dTdIYjByT2VxNE04RGZ1OEtuWERLenNWbWVSanZWMzFjYTB1ODVWQ3JS?=
+ =?utf-8?B?ZHVOVTBseGdxZURuM0c1RnhmVnV4UzZqZlllVVFJc2dnUFlVQm9RNTZWU0l0?=
+ =?utf-8?B?LzFvUURCWEVXcWNSby9hOHZuMHAwVFZKeUpRcG5lemRRNlR2ZzVWK0pzall5?=
+ =?utf-8?B?TDh0amExSXNyUkJNUC9WSENwZWRIQW9aUE1yM2ZqSW9QdUZMb3R1KysyR1U5?=
+ =?utf-8?B?SHhmdXpULzA5QVkyUGM3RDhETk9wV29oTU0wZnA5bEJONWs2bDZ5NTZwMkJ1?=
+ =?utf-8?B?TnB2MFA0MnVZYVcrUjBGc1ptUHVXTS9TUWRnZ2plZmc0NUhWY3FZU2VEV08y?=
+ =?utf-8?B?L09iQ2xpM3ZHREw2b29qaU9XcHhkWHVNVlpackMwVHBHeVROeWlBa0dwUm01?=
+ =?utf-8?B?Ym1CYnRVdjRoeGVydWdYUFBpRS8yZ2RtNWdVQTRQdGRWWWkzd3hoaVVrSHI2?=
+ =?utf-8?B?RDN5RmJEMWlFWFRPdXVpTDJYdmNjUnhEV3JDWjZBODMvdFJYZmxzb2o4bTA5?=
+ =?utf-8?B?ZVE9PQ==?=
+X-OriginatorOrg: virtuozzo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0080ca26-183a-47d6-3184-08dab33aa609
+X-MS-Exchange-CrossTenant-AuthSource: DBBPR08MB4758.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Oct 2022 08:02:50.2848
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 0bc7f26d-0264-416e-a6fc-8352af79c58f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: P/CPtEiJXQP9lgZLGGUyjwUFcyAWsSkwHFqjestKh83UhRfJKlHYRVPtHaH/iIE1TkUcJ0hfcaxILMm9IwiHhcpXLd4gcV35GdBPhsdZL8zxfpAQJMTjyccti9svnvVe
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR08MB8428
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 10:52:30AM +0530, Viresh Kumar wrote:
-> + Johan,
+On 21.10.22 10:31, Nadav Amit wrote:
+> On Oct 21, 2022, at 10:25 AM, Alexander Atanasov <alexander.atanasov@virtuozzo.com> wrote:
 > 
-> On 19-10-22, 19:29, Manivannan Sadhasivam wrote:
-> > Hello,
-> > 
-> > This series adds clock provider support to the Qcom CPUFreq driver for
-> > supplying the clocks to the CPU cores in Qcom SoCs.
-> > 
-> > The Qualcomm platforms making use of CPUFreq HW Engine (EPSS/OSM) supply
-> > clocks to the CPU cores. But this is not represented clearly in devicetree.
-> > There is no clock coming out of the CPUFreq HW node to the CPU. This created
-> > an issue [1] with the OPP core when a recent enhancement series was submitted.
-> > Eventhough the issue got fixed in the OPP framework in the meantime, that's
-> > not a proper solution and this series aims to fix it properly.
-> > 
-> > There was also an attempt made by Viresh [2] to fix the issue by moving the
-> > clocks supplied to the CPUFreq HW node to the CPU. But that was not accepted
-> > since those clocks belong to the CPUFreq HW node only.
-> > 
-> > The proposal here is to add clock provider support to the Qcom CPUFreq HW
-> > driver to supply clocks to the CPUs that comes out of the EPSS/OSM block.
-> > This correctly reflects the hardware implementation.
-> > 
-> > The clock provider is a simple one that just provides the frequency of the
-> > clocks supplied to each frequency domain in the SoC using .recalc_rate()
-> > callback. The frequency supplied by the driver will be the actual frequency
-> > that comes out of the EPSS/OSM block after the DCVS operation. This frequency
-> > is not same as what the CPUFreq framework has set but it is the one that gets
-> > supplied to the CPUs after throttling by LMh.
-> > 
-> > This series has been tested on SM8450 based dev board and hence there is a DTS
-> > change only for that platform. Once this series gets accepted, rest of the
-> > platform DTS can also be modified and finally the hack on the OPP core can be
-> > dropped.
+>>
+>> Ok,I will move it before the enqueue call.
+>> But are you sure about this the reset?
+>> vmballoon_reset(...) is called only from vmballoon_work(...) which does
+>> the update ? what i am missing?
 > 
-> Thanks for working on this Mani.
-> 
-> Can you also test the below code over your series ? This shouldn't
-> result in issues that Johan reported earlier [1][2]. Below is the hack I
-> am carrying in the OPP core for Qcom SoCs at the moment.
-> 
-> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-> index e87567dbe99f..b7158d33c13d 100644
-> --- a/drivers/opp/core.c
-> +++ b/drivers/opp/core.c
-> @@ -1384,20 +1384,6 @@ static struct opp_table *_update_opp_table_clk(struct device *dev,
->         }
-> 
->         if (ret == -ENOENT) {
-> -               /*
-> -                * There are few platforms which don't want the OPP core to
-> -                * manage device's clock settings. In such cases neither the
-> -                * platform provides the clks explicitly to us, nor the DT
-> -                * contains a valid clk entry. The OPP nodes in DT may still
-> -                * contain "opp-hz" property though, which we need to parse and
-> -                * allow the platform to find an OPP based on freq later on.
-> -                *
-> -                * This is a simple solution to take care of such corner cases,
-> -                * i.e. make the clk_count 1, which lets us allocate space for
-> -                * frequency in opp->rates and also parse the entries in DT.
-> -                */
-> -               opp_table->clk_count = 1;
-> -
->                 dev_dbg(dev, "%s: Couldn't find clock: %d\n", __func__, ret);
->                 return opp_table;
->         }
-> diff --git a/drivers/opp/debugfs.c b/drivers/opp/debugfs.c
-> index 96a30a032c5f..402c507edac7 100644
-> --- a/drivers/opp/debugfs.c
-> +++ b/drivers/opp/debugfs.c
-> @@ -138,7 +138,7 @@ void opp_debug_create_one(struct dev_pm_opp *opp, struct opp_table *opp_table)
->          * - For some devices rate isn't available or there are multiple, use
->          *   index instead for them.
->          */
-> -       if (likely(opp_table->clk_count == 1 && opp->rates[0]))
-> +       if (likely(opp_table->clk_count == 1))
->                 id = opp->rates[0];
->         else
->                 id = _get_opp_count(opp_table);
-> 
+> My bad. But when the module is unloaded, vmballoon_pop() is called.
 
-With the above diffs applied, I no longer see the issues reported by Johan on
-SM8450 dev board.
+Yes, i missed the unload -  i will just set it to zero there.
 
-Thanks,
-Mani
-
-> -- 
-> viresh
-> 
-> [1] https://lore.kernel.org/all/YsxSkswzsqgMOc0l@hovoldconsulting.com/
-> [2] https://lore.kernel.org/all/Ys2FZa6YDwt7d%2FZc@hovoldconsulting.com/
 
 -- 
-மணிவண்ணன் சதாசிவம்
+Regards,
+Alexander Atanasov
+
