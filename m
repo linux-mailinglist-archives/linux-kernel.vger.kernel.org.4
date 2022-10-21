@@ -2,104 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E761607DAB
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 19:40:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 989B1607DAA
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 19:39:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbiJURkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 13:40:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51836 "EHLO
+        id S229670AbiJURjr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 13:39:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230305AbiJURjx (ORCPT
+        with ESMTP id S229679AbiJURjl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 13:39:53 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFA2A3FD6D
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 10:39:51 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id g27so8562776edf.11
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 10:39:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=jf/Eb/CewThpJ/hWTbFyMXRlobZKi0EOll0w249IASg=;
-        b=FjP2s6nGxVS8vSbGwtA3KWSHKhXX8uLMMdG+La4JzzyBHW4NHjGGaQnizz3lVooFie
-         IzVyvdcrTpQendS3OohqZkGPSatE52FV8Ug+S6d6WNP+VoYS8NVpX4vfrcaeZpOld4y+
-         CQDkL7FZGdYjOHxLKjFVRrTIaoYWXb/oBNAPCs6g0/zbE8cdMQTsd8PQAr/o7ND2yytX
-         D9Q4/uv6BI89n2p7DXRIFEsAY9SlP4uayCt2MSuUx+emK3UPqMfmc1EQ4zGSadbIfkfi
-         ULPEiSeiXEQhHFkkNtAyJB9I9WPzMLs+d3pfqQIxO+nUVeFrnO6wtr8CMsv1zCns2h5l
-         jtNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jf/Eb/CewThpJ/hWTbFyMXRlobZKi0EOll0w249IASg=;
-        b=Bz2Q6hzrXnGqEuqf+iw7njUCgmzUcTaVgYka1i0nrhfRPo4K4v6rXaIDJN56CDxA9C
-         pLqiOUXJs7PvKcfuHQ0TwCje0KfFxV0Iqc5vP4In0fNvsrZsGwdnemELpq646wHnBRio
-         mGlLzzmsTU6UEtbSLbQvsGAg+XIYvs7jjZa/Su3G2zChakfG9YtQOk2xAgh0MshkkFDy
-         5xQqMynLOrMkuEh/cegpgipW4g9PmrQshfa7zQFr1iEL+72hXQgSfFfvsqtipI9tDNiZ
-         Jff8ZU2mMRVR0ISh3vKDY4n1rAVM09Sp83yF1POLje/RNcHf0Y1Vzw2iLiSVqdMcW7ID
-         CVFQ==
-X-Gm-Message-State: ACrzQf2eeHc29Zv4qGAEkLhYPr74s9LzaJoaPvrXh6UnuZ2rFXfRABbZ
-        zF1RA2GJbeXOGXbkEM8bpH4ldH4DnHwAVEloWhfq+w==
-X-Google-Smtp-Source: AMsMyM5vRLF1pjmsZkk6dWKKdTQUxxi+xL34Z05v4VMrgP/GcxHM3uShCJNvXK4HE4rhr9H9xKahQA33esiY3op/I/g=
-X-Received: by 2002:a17:907:3f1e:b0:78d:f198:fd00 with SMTP id
- hq30-20020a1709073f1e00b0078df198fd00mr16066742ejc.730.1666373989777; Fri, 21
- Oct 2022 10:39:49 -0700 (PDT)
+        Fri, 21 Oct 2022 13:39:41 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F22B033841;
+        Fri, 21 Oct 2022 10:39:36 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id D5B4618846E9;
+        Fri, 21 Oct 2022 17:39:34 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id C5ECE250007B;
+        Fri, 21 Oct 2022 17:39:34 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id BA4459EC0005; Fri, 21 Oct 2022 17:39:34 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-References: <Y1LBGZPMfCZ8A1bl@FVFF77S0Q05N>
-In-Reply-To: <Y1LBGZPMfCZ8A1bl@FVFF77S0Q05N>
-From:   Sami Tolvanen <samitolvanen@google.com>
-Date:   Fri, 21 Oct 2022 10:39:13 -0700
-Message-ID: <CABCJKuf=OB_3ZR_rwaG3H5kHKmTTDk+sihjJXYmyWgZjUX2yTQ@mail.gmail.com>
-Subject: Re: kCFI && patchable-function-entry=M,N
-To:     Mark Rutland <mark.rutland@arm.com>,
-        Fangrui Song <maskray@google.com>
-Cc:     llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+Date:   Fri, 21 Oct 2022 19:39:34 +0200
+From:   netdev@kapio-technology.com
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Florent Fourcot <florent.fourcot@wifirst.fr>,
+        Hans Schultz <schultz.hans@gmail.com>,
+        Joachim Wiberg <troglobit@gmail.com>,
+        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        Joao Moreira <joao@overdrivepizza.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v8 net-next 10/12] net: dsa: mv88e6xxx: mac-auth/MAB
+ implementation
+In-Reply-To: <20221021173014.oit3qmpkrsjwzbgu@skbuf>
+References: <20221018165619.134535-11-netdev@kapio-technology.com>
+ <20221018165619.134535-11-netdev@kapio-technology.com>
+ <20221020132538.reirrskemcjwih2m@skbuf>
+ <2565c09bb95d69142522c3c3bcaa599e@kapio-technology.com>
+ <20221020225719.l5iw6vndmm7gvjo3@skbuf>
+ <82d23b100b8d2c9e4647b8a134d5cbbf@kapio-technology.com>
+ <20221021112216.6bw6sjrieh2znlti@skbuf>
+ <7bfaae46b1913fe81654a4cd257d98b1@kapio-technology.com>
+ <20221021163005.xljk2j3fkikr6uge@skbuf>
+ <d1fb07de4b55d64f98425fe66156c4e4@kapio-technology.com>
+ <20221021173014.oit3qmpkrsjwzbgu@skbuf>
+User-Agent: Gigahost Webmail
+Message-ID: <b88e331e016ad3801f1bf1a0dec507f3@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 8:56 AM Mark Rutland <mark.rutland@arm.com> wrote:
->
-> Hi,
->
-> For arm64, I'd like to use -fatchable-function-entry=M,N (where N > 0), for our
-> ftrace implementation, which instruments *some* but not all functions.
-> Unfortuntately, this doesn't play nicely with -fsanitize=kcfi, as instrumented
-> and non-instrumented functions don't agree on where the type hash should live
-> relative to the function entry point, making them incompatible with one another.
+On 2022-10-21 19:30, Vladimir Oltean wrote:
+> On Fri, Oct 21, 2022 at 07:18:59PM +0200, netdev@kapio-technology.com 
+> wrote:
+>> On 2022-10-21 18:30, Vladimir Oltean wrote:
+>> > On Fri, Oct 21, 2022 at 03:16:21PM +0200, netdev@kapio-technology.com wrote:
+>> > > As it is now in the bridge, the locked port part is handled before learning
+>> > > in the ingress data path, so with BR_LEARNING and BR_PORT_LOCKED, I think it
+>> > > will work as it does now except link local packages.
+>> >
+>> > If link-local learning is enabled on a locked port, I think those
+>> > addresses should also be learned with the BR_FDB_LOCKED flag. The
+>> > creation of those locked FDB entries can be further suppressed by the
+>> > BROPT_NO_LL_LEARN flag.
+>> >
+>> > > If your suggestion of BR_LEARNING causing BR_FDB_LOCKED on a locked port, I
+>> > > guess it would be implemented under br_fdb_update() and BR_LEARNING +
+>> > > BR_PORT_LOCKED would go together, forcing BR_LEARNING in this case, thus also
+>> > > for all drivers?
+>> >
+>> > Yes, basically where this is placed right now (in br_handle_frame_finish):
+>> 
+>> As I don't know what implications it would have for other drivers to 
+>> have learning
+>> forced enabled on locked ports, I cannot say if it is a good idea or 
+>> not.
+>> Right now learning is not forced either way as is, but the consensus 
+>> is that learning
+>> should be off with locked ports, which it would be either way in the 
+>> common case I
+>> think.
+> 
+> I don't think I fully understand what you mean by forcing BR_LEARNING.
+> A bridge port gets created with a default set of flags as can be seen
+> in new_nbp().
+> Those flags include BR_LEARNING but don't include BR_PORT_LOCKED.
+> 
+> The user can decide he wants to make the port use 802.1X without MAB, 
+> so
+> he enables BR_PORT_LOCKED and disables BR_LEARNING, all with the same
+> netlink command (ip link set swp0 type bridge_slave learning off locked 
+> on).
+> 
+> How was the driver forced into anything?
 
-Yes, the current implementation assumes that if prefix nops are used,
-all functions have the same number of them.
-
-> Is there any mechanism today that we could use to solve this, or could we
-> extend clang to have some options to control this behaviour?
-
-I don't think there's a mechanism to work around the issue right now,
-but we could just change where the hash is emitted on arm64.
-
-> It would also be helpful to have a symbol before both the hash and pre-function
-> NOPs so that we can filter those out of probes patching (I see that x86 does
-> this with the __cfi_function symbol).
-
-Adding a symbol before the hash isn't a problem, but if we move the
-hash and want the symbol to be placed before the prefix nops as well,
-we might need a flag to control this. Fangrui, what do you think?
-
-Sami
+Well, with this change, to have MAB working, the bridge would need 
+learning on
+of course, but how things work with the bridge according to the flags, 
+they
+should also work in the offloaded case if you ask me. There should be no
+difference between the two, thus MAB in drivers would have to be with
+learning on.
