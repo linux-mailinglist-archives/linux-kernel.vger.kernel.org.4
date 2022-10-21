@@ -2,114 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5333607D19
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 18:59:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86EBB607D23
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 19:00:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbiJUQ7o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 12:59:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48370 "EHLO
+        id S230476AbiJURAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 13:00:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbiJUQ7i (ORCPT
+        with ESMTP id S230142AbiJURAN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 12:59:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC6C9205E2;
-        Fri, 21 Oct 2022 09:59:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B538FB82CA0;
-        Fri, 21 Oct 2022 16:59:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BD09C433D7;
-        Fri, 21 Oct 2022 16:59:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666371573;
-        bh=zXoZSLRo6mqWQl+SqpCeUt7n3oIRJaBB02GCsl97pmw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=MeulAqGnfa12piC1q/uSWkvw9NL3Xxa/WHR5NjvPhL87bxDnzFp69/bmitWr959WB
-         K5lZyg7okV8RxMAk54qR1LbC35T2UEFperAHPqTvBP5Qw+VxcWmCxmXgfcpKc5i3C5
-         5BlDGtu3S17VYNYoQejRzLFO0O5P6e/6FcifnCyQmeT6tCz740iwx8e3R7Um0fm7ye
-         Fvn6gP9+uDUAOuEyB3FNkPwdMh41Zu9nkxoQxvn2/sEyAUeK+1JDCnVo8zVvnLxYHI
-         UkvXp2XrhF2uxyMB+4T1a5u6FChqX4SDdSoCMSe3u2YpvTAfCiEy2naw1VhwH+6ETC
-         Pd2MqFNI4Evjw==
-Received: by mail-vk1-f181.google.com with SMTP id l8so1466449vko.11;
-        Fri, 21 Oct 2022 09:59:33 -0700 (PDT)
-X-Gm-Message-State: ACrzQf2rsbMHBaSjjzjLQcpcp0FCKAfJTrNgRPnISl6v86wmSBNW9q46
-        eaDMqrdGkbeTNdi89Ut/R7DgTZzSP4Iiap1Lyw==
-X-Google-Smtp-Source: AMsMyM7bsRf7NAYJbwdShF/eQg9O/rEcc0Bmc19ET2w4pWsB3bnX0kUtnl1ALuyMiuToFS0ma0pesPnAhqk2kMhcnN4=
-X-Received: by 2002:a1f:1442:0:b0:3ab:857c:cd8d with SMTP id
- 63-20020a1f1442000000b003ab857ccd8dmr13079994vku.35.1666371572144; Fri, 21
- Oct 2022 09:59:32 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221014151302.27641-1-afd@ti.com> <CAL_Jsq+O0_i3k_3S=W6C-n+ZE7GRKKhOQ7HR54QutmMJq54a_Q@mail.gmail.com>
- <CAMuHMdV2euzPQL35AqBsyeQTkMbkeFz4rk48wtyX7Hd6Lz5d-g@mail.gmail.com> <f8b2a45e-cb6c-60ec-047e-6934dd4c4e1d@ti.com>
-In-Reply-To: <f8b2a45e-cb6c-60ec-047e-6934dd4c4e1d@ti.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Fri, 21 Oct 2022 11:59:22 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqL0zG9_sthMLKMEWjYzBdSDwjJ1D6SsZr3CDe3w8mKE+g@mail.gmail.com>
-Message-ID: <CAL_JsqL0zG9_sthMLKMEWjYzBdSDwjJ1D6SsZr3CDe3w8mKE+g@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: Allow DTB overlays to built from .dtso named
- source files
-To:     Andrew Davis <afd@ti.com>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        devicetree@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Frank Rowand <frowand.list@gmail.com>
+        Fri, 21 Oct 2022 13:00:13 -0400
+Received: from mail-qv1-xf4a.google.com (mail-qv1-xf4a.google.com [IPv6:2607:f8b0:4864:20::f4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B31D631DC
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 10:00:01 -0700 (PDT)
+Received: by mail-qv1-xf4a.google.com with SMTP id i7-20020a0cab47000000b004b4376895bfso2675383qvb.20
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 10:00:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=nFhv/vtA62WAg7cu+g2W7nnuN+CB9hRxAwVFjCLPz/E=;
+        b=N3PqebcHnGpwfb1EnrsvDdTvnRYDuxYhO7jFoLMpeBfvGrzFNly5uNbjeVK5y2xGO/
+         6is2b55BOjkY6q1yB8VZCB1u/xQFL0J49wVNIgjwQofBWyMzefs74wMwT29HxhdVPLDx
+         1uJFleYdC9+M5SFk4Yy4AJZDSsLv2CzSEBuC4vnNk+Q4sx48CtPhqS9k4gls0mbDN0xe
+         3fbV6p0GpUzduBPrg3/ND8aoLaMa7lIWWkj6FjmQnzYlQGVbCgUFuzgASs5w802IJ3Nq
+         XGfXTMMdhfb4YTuAPEvL7N8WfkSnXvF+m963gH42Epe6KwLZwnMGDQJP8PIYiPJhhCz4
+         sKfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nFhv/vtA62WAg7cu+g2W7nnuN+CB9hRxAwVFjCLPz/E=;
+        b=oAc2B292xzeOjCIGgTLF1qjqLq9gn8zlHlI8ATlDrvKEj4gY5msd6KR95QGtmwtJXf
+         2jl7RAse4XwQaLW/FWBLW7wwTcGrNR74cuXnpG7e0Elr7ElSTHGcgjIZMAZ39a5iA5zz
+         MoDkW+w/YZlg10tcMsfSJZ1doGNbYw5O+7lcFFKZPy4H5oXjKZcmpgq8F6H7GtAPkQLS
+         EjOJ6obp4AcASGf4RUaR52HPpAzKOYjbWbZBfH+f9giXpeJOs8JidWzuGDamNpOlJyUD
+         rZPJhhJLjSQe8Wo7MsxOV/5TByaddUnrUnPM2eIF9QBM2/mjUnrg2nTq/4y4RaD33cXR
+         OJ6A==
+X-Gm-Message-State: ACrzQf2d4HafIOJUIitxszzTEV1BvKJ8dy+jjd4Xt9wlSgJrxvCi9GS8
+        uARct9YcuFvxNY7DqYBl5pxvhSnbzwf/MV6K2z9hXz5ZEIyfIx4F/scJGe3Kd8B51THI4tXe96Z
+        hu9EIplRK9BlUobhUlkWBSXHaaCgcj2OwyRFhEMrxbpwcCBe6BS17itje2MrFoMUKl4+Oe6o/he
+        efMHovS60=
+X-Google-Smtp-Source: AMsMyM7Wi00SxhbDGTUYIzg/4rocJUC06QDfyyWfEnn2zSQ8aKkHQNCpHL+gClLu2odOPwt5pub0FhA0xR+oQmo8/Q==
+X-Received: from dionnaglaze.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2ee6])
+ (user=dionnaglaze job=sendgmr) by 2002:a17:903:248:b0:172:7520:db07 with SMTP
+ id j8-20020a170903024800b001727520db07mr19594238plh.76.1666371588758; Fri, 21
+ Oct 2022 09:59:48 -0700 (PDT)
+Date:   Fri, 21 Oct 2022 16:59:39 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.0.135.g90850a2211-goog
+Message-ID: <20221021165943.1968044-1-dionnaglaze@google.com>
+Subject: [PATCH v3 0/4] Add throttling detection to sev-guest
+From:   Dionna Glaze <dionnaglaze@google.com>
+To:     linux-kernel@vger.kernel.org, x86@kernel.org
+Cc:     Dionna Glaze <dionnaglaze@google.com>,
+        Tom Lendacky <Thomas.Lendacky@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Peter Gonda <pgonda@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 9:44 AM Andrew Davis <afd@ti.com> wrote:
->
-> On 10/21/22 1:52 AM, Geert Uytterhoeven wrote:
-> > Hi Rob,
-> >
-> > On Fri, Oct 21, 2022 at 12:47 AM Rob Herring <robh+dt@kernel.org> wrote:
-> >> On Fri, Oct 14, 2022 at 10:13 AM Andrew Davis <afd@ti.com> wrote:
-> >>> Currently DTB Overlays (.dtbo) are build from source files with the same
-> >>> extension (.dts) as the base DTs (.dtb). This may become confusing and
-> >>> even lead to wrong results. For example, a composite DTB (created from a
-> >>> base DTB and a set of overlays) might have the same name as one of the
-> >>> overlays that create it.
-> >>>
-> >>> Different files should be generated from differently named sources.
-> >>>   .dtb  <-> .dts
-> >>>   .dtbo <-> .dtso
-> >>>
-> >>> We do not remove the ability to compile DTBO files from .dts files here,
-> >>> only add a new rule allowing the .dtso file name. The current .dts named
-> >>> overlays can be renamed with time. After all have been renamed we can
-> >>> remove the other rule.
-> >>
-> >> There was a patch from Geert converting everything. I'd rather not
-> >> support both ways.
-> >
-> > Actually that was a patch from Frank?
-> >
->
-> That series looks to have stalled?
+The guest request synchronous API from SEV-SNP VMs to the host's security
+processor consumes a global resource. For this reason, AMD's docs
+recommend that the host implements a throttling mechanism. In order for
+the guest to know it's been throttled and should try its request again,
+we need some good-faith communication from the host that the request
+has been throttled.
 
-Feel free to resurrect it if Frank is not going to.
+These patches work with the existing /dev/sev-guest ABI to detect a
+throttling code.
 
->
-> It won't be easy to convert all the files in one go, especially with series
-> in-flight with both names, not sure how we avoid having both extensions for
-> at least one cycle. Plus having both allowed lets rename the existing files
-> in a more granular/bisectable way.
+Changes from v2:
+  * Codified the non-firmware-call firmware error code as (u32)-1.
+  * Changed sev_issue_guest_request unsigned long *fw_err argument to
+    u64 *exitinfo2 to more accurately and type-safely describe the
+    value that it outputs.
+  * Changed sev_issue_guest_request to always set its exitinfo2
+    argument to either the non-firmware-call error code, the
+    EXIT_INFO_2 returned from the VMM if the request failed, or 0 on
+    success. This fixes a bug that returned uninitialized kernel stack
+    memory to the user when there is no error.
+  * Changed the throttle behavior to retry in the driver instead of
+    returning -EAGAIN, due to possible message sequence number reuse
+    on different message contents.
+    
+Changes from v1:
+  * Changed throttle error code to 2
 
-Fair enough. I'd propose a series adding the build support and
-converting the unittest. Then I can provide a branch for arm-soc and
-the dts conversions.
+Cc: Tom Lendacky <Thomas.Lendacky@amd.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Joerg Roedel <jroedel@suse.de>
+Cc: Peter Gonda <pgonda@google.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
 
-Rob
+Signed-off-by: Dionna Glaze <dionnaglaze@google.com>
+
+Dionna Glaze (4):
+  ccp: Name -1 return value as SEV_RET_NO_FW_CALL
+  x86/sev: Change snp_guest_issue_request's fw_err
+  virt/coco/sev-guest: Remove err in handle_guest_request
+  virt/coco/sev-guest: interpret VMM errors from guest request
+
+ arch/x86/include/asm/sev.h              |  4 +--
+ arch/x86/kernel/sev.c                   | 11 +++++--
+ drivers/crypto/ccp/sev-dev.c            |  2 +-
+ drivers/virt/coco/sev-guest/sev-guest.c | 39 ++++++++++++++++++-------
+ include/uapi/linux/psp-sev.h            |  7 +++++
+ include/uapi/linux/sev-guest.h          | 18 ++++++++++--
+ 6 files changed, 62 insertions(+), 19 deletions(-)
+
+-- 
+2.38.0.135.g90850a2211-goog
+
