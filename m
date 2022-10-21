@@ -2,153 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3388D607720
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 14:42:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60A59607721
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 14:42:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230013AbiJUMl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 08:41:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39848 "EHLO
+        id S230086AbiJUMmE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 08:42:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229854AbiJUMlt (ORCPT
+        with ESMTP id S229909AbiJUMlu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 08:41:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE2702681E7
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 05:41:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666356084;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QHzZGIR/L3eWjmkvGxDRS//SKT5lTAiH8nYjXGv6sWo=;
-        b=bZ7WFy/KRo2tCztutz/rus6kcJ3KO9RUAuOOlg9DSSiS1ysgRPXNEKkERA/KhZ3iTw3rXP
-        bidCtAW93NMU4bOuS7su7rLa9lLt6/8PErbCf4VETu9citsWKCpZa7h9mDPOTIOlWNQDEK
-        krt+tl5kpqpFofSekaeEJk6veRC/QYg=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-75-SA8pem_eP_SUssnD4J-_Ig-1; Fri, 21 Oct 2022 08:41:23 -0400
-X-MC-Unique: SA8pem_eP_SUssnD4J-_Ig-1
-Received: by mail-ed1-f72.google.com with SMTP id s8-20020a056402520800b0045cab560d5eso2328402edd.1
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 05:41:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QHzZGIR/L3eWjmkvGxDRS//SKT5lTAiH8nYjXGv6sWo=;
-        b=SfWSCi3swrSaIvC5oQAK6FK6DKv0yE1ZccwUmU/YVAmbEqTdET+96myKrVxtnGjJzq
-         pdkrEsmUnNCQThg5HaE73FVDb3d0zo+o1e4IsDWKOFpTxzGnPqZyPCRobOk2ey8GTpCF
-         DEfc3DqHHwzx7BF2GQ+LB3kKJbqWq/JTqEHX+zzJpSdWooDhFyYGOEiEU6tN6hWzZrim
-         0GEi+PkHTeIPvE7nmxZCFF2E1xEI5mfboR3TDAMXrroFhsjvrnQVvJoQCKE6+5lbPvb2
-         xtJDzYwHcrF0nk0woNF/50hmaiPvWXeDO2k2AWNtkUqbijyowma+3yVVSsgr9v92NenT
-         J1cg==
-X-Gm-Message-State: ACrzQf31g9C0Z1Htsx4K84WZc7tUXysP+RAU/v0QjqSiWUqnWDgq2/t6
-        IW/OZQ+eLpsEicpKLN5z46+gpjm7ok+ri9VXMJhIskpjHT6mkjz6r/LWrnbvVwi+hud5l8+fF6h
-        YAaoWFIkjznEAWrl3SqoW7iumw3XdOkJlI/IO3qbgiBPnnak+idxNfplZrkqVVVE58NdsJx247G
-        e9
-X-Received: by 2002:a50:baec:0:b0:461:4c59:12bf with SMTP id x99-20020a50baec000000b004614c5912bfmr2386073ede.54.1666356082061;
-        Fri, 21 Oct 2022 05:41:22 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM6RSW63B8AxPtX3+pwhw0aXbCOhejwCfMPNftvJiTc6+wgGrJqhZFR9SUaQf54iaKqPePBggQ==
-X-Received: by 2002:a50:baec:0:b0:461:4c59:12bf with SMTP id x99-20020a50baec000000b004614c5912bfmr2386039ede.54.1666356081696;
-        Fri, 21 Oct 2022 05:41:21 -0700 (PDT)
-Received: from ovpn-192-65.brq.redhat.com (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id n26-20020aa7c69a000000b0046146c730easm910838edq.75.2022.10.21.05.41.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Oct 2022 05:41:21 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        Yuan Yao <yuan.yao@linux.intel.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v11 16/46] KVM: x86: hyper-v: Don't use
- sparse_set_to_vcpu_mask() in kvm_hv_send_ipi()
-In-Reply-To: <87czalczo6.fsf@redhat.com>
-References: <20221004123956.188909-1-vkuznets@redhat.com>
- <20221004123956.188909-17-vkuznets@redhat.com>
- <Y1BahCzO4jxFC9Ey@google.com> <87czalczo6.fsf@redhat.com>
-Date:   Fri, 21 Oct 2022 14:41:19 +0200
-Message-ID: <877d0tcpsg.fsf@ovpn-192-65.brq.redhat.com>
+        Fri, 21 Oct 2022 08:41:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 643502681F3;
+        Fri, 21 Oct 2022 05:41:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 845C7B82B66;
+        Fri, 21 Oct 2022 12:41:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53564C433C1;
+        Fri, 21 Oct 2022 12:41:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666356092;
+        bh=TqgVDSS9DxuiWIHPFZ6jM+uoKNWWo4i2BhM1Zw++h/w=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=I/dfjI9brR5SLfBUxBrcP2z4vwsxifAH5Zo7haWJxqKZkbByUNG2klGiIbGWNFMAl
+         RQUYq6mx93fDBvvBLzDO94T+rCvQ6Kw19gVbLjmS9ejdyBH/TPFOYZ/NC20OUHJVQN
+         PmN8r7dBHj1YWzGzl2TUT5wkh9PCu/DFuU6tnLrm3/OacliqBhCGqiiR7/XAE8IbDj
+         XWhByt8zQAUxSHTi1sggIgpARl17WIgM0LGbYWtJSHvuY4cix/3a/Gpk+9eRF+eedC
+         FJvQyXuxp+O/UJjamiOe59mtX36QxsVTWAw+kKNtknm7MCHXSdefYZ/Yihpd2cghew
+         de5gTt0KKKk3g==
+Message-ID: <b9d370b063915c09ce2b2ff6bdc643ed1796ffb4.camel@kernel.org>
+Subject: Re: [PATCH] isofs: prevent file time rollover after year 2038
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-fsdevel@vger.kernel.org, Thomas Schmitt <scdbackup@gmx.net>,
+        stable@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Jan Kara <jack@suse.cz>,
+        Deepa Dinamani <deepa.kernel@gmail.com>,
+        linux-kernel@vger.kernel.org
+Date:   Fri, 21 Oct 2022 08:41:29 -0400
+In-Reply-To: <20221020160037.4002270-1-arnd@kernel.org>
+References: <20221020160037.4002270-1-arnd@kernel.org>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Vitaly Kuznetsov <vkuznets@redhat.com> writes:
+On Thu, 2022-10-20 at 18:00 +0200, Arnd Bergmann wrote:
+> From: Thomas Schmitt <scdbackup@gmx.net>
+>=20
+> Change the return type of function iso_date() from int to time64_t,
+> to avoid truncating to the 1902..2038 date range.
+>=20
+> After this patch, the reported timestamps should fall into the
+> range reported in the s_time_min/s_time_max fields.
+>=20
+> Signed-off-by: Thomas Schmitt <scdbackup@gmx.net>
+> Cc: stable@vger.kernel.org
+> Link: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=3D800627
+> Fixes: 34be4dbf87fc ("isofs: fix timestamps beyond 2027")
+> Fixes: 5ad32b3acded ("isofs: Initialize filesystem timestamp ranges")
+> [arnd: expand changelog text slightly]
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  fs/isofs/isofs.h | 2 +-
+>  fs/isofs/util.c  | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/fs/isofs/isofs.h b/fs/isofs/isofs.h
+> index dcdc191ed183..c3473ca3f686 100644
+> --- a/fs/isofs/isofs.h
+> +++ b/fs/isofs/isofs.h
+> @@ -106,7 +106,7 @@ static inline unsigned int isonum_733(u8 *p)
+>  	/* Ignore bigendian datum due to broken mastering programs */
+>  	return get_unaligned_le32(p);
+>  }
+> -extern int iso_date(u8 *, int);
+> +extern time64_t iso_date(u8 *, int);
+> =20
+>  struct inode;		/* To make gcc happy */
+> =20
+> diff --git a/fs/isofs/util.c b/fs/isofs/util.c
+> index e88dba721661..348af786a8a4 100644
+> --- a/fs/isofs/util.c
+> +++ b/fs/isofs/util.c
+> @@ -16,10 +16,10 @@
+>   * to GMT.  Thus  we should always be correct.
+>   */
+> =20
+> -int iso_date(u8 *p, int flag)
+> +time64_t iso_date(u8 *p, int flag)
+>  {
+>  	int year, month, day, hour, minute, second, tz;
+> -	int crtime;
+> +	time64_t crtime;
+> =20
+>  	year =3D p[0];
+>  	month =3D p[1];
 
-> Sean Christopherson <seanjc@google.com> writes:
->
->> On Tue, Oct 04, 2022, Vitaly Kuznetsov wrote:
->
-> ...
->
->>>  
->>> -	if (all_cpus) {
->>> -		kvm_send_ipi_to_many(kvm, vector, NULL);
->>> -	} else {
->>> -		sparse_set_to_vcpu_mask(kvm, sparse_banks, valid_bank_mask, vcpu_mask);
->>> -
->>> -		kvm_send_ipi_to_many(kvm, vector, vcpu_mask);
->>> -	}
->>> +	kvm_hv_send_ipi_to_many(kvm, vector, all_cpus ? NULL : sparse_banks, valid_bank_mask);
->>
->> Any objection to not using a ternary operator?
->>
->> 	if (all_cpus)
->> 		kvm_hv_send_ipi_to_many(kvm, vector, NULL, 0);
->> 	else
->> 		kvm_hv_send_ipi_to_many(kvm, vector, sparse_banks, valid_bank_mask);
->>
->
-> Not at all,
->
->> Mostly because it's somewhat arbitrary that earlier code ensures valid_bank_mask
->> is set in the all_cpus=true case, e.g. arguably KVM doesn't need to do the var_cnt
->> sanity check in the all_cpus case:
->>
->> 		all_cpus = send_ipi_ex.vp_set.format == HV_GENERIC_SET_ALL;
->> 		if (all_cpus)
->> 			goto check_and_send_ipi;
->>
->> 		valid_bank_mask = send_ipi_ex.vp_set.valid_bank_mask;
->> 		if (hc->var_cnt != hweight64(valid_bank_mask))
->> 			return HV_STATUS_INVALID_HYPERCALL_INPUT;
->>
->> 		if (!hc->var_cnt)
->> 			goto ret_success;
->>
->
-> I think 'var_cnt' (== hweight64(valid_bank_mask)) has to be checked in
-> 'all_cpus' case, especially in kvm_hv_flush_tlb(): the code which reads
-> TLB flush entries will read them from the wrong offset (data_offset/
-> consumed_xmm_halves) otherwise. The problem is less severe in
-> kvm_hv_send_ipi() as there's no data after CPU banks. 
->
-> At the bare minimum, "KVM: x86: hyper-v: Handle
-> HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST{,EX} calls gently" patch from this
-> series will have to be adjusted. I *think* mandating var_cnt==0 in 'all_cpus'
-> is OK but I don't recall such requirement from TLFS, maybe it's safer to
-> just adjust 'data_offset'/'consumed_xmm_halves' even in 'all_cpus' case.
->
-> Let me do some tests... 
-
-"We can neither confirm nor deny the existence of the problem". Windows
-guests seem to be smart enough to avoid using *_EX hypercalls altogether
-for "all cpus" case (as non-ex versions are good enough). Let's keep
-allowing non-zero var_cnt for 'all cpus' case for now and think about
-hardening it later...
-
--- 
-Vitaly
-
+Reviewed-by: Jeff Layton <jlayton@kernel.org>
