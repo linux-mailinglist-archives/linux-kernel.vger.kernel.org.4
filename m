@@ -2,227 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B84F6606E37
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 05:14:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56E4C606E39
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 05:16:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229874AbiJUDOv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 23:14:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49640 "EHLO
+        id S229741AbiJUDQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 23:16:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229968AbiJUDOk (ORCPT
+        with ESMTP id S229880AbiJUDPy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 23:14:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CF43B85C;
-        Thu, 20 Oct 2022 20:14:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5AC3CB828B5;
-        Fri, 21 Oct 2022 03:14:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 790D6C433D6;
-        Fri, 21 Oct 2022 03:14:22 +0000 (UTC)
-Date:   Thu, 20 Oct 2022 23:14:27 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Primiano Tucci <primiano@google.com>
-Subject: [PATCH] tracing/ring-buffer: Have polling block on watermark
-Message-ID: <20221020231427.41be3f26@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 20 Oct 2022 23:15:54 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 919E6134DD2;
+        Thu, 20 Oct 2022 20:15:37 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MtqKg3k9JzKFJ7;
+        Fri, 21 Oct 2022 11:13:11 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP4 (Coremail) with SMTP id gCh0CgAH+zHWDlJjvXi4AA--.37167S3;
+        Fri, 21 Oct 2022 11:15:35 +0800 (CST)
+Subject: Re: [PATCH -nect RFC v2 0/2] block: fix uaf in bd_link_disk_holder()
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     axboe@kernel.dk, willy@infradead.org, kch@nvidia.com,
+        martin.petersen@oracle.com, johannes.thumshirn@wdc.com,
+        ming.lei@redhat.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yukuai1@huaweicloud.com,
+        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
+References: <20221020132049.3947415-1-yukuai3@huawei.com>
+ <20221020164712.GA14773@lst.de>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <0ad09045-1012-e86b-41f2-a88d02e8f1ed@huaweicloud.com>
+Date:   Fri, 21 Oct 2022 11:15:34 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221020164712.GA14773@lst.de>
+Content-Type: text/plain; charset=gbk; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgAH+zHWDlJjvXi4AA--.37167S3
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYg7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
+        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
+        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8I
+        cVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87
+        Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE
+        6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72
+        CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4II
+        rI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr4
+        1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK
+        67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI
+        8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAv
+        wI8IcIk0rVW3JVWrJr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267
+        AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VU1a9aPUUUUU==
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Hi,
 
-Currently the way polling works on the ring buffer is broken. It will
-return immediately if there's any data in the ring buffer whereas a read
-will block until the watermark (defined by the tracefs buffer_percent file)
-is hit.
+ÔÚ 2022/10/21 0:47, Christoph Hellwig Ð´µÀ:
+> As mentioned before I don't think we should make this even more
+> crufty in the block layer.  See the series I just sent to move it int
+> dm.
 
-That is, a select() or poll() will return as if there's data available,
-but then the following read will block. This is broken for the way
-select()s and poll()s are supposed to work.
+It seems we had some misunderstanding, the problem I tried to fix here
+should not just related to dm, but all the caller of
+bd_link_disk_holder().
 
-Have the polling on the ring buffer also block the same way reads and
-splice does on the ring buffer.
-
-Cc: stable@vger.kernel.org
-Fixes: 1e0d6714aceb7 ("ring-buffer: Do not wake up a splice waiter when page is not full")
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- include/linux/ring_buffer.h |  2 +-
- kernel/trace/ring_buffer.c  | 55 ++++++++++++++++++++++++-------------
- kernel/trace/trace.c        |  2 +-
- 3 files changed, 38 insertions(+), 21 deletions(-)
-
-diff --git a/include/linux/ring_buffer.h b/include/linux/ring_buffer.h
-index 2504df9a0453..3c7d295746f6 100644
---- a/include/linux/ring_buffer.h
-+++ b/include/linux/ring_buffer.h
-@@ -100,7 +100,7 @@ __ring_buffer_alloc(unsigned long size, unsigned flags, struct lock_class_key *k
- 
- int ring_buffer_wait(struct trace_buffer *buffer, int cpu, int full);
- __poll_t ring_buffer_poll_wait(struct trace_buffer *buffer, int cpu,
--			  struct file *filp, poll_table *poll_table);
-+			  struct file *filp, poll_table *poll_table, int full);
- void ring_buffer_wake_waiters(struct trace_buffer *buffer, int cpu);
- 
- #define RING_BUFFER_ALL_CPUS -1
-diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
-index 199759c73519..b60047de897e 100644
---- a/kernel/trace/ring_buffer.c
-+++ b/kernel/trace/ring_buffer.c
-@@ -907,6 +907,21 @@ size_t ring_buffer_nr_dirty_pages(struct trace_buffer *buffer, int cpu)
- 	return cnt - read;
- }
- 
-+static __always_inline bool full_hit(struct trace_buffer *buffer, int cpu, int full)
-+{
-+	struct ring_buffer_per_cpu *cpu_buffer = buffer->buffers[cpu];
-+	size_t nr_pages;
-+	size_t dirty;
-+
-+	nr_pages = cpu_buffer->nr_pages;
-+	if (!nr_pages || !full)
-+		return true;
-+
-+	dirty = ring_buffer_nr_dirty_pages(buffer, cpu);
-+
-+	return (dirty * 100) > (full * nr_pages);
-+}
-+
- /*
-  * rb_wake_up_waiters - wake up tasks waiting for ring buffer input
-  *
-@@ -1035,22 +1050,20 @@ int ring_buffer_wait(struct trace_buffer *buffer, int cpu, int full)
- 		    !ring_buffer_empty_cpu(buffer, cpu)) {
- 			unsigned long flags;
- 			bool pagebusy;
--			size_t nr_pages;
--			size_t dirty;
-+			bool done;
- 
- 			if (!full)
- 				break;
- 
- 			raw_spin_lock_irqsave(&cpu_buffer->reader_lock, flags);
- 			pagebusy = cpu_buffer->reader_page == cpu_buffer->commit_page;
--			nr_pages = cpu_buffer->nr_pages;
--			dirty = ring_buffer_nr_dirty_pages(buffer, cpu);
-+			done = !pagebusy && full_hit(buffer, cpu, full);
-+
- 			if (!cpu_buffer->shortest_full ||
- 			    cpu_buffer->shortest_full > full)
- 				cpu_buffer->shortest_full = full;
- 			raw_spin_unlock_irqrestore(&cpu_buffer->reader_lock, flags);
--			if (!pagebusy &&
--			    (!nr_pages || (dirty * 100) > full * nr_pages))
-+			if (done)
- 				break;
- 		}
- 
-@@ -1076,6 +1089,7 @@ int ring_buffer_wait(struct trace_buffer *buffer, int cpu, int full)
-  * @cpu: the cpu buffer to wait on
-  * @filp: the file descriptor
-  * @poll_table: The poll descriptor
-+ * @full: wait until the percentage of pages are available, if @cpu != RING_BUFFER_ALL_CPUS
-  *
-  * If @cpu == RING_BUFFER_ALL_CPUS then the task will wake up as soon
-  * as data is added to any of the @buffer's cpu buffers. Otherwise
-@@ -1085,14 +1099,15 @@ int ring_buffer_wait(struct trace_buffer *buffer, int cpu, int full)
-  * zero otherwise.
-  */
- __poll_t ring_buffer_poll_wait(struct trace_buffer *buffer, int cpu,
--			  struct file *filp, poll_table *poll_table)
-+			  struct file *filp, poll_table *poll_table, int full)
- {
- 	struct ring_buffer_per_cpu *cpu_buffer;
- 	struct rb_irq_work *work;
- 
--	if (cpu == RING_BUFFER_ALL_CPUS)
-+	if (cpu == RING_BUFFER_ALL_CPUS) {
- 		work = &buffer->irq_work;
--	else {
-+		full = 0;
-+	} else {
- 		if (!cpumask_test_cpu(cpu, buffer->cpumask))
- 			return -EINVAL;
- 
-@@ -1100,8 +1115,14 @@ __poll_t ring_buffer_poll_wait(struct trace_buffer *buffer, int cpu,
- 		work = &cpu_buffer->irq_work;
- 	}
- 
--	poll_wait(filp, &work->waiters, poll_table);
--	work->waiters_pending = true;
-+	if (full) {
-+		poll_wait(filp, &work->full_waiters, poll_table);
-+		work->full_waiters_pending = true;
-+	} else {
-+		poll_wait(filp, &work->waiters, poll_table);
-+		work->waiters_pending = true;
-+	}
-+
- 	/*
- 	 * There's a tight race between setting the waiters_pending and
- 	 * checking if the ring buffer is empty.  Once the waiters_pending bit
-@@ -1117,6 +1138,9 @@ __poll_t ring_buffer_poll_wait(struct trace_buffer *buffer, int cpu,
- 	 */
- 	smp_mb();
- 
-+	if (full)
-+		return full_hit(buffer, cpu, full) ? EPOLLIN | EPOLLRDNORM : 0;
-+
- 	if ((cpu == RING_BUFFER_ALL_CPUS && !ring_buffer_empty(buffer)) ||
- 	    (cpu != RING_BUFFER_ALL_CPUS && !ring_buffer_empty_cpu(buffer, cpu)))
- 		return EPOLLIN | EPOLLRDNORM;
-@@ -3144,10 +3168,6 @@ static void rb_commit(struct ring_buffer_per_cpu *cpu_buffer,
- static __always_inline void
- rb_wakeups(struct trace_buffer *buffer, struct ring_buffer_per_cpu *cpu_buffer)
- {
--	size_t nr_pages;
--	size_t dirty;
--	size_t full;
--
- 	if (buffer->irq_work.waiters_pending) {
- 		buffer->irq_work.waiters_pending = false;
- 		/* irq_work_queue() supplies it's own memory barriers */
-@@ -3171,10 +3191,7 @@ rb_wakeups(struct trace_buffer *buffer, struct ring_buffer_per_cpu *cpu_buffer)
- 
- 	cpu_buffer->last_pages_touch = local_read(&cpu_buffer->pages_touched);
- 
--	full = cpu_buffer->shortest_full;
--	nr_pages = cpu_buffer->nr_pages;
--	dirty = ring_buffer_nr_dirty_pages(buffer, cpu_buffer->cpu);
--	if (full && nr_pages && (dirty * 100) <= full * nr_pages)
-+	if (!full_hit(buffer, cpu_buffer->cpu, cpu_buffer->shortest_full))
- 		return;
- 
- 	cpu_buffer->irq_work.wakeup_full = true;
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index 47a44b055a1d..c6c7a0af3ed2 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -6681,7 +6681,7 @@ trace_poll(struct trace_iterator *iter, struct file *filp, poll_table *poll_tabl
- 		return EPOLLIN | EPOLLRDNORM;
- 	else
- 		return ring_buffer_poll_wait(iter->array_buffer->buffer, iter->cpu_file,
--					     filp, poll_table);
-+					     filp, poll_table, iter->tr->buffer_percent);
- }
- 
- static __poll_t
--- 
-2.35.1
+Thanks,
+Kuai
+> 
+> .
+> 
 
