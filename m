@@ -2,78 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B222C6070EC
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 09:23:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B60576070FB
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 09:24:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229987AbiJUHX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 03:23:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40034 "EHLO
+        id S229478AbiJUHYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 03:24:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230006AbiJUHXV (ORCPT
+        with ESMTP id S229948AbiJUHY3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 03:23:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 111602465F5
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 00:23:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B79061DC5
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 07:23:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 282C8C433D7;
-        Fri, 21 Oct 2022 07:23:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666336994;
-        bh=bcoMgCk0yZGwHr1Q/MWzklE8eNnrm1HaRDamF/Uhm+Q=;
-        h=From:To:Cc:Subject:Date:From;
-        b=uc29ucxtd8oIh6NZDZu0CjYH/bqr6SrS2tAIoV0jlVkj7TDV6ct+0aaMIiK1ImVeB
-         uxe3PrSkWmi5fAOR1qpeRW1jG650EVgdJvIfEiFySUN2z9IKZL2DozqaHA+bUC134v
-         meu2ECVG7Hc6y2JWQlyh+9rjyBLY/b9a7zWs/jBY=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: [PATCH] kobject: make get_ktype() take a const pointer
-Date:   Fri, 21 Oct 2022 09:23:10 +0200
-Message-Id: <20221021072310.3931690-1-gregkh@linuxfoundation.org>
-X-Mailer: git-send-email 2.38.1
+        Fri, 21 Oct 2022 03:24:29 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDF86BF79;
+        Fri, 21 Oct 2022 00:24:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=3QJldfimGMGhCUVfS4T2fQs9aVrQkUBT9b7wxuInmVs=; b=ZTILIayE9X7wdaGqo8oZBO6jEI
+        kFjfze0pHhiT162fcjz9zR0xhMJ5vcnIrncJcnVcB4ahsQ6sXSXUmk6shy20vj3tx89/uKqfrH5GX
+        BBbMyV3A0SwzM+6Mj8+53QROktOQLRY1QD99ecZmOIt7x/ovkwEs6zLXR084uOfH93qghfLYVQOBN
+        e4gHzybzRtjgNAUIEVYYaMgmJ9wqSR0QyeF2+yWYawQ0S8Ae/6h0ocAHRtQgg/26xYQv9pSOsU4cw
+        2r1XQ3X9ZB6AkBeG8KC17SX+27NsTkgUQGsznB6cl/zJVqUsDiFTfkP4n4c2zqB9cReJRQ2QoXAJQ
+        kSdWR6Ow==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34848)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1olmNz-0008Ix-Po; Fri, 21 Oct 2022 08:24:07 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1olmNu-0003yS-L9; Fri, 21 Oct 2022 08:24:02 +0100
+Date:   Fri, 21 Oct 2022 08:24:02 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Frank Wunderlich <frank-w@public-files.de>
+Cc:     Frank Wunderlich <linux@fw-web.de>,
+        linux-mediatek@lists.infradead.org,
+        Alexander Couzens <lynxis@fe80.eu>,
+        Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] net: mtk_sgmii: implement mtk_pcs_ops
+Message-ID: <Y1JJEtvra2F3JGQS@shell.armlinux.org.uk>
+References: <20221020144431.126124-1-linux@fw-web.de>
+ <Y1F0pSrJnNlYzehq@shell.armlinux.org.uk>
+ <02A54E45-2084-440A-A643-772C0CC9F988@public-files.de>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=820; i=gregkh@linuxfoundation.org; h=from:subject; bh=bcoMgCk0yZGwHr1Q/MWzklE8eNnrm1HaRDamF/Uhm+Q=; b=owGbwMvMwCRo6H6F97bub03G02pJDMlBHnddNeK7Mr6veKv40ufXT/4jfA9jpCPkQ5YrhTouvnrt 4K4bHbEsDIJMDLJiiixftvEc3V9xSNHL0PY0zBxWJpAhDFycAjCR58kMCy4a7HOTVpbLOyrUcUpy6p JDk/QkxBjmu/mGcdqkmy682eHHXhldzqUaJigMAA==
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <02A54E45-2084-440A-A643-772C0CC9F988@public-files.de>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-get_ktype() does not modify the structure passed to it, so mark the
-parameter as being const to allow other const structures to be passed to
-it in the future.
+On Fri, Oct 21, 2022 at 08:04:51AM +0200, Frank Wunderlich wrote:
+> On my board (bpi-r3) we have no autoneg on the gmacs. We have a switch (mt7531) with fixed-link on the first and a sfp-cage on the other. Second mac gets speed-setting (1000base-X or 2500base-X) from sfp eeprom, but no advertisement from the "other end". Imho it is always full duplex.
 
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- include/linux/kobject.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+If it's a fixed link, then this function you're adding won't be called.
+It's only called for in-band mode which is exclusive with fixed-link
+mode.
 
-diff --git a/include/linux/kobject.h b/include/linux/kobject.h
-index 57fb972fea05..fc00cee1359c 100644
---- a/include/linux/kobject.h
-+++ b/include/linux/kobject.h
-@@ -198,7 +198,7 @@ static inline void kset_put(struct kset *k)
- 	kobject_put(&k->kobj);
- }
- 
--static inline const struct kobj_type *get_ktype(struct kobject *kobj)
-+static inline const struct kobj_type *get_ktype(const struct kobject *kobj)
- {
- 	return kobj->ktype;
- }
 -- 
-2.38.1
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
