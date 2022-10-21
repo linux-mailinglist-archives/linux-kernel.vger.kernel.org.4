@@ -2,145 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16E25607866
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 15:28:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A17F260786C
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 15:30:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230481AbiJUN2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 09:28:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60238 "EHLO
+        id S230497AbiJUNaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 09:30:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230000AbiJUN2n (ORCPT
+        with ESMTP id S229652AbiJUNaG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 09:28:43 -0400
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC31B1366A2;
-        Fri, 21 Oct 2022 06:28:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1666358920;
-        bh=G2PsC9YonHQYdncfwu8+22Lzftzzm23vftY3NCjeUys=;
-        h=Message-ID:Subject:From:To:Date:From;
-        b=VdB3021SWte2YiS4DfTKx5DT2QnvonMJ1ubAygnX7V8QCM3rIfA5L7StE1OSJaym+
-         01P9Jb/vqviV1d4jFDu4WerdgzDx8Y4pVQ4ouol0PLFGm5VlfhvqcqaiV1bno7Z35t
-         oZEfCne8ri8jHduTXgjWktIgJ7fJfwA1eSHpwRe8=
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 0010E1285DD1;
-        Fri, 21 Oct 2022 09:28:39 -0400 (EDT)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id cBcpPUwfALA3; Fri, 21 Oct 2022 09:28:39 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1666358919;
-        bh=G2PsC9YonHQYdncfwu8+22Lzftzzm23vftY3NCjeUys=;
-        h=Message-ID:Subject:From:To:Date:From;
-        b=ZUBaJHBx3X8SpCDOd6ctPCXOFh8/ayVT793kiNqu7HCe08zZu5g0ay1xDIY9Iyg13
-         ADD47ZNmowhFgsDVvawDXGxg8A/9VhXfOqBWAthd/uWKtL7EXrZrPwloPQ+2gutCy9
-         2tjFWREcGOmg/pH1vFuh7gXXOllVqhWrZ5cDWRrk=
-Received: from [IPv6:2601:5c4:4300:c551:a71:90ff:fec2:f05b] (unknown [IPv6:2601:5c4:4300:c551:a71:90ff:fec2:f05b])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 506B21285D90;
-        Fri, 21 Oct 2022 09:28:39 -0400 (EDT)
-Message-ID: <5054a79b9c9672750ad68704c2d4f77ec2986d6f.camel@HansenPartnership.com>
-Subject: [GIT PULL] SCSI fixes for 6.0-rc1
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Fri, 21 Oct 2022 09:28:37 -0400
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        Fri, 21 Oct 2022 09:30:06 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C5E653038
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 06:29:48 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id m6so1984538qkm.4
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 06:29:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lgmt7nX6KnPzXNdpGQ1k+hkZnzm82SWjZ6hn9mW6e3c=;
+        b=xr+TMhCKaZJAadtHo5DyF6AA9DgxE3djgXCTUSuVRQVI99HB05PRFlUK7JbxsDdB9U
+         KWOGNVGcw/Aam6KS0Ozgrike/GSKkTvE5HAlwusw/kP2BuzaY4HUm0jmRMDnY0Poaab0
+         a8HC756E50eZYCC5Vozd6ptbzZ9HjvebIZB3nloY20qNVskfJ9v54c1t5eX/PZrVNiI/
+         Wspo+nzsVyDKmTZ7KkymlIW27d5rWGFonjmyN7AgnX/q8TScevKtJIM71k0L5L+759uY
+         k87KqkidWvfogd1eNR9aeYfHeFSoR/u900Trg+ZXidttiBRSI3V57z8+tMkKh/izeSb6
+         7l/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lgmt7nX6KnPzXNdpGQ1k+hkZnzm82SWjZ6hn9mW6e3c=;
+        b=k2UAVZp2QvZW/cM9heOy306F8RAUy3cUx16ExtT3dXz/CW4mmQ2Zj11a0+wnkGgams
+         /lOzjQIDMhm72MXj4IMd902gheIk5JFXS93cs+OSGETPQIE08rXYp0/gvNV7n89gl3Ji
+         S0sAXGskf7zyyrRouvGU6plXNGl690+EQFOjPYbY5G59Ii7ov+aKCzlBkjcQEyuurRzT
+         1NmgQaNvCXKWT5omKf19OhkACDBcQwP7U1sLnXjh7oayRbFrRRNOfJD1WTpg+SrBFB+n
+         nNL6kb+0MvcKfhJQ5r/Eur6LccmFTvKEJ4iLOjobV9xdX3TOne+S7f0LtGP6vfLDtq91
+         YXNA==
+X-Gm-Message-State: ACrzQf3fJRK2LqPgtscdvSblBwogW55qDlPjPhTJhgvoZvO6bPeY2vGg
+        JiZDzknanbWtSCYufuZ2hmaalQ==
+X-Google-Smtp-Source: AMsMyM4+fNbWa8PnJwC+vhPTrYPkrSEaC9qcEkdYKxP2CS6JIj+Y1IzK+0h04dZ17WcWzPrz0ZR7hg==
+X-Received: by 2002:a05:620a:12fb:b0:6ee:79f2:3716 with SMTP id f27-20020a05620a12fb00b006ee79f23716mr13688432qkl.348.1666358986973;
+        Fri, 21 Oct 2022 06:29:46 -0700 (PDT)
+Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
+        by smtp.gmail.com with ESMTPSA id hf8-20020a05622a608800b0039cbbcc7da8sm7837080qtb.7.2022.10.21.06.29.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Oct 2022 06:29:46 -0700 (PDT)
+Message-ID: <e13c5fc4-c631-fbb5-f3cf-a8e569fbd752@linaro.org>
+Date:   Fri, 21 Oct 2022 09:29:45 -0400
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH] dt-bindings: pinctrl: qcom,ipq6018: replace maintainer
+Content-Language: en-US
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220924081312.15068-1-krzysztof.kozlowski@linaro.org>
+ <CACRpkdbvo5vyqpfP3EJvFRhK1hzq4uH=vzoq-H6q6hwJ0Bkc4w@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CACRpkdbvo5vyqpfP3EJvFRhK1hzq4uH=vzoq-H6q6hwJ0Bkc4w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Two small changes, one in the lpfc driver and the other in the core. 
-The core change is an additional footgun guard which prevents users
-from writing the wrong state to sysfs and causing a hang.
+On 21/10/2022 04:09, Linus Walleij wrote:
+> On Sat, Sep 24, 2022 at 10:13 AM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+> 
+>>  maintainers:
+>> -  - Sricharan R <sricharan@codeaurora.org>
+>> +  - Bjorn Andersson <andersson@kernel.org>
+> 
+> This is fine, but what about adding yourself as co-maintainer on *all*
+> Qualcomm bindings? I think it would offload Bjorn a bit. Just a suggestion.
 
-The patch is available here:
+It's up to Bjorn, if he wants to make it more official. I just added
+myself to Qualcomm pinctrl ones, because I spent some time to understand
+them. Actually I could do the same for the Qualcomm remote-proc bindings
+(SMD, Glink) as some days ago I was refactoring them as well.
 
-git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
+I am anyway getting all such patches as a DT bindings maintainer.
 
-The short changelog is:
-
-Rafael Mendonca (1):
-      scsi: lpfc: Fix memory leak in lpfc_create_port()
-
-Uday Shankar (1):
-      scsi: core: Restrict legal sdev_state transitions via sysfs
-
-And the diffstat:
-
- drivers/scsi/lpfc/lpfc_init.c | 7 ++++---
- drivers/scsi/scsi_sysfs.c     | 8 ++++++++
- 2 files changed, 12 insertions(+), 3 deletions(-)
-
-With full diff below.
-
-James
-
----
-
-diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
-index b49c39569386..b535f1fd3010 100644
---- a/drivers/scsi/lpfc/lpfc_init.c
-+++ b/drivers/scsi/lpfc/lpfc_init.c
-@@ -4812,7 +4812,7 @@ lpfc_create_port(struct lpfc_hba *phba, int instance, struct device *dev)
- 	rc = lpfc_vmid_res_alloc(phba, vport);
- 
- 	if (rc)
--		goto out;
-+		goto out_put_shost;
- 
- 	/* Initialize all internally managed lists. */
- 	INIT_LIST_HEAD(&vport->fc_nodes);
-@@ -4830,16 +4830,17 @@ lpfc_create_port(struct lpfc_hba *phba, int instance, struct device *dev)
- 
- 	error = scsi_add_host_with_dma(shost, dev, &phba->pcidev->dev);
- 	if (error)
--		goto out_put_shost;
-+		goto out_free_vmid;
- 
- 	spin_lock_irq(&phba->port_list_lock);
- 	list_add_tail(&vport->listentry, &phba->port_list);
- 	spin_unlock_irq(&phba->port_list_lock);
- 	return vport;
- 
--out_put_shost:
-+out_free_vmid:
- 	kfree(vport->vmid);
- 	bitmap_free(vport->vmid_priority_range);
-+out_put_shost:
- 	scsi_host_put(shost);
- out:
- 	return NULL;
-diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
-index c95177ca6ed2..cac7c902cf70 100644
---- a/drivers/scsi/scsi_sysfs.c
-+++ b/drivers/scsi/scsi_sysfs.c
-@@ -828,6 +828,14 @@ store_state_field(struct device *dev, struct device_attribute *attr,
- 	}
- 
- 	mutex_lock(&sdev->state_mutex);
-+	switch (sdev->sdev_state) {
-+	case SDEV_RUNNING:
-+	case SDEV_OFFLINE:
-+		break;
-+	default:
-+		mutex_unlock(&sdev->state_mutex);
-+		return -EINVAL;
-+	}
- 	if (sdev->sdev_state == SDEV_RUNNING && state == SDEV_RUNNING) {
- 		ret = 0;
- 	} else {
-
+Best regards,
+Krzysztof
 
