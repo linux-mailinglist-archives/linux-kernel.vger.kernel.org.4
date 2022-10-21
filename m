@@ -2,116 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91382606FE4
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 08:15:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0367606FE5
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 08:15:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230013AbiJUGPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 02:15:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55162 "EHLO
+        id S230115AbiJUGPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 02:15:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229763AbiJUGPP (ORCPT
+        with ESMTP id S229763AbiJUGPi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 02:15:15 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 952135B107;
-        Thu, 20 Oct 2022 23:15:12 -0700 (PDT)
-X-UUID: 77a61b48e71f48e2ab7ad39378d2f05d-20221021
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=ExRKeO+TK0hJ0ZPupJS/yMOY5pv1f1TbfMj7UR2BrL0=;
-        b=YdprMySo6ZdI9cBJd5yH06FPis4ElBPvUVWhJ3uDVFnoU6NMnKq3I/LQhwgPUZlFlizqH6vDB27ytg5X3fOdtl7VSWDCWLUgf3L2WSYnh5CRaR+RPY6rbTYO4OohndrGcqY1/BtDS8WoMWcyxh4T81uSWKIuLVKKh8gBgnA2Jf8=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.12,REQID:5d1a073c-e50e-4bdb-bc51-d6bd9e086b01,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:40
-X-CID-INFO: VERSION:1.1.12,REQID:5d1a073c-e50e-4bdb-bc51-d6bd9e086b01,IP:0,URL
-        :0,TC:0,Content:-5,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:40
-X-CID-META: VersionHash:62cd327,CLOUDID:4e29a86c-89d3-4bfa-baad-dc632a24bca3,B
-        ulkID:221021095633ASB2EHFK,BulkQuantity:7,Recheck:0,SF:38|28|17|19|48|102,
-        TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:40,QS:nil,BEC:nil,COL:0
-X-UUID: 77a61b48e71f48e2ab7ad39378d2f05d-20221021
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1255428266; Fri, 21 Oct 2022 14:15:06 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Fri, 21 Oct 2022 14:14:59 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Fri, 21 Oct 2022 14:14:58 +0800
-Message-ID: <a24326d0a454082ab532025ae52462757d4d6bab.camel@mediatek.com>
-Subject: Re: [PATCH 2/2] dt-bindings: phy: mediatek: tphy: add compatible
- for tphy-v4
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Daniel Golle <daniel@makrotopia.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-phy@lists.infradead.org>, "Vinod Koul" <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-Date:   Fri, 21 Oct 2022 14:14:58 +0800
-In-Reply-To: <07c5d962515c4f675f076bb91d69eaf651b187c6.1666193782.git.daniel@makrotopia.org>
-References: <df51b63add2830d91b527db64fba6ffdb7765f5d.1666193782.git.daniel@makrotopia.org>
-         <07c5d962515c4f675f076bb91d69eaf651b187c6.1666193782.git.daniel@makrotopia.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Fri, 21 Oct 2022 02:15:38 -0400
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FDB077E95
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 23:15:35 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VSiAvfU_1666332931;
+Received: from 30.97.48.58(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VSiAvfU_1666332931)
+          by smtp.aliyun-inc.com;
+          Fri, 21 Oct 2022 14:15:32 +0800
+Message-ID: <f57aaa0b-fa0c-f925-c0bb-5ad087ef1dbf@linux.alibaba.com>
+Date:   Fri, 21 Oct 2022 14:15:26 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH 2/2] mm: migrate: Try again if THP split is failed due to
+ page refcnt
+To:     Yang Shi <shy828301@gmail.com>
+Cc:     "Huang, Ying" <ying.huang@intel.com>, akpm@linux-foundation.org,
+        david@redhat.com, ziy@nvidia.com, jingshan@linux.alibaba.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <cc48dc1e4db8c33289f168cf380ab3641f45f8ad.1666251624.git.baolin.wang@linux.alibaba.com>
+ <c44225ae71b1be21e32891e2143044863a0b91b1.1666251624.git.baolin.wang@linux.alibaba.com>
+ <87mt9qnbrf.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <dbfb24e8-e83e-5a70-618e-87e1cebdfe5e@linux.alibaba.com>
+ <CAHbLzkppCJ+Jpjkv6CE=fzufL+-=L=29W_oZc6X=MV9gmu85hA@mail.gmail.com>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <CAHbLzkppCJ+Jpjkv6CE=fzufL+-=L=29W_oZc6X=MV9gmu85hA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-10-19 at 16:38 +0100, Daniel Golle wrote:
-> V4 can be found in MT7986 and MT7981 SoCs, it supports PCIe with two
-> lanes.
-NAK.
 
-mt7981/mt7986 shall use "mediatek,generic-tphy-v2" instead.
 
-Thanks a lot
-
+On 10/21/2022 3:21 AM, Yang Shi wrote:
+> On Thu, Oct 20, 2022 at 2:33 AM Baolin Wang
+> <baolin.wang@linux.alibaba.com> wrote:
+>>
+>>
+>>
+>> On 10/20/2022 4:24 PM, Huang, Ying wrote:
+>>> Baolin Wang <baolin.wang@linux.alibaba.com> writes:
+>>>
+>>>> When creating a virtual machine, we will use memfd_create() to get
+>>>> a file descriptor which can be used to create share memory mappings
+>>>> using the mmap function, meanwhile the mmap() will set the MAP_POPULATE
+>>>> flag to allocate physical pages for the virtual machine.
+>>>>
+>>>> When allocating physical pages for the guest, the host can fallback to
+>>>> allocate some CMA pages for the guest when over half of the zone's free
+>>>> memory is in the CMA area.
+>>>>
+>>>> In guest os, when the application wants to do some data transaction with
+>>>> DMA, our QEMU will call VFIO_IOMMU_MAP_DMA ioctl to do longterm-pin and
+>>>> create IOMMU mappings for the DMA pages. However, when calling
+>>>> VFIO_IOMMU_MAP_DMA ioctl to pin the physical pages, we found it will be
+>>>> failed to longterm-pin sometimes.
+>>>>
+>>>> After some invetigation, we found the pages used to do DMA mapping can
+>>>> contain some CMA pages, and these CMA pages will cause a possible
+>>>> failure of the longterm-pin, due to failed to migrate the CMA pages.
+>>>> The reason of migration failure may be temporary reference count or
+>>>> memory allocation failure. So that will cause the VFIO_IOMMU_MAP_DMA
+>>>> ioctl returns error, which makes the application failed to start.
+>>>>
+>>>> I observed one migration failure case (which is not easy to reproduce) is
+>>>> that, the 'thp_migration_fail' count is 1 and the 'thp_split_page_failed'
+>>>> count is also 1.
+>>>>
+>>>> That means when migrating a THP which is in CMA area, but can not allocate
+>>>> a new THP due to memory fragmentation, so it will split the THP. However
+>>>> THP split is also failed, probably the reason is temporary reference count
+>>>> of this THP. And the temporary reference count can be caused by dropping
+>>>> page caches (I observed the drop caches operation in the system), but we
+>>>> can not drop the shmem page caches due to they are already dirty at that time.
+>>>>
+>>>> Especially for THP split failure, which is caused by temporary reference
+>>>> count, we can try again to mitigate the failure of migration in this case
+>>>> according to previous discussion [1].
+>>>
+>>> Does the patch solved your problem?
+>>
+>> The problem is not easy to reproduce and I will test this patch on our
+>> products. However I think this is a likely case to fail the migration,
+>> which need to be addressed to mitigate the failure.
 > 
-> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
-> ---
->  Documentation/devicetree/bindings/phy/mediatek,tphy.yaml | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/phy/mediatek,tphy.yaml
-> b/Documentation/devicetree/bindings/phy/mediatek,tphy.yaml
-> index 5613cc5106e32f..851e3dda7b638b 100644
-> --- a/Documentation/devicetree/bindings/phy/mediatek,tphy.yaml
-> +++ b/Documentation/devicetree/bindings/phy/mediatek,tphy.yaml
-> @@ -89,6 +89,11 @@ properties:
->                - mediatek,mt8188-tphy
->                - mediatek,mt8195-tphy
->            - const: mediatek,generic-tphy-v3
-> +      - items:
-> +          - enum:
-> +              - mediatek,mt7981-tphy
-> +              - mediatek,mt7986-tphy
-> +          - const: mediatek,generic-tphy-v4
->        - const: mediatek,mt2701-u3phy
->          deprecated: true
->        - const: mediatek,mt2712-u3phy
-> @@ -99,7 +104,7 @@ properties:
->      description:
->        Register shared by multiple ports, exclude port's private
-> register.
->        It is needed for T-PHY V1, such as mt2701 and mt8173, but not
-> for
-> -      T-PHY V2/V3, such as mt2712.
-> +      T-PHY V2/V3/V4, such as mt2712.
->      maxItems: 1
->  
->    "#address-cells":
+> You may try to trace all migrations across your fleet (or just pick
+> some sample machines, this should make data analysis easier) and
+> filter the migration by reasons, for example, MR_LONGTERM_PIN, then
+> compare the migration success rate before and after the patch. It > should be a good justification. But it may need some work on data
+> aggregation, process and analysis, not sure how feasible it is.
 
+IMO the migration of MR_LONGTERM_PIN is very rare in this case, so we 
+can obeserve the migraion failure of longterm pin, once obeserved, the 
+application will be aborted. However like I said before, the problem is 
+not easy to reproduce :(
+
+Anyway we'll test this 2 patches on our products.
+
+>>>> [1] https://lore.kernel.org/all/470dc638-a300-f261-94b4-e27250e42f96@redhat.com/
+>>>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+>>>> ---
+>>>>    mm/huge_memory.c |  4 ++--
+>>>>    mm/migrate.c     | 18 +++++++++++++++---
+>>>>    2 files changed, 17 insertions(+), 5 deletions(-)
+>>>>
+>>>> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+>>>> index ad17c8d..a79f03b 100644
+>>>> --- a/mm/huge_memory.c
+>>>> +++ b/mm/huge_memory.c
+>>>> @@ -2666,7 +2666,7 @@ int split_huge_page_to_list(struct page *page, struct list_head *list)
+>>>>        * split PMDs
+>>>>        */
+>>>>       if (!can_split_folio(folio, &extra_pins)) {
+>>>> -            ret = -EBUSY;
+>>>> +            ret = -EAGAIN;
+>>>>               goto out_unlock;
+>>>>       }
+>>>>
+>>>> @@ -2716,7 +2716,7 @@ int split_huge_page_to_list(struct page *page, struct list_head *list)
+>>>>                       xas_unlock(&xas);
+>>>>               local_irq_enable();
+>>>>               remap_page(folio, folio_nr_pages(folio));
+>>>> -            ret = -EBUSY;
+>>>> +            ret = -EAGAIN;
+>>>>       }
+>>>>
+>>>>    out_unlock:
+>>>> diff --git a/mm/migrate.c b/mm/migrate.c
+>>>> index 8e5eb6e..55c7855 100644
+>>>> --- a/mm/migrate.c
+>>>> +++ b/mm/migrate.c
+>>>> @@ -1506,9 +1506,21 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>>>>                               if (is_thp) {
+>>>>                                       nr_thp_failed++;
+>>>>                                       /* THP NUMA faulting doesn't split THP to retry. */
+>>>> -                                    if (!nosplit && !try_split_thp(page, &thp_split_pages)) {
+>>>> -                                            nr_thp_split++;
+>>>> -                                            break;
+>>>> +                                    if (!nosplit) {
+>>>> +                                            rc = try_split_thp(page, &thp_split_pages);
+>>>> +                                            if (!rc) {
+>>>> +                                                    nr_thp_split++;
+>>>> +                                                    break;
+>>>> +                                            } else if (reason == MR_LONGTERM_PIN &&
+>>>> +                                                       rc == -EAGAIN) {
+>>>
+>>> In case reason != MR_LONGTERM_PIN, you change the return value of
+>>> migrate_pages().  So you need to use another variable for return value.
+>>
+>> Good catch, will fix in next version. Thanks for your comments.
