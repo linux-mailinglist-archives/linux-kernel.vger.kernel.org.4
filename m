@@ -2,178 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35C6C6072E7
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 10:50:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B3356072FF
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 10:54:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbiJUIuj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 04:50:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33126 "EHLO
+        id S230307AbiJUIyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 04:54:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230344AbiJUIuS (ORCPT
+        with ESMTP id S230365AbiJUIy3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 04:50:18 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA08212A8B;
-        Fri, 21 Oct 2022 01:49:54 -0700 (PDT)
-Received: from fraeml745-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MtymV0Nd6z6HJPl;
-        Fri, 21 Oct 2022 16:48:26 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- fraeml745-chm.china.huawei.com (10.206.15.226) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 21 Oct 2022 10:49:35 +0200
-Received: from localhost (10.81.215.159) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 21 Oct
- 2022 09:49:34 +0100
-Date:   Fri, 21 Oct 2022 09:49:31 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To:     Ira Weiny <ira.weiny@intel.com>
-CC:     Davidlohr Bueso <dave@stgolabs.net>, <dan.j.williams@intel.com>,
-        <dave.jiang@intel.com>, <alison.schofield@intel.com>,
-        <bwidawsk@kernel.org>, <vishal.l.verma@intel.com>,
-        <a.manzanares@samsung.com>, <linux-cxl@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/2] cxl/pci: Add generic MSI-X/MSI irq support
-Message-ID: <20221021094931.0000795f@huawei.com>
-In-Reply-To: <Y1Idsv0Nuu+V9aMj@iweiny-desk3>
-References: <20221018030010.20913-1-dave@stgolabs.net>
-        <20221018030010.20913-2-dave@stgolabs.net>
-        <20221018103619.00004c39@huawei.com>
-        <20221018115227.00002a4c@huawei.com>
-        <20221020223125.hyrfpt2noiicisxa@offworld>
-        <Y1Idsv0Nuu+V9aMj@iweiny-desk3>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Fri, 21 Oct 2022 04:54:29 -0400
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80A232505E9
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 01:54:17 -0700 (PDT)
+Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20221021085412epoutp03daff6fc2f4f7223370973d7eb234acfd~gCaHSJFZK1720317203epoutp03N
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 08:54:12 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20221021085412epoutp03daff6fc2f4f7223370973d7eb234acfd~gCaHSJFZK1720317203epoutp03N
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1666342452;
+        bh=5U6kbdEwtstzuJzqj8njNs2aevGge2h2etECD8bzp58=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=s4vuaj6JdcOh5bVH2FC8GRmX4JsNeZT2ZI7nF3EpKdjqNmFQyXXYs7XCtBNY3umj2
+         oQJHKV915VnDCSNlqEhYKTtfH+GXXI5lSv55RG/DNVTOhRZqkJq34xkqeXFWHfY0oh
+         Bzy1Rb2362ba32p+F2kxFA75lHv5C/tETI1M8iYQ=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
+        20221021085412epcas5p4301f28acc7e3dd811f5421029590f5ff~gCaGoVoYr2099120991epcas5p4w;
+        Fri, 21 Oct 2022 08:54:12 +0000 (GMT)
+Received: from epsmges5p3new.samsung.com (unknown [182.195.38.178]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4Mtyv52Vrhz4x9Q8; Fri, 21 Oct
+        2022 08:54:09 +0000 (GMT)
+Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
+        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        25.81.56352.13E52536; Fri, 21 Oct 2022 17:54:09 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+        20221021084938epcas5p402b6c1dc47137914fabcbb655ffa85ef~gCWIEbas72051320513epcas5p4y;
+        Fri, 21 Oct 2022 08:49:38 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20221021084938epsmtrp126e775ab3dc74f229417bf94211c6ea7~gCWIDk6752558625586epsmtrp1n;
+        Fri, 21 Oct 2022 08:49:38 +0000 (GMT)
+X-AuditID: b6c32a4b-5f7fe7000001dc20-31-63525e31eb57
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        4B.D4.18644.22D52536; Fri, 21 Oct 2022 17:49:38 +0900 (KST)
+Received: from FDSFTE070 (unknown [107.116.189.86]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20221021084935epsmtip1426827a59937fb73ac13f5c1894f1a5d~gCWFXFPSF0067100671epsmtip1V;
+        Fri, 21 Oct 2022 08:49:35 +0000 (GMT)
+From:   "Padmanabhan Rajanbabu" <p.rajanbabu@samsung.com>
+To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@linaro.org>,
+        <lgirdwood@gmail.com>, <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <s.nawrocki@samsung.com>,
+        <perex@perex.cz>, <tiwai@suse.com>, <pankaj.dubey@samsung.com>,
+        <alim.akhtar@samsung.com>, <rcsekar@samsung.com>,
+        <aswani.reddy@samsung.com>
+Cc:     <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-samsung-soc@vger.kernel.org>
+In-Reply-To: <c11f92be-1d86-17e4-e3bb-05e7b17d5fc8@linaro.org>
+Subject: RE: [PATCH 5/6] arm64: dts: fsd: Add I2S DAI node for Tesla FSD
+Date:   Fri, 21 Oct 2022 14:19:34 +0530
+Message-ID: <04ba01d8e52a$0d55bee0$28013ca0$@samsung.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.81.215.159]
-X-ClientProxiedBy: lhrpeml500003.china.huawei.com (7.191.162.67) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQKFI9qd/qMOsyXBjKz4d8Q6MS4QvwIMhU34AXuYdz8DFSTEIKyLIU2w
+Content-Language: en-in
+X-Brightmail-Tracker: H4sIAAAAAAAAA01TfUwTdxjO73q9HhrIWVj4rWasuUgWyIBWS7kaYGYiqdMY4jLiSDa8tTfK
+        KNdbWyoff4hsK0JAIKZIG4QBggajdIisFluxfCx+BPzAunTiZMOMTVkEFmanc2s52PjveZ/3
+        efK+z+8DF4j9mAQvZM2MkaX1JLYBHRxJSEiSf7xfI6v9Pop61DaIUVO3fQjlu3BRRNlmZjGq
+        fXRCSB2bmxFQnichbnnqKELddbdiVMukF6E6L/4homrcDULKccslpL7yjIqokafVQsr55zmw
+        g1A7l6ow9SXHtEjd31uDqR/4L2Nq73wPpj420AvUfQP3UPVSf1wOnleUrmNoLWOUMqzGoC1k
+        CzLIPe/n78xPVcrkSXIVlUZKWbqYySCz9uYkZRfqQxFIqYXWl4SoHNpkIlMy042GEjMj1RlM
+        5gyS4bR6TsElm+hiUwlbkMwy5u1ymWxrakh4sEh3xTaIcPXxpT+edIBK0BRXCyJwSCjgX/fm
+        hbVgAy4mhgD8taEH4YtFABcDQ6KwSkwsARjsqlhzjL28gPK8G8DLfjlvmAOwq9a3YsCINNjp
+        6QbhRgwxhcDg2Wo0XAgIK4Ce2+dCHRyPIDLhq9HysCGaUMOqlx5hmEaJeOjo3hKmIwkV9DgC
+        CI83wWv22ZXBAuJN+O18q4BfSAqDj3uEYRxDZMOxvmUhr4mFY8E6QXgsJJ7hsK2jGeUNWdDV
+        YUd4HA1/+25AxGNJKL51FRtg88IXGI9LoXXBuap/Bw5PtaLhPQVEAuxzp/D0G9B2/TzCz42C
+        9S9mV+WR0NW2huNh3+l+wOPN0HvfAxoB6VgXzbEummNdBMf/074GaC94neFMxQWMKZXbxjKH
+        /rtvjaG4H6w88MQ9LvDTo2fJPoDgwAcgLiBjIrnfczTiSC1dVs4YDfnGEj1j8oHU0HE3CSSv
+        aQyhH8Ka8+UKlUyhVCoVqm1KORkb2dWSqBETBbSZKWIYjjGu+RA8QlKJfGIuV6HXD+ceP/Kp
+        152Te23kxMIl68mlaLvkrdI8K3sTWDsHkvM2gnencwvpU8VyZtN+f82VuLoX4yqJsF7fVUW2
+        vX228bPOMtvzWHLyYKM9vyhjbGLi0N0HfR3OmPM/R7xn3Oz1tle7drWNFZWlL99sGo9qf1W5
+        eLTixtNdRFrSL9rtHFvB3Y9qEP8zPRjYG0tZdtjOHB66c9yyM5iylHW1XnjAR27dnWY8NbNv
+        Xuqs+xtxtFhuxWU2eys5/+KTwh+sc1+OfGjr/kCZVb9c8HyL0z589bRu4iPLiY0SLmgt//yO
+        Gx1OzDtCG3brHurGv8medAckD2u10d3cY+ONAImadLQ8UWA00f8CSEuguGkEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrAIsWRmVeSWpSXmKPExsWy7bCSnK5SbFCywZcuZYsH87axWVy5eIjJ
+        4tDmrewWUx8+YbOYf+Qcq0Xfi4fMFntfA8W+Xelgsri8aw6bxYzz+5gsFm39wm7Ruauf1WLW
+        hR2sFq17j7BbHH7Tzmqx4ftaRgcBjw2fm9g8ds66y+6xaVUnm8eda3vYPPa9Xcbm0bdlFaPH
+        +i1XWTw+b5IL4IjisklJzcksSy3St0vgytg/dRtTQa9qxf25sxgbGCfKdTFyckgImEgc/bOZ
+        pYuRi0NIYAejxJ/D25khEtIS0/v3sEHYwhIr/z1nhyh6xijxo/UzO0iCTcBcYtHepYwgCRGB
+        R0wSc+c/YgNxmAW6GCWO/13JDNHymVHi5/ofQBkODk4BO4l/R6pAuoUFPCSa/uxlBQmzCKhK
+        zFqqAhLmFbCU2DvrFhOELShxcuYTFhCbWUBbovdhKyOELS+x/e0cqEsVJH4+XcYKYosIuEkc
+        Xf+NFaJGXOLozx7mCYzCs5CMmoVk1Cwko2YhaVnAyLKKUTK1oDg3PbfYsMAoL7Vcrzgxt7g0
+        L10vOT93EyM4krW0djDuWfVB7xAjEwfjIUYJDmYlEd6CdwHJQrwpiZVVqUX58UWlOanFhxil
+        OViUxHkvdJ2MFxJITyxJzU5NLUgtgskycXBKNTDl8XDaLtukIPcu/3HZunfbGzo4Lhy5M7ur
+        cU343wtbFB9039nZynFDYV9ZDIf4G9bqFq6jN6XefFBT7v+9/M6v7VciE8/cM7n1KSd5i7mm
+        C+fe019Ep/irLndnuxyWJR/xbCrjg80K03OUA7lZ1++y+Lg5183WQDDgRJGzvvjta+lzCjNq
+        Ttq6vm1/aOhiUm29dV6Ga0zZDJ3KCe7mvOzb9RLjnjgIHpLYZqpS4/chRWZxZJZE52eD5e62
+        tv1MDAej+fhYLU22r27tOsWZ0nXki8bHX9MUL2wxu/RiX1t34kqdAmv7OYXnKpJtug+qPXa/
+        YeFc9mHeq6O7WNXOyvIElL6/IRNcvZczxMnxlBJLcUaioRZzUXEiALmcMvpTAwAA
+X-CMS-MailID: 20221021084938epcas5p402b6c1dc47137914fabcbb655ffa85ef
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CMS-RootMailID: 20221014104911epcas5p394100ff6ed53be32c4d64c7e23e48833
+References: <20221014102151.108539-1-p.rajanbabu@samsung.com>
+        <CGME20221014104911epcas5p394100ff6ed53be32c4d64c7e23e48833@epcas5p3.samsung.com>
+        <20221014102151.108539-6-p.rajanbabu@samsung.com>
+        <c11f92be-1d86-17e4-e3bb-05e7b17d5fc8@linaro.org>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 20 Oct 2022 21:18:58 -0700
-Ira Weiny <ira.weiny@intel.com> wrote:
-
-> On Thu, Oct 20, 2022 at 03:31:25PM -0700, Davidlohr Bueso wrote:
-> > On Tue, 18 Oct 2022, Jonathan Cameron wrote:
-> >   
-> > > Reality is that it is cleaner to more or less ignore the infrastructure
-> > > proposed in this patch.
-> > > 
-> > > 1. Query how many CPMU devices there are. Whilst there stash the maximim
-> > >   cpmu vector number in the cxlds.
-> > > 2. Run a stub in this infrastructure that does max(irq, cxlds->irq_num);
-> > > 3. Carry on as before.
-> > > 
-> > > Thus destroying the point of this infrastructure for that usecase at least
-> > > and leaving an extra bit of state in the cxl_dev_state that is just
-> > > to squirt a value into the callback...  
-> > 
-> > If it doesn't fit, then it doesn't fit.
-> > 
-> > However, while I was expecting pass one to be in the callback, I wasn't
-> > expecting that both pass 1 and 2 shared the cpmu_regs_array. If the array
-> > could be reconstructed during pass 2, then it would fit a bit better;
-> > albeit the extra allocation, cycles etc., but this is probing phase, so
-> > overhead isn't that important (and cpmu_count isn't big enough to matter).
-
-I thought about that approach, but it's really ugly to have to do
-
-1) For the IRQ number gathering.
-  a) Parse 1 to count CPMUs
-  b) Parse 2 to get the register maps - grab the irq numbers and unmap them again
-2) For the CPMU registration
-  a) Parse 3 to count CPMUs (we could stash the number of CPMUS form 1a) but
-     that's no advantage over stashing the max irq in current proposal.
-     Both are putting state where it's not relevant or wanted just to make it
-     available in a callback.  This way is even worse because it's getting
-     stashed as a side effect of a parse in a function doing something different.
-  b) Parse 4 to get the register maps and actually create the devices. Could have
-     stashed this earlier as well, but same 'side effects' argument applies.
-
-Sure, can move to this however with appropriate comments on why we are playing
-these games because otherwise I suspect a future 'cleanup' would remove double, double
-pass.
-
-To allow for an irq registration wrapper that turns a series of straight
-line calls into callbacks in an array.  The straight line calls aren't exactly
-complex in the first place.
-//find cpmu filling in cxl_cpmu_reg_maps.
-
-max_irq = -1
-rc = cxl_mailbox_get_irq()
-if (rc < 0)
-	return rc;
-max_irq = max(max_irq, rc);
-
-rc = cxl_events_get_irq()
-if (rc < 0)
-	return rc;
-max_irq = max(max_irq, rc);
-
-rc = cxl_cpmus_get_irq(cxl_cpmu_reg_maps);
-if (rc < 0)
-	return rc;
-max_irq = max(max_irq, rC);
-
-...
-
-if (irq > 0) {
-
-	pci_get...
-}
-
-//create all the devices...
 
 
-> > 
-> > But if we're going to go with a free-for-all approach, can we establish
-> > who goes for the initial pci_alloc_irq_vectors()? I think perhaps mbox
-> > since it's the most straightforward and with least requirements, I'm
-> > also unsure of the status yet to merge events and pmu, but regardless
-> > they are still larger patchsets. If folks agree I can send a new mbox-only
-> > patch.  
+> -----Original Message-----
+> From: Krzysztof Kozlowski [mailto:krzysztof.kozlowski@linaro.org]
+> Sent: 16 October 2022 08:44 PM
+> To: Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>;
+> lgirdwood@gmail.com; broonie@kernel.org; robh+dt@kernel.org;
+> krzysztof.kozlowski+dt@linaro.org; s.nawrocki@samsung.com;
+> perex@perex.cz; tiwai@suse.com; pankaj.dubey@samsung.com;
+> alim.akhtar@samsung.com; rcsekar@samsung.com;
+> aswani.reddy@samsung.com
+> Cc: alsa-devel@alsa-project.org; devicetree@vger.kernel.org; linux-
+> kernel@vger.kernel.org; linux-samsung-soc@vger.kernel.org
+> Subject: Re: [PATCH 5/6] arm64: dts: fsd: Add I2S DAI node for Tesla FSD
 > 
-> I think there needs to be some mechanism for all of the sub-device-functions to
-> report their max required vectors.
+> On 14/10/2022 06:21, Padmanabhan Rajanbabu wrote:
+> > Add device tree node for I2S0 and I2S1 CPU DAI instances for Tesla FSD
+> > board
+> >
+> > Signed-off-by: Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>
+> > ---
+> >  arch/arm64/boot/dts/tesla/fsd-evb.dts      |  8 +++++
+> >  arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi | 14 ++++++++
+> >  arch/arm64/boot/dts/tesla/fsd.dtsi         | 38 ++++++++++++++++++++++
+> >  3 files changed, 60 insertions(+)
+> >
+> > diff --git a/arch/arm64/boot/dts/tesla/fsd-evb.dts
+> > b/arch/arm64/boot/dts/tesla/fsd-evb.dts
+> > index 1db6ddf03f01..c0a4509499ab 100644
+> > --- a/arch/arm64/boot/dts/tesla/fsd-evb.dts
+> > +++ b/arch/arm64/boot/dts/tesla/fsd-evb.dts
+> > @@ -41,3 +41,11 @@
+> >  &ufs {
+> >  	status = "okay";
+> >  };
+> > +
+> > +&tdm_0 {
 > 
-> I don't think that the mbox code is necessarily the code which should need to
-> know about all those other sub-device-thingys.  But it could certainly take
-> some 'max vectors' value that probe passed to it.
+> Alphabetical order against other label-overrides.
+Okay
 > 
-> I'm still not sure how dropping this infrastructure makes Jonathan's code
-> cleaner.  I still think there will need to be 2 passes over the number of
-> CPMU's.
+> > +	status = "okay";
+> > +};
+> > +
+> > +&tdm_1 {
+> > +	status = "okay";
+> > +};
+> > diff --git a/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi
+> > b/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi
+> > index e3852c946352..ff6f5d4b16dd 100644
+> > --- a/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi
+> > +++ b/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi
+> > @@ -339,6 +339,20 @@
+> >  		samsung,pin-pud = <FSD_PIN_PULL_UP>;
+> >  		samsung,pin-drv = <FSD_PIN_DRV_LV4>;
+> >  	};
+> > +
+> > +	i2s0_bus: i2s0-bus {
 > 
-
-Primarily that there is no need to stash anything about the CPMUs in the
-cxl_device_state (option 1) or repeat all the counting and discovery logic twice
-(option 2).
-
-I can live with it (it's what we have to do in pcie port for the equivalent)
-but the wrapped up version feels like a false optimization.
-
-Saves a few lines of code and adds a bunch of complexity elsewhere that looks to
-me to outweigh that saving.
-
-If people are convinced this is the way to go then fair enough, but be prepared
-for the ugly corners!
-
-Jonathan
-
-> Ira
+> Does not look like you tested the DTS against bindings. Please run `make
+> dtbs_check` (see Documentation/devicetree/bindings/writing-schema.rst
+> for instructions).
+I'll double check and run dtbs_check to see if I'm hitting any errors.
 > 
-> > 
-> > Thanks,
-> > Davidlohr  
+> > +		samsung,pins = "gpd1-0", "gpd1-1", "gpd1-2", "gpd1-3",
+> "gpd1-4";
+> > +		samsung,pin-function = <FSD_PIN_FUNC_2>;
+> > +		samsung,pin-pud = <FSD_PIN_PULL_DOWN>;
+> > +		samsung,pin-drv = <FSD_PIN_DRV_LV4>;
+> > +	};
+> > +
+> > +	i2s1_bus: i2s1-bus {
+> > +		samsung,pins = "gpd2-0", "gpd2-1", "gpd2-2", "gpd2-3",
+> "gpd2-4";
+> > +		samsung,pin-function = <FSD_PIN_FUNC_2>;
+> > +		samsung,pin-pud = <FSD_PIN_PULL_DOWN>;
+> > +		samsung,pin-drv = <FSD_PIN_DRV_LV4>;
+> > +	};
+> >  };
+> >
+> >  &pinctrl_pmu {
+> > diff --git a/arch/arm64/boot/dts/tesla/fsd.dtsi
+> > b/arch/arm64/boot/dts/tesla/fsd.dtsi
+> > index f35bc5a288c2..5decad45a1b6 100644
+> > --- a/arch/arm64/boot/dts/tesla/fsd.dtsi
+> > +++ b/arch/arm64/boot/dts/tesla/fsd.dtsi
+> > @@ -32,6 +32,8 @@
+> >  		spi0 = &spi_0;
+> >  		spi1 = &spi_1;
+> >  		spi2 = &spi_2;
+> > +		tdm0 = &tdm_0;
+> > +		tdm1 = &tdm_1;
 > 
+> Why?
+Sorry, these aliases are not used right now. I'll remove it.
+
+> 
+> >  	};
+> >
+> >  	cpus {
+> > @@ -809,6 +811,42 @@
+> >  			status = "disabled";
+> >  		};
+> >
+> > +		tdm_0: tdm@140e0000 {
+> 
+> Node names should be generic, so this looks like i2s.
+> https://protect2.fireeye.com/v1/url?k=2cfaa5af-4d874de8-2cfb2ee0-
+> 74fe485fff30-cb16acc0c0c574e9&q=1&e=fc8e3b54-a0ef-475e-a4f2-
+> 83626a86ac8a&u=https%3A%2F%2Fdevicetree-
+> specification.readthedocs.io%2Fen%2Flatest%2Fchapter2-devicetree-
+> basics.html%23generic-names-recommendation
+
+Thank you for the link. I could only find audio-controller in the list and
+not i2s. so I believe I can use audio-controller node name. Please correct
+me otherwise.
+> 
+> > +			compatible = "samsung,exynos7-i2s";
+> > +			reg = <0x0 0x140E0000 0x0 0x100>;
+> > +			interrupts = <GIC_SPI 206 IRQ_TYPE_LEVEL_HIGH>;
+> > +			dmas = <&pdma1 14>, <&pdma1 13>, <&pdma1 12>;
+> > +			dma-names = "tx", "rx", "tx-sec";
+> > +			#clock-cells = <1>;
+> > +			#sound-dai-cells = <1>;
+> > +			clocks = <&clock_peric PERIC_HCLK_TDM0>,
+> > +				 <&clock_peric PERIC_HCLK_TDM0>,
+> > +				 <&clock_peric PERIC_PCLK_TDM0>;
+> > +			clock-names = "i2s_opclk0", "i2s_opclk1", "iis";
+> 
+> Does not look like you tested the DTS against bindings. Please run `make
+> dtbs_check` (see Documentation/devicetree/bindings/writing-schema.rst
+> for instructions).
+I'll double check and run dtbs_check to see if I'm hitting any errors.
+> 
+> Best regards,
+> Krzysztof
+Thank you for reviewing the patch
+
 
