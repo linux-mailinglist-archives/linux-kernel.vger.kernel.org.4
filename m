@@ -2,94 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 820F9607842
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 15:21:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AF4C607846
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 15:22:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230316AbiJUNVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 09:21:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38884 "EHLO
+        id S229843AbiJUNWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 09:22:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230243AbiJUNVC (ORCPT
+        with ESMTP id S229839AbiJUNWU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 09:21:02 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B028525F8C5
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 06:20:59 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id r8-20020a1c4408000000b003c47d5fd475so4977398wma.3
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 06:20:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=i4JniJFO6Hdg6kNwzrb/PJxlNwEXD1oSoB9sUXNG4AA=;
-        b=KRlIyg/u0tYE5oXblsqDn0dKMd0L7zGHX6PBqE0FCsXsswAwYwco4EFIifQX1ONRW7
-         7SaxqLXoSX6mu1Nh7ZFBbvmyXI2zg460zs6nvIAzibw99XZD5uOSyJeIKhOB72YFyDgg
-         3T83bJoFOthQsg53QXGuHLHDoMzER0ebn5zLuxpbZDeCHq+H0KPoig72NBZrimtkxYpq
-         b5eafxr1uEdcRgvlELg8MnV1TgbO4LZTQEqMQuZttox39NTLfsx8LcDBrDYfCjafaAWe
-         Bdv3Yorx+J/XB99YCmhkDaU/qsOy3bnicMiZjV6mqZbIe2KUqJ4/1QLDu3qhTOvNf2fv
-         TYHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=i4JniJFO6Hdg6kNwzrb/PJxlNwEXD1oSoB9sUXNG4AA=;
-        b=vsAkvGmoiP/CvG+KLHnpjB62+hQXcH0X5bLX2cbDdEPlIHq/74aEgkSVpPBPTetJHY
-         R489DXiWWrGQR+Q1pdYyqc5TFBzo5fFa4uBqKUgeWdO6obN8fueJbokOtyLep6tRKo8K
-         tz+Cv/M6XCY11kQQkQsBZ5bv3dgSA78eyv0COeoQ5IonABbd2xlsaXH0jIa5jg/O5A5S
-         dwcTpIhrmFiXlkQ3Fv0KkitLGeY52CqxG/FqVMqqDjzCnzT3/U2WQzy3LgdwDN7f8XY+
-         Y9XgGwW80yRUjl39uwsJNj+ny7y6hUfK3wHeKZFBN+hVCOeo1eiZbJ7ytAl8CPY8ksxe
-         xXEQ==
-X-Gm-Message-State: ACrzQf3FblBpZDFMx7D737vuxqsH7DGluts1eXnoEpbd3z6YrehCyqrV
-        oyx4NqVtmDKimrf0XM7G3xn4nQ==
-X-Google-Smtp-Source: AMsMyM5J4fLco6qzthaoFkH7ErTin58+NxkdGFINMqMFdhJr2i4VdFMQGgMTPWCWXWc+HK19vznoiQ==
-X-Received: by 2002:a05:600c:354d:b0:3c8:4b2d:f3fb with SMTP id i13-20020a05600c354d00b003c84b2df3fbmr310079wmq.188.1666358457786;
-        Fri, 21 Oct 2022 06:20:57 -0700 (PDT)
-Received: from Red ([2a01:cb1d:3d5:a100:4a02:2aff:fe07:1efc])
-        by smtp.googlemail.com with ESMTPSA id g5-20020a5d4885000000b0022e55f40bc7sm18738768wrq.82.2022.10.21.06.20.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Oct 2022 06:20:57 -0700 (PDT)
-Date:   Fri, 21 Oct 2022 15:20:53 +0200
-From:   Corentin LABBE <clabbe@baylibre.com>
-To:     heiko@sntech.de, ardb@kernel.org, davem@davemloft.net,
-        herbert@gondor.apana.org.au, krzysztof.kozlowski+dt@linaro.org,
-        mturquette@baylibre.com, robh+dt@kernel.org, sboyd@kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH v10 00/33] crypto: rockchip: permit to pass self-tests
-Message-ID: <Y1KctXMZ1+c5uQqd@Red>
-References: <20220927075511.3147847-1-clabbe@baylibre.com>
+        Fri, 21 Oct 2022 09:22:20 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CD342475DA
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 06:22:19 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 1B17C219C9;
+        Fri, 21 Oct 2022 13:22:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1666358538; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1VumRopmkMGi42CeTbKazupolMyzZhURL00ZfaW4xkE=;
+        b=gdVZ4fSvrckrlGvFlTSb40MpTj1ZsqvTB7WK7LgbNOk+VtT8zH0CiWHKKRfqD+Tclsv4xI
+        0mEmRZ+ChIZ5Pf66NbeD2oaws4fTZkCO4EnKliGVzXJrofHQZ2xuUYdxuikY3XaH2JhyLq
+        GrpRfBiRz1oFHrjEoTuYOhMVYh3Jd+o=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id BEB062C141;
+        Fri, 21 Oct 2022 13:22:17 +0000 (UTC)
+Date:   Fri, 21 Oct 2022 15:22:17 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Shile Zhang <shile.zhang@linux.alibaba.com>,
+        Xianting Tian <xianting.tian@linux.alibaba.com>,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH printk v2 10/38] tty: hvc: use console_is_enabled()
+Message-ID: <Y1KdCes7Ag6wJ3DE@alley>
+References: <20221019145600.1282823-1-john.ogness@linutronix.de>
+ <20221019145600.1282823-11-john.ogness@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220927075511.3147847-1-clabbe@baylibre.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20221019145600.1282823-11-john.ogness@linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Tue, Sep 27, 2022 at 07:54:38AM +0000, Corentin Labbe a écrit :
-> Hello
+On Wed 2022-10-19 17:01:32, John Ogness wrote:
+> Replace (console->flags & CON_ENABLED) usage with console_is_enabled().
 > 
-> The rockchip crypto driver is broken and do not pass self-tests.
-> This serie's goal is to permit to become usable and pass self-tests.
+> Signed-off-by: John Ogness <john.ogness@linutronix.de>
+> ---
+>  drivers/tty/hvc/hvc_console.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> This whole serie is tested on a rk3328-rock64, rk3288-miqi and
-> rk3399-khadas-edge-v with selftests (with CONFIG_CRYPTO_MANAGER_EXTRA_TESTS=y)
-> 
-> Regards
-> 
+> diff --git a/drivers/tty/hvc/hvc_console.c b/drivers/tty/hvc/hvc_console.c
+> index 4802cfaa107f..6d1d7b72488c 100644
+> --- a/drivers/tty/hvc/hvc_console.c
+> +++ b/drivers/tty/hvc/hvc_console.c
+> @@ -265,7 +265,7 @@ static void hvc_port_destruct(struct tty_port *port)
+>  static void hvc_check_console(int index)
+>  {
+>  	/* Already enabled, bail out */
+> -	if (hvc_console.flags & CON_ENABLED)
+> +	if (console_is_enabled(&hvc_console))
+>  		return;
 
-Hello
+The check is not reliable. The console might be disabled even when
+it is already registered.
 
-Gentle ping since it is a month since this serie was sent and no comment was made (except some reviewed-by).
-So I think it is ready to be merged, probably thought the crypto tree.
+I would be nice to fix this. But it might be done later.
+Feel free to use:
 
-Regards
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+
+>  
+>   	/* If this index is what the user requested, then register
+
+Best Regards,
+Petr
