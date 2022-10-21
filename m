@@ -2,136 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45A9860722A
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 10:27:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE95C60722E
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 10:27:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbiJUI1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 04:27:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45174 "EHLO
+        id S230160AbiJUI1y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 04:27:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229933AbiJUI1O (ORCPT
+        with ESMTP id S229930AbiJUI1l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 04:27:14 -0400
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on20707.outbound.protection.outlook.com [IPv6:2a01:111:f400:feab::707])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C79024D8A2
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 01:27:12 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KzUWg1Fd+Zej17xe5wSvyf6QYO5Fd6cNwymS58/wH6QtEIojtw5ndUyvVRjxj45idwHWzJsPqeEz+jUQNXQWVd0Mkguepuz+Pj9wCRO27hDuh8Gxh3WhD5fkBZZfXGf2u16NQObI3PUc5w6mpWWip3vJwcIwoguPdoxNt+gda6Q+odYY/Z2cF8hcOOsnurvKcDea2t9yMVDGwMbNdwxmxZn8HwNkgmx11l65jaslKWZyicary+3mDdcD5s0duadutLEinyAXM8RpvbyIO/U9J2atUasEDh2Kd2kv76YPqFNi15/WERmwhCSu3tiK5c+90NuEP/5Ujp5Ryj35wnou0A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FIEqPrmxk/QN5f4CQzPiJlz61nYe9bwy8m7Bv/xEuH4=;
- b=mgPAAg1tFYNuB9yDsxoo3zVOJcc1WXigF5rxjMNIxxPISxx/0krvnp8BDXML8yRsQlWYUBXlqBi+0T7EZePYwVky6uIO9P+gOQXO2YSDljhJ0cEkT0lYJ4S/rhwKZ3WU8AK4ncs5USsp3IrfCa9SNIQg0UQdKdEImQUpFk2jnLNatpnAPpuFx7TxY46Z8nrLaUMymEGOIAeSl7KdlddscY5h3/y4DTqStaJ8tbYI9SJRYxySPiNMmb6QoAwkFLlbIDDxFSHEDKGB4e3/xQMgFDNZyR4PCDXqLMMJe7Af8gd84EpcxAXxsNjoUUideXEzZpKsc/JNpdtdsnMWwkP7Kg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FIEqPrmxk/QN5f4CQzPiJlz61nYe9bwy8m7Bv/xEuH4=;
- b=V5cM3FTqiuN4hrVBjBSmg6Xt3HY9hqkP2E7nmQ/GmJwMgxzpyBGf5saP1Rcz3VPPD7h5AoIXER4T4lbMB+txedY60I3TssXKeLAGAIxyAvVmyh/JdJpa11MAZkWfC9q+NOh7lNrJumGL1pw0lOIBHNSdSlEyaBGfb9oFeAQtVz3QKFtFfWdmWgx4V1/9pMY/1Ys1NjCM6FdKlWTPCBHtsfXQQIc5GS0wzT7NvZKdHxhXw9C9r19ei5Id1uQGxemQqLLmsjTwc/jDoBszNZ322wjOTUjomQPpiVaWMcmjt4r2bbdrSWbiugGnwrXRm3EYnSIBO9bamfYRoWKSJF1Rag==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by SI2PR06MB3946.apcprd06.prod.outlook.com (2603:1096:4:ea::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.21; Fri, 21 Oct
- 2022 08:27:07 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::c84b:5a6c:d66f:c0fd]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::c84b:5a6c:d66f:c0fd%3]) with mapi id 15.20.5723.034; Fri, 21 Oct 2022
- 08:27:07 +0000
-From:   Yangtao Li <frank.li@vivo.com>
-To:     jaegeuk@kernel.org, chao@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Yangtao Li <frank.li@vivo.com>
-Subject: [PATCH] f2fs: make gc_idle sysfs node readable
-Date:   Fri, 21 Oct 2022 16:26:57 +0800
-Message-Id: <20221021082657.26559-1-frank.li@vivo.com>
-X-Mailer: git-send-email 2.35.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR01CA0016.apcprd01.prod.exchangelabs.com
- (2603:1096:4:191::20) To SEZPR06MB5269.apcprd06.prod.outlook.com
- (2603:1096:101:78::6)
+        Fri, 21 Oct 2022 04:27:41 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6E3224D8B0;
+        Fri, 21 Oct 2022 01:27:32 -0700 (PDT)
+X-UUID: a3ff3a9331b64b5da75a6f386f9c79a0-20221021
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=6EmYthcJ2NF4pkw+zwFpbJG1Uc8byJjYA0ftZAO+KwY=;
+        b=mG3jmCIxQ7bMW6bRVy1ySyfMNqXi7nfI7Ma1M2IhRt1qF9y0zdFL28rQqvtHS2fHqUOjeLGezdW479DbxfHfXSvjSohdRy+3DThtXYvNvAOoGGvYIoMOThKvJHI7SJhKX1IBWwC6UMO2PtjfKoO/1zSg5mGMTvgvVSh1rk16zAo=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.12,REQID:9fbdf926-1fc3-4eb8-9ac5-93cb204bae05,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:62cd327,CLOUDID:63fa3ee4-e572-4957-be22-d8f73f3158f9,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: a3ff3a9331b64b5da75a6f386f9c79a0-20221021
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
+        (envelope-from <trevor.wu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1191235126; Fri, 21 Oct 2022 16:27:25 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Fri, 21 Oct 2022 16:27:24 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Fri, 21 Oct 2022 16:27:24 +0800
+From:   Trevor Wu <trevor.wu@mediatek.com>
+To:     <broonie@kernel.org>, <tiwai@suse.com>, <robh+dt@kernel.org>,
+        <matthias.bgg@gmail.com>, <p.zabel@pengutronix.de>
+CC:     <trevor.wu@mediatek.com>,
+        <angelogioacchino.delregno@collabora.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <alsa-devel@alsa-project.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+Subject: [PATCH v2 00/12] ASoC: mediatek: Add support for MT8188 SoC
+Date:   Fri, 21 Oct 2022 16:27:07 +0800
+Message-ID: <20221021082719.18325-1-trevor.wu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|SI2PR06MB3946:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2c2ed492-efb8-4bf3-4e28-08dab33e0a6c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: PPcddfDKi86KcH6344xbtM/3z1pqRerphqjMAtRXGsZSj4nBvLRlE5Qq+ojJSnbiuryhT2FIKeDUy0XGj65gej9v6Q0c4w2zCuBgBAryXaR+DVKy7dF1zMxEDDLRbFnKE8jkID6lDEChKjoN3rI+LzjHI9oz0ERdGwtosI4kPv7A31ToulFQ//ZTMo7FAFHdwAjcuB1hylyDyuv3AmFVR6QzxdVivxMEvlqEPbBm0+y7fHZoDSRXmh1Y/oHNYKWPVktODNqslkWafBdqmAwlrWC4eyjf9Lkqnsp8LeMbmdGgsnBIZ6iIhlAqVjZfbeFIiCUuoJzWPLhVtlzD6+LZQEXXtWQNUurvyaKt7Esi1t3rRRqZwBmEfopviB1PbNO8Vh6EGw+0pXCysWu4ARcq53HeDALMCBma2E426NEzHm8LYx/HYvW1C8SzwK5eE43AEBdpWISQldLIxoA1L3ayGJACqYn0cPpfm+EyesFWzqUsBhF7zere31LGNkrMzjirmqcVKO/QhfXsEDi3+6E0oEf13avq5PvPoXEg2TI7eR7wYS1jhi7qwpO2qAZBFQvsi6XZvR6XkphV/uh5Q6WAod472JtnP6mEzjQmB4IknYYomgICt0ARPZcU9UTUJmhUuL0Qzr4YR0+BeFDtZIhQt4Qmqj9VBTZbccI2BhxzPC0tsvCg43iPTHuqdf+WL+ujEwBg1HR5lOqNd93vo8Z/yzeGLwn+eRMBNRB1a6WNR68f8Nx5Cp9S/v18mMLoJUP/Tas/qKu0RZtv3QzjNc/ciQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(366004)(396003)(376002)(346002)(451199015)(66556008)(6486002)(86362001)(316002)(6666004)(107886003)(8676002)(66476007)(66946007)(186003)(26005)(6512007)(36756003)(2906002)(1076003)(83380400001)(6506007)(2616005)(4744005)(38100700002)(478600001)(4326008)(41300700001)(5660300002)(8936002)(38350700002)(52116002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?U6TJD4SpaXbMbHN639H5UeuCRGECNh26tgzo4EoQSEbbZ9ul0/SRtTnltSoC?=
- =?us-ascii?Q?TxStEQS5Ww0QTA2PSVp99FBhiNJtMe6uFwIUTKM9Y2ioBEWUIQQlnX2nDIZK?=
- =?us-ascii?Q?9hAw0uF/NcZUi3zz/CzLU8xxjPn+uN3sPzRvz8G4vfIdAS8R4Ix14AmZ0cQc?=
- =?us-ascii?Q?PqcfwwnmhFnvy+1yg1S4fjsGPfgHHT/y+uzAfN8vSYQ5dnqVV8IUdBJzHPv3?=
- =?us-ascii?Q?V7XWkjbuKBf/E24XznMIWzMsN9VDui8Bz95WAf6JFMahTYylrOFdFSc9GcBx?=
- =?us-ascii?Q?tW4CnSTh93IK/v6S6JcfS8+HlNZ6qz2D8BXNFqRjQ609diJPJH13nx3SlciZ?=
- =?us-ascii?Q?9rUYyEZI9srD/cYPNBY7tTtJFPA7TTVlVGBxM7WBLVA+wupJcWgBKANEHll7?=
- =?us-ascii?Q?O5skkklTNKEIB8nGjf1HvrD173Av0bz4IsZH4bzhPSrPuWbZnIElgUgtNZLj?=
- =?us-ascii?Q?BnVk7qXtBGyAymHSn1y6SH5JL7wgCRcEKHpVDhe1PQaFffQoxLxw9WdWIngd?=
- =?us-ascii?Q?q9Bl4Kl/P09TS9glM7tSU6DegAb8cFsTOQll0cqPUa2DDYA9XgrGK0gicTk7?=
- =?us-ascii?Q?fuTVnhZiZ/X2qFcubCH+pYpXPRTFnp74QFD8rtB138g6yDcA4x7kd569+TYJ?=
- =?us-ascii?Q?4AgSJda6uXC50L98mvgaF/eP5s2j6nKFmwxAC/SuUIWEDAL0VMQkq3CYgTcz?=
- =?us-ascii?Q?WPiYTNeYfjJbph/ire+GpRyhCQEHIQyTWz8jZXklS4m7SQcdRct6MF8j7t+e?=
- =?us-ascii?Q?N7X9EA57/LX+ZA97JlpSLg+/NwcSYU+l1CBt2jeIi1hgsoBI8f1QB4Fjl+Lv?=
- =?us-ascii?Q?JnGT3Ou6sTOEdmnTAlCCXrXKmKg0QJPdvwYP3n30eUd48AO+1KCQ54NEMeOz?=
- =?us-ascii?Q?htwbxdFHFesMR8EIRS6UjP7moWq3UPjI0yaVSfqngjhjVxIl4XNg2/zSsS1B?=
- =?us-ascii?Q?9PiIRScJ7/q1pIOb5kb+FhCRTcnX1IvqapNq++YFNIzdBsC47PlM/0FW5iq0?=
- =?us-ascii?Q?873WifqhftgHBKwLTP0hBllPUWgoc1yWUg048mQIOy+o8zKz41OOYnwGcizi?=
- =?us-ascii?Q?pz8t3TNA9xsBI/D5pEDzBxecyKTezyMCvwjnqAN/p/VySNxpK5oKYtNuwQwB?=
- =?us-ascii?Q?DvraytccdO4wP6UR2ZxOYYRq7wLU/QHYGhP/CCyBv/NebbAFj3Cv6dK7Hstn?=
- =?us-ascii?Q?VMXAvKFr/OZZ7+jRVocYGVftZrJNCpqczINR/omVpCN7vr1TB9zUb+oP/rlM?=
- =?us-ascii?Q?ZvPYuTV0rtfU65neyQFYOAxJs5IK4WOezkOpMmhukQ2nrMBJ5HvwQlp9RfDW?=
- =?us-ascii?Q?pCwcikDwmB/nZMlbMiSF4aJawEiOBPkp7Kkc74r0iCJo4zKpFJjG62kGMM9W?=
- =?us-ascii?Q?bJA1p+PSeBWjNAq5TpGDVE4EPB7rbo4KeZFvsprc68EZOrVbP3Fe/p/D5AQ/?=
- =?us-ascii?Q?SMk41/r1N8GoPJDUT+oXJpflSzbLlLwDc9qoAKVB0u7cVmxcDmsY9ZbliTI6?=
- =?us-ascii?Q?hIGkSeOaRBt6LYDspF+4B5oJZZ/tbpgxNiBVnYeZ81ul/LBE8Sck4kmYpRea?=
- =?us-ascii?Q?YLwR4tbdDhicE79E7zlQ/DQRjw2IqAJudgu/0r1R?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2c2ed492-efb8-4bf3-4e28-08dab33e0a6c
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Oct 2022 08:27:07.3060
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3KFRUeyVE0+HIiCEIsqKh4sKl7BdAxNHcY9VZgyoLhz+XZ5DPVBDYqbHtizZ1OPJX+3YroYXGMsS1JAH07EUlw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR06MB3946
+Content-Type: text/plain
+X-MTK:  N
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Changed a way of showing values of them to use strings.
+This series of patches adds support for Mediatek AFE of MT8188 SoC.
+Patches are based on broonie tree "for-next" branch.
 
-Signed-off-by: Yangtao Li <frank.li@vivo.com>
----
- fs/f2fs/sysfs.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Changes since v1:
+  - remove bus protection functions in case of unmerged dependency problem
+  - replace some bit operation macro with FIELD_PREP
+  - simplify register control by regmap_set_bits and regmap_clear_bits
+  - fix dt-binding errors
+  - rename compatible string for recognition
 
-diff --git a/fs/f2fs/sysfs.c b/fs/f2fs/sysfs.c
-index b4476adea776..555849d4c744 100644
---- a/fs/f2fs/sysfs.c
-+++ b/fs/f2fs/sysfs.c
-@@ -332,6 +332,10 @@ static ssize_t f2fs_sbi_show(struct f2fs_attr *a,
- 		return sysfs_emit(buf, "%u\n", sbi->compr_new_inode);
- #endif
- 
-+	if (!strcmp(a->attr.name, "gc_idle"))
-+		return sysfs_emit(buf, "%s\n",
-+				gc_mode_names[sbi->gc_mode]);
-+
- 	if (!strcmp(a->attr.name, "gc_urgent"))
- 		return sysfs_emit(buf, "%s\n",
- 				gc_mode_names[sbi->gc_mode]);
+Trevor Wu (12):
+  ASoC: mediatek: common: add SMC ops and SMC CMD
+  ASoC: mediatek: mt8188: add common header
+  ASoC: mediatek: mt8188: support audsys clock
+  ASoC: mediatek: mt8188: support adda in platform driver
+  ASoC: mediatek: mt8188: support etdm in platform driver
+  ASoC: mediatek: mt8188: support pcmif in platform driver
+  ASoC: mediatek: mt8188: support audio clock control
+  ASoC: mediatek: mt8188: add platform driver
+  ASoC: mediatek: mt8188: add control for timing select
+  dt-bindings: mediatek: mt8188: add audio afe document
+  ASoC: mediatek: mt8188: add machine driver with mt6359
+  dt-bindings: mediatek: mt8188: add mt8188-mt6359 document
+
+ .../bindings/sound/mt8188-afe-pcm.yaml        |  187 +
+ .../bindings/sound/mt8188-mt6359.yaml         |   64 +
+ sound/soc/mediatek/Kconfig                    |   23 +
+ sound/soc/mediatek/Makefile                   |    1 +
+ sound/soc/mediatek/common/mtk-base-afe.h      |   19 +
+ sound/soc/mediatek/mt8188/Makefile            |   15 +
+ sound/soc/mediatek/mt8188/mt8188-afe-clk.c    |  656 ++++
+ sound/soc/mediatek/mt8188/mt8188-afe-clk.h    |  114 +
+ sound/soc/mediatek/mt8188/mt8188-afe-common.h |  151 +
+ sound/soc/mediatek/mt8188/mt8188-afe-pcm.c    | 3359 +++++++++++++++++
+ sound/soc/mediatek/mt8188/mt8188-audsys-clk.c |  206 +
+ sound/soc/mediatek/mt8188/mt8188-audsys-clk.h |   15 +
+ .../soc/mediatek/mt8188/mt8188-audsys-clkid.h |   83 +
+ sound/soc/mediatek/mt8188/mt8188-dai-adda.c   |  631 ++++
+ sound/soc/mediatek/mt8188/mt8188-dai-etdm.c   | 2596 +++++++++++++
+ sound/soc/mediatek/mt8188/mt8188-dai-pcm.c    |  366 ++
+ sound/soc/mediatek/mt8188/mt8188-mt6359.c     |  808 ++++
+ sound/soc/mediatek/mt8188/mt8188-reg.h        | 3180 ++++++++++++++++
+ 18 files changed, 12474 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/sound/mt8188-afe-pcm.yaml
+ create mode 100644 Documentation/devicetree/bindings/sound/mt8188-mt6359.yaml
+ create mode 100644 sound/soc/mediatek/mt8188/Makefile
+ create mode 100644 sound/soc/mediatek/mt8188/mt8188-afe-clk.c
+ create mode 100644 sound/soc/mediatek/mt8188/mt8188-afe-clk.h
+ create mode 100644 sound/soc/mediatek/mt8188/mt8188-afe-common.h
+ create mode 100644 sound/soc/mediatek/mt8188/mt8188-afe-pcm.c
+ create mode 100644 sound/soc/mediatek/mt8188/mt8188-audsys-clk.c
+ create mode 100644 sound/soc/mediatek/mt8188/mt8188-audsys-clk.h
+ create mode 100644 sound/soc/mediatek/mt8188/mt8188-audsys-clkid.h
+ create mode 100644 sound/soc/mediatek/mt8188/mt8188-dai-adda.c
+ create mode 100644 sound/soc/mediatek/mt8188/mt8188-dai-etdm.c
+ create mode 100644 sound/soc/mediatek/mt8188/mt8188-dai-pcm.c
+ create mode 100644 sound/soc/mediatek/mt8188/mt8188-mt6359.c
+ create mode 100644 sound/soc/mediatek/mt8188/mt8188-reg.h
+
 -- 
-2.25.1
+2.18.0
 
