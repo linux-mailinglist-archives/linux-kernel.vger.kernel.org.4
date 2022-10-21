@@ -2,56 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD0F16076A9
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 14:01:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45BED60768A
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 13:54:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229711AbiJUMBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 08:01:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32954 "EHLO
+        id S230046AbiJULyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 07:54:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbiJUMBc (ORCPT
+        with ESMTP id S229558AbiJULyV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 08:01:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0047025E88A;
-        Fri, 21 Oct 2022 05:01:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 906C761E68;
-        Fri, 21 Oct 2022 12:01:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC042C433C1;
-        Fri, 21 Oct 2022 12:01:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666353691;
-        bh=lFmVFFa/5/iKN/Yo2q9AW/qANwcO3UhaXshlV3Z6Umw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=kiQBMbsyBg7JyvM9JlDzqbseUWfTuCFGqmjFOrnS5Bv/B3HdA51uDLNEdVMBpg/kT
-         6l8LizZqkldUz1mlD6Y+9Pgv9sfIRTMbSFWgOZmGX6Ep2yGBsOflaog3GWqgdNzwxt
-         /nFEQcLM4KyuKH4dNMc71cXam5P/6b0ekEQInTjLZZtKg57J8PkyUxX9SnQceiqN4v
-         yg/snDhaEwK5kRPUDF0Ggg2/MfsrrqBMun+XVylanKhuJfW6Zitw+RyVQhsyhIDuTC
-         SIAQec1Vjjs46rwSe/Um12tcq/3lOVXKN4g3ZlORt717fbLaCoNxgDK7i1F8e9HSQO
-         c3M2OC7XJ1DNQ==
-Date:   Fri, 21 Oct 2022 07:01:29 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Jianmin Lv <lvjianmin@loongson.cn>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org,
-        loongarch@lists.linux.dev, Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Len Brown <lenb@kernel.org>, rafael@kernel.org,
-        linux-pci@vger.kernel.org, linux-acpi@vger.kernel.org
-Subject: Re: [PATCH V4 1/4] ACPI / PCI: fix LPIC IRQ model default PCI IRQ
- polarity
-Message-ID: <20221021120129.GA185586@bhelgaas>
+        Fri, 21 Oct 2022 07:54:21 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB912264E4A
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 04:54:15 -0700 (PDT)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Mv2tg64RCzHv7g;
+        Fri, 21 Oct 2022 19:54:03 +0800 (CST)
+Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 21 Oct 2022 19:53:45 +0800
+Received: from localhost.localdomain (10.175.112.125) by
+ kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 21 Oct 2022 19:53:45 +0800
+From:   Tong Tiangen <tongtiangen@huawei.com>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+CC:     <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        "Tong Tiangen" <tongtiangen@huawei.com>,
+        <wangkefeng.wang@huawei.com>, Guohanjun <guohanjun@huawei.com>
+Subject: [PATCH -next] riscv/mm/fault: simplify code for do_page_fault()
+Date:   Fri, 21 Oct 2022 12:19:32 +0000
+Message-ID: <20221021121932.40967-1-tongtiangen@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f8a64289-6560-7d75-461c-39b7a612e9c2@loongson.cn>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.112.125]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600017.china.huawei.com (7.193.23.234)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,26 +52,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 09:58:57AM +0800, Jianmin Lv wrote:
-> On 2022/10/21 上午12:47, Bjorn Helgaas wrote:
-> > On Thu, Oct 20, 2022 at 04:22:02PM +0800, Jianmin Lv wrote:
-> > > On LoongArch ACPI based systems, the PCI devices (e.g. sata
-> > > controlers and PCI-to-to PCI bridge controlers) existed in
-> > > Loongson chipsets output high-level interrupt signal to the
-> > > interrupt controller they connected to,
+To make the code more hierarchical and readable, we fold vma related
+judgments into __do_page_fault(). And to simplify the code, move the
+tsk->thread.bad_cause's setting into bad_area(). No functional change
+intended.
 
-> > The point is that one should be able to write this code from a spec,
-> > without having to empirically discover the interrupt polarity.  What
-> > spec tells you about using ACTIVE_HIGH here?
-> > 
-> Yes, no mentions for the inverter in ACPI spec, the description about
-> device interrupt type can be found in Loongson chipset manual:
-> 
-> https://github.com/loongson/LoongArch-Documentation/blob/main/docs/Loongson-7A1000-usermanual-EN/interrupt-controller/device-interrupt-types.adoc
+Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
+---
+ arch/riscv/mm/fault.c | 77 +++++++++++++++++++++++--------------------
+ 1 file changed, 41 insertions(+), 36 deletions(-)
 
-That's the kind of reference I was looking for.  The link to HTML is
-convenient in some ways, but since specs evolve over time and URLs are
-ephemeral, I think a citation like "Loongson 7A1000 Bridge User Manual
-v2.00, sec 5.3" is more likely to be useful far in the future.
+diff --git a/arch/riscv/mm/fault.c b/arch/riscv/mm/fault.c
+index d86f7cebd4a7..7194326ae96c 100644
+--- a/arch/riscv/mm/fault.c
++++ b/arch/riscv/mm/fault.c
+@@ -85,6 +85,8 @@ static inline void mm_fault_error(struct pt_regs *regs, unsigned long addr, vm_f
+ 
+ static inline void bad_area(struct pt_regs *regs, struct mm_struct *mm, int code, unsigned long addr)
+ {
++	current->thread.bad_cause = regs->cause;
++
+ 	/*
+ 	 * Something tried to access memory that isn't in our memory map.
+ 	 * Fix it, but check if it's kernel or user first.
+@@ -200,6 +202,38 @@ static inline bool access_error(unsigned long cause, struct vm_area_struct *vma)
+ 	return false;
+ }
+ 
++#define VM_FAULT_BADMAP		((__force vm_fault_t)0x010000)
++#define VM_FAULT_BADACCESS	((__force vm_fault_t)0x020000)
++
++static vm_fault_t __do_page_fault(struct mm_struct *mm, unsigned long addr,
++				unsigned int mm_flags, struct pt_regs *regs)
++{
++	struct vm_area_struct *vma = find_vma(mm, addr);
++
++	if (unlikely(!vma))
++		return VM_FAULT_BADMAP;
++
++	if (unlikely(vma->vm_start > addr)) {
++		if (unlikely(!(vma->vm_flags & VM_GROWSDOWN) ||
++				expand_stack(vma, addr)))
++			return VM_FAULT_BADMAP;
++	}
++
++	/*
++	 * Ok, we have a good vm_area for this memory access, so
++	 * we can handle it.
++	 */
++	if (unlikely(access_error(regs->cause, vma)))
++		return VM_FAULT_BADACCESS;
++
++	/*
++	 * If for any reason at all we could not handle the fault,
++	 * make sure we exit gracefully rather than endlessly redo
++	 * the fault.
++	 */
++	return handle_mm_fault(vma, addr, mm_flags, regs);
++}
++
+ /*
+  * This routine handles page faults.  It determines the address and the
+  * problem, and then passes it off to one of the appropriate routines.
+@@ -207,7 +241,6 @@ static inline bool access_error(unsigned long cause, struct vm_area_struct *vma)
+ asmlinkage void do_page_fault(struct pt_regs *regs)
+ {
+ 	struct task_struct *tsk;
+-	struct vm_area_struct *vma;
+ 	struct mm_struct *mm;
+ 	unsigned long addr, cause;
+ 	unsigned int flags = FAULT_FLAG_DEFAULT;
+@@ -280,44 +313,16 @@ asmlinkage void do_page_fault(struct pt_regs *regs)
+ 		flags |= FAULT_FLAG_INSTRUCTION;
+ retry:
+ 	mmap_read_lock(mm);
+-	vma = find_vma(mm, addr);
+-	if (unlikely(!vma)) {
+-		tsk->thread.bad_cause = cause;
+-		bad_area(regs, mm, code, addr);
+-		return;
+-	}
+-	if (likely(vma->vm_start <= addr))
+-		goto good_area;
+-	if (unlikely(!(vma->vm_flags & VM_GROWSDOWN))) {
+-		tsk->thread.bad_cause = cause;
+-		bad_area(regs, mm, code, addr);
+-		return;
+-	}
+-	if (unlikely(expand_stack(vma, addr))) {
+-		tsk->thread.bad_cause = cause;
+-		bad_area(regs, mm, code, addr);
+-		return;
+-	}
+ 
+-	/*
+-	 * Ok, we have a good vm_area for this memory access, so
+-	 * we can handle it.
+-	 */
+-good_area:
+-	code = SEGV_ACCERR;
++	fault = __do_page_fault(mm, addr, flags, regs);
+ 
+-	if (unlikely(access_error(cause, vma))) {
+-		tsk->thread.bad_cause = cause;
+-		bad_area(regs, mm, code, addr);
+-		return;
+-	}
++	if (unlikely(fault & VM_FAULT_BADMAP))
++		return bad_area(regs, mm, code, addr);
+ 
+-	/*
+-	 * If for any reason at all we could not handle the fault,
+-	 * make sure we exit gracefully rather than endlessly redo
+-	 * the fault.
+-	 */
+-	fault = handle_mm_fault(vma, addr, flags, regs);
++	if (unlikely(fault & VM_FAULT_BADMAP)) {
++		code = SEGV_ACCERR;
++		return bad_area(regs, mm, code, addr);
++	}
+ 
+ 	/*
+ 	 * If we need to retry but a fatal signal is pending, handle the
+-- 
+2.25.1
 
-Bjorn
