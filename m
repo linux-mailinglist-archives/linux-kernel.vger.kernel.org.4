@@ -2,175 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CC10607563
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 12:50:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1D45607566
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 12:51:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230206AbiJUKuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 06:50:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48312 "EHLO
+        id S229660AbiJUKvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 06:51:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230102AbiJUKt6 (ORCPT
+        with ESMTP id S229761AbiJUKuy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 06:49:58 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 02C565B727
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 03:49:50 -0700 (PDT)
-Received: from [192.168.1.139] (unknown [122.171.21.142])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 701FB20FEB53;
-        Fri, 21 Oct 2022 03:49:49 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 701FB20FEB53
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1666349390;
-        bh=RDe6o57WqQiWTwLn7+aFlGflW6DSPp5BZTodavqYfDo=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=EeJa1l2BqBnhp283QnmtulzfpoBQlBgIKKe1BGrVB55cNXqyZKgjEDHa+O0hXAAXM
-         NqDirAHOZjRdn8ij8YOakknGQSbSro8RMqEEF7z2B8KtL/Px5I+VEeV1NQNhKsUWBW
-         ifXTjiozEMxKZixFQ2gj0avZfnrlX4jIHfqLIc3Y=
-Message-ID: <1db48b50-6dac-5f36-315d-72208156f196@linux.microsoft.com>
-Date:   Fri, 21 Oct 2022 16:19:44 +0530
+        Fri, 21 Oct 2022 06:50:54 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07C042502BB
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 03:50:47 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id m9-20020a056e021c2900b002fadb905ddcso3233231ilh.18
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 03:50:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=L7U1sqwK0qgiWwV3vBjnPUoEzYf+gnjLnDUe9Z5mNRg=;
+        b=NBBERjswkgn/VBMjuM5v1+MZQ4SQ9kOhExMAINPEoIrSWTuFKdnWX2/wD05YLpErV+
+         orNs72WniNs0mzWQU6b55n/WxbR0Xj5o80j5pY/543QcBimKVTnAcpWC19LDMzaQ69pU
+         pBl4MZzr+qTkP+kCcpIk/3UGcnGDcSg2R1gL+U/oOa+GcuA07ap15MT6udHVj92vRTrp
+         jwmQ4+azlTW1nbiC652NU7i1sasHHrc90gynr8VS/3dUOmCbpVcpYkw2RG6Hbp+Gckln
+         +3J5iBPzDa5WNZsPlspkq9uN8g7d6TbsaFD+EuF2p734btUqy7dNOLQu6ASG6OszCjsg
+         jWNQ==
+X-Gm-Message-State: ACrzQf1XrfIcL0mQwPhp84ClM+Yef9Q00Q1ebwReOGX63X1vP1nNFO8Y
+        GJAis2PWRp8+zbZHctqoBcyCXLtEF1tklhkUGFK32kEpn+pU
+X-Google-Smtp-Source: AMsMyM6p++tCZH4Ww1eD/ap+IaTSlmeXAMQzK31J3Ua7ZpfRswm6unslYn+/fF8eIKwCQbAskQX6tRyXAILy7FgyYq3dYZYLoq4+
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v4] staging: vt6655: Fix Lines should not end with a '('
-Content-Language: en-US
-To:     Tanjuate Brunostar <tanjubrunostar0@gmail.com>,
-        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
-References: <Y1JlnJ/UpBgm9XEC@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
-From:   Praveen Kumar <kumarpraveen@linux.microsoft.com>
-In-Reply-To: <Y1JlnJ/UpBgm9XEC@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:24d1:b0:363:fa8f:1e2a with SMTP id
+ y17-20020a05663824d100b00363fa8f1e2amr15258088jat.99.1666349445843; Fri, 21
+ Oct 2022 03:50:45 -0700 (PDT)
+Date:   Fri, 21 Oct 2022 03:50:45 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ca93e205eb893680@google.com>
+Subject: [syzbot] UBSAN: shift-out-of-bounds in dbFreeBits
+From:   syzbot <syzbot+cf96cd135c5e00252e3b@syzkaller.appspotmail.com>
+To:     jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        mudongliangabcd@gmail.com, paskripkin@gmail.com, r33s3n6@gmail.com,
+        shaggy@kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21-10-2022 14:55, Tanjuate Brunostar wrote:
-> Code style warnings reported by checkpatch.
-> Improve the layout of a function header:
-> Put the first parameter immediately after the '(' and align the other
-> parameters underneath it.
-> 
-> Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
-> 
-> ---
-> v2: put static and void on the same line and adjusted the indentation as
-> suggested by Greg KH
-> ---
-> v3: Reformat the code by inserting tabs and white space as recommended
-> by Nam Cao and Julia Lawall
-> ---
-> v4: final version of this patch
-> 
->  drivers/staging/vt6655/rxtx.c | 78 +++++++++++++++--------------------
->  1 file changed, 33 insertions(+), 45 deletions(-)
-> 
-> diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
-> index 5bdb5176772c..1e5036121665 100644
-> --- a/drivers/staging/vt6655/rxtx.c
-> +++ b/drivers/staging/vt6655/rxtx.c
-> @@ -85,35 +85,27 @@ static const unsigned short wFB_Opt1[2][5] = {
->  #define DATADUR_A_F1    13
->  
->  /*---------------------  Static Functions  --------------------------*/
-> -static
-> -void
-> -s_vFillRTSHead(
-> -	struct vnt_private *pDevice,
-> -	unsigned char byPktType,
-> -	void *pvRTS,
-> -	unsigned int	cbFrameLength,
-> -	bool bNeedAck,
-> -	bool bDisCRC,
-> -	struct ieee80211_hdr *hdr,
-> -	unsigned short wCurrentRate,
-> -	unsigned char byFBOption
-> -);
-> -
-> -static
-> -void
-> -s_vGenerateTxParameter(
-> -	struct vnt_private *pDevice,
-> -	unsigned char byPktType,
-> -	struct vnt_tx_fifo_head *,
-> -	void *pvRrvTime,
-> -	void *pvRTS,
-> -	void *pvCTS,
-> -	unsigned int	cbFrameSize,
-> -	bool bNeedACK,
-> -	unsigned int	uDMAIdx,
-> -	void *psEthHeader,
-> -	unsigned short wCurrentRate
-> -);
-> +static void s_vFillRTSHead(struct vnt_private *pDevice,
-> +			   unsigned char byPktType,
-> +			   void *pvRTS,
-> +			   unsigned int	cbFrameLength,
-> +			   bool bNeedAck,
-> +			   bool bDisCRC,
-> +			   struct ieee80211_hdr *hdr,
-> +			   unsigned short wCurrentRate,
-> +			   unsigned char byFBOption);
-> +
-> +static void s_vGenerateTxParameter(struct vnt_private *pDevice,
-> +				   unsigned char byPktType,
-> +				   struct vnt_tx_fifo_head *,
-> +				   void *pvRrvTime,
-> +				   void *pvRTS,
-> +				   void *pvCTS,
-> +				   unsigned int	cbFrameSize,
-> +				   bool bNeedACK,
-> +				   unsigned int	uDMAIdx,
-> +				   void *psEthHeader,
-> +				   unsigned short wCurrentRate);
->  
->  static unsigned int
->  s_cbFillTxBufHead(struct vnt_private *pDevice, unsigned char byPktType,
-> @@ -121,22 +113,18 @@ s_cbFillTxBufHead(struct vnt_private *pDevice, unsigned char byPktType,
->  		  unsigned int uDMAIdx, struct vnt_tx_desc *pHeadTD,
->  		  unsigned int uNodeIndex);
->  
-> -static
-> -__le16
-> -s_uFillDataHead(
-> -	struct vnt_private *pDevice,
-> -	unsigned char byPktType,
-> -	void *pTxDataHead,
-> -	unsigned int cbFrameLength,
-> -	unsigned int uDMAIdx,
-> -	bool bNeedAck,
-> -	unsigned int uFragIdx,
-> -	unsigned int cbLastFragmentSize,
-> -	unsigned int uMACfragNum,
-> -	unsigned char byFBOption,
-> -	unsigned short wCurrentRate,
-> -	bool is_pspoll
-> -);
-> +static __le16 s_uFillDataHead(struct vnt_private *pDevice,
-> +			      unsigned char byPktType,
-> +			      void *pTxDataHead,
-> +			      unsigned int cbFrameLength,
-> +			      unsigned int uDMAIdx,
-> +			      bool bNeedAck,
-> +			      unsigned int uFragIdx,
-> +			      unsigned int cbLastFragmentSize,
-> +			      unsigned int uMACfragNum,
-> +			      unsigned char byFBOption,
-> +			      unsigned short wCurrentRate,
-> +			      bool is_pspoll);
->  
->  /*---------------------  Export Variables  --------------------------*/
->  
+Hello,
 
-Can we also work upon the naming convention from pDevice -> p_device and other places if that make sense here.
+syzbot found the following issue on:
 
-Regards,
+HEAD commit:    4d48f589d294 Add linux-next specific files for 20221021
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=173129e2880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=2c4b7d600a5739a6
+dashboard link: https://syzkaller.appspot.com/bug?extid=cf96cd135c5e00252e3b
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-~Praveen.
+Unfortunately, I don't have any reproducer for this issue yet.
 
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/0c86bd0b39a0/disk-4d48f589.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/074059d37f1f/vmlinux-4d48f589.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+cf96cd135c5e00252e3b@syzkaller.appspotmail.com
+
+================================================================================
+UBSAN: shift-out-of-bounds in fs/jfs/jfs_dmap.c:1681:12
+shift exponent -256 is negative
+CPU: 0 PID: 26587 Comm: syz-executor.3 Not tainted 6.1.0-rc1-next-20221021-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ ubsan_epilogue+0xb/0x50 lib/ubsan.c:151
+ __ubsan_handle_shift_out_of_bounds.cold+0xb1/0x187 lib/ubsan.c:322
+ dbFreeBits.cold-0x5/0x72
+ dbAllocAny+0xa4/0x1a0 fs/jfs/jfs_dmap.c:1512
+ dbAlloc+0x46d/0xa70 fs/jfs/jfs_dmap.c:869
+ extBalloc fs/jfs/jfs_extent.c:321 [inline]
+ extAlloc+0x4e7/0xeb0 fs/jfs/jfs_extent.c:122
+ jfs_get_block+0x661/0xa90 fs/jfs/inode.c:248
+ __block_write_begin_int+0x3b9/0x14b0 fs/buffer.c:1991
+ __block_write_begin fs/buffer.c:2041 [inline]
+ block_write_begin+0xb5/0x440 fs/buffer.c:2102
+ jfs_write_begin+0x2d/0xd0 fs/jfs/inode.c:304
+ generic_perform_write+0x252/0x570 mm/filemap.c:3771
+ __generic_file_write_iter+0x2aa/0x4d0 mm/filemap.c:3899
+ generic_file_write_iter+0xdf/0x350 mm/filemap.c:3931
+ call_write_iter include/linux/fs.h:2191 [inline]
+ do_iter_readv_writev+0x20b/0x3b0 fs/read_write.c:735
+ do_iter_write+0x182/0x700 fs/read_write.c:861
+ vfs_writev+0x1aa/0x630 fs/read_write.c:934
+ do_pwritev+0x1b6/0x270 fs/read_write.c:1031
+ __do_sys_pwritev2 fs/read_write.c:1090 [inline]
+ __se_sys_pwritev2 fs/read_write.c:1081 [inline]
+ __x64_sys_pwritev2+0xeb/0x150 fs/read_write.c:1081
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fa59e48b5a9
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fa59f693168 EFLAGS: 00000246 ORIG_RAX: 0000000000000148
+RAX: ffffffffffffffda RBX: 00007fa59e5abf80 RCX: 00007fa59e48b5a9
+RDX: 0000000000000002 RSI: 0000000020003380 RDI: 0000000000000003
+RBP: 00007fa59e4e6580 R08: 0000000002000000 R09: 0000000000000003
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffccdcc3d2f R14: 00007fa59f693300 R15: 0000000000022000
+ </TASK>
+================================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
