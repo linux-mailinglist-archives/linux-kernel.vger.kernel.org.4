@@ -2,329 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CCB0607E80
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 21:00:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A481607E87
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 21:00:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbiJUTAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 15:00:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38058 "EHLO
+        id S230187AbiJUTAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 15:00:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiJUTAE (ORCPT
+        with ESMTP id S229895AbiJUTAM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 15:00:04 -0400
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2736132EAF
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 12:00:00 -0700 (PDT)
-Received: by mail-pf1-x449.google.com with SMTP id cw4-20020a056a00450400b00561ec04e77aso1762556pfb.12
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 12:00:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=il9gk1S5qojK7G4xKoqIgvriNuF5wmsn4l8++fZfPGQ=;
-        b=QM7yKZWVI2m015h4EqgtiKZ1qMRWhX97e1kYND9ElhVHtmkKi7b31QfcTFg4B4T0Gw
-         tMkudKcPS7RGnuUH8Mx+FfiUFFGdatqUQ6LFmVhn0RcMKJ5BErFCE3a5W6fP/eHoz6Ou
-         19q51RSrQcOvxm0vN6tZoGTos+bKExVixOuXaUsWApaU5IkPm2Op3d5pikyWXa8E9DOr
-         nOYByBNc9QurJ6RwccCdutmrJJi6yZLJGJz2FJc6K7FQXQFfpeOHpLKzdnkcRuA8EhzA
-         Js5LlACHGl+j1KOP6qMWkYAZNSiPoh6S+V5CN3wnp4mgrj2pjPwY9fMCHsqShURMaIkx
-         VGyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=il9gk1S5qojK7G4xKoqIgvriNuF5wmsn4l8++fZfPGQ=;
-        b=KdTY3mXsraCqfpeNbFs73DdsgBzNL+lZzLLe49MteNvuJR4ZobqbVpqX+cq86E2x3k
-         gy7ES0cnz/WWdl8uWi/HDkR/pjy6m/9kU+lKNvTd4+a8OBFip95OwXjyPzacjyb/4983
-         wmCxLZjLyRde9YAzt+9cdpgsidCIWodJt7HfLMM+937MX4dPeCRBENOmJ9h4DPyrknlM
-         IREnSOEyssXd3Kx7lZUH0MZvVEM4Vi8NBZbC9lvVlI3qbjt4dilu4MWoJiFbCmvSmki3
-         oi8Dt89Bd7g92rFcthN0Dury6I87Yk1h01CYufnfFCYd5H+hphW+kD25ztrmgdLO9OeC
-         nBHA==
-X-Gm-Message-State: ACrzQf3zV7OXBYXUB+QAuz6ubgPNjS880Qh9BgDScdecUt6mCHswDpwg
-        s+1Wk+A1enkS3EGBpO6/H9VgIT0cmcP2
-X-Google-Smtp-Source: AMsMyM44QesJEnRZVEWJz9kBQyL9A08BTyY9DE0GeJsweUuHrTGYyk8050rr3pYT9Rz89+jSRP8Z1ZZDnNXx
-X-Received: from vipin.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:479f])
- (user=vipinsh job=sendgmr) by 2002:a05:6a00:1742:b0:565:c73a:90de with SMTP
- id j2-20020a056a00174200b00565c73a90demr21246889pfc.68.1666378766941; Fri, 21
- Oct 2022 11:59:26 -0700 (PDT)
-Date:   Fri, 21 Oct 2022 11:59:16 -0700
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.38.0.135.g90850a2211-goog
-Message-ID: <20221021185916.1494314-1-vipinsh@google.com>
-Subject: [RFC PATCH] Add Hyperv extended hypercall support in KVM
-From:   Vipin Sharma <vipinsh@google.com>
-To:     vkuznets@redhat.com, seanjc@google.com, pbonzini@redhat.com,
-        dmatlack@google.com, kvm@vger.kernel.org
-Cc:     shujunxue@google.com, terrytaehyun@google.com,
-        linux-kernel@vger.kernel.org, Vipin Sharma <vipinsh@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Fri, 21 Oct 2022 15:00:12 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6366016C22A;
+        Fri, 21 Oct 2022 12:00:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666378807; x=1697914807;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=/h+VrN160fOhMYJNJRAgTKgEfr4ireiMY5yjWF5ws8Q=;
+  b=Sp3RTOS2UGdzJGs1I5IWzW6WYOMLd8eaPhrOzYlAwh80RHFdFnteQAKN
+   hL9Jw18nMHbxsgNYONNzFYntvfqh0gL8MxnVipdu72Sk36DYpZ9BNvW4N
+   AWsTsrF5rI5GuUA9Sfb23+UI/tvN6RSqexFGThDrUFCM4sGydrgLFNuuQ
+   R0x2PGrCrXSE7h3PCTzKTTPHSLv2WU9nK5vNNlDYYjQz4TuENmRk0uApN
+   +1W1/TsvRcaMwim7JwmKzVCo4d2z3U8+x5pH9rR8n6td2DM8BB/daniHW
+   /+iT65bMDUuO9bW7gvmrzzF5DU72FRBewdTjPxyO5RIycHtohLVaOynvm
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10507"; a="333658296"
+X-IronPort-AV: E=Sophos;i="5.95,202,1661842800"; 
+   d="scan'208";a="333658296"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2022 12:00:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10507"; a="773171046"
+X-IronPort-AV: E=Sophos;i="5.95,202,1661842800"; 
+   d="scan'208";a="773171046"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 21 Oct 2022 12:00:01 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id BE58F107; Fri, 21 Oct 2022 22:00:22 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>
+Subject: [PATCH v5 0/4] spi: pxa2xx: Pass the SSP type via device property
+Date:   Fri, 21 Oct 2022 22:00:14 +0300
+Message-Id: <20221021190018.63646-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hyperv hypercalls above 0x8000 are called as extended hypercalls as per
-Hyperv TLFS. Hypercall 0x8001 is used to enquire about available
-hypercalls by guest VMs.
+Currently the SPI PXA2xx devices on Intel platforms can be instantiated
+via the following paths:
+ 1) as ACPI LPSS device on Haswell, Bay Trail and Cherry Trail;
+ 2) as ACPI LPSS device on the Sky Lake and newer;
+ 3) as PCI LPSS device on Haswell, Bay Trail and Cherry Trail;
+ 4) as PCI LPSS device on the Sky Lake and newer;
+ 5) as PCI device via ID table.
 
-Add support for HvExtCallQueryCapabilities (0x8001) and
-HvExtCallGetBootZeroedMemory (0x8002) in KVM.
+Each of these cases provides some platform related data differently,
+i.e.:
+ 1) via drivers/acpi/acpi_lpss.c and drivers/spi/spi-pxa2xx.c
+ 2) via drivers/mfd/intel-lpss-acpi.c
+ 3) via drivers/spi/spi-pxa2xx-pci.c
+ 4) via drivers/mfd/intel-lpss-pci.c and drivers/spi/spi-pxa2xx.c
+ 5) via drivers/spi/spi-pxa2xx-pci.c
 
-A guest VM finds availability of HvExtCallQueryCapabilities (0x8001) by
-using CPUID.0x40000003.EBX BIT(20). If the bit is set then the guest VM
-make hypercall HvExtCallQueryCapabilities (0x8001) to know what all
-extended hypercalls are supported by hypervisor.
+This approach has two downsides:
 
-A userspace VMM can query capability KVM_CAP_HYPERV_EXT_CALL_QUERY to
-know which extended hypercalls are supported in KVM. After which the
-userspace will enable capabilities for the guest VM.
+a) there is no data propagated in the case #2 because we can't have
+   two or more drivers to match the same ACPI ID and hence some cases
+   are still not supported (Sky Lake and newer ACPI enabled LPSS);
 
-HvExtCallQueryCapabilities (0x8001) is handled by KVM in kernel,
-whereas, HvExtCallGetBootZeroedMemory (0x8002) is passed to userspace
-for further action.
+b) the data is duplicated over two drivers in the cases #1 & #4 and,
+   besides to be a bloatware, it is error prone (e.g. Lakefield has
+   a wrong data right now due to missed PCI entry in the spi-pxa2xx.c).
 
-Change-Id: Ib3709fadbf11f91be2842c8486bcbe755e09cbea
-Signed-off-by: Vipin Sharma <vipinsh@google.com>
----
+This series fixes the downsides, and enables previously unsupported
+cases. On top of that it has a couple of cleanups (patches 4 and 5).
 
-Hi,
+Changelog v5:
+- added a patch to validate the SSP type
+- reworked LPSS detection code to narrow its scope (Mark)
+- dropped applied patches
 
-This is an RFC patch based on the previous discussion
-https://lore.kernel.org/kvm/CAHVum0cbWBXUnJ4s32Yn=TfPXLypv_RRT6LmA_QoBHw3Y+kA7w@mail.gmail.com/#t
+Changelog v4:
+- apply the property only for known MFD enumerated devices (Mark)
 
-Things missing in this RFC patch which I will add when sending proper
-patch:
-1. Documentation
-2. Selftest
-3. Multiple smaller patches instead of one.
+Changelog v3:
+- added tags to patches 4 & 5 (Jonathan)
+- massaged cover letter
 
-I also need suggestions regarding KVM_ENABLE_CAP usage in this patch. My
-idea is userspace can query to know what all capabilities are supported by KVM
-and based on that it can call KVM_ENABLE_CAP to enable only select
-capabilities. Also userspace need to enforce hyperv CPUID check by
-KVM_CAP_HYPERV_ENFORCE_CPUID to make sure these are enforced (hyperv
-default is to accept all, hv_check_hypercall_access()).
+Changelog v2:
+- added cover letter (Mark)
+- dropped applied patch
 
-Current approach is storing capabilities given by userspace in struct kvm_hv{},
-I was not sure which will be good place, struct kvm_hv{} or struct
-kvm_vcpu_hv{}.
+Andy Shevchenko (4):
+  spi: pxa2xx: Validate the correctness of the SSP type
+  spi: pxa2xx: Respect Intel SSP type given by a property
+  spi: pxa2xx: Remove no more needed PCI ID table
+  spi: pxa2xx: Move OF and ACPI ID tables closer to their user
 
-Thanks
-Vipin
+ drivers/spi/spi-pxa2xx.c   | 171 ++++++++-----------------------------
+ include/linux/pxa2xx_ssp.h |   1 +
+ 2 files changed, 37 insertions(+), 135 deletions(-)
 
- arch/x86/include/asm/hyperv-tlfs.h |  3 ++
- arch/x86/include/asm/kvm_host.h    |  2 ++
- arch/x86/kvm/hyperv.c              | 55 ++++++++++++++++++++++++++++++
- arch/x86/kvm/hyperv.h              |  1 +
- arch/x86/kvm/x86.c                 |  5 +++
- include/asm-generic/hyperv-tlfs.h  |  4 ++-
- include/uapi/linux/kvm.h           |  1 +
- 7 files changed, 70 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
-index 3089ec352743..421279a61a9a 100644
---- a/arch/x86/include/asm/hyperv-tlfs.h
-+++ b/arch/x86/include/asm/hyperv-tlfs.h
-@@ -158,6 +158,9 @@
- #define HV_SHARED_GPA_BOUNDARY_ACTIVE			BIT(5)
- #define HV_SHARED_GPA_BOUNDARY_BITS			GENMASK(11, 6)
- 
-+/* Extended hypercalls supported by KVM */
-+#define HV_EXT_CALL_QUERY_CAPABILITIES_MASK		BIT(0)
-+
- enum hv_isolation_type {
- 	HV_ISOLATION_TYPE_NONE	= 0,
- 	HV_ISOLATION_TYPE_VBS	= 1,
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index 7551b6f9c31c..b1892ea39a23 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -1041,6 +1041,8 @@ struct kvm_hv {
- 
- 	struct hv_partition_assist_pg *hv_pa_pg;
- 	struct kvm_hv_syndbg hv_syndbg;
-+
-+	u64 extended_hypercalls_cap;
- };
- 
- struct msr_bitmap_range {
-diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
-index 0adf4a437e85..5f0b7d8789a8 100644
---- a/arch/x86/kvm/hyperv.c
-+++ b/arch/x86/kvm/hyperv.c
-@@ -32,6 +32,7 @@
- #include <linux/eventfd.h>
- 
- #include <asm/apicdef.h>
-+#include <asm/hyperv-tlfs.h>
- #include <trace/events/kvm.h>
- 
- #include "trace.h"
-@@ -2140,6 +2141,8 @@ static void kvm_hv_hypercall_read_xmm(struct kvm_hv_hcall *hc)
- 
- static bool hv_check_hypercall_access(struct kvm_vcpu_hv *hv_vcpu, u16 code)
- {
-+	struct kvm_hv *hv;
-+
- 	if (!hv_vcpu->enforce_cpuid)
- 		return true;
- 
-@@ -2178,6 +2181,14 @@ static bool hv_check_hypercall_access(struct kvm_vcpu_hv *hv_vcpu, u16 code)
- 	case HVCALL_SEND_IPI:
- 		return hv_vcpu->cpuid_cache.enlightenments_eax &
- 			HV_X64_CLUSTER_IPI_RECOMMENDED;
-+	case HV_EXT_CALL_QUERY_CAPABILITIES:
-+		return hv_vcpu->cpuid_cache.features_ebx &
-+				HV_ENABLE_EXTENDED_HYPERCALLS;
-+	case HV_EXT_CALL_GET_BOOT_ZEROED_MEMORY:
-+		hv = to_kvm_hv(hv_vcpu->vcpu->kvm);
-+		return hv->extended_hypercalls_cap &
-+			HV_EXT_CAPABILITY_GET_BOOT_ZEROED_MEMORY;
-+		break;
- 	default:
- 		break;
- 	}
-@@ -2189,6 +2200,7 @@ int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
- {
- 	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
- 	struct kvm_hv_hcall hc;
-+	struct kvm_hv *hv;
- 	u64 ret = HV_STATUS_SUCCESS;
- 
- 	/*
-@@ -2345,6 +2357,30 @@ int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
- 				kvm_hv_hypercall_complete_userspace;
- 		return 0;
- 	}
-+	case HV_EXT_CALL_QUERY_CAPABILITIES:
-+		if (unlikely(hc.fast)) {
-+			ret = HV_STATUS_INVALID_PARAMETER;
-+			break;
-+		}
-+		hv = to_kvm_hv(hv_vcpu->vcpu->kvm);
-+		if (kvm_vcpu_write_guest(vcpu, hc.outgpa,
-+					 &hv->extended_hypercalls_cap,
-+					 sizeof(hv->extended_hypercalls_cap)))
-+			ret = HV_STATUS_OPERATION_DENIED;
-+		break;
-+	case HV_EXT_CALL_GET_BOOT_ZEROED_MEMORY:
-+		if (unlikely(hc.fast)) {
-+			ret = HV_STATUS_INVALID_PARAMETER;
-+			break;
-+		}
-+		vcpu->run->exit_reason = KVM_EXIT_HYPERV;
-+		vcpu->run->hyperv.type = KVM_EXIT_HYPERV_HCALL;
-+		vcpu->run->hyperv.u.hcall.input = hc.param;
-+		vcpu->run->hyperv.u.hcall.params[0] = hc.ingpa;
-+		vcpu->run->hyperv.u.hcall.params[1] = hc.outgpa;
-+		vcpu->arch.complete_userspace_io =
-+				kvm_hv_hypercall_complete_userspace;
-+		return 0;
- 	default:
- 		ret = HV_STATUS_INVALID_HYPERCALL_CODE;
- 		break;
-@@ -2494,6 +2530,7 @@ int kvm_get_hv_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid2 *cpuid,
- 
- 			ent->ebx |= HV_POST_MESSAGES;
- 			ent->ebx |= HV_SIGNAL_EVENTS;
-+			ent->ebx |= HV_ENABLE_EXTENDED_HYPERCALLS;
- 
- 			ent->edx |= HV_X64_HYPERCALL_XMM_INPUT_AVAILABLE;
- 			ent->edx |= HV_FEATURE_FREQUENCY_MSRS_AVAILABLE;
-@@ -2578,3 +2615,21 @@ int kvm_get_hv_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid2 *cpuid,
- 
- 	return 0;
- }
-+
-+int kvm_hv_set_ext_call_cap(struct kvm_vcpu *vcpu, uint64_t cap)
-+{
-+	struct kvm_hv *hv;
-+	int r;
-+
-+	if (cap & ~HV_EXT_CALL_QUERY_CAPABILITIES_MASK)
-+		return -EINVAL;
-+
-+	r = kvm_hv_vcpu_init(vcpu);
-+	if (r)
-+		return r;
-+
-+	hv = to_kvm_hv(vcpu->kvm);
-+	hv->extended_hypercalls_cap = cap;
-+
-+	return 0;
-+}
-diff --git a/arch/x86/kvm/hyperv.h b/arch/x86/kvm/hyperv.h
-index 1030b1b50552..b92f8abdbf0d 100644
---- a/arch/x86/kvm/hyperv.h
-+++ b/arch/x86/kvm/hyperv.h
-@@ -150,5 +150,6 @@ int kvm_hv_set_enforce_cpuid(struct kvm_vcpu *vcpu, bool enforce);
- int kvm_vm_ioctl_hv_eventfd(struct kvm *kvm, struct kvm_hyperv_eventfd *args);
- int kvm_get_hv_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid2 *cpuid,
- 		     struct kvm_cpuid_entry2 __user *entries);
-+int kvm_hv_set_ext_call_cap(struct kvm_vcpu *vcpu, uint64_t cap);
- 
- #endif
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 4bd5f8a751de..caca1f537f6d 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -4515,6 +4515,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
- 	case KVM_CAP_X86_NOTIFY_VMEXIT:
- 		r = kvm_caps.has_notify_vmexit;
- 		break;
-+	case KVM_CAP_HYPERV_EXT_CALL_QUERY:
-+		r = HV_EXT_CALL_QUERY_CAPABILITIES_MASK;
-+		break;
- 	default:
- 		break;
- 	}
-@@ -5510,6 +5513,8 @@ static int kvm_vcpu_ioctl_enable_cap(struct kvm_vcpu *vcpu,
- 			kvm_update_pv_runtime(vcpu);
- 
- 		return 0;
-+	case KVM_CAP_HYPERV_EXT_CALL_QUERY:
-+		return kvm_hv_set_ext_call_cap(vcpu, cap->args[0]);
- 	default:
- 		return -EINVAL;
- 	}
-diff --git a/include/asm-generic/hyperv-tlfs.h b/include/asm-generic/hyperv-tlfs.h
-index fdce7a4cfc6f..15ffc2c5d950 100644
---- a/include/asm-generic/hyperv-tlfs.h
-+++ b/include/asm-generic/hyperv-tlfs.h
-@@ -162,6 +162,7 @@ struct ms_hyperv_tsc_page {
- 
- /* Extended hypercalls */
- #define HV_EXT_CALL_QUERY_CAPABILITIES		0x8001
-+#define HV_EXT_CALL_GET_BOOT_ZEROED_MEMORY	0x8002
- #define HV_EXT_CALL_MEMORY_HEAT_HINT		0x8003
- 
- #define HV_FLUSH_ALL_PROCESSORS			BIT(0)
-@@ -170,7 +171,8 @@ struct ms_hyperv_tsc_page {
- #define HV_FLUSH_USE_EXTENDED_RANGE_FORMAT	BIT(3)
- 
- /* Extended capability bits */
--#define HV_EXT_CAPABILITY_MEMORY_COLD_DISCARD_HINT BIT(8)
-+#define HV_EXT_CAPABILITY_GET_BOOT_ZEROED_MEMORY	BIT(0)
-+#define HV_EXT_CAPABILITY_MEMORY_COLD_DISCARD_HINT	BIT(8)
- 
- enum HV_GENERIC_SET_FORMAT {
- 	HV_GENERIC_SET_SPARSE_4K,
-diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-index 0d5d4419139a..42860137e545 100644
---- a/include/uapi/linux/kvm.h
-+++ b/include/uapi/linux/kvm.h
-@@ -1178,6 +1178,7 @@ struct kvm_ppc_resize_hpt {
- #define KVM_CAP_S390_ZPCI_OP 221
- #define KVM_CAP_S390_CPU_TOPOLOGY 222
- #define KVM_CAP_DIRTY_LOG_RING_ACQ_REL 223
-+#define KVM_CAP_HYPERV_EXT_CALL_QUERY 224
- 
- #ifdef KVM_CAP_IRQ_ROUTING
- 
 -- 
-2.38.0.135.g90850a2211-goog
+2.35.1
 
