@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2972260780A
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 15:14:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F505607811
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 15:15:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230383AbiJUNOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 09:14:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37222 "EHLO
+        id S230443AbiJUNPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 09:15:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230361AbiJUNN1 (ORCPT
+        with ESMTP id S230442AbiJUNNl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 09:13:27 -0400
+        Fri, 21 Oct 2022 09:13:41 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 86F9226D92A
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 06:13:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CA077230A87
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 06:13:23 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5B7F31042;
-        Fri, 21 Oct 2022 06:13:16 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 05E231477;
+        Fri, 21 Oct 2022 06:13:19 -0700 (PDT)
 Received: from merodach.members.linode.com (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B14323F792;
-        Fri, 21 Oct 2022 06:13:07 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5C5953F792;
+        Fri, 21 Oct 2022 06:13:10 -0700 (PDT)
 From:   James Morse <james.morse@arm.com>
 To:     x86@kernel.org, linux-kernel@vger.kernel.org
 Cc:     Fenghua Yu <fenghua.yu@intel.com>,
@@ -37,9 +37,9 @@ Cc:     Fenghua Yu <fenghua.yu@intel.com>,
         Jamie Iles <quic_jiles@quicinc.com>,
         Xin Hao <xhao@linux.alibaba.com>, xingxin.hx@openanolis.org,
         baolin.wang@linux.alibaba.com, peternewman@google.com
-Subject: [PATCH 15/18] x86/resctrl: Add cpu online callback for resctrl work
-Date:   Fri, 21 Oct 2022 13:12:01 +0000
-Message-Id: <20221021131204.5581-16-james.morse@arm.com>
+Subject: [PATCH 16/18] x86/resctrl: Allow overflow/limbo handlers to be scheduled on any-but cpu
+Date:   Fri, 21 Oct 2022 13:12:02 +0000
+Message-Id: <20221021131204.5581-17-james.morse@arm.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20221021131204.5581-1-james.morse@arm.com>
 References: <20221021131204.5581-1-james.morse@arm.com>
@@ -53,103 +53,172 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The resctrl architecture specific code may need to create a domain when
-a CPU comes online, it also needs to reset the CPUs PQR_ASSOC register.
-The resctrl filesystem code needs to update the rdtgroup_default cpu
-mask when cpus are brought online.
+When a cpu is taken offline resctrl may need to move the overflow or
+limbo handlers to run on a different CPU.
 
-Currently this is all done in one function, resctrl_online_cpu().
-This will need to be split into architecture and filesystem parts
-before resctrl can be moved to /fs/.
+Once the offline callbacks have been split, cqm_setup_limbo_handler()
+will be called while the CPU that is going offline is still present
+in the cpu_mask.
 
-Pull the rdtgroup_default update work out as a filesystem specific
-cpu_online helper. resctrl_online_cpu() is the obvious name for this,
-which means the version in core.c needs renaming.
-
-resctrl_online_cpu() is called by the arch code once it has done the
-work to add the new cpu to any domains.
-
-In future patches, resctrl_online_cpu() will take the rdtgroup_mutex
-itself.
+Pass the CPU to exclude to cqm_setup_limbo_handler() and
+mbm_setup_overflow_handler(). These functions can use cpumask_any_but()
+when selecting the CPU. -1 is used to indicate no CPUs need excluding.
 
 Signed-off-by: James Morse <james.morse@arm.com>
 ---
- arch/x86/kernel/cpu/resctrl/core.c     | 11 ++++++-----
- arch/x86/kernel/cpu/resctrl/rdtgroup.c | 10 ++++++++++
- include/linux/resctrl.h                |  1 +
- 3 files changed, 17 insertions(+), 5 deletions(-)
+
+Both cpumask_any() and cpumask_any_but() return a value >= nr_cpu_ids
+on error. schedule_delayed_work_on() doesn't appear to check. Add the
+error handling to be robust. It doesn't look like its possible to hit
+this.
+---
+ arch/x86/kernel/cpu/resctrl/core.c     |  6 ++--
+ arch/x86/kernel/cpu/resctrl/internal.h |  6 ++--
+ arch/x86/kernel/cpu/resctrl/monitor.c  | 39 +++++++++++++++++++++-----
+ arch/x86/kernel/cpu/resctrl/rdtgroup.c |  4 +--
+ 4 files changed, 42 insertions(+), 13 deletions(-)
 
 diff --git a/arch/x86/kernel/cpu/resctrl/core.c b/arch/x86/kernel/cpu/resctrl/core.c
-index de62b0b87ced..511ced743a79 100644
+index 511ced743a79..e25d7a581b0d 100644
 --- a/arch/x86/kernel/cpu/resctrl/core.c
 +++ b/arch/x86/kernel/cpu/resctrl/core.c
-@@ -584,19 +584,20 @@ static void clear_closid_rmid(int cpu)
- 	wrmsr(IA32_PQR_ASSOC, 0, 0);
+@@ -563,12 +563,14 @@ static void domain_remove_cpu(int cpu, struct rdt_resource *r)
+ 	if (r == &rdt_resources_all[RDT_RESOURCE_L3].r_resctrl) {
+ 		if (is_mbm_enabled() && cpu == d->mbm_work_cpu) {
+ 			cancel_delayed_work(&d->mbm_over);
+-			mbm_setup_overflow_handler(d, 0);
++			/* exclude_cpu=-1 as we already cpumask_clear_cpu()d */
++			mbm_setup_overflow_handler(d, 0, -1);
+ 		}
+ 		if (is_llc_occupancy_enabled() && cpu == d->cqm_work_cpu &&
+ 		    has_busy_rmid(r, d)) {
+ 			cancel_delayed_work(&d->cqm_limbo);
+-			cqm_setup_limbo_handler(d, 0);
++			/* exclude_cpu=-1 as we already cpumask_clear_cpu()d */
++			cqm_setup_limbo_handler(d, 0, -1);
+ 		}
+ 	}
  }
- 
--static int resctrl_online_cpu(unsigned int cpu)
-+static int resctrl_arch_online_cpu(unsigned int cpu)
- {
- 	struct rdt_resource *r;
-+	int err;
- 
- 	mutex_lock(&rdtgroup_mutex);
- 	for_each_capable_rdt_resource(r)
- 		domain_add_cpu(cpu, r);
--	/* The cpu is set in default rdtgroup after online. */
--	cpumask_set_cpu(cpu, &rdtgroup_default.cpu_mask);
- 	clear_closid_rmid(cpu);
-+
-+	err = resctrl_online_cpu(cpu);
+diff --git a/arch/x86/kernel/cpu/resctrl/internal.h b/arch/x86/kernel/cpu/resctrl/internal.h
+index adbbfaabf70b..96535e359382 100644
+--- a/arch/x86/kernel/cpu/resctrl/internal.h
++++ b/arch/x86/kernel/cpu/resctrl/internal.h
+@@ -525,11 +525,13 @@ void mon_event_read(struct rmid_read *rr, struct rdt_resource *r,
+ 		    struct rdt_domain *d, struct rdtgroup *rdtgrp,
+ 		    int evtid, int first);
+ void mbm_setup_overflow_handler(struct rdt_domain *dom,
+-				unsigned long delay_ms);
++				unsigned long delay_ms,
++				int exclude_cpu);
+ void mbm_handle_overflow(struct work_struct *work);
+ void __init intel_rdt_mbm_apply_quirk(void);
+ bool is_mba_sc(struct rdt_resource *r);
+-void cqm_setup_limbo_handler(struct rdt_domain *dom, unsigned long delay_ms);
++void cqm_setup_limbo_handler(struct rdt_domain *dom, unsigned long delay_ms,
++			     int exclude_cpu);
+ void cqm_handle_limbo(struct work_struct *work);
+ bool has_busy_rmid(struct rdt_resource *r, struct rdt_domain *d);
+ void __check_limbo(struct rdt_domain *d, bool force_free);
+diff --git a/arch/x86/kernel/cpu/resctrl/monitor.c b/arch/x86/kernel/cpu/resctrl/monitor.c
+index a9af7c56a04a..42a7fd6d56c9 100644
+--- a/arch/x86/kernel/cpu/resctrl/monitor.c
++++ b/arch/x86/kernel/cpu/resctrl/monitor.c
+@@ -433,7 +433,7 @@ static void add_rmid_to_limbo(struct rmid_entry *entry)
+ 		 * setup up the limbo worker.
+ 		 */
+ 		if (!has_busy_rmid(r, d))
+-			cqm_setup_limbo_handler(d, CQM_LIMBOCHECK_INTERVAL);
++			cqm_setup_limbo_handler(d, CQM_LIMBOCHECK_INTERVAL, -1);
+ 		set_bit(idx, d->rmid_busy_llc);
+ 		entry->busy++;
+ 	}
+@@ -766,15 +766,27 @@ void cqm_handle_limbo(struct work_struct *work)
  	mutex_unlock(&rdtgroup_mutex);
- 
--	return 0;
-+	return err;
  }
  
- static void clear_childcpus(struct rdtgroup *r, unsigned int cpu)
-@@ -923,7 +924,7 @@ static int __init resctrl_late_init(void)
+-void cqm_setup_limbo_handler(struct rdt_domain *dom, unsigned long delay_ms)
++/**
++ * cqm_setup_limbo_handler() - Schedule the limbo handler to run for this
++ *                             domain.
++ * @delay_ms:      How far in the future the handler should run.
++ * @exclude_cpu:   Which CPU the handler should not run on, -1 to pick any CPU.
++ */
++void cqm_setup_limbo_handler(struct rdt_domain *dom, unsigned long delay_ms,
++			     int exclude_cpu)
+ {
+ 	unsigned long delay = msecs_to_jiffies(delay_ms);
+ 	int cpu;
  
- 	state = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN,
- 				  "x86/resctrl/cat:online:",
--				  resctrl_online_cpu, resctrl_offline_cpu);
-+				  resctrl_arch_online_cpu, resctrl_offline_cpu);
- 	if (state < 0)
- 		return state;
+-	cpu = cpumask_any(&dom->cpu_mask);
++	if (exclude_cpu == -1)
++		cpu = cpumask_any(&dom->cpu_mask);
++	else
++		cpu = cpumask_any_but(&dom->cpu_mask, exclude_cpu);
++
+ 	dom->cqm_work_cpu = cpu;
  
+-	schedule_delayed_work_on(cpu, &dom->cqm_limbo, delay);
++	if (cpu < nr_cpu_ids)
++		schedule_delayed_work_on(cpu, &dom->cqm_limbo, delay);
+ }
+ 
+ void mbm_handle_overflow(struct work_struct *work)
+@@ -811,7 +823,14 @@ void mbm_handle_overflow(struct work_struct *work)
+ 	mutex_unlock(&rdtgroup_mutex);
+ }
+ 
+-void mbm_setup_overflow_handler(struct rdt_domain *dom, unsigned long delay_ms)
++/**
++ * mbm_setup_overflow_handler() - Schedule the overflow handler to run for this
++ *                                domain.
++ * @delay_ms:      How far in the future the handler should run.
++ * @exclude_cpu:   Which CPU the handler should not run on, -1 to pick any CPU.
++ */
++void mbm_setup_overflow_handler(struct rdt_domain *dom, unsigned long delay_ms,
++				int exclude_cpu)
+ {
+ 	unsigned long delay = msecs_to_jiffies(delay_ms);
+ 	int cpu;
+@@ -819,9 +838,15 @@ void mbm_setup_overflow_handler(struct rdt_domain *dom, unsigned long delay_ms)
+ 	if (!resctrl_mounted || !resctrl_arch_mon_capable())
+ 		return;
+ 
+-	cpu = cpumask_any(&dom->cpu_mask);
++	if (exclude_cpu == -1)
++		cpu = cpumask_any(&dom->cpu_mask);
++	else
++		cpu = cpumask_any_but(&dom->cpu_mask, exclude_cpu);
++
+ 	dom->mbm_work_cpu = cpu;
+-	schedule_delayed_work_on(cpu, &dom->mbm_over, delay);
++
++	if (cpu < nr_cpu_ids)
++		schedule_delayed_work_on(cpu, &dom->mbm_over, delay);
+ }
+ 
+ static int dom_data_init(struct rdt_resource *r)
 diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-index 81ed458be70b..ef444a5690e9 100644
+index ef444a5690e9..3d68a9cb1942 100644
 --- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
 +++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-@@ -3425,6 +3425,16 @@ int resctrl_online_domain(struct rdt_resource *r, struct rdt_domain *d)
- 	return 0;
- }
+@@ -2254,7 +2254,7 @@ static int rdt_get_tree(struct fs_context *fc)
+ 	if (is_mbm_enabled()) {
+ 		r = &rdt_resources_all[RDT_RESOURCE_L3].r_resctrl;
+ 		list_for_each_entry(dom, &r->domains, list)
+-			mbm_setup_overflow_handler(dom, MBM_OVERFLOW_INTERVAL);
++			mbm_setup_overflow_handler(dom, MBM_OVERFLOW_INTERVAL, -1);
+ 	}
  
-+int resctrl_online_cpu(unsigned int cpu)
-+{
-+	lockdep_assert_held(&rdtgroup_mutex);
-+
-+	/* The cpu is set in default rdtgroup after online. */
-+	cpumask_set_cpu(cpu, &rdtgroup_default.cpu_mask);
-+
-+	return 0;
-+}
-+
- /*
-  * rdtgroup_init - rdtgroup initialization
-  *
-diff --git a/include/linux/resctrl.h b/include/linux/resctrl.h
-index 1f345d24e236..b140ee6de00e 100644
---- a/include/linux/resctrl.h
-+++ b/include/linux/resctrl.h
-@@ -219,6 +219,7 @@ u32 resctrl_arch_get_config(struct rdt_resource *r, struct rdt_domain *d,
- 			    u32 closid, enum resctrl_conf_type type);
- int resctrl_online_domain(struct rdt_resource *r, struct rdt_domain *d);
- void resctrl_offline_domain(struct rdt_resource *r, struct rdt_domain *d);
-+int resctrl_online_cpu(unsigned int cpu);
+ 	goto out;
+@@ -3413,7 +3413,7 @@ int resctrl_online_domain(struct rdt_resource *r, struct rdt_domain *d)
  
- /**
-  * resctrl_arch_rmid_read() - Read the eventid counter corresponding to rmid
+ 	if (is_mbm_enabled()) {
+ 		INIT_DELAYED_WORK(&d->mbm_over, mbm_handle_overflow);
+-		mbm_setup_overflow_handler(d, MBM_OVERFLOW_INTERVAL);
++		mbm_setup_overflow_handler(d, MBM_OVERFLOW_INTERVAL, -1);
+ 	}
+ 
+ 	if (is_llc_occupancy_enabled())
 -- 
 2.30.2
 
