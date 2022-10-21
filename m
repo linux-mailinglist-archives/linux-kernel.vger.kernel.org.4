@@ -2,133 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B968607475
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 11:50:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA73260747F
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 11:54:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230131AbiJUJuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 05:50:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53292 "EHLO
+        id S229456AbiJUJyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 05:54:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbiJUJuk (ORCPT
+        with ESMTP id S230488AbiJUJyF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 05:50:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F34FF1885A4;
-        Fri, 21 Oct 2022 02:50:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 80ED561E00;
-        Fri, 21 Oct 2022 09:50:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F5E7C433D6;
-        Fri, 21 Oct 2022 09:50:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666345837;
-        bh=LeQMdSwbtJuXOi2FuwUwd5vVFwEoPYoelUlHATZ33bc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oD+ZpDeeHOAYGH98EjgSF/NQcTjpdu0Piz+tOuBHVfbR9F1OgvnuGpsx3/ELuKpCE
-         0AydlaozEN7cI1UknkZnbVJbubxW8bwijBVPs3VWvotIiqu/uGjC+Hmds9wRYQ2usA
-         YLN9Tq2Wj6bHnZR+0wGpyCehUGEDFxLlQnNtOIM9uFfjcTlEgUDtLpUBM2gl8k1zhR
-         +VnGEoxA0khRJq9mpwacSyKHNVGH8KNeYO6u2YMLh4zxalWRkIK7QGGZPCQuw60o0H
-         ozb+eUKtzLJ/eLKOEx2zuI4536P69mKpeo0oJ9Dmy/nWXZ8aFAZ//YfZDRHZtV1hVh
-         apsNSQmOjXkbw==
-Date:   Fri, 21 Oct 2022 10:50:30 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Tony Lindgren <tony@atomide.com>, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>, linux-omap@vger.kernel.org,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-i2c@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 13/17] ARM: omap1: remove unused board files
-Message-ID: <Y1JrZu8iC9fobX0E@google.com>
-References: <20221019144119.3848027-1-arnd@kernel.org>
- <20221019150410.3851944-1-arnd@kernel.org>
- <20221019150410.3851944-13-arnd@kernel.org>
+        Fri, 21 Oct 2022 05:54:05 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 652112582E9
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 02:54:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=R8aE+fUxsekh1JIzAY8ZsHZpAn2ZOjI/KXf7Nvom+7c=; b=gkYmsgDCCJygDYM8W8VySaUn7s
+        xP3aFyNNAjNMxtS/KAF0p2XZgEQ5Jd0mmq18Qp1jomav9gPu+atfCuUMkMDfaa+rbK6pJqbXWZzXk
+        xaAMR5wmSMfdudbCAVZY9qzim3QXd6RzUVyzQQ0oFD/ciUN37AepShZbQboxpL/3W+wSktKqh5br2
+        m1S4fhR+Ukekn2Zjkmc3oqxqbL0+G6uCyxQH/eKuwXqje/Y/+CjjSCFPGvoMQN0P47rr4ousho/Mo
+        mDkfYS93P7b3gDd4/dE2GCXejqvxIbDC9QMOaSWUyv8OjfsoRxVt24EUxp/AkAZvebPUAQ/bmwuz4
+        /pVF/13g==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oloiJ-00D30Q-M1; Fri, 21 Oct 2022 09:53:15 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 59907300110;
+        Fri, 21 Oct 2022 11:53:09 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 327682099A9E9; Fri, 21 Oct 2022 11:53:09 +0200 (CEST)
+Date:   Fri, 21 Oct 2022 11:53:09 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, Linus Torvalds <torvalds@linux-foundation.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Johannes Wikner <kwikner@ethz.ch>,
+        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
+        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
+        Joao Moreira <joao.moreira@intel.com>,
+        Joseph Nuzman <joseph.nuzman@intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Juergen Gross <jgross@suse.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        K Prateek Nayak <kprateek.nayak@amd.com>,
+        Eric Dumazet <edumazet@google.com>
+Subject: Re: [PATCH v3 48/59] x86/retbleed: Add SKL return thunk
+Message-ID: <Y1JsBQAhDFB2C0OE@hirez.programming.kicks-ass.net>
+References: <20220915111039.092790446@infradead.org>
+ <20220915111147.890071690@infradead.org>
+ <Y1HVZKW4o0KRsMtq@dev-arch.thelio-3990X>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221019150410.3851944-13-arnd@kernel.org>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y1HVZKW4o0KRsMtq@dev-arch.thelio-3990X>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 19 Oct 2022, Arnd Bergmann wrote:
-
-> From: Arnd Bergmann <arnd@arndb.de>
+On Thu, Oct 20, 2022 at 04:10:28PM -0700, Nathan Chancellor wrote:
+> This commit is now in -next as commit 5d8213864ade ("x86/retbleed: Add
+> SKL return thunk"). I just bisected an immediate reboot on my AMD test
+> system when starting a virtual machine with QEMU + KVM to it (see the
+> bisect log below). My Intel test systems do not show this.
+> Unfortunately, I do not have much more information, as there are no logs
+> in journalctl, which makes sense as the reboot occurs immediately after
+> I hit the enter key for the QEMU command.
 > 
-> All board support that was marked as 'unused' earlier can
-> now be removed, leaving the five machines that that still
-> had someone using them in 2022, or that are supported in
-> qemu.
-> 
-> Cc: Aaro Koskinen <aaro.koskinen@iki.fi>
-> Cc: Janusz Krzysztofik <jmkrzyszt@gmail.com>
-> Cc: Tony Lindgren <tony@atomide.com>
-> Cc: linux-omap@vger.kernel.org
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  MAINTAINERS                             |   2 -
->  arch/arm/Kconfig.debug                  |  36 +-
->  arch/arm/configs/omap1_defconfig        |   2 -
->  arch/arm/mach-omap1/Kconfig             |  93 +---
->  arch/arm/mach-omap1/Makefile            |  18 -
->  arch/arm/mach-omap1/board-fsample.c     | 366 ---------------
->  arch/arm/mach-omap1/board-generic.c     |  85 ----
->  arch/arm/mach-omap1/board-h2-mmc.c      |  74 ---
->  arch/arm/mach-omap1/board-h2.c          | 448 ------------------
->  arch/arm/mach-omap1/board-h2.h          |  38 --
->  arch/arm/mach-omap1/board-h3-mmc.c      |  64 ---
->  arch/arm/mach-omap1/board-h3.c          | 455 ------------------
->  arch/arm/mach-omap1/board-h3.h          |  35 --
->  arch/arm/mach-omap1/board-htcherald.c   | 585 ------------------------
->  arch/arm/mach-omap1/board-innovator.c   | 481 -------------------
->  arch/arm/mach-omap1/board-nand.c        |  33 --
->  arch/arm/mach-omap1/board-palmtt.c      | 285 ------------
->  arch/arm/mach-omap1/board-palmz71.c     | 300 ------------
->  arch/arm/mach-omap1/board-perseus2.c    | 333 --------------
->  arch/arm/mach-omap1/fpga.c              | 186 --------
->  arch/arm/mach-omap1/fpga.h              |  49 --
->  arch/arm/mach-omap1/gpio7xx.c           | 272 -----------
->  drivers/i2c/busses/Kconfig              |   2 +-
->  drivers/mfd/Kconfig                     |   2 +-
+> If there is any further information I can provide or patches I can test
+> for further debugging, I am more than happy to do so.
 
-Acked-by: Lee Jones <lee@kernel.org>
+Moo :-(
 
->  drivers/mmc/host/Kconfig                |   2 +-
->  drivers/usb/gadget/udc/Kconfig          |   2 +-
->  drivers/usb/host/Kconfig                |   2 +-
->  include/linux/platform_data/leds-omap.h |  19 -
->  28 files changed, 12 insertions(+), 4257 deletions(-)
->  delete mode 100644 arch/arm/mach-omap1/board-fsample.c
->  delete mode 100644 arch/arm/mach-omap1/board-generic.c
->  delete mode 100644 arch/arm/mach-omap1/board-h2-mmc.c
->  delete mode 100644 arch/arm/mach-omap1/board-h2.c
->  delete mode 100644 arch/arm/mach-omap1/board-h2.h
->  delete mode 100644 arch/arm/mach-omap1/board-h3-mmc.c
->  delete mode 100644 arch/arm/mach-omap1/board-h3.c
->  delete mode 100644 arch/arm/mach-omap1/board-h3.h
->  delete mode 100644 arch/arm/mach-omap1/board-htcherald.c
->  delete mode 100644 arch/arm/mach-omap1/board-innovator.c
->  delete mode 100644 arch/arm/mach-omap1/board-nand.c
->  delete mode 100644 arch/arm/mach-omap1/board-palmtt.c
->  delete mode 100644 arch/arm/mach-omap1/board-palmz71.c
->  delete mode 100644 arch/arm/mach-omap1/board-perseus2.c
->  delete mode 100644 arch/arm/mach-omap1/fpga.c
->  delete mode 100644 arch/arm/mach-omap1/fpga.h
->  delete mode 100644 arch/arm/mach-omap1/gpio7xx.c
->  delete mode 100644 include/linux/platform_data/leds-omap.h
-
--- 
-Lee Jones [李琼斯]
+you happen to have a .config for me?
