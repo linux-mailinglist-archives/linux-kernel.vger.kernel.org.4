@@ -2,130 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9842160729F
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 10:41:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 085A86072B1
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 10:43:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230262AbiJUIlf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 04:41:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60148 "EHLO
+        id S230185AbiJUInN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 04:43:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230026AbiJUIl2 (ORCPT
+        with ESMTP id S229728AbiJUInL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 04:41:28 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C894E24E3AC;
-        Fri, 21 Oct 2022 01:41:25 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0650C6602532;
-        Fri, 21 Oct 2022 09:41:22 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1666341684;
-        bh=ixtnbYZsDUAjtbOO7dcijDfW674zD9cWoD0xTEe/SQM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=kc/Lz34lDvuXmaLXjA3lWGJ1XXjh4KahLHgw6Qg/eLQirT6/VFA4+qENEKQ7CzHy+
-         DmXe8REyjQXW/J/shRxV7ntpiMvf40yTWmDvhOGP49l07EVv1V9xVbD5CtvC4Fr+8+
-         j+SY7b+/ASlzPr5OeyBZQnj8sPNUS9MSJi01jQ9e/w16v8iwmh7qPFcxuuBmmW6rH6
-         Dez4lLPN8acWboG/QPuQEWT6bdT7nf+CLJqeMTR3bXacgU/Ce6+GVT5g82xjebCRwM
-         Ko7r8wwIxC82TrWt2nu1N+IdE5ecKXmGIrF9h8gWae4RRf5v2w0VmUsW+3DqQtGvFH
-         eiCJl0ACY4RFw==
-Message-ID: <de66f0e3-7694-7315-c896-9211259a1a17@collabora.com>
-Date:   Fri, 21 Oct 2022 10:41:20 +0200
+        Fri, 21 Oct 2022 04:43:11 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2593B2475E0;
+        Fri, 21 Oct 2022 01:43:10 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id a10so3241713wrm.12;
+        Fri, 21 Oct 2022 01:43:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fHHbS7emJ7bcil9wJ91wf+rz9g+zVjFgrZmtc6DrjKw=;
+        b=VscjzTazJMHY7zL8gBmLasXCkhTdM0IN81yZKrdBIYJ1eC/0EXRVHW158yi8QMtotS
+         CYcR2WL7PgaU6CkODUHcKiCdehPy/uOY2JPcY5RKkKNU2O47ecMdeYq5r5MViAjdb27a
+         DdSrqQI55IWNabInVZcFQbcFVs6VsH2Bt9+xJe2bHEsfGnD/ejmIiG/d8GjSJG5gmAjE
+         t2YRtEO8pP4d+W1l6IY+zxvwfnVM8ekC+oVpLuoLVHSAte4c/ld4b45DfbUya2NwKRe/
+         DkaS1Va5R/e/sBZU424noYrgc0rhifbR/rH+neOLHXRXxZlA05QGkDIXR6GjlHvy8dbQ
+         yuqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fHHbS7emJ7bcil9wJ91wf+rz9g+zVjFgrZmtc6DrjKw=;
+        b=M82q4ng+kcRKHtxWbSv6CItYH/7RR/pUnfiXtgVnlWB2bpI35JOAcQY3/g7QZtzMml
+         /66UKtWE4A21TR8AVwlhMFxPdrBocIPtIaJFsANe/r5wk5h7wEKnh3+7XlCwZa1QNFGt
+         3YtOc4Kr2+O/VPMgZA55wBndspMRgwjV6zbWZ8TAO1z0XNU0FpAy+7gwsmvZ6a+hOde9
+         elysxJfSAwsh9IkgzZyIXG9tMSmXqpjUlHpqdMAwE0AQvBgdJVpr0pN1OZHPoSs17P3Y
+         xa4K60daXILlcAxbOn5pfrI2ArOun+FMnSBVbpF43D29W3wYpA76QxPuntx3I+aGrD5l
+         m9og==
+X-Gm-Message-State: ACrzQf3VezAiV7tdYRT8Japyk9xQQZRrbc1Hc7WZMPy4K3hJWJCoV/Hp
+        OIzJiJ+TM06+8Y6NWotdiWE=
+X-Google-Smtp-Source: AMsMyM6H1HA8tPJha9xPy1aZuHlCJCpgbM46trP62B3ngcPsvMcfEkI8L8YnqMjjeT/fpSrx0wyFOA==
+X-Received: by 2002:a05:6000:611:b0:22e:c347:2943 with SMTP id bn17-20020a056000061100b0022ec3472943mr11308905wrb.603.1666341788607;
+        Fri, 21 Oct 2022 01:43:08 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id f18-20020a05600c155200b003b3365b38f9sm2137812wmg.10.2022.10.21.01.43.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Oct 2022 01:43:08 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] media: platform: s5p-mfc: Fix spelling mistake "mmaping" -> "mmapping"
+Date:   Fri, 21 Oct 2022 09:43:07 +0100
+Message-Id: <20221021084307.65696-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v2 03/12] ASoC: mediatek: mt8188: support audsys clock
-Content-Language: en-US
-To:     Trevor Wu <trevor.wu@mediatek.com>, broonie@kernel.org,
-        tiwai@suse.com, robh+dt@kernel.org, matthias.bgg@gmail.com,
-        p.zabel@pengutronix.de
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20221021082719.18325-1-trevor.wu@mediatek.com>
- <20221021082719.18325-4-trevor.wu@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221021082719.18325-4-trevor.wu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 21/10/22 10:27, Trevor Wu ha scritto:
-> Add mt8188 audio cg clock control. Audio clock gates are registered to CCF
-> for reference count and clock parent management.
-> 
-> Signed-off-by: Trevor Wu <trevor.wu@mediatek.com>
-> ---
->   sound/soc/mediatek/mt8188/mt8188-audsys-clk.c | 206 ++++++++++++++++++
->   sound/soc/mediatek/mt8188/mt8188-audsys-clk.h |  15 ++
->   .../soc/mediatek/mt8188/mt8188-audsys-clkid.h |  83 +++++++
->   3 files changed, 304 insertions(+)
->   create mode 100644 sound/soc/mediatek/mt8188/mt8188-audsys-clk.c
->   create mode 100644 sound/soc/mediatek/mt8188/mt8188-audsys-clk.h
->   create mode 100644 sound/soc/mediatek/mt8188/mt8188-audsys-clkid.h
-> 
-> diff --git a/sound/soc/mediatek/mt8188/mt8188-audsys-clk.c b/sound/soc/mediatek/mt8188/mt8188-audsys-clk.c
-> new file mode 100644
-> index 000000000000..1f294231d4c2
-> --- /dev/null
-> +++ b/sound/soc/mediatek/mt8188/mt8188-audsys-clk.c
-> @@ -0,0 +1,206 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * mt8188-audsys-clk.c  --  MediaTek 8188 audsys clock control
-> + *
-> + * Copyright (c) 2022 MediaTek Inc.
-> + * Author: Chun-Chia Chiu <chun-chia.chiu@mediatek.com>
-> + */
-> +
-> +#include <linux/clk.h>
-> +#include <linux/clk-provider.h>
-> +#include <linux/clkdev.h>
-> +#include "mt8188-afe-common.h"
-> +#include "mt8188-audsys-clk.h"
-> +#include "mt8188-audsys-clkid.h"
-> +#include "mt8188-reg.h"
-> +
-> +struct afe_gate {
-> +	int id;
-> +	const char *name;
-> +	const char *parent_name;
-> +	int reg;
-> +	u8 bit;
-> +	const struct clk_ops *ops;
-> +	unsigned long flags;
-> +	u8 cg_flags;
-> +};
-> +
-> +#define GATE_AFE_FLAGS(_id, _name, _parent, _reg, _bit, _flags, _cgflags) {\
-> +		.id = _id,					\
-> +		.name = _name,					\
-> +		.parent_name = _parent,				\
-> +		.reg = _reg,					\
-> +		.bit = _bit,					\
-> +		.flags = _flags,				\
-> +		.cg_flags = _cgflags,				\
-> +	}
-> +
-> +#define GATE_AFE(_id, _name, _parent, _reg, _bit)		\
-> +	GATE_AFE_FLAGS(_id, _name, _parent, _reg, _bit,		\
-> +		       CLK_SET_RATE_PARENT | CLK_IGNORE_UNUSED, CLK_GATE_SET_TO_DISABLE)
+There are a couple of spelling mistakes in mfc_debug messages. Fix them.
 
-Can you please explain what's the reason for CLK_IGNORE_UNUSED here?
-Maybe we can solve some issue that you're facing in a cleaner way.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Regards,
-Angelo
+diff --git a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c
+index fca5c6405eec..8c33d09a76aa 100644
+--- a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c
++++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c
+@@ -1047,10 +1047,10 @@ static int s5p_mfc_mmap(struct file *file, struct vm_area_struct *vma)
+ 	int ret;
+ 
+ 	if (offset < DST_QUEUE_OFF_BASE) {
+-		mfc_debug(2, "mmaping source\n");
++		mfc_debug(2, "mmapping source\n");
+ 		ret = vb2_mmap(&ctx->vq_src, vma);
+ 	} else {		/* capture */
+-		mfc_debug(2, "mmaping destination\n");
++		mfc_debug(2, "mmapping destination\n");
+ 		vma->vm_pgoff -= (DST_QUEUE_OFF_BASE >> PAGE_SHIFT);
+ 		ret = vb2_mmap(&ctx->vq_dst, vma);
+ 	}
+-- 
+2.37.3
 
