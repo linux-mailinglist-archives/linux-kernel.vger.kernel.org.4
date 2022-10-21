@@ -2,126 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60DF260702F
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 08:39:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3533F607033
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 08:40:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbiJUGjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 02:39:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34826 "EHLO
+        id S229874AbiJUGk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 02:40:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiJUGju (ORCPT
+        with ESMTP id S229515AbiJUGkZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 02:39:50 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D5AB4D14F;
-        Thu, 20 Oct 2022 23:39:48 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id a6so2422634ljq.5;
-        Thu, 20 Oct 2022 23:39:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:references:in-reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=FFzVqav4ytL2f0CsiBF+eInTfMA8Iy0X1Q8WlCib4/Q=;
-        b=EeuUWgJRyRVkPZSaJYbew7R1hyU+bTUqCMY7+N+xsileGZvgqQhRjJwIFKuO7HmDrb
-         bQHMgelR1wfFrvqjoMmlaGOLdTRP9gMDOWOXbUg2AJYoFDXMNqi+SKBmAq6zGoeREQNz
-         Y4WFohrE7QxGDnjHl2VqAyMJ/gTHDLhC8MhuyDd/nj+RAjS1ZAG1gml6XdBRPTdSkVCs
-         2/N+X0Qyxim7k5rXj4vRb9R1jRMgCaOPyyLGjC39SUnku+JYkTaArB0q2xT0LPxg7B7v
-         +G7VV7ut0/i2IDbQF6qohLPQelmq4jhw2U846FOs07YLHodWw5gXtquQeY3o0P1/5jwm
-         LSEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:references:in-reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FFzVqav4ytL2f0CsiBF+eInTfMA8Iy0X1Q8WlCib4/Q=;
-        b=C4Xy+JnWOrzz2M0JeiIZyk8nSfdoYnX1q9SiufvGEYw2mLA9nk44zoyggJxuJjSZkn
-         Y6cLRJsyqTjNckRGP0iTvAbzLJgJ1VlzKvaKLepR4/iuvUsOFQK2Kft+Dot03ODQWNuc
-         kvfH6njuiwK+AKjm28z7uJOl0Hbi1KHrdM8Kvjz43RY2DzmS7UkHS6kJ1rxknicZrB6Z
-         D18oSKT/6FoL8+eghWV95rOdDKeYCgrhiTD0BjNEuD+qIIoq27fvI79OTLBdnQgs0GYI
-         KLWP6Ls/RbvVlUhkVkx6DpJp+GKA7Bg/jAMdm4viskVYOzcTdLY11f78VilN/LHazvgv
-         QQ5Q==
-X-Gm-Message-State: ACrzQf2G0M77hCmtzoZPtPIExLSp1T/BaY1adu2OkhLL7gXwlq5yIJ5J
-        QNU0JxlpDYceOOvCNqKNB2nb7htssBXtYOcfcv0=
-X-Google-Smtp-Source: AMsMyM4sbtX82B5mKKEHXGcxQPQfO0Xlq0H1c39lDL8xvOXWXw5Gb+e0I9Rx/xGyhKm+X9hJsrod4+dymJAVsZtidxk=
-X-Received: by 2002:a2e:9652:0:b0:276:34ad:75c0 with SMTP id
- z18-20020a2e9652000000b0027634ad75c0mr398362ljh.59.1666334386089; Thu, 20 Oct
- 2022 23:39:46 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:ab3:5411:0:b0:1f6:575a:5fb7 with HTTP; Thu, 20 Oct 2022
- 23:39:44 -0700 (PDT)
-In-Reply-To: <CANpmjNMUCsRm9qmi5eydHUHP2f5Y+Bt_thA97j8ZrEa5PN3sQg@mail.gmail.com>
-References: <20220915150417.722975-19-glider@google.com> <20221019173620.10167-1-youling257@gmail.com>
- <CAOzgRda_CToTVicwxx86E7YcuhDTcayJR=iQtWQ3jECLLhHzcg@mail.gmail.com>
- <CANpmjNMPKokoJVFr9==-0-+O1ypXmaZnQT3hs4Ys0Y4+o86OVA@mail.gmail.com>
- <CAOzgRdbbVWTWR0r4y8u5nLUeANA7bU-o5JxGCHQ3r7Ht+TCg1Q@mail.gmail.com>
- <Y1BXQlu+JOoJi6Yk@elver.google.com> <CAOzgRdY6KSxDMRJ+q2BWHs4hRQc5y-PZ2NYG++-AMcUrO8YOgA@mail.gmail.com>
- <Y1Bt+Ia93mVV/lT3@elver.google.com> <CAG_fn=WLRN=C1rKrpq4=d=AO9dBaGxoa6YsG7+KrqAck5Bty0Q@mail.gmail.com>
- <CAOzgRdb+W3_FuOB+P_HkeinDiJdgpQSsXMC4GArOSixL9K5avg@mail.gmail.com> <CANpmjNMUCsRm9qmi5eydHUHP2f5Y+Bt_thA97j8ZrEa5PN3sQg@mail.gmail.com>
-From:   youling 257 <youling257@gmail.com>
-Date:   Fri, 21 Oct 2022 14:39:44 +0800
-Message-ID: <CAOzgRdZsNWRHOUUksiOhGfC7XDc+Qs2TNKtXQyzm2xj4to+Y=Q@mail.gmail.com>
-Subject: Re: [PATCH v7 18/43] instrumented.h: add KMSAN support
-To:     Marco Elver <elver@google.com>
-Cc:     Alexander Potapenko <glider@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
-        linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        Fri, 21 Oct 2022 02:40:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A070112A96;
+        Thu, 20 Oct 2022 23:40:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E688EB82ADA;
+        Fri, 21 Oct 2022 06:40:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4B59C433D6;
+        Fri, 21 Oct 2022 06:40:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666334419;
+        bh=sSDsv8sNrV4MWlFb62YOB+RVifnK0tCFSxdozhi2KE4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aksXMaxXMeRvPuoZU14QDKDiGuGGTwPIhJul2Z60muawg8b7ekV6ZDVQQeeJ9+9cq
+         9R1szce+/cZdhvcZx9xGVe2M2/qKnpBPIy02FrsDgUVNxkqeiU+/yoAgTxITqBhbNz
+         N1FOsikN0SJHBXA4OrLaFSQyGl48X1X2whKpKnGrTO5vj4dnUe/jr4Z7tpbos4L3Lo
+         UpYBe483uJYXHFYQXFVD2YE2J5Mm3nbPnTYEuP9nNoKLFdEKxyf5xwfZegEfkmJi73
+         m92DLrkkhhk2/SQT+Hoe7aWlqUhnNvcvbD+dreLWEfwXP5gPFldV0fsEQzYsYnWcGT
+         YiurHGZvac48Q==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1ollhN-0001Z7-Ju; Fri, 21 Oct 2022 08:40:05 +0200
+Date:   Fri, 21 Oct 2022 08:40:05 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Krishna chaitanya chundru <quic_krichai@quicinc.com>,
+        quic_vbadigan@quicinc.com, linux-arm-msm@vger.kernel.org,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 1/2] dt-bindings: PCI: qcom: Add SC8280XP/SA8540P
+ interconnects
+Message-ID: <Y1I+xQDpvedLXNHf@hovoldconsulting.com>
+References: <20221017112449.2146-1-johan+linaro@kernel.org>
+ <20221017112449.2146-2-johan+linaro@kernel.org>
+ <010b6de2-5df6-77c9-2f04-43f2edc89ff2@linaro.org>
+ <Y1D/Vaa/3zKP4Cxj@hovoldconsulting.com>
+ <972db8bd-e45a-47b1-c2c4-008c279c6b59@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <972db8bd-e45a-47b1-c2c4-008c279c6b59@linaro.org>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PerfTop:    8253 irqs/sec  kernel:75.3%  exact: 100.0% lost: 0/0 drop:
-0/17899 [4000Hz cycles],  (all, 8 CPUs)
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+On Thu, Oct 20, 2022 at 08:29:02AM -0400, Krzysztof Kozlowski wrote:
+> On 20/10/2022 03:57, Johan Hovold wrote:
+> > On Wed, Oct 19, 2022 at 10:37:31AM -0400, Krzysztof Kozlowski wrote:
+> >> On 17/10/2022 07:24, Johan Hovold wrote:
+> >>> Add the missing SC8280XP/SA8540P "pcie-mem" and "cpu-pcie" interconnect
+> >>> paths to the bindings.
+> >>>
+> >>> Fixes: 76d777ae045e ("dt-bindings: PCI: qcom: Add SC8280XP to binding")
+> >>> Fixes: 76c4207f4085 ("dt-bindings: PCI: qcom: Add SA8540P to binding")
+> >>> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> >>> ---
+> >>>  .../devicetree/bindings/pci/qcom,pcie.yaml    | 25 +++++++++++++++++++
+> >>>  1 file changed, 25 insertions(+)
+> >>>
+> >>> diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+> >>> index 22a2aac4c23f..a55434f95edd 100644
+> >>> --- a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+> >>> +++ b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
 
-    14.87%  [kernel]              [k] 0xffffffff941d1f37
-     6.71%  [kernel]              [k] 0xffffffff942016cf
+> > Are you suggesting something like moving the names to the common
+> > constraints for now:
+> > 
+> >   interconnects:
+> >     maxItems: 2
+> > 
+> >   interconnect-names:
+> >     items:
+> >       - const: pcie-mem
+> >       - const: cpu-pcie
+> > 
+> > and then in the allOf:
+> > 
+> >   - if:
+> >       properties:
+> >         compatible:
+> >           contains:
+> >             enum:
+> >               - qcom,pcie-sa8540p
+> >               - qcom,pcie-sc8280xp
+> >     then:
+> >       required:
+> >         - interconnects
+> >         - interconnect-names
+> >     else:
+> >       properties:
+> >         interconnects: false
+> >         interconnect-names: false
+> > 
+> > This way we'd catch anyone adding interconnects to a DTS without first
+> > updating the bindings, but it also seems to go against the idea of
+> > bindings fully describing the hardware by saying that no other platforms
+> > have interconnects (when they actually do even if we don't describe it
+> > just yet).
+> 
+> You can add a comment to the else like "TODO: Not described yet". I
+> would prefer to have specific but incomplete bindings, instead of loose
+> one which later might cause people adding whatever names they like.
+> 
+> > Or should we do the above but without the else clause to have some
+> > constraints in place on the names at least?
+> 
+> This would work as well if you think the names are applicable for other
+> devices.
 
-what is 0xffffffff941d1f37?
+I think that's a reasonable assumption so I'll go with this alternative.
 
-2022-10-21 14:16 GMT+08:00, Marco Elver <elver@google.com>:
-> On Thu, 20 Oct 2022 at 22:55, youling 257 <youling257@gmail.com> wrote:
->>
->> How to use perf tool?
->
-> The simplest would be to try just "perf top" - and see which kernel
-> functions consume most CPU cycles. I would suggest you compare both
-> kernels, and see if you can spot a function which uses more cycles% in
-> the problematic kernel.
->
+Thanks!
+
+Johan
