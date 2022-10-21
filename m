@@ -2,116 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C243607DC7
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 19:42:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 040BB607DCF
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 19:44:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230111AbiJURlk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 13:41:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59764 "EHLO
+        id S229740AbiJURoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 13:44:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbiJURl3 (ORCPT
+        with ESMTP id S230428AbiJURoB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 13:41:29 -0400
-Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3C1824AE32;
-        Fri, 21 Oct 2022 10:41:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=deltatee.com; s=20200525; h=Subject:MIME-Version:References:In-Reply-To:
-        Message-Id:Date:Cc:To:From:content-disposition;
-        bh=33I13543xxl5IpRI3N6CO97FrUmYnw9CKJFJpgwPP2E=; b=bgCCyiC80LwkdXBnalAtI8yTWC
-        4nCSWE1U2A1ySvyPV3WkvbtPKmCdf5mIA7Kn9LFX8StLBBLZtBnaer7mg65tIOxxPBIxYj1KvJfIL
-        rWHBMfhn6BFIT2AutDopBuI2boeRuUmArJD+P8KpIHv+884xkRV8HDqdscPhcci0Ffdi6HQR+LUMe
-        3fTYi/Cr1SNAX/on0Le/wYgZ+EGvo9nM+tQeNLdYZpAMIkAOBTEtQfuUKhSALmiiVnPPx/nRSZC2+
-        qHzqF6KPUU4VTfcmUsz/jBWXiTnpwR40Qs+fltLB8upyLUJLFBnOw+QnXJI+tf9tvSD1VBHwJy4SU
-        hSNPQy5Q==;
-Received: from cgy1-donard.priv.deltatee.com ([172.16.1.31])
-        by ale.deltatee.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <gunthorp@deltatee.com>)
-        id 1olw1K-00DoHz-5A; Fri, 21 Oct 2022 11:41:23 -0600
-Received: from gunthorp by cgy1-donard.priv.deltatee.com with local (Exim 4.94.2)
-        (envelope-from <gunthorp@deltatee.com>)
-        id 1olw1G-0001tV-Es; Fri, 21 Oct 2022 11:41:18 -0600
-From:   Logan Gunthorpe <logang@deltatee.com>
-To:     linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-mm@kvack.org
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Don Dutile <ddutile@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Minturn Dave B <dave.b.minturn@intel.com>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Xiong Jianxin <jianxin.xiong@intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Martin Oliveira <martin.oliveira@eideticom.com>,
-        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Stephen Bates <sbates@raithlin.com>,
-        Logan Gunthorpe <logang@deltatee.com>
-Date:   Fri, 21 Oct 2022 11:41:16 -0600
-Message-Id: <20221021174116.7200-10-logang@deltatee.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221021174116.7200-1-logang@deltatee.com>
-References: <20221021174116.7200-1-logang@deltatee.com>
+        Fri, 21 Oct 2022 13:44:01 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3583B269096;
+        Fri, 21 Oct 2022 10:43:55 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id bg9-20020a05600c3c8900b003bf249616b0so2529793wmb.3;
+        Fri, 21 Oct 2022 10:43:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NEU8OndF59kbblXG+hQ+BOg2go0yv8KTNGgCVDuvgDM=;
+        b=l2zjzMuDlZJxiUXAq/qm2EIu5Vy3ixqsFB8S4piAb9a59VZm+MueK9dnMC5OkrcKcK
+         OFE7HmsgpfJyWglUAKJteDL3seJuBmMZr7rgwilcXmld4xrxhAwAmk+fSLode2a/TA2X
+         37ycOcPc5TrRX3GXZfG0jflNMe6AjVMzYnbHpnwMommSN2XzPBT2ExZxVhjVI19nKHwj
+         6nA6yYGlzrpTlZrCdlyir9Ythq0Rv4myRiHPVet4yEsTBQACJsjLV65UclxB54xLl9oy
+         zND5yc924M9Fh+67ZS6ZRpzlVgs84yJuXZaKof05xh3m0hFJaTcnN3rKyWzU42vqaQy5
+         pqFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NEU8OndF59kbblXG+hQ+BOg2go0yv8KTNGgCVDuvgDM=;
+        b=kyw/JX+as9aE72cPrQw0UbdUF5x00YHRD0sIPkDCnRSz/pL77AaOsx27ODKBZZ3yz3
+         jmWJFL+SUwWyMUFgeZe17D3WZmZ5wQwVHH1kcTgHbVrktKHPoViEWEertaG30dm361M3
+         aGsmXgvgOez9xPq9uZK/zp4+MRQOD9xGd2rKfjLG/XgtEhpTjhKJQcJQOvsHhhyI0CIT
+         Nz5zJJ6dn/21bLQBOxPUIvFeeFxzlwJrgdGT01fDWjAsWdHqKvR822Biq9jxOCXtmNcx
+         BwT0tn0KVQCaVGtjUuwYO8oTL40Q/lstfSG5+hk1j7gJiPpwzbsf1givBtsN0b2Wtp/i
+         WRdw==
+X-Gm-Message-State: ACrzQf29OfAAJ/WAOMLCIi5103Wa2dJhKzvDb2WgQuNg3gtT7ZUN0Vyp
+        4nrJ8jq7X0JGkG3tMsj4om4=
+X-Google-Smtp-Source: AMsMyM6yiTDm+02FP3z+iQlsbay9XXQvuxmsQ+eHIDzc3K3wViQo25S1QExdZDw170PICbRhDio5YA==
+X-Received: by 2002:a05:600c:4451:b0:3c6:fb65:24cb with SMTP id v17-20020a05600c445100b003c6fb6524cbmr16192541wmn.144.1666374233622;
+        Fri, 21 Oct 2022 10:43:53 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id m8-20020adfe0c8000000b0022efc4322a9sm19481040wri.10.2022.10.21.10.43.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Oct 2022 10:43:53 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] [media] radio: Remove variable p
+Date:   Fri, 21 Oct 2022 18:43:52 +0100
+Message-Id: <20221021174352.28290-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 172.16.1.31
-X-SA-Exim-Rcpt-To: linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org, linux-block@vger.kernel.org, linux-pci@vger.kernel.org, linux-mm@kvack.org, hch@lst.de, gregkh@linuxfoundation.org, jgg@ziepe.ca, christian.koenig@amd.com, ddutile@redhat.com, willy@infradead.org, daniel.vetter@ffwll.ch, jason@jlekstrand.net, dave.hansen@linux.intel.com, helgaas@kernel.org, dan.j.williams@intel.com, dave.b.minturn@intel.com, jianxin.xiong@intel.com, ira.weiny@intel.com, robin.murphy@arm.com, martin.oliveira@eideticom.com, ckulkarnilinux@gmail.com, jhubbard@nvidia.com, rcampbell@nvidia.com, sbates@raithlin.com, logang@deltatee.com
-X-SA-Exim-Mail-From: gunthorp@deltatee.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
-Subject: [PATCH v11 9/9] ABI: sysfs-bus-pci: add documentation for p2pmem allocate
-X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
-X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add documentation for the p2pmem/allocate binary file which allows
-for allocating p2pmem buffers in userspace for passing to drivers
-that support them. (Currently only O_DIRECT to NVMe devices.)
+The variable p being deccremented but it is never referenced,
+it is redundant and can be removed.
 
-Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
-Reviewed-by: John Hubbard <jhubbard@nvidia.com>
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
- Documentation/ABI/testing/sysfs-bus-pci | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ drivers/media/radio/radio-terratec.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/Documentation/ABI/testing/sysfs-bus-pci b/Documentation/ABI/testing/sysfs-bus-pci
-index 840727fc75dc..ecf47559f495 100644
---- a/Documentation/ABI/testing/sysfs-bus-pci
-+++ b/Documentation/ABI/testing/sysfs-bus-pci
-@@ -407,6 +407,16 @@ Description:
- 	        file contains a '1' if the memory has been published for
- 		use outside the driver that owns the device.
+diff --git a/drivers/media/radio/radio-terratec.c b/drivers/media/radio/radio-terratec.c
+index 8b8ce2b46a55..621bb8523271 100644
+--- a/drivers/media/radio/radio-terratec.c
++++ b/drivers/media/radio/radio-terratec.c
+@@ -82,7 +82,6 @@ static int terratec_s_mute_volume(struct radio_isa_card *isa, bool mute, int vol
+ static int terratec_s_frequency(struct radio_isa_card *isa, u32 freq)
+ {
+ 	int i;
+-	int p;
+ 	int temp;
+ 	long rest;
+ 	unsigned char buffer[25];		/* we have to bit shift 25 registers */
+@@ -93,7 +92,6 @@ static int terratec_s_frequency(struct radio_isa_card *isa, u32 freq)
+ 	rest = freq * 10 + 10700;	/* I once had understood what is going on here */
+ 					/* maybe some wise guy (friedhelm?) can comment this stuff */
+ 	i = 13;
+-	p = 10;
+ 	temp = 102400;
+ 	while (rest != 0) {
+ 		if (rest % temp  == rest)
+@@ -103,7 +101,6 @@ static int terratec_s_frequency(struct radio_isa_card *isa, u32 freq)
+ 			rest = rest - temp;
+ 		}
+ 		i--;
+-		p--;
+ 		temp = temp / 2;
+ 	}
  
-+What:		/sys/bus/pci/devices/.../p2pmem/allocate
-+Date:		August 2022
-+Contact:	Logan Gunthorpe <logang@deltatee.com>
-+Description:
-+		This file allows mapping p2pmem into userspace. For each
-+		mmap() call on this file, the kernel will allocate a chunk
-+		of Peer-to-Peer memory for use in Peer-to-Peer transactions.
-+		This memory can be used in O_DIRECT calls to NVMe backed
-+		files for Peer-to-Peer copies.
-+
- What:		/sys/bus/pci/devices/.../link/clkpm
- 		/sys/bus/pci/devices/.../link/l0s_aspm
- 		/sys/bus/pci/devices/.../link/l1_aspm
 -- 
-2.30.2
+2.37.3
 
