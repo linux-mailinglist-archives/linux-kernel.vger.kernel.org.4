@@ -2,69 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73171607F53
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 21:56:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE1AD607F5B
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 21:57:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230244AbiJUT4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 15:56:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59188 "EHLO
+        id S230271AbiJUT5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 15:57:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230096AbiJUT4c (ORCPT
+        with ESMTP id S230230AbiJUT5e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 15:56:32 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A7CF25C491
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 12:56:31 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id 67so3516103pfz.12
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 12:56:30 -0700 (PDT)
+        Fri, 21 Oct 2022 15:57:34 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FF9429CB8C
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 12:57:31 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id r14so9839853edc.7
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 12:57:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Q87+XlhQn6Tk3P1abcoeuNg9gQxaeIvmWYCmU3ZSX0w=;
-        b=e0zwMkMHKkJlf9+RGMoru+W87WKCq8xNa/1hVwEGzJNTqSO4gA+72IUm5X5QYaw4MM
-         b0Y+4xDS3CNIkcjZ8/BIx4pdqJLd/pkGg/9yFM6OHJM1GpHcnTot1+qXayEyKHlbsm58
-         EoXGJQpLzjqk1QVmnD6Fj1HCWVfh00PkxEHQgmwlaEpsuj4ZEzpWI10ABgOU6K0pU/1D
-         Ou6ya4V2MWr8B9lmN+L1JX5guAf9zwwOsp7iV0L7UhUOiGO2LVuPSIdcN6eJaEfgkgJS
-         SvTdNBi1rYpn8pHHOvbMdTllC7bPVYrOVq7d92/Nst74zo4lMTSorzbbNTnRGthdd//t
-         5J4g==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=83yew4h3EczEpqTQpVrOzoHIxYSse7MFO/5DXXJ/mCU=;
+        b=aIFNnV3TWMGHSleRWHCCi5mY8T81euFzFYCxcb60gXsXGBgVZsihBEIEiL7T6OJZmH
+         eJA4hPoYKXiWEWTodkpoyOR6WIS1qq21bnsrJEYfk7JTtH+Sb+lEdMd/ObdO1Dnf1nZF
+         HHvaErEKkRQI/Oiwtg2DJz5u+nLkxCsy5oCiQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Q87+XlhQn6Tk3P1abcoeuNg9gQxaeIvmWYCmU3ZSX0w=;
-        b=SYSXuNlztm/WT2qjH32RG7fJ2lg0QOC70gjbPKx91M78nV6kE80lovtMuIpYYZ9LXH
-         Hug7LRZ8/a8Js1HEbgUYK2LwM3DclAM53vPLENn01mzx8C1ywuv2u1IIBXm1JM/ZAnmF
-         7HZ0ZhD2J1z9tVxXplHKh+9KmDUOKAgjoTO6Zu76d39pM2NC8lL7piDMIho2o2eTp+Aq
-         vDB9MQKSQT8g3pAm8oKCaldLfNfXn9m1BrpkIQ+aQWCd20Wv8nkLoPSZeAGNJ+20aHUn
-         NM+agTrxPcmeZXQ/jMbbQpiCwuVOSuX0SGIHXvbaA2fHqL7C/4en+JIEbbquSGVMhSVd
-         a52g==
-X-Gm-Message-State: ACrzQf34B3MdDhYWuDJxpP61QTdObPA9hQcZbGZ95P4trn+u60dy3jWb
-        oy0kdhC/j4k07LtmvZO3ukY=
-X-Google-Smtp-Source: AMsMyM4xqb6gSapkyekAI3xQRGN8PuvNIv5AfbBFdOkanjUQMGgYGMON0kG502mfjhXtN+OO3+rvkA==
-X-Received: by 2002:a65:6d1a:0:b0:3fb:2109:7b87 with SMTP id bf26-20020a656d1a000000b003fb21097b87mr17299819pgb.127.1666382190589;
-        Fri, 21 Oct 2022 12:56:30 -0700 (PDT)
-Received: from localhost.localdomain (192-184-163-51.fiber.dynamic.sonic.net. [192.184.163.51])
-        by smtp.gmail.com with ESMTPSA id g13-20020aa79dcd000000b005668b26ade0sm15179345pfq.136.2022.10.21.12.56.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Oct 2022 12:56:30 -0700 (PDT)
-From:   Emily Peri <eperi1024@gmail.com>
-To:     gregkh@linuxfoundation.org, outreachy@lists.linux.dev,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Cc:     Emily Peri <eperi1024@gmail.com>
-Subject: [PATCH v2 3/3] staging: rtl8723bs: use tab instead of spaces for indent
-Date:   Fri, 21 Oct 2022 12:54:57 -0700
-Message-Id: <0516cac046c617b55718fddb2aac3a50d543d84c.1666380274.git.eperi1024@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1666380274.git.eperi1024@gmail.com>
-References: <cover.1666380274.git.eperi1024@gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=83yew4h3EczEpqTQpVrOzoHIxYSse7MFO/5DXXJ/mCU=;
+        b=m1qmX3jO6ZnShHE6tcC+2mN/EirouaheCdrgdZOTgPNAxlNVkNbH25165LaXfJl/y8
+         m88UOL33mH1ICPpBC/+8a2NDmbgdeiaLXLnpDrulVTUZZwFMLBZ/u4KaHYBSGlCXtgZV
+         i1McZb0CCfAqCKPoyZXyMAYGtO6FMPVlvrLiu4Ru88lafnYJmUIOuSHrnU7sclsp1sov
+         HhinAvcYnlLXq/GIdb4S/PrJXl+2XPQo0gkTk/Mjraojkeqk9AyFoPUrsc1Zemm9WZ0M
+         2WQbIPYVww0y002Dec0Ton6cEE17EvCx2sKjl04ZvpcVVg40WoZj2lC0TEvZDuT2yUpA
+         MHsA==
+X-Gm-Message-State: ACrzQf0pelKW+v8IKx0tCME//T71XkoY3+o6niesPOfCEpSuPhopyp39
+        5x0m7mF7A0UdIVNZStN8l7GAjG0IAgf+3g==
+X-Google-Smtp-Source: AMsMyM6gf9slKZCtfeGKYRlD5i4sROIa6rdvONmnVfWuFOZN/VoLMcuT7nxSP6QRQAw9LB0pmb/EXw==
+X-Received: by 2002:a17:907:3d91:b0:78d:f675:5659 with SMTP id he17-20020a1709073d9100b0078df6755659mr16657935ejc.92.1666382249137;
+        Fri, 21 Oct 2022 12:57:29 -0700 (PDT)
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com. [209.85.128.48])
+        by smtp.gmail.com with ESMTPSA id fy19-20020a170906b7d300b00781dbdb292asm12023126ejb.155.2022.10.21.12.57.27
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Oct 2022 12:57:27 -0700 (PDT)
+Received: by mail-wm1-f48.google.com with SMTP id iv17so2952742wmb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 12:57:27 -0700 (PDT)
+X-Received: by 2002:a1c:e90b:0:b0:3b4:fb6c:7654 with SMTP id
+ q11-20020a1ce90b000000b003b4fb6c7654mr14163557wmc.98.1666382246970; Fri, 21
+ Oct 2022 12:57:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20220927164922.3383711-1-evgreen@chromium.org>
+ <20220927094559.v3.8.Ibd067e73916b9fae268a5824c2dd037416426af8@changeid> <YzdhMW6VqoT0EkGI@kernel.org>
+In-Reply-To: <YzdhMW6VqoT0EkGI@kernel.org>
+From:   Evan Green <evgreen@chromium.org>
+Date:   Fri, 21 Oct 2022 12:56:50 -0700
+X-Gmail-Original-Message-ID: <CAE=gft45p4QFqe0E0X_1XGeRB2kLgH3p9ZfNNTvMk2H9GwbhMw@mail.gmail.com>
+Message-ID: <CAE=gft45p4QFqe0E0X_1XGeRB2kLgH3p9ZfNNTvMk2H9GwbhMw@mail.gmail.com>
+Subject: Re: [PATCH v3 08/11] PM: hibernate: Use TPM-backed keys to encrypt image
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        apronin@chromium.org, dlunev@google.com,
+        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
+        rjw@rjwysocki.net, corbet@lwn.net, linux-pm@vger.kernel.org,
+        zohar@linux.ibm.com, Kees Cook <keescook@chromium.org>,
+        Eric Biggers <ebiggers@kernel.org>, jejb@linux.ibm.com,
+        gwendal@chromium.org, Matthew Garrett <mgarrett@aurora.tech>,
+        Len Brown <len.brown@intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,27 +82,314 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace spaces with tab for indent and correct alignment for closing
-brace in rtw_ioctl_set. Issue found by checkpatch.
+On Fri, Sep 30, 2022 at 2:35 PM Jarkko Sakkinen <jarkko@kernel.org> wrote:
+>
+> On Tue, Sep 27, 2022 at 09:49:19AM -0700, Evan Green wrote:
+> > When using encrypted hibernate images, have the TPM create a key for us
+> > and seal it. By handing back a sealed blob instead of the raw key, we
+> > prevent usermode from being able to decrypt and tamper with the
+> > hibernate image on a different machine.
+> >
+> > We'll also go through the motions of having PCR23 set to a known value at
+> > the time of key creation and unsealing. Currently there's nothing that
+> > enforces the contents of PCR23 as a condition to unseal the key blob,
+> > that will come in a later change.
+> >
+> > Sourced-from: Matthew Garrett <mjg59@google.com>
+> > Signed-off-by: Evan Green <evgreen@chromium.org>
+> >
+> > ---
+> > Matthew's incarnation of this patch is at:
+> > https://patchwork.kernel.org/project/linux-pm/patch/20210220013255.1083202-9-matthewgarrett@google.com/
+> >
+> > Changes in v3:
+> >  - ENCRYPTED_HIBERNATION needs TRUSTED_KEYS builtin for
+> >    key_type_trusted.
+> >  - Remove KEYS dependency since it's covered by TRUSTED_KEYS (Kees)
+> >
+> > Changes in v2:
+> >  - Rework load/create_kernel_key() to eliminate a label (Andrey)
+> >  - Call put_device() needed from calling tpm_default_chip().
+> >
+> >  kernel/power/Kconfig   |   1 +
+> >  kernel/power/snapenc.c | 207 +++++++++++++++++++++++++++++++++++++++--
+> >  kernel/power/user.h    |   1 +
+> >  3 files changed, 200 insertions(+), 9 deletions(-)
+> >
+> > diff --git a/kernel/power/Kconfig b/kernel/power/Kconfig
+> > index cd574af0b43379..2f8acbd87b34dc 100644
+> > --- a/kernel/power/Kconfig
+> > +++ b/kernel/power/Kconfig
+> > @@ -96,6 +96,7 @@ config ENCRYPTED_HIBERNATION
+> >       bool "Encryption support for userspace snapshots"
+> >       depends on HIBERNATION_SNAPSHOT_DEV
+> >       depends on CRYPTO_AEAD2=y
+> > +     depends on TRUSTED_KEYS=y
+> >       default n
+> >       help
+> >         Enable support for kernel-based encryption of hibernation snapshots
+> > diff --git a/kernel/power/snapenc.c b/kernel/power/snapenc.c
+> > index cb90692d6ab83a..90079f6d4f184b 100644
+> > --- a/kernel/power/snapenc.c
+> > +++ b/kernel/power/snapenc.c
+> > @@ -4,13 +4,23 @@
+> >  #include <linux/crypto.h>
+> >  #include <crypto/aead.h>
+> >  #include <crypto/gcm.h>
+> > +#include <keys/trusted-type.h>
+> > +#include <linux/key-type.h>
+> >  #include <linux/random.h>
+> >  #include <linux/mm.h>
+> > +#include <linux/tpm.h>
+> >  #include <linux/uaccess.h>
+> >
+> >  #include "power.h"
+> >  #include "user.h"
+> >
+> > +/* sha256("To sleep, perchance to dream") */
+> > +static struct tpm_digest known_digest = { .alg_id = TPM_ALG_SHA256,
+> > +     .digest = {0x92, 0x78, 0x3d, 0x79, 0x2d, 0x00, 0x31, 0xb0, 0x55, 0xf9,
+> > +                0x1e, 0x0d, 0xce, 0x83, 0xde, 0x1d, 0xc4, 0xc5, 0x8e, 0x8c,
+> > +                0xf1, 0x22, 0x38, 0x6c, 0x33, 0xb1, 0x14, 0xb7, 0xec, 0x05,
+> > +                0x5f, 0x49}};
+> > +
+> >  /* Encrypt more data from the snapshot into the staging area. */
+> >  static int snapshot_encrypt_refill(struct snapshot_data *data)
+> >  {
+> > @@ -313,6 +323,12 @@ void snapshot_teardown_encryption(struct snapshot_data *data)
+> >  {
+> >       int i;
+> >
+> > +     if (data->key) {
+>
+> Would be a helpful to have perhaps inline comment before the check.
+>
+> Just stating this because I did not exactly follow why the null
+> check was needed (but do believe that there are good reasons to
+> do it).
+>
+> > +             key_revoke(data->key);
+> > +             key_put(data->key);
+> > +             data->key = NULL;
+> > +     }
+> > +
+> >       if (data->aead_req) {
+> >               aead_request_free(data->aead_req);
+> >               data->aead_req = NULL;
+> > @@ -381,11 +397,83 @@ static int snapshot_setup_encryption_common(struct snapshot_data *data)
+> >       return rc;
+> >  }
+> >
+> > +static int snapshot_create_kernel_key(struct snapshot_data *data)
+> > +{
+> > +     const struct cred *cred = current_cred();
+> > +     struct tpm_digest *digests = NULL;
+> > +     struct tpm_chip *chip;
+> > +     struct key *key = NULL;
+> > +     int ret, i;
+> > +     /* Create a key sealed by the SRK. */
+> > +     char *keyinfo = "new\t32\tkeyhandle=0x81000000";
+>
+> Again, I'd consider put this declaration as first.
+>
+> > +
+> > +     chip = tpm_default_chip();
+> > +     if (!chip)
+> > +             return -ENODEV;
+> > +
+> > +     if (!(tpm_is_tpm2(chip))) {
+> > +             ret = -ENODEV;
+> > +             goto out_dev;
+> > +     }
+> > +
+> > +     ret = tpm_pcr_reset(chip, 23);
+> > +     if (ret)
+> > +             goto out;
+> > +
+> > +     digests = kcalloc(chip->nr_allocated_banks, sizeof(struct tpm_digest),
+> > +                       GFP_KERNEL);
+> > +     if (!digests) {
+> > +             ret = -ENOMEM;
+> > +             goto out;
+> > +     }
+> > +
+> > +     for (i = 0; i <= chip->nr_allocated_banks; i++) {
+> > +             digests[i].alg_id = chip->allocated_banks[i].alg_id;
+> > +             if (digests[i].alg_id == known_digest.alg_id)
+> > +                     memcpy(&digests[i], &known_digest, sizeof(known_digest));
+> > +     }
+> > +
+> > +     ret = tpm_pcr_extend(chip, 23, digests);
+> > +     if (ret != 0)
+> > +             goto out;
+> > +
+> > +     key = key_alloc(&key_type_trusted, "swsusp", GLOBAL_ROOT_UID,
+> > +                     GLOBAL_ROOT_GID, cred, 0, KEY_ALLOC_NOT_IN_QUOTA,
+> > +                     NULL);
+> > +
+> > +     if (IS_ERR(key)) {
+> > +             ret = PTR_ERR(key);
+> > +             key = NULL;
+> > +             goto out;
+> > +     }
+> > +
+> > +     ret = key_instantiate_and_link(key, keyinfo, strlen(keyinfo) + 1, NULL,
+> > +                                    NULL);
+>
+> Generally speaking, even if it somehow would be "safe", not strlen()
+> thank you.
+>
+> AFAIK, keyinfo is a constant so you could just as well use sizeof().
+> And then you would not need "+ 1".
 
-Signed-off-by: Emily Peri <eperi1024@gmail.com>
----
- drivers/staging/rtl8723bs/core/rtw_ioctl_set.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Ack, I'm changing this one to sizeof(keyinfo), but...
 
-diff --git a/drivers/staging/rtl8723bs/core/rtw_ioctl_set.c b/drivers/staging/rtl8723bs/core/rtw_ioctl_set.c
-index 47323160e72d..3b44f0dd5b0a 100644
---- a/drivers/staging/rtl8723bs/core/rtw_ioctl_set.c
-+++ b/drivers/staging/rtl8723bs/core/rtw_ioctl_set.c
-@@ -312,7 +312,7 @@ u8 rtw_set_802_11_infrastructure_mode(struct adapter *padapter,
- 		if ((*pold_state == Ndis802_11Infrastructure) || (*pold_state == Ndis802_11IBSS)) {
- 			if (check_fwstate(pmlmepriv, _FW_LINKED) == true)
- 				rtw_indicate_disconnect(padapter); /* will clr Linked_state; before this function, we must have checked whether issue dis-assoc_cmd or not */
--	       }
-+		}
- 
- 		*pold_state = networktype;
- 
--- 
-2.34.1
+>
+> > +     if (ret != 0)
+> > +             goto out;
+> > +
+> > +     data->key = key;
+> > +     key = NULL;
+> > +
+> > +out:
+> > +     if (key) {
+> > +             key_revoke(key);
+> > +             key_put(key);
+> > +     }
+> > +
+> > +     kfree(digests);
+> > +     tpm_pcr_reset(chip, 23);
+> > +
+> > +out_dev:
+> > +     put_device(&chip->dev);
+> > +     return ret;
+> > +}
+> > +
+> >  int snapshot_get_encryption_key(struct snapshot_data *data,
+> >       struct uswsusp_key_blob __user *key)
+> >  {
+> > -     u8 aead_key[SNAPSHOT_ENCRYPTION_KEY_SIZE];
+> >       u8 nonce[USWSUSP_KEY_NONCE_SIZE];
+> > +     struct trusted_key_payload *payload;
+> >       int rc;
+> >       /* Don't pull a random key from a world that can be reset. */
+> >       if (data->ready)
+> > @@ -399,21 +487,28 @@ int snapshot_get_encryption_key(struct snapshot_data *data,
+> >       get_random_bytes(nonce, sizeof(nonce));
+> >       memcpy(&data->nonce_low, &nonce[0], sizeof(data->nonce_low));
+> >       memcpy(&data->nonce_high, &nonce[8], sizeof(data->nonce_high));
+> > -     /* Build a random key */
+> > -     get_random_bytes(aead_key, sizeof(aead_key));
+> > -     rc = crypto_aead_setkey(data->aead_tfm, aead_key, sizeof(aead_key));
+> > +
+> > +     /* Create a kernel key, and set it. */
+> > +     rc = snapshot_create_kernel_key(data);
+> > +     if (rc)
+> > +             goto fail;
+> > +
+> > +     payload = data->key->payload.data[0];
+> > +     /* Install the key */
+> > +     rc = crypto_aead_setkey(data->aead_tfm, payload->key, SNAPSHOT_ENCRYPTION_KEY_SIZE);
+> >       if (rc)
+> >               goto fail;
+> >
+> > -     /* Hand the key back to user mode (to be changed!) */
+> > -     rc = put_user(sizeof(struct uswsusp_key_blob), &key->blob_len);
+> > +     /* Hand the key back to user mode in sealed form. */
+> > +     rc = put_user(payload->blob_len, &key->blob_len);
+> >       if (rc)
+> >               goto fail;
+> >
+> > -     rc = copy_to_user(&key->blob, &aead_key, sizeof(aead_key));
+> > +     rc = copy_to_user(&key->blob, &payload->blob, payload->blob_len);
+> >       if (rc)
+> >               goto fail;
+> >
+> > +     /* The nonce just gets handed back in the clear. */
+> >       rc = copy_to_user(&key->nonce, &nonce, sizeof(nonce));
+> >       if (rc)
+> >               goto fail;
+> > @@ -425,10 +520,99 @@ int snapshot_get_encryption_key(struct snapshot_data *data,
+> >       return rc;
+> >  }
+> >
+> > +static int snapshot_load_kernel_key(struct snapshot_data *data,
+> > +     struct uswsusp_key_blob *blob)
+>
+> Bad alignment.
+>
+> > +{
+> > +
+> > +     const struct cred *cred = current_cred();
+> > +     char *keytemplate = "load\t%s\tkeyhandle=0x81000000";
+>
+> Ditto.
+>
+> > +     struct tpm_digest *digests = NULL;
+> > +     char *blobstring = NULL;
+> > +     char *keyinfo = NULL;
+> > +     struct tpm_chip *chip;
+> > +     struct key *key = NULL;
+> > +     int i, ret;
+> > +
+> > +     chip = tpm_default_chip();
+> > +     if (!chip)
+> > +             return -ENODEV;
+> > +
+> > +     if (!(tpm_is_tpm2(chip))) {
+> > +             ret = -ENODEV;
+> > +             goto out_dev;
+> > +     }
+> > +
+> > +     ret = tpm_pcr_reset(chip, 23);
+> > +     if (ret)
+> > +             goto out;
+> > +
+> > +     digests = kcalloc(chip->nr_allocated_banks, sizeof(struct tpm_digest),
+> > +                       GFP_KERNEL);
+> > +     if (!digests)
+> > +             goto out;
+> > +
+> > +     for (i = 0; i <= chip->nr_allocated_banks; i++) {
+> > +             digests[i].alg_id = chip->allocated_banks[i].alg_id;
+> > +             if (digests[i].alg_id == known_digest.alg_id)
+> > +                     memcpy(&digests[i], &known_digest, sizeof(known_digest));
+> > +     }
+> > +
+> > +     ret = tpm_pcr_extend(chip, 23, digests);
+> > +     if (ret != 0)
+> > +             goto out;
+> > +
+> > +     blobstring = kmalloc(blob->blob_len * 2, GFP_KERNEL);
+> > +     if (!blobstring) {
+> > +             ret = -ENOMEM;
+> > +             goto out;
+> > +     }
+> > +
+> > +     bin2hex(blobstring, blob->blob, blob->blob_len);
+> > +     keyinfo = kasprintf(GFP_KERNEL, keytemplate, blobstring);
+> > +     if (!keyinfo) {
+> > +             ret = -ENOMEM;
+> > +             goto out;
+> > +     }
+> > +
+> > +     key = key_alloc(&key_type_trusted, "swsusp", GLOBAL_ROOT_UID,
+> > +                     GLOBAL_ROOT_GID, cred, 0, KEY_ALLOC_NOT_IN_QUOTA,
+> > +                     NULL);
+> > +
+> > +     if (IS_ERR(key)) {
+> > +             ret = PTR_ERR(key);
+> > +             key = NULL;
+> > +             goto out;
+> > +     }
+> > +
+> > +     ret = key_instantiate_and_link(key, keyinfo, strlen(keyinfo) + 1, NULL,
+> > +                                    NULL);
+>
+> Ditto.
 
+... I can't change this one to sizeof. Since this came out of
+kasprintf() and we already checked against null, strlen() seemed safe
+here. Is there a different pattern I should be following?
+
+-Evan
