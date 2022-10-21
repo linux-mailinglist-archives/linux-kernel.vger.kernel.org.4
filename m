@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA114607835
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 15:19:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C18E607836
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 15:19:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230385AbiJUNT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 09:19:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56604 "EHLO
+        id S230395AbiJUNT2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 09:19:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230495AbiJUNTA (ORCPT
+        with ESMTP id S231173AbiJUNTO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 09:19:00 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DDCB270236;
-        Fri, 21 Oct 2022 06:18:50 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id a25so3744635ljk.0;
-        Fri, 21 Oct 2022 06:18:50 -0700 (PDT)
+        Fri, 21 Oct 2022 09:19:14 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0A6C5C9C3;
+        Fri, 21 Oct 2022 06:19:12 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id f37so5022230lfv.8;
+        Fri, 21 Oct 2022 06:19:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pRkhXHMl4TQ/DqaAGRL8GCynFjjb+3hTJyL1LA0fGPI=;
-        b=WgobnPDdXrxxYqHttfwgpj1q5gAY72WGanvgflFsMOySjkHmZ4ZH4p7AB0RtJyA3KR
-         LAQJzEZ7NujWLO07huI2EltfmcuGTsWpKfAxegLQF6ITGT5ldA3qdzhI3F4kFUq4yVGw
-         zaIz7sxHn5cE8lamSLUKUO0ZVDZZNZAIVmGSTwuP4f8oGB8ATSsPMkGX2VDO/4i5MZNi
-         bPGdh+ZVAvIhLxkO1TLvj50dkUl/1NOl0SeeLJjHwicmqljgCcVMVsjgf6Lg53kjC09m
-         dNUk9rCAkhIQhKjM82dlPBTIwqx7IB9jFo3fTAy7E717X6RDH/DQOgQqpIuQ5070bUD0
-         Z6gA==
+        bh=kSylMpx0YFsO31Hjkjkcjn2msnx+oITUaLGfh+0vVIE=;
+        b=pCPCyBdcW1Dxce4rSpZGxMbdmm3k4A8+8OJ+rBpD3sbTSRkrm98zqrhlvRnQWFeiPg
+         MvE5i8PbKLTNGMCyql6GsXQQQ4AR2ycbx55uOON8fjLAXKw1N1IBmzFeQxB0fFF0QTvZ
+         sCGFD9eb/7U66Fpi96reXKRp56nrV4AmnyftOqBEv2yi3p1CsRspKkhJVvp6/3qJ1su6
+         pkHlAUz4/0AKk43eHoddYd1qtd+kWkhCaZublMPgaLlXzl7DWblkEvA7QSZTmVRiU630
+         2QBEo8/zjdrjSYeh4Rw9zactbfWk8r4o2nbgHhwqzAUkO1V/qtgpjOR8LbtCfaPN8YmA
+         /Xtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pRkhXHMl4TQ/DqaAGRL8GCynFjjb+3hTJyL1LA0fGPI=;
-        b=wAMVbd/DgFo3RgrZSCoGdGawxZiKoRWQCnL40dL69xlc/VgApLI5wF9yiXrkPWwBwg
-         as2wNoE/oeCPRb5ij4V8tQNk9lKvA9BaJaS8R283zQSZeCuWgdDJX93Hz7zlkuOxFuh0
-         U8Nv9mdJjp9vI8ZmUTVAGFBhEC4sGFz4AN2Tsv1YA6LJzY197aGbrFyRPsgAZoBceXld
-         XxhQUsAe+ORiv8hODTbS8SaEQwe9os0YjH/YhjxmjYzb7P3BpOByjWEOhim2vBklJLsy
-         DuowOAtPnO4gj9Y6+wm9ZpoJ/puQVcdH5Qdi7YupRmPKHCC4Ns8ja5ldCCTENpvLQ+nZ
-         vg2w==
-X-Gm-Message-State: ACrzQf2j36vyJRynPQtky/JV2sHtFKt0b3y9hVb/3pq9I/GWW5DvPTrc
-        aX8liCgpGx9/6tF8XAQ+f14=
-X-Google-Smtp-Source: AMsMyM5ZI9LOvAWowEwE1BQiARts/ZjcHuWX/l3x5n+ReleYNXhDm3X/s5vQQklCiZ0l7SohVfPGEA==
-X-Received: by 2002:a2e:a7d0:0:b0:26f:d241:483b with SMTP id x16-20020a2ea7d0000000b0026fd241483bmr6279663ljp.426.1666358328736;
-        Fri, 21 Oct 2022 06:18:48 -0700 (PDT)
+        bh=kSylMpx0YFsO31Hjkjkcjn2msnx+oITUaLGfh+0vVIE=;
+        b=IcTlfFt/B9gO994TEG10yP1jztBiFsAYwCQCoGZPJiYM2IVnYh3Z1ff38NBySwdrRG
+         UD5RYZ3BJJmnnBMauXjHG7Kl39YnLdh160j7fwOcl/NJGWyuDZ4p/J6TlzTcQ2KaUP4N
+         3qlVtOBZ+Dj0h3+Co0CypKphHyOTDPsVlUHjkJe/aumcgJnDKuNIQMm3RnExkyi5KH2V
+         n6+ADhHBOKI/v3/dfumtc/ji+d93Y7fgD1mLdtdfhwuyG8OXvxqHrHLNrqnOV1bgnFOY
+         6Kj9jRsL9kDlbLjRqcJVJKU+6GqnXHXiAZ0gRZIgjY7hsrrte9wb6TxjBzrv/xENWlPV
+         PCRQ==
+X-Gm-Message-State: ACrzQf01QhQOGzTPhRXkAy5NO/nQmPIK/KmR0ITwaORGEUtTPITNqFYf
+        x/hn8cQrYxcAYx6bgAxVT4g=
+X-Google-Smtp-Source: AMsMyM4B1Gz1PwwH2+BbftHuFfixXyGIDvs32ddQqbNWh+grybL2k3HLNZB+9j1dXvJuph8bTTYW2w==
+X-Received: by 2002:a05:6512:1681:b0:4a2:1925:e3ff with SMTP id bu1-20020a056512168100b004a21925e3ffmr7580907lfb.517.1666358350758;
+        Fri, 21 Oct 2022 06:19:10 -0700 (PDT)
 Received: from dc75zzyyyyyyyyyyyyyby-3.rev.dnainternet.fi (dc75zzyyyyyyyyyyyyyby-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::2])
-        by smtp.gmail.com with ESMTPSA id 9-20020ac25f49000000b0049944ab6895sm3150402lfz.260.2022.10.21.06.18.47
+        by smtp.gmail.com with ESMTPSA id t28-20020a05651c205c00b0026e02eb613csm3398419ljo.18.2022.10.21.06.19.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Oct 2022 06:18:47 -0700 (PDT)
-Date:   Fri, 21 Oct 2022 16:18:43 +0300
+        Fri, 21 Oct 2022 06:19:09 -0700 (PDT)
+Date:   Fri, 21 Oct 2022 16:19:04 +0300
 From:   Matti Vaittinen <mazziesaccount@gmail.com>
 To:     Matti Vaittinen <mazziesaccount@gmail.com>,
         Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
@@ -72,13 +72,13 @@ Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
         dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         linux-amlogic@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org
-Subject: [PATCH v4 3/4] hwmon: lm90: simplify using
+Subject: [PATCH v4 4/4] hwmon: adm1177: simplify using
  devm_regulator_get_enable()
-Message-ID: <a1fa4364cbb775de25478117dd22dda0742089e3.1666357434.git.mazziesaccount@gmail.com>
+Message-ID: <7773541795f280db31dd981ffc21df8a630b794a.1666357434.git.mazziesaccount@gmail.com>
 References: <cover.1666357434.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="M3g96xv3Iy/Ir190"
+        protocol="application/pgp-signature"; boundary="LNJ8AAv0zmlHvO2X"
 Content-Disposition: inline
 In-Reply-To: <cover.1666357434.git.mazziesaccount@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -92,68 +92,86 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---M3g96xv3Iy/Ir190
+--LNJ8AAv0zmlHvO2X
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Drop open-coded pattern: 'devm_regulator_get(), regulator_enable(),
 add_action_or_reset(regulator_disable)' and use the
-devm_regulator_get_enable().
+devm_regulator_get_enable() and drop the pointer to the regulator.
+This simplifies code and makes it less tempting to add manual control
+for the regulator which is also controlled by devm.
 
 Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
 Acked-by: Guenter Roeck <linux@roeck-us.net>
 
 ---
-RFCv1 =3D> v2:
-- No changes
+v2 =3D> v3:
+New patch
 ---
- drivers/hwmon/lm90.c | 20 ++------------------
- 1 file changed, 2 insertions(+), 18 deletions(-)
+ drivers/hwmon/adm1177.c | 27 +++------------------------
+ 1 file changed, 3 insertions(+), 24 deletions(-)
 
-diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
-index db595f7d01f8..a3f95ba00dbf 100644
---- a/drivers/hwmon/lm90.c
-+++ b/drivers/hwmon/lm90.c
-@@ -2663,11 +2663,6 @@ static void lm90_remove_pec(void *dev)
- 	device_remove_file(dev, &dev_attr_pec);
- }
+diff --git a/drivers/hwmon/adm1177.c b/drivers/hwmon/adm1177.c
+index 0c5dbc5e33b4..be17a26a84f1 100644
+--- a/drivers/hwmon/adm1177.c
++++ b/drivers/hwmon/adm1177.c
+@@ -26,14 +26,12 @@
+ /**
+  * struct adm1177_state - driver instance specific data
+  * @client:		pointer to i2c client
+- * @reg:		regulator info for the power supply of the device
+  * @r_sense_uohm:	current sense resistor value
+  * @alert_threshold_ua:	current limit for shutdown
+  * @vrange_high:	internal voltage divider
+  */
+ struct adm1177_state {
+ 	struct i2c_client	*client;
+-	struct regulator	*reg;
+ 	u32			r_sense_uohm;
+ 	u32			alert_threshold_ua;
+ 	bool			vrange_high;
+@@ -189,13 +187,6 @@ static const struct hwmon_chip_info adm1177_chip_info =
+=3D {
+ 	.info =3D adm1177_info,
+ };
 =20
--static void lm90_regulator_disable(void *regulator)
+-static void adm1177_remove(void *data)
 -{
--	regulator_disable(regulator);
+-	struct adm1177_state *st =3D data;
+-
+-	regulator_disable(st->reg);
 -}
 -
- static int lm90_probe_channel_from_dt(struct i2c_client *client,
- 				      struct device_node *child,
- 				      struct lm90_data *data)
-@@ -2749,24 +2744,13 @@ static int lm90_probe(struct i2c_client *client)
+ static int adm1177_probe(struct i2c_client *client)
+ {
  	struct device *dev =3D &client->dev;
- 	struct i2c_adapter *adapter =3D client->adapter;
- 	struct hwmon_channel_info *info;
--	struct regulator *regulator;
- 	struct device *hwmon_dev;
- 	struct lm90_data *data;
- 	int err;
+@@ -210,21 +201,9 @@ static int adm1177_probe(struct i2c_client *client)
 =20
--	regulator =3D devm_regulator_get(dev, "vcc");
--	if (IS_ERR(regulator))
--		return PTR_ERR(regulator);
+ 	st->client =3D client;
+=20
+-	st->reg =3D devm_regulator_get_optional(&client->dev, "vref");
+-	if (IS_ERR(st->reg)) {
+-		if (PTR_ERR(st->reg) =3D=3D -EPROBE_DEFER)
+-			return -EPROBE_DEFER;
 -
--	err =3D regulator_enable(regulator);
--	if (err < 0) {
--		dev_err(dev, "Failed to enable regulator: %d\n", err);
--		return err;
+-		st->reg =3D NULL;
+-	} else {
+-		ret =3D regulator_enable(st->reg);
+-		if (ret)
+-			return ret;
+-		ret =3D devm_add_action_or_reset(&client->dev, adm1177_remove,
+-					       st);
+-		if (ret)
+-			return ret;
 -	}
--
--	err =3D devm_add_action_or_reset(dev, lm90_regulator_disable, regulator);
-+	err =3D devm_regulator_get_enable(dev, "vcc");
- 	if (err)
--		return err;
-+		return dev_err_probe(dev, err, "Failed to enable regulator\n");
++	ret =3D devm_regulator_get_enable_optional(&client->dev, "vref");
++	if (ret =3D=3D -EPROBE_DEFER)
++		return -EPROBE_DEFER;
 =20
- 	data =3D devm_kzalloc(dev, sizeof(struct lm90_data), GFP_KERNEL);
- 	if (!data)
+ 	if (device_property_read_u32(dev, "shunt-resistor-micro-ohms",
+ 				     &st->r_sense_uohm))
 --=20
 2.37.3
 
@@ -170,19 +188,19 @@ Simon says - in Latin please.
 ~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
 Thanks to Simon Glass for the translation =3D]=20
 
---M3g96xv3Iy/Ir190
+--LNJ8AAv0zmlHvO2X
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmNSnDMACgkQeFA3/03a
-ocWlJQf/f4PSr4V2vI2p2GUquvO7G7G/Ap8fvDhLsezltYKOvhysBmxyc5W6uOE7
-A7UDzafqeVb2ZRqrHDe3b348v/vZ2nUN37wDIQVQiLFYeVUWJtYQY0AIt3MAYSgh
-/6pYUFjsOhPk4zgrplh2O07iDM7V0h09ovKA/aQ4KtsOgKoi+zmhD7ka4YhwSoaf
-4MEQG4S4pGi5/tJlHG87zH7/+LESzo1g3s2GH5bZOolQQGfahwA+hP7ztnQ/4E0R
-WnPt+SydxPSAGI0A6ImdFCAemC8LkfsmDOfPbV7aVQonl/Pm+PYxKEC0auspopMv
-EARJfxX8SY6Civ722e+t7twiVR0REg==
-=bf9B
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmNSnEgACgkQeFA3/03a
+ocXPvwgAun6eU41kkrvzy+dbHSs4Z56InICDSb5ZiwM1LMLovJ07qcF9l187tw70
+FKRnuRPz02GuzMiZbxxv1vbZ9mQtvKrHgQikiuhopx4O8fdesdNGvf/5LGKGcr7n
+uuWSI+R+6obt7WyZOoO85KrCIXehRfRGMWEAqJtztlfF+SmQDbbPuwxePYNt5tyk
+1/v3ZHiDBFWIP5SdVBkn/uEwGisVbodkhh8g6G9CF68ubMIpJEtO2YfGmbwOJGBs
+hWzuPnYcun0hdtOQs0iyvHzbGV229OqpDJoTbe7+ZmkQgNVG5wq4NREC9U8kg0BN
+5WaVxylnzRD6aew57/PKqteO4AWbkA==
+=Tmnu
 -----END PGP SIGNATURE-----
 
---M3g96xv3Iy/Ir190--
+--LNJ8AAv0zmlHvO2X--
