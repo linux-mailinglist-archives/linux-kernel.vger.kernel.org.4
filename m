@@ -2,63 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B30B60807B
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 23:01:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8722E60807E
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 23:04:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230164AbiJUVBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 17:01:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56706 "EHLO
+        id S229936AbiJUVEy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 17:04:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229950AbiJUVB3 (ORCPT
+        with ESMTP id S229542AbiJUVEu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 17:01:29 -0400
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 048122A3886;
-        Fri, 21 Oct 2022 14:01:28 -0700 (PDT)
-Received: by mail-ot1-f50.google.com with SMTP id r8-20020a056830120800b00661a0a236efso2552911otp.4;
-        Fri, 21 Oct 2022 14:01:27 -0700 (PDT)
+        Fri, 21 Oct 2022 17:04:50 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C27752D1ED;
+        Fri, 21 Oct 2022 14:04:47 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id m14-20020a17090a3f8e00b00212dab39bcdso1286149pjc.0;
+        Fri, 21 Oct 2022 14:04:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ufCCYZYJTmJF/KoW5M3amrstoH4BcMXNIbfmJhiw4Bg=;
+        b=WCWaYaayvJhFN0nzxYZ8rTHbSJb3QZ8teTfyxYm1ciVC4ozBAjqHfy5axAMQ+Lq1pz
+         wMmHX/otXDp+ixHCVLZitVt/EsirR80dPz75DR/89XspfmMN7qtcsOop1T0ETvSY1ESK
+         duNo6HAR+TD2Z4ee2LnD33fhQNuEeB16NFirodfgKS1WdurxWUvd5yENnrQVhk3YvCWk
+         4JO7UxIDGEXfH5uQLzODMbz9w8rXiJ8WE+ETjtpZCEaovHQE4jB+uXUKjsXpihDskgpa
+         3gZQ8lQ6EJrraUf3tqB7IcM/Qjs+N6bOlr2EMQE5qoAp1Z/DrRwkvXIQKc6yGK+p5CmM
+         /jEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ThaXu9P48Sql8fmtxkFGUS2TC8a/h9n1gPZWoGU9Vk4=;
-        b=f9Z0k2WP5OsTrl8+VPoRrbc2VIiAvD93n6pXoigVpmei+cREhhSY5A34vkeXaLMEy1
-         vYa8+P/9E0BypYPWydVh/4R1kjPCoI0WPY9GphKs8idujRNSs4STiEXcZmhROI3qVA2g
-         1vu+eg49wUcXpzVAJSAL33rcH9etUxgasIBwdHC2BemX0lcYc7URZehmCOPKOyh2RK5D
-         InIcD/DO4ZOhr4D4tfVAGP2nLhDZzXSnH1I0l+/KDF3GNzdfS5ION0nn9gri21fEPOG0
-         yid5tkoCgjGU6uxxvOMftrjCfrqQznj6vxg6Wb5X9DrRXF4n8m3QCryZkR3c+7idEvWL
-         XgXA==
-X-Gm-Message-State: ACrzQf3iEc0/m7Rvk+KZlsBPD7ZiO6sOLw1KGE8vzCy7H8j6Ve7nF6ku
-        j826vhUSNVdB+wRcP3XmLQ==
-X-Google-Smtp-Source: AMsMyM5puNgQMe2ztfKZzxbkWEK9GvXVMrSURtKbZWZml7mWzUAxQhNgsqP6pxlCok4W5YhkXYnFqg==
-X-Received: by 2002:a05:6830:2a0d:b0:656:bd3f:253f with SMTP id y13-20020a0568302a0d00b00656bd3f253fmr10826597otu.25.1666386087242;
-        Fri, 21 Oct 2022 14:01:27 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id b8-20020a056870d1c800b0013af0b2e917sm2538708oac.35.2022.10.21.14.01.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Oct 2022 14:01:26 -0700 (PDT)
-Received: (nullmailer pid 316272 invoked by uid 1000);
-        Fri, 21 Oct 2022 21:01:28 -0000
-Date:   Fri, 21 Oct 2022 16:01:28 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Alexander Shiyan <shc_work@mail.ru>, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Subject: Re: [PATCH] dt-bindings: ata: Add 'ata-generic' binding
-Message-ID: <166638606840.315869.4368217201724215214.robh@kernel.org>
-References: <20221011135849.2785834-1-robh@kernel.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ufCCYZYJTmJF/KoW5M3amrstoH4BcMXNIbfmJhiw4Bg=;
+        b=pH8AK0NCJQkHNNJIWrvM+0VdKD0v1OzLxgX168qYyW5BxJQq1acAeDLbJa+Z25hS+A
+         AusLCWOFv4tkHMzU6ro21tx74d54XOReTeDHaimB80kAM8bbntxU9pDCu4P0/EJwYscP
+         PR/y2AW7xGqyLaPzj1MtPaaEgrg843l4+ixZ9zPQ5CPaFjUuqYu2NhsxqFSkc+tMX38o
+         CSyGOPCBDh0Wk94BzwmA19Is8cmHbpvqn58ahnKnvQJ49+CZSdQ+jJrlJ6rcIqq4q6K6
+         tl3Doq9Gpz1LKZ6IQQLW6oDlGuZB1tuXkDWMCpKgu95xHUGiqVTDBGa26uS0ZIZ9vk2I
+         XGBQ==
+X-Gm-Message-State: ACrzQf0ZmZzUimVC/nkf8iTbQNm7Eb0luXBpFjYHmpecINpSLNJfQkIh
+        frJN0yoxq1fn2cV0YzDBc4CVsrHUy51RVHMQ8xQ=
+X-Google-Smtp-Source: AMsMyM5tsrngLoCck9omAqu1bf1kz4Ah2EpMQMR6bhFE6MpEItn2IXmD213rWwn/DZs1vJCr8D+09/EppIvZSTFyUfI=
+X-Received: by 2002:a17:902:d512:b0:181:f1f4:fcb4 with SMTP id
+ b18-20020a170902d51200b00181f1f4fcb4mr21208456plg.102.1666386287303; Fri, 21
+ Oct 2022 14:04:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221011135849.2785834-1-robh@kernel.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <20221005180341.1738796-1-shy828301@gmail.com> <20221005180341.1738796-3-shy828301@gmail.com>
+ <20221013123830.opbulq4qad56kuev@techsingularity.net> <CAHbLzkpc+CAfsYe6gXjh=-3MxMH_aWhPMYhic7ddFZgWttOhng@mail.gmail.com>
+ <20221017094132.vnanndrwa2yn7qcw@techsingularity.net> <CAHbLzkpmbmtOdOsud-VG+wyk18wFAFnan8T55XxxwkHrnhLCmw@mail.gmail.com>
+ <20221021091911.ak3a7a3wr3qcbe3b@techsingularity.net>
+In-Reply-To: <20221021091911.ak3a7a3wr3qcbe3b@techsingularity.net>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Fri, 21 Oct 2022 14:04:34 -0700
+Message-ID: <CAHbLzkpAX3CGRGsxj4CTsj=atXqPakJe7TSxVvp3KnKmygk=3g@mail.gmail.com>
+Subject: Re: [PATCH 2/4] mm: mempool: introduce page bulk allocator
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     agk@redhat.com, snitzer@kernel.org, dm-devel@redhat.com,
+        akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,24 +71,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Oct 2022 08:58:50 -0500, Rob Herring wrote:
-> The 'ata-generic' binding has been around since 2008, but never
-> documented.
-> 
-> Cc: Alexander Shiyan <shc_work@mail.ru>
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
-> AFAICT, the ata-generic,use16bit property has no effect in Linux. The
-> 32-bit transfers fallback to 16-bit if ATA_PFLAG_PIO32 flag is not set
-> which it doesn't appear to ever be set. Looking at the history, the
-> driver always used 16-bit mode.
-> 
-> Linus, Okay with being maintainer here?
-> 
-> ---
->  .../devicetree/bindings/ata/ata-generic.yaml  | 58 +++++++++++++++++++
->  1 file changed, 58 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/ata/ata-generic.yaml
-> 
+On Fri, Oct 21, 2022 at 2:19 AM Mel Gorman <mgorman@techsingularity.net> wrote:
+>
+> On Tue, Oct 18, 2022 at 11:01:31AM -0700, Yang Shi wrote:
+> > > > Yeah, I didn't think of a better way to pass the pages to dm-crypt.
+> > > >
+> > > > >
+> > > > > How about this
+> > > > >
+> > > > > 1. Add a callback to __alloc_pages_bulk() that takes a page as a
+> > > > >    parameter like bulk_add_page() or whatever.
+> > > > >
+> > > > > 2. For page_list == NULL && page_array == NULL, the callback is used
+> > > > >
+> > > > > 3. Add alloc_pages_bulk_cb() that passes in the name of a callback
+> > > > >    function
+> > > > >
+> > > > > 4. In the dm-crypt case, use the callback to pass the page to bio_add_page
+> > > > >    for the new page allocated.
+> > > >
+> > > > Thank you so much for the suggestion. But I have a hard time
+> > > > understanding how these work together. Do you mean call bio_add_page()
+> > > > in the callback? But bio_add_page() needs other parameters. Or I
+> > > > misunderstood you?
+> > > >
+> > >
+> > > I expected dm-crypt to define the callback. Using bio_add_page
+> > > directly would not work as the bulk allocator has no idea what to pass
+> > > bio_add_page. dm-crypt would likely need to create both a callback and an
+> > > opaque data structure passed as (void *) to track "clone" and "len"
+> >
+> > I see. Yeah, we have to pass the "clone" and "len" to the callback via
+> > pool_data. It should not be hard since dm-crypt already uses
+> > crypt_config to maintain a counter for allocated pages, we should just
+> > need to pass the struct to the callback as a parameter.
+> >
+> > But I'm wondering whether this is worth it or not? Will it make the
+> > code harder to follow?
+> >
+>
+> A little because a callback is involved but it's not the only place in the
+> kernel where a callback is used like this and a comment should suffice. It
+> should be faster than list manipulation if nothing else. Mostly, I'm wary
+> of adding the first user of the list interface for the bulk allocator that
+> does not even want a list. If there isn't a user of the list interface
+> that *requires* it, the support will simply be deleted as dead code.
 
-Applied, thanks!
+Thanks, I see your point. Will work on the new version to implement
+the callback approach.
+
+>
+> --
+> Mel Gorman
+> SUSE Labs
