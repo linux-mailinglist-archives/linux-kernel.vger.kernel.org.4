@@ -2,70 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D58E7607CB2
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 18:50:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1093607CB5
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 18:50:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230310AbiJUQug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 12:50:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41844 "EHLO
+        id S231132AbiJUQur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 12:50:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbiJUQuU (ORCPT
+        with ESMTP id S230420AbiJUQuh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 12:50:20 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D54EB251D7D;
-        Fri, 21 Oct 2022 09:50:17 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id l22so8101379edj.5;
-        Fri, 21 Oct 2022 09:50:17 -0700 (PDT)
+        Fri, 21 Oct 2022 12:50:37 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75B2227356C
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:50:32 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id n130so3856675oia.6
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:50:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=C3xihInAFJQTl2KRc26pyAdZJDLSBMJZBLTKuN0TfOY=;
-        b=QfiA3SBfzLH/NwONgFFuq5Xl/WKmwFD/h9fyNaAK9tjQz4wcB4DEatJ/sTVQdx0ZMa
-         fb1fpTBX/qEp04A0EeUYDnIxxdyNTe3xehPISLW/P05oYNfIo2CnTctZL+k3+le5ch5Q
-         ZKlz0QmGWkBLdKxdPAcwMu6Uk64+UGYdUIyPwCz0tAlGiVE+nfu74tVstwFHHJdcpZxD
-         zTTZFV2txeqsg3TOs9k7ijQg0pyyMGzgYm45c16rn4nSODqTdq92YPKkoQ3+dJWHBdE6
-         8UOECdpJ5hv4wZ6wZg1crIRk7O6yK+S2zM2RDzuTxbUTd5AnWTOLAiRU/5/plvHdnFwP
-         GQxw==
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=K4hKno/aL4Bg3771FP97RAk5vH0GViKpS0EoTFQiXAc=;
+        b=QLOUBa61SZHZELYuNpmzZwTNuHX9WWmk2yK/KTPOBV/MohvWeTpdvKV+If+Gt00dLR
+         HDpP7VpVW3lZbNB5dJ1RnNqyztGfGm1VPhetkX0w9W5qnsLXrfzEi66whylia5hRH4q3
+         y/EzFsN0ohUolFYNwuS9CZuiefP2XPX9gNCzY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=C3xihInAFJQTl2KRc26pyAdZJDLSBMJZBLTKuN0TfOY=;
-        b=A4TRcvQS8kyJI8GUrEfqNVW1yK/cqIndw69C1dxHwxNCamoujVyQ34FkXI4pBXv0n2
-         rqzySHtPIYuLVJwWs/tFRs+/rZVccSq1V5QtHaGGawOPFE2wxWplXWCLoh3J0XNJEiWl
-         jQLZrJOlg3ag9E8U/dqA8he/e2nv40GlE0YcKgjs6v1/P3hFcIQUdRkDKfF5AAeD63sc
-         F1bAes7ETtDrpVYAmEfGGCGiAWTj2JYj46gig6R2xMrhkRvGQhAoH1k3wM++D/ZfMues
-         8WnJdBuPWqCASL1RKA2g+O6U2gliRVvd6ZMDeClZYaaH5tSelWt//nD8FA3QM4X2e2+j
-         5JHg==
-X-Gm-Message-State: ACrzQf2BfdGcb36ko4B+Da/l17zXOSetxQnvOWfBxeQghSnY2DAJuJwS
-        5Lszo4plf/SdG0VGybHvy60=
-X-Google-Smtp-Source: AMsMyM5xVwrvmZp/PxN0jnSnioT56JAfb3ZsP0d1S0jQUNTmi0mTIOSjXu6KD5nSrwWALbuKCJDV2w==
-X-Received: by 2002:a17:906:58c6:b0:78d:b37f:5ce5 with SMTP id e6-20020a17090658c600b0078db37f5ce5mr16456644ejs.707.1666371015957;
-        Fri, 21 Oct 2022 09:50:15 -0700 (PDT)
-Received: from localhost.localdomain (dynamic-2a01-0c22-7b0b-4500-0000-0000-0000-0e63.c22.pool.telefonica.de. [2a01:c22:7b0b:4500::e63])
-        by smtp.googlemail.com with ESMTPSA id l23-20020aa7d957000000b0044ef2ac2650sm13725331eds.90.2022.10.21.09.50.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Oct 2022 09:50:15 -0700 (PDT)
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-To:     linux@roeck-us.net, linux-hwmon@vger.kernel.org
-Cc:     jdelvare@suse.com, linux-kernel@vger.kernel.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: [PATCH v3 2/2] hwmon: (jc42) Restore the min/max/critical temperatures on resume
-Date:   Fri, 21 Oct 2022 18:50:00 +0200
-Message-Id: <20221021165000.1865615-3-martin.blumenstingl@googlemail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221021165000.1865615-1-martin.blumenstingl@googlemail.com>
-References: <20221021165000.1865615-1-martin.blumenstingl@googlemail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=K4hKno/aL4Bg3771FP97RAk5vH0GViKpS0EoTFQiXAc=;
+        b=RwkgUe2n0HsTpnKNVyR8dy9OHAILu1+6nRde67BHdOrQ6poo9u2Zsds2Cz48q4Vodf
+         P84TMj6syJQ3jv48EC7YnCnTxr87logSi3bPU2MmN675azS4qAzC+PWs/2A/c5QWJIyn
+         bHLXCdkZ++xGmn6GiVvCC4okWuJsyvLg+/x+ulfu0CYunMAgL1glArvKiVP+LJAL8ut0
+         1gnZ0SnH6XPjAoMrtdfSvpouJOdw0grXcpVvSIQRWfW1prjp86m0GasRK/Yu0Lk9xjYO
+         H4nECfyqLgpD01y39Ep6u/LWytZMGjjT91ucIFxQECrDPUEEWFJ8kL0MnuysljnlAaG7
+         pRfw==
+X-Gm-Message-State: ACrzQf2AJj4OghjS3RqsgvFnO8J+ND6wFrOChlOYuK5rnBHQjOR8LaCg
+        LslmybrYkSzdF3qnWplMq8RXE0E1+FzxBA==
+X-Google-Smtp-Source: AMsMyM5SudCtZEjb1KR5e8d+M8AwQQBGVgeULP6KueDyWiEmhViL9biVe45QZUMfvdYdZlrHAQZyAg==
+X-Received: by 2002:aca:1a0a:0:b0:354:b28b:4079 with SMTP id a10-20020aca1a0a000000b00354b28b4079mr10922599oia.101.1666371031281;
+        Fri, 21 Oct 2022 09:50:31 -0700 (PDT)
+Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com. [209.85.210.52])
+        by smtp.gmail.com with ESMTPSA id v5-20020a9d5a05000000b006619fe836f9sm1286704oth.55.2022.10.21.09.50.29
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Oct 2022 09:50:30 -0700 (PDT)
+Received: by mail-ot1-f52.google.com with SMTP id z11-20020a05683020cb00b00661a95cf920so2160747otq.5
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:50:29 -0700 (PDT)
+X-Received: by 2002:a81:6088:0:b0:361:52e4:dec8 with SMTP id
+ u130-20020a816088000000b0036152e4dec8mr17473482ywb.352.1666371017990; Fri, 21
+ Oct 2022 09:50:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+References: <20220815071332.627393-1-yuzhao@google.com> <20220815071332.627393-9-yuzhao@google.com>
+ <Y0go8wWtdcyH1+Ch@hirez.programming.kicks-ass.net> <CAOUHufa9+FTO3Pv-5jC-e3S5goPsUGu-5KcPVHa4bWb0X+d2ug@mail.gmail.com>
+ <CAHk-=wj1rc2t5noMtVOgu8XXeTM4KiggEub9PdcexxeQrYPZvA@mail.gmail.com>
+ <Y1FXpHdyvXjrjbLw@hirez.programming.kicks-ass.net> <CAHk-=whQchubuDpRGFabhmcZuzdt13OOF8wznXb+Dbi3GzBQhQ@mail.gmail.com>
+ <Y1GZjPO+szk7X0wP@hirez.programming.kicks-ass.net> <CAHk-=wikUaRM5H_y1Bc+QyvGi40dKDL8fnCTyz7ECbwK7aHNPQ@mail.gmail.com>
+ <Y1IUMDJFScAMrCS5@casper.infradead.org>
+In-Reply-To: <Y1IUMDJFScAMrCS5@casper.infradead.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 21 Oct 2022 09:50:01 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjrpH1+6cQQjTO6p-96ndBMiOnNH098vhS2jLybxD+7gA@mail.gmail.com>
+Message-ID: <CAHk-=wjrpH1+6cQQjTO6p-96ndBMiOnNH098vhS2jLybxD+7gA@mail.gmail.com>
+Subject: Re: [PATCH v14 08/14] mm: multi-gen LRU: support page table walks
+To:     Matthew Wilcox <willy@infradead.org>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Yu Zhao <yuzhao@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>, Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        page-reclaim@google.com, Brian Geffon <bgeffon@google.com>,
+        Jan Alexander Steffens <heftig@archlinux.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Steven Barrett <steven@liquorix.net>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Daniel Byrne <djbyrne@mtu.edu>,
+        Donald Carr <d@chaos-reins.com>,
+        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
+        Shuang Zhai <szhai2@cs.rochester.edu>,
+        Sofia Trinh <sofia.trinh@edi.works>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,73 +108,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The JC42 compatible thermal sensor on Kingston KSM32ES8/16ME DIMMs
-(using Micron E-Die) is an ST Microelectronics STTS2004 (manufacturer
-0x104a, device 0x2201). It does not keep the previously programmed
-minimum, maximum and critical temperatures after system suspend and
-resume (which is a shutdown / startup cycle for the JC42 temperature
-sensor). This results in an alarm on system resume because the hardware
-default for these values is 0°C (so any environment temperature greater
-than 0°C will trigger the alarm).
+On Thu, Oct 20, 2022 at 8:38 PM Matthew Wilcox <willy@infradead.org> wrote:
+>
+> On Thu, Oct 20, 2022 at 07:10:46PM -0700, Linus Torvalds wrote:
+> >
+> > We got rid of i386 support back in 2012. Maybe it's time to get rid of
+> > i486 support in 2022?
+>
+> Arnd suggested removing i486 last year and got a bit of pushback.
+> The most convincing to my mind was Maciej:
 
-Example before system suspend:
-  jc42-i2c-0-1a
-  Adapter: SMBus PIIX4 adapter port 0 at 0b00
-  temp1:        +34.8°C  (low  =  +0.0°C)
-                         (high = +85.0°C, hyst = +85.0°C)
-                         (crit = +95.0°C, hyst = +95.0°C)
+Hmm. Maciej added to the cc.
 
-Example after system resume (without this change):
-  jc42-i2c-0-1a
-  Adapter: SMBus PIIX4 adapter port 0 at 0b00
-  temp1:        +34.8°C  (low  =  +0.0°C)             ALARM (HIGH, CRIT)
-                         (high =  +0.0°C, hyst =  +0.0°C)
-                         (crit =  +0.0°C, hyst =  +0.0°C)
+I suspect we can just say "oh, well, use LTS kernels".
 
-Apply the cached values from the JC42_REG_TEMP_UPPER,
-JC42_REG_TEMP_LOWER, JC42_REG_TEMP_CRITICAL and JC42_REG_SMBUS (where
-the SMBUS register is not related to this issue but a side-effect of
-using regcache_sync() during system resume with the previously
-cached/programmed values. This fixes the alarm due to the hardware
-defaults of 0°C because the previously applied limits (set by userspace)
-are re-applied on system resume.
+> but you can see a few other responses indicating that people have
+> shipped new 486-class hardware within the last few years (!)
 
-Fixes: 175c490c9e7f ("hwmon: (jc42) Add support for STTS2004 and AT30TSE004")
-Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
----
- drivers/hwmon/jc42.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+Hmm.. I can only find references to PC104 boards with Bay Trail
+(Pentium-class Atom core, iirc), and some possible FPGA
+implementations through MISTer.
 
-diff --git a/drivers/hwmon/jc42.c b/drivers/hwmon/jc42.c
-index 8d70960d5444..52a60eb0791b 100644
---- a/drivers/hwmon/jc42.c
-+++ b/drivers/hwmon/jc42.c
-@@ -565,6 +565,10 @@ static int jc42_suspend(struct device *dev)
- 
- 	data->config |= JC42_CFG_SHUTDOWN;
- 	regmap_write(data->regmap, JC42_REG_CONFIG, data->config);
-+
-+	regcache_cache_only(data->regmap, true);
-+	regcache_mark_dirty(data->regmap);
-+
- 	return 0;
- }
- 
-@@ -572,9 +576,13 @@ static int jc42_resume(struct device *dev)
- {
- 	struct jc42_data *data = dev_get_drvdata(dev);
- 
-+	regcache_cache_only(data->regmap, false);
-+
- 	data->config &= ~JC42_CFG_SHUTDOWN;
- 	regmap_write(data->regmap, JC42_REG_CONFIG, data->config);
--	return 0;
-+
-+	/* Restore cached register values to hardware */
-+	return regcache_sync(data->regmap);
- }
- 
- static const struct dev_pm_ops jc42_dev_pm_ops = {
--- 
-2.38.1
+There's apparently also a Vortex86DX board too, and I don't know what
+core that is based off, but judging from the fact that it has a
+dual-core version, it had *better* support cmpxchg8b anyway, because
+without that our 64-bit atomics aren't actually atomic.
 
+(Trying to google around, it looks like the older Vortex86SX was a
+486-class CPU and did indeed lack CX8)
+
+Intel had some embedded cores (Quark) that were based on the i486
+pipeline (as can be seen from the timings), but they actually reported
+themselves as Pentium-class and supported all the classic (pre-MMX)
+Pentium features.
+
+So I *really* don't think i486 class hardware is relevant any more.
+Yes, I'm sure it exists (Maciej being an example), but from a kernel
+development standpoint I don't think they are really relevant.
+
+At some point, people have them as museum pieces. They might as well
+run museum kernels.
+
+Moving up to requiring cmpxchg8b doesn't sound unreasonable to me.
+
+            Linus
