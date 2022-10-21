@@ -2,121 +2,280 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37669606C7F
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 02:36:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8291A606C85
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 02:37:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229850AbiJUAf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 20:35:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53828 "EHLO
+        id S229864AbiJUAhu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 20:37:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiJUAf4 (ORCPT
+        with ESMTP id S229556AbiJUAhs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 20:35:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 166861826C1
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 17:35:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CBDADB828C8
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 00:35:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77E81C43470
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 00:35:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666312552;
-        bh=ebitv/o5a3t2vCAKwhBaDXqxzD0jZBqetTbv566wUVk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=YcRHuMRftYy8Glj3XCW+I+nrnBuBC63V8zTtPY69YECK5cMpDmSz8PpaSbppNGAnH
-         d6r3fVonDsL9zIZ533WW7iPsjeUq+gjgmXikx97XMT19fBzrpanTZFqxoID7MOLVK/
-         PTvH448HQVycptTwP0OkM8nE9oIQfDVZdPZS5LBe7xkf5Dc9u9V3pOPCvacEvsZ2LU
-         jCYy2b/yN9Hw2plUQKUFHYduzEydNnO/AvBaeskou5xXeV1eE2kjpHIADgGig34ysc
-         GL8iboDA4oPapAc8xQMCamcEMMhYQY+1gnBAL/eady9s54Al4iLZWpBQ02YpZxD2D8
-         cd/evoR5SVMFg==
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-136b5dd6655so1673925fac.3
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 17:35:52 -0700 (PDT)
-X-Gm-Message-State: ACrzQf2TcmiQFHCyE96EYRzkhQ29LHTPNA7Z47wIyCT7XmS+TFx/wY7l
-        z2dVEJU/n0nlidJDRl9P+1h2Ky8IQ2k2VNX0JPo=
-X-Google-Smtp-Source: AMsMyM483SkhaxijeF6r4LxLvwyIKbEq8gBp3QOrTCWYxzdlRCXzMtRRLH1LvqBfhZHASUiwUujSnBYnGQq9tiW7nTc=
-X-Received: by 2002:a05:6871:b0d:b0:13b:b91:dc94 with SMTP id
- fq13-20020a0568710b0d00b0013b0b91dc94mr2542683oab.112.1666312551610; Thu, 20
- Oct 2022 17:35:51 -0700 (PDT)
+        Thu, 20 Oct 2022 20:37:48 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BFB022E8E9
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 17:37:47 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id y14so3426141ejd.9
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 17:37:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=N9JzvfS9O+EbweznXiTBcEQbOEkl2pnGtGUVAn/P3LE=;
+        b=kaxgzXomD6F9reHPyLw0Yop2cEiip9OlRnQvGdD7sb7tK/1WbrQJCxfj59xNBymB76
+         iIvEbOA3inPGEIfQvN+AfNwkC8/V/ggwOC0x8hvxnG7dd9lxJmSGjuCEmULa9FiJtqIz
+         tJXchW8JjVAsTRDW5ik5etzCUVTIrp/EtNViDDjH64meE+nYOBXAw6N5DFeg+pBkRgOC
+         XtkkTxoSkPbYO0RWRiXGSIJgvOy92u/90VIxe+WU0z8OjH2Ir34UIw+dG9lE+GZaWIJV
+         jNi7C3d6/8bykrZ3k21iS9cSyXlcxTgLPNSSRepeNt4ah0258JmpUENUckbwee8E8R0B
+         +qWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=N9JzvfS9O+EbweznXiTBcEQbOEkl2pnGtGUVAn/P3LE=;
+        b=eLl/ra/9/rl3s0wmdSJ/7H2+lp19g0tcNJwM6dN+XVGjkFHRwcUpWczuxowUUQDNVy
+         sPH+f+jWTlfvwimv6B6qFjaqSHpMfptGjP617uv2DWmsHpZ5rIGUEo9bjbDwx78ElM3K
+         XlzBCpbfv1TKlzO4Q4hRtathF3n+fIpKicFCvVlAMZKjx6FJJZkF9g2o3sWASJsZ2vwG
+         XbybMOwy56YKA6FKixSHIsbGpCFZz3KQ7SY+JfUDfhB36IzUffJMhebCwd9GMv33X3jq
+         e/AESOdUJFh45CbdOMAmtI5vRGzrGRIQAQDaXbtDgGTg/xqOcHDP5toKU/55M+ucp8kS
+         9MbQ==
+X-Gm-Message-State: ACrzQf27uDSWXjTEdDZwXALqnSsn/U/vCh0T5X2lxVTlTOWCT7g+1wFD
+        CF7SalEfy4RvynMw2LYkh2tRRT1hrynIX8Qii7nBoi7A7Pw=
+X-Google-Smtp-Source: AMsMyM6fHevdICVJB+NLRZRZGqKXiSKeIvrSjvipU5PiH7iuf+QLnXrrODo7FfxdEbL4iPZE8gnetm3rO9vLcl8JAwM=
+X-Received: by 2002:a17:906:5a44:b0:78d:4c17:9856 with SMTP id
+ my4-20020a1709065a4400b0078d4c179856mr13264057ejc.477.1666312665398; Thu, 20
+ Oct 2022 17:37:45 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221019154727.2395-1-jszhang@kernel.org> <CAJF2gTSHH69B+KAOJdpLvQdGuhS1nJ+GnW2hVCb+e+8nrnaJ7Q@mail.gmail.com>
- <Y1FdW8P9pw466hjV@xhacker>
-In-Reply-To: <Y1FdW8P9pw466hjV@xhacker>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 21 Oct 2022 08:35:39 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTTBYR-6xGo_SrORrjJw9rYQXLukHwBFCNq_kwNLrd_1VA@mail.gmail.com>
-Message-ID: <CAJF2gTTBYR-6xGo_SrORrjJw9rYQXLukHwBFCNq_kwNLrd_1VA@mail.gmail.com>
-Subject: Re: [PATCH] riscv: fix race when vmap stack overflow
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+From:   Dave Airlie <airlied@gmail.com>
+Date:   Fri, 21 Oct 2022 10:37:33 +1000
+Message-ID: <CAPM=9tzqUzVrUMtmXT1AQAkjec6DziLkuLriKZJVXb6aTWkhXQ@mail.gmail.com>
+Subject: [git pull] drm fixes for 6.1-rc2
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 10:47 PM Jisheng Zhang <jszhang@kernel.org> wrote:
->
-> On Thu, Oct 20, 2022 at 10:16:47AM +0800, Guo Ren wrote:
-> > On Wed, Oct 19, 2022 at 11:57 PM Jisheng Zhang <jszhang@kernel.org> wrote:
-> > >
-> > > Currently, when detecting vmap stack overflow, riscv firstly switches
-> > > to the so called shadow stack, then use this shadow stack to call the
-> > > get_overflow_stack() to get the overflow stack. However, there's
-> > > a race here if two or more harts use the same shadow stack at the same
-> > > time.
-> > >
-> > > To solve this race, we introduce spin_shadow_stack atomic var, which
-> > > will make the shadow stack usage serialized.
-> > >
-> > > Fixes: 31da94c25aea ("riscv: add VMAP_STACK overflow detection")
-> > > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> > > Suggested-by: Guo Ren <guoren@kernel.org>
-> > > ---
-> > >  arch/riscv/kernel/entry.S | 4 ++++
-> > >  arch/riscv/kernel/traps.c | 4 ++++
-> > >  2 files changed, 8 insertions(+)
-> > >
-> > > diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-> > > index b9eda3fcbd6d..7b924b16792b 100644
-> > > --- a/arch/riscv/kernel/entry.S
-> > > +++ b/arch/riscv/kernel/entry.S
-> > > @@ -404,6 +404,10 @@ handle_syscall_trace_exit:
-> > >
-> > >  #ifdef CONFIG_VMAP_STACK
-> > >  handle_kernel_stack_overflow:
-> > > +1:     la sp, spin_shadow_stack
-> > > +       amoswap.w sp, sp, (sp)
-> > If CONFIG_64BIT=y, it would be broken. Because we only hold 32bit of
-> > the sp, and the next loop would get the wrong sp value of
-> > &spin_shadow_stack.
->
-> Hi Guo,
->
-> Don't worry about it. the spin_shadow_stack is just a flag used for
-> "spin", if hart is allowed to used the shadow_stack, we load its
-> address in next instruction by "la sp, shadow_stack".
-Haha, yes, my brain is at fault :)
+Hey Linus,
 
-> But I agree with use unsigned int instead of atomic_t, and use
-> smp_store_release directly. V2 has been sent out, could you please
-> review it?
-Okay
+Usual fixes for the week. The amdgpu contains fixes for two
+regressions, one reported in response to rc1 which broke on SI GPUs,
+and one gfx9 APU regression. Otherwise it's mostly fixes for new IP,
+and some GPU reset fixes. vc4 is just HDMI fixes, and panfrost has
+some mnor types fixes.
 
->
-> Thanks
+Dave.
 
+drm-fixes-2022-10-21:
+drm fixes for 6.1-rc2
 
+core:
+- fix connector DDC pointer
+- fix buffer overflow in format_helper_test
 
--- 
-Best Regards
- Guo Ren
+amdgpu:
+- Mode2 reset fixes for Sienna Cichlid
+- Revert broken fan speed sensor fix
+- SMU 13.x fixes
+- GC 11.x fixes
+- RAS fixes
+- SR-IOV fixes
+- Fix BO move breakage on SI
+- Misc compiler fixes
+- Fix gfx9 APU regression caused by PCI AER fix
+
+vc4:
+- HDMI fixes
+
+panfrost:
+- compiler fixes
+The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780=
+:
+
+  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+
+are available in the Git repository at:
+
+  git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2022-10-21
+
+for you to fetch changes up to cbc543c59e8e7c8bc8604d6ac3e18a029e3d5118:
+
+  Merge tag 'drm-misc-fixes-2022-10-20' of
+git://anongit.freedesktop.org/drm/drm-misc into drm-fixes (2022-10-21
+09:56:14 +1000)
+
+----------------------------------------------------------------
+drm fixes for 6.1-rc2
+
+core:
+- fix connector DDC pointer
+- fix buffer overflow in format_helper_test
+
+amdgpu:
+- Mode2 reset fixes for Sienna Cichlid
+- Revert broken fan speed sensor fix
+- SMU 13.x fixes
+- GC 11.x fixes
+- RAS fixes
+- SR-IOV fixes
+- Fix BO move breakage on SI
+- Misc compiler fixes
+- Fix gfx9 APU regression caused by PCI AER fix
+
+vc4:
+- HDMI fixes
+
+panfrost:
+- compiler fixes
+
+----------------------------------------------------------------
+Alex Deucher (1):
+      drm/amdgpu: fix sdma doorbell init ordering on APUs
+
+Arunpravin Paneer Selvam (1):
+      drm/amdgpu: Fix for BO move issue
+
+Asher Song (1):
+      drm/amdgpu: Revert "drm/amdgpu: getting fan speed pwm for vega10 prop=
+erly"
+
+Christian K=C3=B6nig (2):
+      drm/sched: add DRM_SCHED_FENCE_DONT_PIPELINE flag
+      drm/amdgpu: use DRM_SCHED_FENCE_DONT_PIPELINE for VM updates
+
+Danijel Slivka (1):
+      drm/amdgpu: set vm_update_mode=3D0 as default for Sienna Cichlid
+in SRIOV case
+
+Dave Airlie (4):
+      Merge tag 'drm-misc-fixes-2022-10-13' of
+git://anongit.freedesktop.org/drm/drm-misc into drm-fixes
+      Merge tag 'amd-drm-fixes-6.1-2022-10-19' of
+https://gitlab.freedesktop.org/agd5f/linux into drm-fixes
+      Merge tag 'amd-drm-fixes-6.1-2022-10-20' of
+https://gitlab.freedesktop.org/agd5f/linux into drm-fixes
+      Merge tag 'drm-misc-fixes-2022-10-20' of
+git://anongit.freedesktop.org/drm/drm-misc into drm-fixes
+
+David Gow (1):
+      drm: tests: Fix a buffer overflow in format_helper_test
+
+Evan Quan (3):
+      drm/amd/pm: fulfill SMU13.0.0 cstate control interface
+      drm/amd/pm: fulfill SMU13.0.7 cstate control interface
+      drm/amd/pm: disable cstate feature for gpu reset scenario
+
+Guenter Roeck (1):
+      drm/amd/display: Increase frame size limit for display_mode_vba_util_=
+32.o
+
+Kenneth Feng (5):
+      drm/amd/pm: temporarily disable thermal alert on smu_v13_0_10
+      drm/amd/pm: remove the pptable id override on smu_v13_0_10
+      drm/amd/amdgpu: enable gfx clock gating features on smu_v13_0_10
+      drm/amd/pm: skip loading pptable from driver on secure board for
+smu_v13_0_10
+      drm/amd/pm: enable thermal alert on smu_v13_0_10
+
+Likun Gao (1):
+      drm/amdgpu: skip mes self test for gc 11.0.3
+
+Maxime Ripard (4):
+      drm/vc4: Add module dependency on hdmi-codec
+      drm/vc4: hdmi: Enforce the minimum rate at runtime_resume
+      drm/vc4: hdmi: Check the HSM rate at runtime_resume
+      drm/connector: Set DDC pointer in drmm_connector_init
+
+Nathan Chancellor (1):
+      drm/amdkfd: Fix type of reset_type parameter in hqd_destroy() callbac=
+k
+
+Steven Price (2):
+      drm/panfrost: Remove type name from internal structs
+      drm/panfrost: replace endian-specific types with native ones
+
+Thomas Zimmermann (1):
+      Merge drm/drm-fixes into drm-misc-fixes
+
+Tim Huang (2):
+      drm/amd/pm: update SMU IP v13.0.4 driver interface version
+      drm/amd/pm: add SMU IP v13.0.4 IF version define to V7
+
+Victor Zhao (3):
+      Revert "drm/amdgpu: add debugfs amdgpu_reset_level"
+      Revert "drm/amdgpu: let mode2 reset fallback to default when failure"
+      drm/amdgpu: Refactor mode2 reset logic for v11.0.7
+
+YiPeng Chai (3):
+      drm/amdgpu: Enable gmc soft reset on gmc_v11_0_3
+      drm/amdgpu: Enable ras support for mp0 v13_0_0 and v13_0_10
+      drm/amdgpu: Add sriov vf ras support in amdgpu_ras_asic_supported
+
+Yifan Zha (1):
+      drm/amdgpu: Program GC registers through RLCG interface in gfx_v11/gm=
+c_v11
+
+YuBiao Wang (1):
+      drm/amdgpu: dequeue mes scheduler during fini
+
+ZhenGuo Yin (1):
+      drm/amd/pm: Init pm_attr_list when dpm is disabled
+
+ drivers/gpu/drm/amd/amdgpu/amdgpu.h                |  4 --
+ drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd.c         |  1 -
+ drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gfx_v11.c |  2 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c        |  2 -
+ drivers/gpu/drm/amd/amdgpu/amdgpu_device.c         | 15 +++++---
+ drivers/gpu/drm/amd/amdgpu/amdgpu_job.c            |  1 -
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c            | 25 +++++++++---
+ drivers/gpu/drm/amd/amdgpu/amdgpu_reset.c          | 14 -------
+ drivers/gpu/drm/amd/amdgpu/amdgpu_reset.h          |  3 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ring.c           |  3 --
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c            |  3 ++
+ drivers/gpu/drm/amd/amdgpu/amdgpu_virt.c           |  6 +++
+ drivers/gpu/drm/amd/amdgpu/amdgpu_virt.h           |  4 ++
+ drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c             |  6 ++-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_vm_sdma.c        |  9 ++++-
+ drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c             |  3 +-
+ drivers/gpu/drm/amd/amdgpu/gmc_v11_0.c             | 18 +++++----
+ drivers/gpu/drm/amd/amdgpu/mes_v11_0.c             | 45 ++++++++++++++++++=
+++--
+ drivers/gpu/drm/amd/amdgpu/mxgpu_ai.c              |  1 -
+ drivers/gpu/drm/amd/amdgpu/mxgpu_nv.c              |  1 -
+ drivers/gpu/drm/amd/amdgpu/mxgpu_vi.c              |  1 -
+ drivers/gpu/drm/amd/amdgpu/sdma_v4_0.c             |  5 ---
+ drivers/gpu/drm/amd/amdgpu/sienna_cichlid.c        | 25 ++++++++----
+ drivers/gpu/drm/amd/amdgpu/soc15.c                 | 21 ++++++++++
+ drivers/gpu/drm/amd/amdgpu/soc21.c                 |  7 +++-
+ drivers/gpu/drm/amd/display/dc/dml/Makefile        |  2 +-
+ drivers/gpu/drm/amd/include/kgd_kfd_interface.h    |  5 ++-
+ drivers/gpu/drm/amd/pm/amdgpu_pm.c                 |  4 +-
+ .../drm/amd/pm/powerplay/hwmgr/vega10_thermal.c    | 25 ++++++------
+ drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c          |  4 +-
+ .../pm/swsmu/inc/pmfw_if/smu13_driver_if_v13_0_4.h | 17 +++++++-
+ drivers/gpu/drm/amd/pm/swsmu/inc/smu_v13_0.h       |  2 +-
+ drivers/gpu/drm/amd/pm/swsmu/smu11/arcturus_ppt.c  |  8 ++++
+ drivers/gpu/drm/amd/pm/swsmu/smu13/aldebaran_ppt.c |  9 +++++
+ drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c     |  6 +--
+ .../gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_0_ppt.c   | 11 ++++++
+ .../gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_7_ppt.c   | 12 ++++++
+ drivers/gpu/drm/drm_connector.c                    |  2 +-
+ drivers/gpu/drm/panfrost/panfrost_dump.c           | 36 ++++++++---------
+ drivers/gpu/drm/scheduler/sched_entity.c           |  3 +-
+ drivers/gpu/drm/tests/drm_format_helper_test.c     |  2 +-
+ drivers/gpu/drm/vc4/vc4_drv.c                      |  1 +
+ drivers/gpu/drm/vc4/vc4_hdmi.c                     | 29 ++++++++++++++
+ include/drm/gpu_scheduler.h                        |  9 +++++
+ include/uapi/drm/panfrost_drm.h                    | 36 +++++++++--------
+ 45 files changed, 314 insertions(+), 134 deletions(-)
