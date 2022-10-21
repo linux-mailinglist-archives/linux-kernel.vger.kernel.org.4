@@ -2,116 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 445C9607468
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 11:46:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B968607475
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 11:50:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230345AbiJUJqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 05:46:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43334 "EHLO
+        id S230131AbiJUJuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 05:50:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230180AbiJUJqI (ORCPT
+        with ESMTP id S229872AbiJUJuk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 05:46:08 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12D4565574
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 02:46:02 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id m15so3634844edb.13
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 02:46:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=P0AQ9jlIG0ZlvzZh3L6x6ssa+d2wthNDGpp7sZigdE0=;
-        b=cG4KlR0WMgI8n0RL9tPbQKHpLmpWAy4o2IAPJd8z9JPATgL6wkGWn1syeb41X7r/Pv
-         yzVQorDXy0VFPWSjH4a4bdVp027IK/n2Xc16MEYT6sLb6txOLoObjDPnirfmf9Jf+viY
-         psyaYkhqNzPuIxnahH4HJTNrxECNzZkflw4wBM/Bwcb7qpgc2o9+hH5o1xo+ELEQ90V8
-         EgIrikhasfiFC/VAz7m5Ah0e8Y93ujtecy4t/MNqttY+PKhlLUF1vJfsm23h5h/4cJaM
-         MP8vjsF9u0NLT5ZpVdvTvkwV9TyrH4zI+Q0lTzef1RuZ16RZgtsl/ROREzQILVoPRFdA
-         MBAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=P0AQ9jlIG0ZlvzZh3L6x6ssa+d2wthNDGpp7sZigdE0=;
-        b=q4XUohXZ9wFbITlAyB0IQOFA+5jZeihiMgreTSGUypJ2Ubvt1P6A9ckfH1yJjFg1WG
-         bFLROVEPr37A3CKCmgf9edi0rP+Jul9nQE8X9vVYbbMmrUxRXqBOEJ6CWkZggq1ZxXlT
-         lXhAYIwe9iC0AZqiTqClbj3bKkibVzJAhhC3n6YsACF/xH6TTQo4mOnWaL2AMHtrONqt
-         F1rsv5MvMQGQqmK0HpfI3BAHwN8DnhQy+QZTaBYnZxLshjHbbKfHNnoIGwVqiXxLhOdp
-         /MYTLVE0KVMcLcTou8dtAG7cOWw6IxkkPyQDVPE2x8/rEDsy8eJPx9d8PRp2HGfv5EPb
-         aO7w==
-X-Gm-Message-State: ACrzQf32DmNtpxH1y54N0E9vajrKMZjthYF3ludXDzcXUxQCedOf6cUB
-        WLjaMfNUxKXLaJRL5a4sNc0PdfQyfUOgWDFNCp+mGg==
-X-Google-Smtp-Source: AMsMyM5t02ffZNLPF+/SKV0t2zSPdKi04tT1VyQMGwlcqH6o8oaHN9NJPnaobBhqe+u0XBPphswad6nycmwYjCaoaLw=
-X-Received: by 2002:a17:907:7606:b0:78e:61d:757e with SMTP id
- jx6-20020a170907760600b0078e061d757emr13887723ejc.690.1666345560588; Fri, 21
- Oct 2022 02:46:00 -0700 (PDT)
+        Fri, 21 Oct 2022 05:50:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F34FF1885A4;
+        Fri, 21 Oct 2022 02:50:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 80ED561E00;
+        Fri, 21 Oct 2022 09:50:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F5E7C433D6;
+        Fri, 21 Oct 2022 09:50:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666345837;
+        bh=LeQMdSwbtJuXOi2FuwUwd5vVFwEoPYoelUlHATZ33bc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oD+ZpDeeHOAYGH98EjgSF/NQcTjpdu0Piz+tOuBHVfbR9F1OgvnuGpsx3/ELuKpCE
+         0AydlaozEN7cI1UknkZnbVJbubxW8bwijBVPs3VWvotIiqu/uGjC+Hmds9wRYQ2usA
+         YLN9Tq2Wj6bHnZR+0wGpyCehUGEDFxLlQnNtOIM9uFfjcTlEgUDtLpUBM2gl8k1zhR
+         +VnGEoxA0khRJq9mpwacSyKHNVGH8KNeYO6u2YMLh4zxalWRkIK7QGGZPCQuw60o0H
+         ozb+eUKtzLJ/eLKOEx2zuI4536P69mKpeo0oJ9Dmy/nWXZ8aFAZ//YfZDRHZtV1hVh
+         apsNSQmOjXkbw==
+Date:   Fri, 21 Oct 2022 10:50:30 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Tony Lindgren <tony@atomide.com>, linux-kernel@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>, linux-omap@vger.kernel.org,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-i2c@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 13/17] ARM: omap1: remove unused board files
+Message-ID: <Y1JrZu8iC9fobX0E@google.com>
+References: <20221019144119.3848027-1-arnd@kernel.org>
+ <20221019150410.3851944-1-arnd@kernel.org>
+ <20221019150410.3851944-13-arnd@kernel.org>
 MIME-Version: 1.0
-References: <20221021012728.22373-1-zhuyinbo@loongson.cn>
-In-Reply-To: <20221021012728.22373-1-zhuyinbo@loongson.cn>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 21 Oct 2022 11:45:49 +0200
-Message-ID: <CACRpkdbBW1YNGfec2jEPsUGwqosc8TwwSP9ft+he5KWPf0otvw@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] pinctrl: pinctrl-loongson2: add pinctrl driver support
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        zhanghongchen <zhanghongchen@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221019150410.3851944-13-arnd@kernel.org>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yinbo,
+On Wed, 19 Oct 2022, Arnd Bergmann wrote:
 
-thanks for your patch!
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> All board support that was marked as 'unused' earlier can
+> now be removed, leaving the five machines that that still
+> had someone using them in 2022, or that are supported in
+> qemu.
+> 
+> Cc: Aaro Koskinen <aaro.koskinen@iki.fi>
+> Cc: Janusz Krzysztofik <jmkrzyszt@gmail.com>
+> Cc: Tony Lindgren <tony@atomide.com>
+> Cc: linux-omap@vger.kernel.org
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  MAINTAINERS                             |   2 -
+>  arch/arm/Kconfig.debug                  |  36 +-
+>  arch/arm/configs/omap1_defconfig        |   2 -
+>  arch/arm/mach-omap1/Kconfig             |  93 +---
+>  arch/arm/mach-omap1/Makefile            |  18 -
+>  arch/arm/mach-omap1/board-fsample.c     | 366 ---------------
+>  arch/arm/mach-omap1/board-generic.c     |  85 ----
+>  arch/arm/mach-omap1/board-h2-mmc.c      |  74 ---
+>  arch/arm/mach-omap1/board-h2.c          | 448 ------------------
+>  arch/arm/mach-omap1/board-h2.h          |  38 --
+>  arch/arm/mach-omap1/board-h3-mmc.c      |  64 ---
+>  arch/arm/mach-omap1/board-h3.c          | 455 ------------------
+>  arch/arm/mach-omap1/board-h3.h          |  35 --
+>  arch/arm/mach-omap1/board-htcherald.c   | 585 ------------------------
+>  arch/arm/mach-omap1/board-innovator.c   | 481 -------------------
+>  arch/arm/mach-omap1/board-nand.c        |  33 --
+>  arch/arm/mach-omap1/board-palmtt.c      | 285 ------------
+>  arch/arm/mach-omap1/board-palmz71.c     | 300 ------------
+>  arch/arm/mach-omap1/board-perseus2.c    | 333 --------------
+>  arch/arm/mach-omap1/fpga.c              | 186 --------
+>  arch/arm/mach-omap1/fpga.h              |  49 --
+>  arch/arm/mach-omap1/gpio7xx.c           | 272 -----------
+>  drivers/i2c/busses/Kconfig              |   2 +-
+>  drivers/mfd/Kconfig                     |   2 +-
 
-On Fri, Oct 21, 2022 at 3:27 AM Yinbo Zhu <zhuyinbo@loongson.cn> wrote:
+Acked-by: Lee Jones <lee@kernel.org>
 
-> The loongson2 SoC has a few pins that can be used as GPIOs or take
-> multiple other functions. Add a driver for the pinmuxing.
->
-> There is currently no support for GPIO pin pull-up and pull-down.
->
-> Signed-off-by: zhanghongchen <zhanghongchen@loongson.cn>
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+>  drivers/mmc/host/Kconfig                |   2 +-
+>  drivers/usb/gadget/udc/Kconfig          |   2 +-
+>  drivers/usb/host/Kconfig                |   2 +-
+>  include/linux/platform_data/leds-omap.h |  19 -
+>  28 files changed, 12 insertions(+), 4257 deletions(-)
+>  delete mode 100644 arch/arm/mach-omap1/board-fsample.c
+>  delete mode 100644 arch/arm/mach-omap1/board-generic.c
+>  delete mode 100644 arch/arm/mach-omap1/board-h2-mmc.c
+>  delete mode 100644 arch/arm/mach-omap1/board-h2.c
+>  delete mode 100644 arch/arm/mach-omap1/board-h2.h
+>  delete mode 100644 arch/arm/mach-omap1/board-h3-mmc.c
+>  delete mode 100644 arch/arm/mach-omap1/board-h3.c
+>  delete mode 100644 arch/arm/mach-omap1/board-h3.h
+>  delete mode 100644 arch/arm/mach-omap1/board-htcherald.c
+>  delete mode 100644 arch/arm/mach-omap1/board-innovator.c
+>  delete mode 100644 arch/arm/mach-omap1/board-nand.c
+>  delete mode 100644 arch/arm/mach-omap1/board-palmtt.c
+>  delete mode 100644 arch/arm/mach-omap1/board-palmz71.c
+>  delete mode 100644 arch/arm/mach-omap1/board-perseus2.c
+>  delete mode 100644 arch/arm/mach-omap1/fpga.c
+>  delete mode 100644 arch/arm/mach-omap1/fpga.h
+>  delete mode 100644 arch/arm/mach-omap1/gpio7xx.c
+>  delete mode 100644 include/linux/platform_data/leds-omap.h
 
-(...)
-
-> +static int loongson2_pmx_set_mux(struct pinctrl_dev *pcdev, unsigned int func_num,
-> +                             unsigned int group_num)
-> +{
-> +       struct loongson2_pinctrl *pctrl = pinctrl_dev_get_drvdata(pcdev);
-> +       unsigned long reg = (unsigned long)pctrl->reg_base +
-> +                               loongson2_pmx_groups[group_num].reg;
-> +       unsigned int mux_bit = loongson2_pmx_groups[group_num].bit;
-> +       unsigned int val;
-> +       unsigned long flags;
-> +
-> +       raw_spin_lock_irqsave(&pctrl->lock, flags);
-> +       val = readl((void *)reg);
-> +       if (func_num == 0)
-> +               val &= ~(1<<mux_bit);
-> +       else
-> +               val |= (1<<mux_bit);
-> +       writel(val, (void *)reg);
-> +       raw_spin_unlock_irqrestore(&pctrl->lock, flags);
-
-Can you explain in the commit message or with a comment in the code
-why you have to use a raw spinlock for this?
-
-We usually only use raw spinlocks for things like low level
-interrupt handlers...
-
-My guess is that you can replace this with an ordinary spinlock.
-
-Yours,
-Linus Walleij
+-- 
+Lee Jones [李琼斯]
