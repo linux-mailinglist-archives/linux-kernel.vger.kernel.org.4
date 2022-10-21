@@ -2,74 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 499B1607E16
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 20:07:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7133B607E17
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 20:08:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbiJUSHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 14:07:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44404 "EHLO
+        id S229833AbiJUSIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 14:08:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229902AbiJUSHP (ORCPT
+        with ESMTP id S229719AbiJUSIw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 14:07:15 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CBCB256401;
-        Fri, 21 Oct 2022 11:07:14 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id e18so2772101wmq.3;
-        Fri, 21 Oct 2022 11:07:14 -0700 (PDT)
+        Fri, 21 Oct 2022 14:08:52 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E372D13EB8
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 11:08:51 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id g16so2167770qtu.2
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 11:08:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=UYevc0/VBCj9wBQRWlQ/9Q4O5TfPY8fJu+BvNTU/yG0=;
-        b=dUVoeS+r4UdeGMB+N1lX6A7ISaf2eJpRGohWDvas5cCg0h0Gcp5He+TmxRMkDkCqvT
-         x5exD9Oic5lyVKj6i8H3WukULH5PJz9XPMOnmH77GtSIazHzwhXfmjZASyEE+ukZOhbm
-         6sUznWCYsz2v2vNCrxoGZP+vqL6QIV8PTs4VBrEp/WJdWrpH014xO8b2+sTu8EKBv/tw
-         iUQtQT+WdP2Gxqe4/b85aahP4ag8EC1ZZtlEvVygVgsYrUF5L1PDUoJ/aE+mK56wW1km
-         /CYGqwoUG3V5AhkYby8nsvlPOZlpLY+evbCp4u8ZhKwdJRa9XuIoLwi5E1QTbqVBzYX1
-         nVRw==
+        bh=loxIHvePw8P2bWZhs+2jg7E8L0WwySO9XZZAOZ78G+c=;
+        b=QNKZRg/bnqOgjeIM0eVbXW/g8x2klcrNrWl3jIhl0EtTLlGyzygR71e5xxf6glEgs5
+         H7zsM9zrYeqhEh8QV7zoJGYULJpALrP55t1vxfZSVIsyoAUcUGx5l50QxRPldWFWuJ+q
+         rehdGu/Xi0g+GKRcvQ+yEvGedpSU9qi1ygNdRxo44HbxhfaLHAdPZylaV0aZwf94s3gc
+         VsC+n49Ua5uUEz9tlF1r1hb79Lmwvp9remMpV2I0aWpbYPrZ/GymM1i3jfL11dzw63uW
+         LaXv3tmj33vja16t5DmYbGKMnqXYN309pek4ikhNO5VyAnzaQ9jSclbLK0tkoZ9L7oX/
+         KkvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=UYevc0/VBCj9wBQRWlQ/9Q4O5TfPY8fJu+BvNTU/yG0=;
-        b=jmXSeIEys6KSmwS/8sGo8Wr2iX8nglh9Tt38AnMLtqx9DEXAwSP9gX5vJYEN/q8yWq
-         No/qOV9Bv6xoitfWJuIqYSEU4Mj+4YYITDleO0rgkYxrNBYxOemGpiA59rqMkbhQWWZ9
-         0p6y2QSncPqiU/3wiMFO1auLh8e7tEz8o3IiwMDv7J/I0tq0qj1hqElTRHYadcbCiQvX
-         vqrnuII9odf/dF1bkHAazi9DiaVt7dETLX/wg0s6lEs1/ErHO94PoITiUu9bWtkOPyb1
-         MEOw3XCmHg21CyhIU/wh9iRbUXYww+zXL66YpS3aR4jRD/RJEZL0qbZCFmqdS/cWbg6a
-         CpEw==
-X-Gm-Message-State: ACrzQf36DyTlLCI77OHe78bwgk0aRlSDebwBmZQm+tzTzwd+ewApmuPY
-        Qcp+xWSfQYtlARH8XySAkOek5rBi+NA=
-X-Google-Smtp-Source: AMsMyM7O4wDTum8skBufRBwmROFBmHxMJ6EUTtfJYvNoxki5cnaYBDlB6wDG84J1Q5H4O1LcF63wdQ==
-X-Received: by 2002:a1c:f20e:0:b0:3c2:5062:4017 with SMTP id s14-20020a1cf20e000000b003c250624017mr34025752wmc.175.1666375632872;
-        Fri, 21 Oct 2022 11:07:12 -0700 (PDT)
-Received: from localhost.localdomain (93-42-70-134.ip85.fastwebnet.it. [93.42.70.134])
-        by smtp.googlemail.com with ESMTPSA id n4-20020a1ca404000000b003c41144b3cfsm280348wme.20.2022.10.21.11.07.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Oct 2022 11:07:12 -0700 (PDT)
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Christian Marangi <ansuelsmth@gmail.com>,
-        Robert Marko <robimarko@gmail.com>
-Subject: [RFC PATCH 2/2] clk: qcom: gcc-ipq8074: rework nss_port5/6 clock to multiple conf
-Date:   Fri, 21 Oct 2022 20:06:57 +0200
-Message-Id: <20221021180657.13474-2-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20221021180657.13474-1-ansuelsmth@gmail.com>
-References: <20221021180657.13474-1-ansuelsmth@gmail.com>
+        bh=loxIHvePw8P2bWZhs+2jg7E8L0WwySO9XZZAOZ78G+c=;
+        b=3WJ7tKS+g+JX7E3W78UKJvBBtqTdqhPswxqr0MGPmeq3vSV9kvFAZ3DIqCybtjn0NT
+         9WMjKyOhRH36leHX1U075wHqujX4IPt9gyqB9EajxqCIx71B/m6TZ1GajXZrvlFoP0zU
+         SsKR8aR6iz7p+WJHocDOqBq0hKgSUM4n5IrwVTChaOBwLgyCidMgBW1Ofrrf4i5mWTup
+         Sam1d0BgPz14iWCiGJjRK5iURZgDmFxtvU2RhRE/NE7J2cATB1ow8/KeE2v3oMg2OUmW
+         0w4KnLmObmBkPdcMA3w8E01YVt6hAim2qWtVZNPfLqlLDLi7r36rs1RY71IneqLCWSFy
+         uOBw==
+X-Gm-Message-State: ACrzQf1S1aOY7lTK4EBagPoWlmnqYwFSOmUkQNc5Bb9tpTko/XNpkiJC
+        7FFDVTXcxM+BIQsZVU/i7iqTjmzmyIgBnBUWqoc=
+X-Google-Smtp-Source: AMsMyM5SRt2o+5sChw0r/2m65qf3Iwqe0lThsuz+IMflSRNY/FGCjm8ZH0Dz6ylCRSblLb5Xqcyj/v2UQ7w7at+9EF0=
+X-Received: by 2002:ac8:5902:0:b0:39c:e440:6adb with SMTP id
+ 2-20020ac85902000000b0039ce4406adbmr17509970qty.18.1666375730966; Fri, 21 Oct
+ 2022 11:08:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <cover.1666347511.git.tanjubrunostar0@gmail.com>
+ <03dd39114b1e5c029cd8022245403a079ff03ae7.1666347511.git.tanjubrunostar0@gmail.com>
+ <02a45afb-f81d-639c-1cc6-6376e31351a6@gmail.com>
+In-Reply-To: <02a45afb-f81d-639c-1cc6-6376e31351a6@gmail.com>
+From:   Tanju Brunostar <tanjubrunostar0@gmail.com>
+Date:   Fri, 21 Oct 2022 19:08:39 +0100
+Message-ID: <CAHJEyKW4QZHf_wjaR1bGs8vtb6Gu-inJ4oxcFkPPnAKEAd5-9w@mail.gmail.com>
+Subject: Re: [PATCH v2 4/6] staging: vt6655: refactor long lines of code in s_vGenerateTxParameter
+To:     Philipp Hortmann <philipp.g.hortmann@gmail.com>
+Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,131 +71,228 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rework nss_port5/6 to use the new multiple configuration implementation
-and correctly fix the clocks for these port under some corner case.
+On Fri, Oct 21, 2022 at 5:52 PM Philipp Hortmann
+<philipp.g.hortmann@gmail.com> wrote:
+>
+> On 10/21/22 12:33, Tanjuate Brunostar wrote:
+> > fix checkpatch errors by refactoring long lines of code in the function=
+: s_vGenerateTxParameter
+> >
+> > Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+> > ---
+> >   drivers/staging/vt6655/rxtx.c | 70 ++++++++++++++++++++++++----------=
+-
+> >   1 file changed, 48 insertions(+), 22 deletions(-)
+> >
+> > diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxt=
+x.c
+> > index dc853b83459b..42f4261293ba 100644
+> > --- a/drivers/staging/vt6655/rxtx.c
+> > +++ b/drivers/staging/vt6655/rxtx.c
+> > @@ -839,7 +839,8 @@ s_vFillCTSHead(struct vnt_private *pDevice,
+> >       }
+> >
+> >       if (byPktType =3D=3D PK_TYPE_11GB || byPktType =3D=3D PK_TYPE_11G=
+A) {
+> > -             if (byFBOption !=3D AUTO_FB_NONE && uDMAIdx !=3D TYPE_ATI=
+MDMA && uDMAIdx !=3D TYPE_BEACONDMA) {
+> > +             if (byFBOption !=3D AUTO_FB_NONE && uDMAIdx !=3D
+> > +                 TYPE_ATIMDMA && uDMAIdx !=3D TYPE_BEACONDMA) {
+> >                       /* Auto Fall back */
+> >                       struct vnt_cts_fb *buf =3D pvCTS;
+> >                       /* Get SignalField, ServiceField & Length */
+> > @@ -878,7 +879,10 @@ s_vFillCTSHead(struct vnt_private *pDevice,
+> >
+> >                       ether_addr_copy(buf->data.ra,
+> >                                       pDevice->abyCurrentNetAddr);
+> > -             } else { /* if (byFBOption !=3D AUTO_FB_NONE && uDMAIdx !=
+=3D TYPE_ATIMDMA && uDMAIdx !=3D TYPE_BEACONDMA) */
+> > +             } else {
+> > +                     /* if (byFBOption !=3D AUTO_FB_NONE && uDMAIdx !=
+=3D TYPE_ATIMDMA &&
+> > +                      * uDMAIdx !=3D TYPE_BEACONDMA)
+> > +                      */
+> >                       struct vnt_cts *buf =3D pvCTS;
+> >                       /* Get SignalField, ServiceField & Length */
+> >                       vnt_get_phy_field(pDevice, uCTSFrameLen,
+> > @@ -964,50 +968,72 @@ static void s_vGenerateTxParameter(struct vnt_pri=
+vate *pDevice,
+> >                       /* Fill RsvTime */
+> >                       struct vnt_rrv_time_rts *buf =3D pvRrvTime;
+> >
+> > -                     buf->rts_rrv_time_aa =3D get_rtscts_time(pDevice,=
+ 2, byPktType, cbFrameSize, wCurrentRate);
+> > -                     buf->rts_rrv_time_ba =3D get_rtscts_time(pDevice,=
+ 1, byPktType, cbFrameSize, wCurrentRate);
+> > -                     buf->rts_rrv_time_bb =3D get_rtscts_time(pDevice,=
+ 0, byPktType, cbFrameSize, wCurrentRate);
+> > -                     buf->rrv_time_a =3D vnt_rxtx_rsvtime_le16(pDevice=
+, byPktType, cbFrameSize, wCurrentRate, bNeedACK);
+> > -                     buf->rrv_time_b =3D vnt_rxtx_rsvtime_le16(pDevice=
+, PK_TYPE_11B, cbFrameSize, pDevice->byTopCCKBasicRate, bNeedACK);
+> > -
+> > -                     s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrame=
+Size, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+> > +                     buf->rts_rrv_time_aa =3D get_rtscts_time(pDevice,=
+ 2, byPktType, cbFrameSize,
+> > +                                                            wCurrentRa=
+te);
+> > +                     buf->rts_rrv_time_ba =3D get_rtscts_time(pDevice,=
+ 1, byPktType, cbFrameSize,
+> > +                                                            wCurrentRa=
+te);
+> > +                     buf->rts_rrv_time_bb =3D get_rtscts_time(pDevice,=
+ 0, byPktType, cbFrameSize,
+> > +                                                            wCurrentRa=
+te);
+> > +                     buf->rrv_time_a =3D vnt_rxtx_rsvtime_le16(pDevice=
+, byPktType, cbFrameSize,
+> > +                                                             wCurrentR=
+ate, bNeedACK);
+> > +                     buf->rrv_time_b =3D
+> > +                             vnt_rxtx_rsvtime_le16(pDevice, PK_TYPE_11=
+B, cbFrameSize,
+> > +                                                   pDevice->byTopCCKBa=
+sicRate, bNeedACK);
+> > +
+> > +                     s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrame=
+Size, bNeedACK, bDisCRC,
+> > +                                    psEthHeader, wCurrentRate, byFBOpt=
+ion);
+> >               } else {/* RTS_needless, PCF mode */
+> >                       struct vnt_rrv_time_cts *buf =3D pvRrvTime;
+> >
+> > -                     buf->rrv_time_a =3D vnt_rxtx_rsvtime_le16(pDevice=
+, byPktType, cbFrameSize, wCurrentRate, bNeedACK);
+> > -                     buf->rrv_time_b =3D vnt_rxtx_rsvtime_le16(pDevice=
+, PK_TYPE_11B, cbFrameSize, pDevice->byTopCCKBasicRate, bNeedACK);
+> > -                     buf->cts_rrv_time_ba =3D get_rtscts_time(pDevice,=
+ 3, byPktType, cbFrameSize, wCurrentRate);
+> > +                     buf->rrv_time_a =3D vnt_rxtx_rsvtime_le16(pDevice=
+, byPktType, cbFrameSize,
+> > +                                                             wCurrentR=
+ate, bNeedACK);
+> > +                     buf->rrv_time_b =3D
+> > +                             vnt_rxtx_rsvtime_le16(pDevice, PK_TYPE_11=
+B, cbFrameSize,
+> > +                                                   pDevice->byTopCCKBa=
+sicRate, bNeedACK);
+> > +                     buf->cts_rrv_time_ba =3D get_rtscts_time(pDevice,=
+ 3, byPktType, cbFrameSize,
+> > +                                                            wCurrentRa=
+te);
+> >
+> >                       /* Fill CTS */
+> > -                     s_vFillCTSHead(pDevice, uDMAIdx, byPktType, pvCTS=
+, cbFrameSize, bNeedACK, bDisCRC, wCurrentRate, byFBOption);
+> > +                     s_vFillCTSHead(pDevice, uDMAIdx, byPktType, pvCTS=
+, cbFrameSize, bNeedACK,
+> > +                                    bDisCRC, wCurrentRate, byFBOption)=
+;
+> >               }
+> >       } else if (byPktType =3D=3D PK_TYPE_11A) {
+> >               if (pvRTS) {/* RTS_need, non PCF mode */
+> > -                     struct vnt_rrv_time_ab *buf =3D pvRrvTime;
+>
+> Error during compiliation in next line
+>
+> > +                     struct vnt_rrv_time_ab *buf =3D pvRrvT
+> > +                             ime;
+>
+> make: Entering directory '/home/kernel/Documents/git/kernels/staging'
+>    CC [M]  drivers/staging/vt6655/rxtx.o
+> drivers/staging/vt6655/rxtx.c: In function =E2=80=98s_vGenerateTxParamete=
+r=E2=80=99:
+> drivers/staging/vt6655/rxtx.c:1014:34: error: =E2=80=98pvRrvT=E2=80=99 un=
+declared (first
+> use in this function)
+>   1014 |    struct vnt_rrv_time_ab *buf =3D pvRrvT
+>        |                                  ^~~~~~
+> drivers/staging/vt6655/rxtx.c:1014:34: note: each undeclared identifier
+> is reported only once for each function it appears in
+> drivers/staging/vt6655/rxtx.c:1015:5: error: expected =E2=80=98,=E2=80=99=
+ or =E2=80=98;=E2=80=99 before
+> =E2=80=98ime=E2=80=99
+>   1015 |     ime;
+>        |     ^~~
+> make[1]: *** [scripts/Makefile.build:250: drivers/staging/vt6655/rxtx.o]
+> Error 1
+> make: *** [Makefile:1992: drivers/staging/vt6655] Error 2
+> make: Leaving directory '/home/kernel/Documents/git/kernels/staging'
+>
+This error occured on the first version of this patch. I corrected it,
+compiled the code and the error was gone before I sent this version.
+please check again. You may have seen this error on the first version
+and not this one.
+thanks
 
-This is particularly relevant for device that have 2.5G or 10G port
-connected to port5 or port 6 on ipq8074. As the parent are shared
-across multiple port it may be required to select the correct
-configuration to accomplish the desired clock. Without this patch such
-port doesn't work in some specific ethernet speed as the clock will be
-set to the wrong frequency as we just select the first configuration for
-the related frequency instead of selecting the best one.
-
-Tested-by: Robert Marko <robimarko@gmail.com> # ipq8074 Qnap QHora-301W
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
----
- drivers/clk/qcom/gcc-ipq8074.c | 64 +++++++++++++++++++++++++---------
- 1 file changed, 48 insertions(+), 16 deletions(-)
-
-diff --git a/drivers/clk/qcom/gcc-ipq8074.c b/drivers/clk/qcom/gcc-ipq8074.c
-index 42d185fe19c8..02d04a552b78 100644
---- a/drivers/clk/qcom/gcc-ipq8074.c
-+++ b/drivers/clk/qcom/gcc-ipq8074.c
-@@ -1787,13 +1787,21 @@ static struct clk_regmap_div nss_port4_tx_div_clk_src = {
- 	},
- };
- 
-+static const struct freq_conf ftbl_nss_port5_rx_clk_src_25[] = {
-+	C(P_UNIPHY1_RX, 12.5, 0, 0),
-+	C(P_UNIPHY0_RX, 5, 0, 0),
-+};
-+
-+static const struct freq_conf ftbl_nss_port5_rx_clk_src_125[] = {
-+	C(P_UNIPHY1_RX, 2.5, 0, 0),
-+	C(P_UNIPHY0_RX, 1, 0, 0),
-+};
-+
- static const struct freq_tbl ftbl_nss_port5_rx_clk_src[] = {
- 	F(19200000, P_XO, 1, 0, 0),
--	F(25000000, P_UNIPHY1_RX, 12.5, 0, 0),
--	F(25000000, P_UNIPHY0_RX, 5, 0, 0),
-+	FM(25000000, ftbl_nss_port5_rx_clk_src_25),
- 	F(78125000, P_UNIPHY1_RX, 4, 0, 0),
--	F(125000000, P_UNIPHY1_RX, 2.5, 0, 0),
--	F(125000000, P_UNIPHY0_RX, 1, 0, 0),
-+	FM(125000000, ftbl_nss_port5_rx_clk_src_125),
- 	F(156250000, P_UNIPHY1_RX, 2, 0, 0),
- 	F(312500000, P_UNIPHY1_RX, 1, 0, 0),
- 	{ }
-@@ -1829,13 +1837,21 @@ static struct clk_regmap_div nss_port5_rx_div_clk_src = {
- 	},
- };
- 
-+static struct freq_conf ftbl_nss_port5_tx_clk_src_25[] = {
-+	C(P_UNIPHY1_TX, 12.5, 0, 0),
-+	C(P_UNIPHY0_TX, 5, 0, 0),
-+};
-+
-+static struct freq_conf ftbl_nss_port5_tx_clk_src_125[] = {
-+	C(P_UNIPHY1_TX, 2.5, 0, 0),
-+	C(P_UNIPHY0_TX, 1, 0, 0),
-+};
-+
- static const struct freq_tbl ftbl_nss_port5_tx_clk_src[] = {
- 	F(19200000, P_XO, 1, 0, 0),
--	F(25000000, P_UNIPHY1_TX, 12.5, 0, 0),
--	F(25000000, P_UNIPHY0_TX, 5, 0, 0),
-+	FM(25000000, ftbl_nss_port5_tx_clk_src_25),
- 	F(78125000, P_UNIPHY1_TX, 4, 0, 0),
--	F(125000000, P_UNIPHY1_TX, 2.5, 0, 0),
--	F(125000000, P_UNIPHY0_TX, 1, 0, 0),
-+	FM(125000000, ftbl_nss_port5_tx_clk_src_125),
- 	F(156250000, P_UNIPHY1_TX, 2, 0, 0),
- 	F(312500000, P_UNIPHY1_TX, 1, 0, 0),
- 	{ }
-@@ -1871,13 +1887,21 @@ static struct clk_regmap_div nss_port5_tx_div_clk_src = {
- 	},
- };
- 
-+static struct freq_conf ftbl_nss_port6_rx_clk_src_25[] = {
-+	C(P_UNIPHY2_RX, 5, 0, 0),
-+	C(P_UNIPHY2_RX, 12.5, 0, 0),
-+};
-+
-+static struct freq_conf ftbl_nss_port6_rx_clk_src_125[] = {
-+	C(P_UNIPHY2_RX, 1, 0, 0),
-+	C(P_UNIPHY2_RX, 2.5, 0, 0),
-+};
-+
- static const struct freq_tbl ftbl_nss_port6_rx_clk_src[] = {
- 	F(19200000, P_XO, 1, 0, 0),
--	F(25000000, P_UNIPHY2_RX, 5, 0, 0),
--	F(25000000, P_UNIPHY2_RX, 12.5, 0, 0),
-+	FM(25000000, ftbl_nss_port6_rx_clk_src_25),
- 	F(78125000, P_UNIPHY2_RX, 4, 0, 0),
--	F(125000000, P_UNIPHY2_RX, 1, 0, 0),
--	F(125000000, P_UNIPHY2_RX, 2.5, 0, 0),
-+	FM(125000000, ftbl_nss_port6_rx_clk_src_125),
- 	F(156250000, P_UNIPHY2_RX, 2, 0, 0),
- 	F(312500000, P_UNIPHY2_RX, 1, 0, 0),
- 	{ }
-@@ -1913,13 +1937,21 @@ static struct clk_regmap_div nss_port6_rx_div_clk_src = {
- 	},
- };
- 
-+static struct freq_conf ftbl_nss_port6_tx_clk_src_25[] = {
-+	C(P_UNIPHY2_TX, 5, 0, 0),
-+	C(P_UNIPHY2_TX, 12.5, 0, 0),
-+};
-+
-+static struct freq_conf ftbl_nss_port6_tx_clk_src_125[] = {
-+	C(P_UNIPHY2_TX, 1, 0, 0),
-+	C(P_UNIPHY2_TX, 2.5, 0, 0),
-+};
-+
- static const struct freq_tbl ftbl_nss_port6_tx_clk_src[] = {
- 	F(19200000, P_XO, 1, 0, 0),
--	F(25000000, P_UNIPHY2_TX, 5, 0, 0),
--	F(25000000, P_UNIPHY2_TX, 12.5, 0, 0),
-+	FM(25000000, ftbl_nss_port6_tx_clk_src_25),
- 	F(78125000, P_UNIPHY2_TX, 4, 0, 0),
--	F(125000000, P_UNIPHY2_TX, 1, 0, 0),
--	F(125000000, P_UNIPHY2_TX, 2.5, 0, 0),
-+	FM(125000000, ftbl_nss_port6_tx_clk_src_125),
- 	F(156250000, P_UNIPHY2_TX, 2, 0, 0),
- 	F(312500000, P_UNIPHY2_TX, 1, 0, 0),
- 	{ }
--- 
-2.37.2
-
+Tanju
+> >
+> > -                     buf->rts_rrv_time =3D get_rtscts_time(pDevice, 2,=
+ byPktType, cbFrameSize, wCurrentRate);
+> > -                     buf->rrv_time =3D vnt_rxtx_rsvtime_le16(pDevice, =
+byPktType, cbFrameSize, wCurrentRate, bNeedACK);
+> > +                     buf->rts_rrv_time =3D get_rtscts_time(pDevice, 2,=
+ byPktType, cbFrameSize,
+> > +                                                         wCurrentRate)=
+;
+> > +                     buf->rrv_time =3D vnt_rxtx_rsvtime_le16(pDevice, =
+byPktType, cbFrameSize,
+> > +                                                           wCurrentRat=
+e, bNeedACK);
+> >
+> >                       /* Fill RTS */
+> > -                     s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrame=
+Size, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+> > +                     s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrame=
+Size, bNeedACK, bDisCRC,
+> > +                                    psEthHeader, wCurrentRate, byFBOpt=
+ion);
+> >               } else if (!pvRTS) {/* RTS_needless, non PCF mode */
+> >                       struct vnt_rrv_time_ab *buf =3D pvRrvTime;
+> >
+> > -                     buf->rrv_time =3D vnt_rxtx_rsvtime_le16(pDevice, =
+PK_TYPE_11A, cbFrameSize, wCurrentRate, bNeedACK);
+> > +                     buf->rrv_time =3D
+> > +                             vnt_rxtx_rsvtime_le16(pDevice, PK_TYPE_11=
+A, cbFrameSize,
+> > +                                                   wCurrentRate, bNeed=
+ACK);
+> >               }
+> >       } else if (byPktType =3D=3D PK_TYPE_11B) {
+> >               if (pvRTS) {/* RTS_need, non PCF mode */
+> >                       struct vnt_rrv_time_ab *buf =3D pvRrvTime;
+> >
+> > -                     buf->rts_rrv_time =3D get_rtscts_time(pDevice, 0,=
+ byPktType, cbFrameSize, wCurrentRate);
+> > -                     buf->rrv_time =3D vnt_rxtx_rsvtime_le16(pDevice, =
+PK_TYPE_11B, cbFrameSize, wCurrentRate, bNeedACK);
+> > +                     buf->rts_rrv_time =3D get_rtscts_time(pDevice, 0,=
+ byPktType, cbFrameSize,
+> > +                                                         wCurrentRate)=
+;
+> > +                     buf->rrv_time =3D vnt_rxtx_rsvtime_le16(pDevice, =
+PK_TYPE_11B, cbFrameSize,
+> > +                                                           wCurrentRat=
+e, bNeedACK);
+> >
+> >                       /* Fill RTS */
+> > -                     s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrame=
+Size, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+> > +                     s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrame=
+Size, bNeedACK, bDisCRC,
+> > +                                    psEthHeader, wCurrentRate, byFBOpt=
+ion);
+> >               } else { /* RTS_needless, non PCF mode */
+> >                       struct vnt_rrv_time_ab *buf =3D pvRrvTime;
+> >
+> > -                     buf->rrv_time =3D vnt_rxtx_rsvtime_le16(pDevice, =
+PK_TYPE_11B, cbFrameSize, wCurrentRate, bNeedACK);
+> > +                     buf->rrv_time =3D vnt_rxtx_rsvtime_le16(pDevice, =
+PK_TYPE_11B, cbFrameSize,
+> > +                                                           wCurrentRat=
+e, bNeedACK);
+> >               }
+> >       }
+> >   }
+>
