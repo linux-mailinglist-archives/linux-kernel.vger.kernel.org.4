@@ -2,56 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 335BA60711B
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 09:31:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5251E60711E
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 09:31:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230119AbiJUHba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 03:31:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32978 "EHLO
+        id S230035AbiJUHbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 03:31:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230029AbiJUHbU (ORCPT
+        with ESMTP id S230152AbiJUHbW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 03:31:20 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07EDD2475EC
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 00:31:11 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id i16-20020a056902069000b006c3ef07d22eso2365968ybt.13
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 00:31:10 -0700 (PDT)
+        Fri, 21 Oct 2022 03:31:22 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C91D2475FD
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 00:31:15 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id m66-20020a257145000000b006c23949ec98so2375309ybc.4
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 00:31:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=yYRI4YM/O3HPavk8M56cMbkj+MwZGK3MSk39K+2fBzs=;
-        b=jbSx66ETI+A32fKzKRjx5OquaUQL8nMNegJ5xcIQN/qDilciMPGigwaH0+Zc07EiKX
-         vSt4omPWR1sWbZsL2+Jbm91k4cOhgnEndNJ4H69cflKemIXd6lPrpY/Pjpl1Mxu4Wt3n
-         X4PBCIK2jEgZJ1gOlO6NCeZsnY0RlvaZeykZbwYvhpJYFWPM0IhI/nWiMDD+Vl2X0cay
-         56gP5+65jhmTYTzgC7jF0WhkFSwDzXQQp2gPZIHL1iFYBBPGGr2yPllgTZEU63g98MIf
-         G5fkmIXxWhW4nf+dadIq1oRCMUQKZGlFkRE6gpPhJkomEXnY+zNpM/fuof6ZeqpZj90M
-         hj8g==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4Ukwd+W4yUObSSiJHNA3xBbGR2xkY62jRsxgv2DCjeM=;
+        b=DDR1FZmXOPfNnIahF64Yl1WnL3w1ledFOway/UOkPmf59UO0S5M9JKyLb7LqsKBBpd
+         SwCMN0yvBUeC/7w6TJ/3PGjpiP95babhe9PQdsYTzelfzTyOU7DqeUaiETnnKY4BmoOL
+         w1/dLB+J3w06ZKSH6j+WQOc0tqOZVs/2oOSujKZManwU/mRZV7yVmh25nMuPRpQaajRx
+         BjhLvJcwjN0tpVo/o6/yVDkW8ra/Bh1EoJPZsLTgtXWbUVLc4RD+8HlEe4wkDhP05eST
+         71o0FtYoGrDlSlJYzSlgdegNH1hj2tS69LxMbieFLlSq+l2LMQe9IPxh2VkXIIxTrwv7
+         KrUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yYRI4YM/O3HPavk8M56cMbkj+MwZGK3MSk39K+2fBzs=;
-        b=W/4lVAZAiLtjjqTXeZsn3SuGnPwNmkHGH2hdu55zlbxZ5RAsA+7D5lg20hXkHlskfl
-         OehMKvS7lNPZ8q0RmhxgMjYRwqqi9Qia0LkebQwB0xRlkQF61Zxu2zeJ37IaCXZKYJDZ
-         EnLoaS+X2zSjbtbBRanh831833JpaMM8YzqfsqW3C7E+qNLOej/RFZf6+7On+ELO2HIh
-         d+uVJ0gel9OTtf6zZGyj6fSTeOiNcicHG9lQBpIgK+BdmzO0kNBNapCwPuedB1hlmNP4
-         zYXkr7DfemXNKnNs4aD9fjiv3TDftCXb4vR6Wp7imsoO/rGYzgo3C5DY6dcVRbGuuBlk
-         mYJA==
-X-Gm-Message-State: ACrzQf1wcbTdUXodZiC+Zns/HYu3BMAmM9TuinLEWX5+QmQDhuWi2KTJ
-        ruhtOoyexofm+Pgl6QxYNv4jlcyTux0d1w==
-X-Google-Smtp-Source: AMsMyM76iIWNmGWl5azzgQ/kUxazHQFVQEwuFrEmhRfU3we+Qyko7o5kcAkKNyco/dfhd8d2fOk1nyM9rBERtg==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4Ukwd+W4yUObSSiJHNA3xBbGR2xkY62jRsxgv2DCjeM=;
+        b=N1ELjc8vSZNEEm7MtdbJz7dhvMFl0/UCQTdaPeHVm0DybBc9CwRamomB295JGPoX/X
+         AOYUkAQILI11cDQrcDCjuvG2MAYmSlYvMzIlm3bIecrxvDTxj3TEwIcdwHcqg4SIA0eL
+         pFwPnlwpCNkADXhaGRVH4f/QhceDanVCftqC3nBKTW6zDkLpRFNuahHrXVEEE687Zw5M
+         AAXRfy7vxo0l6Kv7t+YWYzGtVgI2tygnysn7PJY3bZKTOERro3tq0Kbc6DhsSWjnB/TX
+         LaUXMtHvnvRjK/nwbcZcxnhLgssAWTK8pqW31totPpFGqtFPk2dI9N9GRSVoKseOUz36
+         yu5g==
+X-Gm-Message-State: ACrzQf3xgybxNnISf/sV5GR4Sixdj3gpqiIQmJeR5jN0S+LHtK+ahcfQ
+        4slrU4FuyzBuSj1wbZ6iENGXHtzhNKrHQw==
+X-Google-Smtp-Source: AMsMyM5R/AzkN9cwYEhav+L0OEzaKWiS2EE//NDTf7ZoZct9r8qpgWiVgwQhkG3Pyp7lj414XFyXnh8scXZ0jA==
 X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a05:6902:34b:b0:691:4b82:7624 with SMTP
- id e11-20020a056902034b00b006914b827624mr16182648ybs.614.1666337470120; Fri,
- 21 Oct 2022 00:31:10 -0700 (PDT)
-Date:   Fri, 21 Oct 2022 15:28:54 +0800
+ (user=davidgow job=sendgmr) by 2002:a05:6902:1003:b0:6bf:3ae4:7d31 with SMTP
+ id w3-20020a056902100300b006bf3ae47d31mr15179638ybt.48.1666337474473; Fri, 21
+ Oct 2022 00:31:14 -0700 (PDT)
+Date:   Fri, 21 Oct 2022 15:28:55 +0800
+In-Reply-To: <20221021072854.333010-1-davidgow@google.com>
 Mime-Version: 1.0
+References: <20221021072854.333010-1-davidgow@google.com>
 X-Mailer: git-send-email 2.38.0.135.g90850a2211-goog
-Message-ID: <20221021072854.333010-1-davidgow@google.com>
-Subject: [PATCH 1/2] kunit: Provide a static key to check if KUnit is actively
- running tests
+Message-ID: <20221021072854.333010-2-davidgow@google.com>
+Subject: [PATCH 2/2] kunit: Use the static key in kunit_fail_current_test()
 From:   David Gow <davidgow@google.com>
 To:     Brendan Higgins <brendan.higgins@linux.dev>,
         Daniel Latypov <dlatypov@google.com>,
@@ -70,83 +71,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KUnit does a few expensive things when enabled. This hasn't been a
-problem because KUnit was only enabled on test kernels, but with a few
-people enabling (but not _using_) KUnit on production systems, we need a
-runtime way of handling this.
+Speed up the case where kunit_fail_current_test() is called when no test
+is running. This should make it convenient for code to call this
+unconditionally in some error paths, without fear of causing a
+performance problem.
 
-Provide a 'kunit_running' static key (defaulting to false), which allows
-us to hide any KUnit code behind a static branch. This should reduce the
-performance impact (on other code) of having KUnit enabled to a single
-NOP when no tests are running.
+If CONFIG_KUNIT=n, this compiles away to nothing. If CONFIG_KUNIT=y, it
+will compile down to a NOP (on most architectures) if no KUnit test is
+currently running. kunit_fail_current_test() does not work if KUnit
+itself is built as a module, though this is a pre-existing limitation.
 
-Note that, while it looks unintuitive, tests always run entirely within
-__kunit_test_suites_init(), so it's safe to decrement the static key at
-the end of this function, rather than in __kunit_test_suites_exit(),
-which is only there to clean up results in debugfs.
+Note that the definition of kunit_fail_current_test() still wraps an
+empty, inline function if KUnit is not built-in. This is to ensure that
+the printf format string __attribute__ will still work.
 
 Signed-off-by: David Gow <davidgow@google.com>
 ---
+ include/kunit/test-bug.h | 19 ++++++++++++++++---
+ 1 file changed, 16 insertions(+), 3 deletions(-)
 
-This should be a no-op (other than a possible performance improvement)
-functionality-wise, and lays the groundwork for a more optimised static
-stub implementation.
-
----
- include/kunit/test.h | 4 ++++
- lib/kunit/test.c     | 6 ++++++
- 2 files changed, 10 insertions(+)
-
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index b1ab6b32216d..450a778a039e 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -16,6 +16,7 @@
- #include <linux/container_of.h>
- #include <linux/err.h>
- #include <linux/init.h>
-+#include <linux/jump_label.h>
- #include <linux/kconfig.h>
- #include <linux/kref.h>
- #include <linux/list.h>
-@@ -27,6 +28,9 @@
+diff --git a/include/kunit/test-bug.h b/include/kunit/test-bug.h
+index 5fc58081d511..ba9558a9f9c0 100644
+--- a/include/kunit/test-bug.h
++++ b/include/kunit/test-bug.h
+@@ -9,16 +9,29 @@
+ #ifndef _KUNIT_TEST_BUG_H
+ #define _KUNIT_TEST_BUG_H
  
- #include <asm/rwonce.h>
+-#define kunit_fail_current_test(fmt, ...) \
+-	__kunit_fail_current_test(__FILE__, __LINE__, fmt, ##__VA_ARGS__)
+-
+ #if IS_BUILTIN(CONFIG_KUNIT)
  
-+/* Static key: true if any KUnit tests are currently running */
++#include <linux/jump_label.h> /* For static branch */
++
++/* Static key if KUnit is running any tests. */
 +extern struct static_key_false kunit_running;
 +
- struct kunit;
- 
- /* Size of log associated with test. */
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index 90640a43cf62..314717b63080 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -20,6 +20,8 @@
- #include "string-stream.h"
- #include "try-catch-impl.h"
- 
-+DEFINE_STATIC_KEY_FALSE(kunit_running);
++#define kunit_fail_current_test(fmt, ...) do {					\
++	if (static_branch_unlikely(&kunit_running)) {				\
++		__kunit_fail_current_test(__FILE__, __LINE__,			\
++					  fmt, ##__VA_ARGS__);			\
++	} while (0)
 +
- #if IS_BUILTIN(CONFIG_KUNIT)
- /*
-  * Fail the current test and print an error message to the log.
-@@ -612,10 +614,14 @@ int __kunit_test_suites_init(struct kunit_suite * const * const suites, int num_
- 		return 0;
- 	}
++
+ extern __printf(3, 4) void __kunit_fail_current_test(const char *file, int line,
+ 						    const char *fmt, ...);
  
-+	static_branch_inc(&kunit_running);
+ #else
+ 
++/* We define this with an empty helper function so format string warnings work */
++#define kunit_fail_current_test(fmt, ...) \
++		__kunit_fail_current_test(__FILE__, __LINE__, fmt, ##__VA_ARGS__)
 +
- 	for (i = 0; i < num_suites; i++) {
- 		kunit_init_suite(suites[i]);
- 		kunit_run_tests(suites[i]);
- 	}
-+
-+	static_branch_dec(&kunit_running);
- 	return 0;
- }
- EXPORT_SYMBOL_GPL(__kunit_test_suites_init);
+ static inline __printf(3, 4) void __kunit_fail_current_test(const char *file, int line,
+ 							    const char *fmt, ...)
+ {
 -- 
 2.38.0.135.g90850a2211-goog
 
