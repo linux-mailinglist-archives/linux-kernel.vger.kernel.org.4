@@ -2,190 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22635606DDE
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 04:37:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0E99606DE8
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 04:41:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbiJUChK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 22:37:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49710 "EHLO
+        id S229991AbiJUCl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 22:41:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiJUChI (ORCPT
+        with ESMTP id S230041AbiJUClX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 22:37:08 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC3961B230E
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 19:37:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666319827; x=1697855827;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=xXhZ5LLlK07QQMN9PHgZmYqk9UrdPRBEWVeAUEIUZ3M=;
-  b=K9Ql+tWwNdq+2JcwDXXSNEsnaZwtTJ5NKuxcGvJa1iUuW3qvmq3yPyuL
-   OK5CilhIsICQep43fwObVbeLNVu/fLk5x48HR7136fXhcqBQt06BW5GJ1
-   A6a/bGB34xd79co0hmApc5T0JQ9EwS+v+Occf+X0BAJwnu5SO65WuHJDA
-   hx+CwXa6ux8vbCXFGp/X8Fei6NF6lGFVW8kyUucAek/5Me/p3h2HzZ4js
-   rbkm7Oso5ezEGRojuLYAdPkO/SrT0d/CWgesBJilOfXWSRSKckh4mXoFW
-   uEvVcHMtGFdVY/tUJejeK63s6Q5vimurODEaN2VG//T7dBpoq5GaAV/6h
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="368940385"
-X-IronPort-AV: E=Sophos;i="5.95,200,1661842800"; 
-   d="scan'208";a="368940385"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 19:37:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="959346673"
-X-IronPort-AV: E=Sophos;i="5.95,200,1661842800"; 
-   d="scan'208";a="959346673"
-Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 20 Oct 2022 19:37:06 -0700
-Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1olhuD-0001yV-1I;
-        Fri, 21 Oct 2022 02:37:05 +0000
-Date:   Fri, 21 Oct 2022 10:36:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/cpu] BUILD SUCCESS
- 04ba8747e1329fa9e274b4634d792f811a3b0677
-Message-ID: <635205bb.Zaznj/hvO5A0SXVG%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Thu, 20 Oct 2022 22:41:23 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 546941EEA04
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 19:41:18 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id h185so1296229pgc.10
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 19:41:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hHaTEgELqZucdbkgwdj5xVLrR3sTANCQHwBWYpXrDwg=;
+        b=dn1FJWNAP+t44tpnfehnU21uXU5pdAaACu3Oa79rz0ubMUQKxXq5xEKNle55fcNpNr
+         k1/muB+8CtaMnBgpWGzHI/67dp1Y0IBmwFn44HrvW5DlW9v+X+CGhPnrkWEiAjfg+2QQ
+         aZDzR9Bdf8jk/5zW3Ic0OW+3tHEXLBdAf2JY5vuYHQjkhm+uvnXHvO0e77cavyq9BoML
+         CD8xq2DJNbVRw20lnq3wrGiGcfqqcZP/nR8lokGzfL94W4LzLrAg019frrTS0sfeVJXA
+         X3DVCPXyUtxQyufXAKsnJpYj4EZYx4IYZPIZOiXkYQgKbet34Bk8EHh0ysa7vGLhjGBj
+         SzXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hHaTEgELqZucdbkgwdj5xVLrR3sTANCQHwBWYpXrDwg=;
+        b=KZHceLOiRvQUbqEzXLMUxBviGgKFyJwRwVWO3W4IZYBBw5qWEhIysuP711uP8thGaM
+         EVcnJv6AxNXmFgXIJnKfUqaIizaFDr0TGs2DSyiIjR4my3URSrMSdso2zVHiAFJIbItS
+         czrcNQIRKG2PYE8YBM8xkt1i0hIJOzBHSUpmA18J28tTJ+MdadQCM00BUttrrEHLOYt/
+         aTP2FuMe+84Spdz1DhRF2vX1f1gEUPNlNHtp4c39/qnmPCBJ9oAXrRFTFmdxebc8IbBU
+         W8fMwVRQSBm43/zckoUzc9KN9m40LuXXp5KJ7o6+xcCf0wb3RC/vhLvLYNRt5aWGvNGv
+         vz6w==
+X-Gm-Message-State: ACrzQf1ktSEmAl4F0NTcaxaGMJJJXKwj2D/0a8m56PHyhQyxNKdFu2H8
+        k/JK0Sv5+4LJQBb86HxU6Ec=
+X-Google-Smtp-Source: AMsMyM6PtbI8J6Oapq5CSGQIqVaxBmmc+AT2patlNedL5QjRuHQN6mBD3iXGD0ZH3+VFJhwWx4zSiA==
+X-Received: by 2002:a63:1609:0:b0:45c:7c1c:4e7d with SMTP id w9-20020a631609000000b0045c7c1c4e7dmr14170938pgl.265.1666320077331;
+        Thu, 20 Oct 2022 19:41:17 -0700 (PDT)
+Received: from localhost ([159.226.94.113])
+        by smtp.gmail.com with ESMTPSA id d11-20020a170902cecb00b00177fb862a87sm13725924plg.20.2022.10.20.19.41.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Oct 2022 19:41:16 -0700 (PDT)
+From:   Hawkins Jiawei <yin31149@gmail.com>
+To:     mike.kravetz@oracle.com
+Cc:     18801353760@163.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, songmuchun@bytedance.com,
+        syzbot+a3e6acd85ded5c16a709@syzkaller.appspotmail.com,
+        syzkaller-bugs@googlegroups.com, yin31149@gmail.com
+Subject: Re: [PATCH -next] hugetlbfs: fix null-ptr-deref in hugetlbfs_parse_param()
+Date:   Fri, 21 Oct 2022 10:37:41 +0800
+Message-Id: <20221021023740.184533-1-yin31149@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <Y1Hb6sIJXrRwEttv@monkey>
+References: <Y1Hb6sIJXrRwEttv@monkey>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/cpu
-branch HEAD: 04ba8747e1329fa9e274b4634d792f811a3b0677  x86/mtrr: Remove unused cyrix_set_all() function
+Hi Mike,
 
-elapsed time: 730m
+On Fri, 21 Oct 2022 at 07:38, Mike Kravetz <mike.kravetz@oracle.com> wrote:
+>
+> On 10/21/22 07:16, Hawkins Jiawei wrote:
+> > Syzkaller reports a null-ptr-deref bug as follows:
+> > ======================================================
+> > KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
+> > RIP: 0010:hugetlbfs_parse_param+0x1dd/0x8e0 fs/hugetlbfs/inode.c:1380
+> > [...]
+> > Call Trace:
+> >  <TASK>
+> >  vfs_parse_fs_param fs/fs_context.c:148 [inline]
+> >  vfs_parse_fs_param+0x1f9/0x3c0 fs/fs_context.c:129
+> >  vfs_parse_fs_string+0xdb/0x170 fs/fs_context.c:191
+> >  generic_parse_monolithic+0x16f/0x1f0 fs/fs_context.c:231
+> >  do_new_mount fs/namespace.c:3036 [inline]
+> >  path_mount+0x12de/0x1e20 fs/namespace.c:3370
+> >  do_mount fs/namespace.c:3383 [inline]
+> >  __do_sys_mount fs/namespace.c:3591 [inline]
+> >  __se_sys_mount fs/namespace.c:3568 [inline]
+> >  __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
+> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+> >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> >  [...]
+> >  </TASK>
+> > ======================================================
+> >
+> > According to commit
+> > ac369cdd9448("vfs: parse: deal with zero length string value"),
+> > kernel will sets the param->string to null pointer in
+> > vfs_parse_fs_string() if fs string has zero length.
+> >
+> > Yet the problem is that, hugetlbfs_parse_param() will
+> > dereference the param->string, without checking whether it
+> > is a null pointer. To be more specific, if hugetlbfs_parse_param()
+> > parses an illegal mount parameter, such as "size=,", kernel will
+> > constructs struct fs_parameter with null pointer in
+> > vfs_parse_fs_string(), then passes this struct fs_parameter to
+> > hugetlbfs_parse_param(), which triggers the above
+> > null-ptr-deref bug.
+> >
+> > This patch solves it by adding sanity check on param->string
+> > in hugetlbfs_parse_param().
+> >
+> > Reported-by: syzbot+a3e6acd85ded5c16a709@syzkaller.appspotmail.com
+> > Tested-by: syzbot+a3e6acd85ded5c16a709@syzkaller.appspotmail.com
+> > Link: https://lore.kernel.org/all/0000000000005ad00405eb7148c6@google.com/
+> > Signed-off-by: Hawkins Jiawei <yin31149@gmail.com>
+>
+> Thank you!
+>
+> This was on my list of things to look at.
+>
+> Do you know if the issue existed before commit ac369cdd9448?  Just
+> wondering if we need a Fixes tag and stable backports.
+This issue did not exist before commit ac369cdd9448, because kernel will
+sets param->string a string(although a zero length string) by kmemdup_nul()
+when fs string has zero length in vfs_parse_fs_string(). So it will ensures
+that param->string is not a null pointer in hugetlbfs_parse_param().
 
-configs tested: 104
-configs skipped: 84
+I also revert commit ac369cdd9448 or reset to ac369cdd9448~, and test
+the syzkaller reproducer. The reproducer does not trigger any issue
+in both situations.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-x86_64                              defconfig
-x86_64                          rhel-8.3-func
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                    rhel-8.3-kselftests
-x86_64                               rhel-8.3
-x86_64                        randconfig-a006
-i386                                defconfig
-x86_64                           rhel-8.3-syz
-i386                          randconfig-a001
-x86_64                         rhel-8.3-kunit
-i386                          randconfig-a003
-x86_64                           rhel-8.3-kvm
-i386                          randconfig-a005
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                           allyesconfig
-x86_64                        randconfig-a015
-i386                             allyesconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-sh                               allmodconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-openrisc                         alldefconfig
-powerpc                       holly_defconfig
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-s390                                defconfig
-s390                             allmodconfig
-arc                                 defconfig
-alpha                               defconfig
-s390                             allyesconfig
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-arm                        oxnas_v6_defconfig
-arc                  randconfig-r043-20221018
-s390                 randconfig-r044-20221018
-riscv                randconfig-r042-20221018
-m68k                            q40_defconfig
-powerpc                     tqm8541_defconfig
-arm                           stm32_defconfig
-powerpc                      chrp32_defconfig
-i386                          randconfig-c001
-i386                          debian-10.3-kvm
-i386                        debian-10.3-kunit
-i386                         debian-10.3-func
-um                               alldefconfig
-powerpc                  iss476-smp_defconfig
-sh                         apsh4a3a_defconfig
-m68k                         apollo_defconfig
-arc                        vdk_hs38_defconfig
-sh                           se7712_defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                 randconfig-c004-20221020
-x86_64                        randconfig-c001
-arm                  randconfig-c002-20221019
-
-clang tested configs:
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-i386                          randconfig-a002
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-i386                          randconfig-a006
-x86_64                        randconfig-a016
-x86_64                        randconfig-a014
-i386                 randconfig-a011-20221017
-i386                 randconfig-a013-20221017
-i386                 randconfig-a012-20221017
-i386                 randconfig-a014-20221017
-i386                 randconfig-a016-20221017
-i386                 randconfig-a015-20221017
-s390                 randconfig-r044-20221019
-hexagon              randconfig-r045-20221019
-riscv                randconfig-r042-20221019
-hexagon              randconfig-r041-20221019
-x86_64                        randconfig-k001
-mips                       lemote2f_defconfig
-powerpc                    socrates_defconfig
-arm                         orion5x_defconfig
-mips                          ath79_defconfig
-arm                         shannon_defconfig
-mips                     cu1830-neo_defconfig
-arm                           omap1_defconfig
-mips                      malta_kvm_defconfig
-arm                                 defconfig
-powerpc                    gamecube_defconfig
-arm                        magician_defconfig
-x86_64                        randconfig-c007
-mips                 randconfig-c004-20221019
-i386                          randconfig-c001
-s390                 randconfig-c005-20221019
-arm                  randconfig-c002-20221019
-riscv                randconfig-c006-20221019
-powerpc              randconfig-c003-20221019
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>
+> I'll take a closer look at the patch a bit later, unless someone beats
+> me to it.
+> --
+> Mike Kravetz
+>
+> > ---
+> >  fs/hugetlbfs/inode.c | 6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
+> > index 7f836f8f9db1..3ee84604e36d 100644
+> > --- a/fs/hugetlbfs/inode.c
+> > +++ b/fs/hugetlbfs/inode.c
+> > @@ -1377,7 +1377,7 @@ static int hugetlbfs_parse_param(struct fs_context *fc, struct fs_parameter *par
+> >
+> >       case Opt_size:
+> >               /* memparse() will accept a K/M/G without a digit */
+> > -             if (!isdigit(param->string[0]))
+> > +             if (!param->string || !isdigit(param->string[0]))
+> >                       goto bad_val;
+> >               ctx->max_size_opt = memparse(param->string, &rest);
+> >               ctx->max_val_type = SIZE_STD;
+> > @@ -1387,7 +1387,7 @@ static int hugetlbfs_parse_param(struct fs_context *fc, struct fs_parameter *par
+> >
+> >       case Opt_nr_inodes:
+> >               /* memparse() will accept a K/M/G without a digit */
+> > -             if (!isdigit(param->string[0]))
+> > +             if (!param->string || !isdigit(param->string[0]))
+> >                       goto bad_val;
+> >               ctx->nr_inodes = memparse(param->string, &rest);
+> >               return 0;
+> > @@ -1403,7 +1403,7 @@ static int hugetlbfs_parse_param(struct fs_context *fc, struct fs_parameter *par
+> >
+> >       case Opt_min_size:
+> >               /* memparse() will accept a K/M/G without a digit */
+> > -             if (!isdigit(param->string[0]))
+> > +             if (!param->string || !isdigit(param->string[0]))
+> >                       goto bad_val;
+> >               ctx->min_size_opt = memparse(param->string, &rest);
+> >               ctx->min_val_type = SIZE_STD;
+> > --
+> > 2.25.1
+> >
