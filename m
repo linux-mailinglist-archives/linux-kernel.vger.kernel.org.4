@@ -2,71 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A80F607D9C
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 19:35:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 560AA607D9D
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 19:35:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229501AbiJURfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 13:35:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39910 "EHLO
+        id S230303AbiJURfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 13:35:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229891AbiJURfI (ORCPT
+        with ESMTP id S230040AbiJURfI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 21 Oct 2022 13:35:08 -0400
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E32B8D234
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 10:35:04 -0700 (PDT)
-Received: by mail-qv1-xf34.google.com with SMTP id y10so2266596qvo.11
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 10:35:04 -0700 (PDT)
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2210A9A290;
+        Fri, 21 Oct 2022 10:35:07 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id v1so6036521wrt.11;
+        Fri, 21 Oct 2022 10:35:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=xqmXpbUlQQXekXEtSk3XTlvTBFnAf0ZtFknzInIV8QI=;
-        b=aPQqjt3f5TuRi1y4l8mLxIM4Ubx+0PgtU08JXVlinQn41r6nBNo5qyeqniEN9WhEv5
-         rLgSFxeMwHFONZcpTm/4BDxWrdGgNQaaWGpEhIH9vmlS1C6k4MsZCWTg5OI3r37Cb+GG
-         SwuaNJF1EQUtYAD0w4MKV4M9ZCqe+TGNRbq/Q=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=L//Wieblo+p2SGcpxf4C8N8iwGJJZA437EZKxzdxE5c=;
+        b=c7QSuv7iBp5wBrkef3xhwdcZzBUk7O3yFsXRHdNkIwZRAgDvjtzVu3lTez4Or0vyqZ
+         5srXJJ+CRE3E1YNzid2s4Md7XF+aRPkxl6K6NALoeHYddEpW4VHZ04RTPBnnp2PX0EZU
+         +qSojd6H9nT4wHskzFEaa9LLw+Xqc2GyohDTnJYaSg0okXfDNoEea1f/jiX48iSzMHyO
+         SiX5Sa2HbS2v7CjuJkBHKOzHxYpvBOvOeKYvCEE1sOjjA3Pvio7YrU86gea29CMgYS8Z
+         T74fs5CQ8RzDLttl668kRmYZg/P+hiJZfHttqjmrQ0NEe/1nwgIm3TUSqhDljjSlhlEN
+         4RUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=xqmXpbUlQQXekXEtSk3XTlvTBFnAf0ZtFknzInIV8QI=;
-        b=TeGpSuXNWeBxsL6N+iTPa9gwujSsd308bQIhE49y1YvfqupIYrKgzJzedfZ0LhW9lP
-         zCQd66kCLL8b37zf41xrfGM4sRY/VQy9vjytiD+DuX9dAzy0VCtPf/IDFYgwy335VxWF
-         tvbnRSW7vOaDRsPiisF+siTT04b2K2LEStgGZHz7BRDsTixcuiYgYJMmTBrgJbfjWuAS
-         c092jRPdytj4o8Y3Kq2PrtSaWwkWzgQytpmQ7PiWuq7vhdZ6eneB4f/LhPuDJX57B9Oi
-         3Ws+//CI4Ep+sczlgCwY1k8oty6jKDAa66Jcojo3cstMbNgtUs8SG1fVQkjTQF0uFdQi
-         Ak/A==
-X-Gm-Message-State: ACrzQf1st8fUislCULxlaxeMyBosSa5Y3ndF5/hySkoxt3OOgARLg6Nk
-        1ygAgIDYh+CBXPSW4+iU4aOleCRRrJh0KA==
-X-Google-Smtp-Source: AMsMyM56T2MhEwNjrAxiG23gJ6b6qDtpjNYb0WRf9RmlSr36jir2d+pIeTonkXfjYqeyk4/1Ro1Isw==
-X-Received: by 2002:a0c:b30f:0:b0:4b1:9058:7a85 with SMTP id s15-20020a0cb30f000000b004b190587a85mr17546142qve.25.1666373702989;
-        Fri, 21 Oct 2022 10:35:02 -0700 (PDT)
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com. [209.85.128.175])
-        by smtp.gmail.com with ESMTPSA id bj41-20020a05620a192900b006bb29d932e1sm9959187qkb.105.2022.10.21.10.35.02
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Oct 2022 10:35:02 -0700 (PDT)
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-369c2f83697so22802097b3.3
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 10:35:02 -0700 (PDT)
-X-Received: by 2002:a81:8304:0:b0:369:f5aa:46e9 with SMTP id
- t4-20020a818304000000b00369f5aa46e9mr3671073ywf.340.1666373701975; Fri, 21
- Oct 2022 10:35:01 -0700 (PDT)
+        bh=L//Wieblo+p2SGcpxf4C8N8iwGJJZA437EZKxzdxE5c=;
+        b=2DyxTja42MTzDFn5tLwsjk8ncNlkmRce/G1LjiIQaSjTCHOawlAsNxHQMq5inkTVd+
+         2QbLKzt0vNJMf3nY+piRf4tM1BHyzp1ub17OdF70uwPimPhXK5S9hcpcu+nmDuXlcsNP
+         R3kT+kl4l9QFk1M1jXFjr4LkPG6QJXSf8TsNEEA5VjTKvz5ylMVWDE8I/NJV9acVWc2h
+         XfNa4cl0HnXgZpI6jXaEairibtZAIVlQNOGIbsV/pqzZqhadBiD0u70EY9evyYvqFbgh
+         60jyVjhYIYF9tKuvh0JcPd4ccSQV2rCXx8z+GLe/2xHO32L5l0GnD1HpY43OsF29Ts8R
+         DaGQ==
+X-Gm-Message-State: ACrzQf0pgefLmCRxyo9cLPzYuDtcLWlf5r/+GFmMUzaFbD6RDILXaLOJ
+        +MqsXFr/WTdqvIM4+5uMe1Y=
+X-Google-Smtp-Source: AMsMyM54AR9BJUW9TsivXYlyV1jmFLZIEQsnfKPiFn3aRYGaLVXlfmLDEFGSkuGG5WBbqHLN6o+D6A==
+X-Received: by 2002:a05:6000:18ac:b0:232:c7c1:314f with SMTP id b12-20020a05600018ac00b00232c7c1314fmr12382847wri.109.1666373705721;
+        Fri, 21 Oct 2022 10:35:05 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id e38-20020a5d5966000000b002252884cc91sm19436118wri.43.2022.10.21.10.35.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Oct 2022 10:35:05 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] RDMA/hw/qib/qib_iba6120: Remove variable freeze_cnt
+Date:   Fri, 21 Oct 2022 18:35:04 +0100
+Message-Id: <20221021173504.27546-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-References: <CACRpkdbqRy5pXiy2r5CBiBXd8j7VbXKq40pmx_eXtFMynyAMug@mail.gmail.com>
-In-Reply-To: <CACRpkdbqRy5pXiy2r5CBiBXd8j7VbXKq40pmx_eXtFMynyAMug@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 21 Oct 2022 10:34:46 -0700
-X-Gmail-Original-Message-ID: <CAHk-=win6D4mgA04-D+S96n4aTNU-hx94e2ftF7rQjHb46O0Kw@mail.gmail.com>
-Message-ID: <CAHk-=win6D4mgA04-D+S96n4aTNU-hx94e2ftF7rQjHb46O0Kw@mail.gmail.com>
-Subject: Re: [GIT PULL] pin control fixes for the v6.1 series
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,24 +71,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 1:56 AM Linus Walleij <linus.walleij@linaro.org> wrote:
->
-> for you to fetch changes up to 9abf2313adc1ca1b6180c508c25f22f9395cc780:
->
->   Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+The variable freeze_cnt being incremented but it is never referenced,
+it is redundant and can be removed.
 
-Well, I have *no* idea what you did here, but the pull request claims
-that I should fetch that Linux 6.1-rc1 commit, which I obviously
-already have in my tree.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/infiniband/hw/qib/qib_iba6120.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-That's also why the pull request then doesn't have any diffstat
-(because there's no diff), and why pr-tracket-bot immediately replied
-with "it's already been merged".
+diff --git a/drivers/infiniband/hw/qib/qib_iba6120.c b/drivers/infiniband/hw/qib/qib_iba6120.c
+index aea571943768..23a81edf3f7a 100644
+--- a/drivers/infiniband/hw/qib/qib_iba6120.c
++++ b/drivers/infiniband/hw/qib/qib_iba6120.c
+@@ -799,12 +799,9 @@ static void qib_handle_6120_hwerrors(struct qib_devdata *dd, char *msg,
+ 			hwerrs &= ~TXE_PIO_PARITY;
+ 		}
+ 
+-		if (!hwerrs) {
+-			static u32 freeze_cnt;
+-
+-			freeze_cnt++;
++		if (!hwerrs)
+ 			qib_6120_clear_freeze(dd);
+-		} else
++		else
+ 			isfatal = 1;
+ 	}
+ 
+-- 
+2.37.3
 
-And indeed, when I fetch that 'pinctrl-v6.1-2' tag, it does have your
-signed tag, but it just points to my -rc1 commit.
-
-In other words - can you please try that pull request again after
-re-tagging properly - because it's all kinds of messed up right now.
-
-                Linus
