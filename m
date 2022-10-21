@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95B126074B6
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 12:12:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A8BC6074B7
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 12:12:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230332AbiJUKMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 06:12:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55366 "EHLO
+        id S230350AbiJUKMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 06:12:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230251AbiJUKMi (ORCPT
+        with ESMTP id S229489AbiJUKMi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 21 Oct 2022 06:12:38 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BD037AB12
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 03:12:36 -0700 (PDT)
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F212E7AB06
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 03:12:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
         s=mimecast20190719; t=1666347155;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=nRQc9H/82kxOKI2FpppEsEOSQhzrh5bTImBzbqeGf2g=;
-        b=JQj3pDlH+Skurj50/0/yVO8Y0o8VP+o/S4WEn4RGNxh0qOmdZRPg+5ESOELoCRxlj4GCxr
-        dF/2eohpENEx3s06MRZbMSg3qpNdnvnWIxdw8ZTWGyogfVvchWEKPQb7c8v03IJDFP0utM
-        aYci/S8AIdAr2kszGgrZTOXG2+WIvZ0=
+        bh=uL1RRyPgPkJis952ZjK0SFPNdUV1Kk+hsw2E/TYMifs=;
+        b=ia0n/9LmLL+E7X5Fxzf++n8B2xy0+m31zQQDbijcvPkjmhpAyM8b4IBLEHRWR9J0bJ4iGu
+        +omV9NWudGSrEm1e06xzmalRAtjJRki5m/8z+/aIQeDqa2P3xW7+TBp5uHo/ToYjifITXV
+        faYl8YAXct/3h5Nw4YlNdEQe0KgoiQM=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-563-uUm3cRV3OvSB9KP2Undt3w-1; Fri, 21 Oct 2022 06:12:34 -0400
-X-MC-Unique: uUm3cRV3OvSB9KP2Undt3w-1
+ us-mta-638--bIND0qnMVShTdrbuDHPqA-1; Fri, 21 Oct 2022 06:12:31 -0400
+X-MC-Unique: -bIND0qnMVShTdrbuDHPqA-1
 Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 66259857D0A;
-        Fri, 21 Oct 2022 10:12:17 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1D72186EB31;
+        Fri, 21 Oct 2022 10:12:26 +0000 (UTC)
 Received: from t480s.fritz.box (unknown [10.39.193.99])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9C8A040C95B0;
-        Fri, 21 Oct 2022 10:12:04 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6896D40D299B;
+        Fri, 21 Oct 2022 10:12:07 +0000 (UTC)
 From:   David Hildenbrand <david@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-mm@kvack.org, David Hildenbrand <david@redhat.com>,
@@ -48,9 +48,9 @@ Cc:     linux-mm@kvack.org, David Hildenbrand <david@redhat.com>,
         "Matthew Wilcox (Oracle)" <willy@infradead.org>,
         Jason Gunthorpe <jgg@nvidia.com>,
         John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH v2 2/9] mm/ksm: simplify break_ksm() to not rely on VM_FAULT_WRITE
-Date:   Fri, 21 Oct 2022 12:11:34 +0200
-Message-Id: <20221021101141.84170-3-david@redhat.com>
+Subject: [PATCH v2 3/9] mm: remove VM_FAULT_WRITE
+Date:   Fri, 21 Oct 2022 12:11:35 +0200
+Message-Id: <20221021101141.84170-4-david@redhat.com>
 In-Reply-To: <20221021101141.84170-1-david@redhat.com>
 References: <20221021101141.84170-1-david@redhat.com>
 MIME-Version: 1.0
@@ -66,82 +66,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that GUP no longer requires VM_FAULT_WRITE, break_ksm() is the sole
-remaining user of VM_FAULT_WRITE. As we also want to stop triggering a
-fake write fault and instead use FAULT_FLAG_UNSHARE -- similar to
-GUP-triggered unsharing when taking a R/O pin on a shared anonymous page
-(including KSM pages), let's stop relying on VM_FAULT_WRITE.
-
-Let's rework break_ksm() to not rely on the return value of
-handle_mm_fault() anymore to figure out whether COW-breaking was
-successful. Simply perform another follow_page() lookup to verify the
-result.
-
-While this makes break_ksm() slightly less efficient, we can simplify
-handle_mm_fault() a little and easily switch to FAULT_FLAG_UNSHARE
-without introducing similar KSM-specific behavior for
-FAULT_FLAG_UNSHARE.
-
-In my setup (AMD Ryzen 9 3900X), running the KSM selftest to test
-unmerge performance on 2 GiB (taskset 0x8 ./ksm_tests -D -s 2048), this
-results in a performance degradation of ~4% -- 5% (old: ~5250 MiB/s,
-new: ~5010 MiB/s).
-
-I don't think that we particularly care about that performance drop when
-unmerging. If it ever turns out to be an actual performance issue, we can
-think about a better alternative for FAULT_FLAG_UNSHARE -- let's just keep
-it simple for now.
+All users -- GUP and KSM -- are gone, let's just remove it.
 
 Acked-by: Peter Xu <peterx@redhat.com>
 Signed-off-by: David Hildenbrand <david@redhat.com>
 ---
- mm/ksm.c | 25 +++++++++++++------------
- 1 file changed, 13 insertions(+), 12 deletions(-)
+ include/linux/mm_types.h | 3 ---
+ mm/huge_memory.c         | 2 +-
+ mm/memory.c              | 9 ++++-----
+ 3 files changed, 5 insertions(+), 9 deletions(-)
 
-diff --git a/mm/ksm.c b/mm/ksm.c
-index c19fcca9bc03..b884a22f3c3c 100644
---- a/mm/ksm.c
-+++ b/mm/ksm.c
-@@ -440,26 +440,27 @@ static int break_ksm(struct vm_area_struct *vma, unsigned long addr)
- 	vm_fault_t ret = 0;
+diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+index 500e536796ca..6bc3baced3e3 100644
+--- a/include/linux/mm_types.h
++++ b/include/linux/mm_types.h
+@@ -847,7 +847,6 @@ typedef __bitwise unsigned int vm_fault_t;
+  * @VM_FAULT_OOM:		Out Of Memory
+  * @VM_FAULT_SIGBUS:		Bad access
+  * @VM_FAULT_MAJOR:		Page read from storage
+- * @VM_FAULT_WRITE:		Special case for get_user_pages
+  * @VM_FAULT_HWPOISON:		Hit poisoned small page
+  * @VM_FAULT_HWPOISON_LARGE:	Hit poisoned large page. Index encoded
+  *				in upper bits
+@@ -868,7 +867,6 @@ enum vm_fault_reason {
+ 	VM_FAULT_OOM            = (__force vm_fault_t)0x000001,
+ 	VM_FAULT_SIGBUS         = (__force vm_fault_t)0x000002,
+ 	VM_FAULT_MAJOR          = (__force vm_fault_t)0x000004,
+-	VM_FAULT_WRITE          = (__force vm_fault_t)0x000008,
+ 	VM_FAULT_HWPOISON       = (__force vm_fault_t)0x000010,
+ 	VM_FAULT_HWPOISON_LARGE = (__force vm_fault_t)0x000020,
+ 	VM_FAULT_SIGSEGV        = (__force vm_fault_t)0x000040,
+@@ -894,7 +892,6 @@ enum vm_fault_reason {
+ 	{ VM_FAULT_OOM,                 "OOM" },	\
+ 	{ VM_FAULT_SIGBUS,              "SIGBUS" },	\
+ 	{ VM_FAULT_MAJOR,               "MAJOR" },	\
+-	{ VM_FAULT_WRITE,               "WRITE" },	\
+ 	{ VM_FAULT_HWPOISON,            "HWPOISON" },	\
+ 	{ VM_FAULT_HWPOISON_LARGE,      "HWPOISON_LARGE" },	\
+ 	{ VM_FAULT_SIGSEGV,             "SIGSEGV" },	\
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index 1cc4a5f4791e..be13fe55b798 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -1379,7 +1379,7 @@ vm_fault_t do_huge_pmd_wp_page(struct vm_fault *vmf)
+ 		if (pmdp_set_access_flags(vma, haddr, vmf->pmd, entry, 1))
+ 			update_mmu_cache_pmd(vma, vmf->address, vmf->pmd);
+ 		spin_unlock(vmf->ptl);
+-		return VM_FAULT_WRITE;
++		return 0;
+ 	}
  
- 	do {
-+		bool ksm_page = false;
-+
- 		cond_resched();
- 		page = follow_page(vma, addr,
- 				FOLL_GET | FOLL_MIGRATION | FOLL_REMOTE);
- 		if (IS_ERR_OR_NULL(page))
- 			break;
- 		if (PageKsm(page))
--			ret = handle_mm_fault(vma, addr,
--					      FAULT_FLAG_WRITE | FAULT_FLAG_REMOTE,
--					      NULL);
--		else
--			ret = VM_FAULT_WRITE;
-+			ksm_page = true;
- 		put_page(page);
--	} while (!(ret & (VM_FAULT_WRITE | VM_FAULT_SIGBUS | VM_FAULT_SIGSEGV | VM_FAULT_OOM)));
-+
-+		if (!ksm_page)
-+			return 0;
-+		ret = handle_mm_fault(vma, addr,
-+				      FAULT_FLAG_WRITE | FAULT_FLAG_REMOTE,
-+				      NULL);
-+	} while (!(ret & (VM_FAULT_SIGBUS | VM_FAULT_SIGSEGV | VM_FAULT_OOM)));
- 	/*
--	 * We must loop because handle_mm_fault() may back out if there's
--	 * any difficulty e.g. if pte accessed bit gets updated concurrently.
--	 *
--	 * VM_FAULT_WRITE is what we have been hoping for: it indicates that
--	 * COW has been broken, even if the vma does not permit VM_WRITE;
--	 * but note that a concurrent fault might break PageKsm for us.
-+	 * We must loop until we no longer find a KSM page because
-+	 * handle_mm_fault() may back out if there's any difficulty e.g. if
-+	 * pte accessed bit gets updated concurrently.
- 	 *
- 	 * VM_FAULT_SIGBUS could occur if we race with truncation of the
- 	 * backing file, which also invalidates anonymous pages: that's
+ unlock_fallback:
+diff --git a/mm/memory.c b/mm/memory.c
+index f88c351aecd4..8e72f703ed99 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -3242,7 +3242,7 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
+ 	}
+ 
+ 	delayacct_wpcopy_end();
+-	return (page_copied && !unshare) ? VM_FAULT_WRITE : 0;
++	return 0;
+ oom_free_new:
+ 	put_page(new_page);
+ oom:
+@@ -3306,14 +3306,14 @@ static vm_fault_t wp_pfn_shared(struct vm_fault *vmf)
+ 		return finish_mkwrite_fault(vmf);
+ 	}
+ 	wp_page_reuse(vmf);
+-	return VM_FAULT_WRITE;
++	return 0;
+ }
+ 
+ static vm_fault_t wp_page_shared(struct vm_fault *vmf)
+ 	__releases(vmf->ptl)
+ {
+ 	struct vm_area_struct *vma = vmf->vma;
+-	vm_fault_t ret = VM_FAULT_WRITE;
++	vm_fault_t ret = 0;
+ 
+ 	get_page(vmf->page);
+ 
+@@ -3464,7 +3464,7 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
+ 			return 0;
+ 		}
+ 		wp_page_reuse(vmf);
+-		return VM_FAULT_WRITE;
++		return 0;
+ 	} else if (unshare) {
+ 		/* No anonymous page -> nothing to do. */
+ 		pte_unmap_unlock(vmf->pte, vmf->ptl);
+@@ -3983,7 +3983,6 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
+ 		if (vmf->flags & FAULT_FLAG_WRITE) {
+ 			pte = maybe_mkwrite(pte_mkdirty(pte), vma);
+ 			vmf->flags &= ~FAULT_FLAG_WRITE;
+-			ret |= VM_FAULT_WRITE;
+ 		}
+ 		rmap_flags |= RMAP_EXCLUSIVE;
+ 	}
 -- 
 2.37.3
 
