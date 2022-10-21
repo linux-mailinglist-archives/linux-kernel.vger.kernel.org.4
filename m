@@ -2,106 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F73D607138
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 09:36:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C25D607142
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 09:38:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229664AbiJUHgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 03:36:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49320 "EHLO
+        id S229695AbiJUHiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 03:38:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbiJUHgr (ORCPT
+        with ESMTP id S229585AbiJUHiE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 03:36:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55623239201;
-        Fri, 21 Oct 2022 00:36:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EA88061DDD;
-        Fri, 21 Oct 2022 07:36:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB284C433D7;
-        Fri, 21 Oct 2022 07:36:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666337805;
-        bh=qcoFQ3Y1t/OCn1xo7MF0G3Jg4ODkh6FFpJxwxnaf5dQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vZI/il1cIufXd8K1qI1xAjT1PC3P6iuEQ0DkEJHKU/tPFqixNUIMswm8t01ZxtRIh
-         9mXPw1m0VK334fDfV108iafCJka7qzFFr1NUy6kVQc++k6xCFvkvvxNXnLxa5OJXjJ
-         sHwpnVggKa0wSW7dMqiEg66Qm481cjX2xe9L43mc=
-Date:   Fri, 21 Oct 2022 09:36:42 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        mm-commits@vger.kernel.org, masahiroy@kernel.org,
-        andriy.shevchenko@linux.intel.com,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: [PATCH -mm] -funsigned-char, x86: make struct
- p4_event_bind::cntr signed array
-Message-ID: <Y1JMCqv5QucIfNCS@kroah.com>
-References: <Y1EZuQcO8UoN91cX@localhost.localdomain>
- <CAHmME9prEhkHqQmtDGCSFunNnxiKdE_8FHKiksyqebUN63U81Q@mail.gmail.com>
- <CAHk-=whFow9Wd6C8htoRUt5wXbwf1i_qbuArBbhXOPqYsTFvtw@mail.gmail.com>
- <CAHmME9qBZqTd0D_gr8nE+DUzCrC0fxZNZK=7u+21jbgtFgAJBg@mail.gmail.com>
- <CAHk-=wjZDC9o8iwF+bU91Hx40HjGOpMui+VoFCDJkaGCu=rG4A@mail.gmail.com>
- <202210201151.ECC19BC97A@keescook>
- <CAHk-=wgdXRZy0-3v+vLZdDfRFKFXZLehgmR2QUKSemBA99sfmg@mail.gmail.com>
- <CAHk-=wjvp=ys2adnWwc1PNt3OrZ_0EkFaUcvjiVuOoVNjX_+AA@mail.gmail.com>
- <Y1JA0S7jvlA2573n@kroah.com>
- <CAHmME9ouSriPmMCQ3kfF01k4-D4hc7g22GE8m79gT5snqr7MSg@mail.gmail.com>
+        Fri, 21 Oct 2022 03:38:04 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C7B239201
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 00:38:03 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id 126so2409441ybw.3
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 00:38:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=YqCI81aYTBUvq0AjF/BYw/CwZWDfTatRIRM86fy8mzM=;
+        b=hdGApCLDmq0zk1404naN816WsPf7cus4RecqB5gWNPeMIwXuVT2JpTqOAePyNFo0Q+
+         +A7vMQhDqeCFfi6RbOgeeW1dRh4oUJvWP0hZnDs/KK+Nv7HoCDL7+y5jUnB24RrIxW1V
+         l9Grn4St0VsHs99MbtHIi8V8+4PhGRywmpkMY5QpBoXmPWTZOrPflcxxw9Cddy0OkLXA
+         1H83ZHNUriu0YQIACgBzfbWOrYIhJ4nYjCzGVKWq6lY+RHeOyNcAEqr07B+mZpQ06BZz
+         JUWPvoaYDWVI28Wb9OBW92L2zM729XBkw1zK4NjdriUn0h0Tp9lUzd5pmxDXhdbubX15
+         x9Ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YqCI81aYTBUvq0AjF/BYw/CwZWDfTatRIRM86fy8mzM=;
+        b=6doY0QrqgFbnHzL2idmbtQ56PbnpzeKD4Hqn130X9kATGPHU22JtqDj/SMpEUdy3/l
+         vqq84NavULLjA9thYUS6N2EOJoLZr+YD6jG6E6nUA58fVkjakqla3EJf9Sc1LSN8Yy8j
+         TmH8VwdE7Ta7GW9M+edEzww5vdljSoccRnF4kTxZsgv6lkWMtLwYNzkLTx2jA4QWxoEl
+         5TGDMf9ftRVTmTYOlZJd7D98ye7SoV1drBn7FU0p79hk39vxW1wQw7agPuPb4no4JyWb
+         YoquvJWk7xT9U4Cpn/uI3NoeTj71KBOBzX++XX7yz2p4P9BQPX6Xi/872dXEUFq667ZS
+         5YFw==
+X-Gm-Message-State: ACrzQf2IkORJff3EPrqS6TZsIsdDgbQgIbNGu16H44P05OfX0U1IPm1v
+        MKJbZjXYtH0KzbkujUy7BioqFgNUFk5kv96jaeZsBg==
+X-Google-Smtp-Source: AMsMyM62GSx0NWUinN6ObtQibLc5Ih1zlGVGyMCuv7Iu8ly2udUc3uKngmrdcVX2ldvl3SdCr2LW4qra3FYqJuzBJNY=
+X-Received: by 2002:a25:7b42:0:b0:6ca:1d03:2254 with SMTP id
+ w63-20020a257b42000000b006ca1d032254mr8096145ybc.584.1666337882424; Fri, 21
+ Oct 2022 00:38:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHmME9ouSriPmMCQ3kfF01k4-D4hc7g22GE8m79gT5snqr7MSg@mail.gmail.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220915150417.722975-19-glider@google.com> <20221019173620.10167-1-youling257@gmail.com>
+ <CAOzgRda_CToTVicwxx86E7YcuhDTcayJR=iQtWQ3jECLLhHzcg@mail.gmail.com>
+ <CANpmjNMPKokoJVFr9==-0-+O1ypXmaZnQT3hs4Ys0Y4+o86OVA@mail.gmail.com>
+ <CAOzgRdbbVWTWR0r4y8u5nLUeANA7bU-o5JxGCHQ3r7Ht+TCg1Q@mail.gmail.com>
+ <Y1BXQlu+JOoJi6Yk@elver.google.com> <CAOzgRdY6KSxDMRJ+q2BWHs4hRQc5y-PZ2NYG++-AMcUrO8YOgA@mail.gmail.com>
+ <Y1Bt+Ia93mVV/lT3@elver.google.com> <CAG_fn=WLRN=C1rKrpq4=d=AO9dBaGxoa6YsG7+KrqAck5Bty0Q@mail.gmail.com>
+ <CAOzgRdb+W3_FuOB+P_HkeinDiJdgpQSsXMC4GArOSixL9K5avg@mail.gmail.com>
+ <CANpmjNMUCsRm9qmi5eydHUHP2f5Y+Bt_thA97j8ZrEa5PN3sQg@mail.gmail.com> <CAOzgRdZsNWRHOUUksiOhGfC7XDc+Qs2TNKtXQyzm2xj4to+Y=Q@mail.gmail.com>
+In-Reply-To: <CAOzgRdZsNWRHOUUksiOhGfC7XDc+Qs2TNKtXQyzm2xj4to+Y=Q@mail.gmail.com>
+From:   Marco Elver <elver@google.com>
+Date:   Fri, 21 Oct 2022 00:37:26 -0700
+Message-ID: <CANpmjNPUqVwHLVg5weN3+m7RJ7pCfDjBqJ2fBKueeMzKn=R=jA@mail.gmail.com>
+Subject: Re: [PATCH v7 18/43] instrumented.h: add KMSAN support
+To:     youling 257 <youling257@gmail.com>
+Cc:     Alexander Potapenko <glider@google.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
+        linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 03:24:27AM -0400, Jason A. Donenfeld wrote:
-> Hi Greg,
-> 
-> On Fri, Oct 21, 2022 at 2:48 AM Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Thu, Oct 20, 2022 at 01:17:33PM -0700, Linus Torvalds wrote:
-> > > And in other cases, there's no actual difference at all, just
-> > > different register usage, so the diff looks fairly big, but doesn't
-> > > seem to be real.  In one case I looked at, it started with a 'movzbl',
-> > > but it was that in both cases, because the type was actually 'unsigned
-> > > char' to begin with. But for some reason it just used different
-> > > registers. Example:
-> > >
-> > >  - handle_control_request() in drivers/usb/gadget/udc/dummy_hcd.c
-> > >
-> > >    The reason here *seems* to be that
-> > >
-> > >                         char *buf;
-> > >                         buf = (char *)urb->transfer_buffer;
-> > >
-> > >    where it really probably should be 'u8 *buf', since it actually
-> > > does a cast to 'u8' in one place, but there isn't even any read of
-> > > that 'buf' pointer. So the difference seems to be entirely just some
-> > > "different type in assignment" cast internal to gcc that then
-> > > incidentally generated a random other choice in register allocation.
-> >
-> > I've send a patch for this now:
-> >         https://lore.kernel.org/r/20221021064453.3341050-1-gregkh@linuxfoundation.org
-> > and will take it through the USB tree, unless Jason wants to grab it
-> > through his tree.
-> 
-> This doesn't appear to have any actual effect, but just changes gcc's
-> register allocation unexpectedly. So feel free to take it, as it
-> doesn't seem like it's "one of those bad cases" that I'm keeping track
-> of.
+On Thu, 20 Oct 2022 at 23:39, youling 257 <youling257@gmail.com> wrote:
+>
+> PerfTop:    8253 irqs/sec  kernel:75.3%  exact: 100.0% lost: 0/0 drop:
+> 0/17899 [4000Hz cycles],  (all, 8 CPUs)
+> ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+>
+>     14.87%  [kernel]              [k] 0xffffffff941d1f37
+>      6.71%  [kernel]              [k] 0xffffffff942016cf
+>
+> what is 0xffffffff941d1f37?
 
-Great, will take it through my tree, thanks!
+You need to build with debug symbols:
+CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
 
-greg k-h
+Then it'll show function names.
+
+> 2022-10-21 14:16 GMT+08:00, Marco Elver <elver@google.com>:
+> > On Thu, 20 Oct 2022 at 22:55, youling 257 <youling257@gmail.com> wrote:
+> >>
+> >> How to use perf tool?
+> >
+> > The simplest would be to try just "perf top" - and see which kernel
+> > functions consume most CPU cycles. I would suggest you compare both
+> > kernels, and see if you can spot a function which uses more cycles% in
+> > the problematic kernel.
+> >
