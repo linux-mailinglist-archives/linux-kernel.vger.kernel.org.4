@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21D88607D1E
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 19:00:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58A64607D21
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 19:00:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229960AbiJURAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 13:00:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50574 "EHLO
+        id S230169AbiJURAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 13:00:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229763AbiJURAC (ORCPT
+        with ESMTP id S229975AbiJURAE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 13:00:02 -0400
+        Fri, 21 Oct 2022 13:00:04 -0400
 Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A31E851A2C
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:59:52 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id p3-20020a170902e74300b0018546b77dccso2003175plf.17
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:59:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 505AE558F4
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:59:54 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id o17-20020a170902d4d100b0018552c4f4bcso1996722plg.13
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:59:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=VPzkRYiEhEJdjJcMQc6JBwHg+TKgr2BSOIUTw0Esdx8=;
-        b=Ve1rHl0wvmEV+BaAo+AZbIjJY+aKHDudtiZg5pxgxHHbv7Q0LZBBxX+1Yiw80ft0dw
-         oY/2D4LjoidfZcWSyCzI2syNgkKzsj2IAzeJr1OOW80f5ZT9JcFnjInJbv86ng3khx20
-         KbFmr0M4xkf8SFMrlNv8cmgZ3FNM6AibVN1EU5h9lB8rsHb3F8T/A+W+fpLz+ZsHw81i
-         EqP77QJWylrgiUEa9miAw3OSBdvannh2tWWi/8dIc8XARg65nbUBGtRcwF5YFIcY5R/3
-         aeBM1Z6vjh/F7UxPwOMWf57HtQLAVM3g5gKG/M2jB0nONJynwHMwTpmuhazhaV3UGr52
-         VY3g==
+        bh=t50s+W2sjRzmfaqPHM8BWoKuylKuq2NrCynpVhPS9Gk=;
+        b=D9gJIDipIbDmmnhQPtT5HvABc6SjejzqBT5yiNYUXkric3SrAQON1oJaySHETkWhRF
+         PX+KXKZ8JyA88v5tE4EMTFFJ56/REmpBVnlywvFa42c+E/x0SheZzLwiWE2jhqQ+ldz/
+         enUDwkgtlYTXMR/moT5KYh1uSh5HqP4f5+krbjx7kwfdJGvD8LMPgse7XWYz84ecIap3
+         Gm1jQw7vlBv3YOHYsL+3u0MKUTb4Wr9w9Kl/hnfs7pZzn9geE9pgrSyKDnTu2C10Z9vr
+         7m2WMljG5b0dphDbKtqSD/H50W5Ti5sTtcWvFUQJcn/fzKGTVFPvaTkkgPtnH78qD43g
+         NoSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VPzkRYiEhEJdjJcMQc6JBwHg+TKgr2BSOIUTw0Esdx8=;
-        b=CrqoR3C7URS7CY7DshfBCb6fnTck3Km94grg1KFSxAOFBTO9v+HX6ApbO1Eqci+AGl
-         9cW/hLZPVdsPmN9XRQK3fMTd+VL16ylrABx+yadx/Fyw1ET0srM99d/QvtZWZ+oAgHaq
-         W8OvtFcsJ5HkeO+015SETRoxwCsNpeIgQVs9PQrinSCQwumrNxS5BuSu1PPAmZO2gD0k
-         67jQBAeszRgnJWSIwU0BuTwnCUM64JGRmHHjiQEyOc3w7hcfW9yA6YuUuJM6fX0RnwH1
-         idqq+uokPkv29EuZqaS1QLCWOfQRHw5VjVFjP0u6OuYse6KmL14VadguhrxtF5lHvzf5
-         wAiQ==
-X-Gm-Message-State: ACrzQf0FQBbxVb3qlb0v3aRCw1FhwxGlABINC87BfKbAxypJpQ0H8xgc
-        y+pKy0x1jYxN4Ym3vzASIWcMa91Im1AGYJScBloTrUAWSAvuLdDNUINYuE8EZz7vwQc/qiEK7il
-        99Lrsp9oMZDttffXBlkDzjQ0FqNAohLfYB5E1mUK1hfXvfKConv7yaglS+kKYh98XPYxZMk17N2
-        MnIkymrZc=
-X-Google-Smtp-Source: AMsMyM7NCrLMS8GdS8uHY/f+MxHXxD95CbgBq+2SDTqbQy1u+eMm83WwjL2+OgnooK9v60giRJXbsFMQhPUd5Q3kvw==
+        bh=t50s+W2sjRzmfaqPHM8BWoKuylKuq2NrCynpVhPS9Gk=;
+        b=Z84mbLYoaaHWZQaHkhTVpLqYOUqgFTVFYMRIs1sCb0pCFGSpKBQcN0cwBHylTIedwG
+         tnSF81C+Dn6LD/iPXM1v/8ig6D9uBMTLaTkaw5y+Z6JWCj6C44N/SHo7sfjCH2SPJ4Gx
+         QunKNEQFhFD5+i+vjXGPGbbxkut/rnlA9zhtQxCP8jjeIYNWBvEy9Qnn/no6NgOysimm
+         A9Z6XcD44midn81meKuoISjBAQaEDpjmJCzBzG/UTes7w0BCmFQ7+kVL4tZwVAnf0qh6
+         r074J8pKTH5jZHwxmOLNl6E5AqWFtmH1p7oon0Li9R5g5dEkyUpihODhXZ8jJNYQr0dy
+         poxg==
+X-Gm-Message-State: ACrzQf0M3EsiZ/lMmAUi9oIbTQ0JPTdLdbtpIrDo0yIkzTuTydrXgP7o
+        b7br5YS2kDVfWZFNp7odBRR1h0WHOfCGNcLPlV4DJhOnotSmb3YowWZx4Pp6S+umrLYc8/bP6s2
+        arAw2G25RZRhUXaXXXP44HF8eJxSx8lwabJuzK6PqseLRyCBfI8Zjxpftzgcgr+xnr7u+br/T3K
+        6GdCBLXkQ=
+X-Google-Smtp-Source: AMsMyM4zZpV9dAcanrqUynT/VJyO6LIMwgrP7u0kvBFaYYHeHm3KSrfk67+lQwgxAr4mTFyMYrpqm2P+vU5fXAEPAg==
 X-Received: from dionnaglaze.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2ee6])
- (user=dionnaglaze job=sendgmr) by 2002:a17:902:ec83:b0:17c:afb3:d1ec with
- SMTP id x3-20020a170902ec8300b0017cafb3d1ecmr20014781plg.172.1666371592336;
- Fri, 21 Oct 2022 09:59:52 -0700 (PDT)
-Date:   Fri, 21 Oct 2022 16:59:41 +0000
+ (user=dionnaglaze job=sendgmr) by 2002:a17:902:e191:b0:181:b25e:9c17 with
+ SMTP id y17-20020a170902e19100b00181b25e9c17mr20441665pla.57.1666371593958;
+ Fri, 21 Oct 2022 09:59:53 -0700 (PDT)
+Date:   Fri, 21 Oct 2022 16:59:42 +0000
 In-Reply-To: <20221021165943.1968044-1-dionnaglaze@google.com>
 Mime-Version: 1.0
 References: <20221021165943.1968044-1-dionnaglaze@google.com>
 X-Mailer: git-send-email 2.38.0.135.g90850a2211-goog
-Message-ID: <20221021165943.1968044-3-dionnaglaze@google.com>
-Subject: [PATCH v3 2/4] x86/sev: Change snp_guest_issue_request's fw_err
+Message-ID: <20221021165943.1968044-4-dionnaglaze@google.com>
+Subject: [PATCH v3 3/4] virt/coco/sev-guest: Remove err in handle_guest_request
 From:   Dionna Glaze <dionnaglaze@google.com>
 To:     linux-kernel@vger.kernel.org, x86@kernel.org
 Cc:     Dionna Glaze <dionnaglaze@google.com>,
@@ -75,19 +75,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The GHCB specification declares that the firmware error value for a
-guest request will be stored in the lower 32 bits of EXIT_INFO_2.
-The upper 32 bits are for the VMM's own error code. The fw_err argument
-is thus a misnomer, and callers will need access to all 64 bits.
+The err variable may not be set in the call to snp_issue_guest_request,
+yet it is unconditionally written back to fw_err if fw_err is non-null.
+This is undefined behavior, and currently returns uninitialized kernel
+stack memory to user space.
 
-The type of unsigned long also causes problems, since sw_exit_info2 is
-u64 (unsigned long long) vs the argument's previous unsigned long*.
-The signature change requires the follow-up change to
-drivers/virt/coco/sev-guest to use the new expected type in order to
-compile.
-
-The firmware might not even be called, so we bookend the call with the
-no firmware call error and clearing the error.
+The fw_err argument is better to just pass through to
+snp_issue_guest_request, so we do that. Since the issue_request's
+signature has changed fw_err to exitinfo2, we change the argument name
+here.
 
 Cc: Tom Lendacky <Thomas.Lendacky@amd.com>
 Cc: Paolo Bonzini <pbonzini@redhat.com>
@@ -96,82 +92,38 @@ Cc: Peter Gonda <pgonda@google.com>
 Cc: Thomas Gleixner <tglx@linutronix.de>
 Cc: Dave Hansen <dave.hansen@linux.intel.com>
 
-Fixes: d5af44dde546 ("x86/sev: Provide support for SNP guest request NAEs")
+Fixes: fce96cf04430 ("virt: Add SEV-SNP guest driver")
 Signed-off-by: Dionna Glaze <dionnaglaze@google.com>
 ---
- arch/x86/include/asm/sev.h |  4 ++--
- arch/x86/kernel/sev.c      | 11 ++++++++---
- 2 files changed, 10 insertions(+), 5 deletions(-)
+ drivers/virt/coco/sev-guest/sev-guest.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
-index ebc271bb6d8e..8ebd78b6a57c 100644
---- a/arch/x86/include/asm/sev.h
-+++ b/arch/x86/include/asm/sev.h
-@@ -196,7 +196,7 @@ void snp_set_memory_private(unsigned long vaddr, unsigned int npages);
- void snp_set_wakeup_secondary_cpu(void);
- bool snp_init(struct boot_params *bp);
- void __init __noreturn snp_abort(void);
--int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, unsigned long *fw_err);
-+int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, u64 *exitinfo2);
- #else
- static inline void sev_es_ist_enter(struct pt_regs *regs) { }
- static inline void sev_es_ist_exit(void) { }
-@@ -217,7 +217,7 @@ static inline void snp_set_wakeup_secondary_cpu(void) { }
- static inline bool snp_init(struct boot_params *bp) { return false; }
- static inline void snp_abort(void) { }
- static inline int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input,
--					  unsigned long *fw_err)
-+					  unsigned long *exitinfo2)
+diff --git a/drivers/virt/coco/sev-guest/sev-guest.c b/drivers/virt/coco/sev-guest/sev-guest.c
+index f422f9c58ba7..0508c2f46f6b 100644
+--- a/drivers/virt/coco/sev-guest/sev-guest.c
++++ b/drivers/virt/coco/sev-guest/sev-guest.c
+@@ -303,9 +303,8 @@ static int enc_payload(struct snp_guest_dev *snp_dev, u64 seqno, int version, u8
+ 
+ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, int msg_ver,
+ 				u8 type, void *req_buf, size_t req_sz, void *resp_buf,
+-				u32 resp_sz, __u64 *fw_err)
++				u32 resp_sz, __u64 *exitinfo2)
  {
- 	return -ENOTTY;
- }
-diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
-index a428c62330d3..5a402df7549e 100644
---- a/arch/x86/kernel/sev.c
-+++ b/arch/x86/kernel/sev.c
-@@ -22,6 +22,7 @@
- #include <linux/efi.h>
- #include <linux/platform_device.h>
- #include <linux/io.h>
-+#include <linux/psp-sev.h>
+-	unsigned long err;
+ 	u64 seqno;
+ 	int rc;
  
- #include <asm/cpu_entry_area.h>
- #include <asm/stacktrace.h>
-@@ -2175,7 +2176,7 @@ static int __init init_sev_config(char *str)
- }
- __setup("sev=", init_sev_config);
+@@ -322,9 +321,7 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
+ 		return rc;
  
--int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, unsigned long *fw_err)
-+int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, u64 *exitinfo2)
- {
- 	struct ghcb_state state;
- 	struct es_em_ctxt ctxt;
-@@ -2186,9 +2187,11 @@ int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, unsigned
- 	if (!cc_platform_has(CC_ATTR_GUEST_SEV_SNP))
- 		return -ENODEV;
+ 	/* Call firmware to process the request */
+-	rc = snp_issue_guest_request(exit_code, &snp_dev->input, &err);
+-	if (fw_err)
+-		*fw_err = err;
++	rc = snp_issue_guest_request(exit_code, &snp_dev->input, exitinfo2);
  
--	if (!fw_err)
-+	if (!exitinfo2)
- 		return -EINVAL;
- 
-+	*exitinfo2 = SEV_RET_NO_FW_CALL;
-+
- 	/*
- 	 * __sev_get_ghcb() needs to run with IRQs disabled because it is using
- 	 * a per-CPU GHCB.
-@@ -2218,9 +2221,11 @@ int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, unsigned
- 		    ghcb->save.sw_exit_info_2 == SNP_GUEST_REQ_INVALID_LEN)
- 			input->data_npages = ghcb_get_rbx(ghcb);
- 
--		*fw_err = ghcb->save.sw_exit_info_2;
-+		*exitinfo2 = ghcb->save.sw_exit_info_2;
- 
- 		ret = -EIO;
-+	} else {
-+		*exitinfo2 = 0;
- 	}
- 
- e_put:
+ 	if (rc)
+ 		return rc;
 -- 
 2.38.0.135.g90850a2211-goog
 
