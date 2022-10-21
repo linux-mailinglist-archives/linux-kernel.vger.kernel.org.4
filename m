@@ -2,106 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DF4F607C4D
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 18:34:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AB40607C5E
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 18:37:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230141AbiJUQeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 12:34:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41894 "EHLO
+        id S230298AbiJUQhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 12:37:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230224AbiJUQeA (ORCPT
+        with ESMTP id S229727AbiJUQhQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 12:34:00 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2047.outbound.protection.outlook.com [40.107.92.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62A3C157468
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:33:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nQ7n0YCv6AycN3V2+FdUQxjM0Ovey7nEN6z6/WgfyiKk8fRiyPP6WF5deXBd/LxVGrXQyTef3CeiXnld9ZrxPg0Xc0EhguV6OtHykLbSJYEizjYzK0gw9GpD5leUfuzMpjvS3w5Pwhd5kkgJCV8ccqQCvwLF+inxtvYwXX74/f1O4fuGoLRkoEdMZUWKbSCyYfuJmW4hgpqYJeH/AVnzrmDsfShYKx4tzcVzgm04vybsNNIgrque7/4aiybeXvO/yknQnN9sUZQykEJzUg0O+lmIorVXPdyozEOvg6HstR9S/DHsN8ik7ol02xi8xYiH6+qw0pe9J6bzeA6+JI6XUA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wB/+0NrUJkLOB7LSABpljE30X3y4tzaA0xFntAe1kVA=;
- b=if1UqnjwP7gxZs9DLMm0psqoVcTJmNQUYwFPXmWYsakPSq8zE0qyMxxCREpZZCpqyvvt84DNXGPx7I64BvBr+ApA9y26TV1LkItxYhwt5GAPiNzigLa8n8xR4dVi3tMvfmuV0b/luBRgWVbL9LOAZzKPg2CtPck66Pi22nE7B5STjNwEU2lKsZ9vYoUJYzr0eUvJzDp3i020ylEcFnggrl+Fkt7G3x8og9B5IVvP7ZjzrXEb+xpu4gcNGMrYjzA1tlkjCipxGRMAq7B7BGCK4Zc1rc7C2VGNDEsxuFYqE1bS3psNUU3ripU0/PvJVkdIcOJ4CzqPtfSXheeLUqkYqg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=lists.freedesktop.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wB/+0NrUJkLOB7LSABpljE30X3y4tzaA0xFntAe1kVA=;
- b=f2oOsnx5k8NYTdQzltPlUU/Z0P4V+0THqeGmZmYxoDFqBIsqC0Bw+YBxMvNvmTKg5Hg1iByFt7L3s0uFvcTsFyM2Z22cLdBqgaOFubkdHfT3f4aku2eDA7QHTeXeojQfYNTxpE9EQ6Hub++Eh7EQQR/Z8kaWHwhZR2T6KCB/5u0=
-Received: from BN9PR03CA0217.namprd03.prod.outlook.com (2603:10b6:408:f8::12)
- by CY5PR12MB6299.namprd12.prod.outlook.com (2603:10b6:930:20::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.30; Fri, 21 Oct
- 2022 16:33:55 +0000
-Received: from BN8NAM11FT109.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:f8:cafe::46) by BN9PR03CA0217.outlook.office365.com
- (2603:10b6:408:f8::12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.21 via Frontend
- Transport; Fri, 21 Oct 2022 16:33:55 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT109.mail.protection.outlook.com (10.13.176.221) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5746.16 via Frontend Transport; Fri, 21 Oct 2022 16:33:55 +0000
-Received: from hamza-pc.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 21 Oct
- 2022 11:33:53 -0500
-From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
-To:     <amd-gfx@lists.freedesktop.org>
-CC:     Hamza Mahfooz <hamza.mahfooz@amd.com>,
-        Jim Cromie <jim.cromie@gmail.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        "Rodrigo Siqueira" <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Brian Chang <Brian.Chang@amd.com>,
-        Anthony Koo <Anthony.Koo@amd.com>, Ian Chen <ian.chen@amd.com>,
-        "Leo (Hanghong) Ma" <hanghong.ma@amd.com>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] drm/amd/display: don't print messages that contain %f in dml
-Date:   Fri, 21 Oct 2022 12:34:12 -0400
-Message-ID: <20221021163412.82029-1-hamza.mahfooz@amd.com>
-X-Mailer: git-send-email 2.38.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT109:EE_|CY5PR12MB6299:EE_
-X-MS-Office365-Filtering-Correlation-Id: a5f2f301-3aad-418b-83d5-08dab3820c07
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: R2pnZospwJWOhYBu8X1X3Uv9cTlrWDW90h+bK3EuhbdTdLjdRaSd5gTotPHBBTBhX+FiafZGC2/17/WV5ti/vpWKm2UlPimHpY/QDr5tiNKAnz6oTm7TKY5j3yMo8OLnMHtBdGmwyxefaXkvvadB38qdohSVfGBy6VThr6sEVw7yKvKvo3cuS43SOrQ835CJtMaT/Z+JZcB9f0wKCgFmBpYtLAveGdT4u8Hc7euqgZW/TEgkihZqeNk0DXDxBbXzqv+5SIg8TswmEQDbESZB8vCv3MnmMS2Pl8liJPxAV/SYzqBAxyzS5h0wG8gUBk4ZTmLe4NWk8jMAhdAeW10nQpgDR926ZcIc7h25yiJLTPzg6+4C0g79R7VQgaWzLoZtmI7bFv/9Hs5GB6YXeblzvNN4iVtvsos/pOQ8LRuDy7WmYRD8ZoJytO+1mQfLXm2GP30ePiG4CygMpQHpAThxVmgI7LWey6Z8M/VhZF3w7VgbQBOZrpsGd3CUMNbKL9mC+1LMWv+QFAGDekft9jOgTHdjRZWxnKf4eASZAZG50ce9A+vlqYXmFVOu4lZ9fdlne3Ih0y3FxZxQRLWXr6PKiIVWnha80UB5tfM7Y5d6N1cmtNnO2+RyjPHQTcow3h9QyRL03MOAhxL4x/dMDYkrNMQGa5hUulGIGFd2L0ICwlzRUZxO4nVA204tuXg656uMV3KlFK5gVlMjTmXGRqeTty2lIoKnWBXO9mc4GkqrscBb0jwQ/s/3/fq+9XW0ezKJ7lM3vGK2hsOcGozPkS+bx31Z5BLuFDuLcgITEdShrxYqY10s8U9TwhkSBFHZq7eyXZTd1TulGM1aXoSvAj0BQw==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(396003)(346002)(376002)(136003)(451199015)(40470700004)(36840700001)(46966006)(7696005)(6666004)(82310400005)(47076005)(316002)(336012)(426003)(1076003)(16526019)(478600001)(2616005)(70206006)(36756003)(70586007)(26005)(40460700003)(186003)(8676002)(81166007)(83380400001)(40480700001)(6916009)(356005)(54906003)(2906002)(86362001)(36860700001)(82740400003)(44832011)(5660300002)(4326008)(41300700001)(8936002)(16060500005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Oct 2022 16:33:55.4817
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a5f2f301-3aad-418b-83d5-08dab3820c07
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT109.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6299
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        Fri, 21 Oct 2022 12:37:16 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AD8124AACC
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:37:15 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id a2-20020a5b0002000000b006b48689da76so3741070ybp.16
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:37:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ToeQMSprfjKJ7AgFbFKRXXeoC/PlD5SBplDrdgjYWK4=;
+        b=FYquMZ0S8xueWhu85y/cL8X2eVXUoOxyjYtYhY/V/rfjxZ7eFNjrBZYrdEkCVnWJqa
+         SzQaP3vFbMxY+5d3ucqtqk7IckZRj3wNc/yiDbdBmWoX7gl71HNE5pzWv/1HRWB6+W/X
+         mTh8LuMiY2z2wXX7GvgqEkGHN3o/T15NRUTOXpSM9qWRn0EG+mZMXFFPm/9IONubr51H
+         5qqajNcw8wkSDrhTQbe6vDQ5J3kHUrC86jsF+r8mFCo5OwMTUzYyJKfQB0nKgr5gE9n5
+         el0U1sM8hZJhoaoK7SuYBzTuzmi8JZJO7KwyCndbzzH3K0nV89yXDQsb5rNPv4YUR3qm
+         eDpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ToeQMSprfjKJ7AgFbFKRXXeoC/PlD5SBplDrdgjYWK4=;
+        b=ePomtshpNyYR79H/2T2xaBxUOnlPx5LjXyYGi93z+foA4X/GO3RfiPjF6/p7Et/2wX
+         Kqw7E6Mq4OlQGu1ipBEL45HYVjL0jyB3uFPzLxV22j4+8UF8XcSXbtlvg/jiJ1MH9gEW
+         fvSeVLX33V3v+L4gBxYICLo8oRrib6gG9m2UYebyRxnxXrabdEpMi018Ibl+T+gkI7aS
+         RHDVGVJlnvjkWHVcdxCpWGjdydVvsn73F2yux+iIMMTtang9jDGT/ALASQVtudagN9bd
+         GDjP/4NdGNDWv1rwY5Ev8yGWNZ9mKGwVftz+BZrHv3V4wc5pKlOjzDMzUk8MTytr/3IS
+         K9EQ==
+X-Gm-Message-State: ACrzQf3wyPZmZLuOgq8HebGHqo1MUSj0K6G9ioy1xjg4NiHTo+NVvi3d
+        8oQZ+ts5e47xjkkwSx27lCyV9sGVEkwRcLS7
+X-Google-Smtp-Source: AMsMyM4kHJ3a670yz9k5wiPzJ0fbvPAff21OOvAfyP8H5946e31eYCf67abKW5qy3WZtpskgPI/UcOpq5xC1ktlc
+X-Received: from jthoughton.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:2a4f])
+ (user=jthoughton job=sendgmr) by 2002:a81:1a85:0:b0:35e:37d:12e2 with SMTP id
+ a127-20020a811a85000000b0035e037d12e2mr18080128ywa.417.1666370234339; Fri, 21
+ Oct 2022 09:37:14 -0700 (PDT)
+Date:   Fri, 21 Oct 2022 16:36:16 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.0.135.g90850a2211-goog
+Message-ID: <20221021163703.3218176-1-jthoughton@google.com>
+Subject: [RFC PATCH v2 00/47] hugetlb: introduce HugeTLB high-granularity mapping
+From:   James Houghton <jthoughton@google.com>
+To:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Peter Xu <peterx@redhat.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        "Zach O'Keefe" <zokeefe@google.com>,
+        Manish Mishra <manish.mishra@nutanix.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        James Houghton <jthoughton@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -109,54 +82,198 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Unfortunately, printk() doesn't currently support the printing of %f
-entries. So, print statements that contain "%f" should be removed.
-However, since DC is used on other OSes that can still benefit from the
-additional debugging information, we should instead remove the
-problematic print statements at compile time.
+This RFC v2 is a more complete and correct implementation of
+the original high-granularity mapping RFC[1]. For HGM background and
+motivation, please see the original RFC.
 
-Reported-by: Jim Cromie <jim.cromie@gmail.com>
-Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
----
- drivers/gpu/drm/amd/display/include/logger_types.h | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+This series has changed quite significantly since its first version, so
+I've dropped all the Reviewed-bys that it picked up, and I am not
+including a full changelog here. Some notable changes:
+  1. mapcount rules have been simplified (now: the number of times a
+     hugepage is referenced in page tables, still tracked on the head
+     page).
+  2. Synchronizing page table collapsing is now done using the VMA lock
+     that Mike introduced recently.
+  3. PTE splitting is only supported for blank PTEs, and it is done
+     without needing to hold the VMA lock for writing. In many places,
+     we explicitly check if a PTE has been split from under us.
+  4. The userspace API has changed slightly.
 
-diff --git a/drivers/gpu/drm/amd/display/include/logger_types.h b/drivers/gpu/drm/amd/display/include/logger_types.h
-index 3bf08a60c45c..f80630adb5f0 100644
---- a/drivers/gpu/drm/amd/display/include/logger_types.h
-+++ b/drivers/gpu/drm/amd/display/include/logger_types.h
-@@ -30,6 +30,12 @@
- 
- #define MAX_NAME_LEN 32
- 
-+#define __DC_LOG_IGNORE_FLOATS(fmt, args...)	\
-+do {						\
-+	if (!strstr((fmt), "%f"))		\
-+		pr_debug(fmt, ##args);		\
-+} while (0)
-+
- #define DC_LOG_ERROR(...) DRM_ERROR(__VA_ARGS__)
- #define DC_LOG_WARNING(...) DRM_WARN(__VA_ARGS__)
- #define DC_LOG_DEBUG(...) DRM_DEBUG_KMS(__VA_ARGS__)
-@@ -48,7 +54,8 @@
- #define DC_LOG_MST(...) DRM_DEBUG_KMS(__VA_ARGS__)
- #define DC_LOG_SCALER(...) pr_debug("[SCALER]:"__VA_ARGS__)
- #define DC_LOG_BIOS(...) pr_debug("[BIOS]:"__VA_ARGS__)
--#define DC_LOG_BANDWIDTH_CALCS(...) pr_debug("[BANDWIDTH_CALCS]:"__VA_ARGS__)
-+#define DC_LOG_BANDWIDTH_CALCS(args...) \
-+	__DC_LOG_IGNORE_FLOATS("[BANDWIDTH_CALCS]:" args)
- #define DC_LOG_BANDWIDTH_VALIDATION(...) DRM_DEBUG_KMS(__VA_ARGS__)
- #define DC_LOG_I2C_AUX(...) DRM_DEBUG_KMS(__VA_ARGS__)
- #define DC_LOG_SYNC(...) DRM_DEBUG_KMS(__VA_ARGS__)
-@@ -57,7 +64,7 @@
- #define DC_LOG_DETECTION_EDID_PARSER(...) DRM_DEBUG_KMS(__VA_ARGS__)
- #define DC_LOG_DETECTION_DP_CAPS(...) DRM_DEBUG_KMS(__VA_ARGS__)
- #define DC_LOG_RESOURCE(...) DRM_DEBUG_KMS(__VA_ARGS__)
--#define DC_LOG_DML(...) pr_debug("[DML]:"__VA_ARGS__)
-+#define DC_LOG_DML(args...) __DC_LOG_IGNORE_FLOATS("[DML]:" args)
- #define DC_LOG_EVENT_MODE_SET(...) DRM_DEBUG_KMS(__VA_ARGS__)
- #define DC_LOG_EVENT_DETECTION(...) DRM_DEBUG_KMS(__VA_ARGS__)
- #define DC_LOG_EVENT_LINK_TRAINING(...) DRM_DEBUG_KMS(__VA_ARGS__)
+This series implements high-granularity mapping basics, enough to
+support PAGE_SIZE-aligned UFFDIO_CONTINUE operations and MADV_COLLAPSE
+for shared HugeTLB VMAs for x86. The main use case for this is post-copy
+for virtual machines, one of the important HGM use cases described in
+[1]. MADV_COLLAPSE was originally introduced for THPs[2], but it is
+now meaningful for HGM, and so I am co-opting the same API.
+
+- Userspace API
+
+There are two main ways userspace interacts with high-granularity
+mappings:
+  1. Create them with UFFDIO_CONTINUE in an apporiately configured
+     userfaultfd VMA.
+  2. Collapse high-granularity mappings with MADV_COLLAPSE.
+
+The userfaultfd bits of the userspace API have changed slightly since
+RFC v1. To configure a userfaultfd VMA to enable HGM, userspace must
+provide UFFD_FEATURE_MINOR_HUGETLBFS_HGM and UFFD_FEATURE_EXACT_ADDRESS
+in its call to UFFDIO_API.
+
+- A Note About KVM
+
+Normally KVM (as well as any other non-HugeTLB code that assumes that
+HugeTLB pages will always be mapped with huge PTEs) would need to be
+enlightened to do the correct thing with high-granularity-mapped HugeTLB
+pages. It turns out that the x86 TDP MMU already handles HGM mappings
+correctly, but other architectures' KVM MMUs, like arm64's, will need to
+be updated before HGM can be enabled for those architectures.
+
+- How complete is this series?
+
+I have tested this series with the self-tests that I have modified and
+added, and I have run real, large end-to-end migration tests. This
+series should be mostly stable, though I haven't tested DAMON and other
+pieces that were slightly changed by this series.
+
+There is a bug in the current x86 TDP MMU that prevents MADV_COLLAPSE
+from having an effect. That is, the second-stage mappings will remain
+small. This will be fixed with [3], so unless you have [3] merged in
+your tree, you will see that MADV_COLLAPSE does not impact on virtual
+machine performance.
+
+- Future Work
+
+The main areas of future work are:
+  1) Support more architectures (arm64 support is mostly complete, but
+     supporting it is not trivial, and to keep this RFC as short as
+     possible, I will send the arm64 support series separately).
+  2) Improve performance. Right now we take two per-hpage locks in the
+     hotpath for userfaultfd-based post-copy live migration, the page
+     lock and the fault mutex. To improve post-copy performance as much
+     as possible, we likely need to improve this locking strategy.
+  3) Support PAGE_SIZE poisoning of HugeTLB pages. To provide userspace
+     with consistent poison behavior whether using MAP_PRIVATE or
+     MAP_SHARED, more work is needed to implement basic HGM support for
+     MAP_PRIVATE mappings.
+
+- Patches
+
+Patches 1-4:	Cleanup.
+Patches 5-6:	Extend the HugeTLB shared VMA lock struct.
+Patches 7-14:	Create hugetlb_pte and implement HGM basics (PT walking,
+		enabling HGM).
+Patches 15-30:	Make existing routines compatible with HGM.
+Patches 31-35:	Extend userfaultfd to support high-granularity CONTINUEs.
+Patch   36:	Add HugeTLB HGM support to MADV_COLLAPSE.
+Patches 37-40:	Cleanup, add HGM stats, and enable HGM for x86.
+Patches 41-47:	Documentation and selftests.
+
+This series is based on mm-everything-2022-10-20-00-43.
+
+Finally, I will be on vacation next week (until Nov 2, unfortunate
+timing). I will try to respond before Nov 2; I wanted to get this series
+up ASAP.
+
+[1] https://lore.kernel.org/linux-mm/20220624173656.2033256-1-jthoughton@google.com/
+[2] commit 7d8faaf155454 ("mm/madvise: introduce MADV_COLLAPSE sync hugepage collapse")
+[3] https://lore.kernel.org/kvm/20220830235537.4004585-1-seanjc@google.com/
+
+James Houghton (47):
+  hugetlb: don't set PageUptodate for UFFDIO_CONTINUE
+  hugetlb: remove mk_huge_pte; it is unused
+  hugetlb: remove redundant pte_mkhuge in migration path
+  hugetlb: only adjust address ranges when VMAs want PMD sharing
+  hugetlb: make hugetlb_vma_lock_alloc return its failure reason
+  hugetlb: extend vma lock for shared vmas
+  hugetlb: add CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING
+  hugetlb: add HGM enablement functions
+  hugetlb: make huge_pte_lockptr take an explicit shift argument.
+  hugetlb: add hugetlb_pte to track HugeTLB page table entries
+  hugetlb: add hugetlb_pmd_alloc and hugetlb_pte_alloc
+  hugetlb: add hugetlb_hgm_walk and hugetlb_walk_step
+  hugetlb: add make_huge_pte_with_shift
+  hugetlb: make default arch_make_huge_pte understand small mappings
+  hugetlbfs: for unmapping, treat HGM-mapped pages as potentially mapped
+  hugetlb: make unmapping compatible with high-granularity mappings
+  hugetlb: make hugetlb_change_protection compatible with HGM
+  hugetlb: enlighten follow_hugetlb_page to support HGM
+  hugetlb: make hugetlb_follow_page_mask HGM-enabled
+  hugetlb: use struct hugetlb_pte for walk_hugetlb_range
+  mm: rmap: provide pte_order in page_vma_mapped_walk
+  mm: rmap: make page_vma_mapped_walk callers use pte_order
+  rmap: update hugetlb lock comment for HGM
+  hugetlb: update page_vma_mapped to do high-granularity walks
+  hugetlb: add HGM support for copy_hugetlb_page_range
+  hugetlb: make move_hugetlb_page_tables compatible with HGM
+  hugetlb: add HGM support for hugetlb_fault and hugetlb_no_page
+  rmap: in try_to_{migrate,unmap}_one, check head page for page flags
+  hugetlb: add high-granularity migration support
+  hugetlb: add high-granularity check for hwpoison in fault path
+  hugetlb: sort hstates in hugetlb_init_hstates
+  hugetlb: add for_each_hgm_shift
+  userfaultfd: add UFFD_FEATURE_MINOR_HUGETLBFS_HGM
+  hugetlb: userfaultfd: add support for high-granularity UFFDIO_CONTINUE
+  userfaultfd: require UFFD_FEATURE_EXACT_ADDRESS when using HugeTLB HGM
+  hugetlb: add MADV_COLLAPSE for hugetlb
+  hugetlb: remove huge_pte_lock and huge_pte_lockptr
+  hugetlb: replace make_huge_pte with make_huge_pte_with_shift
+  mm: smaps: add stats for HugeTLB mapping size
+  hugetlb: x86: enable high-granularity mapping
+  docs: hugetlb: update hugetlb and userfaultfd admin-guides with HGM
+    info
+  docs: proc: include information about HugeTLB HGM
+  selftests/vm: add HugeTLB HGM to userfaultfd selftest
+  selftests/kvm: add HugeTLB HGM to KVM demand paging selftest
+  selftests/vm: add anon and shared hugetlb to migration test
+  selftests/vm: add hugetlb HGM test to migration selftest
+  selftests/vm: add HGM UFFDIO_CONTINUE and hwpoison tests
+
+ Documentation/admin-guide/mm/hugetlbpage.rst  |    4 +
+ Documentation/admin-guide/mm/userfaultfd.rst  |   16 +-
+ Documentation/filesystems/proc.rst            |   56 +-
+ arch/powerpc/mm/pgtable.c                     |    3 +-
+ arch/s390/include/asm/hugetlb.h               |    5 -
+ arch/s390/mm/gmap.c                           |   20 +-
+ arch/x86/Kconfig                              |    1 +
+ fs/Kconfig                                    |    7 +
+ fs/hugetlbfs/inode.c                          |   27 +-
+ fs/proc/task_mmu.c                            |  184 ++-
+ fs/userfaultfd.c                              |   56 +-
+ include/asm-generic/hugetlb.h                 |    5 -
+ include/asm-generic/tlb.h                     |    6 +-
+ include/linux/huge_mm.h                       |   12 +-
+ include/linux/hugetlb.h                       |  173 ++-
+ include/linux/pagewalk.h                      |   11 +-
+ include/linux/rmap.h                          |    5 +
+ include/linux/swapops.h                       |    8 +-
+ include/linux/userfaultfd_k.h                 |    7 +
+ include/uapi/linux/userfaultfd.h              |    2 +
+ mm/damon/vaddr.c                              |   57 +-
+ mm/debug_vm_pgtable.c                         |    2 +-
+ mm/hmm.c                                      |   21 +-
+ mm/hugetlb.c                                  | 1209 ++++++++++++++---
+ mm/khugepaged.c                               |    4 +-
+ mm/madvise.c                                  |   24 +-
+ mm/memory-failure.c                           |   17 +-
+ mm/mempolicy.c                                |   28 +-
+ mm/migrate.c                                  |   20 +-
+ mm/mincore.c                                  |   17 +-
+ mm/mprotect.c                                 |   18 +-
+ mm/page_vma_mapped.c                          |   60 +-
+ mm/pagewalk.c                                 |   32 +-
+ mm/rmap.c                                     |  102 +-
+ mm/userfaultfd.c                              |   46 +-
+ .../selftests/kvm/demand_paging_test.c        |   20 +-
+ .../testing/selftests/kvm/include/test_util.h |    2 +
+ tools/testing/selftests/kvm/lib/kvm_util.c    |    2 +-
+ tools/testing/selftests/kvm/lib/test_util.c   |   14 +
+ tools/testing/selftests/vm/Makefile           |    1 +
+ tools/testing/selftests/vm/hugetlb-hgm.c      |  326 +++++
+ tools/testing/selftests/vm/migration.c        |  222 ++-
+ tools/testing/selftests/vm/userfaultfd.c      |   90 +-
+ 43 files changed, 2449 insertions(+), 493 deletions(-)
+ create mode 100644 tools/testing/selftests/vm/hugetlb-hgm.c
+
 -- 
-2.38.0
+2.38.0.135.g90850a2211-goog
 
