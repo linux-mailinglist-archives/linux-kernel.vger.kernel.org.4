@@ -2,152 +2,326 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B79F607DE5
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 19:48:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 657A4607DE9
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 19:49:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230189AbiJURs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 13:48:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52120 "EHLO
+        id S229949AbiJURtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 13:49:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229867AbiJURsY (ORCPT
+        with ESMTP id S230302AbiJURtD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 13:48:24 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CA46269091;
-        Fri, 21 Oct 2022 10:48:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1666374467;
-        bh=5QbrjKqljxqksy5puufmiF+jXfgBlAoOUGXFjbxtpbQ=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=hBhbJF4jc8rovTo6jtdQzC4jf96E2Y2BZGDCj8OOv7uVvPAtWDWe+3+lPpVpqHrev
-         hY9tNEpZhA+/wv2jZa3PpEH8ZQJdqKYbhdWH0+HSxxEf75JFo5UvX6IwA2NDbo8QAI
-         GemWHbXMEq5LAqIIq8xXe6n/MtZ3Pq7ekSGRAHN8=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [217.61.146.132] ([217.61.146.132]) by web-mail.gmx.net
- (3c-app-gmx-bap55.server.lan [172.19.172.125]) (via HTTP); Fri, 21 Oct 2022
- 19:47:47 +0200
-MIME-Version: 1.0
-Message-ID: <trinity-e60759de-3f0f-4b1e-bc0f-b33c4f8ac201-1666374467573@3c-app-gmx-bap55>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org,
-        Alexander Couzens <lynxis@fe80.eu>,
-        Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Fri, 21 Oct 2022 13:49:03 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F7A412D3E;
+        Fri, 21 Oct 2022 10:49:02 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id u21so8660454edi.9;
+        Fri, 21 Oct 2022 10:49:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=y8DWF+UF8EVkd6v92FWoTJD5DkJphqAj6oypteWXvQ8=;
+        b=bgq1HW5smypWPkPeGG40imnhVGvYodzpi9FVkSeDN1ZJnB4gLGe0zQlLW3PCcKy8ws
+         Ql17nikI8SGYJL9YLMyHM0MwUL/bsHWO+qfkCer5aDQpBw410qrRPo9sqYcdWdMpCFxZ
+         d73hCFh9F1ExHiZJ/ucw5DdztEzm3Qqtl7FQ7KQWra3QP9cmagwBU3ltWdyKxNlYWXpf
+         JOnArhIgOqH6FYrOrIdFBD6odZveL1LAVlIHpaTvVmmCHZahXoJA8WjPTTQsq6pjWDC8
+         TVzdyR/0Mf5gu9Ptp3dd5Sv6C6SZmCZ7SXKuhXZ6YSUWwMt8HeVf6hUbcAHblBMojydI
+         FiQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=y8DWF+UF8EVkd6v92FWoTJD5DkJphqAj6oypteWXvQ8=;
+        b=vFZq6IMTJSNGsKjHoFiKa+r7VsVvmOpsjnU9QOtpcXesaUwlJsD2SkTfDyMTINQri9
+         cSGtqLteXXXM5VmABuUVIivW4pB1CzwCOLs53FxKtCubG8U539B9QCQYl+TnF//DGXr7
+         kG7PAppoizIt5Ab9BH+zQfo4OnSdCjOhShhkIIt1iuca2jmHgPxTPlTOfC6ODI4/ihfo
+         5SlAIz/i/TBuWnZ1eTbgKIcJv2qAYingGPv22QiVqYJ1Bagk9fmd97Hidxw6qgaJ3Xg9
+         nzofVqlYuRX2VWRfZN9cGEcnYiPPGCdXbpiUxqXqt4a0ELBSoyWQP8p///CIXI8ojN74
+         rOng==
+X-Gm-Message-State: ACrzQf0t5hwxjsjLYWck+9aYMUq6i0Vu+1rpes/o0Ahy/Jrb3/8w5Bxo
+        IWC2kTQ0jpIPMUNI4QtNdflzV/KTBY8EcA==
+X-Google-Smtp-Source: AMsMyM5zMmpNj7aFia7CO9XmwKtDQ3kKJlxeK2NztpW2FsjSipSqf0xUheMp3fXBmBEWQgZHzg1azg==
+X-Received: by 2002:aa7:dd45:0:b0:458:7474:1fbe with SMTP id o5-20020aa7dd45000000b0045874741fbemr18742848edw.334.1666374540733;
+        Fri, 21 Oct 2022 10:49:00 -0700 (PDT)
+Received: from fedora.. ([87.116.164.153])
+        by smtp.gmail.com with ESMTPSA id gl22-20020a170906e0d600b0078d3f96d293sm11921148ejb.30.2022.10.21.10.48.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Oct 2022 10:49:00 -0700 (PDT)
+From:   Aleksa Savic <savicaleksa83@gmail.com>
+To:     linux-hwmon@vger.kernel.org
+Cc:     leonard.anderweit@gmail.com,
+        Aleksa Savic <savicaleksa83@gmail.com>,
+        Jack Doan <me@jackdoan.com>, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Aw: Re: [PATCH v2] net: mtk_sgmii: implement mtk_pcs_ops
-Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 21 Oct 2022 19:47:47 +0200
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <Y1JhEWU5Ac6kd2ne@shell.armlinux.org.uk>
-References: <20221020144431.126124-1-linux@fw-web.de>
- <Y1F0pSrJnNlYzehq@shell.armlinux.org.uk>
- <02A54E45-2084-440A-A643-772C0CC9F988@public-files.de>
- <Y1JhEWU5Ac6kd2ne@shell.armlinux.org.uk>
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:GDNCzu2w9Sb5SdqBgz4X6STf3+fSzJrSEUCB66OPIVCQTyPLjBmzWXa+MHHuTXv8u2sXQ
- wv0U9DyOfKYtSk5dkjolBQH+zi0xwerN7oZZ1mnTi1VgLvzFy6d5w3gGB1lefJlC0ngncQP9cR+f
- faqLtGrwoWJB/rtIX77qXr05Ge0JgMY88wOBBCzUJHWt+pOhMnQXP965uB27Tu61/CCNRb+tV2fb
- JQgslHLsGwhJZvKoEXtXLFRK3sVmSuTrXKhFXXWS4nYmJM8Uy0OKCikiIkBatnm8+kS2OrRRXYHW
- vo=
-X-UI-Out-Filterresults: notjunk:1;V03:K0:TD+n0rJeT4w=:XljR1f4x6ydGS0+XhQ/B3s
- 4iL/C3Ttc33hzqTmSeQBqBxxQygsToOCMuS6YO/U2W99Eek1iEGBKaaSRuITP/8Z2piCd2kLw
- h0FSeCTwNO9viA0yBcnj74cyEYEh/7Y/nIShtgHOGADsCYg3AzZmE5CBJ7vRtsaQYX4WtrdxH
- 0t/VaEWSHVeSXHV+WiHwZNBJE4bgUOgXDZOX4u8fPxcNgtfcqYvuqNkCIto0u5hOukEtdX9Lq
- 4Wm/op2idY2BjsDhNkIQoa5KGUX6gz4M+ZoyJ0Fmu0w4aEJAe4/LvH/VH5UDva4tIH5ugxHkB
- ixtyU/Sksric7WCLFoZHdsPU1Yt7NJJxcl+EtQdnOsd6e04XHwEytM9UfQi0OaeCvvXcmPsi5
- LB2t3QsdRpWyOfbXYhB9r8Zx4iRn3A6E3ktm0yDor2k8lek/gD34QW6BA/0/4ZEXz8GezbIYV
- gp6ZsHzuYBZK1AYou9WipXwKM2vTc9cktZ0cnA9hMXSdH+Q4imggKUhI2+aDKirSfjLJS35gY
- XRP09F4y7pOX/pXCYrRK/104+mP9ImyPYq/zhZGcPQTCFsFtZZFVq7KTVqcRVkeIko8hclYvu
- 6MIDhe/CBAcWSVsa9b0DkhHtetX911dwD7hSgsU+YDXhEdfBrt2IfsH5TJLtPmcevZ7v95RPC
- +20bj4sOrn/uFeJzCK6seCPiNq56e7gOflBqi+WQP8IHmW4XcDDPg3MJRsQ3zRtmLhrGG5uIM
- TFVjedpHshrzrVZi9imF4GC0sd5HfaRSrJlPC0YRjqygTmt/IjKIJS66/D5POW9dplPCI32OG
- Kt5Dk+IQZZi4GN7n+LNVOxUVQU9iB8kLLiC5qbh8Q/TmHpBZYxO9TuSSEvlBSuPGkXATm0AdT
- OlRfs4IuzT3gCW5Gv5lcZEyuvT2483fACpBHgwBZeq2Cyi00asOoG2lhrFGG9k4G3g3VhB96X
- g77inuxSwS2Ti1wsbrm0CZ4OmQYYgH1WUoxu8emEAdRLKIbOMWAfKZ5naC2fl6pCd6bmYQQDP
- ttRxfHmFn6cVBmWjPtzibuf7AAaGej0eeZ0cUKrls8mkQ7jWkv/djJ15KPxfgg/BExN40725/
- MzOSoxkZIMtz+17lo7EeR0TB/fB3XuByH0n4bKl+8eDNTKnzC86u5qEwYDvdNY+ox0SaTfkD5
- T1k5UztsrsfmfJtPd6/2+/yBLlj7Z/kfY3HRQuRa2jMXbi4+xRSFJrJbnBvYbUDDJnr2vRlKq
- 01u1v22a4Mylfincmx3D1WLW8XFsmFsmsGY69vdp8ff9YQuxmoctq93XehSN3dJIq2rLgFCO4
- JZHHdhaO
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Subject: [PATCH] hwmon: (aquacomputer_d5next) Add support for temperature sensor offsets
+Date:   Fri, 21 Oct 2022 19:48:34 +0200
+Message-Id: <20221021174834.736930-1-savicaleksa83@gmail.com>
+X-Mailer: git-send-email 2.37.3
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Gesendet: Freitag, 21. Oktober 2022 um 11:06 Uhr
-> Von: "Russell King (Oracle)" <linux@armlinux.org.uk>
-> An: "Frank Wunderlich" <frank-w@public-files.de>
-> On Fri, Oct 21, 2022 at 08:04:51AM +0200, Frank Wunderlich wrote:
-> > I have no register documentation to check if there is any way to read =
-out pause/duplex setting. Maybe MTK can answer this or extend function lat=
-er.
->
-> I suspect we can probably guess.
->
-> Looking at SGMSYS_PCS_CONTROL_1, this is actually the standard BMCR in
-> the low 16 bits, and BMSR in the upper 16 bits, so:
->
-> At address 4, I'd expect the PHYSID.
-> At address 8, I'd expect the advertisement register in the low 16 bits
-> and the link partner advertisement in the upper 16 bits.
->
-> Can you try an experiment, and in mtk_sgmii_init() try accessing the
-> regmap at address 0, 4, and 8 and print their contents please?
+Add support for reading and writing temperature sensor offsets
+on the Aquacomputer D5 Next, Farbwerk 360, Octo and Quadro,
+for which the needed offsets are known. Implemented by
+Leonard Anderweit [1].
 
-is this what you want to see?
+[1] https://github.com/aleksamagicka/aquacomputer_d5next-hwmon/pull/22
 
- int mtk_sgmii_init(struct mtk_sgmii *ss, struct device_node *r, u32 ana_r=
-gc3)
+Originally-from: Leonard Anderweit <leonard.anderweit@gmail.com>
+Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
+---
+ Documentation/hwmon/aquacomputer_d5next.rst |  1 +
+ drivers/hwmon/aquacomputer_d5next.c         | 91 ++++++++++++++++++---
+ 2 files changed, 79 insertions(+), 13 deletions(-)
+
+diff --git a/Documentation/hwmon/aquacomputer_d5next.rst b/Documentation/hwmon/aquacomputer_d5next.rst
+index e238533b5fe0..15226346434d 100644
+--- a/Documentation/hwmon/aquacomputer_d5next.rst
++++ b/Documentation/hwmon/aquacomputer_d5next.rst
+@@ -62,6 +62,7 @@ Sysfs entries
+ 
+ ================ ==============================================================
+ temp[1-20]_input Physical/virtual temperature sensors (in millidegrees Celsius)
++temp[1-4]_offset Temperature sensor correction offset (in millidegrees Celsius)
+ fan[1-8]_input   Pump/fan speed (in RPM) / Flow speed (in dL/h)
+ power[1-8]_input Pump/fan power (in micro Watts)
+ in[0-7]_input    Pump/fan voltage (in milli Volts)
+diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
+index c51a2678f0eb..862d6c284e83 100644
+--- a/drivers/hwmon/aquacomputer_d5next.c
++++ b/drivers/hwmon/aquacomputer_d5next.c
+@@ -80,6 +80,7 @@ static u8 secondary_ctrl_report[] = {
+ #define D5NEXT_5V_VOLTAGE		0x39
+ #define D5NEXT_12V_VOLTAGE		0x37
+ #define D5NEXT_CTRL_REPORT_SIZE		0x329
++#define D5NEXT_TEMP_CTRL_OFFSET		0x2D
+ static u8 d5next_sensor_fan_offsets[] = { D5NEXT_PUMP_OFFSET, D5NEXT_FAN_OFFSET };
+ 
+ /* Pump and fan speed registers in D5 Next control report (from 0-100%) */
+@@ -94,6 +95,8 @@ static u16 d5next_ctrl_fan_offsets[] = { 0x97, 0x42 };
+ #define FARBWERK360_SENSOR_START		0x32
+ #define FARBWERK360_NUM_VIRTUAL_SENSORS		16
+ #define FARBWERK360_VIRTUAL_SENSORS_START	0x3a
++#define FARBWERK360_CTRL_REPORT_SIZE		0x682
++#define FARBWERK360_TEMP_CTRL_OFFSET		0x8
+ 
+ /* Register offsets for the Octo fan controller */
+ #define OCTO_POWER_CYCLES		0x18
+@@ -103,6 +106,7 @@ static u16 d5next_ctrl_fan_offsets[] = { 0x97, 0x42 };
+ #define OCTO_NUM_VIRTUAL_SENSORS	16
+ #define OCTO_VIRTUAL_SENSORS_START	0x45
+ #define OCTO_CTRL_REPORT_SIZE		0x65F
++#define OCTO_TEMP_CTRL_OFFSET		0xA
+ static u8 octo_sensor_fan_offsets[] = { 0x7D, 0x8A, 0x97, 0xA4, 0xB1, 0xBE, 0xCB, 0xD8 };
+ 
+ /* Fan speed registers in Octo control report (from 0-100%) */
+@@ -117,6 +121,7 @@ static u16 octo_ctrl_fan_offsets[] = { 0x5B, 0xB0, 0x105, 0x15A, 0x1AF, 0x204, 0
+ #define QUADRO_VIRTUAL_SENSORS_START	0x3c
+ #define QUADRO_CTRL_REPORT_SIZE		0x3c1
+ #define QUADRO_FLOW_SENSOR_OFFSET	0x6e
++#define QUADRO_TEMP_CTRL_OFFSET		0xA
+ static u8 quadro_sensor_fan_offsets[] = { 0x70, 0x7D, 0x8A, 0x97 };
+ 
+ /* Fan speed registers in Quadro control report (from 0-100%) */
+@@ -282,6 +287,7 @@ struct aqc_data {
+ 	int temp_sensor_start_offset;
+ 	int num_virtual_temp_sensors;
+ 	int virtual_temp_sensor_start_offset;
++	u16 temp_ctrl_offset;
+ 	u16 power_cycle_count_offset;
+ 	u8 flow_sensor_offset;
+ 
+@@ -365,8 +371,8 @@ static int aqc_send_ctrl_data(struct aqc_data *priv)
+ 	return ret;
+ }
+ 
+-/* Refreshes the control buffer and returns value at offset */
+-static int aqc_get_ctrl_val(struct aqc_data *priv, int offset)
++/* Refreshes the control buffer and stores value at offset in val */
++static int aqc_get_ctrl_val(struct aqc_data *priv, int offset, long *val)
  {
-        struct device_node *np;
-+       unsigned int val;
-        int i;
+ 	int ret;
+ 
+@@ -376,7 +382,7 @@ static int aqc_get_ctrl_val(struct aqc_data *priv, int offset)
+ 	if (ret < 0)
+ 		goto unlock_and_return;
+ 
+-	ret = get_unaligned_be16(priv->buffer + offset);
++	*val = (s16)get_unaligned_be16(priv->buffer + offset);
+ 
+ unlock_and_return:
+ 	mutex_unlock(&priv->mutex);
+@@ -393,7 +399,7 @@ static int aqc_set_ctrl_val(struct aqc_data *priv, int offset, long val)
+ 	if (ret < 0)
+ 		goto unlock_and_return;
+ 
+-	put_unaligned_be16((u16)val, priv->buffer + offset);
++	put_unaligned_be16((s16)val, priv->buffer + offset);
+ 
+ 	ret = aqc_send_ctrl_data(priv);
+ 
+@@ -408,8 +414,28 @@ static umode_t aqc_is_visible(const void *data, enum hwmon_sensor_types type, u3
+ 
+ 	switch (type) {
+ 	case hwmon_temp:
++		if (channel < priv->num_temp_sensors) {
++			switch (attr) {
++			case hwmon_temp_label:
++			case hwmon_temp_input:
++				return 0444;
++			case hwmon_temp_offset:
++				if (priv->temp_ctrl_offset != 0)
++					return 0644;
++				break;
++			default:
++				break;
++			}
++		}
++
+ 		if (channel < priv->num_temp_sensors + priv->num_virtual_temp_sensors)
+-			return 0444;
++			switch (attr) {
++			case hwmon_temp_label:
++			case hwmon_temp_input:
++				return 0444;
++			default:
++				break;
++			}
+ 		break;
+ 	case hwmon_pwm:
+ 		if (priv->fan_ctrl_offsets && channel < priv->num_fans) {
+@@ -492,10 +518,26 @@ static int aqc_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+ 
+ 	switch (type) {
+ 	case hwmon_temp:
+-		if (priv->temp_input[channel] == -ENODATA)
+-			return -ENODATA;
++		switch (attr) {
++		case hwmon_temp_input:
++			if (priv->temp_input[channel] == -ENODATA)
++				return -ENODATA;
++
++			*val = priv->temp_input[channel];
++			break;
++		case hwmon_temp_offset:
++			ret =
++			    aqc_get_ctrl_val(priv,
++					     priv->temp_ctrl_offset +
++					     channel * AQC_TEMP_SENSOR_SIZE, val);
++			if (ret < 0)
++				return ret;
+ 
+-		*val = priv->temp_input[channel];
++			*val *= 10;
++			break;
++		default:
++			break;
++		}
+ 		break;
+ 	case hwmon_fan:
+ 		*val = priv->speed_input[channel];
+@@ -505,7 +547,7 @@ static int aqc_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+ 		break;
+ 	case hwmon_pwm:
+ 		if (priv->fan_ctrl_offsets) {
+-			ret = aqc_get_ctrl_val(priv, priv->fan_ctrl_offsets[channel]);
++			ret = aqc_get_ctrl_val(priv, priv->fan_ctrl_offsets[channel], val);
+ 			if (ret < 0)
+ 				return ret;
+ 
+@@ -563,6 +605,22 @@ static int aqc_write(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+ 	struct aqc_data *priv = dev_get_drvdata(dev);
+ 
+ 	switch (type) {
++	case hwmon_temp:
++		switch (attr) {
++		case hwmon_temp_offset:
++			/* Limit temp offset to +/- 15K as in the official software */
++			val = clamp_val(val, -15000, 15000) / 10;
++			ret =
++			    aqc_set_ctrl_val(priv,
++					     priv->temp_ctrl_offset +
++					     channel * AQC_TEMP_SENSOR_SIZE, val);
++			if (ret < 0)
++				return ret;
++			break;
++		default:
++			return -EOPNOTSUPP;
++		}
++		break;
+ 	case hwmon_pwm:
+ 		switch (attr) {
+ 		case hwmon_pwm_input:
+@@ -597,10 +655,10 @@ static const struct hwmon_ops aqc_hwmon_ops = {
+ 
+ static const struct hwmon_channel_info *aqc_info[] = {
+ 	HWMON_CHANNEL_INFO(temp,
+-			   HWMON_T_INPUT | HWMON_T_LABEL,
+-			   HWMON_T_INPUT | HWMON_T_LABEL,
+-			   HWMON_T_INPUT | HWMON_T_LABEL,
+-			   HWMON_T_INPUT | HWMON_T_LABEL,
++			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_OFFSET,
++			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_OFFSET,
++			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_OFFSET,
++			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_OFFSET,
+ 			   HWMON_T_INPUT | HWMON_T_LABEL,
+ 			   HWMON_T_INPUT | HWMON_T_LABEL,
+ 			   HWMON_T_INPUT | HWMON_T_LABEL,
+@@ -853,6 +911,7 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
+ 		priv->virtual_temp_sensor_start_offset = D5NEXT_VIRTUAL_SENSORS_START;
+ 		priv->power_cycle_count_offset = D5NEXT_POWER_CYCLES;
+ 		priv->buffer_size = D5NEXT_CTRL_REPORT_SIZE;
++		priv->temp_ctrl_offset = D5NEXT_TEMP_CTRL_OFFSET;
+ 
+ 		priv->temp_label = label_d5next_temp;
+ 		priv->virtual_temp_label = label_virtual_temp_sensors;
+@@ -867,6 +926,8 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
+ 		priv->num_fans = 0;
+ 		priv->num_temp_sensors = FARBWERK_NUM_SENSORS;
+ 		priv->temp_sensor_start_offset = FARBWERK_SENSOR_START;
++		priv->temp_ctrl_offset = 0;
++
+ 		priv->temp_label = label_temp_sensors;
+ 		break;
+ 	case USB_PRODUCT_ID_FARBWERK360:
+@@ -877,6 +938,8 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
+ 		priv->temp_sensor_start_offset = FARBWERK360_SENSOR_START;
+ 		priv->num_virtual_temp_sensors = FARBWERK360_NUM_VIRTUAL_SENSORS;
+ 		priv->virtual_temp_sensor_start_offset = FARBWERK360_VIRTUAL_SENSORS_START;
++		priv->buffer_size = FARBWERK360_CTRL_REPORT_SIZE;
++		priv->temp_ctrl_offset = FARBWERK360_TEMP_CTRL_OFFSET;
+ 
+ 		priv->temp_label = label_temp_sensors;
+ 		priv->virtual_temp_label = label_virtual_temp_sensors;
+@@ -893,6 +956,7 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
+ 		priv->virtual_temp_sensor_start_offset = OCTO_VIRTUAL_SENSORS_START;
+ 		priv->power_cycle_count_offset = OCTO_POWER_CYCLES;
+ 		priv->buffer_size = OCTO_CTRL_REPORT_SIZE;
++		priv->temp_ctrl_offset = OCTO_TEMP_CTRL_OFFSET;
+ 
+ 		priv->temp_label = label_temp_sensors;
+ 		priv->virtual_temp_label = label_virtual_temp_sensors;
+@@ -914,6 +978,7 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
+ 		priv->power_cycle_count_offset = QUADRO_POWER_CYCLES;
+ 		priv->buffer_size = QUADRO_CTRL_REPORT_SIZE;
+ 		priv->flow_sensor_offset = QUADRO_FLOW_SENSOR_OFFSET;
++		priv->temp_ctrl_offset = QUADRO_TEMP_CTRL_OFFSET;
+ 
+ 		priv->temp_label = label_temp_sensors;
+ 		priv->virtual_temp_label = label_virtual_temp_sensors;
+-- 
+2.37.3
 
-        for (i =3D 0; i < MTK_MAX_DEVS; i++) {
-@@ -158,6 +159,12 @@ int mtk_sgmii_init(struct mtk_sgmii *ss, struct devic=
-e_node *r, u32 ana_rgc3)
-                if (IS_ERR(ss->pcs[i].regmap))
-                        return PTR_ERR(ss->pcs[i].regmap);
-
-+               regmap_read(ss->pcs[i].regmap, SGMSYS_PCS_CONTROL_1, &val)=
-;
-+               printk(KERN_ALERT "dev: %d offset:0 0x%x",i,val);
-+               regmap_read(ss->pcs[i].regmap, SGMSYS_PCS_CONTROL_1+4, &va=
-l);
-+               printk(KERN_ALERT "dev: %d offset:4 0x%x",i,val);
-+               regmap_read(ss->pcs[i].regmap, SGMSYS_PCS_CONTROL_1+8, &va=
-l);
-+               printk(KERN_ALERT "dev: %d offset:8 0x%x",i,val);
-                ss->pcs[i].pcs.ops =3D &mtk_pcs_ops;
-        }
-
-
-[    1.083359] dev: 0 offset:0 0x840140
-[    1.083376] dev: 0 offset:4 0x4d544950
-[    1.086955] dev: 0 offset:8 0x1
-[    1.090697] dev: 1 offset:0 0x81140
-[    1.093866] dev: 1 offset:4 0x4d544950
-[    1.097342] dev: 1 offset:8 0x1
-
-> --
-> RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-> FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
->
-
-regards Frank
