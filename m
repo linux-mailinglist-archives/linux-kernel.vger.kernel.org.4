@@ -2,174 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BBB1607B9E
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 17:57:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0161B607B9F
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 17:57:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229987AbiJUP5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 11:57:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43578 "EHLO
+        id S230266AbiJUP5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 11:57:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230243AbiJUP4y (ORCPT
+        with ESMTP id S230291AbiJUP44 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 11:56:54 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D0E2018E73E
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 08:56:31 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 96D9B1063;
-        Fri, 21 Oct 2022 08:56:37 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.6.231])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9017B3F792;
-        Fri, 21 Oct 2022 08:56:29 -0700 (PDT)
-Date:   Fri, 21 Oct 2022 16:56:20 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     llvm@lists.linux.dev
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Fangrui Song <maskray@google.com>,
-        Joao Moreira <joao@overdrivepizza.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sami Tolvanen <samitolvanen@google.com>
-Subject: kCFI && patchable-function-entry=M,N
-Message-ID: <Y1LBGZPMfCZ8A1bl@FVFF77S0Q05N>
+        Fri, 21 Oct 2022 11:56:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AE0727E2E6;
+        Fri, 21 Oct 2022 08:56:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BE2A661ED3;
+        Fri, 21 Oct 2022 15:56:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30777C433C1;
+        Fri, 21 Oct 2022 15:56:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666367806;
+        bh=TFG+gvUdfVSbanzWOma5HXdIW4zrIQyBYY84L7UCYbE=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=MB8Yaemo6wmCjbJ2Vvp3EcjIpwZLsjJNs7V+DAMG1iKXJ5LszsjQ75FeOK5g3Yl5q
+         gDl9VnTfSIXTu2kBPdApoqpQ8awcBYPmXYpWqVMVJMQaDqxw/LhsB3V6CETEVm3asz
+         iKuFAxSSfYwrA8ViIPlvh10sxGiXXoQAPebZiKJHWGZq54vkICd3vfhObqbVXzw7D4
+         mA4goRsnLJxoUJIPxMpFLkCHAuypwGkk7r/Mz/voZQHyDqpq6ZMnIxCEEZLaXiFKGG
+         ji72iZsfPoxV97d2B1keLiv53qWGJ4TPVAVg28TTjfpVeQEji11FkxG/KQ6SigML+A
+         IKte+fvA4w36A==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id D08925C0543; Fri, 21 Oct 2022 08:56:45 -0700 (PDT)
+Date:   Fri, 21 Oct 2022 08:56:45 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/nolibc: add 7 tests for memcmp()
+Message-ID: <20221021155645.GK5600@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221021060340.7515-1-w@1wt.eu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221021060340.7515-1-w@1wt.eu>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Fri, Oct 21, 2022 at 08:03:40AM +0200, Willy Tarreau wrote:
+> This adds 7 combinations of input values for memcmp() using signed and
+> unsigned bytes, which will trigger on the original code before Rasmus'
+> fix. This is mostly aimed at helping backporters verify their work, and
+> showing how tests for corner cases can be added to the selftests suite.
+> 
+> Before the fix it reports:
+>   12 memcmp_20_20 = 0                      [OK]
+>   13 memcmp_20_60 = -64                    [OK]
+>   14 memcmp_60_20 = 64                     [OK]
+>   15 memcmp_20_e0 = 64                    [FAIL]
+>   16 memcmp_e0_20 = -64                   [FAIL]
+>   17 memcmp_80_e0 = -96                    [OK]
+>   18 memcmp_e0_80 = 96                     [OK]
+> 
+> And after:
+>   12 memcmp_20_20 = 0                      [OK]
+>   13 memcmp_20_60 = -64                    [OK]
+>   14 memcmp_60_20 = 64                     [OK]
+>   15 memcmp_20_e0 = -192                   [OK]
+>   16 memcmp_e0_20 = 192                    [OK]
+>   17 memcmp_80_e0 = -96                    [OK]
+>   18 memcmp_e0_80 = 96                     [OK]
+> 
+> Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+> Signed-off-by: Willy Tarreau <w@1wt.eu>
 
-For arm64, I'd like to use -fatchable-function-entry=M,N (where N > 0), for our
-ftrace implementation, which instruments *some* but not all functions.
-Unfortuntately, this doesn't play nicely with -fsanitize=kcfi, as instrumented
-and non-instrumented functions don't agree on where the type hash should live
-relative to the function entry point, making them incompatible with one another.
-AFAICT, there's no mechanism today to get them to agree.
+I have pulled both of these in, thank you!
 
-Today we use -fatchable-function-entry=2, which happens to avoid this.
+One thing, though...  I had to do "make clean" in both tools/include/nolibc
+and tools/testing/selftests/nolibc to make those two "[FAIL]" indications
+go away.  Does this mean that I am doing something wrong?
 
-For example, in the below, functions with N=0 expect the type hash to be placed
-4 bytes before the entry point, and functions with N=2 expect the type hash to
-be placed 12 bytes before the entry point.
+It would be good to know before I send the pull request containing these,
+so that we can let Linus know of anything special he needs to do to
+ensure a valid test result.
 
-| % cat test.c
-| #define __notrace       __attribute__((patchable_function_entry(0, 0)))
-| 
-| void callee_patchable(void)
-| {
-| }
-| 
-| void __notrace callee_non_patchable(void)
-| {
-| }
-| 
-| typedef void (*callee_fn_t)(void);
-| 
-| void caller_patchable(callee_fn_t callee)
-| {
-|         callee();
-| }
-| 
-| void __notrace caller_non_patchable(callee_fn_t callee)
-| {
-|         callee();
-| }
-| % clang --target=aarch64-linux -c test.c -fpatchable-function-entry=2,2 -fsanitize=kcfi -O2
-| % aarch64-linux-objdump -d test.o
-| 
-| test.o:     file format elf64-littleaarch64
-| 
-| 
-| Disassembly of section .text:
-| 
-| 0000000000000000 <callee_patchable-0xc>:
-|    0:   a540670c        .word   0xa540670c
-|    4:   d503201f        nop
-|    8:   d503201f        nop
-| 
-| 000000000000000c <callee_patchable>:
-|    c:   d65f03c0        ret
-|   10:   a540670c        .word   0xa540670c
-| 
-| 0000000000000014 <callee_non_patchable>:
-|   14:   d65f03c0        ret
-|   18:   07d85f31        .word   0x07d85f31
-|   1c:   d503201f        nop
-|   20:   d503201f        nop
-| 
-| 0000000000000024 <caller_patchable>:
-|   24:   b85f4010        ldur    w16, [x0, #-12]
-|   28:   728ce191        movk    w17, #0x670c
-|   2c:   72b4a811        movk    w17, #0xa540, lsl #16
-|   30:   6b11021f        cmp     w16, w17
-|   34:   54000040        b.eq    3c <caller_patchable+0x18>  // b.none
-|   38:   d4304400        brk     #0x8220
-|   3c:   d61f0000        br      x0
-|   40:   07d85f31        .word   0x07d85f31
-| 
-| 0000000000000044 <caller_non_patchable>:
-|   44:   b85fc010        ldur    w16, [x0, #-4]
-|   48:   728ce191        movk    w17, #0x670c
-|   4c:   72b4a811        movk    w17, #0xa540, lsl #16
-|   50:   6b11021f        cmp     w16, w17
-|   54:   54000040        b.eq    5c <caller_non_patchable+0x18>  // b.none
-|   58:   d4304400        brk     #0x8220
-|   5c:   d61f0000        br      x0
+							Thanx, Paul
 
-On arm64, I'd like to use -fpatchable-function-entry=4,2 on arm64, along with
--falign-functions=8, so that we can place a naturally-aligned 8-byte literal
-before the function (e.g. a pointer value). That allows us to implement an
-efficient per-callsite hook without hitting branch range limitations and/or
-requiring trampolines. I have a PoC that works without kCFI at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=arm64/ftrace/per-callsite-ops
-
-I mentioned this in the #clangbuiltlinux IRQ channel, and Sami wrote up a
-github issue at: https://github.com/ClangBuiltLinux/linux/issues/1744
-
-Currently clang generates:
-
-| 	< HASH >
-| 	NOP
-| 	NOP
-| func:	BTI	// optional
-| 	NOP
-| 	NOP
-
-... and to make this consistent with non-instrumented functions, the
-non-instrumented functions would need pre-function padding before their hashes.
-
-For my use-case, it doesn't matter where the pre-function NOPs are placed
-relative to the type hash, so long as the location is consistent, and it might
-be nicer to have the option to place the pre-function NOPs before the hash,
-which would avoid needing to change non-instrumented functions (and save some
-space) e.g.
-
-| 	NOP
-| 	NOP
-| 	< HASH >
-| func:	BTI	// optional
-| 	NOP
-| 	NOP
-
-... but I understand that for x86, folk want the pre-function NOPs to
-fall-through into the body of the function.
-
-Is there any mechanism today that we could use to solve this, or could we
-extend clang to have some options to control this behaviour?
-
-It would also be helpful to have a symbol before both the hash and pre-function
-NOPs so that we can filter those out of probes patching (I see that x86 does
-this with the __cfi_function symbol).
-
-Thanks,
-Mark.
+> ---
+>  tools/testing/selftests/nolibc/nolibc-test.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+> index 78bced95ac63..f14f5076fb6d 100644
+> --- a/tools/testing/selftests/nolibc/nolibc-test.c
+> +++ b/tools/testing/selftests/nolibc/nolibc-test.c
+> @@ -565,6 +565,13 @@ int run_stdlib(int min, int max)
+>  		CASE_TEST(strchr_foobar_z);    EXPECT_STRZR(1, strchr("foobar", 'z')); break;
+>  		CASE_TEST(strrchr_foobar_o);   EXPECT_STREQ(1, strrchr("foobar", 'o'), "obar"); break;
+>  		CASE_TEST(strrchr_foobar_z);   EXPECT_STRZR(1, strrchr("foobar", 'z')); break;
+> +		CASE_TEST(memcmp_20_20);       EXPECT_EQ(1, memcmp("aaa\x20", "aaa\x20", 4), 0); break;
+> +		CASE_TEST(memcmp_20_60);       EXPECT_LT(1, memcmp("aaa\x20", "aaa\x60", 4), 0); break;
+> +		CASE_TEST(memcmp_60_20);       EXPECT_GT(1, memcmp("aaa\x60", "aaa\x20", 4), 0); break;
+> +		CASE_TEST(memcmp_20_e0);       EXPECT_LT(1, memcmp("aaa\x20", "aaa\xe0", 4), 0); break;
+> +		CASE_TEST(memcmp_e0_20);       EXPECT_GT(1, memcmp("aaa\xe0", "aaa\x20", 4), 0); break;
+> +		CASE_TEST(memcmp_80_e0);       EXPECT_LT(1, memcmp("aaa\x80", "aaa\xe0", 4), 0); break;
+> +		CASE_TEST(memcmp_e0_80);       EXPECT_GT(1, memcmp("aaa\xe0", "aaa\x80", 4), 0); break;
+>  		case __LINE__:
+>  			return ret; /* must be last */
+>  		/* note: do not set any defaults so as to permit holes above */
+> -- 
+> 2.17.5
+> 
