@@ -2,109 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76FFF607F31
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 21:40:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE402607F30
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 21:40:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230232AbiJUTko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 15:40:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42336 "EHLO
+        id S229919AbiJUTk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 15:40:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230071AbiJUTkl (ORCPT
+        with ESMTP id S230141AbiJUTkU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 15:40:41 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DFA6198459
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 12:40:31 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id d13so2713843qko.5
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 12:40:30 -0700 (PDT)
+        Fri, 21 Oct 2022 15:40:20 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A51E92A73B
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 12:40:17 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id bk15so6493504wrb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 12:40:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=8cEcPE5eJxdhlD5IGo/M7P7SxrnCieMphXj8buQz48I=;
-        b=T9l49X7m6bFvcPcqrTkzRupPSD0TaxDVlJn97Z7GBec0F5nMJUH2zckYJQilD6S+4I
-         v3LjPCvtVo603tLjPTPha5JL3M+0gdgQXKkipkYn/djWgwydEi2FEI1B8X1oN02ql5SO
-         3wYl0+PPOXb8PbGPo/JBnAEn7meQ0mzKUgPFQ=
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iCfubAeNznnX/AzluWAu7NkPDRYfii44G0R9B/8m2X8=;
+        b=n1I4AU3USkOtGuwn+2O+mEazB6HBRndTQcLj893hetIl57S9277pvxqdWZpHd4TMxw
+         d+l2EcVf+PhGL2fI6nPomuri0PyUbDjSultAu1lJ00a+Ersbogeg5f1FLJYqivV6I3AZ
+         RQT6uCFlgd29X1VB2nqA9HODT09bYkepuGrv2o1oQhsuB1hCO61vuftEiu2xq0l82iH6
+         Wh/YGRumwZQtkBVZjk1ql6d5208Vs+JPuItNsieIvvDRbVXDGbaXcl0bmr2TXfjy0/v9
+         pJ4+9LKj4Ajpa13E7D+0IKkjQkQ2M+kjXipqJW2cIbMUWCsNNqWM96LySA4lsFg65V2n
+         WQ3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8cEcPE5eJxdhlD5IGo/M7P7SxrnCieMphXj8buQz48I=;
-        b=7G/MVipTOafjGt92/q7jey1kQ3gFkLymNuqmBeB+fh+x1d1RRBurOAnYCDaSO6ZGD+
-         g/Oqt8QzyRMadZqW9RFqmHLyaPc+hWf/1Z8SQb/WFDmggg3eZdljcrCfH4xzf0Cp+xw2
-         3zCui2nYsHsg0Cis+deLNSoaXTvZbApkili6WKtMrhVDThJ91VIciz0fal6YWP8HmF5z
-         v5aUQGwWOyBnsOnJFBCNTVEG1s8FEtEplv3DqphoUxnLJA17dqy6ZEarRy8Iy44oc8SC
-         vw4xX19nTn7SZaOT9+UeLN+lgrAHI/QDm+VHM7R2bePkWvatluQZMuVb1X+RLd+WOsD3
-         B21w==
-X-Gm-Message-State: ACrzQf2+QwVH5p3IMY7K7GXJqFYtZpFOKUbNPfrvs294Fme1KRwXsT4Y
-        hBJop6kMqNPbunfO2iSnGF9859TBzGVerA==
-X-Google-Smtp-Source: AMsMyM7IR8hy4It57F42ZdvDhbnNIyim4BNNeNFnJgPiVLHG9Z5d/idB03apMoLVBeQrfx/lcOO4xA==
-X-Received: by 2002:a05:620a:2809:b0:6bc:5e42:fef9 with SMTP id f9-20020a05620a280900b006bc5e42fef9mr15034825qkp.278.1666381229895;
-        Fri, 21 Oct 2022 12:40:29 -0700 (PDT)
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
-        by smtp.gmail.com with ESMTPSA id q1-20020a05620a0d8100b006ec62032d3dsm10254185qkl.30.2022.10.21.12.40.28
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Oct 2022 12:40:29 -0700 (PDT)
-Received: by mail-yb1-f176.google.com with SMTP id r3so4503594yba.5
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 12:40:28 -0700 (PDT)
-X-Received: by 2002:a25:84cf:0:b0:6b3:c0c3:19d8 with SMTP id
- x15-20020a2584cf000000b006b3c0c319d8mr17385388ybm.349.1666381228574; Fri, 21
- Oct 2022 12:40:28 -0700 (PDT)
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iCfubAeNznnX/AzluWAu7NkPDRYfii44G0R9B/8m2X8=;
+        b=qdiuqCaLVoW8EKY/XRzuUYvOcds7fGenDRRJ22OXR66cQ9qgKKFIBozXLl7PMGDOmH
+         R88si3E6lloW6O8sXEf356ISwbprevJFzUGASIVJIyMmVFEO0eJbdFOpDYH0SfOY739q
+         Ri7LqicQZ+OEM5VYOHtafSrRep0MIfOph70CJbiZ4A+rlnjOjki3qAV6e6UUastlmhLT
+         8Ta61iwoAgjjht0vRKwXdWfg6QzwU69k1rgJF2BL16oaYnq6oO7ERdSURoP1L2eGbWB1
+         EVwdH2lsPd2V9VyaadZ/r04GKTegZt9zuNkAiLb4lbn4H3VFxZfW5sdAuz/lBGzZ7iQp
+         vrSA==
+X-Gm-Message-State: ACrzQf3zc5HLIpNw6IWj/AJdxOaN3dAkG4QQ7uOfunIgxXJuamkxtqV5
+        xG+Sa9ShciuefvNML1L9afPqL/Jh/z7UfFEUzDI=
+X-Google-Smtp-Source: AMsMyM4ewzan4N6kzc/SprmL7GXilFSncZqiHu8uE9w0v4FJCYHlu72IMCElIi22JluG0cz4Cw2BqjjXlCF7p1Iq9a0=
+X-Received: by 2002:a5d:5a82:0:b0:224:f744:1799 with SMTP id
+ bp2-20020a5d5a82000000b00224f7441799mr13272364wrb.582.1666381216188; Fri, 21
+ Oct 2022 12:40:16 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221020213327.2c284af5925b6a8ed915fe9e@linux-foundation.org>
-In-Reply-To: <20221020213327.2c284af5925b6a8ed915fe9e@linux-foundation.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 21 Oct 2022 12:40:12 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgb42XG1c_rtwupJMD9QXbJsE6k_TBKYC4YvZ8bkATcVg@mail.gmail.com>
-Message-ID: <CAHk-=wgb42XG1c_rtwupJMD9QXbJsE6k_TBKYC4YvZ8bkATcVg@mail.gmail.com>
-Subject: Re: [GIT PULL] hotfixes for 6.1-rc2
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        mm-commits@vger.kernel.org
+Received: by 2002:a5d:4692:0:0:0:0:0 with HTTP; Fri, 21 Oct 2022 12:40:15
+ -0700 (PDT)
+Reply-To: usdepartmenttreasury63@gmail.com
+From:   "U.S FINANCIAL DEPARTMENT" <emmanuel84968@gmail.com>
+Date:   Fri, 21 Oct 2022 19:40:15 +0000
+Message-ID: <CAOCfXBR1FbdEQg3+VH7L8oacjvP21UygRCPu49AwKgxozzMb-A@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:442 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [emmanuel84968[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [usdepartmenttreasury63[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [emmanuel84968[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 9:33 PM Andrew Morton <akpm@linux-foundation.org> wrote:
->
-> Andrew Morton (3):
->       Merge branch 'master' into mm-hotfixes-stable
->       Merge branch 'master' into mm-hotfixes-stable
+-- 
+Dear Friend,
 
-I've pulled this, but both of these merges look entirely invalid.
+I have an important message for you get back for more information.
 
-First off, one of them is most definitely pointless - there's no
-activity between the first and the second merge, so that first merge
-shouldn't have been done in the first place.
-
-But the second merge is bad by definition too, in that it doesn't have
-any explanation for it.
-
-I've said this before - and I hope that some day I just won't have to
-say it again - if you cannot explain a merge, you shouldn't be *doing*
-a merge.
-
-It really is that simple. If you have no clear explanation for why you
-need to do that merge, then you simply shouldn't have done it.
-
-For example, that first merge clearly CANNOT have a valid reason for
-existing. There's simply no valid explanation for doing it,
-considering that there was no work on top of it that could possibly be
-a cause tor that merge.
-
-So that whole "if you cannot explain why you do a merge, don't do the
-merge" rule should have been a hard "NO" on it, and should have made
-it obvious that it shouldn't have happened.
-
-Please don't do pointless merges.
-
-            Linus
+Sincerely,
+Mr. Marcus Hamlin
+Deputy U.S. Department of the Treasury
+United State
