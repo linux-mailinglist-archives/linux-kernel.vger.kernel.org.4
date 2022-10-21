@@ -2,156 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A889607F12
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 21:33:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61A47607F18
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 21:35:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230097AbiJUTc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 15:32:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49032 "EHLO
+        id S229679AbiJUTfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 15:35:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229875AbiJUTcz (ORCPT
+        with ESMTP id S229902AbiJUTfL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 15:32:55 -0400
-Received: from vps.xff.cz (vps.xff.cz [195.181.215.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 164BD2505C3;
-        Fri, 21 Oct 2022 12:32:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xff.cz; s=mail;
-        t=1666380768; bh=iOjw4y7HyVQfS/8t6MNRacekJ0y7x8kJRV6uNTkBJP0=;
-        h=Date:From:To:Cc:Subject:X-My-GPG-KeyId:References:From;
-        b=skRno2TLIS5tzhoN0iDFf8oexHduUUk8zEsykGbBsArZyzIUvFLy9zHy2T8EQySCa
-         YDZPX/DVV9wdf0FupcqvLZkw/h37sXIuU+VD7n0yqvMtbC206xPnsZWdDUQPltBPYn
-         ePHp0WY+OB8R+YynJQrr+atNQtYJlQM+2a0D/Vk8=
-Date:   Fri, 21 Oct 2022 21:32:48 +0200
-From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>
-To:     Peter Geis <pgwipeout@gmail.com>
-Cc:     Heiko Stuebner <heiko@sntech.de>,
-        linux-rockchip@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Yifeng Zhao <yifeng.zhao@rock-chips.com>,
-        Johan Jonker <jbx6244@gmail.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/Rockchip SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] arm64: dts: rockchip: rk356x: Fix PCIe register map
- and ranges
-Message-ID: <20221021193248.2he6amnj7knk4biu@core>
-Mail-Followup-To: =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>,
-        Peter Geis <pgwipeout@gmail.com>, Heiko Stuebner <heiko@sntech.de>,
-        linux-rockchip@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Yifeng Zhao <yifeng.zhao@rock-chips.com>,
-        Johan Jonker <jbx6244@gmail.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
-        "moderated list:ARM/Rockchip SoC support" <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
- <https://xff.cz/key.txt>
-References: <20221005085439.740992-1-megi@xff.cz>
- <CAMdYzYrEXEqOmMeozGBbAAvrujZcOxLh4VYOmu5DSjPWTS-5zQ@mail.gmail.com>
- <20221005220812.4psu6kckej63yo2z@core>
- <4679102.Wku2Vz74k6@phil>
- <CAMdYzYq3S2rR3Kb61irpV9xHYijNiJY0mkVnJwPrpXzxg_Zh9g@mail.gmail.com>
- <20221021153913.l5ry6v4mcnzcmj2v@core>
- <CAMdYzYpYC6ME_ZYE65UWq__i+rit6_os-+do+JLmEL7y-jKr9g@mail.gmail.com>
+        Fri, 21 Oct 2022 15:35:11 -0400
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B7A87AB08
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 12:35:06 -0700 (PDT)
+Received: by mail-il1-x12a.google.com with SMTP id 8so2192445ilj.4
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 12:35:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ep8tCByFfUT/Tv/jGz8MVhMNgYEEnAHcpfl6q9bgIZA=;
+        b=PA0uXBeYg2xBYb490syGqLONmfChuiet5JBStCvpgW6ZCQfH18WDugcBgNE01slET4
+         2XYRENSoGcVK1snsnLZOs92zRLz1su6j9BfMLQfB9ps1gqKJSBtGuwFX0yWulUwLL67W
+         jn68uvFI0hnZYontatqIDy+nNcbcWqWZv0x+/S/edZK9bXEXmN/LpOfL1iYE21TRwWQ+
+         phCp1E1FUGniz5NrMHwQiCPo+5zcsv0UxQiW5QmvO+WzsKg50F+DGFqMZ1+ArO7tHehI
+         bqYer/T+rpJgSwQWwJjeOsAw8cn8QWz931haFSQXYb0WbpExAP4DmEbJcAwDXySNKt6r
+         6yvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ep8tCByFfUT/Tv/jGz8MVhMNgYEEnAHcpfl6q9bgIZA=;
+        b=BkQHKtx55XBes219io2gwFio74byPnOadQOKZXmIYz3WNSKsv3HYIrIEBl0tHddDnP
+         lK2J/6JcpgKNkuUlsmgGfd+B8H9PNCPthNsbY7Q4HkdGxRMdKGDkm4Mmwpp39BQvRGL9
+         RVgZ8eoRzLetPZ8RTXaZyDuYw11w4GsqlbgKAP7YzvevXZ6X8XXqN+YcdDzZkYD/B+UL
+         tCdTAfxsDOqlM0nKPesXerOZvtlAmTxjwSUIlbB82DXvsMt6XgkF7mTWtX3WmnT0eRVK
+         aSZV/4kaTeR5gaOUPY2h5BYMplbKxW9wEXdTFnD+6lK62D3dr0DX8Pb6HBRgenluQrO1
+         8Gkg==
+X-Gm-Message-State: ACrzQf14ZdAobs6VJjjjPGnaW4ckBhjP6SI8cc9DjxtYEaQXq0szRYkB
+        eIHpJ36EfTnBAfM2ixWSKcHJndIYITo31Ksekw88hA==
+X-Google-Smtp-Source: AMsMyM7vQBW0f5ImtIKiiwTQqhNzMj7P4Hpvoujud9vD2xFA5kKWxBDQkvmb8bQ8jHt8zHuhNTeDPnzASWbfcFPdxPo=
+X-Received: by 2002:a05:6e02:1aaa:b0:2fa:542c:7538 with SMTP id
+ l10-20020a056e021aaa00b002fa542c7538mr15170376ilv.260.1666380905474; Fri, 21
+ Oct 2022 12:35:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMdYzYpYC6ME_ZYE65UWq__i+rit6_os-+do+JLmEL7y-jKr9g@mail.gmail.com>
+References: <128dc161-8949-1146-bf8b-310aa33c06a8@quicinc.com>
+ <1663312351-28476-1-git-send-email-quic_aiquny@quicinc.com>
+ <20221012204344.GA1178915@p14s> <792f05fc-995e-9a87-ab7d-bee03f15bc79@quicinc.com>
+ <20221013173442.GA1279972@p14s> <20221013180334.GB1279972@p14s> <8807a9a6-d93d-aef5-15f4-88648a6ecbe2@quicinc.com>
+In-Reply-To: <8807a9a6-d93d-aef5-15f4-88648a6ecbe2@quicinc.com>
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+Date:   Fri, 21 Oct 2022 13:34:54 -0600
+Message-ID: <CANLsYkx8Vcha9FpfRvJEkq2pd+mSYFeZQBXj65YoiSBv+WEY4A@mail.gmail.com>
+Subject: Re: [PATCH v4] remoteproc: core: do pm relax when in RPROC_OFFLINE
+To:     "Aiqun(Maria) Yu" <quic_aiquny@quicinc.com>,
+        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Cc:     linux-remoteproc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_clew@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 12:48:15PM -0400, Peter Geis wrote:
-> On Fri, Oct 21, 2022 at 11:39 AM Ondřej Jirman <megi@xff.cz> wrote:
+On Wed, 19 Oct 2022 at 23:52, Aiqun(Maria) Yu <quic_aiquny@quicinc.com> wrote:
+>
+> On 10/14/2022 2:03 AM, Mathieu Poirier wrote:
+> > On Thu, Oct 13, 2022 at 11:34:42AM -0600, Mathieu Poirier wrote:
+> >> On Thu, Oct 13, 2022 at 09:40:09AM +0800, Aiqun(Maria) Yu wrote:
+> >>> Hi Mathieu,
+> >>>
+> >>> On 10/13/2022 4:43 AM, Mathieu Poirier wrote:
+> >>>> Please add what has changed from one version to another, either in a cover
+> >>>> letter or after the "Signed-off-by".  There are many examples on how to do that
+> >>>> on the mailing list.
+> >>>>
+> >>> Thx for the information, will take a note and benefit for next time.
+> >>>
+> >>>> On Fri, Sep 16, 2022 at 03:12:31PM +0800, Maria Yu wrote:
+> >>>>> RPROC_OFFLINE state indicate there is no recovery process
+> >>>>> is in progress and no chance to do the pm_relax.
+> >>>>> Because when recovering from crash, rproc->lock is held and
+> >>>>> state is RPROC_CRASHED -> RPROC_OFFLINE -> RPROC_RUNNING,
+> >>>>> and then unlock rproc->lock.
+> >>>>
+> >>>> You are correct - because the lock is held rproc->state should be set to RPROC_RUNNING
+> >>>> when rproc_trigger_recovery() returns.  If that is not the case then something
+> >>>> went wrong.
+> >>>>
+> >>>> Function rproc_stop() sets rproc->state to RPROC_OFFLINE just before returning,
+> >>>> so we know the remote processor was stopped.  Therefore if rproc->state is set
+> >>>> to RPROC_OFFLINE something went wrong in either request_firmware() or
+> >>>> rproc_start().  Either way the remote processor is offline and the system probably
+> >>>> in an unknown/unstable.  As such I don't see how calling pm_relax() can help
+> >>>> things along.
+> >>>>
+> >>> PROC_OFFLINE is possible that rproc_shutdown is triggered and successfully
+> >>> finished.
+> >>> Even if it is multi crash rproc_crash_handler_work contention issue, and
+> >>> last rproc_trigger_recovery bailed out with only
+> >>> rproc->state==RPROC_OFFLINE, it is still worth to do pm_relax in pair.
+> >>> Since the subsystem may still can be recovered with customer's next trigger
+> >>> of rproc_start, and we can make each error out path clean with pm resources.
+> >>>
+> >>>> I suggest spending time understanding what leads to the failure when recovering
+> >>>> from a crash and address that problem(s).
+> >>>>
+> >>> In current case, the customer's information is that the issue happened when
+> >>> rproc_shutdown is triggered at similar time. So not an issue from error out
+> >>> of rproc_trigger_recovery.
+> >>
+> >> That is a very important element to consider and should have been mentioned from
+> >> the beginning.  What I see happening is the following:
+> >>
+> >> rproc_report_crash()
+> >>          pm_stay_awake()
+> >>          queue_work() // current thread is suspended
+> >>
+> >> rproc_shutdown()
+> >>          rproc_stop()
+> >>                  rproc->state = RPROC_OFFLINE;
+> >>
+> >> rproc_crash_handler_work()
+> >>          if (rproc->state == RPROC_OFFLINE)
+> >>                  return // pm_relax() is not called
+> >>
+> >> The right way to fix this is to add a pm_relax() in rproc_shutdown() and
+> >> rproc_detach(), along with a very descriptive comment as to why it is needed.
 > >
-> > On Fri, Oct 21, 2022 at 09:07:50AM -0400, Peter Geis wrote:
-> > > Good Morning Heiko,
-> > >
-> > > Apologies for just getting to this, I'm still in the middle of moving
-> > > and just got my lab set back up.
-> > >
-> > > I've tested this patch series and it leads to the same regression with
-> > > NVMe drives. A loop of md5sum on two identical 4GB random files
-> > > produces the following results:
-> > > d11cf0caa541b72551ca22dc5bef2de0  test-rand.img
-> > > fad97e91da8d4fd554c895cafa89809b  test-rand2.img
-> > > 2d56a7baa05c38535f4c19a2b371f90a  test-rand.img
-> > > 74e8e6f93d7c3dc3ad250e91176f5901  test-rand2.img
-> > > 25cfcfecf4dd529e4e9fbbe2be482053  test-rand.img
-> > > 74e8e6f93d7c3dc3ad250e91176f5901  test-rand2.img
-> > > b9637505bf88ed725f6d03deb7065dab  test-rand.img
-> > > f7437e88d524ea92e097db51dce1c60d  test-rand2.img
-> > >
-> > > Before this patch series:
-> > > d11cf0caa541b72551ca22dc5bef2de0  test-rand.img
-> > > d11cf0caa541b72551ca22dc5bef2de0  test-rand2.img
-> > > d11cf0caa541b72551ca22dc5bef2de0  test-rand.img
-> > > d11cf0caa541b72551ca22dc5bef2de0  test-rand2.img
-> > > d11cf0caa541b72551ca22dc5bef2de0  test-rand.img
-> > > d11cf0caa541b72551ca22dc5bef2de0  test-rand2.img
-> > > d11cf0caa541b72551ca22dc5bef2de0  test-rand.img
-> > > d11cf0caa541b72551ca22dc5bef2de0  test-rand2.img
-> > >
-> > > Though I do love where this patch is going and would like to see if it
-> > > can be made to work, in its current form it does not.
+> > Thinking about this further there are more ramifications to consider.  Please
+> > confirm the above scenario is what you are facing.  I will advise on how to move
+> > forward if that is the case.
 > >
-> > Thanks for the test. Can you please also test v1? Also please share lspci -vvv
-> > of your nvme drive, so that we can see allocated address ranges, etc.
-> 
-> Good catch, with your patch as is, the following issue crops up:
-> Region 0: Memory at 300000000 (64-bit, non-prefetchable) [size=16K]
-> Region 2: I/O ports at 1000 [disabled] [size=256]
-> 
-> However, with a simple fix, we can get this:
-> Region 0: Memory at 300000000 (64-bit, non-prefetchable) [virtual] [size=16K]
-> Region 2: I/O ports at 1000 [virtual] [size=256]
-> 
-> and with it a working NVMe drive.
-> 
-> Change the following range:
-> 0x02000000 0x0 0x40000000 0x3 0x00000000 0x0 0x40000000>;
-> to
-> 0x02000000 0x0 0x00000000 0x3 0x00000000 0x0 0x40000000>;
+> Not sure if the situation is clear or not. So resend the email again.
+>
+> The above senario is what customer is facing. crash hanppened while at
+> the same time shutdown is triggered.
 
-I've already tried this, but this unfrotunately breaks the wifi cards.
-(those only use the I/O space) Maybe because I/O and memory address spaces
-now overlap, I don't know. That's why I used the 1GiB offset for memory
-space.
+Unfortunately this is not enough details to address a problem as
+complex as this one.
 
-kind regards,
-	o.
+> And the device cannto goes to suspend state after that.
+> the subsystem can still be start normally after this.
 
-> I still haven't tested this with other cards yet, and another patch
-> that does similar work I've tested successfully as well with NVMe
-> drives. I'll have to get back to you on the results of greater
-> testing.
-> 
-> Very Respectfully,
-> Peter Geis
-> 
-> >
-> > kind regards,
-> >         o.
-> >
-> > > Very Respectfully,
-> > > Peter Geis
+If the code flow I pasted above reflects the problem at hand, the
+current patch will not be sufficient to address the issue.  If Arnaud
+confirms my suspicions we will have to think about a better solution.
+
+>
+> >>
+> >>
+> >>>> Thanks,
+> >>>> Mathieu
+> >>>>
+> >>>>
+> >>>>> When the state is in RPROC_OFFLINE it means separate request
+> >>>>> of rproc_stop was done and no need to hold the wakeup source
+> >>>>> in crash handler to recover any more.
+> >>>>>
+> >>>>> Signed-off-by: Maria Yu <quic_aiquny@quicinc.com>
+> >>>>> ---
+> >>>>>    drivers/remoteproc/remoteproc_core.c | 11 +++++++++++
+> >>>>>    1 file changed, 11 insertions(+)
+> >>>>>
+> >>>>> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+> >>>>> index e5279ed9a8d7..6bc7b8b7d01e 100644
+> >>>>> --- a/drivers/remoteproc/remoteproc_core.c
+> >>>>> +++ b/drivers/remoteproc/remoteproc_core.c
+> >>>>> @@ -1956,6 +1956,17 @@ static void rproc_crash_handler_work(struct work_struct *work)
+> >>>>>           if (rproc->state == RPROC_CRASHED || rproc->state == RPROC_OFFLINE) {
+> >>>>>                   /* handle only the first crash detected */
+> >>>>>                   mutex_unlock(&rproc->lock);
+> >>>>> +         /*
+> >>>>> +          * RPROC_OFFLINE state indicate there is no recovery process
+> >>>>> +          * is in progress and no chance to have pm_relax in place.
+> >>>>> +          * Because when recovering from crash, rproc->lock is held and
+> >>>>> +          * state is RPROC_CRASHED -> RPROC_OFFLINE -> RPROC_RUNNING,
+> >>>>> +          * and then unlock rproc->lock.
+> >>>>> +          * RPROC_OFFLINE is only an intermediate state in recovery
+> >>>>> +          * process.
+> >>>>> +          */
+> >>>>> +         if (rproc->state == RPROC_OFFLINE)
+> >>>>> +                 pm_relax(rproc->dev.parent);
+> >>>>>                   return;
+> >>>>>           }
+> >>>>> --
+> >>>>> 2.7.4
+> >>>>>
+> >>>
+> >>>
+> >>> --
+> >>> Thx and BRs,
+> >>> Aiqun(Maria) Yu
+>
+>
+> --
+> Thx and BRs,
+> Aiqun(Maria) Yu
