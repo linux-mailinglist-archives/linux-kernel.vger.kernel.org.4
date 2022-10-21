@@ -2,97 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C38FB607CD8
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 18:53:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D10A607CC0
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 18:52:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230260AbiJUQxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 12:53:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51224 "EHLO
+        id S230522AbiJUQwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 12:52:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231237AbiJUQxX (ORCPT
+        with ESMTP id S230156AbiJUQwF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 12:53:23 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A079628C33C
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:53:10 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id b4so5956799wrs.1
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:53:09 -0700 (PDT)
+        Fri, 21 Oct 2022 12:52:05 -0400
+Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1443628511B;
+        Fri, 21 Oct 2022 09:52:03 -0700 (PDT)
+Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
+        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id 01ADA2201;
+        Fri, 21 Oct 2022 16:49:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cF5Zvj+Kzci/ADALngKgDuePH0r1ubNxIDC6FLO5nXI=;
-        b=TZiNQE3XOaoDBX4SGKjXJnsnREkA/Fg8Z+lZBP851P+khMnJWvm5pwsMg3gW4Nu+kv
-         yi/ilKE+4pQpSnPy9Fqi3UUUtvr51QKSuFo69OcDKVQGSoxwDcWdaPiRsz1Tf7rfMpLU
-         eSU01OyMfnU2y5Fm3UP+jUqRCP1NJqMOfztW+MqBsJmkihO/bfqs4rQYiflQxt4cZycI
-         aZ/rrAe7sX9qLQgXYnJ1LEFNH598L8hifJMiav5DxAfiLEhH1JLlcO8BhWxwxN+eBXz6
-         xjhygwwSpq2uGXjZmTrKRdgCY1EZ0ZqhQjjIGWht3MZuYoTiDBR67Y6KRYLC0a+ma8B3
-         n9Fg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cF5Zvj+Kzci/ADALngKgDuePH0r1ubNxIDC6FLO5nXI=;
-        b=gH9dKD3yrMM7uRRXQTB1dkTqytvVzDouiIvVCNWezrcEMHg8B38iSnCEYOtkbskigH
-         PmnthFXFHp4P+R3AjnK4N2eS7Va8iQIJ0i9y/Jzns9GcUMDHzxiTgVtAglBfOE/AkrTM
-         ZFlS3PGak9XeBzgOmOJC60dCEfqOAnU33Z3Vgyg/MM5dX/ZgLgrNstYkjh5blo5APAJT
-         tGcGsqlKRDkkCNibryDqDHxH9IYWmbEdla9ajCyLqUMQILn1cxRbBTq59qI4RT1Wf2K8
-         T9wTiIMQdq3tOtiRFwis0VGyLdI1zbWsNI8NiZpYydmg033o7ao5n9NaB8GNZ9+u7HHG
-         OfOw==
-X-Gm-Message-State: ACrzQf1nvxsUKtq/lPjdv8VPN+/oF+M9v+AbbQvKwdzW5kRG6a551PZs
-        Fzg5tK2iDNyTP09nk4HVHoNCMA==
-X-Google-Smtp-Source: AMsMyM7RMk9WjIX1PpFSeoepvlaVRwPBQ71LL5x0bYoQ1ZwIPDc+gwEiUrmdSb4AwWh7mL7wo6Fb0w==
-X-Received: by 2002:a05:6000:144c:b0:230:816f:3167 with SMTP id v12-20020a056000144c00b00230816f3167mr12832842wrx.532.1666371185752;
-        Fri, 21 Oct 2022 09:53:05 -0700 (PDT)
-Received: from localhost.localdomain ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id n14-20020a5d400e000000b0022ae401e9e0sm19541773wrp.78.2022.10.21.09.53.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Oct 2022 09:53:04 -0700 (PDT)
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-To:     broonie@kernel.org
-Cc:     lgirdwood@gmail.com, bgoswami@quicinc.com, perex@perex.cz,
-        tiwai@suse.com, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH v2 2/9] ASoC: qdsp6: audioreach: remove unused connection_list
-Date:   Fri, 21 Oct 2022 17:52:00 +0100
-Message-Id: <20221021165207.13220-3-srinivas.kandagatla@linaro.org>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20221021165207.13220-1-srinivas.kandagatla@linaro.org>
-References: <20221021165207.13220-1-srinivas.kandagatla@linaro.org>
+        d=paragon-software.com; s=mail; t=1666370969;
+        bh=ZCNllPC/IP07/I4v8msKmPt1Eyvxq647ljuvf/bKJqE=;
+        h=Date:Subject:From:To:CC:References:In-Reply-To;
+        b=BCNrNY4SZycSHjYIYtcSk/wdH/VOM2dKBRiLSxnClHBh58xSKhUY8mrLfMAGPcYoc
+         O/3wJJsNoD+NQehqoADpq2Q7EACnrLf0QSRZOezV/fhpuxjGMyI5NJNOGtPmm66Orh
+         2Bodl6Ed1N/pn5CY1UD0pYXONoaX53RcN1f1xpnw=
+Received: from [172.30.8.65] (172.30.8.65) by
+ vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Fri, 21 Oct 2022 19:52:01 +0300
+Message-ID: <21a9d399-f3bf-6e57-0f38-cdbf68fdad58@paragon-software.com>
+Date:   Fri, 21 Oct 2022 19:52:01 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: [PATCH 2/4] fs/ntfs3: Fix sparse problems
+Content-Language: en-US
+From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+To:     <ntfs3@lists.linux.dev>
+CC:     <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>
+References: <9a7d08c2-e503-ac1d-1621-20369c073530@paragon-software.com>
+In-Reply-To: <9a7d08c2-e503-ac1d-1621-20369c073530@paragon-software.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.30.8.65]
+X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
+ vdlg-exch-02.paragon-software.com (172.30.1.105)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove unused connection_list parameter.
+Fixing various problems, detected by sparse.
 
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 ---
- sound/soc/qcom/qdsp6/audioreach.h | 1 -
- 1 file changed, 1 deletion(-)
+  fs/ntfs3/attrib.c  |  7 ++++---
+  fs/ntfs3/dir.c     |  4 ++--
+  fs/ntfs3/frecord.c |  3 +--
+  fs/ntfs3/namei.c   | 13 ++++++-------
+  4 files changed, 13 insertions(+), 14 deletions(-)
 
-diff --git a/sound/soc/qcom/qdsp6/audioreach.h b/sound/soc/qcom/qdsp6/audioreach.h
-index 3ee8bfcd0121..36779ad1952d 100644
---- a/sound/soc/qcom/qdsp6/audioreach.h
-+++ b/sound/soc/qcom/qdsp6/audioreach.h
-@@ -595,7 +595,6 @@ struct audioreach_graph_info {
- 	int id;
- 	uint32_t num_sub_graphs;
- 	struct list_head sg_list;
--	struct list_head connection_list;
- };
- 
- struct audioreach_sub_graph {
+diff --git a/fs/ntfs3/attrib.c b/fs/ntfs3/attrib.c
+index 63169529b52c..b2f54fab4001 100644
+--- a/fs/ntfs3/attrib.c
++++ b/fs/ntfs3/attrib.c
+@@ -2308,7 +2308,8 @@ int attr_insert_range(struct ntfs_inode *ni, u64 vbo, u64 bytes)
+  
+  		if (!attr_b->non_res) {
+  			/* Still resident. */
+-			char *data = Add2Ptr(attr_b, attr_b->res.data_off);
++			char *data = Add2Ptr(attr_b,
++					     le16_to_cpu(attr_b->res.data_off));
+  
+  			memmove(data + bytes, data, bytes);
+  			memset(data, 0, bytes);
+@@ -2400,8 +2401,8 @@ int attr_insert_range(struct ntfs_inode *ni, u64 vbo, u64 bytes)
+  	if (vbo <= ni->i_valid)
+  		ni->i_valid += bytes;
+  
+-	attr_b->nres.data_size = le64_to_cpu(data_size + bytes);
+-	attr_b->nres.alloc_size = le64_to_cpu(alloc_size + bytes);
++	attr_b->nres.data_size = cpu_to_le64(data_size + bytes);
++	attr_b->nres.alloc_size = cpu_to_le64(alloc_size + bytes);
+  
+  	/* ni->valid may be not equal valid_size (temporary). */
+  	if (ni->i_valid > data_size + bytes)
+diff --git a/fs/ntfs3/dir.c b/fs/ntfs3/dir.c
+index fb438d604040..063a6654199b 100644
+--- a/fs/ntfs3/dir.c
++++ b/fs/ntfs3/dir.c
+@@ -26,8 +26,8 @@ int ntfs_utf16_to_nls(struct ntfs_sb_info *sbi, const __le16 *name, u32 len,
+  
+  	if (!nls) {
+  		/* UTF-16 -> UTF-8 */
+-		ret = utf16s_to_utf8s(name, len, UTF16_LITTLE_ENDIAN, buf,
+-				      buf_len);
++		ret = utf16s_to_utf8s((wchar_t *)name, len, UTF16_LITTLE_ENDIAN,
++				      buf, buf_len);
+  		buf[ret] = '\0';
+  		return ret;
+  	}
+diff --git a/fs/ntfs3/frecord.c b/fs/ntfs3/frecord.c
+index 8a741706c7a5..a7aed31e7c93 100644
+--- a/fs/ntfs3/frecord.c
++++ b/fs/ntfs3/frecord.c
+@@ -1670,8 +1670,7 @@ struct ATTR_FILE_NAME *ni_fname_name(struct ntfs_inode *ni,
+  		goto next;
+  
+  	fns = (struct le_str *)&fname->name_len;
+-	if (ntfs_cmp_names(uni->name, uni->len, fns->name, fns->len, NULL,
+-			       false))
++	if (ntfs_cmp_names_cpu(uni, fns, NULL, false))
+  		goto next;
+  
+  	return fname;
+diff --git a/fs/ntfs3/namei.c b/fs/ntfs3/namei.c
+index 315763eb05ff..ff76389475ad 100644
+--- a/fs/ntfs3/namei.c
++++ b/fs/ntfs3/namei.c
+@@ -427,7 +427,8 @@ static int ntfs_d_compare(const struct dentry *dentry, unsigned int len1,
+  	unsigned int len2 = name->len;
+  	unsigned int lm = min(len1, len2);
+  	unsigned char c1, c2;
+-	struct cpu_str *uni1, *uni2;
++	struct cpu_str *uni1;
++	struct le_str *uni2;
+  
+  	/* First try fast implementation. */
+  	for (;;) {
+@@ -468,8 +469,9 @@ static int ntfs_d_compare(const struct dentry *dentry, unsigned int len1,
+  
+  	uni2 = Add2Ptr(uni1, 2048);
+  
+-	ret = ntfs_nls_to_utf16(sbi, name->name, name->len, uni2, NTFS_NAME_LEN,
+-				UTF16_HOST_ENDIAN);
++	ret = ntfs_nls_to_utf16(sbi, name->name, name->len,
++				(struct cpu_str *)uni2, NTFS_NAME_LEN,
++				UTF16_LITTLE_ENDIAN);
+  	if (ret < 0)
+  		goto out;
+  
+@@ -478,10 +480,7 @@ static int ntfs_d_compare(const struct dentry *dentry, unsigned int len1,
+  		goto out;
+  	}
+  
+-	ret = !ntfs_cmp_names(uni1->name, uni1->len, uni2->name, uni2->len,
+-			      sbi->upcase, false)
+-		      ? 0
+-		      : 1;
++	ret = !ntfs_cmp_names_cpu(uni1, uni2, sbi->upcase, false) ? 0 : 1;
+  
+  out:
+  	__putname(uni1);
 -- 
-2.21.0
+2.37.0
+
 
