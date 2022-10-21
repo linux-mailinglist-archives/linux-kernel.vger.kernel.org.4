@@ -2,232 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD1A9608232
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 01:48:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD8E960823E
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 01:50:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229755AbiJUXsm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 19:48:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35708 "EHLO
+        id S229894AbiJUXuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 19:50:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbiJUXsi (ORCPT
+        with ESMTP id S229833AbiJUXto (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 19:48:38 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2055.outbound.protection.outlook.com [40.107.94.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C1BE24E402
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 16:48:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZbxxYzbj4iBWml1cmNJyvTiy2ed+DBTiWEQWfSGnj7IHD/hLcBlK1ksKY+4KFKKerDy6yeBzt1iQD8EpUeos9XWOERyP6xpRYrpFUMDI4g0JscPe8iZ19crnnEReRmDVbI3nQGjxfTdbOJybGX8IbaUENvBnHrndx//6QowRs31ozmFmvicUwWZ3y4rqzkPWKZWsr//4j40QZm9aOocPG5BWjGh8hFOO8XqUCO3bC2d2JOTuK0SPssfYgXsR4W43ySmjKxr2SIo8seNBBcZ/mwiT8A/4KotNpyGQ9IeD96eGry/dtM7ChKDWuehvZadWyWe0gh4PH57vLWWhvVFiKA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hPT+gWJ3KCHw4Umqffy2WWdonR4AwcF1DE2qSsnIkDY=;
- b=KsZNpGLswcYpHjntGCmR+FBiNBAJgvj1g/fUkaKHVp8JEGqZVmqXeWj3sJLwUg4aMv+VF8cEJ1NjxY1FaG13MR7pof0Mg1siu8qdy2y9dlathg2mAJLP7YJBvZBwcTqFtLMi3KRsurz+OEH7btfmXHuVLW/xuMp2Miz4PLyWDjt+HwJGBFFDi+rsbWOuywPkaqTwHyJwAlGlk9ADKcfduRa6DsxLQIsw0ZHsBoNLWyTQnej32XkNTXBAoX3kni2phcdOn8kBQcdr/gYSCygBeBxsoNLRpAxB5vP5RSZNX0gs/pdqZcN8m4CWOhNTYG/5rJDVM8FiZyZ6LpRy1oM2Yg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hPT+gWJ3KCHw4Umqffy2WWdonR4AwcF1DE2qSsnIkDY=;
- b=cgSiwDMdkGO9pYYq3PEC8gzldMPy5uUCZDbIzq2xCXNJhWz0ugg4aqKpEmED0wC9lk7fMBeL6O/mAxxTzLcUl/g5KlwTt5k0B8pl98WgiKAWuiILpV28n5RtA/Unc7k8WDIc5zJd34sqXRA4phPiRuyL0SU9aNUPkGb4JAwOMn4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM6PR12MB3370.namprd12.prod.outlook.com (2603:10b6:5:38::25) by
- CH0PR12MB5075.namprd12.prod.outlook.com (2603:10b6:610:e2::15) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5723.35; Fri, 21 Oct 2022 23:48:35 +0000
-Received: from DM6PR12MB3370.namprd12.prod.outlook.com
- ([fe80::d309:77d2:93d8:2425]) by DM6PR12MB3370.namprd12.prod.outlook.com
- ([fe80::d309:77d2:93d8:2425%7]) with mapi id 15.20.5723.035; Fri, 21 Oct 2022
- 23:48:35 +0000
-Message-ID: <3a068724-8fb3-920e-a529-9a232b6830a9@amd.com>
-Date:   Fri, 21 Oct 2022 19:48:32 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH 00/11] fix memory leak while kset_register() fails
-Content-Language: en-CA
-To:     Yang Yingliang <yangyingliang@huawei.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, qemu-devel@nongnu.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-erofs@lists.ozlabs.org, ocfs2-devel@oss.oracle.com,
-        linux-mtd@lists.infradead.org, amd-gfx@lists.freedesktop.org,
-        rafael@kernel.org, somlo@cmu.edu, mst@redhat.com,
-        jaegeuk@kernel.org, chao@kernel.org, hsiangkao@linux.alibaba.com,
-        huangjianan@oppo.com, mark@fasheh.com, jlbec@evilplan.org,
-        joseph.qi@linux.alibaba.com, akpm@linux-foundation.org,
-        alexander.deucher@amd.com, richard@nod.at, liushixin2@huawei.com
-References: <20221021022102.2231464-1-yangyingliang@huawei.com>
- <d559793a-0ce4-3384-e74e-19855aa31f31@amd.com> <Y1IwLOUGayjT9p6d@kroah.com>
- <0591e66f-731a-5f81-fc9d-3a6d80516c65@huawei.com>
- <Y1JZ9IUPL6jZIQ8E@kroah.com>
- <1f3aa2ac-fba6-dc7a-d01d-7dd5331c8dc5@huawei.com>
-From:   Luben Tuikov <luben.tuikov@amd.com>
-In-Reply-To: <1f3aa2ac-fba6-dc7a-d01d-7dd5331c8dc5@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: YT2PR01CA0018.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:38::23) To DM6PR12MB3370.namprd12.prod.outlook.com
- (2603:10b6:5:38::25)
+        Fri, 21 Oct 2022 19:49:44 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A2283685A
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 16:49:42 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id m14-20020a17090a3f8e00b00212dab39bcdso1592572pjc.0
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 16:49:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8BvgID2Mlp1LOZxFRRSQflp2rM/AmsvDLSJ/CidGjBk=;
+        b=SipCePk/H4Ki27ow1q+KXNmCpWZJrBEfUawrVZrBsrf5flcWPAmOAbGluKxY12Iw/G
+         bVtX/aW+LoBt1hQNS5jlDmWnBHFYNm84mGdiUKexkqYKjorbdT9UX3ZNLwsHmrTBQPvx
+         YQ0XzkJG+Y1al9YY/M3wkrM4PXev+5RvO+WJc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8BvgID2Mlp1LOZxFRRSQflp2rM/AmsvDLSJ/CidGjBk=;
+        b=3CEpq35m8RYy4K43USiXnhRfGJTHwvDvrV0BLybJFySnCSwoCZZhrp1HCSrbfKPNXl
+         xwCSJnQA/w/LdhmyHzJ/OkvcGCBcfSX7qUTURoyndD7k3rh5SVuD3v9iCIchxFTNu2MX
+         DQvdf8hErwympfZ/0Dyza0Pk0fcUEDLSRrTJIjlWUefEptjYGfFY8O4QsiETw27oEKPq
+         yunahsRTkfDHtwzcgfWYVCGmr8jHvPaj7menf9rc5hwTsCbKrKnRABJOpnbwf8DuXr+g
+         pRVoiIwumtCMQH4tBeFarWFtYhX1nO+cannvvcG9kqGlTIgTWp/R0aCiyINzrwbRwBwz
+         MujA==
+X-Gm-Message-State: ACrzQf0pTvameBkY9Ah7ccTU3111WheqzzGKwgHqjXUdBMNd6ZUtpszc
+        imjsnWCRa4e2xGV+t+cHw2AffQ==
+X-Google-Smtp-Source: AMsMyM4/tYwwOvCUIhmt8St2bueqQMk53krDt6Pxm+2ScI1STCM9fObrX/gRa0a5O/cIC5IEGbZKew==
+X-Received: by 2002:a17:90a:e297:b0:212:dc30:7fed with SMTP id d23-20020a17090ae29700b00212dc307fedmr2146955pjz.90.1666396181692;
+        Fri, 21 Oct 2022 16:49:41 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id n21-20020a63ee55000000b00439d071c110sm13864837pgk.43.2022.10.21.16.49.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Oct 2022 16:49:40 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     "David S. Miller" <davem@davemloft.net>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Menglong Dong <imagedong@tencent.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH v4] skbuff: Proactively round up to kmalloc bucket size
+Date:   Fri, 21 Oct 2022 16:49:36 -0700
+Message-Id: <20221021234713.you.031-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR12MB3370:EE_|CH0PR12MB5075:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8d5ce8e3-f289-45b3-cd42-08dab3bec48f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: sXe3UHoS1sNO/at/vFqnPnaMxoDW/6R4DFzmSexR5iIlSmQFdACrzZZG+TvCrmzSHd5HFzKM0xwSAAF5wLmWo9JYAiMgledc7g1Y2fidUE8ccSsKYdiepEd4f+Dsw6uElglxFrGUSSHUgI6qLclAQ7A+icUwoUrTb0HDRIFJ1uSlwnxNqufVhQFD3Ry5i6WSz+j5xe5Kqs5u0//kRRVew0m3JCO/kRgcfBaz6DCFPQNks1M7gbn1qAZqnSP4Nl22HYwKTJWHhODgJr/+7nblnuEPhpfx184XeJwEgBvyYN5QMBvJyftWujuXILLjCjb15WOJw6MnjL/mjofDxpdbWmj3Vybs+UpzOxQTuzrsFhvMQQTdrTYQ1XVuIICav7Ikly7ppsLAuEjgLTy8B+VBpgijtl2muz3PaWGgJIoA6VctQ9AKVrLGNN/+1ueOGEQXEHL9OOdfVAI1WKyqRWLJ0MsVVCHUv8T4dL0x45EUU+Pr9eVEbzgI3NkqVTAp5H6FMhYbFOM9w8yNePuDgEzm5m9rj3PnYCpxxV8/5rWj5D45dzL+3E8u8+GfGHx2QRdKUfAtbY5bTBXuC2g0i34A9bLhkSpNtnNyTnAY7AW3+8fP1uLIlFDJVtuCJPqwgQxsQI8nruEYm0sdOV1rix6rbRGocvdJjfWfjJ0biuDvLobqa87qfXAOC9Furja1JgCheMvld+FP70I/0D1uyIEXi6D2O5K8oQcmqQ4UsL6Ej8lHxg0ZgZgUqUum7rez7OKpW2ndu8ud2xXZopkozraKPZHQEPvJcwh3TTmTROqtdbWIUY/AOM6Rwvm7WVSOmE1nzNyKFKnTPoJsp4WKbfcAog==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3370.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(366004)(39860400002)(376002)(346002)(396003)(451199015)(36756003)(66476007)(4326008)(31696002)(41300700001)(6512007)(53546011)(8676002)(26005)(66556008)(7416002)(5660300002)(86362001)(66946007)(45080400002)(8936002)(966005)(6506007)(44832011)(478600001)(6666004)(6486002)(110136005)(316002)(38100700002)(2616005)(186003)(4001150100001)(31686004)(2906002)(66899015)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TUJjUmYwaC9UMjdwNHo0YTFsejUzRWJvL0poSEUzVEZ3VzdYZU9kQkxkMDRn?=
- =?utf-8?B?ZEhjVGRUOHhEK2xLQ3p1a2k2aGkzdU5HbkxmbGhQakZDNHQrc01YN04yWEsw?=
- =?utf-8?B?VnJzalNmM0hCSlU1dXppOGh3MHpFT2tEeTF3NW9tdmo3NUNyWllLOFRKeGdj?=
- =?utf-8?B?MFBRbEYrVjZPTTRDRmdmUWVRbjlhM3hMc1p3N09GWWgzTVNRR1JtanJpTjlw?=
- =?utf-8?B?d29wdFJhZ0lhVmRJNjdBdHBZeUhNZ0t6MVRSMk5DWDRoajd0dGR6bDFWOS9s?=
- =?utf-8?B?LzZUNmh5TlZrNWZCU2lPaEFlNi9meDJzNjVpOHllRDRnQ3BaeC96YWRvbVhw?=
- =?utf-8?B?S0UxNnpISUk2VHhCN0xIUFhTVTk2L0FNY0hXSkZRbHNQRWsrZDhOaGtJUXlk?=
- =?utf-8?B?elYrWVZaMStrN0oybGdhL2lvMm1BSWd2NVlZOTl4OG5aejhvVnI5SGdKMThr?=
- =?utf-8?B?eEY3aDNWVHdmSThPRkY1eHVKOHdQVGVzNWIzVlZOMFFwR2pOYWJSRks4eWJi?=
- =?utf-8?B?Q3BldnBZSmNQajFCWkJ0aDlBM3NGdlNQWWFWMFBSdk45cHZVL2NTQUJVTi9M?=
- =?utf-8?B?MW9KL0NYck9pL3JKUXFOZjlMMUhhN1dUZDFSd2lqVmEyU1FVMzZIenp3REw2?=
- =?utf-8?B?T1pVaXdlcDBYdVNhRnpXNUpCdUdTMmZ4SFZZMk9URmFUVitTbGhwM0duTnVl?=
- =?utf-8?B?ZXNjQkhmRDVKNExqcVNMUXBDcUdmNGZuaVlrdkpTeFFyaXp1Rk5PbGMwREdB?=
- =?utf-8?B?SXlMYzBSOVh3ZVRObHlwNzJtaENHR1d4NlpBYnc4bDdvRGgyRWIwZWpPWk5B?=
- =?utf-8?B?Zkc3elJLRDBrTkNKekVab1hDNWlZVGNLRitZVHBnYmNCdHc2T0ZBTExwVDlM?=
- =?utf-8?B?QmFOOTBmUjk5S29jMHhwd0dudGhKV0ZkRkhCWGlqQnliNXREN1lLK3phejFN?=
- =?utf-8?B?Vjc2Vk1ZUWM0WTdER3VpVTRQVXZQTG96b3dJVEh4bTh5ejZ5eTEvWkcyZ1RL?=
- =?utf-8?B?ZG1tdWVPN2JFWVZYOWFDSzZ1emhnNFRpdTJVTlM5eHdjK3FXa3RoVHdtVURi?=
- =?utf-8?B?R0UxZXBLR0FmcU1LK0tGRHVmd2M1bVM2dys4bStTMDZ4NFM0QlBQRnVVMzZG?=
- =?utf-8?B?YUNpblNpbE5HcU5JcGtxR0JmRC8vVnFScXN2b1dJRHNXNUc1RzhkUm9aYWtY?=
- =?utf-8?B?TVF0MHRjTVM1ZTJRbkRDaTYrSThMZm4wOStmQjI2ZFVzTlREbnZhbEU2Nnpt?=
- =?utf-8?B?ekxucVovbHozZVhUdjVCWGJXWU56OXpZVklqMnM5cnBGbkpKaTNhV0JjQWMx?=
- =?utf-8?B?bUUvRWxjYVdsTHFHR1RRYVR1WWVoR3NiaXk3QW1GYkRYSjJkRjJlT2tuTmh4?=
- =?utf-8?B?MWRIRUprUlZGOVRkMXpXNGMvY3licy9ISXlZdS81V3RsbVo5eHJnemx6UXpK?=
- =?utf-8?B?MVI5dE9OS2ZwUEhxc0J2dENFZ1hJLzhhZFJhVmV3eXYvYmU0ZnRYd0Q3TDBi?=
- =?utf-8?B?OG5USC9lclpsMVVvdUdXVlZYTFl1b1YyNnZLN1paS0NZT1l2ODdWQlJlcDlS?=
- =?utf-8?B?QlI3VWowRlZIUzk0YmtDUHFuSHZVblJWR3V0K0xHcnF5VzBvTnVQSldaelZu?=
- =?utf-8?B?RmNnajZSMzlva0pHVm44UEpYSWpzcnBtWU1ENnBGb1Nmd29BVWlad0g4Y2VC?=
- =?utf-8?B?eUpLUHBFWkt2UG03UjR2akJQVC9lT3Y1NWw5VTVlU2NCUFEveXRKbkFUcktR?=
- =?utf-8?B?Ym95U1VBUzJnYzMxaEc3b3hLdHh0WDdoYUIydnE4ODlpVmdJS0RUb1huL2dX?=
- =?utf-8?B?QjVJR3M2dFJMWWV6YS9rMTRxR1VrQnQ3OEE4dWhFRXNDUjk3LzlZWTI4MEhP?=
- =?utf-8?B?V3NyTFJnYnRxMWNwbmVuS3pHQ3VPcmhTOENQZXZOUUVGVmVwTHBYcWt2blVB?=
- =?utf-8?B?MDNaRGNFU1JxWEpZYTY1UWlTcG5jWDJ2WDhSRVhVUHhQWjhrR3pSR281VEI2?=
- =?utf-8?B?SS9nalBETUx4ZHdnRTBsbGJGRUh2aXFzMVBtOW16aGNRSkx3S1pHR3puMDdX?=
- =?utf-8?B?UFdHTTFDZVd5L3d4OXZXUVBObE1NNWZrODlpUUpaQUdpR0NMV3hWZEdVdDZ3?=
- =?utf-8?Q?070NBE4PkkWKbQB3jHPo7pNAh?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8d5ce8e3-f289-45b3-cd42-08dab3bec48f
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3370.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Oct 2022 23:48:35.0356
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 5guKvYv7nE6SpmZugR0KPfIUxlvHAtSD1kV2E8jSSEfFB+VJZJWlbm09NsfLoWh+
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5075
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5254; h=from:subject:message-id; bh=mBqppqtvL2/WoVg/f5+5q7YdX/5rZQrDaP9jvq5SNds=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjUzAQj4YnF7sfaNOXHp6h942Zp2pVBhavIZsxhufy hDpdcbqJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY1MwEAAKCRCJcvTf3G3AJlswD/ 9Y3r9CwzM02Mmy50J+PYZcLUgI4ibXyNuMNwupIkwi6KUI2W9fvMVSawsAkM5b/x+M1CWBOI0Y8Koe YtS6rlW11Th17D7xxNhqDh2MViFxJSFl9x1j5zs7OR895024SdmRLS/eT+GonMGTWn65cJoNCutmED 7tuxvlsf4mYqHJkQT/f6ewQ18P9JVGQhhu+aR1dFaiEAHE/2WuZflnqMP6crdv/DEfH2pc6kwKXjy/ 97qL1b2eKrjXbKQX3EydGxGUPRVD0ceddrFUGftCdz0J2H4sZHhFMCQRzbcCrJDNSiAAIVqdbyvrvI Jt+jYK4+8/K5qUobuq2jd85Yrp9gyfx7TX5TmMMWPq9ylU3VD8rCk3x//Wcf0+gJH8QzVFEbPas4OS XK8PyLEgI+uqZZhyHZCbo1hND4yu4lSZfeoRYp3nn3vyqOzaX6+CAPOJUD7+Yl4FSBZZa2EwDVkwKe FfNAS6xx79PI5Fvkyu2+hz6JPiOauASQTiFUe9wC/G+drcJFepnqlm8uPEqlCf02NGzyRrQUnkzDL7 rCEZs2bEF/laMbAR8K1Jq6vke2ET07GdEDOYiheaSE0SM6XfAq5rcn9hTReprIdJWKY6qJsB6986Qv nkOewbajlHJi/78QLUwtnxa+p096QwNqqhJpAAolsFrvQVy2XY5vLah1Snnw==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-21 05:12, Yang Yingliang wrote:
-> 
-> On 2022/10/21 16:36, Greg KH wrote:
->> On Fri, Oct 21, 2022 at 04:24:23PM +0800, Yang Yingliang wrote:
->>> On 2022/10/21 13:37, Greg KH wrote:
->>>> On Fri, Oct 21, 2022 at 01:29:31AM -0400, Luben Tuikov wrote:
->>>>> On 2022-10-20 22:20, Yang Yingliang wrote:
->>>>>> The previous discussion link:
->>>>>> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Flkml%2F0db486eb-6927-927e-3629-958f8f211194%40huawei.com%2FT%2F&amp;data=05%7C01%7Cluben.tuikov%40amd.com%7C26ed7dc8053f4793d54d08dab344731e%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C638019403819761348%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=PD93EC%2FcBmkfSBbdmK8FNtXhqS%2FKmmcByfkx5lqQfpY%3D&amp;reserved=0
->>>>> The very first discussion on this was here:
->>>>>
->>>>> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fwww.spinics.net%2Flists%2Fdri-devel%2Fmsg368077.html&amp;data=05%7C01%7Cluben.tuikov%40amd.com%7C26ed7dc8053f4793d54d08dab344731e%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C638019403819761348%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=k0fTSmAPTnLFCe4zN4z%2FY1Z7CvwO4gR2vgj%2FLH%2FSRRk%3D&amp;reserved=0
->>>>>
->>>>> Please use this link, and not the that one up there you which quoted above,
->>>>> and whose commit description is taken verbatim from the this link.
->>>>>
->>>>>> kset_register() is currently used in some places without calling
->>>>>> kset_put() in error path, because the callers think it should be
->>>>>> kset internal thing to do, but the driver core can not know what
->>>>>> caller doing with that memory at times. The memory could be freed
->>>>>> both in kset_put() and error path of caller, if it is called in
->>>>>> kset_register().
->>>>> As I explained in the link above, the reason there's
->>>>> a memory leak is that one cannot call kset_register() without
->>>>> the kset->kobj.name being set--kobj_add_internal() returns -EINVAL,
->>>>> in this case, i.e. kset_register() fails with -EINVAL.
->>>>>
->>>>> Thus, the most common usage is something like this:
->>>>>
->>>>> 	kobj_set_name(&kset->kobj, format, ...);
->>>>> 	kset->kobj.kset = parent_kset;
->>>>> 	kset->kobj.ktype = ktype;
->>>>> 	res = kset_register(kset);
->>>>>
->>>>> So, what is being leaked, is the memory allocated in kobj_set_name(),
->>>>> by the common idiom shown above. This needs to be mentioned in
->>>>> the documentation, at least, in case, in the future this is absolved
->>>>> in kset_register() redesign, etc.
->>>> Based on this, can kset_register() just clean up from itself when an
->>>> error happens?  Ideally that would be the case, as the odds of a kset
->>>> being embedded in a larger structure is probably slim, but we would have
->>>> to search the tree to make sure.
->>> I have search the whole tree, the kset used in bus_register() - patch #3,
->>> kset_create_and_add() - patch #4
->>> __class_register() - patch #5,  fw_cfg_build_symlink() - patch #6 and
->>> amdgpu_discovery.c - patch #10
->>> is embedded in a larger structure. In these cases, we can not call
->>> kset_put() in error path in kset_register()
->> Yes you can as the kobject in the kset should NOT be controling the
->> lifespan of those larger objects.
-> Read through the code the only leak in this case is the name, so can we 
-> free it
-> directly in kset_register():
-> 
-> --- a/lib/kobject.c
-> +++ b/lib/kobject.c
-> @@ -844,8 +844,11 @@ int kset_register(struct kset *k)
-> 
->          kset_init(k);
->          err = kobject_add_internal(&k->kobj);
-> -       if (err)
-> +       if (err) {
-> +               kfree_const(k->kobj.name);
-> +               k->kobj.name = NULL;
->                  return err;
-> +       }
->          kobject_uevent(&k->kobj, KOBJ_ADD);
->          return 0;
->   }
+Instead of discovering the kmalloc bucket size _after_ allocation, round
+up proactively so the allocation is explicitly made for the full size,
+allowing the compiler to correctly reason about the resulting size of
+the buffer through the existing __alloc_size() hint.
 
-This may work, but absolutely needs to be documented since we don't
-exactly know how the name was allocated by the caller! FWIW, the caller
-may have set the name pointer to point to a static array of strings...
+This will allow for kernels built with CONFIG_UBSAN_BOUNDS or the
+coming dynamic bounds checking under CONFIG_FORTIFY_SOURCE to gain
+back the __alloc_size() hints that were temporarily reverted in commit
+93dd04ab0b2b ("slab: remove __alloc_size attribute from __kmalloc_track_caller")
 
-> or unset ktype of kobject, then call kset_put():
-> 
-> --- a/lib/kobject.c
-> +++ b/lib/kobject.c
-> @@ -844,8 +844,11 @@ int kset_register(struct kset *k)
-> 
->          kset_init(k);
->          err = kobject_add_internal(&k->kobj);
-> -       if (err)
-> +       if (err) {
-> +               k->kobj.ktype = NULL;
-> +               kset_put(k);
->                  return err;
-> +       }
->          kobject_uevent(&k->kobj, KOBJ_ADD);
->          return 0;
->   }
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: netdev@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: David Rientjes <rientjes@google.com>
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+v4: use kmalloc_size_roundup() in callers, not kmalloc_reserve()
+v3: https://lore.kernel.org/lkml/20221018093005.give.246-kees@kernel.org
+v2: https://lore.kernel.org/lkml/20220923202822.2667581-4-keescook@chromium.org
+---
+ net/core/skbuff.c | 50 +++++++++++++++++++++++------------------------
+ 1 file changed, 25 insertions(+), 25 deletions(-)
 
-That's a no. You shouldn't set the ktype to NULL--maybe the caller is relying on it...
+diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+index 651a82d30b09..77af430296e2 100644
+--- a/net/core/skbuff.c
++++ b/net/core/skbuff.c
+@@ -508,14 +508,14 @@ struct sk_buff *__alloc_skb(unsigned int size, gfp_t gfp_mask,
+ 	 */
+ 	size = SKB_DATA_ALIGN(size);
+ 	size += SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
+-	data = kmalloc_reserve(size, gfp_mask, node, &pfmemalloc);
++	osize = kmalloc_size_roundup(size);
++	data = kmalloc_reserve(osize, gfp_mask, node, &pfmemalloc);
+ 	if (unlikely(!data))
+ 		goto nodata;
+ 	/* kmalloc(size) might give us more room than requested.
+ 	 * Put skb_shared_info exactly at the end of allocated zone,
+ 	 * to allow max possible filling before reallocation.
+ 	 */
+-	osize = ksize(data);
+ 	size = SKB_WITH_OVERHEAD(osize);
+ 	prefetchw(data + size);
+ 
+@@ -1816,10 +1816,11 @@ EXPORT_SYMBOL(__pskb_copy_fclone);
+ int pskb_expand_head(struct sk_buff *skb, int nhead, int ntail,
+ 		     gfp_t gfp_mask)
+ {
+-	int i, osize = skb_end_offset(skb);
+-	int size = osize + nhead + ntail;
++	unsigned int osize = skb_end_offset(skb);
++	unsigned int size = osize + nhead + ntail;
+ 	long off;
+ 	u8 *data;
++	int i;
+ 
+ 	BUG_ON(nhead < 0);
+ 
+@@ -1827,15 +1828,16 @@ int pskb_expand_head(struct sk_buff *skb, int nhead, int ntail,
+ 
+ 	skb_zcopy_downgrade_managed(skb);
+ 
+-	size = SKB_DATA_ALIGN(size);
+-
+ 	if (skb_pfmemalloc(skb))
+ 		gfp_mask |= __GFP_MEMALLOC;
+-	data = kmalloc_reserve(size + SKB_DATA_ALIGN(sizeof(struct skb_shared_info)),
+-			       gfp_mask, NUMA_NO_NODE, NULL);
++
++	size = SKB_DATA_ALIGN(size);
++	size += SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
++	size = kmalloc_size_roundup(size);
++	data = kmalloc_reserve(size, gfp_mask, NUMA_NO_NODE, NULL);
+ 	if (!data)
+ 		goto nodata;
+-	size = SKB_WITH_OVERHEAD(ksize(data));
++	size = SKB_WITH_OVERHEAD(size);
+ 
+ 	/* Copy only real data... and, alas, header. This should be
+ 	 * optimized for the cases when header is void.
+@@ -6169,21 +6171,20 @@ static int pskb_carve_inside_header(struct sk_buff *skb, const u32 off,
+ 				    const int headlen, gfp_t gfp_mask)
+ {
+ 	int i;
+-	int size = skb_end_offset(skb);
++	unsigned int size = skb_end_offset(skb);
+ 	int new_hlen = headlen - off;
+ 	u8 *data;
+ 
+-	size = SKB_DATA_ALIGN(size);
+-
+ 	if (skb_pfmemalloc(skb))
+ 		gfp_mask |= __GFP_MEMALLOC;
+-	data = kmalloc_reserve(size +
+-			       SKB_DATA_ALIGN(sizeof(struct skb_shared_info)),
+-			       gfp_mask, NUMA_NO_NODE, NULL);
++
++	size = SKB_DATA_ALIGN(size);
++	size += SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
++	size = kmalloc_size_roundup(size);
++	data = kmalloc_reserve(size, gfp_mask, NUMA_NO_NODE, NULL);
+ 	if (!data)
+ 		return -ENOMEM;
+-
+-	size = SKB_WITH_OVERHEAD(ksize(data));
++	size = SKB_WITH_OVERHEAD(size);
+ 
+ 	/* Copy real data, and all frags */
+ 	skb_copy_from_linear_data_offset(skb, off, data, new_hlen);
+@@ -6288,22 +6289,21 @@ static int pskb_carve_inside_nonlinear(struct sk_buff *skb, const u32 off,
+ 				       int pos, gfp_t gfp_mask)
+ {
+ 	int i, k = 0;
+-	int size = skb_end_offset(skb);
++	unsigned int size = skb_end_offset(skb);
+ 	u8 *data;
+ 	const int nfrags = skb_shinfo(skb)->nr_frags;
+ 	struct skb_shared_info *shinfo;
+ 
+-	size = SKB_DATA_ALIGN(size);
+-
+ 	if (skb_pfmemalloc(skb))
+ 		gfp_mask |= __GFP_MEMALLOC;
+-	data = kmalloc_reserve(size +
+-			       SKB_DATA_ALIGN(sizeof(struct skb_shared_info)),
+-			       gfp_mask, NUMA_NO_NODE, NULL);
++
++	size = SKB_DATA_ALIGN(size);
++	size += SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
++	size = kmalloc_size_roundup(size);
++	data = kmalloc_reserve(size, gfp_mask, NUMA_NO_NODE, NULL);
+ 	if (!data)
+ 		return -ENOMEM;
+-
+-	size = SKB_WITH_OVERHEAD(ksize(data));
++	size = SKB_WITH_OVERHEAD(size);
+ 
+ 	memcpy((struct skb_shared_info *)(data + size),
+ 	       skb_shinfo(skb), offsetof(struct skb_shared_info, frags[0]));
+-- 
+2.34.1
 
-Regards,
-Luben
