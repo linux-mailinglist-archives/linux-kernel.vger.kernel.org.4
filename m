@@ -2,329 +2,366 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D28B3607D54
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 19:19:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D708C607D47
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 19:18:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231205AbiJURTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 13:19:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45742 "EHLO
+        id S230466AbiJURSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 13:18:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbiJURTE (ORCPT
+        with ESMTP id S229728AbiJURSa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 13:19:04 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B761AA25C;
-        Fri, 21 Oct 2022 10:19:01 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29LHIZW7068967;
-        Fri, 21 Oct 2022 12:18:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1666372715;
-        bh=3HkSD6gzkSr94PeFPVxDI7c4rRcKhoiN/vjBRFuON7c=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=Wmt7oL4Kf6FD0MFZpS6/iNbJh/ugGJxZr3Zp6v7CmYTM3q6QC6vW202gWEAZTTU1e
-         QbWJ2aEZ1Jy/RSsJnjETf33ViOIf5ljcZIAc7WEIME7mv9fkNPCX4PQQDzaz3+E6zr
-         5hO/zS02oEN42GnzVV7yY4na391VshycN/lkX7qY=
-Received: from DLEE110.ent.ti.com (dlee110.ent.ti.com [157.170.170.21])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29LHIZra069351
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 21 Oct 2022 12:18:35 -0500
-Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Fri, 21
- Oct 2022 12:18:35 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Fri, 21 Oct 2022 12:18:35 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29LHIYWi037382;
-        Fri, 21 Oct 2022 12:18:34 -0500
-From:   Rahul T R <r-ravikumar@ti.com>
-To:     <dri-devel@lists.freedesktop.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <tomi.valkeinen@ideasonboard.com>
-CC:     <andrzej.hajda@intel.com>, <narmstrong@baylibre.com>,
-        <robert.foss@linaro.org>, <jonas@kwiboo.se>,
-        <jernej.skrabec@gmail.com>, <airlied@linux.ie>, <daniel@ffwll.ch>,
-        <p.zabel@pengutronix.de>, <laurent.pinchart@ideasonboard.com>,
-        <linux-kernel@vger.kernel.org>, <jpawar@cadence.com>,
-        <sjakhade@cadence.com>, <mparab@cadence.com>, <a-bhatia1@ti.com>,
-        <devicetree@vger.kernel.org>, <vigneshr@ti.com>,
-        <lee.jones@linaro.org>, Rahul T R <r-ravikumar@ti.com>
-Subject: [PATCH v8 5/5] drm/bridge: cdns-dsi: Add support for J721E wrapper
-Date:   Fri, 21 Oct 2022 22:48:20 +0530
-Message-ID: <20221021171820.15984-6-r-ravikumar@ti.com>
-X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221021171820.15984-1-r-ravikumar@ti.com>
-References: <20221021171820.15984-1-r-ravikumar@ti.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 21 Oct 2022 13:18:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D923818A008
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 10:18:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 65FCC61F07
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 17:18:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98B88C433C1;
+        Fri, 21 Oct 2022 17:18:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666372707;
+        bh=f4ykmoUl/yCzeTxx58YqgRGeTCMZWNtlrEzV/yFU2ns=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=UZuExFF7uzhDCqLUe1rBq8gtssBbUvQVJhAdp2er4VrOSfKe1ReC3Sq2+Nh1Kv+o1
+         AUcsME3WRrAlBCkSVFucj3zWQdrLjdwE/NwmBgGvmZIqtLGbCqImjIsduSSTapxaGj
+         KK4VLFQwU5rgoTScVuuGtziW6IVO3R3ZkmfefA74umtrf17R2gp8/B6r8bV03oRaww
+         e8rUBA/mxa2zNHfJUJKGdDmfIUCcfF7HsuEdjiBCyvzCcj6YbdHIJliFzLw47ZrY23
+         v+PKmfTCoROU7J+y7/BnqYqsgtw++Qzlc+0mFn3f4R10txm5KEXNrvXgkzMFmrdgoF
+         AzoohjkU6qnbA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1olvf7-000aBi-Ay;
+        Fri, 21 Oct 2022 18:18:25 +0100
+Date:   Fri, 21 Oct 2022 18:18:24 +0100
+Message-ID: <86zgdpdrj3.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     firas ashkar <firas.ashkar@savoirfairelinux.com>
+Cc:     alex@digriz.org.uk, tglx@linutronix.de,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2] irqchip: add TS7800v1 fpga based controller driver
+In-Reply-To: <7b2ac9ae5f18e5272e52478c73da53a76cf9f2a2.camel@savoirfairelinux.com>
+References: <20221020141351.14829-1-firas.ashkar@savoirfairelinux.com>
+        <861qr1fs55.wl-maz@kernel.org>
+        <7b2ac9ae5f18e5272e52478c73da53a76cf9f2a2.camel@savoirfairelinux.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: firas.ashkar@savoirfairelinux.com, alex@digriz.org.uk, tglx@linutronix.de, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for wrapper settings for DSI bridge on
-j721e. Also set the DPI input to DPI0
+On Fri, 21 Oct 2022 17:19:02 +0100,
+firas ashkar <firas.ashkar@savoirfairelinux.com> wrote:
+>=20
+> On Fri, 2022-10-21 at 10:22 +0100, Marc Zyngier wrote:
+> > On Thu, 20 Oct 2022 15:13:51 +0100,
+> > Firas Ashkar <firas.ashkar@savoirfairelinux.com> wrote:
+> > >=20
+> > > 1. add TS-7800v1 fpga based irq controller driver, and
+> > > 2. add related memory and irq resources
+> > >=20
+> > > By default only mapped FPGA interrupts will be chained/multiplexed,
+> > > these
+> > > chained interrupts will then be available to other device drivers
+> > > to
+> > > request via the corresponding Linux IRQs.
+> > >=20
+> > > $ cat /proc/cpuinfo
+> > > processor=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0: 0
+> > > model name=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0: Feroceon rev 0 (v5l)
+> > > BogoMIPS=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0: 333.33
+> > > Features=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0: swp half th=
+umb fastmult edsp
+> > > CPU implementer=C2=A0: 0x41
+> > > CPU architecture: 5TEJ
+> > > CPU variant=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0: 0x0
+> > > CPU part=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0: 0x926
+> > > CPU revision=C2=A0=C2=A0=C2=A0=C2=A0: 0
+> > >=20
+> > > Hardware=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0: Technologic=
+ Systems TS-78xx SBC
+> > > Revision=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0: 0000
+> > > Serial=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0: 0=
+000000000000000
+> > > $
+> > >=20
+> > > $ cat /proc/interrupts
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 CPU0
+> > > =C2=A0 1:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 902=C2=A0 orion_i=
+rq=C2=A0=C2=A0=C2=A0=C2=A0 Level=C2=A0=C2=A0=C2=A0=C2=A0 orion_tick
+> > > =C2=A0 4:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 795=C2=A0 orion_i=
+rq=C2=A0=C2=A0=C2=A0=C2=A0 Level=C2=A0=C2=A0=C2=A0=C2=A0 ttyS0
+> > > =C2=A013:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 0=C2=
+=A0 orion_irq=C2=A0=C2=A0=C2=A0=C2=A0 Level=C2=A0=C2=A0=C2=A0=C2=A0 ehci_hc=
+d:usb2
+> > > =C2=A018:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 0=C2=
+=A0 orion_irq=C2=A0=C2=A0=C2=A0=C2=A0 Level=C2=A0=C2=A0=C2=A0=C2=A0 ehci_hc=
+d:usb1
+> > > =C2=A022:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 69=C2=A0 or=
+ion_irq=C2=A0=C2=A0=C2=A0=C2=A0 Level=C2=A0=C2=A0=C2=A0=C2=A0 eth0
+> > > =C2=A023:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 171=C2=A0 orion_i=
+rq=C2=A0=C2=A0=C2=A0=C2=A0 Level=C2=A0=C2=A0=C2=A0=C2=A0 orion-mdio
+> > > =C2=A029:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 0=C2=
+=A0 orion_irq=C2=A0=C2=A0=C2=A0=C2=A0 Level=C2=A0=C2=A0=C2=A0=C2=A0 mv_cryp=
+to
+> > > =C2=A031:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 2=C2=
+=A0 orion_irq=C2=A0=C2=A0=C2=A0=C2=A0 Level=C2=A0=C2=A0=C2=A0=C2=A0 mv_xor.0
+> > > =C2=A065:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 1=C2=
+=A0 ts7800-irqc=C2=A0=C2=A0 0 Edge=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ts-dmac-cp=
+upci
+> > > Err:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 0
+> > > $
+> > >=20
+> > > $ uname -a
+> > > Linux ts-7800 6.1.0-rc1 #2 PREEMPT Mon Oct 17 11:19:12 EDT 2022
+> > > armv5tel
+> > > =C2=A0GNU/Linux
+> > > $
+> > >=20
+> > > Signed-off-by: Firas Ashkar <firas.ashkar@savoirfairelinux.com>
+> > > ---
+> > >=20
+> > > Notes:
+> > > =C2=A0=C2=A0=C2=A0 Changes in V2
+> > > =C2=A0=C2=A0=C2=A0 * limit the commit message
+> >=20
+> > Well, there is still a lot of work to do. Most of this commit message
+> > could be reduced to a single paragraph:
+> >=20
+> > "Add support for FooBar IRQ controller usually found on Zorglub
+> > platform."
+> >=20
+> > The rest is plain obvious.
+> nack, commit message is fine as is!
 
-Signed-off-by: Rahul T R <r-ravikumar@ti.com>
----
- drivers/gpu/drm/bridge/cadence/Kconfig        | 10 ++++
- drivers/gpu/drm/bridge/cadence/Makefile       |  1 +
- .../gpu/drm/bridge/cadence/cdns-dsi-core.c    | 37 +++++++++++++-
- .../gpu/drm/bridge/cadence/cdns-dsi-core.h    | 13 +++++
- .../gpu/drm/bridge/cadence/cdns-dsi-j721e.c   | 51 +++++++++++++++++++
- .../gpu/drm/bridge/cadence/cdns-dsi-j721e.h   | 18 +++++++
- 6 files changed, 129 insertions(+), 1 deletion(-)
- create mode 100644 drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.c
- create mode 100644 drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.h
+Allow me to be the judge of that.
 
-diff --git a/drivers/gpu/drm/bridge/cadence/Kconfig b/drivers/gpu/drm/bridge/cadence/Kconfig
-index 8fbb46c66094..663a02d96420 100644
---- a/drivers/gpu/drm/bridge/cadence/Kconfig
-+++ b/drivers/gpu/drm/bridge/cadence/Kconfig
-@@ -36,3 +36,13 @@ config DRM_CDNS_DSI
- 	help
- 	  Support Cadence DPI to DSI bridge. This is an internal
- 	  bridge and is meant to be directly embedded in a SoC.
-+
-+if DRM_CDNS_DSI
-+
-+config DRM_CDNS_DSI_J721E
-+	bool "J721E Cadence DPI/DSI wrapper support"
-+	default y
-+	help
-+	  Support J721E Cadence DPI/DSI wrapper. This wrapper adds
-+	  support to select which DPI input to use for the bridge.
-+endif
-diff --git a/drivers/gpu/drm/bridge/cadence/Makefile b/drivers/gpu/drm/bridge/cadence/Makefile
-index e3d8e9a40784..4cffc8ff71c4 100644
---- a/drivers/gpu/drm/bridge/cadence/Makefile
-+++ b/drivers/gpu/drm/bridge/cadence/Makefile
-@@ -4,3 +4,4 @@ cdns-mhdp8546-y := cdns-mhdp8546-core.o cdns-mhdp8546-hdcp.o
- cdns-mhdp8546-$(CONFIG_DRM_CDNS_MHDP8546_J721E) += cdns-mhdp8546-j721e.o
- obj-$(CONFIG_DRM_CDNS_DSI) += cdns-dsi.o
- cdns-dsi-y := cdns-dsi-core.o
-+cdns-dsi-$(CONFIG_DRM_CDNS_DSI_J721E) += cdns-dsi-j721e.o
-diff --git a/drivers/gpu/drm/bridge/cadence/cdns-dsi-core.c b/drivers/gpu/drm/bridge/cadence/cdns-dsi-core.c
-index cba91247ab26..4b7de38ef1b0 100644
---- a/drivers/gpu/drm/bridge/cadence/cdns-dsi-core.c
-+++ b/drivers/gpu/drm/bridge/cadence/cdns-dsi-core.c
-@@ -15,12 +15,16 @@
- #include <linux/iopoll.h>
- #include <linux/module.h>
- #include <linux/of_address.h>
-+#include <linux/of_device.h>
- #include <linux/of_graph.h>
- #include <linux/platform_device.h>
- #include <linux/pm_runtime.h>
- #include <linux/reset.h>
- 
- #include "cdns-dsi-core.h"
-+#ifdef CONFIG_DRM_CDNS_DSI_J721E
-+#include "cdns-dsi-j721e.h"
-+#endif
- 
- static inline struct cdns_dsi *input_to_dsi(struct cdns_dsi_input *input)
- {
-@@ -265,6 +269,10 @@ static void cdns_dsi_bridge_disable(struct drm_bridge *bridge)
- 
- 	val = readl(dsi->regs + MCTL_MAIN_EN) & ~IF_EN(input->id);
- 	writel(val, dsi->regs + MCTL_MAIN_EN);
-+
-+	if (dsi->platform_ops && dsi->platform_ops->disable)
-+		dsi->platform_ops->disable(dsi);
-+
- 	pm_runtime_put(dsi->base.dev);
- }
- 
-@@ -360,6 +368,9 @@ static void cdns_dsi_bridge_enable(struct drm_bridge *bridge)
- 	if (WARN_ON(pm_runtime_get_sync(dsi->base.dev) < 0))
- 		return;
- 
-+	if (dsi->platform_ops && dsi->platform_ops->enable)
-+		dsi->platform_ops->enable(dsi);
-+
- 	mode = &bridge->encoder->crtc->state->adjusted_mode;
- 	nlanes = output->dev->lanes;
- 
-@@ -800,6 +811,8 @@ static int cdns_dsi_drm_probe(struct platform_device *pdev)
- 		goto err_disable_pclk;
- 	}
- 
-+	dsi->platform_ops = of_device_get_match_data(&pdev->dev);
-+
- 	val = readl(dsi->regs + IP_CONF);
- 	dsi->direct_cmd_fifo_depth = 1 << (DIRCMD_FIFO_DEPTH(val) + 2);
- 	dsi->rx_fifo_depth = RX_FIFO_DEPTH(val);
-@@ -835,14 +848,27 @@ static int cdns_dsi_drm_probe(struct platform_device *pdev)
- 	dsi->base.dev = &pdev->dev;
- 	dsi->base.ops = &cdns_dsi_ops;
- 
-+	if (dsi->platform_ops && dsi->platform_ops->init) {
-+		ret = dsi->platform_ops->init(dsi);
-+		if (ret != 0) {
-+			dev_err(&pdev->dev, "platform initialization failed: %d\n",
-+				ret);
-+			goto err_disable_runtime_pm;
-+		}
-+	}
-+
- 	ret = mipi_dsi_host_register(&dsi->base);
- 	if (ret)
--		goto err_disable_runtime_pm;
-+		goto err_deinit_platform;
- 
- 	clk_disable_unprepare(dsi->dsi_p_clk);
- 
- 	return 0;
- 
-+err_deinit_platform:
-+	if (dsi->platform_ops && dsi->platform_ops->exit)
-+		dsi->platform_ops->exit(dsi);
-+
- err_disable_runtime_pm:
- 	pm_runtime_disable(&pdev->dev);
- 
-@@ -857,6 +883,10 @@ static int cdns_dsi_drm_remove(struct platform_device *pdev)
- 	struct cdns_dsi *dsi = platform_get_drvdata(pdev);
- 
- 	mipi_dsi_host_unregister(&dsi->base);
-+
-+	if (dsi->platform_ops && dsi->platform_ops->exit)
-+		dsi->platform_ops->exit(dsi);
-+
- 	pm_runtime_disable(&pdev->dev);
- 
- 	return 0;
-@@ -864,6 +894,11 @@ static int cdns_dsi_drm_remove(struct platform_device *pdev)
- 
- static const struct of_device_id cdns_dsi_of_match[] = {
- 	{ .compatible = "cdns,dsi" },
-+#ifdef CONFIG_DRM_CDNS_DSI_J721E
-+	{ .compatible = "ti,j721e-dsi",
-+	  .data = &dsi_ti_j721e_ops,
-+	},
-+#endif
- 	{ },
- };
- MODULE_DEVICE_TABLE(of, cdns_dsi_of_match);
-diff --git a/drivers/gpu/drm/bridge/cadence/cdns-dsi-core.h b/drivers/gpu/drm/bridge/cadence/cdns-dsi-core.h
-index 65cc77f19b39..37568b547fbe 100644
---- a/drivers/gpu/drm/bridge/cadence/cdns-dsi-core.h
-+++ b/drivers/gpu/drm/bridge/cadence/cdns-dsi-core.h
-@@ -439,9 +439,22 @@ struct cdns_dsi_input {
- 	struct drm_bridge bridge;
- };
- 
-+struct cdns_dsi;
-+
-+struct dsi_platform_ops {
-+	int (*init)(struct cdns_dsi *dsi);
-+	void (*exit)(struct cdns_dsi *dsi);
-+	void (*enable)(struct cdns_dsi *dsi);
-+	void (*disable)(struct cdns_dsi *dsi);
-+};
-+
- struct cdns_dsi {
- 	struct mipi_dsi_host base;
- 	void __iomem *regs;
-+#ifdef CONFIG_DRM_CDNS_DSI_J721E
-+	void __iomem *j721e_regs;
-+#endif
-+	const struct dsi_platform_ops *platform_ops;
- 	struct cdns_dsi_input input;
- 	struct cdns_dsi_output output;
- 	unsigned int direct_cmd_fifo_depth;
-diff --git a/drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.c b/drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.c
-new file mode 100644
-index 000000000000..b5216acb333e
---- /dev/null
-+++ b/drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.c
-@@ -0,0 +1,51 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * TI j721e Cadence DSI wrapper
-+ *
-+ * Copyright (C) 2022 Texas Instruments Incorporated - http://www.ti.com/
-+ * Author: Rahul T R <r-ravikumar@ti.com>
-+ */
-+
-+#include <linux/io.h>
-+#include <linux/platform_device.h>
-+
-+#include "cdns-dsi-j721e.h"
-+
-+#define DSI_WRAP_REVISION		0x0
-+#define DSI_WRAP_DPI_CONTROL		0x4
-+#define DSI_WRAP_DSC_CONTROL		0x8
-+#define DSI_WRAP_DPI_SECURE		0xc
-+#define DSI_WRAP_DSI_0_ASF_STATUS	0x10
-+
-+#define DSI_WRAP_DPI_0_EN		BIT(0)
-+#define DSI_WRAP_DSI2_MUX_SEL		BIT(4)
-+
-+static int cdns_dsi_j721e_init(struct cdns_dsi *dsi)
-+{
-+	struct platform_device *pdev = to_platform_device(dsi->base.dev);
-+
-+	dsi->j721e_regs = devm_platform_ioremap_resource(pdev, 1);
-+	return PTR_ERR_OR_ZERO(dsi->j721e_regs);
-+}
-+
-+static void cdns_dsi_j721e_enable(struct cdns_dsi *dsi)
-+{
-+	/*
-+	 * Enable DPI0 as its input. DSS0 DPI2 is connected
-+	 * to DSI DPI0. This is the only supported configuration on
-+	 * J721E.
-+	 */
-+	writel(DSI_WRAP_DPI_0_EN, dsi->j721e_regs + DSI_WRAP_DPI_CONTROL);
-+}
-+
-+static void cdns_dsi_j721e_disable(struct cdns_dsi *dsi)
-+{
-+	/* Put everything to defaults  */
-+	writel(0, dsi->j721e_regs + DSI_WRAP_DPI_CONTROL);
-+}
-+
-+const struct dsi_platform_ops dsi_ti_j721e_ops = {
-+	.init = cdns_dsi_j721e_init,
-+	.enable = cdns_dsi_j721e_enable,
-+	.disable = cdns_dsi_j721e_disable,
-+};
-diff --git a/drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.h b/drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.h
-new file mode 100644
-index 000000000000..01f3dbd92db2
---- /dev/null
-+++ b/drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.h
-@@ -0,0 +1,18 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * TI j721e Cadence DSI wrapper
-+ *
-+ * Copyright (C) 2022 Texas Instruments Incorporated - http://www.ti.com/
-+ * Author: Rahul T R <r-ravikumar@ti.com>
-+ */
-+
-+#ifndef CDNS_DSI_J721E_H
-+#define CDNS_DSI_J721E_H
-+
-+#include "cdns-dsi-core.h"
-+
-+struct dsi_platform_ops;
-+
-+extern const struct dsi_platform_ops dsi_ti_j721e_ops;
-+
-+#endif /* !CDNS_DSI_J721E_H */
--- 
-2.38.0
+> >=20
+> > > =C2=A0=C2=A0=C2=A0 * format comments in source code
+> > > =C2=A0=C2=A0=C2=A0 * use raw spin locks to protect mask/unmask ops
+> > > =C2=A0=C2=A0=C2=A0 * use 'handle_edge_irq' and 'irq_ack' logic
+> > > =C2=A0=C2=A0=C2=A0 * remove 'irq_domain_xlate_onecell'
+> > > =C2=A0=C2=A0=C2=A0 * remove unnecessary status flags
+> > > =C2=A0=C2=A0=C2=A0 * use 'builtin_platform_driver' helper routine
+> > >=20
+> > > :100644 100644 2f4fe3ca5c1a ed8378893208 M=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0arch/arm/mach-
+> > > orion5x/ts78xx-fpga.h
+> > > :100644 100644 af810e7ccd79 d319a68b7160 M=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0arch/arm/mach-
+> > > orion5x/ts78xx-setup.c
+> > > :100644 100644 7ef9f5e696d3 d184fb435c5d
+> > > M=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0drivers/irqchip/Kconfig
+> > > :100644 100644 87b49a10962c b022eece2042
+> > > M=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0drivers/irqchip/Makefile
+> > > :000000 100644 000000000000 e975607fa4d5
+> > > A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0drivers/irqchip/irq-ts7800.c
+> > > =C2=A0arch/arm/mach-orion5x/ts78xx-fpga.h=C2=A0 |=C2=A0=C2=A0 1 +
+> > > =C2=A0arch/arm/mach-orion5x/ts78xx-setup.c |=C2=A0 55 +++++
+> > > =C2=A0drivers/irqchip/Kconfig=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 12 +
+> > > =C2=A0drivers/irqchip/Makefile=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 1 +
+> > > =C2=A0drivers/irqchip/irq-ts7800.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 | 347
+> > > +++++++++++++++++++++++++++
+> > > =C2=A05 files changed, 416 insertions(+)
+> > >=20
+> > > diff --git a/arch/arm/mach-orion5x/ts78xx-fpga.h b/arch/arm/mach-
+> > > orion5x/ts78xx-fpga.h
+> > > index 2f4fe3ca5c1a..ed8378893208 100644
+> > > --- a/arch/arm/mach-orion5x/ts78xx-fpga.h
+> > > +++ b/arch/arm/mach-orion5x/ts78xx-fpga.h
+> > > @@ -32,6 +32,7 @@ struct fpga_devices {
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct fpga_device=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ts_rtc;
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct fpga_device=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ts_nand;
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct fpga_device=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ts_rng;
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct fpga_device=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ts_irqc;
+> > > =C2=A0};
+> > > =C2=A0
+> > > =C2=A0struct ts78xx_fpga_data {
+> > > diff --git a/arch/arm/mach-orion5x/ts78xx-setup.c b/arch/arm/mach-
+> > > orion5x/ts78xx-setup.c
+> > > index af810e7ccd79..d319a68b7160 100644
+> > > --- a/arch/arm/mach-orion5x/ts78xx-setup.c
+> > > +++ b/arch/arm/mach-orion5x/ts78xx-setup.c
+> > > @@ -322,6 +322,49 @@ static void ts78xx_ts_rng_unload(void)
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0platform_device_del(&=
+ts78xx_ts_rng_device);
+> > > =C2=A0}
+> > > =C2=A0
+> > > +/*****************************************************************
+> > > ************
+> > > + * fpga irq controller
+> > > +
+> > > *******************************************************************
+> > > *********/
+> >=20
+> > [...]
+> >=20
+> > Sorry, but I have to ask: what part of "we're not taking any
+> > additional non-DT changes to these obsolete setups" did I fail to
+> > accurately communicate?
+> >=20
+> > Until this board is entirely converted to DT, I'm not taking any
+> > irqchip changes other than the most obvious bug fixes.
+> as long as this board is present in the kernel in its current legacy
+> form, this is a valid patch!
 
+No. There is a cut of point. Code that we would taken 10 years ago
+isn't necessarily valid anymore. We want to improve the kernel as a
+whole, and not keep it in the past.
+
+>=20
+> >=20
+> > [...]
+> >=20
+> > > +static void ts7800_irq_mask(struct irq_data *d)
+> > > +{
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct ts7800_irq_data *da=
+ta =3D
+> > > irq_data_get_irq_chip_data(d);
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 fpga_mask_reg =3D read=
+l(data->base + IRQ_MASK_REG);
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 mask_bits =3D 1 << d->=
+hwirq;
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0unsigned long flags;
+> > > +
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0raw_spin_lock_irqsave(&dat=
+a->lock, flags);
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0writel(fpga_mask_reg & ~ma=
+sk_bits, data->base +
+> > > IRQ_MASK_REG);
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0writel(fpga_mask_reg & ~ma=
+sk_bits, data->bridge +
+> > > IRQ_MASK_REG);
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0raw_spin_unlock_irqrestore=
+(&data->lock, flags);
+> >=20
+> > OMFG. What do you expect this protects? Same question applies to all
+> > the instances where you take this pointless lock.
+> don't jump now
+> the locks added as per your previous comment, quoting:
+> "I know your HW is UP, but seeing these RMW sequences without a lock
+> makes me jump."
+> On this single CPU based arch TS78xx, locks are waste of cpu cycles,
+> also note that IRQs/preemption are/is already off in this context
+>=20
+> maybe you meant adding locks as to promote general correct coding ?
+
+Let me spell it out for you: RMW means Read-Modify-Write. Putting a
+lock around a *write only* serves zero purpose. It is just overhead,
+and it is incorrect.
+
+>
+> or maybe it was like this previous nonsense comment, quoting :
+> "We don't remove interrupt controllers. What happens if someone still
+> had a mapping?"
+
+And I stand by it.
+
+>=20
+>=20
+> >=20
+> > [...]
+> >=20
+> > > +static void ts7800_ic_chained_handle_irq(struct irq_desc *desc)
+> > > +{
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct ts7800_irq_data *da=
+ta =3D
+> > > irq_desc_get_handler_data(desc);
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct irq_chip *chip =3D =
+irq_desc_get_chip(desc);
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 mask_bits =3D readl(da=
+ta->base + IRQ_MASK_REG);
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 status =3D readl(data-=
+>bridge);
+> > > +
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0chained_irq_enter(chip, de=
+sc);
+> > > +
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (unlikely(status =3D=3D=
+ 0)) {
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0handle_bad_irq(desc);
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0goto out;
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
+> > > +
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0do {
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0unsigned int bit =3D __ffs(status);
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0int irq =3D irq_find_mapping(data->domain, bit);
+> > > +
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0if (irq && (mask_bits & BIT(bit)))
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0gen=
+eric_handle_irq(irq);
+> >=20
+> > Again, this is not appropriate. I've pointed you to the right API in
+> > my previous review of this patch.
+> 'generic_handle_domain_irq' causing some issues
+
+Which issue?
+
+> >
+> > [...]
+> >=20
+> > > +static struct platform_driver ts7800_ic_driver =3D {
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.probe=C2=A0 =3D ts7800_ic=
+_probe,
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.remove =3D ts7800_ic_remo=
+ve,
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.id_table=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=3D ts7800v1_ic_ids,
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.driver =3D {
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0.name =3D DRIVER_NAME,
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0.probe_type =3D PROBE_PREFER_ASYNCHRONOUS,
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0},
+> > > +};
+> > > +builtin_platform_driver(ts7800_ic_driver);
+> >=20
+> > Again, this isn't appropriate either, and I pointed it out last
+> > time. We have specific helpers for irqchip, and using them isn't
+> > optional. But of course, you'll need to move to DT for that.
+> >=20
+> > Anyway, this is the last time I review this patch until you convert
+> > the corresponding platform to DT.
+> no problems, though have to note this is not constructive!
+
+I've pointed out a bunch of issues, and provided advise on how you can
+fix them. That's constructive. A non constructive approach would be to
+just ignore your patch. If that's what you prefer, please say so.
+
+Thanks,
+
+	M.
+
+--=20
+Without deviation from the norm, progress is not possible.
