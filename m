@@ -2,228 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29DAF6080F4
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 23:52:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5092B6080F6
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 23:53:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229777AbiJUVwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 17:52:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51932 "EHLO
+        id S229817AbiJUVxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 17:53:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiJUVwe (ORCPT
+        with ESMTP id S229782AbiJUVw6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 17:52:34 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 300EF2A9347
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 14:52:33 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id e18so3106041wmq.3
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 14:52:33 -0700 (PDT)
+        Fri, 21 Oct 2022 17:52:58 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D70A02A9342
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 14:52:57 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id 126so4835388ybw.3
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 14:52:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=3fr7B7jFvvkYJk812B7ZHpOE8Kp5VoLWcYb2mrCECtA=;
-        b=kVaFZV06eHLXC/zZXFnS6JH57aI50yqrG9iGtTMHItNv6MZcm8YMGTDs8fr+zxjbRS
-         crCqtiCH9pwyYatDyBw87tOAaBqdyxnuA8CpPqmmbgdabdaTT2W+x3ZU8xSI/9gf1OkC
-         y0FQAZ0JIzpXdT89ThEhQmqnkJOyML9tXrwRtEVMnw7qHwgp6rcwqR1idtOdgN3mUCJk
-         +MnT+8PiyPmipaASeGA46Kpg5krDFiAfbZzYalnDPmW4SZXWscl8osTY9JBFaVl0wcRI
-         5xI7PpbxeTRscFR9FfPOnV/M+bH93Va+lu+2Li9exT2k2m3ZrbWlV3Q3pHf8xIDm67HO
-         uSTA==
+        bh=+iB1avfMUtaVh18uLZ7p0dXh1Zz9AyjjEzNxxQZxPGM=;
+        b=eqzBo705DUJCn3T95QOAhLcb7AOUS4Quf6BmIC2OJEsmbLDzB68LWzLmGJtB0u+YIa
+         wlA8cOEl0Lvur9ZEj0/oXqEb3V+07q9i+84FxeLlwBM344E/unP4Kaqo3fz0klwGZoJH
+         e1SpD0WyZ/bZ6+zu3YMnVmvpQ1gIQYxVkzMLczNTVQjQmPDQ3dsliVxXwRYwrKEIekUD
+         1Q/eAC/gIZ79gG3nm7FivsD9f/g4LY6R7/7eGrgY4/qTitJWICISgT5QiI8Da8oeAqOg
+         CDdx5+7rQeqR1Oqz4CIpxs/8hqQIUTlDSadfyIvQ6gG07C2OBnRFn2s3HeFw3O1jzWEy
+         V8QQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=3fr7B7jFvvkYJk812B7ZHpOE8Kp5VoLWcYb2mrCECtA=;
-        b=1BgqnfiZ0CmQpSp5NrdI9U6Iu1l9STZRMh5wCqq8vEd8qHBnNfSYF01beblAydDHIY
-         iLZ5/eQ0+Vakcac33nM3WmwU31zBuomBLD4IUlvG/jOM/9P+OTDJXaDsz/jYvUOjtF7D
-         liuPAG9ScN2396XVXKgkhZdC9gz9q0fTEIT8hPig11WSt+JZEqAoYxahyXqqEQbl4yvS
-         VOEVlqmGTHpxkpDf34+Yv2xGuC7oZBC4sBPK1VKZUBbKFcUYqFLoJ4HaRXqFFvpgf/xL
-         sAIIlip2vRZtiKnqJ+j9gabG1PZnZNLaFDqerLy9xqwre4G1H+myVTS08l0IrjEsEEXS
-         vExQ==
-X-Gm-Message-State: ACrzQf1VnZLHwFzCcJ33i9dVpsGteLTDUlsQ0LZ4hjfiNkjA54V5dOWY
-        LoW1n0/zuqHAVM1Q1Jk+rdawPB+JtFaD5d1yFmRNQw==
-X-Google-Smtp-Source: AMsMyM7SnpsAuSsgopXHInPYeRxWDpGqyf+t9d27xa8PEOKgEp+HyVljAaBXIQPHLRDvror0bqkC7WllVx6n7G1JYMo=
-X-Received: by 2002:a7b:c4cb:0:b0:3c6:f83e:cf79 with SMTP id
- g11-20020a7bc4cb000000b003c6f83ecf79mr14678322wmk.112.1666389151506; Fri, 21
- Oct 2022 14:52:31 -0700 (PDT)
+        bh=+iB1avfMUtaVh18uLZ7p0dXh1Zz9AyjjEzNxxQZxPGM=;
+        b=tFJUHjJuHYoElkz5IL9XxPHY95YZYLfAVdeev7ysoPaWoJKvcT1V/DK0nsFDhSyE/T
+         9awAHSuOkby05TQAM0PxrNbUGc4HdvzbN0Gfvk/9jMq8j6QWikeMXWbD8rstkjPblHyo
+         /ebvYFoLl+jUbM8/ykE4S/xBcnMT6yEflcmNJ+qBNtwQvS6J92KGcnwnA7pCLc0F3bEV
+         9h4tm4hVUq04BeYy7wfg+OyKpbZ4oXOm/4LLAfr+zuKet7K+Of618UDt0Jt+9K92PqlD
+         U/LzOj/MZvBUQI7BZApVZTnS5hih3E08w+PhoNHXdFdvFV+1kvdUriLdV+i54i1bqAE3
+         N98w==
+X-Gm-Message-State: ACrzQf0QrRDbmJnWVccJr6/nnASgfbxR+xXtNBArt/MODpqWVf2gejy8
+        r7AKy6KMmR+GegiR3LuEgCAlcaKdDze+my2gSRHmzA==
+X-Google-Smtp-Source: AMsMyM5uxt7FKYLtjJ8frs4yggeb3qCC1JIvKfPpTiW95zXvKFyuLH6Fh4Sf/vqD23XI4DeS5byxPmICDT43FGagdzA=
+X-Received: by 2002:a5b:cc4:0:b0:6ae:2a6c:59e6 with SMTP id
+ e4-20020a5b0cc4000000b006ae2a6c59e6mr18314806ybr.59.1666389176846; Fri, 21
+ Oct 2022 14:52:56 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221021185916.1494314-1-vipinsh@google.com> <Y1L9Z8RgIs8yrU6o@google.com>
-In-Reply-To: <Y1L9Z8RgIs8yrU6o@google.com>
-From:   Vipin Sharma <vipinsh@google.com>
-Date:   Fri, 21 Oct 2022 14:51:55 -0700
-Message-ID: <CAHVum0eoA5j7EPmmuuUb2y7XOU1jRpFwJO90tc+QBy0JNUtBsQ@mail.gmail.com>
-Subject: Re: [RFC PATCH] Add Hyperv extended hypercall support in KVM
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     vkuznets@redhat.com, pbonzini@redhat.com, dmatlack@google.com,
-        kvm@vger.kernel.org, shujunxue@google.com, terrytaehyun@google.com,
-        linux-kernel@vger.kernel.org
+References: <0000000000009fa63105eb7648d8@google.com> <00000000000031aec805eb76a2d4@google.com>
+ <20221020182155.ecd44ee984b1aeb2e5a2e8ed@linux-foundation.org> <CAJuCfpEh0byROe58H_FtL+NMLKAvSrQW0f0wd3QiVTBdRg5CTA@mail.gmail.com>
+In-Reply-To: <CAJuCfpEh0byROe58H_FtL+NMLKAvSrQW0f0wd3QiVTBdRg5CTA@mail.gmail.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Fri, 21 Oct 2022 14:52:45 -0700
+Message-ID: <CAJuCfpF7xsZJevfj6ERsJi5tPFj0o6FATAm4k=CMsONFG86EmQ@mail.gmail.com>
+Subject: Re: [syzbot] BUG: sleeping function called from invalid context in vm_area_dup
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     syzbot <syzbot+b910411d3d253dab25d8@syzkaller.appspotmail.com>,
+        bigeasy@linutronix.de, bpf@vger.kernel.org, brauner@kernel.org,
+        ebiederm@xmission.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
+        linux-mm@kvack.org, David Hildenbrand <david@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 1:13 PM Sean Christopherson <seanjc@google.com> wrote:
+On Thu, Oct 20, 2022 at 6:58 PM Suren Baghdasaryan <surenb@google.com> wrote:
 >
-> On Fri, Oct 21, 2022, Vipin Sharma wrote:
-> > Hyperv hypercalls above 0x8000 are called as extended hypercalls as per
-> > Hyperv TLFS. Hypercall 0x8001 is used to enquire about available
-> > hypercalls by guest VMs.
+> On Thu, Oct 20, 2022 at 6:22 PM Andrew Morton <akpm@linux-foundation.org> wrote:
 > >
-> > Add support for HvExtCallQueryCapabilities (0x8001) and
-> > HvExtCallGetBootZeroedMemory (0x8002) in KVM.
+> > On Thu, 20 Oct 2022 05:40:43 -0700 syzbot <syzbot+b910411d3d253dab25d8@syzkaller.appspotmail.com> wrote:
 > >
-> > A guest VM finds availability of HvExtCallQueryCapabilities (0x8001) by
-> > using CPUID.0x40000003.EBX BIT(20). If the bit is set then the guest VM
-> > make hypercall HvExtCallQueryCapabilities (0x8001) to know what all
-> > extended hypercalls are supported by hypervisor.
+> > > syzbot has found a reproducer for the following issue on:
 > >
-> > A userspace VMM can query capability KVM_CAP_HYPERV_EXT_CALL_QUERY to
-> > know which extended hypercalls are supported in KVM. After which the
-> > userspace will enable capabilities for the guest VM.
+> > Thanks.
 > >
-> > HvExtCallQueryCapabilities (0x8001) is handled by KVM in kernel,
+> >
+> > > HEAD commit:    acee3e83b493 Add linux-next specific files for 20221020
+> > > git tree:       linux-next
+> > > console+strace: https://syzkaller.appspot.com/x/log.txt?x=170a8016880000
+> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=c82245cfb913f766
+> > > dashboard link: https://syzkaller.appspot.com/bug?extid=b910411d3d253dab25d8
+> > > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=109e0372880000
+> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1770d752880000
+> > >
+> > > Downloadable assets:
+> > > disk image: https://storage.googleapis.com/syzbot-assets/98cc5896cded/disk-acee3e83.raw.xz
+> > > vmlinux: https://storage.googleapis.com/syzbot-assets/b3d3eb3aa10a/vmlinux-acee3e83.xz
+> > >
+> > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > > Reported-by: syzbot+b910411d3d253dab25d8@syzkaller.appspotmail.com
+> > >
+> > > BUG: sleeping function called from invalid context at include/linux/sched/mm.h:274
+> >
+> > This is happening under dup_anon_vma_name().
+> >
+> > I can't spot preemption being disabled on that call path, and I assume
+> > this code has been exercised for some time.
 >
-> Does this really need to be handle by KVM?  I assume this is a rare operation,
-> e.g. done once during guest boot, so performance shouldn't be a concern.  To
-> avoid breaking existing userspace, KVM can forward HV_EXT_CALL_GET_BOOT_ZEROED_MEMORY
-> to userspace if and only if HV_ENABLE_EXTENDED_HYPERCALLS is enabled in CPUID,
-> but otherwise KVM can let userspace deal with the "is this enabled" check.
+> Indeed, it is unclear why copy_vma() would be called in atomic
+> context. I'll try to reproduce tomorrow. Maybe with lockdep enabled we
+> can get something interesting.
 
-There are 4 more extended hypercalls mentioned in TLFS but there is no
-detail about them in the document. From the linux source code one of
-the hypercall HvExtCallMemoryHeatHint (0x8003) is a repetitive call.
-In the file drivers/hv/hv_balloon.c
-          status = hv_do_rep_hypercall(HV_EXT_CALL_MEMORY_HEAT_HINT,
-nents, 0,  hint, NULL);
-
-This makes me a little bit wary that these hypercalls or any future
-hypercalls can have high calling frequency by Windows guest. Also, it
-is not clear which calls can or cannot be satisfied by userspace
-alone.
-
-So, I am not sure if the default exit to userspace for all of the
-extended hypercalls will be future proof, therefore, I went with the
-approach of only selectively exiting to userspace based on hypercall.
+Sorry for the delay. Having trouble booting the image built with the
+attached config. My qemu crashes with a "sched: CPU #1's llc-sibling
+CPU #0 is not on the same node! [node: 1 != 0]." warning before the
+crash. Trying to figure out why.
+defconfig with CONFIG_ANON_VMA_NAME=y boots fine but does not
+reproduce the issue.
 
 >
-> Aha!  And if KVM "allows" all theoretically possible extended hypercalls, then
-> KVM will never need a capability to announce "support" for a new hypercall, i.e.
-> define KVM's ABI to be that KVM punts all possible extended hypercalls to userspace
-> if CPUID.0x40000003.EBX BIT(20) is enabled.
->
-> > whereas, HvExtCallGetBootZeroedMemory (0x8002) is passed to userspace
-> > for further action.
 > >
-> > Change-Id: Ib3709fadbf11f91be2842c8486bcbe755e09cbea
->
-> Drop gerrit's Change-Id when posting publicly.
->
-> If KVM punts the support checks to userspace, then the KVM side of things is very
-> minimal and future proof (unless Microsoft hoses us).  E.g. with code deduplication
-> that should be moved to a prep patch:
->
-> ---
->  arch/x86/kvm/hyperv.c | 43 +++++++++++++++++++++++++++----------------
->  1 file changed, 27 insertions(+), 16 deletions(-)
->
-> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
-> index 0adf4a437e85..f9253249de00 100644
-> --- a/arch/x86/kvm/hyperv.c
-> +++ b/arch/x86/kvm/hyperv.c
-> @@ -2138,6 +2138,12 @@ static void kvm_hv_hypercall_read_xmm(struct kvm_hv_hcall *hc)
->         kvm_fpu_put();
->  }
->
-> +/*
-> + * The TLFS carves out 64 possible extended hypercalls, numbered sequentially
-> + * after the base capabilities extended hypercall.
-> + */
-> +#define HV_EXT_CALL_MAX (HV_EXT_CALL_QUERY_CAPABILITIES + 64)
-> +
->  static bool hv_check_hypercall_access(struct kvm_vcpu_hv *hv_vcpu, u16 code)
->  {
->         if (!hv_vcpu->enforce_cpuid)
-> @@ -2178,6 +2184,10 @@ static bool hv_check_hypercall_access(struct kvm_vcpu_hv *hv_vcpu, u16 code)
->         case HVCALL_SEND_IPI:
->                 return hv_vcpu->cpuid_cache.enlightenments_eax &
->                         HV_X64_CLUSTER_IPI_RECOMMENDED;
-> +       case HV_EXT_CALL_QUERY_CAPABILITIES ... HV_EXT_CALL_MAX:
-> +               return hv_vcpu->cpuid_cache.features_ebx &
-> +                      HV_ENABLE_EXTENDED_HYPERCALLS;
-> +               break;
->         default:
->                 break;
->         }
-> @@ -2270,14 +2280,7 @@ int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
->                         ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
->                         break;
->                 }
-> -               vcpu->run->exit_reason = KVM_EXIT_HYPERV;
-> -               vcpu->run->hyperv.type = KVM_EXIT_HYPERV_HCALL;
-> -               vcpu->run->hyperv.u.hcall.input = hc.param;
-> -               vcpu->run->hyperv.u.hcall.params[0] = hc.ingpa;
-> -               vcpu->run->hyperv.u.hcall.params[1] = hc.outgpa;
-> -               vcpu->arch.complete_userspace_io =
-> -                               kvm_hv_hypercall_complete_userspace;
-> -               return 0;
-> +               goto hypercall_userspace_exit;
->         case HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST:
->                 if (unlikely(hc.var_cnt)) {
->                         ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
-> @@ -2336,15 +2339,14 @@ int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
->                         ret = HV_STATUS_OPERATION_DENIED;
->                         break;
->                 }
-> -               vcpu->run->exit_reason = KVM_EXIT_HYPERV;
-> -               vcpu->run->hyperv.type = KVM_EXIT_HYPERV_HCALL;
-> -               vcpu->run->hyperv.u.hcall.input = hc.param;
-> -               vcpu->run->hyperv.u.hcall.params[0] = hc.ingpa;
-> -               vcpu->run->hyperv.u.hcall.params[1] = hc.outgpa;
-> -               vcpu->arch.complete_userspace_io =
-> -                               kvm_hv_hypercall_complete_userspace;
-> -               return 0;
-> +               goto hypercall_userspace_exit;
->         }
-> +       case HV_EXT_CALL_QUERY_CAPABILITIES ... HV_EXT_CALL_MAX:
-> +               if (unlikely(hc.fast)) {
-> +                       ret = HV_STATUS_INVALID_PARAMETER;
-> +                       break;
-> +               }
-> +               goto hypercall_userspace_exit;
->         default:
->                 ret = HV_STATUS_INVALID_HYPERCALL_CODE;
->                 break;
-> @@ -2352,6 +2354,14 @@ int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
->
->  hypercall_complete:
->         return kvm_hv_hypercall_complete(vcpu, ret);
-> +hypercall_userspace_exit:
-> +       vcpu->run->exit_reason = KVM_EXIT_HYPERV;
-> +       vcpu->run->hyperv.type = KVM_EXIT_HYPERV_HCALL;
-> +       vcpu->run->hyperv.u.hcall.input = hc.param;
-> +       vcpu->run->hyperv.u.hcall.params[0] = hc.ingpa;
-> +       vcpu->run->hyperv.u.hcall.params[1] = hc.outgpa;
-> +       vcpu->arch.complete_userspace_io = kvm_hv_hypercall_complete_userspace;
-> +       return 0;
->  }
->
->  void kvm_hv_init_vm(struct kvm *kvm)
-> @@ -2494,6 +2504,7 @@ int kvm_get_hv_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid2 *cpuid,
->
->                         ent->ebx |= HV_POST_MESSAGES;
->                         ent->ebx |= HV_SIGNAL_EVENTS;
-> +                       ent->ebx |= HV_ENABLE_EXTENDED_HYPERCALLS;
->
->                         ent->edx |= HV_X64_HYPERCALL_XMM_INPUT_AVAILABLE;
->                         ent->edx |= HV_FEATURE_FREQUENCY_MSRS_AVAILABLE;
->
-> base-commit: e18d6152ff0f41b7f01f9817372022df04e0d354
-> --
->
+> > I wonder if this could be fallout from the KSM locking error which
+> > https://lkml.kernel.org/r/8c86678a-3bfb-3854-b1a9-ae5969e730b8@redhat.com
+> > addresses.  Seems quite unlikely.
+> >
+> > > in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 3602, name: syz-executor107
+> > > preempt_count: 1, expected: 0
+> > > RCU nest depth: 0, expected: 0
+> > > INFO: lockdep is turned off.
+> > > Preemption disabled at:
+> > > [<0000000000000000>] 0x0
+> > > CPU: 0 PID: 3602 Comm: syz-executor107 Not tainted 6.1.0-rc1-next-20221020-syzkaller #0
+> > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+> > > Call Trace:
+> > >  <TASK>
+> > >  __dump_stack lib/dump_stack.c:88 [inline]
+> > >  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+> > >  __might_resched.cold+0x222/0x26b kernel/sched/core.c:9890
+> > >  might_alloc include/linux/sched/mm.h:274 [inline]
+> > >  slab_pre_alloc_hook mm/slab.h:727 [inline]
+> > >  slab_alloc_node mm/slub.c:3323 [inline]
+> > >  slab_alloc mm/slub.c:3411 [inline]
+> > >  __kmem_cache_alloc_lru mm/slub.c:3418 [inline]
+> > >  kmem_cache_alloc+0x2e6/0x3c0 mm/slub.c:3427
+> > >  vm_area_dup+0x81/0x380 kernel/fork.c:466
+> > >  copy_vma+0x376/0x8d0 mm/mmap.c:3216
+> > >  move_vma+0x449/0xf60 mm/mremap.c:626
+> > >  __do_sys_mremap+0x487/0x16b0 mm/mremap.c:1075
+> > >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> > >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+> > >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> > > RIP: 0033:0x7fd090fa5b29
+> > > Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+> > > RSP: 002b:00007ffc2e90bd38 EFLAGS: 00000246 ORIG_RAX: 0000000000000019
+> > > RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fd090fa5b29
+> > > RDX: 0000000000001000 RSI: 0000000000004000 RDI: 00000000201c4000
+> > > RBP: 00007fd090f69cd0 R08: 00000000202ef000 R09: 0000000000000000
+> > > R10: 0000000000000003 R11: 0000000000000246 R12: 00007fd090f69d60
+> > > R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+> > >  </TASK>
