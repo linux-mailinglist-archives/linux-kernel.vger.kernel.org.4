@@ -2,80 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66848607605
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 13:22:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28F9A60760B
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 13:22:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229918AbiJULWF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 07:22:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34716 "EHLO
+        id S229542AbiJULWe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 07:22:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiJULWC (ORCPT
+        with ESMTP id S229716AbiJULWb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 07:22:02 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6BD4261429;
-        Fri, 21 Oct 2022 04:21:58 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id x18so3291395ljm.1;
-        Fri, 21 Oct 2022 04:21:58 -0700 (PDT)
+        Fri, 21 Oct 2022 07:22:31 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 875A6264E44;
+        Fri, 21 Oct 2022 04:22:22 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id b12so4572994edd.6;
+        Fri, 21 Oct 2022 04:22:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ff1Fq682tglQjFEQ/rqieCnCur14IRaiPmZgfb2AelY=;
-        b=XHLvvmzXj37dVZagPb6YYIKoOd5wpMQ6+GBhmlRl2ZKrXQRsPNqBOXoSwvn60UtPJA
-         NUDeILUT9Grntpu4Llh2phTOIS7rN21FNrVFgfWmLSmjwKdBgrsAVEA4QoJE3LmQosjc
-         aHBe4NHvQgsfLkI0JWOdL83aoKW3J4rGWychQZ0TDRRDswpwqIoN7E3ZUay+K/FPmapx
-         PappMSJ+rv9t045c6fA7aq3Dog4/+2NpX3SYLi+iO44BC+v4ckyHdafu+fHu8/ptvnVt
-         aoJrmaot+Eed2pN1FDyv5Xd4QbkT/EUpqqRgzBqX/ekcu++kX6fqgFTFV2QR8uDbyiWe
-         hCJw==
+        bh=y83I/EEj5O1WzvhlqMvy69bC2C3kma+TguYlktElg+U=;
+        b=aqI400aFX+Hv1if94yQ/9coImAcoL5xm5EE9Z8Pnq+JQ7MqId0ZuB5eW9kjAqCiUrN
+         KMZPlHItsw5EctvNgdlnTcP5laLuqUz+SV1o33najcKCsjf0QARB5ow9Z44sTZTOmSeg
+         UrpNC6fH6ciHR2X4rGmdJWOSbH4r9VMHXzYepV/zYSLDnnNwqU+kf3Zv2sg7HE61xVNl
+         7t3a9w2kLyvF5PibwmB0qSxZXtgVyxt+2/Ir7YJLUZG06dtskhoVW5tz2mc4jA71zIm4
+         UhnubOmNzJl78yCv0QqxYV7AfFoBR+16JycwYyxr/dmdd6j59K4vgycD/Tzgpk9gib2d
+         VCVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ff1Fq682tglQjFEQ/rqieCnCur14IRaiPmZgfb2AelY=;
-        b=ip+DvW6ZuACutEuNwF3AVawclhgX4gJtzCdr1gkyGadBdOsdS/qYf5Rrkqpu/xFnyy
-         EBIPgkuypQM7gnE/NUB8+95v5qeVCxApO9z9nMN0+//SyqiBjmGhJw+Y5TMYs8rwo/cQ
-         0/pf9J/EkOefLhWjMe6VZD60oycH7rifaxfpF1MrC/No1mH8Ka07ZD4YH6djCInIiPBz
-         STZLdM9tu+KC8MsipKhPrwOrCWTMJlidWVocPTnyj++BAD9auaYHBhHMUCHHlgsOUOTV
-         ge05Z8r4VDIwlt3ZOYovIZ92XBC5kSFjUKd5ujvxKmms0EoPmlzJ5RKMg40Mi3CfyOt5
-         4vBw==
-X-Gm-Message-State: ACrzQf3Oydpqkpx5pcwFPkaKN+V2hBp8Y+UuADEswEwqC7Djoy51zZRc
-        uEFdWVzxRkq3jAkKZ2uGQlY=
-X-Google-Smtp-Source: AMsMyM6f8zbyDcV8HfSn/DBBK+Ilh0ts3mTJMAVMsXMXR1Y9djsI6TtgvCgCQMVz6eioC2jutIZA1A==
-X-Received: by 2002:a2e:b80f:0:b0:26d:fd9d:6e29 with SMTP id u15-20020a2eb80f000000b0026dfd9d6e29mr7028798ljo.391.1666351316436;
-        Fri, 21 Oct 2022 04:21:56 -0700 (PDT)
-Received: from dc75zzyyyyyyyyyyyyyby-3.rev.dnainternet.fi (dc75zzyyyyyyyyyyyyyby-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::2])
-        by smtp.gmail.com with ESMTPSA id t16-20020a056512209000b0048b26d4bb64sm3133368lfr.40.2022.10.21.04.21.55
+        bh=y83I/EEj5O1WzvhlqMvy69bC2C3kma+TguYlktElg+U=;
+        b=Zu7GJbQ5TZlq8kH3vSDfX32h0DpvTIuuQNUkPQ9vNy6ffF/Fdd5NenNwr+hjJd6FQd
+         IiRhebil1Oj4gj5stR4NrQLqrwlScAPWbqDicS5XY4hmYIhqoXqkK24EnVNFmaOUryXh
+         gL7OGQrXccV2meGHaSrPFXzkUwzoUOP81Lcm71M0YFZF3NWMPWE0FwPiXkile2or1J5D
+         dbwMlcnfQ8xX5d3yrMjfYI/K3pnderM4JFhCqAZloZHg76cFzOXg8+e7OWkvthjGde2L
+         Ojln8bY0L2m2KBD1q3z2QgFqYYJ3BdhAoc46lMhY1pxfmQIK70KroP4EEvCbETYG/Zf6
+         V7dQ==
+X-Gm-Message-State: ACrzQf1Ru5sTUk8bEuzce1bgXu9Co2uAzt4h14NqO2T1eR8dgHNC/oOv
+        S+BjpNducF+Zbp14uG1BXpI=
+X-Google-Smtp-Source: AMsMyM4Ljgcs84MFVGjjaNn1SINn2K1OMLuiOgFc7iq4/CDwKUIaipwaA3YvQFgGhkmQ345GuQJlMw==
+X-Received: by 2002:a17:906:db0e:b0:77b:82cf:54a6 with SMTP id xj14-20020a170906db0e00b0077b82cf54a6mr14838182ejb.691.1666351340215;
+        Fri, 21 Oct 2022 04:22:20 -0700 (PDT)
+Received: from skbuf ([188.27.184.197])
+        by smtp.gmail.com with ESMTPSA id g22-20020a50d5d6000000b00457160c3c77sm13487340edj.20.2022.10.21.04.22.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Oct 2022 04:21:55 -0700 (PDT)
-Date:   Fri, 21 Oct 2022 14:21:51 +0300
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Dmitry Rokosov <DDRokosov@sberdevices.ru>,
-        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
-        Cosmin Tanislav <demonsingur@gmail.com>,
-        Jagath Jog J <jagathjog1996@gmail.com>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4 1/3] dt-bindings: iio: Add KX022A accelerometer
-Message-ID: <06f8e1ab29d02ed216db10091a269df4b6abad9a.1666350457.git.mazziesaccount@gmail.com>
-References: <cover.1666350457.git.mazziesaccount@gmail.com>
+        Fri, 21 Oct 2022 04:22:19 -0700 (PDT)
+Date:   Fri, 21 Oct 2022 14:22:16 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     netdev@kapio-technology.com
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Florent Fourcot <florent.fourcot@wifirst.fr>,
+        Hans Schultz <schultz.hans@gmail.com>,
+        Joachim Wiberg <troglobit@gmail.com>,
+        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v8 net-next 10/12] net: dsa: mv88e6xxx: mac-auth/MAB
+ implementation
+Message-ID: <20221021112216.6bw6sjrieh2znlti@skbuf>
+References: <20221018165619.134535-1-netdev@kapio-technology.com>
+ <20221018165619.134535-1-netdev@kapio-technology.com>
+ <20221018165619.134535-11-netdev@kapio-technology.com>
+ <20221018165619.134535-11-netdev@kapio-technology.com>
+ <20221020132538.reirrskemcjwih2m@skbuf>
+ <2565c09bb95d69142522c3c3bcaa599e@kapio-technology.com>
+ <20221020225719.l5iw6vndmm7gvjo3@skbuf>
+ <82d23b100b8d2c9e4647b8a134d5cbbf@kapio-technology.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="99ety+xxpEjg4OA2"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1666350457.git.mazziesaccount@gmail.com>
+In-Reply-To: <82d23b100b8d2c9e4647b8a134d5cbbf@kapio-technology.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,148 +110,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Oct 21, 2022 at 08:47:42AM +0200, netdev@kapio-technology.com wrote:
+> On 2022-10-21 00:57, Vladimir Oltean wrote:
+> > On Thu, Oct 20, 2022 at 10:20:50PM +0200, netdev@kapio-technology.com
+> > wrote:
+> > > In general locked ports block traffic from a host based on if there
+> > > is a
+> > > FDB entry or not. In the non-offloaded case, there is only CPU
+> > > assisted
+> > > learning, so the normal learning mechanism has to be disabled as any
+> > > learned entry will open the port for the learned MAC,vlan.
+> > 
+> > Does it have to be that way? Why can't BR_LEARNING on a BR_PORT_LOCKED
+> > cause the learned FDB entries to have BR_FDB_LOCKED, and everything
+> > would be ok in that case (the port will not be opened for the learned
+> > MAC/VLAN)?
+> 
+> I suppose you are right that basing it solely on BR_FDB_LOCKED is possible.
+> 
+> The question is then maybe if the common case where you don't need learned
+> entries for the scheme to work, e.g. with EAPOL link local packets, requires
+> less CPU load to work and is cleaner than if using BR_FDB_LOCKED entries?
 
---99ety+xxpEjg4OA2
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I suppose the real question is what does the bridge currently do with
+BR_LEARNING + BR_PORT_LOCKED, and if that is sane and useful in any case?
+It isn't a configuration that's rejected, for sure. The configuration
+could be rejected via a bug fix patch, then in net-next it could be made
+to learn these addresses with the BR_FDB_LOCKED flag.
 
-KX022A is a 3-axis Accelerometer from ROHM/Kionix. The sensor features
-include variable ODRs, I2C and SPI control, FIFO/LIFO with watermark IRQ,
-tap/motion detection, wake-up & back-to-sleep events, four acceleration
-ranges (2, 4, 8 and 16g) and probably some other cool features.
-
-Add the basic device tree description for the accelerometer. Only basic
-accelerometer features are considered as of now - new properties may or
-may not be needed in the future when rest of the features are supported.
-
-Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
----
-v3 =3D> No changes.
-
-v2 =3D> v3 as suggested by Krzysztof:
-- better check for the interrupt-names
-
-RFCv1 =3D> v2:
-Based on a review by Krzysztof:
-- fix a typo from commit message
-- const compatible
-- drop unnecessary descriptions/words
-- io_vdd-supply =3D> io-vdd-supply
-- fix the binding example indentiation
-Also,
-- change my email address
-- support both INT pins
----
- .../bindings/iio/accel/kionix,kx022a.yaml     | 65 +++++++++++++++++++
- 1 file changed, 65 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/iio/accel/kionix,kx02=
-2a.yaml
-
-diff --git a/Documentation/devicetree/bindings/iio/accel/kionix,kx022a.yaml=
- b/Documentation/devicetree/bindings/iio/accel/kionix,kx022a.yaml
-new file mode 100644
-index 000000000000..986df1a6ff0a
---- /dev/null
-+++ b/Documentation/devicetree/bindings/iio/accel/kionix,kx022a.yaml
-@@ -0,0 +1,65 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/iio/accel/kionix,kx022a.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: ROHM/Kionix KX022A Accelerometer
-+
-+maintainers:
-+  - Matti Vaittinen <mazziesaccount@gmail.com>
-+
-+description: |
-+  KX022A is a 3-axis accelerometer supporting +/- 2G, 4G, 8G and 16G range=
-s,
-+  output data-rates from 0.78Hz to 1600Hz and a hardware-fifo buffering.
-+  KX022A can be accessed either via I2C or SPI.
-+
-+properties:
-+  compatible:
-+    const: kionix,kx022a
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    minItems: 1
-+    maxItems: 2
-+
-+  interrupt-names:
-+    minItems: 1
-+    items:
-+      - enum: [INT1, INT2]
-+      - const: INT2
-+
-+  vdd-supply: true
-+  io-vdd-supply: true
-+
-+  mount-matrix:
-+    description: |
-+      an optional 3x3 mounting rotation matrix.
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    i2c {
-+        #address-cells =3D <1>;
-+        #size-cells =3D <0>;
-+        accel@1f {
-+            compatible =3D "kionix,kx022a";
-+            reg =3D <0x1f>;
-+
-+            interrupt-parent =3D <&gpio1>;
-+            interrupts =3D <29 IRQ_TYPE_LEVEL_LOW>;
-+            interrupt-names =3D "INT1";
-+
-+            io-vdd-supply =3D <&iovdd>;
-+            vdd-supply =3D <&vdd>;
-+        };
-+    };
---=20
-2.37.3
-
-
---=20
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
-
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =3D]=20
-
---99ety+xxpEjg4OA2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmNSgM8ACgkQeFA3/03a
-ocVazQgAn5La4AIWRiPkYF0fK3XCNbx/WiLpZT+/uLSn4Yb4MrjcZPSkKcGabT9d
-QOanYvONREE5Bp5aTRcvQm6H+CHtROV3skvpJfy1EA6PlvWTeO4+fMeqqr2LuNav
-SJsjDEGrdSPkbul6N99kqV7bFd9hwnwMQDl7ROcW+EqRYH82LFZvsxP7arZ4Pmab
-MmrjcnLx79dmZ+JSIXr/3iNWo29Cewcb6k3ePFhqWPiBrQKz7GcamU3ya+mQs3CQ
-i4cmzcT73wV578Yh34XNVtalNVhN4nOTXqiQvEKhxytUEgAbLUc098cb+9OR9MTW
-VDFwGY4rX5+wWEG6cUYks0HRmHYpZA==
-=iku/
------END PGP SIGNATURE-----
-
---99ety+xxpEjg4OA2--
+To your question regarding the common case (no MAB): that can be supported
+just fine when BR_LEARNING is off and BR_PORT_LOCKED is on, no?
+No BR_FDB_LOCKED entries will be learned.
