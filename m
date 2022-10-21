@@ -2,147 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 038D860821F
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 01:44:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2149E608228
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 01:45:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbiJUXoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 19:44:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51182 "EHLO
+        id S229763AbiJUXpg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 19:45:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbiJUXoQ (ORCPT
+        with ESMTP id S229613AbiJUXpc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 19:44:16 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFFC12AF652
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 16:44:14 -0700 (PDT)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29LLDn3H005590;
-        Fri, 21 Oct 2022 23:42:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type :
- content-transfer-encoding : in-reply-to : mime-version; s=corp-2022-7-12;
- bh=o2hOB+5stE1tvwN8KkxRejjp5WgFw44nJH9OrG9/fLA=;
- b=kj2FSwcq0owTFIweTedSpOHNAOt35ACu12aKcLiFi6VkrXCxCiPDs3gMe4WYnRvDPUKI
- mVJs44J2DmK+uexOZo/Cfh5VUV1WMgFkygLlhS2FyrVNjxQxltjP5mYibzpOeLTI08bF
- qY6zTDd7K+dN1/boSER3mEYlia3U8NelEdk3ZoeoJUqaXVt1mzUemDN6n7FYR/WQVEKk
- /KygrQYE6c2bycP+OsuRhn3MJ/lS/oJDjsKjs241M8YsDnf3Mq6uuvaqeSp6xdG0dj8j
- ArDVUl6RQpvw23EYy1FtJr/G+bLretOwGVcibw4DAzRljo6gvE/enMyr37hEY+kM7zb9 +g== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3k7ndtuc4v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 21 Oct 2022 23:42:06 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 29LLPxxi016974;
-        Fri, 21 Oct 2022 23:42:05 GMT
-Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2168.outbound.protection.outlook.com [104.47.58.168])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3k8hub9jxv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 21 Oct 2022 23:42:04 +0000
+        Fri, 21 Oct 2022 19:45:32 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2067.outbound.protection.outlook.com [40.107.92.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF9761EEF01
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 16:45:30 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=L/5kvBGNGKaZ2PwDnE5yZSk4PIOI+V+cM1H9Vd4vDrQrQhUQzQ+z1O3bDryJz+XKJ3rLwdvOL6Z0GztTV66HQanau3FjkVVzRYxCllF/fXzxjtT7CWYSxvBymHazLMMZjOQgRu9tF3L39Esr3l9c4a0OnUhmoLlQXYszkkh2So1gqrpNHbq3apBozA/WcL6oKs6rhvm1fO7D/drgrfI3qXCbyxwQG3UZt0mo3bnWwtOGNzgRfTXWAHQ4Cm1s0WeWB66PYPwH1onhbaX+YJvXFmt2LDV+PQNQ0fypK1GK5rDQSvah8Gdz1s9ZwNG6ot/M+ysp5YhkB2r2q6wf03i8+g==
+ b=IfgLgnrqxfnApVTN7pcxZUGWZSXDqaoJTvcG+gjlQkk/1NS7C8CtLbjEVyO14kXX78rp6uc7yNuWYwLO4bpZqrsOpMQHgUiMzZU+VHpLvmP/nHmX69RI4vEsgxUptZyadYqfZe7iambjMJUbAuR0wSV/hQs/Au32szORymPZNLs8eyOXqz9GS4YQryw/LKw7wHOUb2jOms64nPwUL1c4wNcyaoNxOZYozfyFjMUP+hhV0RvsFpW/mv2yMDhPFHk8xFmvAHjfF97UEyGv/tjTV0mFpzhZWbyydNruRxXuW5edu7G/pjFPS2FAkGdZnvSSEBVjEkxWC4dZP+LWzN9Mag==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GNGefHcywQgU1O3V2jurio8wzamLLaNAQ4Pphp9SGOQ=;
- b=kMjvoRRwfTmZ/2C3jSdt5gd+goH2gzlAiFGzoBSFjakSjpEs++/9weK+hILOta1yE42duSRfmnq5CniV58O/ZtrnLtxAMRYul96wqgJZmr1CzBNYYvGDD4TsfcHx4SE7ID6h88oqBUoT6ViJXdAcjR+XwSVPaH7b5GZEyqGhz2ingiHfSMeAOxAxU15EfEHDUE1k6p2RccaATw3AeWTC6bR9leSVysVXf7VOjurj9AJCFrRHOM2wIH2rTYWLobfY0guFehhFqwTqC5Q3oiD1jJVFM3NpLTSuOzftKKUcUg5Eq3UKhkWPutTHW9duyZho4lBO4NJ0B69UIZENW+Ky0g==
+ bh=bpGBa9Rr4uN64ok9iDDV/hFbcVrvfG/84EdVCW/8ySE=;
+ b=Tc0WAeDHHAlh3ldQuKqNVdkW8Poac3KPtya50OFkSwsely9fRfTpw94y7+JEWxv6BY7nWTsLvhhKT9ZvC/I4BtLSKjZRv8KORPhuoMMCiNTw1KV2q4oWwssfkI+ibffqh4iNVZT3QYa6sk42jFXdoXcCLnqVlPJIzSoNJL6R2o5Mj8iefkxyCByP6wPnGS1RCiImCifStV5yWBD3x6NEncH0ye5eD0WKmnseY127cHRt0uiCOXy8SiOEKYE+IBCdvKvDwRqB3lgdZrXBXnVDMYyQsJ1SrRGkZs5hha+i/ahvXb8aVjCO4/kIX5hjQsW8VREXggNjiFn6WtyHrNrkRQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GNGefHcywQgU1O3V2jurio8wzamLLaNAQ4Pphp9SGOQ=;
- b=g08x9oOJNoF/rcJpNLifVwoVCAHwcDzNpZ2TIZXMc+zpKPCWgE1uXKyMUJdrI5tDiWuTzr3FkwZy5GTEi5Hq/YfcYIAvgtjre7IyxBExZ6RRBSFVI8ogvsGZwkxlk9NLgZM094d0UQXfUStPuNI2HKqHzeO9LCyqnGoILnURuZk=
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
- by BLAPR10MB4899.namprd10.prod.outlook.com (2603:10b6:208:323::11) with
+ bh=bpGBa9Rr4uN64ok9iDDV/hFbcVrvfG/84EdVCW/8ySE=;
+ b=sikIsTSBPprQEYv/TS0i4n0ua5kGE0zSmdDFvSK1RTZ9FRcYZDstf8IurKTL9wdIPjwhlu5NsJzL0Rozqf8GQJooc8/JvY0jMHUpdwpkijVLpBzEabO13bTo5Bw4QSiOoVckclNdr7GpGQF/okgsUj2h9Ceiy08PPMY+LVXWzQ8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM6PR12MB3370.namprd12.prod.outlook.com (2603:10b6:5:38::25) by
+ MW5PR12MB5650.namprd12.prod.outlook.com (2603:10b6:303:19e::12) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.35; Fri, 21 Oct
- 2022 23:42:03 +0000
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::5f85:c22e:b7fa:21bd]) by BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::5f85:c22e:b7fa:21bd%5]) with mapi id 15.20.5746.021; Fri, 21 Oct 2022
- 23:42:03 +0000
-Date:   Fri, 21 Oct 2022 16:42:00 -0700
-From:   Mike Kravetz <mike.kravetz@oracle.com>
-To:     Rik van Riel <riel@surriel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        kernel-team@meta.com, Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>
-Subject: Re: [PATCH] mm,madvise,hugetlb: fix unexpected data loss with
- MADV_DONTNEED on hugetlbfs
-Message-ID: <Y1MuSFgBkPZmLu7o@monkey>
-References: <20221021154546.57df96db@imladris.surriel.com>
- <Y1MFjnDBOzpCW/9Z@monkey>
- <e0fc94ec3e6e088ad26d1b2ba7a1e9dfb4fb8079.camel@surriel.com>
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.29; Fri, 21 Oct
+ 2022 23:45:26 +0000
+Received: from DM6PR12MB3370.namprd12.prod.outlook.com
+ ([fe80::d309:77d2:93d8:2425]) by DM6PR12MB3370.namprd12.prod.outlook.com
+ ([fe80::d309:77d2:93d8:2425%7]) with mapi id 15.20.5723.035; Fri, 21 Oct 2022
+ 23:45:26 +0000
+Message-ID: <dddec689-c945-a564-3870-b8cebf142323@amd.com>
+Date:   Fri, 21 Oct 2022 19:45:22 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH 00/11] fix memory leak while kset_register() fails
+Content-Language: en-CA
+To:     Yang Yingliang <yangyingliang@huawei.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-erofs@lists.ozlabs.org, ocfs2-devel@oss.oracle.com,
+        linux-mtd@lists.infradead.org, amd-gfx@lists.freedesktop.org,
+        rafael@kernel.org, somlo@cmu.edu, mst@redhat.com,
+        jaegeuk@kernel.org, chao@kernel.org, hsiangkao@linux.alibaba.com,
+        huangjianan@oppo.com, mark@fasheh.com, jlbec@evilplan.org,
+        joseph.qi@linux.alibaba.com, akpm@linux-foundation.org,
+        alexander.deucher@amd.com, richard@nod.at, liushixin2@huawei.com
+References: <20221021022102.2231464-1-yangyingliang@huawei.com>
+ <d559793a-0ce4-3384-e74e-19855aa31f31@amd.com> <Y1IwLOUGayjT9p6d@kroah.com>
+ <0591e66f-731a-5f81-fc9d-3a6d80516c65@huawei.com>
+ <Y1JZ9IUPL6jZIQ8E@kroah.com>
+ <f1210e20-d167-26c4-7aba-490d8fb7241e@huawei.com>
+ <78f84006-955f-6209-1cae-024e4f199b97@amd.com>
+ <9ee10048-f3fe-533b-5f00-8e5dd176808e@huawei.com>
+From:   Luben Tuikov <luben.tuikov@amd.com>
+In-Reply-To: <9ee10048-f3fe-533b-5f00-8e5dd176808e@huawei.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <e0fc94ec3e6e088ad26d1b2ba7a1e9dfb4fb8079.camel@surriel.com>
-X-ClientProxiedBy: MW4P222CA0029.NAMP222.PROD.OUTLOOK.COM
- (2603:10b6:303:114::34) To BY5PR10MB4196.namprd10.prod.outlook.com
- (2603:10b6:a03:20d::23)
+X-ClientProxiedBy: YT3PR01CA0021.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:86::32) To DM6PR12MB3370.namprd12.prod.outlook.com
+ (2603:10b6:5:38::25)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR10MB4196:EE_|BLAPR10MB4899:EE_
-X-MS-Office365-Filtering-Correlation-Id: 69b4b6e9-5156-45ae-5a13-08dab3bddaf8
+X-MS-TrafficTypeDiagnostic: DM6PR12MB3370:EE_|MW5PR12MB5650:EE_
+X-MS-Office365-Filtering-Correlation-Id: 54580e30-f48c-4ace-142d-08dab3be53f9
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zXlW/R8LKleFs3jYAeMuHPvcPp6NCVzWr+lGI4Qq7fY9D6ecg5EheOEe2sWSBTzuo7mZTPJsYrATvJqHdUzB6AxlvliuCUC7aHhfHbxsALBvOuAO1t/kxvRyepnKAgdlI6L+MXQus7upH7i2ucw1Slc0yEBXVlTzyoxHqwo+1eZbUZuXWGYUNu4cpENJbB+Upo7SnkPITcP7mppp/E+EXlQpQiKkK1QXFpVB5GLfotZ0I0fTHO0U13P2a3Nsyff60WtkODw8NvlUzFC93QDTMbBm+tCFyxGsfBhn7f84HxLL+4JRAFthhpBKlovthgmQeoKRqACCeyeZKScKBpYEYy4q2Iw35PSxgX587y6kkAqeacYz99Bsa6aljglLQvUMFezXNHuN6M6Vh+5TmoSnZgf2fStvybQbuRR6b8pg+tY7qxZl2SsoLoBbHI7ypCP1nPJkDGJ0xscWa7sNYoFF12SSIcqGVd9COfnrMJ1Z+DD6XUpSNd2OJ8YRtRhFNln7v7UUMGHxAOIYGcF7hj35HHMerX5ID1fxQ9gdvAw1I84IHh8Kkahed5cRuiFj7gK4gLbQA0Y16oVqUcIKDOFI6sFwJqy9YXeLURQA9Gwzdjblhd5kZP+T/bEHBvrDSgqcjhmF2vXqWLmgvd5gsQqi90EcXm9kNm3jDEsXfbIlgGVuMiGE/iOh9gvCdv21Jx49SvZj0ZT8gcWvBO0CsKL4HASUyAg/AVFCt79UP+XPXNk=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(396003)(346002)(136003)(39860400002)(366004)(376002)(451199015)(316002)(9686003)(54906003)(6916009)(66476007)(8936002)(6512007)(8676002)(26005)(186003)(2906002)(5660300002)(44832011)(4326008)(66946007)(66556008)(86362001)(83380400001)(6506007)(41300700001)(4001150100001)(53546011)(33716001)(966005)(38100700002)(478600001)(6486002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: aGw1DrPLFR4cKWXUAaEcDXP7kewxDGHHsexFg+bcleKM44gaAlIfGy7WDrKTwPi758grxCfL14m28Qfzy1zAFeihOhbCSkTRgYXx451/vS5EpxKSCGKoPYFob1YDAmBBy2hUdXaFJy9du+OqrQ580BGM//1l/PQPwjSO15AYjEI7DQXW8DvpCYA5eQCRwRp2oA1UJV35og8h93wl/LVn0KAsdU/Ch5ZLzMWDbF2IH8/FnjM6EtMn+1XSdMvlaV/4mDnTrP0oFj9EuWyAKOvJjYKcqZMVLai8jVxW7UbKn2XU6kCQI4Qg2bGWDEIpyVKmmZJqBdjxc10eDer4H/WVPC5XFpAhYajU1YPpOADE8XZFmjQ8CaX9ts7ZM6oY1ZHuPoT9FqL/nbXYbzDfasrkByqBiEUaZ5jYGM9DPTO5gK8l9Hk/ao/7ZEw0pD3gvVrbt1QA2MubHmhtqjv3gOE/3ZY2y152uBTOyDiLZKasmc0tONJvUo/omNxiweDwV2TfndKqn1f8+EIoQ/WiMmwWW8h9pPy1pR3GZxgEccgL7jklmS4MGMn+uemyKTUIJF2ErugTZtcu6Bnnh+iYHPorsRXtOMFrYak6IUReOEDdQdPkJxGGFUvfe598C3FWfMhpf5uc2/QbcC6v7ksUSmXGopjeKu88e7BEaIZytmxckU8p+W9cw8gxRRnymlxX3FfUz6zziOZ6NeLmU/ATcfY5oERHUUIrKZJxiedMZRlc/lw2gFjMY5APJeGw9Ev6l9HMEOMRLC/THaeCUb/7V4Tg6+Zx4p4dLThLmUpXkaYqvQgv5T3LBR6i2kEk2dAdx0N+VEDT3/v03YuyyfqilHuLaw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3370.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(136003)(376002)(39860400002)(396003)(346002)(451199015)(6666004)(6486002)(966005)(45080400002)(7416002)(5660300002)(66556008)(41300700001)(478600001)(36756003)(8936002)(4326008)(8676002)(44832011)(316002)(110136005)(66946007)(66476007)(2616005)(6512007)(38100700002)(26005)(6506007)(53546011)(31696002)(186003)(31686004)(2906002)(86362001)(4001150100001)(66899015)(43740500002)(45980500001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?FPi5GbRwM3AN34YcLQYCa1uOYMJT60UoaTqHr5UytC5KrBe2k0y/+3KEtT?=
- =?iso-8859-1?Q?MDzHiJqPo7a9b12khBzTomcTFV1TykNQk9FR+MxccmudD0zoreG4mnfnsi?=
- =?iso-8859-1?Q?EJdy+fUJrWhQ+w6Rflxp+saxQBwoSE5mHg2GkvGUZs2pIFXLatY2fqHtdc?=
- =?iso-8859-1?Q?vIfOFa0g0EdioYAw1u/Ne0d8Bhe9sy8ZUpI/XYPe11XW220KOnTmP9xkr4?=
- =?iso-8859-1?Q?6rtPJ0OqpaRSy3taIXLW+n4Q+g9dUlzfBsctmeQGAIDoMHCfQF90ZRRp7n?=
- =?iso-8859-1?Q?zmsPA7fMB156e4iFfYaUSRkA/fFj+RKyu0fuIF8A2Aizb9ndarKCLSZTBd?=
- =?iso-8859-1?Q?DKD37Xi0IPph8Grm2TI//aIX2D0vTqFV4Eu9VympGk3ec+8XS7Xz4v/lQx?=
- =?iso-8859-1?Q?CcwCgfGupJm7uW2ME/letNorT/fkeB3OxyYFkg/ta0+K9dyx/VEMXg69VL?=
- =?iso-8859-1?Q?ilrbnuDuD22GPOBXWVj9mTDC8ZSX4h624y+Pr1sjh0cZGruXIkY0I8KBbg?=
- =?iso-8859-1?Q?qNh4nOUBHmpiXXHpFBJWE5HJOlZ+BrZjDDyvLaoBfAm0WGIfEg9ocIT/SP?=
- =?iso-8859-1?Q?Apyf1YpUg5X5vHY2mWMBt5xd4M06j/h9qFCTUMnezEHZsEN41UhxL4jZS3?=
- =?iso-8859-1?Q?NpNynAnbqMwkPRHbhasIHl02fGq8LZM7W3GRXnK6CLBTP/LHkCqKftwFWj?=
- =?iso-8859-1?Q?MosXOyvf32o+ZUlHfMxT1Mn2XZ+kaldyJhI5qHNXYb/AgdxPyxQgQY36HP?=
- =?iso-8859-1?Q?X4P2juuqQexVHYJWCfrwBkaOpw9cFxFs0eH3G8onhXMiudFJTWxfzAUA2p?=
- =?iso-8859-1?Q?5ahwQE05+MN3RX7q6f8tcK8qTsFfdh8d1cXTCFpDHkFnv8cr8KaFuYuy8q?=
- =?iso-8859-1?Q?ROOg4Wzv8aTDKzSZSyq0mTm2O9FJ7WG7rnUopDXbIVjOqLsgst7KNw0QoR?=
- =?iso-8859-1?Q?GPg+Z53SF4Wy5SRExygmk/PJGjUraRArPKemi6kOfWMFBisAfefu2TtPc2?=
- =?iso-8859-1?Q?XLahe0jrq7HQ/uQL4Bgup7gRv9uhFb0zxgt4cjZ4nQHppr5Ji6wqkZTUNx?=
- =?iso-8859-1?Q?8VU0vG7f48ISQZ9ckNzgWHzBizOOCJsQ/Q4tL5EtLZdkJG9rSyAO+4Topp?=
- =?iso-8859-1?Q?GUnOEyuejZmggrc6iTG4XZ6CLTq8VP2OWl8aXgA5OfKS36sraC0phv4jXs?=
- =?iso-8859-1?Q?rqqJMgE8CrTAg7a1UJA1GmL8nOlg6JFre8cCWenf4OeBGVWuCuSKzSsmQh?=
- =?iso-8859-1?Q?X2wkrV4fK4sSw51QMw1kGLGMKnyhj03Fr9cc8JOSCtyeb9xL2htbdHAkEa?=
- =?iso-8859-1?Q?FWZ4edmD9c7wJ82k8WnRpO4vHL3xNePjEvlNGfvfWa2o0oM7Gj4ERRU4+l?=
- =?iso-8859-1?Q?w5YnMGL5j8envRckZgLb6FYHvtM5a9XWEJhAehHztMXlqzHTJ/tCqOIpb9?=
- =?iso-8859-1?Q?Wa9CSMIbrLIEYwPRP99FYwLSxnF+AIsZenyqul9UJYiSleiTycGAIg/RVV?=
- =?iso-8859-1?Q?EzA5yEm1NC6+GfTFS6KCkNRm9Vtx8XSw4a80PmwdLJNMicybzVzZ77U/n2?=
- =?iso-8859-1?Q?1BO/S+YKG/fr+BFVYGXycNXnrPNxAj1CK6YnoKAm/4ORzPgz4yjHnPCrTA?=
- =?iso-8859-1?Q?7nyx1bC2kIAOpJB1mCSXCVZs7PS0h9WobAgjx2iKIJlopn7UsoRI6Mgw?=
- =?iso-8859-1?Q?=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 69b4b6e9-5156-45ae-5a13-08dab3bddaf8
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Q2FWellvK2p6ZmpiRkFPK3Bkc2Y0SVhJbUV6WUlJOEpPQk9uU3E5Z0crVHJU?=
+ =?utf-8?B?SzBtZkxZSzI0MjBGYWlGSmNqZ2d1WGlpd0s0VUExcE9Zd084b1J6blg2VW8r?=
+ =?utf-8?B?UzFpMEsyRnhPQnRuNnNEMktzdUIwT0p3MmdoZ0xCUGxwdlo2STQvZ2p0bENz?=
+ =?utf-8?B?OG5saldyQkg0NTJwaTdPZm5NV1NLZ3RBSlF6eXdSV2FGeGNva0NsRXZaS2ZC?=
+ =?utf-8?B?d0Vma3d4WEg3dVEzYlRWQlVIU1VnQUdaclBOU3ZLeWlmN25WelZIaC84WVJY?=
+ =?utf-8?B?c2FaaDljK0tTWWJPSEVjR3lhaERrSi9WQk5SOXFRMkRWeTFRR0dXaEtKTGlW?=
+ =?utf-8?B?RkdWbzJCY2k0MkkzUVJtTldWV090amhoNEpEcU43b3FMbHQvdW5mQ0lHUjRR?=
+ =?utf-8?B?dkJSMFUxb1hxUkg2aVcrcTMxQkdrVVZGU3R3QUppSTdVczIva21ydG9vVWZC?=
+ =?utf-8?B?VStkd2M0YUEvL09PVjdKZFFBMndvUGF5blp2ajA5ek50K1JLdDBwN2QyZTN0?=
+ =?utf-8?B?MXkwaW1zamkrbk4wNldZLzNuaDdUUkZnRGs4MjZHOUU2akUrVGZCZFpaY1Nw?=
+ =?utf-8?B?Y3FGcFk2VHEvOXJoZTBOUzNLYXdjdm1BenVCL1lWajkzVUN0NHl0NXpIdFVl?=
+ =?utf-8?B?QWdqUjVFYWlKZzh5YWh2eFVvYXAveldMcm1hVVYxaSt3ZXRFenN1RmErbVhI?=
+ =?utf-8?B?b1FNeFgxczJoRnhJc1FkcS9vdW9GTjN5bHA4OW5OVjNnSUViQ0s5YkdPcnJF?=
+ =?utf-8?B?UXF5SEJ2TlN5SmZVSXo0OFFjWHpHUzZsU2c5bFgzSk95WlVVYXpERWNGdnB6?=
+ =?utf-8?B?dDVmTlJMdVNCRDk0bFZQZWxwa2h2eUNmVFNzOFZrQXFLTGJwc3dMRjZ0RzVv?=
+ =?utf-8?B?WStCdFUxeEFIcmRxWXcxNEpCU25NMjJIZ2ExZlVqdUorM3FWYmN2MTRXQjVk?=
+ =?utf-8?B?U1hKVnJoVldsZGZwRWRocmVjSEFxakZYT2NuQXdhRTF4OU91YVdIaStldis3?=
+ =?utf-8?B?QzBEc1QvM2V6UmJZYjdPdk03NitjMGNtdFVCc3FPN0VSRnJpV3lKbEkrUnZr?=
+ =?utf-8?B?MW52anZDUmE2QUxJbjJyMDdsS0xILzI2U3BMQ2gzaTh5SjQwQWM0V0ZDQzVq?=
+ =?utf-8?B?OGdOUTh6WU9PWE1OaU9Za2g5N1FONUo2NGREZHdZcHE3dzZybGE1TkVzaWVL?=
+ =?utf-8?B?Y01TcjN0Q2s1M2EwNS9TakNhMWlIM1dhUCsrclo3cTRVaThabDVEUkd6UWo1?=
+ =?utf-8?B?ZlVpcmFpY3dxSTltTkxlbktlZ0g1MGl0bCtjNVBJQ1lUZU1GMko2SG11YnN1?=
+ =?utf-8?B?cnk3VDdJU2o1K0xjMWs3TlJLWm04WmlCTWxvUjhzYWxGWGpzWWxIa29Ya1lR?=
+ =?utf-8?B?V2p1czg3YWVaNGNkeHVBbTMvTlJvZGFjMWtJRHR4bEtpNVJEQ3hFb3lNeS9R?=
+ =?utf-8?B?NXowM3E5dk40NFR2VXZ3Ky9McVNhb0NidGZsekp0VlErQ3YzNXdoK0FpS0ZX?=
+ =?utf-8?B?UmJOMmVvSS9mbGtNZnRmRUliUlRzeEFLMW56RGNTY1JqYU1Ia0tld2xKVVJW?=
+ =?utf-8?B?ZVZRQTVoMllrYnU1Y2dUaEFmKzJUWEFodmRUT2RiUFBQbVZkNzFoVys3Z3Nk?=
+ =?utf-8?B?MndTNytmRDYvWWxuaStDeFJWb3l2anZMVUR1b3Y5RVJLNHlEaGdmcnVIWEV1?=
+ =?utf-8?B?MngzZHErMm5Uc1dSUmFNRE9Ed253VGdLL1c2cGp2NUtjcUN4aFJHQnBOY3h2?=
+ =?utf-8?B?b2NUakJNWlpwa0ZGWjhVWXhZU2E1bjhFRTkvWnFnenEvemIrSHVQd2xRZXJz?=
+ =?utf-8?B?bUlDS2V5L253M0VHbmpURDVLWVQrWmRMeGZBVVY1ei9wMVl3RkVKVWtNQmMw?=
+ =?utf-8?B?YUVicHY2aVptYW1ueFFTZk9sQVh4UlhiNmRIYXRsbmFPbkczUXNVRWVhUzNS?=
+ =?utf-8?B?S0NZZFZyR2Vid2svd014RythOWxPU2FWL01rc3Q0TFcrbUJHQUFwMHdBalFJ?=
+ =?utf-8?B?VHVQZVcxQUhEZXJ2VVJSQ1JhM0ozSld5OERxNjFVWXJNaFNpWmQ5WTNUTURY?=
+ =?utf-8?B?REpuWmJpRmFhYmh5VlVNWnlIUFhuMmJ0VkZVZFBmNTVSc29NeUMydWQ0bk9X?=
+ =?utf-8?Q?J4JTjMsig2S9FxnKmAe7Vbw1M?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 54580e30-f48c-4ace-142d-08dab3be53f9
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3370.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Oct 2022 23:42:03.1182
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Oct 2022 23:45:26.1743
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: rxSyASFiKfVbl4Ok1EBC3y+JKUD3NXWYSz5mvuI6zDt2k4RzOZrcdCocrjoORgdyXznvh7Z8qRjeBMvIzHR1NQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB4899
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-21_04,2022-10-21_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 adultscore=0 mlxscore=0
- spamscore=0 bulkscore=0 malwarescore=0 mlxlogscore=820 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
- definitions=main-2210210138
-X-Proofpoint-ORIG-GUID: hXAxE3WOTGGueziMGKciDxqB5xqHFL9u
-X-Proofpoint-GUID: hXAxE3WOTGGueziMGKciDxqB5xqHFL9u
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-MS-Exchange-CrossTenant-UserPrincipalName: 7iawkYfgjKrRJkKVJ9PC3JfmAwNlzjkogEihwWkOSQrKv8vCMKol/DssN80A9GML
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR12MB5650
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -150,50 +138,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/21/22 19:29, Rik van Riel wrote:
-> On Fri, 2022-10-21 at 13:48 -0700, Mike Kravetz wrote:
-> > On 10/21/22 15:45, Rik van Riel wrote:
-> > > A common use case for hugetlbfs is for the application to create
-> > > memory pools backed by huge pages, which then get handed over to
-> > > some malloc library (eg. jemalloc) for further management.
-> > > 
-> > > That malloc library may be doing MADV_DONTNEED calls on memory
-> > > that is no longer needed, expecting those calls to happen on
-> > > PAGE_SIZE boundaries.
-> > > 
-> > 
-> > Thanks Rik.  I tend to agree with this direction as it is 'breaking'
-> > current code.  David and I discussed this in this thread,
-> > https://lore.kernel.org/linux-mm/356a4b9a-1f56-ae06-b211-bd32fc93ecda@redhat.com/
-> > 
-> > One thing to note is that there was not any documentation saying
-> > madvise would happen on page boundaries.  The system call takes a
-> > length and rounds up to page size.  However, the man page explicitly
-> > said it operates on a byte range.  Certainly mm people and others
-> > know we only operate on pages.  But, that is not what was documented.
-> > 
-> > When the change was made to add hugetlb support, the decision was
-> > made
-> > to round up the range to hugetlb page boundaries in hugetlb vmas. 
-> > This
-> > was to be consistent with how madvise operated on base pages.  At the
-> > same time, madvise documentation was updated say it operates on page
-> > boundaries as well as the behavior for hugetlb mappings.  If moving
-> > forward with this change we will need to update the man page.
+On 2022-10-21 05:56, Yang Yingliang wrote:
 > 
-> I'll send in a patch for the man page after the patch gets
-> merged. I'll change the text to clarify that the system
-> may round up the specified length to PAGE_SIZE granularity,
-> which is a quantity programs can get through (IIRC) getconf.
+> On 2022/10/21 17:08, Luben Tuikov wrote:
+>> On 2022-10-21 04:59, Yang Yingliang wrote:
+>>> On 2022/10/21 16:36, Greg KH wrote:
+>>>> On Fri, Oct 21, 2022 at 04:24:23PM +0800, Yang Yingliang wrote:
+>>>>> On 2022/10/21 13:37, Greg KH wrote:
+>>>>>> On Fri, Oct 21, 2022 at 01:29:31AM -0400, Luben Tuikov wrote:
+>>>>>>> On 2022-10-20 22:20, Yang Yingliang wrote:
+>>>>>>>> The previous discussion link:
+>>>>>>>> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Flkml%2F0db486eb-6927-927e-3629-958f8f211194%40huawei.com%2FT%2F&amp;data=05%7C01%7Cluben.tuikov%40amd.com%7C2597f1097c204be54c7c08dab34a8654%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C638019429914730071%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=NNVCtbTxI5uzxxJA9mKvnsy8d3jyudtl1u4CTcm3tsU%3D&amp;reserved=0
+>>>>>>> The very first discussion on this was here:
+>>>>>>>
+>>>>>>> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fwww.spinics.net%2Flists%2Fdri-devel%2Fmsg368077.html&amp;data=05%7C01%7Cluben.tuikov%40amd.com%7C2597f1097c204be54c7c08dab34a8654%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C638019429914886316%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=ByCQk0qGktyyoNQg8IFj5AGxmaeWOXnbIA4rFnX%2B6%2BA%3D&amp;reserved=0
+>>>>>>>
+>>>>>>> Please use this link, and not the that one up there you which quoted above,
+>>>>>>> and whose commit description is taken verbatim from the this link.
+>>>>>>>
+>>>>>>>> kset_register() is currently used in some places without calling
+>>>>>>>> kset_put() in error path, because the callers think it should be
+>>>>>>>> kset internal thing to do, but the driver core can not know what
+>>>>>>>> caller doing with that memory at times. The memory could be freed
+>>>>>>>> both in kset_put() and error path of caller, if it is called in
+>>>>>>>> kset_register().
+>>>>>>> As I explained in the link above, the reason there's
+>>>>>>> a memory leak is that one cannot call kset_register() without
+>>>>>>> the kset->kobj.name being set--kobj_add_internal() returns -EINVAL,
+>>>>>>> in this case, i.e. kset_register() fails with -EINVAL.
+>>>>>>>
+>>>>>>> Thus, the most common usage is something like this:
+>>>>>>>
+>>>>>>> 	kobj_set_name(&kset->kobj, format, ...);
+>>>>>>> 	kset->kobj.kset = parent_kset;
+>>>>>>> 	kset->kobj.ktype = ktype;
+>>>>>>> 	res = kset_register(kset);
+>>>>>>>
+>>>>>>> So, what is being leaked, is the memory allocated in kobj_set_name(),
+>>>>>>> by the common idiom shown above. This needs to be mentioned in
+>>>>>>> the documentation, at least, in case, in the future this is absolved
+>>>>>>> in kset_register() redesign, etc.
+>>>>>> Based on this, can kset_register() just clean up from itself when an
+>>>>>> error happens?  Ideally that would be the case, as the odds of a kset
+>>>>>> being embedded in a larger structure is probably slim, but we would have
+>>>>>> to search the tree to make sure.
+>>>>> I have search the whole tree, the kset used in bus_register() - patch #3,
+>>>>> kset_create_and_add() - patch #4
+>>>>> __class_register() - patch #5,Â  fw_cfg_build_symlink() - patch #6 and
+>>>>> amdgpu_discovery.c - patch #10
+>>>>> is embedded in a larger structure. In these cases, we can not call
+>>>>> kset_put() in error path in kset_register()
+>>>> Yes you can as the kobject in the kset should NOT be controling the
+>>>> lifespan of those larger objects.
+>>>>
+>>>> If it is, please point out the call chain here as I don't think that
+>>>> should be possible.
+>>>>
+>>>> Note all of this is a mess because the kobject name stuff was added much
+>>>> later, after the driver model had been created and running for a while.
+>>>> We missed this error path when adding the dynamic kobject name logic,
+>>>> thank for looking into this.
+>>>>
+>>>> If you could test the patch posted with your error injection systems,
+>>>> that could make this all much simpler to solve.
+>>> The patch posted by Luben will cause double free in some cases.
+>> Yes, I figured this out in the other email and posted the scenario Greg
+>> was asking about.
+>>
+>> But I believe the question still stands if we can do kset_put()
+>> after a *failed* kset_register(), namely if more is being done than
+>> necessary, which is just to free the memory allocated by
+>> kobject_set_name().
+> The name memory is allocated in kobject_set_name() in caller,Â  and I 
+> think caller
+> free the memory that it allocated is reasonable, it's weird that some 
+> callers allocate
+> some memory and use function (kset_register) failed, then it free the 
+> memory allocated
+> in callers,Â  I think use kset_put()/kfree_const(name) in caller seems 
+> more reasonable.
 
-Ok, the man page now says madvise only operates on page granularity.
-Perhaps we can add info about using sysconf(PAGE_SIZE) if that will
-help.  What will really need to be changed is the description of
-rounding hugetlb mappings up to the next huge page size boundary.
-Just need to describe the hugetlb behavior.  Unfortunately, we may
-need to define/describe the arithmetic:
-	ALIGN_DOWN(PAGE_ALIGN(length))
-i.e. Will align down except in the case length is within PAGE_SIZE
-     of hugetlb page size.
--- 
-Mike Kravetz
+kset_put() would work only in implementations, such as amdgpu_discovery.c,
+where the ktype.release is defined and it frees the embedding object in
+which the kset is embedded.
+
+Depending on the implementation, you may need to call kfree_const(name).
+
+And this is why this needs to be documented in kset_register(), as I noted
+in the review earlier.
+
+Regards,
+Luben
