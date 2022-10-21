@@ -2,68 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0E99606DE8
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 04:41:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 668BF606DE4
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 04:41:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229991AbiJUCl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 22:41:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58534 "EHLO
+        id S229962AbiJUClM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 22:41:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230041AbiJUClX (ORCPT
+        with ESMTP id S229909AbiJUClJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 22:41:23 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 546941EEA04
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 19:41:18 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id h185so1296229pgc.10
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 19:41:18 -0700 (PDT)
+        Thu, 20 Oct 2022 22:41:09 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4F661B232E;
+        Thu, 20 Oct 2022 19:41:05 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id pq16so1197474pjb.2;
+        Thu, 20 Oct 2022 19:41:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hHaTEgELqZucdbkgwdj5xVLrR3sTANCQHwBWYpXrDwg=;
-        b=dn1FJWNAP+t44tpnfehnU21uXU5pdAaACu3Oa79rz0ubMUQKxXq5xEKNle55fcNpNr
-         k1/muB+8CtaMnBgpWGzHI/67dp1Y0IBmwFn44HrvW5DlW9v+X+CGhPnrkWEiAjfg+2QQ
-         aZDzR9Bdf8jk/5zW3Ic0OW+3tHEXLBdAf2JY5vuYHQjkhm+uvnXHvO0e77cavyq9BoML
-         CD8xq2DJNbVRw20lnq3wrGiGcfqqcZP/nR8lokGzfL94W4LzLrAg019frrTS0sfeVJXA
-         X3DVCPXyUtxQyufXAKsnJpYj4EZYx4IYZPIZOiXkYQgKbet34Bk8EHh0ysa7vGLhjGBj
-         SzXw==
+        bh=q7qTx0k1id+tqPtrpykfViuJRNlwvqXtqIFSsgug6r4=;
+        b=jb6+eMMfeAlOFfvR6HBFBnIUEKd66s8sfoCn1SS236FS6ogTGYFAQimh1lfZiL++XA
+         DK2ZPy3sW7JuPOHLqzHfqXaAE3jTu0kTcqINtCP7oZzyRmNkWRJkImDh7SSVLw2s75/W
+         MJqj5Mwxe3WKSt7MzJPP39mtiCKI2b8TJbHkzufBmaNUQPGvgjmlEcDuR5jkGWUvY1SK
+         gY3P3dg0xaTO/Jr+ctaIe1QpD5gZ+bDRdYaR+4aLwd9TW8Q1YAt7JtiRFUykVAjY5TYx
+         KbqYCEmR+egPBnlphsnRUIYCg4mYGrnqsgXUp7qsVNaFoNUialIyT7NElTwDa0H/Kf5s
+         anxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=hHaTEgELqZucdbkgwdj5xVLrR3sTANCQHwBWYpXrDwg=;
-        b=KZHceLOiRvQUbqEzXLMUxBviGgKFyJwRwVWO3W4IZYBBw5qWEhIysuP711uP8thGaM
-         EVcnJv6AxNXmFgXIJnKfUqaIizaFDr0TGs2DSyiIjR4my3URSrMSdso2zVHiAFJIbItS
-         czrcNQIRKG2PYE8YBM8xkt1i0hIJOzBHSUpmA18J28tTJ+MdadQCM00BUttrrEHLOYt/
-         aTP2FuMe+84Spdz1DhRF2vX1f1gEUPNlNHtp4c39/qnmPCBJ9oAXrRFTFmdxebc8IbBU
-         W8fMwVRQSBm43/zckoUzc9KN9m40LuXXp5KJ7o6+xcCf0wb3RC/vhLvLYNRt5aWGvNGv
-         vz6w==
-X-Gm-Message-State: ACrzQf1ktSEmAl4F0NTcaxaGMJJJXKwj2D/0a8m56PHyhQyxNKdFu2H8
-        k/JK0Sv5+4LJQBb86HxU6Ec=
-X-Google-Smtp-Source: AMsMyM6PtbI8J6Oapq5CSGQIqVaxBmmc+AT2patlNedL5QjRuHQN6mBD3iXGD0ZH3+VFJhwWx4zSiA==
-X-Received: by 2002:a63:1609:0:b0:45c:7c1c:4e7d with SMTP id w9-20020a631609000000b0045c7c1c4e7dmr14170938pgl.265.1666320077331;
-        Thu, 20 Oct 2022 19:41:17 -0700 (PDT)
-Received: from localhost ([159.226.94.113])
-        by smtp.gmail.com with ESMTPSA id d11-20020a170902cecb00b00177fb862a87sm13725924plg.20.2022.10.20.19.41.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 19:41:16 -0700 (PDT)
-From:   Hawkins Jiawei <yin31149@gmail.com>
-To:     mike.kravetz@oracle.com
-Cc:     18801353760@163.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, songmuchun@bytedance.com,
-        syzbot+a3e6acd85ded5c16a709@syzkaller.appspotmail.com,
-        syzkaller-bugs@googlegroups.com, yin31149@gmail.com
-Subject: Re: [PATCH -next] hugetlbfs: fix null-ptr-deref in hugetlbfs_parse_param()
-Date:   Fri, 21 Oct 2022 10:37:41 +0800
-Message-Id: <20221021023740.184533-1-yin31149@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <Y1Hb6sIJXrRwEttv@monkey>
-References: <Y1Hb6sIJXrRwEttv@monkey>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        bh=q7qTx0k1id+tqPtrpykfViuJRNlwvqXtqIFSsgug6r4=;
+        b=P92epzXNTmcVDtCOOkMbCp4onukyakC88shqy3SxM5R2USaRhA/8c7+9c/kD7Xw3VC
+         PaFjs7f/wjwzb3FpdkvojMmMq7jbKXtkWZ0HWDSENa7OEcOdq28S76a3UTPjg2SKxUGB
+         CF7LvH6QHkNVLoA6/mSmxHFiER/8ex+chJrzJ9//TqejIYmXngVv6u22uiigy46Xqcpk
+         UF2OrR52hcC4uhDC+61fHECNvoDo7pjBa72NlGvxB1cnlWwGn64c3VNPVI84BVXXIrYZ
+         gMzIf11RzwdoLh0UBHoXfOGroDznLB9y4+3Be9LZ4lOpS4XfU/eFVfgODavSEE2TXS/V
+         5NGg==
+X-Gm-Message-State: ACrzQf35z9Vq0p8181irOWiFqdVZQBKPwolahRM3Y2Dj1ygKlbH1s3mQ
+        WULPlY/R0WWz192D0IUTrSZ/NYfxmQY=
+X-Google-Smtp-Source: AMsMyM4F6P4Q2y0fMHWd/2HcgUfqbJuYGK+P0AQlvZmPa2lVfx/+4B89c3o9JWroPUArSnnXUA92EA==
+X-Received: by 2002:a17:902:ccc2:b0:178:29e1:899e with SMTP id z2-20020a170902ccc200b0017829e1899emr16995154ple.114.1666320065326;
+        Thu, 20 Oct 2022 19:41:05 -0700 (PDT)
+Received: from localhost.localdomain ([2402:7500:577:b022:150a:a87e:ab3a:9736])
+        by smtp.gmail.com with ESMTPSA id a19-20020aa794b3000000b0053e42167a33sm14033023pfl.53.2022.10.20.19.41.02
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 20 Oct 2022 19:41:04 -0700 (PDT)
+From:   cy_huang <u0084500@gmail.com>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        broonie@kernel.org
+Cc:     lgirdwood@gmail.com, cy_huang@richtek.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/2] Add support for Richtek RT6190 36V 4-wwtich regulator
+Date:   Fri, 21 Oct 2022 10:40:57 +0800
+Message-Id: <1666320059-17544-1-git-send-email-u0084500@gmail.com>
+X-Mailer: git-send-email 2.7.4
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -74,113 +67,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mike,
+From: ChiYuan Huang <cy_huang@richtek.com>
 
-On Fri, 21 Oct 2022 at 07:38, Mike Kravetz <mike.kravetz@oracle.com> wrote:
->
-> On 10/21/22 07:16, Hawkins Jiawei wrote:
-> > Syzkaller reports a null-ptr-deref bug as follows:
-> > ======================================================
-> > KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
-> > RIP: 0010:hugetlbfs_parse_param+0x1dd/0x8e0 fs/hugetlbfs/inode.c:1380
-> > [...]
-> > Call Trace:
-> >  <TASK>
-> >  vfs_parse_fs_param fs/fs_context.c:148 [inline]
-> >  vfs_parse_fs_param+0x1f9/0x3c0 fs/fs_context.c:129
-> >  vfs_parse_fs_string+0xdb/0x170 fs/fs_context.c:191
-> >  generic_parse_monolithic+0x16f/0x1f0 fs/fs_context.c:231
-> >  do_new_mount fs/namespace.c:3036 [inline]
-> >  path_mount+0x12de/0x1e20 fs/namespace.c:3370
-> >  do_mount fs/namespace.c:3383 [inline]
-> >  __do_sys_mount fs/namespace.c:3591 [inline]
-> >  __se_sys_mount fs/namespace.c:3568 [inline]
-> >  __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
-> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-> >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> >  [...]
-> >  </TASK>
-> > ======================================================
-> >
-> > According to commit
-> > ac369cdd9448("vfs: parse: deal with zero length string value"),
-> > kernel will sets the param->string to null pointer in
-> > vfs_parse_fs_string() if fs string has zero length.
-> >
-> > Yet the problem is that, hugetlbfs_parse_param() will
-> > dereference the param->string, without checking whether it
-> > is a null pointer. To be more specific, if hugetlbfs_parse_param()
-> > parses an illegal mount parameter, such as "size=,", kernel will
-> > constructs struct fs_parameter with null pointer in
-> > vfs_parse_fs_string(), then passes this struct fs_parameter to
-> > hugetlbfs_parse_param(), which triggers the above
-> > null-ptr-deref bug.
-> >
-> > This patch solves it by adding sanity check on param->string
-> > in hugetlbfs_parse_param().
-> >
-> > Reported-by: syzbot+a3e6acd85ded5c16a709@syzkaller.appspotmail.com
-> > Tested-by: syzbot+a3e6acd85ded5c16a709@syzkaller.appspotmail.com
-> > Link: https://lore.kernel.org/all/0000000000005ad00405eb7148c6@google.com/
-> > Signed-off-by: Hawkins Jiawei <yin31149@gmail.com>
->
-> Thank you!
->
-> This was on my list of things to look at.
->
-> Do you know if the issue existed before commit ac369cdd9448?  Just
-> wondering if we need a Fixes tag and stable backports.
-This issue did not exist before commit ac369cdd9448, because kernel will
-sets param->string a string(although a zero length string) by kmemdup_nul()
-when fs string has zero length in vfs_parse_fs_string(). So it will ensures
-that param->string is not a null pointer in hugetlbfs_parse_param().
+The RT6190 is a 4-switch Buck-Boost controller designed for USB power delivery
+(USB PD). It operates with wide input voltage range from 4.5V to 36V, and the
+output voltage can be programmable between 3V and 36V. It implements peak
+current mode control mechanism to deliver up to 100W power with the
+programmable constant voltage and constant current output. It also has built-in
+charge pumps for driving external low-cost N-MOSFETs to control the power path.
 
-I also revert commit ac369cdd9448 or reset to ac369cdd9448~, and test
-the syzkaller reproducer. The reproducer does not trigger any issue
-in both situations.
+Since v2:
+- Rename binding filename to 'richtek,rt6190.yaml'
 
->
-> I'll take a closer look at the patch a bit later, unless someone beats
-> me to it.
-> --
-> Mike Kravetz
->
-> > ---
-> >  fs/hugetlbfs/inode.c | 6 +++---
-> >  1 file changed, 3 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
-> > index 7f836f8f9db1..3ee84604e36d 100644
-> > --- a/fs/hugetlbfs/inode.c
-> > +++ b/fs/hugetlbfs/inode.c
-> > @@ -1377,7 +1377,7 @@ static int hugetlbfs_parse_param(struct fs_context *fc, struct fs_parameter *par
-> >
-> >       case Opt_size:
-> >               /* memparse() will accept a K/M/G without a digit */
-> > -             if (!isdigit(param->string[0]))
-> > +             if (!param->string || !isdigit(param->string[0]))
-> >                       goto bad_val;
-> >               ctx->max_size_opt = memparse(param->string, &rest);
-> >               ctx->max_val_type = SIZE_STD;
-> > @@ -1387,7 +1387,7 @@ static int hugetlbfs_parse_param(struct fs_context *fc, struct fs_parameter *par
-> >
-> >       case Opt_nr_inodes:
-> >               /* memparse() will accept a K/M/G without a digit */
-> > -             if (!isdigit(param->string[0]))
-> > +             if (!param->string || !isdigit(param->string[0]))
-> >                       goto bad_val;
-> >               ctx->nr_inodes = memparse(param->string, &rest);
-> >               return 0;
-> > @@ -1403,7 +1403,7 @@ static int hugetlbfs_parse_param(struct fs_context *fc, struct fs_parameter *par
-> >
-> >       case Opt_min_size:
-> >               /* memparse() will accept a K/M/G without a digit */
-> > -             if (!isdigit(param->string[0]))
-> > +             if (!param->string || !isdigit(param->string[0]))
-> >                       goto bad_val;
-> >               ctx->min_size_opt = memparse(param->string, &rest);
-> >               ctx->min_val_type = SIZE_STD;
-> > --
-> > 2.25.1
-> >
+ChiYuan Huang (2):
+  dt-bindings: regulator: Add bindings for Richtek RT6190 regulator
+  regulator: rt6190: Add support for Richtek RT6190 regulator
+
+ .../bindings/regulator/richtek,rt6190.yaml         |  77 ++++
+ drivers/regulator/Kconfig                          |  11 +
+ drivers/regulator/Makefile                         |   1 +
+ drivers/regulator/rt6190-regulator.c               | 495 +++++++++++++++++++++
+ 4 files changed, 584 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/regulator/richtek,rt6190.yaml
+ create mode 100644 drivers/regulator/rt6190-regulator.c
+
+-- 
+2.7.4
+
