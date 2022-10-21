@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94C72607C89
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 18:41:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1711607C8D
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 18:41:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231334AbiJUQlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 12:41:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53400 "EHLO
+        id S231492AbiJUQl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 12:41:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231207AbiJUQjP (ORCPT
+        with ESMTP id S231295AbiJUQje (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 12:39:15 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BCDC2892F2
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:37:57 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id v17-20020a259d91000000b006b4c31c0640so3723404ybp.18
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:37:56 -0700 (PDT)
+        Fri, 21 Oct 2022 12:39:34 -0400
+Received: from mail-vs1-xe4a.google.com (mail-vs1-xe4a.google.com [IPv6:2607:f8b0:4864:20::e4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5700A28C310
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:37:59 -0700 (PDT)
+Received: by mail-vs1-xe4a.google.com with SMTP id 65-20020a670344000000b0039b3020da1bso1053592vsd.3
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:37:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=LdHnE7caiqm4qshIBX12p5Rv53BpHm3Kmd+OvWlvh64=;
-        b=BIwoTuKHg0KVxAgZkQCtc2lTNtp6Y3O1lU/37+Hr0O/jeYU6gp+nzdB+H8m1NuA1ZL
-         VfIhzTnIwplVj+yHE00lZr+dFVwGgjXrUD+N5kHCoV/HhA1HAXwQNy9x27lvlVlgLIwf
-         DtjoIt6kkMc1YxnjeRuFwMF1WhDCfWcSqQA8ZPBcfbEojzPyzzD3dfJjCbyiR5Oc3sTY
-         SGe/+kTodt8Pm9AEqQzXBD2m1LtQnlBciskGh6NtkTnRzM+71sNNQHKJjcxjPPCLNpaD
-         NGLrnmbOnuJ8iS/HFbyXfe7oQTovhAfVGgN7uv4nuezupV5Y/VexoSSWmkqo3fUcEME7
-         XpJQ==
+        bh=9y9Kps0uMUxaUviUQmHpRsZg2wkh8g+3BdgpOUsdpD0=;
+        b=l/7qHlTlqK2+odgNL+qqaWtZd95RSQmfjj2EnMNPwPzYUopC/nQW9oknGDwJAIzM/V
+         toI7WNbfT5WjVMs9srJI2QLMSDhRHFgSpdvMACL3z+IizihCksdhhkBJ5mEioYTHCvo0
+         FmIcUxXZMiWS/ZIIxOqSMSBxAewQGqIH5uUcc6n9Dwa4sD9nRkufaMXxSFItUN7lDgfT
+         9USzcKP2HR68osgtg5cJtSMN3cXJ4Jhqhm/TxBcpRTG1sKA8CwhRmqo/CkU6R16k9yiZ
+         DFjIvC7I9+PQFY+MIk1rCSd9HJjdGzJoKWKELko+HJE1P98O26BCJKJPZ6KXbv/ZPUig
+         8qww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LdHnE7caiqm4qshIBX12p5Rv53BpHm3Kmd+OvWlvh64=;
-        b=azDVOvfrkK2fNG02OQG5hoy9ZY34fQA4opA8NXen0NuyR1G7MrwMzSj86estGiRFJE
-         etSjwdWBG8E0BQrvvs6sgWpP6MqUbNYo5ealYFu7h/8gktm1Q77hlLOF4Ov2yEuNXlhH
-         LZ1d+S8yfD97Y59tWAIgbyN0JZPVoQvkCepti7j6V0uzAPelCpyGIUf/3nrwpgZ7os63
-         rx/GDseUzf9u1v3O0/kHxLjjNctheX1m3/aZpuWpPL2ca+4hyotBiI149osGSg1NTxBV
-         rOotXr36HwOhT0Z4m7It5nt7u0i3TREafJUOZydGGO/BDFw7zEo8TnaGYcRbdDhOVDcw
-         VajA==
-X-Gm-Message-State: ACrzQf1ryhCG6IwN3JPq/uJJ2qmogDH68aVegpp67sU3UpDHF0EIA5i9
-        b6um56cgf2jf/lk5lf952AhBqPBAQibu5q0B
-X-Google-Smtp-Source: AMsMyM5h7Qfvjj2U3dA4nHJgEpkUrpiMmGEWdmjeehuzwUrU0UvEY2wo0j6MknJytybv7NpgRlPVlv0RuroSad+t
+        bh=9y9Kps0uMUxaUviUQmHpRsZg2wkh8g+3BdgpOUsdpD0=;
+        b=lQjolw3JnpHzgvISkzrbZUqzqq650Nm9t6w8GfSVWdGOD/5ta5dgUySPY0ouvS95P0
+         5Hbo+8fDJGinFH/Y4KwbYGnCCpbrTXn8MDWRazgKmsqeSAzPHzkM+o2F3QBngiFON+jL
+         inTXpkF7sySUk+r9CkBU+/Wj86XafSdDfyPAHdnp9FAB0Rauy6lNxPTmD5nCBT26XsAw
+         ZvnwLYYs5AKPT+2yytuTb2T2lsql58jpBm6HqvYOm7++A61r746m7cfIsUu5x1RQxdcW
+         hWt8IJOqz3Qs6K8He1BhN9NMFvo3JCkn2Dv2DKRhpMdgl1G0uzzhcsQYcR8+yQDjJVnq
+         GS3w==
+X-Gm-Message-State: ACrzQf3fO39wODjFI36JCOLh3qCWl/z77s+jQmnbr8cKw0HPxLwcZR5e
+        Tnro57lxxMkfzbxbUV2yGgDv+hgqXmBHVLgQ
+X-Google-Smtp-Source: AMsMyM4nbZOrU1c/6hMqiMfGOpW3jUqhlLxnmrA187TxhDh2sp8xpyGXRT14XguSYLO8M1Ws1W5QM12ugy8JoJHf
 X-Received: from jthoughton.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:2a4f])
- (user=jthoughton job=sendgmr) by 2002:a0d:e402:0:b0:368:5f54:d94b with SMTP
- id n2-20020a0de402000000b003685f54d94bmr8815902ywe.519.1666370276754; Fri, 21
- Oct 2022 09:37:56 -0700 (PDT)
-Date:   Fri, 21 Oct 2022 16:36:59 +0000
+ (user=jthoughton job=sendgmr) by 2002:a67:c80d:0:b0:3aa:895:9630 with SMTP id
+ u13-20020a67c80d000000b003aa08959630mr2609998vsk.15.1666370277616; Fri, 21
+ Oct 2022 09:37:57 -0700 (PDT)
+Date:   Fri, 21 Oct 2022 16:37:00 +0000
 In-Reply-To: <20221021163703.3218176-1-jthoughton@google.com>
 Mime-Version: 1.0
 References: <20221021163703.3218176-1-jthoughton@google.com>
 X-Mailer: git-send-email 2.38.0.135.g90850a2211-goog
-Message-ID: <20221021163703.3218176-44-jthoughton@google.com>
-Subject: [RFC PATCH v2 43/47] selftests/vm: add HugeTLB HGM to userfaultfd selftest
+Message-ID: <20221021163703.3218176-45-jthoughton@google.com>
+Subject: [RFC PATCH v2 44/47] selftests/kvm: add HugeTLB HGM to KVM demand
+ paging selftest
 From:   James Houghton <jthoughton@google.com>
 To:     Mike Kravetz <mike.kravetz@oracle.com>,
         Muchun Song <songmuchun@bytedance.com>,
@@ -84,252 +85,142 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This test case behaves similarly to the regular shared HugeTLB
-configuration, except that it uses 4K instead of hugepages, and that we
-ignore the UFFDIO_COPY tests, as UFFDIO_CONTINUE is the only ioctl that
-supports PAGE_SIZE-aligned regions.
-
-This doesn't test MADV_COLLAPSE. Other tests are added later to exercise
-MADV_COLLAPSE.
+This test exercises the GUP paths for HGM. MADV_COLLAPSE is not tested.
 
 Signed-off-by: James Houghton <jthoughton@google.com>
 ---
- tools/testing/selftests/vm/userfaultfd.c | 90 +++++++++++++++++++-----
- 1 file changed, 74 insertions(+), 16 deletions(-)
+ .../selftests/kvm/demand_paging_test.c        | 20 ++++++++++++++++---
+ .../testing/selftests/kvm/include/test_util.h |  2 ++
+ tools/testing/selftests/kvm/lib/kvm_util.c    |  2 +-
+ tools/testing/selftests/kvm/lib/test_util.c   | 14 +++++++++++++
+ 4 files changed, 34 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
-index 7f22844ed704..c9cdfb20f292 100644
---- a/tools/testing/selftests/vm/userfaultfd.c
-+++ b/tools/testing/selftests/vm/userfaultfd.c
-@@ -73,9 +73,10 @@ static unsigned long nr_cpus, nr_pages, nr_pages_per_cpu, page_size, hpage_size;
- #define BOUNCE_POLL		(1<<3)
- static int bounces;
+diff --git a/tools/testing/selftests/kvm/demand_paging_test.c b/tools/testing/selftests/kvm/demand_paging_test.c
+index 779ae54f89c4..67ca8703c6b7 100644
+--- a/tools/testing/selftests/kvm/demand_paging_test.c
++++ b/tools/testing/selftests/kvm/demand_paging_test.c
+@@ -76,6 +76,12 @@ static int handle_uffd_page_request(int uffd_mode, int uffd, uint64_t addr)
  
--#define TEST_ANON	1
--#define TEST_HUGETLB	2
--#define TEST_SHMEM	3
-+#define TEST_ANON		1
-+#define TEST_HUGETLB		2
-+#define TEST_HUGETLB_HGM	3
-+#define TEST_SHMEM		4
- static int test_type;
- 
- #define UFFD_FLAGS	(O_CLOEXEC | O_NONBLOCK | UFFD_USER_MODE_ONLY)
-@@ -93,6 +94,8 @@ static volatile bool test_uffdio_zeropage_eexist = true;
- static bool test_uffdio_wp = true;
- /* Whether to test uffd minor faults */
- static bool test_uffdio_minor = false;
-+static bool test_uffdio_copy = true;
-+
- static bool map_shared;
- static int mem_fd;
- static unsigned long long *count_verify;
-@@ -151,7 +154,7 @@ static void usage(void)
- 	fprintf(stderr, "\nUsage: ./userfaultfd <test type> <MiB> <bounces> "
- 		"[hugetlbfs_file]\n\n");
- 	fprintf(stderr, "Supported <test type>: anon, hugetlb, "
--		"hugetlb_shared, shmem\n\n");
-+		"hugetlb_shared, hugetlb_shared_hgm, shmem\n\n");
- 	fprintf(stderr, "'Test mods' can be joined to the test type string with a ':'. "
- 		"Supported mods:\n");
- 	fprintf(stderr, "\tsyscall - Use userfaultfd(2) (default)\n");
-@@ -167,6 +170,11 @@ static void usage(void)
- 	exit(1);
- }
- 
-+static bool test_is_hugetlb(void)
-+{
-+	return test_type == TEST_HUGETLB || test_type == TEST_HUGETLB_HGM;
-+}
-+
- #define _err(fmt, ...)						\
- 	do {							\
- 		int ret = errno;				\
-@@ -381,8 +389,12 @@ static struct uffd_test_ops *uffd_test_ops;
- 
- static inline uint64_t uffd_minor_feature(void)
- {
--	if (test_type == TEST_HUGETLB && map_shared)
--		return UFFD_FEATURE_MINOR_HUGETLBFS;
-+	if (test_is_hugetlb() && map_shared)
-+		return UFFD_FEATURE_MINOR_HUGETLBFS |
-+			(test_type == TEST_HUGETLB_HGM
-+			 ? (UFFD_FEATURE_MINOR_HUGETLBFS_HGM |
-+				 UFFD_FEATURE_EXACT_ADDRESS)
-+			 : 0);
- 	else if (test_type == TEST_SHMEM)
- 		return UFFD_FEATURE_MINOR_SHMEM;
- 	else
-@@ -393,7 +405,7 @@ static uint64_t get_expected_ioctls(uint64_t mode)
- {
- 	uint64_t ioctls = UFFD_API_RANGE_IOCTLS;
- 
--	if (test_type == TEST_HUGETLB)
-+	if (test_is_hugetlb())
- 		ioctls &= ~(1 << _UFFDIO_ZEROPAGE);
- 
- 	if (!((mode & UFFDIO_REGISTER_MODE_WP) && test_uffdio_wp))
-@@ -500,13 +512,16 @@ static void uffd_test_ctx_clear(void)
- static void uffd_test_ctx_init(uint64_t features)
- {
- 	unsigned long nr, cpu;
-+	uint64_t enabled_features = features;
- 
- 	uffd_test_ctx_clear();
- 
- 	uffd_test_ops->allocate_area((void **)&area_src, true);
- 	uffd_test_ops->allocate_area((void **)&area_dst, false);
- 
--	userfaultfd_open(&features);
-+	userfaultfd_open(&enabled_features);
-+	if ((enabled_features & features) != features)
-+		err("couldn't enable all features");
- 
- 	count_verify = malloc(nr_pages * sizeof(unsigned long long));
- 	if (!count_verify)
-@@ -726,13 +741,21 @@ static void uffd_handle_page_fault(struct uffd_msg *msg,
- 				   struct uffd_stats *stats)
- {
- 	unsigned long offset;
-+	unsigned long address;
- 
- 	if (msg->event != UFFD_EVENT_PAGEFAULT)
- 		err("unexpected msg event %u", msg->event);
+ 	clock_gettime(CLOCK_MONOTONIC, &start);
  
 +	/*
-+	 * Round down address to nearest page_size.
-+	 * We do this manually because we specified UFFD_FEATURE_EXACT_ADDRESS
-+	 * to support UFFD_FEATURE_MINOR_HUGETLBFS_HGM.
++	 * We're using UFFD_FEATURE_EXACT_ADDRESS, so round down the address.
++	 * This is needed to support HugeTLB high-granularity mapping.
 +	 */
-+	address = msg->arg.pagefault.address & ~(page_size - 1);
++	addr &= ~(demand_paging_size - 1);
 +
- 	if (msg->arg.pagefault.flags & UFFD_PAGEFAULT_FLAG_WP) {
- 		/* Write protect page faults */
--		wp_range(uffd, msg->arg.pagefault.address, page_size, false);
-+		wp_range(uffd, address, page_size, false);
- 		stats->wp_faults++;
- 	} else if (msg->arg.pagefault.flags & UFFD_PAGEFAULT_FLAG_MINOR) {
- 		uint8_t *area;
-@@ -751,11 +774,10 @@ static void uffd_handle_page_fault(struct uffd_msg *msg,
- 		 */
+ 	if (uffd_mode == UFFDIO_REGISTER_MODE_MISSING) {
+ 		struct uffdio_copy copy;
  
- 		area = (uint8_t *)(area_dst +
--				   ((char *)msg->arg.pagefault.address -
--				    area_dst_alias));
-+				   ((char *)address - area_dst_alias));
- 		for (b = 0; b < page_size; ++b)
- 			area[b] = ~area[b];
--		continue_range(uffd, msg->arg.pagefault.address, page_size);
-+		continue_range(uffd, address, page_size);
- 		stats->minor_faults++;
- 	} else {
- 		/*
-@@ -782,7 +804,7 @@ static void uffd_handle_page_fault(struct uffd_msg *msg,
- 		if (msg->arg.pagefault.flags & UFFD_PAGEFAULT_FLAG_WRITE)
- 			err("unexpected write fault");
+@@ -214,7 +220,8 @@ static void setup_demand_paging(struct kvm_vm *vm,
+ 				pthread_t *uffd_handler_thread, int pipefd,
+ 				int uffd_mode, useconds_t uffd_delay,
+ 				struct uffd_handler_args *uffd_args,
+-				void *hva, void *alias, uint64_t len)
++				void *hva, void *alias, uint64_t len,
++				enum vm_mem_backing_src_type src_type)
+ {
+ 	bool is_minor = (uffd_mode == UFFDIO_REGISTER_MODE_MINOR);
+ 	int uffd;
+@@ -244,9 +251,15 @@ static void setup_demand_paging(struct kvm_vm *vm,
+ 	TEST_ASSERT(uffd >= 0, __KVM_SYSCALL_ERROR("userfaultfd()", uffd));
  
--		offset = (char *)(unsigned long)msg->arg.pagefault.address - area_dst;
-+		offset = (char *)address - area_dst;
- 		offset &= ~(page_size-1);
+ 	uffdio_api.api = UFFD_API;
+-	uffdio_api.features = 0;
++	uffdio_api.features = is_minor
++		? UFFD_FEATURE_EXACT_ADDRESS | UFFD_FEATURE_MINOR_HUGETLBFS_HGM
++		: 0;
+ 	ret = ioctl(uffd, UFFDIO_API, &uffdio_api);
+ 	TEST_ASSERT(ret != -1, __KVM_SYSCALL_ERROR("UFFDIO_API", ret));
++	if (src_type == VM_MEM_SRC_SHARED_HUGETLB_HGM)
++		TEST_ASSERT(uffdio_api.features &
++			    UFFD_FEATURE_MINOR_HUGETLBFS_HGM,
++			    "UFFD_FEATURE_MINOR_HUGETLBFS_HGM not present");
  
- 		if (copy_page(uffd, offset))
-@@ -1192,6 +1214,12 @@ static int userfaultfd_events_test(void)
- 	char c;
- 	struct uffd_stats stats = { 0 };
- 
-+	if (!test_uffdio_copy) {
-+		printf("Skipping userfaultfd events test "
-+			"(test_uffdio_copy=false)\n");
-+		return 0;
-+	}
-+
- 	printf("testing events (fork, remap, remove): ");
- 	fflush(stdout);
- 
-@@ -1245,6 +1273,12 @@ static int userfaultfd_sig_test(void)
- 	char c;
- 	struct uffd_stats stats = { 0 };
- 
-+	if (!test_uffdio_copy) {
-+		printf("Skipping userfaultfd signal test "
-+			"(test_uffdio_copy=false)\n");
-+		return 0;
-+	}
-+
- 	printf("testing signal delivery: ");
- 	fflush(stdout);
- 
-@@ -1538,6 +1572,12 @@ static int userfaultfd_stress(void)
- 	pthread_attr_init(&attr);
- 	pthread_attr_setstacksize(&attr, 16*1024*1024);
- 
-+	if (!test_uffdio_copy) {
-+		printf("Skipping userfaultfd stress test "
-+			"(test_uffdio_copy=false)\n");
-+		bounces = 0;
-+	}
-+
- 	while (bounces--) {
- 		printf("bounces: %d, mode:", bounces);
- 		if (bounces & BOUNCE_RANDOM)
-@@ -1696,6 +1736,16 @@ static void set_test_type(const char *type)
- 		uffd_test_ops = &hugetlb_uffd_test_ops;
- 		/* Minor faults require shared hugetlb; only enable here. */
- 		test_uffdio_minor = true;
-+	} else if (!strcmp(type, "hugetlb_shared_hgm")) {
-+		map_shared = true;
-+		test_type = TEST_HUGETLB_HGM;
-+		uffd_test_ops = &hugetlb_uffd_test_ops;
-+		/*
-+		 * HugeTLB HGM only changes UFFDIO_CONTINUE, so don't test
-+		 * UFFDIO_COPY.
-+		 */
-+		test_uffdio_minor = true;
-+		test_uffdio_copy = false;
- 	} else if (!strcmp(type, "shmem")) {
- 		map_shared = true;
- 		test_type = TEST_SHMEM;
-@@ -1731,6 +1781,7 @@ static void parse_test_type_arg(const char *raw_type)
- 		err("Unsupported test: %s", raw_type);
- 
- 	if (test_type == TEST_HUGETLB)
-+		/* TEST_HUGETLB_HGM gets small pages. */
- 		page_size = hpage_size;
- 	else
- 		page_size = sysconf(_SC_PAGE_SIZE);
-@@ -1813,22 +1864,29 @@ int main(int argc, char **argv)
- 		nr_cpus = x < y ? x : y;
+ 	uffdio_register.range.start = (uint64_t)hva;
+ 	uffdio_register.range.len = len;
+@@ -329,7 +342,8 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+ 					    pipefds[i * 2], p->uffd_mode,
+ 					    p->uffd_delay, &uffd_args[i],
+ 					    vcpu_hva, vcpu_alias,
+-					    vcpu_args->pages * perf_test_args.guest_page_size);
++					    vcpu_args->pages * perf_test_args.guest_page_size,
++					    p->src_type);
+ 		}
  	}
- 	nr_pages_per_cpu = bytes / page_size / nr_cpus;
-+	if (test_type == TEST_HUGETLB_HGM)
-+		/*
-+		 * `page_size` refers to the page_size we can use in
-+		 * UFFDIO_CONTINUE. We still need nr_pages to be appropriately
-+		 * aligned, so align it here.
-+		 */
-+		nr_pages_per_cpu -= nr_pages_per_cpu % (hpage_size / page_size);
- 	if (!nr_pages_per_cpu) {
- 		_err("invalid MiB");
- 		usage();
- 	}
-+	nr_pages = nr_pages_per_cpu * nr_cpus;
  
- 	bounces = atoi(argv[3]);
- 	if (bounces <= 0) {
- 		_err("invalid bounces");
- 		usage();
- 	}
--	nr_pages = nr_pages_per_cpu * nr_cpus;
+diff --git a/tools/testing/selftests/kvm/include/test_util.h b/tools/testing/selftests/kvm/include/test_util.h
+index befc754ce9b3..0410326dbc18 100644
+--- a/tools/testing/selftests/kvm/include/test_util.h
++++ b/tools/testing/selftests/kvm/include/test_util.h
+@@ -96,6 +96,7 @@ enum vm_mem_backing_src_type {
+ 	VM_MEM_SRC_ANONYMOUS_HUGETLB_16GB,
+ 	VM_MEM_SRC_SHMEM,
+ 	VM_MEM_SRC_SHARED_HUGETLB,
++	VM_MEM_SRC_SHARED_HUGETLB_HGM,
+ 	NUM_SRC_TYPES,
+ };
  
--	if (test_type == TEST_SHMEM || test_type == TEST_HUGETLB) {
-+	if (test_type == TEST_SHMEM || test_is_hugetlb()) {
- 		unsigned int memfd_flags = 0;
+@@ -114,6 +115,7 @@ size_t get_def_hugetlb_pagesz(void);
+ const struct vm_mem_backing_src_alias *vm_mem_backing_src_alias(uint32_t i);
+ size_t get_backing_src_pagesz(uint32_t i);
+ bool is_backing_src_hugetlb(uint32_t i);
++bool is_backing_src_shared_hugetlb(enum vm_mem_backing_src_type src_type);
+ void backing_src_help(const char *flag);
+ enum vm_mem_backing_src_type parse_backing_src_type(const char *type_name);
+ long get_run_delay(void);
+diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+index f1cb1627161f..7d769a117e14 100644
+--- a/tools/testing/selftests/kvm/lib/kvm_util.c
++++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+@@ -896,7 +896,7 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
+ 	region->fd = -1;
+ 	if (backing_src_is_shared(src_type))
+ 		region->fd = kvm_memfd_alloc(region->mmap_size,
+-					     src_type == VM_MEM_SRC_SHARED_HUGETLB);
++				is_backing_src_shared_hugetlb(src_type));
  
--		if (test_type == TEST_HUGETLB)
-+		if (test_is_hugetlb())
- 			memfd_flags = MFD_HUGETLB;
- 		mem_fd = memfd_create(argv[0], memfd_flags);
- 		if (mem_fd < 0)
+ 	region->mmap_start = mmap(NULL, region->mmap_size,
+ 				  PROT_READ | PROT_WRITE,
+diff --git a/tools/testing/selftests/kvm/lib/test_util.c b/tools/testing/selftests/kvm/lib/test_util.c
+index 6d23878bbfe1..710dc42077fe 100644
+--- a/tools/testing/selftests/kvm/lib/test_util.c
++++ b/tools/testing/selftests/kvm/lib/test_util.c
+@@ -254,6 +254,13 @@ const struct vm_mem_backing_src_alias *vm_mem_backing_src_alias(uint32_t i)
+ 			 */
+ 			.flag = MAP_SHARED,
+ 		},
++		[VM_MEM_SRC_SHARED_HUGETLB_HGM] = {
++			/*
++			 * Identical to shared_hugetlb except for the name.
++			 */
++			.name = "shared_hugetlb_hgm",
++			.flag = MAP_SHARED,
++		},
+ 	};
+ 	_Static_assert(ARRAY_SIZE(aliases) == NUM_SRC_TYPES,
+ 		       "Missing new backing src types?");
+@@ -272,6 +279,7 @@ size_t get_backing_src_pagesz(uint32_t i)
+ 	switch (i) {
+ 	case VM_MEM_SRC_ANONYMOUS:
+ 	case VM_MEM_SRC_SHMEM:
++	case VM_MEM_SRC_SHARED_HUGETLB_HGM:
+ 		return getpagesize();
+ 	case VM_MEM_SRC_ANONYMOUS_THP:
+ 		return get_trans_hugepagesz();
+@@ -288,6 +296,12 @@ bool is_backing_src_hugetlb(uint32_t i)
+ 	return !!(vm_mem_backing_src_alias(i)->flag & MAP_HUGETLB);
+ }
+ 
++bool is_backing_src_shared_hugetlb(enum vm_mem_backing_src_type src_type)
++{
++	return src_type == VM_MEM_SRC_SHARED_HUGETLB ||
++		src_type == VM_MEM_SRC_SHARED_HUGETLB_HGM;
++}
++
+ static void print_available_backing_src_types(const char *prefix)
+ {
+ 	int i;
 -- 
 2.38.0.135.g90850a2211-goog
 
