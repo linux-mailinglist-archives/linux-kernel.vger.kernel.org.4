@@ -2,120 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EC71606D7A
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 04:16:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A522A606D89
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 04:21:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbiJUCQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 22:16:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50324 "EHLO
+        id S229932AbiJUCVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 22:21:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbiJUCQI (ORCPT
+        with ESMTP id S229685AbiJUCVN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 22:16:08 -0400
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB0E822C448;
-        Thu, 20 Oct 2022 19:16:03 -0700 (PDT)
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-132fb4fd495so1843712fac.12;
-        Thu, 20 Oct 2022 19:16:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bZo2SoHGMB49U08FrggSD62F1dJU4x2WpR2kVlXQtTc=;
-        b=er2GizeSfMKN92eiA3N1GE2f0GyImLMEB18NraTx3m8V4CoD6UO2RmkoHXumQaYrQ/
-         cJOLI4QxkDHquTGIjhoT3ygey+5x23HIkpDneHH5ClyrVT1oJTMOw7TavZouqV0G0zN4
-         mdwHud+NbA66JUlmBQhz93tYxL7X5/fbidGRuCvqesg+kEsMANPedis/exKYiDgYdiMf
-         KBgESHC14djbHngUnGyuXhPaHMQXDx+ApGvqgRWl499fjiDh8AfUuFWLXZ+6IUfHUcu+
-         ningQ5H0clSIUJ/Lkj649vP8STGrKPsmJC5PQ3BVu4/kcNzvV+W1K8DVUVwDTi2FcIq+
-         bnXA==
-X-Gm-Message-State: ACrzQf3JzruYiBTjwU+WgBDDrqFkcXj13MuJVJgexbGg5XAddl0ORnff
-        PcVcHEUWk6lF86PQiUj4lg==
-X-Google-Smtp-Source: AMsMyM5JqlxGmxU3HmlsBn+wCVxoYJuiS0p3ug0txSMNfjbiGur1wQ7LqoQZCrDcHynQBVEyZ74sBA==
-X-Received: by 2002:a05:6870:8193:b0:13a:e465:ad18 with SMTP id k19-20020a056870819300b0013ae465ad18mr4895007oae.30.1666318563053;
-        Thu, 20 Oct 2022 19:16:03 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id t11-20020a9d66cb000000b0063b24357269sm612592otm.13.2022.10.20.19.16.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 19:16:02 -0700 (PDT)
-Received: (nullmailer pid 2187016 invoked by uid 1000);
-        Fri, 21 Oct 2022 02:16:04 -0000
-Date:   Thu, 20 Oct 2022 21:16:04 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Akhil R <akhilrajeev@nvidia.com>
-Cc:     ldewangan@nvidia.com, jonathanh@nvidia.com, vkoul@kernel.org,
-        thierry.reding@gmail.com, p.zabel@pengutronix.de,
-        dmaengine@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, sfr@canb.auug.org.au
-Subject: Re: [PATCH RESEND v2 3/3] dmaengine: tegra: Add support for
- dma-channel-mask
-Message-ID: <20221021021604.GA2181729-robh@kernel.org>
-References: <20221020083322.36431-1-akhilrajeev@nvidia.com>
- <20221020083322.36431-4-akhilrajeev@nvidia.com>
+        Thu, 20 Oct 2022 22:21:13 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB37E1F8100
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 19:21:12 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Mtp6Y6tt8zDsKp;
+        Fri, 21 Oct 2022 10:18:29 +0800 (CST)
+Received: from dggpemm500016.china.huawei.com (7.185.36.25) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 21 Oct 2022 10:21:10 +0800
+Received: from huawei.com (10.67.175.41) by dggpemm500016.china.huawei.com
+ (7.185.36.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 21 Oct
+ 2022 10:21:10 +0800
+From:   Yipeng Zou <zouyipeng@huawei.com>
+To:     <tglx@linutronix.de>, <bp@alien8.de>, <mingo@redhat.com>,
+        <x86@kernel.org>, <hpa@zytor.com>, <rafael.j.wysocki@intel.com>,
+        <linux-kernel@vger.kernel.org>
+CC:     Yipeng Zou <zouyipeng@huawei.com>
+Subject: [PATCH stable 0/1] x86: aperfmperf: bug report
+Date:   Fri, 21 Oct 2022 10:17:39 +0800
+Message-ID: <20221021021740.137196-1-zouyipeng@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221020083322.36431-4-akhilrajeev@nvidia.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.67.175.41]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500016.china.huawei.com (7.185.36.25)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 02:03:22PM +0530, Akhil R wrote:
-> Add support for dma-channel-mask so that only the specified channels
-> are used. This helps to reserve some channels for the firmware.
-> 
-> This was initially achieved by limiting the channel number to 31 in
-> the driver and adjusting the register address to skip channel0 which
-> was reserved for a firmware. Now, with this change, the driver can
-> align more to the actual hardware which has 32 channels.
-> 
-> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
-> Reviewed-by: Jon Hunter <jonathanh@nvidia.com>
-> ---
->  drivers/dma/tegra186-gpc-dma.c | 37 +++++++++++++++++++++++++++-------
->  1 file changed, 30 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/dma/tegra186-gpc-dma.c b/drivers/dma/tegra186-gpc-dma.c
-> index fa9bda4a2bc6..1d1180db6d4e 100644
-> --- a/drivers/dma/tegra186-gpc-dma.c
-> +++ b/drivers/dma/tegra186-gpc-dma.c
-> @@ -161,7 +161,10 @@
->  #define TEGRA_GPCDMA_BURST_COMPLETION_TIMEOUT	5000 /* 5 msec */
->  
->  /* Channel base address offset from GPCDMA base address */
-> -#define TEGRA_GPCDMA_CHANNEL_BASE_ADD_OFFSET	0x20000
-> +#define TEGRA_GPCDMA_CHANNEL_BASE_ADDR_OFFSET	0x10000
-> +
-> +/* Default channel mask reserving channel0 */
-> +#define TEGRA_GPCDMA_DEFAULT_CHANNEL_MASK	0xfffffffe
->  
->  struct tegra_dma;
->  struct tegra_dma_channel;
-> @@ -246,6 +249,7 @@ struct tegra_dma {
->  	const struct tegra_dma_chip_data *chip_data;
->  	unsigned long sid_m2d_reserved;
->  	unsigned long sid_d2m_reserved;
-> +	u32 chan_mask;
->  	void __iomem *base_addr;
->  	struct device *dev;
->  	struct dma_device dma_dev;
-> @@ -1288,7 +1292,7 @@ static struct dma_chan *tegra_dma_of_xlate(struct of_phandle_args *dma_spec,
->  }
->  
->  static const struct tegra_dma_chip_data tegra186_dma_chip_data = {
-> -	.nr_channels = 31,
-> +	.nr_channels = 32,
+Recently i was doing some work about calculating CPU frequency on x86 on
+stable branch linux-5.10.y, and there is a problem which i descrip in
+the commit message.
 
-This is an ABI break. A new kernel with an old DTB will use 32 channels 
-instead of 31. You should leave this and use the dma-channel-mask to 
-enable all 32 channels.
+I've noticed that it has been abandoned on the mainline. On the mainline
+it becomes to update [a,m]cnt in timer code with HZ frequency, and it is
+actually calculated at the time of reading the cpu freqency. This solves
+the problem above.
 
-Rob
+So, Are there other reasons why the stable branch doesn't have these
+changes?, this patch is just to ask how we plan to fix it.
+
+Yipeng Zou (1):
+  x86: aperfmperf: fix overflow problem in the concurrency scenario
+
+ arch/x86/kernel/cpu/aperfmperf.c | 4 ----
+ 1 file changed, 4 deletions(-)
+
+-- 
+2.17.1
+
