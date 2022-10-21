@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9F57607C6B
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 18:38:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6F8F607C6F
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 18:38:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231205AbiJUQi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 12:38:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52662 "EHLO
+        id S231247AbiJUQig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 12:38:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230361AbiJUQhw (ORCPT
+        with ESMTP id S230512AbiJUQhw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 21 Oct 2022 12:37:52 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D525427B579
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:37:29 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id t17-20020a257811000000b006c509f9a16dso3792779ybc.10
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:37:29 -0700 (PDT)
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED1F27B55C
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:37:30 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id p66-20020a257445000000b006ca0ba7608fso3732176ybc.7
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:37:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8/NM5zqKrp3T0mJhjHHyOLUnz62gupmqJK/DDFGexZI=;
-        b=kNo3BI9LgJDNbw4zG7f+BcfBeEsxT7zZGWcOge04kuwB3WGs4ua5FnV/ikxacl43mD
-         M6k0xqIMh4xV/kNssOly5E5ouNZTJbE1jiHX8f4BQKdFzjOe8CtoSIjUdke5SPji+pEq
-         kOZ846TjVCKjKeX4b6HxrkfJ6BQ6CGISZePlXZkN2Rm1jtqyKh+RfXYCoD2KqxlK58+X
-         giN/v/U9prCXXWwTgQ+82EXYGKAT/w9/2BGshYZOi4LwaY3LCQutO9qEE+7l1KWb9pbv
-         DCVuuxqs8fuEhlJkR2ekbMYvfUQkoMuOLpKGVnSHPaC+P69I+ARfmCsKOI9PHLE6d5yH
-         SWSQ==
+        bh=vfmRA2hXHJo+o02NNvf+xyYOK4fmmGYkyLRnRI2e0ew=;
+        b=N0Njss2tbbufEOGB3mWef6ZPPCsGQk8p/qgNHuo+xubJr8V06BeblG2+fHSKMDlxA/
+         UJHivxWkHImjyXzOSjLEeYcZId2JJN2s+UU8otxIgWTW9duZ5h63B+TLoNO25kQvzWXU
+         HeD3Hvh1l9z43C29huY50us4lyvu6ehOMFBsaP/qsg6yn2ieehrftiopv/q8ZpHCLJ3Y
+         K7UMsTw8/CtFVq/Ds71EirrkPGmvM7a28uKqnCDpCM+PSuE49qWj9kjs6TX0wErVJMdC
+         fBYvTwS4YdM1mYbSThmJwyUIU5RPiBM8YE1g/uw7dhpETOePIsSy4CEuuJN9RhbaqsIy
+         0rtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8/NM5zqKrp3T0mJhjHHyOLUnz62gupmqJK/DDFGexZI=;
-        b=PE7K8aCeBtl9dPQk2G2iangSq8o390LGl2zyxcz7mCCAMCjsC78mP1kdSk1+MglYdi
-         iRzVxb+pJ5HMkkHJeHwEQL8hbgffR2eo+Hu4e7qp+yTOTHD9f2Rw1fWwuBPzlpgbGrLj
-         Yv6tv3/PB6W4A2LrO89Yhbdx8d4r/yPhqpT5bEB+zRIxQiNKZBDvukphOC2110mPvFex
-         VH9UOVwrwz98a5LYzZZdkDwWA0dCnAHbAYQnu72lmqYCvFcHVMhDF1W1wavNBJ3clUVG
-         zsZea1jbdohwLrEvd3Acm4lPxpu8gbQySy9T8m2X8mdFiOngk9/DnBqrxCHmq341pPY9
-         lPRg==
-X-Gm-Message-State: ACrzQf0eRFmTgnQiIODRCrlRFrmtlHgDfLcPQ0SA5Uew7qTxqWxTEDLl
-        TT3xagEHB3Xg296AUjcZ4QtPCufheQCXdxwz
-X-Google-Smtp-Source: AMsMyM6lUFLmKl2u24xYHvEYAF3HSHyv+Q9NHWaQ4uC8W+BKyVcH1krHI+4kAFLxi7gYBA7W761SZPhq47YrIqjR
+        bh=vfmRA2hXHJo+o02NNvf+xyYOK4fmmGYkyLRnRI2e0ew=;
+        b=pLsxIW+Znhwb5czVtOkwP4MfdVlHE0FAd5jFU4PU6c96ulf3QuFhtz/mQj14NXhluV
+         b3HQ6oOpMvAEEY6p4zRFFq2LV3fP4cHFhrxOLzNM6jPSPu7qYG4Lc5m75VS6cRy7FjfH
+         trKdxVT3YQuLFALesgyMOIHRr85zw/P6R9qI8Azkj4SA/hOt+u2VHtPgjLPh0i7qtzOY
+         jAURiwz3aFmLjVQNdQx5Y1r3j7Mw9nm37LQSulHzGitRZRqIbJiXrk0J3xnWCsFw3lwl
+         Fq22Ux9Ap8Le4MlA/sq8yTeLR52OdzZJ6lyr+p4bMkhvzWE1gOaIsz0g7+E102B77SAt
+         TW8w==
+X-Gm-Message-State: ACrzQf0+J5HMG2PiQ8WV2ZorU207EpquGUe9EaQftVM784AMzGUMqQxO
+        4xAKPVB7e1rHzp2vrI6xOnRWCN2i9T0A+AUo
+X-Google-Smtp-Source: AMsMyM75iODIU2u9+2Ko6JMPySQIphDFX4W2ca1ATqg4hjaMgjVtf9dtnIOEwBdlJcFpQluhwu54PMNKNN8Zpw+u
 X-Received: from jthoughton.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:2a4f])
- (user=jthoughton job=sendgmr) by 2002:a81:4b96:0:b0:354:8935:d5a9 with SMTP
- id y144-20020a814b96000000b003548935d5a9mr18239585ywa.36.1666370248722; Fri,
- 21 Oct 2022 09:37:28 -0700 (PDT)
-Date:   Fri, 21 Oct 2022 16:36:29 +0000
+ (user=jthoughton job=sendgmr) by 2002:a25:ca8d:0:b0:6c1:99ab:5798 with SMTP
+ id a135-20020a25ca8d000000b006c199ab5798mr17535543ybg.19.1666370249622; Fri,
+ 21 Oct 2022 09:37:29 -0700 (PDT)
+Date:   Fri, 21 Oct 2022 16:36:30 +0000
 In-Reply-To: <20221021163703.3218176-1-jthoughton@google.com>
 Mime-Version: 1.0
 References: <20221021163703.3218176-1-jthoughton@google.com>
 X-Mailer: git-send-email 2.38.0.135.g90850a2211-goog
-Message-ID: <20221021163703.3218176-14-jthoughton@google.com>
-Subject: [RFC PATCH v2 13/47] hugetlb: add make_huge_pte_with_shift
+Message-ID: <20221021163703.3218176-15-jthoughton@google.com>
+Subject: [RFC PATCH v2 14/47] hugetlb: make default arch_make_huge_pte
+ understand small mappings
 From:   James Houghton <jthoughton@google.com>
 To:     Mike Kravetz <mike.kravetz@oracle.com>,
         Muchun Song <songmuchun@bytedance.com>,
@@ -84,48 +85,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This allows us to make huge PTEs at shifts other than the hstate shift,
-which will be necessary for high-granularity mappings.
+This is a simple change: don't create a "huge" PTE if we are making a
+regular, PAGE_SIZE PTE. All architectures that want to implement HGM
+likely need to be changed in a similar way if they implement their own
+version of arch_make_huge_pte.
 
 Signed-off-by: James Houghton <jthoughton@google.com>
 ---
- mm/hugetlb.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+ include/linux/hugetlb.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 90db59632559..74a4afda1a7e 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -4867,11 +4867,11 @@ const struct vm_operations_struct hugetlb_vm_ops = {
- 	.pagesize = hugetlb_vm_op_pagesize,
- };
- 
--static pte_t make_huge_pte(struct vm_area_struct *vma, struct page *page,
--				int writable)
-+static pte_t make_huge_pte_with_shift(struct vm_area_struct *vma,
-+				      struct page *page, int writable,
-+				      int shift)
+diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+index 4b1548adecde..d305742e9d44 100644
+--- a/include/linux/hugetlb.h
++++ b/include/linux/hugetlb.h
+@@ -907,7 +907,7 @@ static inline void arch_clear_hugepage_flags(struct page *page) { }
+ static inline pte_t arch_make_huge_pte(pte_t entry, unsigned int shift,
+ 				       vm_flags_t flags)
  {
- 	pte_t entry;
--	unsigned int shift = huge_page_shift(hstate_vma(vma));
- 
- 	if (writable) {
- 		entry = huge_pte_mkwrite(huge_pte_mkdirty(mk_pte(page,
-@@ -4885,6 +4885,14 @@ static pte_t make_huge_pte(struct vm_area_struct *vma, struct page *page,
- 	return entry;
+-	return pte_mkhuge(entry);
++	return shift > PAGE_SHIFT ? pte_mkhuge(entry) : entry;
  }
+ #endif
  
-+static pte_t make_huge_pte(struct vm_area_struct *vma, struct page *page,
-+			   int writable)
-+{
-+	unsigned int shift = huge_page_shift(hstate_vma(vma));
-+
-+	return make_huge_pte_with_shift(vma, page, writable, shift);
-+}
-+
- static void set_huge_ptep_writable(struct vm_area_struct *vma,
- 				   unsigned long address, pte_t *ptep)
- {
 -- 
 2.38.0.135.g90850a2211-goog
 
