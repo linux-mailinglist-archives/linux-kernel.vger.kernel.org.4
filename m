@@ -2,61 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A510760759A
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 13:08:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0A5160759E
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 13:08:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229678AbiJULIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 07:08:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41228 "EHLO
+        id S229588AbiJULI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 07:08:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbiJULII (ORCPT
+        with ESMTP id S229810AbiJULIX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 07:08:08 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F6162582FA
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 04:08:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666350487; x=1697886487;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=ea5GORsQef7R0ghK4gYeNNtaLLLbqldfJ+IL0nGcNd0=;
-  b=FEXXjPyOTp5/lhtbTRkZ38idM4WQMHoRN3rx0UCuPr0dFTXTrNBRE6zi
-   lP3D1S2f0BNewbK78tC7R1NRQoWmA1R4O6zfY6U0zCYbPX286qm3lxzom
-   QeUtc/dWPm22oOJtGKvQ6vZ5fw9V3P7asEcJPBVSTdnwwMVznFQJtwheY
-   kSNpH54nacQ7Ra9w4fgIhxBdoTWo89V2PvhYRHDohAk9SX6n4bktmHENU
-   e6n1kAiFKkZhOp55nHL8JtUXQsHoinlljTL0uu1kUeBqzQpF1n3oHra81
-   sW2iwTFl8/rPHWacIgEguESMVBUmK17VMvvyi37EKaPb1oRJVkfyRyxuG
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="294373724"
-X-IronPort-AV: E=Sophos;i="5.95,200,1661842800"; 
-   d="scan'208";a="294373724"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2022 04:08:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="719664976"
-X-IronPort-AV: E=Sophos;i="5.95,200,1661842800"; 
-   d="scan'208";a="719664976"
-Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 21 Oct 2022 04:08:05 -0700
-Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1olpsj-0002Wm-0G;
-        Fri, 21 Oct 2022 11:08:05 +0000
-Date:   Fri, 21 Oct 2022 19:07:27 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:srcunmisafe.2022.10.20a] BUILD SUCCESS
- c4c1e1794feee19cf50f14200284e0037878da04
-Message-ID: <63527d6f.nsd0eOu8mpX5QrR7%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Fri, 21 Oct 2022 07:08:23 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F5525FD19;
+        Fri, 21 Oct 2022 04:08:21 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id ez6so2168481pjb.1;
+        Fri, 21 Oct 2022 04:08:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=F5kgS7yQEGO9LUqVSDqp3CpkexPsyHSXYjDOzxzQR48=;
+        b=qg9PNFoKtrgWoO8IqWXLSGVXwrCFhdNWy7zL6z85SZ69qdgubrTSoEFtg81C0kD87u
+         yzmwSV5f5wH1lIUrugZqQleGxsiHDh5xRQWHYEA4xRxAP+YU/ajgG+zMcwJnYZvMst3N
+         Jehz0e9d9bOaWJHofFpapdhSNUNbmsZV2ZBCqSGDw0Azx7/+xds6pgm0i8n3mcDUnhTU
+         yOzLWICfVihzW43Q+w4SfF5paSEIZtaYpQG86OsAS19EQQ/oHdb9RKWaDBlea+Hlj/9k
+         z2hKT4YD47UGUqZBYz64aXmpZwt1bIQmM4ZW2b19jrxek5vIiKeSCwuSGlQRh8XiK+Kd
+         IDlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=F5kgS7yQEGO9LUqVSDqp3CpkexPsyHSXYjDOzxzQR48=;
+        b=6qVVUNVNjSHzPdlhHu+IsGWBiG4bVyl27mcgOeNybWFf+4SS5AVrdlAwYPe/l/Ritn
+         G0MKcsV9OJsRaLLyiBwTgIMBcm+nvtWF2UBVukzM1M+aKBgDZFLSiVnYvvIffd4X9ruJ
+         ql8qAVHXWCPp3Bv/0wZ2JEIyXDrKbH55II7bnfJBaNlL1pEUlpuT+SY70kf38VvUTInc
+         oMa2EquOEeskZx3AKQKYr6+tuKHlNqVKptMdDCtPinY9nnYw2cpVZrdmIdUh8Fx9zjSb
+         adKEO/Ge+3iO6tDG9KpSnOzQE7O7UsVjt8FG7RNnQ+EYXKcFvn5iTa0IbccDE0tyaD7v
+         AF+A==
+X-Gm-Message-State: ACrzQf0ZUqJ7r5F/WPd3GfFyQ9Tg3BU4Z/hCatxB9krtdmpl/2WHAIo+
+        zZqTgTetI9bzj1WEgyOnwQA=
+X-Google-Smtp-Source: AMsMyM7P3IKbMkFSIANcIM28f5PtNsCcRQ2AQ36V1wZvaWzavwTCGTNLqzI36pRWAYJGMjZp1g2X9Q==
+X-Received: by 2002:a17:90b:1bc3:b0:20d:75b8:ee74 with SMTP id oa3-20020a17090b1bc300b0020d75b8ee74mr58860891pjb.1.1666350500670;
+        Fri, 21 Oct 2022 04:08:20 -0700 (PDT)
+Received: from [192.168.123.101] ([182.213.254.91])
+        by smtp.gmail.com with ESMTPSA id o68-20020a625a47000000b005699dd316ebsm1947869pfb.35.2022.10.21.04.08.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Oct 2022 04:08:19 -0700 (PDT)
+Message-ID: <8bac748a-3309-b249-c098-f0a86ed7d384@gmail.com>
+Date:   Fri, 21 Oct 2022 20:08:13 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.1
+Subject: Re: [syzbot] kernel panic: kernel stack overflow
+From:   Taehee Yoo <ap420073@gmail.com>
+To:     Eric Dumazet <edumazet@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>
+Cc:     syzbot <syzbot+60748c96cf5c6df8e581@syzkaller.appspotmail.com>,
+        =?UTF-8?B?SmnFmcOtIFDDrXJrbw==?= <jiri@resnulli.us>,
+        davem@davemloft.net, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com,
+        Cong Wang <xiyou.wangcong@gmail.com>
+References: <000000000000c8900705ead19e41@google.com>
+ <CACT4Y+Zuoo_rgf=DP90wgSVm909Qboj5kdYQjZELPDfdkQWJqA@mail.gmail.com>
+ <CANn89iLkk75vy6fKMzwQXFEBdyTrQghnFKSxR3HPaeWS4oT+8g@mail.gmail.com>
+ <f22f16ec-e78b-bf9e-ea43-5232b2403fa1@gmail.com>
+In-Reply-To: <f22f16ec-e78b-bf9e-ea43-5232b2403fa1@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,139 +82,275 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git srcunmisafe.2022.10.20a
-branch HEAD: c4c1e1794feee19cf50f14200284e0037878da04  srcu: Explain the reason behind the read side critical section on GP start
+Hi,
 
-elapsed time: 745m
+2022. 10. 14. 오전 12:00에 Taehee Yoo 이(가) 쓴 글:
+ > Hi,
+ >
+ > On 10/12/22 21:19, Eric Dumazet wrote:
+ >  > On Wed, Oct 12, 2022 at 12:53 AM Dmitry Vyukov <dvyukov@google.com>
+ > wrote:
+ >  >>
+ >  >> On Wed, 12 Oct 2022 at 09:48, syzbot
+ >  >> <syzbot+60748c96cf5c6df8e581@syzkaller.appspotmail.com> wrote:
+ >  >>>
+ >  >>> Hello,
+ >  >>>
+ >  >>> syzbot found the following issue on:
+ >  >>>
+ >  >>> HEAD commit:    bbed346d5a96 Merge branch 'for-next/core' into
+ > for-kernelci
+ >  >>> git tree:
+ > git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git 
+for-kernelci
+ >  >>> console output:
+ > https://syzkaller.appspot.com/x/log.txt?x=14a03a2a880000
+ >  >>> kernel config:
+ > https://syzkaller.appspot.com/x/.config?x=aae2d21e7dd80684
+ >  >>> dashboard link:
+ > https://syzkaller.appspot.com/bug?extid=60748c96cf5c6df8e581
+ >  >>> compiler:       Debian clang version
+ > 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld
+ > (GNU Binutils for Debian) 2.35.2
+ >  >>> userspace arch: arm64
+ >  >>>
+ >  >>> Unfortunately, I don't have any reproducer for this issue yet.
+ >  >>>
+ >  >>> Downloadable assets:
+ >  >>> disk image:
+ > 
+https://storage.googleapis.com/syzbot-assets/11078f50b80b/disk-bbed346d.raw.xz 
 
-configs tested: 117
-configs skipped: 3
+ >
+ >  >>> vmlinux:
+ > 
+https://storage.googleapis.com/syzbot-assets/398e5f1e6c84/vmlinux-bbed346d.xz 
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+ >
+ >  >>>
+ >  >>> IMPORTANT: if you fix the issue, please add the following tag to
+ > the commit:
+ >  >>> Reported-by: syzbot+60748c96cf5c6df8e581@syzkaller.appspotmail.com
+ >  >>
+ >  >> +Jiri
+ >  >>
+ >  >> It looks like the issue is with the team device. It seems to call
+ >  >> itself infinitely.
+ >  >> team_device_event was mentioned in stack overflow bugs in the past:
+ >  >>
+ > 
+https://groups.google.com/g/syzkaller-bugs/search?q=%22team_device_event%22
+ >  >>
+ >  >
+ >  >
+ >  > Taehee Yoo, can you take a look ?
+ >  >
+ >  > Patch series of yours was supposed to limit max nest level to 8
+ >  >
+ >  >
+ > 
+https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git/commit/?id=65921376425fc9c8b7ce647e1f7989f7cdf5dd70 
 
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-arc                                 defconfig
-s390                             allmodconfig
-alpha                               defconfig
-s390                                defconfig
-s390                             allyesconfig
-x86_64                        randconfig-a004
-powerpc                           allnoconfig
-i386                                defconfig
-x86_64                           rhel-8.3-kvm
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-x86_64                              defconfig
-x86_64                        randconfig-a002
-x86_64                          rhel-8.3-func
-mips                             allyesconfig
-powerpc                          allmodconfig
-sh                               allmodconfig
-i386                             allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                        randconfig-a006
-arc                  randconfig-r043-20221020
-x86_64                        randconfig-a013
-s390                 randconfig-r044-20221020
-x86_64                        randconfig-a011
-riscv                randconfig-r042-20221020
-m68k                             allmodconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-x86_64                        randconfig-a015
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-i386                          randconfig-a014
-m68k                             allyesconfig
-i386                          randconfig-a012
-i386                          randconfig-a016
-m68k                            q40_defconfig
-powerpc                     tqm8541_defconfig
-arm                           stm32_defconfig
-powerpc                      chrp32_defconfig
-i386                          randconfig-c001
-openrisc                         alldefconfig
-powerpc                       holly_defconfig
-sh                ecovec24-romimage_defconfig
-arm                      footbridge_defconfig
-sh                     magicpanelr2_defconfig
-arm                          gemini_defconfig
-mips                  maltasmvp_eva_defconfig
-m68k                         apollo_defconfig
-arc                        vdk_hs38_defconfig
-sh                           se7712_defconfig
-arc                  randconfig-r043-20221018
-s390                 randconfig-r044-20221018
-riscv                randconfig-r042-20221018
-mips                      loongson3_defconfig
-xtensa                generic_kc705_defconfig
-nios2                            alldefconfig
-i386                          debian-10.3-kvm
-i386                        debian-10.3-kunit
-i386                         debian-10.3-func
-arm                     eseries_pxa_defconfig
-powerpc                  storcenter_defconfig
-arc                  randconfig-r043-20221019
-mips                           ci20_defconfig
-m68k                        mvme147_defconfig
-openrisc                            defconfig
-x86_64                        randconfig-c001
-arm                  randconfig-c002-20221020
+ >
+ >  >
+ >
+ > I found a reproducer.
+ >
+ > #test_team.sh
+ > ip link add dummy0 type dummy
+ > ip link set dummy0 up
+ > for a1 in {0..1}
+ > do
+ >          ip link add team$a1 type team
+ >          for a2 in {0..1}
+ >          do
+ >                  ip link add team$a1$a2 master team$a1 type team
+ >                  for a3 in {0..1}
+ >                  do
+ >                          ip link add team$a1$a2$a3 master team$a1$a2
+ > type team
+ >                          for a4 in {0..1}
+ >                          do
+ >                                  ip link add team$a1$a2$a3$a4 master
+ > team$a1$a2$a3 type team
+ >                                  for a5 in {0..1}
+ >                                  do
+ >                                          ip link add team$a1$a2$a3$a4$a5
+ > master team$a1$a2$a3$a4 type team
+ >                                          for a6 in {0..1}
+ >                                          do
+ >                                                  ip link add
+ > team$a1$a2$a3$a4$a5$a6 master team$a1$a2$a3$a4$a5 type team
+ >                                                  ip link add
+ > macvlan$a1$a2$a3$a4$a5$a6 link dummy0 master team$a1$a2$a3$a4$a5$a6 type
+ > macvlan
+ >                                                  ip link set
+ > macvlan$a1$a2$a3$a4$a5$a6 up
+ >                                                  ip link set
+ > team$a1$a2$a3$a4$a5$a6 up
+ >                                          done
+ >                                          ip link set 
+team$a1$a2$a3$a4$a5 up
+ >                                  done
+ >                                  ip link set team$a1$a2$a3$a4 up
+ >                          done
+ >                          ip link set team$a1$a2$a3 up
+ >                  done
+ >                  ip link set team$a1$a2 up
+ >          done
+ >          ip link set team$a1 up
+ > done
+ >
+ > #test_ethtool.sh
+ > for a1 in {0..1}
+ > do
+ >          ethtool -K team$a1 lro $1
+ >          for a2 in {0..1}
+ >          do
+ >                  ethtool -K team$a1$a2 lro $1
+ >                  for a3 in {0..1}
+ >                  do
+ >                          ethtool -K team$a1$a2$a3 lro $1
+ >                          for a4 in {0..1}
+ >                          do
+ >                                  ethtool -K team$a1$a2$a3$a4 lro $1
+ >                                  for a5 in {0..1}
+ >                                  do
+ >                                          ethtool -K team$a1$a2$a3$a4$a5
+ > lro $1
+ >                                          for a6 in {0..1}
+ >                                          do
+ >                                                  ethtool -K
+ > team$a1$a2$a3$a4$a5$a6 lro $1
+ >                                                  ethtool -K
+ > macvlan$a1$a2$a3$a4$a5$a6 lro $1
+ >                                          done
+ >                                  done
+ >                          done
+ >                  done
+ >          done
+ > done
+ >
+ > shell#1
+ > bash test_team.sh
+ > while :
+ > do
+ > bash test_ethtool.sh on
+ > done
+ > shell#2
+ > while :
+ > do
+ > bash test_ethtool.sh off
+ > done
+ >
+ > We can see a very similar call trace with the above reproducer.
+ > I think it is the same issue.
+ > Could you please test it?
+ >
+ > And, I found the fixed same issue too.
+ > 
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?h=v6.0&id=dd912306ff008891c82cd9f63e8181e47a9cb2fb 
 
-clang tested configs:
-hexagon              randconfig-r041-20221020
-x86_64                        randconfig-a005
-hexagon              randconfig-r045-20221020
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-mips                          ath79_defconfig
-arm                         shannon_defconfig
-mips                     cu1830-neo_defconfig
-arm                       mainstone_defconfig
-arm                  colibri_pxa300_defconfig
-hexagon              randconfig-r045-20221018
-hexagon              randconfig-r041-20221018
-powerpc                     tqm8560_defconfig
-powerpc                     kmeter1_defconfig
-mips                       lemote2f_defconfig
-powerpc                    socrates_defconfig
-arm                         orion5x_defconfig
-arm                        magician_defconfig
-s390                 randconfig-r044-20221019
-hexagon              randconfig-r045-20221019
-riscv                randconfig-r042-20221019
-hexagon              randconfig-r041-20221019
-powerpc                 mpc8560_ads_defconfig
-mips                           rs90_defconfig
-x86_64                        randconfig-k001
-i386                 randconfig-a013-20221017
-i386                 randconfig-a015-20221017
-i386                 randconfig-a016-20221017
-i386                 randconfig-a011-20221017
-i386                 randconfig-a014-20221017
-i386                 randconfig-a012-20221017
-arm                          ep93xx_defconfig
-powerpc                 mpc836x_rdk_defconfig
-mips                          ath25_defconfig
-arm                           omap1_defconfig
-mips                      malta_kvm_defconfig
-arm                                 defconfig
+ >
+ > https://groups.google.com/g/syzkaller-bugs/c/-5OV1OW-dS4/m/o2Oq6AYSAwAJ
+ >
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+I found the root cause of this issue.
+
+This is simpler reproducer.
+
+ip link add team0 type team
+ethtool -K team0 lro on
+for i in {1..100}
+do
+         ip link add team$i master team0 type team
+         ethtool -K team$i lro on
+done
+
+ethtool -K team0 lro off
+
+The above graph is like below:
+        team0
+          |
+   +------+------+-----+-----+
+   |      |      |     |     |
+team1  team2  team3  ...  team100
+
+int __netdev_update_features(struct net_device *dev)
+{
+         struct net_device *upper, *lower;
+         netdev_features_t features;
+         struct list_head *iter;
+         int err = -1;
+...
+sync_lower:
+         /* some features must be disabled on lower devices when disabled
+          * on an upper device (think: bonding master or bridge)
+          */
+         netdev_for_each_lower_dev(dev, lower, iter)
+                 netdev_sync_lower_features(dev, lower, features);
+...
+
+
+static void netdev_sync_lower_features(struct net_device *upper,
+         struct net_device *lower, netdev_features_t features)
+{
+         netdev_features_t upper_disables = NETIF_F_UPPER_DISABLES;
+         netdev_features_t feature;
+         int feature_bit;
+
+         for_each_netdev_feature(upper_disables, feature_bit) {
+                 feature = __NETIF_F_BIT(feature_bit);
+                 if (!(features & feature) && (lower->features & feature)) {
+                         netdev_dbg(upper, "Disabling feature %pNF on 
+lower dev %s.\n",
+                                    &feature, lower->name);
+                         lower->wanted_features &= ~feature;
+                         __netdev_update_features(lower);
+
+                         if (unlikely(lower->features & feature))
+                                 netdev_WARN(upper, "failed to disable 
+%pNF on %s!\n",
+                                             &feature, lower->name);
+                         else
+                                 netdev_features_change(lower);<-----HERE
+                 }
+         }
+}
+
+void netdev_features_change(struct net_device *dev)
+{
+         call_netdevice_notifiers(NETDEV_FEAT_CHANGE, dev);
+}
+
+The code looks like an iterator.
+But it would work recursively because of notification.
+
+When team0's feature(LRO) is changed with <ethtool -K team0 lro off>", 
+__netdev_update_features(team0) is called.
+__netdev_update_features(team0) internally sends NETDEV_FEAT_CHANGE 
+event to all lower interfaces(team1, team2, ... team100).
+team1 will receive NETDEV_FEAT_CHANGE, and it sends NETDEV_FEAT_CHANGE 
+to the upper interface(team0).
+team0 will receive NETDEV_FEAT_CHANGE again, and it sends 
+NETDEV_FEAT_CHANGE to the all lower interfaces(team1, team2, ... team100).
+(At this point, team1 flag was already set, so it will be skipped.)
+team2 will receive NETDEV_FEAT_CHANGE, and it sends NETDEV_FEAT_CHANGE 
+to the upper interface(team0).
+team0 will receive NETDEV_FEAT_CHANGE again again, and it sends 
+NETDEV_FEAT_CHANGE to the all lower interfaces(team1, team2, ... team100).
+(team1, team2 skipped.)
+...
+So, if there are a few lower interfaces(roughly under 30 lower 
+interfaces), it anyway works even if internally works recursively.
+But so many lower interfaces exist, stack overflow will occur.
+This is the root cause of this issue.
+
+I think synchronization direction should be one way.
+Up or Down.
+It means that if the team0 interface can send the NETDEV_FEAT_CHANGE 
+notification event to the lower interface,
+the lower interfaces should be disallowed to send NETDEV_FEAT_CHANGE 
+event to the upper interface.
+
+bonding has same issue.
