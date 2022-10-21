@@ -2,73 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8BFE607E57
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 20:35:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F043C607E5A
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 20:38:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230041AbiJUSfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 14:35:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58794 "EHLO
+        id S230188AbiJUSit (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 14:38:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbiJUSfK (ORCPT
+        with ESMTP id S229744AbiJUSip (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 14:35:10 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75747664C5
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 11:35:08 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id f193so3320616pgc.0
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 11:35:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RbVgeTtCM02kPqYNtbeyhsWp7ZqZ9UH42EzNv221eVU=;
-        b=g0K9So0kuv+lWZGKTwvhP1SbKVRRXuLtb1ArR2RJYXdBTW5aCKVTxK0iF4QVJCm3Bf
-         qK64Ftc6YjlDZBrzedI4YyCJEMxu2UyjXWTZB5izZLP9kUjgXWH5zfJuTKgmhl+omQTj
-         mEXZBxu6FtPtC7qSwgVabW2/YrD8LywRi2k6w7MOryDz6vqsHb3lZ+HPrf6gDILUq1h3
-         PQV6Y0E72RYSDWNyToJwtAa+Qo1iuaZQo9xGMDu9pb14teVljAi4n8wEjsrqyw2/a3IE
-         5FPKP9b5HePpdKctATwnSN6DY7SjnorowxmRlNakfXZzTgCvL8D8LZOXgSF4/86GuyXe
-         FAmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RbVgeTtCM02kPqYNtbeyhsWp7ZqZ9UH42EzNv221eVU=;
-        b=ZJBEVSqbPSJbJVMMmp9c7x3ODUVru6Z01s8R6Z3hsIXLRoaCVYgEPioi136L9hDebD
-         BvMFpYim7b8mDCjo8kj3x+QtU3CD3NWjX1NUikQjUmN9ZjRuMViNMYsUh1UV9naHvGLj
-         mImHtIdBXlcjVyDbp+rdWjyBMsAEAaGACFTpc+Dl/AWV0KdpTaoMUTItzsxcJiigSQb1
-         XANXgwJcmcxoNx4FaBDbnR3gzWYhR0W2aSThZtz+osKewKgBfcfVDHRWH8GoSp8sAfjr
-         bbj6gBzZrMXMvNQONr9Pdr/NbGx68KrZW8JDb0LlTM8n19obeDKWRYJo7CSkTDedQbtM
-         UzVA==
-X-Gm-Message-State: ACrzQf0QdiFYZjO41DWvjpX641aimdCxHkgh+PaAWLTaVhd3e3IaV9KJ
-        Yrsgf1rOOvRTraSyNvcgZ0h2pw==
-X-Google-Smtp-Source: AMsMyM6CFrI3TebUqw8G9APsnCJTcyJ3UhnwN87wo5TFxtbiPLBJNPKF37qhEOe3JPnCYdSoF+9UGw==
-X-Received: by 2002:a05:6a00:16c4:b0:535:890:d52 with SMTP id l4-20020a056a0016c400b0053508900d52mr20707625pfc.9.1666377307899;
-        Fri, 21 Oct 2022 11:35:07 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id i13-20020a170902c94d00b001754064ac31sm15122073pla.280.2022.10.21.11.35.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Oct 2022 11:35:07 -0700 (PDT)
-Date:   Fri, 21 Oct 2022 18:35:04 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Xiaoyao Li <xiaoyao.li@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: x86: Fix the initial value of mcg_cap
-Message-ID: <Y1LmWAyG7S4bgzBs@google.com>
-References: <20221020031615.890400-1-xiaoyao.li@intel.com>
- <Y1FatU6Yf9n5pWB+@google.com>
- <092dc961-76f6-331a-6f91-a77a58f6732d@intel.com>
- <Y1F4AoeOhNFQnHnJ@google.com>
- <b40fd338-cb3b-b602-0059-39f775e77ad6@intel.com>
+        Fri, 21 Oct 2022 14:38:45 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2110.outbound.protection.outlook.com [40.107.117.110])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 439DF241B1C
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 11:38:43 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YErfffnK9FcS5q4zYs7esLo8UJlFiS08PFmdq6I/C1ShXMBjVHNadEg6AGbCfQ2mVwUUsSsOeIW/s16hPDko41bZSTIRH72S4pgiP04pnxsmc52ydLYuXr2KuiSQp4z8pzRLnBguiFBJlypyK6NJYvAtWt8WUz9DQ5XfcUgFwfpn2D1wZX4k/nh1o/14Lmhym2Cy5VpRvVAJknpIhxtp8ZpLZ2USDYiBk4ruLCuJB7SduJ19uZlyaqEI+xdKOrAqGfd2eESvMaKhCo2K9o2Ljob9b+CPF/nqtWbpQB7t0T2kmSuQ/Tt1XUH6xG6ixigmumiyPj1ShuVKcQwB9LwAGw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QXDv+YXFosw2fWAKFtHiAv4uJen+//GC3ZPUMcMiEhE=;
+ b=F0S3msS/3RGU2ruW+7w/y+UesUfrvNPmYrPR/PcnD6qVvKbtmXAgwWCEhLuAl9awHzeq3DGTI2msFj1eU2x4CZiZIifOfyjmhhdQboDtX8fGBQvc+JWXBy+SPYzFOF1ZJ07fLUjxz7MmegJrTvEx39uvrhMwqxjmF0VedY6v+7Wi1EmaZtihYOKTRRrA7pWJWMDlJ2ZhoIcygj/Wir9BaQaIYHJDm2EdbIcskK40O8UCRG19nofba3VkHKv1uC0z8T46RRYgRHQrn3ZYGDS++Iqou2cQ+1royvWYMO99HX07yku3HsuX9E7XqhspsHrpb0mlskK9KC5HMZMyTqJpTA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QXDv+YXFosw2fWAKFtHiAv4uJen+//GC3ZPUMcMiEhE=;
+ b=dgK88fsnggDiHuVY0KGX8jMqm2PXFGKC1oDYNKUdXzmLrz9kdAfByb7LFJipFOQ8zng7YsAuBilhnfKzXk57cOSpU7QUxVNeEPyJbnW5s6V0igMXSLeEYFes27maCjNnN7haNdnqM7jgPtNSia25YyMDIG+i9RBp2QOyGds0gGIVGe36SVzDRXfALd3HCEPXsMbBZx+uLGe5qPnme3QjNa8ENxdTki7fMzZ2lrUyKfNzf9ZW7KNqKTWNPxI+pFRUk1PTW8/9Z/ngzbvLpe2eBJ1L3QkDlDmHzQRv/XAjTlOpGKQWv+zbWdS4Frko7EjeWcnOBApqJ98l9P++tBnRtQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by PUZPR06MB6223.apcprd06.prod.outlook.com (2603:1096:301:107::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.21; Fri, 21 Oct
+ 2022 18:38:40 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::c84b:5a6c:d66f:c0fd]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::c84b:5a6c:d66f:c0fd%3]) with mapi id 15.20.5723.034; Fri, 21 Oct 2022
+ 18:38:40 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     chao@kernel.org
+Cc:     jaegeuk@kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Yangtao Li <frank.li@vivo.com>
+Subject: Re: [f2fs-dev] [PATCH] f2fs: let's avoid to get cp_rwsem twice by f2fs_evict_inode by d_invalidate
+Date:   Sat, 22 Oct 2022 02:38:07 +0800
+Message-Id: <20221021183807.18640-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <b578c945-f695-d505-1e97-fcfbcef6e670@kernel.org>
+References: <b578c945-f695-d505-1e97-fcfbcef6e670@kernel.org>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI1PR02CA0059.apcprd02.prod.outlook.com
+ (2603:1096:4:1f5::19) To SEZPR06MB5269.apcprd06.prod.outlook.com
+ (2603:1096:101:78::6)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b40fd338-cb3b-b602-0059-39f775e77ad6@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|PUZPR06MB6223:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8a6e6dd0-3751-4516-c894-08dab393795f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 9kb4TfZ84T/mwiykihtNyLtkfiv7N0Z1MR/1F8jYakixQbyuCDkoDj8/3kn4Z9JU9wPKcBE0HDQXE3fo3lxebE0qGKBPoVuVELEeKrzQ/Kua0/i5vWJvWIuN2IkdVpF5njm8GBNOC7zxtbIeX4YKXunE3MrfnHGVsmJ8kKe3jfASE0lg/hCKImi/EsU++8VVY3YzRgzU2uo+sVjaF9YrRjnCPGlyVQlVOoJAUU6UhuZ+yC3KS0I6oFNwTleuJvZzqokONJjaz5VVQco2OYmsJaLqb9fhrWbp42VPWf69p647C8tQJANFzm1LzzQCZQSf9YZgYePD09JmzLuIk7vowEnvVM6sI9d0Kbv+WBgUoIVczKetF8y3xzrb5yKFH3zIVg72KFRuk5XzHoIsXOpg7tvMbW8Ph8ZQ9Iko8GhBxoOefHld4aq9jzWpKz9gMDvXcaLc5ZtkPAgJWDevfIHbXFby6RYB8wqwlg8Q39UFQDX4MD8IpTShoBZ5W/xYlLt+1pri9PUrrFxaNzgYR/2GTWM3QFN3d3NdapIQcFAkPmhqaKU5S8+Pv7XDVdhDex7A1oaCmAtTWkmMFNA9HKjQBExsRmwWXm5OAZY5HQ8t0gg8P9R5+cMdXQxSZHL3ujtdLcUtuDVcmmRlfw9hOcGFTV1dM7GKsEYTXmMfPluY43iaqudw5LUZwMUIrBrBrobr2DziY722AvvCzGkj2RknWXMFNYGlaIUmjg3QXrKL+15NgAE3bmjRFDRAPkViTcEnIBz2HYgsoH2VEZY52D6fZg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(346002)(396003)(366004)(376002)(39860400002)(451199015)(6486002)(6506007)(6666004)(107886003)(186003)(52116002)(6512007)(26005)(478600001)(2906002)(1076003)(2616005)(4270600006)(6916009)(66476007)(316002)(8676002)(66946007)(66556008)(4326008)(8936002)(41300700001)(86362001)(5660300002)(38100700002)(38350700002)(19618925003)(36756003)(558084003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?mvYrpZzaKPxLQKa0/Kbl7EJk/RElF0P9eXA+a0n9gjzxWgxHXkdslImC8IyQ?=
+ =?us-ascii?Q?HEBWKlxN3TyeMUIW0+frXNDFS9nzpkuzIrMddxHpKBeqOCw6Zw+6W6b3JcLi?=
+ =?us-ascii?Q?KxNUIFFtWi4zbktiKn9jF+47XgcgAdoh4s6AvvMLOerzOu7L/+MOuccSB4ol?=
+ =?us-ascii?Q?Vlbpr/giE0+xu3PBwtuKHmz50Jb41yz5Cuj4M9MbsED8p0DNiBpQ+xf4vbKE?=
+ =?us-ascii?Q?BaC/Rcr92t2yB9kSgD+JosHdrnAsizEBjYr0G9H6oLH79wiPQjXD1jn42YJp?=
+ =?us-ascii?Q?heod7+OKeUwFNy1klx+3ynLWtMyZ/8iGm+C6970KXBN4Qkdk0ZXY3uJBZdyT?=
+ =?us-ascii?Q?Jcg9vUnJ7wAHiFC7EQTl0+uPpWNQxyHK9xPfiuVz+382kFAocU5y34qOJubP?=
+ =?us-ascii?Q?J0iLFtw2xR5ASv2LbINUaHZif95KYsYLImh7zWKx/aE+0ryfz3lVMWu9pDFL?=
+ =?us-ascii?Q?jIfscAQfhGy2SiAeBCBUAT1+EzGet0FPxr0EVGQlOVh0cSZYZ6eyyKQcQQVC?=
+ =?us-ascii?Q?ERzPPW8ZnGFBKzm1OYVzcJVq9HDrgY71xx99zzFuPpzIL8fQxi6BYu7nK6zV?=
+ =?us-ascii?Q?XrxZA2SJKZFTDG9vL0j3KzVJCMlHyhHES14V9spQMy9PcYN2r5RWdB1ocrzW?=
+ =?us-ascii?Q?r2l5AgF5+f/LMVQbNlnksXpawb4fyj7B91+sV46wsojq5YlQRVGX6x2MtRgC?=
+ =?us-ascii?Q?uzIPKq0VYGjg0BMrPoeJn69fqCVtdNKcKOJg8uv3jpNO5dkrz3M+bTnGwM56?=
+ =?us-ascii?Q?TUmbnVgnUomx7NAXsWz3HPhybPXEwcX8ZAXxo2NoJdLb8ATje/gc8NUIid1R?=
+ =?us-ascii?Q?AnqPvficpJRX6tuDWChudqGRCZxm/rp0m//ko32XwJKz8AgvV1zwBFvPZ8QQ?=
+ =?us-ascii?Q?b74wMOWuH+pZxjMoA+8LNGtZC4oBW42so1hMCJJp9A7bodZadDb/Jbo4kn49?=
+ =?us-ascii?Q?//Imwh0RWsFiFxRDJKb0sW/bkJDeKz8yzFfVlsl1eIZslFTQCU6EJybrStOf?=
+ =?us-ascii?Q?gcsQbPmUpE7lIggte6hf8d2WPZ8q/54e5NaOMBlNpL6ulOi2sYwBptpRRjAB?=
+ =?us-ascii?Q?O06KJP5qJQSrdY9qsuGyamylmu0zbfucuKt5Em6efGtpV4td2HkYBSrmrjN4?=
+ =?us-ascii?Q?gGtQpEUAZCoYkcrXidzcZsGnla99tykpZwo+Io1vsME07asNWOKXQeuRuzDk?=
+ =?us-ascii?Q?NM56/ADI4uj/hts+HjqsIHKt6vtv5+ZH3RjONA3nHboyAzsTqyXeZwYWaRQw?=
+ =?us-ascii?Q?LI4CHZsvrqVDDuTPrxiXRA8B7sFRu7XR60ghW3TOxFkRElH4TMBvq1r5jrv0?=
+ =?us-ascii?Q?DOY7Jt1TgNOcalz6K2jU4pmKFB3V9AqNp0XWN6Jf4wdnrBbQOaiyB8KwnS/d?=
+ =?us-ascii?Q?7jZYOTM6U6KGz7/ME80BeakVnnolDtNcYfUfqPcJstKWDmsjvRPxgeXo1r79?=
+ =?us-ascii?Q?vfodO1GvbhpJCLfCjninsfM4KqcuQ797iIb9uX85ur/gOe9wHOAHhMhF6aAi?=
+ =?us-ascii?Q?+G/dGqfTMs3bYLlhPXbQe6Z4gRwzKG8U5imEQAs/OJaY08YdGr8LrVyKMmCX?=
+ =?us-ascii?Q?jwwQKlE3I6EgOrLoGZ1O6qeG81jyt4HYpoZrjWIi?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8a6e6dd0-3751-4516-c894-08dab393795f
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Oct 2022 18:38:40.8126
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Wiu64ZbPmHHLMH4Cj4dOJXStNQ1q4bSVC/hjmBW9LXNwg1lHbWAlm652zOVT+4wXWU0lQPF+F1j/mAZvaT6ppQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PUZPR06MB6223
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,30 +113,6 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022, Xiaoyao Li wrote:
-> On 10/21/2022 12:32 AM, Sean Christopherson wrote:
-> > If we really want to clean up this code, I think the correct approach would be to
-> > inject #GP on all relevant MSRs if CPUID.MCA==0, e.g.
-> 
-> It's what I thought of as well. But I didn't find any statement in SDM of
-> "Accessing Machine Check MSRs gets #GP if no CPUID.MCA"
+Tested-by: Yangtao Li <frank.li@vivo.com>
 
-Ugh, stupid SDM.  Really old SDMs, e.g. circa 1997, explicity state in the
-CPUID.MCA entry that:
-
-  Processor supports the MCG_CAP MSR.
-
-But, when Intel introduced the "Architectural MSRs" section (2001 or so), the
-wording was changed to be less explicit:
-
-  The Machine Check Architecture, which provides a compatible mechanism for error
-  reporting in P6 family, Pentium 4, and Intel Xeon processors, and future processors,
-  is supported. The MCG_CAP MSR contains feature bits describing how many banks of
-  error reporting MSRs are supported.
-
-and the entry in the MSR index just lists P6 as the dependency:
-
-  IA32_MCG_CAP (MCG_CAP) Global Machine Check Capability (R/O) 06_01H
-
-So I think it's technically true that MCG_CAP is supposed to exist iff CPUID.MCA=1,
-but we'd probably need an SDM change to really be able to enforce that :-(
+Thanks,
