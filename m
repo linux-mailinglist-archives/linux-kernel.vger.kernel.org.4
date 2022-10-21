@@ -2,137 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CB7B607488
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 11:57:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 030BD60748A
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 11:57:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229755AbiJUJ5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 05:57:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41262 "EHLO
+        id S230085AbiJUJ50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 05:57:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229916AbiJUJ4y (ORCPT
+        with ESMTP id S229608AbiJUJ5Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 05:56:54 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CADC228CF8
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 02:56:48 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id j8-20020a056e02154800b002fc89e9ebeeso3077700ilu.16
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 02:56:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RKOPYMWoU+pj6DkofKbbNnR/YvcIyy/DI1Wxbd6izEM=;
-        b=ZEqHPqfrJr1LRCRbIJpOEKvrxLc9DLIiw7Hl6HD30cypHWtoyRXXMG1AbNo7M6XipM
-         n6sT6orKpp5E6l71whO09iln6+XTXjJh98NHQCfrP/QyiwYqFDGKWsmNDxSt3nUN6p6/
-         1dwYeFwJ/EXQhjGX14SJVKWVdr7UUb4DO5NMz2rcYbU6fJaeFb4vfb5oFnbqDPQPadV4
-         J1zUIiyajqnRbda+vuXCQEorQcGSXYL2NOMM+Ydu3jwyA/yq5wrRtvHl5oItr5vUoTXw
-         yw99yQRnaIW/cbpoG/hbj9V01xhtRw2g0e9hbf70IJj7CxsDEc+RJltXZq3g24MGH2Vr
-         TsNQ==
-X-Gm-Message-State: ACrzQf0cPqMUgwF4VqaQ98WolkQyXuC+rSVrTRZ4CZITRlQw6JuinB0X
-        95DRr8VpMsz3f1NPzBgiB+lRJuFvRjR+vaJYo+/vKXc3Z3kr
-X-Google-Smtp-Source: AMsMyM5eHOs/7lFkVSCkihITBx0m6g35gKFh5gtnt0w7ZNWNkyRS7Hr75ZJOBtAiG45QPp/W7KT3bXx4rt5AZVML9Oilic5FfOi8
+        Fri, 21 Oct 2022 05:57:24 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 61882256D15
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 02:57:23 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 679EDED1;
+        Fri, 21 Oct 2022 02:57:29 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.6.231])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 13E813F67D;
+        Fri, 21 Oct 2022 02:57:21 -0700 (PDT)
+Date:   Fri, 21 Oct 2022 10:57:19 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     syzbot <syzbot+96e659d35b9d6b541152@syzkaller.appspotmail.com>,
+        jiebin.sun@intel.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, tim.c.chen@linux.intel.com
+Subject: Re: [syzbot] BUG: unable to handle kernel paging request in
+ percpu_counter_add_batch
+Message-ID: <Y1Js/wNrjzTyYSwD@FVFF77S0Q05N>
+References: <000000000000e528a905eb822440@google.com>
+ <20221020194427.68571e92bc33d98a05c852aa@linux-foundation.org>
 MIME-Version: 1.0
-X-Received: by 2002:a92:c0c9:0:b0:2f9:ae60:164c with SMTP id
- t9-20020a92c0c9000000b002f9ae60164cmr14340758ilf.28.1666346207746; Fri, 21
- Oct 2022 02:56:47 -0700 (PDT)
-Date:   Fri, 21 Oct 2022 02:56:47 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c92d2105eb8875d9@google.com>
-Subject: [syzbot] WARNING in btrfs_destroy_inode
-From:   syzbot <syzbot+d4d23ca08383875f6956@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221020194427.68571e92bc33d98a05c852aa@linux-foundation.org>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thu, Oct 20, 2022 at 07:44:27PM -0700, Andrew Morton wrote:
+> On Thu, 20 Oct 2022 19:24:40 -0700 syzbot <syzbot+96e659d35b9d6b541152@syzkaller.appspotmail.com> wrote:
 
-syzbot found the following issue on:
+> Well.  freeque() messes with ns->percpu_msg_hdrs but msg_exit_ns()
+> already did percpu_counter_destroy(&ns->percpu_msg_hdrs);
+> 
+> I'm thinking something like this?
+> 
+> --- a/ipc/msg.c~a
+> +++ a/ipc/msg.c
+> @@ -1329,11 +1329,11 @@ fail_msg_bytes:
+>  #ifdef CONFIG_IPC_NS
+>  void msg_exit_ns(struct ipc_namespace *ns)
+>  {
+> -	percpu_counter_destroy(&ns->percpu_msg_bytes);
+> -	percpu_counter_destroy(&ns->percpu_msg_hdrs);
+>  	free_ipcs(ns, &msg_ids(ns), freeque);
+>  	idr_destroy(&ns->ids[IPC_MSG_IDS].ipcs_idr);
+>  	rhashtable_destroy(&ns->ids[IPC_MSG_IDS].key_ht);
+> +	percpu_counter_destroy(&ns->percpu_msg_bytes);
+> +	percpu_counter_destroy(&ns->percpu_msg_hdrs);
+>  }
+>  #endif
 
-HEAD commit:    bbed346d5a96 Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=125cfb76880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3a4a45d2d827c1e
-dashboard link: https://syzkaller.appspot.com/bug?extid=d4d23ca08383875f6956
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
+That seems to fix the issue for me, testing with the reproducer in my prior
+reply. Previously that would trigger within seconds, and with the above applied
+I couldn't get it to trigger after 15+ minutes of repeated test runs.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+FWIW:
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/e8e91bc79312/disk-bbed346d.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/c1cb3fb3b77e/vmlinux-bbed346d.xz
+  Tested-by: Mark Rutland <mark.rutland@arm.com>
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+d4d23ca08383875f6956@syzkaller.appspotmail.com
-
-loop0: detected capacity change from 0 to 32768
-BTRFS info (device loop0): using xxhash64 (xxhash64-generic) checksum algorithm
-BTRFS info (device loop0): using free space tree
-BTRFS info (device loop0): enabling ssd optimizations
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 27221 at fs/btrfs/inode.c:8963 btrfs_destroy_inode+0x274/0x2f8 fs/btrfs/inode.c:8963
-Modules linked in:
-CPU: 1 PID: 27221 Comm: syz-executor.0 Not tainted 6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : btrfs_destroy_inode+0x274/0x2f8 fs/btrfs/inode.c:8963
-lr : btrfs_destroy_inode+0x274/0x2f8 fs/btrfs/inode.c:8963
-sp : ffff800020f13a30
-x29: ffff800020f13a30 x28: 0000000000000040 x27: ffff000128be1d68
-x26: ffff00012a3c0c30 x25: 0000000000000000 x24: ffff00011a6704c0
-x23: ffff80000d3480b0 x22: 0000000000000000 x21: ffff80000c1419d0
-x20: ffff00011a672a20 x19: ffff00011a672560 x18: 0000000000000000
-x17: 0000000000000000 x16: ffff80000db49158 x15: ffff000128e49a80
-x14: 0000000000000010 x13: 0000000000000000 x12: 0000000000040000
-x11: 0000000000001bfd x10: ffff800022c9f000 x9 : ffff800009132e4c
-x8 : 0000000000001bfe x7 : ffff8000084b15e8 x6 : 0000000000000000
-x5 : 0000000000000d40 x4 : 0000000000000038 x3 : 0000000000000038
-x2 : ffff0000c001c800 x1 : 00000000fffffff4 x0 : ffff00011a672a20
-Call trace:
- btrfs_destroy_inode+0x274/0x2f8 fs/btrfs/inode.c:8963
- alloc_inode+0xb0/0x104 fs/inode.c:269
- new_inode_pseudo fs/inode.c:1019 [inline]
- new_inode+0x2c/0xc0 fs/inode.c:1047
- btrfs_create+0x34/0xb0 fs/btrfs/inode.c:6690
- lookup_open fs/namei.c:3413 [inline]
- open_last_lookups fs/namei.c:3481 [inline]
- path_openat+0x804/0x11c4 fs/namei.c:3688
- do_filp_open+0xdc/0x1b8 fs/namei.c:3718
- do_sys_openat2+0xb8/0x22c fs/open.c:1313
- do_sys_open fs/open.c:1329 [inline]
- __do_sys_openat fs/open.c:1345 [inline]
- __se_sys_openat fs/open.c:1340 [inline]
- __arm64_sys_openat+0xb0/0xe0 fs/open.c:1340
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
- el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
-irq event stamp: 4032
-hardirqs last  enabled at (4031): [<ffff8000085633bc>] mod_objcg_state+0x19c/0x204 mm/memcontrol.c:3158
-hardirqs last disabled at (4032): [<ffff80000bfb5fbc>] el1_dbg+0x24/0x5c arch/arm64/kernel/entry-common.c:404
-softirqs last  enabled at (3900): [<ffff80000801c33c>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
-softirqs last disabled at (3898): [<ffff80000801c308>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
----[ end trace 0000000000000000 ]---
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Thanks,
+Mark.
