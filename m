@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A71B8607C66
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 18:38:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0866B607C67
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 18:38:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230520AbiJUQh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 12:37:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52572 "EHLO
+        id S231124AbiJUQiB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 12:38:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230427AbiJUQh3 (ORCPT
+        with ESMTP id S230428AbiJUQh3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 21 Oct 2022 12:37:29 -0400
 Received: from mail-ua1-x94a.google.com (mail-ua1-x94a.google.com [IPv6:2607:f8b0:4864:20::94a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AED6227B564
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:37:25 -0700 (PDT)
-Received: by mail-ua1-x94a.google.com with SMTP id h11-20020ab0470b000000b003bf1da44886so2348887uac.17
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:37:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2DA627B56D
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:37:26 -0700 (PDT)
+Received: by mail-ua1-x94a.google.com with SMTP id 95-20020a9f23e8000000b0038caa7cd5c1so2349724uao.8
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:37:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2b1VLSKb1qIoBhHv68uc7sEp7uA+Ju1UfoLt8HAduUY=;
-        b=fFKq9A+3A5TkI1IGkVnB2YWBf8fVHVGy1IiVCq2xH2D+ukznX6/SfUTTA86X+pjDnq
-         mbkAvkkQZk6J12PGLDzV/KGi2b7kOMU02Aktw1M0kEN5f6ZdQppBNHzpLJZ/2+Tr/2/g
-         ncbFQte81ZEqmhzmntgBziWdoyhRcdyDj0o5k51Fk87D8MZ5FdHzTMkbyahm7686yY3i
-         DZOqrcFZGBRSPmwIMgUobG/r3zXICtn1+y5idZYO2hGxg2n7PJaREU84U/umC4o0E0Ow
-         /Kbl96xQv1BiA7GCRPg/XqDMmTLQZjscb0wPrtARpfKTcFdOZGNtTdI8o1uc4cbj1uEg
-         69aw==
+        bh=uDuCPiOW4B8iVzI/6AmJPz8Wx+abw4sbfMgiEm8c4Xc=;
+        b=qq0EliFW2HK5B98D2udo/aAD/3vjrh0KvnobMtG+PZI475PQxdoifbXuauS2SCXR7s
+         NBAGHfMDTBh2R7M3djga9zPIyUlhx0bNxKeL4L+V01PzyGv4mm0erA2L0Y1ny5S6vxJy
+         4gip8m0AqQsH7lfmx5uVfNaKn30YrEf2kISS2JxneX57zOtYW6lbymXlNNHiSfHhJ/y1
+         yUdl8fYNmg7ptYMobwK3mFqxuJ7Y4BDoNlS3denm9rDalcC6tLL8UL3VoKuOEfO+zFSR
+         UdMrIX+D3fSXo2nL8Ka8LYE/7mxAdhiJ2pdIhLJL9bKOH/gF6yAWL/qKQ3jBuanK9jCL
+         6s5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2b1VLSKb1qIoBhHv68uc7sEp7uA+Ju1UfoLt8HAduUY=;
-        b=dZLaVedVZ65npY9+RIkby/0YIv1neWgkH3rdavJ16jIuwGRuR2nsjOPPvHuQo2suEw
-         OZUIbouwdSSR+DHbCEOumya9kGRgCPjOHT1TN2L0+MUMjCiaDfZ5gN/uFVc+cmqCUWu5
-         XQq1NPLkgztXYvNt3vGFJLnme5Qk8U4C7JLsP1uBegrpRuUpQ28nO43FEq42WsZRY5ab
-         lw1enGh4lZy7Tw9F1zko4k+DZ7MqdL43Jcge7Jot6a7jhXvRFiTjaSPZ5Qs9lb+D8EuG
-         0aKZ5dV1K37jt655ehSL3MZQwIJARx8YSpmWodtY/5gtrzpVpY2fLKGwCpYo856HfVGC
-         5/bA==
-X-Gm-Message-State: ACrzQf3b8CdCQyxV2yrGUJzPodUqkIhIWoC9aHvee0fvpO0m0NtfI9LT
-        +Yp/nqfcRehuxzcyn4r1AXXQhIYp/Qvsm77+
-X-Google-Smtp-Source: AMsMyM4U494lNIuvyXBYQh14d1SDt3UAjeXmdAvTI/QhS8Lp1qSrtxq6ioU81FqwlquHVCLPB+1LIMea9tgSCnQ7
+        bh=uDuCPiOW4B8iVzI/6AmJPz8Wx+abw4sbfMgiEm8c4Xc=;
+        b=H1x/qASiCRbYpy6Qe+KoKeSqLQfpRHR5yLUd9o6vhgplzcBeMNq50sGfMNqWu/9bbr
+         Cl0u1ugcv/9G2fBMCg6hTQi5YbvEJkYMuJAssjW6lTtko2Y2+oU5NyvFbpmexchUfXV3
+         m0+tZppSgv5FWP0s+YShAB07WvcSAPX2W7evrBYyPU9WnCK9dhTKGAzpEaELAcSsnFtP
+         /mhH5T2r4kxzKBy3FRchhpyLv1ru3SlxGY1VO5fRYIQgApYr78mZfb5GQGD8V+WEWFqp
+         rgaKAu3rKjaARLDPCGEoJ7RDia7HtIjSwrrEDLTiInbmjtqYrkhvRNUu8LzDjI9s3gcU
+         BSgA==
+X-Gm-Message-State: ACrzQf0YWUIElb8qWUuGwdS5QcATKEIGwVqCD/me4XGxY3BGU1PNJ3jW
+        Aa10/DJbOJY3KnGtcMr7Vev+0y3qSX83DF+Z
+X-Google-Smtp-Source: AMsMyM5MOfTzLEOJgE3E6XYRUQL+J9vN27S5Ka8UI3ikwk+Wd0rafhqiIzJtQHdX6T/3LZGa8ANB+n7hmfewb2Cy
 X-Received: from jthoughton.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:2a4f])
- (user=jthoughton job=sendgmr) by 2002:ab0:6847:0:b0:3f0:c29b:e14a with SMTP
- id a7-20020ab06847000000b003f0c29be14amr9896783uas.33.1666370244124; Fri, 21
- Oct 2022 09:37:24 -0700 (PDT)
-Date:   Fri, 21 Oct 2022 16:36:24 +0000
+ (user=jthoughton job=sendgmr) by 2002:a05:6102:3172:b0:3a7:319c:ffef with
+ SMTP id l18-20020a056102317200b003a7319cffefmr15180512vsm.80.1666370244975;
+ Fri, 21 Oct 2022 09:37:24 -0700 (PDT)
+Date:   Fri, 21 Oct 2022 16:36:25 +0000
 In-Reply-To: <20221021163703.3218176-1-jthoughton@google.com>
 Mime-Version: 1.0
 References: <20221021163703.3218176-1-jthoughton@google.com>
 X-Mailer: git-send-email 2.38.0.135.g90850a2211-goog
-Message-ID: <20221021163703.3218176-9-jthoughton@google.com>
-Subject: [RFC PATCH v2 08/47] hugetlb: add HGM enablement functions
+Message-ID: <20221021163703.3218176-10-jthoughton@google.com>
+Subject: [RFC PATCH v2 09/47] hugetlb: make huge_pte_lockptr take an explicit
+ shift argument.
 From:   James Houghton <jthoughton@google.com>
 To:     Mike Kravetz <mike.kravetz@oracle.com>,
         Muchun Song <songmuchun@bytedance.com>,
@@ -84,151 +85,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently it is possible for all shared VMAs to use HGM, but it must be
-enabled first. This is because with HGM, we lose PMD sharing, and page
-table walks require additional synchronization (we need to take the VMA
-lock).
+This is needed to handle PTL locking with high-granularity mapping. We
+won't always be using the PMD-level PTL even if we're using the 2M
+hugepage hstate. It's possible that we're dealing with 4K PTEs, in which
+case, we need to lock the PTL for the 4K PTE.
 
 Signed-off-by: James Houghton <jthoughton@google.com>
 ---
- include/linux/hugetlb.h | 22 +++++++++++++
- mm/hugetlb.c            | 69 +++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 91 insertions(+)
+ arch/powerpc/mm/pgtable.c | 3 ++-
+ include/linux/hugetlb.h   | 9 ++++-----
+ mm/hugetlb.c              | 7 ++++---
+ mm/migrate.c              | 3 ++-
+ 4 files changed, 12 insertions(+), 10 deletions(-)
 
+diff --git a/arch/powerpc/mm/pgtable.c b/arch/powerpc/mm/pgtable.c
+index cb2dcdb18f8e..035a0df47af0 100644
+--- a/arch/powerpc/mm/pgtable.c
++++ b/arch/powerpc/mm/pgtable.c
+@@ -261,7 +261,8 @@ int huge_ptep_set_access_flags(struct vm_area_struct *vma,
+ 
+ 		psize = hstate_get_psize(h);
+ #ifdef CONFIG_DEBUG_VM
+-		assert_spin_locked(huge_pte_lockptr(h, vma->vm_mm, ptep));
++		assert_spin_locked(huge_pte_lockptr(huge_page_shift(h),
++						    vma->vm_mm, ptep));
+ #endif
+ 
+ #else
 diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-index 534958499ac4..6e0c36b08a0c 100644
+index 6e0c36b08a0c..db3ed6095b1c 100644
 --- a/include/linux/hugetlb.h
 +++ b/include/linux/hugetlb.h
-@@ -123,6 +123,9 @@ struct hugetlb_vma_lock {
- 
- struct hugetlb_shared_vma_data {
- 	struct hugetlb_vma_lock vma_lock;
-+#ifdef CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING
-+	bool hgm_enabled;
-+#endif
- };
- 
- extern struct resv_map *resv_map_alloc(void);
-@@ -1179,6 +1182,25 @@ static inline void hugetlb_unregister_node(struct node *node)
+@@ -934,12 +934,11 @@ static inline gfp_t htlb_modify_alloc_mask(struct hstate *h, gfp_t gfp_mask)
+ 	return modified_mask;
  }
- #endif	/* CONFIG_HUGETLB_PAGE */
  
-+#ifdef CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING
-+bool hugetlb_hgm_enabled(struct vm_area_struct *vma);
-+bool hugetlb_hgm_eligible(struct vm_area_struct *vma);
-+int enable_hugetlb_hgm(struct vm_area_struct *vma);
-+#else
-+static inline bool hugetlb_hgm_enabled(struct vm_area_struct *vma)
-+{
-+	return false;
-+}
-+static inline bool hugetlb_hgm_eligible(struct vm_area_struct *vma)
-+{
-+	return false;
-+}
-+static inline int enable_hugetlb_hgm(struct vm_area_struct *vma)
-+{
-+	return -EINVAL;
-+}
-+#endif
-+
- static inline spinlock_t *huge_pte_lock(struct hstate *h,
- 					struct mm_struct *mm, pte_t *pte)
+-static inline spinlock_t *huge_pte_lockptr(struct hstate *h,
++static inline spinlock_t *huge_pte_lockptr(unsigned int shift,
+ 					   struct mm_struct *mm, pte_t *pte)
  {
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 5ae8bc8c928e..a18143add956 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -6840,6 +6840,10 @@ static bool pmd_sharing_possible(struct vm_area_struct *vma)
- #ifdef CONFIG_USERFAULTFD
- 	if (uffd_disable_huge_pmd_share(vma))
- 		return false;
-+#endif
-+#ifdef CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING
-+	if (hugetlb_hgm_enabled(vma))
-+		return false;
- #endif
- 	/*
- 	 * Only shared VMAs can share PMDs.
-@@ -7033,6 +7037,9 @@ static int hugetlb_vma_data_alloc(struct vm_area_struct *vma)
- 	kref_init(&data->vma_lock.refs);
- 	init_rwsem(&data->vma_lock.rw_sema);
- 	data->vma_lock.vma = vma;
-+#ifdef CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING
-+	data->hgm_enabled = false;
-+#endif
- 	vma->vm_private_data = data;
+-	if (huge_page_size(h) == PMD_SIZE)
++	if (shift == PMD_SHIFT)
+ 		return pmd_lockptr(mm, (pmd_t *) pte);
+-	VM_BUG_ON(huge_page_size(h) == PAGE_SIZE);
+ 	return &mm->page_table_lock;
+ }
+ 
+@@ -1144,7 +1143,7 @@ static inline gfp_t htlb_modify_alloc_mask(struct hstate *h, gfp_t gfp_mask)
  	return 0;
  }
-@@ -7290,6 +7297,68 @@ __weak unsigned long hugetlb_mask_last_page(struct hstate *h)
  
- #endif /* CONFIG_ARCH_WANT_GENERAL_HUGETLB */
+-static inline spinlock_t *huge_pte_lockptr(struct hstate *h,
++static inline spinlock_t *huge_pte_lockptr(unsigned int shift,
+ 					   struct mm_struct *mm, pte_t *pte)
+ {
+ 	return &mm->page_table_lock;
+@@ -1206,7 +1205,7 @@ static inline spinlock_t *huge_pte_lock(struct hstate *h,
+ {
+ 	spinlock_t *ptl;
  
-+#ifdef CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING
-+bool hugetlb_hgm_eligible(struct vm_area_struct *vma)
-+{
-+	/*
-+	 * All shared VMAs may have HGM.
-+	 *
-+	 * HGM requires using the VMA lock, which only exists for shared VMAs.
-+	 * To make HGM work for private VMAs, we would need to use another
-+	 * scheme to prevent collapsing/splitting from invalidating other
-+	 * threads' page table walks.
-+	 */
-+	return vma && (vma->vm_flags & VM_MAYSHARE);
-+}
-+bool hugetlb_hgm_enabled(struct vm_area_struct *vma)
-+{
-+	struct hugetlb_shared_vma_data *data = vma->vm_private_data;
-+
-+	if (!vma || !(vma->vm_flags & VM_MAYSHARE))
-+		return false;
-+
-+	return data && data->hgm_enabled;
-+}
-+
-+/*
-+ * Enable high-granularity mapping (HGM) for this VMA. Once enabled, HGM
-+ * cannot be turned off.
-+ *
-+ * PMDs cannot be shared in HGM VMAs.
-+ */
-+int enable_hugetlb_hgm(struct vm_area_struct *vma)
-+{
-+	int ret;
-+	struct hugetlb_shared_vma_data *data;
-+
-+	if (!hugetlb_hgm_eligible(vma))
-+		return -EINVAL;
-+
-+	if (hugetlb_hgm_enabled(vma))
-+		return 0;
-+
-+	/*
-+	 * We must hold the mmap lock for writing so that callers can rely on
-+	 * hugetlb_hgm_enabled returning a consistent result while holding
-+	 * the mmap lock for reading.
-+	 */
-+	mmap_assert_write_locked(vma->vm_mm);
-+
-+	/* HugeTLB HGM requires the VMA lock to synchronize collapsing. */
-+	ret = hugetlb_vma_data_alloc(vma);
-+	if (ret)
-+		return ret;
-+
-+	data = vma->vm_private_data;
-+	BUG_ON(!data);
-+	data->hgm_enabled = true;
-+
-+	/* We don't support PMD sharing with HGM. */
-+	hugetlb_unshare_all_pmds(vma);
-+	return 0;
-+}
-+#endif /* CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING */
-+
- /*
-  * These functions are overwritable if your architecture needs its own
-  * behavior.
+-	ptl = huge_pte_lockptr(h, mm, pte);
++	ptl = huge_pte_lockptr(huge_page_shift(h), mm, pte);
+ 	spin_lock(ptl);
+ 	return ptl;
+ }
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index a18143add956..ef7662bd0068 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -4847,7 +4847,7 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
+ 		}
+ 
+ 		dst_ptl = huge_pte_lock(h, dst, dst_pte);
+-		src_ptl = huge_pte_lockptr(h, src, src_pte);
++		src_ptl = huge_pte_lockptr(huge_page_shift(h), src, src_pte);
+ 		spin_lock_nested(src_ptl, SINGLE_DEPTH_NESTING);
+ 		entry = huge_ptep_get(src_pte);
+ again:
+@@ -4925,7 +4925,8 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
+ 
+ 				/* Install the new huge page if src pte stable */
+ 				dst_ptl = huge_pte_lock(h, dst, dst_pte);
+-				src_ptl = huge_pte_lockptr(h, src, src_pte);
++				src_ptl = huge_pte_lockptr(huge_page_shift(h),
++							   src, src_pte);
+ 				spin_lock_nested(src_ptl, SINGLE_DEPTH_NESTING);
+ 				entry = huge_ptep_get(src_pte);
+ 				if (!pte_same(src_pte_old, entry)) {
+@@ -4979,7 +4980,7 @@ static void move_huge_pte(struct vm_area_struct *vma, unsigned long old_addr,
+ 	pte_t pte;
+ 
+ 	dst_ptl = huge_pte_lock(h, mm, dst_pte);
+-	src_ptl = huge_pte_lockptr(h, mm, src_pte);
++	src_ptl = huge_pte_lockptr(huge_page_shift(h), mm, src_pte);
+ 
+ 	/*
+ 	 * We don't have to worry about the ordering of src and dst ptlocks
+diff --git a/mm/migrate.c b/mm/migrate.c
+index 1457cdbb7828..a0105fa6e3b2 100644
+--- a/mm/migrate.c
++++ b/mm/migrate.c
+@@ -334,7 +334,8 @@ void __migration_entry_wait_huge(pte_t *ptep, spinlock_t *ptl)
+ 
+ void migration_entry_wait_huge(struct vm_area_struct *vma, pte_t *pte)
+ {
+-	spinlock_t *ptl = huge_pte_lockptr(hstate_vma(vma), vma->vm_mm, pte);
++	spinlock_t *ptl = huge_pte_lockptr(huge_page_shift(hstate_vma(vma)),
++					   vma->vm_mm, pte);
+ 
+ 	__migration_entry_wait_huge(pte, ptl);
+ }
 -- 
 2.38.0.135.g90850a2211-goog
 
