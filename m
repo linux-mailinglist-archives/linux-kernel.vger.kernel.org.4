@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6901606DA0
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 04:23:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5F29606D8C
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 04:22:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230022AbiJUCXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 22:23:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37596 "EHLO
+        id S229939AbiJUCWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 22:22:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229980AbiJUCWz (ORCPT
+        with ESMTP id S229746AbiJUCWl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 22:22:55 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A72A232E54
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 19:22:51 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MtpCN0WmtzHvCB;
-        Fri, 21 Oct 2022 10:22:40 +0800 (CST)
+        Thu, 20 Oct 2022 22:22:41 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86D5B1F810F
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 19:22:40 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Mtp7V36sMzpVfQ;
+        Fri, 21 Oct 2022 10:19:18 +0800 (CST)
 Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 21 Oct 2022 10:22:40 +0800
+ 15.1.2375.31; Fri, 21 Oct 2022 10:22:38 +0800
 Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
  (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 21 Oct
- 2022 10:22:36 +0800
+ 2022 10:22:37 +0800
 From:   Yang Yingliang <yangyingliang@huawei.com>
 To:     <linux-kernel@vger.kernel.org>, <qemu-devel@nongnu.org>,
         <linux-f2fs-devel@lists.sourceforge.net>,
@@ -38,9 +38,9 @@ CC:     <gregkh@linuxfoundation.org>, <rafael@kernel.org>, <somlo@cmu.edu>,
         <joseph.qi@linux.alibaba.com>, <akpm@linux-foundation.org>,
         <alexander.deucher@amd.com>, <luben.tuikov@amd.com>,
         <richard@nod.at>, <liushixin2@huawei.com>
-Subject: [PATCH 01/11] kset: fix documentation for kset_register()
-Date:   Fri, 21 Oct 2022 10:20:52 +0800
-Message-ID: <20221021022102.2231464-2-yangyingliang@huawei.com>
+Subject: [PATCH 02/11] kset: add null pointer check in kset_put()
+Date:   Fri, 21 Oct 2022 10:20:53 +0800
+Message-ID: <20221021022102.2231464-3-yangyingliang@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221021022102.2231464-1-yangyingliang@huawei.com>
 References: <20221021022102.2231464-1-yangyingliang@huawei.com>
@@ -59,35 +59,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kset_register() is currently used in some places without calling
-kset_put() in error path, because the callers think it should be
-kset internal thing to do, but the driver core can not know what
-caller doing with that memory at times. The memory could be freed
-both in kset_put() and error path of caller, if it is called in
-kset_register().
-
-So make the function documentation more explicit about calling
-kset_put() in the error path of caller.
+kset_put() can be called from drivers, add null pointer
+check to make it more robust.
 
 Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 ---
- lib/kobject.c | 3 +++
- 1 file changed, 3 insertions(+)
+ include/linux/kobject.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/lib/kobject.c b/lib/kobject.c
-index a0b2dbfcfa23..6da04353d974 100644
---- a/lib/kobject.c
-+++ b/lib/kobject.c
-@@ -834,6 +834,9 @@ EXPORT_SYMBOL_GPL(kobj_sysfs_ops);
- /**
-  * kset_register() - Initialize and add a kset.
-  * @k: kset.
-+ *
-+ * If this function returns an error, kset_put() must be called to
-+ * properly clean up the memory associated with the object.
-  */
- int kset_register(struct kset *k)
+diff --git a/include/linux/kobject.h b/include/linux/kobject.h
+index 57fb972fea05..e81de8ba41a2 100644
+--- a/include/linux/kobject.h
++++ b/include/linux/kobject.h
+@@ -195,7 +195,8 @@ static inline struct kset *kset_get(struct kset *k)
+ 
+ static inline void kset_put(struct kset *k)
  {
+-	kobject_put(&k->kobj);
++	if (k)
++		kobject_put(&k->kobj);
+ }
+ 
+ static inline const struct kobj_type *get_ktype(struct kobject *kobj)
 -- 
 2.25.1
 
