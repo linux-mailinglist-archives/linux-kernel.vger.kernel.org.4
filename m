@@ -2,143 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44CFA607086
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 08:52:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80EF6607080
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 08:52:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230108AbiJUGwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 02:52:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47732 "EHLO
+        id S230000AbiJUGwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 02:52:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230106AbiJUGwe (ORCPT
+        with ESMTP id S229606AbiJUGw1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 02:52:34 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 729BD22E8DE;
-        Thu, 20 Oct 2022 23:52:32 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 6C5815C007F;
-        Fri, 21 Oct 2022 02:52:31 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Fri, 21 Oct 2022 02:52:31 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1666335151; x=1666421551; bh=asFMH01gIy
-        FuLLt84XhpsavdGbikk/Zr70yYHFNA5r4=; b=tmmE+zyWqZsaV1HNHXmexsKCRZ
-        cTGaKpie3Ix8/C9msO3j7jjW6V++ZSgrCc/D8wECWflD2w77EVwUT4ZDJI4/qcDa
-        AE+VHQAznpHOe3oxin/wy0H7Jo04+zv8pXMIZDRqNYKa7QklC3Cl0vigmK7m0AEx
-        jx4A+td7c0SMHEJZVt6BhAUTnDzWRhZ9MfDQtZxrfpDQrShjDhD3SXdwd+IKTxAI
-        ZlRdzDXxtI9oe5QhZuvE6Vh3SgZNQgA+Thl0nO742KhzJJmNXR4asTqNJtVzEXKw
-        nLbhugd9XR3xVQIgR9sNyfKv+DM6ICYPVRj+7tuFLcBrlxWvHEZtTmiUJv3A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1666335151; x=1666421551; bh=asFMH01gIyFuLLt84XhpsavdGbik
-        k/Zr70yYHFNA5r4=; b=kCOatloKYNVOBJC3olA9k9hCbIwlxdKz89aA/Z58vRei
-        9lF6wbuChyuHTmzK1sc/5zb1M9ITUeNuFi1Qnmt8Ylcp3S8LtMToKa47i81KnVUn
-        pKaYJSDOMcqY5XM1uIM8a19oVoZvqIfhzU1X2pRzpCooHtDS9LFbVzR7GEcdGtHL
-        AklcoevJjyfziK/7t/uavCUXSXqEEVMLG/OrSxEbgY3S5JVdkTlRp0Z4RJitL/+e
-        0ERI0xWyGGrXd2+d5YSKUTWnNw4Arew5r/fl7dC/5kvsW4oQj/ac1iCAQLFRY1/q
-        XMZ34TsU+xO6zNgCM1pN8wwV1egVuBvELVnsf+ph8Q==
-X-ME-Sender: <xms:rkFSY7b52o4SSS29ii51024C6Tx9E3noQFHWuRk6VKm_aOR-UZKzQA>
-    <xme:rkFSY6byU9_2HIcQmGIOp1DUsd0lSnFXIvrb605VOlHM0RkwJGbTS-mIbt6ZO5aIY
-    0gt_IjGFwCVawZFB94>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeljedgudduhecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeevhfffledtgeehfeffhfdtgedvheejtdfgkeeuvefgudffteettdekkeeu
-    feehudenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:rkFSY9_MJx9tKvhvQ5lwCt0Zb3IV3YOYY3pCycDfPWnv71sUpdgg3w>
-    <xmx:rkFSYxoBeoqaIgsY93umf4TjZTfSZAS5scg5cHiLigOO9T8BZHkFJw>
-    <xmx:rkFSY2qYK18DaISpgzqWb_yvcq_kGLQgKvWFftU45cRPvZmabuJJrQ>
-    <xmx:r0FSYzQVLjlAZPdjc9KdCUd8H-_UiL5nj-YrhWIpq4YNRLBe_QmjzA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id A2DA1B60086; Fri, 21 Oct 2022 02:52:30 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1047-g9e4af4ada4-fm-20221005.001-g9e4af4ad
-Mime-Version: 1.0
-Message-Id: <de36ec6b-2e7c-48eb-9682-f60d8e4011da@app.fastmail.com>
-In-Reply-To: <20221020193511.GB3019@t60.musicnaut.iki.fi>
-References: <20221019144119.3848027-1-arnd@kernel.org>
- <20221019150410.3851944-1-arnd@kernel.org>
- <20221019150410.3851944-13-arnd@kernel.org>
- <20221019171541.GA41568@darkstar.musicnaut.iki.fi>
- <1b632df1-7e3c-456d-8629-dc36efd9fe15@app.fastmail.com>
- <20221020193511.GB3019@t60.musicnaut.iki.fi>
-Date:   Fri, 21 Oct 2022 08:52:10 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Aaro Koskinen" <aaro.koskinen@iki.fi>
-Cc:     "Arnd Bergmann" <arnd@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        "Janusz Krzysztofik" <jmkrzyszt@gmail.com>,
-        "Tony Lindgren" <tony@atomide.com>, linux-kernel@vger.kernel.org,
-        Linux-OMAP <linux-omap@vger.kernel.org>,
-        "Lee Jones" <lee@kernel.org>,
-        "Ulf Hansson" <ulf.hansson@linaro.org>,
-        "Felipe Balbi" <balbi@kernel.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        linux-i2c@vger.kernel.org,
-        "linux-mmc @ vger . kernel . org" <linux-mmc@vger.kernel.org>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 13/17] ARM: omap1: remove unused board files
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 21 Oct 2022 02:52:27 -0400
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57AE21CC3D8;
+        Thu, 20 Oct 2022 23:52:26 -0700 (PDT)
+Received: by mail-qt1-f180.google.com with SMTP id l28so1114290qtv.4;
+        Thu, 20 Oct 2022 23:52:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=I59wsqYY5XzomQ555m16KBZpVHjF9zyFBjrO5xQI/Vo=;
+        b=KssL1OH1AqDNqPwEntxsB3JYxC/8tfAJF6a0RqyotBp4M7hoPliNpTbR4xaWCeTU8S
+         jYZhy6FlmsdnI+g9n/DRg1EKvZ27k7IcQQJ0ibOhNLevKtXWKBK/VA1SGR47khaRgIMw
+         j9iR6MowaaGnWWeaPdAN4z1xGpLkIiK2tyYuNqj6dHbmc4iDbvzItJzHyhFpElA/P+Cd
+         mdpO2IASsOCTMT3VjjJc2t3Q0IRv3NRT/zCh/v+cD+g/5nwVNXVz7VDp+0Il4r7f+xds
+         oMraIhpXWPEhArkibmBMU5WFksuC9V/tV73uqKnbXPZ3cE3vtVQJc0s7WXY0JdC3kGa3
+         EP/A==
+X-Gm-Message-State: ACrzQf2J5HeERsuW3zVmDoX2ln/S82qnO7ylpcts3nLivnXX+EC8eY6S
+        wS5YsQQCYAEfsG+0HRbA7RzbKH3Bujb6kA==
+X-Google-Smtp-Source: AMsMyM5Lyb893NWOKTf2SOP1NMEVmji62KWV3elYvNwdu6dKlrPX9MqGQGbKEz6xQSmsz4cl1RyCfA==
+X-Received: by 2002:ac8:5c11:0:b0:39c:fd77:336d with SMTP id i17-20020ac85c11000000b0039cfd77336dmr10700134qti.479.1666335145309;
+        Thu, 20 Oct 2022 23:52:25 -0700 (PDT)
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
+        by smtp.gmail.com with ESMTPSA id m21-20020ac866d5000000b0039cbd3e4ed1sm7526887qtp.6.2022.10.20.23.52.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Oct 2022 23:52:25 -0700 (PDT)
+Received: by mail-yb1-f176.google.com with SMTP id y72so2235402yby.13;
+        Thu, 20 Oct 2022 23:52:25 -0700 (PDT)
+X-Received: by 2002:a25:cd01:0:b0:6c2:6f0d:f4ce with SMTP id
+ d1-20020a25cd01000000b006c26f0df4cemr14410142ybf.365.1666335144961; Thu, 20
+ Oct 2022 23:52:24 -0700 (PDT)
+MIME-Version: 1.0
+References: <20221014151302.27641-1-afd@ti.com> <CAL_Jsq+O0_i3k_3S=W6C-n+ZE7GRKKhOQ7HR54QutmMJq54a_Q@mail.gmail.com>
+In-Reply-To: <CAL_Jsq+O0_i3k_3S=W6C-n+ZE7GRKKhOQ7HR54QutmMJq54a_Q@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 21 Oct 2022 08:52:12 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdV2euzPQL35AqBsyeQTkMbkeFz4rk48wtyX7Hd6Lz5d-g@mail.gmail.com>
+Message-ID: <CAMuHMdV2euzPQL35AqBsyeQTkMbkeFz4rk48wtyX7Hd6Lz5d-g@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: Allow DTB overlays to built from .dtso named
+ source files
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Andrew Davis <afd@ti.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        devicetree@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Frank Rowand <frowand.list@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022, at 21:35, Aaro Koskinen wrote:
-> On Thu, Oct 20, 2022 at 09:11:11AM +0200, Arnd Bergmann wrote:
->> On Wed, Oct 19, 2022, at 19:15, Aaro Koskinen wrote:
->> > On Wed, Oct 19, 2022 at 05:03:35PM +0200, Arnd Bergmann wrote:
->> >> All board support that was marked as 'unused' earlier can
->> >> now be removed, leaving the five machines that that still
->> >> had someone using them in 2022, or that are supported in
->> >> qemu.
->> > [...]
->> >>  config OMAP_OSK_MISTRAL
->> >>  	bool "Mistral QVGA board Support"
->> >>  	depends on MACH_OMAP_OSK
->> >> -	depends on UNUSED_BOARD_FILES
->> >>  	help
->> >>  	  The OSK supports an optional add-on board with a Quarter-VGA
->> >>  	  touchscreen, PDA-ish buttons, a resume button, bicolor LED,
->> >>  	  and camera connector.  Say Y here if you have this board.
->> >
->> > Shouldn't this go away as well?
->> 
->> No, this one was incorrectly annotated, it's not actually
->> a board but it's an option for the OSK board that is not
->> getting removed. I considered making a separate patch
->> for removing the dependency, but that didn't seem worth it.
+Hi Rob,
+
+On Fri, Oct 21, 2022 at 12:47 AM Rob Herring <robh+dt@kernel.org> wrote:
+> On Fri, Oct 14, 2022 at 10:13 AM Andrew Davis <afd@ti.com> wrote:
+> > Currently DTB Overlays (.dtbo) are build from source files with the same
+> > extension (.dts) as the base DTs (.dtb). This may become confusing and
+> > even lead to wrong results. For example, a composite DTB (created from a
+> > base DTB and a set of overlays) might have the same name as one of the
+> > overlays that create it.
+> >
+> > Different files should be generated from differently named sources.
+> >  .dtb  <-> .dts
+> >  .dtbo <-> .dtso
+> >
+> > We do not remove the ability to compile DTBO files from .dts files here,
+> > only add a new rule allowing the .dtso file name. The current .dts named
+> > overlays can be renamed with time. After all have been renamed we can
+> > remove the other rule.
 >
-> OK. For the record, I don't think anyone has this add-on board anymore,
-> and it has probably never been tested with the mainline kernel, so
-> it's likely in the "dead code" category... Maybe it could be changed to
-> "BROKEN", then the related OSK LCD panel stuff could be deleted later
-> on too.
+> There was a patch from Geert converting everything. I'd rather not
+> support both ways.
 
-Ok, good to know. I left it in place for now because Tony originally
-listed it as a likely used machine along with NOKIA770 and
-AMS_DELTA [1], but I don't have anyone listed specifically as a
-user for it.
+Actually that was a patch from Frank?
 
-It's not too late to revisit this list if you think it helps to
-get rid of it. I can see that drivers/mtd/tps65010.c and
-drivers/pcmcia/omap_cf.c become orphaned without it and can
-probably get removed as well then.
+Gr{oetje,eeting}s,
 
-      Arnd
+                        Geert
 
-[1] https://lore.kernel.org/linux-arm-kernel/20220721150320.GA9385@macbook.musicnaut.iki.fi/
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
