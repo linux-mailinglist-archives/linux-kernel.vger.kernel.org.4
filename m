@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 777FA606FC1
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 08:01:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E15C606FC2
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 08:01:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229729AbiJUGBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 02:01:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52918 "EHLO
+        id S229874AbiJUGBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 02:01:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbiJUGBC (ORCPT
+        with ESMTP id S229648AbiJUGBC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 21 Oct 2022 02:01:02 -0400
 Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1279A1A4003;
-        Thu, 20 Oct 2022 23:00:58 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id g1so3272959lfu.12;
-        Thu, 20 Oct 2022 23:00:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D17C1D3A47;
+        Thu, 20 Oct 2022 23:01:00 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id f37so3290211lfv.8;
+        Thu, 20 Oct 2022 23:01:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=C5hHs2S/RQl/JXIwHudGm/5mav5RsuOJ5skKbHJaT7M=;
-        b=OYP1l1n6nvRFKN66YMNkW/ZD0biklmoqW7/GKmlBQ/5ENQhPpcHwgnW/rNIUjRoyeq
-         mUi4KXWRSDufdZ1cvTW+/XnGUEaYLFilpxFrjNlzxEDxCFeoa4hoLVhGgnokrL4GUPet
-         uKYNILHU9QWMrCKkaYtUezb0B7qpROKi1T0G3/hNigGE37igbdbYuW2uvo4prBisHInc
-         RUEzuiYlVyFbUVo4KlAGbb6R/AWWoEOYu7HdZU0ekJPUOU2oH4HXT/NQl7KkNx7KZB/t
-         L3IccSVZ1ulaB+TjsnFK+9dkyAMqV/YBwlFRErIyCwwNXGnUijQlIUCwJg60u7yjz9E8
-         xS7Q==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RJ9xIMP9KJSnyP3kmEcAZFEOTKsj48z0+6bhrdbyYmQ=;
+        b=d1Ic9JTyYswqZsEL5SydOKhL435NQPu3xf45ckQx+lh0zbljdQXq32zSHLZSdZhfGK
+         0NTAOfVvX/A9wGkQREP8rf4nIZ2eIZ5dknqfY6MXMR5wSF0tSbL4i443zXJDCpCu3dM9
+         LLnBbM0HkC7bE2lEC8Iy4RpSsR3VM4UbZ+Zpsx8RVHF/cPNO94o8MVbVdBkF3vhnNQwW
+         mlkB2aOzr2RpA5I+GZX0sodWgJkknZuegcQYzVXIU+R998qS1zhMaoGJPt1ym+bJXFnj
+         Rx7DyriZhROpSd0A7uzEvPKl8bRHVk8I3Jy7cM6KPFBLtnciJLQ99aHoQQTYutgufa8r
+         Qpzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=C5hHs2S/RQl/JXIwHudGm/5mav5RsuOJ5skKbHJaT7M=;
-        b=7EMsyztakmfRRe2zr23yF2ft/z26d8HOGVOVvypa0C4Dq8QhD2SYIK6tT69rLjMGN4
-         ZkHhCeMQZ/IVrcO4Xz1hJYdobO3vKpFT1FMYk5x18IqUhWQo7y8ZRVvmkNGcjgD47ts9
-         BZy5UqWdASpXXTa1+5jFjumuSUEkZHQoaVCdaE9i8UJUR7/P7TE/Vgm2ZDPHO7j/AT/x
-         ZNmb2CaARC4stxeOY8wgt5uSKZHASGJra9mD7BqpSDdGmy75tGjtOuppYq1guBA+8ZuR
-         jhKHEr66OT/zv0u6crgYtpQXn8sZtT0zT+XkIXgazPK8TupnzorB8sqc5QaDpB5W4KIz
-         DC8g==
-X-Gm-Message-State: ACrzQf3RVbqEA+W05gbsA6J3sSkEQrDaclWs8pkl9XhyEV85OU/ktDV+
-        eTAIZ5x5v06+GshQ2YNjMXE=
-X-Google-Smtp-Source: AMsMyM6WDH7wq1u5kd3U+odFfEpgQ30j9+6ajofiuy78KRWiVD1E3qXL80lU1+kvXFHzYz3QOVAQIg==
-X-Received: by 2002:ac2:5321:0:b0:4a4:3c25:dbd with SMTP id f1-20020ac25321000000b004a43c250dbdmr5837748lfh.406.1666332056154;
-        Thu, 20 Oct 2022 23:00:56 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RJ9xIMP9KJSnyP3kmEcAZFEOTKsj48z0+6bhrdbyYmQ=;
+        b=MUsJUVCW01sjDCRqvw0m4Ke85r6wgPvakkMyPDVpv/VPvAHV65Q1oWQjBfbVuPSC1U
+         1lu4b01IRmw46vaNAhkcg4FgM8xGR4SPtVRDHt7O8UfFnskAcgRLfOyx152aDhbCILZ5
+         wSgURWSUPLHNe3ZKnP0iXVmtObF3T5L4MpWLUdFqSz4q2VnsS5Tkt5rxVzxR/gJBtaeE
+         V6fPc9w96e52B2zXwmEDqgTq+eBHPP2vMD9BHDO/+fx4f6ep0sd6bMY5PGWJHtk1tH0J
+         ODRU7kbag79j74AH12HAdg2NxZZGAxGpEHlJrlYHtZ38Hmo+SsMtxBhVvMykRkyy5nYt
+         MKtA==
+X-Gm-Message-State: ACrzQf0TlujcIFkOhAGz6SJh5nPNylQgLSBNRKvdIh0z0yAsqwtzx0ln
+        ymcnC5rb8S5i1mIx5BBLkzg=
+X-Google-Smtp-Source: AMsMyM6B1qDtmd+KvrXozhnnD4v6SqdWdIOD/IrSleQ9kdprEflFZM9GH+ldehIYgYyV0Ptm4xo4Qg==
+X-Received: by 2002:a05:6512:11e9:b0:49f:d530:9f25 with SMTP id p9-20020a05651211e900b0049fd5309f25mr6513590lfs.533.1666332058608;
+        Thu, 20 Oct 2022 23:00:58 -0700 (PDT)
 Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.gmail.com with ESMTPSA id p6-20020ac246c6000000b0049e9122bd0esm3021950lfo.114.2022.10.20.23.00.54
+        by smtp.gmail.com with ESMTPSA id p6-20020ac246c6000000b0049e9122bd0esm3021950lfo.114.2022.10.20.23.00.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 23:00:55 -0700 (PDT)
+        Thu, 20 Oct 2022 23:00:58 -0700 (PDT)
 From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
 To:     Miquel Raynal <miquel.raynal@bootlin.com>,
         Richard Weinberger <richard@nod.at>,
@@ -65,10 +66,12 @@ Cc:     Mikhail Zhilkin <csharper2005@gmail.com>,
         linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH V2 1/2] dt-bindings: mtd: partitions: support marking rootfs partition
-Date:   Fri, 21 Oct 2022 08:00:50 +0200
-Message-Id: <20221021060051.2508-1-zajec5@gmail.com>
+Subject: [PATCH V2 2/2] mtd: core: set ROOT_DEV for partitions marked as rootfs in DT
+Date:   Fri, 21 Oct 2022 08:00:51 +0200
+Message-Id: <20221021060051.2508-2-zajec5@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221021060051.2508-1-zajec5@gmail.com>
+References: <20221021060051.2508-1-zajec5@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -84,54 +87,42 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Rafał Miłecki <rafal@milecki.pl>
 
-Linux needs to know what to use as root device. On embedded devices with
-flash the only common way to specify that is cmdline & root= parameter.
-
-That solution works with U-Boot which is Linux & cmdline aware but isn't
-available with all market bootloaders. Also that method is fragile:
-1. Requires specific probing order on multi-flash devices
-2. Uses hardcoded partitions indexes
-
-A lot of devices use different partitioning methods. It may be
-"fixed-partitions" or some dynamic partitioning (e.g. based on parts
-table). For such cases allow "linux,rootfs" property to mark correct
-flash partition.
+This adds support for "linux,rootfs" binding that is used to mark flash
+partition containing rootfs. It's useful for devices using device tree
+that don't have bootloader passing root info in cmdline.
 
 Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
 ---
 V2: Use "linux,rootfs" as more accurate. Thanks Rob.
 ---
- .../devicetree/bindings/mtd/partitions/fixed-partitions.yaml  | 1 +
- .../devicetree/bindings/mtd/partitions/partition.yaml         | 4 ++++
- 2 files changed, 5 insertions(+)
+ drivers/mtd/mtdcore.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/mtd/partitions/fixed-partitions.yaml b/Documentation/devicetree/bindings/mtd/partitions/fixed-partitions.yaml
-index ad3ccd250802..d66a6e3bcb56 100644
---- a/Documentation/devicetree/bindings/mtd/partitions/fixed-partitions.yaml
-+++ b/Documentation/devicetree/bindings/mtd/partitions/fixed-partitions.yaml
-@@ -84,6 +84,7 @@ examples:
-         partition@0 {
-             label = "filesystem";
-             reg = <0x00000000 0x1 0x00000000>;
-+            linux,rootfs;
-         };
-     };
+diff --git a/drivers/mtd/mtdcore.c b/drivers/mtd/mtdcore.c
+index 07249af4f890..034b06aff660 100644
+--- a/drivers/mtd/mtdcore.c
++++ b/drivers/mtd/mtdcore.c
+@@ -28,6 +28,7 @@
+ #include <linux/leds.h>
+ #include <linux/debugfs.h>
+ #include <linux/nvmem-provider.h>
++#include <linux/root_dev.h>
  
-diff --git a/Documentation/devicetree/bindings/mtd/partitions/partition.yaml b/Documentation/devicetree/bindings/mtd/partitions/partition.yaml
-index f1a02d840b12..a25cd23a34c0 100644
---- a/Documentation/devicetree/bindings/mtd/partitions/partition.yaml
-+++ b/Documentation/devicetree/bindings/mtd/partitions/partition.yaml
-@@ -52,6 +52,10 @@ properties:
-       immune to paired-pages corruptions
-     type: boolean
+ #include <linux/mtd/mtd.h>
+ #include <linux/mtd/partitions.h>
+@@ -735,6 +736,12 @@ int add_mtd_device(struct mtd_info *mtd)
+ 		not->add(mtd);
  
-+  linux,rootfs:
-+    description: Marks partition that contains root filesystem to mount and boot
-+      user space from
+ 	mutex_unlock(&mtd_table_mutex);
 +
- if:
-   not:
-     required: [ reg ]
++	if (of_find_property(mtd_get_of_node(mtd), "linux,rootfs", NULL)) {
++		pr_info("mtd: setting mtd%d (%s) as root device\n", mtd->index, mtd->name);
++		ROOT_DEV = MKDEV(MTD_BLOCK_MAJOR, mtd->index);
++	}
++
+ 	/* We _know_ we aren't being removed, because
+ 	   our caller is still holding us here. So none
+ 	   of this try_ nonsense, and no bitching about it
 -- 
 2.34.1
 
