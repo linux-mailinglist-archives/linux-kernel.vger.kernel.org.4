@@ -2,92 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A45A607EA9
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 21:07:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 831A7607EAF
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 21:09:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbiJUTHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 15:07:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60116 "EHLO
+        id S230300AbiJUTJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 15:09:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbiJUTHE (ORCPT
+        with ESMTP id S230270AbiJUTJS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 15:07:04 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FD1C28B1F5;
-        Fri, 21 Oct 2022 12:07:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666379223; x=1697915223;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=/EQtWCHFFkeAZlmUk41kUqKtdZ+qGfIDaB7P0+omrmQ=;
-  b=WHjjD7m4Dkrb52YAToh3xidj06u7/7vCayG3+rpWaVKiQ2vEx5THzmIH
-   LK0HHz6d22nYHLu7abvUQKZqN2jfGa/lUHuN9Vz6iINnPuPBYRAGDqmEB
-   A2DgOmtJxeF5dADyp2Y5jPIEP2FMqCOk5RfSzTE2itHGJqsOEj+XCWYsT
-   y4mB1YV+Z8de7W0sju4uJ61wSflmoWlgUw6lTtwz/IH1UEV25zwPoz5oS
-   7r8GcbebnLf/PCFyIYJ8byicjm5AdMo7IemkG+HFAd38eIWjotzZetXhr
-   KtowshtT9fFkfSZHIFhMXUvevqhv0LQJmRhp3/4gqnnRXHkucEsYauhUd
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10507"; a="371299725"
-X-IronPort-AV: E=Sophos;i="5.95,202,1661842800"; 
-   d="scan'208";a="371299725"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2022 12:07:01 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10507"; a="581717074"
-X-IronPort-AV: E=Sophos;i="5.95,202,1661842800"; 
-   d="scan'208";a="581717074"
-Received: from thnguy1-mobl2.amr.corp.intel.com (HELO [10.209.91.210]) ([10.209.91.210])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2022 12:07:00 -0700
-Message-ID: <ad716b6f-3d1a-8aab-b452-2e01769348dd@intel.com>
-Date:   Fri, 21 Oct 2022 12:07:00 -0700
+        Fri, 21 Oct 2022 15:09:18 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E043295B15;
+        Fri, 21 Oct 2022 12:09:15 -0700 (PDT)
+Received: from notapiano.myfiosgateway.com (unknown [IPv6:2600:4041:5b1a:cd00:524d:e95d:1a9c:492a])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 03B5066025FA;
+        Fri, 21 Oct 2022 20:09:11 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1666379353;
+        bh=7tSbZ3o9rnEZxiNzuX4/brBcjhft4z9R+3Odm3eod+c=;
+        h=From:To:Cc:Subject:Date:From;
+        b=lhhM2+K+4Va/Ait9eg4Xp6JcNcJOQtx7J0hSCLTEedwUhOxPAvPUB/lvngidszGux
+         zUA9LmmgdC548TQKqg2E1tjwxDLgqQ35mWG1U4O0NsUI0NdN5mgbwng4I3q0Njd3nT
+         /rHoqEibFAtJ1HVu6HCBKJVECwBwbDnbZyx/NrRXJvfCO+26LM46XtK4Hb1mirCs0r
+         Z+wT8lYDalJkeccTmB5tGaXEjWVjsAWn21wbTA/qBJBAjeEl2BgIbGXs+OeeViuxtu
+         GI3xwimrJgct2RkGt7Kno4A1OROtVGyw/LP4qJKBx0tBrNKi/aMMizRwuZuJShuNQ1
+         z/b4Brc3UJ2Tg==
+From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
+        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>, Derek Fang <derek.fang@realtek.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/3] Add missing dt-binding properties to rt5682(s)
+Date:   Fri, 21 Oct 2022 15:09:05 -0400
+Message-Id: <20221021190908.1502026-1-nfraprado@collabora.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH V2] x86/split_lock: Add sysctl to control the misery mode
-Content-Language: en-US
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, luto@kernel.org,
-        corbet@lwn.net, linux-doc@vger.kernel.org, kernel-dev@igalia.com,
-        kernel@gpiccoli.net, Andre Almeida <andrealmeid@igalia.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Joshua Ashton <joshua@froggi.es>,
-        Melissa Wen <mwen@igalia.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Pavel Machek <pavel@denx.de>,
-        Pierre-Loup Griffais <pgriffais@valvesoftware.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Zebediah Figura <zfigura@codeweavers.com>
-References: <20221014180506.211592-1-gpiccoli@igalia.com>
- <44b41091-d474-9f80-fcf1-93c8d1316272@intel.com>
- <267fb708-9fae-f651-d8c6-e34a873d668f@igalia.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <267fb708-9fae-f651-d8c6-e34a873d668f@igalia.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/21/22 12:03, Guilherme G. Piccoli wrote:
-...
->> 	if (need_release_sem)
->> 		up(...);
->>
->> That's nice and compact.  It's also logically easy to follow because you
->> can see how the need_release_sem gets set only after the
->> down_interruptible().  It's also nice to have both sites share the
->> 'need_release_sem' naming for grepping.
->>
-> 
-> ...but, this is a very good suggestion, and will eliminate the need for
-> two delayed_works, right?
 
-Yes, that too.
+This series adds the missing sound-dai-cells to rt5682s and supplies for
+both rt5682s and rt5682.
+
+
+Nícolas F. R. A. Prado (3):
+  ASoC: dt-bindings: realtek,rt5682s: Add #sound-dai-cells
+  ASoC: dt-bindings: realtek,rt5682s: Add AVDD and MICVDD supplies
+  ASoC: dt-bindings: rt5682: Add AVDD, MICVDD and VBAT supplies
+
+ .../devicetree/bindings/sound/realtek,rt5682s.yaml         | 7 +++++++
+ Documentation/devicetree/bindings/sound/rt5682.txt         | 6 ++++++
+ 2 files changed, 13 insertions(+)
+
+-- 
+2.38.1
+
