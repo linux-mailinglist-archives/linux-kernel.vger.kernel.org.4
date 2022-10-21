@@ -2,113 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07AA66073A3
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 11:13:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B6256073A9
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 11:13:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229932AbiJUJNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 05:13:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43648 "EHLO
+        id S231161AbiJUJNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 05:13:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229664AbiJUJMw (ORCPT
+        with ESMTP id S231254AbiJUJNP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 05:12:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5314D13C1F2;
-        Fri, 21 Oct 2022 02:12:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 51321B81CFB;
-        Fri, 21 Oct 2022 09:11:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EDB4C433D7;
-        Fri, 21 Oct 2022 09:11:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666343517;
-        bh=dH8fnaw2bSgqdWXeyJfw+/qCj6MLAJ4Vv/QAwOnPRW4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ovwbLCMioT0HuD/yB6BI0yUisLfj+eLYmAQoMXr7PGCoJjfB2P17Ekhw14UjaEeRc
-         rWsDxUtOWmNvSdTeF6UFE3rxc+U8WAEUvPJt1VGerMj/jEmcPYgHdHvvGNDX+AoXa7
-         WFJOj2GyKXQccHSCQlyWicOA3dHq1AKh12XbEQacnsz90F5XrYqCUp2TzPsMTbdqt4
-         arqMiXio8oL0P1HY7AcrcfD26KZyFDfwWTbKkA4gAFObjN+8Fkh5rqlTZ44noDS8sS
-         JkYOIlIfDSO+wBOM3wrjLk7EtRzI1RTPSIgpJn3r8Z0fuIN/zKIasmQwikKT8jS7Up
-         2R3N/BWIsFA7g==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1olo47-0003Mc-2U; Fri, 21 Oct 2022 11:11:43 +0200
-Date:   Fri, 21 Oct 2022 11:11:43 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 12/15] phy: qcom-qmp-pcie: fix initialisation reset
-Message-ID: <Y1JiT7qKERR7ktSs@hovoldconsulting.com>
-References: <20221019113552.22353-1-johan+linaro@kernel.org>
- <20221019113552.22353-13-johan+linaro@kernel.org>
- <02a879d4-cc7a-ca8e-7334-755873baa3e7@linaro.org>
+        Fri, 21 Oct 2022 05:13:15 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73BAD5C94C
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 02:12:59 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MtzJb6fMCzHvCS;
+        Fri, 21 Oct 2022 17:12:47 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 21 Oct 2022 17:12:39 +0800
+Received: from [10.174.178.174] (10.174.178.174) by
+ dggpemm500007.china.huawei.com (7.185.36.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 21 Oct 2022 17:12:38 +0800
+Subject: Re: [PATCH 00/11] fix memory leak while kset_register() fails
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     Luben Tuikov <luben.tuikov@amd.com>,
+        <linux-kernel@vger.kernel.org>, <qemu-devel@nongnu.org>,
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        <linux-erofs@lists.ozlabs.org>, <ocfs2-devel@oss.oracle.com>,
+        <linux-mtd@lists.infradead.org>, <amd-gfx@lists.freedesktop.org>,
+        <rafael@kernel.org>, <somlo@cmu.edu>, <mst@redhat.com>,
+        <jaegeuk@kernel.org>, <chao@kernel.org>,
+        <hsiangkao@linux.alibaba.com>, <huangjianan@oppo.com>,
+        <mark@fasheh.com>, <jlbec@evilplan.org>,
+        <joseph.qi@linux.alibaba.com>, <akpm@linux-foundation.org>,
+        <alexander.deucher@amd.com>, <richard@nod.at>,
+        <liushixin2@huawei.com>
+References: <20221021022102.2231464-1-yangyingliang@huawei.com>
+ <d559793a-0ce4-3384-e74e-19855aa31f31@amd.com> <Y1IwLOUGayjT9p6d@kroah.com>
+ <0591e66f-731a-5f81-fc9d-3a6d80516c65@huawei.com>
+ <Y1JZ9IUPL6jZIQ8E@kroah.com>
+From:   Yang Yingliang <yangyingliang@huawei.com>
+Message-ID: <1f3aa2ac-fba6-dc7a-d01d-7dd5331c8dc5@huawei.com>
+Date:   Fri, 21 Oct 2022 17:12:37 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <02a879d4-cc7a-ca8e-7334-755873baa3e7@linaro.org>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y1JZ9IUPL6jZIQ8E@kroah.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Originating-IP: [10.174.178.174]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 04:52:29PM +0300, Dmitry Baryshkov wrote:
-> On 19/10/2022 14:35, Johan Hovold wrote:
-> > Add the missing delay after asserting reset. This is specifically needed
-> > for the reset to have any effect on SC8280XP.
-> > 
-> > The vendor driver uses a 1 ms delay, but that seems a bit excessive.
-> > Instead use a 200 us delay which appears to be more than enough and also
-> > matches the UFS reset delay added by commit 870b1279c7a0 ("scsi:
-> > ufs-qcom: Add reset control support for host controller").
-> > 
-> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> > ---
-> >   drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 2 ++
-> >   1 file changed, 2 insertions(+)
-> > 
-> > diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-> > index 2f4bdef73395..9c8e009033f1 100644
-> > --- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-> > +++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-> > @@ -1866,6 +1866,8 @@ static int qmp_pcie_init(struct phy *phy)
-> >   		goto err_disable_regulators;
-> >   	}
-> >   
-> > +	usleep_range(200, 300);
-> > +
-> 
-> If there is a v3, I'd kindly ask to add a comment about vendor using 1ms 
-> here.
 
-No, I'm going to leave this is as is. The vendor driver is just a
-reference implementation with a wide range of differences which there's
-little point in documenting in mainline.
+On 2022/10/21 16:36, Greg KH wrote:
+> On Fri, Oct 21, 2022 at 04:24:23PM +0800, Yang Yingliang wrote:
+>> On 2022/10/21 13:37, Greg KH wrote:
+>>> On Fri, Oct 21, 2022 at 01:29:31AM -0400, Luben Tuikov wrote:
+>>>> On 2022-10-20 22:20, Yang Yingliang wrote:
+>>>>> The previous discussion link:
+>>>>> https://lore.kernel.org/lkml/0db486eb-6927-927e-3629-958f8f211194@huawei.com/T/
+>>>> The very first discussion on this was here:
+>>>>
+>>>> https://www.spinics.net/lists/dri-devel/msg368077.html
+>>>>
+>>>> Please use this link, and not the that one up there you which quoted above,
+>>>> and whose commit description is taken verbatim from the this link.
+>>>>
+>>>>> kset_register() is currently used in some places without calling
+>>>>> kset_put() in error path, because the callers think it should be
+>>>>> kset internal thing to do, but the driver core can not know what
+>>>>> caller doing with that memory at times. The memory could be freed
+>>>>> both in kset_put() and error path of caller, if it is called in
+>>>>> kset_register().
+>>>> As I explained in the link above, the reason there's
+>>>> a memory leak is that one cannot call kset_register() without
+>>>> the kset->kobj.name being set--kobj_add_internal() returns -EINVAL,
+>>>> in this case, i.e. kset_register() fails with -EINVAL.
+>>>>
+>>>> Thus, the most common usage is something like this:
+>>>>
+>>>> 	kobj_set_name(&kset->kobj, format, ...);
+>>>> 	kset->kobj.kset = parent_kset;
+>>>> 	kset->kobj.ktype = ktype;
+>>>> 	res = kset_register(kset);
+>>>>
+>>>> So, what is being leaked, is the memory allocated in kobj_set_name(),
+>>>> by the common idiom shown above. This needs to be mentioned in
+>>>> the documentation, at least, in case, in the future this is absolved
+>>>> in kset_register() redesign, etc.
+>>> Based on this, can kset_register() just clean up from itself when an
+>>> error happens?  Ideally that would be the case, as the odds of a kset
+>>> being embedded in a larger structure is probably slim, but we would have
+>>> to search the tree to make sure.
+>> I have search the whole tree, the kset used in bus_register() - patch #3,
+>> kset_create_and_add() - patch #4
+>> __class_register() - patch #5,  fw_cfg_build_symlink() - patch #6 and
+>> amdgpu_discovery.c - patch #10
+>> is embedded in a larger structure. In these cases, we can not call
+>> kset_put() in error path in kset_register()
+> Yes you can as the kobject in the kset should NOT be controling the
+> lifespan of those larger objects.
+Read through the code the only leak in this case is the name, so can we 
+free it
+directly in kset_register():
 
-This information will continue to be available in the git logs if anyone
-wonders were these numbers came from.
+--- a/lib/kobject.c
++++ b/lib/kobject.c
+@@ -844,8 +844,11 @@ int kset_register(struct kset *k)
 
-If it turns out that some other platform needs a longer delay, we can
-consider increasing the delay unconditionally after verifying
-experimentally.
+         kset_init(k);
+         err = kobject_add_internal(&k->kobj);
+-       if (err)
++       if (err) {
++               kfree_const(k->kobj.name);
++               k->kobj.name = NULL;
+                 return err;
++       }
+         kobject_uevent(&k->kobj, KOBJ_ADD);
+         return 0;
+  }
 
-And anyone with access to actual documentation is of course free to
-suggest a different delay from the start.
+or unset ktype of kobject, then call kset_put():
 
-> >   	ret = reset_control_bulk_deassert(cfg->num_resets, qmp->resets);
-> >   	if (ret) {
-> >   		dev_err(qmp->dev, "reset deassert failed\n");
+--- a/lib/kobject.c
++++ b/lib/kobject.c
+@@ -844,8 +844,11 @@ int kset_register(struct kset *k)
 
-Johan
+         kset_init(k);
+         err = kobject_add_internal(&k->kobj);
+-       if (err)
++       if (err) {
++               k->kobj.ktype = NULL;
++               kset_put(k);
+                 return err;
++       }
+         kobject_uevent(&k->kobj, KOBJ_ADD);
+         return 0;
+  }
+
+>
+> If it is, please point out the call chain here as I don't think that
+> should be possible.
+>
+> Note all of this is a mess because the kobject name stuff was added much
+> later, after the driver model had been created and running for a while.
+> We missed this error path when adding the dynamic kobject name logic,
+> thank for looking into this.
+>
+> If you could test the patch posted with your error injection systems,
+> that could make this all much simpler to solve.
+>
+> thanks,
+>
+> greg k-h
+> .
