@@ -2,104 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBAFB607D25
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 19:01:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E34D1607D28
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 19:05:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230076AbiJURBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 13:01:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59054 "EHLO
+        id S230022AbiJURFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 13:05:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbiJURBp (ORCPT
+        with ESMTP id S229565AbiJURFQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 13:01:45 -0400
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2A8C022514;
-        Fri, 21 Oct 2022 10:01:42 -0700 (PDT)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 29LH1Y3N013131;
-        Fri, 21 Oct 2022 19:01:34 +0200
-Date:   Fri, 21 Oct 2022 19:01:34 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/nolibc: add 7 tests for memcmp()
-Message-ID: <20221021170134.GB8420@1wt.eu>
-References: <20221021060340.7515-1-w@1wt.eu>
- <20221021155645.GK5600@paulmck-ThinkPad-P17-Gen-1>
+        Fri, 21 Oct 2022 13:05:16 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98515E9865
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 10:05:11 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id b12so8265150edd.6
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 10:05:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GdzuOhOEDnhogdt2xT3mV0ivSFs+fA5l/e0d5HS1oA8=;
+        b=b6xgLPDoBt3PhdbfKHSCRk6AerYKtG5tABOU0jANNkfpC1cyawgo44nLA1dB9lHmBW
+         E2YevGu83krHSpeqZjgijkPCY1xpkIMDj9IiSQikIO7mQCqAFoYiTs3FcWzRx0yQXv29
+         iYcNhWkpMv0LU3z4f/B5J6ppR0okx85za6h2OLogUUdQuvf5WLIkN/M/PYNSk4EM9T3m
+         xhUCWb/Og9Y8FLPcqDBDJwhYgU2xK+URNBwEl0LqFmyGaxrwNw8gytEbdFAf4MSnuVYn
+         lGUF2t0esfWUT3jq9QfO3K/zMO2pHi2BSfUp/5M87tYVE5TFHKK1G/iFa/LwQxipwmTW
+         QFtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GdzuOhOEDnhogdt2xT3mV0ivSFs+fA5l/e0d5HS1oA8=;
+        b=cChz8bjboNud69aTpM8GS8JQeffdUloIdloUYuvnqY15/vVXcU6vZKJ1fzMr7oBoh+
+         DOyD1ZH3DjSr8NjjVWczT1/K+M6GS0wNPIKDAGXfDA6bpUvt5l53GPd+7ZR+QG7cL6xS
+         N1c8Mtx09sdJALQVshJPeATeaIimfXK8FrNH6ZavogIE1SuDEozg1CaIdxAcs7o3Rd6F
+         1bWlWtSsYiIoNGyWbIowmdBAO8+s95aEDFO5rs39piI9ExX4F3LhAKbRZl6fX8UOqQIW
+         nfIFrjYMKBp7G9RU44Zipa3e9q7ySp3PbiFSUwePZHIAB91lXFOnU28FS4/viBTMa/7e
+         Vn1Q==
+X-Gm-Message-State: ACrzQf230QjJSlSroVcGjz+OnS4BW3RVrJLgNXGZjVB7bjeKzcDvcf2o
+        sTFSUEUmzzz/CglzjlXH+a8=
+X-Google-Smtp-Source: AMsMyM7ETgiBE2YpB7J5C0yYyKxPBky8LfFtJmy983B00YuIOuyR0rEFue1oZlzKDxZV4zdOCsuejw==
+X-Received: by 2002:a05:6402:1cc1:b0:45c:3a90:9499 with SMTP id ds1-20020a0564021cc100b0045c3a909499mr18623207edb.61.1666371909625;
+        Fri, 21 Oct 2022 10:05:09 -0700 (PDT)
+Received: from [192.168.1.100] (p57ba2cf5.dip0.t-ipconnect.de. [87.186.44.245])
+        by smtp.gmail.com with ESMTPSA id ku16-20020a170907789000b0078cb06c2ef9sm11923224ejc.8.2022.10.21.10.05.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Oct 2022 10:05:09 -0700 (PDT)
+Message-ID: <797fefa6-9a57-a773-7d0a-4e15533ee664@gmail.com>
+Date:   Fri, 21 Oct 2022 19:04:57 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221021155645.GK5600@paulmck-ThinkPad-P17-Gen-1>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v4] staging: vt6655: Fix Lines should not end with a '('
+Content-Language: en-US
+To:     Tanjuate Brunostar <tanjubrunostar0@gmail.com>,
+        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
+References: <Y1JlnJ/UpBgm9XEC@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <Y1JlnJ/UpBgm9XEC@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 08:56:45AM -0700, Paul E. McKenney wrote:
-> On Fri, Oct 21, 2022 at 08:03:40AM +0200, Willy Tarreau wrote:
-> > This adds 7 combinations of input values for memcmp() using signed and
-> > unsigned bytes, which will trigger on the original code before Rasmus'
-> > fix. This is mostly aimed at helping backporters verify their work, and
-> > showing how tests for corner cases can be added to the selftests suite.
-> > 
-> > Before the fix it reports:
-> >   12 memcmp_20_20 = 0                      [OK]
-> >   13 memcmp_20_60 = -64                    [OK]
-> >   14 memcmp_60_20 = 64                     [OK]
-> >   15 memcmp_20_e0 = 64                    [FAIL]
-> >   16 memcmp_e0_20 = -64                   [FAIL]
-> >   17 memcmp_80_e0 = -96                    [OK]
-> >   18 memcmp_e0_80 = 96                     [OK]
-> > 
-> > And after:
-> >   12 memcmp_20_20 = 0                      [OK]
-> >   13 memcmp_20_60 = -64                    [OK]
-> >   14 memcmp_60_20 = 64                     [OK]
-> >   15 memcmp_20_e0 = -192                   [OK]
-> >   16 memcmp_e0_20 = 192                    [OK]
-> >   17 memcmp_80_e0 = -96                    [OK]
-> >   18 memcmp_e0_80 = 96                     [OK]
-> > 
-> > Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-> > Signed-off-by: Willy Tarreau <w@1wt.eu>
+On 10/21/22 11:25, Tanjuate Brunostar wrote:
+> Code style warnings reported by checkpatch.
+> Improve the layout of a function header:
+> Put the first parameter immediately after the '(' and align the other
+> parameters underneath it.
 > 
-> I have pulled both of these in, thank you!
- 
-Thanks!
+> Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+> 
+> ---
+> v2: put static and void on the same line and adjusted the indentation as
+> suggested by Greg KH
+> ---
+> v3: Reformat the code by inserting tabs and white space as recommended
+> by Nam Cao and Julia Lawall
+> ---
+> v4: final version of this patch
+> 
+>   drivers/staging/vt6655/rxtx.c | 78 +++++++++++++++--------------------
+>   1 file changed, 33 insertions(+), 45 deletions(-)
+> 
+> diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
+> index 5bdb5176772c..1e5036121665 100644
+> --- a/drivers/staging/vt6655/rxtx.c
+> +++ b/drivers/staging/vt6655/rxtx.c
+> @@ -85,35 +85,27 @@ static const unsigned short wFB_Opt1[2][5] = {
+>   #define DATADUR_A_F1    13
+>   
+>   /*---------------------  Static Functions  --------------------------*/
+> -static
+> -void
+> -s_vFillRTSHead(
+> -	struct vnt_private *pDevice,
+> -	unsigned char byPktType,
+> -	void *pvRTS,
+> -	unsigned int	cbFrameLength,
+> -	bool bNeedAck,
+> -	bool bDisCRC,
+> -	struct ieee80211_hdr *hdr,
+> -	unsigned short wCurrentRate,
+> -	unsigned char byFBOption
+> -);
+> -
+> -static
+> -void
+> -s_vGenerateTxParameter(
+> -	struct vnt_private *pDevice,
+> -	unsigned char byPktType,
+> -	struct vnt_tx_fifo_head *,
+> -	void *pvRrvTime,
+> -	void *pvRTS,
+> -	void *pvCTS,
+> -	unsigned int	cbFrameSize,
+> -	bool bNeedACK,
+> -	unsigned int	uDMAIdx,
+> -	void *psEthHeader,
+> -	unsigned short wCurrentRate
+> -);
+> +static void s_vFillRTSHead(struct vnt_private *pDevice,
+> +			   unsigned char byPktType,
+> +			   void *pvRTS,
+> +			   unsigned int	cbFrameLength,
+> +			   bool bNeedAck,
+> +			   bool bDisCRC,
+> +			   struct ieee80211_hdr *hdr,
+> +			   unsigned short wCurrentRate,
+> +			   unsigned char byFBOption);
+> +
+> +static void s_vGenerateTxParameter(struct vnt_private *pDevice,
+> +				   unsigned char byPktType,
+> +				   struct vnt_tx_fifo_head *,
+> +				   void *pvRrvTime,
+> +				   void *pvRTS,
+> +				   void *pvCTS,
+> +				   unsigned int	cbFrameSize,
+> +				   bool bNeedACK,
+> +				   unsigned int	uDMAIdx,
+> +				   void *psEthHeader,
+> +				   unsigned short wCurrentRate);
+>   
+>   static unsigned int
+>   s_cbFillTxBufHead(struct vnt_private *pDevice, unsigned char byPktType,
+> @@ -121,22 +113,18 @@ s_cbFillTxBufHead(struct vnt_private *pDevice, unsigned char byPktType,
+>   		  unsigned int uDMAIdx, struct vnt_tx_desc *pHeadTD,
+>   		  unsigned int uNodeIndex);
+>   
+> -static
+> -__le16
+> -s_uFillDataHead(
+> -	struct vnt_private *pDevice,
+> -	unsigned char byPktType,
+> -	void *pTxDataHead,
+> -	unsigned int cbFrameLength,
+> -	unsigned int uDMAIdx,
+> -	bool bNeedAck,
+> -	unsigned int uFragIdx,
+> -	unsigned int cbLastFragmentSize,
+> -	unsigned int uMACfragNum,
+> -	unsigned char byFBOption,
+> -	unsigned short wCurrentRate,
+> -	bool is_pspoll
+> -);
+> +static __le16 s_uFillDataHead(struct vnt_private *pDevice,
+> +			      unsigned char byPktType,
+> +			      void *pTxDataHead,
+> +			      unsigned int cbFrameLength,
+> +			      unsigned int uDMAIdx,
+> +			      bool bNeedAck,
+> +			      unsigned int uFragIdx,
+> +			      unsigned int cbLastFragmentSize,
+> +			      unsigned int uMACfragNum,
+> +			      unsigned char byFBOption,
+> +			      unsigned short wCurrentRate,
+> +			      bool is_pspoll);
+>   
+>   /*---------------------  Export Variables  --------------------------*/
+>   
 
-> One thing, though...  I had to do "make clean" in both tools/include/nolibc
-> and tools/testing/selftests/nolibc to make those two "[FAIL]" indications
-> go away.  Does this mean that I am doing something wrong?
-
-No you didn't do anything wrong, it was the same for me and initially it
-was intentional, but probably it wasn't that good an idea. What happens
-is that we first prepare a pseudo-sysroot with kernel headers and nolibc
-headers, then we build the test based on this sysroot. Thus if any uapi
-header or nolibc header changes, nothing is detected. And I'm not much
-willing to always reinstall everything for every single test, nor to
-detect long dependency chains. Maybe I should think about adding another
-target to clean+test at the same time, or maybe make the current
-"nolibc-test" target do that and have a "retest" to only rebuild. But
-that needs to be thought about with the QEMU test as well (because most
-of the time for a quick test I don't build the kernel nor start QEMU, I
-just call the executable directly).
-
-Any ideas or suggestions are welcome, of course. We could consider that
-if we build a kernel and start QEMU, it's long enough to justify a
-systematic clean maybe ?
-
-> It would be good to know before I send the pull request containing these,
-> so that we can let Linus know of anything special he needs to do to
-> ensure a valid test result.
-
-I see. In the worst case, a preliminary "make clean" will do it. We just
-need to decide what's the best solution for everyone (i.e. not waste too
-much time between tests while not getting misleading results by accident).
-
-Thanks!
-Willy
+Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
