@@ -2,99 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3143E60789E
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 15:38:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44B9D6078A2
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 15:38:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230493AbiJUNiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 09:38:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37076 "EHLO
+        id S229960AbiJUNil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 09:38:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229954AbiJUNiJ (ORCPT
+        with ESMTP id S230425AbiJUNif (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 09:38:09 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0135A27518D
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 06:38:07 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id b4so4941041wrs.1
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 06:38:07 -0700 (PDT)
+        Fri, 21 Oct 2022 09:38:35 -0400
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44AA52764CD
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 06:38:26 -0700 (PDT)
+Received: by mail-qv1-xf2d.google.com with SMTP id ml12so799726qvb.0
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 06:38:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qLW9FnoLQc7PleQYsjtukTsF4zwFV4e2UFMmghknV0A=;
-        b=ymzonE0YR7nXbf5vxYalyCAO/LLN+uDz1EynBBLkY0GBLxkOL8k7Gb9siuEUNMdE81
-         rLIwlljVOwe5I4g3IfRz5UWo/xJiEip68tl2PF8zqoaP0qLzmgjigdHkYOWbBq7yv5vZ
-         oJAC0fOTMdzOfhj+CMc8h9LFSDoTqqmINPQ9XqX+axkvhhuErT5HNQs9/zPoicBEVc5U
-         Kqp1K/fno53dVbWpQ56ustjbOrptAIVrtwrCDTq5/QHJYVok1vRmPKz+rlTPC3Q9/aWG
-         Q0IlK3hFsWAT95i6cHf/edrzCuEhVDw4cTFvvlO2iSXoICqHRNnY7awIWdx3TjtyGaiX
-         DbCg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KSzkkxJmt+63RR1lkwGlnOxYt96Hz8plGKgcG5hGf78=;
+        b=WC1/Vaw070/6Nnw2/72p0FXGDvkc/9JDDi/PrPjA/nbPPFkSpNofj5eiWG2HegS1Iu
+         EZxINnRgbYWJPxzi6N3Htly+fhPZlnnIsk/dvkpvMSci1X7chIX34vE694cH3gNODt84
+         8sQNDQjRhWpYHsP3/+PnBQh41HYUwuuBCF1M0kbH5adOC8e+Ze0/smvQLB5BwQUmotee
+         lBeGupjIoJYlCiKTMgF1bZGxotJWPOG5LEgfWRNe9NmW4KCPcGYrgyR3Mc5i0JOWQahy
+         8el//Z5s/Axsfk14aGPP4YsVWB+V+kgBQ8bAY07hiuQKmp7nzm57YuIi0fcftOEB9WK/
+         L4rA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qLW9FnoLQc7PleQYsjtukTsF4zwFV4e2UFMmghknV0A=;
-        b=Da90txLQIP646hvONfTPwtuvvdbqwovakfb+PdqMHG08/uLgg+sEXIJT3e8IJKPgzh
-         IzGWdBNqW3bSgPn9vXr23iGQjQSXPBfQWoeO7LuFgSKvPtHl/ecSsMpmH8WhHB+6Re7u
-         vBMQEoWtKFJzXDWnLMPM8XOccs68c0wtyPS6YuF7UIXvJtuGwwqv/UsRVGxmNg9L2EDX
-         DoexlOfbu6XDaMVP3p5XzkSd8mSwzx4OGPkfeln7RTWqMT4P74BExoKwA5vhGnQyN7VB
-         fC6RnMg1qn7a+wBPns0+w4Ywp089zRz48IZ0Rhc6yb8CXgq51yUaJiyV5D/wY/+Y2Tvj
-         I3Xw==
-X-Gm-Message-State: ACrzQf37wVSIWL9+GZWgT8lfylFVIlteGNDWPFGW9LIEUtVPNiwkGQlq
-        VRiYBv9Jst9JJmWmeis5URXtDA==
-X-Google-Smtp-Source: AMsMyM78KxID0nlhfiPnA8La+isJ1lYfn0KYj8PqfiXRifKWZDT56bvl00KPWG3O4rhRbTxlWh3DAg==
-X-Received: by 2002:a05:6000:2ad:b0:231:48fb:3a64 with SMTP id l13-20020a05600002ad00b0023148fb3a64mr11952614wry.184.1666359486433;
-        Fri, 21 Oct 2022 06:38:06 -0700 (PDT)
-Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id l35-20020a05600c1d2300b003b477532e66sm10462313wms.2.2022.10.21.06.38.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Oct 2022 06:38:06 -0700 (PDT)
-From:   Corentin Labbe <clabbe@baylibre.com>
-To:     gregkh@linuxfoundation.org, johan@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        neil.armstrong@linaro.org, Corentin Labbe <clabbe@baylibre.com>
-Subject: [PATCH v2 2/2] usb: serial: add myself as maintainer of CH348
-Date:   Fri, 21 Oct 2022 13:37:58 +0000
-Message-Id: <20221021133758.1881904-3-clabbe@baylibre.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221021133758.1881904-1-clabbe@baylibre.com>
-References: <20221021133758.1881904-1-clabbe@baylibre.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KSzkkxJmt+63RR1lkwGlnOxYt96Hz8plGKgcG5hGf78=;
+        b=D2v8T5PqrNaOFC0U50IyN/LTzGTBVAfqbQxNQDm4pCSAVOgBdnW2MhRW/5XLg2tDY9
+         b59tFoz3opiQJjPYYKHKUA3/P/5lmYqrgvEbcTdmjZpfnIK0hgVamHgMH0OmXb8bfbqU
+         KJFF8M170DgsRhTC2r0bm79poqa6TMvlq/EFgz0M6LeeV1jxr3d37Ikw85KI5uk2QJ6J
+         973OQHd/IMHI/x5GxVEVPDxZj6MOcNdE4Y0LebneRiWIdaKGr8CeQhx7wtUmxMHd0lMZ
+         7iu5WWuaCflTXeKdEXKs+YFoHeOwJPxwd9PVp+T/cccrMr7CF8KAE2ollewn4WHhKHbG
+         YvtA==
+X-Gm-Message-State: ACrzQf0cYII8Xbnw2b7NRXgRb1tBD4RxjSaNbRxXImPbx/8THJ9kXkpF
+        EdIN5VGuu4VXnuaxmTjlCR9o+Q==
+X-Google-Smtp-Source: AMsMyM4FZ01IGdKeTxmwj5pLpoUJHwEmgn6/Mp8bmAqg3DRg9Qw431uomUeIF2iTpThwFCvOjuXusg==
+X-Received: by 2002:a0c:ac02:0:b0:4af:a3b1:3167 with SMTP id l2-20020a0cac02000000b004afa3b13167mr16441073qvb.66.1666359505693;
+        Fri, 21 Oct 2022 06:38:25 -0700 (PDT)
+Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
+        by smtp.gmail.com with ESMTPSA id br32-20020a05620a462000b006e9b3096482sm9522021qkb.64.2022.10.21.06.38.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Oct 2022 06:38:25 -0700 (PDT)
+Message-ID: <a0353e85-8604-a268-5776-2f28b092e57b@linaro.org>
+Date:   Fri, 21 Oct 2022 09:38:23 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH net-next v5 2/5] net: ipqess: introduce the Qualcomm
+ IPQESS driver
+Content-Language: en-US
+To:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        davem@davemloft.net, Rob Herring <robh+dt@kernel.org>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, thomas.petazzoni@bootlin.com,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Robert Marko <robert.marko@sartura.hr>
+References: <20221021124556.100445-1-maxime.chevallier@bootlin.com>
+ <20221021124556.100445-3-maxime.chevallier@bootlin.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221021124556.100445-3-maxime.chevallier@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since I did the driver and have hardware to test, set myself as
-maintainer of it.
+On 21/10/2022 08:45, Maxime Chevallier wrote:
+> The Qualcomm IPQESS controller is a simple 1G Ethernet controller found
+> on the IPQ4019 chip. This controller has some specificities, in that the
+> IPQ4019 platform that includes that controller also has an internal
+> switch, based on the QCA8K IP.
 
-Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
----
- MAINTAINERS | 5 +++++
- 1 file changed, 5 insertions(+)
+Thank you for your patch. There is something to discuss/improve.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index b9ed414dd8ab..cc498aa84a4f 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -4847,6 +4847,11 @@ S:	Maintained
- F:	drivers/auxdisplay/cfag12864bfb.c
- F:	include/linux/cfag12864b.h
- 
-+CH348 USB SERIAL ADAPTER
-+M:	Corentin Labbe <clabbe@baylibre.com>
-+S:	Maintained
-+F:	drivers/usb/serial/ch348.c
-+
- CHAR and MISC DRIVERS
- M:	Arnd Bergmann <arnd@arndb.de>
- M:	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
--- 
-2.37.4
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 5c6ce094e55e..46fdd3c523c5 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -17037,6 +17037,12 @@ L:	netdev@vger.kernel.org
+>  S:	Maintained
+>  F:	drivers/net/ethernet/qualcomm/emac/
+>  
+> +QUALCOMM IPQESS ETHERNET DRIVER
+> +M:	Maxime Chevallier <maxime.chevallier@bootlin.com>
+> +L:	netdev@vger.kernel.org
+> +S:	Maintained
+> +F:	drivers/net/ethernet/qualcomm/ipqess/
+
+Add also bindings.
+
+> +
+>  QUALCOMM ETHQOS ETHERNET DRIVER
+>  M:	Vinod Koul <vkoul@kernel.org>
+>  R:	Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> diff --git a/drivers/net/ethernet/qualcomm/Kconfig b/drivers/net/ethernet/qualcomm/Kconfig
+> index a4434eb38950..a723ddbea248 100644
+> --- a/drivers/net/ethernet/qualcomm/Kconfig
+> +++ b/drivers/net/ethernet/qualcomm/Kconfig
+> @@ -60,6 +60,17 @@ config QCOM_EMAC
+>  	  low power, Receive-Side Scaling (RSS), and IEEE 1588-2008
+>  	  Precision Clock Synchronization Protocol.
+>  
+> +config QCOM_IPQ4019_ESS_EDMA
+> +	tristate "Qualcomm Atheros IPQ4019 ESS EDMA support"
+> +	depends on OF
+
+I think this is present only on systems where Qualcomm IPQ4019 SoCs is
+the main SoC (AP)? If so, I propose not to offer this to non-Qualcomm
+SoC builds, because they cannot use it and it makes life of
+distro-vendors configurators difficult:
+
+	depends on ARCH_QCOM || COMPILE_TEST
+
+> +	select PHYLINK
+> +	help
+> +	  This driver supports the Qualcomm Atheros IPQ40xx built-in
+> +	  ESS EDMA ethernet controller.
+> +
+> +	  To compile this driver as a module, choose M here: the
+> +	  module will be called ipqess.
+> +
+>  source "drivers/net/ethernet/qualcomm/rmnet/Kconfig"
+
+
+Best regards,
+Krzysztof
 
