@@ -2,107 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CD35607337
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 11:04:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF8A560733D
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 11:06:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230146AbiJUJEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 05:04:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52650 "EHLO
+        id S230460AbiJUJGs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 05:06:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230434AbiJUJEs (ORCPT
+        with ESMTP id S230434AbiJUJGp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 05:04:48 -0400
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF2C4D273;
-        Fri, 21 Oct 2022 02:04:41 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R631e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VSikrQi_1666343077;
-Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VSikrQi_1666343077)
-          by smtp.aliyun-inc.com;
-          Fri, 21 Oct 2022 17:04:38 +0800
-Date:   Fri, 21 Oct 2022 17:04:36 +0800
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-To:     Jingbo Xu <jefflexu@linux.alibaba.com>
-Cc:     dhowells@redhat.com, xiang@kernel.org, chao@kernel.org,
-        linux-erofs@lists.ozlabs.org, jlayton@kernel.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH 1/2] netfs: export helpers for request and subrequest
-Message-ID: <Y1JgpEfsKH0vYbw0@B-P7TQMD6M-0146.local>
-Mail-Followup-To: Jingbo Xu <jefflexu@linux.alibaba.com>,
-        dhowells@redhat.com, xiang@kernel.org, chao@kernel.org,
-        linux-erofs@lists.ozlabs.org, jlayton@kernel.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-References: <20221021084912.61468-1-jefflexu@linux.alibaba.com>
- <20221021084912.61468-2-jefflexu@linux.alibaba.com>
+        Fri, 21 Oct 2022 05:06:45 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A914A1B65D4;
+        Fri, 21 Oct 2022 02:06:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Btl6lB7/jBAwJDOo52HZvR/bEdbyeTvFLPuY3K4Zko0=; b=pyplzieDCI1Jkh1GoGLbvsYVVx
+        uHCqQJzf9myydjTTCZyJlfAgIL1Ad0QHfgNBMrbpvkz7KgN1NltByM6anYZbVpEgik+sT8GiBRbAT
+        003jASt0qJW3q47hyaUXY64m2CxLNu4WQ7Emdhdc804IodgwWCgGWPPZN6k0zHLCnvWsiAGQf5Ue8
+        V/plhE17pQYby+ANZNCJzfQM3Bk0iBn/UjzZcx62Xbi8kABllHXJLFTR+reIcdzdrFJHv5LHpqIi6
+        hJLuuJb6YzhZpjpzeiql/TKGeFMOoYRkwlvDaqIW6SALh19LUTHxkNhnXwgZKfqymljlkOrHSfqOF
+        NU6e4DpQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34856)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1olnz3-0008Q4-Ka; Fri, 21 Oct 2022 10:06:29 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1olnyz-00042A-Dw; Fri, 21 Oct 2022 10:06:25 +0100
+Date:   Fri, 21 Oct 2022 10:06:25 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Frank Wunderlich <frank-w@public-files.de>
+Cc:     Frank Wunderlich <linux@fw-web.de>,
+        linux-mediatek@lists.infradead.org,
+        Alexander Couzens <lynxis@fe80.eu>,
+        Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] net: mtk_sgmii: implement mtk_pcs_ops
+Message-ID: <Y1JhEWU5Ac6kd2ne@shell.armlinux.org.uk>
+References: <20221020144431.126124-1-linux@fw-web.de>
+ <Y1F0pSrJnNlYzehq@shell.armlinux.org.uk>
+ <02A54E45-2084-440A-A643-772C0CC9F988@public-files.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221021084912.61468-2-jefflexu@linux.alibaba.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <02A54E45-2084-440A-A643-772C0CC9F988@public-files.de>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 04:49:11PM +0800, Jingbo Xu wrote:
-> Export netfs_put_subrequest() and netfs_rreq_completed().
-> 
-> Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
+On Fri, Oct 21, 2022 at 08:04:51AM +0200, Frank Wunderlich wrote:
+> I have no register documentation to check if there is any way to read out pause/duplex setting. Maybe MTK can answer this or extend function later.
 
-Reviewed-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+I suspect we can probably guess.
 
-Thanks,
-Gao Xiang
+Looking at SGMSYS_PCS_CONTROL_1, this is actually the standard BMCR in
+the low 16 bits, and BMSR in the upper 16 bits, so:
 
-> ---
->  fs/netfs/io.c         | 3 ++-
->  fs/netfs/objects.c    | 1 +
->  include/linux/netfs.h | 2 ++
->  3 files changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/fs/netfs/io.c b/fs/netfs/io.c
-> index 428925899282..58dd56e3e780 100644
-> --- a/fs/netfs/io.c
-> +++ b/fs/netfs/io.c
-> @@ -94,12 +94,13 @@ static void netfs_read_from_server(struct netfs_io_request *rreq,
->  /*
->   * Release those waiting.
->   */
-> -static void netfs_rreq_completed(struct netfs_io_request *rreq, bool was_async)
-> +void netfs_rreq_completed(struct netfs_io_request *rreq, bool was_async)
->  {
->  	trace_netfs_rreq(rreq, netfs_rreq_trace_done);
->  	netfs_clear_subrequests(rreq, was_async);
->  	netfs_put_request(rreq, was_async, netfs_rreq_trace_put_complete);
->  }
-> +EXPORT_SYMBOL(netfs_rreq_completed);
->  
->  /*
->   * Deal with the completion of writing the data to the cache.  We have to clear
-> diff --git a/fs/netfs/objects.c b/fs/netfs/objects.c
-> index e17cdf53f6a7..478cc1a1664c 100644
-> --- a/fs/netfs/objects.c
-> +++ b/fs/netfs/objects.c
-> @@ -158,3 +158,4 @@ void netfs_put_subrequest(struct netfs_io_subrequest *subreq, bool was_async,
->  	if (dead)
->  		netfs_free_subrequest(subreq, was_async);
->  }
-> +EXPORT_SYMBOL(netfs_put_subrequest);
-> diff --git a/include/linux/netfs.h b/include/linux/netfs.h
-> index f2402ddeafbf..d519fb709d7f 100644
-> --- a/include/linux/netfs.h
-> +++ b/include/linux/netfs.h
-> @@ -282,6 +282,8 @@ int netfs_write_begin(struct netfs_inode *, struct file *,
->  		struct address_space *, loff_t pos, unsigned int len,
->  		struct folio **, void **fsdata);
->  
-> +void netfs_rreq_completed(struct netfs_io_request *rreq, bool was_async);
-> +
->  void netfs_subreq_terminated(struct netfs_io_subrequest *, ssize_t, bool);
->  void netfs_get_subrequest(struct netfs_io_subrequest *subreq,
->  			  enum netfs_sreq_ref_trace what);
-> -- 
-> 2.19.1.6.gb485710b
+At address 4, I'd expect the PHYSID.
+At address 8, I'd expect the advertisement register in the low 16 bits
+and the link partner advertisement in the upper 16 bits.
+
+Can you try an experiment, and in mtk_sgmii_init() try accessing the
+regmap at address 0, 4, and 8 and print their contents please?
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
