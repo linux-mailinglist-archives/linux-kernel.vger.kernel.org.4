@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33BE8606E4A
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 05:24:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34C89606E4B
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 05:24:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229995AbiJUDYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 23:24:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44124 "EHLO
+        id S230009AbiJUDYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 23:24:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229939AbiJUDYP (ORCPT
+        with ESMTP id S229962AbiJUDYb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 23:24:15 -0400
+        Thu, 20 Oct 2022 23:24:31 -0400
 Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B99D01B65C8
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 20:24:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 225511DDDB
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 20:24:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666322654; x=1697858654;
+  t=1666322659; x=1697858659;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=DZlZbkmzdjTJqsSTh0PWMpWULB1+KKo5zc/qeSpD1kM=;
-  b=FPaYQwtMlGIygD5c5XwrdlDH0d1K99m5v9aroVtLozfMUN1gN3NyZfBu
-   4lmZydFRf28L0vKlQRWlxu26ZLaBkSDcTBRewhZPFZf/h6dnDRKvieazA
-   1DHONo4f8tHtv5CTfgx/FN4s8+ZZM1BYiQ2fQ8UiLWxEA24Y3q92OJQP2
-   dBS1ydgX3BT73WRXdGAYqi3z1LYTqHM0pDEB/YhcthR9fFYuKoVTjWX0z
-   Kv6wkt21djkVRZIc9QhfKSx4Qqcx3iegep4tkPn5b2gtiEWsmpCZfSWte
-   xqsImrqjNAxo1OvFRwUjpMZrEEQFkkkjDLoOpTR6LrCWdpNMjTRi8OsMB
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="333471603"
+  bh=TNsKWHYJLqAo/IELz04ecR5M2wF4zce2b3Ctn8SweIk=;
+  b=UvBTWdXZfmdyCKnxuwdmvhWMuU2YzM1GMZnoR4IKEu89IDisATU9EVlv
+   8U5d4IVWcEnIpuc8q++HzUzC3oHoId1nMY7nKkAZDwI8ynKRdJwx2xivg
+   S2Hv0YZlDODsbO2DBNOGreouP6uX9EZ016f+8jpO6rtYOEk6xoQA0xG+q
+   8/pDQZepEChWFGBl+y8w0TEwoJb1VcyM/1+1PrABvZpGgEUHokIIDh01b
+   2T2EtZJWKT8y5Y6Db8PX9mlBz85C1LstBRoyxayFptTKkBCfurBaU/7Rb
+   38c2pyEAmORjra5Vd7yngA72Qi6i7HtdiHEXZhwZsBP3oRsZOpeF530nN
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="333471613"
 X-IronPort-AV: E=Sophos;i="5.95,200,1661842800"; 
-   d="scan'208";a="333471603"
+   d="scan'208";a="333471613"
 Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 20:24:14 -0700
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 20:24:18 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="719459559"
+X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="719459592"
 X-IronPort-AV: E=Sophos;i="5.95,200,1661842800"; 
-   d="scan'208";a="719459559"
+   d="scan'208";a="719459592"
 Received: from feng-clx.sh.intel.com ([10.238.200.228])
-  by FMSMGA003.fm.intel.com with ESMTP; 20 Oct 2022 20:24:11 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 20 Oct 2022 20:24:14 -0700
 From:   Feng Tang <feng.tang@intel.com>
 To:     Andrew Morton <akpm@linux-foundation.org>,
         Vlastimil Babka <vbabka@suse.cz>,
@@ -53,10 +53,14 @@ To:     Andrew Morton <akpm@linux-foundation.org>,
         Kees Cook <keescook@chromium.org>
 Cc:     Dave Hansen <dave.hansen@intel.com>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
-        Feng Tang <feng.tang@intel.com>
-Subject: [PATCH v7 1/3] mm/slub: only zero requested size of buffer for kzalloc when debug enabled
-Date:   Fri, 21 Oct 2022 11:24:03 +0800
-Message-Id: <20221021032405.1825078-2-feng.tang@intel.com>
+        Feng Tang <feng.tang@intel.com>,
+        kernel test robot <oliver.sang@intel.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>
+Subject: [PATCH v7 2/3] mm: kasan: Extend kasan_metadata_size() to also cover in-object size
+Date:   Fri, 21 Oct 2022 11:24:04 +0800
+Message-Id: <20221021032405.1825078-3-feng.tang@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221021032405.1825078-1-feng.tang@intel.com>
 References: <20221021032405.1825078-1-feng.tang@intel.com>
@@ -72,130 +76,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kzalloc/kmalloc will round up the request size to a fixed size
-(mostly power of 2), so the allocated memory could be more than
-requested. Currently kzalloc family APIs will zero all the
-allocated memory.
+When kasan is enabled for slab/slub, it may save kasan' free_meta
+data in the former part of slab object data area in slab object's
+free path, which works fine.
 
-To detect out-of-bound usage of the extra allocated memory, only
-zero the requested part, so that redzone sanity check could be
-added to the extra space later.
+There is ongoing effort to extend slub's debug function which will
+redzone the latter part of kmalloc object area, and when both of
+the debug are enabled, there is possible conflict, especially when
+the kmalloc object has small size, as caught by 0Day bot [1].
 
-For kzalloc users who will call ksize() later and utilize this
-extra space, please be aware that the space is not zeroed any
-more when debug is enabled. (Thanks to Kees Cook's effort to
-sanitize all ksize() user cases [1], this won't be a big issue).
+To solve it, slub code needs to know the in-object kasan's meta
+data size. Currently, there is existing kasan_metadata_size()
+which returns the kasan's metadata size inside slub's metadata
+area, so extend it to also cover the in-object meta size by
+adding a boolean flag 'in_object'.
 
-[1]. https://lore.kernel.org/all/20220922031013.2150682-1-keescook@chromium.org/#r
+There is no functional change to existing code logic.
+
+[1]. https://lore.kernel.org/lkml/YuYm3dWwpZwH58Hu@xsang-OptiPlex-9020/
+Reported-by: kernel test robot <oliver.sang@intel.com>
+Suggested-by: Andrey Konovalov <andreyknvl@gmail.com>
 Signed-off-by: Feng Tang <feng.tang@intel.com>
+Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
+Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
+Cc: Alexander Potapenko <glider@google.com>
+Cc: Dmitry Vyukov <dvyukov@google.com>
+Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
 ---
- mm/slab.c |  7 ++++---
- mm/slab.h | 18 ++++++++++++++++--
- mm/slub.c | 10 +++++++---
- 3 files changed, 27 insertions(+), 8 deletions(-)
+ include/linux/kasan.h |  5 +++--
+ mm/kasan/generic.c    | 19 +++++++++++++------
+ mm/slub.c             |  4 ++--
+ 3 files changed, 18 insertions(+), 10 deletions(-)
 
-diff --git a/mm/slab.c b/mm/slab.c
-index a5486ff8362a..4594de0e3d6b 100644
---- a/mm/slab.c
-+++ b/mm/slab.c
-@@ -3253,7 +3253,8 @@ slab_alloc_node(struct kmem_cache *cachep, struct list_lru *lru, gfp_t flags,
- 	init = slab_want_init_on_alloc(flags, cachep);
+diff --git a/include/linux/kasan.h b/include/linux/kasan.h
+index d811b3d7d2a1..96c9d56e5510 100644
+--- a/include/linux/kasan.h
++++ b/include/linux/kasan.h
+@@ -302,7 +302,7 @@ static inline void kasan_unpoison_task_stack(struct task_struct *task) {}
  
- out:
--	slab_post_alloc_hook(cachep, objcg, flags, 1, &objp, init);
-+	slab_post_alloc_hook(cachep, objcg, flags, 1, &objp, init,
-+				cachep->object_size);
- 	return objp;
- }
+ #ifdef CONFIG_KASAN_GENERIC
  
-@@ -3506,13 +3507,13 @@ int kmem_cache_alloc_bulk(struct kmem_cache *s, gfp_t flags, size_t size,
- 	 * Done outside of the IRQ disabled section.
- 	 */
- 	slab_post_alloc_hook(s, objcg, flags, size, p,
--				slab_want_init_on_alloc(flags, s));
-+			slab_want_init_on_alloc(flags, s), s->object_size);
- 	/* FIXME: Trace call missing. Christoph would like a bulk variant */
- 	return size;
- error:
- 	local_irq_enable();
- 	cache_alloc_debugcheck_after_bulk(s, flags, i, p, _RET_IP_);
--	slab_post_alloc_hook(s, objcg, flags, i, p, false);
-+	slab_post_alloc_hook(s, objcg, flags, i, p, false, s->object_size);
- 	kmem_cache_free_bulk(s, i, p);
+-size_t kasan_metadata_size(struct kmem_cache *cache);
++size_t kasan_metadata_size(struct kmem_cache *cache, bool in_object);
+ slab_flags_t kasan_never_merge(void);
+ void kasan_cache_create(struct kmem_cache *cache, unsigned int *size,
+ 			slab_flags_t *flags);
+@@ -315,7 +315,8 @@ void kasan_record_aux_stack_noalloc(void *ptr);
+ #else /* CONFIG_KASAN_GENERIC */
+ 
+ /* Tag-based KASAN modes do not use per-object metadata. */
+-static inline size_t kasan_metadata_size(struct kmem_cache *cache)
++static inline size_t kasan_metadata_size(struct kmem_cache *cache,
++						bool in_object)
+ {
  	return 0;
  }
-diff --git a/mm/slab.h b/mm/slab.h
-index 0202a8c2f0d2..8b4ee02fc14a 100644
---- a/mm/slab.h
-+++ b/mm/slab.h
-@@ -720,12 +720,26 @@ static inline struct kmem_cache *slab_pre_alloc_hook(struct kmem_cache *s,
+diff --git a/mm/kasan/generic.c b/mm/kasan/generic.c
+index d8b5590f9484..b076f597a378 100644
+--- a/mm/kasan/generic.c
++++ b/mm/kasan/generic.c
+@@ -450,15 +450,22 @@ void kasan_init_object_meta(struct kmem_cache *cache, const void *object)
+ 		__memset(alloc_meta, 0, sizeof(*alloc_meta));
+ }
  
- static inline void slab_post_alloc_hook(struct kmem_cache *s,
- 					struct obj_cgroup *objcg, gfp_t flags,
--					size_t size, void **p, bool init)
-+					size_t size, void **p, bool init,
-+					unsigned int orig_size)
+-size_t kasan_metadata_size(struct kmem_cache *cache)
++size_t kasan_metadata_size(struct kmem_cache *cache, bool in_object)
  {
-+	unsigned int zero_size = s->object_size;
- 	size_t i;
- 
- 	flags &= gfp_allowed_mask;
- 
-+	/*
-+	 * For kmalloc object, the allocated memory size(object_size) is likely
-+	 * larger than the requested size(orig_size). If redzone check is
-+	 * enabled for the extra space, don't zero it, as it will be redzoned
-+	 * soon. The redzone operation for this extra space could be seen as a
-+	 * replacement of current poisoning under certain debug option, and
-+	 * won't break other sanity checks.
-+	 */
-+	if (kmem_cache_debug_flags(s, SLAB_STORE_USER) &&
-+	    (s->flags & SLAB_KMALLOC))
-+		zero_size = orig_size;
++	struct kasan_cache *info = &cache->kasan_info;
 +
- 	/*
- 	 * As memory initialization might be integrated into KASAN,
- 	 * kasan_slab_alloc and initialization memset must be
-@@ -736,7 +750,7 @@ static inline void slab_post_alloc_hook(struct kmem_cache *s,
- 	for (i = 0; i < size; i++) {
- 		p[i] = kasan_slab_alloc(s, p[i], flags, init);
- 		if (p[i] && init && !kasan_has_integrated_init())
--			memset(p[i], 0, s->object_size);
-+			memset(p[i], 0, zero_size);
- 		kmemleak_alloc_recursive(p[i], s->object_size, 1,
- 					 s->flags, flags);
- 		kmsan_slab_alloc(s, p[i], flags);
+ 	if (!kasan_requires_meta())
+ 		return 0;
+-	return (cache->kasan_info.alloc_meta_offset ?
+-		sizeof(struct kasan_alloc_meta) : 0) +
+-		((cache->kasan_info.free_meta_offset &&
+-		  cache->kasan_info.free_meta_offset != KASAN_NO_FREE_META) ?
+-		 sizeof(struct kasan_free_meta) : 0);
++
++	if (in_object)
++		return (info->free_meta_offset ?
++			0 : sizeof(struct kasan_free_meta));
++	else
++		return (info->alloc_meta_offset ?
++			sizeof(struct kasan_alloc_meta) : 0) +
++			((info->free_meta_offset &&
++			info->free_meta_offset != KASAN_NO_FREE_META) ?
++			sizeof(struct kasan_free_meta) : 0);
+ }
+ 
+ static void __kasan_record_aux_stack(void *addr, bool can_alloc)
 diff --git a/mm/slub.c b/mm/slub.c
-index 12354fb8d6e4..17292c2d3eee 100644
+index 17292c2d3eee..adff7553b54e 100644
 --- a/mm/slub.c
 +++ b/mm/slub.c
-@@ -3395,7 +3395,11 @@ static __always_inline void *slab_alloc_node(struct kmem_cache *s, struct list_l
- 	init = slab_want_init_on_alloc(gfpflags, s);
+@@ -910,7 +910,7 @@ static void print_trailer(struct kmem_cache *s, struct slab *slab, u8 *p)
+ 	if (slub_debug_orig_size(s))
+ 		off += sizeof(unsigned int);
  
- out:
--	slab_post_alloc_hook(s, objcg, gfpflags, 1, &object, init);
-+	/*
-+	 * When init equals 'true', like for kzalloc() family, only
-+	 * @orig_size bytes will be zeroed instead of s->object_size
-+	 */
-+	slab_post_alloc_hook(s, objcg, gfpflags, 1, &object, init, orig_size);
+-	off += kasan_metadata_size(s);
++	off += kasan_metadata_size(s, false);
  
- 	return object;
- }
-@@ -3852,11 +3856,11 @@ int kmem_cache_alloc_bulk(struct kmem_cache *s, gfp_t flags, size_t size,
- 	 * Done outside of the IRQ disabled fastpath loop.
- 	 */
- 	slab_post_alloc_hook(s, objcg, flags, size, p,
--				slab_want_init_on_alloc(flags, s));
-+			slab_want_init_on_alloc(flags, s), s->object_size);
- 	return i;
- error:
- 	slub_put_cpu_ptr(s->cpu_slab);
--	slab_post_alloc_hook(s, objcg, flags, i, p, false);
-+	slab_post_alloc_hook(s, objcg, flags, i, p, false, s->object_size);
- 	kmem_cache_free_bulk(s, i, p);
- 	return 0;
- }
+ 	if (off != size_from_object(s))
+ 		/* Beginning of the filler is the free pointer */
+@@ -1070,7 +1070,7 @@ static int check_pad_bytes(struct kmem_cache *s, struct slab *slab, u8 *p)
+ 			off += sizeof(unsigned int);
+ 	}
+ 
+-	off += kasan_metadata_size(s);
++	off += kasan_metadata_size(s, false);
+ 
+ 	if (size_from_object(s) == off)
+ 		return 1;
 -- 
 2.34.1
 
