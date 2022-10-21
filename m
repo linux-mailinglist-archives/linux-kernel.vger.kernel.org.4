@@ -2,126 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC05C6078CD
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 15:44:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C5496078D2
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 15:45:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230446AbiJUNoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 09:44:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55430 "EHLO
+        id S231223AbiJUNpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 09:45:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiJUNoV (ORCPT
+        with ESMTP id S231186AbiJUNpe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 09:44:21 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 665D4B36
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 06:44:19 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id f11so4487012wrm.6
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 06:44:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=/ZpaxMvmEuJPF3OgoDpXULb0R5XqV+uhtln4+RAmmd8=;
-        b=HOny0ruFI9g5TTzJ5ZH5qvGL6+UqA9BmO6SUTjvo8lyGP84OduwmM3imoX5TfLfQpX
-         ErIPWwPwtiBgh5+cGpZS4bF5gzGh7q4mp3WyPs05jgxYtWDaNdoTT/2RJl3Ma7kZkKeS
-         NURZRhHE7c0nbQqwVRSImTCopAdiYUQdWHovO/cJNQtOmeviI63EKOhJFOiZz4XPq8hT
-         L5tlfCsV4MNt4gIcoW+NcpqdQMjlmMK/cDQ2SgL+L4FmTvmOtkw9MoR5doYjmgnTSB7W
-         l+mBUrZgtjW38JdnhIB4wA/uCMpvxiW68VCkV/I/cmccE3nItp3GMRryTteLFGrfPvP1
-         yt3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/ZpaxMvmEuJPF3OgoDpXULb0R5XqV+uhtln4+RAmmd8=;
-        b=aFx7cYR/LoTh4FceYCCYR7eCv8R2aJJLuWsPNHfh9OExPvWuRPvrGXM50zrP1sFc+Q
-         9wLcV6vIJ5H6cv9h2cAPs1Yfx1sbZByn6yEZoNestVfxqHnH1XFvHEgIBZ/eL7x46ZWs
-         whTRNrPwf2JjAxouwMkp1RxW6dX6Hc912/dIfLXn16JtE45JFrw+p6eGq8ihxerO5MxV
-         gvfu26LSxJ617FfZbgXp8ZKbG+XF2d9Mci0pcFxZlRFuJC3oqpQFfa7Ck3Faxoe+rJux
-         oFzeMOA/Mt1JwZ3Pyj3GNGNBdutlZtlcjSRyRp3Edgh4uU8ZQwiMcwO/999Thj6rBOiH
-         WpHg==
-X-Gm-Message-State: ACrzQf1nnGIV0GewkMy5vnwmMC/1KNHiGAokfUM1hcuXEoCoPZQfTOWr
-        Y6O8+d38SuXzF1rheUX6/kAdtA==
-X-Google-Smtp-Source: AMsMyM4nd+8JiG4Qbt3OaJ5WL7VTFhfdy3U2bhmHB12MxhIYrGqcodjTvuokWPVyjHYedie2uggWdQ==
-X-Received: by 2002:a5d:584a:0:b0:231:636c:de28 with SMTP id i10-20020a5d584a000000b00231636cde28mr12412891wrf.175.1666359857728;
-        Fri, 21 Oct 2022 06:44:17 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:8104:adb4:5d77:2050? ([2a01:e0a:982:cbb0:8104:adb4:5d77:2050])
-        by smtp.gmail.com with ESMTPSA id h10-20020a5d504a000000b0022a9246c853sm19016553wrt.41.2022.10.21.06.44.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Oct 2022 06:44:17 -0700 (PDT)
-Message-ID: <3bc7dfc1-3e26-926f-f55e-bc9e6531e04b@linaro.org>
-Date:   Fri, 21 Oct 2022 15:44:16 +0200
+        Fri, 21 Oct 2022 09:45:34 -0400
+Received: from mail.sf-mail.de (mail.sf-mail.de [IPv6:2a01:4f8:1c17:6fae:616d:6c69:616d:6c69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B8F9A2A0
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 06:45:28 -0700 (PDT)
+Received: (qmail 18684 invoked from network); 21 Oct 2022 13:44:36 -0000
+Received: from p200300cf07087500581cdcfffecf391f.dip0.t-ipconnect.de ([2003:cf:708:7500:581c:dcff:fecf:391f]:60600 HELO eto.sf-tec.de) (auth=eike@sf-mail.de)
+        by mail.sf-mail.de (Qsmtpd 0.38dev) with (TLS_AES_256_GCM_SHA384 encrypted) ESMTPSA
+        for <tgraf@suug.ch>; Fri, 21 Oct 2022 15:44:36 +0200
+From:   Rolf Eike Beer <eike@sf-mail.de>
+To:     Thomas Graf <tgraf@suug.ch>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Florian Westphal <fw@strlen.de>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH] rhashtable: make test actually random
+Date:   Fri, 21 Oct 2022 15:45:23 +0200
+Message-ID: <12102372.O9o76ZdvQC@eto.sf-tec.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v4 4/4] arm64: dts: meson-gxbb: add SPI pinctrl nodes for
- CLK
-Content-Language: en-US
-To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>
-Cc:     linux-amlogic@lists.infradead.org, Da Xue <da@libre.computer>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20221004-up-aml-fix-spi-v4-0-0342d8e10c49@baylibre.com>
- <20221004-up-aml-fix-spi-v4-4-0342d8e10c49@baylibre.com>
-Organization: Linaro Developer Services
-In-Reply-To: <20221004-up-aml-fix-spi-v4-4-0342d8e10c49@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/10/2022 15:31, Amjad Ouled-Ameur wrote:
-> Add SPICC Controller pin nodes for CLK line when idle for Amlogic GXBB
-> SoCs.
-> 
-> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
-> ---
->   arch/arm64/boot/dts/amlogic/meson-gxbb.dtsi | 14 ++++++++++++++
->   1 file changed, 14 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/amlogic/meson-gxbb.dtsi b/arch/arm64/boot/dts/amlogic/meson-gxbb.dtsi
-> index 7c029f552a23..923d2d8bbb9c 100644
-> --- a/arch/arm64/boot/dts/amlogic/meson-gxbb.dtsi
-> +++ b/arch/arm64/boot/dts/amlogic/meson-gxbb.dtsi
-> @@ -427,6 +427,20 @@ mux {
->   			};
->   		};
->   
-> +		spi_idle_high_pins: spi-idle-high-pins {
-> +			mux {
-> +				groups = "spi_sclk";
-> +				bias-pull-up;
-> +			};
-> +		};
-> +
-> +		spi_idle_low_pins: spi-idle-low-pins {
-> +			mux {
-> +				groups = "spi_sclk";
-> +				bias-pull-down;
-> +			};
-> +		};
-> +
->   		spi_ss0_pins: spi-ss0 {
->   			mux {
->   				groups = "spi_ss0";
-> 
+The "random rhlist add/delete operations" actually wasn't very random, as all
+cases tested the same bit. Since the later parts of this loop depend on the
+first case execute this unconditionally, and then test on different bits for the
+remaining tests. While at it only request as much random bits as are actually
+used.
+
+Signed-off-by: Rolf Eike Beer <eike-kernel@sf-tec.de>
+---
+ lib/test_rhashtable.c | 58 ++++++++++++++++---------------------------
+ 1 file changed, 22 insertions(+), 36 deletions(-)
+
+diff --git a/lib/test_rhashtable.c b/lib/test_rhashtable.c
+index b358a74ed7ed..f2ba5787055a 100644
+--- a/lib/test_rhashtable.c
++++ b/lib/test_rhashtable.c
+@@ -369,18 +369,10 @@ static int __init test_rhltable(unsigned int entries)
+ 	pr_info("test %d random rhlist add/delete operations\n", entries);
+ 	for (j = 0; j < entries; j++) {
+ 		u32 i = prandom_u32_max(entries);
+-		u32 prand = get_random_u32();
++		u32 prand = prandom_u32_max(4);
+ 
+ 		cond_resched();
+ 
+-		if (prand == 0)
+-			prand = get_random_u32();
+-
+-		if (prand & 1) {
+-			prand >>= 1;
+-			continue;
+-		}
+-
+ 		err = rhltable_remove(&rhlt, &rhl_test_objects[i].list_node, test_rht_params);
+ 		if (test_bit(i, obj_in_table)) {
+ 			clear_bit(i, obj_in_table);
+@@ -393,35 +385,29 @@ static int __init test_rhltable(unsigned int entries)
+ 		}
+ 
+ 		if (prand & 1) {
+-			prand >>= 1;
+-			continue;
+-		}
+-
+-		err = rhltable_insert(&rhlt, &rhl_test_objects[i].list_node, test_rht_params);
+-		if (err == 0) {
+-			if (WARN(test_and_set_bit(i, obj_in_table), "succeeded to insert same object %d", i))
+-				continue;
+-		} else {
+-			if (WARN(!test_bit(i, obj_in_table), "failed to insert object %d", i))
+-				continue;
+-		}
+-
+-		if (prand & 1) {
+-			prand >>= 1;
+-			continue;
++			err = rhltable_insert(&rhlt, &rhl_test_objects[i].list_node, test_rht_params);
++			if (err == 0) {
++				if (WARN(test_and_set_bit(i, obj_in_table), "succeeded to insert same object %d", i))
++					continue;
++			} else {
++				if (WARN(!test_bit(i, obj_in_table), "failed to insert object %d", i))
++					continue;
++			}
+ 		}
+ 
+-		i = prandom_u32_max(entries);
+-		if (test_bit(i, obj_in_table)) {
+-			err = rhltable_remove(&rhlt, &rhl_test_objects[i].list_node, test_rht_params);
+-			WARN(err, "cannot remove element at slot %d", i);
+-			if (err == 0)
+-				clear_bit(i, obj_in_table);
+-		} else {
+-			err = rhltable_insert(&rhlt, &rhl_test_objects[i].list_node, test_rht_params);
+-			WARN(err, "failed to insert object %d", i);
+-			if (err == 0)
+-				set_bit(i, obj_in_table);
++		if (prand & 2) {
++			i = prandom_u32_max(entries);
++			if (test_bit(i, obj_in_table)) {
++				err = rhltable_remove(&rhlt, &rhl_test_objects[i].list_node, test_rht_params);
++				WARN(err, "cannot remove element at slot %d", i);
++				if (err == 0)
++					clear_bit(i, obj_in_table);
++			} else {
++				err = rhltable_insert(&rhlt, &rhl_test_objects[i].list_node, test_rht_params);
++				WARN(err, "failed to insert object %d", i);
++				if (err == 0)
++					set_bit(i, obj_in_table);
++			}
+ 		}
+ 	}
+ 
+-- 
+2.35.3
 
 
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+
+
