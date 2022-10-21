@@ -2,477 +2,2039 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEA676070BC
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 09:13:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61C946070C7
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 09:15:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230053AbiJUHNn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 03:13:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45390 "EHLO
+        id S229760AbiJUHPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 03:15:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbiJUHNl (ORCPT
+        with ESMTP id S229731AbiJUHPs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 03:13:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D77066156
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 00:13:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666336418;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6+K0YudeCXHfh0Ej/rQGh2RbrGNuVuwTcbXf3PjEZPc=;
-        b=Ubvkeic4ihCc2OnC4qcYUa31H4SjUsyA8LIm2kQbZP2lS00uROZnyWEdCMq8EkrjjvgHIi
-        DExCtPSAqv3J7fEOAyYwItV/DQG1bQvYuMl1bx0SY5EE8kP7DktaQziE2biXaY3xsa2ujQ
-        FaAcaBlIdVV2SYqArLwQGNJy2DS8DpY=
-Received: from mail-oa1-f71.google.com (mail-oa1-f71.google.com
- [209.85.160.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-543-cOWqgraEOnSeFTlvBj8ZwA-1; Fri, 21 Oct 2022 03:13:36 -0400
-X-MC-Unique: cOWqgraEOnSeFTlvBj8ZwA-1
-Received: by mail-oa1-f71.google.com with SMTP id 586e51a60fabf-13b29b8eceaso814257fac.20
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 00:13:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6+K0YudeCXHfh0Ej/rQGh2RbrGNuVuwTcbXf3PjEZPc=;
-        b=QagmTxOKWttqHzvdD+5DdB6tl18UYI3S8Z4DkRtcB/Zs90ZK17TfQafwhmHyW1JkrY
-         PeHXOZQoZcOWK2mcvaSKbQWunDzCqA0SS826qpd9CRX4mzxVcXstIyby8uMMU+kXcJtb
-         cMA+OVJuG5MiDX1OSJ37b/nWFqv2CZ49OP0E8Bzp/oJ9r+P4C5114i03i/Cs0VuGi1YA
-         0MnhIGiC+7ibsiF6vSHvPmUBQc1zo6ndbwv5XqE4D+JXQkMeHQG5PDG1RhtgQpluAkXu
-         Q5AantIaGkCsX+btaATVlS7WEukHYoPkQhKZ/z/5IPL4B89uhTEzwHxkiiutU0two8++
-         wQkA==
-X-Gm-Message-State: ACrzQf3Wlv8TEF+uuP3l8Z+x7MGNlILPGn1SbdIHaa3sVeH2obfCwnYK
-        2VrS0lDWU3ufuVMHMgMPAdvOzANFdp7xSLvpcHR/mn4dfYErlxZtzY4C+ePQXJiwOdo4QKC9pRO
-        HVUB2Q3QUm80DL+MBpr9NapfcsHVxwaLFaXGyoMij
-X-Received: by 2002:a9d:12a8:0:b0:661:a06f:33d7 with SMTP id g37-20020a9d12a8000000b00661a06f33d7mr9041523otg.237.1666336415521;
-        Fri, 21 Oct 2022 00:13:35 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4PXHoJbgdA+C7cmFOGkx27RMqNCCb2+5mROMQWK5BZ1jCyM9VeWVQThmbbCjFy/PfHKkzo3Kopu6X6BLfsjvo=
-X-Received: by 2002:a9d:12a8:0:b0:661:a06f:33d7 with SMTP id
- g37-20020a9d12a8000000b00661a06f33d7mr9041496otg.237.1666336414927; Fri, 21
- Oct 2022 00:13:34 -0700 (PDT)
+        Fri, 21 Oct 2022 03:15:48 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55D041E745B;
+        Fri, 21 Oct 2022 00:15:43 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29L784Uq023342;
+        Fri, 21 Oct 2022 07:15:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=Yq0AJ+W51nuTlcV9ufpiDc4CsfARZGOlGP6MI8Virng=;
+ b=j3tyZLkpEHrLHHrW0UXeWbuvo/SXK7l1JOISqMEnMWQ/zjfZeeNL26ALtFjbLk1rNezN
+ mCqJP0QmsYiXAqc5fQkR4gCOxM3TRYKbb/t1p1M/o6ZTLzeCUTmrij8jLhSmffziLUol
+ quirkNd3YF+rjyKvSQslm3PGWiZHdMSiGNtJH1N1422I4C7Dg3xYQfRg+sfW77qlrLYk
+ WK23PbMB8n7o6ZVWA7+LkTCg7DhrDuyZydkj6anOKXHzDgUb17L5iPqVwTBrOqFvdrIA
+ 5trIyPNy+xznC+AI0c3l1cqZBMvvMVy2sRGMZXtLujs/KRwlVzY9usb7ILtn1Uobp9sj 9w== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kak1c4p35-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 21 Oct 2022 07:15:12 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29L7FBJD029107
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 21 Oct 2022 07:15:11 GMT
+Received: from [10.110.27.60] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Fri, 21 Oct
+ 2022 00:15:03 -0700
+Message-ID: <7f61eba9-30d2-1540-1c2f-6af7a50a4b53@quicinc.com>
+Date:   Fri, 21 Oct 2022 12:44:37 +0530
 MIME-Version: 1.0
-References: <1665793690-28120-1-git-send-email-si-wei.liu@oracle.com>
- <CACGkMEvaKnqS-0p7iqyHP_Wbbj1YdmPFA7ABfKK_8FbXMsZEkg@mail.gmail.com>
- <08d98212a355fdce5820d57bd0ffaf3ca0968531.camel@redhat.com>
- <5887b71e-cef2-a7b9-133c-e4ba860bf24a@oracle.com> <CACGkMEvQhfenW9-StMwaJ887eatb_qtRYdDn=E12Wwkc6HU-sQ@mail.gmail.com>
- <1a81e33d7069875ecba0fd493b298b5d33718081.camel@redhat.com>
-In-Reply-To: <1a81e33d7069875ecba0fd493b298b5d33718081.camel@redhat.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Fri, 21 Oct 2022 15:13:22 +0800
-Message-ID: <CACGkMEtQ4xawaU6i=h5SSJApW-95PBfV2PaHgAhitt8Eiz_okw@mail.gmail.com>
-Subject: Re: [PATCH 0/4] vDPA: dev config export via "vdpa dev show" command
-To:     Sean Mooney <smooney@redhat.com>
-Cc:     Si-Wei Liu <si-wei.liu@oracle.com>, mst@redhat.com,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, Daniel Berrange <berrange@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH V17 2/7] soc: qcom: dcc: Add driver support for Data
+ Capture and Compare unit(DCC)
+Content-Language: en-US
+To:     Alex Elder <elder@ieee.org>, Andy Gross <agross@kernel.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        "Sai Prakash Ranjan" <quic_saipraka@quicinc.com>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>, <vkoul@kernel.org>
+References: <cover.1665549527.git.quic_schowdhu@quicinc.com>
+ <5fee939d0a238344c7db11cf322adcb6baa35724.1665549527.git.quic_schowdhu@quicinc.com>
+ <6693993c-bd81-c974-a903-52a62bfec606@ieee.org>
+From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+In-Reply-To: <6693993c-bd81-c974-a903-52a62bfec606@ieee.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: KFkhvSRcdqWMIYNDHWJySU8Qq1FKH_WI
+X-Proofpoint-ORIG-GUID: KFkhvSRcdqWMIYNDHWJySU8Qq1FKH_WI
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-21_03,2022-10-20_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ spamscore=0 malwarescore=0 bulkscore=0 clxscore=1015 mlxscore=0
+ mlxlogscore=999 priorityscore=1501 phishscore=0 adultscore=0
+ suspectscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2209130000 definitions=main-2210210042
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 5:09 PM Sean Mooney <smooney@redhat.com> wrote:
->
-> On Tue, 2022-10-18 at 15:59 +0800, Jason Wang wrote:
-> > On Tue, Oct 18, 2022 at 7:35 AM Si-Wei Liu <si-wei.liu@oracle.com> wrote:
-> > >
-> > >
-> > >
-> > > On 10/17/2022 5:28 AM, Sean Mooney wrote:
-> > > > On Mon, 2022-10-17 at 15:08 +0800, Jason Wang wrote:
-> > > > > Adding Sean and Daniel for more thoughts.
-> > > > >
-> > > > > On Sat, Oct 15, 2022 at 9:33 AM Si-Wei Liu <si-wei.liu@oracle.com> wrote:
-> > > > > > Live migration of vdpa would typically require re-instate vdpa
-> > > > > > device with an idential set of configs on the destination node,
-> > > > > > same way as how source node created the device in the first place.
-> > > > > >
-> > > > > > In order to allow live migration orchestration software to export the
-> > > > > > initial set of vdpa attributes with which the device was created, it
-> > > > > > will be useful if the vdpa tool can report the config on demand with
-> > > > > > simple query.
-> > > > > For live migration, I think the management layer should have this
-> > > > > knowledge and they can communicate directly without bothering the vdpa
-> > > > > tool on the source. If I was not wrong this is the way libvirt is
-> > > > > doing now.
-> > > > At least form a openstack(nova) perspective we are not expecting to do any vdpa device configuration
-> > > > at the openstack level. To use a vdpa device in openstack the oeprator when installing openstack
-> > > > need to create a udev/systemd script to precreatre the vdpa devices.
-> > > This seems to correlate vdpa device creation with the static allocation
-> > > of SR-IOV VF devices. Perhaps OpenStack doesn't have a plan to support
-> > > dynamic vdpa creation, but conceptionally vdpa creation can be on demand
-> > > for e.g. over Mellanox SubFunction or Intel Scalable IOV device.
-> >
-> > Yes, it's not specific to vDPA but something that openstack needs to consider.
->
-> yes so before i joined redhat in 2018 i worked at intel and was trying to intergate there mdev based
-> solution for a nic that got canceled due to the changes required to adtop vdpa and some other issues.
-> that orgianal approch was goign to dynmaicaly create teh mdev. for vdpa we built the support on top of
-> our pci manager so the current support directly requires the vdpa device's parent to be a vf.
->
-> we did this for two reasons, first when i started working on this again in 2020 that was the only model that
-> worked with any nic that were aviable and at the time mdevs were automaticaly created when you allcoated the
-> vf sicne this predated teh newer model of using the vdpa cli to add devcies. secondly buliding on top of the
-> sriov/pci passthough framework was less invasive. with openstack we currently have only tested our vdpa support
-> with melonox connectx6-dx cards which at the time i added supprot only supported vdpa device creation on vfs
-> not subfunctions.
->
-> we are aware that vdpa devices can be created over a Mellanox SubFunction or Intel Scalable IOV device
-> but we do not plan to support either in the near term. Im the primary person who has been workign on the openstack
-> support for vdpa in openstack but i will be working on some other work for the next 6 months or so
-> its unlikely we will look at extending nova vdpa cpablities until our upstream b cycle which start in march next year.
 
-Ok, I see. But note that cx6-dx has been switched to use vdap tool so
-the vDPA device is no longer automatically being created after VF is
-probed.
 
-Actually, there's a third choice, the openstack can still choose to
-"statically" provision the vDPA instance during the boot by just
-calling the vdpa tool to create the instances.
+On 10/21/2022 5:37 AM, Alex Elder wrote:
+> On 10/14/22 1:00 AM, Souradeep Chowdhury wrote:
+>> The DCC is a DMA Engine designed to capture and store data
+>> during system crash or software triggers. The DCC operates
+>> based on user inputs via the debugfs interface. The user gives
+>> addresses as inputs and these addresses are stored in the
+>> dcc sram. In case of a system crash or a manual software
+>> trigger by the user through the debugfs interface,
+>> the dcc captures and stores the values at these addresses.
+>> This patch contains the driver which has all the methods
+>> pertaining to the debugfs interface, auxiliary functions to
+>> support all the four fundamental operations of dcc namely
+>> read, write, read/modify/write and loop. The probe method
+>> here instantiates all the resources necessary for dcc to
+>> operate mainly the dedicated dcc sram where it stores the
+>> values. The DCC driver can be used for debugging purposes
+>> without going for a reboot since it can perform software
+>> triggers as well based on user inputs.
+>>
+>> Also added the documentation for debugfs entries and explained
+>> the functionalities of each debugfs file that has been created
+>> for dcc.
+>>
+>> The following is the justification of using debugfs interface
+>> over the other alternatives like sysfs/ioctls
+>>
+>> i) As can be seen from the debugfs attribute descriptions,
+>> some of the debugfs attribute files here contains multiple
+>> arguments which needs to be accepted from the user. This goes
+>> against the design style of sysfs.
+>>
+>> ii) The user input patterns have been made simple and convenient
+>> in this case with the use of debugfs interface as user doesn't
+>> need to shuffle between different files to execute one instruction
+>> as was the case on using other alternatives.
+>>
+>> Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+> 
+> I haven't followed any review feedback you have received
+> since verion 8 (which I reviewed), so if I say something
+> that conflicts with other feedback I apologize.  I know
+> Bjorn had some comments too, so you're already going to
+> send another version.
+> 
+> Unfortunately I have some more input, including some things
+> that are basically bugs (because buffers could be overrun).
+> I will plan to review again once you've had a chance to
+> address my comments.
+> 
+>                      -Alex
 
->
-> conceptually speakign we have two concerns with the dynamic approch. nova for better or worse effectivly runs with
-> full root access alhtough tha tis configend with selinux/apparmor policies and/or with contaienrs in most production
-> installations.
+Thanks for the review. Will be sending out the next version implementing 
+Bjorn's and your comments.
 
-I think the situation should be no different from the case of e.g
-using an iproute2 to create/destroy/configure networking devices? E.g
-we case we need to create a bond or configure bridge/ovs. Can we keep
-using the way we've used for iproute2?
+> 
+>> ---
+>>   Documentation/ABI/testing/debugfs-driver-dcc |   98 ++
+>>   drivers/soc/qcom/Kconfig                     |    8 +
+>>   drivers/soc/qcom/Makefile                    |    1 +
+>>   drivers/soc/qcom/dcc.c                       | 1355 
+>> ++++++++++++++++++++++++++
+>>   4 files changed, 1462 insertions(+)
+>>   create mode 100644 Documentation/ABI/testing/debugfs-driver-dcc
+>>   create mode 100644 drivers/soc/qcom/dcc.c
+>>
+>> diff --git a/Documentation/ABI/testing/debugfs-driver-dcc 
+>> b/Documentation/ABI/testing/debugfs-driver-dcc
+>> new file mode 100644
+>> index 0000000..387f67e
+>> --- /dev/null
+>> +++ b/Documentation/ABI/testing/debugfs-driver-dcc
+>> @@ -0,0 +1,98 @@
+>> +What:           /sys/kernel/debug/dcc/.../ready
+>> +Date:           September 2022
+>> +Contact:        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+>> +Description:
+>> +        This file is used to check the status of the dcc
+>> +        hardware if it's ready to take the inputs. A 'Y'
+>> +        here indicates dcc is in a ready condition.
+>> +        Example:
+>> +        cat /sys/kernel/debug/dcc/.../ready
+>> +
+>> +What:           /sys/kernel/debug/dcc/.../trigger
+>> +Date:           September 2022
+> 
+> Again, update these dates before the final version goes out,
+> or...  each time you send a new version, update them.
 
-> even so we try to limit privaldged calls and in the past we did not want nova specirifcly
-> to make privladged calls to reconfigure hardware.  we already have precident for breaking that in the form of our
-> generic mdev support where we are pass a list of parent devices and the mdev type to create on that device and then
-> dynimcily advertise pools of avaiable mdevs which we create dynamicly. The scecond conserne is we have seen caching issue
-> with libvirt when device change dynmicaly as it does nto always process the udev events correctly. as such our experince
-> tells us that we are less likely to have caching related bugs if we take a staic approch.
+Ack
 
-I guess it might be bugs which needs to be fixed in the kernel instead
-of trying to have workaround in the userspace but anyhow, we can still
-emulate the "static" provisioning via vdpa tool, it seems more
-smoothly that a immediate switch to dynamic one and then we will have
-the time to fix the dynamic things.
+> 
+>> +Contact:        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+>> +Description:
+>> +        This is the debugfs interface for manual software
+>> +        triggers. The user can simply enter a 1 against
+>> +        the debugfs file and enable a manual trigger.
+>> +        Example:
+>> +        echo  1 > /sys/kernel/debug/dcc/.../trigger
+>> +
+>> +What:           /sys/kernel/debug/dcc/.../config_reset
+>> +Date:           September 2022
+>> +Contact:        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+>> +Description:
+>> +        This file is used to reset the configuration of
+>> +        a dcc driver to the default configuration. This
+>> +        means that all the previous addresses stored in
+>> +        the driver gets removed and user needs to enter
+>> +        the address values from the start.
+>> +        Example:
+>> +        echo  1 > /sys/kernel/debug/dcc/../config_reset
+>> +
+>> +What:           /sys/kernel/debug/dcc/.../[list-number]/config
+>> +Date:           September 2022
+>> +Contact:        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+>> +Description:
+>> +        This stores the addresses of the registers which
+>> +        should be read in case of a hardware crash or
+>> +        manual software triggers. The addresses entered here
+>> +        are considered under all the 4 types of dcc
+>> +        instructions Read type, Write type, Read Modify Write
+>> +        type and Loop type. The lists need to be configured
+>> +        sequentially and not in a overlapping manner. As an
+>> +        example user can jump to list x only after list y is
+>> +        configured and enabled. The format for entering all
+>> +        types of instructions are explained in examples as
+>> +        follows.
+>> +        Example:
+>> +             i)Read Type Instruction
+>> +           echo R <1> <2> <3> 
+>> >/sys/kernel/debug/dcc/../[list-number]/config
+>> +           1->Address to be considered for reading the value.
+>> +           2->The word count of the addresses, read n words
+>> +              starting from address <1>. Each word is of 32 bits.
+>> +              If not entered 1 is considered.
+>> +           3->Can be 'apb' or 'ahb' which indicates if it is apb or ahb
+>> +              bus respectively. If not entered ahb is considered.
+>> +        ii)Write Type Instruction
+>> +           echo W <1> <2> <3> > 
+>> /sys/kernel/debug/dcc/../[list-number]/config
+>> +           1->Address to be considered for writing the value.
+>> +           2->The value that needs to be written at the location.
+>> +           3->Can be a 'apb' or 'ahb' which indicates if it is apb or 
+>> ahb
+>> +              but respectively.
+>> +           iii)Read Modify Write type instruction
+>> +           echo RW <1> <2> <3> > 
+>> /sys/kernel/debug/dcc/../[list-number]/config
+>> +           1->The address which needs to be considered for read then 
+>> write.
+>> +           2->The value that needs to be written on the address.
+>> +           3->The mask of the value to be written.
+>> +        iv)Loop Type Instruction
+>> +           echo L <1> <2> <3> > 
+>> /sys/kernel/debug/dcc/../[list-number]/config
+>> +           1->The loop count, the number of times the value of the 
+>> addresses will be
+>> +              captured.
+>> +           2->The address count, total number of addresses to be 
+>> entered in this
+>> +              instruction.
+>> +           3->The series of addresses to be entered separated by a 
+>> space like <addr1>
+>> +              <addr2>... and so on.
+>> +
+>> +What:           /sys/kernel/debug/dcc/.../[list-number]/enable
+>> +Date:           September 2022
+>> +Contact:        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+>> +Description:
+>> +        This debugfs interface is used for enabling the
+>> +        the dcc hardware. Enable file is kept under the
+>> +        directory list number for which the user wants
+>> +        to enable it. For example if the user wants to
+>> +        enable list 1, then he should go for
+>> +        echo 1 > /sys/kernel/debug/dcc/.../1/enable.
+>> +        On enabling the dcc, all the addresses entered
+>> +        by the user for the corresponding list is written
+>> +        into dcc sram which is read by the dcc hardware
+>> +        on manual or crash induced triggers. Lists should
+>> +        be enabled sequentially.For example after configuring
+>> +        addresses for list 1 and enabling it, a user can
+>> +        proceed to enable list 2 or vice versa.
+>> +        Example:
+>> +        echo  0 > /sys/kernel/debug/dcc/.../[list-number]/enable
+>> +        (disable dcc for the corresponding list number)
+>> +        echo  1 > /sys/kernel/debug/dcc/.../[list-number]/enable
+>> +        (enable dcc for the corresponding list number)
+>> diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
+>> index 024e420..d5730bf 100644
+>> --- a/drivers/soc/qcom/Kconfig
+>> +++ b/drivers/soc/qcom/Kconfig
+>> @@ -69,6 +69,14 @@ config QCOM_LLCC
+>>         SDM845. This provides interfaces to clients that use the LLCC.
+>>         Say yes here to enable LLCC slice driver.
+>>
+>> +config QCOM_DCC
+>> +    tristate "Qualcomm Technologies, Inc. Data Capture and 
+>> Compare(DCC) engine driver"
+>> +    depends on ARCH_QCOM || COMPILE_TEST
+>> +    help
+>> +      This option enables driver for Data Capture and Compare engine. 
+>> DCC
+>> +      driver provides interface to configure DCC block and read back
+>> +      captured data from DCC's internal SRAM.
+>> +
+>>   config QCOM_KRYO_L2_ACCESSORS
+>>       bool
+>>       depends on ARCH_QCOM && ARM64 || COMPILE_TEST
+>> diff --git a/drivers/soc/qcom/Makefile b/drivers/soc/qcom/Makefile
+>> index d66604a..b1fe812 100644
+>> --- a/drivers/soc/qcom/Makefile
+>> +++ b/drivers/soc/qcom/Makefile
+>> @@ -4,6 +4,7 @@ obj-$(CONFIG_QCOM_AOSS_QMP) +=    qcom_aoss.o
+>>   obj-$(CONFIG_QCOM_GENI_SE) +=    qcom-geni-se.o
+>>   obj-$(CONFIG_QCOM_COMMAND_DB) += cmd-db.o
+>>   obj-$(CONFIG_QCOM_CPR)        += cpr.o
+>> +obj-$(CONFIG_QCOM_DCC) += dcc.o
+>>   obj-$(CONFIG_QCOM_GSBI)    +=    qcom_gsbi.o
+>>   obj-$(CONFIG_QCOM_MDT_LOADER)    += mdt_loader.o
+>>   obj-$(CONFIG_QCOM_OCMEM)    += ocmem.o
+>> diff --git a/drivers/soc/qcom/dcc.c b/drivers/soc/qcom/dcc.c
+>> new file mode 100644
+>> index 0000000..efad225
+>> --- /dev/null
+>> +++ b/drivers/soc/qcom/dcc.c
+>> @@ -0,0 +1,1355 @@
+>> +// SPDX-License-Identifier: GPL-2.0-only
+>> +/*
+>> + * Copyright (c) 2015-2021, The Linux Foundation. All rights reserved.
+>> + * Copyright (c) 2022, Qualcomm Innovation Center, Inc. All rights 
+>> reserved.
+>> + */
+>> +
+>> +#include <linux/bitfield.h>
+>> +#include <linux/bitops.h>
+>> +#include <linux/debugfs.h>
+>> +#include <linux/delay.h>
+>> +#include <linux/fs.h>
+>> +#include <linux/io.h>
+>> +#include <linux/iopoll.h>
+>> +#include <linux/miscdevice.h>
+>> +#include <linux/module.h>
+>> +#include <linux/of.h>
+>> +#include <linux/of_device.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/slab.h>
+>> +#include <linux/uaccess.h>
+>> +
+>> +#define STATUS_READY_TIMEOUT        5000  /*microseconds*/
+> 
+> Comments normally have spaces next to the asterisk.
+> I.e.:
+>      /* microseconds */
+> 
+> Maybe this isn't that critical.  But if you fix this, fix
+> it throughout.
 
->
-> Enableing dynamic vdpa createion would reqiure a large rewrite of how vdpa has been integrated in nova and neutron(openstack networking component).
-> right now when you create a neutron port of type vdpa we internally convert that to a pci_request of type vdpa which
-> or pci_manager matches to a db record for the precreated vdpa devices. we woudl likely need to have a new vdpa-dynmaic or similar
-> port type that would correspond to the subfucniton/iov backed vdpa devices adn we would need to modle them differencly in our database.
+Ack
 
-Yes, so this needs to be consided with the mdev/SIOV/SF, they
-basically have the same model more or less.
+> 
+>> +
+>> +#define DCC_SRAM_NODE "dcc_sram"
+>> +
+>> +/* DCC registers */
+>> +#define DCC_HW_INFO            0x04
+>> +#define DCC_LL_NUM_INFO            0x10
+>> +#define DCC_STATUS(vers)        ((vers) == 1 ? 0x0c : 0x1c)
+>> +#define DCC_LL_LOCK            0x00
+>> +#define DCC_LL_CFG            0x04
+>> +#define DCC_LL_BASE            0x08
+>> +#define DCC_FD_BASE            0x0c
+>> +#define DCC_LL_TIMEOUT            0x10
+>> +#define DCC_LL_INT_ENABLE        0x18
+>> +#define DCC_LL_INT_STATUS        0x1c
+>> +#define DCC_LL_SW_TRIGGER        0x2c
+>> +#define DCC_LL_BUS_ACCESS_STATUS    0x30
+>> +
+>> +#define DCC_MAP_LEVEL1            0x18
+>> +#define DCC_MAP_LEVEL2            0x34
+>> +#define DCC_MAP_LEVEL3            0x4C
+>> +
+>> +#define DCC_MAP_OFFSET1            0x10
+>> +#define DCC_MAP_OFFSET2            0x18
+>> +#define DCC_MAP_OFFSET3            0x1C
+>> +#define DCC_MAP_OFFSET4            0x8
+>> +
+>> +/*Default value used if a bit 6 in the HW_INFO register is set.*/
+>> +#define DCC_FIX_LOOP_OFFSET        16
+>> +
+>> +/*Mask to find version info from HW_Info register*/
+>> +#define DCC_VER_INFO_MASK        BIT(9)
+>> +
+>> +#define DCC_READ            0
+>> +#define DCC_WRITE            1
+>> +#define DCC_LOOP            2
+>> +#define DCC_READ_WRITE            3
+>> +
+>> +#define MAX_DCC_OFFSET            GENMASK(9, 2)
+>> +#define MAX_DCC_LEN            GENMASK(6, 0)
+>> +#define MAX_LOOP_CNT            GENMASK(7, 0)
+>> +#define MAX_LOOP_ADDR            10
+>> +
+>> +#define DCC_ADDR_DESCRIPTOR        0x00
+>> +#define DCC_ADDR_LIMIT            27
+> 
+> You appear to use DCC_ADDR_OFF_RANGE as the size of a
+> "word" when a word count is supplied.  But if that's
+> the case, I think it's supposed to be 4, or better,
+> sizeof(u32).  If it is the word size, DCC_WORD_SIZE
+> might be a better name (and defined it as sizeof(u32)).
 
->
-> for sr-iov vfs the consumable consumable and therfor schdulable resouce is the vf so we have pools of vf with some metadata ot map them to logical
-> networks in the case of a nic.  for a subfunciton/iov backed device there are presumabel two logical consumable resouces. The number of hardware
-> vq pairs, and presumably there is a fintes number of iov/subfunctions a PF can allcoate.
+Ack
 
-This reminds me that the current vDPA tool can not report the number
-of available vDPA instances that could be created by a mgmtdev, this
-needs to be fixed.
+> 
+>> +#define DCC_ADDR_OFF_RANGE        8
+> 
+> Then you use DCC_ADDR_RANGE_MASK to truncate an address
+> provided down to a multiple of 16 bytes.  Why is that?
+> Is there a hardware limitation that makes 16 byte alignment
+> necessary?  (A little more below, where they're used.)
 
-> im sure there are other qualatative aspect we would like
-> to schdule on but those are the main consumables that will determin how many vdpa devices we can create when selecting a host.
->
-> we/i intentionally put this out of scope fo the inital vdpa support as i had no way to test this back in 2020 partly because we have a policy
-> of not support test only code path i.e. adding supprot for the vdpa_sim kernel module which was discussed adn rejected becasue it does not create
-> pci vfs for the vdpa devices and would have prevent using the pci manager or at least require us to fake the pci adress info using a sentenial like
-> all 0. if we did not need to supprot dynamic creation the usnign a cential pci adress would actully be a quick way to add iov/subfucniton support
-> but it woudl still require the static creations and a slight tweak to how we disucover the vdpa devices from libvirt.
+Yes,this is necessary as per dcc_sram hardware configuraton.
 
-Right, but for now, we have plenty of devices, e.g we can create vDPA
-on top of subfucntion (and vDPA seems to be the first of several
-devices that could be created via SF).
+> 
+>> +#define DCC_ADDR_RANGE_MASK        GENMASK(31, 4)
+>> +#define DCC_LOOP_DESCRIPTOR        BIT(30)
+>> +#define DCC_RD_MOD_WR_DESCRIPTOR    BIT(31)
+>> +#define DCC_LINK_DESCRIPTOR        GENMASK(31, 30)
+>> +#define DCC_STATUS_MASK        GENMASK(1, 0)
+> 
+> You need one more tab before GENMASK() in the line above.
 
->
-> so to summerise supporting vdpa with iov/subfuctions as the backedn device would be a relitivly simple if they are precreated, we can
-> fake the entry in the pci tacker in that case using a sentinal adress other tag in the db row to denote they are not vf backed.
-> this woudl not require any change to neutron although we woudl likely need ot also modify os-vif to lookup the repesentor netdev which we
-> attach to openvswitch to accoutn for the fact its an iov/subfunciton isntead of a vf parent.
-> the dynmic approch
->
-> >
-> > >
-> > > >
-> > > > nova will query libvirt for the list avaiable vdpa devices at start up and record them in our database.
-> > > > when schudling we select a host that has a free vdpa device and on that host we generate a xml snipit
-> > > > that refernce the vdpa device and proivde that to libvirt and it will in turn program the mac.
-> > > >
-> > > > """
-> > > > <interface type="vdpa">
-> > > >      <mac address="b5:bc:2e:e7:51:ee"/>
-> > > >      <source dev="/dev/vhost-vdpa-3"/>
-> > > > </interface>
-> > > > """
-> > > >
-> > > > when live migrating the workflow is similar. we ask our schduler for a host that should have enough avaiable
-> > > > resouces, then we make an rpc call "pre_live_migrate" which makes a number of assterions such as cpu compatiablity
-> >
-> > A migration compatibility check for vDPA should be done as well here.
-> yes it could be although at this point we have alredy complete schduling so if the check fails we will abort the migration.
-> presumable libvirt will also check after we invoke the migraation too but the ideal case woudl be that we have enough
-> info in our db to select a host we know will work rather then checkign after the fact.
-> >
-> > > > but also computes cpu pinning and device passthough asignemnts. i.e. in pre_live_migate we select wich cpu cores, pcie
-> > > > devices and in this case vdpa devices to use on the destination host
-> > > In the case of vdpa, does it (the pre_live_migrate rpc) now just selects
-> > > the parent mgmtdev for creating vdpa in later phase, or it ends up with
-> > > a vdpa device being created? Be noted by now there's only a few
-> > > properties for vdpa creation e.g. mtu and mac, that it doesn't need
-> > > special reservation of resources for creating a vdpa device. But that
-> > > may well change in the future.
-> > >
-> > > > and return that in our rpc result.
-> > > >
-> > > > we then use that information to udpate the libvirt domain xml with the new host specific information and start
-> > > > the migration at the libvirt level.
-> > > >
-> > > > today in openstack we use a hack i came up with to workaroudn that fact that you cant migrate with sriov/pci passthough
-> > > > devices to support live migration with vdpa. basically before we call libvirt to live migrate we hot unplug the vdpa nic
-> > > > form the guest and add them back after the migration is complte. if you dont bound the vdpa nics wiht a transparently migratable
-> > > > nic in the guest that obvioulsy result in a loss of network connectivity while the migration is happenign which is not ideal
-> > > > so a normal virtio-net interface on ovs is what we recommend as the fallback interface for the bound.
-> > > Do you need to preserve the mac address when falling back to the normal
-> > > virtio-net interface, and similarly any other network config/state?
-> > > Basically vDPA doesn't support live migration for the moment.
-> >
-> > Basic shadow vq based live migration can work now. Eugenio is working
-> > to make it fully ready in the near future.
-> this missed our merge window for the Zed cycle which feature froze in september and was relased a week or two ago.
+Ack
 
-I see.
+> 
+>> +#define DCC_LOCK_MASK                  BIT(0)
+> 
+> The above line has a bunch of spaces before BIT(0), and
+> it should just be tabs.
 
->
-> >
-> > > This
-> > > doesn't like to be a technically correct solution for it to work.
-> >
-> > I agree.
-> this is what is what we added for sriov VF direct pasthouhg
-> all you need to do in the guest is use the linux kernel bond driver to create a bound between the vf and anoter live migratebale prot type.
-> the basic test i did for this i added the mac of the VF  to the allowed adress pairs for the ovs port and used that as the mac of the vf.
-> this is all out os scope of openstack to configure and manage. we are not useing the virtio fallback support that was added after we implemted this
-> as we dont have a good way today to descibe the grouping of the primary and fallback internfce in neutron api.
->
-> the details of waht we do are here https://specs.openstack.org/openstack/nova-specs/specs/stein/approved/libvirt-neutron-sriov-livemigration.html
->
-> we only do automatic hotplug for nic and only if they are drectly attached, if they use a macvtap to attach the vf to the vm we do not remove them.
-> our intent for vdpa was to also not remove them and rely on the native live migration supprot when we detct the source and destiantion host
-> supprot that.
+Ack
+> 
+>> +#define DCC_LOOP_OFFSET_MASK        BIT(6)
+>> +#define DCC_TRIGGER_MASK        BIT(9)
+>> +
+>> +#define DCC_WRITE_MASK            BIT(15)
+>> +#define DCC_WRITE_OFF_MASK        GENMASK(7, 0)
+>> +#define DCC_WRITE_LEN_MASK        GENMASK(14, 8)
+>> +
+>> +#define DCC_READ_IND            0x00
+>> +#define DCC_WRITE_IND            (BIT(28))
+>> +
+>> +#define DCC_AHB_IND            0x00
+>> +#define DCC_APB_IND            BIT(29)
+>> +
+>> +#define DCC_MAX_LINK_LIST        8
+>> +#define DCC_INVALID_LINK_LIST        GENMASK(7, 0)
+>> +
+>> +#define DCC_VER_MASK1            GENMASK(6, 0)
+>> +#define DCC_VER_MASK2            GENMASK(5, 0)
+>> +
+>> +#define DCC_SRAM_WORD_LENGTH        4
+>> +
+>> +#define DCC_RD_MOD_WR_ADDR              0xC105E
+>> +
+>> +/*DCC debugfs directory*/
+>> +static struct dentry    *dcc_dbg;
+>> +
+>> +enum dcc_descriptor_type {
+>> +    DCC_READ_TYPE,
+>> +    DCC_LOOP_TYPE,
+>> +    DCC_READ_WRITE_TYPE,
+>> +    DCC_WRITE_TYPE
+>> +};
+>> +
+>> +struct dcc_config_entry {
+>> +    u32                base;
+>> +    u32                offset;
+>> +    u32                len;
+>> +    u32                loop_cnt;
+>> +    u32                write_val;
+>> +    u32                mask;
+>> +    bool                apb_bus;
+>> +    enum dcc_descriptor_type    desc_type;
+>> +    struct list_head        list;
+>> +};
+>> +
+>> +/**
+>> + * struct dcc_drvdata - configuration information related to a dcc 
+>> device
+>> + * @base:        Base Address of the dcc device
+>> + * @dev:        The device attached to the driver data
+>> + * @mutex:        Lock to protect access and manipulation of dcc_drvdata
+>> + * @ram_base:        Base address for the SRAM dedicated for the dcc 
+>> device
+>> + * @ram_size:        Total size of the SRAM dedicated for the dcc device
+>> + * @ram_offset:    Offset to the SRAM dedicated for dcc device
+>> + * @mem_map_ver:    Memory map version of DCC hardware
+>> + * @ram_cfg:        Used for address limit calculation for dcc
+>> + * @ram_start:        Starting address of DCC SRAM
+>> + * @sram_dev:        Miscellaneous device equivalent of dcc SRAM
+>> + * @cfg_head:        Points to the head of the linked list of addresses
+>> + * @dbg_dir:        The dcc debugfs directory under which all the 
+>> debugfs files are placed
+>> + * @nr_link_list:    Total number of linkedlists supported by the DCC 
+>> configuration
+>> + * @loopoff:        Loop offset bits range for the addresses
+>> + * @enable_bitmap:    Bitmap to capture the enabled status of each 
+>> linked list of addresses
+>> + */
+>> +struct dcc_drvdata {
+>> +    void __iomem        *base;
+>> +    void                    *ram_base;
+>> +    struct device        *dev;
+>> +    struct mutex        mutex;
+>> +    size_t            ram_size;
+>> +    size_t            ram_offset;
+>> +    int            mem_map_ver;
+>> +    phys_addr_t        ram_cfg;
+>> +    phys_addr_t        ram_start;
+>> +    struct miscdevice    sram_dev;
+>> +    struct list_head    *cfg_head;
+>> +    struct dentry        *dbg_dir;
+>> +    size_t            nr_link_list;
+>> +    u8            loopoff;
+>> +    unsigned long        *enable_bitmap;
+>> +};
+>> +
+>> +struct dcc_cfg_attr {
+>> +    u32    addr;
+>> +    u32    prev_addr;
+>> +    u32    prev_off;
+>> +    u32    link;
+>> +    u32    sram_offset;
+>> +};
+>> +
+>> +struct dcc_cfg_loop_attr {
+>> +    u32    loop;
+>> +    u32    loop_cnt;
+>> +    u32    loop_len;
+>> +    u32    loop_off;
+>> +    bool    loop_start;
+>> +};
+> 
+> The entire dcc_offset_conv() function, along with all of the
+> MAP_LEVEL and MAP_OFFSET definitions, can simply go away.
+> 
+> The only place dcc_offset_conv() is called is from dcc_readl().
+> And the only offset values passed to dcc_readl() are DCC_HW_INFO
+> and DCC_LL_NUM_INFO.
+> 
+> DCC_HW_INFO is actually read *before* drvdata->mem_map_ver is
+> even set, but in any case its value is 0x4, meaning the return
+> value of dcc_offset_conv(drvdata, DCC_HW_INFO) is simply 0x4
+> (or DCC_HW_INFO).
+> 
+> The value of DCC_LL_NUM_INFO is 0x10, which is less than
+> DCC_MAP_LEVEL1=0x18 (for mem_map_ver == 1) and also less
+> than DCC_MAP_LEVEL2=0x34 (for mem_map_ver == 2).  So here
+> again, dcc_offset_conv(drvdata, DCC_LL_NUM_INFO) will always
+> return 0x10 (or DCC_LL_NUM_INFO).
+> 
+> Unless there is some reason to believe you need to read more
+> than just these two registers, all this mapping code is just
+> a distraction.
 
-Yes, it should work for vDPA as well, but what we want to say is that
-vDPA will support native live migration. And vDPA is more than just a
-networking device. It might not be easy to find a similar technology
-like bond/multipath in other type of devices.
+Ack. Will be removing the function and map level definitions.
 
->
-> >
-> > > >
-> > > > obviouly when vdpa supprot transparent live migration we can just skip this workaround which woudl be a very nice ux improvement.
-> > > > one of the sideeffct of the hack however is you can start with an intel nic and end up with a melonox nic becasue we dont need
-> > > > to preserve the device capablies sicne we are hotplugging.
-> > > Exactly. This is the issue.
-> so today in an openstack cloud you ingeneral should not know the vendro fo the nic that si provdie as a normal user.
-> for vdpa that is even more imporant as vdpa is ment to abstract that and provdie a standardised virtio interface to the guest.
-> there are atributes of the virtio inteface that obviously need to match liek the vq_size but we shoudl be able to
-> live migrate from a vdpa device created on a connext6-dx vf to one expsoed by an intel iov device without the guest knowing
-> that we have changed teh backend.
+> 
+>> +static size_t dcc_offset_conv(struct dcc_drvdata *drvdata, size_t off)
+>> +{
+>> +    /* If the memory map version is 1, adjust the offset based on
+>> +     * the dcc version mask. If the memory map version is 2
+>> +     * adjust the offset if the dcc version mask is greater than
+>> +     * map level 2.For other conditions, just return the offset.
+>> +     */
+>> +    if (drvdata->mem_map_ver == 1) {
+>> +        if (FIELD_GET(DCC_VER_MASK1, off) >= DCC_MAP_LEVEL3)
+>> +            return off - DCC_MAP_OFFSET3;
+>> +        if (FIELD_GET(DCC_VER_MASK1, off) >= DCC_MAP_LEVEL2)
+>> +            return off - DCC_MAP_OFFSET2;
+>> +        else if (FIELD_GET(DCC_VER_MASK1, off) >= DCC_MAP_LEVEL1)
+>> +            return off - DCC_MAP_OFFSET1;
+>> +    } else if (drvdata->mem_map_ver == 2) {
+>> +        if (FIELD_GET(DCC_VER_MASK1, off) >= DCC_MAP_LEVEL2)
+>> +            return off - DCC_MAP_OFFSET4;
+>> +    }
+>> +
+>> +    return off;
+>> +}
+>> +
+>> +static inline u32 dcc_ll_offset(int version)
+>> +{
+>> +    return version == 1 ? 0x1c : (version == 2 ? 0x2c : 0x34);
+>> +}
+>> +
+>> +static inline u32 dcc_readl(struct dcc_drvdata *drvdata, u32 off)
+>> +{
+>> +    return readl(drvdata->base + dcc_offset_conv(drvdata, off));
+>> +}
+>> +
+>> +static inline void dcc_ll_writel(struct dcc_drvdata *drvdata,
+>> +                 u32 ll, u32 val, u32 off)
+>> +{
+>> +    u32 offset = dcc_ll_offset(drvdata->mem_map_ver) + off;
+>> +
+>> +    writel(val, drvdata->base + ll * 0x80 + offset);
+>> +}
+>> +
+>> +static inline u32 dcc_ll_readl(struct dcc_drvdata *drvdata, u32 ll, 
+>> u32 off)
+>> +{
+>> +    u32 offset = dcc_ll_offset(drvdata->mem_map_ver) + off;
+>> +
+>> +    return readl(drvdata->base + ll * 0x80 + offset);
+>> +}
+>> +
+>> +static void dcc_sram_write_auto(struct dcc_drvdata *drvdata,
+>> +                u32 val, u32 *off)
+>> +{
+>> +    memset(drvdata->ram_base + *off, val, DCC_SRAM_WORD_LENGTH);
+>> +
+>> +    *off += 4;
+>> +}
+>> +
+>> +static int dcc_read_and_clear(struct dcc_drvdata *drvdata)
+>> +{
+>> +    int i;
+>> +    u32 status;
+>> +    u32 ll_cfg;
+>> +    u32 tmp_ll_cfg;
+>> +
+>> +    for (i = 0; i < drvdata->nr_link_list; i++) {
+>> +        if (!test_bit(i, drvdata->enable_bitmap))
+>> +            continue;
+>> +
+>> +        status = dcc_ll_readl(drvdata, i, DCC_LL_BUS_ACCESS_STATUS);
+>> +        if (!status)
+>> +            continue;
+>> +
+>> +        dev_err(drvdata->dev, "Read access error for list %d err: 
+>> 0x%x\n",
+>> +            i, status);
+>> +        ll_cfg = dcc_ll_readl(drvdata, i, DCC_LL_CFG);
+>> +        tmp_ll_cfg = ll_cfg & ~DCC_TRIGGER_MASK;
+>> +        dcc_ll_writel(drvdata, tmp_ll_cfg, i, DCC_LL_CFG);
+>> +        dcc_ll_writel(drvdata, DCC_STATUS_MASK, i, 
+>> DCC_LL_BUS_ACCESS_STATUS);
+>> +        dcc_ll_writel(drvdata, ll_cfg, i, DCC_LL_CFG);
+>> +        return -ENODATA;
+>> +    }
+>> +
+>> +    return 0;
+>> +}
+>> +
+>> +static int dcc_sw_trigger(struct dcc_drvdata *drvdata)
+>> +{
+>> +    void __iomem *addr;
+>> +    int ret;
+>> +    int i;
+>> +    u32 ll_cfg;
+>> +    u32 tmp_ll_cfg;
+>> +    u32 val;
+>> +
+>> +    mutex_lock(&drvdata->mutex);
+>> +
+>> +    for (i = 0; i < drvdata->nr_link_list; i++) {
+>> +        if (!test_bit(i, drvdata->enable_bitmap))
+>> +            continue;
+>> +        ll_cfg = dcc_ll_readl(drvdata, i, DCC_LL_CFG);
+>> +        tmp_ll_cfg = ll_cfg & ~DCC_TRIGGER_MASK;
+>> +        dcc_ll_writel(drvdata, tmp_ll_cfg, i, DCC_LL_CFG);
+>> +        dcc_ll_writel(drvdata, 1, i, DCC_LL_SW_TRIGGER);
+>> +        dcc_ll_writel(drvdata, ll_cfg, i, DCC_LL_CFG);
+>> +    }
+>> +
+>> +    addr = drvdata->base + DCC_STATUS(drvdata->mem_map_ver);
+>> +    if (readl_poll_timeout(addr, val, (FIELD_GET(DCC_STATUS_MASK, 
+>> val) == 0),
+> 
+> Parentheses around (FIELD_GET(...) == 0) not needed here,
+> and you could just do !FIELD_GET(...).
 
-Yes.
+Ack
 
-> > > >
-> > > > with vdpa we will at least have a virtaul virtio-net-pci frontend in qemu to provide some level of abstraction.
-> > > > i guess the point you are raising is that for live migration we cant start with 4 queue paris and vq_size=256
-> > > > and select a device with 2 queue pairs and vq_size of 512 and expect that to just work.
-> > > Not exactly, the vq_size comes from QEMU that has nothing to do with
-> > > vDPA tool. And live migrating from 4 queue pairs to 2 queue pairs won't
-> > > work for the guest driver. Change of queue pair numbers would need
-> > > device reset which  won't happen transparently during live migration.
-> > > Basically libvirt has to match the exact queue pair number and queue
-> > > length on destination node.
-> > >
-> > > >
-> > > > There are two ways to adress that. 1 we can start recording this infor in our db and schdule only ot hosts with the same
-> > > > configuration values, or 2 we can record the capablities i.e. the max vaulues that are support by a devcice and schdule to a host
-> > > > where its >= the current value and rely on libvirt to reconfigure the device.
-> > > >
-> > > > libvirt required very little input today to consume a vdpa interface
-> > > > https://libvirt.org/formatdomain.html#vdpa-devices
-> >
-> > So a question here, if we need to create vDPA on demand (e.g with the
-> > features and configs from the source) who will do the provision? Is it
-> > libvirt?
-> for mdevs we directly write to /sys we decied not to supprot mdevctl as it was not vendor neutal at the time or packaged in
-> distros other then fedora. since then libvirt has added the ablity to create mdevs via its nodedev api.
+> 
+>> +                   1, STATUS_READY_TIMEOUT)) {
+>> +        dev_err(drvdata->dev, "DCC is busy after receiving sw 
+>> trigger\n");
+>> +        ret = -EBUSY;
+>> +        goto out_unlock;
+>> +    }
+>> +
+>> +    ret = dcc_read_and_clear(drvdata);
+>> +
+>> +out_unlock:
+>> +    mutex_unlock(&drvdata->mutex);
+>> +    return ret;
+>> +}
+>> +
+>> +static void _dcc_ll_cfg_reset_link(struct dcc_cfg_attr *cfg)
+>> +{
+>> +    cfg->addr = 0x00;
+>> +    cfg->link = 0;
+>> +    cfg->prev_off = 0;
+>> +    cfg->prev_addr = cfg->addr;
+>> +}
+>> +
+>> +static void _dcc_emit_read_write(struct dcc_drvdata *drvdata,
+>> +                 struct dcc_config_entry *entry,
+>> +                 struct dcc_cfg_attr *cfg)
+>> +{
+>> +    if (cfg->link) {
+>> +        /*
+>> +         * write new offset = 1 to continue
+>> +         * processing the list
+>> +         */
+>> +
+>> +        dcc_sram_write_auto(drvdata, cfg->link, &cfg->sram_offset);
+>> +
+>> +        /* Reset link and prev_off */
+>> +        _dcc_ll_cfg_reset_link(cfg);
+>> +    }
+>> +
+>> +    cfg->addr = DCC_RD_MOD_WR_DESCRIPTOR;
+>> +    dcc_sram_write_auto(drvdata, cfg->addr, &cfg->sram_offset);
+>> +
+>> +    dcc_sram_write_auto(drvdata, entry->mask, &cfg->sram_offset);
+>> +
+>> +    dcc_sram_write_auto(drvdata, entry->write_val, &cfg->sram_offset);
+>> +
+>> +    cfg->addr = 0;
+>> +}
+>> +
+>> +static void _dcc_emit_loop(struct dcc_drvdata *drvdata, struct 
+>> dcc_config_entry *entry,
+>> +               struct dcc_cfg_attr *cfg,
+>> +               struct dcc_cfg_loop_attr *cfg_loop,
+>> +               u32 *total_len)
+>> +{
+>> +    /* Check if we need to write link of prev entry */
+>> +    if (cfg->link)
+>> +        dcc_sram_write_auto(drvdata, cfg->link, &cfg->sram_offset);
+>> +
+>> +    if (cfg_loop->loop_start) {
+>> +        cfg_loop->loop = (cfg->sram_offset - cfg_loop->loop_off) / 4;
+>> +        cfg_loop->loop |= (cfg_loop->loop_cnt << drvdata->loopoff) &
+>> +                   GENMASK(DCC_ADDR_LIMIT, drvdata->loopoff);
+>> +        cfg_loop->loop |= DCC_LOOP_DESCRIPTOR;
+>> +        *total_len += (*total_len - cfg_loop->loop_len) * 
+>> cfg_loop->loop_cnt;
+>> +
+>> +        dcc_sram_write_auto(drvdata, cfg_loop->loop, &cfg->sram_offset);
+>> +
+>> +        cfg_loop->loop_start = false;
+>> +        cfg_loop->loop_len = 0;
+>> +        cfg_loop->loop_off = 0;
+>> +    } else {
+>> +        cfg_loop->loop_start = true;
+>> +        cfg_loop->loop_cnt = entry->loop_cnt - 1;
+>> +        cfg_loop->loop_len = *total_len;
+>> +        cfg_loop->loop_off = cfg->sram_offset;
+>> +    }
+>> +
+>> +    /* Reset link and prev_off */
+>> +    _dcc_ll_cfg_reset_link(cfg);
+>> +}
+>> +
+>> +static void _dcc_emit_write(struct dcc_drvdata *drvdata,
+>> +                struct dcc_config_entry *entry,
+>> +                struct dcc_cfg_attr *cfg,
+>> +                u32 *total_len)
+>> +{
+>> +    u32 off;
+>> +
+>> +    if (cfg->link) {
+>> +        /*
+>> +         * write new offset = 1 to continue
+>> +         * processing the list
+>> +         */
+>> +        dcc_sram_write_auto(drvdata, cfg->link, &cfg->sram_offset);
+>> +
+>> +        /* Reset link and prev_off */
+>> +        cfg->addr = 0x00;
+>> +        cfg->prev_off = 0;
+>> +        cfg->prev_addr = cfg->addr;
+>> +    }
+>> +
+>> +    off = entry->offset / 4;
+>> +    /* write new offset-length pair to correct position */
+>> +    cfg->link |= ((off & DCC_WRITE_OFF_MASK) | DCC_WRITE_MASK |
+>> +              FIELD_PREP(DCC_WRITE_LEN_MASK, entry->len));
+>> +    cfg->link |= DCC_LINK_DESCRIPTOR;
+>> +
+>> +    /* Address type */
+>> +    cfg->addr = (entry->base >> 4) & GENMASK(DCC_ADDR_LIMIT, 0);
+>> +    if (entry->apb_bus)
+>> +        cfg->addr |= DCC_ADDR_DESCRIPTOR | DCC_WRITE_IND | DCC_APB_IND;
+>> +    else
+>> +        cfg->addr |= DCC_ADDR_DESCRIPTOR | DCC_WRITE_IND | DCC_AHB_IND;
+>> +    dcc_sram_write_auto(drvdata, cfg->addr, &cfg->sram_offset);
+>> +
+>> +    dcc_sram_write_auto(drvdata, cfg->link, &cfg->sram_offset);
+>> +
+>> +    dcc_sram_write_auto(drvdata, entry->write_val, &cfg->sram_offset);
+>> +
+>> +    cfg->addr = 0x00;
+>> +    cfg->link = 0;
+>> +}
+>> +
+>> +static int _dcc_emit_read(struct dcc_drvdata *drvdata,
+>> +              struct dcc_config_entry *entry,
+>> +              struct dcc_cfg_attr *cfg,
+>> +              u32 *pos, u32 *total_len)
+>> +{
+>> +    u32 off;
+>> +    u32 temp_off;
+>> +
+>> +    cfg->addr = (entry->base >> 4) & GENMASK(27, 0);
+>> +
+>> +    if (entry->apb_bus)
+>> +        cfg->addr |= DCC_ADDR_DESCRIPTOR | DCC_READ_IND | DCC_APB_IND;
+>> +    else
+>> +        cfg->addr |= DCC_ADDR_DESCRIPTOR | DCC_READ_IND | DCC_AHB_IND;
+>> +
+>> +    off = entry->offset / 4;
+>> +
+>> +    *total_len += entry->len * 4;
+>> +
+>> +    if (!cfg->prev_addr || cfg->prev_addr != cfg->addr || 
+>> cfg->prev_off > off) {
+>> +        /* Check if we need to write prev link entry */
+>> +        if (cfg->link)
+>> +            dcc_sram_write_auto(drvdata, cfg->link, &cfg->sram_offset);
+>> +        dev_dbg(drvdata->dev, "DCC: sram address 0x%x\n", 
+>> cfg->sram_offset);
+>> +
+>> +        /* Write address */
+>> +        dcc_sram_write_auto(drvdata, cfg->addr, &cfg->sram_offset);
+>> +
+>> +        /* Reset link and prev_off */
+>> +        cfg->link = 0;
+>> +        cfg->prev_off = 0;
+>> +    }
+>> +
+>> +    if ((off - cfg->prev_off) > 0xFF || entry->len > MAX_DCC_LEN) {
+>> +        dev_err(drvdata->dev, "DCC: Programming error Base: 0x%x, 
+>> offset 0x%x\n",
+>> +            entry->base, entry->offset);
+>> +        return -EINVAL;
+>> +    }
+>> +
+>> +    if (cfg->link) {
+>> +        /*
+>> +         * link already has one offset-length so new
+>> +         * offset-length needs to be placed at
+>> +         * bits [29:15]
+>> +         */
+>> +        *pos = 15;
+>> +
+>> +        /* Clear bits [31:16] */
+>> +        cfg->link &= GENMASK(14, 0);
+>> +    } else {
+>> +        /*
+>> +         * link is empty, so new offset-length needs
+>> +         * to be placed at bits [15:0]
+>> +         */
+>> +        *pos = 0;
+>> +        cfg->link = 1 << 15;
+>> +    }
+>> +
+>> +    /* write new offset-length pair to correct position */
+>> +    temp_off = (off - cfg->prev_off) & GENMASK(7, 0);
+>> +    cfg->link |= temp_off | ((entry->len << 8) & GENMASK(14, 8)) << 
+>> *pos;
+>> +
+>> +    cfg->link |= DCC_LINK_DESCRIPTOR;
+>> +
+>> +    if (*pos) {
+>> +        dcc_sram_write_auto(drvdata, cfg->link, &cfg->sram_offset);
+>> +        cfg->link = 0;
+>> +    }
+>> +
+>> +    cfg->prev_off  = off + entry->len - 1;
+>> +    cfg->prev_addr = cfg->addr;
+>> +    return 0;
+>> +}
+>> +
+>> +static int __dcc_emit_config(struct dcc_drvdata *drvdata, int curr_list)
+>> +{
+>> +    int ret;
+>> +    u32 total_len, pos;
+>> +    struct dcc_config_entry *entry;
+>> +    struct dcc_cfg_attr cfg;
+>> +    struct dcc_cfg_loop_attr cfg_loop;
+>> +
+>> +    memset(&cfg, 0, sizeof(cfg));
+>> +    memset(&cfg_loop, 0, sizeof(cfg_loop));
+>> +    cfg.sram_offset = drvdata->ram_cfg * 4;
+>> +    total_len = 0;
+>> +
+>> +    list_for_each_entry(entry, &drvdata->cfg_head[curr_list], list) {
+>> +        switch (entry->desc_type) {
+>> +        case DCC_READ_WRITE_TYPE:
+>> +            _dcc_emit_read_write(drvdata, entry, &cfg);
+>> +            break;
+>> +
+>> +        case DCC_LOOP_TYPE:
+>> +            _dcc_emit_loop(drvdata, entry, &cfg, &cfg_loop, &total_len);
+>> +            break;
+>> +
+>> +        case DCC_WRITE_TYPE:
+>> +            _dcc_emit_write(drvdata, entry, &cfg, &total_len);
+>> +            break;
+>> +
+>> +        case DCC_READ_TYPE:
+>> +            ret = _dcc_emit_read(drvdata, entry, &cfg, &pos, 
+>> &total_len);
+>> +            if (ret)
+>> +                goto overstep;
+>> +            break;
+>> +        }
+>> +    }
+>> +
+>> +    if (cfg.link)
+>> +        dcc_sram_write_auto(drvdata, cfg.link, &cfg.sram_offset);
+>> +
+>> +    if (cfg_loop.loop_start) {
+>> +        dev_err(drvdata->dev, "DCC: Programming error: Loop 
+>> unterminated\n");
+>> +        ret = -EINVAL;
+>> +        goto err;
+>> +    }
+>> +
+>> +    /* Handling special case of list ending with a rd_mod_wr */
+>> +    if (cfg.addr == DCC_RD_MOD_WR_DESCRIPTOR) {
+>> +        cfg.addr = (DCC_RD_MOD_WR_ADDR) & GENMASK(27, 0);
+>> +        cfg.addr |= DCC_ADDR_DESCRIPTOR;
+>> +        dcc_sram_write_auto(drvdata, cfg.addr, &cfg.sram_offset);
+>> +    }
+>> +
+>> +    /* Setting zero to indicate end of the list */
+>> +    cfg.link = DCC_LINK_DESCRIPTOR;
+>> +    dcc_sram_write_auto(drvdata, cfg.link, &cfg.sram_offset);
+>> +
+>> +    /*Check if sram offset exceeds the ram size*/
+>> +    if (cfg.sram_offset > drvdata->ram_size)
+>> +        goto overstep;
+>> +
+>> +    /* Update ram_cfg and check if the data will overstep */
+>> +    drvdata->ram_cfg = (cfg.sram_offset + total_len) / 4;
+>> +
+>> +    if (cfg.sram_offset + total_len > drvdata->ram_size) {
+>> +        cfg.sram_offset += total_len;
+>> +        goto overstep;
+>> +    }
+>> +
+>> +    drvdata->ram_start = cfg.sram_offset / 4;
+>> +    return 0;
+>> +overstep:
+>> +    ret = -EINVAL;
+>> +    memset(drvdata->ram_base, 0, drvdata->ram_size);
+>> +
+>> +err:
+>> +    return ret;
+>> +}
+>> +
+> 
+> You could have dcc_valid_list() return Boolean and then it
+> reads nicely:
+> 
+>      if (!dcc_valid_list(drvdata, curr_list))
+>          /* ... error, list is not valid */
 
-Good to know that, then it looks like libvirt should be in charge of this.
+Ack
 
-> if that had existed
-> at the time we probably would have used that instead. so if we were to support dynamic mdev createion we would have two options
->
-> 1.) wrap calls to the vdpa cli into privaldged fucntions executed in our privaladge seperation deamon
-> 2.) use a libvirt provided api likely an extention to the nodedev api like the mdev one.
->
-> timing would be a factor but if libvirt supported the capablity when we started working on supprot i dont see why we woudl
-> bypass it and do it ourselve. if libvirt did not want to supprot this we woudl fall back to option 1.
->
-> as noted above the openstack team at redhat will not have capsity to consume this ongoing work in the kernel/libvit
-> until q2 next year at the eairliest so we likely wont make any discision in this regard until then.
+> 
+>> +static int dcc_valid_list(struct dcc_drvdata *drvdata, int curr_list)
+>> +{
+>> +    u32 lock_reg;
+>> +
+>> +    if (list_empty(&drvdata->cfg_head[curr_list]))
+>> +        return -EINVAL;
+>> +
+>> +    if (test_bit(curr_list, drvdata->enable_bitmap)) {
+>> +        dev_err(drvdata->dev, "List %d is already enabled\n", 
+>> curr_list);
+> 
+> Maybe this seems picky, but...
+> 
+> This error message doesn't belong in the validity check, it belongs
+> in the caller.
+> 
+> Actually, I feel like all of this just belongs in dcc_enable(),
+> because it's doing more than just validity checking.
 
-I see, then we can see if it would be interesting for other vendors to
-implement.
+Ack
 
-Thanks
+> 
+>> +        return -EINVAL;
+>> +    }
+>> +
+>> +    lock_reg = dcc_ll_readl(drvdata, curr_list, DCC_LL_LOCK);
+>> +    if (lock_reg & DCC_LOCK_MASK) {
+>> +        dev_err(drvdata->dev, "List %d is already locked\n", curr_list);
+>> +        return -EINVAL;
+>> +    }
+>> +
+>> +    return 0;
+>> +}
+>> +
+>> +static bool is_dcc_enabled(struct dcc_drvdata *drvdata)
+>> +{
+>> +    int list;
+>> +
+>> +    for (list = 0; list < drvdata->nr_link_list; list++)
+>> +        if (test_bit(list, drvdata->enable_bitmap))
+>> +            return true;
+>> +
+>> +    return false;
+>> +}
+>> +
+>> +static int dcc_enable(struct dcc_drvdata *drvdata, int curr_list)
+>> +{
+>> +    int ret;
+>> +    u32 ram_cfg_base;
+>> +
+>> +    mutex_lock(&drvdata->mutex);
+>> +
+>> +    ret = dcc_valid_list(drvdata, curr_list);
+>> +    if (ret)
+>> +        goto out_unlock;
+>> +
+>> +    /* Fill dcc sram with the poison value.
+>> +     * This helps in understanding bus
+>> +     * hang from registers returning a zero
+>> +     */
+>> +    if (!is_dcc_enabled(drvdata))
+>> +        memset(drvdata->ram_base, 0xde, drvdata->ram_size);
+>> +
+>> +    /* 1. Take ownership of the list */
+>> +    dcc_ll_writel(drvdata, DCC_LOCK_MASK, curr_list, DCC_LL_LOCK);
+>> +
+>> +    /* 2. Program linked-list in the SRAM */
+>> +    ram_cfg_base = drvdata->ram_cfg;
+>> +    ret = __dcc_emit_config(drvdata, curr_list);
+>> +    if (ret) {
+>> +        dcc_ll_writel(drvdata, 0, curr_list, DCC_LL_LOCK);
+>> +        goto out_unlock;
+>> +    }
+>> +
+>> +    /* 3. Program DCC_RAM_CFG reg */
+>> +    dcc_ll_writel(drvdata, ram_cfg_base +
+>> +            drvdata->ram_offset / 4, curr_list, DCC_LL_BASE);
+>> +    dcc_ll_writel(drvdata, drvdata->ram_start +
+>> +            drvdata->ram_offset / 4, curr_list, DCC_FD_BASE);
+>> +    dcc_ll_writel(drvdata, 0xFFF, curr_list, DCC_LL_TIMEOUT);
+>> +
+>> +    /* 4. Clears interrupt status register */
+>> +    dcc_ll_writel(drvdata, 0, curr_list, DCC_LL_INT_ENABLE);
+>> +    dcc_ll_writel(drvdata, (BIT(0) | BIT(1) | BIT(2)),
+>> +              curr_list, DCC_LL_INT_STATUS);
+>> +
+>> +    set_bit(curr_list, drvdata->enable_bitmap);
+>> +
+>> +    /* 5. Configure trigger */
+>> +    dcc_ll_writel(drvdata, DCC_TRIGGER_MASK,
+>> +              curr_list, DCC_LL_CFG);
+>> +
+>> +out_unlock:
+>> +    mutex_unlock(&drvdata->mutex);
+>> +    return ret;
+>> +}
+>> +
+>> +static void dcc_disable(struct dcc_drvdata *drvdata, int curr_list)
+>> +{
+>> +    mutex_lock(&drvdata->mutex);
+>> +
+>> +    if (!test_bit(curr_list, drvdata->enable_bitmap))
+>> +        goto out_unlock;
+>> +    dcc_ll_writel(drvdata, 0, curr_list, DCC_LL_CFG);
+>> +    dcc_ll_writel(drvdata, 0, curr_list, DCC_LL_BASE);
+>> +    dcc_ll_writel(drvdata, 0, curr_list, DCC_FD_BASE);
+>> +    dcc_ll_writel(drvdata, 0, curr_list, DCC_LL_LOCK);
+>> +    clear_bit(curr_list, drvdata->enable_bitmap);
+>> +out_unlock:
+>> +    mutex_unlock(&drvdata->mutex);
+>> +}
+>> +
+>> +static u32 dcc_filp_curr_list(const struct file *filp)
+>> +{
+>> +    struct dentry *dentry = file_dentry(filp);
+>> +    int curr_list, ret;
+>> +
+>> +    ret = kstrtoint(dentry->d_parent->d_name.name, 0, &curr_list);
+>> +    if (ret)
+>> +        return ret;
+>> +
+>> +    return curr_list;
+>> +}
+>> +
+>> +static ssize_t enable_read(struct file *filp, char __user *userbuf,
+>> +               size_t count, loff_t *ppos)
+>> +{
+>> +    char *buf;
+>> +    struct dcc_drvdata *drvdata = filp->private_data;
+>> +
+>> +    mutex_lock(&drvdata->mutex);
+>> +
+>> +    if (is_dcc_enabled(drvdata))
+>> +        buf = "Y\n";
+>> +    else
+>> +        buf = "N\n";
+>> +
+>> +    mutex_unlock(&drvdata->mutex);
+>> +
+>> +    return simple_read_from_buffer(userbuf, count, ppos, buf, 
+>> strlen(buf) + 1);
+>> +}
+>> +
+>> +static ssize_t enable_write(struct file *filp, const char __user 
+>> *userbuf,
+>> +                size_t count, loff_t *ppos)
+>> +{
+>> +    int ret = 0, curr_list;
+>> +    bool val;
+>> +    struct dcc_drvdata *drvdata = filp->private_data;
+>> +
+>> +    curr_list = dcc_filp_curr_list(filp);
+>> +    if (curr_list < 0)
+>> +        return curr_list;
+>> +
+>> +    ret = kstrtobool_from_user(userbuf, count, &val);
+>> +    if (ret < 0)
+>> +        return ret;
+>> +
+>> +    if (val) {
+>> +        ret = dcc_enable(drvdata, curr_list);
+>> +        if (ret)
+>> +            return ret;
+>> +    } else {
+>> +        dcc_disable(drvdata, curr_list);
+>> +    }
+>> +
+>> +    return count;
+>> +}
+>> +
+>> +static const struct file_operations enable_fops = {
+>> +    .read = enable_read,
+>> +    .write = enable_write,
+>> +    .open = simple_open,
+>> +    .llseek = generic_file_llseek,
+>> +};
+>> +
+>> +static ssize_t trigger_write(struct file *filp,
+>> +                 const char __user *user_buf, size_t count,
+>> +                 loff_t *ppos)
+>> +{
+>> +    int ret;
+>> +    unsigned int val;
+>> +    struct dcc_drvdata *drvdata = filp->private_data;
+>> +
+>> +    ret = kstrtouint_from_user(user_buf, count, 0, &val);
+>> +    if (ret < 0)
+>> +        return ret;
+>> +
+>> +    if (val != 1)
+>> +        return -EINVAL;
+>> +
+>> +    ret = dcc_sw_trigger(drvdata);
+>> +    if (ret < 0)
+>> +        return ret;
+>> +
+>> +    return count;
+>> +}
+>> +
+>> +static const struct file_operations trigger_fops = {
+>> +    .write = trigger_write,
+>> +    .open = simple_open,
+>> +    .llseek = generic_file_llseek,
+>> +};
+>> +
+>> +static int dcc_config_add(struct dcc_drvdata *drvdata, unsigned int 
+>> addr,
+>> +              unsigned int len, int apb_bus, int curr_list)
+>> +{
+>> +    int ret = 0;
+>> +    struct dcc_config_entry *entry, *pentry;
+>> +    unsigned int base, offset;
+>> +
+>> +    mutex_lock(&drvdata->mutex);
+>> +
+> 
+> I have some questions about the way memory regions
+> are defined here.
+> 
+> - You round down the address using DCC_ADDR_RANGE_MASK.
+>    Is that because the address has an alignment requirement?
+> - DCC_ADDR_RANGE_MASK is 0xfffffff0, meaning it's 16-byte
+>    aligned.  Is that the required alignment?  (It is more
+>    strict than the 32-bit word size.)
+> - Is there any requirement on the size (in bytes)?  I.e.,
+>    does it need to be 16-byte aligned?  (You multiply the
+>    count by 4, which I presume is sizeof(u32), the word size.)
+> - If the base address is affected by rounding down like
+>    this, you aren't updating the length, which it seems
+>    could omit a word at the end of the desired range.
+> - You are checking to be sure the word count doesn't exceed
+>    the RAM size.  But you're using DCC_ADDR_OFF_RANGE=8,
+>    even though you said that a "word" is 32 bits.
 
->
-> >
-> > Thanks
-> >
-> > > > there are some generic virtio device optiosn we could set https://libvirt.org/formatdomain.html#virtio-related-options
-> > > > and some generic options like the mtu that the interface element supportr
-> > > >
-> > > > but the miniumal valide xml snipit is litrally just the source dev path.
-> > > >
-> > > > <devices>
-> > > >    <interface type='vdpa'>
-> > > >      <source dev='/dev/vhost-vdpa-0'/>
-> > > >    </interface>
-> > > > </devices>
-> > > >
-> > > > nova only add the mac address and MTU today although i have some untested code that will try to also set the vq size.
-> > > > https://github.com/openstack/nova/blob/11cb31258fa5b429ea9881c92b2d745fd127cdaf/nova/virt/libvirt/designer.py#L154-L167
-> > > >
-> > > > The basic supprot we have today assumes however that the vq_size is either the same on all host or it does not matter because we do
-> > > > not support transparent live migration today so its ok for it to change form host to host.
-> > > > in any case we do not track the vq_size or vq count today so we cant schdule based on it or comunicate it to libvirt via our
-> > > > pre_live_migration rpc result. that means libvirt shoudl check if the dest device has the same cofnig or update it if posible
-> > > > before starting the destination qemu instance and begining the migration.
-> > > >
-> > > > > > This will ease the orchestration software implementation
-> > > > > > so that it doesn't have to keep track of vdpa config change, or have
-> > > > > > to persist vdpa attributes across failure and recovery, in fear of
-> > > > > > being killed due to accidental software error.
-> > > > the vdpa device config is not somethign we do today so this woudl make our lives more complex
-> > > It's regarding use case whether to support or not. These configs well
-> > > exist before my change.
-> > >
-> > > > depending on
-> > > > what that info is. at least in the case of nova we do not use the vdpa cli at all, we use libvirt as an indirection layer.
-> > > > so libvirt would need to support this interface, we would have to then add it to our db and modify our RPC interface
-> > > > to then update the libvirt xml with addtional info we dont need today.
-> > >
-> > > Yes. You can follow libvirt when the corresponding support is done, but
-> > > I think it's orthogonal with my changes. Basically my change won't
-> > > affect libvirt's implementation at all.
-> > >
-> > > Thanks,
-> > > -Siwei
-> > >
-> > >
-> > > > > > In this series, the initial device config for vdpa creation will be
-> > > > > > exported via the "vdpa dev show" command.
-> > > > > > This is unlike the "vdpa
-> > > > > > dev config show" command that usually goes with the live value in
-> > > > > > the device config space, which is not reliable subject to the dynamics
-> > > > > > of feature negotiation and possible change in device config space.
-> > > > > >
-> > > > > > Examples:
-> > > > > >
-> > > > > > 1) Create vDPA by default without any config attribute
-> > > > > >
-> > > > > > $ vdpa dev add mgmtdev pci/0000:41:04.2 name vdpa0
-> > > > > > $ vdpa dev show vdpa0
-> > > > > > vdpa0: type network mgmtdev pci/0000:41:04.2 vendor_id 5555 max_vqs 9 max_vq_size 256
-> > > > > > $ vdpa dev -jp show vdpa0
-> > > > > > {
-> > > > > >      "dev": {
-> > > > > >          "vdpa0": {
-> > > > > >              "type": "network",
-> > > > > >              "mgmtdev": "pci/0000:41:04.2",
-> > > > > >              "vendor_id": 5555,
-> > > > > >              "max_vqs": 9,
-> > > > > >              "max_vq_size": 256,
-> > > > > >          }
-> > > > > >      }
-> > > > > > }
-> > > > This is how openstack works today. this step is done statically at boot time typiccly via a udev script or systemd servic file.
-> > > > the mac adress is udpate don the vdpa interface by libvirt when its asigined to the qemu process.
-> > > > if we wanted to suport multi queue or vq size configuration it would also happen at that time not during device creation.
-> > > > > > 2) Create vDPA with config attribute(s) specified
-> > > > > >
-> > > > > > $ vdpa dev add mgmtdev pci/0000:41:04.2 name vdpa0 \
-> > > > > >      mac e4:11:c6:d3:45:f0 max_vq_pairs 4
-> > > > > > $ vdpa dev show
-> > > > > > vdpa0: type network mgmtdev pci/0000:41:04.2 vendor_id 5555 max_vqs 9 max_vq_size 256
-> > > > > >    mac e4:11:c6:d3:45:f0 max_vq_pairs 4
-> > > > > > $ vdpa dev -jp show
-> > > > > > {
-> > > > > >      "dev": {
-> > > > > >          "vdpa0": {
-> > > > > >              "type": "network",
-> > > > > >              "mgmtdev": "pci/0000:41:04.2",
-> > > > > So "mgmtdev" looks not necessary for live migration.
-> > > > >
-> > > > > Thanks
-> > > > >
-> > > > > >              "vendor_id": 5555,
-> > > > > >              "max_vqs": 9,
-> > > > > >              "max_vq_size": 256,
-> > > > > >              "mac": "e4:11:c6:d3:45:f0",
-> > > > > >              "max_vq_pairs": 4
-> > > > > >          }
-> > > > > >      }
-> > > > > > }
-> > > > dynmaicaly creating vdpa device at runtime while possible is not an approch we are plannign to supprot.
-> > > >
-> > > > currntly in nova we perefer to do allcoation of staticically provsioned resouces in nova.
-> > > > for persitent memory, sriov/pci passthorgh, dedciated cpus, hugepages and vdpa devices we manage inventories
-> > > > of resouce that the operator has configured on the platform.
-> > > >
-> > > > we have one excption to this static aproch which is semi dynmaic that is how we manage vifo mediated devices.
-> > > > for reasons that are not important we currrnly track the partent devices that are capable of providing MDEVs
-> > > > and we directlly write to /sys/... to create teh mdev instance  of a requested mdev on demand.
-> > > >
-> > > > This has proven ot be quite problematic as we have encountered caching bugs due to the delay between device
-> > > > creation and when the /sys interface expost the direcotry stucture for the mdev. This has lead ot libvirt and as a result
-> > > > nova getting out of sync with the actual state of the host. There are also issue with host reboots.
-> > > >
-> > > > while we do see the advantage of beign able to create vdpa interface on demad espicaly if we can do finer grained resouce
-> > > > partioning by allcoating one mdev with 4 vqs adn another with 8 ectra, or experice with dynmic mdev management gives us
-> > > > pause. we can and will fix our bugs with mdevs but we have found that most of our customers that use feature  like this
-> > > > are telcos or other similar industries that typiclly have very static wrokloads. while there is  some interest in making
-> > > > there clouds more dynmaic they typically file a host and run the same worklaod on that host form months to years at a
-> > > > time and plan there hardware and acordingly so they are well seved by the static usecase "1) Create vDPA by default without any config attribute".
-> > > >
-> > > > > > ---
-> > > > > >
-> > > > > > Si-Wei Liu (4):
-> > > > > >    vdpa: save vdpa_dev_set_config in struct vdpa_device
-> > > > > >    vdpa: pass initial config to _vdpa_register_device()
-> > > > > >    vdpa: show dev config as-is in "vdpa dev show" output
-> > > > > >    vdpa: fix improper error message when adding vdpa dev
-> > > > > >
-> > > > > >   drivers/vdpa/ifcvf/ifcvf_main.c      |  2 +-
-> > > > > >   drivers/vdpa/mlx5/net/mlx5_vnet.c    |  2 +-
-> > > > > >   drivers/vdpa/vdpa.c                  | 63 +++++++++++++++++++++++++++++++++---
-> > > > > >   drivers/vdpa/vdpa_sim/vdpa_sim_blk.c |  2 +-
-> > > > > >   drivers/vdpa/vdpa_sim/vdpa_sim_net.c |  2 +-
-> > > > > >   drivers/vdpa/vdpa_user/vduse_dev.c   |  2 +-
-> > > > > >   drivers/vdpa/virtio_pci/vp_vdpa.c    |  3 +-
-> > > > > >   include/linux/vdpa.h                 | 26 ++++++++-------
-> > > > > >   8 files changed, 80 insertions(+), 22 deletions(-)
-> > > > > >
-> > > > > > --
-> > > > > > 1.8.3.1
-> > > > > >
-> > >
-> >
->
+The check for the DCC_ADDR_OFF_RANGE=8 is to give an arbitrary
+restriction in word length for the dcc configuration but ideally it
+should be 4 as dcc sram word length is 4, will be changing this accordingly.
 
+Also the base address alignment requirement is consistent as per the
+DCC hardware specification. The address range has to be 16 byte
+aligned.
+
+
+> 
+>> +    if (!len || len > drvdata->ram_size / DCC_ADDR_OFF_RANGE) {
+>> +        dev_err(drvdata->dev, "DCC: Invalid length\n");
+>> +        ret = -EINVAL;
+>> +        goto out_unlock;
+>> +    }
+>> +
+>> +    base = addr & DCC_ADDR_RANGE_MASK;
+> Maybe:
+>      base = round_down(addr, DCC_WORD_SIZE);
+> 
+> Then you don't even need DCC_ADDR_RANGE_MASK.
+> 
+> And then:
+>      len += base - addr;
+> And if necessary:
+>      len = round_up(addr, DCC_WORD_SIZE);
+> And finally:
+>      if (len > drvdata->ram_size / DCC_WORD_SIZE)
+>          return -EINVAL;
+
+Ack
+
+> 
+>> +    if (!list_empty(&drvdata->cfg_head[curr_list])) {
+>> +        pentry = list_last_entry(&drvdata->cfg_head[curr_list],
+>> +                     struct dcc_config_entry, list);
+>> +
+>> +        if (pentry->desc_type == DCC_READ_TYPE &&
+>> +            addr >= (pentry->base + pentry->offset) &&
+>> +            addr <= (pentry->base + pentry->offset + MAX_DCC_OFFSET)) {
+>> +            /* Re-use base address from last entry */
+>> +            base = pentry->base;
+>> +
+>> +            if ((pentry->len * 4 + pentry->base + pentry->offset)
+>> +                    == addr) {
+>> +                len += pentry->len;
+>> +
+>> +                if (len > MAX_DCC_LEN)
+>> +                    pentry->len = MAX_DCC_LEN;
+>> +                else
+>> +                    pentry->len = len;
+>> +
+>> +                addr = pentry->base + pentry->offset +
+>> +                    pentry->len * 4;
+>> +                len -= pentry->len;
+>> +            }
+>> +        }
+>> +    }
+>> +
+>> +    offset = addr - base;
+>> +
+>> +    while (len) {
+>> +        entry = devm_kzalloc(drvdata->dev, sizeof(*entry), GFP_KERNEL);
+>> +        if (!entry) {
+>> +            ret = -ENOMEM;
+>> +            goto out_unlock;
+>> +        }
+>> +
+>> +        entry->base = base;
+>> +        entry->offset = offset;
+>> +        entry->len = min_t(u32, len, MAX_DCC_LEN);
+>> +        entry->desc_type = DCC_READ_TYPE;
+>> +        entry->apb_bus = apb_bus;
+>> +        INIT_LIST_HEAD(&entry->list);
+>> +        list_add_tail(&entry->list,
+>> +                  &drvdata->cfg_head[curr_list]);
+>> +
+>> +        len -= entry->len;
+>> +        offset += MAX_DCC_LEN * 4;
+>> +    }
+>> +
+>> +out_unlock:
+>> +    mutex_unlock(&drvdata->mutex);
+>> +    return ret;
+>> +}
+>> +
+>> +static ssize_t dcc_config_add_read(struct dcc_drvdata *drvdata, char 
+>> *buf, int curr_list)
+>> +{
+>> +    int len, nval, bus;
+>> +    unsigned int base;
+>> +    char apb_bus[4];
+>> +
+>> +    nval = sscanf(buf, "%x %i %s", &base, &len, apb_bus);
+> 
+> This sscanf() is not safe; it can overrun apb_bus[].  I
+> think you can fix that by using %3s (for apb_bus[4]).
+
+Ack
+
+> 
+>> +    if (nval <= 0 || nval > 3)
+>> +        return -EINVAL;
+>> +
+>> +    if (nval == 1) {
+>> +        len = 1;
+>> +        bus = 0;
+>> +    } else if (nval == 2) {
+>> +        bus = 0;
+>> +    } else if (!strcmp("apb", apb_bus)) {
+>> +        bus = 1;
+>> +    } else if (!strcmp("ahb", apb_bus)) {
+>> +        bus = 0;
+>> +    } else {
+>> +        return -EINVAL;
+>> +    }
+>> +
+>> +    return dcc_config_add(drvdata, base, len, bus, curr_list);
+>> +}
+>> +
+>> +static void dcc_config_reset(struct dcc_drvdata *drvdata)
+>> +{
+>> +    struct dcc_config_entry *entry, *temp;
+>> +    int curr_list;
+>> +
+>> +    mutex_lock(&drvdata->mutex);
+>> +
+>> +    for (curr_list = 0; curr_list < drvdata->nr_link_list; 
+>> curr_list++) {
+>> +        list_for_each_entry_safe(entry, temp,
+>> +                     &drvdata->cfg_head[curr_list], list) {
+>> +            list_del(&entry->list);
+>> +        }
+>> +    }
+>> +    drvdata->ram_start = 0;
+>> +    drvdata->ram_cfg = 0;
+>> +    mutex_unlock(&drvdata->mutex);
+>> +}
+>> +
+>> +static ssize_t config_reset_write(struct file *filp,
+>> +                  const char __user *user_buf, size_t count,
+>> +                  loff_t *ppos)
+>> +{
+>> +    unsigned int val, ret;
+>> +    struct dcc_drvdata *drvdata = filp->private_data;
+>> +
+>> +    ret = kstrtouint_from_user(user_buf, count, 0, &val);
+>> +    if (ret < 0)
+>> +        return ret;
+>> +
+>> +    if (val)
+>> +        dcc_config_reset(drvdata);
+>> +
+>> +    return count;
+>> +}
+>> +
+>> +static const struct file_operations config_reset_fops = {
+>> +    .write = config_reset_write,
+>> +    .open = simple_open,
+>> +    .llseek = generic_file_llseek,
+>> +};
+>> +
+>> +static ssize_t ready_read(struct file *filp, char __user *userbuf,
+>> +              size_t count, loff_t *ppos)
+>> +{
+>> +    int ret = 0;
+>> +    char *buf;
+>> +    struct dcc_drvdata *drvdata = filp->private_data;
+>> +
+>> +    mutex_lock(&drvdata->mutex);
+>> +
+>> +    if (!is_dcc_enabled(drvdata)) {
+>> +        ret = -EINVAL;
+>> +        goto out_unlock;
+>> +    }
+>> +
+>> +    if (!FIELD_GET(BIT(1), readl(drvdata->base + 
+>> DCC_STATUS(drvdata->mem_map_ver))))
+>> +        buf = "Y\n";
+>> +    else
+>> +        buf = "N\n";
+>> +out_unlock:
+>> +    mutex_unlock(&drvdata->mutex);
+>> +
+>> +    if (ret < 0)
+>> +        return -EINVAL;
+>> +    else
+>> +        return simple_read_from_buffer(userbuf, count, ppos, buf, 
+>> strlen(buf) + 1);
+>> +}
+>> +
+>> +static const struct file_operations ready_fops = {
+>> +    .read = ready_read,
+>> +    .open = simple_open,
+>> +    .llseek = generic_file_llseek,
+>> +};
+>> +
+>> +static int dcc_add_loop(struct dcc_drvdata *drvdata, unsigned long 
+>> loop_cnt, int curr_list)
+>> +{
+>> +    struct dcc_config_entry *entry;
+>> +
+>> +    entry = devm_kzalloc(drvdata->dev, sizeof(*entry), GFP_KERNEL);
+>> +    if (!entry)
+>> +        return -ENOMEM;
+>> +
+>> +    entry->loop_cnt = min_t(u32, loop_cnt, MAX_LOOP_CNT);
+>> +    entry->desc_type = DCC_LOOP_TYPE;
+>> +    INIT_LIST_HEAD(&entry->list);
+>> +    list_add_tail(&entry->list, &drvdata->cfg_head[curr_list]);
+>> +
+>> +    return 0;
+>> +}
+>> +
+>> +static ssize_t dcc_config_add_loop(struct dcc_drvdata *drvdata, char 
+>> *buf, int curr_list)
+>> +{
+>> +    int ret, cnt = 2, i = 0;
+>> +    char *token, *input;
+>> +    char delim[2] = " ";
+>> +    unsigned int val[MAX_LOOP_ADDR];
+>> +
+>> +    input = buf;
+>> +
+>> +    token = strsep(&input, delim);
+>> +    while (token) {
+>> +        ret = kstrtoint(token, 0, &val[i++]);
+> 
+> As I said last time I reviewed this, nothing prevents you from
+> overrunning your val[] buffer here.
+
+Ack
+
+> 
+>> +        if (ret)
+>> +            return ret;
+>> +
+>> +        token = strsep(&input, delim);
+>> +    }
+>> +
+>> +    ret = dcc_add_loop(drvdata, val[0], curr_list);
+>> +    if (ret)
+>> +        return ret;
+>> +
+>> +    for (i = 0; i < val[1]; i++)
+>> +        dcc_config_add(drvdata, val[cnt++], 1, 0, curr_list);
+>> +
+>> +    return dcc_add_loop(drvdata, 1, curr_list);
+>> +}
+>> +
+>> +static int dcc_rd_mod_wr_add(struct dcc_drvdata *drvdata, unsigned 
+>> int mask,
+>> +                 unsigned int val, int curr_list)
+>> +{
+>> +    int ret = 0;
+>> +    struct dcc_config_entry *entry;
+>> +
+>> +    mutex_lock(&drvdata->mutex);
+>> +
+>> +    if (list_empty(&drvdata->cfg_head[curr_list])) {
+>> +        dev_err(drvdata->dev, "DCC: No read address programmed\n");
+>> +        ret = -EPERM;
+>> +        goto out_unlock;
+>> +    }
+>> +
+>> +    entry = devm_kzalloc(drvdata->dev, sizeof(*entry), GFP_KERNEL);
+>> +    if (!entry) {
+>> +        ret = -ENOMEM;
+>> +        goto out_unlock;
+>> +    }
+>> +
+>> +    entry->desc_type = DCC_READ_WRITE_TYPE;
+>> +    entry->mask = mask;
+>> +    entry->write_val = val;
+>> +    INIT_LIST_HEAD(&entry->list);
+>> +    list_add_tail(&entry->list, &drvdata->cfg_head[curr_list]);
+>> +out_unlock:
+>> +    mutex_unlock(&drvdata->mutex);
+>> +    return ret;
+>> +}
+>> +
+>> +static ssize_t dcc_config_add_read_write(struct dcc_drvdata *drvdata, 
+>> char *buf, int curr_list)
+>> +{
+>> +    int ret;
+>> +    int nval;
+>> +    unsigned int addr, mask, val;
+>> +
+>> +    nval = sscanf(buf, "%x %x %x", &addr, &mask, &val);
+>> +
+>> +    if (nval <= 1 || nval > 3)
+>> +        return -EINVAL;
+>> +
+>> +    ret = dcc_config_add(drvdata, addr, 1, 0, curr_list);
+>> +    if (ret)
+>> +        return ret;
+>> +
+>> +    return dcc_rd_mod_wr_add(drvdata, mask, val, curr_list);
+>> +}
+>> +
+>> +static int dcc_add_write(struct dcc_drvdata *drvdata, unsigned int addr,
+>> +             unsigned int write_val, int apb_bus, int curr_list)
+>> +{
+>> +    struct dcc_config_entry *entry;
+>> +
+>> +    entry = devm_kzalloc(drvdata->dev, sizeof(*entry), GFP_KERNEL);
+>> +    if (!entry)
+>> +        return -ENOMEM;
+>> +
+>> +    entry->desc_type = DCC_WRITE_TYPE;
+>> +    entry->base = addr & GENMASK(31, 4);
+>> +    entry->offset = addr - entry->base;
+>> +    entry->write_val = write_val;
+>> +    entry->len = 1;
+>> +    entry->apb_bus = apb_bus;
+>> +    INIT_LIST_HEAD(&entry->list);
+> 
+> There is no need to initialize the list pointers when you are
+> adding an entry to an existing list.
+
+Ack
+
+> 
+>> +    list_add_tail(&entry->list, &drvdata->cfg_head[curr_list]);
+>> +
+>> +    return 0;
+>> +}
+>> +
+>> +static ssize_t dcc_config_add_write(struct dcc_drvdata *drvdata, char 
+>> *buf, int curr_list)
+>> +{
+>> +    int bus;
+>> +    int nval;
+>> +    unsigned int addr, write_val;
+>> +    char apb_bus[4];
+>> +
+>> +    nval = sscanf(buf, "%x %x %s", &addr, &write_val, apb_bus);
+> 
+> This sscanf() is not safe; it can overrun apb_bus[].
+
+Ack
+
+> 
+>> +
+>> +    if (nval <= 1 || nval > 3)
+>> +        return -EINVAL;
+>> +
+>> +    if (nval == 3) {
+>> +        if (!strcmp("apb", apb_bus))
+>> +            bus = 1;
+>> +        else if (!strcmp("apb", apb_bus))
+>> +            bus = 0;
+>> +        else
+>> +            return -EINVAL;
+>> +    }
+> 
+> If nval == 2, bus is uninitialized at this point, and then passed
+> to dcc_add_write() below.  The compiler should have warned you
+> about this.
+
+Ack
+
+> 
+>> +
+>> +    return dcc_add_write(drvdata, addr, write_val, bus, curr_list);
+>> +}
+>> +
+>> +static int config_show(struct seq_file *m, void *data)
+>> +{
+>> +    struct dcc_drvdata *drvdata = m->private;
+>> +    struct dcc_config_entry *entry;
+>> +    int index = 0, curr_list;
+>> +
+>> +    curr_list = dcc_filp_curr_list(m->file);
+>> +    if (curr_list < 0)
+>> +        return curr_list;
+>> +
+>> +    mutex_lock(&drvdata->mutex);
+>> +
+>> +    list_for_each_entry(entry,
+> 
+> Please join the line above with the line below.
+
+Ack
+
+> 
+>> +                &drvdata->cfg_head[curr_list], list) {
+>> +        index++;
+>> +        switch (entry->desc_type) {
+>> +        case DCC_READ_WRITE_TYPE:
+>> +            seq_printf(m, "RW mask: 0x%x, val: 0x%x\n index: 0x%x\n",
+>> +                   entry->mask, entry->write_val, index);
+>> +            break;
+>> +        case DCC_LOOP_TYPE:
+>> +            seq_printf(m, "L index: 0x%x Loop: %d\n", index, 
+>> entry->loop_cnt);
+>> +            break;
+>> +        case DCC_WRITE_TYPE:
+>> +            seq_printf(m, "W Base:0x%x, Offset: 0x%x, val: 0x%x, APB: 
+>> %d\n, Index: 0x%x\n",
+>> +                   entry->base, entry->offset, entry->write_val, 
+>> entry->apb_bus,
+>> +                   index);
+>> +            break;
+>> +        case DCC_READ_TYPE:
+>> +            seq_printf(m, "R Base:0x%x, Offset: 0x%x, len: 0x%x, APB: 
+>> %d\n, Index: 0x%x\n",
+>> +                   entry->base, entry->offset, entry->len, 
+>> entry->apb_bus, index);
+>> +        }
+>> +    }
+>> +    mutex_unlock(&drvdata->mutex);
+>> +    return 0;
+>> +}
+>> +
+>> +static int config_open(struct inode *inode, struct file *file)
+>> +{
+>> +    struct dcc_drvdata *drvdata = inode->i_private;
+>> +
+>> +    return single_open(file, config_show, drvdata);
+>> +}
+>> +
+>> +static ssize_t config_write(struct file *filp,
+>> +                const char __user *user_buf, size_t count,
+>> +                loff_t *ppos)
+>> +{
+>> +    int ret, curr_list;
+>> +    char *token, buf[50];
+>> +    char *delim = " ";
+>> +    struct dcc_drvdata *drvdata = filp->private_data;
+>> +
+>> +    ret = copy_from_user(buf, user_buf, count);
+> 
+> Nothing prevents the user from passing you more than sizeof(buf)
+> bytes, which would overrun your buffer.
+
+Ack
+
+> 
+>> +    if (ret)
+>> +        return -EFAULT;
+>> +    if (count > sizeof(buf) || count == 0)
+>> +        return -EINVAL;
+>> +
+>> +    curr_list = dcc_filp_curr_list(filp);
+>> +    if (curr_list < 0)
+>> +        return curr_list;
+>> +
+>> +    if (buf[count - 1] == '\n')
+>> +        buf[count - 1] = '\0';
+>> +    else
+>> +        return -EINVAL;
+> Why is it important for the input buffer to end in newline?
+
+We are using the newline to convert the input buffer into a string
+
+for strsep operations.
+> 
+>> +
+>> +    token = strsep((char **)&buf, delim);
+> 
+> OK this is weird.  You should be passing the address
+> of a pointer here, but you're passing the address of
+> a character array.  Honestly I'm not sure what it means
+> to increment the address of an array on the stack.  Maybe
+> it's OK, but I suspect you're putting the cast in there
+> because the compiler complained about what you were doing.
+> 
+> Do this:
+>      char buf[50];
+>      char *bufp = buf;
+>      /* ... */
+>      token = strsep(&bufp, delim);
+> 
+> But to be honest I'm not sure why you're using strsep()
+> at all here.  (I guess it terminates the token with \0.)
+
+Ack. Yes, strsep returns a string.
+
+> 
+>> +
+>> +    if (!strcmp("R", token)) {
+>> +        ret = dcc_config_add_read(drvdata, buf, curr_list);
+>> +    } else if (!strcmp("W", token)) {
+>> +        ret = dcc_config_add_write(drvdata, buf, curr_list);
+>> +    } else if (!strcmp("RW", token)) {
+>> +        ret = dcc_config_add_read_write(drvdata, buf, curr_list);
+>> +    } else if (!strcmp("L", token)) {
+>> +        ret = dcc_config_add_loop(drvdata, buf, curr_list);
+>> +    } else {
+>> +        dev_err(drvdata->dev, "%s is not a correct input\n", token);
+>> +        return -EINVAL;
+>> +    }
+>> +
+>> +    if (ret)
+>> +        return ret;
+>> +
+>> +    return count;
+>> +}
+>> +
+>> +static const struct file_operations config_fops = {
+>> +    .open = config_open,
+>> +    .read = seq_read,
+>> +    .write = config_write,
+>> +    .llseek = seq_lseek,
+>> +    .release = single_release,
+>> +};
+>> +
+>> +static void dcc_delete_debug_dir(struct dcc_drvdata *dcc)
+>> +{
+>> +     debugfs_remove_recursive(dcc->dbg_dir);
+>> +};
+>> +
+>> +static int dcc_create_debug_dir(struct dcc_drvdata *dcc)
+>> +{
+>> +    int i;
+>> +    char list_num[10];
+>> +    struct dentry *list;
+>> +    struct device *dev = dcc->dev;
+>> +
+>> +    dcc_dbg = debugfs_create_dir(KBUILD_MODNAME, NULL);
+> 
+> You never remove this dcc_dbg directory.  Why not?
+> 
+> And since you don't, dcc_dbg could just be a local
+> variable here rather than being a global.  But it
+> seems to me this is the root directory you want to
+> remove when you're done.
+
+Ack
+
+> 
+>> +    if (!dcc_dbg) {
+>> +        pr_err("can't create debugfs dir\n");
+>> +        return -1;
+>> +    }
+>> +
+>> +    dcc->dbg_dir = debugfs_create_dir(dev_name(dev), dcc_dbg);
+>> +    if (!dcc->dbg_dir)
+>> +        return -1;
+>> +    for (i = 0; i <= dcc->nr_link_list; i++) {
+>> +        sprintf(list_num, "%d", i);
+>> +        list = debugfs_create_dir(list_num, dcc->dbg_dir);
+> 
+> Any of the debugfs_create_dir() calls could fail.
+> 
+>> +        debugfs_create_file("enable", 0600, list, dcc, &enable_fops);
+>> +        debugfs_create_file("config", 0600, list, dcc, &config_fops);
+> 
+> And any of the debugfs_create_file() calls here and
+> below could fail.
+> 
+> I think if *any* of these fails, you might as well give
+> up, because the entire interface for this functionality
+> is via these debugfs files.
+
+Ack
+
+> 
+>> +    }
+>> +
+>> +    debugfs_create_file("trigger", 0200, dcc->dbg_dir, dcc, 
+>> &trigger_fops);
+>> +    debugfs_create_file("ready", 0400, dcc->dbg_dir, dcc, &ready_fops);
+>> +    debugfs_create_file("config_reset", 0200, dcc->dbg_dir,
+>> +                dcc, &config_reset_fops);
+>> +
+>> +    return 0;
+>> +}
+>> +
+>> +static ssize_t dcc_sram_read(struct file *file, char __user *data,
+>> +                 size_t len, loff_t *ppos)
+>> +{
+>> +    unsigned char *buf;
+>> +    struct dcc_drvdata *drvdata = container_of(file->private_data,
+>> +        struct dcc_drvdata,
+>> +        sram_dev);
+> 
+> Indent the above arguments further.  And/or assign the
+> local variable on a line by itself, separate from its
+> declaration.
+
+Ack
+
+> 
+>> +    /* EOF check */
+>> +    if (*ppos >= drvdata->ram_size)
+>> +        return 0;
+>> +
+>> +    if ((*ppos + len) > drvdata->ram_size)
+>> +        len = (drvdata->ram_size - *ppos);
+>> +
+>> +    buf = kzalloc(len, GFP_KERNEL);
+> 
+> Now that you are using memremap() rather than ioremap()
+> for the ram_base memory, I don't think you have any need
+> to allocate a buffer here anymore.
+
+Ack. As per Bjorn's comments this should be ioremaped.
+
+Can you please clarify whether this should be mapped to
+
+mem or ioremap?
+
+> 
+>> +    if (!buf)
+>> +        return -ENOMEM;
+>> +
+>> +    memcpy(buf, drvdata->ram_base + *ppos, len);
+> 
+> That is, you can simply copy_to_user() into the (user)
+> data pointer, from drvdata->ram_base + *ppos.  Maybe
+> something like:
+> 
+>      void *src;
+>      /* ... */
+> 
+>      src = drvdata->ram_base + *ppos;
+>      if (copy_to_user(data, src, len))
+>          return -EFAULT;
+> 
+
+Ack
+
+>> +    if (copy_to_user(data, buf, len)) {
+>> +        kfree(buf);
+>> +        return -EFAULT;
+>> +    }
+>> +
+>> +    *ppos += len;
+>> +
+>> +    kfree(buf);
+>> +
+>> +    return len;
+>> +}
+>> +
+>> +static const struct file_operations dcc_sram_fops = {
+>> +    .owner        = THIS_MODULE,
+>> +    .read        = dcc_sram_read,
+>> +    .llseek        = no_llseek,
+>> +};
+>> +
+>> +static int dcc_sram_dev_init(struct dcc_drvdata *drvdata)
+>> +{
+>> +    drvdata->sram_dev.minor = MISC_DYNAMIC_MINOR;
+>> +    drvdata->sram_dev.name = DCC_SRAM_NODE;
+>> +    drvdata->sram_dev.fops = &dcc_sram_fops;
+>> +
+>> +    return misc_register(&drvdata->sram_dev);
+>> +}
+>> +
+>> +static void dcc_sram_dev_exit(struct dcc_drvdata *drvdata)
+>> +{
+>> +    misc_deregister(&drvdata->sram_dev);
+>> +}
+>> +
+>> +static int dcc_probe(struct platform_device *pdev)
+>> +{
+>> +    u32 val;
+>> +    int ret = 0, i;
+>> +    struct device *dev = &pdev->dev;
+>> +    struct dcc_drvdata *dcc;
+> 
+> Why do you use "dcc" here and "drvdata" elsewhere?
+
+This was renamed in probe as per prior review comment.
+
+> 
+>> +    struct resource *res;
+>> +
+>> +    dcc = devm_kzalloc(dev, sizeof(*dcc), GFP_KERNEL);
+>> +    if (!dcc)
+>> +        return -ENOMEM;
+>> +
+>> +    dcc->dev = &pdev->dev;
+>> +    platform_set_drvdata(pdev, dcc);
+>> +
+>> +    dcc->base = devm_platform_ioremap_resource(pdev, 0);
+>> +    if (IS_ERR(dcc->base))
+>> +        return PTR_ERR(dcc->base);
+>> +
+>> +    res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+>> +    if (!res)
+>> +        return -ENODEV;
+>> +
+>> +    dcc->ram_base = memremap(res->start, resource_size(res), 
+>> MEMREMAP_WB);
+>> +    if (!dcc->ram_base)
+>> +        return -ENODEV;
+> 
+>  From this point all, you need to memunmap(dcc->ram_base)
+> if you return early...
+
+Ack
+
+> 
+>> +
+>> +    dcc->ram_size = resource_size(res);
+>> +
+>> +    dcc->ram_offset = (size_t)of_device_get_match_data(&pdev->dev);
+>> +
+>> +    val = dcc_readl(dcc, DCC_HW_INFO);
+>> +
+>> +    if (FIELD_GET(DCC_VER_INFO_MASK, val)) {
+>> +        dcc->mem_map_ver = 3;
+>> +        dcc->nr_link_list = dcc_readl(dcc, DCC_LL_NUM_INFO);
+> 
+> ...so the test below needs to unmap dcc->ram_base before it
+> returns the error.
+> 
+>> +        if (dcc->nr_link_list == 0)
+>> +            return    -EINVAL;
+> 
+> You could check for zero list count below and not duplicate it.
+> You could (should) also limit it to a fixed reasonable maximum.
+> What if the hardware tells you you've got a million lists?
+
+Ack
+
+> 
+>> +    } else if ((val & DCC_VER_MASK2) == DCC_VER_MASK2) {
+>> +        dcc->mem_map_ver = 2;
+>> +        dcc->nr_link_list = dcc_readl(dcc, DCC_LL_NUM_INFO);
+>> +        if (dcc->nr_link_list == 0)
+>> +            return    -EINVAL;
+>> +    } else {
+>> +        dcc->mem_map_ver = 1;
+>> +        dcc->nr_link_list = DCC_MAX_LINK_LIST;
+>> +    }
+>> +
+>> +    /* Either set the fixed loop offset or calculate it
+>> +     * from ram_size. Max consecutive addresses the
+>> +     * dcc can loop is equivalent to the ram size
+>> +     */
+>> +    if (val & DCC_LOOP_OFFSET_MASK)
+>> +        dcc->loopoff = DCC_FIX_LOOP_OFFSET;
+>> +    else
+>> +        dcc->loopoff = get_bitmask_order((dcc->ram_size +
+>> +                dcc->ram_offset) / 4 - 1);
+> 
+> Here's what I said about the above last time:
+> 
+>    This get_bitmask_order() call to determine the offset of a
+>    register seems overly clever.  I think it warrants a little
+>    explanation why it's determined by the size of SRAM.
+> 
+> I think part of what confuses me is why you use the sum
+> of ram_size and ram_offset.  I suppose 4 is DCC_WORD_SIZE
+> but I just don't know.  The comment I was suggesting was
+> something about what loopoff actually represents, and why
+> it's calculated this way.
+
+As mentioned in the comment above, the loopoff stands for the max
+
+consecutive addresses that can be given to the loop instruction. We
+
+are restricting it as per the total words that can be accomodated in
+
+the dcc_sram.
+
+> 
+> 
+>> +
+>> +    mutex_init(&dcc->mutex);
+>> +
+>> +    dcc->enable_bitmap = devm_kcalloc(dev, 
+>> BITS_TO_LONGS(dcc->nr_link_list),
+>> +                      sizeof(*dcc->enable_bitmap), GFP_KERNEL);
+>> +    if (!dcc->enable_bitmap)
+>> +        return -ENOMEM;
+>> +
+>> +    dcc->cfg_head = devm_kcalloc(dev, dcc->nr_link_list,
+>> +                     sizeof(*dcc->cfg_head), GFP_KERNEL);
+>> +    if (!dcc->cfg_head)
+>> +        return -ENOMEM;
+>> +
+>> +    for (i = 0; i < dcc->nr_link_list; i++)
+>> +        INIT_LIST_HEAD(&dcc->cfg_head[i]);
+>> +
+>> +    ret = dcc_sram_dev_init(dcc);
+>> +    if (ret) {
+>> +        dev_err(dcc->dev, "DCC: sram node not registered.\n");
+>> +        return ret;
+>> +    }
+>> +
+>> +    ret = dcc_create_debug_dir(dcc);
+>> +    if (ret) {
+>> +        dev_err(dcc->dev, "DCC: debugfs files not created.\n");
+>> +        dcc_sram_dev_exit(dcc);
+>> +        return ret;
+>> +    }
+>> +
+>> +    return 0;
+>> +}
+>> +
+>> +static int dcc_remove(struct platform_device *pdev)
+>> +{
+>> +    struct dcc_drvdata *drvdata = platform_get_drvdata(pdev);
+>> +
+>> +    dcc_delete_debug_dir(drvdata);
+>> +    dcc_sram_dev_exit(drvdata);
+>> +    dcc_config_reset(drvdata);
+>> +    memunmap(drvdata->ram_base);
+>> +
+>> +    return 0;
+>> +}
+>> +
+>> +static const struct of_device_id dcc_match_table[] = {
+>> +    { .compatible = "qcom,sm8150-dcc", .data = (void *)0x5000 },
+>> +    { .compatible = "qcom,sc7280-dcc", .data = (void *)0x12000 },
+>> +    { .compatible = "qcom,sc7180-dcc", .data = (void *)0x6000 },
+>> +    { .compatible = "qcom,sdm845-dcc", .data = (void *)0x6000 },
+>> +    { }
+>> +};
+>> +MODULE_DEVICE_TABLE(of, dcc_match_table);
+>> +
+>> +static struct platform_driver dcc_driver = {
+>> +    .probe = dcc_probe,
+>> +    .remove    = dcc_remove,
+>> +    .driver    = {
+>> +        .name = "qcom-dcc",
+>> +        .of_match_table    = dcc_match_table,
+>> +    },
+>> +};
+>> +
+>> +module_platform_driver(dcc_driver);
+>> +
+>> +MODULE_LICENSE("GPL");
+>> +MODULE_DESCRIPTION("Qualcomm Technologies Inc. DCC driver");
+>> +
+>> -- 
+>> 2.7.4
+>>
+>>
+>>
+> 
