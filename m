@@ -2,145 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30FEA607D52
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 19:19:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F2A5607D5E
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 19:20:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229916AbiJURTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 13:19:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45740 "EHLO
+        id S231365AbiJURUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 13:20:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230049AbiJURTF (ORCPT
+        with ESMTP id S231340AbiJURT7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 13:19:05 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B2811ABA01;
-        Fri, 21 Oct 2022 10:19:02 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id BD5431884D31;
-        Fri, 21 Oct 2022 17:18:59 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 7E0FF250007B;
-        Fri, 21 Oct 2022 17:18:59 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id 7497A9EC0007; Fri, 21 Oct 2022 17:18:59 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Fri, 21 Oct 2022 13:19:59 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9DBC733C9
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 10:19:48 -0700 (PDT)
+Received: from zn.tnic (p200300ea9733e769329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e769:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1716C1EC072C;
+        Fri, 21 Oct 2022 19:19:29 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1666372769;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=ffg5NFO6tKVWSvtqYlp2XGILZ80EHuLep0vwKN4z2rY=;
+        b=ME7+CSalOdpFY8l4MGtCsWwEHn2B8Dt8+LLRPZfDhiJCeR/y9ROe1wTmobgr+mcetr8Sj8
+        qyLrlUAmcnOU7EZ0BiFoTMaof7nCcPOwOUauWFQwdZBOnwgW4bxKhxDJVNGGddCGl2vPrJ
+        XKUFyYmhyHoviplwhPk2B5aMpwRN4eA=
+Date:   Fri, 21 Oct 2022 19:19:23 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Juergen Gross <jgross@suse.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH v4 03/16] x86/mtrr: replace use_intel() with a local flag
+Message-ID: <Y1LUm1Vdu4u2Tp1c@zn.tnic>
+References: <20221004081023.32402-1-jgross@suse.com>
+ <20221004081023.32402-4-jgross@suse.com>
 MIME-Version: 1.0
-Date:   Fri, 21 Oct 2022 19:18:59 +0200
-From:   netdev@kapio-technology.com
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Florent Fourcot <florent.fourcot@wifirst.fr>,
-        Hans Schultz <schultz.hans@gmail.com>,
-        Joachim Wiberg <troglobit@gmail.com>,
-        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v8 net-next 10/12] net: dsa: mv88e6xxx: mac-auth/MAB
- implementation
-In-Reply-To: <20221021163005.xljk2j3fkikr6uge@skbuf>
-References: <20221018165619.134535-1-netdev@kapio-technology.com>
- <20221018165619.134535-1-netdev@kapio-technology.com>
- <20221018165619.134535-11-netdev@kapio-technology.com>
- <20221018165619.134535-11-netdev@kapio-technology.com>
- <20221020132538.reirrskemcjwih2m@skbuf>
- <2565c09bb95d69142522c3c3bcaa599e@kapio-technology.com>
- <20221020225719.l5iw6vndmm7gvjo3@skbuf>
- <82d23b100b8d2c9e4647b8a134d5cbbf@kapio-technology.com>
- <20221021112216.6bw6sjrieh2znlti@skbuf>
- <7bfaae46b1913fe81654a4cd257d98b1@kapio-technology.com>
- <20221021163005.xljk2j3fkikr6uge@skbuf>
-User-Agent: Gigahost Webmail
-Message-ID: <d1fb07de4b55d64f98425fe66156c4e4@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221004081023.32402-4-jgross@suse.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-21 18:30, Vladimir Oltean wrote:
-> On Fri, Oct 21, 2022 at 03:16:21PM +0200, netdev@kapio-technology.com 
-> wrote:
->> As it is now in the bridge, the locked port part is handled before 
->> learning
->> in the ingress data path, so with BR_LEARNING and BR_PORT_LOCKED, I 
->> think it
->> will work as it does now except link local packages.
+On Tue, Oct 04, 2022 at 10:10:10AM +0200, Juergen Gross wrote:
+> In MTRR code use_intel() is only used in one source file, and the
+> relevant use_intel_if member of struct mtrr_ops is set only in
+> generic_mtrr_ops.
 > 
-> If link-local learning is enabled on a locked port, I think those
-> addresses should also be learned with the BR_FDB_LOCKED flag. The
-> creation of those locked FDB entries can be further suppressed by the
-> BROPT_NO_LL_LEARN flag.
+> Replace use_intel() with a single flag in cacheinfo.c, which can be set
+> when assigning generic_mtrr_ops to mtrr_if. This allows to drop
+> use_intel_if from mtrr_ops, while preparing to support PAT without
+> MTRR. As another preparation for the PAT/MTRR decoupling use a bit for
+> MTRR control and one for PAT control. For now set both bits together,
+> this can be changed later.
 > 
->> If your suggestion of BR_LEARNING causing BR_FDB_LOCKED on a locked 
->> port, I
->> guess it would be implemented under br_fdb_update() and BR_LEARNING +
->> BR_PORT_LOCKED would go together, forcing BR_LEARNING in this case, 
->> thus also
->> for all drivers?
+> As the new flag will be set only if mtrr_enabled is set, the test for
+> mtrr_enabled can be dropped at some places.
 > 
-> Yes, basically where this is placed right now (in 
-> br_handle_frame_finish):
-> 
-> 	if (p->flags & BR_PORT_LOCKED) {
-> 		struct net_bridge_fdb_entry *fdb_src =
-> 			br_fdb_find_rcu(br, eth_hdr(skb)->h_source, vid);
-> 
-> 		if (!fdb_src) {
-> 			unsigned long flags = 0;
-> 
-> 			if (p->flags & BR_PORT_MAB) {
-> 			   ~~~~~~~~~~~~~~~~~~~~~~~~
-> 			   except check for BR_LEARNING
-> 
-> 				__set_bit(BR_FDB_LOCKED, &flags);
-> 				br_fdb_update(br, p, eth_hdr(skb)->h_source,
-> 					      vid, flags);
-> 			}
-> 			goto drop;
-> 		} else if (READ_ONCE(fdb_src->dst) != p ||
-> 			   test_bit(BR_FDB_LOCAL, &fdb_src->flags) ||
-> 			   test_bit(BR_FDB_LOCKED, &fdb_src->flags)) {
-> 			goto drop;
-> 		}
-> 	}
+> At the same time drop the local mtrr_enabled() function and rename
+> the __mtrr_enabled flag to mtrr_enabled.
 
-As I don't know what implications it would have for other drivers to 
-have learning
-forced enabled on locked ports, I cannot say if it is a good idea or 
-not. Right now
-learning is not forced either way as is, but the consensus is that 
-learning should
-be off with locked ports, which it would be either way in the common 
-case I think.
+So, I kinda like your idea about "replace the bool with mtrr_if != NULL"
+to test whether MTRRs are enabled.
+
+IOW, how does this look ontop of yours?
+
+At the end of mtrr_bp_init() I need to do some careful dancing but I
+think this way it is even clearer. I'm pretty sure it can be simplified
+even more but one thing at a time...
+
+Thx.
+
+---
+diff --git a/arch/x86/kernel/cpu/mtrr/mtrr.c b/arch/x86/kernel/cpu/mtrr/mtrr.c
+index dacb537da126..927b463a22bd 100644
+--- a/arch/x86/kernel/cpu/mtrr/mtrr.c
++++ b/arch/x86/kernel/cpu/mtrr/mtrr.c
+@@ -59,7 +59,6 @@
+ #define MTRR_TO_PHYS_WC_OFFSET 1000
+ 
+ u32 num_var_ranges;
+-static bool mtrr_enabled;
+ 
+ unsigned int mtrr_usage_table[MTRR_MAX_VAR_RANGES];
+ static DEFINE_MUTEX(mtrr_mutex);
+@@ -71,15 +70,17 @@ static const struct mtrr_ops *mtrr_ops[X86_VENDOR_NUM] __ro_after_init;
+ 
+ const struct mtrr_ops *mtrr_if;
+ 
+-static void set_mtrr(unsigned int reg, unsigned long base,
+-		     unsigned long size, mtrr_type type);
+-
+ void __init set_mtrr_ops(const struct mtrr_ops *ops)
+ {
+ 	if (ops->vendor && ops->vendor < X86_VENDOR_NUM)
+ 		mtrr_ops[ops->vendor] = ops;
+ }
+ 
++static bool mtrr_enabled(void)
++{
++	return !!mtrr_if;
++}
++
+ /*  Returns non-zero if we have the write-combining memory type  */
+ static int have_wrcomb(void)
+ {
+@@ -299,7 +300,7 @@ int mtrr_add_page(unsigned long base, unsigned long size,
+ 	int i, replace, error;
+ 	mtrr_type ltype;
+ 
+-	if (!mtrr_enabled)
++	if (!mtrr_enabled())
+ 		return -ENXIO;
+ 
+ 	error = mtrr_if->validate_add_page(base, size, type);
+@@ -447,7 +448,7 @@ static int mtrr_check(unsigned long base, unsigned long size)
+ int mtrr_add(unsigned long base, unsigned long size, unsigned int type,
+ 	     bool increment)
+ {
+-	if (!mtrr_enabled)
++	if (!mtrr_enabled())
+ 		return -ENODEV;
+ 	if (mtrr_check(base, size))
+ 		return -EINVAL;
+@@ -476,7 +477,7 @@ int mtrr_del_page(int reg, unsigned long base, unsigned long size)
+ 	unsigned long lbase, lsize;
+ 	int error = -EINVAL;
+ 
+-	if (!mtrr_enabled)
++	if (!mtrr_enabled())
+ 		return -ENODEV;
+ 
+ 	max = num_var_ranges;
+@@ -536,7 +537,7 @@ int mtrr_del_page(int reg, unsigned long base, unsigned long size)
+  */
+ int mtrr_del(int reg, unsigned long base, unsigned long size)
+ {
+-	if (!mtrr_enabled)
++	if (!mtrr_enabled())
+ 		return -ENODEV;
+ 	if (mtrr_check(base, size))
+ 		return -EINVAL;
+@@ -562,7 +563,7 @@ int arch_phys_wc_add(unsigned long base, unsigned long size)
+ {
+ 	int ret;
+ 
+-	if (pat_enabled() || !mtrr_enabled)
++	if (pat_enabled() || !mtrr_enabled())
+ 		return 0;  /* Success!  (We don't need to do anything.) */
+ 
+ 	ret = mtrr_add(base, size, MTRR_TYPE_WRCOMB, true);
+@@ -750,15 +751,18 @@ void __init mtrr_bp_init(void)
+ 		}
+ 	}
+ 
+-	if (mtrr_if) {
+-		mtrr_enabled = true;
+-		set_num_var_ranges(mtrr_if == &generic_mtrr_ops);
++	if (mtrr_enabled()) {
++		bool use_generic = mtrr_if == &generic_mtrr_ops;
++		bool mtrr_state_enabled = true;
++
++		set_num_var_ranges(use_generic);
+ 		init_table();
+-		if (mtrr_if == &generic_mtrr_ops) {
++
++		if (use_generic) {
+ 			/* BIOS may override */
+-			mtrr_enabled = get_mtrr_state();
++			mtrr_state_enabled = get_mtrr_state();
+ 
+-			if (mtrr_enabled) {
++			if (mtrr_state_enabled) {
+ 				mtrr_bp_pat_init();
+ 				memory_caching_control |= CACHE_MTRR | CACHE_PAT;
+ 			}
+@@ -767,10 +771,13 @@ void __init mtrr_bp_init(void)
+ 				changed_by_mtrr_cleanup = 1;
+ 				mtrr_if->set_all();
+ 			}
++
++			if (!mtrr_state_enabled)
++				mtrr_if = NULL;
+ 		}
+ 	}
+ 
+-	if (!mtrr_enabled) {
++	if (!mtrr_enabled()) {
+ 		pr_info("Disabled\n");
+ 
+ 		/*
+@@ -811,7 +818,7 @@ void mtrr_save_state(void)
+ {
+ 	int first_cpu;
+ 
+-	if (!mtrr_enabled)
++	if (!mtrr_enabled())
+ 		return;
+ 
+ 	first_cpu = cpumask_first(cpu_online_mask);
+@@ -856,7 +863,7 @@ void mtrr_bp_restore(void)
+ 
+ static int __init mtrr_init_finialize(void)
+ {
+-	if (!mtrr_enabled)
++	if (!mtrr_enabled())
+ 		return 0;
+ 
+ 	if (memory_caching_control & CACHE_MTRR) {
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
