@@ -2,68 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C49CE608067
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 22:55:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B81A60806A
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 22:58:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230127AbiJUUzc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 16:55:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36098 "EHLO
+        id S230107AbiJUU6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 16:58:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230133AbiJUUzY (ORCPT
+        with ESMTP id S229761AbiJUU6C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 16:55:24 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A081AEE0B2
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 13:55:21 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id c24so3417686plo.3
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 13:55:21 -0700 (PDT)
+        Fri, 21 Oct 2022 16:58:02 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 119852A43A9
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 13:58:00 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id c22so5332921lja.6
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 13:57:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=F7u5LENBlh/N8BqD1OrpsNANMRi3dqvQvqj7Z7ssiI0=;
-        b=mYmgYlJLNMQSWHbPU91tYuq+vNAdaCvkR6a5DcOjqAK1Fk/X3l9VcfI1d9MnP4sMkj
-         JmPZgLbSeMd6kNNtcn0DcYp2A6aqodCC6wxc6agmNWsJ6VYaV2NsWcm/Ome9Hy8YMyDk
-         oQR5Da8gL42iggH2mY3sGSeTDr5z5QVmlSouLSUIUS7tA4JqysDPrQtP7k9R2SYcDFwM
-         UQnl+Vt8q29C1TFbhSoYTdKyLEoW9C4QsmCBIEuqulgo8oNwi55JEVsk8IePPwrSio3I
-         Ds4ZUyBfswFGMadLVAszIGW7XMByMcO90iInmIQu3fs01fZF+I1wgNYT5xIhOWKnfj4u
-         ayWw==
+        bh=zPoXRl3vqSRiOkEBnTagjx/z8JLR9tKOglaOv2B1U2U=;
+        b=N0uswtbOcvcrjYWhK209jQ57ivFejDqckNGgi+6v1+TlRJIyOc4ERhENLxmujLLygZ
+         J6eMgJLDpsSBocWsuUUUwHzHqIRRAR11BwGqyd3RVVh+L7A9Yu0m9UhcFcjHcmZeXJNH
+         joGIrz7kJFXxYaN8pecViJhxe+f6YqZDnwFHB145bCMcp5a3r6kxlGVz6y5vJTkc5QTn
+         ag2fK/CdBQr32vLegoJngzYctpda2BXs9gUjmDo8BwlZhRPt1G7rTXMsZyaYuHj2HA7C
+         sBCAkCnl8Ug6w3jcpiPaklZKiTgY6cer1/Uc0k36kEAJj4OrzRGGVHGUqSgk8GwJqybJ
+         zI4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=F7u5LENBlh/N8BqD1OrpsNANMRi3dqvQvqj7Z7ssiI0=;
-        b=oyZEQU+PVW/1g4xRd2VYI/970E2+b1qm5VaJis00jg2x3HyBr/m9cVjuAwytL86Gs4
-         OZV4h2xRKkOnMrtK2aMl484DptBLmHM80sGs2AMhhj48XBz9V0rk2Tzyvl332kJv47P4
-         wFtvdEpTaQGbbLfLdLzGfj8LVd9GoG+INUoJ+nY5zy3kLXOhUmHPlxc8JzquJXePQS4j
-         SLQpJ0C7PQUFghlxzrP/dXXLxPSLcGmMvuGaoAy62a13vb1JRCVtCm4iz5FzLw3c6aEo
-         81FG+tul3L7uzRMykPyyMmlSUctGdlFjHwU8QR7Plgc0NCCRfWJIFiHJ4HO6kFdcUOnN
-         x3uw==
-X-Gm-Message-State: ACrzQf0sfUIU8SjanKnTsTsKw5agbvpgB5ppRO25aqqdFgYC1PksSgIe
-        Nmh3xtLqyAgTX1hvpJoQ6okwi8d3j4Lxs8eiVpU=
-X-Google-Smtp-Source: AMsMyM4ZwGIw9LrZbmC9Nz2xCv+makqVTogU6wOpbhsZd7w12UlTZV0wFWpKJOi1ejJdrXeQrbgDuamcbx0N17Iqk3g=
-X-Received: by 2002:a17:902:e88a:b0:183:9ecb:ff85 with SMTP id
- w10-20020a170902e88a00b001839ecbff85mr21222893plg.169.1666385720645; Fri, 21
- Oct 2022 13:55:20 -0700 (PDT)
+        bh=zPoXRl3vqSRiOkEBnTagjx/z8JLR9tKOglaOv2B1U2U=;
+        b=kigoW21KpYoqtohHHyKdVeZ9GsgwAOpY6l48NmpvvOBfWb5/RHt/jhkIlRFOmyS0IF
+         BFTAi5kY3XdbdGEWP3OW4zdPDJB+BXjuiTl+TZWejUCcflneNsQhukf2+VRBRzoUiSqE
+         jQCfLOtwJhze5LKOobef0Wh1XXSxuSYJz5XXhfcEm7E6hpP3SJf67AtMFYfrMUJi9t7a
+         b0XEM+54htHIV6S2d0QCYS156ppaiP6DN09ZH++kym+7yxovxr5tWQgqMvzREEljdrFe
+         IxdLWQDnqcT64qc8ohjtCuinw19kowwpL87olqDGptcsiTe0XsdEq361UhKp5Tq+3fZs
+         bt5A==
+X-Gm-Message-State: ACrzQf29oYPE4nnPkulk3Co74BnxEKy1bfWphOLl+0KlVYuFbIjTi0b1
+        PTqHYDPVOvrRD7IA6CXvioZIzQURY8pCeksqklCJxw==
+X-Google-Smtp-Source: AMsMyM6liyZL2chJT/HcVrSUXohK/qQW8DkT5NwZSfVK/d7lwDrnh4DQUf2YqW0RDbkqUXvvcJY3QfV08FmhrOCZvBA=
+X-Received: by 2002:a2e:8717:0:b0:26f:c379:677 with SMTP id
+ m23-20020a2e8717000000b0026fc3790677mr7345924lji.445.1666385878156; Fri, 21
+ Oct 2022 13:57:58 -0700 (PDT)
 MIME-Version: 1.0
-References: <fca6bb0bd48a0292a0ace2fadd0f44579a060cbb.1666335603.git.baolin.wang@linux.alibaba.com>
- <20221021114149.eadf6fafdd0b2c2409a46389@linux-foundation.org>
-In-Reply-To: <20221021114149.eadf6fafdd0b2c2409a46389@linux-foundation.org>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Fri, 21 Oct 2022 13:55:07 -0700
-Message-ID: <CAHbLzkpv3TkUag9+0mdBE5PbNuN4o3xbDT-Z4p-CjB6Fq775Hw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] mm: migrate: Fix return value if all subpages of
- THPs are migrated successfully
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Baolin Wang <baolin.wang@linux.alibaba.com>, david@redhat.com,
-        ying.huang@intel.com, ziy@nvidia.com, apopple@nvidia.com,
-        jingshan@linux.alibaba.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
+References: <20221021173328.2489411-1-pgonda@google.com> <b7414cda-9924-33c3-68da-9b26b2bcc0b6@amd.com>
+In-Reply-To: <b7414cda-9924-33c3-68da-9b26b2bcc0b6@amd.com>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Fri, 21 Oct 2022 14:57:46 -0600
+Message-ID: <CAMkAt6rCPYi3EewVfrTb6ie5VZwSnY0aEv_oDT4pom9dLTgf9A@mail.gmail.com>
+Subject: Re: [PATCH V2] virt: Prevent IV reuse in SNP guest driver
+To:     Tom Lendacky <thomas.lendacky@amd.com>
+Cc:     Dionna Glaze <dionnaglaze@google.com>,
+        Borislav Petkov <bp@suse.de>,
+        Michael Roth <michael.roth@amd.com>,
+        Haowen Bai <baihaowen@meizu.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Marc Orr <marcorr@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Ashish Kalra <Ashish.Kalra@amd.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,46 +75,268 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 11:41 AM Andrew Morton
-<akpm@linux-foundation.org> wrote:
+On Fri, Oct 21, 2022 at 1:02 PM Tom Lendacky <thomas.lendacky@amd.com> wrote:
 >
-> On Fri, 21 Oct 2022 18:16:23 +0800 Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
->
-> > When THP migration, if THPs are split and all subpages are migrated successfully
-> > , the migrate_pages() will still return the number of THP that were not migrated.
-> > That will confuse the callers of migrate_pages(), for example, which will make
-> > the longterm pinning failed though all pages are migrated successfully.
+> On 10/21/22 12:33, Peter Gonda wrote:
+> > The ASP and an SNP guest use a series of AES-GCM keys called VMPCKs to
+> > communicate securely with each other. The IV to this scheme is a
+> > sequence number that both the ASP and the guest track. Currently this
+> > sequence number in a guest request must exactly match the sequence
+> > number tracked by the ASP. This means that if the guest sees an error
+> > from the host during a request it can only retry that exact request or
+> > disable the VMPCK to prevent an IV reuse. AES-GCM cannot tolerate IV
+> > reuse see:
+> > https://csrc.nist.gov/csrc/media/projects/block-cipher-techniques/documents/bcm/comments/800-38-series-drafts/gcm/joux_comments.pdf
 > >
-> > Thus we should return 0 to indicate all pages are migrated in this case.
+> > To handle userspace querying the cert_data length. Instead of requesting
+> > the cert length from userspace use the size of the drivers allocated
+> > shared buffer. Then copy that buffer to userspace, or give userspace an
+> > error depending on the size of the buffer given by userspace.
 > >
+> > Fixes: fce96cf044308 ("virt: Add SEV-SNP guest driver")
+> > Signed-off-by: Peter Gonda <pgonda@google.com>
+> > Reported-by: Peter Gonda <pgonda@google.com>
+> > Reviewed-by: Dionna Glaze <dionnaglaze@google.com>
+> > Cc: Borislav Petkov <bp@suse.de>
+> > Cc: Tom Lendacky <thomas.lendacky@amd.com>
+> > Cc: Michael Roth <michael.roth@amd.com>
+> > Cc: Haowen Bai <baihaowen@meizu.com>
+> > Cc: Yang Yingliang <yangyingliang@huawei.com>
+> > Cc: Marc Orr <marcorr@google.com>
+> > Cc: David Rientjes <rientjes@google.com>
+> > Cc: Ashish Kalra <Ashish.Kalra@amd.com>
+> > Cc: linux-kernel@vger.kernel.org
+> > Cc: kvm@vger.kernel.org
+> > ---
+> >   drivers/virt/coco/sev-guest/sev-guest.c | 93 ++++++++++++++++---------
+> >   1 file changed, 62 insertions(+), 31 deletions(-)
+> >
+> > diff --git a/drivers/virt/coco/sev-guest/sev-guest.c b/drivers/virt/coco/sev-guest/sev-guest.c
+> > index f422f9c58ba7..8c54ea84bc57 100644
+> > --- a/drivers/virt/coco/sev-guest/sev-guest.c
+> > +++ b/drivers/virt/coco/sev-guest/sev-guest.c
+> > @@ -41,7 +41,7 @@ struct snp_guest_dev {
+> >       struct device *dev;
+> >       struct miscdevice misc;
+> >
+> > -     void *certs_data;
+> > +     u8 (*certs_data)[SEV_FW_BLOB_MAX_SIZE];
+> >       struct snp_guest_crypto *crypto;
+> >       struct snp_guest_msg *request, *response;
+> >       struct snp_secrets_page_layout *layout;
+> > @@ -67,8 +67,27 @@ static bool is_vmpck_empty(struct snp_guest_dev *snp_dev)
+> >       return true;
+> >   }
+> >
+> > +/*
+> > + * If we receive an error from the host or ASP we have two options. We can
+> > + * either retry the exact same encrypted request or we can discontinue using the
+> > + * VMPCK.
+> > + *
+> > + * This is because in the current encryption scheme GHCB v2 uses AES-GCM to
+> > + * encrypt the requests. The IV for this scheme is the sequence number. GCM
+> > + * cannot tolerate IV reuse.
+> > + *
+> > + * The ASP FW v1.51 only increments the sequence numbers on a successful
+> > + * guest<->ASP back and forth and only accepts messages at its exact sequence
+> > + * number.
+> > + *
+> > + * So if we were to reuse the sequence number the encryption scheme is
+> > + * vulnerable. If we encrypt the sequence number for a fresh IV the ASP will
+> > + * reject our request.
+> > + */
+> >   static void snp_disable_vmpck(struct snp_guest_dev *snp_dev)
+> >   {
+> > +     dev_alert(snp_dev->dev, "Disabling vmpck_id: %d to prevent IV reuse.\n",
+> > +               vmpck_id);
+> >       memzero_explicit(snp_dev->vmpck, VMPCK_KEY_LEN);
+> >       snp_dev->vmpck = NULL;
+> >   }
+> > @@ -326,29 +345,29 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
+> >       if (fw_err)
+> >               *fw_err = err;
+> >
+> > -     if (rc)
+> > -             return rc;
+> > +     if (rc) {
+> > +             dev_alert(snp_dev->dev,
+> > +                       "Detected error from ASP request. rc: %d, fw_err: %llu\n",
+> > +                       rc, *fw_err);
+> > +             goto disable_vmpck;
+> > +     }
+> >
+> > -     /*
+> > -      * The verify_and_dec_payload() will fail only if the hypervisor is
+> > -      * actively modifying the message header or corrupting the encrypted payload.
+> > -      * This hints that hypervisor is acting in a bad faith. Disable the VMPCK so that
+> > -      * the key cannot be used for any communication. The key is disabled to ensure
+> > -      * that AES-GCM does not use the same IV while encrypting the request payload.
+> > -      */
+> >       rc = verify_and_dec_payload(snp_dev, resp_buf, resp_sz);
+> >       if (rc) {
+> >               dev_alert(snp_dev->dev,
+> > -                       "Detected unexpected decode failure, disabling the vmpck_id %d\n",
+> > -                       vmpck_id);
+> > -             snp_disable_vmpck(snp_dev);
+> > -             return rc;
+> > +                       "Detected unexpected decode failure from ASP. rc: %d\n",
+> > +                       rc);
+> > +             goto disable_vmpck;
+> >       }
+> >
+> >       /* Increment to new message sequence after payload decryption was successful. */
+> >       snp_inc_msg_seqno(snp_dev);
+> >
+> >       return 0;
+> > +
+> > +disable_vmpck:
+> > +     snp_disable_vmpck(snp_dev);
+> > +     return rc;
+> >   }
+> >
+> >   static int get_report(struct snp_guest_dev *snp_dev, struct snp_guest_request_ioctl *arg)
+> > @@ -437,7 +456,7 @@ static int get_ext_report(struct snp_guest_dev *snp_dev, struct snp_guest_reques
+> >       struct snp_guest_crypto *crypto = snp_dev->crypto;
+> >       struct snp_ext_report_req req;
+> >       struct snp_report_resp *resp;
+> > -     int ret, npages = 0, resp_len;
+> > +     int ret, resp_len, req_cert_len, resp_cert_len;
+> >
+> >       lockdep_assert_held(&snp_cmd_mutex);
+> >
+> > @@ -448,14 +467,15 @@ static int get_ext_report(struct snp_guest_dev *snp_dev, struct snp_guest_reques
+> >               return -EFAULT;
+> >
+> >       /* userspace does not want certificate data */
+> > -     if (!req.certs_len || !req.certs_address)
+> > +     req_cert_len = req.certs_len;
+> > +     if (!req_cert_len || !req.certs_address)
+> >               goto cmd;
+> >
+> > -     if (req.certs_len > SEV_FW_BLOB_MAX_SIZE ||
+> > -         !IS_ALIGNED(req.certs_len, PAGE_SIZE))
+> > +     if (req_cert_len > sizeof(*snp_dev->certs_data) ||
+> > +         !IS_ALIGNED(req_cert_len, PAGE_SIZE))
+> >               return -EINVAL;
+> >
+> > -     if (!access_ok((const void __user *)req.certs_address, req.certs_len))
+> > +     if (!access_ok((const void __user *)req.certs_address, req_cert_len))
+> >               return -EFAULT;
+> >
+> >       /*
+> > @@ -464,8 +484,7 @@ static int get_ext_report(struct snp_guest_dev *snp_dev, struct snp_guest_reques
+> >        * the host. If host does not supply any certs in it, then copy
+> >        * zeros to indicate that certificate data was not provided.
+> >        */
+> > -     memset(snp_dev->certs_data, 0, req.certs_len);
+> > -     npages = req.certs_len >> PAGE_SHIFT;
+> > +     memset(snp_dev->certs_data, 0, sizeof(*snp_dev->certs_data));
+> >   cmd:
+> >       /*
+> >        * The intermediate response buffer is used while decrypting the
+> > @@ -477,25 +496,37 @@ static int get_ext_report(struct snp_guest_dev *snp_dev, struct snp_guest_reques
+> >       if (!resp)
+> >               return -ENOMEM;
+> >
+> > -     snp_dev->input.data_npages = npages;
+> > +     snp_dev->input.data_npages = sizeof(*snp_dev->certs_data) >> PAGE_SHIFT;
+> >       ret = handle_guest_request(snp_dev, SVM_VMGEXIT_EXT_GUEST_REQUEST, arg->msg_version,
+> >                                  SNP_MSG_REPORT_REQ, &req.data,
+> >                                  sizeof(req.data), resp->data, resp_len, &arg->fw_err);
+> >
+> > +     resp_cert_len = snp_dev->input.data_npages << PAGE_SHIFT;
 >
-> This had me puzzled for a while.  I think this wording is clearer?
+> The hypervisor is not required to update the number of pages that the
+> certificates actually used/required if enough pages were supplied. So this
+> value could always remain as 4 (based on SEV_FW_BLOB_MAX_SIZE) on
+> successful return.
 >
-> : During THP migration, if THPs are not migrated but they are split and all
-> : subpages are migrated successfully, migrate_pages() will still return the
-> : number of THP pages that were not migrated.  This will confuse the callers
-> : of migrate_pages().  For example, the longterm pinning will failed though
-> : all pages are migrated successfully.
-> :
-> : Thus we should return 0 to indicate that all pages are migrated in this
-> : case.
+> And if that's the case, we could always just return 4 for the number of
+> pages no matter what. Otherwise you'll have to update the logic here if
+> you want to obtain the actual number.
+
+Are you asking for this to just hard code the userspace requirement to
+4 pages? We could leave this as written here, that would leave the
+guest open to a new GHCB spec where
+
+"State from Hypervisor: on error will contain the number of guest
+contiguous pages required to hold the data to be returned"
+
+Is instead:
+
+"State from Hypervisor: contain the number of guest contiguous pages
+required to hold the data to be returned"
+
+I think this would be a non-breaking change since the spec says
+nothing of the non-error case currently. Fine with your preference
+here. Either Dionna or I can follow up with a series to allow more
+than 4pages if needed.
+
+The logic required would be parsing the GUID table? I think we'd
+rather keep that out of the kernel driver, right?
+
 >
-> This is a fairly longstanding problem?  No Fixes: we can identify?
-
-It doesn't seem like a long standing issue. It seems like commit
-b5bade978e9b ("mm: migrate: fix the return value of migrate_pages()")
-fixed one problem, but introduced this new one IIUC.
-
-Before this commit, the code did:
-
-nr_failed += retry + thp_retry;
-rc = nr_failed;
-
-But retry and thp_retry were actually reset for each retry until the
-last one. So as long as there is no permanent migration failure and
-THP split failure, nr_failed should be 0 IIUC. TBH the code is a
-little bit hard to follow, please correct me if I'm wrong.
-
+> Thanks,
+> Tom
 >
-> Did you consider the desirability of a -stable backport?
->
+> > +
+> >       /* If certs length is invalid then copy the returned length */
+> >       if (arg->fw_err == SNP_GUEST_REQ_INVALID_LEN) {
+> > -             req.certs_len = snp_dev->input.data_npages << PAGE_SHIFT;
+> > +             dev_alert(snp_dev->dev,
+> > +                       "Certificate data from host: %d, Max size allocated by driver: %lu.\n",
+> > +                       resp_cert_len, sizeof(*snp_dev->certs_data));
+> > +             ret = -EFAULT;
+> > +     }
+> > +
+> > +     if (ret)
+> > +             goto e_free;
+> > +
+> > +     /* Pass the actual certificate data size back to userspace */
+> > +     req.certs_len = resp_cert_len;
+> > +     if (resp_cert_len > req_cert_len) {
+> > +             arg->fw_err = SNP_GUEST_REQ_INVALID_LEN;
+> >
+> >               if (copy_to_user((void __user *)arg->req_data, &req, sizeof(req)))
+> >                       ret = -EFAULT;
+> > -     }
+> >
+> > -     if (ret)
+> >               goto e_free;
+> > +     }
+> >
+> > -     if (npages &&
+> > -         copy_to_user((void __user *)req.certs_address, snp_dev->certs_data,
+> > -                      req.certs_len)) {
+> > +     if (copy_to_user((void __user *)req.certs_address, snp_dev->certs_data,
+> > +                      resp_cert_len)) {
+> >               ret = -EFAULT;
+> >               goto e_free;
+> >       }
+> > @@ -676,7 +707,7 @@ static int __init sev_guest_probe(struct platform_device *pdev)
+> >       if (!snp_dev->response)
+> >               goto e_free_request;
+> >
+> > -     snp_dev->certs_data = alloc_shared_pages(dev, SEV_FW_BLOB_MAX_SIZE);
+> > +     snp_dev->certs_data = alloc_shared_pages(dev, sizeof(*snp_dev->certs_data));
+> >       if (!snp_dev->certs_data)
+> >               goto e_free_response;
+> >
+> > @@ -703,7 +734,7 @@ static int __init sev_guest_probe(struct platform_device *pdev)
+> >       return 0;
+> >
+> >   e_free_cert_data:
+> > -     free_shared_pages(snp_dev->certs_data, SEV_FW_BLOB_MAX_SIZE);
+> > +     free_shared_pages(snp_dev->certs_data, sizeof(*snp_dev->certs_data));
+> >   e_free_response:
+> >       free_shared_pages(snp_dev->response, sizeof(struct snp_guest_msg));
+> >   e_free_request:
+> > @@ -717,7 +748,7 @@ static int __exit sev_guest_remove(struct platform_device *pdev)
+> >   {
+> >       struct snp_guest_dev *snp_dev = platform_get_drvdata(pdev);
+> >
+> > -     free_shared_pages(snp_dev->certs_data, SEV_FW_BLOB_MAX_SIZE);
+> > +     free_shared_pages(snp_dev->certs_data, sizeof(*snp_dev->certs_data));
+> >       free_shared_pages(snp_dev->response, sizeof(struct snp_guest_msg));
+> >       free_shared_pages(snp_dev->request, sizeof(struct snp_guest_msg));
+> >       deinit_crypto(snp_dev->crypto);
