@@ -2,107 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73D4F607E27
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 20:14:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBFFF607E29
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 20:14:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229936AbiJUSOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 14:14:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34342 "EHLO
+        id S230093AbiJUSOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 14:14:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbiJUSOT (ORCPT
+        with ESMTP id S229997AbiJUSOm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 14:14:19 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1021F26553E;
-        Fri, 21 Oct 2022 11:14:18 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id z97so8890683ede.8;
-        Fri, 21 Oct 2022 11:14:17 -0700 (PDT)
+        Fri, 21 Oct 2022 14:14:42 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ABAA12AC6;
+        Fri, 21 Oct 2022 11:14:26 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id v11so2798180wmd.1;
+        Fri, 21 Oct 2022 11:14:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=IWT32hn/5on9JQFLZ9CdZqyFkNpfjrGX5X1sBaET02U=;
-        b=P9hSCaa39i9JGj/5fhpGAGKqV0qNaEhqet8DmdqurbIDP+fWwaBweSZJ3/S6bAi2DE
-         p+eq7oKJ/RDCYh9wf+nabFJSnwsdceArXMizkG598uRi7agL1PsnxpKJR3QOGe9LGUsr
-         zmlp8/3/NqI+V1i2nDa+LoUbsVbsT7TecGgNHY9btlLCVLiBhuGwippKH5FV3uy6EKQf
-         py5P3IgoKNZRscRUy9euAQkfpmI26lMxdGlz6ZIjmzgrS22NPAK4YVPfYhIgDowxprq/
-         ViQgGv3cTTio2/IhXMiDB1cCyYpWLgr0OA+yXjiHyGL9TQD3FZitvAZZYL5w3Dv4WD/K
-         D/1g==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Bk4YjCSLu5/QbUBb+oa/0HDOrbXfgW9e8G+jzD0uIkI=;
+        b=PUNnKf2QyDtw3cp6/6a0DqYNduOX6oQOMw0kTySqoz0k97maIX6wieSU4HoAxeqkUR
+         s9IYTjR+KjOj3MRIQO8UP11ROyOT57b6ka9Jho5DhSqQezTiuyQqKQ3GNxL3OQWMSpWd
+         y9gbba63TYG+GfS1Er8kp09QxY837iE8zgVWzYcwD2rQP6T80+JmrYVePkWZsdwrSNV4
+         JzT9H7IZoSLdr9zzJkuXT/6P5ylX9o77PYgi7gpzX2WWiLB0jO5Bk6jaqY78o2GfJ4+E
+         r3UTzo8/K/UvKp2JHYhOL8w7F/OE+uGYxlKQAMfkGbQnRDYidk1CvojN7kigVA3YvV5l
+         tvvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IWT32hn/5on9JQFLZ9CdZqyFkNpfjrGX5X1sBaET02U=;
-        b=0IIUGq2/m1jNRNM78VX6acbMB2gcrT5vIVpu2YM+fqxsuFSjn7DHk64uODO5K3Vr/s
-         1NbbTt/fkBexvgfHZgVRmuTOh0REclXfv1/EfrwVhVoRFTmYD92SbIFqZ+HQJXURg1WM
-         ZiapQJo4MG5w6hR+1qkIAhkMUVbK/TmPMRecxWE4JhQ5hb28Dqaho0UXDFXy5oeglaT7
-         2k5ZkrpPkygbceUUCRxRGX+9RyrB/NHeaNfT4TBYZOS4tdkjvLc0FbhN3TjSA2C3EfUn
-         1kQxYUuBHrJMBR8PiG0HCv+ARdlR0wRcw2wjK9qY67YsxsouVIpLJE5Nl6ve3l+6AmCa
-         rcmg==
-X-Gm-Message-State: ACrzQf3QDvrNObTuk9ocG726vZxN+AjStVT4H9OnkYZmv3gM8AyU1Fdz
-        u78y+A5rHgBFhcRn3I5r9lM=
-X-Google-Smtp-Source: AMsMyM7EHFMooNaoQGzQ5R9JFO+S5r0igTZjt4d8ThXihB+ZZ0Av9ErxITHmAdRMMZTwcRJFugdAAw==
-X-Received: by 2002:a17:907:b05:b0:78d:9bc9:b96f with SMTP id h5-20020a1709070b0500b0078d9bc9b96fmr16306095ejl.468.1666376056317;
-        Fri, 21 Oct 2022 11:14:16 -0700 (PDT)
-Received: from skbuf ([188.27.184.197])
-        by smtp.gmail.com with ESMTPSA id kw15-20020a170907770f00b00741383c1c5bsm11797572ejc.196.2022.10.21.11.14.13
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Bk4YjCSLu5/QbUBb+oa/0HDOrbXfgW9e8G+jzD0uIkI=;
+        b=mYpEcu4tyH/MFThk5A+DyW9xzqWBpsiYuEl1ZcUF4oV7lR0nZVc4HA/vbah2qF+0X5
+         Ce7h/HloW29zqObNlCr+e7R8CWhAGds6aguOC5ZXoakqd9Pgd1lG1spHmD0Ggx4D4p/d
+         /4JiNLRts//t8ZOWK1OeD7I2W9ys83esoIXcZVb06UH6xoCxnN+7N+hcf6p3vOUs6Jg3
+         kXM2C21KFacJtPiF+5wQC3ao2DrANVKNweN10iz4YAHFQ+dnInPpx2Y30TDuax2GkC2x
+         lpfJly/Q6EBckzZEGrjH9aO3wq2L2pXRI6aqS2yhD6B18u1RnRYhE21T9GYqSiViy3PV
+         mepw==
+X-Gm-Message-State: ACrzQf3CkxjQtiesmyRoICO5tPvZZuG4QHxqIXpBaMS37J8ngSvZ1Q40
+        tZFvQpsKqAmY5cFGkXTY9MU=
+X-Google-Smtp-Source: AMsMyM45xoVdse05SFORL9vCUlpOMxtTcVqSzWcnsdFhZJsruvC+5KZwqNN10ESR0pIBuzglzfSyog==
+X-Received: by 2002:a1c:4405:0:b0:3c5:8b6b:1efc with SMTP id r5-20020a1c4405000000b003c58b6b1efcmr34952115wma.192.1666376064869;
+        Fri, 21 Oct 2022 11:14:24 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id r9-20020a05600c35c900b003c5571c27a1sm4405061wmq.32.2022.10.21.11.14.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Oct 2022 11:14:15 -0700 (PDT)
-Date:   Fri, 21 Oct 2022 21:14:11 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     netdev@kapio-technology.com
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Oleksandr Mazur <oleksandr.mazur@plvision.eu>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Florent Fourcot <florent.fourcot@wifirst.fr>,
-        Hans Schultz <schultz.hans@gmail.com>,
-        Joachim Wiberg <troglobit@gmail.com>,
-        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v8 net-next 10/12] net: dsa: mv88e6xxx: mac-auth/MAB
- implementation
-Message-ID: <20221021181411.sv52q4yxr5r7urab@skbuf>
-References: <20221020132538.reirrskemcjwih2m@skbuf>
- <2565c09bb95d69142522c3c3bcaa599e@kapio-technology.com>
- <20221020225719.l5iw6vndmm7gvjo3@skbuf>
- <82d23b100b8d2c9e4647b8a134d5cbbf@kapio-technology.com>
- <20221021112216.6bw6sjrieh2znlti@skbuf>
- <7bfaae46b1913fe81654a4cd257d98b1@kapio-technology.com>
- <20221021163005.xljk2j3fkikr6uge@skbuf>
- <d1fb07de4b55d64f98425fe66156c4e4@kapio-technology.com>
- <20221021173014.oit3qmpkrsjwzbgu@skbuf>
- <b88e331e016ad3801f1bf1a0dec507f3@kapio-technology.com>
+        Fri, 21 Oct 2022 11:14:24 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] sysv: Remove variable res
+Date:   Fri, 21 Oct 2022 19:14:23 +0100
+Message-Id: <20221021181423.29433-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b88e331e016ad3801f1bf1a0dec507f3@kapio-technology.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -113,41 +69,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 07:39:34PM +0200, netdev@kapio-technology.com wrote:
-> Well, with this change, to have MAB working, the bridge would need learning on
-> of course, but how things work with the bridge according to the flags, they
-> should also work in the offloaded case if you ask me. There should be no
-> difference between the two, thus MAB in drivers would have to be with
-> learning on.
+The variable res being incremented but it is never referenced,
+it is redundant and can be removed.
 
-Am I proposing for things to work differently in the offload and
-software case, and not realizing it? :-/
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ fs/sysv/itree.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-The essence of my proposal was to send a bug fix now which denies
-BR_LEARNING to be set together with BR_PORT_LOCKED. The fact that
-link-local traffic is learned by the software bridge is something
-unintended as far as I understand.
+diff --git a/fs/sysv/itree.c b/fs/sysv/itree.c
+index d4ec9bb97de9..505f4cb7be79 100644
+--- a/fs/sysv/itree.c
++++ b/fs/sysv/itree.c
+@@ -430,12 +430,10 @@ static unsigned sysv_nblocks(struct super_block *s, loff_t size)
+ {
+ 	struct sysv_sb_info *sbi = SYSV_SB(s);
+ 	int ptrs_bits = sbi->s_ind_per_block_bits;
+-	unsigned blocks, res, direct = DIRECT, i = DEPTH;
++	unsigned blocks, direct = DIRECT, i = DEPTH;
+ 	blocks = (size + s->s_blocksize - 1) >> s->s_blocksize_bits;
+-	res = blocks;
+ 	while (--i && blocks > direct) {
+ 		blocks = ((blocks - direct - 1) >> ptrs_bits) + 1;
+-		res += blocks;
+ 		direct = 1;
+ 	}
+ 	return blocks;
+-- 
+2.37.3
 
-You tried to fix it here, and as far as I could search in my inbox, that
-didn't go anywhere:
-https://lore.kernel.org/netdev/47d8d747-54ef-df52-3b9c-acb9a77fa14a@blackwall.org/T/#u
-
-I thought only mv88e6xxx offloads BR_PORT_LOCKED, but now, after
-searching, I also see prestera has support for it, so let me add
-Oleksandr Mazur to the discussion as well. I wonder how they deal with
-this? Has somebody come to rely on learning being enabled on a locked
-port?
-
-
-MAB in offloading drivers will have to be with learning on (same as in
-software). When BR_PORT_LOCKED | BR_LEARNING will be allowed together
-back in net-next (to denote the MAB configuration), offloading drivers
-(mv88e6xxx and prestera) will be patched to reject them. They will only
-accept the two together when they implement MAB support.
-
-Future drivers after this mess has been cleaned up will have to look at
-the BR_PORT_LOCKED and BR_LEARNING flag in combination, to see which
-kind of learning is desired on a port (secure, CPU based learning or
-autonomous learning).
-
-Am I not making sense?
