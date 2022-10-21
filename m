@@ -2,117 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE975607058
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 08:47:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B86A2607067
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 08:48:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230053AbiJUGrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 02:47:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59126 "EHLO
+        id S229972AbiJUGsK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 02:48:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiJUGrq (ORCPT
+        with ESMTP id S230108AbiJUGrx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 02:47:46 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B492413ED;
-        Thu, 20 Oct 2022 23:47:44 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id A3C711884AB0;
-        Fri, 21 Oct 2022 06:47:42 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 9C2CF250007B;
-        Fri, 21 Oct 2022 06:47:42 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id 87CB39EC000B; Fri, 21 Oct 2022 06:47:42 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Fri, 21 Oct 2022 02:47:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25736242CBF;
+        Thu, 20 Oct 2022 23:47:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 83822601D2;
+        Fri, 21 Oct 2022 06:47:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F4E2C4347C;
+        Fri, 21 Oct 2022 06:47:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666334869;
+        bh=r8oU8iN1SGiDyninGJJEWFE66Ye7/JYq//V1dSgNaKY=;
+        h=Date:From:To:Subject:References:In-Reply-To:From;
+        b=Uf2ILtBPUZ6s7Hugq7rwIzSyv1zmsNdMxu0oC1CHKGY3kWO0TOkUvoWRPaClAZOt4
+         TSrPCOaP+m1wtXvXBDB/eriOEnqVWKp1yciPQDmE8M+jZv84fLQQvJsj0cjjASqAx9
+         kpTmclYHCnT6S12vMQ8UhNuTqNTlEcNEmx477z9vj6wu3B4+wGqPM6eHiJNvLuPx/c
+         Cocow2Xf/kf3T3aBZ+qk1DXTVhjxdu3FDnfc95FjwGdrt9JTjJewQdCKxDyqwPeVFZ
+         MHm7wCmPvY1sfWdH0XdrvUpAkw584KvL3TjNNETh0/1UiedNAvB3T0SwM1fPj1SZGC
+         TceGjSOMz2rOA==
+Date:   Fri, 21 Oct 2022 08:47:46 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Adam Borowski <kilobyte@angband.pl>,
+        Khalil Blaiech <kblaiech@nvidia.com>,
+        Asmaa Mnebhi <asmaa@nvidia.com>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/6] i2c: mlxbf: depend on ACPI; clean away ifdeffage
+Message-ID: <Y1JAkptx2esnE5BB@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Adam Borowski <kilobyte@angband.pl>,
+        Khalil Blaiech <kblaiech@nvidia.com>,
+        Asmaa Mnebhi <asmaa@nvidia.com>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <S229853AbiJTWkg/20221020224036Z+12888@vger.kernel.org>
+ <S229897AbiJTWqk/20221020224640Z+957@vger.kernel.org>
+ <Y1I/hRG9XGTFDTr3@shikoro>
 MIME-Version: 1.0
-Date:   Fri, 21 Oct 2022 08:47:42 +0200
-From:   netdev@kapio-technology.com
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Florent Fourcot <florent.fourcot@wifirst.fr>,
-        Hans Schultz <schultz.hans@gmail.com>,
-        Joachim Wiberg <troglobit@gmail.com>,
-        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v8 net-next 10/12] net: dsa: mv88e6xxx: mac-auth/MAB
- implementation
-In-Reply-To: <20221020225719.l5iw6vndmm7gvjo3@skbuf>
-References: <20221018165619.134535-1-netdev@kapio-technology.com>
- <20221018165619.134535-1-netdev@kapio-technology.com>
- <20221018165619.134535-11-netdev@kapio-technology.com>
- <20221018165619.134535-11-netdev@kapio-technology.com>
- <20221020132538.reirrskemcjwih2m@skbuf>
- <2565c09bb95d69142522c3c3bcaa599e@kapio-technology.com>
- <20221020225719.l5iw6vndmm7gvjo3@skbuf>
-User-Agent: Gigahost Webmail
-Message-ID: <82d23b100b8d2c9e4647b8a134d5cbbf@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qjmFV6esX/iMIQ4i"
+Content-Disposition: inline
+In-Reply-To: <Y1I/hRG9XGTFDTr3@shikoro>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-21 00:57, Vladimir Oltean wrote:
-> On Thu, Oct 20, 2022 at 10:20:50PM +0200, netdev@kapio-technology.com 
-> wrote:
->> In general locked ports block traffic from a host based on if there is 
->> a
->> FDB entry or not. In the non-offloaded case, there is only CPU 
->> assisted
->> learning, so the normal learning mechanism has to be disabled as any
->> learned entry will open the port for the learned MAC,vlan.
-> 
-> Does it have to be that way? Why can't BR_LEARNING on a BR_PORT_LOCKED
-> cause the learned FDB entries to have BR_FDB_LOCKED, and everything
-> would be ok in that case (the port will not be opened for the learned
-> MAC/VLAN)?
-> 
 
-I suppose you are right that basing it solely on BR_FDB_LOCKED is 
-possible.
+--qjmFV6esX/iMIQ4i
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-The question is then maybe if the common case where you don't need 
-learned
-entries for the scheme to work, e.g. with EAPOL link local packets, 
-requires
-less CPU load to work and is cleaner than if using BR_FDB_LOCKED 
-entries?
 
->> Thus learning is off for locked ports, which of course includes MAB.
->> 
->> So the 'learning' is based on authorizing MAC,vlan addresses, which
->> is done by userspace daemons, e.g. hostapd or what could be called
->> mabd.
+> > Fixes: be18c5ede25da39a0eda541f6de3620a30cf731f
+
+BTW this has to look like:
+
+Fixes: be18c5ede25d ("i2c: mlxbf: remove device tree support")
+
+checkpatch will warn you about it. This time, I fixed it for you.
+
+
+--qjmFV6esX/iMIQ4i
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNSQJIACgkQFA3kzBSg
+KbbWjRAAjQyHW7RhKonJluwzTyVOjPXrwtB3Yltv/wgrir9XgjTVR4w2b2OVC+3D
+8eSGSdxVNCkHNQnR3B9fmw307QGSMwa9q3fF4fJI6wLrJu3ifOdqApzzUTf4KACc
+TAo7AsC5tfhBWSHIpOlUfFlVSyLVZIJCj549EZ/EYqz8hdsLgm1iVpSOLNoW1u0r
+2LXJJyAc5LTontpw7wLGu7sAKcoj9KDymfTGCGlYe4u442xiPGRmjgzXk5P/Uffx
+FBXJXlgHKrPPA2m+hRI+cbD8W1tJASfQhVNIj5NqdEATdrjsGhdpTj6ssLjzkKlm
+/ixJqgfP60n3UmYAHEXvyjkMznLcHUXDmSmYsZadnlyRhK4p+/uexWClmHJ0Lqw4
+VPkXoawQNeIswxebNZntagLWeoosqaEZd3QyfvyYXRi716uq57blN72WDogw3C8K
+uIOnuVicySdXjrZn+QjtHgpngPbCFE1xATEcxeU2YnapF1VF67HKPpdlIP4OiFko
+roqVqFAjT8asKsBKLeAlvAIcKqNdM3B5/y11S3eCzlRNyZ4Lq0MOfijgM1KA/Elm
+00/Xc3O2X+11Zw05Jq4iWF2Z/30AJwSDOSDo2zbZdbGz4ToJ15BFbJf50+8Uzxyj
+C/knEAEVpdlQhyvTbYIbdjE4FDJWHiBoPRKRJJWD6hjausv9oxs=
+=Ho5N
+-----END PGP SIGNATURE-----
+
+--qjmFV6esX/iMIQ4i--
