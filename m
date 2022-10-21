@@ -2,138 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCC7A606F7D
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 07:35:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BED13606F7E
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 07:37:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229678AbiJUFfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 01:35:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38108 "EHLO
+        id S229728AbiJUFhE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 01:37:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbiJUFfD (ORCPT
+        with ESMTP id S229574AbiJUFhC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 01:35:03 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B1DD98F25F
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 22:34:56 -0700 (PDT)
-Received: from [192.168.1.139] (unknown [122.171.21.142])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 2717620FE651;
-        Thu, 20 Oct 2022 22:34:53 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 2717620FE651
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1666330496;
-        bh=z9ChsFdjUlv52E4SjHOOEqJlyuV2FJx+BaOBRoJ3lBg=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=ZpWvyu/LfUUP0pAqQDJwtlJR20oWYeLmsqSFAEh0LXbS0GZKUHXzk6pNNuf8ZXxAi
-         db2oYNbnN+Xu7WB7Cl4tOJvuqR7QC1hd+vtQZ/Xe6jekvKwnFg3SYIpEob84fJXH+D
-         ZIeObB3x0O7FkZB2u23gBXFYRAmpSxGrNEXbH7eY=
-Message-ID: <a1429a6a-1688-c30a-4fb2-3d575ffecbf1@linux.microsoft.com>
-Date:   Fri, 21 Oct 2022 11:04:49 +0530
+        Fri, 21 Oct 2022 01:37:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D3C1BE1FC
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 22:37:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1974E61DC8
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 05:37:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD180C433C1;
+        Fri, 21 Oct 2022 05:36:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1666330619;
+        bh=C4x6hYFDAWi4DXcimrF67aLQPsZW93Mx96V0amCnWn8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QlbKpgGx1qrMgSdaJyivXXf5qor/X961lpc0yRR+woSzH3tCcgiu1gmz/NBYEXQfe
+         K4vsmjcCVpegODndBu2vg9R9eT4zstEkXIb1SfoFeTNCPoQOhnVD+4siGARAhiytQw
+         tUVK0o7ipMo473nLX2GyW5d8TYlaC0oYKW+aMHhw=
+Date:   Fri, 21 Oct 2022 07:37:48 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Luben Tuikov <luben.tuikov@amd.com>
+Cc:     Yang Yingliang <yangyingliang@huawei.com>,
+        linux-kernel@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-erofs@lists.ozlabs.org, ocfs2-devel@oss.oracle.com,
+        linux-mtd@lists.infradead.org, amd-gfx@lists.freedesktop.org,
+        rafael@kernel.org, somlo@cmu.edu, mst@redhat.com,
+        jaegeuk@kernel.org, chao@kernel.org, hsiangkao@linux.alibaba.com,
+        huangjianan@oppo.com, mark@fasheh.com, jlbec@evilplan.org,
+        joseph.qi@linux.alibaba.com, akpm@linux-foundation.org,
+        alexander.deucher@amd.com, richard@nod.at, liushixin2@huawei.com
+Subject: Re: [PATCH 00/11] fix memory leak while kset_register() fails
+Message-ID: <Y1IwLOUGayjT9p6d@kroah.com>
+References: <20221021022102.2231464-1-yangyingliang@huawei.com>
+ <d559793a-0ce4-3384-e74e-19855aa31f31@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v4 08/11] staging: r8188eu: replace leading spaces by tabs
-To:     Deepak R Varma <drv@mailo.com>, outreachy@lists.linux.dev,
-        Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        paskripkin@gmail.com, gregkh@linuxfoundation.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        saurabh.truth@gmail.com
-References: <cover.1666299151.git.drv@mailo.com>
- <c32b702c61ea3367d60f0a4c2443093d6ce45a69.1666299151.git.drv@mailo.com>
-Content-Language: en-US
-From:   Praveen Kumar <kumarpraveen@linux.microsoft.com>
-In-Reply-To: <c32b702c61ea3367d60f0a4c2443093d6ce45a69.1666299151.git.drv@mailo.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d559793a-0ce4-3384-e74e-19855aa31f31@amd.com>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21-10-2022 03:01, Deepak R Varma wrote:
-> Spaces are prohibited as per the Linux coding style guidelines. Replace
-> those by tabs wherever possible to improve code alignment. Error
-> reported by checkpatch script.
+On Fri, Oct 21, 2022 at 01:29:31AM -0400, Luben Tuikov wrote:
+> On 2022-10-20 22:20, Yang Yingliang wrote:
+> > The previous discussion link:
+> > https://lore.kernel.org/lkml/0db486eb-6927-927e-3629-958f8f211194@huawei.com/T/
 > 
-> Signed-off-by: Deepak R Varma <drv@mailo.com>
-> ---
+> The very first discussion on this was here:
 > 
-> Changes in v4:
->    -- None.
+> https://www.spinics.net/lists/dri-devel/msg368077.html
 > 
-> Changes in v3:
->    1. Patch newly added in the patch set.
+> Please use this link, and not the that one up there you which quoted above,
+> and whose commit description is taken verbatim from the this link.
 > 
->  drivers/staging/r8188eu/include/rtw_cmd.h      | 10 +++++-----
->  drivers/staging/r8188eu/include/rtw_mlme.h     |  2 +-
->  drivers/staging/r8188eu/include/rtw_mlme_ext.h |  2 +-
->  3 files changed, 7 insertions(+), 7 deletions(-)
+> > 
+> > kset_register() is currently used in some places without calling
+> > kset_put() in error path, because the callers think it should be
+> > kset internal thing to do, but the driver core can not know what
+> > caller doing with that memory at times. The memory could be freed
+> > both in kset_put() and error path of caller, if it is called in
+> > kset_register().
 > 
-> diff --git a/drivers/staging/r8188eu/include/rtw_cmd.h b/drivers/staging/r8188eu/include/rtw_cmd.h
-> index 61fb523afb08..4b6a91aefc1e 100644
-> --- a/drivers/staging/r8188eu/include/rtw_cmd.h
-> +++ b/drivers/staging/r8188eu/include/rtw_cmd.h
-> @@ -592,14 +592,14 @@ struct setratable_parm {
->  };
+> As I explained in the link above, the reason there's
+> a memory leak is that one cannot call kset_register() without
+> the kset->kobj.name being set--kobj_add_internal() returns -EINVAL,
+> in this case, i.e. kset_register() fails with -EINVAL.
 > 
->  struct getratable_parm {
-> -                uint rsvd;
-> +	uint rsvd;
->  };
+> Thus, the most common usage is something like this:
 > 
->  struct getratable_rsp {
-> -        u8 ss_ForceUp[NumRates];
-> -        u8 ss_ULevel[NumRates];
-> -        u8 ss_DLevel[NumRates];
-> -        u8 count_judge[NumRates];
-> +	u8 ss_ForceUp[NumRates];
-> +	u8 ss_ULevel[NumRates];
-> +	u8 ss_DLevel[NumRates];
+> 	kobj_set_name(&kset->kobj, format, ...);
+> 	kset->kobj.kset = parent_kset;
+> 	kset->kobj.ktype = ktype;
+> 	res = kset_register(kset);
+> 
+> So, what is being leaked, is the memory allocated in kobj_set_name(),
+> by the common idiom shown above. This needs to be mentioned in
+> the documentation, at least, in case, in the future this is absolved
+> in kset_register() redesign, etc.
 
-Can this be reworked further like ss_ForceUp -> ss_force_up or ss_forceup ?
-Similarly for other attributes.
+Based on this, can kset_register() just clean up from itself when an
+error happens?  Ideally that would be the case, as the odds of a kset
+being embedded in a larger structure is probably slim, but we would have
+to search the tree to make sure.
 
-> +	u8 count_judge[NumRates];
->  };
-> 
->  /* to get TX,RX retry count */
-> diff --git a/drivers/staging/r8188eu/include/rtw_mlme.h b/drivers/staging/r8188eu/include/rtw_mlme.h
-> index 7658f864136e..ebf7168a7ef9 100644
-> --- a/drivers/staging/r8188eu/include/rtw_mlme.h
-> +++ b/drivers/staging/r8188eu/include/rtw_mlme.h
-> @@ -528,7 +528,7 @@ void rtw_indicate_scan_done(struct adapter *padapter);
->  int rtw_restruct_sec_ie(struct adapter *adapter, u8 *in_ie, u8 *out_ie,
->  			uint in_len);
->  int rtw_restruct_wmm_ie(struct adapter *adapter, u8 *in_ie, u8 *out_ie,
-> -		        uint in_len, uint initial_out_len);
-> +			uint in_len, uint initial_out_len);
->  void rtw_init_registrypriv_dev_network(struct adapter *adapter);
-> 
->  void rtw_update_registrypriv_dev_network(struct adapter *adapter);
-> diff --git a/drivers/staging/r8188eu/include/rtw_mlme_ext.h b/drivers/staging/r8188eu/include/rtw_mlme_ext.h
-> index be470f913a94..413b94e38744 100644
-> --- a/drivers/staging/r8188eu/include/rtw_mlme_ext.h
-> +++ b/drivers/staging/r8188eu/include/rtw_mlme_ext.h
-> @@ -449,7 +449,7 @@ void ERP_IE_handler(struct adapter *padapter, struct ndis_802_11_var_ie *pIE);
->  void VCS_update(struct adapter *padapter, struct sta_info *psta);
-> 
->  void update_beacon_info(struct adapter *padapter, u8 *pframe, uint len,
-> -		        struct sta_info *psta);
-> +			struct sta_info *psta);
->  int rtw_check_bcn_info(struct adapter  *Adapter, u8 *pframe, u32 packet_len);
->  void update_IOT_info(struct adapter *padapter);
->  void update_capinfo(struct adapter *adapter, u16 updatecap);
-> --
-> 2.30.2
-> 
-> 
-> 
+thanks,
 
-Regards,
-
-~Praveen.
-
+greg k-h
