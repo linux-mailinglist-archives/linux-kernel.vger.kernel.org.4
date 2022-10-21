@@ -2,143 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9E586081FD
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 01:09:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 219B4608202
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 01:13:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229678AbiJUXJH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 19:09:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51276 "EHLO
+        id S229690AbiJUXM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 19:12:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiJUXJE (ORCPT
+        with ESMTP id S229520AbiJUXMy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 19:09:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E69B52A934E
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 16:09:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9822DB82D8A
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 23:09:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF3F1C433D7;
-        Fri, 21 Oct 2022 23:09:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666393741;
-        bh=/209B5q5fAsMzd57io+X83Y3V+4/3rfLq9Maz8bcl6k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Col0fq/5u/mfv2kRTF+GOen4HTlJk29yNGMnXqLrGmelTlJig8A057pO8eQ3Weznr
-         v+aVKZP14/mAoViQo7itBNV2CShVXZBW3dplXRv1BXZxGhdtoZIgChOqrPLe+DL17N
-         p4ioI6WIsWOQNrDgKryxwv11imfNu4KEsr5K6wSj053C4VcNOZBiKMdHsa+H3MZXHn
-         ETbdTEHqUbYm1ZhMBcJoSV7YLBsFdr//Caa1CSdE+YtAdnLGQp7PIIR4awUrSjVaMh
-         IEtYVoyefRmBAona0/fALTTVfI/MgW1NX878H9JX2c+6WCtVxrgGa+p3lWIiSVQqCm
-         3fkP0A4/KfWaw==
-Date:   Fri, 21 Oct 2022 16:08:59 -0700
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, Kees Cook <keescook@chromium.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Joao Moreira <joao@overdrivepizza.com>,
-        linux-kernel@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>
-Subject: Re: [PATCH] x86/ibt: Implement FineIBT
-Message-ID: <20221021230859.gysp5v3yzfqz4xgb@treble>
-References: <Y06rtoE9BsERG9uv@hirez.programming.kicks-ass.net>
+        Fri, 21 Oct 2022 19:12:54 -0400
+Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D3302AD9F4
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 16:12:53 -0700 (PDT)
+Received: by mail-ua1-x932.google.com with SMTP id x20so2839337ual.6
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 16:12:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=isrx0fF4dkHtuQtfExKpKHMNsKbyGSRRWGG4h79QdEA=;
+        b=ftRI5yk48SGPvPE7t5Y1f8GCbtFXB8DZCxYc85spUTQX1lUeo93EWvRL8UhE9fM/Es
+         35XPmvPaudMYzwENm2+zPyApDJiv6F7s6zlEm7FtBs3MgNwgZ/UFY1Lzn2k4GQX51V6b
+         /fltiHIlaSnSgqzWyY1itBruvt0XZxNAvoxl7M0Gng4ivvR5Yfj/nnIQBtPhv3GSBw2q
+         jJ5gl9P5SwqxUhB8eRN7b1WiGkj4fxB3Y9nlsXSdUWlfsOkHnpj+0BJzZCMvC5DHpsnn
+         95yFdGh1JVOsRSmc6AuvO7h16WNdV1RVYYB9AIesXAwvSWR8T5OLIPcsIMGGw8rOMYWL
+         Y8zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=isrx0fF4dkHtuQtfExKpKHMNsKbyGSRRWGG4h79QdEA=;
+        b=a7Ir7AuZJAIUKoSl+Z1DK705eUwMmhWZmEJl794niPTs3CvHyzRXzEMCmMNRi3Iy9+
+         fef394dZc8+Ss0u3OsRA0pCPERkudHq0Kx+bUWMstxL7lNAGKQL+a+36R62Ed4tVA4zh
+         jUuTrsLiYvAL84WhZ5x19yIHEEWb1GhXYiM2EMe8Q1J6Z18x6uvgC159ZTMHqd7QLip3
+         ixyzvkrXuXmG40FqCZ0UfLhGjCfPgvH8t7lO/i9v0DKH4tA1fGVvofDeF+qijPN5Yp1A
+         Ck2yLnEoyG8yD41g0QNVlHFCrYpI7uYma0yQYz+VFE+XjUOuNsDFrPBHD5heqBd4aWnB
+         KoqQ==
+X-Gm-Message-State: ACrzQf1dXStLij3JyfN5hn/MAYAywM5MiHGKefv57vRi5S1YsdkgLZWU
+        uEVjmPL68TBlhFF97f5+xVyKBNYWLrku9u5hc7tjxg==
+X-Google-Smtp-Source: AMsMyM6RmE7ZMseZwHdE++neV7KKrTc6vpLmByaReQg76bUNKo2ix2D9t+6JzGpx0/wHbGz4j4PHZRg0FI4AQdbVk/k=
+X-Received: by 2002:ab0:70c6:0:b0:39e:ed14:806b with SMTP id
+ r6-20020ab070c6000000b0039eed14806bmr14734210ual.82.1666393972144; Fri, 21
+ Oct 2022 16:12:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y06rtoE9BsERG9uv@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <0000000000009fa63105eb7648d8@google.com> <00000000000031aec805eb76a2d4@google.com>
+ <20221020182155.ecd44ee984b1aeb2e5a2e8ed@linux-foundation.org>
+ <CAJuCfpEh0byROe58H_FtL+NMLKAvSrQW0f0wd3QiVTBdRg5CTA@mail.gmail.com> <CAJuCfpF7xsZJevfj6ERsJi5tPFj0o6FATAm4k=CMsONFG86EmQ@mail.gmail.com>
+In-Reply-To: <CAJuCfpF7xsZJevfj6ERsJi5tPFj0o6FATAm4k=CMsONFG86EmQ@mail.gmail.com>
+From:   Aleksandr Nogikh <nogikh@google.com>
+Date:   Fri, 21 Oct 2022 16:12:41 -0700
+Message-ID: <CANp29Y7aNP+0hd01feB24XrCUPVa0+7kf7NiDAV_FdhPx2VkOQ@mail.gmail.com>
+Subject: Re: [syzbot] BUG: sleeping function called from invalid context in vm_area_dup
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        syzbot <syzbot+b910411d3d253dab25d8@syzkaller.appspotmail.com>,
+        bigeasy@linutronix.de, bpf@vger.kernel.org, brauner@kernel.org,
+        ebiederm@xmission.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
+        linux-mm@kvack.org, David Hildenbrand <david@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 03:35:50PM +0200, Peter Zijlstra wrote:
-> +#ifdef CONFIG_FINEIBT
-> +/*
-> + * kCFI						FineIBT
-> + *
-> + * __cfi_\func:					__cfi_\func:
-> + *	movl   $0x12345678,%eax			     endbr64			// 4
-> + *	nop					     subl   $0x12345678,%r10d   // 7
-> + *	nop					     jz     1f			// 2
-> + *	nop					     ud2			// 2
-> + *	nop					1:   nop			// 1
-> + *	nop
-> + *	nop
-> + *	nop
-> + *	nop
-> + *	nop
-> + *	nop
-> + *	nop
+On Fri, Oct 21, 2022 at 2:52 PM 'Suren Baghdasaryan' via
+syzkaller-bugs <syzkaller-bugs@googlegroups.com> wrote:
+>
+> On Thu, Oct 20, 2022 at 6:58 PM Suren Baghdasaryan <surenb@google.com> wrote:
+> >
+> > On Thu, Oct 20, 2022 at 6:22 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+> > >
+> > > On Thu, 20 Oct 2022 05:40:43 -0700 syzbot <syzbot+b910411d3d253dab25d8@syzkaller.appspotmail.com> wrote:
+> > >
+> > > > syzbot has found a reproducer for the following issue on:
+> > >
+> > > Thanks.
+> > >
+> > >
+> > > > HEAD commit:    acee3e83b493 Add linux-next specific files for 20221020
+> > > > git tree:       linux-next
+> > > > console+strace: https://syzkaller.appspot.com/x/log.txt?x=170a8016880000
+> > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=c82245cfb913f766
+> > > > dashboard link: https://syzkaller.appspot.com/bug?extid=b910411d3d253dab25d8
+> > > > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=109e0372880000
+> > > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1770d752880000
+> > > >
+> > > > Downloadable assets:
+> > > > disk image: https://storage.googleapis.com/syzbot-assets/98cc5896cded/disk-acee3e83.raw.xz
+> > > > vmlinux: https://storage.googleapis.com/syzbot-assets/b3d3eb3aa10a/vmlinux-acee3e83.xz
+> > > >
+> > > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > > > Reported-by: syzbot+b910411d3d253dab25d8@syzkaller.appspotmail.com
+> > > >
+> > > > BUG: sleeping function called from invalid context at include/linux/sched/mm.h:274
+> > >
+> > > This is happening under dup_anon_vma_name().
+> > >
+> > > I can't spot preemption being disabled on that call path, and I assume
+> > > this code has been exercised for some time.
+> >
+> > Indeed, it is unclear why copy_vma() would be called in atomic
+> > context. I'll try to reproduce tomorrow. Maybe with lockdep enabled we
+> > can get something interesting.
+>
+> Sorry for the delay. Having trouble booting the image built with the
+> attached config. My qemu crashes with a "sched: CPU #1's llc-sibling
+> CPU #0 is not on the same node! [node: 1 != 0]." warning before the
+> crash. Trying to figure out why.
 
-All the "CFI" naming everywhere is very unfortunate.  We already have
-"call frame information" in both the toolchain and objtool.
+qemu 6.2 changed the core-to-socket assignment and it looks like we
+get such errors when a kernel with "numa=fake=" is run under qemu on a
+system with multiple CPUs.
 
-The feature is called "kCFI" anyway, can Clang call the symbols
-'__kcfi_*'?
+You can try removing numa=fake=... from the CMDLINE config or just
+manually setting the smp argument of the qemu process (e.g. -smp
+2,sockets=2,cores=1)
 
-> +++ b/tools/objtool/builtin-check.c
-> @@ -79,6 +79,7 @@ const struct option check_options[] = {
->  	OPT_BOOLEAN('s', "stackval", &opts.stackval, "validate frame pointer rules"),
->  	OPT_BOOLEAN('t', "static-call", &opts.static_call, "annotate static calls"),
->  	OPT_BOOLEAN('u', "uaccess", &opts.uaccess, "validate uaccess rules for SMAP"),
-> +	OPT_BOOLEAN(0  , "cfi", &opts.cfi, "generate cfi_sites"),
+See https://gitlab.com/qemu-project/qemu/-/issues/877
 
-"annotate kernel control flow integrity (kCFI) function preambles" ?
-
-> +++ b/tools/objtool/check.c
-> @@ -861,6 +861,62 @@ static int create_ibt_endbr_seal_section
->  	return 0;
->  }
->  
-> +static int create_cfi_sections(struct objtool_file *file)
-> +{
-> +	struct section *sec, *s;
-> +	struct symbol *sym;
-> +	unsigned int *loc;
-> +	int idx;
-> +
-> +	sec = find_section_by_name(file->elf, ".cfi_sites");
-> +	if (sec) {
-> +		INIT_LIST_HEAD(&file->call_list);
-> +		WARN("file already has .cfi_sites section, skipping");
-> +		return 0;
-> +	}
-> +
-> +	idx = 0;
-> +	for_each_sec(file, s) {
-> +		if (!s->text)
-> +			continue;
-> +
-> +		list_for_each_entry(sym, &s->symbol_list, list) {
-> +			if (strncmp(sym->name, "__cfi_", 6))
-> +				continue;
-
-Also make sure it's STT_FUNC.
-
-> +
-> +			idx++;
-> +		}
-> +	}
-> +
-> +	sec = elf_create_section(file->elf, ".cfi_sites", 0, sizeof(unsigned int), idx);
-> +	if (!sec)
-> +		return -1;
-> +
-> +	idx = 0;
-> +	for_each_sec(file, s) {
-> +		if (!s->text)
-> +			continue;
-> +
-> +		list_for_each_entry(sym, &s->symbol_list, list) {
-> +			if (strncmp(sym->name, "__cfi_", 6))
-> +				continue;
-
-Ditto.
-
--- 
-Josh
+> defconfig with CONFIG_ANON_VMA_NAME=y boots fine but does not
+> reproduce the issue.
+>
+> >
+> > >
+> > > I wonder if this could be fallout from the KSM locking error which
+> > > https://lkml.kernel.org/r/8c86678a-3bfb-3854-b1a9-ae5969e730b8@redhat.com
+> > > addresses.  Seems quite unlikely.
+> > >
+> > > > in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 3602, name: syz-executor107
+> > > > preempt_count: 1, expected: 0
+> > > > RCU nest depth: 0, expected: 0
+> > > > INFO: lockdep is turned off.
+> > > > Preemption disabled at:
+> > > > [<0000000000000000>] 0x0
+> > > > CPU: 0 PID: 3602 Comm: syz-executor107 Not tainted 6.1.0-rc1-next-20221020-syzkaller #0
+> > > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+> > > > Call Trace:
+> > > >  <TASK>
+> > > >  __dump_stack lib/dump_stack.c:88 [inline]
+> > > >  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+> > > >  __might_resched.cold+0x222/0x26b kernel/sched/core.c:9890
+> > > >  might_alloc include/linux/sched/mm.h:274 [inline]
+> > > >  slab_pre_alloc_hook mm/slab.h:727 [inline]
+> > > >  slab_alloc_node mm/slub.c:3323 [inline]
+> > > >  slab_alloc mm/slub.c:3411 [inline]
+> > > >  __kmem_cache_alloc_lru mm/slub.c:3418 [inline]
+> > > >  kmem_cache_alloc+0x2e6/0x3c0 mm/slub.c:3427
+> > > >  vm_area_dup+0x81/0x380 kernel/fork.c:466
+> > > >  copy_vma+0x376/0x8d0 mm/mmap.c:3216
+> > > >  move_vma+0x449/0xf60 mm/mremap.c:626
+> > > >  __do_sys_mremap+0x487/0x16b0 mm/mremap.c:1075
+> > > >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> > > >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+> > > >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> > > > RIP: 0033:0x7fd090fa5b29
+> > > > Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+> > > > RSP: 002b:00007ffc2e90bd38 EFLAGS: 00000246 ORIG_RAX: 0000000000000019
+> > > > RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fd090fa5b29
+> > > > RDX: 0000000000001000 RSI: 0000000000004000 RDI: 00000000201c4000
+> > > > RBP: 00007fd090f69cd0 R08: 00000000202ef000 R09: 0000000000000000
+> > > > R10: 0000000000000003 R11: 0000000000000246 R12: 00007fd090f69d60
+> > > > R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+> > > >  </TASK>
+>
+> --
+> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/CAJuCfpF7xsZJevfj6ERsJi5tPFj0o6FATAm4k%3DCMsONFG86EmQ%40mail.gmail.com.
