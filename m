@@ -2,168 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8639607714
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 14:39:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D97176076B1
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 14:09:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229729AbiJUMj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 08:39:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40086 "EHLO
+        id S230036AbiJUMJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 08:09:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbiJUMi5 (ORCPT
+        with ESMTP id S229449AbiJUMJM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 08:38:57 -0400
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 121E02681CD
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 05:38:39 -0700 (PDT)
-Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20221021123837epoutp015424c97a064d656ce04e93f37479d6b0~gFeC-HM8a1427514275epoutp01b
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 12:38:37 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20221021123837epoutp015424c97a064d656ce04e93f37479d6b0~gFeC-HM8a1427514275epoutp01b
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1666355917;
-        bh=biFlnjuZ8k7mTMxR0OX0eBniKYxMuKThwFDjh9fvDPg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fM/6QpP77QqhvdyX4IMUTsW3Snw5E3jfZMJqCOnubcf3zz4RNNnjUgM1XrqG77+BB
-         gDPtEitKhaZOqkx6qiKvoZlHlakFTj2jKeU2vSVV7NcjD+2/k++gdIzHqS1DhEQbYH
-         Nk1vS30dxzgPLCswBzRzzbVhOotPRDCGRbgvoeYU=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
-        20221021123836epcas5p26af5b3a891b3f64ace2e9353297721d1~gFeCVtaPu1049710497epcas5p2R;
-        Fri, 21 Oct 2022 12:38:36 +0000 (GMT)
-Received: from epsmges5p1new.samsung.com (unknown [182.195.38.179]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4Mv3t15TyZz4x9Pw; Fri, 21 Oct
-        2022 12:38:33 +0000 (GMT)
-Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
-        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        BA.EB.20812.9C292536; Fri, 21 Oct 2022 21:38:33 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-        20221021102642epcas5p24fec1e1e90632f6d9e768f7d25dc5480~gDq4NHe3l0419604196epcas5p2Z;
-        Fri, 21 Oct 2022 10:26:42 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20221021102642epsmtrp28fea699862896241631581e17642ead7~gDq4MJMPm0776407764epsmtrp2P;
-        Fri, 21 Oct 2022 10:26:42 +0000 (GMT)
-X-AuditID: b6c32a49-b09f97000001514c-61-635292c956f6
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        56.26.14392.2E372536; Fri, 21 Oct 2022 19:26:42 +0900 (KST)
-Received: from cheetah.sa.corp.samsungelectronics.net (unknown
-        [107.109.115.53]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20221021102640epsmtip1194c12f5c871cadc8caa52e6fb12ce21~gDq2Ud8bo2758127581epsmtip1B;
-        Fri, 21 Oct 2022 10:26:40 +0000 (GMT)
-From:   Vivek Yadav <vivek.2311@samsung.com>
-To:     rcsekar@samsung.com, wg@grandegger.com, mkl@pengutronix.de,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, pankaj.dubey@samsung.com,
-        ravi.patel@samsung.com, alim.akhtar@samsung.com
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Vivek Yadav <vivek.2311@samsung.com>
-Subject: [PATCH 7/7] arm64: dts: fsd: Add support for error correction code
- for message RAM
-Date:   Fri, 21 Oct 2022 15:28:33 +0530
-Message-Id: <20221021095833.62406-8-vivek.2311@samsung.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221021095833.62406-1-vivek.2311@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFuplk+LIzCtJLcpLzFFi42LZdlhTQ/fkpKBkgw87NC0ezNvGZjHnfAuL
-        xdNjj9gtLmzrY7VY9X0qs8XlXXPYLNYvmsJicWyBmMW3028YLRZt/cJu8fDDHnaLWRd2sFr8
-        WniYxWLpvZ2sDnweW1beZPJYsKnU4+Ol24wem1Z1snn0/zXweL/vKptH35ZVjB6fN8kFcERl
-        22SkJqakFimk5iXnp2TmpdsqeQfHO8ebmhkY6hpaWpgrKeQl5qbaKrn4BOi6ZeYAXa2kUJaY
-        UwoUCkgsLlbSt7Mpyi8tSVXIyC8usVVKLUjJKTAp0CtOzC0uzUvXy0stsTI0MDAyBSpMyM74
-        2PmRqWAHb8XfK/NZGhjvcHUxcnJICJhItM57wNTFyMUhJLCbUeLqpQ/MEM4nRomzG9+zgVQJ
-        CXxjlLjSHAHT0fXpBCtE0V5GiW0NE9ggnFYmiVtvm1lBqtgEtCQedy5gAbFFBO4ySlxbnNnF
-        yMHBLFAtceAIH0hYWCBW4sKlXWALWARUJb48OcAIYvMKWEs8aZnMBLFMXmL1hgPMIDangI3E
-        q/lbGEF2SQhM5JDYuPMzM0SRi8Tyn5OgGoQlXh3fwg5hS0l8freXDcJOltjxr5MVws6QWDBx
-        DyOEbS9x4MocFojbNCXW79KHCMtKTD21DmwkswCfRO/vJ1DjeSV2zIOxVSRefJ7ACtIKsqr3
-        nDBE2EPi8qP/0PDpZ5SYNPk02wRGuVkIGxYwMq5ilEwtKM5NTy02LTDMSy2Hx1lyfu4mRnC6
-        1PLcwXj3wQe9Q4xMHIyHGCU4mJVEeC3qgpKFeFMSK6tSi/Lji0pzUosPMZoCw28is5Rocj4w
-        YeeVxBuaWBqYmJmZmVgamxkqifMunqGVLCSQnliSmp2aWpBaBNPHxMEp1cCksYnryO7uRxfD
-        onYcUurYJP6w6dHHZga5r1ovY65r/xcu0Xq49dqknyXTbtYl3n2axl9X7VM+VXNN/a/Htmsc
-        05O6y76e8Ct88a2FY9rxJI9HN+bFOUg9aMvq8Aq6H3+o47mLvURl5ZI1M/3/fwv3srW4eX9R
-        nahmZ/mdCXO/P5cQvNJrLiT7yqf2WOHtjB9qGerB0oFtvYHWZ/9MFv6Yasbs0nuorHe+7B1u
-        vunOrF+E10r3XFqynmWP6N0rWqumqLvf3n7JWGoxT43NrgOJXu9mfA7ZIHOWU/NwR7PzjBW5
-        u+/89mQ7k519aHlsoxxvhubch3qOCnvD+6VLfglPn/rZjC2nSvPFL5UAO3MlluKMREMt5qLi
-        RADlduDdIAQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrGLMWRmVeSWpSXmKPExsWy7bCSnO6j4qBkg3NL9CwezNvGZjHnfAuL
-        xdNjj9gtLmzrY7VY9X0qs8XlXXPYLNYvmsJicWyBmMW3028YLRZt/cJu8fDDHnaLWRd2sFr8
-        WniYxWLpvZ2sDnweW1beZPJYsKnU4+Ol24wem1Z1snn0/zXweL/vKptH35ZVjB6fN8kFcERx
-        2aSk5mSWpRbp2yVwZXzs/MhUsIO34u+V+SwNjHe4uhg5OSQETCS6Pp1g7WLk4hAS2M0oMfvN
-        XkaIhJTElDMvWSBsYYmV/56zQxQ1M0nsXHqICSTBJqAl8bhzAViRiMBLRomWs2wgNrNAvcS7
-        MzfZQWxhgWiJfx+Pgg1lEVCV+PLkAJjNK2At8aRlMhPEAnmJ1RsOMIPYnAI2Eq/mbwGrEQKq
-        WfboJvsERr4FjAyrGCVTC4pz03OLDQsM81LL9YoTc4tL89L1kvNzNzGCg1pLcwfj9lUf9A4x
-        MnEwHmKU4GBWEuEteBeQLMSbklhZlVqUH19UmpNafIhRmoNFSZz3QtfJeCGB9MSS1OzU1ILU
-        IpgsEwenVAPTfK03/yMiLobMV/hzY9Mpo9LbTB8dJFlsrwktuSm+S797dnZ2fdSW2RLHZrTN
-        O9hz+MNaNa8tfFMf7HC4KvkjrPyuYseBY17f7kfEJHjHWNx1OnHxV4n2w+qA7fMv7ktlXFK6
-        6EZq9RfDiT8mr+k5Oq218ccaM5fLYcs8zh2UfGKWJuO2eWbpU1U1+xk2qj+WXn9zSi3B/Hht
-        vcNiP6aK52F7N23cHaMwLyrhxpfQrxe2797mkVP+5HaPyOXP0dEz0i0NGaM0JS0XRP/euvpo
-        b9j/ikNJkwu+di1NiltuX/9cfZK95Wbf6x9OzlVa7dBlNHv3wwUlLLr7TqprNh9PflLRdP5i
-        TG5s6N6MDc8z9imxFGckGmoxFxUnAgBdRuRs2QIAAA==
-X-CMS-MailID: 20221021102642epcas5p24fec1e1e90632f6d9e768f7d25dc5480
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20221021102642epcas5p24fec1e1e90632f6d9e768f7d25dc5480
-References: <20221021095833.62406-1-vivek.2311@samsung.com>
-        <CGME20221021102642epcas5p24fec1e1e90632f6d9e768f7d25dc5480@epcas5p2.samsung.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+        Fri, 21 Oct 2022 08:09:12 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B5B42608E1;
+        Fri, 21 Oct 2022 05:09:11 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29LBhP7Z020693;
+        Fri, 21 Oct 2022 12:08:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=Ix1uBobI9o+Hwx9mkxSgwrjZvrcNBw5GmPYnoSmZC0g=;
+ b=P1LKqhyU3TpGsKuM06Gy0Z0lzgC6pwAGAdNNfCkg9SmFoeUHab7+pLaI6WFyLv6yKBg9
+ EZ9dyhn1VLPwHykJWwTCk0qmxDeuB+ZQ1bzACK1eqALwXX/Ee3JTwa8eVFdfAW1KOR6I
+ 6IfcfGVe0LwytkEzn33l8PUx3K1Xli0KjsT9wzX9YxPiQ31/OcWOlNrwObRUtvVIlAjx
+ NpC7Ug2OpqZma7HlxrxWdDfMOvJdQeFXhRGdRjuVe+m8UNXX35DSDVAKfUAmjJQYGjV6
+ VLmrZFvVvm4eck1RBc/XugjJgj/u23Bb9QxStJvUCea0ULL98OTWPxS6YrwvHmbNdUcM qA== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kbtsx0u61-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 21 Oct 2022 12:08:54 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29LC5MVa022822;
+        Fri, 21 Oct 2022 12:08:06 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma03ams.nl.ibm.com with ESMTP id 3k7mg9ahwa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 21 Oct 2022 12:08:06 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29LC8bXV26673600
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 21 Oct 2022 12:08:37 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8FB6BAE045;
+        Fri, 21 Oct 2022 12:08:03 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9EE4AAE04D;
+        Fri, 21 Oct 2022 12:08:02 +0000 (GMT)
+Received: from sig-9-145-0-12.uk.ibm.com (unknown [9.145.0.12])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 21 Oct 2022 12:08:02 +0000 (GMT)
+Message-ID: <68d91d7a5aadbd46dc34470eccd6b86a84c9e47b.camel@linux.ibm.com>
+Subject: Re: [PATCH 3/5] iommu/s390: Use RCU to allow concurrent domain_list
+ iteration
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Matthew Rosato <mjrosato@linux.ibm.com>, iommu@lists.linux.dev,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Gerd Bayer <gbayer@linux.ibm.com>,
+        Pierre Morel <pmorel@linux.ibm.com>,
+        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        svens@linux.ibm.com, linux-kernel@vger.kernel.org
+Date:   Fri, 21 Oct 2022 14:08:02 +0200
+In-Reply-To: <Y1ErcEe82yjJI+ET@nvidia.com>
+References: <20221018145132.998866-1-schnelle@linux.ibm.com>
+         <20221018145132.998866-4-schnelle@linux.ibm.com>
+         <Y07Dz/NROAMI0Hku@nvidia.com>
+         <8e268ab5e0dadf86be5fd7ffaa9debb76cea67f3.camel@linux.ibm.com>
+         <Y0/lMCQ8oeXJ2HTg@nvidia.com>
+         <f3551bb461b3ef3cfc1a0c644093816be1835b3f.camel@linux.ibm.com>
+         <Y1ErcEe82yjJI+ET@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: klfKJ7beKJOkBDRPKCrx-JPXjTSQ4Qiz
+X-Proofpoint-ORIG-GUID: klfKJ7beKJOkBDRPKCrx-JPXjTSQ4Qiz
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-21_04,2022-10-21_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
+ spamscore=0 clxscore=1015 impostorscore=0 mlxscore=0 mlxlogscore=952
+ priorityscore=1501 lowpriorityscore=0 bulkscore=0 adultscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210210071
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add mram-ecc-cfg property which indicates the error correction code config
-and enable the same for FSD platform.
+On Thu, 2022-10-20 at 08:05 -0300, Jason Gunthorpe wrote:
+> On Thu, Oct 20, 2022 at 10:51:10AM +0200, Niklas Schnelle wrote:
+> 
+> > Ok that makes sense thanks for the explanation. So yes my assessment is
+> > still that in this situation the IOTLB flush is architected to return
+> > an error that we can ignore. Not the most elegant I admit but at least
+> > it's simple. Alternatively I guess we could use call_rcu() to do the
+> > zpci_unregister_ioat() but I'm not sure how to then make sure that a
+> > subsequent zpci_register_ioat() only happens after that without adding
+> > too much more logic.
+> 
+> This won't work either as the domain could have been freed before the
+> call_rcu() happens, the domain needs to be detached synchronously
+> 
+> Jason
 
-In FSD, error correction code (ECC) is configured via PERIC SYSREG registers.
-
-Signed-off-by: Vivek Yadav <vivek.2311@samsung.com>
----
- arch/arm64/boot/dts/tesla/fsd.dtsi | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/tesla/fsd.dtsi b/arch/arm64/boot/dts/tesla/fsd.dtsi
-index 154fd3fc5895..03d46a113612 100644
---- a/arch/arm64/boot/dts/tesla/fsd.dtsi
-+++ b/arch/arm64/boot/dts/tesla/fsd.dtsi
-@@ -778,6 +778,7 @@
- 			clocks = <&clock_peric PERIC_MCAN0_IPCLKPORT_PCLK>,
- 				<&clock_peric PERIC_MCAN0_IPCLKPORT_CCLK>;
- 			clock-names = "hclk", "cclk";
-+			mram-ecc-cfg = <&sysreg_peric 0x700>;
- 			bosch,mram-cfg = <0x0 128 64 64 64 64 32 32>;
- 			status = "disabled";
- 		};
-@@ -795,6 +796,7 @@
- 			clocks = <&clock_peric PERIC_MCAN1_IPCLKPORT_PCLK>,
- 				<&clock_peric PERIC_MCAN1_IPCLKPORT_CCLK>;
- 			clock-names = "hclk", "cclk";
-+			mram-ecc-cfg = <&sysreg_peric 0x704>;
- 			bosch,mram-cfg = <0x0 128 64 64 64 64 32 32>;
- 			status = "disabled";
- 		};
-@@ -812,6 +814,7 @@
- 			clocks = <&clock_peric PERIC_MCAN2_IPCLKPORT_PCLK>,
- 				<&clock_peric PERIC_MCAN2_IPCLKPORT_CCLK>;
- 			clock-names = "hclk", "cclk";
-+			mram-ecc-cfg = <&sysreg_peric 0x708>;
- 			bosch,mram-cfg = <0x0 128 64 64 64 64 32 32>;
- 			status = "disabled";
- 		};
-@@ -829,6 +832,7 @@
- 			clocks = <&clock_peric PERIC_MCAN3_IPCLKPORT_PCLK>,
- 				<&clock_peric PERIC_MCAN3_IPCLKPORT_CCLK>;
- 			clock-names = "hclk", "cclk";
-+			mram-ecc-cfg = <&sysreg_peric 0x70c>;
- 			bosch,mram-cfg = <0x0 128 64 64 64 64 32 32>;
- 			status = "disabled";
- 		};
--- 
-2.17.1
+Yeah right, that is basically the same issue I was thinking of for a
+subsequent zpci_register_ioat(). What about the obvious one. Just call
+synchronize_rcu() before zpci_unregister_ioat()?
 
