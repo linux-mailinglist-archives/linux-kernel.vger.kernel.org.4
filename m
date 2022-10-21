@@ -2,48 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A6EF607B99
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 17:56:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E194B607B9B
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 17:56:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230203AbiJUP4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 11:56:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38860 "EHLO
+        id S230233AbiJUP4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 11:56:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230283AbiJUPzv (ORCPT
+        with ESMTP id S229987AbiJUP4i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 11:55:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FB96254376;
-        Fri, 21 Oct 2022 08:55:45 -0700 (PDT)
+        Fri, 21 Oct 2022 11:56:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9776C27BB3F
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 08:56:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7915861E51;
-        Fri, 21 Oct 2022 15:55:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE6DDC433D6;
-        Fri, 21 Oct 2022 15:55:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2C2E8B82C96
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 15:56:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DBA8C433C1;
+        Fri, 21 Oct 2022 15:56:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666367743;
-        bh=9svDsx/IvKURyry+tFIoZtbUOo7UpezS4yA88zfcECM=;
+        s=k20201202; t=1666367776;
+        bh=alpySgmE7v5TDwtdevYP18DEgyIY/hpbe8Cca9BE4wY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Cb3LhsF6GP8O977cQXuhjz2Oa1Uc/dhq/fSeH5z04lAAsa50+sf6RSXtTwgT4JDCo
-         0A+yDHxcgfSl7srhCbmt35wcOmAPQPvLakbxJ5mTkhQV0K6kgGMnYu6k3bVIMJZO4R
-         XBhMNpbaNaSaKYlpFJ2Yh0kG65H/WcapvCJA35cHRP42qebD5MXPVUU9coy+v+auNX
-         Ssef97rRfauUq2IXO/K3q8IEKJCCZgoT4Nm2u7HC4fXjM91OfPGsRH5KwDw324a8Fz
-         og2pkmS5/e/B0C7laVTAMM0feLQ4DPuDsNlPTtRXOs83LIIKf8WVakKG7qsKWGT3HI
-         ZKTrDOwjGh2xg==
+        b=Oaf1PmclNNg1SbMiO/DYEh9dfwp4ayblsPeH6W54GND2rS0tcuVukarQeVoOu/Kwy
+         7PM0NmOC7HQ9dLwCvqzgUAPj0zMPbmguZ4DfryWq7nt6KVZ4W5LTiOTiTKJJG0Jr1/
+         1JMX9KpwUrnXdnFrgroBZvVLw0+ys4xaeF+thfaEatj81qEFOhy+KmGENVWTf4gKe8
+         FA/LcogMsiA6+Z15zNEiSOiVpproJfCUUF25Us/OnT1Zyov3H0SwflppTS42f560tr
+         7EwHGYIebsLflv5wULvMt+18tlQjBYIAv4k6eIEYdfFkn/r5qH4d7xHwye8FBjfqJN
+         va8N6JlOsJU+g==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     linux-arm-kernel@lists.infradead.org,
         Russell King <linux@armlinux.org.uk>,
         Linus Walleij <linus.walleij@linaro.org>,
         Lubomir Rintel <lkundrak@v3.sk>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>
 Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Randy Dunlap <rdunlap@infradead.org>, linux-pm@vger.kernel.org
-Subject: [PATCH 05/11] cpufreq: remove sa1100 driver
-Date:   Fri, 21 Oct 2022 17:49:35 +0200
-Message-Id: <20221021155000.4108406-6-arnd@kernel.org>
+        linux-mtd@lists.infradead.org
+Subject: [PATCH 06/11] mtd: remove lart flash driver
+Date:   Fri, 21 Oct 2022 17:49:36 +0200
+Message-Id: <20221021155000.4108406-7-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20221021155000.4108406-1-arnd@kernel.org>
 References: <20221021155000.4108406-1-arnd@kernel.org>
@@ -61,271 +62,736 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The sa11xx platform has two cpufreq drivers, one for the older
-StrongARM1100 SoC, and a second one for StrongARM1110. After
-the removal of most SA1100 based machines, this driver is unused,
-and only the sa1110-cpufreq driver remains.
+The sa1100 lart platform was removed, so its flash driver is
+no longer useful.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/cpufreq/Kconfig          |   2 +-
- drivers/cpufreq/Kconfig.arm      |   3 -
- drivers/cpufreq/Makefile         |   1 -
- drivers/cpufreq/sa1100-cpufreq.c | 206 -------------------------------
- 4 files changed, 1 insertion(+), 211 deletions(-)
- delete mode 100644 drivers/cpufreq/sa1100-cpufreq.c
+ drivers/mtd/devices/Kconfig  |   8 -
+ drivers/mtd/devices/Makefile |   1 -
+ drivers/mtd/devices/lart.c   | 682 -----------------------------------
+ 3 files changed, 691 deletions(-)
+ delete mode 100644 drivers/mtd/devices/lart.c
 
-diff --git a/drivers/cpufreq/Kconfig b/drivers/cpufreq/Kconfig
-index 2a84fc63371e..8466f78651fc 100644
---- a/drivers/cpufreq/Kconfig
-+++ b/drivers/cpufreq/Kconfig
-@@ -37,7 +37,7 @@ config CPU_FREQ_STAT
+diff --git a/drivers/mtd/devices/Kconfig b/drivers/mtd/devices/Kconfig
+index 79cb981ececc..ff2f9e55ef28 100644
+--- a/drivers/mtd/devices/Kconfig
++++ b/drivers/mtd/devices/Kconfig
+@@ -136,14 +136,6 @@ config MTD_PHRAM
+ 	  doesn't have access to, memory beyond the mem=xxx limit, nvram,
+ 	  memory on the video card, etc...
  
- choice
- 	prompt "Default CPUFreq governor"
--	default CPU_FREQ_DEFAULT_GOV_USERSPACE if ARM_SA1100_CPUFREQ || ARM_SA1110_CPUFREQ
-+	default CPU_FREQ_DEFAULT_GOV_USERSPACE if ARM_SA1110_CPUFREQ
- 	default CPU_FREQ_DEFAULT_GOV_SCHEDUTIL if ARM64 || ARM
- 	default CPU_FREQ_DEFAULT_GOV_SCHEDUTIL if X86_INTEL_PSTATE && SMP
- 	default CPU_FREQ_DEFAULT_GOV_PERFORMANCE
-diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
-index 82e5de1f6f8c..8f7a1065f344 100644
---- a/drivers/cpufreq/Kconfig.arm
-+++ b/drivers/cpufreq/Kconfig.arm
-@@ -277,9 +277,6 @@ config ARM_S5PV210_CPUFREQ
- 
- 	  If in doubt, say N.
- 
--config ARM_SA1100_CPUFREQ
--	bool
+-config MTD_LART
+-	tristate "28F160xx flash driver for LART"
+-	depends on SA1100_LART
+-	help
+-	  This enables the flash driver for LART. Please note that you do
+-	  not need any mapping/chip driver for LART. This one does it all
+-	  for you, so go disable all of those if you enabled some of them (:
 -
- config ARM_SA1110_CPUFREQ
- 	bool
- 
-diff --git a/drivers/cpufreq/Makefile b/drivers/cpufreq/Makefile
-index 49b98c62c5af..8de99b213146 100644
---- a/drivers/cpufreq/Makefile
-+++ b/drivers/cpufreq/Makefile
-@@ -78,7 +78,6 @@ obj-$(CONFIG_ARM_S3C64XX_CPUFREQ)	+= s3c64xx-cpufreq.o
- obj-$(CONFIG_ARM_S3C24XX_CPUFREQ)	+= s3c24xx-cpufreq.o
- obj-$(CONFIG_ARM_S3C24XX_CPUFREQ_DEBUGFS) += s3c24xx-cpufreq-debugfs.o
- obj-$(CONFIG_ARM_S5PV210_CPUFREQ)	+= s5pv210-cpufreq.o
--obj-$(CONFIG_ARM_SA1100_CPUFREQ)	+= sa1100-cpufreq.o
- obj-$(CONFIG_ARM_SA1110_CPUFREQ)	+= sa1110-cpufreq.o
- obj-$(CONFIG_ARM_SCMI_CPUFREQ)		+= scmi-cpufreq.o
- obj-$(CONFIG_ARM_SCPI_CPUFREQ)		+= scpi-cpufreq.o
-diff --git a/drivers/cpufreq/sa1100-cpufreq.c b/drivers/cpufreq/sa1100-cpufreq.c
+ config MTD_MTDRAM
+ 	tristate "Test driver using RAM"
+ 	help
+diff --git a/drivers/mtd/devices/Makefile b/drivers/mtd/devices/Makefile
+index 0362cf6bdc67..d11eb2b8b6f8 100644
+--- a/drivers/mtd/devices/Makefile
++++ b/drivers/mtd/devices/Makefile
+@@ -9,7 +9,6 @@ obj-$(CONFIG_MTD_PHRAM)		+= phram.o
+ obj-$(CONFIG_MTD_PMC551)	+= pmc551.o
+ obj-$(CONFIG_MTD_MS02NV)	+= ms02-nv.o
+ obj-$(CONFIG_MTD_MTDRAM)	+= mtdram.o
+-obj-$(CONFIG_MTD_LART)		+= lart.o
+ obj-$(CONFIG_MTD_BLOCK2MTD)	+= block2mtd.o
+ obj-$(CONFIG_MTD_DATAFLASH)	+= mtd_dataflash.o
+ obj-$(CONFIG_MTD_MCHP23K256)	+= mchp23k256.o
+diff --git a/drivers/mtd/devices/lart.c b/drivers/mtd/devices/lart.c
 deleted file mode 100644
-index 252b9fc26124..000000000000
---- a/drivers/cpufreq/sa1100-cpufreq.c
+index aecd441e4183..000000000000
+--- a/drivers/mtd/devices/lart.c
 +++ /dev/null
-@@ -1,206 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-or-later
+@@ -1,682 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-
 -/*
-- * cpu-sa1100.c: clock scaling for the SA1100
+- * MTD driver for the 28F160F3 Flash Memory (non-CFI) on LART.
 - *
-- * Copyright (C) 2000 2001, The Delft University of Technology
+- * Author: Abraham vd Merwe <abraham@2d3d.co.za>
 - *
-- * Authors:
-- * - Johan Pouwelse (J.A.Pouwelse@its.tudelft.nl): initial version
-- * - Erik Mouw (J.A.K.Mouw@its.tudelft.nl):
-- *   - major rewrite for linux-2.3.99
-- *   - rewritten for the more generic power management scheme in
-- *     linux-2.4.5-rmk1
+- * Copyright (c) 2001, 2d3D, Inc.
 - *
-- * This software has been developed while working on the LART
-- * computing board (http://www.lartmaker.nl/), which is
-- * sponsored by the Mobile Multi-media Communications
-- * (http://www.mobimedia.org/) and Ubiquitous Communications
-- * (http://www.ubicom.tudelft.nl/) projects.
+- * References:
 - *
-- * The authors can be reached at:
+- *    [1] 3 Volt Fast Boot Block Flash Memory" Intel Datasheet
+- *           - Order Number: 290644-005
+- *           - January 2000
 - *
-- *  Erik Mouw
-- *  Information and Communication Theory Group
-- *  Faculty of Information Technology and Systems
-- *  Delft University of Technology
-- *  P.O. Box 5031
-- *  2600 GA Delft
-- *  The Netherlands
+- *    [2] MTD internal API documentation
+- *           - http://www.linux-mtd.infradead.org/ 
 - *
-- * Theory of operations
-- * ====================
+- * Limitations:
 - *
-- * Clock scaling can be used to lower the power consumption of the CPU
-- * core. This will give you a somewhat longer running time.
+- *    Even though this driver is written for 3 Volt Fast Boot
+- *    Block Flash Memory, it is rather specific to LART. With
+- *    Minor modifications, notably the without data/address line
+- *    mangling and different bus settings, etc. it should be
+- *    trivial to adapt to other platforms.
 - *
-- * The SA-1100 has a single register to change the core clock speed:
-- *
-- *   PPCR      0x90020014    PLL config
-- *
-- * However, the DRAM timings are closely related to the core clock
-- * speed, so we need to change these, too. The used registers are:
-- *
-- *   MDCNFG    0xA0000000    DRAM config
-- *   MDCAS0    0xA0000004    Access waveform
-- *   MDCAS1    0xA0000008    Access waveform
-- *   MDCAS2    0xA000000C    Access waveform
-- *
-- * Care must be taken to change the DRAM parameters the correct way,
-- * because otherwise the DRAM becomes unusable and the kernel will
-- * crash.
-- *
-- * The simple solution to avoid a kernel crash is to put the actual
-- * clock change in ROM and jump to that code from the kernel. The main
-- * disadvantage is that the ROM has to be modified, which is not
-- * possible on all SA-1100 platforms. Another disadvantage is that
-- * jumping to ROM makes clock switching unnecessary complicated.
-- *
-- * The idea behind this driver is that the memory configuration can be
-- * changed while running from DRAM (even with interrupts turned on!)
-- * as long as all re-configuration steps yield a valid DRAM
-- * configuration. The advantages are clear: it will run on all SA-1100
-- * platforms, and the code is very simple.
-- *
-- * If you really want to understand what is going on in
-- * sa1100_update_dram_timings(), you'll have to read sections 8.2,
-- * 9.5.7.3, and 10.2 from the "Intel StrongARM SA-1100 Microprocessor
-- * Developers Manual" (available for free from Intel).
+- *    If somebody would sponsor me a different board, I'll
+- *    adapt the driver (:
 - */
 -
+-/* debugging */
+-//#define LART_DEBUG
+-
 -#include <linux/kernel.h>
+-#include <linux/module.h>
 -#include <linux/types.h>
 -#include <linux/init.h>
--#include <linux/cpufreq.h>
--#include <linux/io.h>
+-#include <linux/errno.h>
+-#include <linux/string.h>
+-#include <linux/mtd/mtd.h>
+-#include <linux/mtd/partitions.h>
 -
--#include <asm/cputype.h>
+-#ifndef CONFIG_SA1100_LART
+-#error This is for LART architecture only
+-#endif
 -
--#include <mach/generic.h>
--#include <mach/hardware.h>
+-static char module_name[] = "lart";
 -
--struct sa1100_dram_regs {
--	int speed;
--	u32 mdcnfg;
--	u32 mdcas0;
--	u32 mdcas1;
--	u32 mdcas2;
+-/*
+- * These values is specific to 28Fxxxx3 flash memory.
+- * See section 2.3.1 in "3 Volt Fast Boot Block Flash Memory" Intel Datasheet
+- */
+-#define FLASH_BLOCKSIZE_PARAM		(4096 * BUSWIDTH)
+-#define FLASH_NUMBLOCKS_16m_PARAM	8
+-#define FLASH_NUMBLOCKS_8m_PARAM	8
+-
+-/*
+- * These values is specific to 28Fxxxx3 flash memory.
+- * See section 2.3.2 in "3 Volt Fast Boot Block Flash Memory" Intel Datasheet
+- */
+-#define FLASH_BLOCKSIZE_MAIN		(32768 * BUSWIDTH)
+-#define FLASH_NUMBLOCKS_16m_MAIN	31
+-#define FLASH_NUMBLOCKS_8m_MAIN		15
+-
+-/*
+- * These values are specific to LART
+- */
+-
+-/* general */
+-#define BUSWIDTH			4				/* don't change this - a lot of the code _will_ break if you change this */
+-#define FLASH_OFFSET		0xe8000000		/* see linux/arch/arm/mach-sa1100/lart.c */
+-
+-/* blob */
+-#define NUM_BLOB_BLOCKS		FLASH_NUMBLOCKS_16m_PARAM
+-#define PART_BLOB_START		0x00000000
+-#define PART_BLOB_LEN		(NUM_BLOB_BLOCKS * FLASH_BLOCKSIZE_PARAM)
+-
+-/* kernel */
+-#define NUM_KERNEL_BLOCKS	7
+-#define PART_KERNEL_START	(PART_BLOB_START + PART_BLOB_LEN)
+-#define PART_KERNEL_LEN		(NUM_KERNEL_BLOCKS * FLASH_BLOCKSIZE_MAIN)
+-
+-/* initial ramdisk */
+-#define NUM_INITRD_BLOCKS	24
+-#define PART_INITRD_START	(PART_KERNEL_START + PART_KERNEL_LEN)
+-#define PART_INITRD_LEN		(NUM_INITRD_BLOCKS * FLASH_BLOCKSIZE_MAIN)
+-
+-/*
+- * See section 4.0 in "3 Volt Fast Boot Block Flash Memory" Intel Datasheet
+- */
+-#define READ_ARRAY			0x00FF00FF		/* Read Array/Reset */
+-#define READ_ID_CODES		0x00900090		/* Read Identifier Codes */
+-#define ERASE_SETUP			0x00200020		/* Block Erase */
+-#define ERASE_CONFIRM		0x00D000D0		/* Block Erase and Program Resume */
+-#define PGM_SETUP			0x00400040		/* Program */
+-#define STATUS_READ			0x00700070		/* Read Status Register */
+-#define STATUS_CLEAR		0x00500050		/* Clear Status Register */
+-#define STATUS_BUSY			0x00800080		/* Write State Machine Status (WSMS) */
+-#define STATUS_ERASE_ERR	0x00200020		/* Erase Status (ES) */
+-#define STATUS_PGM_ERR		0x00100010		/* Program Status (PS) */
+-
+-/*
+- * See section 4.2 in "3 Volt Fast Boot Block Flash Memory" Intel Datasheet
+- */
+-#define FLASH_MANUFACTURER			0x00890089
+-#define FLASH_DEVICE_8mbit_TOP		0x88f188f1
+-#define FLASH_DEVICE_8mbit_BOTTOM	0x88f288f2
+-#define FLASH_DEVICE_16mbit_TOP		0x88f388f3
+-#define FLASH_DEVICE_16mbit_BOTTOM	0x88f488f4
+-
+-/***************************************************************************************************/
+-
+-/*
+- * The data line mapping on LART is as follows:
+- *
+- *   	 U2  CPU |   U3  CPU
+- *   	 -------------------
+- *   	  0  20  |   0   12
+- *   	  1  22  |   1   14
+- *   	  2  19  |   2   11
+- *   	  3  17  |   3   9
+- *   	  4  24  |   4   0
+- *   	  5  26  |   5   2
+- *   	  6  31  |   6   7
+- *   	  7  29  |   7   5
+- *   	  8  21  |   8   13
+- *   	  9  23  |   9   15
+- *   	  10 18  |   10  10
+- *   	  11 16  |   11  8
+- *   	  12 25  |   12  1
+- *   	  13 27  |   13  3
+- *   	  14 30  |   14  6
+- *   	  15 28  |   15  4
+- */
+-
+-/* Mangle data (x) */
+-#define DATA_TO_FLASH(x)				\
+-	(									\
+-		(((x) & 0x08009000) >> 11)	+	\
+-		(((x) & 0x00002000) >> 10)	+	\
+-		(((x) & 0x04004000) >> 8)	+	\
+-		(((x) & 0x00000010) >> 4)	+	\
+-		(((x) & 0x91000820) >> 3)	+	\
+-		(((x) & 0x22080080) >> 2)	+	\
+-		((x) & 0x40000400)			+	\
+-		(((x) & 0x00040040) << 1)	+	\
+-		(((x) & 0x00110000) << 4)	+	\
+-		(((x) & 0x00220100) << 5)	+	\
+-		(((x) & 0x00800208) << 6)	+	\
+-		(((x) & 0x00400004) << 9)	+	\
+-		(((x) & 0x00000001) << 12)	+	\
+-		(((x) & 0x00000002) << 13)		\
+-	)
+-
+-/* Unmangle data (x) */
+-#define FLASH_TO_DATA(x)				\
+-	(									\
+-		(((x) & 0x00010012) << 11)	+	\
+-		(((x) & 0x00000008) << 10)	+	\
+-		(((x) & 0x00040040) << 8)	+	\
+-		(((x) & 0x00000001) << 4)	+	\
+-		(((x) & 0x12200104) << 3)	+	\
+-		(((x) & 0x08820020) << 2)	+	\
+-		((x) & 0x40000400)			+	\
+-		(((x) & 0x00080080) >> 1)	+	\
+-		(((x) & 0x01100000) >> 4)	+	\
+-		(((x) & 0x04402000) >> 5)	+	\
+-		(((x) & 0x20008200) >> 6)	+	\
+-		(((x) & 0x80000800) >> 9)	+	\
+-		(((x) & 0x00001000) >> 12)	+	\
+-		(((x) & 0x00004000) >> 13)		\
+-	)
+-
+-/*
+- * The address line mapping on LART is as follows:
+- *
+- *   	 U3  CPU |   U2  CPU
+- *   	 -------------------
+- *   	  0  2   |   0   2
+- *   	  1  3   |   1   3
+- *   	  2  9   |   2   9
+- *   	  3  13  |   3   8
+- *   	  4  8   |   4   7
+- *   	  5  12  |   5   6
+- *   	  6  11  |   6   5
+- *   	  7  10  |   7   4
+- *   	  8  4   |   8   10
+- *   	  9  5   |   9   11
+- *   	 10  6   |   10  12
+- *   	 11  7   |   11  13
+- *
+- *   	 BOOT BLOCK BOUNDARY
+- *
+- *   	 12  15  |   12  15
+- *   	 13  14  |   13  14
+- *   	 14  16  |   14  16
+- *
+- *   	 MAIN BLOCK BOUNDARY
+- *
+- *   	 15  17  |   15  18
+- *   	 16  18  |   16  17
+- *   	 17  20  |   17  20
+- *   	 18  19  |   18  19
+- *   	 19  21  |   19  21
+- *
+- * As we can see from above, the addresses aren't mangled across
+- * block boundaries, so we don't need to worry about address
+- * translations except for sending/reading commands during
+- * initialization
+- */
+-
+-/* Mangle address (x) on chip U2 */
+-#define ADDR_TO_FLASH_U2(x)				\
+-	(									\
+-		(((x) & 0x00000f00) >> 4)	+	\
+-		(((x) & 0x00042000) << 1)	+	\
+-		(((x) & 0x0009c003) << 2)	+	\
+-		(((x) & 0x00021080) << 3)	+	\
+-		(((x) & 0x00000010) << 4)	+	\
+-		(((x) & 0x00000040) << 5)	+	\
+-		(((x) & 0x00000024) << 7)	+	\
+-		(((x) & 0x00000008) << 10)		\
+-	)
+-
+-/* Unmangle address (x) on chip U2 */
+-#define FLASH_U2_TO_ADDR(x)				\
+-	(									\
+-		(((x) << 4) & 0x00000f00)	+	\
+-		(((x) >> 1) & 0x00042000)	+	\
+-		(((x) >> 2) & 0x0009c003)	+	\
+-		(((x) >> 3) & 0x00021080)	+	\
+-		(((x) >> 4) & 0x00000010)	+	\
+-		(((x) >> 5) & 0x00000040)	+	\
+-		(((x) >> 7) & 0x00000024)	+	\
+-		(((x) >> 10) & 0x00000008)		\
+-	)
+-
+-/* Mangle address (x) on chip U3 */
+-#define ADDR_TO_FLASH_U3(x)				\
+-	(									\
+-		(((x) & 0x00000080) >> 3)	+	\
+-		(((x) & 0x00000040) >> 1)	+	\
+-		(((x) & 0x00052020) << 1)	+	\
+-		(((x) & 0x00084f03) << 2)	+	\
+-		(((x) & 0x00029010) << 3)	+	\
+-		(((x) & 0x00000008) << 5)	+	\
+-		(((x) & 0x00000004) << 7)		\
+-	)
+-
+-/* Unmangle address (x) on chip U3 */
+-#define FLASH_U3_TO_ADDR(x)				\
+-	(									\
+-		(((x) << 3) & 0x00000080)	+	\
+-		(((x) << 1) & 0x00000040)	+	\
+-		(((x) >> 1) & 0x00052020)	+	\
+-		(((x) >> 2) & 0x00084f03)	+	\
+-		(((x) >> 3) & 0x00029010)	+	\
+-		(((x) >> 5) & 0x00000008)	+	\
+-		(((x) >> 7) & 0x00000004)		\
+-	)
+-
+-/***************************************************************************************************/
+-
+-static __u8 read8 (__u32 offset)
+-{
+-   volatile __u8 *data = (__u8 *) (FLASH_OFFSET + offset);
+-#ifdef LART_DEBUG
+-   printk (KERN_DEBUG "%s(): 0x%.8x -> 0x%.2x\n", __func__, offset, *data);
+-#endif
+-   return (*data);
+-}
+-
+-static __u32 read32 (__u32 offset)
+-{
+-   volatile __u32 *data = (__u32 *) (FLASH_OFFSET + offset);
+-#ifdef LART_DEBUG
+-   printk (KERN_DEBUG "%s(): 0x%.8x -> 0x%.8x\n", __func__, offset, *data);
+-#endif
+-   return (*data);
+-}
+-
+-static void write32 (__u32 x,__u32 offset)
+-{
+-   volatile __u32 *data = (__u32 *) (FLASH_OFFSET + offset);
+-   *data = x;
+-#ifdef LART_DEBUG
+-   printk (KERN_DEBUG "%s(): 0x%.8x <- 0x%.8x\n", __func__, offset, *data);
+-#endif
+-}
+-
+-/***************************************************************************************************/
+-
+-/*
+- * Probe for 16mbit flash memory on a LART board without doing
+- * too much damage. Since we need to write 1 dword to memory,
+- * we're f**cked if this happens to be DRAM since we can't
+- * restore the memory (otherwise we might exit Read Array mode).
+- *
+- * Returns 1 if we found 16mbit flash memory on LART, 0 otherwise.
+- */
+-static int flash_probe (void)
+-{
+-   __u32 manufacturer,devtype;
+-
+-   /* setup "Read Identifier Codes" mode */
+-   write32 (DATA_TO_FLASH (READ_ID_CODES),0x00000000);
+-
+-   /* probe U2. U2/U3 returns the same data since the first 3
+-	* address lines is mangled in the same way */
+-   manufacturer = FLASH_TO_DATA (read32 (ADDR_TO_FLASH_U2 (0x00000000)));
+-   devtype = FLASH_TO_DATA (read32 (ADDR_TO_FLASH_U2 (0x00000001)));
+-
+-   /* put the flash back into command mode */
+-   write32 (DATA_TO_FLASH (READ_ARRAY),0x00000000);
+-
+-   return (manufacturer == FLASH_MANUFACTURER && (devtype == FLASH_DEVICE_16mbit_TOP || devtype == FLASH_DEVICE_16mbit_BOTTOM));
+-}
+-
+-/*
+- * Erase one block of flash memory at offset ``offset'' which is any
+- * address within the block which should be erased.
+- *
+- * Returns 1 if successful, 0 otherwise.
+- */
+-static inline int erase_block (__u32 offset)
+-{
+-   __u32 status;
+-
+-#ifdef LART_DEBUG
+-   printk (KERN_DEBUG "%s(): 0x%.8x\n", __func__, offset);
+-#endif
+-
+-   /* erase and confirm */
+-   write32 (DATA_TO_FLASH (ERASE_SETUP),offset);
+-   write32 (DATA_TO_FLASH (ERASE_CONFIRM),offset);
+-
+-   /* wait for block erase to finish */
+-   do
+-	 {
+-		write32 (DATA_TO_FLASH (STATUS_READ),offset);
+-		status = FLASH_TO_DATA (read32 (offset));
+-	 }
+-   while ((~status & STATUS_BUSY) != 0);
+-
+-   /* put the flash back into command mode */
+-   write32 (DATA_TO_FLASH (READ_ARRAY),offset);
+-
+-   /* was the erase successful? */
+-   if ((status & STATUS_ERASE_ERR))
+-	 {
+-		printk (KERN_WARNING "%s: erase error at address 0x%.8x.\n",module_name,offset);
+-		return (0);
+-	 }
+-
+-   return (1);
+-}
+-
+-static int flash_erase (struct mtd_info *mtd,struct erase_info *instr)
+-{
+-   __u32 addr,len;
+-   int i,first;
+-
+-#ifdef LART_DEBUG
+-   printk (KERN_DEBUG "%s(addr = 0x%.8x, len = %d)\n", __func__, instr->addr, instr->len);
+-#endif
+-
+-   /*
+-	* check that both start and end of the requested erase are
+-	* aligned with the erasesize at the appropriate addresses.
+-	*
+-	* skip all erase regions which are ended before the start of
+-	* the requested erase. Actually, to save on the calculations,
+-	* we skip to the first erase region which starts after the
+-	* start of the requested erase, and then go back one.
+-	*/
+-   for (i = 0; i < mtd->numeraseregions && instr->addr >= mtd->eraseregions[i].offset; i++) ;
+-   i--;
+-
+-   /*
+-	* ok, now i is pointing at the erase region in which this
+-	* erase request starts. Check the start of the requested
+-	* erase range is aligned with the erase size which is in
+-	* effect here.
+-	*/
+-   if (i < 0 || (instr->addr & (mtd->eraseregions[i].erasesize - 1)))
+-      return -EINVAL;
+-
+-   /* Remember the erase region we start on */
+-   first = i;
+-
+-   /*
+-	* next, check that the end of the requested erase is aligned
+-	* with the erase region at that address.
+-	*
+-	* as before, drop back one to point at the region in which
+-	* the address actually falls
+-	*/
+-   for (; i < mtd->numeraseregions && instr->addr + instr->len >= mtd->eraseregions[i].offset; i++) ;
+-   i--;
+-
+-   /* is the end aligned on a block boundary? */
+-   if (i < 0 || ((instr->addr + instr->len) & (mtd->eraseregions[i].erasesize - 1)))
+-      return -EINVAL;
+-
+-   addr = instr->addr;
+-   len = instr->len;
+-
+-   i = first;
+-
+-   /* now erase those blocks */
+-   while (len)
+-	 {
+-		if (!erase_block (addr))
+-			 return (-EIO);
+-
+-		addr += mtd->eraseregions[i].erasesize;
+-		len -= mtd->eraseregions[i].erasesize;
+-
+-		if (addr == mtd->eraseregions[i].offset + (mtd->eraseregions[i].erasesize * mtd->eraseregions[i].numblocks)) i++;
+-	 }
+-
+-   return (0);
+-}
+-
+-static int flash_read (struct mtd_info *mtd,loff_t from,size_t len,size_t *retlen,u_char *buf)
+-{
+-#ifdef LART_DEBUG
+-   printk (KERN_DEBUG "%s(from = 0x%.8x, len = %d)\n", __func__, (__u32)from, len);
+-#endif
+-
+-   /* we always read len bytes */
+-   *retlen = len;
+-
+-   /* first, we read bytes until we reach a dword boundary */
+-   if (from & (BUSWIDTH - 1))
+-	 {
+-		int gap = BUSWIDTH - (from & (BUSWIDTH - 1));
+-
+-		while (len && gap--) {
+-			*buf++ = read8 (from++);
+-			len--;
+-		}
+-	 }
+-
+-   /* now we read dwords until we reach a non-dword boundary */
+-   while (len >= BUSWIDTH)
+-	 {
+-		*((__u32 *) buf) = read32 (from);
+-
+-		buf += BUSWIDTH;
+-		from += BUSWIDTH;
+-		len -= BUSWIDTH;
+-	 }
+-
+-   /* top up the last unaligned bytes */
+-   if (len & (BUSWIDTH - 1))
+-	 while (len--) *buf++ = read8 (from++);
+-
+-   return (0);
+-}
+-
+-/*
+- * Write one dword ``x'' to flash memory at offset ``offset''. ``offset''
+- * must be 32 bits, i.e. it must be on a dword boundary.
+- *
+- * Returns 1 if successful, 0 otherwise.
+- */
+-static inline int write_dword (__u32 offset,__u32 x)
+-{
+-   __u32 status;
+-
+-#ifdef LART_DEBUG
+-   printk (KERN_DEBUG "%s(): 0x%.8x <- 0x%.8x\n", __func__, offset, x);
+-#endif
+-
+-   /* setup writing */
+-   write32 (DATA_TO_FLASH (PGM_SETUP),offset);
+-
+-   /* write the data */
+-   write32 (x,offset);
+-
+-   /* wait for the write to finish */
+-   do
+-	 {
+-		write32 (DATA_TO_FLASH (STATUS_READ),offset);
+-		status = FLASH_TO_DATA (read32 (offset));
+-	 }
+-   while ((~status & STATUS_BUSY) != 0);
+-
+-   /* put the flash back into command mode */
+-   write32 (DATA_TO_FLASH (READ_ARRAY),offset);
+-
+-   /* was the write successful? */
+-   if ((status & STATUS_PGM_ERR) || read32 (offset) != x)
+-	 {
+-		printk (KERN_WARNING "%s: write error at address 0x%.8x.\n",module_name,offset);
+-		return (0);
+-	 }
+-
+-   return (1);
+-}
+-
+-static int flash_write (struct mtd_info *mtd,loff_t to,size_t len,size_t *retlen,const u_char *buf)
+-{
+-   __u8 tmp[4];
+-   int i,n;
+-
+-#ifdef LART_DEBUG
+-   printk (KERN_DEBUG "%s(to = 0x%.8x, len = %d)\n", __func__, (__u32)to, len);
+-#endif
+-
+-   /* sanity checks */
+-   if (!len) return (0);
+-
+-   /* first, we write a 0xFF.... padded byte until we reach a dword boundary */
+-   if (to & (BUSWIDTH - 1))
+-	 {
+-		__u32 aligned = to & ~(BUSWIDTH - 1);
+-		int gap = to - aligned;
+-
+-		i = n = 0;
+-
+-		while (gap--) tmp[i++] = 0xFF;
+-		while (len && i < BUSWIDTH) {
+-			tmp[i++] = buf[n++];
+-			len--;
+-		}
+-		while (i < BUSWIDTH) tmp[i++] = 0xFF;
+-
+-		if (!write_dword (aligned,*((__u32 *) tmp))) return (-EIO);
+-
+-		to += n;
+-		buf += n;
+-		*retlen += n;
+-	 }
+-
+-   /* now we write dwords until we reach a non-dword boundary */
+-   while (len >= BUSWIDTH)
+-	 {
+-		if (!write_dword (to,*((__u32 *) buf))) return (-EIO);
+-
+-		to += BUSWIDTH;
+-		buf += BUSWIDTH;
+-		*retlen += BUSWIDTH;
+-		len -= BUSWIDTH;
+-	 }
+-
+-   /* top up the last unaligned bytes, padded with 0xFF.... */
+-   if (len & (BUSWIDTH - 1))
+-	 {
+-		i = n = 0;
+-
+-		while (len--) tmp[i++] = buf[n++];
+-		while (i < BUSWIDTH) tmp[i++] = 0xFF;
+-
+-		if (!write_dword (to,*((__u32 *) tmp))) return (-EIO);
+-
+-		*retlen += n;
+-	 }
+-
+-   return (0);
+-}
+-
+-/***************************************************************************************************/
+-
+-static struct mtd_info mtd;
+-
+-static struct mtd_erase_region_info erase_regions[] = {
+-	/* parameter blocks */
+-	{
+-		.offset		= 0x00000000,
+-		.erasesize	= FLASH_BLOCKSIZE_PARAM,
+-		.numblocks	= FLASH_NUMBLOCKS_16m_PARAM,
+-	},
+-	/* main blocks */
+-	{
+-		.offset	 = FLASH_BLOCKSIZE_PARAM * FLASH_NUMBLOCKS_16m_PARAM,
+-		.erasesize	= FLASH_BLOCKSIZE_MAIN,
+-		.numblocks	= FLASH_NUMBLOCKS_16m_MAIN,
+-	}
 -};
 -
--
--static struct cpufreq_driver sa1100_driver;
--
--static struct sa1100_dram_regs sa1100_dram_settings[] = {
--	/*speed,     mdcnfg,     mdcas0,     mdcas1,     mdcas2,   clock freq */
--	{ 59000, 0x00dc88a3, 0xcccccccf, 0xfffffffc, 0xffffffff},/*  59.0 MHz */
--	{ 73700, 0x011490a3, 0xcccccccf, 0xfffffffc, 0xffffffff},/*  73.7 MHz */
--	{ 88500, 0x014e90a3, 0xcccccccf, 0xfffffffc, 0xffffffff},/*  88.5 MHz */
--	{103200, 0x01889923, 0xcccccccf, 0xfffffffc, 0xffffffff},/* 103.2 MHz */
--	{118000, 0x01c29923, 0x9999998f, 0xfffffff9, 0xffffffff},/* 118.0 MHz */
--	{132700, 0x01fb2123, 0x9999998f, 0xfffffff9, 0xffffffff},/* 132.7 MHz */
--	{147500, 0x02352123, 0x3333330f, 0xfffffff3, 0xffffffff},/* 147.5 MHz */
--	{162200, 0x026b29a3, 0x38e38e1f, 0xfff8e38e, 0xffffffff},/* 162.2 MHz */
--	{176900, 0x02a329a3, 0x71c71c1f, 0xfff1c71c, 0xffffffff},/* 176.9 MHz */
--	{191700, 0x02dd31a3, 0xe38e383f, 0xffe38e38, 0xffffffff},/* 191.7 MHz */
--	{206400, 0x03153223, 0xc71c703f, 0xffc71c71, 0xffffffff},/* 206.4 MHz */
--	{221200, 0x034fba23, 0xc71c703f, 0xffc71c71, 0xffffffff},/* 221.2 MHz */
--	{235900, 0x03853a23, 0xe1e1e07f, 0xe1e1e1e1, 0xffffffe1},/* 235.9 MHz */
--	{250700, 0x03bf3aa3, 0xc3c3c07f, 0xc3c3c3c3, 0xffffffc3},/* 250.7 MHz */
--	{265400, 0x03f7c2a3, 0xc3c3c07f, 0xc3c3c3c3, 0xffffffc3},/* 265.4 MHz */
--	{280200, 0x0431c2a3, 0x878780ff, 0x87878787, 0xffffff87},/* 280.2 MHz */
--	{ 0, 0, 0, 0, 0 } /* last entry */
+-static const struct mtd_partition lart_partitions[] = {
+-	/* blob */
+-	{
+-		.name	= "blob",
+-		.offset	= PART_BLOB_START,
+-		.size	= PART_BLOB_LEN,
+-	},
+-	/* kernel */
+-	{
+-		.name	= "kernel",
+-		.offset	= PART_KERNEL_START,	/* MTDPART_OFS_APPEND */
+-		.size	= PART_KERNEL_LEN,
+-	},
+-	/* initial ramdisk / file system */
+-	{
+-		.name	= "file system",
+-		.offset	= PART_INITRD_START,	/* MTDPART_OFS_APPEND */
+-		.size	= PART_INITRD_LEN,	/* MTDPART_SIZ_FULL */
+-	}
 -};
+-#define NUM_PARTITIONS ARRAY_SIZE(lart_partitions)
 -
--static void sa1100_update_dram_timings(int current_speed, int new_speed)
+-static int __init lart_flash_init (void)
 -{
--	struct sa1100_dram_regs *settings = sa1100_dram_settings;
+-   int result;
+-   memset (&mtd,0,sizeof (mtd));
+-   printk ("MTD driver for LART. Written by Abraham vd Merwe <abraham@2d3d.co.za>\n");
+-   printk ("%s: Probing for 28F160x3 flash on LART...\n",module_name);
+-   if (!flash_probe ())
+-	 {
+-		printk (KERN_WARNING "%s: Found no LART compatible flash device\n",module_name);
+-		return (-ENXIO);
+-	 }
+-   printk ("%s: This looks like a LART board to me.\n",module_name);
+-   mtd.name = module_name;
+-   mtd.type = MTD_NORFLASH;
+-   mtd.writesize = 1;
+-   mtd.writebufsize = 4;
+-   mtd.flags = MTD_CAP_NORFLASH;
+-   mtd.size = FLASH_BLOCKSIZE_PARAM * FLASH_NUMBLOCKS_16m_PARAM + FLASH_BLOCKSIZE_MAIN * FLASH_NUMBLOCKS_16m_MAIN;
+-   mtd.erasesize = FLASH_BLOCKSIZE_MAIN;
+-   mtd.numeraseregions = ARRAY_SIZE(erase_regions);
+-   mtd.eraseregions = erase_regions;
+-   mtd._erase = flash_erase;
+-   mtd._read = flash_read;
+-   mtd._write = flash_write;
+-   mtd.owner = THIS_MODULE;
 -
--	/* find speed */
--	while (settings->speed != 0) {
--		if (new_speed == settings->speed)
--			break;
+-#ifdef LART_DEBUG
+-   printk (KERN_DEBUG
+-		   "mtd.name = %s\n"
+-		   "mtd.size = 0x%.8x (%uM)\n"
+-		   "mtd.erasesize = 0x%.8x (%uK)\n"
+-		   "mtd.numeraseregions = %d\n",
+-		   mtd.name,
+-		   mtd.size,mtd.size / (1024*1024),
+-		   mtd.erasesize,mtd.erasesize / 1024,
+-		   mtd.numeraseregions);
 -
--		settings++;
--	}
+-   if (mtd.numeraseregions)
+-	 for (result = 0; result < mtd.numeraseregions; result++)
+-	   printk (KERN_DEBUG
+-			   "\n\n"
+-			   "mtd.eraseregions[%d].offset = 0x%.8x\n"
+-			   "mtd.eraseregions[%d].erasesize = 0x%.8x (%uK)\n"
+-			   "mtd.eraseregions[%d].numblocks = %d\n",
+-			   result,mtd.eraseregions[result].offset,
+-			   result,mtd.eraseregions[result].erasesize,mtd.eraseregions[result].erasesize / 1024,
+-			   result,mtd.eraseregions[result].numblocks);
 -
--	if (settings->speed == 0) {
--		panic("%s: couldn't find dram setting for speed %d\n",
--		      __func__, new_speed);
--	}
+-   printk ("\npartitions = %d\n", ARRAY_SIZE(lart_partitions));
 -
--	/* No risk, no fun: run with interrupts on! */
--	if (new_speed > current_speed) {
--		/* We're going FASTER, so first relax the memory
--		 * timings before changing the core frequency
--		 */
+-   for (result = 0; result < ARRAY_SIZE(lart_partitions); result++)
+-	 printk (KERN_DEBUG
+-			 "\n\n"
+-			 "lart_partitions[%d].name = %s\n"
+-			 "lart_partitions[%d].offset = 0x%.8x\n"
+-			 "lart_partitions[%d].size = 0x%.8x (%uK)\n",
+-			 result,lart_partitions[result].name,
+-			 result,lart_partitions[result].offset,
+-			 result,lart_partitions[result].size,lart_partitions[result].size / 1024);
+-#endif
 -
--		/* Half the memory access clock */
--		MDCNFG |= MDCNFG_CDB2;
+-   result = mtd_device_register(&mtd, lart_partitions,
+-                                ARRAY_SIZE(lart_partitions));
 -
--		/* The order of these statements IS important, keep 8
--		 * pulses!!
--		 */
--		MDCAS2 = settings->mdcas2;
--		MDCAS1 = settings->mdcas1;
--		MDCAS0 = settings->mdcas0;
--		MDCNFG = settings->mdcnfg;
--	} else {
--		/* We're going SLOWER: first decrease the core
--		 * frequency and then tighten the memory settings.
--		 */
--
--		/* Half the memory access clock */
--		MDCNFG |= MDCNFG_CDB2;
--
--		/* The order of these statements IS important, keep 8
--		 * pulses!!
--		 */
--		MDCAS0 = settings->mdcas0;
--		MDCAS1 = settings->mdcas1;
--		MDCAS2 = settings->mdcas2;
--		MDCNFG = settings->mdcnfg;
--	}
+-   return (result);
 -}
 -
--static int sa1100_target(struct cpufreq_policy *policy, unsigned int ppcr)
+-static void __exit lart_flash_exit (void)
 -{
--	unsigned int cur = sa11x0_getspeed(0);
--	unsigned int new_freq;
--
--	new_freq = sa11x0_freq_table[ppcr].frequency;
--
--	if (new_freq > cur)
--		sa1100_update_dram_timings(cur, new_freq);
--
--	PPCR = ppcr;
--
--	if (new_freq < cur)
--		sa1100_update_dram_timings(cur, new_freq);
--
--	return 0;
+-   mtd_device_unregister(&mtd);
 -}
 -
--static int __init sa1100_cpu_init(struct cpufreq_policy *policy)
--{
--	cpufreq_generic_init(policy, sa11x0_freq_table, 0);
--	return 0;
--}
+-module_init (lart_flash_init);
+-module_exit (lart_flash_exit);
 -
--static struct cpufreq_driver sa1100_driver __refdata = {
--	.flags		= CPUFREQ_NEED_INITIAL_FREQ_CHECK |
--			  CPUFREQ_NO_AUTO_DYNAMIC_SWITCHING,
--	.verify		= cpufreq_generic_frequency_table_verify,
--	.target_index	= sa1100_target,
--	.get		= sa11x0_getspeed,
--	.init		= sa1100_cpu_init,
--	.name		= "sa1100",
--};
--
--static int __init sa1100_dram_init(void)
--{
--	if (cpu_is_sa1100())
--		return cpufreq_register_driver(&sa1100_driver);
--	else
--		return -ENODEV;
--}
--
--arch_initcall(sa1100_dram_init);
+-MODULE_LICENSE("GPL");
+-MODULE_AUTHOR("Abraham vd Merwe <abraham@2d3d.co.za>");
+-MODULE_DESCRIPTION("MTD driver for Intel 28F160F3 on LART board");
 -- 
 2.29.2
 
