@@ -2,155 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 117FD607485
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 11:56:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CB7B607488
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 11:57:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229731AbiJUJ4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 05:56:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39998 "EHLO
+        id S229755AbiJUJ5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 05:57:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbiJUJ4e (ORCPT
+        with ESMTP id S229916AbiJUJ4y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 05:56:34 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD9F01ACA9F
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 02:56:29 -0700 (PDT)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Mv09R6B5NzmVJg;
-        Fri, 21 Oct 2022 17:51:39 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 21 Oct 2022 17:56:21 +0800
-Received: from [10.174.178.174] (10.174.178.174) by
- dggpemm500007.china.huawei.com (7.185.36.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 21 Oct 2022 17:56:20 +0800
-Subject: Re: [PATCH 00/11] fix memory leak while kset_register() fails
-To:     Luben Tuikov <luben.tuikov@amd.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-CC:     <linux-kernel@vger.kernel.org>, <qemu-devel@nongnu.org>,
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        <linux-erofs@lists.ozlabs.org>, <ocfs2-devel@oss.oracle.com>,
-        <linux-mtd@lists.infradead.org>, <amd-gfx@lists.freedesktop.org>,
-        <rafael@kernel.org>, <somlo@cmu.edu>, <mst@redhat.com>,
-        <jaegeuk@kernel.org>, <chao@kernel.org>,
-        <hsiangkao@linux.alibaba.com>, <huangjianan@oppo.com>,
-        <mark@fasheh.com>, <jlbec@evilplan.org>,
-        <joseph.qi@linux.alibaba.com>, <akpm@linux-foundation.org>,
-        <alexander.deucher@amd.com>, <richard@nod.at>,
-        <liushixin2@huawei.com>
-References: <20221021022102.2231464-1-yangyingliang@huawei.com>
- <d559793a-0ce4-3384-e74e-19855aa31f31@amd.com> <Y1IwLOUGayjT9p6d@kroah.com>
- <0591e66f-731a-5f81-fc9d-3a6d80516c65@huawei.com>
- <Y1JZ9IUPL6jZIQ8E@kroah.com>
- <f1210e20-d167-26c4-7aba-490d8fb7241e@huawei.com>
- <78f84006-955f-6209-1cae-024e4f199b97@amd.com>
-From:   Yang Yingliang <yangyingliang@huawei.com>
-Message-ID: <9ee10048-f3fe-533b-5f00-8e5dd176808e@huawei.com>
-Date:   Fri, 21 Oct 2022 17:56:19 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Fri, 21 Oct 2022 05:56:54 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CADC228CF8
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 02:56:48 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id j8-20020a056e02154800b002fc89e9ebeeso3077700ilu.16
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 02:56:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RKOPYMWoU+pj6DkofKbbNnR/YvcIyy/DI1Wxbd6izEM=;
+        b=ZEqHPqfrJr1LRCRbIJpOEKvrxLc9DLIiw7Hl6HD30cypHWtoyRXXMG1AbNo7M6XipM
+         n6sT6orKpp5E6l71whO09iln6+XTXjJh98NHQCfrP/QyiwYqFDGKWsmNDxSt3nUN6p6/
+         1dwYeFwJ/EXQhjGX14SJVKWVdr7UUb4DO5NMz2rcYbU6fJaeFb4vfb5oFnbqDPQPadV4
+         J1zUIiyajqnRbda+vuXCQEorQcGSXYL2NOMM+Ydu3jwyA/yq5wrRtvHl5oItr5vUoTXw
+         yw99yQRnaIW/cbpoG/hbj9V01xhtRw2g0e9hbf70IJj7CxsDEc+RJltXZq3g24MGH2Vr
+         TsNQ==
+X-Gm-Message-State: ACrzQf0cPqMUgwF4VqaQ98WolkQyXuC+rSVrTRZ4CZITRlQw6JuinB0X
+        95DRr8VpMsz3f1NPzBgiB+lRJuFvRjR+vaJYo+/vKXc3Z3kr
+X-Google-Smtp-Source: AMsMyM5eHOs/7lFkVSCkihITBx0m6g35gKFh5gtnt0w7ZNWNkyRS7Hr75ZJOBtAiG45QPp/W7KT3bXx4rt5AZVML9Oilic5FfOi8
 MIME-Version: 1.0
-In-Reply-To: <78f84006-955f-6209-1cae-024e4f199b97@amd.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Originating-IP: [10.174.178.174]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:c0c9:0:b0:2f9:ae60:164c with SMTP id
+ t9-20020a92c0c9000000b002f9ae60164cmr14340758ilf.28.1666346207746; Fri, 21
+ Oct 2022 02:56:47 -0700 (PDT)
+Date:   Fri, 21 Oct 2022 02:56:47 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c92d2105eb8875d9@google.com>
+Subject: [syzbot] WARNING in btrfs_destroy_inode
+From:   syzbot <syzbot+d4d23ca08383875f6956@syzkaller.appspotmail.com>
+To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
-On 2022/10/21 17:08, Luben Tuikov wrote:
-> On 2022-10-21 04:59, Yang Yingliang wrote:
->> On 2022/10/21 16:36, Greg KH wrote:
->>> On Fri, Oct 21, 2022 at 04:24:23PM +0800, Yang Yingliang wrote:
->>>> On 2022/10/21 13:37, Greg KH wrote:
->>>>> On Fri, Oct 21, 2022 at 01:29:31AM -0400, Luben Tuikov wrote:
->>>>>> On 2022-10-20 22:20, Yang Yingliang wrote:
->>>>>>> The previous discussion link:
->>>>>>> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Flkml%2F0db486eb-6927-927e-3629-958f8f211194%40huawei.com%2FT%2F&amp;data=05%7C01%7Cluben.tuikov%40amd.com%7C74aa9b57192b406ef27408dab3429db4%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C638019395979868103%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=RcK05cXm1J5%2BtYcLO2SMG7k6sjeymQzdBzMCDJSzfdE%3D&amp;reserved=0
->>>>>> The very first discussion on this was here:
->>>>>>
->>>>>> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fwww.spinics.net%2Flists%2Fdri-devel%2Fmsg368077.html&amp;data=05%7C01%7Cluben.tuikov%40amd.com%7C74aa9b57192b406ef27408dab3429db4%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C638019395979868103%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=sHZ6kfLF8HxrNXV6%2FVjgdH%2BmQM4T3Zv0U%2FAwddT97cE%3D&amp;reserved=0
->>>>>>
->>>>>> Please use this link, and not the that one up there you which quoted above,
->>>>>> and whose commit description is taken verbatim from the this link.
->>>>>>
->>>>>>> kset_register() is currently used in some places without calling
->>>>>>> kset_put() in error path, because the callers think it should be
->>>>>>> kset internal thing to do, but the driver core can not know what
->>>>>>> caller doing with that memory at times. The memory could be freed
->>>>>>> both in kset_put() and error path of caller, if it is called in
->>>>>>> kset_register().
->>>>>> As I explained in the link above, the reason there's
->>>>>> a memory leak is that one cannot call kset_register() without
->>>>>> the kset->kobj.name being set--kobj_add_internal() returns -EINVAL,
->>>>>> in this case, i.e. kset_register() fails with -EINVAL.
->>>>>>
->>>>>> Thus, the most common usage is something like this:
->>>>>>
->>>>>> 	kobj_set_name(&kset->kobj, format, ...);
->>>>>> 	kset->kobj.kset = parent_kset;
->>>>>> 	kset->kobj.ktype = ktype;
->>>>>> 	res = kset_register(kset);
->>>>>>
->>>>>> So, what is being leaked, is the memory allocated in kobj_set_name(),
->>>>>> by the common idiom shown above. This needs to be mentioned in
->>>>>> the documentation, at least, in case, in the future this is absolved
->>>>>> in kset_register() redesign, etc.
->>>>> Based on this, can kset_register() just clean up from itself when an
->>>>> error happens?  Ideally that would be the case, as the odds of a kset
->>>>> being embedded in a larger structure is probably slim, but we would have
->>>>> to search the tree to make sure.
->>>> I have search the whole tree, the kset used in bus_register() - patch #3,
->>>> kset_create_and_add() - patch #4
->>>> __class_register() - patch #5,  fw_cfg_build_symlink() - patch #6 and
->>>> amdgpu_discovery.c - patch #10
->>>> is embedded in a larger structure. In these cases, we can not call
->>>> kset_put() in error path in kset_register()
->>> Yes you can as the kobject in the kset should NOT be controling the
->>> lifespan of those larger objects.
->>>
->>> If it is, please point out the call chain here as I don't think that
->>> should be possible.
->>>
->>> Note all of this is a mess because the kobject name stuff was added much
->>> later, after the driver model had been created and running for a while.
->>> We missed this error path when adding the dynamic kobject name logic,
->>> thank for looking into this.
->>>
->>> If you could test the patch posted with your error injection systems,
->>> that could make this all much simpler to solve.
->> The patch posted by Luben will cause double free in some cases.
-> Yes, I figured this out in the other email and posted the scenario Greg
-> was asking about.
->
-> But I believe the question still stands if we can do kset_put()
-> after a *failed* kset_register(), namely if more is being done than
-> necessary, which is just to free the memory allocated by
-> kobject_set_name().
-The name memory is allocated in kobject_set_name() in caller,  and I 
-think caller
-free the memory that it allocated is reasonable, it's weird that some 
-callers allocate
-some memory and use function (kset_register) failed, then it free the 
-memory allocated
-in callers,  I think use kset_put()/kfree_const(name) in caller seems 
-more reasonable.
+syzbot found the following issue on:
 
-Thanks,
-Yang
->
-> Regards,
-> Luben
-> .
+HEAD commit:    bbed346d5a96 Merge branch 'for-next/core' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=125cfb76880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3a4a45d2d827c1e
+dashboard link: https://syzkaller.appspot.com/bug?extid=d4d23ca08383875f6956
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/e8e91bc79312/disk-bbed346d.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/c1cb3fb3b77e/vmlinux-bbed346d.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+d4d23ca08383875f6956@syzkaller.appspotmail.com
+
+loop0: detected capacity change from 0 to 32768
+BTRFS info (device loop0): using xxhash64 (xxhash64-generic) checksum algorithm
+BTRFS info (device loop0): using free space tree
+BTRFS info (device loop0): enabling ssd optimizations
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 27221 at fs/btrfs/inode.c:8963 btrfs_destroy_inode+0x274/0x2f8 fs/btrfs/inode.c:8963
+Modules linked in:
+CPU: 1 PID: 27221 Comm: syz-executor.0 Not tainted 6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
+pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : btrfs_destroy_inode+0x274/0x2f8 fs/btrfs/inode.c:8963
+lr : btrfs_destroy_inode+0x274/0x2f8 fs/btrfs/inode.c:8963
+sp : ffff800020f13a30
+x29: ffff800020f13a30 x28: 0000000000000040 x27: ffff000128be1d68
+x26: ffff00012a3c0c30 x25: 0000000000000000 x24: ffff00011a6704c0
+x23: ffff80000d3480b0 x22: 0000000000000000 x21: ffff80000c1419d0
+x20: ffff00011a672a20 x19: ffff00011a672560 x18: 0000000000000000
+x17: 0000000000000000 x16: ffff80000db49158 x15: ffff000128e49a80
+x14: 0000000000000010 x13: 0000000000000000 x12: 0000000000040000
+x11: 0000000000001bfd x10: ffff800022c9f000 x9 : ffff800009132e4c
+x8 : 0000000000001bfe x7 : ffff8000084b15e8 x6 : 0000000000000000
+x5 : 0000000000000d40 x4 : 0000000000000038 x3 : 0000000000000038
+x2 : ffff0000c001c800 x1 : 00000000fffffff4 x0 : ffff00011a672a20
+Call trace:
+ btrfs_destroy_inode+0x274/0x2f8 fs/btrfs/inode.c:8963
+ alloc_inode+0xb0/0x104 fs/inode.c:269
+ new_inode_pseudo fs/inode.c:1019 [inline]
+ new_inode+0x2c/0xc0 fs/inode.c:1047
+ btrfs_create+0x34/0xb0 fs/btrfs/inode.c:6690
+ lookup_open fs/namei.c:3413 [inline]
+ open_last_lookups fs/namei.c:3481 [inline]
+ path_openat+0x804/0x11c4 fs/namei.c:3688
+ do_filp_open+0xdc/0x1b8 fs/namei.c:3718
+ do_sys_openat2+0xb8/0x22c fs/open.c:1313
+ do_sys_open fs/open.c:1329 [inline]
+ __do_sys_openat fs/open.c:1345 [inline]
+ __se_sys_openat fs/open.c:1340 [inline]
+ __arm64_sys_openat+0xb0/0xe0 fs/open.c:1340
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
+ el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
+irq event stamp: 4032
+hardirqs last  enabled at (4031): [<ffff8000085633bc>] mod_objcg_state+0x19c/0x204 mm/memcontrol.c:3158
+hardirqs last disabled at (4032): [<ffff80000bfb5fbc>] el1_dbg+0x24/0x5c arch/arm64/kernel/entry-common.c:404
+softirqs last  enabled at (3900): [<ffff80000801c33c>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
+softirqs last disabled at (3898): [<ffff80000801c308>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
+---[ end trace 0000000000000000 ]---
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
