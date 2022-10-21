@@ -2,66 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBFFF607E29
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 20:14:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 483EE607E2A
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 20:14:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230093AbiJUSOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 14:14:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35518 "EHLO
+        id S230198AbiJUSOu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 14:14:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229997AbiJUSOm (ORCPT
+        with ESMTP id S229761AbiJUSOr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 14:14:42 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ABAA12AC6;
-        Fri, 21 Oct 2022 11:14:26 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id v11so2798180wmd.1;
-        Fri, 21 Oct 2022 11:14:26 -0700 (PDT)
+        Fri, 21 Oct 2022 14:14:47 -0400
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFBD03207B
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 11:14:41 -0700 (PDT)
+Received: by mail-qk1-x736.google.com with SMTP id z30so2522538qkz.13
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 11:14:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Bk4YjCSLu5/QbUBb+oa/0HDOrbXfgW9e8G+jzD0uIkI=;
-        b=PUNnKf2QyDtw3cp6/6a0DqYNduOX6oQOMw0kTySqoz0k97maIX6wieSU4HoAxeqkUR
-         s9IYTjR+KjOj3MRIQO8UP11ROyOT57b6ka9Jho5DhSqQezTiuyQqKQ3GNxL3OQWMSpWd
-         y9gbba63TYG+GfS1Er8kp09QxY837iE8zgVWzYcwD2rQP6T80+JmrYVePkWZsdwrSNV4
-         JzT9H7IZoSLdr9zzJkuXT/6P5ylX9o77PYgi7gpzX2WWiLB0jO5Bk6jaqY78o2GfJ4+E
-         r3UTzo8/K/UvKp2JHYhOL8w7F/OE+uGYxlKQAMfkGbQnRDYidk1CvojN7kigVA3YvV5l
-         tvvA==
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gRIaVA7IbW37xMjt4UyIoi28oEObcp55eUOuloap5Tw=;
+        b=qMAwsEPVkK5iLMOkgHAlLTC38guT9l7ljuUpTvRrwgxRPDg0eUZTeO/NICq8KVjkte
+         AmVHEvueKRFUg1AZjsIs76spu1UveR0u6BARgWX+lyguZ+o+DURe2t+Zs2M+SfL9nGuR
+         DzCEczS0fPgd0szccqg+Ug2K0O1qtEJcZe7QVYIwvskBLpLFiDME0BYLBTTK6CdQOiL5
+         qF/YlQfNb4nHtVUPCOC0UAaJkXDso5MU6BOih8gai6Q9ftzTwyKnKyHKA84m016bXt2K
+         7qa9nYl05sD4uJ+QMgNkjMWxWW+ZV5Ai7Q8DA/UxeeGZLzrmJ3g1o9OZ30lzODFTwiqg
+         afeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Bk4YjCSLu5/QbUBb+oa/0HDOrbXfgW9e8G+jzD0uIkI=;
-        b=mYpEcu4tyH/MFThk5A+DyW9xzqWBpsiYuEl1ZcUF4oV7lR0nZVc4HA/vbah2qF+0X5
-         Ce7h/HloW29zqObNlCr+e7R8CWhAGds6aguOC5ZXoakqd9Pgd1lG1spHmD0Ggx4D4p/d
-         /4JiNLRts//t8ZOWK1OeD7I2W9ys83esoIXcZVb06UH6xoCxnN+7N+hcf6p3vOUs6Jg3
-         kXM2C21KFacJtPiF+5wQC3ao2DrANVKNweN10iz4YAHFQ+dnInPpx2Y30TDuax2GkC2x
-         lpfJly/Q6EBckzZEGrjH9aO3wq2L2pXRI6aqS2yhD6B18u1RnRYhE21T9GYqSiViy3PV
-         mepw==
-X-Gm-Message-State: ACrzQf3CkxjQtiesmyRoICO5tPvZZuG4QHxqIXpBaMS37J8ngSvZ1Q40
-        tZFvQpsKqAmY5cFGkXTY9MU=
-X-Google-Smtp-Source: AMsMyM45xoVdse05SFORL9vCUlpOMxtTcVqSzWcnsdFhZJsruvC+5KZwqNN10ESR0pIBuzglzfSyog==
-X-Received: by 2002:a1c:4405:0:b0:3c5:8b6b:1efc with SMTP id r5-20020a1c4405000000b003c58b6b1efcmr34952115wma.192.1666376064869;
-        Fri, 21 Oct 2022 11:14:24 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id r9-20020a05600c35c900b003c5571c27a1sm4405061wmq.32.2022.10.21.11.14.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Oct 2022 11:14:24 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] sysv: Remove variable res
-Date:   Fri, 21 Oct 2022 19:14:23 +0100
-Message-Id: <20221021181423.29433-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.37.3
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gRIaVA7IbW37xMjt4UyIoi28oEObcp55eUOuloap5Tw=;
+        b=FX/Iol4wOSDhNIOUO8e/R3oHtVnzRAOAcUpt/QeQURp/qVYIElR8piAIf+b1PObjQn
+         TbLBXblxylpu+n5MGrG3AODMrhqnciL0z0zEVHVRaAq4aiTQ2UOsv/3PYYbDw/FFqmHF
+         YQUzar7q9r74HNanC1O0Wg8WXuDLtSuaY4dAvnizC+ax1pStkYZBGKvgKPFAf7evnqT4
+         HO6H4vDO25uBbUOegl8hirdmDoevsCmOkdZRbQ9Mad8kdpkZoYowh90XgZuresJHkCB4
+         SNuBZ57wFFyrMXICLkn9kuX4ZmUOJsfnyIls1/6ktF1R6ohrhlmZ8qkibg4BTl2NMYyV
+         OhSQ==
+X-Gm-Message-State: ACrzQf1xWbCATpSj6gD1107M4NayBdx7wc9ftuO5OWXsBBb7fMR354aZ
+        UhkH6cMnel8RiHYw9ctgBqX72uid46Wuwqb8Gsk=
+X-Google-Smtp-Source: AMsMyM5Ruc36WWqiwRhr0PSWg+i/b/XuayDAluZzK6NB0RR89IS5IpdtRmVm4jOxoPQfE2znH7T6lYWm1WwtMo46aQg=
+X-Received: by 2002:a05:620a:2699:b0:6cf:3a7f:5fe6 with SMTP id
+ c25-20020a05620a269900b006cf3a7f5fe6mr15246902qkp.103.1666376080464; Fri, 21
+ Oct 2022 11:14:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <cover.1666347511.git.tanjubrunostar0@gmail.com>
+ <03dd39114b1e5c029cd8022245403a079ff03ae7.1666347511.git.tanjubrunostar0@gmail.com>
+ <02a45afb-f81d-639c-1cc6-6376e31351a6@gmail.com> <CAHJEyKW4QZHf_wjaR1bGs8vtb6Gu-inJ4oxcFkPPnAKEAd5-9w@mail.gmail.com>
+In-Reply-To: <CAHJEyKW4QZHf_wjaR1bGs8vtb6Gu-inJ4oxcFkPPnAKEAd5-9w@mail.gmail.com>
+From:   Tanju Brunostar <tanjubrunostar0@gmail.com>
+Date:   Fri, 21 Oct 2022 19:14:28 +0100
+Message-ID: <CAHJEyKUGJ+E13-oLTHr4PS6za==gyCPWm6siGZaasUw6dJxGmQ@mail.gmail.com>
+Subject: Re: [PATCH v2 4/6] staging: vt6655: refactor long lines of code in s_vGenerateTxParameter
+To:     Philipp Hortmann <philipp.g.hortmann@gmail.com>
+Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,32 +71,234 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The variable res being incremented but it is never referenced,
-it is redundant and can be removed.
-
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+On Fri, Oct 21, 2022 at 7:08 PM Tanju Brunostar
+<tanjubrunostar0@gmail.com> wrote:
+>
+> On Fri, Oct 21, 2022 at 5:52 PM Philipp Hortmann
+> <philipp.g.hortmann@gmail.com> wrote:
+> >
+> > On 10/21/22 12:33, Tanjuate Brunostar wrote:
+> > > fix checkpatch errors by refactoring long lines of code in the functi=
+on: s_vGenerateTxParameter
+> > >
+> > > Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+> > > ---
+> > >   drivers/staging/vt6655/rxtx.c | 70 ++++++++++++++++++++++++--------=
 ---
- fs/sysv/itree.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/fs/sysv/itree.c b/fs/sysv/itree.c
-index d4ec9bb97de9..505f4cb7be79 100644
---- a/fs/sysv/itree.c
-+++ b/fs/sysv/itree.c
-@@ -430,12 +430,10 @@ static unsigned sysv_nblocks(struct super_block *s, loff_t size)
- {
- 	struct sysv_sb_info *sbi = SYSV_SB(s);
- 	int ptrs_bits = sbi->s_ind_per_block_bits;
--	unsigned blocks, res, direct = DIRECT, i = DEPTH;
-+	unsigned blocks, direct = DIRECT, i = DEPTH;
- 	blocks = (size + s->s_blocksize - 1) >> s->s_blocksize_bits;
--	res = blocks;
- 	while (--i && blocks > direct) {
- 		blocks = ((blocks - direct - 1) >> ptrs_bits) + 1;
--		res += blocks;
- 		direct = 1;
- 	}
- 	return blocks;
--- 
-2.37.3
-
+> > >   1 file changed, 48 insertions(+), 22 deletions(-)
+> > >
+> > > diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/r=
+xtx.c
+> > > index dc853b83459b..42f4261293ba 100644
+> > > --- a/drivers/staging/vt6655/rxtx.c
+> > > +++ b/drivers/staging/vt6655/rxtx.c
+> > > @@ -839,7 +839,8 @@ s_vFillCTSHead(struct vnt_private *pDevice,
+> > >       }
+> > >
+> > >       if (byPktType =3D=3D PK_TYPE_11GB || byPktType =3D=3D PK_TYPE_1=
+1GA) {
+> > > -             if (byFBOption !=3D AUTO_FB_NONE && uDMAIdx !=3D TYPE_A=
+TIMDMA && uDMAIdx !=3D TYPE_BEACONDMA) {
+> > > +             if (byFBOption !=3D AUTO_FB_NONE && uDMAIdx !=3D
+> > > +                 TYPE_ATIMDMA && uDMAIdx !=3D TYPE_BEACONDMA) {
+> > >                       /* Auto Fall back */
+> > >                       struct vnt_cts_fb *buf =3D pvCTS;
+> > >                       /* Get SignalField, ServiceField & Length */
+> > > @@ -878,7 +879,10 @@ s_vFillCTSHead(struct vnt_private *pDevice,
+> > >
+> > >                       ether_addr_copy(buf->data.ra,
+> > >                                       pDevice->abyCurrentNetAddr);
+> > > -             } else { /* if (byFBOption !=3D AUTO_FB_NONE && uDMAIdx=
+ !=3D TYPE_ATIMDMA && uDMAIdx !=3D TYPE_BEACONDMA) */
+> > > +             } else {
+> > > +                     /* if (byFBOption !=3D AUTO_FB_NONE && uDMAIdx =
+!=3D TYPE_ATIMDMA &&
+> > > +                      * uDMAIdx !=3D TYPE_BEACONDMA)
+> > > +                      */
+> > >                       struct vnt_cts *buf =3D pvCTS;
+> > >                       /* Get SignalField, ServiceField & Length */
+> > >                       vnt_get_phy_field(pDevice, uCTSFrameLen,
+> > > @@ -964,50 +968,72 @@ static void s_vGenerateTxParameter(struct vnt_p=
+rivate *pDevice,
+> > >                       /* Fill RsvTime */
+> > >                       struct vnt_rrv_time_rts *buf =3D pvRrvTime;
+> > >
+> > > -                     buf->rts_rrv_time_aa =3D get_rtscts_time(pDevic=
+e, 2, byPktType, cbFrameSize, wCurrentRate);
+> > > -                     buf->rts_rrv_time_ba =3D get_rtscts_time(pDevic=
+e, 1, byPktType, cbFrameSize, wCurrentRate);
+> > > -                     buf->rts_rrv_time_bb =3D get_rtscts_time(pDevic=
+e, 0, byPktType, cbFrameSize, wCurrentRate);
+> > > -                     buf->rrv_time_a =3D vnt_rxtx_rsvtime_le16(pDevi=
+ce, byPktType, cbFrameSize, wCurrentRate, bNeedACK);
+> > > -                     buf->rrv_time_b =3D vnt_rxtx_rsvtime_le16(pDevi=
+ce, PK_TYPE_11B, cbFrameSize, pDevice->byTopCCKBasicRate, bNeedACK);
+> > > -
+> > > -                     s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFra=
+meSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+> > > +                     buf->rts_rrv_time_aa =3D get_rtscts_time(pDevic=
+e, 2, byPktType, cbFrameSize,
+> > > +                                                            wCurrent=
+Rate);
+> > > +                     buf->rts_rrv_time_ba =3D get_rtscts_time(pDevic=
+e, 1, byPktType, cbFrameSize,
+> > > +                                                            wCurrent=
+Rate);
+> > > +                     buf->rts_rrv_time_bb =3D get_rtscts_time(pDevic=
+e, 0, byPktType, cbFrameSize,
+> > > +                                                            wCurrent=
+Rate);
+> > > +                     buf->rrv_time_a =3D vnt_rxtx_rsvtime_le16(pDevi=
+ce, byPktType, cbFrameSize,
+> > > +                                                             wCurren=
+tRate, bNeedACK);
+> > > +                     buf->rrv_time_b =3D
+> > > +                             vnt_rxtx_rsvtime_le16(pDevice, PK_TYPE_=
+11B, cbFrameSize,
+> > > +                                                   pDevice->byTopCCK=
+BasicRate, bNeedACK);
+> > > +
+> > > +                     s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFra=
+meSize, bNeedACK, bDisCRC,
+> > > +                                    psEthHeader, wCurrentRate, byFBO=
+ption);
+> > >               } else {/* RTS_needless, PCF mode */
+> > >                       struct vnt_rrv_time_cts *buf =3D pvRrvTime;
+> > >
+> > > -                     buf->rrv_time_a =3D vnt_rxtx_rsvtime_le16(pDevi=
+ce, byPktType, cbFrameSize, wCurrentRate, bNeedACK);
+> > > -                     buf->rrv_time_b =3D vnt_rxtx_rsvtime_le16(pDevi=
+ce, PK_TYPE_11B, cbFrameSize, pDevice->byTopCCKBasicRate, bNeedACK);
+> > > -                     buf->cts_rrv_time_ba =3D get_rtscts_time(pDevic=
+e, 3, byPktType, cbFrameSize, wCurrentRate);
+> > > +                     buf->rrv_time_a =3D vnt_rxtx_rsvtime_le16(pDevi=
+ce, byPktType, cbFrameSize,
+> > > +                                                             wCurren=
+tRate, bNeedACK);
+> > > +                     buf->rrv_time_b =3D
+> > > +                             vnt_rxtx_rsvtime_le16(pDevice, PK_TYPE_=
+11B, cbFrameSize,
+> > > +                                                   pDevice->byTopCCK=
+BasicRate, bNeedACK);
+> > > +                     buf->cts_rrv_time_ba =3D get_rtscts_time(pDevic=
+e, 3, byPktType, cbFrameSize,
+> > > +                                                            wCurrent=
+Rate);
+> > >
+> > >                       /* Fill CTS */
+> > > -                     s_vFillCTSHead(pDevice, uDMAIdx, byPktType, pvC=
+TS, cbFrameSize, bNeedACK, bDisCRC, wCurrentRate, byFBOption);
+> > > +                     s_vFillCTSHead(pDevice, uDMAIdx, byPktType, pvC=
+TS, cbFrameSize, bNeedACK,
+> > > +                                    bDisCRC, wCurrentRate, byFBOptio=
+n);
+> > >               }
+> > >       } else if (byPktType =3D=3D PK_TYPE_11A) {
+> > >               if (pvRTS) {/* RTS_need, non PCF mode */
+> > > -                     struct vnt_rrv_time_ab *buf =3D pvRrvTime;
+> >
+> > Error during compiliation in next line
+> >
+> > > +                     struct vnt_rrv_time_ab *buf =3D pvRrvT
+> > > +                             ime;
+> >
+> > make: Entering directory '/home/kernel/Documents/git/kernels/staging'
+> >    CC [M]  drivers/staging/vt6655/rxtx.o
+> > drivers/staging/vt6655/rxtx.c: In function =E2=80=98s_vGenerateTxParame=
+ter=E2=80=99:
+> > drivers/staging/vt6655/rxtx.c:1014:34: error: =E2=80=98pvRrvT=E2=80=99 =
+undeclared (first
+> > use in this function)
+> >   1014 |    struct vnt_rrv_time_ab *buf =3D pvRrvT
+> >        |                                  ^~~~~~
+> > drivers/staging/vt6655/rxtx.c:1014:34: note: each undeclared identifier
+> > is reported only once for each function it appears in
+> > drivers/staging/vt6655/rxtx.c:1015:5: error: expected =E2=80=98,=E2=80=
+=99 or =E2=80=98;=E2=80=99 before
+> > =E2=80=98ime=E2=80=99
+> >   1015 |     ime;
+> >        |     ^~~
+> > make[1]: *** [scripts/Makefile.build:250: drivers/staging/vt6655/rxtx.o=
+]
+> > Error 1
+> > make: *** [Makefile:1992: drivers/staging/vt6655] Error 2
+> > make: Leaving directory '/home/kernel/Documents/git/kernels/staging'
+> >
+> This error occured on the first version of this patch. I corrected it,
+> compiled the code and the error was gone before I sent this version.
+> please check again. You may have seen this error on the first version
+> and not this one.
+> thanks
+>
+> Tanju
+On the first patch, this error was detected by the kernel bot. This
+time around, the kernel bot did not detect it, meaning it was fixed.
+> > >
+> > > -                     buf->rts_rrv_time =3D get_rtscts_time(pDevice, =
+2, byPktType, cbFrameSize, wCurrentRate);
+> > > -                     buf->rrv_time =3D vnt_rxtx_rsvtime_le16(pDevice=
+, byPktType, cbFrameSize, wCurrentRate, bNeedACK);
+> > > +                     buf->rts_rrv_time =3D get_rtscts_time(pDevice, =
+2, byPktType, cbFrameSize,
+> > > +                                                         wCurrentRat=
+e);
+> > > +                     buf->rrv_time =3D vnt_rxtx_rsvtime_le16(pDevice=
+, byPktType, cbFrameSize,
+> > > +                                                           wCurrentR=
+ate, bNeedACK);
+> > >
+> > >                       /* Fill RTS */
+> > > -                     s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFra=
+meSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+> > > +                     s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFra=
+meSize, bNeedACK, bDisCRC,
+> > > +                                    psEthHeader, wCurrentRate, byFBO=
+ption);
+> > >               } else if (!pvRTS) {/* RTS_needless, non PCF mode */
+> > >                       struct vnt_rrv_time_ab *buf =3D pvRrvTime;
+> > >
+> > > -                     buf->rrv_time =3D vnt_rxtx_rsvtime_le16(pDevice=
+, PK_TYPE_11A, cbFrameSize, wCurrentRate, bNeedACK);
+> > > +                     buf->rrv_time =3D
+> > > +                             vnt_rxtx_rsvtime_le16(pDevice, PK_TYPE_=
+11A, cbFrameSize,
+> > > +                                                   wCurrentRate, bNe=
+edACK);
+> > >               }
+> > >       } else if (byPktType =3D=3D PK_TYPE_11B) {
+> > >               if (pvRTS) {/* RTS_need, non PCF mode */
+> > >                       struct vnt_rrv_time_ab *buf =3D pvRrvTime;
+> > >
+> > > -                     buf->rts_rrv_time =3D get_rtscts_time(pDevice, =
+0, byPktType, cbFrameSize, wCurrentRate);
+> > > -                     buf->rrv_time =3D vnt_rxtx_rsvtime_le16(pDevice=
+, PK_TYPE_11B, cbFrameSize, wCurrentRate, bNeedACK);
+> > > +                     buf->rts_rrv_time =3D get_rtscts_time(pDevice, =
+0, byPktType, cbFrameSize,
+> > > +                                                         wCurrentRat=
+e);
+> > > +                     buf->rrv_time =3D vnt_rxtx_rsvtime_le16(pDevice=
+, PK_TYPE_11B, cbFrameSize,
+> > > +                                                           wCurrentR=
+ate, bNeedACK);
+> > >
+> > >                       /* Fill RTS */
+> > > -                     s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFra=
+meSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+> > > +                     s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFra=
+meSize, bNeedACK, bDisCRC,
+> > > +                                    psEthHeader, wCurrentRate, byFBO=
+ption);
+> > >               } else { /* RTS_needless, non PCF mode */
+> > >                       struct vnt_rrv_time_ab *buf =3D pvRrvTime;
+> > >
+> > > -                     buf->rrv_time =3D vnt_rxtx_rsvtime_le16(pDevice=
+, PK_TYPE_11B, cbFrameSize, wCurrentRate, bNeedACK);
+> > > +                     buf->rrv_time =3D vnt_rxtx_rsvtime_le16(pDevice=
+, PK_TYPE_11B, cbFrameSize,
+> > > +                                                           wCurrentR=
+ate, bNeedACK);
+> > >               }
+> > >       }
+> > >   }
+> >
