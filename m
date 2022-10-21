@@ -2,114 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FE15607579
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 12:55:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FDB760757E
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 12:56:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230139AbiJUKz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 06:55:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37622 "EHLO
+        id S229871AbiJUK4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 06:56:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbiJUKzV (ORCPT
+        with ESMTP id S229853AbiJUK4g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 06:55:21 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD871244720;
-        Fri, 21 Oct 2022 03:55:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666349719; x=1697885719;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Wx25grSXDV+rY/7gahOrHKDqSL40ohUGsgRb8cn4kGo=;
-  b=FA3jJmYGd7OSRR9QO/OGxVrgA96MPMSCK29YBCWrfuHCokFYV9Lah4tz
-   GYwHYSNctFH79Sk/Vp9APBU6MTyPRtML9lADqQn3DmHpBuIRGYj0ObnSR
-   DYR+OxAjBXhcfJwgnw+67LTuWO+H1nPSJXCOMi0u2SzvP1/IKEUV4cMzA
-   b05qQhRSzi1GlF+18QdTeWNnxp4ZyfesTKwhZyRicV/UGv4+C695aXwnl
-   QE/Ykcn7wp9Qp61rJdYXwIGkp/TLg5IuTkm74GVahtrgpwzqGg7AHAssN
-   wZv498OC7IX1PiEQJCnLXcf6WAJQvtKqdA5RL/NMr7Z0+9rGtdvCJ/iLb
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="305709345"
-X-IronPort-AV: E=Sophos;i="5.95,200,1661842800"; 
-   d="scan'208";a="305709345"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2022 03:55:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="630432859"
-X-IronPort-AV: E=Sophos;i="5.95,200,1661842800"; 
-   d="scan'208";a="630432859"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga002.jf.intel.com with ESMTP; 21 Oct 2022 03:55:14 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1olpgG-00B70q-2S;
-        Fri, 21 Oct 2022 13:55:12 +0300
-Date:   Fri, 21 Oct 2022 13:55:12 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     chengwei <foxfly.lai.tw@gmail.com>, lee@kernel.org,
-        broonie@kernel.org, rafael@kernel.org,
-        mika.westerberg@linux.intel.com, brgl@bgdev.pl,
-        linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
-        lenb@kernel.org, linux-acpi@vger.kernel.org,
-        linux-gpio@vger.kernel.org, GaryWang@aaeon.com.tw,
-        musa.lin@yunjingtech.com, jack.chang@yunjingtech.com,
-        chengwei <larry.lai@yunjingtech.com>,
-        Javier Arteaga <javier@emutex.com>,
-        Nicola Lunghi <nicola.lunghi@emutex.com>
-Subject: Re: [PATCH 5/5] pinctrl: Add support pin control for UP board
- CPLD/FPGA
-Message-ID: <Y1J6kJ/sL4qqok16@smile.fi.intel.com>
-References: <20221019022450.16851-1-larry.lai@yunjingtech.com>
- <20221019022450.16851-6-larry.lai@yunjingtech.com>
- <CACRpkdYfPT6-gt2RCxzPfy+GdkLYo8KP02CLLC+uY512AqPwNw@mail.gmail.com>
+        Fri, 21 Oct 2022 06:56:36 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37D58246C18
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 03:56:35 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id y4so2025184plb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 03:56:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=quanta-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vU/DuE4Eaix7qc9Mg5crIANCPOJ8DuGZdNrlRQlDA6Y=;
+        b=qxIn1W5NmANH7TeIMGXyAtAlsJ9NjN4LbjmXSJ2+EKA/58ExYKFL2JmNU/ZSTtV55M
+         mYctrLur9xYsiI6wVSuQENUMJJebFKR3boIHoRP7vrzVatxTv0R/e5IApHVOzyHxlcr+
+         /Ot5UhT+CmavNXPpnKczC0PhaTKazUfudi7ThAZk5c4PDfreiCeQSIbfLp3nR9PNEHlN
+         Mwj2D3e8y6yUZFzURka8WilktNWLOrNcYKICoxV7KQTchZd0qHpmQz/d57gre/BIC2BS
+         4daIwYssaLwcc+Q4p3sI82GPZoQ1H62oyUQHzF3va1tMXzuFXC0uV6JOlSlizi65MEYx
+         uGKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vU/DuE4Eaix7qc9Mg5crIANCPOJ8DuGZdNrlRQlDA6Y=;
+        b=GRNFtnI4uSAdvYfc7pcBs7xLYB8tQKX60YJ3fgys59k68DkVdvLDv0/qzYA5T7dVir
+         vgbUAUlqjUZ8uwcd723DDjKSqn3zkGihAa1E+qSTINTgPWoR4fshv604nPeWGy6IlYFo
+         TYVw7s/wJ1EPFbBG2m7jRdGdOlUHWWsIZLcLQdbmrDDmTh4TgO8A16rfFe+LYsStf+QE
+         I3lJaUJqjFHddHgKMN79TH5CTYe8fMIArmBzgUqElMJLogWzkFLBu8Mjz0px1VSdbodd
+         A98fLQmMA/EQ9hcfLERqpWi2bJ4CN+NojnustPp5dz632iZ1xKcLCy8GuRyl31MKHnAz
+         0VHg==
+X-Gm-Message-State: ACrzQf0yHKF0wrq9tRz8OEeAiSC4FQ9t5ofDz6W/IHxWmTFyLtwuZhVy
+        BAajPKk3Y6qIeFCxXRg3U6O9j6t/r8pIdQ==
+X-Google-Smtp-Source: AMsMyM4AF1epMQ0gklAfq/TEi+5qRQfJJqFcac8hRczaFe30IChFzJF2ovDQaCCwPze6LTtYP+YbRA==
+X-Received: by 2002:a17:90b:4d8c:b0:20d:2935:7058 with SMTP id oj12-20020a17090b4d8c00b0020d29357058mr56803462pjb.86.1666349794362;
+        Fri, 21 Oct 2022 03:56:34 -0700 (PDT)
+Received: from liang-Predator-PH517-52.. (2001-b400-e339-bb7d-a809-3af0-ee98-4fc4.emome-ip6.hinet.net. [2001:b400:e339:bb7d:a809:3af0:ee98:4fc4])
+        by smtp.gmail.com with ESMTPSA id 2-20020a620602000000b0052d4cb47339sm14822957pfg.151.2022.10.21.03.56.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Oct 2022 03:56:33 -0700 (PDT)
+From:   Sheng-Liang Pan <sheng-liang.pan@quanta.corp-partner.google.com>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     dianders@chromium.org,
+        Sheng-Liang Pan <sheng-liang.pan@quanta.corp-partner.google.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-input@vger.kernel.org
+Subject: [PATCH v8 0/4] Add LTE SKU for sc7280-evoker family
+Date:   Fri, 21 Oct 2022 18:56:19 +0800
+Message-Id: <20221021105623.3520859-1-sheng-liang.pan@quanta.corp-partner.google.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACRpkdYfPT6-gt2RCxzPfy+GdkLYo8KP02CLLC+uY512AqPwNw@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 11:09:27AM +0200, Linus Walleij wrote:
-> On Wed, Oct 19, 2022 at 4:26 AM chengwei <foxfly.lai.tw@gmail.com> wrote:
+This patch add common dtsi and WIFI/LTE dts for evoker.
 
-> > The UP Squared board <http://www.upboard.com> implements certain
-> > features (pin control) through an on-board FPGA.
+Changes in v8:
+- updated patch subjects
 
-> I am a bit confused by this driver. Andy pointed out some obvious nits that
-> need to be fixed but the overall architecture here is also a bit puzzling.
-> 
-> This seems to want to be compatible to Raspberry Pi (RPi), then which one?
-> 
-> The driver seems to translate GPIO calls to "native GPIO" in some cases,
-> which GPIO controller is that?
+Changes in v7:
+- goodix gt7986 dt bindings added in v7
+- add compiatable for gt7986
 
-There is an SoC level GPIO (Apollo Lake I believe) and there is a discrete
-component between it and user visible header (connector). This driver AFAIU
-is about controlling that discrete component.
+Changes in v6:
+- add removed pinctrl and align touchscreen label with herobrine board
 
-> Also I don't see why, normally a pin control
-> driver is an agnostic back-end for a GPIO controller, so the GPIO driver
-> should be the same (whatever "native") means, and this driver should
-> not even implement a gpio chip, just let the GPIO driver do its job
-> and call back into the pin control back-end whenever it needs it.
-> 
-> Also we already have a driver that collects existing GPIOs to a new
-> GPIO chip, the GPIO aggregator:
-> drivers/gpio/gpio-aggregator.c
-> 
-> Maybe if you can explain a bit about how this hardware works and why
-> you have to do indirect calls to another GPIO controller, things will
-> be easier to understand?
+Changes in v5:
+- recover whitespace change
+- new patch for Touchscreen/trackpad in v5
+
+Changes in v4:
+- fix typo in tittle and commit
+- recover change for trackpad and touchscreen
+
+Changes in v3:
+- none
+
+Changes in v2:
+- none
+
+Sheng-Liang Pan (4):
+  dt-bindings: arm: qcom: Separate LTE/WIFI SKU for sc7280-evoker
+  arm64: dts: qcom: sc7280: Add LTE SKU for sc7280-evoker family
+  dt-bindings: input: touchscreen: Add goodix GT7986U touchscreen chip
+  arm64: dts: qcom: sc7280: Add touchscreen and touchpad support for
+    evoker
+
+ .../devicetree/bindings/arm/qcom.yaml         |  5 +++++
+ .../bindings/input/goodix,gt7375p.yaml        |  5 ++++-
+ arch/arm64/boot/dts/qcom/Makefile             |  3 ++-
+ .../dts/qcom/sc7280-herobrine-evoker-lte.dts  | 14 ++++++++++++
+ .../boot/dts/qcom/sc7280-herobrine-evoker.dts | 15 +++++++++++++
+ ...er-r0.dts => sc7280-herobrine-evoker.dtsi} | 22 ++++++-------------
+ 6 files changed, 47 insertions(+), 17 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker-lte.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker.dts
+ rename arch/arm64/boot/dts/qcom/{sc7280-herobrine-evoker-r0.dts => sc7280-herobrine-evoker.dtsi} (95%)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.34.1
 
