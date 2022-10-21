@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91F796076A3
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 14:00:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B65C46076A4
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 14:00:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbiJUMAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 08:00:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59820 "EHLO
+        id S230270AbiJUMAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 08:00:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230158AbiJUMAc (ORCPT
+        with ESMTP id S230226AbiJUMAj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 08:00:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53811251F6C
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 05:00:30 -0700 (PDT)
+        Fri, 21 Oct 2022 08:00:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CECCC251F6C
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 05:00:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E3FE561E6D
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 12:00:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35885C433B5;
-        Fri, 21 Oct 2022 12:00:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 10A68B82B92
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 12:00:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7330C433C1;
+        Fri, 21 Oct 2022 12:00:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666353629;
-        bh=LjLwcRsPZ65V3+uAZ7ZJ20ekU/4YVxIRhGPnMyc8hg4=;
+        s=k20201202; t=1666353632;
+        bh=XzdFROMipXdmkMLqEBVG7r+Qq/ycFDav+ihm+nprFco=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=baCMPAuxXA5okUTpltIb1PDHRcQSWtRzcienWV3n48jfF8Q1Om+t1BddLs/7d0inO
-         InEt3zCd6r9NHUbXIMY9PFstO8lNWAmBtcEUbaF1vbyc8hG/3nA2ztdGA1RGb4Wl3K
-         dNwqE3PLZX5+eB8k95zqUizFUUQQ956brbMSA1LKzslbPxctl171bS9q/c2ltkthu5
-         dy8p3R/F4O9pVyb0dPvn3w7+n1az8dSGvClcU7DppMM1YL2dfIuY4AvpeK3TnMfO3v
-         UQCwtxdKwyeP+hKa2hfsoNROys+c5Zv1hCKnYkhNeUfO+i0nH1ALJRpxMpjAFD3yhR
-         y3JUNWJ3ls7kg==
+        b=lRRUVqO3E1qBngvZkiPsbDUe43N8i1GrfX46QurdSPQ8voWfgv5owS7cY8PQ85VB/
+         uAyj13Y3I3p5za42OA6G2hnIOtHOrD3xWSuiwZa0u60g3+pyWDgIYxSIyrVSPXBx/i
+         1Ew1lwcs6Z7f0zL0Wy5H5SyOWFnoP6VVXEpiePRCxbwB+nPaKhKilN4t0I0IsNh8y9
+         wIbdTTau6kSZ8p39Hh5vs+Q5FI03DRkAUZLfOP0knGELWSnJY9CDjbGQw7tW3EKD2n
+         kQMmF/IywkBz24C7AADfw6a02EuB83ACvZBXHvryDeeSbrBp64AKTwXXsWt4eLvksJ
+         KY/QwSJ5NttcQ==
 From:   Miguel Ojeda <ojeda@kernel.org>
 To:     Andrey Konovalov <andreyknvl@gmail.com>,
         Marco Elver <elver@google.com>,
@@ -45,9 +45,9 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Dan Li <ashimida@linux.alibaba.com>,
         Alexander Potapenko <glider@google.com>,
         Miguel Ojeda <ojeda@kernel.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/5] compiler-gcc: remove attribute support check for `__no_sanitize_thread__`
-Date:   Fri, 21 Oct 2022 13:59:54 +0200
-Message-Id: <20221021115956.9947-3-ojeda@kernel.org>
+Subject: [PATCH 4/5] compiler-gcc: remove attribute support check for `__no_sanitize_undefined__`
+Date:   Fri, 21 Oct 2022 13:59:55 +0200
+Message-Id: <20221021115956.9947-4-ojeda@kernel.org>
 In-Reply-To: <20221021115956.9947-1-ojeda@kernel.org>
 References: <20221021115956.9947-1-ojeda@kernel.org>
 MIME-Version: 1.0
@@ -62,30 +62,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The attribute was added in GCC 5.1, which matches the minimum GCC version
-supported by the kernel.
+The attribute was added in GCC 4.9, while the minimum GCC version
+supported by the kernel is GCC 5.1.
 
 Therefore, remove the check.
 
-Link: https://godbolt.org/z/vbxKejxbx
+Link: https://godbolt.org/z/GrMeo6fYr
 Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 ---
- include/linux/compiler-gcc.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/compiler-gcc.h | 4 ----
+ 1 file changed, 4 deletions(-)
 
 diff --git a/include/linux/compiler-gcc.h b/include/linux/compiler-gcc.h
-index bfce7f4d0978..ba207deb77ca 100644
+index ba207deb77ca..7f2c2bb73815 100644
 --- a/include/linux/compiler-gcc.h
 +++ b/include/linux/compiler-gcc.h
-@@ -84,7 +84,7 @@
- 
- #define __no_sanitize_address __attribute__((__no_sanitize_address__))
- 
--#if defined(__SANITIZE_THREAD__) && __has_attribute(__no_sanitize_thread__)
-+#if defined(__SANITIZE_THREAD__)
- #define __no_sanitize_thread __attribute__((__no_sanitize_thread__))
- #else
+@@ -90,11 +90,7 @@
  #define __no_sanitize_thread
+ #endif
+ 
+-#if __has_attribute(__no_sanitize_undefined__)
+ #define __no_sanitize_undefined __attribute__((__no_sanitize_undefined__))
+-#else
+-#define __no_sanitize_undefined
+-#endif
+ 
+ #if defined(CONFIG_KCOV) && __has_attribute(__no_sanitize_coverage__)
+ #define __no_sanitize_coverage __attribute__((__no_sanitize_coverage__))
 -- 
 2.38.1
 
