@@ -2,171 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F9D8607CE9
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 18:54:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DF5A607D15
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 18:57:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231236AbiJUQyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 12:54:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52326 "EHLO
+        id S230117AbiJUQ50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 12:57:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231392AbiJUQxx (ORCPT
+        with ESMTP id S230272AbiJUQ5G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 12:53:53 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97B2A28B1B4
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:53:21 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id t10-20020a17090a4e4a00b0020af4bcae10so3433730pjl.3
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:53:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xrysGx55UenjRLyS1DI8lWgE85TWYqrMWgtnLZZFAkc=;
-        b=RHWZQBLe9HXVngD3tJPBIAxrqGbPxOHUi+EuoMf2wh8wAVWCUykhVBw5M4bpHipxKX
-         AQrvUqN4owfPyZqdyzULb7AFBCSDE+f4NUKYHAYIddpZR67VGGUvvxapOtY3ozT/Ml4t
-         aiXuSjYrXY3eVMT1GbVbskQFgGxypZbRWqNEOhCm30Zif46drkOhIOZelqHekwQwUk43
-         bnuW3YgCEoukR20OzDrDD/o7UY7n/fRCHqej35doY178zBweJ3IoeGQQs9hPHYSo3Ohx
-         OqzLxanZHEvXOsNtWfWWxGtsKOFGJnejx5vYFgdKqN5Vb6+SO3aa9cMSKsUkIyd4p5eH
-         sJHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xrysGx55UenjRLyS1DI8lWgE85TWYqrMWgtnLZZFAkc=;
-        b=xU5d4XWz7XCK7eBELIvIBNAC9tqJGVNxRjWrPT6Egr14FxMzcnTHYfXgNQRD4CUeVL
-         FtOt08EtdtMKcy9N3vRAZT/7Qf9oW7nb32RvSUT1MTKSJ6QgTHoEeobKg7OWZO33ymBe
-         Js1ZZFtC6Mvmh0riOoaIaLYeU0HptPaGhcCqPujqPNVGu2w1gLvdf9Hd9eo30Y5DWI/L
-         4ok49GLDWBZOz99K92GxfxXn6ywGUATh2rPIfSw6jHVi/8tY/rPMC4uTRRX0ehbhZds+
-         0D/GK8eDU90juwsQOtP3WbYLivkvfD+kSQR++vZ8KW9POQIVrCa/gDGdBaUrK1h5Q1XP
-         O1/A==
-X-Gm-Message-State: ACrzQf3qo+4e8hbhL+Wh00QGO/B1FUvZy8IK5aNmAkwwzuVcMrE0ZpMK
-        nibyQ85oYTXjmlFHUejFowKcjQ==
-X-Google-Smtp-Source: AMsMyM4X0ByBcSID7/aMrdZ0mivytsG1EHhlrHnS2og4yoaJvAdKT/AGmOFlcmS9yqzFtIJMO1ZXxQ==
-X-Received: by 2002:a17:90b:2651:b0:20a:daaf:75f0 with SMTP id pa17-20020a17090b265100b0020adaaf75f0mr22464873pjb.142.1666371200475;
-        Fri, 21 Oct 2022 09:53:20 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id b14-20020a170903228e00b00176e8f85147sm15298020plh.83.2022.10.21.09.53.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Oct 2022 09:53:19 -0700 (PDT)
-Date:   Fri, 21 Oct 2022 16:53:15 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     Vishal Annapurve <vannapurve@google.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        "Gupta, Pankaj" <pankaj.gupta@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>, luto@kernel.org,
-        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
-        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
-Subject: Re: [PATCH v8 1/8] mm/memfd: Introduce userspace inaccessible memfd
-Message-ID: <Y1LOe4JvnTbFNs4u@google.com>
-References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
- <20220915142913.2213336-2-chao.p.peng@linux.intel.com>
- <de680280-f6b1-9337-2ae4-4b2faf2b823b@suse.cz>
- <20221017161955.t4gditaztbwijgcn@box.shutemov.name>
- <c63ad0cd-d517-0f1e-59e9-927d8ae15a1a@amd.com>
- <20221017215640.hobzcz47es7dq2bi@box.shutemov.name>
- <CAGtprH8xEdgATjQdhi2b_KqUuSOZHUM-Lh+O-ZtcFKbHf2_75g@mail.gmail.com>
- <20221019153225.njvg45glehlnjgc7@box.shutemov.name>
- <CAGtprH-8y9iTyVZ+EYW2t=zGqz7fVgPu-3wVm0Wgv5134NU6WQ@mail.gmail.com>
- <20221021135434.GB3607894@chaop.bj.intel.com>
+        Fri, 21 Oct 2022 12:57:06 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3D72290699;
+        Fri, 21 Oct 2022 09:56:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Pzedf8xUwKOln81ZTWxbSMHMJwx3UBJjVHtdKN+dquE=; b=PSqL5obtPZNUSphXW+bDu7qUsv
+        aFRhXzW0sAuFpn241dUXZav8iCQY1kuqC7gNN+x/vLxS0XKJKogjE+KxjG1SITNzvVYyssgYoTmXK
+        hZn4gcQTk5ZsebJ41dJIwEns1LclHialE6zySbWO7fZ6BplVG5u3SVuqtS3jvLSBACygjl1XR1ZQX
+        xh4ommYHirqoUgdwzQB8t1mrc3cSJgnmupZRuxYQV4oZH2WWwZkqxgPJ+zNjlUQc6XDwW8S2SYPp+
+        slsVeMvrWzE0H1Oa7PobRn0Dg2q/msokW55028EfB2NI1aai1feHINwR2NlOh+T1sa872LPZ6fiml
+        GbTk/uiQ==;
+Received: from [179.113.159.85] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1olvJz-002xu8-Ac; Fri, 21 Oct 2022 18:56:35 +0200
+Message-ID: <04954335-ff3f-d418-3e23-c463a9e47f0c@igalia.com>
+Date:   Fri, 21 Oct 2022 13:56:27 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221021135434.GB3607894@chaop.bj.intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH V2] x86/split_lock: Add sysctl to control the misery mode
+Content-Language: en-US
+To:     x86@kernel.org, tglx@linutronix.de, dave.hansen@linux.intel.com
+Cc:     linux-kernel@vger.kernel.org, mingo@redhat.com, bp@alien8.de,
+        hpa@zytor.com, luto@kernel.org, corbet@lwn.net,
+        linux-doc@vger.kernel.org, kernel-dev@igalia.com,
+        kernel@gpiccoli.net, Andre Almeida <andrealmeid@igalia.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Joshua Ashton <joshua@froggi.es>,
+        Melissa Wen <mwen@igalia.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Pavel Machek <pavel@denx.de>,
+        Pierre-Loup Griffais <pgriffais@valvesoftware.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Zebediah Figura <zfigura@codeweavers.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>
+References: <20221014180506.211592-1-gpiccoli@igalia.com>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <20221014180506.211592-1-gpiccoli@igalia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022, Chao Peng wrote:
-> On Thu, Oct 20, 2022 at 04:20:58PM +0530, Vishal Annapurve wrote:
-> > On Wed, Oct 19, 2022 at 9:02 PM Kirill A . Shutemov <kirill.shutemov@linux.intel.com> wrote:
-> > >
-> > > On Tue, Oct 18, 2022 at 07:12:10PM +0530, Vishal Annapurve wrote:
-> > > > I think moving this notifier_invalidate before fallocate may not solve
-> > > > the problem completely. Is it possible that between invalidate and
-> > > > fallocate, KVM tries to handle the page fault for the guest VM from
-> > > > another vcpu and uses the pages to be freed to back gpa ranges? Should
-> > > > hole punching here also update mem_attr first to say that KVM should
-> > > > consider the corresponding gpa ranges to be no more backed by
-> > > > inaccessible memfd?
-> > >
-> > > We rely on external synchronization to prevent this. See code around
-> > > mmu_invalidate_retry_hva().
-> > >
-> > > --
-> > >   Kiryl Shutsemau / Kirill A. Shutemov
-> > 
-> > IIUC, mmu_invalidate_retry_hva/gfn ensures that page faults on gfn
-> > ranges that are being invalidated are retried till invalidation is
-> > complete. In this case, is it possible that KVM tries to serve the
-> > page fault after inaccessible_notifier_invalidate is complete but
-> > before fallocate could punch hole into the files?
-
-It's not just the page fault edge case.  In the more straightforward scenario
-where the memory is already mapped into the guest, freeing pages back to the kernel
-before they are removed from the guest will lead to use-after-free.
-
-> > e.g.
-> > inaccessible_notifier_invalidate(...)
-> > ... (system event preempting this control flow, giving a window for
-> > the guest to retry accessing the gfn range which was invalidated)
-> > fallocate(.., PUNCH_HOLE..)
+On 14/10/2022 15:05, Guilherme G. Piccoli wrote:
+> Commit b041b525dab9 ("x86/split_lock: Make life miserable for split lockers")
+> changed the way the split lock detector works when in "warn" mode;
+> basically, not only it shows the warn message, but also intentionally
+> introduces a slowdown (through sleeping plus serialization mechanism)
+> on such task. Based on discussions in [0], seems the warning alone
+> wasn't enough motivation for userspace developers to fix their
+> applications.
 > 
-> Looks this is something can happen.
-> And sounds to me the solution needs
-> just follow the mmu_notifier's way of using a invalidate_start/end pair.
+> Happens that originally the proposal in [0] was to add a new mode
+> which would warns + slowdown the "split locking" task, keeping the
+> old warn mode untouched. In the end, that idea was discarded and
+> the regular/default "warn" mode now slowdowns the applications. This
+> is quite aggressive with regards proprietary/legacy programs that
+> basically are unable to properly run in kernel with this change.
+> While is understandable that a malicious application could try a DoS
+> by split locking, it seems unacceptable to regress old/proprietary
+> userspace programs through a default configuration that previously
+> worked. An example of such breakage was reported in [1].
 > 
->   invalidate_start()  --> kvm->mmu_invalidate_in_progress++;
->                           zap KVM page table entries;
->   fallocate()
->   invalidate_end()  --> kvm->mmu_invalidate_in_progress--;
+> So let's add a sysctl to allow controlling the "misery mode" behavior,
+> as per Thomas suggestion on [2]. This way, users running legacy and/or
+> proprietary software are allowed to still execute them with a decent
+> performance while still observe the warning messages on kernel log.
 > 
-> Then during invalidate_start/end time window mmu_invalidate_retry_gfn
-> checks 'mmu_invalidate_in_progress' and prevent repopulating the same
-> page in KVM page table.
+> [0] https://lore.kernel.org/lkml/20220217012721.9694-1-tony.luck@intel.com/
+> 
+> [1] https://github.com/doitsujin/dxvk/issues/2938
+> 
+> [2] https://lore.kernel.org/lkml/87pmf4bter.ffs@tglx/
+> 
+> Fixes: b041b525dab9 ("x86/split_lock: Make life miserable for split lockers")
+> Cc: Andre Almeida <andrealmeid@igalia.com>
+> Cc: Fenghua Yu <fenghua.yu@intel.com>
+> Cc: Joshua Ashton <joshua@froggi.es>
+> Cc: Melissa Wen <mwen@igalia.com>
+> Cc: Paul Gofman <pgofman@codeweavers.com>
+> Cc: Pavel Machek <pavel@denx.de>
+> Cc: Pierre-Loup Griffais <pgriffais@valvesoftware.com>
+> Cc: Tony Luck <tony.luck@intel.com>
+> Cc: Zebediah Figura <zfigura@codeweavers.com>
+> Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+> ---
 
-Yes, if it's not safe to invalidate after making the change (fallocate()), then
-the change needs to be bookended by a start+end pair.  The mmu_notifier's unpaired
-invalidate() hook works by zapping the primary MMU's PTEs before invalidate(), but
-frees the underlying physical page _after_ invalidate().
+Hi Dave / Thomas, do you think this version is good enough?
 
-And the only reason the unpaired invalidate() exists is because there are secondary
-MMUs that reuse the primary MMU's page tables, e.g. shared virtual addressing, in
-which case bookending doesn't work because the secondary MMU can't remove PTEs, it
-can only flush its TLBs.
+If so, would be possible to pick it still in the v6.1-rc cycle, since it
+is a fix?
 
-For this case, the whole point is to not create PTEs in the primary MMU, so there
-should never be a use case that _needs_ an unpaired invalidate().
+What about the documentation improvements from Bagas, should I re-send
+(V3) with that, or would you pick them when merging?
 
-TL;DR: a start+end pair is likely the simplest solution.
+Thanks in advance,
+
+
+Guilherme
