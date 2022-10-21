@@ -2,207 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C69D5607713
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 14:39:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3388D607720
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 14:42:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230251AbiJUMjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 08:39:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39142 "EHLO
+        id S230013AbiJUMl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 08:41:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230189AbiJUMi5 (ORCPT
+        with ESMTP id S229854AbiJUMlt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 08:38:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A56552670CC;
-        Fri, 21 Oct 2022 05:38:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CEEE060AFB;
-        Fri, 21 Oct 2022 12:38:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B9E3C433C1;
-        Fri, 21 Oct 2022 12:38:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666355920;
-        bh=64uVrSSZwWPzLpCq8Wif119GEfxx4bpfwwV/98dcN8g=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=dQAb0u8462bv4f0DoyWtG+9rRmIhiDxj/hocWQ5lhX9d2Ua2Q4fESY7S7yMo1lEjy
-         DmV+Vxt9MwiIkFTvMRH+Wqs1kDSSni6mocKlDcfeHn4l17r4u9FYhtlKUyBWpkdjvw
-         9YhBLLSsJVzyXExEeaUSrtlZGlmgrYrhlNXIPr+/PHb8Njw1B646UP+QIKKtA4QohL
-         9NfrCkkcsFck1sEQNYIk9pl4agxkBNRLxwvrBNSACIJthgMD3Ilaj+4+s5pcPpGMEm
-         sZWB8IvIiko39ZQNzU5YXatkk9K4nnfsWaXAaJp0NzLnaanGsT2XsLHwMiW6oLTx5Y
-         shHt9vh2deRaQ==
-Message-ID: <ce12b5050be31cc15bb84b620b4c21911d99530c.camel@kernel.org>
-Subject: Re: [PATCH 2/2] erofs: use netfs helpers manipulating request and
- subrequest
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Jingbo Xu <jefflexu@linux.alibaba.com>, dhowells@redhat.com,
-        xiang@kernel.org, chao@kernel.org, linux-erofs@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Date:   Fri, 21 Oct 2022 08:38:38 -0400
-In-Reply-To: <20221021084912.61468-3-jefflexu@linux.alibaba.com>
-References: <20221021084912.61468-1-jefflexu@linux.alibaba.com>
-         <20221021084912.61468-3-jefflexu@linux.alibaba.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Fri, 21 Oct 2022 08:41:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE2702681E7
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 05:41:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666356084;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QHzZGIR/L3eWjmkvGxDRS//SKT5lTAiH8nYjXGv6sWo=;
+        b=bZ7WFy/KRo2tCztutz/rus6kcJ3KO9RUAuOOlg9DSSiS1ysgRPXNEKkERA/KhZ3iTw3rXP
+        bidCtAW93NMU4bOuS7su7rLa9lLt6/8PErbCf4VETu9citsWKCpZa7h9mDPOTIOlWNQDEK
+        krt+tl5kpqpFofSekaeEJk6veRC/QYg=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-75-SA8pem_eP_SUssnD4J-_Ig-1; Fri, 21 Oct 2022 08:41:23 -0400
+X-MC-Unique: SA8pem_eP_SUssnD4J-_Ig-1
+Received: by mail-ed1-f72.google.com with SMTP id s8-20020a056402520800b0045cab560d5eso2328402edd.1
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 05:41:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QHzZGIR/L3eWjmkvGxDRS//SKT5lTAiH8nYjXGv6sWo=;
+        b=SfWSCi3swrSaIvC5oQAK6FK6DKv0yE1ZccwUmU/YVAmbEqTdET+96myKrVxtnGjJzq
+         pdkrEsmUnNCQThg5HaE73FVDb3d0zo+o1e4IsDWKOFpTxzGnPqZyPCRobOk2ey8GTpCF
+         DEfc3DqHHwzx7BF2GQ+LB3kKJbqWq/JTqEHX+zzJpSdWooDhFyYGOEiEU6tN6hWzZrim
+         0GEi+PkHTeIPvE7nmxZCFF2E1xEI5mfboR3TDAMXrroFhsjvrnQVvJoQCKE6+5lbPvb2
+         xtJDzYwHcrF0nk0woNF/50hmaiPvWXeDO2k2AWNtkUqbijyowma+3yVVSsgr9v92NenT
+         J1cg==
+X-Gm-Message-State: ACrzQf31g9C0Z1Htsx4K84WZc7tUXysP+RAU/v0QjqSiWUqnWDgq2/t6
+        IW/OZQ+eLpsEicpKLN5z46+gpjm7ok+ri9VXMJhIskpjHT6mkjz6r/LWrnbvVwi+hud5l8+fF6h
+        YAaoWFIkjznEAWrl3SqoW7iumw3XdOkJlI/IO3qbgiBPnnak+idxNfplZrkqVVVE58NdsJx247G
+        e9
+X-Received: by 2002:a50:baec:0:b0:461:4c59:12bf with SMTP id x99-20020a50baec000000b004614c5912bfmr2386073ede.54.1666356082061;
+        Fri, 21 Oct 2022 05:41:22 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6RSW63B8AxPtX3+pwhw0aXbCOhejwCfMPNftvJiTc6+wgGrJqhZFR9SUaQf54iaKqPePBggQ==
+X-Received: by 2002:a50:baec:0:b0:461:4c59:12bf with SMTP id x99-20020a50baec000000b004614c5912bfmr2386039ede.54.1666356081696;
+        Fri, 21 Oct 2022 05:41:21 -0700 (PDT)
+Received: from ovpn-192-65.brq.redhat.com (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id n26-20020aa7c69a000000b0046146c730easm910838edq.75.2022.10.21.05.41.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Oct 2022 05:41:21 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        Yuan Yao <yuan.yao@linux.intel.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v11 16/46] KVM: x86: hyper-v: Don't use
+ sparse_set_to_vcpu_mask() in kvm_hv_send_ipi()
+In-Reply-To: <87czalczo6.fsf@redhat.com>
+References: <20221004123956.188909-1-vkuznets@redhat.com>
+ <20221004123956.188909-17-vkuznets@redhat.com>
+ <Y1BahCzO4jxFC9Ey@google.com> <87czalczo6.fsf@redhat.com>
+Date:   Fri, 21 Oct 2022 14:41:19 +0200
+Message-ID: <877d0tcpsg.fsf@ovpn-192-65.brq.redhat.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-10-21 at 16:49 +0800, Jingbo Xu wrote:
-> Use netfs_put_subrequest() and netfs_rreq_completed() completing request
-> and subrequest.
->=20
-> It is worth noting that a noop netfs_request_ops is introduced for erofs
-> since some netfs routine, e.g. netfs_free_request(), will call into
-> this ops.
->=20
-> Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
-> ---
->  fs/erofs/fscache.c | 47 ++++++++++------------------------------------
->  1 file changed, 10 insertions(+), 37 deletions(-)
->=20
-> diff --git a/fs/erofs/fscache.c b/fs/erofs/fscache.c
-> index fe05bc51f9f2..fa3f4ab5e3b6 100644
-> --- a/fs/erofs/fscache.c
-> +++ b/fs/erofs/fscache.c
-> @@ -4,6 +4,7 @@
->   * Copyright (C) 2022, Bytedance Inc. All rights reserved.
->   */
->  #include <linux/fscache.h>
-> +#include <trace/events/netfs.h>
->  #include "internal.h"
-> =20
->  static DEFINE_MUTEX(erofs_domain_list_lock);
-> @@ -11,6 +12,8 @@ static DEFINE_MUTEX(erofs_domain_cookies_lock);
->  static LIST_HEAD(erofs_domain_list);
->  static struct vfsmount *erofs_pseudo_mnt;
-> =20
-> +static const struct netfs_request_ops erofs_noop_req_ops;
-> +
->  static struct netfs_io_request *erofs_fscache_alloc_request(struct addre=
-ss_space *mapping,
->  					     loff_t start, size_t len)
->  {
-> @@ -24,40 +27,12 @@ static struct netfs_io_request *erofs_fscache_alloc_r=
-equest(struct address_space
->  	rreq->len	=3D len;
->  	rreq->mapping	=3D mapping;
->  	rreq->inode	=3D mapping->host;
-> +	rreq->netfs_ops	=3D &erofs_noop_req_ops;
->  	INIT_LIST_HEAD(&rreq->subrequests);
->  	refcount_set(&rreq->ref, 1);
->  	return rreq;
->  }
-> =20
+Vitaly Kuznetsov <vkuznets@redhat.com> writes:
 
-Why is erofs allocating its own netfs structures? This seems quite
-fragile, and a layering violation too.
+> Sean Christopherson <seanjc@google.com> writes:
+>
+>> On Tue, Oct 04, 2022, Vitaly Kuznetsov wrote:
+>
+> ...
+>
+>>>  
+>>> -	if (all_cpus) {
+>>> -		kvm_send_ipi_to_many(kvm, vector, NULL);
+>>> -	} else {
+>>> -		sparse_set_to_vcpu_mask(kvm, sparse_banks, valid_bank_mask, vcpu_mask);
+>>> -
+>>> -		kvm_send_ipi_to_many(kvm, vector, vcpu_mask);
+>>> -	}
+>>> +	kvm_hv_send_ipi_to_many(kvm, vector, all_cpus ? NULL : sparse_banks, valid_bank_mask);
+>>
+>> Any objection to not using a ternary operator?
+>>
+>> 	if (all_cpus)
+>> 		kvm_hv_send_ipi_to_many(kvm, vector, NULL, 0);
+>> 	else
+>> 		kvm_hv_send_ipi_to_many(kvm, vector, sparse_banks, valid_bank_mask);
+>>
+>
+> Not at all,
+>
+>> Mostly because it's somewhat arbitrary that earlier code ensures valid_bank_mask
+>> is set in the all_cpus=true case, e.g. arguably KVM doesn't need to do the var_cnt
+>> sanity check in the all_cpus case:
+>>
+>> 		all_cpus = send_ipi_ex.vp_set.format == HV_GENERIC_SET_ALL;
+>> 		if (all_cpus)
+>> 			goto check_and_send_ipi;
+>>
+>> 		valid_bank_mask = send_ipi_ex.vp_set.valid_bank_mask;
+>> 		if (hc->var_cnt != hweight64(valid_bank_mask))
+>> 			return HV_STATUS_INVALID_HYPERCALL_INPUT;
+>>
+>> 		if (!hc->var_cnt)
+>> 			goto ret_success;
+>>
+>
+> I think 'var_cnt' (== hweight64(valid_bank_mask)) has to be checked in
+> 'all_cpus' case, especially in kvm_hv_flush_tlb(): the code which reads
+> TLB flush entries will read them from the wrong offset (data_offset/
+> consumed_xmm_halves) otherwise. The problem is less severe in
+> kvm_hv_send_ipi() as there's no data after CPU banks. 
+>
+> At the bare minimum, "KVM: x86: hyper-v: Handle
+> HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST{,EX} calls gently" patch from this
+> series will have to be adjusted. I *think* mandating var_cnt==0 in 'all_cpus'
+> is OK but I don't recall such requirement from TLFS, maybe it's safer to
+> just adjust 'data_offset'/'consumed_xmm_halves' even in 'all_cpus' case.
+>
+> Let me do some tests... 
 
-> -static void erofs_fscache_put_request(struct netfs_io_request *rreq)
-> -{
-> -	if (!refcount_dec_and_test(&rreq->ref))
-> -		return;
-> -	if (rreq->cache_resources.ops)
-> -		rreq->cache_resources.ops->end_operation(&rreq->cache_resources);
-> -	kfree(rreq);
-> -}
-> -
-> -static void erofs_fscache_put_subrequest(struct netfs_io_subrequest *sub=
-req)
-> -{
-> -	if (!refcount_dec_and_test(&subreq->ref))
-> -		return;
-> -	erofs_fscache_put_request(subreq->rreq);
-> -	kfree(subreq);
-> -}
-> -
-> -static void erofs_fscache_clear_subrequests(struct netfs_io_request *rre=
-q)
-> -{
-> -	struct netfs_io_subrequest *subreq;
-> -
-> -	while (!list_empty(&rreq->subrequests)) {
-> -		subreq =3D list_first_entry(&rreq->subrequests,
-> -				struct netfs_io_subrequest, rreq_link);
-> -		list_del(&subreq->rreq_link);
-> -		erofs_fscache_put_subrequest(subreq);
-> -	}
-> -}
-> -
->  static void erofs_fscache_rreq_unlock_folios(struct netfs_io_request *rr=
-eq)
->  {
->  	struct netfs_io_subrequest *subreq;
-> @@ -114,11 +89,10 @@ static void erofs_fscache_rreq_unlock_folios(struct =
-netfs_io_request *rreq)
->  static void erofs_fscache_rreq_complete(struct netfs_io_request *rreq)
->  {
->  	erofs_fscache_rreq_unlock_folios(rreq);
-> -	erofs_fscache_clear_subrequests(rreq);
-> -	erofs_fscache_put_request(rreq);
-> +	netfs_rreq_completed(rreq, false);
->  }
-> =20
-> -static void erofc_fscache_subreq_complete(void *priv,
-> +static void erofs_fscache_subreq_complete(void *priv,
->  		ssize_t transferred_or_error, bool was_async)
->  {
->  	struct netfs_io_subrequest *subreq =3D priv;
-> @@ -130,7 +104,7 @@ static void erofc_fscache_subreq_complete(void *priv,
->  	if (atomic_dec_and_test(&rreq->nr_outstanding))
->  		erofs_fscache_rreq_complete(rreq);
-> =20
-> -	erofs_fscache_put_subrequest(subreq);
-> +	netfs_put_subrequest(subreq, false, netfs_sreq_trace_put_terminated);
->  }
-> =20
->  /*
-> @@ -171,9 +145,8 @@ static int erofs_fscache_read_folios_async(struct fsc=
-ache_cookie *cookie,
->  		}
-> =20
->  		subreq->start =3D pstart + done;
-> -		subreq->len	=3D  len - done;
-> +		subreq->len   =3D  len - done;
->  		subreq->flags =3D 1 << NETFS_SREQ_ONDEMAND;
-> -
->  		list_add_tail(&subreq->rreq_link, &rreq->subrequests);
-> =20
->  		source =3D cres->ops->prepare_read(subreq, LLONG_MAX);
-> @@ -184,7 +157,7 @@ static int erofs_fscache_read_folios_async(struct fsc=
-ache_cookie *cookie,
->  				  source);
->  			ret =3D -EIO;
->  			subreq->error =3D ret;
-> -			erofs_fscache_put_subrequest(subreq);
-> +			netfs_put_subrequest(subreq, false, netfs_sreq_trace_put_failed);
->  			goto out;
->  		}
-> =20
-> @@ -195,7 +168,7 @@ static int erofs_fscache_read_folios_async(struct fsc=
-ache_cookie *cookie,
-> =20
->  		ret =3D fscache_read(cres, subreq->start, &iter,
->  				   NETFS_READ_HOLE_FAIL,
-> -				   erofc_fscache_subreq_complete, subreq);
-> +				   erofs_fscache_subreq_complete, subreq);
->  		if (ret =3D=3D -EIOCBQUEUED)
->  			ret =3D 0;
->  		if (ret) {
+"We can neither confirm nor deny the existence of the problem". Windows
+guests seem to be smart enough to avoid using *_EX hypercalls altogether
+for "all cpus" case (as non-ex versions are good enough). Let's keep
+allowing non-zero var_cnt for 'all cpus' case for now and think about
+hardening it later...
 
-I'd rather see this done differently. Either change erofs to use the
-netfs infrastructure in a more standard fashion, or maybe consider
-teaching erofs to talk to cachefiles directly?
+-- 
+Vitaly
 
-IDK, but this sort of mucking around in the low level netfs objects
-seems wrong to me.
---=20
-Jeff Layton <jlayton@kernel.org>
