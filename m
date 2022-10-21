@@ -2,303 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A94A6073A0
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 11:13:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 016E66073A6
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 11:13:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229976AbiJUJNO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 05:13:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43758 "EHLO
+        id S231127AbiJUJNZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 05:13:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229902AbiJUJMx (ORCPT
+        with ESMTP id S231223AbiJUJM5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 05:12:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D1125642F
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 02:12:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666343470;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QNj3hgEs4bdBiVyu7LVFVtKGSZLscyD7sZ5w02+87Hk=;
-        b=GLftEHYoz2/Tz/zxCqZa/GDTYhHvrkAcgKxFKj3NkzI4xDIo1d30d3q5aB7ydTMFZHD1v0
-        qElyk+oTt4XktufX2ZXzmSs6u0/e11+bfCKWv/zpOfqJccpJVj1slW5YepDnrJNp7DEM/v
-        xHy0OuB2J2unffeqBtELrXPmzRN/Kzo=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-569-MPGvJ-22Pwep3WtLNjUW2g-1; Fri, 21 Oct 2022 05:11:08 -0400
-X-MC-Unique: MPGvJ-22Pwep3WtLNjUW2g-1
-Received: by mail-wm1-f72.google.com with SMTP id i203-20020a1c3bd4000000b003c6d18a7ee5so1182810wma.6
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 02:11:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QNj3hgEs4bdBiVyu7LVFVtKGSZLscyD7sZ5w02+87Hk=;
-        b=ahMr6mmK0nF/v6oMTpBZWC5gpJIvOH1evWhzl8sRuU7LJtXI62Ha7w3U+VidJgBAY1
-         rwLsHqOEF9Glq2970iJk4pV0nZVlETS08KDDcuF/vfZHXAqa2ejcDNpITc9oeElKVB8d
-         G2yZMYi8XbbSzIn8kv+ABTtTPPAFVHqYf5plzkeFfQ/Cw64VD9d1sgMWX39ijx0KxmeO
-         423jnmPnz9gRZqPnasB8jyBkKPfvVN83mc3fcJ8qvwdm3sOV+aoOTqrPcI8hxf+uPjqj
-         d44Gq+H/PU+vHPHx1Z3eMRvIfw2CgLokf7t/IRXCgt/tCvdSh0xNmYWNDe1p0/4wwdDU
-         1+gQ==
-X-Gm-Message-State: ACrzQf2xMOgEVJ7lQvH/ZKGJO9wgX09aNrBCP/ggtKu8insJSVIg2KO2
-        01XsTIKrGReKfz4UduzCNk7j5EpY0g4XL82b4qj+/S4wgKH3L7MISpysH5bOhg8r7t/+2PcwPC9
-        b93DLbef/vXKxLWu5vBQPIxSi
-X-Received: by 2002:a5d:59a8:0:b0:22e:d6ff:3a7c with SMTP id p8-20020a5d59a8000000b0022ed6ff3a7cmr10953447wrr.128.1666343467781;
-        Fri, 21 Oct 2022 02:11:07 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM6hFXNeBt6oxLNmY4x/JZYnr1k0+HqDtVJtEv7DGA4moNCSIWQ++QOW5VSnf7aMpvwJq4FCeQ==
-X-Received: by 2002:a5d:59a8:0:b0:22e:d6ff:3a7c with SMTP id p8-20020a5d59a8000000b0022ed6ff3a7cmr10953431wrr.128.1666343467486;
-        Fri, 21 Oct 2022 02:11:07 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c708:1700:e40d:574c:c991:5f78? (p200300cbc7081700e40d574cc9915f78.dip0.t-ipconnect.de. [2003:cb:c708:1700:e40d:574c:c991:5f78])
-        by smtp.gmail.com with ESMTPSA id f18-20020adff452000000b0022584c82c80sm18307517wrp.19.2022.10.21.02.11.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Oct 2022 02:11:06 -0700 (PDT)
-Message-ID: <948fbf8f-1f0c-ace4-f7b3-64f2bbca00f8@redhat.com>
-Date:   Fri, 21 Oct 2022 11:11:05 +0200
+        Fri, 21 Oct 2022 05:12:57 -0400
+Received: from a.mx.secunet.com (a.mx.secunet.com [62.96.220.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BD1D2570B3;
+        Fri, 21 Oct 2022 02:12:31 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by a.mx.secunet.com (Postfix) with ESMTP id 48AD42019D;
+        Fri, 21 Oct 2022 11:11:29 +0200 (CEST)
+X-Virus-Scanned: by secunet
+Received: from a.mx.secunet.com ([127.0.0.1])
+        by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 9l94Wvjqj3yJ; Fri, 21 Oct 2022 11:11:28 +0200 (CEST)
+Received: from mailout1.secunet.com (mailout1.secunet.com [62.96.220.44])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by a.mx.secunet.com (Postfix) with ESMTPS id CD98720189;
+        Fri, 21 Oct 2022 11:11:28 +0200 (CEST)
+Received: from cas-essen-01.secunet.de (unknown [10.53.40.201])
+        by mailout1.secunet.com (Postfix) with ESMTP id BE90980004A;
+        Fri, 21 Oct 2022 11:11:28 +0200 (CEST)
+Received: from mbx-essen-01.secunet.de (10.53.40.197) by
+ cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 21 Oct 2022 11:11:28 +0200
+Received: from gauss2.secunet.de (10.182.7.193) by mbx-essen-01.secunet.de
+ (10.53.40.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 21 Oct
+ 2022 11:11:28 +0200
+Received: by gauss2.secunet.de (Postfix, from userid 1000)
+        id ADD1B3182AD5; Fri, 21 Oct 2022 11:11:27 +0200 (CEST)
+Date:   Fri, 21 Oct 2022 11:11:27 +0200
+From:   Steffen Klassert <steffen.klassert@secunet.com>
+To:     Christian Langrock <christian.langrock@secunet.com>
+CC:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        "David Ahern" <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "open list:NETWORKING [IPSEC]" <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH ipsec v7] xfrm: replay: Fix ESN wrap around for GSO
+Message-ID: <20221021091127.GQ3294086@gauss3.secunet.de>
+References: <20221017063447.1816366-1-christian.langrock@secunet.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Hugh Dickins <hughd@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>
-References: <20220930141931.174362-1-david@redhat.com>
- <20220930141931.174362-7-david@redhat.com> <Yz3wcDZPFvKBmnet@x1n>
- <9a84440f-1462-2193-7dd6-c84e8bb22232@redhat.com> <Yz8sZROC7rpPwmgY@x1n>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v1 6/7] mm/ksm: convert break_ksm() to use
- walk_page_range_vma()
-In-Reply-To: <Yz8sZROC7rpPwmgY@x1n>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20221017063447.1816366-1-christian.langrock@secunet.com>
+X-ClientProxiedBy: cas-essen-01.secunet.de (10.53.40.201) To
+ mbx-essen-01.secunet.de (10.53.40.197)
+X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06.10.22 21:28, Peter Xu wrote:
-> On Thu, Oct 06, 2022 at 11:20:42AM +0200, David Hildenbrand wrote:
->>>> +int break_ksm_pud_entry(pud_t *pud, unsigned long addr, unsigned long next,
->>>> +			struct mm_walk *walk)
->>>> +{
->>>> +	/* We only care about page tables to walk to a single base page. */
->>>> +	if (pud_leaf(*pud) || !pud_present(*pud))
->>>> +		return 1;
->>>> +	return 0;
->>>> +}
->>>
->>> Is this needed?  I thought the pgtable walker handlers this already.
->>>
->>> [...]
->>>
->>
->> Most probably yes. I was trying to avoid about PUD splits, but I guess we
->> simply should not care in VMAs that are considered by KSM (MERGABLE). Most
->> probably never ever happens.
+On Mon, Oct 17, 2022 at 08:34:47AM +0200, Christian Langrock wrote:
+> When using GSO it can happen that the wrong seq_hi is used for the last
+> packets before the wrap around. This can lead to double usage of a
+> sequence number. To avoid this, we should serialize this last GSO
+> packet.
 > 
-> I was surprised the split is the default approach; didn't really notice
-> that before. Yeah maybe better to keep it.
+> Fixes: d7dbefc45cf5 ("xfrm: Add xfrm_replay_overflow functions for offloading")
+> Co-developed-by: Steffen Klassert <steffen.klassert@secunet.com>
+> Signed-off-by: Christian Langrock <christian.langrock@secunet.com>
 
-Interestingly, one callback reduces the benchmark result by 100-200 MiB.
-
-With only break_ksm_pmd_entry(), I get ~4900 MiB/s instead of ~5010 MiB/s (~2%).
-
-I came to the conclusion that we really shouldn't have to worry about pud
-THPs here: it could only be a file PUD and splitting that only zaps the
-entry, but doesn't PMD- or PTE-map it.
-
-Also, I think we will barely see large pud THP in a mergable mapping ... :)
-
-[...]
-
->> My main motivation is to remove most of that GUP hackery here, which is
->> 1) Getting a reference on a page and waiting for migration to finish
->>     even though both is unnecessary.
->> 2) As we don't have sufficient control, we added FOLL_MIGRATION hacks to
->>     MM core to work around limitations in the GUP-based approacj.
-> 
-> I saw one thing of adding FOLL_MIGRATION from Hugh was to have a hint for
-> follow page users:
-> 
->    I'd have preferred to avoid another flag, and do it every time, in case
->    someone else makes the same easy mistake..
-> 
-> Though..
-
-The important thing I think is that FOLL_MIGRATION really only applies to
-follow_page(). In case of "modern" GUP we will just wait for migration
-entries, handle swap entries ... when triggering a page fault.
-
-> 
->> 3) We rely on legacy follow_page() interface that we should really get
->>     rid of in the long term.
-> 
-> ..this is part of effort to remove follow_page()?  More context will be
-> helpful in that case.
-
-The comment from Hugh is another example why follow_page() adds complexity.
-One might wonder, how pages in the swapcache, device coherent pages, ...
-would have to be handled.
-
-Short-term, I want to cleanup GUP. Long-term we might want to consider
-removing follow_page() completely.
-
-[...]
-
->>
->> Yes, we have to extend page walking code, but it's just the natural,
->> non-hacky way of doing it.
->>
->> Regarding the 4% performance degradation (if I wouldn't have added the
->> benchmarks, nobody would know and probably care ;) ), I am not quite sure
->> why that is the case. We're just walking page tables after all in both
->> cases. Maybe the callback-based implementation of pagewalk code is less
->> efficient, but we might be able to improve that implementation if we really
->> care about performance here. Maybe removing break_ksm_pud_entry() already
->> improves the numbers slightly.
-> 
-> Yeah it could be the walker is just slower.  And for !ksm walking your code
-> should be faster when hit migration entries, but that should really be rare
-> anyway.
-
-
-I have the following right now:
-
-
- From 7f767f9e9e673a29793cd35f1c3d66ed593b67cb Mon Sep 17 00:00:00 2001
-From: David Hildenbrand <david@redhat.com>
-Date: Mon, 25 Jul 2022 10:36:20 +0200
-Subject: [PATCH] mm/ksm: convert break_ksm() to use walk_page_range_vma()
-
-FOLL_MIGRATION exists only for the purpose of break_ksm(), and
-actually, there is not even the need to wait for the migration to
-finish, we only want to know if we're dealing with a KSM page.
-
-Using follow_page() just to identify a KSM page overcomplicates GUP
-code. Let's use walk_page_range_vma() instead, because we don't actually
-care about the page itself, we only need to know a single property --
-no need to even grab a reference.
-
-So, get rid of follow_page() usage such that we can get rid of
-FOLL_MIGRATION now and eventually be able to get rid of follow_page() in
-the future.
-
-In my setup (AMD Ryzen 9 3900X), running the KSM selftest to test unmerge
-performance on 2 GiB (taskset 0x8 ./ksm_tests -D -s 2048), this results in
-a performance degradation of ~2% (old: ~5010 MiB/s, new: ~4900 MiB/s).
-I don't think we particularly care for now.
-
-Interestingly, the benchmark reduction is due to the single callback.
-Adding a second callback (e.g., pud_entry()) reduces the benchmark by
-another 100-200 MiB/s.
-
-Signed-off-by: David Hildenbrand <david@redhat.com>
----
-  mm/ksm.c | 49 +++++++++++++++++++++++++++++++++++++++----------
-  1 file changed, 39 insertions(+), 10 deletions(-)
-
-diff --git a/mm/ksm.c b/mm/ksm.c
-index c6f58aa6e731..5cdb852ff132 100644
---- a/mm/ksm.c
-+++ b/mm/ksm.c
-@@ -39,6 +39,7 @@
-  #include <linux/freezer.h>
-  #include <linux/oom.h>
-  #include <linux/numa.h>
-+#include <linux/pagewalk.h>
-  
-  #include <asm/tlbflush.h>
-  #include "internal.h"
-@@ -419,6 +420,39 @@ static inline bool ksm_test_exit(struct mm_struct *mm)
-  	return atomic_read(&mm->mm_users) == 0;
-  }
-  
-+static int break_ksm_pmd_entry(pmd_t *pmd, unsigned long addr, unsigned long next,
-+			struct mm_walk *walk)
-+{
-+	struct page *page = NULL;
-+	spinlock_t *ptl;
-+	pte_t *pte;
-+	int ret;
-+
-+	if (pmd_leaf(*pmd) || !pmd_present(*pmd))
-+		return 0;
-+
-+	pte = pte_offset_map_lock(walk->mm, pmd, addr, &ptl);
-+	if (pte_present(*pte)) {
-+		page = vm_normal_page(walk->vma, addr, *pte);
-+	} else if (!pte_none(*pte)) {
-+		swp_entry_t entry = pte_to_swp_entry(*pte);
-+
-+		/*
-+		 * As KSM pages remain KSM pages until freed, no need to wait
-+		 * here for migration to end.
-+		 */
-+		if (is_migration_entry(entry))
-+			page = pfn_swap_entry_to_page(entry);
-+	}
-+	ret = page && PageKsm(page);
-+	pte_unmap_unlock(pte, ptl);
-+	return ret;
-+}
-+
-+static const struct mm_walk_ops break_ksm_ops = {
-+	.pmd_entry = break_ksm_pmd_entry,
-+};
-+
-  /*
-   * We use break_ksm to break COW on a ksm page by triggering unsharing,
-   * such that the ksm page will get replaced by an exclusive anonymous page.
-@@ -434,21 +468,16 @@ static inline bool ksm_test_exit(struct mm_struct *mm)
-   */
-  static int break_ksm(struct vm_area_struct *vma, unsigned long addr)
-  {
--	struct page *page;
-  	vm_fault_t ret = 0;
-  
-  	do {
--		bool ksm_page = false;
-+		int ksm_page;
-  
-  		cond_resched();
--		page = follow_page(vma, addr,
--				FOLL_GET | FOLL_MIGRATION | FOLL_REMOTE);
--		if (IS_ERR_OR_NULL(page))
--			break;
--		if (PageKsm(page))
--			ksm_page = true;
--		put_page(page);
--
-+		ksm_page = walk_page_range_vma(vma, addr, addr + 1,
-+					       &break_ksm_ops, NULL);
-+		if (WARN_ON_ONCE(ksm_page < 0))
-+			return ksm_page;
-  		if (!ksm_page)
-  			return 0;
-  		ret = handle_mm_fault(vma, addr,
--- 
-2.37.3
-
-
--- 
-Thanks,
-
-David / dhildenb
-
+Applied, thanks a lot Christian!
