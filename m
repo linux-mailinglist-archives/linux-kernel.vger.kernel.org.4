@@ -2,173 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77956607055
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 08:47:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE975607058
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 08:47:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229494AbiJUGrq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 02:47:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59132 "EHLO
+        id S230053AbiJUGrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 02:47:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229978AbiJUGrm (ORCPT
+        with ESMTP id S229497AbiJUGrq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 02:47:42 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63843242C98
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 23:47:39 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id w18so4764425ejq.11
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 23:47:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Rz8S9MMQRt8zPpvrNpbhX5Tj2i1jjVBTVbkbjHZYyRM=;
-        b=WQE6C3Cfh/sF5gQfmupWGacH2Ck1q0VF6PV83R45exfq8m59GATBQ3H7J//jcxkDNp
-         G5K4CG+PbOJLrmWYhAR+g8BWQMn5Z6qYhOMx5XVIviGST2E1FHLZZWRKOfmraGsN8XHd
-         krPv/COxA8nMYOyAbxPmWNNhNsaAflvIMqNuUzeOjyoFDr/zP8H5j5knuj4YC+8zSA1V
-         NIgGclsyH5FaFGXoznhSAUviqAmc+BhFrn5MHPpBta5k8wmZLQKFQWzTj9/adOXgdpUv
-         t5GRkqbIHJC+lsgAdGQrVAUeOZcpGxDsSPPuJgzz0mnOxsaT57QFq3vNIdDyas0tI1av
-         +Rqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Rz8S9MMQRt8zPpvrNpbhX5Tj2i1jjVBTVbkbjHZYyRM=;
-        b=FDoblrnJJQHUVLFh7/2xZFNiVmgGHIc8QJaF5/oprwxQdyu5Aq8LmTHehs+YokZpMq
-         z9HJCRGq56r3OSVIdwbt4Bipxm0htCepW7/vnR2i3m2XhXDD/qrlKywUFMBffNBMH9La
-         xp9R6cOGBf0x1wUJoE7EtMf1TWAWj6KebNWINyyKw4BqHordNqs149F2VPC/dZIUXvr/
-         w9zxiJmk8x0nP7FhOxgjZ8uCSVddIZENjrvO02Sa4ptPxD6a7pH9+YgNnDmwkzwIw/m/
-         BfurdfJBPkkRUpddITSfwOvF+r2qLW3diVc/m0kG8oQMh1fofJnMd5WGNeEs3zGCe9VS
-         qp/g==
-X-Gm-Message-State: ACrzQf3RrObX8Q5l+LCb4eX4asqdC9tCs3hbEbjKi6orqgg/pJMNlm55
-        nAiu7pdWOrC09y36LCILkdJxZOfeWZ1OT8wC8CnTog==
-X-Google-Smtp-Source: AMsMyM6pQHRPA5JEM3T9CLocnalknf1b06jBC2miJcOeuA6fxx8hkV1pE7MgAVLDnlzbb1EL4XbFpDUSEcapbRUtloI=
-X-Received: by 2002:a17:906:dac8:b0:741:545b:796a with SMTP id
- xi8-20020a170906dac800b00741545b796amr13903081ejb.240.1666334857669; Thu, 20
- Oct 2022 23:47:37 -0700 (PDT)
+        Fri, 21 Oct 2022 02:47:46 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B492413ED;
+        Thu, 20 Oct 2022 23:47:44 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id A3C711884AB0;
+        Fri, 21 Oct 2022 06:47:42 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 9C2CF250007B;
+        Fri, 21 Oct 2022 06:47:42 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 87CB39EC000B; Fri, 21 Oct 2022 06:47:42 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-References: <20221019114535.131469-1-apatel@ventanamicro.com> <CAOnJCUJYQegEa3H+1drGAcy5ptEku9A3gtKWkOm=imC62S4UZw@mail.gmail.com>
-In-Reply-To: <CAOnJCUJYQegEa3H+1drGAcy5ptEku9A3gtKWkOm=imC62S4UZw@mail.gmail.com>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Fri, 21 Oct 2022 12:17:25 +0530
-Message-ID: <CAAhSdy0B-4JobSVUP9-CPZiSu4UBYUrvxmyVjEE--O5Fb6V_Ew@mail.gmail.com>
-Subject: Re: [PATCH] RISC-V: KVM: Fix kvm_riscv_vcpu_timer_pending() for Sstc
-To:     Atish Patra <atishp@atishpatra.org>
-Cc:     Anup Patel <apatel@ventanamicro.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Andrew Jones <ajones@ventanamicro.com>, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Date:   Fri, 21 Oct 2022 08:47:42 +0200
+From:   netdev@kapio-technology.com
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Florent Fourcot <florent.fourcot@wifirst.fr>,
+        Hans Schultz <schultz.hans@gmail.com>,
+        Joachim Wiberg <troglobit@gmail.com>,
+        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v8 net-next 10/12] net: dsa: mv88e6xxx: mac-auth/MAB
+ implementation
+In-Reply-To: <20221020225719.l5iw6vndmm7gvjo3@skbuf>
+References: <20221018165619.134535-1-netdev@kapio-technology.com>
+ <20221018165619.134535-1-netdev@kapio-technology.com>
+ <20221018165619.134535-11-netdev@kapio-technology.com>
+ <20221018165619.134535-11-netdev@kapio-technology.com>
+ <20221020132538.reirrskemcjwih2m@skbuf>
+ <2565c09bb95d69142522c3c3bcaa599e@kapio-technology.com>
+ <20221020225719.l5iw6vndmm7gvjo3@skbuf>
+User-Agent: Gigahost Webmail
+Message-ID: <82d23b100b8d2c9e4647b8a134d5cbbf@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 11:34 AM Atish Patra <atishp@atishpatra.org> wrote:
->
-> On Wed, Oct 19, 2022 at 4:45 AM Anup Patel <apatel@ventanamicro.com> wrote:
-> >
-> > The kvm_riscv_vcpu_timer_pending() checks per-VCPU next_cycles
-> > and per-VCPU software injected VS timer interrupt. This function
-> > returns incorrect value when Sstc is available because the per-VCPU
-> > next_cycles are only updated by kvm_riscv_vcpu_timer_save() called
-> > from kvm_arch_vcpu_put(). As a result, when Sstc is available the
-> > VCPU does not block properly upon WFI traps.
-> >
-> > To fix the above issue, we introduce kvm_riscv_vcpu_timer_sync()
-> > which will update per-VCPU next_cycles upon every VM exit instead
-> > of kvm_riscv_vcpu_timer_save().
-> >
-> > Fixes: 8f5cb44b1bae ("RISC-V: KVM: Support sstc extension")
-> > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> > ---
-> >  arch/riscv/include/asm/kvm_vcpu_timer.h |  1 +
-> >  arch/riscv/kvm/vcpu.c                   |  3 +++
-> >  arch/riscv/kvm/vcpu_timer.c             | 17 +++++++++++++++--
-> >  3 files changed, 19 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/arch/riscv/include/asm/kvm_vcpu_timer.h b/arch/riscv/include/asm/kvm_vcpu_timer.h
-> > index 0d8fdb8ec63a..82f7260301da 100644
-> > --- a/arch/riscv/include/asm/kvm_vcpu_timer.h
-> > +++ b/arch/riscv/include/asm/kvm_vcpu_timer.h
-> > @@ -45,6 +45,7 @@ int kvm_riscv_vcpu_timer_deinit(struct kvm_vcpu *vcpu);
-> >  int kvm_riscv_vcpu_timer_reset(struct kvm_vcpu *vcpu);
-> >  void kvm_riscv_vcpu_timer_restore(struct kvm_vcpu *vcpu);
-> >  void kvm_riscv_guest_timer_init(struct kvm *kvm);
-> > +void kvm_riscv_vcpu_timer_sync(struct kvm_vcpu *vcpu);
-> >  void kvm_riscv_vcpu_timer_save(struct kvm_vcpu *vcpu);
-> >  bool kvm_riscv_vcpu_timer_pending(struct kvm_vcpu *vcpu);
-> >
-> > diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
-> > index a032c4f0d600..71ebbc4821f0 100644
-> > --- a/arch/riscv/kvm/vcpu.c
-> > +++ b/arch/riscv/kvm/vcpu.c
-> > @@ -708,6 +708,9 @@ void kvm_riscv_vcpu_sync_interrupts(struct kvm_vcpu *vcpu)
-> >                                 clear_bit(IRQ_VS_SOFT, &v->irqs_pending);
-> >                 }
-> >         }
-> > +
-> > +       /* Sync-up timer CSRs */
-> > +       kvm_riscv_vcpu_timer_sync(vcpu);
-> >  }
-> >
-> >  int kvm_riscv_vcpu_set_interrupt(struct kvm_vcpu *vcpu, unsigned int irq)
-> > diff --git a/arch/riscv/kvm/vcpu_timer.c b/arch/riscv/kvm/vcpu_timer.c
-> > index 185f2386a747..ad34519c8a13 100644
-> > --- a/arch/riscv/kvm/vcpu_timer.c
-> > +++ b/arch/riscv/kvm/vcpu_timer.c
-> > @@ -320,20 +320,33 @@ void kvm_riscv_vcpu_timer_restore(struct kvm_vcpu *vcpu)
-> >         kvm_riscv_vcpu_timer_unblocking(vcpu);
-> >  }
-> >
-> > -void kvm_riscv_vcpu_timer_save(struct kvm_vcpu *vcpu)
-> > +void kvm_riscv_vcpu_timer_sync(struct kvm_vcpu *vcpu)
-> >  {
-> >         struct kvm_vcpu_timer *t = &vcpu->arch.timer;
-> >
-> >         if (!t->sstc_enabled)
-> >                 return;
-> >
-> > -       t = &vcpu->arch.timer;
-> >  #if defined(CONFIG_32BIT)
-> >         t->next_cycles = csr_read(CSR_VSTIMECMP);
-> >         t->next_cycles |= (u64)csr_read(CSR_VSTIMECMPH) << 32;
-> >  #else
-> >         t->next_cycles = csr_read(CSR_VSTIMECMP);
-> >  #endif
-> > +}
-> > +
-> > +void kvm_riscv_vcpu_timer_save(struct kvm_vcpu *vcpu)
-> > +{
-> > +       struct kvm_vcpu_timer *t = &vcpu->arch.timer;
-> > +
-> > +       if (!t->sstc_enabled)
-> > +               return;
-> > +
-> > +       /*
-> > +        * The vstimecmp CSRs are saved by kvm_riscv_vcpu_timer_sync()
-> > +        * upon every VM exit so no need to save here.
-> > +        */
-> > +
-> >         /* timer should be enabled for the remaining operations */
-> >         if (unlikely(!t->init_done))
-> >                 return;
-> > --
-> > 2.34.1
-> >
->
-> Ahh. That's a tricky one. Thanks for fixing it.
->
-> Reviewed-by: Atish Patra <atishp@rivosinc.com>
+On 2022-10-21 00:57, Vladimir Oltean wrote:
+> On Thu, Oct 20, 2022 at 10:20:50PM +0200, netdev@kapio-technology.com 
+> wrote:
+>> In general locked ports block traffic from a host based on if there is 
+>> a
+>> FDB entry or not. In the non-offloaded case, there is only CPU 
+>> assisted
+>> learning, so the normal learning mechanism has to be disabled as any
+>> learned entry will open the port for the learned MAC,vlan.
+> 
+> Does it have to be that way? Why can't BR_LEARNING on a BR_PORT_LOCKED
+> cause the learned FDB entries to have BR_FDB_LOCKED, and everything
+> would be ok in that case (the port will not be opened for the learned
+> MAC/VLAN)?
+> 
 
-Thanks, queued this patch for Linux-6.1-rcX
+I suppose you are right that basing it solely on BR_FDB_LOCKED is 
+possible.
 
-Regards,
-Anup
+The question is then maybe if the common case where you don't need 
+learned
+entries for the scheme to work, e.g. with EAPOL link local packets, 
+requires
+less CPU load to work and is cleaner than if using BR_FDB_LOCKED 
+entries?
+
+>> Thus learning is off for locked ports, which of course includes MAB.
+>> 
+>> So the 'learning' is based on authorizing MAC,vlan addresses, which
+>> is done by userspace daemons, e.g. hostapd or what could be called
+>> mabd.
