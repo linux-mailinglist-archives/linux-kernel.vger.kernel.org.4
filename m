@@ -2,52 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23CEF608028
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 22:47:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA2D960802B
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 22:48:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229520AbiJUUrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 16:47:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60164 "EHLO
+        id S230128AbiJUUsG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 16:48:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230127AbiJUUrD (ORCPT
+        with ESMTP id S230080AbiJUUrs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 16:47:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6692315711;
-        Fri, 21 Oct 2022 13:46:30 -0700 (PDT)
+        Fri, 21 Oct 2022 16:47:48 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0485210325B;
+        Fri, 21 Oct 2022 13:47:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 99856B82D23;
-        Fri, 21 Oct 2022 20:46:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 757ECC433D6;
-        Fri, 21 Oct 2022 20:46:24 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id A3714CE2BD3;
+        Fri, 21 Oct 2022 20:47:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DE63C433D6;
+        Fri, 21 Oct 2022 20:47:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666385187;
-        bh=r4rs+gBLRR2XnC/iBTUpmvw8Y1/CAN6bIqgMsnCS3+M=;
+        s=k20201202; t=1666385232;
+        bh=03jM+N/itfs6Ls3v3FEsqDtVBOyJZhtZFr6zqJXmPkE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bEUU8QrTiTFvPH3Zs3lk4BYlQrncBQ27b3JEZ7yaGj50xGf//DsfDHZOPKOyFufVa
-         6nMW5QVb8ee2kX8yYQ4luotFom6IwrY+xE1qUt3yvhg0LPb81AaSj8Hjz6d6F177Ru
-         lZi8jSduBpDBFd0G6P8jl3epKd/ckixBVvwQlHY6w8t+tc3UkcU5USD4fUdzlfdSG/
-         x4Nr5rm65+P+QtI5jkg720jIM+qyrp4IRhkj/LVLS7NwJ8CwNe0qUOaFjN0aQHy55H
-         m7pyWO9Mc4H3h8+ox4O34LhmQhCJSxO476RkcFhRYlNbtmxDum5e1aJAeUEC7PTd/5
-         vbYBD2zsrbKYw==
+        b=spyV1d3PJkZo9sze+sHHjFp9Yjay83rvxDF1iI+ukct/IyMicVrqXkWh8WrxicZCX
+         V9yJPXSaNk92ByrZJAcA83wak/5lGLif23xsj2nIlE5i+WPijEmglqvU82g2e6wX28
+         vMMNmGtoMjXjTz1Y1IR44E2pwHNYE25eWffPQCWXh9OjD6Y5rpYs7rma/UnXpIAaAP
+         U8Vz1qjuuxraqcQhQPz6Nom9DAnNQKar53Bm7u0PWPrcta3aOLoKa17p8Q7rXx1kBS
+         56VK+i4rggdEPCjlOcaDhVexSuap/rszkJZM4hIZDzNWhWUe7unaWQIbPSSVa7ZjTZ
+         BQikFUEGwfCOw==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     linux-arm-kernel@lists.infradead.org,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
+        Pavel Machek <pavel@ucw.cz>
 Cc:     linux-kernel@vger.kernel.org, Ben Dooks <ben-linux@fluff.org>,
         Simtec Linux Team <linux@simtec.co.uk>,
         Arnd Bergmann <arnd@arndb.de>,
         Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: [PATCH 11/21] clk: remove s3c24xx driver
-Date:   Fri, 21 Oct 2022 22:27:44 +0200
-Message-Id: <20221021203329.4143397-11-arnd@kernel.org>
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sven Schwermer <sven.schwermer@disruptive-technologies.com>,
+        linux-leds@vger.kernel.org, linux-samsung-soc@vger.kernel.org
+Subject: [PATCH 12/21] leds: remove s3c24xx driver
+Date:   Fri, 21 Oct 2022 22:27:45 +0200
+Message-Id: <20221021203329.4143397-12-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20221021202254.4142411-1-arnd@kernel.org>
 References: <20221021202254.4142411-1-arnd@kernel.org>
@@ -64,111 +62,56 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The s3c24xx platform is gone, so the clk driver can be removed as
-well.
+The s3c24xx platform is gone, so the led driver can be
+removed as well.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- MAINTAINERS                               |   1 -
- drivers/clk/samsung/Kconfig               |  32 --
- drivers/clk/samsung/Makefile              |   4 -
- drivers/clk/samsung/clk-s3c2410-dclk.c    | 440 ---------------------
- drivers/clk/samsung/clk-s3c2410.c         | 446 ----------------------
- drivers/clk/samsung/clk-s3c2412.c         | 254 ------------
- drivers/clk/samsung/clk-s3c2443.c         | 438 ---------------------
- include/linux/platform_data/clk-s3c2410.h |  19 -
- 8 files changed, 1634 deletions(-)
- delete mode 100644 drivers/clk/samsung/clk-s3c2410-dclk.c
- delete mode 100644 drivers/clk/samsung/clk-s3c2410.c
- delete mode 100644 drivers/clk/samsung/clk-s3c2412.c
- delete mode 100644 drivers/clk/samsung/clk-s3c2443.c
- delete mode 100644 include/linux/platform_data/clk-s3c2410.h
+ drivers/leds/Kconfig                       |  8 ---
+ drivers/leds/Makefile                      |  1 -
+ drivers/leds/leds-s3c24xx.c                | 83 ----------------------
+ include/linux/platform_data/leds-s3c24xx.h | 18 -----
+ 4 files changed, 110 deletions(-)
+ delete mode 100644 drivers/leds/leds-s3c24xx.c
+ delete mode 100644 include/linux/platform_data/leds-s3c24xx.h
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 503ebd9800db..caf196041e3a 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -18078,7 +18078,6 @@ F:	include/dt-bindings/clock/s3c*.h
- F:	include/dt-bindings/clock/s5p*.h
- F:	include/dt-bindings/clock/samsung,*.h
- F:	include/linux/clk/samsung.h
--F:	include/linux/platform_data/clk-s3c2410.h
+diff --git a/drivers/leds/Kconfig b/drivers/leds/Kconfig
+index 3642ed8a75b4..9dbce09eabac 100644
+--- a/drivers/leds/Kconfig
++++ b/drivers/leds/Kconfig
+@@ -244,14 +244,6 @@ config LEDS_MT6323
+ 	  This option enables support for on-chip LED drivers found on
+ 	  Mediatek MT6323 PMIC.
  
- SAMSUNG SPI DRIVERS
- M:	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-diff --git a/drivers/clk/samsung/Kconfig b/drivers/clk/samsung/Kconfig
-index 8e8245ab3fd1..c07bb50513bf 100644
---- a/drivers/clk/samsung/Kconfig
-+++ b/drivers/clk/samsung/Kconfig
-@@ -94,38 +94,6 @@ config EXYNOS_CLKOUT
- 	  status of the certains clocks from SoC, but it could also be tied to
- 	  other devices as an input clock.
- 
--# For S3C24XX platforms, select following symbols:
--config S3C2410_COMMON_CLK
--	bool "Samsung S3C2410 clock controller support" if COMPILE_TEST
--	select COMMON_CLK_SAMSUNG
+-config LEDS_S3C24XX
+-	tristate "LED Support for Samsung S3C24XX GPIO LEDs"
+-	depends on LEDS_CLASS
+-	depends on ARCH_S3C24XX || COMPILE_TEST
 -	help
--	  Support for the clock controller present on the Samsung
--	  S3C2410/S3C2440/S3C2442 SoCs. Choose Y here only if you build for
--	  this SoC.
+-	  This option enables support for LEDs connected to GPIO lines
+-	  on Samsung S3C24XX series CPUs, such as the S3C2410 and S3C2440.
 -
--config S3C2410_COMMON_DCLK
--	bool
--	select COMMON_CLK_SAMSUNG
--	select REGMAP_MMIO
--	help
--	  Support for the dclk clock controller present on the Samsung
--	  S3C2410/S3C2412/S3C2440/S3C2443 SoCs. Choose Y here only if you build
--	  for this SoC.
--
--config S3C2412_COMMON_CLK
--	bool "Samsung S3C2412 clock controller support" if COMPILE_TEST
--	select COMMON_CLK_SAMSUNG
--	help
--	  Support for the clock controller present on the Samsung S3C2412 SoCs.
--	  Choose Y here only if you build for this SoC.
--
--config S3C2443_COMMON_CLK
--	bool "Samsung S3C2443 clock controller support" if COMPILE_TEST
--	select COMMON_CLK_SAMSUNG
--	help
--	  Support for the clock controller present on the Samsung
--	  S3C2416/S3C2443 SoCs. Choose Y here only if you build for this SoC.
--
- config TESLA_FSD_COMMON_CLK
- 	bool "Tesla FSD clock controller support" if COMPILE_TEST
- 	depends on COMMON_CLK_SAMSUNG
-diff --git a/drivers/clk/samsung/Makefile b/drivers/clk/samsung/Makefile
-index 239d9eead77f..ebbeacabe88f 100644
---- a/drivers/clk/samsung/Makefile
-+++ b/drivers/clk/samsung/Makefile
-@@ -21,10 +21,6 @@ obj-$(CONFIG_EXYNOS_ARM64_COMMON_CLK)	+= clk-exynos7.o
- obj-$(CONFIG_EXYNOS_ARM64_COMMON_CLK)	+= clk-exynos7885.o
- obj-$(CONFIG_EXYNOS_ARM64_COMMON_CLK)	+= clk-exynos850.o
- obj-$(CONFIG_EXYNOS_ARM64_COMMON_CLK)	+= clk-exynosautov9.o
--obj-$(CONFIG_S3C2410_COMMON_CLK)+= clk-s3c2410.o
--obj-$(CONFIG_S3C2410_COMMON_DCLK)+= clk-s3c2410-dclk.o
--obj-$(CONFIG_S3C2412_COMMON_CLK)+= clk-s3c2412.o
--obj-$(CONFIG_S3C2443_COMMON_CLK)+= clk-s3c2443.o
- obj-$(CONFIG_S3C64XX_COMMON_CLK)	+= clk-s3c64xx.o
- obj-$(CONFIG_S5PV210_COMMON_CLK)	+= clk-s5pv210.o clk-s5pv210-audss.o
- obj-$(CONFIG_TESLA_FSD_COMMON_CLK)	+= clk-fsd.o
-diff --git a/drivers/clk/samsung/clk-s3c2410-dclk.c b/drivers/clk/samsung/clk-s3c2410-dclk.c
+ config LEDS_NET48XX
+ 	tristate "LED Support for Soekris net48xx series Error LED"
+ 	depends on LEDS_CLASS
+diff --git a/drivers/leds/Makefile b/drivers/leds/Makefile
+index 0c1543a4a7a8..d30395d11fd8 100644
+--- a/drivers/leds/Makefile
++++ b/drivers/leds/Makefile
+@@ -73,7 +73,6 @@ obj-$(CONFIG_LEDS_PM8058)		+= leds-pm8058.o
+ obj-$(CONFIG_LEDS_POWERNV)		+= leds-powernv.o
+ obj-$(CONFIG_LEDS_PWM)			+= leds-pwm.o
+ obj-$(CONFIG_LEDS_REGULATOR)		+= leds-regulator.o
+-obj-$(CONFIG_LEDS_S3C24XX)		+= leds-s3c24xx.o
+ obj-$(CONFIG_LEDS_SC27XX_BLTC)		+= leds-sc27xx-bltc.o
+ obj-$(CONFIG_LEDS_SUNFIRE)		+= leds-sunfire.o
+ obj-$(CONFIG_LEDS_SYSCON)		+= leds-syscon.o
+diff --git a/drivers/leds/leds-s3c24xx.c b/drivers/leds/leds-s3c24xx.c
 deleted file mode 100644
-index f5e0a6ba2d12..000000000000
-diff --git a/drivers/clk/samsung/clk-s3c2410.c b/drivers/clk/samsung/clk-s3c2410.c
+index 3c0c7aa63b8c..000000000000
+diff --git a/include/linux/platform_data/leds-s3c24xx.h b/include/linux/platform_data/leds-s3c24xx.h
 deleted file mode 100644
-index 3d152a46169b..000000000000
-diff --git a/drivers/clk/samsung/clk-s3c2412.c b/drivers/clk/samsung/clk-s3c2412.c
-deleted file mode 100644
-index 724ef642f048..000000000000
-diff --git a/drivers/clk/samsung/clk-s3c2443.c b/drivers/clk/samsung/clk-s3c2443.c
-deleted file mode 100644
-index a827d63766d1..000000000000
-diff --git a/include/linux/platform_data/clk-s3c2410.h b/include/linux/platform_data/clk-s3c2410.h
-deleted file mode 100644
-index 7eb1cfa5409b..000000000000
+index 64f8d14876e0..000000000000
 -- 
 2.29.2
 
