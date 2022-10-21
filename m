@@ -2,57 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69B7C606DCA
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 04:31:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B08AB606DCD
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 04:32:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229782AbiJUCbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 22:31:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38432 "EHLO
+        id S229921AbiJUCcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 22:32:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbiJUCbI (ORCPT
+        with ESMTP id S229509AbiJUCc2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 22:31:08 -0400
-Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C206A17A96B;
-        Thu, 20 Oct 2022 19:31:07 -0700 (PDT)
-Received: from [192.168.192.83] (unknown [50.47.134.47])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id E3B7F43229;
-        Fri, 21 Oct 2022 02:31:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1666319466;
-        bh=W5ttTTvJhQt4iDiuMC26FByAMmCEgx3KWUE5L8KpP7U=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=OZT2127MI30oLkHN/HfKdTDGLMQt/MK5TuvwgCWwAj6Y8lIcGkdXKQzGvR5yDb5L9
-         IXkTdgEr+p1xmSr8IuySgzBLW9dpj7MdvNxhm3PH56L512Lemuzi0PEz7AnuDUQOjU
-         E4y8uICB1YV/2d9UeuVNxiQh366wAp8hQT0/tbasa0tucRuRXwMeEjqCWyonmfCiND
-         JonsSQuXW++EJ28lMTDmjrjFHd6Tt9ikqdS247nJVjOR48gqDMW2sgdYG1P1Zuj1Qh
-         DFPV3+uOnKBsDTXI32vCQeCS6ExXPoOyM5P3GlE3ySqtgRc7yyUozP9IPOONiLMoLX
-         t/NSPIHdKXHNg==
-Message-ID: <d39df9d7-fc54-7e9b-d4ce-5c0d4fc455d4@canonical.com>
-Date:   Thu, 20 Oct 2022 19:31:03 -0700
+        Thu, 20 Oct 2022 22:32:28 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBC4810F891
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 19:32:27 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id f8-20020a17090a664800b00212464cd49fso1470917pjm.4
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 19:32:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=EsvLhV+cbznBpgyq6mtNJgNZycGH3T3tCrg6LonEOp4=;
+        b=j/PynzD1zbRkpecTxyYqHEf9VOlhdAnPFJOV+1z+gFkB1FSq6HINXXtTMGuFuIo6Ep
+         wEQl2D20Ee1cv5aTkporTtwe1KX0xnjVB6MRsj5mecJRoCDoG0OyB663+yD0NRGrxC2n
+         Wj61WEZrQUN9h6rOa7UpVVm+goCuZjsCSElc/VBeiDJvdjyNp6cFoc5JaZlCj6rKVBWe
+         mrahL6X5dThTNxDZ0uSvimWvEHIM7ToHfEcJ4rD7Wqvc/AVQiiRkyq02KQ87OM7lzVt1
+         1LKIjfxxR0cpcrkZS+dcv3HhTYsjuDY5Qf8G60IcL5OnioJ/qJr9awS47USK4Vsqa9Pq
+         UrVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EsvLhV+cbznBpgyq6mtNJgNZycGH3T3tCrg6LonEOp4=;
+        b=1VZ9ILD+xhkxvQNJDjbGEFxwAfgZZqfXCdKDWsrEljppsz3M/8qIYZnoOMZQeAyywW
+         4NUJbO1hTo78Isw5Mw48g+lwIfULplQGzXHjoOb2dRQV4c/0Eq7UhdTNymGafPtM1+1M
+         qfoXVs9GW1RJwRf/FmfCMrsEscuM4Q7vflyCKbUl/uwRdFQwWoh1Ewwkg/AEu80IdvbJ
+         PZyKoQ3rmj6aMv2+Da44lH9TyQBSM32M/DxzARno/lk6CntGJiz1yvmpD3v1gn9q/e/G
+         rxAtJUqYtqWBQZJIH7xH6e/PoX8FIBm9N084s+KwH3GyElo2QaQm6FtgJudFOtTlvt7o
+         CtRA==
+X-Gm-Message-State: ACrzQf1/JiDgyfYnuqD8cZnCLxXLhW28ACV8saBdMBKyGFhuLgWaRDeQ
+        USW/WUXOjVbJDakUKiAzcoQ=
+X-Google-Smtp-Source: AMsMyM7XIQHtE3EZUCPvUCzBIEy8P10eqv0oWue4UomJiecL9ou04VigPmr21N4CME/yWIltLfobfw==
+X-Received: by 2002:a17:902:ed93:b0:185:4421:24b with SMTP id e19-20020a170902ed9300b001854421024bmr16735349plj.158.1666319547482;
+        Thu, 20 Oct 2022 19:32:27 -0700 (PDT)
+Received: from mi-HP-ProDesk-680-G4-MT.mioffice.cn ([43.224.245.252])
+        by smtp.gmail.com with ESMTPSA id v129-20020a626187000000b00565f4efbc0csm1291080pfb.49.2022.10.20.19.32.23
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 20 Oct 2022 19:32:25 -0700 (PDT)
+From:   qixiaoyu1 <qxy65535@gmail.com>
+X-Google-Original-From: qixiaoyu1 <qixiaoyu1@xiaomi.com>
+To:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        qixiaoyu1 <qixiaoyu1@xiaomi.com>
+Subject: [PATCH] f2fs: separate IPU policy for fdatasync from F2FS_IPU_FSYNC
+Date:   Fri, 21 Oct 2022 10:31:36 +0800
+Message-Id: <20221021023136.22863-1-qixiaoyu1@xiaomi.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH -next] apparmor: Fix spelling of function name in comment
- block
-Content-Language: en-US
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-References: <20221014084255.26103-1-yang.lee@linux.alibaba.com>
-From:   John Johansen <john.johansen@canonical.com>
-Organization: Canonical
-In-Reply-To: <20221014084255.26103-1-yang.lee@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,32 +71,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/14/22 01:42, Yang Li wrote:
-> 'resouce' -> 'resource'
-> 
-> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2396
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+Currently IPU policy for fdatasync is coupled with F2FS_IPU_FSYNC.
+Fix to apply it to all IPU policy.
 
-I have pulled this into my tree
+Signed-off-by: qixiaoyu1 <qixiaoyu1@xiaomi.com>
+---
+ fs/f2fs/data.c | 8 +++-----
+ fs/f2fs/file.c | 4 +++-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-Acked-by: John Johansen <john.johansen@canonical.com>
-
-> ---
->   security/apparmor/resource.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/security/apparmor/resource.c b/security/apparmor/resource.c
-> index ed543f4edfd9..d7dbacc9a369 100644
-> --- a/security/apparmor/resource.c
-> +++ b/security/apparmor/resource.c
-> @@ -66,7 +66,7 @@ static int audit_resource(struct aa_profile *profile, unsigned int resource,
->   }
->   
->   /**
-> - * aa_map_resouce - map compiled policy resource to internal #
-> + * aa_map_resource - map compiled policy resource to internal #
->    * @resource: flattened policy resource number
->    *
->    * Returns: resource # for the current architecture.
+diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+index a71e818cd67b..fec8e15fe820 100644
+--- a/fs/f2fs/data.c
++++ b/fs/f2fs/data.c
+@@ -2518,6 +2518,9 @@ static inline bool check_inplace_update_policy(struct inode *inode,
+ 	if (policy & (0x1 << F2FS_IPU_HONOR_OPU_WRITE) &&
+ 			is_inode_flag_set(inode, FI_OPU_WRITE))
+ 		return false;
++	/* this is set by fdatasync or F2FS_IPU_FSYNC policy */
++	if (is_inode_flag_set(inode, FI_NEED_IPU))
++		return true;
+ 	if (policy & (0x1 << F2FS_IPU_FORCE))
+ 		return true;
+ 	if (policy & (0x1 << F2FS_IPU_SSR) && f2fs_need_SSR(sbi))
+@@ -2538,11 +2541,6 @@ static inline bool check_inplace_update_policy(struct inode *inode,
+ 			!IS_ENCRYPTED(inode))
+ 		return true;
+ 
+-	/* this is only set during fdatasync */
+-	if (policy & (0x1 << F2FS_IPU_FSYNC) &&
+-			is_inode_flag_set(inode, FI_NEED_IPU))
+-		return true;
+-
+ 	if (unlikely(fio && is_sbi_flag_set(sbi, SBI_CP_DISABLED) &&
+ 			!f2fs_is_checkpointed_data(sbi, fio->old_blkaddr)))
+ 		return true;
+diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+index 82cda1258227..08091550cdf2 100644
+--- a/fs/f2fs/file.c
++++ b/fs/f2fs/file.c
+@@ -270,8 +270,10 @@ static int f2fs_do_sync_file(struct file *file, loff_t start, loff_t end,
+ 		goto go_write;
+ 
+ 	/* if fdatasync is triggered, let's do in-place-update */
+-	if (datasync || get_dirty_pages(inode) <= SM_I(sbi)->min_fsync_blocks)
++	if (datasync || (SM_I(sbi)->ipu_policy & (0x1 << F2FS_IPU_FSYNC) &&
++			get_dirty_pages(inode) <= SM_I(sbi)->min_fsync_blocks))
+ 		set_inode_flag(inode, FI_NEED_IPU);
++
+ 	ret = file_write_and_wait_range(file, start, end);
+ 	clear_inode_flag(inode, FI_NEED_IPU);
+ 
+-- 
+2.36.1
 
