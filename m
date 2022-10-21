@@ -2,118 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CC76607B73
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 17:49:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21FA2607B71
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 17:47:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229815AbiJUPtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 11:49:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45570 "EHLO
+        id S230423AbiJUPrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 11:47:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbiJUPsu (ORCPT
+        with ESMTP id S231282AbiJUPrb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 11:48:50 -0400
-Received: from vps.xff.cz (vps.xff.cz [195.181.215.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29DE8222F00;
-        Fri, 21 Oct 2022 08:48:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xff.cz; s=mail;
-        t=1666366753; bh=CMrmPvkFy9Rnj6R3j7QT0enTO4XoE0Vw26Epmtis0+g=;
-        h=Date:From:To:Cc:Subject:X-My-GPG-KeyId:References:From;
-        b=AOEvKLBb8mH5u5eqhb3ggdx4wGRkJSHhVMZlbDA6lj7TZ23qsX+M5kXwKbXYSA7zL
-         dm61z2GB1I3COTwrpB0emSpvNhhxGFJJY9AzPLkoIQO9CvBW+OTXGJrXefYDfdhOCF
-         GZoHMuRtRf2OZMAAscspxS669F9IH1l5GhgTp+5I=
-Date:   Fri, 21 Oct 2022 17:39:13 +0200
-From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>
-To:     Peter Geis <pgwipeout@gmail.com>
-Cc:     Heiko Stuebner <heiko@sntech.de>,
-        linux-rockchip@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Yifeng Zhao <yifeng.zhao@rock-chips.com>,
-        Johan Jonker <jbx6244@gmail.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/Rockchip SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] arm64: dts: rockchip: rk356x: Fix PCIe register map
- and ranges
-Message-ID: <20221021153913.l5ry6v4mcnzcmj2v@core>
-Mail-Followup-To: =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>,
-        Peter Geis <pgwipeout@gmail.com>, Heiko Stuebner <heiko@sntech.de>,
-        linux-rockchip@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Yifeng Zhao <yifeng.zhao@rock-chips.com>,
-        Johan Jonker <jbx6244@gmail.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
-        "moderated list:ARM/Rockchip SoC support" <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
- <https://xff.cz/key.txt>
-References: <20221005085439.740992-1-megi@xff.cz>
- <CAMdYzYrEXEqOmMeozGBbAAvrujZcOxLh4VYOmu5DSjPWTS-5zQ@mail.gmail.com>
- <20221005220812.4psu6kckej63yo2z@core>
- <4679102.Wku2Vz74k6@phil>
- <CAMdYzYq3S2rR3Kb61irpV9xHYijNiJY0mkVnJwPrpXzxg_Zh9g@mail.gmail.com>
+        Fri, 21 Oct 2022 11:47:31 -0400
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C90435814D
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 08:46:50 -0700 (PDT)
+Received: by mail-yb1-f172.google.com with SMTP id r3so3802766yba.5
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 08:46:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf.com; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3RXItDXJ/Ml3IUjXg4GmR8kWvZb6b9L0vGRz8r8mXDs=;
+        b=Q1uHvIr/Me3XlWSUlN3kNiSLqHDIBgh3dc2YVpZhOmViER/b8asp6FMQohe7f8O5rK
+         OPjoOtF/SGmlPYNYXmoq8zrmMvlkTyBZL3LJ4JTaVI1VuWlFeG+6hRQeeZC9kqfgtW3A
+         h3HFHnsrTiX6Sf2gr9+Be2OtRQd2fDkWMISvvNHPAX5whlKbzFapUX/fwOR7uqXb/F5A
+         bjLhiM1yj9bJjJ6LUCT6009WQWoBOd61vxpXCt/BBmshvD2jUZilKE9K8qAhDPYECmPD
+         pvYND6ECYnNRV3KSMfQb5YDuprTnJcp2ilIrILQ9+xxc2zx5v64o9l3gAJzgzS5e9osP
+         ZpXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3RXItDXJ/Ml3IUjXg4GmR8kWvZb6b9L0vGRz8r8mXDs=;
+        b=OJr/5Z1POzkhvMtNIoS9SUyvQjGWUVg2lBxv2fCzSD9XqKu9UQY0IIA9JrAEJgtWvj
+         jqH/xG5HrIMo+ZruYFuIJ+4H/BqL4nfCEGNyn84epGhLmxqsb7g63MUbswX/Sm8tXAbs
+         8d2Ep23PlYjpSoeubAHEK+vgBnsrbetXx322ANSA9t/FQKgI1EfZ3cEnoK+cBCLq3Aia
+         RGWNaTFqVPAN/vxGqEekEONJ1qKulv1YCQBNiXwZh8+dHQp6GqVnMaroYi3gCc4qR3ST
+         aJ/9H1n/i+Dv6l+JKICXKiJTlZqEoA0iv1cf53Vic8azlS0Js+6baDIn1l1PGhTSAeZg
+         KQ7A==
+X-Gm-Message-State: ACrzQf3ZfgGMkFgqrkN8mSSyGV/V4YqiWrHtAlZsC5qVM8fnQWHjHh88
+        hHwaRgkZ90wKqsyLk1V+wdM+8S9M05BKsRIybdYHsw==
+X-Google-Smtp-Source: AMsMyM4wHAFcilTO9hMOnlaVMmagzB5Km/M7N/n/4pRk22LaNUomks0PkJLBB1nKN/aBXBVWjOyzl78un5ODX9VIyGA=
+X-Received: by 2002:a05:6902:705:b0:6bd:3822:78c3 with SMTP id
+ k5-20020a056902070500b006bd382278c3mr17271586ybt.225.1666366847425; Fri, 21
+ Oct 2022 08:40:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMdYzYq3S2rR3Kb61irpV9xHYijNiJY0mkVnJwPrpXzxg_Zh9g@mail.gmail.com>
+References: <CAFJ_xbq0cxcH-cgpXLU4Mjk30+muWyWm1aUZGK7iG53yaLBaQg@mail.gmail.com>
+ <20221021111935.GB28729@wunner.de> <CAFJ_xboDuFiACjECO0UmYz5y9TCz4rTRPmrxeVMup7r9816dTg@mail.gmail.com>
+ <CAOs-w0KRYh-=gTb0Ed5iYAMs92AYtV_oEei5OgezgKGfwfiBYg@mail.gmail.com>
+In-Reply-To: <CAOs-w0KRYh-=gTb0Ed5iYAMs92AYtV_oEei5OgezgKGfwfiBYg@mail.gmail.com>
+From:   =?UTF-8?Q?Rados=C5=82aw_Biernacki?= <rad@semihalf.com>
+Date:   Fri, 21 Oct 2022 17:40:31 +0200
+Message-ID: <CAOs-w0KNvzfT9tSzXUZeoRthMBt1rgDf-arXY6uvkNJpNBrxBQ@mail.gmail.com>
+Subject: Re: [BUG] Intel Apollolake: PCIe bridge "loses" capabilities after
+ entering D3Cold state
+To:     Lukasz Majczak <lma@semihalf.com>, Vidya Sagar <vidyas@nvidia.com>
+Cc:     Lukas Wunner <lukas@wunner.de>, bhelgaas@google.com,
+        Rajat Jain <rajatja@google.com>, upstream@semihalf.com,
+        linux-pci@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 09:07:50AM -0400, Peter Geis wrote:
-> Good Morning Heiko,
-> 
-> Apologies for just getting to this, I'm still in the middle of moving
-> and just got my lab set back up.
-> 
-> I've tested this patch series and it leads to the same regression with
-> NVMe drives. A loop of md5sum on two identical 4GB random files
-> produces the following results:
-> d11cf0caa541b72551ca22dc5bef2de0  test-rand.img
-> fad97e91da8d4fd554c895cafa89809b  test-rand2.img
-> 2d56a7baa05c38535f4c19a2b371f90a  test-rand.img
-> 74e8e6f93d7c3dc3ad250e91176f5901  test-rand2.img
-> 25cfcfecf4dd529e4e9fbbe2be482053  test-rand.img
-> 74e8e6f93d7c3dc3ad250e91176f5901  test-rand2.img
-> b9637505bf88ed725f6d03deb7065dab  test-rand.img
-> f7437e88d524ea92e097db51dce1c60d  test-rand2.img
-> 
-> Before this patch series:
-> d11cf0caa541b72551ca22dc5bef2de0  test-rand.img
-> d11cf0caa541b72551ca22dc5bef2de0  test-rand2.img
-> d11cf0caa541b72551ca22dc5bef2de0  test-rand.img
-> d11cf0caa541b72551ca22dc5bef2de0  test-rand2.img
-> d11cf0caa541b72551ca22dc5bef2de0  test-rand.img
-> d11cf0caa541b72551ca22dc5bef2de0  test-rand2.img
-> d11cf0caa541b72551ca22dc5bef2de0  test-rand.img
-> d11cf0caa541b72551ca22dc5bef2de0  test-rand2.img
-> 
-> Though I do love where this patch is going and would like to see if it
-> can be made to work, in its current form it does not.
+>> pt., 21 pa=C5=BA 2022 o 13:19 Lukas Wunner <lukas@wunner.de> napisa=C5=
+=82(a):
+>> >
+>> > On Fri, Oct 21, 2022 at 12:17:35PM +0200, Lukasz Majczak wrote:
+>> > > While working with Vidya???s patch I have noticed that after
+>> > > suspend/resume cycle on my Chromebook (Apollolake) PCIe bridge loses
+>> > > its capabilities - the missing part is:
+>> > >
+>> > > Capabilities: [200 v1] L1 PM Substates
+>> > > L1SubCap: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+ ASPM_L1.1+ L1_PM_Subs=
+tates+
+>> > >   PortCommonModeRestoreTime=3D40us PortTPowerOnTime=3D10us
+>> > > L1SubCtl1: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+ ASPM_L1.1+
+>> > >    T_CommonMode=3D40us LTR1.2_Threshold=3D98304ns
+>> > > L1SubCtl2: T_PwrOn=3D60us
+>> > >
+>> > > Digging more I???ve found out that entering D3Cold state causes this
+>> >
+>> > You mean the capability is gone from lspci after D3cold?
+>> >
+>> > My understanding is that BIOS is responsible for populating config spa=
+ce.
+>> > So this sounds like a BIOS bug.  What's the BIOS vendor and version?
+>> > (dmesg | grep DMI)
+>> >
+>> > Thanks,
+>> >
+>> > Lukas
+>>
+>> Hi Lukasz
+>>
+>> here is the DMI
+>>
+>> localhost ~ # dmesg | grep DMI
+>> [    0.000000] DMI: Google Coral/Coral, BIOS Google_Coral.10068.81.0 11/=
+27/2018
+>> [    0.155420] ACPI: Added _OSI(Linux-Lenovo-NV-HDMI-Audio)
+>> [    0.447820] [drm] DMI info: DMI_BIOS_VENDOR coreboot
+>> [    0.447828] [drm] DMI info: DMI_BIOS_VERSION Google_Coral.10068.81.0
+>> [    0.447832] [drm] DMI info: DMI_BIOS_DATE 11/27/2018
+>> [    0.447835] [drm] DMI info: DMI_BIOS_RELEASE 4.0
+>> [    0.447838] [drm] DMI info: DMI_SYS_VENDOR Google
+>> [    0.447841] [drm] DMI info: DMI_PRODUCT_NAME Coral
+>> [    0.447844] [drm] DMI info: DMI_PRODUCT_VERSION rev3
+>> [    0.447848] [drm] DMI info: DMI_PRODUCT_FAMILY Google_Coral
+>>
+>> Yes, you are right and in our internal discussion the vendor (Intel)
+>> has proposed a firmware patch, although I couldn't verified that the
+>> issue is limited only to the given firmware/bios, so decided to send
+>> this email.
+>>
+>> Best regards,
+>> Lukasz
 
-Thanks for the test. Can you please also test v1? Also please share lspci -vvv
-of your nvme drive, so that we can see allocated address ranges, etc.
+Lukasz, Vidya, is the change in behaviour in V4 intentional fix for
+mentioned problems with missing devices after D3cold or unintentional
+side effects.
+Or from another angle, can we base on this behaviour as a hotfix for
+problems with missing devices?
 
-kind regards,
-	o.
+As far as I understand we probably still should update FW in the fleet
+of devices, right?
 
-> Very Respectfully,
-> Peter Geis
+ps: Sorry for top-posting in the previous email, I forgot to switch my
+gmail client.
