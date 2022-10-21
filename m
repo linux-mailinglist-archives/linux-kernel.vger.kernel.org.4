@@ -2,224 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B643D608176
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 00:26:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72D80608179
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 00:28:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229613AbiJUW0H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 18:26:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55626 "EHLO
+        id S229779AbiJUW21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 18:28:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229838AbiJUWZw (ORCPT
+        with ESMTP id S229535AbiJUW2Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 18:25:52 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA08C18E2B6;
-        Fri, 21 Oct 2022 15:25:50 -0700 (PDT)
-Date:   Fri, 21 Oct 2022 22:25:45 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1666391147;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=WWVRtK1oSdCMD8tZ02jUK7li0uyMogbugXnIeZb0lpI=;
-        b=MOXaMPagHMJyaT7UFqU6r5YeyKdgx/3/fTdRwcfJgOK3OY865Gz8aoka70HiYpKGu0d/P1
-        B3LW5JPT2xKddtUMT8R9Ro4VjBuWpRVJYwXwyfS7yjsL7QrOC2vzK5ggjBcIFWRpAJO1LE
-        hnuRODhRrwIFNQtA9AUqqweo0nYY8nANvIT53NazAf7r3ACutC+H4BqffrkQ3L4wgqwGGO
-        nQIrqYi1vF0Le8a08NTGpPRT2WtxBOAUKGN0UYMS3f1fERsz3Bgxela1o645LfX1Qq0end
-        ESC1KR2P9REUDeZ20+NBIhcEzIl9Ac+PFNmbE5X3KLgEfKKKkFDnTv8Htm44hA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1666391147;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=WWVRtK1oSdCMD8tZ02jUK7li0uyMogbugXnIeZb0lpI=;
-        b=xV5NvZMPujhZ7Bix4/2jqP1TNwg0tQvyn+Ugx933Iut6LwL1ZLcQi6yvNOb4w+e8192Zpq
-        zHaZtm/lWjV6fUBw==
-From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/mm] x86/mm: Randomize per-cpu entry area
-Cc:     Seth Jenkins <sethjenkins@google.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-MIME-Version: 1.0
-Message-ID: <166639114548.401.707105259028399157.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 21 Oct 2022 18:28:24 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AFF0215518
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 15:28:22 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-36772c0c795so41304087b3.23
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 15:28:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=UNGrrBQSFJPioHxic2YhpQaL13tNOPKKc9e4+Y6lW8k=;
+        b=GRjRHyXTE27B29YnD2HJByyz3W+700Npn0UlJyjcUv0fTWRPpk97F2bNonvmnpiDxh
+         g/78zE0v2v228u8mCtmIvNuulUIzJU1BjwAijMPIxh9Rcg1p7sOtw2GiPxuAx+TPnpQd
+         syLdHCxlIqOxrJmbssi6cOkK3CP06GK+70QGTkOSqcnw5vpjij0H7u8hWTD6yC2WIxjz
+         /UJ3W3L7OpKZO3zw8kAXtj0iectnuEdw3c9hoGKMLtIo3Oe6V/YlqbNOH/yGyj9YJBNm
+         vaIsPoH74TVQXh/5h7oXgdBAyKbwRwb5LxAl4j9TTKx+te6MOjhqPpttBElipDkFhDf7
+         btJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UNGrrBQSFJPioHxic2YhpQaL13tNOPKKc9e4+Y6lW8k=;
+        b=ZNhvF2WIDp1ICXjW++YnakbrhNwL7MI67AwV3AkciOv0sdn4oYWWDARRpCDwUN6Tpf
+         osOvZnk30Q9/Bw9Rok4uwTwWoEoqWI5TAFi9AZ6K9u+U8mVb+Q/UX7Z1SsLR8SgohwsG
+         advP1FeBaqfnToWTr9fMci+KefR7EZuxJMEpAhhuKViqowUHkdRorlIsRkCDenld5Cg/
+         /IqvA+07XXtCtrZTiTLnt+i7etrh61siiVnr8XD5DzHhCkqVEbo/B8n36K9i6sVbXlkt
+         cnMgrCSLb52Nl6M7tT8TGvyLSWVLQydsu5vrD8qtkhBpIhxRMl5cFz4tPibhmYbzR0ER
+         z3XQ==
+X-Gm-Message-State: ACrzQf0OddDawcszG+8lifGWYKrxX4tmTqV0C/kNYcYMug5pVAC+Myf5
+        gKW4wLvQsywMSUSVA7SRD6M0lXtfCyBI
+X-Google-Smtp-Source: AMsMyM5TbyMWFj8dXnMjbTzsabuwCCGxprLxGdPNkjU9sB5Pn03oatqgJU6mjH6D+fPclNH2ondarbIPH43I
+X-Received: from eugenis.svl.corp.google.com ([2620:15c:2ce:200:8a12:10f5:7696:29de])
+ (user=eugenis job=sendgmr) by 2002:a81:130a:0:b0:360:9739:82be with SMTP id
+ 10-20020a81130a000000b00360973982bemr19424499ywt.69.1666391301693; Fri, 21
+ Oct 2022 15:28:21 -0700 (PDT)
+Date:   Fri, 21 Oct 2022 15:28:11 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.0.135.g90850a2211-goog
+Message-ID: <20221021222811.2366215-1-eugenis@google.com>
+Subject: [PATCH] arm64/mm: Consolidate TCR_EL1 fields
+From:   Evgenii Stepanov <eugenis@google.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/mm branch of tip:
+From: Anshuman Khandual <anshuman.khandual@arm.com>
 
-Commit-ID:     11a4f78908cb8a6cccbb49dd7d0455a94741e959
-Gitweb:        https://git.kernel.org/tip/11a4f78908cb8a6cccbb49dd7d0455a94741e959
-Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Fri, 07 Oct 2022 10:42:36 +02:00
-Committer:     Dave Hansen <dave.hansen@linux.intel.com>
-CommitterDate: Fri, 21 Oct 2022 09:48:58 -07:00
+commit e921da6bc7cac5f0e8458fe5df18ae08eb538f54 upstream.
 
-x86/mm: Randomize per-cpu entry area
+This renames and moves SYS_TCR_EL1_TCMA1 and SYS_TCR_EL1_TCMA0 definitions
+into pgtable-hwdef.h thus consolidating all TCR fields in a single header.
+This does not cause any functional change.
 
-Seth found that the CPU-entry-area; the piece of per-cpu data that is
-mapped into the userspace page-tables for kPTI is not subject to any
-randomization -- irrespective of kASLR settings.
-
-On x86_64 a whole P4D (512 GB) of virtual address space is reserved for
-this structure, which is plenty large enough to randomize things a
-little.
-
-As such, use a straightforward randomization scheme that avoids
-duplicates to spread the existing CPUs over the available space.
-
-This makes it harder to find the addresses of important structures in
-the cpu entry areas like the entry stacks.
-
-[ dhansen: add minor comment in "sodding terrible" loop ]
-
-Reported-by: Seth Jenkins <sethjenkins@google.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+Link: https://lore.kernel.org/r/1643121513-21854-1-git-send-email-anshuman.khandual@arm.com
+Signed-off-by: Will Deacon <will@kernel.org>
 ---
- arch/x86/include/asm/cpu_entry_area.h |  4 +--
- arch/x86/include/asm/pgtable_areas.h  |  8 +++-
- arch/x86/kernel/hw_breakpoint.c       |  2 +-
- arch/x86/mm/cpu_entry_area.c          | 47 +++++++++++++++++++++++---
- 4 files changed, 51 insertions(+), 10 deletions(-)
+ arch/arm64/include/asm/pgtable-hwdef.h | 2 ++
+ arch/arm64/include/asm/sysreg.h        | 4 ----
+ arch/arm64/mm/proc.S                   | 2 +-
+ 3 files changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/arch/x86/include/asm/cpu_entry_area.h b/arch/x86/include/asm/cpu_entry_area.h
-index 75efc4c..462fc34 100644
---- a/arch/x86/include/asm/cpu_entry_area.h
-+++ b/arch/x86/include/asm/cpu_entry_area.h
-@@ -130,10 +130,6 @@ struct cpu_entry_area {
- };
+diff --git a/arch/arm64/include/asm/pgtable-hwdef.h b/arch/arm64/include/asm/pgtable-hwdef.h
+index 40085e53f573..66671ff05183 100644
+--- a/arch/arm64/include/asm/pgtable-hwdef.h
++++ b/arch/arm64/include/asm/pgtable-hwdef.h
+@@ -273,6 +273,8 @@
+ #define TCR_NFD1		(UL(1) << 54)
+ #define TCR_E0PD0		(UL(1) << 55)
+ #define TCR_E0PD1		(UL(1) << 56)
++#define TCR_TCMA0		(UL(1) << 57)
++#define TCR_TCMA1		(UL(1) << 58)
  
- #define CPU_ENTRY_AREA_SIZE		(sizeof(struct cpu_entry_area))
--#define CPU_ENTRY_AREA_ARRAY_SIZE	(CPU_ENTRY_AREA_SIZE * NR_CPUS)
+ /*
+  * TTBR.
+diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
+index 394fc5998a4b..f79f3720e4cb 100644
+--- a/arch/arm64/include/asm/sysreg.h
++++ b/arch/arm64/include/asm/sysreg.h
+@@ -1094,10 +1094,6 @@
+ #define CPACR_EL1_ZEN_EL0EN	(BIT(17)) /* enable EL0 access, if EL1EN set */
+ #define CPACR_EL1_ZEN		(CPACR_EL1_ZEN_EL1EN | CPACR_EL1_ZEN_EL0EN)
+ 
+-/* TCR EL1 Bit Definitions */
+-#define SYS_TCR_EL1_TCMA1	(BIT(58))
+-#define SYS_TCR_EL1_TCMA0	(BIT(57))
 -
--/* Total size includes the readonly IDT mapping page as well: */
--#define CPU_ENTRY_AREA_TOTAL_SIZE	(CPU_ENTRY_AREA_ARRAY_SIZE + PAGE_SIZE)
- 
- DECLARE_PER_CPU(struct cpu_entry_area *, cpu_entry_area);
- DECLARE_PER_CPU(struct cea_exception_stacks *, cea_exception_stacks);
-diff --git a/arch/x86/include/asm/pgtable_areas.h b/arch/x86/include/asm/pgtable_areas.h
-index d34cce1..62e5ede 100644
---- a/arch/x86/include/asm/pgtable_areas.h
-+++ b/arch/x86/include/asm/pgtable_areas.h
-@@ -11,6 +11,12 @@
- 
- #define CPU_ENTRY_AREA_RO_IDT_VADDR	((void *)CPU_ENTRY_AREA_RO_IDT)
- 
--#define CPU_ENTRY_AREA_MAP_SIZE		(CPU_ENTRY_AREA_PER_CPU + CPU_ENTRY_AREA_ARRAY_SIZE - CPU_ENTRY_AREA_BASE)
-+#ifdef CONFIG_X86_32
-+#define CPU_ENTRY_AREA_MAP_SIZE		(CPU_ENTRY_AREA_PER_CPU +		\
-+					 (CPU_ENTRY_AREA_SIZE * NR_CPUS) -	\
-+					 CPU_ENTRY_AREA_BASE
-+#else
-+#define CPU_ENTRY_AREA_MAP_SIZE		P4D_SIZE
-+#endif
- 
- #endif /* _ASM_X86_PGTABLE_AREAS_H */
-diff --git a/arch/x86/kernel/hw_breakpoint.c b/arch/x86/kernel/hw_breakpoint.c
-index 668a4a6..bbb0f73 100644
---- a/arch/x86/kernel/hw_breakpoint.c
-+++ b/arch/x86/kernel/hw_breakpoint.c
-@@ -266,7 +266,7 @@ static inline bool within_cpu_entry(unsigned long addr, unsigned long end)
- 
- 	/* CPU entry erea is always used for CPU entry */
- 	if (within_area(addr, end, CPU_ENTRY_AREA_BASE,
--			CPU_ENTRY_AREA_TOTAL_SIZE))
-+			CPU_ENTRY_AREA_MAP_SIZE))
- 		return true;
- 
- 	/*
-diff --git a/arch/x86/mm/cpu_entry_area.c b/arch/x86/mm/cpu_entry_area.c
-index 6c2f1b7..ad1f750 100644
---- a/arch/x86/mm/cpu_entry_area.c
-+++ b/arch/x86/mm/cpu_entry_area.c
-@@ -15,16 +15,54 @@ static DEFINE_PER_CPU_PAGE_ALIGNED(struct entry_stack_page, entry_stack_storage)
- #ifdef CONFIG_X86_64
- static DEFINE_PER_CPU_PAGE_ALIGNED(struct exception_stacks, exception_stacks);
- DEFINE_PER_CPU(struct cea_exception_stacks*, cea_exception_stacks);
--#endif
- 
--#ifdef CONFIG_X86_32
-+static DEFINE_PER_CPU_READ_MOSTLY(unsigned long, _cea_offset);
-+
-+static inline unsigned int cea_offset(unsigned int cpu)
-+{
-+	return per_cpu(_cea_offset, cpu);
-+}
-+
-+static __init void init_cea_offsets(void)
-+{
-+	unsigned int max_cea;
-+	unsigned int i, j;
-+
-+	max_cea = (CPU_ENTRY_AREA_MAP_SIZE - PAGE_SIZE) / CPU_ENTRY_AREA_SIZE;
-+
-+	/* O(sodding terrible) */
-+	for_each_possible_cpu(i) {
-+		unsigned int cea;
-+
-+again:
-+		cea = prandom_u32_max(max_cea);
-+
-+		/* Make sure that no previous CPU shares the offset: */
-+		for_each_possible_cpu(j) {
-+			if (cea_offset(j) == cea)
-+				goto again;
-+
-+			if (i == j)
-+				break;
-+		}
-+
-+		per_cpu(_cea_offset, i) = cea;
-+	}
-+}
-+#else /* !X86_64 */
- DECLARE_PER_CPU_PAGE_ALIGNED(struct doublefault_stack, doublefault_stack);
-+
-+static inline unsigned int cea_offset(unsigned int cpu)
-+{
-+	return cpu;
-+}
-+static inline void init_cea_offsets(void) { }
+ /* GCR_EL1 Definitions */
+ #define SYS_GCR_EL1_RRND	(BIT(16))
+ #define SYS_GCR_EL1_EXCL_MASK	0xffffUL
+diff --git a/arch/arm64/mm/proc.S b/arch/arm64/mm/proc.S
+index d35c90d2e47a..50bbed947bec 100644
+--- a/arch/arm64/mm/proc.S
++++ b/arch/arm64/mm/proc.S
+@@ -46,7 +46,7 @@
  #endif
  
- /* Is called from entry code, so must be noinstr */
- noinstr struct cpu_entry_area *get_cpu_entry_area(int cpu)
- {
--	unsigned long va = CPU_ENTRY_AREA_PER_CPU + cpu * CPU_ENTRY_AREA_SIZE;
-+	unsigned long va = CPU_ENTRY_AREA_PER_CPU + cea_offset(cpu) * CPU_ENTRY_AREA_SIZE;
- 	BUILD_BUG_ON(sizeof(struct cpu_entry_area) % PAGE_SIZE != 0);
- 
- 	return (struct cpu_entry_area *) va;
-@@ -205,7 +243,6 @@ static __init void setup_cpu_entry_area_ptes(void)
- 
- 	/* The +1 is for the readonly IDT: */
- 	BUILD_BUG_ON((CPU_ENTRY_AREA_PAGES+1)*PAGE_SIZE != CPU_ENTRY_AREA_MAP_SIZE);
--	BUILD_BUG_ON(CPU_ENTRY_AREA_TOTAL_SIZE != CPU_ENTRY_AREA_MAP_SIZE);
- 	BUG_ON(CPU_ENTRY_AREA_BASE & ~PMD_MASK);
- 
- 	start = CPU_ENTRY_AREA_BASE;
-@@ -221,6 +258,8 @@ void __init setup_cpu_entry_areas(void)
- {
- 	unsigned int cpu;
- 
-+	init_cea_offsets();
-+
- 	setup_cpu_entry_area_ptes();
- 
- 	for_each_possible_cpu(cpu)
+ #ifdef CONFIG_KASAN_HW_TAGS
+-#define TCR_MTE_FLAGS SYS_TCR_EL1_TCMA1 | TCR_TBI1 | TCR_TBID1
++#define TCR_MTE_FLAGS TCR_TCMA1 | TCR_TBI1 | TCR_TBID1
+ #else
+ /*
+  * The mte_zero_clear_page_tags() implementation uses DC GZVA, which relies on
+-- 
+2.38.0.135.g90850a2211-goog
+
