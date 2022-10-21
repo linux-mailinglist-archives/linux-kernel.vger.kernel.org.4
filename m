@@ -2,74 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D5AE606FBD
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 07:59:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 777FA606FC1
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 08:01:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbiJUF7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 01:59:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45860 "EHLO
+        id S229729AbiJUGBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 02:01:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbiJUF7s (ORCPT
+        with ESMTP id S229604AbiJUGBC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 01:59:48 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 855EB4E40F;
-        Thu, 20 Oct 2022 22:59:43 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id w18so4554824ejq.11;
-        Thu, 20 Oct 2022 22:59:43 -0700 (PDT)
+        Fri, 21 Oct 2022 02:01:02 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1279A1A4003;
+        Thu, 20 Oct 2022 23:00:58 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id g1so3272959lfu.12;
+        Thu, 20 Oct 2022 23:00:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YEiLrINto3OfhATRDo7il8OOpbEVODXHzBub1SpWzxo=;
-        b=dU82oX6EYusd5s+JqKnuaoZGuHlZ8VZ7kNohRINYDKTsWw3YUFTKBOFn2Vp/t+57L8
-         zcN1xjdnldwKfhfkmbhyYf3df/fT6TtzZv6nbws89fcoBJt7AzYD8yB7G9rkdBVtagZN
-         IjaUQ1PIgxiyeBK2xO2+wxR7aX0+M4lCQ9R2wQEJ8vjKj8fuxYWs7FqdxybKHpE7TOJZ
-         eq9xLxKjv4dwiEC9b9vrkJobNZVfXDNCgoWKvfJdt9Hb988Q8IuaUwcHMs8odK3ZtySZ
-         QRzzjyHUkosgZnnnUytA2IzT+lbacPpELiCJwcDAyUpY7IjPaZD2cY7WeEYe3QqBSP/s
-         rsnw==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=C5hHs2S/RQl/JXIwHudGm/5mav5RsuOJ5skKbHJaT7M=;
+        b=OYP1l1n6nvRFKN66YMNkW/ZD0biklmoqW7/GKmlBQ/5ENQhPpcHwgnW/rNIUjRoyeq
+         mUi4KXWRSDufdZ1cvTW+/XnGUEaYLFilpxFrjNlzxEDxCFeoa4hoLVhGgnokrL4GUPet
+         uKYNILHU9QWMrCKkaYtUezb0B7qpROKi1T0G3/hNigGE37igbdbYuW2uvo4prBisHInc
+         RUEzuiYlVyFbUVo4KlAGbb6R/AWWoEOYu7HdZU0ekJPUOU2oH4HXT/NQl7KkNx7KZB/t
+         L3IccSVZ1ulaB+TjsnFK+9dkyAMqV/YBwlFRErIyCwwNXGnUijQlIUCwJg60u7yjz9E8
+         xS7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YEiLrINto3OfhATRDo7il8OOpbEVODXHzBub1SpWzxo=;
-        b=3Lwk7HGafpGM+7rfVpiYrDYWe+a/sXpSYHzlz2wMmMeduGp9Qsu5fXnegoVBRPvjD7
-         NCDdWEwTG9MAqOUUvfZxNVcnxgUoRYPioJ0NNbfMnDJv1jyrQkuFSlR3xQFwJQKQ3mra
-         EpJ/s6XFAAS8lTFJk0/1OWrAE4AA8C5spZqeE87VabdRhxgjagE+I+uNYS/xLbu99hRm
-         lX5isPcyvCZubx5B10G1Pg6ohUQtFsmCPH7NuCot8FTwcjeZjqV9JLzcMcwSVz7M3D8P
-         XRl1hrEwpPKE+WKNIm1ndWUjzcrkz6qxbCt/Gzb2IRuqjOuKgWgRVGysTyTx1ucAFUvN
-         fl6A==
-X-Gm-Message-State: ACrzQf3mBQf0X+gzXQuunVooj8LPB7B66Ic6YVPpc+eZuafkW5Ex7DKX
-        HDQXE70j6n0p76K7BJCL5g==
-X-Google-Smtp-Source: AMsMyM60XkWKQKT3Ac3NZ9xwlVh1NouJ5Daas52aFUJobFpgWBoFA5TT4vK59YS8i+aHzzcGddreDA==
-X-Received: by 2002:a17:907:16a7:b0:78d:f586:e446 with SMTP id hc39-20020a17090716a700b0078df586e446mr14040167ejc.252.1666331981460;
-        Thu, 20 Oct 2022 22:59:41 -0700 (PDT)
-Received: from localhost.localdomain ([46.53.249.171])
-        by smtp.gmail.com with ESMTPSA id c22-20020a170906155600b007081282cbd8sm11140994ejd.76.2022.10.20.22.59.40
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=C5hHs2S/RQl/JXIwHudGm/5mav5RsuOJ5skKbHJaT7M=;
+        b=7EMsyztakmfRRe2zr23yF2ft/z26d8HOGVOVvypa0C4Dq8QhD2SYIK6tT69rLjMGN4
+         ZkHhCeMQZ/IVrcO4Xz1hJYdobO3vKpFT1FMYk5x18IqUhWQo7y8ZRVvmkNGcjgD47ts9
+         BZy5UqWdASpXXTa1+5jFjumuSUEkZHQoaVCdaE9i8UJUR7/P7TE/Vgm2ZDPHO7j/AT/x
+         ZNmb2CaARC4stxeOY8wgt5uSKZHASGJra9mD7BqpSDdGmy75tGjtOuppYq1guBA+8ZuR
+         jhKHEr66OT/zv0u6crgYtpQXn8sZtT0zT+XkIXgazPK8TupnzorB8sqc5QaDpB5W4KIz
+         DC8g==
+X-Gm-Message-State: ACrzQf3RVbqEA+W05gbsA6J3sSkEQrDaclWs8pkl9XhyEV85OU/ktDV+
+        eTAIZ5x5v06+GshQ2YNjMXE=
+X-Google-Smtp-Source: AMsMyM6WDH7wq1u5kd3U+odFfEpgQ30j9+6ajofiuy78KRWiVD1E3qXL80lU1+kvXFHzYz3QOVAQIg==
+X-Received: by 2002:ac2:5321:0:b0:4a4:3c25:dbd with SMTP id f1-20020ac25321000000b004a43c250dbdmr5837748lfh.406.1666332056154;
+        Thu, 20 Oct 2022 23:00:56 -0700 (PDT)
+Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.gmail.com with ESMTPSA id p6-20020ac246c6000000b0049e9122bd0esm3021950lfo.114.2022.10.20.23.00.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 22:59:41 -0700 (PDT)
-Date:   Fri, 21 Oct 2022 08:59:39 +0300
-From:   Alexey Dobriyan <adobriyan@gmail.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, mm-commits@vger.kernel.org,
-        masahiroy@kernel.org, keescook@chromium.org,
-        gregkh@linuxfoundation.org, andriy.shevchenko@linux.intel.com
-Subject: Re: [PATCH -mm] -funsigned-char, x86: make struct
- p4_event_bind::cntr signed array
-Message-ID: <Y1I1S86zbBmeJ+jq@localhost.localdomain>
-References: <20221020000356.177CDC433C1@smtp.kernel.org>
- <Y1EZuQcO8UoN91cX@localhost.localdomain>
- <CAHmME9prEhkHqQmtDGCSFunNnxiKdE_8FHKiksyqebUN63U81Q@mail.gmail.com>
- <CAHk-=whFow9Wd6C8htoRUt5wXbwf1i_qbuArBbhXOPqYsTFvtw@mail.gmail.com>
+        Thu, 20 Oct 2022 23:00:55 -0700 (PDT)
+From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Mikhail Zhilkin <csharper2005@gmail.com>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
+Subject: [PATCH V2 1/2] dt-bindings: mtd: partitions: support marking rootfs partition
+Date:   Fri, 21 Oct 2022 08:00:50 +0200
+Message-Id: <20221021060051.2508-1-zajec5@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAHk-=whFow9Wd6C8htoRUt5wXbwf1i_qbuArBbhXOPqYsTFvtw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,58 +82,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 10:14:54AM -0700, Linus Torvalds wrote:
-> On Thu, Oct 20, 2022 at 9:28 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
-> >
-> > Nice catch.
-> >
-> > Reviewed-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> 
-> Can we please try to collect these all in one place?
-> 
-> I see that Andrew picked up the original one for -mm, but I think it
-> would be better if we had one specific place for all of this (one
-> branch) to collect it all.
-> 
-> I'm actually trying to do a "make allyesconfig" build on x86-64 with
-> both signed and unsigned char, and trying to see if I can script
-> something sane to show differences.
+From: Rafał Miłecki <rafal@milecki.pl>
 
-It is very entertaining, i've given up and started patching sparse
-but it needs more because char constants are ints:
+Linux needs to know what to use as root device. On embedded devices with
+flash the only common way to specify that is cmdline & root= parameter.
 
+That solution works with U-Boot which is Linux & cmdline aware but isn't
+available with all market bootloaders. Also that method is fragile:
+1. Requires specific probing order on multi-flash devices
+2. Uses hardcoded partitions indexes
 
-diff --git a/evaluate.c b/evaluate.c
-index 61f59ee3..ab607581 100644
---- a/evaluate.c
-+++ b/evaluate.c
-@@ -321,6 +321,10 @@ static struct expression * cast_to(struct expression *old, struct symbol *type)
- 	if (old->ctype != &null_ctype && is_same_type(old, type))
- 		return old;
+A lot of devices use different partitioning methods. It may be
+"fixed-partitions" or some dynamic partitioning (e.g. based on parts
+table). For such cases allow "linux,rootfs" property to mark correct
+flash partition.
+
+Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+---
+V2: Use "linux,rootfs" as more accurate. Thanks Rob.
+---
+ .../devicetree/bindings/mtd/partitions/fixed-partitions.yaml  | 1 +
+ .../devicetree/bindings/mtd/partitions/partition.yaml         | 4 ++++
+ 2 files changed, 5 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/mtd/partitions/fixed-partitions.yaml b/Documentation/devicetree/bindings/mtd/partitions/fixed-partitions.yaml
+index ad3ccd250802..d66a6e3bcb56 100644
+--- a/Documentation/devicetree/bindings/mtd/partitions/fixed-partitions.yaml
++++ b/Documentation/devicetree/bindings/mtd/partitions/fixed-partitions.yaml
+@@ -84,6 +84,7 @@ examples:
+         partition@0 {
+             label = "filesystem";
+             reg = <0x00000000 0x1 0x00000000>;
++            linux,rootfs;
+         };
+     };
  
-+	if (is_char_type(old->ctype)) {
-+		sparse_error(old->pos, "XXX char");
-+	}
-+
- 	expr = alloc_expression(old->pos, EXPR_IMPLIED_CAST);
- 	expr->ctype = type;
- 	expr->cast_type = type;
-diff --git a/symbol.h b/symbol.h
-index 5270fcd7..8e62aca2 100644
---- a/symbol.h
-+++ b/symbol.h
-@@ -455,6 +455,14 @@ static inline int is_byte_type(struct symbol *type)
- 	return type->bit_size == bits_in_char && type->type != SYM_BITFIELD;
- }
+diff --git a/Documentation/devicetree/bindings/mtd/partitions/partition.yaml b/Documentation/devicetree/bindings/mtd/partitions/partition.yaml
+index f1a02d840b12..a25cd23a34c0 100644
+--- a/Documentation/devicetree/bindings/mtd/partitions/partition.yaml
++++ b/Documentation/devicetree/bindings/mtd/partitions/partition.yaml
+@@ -52,6 +52,10 @@ properties:
+       immune to paired-pages corruptions
+     type: boolean
  
-+static inline int is_char_type(const struct symbol *type)
-+{
-+	if (type->type == SYM_NODE) {
-+		type = type->ctype.base_type;
-+	}
-+	return type == &char_ctype;
-+}
++  linux,rootfs:
++    description: Marks partition that contains root filesystem to mount and boot
++      user space from
 +
- static inline int is_wchar_type(struct symbol *type)
- {
- 	if (type->type == SYM_NODE)
+ if:
+   not:
+     required: [ reg ]
+-- 
+2.34.1
+
