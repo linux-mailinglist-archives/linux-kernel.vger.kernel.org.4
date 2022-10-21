@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0707760803B
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 22:50:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EFEC608041
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 22:51:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229739AbiJUUu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 16:50:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46922 "EHLO
+        id S229874AbiJUUu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 16:50:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbiJUUuW (ORCPT
+        with ESMTP id S229921AbiJUUuv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 16:50:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE3DFC1E0;
-        Fri, 21 Oct 2022 13:50:05 -0700 (PDT)
+        Fri, 21 Oct 2022 16:50:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C52351C25DF;
+        Fri, 21 Oct 2022 13:50:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CED34B80C82;
-        Fri, 21 Oct 2022 20:50:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F655C433D6;
-        Fri, 21 Oct 2022 20:49:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1559661F74;
+        Fri, 21 Oct 2022 20:50:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 233C9C433C1;
+        Fri, 21 Oct 2022 20:50:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666385400;
-        bh=kYmXdlJCPhtt4uIiTfM2YwsKyRkHie/QI7iUSviGI7I=;
+        s=k20201202; t=1666385443;
+        bh=QMX5heUyLImd+6hJQe5kHvBC9IDbbrmFRJqR9+d5odE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HOY8GsWX/MBlmsU4NQ/Kcf6mjvd95DH3jHkfK3d7HxPS2m0Uu2779N0+EFYiHV7Mp
-         ARhZZuD2f0LqZsKfkYOHAHpiA0xfSuTI+cwW+Ga5+a3kXZIyZKbUkGPlZy7yVP29r7
-         uLOU8PJYQWHFQp+vw287RbAa8tnS7Ey7ro05EfmsXMU2QZH/05IapM/0gqehybpA1H
-         CfTyg90T7/PABTi44q83w5NxI7CZhxGAtW5BM/rBVEC/OEbtY0/7vJH5lwBs+QxR6C
-         kRile9AbSnwhfw5Dfsc951wp3EvsWtqsaC9hXUNbB3cAzAZtTgQQVV5w3CmSH75plv
-         +oeG0Tlw7m6jw==
+        b=O4IU4IsPwf2qskLIG5MIdhKmMnn0pHcs7KK60yXRWra3j8cmhMAffwBPEz9G6cqye
+         M8To5Y0WzATvdGpdLwpLwhU/QvfGx0dId/V5ZrhxxKjNhKvx8YZ0r0q1iUrocaHknl
+         tllYiU6DcuJ0MdGhGzGhUtU/ZJ614RLNdiYsLX/tpDSw/8wz5z1l8GhxEA9yikMjOT
+         yaqK0CcRQdPfpUbquVCdgAZ/5ah33PE8M6jY3q14U1sBtm+xUvqJlNMT6wGKhta/O6
+         wHrS7UeTwer73/+Af8ndFtI+AAbmHpCUSVMm1P5RfKXkwBhL9FdMlKpKJHpCUelRlH
+         HxT4bVi8w+4UQ==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     linux-arm-kernel@lists.infradead.org,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
+        Helge Deller <deller@gmx.de>
 Cc:     linux-kernel@vger.kernel.org, Ben Dooks <ben-linux@fluff.org>,
         Simtec Linux Team <linux@simtec.co.uk>,
         Arnd Bergmann <arnd@arndb.de>,
         Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-Subject: [PATCH 15/21] cpufreq: remove s3c24xx drivers
-Date:   Fri, 21 Oct 2022 22:27:48 +0200
-Message-Id: <20221021203329.4143397-15-arnd@kernel.org>
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-samsung-soc@vger.kernel.org
+Subject: [PATCH 16/21] fbdev: remove s3c2410 framebuffer
+Date:   Fri, 21 Oct 2022 22:27:49 +0200
+Message-Id: <20221021203329.4143397-16-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20221021202254.4142411-1-arnd@kernel.org>
 References: <20221021202254.4142411-1-arnd@kernel.org>
@@ -61,157 +61,105 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-All s3c24xx platforms were removed, so these five drivers are all
-obsolete now.
+The s3c24xx platform was removed, so the framebuffer driver is no longer
+needed.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/cpufreq/Kconfig.arm                  |  78 ---
- drivers/cpufreq/Makefile                     |   6 -
- drivers/cpufreq/s3c2410-cpufreq.c            | 155 -----
- drivers/cpufreq/s3c2412-cpufreq.c            | 240 -------
- drivers/cpufreq/s3c2416-cpufreq.c            | 492 --------------
- drivers/cpufreq/s3c2440-cpufreq.c            | 321 ---------
- drivers/cpufreq/s3c24xx-cpufreq-debugfs.c    | 163 -----
- drivers/cpufreq/s3c24xx-cpufreq.c            | 648 -------------------
- include/linux/soc/samsung/s3c-cpufreq-core.h | 299 ---------
- 9 files changed, 2402 deletions(-)
- delete mode 100644 drivers/cpufreq/s3c2410-cpufreq.c
- delete mode 100644 drivers/cpufreq/s3c2412-cpufreq.c
- delete mode 100644 drivers/cpufreq/s3c2416-cpufreq.c
- delete mode 100644 drivers/cpufreq/s3c2440-cpufreq.c
- delete mode 100644 drivers/cpufreq/s3c24xx-cpufreq-debugfs.c
- delete mode 100644 drivers/cpufreq/s3c24xx-cpufreq.c
- delete mode 100644 include/linux/soc/samsung/s3c-cpufreq-core.h
+ drivers/video/fbdev/Kconfig              |   33 +-
+ drivers/video/fbdev/Makefile             |    1 -
+ drivers/video/fbdev/s3c2410fb-regs-lcd.h |  143 ---
+ drivers/video/fbdev/s3c2410fb.c          | 1142 ----------------------
+ drivers/video/fbdev/s3c2410fb.h          |   48 -
+ include/linux/platform_data/fb-s3c2410.h |   99 --
+ 6 files changed, 4 insertions(+), 1462 deletions(-)
+ delete mode 100644 drivers/video/fbdev/s3c2410fb-regs-lcd.h
+ delete mode 100644 drivers/video/fbdev/s3c2410fb.c
+ delete mode 100644 drivers/video/fbdev/s3c2410fb.h
+ delete mode 100644 include/linux/platform_data/fb-s3c2410.h
 
-diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
-index 8f7a1065f344..e3e0367305ec 100644
---- a/drivers/cpufreq/Kconfig.arm
-+++ b/drivers/cpufreq/Kconfig.arm
-@@ -180,84 +180,6 @@ config ARM_RASPBERRYPI_CPUFREQ
+diff --git a/drivers/video/fbdev/Kconfig b/drivers/video/fbdev/Kconfig
+index d1d74269075a..fa5bdbf82d59 100644
+--- a/drivers/video/fbdev/Kconfig
++++ b/drivers/video/fbdev/Kconfig
+@@ -1822,19 +1822,17 @@ config FB_SH_MOBILE_LCDC
+ config FB_S3C
+ 	tristate "Samsung S3C framebuffer support"
+ 	depends on FB && HAVE_CLK && HAS_IOMEM
+-	depends on (CPU_S3C2416 || ARCH_S3C64XX) || COMPILE_TEST
++	depends on ARCH_S3C64XX || COMPILE_TEST
+ 	select FB_CFB_FILLRECT
+ 	select FB_CFB_COPYAREA
+ 	select FB_CFB_IMAGEBLIT
+ 	help
+ 	  Frame buffer driver for the built-in FB controller in the Samsung
+-	  SoC line from the S3C2443 onwards, including the S3C2416, S3C2450,
+-	  and the S3C64XX series such as the S3C6400 and S3C6410.
++	  SoC line such as the S3C6400 and S3C6410.
  
- 	  If in doubt, say N.
+ 	  These chips all have the same basic framebuffer design with the
+-	  actual capabilities depending on the chip. For instance the S3C6400
+-	  and S3C6410 support 4 hardware windows whereas the S3C24XX series
+-	  currently only have two.
++	  actual capabilities depending on the chip. The S3C6400
++	  and S3C6410 support 4 hardware windows.
  
--config ARM_S3C_CPUFREQ
--	bool
+ 	  Currently the support is only for the S3C6400 and S3C6410 SoCs.
+ 
+@@ -1844,29 +1842,6 @@ config FB_S3C_DEBUG_REGWRITE
+ 	help
+ 	  Show all register writes via pr_debug()
+ 
+-config FB_S3C2410
+-	tristate "S3C2410 LCD framebuffer support"
+-	depends on FB && ARCH_S3C24XX
+-	select FB_CFB_FILLRECT
+-	select FB_CFB_COPYAREA
+-	select FB_CFB_IMAGEBLIT
 -	help
--	  Internal configuration node for common cpufreq on Samsung SoC
+-	  Frame buffer driver for the built-in LCD controller in the Samsung
+-	  S3C2410 processor.
 -
--config ARM_S3C24XX_CPUFREQ
--	bool "CPUfreq driver for Samsung S3C24XX series CPUs (EXPERIMENTAL)"
--	depends on ARCH_S3C24XX
--	select ARM_S3C_CPUFREQ
+-	  This driver is also available as a module ( = code which can be
+-	  inserted and removed from the running kernel whenever you want). The
+-	  module will be called s3c2410fb. If you want to compile it as a module,
+-	  say M here and read <file:Documentation/kbuild/modules.rst>.
+-
+-	  If unsure, say N.
+-config FB_S3C2410_DEBUG
+-	bool "S3C2410 lcd debug messages"
+-	depends on FB_S3C2410
 -	help
--	  This enables the CPUfreq driver for the Samsung S3C24XX family
--	  of CPUs.
+-	  Turn on debugging messages. Note that you can set/unset at run time
+-	  through sysfs
 -
--	  For details, take a look at <file:Documentation/cpu-freq>.
--
--	  If in doubt, say N.
--
--config ARM_S3C24XX_CPUFREQ_DEBUG
--	bool "Debug CPUfreq Samsung driver core"
--	depends on ARM_S3C24XX_CPUFREQ
--	help
--	  Enable s3c_freq_dbg for the Samsung S3C CPUfreq core
--
--config ARM_S3C24XX_CPUFREQ_IODEBUG
--	bool "Debug CPUfreq Samsung driver IO timing"
--	depends on ARM_S3C24XX_CPUFREQ
--	help
--	  Enable s3c_freq_iodbg for the Samsung S3C CPUfreq core
--
--config ARM_S3C24XX_CPUFREQ_DEBUGFS
--	bool "Export debugfs for CPUFreq"
--	depends on ARM_S3C24XX_CPUFREQ && DEBUG_FS
--	help
--	  Export status information via debugfs.
--
--config ARM_S3C2410_CPUFREQ
--	bool
--	depends on ARM_S3C24XX_CPUFREQ && CPU_S3C2410
--	help
--	  CPU Frequency scaling support for S3C2410
--
--config ARM_S3C2412_CPUFREQ
--	bool
--	depends on ARM_S3C24XX_CPUFREQ && CPU_S3C2412
--	default y
--	select S3C2412_IOTIMING
--	help
--	  CPU Frequency scaling support for S3C2412 and S3C2413 SoC CPUs.
--
--config ARM_S3C2416_CPUFREQ
--	bool "S3C2416 CPU Frequency scaling support"
--	depends on CPU_S3C2416
--	help
--	  This adds the CPUFreq driver for the Samsung S3C2416 and
--	  S3C2450 SoC. The S3C2416 supports changing the rate of the
--	  armdiv clock source and also entering a so called dynamic
--	  voltage scaling mode in which it is possible to reduce the
--	  core voltage of the CPU.
--
--	  If in doubt, say N.
--
--config ARM_S3C2416_CPUFREQ_VCORESCALE
--	bool "Allow voltage scaling for S3C2416 arm core"
--	depends on ARM_S3C2416_CPUFREQ && REGULATOR
--	help
--	  Enable CPU voltage scaling when entering the dvs mode.
--	  It uses information gathered through existing hardware and
--	  tests but not documented in any datasheet.
--
--	  If in doubt, say N.
--
--config ARM_S3C2440_CPUFREQ
--	bool "S3C2440/S3C2442 CPU Frequency scaling support"
--	depends on ARM_S3C24XX_CPUFREQ && (CPU_S3C2440 || CPU_S3C2442)
--	default y
--	help
--	  CPU Frequency scaling support for S3C2440 and S3C2442 SoC CPUs.
--
- config ARM_S3C64XX_CPUFREQ
- 	bool "Samsung S3C64XX"
- 	depends on CPU_S3C6410
-diff --git a/drivers/cpufreq/Makefile b/drivers/cpufreq/Makefile
-index 8de99b213146..692c16e4ee55 100644
---- a/drivers/cpufreq/Makefile
-+++ b/drivers/cpufreq/Makefile
-@@ -70,13 +70,7 @@ obj-$(CONFIG_PXA3xx)			+= pxa3xx-cpufreq.o
- obj-$(CONFIG_ARM_QCOM_CPUFREQ_HW)	+= qcom-cpufreq-hw.o
- obj-$(CONFIG_ARM_QCOM_CPUFREQ_NVMEM)	+= qcom-cpufreq-nvmem.o
- obj-$(CONFIG_ARM_RASPBERRYPI_CPUFREQ) 	+= raspberrypi-cpufreq.o
--obj-$(CONFIG_ARM_S3C2410_CPUFREQ)	+= s3c2410-cpufreq.o
--obj-$(CONFIG_ARM_S3C2412_CPUFREQ)	+= s3c2412-cpufreq.o
--obj-$(CONFIG_ARM_S3C2416_CPUFREQ)	+= s3c2416-cpufreq.o
--obj-$(CONFIG_ARM_S3C2440_CPUFREQ)	+= s3c2440-cpufreq.o
- obj-$(CONFIG_ARM_S3C64XX_CPUFREQ)	+= s3c64xx-cpufreq.o
--obj-$(CONFIG_ARM_S3C24XX_CPUFREQ)	+= s3c24xx-cpufreq.o
--obj-$(CONFIG_ARM_S3C24XX_CPUFREQ_DEBUGFS) += s3c24xx-cpufreq-debugfs.o
- obj-$(CONFIG_ARM_S5PV210_CPUFREQ)	+= s5pv210-cpufreq.o
- obj-$(CONFIG_ARM_SA1110_CPUFREQ)	+= sa1110-cpufreq.o
- obj-$(CONFIG_ARM_SCMI_CPUFREQ)		+= scmi-cpufreq.o
-diff --git a/drivers/cpufreq/s3c2410-cpufreq.c b/drivers/cpufreq/s3c2410-cpufreq.c
+ config FB_SM501
+ 	tristate "Silicon Motion SM501 framebuffer support"
+ 	depends on FB && MFD_SM501
+diff --git a/drivers/video/fbdev/Makefile b/drivers/video/fbdev/Makefile
+index 279cb0066aec..e6b0ae094b8b 100644
+--- a/drivers/video/fbdev/Makefile
++++ b/drivers/video/fbdev/Makefile
+@@ -98,7 +98,6 @@ obj-$(CONFIG_FB_S1D13XXX)	  += s1d13xxxfb.o
+ obj-$(CONFIG_FB_SH7760)		  += sh7760fb.o
+ obj-$(CONFIG_FB_IMX)              += imxfb.o
+ obj-$(CONFIG_FB_S3C)		  += s3c-fb.o
+-obj-$(CONFIG_FB_S3C2410)	  += s3c2410fb.o
+ obj-$(CONFIG_FB_FSL_DIU)	  += fsl-diu-fb.o
+ obj-$(CONFIG_FB_COBALT)           += cobalt_lcdfb.o
+ obj-$(CONFIG_FB_IBM_GXT4500)	  += gxt4500.o
+diff --git a/drivers/video/fbdev/s3c2410fb-regs-lcd.h b/drivers/video/fbdev/s3c2410fb-regs-lcd.h
 deleted file mode 100644
-index 5dcfbf0bfb74..000000000000
-diff --git a/drivers/cpufreq/s3c2412-cpufreq.c b/drivers/cpufreq/s3c2412-cpufreq.c
+index 1e46f7a788e5..000000000000
+diff --git a/drivers/video/fbdev/s3c2410fb.c b/drivers/video/fbdev/s3c2410fb.c
 deleted file mode 100644
-index 5945945ead7c..000000000000
-diff --git a/drivers/cpufreq/s3c2416-cpufreq.c b/drivers/cpufreq/s3c2416-cpufreq.c
+index d8ae5258de46..000000000000
+diff --git a/drivers/video/fbdev/s3c2410fb.h b/drivers/video/fbdev/s3c2410fb.h
 deleted file mode 100644
-index 5c221bc90210..000000000000
-diff --git a/drivers/cpufreq/s3c2440-cpufreq.c b/drivers/cpufreq/s3c2440-cpufreq.c
+index cdd11e2f8859..000000000000
+diff --git a/include/linux/platform_data/fb-s3c2410.h b/include/linux/platform_data/fb-s3c2410.h
 deleted file mode 100644
-index 2011fb9c03a4..000000000000
-diff --git a/drivers/cpufreq/s3c24xx-cpufreq-debugfs.c b/drivers/cpufreq/s3c24xx-cpufreq-debugfs.c
-deleted file mode 100644
-index 93971dfe7c75..000000000000
-diff --git a/drivers/cpufreq/s3c24xx-cpufreq.c b/drivers/cpufreq/s3c24xx-cpufreq.c
-deleted file mode 100644
-index 7380c32b238e..000000000000
-diff --git a/include/linux/soc/samsung/s3c-cpufreq-core.h b/include/linux/soc/samsung/s3c-cpufreq-core.h
-deleted file mode 100644
-index 3b278afb769b..000000000000
+index 10c11e6316d6..000000000000
 -- 
 2.29.2
 
