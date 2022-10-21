@@ -2,244 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18D85606F86
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 07:38:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13557606F89
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 07:41:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230033AbiJUFiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 01:38:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46514 "EHLO
+        id S229648AbiJUFlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 01:41:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbiJUFiN (ORCPT
+        with ESMTP id S229476AbiJUFlV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 01:38:13 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E97E21C77DF;
-        Thu, 20 Oct 2022 22:38:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666330692; x=1697866692;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=qsijm1nWAYB0hTEPPXkclxCCdJ0IA1yPqNt83wkUHOM=;
-  b=fWcqrYIEgynHlDI9aYlMP05Ix/6snbQv2z/l+BWylFmX5xS4eC77Z0GN
-   BLS7WpdrujKDOeRQvQagzO1tVDi3aBoxrIG6bR8B1Cdv1mNi903YSuEpF
-   HRpMFTq2Bc1Mj37vQ2Z/b3g1Pf1uojhdiAq2DFIVyFQj3OYFjvPvu9I1r
-   0koHtf4G9L9GAFfzyFhmW0WZ0xTExMGDDH1bngU7rKrbjNuZnnr+cxv5F
-   6cAFqqeGdQkf6YOSVA1Bn085tPOox4h4teV44k2nWpWPiuHBtO6q1V3/N
-   t2ZXDJAxOJsNK5oCth1FDGh+V46wiN4Uz/7aU09kQnuzv5fLa3bIg5Vrr
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="371131186"
-X-IronPort-AV: E=Sophos;i="5.95,200,1661842800"; 
-   d="scan'208";a="371131186"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 22:38:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="875474329"
-X-IronPort-AV: E=Sophos;i="5.95,200,1661842800"; 
-   d="scan'208";a="875474329"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga006.fm.intel.com with ESMTP; 20 Oct 2022 22:38:11 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 20 Oct 2022 22:38:11 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 20 Oct 2022 22:38:10 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Thu, 20 Oct 2022 22:38:10 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.100)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Thu, 20 Oct 2022 22:38:08 -0700
+        Fri, 21 Oct 2022 01:41:21 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F301D93D6;
+        Thu, 20 Oct 2022 22:41:19 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ev86lcvcUfam4D3nlPZrbqKqe2CfxLkFlavtHiTf6yu8L9FtAoWzpA2Ag5philsS56VjUmfEZpoE9vIoVpbqzXo82IzjhYjDFb3j2LuBf+nnIV/+O29hhp6uM4gwkTkX9MaG1X+1etJT7a95vo+FungXUJDgiXH0HbspQnEp3ZjK5pfB8cd7J2AaLtnHWXvXDkvwYxqx/FVZ5bQhJevOs/VWDeBeBlk10M+R5CaBvYxdajlFqlNo3DXLKnqGRMfZ19AlvMsOFNk+2LcDZzeXMm0jYsdt40/xI+dFKAG+C8DGcQmAGix2w9afClTiVwi+laDyF9bRjnHcDj0KA8ktgQ==
+ b=Ka8Sw/8IKbm4rh9oWThw073MU+kSbXMud3JAypGZM8k2+Qgj9JAdw/kQtFxUz2AzMD80lZRCHk9jr+9ltAOvTxcmNmbZQTh+m+YVte9tOMkifyhDMrhgrSu4S1Bi5EQm18QqLLAISio2ptcXD6jQASaPyRHmQFrdp1cQabxpZOYxV0h0QvBKCJBTKzQm16mewCrc46sU7+WYFLEZhU6CgIwty26Hux3R4juNMIdS0gn8DWO5LCPyqQhdnPojonXmCOXrddRXhDPXD0Bp1p1H6PFCKbarCrlnU2jfzCdNethTMKDd8oj+JJOAGmtL7G1WGQ4WQMweIT9owL9fvC3QIA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Q6RLynEOtWNkBS94SamNfOjXAnvgrbkBoWt+ildnxEs=;
- b=MrOYc5NeuOQv2x7oohLsvBDAh0E2n573NIkoS/b89X2SpgYwhXCUb66G+kqxKXC9INmEJes6Tpf7byVSbu8iolmB+ypLlUnjJ+PP/bvRcsyGc21HZsnx4r8XtcslZOapMiTetZiFTxvw6PtyqSezPhm7ombfgwlq4+L/DokVehHqi7Q8PqoM0izv7nprFbvfLk2pMjdr3dUeftfavJdF6VAAVxszh5U4Hh3KBLHBoZGqjLAUhdpAAU0yIDsg8msYGH724U22/KTeQXYN4M+bk0t98A32QDeZfmvFg8RvbYlcBDpRv+HAmhJVstsQepPnjyjK8ib6zyWqx98igGVDvg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20) by BL3PR11MB6362.namprd11.prod.outlook.com
- (2603:10b6:208:3b5::8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.26; Fri, 21 Oct
- 2022 05:38:06 +0000
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::7d5a:684d:99f7:4e83]) by MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::7d5a:684d:99f7:4e83%12]) with mapi id 15.20.5723.034; Fri, 21 Oct
- 2022 05:38:06 +0000
-Date:   Thu, 20 Oct 2022 22:38:03 -0700
-From:   Dan Williams <dan.j.williams@intel.com>
-To:     Robert Richter <rrichter@amd.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        "Ira Weiny" <ira.weiny@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        "Dan Williams" <dan.j.williams@intel.com>
-CC:     <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        "Davidlohr Bueso" <dave@stgolabs.net>,
-        Robert Richter <rrichter@amd.com>
-Subject: RE: [PATCH v2 07/12] cxl: Remove dev_is_cxl_root_child() check in
- devm_cxl_enumerate_ports()
-Message-ID: <6352303b266c_24ac29423@dwillia2-mobl3.amr.corp.intel.com.notmuch>
-References: <20221018132341.76259-1-rrichter@amd.com>
- <20221018132341.76259-8-rrichter@amd.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20221018132341.76259-8-rrichter@amd.com>
-X-ClientProxiedBy: SJ0PR03CA0094.namprd03.prod.outlook.com
- (2603:10b6:a03:333::9) To MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20)
+ bh=N0cYYs1TKbLRxbPxeCGvBUp8VK5ipygXGkgTebj9Oro=;
+ b=G3TbGcHnpByiws0+TXw8F9ZnJ9EMEaG25Q/DseZ2OvcvLHMiCXRnavoFk8F+pMCqJG6lt9WTwxuKNIZHtLbmc1edboYi80dlfZM6QmhYJbSvIWSrUG6WFP+EFQnUnhNX71SGixm3zx5uk4IrqsrnJZWanSK2Y+SckiL7bCC7CNzhCUf7rElfep6OGw4Rl2yJ5xOYuGO6TsHXEJ8CvR2i6VFMO1854kqEAUERpfdZfYM/5XEJuqDJ7fCq56TZerAID8+RFv6Ps10ftvPH8YTyyVtsWew+uRX0mFuhYglThLLiCRw0gqAATYiEmriy1IPqX+h61vJJ3R9NtT//vBTevw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=davemloft.net smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=N0cYYs1TKbLRxbPxeCGvBUp8VK5ipygXGkgTebj9Oro=;
+ b=p+XxgQwacbdSZydXuTormEERfySTE/TSVfmQFEZhX1CW9DmikHS6DRGquMUsKUMr8JLzuEVzqHtl8B8BNqjqkZlN7jxJoEn1Fber2JzTl9GbbCsQ9U4O+YTN0ttJin0VCaO6/ReWKTv8ok11vR8f1Y8OPSWIs+L6UaLaHQhrQZ0=
+Received: from DS7PR06CA0041.namprd06.prod.outlook.com (2603:10b6:8:54::10) by
+ SN7PR12MB7369.namprd12.prod.outlook.com (2603:10b6:806:298::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.29; Fri, 21 Oct
+ 2022 05:41:17 +0000
+Received: from DM6NAM11FT092.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:8:54:cafe::45) by DS7PR06CA0041.outlook.office365.com
+ (2603:10b6:8:54::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.35 via Frontend
+ Transport; Fri, 21 Oct 2022 05:41:17 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ DM6NAM11FT092.mail.protection.outlook.com (10.13.173.44) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5746.16 via Frontend Transport; Fri, 21 Oct 2022 05:41:16 +0000
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 21 Oct
+ 2022 00:41:15 -0500
+Received: from xhdpranavis40.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2375.31 via Frontend
+ Transport; Fri, 21 Oct 2022 00:41:11 -0500
+From:   Sarath Babu Naidu Gaddam <sarath.babu.naidu.gaddam@amd.com>
+To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <robh+dt@kernel.org>,
+        <richardcochran@gmail.com>
+CC:     <krzysztof.kozlowski+dt@linaro.org>, <netdev@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <yangbo.lu@nxp.com>, <radhey.shyam.pandey@amd.com>,
+        <anirudha.sarangi@amd.com>, <harini.katakam@amd.com>,
+        <sarath.babu.naidu.gaddam@amd.com>, <git@amd.com>
+Subject: [PATCH net-next V2] dt-bindings: net: ethernet-controller: Add ptp-hardware-clock
+Date:   Thu, 20 Oct 2022 23:41:10 -0600
+Message-ID: <20221021054111.25852-1-sarath.babu.naidu.gaddam@amd.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWHPR1101MB2126:EE_|BL3PR11MB6362:EE_
-X-MS-Office365-Filtering-Correlation-Id: 82df6124-f3e6-47ed-f66f-08dab3266db1
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT092:EE_|SN7PR12MB7369:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7237ce4c-209e-4b0b-1696-08dab326df9b
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ny5K6NvWLENpGP43yQdWEMzmuUYA5+HoV89A3E0krOPIWe4xWE9JumBdeTklVs6UgeuDtMZMIOKarI1PVyK0D/mYn75N9UWGnQbGNd9Zhw058IwcVfgphCbIEn8Zgq/DD1bKj9Bi7oA2FKcX4ulXbN1zyq8721eJzupaDFUhr5IITMOfAH3i7ixuu5hOORMiGRGaVNOT8fmIQubAkcFrIINYSSodmVxjDtH1Uu1l7fCbmPJAIXrmSN6ftVo2lC6HCz4vnHkkYS5xDC7BJvDwtpWsx97IIB4+QdLabMciuT3u5czVaGjoV7engMpWRm60b5qqrmlLPfFyaltab1R/2KEBPw863w5npHBJT8o6G3zg3+qbVUZodxG9JzwwWw8NBG9npckCFMFzxW6FiMdwsk0Iaz6foVriPlKpWBUoAf7W9HgXiBIJOR6nRyDfo/o25kqB/TfQQ5zAcwiVVz2mxKsvgbyYmWOnYXMGTO4laQZA99kNUPywgaf0XHQusbwWb7rRqpRcAIJYv72iGB89TrZrhgv01QLXGWNU7hRRoCL/d/s9czrLRcHiGq2TGfSWeYA4ovvbe2kxWV6pr+8f4XTiQAoODxA96EjZmXUPdyb43sCQMsG1dv0VB4jx+l/Fp/b3tAmuAk6CBTl+fIiz0F1OxxD+ka1JKz7fDiEwpxgG5icRyrT4t/e0CSc13I4UGZqFj1d4e/CHyfF8W0eCTg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1101MB2126.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(39860400002)(396003)(366004)(136003)(346002)(451199015)(86362001)(82960400001)(38100700002)(6666004)(6506007)(5660300002)(9686003)(2906002)(26005)(6486002)(478600001)(186003)(6512007)(110136005)(66556008)(316002)(8676002)(8936002)(66946007)(54906003)(4326008)(41300700001)(66476007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?pNyR4t0Yk6R7REVp5K4bb/Q5xB77tXoMu45b4N0xjtr1F3FEIqkNMOffoqcq?=
- =?us-ascii?Q?DfPut21yZnG+MyJMQkyvZ5XYa4syb9SHnFcUbIGWTLpjDXlA24azrqcLtvDM?=
- =?us-ascii?Q?oj4Qrd0/SnJCL+aNwevIkjG7AwWEZkykN8uEMeKlYt9T2uHkwltnTpx+Qwpk?=
- =?us-ascii?Q?5627G1iQNXAbN1tFQuFpdIHJTCELaXliz6mN71rCwzQD6yNYumEqhEEUxHa4?=
- =?us-ascii?Q?/kgcCndEqPHFEk49x/wIpGCwgHrE6tmscp78ZIRThbEyFv2qxoNo81BfBNZx?=
- =?us-ascii?Q?bGAMLK6abrIF/UHC1YoTrOEjHYUkoW2Y+Z2TldhlejYjH9UM8dzE4dAll6Hn?=
- =?us-ascii?Q?C18n6tjed6N3zcJMkefueE1PThAlGBJlvZ+MvrzTuapAnsq8KegFLFeZRU81?=
- =?us-ascii?Q?koanSL+uocKkykwcdAPu5n9FiqGO2SQsll58P/kr6EhJRODZiVbgjR+n9fFL?=
- =?us-ascii?Q?LG7lCiFQ+4rfvFSme/yEYIL9CeBJ6xfa37I8Fj6oiD82V7KygLBgUAnH823h?=
- =?us-ascii?Q?Kr5Gf7dqzX+ZZ86zzSyN+bKOQ6EFz3g5HX0rU8xzKoUDElqHJxVRQq5Eea5t?=
- =?us-ascii?Q?9M0N+INonxQDRdywNZ0xUENMDVWn7ZqLbqvOc4AL4P/OLIXUJdHGfB8A+uA5?=
- =?us-ascii?Q?nRyKtxgRRk4opORUqvx376WuRxHnz5UNbVVmWtRDYjbilO10UAL71y03PDM8?=
- =?us-ascii?Q?Iv2M7D7rBLzTeiKLF047ZZx0/B5BH8mZi6wA+pTqqzNG0d1lhr9uGs3lxTkk?=
- =?us-ascii?Q?VDTTEUavDV6+IdbuYLMxWITQDlyft9XYKaJR5gISmiKB3yW2/hDo7oIGuOSD?=
- =?us-ascii?Q?cLQCpxyS5agFNGXcvhawZl0wNgKboYQBGY5Ic1+eFxHHQnRPsvKT79ikK4Oq?=
- =?us-ascii?Q?e0wHHhzaSh/fsE0yxbKYeB0tnj3WOSyKThOhpRYnvwjVH/xette7UCopcej2?=
- =?us-ascii?Q?Lzj5AzqoohNyUmUaUl3b38OXXljAnTHAFUTC9OupUtT/TJf5N2rOWZwykPAH?=
- =?us-ascii?Q?QtUJGcF6BBuonLchtUJL/Kr33sjUxzxx8u6saFcRXFWuLCd3tQaelJI6DODe?=
- =?us-ascii?Q?n8OTF/KAeLHF+RZ0pIzdhajQTmc1QUI28LMZdp6WuNviZ12ormBlZynnSz7U?=
- =?us-ascii?Q?R3Q9VM16Q4VQuqhr4qljNDMGb9M2MD4SCZ2A8X5cv0Dyfq3fbZVNlLMA4Ofc?=
- =?us-ascii?Q?eI6C6S0rkHvevmH4moY1PFxFLgs9ZJ8ScrGgU4kob+5LmlwcLgKMD0GyIU8C?=
- =?us-ascii?Q?LIIAGZ43tzeh7lHyClDY9pR2LPXBpeUimX0N7JLG9WuXQTluooVa/+IrHstD?=
- =?us-ascii?Q?7AR1ImHa/o3YtmXHW2ZKyLEi8ooHVoJI4OT6HUyq6c0qUy+9uQ3rnqPEpoYv?=
- =?us-ascii?Q?G5S36MtnDu+endAIf1toDU2HdPj8nRWtbsxsSst8YanJQ7R6eBpSMYYr6h1I?=
- =?us-ascii?Q?yEJmhxzRXEQK1VG3tL1QWYvanM6p8c0V9F81RFNS7/MzpZPA0A2ZSjVAxPDW?=
- =?us-ascii?Q?/7bFhZotRZOX7ndImrl4FmYiZeUEqh6TMkz6Ai+ONQolhY61aSKWGzxmp71O?=
- =?us-ascii?Q?l0zBryC0nwpr3qVDf99VpdwQg5IrlnUtmFAhXgjl7emkW//98/RG5NJbSBMJ?=
- =?us-ascii?Q?2Q=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 82df6124-f3e6-47ed-f66f-08dab3266db1
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1101MB2126.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Oct 2022 05:38:05.8886
+X-Microsoft-Antispam-Message-Info: BdBJ5MiS+5YvnplbRD/tsVsJEP9p5crNmPyVxb79zvri7gIW/ODzDGd3TkEXnbSPV8sXL+KktX184B6VL9JOH1N/QOdZG02vt22JZ3YqB5YPSFnFYAhDGHXzH/sergOEg8II0eIAYdCfqc0LBztDiOjdBQ7IIkODzlSVHAaWGmDbknxNr+8txXs9bii6Hnzbb+fFgKmq52VealfsJPlzE3+pWW3kOX4vVdCBV19uIy87IMlaRTJ4cUqi7kOyVAPknLlY0Vz7cBNhkpc0adhQjGVM9+CGnCgOpevaRAdJH4pOJfE9/FrkCcIJdSzx0s+HxdaPDFb081/dgT44ck8RW1yvol5CHZ1ev2nbP3481Vt+zhJPM4nyZJL/i/eFx+elOYifrshSSPWIK1/RuSaKl61yBXQsLUDtH4xyxCK1qgn6iHXy1eQeKTOJ0nNSmb7no2G5Qg8s561kBubFBmfFiR8uRsWUf7qiBwOFmp7cPzGUyTjEnEGe5E8Y5GSUXPH7/XHhV5EMacN9R1nvAQ0ntiwSpF51hsB4esnOmJAvL7HMoO4iK8iQYBoHF7tlxHMLmjab+ZMQRMttV75LDTTDoOyi4P6p1a3PRCs8zg/ts5pM66Z3bRPGooxVP5i5GqCv8nZGb01xlUT9utYFOj1tz6Q+FfkIlCFbdZYkuUCugA70lYfc6M0EBSTCYTpJ38qjeAmAabsx1TCYe9nCrbx9oaW4p8AQFjiK5ecNceR0XLp2PclAsswNkWT9DO98avroEluGb4iBa7SDGw8jlgDL4OVwhaNVRu+Pek9gODe5g+U6fjtv2C3EH0a0OZVusDGnT7i6HxCbgJWSkYF9Xy8xzmlos/zo2v09WNUuTGOWYyE=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(396003)(136003)(39860400002)(346002)(376002)(451199015)(40470700004)(36840700001)(46966006)(82740400003)(186003)(2616005)(1076003)(426003)(36860700001)(316002)(47076005)(336012)(26005)(40460700003)(83380400001)(2906002)(7416002)(40480700001)(5660300002)(8936002)(110136005)(478600001)(41300700001)(82310400005)(54906003)(70206006)(8676002)(70586007)(4326008)(966005)(103116003)(36756003)(86362001)(356005)(81166007)(36900700001)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Oct 2022 05:41:16.7177
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +ZyiM2eIpq5AZUmjrdWY5RO1saPL0zLP8IIEVHWRlXEHCvGurkKpZt/ljmLaOtW3XIMpNIfnXv9oFFVn9YrXlPUy0gUEzf5tSrA0pOs9IMw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR11MB6362
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7237ce4c-209e-4b0b-1696-08dab326df9b
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT092.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7369
+X-Spam-Status: No, score=0.6 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Robert Richter wrote:
-> The dev_is_cxl_root_child() check adds complexity to the control flow
-> of the iterator loop in devm_cxl_enumerate_ports(). This check is
-> unnecessary and can safely be removed: If the port of a dport_dev is
-> connected to the cxl root port, the grandparent of dport_dev will be
-> null. This is checked early in the iterator loop and the function is
-> left in this case.
-> 
-> Drop this check to ease the control flow in devm_cxl_enumerate_
-> ports().
-> 
-> This change is a prerequisite of factoring out parts of the loop.
+There is currently no standard property to pass PTP device index
+information to ethernet driver when they are independent.
 
-Ok, so this seems to be where we diverge on how an RCH topology maps
-into the CXL subsystem object hierarchy. The main observation going
-through this with Dave before this set came out is that
-devm_cxl_enumerate_ports() is a nop and should be skipped in the RCH
-case. devm_cxl_enumerate_ports() is only for discovering intermediate
-ports between a host bridge and an endpoint.
+ptp-hardware-clock property will contain phandle to PTP clock node.
 
-In a CXL VH topology a direct attached endpoint is downstream of a
-host-bridge's root port. In the CXL RCH topology the
-Root-Complex-Integrated-Endpoint is a *peer* of a host-bridge's root
-port. So one level of the hierarchy is removed and
-devm_cxl_enumerate_ports() can be skipped.
+Freescale driver currently has this implementation but it will be
+good to agree on a generic (optional) property name to link to PTP
+phandle to Ethernet node. In future or any current ethernet driver
+wants to use this method of reading the PHC index,they can simply use
+this generic name and point their own PTP clock node, instead of
+creating separate property names in each ethernet driver DT node.
 
-The proposal is to have cxl_mem_probe() do something like:
+axiethernet driver uses this method when PTP support is integrated.
 
-       if (!cxlds->is_rcd) {
-               rc = devm_cxl_enumerate_ports(cxlmd);
-               if (rc)
-                       return rc;
-       }
+Example:
+	fman0: fman@1a00000 {
+		ptp-hardware-clock = <&ptp_timer0>;
+	}
 
-The existing:
+	ptp_timer0: ptp-timer@1afe000 {
+		compatible = "fsl,fman-ptp-timer";
+		reg = <0x0 0x1afe000 0x0 0x1000>;
+	}
 
-       parent_port = cxl_mem_find_port(cxlmd, &dport);
+Signed-off-by: Sarath Babu Naidu Gaddam <sarath.babu.naidu.gaddam@amd.com>
+---
+We want binding to be reviewed/accepted and then make changes in freescale
+binding documentation to use this generic binding.
 
-...should do the right thing as long as cxl_acpi registers the host
-bridge as a dport with this change:
+DT information:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
+tree/arch/arm64/boot/dts/freescale/qoriq-fman3-0.dtsi#n23
 
--       dport = devm_cxl_add_dport(root_port, match, uid, ...
-+       dport = devm_cxl_add_dport(root_port, pci_root->bus->bridge, uid, ... 
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
+tree/Documentation/devicetree/bindings/net/fsl-fman.txt#n320
 
-That way the dport device is not the ACPI device but the 'struct
-pci_dev' for the host-bridge.
+Freescale driver:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
+tree/drivers/net/ethernet/freescale/dpaa/dpaa_ethtool.c#n467
 
-With that scheme in place and some cxl-cli fixups from Vishal we are
-seeing:
+Changes in V2:
+1) Changed the ptimer-handle to ptp-hardware-clock based on
+   Richard Cochran's comment.
+2) Updated commit description.
+---
+ .../devicetree/bindings/net/ethernet-controller.yaml         | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-# cxl list -BEMPTu
-{
-  "bus":"root0",
-  "provider":"ACPI.CXL",
-  "nr_dports":1,
-  "dports":[
-    {
-      "dport":"pci0000:38",
-      "id":"0x31"
-    }
-  ],
-  "endpoints:root0":[
-    {
-      "endpoint":"endpoint1",
-      "host":"mem0",
-      "depth":1,
-      "memdev":{
-        "memdev":"mem0",
-        "pmem_size":0,
-        "ram_size":"16.00 GiB (17.18 GB)",
-        "serial":"0",
-        "numa_node":0,
-        "host":"0000:38:00.0"
-      }
-    }
-  ]
-}
+diff --git a/Documentation/devicetree/bindings/net/ethernet-controller.yaml b/Documentation/devicetree/bindings/net/ethernet-controller.yaml
+index 3aef506fa158..d2863c1dd585 100644
+--- a/Documentation/devicetree/bindings/net/ethernet-controller.yaml
++++ b/Documentation/devicetree/bindings/net/ethernet-controller.yaml
+@@ -161,6 +161,11 @@ properties:
+       - auto
+       - in-band-status
+ 
++  ptp-hardware-clock:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description:
++      Specifies a reference to a node representing a IEEE1588 timer.
++
+   fixed-link:
+     oneOf:
+       - $ref: /schemas/types.yaml#/definitions/uint32-array
+-- 
+2.25.1
 
-Does that make sense? I think this patchset gets a lot simpler if it
-does not try to make devm_cxl_enumerate_ports() understand the RCH
-topology.
