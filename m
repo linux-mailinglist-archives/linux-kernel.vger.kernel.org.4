@@ -2,130 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A276D60783E
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 15:21:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 820F9607842
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 15:21:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230408AbiJUNVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 09:21:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38256 "EHLO
+        id S230316AbiJUNVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 09:21:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230403AbiJUNUy (ORCPT
+        with ESMTP id S230243AbiJUNVC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 09:20:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA89D24E38E
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 06:20:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666358450;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZsPij9BvW1d4VCHGwc7667RVR2VkSQ3/k+XB1C+z4tA=;
-        b=dRXKJMxmepjAj74b+76AQ3LVWS6kWKDakUfY4nG1ZSGGP5f7bK1TNV/0w89dnRKWlRCuH/
-        r+ZyXbH2ipxlfr02I+TWrEycZK7f+6A/YWXbyXgDY1bwTnU1+Hx4jwN4M5KEP5ZJGuLizs
-        1fnjJ8iADjlp2iCZsXMWh4fFruBHm7c=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-662-i1A2PuoiNxmi5pn9vig8RA-1; Fri, 21 Oct 2022 09:20:49 -0400
-X-MC-Unique: i1A2PuoiNxmi5pn9vig8RA-1
-Received: by mail-ed1-f70.google.com with SMTP id y14-20020a056402440e00b0044301c7ccd9so2415031eda.19
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 06:20:49 -0700 (PDT)
+        Fri, 21 Oct 2022 09:21:02 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B028525F8C5
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 06:20:59 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id r8-20020a1c4408000000b003c47d5fd475so4977398wma.3
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 06:20:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=i4JniJFO6Hdg6kNwzrb/PJxlNwEXD1oSoB9sUXNG4AA=;
+        b=KRlIyg/u0tYE5oXblsqDn0dKMd0L7zGHX6PBqE0FCsXsswAwYwco4EFIifQX1ONRW7
+         7SaxqLXoSX6mu1Nh7ZFBbvmyXI2zg460zs6nvIAzibw99XZD5uOSyJeIKhOB72YFyDgg
+         3T83bJoFOthQsg53QXGuHLHDoMzER0ebn5zLuxpbZDeCHq+H0KPoig72NBZrimtkxYpq
+         b5eafxr1uEdcRgvlELg8MnV1TgbO4LZTQEqMQuZttox39NTLfsx8LcDBrDYfCjafaAWe
+         Bdv3Yorx+J/XB99YCmhkDaU/qsOy3bnicMiZjV6mqZbIe2KUqJ4/1QLDu3qhTOvNf2fv
+         TYHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZsPij9BvW1d4VCHGwc7667RVR2VkSQ3/k+XB1C+z4tA=;
-        b=yuX/46xLXYfoKh21Zu1eAYDNfxJrinwFYsPo4FyZurHwK9bqYGvwti8Taq6kexP+RO
-         XY36LuveIA8ySUNGdEeUg66XgkuKORiT3gK7u/7XsG3yXzVOLl/2SIa/OlIVBfK5sLA3
-         /vrizF6oXruBA5Q2gOxmavfch8h6UNcjArpp/ND9NQNvCZ0bVaOLhQQ9mLKlYTdcchDp
-         ei74L6xYUaosquHJH8HPNCCnMBXRuScn4BYnKyBKtJr36LiAnVIghm2HpuNheAQFtRvK
-         tLelHgtYNlRaz7hWZAqZs9Luu+RgW3xiek0dPI9koVrIJaffMJiEeWjIIumTRC0j9DC7
-         ptqw==
-X-Gm-Message-State: ACrzQf2PeJR+dXEfwRx9B+5x3Afo5sQWdhFSZbQFtsLskrpx27FPDj1g
-        52qSGFE4rv+DsDjBYE8Mo+xxfv8YkOwdJzaTpXA6142JgU5Nnv0WngDNuZ9M8aiEFtM1JLd4ewp
-        4EMi6fh/oW9OSlYrR1ttbEqFpeoSIC1RzIveq9xjygEnDnNLRVADRoNaufq15lb2xscgGNv6sTU
-        xu
-X-Received: by 2002:a17:906:d550:b0:78d:a6d4:c18f with SMTP id cr16-20020a170906d55000b0078da6d4c18fmr15768855ejc.113.1666358448492;
-        Fri, 21 Oct 2022 06:20:48 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM78Ox5DULLooxv+oNbpida2qPtNCXNw0skZAst4D7gv1coM+49eLIkJVlVXWJCrWr8ON2a8tQ==
-X-Received: by 2002:a17:906:d550:b0:78d:a6d4:c18f with SMTP id cr16-20020a170906d55000b0078da6d4c18fmr15768817ejc.113.1666358448188;
-        Fri, 21 Oct 2022 06:20:48 -0700 (PDT)
-Received: from ovpn-192-65.brq.redhat.com (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id de13-20020a1709069bcd00b0078d957e65b6sm11587521ejc.23.2022.10.21.06.20.46
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=i4JniJFO6Hdg6kNwzrb/PJxlNwEXD1oSoB9sUXNG4AA=;
+        b=vsAkvGmoiP/CvG+KLHnpjB62+hQXcH0X5bLX2cbDdEPlIHq/74aEgkSVpPBPTetJHY
+         R489DXiWWrGQR+Q1pdYyqc5TFBzo5fFa4uBqKUgeWdO6obN8fueJbokOtyLep6tRKo8K
+         tz+Cv/M6XCY11kQQkQsBZ5bv3dgSA78eyv0COeoQ5IonABbd2xlsaXH0jIa5jg/O5A5S
+         dwcTpIhrmFiXlkQ3Fv0KkitLGeY52CqxG/FqVMqqDjzCnzT3/U2WQzy3LgdwDN7f8XY+
+         Y9XgGwW80yRUjl39uwsJNj+ny7y6hUfK3wHeKZFBN+hVCOeo1eiZbJ7ytAl8CPY8ksxe
+         xXEQ==
+X-Gm-Message-State: ACrzQf3FblBpZDFMx7D737vuxqsH7DGluts1eXnoEpbd3z6YrehCyqrV
+        oyx4NqVtmDKimrf0XM7G3xn4nQ==
+X-Google-Smtp-Source: AMsMyM5J4fLco6qzthaoFkH7ErTin58+NxkdGFINMqMFdhJr2i4VdFMQGgMTPWCWXWc+HK19vznoiQ==
+X-Received: by 2002:a05:600c:354d:b0:3c8:4b2d:f3fb with SMTP id i13-20020a05600c354d00b003c84b2df3fbmr310079wmq.188.1666358457786;
+        Fri, 21 Oct 2022 06:20:57 -0700 (PDT)
+Received: from Red ([2a01:cb1d:3d5:a100:4a02:2aff:fe07:1efc])
+        by smtp.googlemail.com with ESMTPSA id g5-20020a5d4885000000b0022e55f40bc7sm18738768wrq.82.2022.10.21.06.20.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Oct 2022 06:20:47 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        Yuan Yao <yuan.yao@linux.intel.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v11 33/46] KVM: selftests: Hyper-V PV IPI selftest
-In-Reply-To: <Y1B1eBIL9WhB4dwc@google.com>
-References: <20221004123956.188909-1-vkuznets@redhat.com>
- <20221004123956.188909-34-vkuznets@redhat.com>
- <Y1B1eBIL9WhB4dwc@google.com>
-Date:   Fri, 21 Oct 2022 15:20:46 +0200
-Message-ID: <874jvxcnyp.fsf@ovpn-192-65.brq.redhat.com>
+        Fri, 21 Oct 2022 06:20:57 -0700 (PDT)
+Date:   Fri, 21 Oct 2022 15:20:53 +0200
+From:   Corentin LABBE <clabbe@baylibre.com>
+To:     heiko@sntech.de, ardb@kernel.org, davem@davemloft.net,
+        herbert@gondor.apana.org.au, krzysztof.kozlowski+dt@linaro.org,
+        mturquette@baylibre.com, robh+dt@kernel.org, sboyd@kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH v10 00/33] crypto: rockchip: permit to pass self-tests
+Message-ID: <Y1KctXMZ1+c5uQqd@Red>
+References: <20220927075511.3147847-1-clabbe@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220927075511.3147847-1-clabbe@baylibre.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sean Christopherson <seanjc@google.com> writes:
+Le Tue, Sep 27, 2022 at 07:54:38AM +0000, Corentin Labbe a écrit :
+> Hello
+> 
+> The rockchip crypto driver is broken and do not pass self-tests.
+> This serie's goal is to permit to become usable and pass self-tests.
+> 
+> This whole serie is tested on a rk3328-rock64, rk3288-miqi and
+> rk3399-khadas-edge-v with selftests (with CONFIG_CRYPTO_MANAGER_EXTRA_TESTS=y)
+> 
+> Regards
+> 
 
-> On Tue, Oct 04, 2022, Vitaly Kuznetsov wrote:
+Hello
 
-...
+Gentle ping since it is a month since this serie was sent and no comment was made (except some reviewed-by).
+So I think it is ready to be merged, probably thought the crypto tree.
 
->> +
->> +	r = pthread_cancel(thread);
->> +	TEST_ASSERT(r == 0,
->
-> !r is generally preferred over "r == 0"
->
->> +		    "pthread_cancel on vcpu_id=%d failed with errno=%d",
->> +		    vcpu->id, r);
->
-> Do you happen to know if errno is preserved?  I.e. if TEST_ASSERT()'s print of
-> errno will capture the right errno?  If so, this and the pthread_join() assert
-> can be:
->
-> 	TEST_ASSERT(!r, pthread_cancel() failed on vcpu_id=%d, vcpu->id);
->
-
-The example from 'man 3 pthread_cancel' makes me think errno is not
-set. 'man 3 errno' confirms that:
-
-"
-       Note  that the POSIX threads APIs do not set errno on error.
-Instead, on failure they return an error number as the function result.
-These error numbers have the same meanings as the error numbers returned
-in errno by other APIs.
-"
-
-but nothing stops us from doing something like
-
-#include <errno.h>
-...
-
-errno = pthread_cancel(thread);
-TEST_ASSERT(!errno, pthread_cancel() failed on vcpu_id=%d, vcpu->id);
-
-I believe.
-
--- 
-Vitaly
-
+Regards
