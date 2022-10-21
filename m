@@ -2,54 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 664D460800A
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 22:43:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E9B9608031
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 22:48:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230133AbiJUUnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 16:43:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45404 "EHLO
+        id S229864AbiJUUsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 16:48:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229919AbiJUUm4 (ORCPT
+        with ESMTP id S229929AbiJUUsR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 16:42:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D53E22A17D1;
-        Fri, 21 Oct 2022 13:42:38 -0700 (PDT)
+        Fri, 21 Oct 2022 16:48:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 102582A1FD8;
+        Fri, 21 Oct 2022 13:48:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 744E761F1A;
-        Fri, 21 Oct 2022 20:42:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68425C433D7;
-        Fri, 21 Oct 2022 20:42:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 01A43B80C82;
+        Fri, 21 Oct 2022 20:43:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5B1AC433C1;
+        Fri, 21 Oct 2022 20:43:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666384946;
-        bh=OzXG9cO8TgE4LXZUmE+an4SXeiNKfPtvb8eemwziMgg=;
+        s=k20201202; t=1666384986;
+        bh=ZRuew8H2IVJtQjPQ4OtZq012SU14YGDgRtLmhljfjrk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SlEHXZ9W2VW1K52a5l4DiStfpB9gQRQ6g2Tk+CoAgvtDQeGYfFsYhfq7Frqyctheq
-         luxePxPLnWV3P9teeQoo9DosYZ2TiinjkErIM/X1hVivH6/ahkulu7cB4NQ5cComLR
-         QL4mayyptJxKtQIxIi/ZbJ7OOysW4KQ0pbF49GQa4rNxhX29ZW8xkoO8ly8VoYQdnu
-         BQsgZHlftzNJ7NY8Y7TpmoTHNWuq6hiJqHelMhzMC5DlO0pyviGOb1vLpjJ+c9jzbd
-         rrA0XiCMxMTFOB+vD9WwMgs9CB9/O16x30FOsGCjSOyYsb4oWgx4Ml+iuFA7MLjMRW
-         t+dlMmUNYQh8g==
+        b=eesCGvG7neRIWHjJcwV8I0J5EG54Zcp/smPrxCPTmMnPeBVp7LypHS2z3LnODC6z/
+         muzPRa29R10CvlzhrjBPgi+qnuGzktVGLd0RKb+YScId60v3lexcWg6dZksBHAYaQV
+         qWV8AQxDp9K01KoH3Skb3V8zhBW5LTelAOiFqvxF8qM+Yj1C3PP+kccQv0EvdI4zow
+         EPhTZ56GSoMLm4yHS+My0mvQ14S4IV50bndPNRxDUmjddmnkYjWHBzlFEUVFmj9JPG
+         TY90A8TAUcTvcyiY8xAFtRDmwX6Xpr3V/wv/a8ImvgFsA6IkmGd4D8VlNdUXaV5E0M
+         9BanHS4Kch5Zw==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     linux-arm-kernel@lists.infradead.org,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-kernel@vger.kernel.org, Ben Dooks <ben-linux@fluff.org>,
         Simtec Linux Team <linux@simtec.co.uk>,
-        Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Joe Perches <joe@perches.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Lee Jones <lee@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH 07/21] power: remove s3c adc battery driver
-Date:   Fri, 21 Oct 2022 22:27:40 +0200
-Message-Id: <20221021203329.4143397-7-arnd@kernel.org>
+        Arnd Bergmann <arnd@arndb.de>, linux-hwmon@vger.kernel.org
+Subject: [PATCH 08/21] hwmon: remove s3c driver
+Date:   Fri, 21 Oct 2022 22:27:41 +0200
+Message-Id: <20221021203329.4143397-8-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20221021202254.4142411-1-arnd@kernel.org>
 References: <20221021202254.4142411-1-arnd@kernel.org>
@@ -66,73 +59,60 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The s3c-adc driver is removed along with the s3c24xx platform,
-so the battery driver is no longer needed either.
+The s3c adc driver was removed along with the s3c24xx platform, so the
+hwmon driver is orphaned and can be removed.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- MAINTAINERS                            |   7 -
- drivers/power/supply/Kconfig           |   6 -
- drivers/power/supply/Makefile          |   1 -
- drivers/power/supply/s3c_adc_battery.c | 453 -------------------------
- include/linux/s3c_adc_battery.h        |  39 ---
- 5 files changed, 506 deletions(-)
- delete mode 100644 drivers/power/supply/s3c_adc_battery.c
- delete mode 100644 include/linux/s3c_adc_battery.h
+ drivers/hwmon/Kconfig     |  17 --
+ drivers/hwmon/Makefile    |   1 -
+ drivers/hwmon/s3c-hwmon.c | 379 --------------------------------------
+ 3 files changed, 397 deletions(-)
+ delete mode 100644 drivers/hwmon/s3c-hwmon.c
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 071d64e2a7ca..2caf42b0328a 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17920,13 +17920,6 @@ S:	Supported
- W:	http://www.ibm.com/developerworks/linux/linux390/
- F:	drivers/s390/scsi/zfcp_*
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 7ac3daaf59ce..c98a068b5be2 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -1729,23 +1729,6 @@ config SENSORS_SHTC1
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called shtc1.
  
--S3C ADC BATTERY DRIVER
--M:	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
--L:	linux-samsung-soc@vger.kernel.org
--S:	Odd Fixes
--F:	drivers/power/supply/s3c_adc_battery.c
--F:	include/linux/s3c_adc_battery.h
--
- S3C24XX SD/MMC Driver
- M:	Ben Dooks <ben-linux@fluff.org>
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
-index 568b3ede993a..e2f8dfcdd2a9 100644
---- a/drivers/power/supply/Kconfig
-+++ b/drivers/power/supply/Kconfig
-@@ -406,12 +406,6 @@ config BATTERY_MAX1721X
- 	  Say Y here to enable support for the MAX17211/MAX17215 standalone
- 	  battery gas-gauge.
- 
--config BATTERY_S3C_ADC
--	tristate "Battery driver for Samsung ADC based monitoring"
+-config SENSORS_S3C
+-	tristate "Samsung built-in ADC"
 -	depends on S3C_ADC
 -	help
--	  Say Y here to enable support for iPAQ h1930/h1940/rx1950 battery
+-	  If you say yes here you get support for the on-board ADCs of
+-	  the Samsung S3C24XX, S3C64XX and other series of SoC
 -
- config BATTERY_TWL4030_MADC
- 	tristate "TWL4030 MADC battery driver"
- 	depends on TWL4030_MADC
-diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
-index af43866b3980..8cb3c7f5c111 100644
---- a/drivers/power/supply/Makefile
-+++ b/drivers/power/supply/Makefile
-@@ -54,7 +54,6 @@ obj-$(CONFIG_BATTERY_MAX17042)	+= max17042_battery.o
- obj-$(CONFIG_BATTERY_MAX1721X)	+= max1721x_battery.o
- obj-$(CONFIG_BATTERY_RT5033)	+= rt5033_battery.o
- obj-$(CONFIG_CHARGER_RT9455)	+= rt9455_charger.o
--obj-$(CONFIG_BATTERY_S3C_ADC)	+= s3c_adc_battery.o
- obj-$(CONFIG_BATTERY_TWL4030_MADC)	+= twl4030_madc_battery.o
- obj-$(CONFIG_CHARGER_88PM860X)	+= 88pm860x_charger.o
- obj-$(CONFIG_CHARGER_PCF50633)	+= pcf50633-charger.o
-diff --git a/drivers/power/supply/s3c_adc_battery.c b/drivers/power/supply/s3c_adc_battery.c
+-	  This driver can also be built as a module. If so, the module
+-	  will be called s3c-hwmon.
+-
+-config SENSORS_S3C_RAW
+-	bool "Include raw channel attributes in sysfs"
+-	depends on SENSORS_S3C
+-	help
+-	  Say Y here if you want to include raw copies of all the ADC
+-	  channels in sysfs.
+-
+ config SENSORS_SIS5595
+ 	tristate "Silicon Integrated Systems Corp. SiS5595"
+ 	depends on PCI
+diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+index 11d076cad8a2..b5a401ce3285 100644
+--- a/drivers/hwmon/Makefile
++++ b/drivers/hwmon/Makefile
+@@ -173,7 +173,6 @@ obj-$(CONFIG_SENSORS_PCF8591)	+= pcf8591.o
+ obj-$(CONFIG_SENSORS_POWR1220)  += powr1220.o
+ obj-$(CONFIG_SENSORS_PWM_FAN)	+= pwm-fan.o
+ obj-$(CONFIG_SENSORS_RASPBERRYPI_HWMON)	+= raspberrypi-hwmon.o
+-obj-$(CONFIG_SENSORS_S3C)	+= s3c-hwmon.o
+ obj-$(CONFIG_SENSORS_SBTSI)	+= sbtsi_temp.o
+ obj-$(CONFIG_SENSORS_SBRMI)	+= sbrmi.o
+ obj-$(CONFIG_SENSORS_SCH56XX_COMMON)+= sch56xx-common.o
+diff --git a/drivers/hwmon/s3c-hwmon.c b/drivers/hwmon/s3c-hwmon.c
 deleted file mode 100644
-index 68d31a3bee48..000000000000
-diff --git a/include/linux/s3c_adc_battery.h b/include/linux/s3c_adc_battery.h
-deleted file mode 100644
-index 57f982c375f8..000000000000
+index 70ae665db477..000000000000
 -- 
 2.29.2
 
