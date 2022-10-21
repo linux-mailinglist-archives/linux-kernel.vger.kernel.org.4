@@ -2,118 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2321B6071A7
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 10:05:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91BD96071AA
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 10:06:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229944AbiJUIFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 04:05:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40780 "EHLO
+        id S229983AbiJUIGU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 04:06:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbiJUIFw (ORCPT
+        with ESMTP id S229930AbiJUIGQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 04:05:52 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97BE81EA563
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 01:05:49 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Mtxjn0wbFzmVCy;
-        Fri, 21 Oct 2022 16:01:01 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 21 Oct 2022 16:05:20 +0800
-Received: from [10.174.178.174] (10.174.178.174) by
- dggpemm500007.china.huawei.com (7.185.36.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 21 Oct 2022 16:05:19 +0800
-Subject: Re: [PATCH 01/11] kset: fix documentation for kset_register()
-To:     Luben Tuikov <luben.tuikov@amd.com>,
-        <linux-kernel@vger.kernel.org>, <qemu-devel@nongnu.org>,
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        <linux-erofs@lists.ozlabs.org>, <ocfs2-devel@oss.oracle.com>,
-        <linux-mtd@lists.infradead.org>, <amd-gfx@lists.freedesktop.org>,
-        <gregkh@linuxfoundation.org>
-CC:     <rafael@kernel.org>, <somlo@cmu.edu>, <mst@redhat.com>,
-        <jaegeuk@kernel.org>, <chao@kernel.org>,
-        <hsiangkao@linux.alibaba.com>, <huangjianan@oppo.com>,
-        <mark@fasheh.com>, <jlbec@evilplan.org>,
-        <joseph.qi@linux.alibaba.com>, <akpm@linux-foundation.org>,
-        <alexander.deucher@amd.com>, <richard@nod.at>,
-        <liushixin2@huawei.com>
-References: <20221021022102.2231464-1-yangyingliang@huawei.com>
- <20221021022102.2231464-2-yangyingliang@huawei.com>
- <eb0f1459-7980-4a7b-58f9-652eeccc357e@amd.com>
-From:   Yang Yingliang <yangyingliang@huawei.com>
-Message-ID: <10d887c4-7db0-8958-f661-bd52e6c8b4af@huawei.com>
-Date:   Fri, 21 Oct 2022 16:05:18 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Fri, 21 Oct 2022 04:06:16 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5133E249884;
+        Fri, 21 Oct 2022 01:06:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666339575; x=1697875575;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=LrCEQpcLNEI0YFE1k8Q6HnH866BTswZ72JmMZMcO21g=;
+  b=TON6GNZ4cHA8oyx1+/QXMDYe6F/wKM8ScDTvThRHcyKsVuv6M2/dgDZZ
+   sk18QUORzRrppvGehP/pQkkWAmAdXp9TZnqrNNs1VUzOAHsSAFIQvi6PG
+   P2jP9TGwxah3XL7EgrhzUcZ9WMSX6/76AqHf0Xbf3rJBe2NrdDxeFn+WU
+   U0hfm+m4Cgtz/CJam6Z5c29dELaxFmhLJpRMY6tOuIJx2o0ItOEmUcnyh
+   uTbWvy3pNryF6CDiwPQyNYT4mvmeJDzzPTPsg+0bPBzk9ZNF/vbmjQN36
+   /af7uftG7J/PteY3lzRtPDHPjfD2BKZCCefHvzcnqKca8ruH0ar14NL9C
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="304559154"
+X-IronPort-AV: E=Sophos;i="5.95,200,1661842800"; 
+   d="scan'208";a="304559154"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2022 01:06:14 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="608236633"
+X-IronPort-AV: E=Sophos;i="5.95,200,1661842800"; 
+   d="scan'208";a="608236633"
+Received: from lramir2-mobl1.ger.corp.intel.com ([10.252.44.179])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2022 01:06:08 -0700
+Date:   Fri, 21 Oct 2022 11:06:02 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Matthew Gerlach <matthew.gerlach@linux.intel.com>
+cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>, geert+renesas@glider.be,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
+        johan@kernel.org, Lukas Wunner <lukas@wunner.de>,
+        marpagan@redhat.com,
+        Basheer Ahmed Muddebihal 
+        <basheer.ahmed.muddebihal@linux.intel.com>
+Subject: Re: [PATCH v4 2/4] fpga: dfl: Add DFHv1 Register Definitions
+In-Reply-To: <20221020212610.697729-3-matthew.gerlach@linux.intel.com>
+Message-ID: <4d609218-508f-6025-e99-71aac2b01369@linux.intel.com>
+References: <20221020212610.697729-1-matthew.gerlach@linux.intel.com> <20221020212610.697729-3-matthew.gerlach@linux.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <eb0f1459-7980-4a7b-58f9-652eeccc357e@amd.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.174.178.174]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 20 Oct 2022, matthew.gerlach@linux.intel.com wrote:
 
-On 2022/10/21 13:34, Luben Tuikov wrote:
-> On 2022-10-20 22:20, Yang Yingliang wrote:
->> kset_register() is currently used in some places without calling
->> kset_put() in error path, because the callers think it should be
->> kset internal thing to do, but the driver core can not know what
->> caller doing with that memory at times. The memory could be freed
->> both in kset_put() and error path of caller, if it is called in
->> kset_register().
->>
->> So make the function documentation more explicit about calling
->> kset_put() in the error path of caller.
->>
->> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
->> ---
->>   lib/kobject.c | 3 +++
->>   1 file changed, 3 insertions(+)
->>
->> diff --git a/lib/kobject.c b/lib/kobject.c
->> index a0b2dbfcfa23..6da04353d974 100644
->> --- a/lib/kobject.c
->> +++ b/lib/kobject.c
->> @@ -834,6 +834,9 @@ EXPORT_SYMBOL_GPL(kobj_sysfs_ops);
->>   /**
->>    * kset_register() - Initialize and add a kset.
->>    * @k: kset.
->> + *
->> + * If this function returns an error, kset_put() must be called to
->> + * properly clean up the memory associated with the object.
->>    */
-> And I'd continue the sentence, with " ... with the object,
-> for instance the memory for the kset.kobj.name when kobj_set_name(&kset.kobj, format, ...)
-> was called before calling kset_register()."
-kobject_cleanup() not only frees name, but aslo calls ->release() to 
-free another resources.
->
-> This makes it clear what we want to make sure is freed, in case of an early error
-> from kset_register().
+> From: Basheer Ahmed Muddebihal <basheer.ahmed.muddebihal@linux.intel.com>
+> 
+> This patch adds the definitions for DFHv1 header and related register
+> bitfields.
+> 
+> Signed-off-by: Basheer Ahmed Muddebihal <basheer.ahmed.muddebihal@linux.intel.com>
+> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> ---
+> v4: s/MSIX/MSI_X/g
+>     move kerneldoc to implementation
+>     don't change copyright date
+> 
+> v3:
+>     keep DFHv1 definitions "hidden" in drivers/fpga/dfl.h
+> 
+> v2: clean up whitespace and one line comments
+>     remove extra space in commit
+>     use uniform number of digits in constants
+>     don't change copyright date because of removed content
+> 
+> dfl.h s/MSIX/MSI_X/g move kerneldoc
+> ---
+>  drivers/fpga/dfl.h  | 33 +++++++++++++++++++++++++++++++++
+>  include/linux/dfl.h | 11 +++++++++++
+>  2 files changed, 44 insertions(+)
+> 
+> diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
+> index 06cfcd5e84bb..45e6e1359a67 100644
+> --- a/drivers/fpga/dfl.h
+> +++ b/drivers/fpga/dfl.h
+> @@ -74,11 +74,44 @@
+>  #define DFH_REVISION		GENMASK_ULL(15, 12)	/* Feature revision */
+>  #define DFH_NEXT_HDR_OFST	GENMASK_ULL(39, 16)	/* Offset to next DFH */
+>  #define DFH_EOL			BIT_ULL(40)		/* End of list */
+> +#define DFH_VERSION		GENMASK_ULL(59, 52)	/* DFH version */
+>  #define DFH_TYPE		GENMASK_ULL(63, 60)	/* Feature type */
+>  #define DFH_TYPE_AFU		1
+>  #define DFH_TYPE_PRIVATE	3
+>  #define DFH_TYPE_FIU		4
+>  
+> +/*
+> + * DFHv1 Register Offset definitons
+> + * In DHFv1, DFH + GUID + CSR_START + CSR_SIZE_GROUP + PARAM_HDR + PARAM_DATA
+> + * as common header registers
+> + */
+> +#define DFHv1_CSR_ADDR		0x18  /* CSR Register start address */
+> +#define DFHv1_CSR_SIZE_GRP	0x20  /* Size of Reg Block and Group/tag */
+> +#define DFHv1_PARAM_HDR		0x28  /* Optional First Param header */
+> +
+> +/*
+> + * CSR Rel Bit, 1'b0 = relative (offset from feature DFH start),
+> + * 1'b1 = absolute (ARM or other non-PCIe use)
+> + */
+> +#define DFHv1_CSR_ADDR_REL	BIT_ULL(0)
+> +
+> +/* CSR Header Register Bit Definitions */
+> +#define DFHv1_CSR_ADDR_MASK       GENMASK_ULL(63, 1)  /* 63:1 of CSR address */
+> +
+> +/* CSR SIZE Goup Register Bit Definitions */
+> +#define DFHv1_CSR_SIZE_GRP_INSTANCE_ID	GENMASK_ULL(15, 0)	/* Enumeration instantiated IP */
+> +#define DFHv1_CSR_SIZE_GRP_GROUPING_ID	GENMASK_ULL(30, 16)	/* Group Features/interfaces */
+> +#define DFHv1_CSR_SIZE_GRP_HAS_PARAMS	BIT_ULL(31)		/* Presence of Parameters */
+> +#define DFHv1_CSR_SIZE_GRP_SIZE		GENMASK_ULL(63, 32)	/* Size of CSR Block in bytes */
 
-How about like this:
+SIZE -> SZ would remove two letters w/o loss of info (remember to 
+rename the offset too if you make this change).
 
-If this function returns an error, kset_put() must be called to clean up the name of
-kset object and other memory associated with the object.
+> +/* PARAM Header Register Bit Definitions */
+> +#define DFHv1_PARAM_HDR_ID		GENMASK_ULL(15, 0) /* Id of this Param  */
+> +#define DFHv1_PARAM_HDR_VERSION		GENMASK_ULL(31, 16) /* Version Param */
+> +#define DFHv1_PARAM_HDR_NEXT_OFFSET	GENMASK_ULL(63, 32) /* Offset of next Param */
+> +#define DFHv1_PARAM_HDR_NEXT_EOL	BIT_ULL(0)
+> +#define DFHv1_PARAM_HDR_NEXT_MASK	GENMASK_ULL(1, 0)
+> +#define DFHv1_PARAM_DATA		0x08  /* Offset of Param data from Param header */
+> +
+>  /* Next AFU Register Bitfield */
+>  #define NEXT_AFU_NEXT_DFH_OFST	GENMASK_ULL(23, 0)	/* Offset to next AFU */
+>  
+> diff --git a/include/linux/dfl.h b/include/linux/dfl.h
+> index 431636a0dc78..fea9e16d35b6 100644
+> --- a/include/linux/dfl.h
+> +++ b/include/linux/dfl.h
+> @@ -11,6 +11,17 @@
+>  #include <linux/device.h>
+>  #include <linux/mod_devicetable.h>
+>  
+> +#define DFHv1_PARAM_ID_MSI_X		0x1
+> +#define DFHv1_PARAM_MSI_X_STARTV	0x0
+> +#define DFHv1_PARAM_MSI_X_NUMV		0x4
+> +
+> +#define DFHv1_PARAM_ID_CLK_FRQ    0x2
+> +#define DFHv1_PARAM_ID_FIFO_LEN   0x3
+> +
+> +#define DFHv1_PARAM_ID_REG_LAYOUT 0x4
+> +#define DFHv1_PARAM_ID_REG_WIDTH  GENMASK_ULL(63, 32)
+> +#define DFHv1_PARAM_ID_REG_SHIFT  GENMASK_ULL(31, 0)
 
->
-> Regards,
-> Luben
->
->>   int kset_register(struct kset *k)
->>   {
-> .
+Any particular reason why MSI_X parameters are given as offsets and 
+these REG_LAYOUT ones as bitfields (both are 32-bit)?
+
+The naming here would indicate that DFHv1_PARAM_ID_REG_WIDTH is one of the 
+parameters but it's part of param data instead. I suppose you'd want 
+DFHv1_PARAM_REG_LAYOUT_WIDTH instead.
+
+-- 
+ i.
+
