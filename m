@@ -2,66 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 040BB607DCF
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 19:44:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73A4B607DD2
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 19:45:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229740AbiJURoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 13:44:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37390 "EHLO
+        id S229867AbiJURpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 13:45:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230428AbiJURoB (ORCPT
+        with ESMTP id S229670AbiJURpu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 13:44:01 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3583B269096;
-        Fri, 21 Oct 2022 10:43:55 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id bg9-20020a05600c3c8900b003bf249616b0so2529793wmb.3;
-        Fri, 21 Oct 2022 10:43:55 -0700 (PDT)
+        Fri, 21 Oct 2022 13:45:50 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D57825F47;
+        Fri, 21 Oct 2022 10:45:47 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id cr19so2154526qtb.0;
+        Fri, 21 Oct 2022 10:45:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=NEU8OndF59kbblXG+hQ+BOg2go0yv8KTNGgCVDuvgDM=;
-        b=l2zjzMuDlZJxiUXAq/qm2EIu5Vy3ixqsFB8S4piAb9a59VZm+MueK9dnMC5OkrcKcK
-         OFE7HmsgpfJyWglUAKJteDL3seJuBmMZr7rgwilcXmld4xrxhAwAmk+fSLode2a/TA2X
-         37ycOcPc5TrRX3GXZfG0jflNMe6AjVMzYnbHpnwMommSN2XzPBT2ExZxVhjVI19nKHwj
-         6nA6yYGlzrpTlZrCdlyir9Ythq0Rv4myRiHPVet4yEsTBQACJsjLV65UclxB54xLl9oy
-         zND5yc924M9Fh+67ZS6ZRpzlVgs84yJuXZaKof05xh3m0hFJaTcnN3rKyWzU42vqaQy5
-         pqFw==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9jf1Or+O0WATniMBydkpibsCp44mV74kwc+1uNXS0e0=;
+        b=MaUeJGs+YkNZIKBbZ8z/Z9S2HZlo6KAmfqilfv+d+s+Y3O9zurejymgbKOf7JSvPqO
+         0fVlj99M/nNWb/k86FK/5YdSrVsIK45/Uu7net3R/SKvCZ4BHFR+orBGxHdCbkfmm4Cp
+         FUgVWZyPq+cJEXCG0EN5RBL6H1s6kAXhjA/2M8P4hheiqaYA1eLhV/hUv/2IqduQr1W0
+         9XbyIrp3u5e+AC5Wr41vwQ4TZa3FW5tE/PQxe7Irh01QJJYK5aJ8IFYAGvCcwwCDI07H
+         GxgkE53xpRDM/OS16msJZEUFZd4QJcRApOUgUO3fAdgUXYy+6piNHX/NMCUNkakzBvxT
+         NbFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NEU8OndF59kbblXG+hQ+BOg2go0yv8KTNGgCVDuvgDM=;
-        b=kyw/JX+as9aE72cPrQw0UbdUF5x00YHRD0sIPkDCnRSz/pL77AaOsx27ODKBZZ3yz3
-         jmWJFL+SUwWyMUFgeZe17D3WZmZ5wQwVHH1kcTgHbVrktKHPoViEWEertaG30dm361M3
-         aGsmXgvgOez9xPq9uZK/zp4+MRQOD9xGd2rKfjLG/XgtEhpTjhKJQcJQOvsHhhyI0CIT
-         Nz5zJJ6dn/21bLQBOxPUIvFeeFxzlwJrgdGT01fDWjAsWdHqKvR822Biq9jxOCXtmNcx
-         BwT0tn0KVQCaVGtjUuwYO8oTL40Q/lstfSG5+hk1j7gJiPpwzbsf1givBtsN0b2Wtp/i
-         WRdw==
-X-Gm-Message-State: ACrzQf29OfAAJ/WAOMLCIi5103Wa2dJhKzvDb2WgQuNg3gtT7ZUN0Vyp
-        4nrJ8jq7X0JGkG3tMsj4om4=
-X-Google-Smtp-Source: AMsMyM6yiTDm+02FP3z+iQlsbay9XXQvuxmsQ+eHIDzc3K3wViQo25S1QExdZDw170PICbRhDio5YA==
-X-Received: by 2002:a05:600c:4451:b0:3c6:fb65:24cb with SMTP id v17-20020a05600c445100b003c6fb6524cbmr16192541wmn.144.1666374233622;
-        Fri, 21 Oct 2022 10:43:53 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id m8-20020adfe0c8000000b0022efc4322a9sm19481040wri.10.2022.10.21.10.43.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Oct 2022 10:43:53 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] [media] radio: Remove variable p
-Date:   Fri, 21 Oct 2022 18:43:52 +0100
-Message-Id: <20221021174352.28290-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.37.3
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9jf1Or+O0WATniMBydkpibsCp44mV74kwc+1uNXS0e0=;
+        b=fc2+59Z9hlpezbWB3+Jn7UNZUREvaHoLEQTq08ssUAZxh3kW9HGJhcSIxd0CahI8ud
+         yuROqijXK91GdMnhEEhO6q7Kei7RAbe5LBYNWFaLEcr2IdJYYQaOBP7klbmYFFXA6hUb
+         g13ghO/5FvcYIo2q83NKCBkqoU+GnKfIrCS9PiCsbzM3xxMyeOxujZ2Wz4qCFHjV6qU4
+         LcgaE65OA2/qlpI9FP7YBRrbKOIymrZW+QRhdWZ30MQD9RkE+83ofzlkjfwmbZSN/CZ2
+         w/ffX7h4pgEY4z0c6s7o3efQgPYhvI6/59pOLa5nZd2A12N6jXZbT0Mc/LSJwdquvQuQ
+         /8FQ==
+X-Gm-Message-State: ACrzQf0E0Ex3216WJzvBllfD5Cfe7EAqMbIkbIqI0FHTAZe+386eJUzo
+        mZqXM/mVBfrBZCtgV9ybIvQ=
+X-Google-Smtp-Source: AMsMyM4geCAzB+hp+wq+emgUYQlwUd2aBYl5rvEbU1iMuZ+NC4ysO0kWjtTcWnCX/l/FutMzq+ybog==
+X-Received: by 2002:ac8:5b90:0:b0:39c:e9b9:c002 with SMTP id a16-20020ac85b90000000b0039ce9b9c002mr17475349qta.3.1666374346793;
+        Fri, 21 Oct 2022 10:45:46 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id l13-20020ac84a8d000000b00342f8d4d0basm8418189qtq.43.2022.10.21.10.45.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Oct 2022 10:45:46 -0700 (PDT)
+Message-ID: <9fe9c826-9b1a-0471-e30c-7fa949d2b08e@gmail.com>
+Date:   Fri, 21 Oct 2022 10:45:36 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2 2/7] mmc: sdhci-of-arasan: Fix SDHCI_RESET_ALL for
+ CQHCI
+Content-Language: en-US
+To:     Adrian Hunter <adrian.hunter@intel.com>,
+        Brian Norris <briannorris@chromium.org>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Shawn Lin <shawn.lin@rock-chips.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Haibo Chen <haibo.chen@nxp.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Faiz Abbas <faiz_abbas@ti.com>, linux-mmc@vger.kernel.org,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Al Cooper <alcooperx@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        linux-kernel@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>, stable@vger.kernel.org
+References: <20221019215440.277643-1-briannorris@chromium.org>
+ <20221019145246.v2.2.I29f6a2189e84e35ad89c1833793dca9e36c64297@changeid>
+ <14efb3e6-96cf-f42e-16aa-c45001ec632e@gmail.com>
+ <Y1B36AnqJtolGQEP@google.com>
+ <5f1adbf7-b477-914e-0a07-5c76532e85cd@intel.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <5f1adbf7-b477-914e-0a07-5c76532e85cd@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,42 +97,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The variable p being deccremented but it is never referenced,
-it is redundant and can be removed.
+On 10/19/22 23:29, Adrian Hunter wrote:
+> On 20/10/22 01:19, Brian Norris wrote:
+>> On Wed, Oct 19, 2022 at 02:59:39PM -0700, Florian Fainelli wrote:
+>>> On 10/19/22 14:54, Brian Norris wrote:
+>>>> The same bug was already found and fixed for two other drivers, in v5.7
+>>>> and v5.9:
+>>>>
+>>>> 5cf583f1fb9c mmc: sdhci-msm: Deactivate CQE during SDHC reset
+>>>> df57d73276b8 mmc: sdhci-pci: Fix SDHCI_RESET_ALL for CQHCI for Intel GLK-based controllers
+>>>>
+>>>> The latter is especially prescient, saying "other drivers using CQHCI
+>>>> might benefit from a similar change, if they also have CQHCI reset by
+>>>> SDHCI_RESET_ALL."
+>>
+>>>> --- a/drivers/mmc/host/sdhci-of-arasan.c
+>>>> +++ b/drivers/mmc/host/sdhci-of-arasan.c
+>>>> @@ -366,6 +366,9 @@ static void sdhci_arasan_reset(struct sdhci_host *host, u8 mask)
+>>>>    	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
+>>>>    	struct sdhci_arasan_data *sdhci_arasan = sdhci_pltfm_priv(pltfm_host);
+>>>> +	if ((host->mmc->caps2 & MMC_CAP2_CQE) && (mask & SDHCI_RESET_ALL))
+>>>> +		cqhci_deactivate(host->mmc);
+>>>> +
+>>>>    	sdhci_reset(host, mask);
+>>>
+>>> Cannot this be absorbed by sdhci_reset() that all of these drivers appear to
+>>> be utilizing since you have access to the host and the mask to make that
+>>> decision?
+>>
+>> It potentially could.
+>>
+>> I don't know if this is a specified SDHCI behavior that really belongs
+>> in the common helper, or if this is just a commonly-shared behavior. Per
+>> the comments I quote above ("if they also have CQHCI reset by
+>> SDHCI_RESET_ALL"), I chose to leave that as an implementation-specific
+>> behavior.
+>>
+>> I suppose it's not all that harmful to do this even if some SDHCI
+>> controller doesn't have the same behavior/quirk.
+>>
+>> I guess I also don't know if any SDHCI controllers will support command
+>> queueing (MMC_CAP2_CQE) via somethings *besides* CQHCI. I see
+>> CQE support in sdhci-sprd.c without CQHCI, although that driver doesn't
+>> set MMC_CAP2_CQE.
+> 
+> SDHCI and CQHCI are separate modules and are not dependent, so they cannot
+> call into each other directly (and should not).  A new CQE API would be
+> needed in mmc_cqe_ops e.g. (*cqe_notify_reset)(struct mmc_host *host),
+> and wrapped in mmc/host.h:
+> 
+> static inline void mmc_cqe_notify_reset(struct mmc_host *host)
+> {
+> 	if (host->cqe_ops->cqe_notify_reset)
+> 		host->cqe_ops->cqe_notify_reset(host);
+> }
+> 
+> Alternatively, you could make a new module for SDHCI/CQHCI helper functions,
+> although in this case there is so little code it could be static inline and
+> added in a new include file instead, say sdhci-cqhci.h e.g.
+> 
+> #include "cqhci.h"
+> #include "sdhci.h"
+> 
+> static inline void sdhci_cqhci_reset(struct sdhci_host *host, u8 mask)
+> {
+> 	if ((host->mmc->caps2 & MMC_CAP2_CQE) && (mask & SDHCI_RESET_ALL) &&
+> 	    host->mmc->cqe_private)
+> 		cqhci_deactivate(host->mmc);
+> 	sdhci_reset(host, mask);
+> }
+> 
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/media/radio/radio-terratec.c | 3 ---
- 1 file changed, 3 deletions(-)
-
-diff --git a/drivers/media/radio/radio-terratec.c b/drivers/media/radio/radio-terratec.c
-index 8b8ce2b46a55..621bb8523271 100644
---- a/drivers/media/radio/radio-terratec.c
-+++ b/drivers/media/radio/radio-terratec.c
-@@ -82,7 +82,6 @@ static int terratec_s_mute_volume(struct radio_isa_card *isa, bool mute, int vol
- static int terratec_s_frequency(struct radio_isa_card *isa, u32 freq)
- {
- 	int i;
--	int p;
- 	int temp;
- 	long rest;
- 	unsigned char buffer[25];		/* we have to bit shift 25 registers */
-@@ -93,7 +92,6 @@ static int terratec_s_frequency(struct radio_isa_card *isa, u32 freq)
- 	rest = freq * 10 + 10700;	/* I once had understood what is going on here */
- 					/* maybe some wise guy (friedhelm?) can comment this stuff */
- 	i = 13;
--	p = 10;
- 	temp = 102400;
- 	while (rest != 0) {
- 		if (rest % temp  == rest)
-@@ -103,7 +101,6 @@ static int terratec_s_frequency(struct radio_isa_card *isa, u32 freq)
- 			rest = rest - temp;
- 		}
- 		i--;
--		p--;
- 		temp = temp / 2;
- 	}
- 
+I like the simplicity of the inline helper, especially towards 
+backports. May suggest to name it sdhci_and_cqhci_reset() to illustrate 
+that it does both, and does not apply specifically CQHCI that would be 
+"embedded" into SDHCI, but your call here.
 -- 
-2.37.3
+Florian
 
