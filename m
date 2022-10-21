@@ -2,519 +2,473 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4DB6606D22
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 03:44:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D5F8606D25
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 03:47:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbiJUBoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 21:44:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44650 "EHLO
+        id S229788AbiJUBq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 21:46:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229849AbiJUBoI (ORCPT
+        with ESMTP id S229489AbiJUBqv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 21:44:08 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B759137382
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 18:44:06 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id g16so826287qtu.2
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 18:44:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=H0RwNquik7YFvngOKcLrYEB6m/8xigMSuDQJeMA7mF8=;
-        b=ppWV2uPw8Rtohubpp2o324NIpe7xDAdGlX7pCO1C2+vtoFU4mMAUWvCFHKywt3bEDG
-         O0JJsCxJrvvEiDknv0pKa+/nKO5oAdGUF9QZ8x5Wb7hT9B1haOiXl86igwaXK+ZKzGaa
-         bcMeBSKAbVvT1N++iC3IC/jcv/DAvS6gCl1ULFULtFTHiFqUoD9OUcErUWzELWqDTQaQ
-         vwQtOyGnx70BOPzWABN2NXbYlIGOTlHW0Gey2VIlAZFhFLHDNQA7Shw4uPJQmV4JrKBM
-         2inxfxGJo5Impvqst7Gui15dalkB14wyKXrhhMeU4eri16//I2XItl98BCrG1iF7/I4+
-         7Xog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=H0RwNquik7YFvngOKcLrYEB6m/8xigMSuDQJeMA7mF8=;
-        b=wVkD3KY1/VDwAjZ4ODJxSJmjVioTzMmOMPAJlQiAjF1LHI794S+skwBEzBsayI5PLU
-         omeQdJcxFR2FTbmGLZqL8IgykCDDusL2LT/rG8eLelcyF1Jxu44SW8mkqFJIPBtXqqH5
-         rDRtM0Ywt+TMpwi0ZWdhihDPTVF9lIpqBff0es3Lm/U9JVEd8IBBasKyqxIei+Ei14GN
-         V/EEHnITYo5sbnRHbPVk4xbKZYAYFiXA8w7v6yXjBtEND4MpjZ4USIcpzlnQwaePWWTo
-         JyhP/tyCttFBs0h//VWBHxHAKtS6vmpJBspIFfQjXJyhXhPoKEc7++AxwTLYRihlj4Yd
-         SguQ==
-X-Gm-Message-State: ACrzQf3llscBUXsUJm4jWVVYMepkcESEFFqxj4cchOEaomZ+8qSVDprK
-        IaBtX2tFbxdL/wXvzhwy22V2SgRzDxifzQ==
-X-Google-Smtp-Source: AMsMyM5CHwym7SV6F8VoEiEVFNfnVbEPoEfPGG65XG+6Kv6/pJCyIsbnefba9g+T8p9B7U49fvvnsQ==
-X-Received: by 2002:ac8:6f09:0:b0:39c:d3ab:eb84 with SMTP id bs9-20020ac86f09000000b0039cd3abeb84mr14092890qtb.267.1666316645113;
-        Thu, 20 Oct 2022 18:44:05 -0700 (PDT)
-Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
-        by smtp.gmail.com with ESMTPSA id y2-20020a05620a0e0200b006ee8874f5d8sm8386118qkm.28.2022.10.20.18.44.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Oct 2022 18:44:04 -0700 (PDT)
-Message-ID: <adb9d5ff-bc66-df11-c93c-70f6e11c66aa@linaro.org>
-Date:   Thu, 20 Oct 2022 21:44:01 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v1 1/2] pinctrl: pinctrl-loongson2: add pinctrl driver
- support
+        Thu, 20 Oct 2022 21:46:51 -0400
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on20628.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e1a::628])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2155A226592;
+        Thu, 20 Oct 2022 18:46:50 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fX6//82JSx9ke2gCriBVz06UgXMJqQ7uwUe6lOUwX+Asyyp6z65W/1f7iYG6M0kigVsIKU9wnPbJemWGa7H4D/bkKW9QpCjr/OMQr1M12WEuj0l4kcTx/sh3zcTo2sMvAG+N/1LX6WOZlWVem8m/Qcq53TxH42+crWvNTWiDYIIoztMwvZW8mu6qMUTX+rrpXq1voSIZVXwWqQ2OEytns97sqWUSrk4CzCgojQjix1VoDICSKW0YmPH0Gd/raH7x2KwW+YlI0cMR/WpghXGRkP6gM1NFgk9XBI6jqJLAvouGVMNYIxOMDMfGR0elnwTLHevfqxaQkK0y4CLU7MK93w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=x9tZ9jV93bQ9P9GBUbOfVpkA07fCJFi6T2R1LeP6Nag=;
+ b=Tpw/PSYqwNy3UsUd82QcOeptH63mTO0qunsMjBqR9fq2iPQsTaCu4WVAWwY5x3O0NkVqrqyiLVPHBJLFkfT1j7uT8l2HTd6oEH3pSOSsfxMWXWvG0pNyal38KrcGWhFH3IrQBpMfQNhwk8EP8gwEMEADPOjOnyACr+Sb+SuXC5QOQ/Wn9cqJB6qZV8DMNJXYDtA9gX40t4B13cS0Rj0fs5xe4hWq0wsSrYSNqiWPuj74uTKpzLQyIV64BrRT+1Uq/+wePr7oFiDXThMLH+P0ONmB8DEPSXjw0Owg45LamLnIBoZmlVAzcqP+KoX55l4oJ/jkP83xpUkqrMW9EbetNw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=x9tZ9jV93bQ9P9GBUbOfVpkA07fCJFi6T2R1LeP6Nag=;
+ b=sw2vze73NQvionva4V0hqez5Kqkn+NPD28kWR4vwOAMVEpOqJ/Q6VWTsiBJUTsTfvqG2bq4d/+cb+vMkTusPdTn2NAdtoj5AfycWN5uXDTGDE03TiJtaxIwfYd46vJ2ycRiz0ovm2pOCnmFQlbI/0SCYraeJP8gOPRQkQgs7RjM=
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by DB9PR04MB8204.eurprd04.prod.outlook.com (2603:10a6:10:240::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.29; Fri, 21 Oct
+ 2022 01:46:46 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::a5ff:3d28:4bbc:e1ed]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::a5ff:3d28:4bbc:e1ed%6]) with mapi id 15.20.5723.032; Fri, 21 Oct 2022
+ 01:46:46 +0000
+From:   Peng Fan <peng.fan@nxp.com>
+To:     Rob Herring <robh@kernel.org>,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+CC:     "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>
+Subject: RE: [PATCH 1/2] dt-bindings: spi: fsl-imx-cspi: update i.MX8MP
+ binding
+Thread-Topic: [PATCH 1/2] dt-bindings: spi: fsl-imx-cspi: update i.MX8MP
+ binding
+Thread-Index: AQHY5G78ayDcx+I0EU6hKLmDPIgYmq4XPdiAgADW+vA=
+Date:   Fri, 21 Oct 2022 01:46:46 +0000
+Message-ID: <DU0PR04MB9417FFB2605B8026312EE831882D9@DU0PR04MB9417.eurprd04.prod.outlook.com>
+References: <20221020103158.2273874-1-peng.fan@oss.nxp.com>
+ <20221020103158.2273874-2-peng.fan@oss.nxp.com>
+ <166626975547.1096642.8539184924637719626.robh@kernel.org>
+In-Reply-To: <166626975547.1096642.8539184924637719626.robh@kernel.org>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        zhanghongchen <zhanghongchen@loongson.cn>
-References: <20221021012728.22373-1-zhuyinbo@loongson.cn>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221021012728.22373-1-zhuyinbo@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DU0PR04MB9417:EE_|DB9PR04MB8204:EE_
+x-ms-office365-filtering-correlation-id: abe2e4da-3dbc-4a12-c813-08dab3061cf9
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: sikapDkWUA3+kwCkd9gMYv7CvFWQIgtSgdzNFverH3xU9tqjpexiehRCSzN8uRevQVN3pYTL6M5VQuCt2Gzi1ra0DsDlhPVxdCCKdps8xvrOx2rMoczOWirccCxnHwR718dVD2PFSW8GqELwPKeyvKAR16PXtP6blHJ/u6vUVXLzOJ9iS5scepQdp3euZIvrmVN+sJ0eYPs1/hwiSVTeGpAQox8RjVjMRHD8TSEFx5UBraj1VqNFuMfz03cbLwBgLjGg8aRwZmX/X9+b6z+0qEtlaYBsQMI1LZxZwaSLlRfwGqxYnUCyXTciO55u4M/zenJl5gaJk1chTWwyjYDFYBI3J70y4kLF+7v/nNRIkOQrAbhjA/UGXvVYHGiOhmlm8tODziZ3l0VUtLAL+dTWMAfmV9T1jR7tz9fbQgGXApNNb17YNrhwjrezlFgpz+f9P2MBidxHE5FAQVxZMEQd8g8cITXZvjL56dU7Hocb41VOHzzgPdoT0DAlwbaWAMS2iFhPnxormNY0nulkYXPwkTFZFkSoUJmsjX1SY1M9YbS4UPMU8aTp2obZtKVewGmLohqSAWYqtmDGf2N8TUxiUbJ0aXvmfyVg0oAsSEtKjjwVGkEUN/9DHP+GiubqfxL1ZXBbKa1O3POTUDkm9bj+YbUyXOOpXKJwHsI2T9YI6ym4QEYTUA5ugqimry8QqriGIpKtLTYjP8qra4+07GvbW6kbTIa2+TKsejwZw3so7UvrMYDxzfznkn0I0BcU44BAwVf+Mpm1f+1sEgOp3heUy0zxXIUbV+CvLZhTy7eo2fs=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(396003)(39860400002)(366004)(136003)(376002)(451199015)(38070700005)(122000001)(38100700002)(86362001)(33656002)(55016003)(2906002)(71200400001)(30864003)(45080400002)(15650500001)(44832011)(478600001)(966005)(66446008)(316002)(41300700001)(64756008)(4326008)(8676002)(66556008)(76116006)(66476007)(8936002)(66946007)(7416002)(52536014)(54906003)(5660300002)(110136005)(83380400001)(9686003)(26005)(7696005)(6506007)(186003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?YR5ETb6Q9CZvXpjA/CTwsGfGMleB9yA+KOG8J6hIFY2Bam8Xw4yWuxIM8ONW?=
+ =?us-ascii?Q?Wj9M9st1dx/Yv4HW7h4JZztHdIEJRLOvfjzkNmbB4VIhQyZLCNP63zOH+kIi?=
+ =?us-ascii?Q?Ev3QeghUUQ/Xcw5bEQeZPeolyeDTTtYEe61I/6m+p7WHqUvBx2RXOtIvkpz6?=
+ =?us-ascii?Q?zVt0tDIPVwtLb2OuX1iUt9bFf7H9hGOaXx6uTewggW9JY5B1VGz+E3cpR9Zo?=
+ =?us-ascii?Q?IE0iz/9udV/AHB0xumTplRw0UkIbDRueXJLwLK+7BYanWYBs5rK2CdwoarfB?=
+ =?us-ascii?Q?q8eV+S8seJNCeDmSLtIBDLSfe/h5lOTjGOtw1FNUKvcXaXTS0kmOM/7YW353?=
+ =?us-ascii?Q?sFDslJ3F1hT/RmngMZac7WWcTaH2jd/NLd9ZKvxylixs/51Kzl9LRvreS41a?=
+ =?us-ascii?Q?GlA0S4h4j5geSKUm7F9GICuTaPbr8Rx2ahCIS0iPY+qHkLXFXvbEoOe+ZOZz?=
+ =?us-ascii?Q?tCfHCOBXIchgUK9SkFF2240ynI6D77s1YTm5lW4yZ6Nf2U45QuhR5y0bh2pr?=
+ =?us-ascii?Q?jSD6JnwXKPwAacIFY8KP1vFw9le/D1QjUYkKInrhjPlJOzEkAS002ZPTzMBZ?=
+ =?us-ascii?Q?2BuZarXv+33NTeVCgnL/1LEJv9hxOlPcQEuFE6DL3sLL65Vev1jmpZKM/rIu?=
+ =?us-ascii?Q?evKMMfDvIUcBvis/oa+sxWm9YK3U1XwND8+fQvpIittD+E4/EMGMjgnV8AYo?=
+ =?us-ascii?Q?hx+a/ygmh/uQXw3lp0HE0JFeEGci8cKeoMOhkHH4/q5y8rL/z+HZAduIv4ux?=
+ =?us-ascii?Q?t07qMlc+HsCymaIopfWxPkJlbODw1N5iXddzHHFF1KxrI+nvqOjHUs4nSr+J?=
+ =?us-ascii?Q?omrEMDVEkfVdMwuZRgkUfz9YuosgLhhKHtfWUZe3MOkfaFsAmJ5Y599UDZp/?=
+ =?us-ascii?Q?FPYlGGbn/Bzcl1ScvwM00SF8//OyiKSZMLozOQijie6kqEhLe0GNNR6lqz4Q?=
+ =?us-ascii?Q?06Yb0s/u2+hnDQTenB16CJ2sBFjJdBuknEJoBEDLExbRaPl6ZHVY7DpP3bc5?=
+ =?us-ascii?Q?mVls/fEN++4W1LoSVbATru/cQR//foCTOVYtYe3KmI9AX6V/urAZLCT/ShZi?=
+ =?us-ascii?Q?Es1EaNaoR9MSLc6JuVNpUkYo56llYQl3Fk4Z24mXC0mayRoJ/0q0brLiV8s2?=
+ =?us-ascii?Q?eqN7XgNRoDWGZMUSyVpPDiGDkjmxEegsS15fgeNf4xXT3fppFhrHtuLNeQ0m?=
+ =?us-ascii?Q?sRIryrw9LNeXoeliP7jTxSZoEBuClNvlGZO3deROAvviB7XstaXqa0UAPxJP?=
+ =?us-ascii?Q?fCdvkJsXYt5S9zXgyhzFFBOKIIKct8JSqche3FRVFcrvB5yx34f5B4kLoIsw?=
+ =?us-ascii?Q?sbwI7zocARTBVm/41+l2t5TofDVFxe2mtV203eIDbudfLDi3A0nFJHOUDyXA?=
+ =?us-ascii?Q?/5DmIFxBltty5IoliqhGW5mUv32myYlRZOOOjKMTakjs9oUkA1VdOJqsI/e8?=
+ =?us-ascii?Q?V5dRt+YHqi3jCccoArSZMmTuLW4VZsWQ7uAfePPH+y2NAJCuZwHrf4feeeWX?=
+ =?us-ascii?Q?kRrmxQIpCwUHUo3tDgnUNMe1lCznqdYV6cwo9ivTyS1DtsgpsCrDSoEfuO/8?=
+ =?us-ascii?Q?t04f/qKfVyncHxRbXCo=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: abe2e4da-3dbc-4a12-c813-08dab3061cf9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Oct 2022 01:46:46.3497
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: KgBqd/g+2ztndfcqo0ZMKEnwj49ZUMpjUiobWqchaQqVzjWEzA4DnZn9DjtYDHZIMaAkX58RmxdBpvNW1TGgTA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB8204
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,T_SPF_PERMERROR,URIBL_BLOCKED
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/10/2022 21:27, Yinbo Zhu wrote:
-> The loongson2 SoC has a few pins that can be used as GPIOs or take
-> multiple other functions. Add a driver for the pinmuxing.
-> 
-> There is currently no support for GPIO pin pull-up and pull-down.
-> 
-> Signed-off-by: zhanghongchen <zhanghongchen@loongson.cn>
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-> ---
->  MAINTAINERS                         |   7 +
->  drivers/pinctrl/Kconfig             |  10 +
->  drivers/pinctrl/Makefile            |   1 +
->  drivers/pinctrl/pinctrl-loongson2.c | 330 ++++++++++++++++++++++++++++
->  4 files changed, 348 insertions(+)
->  create mode 100644 drivers/pinctrl/pinctrl-loongson2.c
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 8cc541ce89b8..c9883f145acb 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -11922,6 +11922,13 @@ S:	Maintained
->  F:	Documentation/devicetree/bindings/timer/loongson,ls2k-hpet.yaml
->  F:	drivers/clocksource/loongson2_hpet.c
->  
-> +LOONGSON2 SOC SERIES PINCTRL DRIVER
-> +M:	zhanghongchen <zhanghongchen@loongson.cn>
-> +M:	Yinbo Zhu <zhuyinbo@loongson.cn>
-> +L:	linux-gpio@vger.kernel.org
-> +S:	Maintained
-> +F:	drivers/pinctrl/pinctrl-loongson2.c
-> +
->  LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
->  M:	Sathya Prakash <sathya.prakash@broadcom.com>
->  M:	Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-> diff --git a/drivers/pinctrl/Kconfig b/drivers/pinctrl/Kconfig
-> index 1cf74b0c42e5..8e43cea0277c 100644
-> --- a/drivers/pinctrl/Kconfig
-> +++ b/drivers/pinctrl/Kconfig
-> @@ -507,6 +507,16 @@ config PINCTRL_ZYNQMP
->  	  This driver can also be built as a module. If so, the module
->  	  will be called pinctrl-zynqmp.
->  
-> +config PINCTRL_LOONGSON2
-> +	tristate "Pinctrl driver for the Loongson2 SoC"
+Hi Rob,
 
-depends on-your-arch || COMPILE_TEST
+> Subject: Re: [PATCH 1/2] dt-bindings: spi: fsl-imx-cspi: update i.MX8MP
+> binding
+>=20
+> On Thu, 20 Oct 2022 18:31:57 +0800, Peng Fan (OSS) wrote:
+> > From: Peng Fan <peng.fan@nxp.com>
+> >
+> > i.MX8MP ECSPI is derived from i.MX6UL, so update the binding.
+> >
+> > Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> > ---
+> >  Documentation/devicetree/bindings/spi/fsl-imx-cspi.yaml | 4 +++-
+> >  1 file changed, 3 insertions(+), 1 deletion(-)
+> >
+>=20
+> Running 'make dtbs_check' with the schema in this patch gives the followi=
+ng
+> warnings. Consider if they are expected or the schema is incorrect. These
+> may not be new warnings.
 
-> +        select PINMUX
-> +        select GENERIC_PINCONF
+Patch 2/2 updates the compatible string which could resolved the dtbs_check
+failure for i.MX8MP boards.
 
-There is something odd with this indentation. Please check if it matches
-coding style.
+Thanks,
+Peng.
 
-
-> +        help
-> +	  This selects pin control driver for the Loongson2 SoC. It
-> +	  provides pin config functions multiplexing.  GPIO pin pull-up
-> +	  , pull-down functions are not supported. Say yes to enable
-
-coma goes to previous line.
-
-> +	  pinctrl for Loongson2 SoC.
-> +
->  source "drivers/pinctrl/actions/Kconfig"
->  source "drivers/pinctrl/aspeed/Kconfig"
->  source "drivers/pinctrl/bcm/Kconfig"
-> diff --git a/drivers/pinctrl/Makefile b/drivers/pinctrl/Makefile
-> index e76f5cdc64b0..d8b8c5f9e2fd 100644
-> --- a/drivers/pinctrl/Makefile
-> +++ b/drivers/pinctrl/Makefile
-> @@ -50,6 +50,7 @@ obj-$(CONFIG_PINCTRL_TB10X)	+= pinctrl-tb10x.o
->  obj-$(CONFIG_PINCTRL_THUNDERBAY) += pinctrl-thunderbay.o
->  obj-$(CONFIG_PINCTRL_ZYNQMP)	+= pinctrl-zynqmp.o
->  obj-$(CONFIG_PINCTRL_ZYNQ)	+= pinctrl-zynq.o
-> +obj-$(CONFIG_PINCTRL_LOONGSON2) += pinctrl-loongson2.o
-
-Add items in alphabetical order.
-
->  
->  obj-y				+= actions/
->  obj-$(CONFIG_ARCH_ASPEED)	+= aspeed/
-> diff --git a/drivers/pinctrl/pinctrl-loongson2.c b/drivers/pinctrl/pinctrl-loongson2.c
-> new file mode 100644
-> index 000000000000..e4bb3e33e9db
-> --- /dev/null
-> +++ b/drivers/pinctrl/pinctrl-loongson2.c
-> @@ -0,0 +1,330 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * Author: zhanghongchen <zhanghongchen@loongson.cn>
-> + *         Yinbo Zhu <zhuyinbo@loongson.cn>
-> + * Copyright (C) 2022-2023 Loongson Technology Corporation Limited
-> + */
-> +
-> +#include <linux/init.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/of.h>
-> +#include <linux/pinctrl/pinmux.h>
-> +#include <linux/pinctrl/pinconf-generic.h>
-> +#include "core.h"
-> +#include "pinctrl-utils.h"
-> +
-> +#define PMX_GROUP(grp, offset, bitv)					\
-> +	{								\
-> +		.name = #grp,						\
-> +		.pins = grp ## _pins,					\
-> +		.num_pins = ARRAY_SIZE(grp ## _pins),			\
-> +		.reg = offset,						\
-> +		.bit = bitv,						\
-> +	}
-> +
-> +#define SPECIFIC_GROUP(group)						\
-> +	static const char * const group##_groups[] = {			\
-> +		#group							\
-> +	}
-> +
-> +#define FUNCTION(fn)							\
-> +	{								\
-> +		.name = #fn,						\
-> +		.groups = fn ## _groups,				\
-> +		.num_groups = ARRAY_SIZE(fn ## _groups),		\
-> +	}
-> +
-> +struct loongson2_pinctrl {
-> +	struct device *dev;
-> +	struct pinctrl_dev *pcdev;
-> +	struct pinctrl_desc desc;
-> +	struct device_node *of_node;
-> +	raw_spinlock_t lock;
-> +	void * __iomem reg_base;
-> +};
-> +
-> +struct loongson2_pmx_group {
-> +	const char *name;
-> +	const unsigned int *pins;
-> +	unsigned int num_pins;
-> +	unsigned int reg;
-> +	unsigned int bit;
-> +};
-> +
-> +struct loongson2_pmx_func {
-> +	const char *name;
-> +	const char * const *groups;
-> +	unsigned int num_groups;
-> +};
-> +
-> +#define LOONGSON2_PIN(x) PINCTRL_PIN(x, "gpio"#x)
-> +static const struct pinctrl_pin_desc loongson2_pctrl_pins[] = {
-> +	LOONGSON2_PIN(0),  LOONGSON2_PIN(1),  LOONGSON2_PIN(2),  LOONGSON2_PIN(3),
-> +	LOONGSON2_PIN(4),  LOONGSON2_PIN(5),  LOONGSON2_PIN(6),  LOONGSON2_PIN(7),
-> +	LOONGSON2_PIN(8),  LOONGSON2_PIN(9),  LOONGSON2_PIN(10), LOONGSON2_PIN(11),
-> +	LOONGSON2_PIN(12), LOONGSON2_PIN(13), LOONGSON2_PIN(14),
-> +	LOONGSON2_PIN(16), LOONGSON2_PIN(17), LOONGSON2_PIN(18), LOONGSON2_PIN(19),
-> +	LOONGSON2_PIN(20), LOONGSON2_PIN(21), LOONGSON2_PIN(22), LOONGSON2_PIN(23),
-> +	LOONGSON2_PIN(24), LOONGSON2_PIN(25), LOONGSON2_PIN(26), LOONGSON2_PIN(27),
-> +	LOONGSON2_PIN(28), LOONGSON2_PIN(29), LOONGSON2_PIN(30),
-> +	LOONGSON2_PIN(32), LOONGSON2_PIN(33), LOONGSON2_PIN(34), LOONGSON2_PIN(35),
-> +	LOONGSON2_PIN(36), LOONGSON2_PIN(37), LOONGSON2_PIN(38), LOONGSON2_PIN(39),
-> +	LOONGSON2_PIN(40), LOONGSON2_PIN(41),
-> +	LOONGSON2_PIN(44), LOONGSON2_PIN(45), LOONGSON2_PIN(46), LOONGSON2_PIN(47),
-> +	LOONGSON2_PIN(48), LOONGSON2_PIN(49), LOONGSON2_PIN(50), LOONGSON2_PIN(51),
-> +	LOONGSON2_PIN(52), LOONGSON2_PIN(53), LOONGSON2_PIN(54), LOONGSON2_PIN(55),
-> +	LOONGSON2_PIN(56), LOONGSON2_PIN(57), LOONGSON2_PIN(58), LOONGSON2_PIN(59),
-> +	LOONGSON2_PIN(60), LOONGSON2_PIN(61), LOONGSON2_PIN(62), LOONGSON2_PIN(63),
-> +};
-> +
-> +static const unsigned int gpio_pins[] = {0, 1, 2, 3, 4, 5, 6, 7,
-> +					 8, 9, 10, 11, 12, 13, 14,
-> +					 16, 17, 18, 19, 20, 21, 22, 23,
-> +					 24, 25, 26, 27, 28, 29, 30,
-> +					 32, 33, 34, 35, 36, 37, 38, 39,
-> +					 40,         43, 44, 45, 46, 47,
-> +					 48, 49, 50, 51, 52, 53, 46, 55,
-> +					 56, 57, 58, 59, 60, 61, 62, 63};
-> +static const unsigned int sdio_pins[] = {36, 37, 38, 39, 40, 41};
-> +static const unsigned int can1_pins[] = {34, 35};
-> +static const unsigned int can0_pins[] = {32, 33};
-> +static const unsigned int pwm3_pins[] = {23};
-> +static const unsigned int pwm2_pins[] = {22};
-> +static const unsigned int pwm1_pins[] = {21};
-> +static const unsigned int pwm0_pins[] = {20};
-> +static const unsigned int i2c1_pins[] = {18, 19};
-> +static const unsigned int i2c0_pins[] = {16, 17};
-> +static const unsigned int nand_pins[] = {44, 45, 46, 47, 48, 49, 50, 51,
-> +					 52, 53, 54, 55, 56, 57, 58, 59, 60,
-> +					 61, 62, 63};
-> +static const unsigned int sata_led_pins[] = {14};
-> +static const unsigned int lio_pins[]    = {};
-> +static const unsigned int i2s_pins[]    = {24, 25, 26, 27, 28};
-> +static const unsigned int hda_pins[]    = {24, 25, 26, 27, 28, 29, 30};
-> +static const unsigned int uart2_pins[]  = {};
-> +static const unsigned int uart1_pins[]  = {};
-> +static const unsigned int camera_pins[] = {};
-> +static const unsigned int dvo1_pins[]   = {};
-> +static const unsigned int dvo0_pins[]   = {};
-> +
-> +static struct loongson2_pmx_group loongson2_pmx_groups[] = {
-> +	PMX_GROUP(gpio, 0x0, 64),
-> +	PMX_GROUP(sdio, 0x0, 20),
-> +	PMX_GROUP(can1, 0x0, 17),
-> +	PMX_GROUP(can0, 0x0, 16),
-> +	PMX_GROUP(pwm3, 0x0, 15),
-> +	PMX_GROUP(pwm2, 0x0, 14),
-> +	PMX_GROUP(pwm1, 0x0, 13),
-> +	PMX_GROUP(pwm0, 0x0, 12),
-> +	PMX_GROUP(i2c1, 0x0, 11),
-> +	PMX_GROUP(i2c0, 0x0, 10),
-> +	PMX_GROUP(nand, 0x0, 9),
-> +	PMX_GROUP(sata_led, 0x0, 8),
-> +	PMX_GROUP(lio, 0x0, 7),
-> +	PMX_GROUP(i2s, 0x0, 6),
-> +	PMX_GROUP(hda, 0x0, 4),
-> +	PMX_GROUP(uart2, 0x8, 13),
-> +	PMX_GROUP(uart1, 0x8, 12),
-> +	PMX_GROUP(camera, 0x10, 5),
-> +	PMX_GROUP(dvo1, 0x10, 4),
-> +	PMX_GROUP(dvo0, 0x10, 1),
-> +
-> +};
-> +
-> +SPECIFIC_GROUP(sdio);
-> +SPECIFIC_GROUP(can1);
-> +SPECIFIC_GROUP(can0);
-> +SPECIFIC_GROUP(pwm3);
-> +SPECIFIC_GROUP(pwm2);
-> +SPECIFIC_GROUP(pwm1);
-> +SPECIFIC_GROUP(pwm0);
-> +SPECIFIC_GROUP(i2c1);
-> +SPECIFIC_GROUP(i2c0);
-> +SPECIFIC_GROUP(nand);
-> +SPECIFIC_GROUP(sata_led);
-> +SPECIFIC_GROUP(lio);
-> +SPECIFIC_GROUP(i2s);
-> +SPECIFIC_GROUP(hda);
-> +SPECIFIC_GROUP(uart2);
-> +SPECIFIC_GROUP(uart1);
-> +SPECIFIC_GROUP(camera);
-> +SPECIFIC_GROUP(dvo1);
-> +SPECIFIC_GROUP(dvo0);
-> +
-> +static const char * const gpio_groups[] = {
-> +	"sdio", "can1", "can0", "pwm3", "pwm2", "pwm1", "pwm0", "i2c1",
-> +	"i2c0", "nand", "sata_led", "lio", "i2s", "hda", "uart2", "uart1",
-> +	"camera", "dvo1", "dvo0"
-> +};
-> +
-> +static struct loongson2_pmx_func loongson2_pmx_functions[] = {
-
-Why this is not const?
-
-> +	FUNCTION(gpio),
-> +	FUNCTION(sdio),
-> +	FUNCTION(can1),
-> +	FUNCTION(can0),
-> +	FUNCTION(pwm3),
-> +	FUNCTION(pwm2),
-> +	FUNCTION(pwm1),
-> +	FUNCTION(pwm0),
-> +	FUNCTION(i2c1),
-> +	FUNCTION(i2c0),
-> +	FUNCTION(nand),
-> +	FUNCTION(sata_led),
-> +	FUNCTION(lio),
-> +	FUNCTION(i2s),
-> +	FUNCTION(hda),
-> +	FUNCTION(uart2),
-> +	FUNCTION(uart1),
-> +	FUNCTION(camera),
-> +	FUNCTION(dvo1),
-> +	FUNCTION(dvo0),
-> +};
-> +
-> +static int loongson2_get_groups_count(struct pinctrl_dev *pcdev)
-> +{
-> +	return ARRAY_SIZE(loongson2_pmx_groups);
-> +}
-> +
-> +static const char *loongson2_get_group_name(struct pinctrl_dev *pcdev,
-> +					unsigned int selector)
-> +{
-> +	return loongson2_pmx_groups[selector].name;
-> +}
-> +
-> +static int loongson2_get_group_pins(struct pinctrl_dev *pcdev, unsigned int selector,
-> +			const unsigned int **pins, unsigned int *num_pins)
-> +{
-> +	*pins = loongson2_pmx_groups[selector].pins;
-> +	*num_pins = loongson2_pmx_groups[selector].num_pins;
-> +
-> +	return 0;
-> +}
-> +
-> +static void loongson2_pin_dbg_show(struct pinctrl_dev *pcdev, struct seq_file *s,
-> +			       unsigned int offset)
-> +{
-> +	seq_printf(s, " %s", dev_name(pcdev->dev));
-> +}
-> +
-> +static const struct pinctrl_ops loongson2_pctrl_ops = {
-> +	.get_groups_count	= loongson2_get_groups_count,
-> +	.get_group_name		= loongson2_get_group_name,
-> +	.get_group_pins		= loongson2_get_group_pins,
-> +	.dt_node_to_map		= pinconf_generic_dt_node_to_map_all,
-> +	.dt_free_map		= pinctrl_utils_free_map,
-> +	.pin_dbg_show		= loongson2_pin_dbg_show,
-> +};
-> +
-> +static int loongson2_pmx_set_mux(struct pinctrl_dev *pcdev, unsigned int func_num,
-> +			      unsigned int group_num)
-> +{
-> +	struct loongson2_pinctrl *pctrl = pinctrl_dev_get_drvdata(pcdev);
-> +	unsigned long reg = (unsigned long)pctrl->reg_base +
-> +				loongson2_pmx_groups[group_num].reg;
-> +	unsigned int mux_bit = loongson2_pmx_groups[group_num].bit;
-> +	unsigned int val;
-> +	unsigned long flags;
-> +
-> +	raw_spin_lock_irqsave(&pctrl->lock, flags);
-> +	val = readl((void *)reg);
-> +	if (func_num == 0)
-> +		val &= ~(1<<mux_bit);
-> +	else
-> +		val |= (1<<mux_bit);
-> +	writel(val, (void *)reg);
-> +	raw_spin_unlock_irqrestore(&pctrl->lock, flags);
-> +
-> +	return 0;
-> +}
-> +
-> +static int loongson2_pmx_get_funcs_count(struct pinctrl_dev *pcdev)
-> +{
-> +	return ARRAY_SIZE(loongson2_pmx_functions);
-> +}
-> +
-> +static const char *loongson2_pmx_get_func_name(struct pinctrl_dev *pcdev,
-> +				    unsigned int selector)
-> +{
-> +	return loongson2_pmx_functions[selector].name;
-> +}
-> +
-> +static int loongson2_pmx_get_groups(struct pinctrl_dev *pcdev,
-> +			 unsigned int selector,
-> +			 const char * const **groups,
-> +			 unsigned int * const num_groups)
-> +{
-> +	*groups = loongson2_pmx_functions[selector].groups;
-> +	*num_groups = loongson2_pmx_functions[selector].num_groups;
-> +
-> +	return 0;
-> +}
-> +
-> +const struct pinmux_ops loongson2_pmx_ops = {
-
-Missing static.
-
-Did you compile your code with W=1?
-
-> +	.set_mux = loongson2_pmx_set_mux,
-> +	.get_functions_count = loongson2_pmx_get_funcs_count,
-> +	.get_function_name = loongson2_pmx_get_func_name,
-> +	.get_function_groups = loongson2_pmx_get_groups,
-> +};
-> +
-> +static int loongson2_pinctrl_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct loongson2_pinctrl *pctrl;
-> +	struct resource *res;
-> +
-> +	pctrl = devm_kzalloc(dev, sizeof(struct loongson2_pinctrl), GFP_KERNEL);
-
-sizeof(*pctrl)
-
-> +	if (!pctrl)
-> +		return -ENOMEM;
-> +
-> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +	pctrl->reg_base = devm_ioremap_resource(dev, res);
-
-Use combined helper for this.
-
-> +	if (IS_ERR(pctrl->reg_base))
-> +		return PTR_ERR(pctrl->reg_base);
-> +
-> +	raw_spin_lock_init(&pctrl->lock);
-> +
-> +	pctrl->dev = dev;
-> +	pctrl->desc.name	= "pinctrl-loongson2";
-> +	pctrl->desc.owner	= THIS_MODULE;
-> +	pctrl->desc.pctlops	= &loongson2_pctrl_ops;
-> +	pctrl->desc.pmxops	= &loongson2_pmx_ops;
-> +	pctrl->desc.confops	= NULL;
-> +	pctrl->desc.pins	= loongson2_pctrl_pins;
-> +	pctrl->desc.npins	= ARRAY_SIZE(loongson2_pctrl_pins);
-> +
-> +	pctrl->pcdev = devm_pinctrl_register(pctrl->dev, &pctrl->desc, pctrl);
-> +	if (IS_ERR(pctrl->pcdev)) {
-> +		dev_err(pctrl->dev, "can't register pinctrl device");
-> +		return PTR_ERR(pctrl->pcdev);
-
-return dev_err_probe()
-
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id loongson2_pinctrl_dt_match[] = {
-> +	{
-> +		.compatible = "loongson,ls2k-pinctrl",
-> +	},
-> +	{ },
-> +};
-> +
-> +static struct platform_driver loongson2_pinctrl_driver = {
-> +	.probe		= loongson2_pinctrl_probe,
-> +	.driver = {
-> +		.name	= "loongson2-pinctrl",
-> +		.of_match_table = loongson2_pinctrl_dt_match,
-> +	},
-> +};
-> +
-> +static int __init loongson2_pinctrl_init(void)
-> +{
-> +	return platform_driver_register(&loongson2_pinctrl_driver);
-> +}
-> +arch_initcall(loongson2_pinctrl_init);
-> +
-> +static void __exit loongson2_pinctrl_exit(void)
-> +{
-> +	platform_driver_unregister(&loongson2_pinctrl_driver);
-> +}
-> +module_exit(loongson2_pinctrl_exit);
-
-Best regards,
-Krzysztof
+>=20
+> Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+> This will change in the future.
+>=20
+> Full log is available here:
+> https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fpatc
+> hwork.ozlabs.org%2Fpatch%2F&amp;data=3D05%7C01%7Cpeng.fan%40nxp.c
+> om%7Cbd5f3e7566774254285308dab29a7eb5%7C686ea1d3bc2b4c6fa92cd
+> 99c5c301635%7C0%7C1%7C638018673864797750%7CUnknown%7CTWFpb
+> GZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI
+> 6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=3DZawGt%2BSCPrZkiNU3WYRy%
+> 2F2JqCVY%2FtRWfVC%2BCTRcC0Fs%3D&amp;reserved=3D0
+>=20
+>=20
+> spi@30630000: Unevaluated properties are not allowed ('num-chipselects'
+> was unexpected)
+> 	arch/arm/boot/dts/imx7d-flex-concentrator.dtb
+> 	arch/arm/boot/dts/imx7d-flex-concentrator-mfg.dtb
+>=20
+> spi@30820000: compatible: 'oneOf' conditional failed, one must be fixed:
+> 	arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-evk.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-icore-mx8mp-
+> edimm2.2.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-ep1.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-rdk.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-tqma8mpql-
+> mba8mpxl.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-verdin-nonwifi-dahlia.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-verdin-nonwifi-dev.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-verdin-wifi-dahlia.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-verdin-wifi-dev.dtb
+>=20
+> spi@30820000: Unevaluated properties are not allowed ('compatible' was
+> unexpected)
+> 	arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-evk.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-icore-mx8mp-
+> edimm2.2.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-ep1.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-rdk.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-tqma8mpql-
+> mba8mpxl.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-verdin-nonwifi-dahlia.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-verdin-nonwifi-dev.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-verdin-wifi-dahlia.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-verdin-wifi-dev.dtb
+>=20
+> spi@30830000: compatible: 'oneOf' conditional failed, one must be fixed:
+> 	arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-evk.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-icore-mx8mp-
+> edimm2.2.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-ep1.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-rdk.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-tqma8mpql-
+> mba8mpxl.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-verdin-nonwifi-dahlia.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-verdin-nonwifi-dev.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-verdin-wifi-dahlia.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-verdin-wifi-dev.dtb
+>=20
+> spi@30830000: Unevaluated properties are not allowed ('compatible' was
+> unexpected)
+> 	arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-evk.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-icore-mx8mp-
+> edimm2.2.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-ep1.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-rdk.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-tqma8mpql-
+> mba8mpxl.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-verdin-nonwifi-dahlia.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-verdin-nonwifi-dev.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-verdin-wifi-dahlia.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-verdin-wifi-dev.dtb
+>=20
+> spi@30830000: Unevaluated properties are not allowed ('num-chipselects'
+> was unexpected)
+> 	arch/arm/boot/dts/imx7d-flex-concentrator.dtb
+> 	arch/arm/boot/dts/imx7d-flex-concentrator-mfg.dtb
+>=20
+> spi@30840000: compatible: 'oneOf' conditional failed, one must be fixed:
+> 	arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-evk.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-icore-mx8mp-
+> edimm2.2.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-ep1.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-rdk.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-tqma8mpql-
+> mba8mpxl.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-verdin-nonwifi-dahlia.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-verdin-nonwifi-dev.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-verdin-wifi-dahlia.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-verdin-wifi-dev.dtb
+>=20
+> spi@30840000: Unevaluated properties are not allowed ('compatible' was
+> unexpected)
+> 	arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-evk.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-icore-mx8mp-
+> edimm2.2.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-ep1.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-rdk.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-tqma8mpql-
+> mba8mpxl.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-verdin-nonwifi-dahlia.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-verdin-nonwifi-dev.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-verdin-wifi-dahlia.dtb
+> 	arch/arm64/boot/dts/freescale/imx8mp-verdin-wifi-dev.dtb
+>=20
+> spi@43fa4000: compatible: 'oneOf' conditional failed, one must be fixed:
+> 	arch/arm/boot/dts/imx25-eukrea-mbimxsd25-baseboard-cmo-
+> qvga.dtb
+> 	arch/arm/boot/dts/imx25-eukrea-mbimxsd25-baseboard.dtb
+> 	arch/arm/boot/dts/imx25-eukrea-mbimxsd25-baseboard-dvi-
+> svga.dtb
+> 	arch/arm/boot/dts/imx25-eukrea-mbimxsd25-baseboard-dvi-
+> vga.dtb
+> 	arch/arm/boot/dts/imx25-karo-tx25.dtb
+> 	arch/arm/boot/dts/imx25-pdk.dtb
+>=20
+> spi@43fa4000: Unevaluated properties are not allowed ('compatible' was
+> unexpected)
+> 	arch/arm/boot/dts/imx25-eukrea-mbimxsd25-baseboard-cmo-
+> qvga.dtb
+> 	arch/arm/boot/dts/imx25-eukrea-mbimxsd25-baseboard.dtb
+> 	arch/arm/boot/dts/imx25-eukrea-mbimxsd25-baseboard-dvi-
+> svga.dtb
+> 	arch/arm/boot/dts/imx25-eukrea-mbimxsd25-baseboard-dvi-
+> vga.dtb
+> 	arch/arm/boot/dts/imx25-karo-tx25.dtb
+> 	arch/arm/boot/dts/imx25-pdk.dtb
+>=20
+> spi@50004000: compatible: 'oneOf' conditional failed, one must be fixed:
+> 	arch/arm/boot/dts/imx25-eukrea-mbimxsd25-baseboard-cmo-
+> qvga.dtb
+> 	arch/arm/boot/dts/imx25-eukrea-mbimxsd25-baseboard.dtb
+> 	arch/arm/boot/dts/imx25-eukrea-mbimxsd25-baseboard-dvi-
+> svga.dtb
+> 	arch/arm/boot/dts/imx25-eukrea-mbimxsd25-baseboard-dvi-
+> vga.dtb
+> 	arch/arm/boot/dts/imx25-karo-tx25.dtb
+> 	arch/arm/boot/dts/imx25-pdk.dtb
+>=20
+> spi@50004000: Unevaluated properties are not allowed ('compatible' was
+> unexpected)
+> 	arch/arm/boot/dts/imx25-eukrea-mbimxsd25-baseboard-cmo-
+> qvga.dtb
+> 	arch/arm/boot/dts/imx25-eukrea-mbimxsd25-baseboard.dtb
+> 	arch/arm/boot/dts/imx25-eukrea-mbimxsd25-baseboard-dvi-
+> svga.dtb
+> 	arch/arm/boot/dts/imx25-eukrea-mbimxsd25-baseboard-dvi-
+> vga.dtb
+> 	arch/arm/boot/dts/imx25-karo-tx25.dtb
+> 	arch/arm/boot/dts/imx25-pdk.dtb
+>=20
+> spi@50010000: compatible: 'oneOf' conditional failed, one must be fixed:
+> 	arch/arm/boot/dts/imx25-eukrea-mbimxsd25-baseboard-cmo-
+> qvga.dtb
+> 	arch/arm/boot/dts/imx25-eukrea-mbimxsd25-baseboard.dtb
+> 	arch/arm/boot/dts/imx25-eukrea-mbimxsd25-baseboard-dvi-
+> svga.dtb
+> 	arch/arm/boot/dts/imx25-eukrea-mbimxsd25-baseboard-dvi-
+> vga.dtb
+> 	arch/arm/boot/dts/imx25-karo-tx25.dtb
+> 	arch/arm/boot/dts/imx25-pdk.dtb
+> 	arch/arm/boot/dts/imx53-ard.dtb
+> 	arch/arm/boot/dts/imx53-cx9020.dtb
+> 	arch/arm/boot/dts/imx53-kp-ddc.dtb
+> 	arch/arm/boot/dts/imx53-kp-hsc.dtb
+> 	arch/arm/boot/dts/imx53-m53evk.dtb
+> 	arch/arm/boot/dts/imx53-m53menlo.dtb
+> 	arch/arm/boot/dts/imx53-mba53.dtb
+> 	arch/arm/boot/dts/imx53-ppd.dtb
+> 	arch/arm/boot/dts/imx53-qsb.dtb
+> 	arch/arm/boot/dts/imx53-qsrb.dtb
+> 	arch/arm/boot/dts/imx53-smd.dtb
+> 	arch/arm/boot/dts/imx53-tx53-x03x.dtb
+> 	arch/arm/boot/dts/imx53-tx53-x13x.dtb
+> 	arch/arm/boot/dts/imx53-usbarmory.dtb
+> 	arch/arm/boot/dts/imx53-voipac-bsb.dtb
+>=20
+> spi@50010000: Unevaluated properties are not allowed ('compatible' was
+> unexpected)
+> 	arch/arm/boot/dts/imx25-eukrea-mbimxsd25-baseboard-cmo-
+> qvga.dtb
+> 	arch/arm/boot/dts/imx25-eukrea-mbimxsd25-baseboard.dtb
+> 	arch/arm/boot/dts/imx25-eukrea-mbimxsd25-baseboard-dvi-
+> svga.dtb
+> 	arch/arm/boot/dts/imx25-eukrea-mbimxsd25-baseboard-dvi-
+> vga.dtb
+> 	arch/arm/boot/dts/imx25-karo-tx25.dtb
+> 	arch/arm/boot/dts/imx25-pdk.dtb
+> 	arch/arm/boot/dts/imx53-ard.dtb
+> 	arch/arm/boot/dts/imx53-cx9020.dtb
+> 	arch/arm/boot/dts/imx53-kp-ddc.dtb
+> 	arch/arm/boot/dts/imx53-kp-hsc.dtb
+> 	arch/arm/boot/dts/imx53-m53evk.dtb
+> 	arch/arm/boot/dts/imx53-m53menlo.dtb
+> 	arch/arm/boot/dts/imx53-mba53.dtb
+> 	arch/arm/boot/dts/imx53-ppd.dtb
+> 	arch/arm/boot/dts/imx53-qsb.dtb
+> 	arch/arm/boot/dts/imx53-qsrb.dtb
+> 	arch/arm/boot/dts/imx53-smd.dtb
+> 	arch/arm/boot/dts/imx53-tx53-x03x.dtb
+> 	arch/arm/boot/dts/imx53-tx53-x13x.dtb
+> 	arch/arm/boot/dts/imx53-usbarmory.dtb
+> 	arch/arm/boot/dts/imx53-voipac-bsb.dtb
+>=20
+> spi@63fac000: compatible: 'oneOf' conditional failed, one must be fixed:
+> 	arch/arm/boot/dts/imx53-ard.dtb
+> 	arch/arm/boot/dts/imx53-cx9020.dtb
+> 	arch/arm/boot/dts/imx53-kp-ddc.dtb
+> 	arch/arm/boot/dts/imx53-kp-hsc.dtb
+> 	arch/arm/boot/dts/imx53-m53evk.dtb
+> 	arch/arm/boot/dts/imx53-m53menlo.dtb
+> 	arch/arm/boot/dts/imx53-mba53.dtb
+> 	arch/arm/boot/dts/imx53-ppd.dtb
+> 	arch/arm/boot/dts/imx53-qsb.dtb
+> 	arch/arm/boot/dts/imx53-qsrb.dtb
+> 	arch/arm/boot/dts/imx53-smd.dtb
+> 	arch/arm/boot/dts/imx53-tx53-x03x.dtb
+> 	arch/arm/boot/dts/imx53-tx53-x13x.dtb
+> 	arch/arm/boot/dts/imx53-usbarmory.dtb
+> 	arch/arm/boot/dts/imx53-voipac-bsb.dtb
+>=20
+> spi@63fac000: Unevaluated properties are not allowed ('compatible' was
+> unexpected)
+> 	arch/arm/boot/dts/imx53-ard.dtb
+> 	arch/arm/boot/dts/imx53-cx9020.dtb
+> 	arch/arm/boot/dts/imx53-kp-ddc.dtb
+> 	arch/arm/boot/dts/imx53-kp-hsc.dtb
+> 	arch/arm/boot/dts/imx53-m53evk.dtb
+> 	arch/arm/boot/dts/imx53-m53menlo.dtb
+> 	arch/arm/boot/dts/imx53-mba53.dtb
+> 	arch/arm/boot/dts/imx53-ppd.dtb
+> 	arch/arm/boot/dts/imx53-qsb.dtb
+> 	arch/arm/boot/dts/imx53-qsrb.dtb
+> 	arch/arm/boot/dts/imx53-smd.dtb
+> 	arch/arm/boot/dts/imx53-tx53-x03x.dtb
+> 	arch/arm/boot/dts/imx53-tx53-x13x.dtb
+> 	arch/arm/boot/dts/imx53-usbarmory.dtb
+> 	arch/arm/boot/dts/imx53-voipac-bsb.dtb
+>=20
+> spi@63fc0000: compatible: 'oneOf' conditional failed, one must be fixed:
+> 	arch/arm/boot/dts/imx50-evk.dtb
+> 	arch/arm/boot/dts/imx50-kobo-aura.dtb
+> 	arch/arm/boot/dts/imx53-ard.dtb
+> 	arch/arm/boot/dts/imx53-cx9020.dtb
+> 	arch/arm/boot/dts/imx53-kp-ddc.dtb
+> 	arch/arm/boot/dts/imx53-kp-hsc.dtb
+> 	arch/arm/boot/dts/imx53-m53evk.dtb
+> 	arch/arm/boot/dts/imx53-m53menlo.dtb
+> 	arch/arm/boot/dts/imx53-mba53.dtb
+> 	arch/arm/boot/dts/imx53-ppd.dtb
+> 	arch/arm/boot/dts/imx53-qsb.dtb
+> 	arch/arm/boot/dts/imx53-qsrb.dtb
+> 	arch/arm/boot/dts/imx53-smd.dtb
+> 	arch/arm/boot/dts/imx53-tx53-x03x.dtb
+> 	arch/arm/boot/dts/imx53-tx53-x13x.dtb
+> 	arch/arm/boot/dts/imx53-usbarmory.dtb
+> 	arch/arm/boot/dts/imx53-voipac-bsb.dtb
+>=20
+> spi@63fc0000: Unevaluated properties are not allowed ('compatible' was
+> unexpected)
+> 	arch/arm/boot/dts/imx50-evk.dtb
+> 	arch/arm/boot/dts/imx50-kobo-aura.dtb
+> 	arch/arm/boot/dts/imx53-ard.dtb
+> 	arch/arm/boot/dts/imx53-cx9020.dtb
+> 	arch/arm/boot/dts/imx53-kp-ddc.dtb
+> 	arch/arm/boot/dts/imx53-kp-hsc.dtb
+> 	arch/arm/boot/dts/imx53-m53evk.dtb
+> 	arch/arm/boot/dts/imx53-m53menlo.dtb
+> 	arch/arm/boot/dts/imx53-mba53.dtb
+> 	arch/arm/boot/dts/imx53-ppd.dtb
+> 	arch/arm/boot/dts/imx53-qsb.dtb
+> 	arch/arm/boot/dts/imx53-qsrb.dtb
+> 	arch/arm/boot/dts/imx53-smd.dtb
+> 	arch/arm/boot/dts/imx53-tx53-x03x.dtb
+> 	arch/arm/boot/dts/imx53-tx53-x13x.dtb
+> 	arch/arm/boot/dts/imx53-usbarmory.dtb
+> 	arch/arm/boot/dts/imx53-voipac-bsb.dtb
+>=20
+> spi@83fc0000: compatible: 'oneOf' conditional failed, one must be fixed:
+> 	arch/arm/boot/dts/imx51-apf51dev.dtb
+> 	arch/arm/boot/dts/imx51-apf51.dtb
+> 	arch/arm/boot/dts/imx51-babbage.dtb
+> 	arch/arm/boot/dts/imx51-digi-connectcore-jsk.dtb
+> 	arch/arm/boot/dts/imx51-eukrea-mbimxsd51-baseboard.dtb
+> 	arch/arm/boot/dts/imx51-ts4800.dtb
+> 	arch/arm/boot/dts/imx51-zii-rdu1.dtb
+> 	arch/arm/boot/dts/imx51-zii-scu2-mezz.dtb
+> 	arch/arm/boot/dts/imx51-zii-scu3-esb.dtb
+>=20
+> spi@83fc0000: Unevaluated properties are not allowed ('compatible' was
+> unexpected)
+> 	arch/arm/boot/dts/imx51-apf51dev.dtb
+> 	arch/arm/boot/dts/imx51-apf51.dtb
+> 	arch/arm/boot/dts/imx51-babbage.dtb
+> 	arch/arm/boot/dts/imx51-digi-connectcore-jsk.dtb
+> 	arch/arm/boot/dts/imx51-eukrea-mbimxsd51-baseboard.dtb
+> 	arch/arm/boot/dts/imx51-ts4800.dtb
+> 	arch/arm/boot/dts/imx51-zii-rdu1.dtb
+> 	arch/arm/boot/dts/imx51-zii-scu2-mezz.dtb
+> 	arch/arm/boot/dts/imx51-zii-scu3-esb.dtb
 
