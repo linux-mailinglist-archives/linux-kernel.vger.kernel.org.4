@@ -2,48 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D70DA608018
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 22:47:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23CEF608028
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 22:47:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230224AbiJUUrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 16:47:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54018 "EHLO
+        id S229520AbiJUUrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 16:47:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230080AbiJUUqc (ORCPT
+        with ESMTP id S230127AbiJUUrD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 16:46:32 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A11BD2995C9;
-        Fri, 21 Oct 2022 13:46:07 -0700 (PDT)
+        Fri, 21 Oct 2022 16:47:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6692315711;
+        Fri, 21 Oct 2022 13:46:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A496FCE2BD4;
-        Fri, 21 Oct 2022 20:45:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBEA3C433D6;
-        Fri, 21 Oct 2022 20:45:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 99856B82D23;
+        Fri, 21 Oct 2022 20:46:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 757ECC433D6;
+        Fri, 21 Oct 2022 20:46:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666385112;
-        bh=tq2/NapKhyhj/nZ7UhIrjnv6uKjQg8q5BUCehbxRKV8=;
+        s=k20201202; t=1666385187;
+        bh=r4rs+gBLRR2XnC/iBTUpmvw8Y1/CAN6bIqgMsnCS3+M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SB3QFe5LK0b+E/lFpE+2wEY35sjtJodRiiuoDy9SLn5Cqeu0V/vx5oviEBkxpnoqP
-         vvm12zSEEnmDRnYlw2pbjdkW6Gfx+FT75vQFcbslNL4I19GusCdiFRJMQRowqqGF5w
-         /pn1S70gZTkepqPHjiaNIaB/RAFOgP8HuWbQqilStb3w6UUVAyaFtrYR504COnoE5Q
-         Q8UACn9Mvil3BLSmCJZ3dnhqa4u64sVt4Yh1rQDqSgWrYKip3Geqd/G2OnUgME95AR
-         qdcQ0XADqEcloCkpN4EQ/KUo5+RC2XAGHOqMk6SO9LnEQuCmQSjy36QUy5rViHDuIn
-         wsDWlpY+5/9+w==
+        b=bEUU8QrTiTFvPH3Zs3lk4BYlQrncBQ27b3JEZ7yaGj50xGf//DsfDHZOPKOyFufVa
+         6nMW5QVb8ee2kX8yYQ4luotFom6IwrY+xE1qUt3yvhg0LPb81AaSj8Hjz6d6F177Ru
+         lZi8jSduBpDBFd0G6P8jl3epKd/ckixBVvwQlHY6w8t+tc3UkcU5USD4fUdzlfdSG/
+         x4Nr5rm65+P+QtI5jkg720jIM+qyrp4IRhkj/LVLS7NwJ8CwNe0qUOaFjN0aQHy55H
+         m7pyWO9Mc4H3h8+ox4O34LhmQhCJSxO476RkcFhRYlNbtmxDum5e1aJAeUEC7PTd/5
+         vbYBD2zsrbKYw==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     linux-arm-kernel@lists.infradead.org,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, Ben Dooks <ben-linux@fluff.org>,
         Simtec Linux Team <linux@simtec.co.uk>,
         Arnd Bergmann <arnd@arndb.de>,
         Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-mmc@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-Subject: [PATCH 10/21] mmc: remove s3cmci driver
-Date:   Fri, 21 Oct 2022 22:27:43 +0200
-Message-Id: <20221021203329.4143397-10-arnd@kernel.org>
+        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: [PATCH 11/21] clk: remove s3c24xx driver
+Date:   Fri, 21 Oct 2022 22:27:44 +0200
+Message-Id: <20221021203329.4143397-11-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20221021202254.4142411-1-arnd@kernel.org>
 References: <20221021202254.4142411-1-arnd@kernel.org>
@@ -60,113 +64,111 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The s3c24xx platform is gone, so this driver can be removed as well.
+The s3c24xx platform is gone, so the clk driver can be removed as
+well.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- MAINTAINERS                              |    6 -
- drivers/mmc/host/Kconfig                 |   43 -
- drivers/mmc/host/Makefile                |    1 -
- drivers/mmc/host/s3cmci.c                | 1777 ----------------------
- drivers/mmc/host/s3cmci.h                |   75 -
- include/linux/platform_data/mmc-s3cmci.h |   51 -
- 6 files changed, 1953 deletions(-)
- delete mode 100644 drivers/mmc/host/s3cmci.c
- delete mode 100644 drivers/mmc/host/s3cmci.h
- delete mode 100644 include/linux/platform_data/mmc-s3cmci.h
+ MAINTAINERS                               |   1 -
+ drivers/clk/samsung/Kconfig               |  32 --
+ drivers/clk/samsung/Makefile              |   4 -
+ drivers/clk/samsung/clk-s3c2410-dclk.c    | 440 ---------------------
+ drivers/clk/samsung/clk-s3c2410.c         | 446 ----------------------
+ drivers/clk/samsung/clk-s3c2412.c         | 254 ------------
+ drivers/clk/samsung/clk-s3c2443.c         | 438 ---------------------
+ include/linux/platform_data/clk-s3c2410.h |  19 -
+ 8 files changed, 1634 deletions(-)
+ delete mode 100644 drivers/clk/samsung/clk-s3c2410-dclk.c
+ delete mode 100644 drivers/clk/samsung/clk-s3c2410.c
+ delete mode 100644 drivers/clk/samsung/clk-s3c2412.c
+ delete mode 100644 drivers/clk/samsung/clk-s3c2443.c
+ delete mode 100644 include/linux/platform_data/clk-s3c2410.h
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 2caf42b0328a..503ebd9800db 100644
+index 503ebd9800db..caf196041e3a 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -17920,12 +17920,6 @@ S:	Supported
- W:	http://www.ibm.com/developerworks/linux/linux390/
- F:	drivers/s390/scsi/zfcp_*
+@@ -18078,7 +18078,6 @@ F:	include/dt-bindings/clock/s3c*.h
+ F:	include/dt-bindings/clock/s5p*.h
+ F:	include/dt-bindings/clock/samsung,*.h
+ F:	include/linux/clk/samsung.h
+-F:	include/linux/platform_data/clk-s3c2410.h
  
--S3C24XX SD/MMC Driver
--M:	Ben Dooks <ben-linux@fluff.org>
--L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
--S:	Supported
--F:	drivers/mmc/host/s3cmci.*
--
- SAA6588 RDS RECEIVER DRIVER
- M:	Hans Verkuil <hverkuil@xs4all.nl>
- L:	linux-media@vger.kernel.org
-diff --git a/drivers/mmc/host/Kconfig b/drivers/mmc/host/Kconfig
-index 79d8ddf1f616..75e8c364243d 100644
---- a/drivers/mmc/host/Kconfig
-+++ b/drivers/mmc/host/Kconfig
-@@ -619,49 +619,6 @@ config MMC_SPI
+ SAMSUNG SPI DRIVERS
+ M:	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+diff --git a/drivers/clk/samsung/Kconfig b/drivers/clk/samsung/Kconfig
+index 8e8245ab3fd1..c07bb50513bf 100644
+--- a/drivers/clk/samsung/Kconfig
++++ b/drivers/clk/samsung/Kconfig
+@@ -94,38 +94,6 @@ config EXYNOS_CLKOUT
+ 	  status of the certains clocks from SoC, but it could also be tied to
+ 	  other devices as an input clock.
  
- 	  If unsure, or if your system has no SPI master driver, say N.
- 
--config MMC_S3C
--	tristate "Samsung S3C SD/MMC Card Interface support"
--	depends on ARCH_S3C24XX || COMPILE_TEST
--	depends on S3C24XX_DMAC || COMPILE_TEST
+-# For S3C24XX platforms, select following symbols:
+-config S3C2410_COMMON_CLK
+-	bool "Samsung S3C2410 clock controller support" if COMPILE_TEST
+-	select COMMON_CLK_SAMSUNG
 -	help
--	  This selects a driver for the MCI interface found in
--	  Samsung's S3C2410, S3C2412, S3C2440, S3C2442 CPUs.
--	  If you have a board based on one of those and a MMC/SD
--	  slot, say Y or M here.
+-	  Support for the clock controller present on the Samsung
+-	  S3C2410/S3C2440/S3C2442 SoCs. Choose Y here only if you build for
+-	  this SoC.
 -
--	  If unsure, say N.
--
--config MMC_S3C_HW_SDIO_IRQ
--	bool "Hardware support for SDIO IRQ"
--	depends on MMC_S3C
+-config S3C2410_COMMON_DCLK
+-	bool
+-	select COMMON_CLK_SAMSUNG
+-	select REGMAP_MMIO
 -	help
--	  Enable the hardware support for SDIO interrupts instead of using
--	  the generic polling code.
+-	  Support for the dclk clock controller present on the Samsung
+-	  S3C2410/S3C2412/S3C2440/S3C2443 SoCs. Choose Y here only if you build
+-	  for this SoC.
 -
--choice
--	prompt "Samsung S3C SD/MMC transfer code"
--	depends on MMC_S3C
--
--config MMC_S3C_PIO
--	bool "Use PIO transfers only"
+-config S3C2412_COMMON_CLK
+-	bool "Samsung S3C2412 clock controller support" if COMPILE_TEST
+-	select COMMON_CLK_SAMSUNG
 -	help
--	  Use PIO to transfer data between memory and the hardware.
+-	  Support for the clock controller present on the Samsung S3C2412 SoCs.
+-	  Choose Y here only if you build for this SoC.
 -
--	  PIO is slower than DMA as it requires CPU instructions to
--	  move the data. This has been the traditional default for
--	  the S3C MCI driver.
--
--config MMC_S3C_DMA
--	bool "Use DMA transfers only"
+-config S3C2443_COMMON_CLK
+-	bool "Samsung S3C2443 clock controller support" if COMPILE_TEST
+-	select COMMON_CLK_SAMSUNG
 -	help
--	  Use DMA to transfer data between memory and the hardware.
+-	  Support for the clock controller present on the Samsung
+-	  S3C2416/S3C2443 SoCs. Choose Y here only if you build for this SoC.
 -
--	  Currently, the DMA support in this driver seems to not be
--	  working properly and needs to be debugged before this
--	  option is useful.
--
--endchoice
--
- config MMC_SDRICOH_CS
- 	tristate "MMC/SD driver for Ricoh Bay1Controllers"
- 	depends on PCI && PCMCIA
-diff --git a/drivers/mmc/host/Makefile b/drivers/mmc/host/Makefile
-index 0baeb0b004f7..885e19e21e75 100644
---- a/drivers/mmc/host/Makefile
-+++ b/drivers/mmc/host/Makefile
-@@ -34,7 +34,6 @@ obj-$(CONFIG_MMC_MVSDIO)	+= mvsdio.o
- obj-$(CONFIG_MMC_DAVINCI)       += davinci_mmc.o
- obj-$(CONFIG_MMC_SPI)		+= mmc_spi.o
- obj-$(CONFIG_MMC_SPI)		+= of_mmc_spi.o
--obj-$(CONFIG_MMC_S3C)   	+= s3cmci.o
- obj-$(CONFIG_MMC_SDRICOH_CS)	+= sdricoh_cs.o
- obj-$(CONFIG_MMC_TMIO_CORE)	+= tmio_mmc_core.o
- obj-$(CONFIG_MMC_SDHI)		+= renesas_sdhi_core.o
-diff --git a/drivers/mmc/host/s3cmci.c b/drivers/mmc/host/s3cmci.c
+ config TESLA_FSD_COMMON_CLK
+ 	bool "Tesla FSD clock controller support" if COMPILE_TEST
+ 	depends on COMMON_CLK_SAMSUNG
+diff --git a/drivers/clk/samsung/Makefile b/drivers/clk/samsung/Makefile
+index 239d9eead77f..ebbeacabe88f 100644
+--- a/drivers/clk/samsung/Makefile
++++ b/drivers/clk/samsung/Makefile
+@@ -21,10 +21,6 @@ obj-$(CONFIG_EXYNOS_ARM64_COMMON_CLK)	+= clk-exynos7.o
+ obj-$(CONFIG_EXYNOS_ARM64_COMMON_CLK)	+= clk-exynos7885.o
+ obj-$(CONFIG_EXYNOS_ARM64_COMMON_CLK)	+= clk-exynos850.o
+ obj-$(CONFIG_EXYNOS_ARM64_COMMON_CLK)	+= clk-exynosautov9.o
+-obj-$(CONFIG_S3C2410_COMMON_CLK)+= clk-s3c2410.o
+-obj-$(CONFIG_S3C2410_COMMON_DCLK)+= clk-s3c2410-dclk.o
+-obj-$(CONFIG_S3C2412_COMMON_CLK)+= clk-s3c2412.o
+-obj-$(CONFIG_S3C2443_COMMON_CLK)+= clk-s3c2443.o
+ obj-$(CONFIG_S3C64XX_COMMON_CLK)	+= clk-s3c64xx.o
+ obj-$(CONFIG_S5PV210_COMMON_CLK)	+= clk-s5pv210.o clk-s5pv210-audss.o
+ obj-$(CONFIG_TESLA_FSD_COMMON_CLK)	+= clk-fsd.o
+diff --git a/drivers/clk/samsung/clk-s3c2410-dclk.c b/drivers/clk/samsung/clk-s3c2410-dclk.c
 deleted file mode 100644
-index 8d5929a32d34..000000000000
-diff --git a/drivers/mmc/host/s3cmci.h b/drivers/mmc/host/s3cmci.h
+index f5e0a6ba2d12..000000000000
+diff --git a/drivers/clk/samsung/clk-s3c2410.c b/drivers/clk/samsung/clk-s3c2410.c
 deleted file mode 100644
-index 8b65d7ad9f97..000000000000
-diff --git a/include/linux/platform_data/mmc-s3cmci.h b/include/linux/platform_data/mmc-s3cmci.h
+index 3d152a46169b..000000000000
+diff --git a/drivers/clk/samsung/clk-s3c2412.c b/drivers/clk/samsung/clk-s3c2412.c
 deleted file mode 100644
-index bacb86db3112..000000000000
+index 724ef642f048..000000000000
+diff --git a/drivers/clk/samsung/clk-s3c2443.c b/drivers/clk/samsung/clk-s3c2443.c
+deleted file mode 100644
+index a827d63766d1..000000000000
+diff --git a/include/linux/platform_data/clk-s3c2410.h b/include/linux/platform_data/clk-s3c2410.h
+deleted file mode 100644
+index 7eb1cfa5409b..000000000000
 -- 
 2.29.2
 
