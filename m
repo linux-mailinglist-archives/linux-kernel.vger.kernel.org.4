@@ -2,184 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 436D0607CAD
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 18:50:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC985607CB1
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 18:50:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230118AbiJUQuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 12:50:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38942 "EHLO
+        id S230295AbiJUQu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 12:50:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229913AbiJUQty (ORCPT
+        with ESMTP id S230185AbiJUQuU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 12:49:54 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1791FE09E6
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:49:51 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id d24so2874616pls.4
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:49:50 -0700 (PDT)
+        Fri, 21 Oct 2022 12:50:20 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F158D2475E3;
+        Fri, 21 Oct 2022 09:50:15 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id b12so8111915edd.6;
+        Fri, 21 Oct 2022 09:50:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=/veItqXlMJIQTcpDjM5JBzQqgSWpElwpdVZBwKN6hJc=;
-        b=II+6tRfI3o4IWM6bK4CLHQMdChvkiK85yyUuB33AlvXPnQlJOzyfUurZ9ghhEh4Bcp
-         hK5caeuJ7efRWUGlErbXOLzT/G5qtuLcOjUS2UwGz9qG0IEhT1Rem3kQkeE9vE+VvDAo
-         2qn+M6JzvenfZRqzI6B1y+kW4+qXWJYeQzJuo=
+        d=googlemail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Cw+R9Xikusyj0v7XUpo66UBCqQebEKZZe8nkfd2rnP4=;
+        b=Ao635rcc4v6ANTEZfVUNii8aItSWgNLiZ9owf76yP2my6qCugJssh6e7ebj16THCMl
+         hpI+m5iIrKSzZFU1SvaisJzzIFwXKDV4/gHM3z+hvda+b4vSYpADy+RB9LsjSagoP3Fc
+         tsoC0zw9QpwPSiDoOF6IutJywJVIXQ082uZ4zqMGRElTzV3LW90wS04bdsh2+14iwdrS
+         /FaVxbeRU5ohz/wJdyR3g1doSpqqnJHX+DLkedaa6SRCJst2sGTih9SwZdikK1UKQQSg
+         qw8PHfkP8jK6oAxIbQe4KHsGAwjf3ZHD/+zU/QMKfuTIzLjYhi6ixaopvDZrPf9SADug
+         xfHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=/veItqXlMJIQTcpDjM5JBzQqgSWpElwpdVZBwKN6hJc=;
-        b=GQfgSjB94Pqe1Jk6xBUBNM2Zipf1J+r6bvNT3npkLUjT+M3aU1W9QeyWez95qMtIp1
-         1aBskKsGTkWA/ZzYJj7AYR0fQjmWr3XeTW5/wLohqy7drKYY5ARg+zv5sNr7JiDVpEw9
-         OkG7+KX94hnonF32JtIrURzIC6eCTbep5YV/yWj+wbL5SpVBJojCcDFwzBPKDaH1PPBF
-         bVmEUk1CersgRsd9iyNXatZm42N7BicDeumv7M03tDA39c9/nIZA7JQ3e5vJPTA28ZlV
-         Cf4Rkux/BHF1vGGrKqnogiXxd1cH2KH6mhStwJlSE7sFfnL73BHS9kZWknWSE0Ns6GUa
-         CzmQ==
-X-Gm-Message-State: ACrzQf2npdr+aCzvRt/Xpeu5v3T4iHmusjFstWtNhHKYOYqFpufC/QuO
-        K4nyKC+Qh+9ZtdzD0vLnjsCQNWJPphHhcrPBKYspmw==
-X-Google-Smtp-Source: AMsMyM492XaifRbV0Xp7jrZHgBHM2zCIypWIvrKBrEXC2Ld4rwIq+kUfF1WZv/Xcr9iHc3ynJsuZUvoHdq/WuuH47xA=
-X-Received: by 2002:a17:902:f1cc:b0:186:6670:e3da with SMTP id
- e12-20020a170902f1cc00b001866670e3damr8654642plc.41.1666370990207; Fri, 21
- Oct 2022 09:49:50 -0700 (PDT)
+        bh=Cw+R9Xikusyj0v7XUpo66UBCqQebEKZZe8nkfd2rnP4=;
+        b=5aIxMiKjGFxJ5DPJOf+8EMuvCloof5nwvsMpCBx5kqww2QfeaFlw/AMjdycXJXi0hI
+         rpIslZX+FvPGeiYHUO9Lq5t9NwuMxSMZB5/sHvjP1L3/fiEId+BPyVioFnl/EKe95UzX
+         XYhX5IbiXZaHtX8nOJRE+hDoZZ8N66VQ0atWDznhXcr1N4rB1xnSu+xIh4VU3szWBYJ6
+         yYRIA75/HRbsX2sAd1xK7Vob+8zhTBWA9dYbfMA/XC/dTfjMA3Q2KjqBAo6UE+8awIa9
+         CB9qSXoJ+xdvl3KZ+3JbT8z+NjHKeD0N5c0fpcNjENUgo3Ow/F5qrNDlm7A2ed4uL5/h
+         W49w==
+X-Gm-Message-State: ACrzQf2WkMlP1ekIITEZf3NUkTNLZuHs8uvhI2y9GVX5ajQM7j4ypeLb
+        ojeqfer2lUZzNNhjG5kyfn8=
+X-Google-Smtp-Source: AMsMyM7zHDeLAO0XEuFmG4m/5KkaJuZHKCPLb5Pi2pHUCn9rPjFqWOK3wln6GDKxiGj8UdCBfeoHaw==
+X-Received: by 2002:a17:907:2719:b0:782:b261:e9eb with SMTP id w25-20020a170907271900b00782b261e9ebmr17186574ejk.104.1666371013803;
+        Fri, 21 Oct 2022 09:50:13 -0700 (PDT)
+Received: from localhost.localdomain (dynamic-2a01-0c22-7b0b-4500-0000-0000-0000-0e63.c22.pool.telefonica.de. [2a01:c22:7b0b:4500::e63])
+        by smtp.googlemail.com with ESMTPSA id l23-20020aa7d957000000b0044ef2ac2650sm13725331eds.90.2022.10.21.09.50.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Oct 2022 09:50:13 -0700 (PDT)
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+To:     linux@roeck-us.net, linux-hwmon@vger.kernel.org
+Cc:     jdelvare@suse.com, linux-kernel@vger.kernel.org,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Subject: [PATCH v3 0/2] hwmon: (jc42) regmap conversion and resume fix
+Date:   Fri, 21 Oct 2022 18:49:58 +0200
+Message-Id: <20221021165000.1865615-1-martin.blumenstingl@googlemail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-References: <20220913162732.163631-1-xukuohai@huaweicloud.com>
- <f1e14934-dc54-9bf7-501a-89affdb7371e@iogearbox.net> <YzG51Jyd5zhvygtK@arm.com>
- <YzHk1zRf1Dp8YTEe@FVFF77S0Q05N> <970a25e4-9b79-9e0c-b338-ed1a934f2770@huawei.com>
- <YzR5WSLux4mmFIXg@FVFF77S0Q05N> <2cb606b4-aa8b-e259-cdfd-1bfc61fd7c44@huawei.com>
- <CABRcYmKPchvtkkgWhOJ6o3pHVqTWeenGawHfZ2ug8Akdh6NfnQ@mail.gmail.com>
- <7f34d333-3b2a-aea5-f411-d53be2c46eee@huawei.com> <20221005110707.55bd9354@gandalf.local.home>
- <CABRcYmJGY6fp0CtUBYN8BjEDN=r42BPLSBcrxqu491bTRmfm7g@mail.gmail.com>
- <20221005113019.18aeda76@gandalf.local.home> <CABRcYmL0bDkgYP3tSwhZYaGUSbsUR3Gq85QCRiUAdXt65czzmg@mail.gmail.com>
- <20221006122922.53802a5c@gandalf.local.home> <CABRcYm+d=xY9nBCJo-6JW_=F41g4X32QM9WOPChaOTfs6d6KCA@mail.gmail.com>
- <20221021203158.4464ac19d8b19b6da6a40852@kernel.org>
-In-Reply-To: <20221021203158.4464ac19d8b19b6da6a40852@kernel.org>
-From:   Florent Revest <revest@chromium.org>
-Date:   Fri, 21 Oct 2022 18:49:38 +0200
-Message-ID: <CABRcYmKzwAFr_0NOxeWhXcCiT5wwi_qkm5Czc0C4CVCAs8stFw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 0/4] Add ftrace direct call for arm64
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Xu Kuohai <xukuohai@huawei.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Xu Kuohai <xukuohai@huaweicloud.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Marc Zyngier <maz@kernel.org>, Guo Ren <guoren@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 1:32 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> On Mon, 17 Oct 2022 19:55:06 +0200
-> Florent Revest <revest@chromium.org> wrote:
-> > Mark finished an implementation of his per-callsite-ops and min-args
-> > branches (meaning that we can now skip the expensive ftrace's saving
-> > of all registers and iteration over all ops if only one is attached)
-> > - https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=arm64-ftrace-call-ops-20221017
-> >
-> > And Masami wrote similar patches to what I had originally done to
-> > fprobe in my branch:
-> > - https://github.com/mhiramat/linux/commits/kprobes/fprobe-update
-> >
-> > So I could rebase my previous "bpf on fprobe" branch on top of these:
-> > (as before, it's just good enough for benchmarking and to give a
-> > general sense of the idea, not for a thorough code review):
-> > - https://github.com/FlorentRevest/linux/commits/fprobe-min-args-3
-> >
-> > And I could run the benchmarks against my rpi4. I have different
-> > baseline numbers as Xu so I ran everything again and tried to keep the
-> > format the same. "indirect call" refers to my branch I just linked and
-> > "direct call" refers to the series this is a reply to (Xu's work)
->
-> Thanks for sharing the measurement results. Yes, fprobes/rethook
-> implementation is just porting the kretprobes implementation, thus
-> it may not be so optimized.
->
-> BTW, I remember Wuqiang's patch for kretprobes.
->
-> https://lore.kernel.org/all/20210830173324.32507-1-wuqiang.matt@bytedance.com/T/#u
+Hello,
 
-Oh that's a great idea, thanks for pointing it out Masami!
+this is a follow-up to the comments I got from Guenter on v1 of my patch
+from [0] titled:
+  "hwmon: (jc42) Restore the min/max/critical temperatures on resume"
+There Guenter suggested: "The best solution would probably be to convert
+the driver to use regmap and let regmap handle the caching". That's the
+goal of this series - in addition to fixing the original resume issue
+(see patch #3 - which was the reason for v1 of this series).
 
-> This is for the scalability fixing, but may possible to improve
-> the performance a bit. It is not hard to port to the recent kernel.
-> Can you try it too?
+Guenter suggested:
+> Make sure that the alarm bits are not dropped after reading the
+> temperature (running the 'sensors' command with alarms active should
+> do)
+I configured the limits to be below the case temperature on my system
+(as the jc42 sensor - a ST Microelectronics STTS2004 - is part of the
+DIMMs) and ran sensors three times in a row. The output is the same for
+all runs:
+  temp1:       +35.0°C  (low  =  +0.0°C)            ALARM (HIGH, CRIT)
+                        (high = +25.0°C, hyst = +25.0°C)
+                        (crit = +30.0°C, hyst = +30.0°C)
+My conclusion is that the alarm bit is not dropped after reading the
+temperature.
 
-I rebased it on my branch
-https://github.com/FlorentRevest/linux/commits/fprobe-min-args-3
 
-And I got measurements again. Unfortunately it looks like this does not help :/
+Changes sinc v2 at [1]:
+- squashed patches #1, #2 and #4 into the new patch #1 (without any
+  other changes to content in jc42.c)
+- patch #3 has no changes other than it's numbering (see previous
+  change)
+- dropped RFC prefix
 
-New benchmark results: https://paste.debian.net/1257856/
-New perf report: https://paste.debian.net/1257859/
+Changes since v1 at [0]:
+- marked as RFC
+- added patches for regmap (patch #1) and regcache (patch #2) conversion
+- patch #3 has been updated to use regcache for restoring the register
+  values during system resume (this was originally patch 1/1)
+- added another patch to remove caching of the temperature register
 
-The fprobe based approach is still significantly slower than the
-direct call approach.
 
-> Anyway, eventually, I would like to remove the current kretprobe
-> based implementation and unify fexit hook with function-graph
-> tracer. It should make more better perfromance on it.
+[0] https://lore.kernel.org/linux-hwmon/20221019214108.220319-1-martin.blumenstingl@googlemail.com/
+[1] https://lore.kernel.org/linux-hwmon/20221020210320.1624617-1-martin.blumenstingl@googlemail.com/
 
-That makes sense. :) How do you imagine the unified solution ?
-Would both the fgraph and fprobe APIs keep existing but under the hood
-one would be implemented on the other ? (or would one be gone ?) Would
-we replace the rethook freelist with the function graph's per-task
-shadow stacks ? (or the other way around ?))
 
-> > Note that I can't really make sense of the perf report with indirect
-> > calls. it always reports it spent 12% of the time in
-> > rethook_trampoline_handler but I verified with both a WARN in that
-> > function and a breakpoint with a debugger, this function does *not*
-> > get called when running this "bench trig-fentry" benchmark. Also it
-> > wouldn't make sense for fprobe_handler to call it so I'm quite
-> > confused why perf would report this call and such a long time spent
-> > there. Anyone know what I could be missing here ?
+Martin Blumenstingl (2):
+  hwmon: (jc42) Convert register access and caching to regmap/regcache
+  hwmon: (jc42) Restore the min/max/critical temperatures on resume
 
-I made slight progress on this. If I put the vmlinux file in the cwd
-where I run perf report, the reports no longer contain references to
-rethook_trampoline_handler. Instead, they have a few
-0xffff800008xxxxxx addresses under fprobe_handler. (like in the
-pastebin I just linked)
+ drivers/hwmon/Kconfig |   1 +
+ drivers/hwmon/jc42.c  | 224 +++++++++++++++++++++++-------------------
+ 2 files changed, 125 insertions(+), 100 deletions(-)
 
-It's still pretty weird because that range is the vmalloc area on
-arm64 and I don't understand why anything under fprobe_handler would
-execute there. However, I'm also definitely sure that these 12% are
-actually spent getting buffers from the rethook memory pool because if
-I replace rethook_try_get and rethook_recycle calls with the usage of
-a dummy static bss buffer (for the sake of benchmarking the
-"theoretical best case scenario") these weird perf report traces are
-gone and the 12% are saved. https://paste.debian.net/1257862/
+-- 
+2.38.1
 
-This is why I would be interested in seeing rethook's memory pool
-reimplemented on top of something like
-https://lwn.net/Articles/788923/ If we get closer to the performance
-of the the theoretical best case scenario where getting a blob of
-memory is ~free (and I think it could be the case with a per task
-shadow stack like fgraph's), then a bpf on fprobe implementation would
-start to approach the performances of a direct called trampoline on
-arm64: https://paste.debian.net/1257863/
