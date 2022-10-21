@@ -2,156 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C1986076D6
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 14:21:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACE096076D9
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 14:23:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229441AbiJUMV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 08:21:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51380 "EHLO
+        id S229506AbiJUMXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 08:23:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230078AbiJUMVq (ORCPT
+        with ESMTP id S229484AbiJUMXS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 08:21:46 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32C1475CF8
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 05:21:45 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id i4-20020a056e02152400b002fa876e95b3so3408025ilu.17
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 05:21:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4pnLQEi49b7eMYSApkCD1PoDhPgZzcH1PN7FDHx9LS0=;
-        b=KxJGOC1siHJ2yaFGDEaQuLKHvbondiZ5NLmlpHLKzdxOCjUiY7q/A6AJgH1GNfN+mO
-         tOOhpbMAoqGQGiO3um7qGHN3XH/6MpNElqmbRmhwmZ8DMFnAf387hfHS/DVGZxsq14Ot
-         TH0GGehCxNlb3lPYwYx9zpckpLZ1jO3eooHIBOS5KvjCyEUWV0kH2MTjV5OWjq/oJptn
-         Q2lSfeioGnWdTVl7gc1fFO8C/9ywnqJBgGbAxCeaJnQIAzGvtv4A920WS6Ds0C/dIJnq
-         T1C3ZrOVBMKSoRe8Y2+macS6bmOBBUBL2uapFagqYnVPGxd47v5XEHVsGNJuvSDn4n/1
-         6ArQ==
-X-Gm-Message-State: ACrzQf0FtkquBbFfkxMDuF7xBkS4kabYrN0+SkJ972Y8U1rbpNssPM8m
-        FnzRUS1Pze7dGETPNtxdLLRqAObN9BkDsuogLdphAxs+4yti
-X-Google-Smtp-Source: AMsMyM4emuHDYp5cKxwfqAjqh6rV1xnetav+FIqN2TQwI+JPR73d97kjNktx/C+tQRlsBcZRwNaDfmcb+N9hOPmdbRYgSXGWXNqR
+        Fri, 21 Oct 2022 08:23:18 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF7476950
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 05:23:16 -0700 (PDT)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Mv3Qq6Z18z15Lxs;
+        Fri, 21 Oct 2022 20:18:27 +0800 (CST)
+Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 21 Oct 2022 20:23:14 +0800
+Received: from [10.174.179.234] (10.174.179.234) by
+ kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 21 Oct 2022 20:23:12 +0800
+Message-ID: <09d1c410-5690-7158-8982-48ceec8ab64e@huawei.com>
+Date:   Fri, 21 Oct 2022 20:23:12 +0800
 MIME-Version: 1.0
-X-Received: by 2002:a5d:9411:0:b0:6a7:f7ec:6dd8 with SMTP id
- v17-20020a5d9411000000b006a7f7ec6dd8mr13104822ion.44.1666354904452; Fri, 21
- Oct 2022 05:21:44 -0700 (PDT)
-Date:   Fri, 21 Oct 2022 05:21:44 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000026532c05eb8a7ce2@google.com>
-Subject: [syzbot] BUG: unable to handle kernel paging request in dquot_add_inodes
-From:   syzbot <syzbot+60faec7a78ed9879d6b9@syzkaller.appspotmail.com>
-To:     jack@suse.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH -next v2 2/2] riscv: extable: add new extable type
+ EX_TYPE_KACCESS_ERR_ZERO support
+To:     Palmer Dabbelt <palmer@rivosinc.com>
+CC:     <ajones@ventanamicro.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        <aou@eecs.berkeley.edu>, <Conor.Dooley@microchip.com>,
+        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <wangkefeng.wang@huawei.com>, <guohanjun@huawei.com>
+References: <mhng-b5608339-68e0-4706-9002-50ba006b4d05@palmer-ri-x1c9>
+From:   Tong Tiangen <tongtiangen@huawei.com>
+In-Reply-To: <mhng-b5608339-68e0-4706-9002-50ba006b4d05@palmer-ri-x1c9>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.234]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600017.china.huawei.com (7.193.23.234)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-syzbot found the following issue on:
-
-HEAD commit:    bbed346d5a96 Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=15ea75d2880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3a4a45d2d827c1e
-dashboard link: https://syzkaller.appspot.com/bug?extid=60faec7a78ed9879d6b9
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/e8e91bc79312/disk-bbed346d.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/c1cb3fb3b77e/vmlinux-bbed346d.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+60faec7a78ed9879d6b9@syzkaller.appspotmail.com
-
-EXT4-fs (loop0): mounted filesystem without journal. Quota mode: writeback.
-Unable to handle kernel paging request at virtual address 00000001000000e7
-Mem abort info:
-  ESR = 0x0000000096000005
-  EC = 0x25: DABT (current EL), IL = 32 bits
-  SET = 0, FnV = 0
-  EA = 0, S1PTW = 0
-  FSC = 0x05: level 1 translation fault
-Data abort info:
-  ISV = 0, ISS = 0x00000005
-  CM = 0, WnR = 0
-user pgtable: 4k pages, 48-bit VAs, pgdp=0000000133af2000
-[00000001000000e7] pgd=0800000135e12003, p4d=0800000135e12003, pud=0000000000000000
-Internal error: Oops: 0000000096000005 [#1] PREEMPT SMP
-Modules linked in:
-CPU: 0 PID: 8925 Comm: syz-executor.0 Not tainted 6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-pstate: 804000c5 (Nzcv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __lock_acquire+0x60/0x30a4 kernel/locking/lockdep.c:4923
-lr : lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5666
-sp : ffff800015adb3d0
-x29: ffff800015adb4b0 x28: 0000000000000000 x27: 0000000000000000
-x26: 00000001000000e7 x25: ffff8000086bb660 x24: 0000000000000000
-x23: 0000000000000000 x22: 00000001000000e7 x21: 0000000000000000
-x20: 0000000000000000 x19: 0000000000000000 x18: 00000000000000c0
-x17: ffff80000dd0b198 x16: ffff80000db49158 x15: ffff0000e3f44f80
-x14: ffff80000dd0b198 x13: ffff80000db49158 x12: 0000000000040000
-x11: 0000000000001abd x10: ffff800012e18000 x9 : 0000000000000001
-x8 : 0000000000000001 x7 : ffff8000086bb660 x6 : 0000000000000000
-x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : 0000000000000000 x0 : 00000001000000e7
-Call trace:
- __lock_acquire+0x60/0x30a4 kernel/locking/lockdep.c:4923
- lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5666
- __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
- _raw_spin_lock+0x54/0x6c kernel/locking/spinlock.c:154
- spin_lock include/linux/spinlock.h:349 [inline]
- dquot_add_inodes+0x38/0x36c fs/quota/dquot.c:1285
- dquot_alloc_inode+0xdc/0x434 fs/quota/dquot.c:1751
- ext4_xattr_inode_alloc_quota fs/ext4/xattr.c:888 [inline]
- ext4_xattr_set_entry+0x294/0xe28 fs/ext4/xattr.c:1661
- ext4_xattr_block_set+0x3d4/0x142c fs/ext4/xattr.c:1971
- ext4_xattr_set_handle+0x724/0x994 fs/ext4/xattr.c:2394
- ext4_xattr_set+0x100/0x1d0 fs/ext4/xattr.c:2495
- ext4_xattr_trusted_set+0x4c/0x64 fs/ext4/xattr_trusted.c:38
- __vfs_setxattr+0x250/0x260 fs/xattr.c:182
- __vfs_setxattr_noperm+0xcc/0x320 fs/xattr.c:216
- __vfs_setxattr_locked+0x16c/0x194 fs/xattr.c:277
- vfs_setxattr+0x174/0x280 fs/xattr.c:313
- do_setxattr fs/xattr.c:600 [inline]
- setxattr fs/xattr.c:623 [inline]
- path_setxattr+0x354/0x414 fs/xattr.c:642
- __do_sys_setxattr fs/xattr.c:658 [inline]
- __se_sys_setxattr fs/xattr.c:654 [inline]
- __arm64_sys_setxattr+0x2c/0x40 fs/xattr.c:654
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
- el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
-Code: 2a0303f4 2a0203f7 aa0003fa 34000148 (f9400348) 
----[ end trace 0000000000000000 ]---
-----------------
-Code disassembly (best guess):
-   0:	2a0303f4 	mov	w20, w3
-   4:	2a0203f7 	mov	w23, w2
-   8:	aa0003fa 	mov	x26, x0
-   c:	34000148 	cbz	w8, 0x34
-* 10:	f9400348 	ldr	x8, [x26] <-- trapping instruction
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+在 2022/9/22 4:25, Palmer Dabbelt 写道:
+> On Sat, 27 Aug 2022 03:39:38 PDT (-0700), tongtiangen@huawei.com wrote:
+>>
+>>
+>> 在 2022/8/26 16:16, Andrew Jones 写道:
+>>> On Fri, Aug 26, 2022 at 02:44:48PM +0800, Tong Tiangen wrote:
+>>>>
+>>>>
+>>>> 在 2022/8/25 19:06, Andrew Jones 写道:
+>>>>> On Mon, Aug 15, 2022 at 03:20:25AM +0000, Tong Tiangen wrote:
+>>>>>> Currently, The extable type EX_TYPE_UACCESS_ERR_ZERO is used by
+>>>>>> __get/put_kernel_nofault(), but those helpers are not uaccess 
+>>>>>> type, so we
+>>>>>> add a new extable type EX_TYPE_KACCESS_ERR_ZERO which can be used by
+>>>>>> __get/put_kernel_no_fault().
+>>>>>>
+>>>>>> Only refactor code without any functional changes.
+>>>>>
+>>>>> This isn't quite true. __get/put_kernel_nofault now sets a different
+>>>>> extable type (as the commit message says). But, nothing special seems
+>>>>> to be done with that, so there's effectively no functional change. Can
+>>>>> you please elaborate on the motivation for this change? Where will the
+>>>>> KACCESS type need to be distinguished from the UACCESS type?
+>>>>
+>>>> The introduction of EX_TYPE_KACCESS_ERR_ZERO does not change any 
+>>>> function,
+>>>> but makes a correct distinction in the actual type, indicating that 
+>>>> there
+>>>> are indeed some kaccess entries in extable. I think this 
+>>>> optimization is
+>>>> more clear and reasonable.
+>>>
+>>> Well, creating new types, just for new type sake, just bloats code.
+>>>
+>>>>
+>>>> A few weeks ago, I did something similar on arm64[1]. I think this
+>>>> optimization can also be used on riscv.
+>>>>
+>>>> We can do some features that are used on uaccss but not applicable on
+>>>> kaccess in the future[2].
+>>>>
+>>>> [1]
+>>>> https://lore.kernel.org/lkml/20220621072638.1273594-2-tongtiangen@huawei.com/ 
+>>>>
+>>>> [2]https://lore.kernel.org/lkml/20220812070557.1028499-4-tongtiangen@huawei.com/ 
+>>>>
+>>>>
+>>>
+>>> This is part of the information, but I had already found this. What's
+>>> still missing to me are the riscv patches, or at least a riscv plan, for
+>>> actually implementing something which requires kaccess and uaccess to 
+>>> have
+>>> distinct types.
+>>>
+>>> Thanks,
+>>> drew
+>>
+>> At present, there is no such plan on riscv, because it is rely on
+>> hardware support.
+>> I think this patch can be merged as a small code optimization and
+>> without any function change.
+> 
+> Generally we need some use of the code in the upstream kernel to justify 
+> its existence.  In this case I don't really see that: it's just another 
+> type that's exactly the same as the existing one, having some out of 
+> tree code that depends on making these types do something different 
+> isn't a sufficient justification.
+> .
+Hi palmer:
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+I agree with this point very much，many thanks.
+
+Tong.
