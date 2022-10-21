@@ -2,101 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0650260753F
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 12:43:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B388607544
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 12:43:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229948AbiJUKm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 06:42:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59780 "EHLO
+        id S229556AbiJUKn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 06:43:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbiJUKmu (ORCPT
+        with ESMTP id S229925AbiJUKnw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 06:42:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E71DB25F1E8;
-        Fri, 21 Oct 2022 03:42:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 21 Oct 2022 06:43:52 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDD6B25F1F2
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 03:43:44 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2EE54B82B93;
-        Fri, 21 Oct 2022 10:42:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B943C433C1;
-        Fri, 21 Oct 2022 10:42:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666348956;
-        bh=6kFhXO7wLcwrPbLp/Is1Y5U8BGHez3TkK1IWMQHhqxQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=j0AKj4GgQXB36jdY/13p5VwOQ8qJ56X1AfCGK+5zL33D23Yo7m/RpwfCrtVFfq9eo
-         ityhy56nvvgpnofyLOoYjQj3FY0Md0wJWfi+PGronUKLYsGhlxTzuwJ3z/QKjlXGDx
-         vWFFFGJyMU49KfremOXKxTtaxW71rNPAm2ir4Em2zV3PxbqURzZd4gS8yAymCrTpW6
-         TJVdQ7eYa4I30DTAoyhFXFpMoPEJO7kOAWs5LCdzRnnr26+ocI7fxsgxVekX+gREZH
-         yqxslhjKpDnDHB1Y++VDBCng4qB16TQzBQ1vCI5YR9ZdHGSlGS/m7Pu8LrQx3gGEKQ
-         g8AA9x7uY5Rlg==
-Date:   Fri, 21 Oct 2022 11:42:31 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>
-Subject: Re: [PATCH v1 3/6] spi: pxa2xx: Remove no more needed PCI ID table
-Message-ID: <Y1J3lyrygPvVGUJw@sirena.org.uk>
-References: <Y1F2a6CR+9sY66Zz@sirena.org.uk>
- <Y1F6YRzRS2DR+cKL@smile.fi.intel.com>
- <Y1F+Pw52nN195qDO@sirena.org.uk>
- <Y1F/aVEYn3GIVEN2@smile.fi.intel.com>
- <Y1GEqa07/b25utui@sirena.org.uk>
- <Y1GIVy8l4vKsUYLr@smile.fi.intel.com>
- <Y1GJL8/YfeoUy8wB@sirena.org.uk>
- <Y1GLdp9GCqD7CdfW@smile.fi.intel.com>
- <Y1GOTtYIeOFmrmm7@sirena.org.uk>
- <Y1GRGrt8EvhoeV0z@smile.fi.intel.com>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 5A35C2271B;
+        Fri, 21 Oct 2022 10:43:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1666349023; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TA7eXrG7O3B23odrrkOkZeSr4Pfu3eeY9ko+Mp8d0go=;
+        b=xUaaGYFVu0gPmo4L0tL7e2f/7X+LfimgY+c5ACBUf69XBQbcB02ILZ/tCQYZAgjM5UbdyG
+        iCfJWI4RiCd1S/0BiNU3udYY8iRbJEbKOY0LW2ScOuS0wj0SqgX1CHZ0v4Vc/7j3XPvHsv
+        6eIZ2eiF1f0AM+0sBOpg/ZvebBQ9SEE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1666349023;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TA7eXrG7O3B23odrrkOkZeSr4Pfu3eeY9ko+Mp8d0go=;
+        b=OUEt6dx5IOWptug7O299I3fq+sUl422kxESBxABV83D15QaX2vFZpaGPgRGbKzzwPWNulT
+        qEtinpFISPFgwpAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 344E51331A;
+        Fri, 21 Oct 2022 10:43:43 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id FIktDN93UmPAJAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Fri, 21 Oct 2022 10:43:43 +0000
+Message-ID: <82e8147e-f031-6bc2-9395-56d2052e62cb@suse.cz>
+Date:   Fri, 21 Oct 2022 12:43:42 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="lhL2Ud7ORY4pUWsg"
-Content-Disposition: inline
-In-Reply-To: <Y1GRGrt8EvhoeV0z@smile.fi.intel.com>
-X-Cookie: On the eighth day, God created FORTRAN.
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH] mm/slub: remove dead code for debug caches on
+ deactivate_slab()
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20221014114322.97512-1-42.hyeyoo@gmail.com>
+Content-Language: en-US
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20221014114322.97512-1-42.hyeyoo@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_SOFTFAIL,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 10/14/22 13:43, Hyeonggon Yoo wrote:
+> After commit c7323a5ad0786 ("mm/slub: restrict sysfs validation to debug
+> caches and make it safe"), SLUB does not take a slab from partial list for
 
---lhL2Ud7ORY4pUWsg
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I'm confused by "SLUB does not take a slab from partial list" here. Did you
+mean something like "SLUB never installs (even temporarily) a percpu slab
+for debug caches"? So that means we never deactivate percpu slabs for debug
+caches. And since debug caches are also the only ones that use the full
+list, we no longer need to care about the full list in deactivate_slab(), right?
 
-On Thu, Oct 20, 2022 at 09:19:06PM +0300, Andy Shevchenko wrote:
-> On Thu, Oct 20, 2022 at 07:07:10PM +0100, Mark Brown wrote:
+> debug caches. As deactivation isn't needed anymore, remove dead code.
+> 
+> Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
 
-> > Remember that device_property backs onto fwnode so properties can come
-> > from _DSD properties too since fwnode will query any source of
+Otherwise it looks correct to me, just wanted to clarify I'm not missing
+something.
 
-> > I think the code would have to also check that it was a
-> > MFD child at least,
+> ---
+>  mm/slub.c | 16 ++--------------
+>  1 file changed, 2 insertions(+), 14 deletions(-)
+> 
+> diff --git a/mm/slub.c b/mm/slub.c
+> index 96dd392d7f99..e2215240954d 100644
+> --- a/mm/slub.c
+> +++ b/mm/slub.c
+> @@ -2411,7 +2411,7 @@ static void init_kmem_cache_cpus(struct kmem_cache *s)
+>  static void deactivate_slab(struct kmem_cache *s, struct slab *slab,
+>  			    void *freelist)
+>  {
+> -	enum slab_modes { M_NONE, M_PARTIAL, M_FULL, M_FREE, M_FULL_NOLIST };
+> +	enum slab_modes { M_NONE, M_PARTIAL, M_FREE, M_FULL_NOLIST };
+>  	struct kmem_cache_node *n = get_node(s, slab_nid(slab));
+>  	int free_delta = 0;
+>  	enum slab_modes mode = M_NONE;
+> @@ -2487,14 +2487,6 @@ static void deactivate_slab(struct kmem_cache *s, struct slab *slab,
+>  		 * acquire_slab() will see a slab that is frozen
+>  		 */
+>  		spin_lock_irqsave(&n->list_lock, flags);
+> -	} else if (kmem_cache_debug_flags(s, SLAB_STORE_USER)) {
+> -		mode = M_FULL;
+> -		/*
+> -		 * This also ensures that the scanning of full
+> -		 * slabs from diagnostic functions will not see
+> -		 * any frozen slabs.
+> -		 */
+> -		spin_lock_irqsave(&n->list_lock, flags);
+>  	} else {
+>  		mode = M_FULL_NOLIST;
+>  	}
+> @@ -2504,7 +2496,7 @@ static void deactivate_slab(struct kmem_cache *s, struct slab *slab,
+>  				old.freelist, old.counters,
+>  				new.freelist, new.counters,
+>  				"unfreezing slab")) {
+> -		if (mode == M_PARTIAL || mode == M_FULL)
+> +		if (mode == M_PARTIAL)
+>  			spin_unlock_irqrestore(&n->list_lock, flags);
+>  		goto redo;
+>  	}
+> @@ -2518,10 +2510,6 @@ static void deactivate_slab(struct kmem_cache *s, struct slab *slab,
+>  		stat(s, DEACTIVATE_EMPTY);
+>  		discard_slab(s, slab);
+>  		stat(s, FREE_SLAB);
+> -	} else if (mode == M_FULL) {
+> -		add_full(s, n, slab);
+> -		spin_unlock_irqrestore(&n->list_lock, flags);
+> -		stat(s, DEACTIVATE_FULL);
+>  	} else if (mode == M_FULL_NOLIST) {
+>  		stat(s, DEACTIVATE_FULL);
+>  	}
 
-> That's exactly what I'm talking about when said "named resource check".
-
-Like I say a property can come from any firmware interface.
-
---lhL2Ud7ORY4pUWsg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNSd5cACgkQJNaLcl1U
-h9C1lQf9EHBaukWZgnG40NiujExN8BFbs61PRd0hLFpgKAZ0qH/Lyr6Rld9KuA0Y
-fNqeZz303UJuFR8MnqBaWyyT1bZvsONCUDBDc3GAqwr6ss/OJo/Ygh6rQORnhOFb
-zLDcLpBm3qbJt9tZ0hwYGcMZhZ/3I+f3+Gfb9SHibtTGWiSKeGL1mFY9I7DdpwV1
-xPTdCJo6xhM5JparciTlr70bITnSqDX1HRPjspVM2Jah1sigmiHj5ULt+cZRv74h
-wJjJloy5R9z6tr+5u2j7NNOpcHbNMDvjJKupxImRdW6M/uxyM2E4KgQ1NSLcW/EG
-cmkKSjlojaY4vSG84B/CgyO+wt7AcQ==
-=RFDr
------END PGP SIGNATURE-----
-
---lhL2Ud7ORY4pUWsg--
