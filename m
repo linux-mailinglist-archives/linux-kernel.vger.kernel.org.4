@@ -2,108 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C796607663
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 13:41:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69351607665
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 13:42:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230246AbiJULlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 07:41:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38748 "EHLO
+        id S230293AbiJULmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 07:42:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230156AbiJULlA (ORCPT
+        with ESMTP id S229787AbiJULmm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 07:41:00 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 165931E8B8A;
-        Fri, 21 Oct 2022 04:40:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=ybzj+4INELQ+p10Y7K/jRSkq7s5IXHsyCClX4FS/l14=; b=F2+zcW8NX3aYgLlejVS2joun3r
-        cnmlcNvTL3nMYgQY7GkQpFApFoz44GGlQWZHwEkSi95aUNkzJBxNSGCPhORGM3aE751T/TtnrgiEn
-        RwFzIcPrbWy2phovgkzgpy5TaWRvz5bTyCsQSTBundZzGkYHA1sJIFQCoO5nFdfqoHi5p7T+jZAWu
-        KHEsmUF7hRWuG/Nu+8gga/kd9/B4ncS1S3ElH2yqHWLbRWWtCnJsZPjwFtVJuvac3McqEnZsEhwK1
-        8K6092yiN3hd9Unz8UitPmn2i63TD2xt1eLJPPUGP/XD8OlrtLuiyq5rO5X1mZvLlchZSHkc7v28V
-        xGc2YRbg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34860)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1olqOT-00008I-FO; Fri, 21 Oct 2022 12:40:53 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1olqOR-00048B-B4; Fri, 21 Oct 2022 12:40:51 +0100
-Date:   Fri, 21 Oct 2022 12:40:51 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, lxu@maxlinear.com,
-        hkallweit1@gmail.com, pabeni@redhat.com, edumazet@google.com,
-        UNGLinuxDriver@microchip.com, andrew@lunn.ch,
-        Ian.Saturley@microchip.com
-Subject: Re: [PATCH net-next] net: phy: mxl-gpy: Add PHY Auto/MDI/MDI-X set
- driver for GPY211 chips
-Message-ID: <Y1KFQ3emJhg8gXOj@shell.armlinux.org.uk>
-References: <20221021100305.6576-1-Raju.Lakkaraju@microchip.com>
+        Fri, 21 Oct 2022 07:42:42 -0400
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D45892625CF
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 04:42:41 -0700 (PDT)
+Received: by mail-ot1-x332.google.com with SMTP id f4-20020a9d0384000000b0066208c73094so1681517otf.0
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 04:42:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=5PwdDXVu5A11cVv6wJuG3gZctd4QRKpsxJeBckZ3fGo=;
+        b=DE2jFHwTCLaJZKNXRFpcGV7F9oYrDcTgin68ddiLvmSVj7qsqTyMUi4RIbwW5Oe+if
+         7Rr4jMKrJeV2vk7KsQXL0yyAopaHkuLwC0Km67MNC4pWxDq2BhmEKwxsCS5Hhbya01fP
+         wzW8WS0Nj/oIKB+NnQFEPENeAym4Atjquli+3OdFHqEUCjxZm38DlfwzQqCnCt4hNK4a
+         Jis9X5xOEn2GVKQ+dNTjBD7eQhEAu/nDy+bggd6+paAMX7wGt+FrV0Nl7c0mqvRxd8HT
+         rInJCusJHTq0E9lO5WWRQBQlyIXFTCn09HTBcEQbXehVbXFSmkWg+dWi9WjXpgN7YJwz
+         CnyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5PwdDXVu5A11cVv6wJuG3gZctd4QRKpsxJeBckZ3fGo=;
+        b=gOABG8oH5uUyAb2A0DGdlcOcFif00Z0QBKhlKBa+5tlXI0vzqQ42YnxLqWVknJXBWh
+         bg0o0+iaR4Gva61wPVpRm5FMHoTPsAMXidk3hmQqJVTYTbWIAy+KHue5rWdc2hXKvrTS
+         6N9ETh+U7Wviz3RlFMtCJRwoKfYoqK+k5Hh9MVqqbb1ErSOuxXpm7litv/WGCHu4jAO8
+         qUiDsHSwwkxz3eVfdg9iy4kcGiN5r1eHOm9X+vw0NnFNDehqqrvLfJOD/+P2udR2NwUT
+         6xzViWat1/YZAd+cu4PyMNNmwzZA82FJ2LalhsWWi7IGWFQFqxegbUwz4sbQ5Z9+ipg3
+         tMwg==
+X-Gm-Message-State: ACrzQf0KQbcy4mg71mSc8LWJWQJZ/JwHmkxhh1OoQkutUGBaYfvvZkSv
+        JkmSmCV1+jEfToy3w6qCB0gk6Y53DZqugnb1WMcsDhJcHAo=
+X-Google-Smtp-Source: AMsMyM4MlL2lx2850kkZhBccJdvjF9LkaoDGMT+SR3ZXRJtr91+cINSTOEUZYpzEfNjB/7WXVfOGbX3ghN9Ri7GGsJw=
+X-Received: by 2002:a05:6830:4115:b0:661:a2c4:3bcd with SMTP id
+ w21-20020a056830411500b00661a2c43bcdmr10255936ott.368.1666352561091; Fri, 21
+ Oct 2022 04:42:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221021100305.6576-1-Raju.Lakkaraju@microchip.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+References: <20221017171118.1588820-1-sammler@google.com>
+In-Reply-To: <20221017171118.1588820-1-sammler@google.com>
+From:   Pankaj Gupta <pankaj.gupta.linux@gmail.com>
+Date:   Fri, 21 Oct 2022 13:42:28 +0200
+Message-ID: <CAM9Jb+ggq5L9XZZHhfA98XDO+P=8y-mT+ct0JFAtXRbsCuORsA@mail.gmail.com>
+Subject: Re: [PATCH v1] virtio_pmem: populate numa information
+To:     Michael Sammler <sammler@google.com>
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        nvdimm@lists.linux.dev, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Fri, Oct 21, 2022 at 03:33:05PM +0530, Raju Lakkaraju wrote:
-> @@ -370,6 +415,38 @@ static int gpy_config_aneg(struct phy_device *phydev)
->  			      VSPEC1_SGMII_CTRL_ANRS, VSPEC1_SGMII_CTRL_ANRS);
->  }
->  
-> +static void gpy_update_mdix(struct phy_device *phydev)
-> +{
-> +	int ret;
+> Compute the numa information for a virtio_pmem device from the memory
+> range of the device. Previously, the target_node was always 0 since
+> the ndr_desc.target_node field was never explicitly set. The code for
+> computing the numa node is taken from cxl_pmem_region_probe in
+> drivers/cxl/pmem.c.
+>
+> Signed-off-by: Michael Sammler <sammler@google.com>
+> ---
+>  drivers/nvdimm/virtio_pmem.c | 11 +++++++++--
+>  1 file changed, 9 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/nvdimm/virtio_pmem.c b/drivers/nvdimm/virtio_pmem.c
+> index 20da455d2ef6..a92eb172f0e7 100644
+> --- a/drivers/nvdimm/virtio_pmem.c
+> +++ b/drivers/nvdimm/virtio_pmem.c
+> @@ -32,7 +32,6 @@ static int init_vq(struct virtio_pmem *vpmem)
+>  static int virtio_pmem_probe(struct virtio_device *vdev)
+>  {
+>         struct nd_region_desc ndr_desc = {};
+> -       int nid = dev_to_node(&vdev->dev);
+>         struct nd_region *nd_region;
+>         struct virtio_pmem *vpmem;
+>         struct resource res;
+> @@ -79,7 +78,15 @@ static int virtio_pmem_probe(struct virtio_device *vdev)
+>         dev_set_drvdata(&vdev->dev, vpmem->nvdimm_bus);
+>
+>         ndr_desc.res = &res;
+> -       ndr_desc.numa_node = nid;
 > +
-> +	ret = phy_read(phydev, PHY_CTL1);
-> +	if (ret < 0) {
-> +		phydev_err(phydev, "Error: MDIO register access failed: %d\n",
-> +			   ret);
-> +		return;
-> +	}
+> +       ndr_desc.numa_node = memory_add_physaddr_to_nid(res.start);
+> +       ndr_desc.target_node = phys_to_target_node(res.start);
+> +       if (ndr_desc.target_node == NUMA_NO_NODE) {
+> +               ndr_desc.target_node = ndr_desc.numa_node;
+> +               dev_dbg(&vdev->dev, "changing target node from %d to %d",
+> +                       NUMA_NO_NODE, ndr_desc.target_node);
+> +       }
+
+As this memory later gets hotplugged using "devm_memremap_pages". I don't
+see if 'target_node' is used for fsdax case?
+
+It seems to me "target_node" is used mainly for volatile range above
+persistent memory ( e.g kmem driver?).
+
+Thanks,
+Pankaj
+
 > +
-> +	if (ret & PHY_CTL1_AMDIX)
-> +		phydev->mdix_ctrl = ETH_TP_MDI_AUTO;
-> +	else
-> +		if (ret & PHY_CTL1_MDICD || ret & PHY_CTL1_MDIAB)
-> +			phydev->mdix_ctrl = ETH_TP_MDI_X;
-> +		else
-> +			phydev->mdix_ctrl = ETH_TP_MDI;
-
-I think this would be better formatted as:
-
-	if (...)
-		...
-	else if (...)
-		...
-	else
-		...
-
-We don't indent unless there's braces, and if there's braces, coding
-style advises braces on both sides of the "else". So, much better to
-use the formatting I suggest above.
-
-Apart from that, nothing stands out as being wrong in this patch.
-
-Thanks.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+>         ndr_desc.flush = async_pmem_flush;
+>         ndr_desc.provider_data = vdev;
+>         set_bit(ND_REGION_PAGEMAP, &ndr_desc.flags);
+> --
