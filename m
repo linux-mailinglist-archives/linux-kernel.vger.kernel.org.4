@@ -2,192 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5180760741E
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 11:32:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09E1B607429
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 11:35:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229915AbiJUJcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 05:32:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36668 "EHLO
+        id S230115AbiJUJfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 05:35:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbiJUJcG (ORCPT
+        with ESMTP id S230036AbiJUJfo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 05:32:06 -0400
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60082.outbound.protection.outlook.com [40.107.6.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A609F256D09;
-        Fri, 21 Oct 2022 02:32:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=inyNIZDMo2rBrTjj48/wb2IkvJBGu8/2KsMsmBHulVMeXMJhJ2NCbFMNvwVa+SJRVzm4UD6DiwUl7ASKGieAS5ieDDGK9ixiAFi2z/XGm853IbA2IiUdPgiCSB6XFPtFQTONo6ZVbqyypXQFXka1PH/LdOQA+AgqGlH6dSXsJWN0InffzlpJzUYjHSf4hNJFVqG77tlgHvbuVMz6Kg6H6ggA9/glDtrSyU39cFJRf77KSJ5Qou/Ojm57upnh7eZ8UxgRlqMokDHNea0/5x7Irs0/4oKw1rkqh2HlqvH4aNlSraKrbG2LFv+M7ArUhuhWIuNhlUGfV9AwPijEhCknWw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BFljExZKI/hH2jz5ff/LSycirC/HnzXWtUN26hrlxhc=;
- b=F3Vmi5wjVxL8D2VJ3yqdqQDCyEutAVS0C+3nZ0anu3+ljHkTH8y1ijcnMUFF52B+mK9LLhZgZcO3tFo4CCKztLZbqdphNRMOvoKdq6/stJ11U78oYitG0pOadXsr8kDkpUPTQzwj5pjQ+eERWQi3YUPRWMu2tqIdfQxqQ059/DpdoSQSoRpGkoKRsFg8S/GOztxpUBgbNCkbyvEq1dzmDaF1a0d14dAJasMYVZsSmK+Jv3qgHbfgNm9JZcoqFXbAYVynh1XB/ps7zWbQc/et8ZlUtImrMhTeWMyqUd+QlUeQxm5HLu1CY5omFxEICCmorOYapnZLFipNkZ9h3uPHgg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BFljExZKI/hH2jz5ff/LSycirC/HnzXWtUN26hrlxhc=;
- b=Wz/hZg8dXW/W3ZB/irH9dojKTgLi+yVGaV4KWQ7R813R8kSIDbZReIGEx5R2L/GMd+9I1K60f776z7uuWJTm0r3MaPQmTq13vqv1wXiwoLb13xcnfx6qXgtXYgeguuAgPA4Yj3WBcXJg0mvNOpVvwHf9vzcW5brN3Od39JlKAwU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.29; Fri, 21 Oct
- 2022 09:32:00 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::a5ff:3d28:4bbc:e1ed]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::a5ff:3d28:4bbc:e1ed%6]) with mapi id 15.20.5723.032; Fri, 21 Oct 2022
- 09:32:00 +0000
-Message-ID: <5ddc1dac-b6ee-34c4-63eb-63c9a254d984@oss.nxp.com>
-Date:   Fri, 21 Oct 2022 17:31:50 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0
-Subject: Re: [PATCH 05/15] arm64: dts: imx8mp-evk: enable uart1/3 ports
-Content-Language: en-US
-To:     Marco Felsch <m.felsch@pengutronix.de>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de,
-        devicetree@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
-        linux-kernel@vger.kernel.org, linux-imx@nxp.com,
-        kernel@pengutronix.de, festevam@gmail.com,
-        linux-arm-kernel@lists.infradead.org
-References: <20221020095934.1659449-1-peng.fan@oss.nxp.com>
- <20221020095934.1659449-6-peng.fan@oss.nxp.com>
- <20221020110723.udftsfrfdnghudto@pengutronix.de>
- <7ede9de4-75ba-6ebf-60a3-fee98e050ea9@oss.nxp.com>
- <20221021090910.zkijqqt6mpukzqdp@pengutronix.de>
-From:   Peng Fan <peng.fan@oss.nxp.com>
-In-Reply-To: <20221021090910.zkijqqt6mpukzqdp@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SI2PR06CA0017.apcprd06.prod.outlook.com
- (2603:1096:4:186::15) To DU0PR04MB9417.eurprd04.prod.outlook.com
- (2603:10a6:10:358::11)
+        Fri, 21 Oct 2022 05:35:44 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B66C5187DCE;
+        Fri, 21 Oct 2022 02:35:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1666344902;
+        bh=iwiQ6dtbZMd6P2Wdtt4KO30QQTINxxu0iK5jUadx5B8=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=bsRzn9LyTs5Lj+EVkw8ZcnshNG8GjixWpJQ+/MFpksfPNyPHCmgPyYiWTF64XkPQu
+         TPNpFehB5PK6AzDUnGaUOvFS0W9BMQMNMxFFNIaWPhCMfwQnmV1LiM3hvzVS4m6H2B
+         2c9CqxaBlKw5K5RDShx8D0UF5C7kUzrFW0egCxss=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [172.16.10.126] ([141.76.176.167]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MlNpH-1pXUSZ07hd-00lpDi; Fri, 21
+ Oct 2022 11:35:02 +0200
+Subject: Re: [PATCH v2 2/2] platform/x86: dell: Add new dell-wmi-ddv driver
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     markgross@kernel.org, rafael@kernel.org, lenb@kernel.org,
+        hmh@hmh.eng.br, matan@svgalib.org, corentin.chary@gmail.com,
+        jeremy@system76.com, productdev@system76.com,
+        mario.limonciello@amd.com, pobrn@protonmail.com,
+        coproscefalo@gmail.com, platform-driver-x86@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220927204521.601887-1-W_Armin@gmx.de>
+ <20220927204521.601887-3-W_Armin@gmx.de>
+ <YzQmQw0hEwzXV/iz@smile.fi.intel.com>
+ <34774c9d-1210-0015-f78e-97fdf717480c@gmx.de>
+ <YzVqbSBHm3OrjIaQ@smile.fi.intel.com>
+ <bf84f13d-f76a-c0ac-8a1f-f4e1b55e6f51@redhat.com>
+From:   Armin Wolf <W_Armin@gmx.de>
+Message-ID: <11964cd1-94b5-dc6a-a6c9-7fd5fe335ed4@gmx.de>
+Date:   Fri, 21 Oct 2022 11:34:10 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU0PR04MB9417:EE_|AM7PR04MB7157:EE_
-X-MS-Office365-Filtering-Correlation-Id: 48e80542-14c2-4046-9970-08dab3471aa8
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: q/6st4y3RlkWiW402/ePwYX5BRdeNaMoLaYCLxdEW/NWnaoLBNn1PvXxWdh/hqdzgyV+sA7/p+zuiQ0frmI4KY+0pjgJRJT05rVxKqRBca/xfJ9vYa56scae5tf5Wlw3y21ihlaKMnNvq0CMVBo6d7KVgwju9QmzirB4EwaScEj/aW1xepc4KsxwGCK8IMalX4WjVnJeJGdk+bi9Nq0tyvCpXl7e+btO0JmXSB5N8eQxCdUIAzpbw9qcX+WTHdfdIh/RGIjFapkZb6dXhXUY0WUbf9Pil0Ihb/Db5TwgUNe+M1/3Vb5HfGLxxbntJW99ZwPjHA+t1nHnsNgM3dwf2GiEnAVBL4n6LUumV80izrxNQo96fsBtsx45BAcpYT1N+3AHrmvoHLN7ZXCfzZYolfCfqBayVgcBJ8UFWRnKAkqlg1se6vedQvpsCwdTKhCUCXEdc5TdUubBSpKRWu6qiIO9H/ZpXafu4KKxU5e0fhqS3zJKw0gLKAaEGYp2E4cTXGPWbovVSogOCasEEeGdGcK7Z/nSjDfNHF4HzMlpI9nQImLpjC2sE3EmQ0uRdSay8sJOLnLlPcrzoytbDQjcUwBNaWnXlLyJu84xjOGp62qTFhvJ/5BYz6ZdYX70aR90ARo9a3zEKcwFSsSOEYyDzcbnm4Jvl5byfACQzc1GzbH91LY5N5r6pOy9j64KC3tcAJofx+TaKzbF4rnNGbyrLAdiIAMjUV0Mc1dgcI9g8tnBSjUUTJpuOHkwn4MTin3p84TQODfzZk3GWXD7EOoQv9pPnauTqgiqM2U18k0zYBJeObs/210sBNt82LuWWj63Mz5svDvX+IKHazpIjMBOm55gTl/cgiIOxEhokrZZWpQ=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(366004)(376002)(136003)(396003)(39860400002)(451199015)(31686004)(83380400001)(6486002)(478600001)(38350700002)(2906002)(6666004)(38100700002)(44832011)(86362001)(6916009)(52116002)(2616005)(186003)(316002)(7416002)(66556008)(8936002)(66476007)(31696002)(41300700001)(26005)(6512007)(4326008)(5660300002)(6506007)(66946007)(53546011)(8676002)(32563001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?blZtcWxHV1RlOXhMN2RQY2VpRUJoeWFmbmVlM3dHSVhQOXNZSVFJZGdKeXVm?=
- =?utf-8?B?SnZJZy9rR3ArTEdaU0dPMi9YdFY2cUl5dzVCS29HZlZraVVBMldFbXZsNVJl?=
- =?utf-8?B?QXM3dGZ6OFN6R1l6emlZOXFSNkRBdktkUGhNaU96UnozKytIdUpqTlVNMmNU?=
- =?utf-8?B?Zis2QklBT3dMelVvWkd4VjRNZHdmam5KdDJ6b3B4OGNQenJkZWM0R0hhN0w4?=
- =?utf-8?B?ZkNBaGdjOUlURkIzb3Z4UU54bFpxemxScGE4RFFkUHJIOHJJSlBlSldqVlFa?=
- =?utf-8?B?c0VUUTZHTytKRDYzWVF3WFdYRkZ3UHpoQjM3V3dEVTh6ZXRZUVZVbHk1QzhU?=
- =?utf-8?B?NUdNV2pvOGNBSnllQ3FqSFMrLytTWjVWWXB5Uk9sdk9ReE0wTTR1UC80TSth?=
- =?utf-8?B?bElSbk1Cd1kzYUVxc0hPK0JDeWJDbEdDWjdKaXFHaFdvNGQxWWhmaDNnZFlN?=
- =?utf-8?B?Ulc0dzVkSzJRYnpyVTl5TUkwWWF4SVIwS2ZTSmR3a0dpdDR0REw5eVdqMXVx?=
- =?utf-8?B?VUlQcHBPNk1lZkMzeDlKSGN4NnREM1JMQWZYZHhSMVlzN3BOTjZOVzBTRmNv?=
- =?utf-8?B?SnZTajVTejU0TUpGeHFHbERpTUFnQko0blFKd0pHTW1IaWdnbVpGQ2tPRThW?=
- =?utf-8?B?S3o2eGViOVE0b0FZeFMxS2pwckdYaEliSXlGckhKelREWVhsMGtKSmgvdlVF?=
- =?utf-8?B?ZExlazdkNXl1akQrRVZuS2xGSUU3SzVhT2ZTa3J3SGtEaHhLWjhtTlpZZG0y?=
- =?utf-8?B?c215WnVEektYbmpSVWtpKzdjeklpVW80cWduUzJGV05Xc0pKMHdoRUxyeWdw?=
- =?utf-8?B?Ujg5WElhQmxqeXh5bzQ4VEx6Q04wT1M3VW5pSWVxeXdaSGtPQXBVZ2lINUti?=
- =?utf-8?B?M0xWdUFuQWc2M2RtajdQQitPekg5WFdhNGsxVnRWZmZ4S2pTUWdta0l5Mkpm?=
- =?utf-8?B?LzhlN0lkYjloVUdXTDcwUHZFekFpWUpGdlJoa3l6Tkl5MUdaZXJ3Sm5xd3Vx?=
- =?utf-8?B?NDcyWnVoWlZnOXp5YktTNmZnTmxyV1BkVXR4RTdkY3R1MXROdlZRSWsyZ3lu?=
- =?utf-8?B?VENxOG00REFtMFpyaE9Ya015N1ltaDkrT2Q5THIwc01nNmpZMm1lT1crVWta?=
- =?utf-8?B?dEQ5T0FQYjNpUnlNc3kyby92c0FKbGlPM05ITVd6Y2tiUEVmdDRHS2xzTHor?=
- =?utf-8?B?Rk1wUFpFWTl3K0NQSVRnUWQyVVg4YnVIOEtiWnNvdXlkLzRESDJZQ2dNcWJN?=
- =?utf-8?B?WkE1TjJGWkxlRkFsOFA3T25yYk9oNjZrZUF4VnNKOS8rT2N4TmlrN09MY2Zi?=
- =?utf-8?B?WGxCU3h2cWR2SjJUdjlDT1ljWE5qY3p3MjJPMGROUlMxS24zaU5BTXc1NHFC?=
- =?utf-8?B?NGp3WUkrQXZZdkJKUGE2c2NwcXVqOEVoVW0rTWpTSTZra2dnMkYyaXhhVGJt?=
- =?utf-8?B?MWRuTFBoNzlvY1YyYm9MbEx0T2tsVS95WnZyang4Q3c3S1ZtQzFnSFM0V0Yx?=
- =?utf-8?B?WndaUndHcU41U3g2ZUxhVUcybUd1aWpDbi9mQnlTanBzRkRGSVpuZng2bjY1?=
- =?utf-8?B?WCtrSnM1bnJnU2U3UERzS05zN1RSUE1kcE5pUmZpMGh1VHgxVlZJNU9vTllY?=
- =?utf-8?B?ZVhXWW5ja3BZV3FNQkp4cWF4YVZKYkRhOUxiZmRwQXdONE4rVWlRcE5zUXN4?=
- =?utf-8?B?YkYxUWhtUmY0N2FDZjdvM3RobVU1YnZaUFpBR1lzcFBaY1IrRVA0c3RKUGgr?=
- =?utf-8?B?OUtFQ29EMTEwMWVXK05FU21aLzlETG9Yb3NEMk4rMTE5OVNESW14aERLSWNU?=
- =?utf-8?B?R0NmZ2F6R1g0akxyc3ZBaTdEcElyelRiLy90MVlvTTlITVlGYlV0aWFXc3Nl?=
- =?utf-8?B?NzBsVHdsekZueEJNOFBiY0VhTWpPMEFIajhMN1ovL3lJbEF4NXBDQ3R2S3hZ?=
- =?utf-8?B?NHdicjBFNzJrbVNmR0Zya0RKY0xSMVdyL3RLQllYejdwUEJUL1MrTWdSRXc3?=
- =?utf-8?B?Y3h3UWMwRUY4NHdjbUhrUXE5UWdFY1RIcDFLUENaNXplMmJ4dFFMQmhpZmJm?=
- =?utf-8?B?WnZRQUZodXpUOUlTS0RtNDBEZE5lbWt2VXE2ZXR3RkliOGprR3lFbC93dVQv?=
- =?utf-8?Q?r5Duii0i1HgzQJPFgcz7cz3gE?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 48e80542-14c2-4046-9970-08dab3471aa8
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Oct 2022 09:32:00.3915
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: OluYeYjF2x4VkHtcqxoAJmqHMurvI6NMjwMkEYj+rq9oSemAlyWuIFTTH7qi5lCJ5DVU89j6/0GTmagXSDjNQw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB7157
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <bf84f13d-f76a-c0ac-8a1f-f4e1b55e6f51@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+Content-Language: en-US
+X-Provags-ID: V03:K1:X4pEoToi4QT7HuAczkuIfzBTEdr5/qhm3nE5Pi+nOj4pzMhjYCO
+ 1HI8G2L0Q58QWEknTr3HL0zMRi9uFy7i5HHRGdu4LM+gybgxhCc28eVvSJEr/xjtqX3F8wN
+ kKJ3l9bKuh4xcB0hjaL9KMJXvUObYBeGV6N73MM8paXSWr3Qjh9+pVVd10lluR4SMaJFg30
+ Jv6TkJA4ThhK52fhrQMvQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:/Hmq+Ne4wC4=:vzadYy6YPg0iPRTOzPQRAJ
+ 5dFTqHAwfr0TQTmnCySkD0icSEuwtmZ6pZUYfCPGItQK0OzhyTmUswj7Yt7F9mA2m4kKeuY+s
+ pzz7KtCx+wacZw1f1UQggvrdT8TdoI4AihLboEs445kP2N1pdsBCxjz1L1aRGFPwGBDGSDbEj
+ 2Ff/0SBmJKwxJRxmGDku3qHnr/2jO+Vq9YcGviWd1BuGkvShH1QKvPlO5hlj5Lu6g8f/NLM+d
+ Ls+5wR2cosg5s4rDU1U+tMQJmRD6RPXZ6mnP7x9go0LptsBoZPztc5H+fKv2Saqp3nF20PNUh
+ bYi242BRmiWhzc2jaJXghYVMXFQuWiM9QifgSKHaZpSgfMQ1HU4gflSj9BGvKF6v4NH0EKjdI
+ vPRYS70C9yNroORTJInmdcwq9lCbXL2G4IfEUBZuDbAZDy0GeaykaTImu4jmHIdedtxO3RJl/
+ cL/esEUK4NdwfkDnZbj+ysei4vht6/dtCYXTP6vj4qnPvlTdynQmrtIelHJKCHiqpZ0/rzw10
+ kNbQKe3KcWNLt3/3wXvmRw0rR7aUqJl0iTnN2jaXoeY5syRlDDj3MadQhhqbJo8CvJCcsvkDb
+ gT5uKSH1F7vY+1ClzqkVVqkknD8i8bRDdI9SPv59v4WeFWLmw+Fb43ppb1FOaUJIN/0rOpuQF
+ d1RQuHljfUpODJlTfkwOUhngrZ9eyfJk516wpCRtb9dZOZ+hwyV0rCJP3TVpVztrdnGvVO1iL
+ zpIZwtcABTKmtz2Yj+6Iu2aTDEB0ep04ySWy1v+3GQHyYPhf6zy53PdWDqP2wu+fflsHgTtL1
+ mhs+rorYP82uWu6Ljp75Uh6Az8FlcDpEt+ljTKxi7d6+Xls4nHh+ViUbtPKAJPyD5rHsv0SL7
+ ViUAMTqlFo5kZ6Y6wF05jW20YWVygDkajAgzEDE9sxYIeBCP9b8TD2cCW6Po5LWnsf6mu/dLv
+ y1nMx28j4R9ocFrOpDZ6jj8wOxppn58WUip1c7tRIRQO38IwQuPlP3gCVe1nnlkNocacvaJN/
+ 0YqyzOw+6RI9+SliSELeI1b53hHbTcQFP4r5u0pbFqRyoogi4uQcGtYwX66Xn4cxprrf6YvvJ
+ bCbNltRcSGaikwAPA/HYEqu4LihGeKMU8FHCZeRinaSyhxwPJbaciyvldhU1jUqbF6VxaiVbw
+ YP56fywvy5GkS5kxQxcwQsAXo9VdLPuaidFwqtQbm36WjgBlriePtlmK+03Aio8YUtyppksKz
+ UmymwatVgzfbroRp0pSrQxYHvJQz7kH1lK6UasheSFAylHL+CiDGqt8ActlfAEqnj4hEd41Gp
+ K32qNM+6kHR6YR2dzVU1tgwWStJTIeatjb/5bKAvUr+PRXSgEwilBkEQ/Sd3xlCFvH/y6nnz7
+ oERSAi7yGhEFkXwxlJreJiG4Zk9hG4+eVQvRgiypqu+JQy2mi+fZQDi6HoIVPU5oWeNglSBuG
+ zkNFb/d+8Y2kLPH5jwVDBguGKNL5a3Ptx9FmorE+hP4VBtMO/rjs2teONHkZtjrAcXts1wATx
+ Q0sykocID5b0n1WcLLk19EJJPH8fnsmTZlmHamYIQ1V0v
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marco,
+Am 29.09.22 um 15:12 schrieb Hans de Goede:
 
-On 10/21/2022 5:09 PM, Marco Felsch wrote:
-> On 22-10-21, Peng Fan wrote:
->> Hi Marco,
+> Hi,
+>
+> On 9/29/22 11:50, Andy Shevchenko wrote:
+>> On Wed, Sep 28, 2022 at 10:57:16PM +0200, Armin Wolf wrote:
+>>> Am 28.09.22 um 12:47 schrieb Andy Shevchenko:
+>>>> On Tue, Sep 27, 2022 at 10:45:21PM +0200, Armin Wolf wrote:
+>> ...
 >>
->> On 10/20/2022 7:07 PM, Marco Felsch wrote:
->>> Hi Peng,
->>>
->>> On 22-10-20, Peng Fan (OSS) wrote:
->>>> From: Peng Fan <peng.fan@nxp.com>
+>>>>> +static void dell_wmi_ddv_debugfs_init(struct wmi_device *wdev)
+>>>> Strictly speaking this should return int (see below).
 >>>>
->>>> Enable uart1/3 ports for evk board.
+>>>>> +{
+>>>>> +	struct dentry *entry;
+>>>>> +	char name[64];
+>>>>> +Fujitsu Academy
+>>>>>
+>>>>> +	scnprintf(name, ARRAY_SIZE(name), "%s-%s", DRIVER_NAME, dev_name(&=
+wdev->dev));
+>>>>> +	entry =3D debugfs_create_dir(name, NULL);
+>>>>> +
+>>>>> +	debugfs_create_devm_seqfile(&wdev->dev, "fan_sensor_information", =
+entry,
+>>>>> +				    dell_wmi_ddv_fan_read);
+>>>>> +	debugfs_create_devm_seqfile(&wdev->dev, "thermal_sensor_informatio=
+n", entry,
+>>>>> +				    dell_wmi_ddv_temp_read);
+>>>>> +
+>>>>> +	devm_add_action_or_reset(&wdev->dev, dell_wmi_ddv_debugfs_remove, =
+entry);
+>>>> return devm...
 >>>>
->>>> Signed-off-by: Peng Fan <peng.fan@nxp.com>
->>>> ---
->>>>    arch/arm64/boot/dts/freescale/imx8mp-evk.dts | 36 ++++++++++++++++++++
->>>>    1 file changed, 36 insertions(+)
+>>>> This is not related to debugfs and there is no rule to avoid checking=
+ error
+>>>> codes from devm_add_action_or_reset().
 >>>>
->>>> diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
->>>> index 2e29bb3c041c..366f709f8790 100644
->>>> --- a/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
->>>> +++ b/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
->>>> @@ -428,6 +428,15 @@ &snvs_pwrkey {
->>>>    	status = "okay";
->>>>    };
->>>> +&uart1 { /* BT */
->>>> +	pinctrl-names = "default";
->>>> +	pinctrl-0 = <&pinctrl_uart1>;
->>>> +	assigned-clocks = <&clk IMX8MP_CLK_UART1>;
->>>> +	assigned-clock-parents = <&clk IMX8MP_SYS_PLL1_80M>;
->>>
->>> I'm curious, what is the default parent and why is this wrong? For the
->>> already exisiting uart2 we don't do that. Same applies for uart3.
->>
->> The default parent is OSC_24M. The uart2 is for console, so 24M is ok.
->> As I recall, we met issue 24M not able to get higher baudrate.
-> 
-> What did you mean by higher baudrate, is it everything > 115200? When
-> the console baudrates can be fullfilled with the PLL1_80M as well
-> wouldn't it be worth to fix the imx8mp.dtsi instead?
-
-To console, we use 115200, 24M could fullfill it.
-
-BaudRate = (clk / ref_clk_div) / (16 * (ubmr + 1) / (ubir + 1))
-
-If you have 24M ref_clk, the max baudrate is 1.5M, with setting
-ubmr, ubir to 0, and ref clk divider to 1.
-
-So more higher baudrate, 24M could not fulfill.
-
-THanks,
-Peng.
-
-> 
+>>> According to the documentation of debugfs_create_dir(), drivers should=
+ work fine if debugfs
+>>> initialization fails. Thus the the return value of dell_wmi_ddv_debugf=
+s_init() would be ignored
+>>> when called, which means that returning an error would serve no purpos=
+e.
+>>> Additionally, devm_add_action_or_reset() automatically executes the cl=
+eanup function if devres
+>>> registration fails, so we do not have to care about that.
+>> The problem with your code that if devm_ call fails and you ain't stop =
+probing
+>> the remove-insert module (or unbind-bind) cycle will fail, because of e=
+xisting
+>> (leaked) debugfs dentries.
+> No it won't if the devm_ call fails then it will directly call
+> the passed in handler so in this case we can simply continue
+> without debugfs entries (which will have been removed by the
+> handler). The directly calling of the action handler on
+> failure is the whole difference between devm_add_action()
+> and devm_add_action_or_reset()
+>
+> So using it this way in the case of a debugfs init function
+> is fine.
+>
+>>>>> +		.name =3D DRIVER_NAME,
+>>>> I would use explicit literal since this is a (semi-) ABI, and having =
+it as
+>>>> a define feels not fully right.
+>>> The driver name is used in two places (init and debugfs), so having a =
+define for it
+>>> avoids problems in case someone forgets to change both.
+>> Which is exactly what we must prevent developer to do. If changing debu=
+gfs it
+>> mustn't change the driver name, because the latter is ABI, while the fo=
+rmer is
+>> not.
+> Arguably both are not really ABI. Drivers have been renamed in the past
+> without issues for userspace.
+>
 > Regards,
->    Marco
+>
+> Hans
+>
+What is the current status of this patch set? If necessary, i can submit a=
+n v3 patch set which includes the
+patch regarding the minor style fixes. I also tested the driver on my Dell=
+ Insprion 3505 for some time, so
+i can proof it works.
+
+Armin Wolf
+
