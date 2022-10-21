@@ -2,135 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 956A8606CB8
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 02:57:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23C1B606CBD
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 02:58:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229911AbiJUA5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 20:57:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54726 "EHLO
+        id S229944AbiJUA6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 20:58:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbiJUA5j (ORCPT
+        with ESMTP id S229929AbiJUA5y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 20:57:39 -0400
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34D011C7128
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 17:57:38 -0700 (PDT)
-Received: by mail-qv1-xf30.google.com with SMTP id x15so885155qvp.1
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 17:57:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=X0SdjGX93SoUfgDNcPGyqCsKajZovtPz4VDBIQaEbUw=;
-        b=K2GsRTG+bSqoKbLmErsIpN4EL1UTxTrjiH5LtCpkVWp8ZKQJ3BP7leJ8aTCinICyFB
-         F76jiPG1g5sb9CBh92ZbvlDB9CdqJd0zYtkW3KdkTOSs8xekNf+wqpu9nDZCaK27heET
-         agVbeQ97cNPvr8f91bT3FXLrUD2hhr5kCuPPejQ+1IhJYRXgsL7P+qkL8tVEaHsOSH3P
-         39mH1CKTA9MtHDRqMu+vv+c8JB6k4V0UJncn7D0aK0slUrywNsOk0J8AdFGHEykfhWYJ
-         Iy7aBYBz0Jtiiyvm4MKOTPnOS8o5J2Ov9p4NYdIGLtFpOnuE8aoHGzcTALTBOZ2pfP7h
-         akRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=X0SdjGX93SoUfgDNcPGyqCsKajZovtPz4VDBIQaEbUw=;
-        b=cHPPMdF5DvPPSbD0uzAQ1T96NpU9RgdOTqZFn4lHlZxWkM5DSWsSkmD5Egcxb5Mvn8
-         YLuXfQIwjdvdwApGchT9oKCDPifIcnR3K9mflskeOql7AhAJYAXCsOWk0mhDnzOkJgfG
-         zomjkxTadN6sa7AW2S69oN3AePyIYKVldlGD15xaFiFRlO3SkZuZ9b1jIjX5jLbpgJE7
-         n7i4wHu+LpeMSVJnfx4/Z66jn07iU2R66G1qJFx4MxyVVmlpATJoVez0OlN7p7Y897yY
-         YRBeDfqTIwm9VrDJbsCMpJOF9vBTcYbo2McnxKw6ZwJwjUKIyVFaNylfHh6bB71ZaR1A
-         Twig==
-X-Gm-Message-State: ACrzQf0lP2FHzjzuFdE+NNJcqvzbGdUdF81Uf6z4WcQyiwwMVRtQMUo9
-        svB4XJhmvFPpVqzfkryVw++gBA==
-X-Google-Smtp-Source: AMsMyM4RPti2boCODgoqSWyPSib8gDX4SUzNZkPomNOm7OB5OU0HG8iKXhT6X7ezvTMPKyb11m+LFw==
-X-Received: by 2002:a05:6214:29cb:b0:4b1:7991:e844 with SMTP id gh11-20020a05621429cb00b004b17991e844mr14426856qvb.72.1666313857373;
-        Thu, 20 Oct 2022 17:57:37 -0700 (PDT)
-Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
-        by smtp.gmail.com with ESMTPSA id k11-20020a05620a414b00b006e99290e83fsm8678550qko.107.2022.10.20.17.57.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Oct 2022 17:57:36 -0700 (PDT)
-Message-ID: <2458332d-5a55-a74d-d6f0-c1457fbda282@linaro.org>
-Date:   Thu, 20 Oct 2022 20:57:29 -0400
+        Thu, 20 Oct 2022 20:57:54 -0400
+Received: from out203-205-221-236.mail.qq.com (out203-205-221-236.mail.qq.com [203.205.221.236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE6C31CE3F7
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 17:57:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1666313868;
+        bh=dl6yBMYwe2DpRerjx1DwIpqPoeEi77jJTwJJ4yakXcw=;
+        h=From:To:Cc:Subject:Date;
+        b=OXrU6QK7H88OGpncfbeF9Atn5gBx7fntYNuupXmO34GFm/DA/r5qv9bb7GKczMCsq
+         YmHJoq81bURH2r+AAhJv7MOqg++jx1bSei77QhJTyqq/6UdIjRBlny3c9+YV4c5Kym
+         ORLsfpaFM84nOdcXl9NYFquhTUDBUDqcsNNLGsCA=
+Received: from localhost.localdomain ([39.156.73.13])
+        by newxmesmtplogicsvrsza32.qq.com (NewEsmtp) with SMTP
+        id E6C0F64A; Fri, 21 Oct 2022 08:57:44 +0800
+X-QQ-mid: xmsmtpt1666313864toqnf29sc
+Message-ID: <tencent_768ACEEBE1E803E29F4191906956D065B806@qq.com>
+X-QQ-XMAILINFO: N7h1OCCDntujVo9Hfi8wbg9LPgS406+zvQTITmAD8nORjvpp5imfSfXMri5wj2
+         UGkC1dgWu75HAPm4Be98DV1aokEVMPBFiLBNYNEtIqdmNWbZJ1mnsINioGFkoRZvFFlbf2cqVS/P
+         TKe+XeRC/wEUvIFDkAharLneEpucmpKvk7TTfjaf6CcmYjFOBAGPYganYWaJOTfCnXvXl0g61usk
+         zONKzkcwlenZts7hjaX091E5F8xAlVC+VdwS6mmhB1nlwROloZWJ/rqur5o0ngZrkdd3cmiyuldq
+         5xvzgY3hYEFqba57v7i2p1n5LGnafMCRm74DjxbOBGlwcFVu9TyKX2DeY2Mf/AQxiLNEKcvkrwLp
+         nF6nIlR+H825OsZFIjEzNKVDEv4mfQlOlKyuQJZWnwk54CdfU1fmnCu+xJ84c4LZxnyudxJkN/vt
+         bHVTwIeU91qy3ERq7YpepX43uYX1aeJ4JdEZh4TWOxg7JmnHz4k6G3bEoeVCrAfLqQwHAtg1yW+C
+         sLGxnNRcuQGnm/rkPJXtE6ZdW5HpzVy9ne7FNTcTYuVSEvWXIxLUmw+8fiBOhKSKQ/MJliqWSO+T
+         1zfFaX7ZSqnvYWXZd07qw7oE2FRzcC533AB27bpaWguNmMhDrZ9Ifc4nrenEu8tQwoO6FxjQ6t/K
+         Rwgm094erd6KWHi9d9vnUt6U36+/0k1o20s2L6Q52aRDb9u5R7IWsNzIfSl7zdOzMS5GizRWB1YK
+         35Dij5670IMz/yn0glJAQHNQ/vCFWfbmm0T9fPL1fd8kp7mN5Z7P1wbWNjByeAjMX2TgwXVxk+Xt
+         DvedF3uUzdPJ5geaI7s8ezRFQ7MPRTosbJQKRhwrMc4IEDCE8KEYMgpe/aiVyf/t0xGCJvUKrZnm
+         yxAlrDCHxCK8hCaFYAv9NoSlHdR0xeZZ/NKHe0TOyp59rYktnjqlqIYAdjf53ed4ShVSNetuuAC+
+         5hxj45G3Ku6xzOMDjBqeT/u6bgisv68ZSRFANOdBQ+qw9HNTkmSMel90NboXgF
+From:   Rong Tao <rtoax@foxmail.com>
+Cc:     rtoax@foxmail.com, Rong Tao <rongtao@cestc.cn>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] kvm: vmenter: Use tabs instead of spaces for indentation
+Date:   Fri, 21 Oct 2022 08:57:41 +0800
+X-OQ-MSGID: <20221021005741.12240-1-rtoax@foxmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 1/2] dt-bindings: regulator: Add bindings for Richtek
- RT6190 regulator
-Content-Language: en-US
-To:     cy_huang <u0084500@gmail.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, broonie@kernel.org
-Cc:     lgirdwood@gmail.com, cy_huang@richtek.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1666249033-12219-1-git-send-email-u0084500@gmail.com>
- <1666249033-12219-2-git-send-email-u0084500@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1666249033-12219-2-git-send-email-u0084500@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/10/2022 02:57, cy_huang wrote:
-> From: ChiYuan Huang <cy_huang@richtek.com>
-> 
-> Add devicetree binding for Richtek RT6190 4-Switch buckboost controller.
-> 
-> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> ---
->  .../regulator/richtek,rt6190-regulator.yaml        | 77 ++++++++++++++++++++++
->  1 file changed, 77 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/regulator/richtek,rt6190-regulator.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/regulator/richtek,rt6190-regulator.yaml b/Documentation/devicetree/bindings/regulator/richtek,rt6190-regulator.yaml
-> new file mode 100644
-> index 00000000..be0fa7f
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/regulator/richtek,rt6190-regulator.yaml
-> @@ -0,0 +1,77 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/regulator/richtek,rt6190-regulator.yaml#
+From: Rong Tao <rongtao@cestc.cn>
 
-Filename based on compatible, so just richtek,rt6190.yaml
+Code indentation should use tabs where possible and miss a '*'.
 
-Unless it is a part of some MFD-like device, but then compatibles needs
-fixes.
+Signed-off-by: Rong Tao <rongtao@cestc.cn>
+---
+ arch/x86/kvm/vmx/vmenter.S | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Richtek RT6190 4-Switch BuckBoost controller
-> +
-> +maintainers:
-> +  - ChiYuan Huang <cy_huang@richtek.com>
-> +
-> +description: |
-> +  The RT6190 is 4-Switch BuckBoost controller designed for converting input
-> +  voltage to output voltage that can be equal to, higher or lower than input
-> +  voltage. It operates with wide input voltage range from 4.5V to 36V, and
-> +  the output voltage can be set from 3V to 36V by external FB pin. It's commonly
-> +  used for the application like as BuckBoost bus upply, docking station and USB
-> +  power delivery product.
-> +
-> +  Datasheet is available at
-> +  https://www.richtek.com/assets/product_file/RT6190/DS6190-02.pdf
-> +
-> +allOf:
-> +  - $ref: regulator.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - richtek,rt6190
-
-Best regards,
-Krzysztof
+diff --git a/arch/x86/kvm/vmx/vmenter.S b/arch/x86/kvm/vmx/vmenter.S
+index 8477d8bdd69c..f09e3aaab102 100644
+--- a/arch/x86/kvm/vmx/vmenter.S
++++ b/arch/x86/kvm/vmx/vmenter.S
+@@ -229,7 +229,7 @@ SYM_INNER_LABEL(vmx_vmexit, SYM_L_GLOBAL)
+ 	 * eIBRS has its own protection against poisoned RSB, so it doesn't
+ 	 * need the RSB filling sequence.  But it does need to be enabled, and a
+ 	 * single call to retire, before the first unbalanced RET.
+-         */
++	 */
+ 
+ 	FILL_RETURN_BUFFER %_ASM_CX, RSB_CLEAR_LOOPS, X86_FEATURE_RSB_VMEXIT,\
+ 			   X86_FEATURE_RSB_VMEXIT_LITE
+@@ -273,7 +273,7 @@ SYM_FUNC_END(__vmx_vcpu_run)
+  * vmread_error_trampoline - Trampoline from inline asm to vmread_error()
+  * @field:	VMCS field encoding that failed
+  * @fault:	%true if the VMREAD faulted, %false if it failed
+-
++ *
+  * Save and restore volatile registers across a call to vmread_error().  Note,
+  * all parameters are passed on the stack.
+  */
+-- 
+2.31.1
 
