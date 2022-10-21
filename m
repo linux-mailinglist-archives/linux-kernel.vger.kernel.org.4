@@ -2,103 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B8276075F9
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 13:20:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B819D6075FF
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 13:21:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230294AbiJULT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 07:19:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52984 "EHLO
+        id S230312AbiJULVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 07:21:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230177AbiJULTr (ORCPT
+        with ESMTP id S230251AbiJULVA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 07:19:47 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE34C53A67
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 04:19:44 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id p8so4483240lfu.11
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 04:19:44 -0700 (PDT)
+        Fri, 21 Oct 2022 07:21:00 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C1722514E1
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 04:20:58 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id 3-20020a17090a0f8300b00212d5cd4e5eso709799pjz.4
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 04:20:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ry8J3AzsAYcOp8SmDfnbNUXitGgoYOKaYRQ6uRWnRWU=;
-        b=daE365yCa1g3YT3Ogsc/0phvnpY7BrOOzncWnQ3sfLuU0gpU2cH1cbumKwuTfm12j+
-         nhkXFut2118tOsAdLXDvjf8sDSNV9p2u9bm/0f9JTNkW9RR3AgB1JXoQrUxUF5okjfwl
-         nlmc7nRkMhb8IcQq9Tp8YXHh2wFFRdj0E4MEE22MFVK4iHWKtZmGMwGiv9aztYevI3Ik
-         y/ECRXjNKpNAAObiSLxryE2yGNyV1A8Q8QUbtTLHpgxLiyjz2Pg9WDNu7b7D87HnZze6
-         Lel9eKeAAbPws8UExyJh6YIoNl2CIeNOI6hJfr71ChuCnhwEfNp7rg2M9UG84x5QOaKW
-         Yo3A==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=PVxrbdloPyeC7I/bClCHPaphZOmS62WhGrOJR/1SEx0=;
+        b=MyJKtJ/ZCHJdYsCn2j64p5BmT6QyI5frJjqts7FvsQSznMxcSspaLyESPqEOHYiyfN
+         0gcY0cQ1CZCbz/CRw53i9ur6YO1StEHMH4daMsTL9kRYb+H7zVgRiucjG2gpoHvAeoZN
+         8r/kATvwxpzdya4feBBsqjztLWSacMdF9SahGB1HlLlDm/JMR8tP5onZ9qoNmMlxZCpV
+         aZXeJfPlhvwUt1QKoJVLwcpgRG1mccvv6+8fjroaoIlwADYcwELV9TGGx8kh4L15cFJH
+         qYH7luxxGN/1hvb5XksLYjpflCsCwFCcei/xNneMaOMJqKGvixfZYFcIxI71FXdCNNJd
+         Eb/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ry8J3AzsAYcOp8SmDfnbNUXitGgoYOKaYRQ6uRWnRWU=;
-        b=dnwxVCbVJmhaQgqmxvsQQh/TgCk7wou6AkIyZj4E/22AoJdpyoJ8TrPpKE3A+/Dxy5
-         tsZpHH0D9woLn8SS9HT30NwHjnK+Vik0QyZTlT53P3hs6XT3NxjBBxM3rQ9wKZzMLO5r
-         zYy95G4s640N+b18xGEubZYgYwEYPkBU83Q5DBaijIzUqe8e9UkCAfi4JTOsbwHD5w1w
-         tlvqb+zheFgr0+UILza3lhQyKdoGI5HiCJl4nYQ/wUwwghdPyG7njdD82f1rEIX2iu5R
-         0adCfIDcBbCvq9SnOgHlA20ts433ShYtAyX1qhtMV2ywY7jhDQZimktL2NtdWmW1Cul0
-         XuFQ==
-X-Gm-Message-State: ACrzQf1XTlu3jvyjIs6nembFZ+b8yDb5rCF8SUkHAAQkVxyvSuVfUKMh
-        fttiLgAC2bGVjI+/AqeOGdb/yg==
-X-Google-Smtp-Source: AMsMyM4ow9jYgXDgpVjyT18F7PpTAHJgqNxNuwIMrdbae9umBoBzQMLU0ULg0iNON8oQ6+JowOTHQg==
-X-Received: by 2002:ac2:50da:0:b0:4a2:44dc:b719 with SMTP id h26-20020ac250da000000b004a244dcb719mr6259514lfm.652.1666351183033;
-        Fri, 21 Oct 2022 04:19:43 -0700 (PDT)
-Received: from [10.27.10.248] ([195.165.23.90])
-        by smtp.gmail.com with ESMTPSA id f25-20020a19ae19000000b00497aa190523sm3123186lfc.248.2022.10.21.04.19.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Oct 2022 04:19:42 -0700 (PDT)
-Message-ID: <d2c2b274-ecee-456e-25b1-dd161641720c@linaro.org>
-Date:   Fri, 21 Oct 2022 14:19:41 +0300
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PVxrbdloPyeC7I/bClCHPaphZOmS62WhGrOJR/1SEx0=;
+        b=kFTL4lJQGjA6+woVdmZg18+xfWT1XalCUJ9NA/GeK87SDVFY1E5CSbRtcviSbRmV8y
+         JVGcNNnL2CF6r8JTF12pWkUo/nvPgVm3APXsgk5l4LPH5X3M5XipKBMgo/iQUVokKaBJ
+         NgIEf0igv8Mj39gKBHA0trL30vsIxuy06X1QQbc526CQEasPIBwQywPvmXLpb5pXRpBU
+         e0TrcDlKjQjz2zot3dToC/rlPVgIiwKzBSwsUPBF257/vFkzhDZ8afwYPvzYDPh1EbGa
+         tvDEo8KFy6XtXT/sD6C3JM8kuuLKDQIxJ2Dg5cngajNtsZi7yS44CzvozgMv9SU6XJd+
+         12Ww==
+X-Gm-Message-State: ACrzQf03Uwz2c7z6USb2XTYlLS0IB+pGM4ygl/XJrOJbv1P/JM1YjubQ
+        8sH4tBIRvm8bXxhz6AyujH6Tc0eLu1M6/XCn
+X-Google-Smtp-Source: AMsMyM7f6OAkLIejzpa1Mw+h4+S7hXcJYNWXrgn44dgnez1Vgxyg0/EY/g/eVmZkfbWeQoUOq9uoDA==
+X-Received: by 2002:a17:90b:3d1:b0:212:732d:a1c8 with SMTP id go17-20020a17090b03d100b00212732da1c8mr8188889pjb.189.1666351257756;
+        Fri, 21 Oct 2022 04:20:57 -0700 (PDT)
+Received: from jacob-Ubuntu (126.224.215.218.sta.wbroadband.net.au. [218.215.224.126])
+        by smtp.gmail.com with ESMTPSA id t16-20020a170902e85000b00179eaf275d5sm14711612plg.27.2022.10.21.04.20.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Oct 2022 04:20:57 -0700 (PDT)
+Date:   Fri, 21 Oct 2022 22:20:52 +1100
+From:   Jacob Bai <jacob.bai.au@gmail.com>
+To:     Joe Perches <joe@perches.com>,
+        Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: r8188eu: replace IEs with ies
+Message-ID: <Y1KAlCIt64/y/PE7@jacob-Ubuntu>
+References: <20221018105409.18331-1-jacob.bai.au@gmail.com>
+ <8617109bdc3e192b98e5c3b21ba871501a87f6d9.camel@perches.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v3 15/15] phy: qcom-qmp-pcie: add support for sc8280xp
- 4-lane PHYs
-Content-Language: en-GB
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221021110947.28103-1-johan+linaro@kernel.org>
- <20221021110947.28103-16-johan+linaro@kernel.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20221021110947.28103-16-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8617109bdc3e192b98e5c3b21ba871501a87f6d9.camel@perches.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/10/2022 14:09, Johan Hovold wrote:
-> The PCIe2 and PCIe3 controllers and PHYs on SC8280XP can be used in
-> 4-lane mode or as separate controllers and PHYs in 2-lane mode (e.g. as
-> PCIe2A and PCIe2B).
+On Wed, Oct 19, 2022 at 09:35:32PM -0700, Joe Perches wrote:
+> On Tue, 2022-10-18 at 21:54 +1100, Jacob Bai wrote:
+> > Replace wlan_bssid_ex struct member IEs to ies.
+> > CamelCase issue found by checkpatch.
 > 
-> Add support for fetching the 4-lane configuration from the TCSR and
-> programming the lane registers of the second port when in 4-lane mode.
+> Please try to avoid changing code merely to appease checkpatch.
 > 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->   drivers/phy/qualcomm/Kconfig             |   1 +
->   drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 117 +++++++++++++++++++++++
->   2 files changed, 118 insertions(+)
-
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
--- 
-With best wishes
-Dmitry
-
+> What is the value of the last s?
+> When is a specific index of the IEs array actually used?
+> 
+> Mere renaming may be removing useful markings.
+> 
+> (removing a lot of the rename blocks)
+> 
+Thanks for those advices. As this was my first patch, I tried to 
+pick up an easier one to start with and followed commit 341f27d0
+but changed "IEs" only. 
+> > diff --git a/drivers/staging/r8188eu/include/wlan_bssdef.h b/drivers/staging/r8188eu/include/wlan_bssdef.h
+> []
+> > @@ -239,7 +239,7 @@ struct wlan_bssid_ex {
+> >  	unsigned char SupportedRates[NDIS_802_11_LENGTH_RATES_EX];
+> >  	struct wlan_phy_info	PhyInfo;
+> >  	u32  IELength;
+> > -	u8  IEs[MAX_IE_SZ];	/* timestamp, beacon interval, and
+> > +	u8  ies[MAX_IE_SZ];	/* timestamp, beacon interval, and
+> >  				 * capability information) */
+> >  } __packed;
+> []
+> > diff --git a/drivers/staging/r8188eu/os_dep/ioctl_linux.c b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
+> []
+> > @@ -104,11 +104,11 @@ static char *translate_scan(struct adapter *padapter,
+> >  
+> >  			if (pnetwork->network.Reserved[0] == 2) {/*  Probe Request */
+> >  				/*	Verifying the P2P IE */
+> > -				if (rtw_get_p2p_ie(pnetwork->network.IEs, pnetwork->network.IELength, NULL, &p2pielen))
+> > +				if (rtw_get_p2p_ie(pnetwork->network.ies, pnetwork->network.IELength, NULL, &p2pielen))
+> >  					blnGotP2PIE = true;
+> >  			} else {/*  Beacon or Probe Respones */
+> >  				/*	Verifying the P2P IE */
+> > -				if (rtw_get_p2p_ie(&pnetwork->network.IEs[12], pnetwork->network.IELength - 12, NULL, &p2pielen))
+> > +				if (rtw_get_p2p_ie(&pnetwork->network.ies[12], pnetwork->network.IELength - 12, NULL, &p2pielen))
+> 
+> For instance, these consistent 12 and "- 12" uses may be better as some
+> alternate array.
+Could you please be more detail on this?
+> 
+> >  					blnGotP2PIE = true;
+> >  			}
+> >  		}
+> > @@ -131,7 +131,7 @@ static char *translate_scan(struct adapter *padapter,
+> >  	start = iwe_stream_add_point(info, start, stop, &iwe, pnetwork->network.Ssid.Ssid);
+> >  
+> >  	/* parsing HT_CAP_IE */
+> > -	p = rtw_get_ie(&pnetwork->network.IEs[12], _HT_CAPABILITY_IE_, &ht_ielen, pnetwork->network.IELength - 12);
+> > +	p = rtw_get_ie(&pnetwork->network.ies[12], _HT_CAPABILITY_IE_, &ht_ielen, pnetwork->network.IELength - 12);
+> >  
+> >  	if (p && ht_ielen > 0) {
+> >  		struct ieee80211_ht_cap *pht_capie;
+> 
+> etc...
+> 
+> Also this may be removing similarities between a few other realtek
+> staging drivers
+> 
+> $ git grep  "\[MAX_IE_SZ\]"
+> drivers/staging/r8188eu/include/wlan_bssdef.h:  u8  IEs[MAX_IE_SZ];     /* timestamp, beacon interval, and
+> drivers/staging/rtl8712/wlan_bssdef.h:  u8 IEs[MAX_IE_SZ];
+> drivers/staging/rtl8723bs/include/wlan_bssdef.h:        u8  ies[MAX_IE_SZ];     /* timestamp, beacon interval, and capability information) */
+> 
+looks like rtl8723bs has already been updated with ies, should I replace
+IELength as well like the commit I followed?
