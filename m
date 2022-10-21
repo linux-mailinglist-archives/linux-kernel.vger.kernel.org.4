@@ -2,64 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6483608158
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 00:12:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F47F60815B
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 00:13:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbiJUWMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 18:12:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44884 "EHLO
+        id S229914AbiJUWNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 18:13:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbiJUWMK (ORCPT
+        with ESMTP id S229760AbiJUWNM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 18:12:10 -0400
-Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD74B2441B8;
-        Fri, 21 Oct 2022 15:12:08 -0700 (PDT)
-Received: by mail-oo1-f45.google.com with SMTP id r15-20020a4abf0f000000b004761c7e6be1so625856oop.9;
-        Fri, 21 Oct 2022 15:12:08 -0700 (PDT)
+        Fri, 21 Oct 2022 18:13:12 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4360D2441B8;
+        Fri, 21 Oct 2022 15:13:10 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id m15so10816602edb.13;
+        Fri, 21 Oct 2022 15:13:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=hjvmw72+jg+DsIKSh1utr1OBPgBsXbl/oMeJG09/SV0=;
+        b=lVVznKdsNy9DoOtyaoNzOXvV+CA4XIHhe12oB2nxluu6+Zn74jmBrt7IhVlAiNOC6r
+         THKSgsfUT/c7HU1e2i6Ps5KOPemnDoZ00hIyZfW5cWEgSEV2+Q0+vjDegLFO3iOINYtb
+         3JPDos5qggIJQbUu/CLIn3eP079shfr1AyzE16M4S2FkEbDkpnGIJ49NYCcWjO5R5t95
+         ydEyWOrKnJwsM6qg7pXcQjWv51K/+it5COoTHb5gLE49isEWGrSd353nXxQr3joHNqIV
+         Eb5LWoczMe3HYAbxlzKccxL/72mrvyAZMMEoiflxOVddfHRNicbghk0sITjxvTrrw04Q
+         cRwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+7kJ8nWws4CdYxlh1B9Atp5y9g2i8sKYiDiGJZXRmEI=;
-        b=S4yqKDMwuekQgAECgcBeDfoDl+EKaTAnJdtE5DRwYQoAwYXDiKbxX7srIIUWSyatwn
-         IWB6ygwnG5RINtoNUHx8mUf2M2mRlbFCJM7IRRE5DEEVbFz+VtFShNujPG8jmekNBv+b
-         YnDNZVjq9MbItqlOek2Dg/EYZ+KJKBa2MQnwqnRg5rly8W0pjPki/l5+7qu4nqtHlpmC
-         EgiUKi2HZ/aDKVTISndA8tVGxGS5mCXJ7IUAotx/hhpyi7t5gMOsN0ZXhPsyM4JLu/sY
-         lfkfnzWiSzWpW9OBTR+8gH0eMwrbNLb59A9PvvHgU5LYcSrsJYHW/L8cqUt07LTwBNDu
-         YkJQ==
-X-Gm-Message-State: ACrzQf3LqjU9u5Pu2OTdKK3KfH17IA38n4Ube9LuQexceUGHYK07SNfb
-        o6YpoP0m/DfRB2w+huN6oA==
-X-Google-Smtp-Source: AMsMyM44mYEduOCve2TkVYfwaNjYyUW48/ORzqaTp28KfbVGQNZ7AEpDcq9TzSF6OK3JoocFYxlbxw==
-X-Received: by 2002:a05:6820:168b:b0:476:2e4c:6cf1 with SMTP id bc11-20020a056820168b00b004762e4c6cf1mr10032684oob.69.1666390327919;
-        Fri, 21 Oct 2022 15:12:07 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id j3-20020acab903000000b0035179b87ba5sm1595444oif.20.2022.10.21.15.12.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Oct 2022 15:12:07 -0700 (PDT)
-Received: (nullmailer pid 516244 invoked by uid 1000);
-        Fri, 21 Oct 2022 22:12:08 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Vadym Kochan <vadym.kochan@plvision.eu>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Andrew Lunn <andrew@lunn.ch>, linux-mtd@lists.infradead.org,
-        devicetree@vger.kernel.org, Richard Weinberger <richard@nod.at>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Elad Nachman <enachman@marvell.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Gregory Clement <gregory.clement@bootlin.com>
-In-Reply-To: <20221021194552.683-2-vadym.kochan@plvision.eu>
-References: <20221021194552.683-1-vadym.kochan@plvision.eu> <20221021194552.683-2-vadym.kochan@plvision.eu>
-Message-Id: <166639031801.513906.6752849188940196302.robh@kernel.org>
-Subject: Re: [PATCH 1/2] dt-bindings: mtd: marvell-nand: Convert to YAML DT scheme
-Date:   Fri, 21 Oct 2022 17:12:08 -0500
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hjvmw72+jg+DsIKSh1utr1OBPgBsXbl/oMeJG09/SV0=;
+        b=zsp8jKJLaoZJrSzpqfqci7hhyjl5FJ//2jZQ6rU0mj1hova8yIwTQjedb5q0isnZwk
+         Xlu/dTU0RgyG4DOLZTLEBXisMhCY1VgtL+u2jingmz2ybSHoH/M7tEzdqxoL75DHMy5l
+         0NHo7aakGKLR4AnbIrFcTCTi9/AWdiFIj+hVF5lkeRF2+9yuFu3lF02lbumx2F+ke0xf
+         LbFT5Ii0n8U2+xkbCHM63vb0q8gNnRYgFH9+9YK098Bfn6qT2T4f85eaw++zb4XQMfYq
+         BE3BmY4XWttek4gT+YeGD1VHVpETPlVjLmpbkOAkdZR+57HXoNgWNECqqXcpEL6X8IHR
+         8keg==
+X-Gm-Message-State: ACrzQf0p/e2RY/8PedpezVVxvkoO0Nb4OjRgAtXuWtwdoPYWwWGpA05P
+        0ZCtton6JWwAnvvq97+J4bZxYXTJSJ0kJ1E9+e0=
+X-Google-Smtp-Source: AMsMyM7tVViOUvuari02fIONQYzlg8jdd0EECyRiJpb3iJ/LEjcS03V19gkGHtZgK+gVX/2RKWfxEi7jOsdCA9Xs4gM=
+X-Received: by 2002:a17:906:5a4b:b0:78d:4e5a:d101 with SMTP id
+ my11-20020a1709065a4b00b0078d4e5ad101mr16967374ejc.196.1666390388943; Fri, 21
+ Oct 2022 15:13:08 -0700 (PDT)
+MIME-Version: 1.0
+References: <20221019220242.4746-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20221019220242.4746-2-prabhakar.mahadev-lad.rj@bp.renesas.com> <20221021021006.GA2171731-robh@kernel.org>
+In-Reply-To: <20221021021006.GA2171731-robh@kernel.org>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Fri, 21 Oct 2022 23:12:42 +0100
+Message-ID: <CA+V-a8uMQrM75qxyFjz_x+V9+Se9JsPE0D=2yrgUkNRA7r2tew@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 1/2] dt-bindings: cache: r9a07g043f-l2-cache: Add
+ DT binding documentation for L2 cache controller
+To:     Rob Herring <robh@kernel.org>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Guo Ren <guoren@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Anup Patel <anup@brainfault.org>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-renesas-soc@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,41 +85,159 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 21 Oct 2022 22:45:49 +0300, Vadym Kochan wrote:
-> Switch the DT binding to a YAML schema to enable the DT validation.
-> 
-> Dropped deprecated compatibles and properties described in txt file.
-> 
-> Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
-> ---
->  .../bindings/mtd/marvell,nand-controller.yaml | 199 ++++++++++++++++++
->  .../devicetree/bindings/mtd/marvell-nand.txt  | 126 -----------
->  2 files changed, 199 insertions(+), 126 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/mtd/marvell,nand-controller.yaml
->  delete mode 100644 Documentation/devicetree/bindings/mtd/marvell-nand.txt
-> 
+Hi Rob,
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Thank you for the review.
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/mtd/marvell,nand-controller.yaml:17:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
+On Fri, Oct 21, 2022 at 3:10 AM Rob Herring <robh@kernel.org> wrote:
+>
+> On Wed, Oct 19, 2022 at 11:02:41PM +0100, Prabhakar wrote:
+> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> >
+> > Add DT binding documentation for L2 cache controller found on RZ/Five SoC.
+> >
+> > The Renesas RZ/Five microprocessor includes a RISC-V CPU Core (AX45MP
+> > Single) from Andes. The AX45MP core has an L2 cache controller, this patch
+> > describes the L2 cache block.
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > ---
+> >  .../cache/andestech,ax45mp-cache.yaml         | 125 ++++++++++++++++++
+> >  .../cache/andestech,ax45mp-cache.h            |  38 ++++++
+> >  2 files changed, 163 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/cache/andestech,ax45mp-cache.yaml
+> >  create mode 100644 include/dt-bindings/cache/andestech,ax45mp-cache.h
+> >
+> > diff --git a/Documentation/devicetree/bindings/cache/andestech,ax45mp-cache.yaml b/Documentation/devicetree/bindings/cache/andestech,ax45mp-cache.yaml
+> > new file mode 100644
+> > index 000000000000..4c86a15bda5f
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/cache/andestech,ax45mp-cache.yaml
+> > @@ -0,0 +1,125 @@
+> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > +# Copyright (C) 2022 Renesas Electronics Corp.
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/cache/andestech,ax45mp-cache.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Andestech AX45MP L2 Cache Controller
+> > +
+> > +maintainers:
+> > +  - Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > +
+> > +description:
+> > +  A level-2 cache (L2C) is used to improve the system performance by providing
+> > +  a larger amount of cache line entries and reasonable access delays. The L2C
+> > +  is shared between cores, and a non-inclusive non-exclusive policy is used.
+> > +
+> > +select:
+> > +  properties:
+> > +    compatible:
+> > +      contains:
+> > +        enum:
+> > +          - andestech,ax45mp-cache
+> > +
+> > +  required:
+> > +    - compatible
+> > +
+> > +properties:
+> > +  compatible:
+> > +    items:
+> > +      - const: andestech,ax45mp-cache
+> > +      - const: cache
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  interrupts:
+> > +    maxItems: 1
+> > +
+> > +  cache-line-size:
+> > +    const: 64
+> > +
+> > +  cache-level:
+> > +    const: 2
+> > +
+> > +  cache-sets:
+> > +    const: 1024
+> > +
+> > +  cache-size:
+> > +    enum: [131072, 262144, 524288, 1048576, 2097152]
+> > +
+> > +  cache-unified: true
+> > +
+> > +  next-level-cache: true
+> > +
+> > +  andestech,pma-regions:
+> > +    $ref: /schemas/types.yaml#/definitions/uint32-matrix
+> > +    minItems: 1
+> > +    maxItems: 16
+>
+> What is the inner dimension of the matrix?
+>
+> items:
+>   minItems: ?
+>   maxItems: ?
+>
+minItems = maxItems = 6
 
-dtschema/dtc warnings/errors:
+i.e. the first two entries are the address, next two is the size and
+last two is the flag.
+<0x0 0x58000000 0x0 0x08000000 0x0 (AX45MP_PMACFG_ETYP_NAPOT |
+AX45MP_PMACFG_MTYP_MEM_NON_CACHE_BUF)>;
+                                                          ^^ This is
+dummy and always be 0x0
 
-doc reference errors (make refcheckdocs):
-MAINTAINERS: Documentation/devicetree/bindings/mtd/marvell-nand.txt
+Is the above OK?
 
-See https://patchwork.ozlabs.org/patch/
+> > +    description: Optional array of memory regions to be set as non-cacheable
+> > +                 bufferable regions which will be setup in the PMA.
+> > +
+> > +  andestech,inst-prefetch:
+> > +    description: Instruction prefetch depth
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +    enum: [ 0, 1, 2, 3 ]
+> > +
+> > +  andestech,data-prefetch:
+> > +    description: Data prefetch depth
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +    enum: [ 0, 1, 2, 3 ]
+> > +
+> > +  andestech,tag-ram-ctl:
+> > +    description: Tag RAM output cycle. First tuple indicates output cycle and the
+> > +      second tuple indicates setup cycle.
+> > +    $ref: /schemas/types.yaml#/definitions/uint8-array
+> > +    items:
+> > +      - minimum: 0
+> > +        maximum: 2
+> > +      - minimum: 0
+> > +        maximum: 2
+>
+> maxItems: 2
+> items:
+>   maximum: 2
+>
+> 'items' without the '-' applies to all items.
+>
+> And the minimum is already 0.
+>
+Thanks for the suggestion, I'll fix it in the next version.
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
+> > +
+> > +  andestech,data-ram-ctl:
+> > +    description: Data RAM output cycle. First tuple indicates output cycle and the
+> > +      second tuple indicates setup cycle.
+> > +    $ref: /schemas/types.yaml#/definitions/uint8-array
+> > +    items:
+> > +      - minimum: 0
+> > +        maximum: 2
+> > +      - minimum: 0
+> > +        maximum: 2
+>
+> Same here.
+>
+Ditto.
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+Cheers,
+Prabhakar
