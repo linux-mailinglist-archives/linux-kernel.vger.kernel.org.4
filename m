@@ -2,158 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D26C46081B9
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 00:33:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 149AC6081BE
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 00:34:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbiJUWde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 18:33:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45206 "EHLO
+        id S229904AbiJUWes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 18:34:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229959AbiJUWda (ORCPT
+        with ESMTP id S229864AbiJUWen (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 18:33:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B81592AD314;
-        Fri, 21 Oct 2022 15:33:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 69253B82CBE;
-        Fri, 21 Oct 2022 22:33:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4070CC433C1;
-        Fri, 21 Oct 2022 22:33:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666391607;
-        bh=g5SUbc3dxCone79caS0M2AEu5MpWd5JFL171Tn/U2d4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YtT4bLoLT3AdAlNhZAuWY10vexMQTJrTFgGjHybRvOmmgqCsx8pKtm0zVkueeQbLC
-         K1m/sojgD3EMuFX/rcQI58EnKk68AVJNtO9JiMKs/6ZwTgDRov4jmgc2ydvStn23ag
-         GvR7y/2LAlBe2M1nuLAhW5vkosztclzcGnUgYIgwqC81NmFmc1up42azXQpER9T20A
-         CLWBmZzb96celcpPnCzalJVcG3hOZMKp8B00T3IhYbMWjwpGhvoTMm1M/b4lZzePg3
-         YQlPgGhd1URgg6MqJfR9Yeai00VsTcYaYL1I9dJTOVXHN4hE0/5hMAK8/MoHnqxz4X
-         OUGBYYU9we38Q==
-Date:   Sat, 22 Oct 2022 00:33:18 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org, Ben Dooks <ben-linux@fluff.org>,
-        Simtec Linux Team <linux@simtec.co.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Sylwester Nawrocki <sylvester.nawrocki@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-samsung-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: Re: [PATCH 02/21] ARM: s3c: remove s3c24xx specific hacks
-Message-ID: <Y1MeLqsE2fggyhzU@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org, Ben Dooks <ben-linux@fluff.org>,
-        Simtec Linux Team <linux@simtec.co.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Sylwester Nawrocki <sylvester.nawrocki@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-samsung-soc@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-clk@vger.kernel.org
-References: <20221021202254.4142411-1-arnd@kernel.org>
- <20221021203329.4143397-2-arnd@kernel.org>
+        Fri, 21 Oct 2022 18:34:43 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C183B40560
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 15:34:40 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id v11so3179293wmd.1
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 15:34:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=u8ZUYzkw582B8ag/E5+DphAy2SP/fG5AqdZthlsgOkg=;
+        b=jL2Gd5xVvSPH4itprSkcbvjwhI91WFR+GbCQACpb470ber3HglJQozB5ag4RcVToGu
+         wPnTIpEFEe2M7RFLs6dcNmbQQpyF9XykxWtxGmWevrX1p774CgpJDApx0b2s1BUGzcwT
+         FMGFFa+SIoDoDQIyEUYncH8OuHcHF1tyXss1rA7xTP5u4c+1vM0j4i6plBx6wA49/6bQ
+         5dg5J8y+B9E5MptlY39cKV/O1f6F0pubQws+MZi5qsgx8d92A3pWZvWoWOUJtMrxRswL
+         5j01nhNqCCtSARU2m8zude96vB3ZXXwUoAnBE21Lie8GWe5tvKc5Ruw9nyQFzCMxjVVP
+         R6CA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=u8ZUYzkw582B8ag/E5+DphAy2SP/fG5AqdZthlsgOkg=;
+        b=dQ+ZQjDL4/uQs70whbp4yduR/7Ln2dVMFBn80PdACOo/ASUNeqxf1x5wbGoIDsx/4X
+         RubqaXYyTidIvtokWwgl3MdqxI6zd2O5iu6j7Hy3QpnO05sGxR8EmVz+lfuw/rjJIkVG
+         aqr+AXXZbRWDDtA5MR0P7wsrQIo9+FFPumEneDlCU6nSVrMlRYOov2G8eRH1pSEqMQFZ
+         RzI4yKD/l4owJrpGpzNurKAvf3A1C3TsAS5YZoY2Ly9W2E9Ecs37eytgrKq0z6j1yOIK
+         2UiktJwqHJWN4k+2keInkUAXaXuaXXJD+mehPSPw1nz7L09od/JAr4q4qjygxVN3JcYl
+         oqZA==
+X-Gm-Message-State: ACrzQf1w+pN1BhivU6MbRGDLI0WM6HW+s9Stip4rFZdHDOOO6djyAVvg
+        k/jFUmkt4WHyaIdWsOKDnOwZ/YivQKdJv6A10Q6o9A==
+X-Google-Smtp-Source: AMsMyM5aywUekN6Y8xJpyTwBo0Fi998NdSgln/qRnagoV2Uw0QOqYGKf3bo2WxCdC0TacuRFb/YyoJJLunXXYIoxI1Q=
+X-Received: by 2002:a7b:c4cb:0:b0:3c6:f83e:cf79 with SMTP id
+ g11-20020a7bc4cb000000b003c6f83ecf79mr14767201wmk.112.1666391678766; Fri, 21
+ Oct 2022 15:34:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="q4IaRr9rlP9eixcE"
-Content-Disposition: inline
-In-Reply-To: <20221021203329.4143397-2-arnd@kernel.org>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221017162448.257173-1-wei.w.wang@intel.com>
+In-Reply-To: <20221017162448.257173-1-wei.w.wang@intel.com>
+From:   Vipin Sharma <vipinsh@google.com>
+Date:   Fri, 21 Oct 2022 15:34:02 -0700
+Message-ID: <CAHVum0fEVEtC-pLrKO3VJkPy0uqPa5WfeYQrTB=9Hk2Z8jV3fw@mail.gmail.com>
+Subject: Re: [PATCH v1] KVM: selftests: name the threads
+To:     Wei Wang <wei.w.wang@intel.com>
+Cc:     seanjc@google.com, pbonzini@redhat.com, dmatlack@google.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Oct 17, 2022 at 9:25 AM Wei Wang <wei.w.wang@intel.com> wrote:
+> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> index f1cb1627161f..c252c912f1ba 100644
+> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> @@ -2021,3 +2021,50 @@ void __vm_get_stat(struct kvm_vm *vm, const char *stat_name, uint64_t *data,
+>                 break;
+>         }
+>  }
+> +
+> +/*
+> + * Create a named thread
+> + *
+> + * Input Args:
+> + *   attr - the attributes for the new thread
+> + *   start_routine - the routine to run in the thread context
+> + *   arg - the argument passed to start_routine
+> + *   name - the name of the thread
+> + *
+> + * Output Args:
+> + *   thread - the thread to be created
+> + *
+> + * Create a thread with user specified name.
+> + */
+> +void pthread_create_with_name(pthread_t *thread, const pthread_attr_t *attr,
+> +                       void *(*start_routine)(void *), void *arg, char *name)
+> +{
+> +       int r;
+> +
+> +       r = pthread_create(thread, attr, start_routine, arg);
+> +       TEST_ASSERT(!r, "thread(%s) creation failed, r = %d", name, r);
+> +       pthread_setname_np(*thread, name);
 
---q4IaRr9rlP9eixcE
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Fri, Oct 21, 2022 at 10:27:35PM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
->=20
-> A number of device drivers reference CONFIG_ARM_S3C24XX_CPUFREQ or
-> similar symbols that are no longer available with the platform gone,
-> though the drivers themselves are still used on newer platforms,
-> so remove these hacks.
->=20
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-
-Acked-by: Wolfram Sang <wsa@kernel.org> # for I2C
-
-
---q4IaRr9rlP9eixcE
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNTHioACgkQFA3kzBSg
-KbYeNA/9HlDxIncjyh8NS2x57Q58pKmrahP7tNy2sriAnglRPdeXjkmitx/PDnHg
-bIozZCPd20DhLP05iEjhC03Z+mkJJjnjo+rhRpAKX8NlI1+pvJXTmfxiAvwkIU3b
-Ra+7NbDwBKiltZo/jJ7QNRjr6bWyZCLx3/0VIEx/ILC+ukZen1jdsJhdPD1/X1b3
-RiA8N9L3oPIcLmesbdb1HDiF5iD5C+2baALIuBeZ9xXwF8uFSsFpq4Qn1/HgpJFu
-AP6+2ksTWEj7H6ARmXOA/u6frOxsWH1kahCSTBB0dtX0gSarueTzo0FxEQsyhkAx
-dgtZB9qGsy7A92ya7u69s+VLgXQyEH3C+JOBW8Ww+faoCz2nk3VFqWjwKy8kqCil
-wgbEHv9oPuQDtlP2lw9ApUxfTkWIWp3v1EfZ7dALMcfSyMjh+kGcYntEhMlD1u3V
-lZrp9wbt5yJoIZ18mFHHbaiVCdcEjwn5fvLHSQ2znhLiyBT6pbWcC7Is5xb2hiF7
-Rl6+VuLynCXX36g/7J8hFkwcKZIa7x95++ksHb908o4tjNKX+6oYSKdbYW1gUhxJ
-yUNJs6W+HsoC0DFOWt71wex8PgRwG3HGkxBKDkd5dmLDcUYlLA9xENa6fH5MVdHI
-37v4yvkdM8L5yq07lG/mJkHC7C/7+kdZ/ahDQsSuIdcAoV1dIPc=
-=za7Y
------END PGP SIGNATURE-----
-
---q4IaRr9rlP9eixcE--
+Since pthread_setname_np() expects "name" to be 16 chars including \0,
+maybe a strnlen(name, 16) check before it will be useful.
