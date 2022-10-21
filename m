@@ -2,116 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCBF86079CF
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 16:41:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80B406079D8
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 16:44:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230368AbiJUOlt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 10:41:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57228 "EHLO
+        id S230365AbiJUOoB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 10:44:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230106AbiJUOlr (ORCPT
+        with ESMTP id S230106AbiJUOn5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 10:41:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 086583AE5B
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 07:41:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 987C561E9B
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 14:41:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 018BEC43470
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 14:41:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666363306;
-        bh=ropLClIeHzFRkVhJYXOsh1KnHR2hkSkJ7NM6ho2IP+c=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=kN8e2I0x6jmgx9kop7mSITV8Rqm4QU+8c0Be7/Bb/5PC5JQ6zoN1hL/hIAOSqU4o1
-         GSAAHt9qf0c9TVi6ksvMUh5ki00dahMuKNSmlO/bDY+0IErGYa3jPBmdPi0xT1D8sz
-         0a002Vdep6v2Nl89ppHI3kiqyI9CW8iGERxdB4bJxQUp9ZUzunzGt04Inx8Fh57afD
-         pXzsN1NSaSEDNxiWQcO2T8k2WvRDdyh3LWbG4HgO3RUlWwl4O09NzTLUkvM2REZTON
-         UEEFZQg6GV7jzAXat4R3OinHjqQwKwTpQPMc4gqsinKcnavd/WlwQlS66K+KLEhsaJ
-         FMqXcYT/zl6SQ==
-Received: by mail-oi1-f180.google.com with SMTP id n130so3437789oia.6
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 07:41:45 -0700 (PDT)
-X-Gm-Message-State: ACrzQf20zNWeVyRnUYPNhsm+fq8AMFk+QEeC0WRXHj5AMbm8sMovy1K6
-        D8RDmRWe+sUNw7kup2Z5cLnZqeD8GPAYVmrk3kM=
-X-Google-Smtp-Source: AMsMyM6vmu+6l7PBPl70AuuJwzmJIjFT3lQyrGPa9CZ9CzkdkiEtFZNRG79H8ghNVYAPWvYYCNoj1G0z2mZ1h+SqLr4=
-X-Received: by 2002:a05:6808:2222:b0:354:9c65:79ed with SMTP id
- bd34-20020a056808222200b003549c6579edmr23550708oib.19.1666363305134; Fri, 21
- Oct 2022 07:41:45 -0700 (PDT)
+        Fri, 21 Oct 2022 10:43:57 -0400
+Received: from vps0.lunn.ch (unknown [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E9B27FABF;
+        Fri, 21 Oct 2022 07:43:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=73aqR6HV5iOcxyMSF4YE4ZmbimjzG5hqXoHDTRylJ4E=; b=strngkscdax+cwEcwSvU9iuLvn
+        Pr3fH3nNfLRtg7p+KgHGYDKLHT7B0fbe7vpVJE9NTIvzPgmtusbiUz9ED+PWwZUeFZMR6JC2+aEvN
+        gOqBPoDRMZT9Z3Gx+VjqCSKqBMO9/jNzCMg1U/iDSgnTXztBrRScPtp1eaLn9rtS60Vg=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1oltFY-000F8w-Dz; Fri, 21 Oct 2022 16:43:52 +0200
+Date:   Fri, 21 Oct 2022 16:43:52 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Maxime Chevallier <maxime.chevallier@bootlin.com>
+Cc:     davem@davemloft.net, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, thomas.petazzoni@bootlin.com,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Robert Marko <robert.marko@sartura.hr>
+Subject: Re: [PATCH net-next v5 3/5] net: dsa: add out-of-band tagging
+ protocol
+Message-ID: <Y1KwKGcssBJ5tixJ@lunn.ch>
+References: <20221021124556.100445-1-maxime.chevallier@bootlin.com>
+ <20221021124556.100445-4-maxime.chevallier@bootlin.com>
 MIME-Version: 1.0
-References: <20221019154727.2395-1-jszhang@kernel.org> <Y1HZFcBo21SQzXVj@andrea>
- <CAJF2gTRAEX_jQ_w5H05dyafZzHq+P5j05TJ=C+v+OL__GQam4A@mail.gmail.com>
- <Y1JaE/ot91Z0KXuC@andrea> <ed7c4027-8e15-245f-cdda-0551063761e7@huawei.com>
- <Y1KdKATQx16Xl/iL@andrea> <f1eb4756-e1e1-1f12-e767-a69a891786d6@huawei.com>
-In-Reply-To: <f1eb4756-e1e1-1f12-e767-a69a891786d6@huawei.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 21 Oct 2022 22:41:33 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRdtcpccL5W48O8VEXCMvxNAyyrKJzhwNJkc8js+H2iJg@mail.gmail.com>
-Message-ID: <CAJF2gTRdtcpccL5W48O8VEXCMvxNAyyrKJzhwNJkc8js+H2iJg@mail.gmail.com>
-Subject: Re: [PATCH] riscv: fix race when vmap stack overflow
-To:     Tong Tiangen <tongtiangen@huawei.com>
-Cc:     Andrea Parri <parri.andrea@gmail.com>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221021124556.100445-4-maxime.chevallier@bootlin.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NEUTRAL,SPF_NEUTRAL,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 9:46 PM Tong Tiangen <tongtiangen@huawei.com> wrote=
-:
->
->
->
-> =E5=9C=A8 2022/10/21 21:22, Andrea Parri =E5=86=99=E9=81=93:
-> > Hi Tong,
-> >
-> >>>> I use atomic_set_release here, because I need earlier memory
-> >>>> operations finished to make sure the sp is ready then set the spin
-> >>>> flag.
-> >
-> >>      Consider this implementation:)
-> >>
-> >>      smp_store_mb(&spin_shadow_stack, 0);
-> >
-> > smp_store_mb() has "WRITE_ONCE(); smp_mb()" semantics; so it doesn't
-> > guarantee that the store to spin_shadow_stack is ordered after program
-> > -order earlier memory accesses.
-> >
-> >    Andrea
-> > .
->
-> Hi Andrea:
->
-> IIUC, the earlier memory access amoswap.aqrl, here .aqrl guarantee it.
-> But anyway, consider we don't care about performance here, using
-> smp_store_release()(add barrier()) surely right.
-We use smp_store_release() is for:
-        //load per-cpu overflow stack
-        REG_L sp, -8(sp)
+> @@ -17,6 +17,7 @@ obj-$(CONFIG_NET_DSA_TAG_BRCM_COMMON) += tag_brcm.o
+>  obj-$(CONFIG_NET_DSA_TAG_DSA_COMMON) += tag_dsa.o
+>  obj-$(CONFIG_NET_DSA_TAG_GSWIP) += tag_gswip.o
+>  obj-$(CONFIG_NET_DSA_TAG_HELLCREEK) += tag_hellcreek.o
+> +obj-$(CONFIG_NET_DSA_TAG_OOB) += tag_oob.o
+>  obj-$(CONFIG_NET_DSA_TAG_KSZ) += tag_ksz.o
+>  obj-$(CONFIG_NET_DSA_TAG_LAN9303) += tag_lan9303.o
+>  obj-$(CONFIG_NET_DSA_TAG_MTK) += tag_mtk.o
 
-Not amoswap.
+This list is roughly in alphabetic order, part from
+CONFIG_NET_DSA_TAG_RTL4_A. Please add OOB after OCELOT_8021Q.
 
-Actually, amoswap.aqrl guarantees nothing because all instructions
-depend on the sp register.
-
->
-> Thanks,
-> Tong.
-
-
-
---=20
-Best Regards
- Guo Ren
+Thanks
+	Andrew
