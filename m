@@ -2,69 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3533F607033
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 08:40:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF326607041
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 08:44:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229874AbiJUGk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 02:40:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38560 "EHLO
+        id S229695AbiJUGnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 02:43:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiJUGkZ (ORCPT
+        with ESMTP id S230030AbiJUGns (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 02:40:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A070112A96;
-        Thu, 20 Oct 2022 23:40:22 -0700 (PDT)
+        Fri, 21 Oct 2022 02:43:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DAF62413CD;
+        Thu, 20 Oct 2022 23:43:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E688EB82ADA;
-        Fri, 21 Oct 2022 06:40:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4B59C433D6;
-        Fri, 21 Oct 2022 06:40:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DB41961DD2;
+        Fri, 21 Oct 2022 06:43:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2CC2C433D6;
+        Fri, 21 Oct 2022 06:43:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666334419;
-        bh=sSDsv8sNrV4MWlFb62YOB+RVifnK0tCFSxdozhi2KE4=;
+        s=k20201202; t=1666334625;
+        bh=sEwMq2j5fjO07u3xyI2MdfOg2PhiXrflPNSl+1UnYnQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aksXMaxXMeRvPuoZU14QDKDiGuGGTwPIhJul2Z60muawg8b7ekV6ZDVQQeeJ9+9cq
-         9R1szce+/cZdhvcZx9xGVe2M2/qKnpBPIy02FrsDgUVNxkqeiU+/yoAgTxITqBhbNz
-         N1FOsikN0SJHBXA4OrLaFSQyGl48X1X2whKpKnGrTO5vj4dnUe/jr4Z7tpbos4L3Lo
-         UpYBe483uJYXHFYQXFVD2YE2J5Mm3nbPnTYEuP9nNoKLFdEKxyf5xwfZegEfkmJi73
-         m92DLrkkhhk2/SQT+Hoe7aWlqUhnNvcvbD+dreLWEfwXP5gPFldV0fsEQzYsYnWcGT
-         YiurHGZvac48Q==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1ollhN-0001Z7-Ju; Fri, 21 Oct 2022 08:40:05 +0200
-Date:   Fri, 21 Oct 2022 08:40:05 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Stanimir Varbanov <svarbanov@mm-sol.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Krishna chaitanya chundru <quic_krichai@quicinc.com>,
-        quic_vbadigan@quicinc.com, linux-arm-msm@vger.kernel.org,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        b=p35BnNfZPMnmjAztGM+SVzJPSQLvzbn4xPbC/SN4po2T9VkG2rTnk+kmA0AlVvMoa
+         OZJQ5iwoswxe5tWoHusob88QqBXioMBVWB5RcbY6e39dv7zWqslEHVzy0oGlobvJiG
+         RFbeSWjIe9n3yOguBmIO4jzeFqd0ZbPPZYS8hW9jqCI00juDwYj0u5UQ57a7JL0Uxp
+         WPyDBY8oEaLI4MQsQKVzyn0lWUENtw2mYsCxtkm2JVDAShlvxWgB1B7jjkiFWTxFbN
+         9ds+LgrUpoV6/ObsCWhfVPBvHm5fGG5NIfX0D8HCakUn1R5s03ZlYJ8yoVSyeKpEau
+         ZhNzmEt01Qnvg==
+Date:   Fri, 21 Oct 2022 08:43:17 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Adam Borowski <kilobyte@angband.pl>
+Cc:     Khalil Blaiech <kblaiech@nvidia.com>,
+        Asmaa Mnebhi <asmaa@nvidia.com>, linux-i2c@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: PCI: qcom: Add SC8280XP/SA8540P
- interconnects
-Message-ID: <Y1I+xQDpvedLXNHf@hovoldconsulting.com>
-References: <20221017112449.2146-1-johan+linaro@kernel.org>
- <20221017112449.2146-2-johan+linaro@kernel.org>
- <010b6de2-5df6-77c9-2f04-43f2edc89ff2@linaro.org>
- <Y1D/Vaa/3zKP4Cxj@hovoldconsulting.com>
- <972db8bd-e45a-47b1-c2c4-008c279c6b59@linaro.org>
+Subject: Re: [PATCH 5/6] i2c: mlxbf: depend on ACPI; clean away ifdeffage
+Message-ID: <Y1I/hRG9XGTFDTr3@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Adam Borowski <kilobyte@angband.pl>,
+        Khalil Blaiech <kblaiech@nvidia.com>,
+        Asmaa Mnebhi <asmaa@nvidia.com>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <S229853AbiJTWkg/20221020224036Z+12888@vger.kernel.org>
+ <S229897AbiJTWqk/20221020224640Z+957@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="iApmyqhp3K52o8pq"
 Content-Disposition: inline
-In-Reply-To: <972db8bd-e45a-47b1-c2c4-008c279c6b59@linaro.org>
+In-Reply-To: <S229897AbiJTWqk/20221020224640Z+957@vger.kernel.org>
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -74,72 +61,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 08:29:02AM -0400, Krzysztof Kozlowski wrote:
-> On 20/10/2022 03:57, Johan Hovold wrote:
-> > On Wed, Oct 19, 2022 at 10:37:31AM -0400, Krzysztof Kozlowski wrote:
-> >> On 17/10/2022 07:24, Johan Hovold wrote:
-> >>> Add the missing SC8280XP/SA8540P "pcie-mem" and "cpu-pcie" interconnect
-> >>> paths to the bindings.
-> >>>
-> >>> Fixes: 76d777ae045e ("dt-bindings: PCI: qcom: Add SC8280XP to binding")
-> >>> Fixes: 76c4207f4085 ("dt-bindings: PCI: qcom: Add SA8540P to binding")
-> >>> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> >>> ---
-> >>>  .../devicetree/bindings/pci/qcom,pcie.yaml    | 25 +++++++++++++++++++
-> >>>  1 file changed, 25 insertions(+)
-> >>>
-> >>> diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
-> >>> index 22a2aac4c23f..a55434f95edd 100644
-> >>> --- a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
-> >>> +++ b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
 
-> > Are you suggesting something like moving the names to the common
-> > constraints for now:
-> > 
-> >   interconnects:
-> >     maxItems: 2
-> > 
-> >   interconnect-names:
-> >     items:
-> >       - const: pcie-mem
-> >       - const: cpu-pcie
-> > 
-> > and then in the allOf:
-> > 
-> >   - if:
-> >       properties:
-> >         compatible:
-> >           contains:
-> >             enum:
-> >               - qcom,pcie-sa8540p
-> >               - qcom,pcie-sc8280xp
-> >     then:
-> >       required:
-> >         - interconnects
-> >         - interconnect-names
-> >     else:
-> >       properties:
-> >         interconnects: false
-> >         interconnect-names: false
-> > 
-> > This way we'd catch anyone adding interconnects to a DTS without first
-> > updating the bindings, but it also seems to go against the idea of
-> > bindings fully describing the hardware by saying that no other platforms
-> > have interconnects (when they actually do even if we don't describe it
-> > just yet).
-> 
-> You can add a comment to the else like "TODO: Not described yet". I
-> would prefer to have specific but incomplete bindings, instead of loose
-> one which later might cause people adding whatever names they like.
-> 
-> > Or should we do the above but without the else clause to have some
-> > constraints in place on the names at least?
-> 
-> This would work as well if you think the names are applicable for other
-> devices.
+--iApmyqhp3K52o8pq
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I think that's a reasonable assumption so I'll go with this alternative.
+On Mon, Oct 10, 2022 at 08:33:51PM +0200, Adam Borowski wrote:
+> This fixes maybe_unused warnings/errors.
+>=20
+> According to a comment during device tree removal, only ACPI is supported,
+> thus let's actually require it.
+>=20
+> Fixes: be18c5ede25da39a0eda541f6de3620a30cf731f
+> Signed-off-by: Adam Borowski <kilobyte@angband.pl>
 
-Thanks!
+Applied to for-current, thanks!
 
-Johan
+@Asmaa, @Khalil: normally, I will not skip the driver maintainer's ack
+but wait for it. I'd like to make an exception this time because I don't
+want to get another dozen of patches fixing this build warning. Since
+Asmaa already acked a similar patch, I hope this is okay with you.
+
+
+--iApmyqhp3K52o8pq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNSP4EACgkQFA3kzBSg
+KbaKpA//UbFxu/KCQ6nmi/cix+XNC2Jodbf/CpEn81lRISMmrLzIe78d35NXtgq+
+qY8Yq3F7sm9a4eyklMQlAX8qLRr6XggCEltkI+ZcvshnvMg4rpNEzwFu2s+7YtwU
++S7julqS0h8AWUze4f3nGtM3w/hBSuj2tclZ0shKZX64COCBho2FmIQrDJbZu5um
+hmB5R7Gis9c853pOGf0rdINA2x3Uod9tV+RddnBhmiq2ATkP0SBA1xXZ3/XbM3On
+nrMtvMvJp0C8KTgwJF+2IovW95OQamCG/9/tgqt1/7N4Y6sdXwBQ8G6YtneqWunR
+jmoaNbTUSulLM3imHqgyA2wyE1Heao3WyAOwusLVXepUHcEKALGlZEaVtPp15CvD
+ICbMviweiENLD9RfSHmSaORlsRIiJevlNY2rq8omzRVP4NEDXUZiHEydjLay5jU1
+pjWi1iRKtraDWr3T5/zalNuhKLLFBZjZboTDm2TdQoYj0aAzS96LSDmt4m8d7D0W
+BMPqLFSMBlLNJvmuSE2w4j4RjW+r9vLn0kYeJqWAonjqITiMLoY4Vpl8452vTvXL
+KuA5jDZSJl0KIlikXZ+Fd1+6GEuX2QxAbrF9FVvI1wJAxzcKYR6M7T66As1LfJ6t
+aYqL9JJ+YSL0oMbIBwUeH0HnYW5/RSTojOl82KW+7/8nrgJlhDM=
+=Bmm/
+-----END PGP SIGNATURE-----
+
+--iApmyqhp3K52o8pq--
