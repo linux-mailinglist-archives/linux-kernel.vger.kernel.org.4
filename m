@@ -2,191 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8EEE6070E7
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 09:23:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 335BA60711B
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 09:31:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229880AbiJUHXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 03:23:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39512 "EHLO
+        id S230119AbiJUHba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 03:31:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229893AbiJUHW7 (ORCPT
+        with ESMTP id S230029AbiJUHbU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 03:22:59 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30E48245EBD;
-        Fri, 21 Oct 2022 00:22:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1666336978; x=1697872978;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=j/iJEREQc6b5PWNxao/a5BkD1vhPEB7D4sLoJaR31eo=;
-  b=HpmJLcFxvYv8WeqhLaI05e3WfYwVvZOu8cOjFHlVuJSUfPZLXnC7/862
-   yyiwByZ8Jc1wY33+Kb2hFn64rHZRKOICqyozMZMlcd/VYvBVqOzCnSjBy
-   885bHf62MznmNevkoTt8pS2hvuWW8fsysCpmId41kCu8hQI7sThS/XZYD
-   I3cMqdjKqj7iu97ngBlodTgPZGswphULO9EfyGTJ2WN4/xHZMiMXNlGcI
-   AMUmDEciIe1EkLUUoYE5+0Iy+womqqiCsOVu03I2btIJKu+0iUAZjgp1o
-   kafKdIpHXjuF6YBlS6S4sPSN6Mwb+T8yA2AT1xeMV6NPX4OF6iUkLzw5h
-   g==;
-X-IronPort-AV: E=Sophos;i="5.95,200,1661842800"; 
-   d="scan'208";a="179895228"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 21 Oct 2022 00:22:58 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Fri, 21 Oct 2022 00:22:56 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
- Transport; Fri, 21 Oct 2022 00:22:56 -0700
-Date:   Fri, 21 Oct 2022 09:27:35 +0200
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
-CC:     <netdev@vger.kernel.org>, <davem@davemloft.net>, <kuba@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <bryan.whitehead@microchip.com>,
-        <hkallweit1@gmail.com>, <pabeni@redhat.com>, <edumazet@google.com>,
-        <linux@armlinux.org.uk>, <UNGLinuxDriver@microchip.com>,
-        <andrew@lunn.ch>, <Ian.Saturley@microchip.com>
-Subject: Re: [PATCH net-next 2/2] net: phy: micrel: Add PHY Auto/MDI/MDI-X
- set driver for KSZ9131
-Message-ID: <20221021072735.pcx6wlnujhhxgy3q@soft-dev3-1>
-References: <20221021055642.255413-1-Raju.Lakkaraju@microchip.com>
- <20221021055642.255413-3-Raju.Lakkaraju@microchip.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <20221021055642.255413-3-Raju.Lakkaraju@microchip.com>
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 21 Oct 2022 03:31:20 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07EDD2475EC
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 00:31:11 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id i16-20020a056902069000b006c3ef07d22eso2365968ybt.13
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 00:31:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=yYRI4YM/O3HPavk8M56cMbkj+MwZGK3MSk39K+2fBzs=;
+        b=jbSx66ETI+A32fKzKRjx5OquaUQL8nMNegJ5xcIQN/qDilciMPGigwaH0+Zc07EiKX
+         vSt4omPWR1sWbZsL2+Jbm91k4cOhgnEndNJ4H69cflKemIXd6lPrpY/Pjpl1Mxu4Wt3n
+         X4PBCIK2jEgZJ1gOlO6NCeZsnY0RlvaZeykZbwYvhpJYFWPM0IhI/nWiMDD+Vl2X0cay
+         56gP5+65jhmTYTzgC7jF0WhkFSwDzXQQp2gPZIHL1iFYBBPGGr2yPllgTZEU63g98MIf
+         G5fkmIXxWhW4nf+dadIq1oRCMUQKZGlFkRE6gpPhJkomEXnY+zNpM/fuof6ZeqpZj90M
+         hj8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yYRI4YM/O3HPavk8M56cMbkj+MwZGK3MSk39K+2fBzs=;
+        b=W/4lVAZAiLtjjqTXeZsn3SuGnPwNmkHGH2hdu55zlbxZ5RAsA+7D5lg20hXkHlskfl
+         OehMKvS7lNPZ8q0RmhxgMjYRwqqi9Qia0LkebQwB0xRlkQF61Zxu2zeJ37IaCXZKYJDZ
+         EnLoaS+X2zSjbtbBRanh831833JpaMM8YzqfsqW3C7E+qNLOej/RFZf6+7On+ELO2HIh
+         d+uVJ0gel9OTtf6zZGyj6fSTeOiNcicHG9lQBpIgK+BdmzO0kNBNapCwPuedB1hlmNP4
+         zYXkr7DfemXNKnNs4aD9fjiv3TDftCXb4vR6Wp7imsoO/rGYzgo3C5DY6dcVRbGuuBlk
+         mYJA==
+X-Gm-Message-State: ACrzQf1wcbTdUXodZiC+Zns/HYu3BMAmM9TuinLEWX5+QmQDhuWi2KTJ
+        ruhtOoyexofm+Pgl6QxYNv4jlcyTux0d1w==
+X-Google-Smtp-Source: AMsMyM76iIWNmGWl5azzgQ/kUxazHQFVQEwuFrEmhRfU3we+Qyko7o5kcAkKNyco/dfhd8d2fOk1nyM9rBERtg==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a05:6902:34b:b0:691:4b82:7624 with SMTP
+ id e11-20020a056902034b00b006914b827624mr16182648ybs.614.1666337470120; Fri,
+ 21 Oct 2022 00:31:10 -0700 (PDT)
+Date:   Fri, 21 Oct 2022 15:28:54 +0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.0.135.g90850a2211-goog
+Message-ID: <20221021072854.333010-1-davidgow@google.com>
+Subject: [PATCH 1/2] kunit: Provide a static key to check if KUnit is actively
+ running tests
+From:   David Gow <davidgow@google.com>
+To:     Brendan Higgins <brendan.higgins@linux.dev>,
+        Daniel Latypov <dlatypov@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kees Cook <keescook@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 10/21/2022 11:26, Raju Lakkaraju wrote:
+KUnit does a few expensive things when enabled. This hasn't been a
+problem because KUnit was only enabled on test kernels, but with a few
+people enabling (but not _using_) KUnit on production systems, we need a
+runtime way of handling this.
 
-Hi Raju,
+Provide a 'kunit_running' static key (defaulting to false), which allows
+us to hide any KUnit code behind a static branch. This should reduce the
+performance impact (on other code) of having KUnit enabled to a single
+NOP when no tests are running.
 
-> Add support for MDI-X status and configuration for KSZ9131 chips
-> 
-> Signed-off-by: Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
-> ---
->  drivers/net/phy/micrel.c | 77 ++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 77 insertions(+)
-> 
-> diff --git a/drivers/net/phy/micrel.c b/drivers/net/phy/micrel.c
-> index 54a17b576eac..40aa52d442f8 100644
-> --- a/drivers/net/phy/micrel.c
-> +++ b/drivers/net/phy/micrel.c
-> @@ -1295,6 +1295,81 @@ static int ksz9131_config_init(struct phy_device *phydev)
->  	return 0;
->  }
->  
-> +#define MII_KSZPHY_AUTO_MDIX		0x1C
-> +#define MII_KSZPHY_AUTO_MDI_SET_	BIT(7)
-> +#define MII_KSZPHY_AUTO_MDIX_SWAP_OFF_	BIT(6)
+Note that, while it looks unintuitive, tests always run entirely within
+__kunit_test_suites_init(), so it's safe to decrement the static key at
+the end of this function, rather than in __kunit_test_suites_exit(),
+which is only there to clean up results in debugfs.
 
-Can you please drop the "_" from the end of the macros. The only
-macros that have that suffix are those used by PTP.
+Signed-off-by: David Gow <davidgow@google.com>
+---
 
-Are these KSZPHY registers generic for all KSZ phys? Then the functions
-'ksz9131_mdix_update' and 'ksz9131_config_mdix' shouldn't be rename to
-something like 'kszphy_mdix_update' and 'kszphy_config_mdix'?
-Otherwise shoudln't these register contain 9131 in their name?
+This should be a no-op (other than a possible performance improvement)
+functionality-wise, and lays the groundwork for a more optimised static
+stub implementation.
 
-I know that also lan8841 and lan8804 have the same layout for these
-registers.
+---
+ include/kunit/test.h | 4 ++++
+ lib/kunit/test.c     | 6 ++++++
+ 2 files changed, 10 insertions(+)
 
-> +
-> +static int ksz9131_mdix_update(struct phy_device *phydev)
-> +{
-> +	int ret;
-> +
-> +	ret = phy_read(phydev, MII_KSZPHY_AUTO_MDIX);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	if (ret & MII_KSZPHY_AUTO_MDIX_SWAP_OFF_) {
-> +		if (ret & MII_KSZPHY_AUTO_MDI_SET_)
-> +			phydev->mdix_ctrl = ETH_TP_MDI;
-> +		else
-> +			phydev->mdix_ctrl = ETH_TP_MDI_X;
-> +	} else {
-> +		phydev->mdix_ctrl = ETH_TP_MDI_AUTO;
-> +	}
-> +
-> +	if (ret & MII_KSZPHY_AUTO_MDI_SET_)
-> +		phydev->mdix = ETH_TP_MDI;
-> +	else
-> +		phydev->mdix = ETH_TP_MDI_X;
-> +
-> +	return 0;
-> +}
-> +
-> +static int ksz9131_config_mdix(struct phy_device *phydev, u8 ctrl)
-> +{
-> +	u16 val;
-> +
-> +	switch (ctrl) {
-> +	case ETH_TP_MDI:
-> +		val = MII_KSZPHY_AUTO_MDIX_SWAP_OFF_ |
-> +		      MII_KSZPHY_AUTO_MDI_SET_;
-> +		break;
-> +	case ETH_TP_MDI_X:
-> +		val = MII_KSZPHY_AUTO_MDIX_SWAP_OFF_;
-> +		break;
-> +	case ETH_TP_MDI_AUTO:
-> +		val = 0;
-> +		break;
-> +	default:
-> +		return 0;
-> +	}
-> +
-> +	return phy_modify(phydev, MII_KSZPHY_AUTO_MDIX,
-> +			  MII_KSZPHY_AUTO_MDIX_SWAP_OFF_ |
-> +			  MII_KSZPHY_AUTO_MDI_SET_, val);
-> +}
-> +
-> +static int ksz9131_read_status(struct phy_device *phydev)
-> +{
-> +	int ret;
-> +
-> +	ret = ksz9131_mdix_update(phydev);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	return genphy_read_status(phydev);
-> +}
-> +
-> +static int ksz9131_config_aneg(struct phy_device *phydev)
-> +{
-> +	int ret;
-> +
-> +	ret = genphy_config_aneg(phydev);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return ksz9131_config_mdix(phydev, phydev->mdix_ctrl);
-> +}
-> +
->  #define KSZ8873MLL_GLOBAL_CONTROL_4	0x06
->  #define KSZ8873MLL_GLOBAL_CONTROL_4_DUPLEX	BIT(6)
->  #define KSZ8873MLL_GLOBAL_CONTROL_4_SPEED	BIT(4)
-> @@ -3304,6 +3379,8 @@ static struct phy_driver ksphy_driver[] = {
->  	.probe		= kszphy_probe,
->  	.config_init	= ksz9131_config_init,
->  	.config_intr	= kszphy_config_intr,
-> +	.config_aneg	= ksz9131_config_aneg,
-> +	.read_status	= ksz9131_read_status,
->  	.handle_interrupt = kszphy_handle_interrupt,
->  	.get_sset_count = kszphy_get_sset_count,
->  	.get_strings	= kszphy_get_strings,
-> -- 
-> 2.25.1
-> 
-
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index b1ab6b32216d..450a778a039e 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -16,6 +16,7 @@
+ #include <linux/container_of.h>
+ #include <linux/err.h>
+ #include <linux/init.h>
++#include <linux/jump_label.h>
+ #include <linux/kconfig.h>
+ #include <linux/kref.h>
+ #include <linux/list.h>
+@@ -27,6 +28,9 @@
+ 
+ #include <asm/rwonce.h>
+ 
++/* Static key: true if any KUnit tests are currently running */
++extern struct static_key_false kunit_running;
++
+ struct kunit;
+ 
+ /* Size of log associated with test. */
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index 90640a43cf62..314717b63080 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -20,6 +20,8 @@
+ #include "string-stream.h"
+ #include "try-catch-impl.h"
+ 
++DEFINE_STATIC_KEY_FALSE(kunit_running);
++
+ #if IS_BUILTIN(CONFIG_KUNIT)
+ /*
+  * Fail the current test and print an error message to the log.
+@@ -612,10 +614,14 @@ int __kunit_test_suites_init(struct kunit_suite * const * const suites, int num_
+ 		return 0;
+ 	}
+ 
++	static_branch_inc(&kunit_running);
++
+ 	for (i = 0; i < num_suites; i++) {
+ 		kunit_init_suite(suites[i]);
+ 		kunit_run_tests(suites[i]);
+ 	}
++
++	static_branch_dec(&kunit_running);
+ 	return 0;
+ }
+ EXPORT_SYMBOL_GPL(__kunit_test_suites_init);
 -- 
-/Horatiu
+2.38.0.135.g90850a2211-goog
+
