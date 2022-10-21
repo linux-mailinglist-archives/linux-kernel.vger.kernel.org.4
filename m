@@ -2,151 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B388607544
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 12:43:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38A5960754B
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 12:45:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229556AbiJUKn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 06:43:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35664 "EHLO
+        id S230003AbiJUKpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 06:45:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229925AbiJUKnw (ORCPT
+        with ESMTP id S229832AbiJUKpF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 06:43:52 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDD6B25F1F2
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 03:43:44 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Fri, 21 Oct 2022 06:45:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF66C5B73B;
+        Fri, 21 Oct 2022 03:45:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 5A35C2271B;
-        Fri, 21 Oct 2022 10:43:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1666349023; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TA7eXrG7O3B23odrrkOkZeSr4Pfu3eeY9ko+Mp8d0go=;
-        b=xUaaGYFVu0gPmo4L0tL7e2f/7X+LfimgY+c5ACBUf69XBQbcB02ILZ/tCQYZAgjM5UbdyG
-        iCfJWI4RiCd1S/0BiNU3udYY8iRbJEbKOY0LW2ScOuS0wj0SqgX1CHZ0v4Vc/7j3XPvHsv
-        6eIZ2eiF1f0AM+0sBOpg/ZvebBQ9SEE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1666349023;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TA7eXrG7O3B23odrrkOkZeSr4Pfu3eeY9ko+Mp8d0go=;
-        b=OUEt6dx5IOWptug7O299I3fq+sUl422kxESBxABV83D15QaX2vFZpaGPgRGbKzzwPWNulT
-        qEtinpFISPFgwpAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 344E51331A;
-        Fri, 21 Oct 2022 10:43:43 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id FIktDN93UmPAJAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Fri, 21 Oct 2022 10:43:43 +0000
-Message-ID: <82e8147e-f031-6bc2-9395-56d2052e62cb@suse.cz>
-Date:   Fri, 21 Oct 2022 12:43:42 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C4F1761E3B;
+        Fri, 21 Oct 2022 10:45:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4577AC433D6;
+        Fri, 21 Oct 2022 10:44:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666349102;
+        bh=J7/tgj0zGETukgrM7kBytQZ9k9B0vXsbKGc9ccx9mwE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=V9jDZnDKZ4ly7SGBtpEnWUgSo4oWfTF5Tv5/EN3XbynhRsqs7T/+03XWHp8sWs19C
+         fqPEyZlxOMIm/DIr91kDpoegLD5bWdFWE436SY/ZCTgVhfL7HCd5nwposBFyPMxiJN
+         Wte9FNAJstcg5uEgiE0eW28UDAUT1sztXXp//DpJkRihq6g33sH2F+NOiHbDuzqADJ
+         VgftPFM+qTuDk8loSTSeZoAaRH4XTtdCLQw6nvSxMTBGjxc+wrwMSCSRoWeuZRlytC
+         s+GXOnyHtrqpiTVy5QKJpaFeZT8Ved/SAanLjeMtWF0cgFlzkBTyVncTW6IoATAPkY
+         qYh/4h4oY+VeA==
+Date:   Fri, 21 Oct 2022 11:44:54 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Namhyung Kim <namhyung@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Jiri Olsa <jolsa@kernel.org>, kvmarm@lists.cs.columbia.edu,
+        kvmarm@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/7] arm64/sysreg: Convert SPE registers to automatic
+ generation
+Message-ID: <Y1J4JhJZs9w1zn6q@sirena.org.uk>
+References: <20220825-arm-spe-v8-7-v2-0-e37322d68ac0@kernel.org>
+ <20220825-arm-spe-v8-7-v2-3-e37322d68ac0@kernel.org>
+ <Y1FcRNhFpZxZ7AMx@sirena.org.uk>
+ <CAL_JsqLVjWH-x3jxGQpJ3ax_ddvBqHd-P2DE=DEnrknoHuq+Qg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH] mm/slub: remove dead code for debug caches on
- deactivate_slab()
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20221014114322.97512-1-42.hyeyoo@gmail.com>
-Content-Language: en-US
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20221014114322.97512-1-42.hyeyoo@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_SOFTFAIL,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="h8OqzCyx1D8l8y4i"
+Content-Disposition: inline
+In-Reply-To: <CAL_JsqLVjWH-x3jxGQpJ3ax_ddvBqHd-P2DE=DEnrknoHuq+Qg@mail.gmail.com>
+X-Cookie: On the eighth day, God created FORTRAN.
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/14/22 13:43, Hyeonggon Yoo wrote:
-> After commit c7323a5ad0786 ("mm/slub: restrict sysfs validation to debug
-> caches and make it safe"), SLUB does not take a slab from partial list for
 
-I'm confused by "SLUB does not take a slab from partial list" here. Did you
-mean something like "SLUB never installs (even temporarily) a percpu slab
-for debug caches"? So that means we never deactivate percpu slabs for debug
-caches. And since debug caches are also the only ones that use the full
-list, we no longer need to care about the full list in deactivate_slab(), right?
+--h8OqzCyx1D8l8y4i
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> debug caches. As deactivation isn't needed anymore, remove dead code.
-> 
-> Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+On Thu, Oct 20, 2022 at 02:51:02PM -0500, Rob Herring wrote:
+> On Thu, Oct 20, 2022 at 9:33 AM Mark Brown <broonie@kernel.org> wrote:
 
-Otherwise it looks correct to me, just wanted to clarify I'm not missing
-something.
+> > > +Field        11:8    EA
 
-> ---
->  mm/slub.c | 16 ++--------------
->  1 file changed, 2 insertions(+), 14 deletions(-)
-> 
-> diff --git a/mm/slub.c b/mm/slub.c
-> index 96dd392d7f99..e2215240954d 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -2411,7 +2411,7 @@ static void init_kmem_cache_cpus(struct kmem_cache *s)
->  static void deactivate_slab(struct kmem_cache *s, struct slab *slab,
->  			    void *freelist)
->  {
-> -	enum slab_modes { M_NONE, M_PARTIAL, M_FULL, M_FREE, M_FULL_NOLIST };
-> +	enum slab_modes { M_NONE, M_PARTIAL, M_FREE, M_FULL_NOLIST };
->  	struct kmem_cache_node *n = get_node(s, slab_nid(slab));
->  	int free_delta = 0;
->  	enum slab_modes mode = M_NONE;
-> @@ -2487,14 +2487,6 @@ static void deactivate_slab(struct kmem_cache *s, struct slab *slab,
->  		 * acquire_slab() will see a slab that is frozen
->  		 */
->  		spin_lock_irqsave(&n->list_lock, flags);
-> -	} else if (kmem_cache_debug_flags(s, SLAB_STORE_USER)) {
-> -		mode = M_FULL;
-> -		/*
-> -		 * This also ensures that the scanning of full
-> -		 * slabs from diagnostic functions will not see
-> -		 * any frozen slabs.
-> -		 */
-> -		spin_lock_irqsave(&n->list_lock, flags);
->  	} else {
->  		mode = M_FULL_NOLIST;
->  	}
-> @@ -2504,7 +2496,7 @@ static void deactivate_slab(struct kmem_cache *s, struct slab *slab,
->  				old.freelist, old.counters,
->  				new.freelist, new.counters,
->  				"unfreezing slab")) {
-> -		if (mode == M_PARTIAL || mode == M_FULL)
-> +		if (mode == M_PARTIAL)
->  			spin_unlock_irqrestore(&n->list_lock, flags);
->  		goto redo;
->  	}
-> @@ -2518,10 +2510,6 @@ static void deactivate_slab(struct kmem_cache *s, struct slab *slab,
->  		stat(s, DEACTIVATE_EMPTY);
->  		discard_slab(s, slab);
->  		stat(s, FREE_SLAB);
-> -	} else if (mode == M_FULL) {
-> -		add_full(s, n, slab);
-> -		spin_unlock_irqrestore(&n->list_lock, flags);
-> -		stat(s, DEACTIVATE_FULL);
->  	} else if (mode == M_FULL_NOLIST) {
->  		stat(s, DEACTIVATE_FULL);
->  	}
+> > This looks like it should be described as an enum.
 
+>     0b0000    Not_Described
+>     0b0001    Ignored
+>     0b0010    SError
+
+> What's the preferred case here?
+
+Either option is good for case I think, it's a taste question - going
+with upper case is more the kernel coding style so fine there, though
+sometimes it makes things hard to read.
+
+--h8OqzCyx1D8l8y4i
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNSeCYACgkQJNaLcl1U
+h9Atiwf+OSs1WYEEU3S40lQi7fccTKxTPnixytK3Sph02dBD9R/EnwsFK6DnnBsA
+hyaxC2aWvjmz1oplivZ7qQwM6CKRyfPoi3f62/L2Ne0A+PILHTWjsr8CRkYHaipd
+iPss2Dszd5K65d9ZULDEuUR6tgCWodejetEY1bCu3g7dtB2ZoZPDlfXnvssxm3MP
+pKjj58ynCwhGeHMJ6T7ASJOmvvkLbTvLTni4MJ7o56/ltB0+JuNyf28MQzRiG+Ts
+A19juSTfZvW8g6aG9P2+byuIXeMJJyas2bz46021mDn6Ch/jkrIfeIsVVlf8UpCp
+gHbpAw48zWWXQbb3phklP/cvtYisSQ==
+=/DQ9
+-----END PGP SIGNATURE-----
+
+--h8OqzCyx1D8l8y4i--
