@@ -2,206 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75FE2606D38
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 03:52:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6672606D36
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 03:52:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbiJUBwi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 21:52:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46502 "EHLO
+        id S229645AbiJUBwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 21:52:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbiJUBwf (ORCPT
+        with ESMTP id S229491AbiJUBwQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 21:52:35 -0400
-Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42B26158185;
-        Thu, 20 Oct 2022 18:52:33 -0700 (PDT)
-Received: by mail-ua1-x92c.google.com with SMTP id e22so1610806uar.5;
-        Thu, 20 Oct 2022 18:52:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=A/X4BKH1+5rJ4rbxYZrtmnGpMfEo4yCisAmPOP1kbwI=;
-        b=M1GYgGlvvgUTcch6G0ibTLp+6fc1JTaQJHMyXkIR4uQ03w4fh6+GVol4YfXPqi+xz0
-         4bx75Zypsbg7LWhAv/PGMNY8DoZ74eUDLp16JKOVc8TY9z803fSXSjUwfR6KwO744mWD
-         vfCD2D/Iy3lQjyjOd+24dOpvyzMtteSVv9NhrzX2Fpk5yprLsoouMmVW5QT7g2cWBzTO
-         UBwQql7Pd6zXXwcZVY+E9IATn6hKOaBcjjTBIYF4AzlaXWvdGwbtK1JN9vAZJCJ3HvmG
-         irEXycAbXu3m0tUs1Fl15ke3N9VkBwsOw+avhOinTLYIjkYnboUpHYtIByzQxlp9MGfv
-         QyOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=A/X4BKH1+5rJ4rbxYZrtmnGpMfEo4yCisAmPOP1kbwI=;
-        b=nnLgMz0VxBp6EwJeZ5+BrIrqyJ60SbYN6qGehBjwp3yvpR5UScNcE4Mcb+diw9ORYN
-         ApxuAHfc8s6TUIFUzmKkLHzv+6NuypFRCcJWZan631eNZUBQEIv93yQzmZZxxW+MBtYR
-         oTbZyTIKo8sz7FDO1+Lke4TB7mxulgiaDNpHZqDa1knPUFJnEusjVGJ4x0UbWWVmos6A
-         idy4fkybRIQfJnnZ6EYHgURTEcARllpcCk1qyUfSKwXs09Tbdos/bdifOhC99zNuoifZ
-         1LRSRlqbpkVHgJabnBWM/1odzavwsHjNHpBPvEatwaXm3Zbuei0eL1p8ppg2FrZtfq7Y
-         AN3w==
-X-Gm-Message-State: ACrzQf1Bz2OnAODteG5ae+eNkeqAqB/rhiSl1YtNx0qN4/hxXahqi2Zy
-        ZMkIQdJdJlkGVkeq+9pTw5BqPOiZhIh++MFkkLc=
-X-Google-Smtp-Source: AMsMyM4qCIRUEQcZArW6VI8G3qndhgaFIp97VM27Zqwd3N05qAAwpR9XHHFc6IGzp1r775XT/G/ASF8jzfSuB7tqfD8=
-X-Received: by 2002:ab0:6511:0:b0:3e1:935d:3cc0 with SMTP id
- w17-20020ab06511000000b003e1935d3cc0mr10408297uam.93.1666317152011; Thu, 20
- Oct 2022 18:52:32 -0700 (PDT)
+        Thu, 20 Oct 2022 21:52:16 -0400
+Received: from out199-16.us.a.mail.aliyun.com (out199-16.us.a.mail.aliyun.com [47.90.199.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 362882303CD
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 18:52:11 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R721e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VSh9xYs_1666317124;
+Received: from 30.32.116.61(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VSh9xYs_1666317124)
+          by smtp.aliyun-inc.com;
+          Fri, 21 Oct 2022 09:52:06 +0800
+Message-ID: <359bae4e-6ce3-cc7e-33d0-252064157bc6@linux.alibaba.com>
+Date:   Fri, 21 Oct 2022 09:52:01 +0800
 MIME-Version: 1.0
-References: <20221019152117.1234968-1-Frank.Li@nxp.com>
-In-Reply-To: <20221019152117.1234968-1-Frank.Li@nxp.com>
-From:   Peter Chen <hzpeterchen@gmail.com>
-Date:   Fri, 21 Oct 2022 09:51:46 +0800
-Message-ID: <CAL411-pHPiPeY0QTiMUwrGes+K9tQpq0OwVOnCHHkg7Aq2zy4g@mail.gmail.com>
-Subject: Re: [PATCH 1/1] usb: cdns3: host: fix endless superspeed hub port reset
-To:     Frank Li <Frank.Li@nxp.com>
-Cc:     imx@lists.linux.dev, Pawel Laszczak <pawell@cadence.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "open list:CADENCE USBSSP DRD IP DRIVER" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>, stable@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.0
+Subject: Re: [PATCH v2] mm, hwpoison: Try to recover from copy-on write faults
+Content-Language: en-US
+To:     Tony Luck <tony.luck@intel.com>
+Cc:     Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+References: <SJ1PR11MB60838C1F65CA293188BB442DFC289@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <20221019170835.155381-1-tony.luck@intel.com>
+ <893b681b-726e-94e3-441e-4d68c767778a@linux.alibaba.com>
+ <Y1GqGbBNk6fX/OnD@agluck-desk3.sc.intel.com>
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <Y1GqGbBNk6fX/OnD@agluck-desk3.sc.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 11:21 PM Frank Li <Frank.Li@nxp.com> wrote:
->
-> From: Li Jun <jun.li@nxp.com>
->
-> When usb 3.0 hub connect with one USB 2.0 device and NO USB 3.0 device,
-> some usb hub reports endless port reset message.
->
-> [  190.324169] usb 2-1: new SuperSpeed USB device number 88 using xhci-hcd
-> [  190.352834] hub 2-1:1.0: USB hub found
-> [  190.356995] hub 2-1:1.0: 4 ports detected
-> [  190.700056] usb 2-1: USB disconnect, device number 88
-> [  192.472139] usb 2-1: new SuperSpeed USB device number 89 using xhci-hcd
-> [  192.500820] hub 2-1:1.0: USB hub found
-> [  192.504977] hub 2-1:1.0: 4 ports detected
-> [  192.852066] usb 2-1: USB disconnect, device number 89
->
-> The reason is the runtime pm state of USB2.0 port is active and
-> USB 3.0 port is suspend, so parent device is active state.
->
->  cat /sys/bus/platform/devices/5b110000.usb/5b130000.usb/xhci-hcd.1.auto/usb2/power/runtime_status
->
->  suspended
->
->  cat /sys/bus/platform/devices/5b110000.usb/5b130000.usb/xhci-hcd.1.auto/usb1/power/runtime_status
->
->  active
->
->  cat /sys/bus/platform/devices/5b110000.usb/5b130000.usb/xhci-hcd.1.auto/power/runtime_status
->
->  active
->
->  cat /sys/bus/platform/devices/5b110000.usb/5b130000.usb/power/runtime_status
->
->  active
->
-> So xhci_cdns3_suspend_quirk() have not called. U3 configure is not applied.
->
-> move U3 configure into host start
->
-> Signed-off-by: Li Jun <jun.li@nxp.com>
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+
+
+在 2022/10/21 AM4:05, Tony Luck 写道:
+> On Thu, Oct 20, 2022 at 09:57:04AM +0800, Shuai Xue wrote:
+>>
+>>
+>> 在 2022/10/20 AM1:08, Tony Luck 写道:
+>>> If the kernel is copying a page as the result of a copy-on-write
+>>> fault and runs into an uncorrectable error, Linux will crash because
+>>> it does not have recovery code for this case where poison is consumed
+>>> by the kernel.
+>>>
+>>> It is easy to set up a test case. Just inject an error into a private
+>>> page, fork(2), and have the child process write to the page.
+>>>
+>>> I wrapped that neatly into a test at:
+>>>
+>>>   git://git.kernel.org/pub/scm/linux/kernel/git/aegl/ras-tools.git
+>>>
+>>> just enable ACPI error injection and run:
+>>>
+>>>   # ./einj_mem-uc -f copy-on-write
+>>>
+>>> Add a new copy_user_highpage_mc() function that uses copy_mc_to_kernel()
+>>> on architectures where that is available (currently x86 and powerpc).
+>>> When an error is detected during the page copy, return VM_FAULT_HWPOISON
+>>> to caller of wp_page_copy(). This propagates up the call stack. Both x86
+>>> and powerpc have code in their fault handler to deal with this code by
+>>> sending a SIGBUS to the application.
+>>
+>> Does it send SIGBUS to only child process or both parent and child process?
+> 
+> This only sends a SIGBUS to the process that wrote the page (typically
+> the child, but also possible that the parent is the one that does the
+> write that causes the COW).
+
+
+Thanks for your explanation.
+
+> 
+>>>
+>>> Note that this patch avoids a system crash and signals the process that
+>>> triggered the copy-on-write action. It does not take any action for the
+>>> memory error that is still in the shared page. To handle that a call to
+>>> memory_failure() is needed. 
+>>
+>> If the error page is not poisoned, should the return value of wp_page_copy
+>> be VM_FAULT_HWPOISON or VM_FAULT_SIGBUS? When is_hwpoison_entry(entry) or
+>> PageHWPoison(page) is true, do_swap_page return VM_FAULT_HWPOISON to caller.
+>> And when is_swapin_error_entry is true, do_swap_page return VM_FAULT_SIGBUS.
+> 
+> The page has uncorrected data in it, but this patch doesn't mark it
+> as poisoned.  Returning VM_FAULT_SIGBUS would send an "ordinary" SIGBUS
+> that doesn't include the BUS_MCEERR_AR and "lsb" information. It would
+> also skip the:
+> 
+> 	"MCE: Killing %s:%d due to hardware memory corruption fault at %lx\n"
+> 
+> console message. So might result in confusion and attepmts to debug a
+> s/w problem with the application instead of blaming the death on a bad
+> DIMM.
+
+I see your point. Thank you.
+
+> 
+>>> But this cannot be done from wp_page_copy()
+>>> because it holds mmap_lock(). Perhaps the architecture fault handlers
+>>> can deal with this loose end in a subsequent patch?
+> 
+> I started looking at this for x86 ... but I have changed my mind
+> about this being a good place for a fix. When control returns back
+> to the architecture fault handler it no longer has easy access to
+> the physical page frame number. It has the virtual address, so it
+> could descend back into somee new mm/memory.c function to get the
+> physical address ... but that seems silly.
+> 
+> I'm experimenting with using sched_work() to handle the call to
+> memory_failure() (echoing what the machine check handler does using
+> task_work)_add() to avoid the same problem of not being able to directly
+> call memory_failure()).
+
+Work queues permit work to be deferred outside of the interrupt context
+into the kernel process context. If we return to user-space before the
+queued memory_failure() work is processed, we will take the fault again,
+as we discussed recently.
+
+    commit 7f17b4a121d0d ACPI: APEI: Kick the memory_failure() queue for synchronous errors
+    commit 415fed694fe11 ACPI: APEI: do not add task_work to kernel thread to avoid memory leak
+
+So, in my opinion, we should add memory failure as a task work, like
+do_machine_check does, e.g.
+
+    queue_task_work(&m, msg, kill_me_maybe);
+
+> 
+> So far it seems to be working. Patch below (goes on top of original
+> patch ... well on top of the internal version with mods based on
+> feedback from Dan Williams ... but should show the general idea)
+> 
+> With this patch applied the page does get unmapped from all users.
+> Other tasks that shared the page will get a SIGBUS if they attempt
+> to access it later (from the page fault handler because of
+> is_hwpoison_entry() as you mention above.
+> 
+> -Tony
+> 
+> From d3879e83bf91cd6c61e12d32d3e15eb6ef069204 Mon Sep 17 00:00:00 2001
+> From: Tony Luck <tony.luck@intel.com>
+> Date: Thu, 20 Oct 2022 09:57:28 -0700
+> Subject: [PATCH] mm, hwpoison: Call memory_failure() for source page of COW
+>  failure
+> 
+> Cannot call memory_failure() directly from the fault handler because
+> mmap_lock (and others) are held.
+> 
+> It is important, but not urgent, to mark the source page as h/w poisoned
+> and unmap it from other tasks.
+> 
+> Use schedule_work() to queue a request to call memory_failure() for the
+> page with the error.
+> 
+> Signed-off-by: Tony Luck <tony.luck@intel.com>
 > ---
->  drivers/usb/cdns3/host.c | 58 +++++++++++++++++++++-------------------
->  1 file changed, 31 insertions(+), 27 deletions(-)
->
-> diff --git a/drivers/usb/cdns3/host.c b/drivers/usb/cdns3/host.c
-> index 9643b905e2d8..9092b6f4d7c4 100644
-> --- a/drivers/usb/cdns3/host.c
-> +++ b/drivers/usb/cdns3/host.c
-> @@ -24,11 +24,41 @@
->  #define CFG_RXDET_P3_EN                BIT(15)
->  #define LPM_2_STB_SWITCH_EN    BIT(25)
->
-> -static int xhci_cdns3_suspend_quirk(struct usb_hcd *hcd);
-> +static void xhci_cdns3_plat_start(struct usb_hcd *hcd)
-> +{
-> +       struct xhci_hcd *xhci = hcd_to_xhci(hcd);
-> +       u32 value;
-> +
-> +       /* set usbcmd.EU3S */
-> +       value = readl(&xhci->op_regs->command);
-> +       value |= CMD_PM_INDEX;
-> +       writel(value, &xhci->op_regs->command);
-> +
-> +       if (hcd->regs) {
-> +               value = readl(hcd->regs + XECP_AUX_CTRL_REG1);
-> +               value |= CFG_RXDET_P3_EN;
-> +               writel(value, hcd->regs + XECP_AUX_CTRL_REG1);
-> +
-> +               value = readl(hcd->regs + XECP_PORT_CAP_REG);
-> +               value |= LPM_2_STB_SWITCH_EN;
-> +               writel(value, hcd->regs + XECP_PORT_CAP_REG);
-> +       }
-> +}
-> +
-> +static int xhci_cdns3_suspend_quirk(struct usb_hcd *hcd)
-> +{
-> +       if (pm_runtime_status_suspended(hcd->self.controller))
-> +               return 0;
-> +
-> +       xhci_cdns3_plat_start(hcd);
-> +
-
-Why does it need to call again at suspend?
-
-Peter
-
-> +       return 0;
-> +}
->
->  static const struct xhci_plat_priv xhci_plat_cdns3_xhci = {
->         .quirks = XHCI_SKIP_PHY_INIT | XHCI_AVOID_BEI,
->         .suspend_quirk = xhci_cdns3_suspend_quirk,
-> +       .plat_start = xhci_cdns3_plat_start,
->  };
->
->  static int __cdns_host_init(struct cdns *cdns)
-> @@ -90,32 +120,6 @@ static int __cdns_host_init(struct cdns *cdns)
->         return ret;
+>  mm/memory.c | 35 ++++++++++++++++++++++++++++++++++-
+>  1 file changed, 34 insertions(+), 1 deletion(-)
+> 
+> diff --git a/mm/memory.c b/mm/memory.c
+> index b6056eef2f72..4a1304cf1f4e 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -2848,6 +2848,37 @@ static inline int pte_unmap_same(struct vm_fault *vmf)
+>  	return same;
 >  }
->
-> -static int xhci_cdns3_suspend_quirk(struct usb_hcd *hcd)
-> -{
-> -       struct xhci_hcd *xhci = hcd_to_xhci(hcd);
-> -       u32 value;
-> -
-> -       if (pm_runtime_status_suspended(hcd->self.controller))
-> -               return 0;
-> -
-> -       /* set usbcmd.EU3S */
-> -       value = readl(&xhci->op_regs->command);
-> -       value |= CMD_PM_INDEX;
-> -       writel(value, &xhci->op_regs->command);
-> -
-> -       if (hcd->regs) {
-> -               value = readl(hcd->regs + XECP_AUX_CTRL_REG1);
-> -               value |= CFG_RXDET_P3_EN;
-> -               writel(value, hcd->regs + XECP_AUX_CTRL_REG1);
-> -
-> -               value = readl(hcd->regs + XECP_PORT_CAP_REG);
-> -               value |= LPM_2_STB_SWITCH_EN;
-> -               writel(value, hcd->regs + XECP_PORT_CAP_REG);
-> -       }
-> -
-> -       return 0;
-> -}
-> -
->  static void cdns_host_exit(struct cdns *cdns)
->  {
->         kfree(cdns->xhci_plat_data);
-> --
-> 2.34.1
->
+>  
+> +#ifdef CONFIG_MEMORY_FAILURE
+> +struct pfn_work {
+> +	struct work_struct work;
+> +	unsigned long pfn;
+> +};
+> +
+> +static void do_sched_memory_failure(struct work_struct *w)
+> +{
+> +	struct pfn_work *p = container_of(w, struct pfn_work, work);
+> +
+> +	memory_failure(p->pfn, 0);
+> +	kfree(p);
+> +}
+> +
+> +static void sched_memory_failure(unsigned long pfn)
+> +{
+> +	struct pfn_work *p;
+> +
+> +	p = kmalloc(sizeof *p, GFP_KERNEL);
+> +	if (!p)
+> +		return;
+> +	INIT_WORK(&p->work, do_sched_memory_failure);
+> +	p->pfn = pfn;
+> +	schedule_work(&p->work);
+> +}
+
+I think there is already a function to do such work in mm/memory-failure.c.
+
+	void memory_failure_queue(unsigned long pfn, int flags)
+
+
+Best Regards,
+Shuai
+
+
+> +#else
+> +static void sched_memory_failure(unsigned long pfn)
+> +{
+> +}
+> +#endif
+> +
+>  /*
+>   * Return:
+>   *	0:		copied succeeded
+> @@ -2866,8 +2897,10 @@ static inline int __wp_page_copy_user(struct page *dst, struct page *src,
+>  	unsigned long addr = vmf->address;
+>  
+>  	if (likely(src)) {
+> -		if (copy_mc_user_highpage(dst, src, addr, vma))
+> +		if (copy_mc_user_highpage(dst, src, addr, vma)) {
+> +			sched_memory_failure(page_to_pfn(src));
+>  			return -EHWPOISON;
+> +		}
+>  		return 0;
+>  	}
+>  
