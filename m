@@ -2,78 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2957606D11
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 03:36:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67CA3606D14
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 03:39:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229897AbiJUBgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 21:36:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33824 "EHLO
+        id S229489AbiJUBjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 21:39:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiJUBga (ORCPT
+        with ESMTP id S229606AbiJUBjA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 21:36:30 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79DD210DE7E;
-        Thu, 20 Oct 2022 18:36:29 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id ot12so3761594ejb.1;
-        Thu, 20 Oct 2022 18:36:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=riV2LKDCFyGjMOKFMcuq4CjIaZfhS9K0Zw+bRcaY9Ps=;
-        b=Z/b1h0Ea2IOWf8ygXQlMOLriBrTuYzmtSPrEuu6v+TL+mM9RxVlN44VRR1wiRY3PXT
-         Bt9WCuzw44D56rPl7WwjzQtG3JthD69N1HfVQgJndDhDK9LWPdxdhH6qhdD6oNuF0ZKf
-         v7lpBBhqsSbaQIG2t8Ed2Ldgmb1KjyfOv1qo6+Az9Pqo4tYBB6GUy56zRt9Vdff6lbHi
-         O7hgksyhy7pRlPOAXBco9KRMG56RXO4EUluwNAbNuQGKbinuvJGRxB8aWa+y6QOTK6PX
-         mRGk1nhnjMWZuP98i8prLVwmLuAmnE315L2xgSwUYaYAneLqFfQxI7sQVG4AQFC3YBB6
-         YC+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=riV2LKDCFyGjMOKFMcuq4CjIaZfhS9K0Zw+bRcaY9Ps=;
-        b=UP1iBLhUekRpu8d1p/J2raPCmtYi34lCFpY63O2qRFdamXYwaXePnj25Ub/GLHU18t
-         V8TPdbLdcG7A3I3f+eCe4aY3XUKtb0j9D92+nhVenlbH+BQGPTZc0InYUzkFv2ufDZmn
-         jmq5HZFykaGDesVuM5FBlidvg+td8aDtU/3Hi8oBi3qBzsuJ9Na8FFWbxt7pic4FEay2
-         lq3yEsVu5RK7mR4pJVsxJTRcfQLa29arvYQZuGuUa7KmYq4O2cPbULL+59216foz3+TT
-         z4hslp2qb+IfdvnZz8ygaxf4t3Jevm9cN47zByyuKow5THa1zvUVEODEK0oEciQmhReI
-         lIGw==
-X-Gm-Message-State: ACrzQf1vo+UYj9bteerMB/ihGgeTcd5iRsM7K6ZuVDVrA7wqrAc4CgQ0
-        6hMv4loFr/PwtvwzfKDKkNo/6M0nhyqstacLZ3aUALVF
-X-Google-Smtp-Source: AMsMyM5ljJniXUYLRN9ji7bgw5RywfZYlVJvXYot0viEKNYOvBV5IcbY/KdfypX2Fe0N4EnnN6USoZp5ku2SCRZqSM4=
-X-Received: by 2002:a17:907:6e93:b0:78d:dff1:71e3 with SMTP id
- sh19-20020a1709076e9300b0078ddff171e3mr12669803ejc.94.1666316187888; Thu, 20
- Oct 2022 18:36:27 -0700 (PDT)
+        Thu, 20 Oct 2022 21:39:00 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31EF222E0F9
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 18:38:59 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Mtn7R1NH2zmV8m;
+        Fri, 21 Oct 2022 09:34:11 +0800 (CST)
+Received: from [10.174.151.185] (10.174.151.185) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 21 Oct 2022 09:38:56 +0800
+Subject: Re: [PATCH v2] mm, hwpoison: Try to recover from copy-on write faults
+To:     Tony Luck <tony.luck@intel.com>
+CC:     Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>,
+        Shuai Xue <xueshuai@linux.alibaba.com>
+References: <SJ1PR11MB60838C1F65CA293188BB442DFC289@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <20221019170835.155381-1-tony.luck@intel.com>
+ <893b681b-726e-94e3-441e-4d68c767778a@linux.alibaba.com>
+ <Y1GqGbBNk6fX/OnD@agluck-desk3.sc.intel.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <900bd42d-10c2-e83d-80ad-5c1fa94e8d94@huawei.com>
+Date:   Fri, 21 Oct 2022 09:38:56 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-References: <Yz8lbkx3HYQpnvIB@krava> <20221007081327.1047552-1-sumanthk@linux.ibm.com>
- <Yz/1QNGfO39Y7dOJ@krava> <Y0BDWK7cl83Fkwqz@hirez.programming.kicks-ass.net> <CAADnVQJ0ur6Pox9aTjoSkXs43strqN__e1h4JWya46WOER9V4w@mail.gmail.com>
-In-Reply-To: <CAADnVQJ0ur6Pox9aTjoSkXs43strqN__e1h4JWya46WOER9V4w@mail.gmail.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Thu, 20 Oct 2022 18:36:16 -0700
-Message-ID: <CAADnVQ+gquOKjo68ryUhpw4nQYoQzpUYJhdA2e6Wfqs=_oHV8g@mail.gmail.com>
-Subject: Re: [PATCH] bpf: fix sample_flags for bpf_perf_event_output
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Jiri Olsa <olsajiri@gmail.com>,
-        Sumanth Korikkar <sumanthk@linux.ibm.com>,
-        bpf <bpf@vger.kernel.org>, Vasily Gorbik <gor@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        X86 ML <x86@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <Y1GqGbBNk6fX/OnD@agluck-desk3.sc.intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.151.185]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,53 +61,169 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Peter,
+On 2022/10/21 4:05, Tony Luck wrote:
+> On Thu, Oct 20, 2022 at 09:57:04AM +0800, Shuai Xue wrote:
+>>
+>>
+>> 在 2022/10/20 AM1:08, Tony Luck 写道:
+>>> If the kernel is copying a page as the result of a copy-on-write
+>>> fault and runs into an uncorrectable error, Linux will crash because
+>>> it does not have recovery code for this case where poison is consumed
+>>> by the kernel.
+>>>
+>>> It is easy to set up a test case. Just inject an error into a private
+>>> page, fork(2), and have the child process write to the page.
+>>>
+>>> I wrapped that neatly into a test at:
+>>>
+>>>   git://git.kernel.org/pub/scm/linux/kernel/git/aegl/ras-tools.git
+>>>
+>>> just enable ACPI error injection and run:
+>>>
+>>>   # ./einj_mem-uc -f copy-on-write
+>>>
+>>> Add a new copy_user_highpage_mc() function that uses copy_mc_to_kernel()
+>>> on architectures where that is available (currently x86 and powerpc).
+>>> When an error is detected during the page copy, return VM_FAULT_HWPOISON
+>>> to caller of wp_page_copy(). This propagates up the call stack. Both x86
+>>> and powerpc have code in their fault handler to deal with this code by
+>>> sending a SIGBUS to the application.
+>>
+>> Does it send SIGBUS to only child process or both parent and child process?
+> 
+> This only sends a SIGBUS to the process that wrote the page (typically
+> the child, but also possible that the parent is the one that does the
+> write that causes the COW).
+> 
+>>>
+>>> Note that this patch avoids a system crash and signals the process that
+>>> triggered the copy-on-write action. It does not take any action for the
+>>> memory error that is still in the shared page. To handle that a call to
+>>> memory_failure() is needed. 
+>>
+>> If the error page is not poisoned, should the return value of wp_page_copy
+>> be VM_FAULT_HWPOISON or VM_FAULT_SIGBUS? When is_hwpoison_entry(entry) or
+>> PageHWPoison(page) is true, do_swap_page return VM_FAULT_HWPOISON to caller.
+>> And when is_swapin_error_entry is true, do_swap_page return VM_FAULT_SIGBUS.
+> 
+> The page has uncorrected data in it, but this patch doesn't mark it
+> as poisoned.  Returning VM_FAULT_SIGBUS would send an "ordinary" SIGBUS
+> that doesn't include the BUS_MCEERR_AR and "lsb" information. It would
+> also skip the:
+> 
+> 	"MCE: Killing %s:%d due to hardware memory corruption fault at %lx\n"
+> 
+> console message. So might result in confusion and attepmts to debug a
+> s/w problem with the application instead of blaming the death on a bad
+> DIMM.
+> 
+>>> But this cannot be done from wp_page_copy()
+>>> because it holds mmap_lock(). Perhaps the architecture fault handlers
+>>> can deal with this loose end in a subsequent patch?
+> 
+> I started looking at this for x86 ... but I have changed my mind
+> about this being a good place for a fix. When control returns back
+> to the architecture fault handler it no longer has easy access to
+> the physical page frame number. It has the virtual address, so it
+> could descend back into somee new mm/memory.c function to get the
+> physical address ... but that seems silly.
+> 
+> I'm experimenting with using sched_work() to handle the call to
+> memory_failure() (echoing what the machine check handler does using
+> task_work)_add() to avoid the same problem of not being able to directly
+> call memory_failure()).
+> 
+> So far it seems to be working. Patch below (goes on top of original
+> patch ... well on top of the internal version with mods based on
+> feedback from Dan Williams ... but should show the general idea)
+> 
+> With this patch applied the page does get unmapped from all users.
+> Other tasks that shared the page will get a SIGBUS if they attempt
+> to access it later (from the page fault handler because of
+> is_hwpoison_entry() as you mention above.
+> 
+> -Tony
+> 
+>>From d3879e83bf91cd6c61e12d32d3e15eb6ef069204 Mon Sep 17 00:00:00 2001
+> From: Tony Luck <tony.luck@intel.com>
+> Date: Thu, 20 Oct 2022 09:57:28 -0700
+> Subject: [PATCH] mm, hwpoison: Call memory_failure() for source page of COW
+>  failure
+> 
+> Cannot call memory_failure() directly from the fault handler because
+> mmap_lock (and others) are held.
+> 
+> It is important, but not urgent, to mark the source page as h/w poisoned
+> and unmap it from other tasks.
+> 
+> Use schedule_work() to queue a request to call memory_failure() for the
+> page with the error.
+> 
+> Signed-off-by: Tony Luck <tony.luck@intel.com>
+> ---
+>  mm/memory.c | 35 ++++++++++++++++++++++++++++++++++-
+>  1 file changed, 34 insertions(+), 1 deletion(-)
+> 
+> diff --git a/mm/memory.c b/mm/memory.c
+> index b6056eef2f72..4a1304cf1f4e 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -2848,6 +2848,37 @@ static inline int pte_unmap_same(struct vm_fault *vmf)
+>  	return same;
+>  }
+>  
+> +#ifdef CONFIG_MEMORY_FAILURE
+> +struct pfn_work {
+> +	struct work_struct work;
+> +	unsigned long pfn;
+> +};
+> +
+> +static void do_sched_memory_failure(struct work_struct *w)
+> +{
+> +	struct pfn_work *p = container_of(w, struct pfn_work, work);
+> +
+> +	memory_failure(p->pfn, 0);
+> +	kfree(p);
+> +}
+> +
+> +static void sched_memory_failure(unsigned long pfn)
+> +{
+> +	struct pfn_work *p;
+> +
+> +	p = kmalloc(sizeof *p, GFP_KERNEL);
+> +	if (!p)
+> +		return;
+> +	INIT_WORK(&p->work, do_sched_memory_failure);
+> +	p->pfn = pfn;
+> +	schedule_work(&p->work);
 
-Another 2 days have passed and bpf side is still broken
-due to the change that went during the merge window without
-corresponding fix from the bpf side.
-Looks like the patch is sitting in tip:perf/urgent.
-Please send it to Linus asap.
+There is already memory_failure_queue() that can do this. Can we use it directly?
 
-We're not sending bpf fixes to avoid breaking bpf tree too.
-We've worked around the issue in bpf CI for bpf-next tree only.
-Developers still see failures when they run tests locally.
+Thanks,
+Miaohe Lin
 
-On Tue, Oct 18, 2022 at 9:57 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Fri, Oct 7, 2022 at 8:31 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > On Fri, Oct 07, 2022 at 11:45:36AM +0200, Jiri Olsa wrote:
-> > > On Fri, Oct 07, 2022 at 10:13:27AM +0200, Sumanth Korikkar wrote:
-> > > > * Raw data is also filled by bpf_perf_event_output.
-> > > > * Add sample_flags to indicate raw data.
-> > > > * This eliminates the segfaults as shown below:
-> > > >   Run ./samples/bpf/trace_output
-> > > >   BUG pid 9 cookie 1001000000004 sized 4
-> > > >   BUG pid 9 cookie 1001000000004 sized 4
-> > > >   BUG pid 9 cookie 1001000000004 sized 4
-> > > >   Segmentation fault (core dumped)
-> > > >
-> > > > Fixes: 838d9bb62d13 ("perf: Use sample_flags for raw_data")
-> > > > Acked-by: Namhyung Kim <namhyung@kernel.org>
-> > > > Signed-off-by: Sumanth Korikkar <sumanthk@linux.ibm.com>
-> > >
-> > > Acked-by: Jiri Olsa <jolsa@kernel.org>
-> > >
-> > > Peter,
-> > > I think this should go through your tree again?
-> > > bpf-next/master does not have sample_flags merged yet
-> >
-> > Yep can do. I'll line it up in perf/urgent (Ingo just send out
-> > perf/core).
->
-> Peter,
->
-> Could you please hurry up. 11 days have passed.
->
-> This issue affects everyone the hard way now after merging
-> all the trees: tip -> linus -> net-next -> bpf-next.
-> The BPF CI is red right now with 5 tests failing because
-> this fix is still missing.
-> It's causing a headache to maintainers and developers.
+
+> +}
+> +#else
+> +static void sched_memory_failure(unsigned long pfn)
+> +{
+> +}
+> +#endif
+> +
+>  /*
+>   * Return:
+>   *	0:		copied succeeded
+> @@ -2866,8 +2897,10 @@ static inline int __wp_page_copy_user(struct page *dst, struct page *src,
+>  	unsigned long addr = vmf->address;
+>  
+>  	if (likely(src)) {
+> -		if (copy_mc_user_highpage(dst, src, addr, vma))
+> +		if (copy_mc_user_highpage(dst, src, addr, vma)) {
+> +			sched_memory_failure(page_to_pfn(src));
+>  			return -EHWPOISON;
+> +		}
+>  		return 0;
+>  	}
+>  
+> 
+
