@@ -2,154 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6EB1606CDC
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 03:09:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D7EE606CE6
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 03:11:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229765AbiJUBJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 21:09:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56028 "EHLO
+        id S229987AbiJUBLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 21:11:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbiJUBJk (ORCPT
+        with ESMTP id S230020AbiJUBLk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 21:09:40 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DAF9D4BD34;
-        Thu, 20 Oct 2022 18:09:34 -0700 (PDT)
-Received: from loongson.cn (unknown [10.180.13.64])
-        by gateway (Coremail) with SMTP id _____8AxzNhN8VFjUUUBAA--.5899S3;
-        Fri, 21 Oct 2022 09:09:33 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxLeBH8VFjU1MCAA--.9462S3;
-        Fri, 21 Oct 2022 09:09:32 +0800 (CST)
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Yun Liu <liuyun@loongson.cn>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        loongarch@lists.linux.dev, Yinbo Zhu <zhuyinbo@loongson.cn>
-Subject: [PATCH v3 2/2] dt-bindings: hpet: add loongson2 hpet
-Date:   Fri, 21 Oct 2022 09:09:25 +0800
-Message-Id: <20221021010925.21604-2-zhuyinbo@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20221021010925.21604-1-zhuyinbo@loongson.cn>
-References: <20221021010925.21604-1-zhuyinbo@loongson.cn>
+        Thu, 20 Oct 2022 21:11:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8DBB233980
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 18:11:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3066561D7E
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 01:11:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AE14C43150
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 01:11:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666314696;
+        bh=zj2R2EeuAoIlK9K+n2SHRBjvUH7ZW6esdrFQXcc7cGo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=W+nbWPleYa3gGCafB/dPPTJTwwZRQ3Rgaw5ZF/e6QxmEIds6cP1O1m0xnfrc7DSci
+         fjv8Ipun4cosyte1N1OZ/BMAEk1vgbuEK8RLnVkb71T61XXKShcqveIL+YXOkg/C85
+         M9ySX+e2CBsdX3XGyvROfCBgHrNWNWzPxu28q94lr1YyxtC0kmo0coWNGyCE9ZIYIN
+         dXi6GyUjf5ec+yIB2eOFt8RJQLNuYG8x69PnJ+3Ov1LV07+4+snLF2a5KfjokKW903
+         Wz6GaViL3ywcOSvu1goZiaMHYgN7ZohLhjGH1sObFFzZfrg5kzW/EG1gYfBhCAkb8c
+         xuY1C1mF7mydw==
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-13aeccf12fbso1701672fac.11
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 18:11:36 -0700 (PDT)
+X-Gm-Message-State: ACrzQf1lz2X4DMIhc47t9EO6uFnkLoXXIYuEXdif4DUcaIrEOuGEHsZD
+        RIhqpVNZuQwfX/AS8zESznVYLmru+OJSNasnBm0=
+X-Google-Smtp-Source: AMsMyM41rqetlYAfk04Uk64NiYfIAaeUDKaVUvjDO2wwlkmVIwyeXpVrBv3cP7g7+Gx+G9zIXVmNjKz3tu3FLRIlkqk=
+X-Received: by 2002:a05:6871:b0d:b0:13b:b91:dc94 with SMTP id
+ fq13-20020a0568710b0d00b0013b0b91dc94mr2649194oab.112.1666314695632; Thu, 20
+ Oct 2022 18:11:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxLeBH8VFjU1MCAA--.9462S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7uF15Xw1xWFyxXrW8CF4fGrg_yoW8tFyfpF
-        srCFyfJr40gF17Z395tFy8C3WrZ34kAFy7WF17J3WUKr9xX3WrZ3W7Ka4DZa13CrW8Xay7
-        ZFWSkr4UKayUZF7anT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bf8Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Cr0_Gr1UM2
-        8EF7xvwVC2z280aVCY1x0267AKxVW8JVW8Jr1ln4kS14v26r126r1DM2AIxVAIcxkEcVAq
-        07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7
-        xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Y
-        z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64
-        vIr41l42xK82IY6x8ErcxFaVAv8VWrMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E
-        14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4
-        CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r4j6ryU
-        MIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF
-        4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsG
-        vfC2KfnxnUUI43ZEXa7IU8mQ6JUUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20221019154727.2395-1-jszhang@kernel.org> <Y1HZFcBo21SQzXVj@andrea>
+In-Reply-To: <Y1HZFcBo21SQzXVj@andrea>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Fri, 21 Oct 2022 09:11:23 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTRAEX_jQ_w5H05dyafZzHq+P5j05TJ=C+v+OL__GQam4A@mail.gmail.com>
+Message-ID: <CAJF2gTRAEX_jQ_w5H05dyafZzHq+P5j05TJ=C+v+OL__GQam4A@mail.gmail.com>
+Subject: Re: [PATCH] riscv: fix race when vmap stack overflow
+To:     Andrea Parri <parri.andrea@gmail.com>
+Cc:     Jisheng Zhang <jszhang@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the loongson2 High Precision Event Timer (HPET) binding
-with DT schema format using json-schema.
+On Fri, Oct 21, 2022 at 7:26 AM Andrea Parri <parri.andrea@gmail.com> wrote:
+>
+> Hi Jisheng,
+>
+> On Wed, Oct 19, 2022 at 11:47:27PM +0800, Jisheng Zhang wrote:
+> > Currently, when detecting vmap stack overflow, riscv firstly switches
+> > to the so called shadow stack, then use this shadow stack to call the
+> > get_overflow_stack() to get the overflow stack. However, there's
+> > a race here if two or more harts use the same shadow stack at the same
+> > time.
+> >
+> > To solve this race, we introduce spin_shadow_stack atomic var, which
+> > will make the shadow stack usage serialized.
+> >
+> > Fixes: 31da94c25aea ("riscv: add VMAP_STACK overflow detection")
+> > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> > Suggested-by: Guo Ren <guoren@kernel.org>
+> > ---
+> >  arch/riscv/kernel/entry.S | 4 ++++
+> >  arch/riscv/kernel/traps.c | 4 ++++
+> >  2 files changed, 8 insertions(+)
+> >
+> > diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+> > index b9eda3fcbd6d..7b924b16792b 100644
+> > --- a/arch/riscv/kernel/entry.S
+> > +++ b/arch/riscv/kernel/entry.S
+> > @@ -404,6 +404,10 @@ handle_syscall_trace_exit:
+> >
+> >  #ifdef CONFIG_VMAP_STACK
+> >  handle_kernel_stack_overflow:
+> > +1:   la sp, spin_shadow_stack
+> > +     amoswap.w sp, sp, (sp)
+> > +     bnez sp, 1b
+> > +
+> >       la sp, shadow_stack
+> >       addi sp, sp, SHADOW_OVERFLOW_STACK_SIZE
+> >
+> > diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
+> > index f3e96d60a2ff..88a54947dffb 100644
+> > --- a/arch/riscv/kernel/traps.c
+> > +++ b/arch/riscv/kernel/traps.c
+> > @@ -221,11 +221,15 @@ asmlinkage unsigned long get_overflow_stack(void)
+> >               OVERFLOW_STACK_SIZE;
+> >  }
+> >
+> > +atomic_t spin_shadow_stack;
+> > +
+> >  asmlinkage void handle_bad_stack(struct pt_regs *regs)
+> >  {
+> >       unsigned long tsk_stk = (unsigned long)current->stack;
+> >       unsigned long ovf_stk = (unsigned long)this_cpu_ptr(overflow_stack);
+> >
+> > +     atomic_set_release(&spin_shadow_stack, 0);
+> > +
+>
+> Have not really looked the details: should there be a matching acquire?
 
-Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
----
-Change in v3:
-		1. Update dts that base on common clock framework.
+I use atomic_set_release here, because I need earlier memory
+operations finished to make sure the sp is ready then set the spin
+flag.
 
- .../bindings/timer/loongson,ls2k-hpet.yaml    | 50 +++++++++++++++++++
- MAINTAINERS                                   |  1 +
- 2 files changed, 51 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/timer/loongson,ls2k-hpet.yaml
+The following memory operations order is not important, because we
+just care about sp value.
 
-diff --git a/Documentation/devicetree/bindings/timer/loongson,ls2k-hpet.yaml b/Documentation/devicetree/bindings/timer/loongson,ls2k-hpet.yaml
-new file mode 100644
-index 000000000000..01656048858a
---- /dev/null
-+++ b/Documentation/devicetree/bindings/timer/loongson,ls2k-hpet.yaml
-@@ -0,0 +1,50 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/timer/loongson,ls2k-hpet.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+Also, we use relax amoswap before, because sp has naturelly
+dependency. But giving them RCsc is okay here, because we don't care
+about performance here.
+eg:
+ handle_kernel_stack_overflow:
++1:     la sp, spin_shadow_stack
++       amoswap.w.aqrl sp, sp, (sp)
++       bnez sp, 1b
 +
-+title: Loongson2 High Precision Event Timer (HPET)
-+
-+maintainers:
-+  - Yinbo Zhu <zhuyinbo@loongson.cn>
-+
-+properties:
-+  compatible:
-+    const: loongson,ls2k-hpet
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    items:
-+      - description: SoC apb clock
-+
-+  clock-names:
-+    items:
-+      - const: apb_clk
-+
-+  interrupts:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - interrupts
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/loongson,ls2k-clk.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    timer@1fe24000 {
-+        compatible = "loongson,ls2k-hpet";
-+        reg = <0x1fe24000 0x15f>;
-+        clocks = <&clk LOONGSON2_APB_CLK>;
-+        clock-names = "apb_clk";
-+        interrupt-parent = <&liointc0>;
-+        interrupts = <21 IRQ_TYPE_LEVEL_LOW>;
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index db29c1dc2d89..8cc541ce89b8 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11919,6 +11919,7 @@ LOONGSON2 SOC SERIES HPET DRIVER
- M:	Yinbo Zhu <zhuyinbo@loongson.cn>
- L:	linux-kernel@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/timer/loongson,ls2k-hpet.yaml
- F:	drivers/clocksource/loongson2_hpet.c
- 
- LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
--- 
-2.20.1
+....
++     smp_store_release(&spin_shadow_stack, 0);
++     smp_mb();
 
+>
+>   Andrea
+>
+>
+> >       console_verbose();
+> >
+> >       pr_emerg("Insufficient stack space to handle exception!\n");
+> > --
+> > 2.37.2
+> >
+
+
+
+--
+Best Regards
+ Guo Ren
