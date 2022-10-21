@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCCF1606DA6
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 04:23:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A05D4606DB1
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 04:24:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230064AbiJUCXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 22:23:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37516 "EHLO
+        id S229826AbiJUCYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 22:24:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbiJUCWz (ORCPT
+        with ESMTP id S230056AbiJUCXl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 22:22:55 -0400
+        Thu, 20 Oct 2022 22:23:41 -0400
 Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EE54232E4F
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 19:22:50 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MtpCN18FmzHvCF;
-        Fri, 21 Oct 2022 10:22:40 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1327204AD0
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 19:23:20 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Mtp6h64dWzVj27;
+        Fri, 21 Oct 2022 10:18:36 +0800 (CST)
 Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 21 Oct 2022 10:22:44 +0800
+ 15.1.2375.31; Fri, 21 Oct 2022 10:22:45 +0800
 Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
  (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 21 Oct
- 2022 10:22:43 +0800
+ 2022 10:22:44 +0800
 From:   Yang Yingliang <yangyingliang@huawei.com>
 To:     <linux-kernel@vger.kernel.org>, <qemu-devel@nongnu.org>,
         <linux-f2fs-devel@lists.sourceforge.net>,
@@ -38,9 +38,9 @@ CC:     <gregkh@linuxfoundation.org>, <rafael@kernel.org>, <somlo@cmu.edu>,
         <joseph.qi@linux.alibaba.com>, <akpm@linux-foundation.org>,
         <alexander.deucher@amd.com>, <luben.tuikov@amd.com>,
         <richard@nod.at>, <liushixin2@huawei.com>
-Subject: [PATCH 08/11] erofs: fix possible memory leak in erofs_init_sysfs()
-Date:   Fri, 21 Oct 2022 10:20:59 +0800
-Message-ID: <20221021022102.2231464-9-yangyingliang@huawei.com>
+Subject: [PATCH 09/11] ocfs2: possible memory leak in mlog_sys_init()
+Date:   Fri, 21 Oct 2022 10:21:00 +0800
+Message-ID: <20221021022102.2231464-10-yangyingliang@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221021022102.2231464-1-yangyingliang@huawei.com>
 References: <20221021022102.2231464-1-yangyingliang@huawei.com>
@@ -65,40 +65,49 @@ if it fails, but the refcount of kobject is not decreased to
 this by calling kset_put(), so that name can be freed in
 callback function kobject_cleanup().
 
-unreferenced object 0xffff888101d228c0 (size 8):
-  comm "modprobe", pid 276, jiffies 4294722700 (age 13.151s)
+unreferenced object 0xffff888100da9348 (size 8):
+  comm "modprobe", pid 257, jiffies 4294701096 (age 33.334s)
   hex dump (first 8 bytes):
-    65 72 6f 66 73 00 ff ff                          erofs...
+    6c 6f 67 6d 61 73 6b 00                          logmask.
   backtrace:
-    [<00000000e2a9a4a6>] __kmalloc_node_track_caller+0x44/0x1b0
-    [<00000000b8ce02de>] kstrdup+0x3a/0x70
-    [<000000004a0e01d2>] kstrdup_const+0x63/0x80
-    [<00000000051b6cda>] kvasprintf_const+0x149/0x180
-    [<000000004dc51dad>] kobject_set_name_vargs+0x56/0x150
-    [<00000000b30f0bad>] kobject_set_name+0xab/0xe0
+    [<00000000306e441c>] __kmalloc_node_track_caller+0x44/0x1b0
+    [<000000007c491a9e>] kstrdup+0x3a/0x70
+    [<0000000015719a3b>] kstrdup_const+0x63/0x80
+    [<0000000084e458ea>] kvasprintf_const+0x149/0x180
+    [<0000000091302b42>] kobject_set_name_vargs+0x56/0x150
+    [<000000005f48eeac>] kobject_set_name+0xab/0xe0
 
-Fixes: 168e9a76200c ("erofs: add sysfs interface")
+Fixes: 34980ca8faeb ("Drivers: clean up direct setting of the name of a kset")
 Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 ---
- fs/erofs/sysfs.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ fs/ocfs2/cluster/masklog.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/fs/erofs/sysfs.c b/fs/erofs/sysfs.c
-index 783bb7b21b51..653b35001bc5 100644
---- a/fs/erofs/sysfs.c
-+++ b/fs/erofs/sysfs.c
-@@ -254,8 +254,10 @@ int __init erofs_init_sysfs(void)
- 	kobject_set_name(&erofs_root.kobj, "erofs");
- 	erofs_root.kobj.parent = fs_kobj;
- 	ret = kset_register(&erofs_root);
--	if (ret)
-+	if (ret) {
-+		kset_put(&erofs_root);
- 		goto root_err;
-+	}
+diff --git a/fs/ocfs2/cluster/masklog.c b/fs/ocfs2/cluster/masklog.c
+index 563881ddbf00..7f9ba816d955 100644
+--- a/fs/ocfs2/cluster/masklog.c
++++ b/fs/ocfs2/cluster/masklog.c
+@@ -156,6 +156,7 @@ static struct kset mlog_kset = {
+ int mlog_sys_init(struct kset *o2cb_kset)
+ {
+ 	int i = 0;
++	int ret;
  
- 	ret = kobject_init_and_add(&erofs_feat, &erofs_feat_ktype,
- 				   NULL, "features");
+ 	while (mlog_attrs[i].attr.mode) {
+ 		mlog_default_attrs[i] = &mlog_attrs[i].attr;
+@@ -165,7 +166,11 @@ int mlog_sys_init(struct kset *o2cb_kset)
+ 
+ 	kobject_set_name(&mlog_kset.kobj, "logmask");
+ 	mlog_kset.kobj.kset = o2cb_kset;
+-	return kset_register(&mlog_kset);
++	ret = kset_register(&mlog_kset);
++	if (ret)
++		kset_put(&mlog_kset);
++
++	return ret;
+ }
+ 
+ void mlog_sys_shutdown(void)
 -- 
 2.25.1
 
