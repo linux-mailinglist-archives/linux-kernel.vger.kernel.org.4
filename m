@@ -2,121 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFE74607BF9
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 18:18:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5064607BFB
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 18:18:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbiJUQSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 12:18:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51616 "EHLO
+        id S230117AbiJUQSh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 12:18:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230206AbiJUQSU (ORCPT
+        with ESMTP id S230404AbiJUQSb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 12:18:20 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0334E249887
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:18:19 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id f9so2758746plb.13
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:18:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PIRb6+ovxp5J4uJ1hVDeWHpfyBDCzaaTh1iPpdxBBXo=;
-        b=LBbRjb9HoKMsM0BrB5Yx8EKkNw2z2slGB6RREjreEOgAz6cf4w0roEfiOfI1ISkxC3
-         umCpqoYJ+BxiTeH6mDoFf2MIPMRAa8KHajTmAG5q0NIMZtDgJyPYDAp4OEAVmIJyfonP
-         YVdGEHCQT54p0r2x+JlsthZbC8pGVdj+LT/dxHs3Utvt9tNW6l/hE2qLrAwkHAoOVZeH
-         cqWWQ1T7dnKxpoX4VIogeOoRSjB+ibtFx6bQv9mAbDdRyNK9AcGDi4qG7P8xM/rtcTeQ
-         giQByT9/HXaV3sGzuy8Kux9ZJVNncssFk2zzM8JEHArzX1QytiIWnjlmf1c2NjGzQeqm
-         YCQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PIRb6+ovxp5J4uJ1hVDeWHpfyBDCzaaTh1iPpdxBBXo=;
-        b=Gw7r/3PvD7Sr1soPKHOxS2D3kb1wZnSaOSoyUyhhIemrd7sYrETd6Cj2Mh/7X3V3cj
-         nHKeRdynHLTwfo5IzHS8OpoKOOzc/GopCrULSO/i/IX23SEKo86GFGbBZOWDG33A7nsI
-         7kCEL7igX6Z7rblIiXiGeH5wawUE5jzgAVItaYFza+Zsn25ZMpqbS9HJJhpsFia1w5JY
-         BVzZNzOtFRY56Ex7SR/5GX+rXDaTjRjsPQmgHj2beJgEvI4U5fl1kMHq75iFEYtNtHjC
-         O29OKKAaCHlD8FCqxTw78/jvIDBS3SwhZBgE04ChMxXeSWN6dLBslX34nxHJ5xLXQxYE
-         1uzw==
-X-Gm-Message-State: ACrzQf3SX1LR50t9AAT8hsQKWGUusIvcUYp+aOEUNv1Yah/vVumg5JKf
-        QUPQkCAuLP7bDKoRSK/GTa2PrA==
-X-Google-Smtp-Source: AMsMyM7vsZ30ExGufg/GPlnIb76AAev1l4p5ZYo9iokYaR6mEcu4bpMFXgiNWD7ik43HxyivyjTj/A==
-X-Received: by 2002:a17:903:50e:b0:182:631b:df6f with SMTP id jn14-20020a170903050e00b00182631bdf6fmr20228449plb.66.1666369098415;
-        Fri, 21 Oct 2022 09:18:18 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id t3-20020a170902b20300b0017f61576dbesm14948739plr.304.2022.10.21.09.18.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Oct 2022 09:18:17 -0700 (PDT)
-Date:   Fri, 21 Oct 2022 16:18:14 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     Vishal Annapurve <vannapurve@google.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
-Subject: Re: [PATCH v8 1/8] mm/memfd: Introduce userspace inaccessible memfd
-Message-ID: <Y1LGRvVaWwHS+Zna@google.com>
-References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
- <20220915142913.2213336-2-chao.p.peng@linux.intel.com>
- <CAGtprH_MiCxT2xSxD2UrM4M+ghL0V=XEZzEX4Fo5wQKV4fAL4w@mail.gmail.com>
- <20221021134711.GA3607894@chaop.bj.intel.com>
+        Fri, 21 Oct 2022 12:18:31 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8799C254371;
+        Fri, 21 Oct 2022 09:18:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666369108; x=1697905108;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=VaytRT87Myc4YmqlUl0V8eAIgrysFmZWUw/21sXlOCI=;
+  b=HW8Kp4fCchIrusrEIngZukDzqfVDQXyhI68pgJLHJKGhDwZ6qF8121fF
+   yLNuyph5AB3ZsaaWbFqVaGfkmo068URvcZt5J73hcFFNvGCGgrKneHLfz
+   GNgA+QJnjTF3zD4SdWPZPdAkZMcE9Q0BwgzODga3K0jXhtQJVviYalas/
+   mlynJR3uAI0cjA5QlRZ5FKUb+eI6aZ1Ah8Kb5klDE+3axmLAk4HaDKcq0
+   bJ3AOz/vhDYs1LmU/wYOP5D6qeW4B05jDGWVcP+MHwaBLGCHJfRagKSYG
+   CtTPgMHF5dq+FtRu60JL0+3Ct38nfyMi5gpjtZArttnprFi/zYSVbS4aM
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10507"; a="308726982"
+X-IronPort-AV: E=Sophos;i="5.95,202,1661842800"; 
+   d="scan'208";a="308726982"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2022 09:18:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10507"; a="693779105"
+X-IronPort-AV: E=Sophos;i="5.95,202,1661842800"; 
+   d="scan'208";a="693779105"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga008.fm.intel.com with ESMTP; 21 Oct 2022 09:18:25 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1oluj2-0003sQ-1A;
+        Fri, 21 Oct 2022 19:18:24 +0300
+Date:   Fri, 21 Oct 2022 19:18:24 +0300
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     William Breathitt Gray <william.gray@linaro.org>,
+        linus.walleij@linaro.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org
+Subject: Re: [PATCH v2 0/3] Introduce the ACCES IDIO-16 GPIO library module
+Message-ID: <Y1LGULB4L4IheMPk@smile.fi.intel.com>
+References: <cover.1663519546.git.william.gray@linaro.org>
+ <CAMRc=McQa0iDS+6OCOt9R1B-DdR7t1jD3D-Q3DTKbm=zidXpAQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221021134711.GA3607894@chaop.bj.intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <CAMRc=McQa0iDS+6OCOt9R1B-DdR7t1jD3D-Q3DTKbm=zidXpAQ@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022, Chao Peng wrote:
-> > 
-> > In the context of userspace inaccessible memfd, what would be a
-> > suggested way to enforce NUMA memory policy for physical memory
-> > allocation? mbind[1] won't work here in absence of virtual address
-> > range.
-> 
-> How about set_mempolicy():
-> https://www.man7.org/linux/man-pages/man2/set_mempolicy.2.html
+On Thu, Oct 20, 2022 at 02:10:58PM +0200, Bartosz Golaszewski wrote:
+> On Sun, Sep 18, 2022 at 9:54 PM William Breathitt Gray
+> <william.gray@linaro.org> wrote:
 
-Andy Lutomirski brought this up in an off-list discussion way back when the whole
-private-fd thing was first being proposed.
+> This series looks good to me, Andy do you have any objections?
+> Otherwise, I'll queue it soon.
 
-  : The current Linux NUMA APIs (mbind, move_pages) work on virtual addresses.  If
-  : we want to support them for TDX private memory, we either need TDX private
-  : memory to have an HVA or we need file-based equivalents. Arguably we should add
-  : fmove_pages and fbind syscalls anyway, since the current API is quite awkward
-  : even for tools like numactl.
+Nope. If anything, we can fix iteratively later on.
+Thanks!
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
