@@ -2,72 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 037B4607A3C
+	by mail.lfdr.de (Postfix) with ESMTP id 5945A607A3D
 	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 17:12:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230130AbiJUPMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 11:12:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59208 "EHLO
+        id S229999AbiJUPMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 11:12:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230300AbiJUPMH (ORCPT
+        with ESMTP id S230350AbiJUPMU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 11:12:07 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3073724A55A
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 08:11:56 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id g8-20020a17090a128800b0020c79f987ceso6930516pja.5
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 08:11:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=TDWBSKUOxk1MS8sahwUCxJrP6mn3rTa/DfYCPn2xgwU=;
-        b=g4eEP/DRbVJVgWqeAPyN8MoeecoBADndcqppWSicvOBNBYBCCBOj4EqA7VBUWDQKSt
-         9yUsOppgJj+T4TufXLCn7V/Ca/k3pnJ98LBDTQg7+UqxkBy7matNxHWrg9NG9bxWPQuQ
-         aq7lkMN8E4hB5tHptzYF9O3Nd3AoIGY3zx82QSqI6JDMFB8KJLWypoe8XJwzT1bPLqLE
-         xEzik0svP4D8fkWQjrM9hZGhejrYo8gU4MoFoqfmr12SfBlcwH5qeT03l1r/hMIURNQv
-         tfhxmtqNWXjInb9KiIcUe0seQ28h/g9Jfvt32QBZgEpWHngKrI+OsgvhQVlk5Hd6Uifj
-         R+9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TDWBSKUOxk1MS8sahwUCxJrP6mn3rTa/DfYCPn2xgwU=;
-        b=GnYDq5Ht11XZXhrQY9YpmR2vlVJHwApa978qe//KU3NgpztaLX+990vVWL9VeZGADq
-         RDR8gVdDA/sccNLOnD6zmlRxvXOl07buvKf+B0kNA9t4mONhcKCj9tTt4Z7HQyiNyX/w
-         MV2FrrXq0sOskf+mZkEnqAAwwo72YFEeD0PY7LHxi7ZcyhWU6YSNtfrYmPzzFD2yFQFy
-         R4fix0H8lV3vFFwHERGUUf056/TM0cccnc4mw1EODrmJeX1/7Wmc7p+04IVyVob+LdGU
-         mf4O/9K0SopuzBoYUJsmOJk47f2sUldwAgn76Tu5t0rb5YTHhXg0/8Ub8NCmmQaBKKCE
-         vCqw==
-X-Gm-Message-State: ACrzQf3aSAmOXS2efX6oGu8kgQZDqD6Dk4UeSVnixVyH7E6qYh1JxViw
-        0iE3R1MA1RHV1pjdrjB+Q2NOpQ==
-X-Google-Smtp-Source: AMsMyM4HpUL75SY4AAPrUy+NsP0ZdpoF7GL2na83jW2a/A4nStjNzADFs3WKvQooJLDqA6NTspY7JQ==
-X-Received: by 2002:a17:90a:ab90:b0:210:27cb:e337 with SMTP id n16-20020a17090aab9000b0021027cbe337mr14747314pjq.139.1666365114945;
-        Fri, 21 Oct 2022 08:11:54 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id u2-20020a170902e80200b00184360e5d68sm4068201plg.268.2022.10.21.08.11.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Oct 2022 08:11:54 -0700 (PDT)
-Date:   Fri, 21 Oct 2022 15:11:50 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Fuad Tabba <tabba@google.com>
-Cc:     kvm@vger.kernel.org, pbonzini@redhat.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, will@kernel.org, x86@kernel.org,
+        Fri, 21 Oct 2022 11:12:20 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2047.outbound.protection.outlook.com [40.107.243.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6741E8C65
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 08:12:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=l71cDup+ABqfUNVNnKDJaFx9gUmp6CodXFcM2RkV1NeTEA/6F6YJJEuyfkgFWXBjcb297H9a59sqAZZUVM462J25ASUGMrcDYTIZhrm+e7vTpsi5NACISnla79/LiNKyoO72QYHnHGOpseu/7gjXL4fQoCV9l7f/8sxk0NFKfV5ECzOroOdVKp36ZvOMyXdnQ2J/SR9YtcjBOTpyCa45VLVAKdj4zEb3IDqX9gDAOnxEZ/yrN7hZoD4zPazC2xpGDSwvQAgNc2ZBChVHO1MtLWxXisDsZwssz40OziMhWtWdsIaOt6gnlEOsm1phupG66lxg7x0MkppvTzhHYdP14Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tNvwI8i1NUcbzqkVoEV+4mdYMO/sGQGcqnXJMzL9D2c=;
+ b=lrkPAHEX7/60f4KPw5bibdwp+v1Jz3tDTNmQCzK6gFoTAIC13+2U7DOygyXQCCi3nz3ZQSrizCslUODgw9zWkAWIy0sLZduNurXi46P41TWu5gi4bZWIj8asO61DTSa2HvuDDn6H80qU+X6zxfxfamH98Py28LS12PY0+h1Yk/M6gQMOQOWPKI+fHFHqnwXt5US61ONxg7W7Q6DOXnMMeWbXxWAEEsCPaO0g/yPE6V4TEwgYW35f3+D+CMBYnCwaCdV8WTcahZS3FRr6L2kYTkYzawZqWDYBUgqt1cjkaBdyzAbzEQ+g25yKAhWARDcyZW9MLeAPzZd+A0DT3PU7ug==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tNvwI8i1NUcbzqkVoEV+4mdYMO/sGQGcqnXJMzL9D2c=;
+ b=DFsvto04VcPBQqkBFH7lpssyKQvBhdYkgwZP97913/vwIYaCGQFgwMyE/I5PTocK9JyAMYkMHO5KClvypirPRscVQG6yrwiAy9LCCqKLFEpgQMnwD6WrKu88pguo+lwtC5/hcPEfn0hjAsAtxPWoPwaIY/MU9/q90LAKoPT+s24=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com (2603:10b6:5:358::13)
+ by MW4PR12MB7013.namprd12.prod.outlook.com (2603:10b6:303:218::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.32; Fri, 21 Oct
+ 2022 15:12:08 +0000
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::aef3:6aae:b904:e395]) by CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::aef3:6aae:b904:e395%7]) with mapi id 15.20.5746.021; Fri, 21 Oct 2022
+ 15:12:08 +0000
+Message-ID: <cb1efdf9-3d68-df1c-a808-d971077a2666@amd.com>
+Date:   Fri, 21 Oct 2022 11:12:04 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH] drm/amd/display: Remove duplicate code for DCN314 DML
+ calculation
+Content-Language: en-US
+To:     Rafael Mendonca <rafaelmendsr@gmail.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: x86/mmu: Release the pfn in handle_abnormal_pfn()
- error path
-Message-ID: <Y1K2toQAAj90+ATK@google.com>
-References: <20221021111932.3291560-1-tabba@google.com>
+References: <20221020221051.919704-1-rafaelmendsr@gmail.com>
+From:   Harry Wentland <harry.wentland@amd.com>
+In-Reply-To: <20221020221051.919704-1-rafaelmendsr@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YT3PR01CA0110.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:85::22) To CO6PR12MB5427.namprd12.prod.outlook.com
+ (2603:10b6:5:358::13)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221021111932.3291560-1-tabba@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO6PR12MB5427:EE_|MW4PR12MB7013:EE_
+X-MS-Office365-Filtering-Correlation-Id: 89c1df00-38df-437b-8b26-08dab3769ebd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: K0LPe37aLyir7dEGSsxuoU2o1asBeLSA+vfDJdVb0ycVJ4c++p8Cw4M825lz/KQUodGeJFyil8mz3vkuhuQxt5AzJNH7zFf2g+ODfBNvG1731N7Afv/cgllLNEHXPqkOvgKAZwWEZP78XZUAnc+MMX3SBNeu6X7N/ID/VqHzeVfWxEfl3KDsU9FmbyMOniLviw62jkjnBAcheV7wtmwqYLyoWF7GOmPblFVuycLHbRC49aK2MfMAzH29CVK3ekhw7OlZAZX5AG5tGwN3zO2FgPn6JYvjsHPl/umGJC98gMJxY6NPUA38oevkSxqaZs0ivsvi+3RtkvxfKcVB9rJSp0bmRKzxSK/IvXilmfrd40b0ISSB6+DVWh7W7dvv0pL4Skbjelbqd1wzKa4WAPH0hlZy1s6BR/QvWkCmEsJG1mr+8M8NSEXKR8FivEjo596XFo2Bn3NZRj95ONbkRWn/Mt5wjMlBulKQyDsrL9oluv/tMPzrb0MiSqd/07drT35SofBnAypPBhoTlU/RY4Vueq6QqhBQkbPuFBQUUhfl2PrykbWPOJISr6GtKzd4Zw1pW2lSl0b0yTggCqMTMEPQsUIqgg1QOiaDsLweieAJ1qvKDhON17Efu/c9sO+JuXONww8F9qdcRCuY+1dE0uFU/vmaoDlIU0edy9taMLTVbx9YNw+VTlw0amY6A3bbCSkEc5S4ar2YVLWm0sBAGO5ZRYVUoe6tJDRkr+mrNvz9yMAyq1ueHxa2L7bH1ay+Ia75EslA5irgrqlH0hZX16Jme+3h9xCXpbekl8LIzbGhohY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5427.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(376002)(136003)(39860400002)(366004)(396003)(451199015)(5660300002)(186003)(31686004)(4001150100001)(66556008)(2906002)(2616005)(6666004)(6506007)(110136005)(38100700002)(26005)(316002)(53546011)(86362001)(6512007)(8676002)(41300700001)(8936002)(30864003)(66476007)(83380400001)(4326008)(31696002)(478600001)(44832011)(6486002)(36756003)(66946007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VGRKeUE4Y2dDUXFrR1ZQeTUvVk05K1Z0TVNLanhwNzdOc3UrZTQ2YXVVNjB5?=
+ =?utf-8?B?am9NSXVURU5NQ0FwYUtWVnBzNlBFbncrUkNmVWhUd0YzR3NoOHVXK0NaaXJn?=
+ =?utf-8?B?TlRDOGxSd2lZYURIK2Fra0thMDY2YUk5T3g1QXB1cE9IMHRsem1LMC8vY0w4?=
+ =?utf-8?B?NmM3OUtnVDRZWTZ6cDBBTjE5ZzUyN2JJQWJjbDJYL0hJK2dnS2NvTExDb0xt?=
+ =?utf-8?B?U3E5K3h4ejd5S2JZUmpjdnBhNkdwem85YzRVWmdIeUNrUnhvWklLOU1kblFa?=
+ =?utf-8?B?U090dHBRRWQwVzQxT0dXTDk0WGRma1pkTVlCMW8vSHFRRjRucDFpUUhZeGxE?=
+ =?utf-8?B?OGZRUHNoOWFLMFFLSitxN3cydzlBeUlSUGs5NlJwOXptTVFlWnRWN3ZxaS94?=
+ =?utf-8?B?NHBxV1RNTlNWZGFtZi8vUG9hYjNxK09xUXN3a3lQMmxHV2VHWjRGcktGdU9y?=
+ =?utf-8?B?WjZVT0lpQVJqRysrQXpNelAvSU1Od2hBemZqME4zOEg0ek81OEtvcHFzV3JQ?=
+ =?utf-8?B?QnJFSlk3QWkzajlwbkphbzVmT2VVamlRYlNhUndVZlI4ZjdvV1RPN2VDS3M5?=
+ =?utf-8?B?Y2NKUTl2QjB6U0RERytzNkJtSTZhdmR1dzRlOFJudTBsWWpiWW1xNEJwekVz?=
+ =?utf-8?B?NnJDQks0dDhTZklXdHlnNUF6QVU2ekNGRHdkQnhXeC9pbCt1ZU42TzNLcGZn?=
+ =?utf-8?B?blFnZ0tRdjlYZnAxMkFxOFVqZGh2ZTBhYTFJVlY5WDNzTytya2hJSFU0Mzl6?=
+ =?utf-8?B?VXV3MDVXV1ZndVcreG1wSGh4QTRpSWw1NGVmU0wvU2huL2F4TG53dTBvaHhu?=
+ =?utf-8?B?SW42blZIempWY3RyOEQrL1pPM0RKeHBWdDJobHpnL0YyM3lPNXF4eHFjTlFC?=
+ =?utf-8?B?ek9HY1c4Q1N6NFdWSURNakF5RGxselF2NkxDdGtUdnQ0VmxGckM5bVN2Kzht?=
+ =?utf-8?B?dXVTdEVremZueWJqT0l3eDhqMTYvNDZzVFJQUUNCUkY0WG1NR1haYktpeTlz?=
+ =?utf-8?B?ZE5Iei9XOEJVbDAxUndXZElEaGdYRG0vcHc3ZStPZU56WlR1Y29rd1dnTUN2?=
+ =?utf-8?B?Ui9QNERncEFnRWwyREF6SW95YktSZjQxOXB3OGQxeGNkMTkvTFc2dnF6d05Q?=
+ =?utf-8?B?T2pjb1p5MjRmMnAzaUpPWndLSC9yZEFtVkQ3ZVBYcW5yZGs0a0Q5Ykt3NzdZ?=
+ =?utf-8?B?L3phdlhaY2Z3dGdISHFjSmR2eTVzUWV6S2hWTGpFbmF5MW9KMkVLaWdSOGZM?=
+ =?utf-8?B?Sm1BM1BHR0xaYVVpaExtL25FdFA0QUlCVG52WXJPNW1EMXdhQXNIaFQ0WjNX?=
+ =?utf-8?B?V2lTcW80WWhRcStTUlhPcm92UjlOQmRSYmVRSG1weFd4cTVLSXlyUzRhT1NR?=
+ =?utf-8?B?UTBSYSs4TFJKQlFnRGVSaEZjeVhpRnlxMFcxNTZpanh6VnR0SDJkSUErVzRY?=
+ =?utf-8?B?VktLVzNSYm5qYkljSzZVSW9CWlpROEkwY1F1T3cxc09RVnB5ZlZVTUltQnlW?=
+ =?utf-8?B?alpiMWxVTjAwM05WL1JyeTZWaHJkcTZpc3dnVXVveHA2bDF0RS9GUVJEOU95?=
+ =?utf-8?B?MXhJZGdDUldseVc5YzNDVlRSOGZhenBVL2kwWk5HcGRvakVjdjVDZDBEalY3?=
+ =?utf-8?B?NzdSVVpsQmRKT0w1SWN4WG5MSy9ubEZnUEVkYmU4Q3FpSnpPdjlxa29RbnZK?=
+ =?utf-8?B?UWxTVVlqTjhUamd5NU9hU2hyZkMxOGVoWVB3eUZJMG1PYUZUUjQwV2RiSjFi?=
+ =?utf-8?B?RnhyRTd3cG1qcFdMT0ZieE5rRTFrT05PaFBXOFp0TDcyTE1xVWJ2MnZrOHlj?=
+ =?utf-8?B?SWRUYmQyUGhuUW9QcTZNYUszS1RxK2VTbXlSRmtZVWZmUEJrWDVCUzU1RG1N?=
+ =?utf-8?B?YTE3M3dtMXNEV1FqRVNKU0tvbDE4dmdiVktkVGNGcDRXSGdJNzFpNForTU9B?=
+ =?utf-8?B?cGdMRmxTdHc3SUxPcXlBTVoxRGpDQU02ajlhZVNINk4rMUxta1NzWExFS2l2?=
+ =?utf-8?B?MmZIaE9OY1gzR3JMQ3E1Q3RpNTY1L2RJNzFXZDRLeHVwYXlIMHRVU25sbEt1?=
+ =?utf-8?B?SThjRGsyZFBPWlpvVWxjOUJ2YmlBQXc5L3AyZXYzWks4WXZOWnJ5TWNROUR4?=
+ =?utf-8?Q?cv2J42DZxccl0ktRPsMouqFFf?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 89c1df00-38df-437b-8b26-08dab3769ebd
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5427.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Oct 2022 15:12:07.8968
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3DvBLva5zRk597RRZuQhMYpCvsqZjm3iNb/2eEliUUQvzp777HR0Yvo4xdsDHCX0yckd4HVRdgA+aAO9hKWzoQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7013
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,9 +132,315 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022, Fuad Tabba wrote:
-> Currently in case of error it returns without releasing the pfn
-> faulted in earlier.
 
-handle_abnormal_pfn() returns something other than RET_PF_CONTINUE if and only if
-there was no pfn to fault-in, i.e. it only handles error and no-slot pfns.
+
+On 2022-10-20 18:10, Rafael Mendonca wrote:
+> This is an extension of commit fd3bc691fc7b ("drm/amd/display: Remove
+> duplicate code across dcn30 and dcn31"), which removed duplicate code for
+> the function CalculateBytePerPixelAnd256BBlockSizes() across dcn30 and
+> dcn31. At the time the aforementioned commit was introduced, support for
+> DCN 3.1.4 was still not merged. Thus, this deletes duplicate code for
+> CalculateBytePerPixelAnd256BBlockSizes(), that was introduced later in
+> DCN314, in favor of using the respective functionality from
+> 'display_mode_vba_30.h'.
+> 
+> Additionally, by doing that, we also fix a duplicate argument issue
+> reported by coccinelle in 'display_rq_dlg_calc_314.c':
+> 
+>   static bool CalculateBytePerPixelAnd256BBlockSizes(...) {
+>     ...
+>     } else if (SourcePixelFormat == dm_444_16 || SourcePixelFormat == dm_444_16) {
+>     ...
+>   }
+> 
+
+A lot of the uglyness of this code and some of the duplicate nature
+of it are due to the fact that this comes directly from the HW
+designers and is consumed as HW gospel. Years ago we tried to write
+our own beautiful code to implement the HW bandwidth constraints and
+calculations. This proved problematic as we had an argument with
+HW designers each time there was a bug and first had to try to
+prove that our own code was good. Consuming their code (more-or-less)
+as-is short circuits any of these arguments and has lead to a
+more stable driver, even with HW where the bandwidth calculations
+have become more and more complex.
+
+We do want this code to be kosher for the kernel but beyond that
+we want to refactor this code as little as possible for the
+above-stated reasons.
+
+Note the "NOTE" at the top of the file regarding this.
+
+As for the specifics of this patch, I'll leave that to Siqueira,
+since he's been a lot deeper into this code than I have.
+
+Harry
+
+> Signed-off-by: Rafael Mendonca <rafaelmendsr@gmail.com>
+> ---
+>  .../dc/dml/dcn314/display_mode_vba_314.c      | 106 +-----------------
+>  .../dc/dml/dcn314/display_rq_dlg_calc_314.c   |  91 +--------------
+>  2 files changed, 6 insertions(+), 191 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_mode_vba_314.c b/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_mode_vba_314.c
+> index 0d12fd079cd6..6e43cd21a7d3 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_mode_vba_314.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_mode_vba_314.c
+> @@ -32,6 +32,7 @@
+>  #include "../display_mode_lib.h"
+>  #include "display_mode_vba_314.h"
+>  #include "../dml_inline_defs.h"
+> +#include "dml/dcn30/display_mode_vba_30.h"
+>  
+>  /*
+>   * NOTE:
+> @@ -90,17 +91,6 @@ typedef struct {
+>  #define BPP_INVALID 0
+>  #define BPP_BLENDED_PIPE 0xffffffff
+>  
+> -static bool CalculateBytePerPixelAnd256BBlockSizes(
+> -		enum source_format_class SourcePixelFormat,
+> -		enum dm_swizzle_mode SurfaceTiling,
+> -		unsigned int *BytePerPixelY,
+> -		unsigned int *BytePerPixelC,
+> -		double *BytePerPixelDETY,
+> -		double *BytePerPixelDETC,
+> -		unsigned int *BlockHeight256BytesY,
+> -		unsigned int *BlockHeight256BytesC,
+> -		unsigned int *BlockWidth256BytesY,
+> -		unsigned int *BlockWidth256BytesC);
+>  static void DisplayPipeConfiguration(struct display_mode_lib *mode_lib);
+>  static void DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation(struct display_mode_lib *mode_lib);
+>  static unsigned int dscceComputeDelay(
+> @@ -2178,7 +2168,7 @@ static void DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerforman
+>  	DTRACE("   return_bus_bw      = %f", v->ReturnBW);
+>  
+>  	for (k = 0; k < v->NumberOfActivePlanes; ++k) {
+> -		CalculateBytePerPixelAnd256BBlockSizes(
+> +		dml30_CalculateBytePerPixelAnd256BBlockSizes(
+>  				v->SourcePixelFormat[k],
+>  				v->SurfaceTiling[k],
+>  				&v->BytePerPixelY[k],
+> @@ -3317,7 +3307,7 @@ static void DisplayPipeConfiguration(struct display_mode_lib *mode_lib)
+>  
+>  	for (k = 0; k < v->NumberOfActivePlanes; ++k) {
+>  
+> -		CalculateBytePerPixelAnd256BBlockSizes(
+> +		dml30_CalculateBytePerPixelAnd256BBlockSizes(
+>  				v->SourcePixelFormat[k],
+>  				v->SurfaceTiling[k],
+>  				&BytePerPixY[k],
+> @@ -3371,94 +3361,6 @@ static void DisplayPipeConfiguration(struct display_mode_lib *mode_lib)
+>  			&dummysinglestring);
+>  }
+>  
+> -static bool CalculateBytePerPixelAnd256BBlockSizes(
+> -		enum source_format_class SourcePixelFormat,
+> -		enum dm_swizzle_mode SurfaceTiling,
+> -		unsigned int *BytePerPixelY,
+> -		unsigned int *BytePerPixelC,
+> -		double *BytePerPixelDETY,
+> -		double *BytePerPixelDETC,
+> -		unsigned int *BlockHeight256BytesY,
+> -		unsigned int *BlockHeight256BytesC,
+> -		unsigned int *BlockWidth256BytesY,
+> -		unsigned int *BlockWidth256BytesC)
+> -{
+> -	if (SourcePixelFormat == dm_444_64) {
+> -		*BytePerPixelDETY = 8;
+> -		*BytePerPixelDETC = 0;
+> -		*BytePerPixelY = 8;
+> -		*BytePerPixelC = 0;
+> -	} else if (SourcePixelFormat == dm_444_32 || SourcePixelFormat == dm_rgbe) {
+> -		*BytePerPixelDETY = 4;
+> -		*BytePerPixelDETC = 0;
+> -		*BytePerPixelY = 4;
+> -		*BytePerPixelC = 0;
+> -	} else if (SourcePixelFormat == dm_444_16) {
+> -		*BytePerPixelDETY = 2;
+> -		*BytePerPixelDETC = 0;
+> -		*BytePerPixelY = 2;
+> -		*BytePerPixelC = 0;
+> -	} else if (SourcePixelFormat == dm_444_8) {
+> -		*BytePerPixelDETY = 1;
+> -		*BytePerPixelDETC = 0;
+> -		*BytePerPixelY = 1;
+> -		*BytePerPixelC = 0;
+> -	} else if (SourcePixelFormat == dm_rgbe_alpha) {
+> -		*BytePerPixelDETY = 4;
+> -		*BytePerPixelDETC = 1;
+> -		*BytePerPixelY = 4;
+> -		*BytePerPixelC = 1;
+> -	} else if (SourcePixelFormat == dm_420_8) {
+> -		*BytePerPixelDETY = 1;
+> -		*BytePerPixelDETC = 2;
+> -		*BytePerPixelY = 1;
+> -		*BytePerPixelC = 2;
+> -	} else if (SourcePixelFormat == dm_420_12) {
+> -		*BytePerPixelDETY = 2;
+> -		*BytePerPixelDETC = 4;
+> -		*BytePerPixelY = 2;
+> -		*BytePerPixelC = 4;
+> -	} else {
+> -		*BytePerPixelDETY = 4.0 / 3;
+> -		*BytePerPixelDETC = 8.0 / 3;
+> -		*BytePerPixelY = 2;
+> -		*BytePerPixelC = 4;
+> -	}
+> -
+> -	if ((SourcePixelFormat == dm_444_64 || SourcePixelFormat == dm_444_32 || SourcePixelFormat == dm_444_16 || SourcePixelFormat == dm_444_8 || SourcePixelFormat == dm_mono_16
+> -			|| SourcePixelFormat == dm_mono_8 || SourcePixelFormat == dm_rgbe)) {
+> -		if (SurfaceTiling == dm_sw_linear) {
+> -			*BlockHeight256BytesY = 1;
+> -		} else if (SourcePixelFormat == dm_444_64) {
+> -			*BlockHeight256BytesY = 4;
+> -		} else if (SourcePixelFormat == dm_444_8) {
+> -			*BlockHeight256BytesY = 16;
+> -		} else {
+> -			*BlockHeight256BytesY = 8;
+> -		}
+> -		*BlockWidth256BytesY = 256U / *BytePerPixelY / *BlockHeight256BytesY;
+> -		*BlockHeight256BytesC = 0;
+> -		*BlockWidth256BytesC = 0;
+> -	} else {
+> -		if (SurfaceTiling == dm_sw_linear) {
+> -			*BlockHeight256BytesY = 1;
+> -			*BlockHeight256BytesC = 1;
+> -		} else if (SourcePixelFormat == dm_rgbe_alpha) {
+> -			*BlockHeight256BytesY = 8;
+> -			*BlockHeight256BytesC = 16;
+> -		} else if (SourcePixelFormat == dm_420_8) {
+> -			*BlockHeight256BytesY = 16;
+> -			*BlockHeight256BytesC = 8;
+> -		} else {
+> -			*BlockHeight256BytesY = 8;
+> -			*BlockHeight256BytesC = 8;
+> -		}
+> -		*BlockWidth256BytesY = 256U / *BytePerPixelY / *BlockHeight256BytesY;
+> -		*BlockWidth256BytesC = 256U / *BytePerPixelC / *BlockHeight256BytesC;
+> -	}
+> -	return true;
+> -}
+> -
+>  static double CalculateTWait(unsigned int PrefetchMode, double DRAMClockChangeLatency, double UrgentLatency, double SREnterPlusExitTime)
+>  {
+>  	if (PrefetchMode == 0) {
+> @@ -3948,7 +3850,7 @@ void dml314_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_
+>  	/*Bandwidth Support Check*/
+>  
+>  	for (k = 0; k < v->NumberOfActivePlanes; k++) {
+> -		CalculateBytePerPixelAnd256BBlockSizes(
+> +		dml30_CalculateBytePerPixelAnd256BBlockSizes(
+>  				v->SourcePixelFormat[k],
+>  				v->SurfaceTiling[k],
+>  				&v->BytePerPixelY[k],
+> diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_rq_dlg_calc_314.c b/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_rq_dlg_calc_314.c
+> index 61ee9ba063a7..a373d35dd473 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_rq_dlg_calc_314.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_rq_dlg_calc_314.c
+> @@ -28,94 +28,7 @@
+>  #include "../display_mode_vba.h"
+>  #include "../dml_inline_defs.h"
+>  #include "display_rq_dlg_calc_314.h"
+> -
+> -static bool CalculateBytePerPixelAnd256BBlockSizes(
+> -		enum source_format_class SourcePixelFormat,
+> -		enum dm_swizzle_mode SurfaceTiling,
+> -		unsigned int *BytePerPixelY,
+> -		unsigned int *BytePerPixelC,
+> -		double *BytePerPixelDETY,
+> -		double *BytePerPixelDETC,
+> -		unsigned int *BlockHeight256BytesY,
+> -		unsigned int *BlockHeight256BytesC,
+> -		unsigned int *BlockWidth256BytesY,
+> -		unsigned int *BlockWidth256BytesC)
+> -{
+> -	if (SourcePixelFormat == dm_444_64) {
+> -		*BytePerPixelDETY = 8;
+> -		*BytePerPixelDETC = 0;
+> -		*BytePerPixelY = 8;
+> -		*BytePerPixelC = 0;
+> -	} else if (SourcePixelFormat == dm_444_32 || SourcePixelFormat == dm_rgbe) {
+> -		*BytePerPixelDETY = 4;
+> -		*BytePerPixelDETC = 0;
+> -		*BytePerPixelY = 4;
+> -		*BytePerPixelC = 0;
+> -	} else if (SourcePixelFormat == dm_444_16 || SourcePixelFormat == dm_444_16) {
+> -		*BytePerPixelDETY = 2;
+> -		*BytePerPixelDETC = 0;
+> -		*BytePerPixelY = 2;
+> -		*BytePerPixelC = 0;
+> -	} else if (SourcePixelFormat == dm_444_8) {
+> -		*BytePerPixelDETY = 1;
+> -		*BytePerPixelDETC = 0;
+> -		*BytePerPixelY = 1;
+> -		*BytePerPixelC = 0;
+> -	} else if (SourcePixelFormat == dm_rgbe_alpha) {
+> -		*BytePerPixelDETY = 4;
+> -		*BytePerPixelDETC = 1;
+> -		*BytePerPixelY = 4;
+> -		*BytePerPixelC = 1;
+> -	} else if (SourcePixelFormat == dm_420_8) {
+> -		*BytePerPixelDETY = 1;
+> -		*BytePerPixelDETC = 2;
+> -		*BytePerPixelY = 1;
+> -		*BytePerPixelC = 2;
+> -	} else if (SourcePixelFormat == dm_420_12) {
+> -		*BytePerPixelDETY = 2;
+> -		*BytePerPixelDETC = 4;
+> -		*BytePerPixelY = 2;
+> -		*BytePerPixelC = 4;
+> -	} else {
+> -		*BytePerPixelDETY = 4.0 / 3;
+> -		*BytePerPixelDETC = 8.0 / 3;
+> -		*BytePerPixelY = 2;
+> -		*BytePerPixelC = 4;
+> -	}
+> -
+> -	if ((SourcePixelFormat == dm_444_64 || SourcePixelFormat == dm_444_32 || SourcePixelFormat == dm_444_16 || SourcePixelFormat == dm_444_8 || SourcePixelFormat == dm_mono_16
+> -			|| SourcePixelFormat == dm_mono_8 || SourcePixelFormat == dm_rgbe)) {
+> -		if (SurfaceTiling == dm_sw_linear)
+> -			*BlockHeight256BytesY = 1;
+> -		else if (SourcePixelFormat == dm_444_64)
+> -			*BlockHeight256BytesY = 4;
+> -		else if (SourcePixelFormat == dm_444_8)
+> -			*BlockHeight256BytesY = 16;
+> -		else
+> -			*BlockHeight256BytesY = 8;
+> -
+> -		*BlockWidth256BytesY = 256U / *BytePerPixelY / *BlockHeight256BytesY;
+> -		*BlockHeight256BytesC = 0;
+> -		*BlockWidth256BytesC = 0;
+> -	} else {
+> -		if (SurfaceTiling == dm_sw_linear) {
+> -			*BlockHeight256BytesY = 1;
+> -			*BlockHeight256BytesC = 1;
+> -		} else if (SourcePixelFormat == dm_rgbe_alpha) {
+> -			*BlockHeight256BytesY = 8;
+> -			*BlockHeight256BytesC = 16;
+> -		} else if (SourcePixelFormat == dm_420_8) {
+> -			*BlockHeight256BytesY = 16;
+> -			*BlockHeight256BytesC = 8;
+> -		} else {
+> -			*BlockHeight256BytesY = 8;
+> -			*BlockHeight256BytesC = 8;
+> -		}
+> -		*BlockWidth256BytesY = 256U / *BytePerPixelY / *BlockHeight256BytesY;
+> -		*BlockWidth256BytesC = 256U / *BytePerPixelC / *BlockHeight256BytesC;
+> -	}
+> -	return true;
+> -}
+> +#include "dml/dcn30/display_mode_vba_30.h"
+>  
+>  static bool is_dual_plane(enum source_format_class source_format)
+>  {
+> @@ -468,7 +381,7 @@ static void get_meta_and_pte_attr(
+>  	double byte_per_pixel_det_y;
+>  	double byte_per_pixel_det_c;
+>  
+> -	CalculateBytePerPixelAnd256BBlockSizes(
+> +	dml30_CalculateBytePerPixelAnd256BBlockSizes(
+>  			(enum source_format_class) (source_format),
+>  			(enum dm_swizzle_mode) (tiling),
+>  			&bytes_per_element_y,
+
