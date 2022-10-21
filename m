@@ -2,160 +2,499 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06018607EF0
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 21:18:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52B9A607EF1
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 21:18:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229876AbiJUTSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 15:18:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40568 "EHLO
+        id S229958AbiJUTSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 15:18:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbiJUTR7 (ORCPT
+        with ESMTP id S229608AbiJUTSV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 15:17:59 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B392920CA;
-        Fri, 21 Oct 2022 12:17:54 -0700 (PDT)
-Received: from [10.0.0.163] (ip-89-177-23-149.bb.vodafone.cz [89.177.23.149])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Fri, 21 Oct 2022 15:18:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DAA522B791
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 12:18:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: david.heidelberg)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C58B066025FA;
-        Fri, 21 Oct 2022 20:17:51 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1666379872;
-        bh=5JoqpvIeIVnbkgZEA0L2xNRd9xGh1NYvaRQdmk73hpA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=k6SoNyV6QY1zZ+StUQYv2+IHEtSM6JxTuxNVwMPL2eBg7iLnw2Fm83DK4aRiB/A6g
-         047caoIrXZ/mW8tWLa7Dp3RLXan5KvZBNeLA3hyrQTIEEd19zcsdHZSHSwey9BN0Q3
-         /EelXBGFXlVSSap8IUWMVMHOE0Nv845OLUIm67z8OA7Xhl3Wz754v0c8Xtd0uYT5kW
-         QW5PpV6JMjsfTjjMXPS2Wr0Gq95Ve9fIbCFhksbCSI61XHiENTcirBfvlolyyupDHZ
-         iulkNMJeM01jnRSE8JevDftfrg6hObczJVWvn66hWl9ClV8FBg3bZ662dTei56OnSq
-         UPrSsXSOVNz5Q==
-Message-ID: <aedd2f30-3f27-757f-6d2b-d34067b9e6d6@collabora.com>
-Date:   Fri, 21 Oct 2022 21:17:48 +0200
+        by ams.source.kernel.org (Postfix) with ESMTPS id AECB9B82D23
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 19:18:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41B2AC433C1;
+        Fri, 21 Oct 2022 19:18:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666379896;
+        bh=xcqENazRXOMVneuXkFAVRd801+EYKORC9ozJY5P/l00=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=hb5eiRLNjKuUaO6iBj0Y0RB7IOmLrHl6KGd+2Kt8lAS0L25sb5Syv7vOhr07S59EZ
+         xeRtBPQsEcHO9dDnS1/Hh8quDOb7POCnutYeKe5RZThBBtyYhKsbs38wraKO7orvUX
+         iC72PaqjLAgIPl6719e0ngu3EQLvZnO4bjZR9koD6Yun4TkMRgvkn7f1l1E4yihiPd
+         +QFlgPLulvLl+CXjN8J5B/MeW5hJETqkDgfwSUv7ehjeGKoTwOpiy99gUK8765Ky3v
+         WyeZNVn5rtDvbh1jfeFPp4n0ew0MKjtrZYuhUKimelPG93cw9pH6HsKPDxUmRIN1X0
+         rIJMsN6lDhlZQ==
+Date:   Fri, 21 Oct 2022 21:18:12 +0200 (CEST)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>
+cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] mm/slab: Annotate kmem_cache_node->list_lock as raw
+In-Reply-To: <nycvar.YFH.7.76.2210212114480.29912@cbobk.fhfr.pm>
+Message-ID: <nycvar.YFH.7.76.2210212117090.29912@cbobk.fhfr.pm>
+References: <nycvar.YFH.7.76.2210211643330.29912@cbobk.fhfr.pm> <nycvar.YFH.7.76.2210212114480.29912@cbobk.fhfr.pm>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:104.0) Gecko/20100101
- Thunderbird/104.0
-Subject: Re: [PATCH 2/3] ASoC: dt-bindings: realtek,rt5682s: Add AVDD and
- MICVDD supplies
-Content-Language: en-US
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
-        Derek Fang <derek.fang@realtek.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-References: <20221021190908.1502026-1-nfraprado@collabora.com>
- <20221021190908.1502026-3-nfraprado@collabora.com>
-From:   David Heidelberg <david.heidelberg@collabora.com>
-Autocrypt: addr=david.heidelberg@collabora.com; keydata=
- xjMEYlvLOxYJKwYBBAHaRw8BAQdA5CoWEzz4igpwK4h6lK6ZformRk84+ymcfkGNPwqEeILN
- MURhdmlkIEhlaWRlbGJlcmcgPGRhdmlkLmhlaWRlbGJlcmdAY29sbGFib3JhLmNvbT7ClgQT
- FggAPhYhBEo7kSl22BK0F1Np/mn1Z4YcHsAUBQJiW8s7AhsDBQkFo5qABQsJCAcCBhUKCQgL
- AgQWAgMBAh4BAheAAAoJEGn1Z4YcHsAU84kBAK5YqSWAOuIumAqgWvke6BEsaIGWGQzXSuKj
- er/TXuFuAQCwc9ITSVXWWTSpdFt2+4z7Wch8tIGlbIFcS9dCFddwCc44BGJbyzsSCisGAQQB
- l1UBBQEBB0AEk7jXEwDApGOwMH/X0UAPBH8Y3isjxhNMjpyRcnl2CwMBCAfCfgQYFggAJhYh
- BEo7kSl22BK0F1Np/mn1Z4YcHsAUBQJiW8s7AhsMBQkFo5qAAAoJEGn1Z4YcHsAU0PEA/j0Y
- uAOKJCnnwrkf3ozPP0sutA5bojoARwcIaZKO/zvIAP9PwTC9DGLg+8LJm7m2Lyf0LxLA8FXD
- wueLHBdwHg6zAQ==
-In-Reply-To: <20221021190908.1502026-3-nfraprado@collabora.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------7IDW3YrPnWNDMBG09VTeo65l"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------7IDW3YrPnWNDMBG09VTeo65l
-Content-Type: multipart/mixed; boundary="------------Lp0HUlG1cLU189d74g2Urm8D";
- protected-headers="v1"
-From: David Heidelberg <david.heidelberg@collabora.com>
-To: =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>
-Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- kernel@collabora.com, Derek Fang <derek.fang@realtek.com>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Liam Girdwood <lgirdwood@gmail.com>, Rob Herring <robh+dt@kernel.org>,
- alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Message-ID: <aedd2f30-3f27-757f-6d2b-d34067b9e6d6@collabora.com>
-Subject: Re: [PATCH 2/3] ASoC: dt-bindings: realtek,rt5682s: Add AVDD and
- MICVDD supplies
-References: <20221021190908.1502026-1-nfraprado@collabora.com>
- <20221021190908.1502026-3-nfraprado@collabora.com>
-In-Reply-To: <20221021190908.1502026-3-nfraprado@collabora.com>
+From: Jiri Kosina <jkosina@suse.cz>
 
---------------Lp0HUlG1cLU189d74g2Urm8D
-Content-Type: multipart/mixed; boundary="------------J2fwV7r1wXG0m4q6aeHfxIlj"
+The list_lock can be taken in hardirq context when do_drain() is being 
+called via IPI on all cores, and therefore lockdep complains about it, 
+because it can't be preempted on PREEMPT_RT.
 
---------------J2fwV7r1wXG0m4q6aeHfxIlj
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+That's not a real issue, as SLAB can't be built on PREEMPT_RT anyway, but 
+we still want to get rid of the warning on non-PREEMPT_RT builds.
 
-UmV2aWV3ZWQtYnk6IERhdmlkIEhlaWRlbGJlcmcgPGRhdmlkLmhlaWRlbGJlcmdAY29sbGFi
-b3JhLmNvbT4NCg0KT24gMjEvMTAvMjAyMiAyMTowOSwgTsOtY29sYXMgRi4gUi4gQS4gUHJh
-ZG8gd3JvdGU6DQo+IFRoZSBydDU2ODJzIGNvZGVjIGNhbiBoYXZlIHR3byBzdXBwbGllczog
-QVZERCBhbmQgTUlDVkRELiBBZGQgcHJvcGVydGllcw0KPiBmb3IgdGhlbS4NCj4NCj4gU2ln
-bmVkLW9mZi1ieTogTsOtY29sYXMgRi4gUi4gQS4gUHJhZG8gPG5mcmFwcmFkb0Bjb2xsYWJv
-cmEuY29tPg0KPiAtLS0NCj4NCj4gICBEb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGlu
-Z3Mvc291bmQvcmVhbHRlayxydDU2ODJzLnlhbWwgfCA0ICsrKysNCj4gICAxIGZpbGUgY2hh
-bmdlZCwgNCBpbnNlcnRpb25zKCspDQo+DQo+IGRpZmYgLS1naXQgYS9Eb2N1bWVudGF0aW9u
-L2RldmljZXRyZWUvYmluZGluZ3Mvc291bmQvcmVhbHRlayxydDU2ODJzLnlhbWwgYi9Eb2N1
-bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3Mvc291bmQvcmVhbHRlayxydDU2ODJzLnlh
-bWwNCj4gaW5kZXggZWE1M2E1NTAxNWM0Li5jYTEwMzdlNzZmOTYgMTAwNjQ0DQo+IC0tLSBh
-L0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9zb3VuZC9yZWFsdGVrLHJ0NTY4
-MnMueWFtbA0KPiArKysgYi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3Mvc291
-bmQvcmVhbHRlayxydDU2ODJzLnlhbWwNCj4gQEAgLTkwLDYgKzkwLDEwIEBAIHByb3BlcnRp
-ZXM6DQo+ICAgICAiI3NvdW5kLWRhaS1jZWxscyI6DQo+ICAgICAgIGNvbnN0OiAwDQo+ICAg
-DQo+ICsgIEFWREQtc3VwcGx5OiB0cnVlDQo+ICsNCj4gKyAgTUlDVkRELXN1cHBseTogdHJ1
-ZQ0KPiArDQo+ICAgYWRkaXRpb25hbFByb3BlcnRpZXM6IGZhbHNlDQo+ICAgDQo+ICAgcmVx
-dWlyZWQ6DQo=
---------------J2fwV7r1wXG0m4q6aeHfxIlj
-Content-Type: application/pgp-keys; name="OpenPGP_0x69F567861C1EC014.asc"
-Content-Disposition: attachment; filename="OpenPGP_0x69F567861C1EC014.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+Annotate it therefore as a raw lock in order to get rid of he lockdep 
+warning below.
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+	 =============================
+	 [ BUG: Invalid wait context ]
+	 6.1.0-rc1-00134-ge35184f32151 #4 Not tainted
+	 -----------------------------
+	 swapper/3/0 is trying to lock:
+	 ffff8bc88086dc18 (&parent->list_lock){..-.}-{3:3}, at: do_drain+0x57/0xb0
+	 other info that might help us debug this:
+	 context-{2:2}
+	 no locks held by swapper/3/0.
+	 stack backtrace:
+	 CPU: 3 PID: 0 Comm: swapper/3 Not tainted 6.1.0-rc1-00134-ge35184f32151 #4
+	 Hardware name: LENOVO 20K5S22R00/20K5S22R00, BIOS R0IET38W (1.16 ) 05/31/2017
+	 Call Trace:
+	  <IRQ>
+	  dump_stack_lvl+0x6b/0x9d
+	  __lock_acquire+0x1519/0x1730
+	  ? build_sched_domains+0x4bd/0x1590
+	  ? __lock_acquire+0xad2/0x1730
+	  lock_acquire+0x294/0x340
+	  ? do_drain+0x57/0xb0
+	  ? sched_clock_tick+0x41/0x60
+	  _raw_spin_lock+0x2c/0x40
+	  ? do_drain+0x57/0xb0
+	  do_drain+0x57/0xb0
+	  __flush_smp_call_function_queue+0x138/0x220
+	  __sysvec_call_function+0x4f/0x210
+	  sysvec_call_function+0x4b/0x90
+	  </IRQ>
+	  <TASK>
+	  asm_sysvec_call_function+0x16/0x20
+	 RIP: 0010:mwait_idle+0x5e/0x80
+	 Code: 31 d2 65 48 8b 04 25 80 ed 01 00 48 89 d1 0f 01 c8 48 8b 00 a8 08 75 14 66 90 0f 00 2d 0b 78 46 00 31 c0 48 89 c1 fb 0f 01 c9 <eb> 06 fb 0f 1f 44 00 00 65 48 8b 04 25 80 ed 01 00 f0 80 60 02 df
+	 RSP: 0000:ffffa90940217ee0 EFLAGS: 00000246
+	 RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+	 RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffffffff9bb9f93a
+	 RBP: 0000000000000003 R08: 0000000000000001 R09: 0000000000000001
+	 R10: ffffa90940217ea8 R11: 0000000000000000 R12: ffffffffffffffff
+	 R13: 0000000000000000 R14: ffff8bc88127c500 R15: 0000000000000000
+	  ? default_idle_call+0x1a/0xa0
+	  default_idle_call+0x4b/0xa0
+	  do_idle+0x1f1/0x2c0
+	  ? _raw_spin_unlock_irqrestore+0x56/0x70
+	  cpu_startup_entry+0x19/0x20
+	  start_secondary+0x122/0x150
+	  secondary_startup_64_no_verify+0xce/0xdb
+	  </TASK>
 
-xjMEYlvLOxYJKwYBBAHaRw8BAQdA5CoWEzz4igpwK4h6lK6ZformRk84+ymcfkGN
-PwqEeILNMURhdmlkIEhlaWRlbGJlcmcgPGRhdmlkLmhlaWRlbGJlcmdAY29sbGFi
-b3JhLmNvbT7ClgQTFggAPhYhBEo7kSl22BK0F1Np/mn1Z4YcHsAUBQJiW8s7AhsD
-BQkFo5qABQsJCAcCBhUKCQgLAgQWAgMBAh4BAheAAAoJEGn1Z4YcHsAU84kBAK5Y
-qSWAOuIumAqgWvke6BEsaIGWGQzXSuKjer/TXuFuAQCwc9ITSVXWWTSpdFt2+4z7
-Wch8tIGlbIFcS9dCFddwCc44BGJbyzsSCisGAQQBl1UBBQEBB0AEk7jXEwDApGOw
-MH/X0UAPBH8Y3isjxhNMjpyRcnl2CwMBCAfCfgQYFggAJhYhBEo7kSl22BK0F1Np
-/mn1Z4YcHsAUBQJiW8s7AhsMBQkFo5qAAAoJEGn1Z4YcHsAU0PEA/j0YuAOKJCnn
-wrkf3ozPP0sutA5bojoARwcIaZKO/zvIAP9PwTC9DGLg+8LJm7m2Lyf0LxLA8FXD
-wueLHBdwHg6zAQ=3D=3D
-=3DOQS+
------END PGP PUBLIC KEY BLOCK-----
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+---
 
---------------J2fwV7r1wXG0m4q6aeHfxIlj--
+v1->v2: fix !SLAB build failures due to list_lock mismatch
+v2->v3: really fix it by sending refreshed version of the patch (facepalm)
 
---------------Lp0HUlG1cLU189d74g2Urm8D--
+ mm/slab.c | 90 +++++++++++++++++++++++++++----------------------------
+ mm/slab.h |  4 +++
+ 2 files changed, 49 insertions(+), 45 deletions(-)
 
---------------7IDW3YrPnWNDMBG09VTeo65l
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+diff --git a/mm/slab.c b/mm/slab.c
+index 59c8e28f7b6a..d8a287900193 100644
+--- a/mm/slab.c
++++ b/mm/slab.c
+@@ -234,7 +234,7 @@ static void kmem_cache_node_init(struct kmem_cache_node *parent)
+ 	parent->shared = NULL;
+ 	parent->alien = NULL;
+ 	parent->colour_next = 0;
+-	spin_lock_init(&parent->list_lock);
++	raw_spin_lock_init(&parent->list_lock);
+ 	parent->free_objects = 0;
+ 	parent->free_touched = 0;
+ }
+@@ -559,9 +559,9 @@ static noinline void cache_free_pfmemalloc(struct kmem_cache *cachep,
+ 	slab_node = slab_nid(slab);
+ 	n = get_node(cachep, slab_node);
+ 
+-	spin_lock(&n->list_lock);
++	raw_spin_lock(&n->list_lock);
+ 	free_block(cachep, &objp, 1, slab_node, &list);
+-	spin_unlock(&n->list_lock);
++	raw_spin_unlock(&n->list_lock);
+ 
+ 	slabs_destroy(cachep, &list);
+ }
+@@ -684,7 +684,7 @@ static void __drain_alien_cache(struct kmem_cache *cachep,
+ 	struct kmem_cache_node *n = get_node(cachep, node);
+ 
+ 	if (ac->avail) {
+-		spin_lock(&n->list_lock);
++		raw_spin_lock(&n->list_lock);
+ 		/*
+ 		 * Stuff objects into the remote nodes shared array first.
+ 		 * That way we could avoid the overhead of putting the objects
+@@ -695,7 +695,7 @@ static void __drain_alien_cache(struct kmem_cache *cachep,
+ 
+ 		free_block(cachep, ac->entry, ac->avail, node, list);
+ 		ac->avail = 0;
+-		spin_unlock(&n->list_lock);
++		raw_spin_unlock(&n->list_lock);
+ 	}
+ }
+ 
+@@ -768,9 +768,9 @@ static int __cache_free_alien(struct kmem_cache *cachep, void *objp,
+ 		slabs_destroy(cachep, &list);
+ 	} else {
+ 		n = get_node(cachep, slab_node);
+-		spin_lock(&n->list_lock);
++		raw_spin_lock(&n->list_lock);
+ 		free_block(cachep, &objp, 1, slab_node, &list);
+-		spin_unlock(&n->list_lock);
++		raw_spin_unlock(&n->list_lock);
+ 		slabs_destroy(cachep, &list);
+ 	}
+ 	return 1;
+@@ -811,10 +811,10 @@ static int init_cache_node(struct kmem_cache *cachep, int node, gfp_t gfp)
+ 	 */
+ 	n = get_node(cachep, node);
+ 	if (n) {
+-		spin_lock_irq(&n->list_lock);
++		raw_spin_lock_irq(&n->list_lock);
+ 		n->free_limit = (1 + nr_cpus_node(node)) * cachep->batchcount +
+ 				cachep->num;
+-		spin_unlock_irq(&n->list_lock);
++		raw_spin_unlock_irq(&n->list_lock);
+ 
+ 		return 0;
+ 	}
+@@ -893,7 +893,7 @@ static int setup_kmem_cache_node(struct kmem_cache *cachep,
+ 		goto fail;
+ 
+ 	n = get_node(cachep, node);
+-	spin_lock_irq(&n->list_lock);
++	raw_spin_lock_irq(&n->list_lock);
+ 	if (n->shared && force_change) {
+ 		free_block(cachep, n->shared->entry,
+ 				n->shared->avail, node, &list);
+@@ -911,7 +911,7 @@ static int setup_kmem_cache_node(struct kmem_cache *cachep,
+ 		new_alien = NULL;
+ 	}
+ 
+-	spin_unlock_irq(&n->list_lock);
++	raw_spin_unlock_irq(&n->list_lock);
+ 	slabs_destroy(cachep, &list);
+ 
+ 	/*
+@@ -950,7 +950,7 @@ static void cpuup_canceled(long cpu)
+ 		if (!n)
+ 			continue;
+ 
+-		spin_lock_irq(&n->list_lock);
++		raw_spin_lock_irq(&n->list_lock);
+ 
+ 		/* Free limit for this kmem_cache_node */
+ 		n->free_limit -= cachep->batchcount;
+@@ -961,7 +961,7 @@ static void cpuup_canceled(long cpu)
+ 		nc->avail = 0;
+ 
+ 		if (!cpumask_empty(mask)) {
+-			spin_unlock_irq(&n->list_lock);
++			raw_spin_unlock_irq(&n->list_lock);
+ 			goto free_slab;
+ 		}
+ 
+@@ -975,7 +975,7 @@ static void cpuup_canceled(long cpu)
+ 		alien = n->alien;
+ 		n->alien = NULL;
+ 
+-		spin_unlock_irq(&n->list_lock);
++		raw_spin_unlock_irq(&n->list_lock);
+ 
+ 		kfree(shared);
+ 		if (alien) {
+@@ -1159,7 +1159,7 @@ static void __init init_list(struct kmem_cache *cachep, struct kmem_cache_node *
+ 	/*
+ 	 * Do not assume that spinlocks can be initialized via memcpy:
+ 	 */
+-	spin_lock_init(&ptr->list_lock);
++	raw_spin_lock_init(&ptr->list_lock);
+ 
+ 	MAKE_ALL_LISTS(cachep, ptr, nodeid);
+ 	cachep->node[nodeid] = ptr;
+@@ -1330,11 +1330,11 @@ slab_out_of_memory(struct kmem_cache *cachep, gfp_t gfpflags, int nodeid)
+ 	for_each_kmem_cache_node(cachep, node, n) {
+ 		unsigned long total_slabs, free_slabs, free_objs;
+ 
+-		spin_lock_irqsave(&n->list_lock, flags);
++		raw_spin_lock_irqsave(&n->list_lock, flags);
+ 		total_slabs = n->total_slabs;
+ 		free_slabs = n->free_slabs;
+ 		free_objs = n->free_objects;
+-		spin_unlock_irqrestore(&n->list_lock, flags);
++		raw_spin_unlock_irqrestore(&n->list_lock, flags);
+ 
+ 		pr_warn("  node %d: slabs: %ld/%ld, objs: %ld/%ld\n",
+ 			node, total_slabs - free_slabs, total_slabs,
+@@ -2096,7 +2096,7 @@ static void check_spinlock_acquired(struct kmem_cache *cachep)
+ {
+ #ifdef CONFIG_SMP
+ 	check_irq_off();
+-	assert_spin_locked(&get_node(cachep, numa_mem_id())->list_lock);
++	assert_raw_spin_locked(&get_node(cachep, numa_mem_id())->list_lock);
+ #endif
+ }
+ 
+@@ -2104,7 +2104,7 @@ static void check_spinlock_acquired_node(struct kmem_cache *cachep, int node)
+ {
+ #ifdef CONFIG_SMP
+ 	check_irq_off();
+-	assert_spin_locked(&get_node(cachep, node)->list_lock);
++	assert_raw_spin_locked(&get_node(cachep, node)->list_lock);
+ #endif
+ }
+ 
+@@ -2144,9 +2144,9 @@ static void do_drain(void *arg)
+ 	check_irq_off();
+ 	ac = cpu_cache_get(cachep);
+ 	n = get_node(cachep, node);
+-	spin_lock(&n->list_lock);
++	raw_spin_lock(&n->list_lock);
+ 	free_block(cachep, ac->entry, ac->avail, node, &list);
+-	spin_unlock(&n->list_lock);
++	raw_spin_unlock(&n->list_lock);
+ 	ac->avail = 0;
+ 	slabs_destroy(cachep, &list);
+ }
+@@ -2164,9 +2164,9 @@ static void drain_cpu_caches(struct kmem_cache *cachep)
+ 			drain_alien_cache(cachep, n->alien);
+ 
+ 	for_each_kmem_cache_node(cachep, node, n) {
+-		spin_lock_irq(&n->list_lock);
++		raw_spin_lock_irq(&n->list_lock);
+ 		drain_array_locked(cachep, n->shared, node, true, &list);
+-		spin_unlock_irq(&n->list_lock);
++		raw_spin_unlock_irq(&n->list_lock);
+ 
+ 		slabs_destroy(cachep, &list);
+ 	}
+@@ -2188,10 +2188,10 @@ static int drain_freelist(struct kmem_cache *cache,
+ 	nr_freed = 0;
+ 	while (nr_freed < tofree && !list_empty(&n->slabs_free)) {
+ 
+-		spin_lock_irq(&n->list_lock);
++		raw_spin_lock_irq(&n->list_lock);
+ 		p = n->slabs_free.prev;
+ 		if (p == &n->slabs_free) {
+-			spin_unlock_irq(&n->list_lock);
++			raw_spin_unlock_irq(&n->list_lock);
+ 			goto out;
+ 		}
+ 
+@@ -2204,7 +2204,7 @@ static int drain_freelist(struct kmem_cache *cache,
+ 		 * to the cache.
+ 		 */
+ 		n->free_objects -= cache->num;
+-		spin_unlock_irq(&n->list_lock);
++		raw_spin_unlock_irq(&n->list_lock);
+ 		slab_destroy(cache, slab);
+ 		nr_freed++;
+ 	}
+@@ -2629,7 +2629,7 @@ static void cache_grow_end(struct kmem_cache *cachep, struct slab *slab)
+ 	INIT_LIST_HEAD(&slab->slab_list);
+ 	n = get_node(cachep, slab_nid(slab));
+ 
+-	spin_lock(&n->list_lock);
++	raw_spin_lock(&n->list_lock);
+ 	n->total_slabs++;
+ 	if (!slab->active) {
+ 		list_add_tail(&slab->slab_list, &n->slabs_free);
+@@ -2639,7 +2639,7 @@ static void cache_grow_end(struct kmem_cache *cachep, struct slab *slab)
+ 
+ 	STATS_INC_GROWN(cachep);
+ 	n->free_objects += cachep->num - slab->active;
+-	spin_unlock(&n->list_lock);
++	raw_spin_unlock(&n->list_lock);
+ 
+ 	fixup_objfreelist_debug(cachep, &list);
+ }
+@@ -2805,7 +2805,7 @@ static struct slab *get_first_slab(struct kmem_cache_node *n, bool pfmemalloc)
+ {
+ 	struct slab *slab;
+ 
+-	assert_spin_locked(&n->list_lock);
++	assert_raw_spin_locked(&n->list_lock);
+ 	slab = list_first_entry_or_null(&n->slabs_partial, struct slab,
+ 					slab_list);
+ 	if (!slab) {
+@@ -2832,10 +2832,10 @@ static noinline void *cache_alloc_pfmemalloc(struct kmem_cache *cachep,
+ 	if (!gfp_pfmemalloc_allowed(flags))
+ 		return NULL;
+ 
+-	spin_lock(&n->list_lock);
++	raw_spin_lock(&n->list_lock);
+ 	slab = get_first_slab(n, true);
+ 	if (!slab) {
+-		spin_unlock(&n->list_lock);
++		raw_spin_unlock(&n->list_lock);
+ 		return NULL;
+ 	}
+ 
+@@ -2844,7 +2844,7 @@ static noinline void *cache_alloc_pfmemalloc(struct kmem_cache *cachep,
+ 
+ 	fixup_slab_list(cachep, n, slab, &list);
+ 
+-	spin_unlock(&n->list_lock);
++	raw_spin_unlock(&n->list_lock);
+ 	fixup_objfreelist_debug(cachep, &list);
+ 
+ 	return obj;
+@@ -2903,7 +2903,7 @@ static void *cache_alloc_refill(struct kmem_cache *cachep, gfp_t flags)
+ 	if (!n->free_objects && (!shared || !shared->avail))
+ 		goto direct_grow;
+ 
+-	spin_lock(&n->list_lock);
++	raw_spin_lock(&n->list_lock);
+ 	shared = READ_ONCE(n->shared);
+ 
+ 	/* See if we can refill from the shared array */
+@@ -2927,7 +2927,7 @@ static void *cache_alloc_refill(struct kmem_cache *cachep, gfp_t flags)
+ must_grow:
+ 	n->free_objects -= ac->avail;
+ alloc_done:
+-	spin_unlock(&n->list_lock);
++	raw_spin_unlock(&n->list_lock);
+ 	fixup_objfreelist_debug(cachep, &list);
+ 
+ direct_grow:
+@@ -3147,7 +3147,7 @@ static void *____cache_alloc_node(struct kmem_cache *cachep, gfp_t flags,
+ 	BUG_ON(!n);
+ 
+ 	check_irq_off();
+-	spin_lock(&n->list_lock);
++	raw_spin_lock(&n->list_lock);
+ 	slab = get_first_slab(n, false);
+ 	if (!slab)
+ 		goto must_grow;
+@@ -3165,12 +3165,12 @@ static void *____cache_alloc_node(struct kmem_cache *cachep, gfp_t flags,
+ 
+ 	fixup_slab_list(cachep, n, slab, &list);
+ 
+-	spin_unlock(&n->list_lock);
++	raw_spin_unlock(&n->list_lock);
+ 	fixup_objfreelist_debug(cachep, &list);
+ 	return obj;
+ 
+ must_grow:
+-	spin_unlock(&n->list_lock);
++	raw_spin_unlock(&n->list_lock);
+ 	slab = cache_grow_begin(cachep, gfp_exact_node(flags), nodeid);
+ 	if (slab) {
+ 		/* This slab isn't counted yet so don't update free_objects */
+@@ -3325,7 +3325,7 @@ static void cache_flusharray(struct kmem_cache *cachep, struct array_cache *ac)
+ 
+ 	check_irq_off();
+ 	n = get_node(cachep, node);
+-	spin_lock(&n->list_lock);
++	raw_spin_lock(&n->list_lock);
+ 	if (n->shared) {
+ 		struct array_cache *shared_array = n->shared;
+ 		int max = shared_array->limit - shared_array->avail;
+@@ -3354,7 +3354,7 @@ static void cache_flusharray(struct kmem_cache *cachep, struct array_cache *ac)
+ 		STATS_SET_FREEABLE(cachep, i);
+ 	}
+ #endif
+-	spin_unlock(&n->list_lock);
++	raw_spin_unlock(&n->list_lock);
+ 	ac->avail -= batchcount;
+ 	memmove(ac->entry, &(ac->entry[batchcount]), sizeof(void *)*ac->avail);
+ 	slabs_destroy(cachep, &list);
+@@ -3721,9 +3721,9 @@ static int do_tune_cpucache(struct kmem_cache *cachep, int limit,
+ 
+ 		node = cpu_to_mem(cpu);
+ 		n = get_node(cachep, node);
+-		spin_lock_irq(&n->list_lock);
++		raw_spin_lock_irq(&n->list_lock);
+ 		free_block(cachep, ac->entry, ac->avail, node, &list);
+-		spin_unlock_irq(&n->list_lock);
++		raw_spin_unlock_irq(&n->list_lock);
+ 		slabs_destroy(cachep, &list);
+ 	}
+ 	free_percpu(prev);
+@@ -3815,9 +3815,9 @@ static void drain_array(struct kmem_cache *cachep, struct kmem_cache_node *n,
+ 		return;
+ 	}
+ 
+-	spin_lock_irq(&n->list_lock);
++	raw_spin_lock_irq(&n->list_lock);
+ 	drain_array_locked(cachep, ac, node, false, &list);
+-	spin_unlock_irq(&n->list_lock);
++	raw_spin_unlock_irq(&n->list_lock);
+ 
+ 	slabs_destroy(cachep, &list);
+ }
+@@ -3901,7 +3901,7 @@ void get_slabinfo(struct kmem_cache *cachep, struct slabinfo *sinfo)
+ 
+ 	for_each_kmem_cache_node(cachep, node, n) {
+ 		check_irq_on();
+-		spin_lock_irq(&n->list_lock);
++		raw_spin_lock_irq(&n->list_lock);
+ 
+ 		total_slabs += n->total_slabs;
+ 		free_slabs += n->free_slabs;
+@@ -3910,7 +3910,7 @@ void get_slabinfo(struct kmem_cache *cachep, struct slabinfo *sinfo)
+ 		if (n->shared)
+ 			shared_avail += n->shared->avail;
+ 
+-		spin_unlock_irq(&n->list_lock);
++		raw_spin_unlock_irq(&n->list_lock);
+ 	}
+ 	num_objs = total_slabs * cachep->num;
+ 	active_slabs = total_slabs - free_slabs;
+diff --git a/mm/slab.h b/mm/slab.h
+index 0202a8c2f0d2..7a705e4228c8 100644
+--- a/mm/slab.h
++++ b/mm/slab.h
+@@ -750,7 +750,11 @@ static inline void slab_post_alloc_hook(struct kmem_cache *s,
+  * The slab lists for all objects.
+  */
+ struct kmem_cache_node {
++#ifdef CONFIG_SLAB
++	raw_spinlock_t list_lock;
++#else
+ 	spinlock_t list_lock;
++#endif
+ 
+ #ifdef CONFIG_SLAB
+ 	struct list_head slabs_partial;	/* partial list first, better asm code */
+-- 
+2.35.3
 
------BEGIN PGP SIGNATURE-----
-
-iHUEARYIAB0WIQRKO5EpdtgStBdTaf5p9WeGHB7AFAUCY1LwXQAKCRBp9WeGHB7A
-FO9pAP9zwthSYYt9lC+meBeHS4DNmDJlPdVDLfrzj7KcwatqwgEA02fTCaJRzCSS
-fzPRIZBbpaXBnfP5RvDu4QZoTynFBAQ=
-=Yczf
------END PGP SIGNATURE-----
-
---------------7IDW3YrPnWNDMBG09VTeo65l--
