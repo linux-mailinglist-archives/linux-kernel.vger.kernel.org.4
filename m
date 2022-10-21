@@ -2,86 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 391CB6071A3
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 10:04:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2321B6071A7
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 10:05:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbiJUIE4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 04:04:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33854 "EHLO
+        id S229944AbiJUIFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 04:05:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiJUIEw (ORCPT
+        with ESMTP id S229915AbiJUIFw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 04:04:52 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1491399E1;
-        Fri, 21 Oct 2022 01:04:49 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 909F366023A6;
-        Fri, 21 Oct 2022 09:04:47 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1666339488;
-        bh=+8v8j3CmYy0V5Wq2wkndR69HIDwbqZQ5C7fQX3ELlVw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=IWs9rC9m98Q1I1estZybthcBQOSBE+OnVNazeYA1948VDQQXN8XQqxWemscEG0Nqy
-         3kfk0NXb5GZZtGPuhEtt5sLk+BNVlBix6UAB1y9XDJHwC1C11Njr/1c0ixmz2OnZ99
-         S6w1nkdpeRLTaCtONxRZmjCiI/FfNdo1e+a2ieDDJG2ASGsMkUYAIKpAi2udqAm3ii
-         oUW3fiah3Ei/7k7YcebxiviKy+rvsT6hItVdpGIVrq15qjqJGyANhfJ9bAMD336LiO
-         Gyn3vYOrHQl1JvOyywhPO9cSutpH70MdGB/ng2RHyhEJUrBqKiVNxQuBOCKH2q6EYo
-         doOzPANMiecNQ==
-Message-ID: <5b62a132-df41-6da2-4cb5-c15f9dc53801@collabora.com>
-Date:   Fri, 21 Oct 2022 10:04:45 +0200
+        Fri, 21 Oct 2022 04:05:52 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97BE81EA563
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 01:05:49 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Mtxjn0wbFzmVCy;
+        Fri, 21 Oct 2022 16:01:01 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 21 Oct 2022 16:05:20 +0800
+Received: from [10.174.178.174] (10.174.178.174) by
+ dggpemm500007.china.huawei.com (7.185.36.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 21 Oct 2022 16:05:19 +0800
+Subject: Re: [PATCH 01/11] kset: fix documentation for kset_register()
+To:     Luben Tuikov <luben.tuikov@amd.com>,
+        <linux-kernel@vger.kernel.org>, <qemu-devel@nongnu.org>,
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        <linux-erofs@lists.ozlabs.org>, <ocfs2-devel@oss.oracle.com>,
+        <linux-mtd@lists.infradead.org>, <amd-gfx@lists.freedesktop.org>,
+        <gregkh@linuxfoundation.org>
+CC:     <rafael@kernel.org>, <somlo@cmu.edu>, <mst@redhat.com>,
+        <jaegeuk@kernel.org>, <chao@kernel.org>,
+        <hsiangkao@linux.alibaba.com>, <huangjianan@oppo.com>,
+        <mark@fasheh.com>, <jlbec@evilplan.org>,
+        <joseph.qi@linux.alibaba.com>, <akpm@linux-foundation.org>,
+        <alexander.deucher@amd.com>, <richard@nod.at>,
+        <liushixin2@huawei.com>
+References: <20221021022102.2231464-1-yangyingliang@huawei.com>
+ <20221021022102.2231464-2-yangyingliang@huawei.com>
+ <eb0f1459-7980-4a7b-58f9-652eeccc357e@amd.com>
+From:   Yang Yingliang <yangyingliang@huawei.com>
+Message-ID: <10d887c4-7db0-8958-f661-bd52e6c8b4af@huawei.com>
+Date:   Fri, 21 Oct 2022 16:05:18 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v3 2/5] dt-bindings: input: mtk-pmic-keys: add binding for
- MT6357 PMIC
-Content-Language: en-US
-To:     Alexandre Mergnat <amergnat@baylibre.com>,
-        Mark Brown <broonie@kernel.org>,
-        Chen Zhong <chen.zhong@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Lee Jones <lee@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Fabien Parent <fabien.parent@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Fabien Parent <fparent@baylibre.com>,
-        Rob Herring <robh@kernel.org>,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
-        devicetree@vger.kernel.org, linux-input@vger.kernel.org
-References: <20221005-mt6357-support-v3-0-7e0bd7c315b2@baylibre.com>
- <20221005-mt6357-support-v3-2-7e0bd7c315b2@baylibre.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221005-mt6357-support-v3-2-7e0bd7c315b2@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <eb0f1459-7980-4a7b-58f9-652eeccc357e@amd.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Language: en-US
+X-Originating-IP: [10.174.178.174]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 20/10/22 18:20, Alexandre Mergnat ha scritto:
-> From: Fabien Parent <fparent@baylibre.com>
-> 
-> Add binding documentation for the PMIC keys on MT6357.
-> 
-> Signed-off-by: Fabien Parent <fparent@baylibre.com>
-> Acked-by: Rob Herring <robh@kernel.org>
-> Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+On 2022/10/21 13:34, Luben Tuikov wrote:
+> On 2022-10-20 22:20, Yang Yingliang wrote:
+>> kset_register() is currently used in some places without calling
+>> kset_put() in error path, because the callers think it should be
+>> kset internal thing to do, but the driver core can not know what
+>> caller doing with that memory at times. The memory could be freed
+>> both in kset_put() and error path of caller, if it is called in
+>> kset_register().
+>>
+>> So make the function documentation more explicit about calling
+>> kset_put() in the error path of caller.
+>>
+>> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+>> ---
+>>   lib/kobject.c | 3 +++
+>>   1 file changed, 3 insertions(+)
+>>
+>> diff --git a/lib/kobject.c b/lib/kobject.c
+>> index a0b2dbfcfa23..6da04353d974 100644
+>> --- a/lib/kobject.c
+>> +++ b/lib/kobject.c
+>> @@ -834,6 +834,9 @@ EXPORT_SYMBOL_GPL(kobj_sysfs_ops);
+>>   /**
+>>    * kset_register() - Initialize and add a kset.
+>>    * @k: kset.
+>> + *
+>> + * If this function returns an error, kset_put() must be called to
+>> + * properly clean up the memory associated with the object.
+>>    */
+> And I'd continue the sentence, with " ... with the object,
+> for instance the memory for the kset.kobj.name when kobj_set_name(&kset.kobj, format, ...)
+> was called before calling kset_register()."
+kobject_cleanup() not only frees name, but aslo calls ->release() to 
+free another resources.
+>
+> This makes it clear what we want to make sure is freed, in case of an early error
+> from kset_register().
 
+How about like this:
 
+If this function returns an error, kset_put() must be called to clean up the name of
+kset object and other memory associated with the object.
+
+>
+> Regards,
+> Luben
+>
+>>   int kset_register(struct kset *k)
+>>   {
+> .
