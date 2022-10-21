@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36F21607E64
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 20:49:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48738607E68
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 20:50:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229645AbiJUStH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 14:49:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35188 "EHLO
+        id S229828AbiJUSul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 14:50:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbiJUSs6 (ORCPT
+        with ESMTP id S229596AbiJUSui (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 14:48:58 -0400
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB82E25ED00;
-        Fri, 21 Oct 2022 11:48:53 -0700 (PDT)
-Received: by mail-qt1-f169.google.com with SMTP id s3so2208151qtn.12;
-        Fri, 21 Oct 2022 11:48:53 -0700 (PDT)
+        Fri, 21 Oct 2022 14:50:38 -0400
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E574815ECD8;
+        Fri, 21 Oct 2022 11:50:36 -0700 (PDT)
+Received: by mail-qt1-f180.google.com with SMTP id c23so2225501qtw.8;
+        Fri, 21 Oct 2022 11:50:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=a/KYI9SK+qNSpAsWbexUxXHKrMUPsGkfv1dKVsoZ6ks=;
-        b=TEkdgSEZrdYoFEEEyW8Bgp261fLwPRJhTCmbPJ69MyF6oPURxSfNBpYIAbrg3fIT8h
-         0+QFuXdSEn9AB9mPnolu+vTC4lky59t/0tsEL59waMLeLdzzbKt3IyoWv3wJtlnoUxEk
-         4vf2menKV2ha7e4oP83isGA0FuJfn+zoe2gYL/lhFogLv8DwFD3wytOHkaDpVdfGfDgj
-         BwH8/rRHARPxGz5fZRiftlwld9PT6qdPkqdhTF39TQY15q4zPtsZjBC37K5v+C2SeYsz
-         2qD3MKCWTHcxVZhYdndQf+Bf7mzp1c68IFWLQCzed7bM75Gj+i9I20r2RHBEnpLL7B6C
-         vldA==
-X-Gm-Message-State: ACrzQf2niC9VA922sTwO6eQZvsds4llQlM5nltRNOrdhc2FIVXi0yJ/3
-        zfSrKnXjGEcMFXflpMpgayVc+SW6NW9drlIjV+JV8MDOoQk=
-X-Google-Smtp-Source: AMsMyM5h8taKdI0Fx9Ss5YZ4HdCE9r2NTegkaW5KoWbHvmHyWrFuBajq52N5ZYj1uvE/KV2XxNzHnwqzM4xvm79kUOk=
-X-Received: by 2002:a05:622a:620a:b0:35c:bf9e:8748 with SMTP id
- hj10-20020a05622a620a00b0035cbf9e8748mr17957110qtb.494.1666378133055; Fri, 21
- Oct 2022 11:48:53 -0700 (PDT)
+        bh=7Eysv7zcSaSmjCvoZiMko9/clmFPR09HgvorThEzAV0=;
+        b=S4m9G1sdLkl++/6A1p3gOqjIBLu33U00XFFTtKvG0OXF3dCt0WLSnEW6lvauAZ70Yk
+         9bbzIIn6mZER1HP+RQyiyrgtFSKAddIHRXQhBkCtoNlbV1PNN+4Px46NERwqSZ7h2Q7R
+         LHhl0Cf1gNn1vxfw4pm7uS8736fl8CKuLQaPO/1XROuXdyeXkznQbCrKtZwGPpgqLoKd
+         Rku50zpwxMTgcMsXpsDCFJbnQ9nmQPJuku6caW09H4zeJlPitTRSXE67Zn8UPiF84+/a
+         IbphoZRTpiErTB3+bpoqXSNXXGcyBJ/mxvt7L+Y/tRDgsSYWixAxGL+YyntW6vhyi8KS
+         9Pcw==
+X-Gm-Message-State: ACrzQf1II+KnGc42jH/YYkhv5U7BuqxzEnkyDyOjR+X4NXVdrHw24hlK
+        SeFEv0P7Uex5mkhvoLbjrbo6jIOV9IgHizRwMDk=
+X-Google-Smtp-Source: AMsMyM5e+TniKndwbNXCbDzhIwBmyhaEQoSjPqDh5pNbiCMZ6yY6II5GFaDaxfQpgF3yKgw6iTR1JgSS1EG7EoEKF8Q=
+X-Received: by 2002:a05:622a:11c7:b0:39c:b4bc:7030 with SMTP id
+ n7-20020a05622a11c700b0039cb4bc7030mr17834072qtk.17.1666378236106; Fri, 21
+ Oct 2022 11:50:36 -0700 (PDT)
 MIME-Version: 1.0
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 21 Oct 2022 20:48:42 +0200
-Message-ID: <CAJZ5v0h6OWoyO3om5GjsU-6+jPcXPiR-p+4LA22YD6-ptpnhbg@mail.gmail.com>
-Subject: [GIT PULL] ACPI fixes for v6.1-rc1
+Date:   Fri, 21 Oct 2022 20:50:25 +0200
+Message-ID: <CAJZ5v0hE31BLmRR9w6u5+vrEEc3QjkaOpUPaCo6QcdJCFez0Rg@mail.gmail.com>
+Subject: [GIT PULL] Power management fixes for v6.1-rc2
 To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -59,72 +58,55 @@ Hi Linus,
 Please pull from the tag
 
  git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- acpi-6.1-rc2
+ pm-6.1-rc2
 
-with top-most commit 3f8deab61ea86d738a1e7fdf95e9ad2bf08d14b8
+with top-most commit a6991d623de02c42c44ddfffde66ec18608069d3
 
- Merge branches 'acpi-scan', 'acpi-resource', 'acpi-apei',
-'acpi-extlog' and 'acpi-docs'
+ Merge tag 'cpufreq-arm-fixes-6.1-rc' of
+git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm
 
 on top of commit 9abf2313adc1ca1b6180c508c25f22f9395cc780
 
  Linux 6.1-rc1
 
-to receive ACPI fixes for 6.1-rc2.
+to receive power management fixes for 6.1-rc2.
 
-These fix 3 issues introduced during the 6.1 merge window (ACPI/PCI,
-device enumeration and documentation) and some other ones found
-recently.
+These fix some issues and clean up code in ARM cpufreq drivers.
 
 Specifics:
 
- - Add missing device reference counting to acpi_get_pci_dev() after
-   changing it recently (Rafael Wysocki).
+ - Fix module loading in the Tegra124 cpufreq driver (Jon Hunter).
 
- - Fix resource list walk in acpi_dma_get_range() (Robin Murphy).
+ - Fix memory leak and update to read-only region in the qcom
+   cpufreq driver (Fabien Parent).
 
- - Add IRQ override quirk for LENOVO IdeaPad and extend the IRQ
-   override warning message (Jiri Slaby).
-
- - Fix integer overflow in ghes_estatus_pool_init() (Ashish Kalra).
-
- - Fix multiple error records handling in one of the ACPI extlog driver
-   code paths (Tony Luck).
-
- - Prune DSDT override documentation from index after dropping it (Bagas
-   Sanjaya).
+ - Miscellaneous minor cleanups to cpufreq drivers (Fabien Parent,
+   Yang Yingliang).
 
 Thanks!
 
 
 ---------------
 
-Ashish Kalra (1):
-      ACPI: APEI: Fix integer overflow in ghes_estatus_pool_init()
+Fabien Parent (3):
+      cpufreq: qcom: fix memory leak in error path
+      cpufreq: qcom: fix writes in read-only memory region
+      cpufreq: qcom: remove unused parameter in function definition
 
-Bagas Sanjaya (1):
-      Documentation: ACPI: Prune DSDT override documentation from index
+Jon Hunter (1):
+      cpufreq: tegra194: Fix module loading
 
-Jiri Slaby (SUSE) (2):
-      ACPI: resource: do IRQ override on LENOVO IdeaPad
-      ACPI: resource: note more about IRQ override
-
-Rafael J. Wysocki (1):
-      ACPI: PCI: Fix device reference counting in acpi_get_pci_dev()
-
-Robin Murphy (1):
-      ACPI: scan: Fix DMA range assignment
-
-Tony Luck (1):
-      ACPI: extlog: Handle multiple records
+Yang Yingliang (4):
+      cpufreq: dt: Switch to use dev_err_probe() helper
+      cpufreq: imx6q: Switch to use dev_err_probe() helper
+      cpufreq: qcom-nvmem: Switch to use dev_err_probe() helper
+      cpufreq: sun50i: Switch to use dev_err_probe() helper
 
 ---------------
 
- Documentation/admin-guide/acpi/index.rst |  1 -
- drivers/acpi/acpi_extlog.c               | 33 ++++++++++++---------
- drivers/acpi/apei/ghes.c                 |  2 +-
- drivers/acpi/pci_root.c                  |  1 +
- drivers/acpi/resource.c                  | 49 +++++++++++++++++++++-----------
- drivers/acpi/scan.c                      |  7 +++--
- include/acpi/ghes.h                      |  2 +-
- 7 files changed, 60 insertions(+), 35 deletions(-)
+ drivers/cpufreq/cpufreq-dt.c           |  6 ++----
+ drivers/cpufreq/imx6q-cpufreq.c        |  4 +---
+ drivers/cpufreq/qcom-cpufreq-nvmem.c   | 25 +++++++++++++------------
+ drivers/cpufreq/sun50i-cpufreq-nvmem.c |  9 +++------
+ drivers/cpufreq/tegra194-cpufreq.c     |  1 +
+ 5 files changed, 20 insertions(+), 25 deletions(-)
