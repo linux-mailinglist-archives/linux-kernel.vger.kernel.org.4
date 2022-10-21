@@ -2,66 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CEAB607D20
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 19:00:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21D88607D1E
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 19:00:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbiJURAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 13:00:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50958 "EHLO
+        id S229960AbiJURAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 13:00:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229934AbiJURAE (ORCPT
+        with ESMTP id S229763AbiJURAC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 13:00:04 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F6D2558C5
+        Fri, 21 Oct 2022 13:00:02 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A31E851A2C
         for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:59:52 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-367dc159c2fso34348827b3.19
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:59:51 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id p3-20020a170902e74300b0018546b77dccso2003175plf.17
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:59:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=m+6LJgKl0wRgTRLkq4f9veim6S7HXx9ZKXbkLf1zrmQ=;
-        b=IAUiu92eRZoXbbSs2RkIa1od4MS2ZKai3lK1I9O75aKToczZ/VnpZ5z1vxJPMa/GkC
-         0lZR6s0KSFCVAgw42q/iyvA+kgH4bPDygEOtwmVRuTsGKEsMBFRUYetzcXtvMGluFGsl
-         oIRPkUIp+AaAMleOZpYIYm4+q9lNnERRe31K2FGn/prPllHO4BM6VzlqX/JTedIRXn/g
-         TVsFJnaJx3ZF69jFYpZyw6YK4mL41IWE/4P1ddXk2c0qHtRj8j6fw0AoQdrvpaI34rP4
-         WL66+HcMTo/T5w05qnW0jiXQlTMkXwyTHlgJbbqfWCuOFHRFxD2mQpcOSJyBL1gCfEvx
-         C27w==
+        bh=VPzkRYiEhEJdjJcMQc6JBwHg+TKgr2BSOIUTw0Esdx8=;
+        b=Ve1rHl0wvmEV+BaAo+AZbIjJY+aKHDudtiZg5pxgxHHbv7Q0LZBBxX+1Yiw80ft0dw
+         oY/2D4LjoidfZcWSyCzI2syNgkKzsj2IAzeJr1OOW80f5ZT9JcFnjInJbv86ng3khx20
+         KbFmr0M4xkf8SFMrlNv8cmgZ3FNM6AibVN1EU5h9lB8rsHb3F8T/A+W+fpLz+ZsHw81i
+         EqP77QJWylrgiUEa9miAw3OSBdvannh2tWWi/8dIc8XARg65nbUBGtRcwF5YFIcY5R/3
+         aeBM1Z6vjh/F7UxPwOMWf57HtQLAVM3g5gKG/M2jB0nONJynwHMwTpmuhazhaV3UGr52
+         VY3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=m+6LJgKl0wRgTRLkq4f9veim6S7HXx9ZKXbkLf1zrmQ=;
-        b=yp8szvCtnWYMUUFBitjJAtlpaXCt9sLFXDFHyTJNLXO71il5RPh7bR78t+IM+FWeej
-         QG7lXqUow7WpQgwWTgbz+7TRGORVjRsdBzTX1xwELWY9oLteOhZPm31/qDMV/hC1Y8Sj
-         CcxMaatZ4+YBW2l55TTQKZoKk491E4zrYc6I9uHL8qNgnuYxPvTBVcZsh2kkiOXWBqLZ
-         Ua65z3tg9FBkl8egnV5eBmsHSGXwQ9mO8CzvA6D/Su+x4LdR6qLQFlfmvttWAC5NRyF8
-         Tr5n83KS+5aJscu5eLI0oM9dUY9xEnUd3ng7xEywjnnbyA88Tckhx0GK36xRQ2IrCKPK
-         Uq6w==
-X-Gm-Message-State: ACrzQf1kHqhRBOqQvL7/RQzKc1wt1dnb0tSbqyughu4DUZSGF7JPdNno
-        TnejQSjzCJk8cXxEqJ25AGYcbLNJ9YviGJc60Ipikov+ADQ99g3hZifOgP9KynXpk2V2L7LAewE
-        VF9WJZMWgs+GAenwCHblRFWS0sfCnAcxPiSKmuz7HjKRz+SMzkyV6CSu9U5mdEYg0NdMXtpi4Ot
-        6OOIe/X9g=
-X-Google-Smtp-Source: AMsMyM5CQH4TFkLl4P/9mkWXy3i+ItjFbQYaMrom0RyvhQqef8RqBnFfeGLST8i6w2fb1FCTGC49V9uXDGyOMCsLeA==
+        bh=VPzkRYiEhEJdjJcMQc6JBwHg+TKgr2BSOIUTw0Esdx8=;
+        b=CrqoR3C7URS7CY7DshfBCb6fnTck3Km94grg1KFSxAOFBTO9v+HX6ApbO1Eqci+AGl
+         9cW/hLZPVdsPmN9XRQK3fMTd+VL16ylrABx+yadx/Fyw1ET0srM99d/QvtZWZ+oAgHaq
+         W8OvtFcsJ5HkeO+015SETRoxwCsNpeIgQVs9PQrinSCQwumrNxS5BuSu1PPAmZO2gD0k
+         67jQBAeszRgnJWSIwU0BuTwnCUM64JGRmHHjiQEyOc3w7hcfW9yA6YuUuJM6fX0RnwH1
+         idqq+uokPkv29EuZqaS1QLCWOfQRHw5VjVFjP0u6OuYse6KmL14VadguhrxtF5lHvzf5
+         wAiQ==
+X-Gm-Message-State: ACrzQf0FQBbxVb3qlb0v3aRCw1FhwxGlABINC87BfKbAxypJpQ0H8xgc
+        y+pKy0x1jYxN4Ym3vzASIWcMa91Im1AGYJScBloTrUAWSAvuLdDNUINYuE8EZz7vwQc/qiEK7il
+        99Lrsp9oMZDttffXBlkDzjQ0FqNAohLfYB5E1mUK1hfXvfKConv7yaglS+kKYh98XPYxZMk17N2
+        MnIkymrZc=
+X-Google-Smtp-Source: AMsMyM7NCrLMS8GdS8uHY/f+MxHXxD95CbgBq+2SDTqbQy1u+eMm83WwjL2+OgnooK9v60giRJXbsFMQhPUd5Q3kvw==
 X-Received: from dionnaglaze.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2ee6])
- (user=dionnaglaze job=sendgmr) by 2002:a25:be14:0:b0:6be:885f:20bb with SMTP
- id h20-20020a25be14000000b006be885f20bbmr17567487ybk.480.1666371590674; Fri,
- 21 Oct 2022 09:59:50 -0700 (PDT)
-Date:   Fri, 21 Oct 2022 16:59:40 +0000
+ (user=dionnaglaze job=sendgmr) by 2002:a17:902:ec83:b0:17c:afb3:d1ec with
+ SMTP id x3-20020a170902ec8300b0017cafb3d1ecmr20014781plg.172.1666371592336;
+ Fri, 21 Oct 2022 09:59:52 -0700 (PDT)
+Date:   Fri, 21 Oct 2022 16:59:41 +0000
 In-Reply-To: <20221021165943.1968044-1-dionnaglaze@google.com>
 Mime-Version: 1.0
 References: <20221021165943.1968044-1-dionnaglaze@google.com>
 X-Mailer: git-send-email 2.38.0.135.g90850a2211-goog
-Message-ID: <20221021165943.1968044-2-dionnaglaze@google.com>
-Subject: [PATCH v3 1/4] ccp: Name -1 return value as SEV_RET_NO_FW_CALL
+Message-ID: <20221021165943.1968044-3-dionnaglaze@google.com>
+Subject: [PATCH v3 2/4] x86/sev: Change snp_guest_issue_request's fw_err
 From:   Dionna Glaze <dionnaglaze@google.com>
 To:     linux-kernel@vger.kernel.org, x86@kernel.org
 Cc:     Dionna Glaze <dionnaglaze@google.com>,
-        Thomas Lendacky <Thomas.Lendacky@amd.com>,
+        Tom Lendacky <Thomas.Lendacky@amd.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
-        Joerg Roedel <jroedel@suse.de>, Ingo Molnar <mingo@redhat.com>,
-        Andy Lutomirsky <luto@kernel.org>
+        Joerg Roedel <jroedel@suse.de>,
+        Peter Gonda <pgonda@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -73,54 +75,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The PSP can return a "firmware error" code of -1 in circumstances where
-the PSP is not actually called. To make this protocol unambiguous, we
-add a constant naming the return value.
+The GHCB specification declares that the firmware error value for a
+guest request will be stored in the lower 32 bits of EXIT_INFO_2.
+The upper 32 bits are for the VMM's own error code. The fw_err argument
+is thus a misnomer, and callers will need access to all 64 bits.
 
-From: Peter Gonda <pgonda@google.com>
-Cc: Thomas Lendacky <Thomas.Lendacky@amd.com>
+The type of unsigned long also causes problems, since sw_exit_info2 is
+u64 (unsigned long long) vs the argument's previous unsigned long*.
+The signature change requires the follow-up change to
+drivers/virt/coco/sev-guest to use the new expected type in order to
+compile.
+
+The firmware might not even be called, so we bookend the call with the
+no firmware call error and clearing the error.
+
+Cc: Tom Lendacky <Thomas.Lendacky@amd.com>
 Cc: Paolo Bonzini <pbonzini@redhat.com>
 Cc: Joerg Roedel <jroedel@suse.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Andy Lutomirsky <luto@kernel.org>
+Cc: Peter Gonda <pgonda@google.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
 
+Fixes: d5af44dde546 ("x86/sev: Provide support for SNP guest request NAEs")
 Signed-off-by: Dionna Glaze <dionnaglaze@google.com>
 ---
- drivers/crypto/ccp/sev-dev.c | 2 +-
- include/uapi/linux/psp-sev.h | 7 +++++++
- 2 files changed, 8 insertions(+), 1 deletion(-)
+ arch/x86/include/asm/sev.h |  4 ++--
+ arch/x86/kernel/sev.c      | 11 ++++++++---
+ 2 files changed, 10 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
-index 06fc7156c04f..97eb3544ab36 100644
---- a/drivers/crypto/ccp/sev-dev.c
-+++ b/drivers/crypto/ccp/sev-dev.c
-@@ -444,7 +444,7 @@ static int __sev_platform_init_locked(int *error)
+diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
+index ebc271bb6d8e..8ebd78b6a57c 100644
+--- a/arch/x86/include/asm/sev.h
++++ b/arch/x86/include/asm/sev.h
+@@ -196,7 +196,7 @@ void snp_set_memory_private(unsigned long vaddr, unsigned int npages);
+ void snp_set_wakeup_secondary_cpu(void);
+ bool snp_init(struct boot_params *bp);
+ void __init __noreturn snp_abort(void);
+-int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, unsigned long *fw_err);
++int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, u64 *exitinfo2);
+ #else
+ static inline void sev_es_ist_enter(struct pt_regs *regs) { }
+ static inline void sev_es_ist_exit(void) { }
+@@ -217,7 +217,7 @@ static inline void snp_set_wakeup_secondary_cpu(void) { }
+ static inline bool snp_init(struct boot_params *bp) { return false; }
+ static inline void snp_abort(void) { }
+ static inline int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input,
+-					  unsigned long *fw_err)
++					  unsigned long *exitinfo2)
  {
- 	struct psp_device *psp = psp_master;
- 	struct sev_device *sev;
--	int rc = 0, psp_ret = -1;
-+	int rc = 0, psp_ret = SEV_RET_NO_FW_CALL;
- 	int (*init_function)(int *error);
+ 	return -ENOTTY;
+ }
+diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
+index a428c62330d3..5a402df7549e 100644
+--- a/arch/x86/kernel/sev.c
++++ b/arch/x86/kernel/sev.c
+@@ -22,6 +22,7 @@
+ #include <linux/efi.h>
+ #include <linux/platform_device.h>
+ #include <linux/io.h>
++#include <linux/psp-sev.h>
  
- 	if (!psp || !psp->sev_data)
-diff --git a/include/uapi/linux/psp-sev.h b/include/uapi/linux/psp-sev.h
-index 91b4c63d5cbf..fb61e083d42e 100644
---- a/include/uapi/linux/psp-sev.h
-+++ b/include/uapi/linux/psp-sev.h
-@@ -36,6 +36,13 @@ enum {
-  * SEV Firmware status code
-  */
- typedef enum {
-+	/*
-+	 * This error code is not in the SEV spec but is added to convey that
-+	 * there was an error that prevented the SEV Firmware from being called.
-+	 * This is (u32)-1 since the firmware error code part of EXIT_INFO_2 is
-+	 * the lower 32 bits.
-+	 */
-+	SEV_RET_NO_FW_CALL = 0xffffffff,
- 	SEV_RET_SUCCESS = 0,
- 	SEV_RET_INVALID_PLATFORM_STATE,
- 	SEV_RET_INVALID_GUEST_STATE,
+ #include <asm/cpu_entry_area.h>
+ #include <asm/stacktrace.h>
+@@ -2175,7 +2176,7 @@ static int __init init_sev_config(char *str)
+ }
+ __setup("sev=", init_sev_config);
+ 
+-int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, unsigned long *fw_err)
++int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, u64 *exitinfo2)
+ {
+ 	struct ghcb_state state;
+ 	struct es_em_ctxt ctxt;
+@@ -2186,9 +2187,11 @@ int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, unsigned
+ 	if (!cc_platform_has(CC_ATTR_GUEST_SEV_SNP))
+ 		return -ENODEV;
+ 
+-	if (!fw_err)
++	if (!exitinfo2)
+ 		return -EINVAL;
+ 
++	*exitinfo2 = SEV_RET_NO_FW_CALL;
++
+ 	/*
+ 	 * __sev_get_ghcb() needs to run with IRQs disabled because it is using
+ 	 * a per-CPU GHCB.
+@@ -2218,9 +2221,11 @@ int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, unsigned
+ 		    ghcb->save.sw_exit_info_2 == SNP_GUEST_REQ_INVALID_LEN)
+ 			input->data_npages = ghcb_get_rbx(ghcb);
+ 
+-		*fw_err = ghcb->save.sw_exit_info_2;
++		*exitinfo2 = ghcb->save.sw_exit_info_2;
+ 
+ 		ret = -EIO;
++	} else {
++		*exitinfo2 = 0;
+ 	}
+ 
+ e_put:
 -- 
 2.38.0.135.g90850a2211-goog
 
