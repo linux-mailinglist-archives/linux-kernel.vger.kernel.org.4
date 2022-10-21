@@ -2,126 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0510A60808D
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 23:08:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA3C0608093
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 23:11:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229596AbiJUVI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 17:08:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43228 "EHLO
+        id S229895AbiJUVLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 17:11:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230151AbiJUVIZ (ORCPT
+        with ESMTP id S229741AbiJUVLm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 17:08:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DD282A1D9E;
-        Fri, 21 Oct 2022 14:08:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4299DB82D5F;
-        Fri, 21 Oct 2022 21:08:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFCAEC433C1;
-        Fri, 21 Oct 2022 21:08:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666386502;
-        bh=vGtm8cDaRMwbpuCX+Ll3kMjwJy8sUPoYx9jzNG/dA7A=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=R4lfENKOZxZtb7xmjLqJ0RfIvxmDmHOMOyPV4823rIDTVpQyzqPfVsTkupi+u4Pes
-         sPGDOkjtQne929pDHD8Zx9+9yy04AakG4WR7/4evF7JMpfimC2CUBd3+fWF7Y9dnLx
-         yskqC5DTwxc8JSkysz1+SAItbtwNSvvVjLTj+uvaYYZzxfu9rdGxToJZmm7YMwRRqd
-         MKOKAQUoD3qTUEXqu4ZBs5CKj+bB73a6V1bhaeD/rpGqsOg/sUVCBS9DFnCOW7v7w6
-         Qskag7X1mg3sWeIK/XviqzJQA3PtEW76/UlNkjYwrUKDpugWkArd34hRtrBNyJ3+dA
-         ObTNZHjqaT69Q==
-Date:   Fri, 21 Oct 2022 16:08:20 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Lukasz Majczak <lma@semihalf.com>
-Cc:     bhelgaas@google.com, Rajat Jain <rajatja@google.com>,
-        Vidya Sagar <vidyas@nvidia.com>, upstream@semihalf.com,
-        linux-pci@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        =?utf-8?B?UmFkb3PFgmF3?= Biernacki <rad@semihalf.com>
-Subject: Re: [BUG] Intel Apollolake: PCIe bridge "loses" capabilities after
- entering D3Cold state
-Message-ID: <20221021210820.GA308037@bhelgaas>
+        Fri, 21 Oct 2022 17:11:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F37BD29CBAE
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 14:11:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666386701;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Tb5G8Q5vATxNip+KIvKKwBUveWJ2RwJYjzfJBGeAXxg=;
+        b=ZMsvVDZFxd0uEA5CD9fgCQZ0kYp18KM0gTEZl0nrndUmc5l7OWvt9ZwqN1NgiZUBqn7He2
+        P9/xyIoh0Kdpn0uxdBMJ9CtTmVTcDPj5JzhdwAlTuqlIBpJ62ftDc0A13H+OkdPWu5PAce
+        Rlv/5f/JRd6BL/gR6/D29H0sZmZmuC8=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-122-oKntkaKJMdSKksSJTEBaeQ-1; Fri, 21 Oct 2022 17:11:40 -0400
+X-MC-Unique: oKntkaKJMdSKksSJTEBaeQ-1
+Received: by mail-qv1-f69.google.com with SMTP id ny15-20020a056214398f00b004b9152f4b53so3000251qvb.17
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 14:11:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:user-agent:organization
+         :references:in-reply-to:date:cc:to:from:subject:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Tb5G8Q5vATxNip+KIvKKwBUveWJ2RwJYjzfJBGeAXxg=;
+        b=1D5oqJvSka+dUI47WKD7/XyTr6CcgEhkbkuXFJvtSUkVwX5iP6WoVA/DZfmzzT89KU
+         ETpXbft6aSPnDtzhxBLSz4rLwUJ+1jB2o82oQrY6rliQtETs4JTApMStXFeVDaeJNwH6
+         SasQ1pEDtOHhKfw3UCED0fn8Zj5Jbosgdvp6HzWDkEIbkrfV5HYlyzm9J5FSStAHu1/c
+         /kaFdbIXVDDgGnW0VWw2mLfbAEwF4j+dAE95CMybFhdPXMn15gJ+khVSIeD52Lz54sEQ
+         eZ3NTWUqVr/es3mgXgrBHiHW5wLl+XWYIFTR8OlnTxcHqnEevCkBWN6+whO4UhmqOn4X
+         JCbA==
+X-Gm-Message-State: ACrzQf0r2Sg+pvH5UwGaGn+gauJDkolCg9jL3mvcXDjAdGtgewflkTk0
+        ZFUM7ni5enwKY9d8MK4tI/hkYi/DpHENoG7qtxq8oeN/WmGjP8DPGG0piMo9LpigECwOOdrDEHn
+        S9jVN7R5x9VKlr39t0UmEquhY
+X-Received: by 2002:a05:6214:2483:b0:4bb:59ec:c5a7 with SMTP id gi3-20020a056214248300b004bb59ecc5a7mr3071180qvb.94.1666386699530;
+        Fri, 21 Oct 2022 14:11:39 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7KgayDfa/OfgLiBOflAoe1rYw1XFXkm1/ap8s3joDTxP0ofbKbGObX5+tK8zXV+pqU3S2xcQ==
+X-Received: by 2002:a05:6214:2483:b0:4bb:59ec:c5a7 with SMTP id gi3-20020a056214248300b004bb59ecc5a7mr3071157qvb.94.1666386699307;
+        Fri, 21 Oct 2022 14:11:39 -0700 (PDT)
+Received: from ?IPv6:2600:4040:5c68:4300::feb? ([2600:4040:5c68:4300::feb])
+        by smtp.gmail.com with ESMTPSA id fw10-20020a05622a4a8a00b0039cba52974fsm8491618qtb.94.2022.10.21.14.11.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Oct 2022 14:11:38 -0700 (PDT)
+Message-ID: <54135445ebea45857a95ac86db1c22804996af8c.camel@redhat.com>
+Subject: Re: [PATCH -next] nouveau/dmem: Remove duplicated include in
+ nouveau_dmem.c
+From:   Lyude Paul <lyude@redhat.com>
+To:     Yang Li <yang.lee@linux.alibaba.com>, bskeggs@redhat.com
+Cc:     kherbst@redhat.com, airlied@gmail.com, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
+Date:   Fri, 21 Oct 2022 17:11:37 -0400
+In-Reply-To: <20221017000723.113744-1-yang.lee@linux.alibaba.com>
+References: <20221017000723.113744-1-yang.lee@linux.alibaba.com>
+Organization: Red Hat Inc.
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFJ_xbq0cxcH-cgpXLU4Mjk30+muWyWm1aUZGK7iG53yaLBaQg@mail.gmail.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+cc Radosław]
+Reviewed-by: Lyude Paul <lyude@redhat.com>
 
-On Fri, Oct 21, 2022 at 12:17:35PM +0200, Lukasz Majczak wrote:
-> Hi,
+Will push in just a moment to drm-misc-next, thanks!
+
+On Mon, 2022-10-17 at 08:07 +0800, Yang Li wrote:
+> ./drivers/gpu/drm/nouveau/nouveau_dmem.c: nvif/if000c.h is included more
+> than once.
 > 
-> This a follow-up from a discussion from “[PATCH V2] PCI/ASPM:
-> Save/restore L1SS Capability for suspend/resume”
-> (https://lore.kernel.org/lkml/d3228b1f-8d12-bfab-4cba-6d93a6869f20@nvidia.com/t/)
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2404
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> ---
+>  drivers/gpu/drm/nouveau/nouveau_dmem.c | 1 -
+>  1 file changed, 1 deletion(-)
 > 
-> While working with Vidya’s patch I have noticed that after
-> suspend/resume cycle on my Chromebook (Apollolake) PCIe bridge loses
-> its capabilities - the missing part is:
-> 
-> Capabilities: [200 v1] L1 PM Substates
-> L1SubCap: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+ ASPM_L1.1+ L1_PM_Substates+
->   PortCommonModeRestoreTime=40us PortTPowerOnTime=10us
-> L1SubCtl1: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+ ASPM_L1.1+
->    T_CommonMode=40us LTR1.2_Threshold=98304ns
-> L1SubCtl2: T_PwrOn=60us
-> 
-> Digging more I’ve found out that entering D3Cold state causes this
-> issue (D3Hot seems to work fine).
-> 
-> With Vidya’s patch (all versions form V1 to V3) on upstream kernels
-> 5.10/5.15  it was causing underlying device unavailable (in my case -
-> WiFi card) - the V4 (which was accepted and merged) works fine (I
-> guess thanks to “PCI/ASPM: Refactor L1 PM Substates Control Register
-> programming”) but the issue is still there - I mean now after
-> suspend/resume the underlying deceive works fine but mentioned
-> capabilities are still gone when using lspci -vvv.
-> 
-> I think with current code it does no harm to anyone, but just doing a
-> heads up about this.
+> diff --git a/drivers/gpu/drm/nouveau/nouveau_dmem.c b/drivers/gpu/drm/nouveau/nouveau_dmem.c
+> index 5fe209107246..e2c500aac273 100644
+> --- a/drivers/gpu/drm/nouveau/nouveau_dmem.c
+> +++ b/drivers/gpu/drm/nouveau/nouveau_dmem.c
+> @@ -33,7 +33,6 @@
+>  #include <nvif/if000c.h>
+>  #include <nvif/if500b.h>
+>  #include <nvif/if900b.h>
+> -#include <nvif/if000c.h>
+>  
+>  #include <nvhw/class/cla0b5.h>
+>  
 
-Thanks a lot for following up on this!  Tell me if I have this right:
+-- 
+Cheers,
+ Lyude Paul (she/her)
+ Software Engineer at Red Hat
 
-  - After a fresh boot, the Root Port at 00:14.0 [8086:5ad6] has an L1
-    PM Substates Capability [per 1,2].
-
-  - You suspend and resume the system.
-
-  - After resume, 00:14.0 no longer has an L1 PM Substates Capability,
-    as in [2].
-
-  - The 00:14.0 Root Port leads to an iwlwifi device at 01:00.0, and
-    the wifi device works fine after resume.
-
-  - On the 01:00.0 iwlwifi device, lspci -vv still shows L1.1 and L1.2
-    enabled after resume, as it did in [2].
-
-If substates are enabled at iwlwifi but not at the Root Port, that
-would not be a valid scenario per spec.  Per PCIe r6.0, sec 5.5.4:
-
-  An L1 PM Substate enable bit must only be Set in the Upstream and
-  Downstream Ports on a Link when the corresponding supported
-  capability bit is Set by both the Upstream and Downstream Ports on
-  that Link, otherwise the behavior is undefined.
-
-So I don't know whether the L1.s states would still actually work.
-(Is there any way to tell whether the iwlwifi power consumption
-changes after the suspend/resume?  Maybe powertop?)
-
-And ASPM configuration, e.g., disabling/enabling substates via the
-sysfs "l1_1_aspm" and "l1_2_aspm" files probably won't work right.
-
-Bjorn
-
-[1] https://lore.kernel.org/lkml/20220722174212.GA1911979@bhelgaas/
-[2] https://gist.github.com/semihalf-majczak-lukasz/fb36dfa2eff22911109dfb91ab0fc0e3
