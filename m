@@ -2,83 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29E7D607745
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 14:48:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A5A960774E
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 14:50:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229514AbiJUMsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 08:48:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44728 "EHLO
+        id S229604AbiJUMuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 08:50:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbiJUMrw (ORCPT
+        with ESMTP id S229558AbiJUMub (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 08:47:52 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD81F2681D8;
-        Fri, 21 Oct 2022 05:47:26 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id j4so5023738lfk.0;
-        Fri, 21 Oct 2022 05:47:26 -0700 (PDT)
+        Fri, 21 Oct 2022 08:50:31 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5D8E32EC1;
+        Fri, 21 Oct 2022 05:50:29 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d24so2269572pls.4;
+        Fri, 21 Oct 2022 05:50:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bR/IhUckEHa0IuDp4LpofYq5xrM/m2D7Ojkw4Y/+w3U=;
-        b=TLM+JtUNdSTDgYochS4bQIpw/lUzMOmCYgxgRZCX0Ul1bbmUk4FG/vnbEmLgH7hdWz
-         2x7dlQropn+4X7pJeyQIB9Tc2AZ2/ojxRIyZ4KchxtnR8JHfNlFny/A18Anl4JjVp13k
-         +gurWy6lzRogPbwNIJnOiMVIsBP9VOj84wMIXXdkyUXb8HFA9B4gkBw89Hck1BL0P4dZ
-         QrrfnErkVO0WwfOR8GToORjbJ+agqUF/PLKnA0HfFBvYdwtZ0/lx7025ehOMrTS03XsL
-         MRfCx0laknxasZ5uOFPGe7h7IvDrTkwBaPxVh7KW4Y+kmcHVW9bSUYZPCbXhmi+SzkyF
-         YmcA==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0KlGUTvUZl89L8eZO3gvANACbFJz3GB1qo5LaPEgyIY=;
+        b=gmYJEfCux9XE2yl97cPgtCIDDQKosLHOMgL8kKLEcnGRi4HI8ZWQvmKUKbaxoTREH4
+         l5KvNT9c1qFjO3wNM3vdLmw9zynWL1jksJnmV/ao2ncyxcMn8U4rNZJCPfAb4kBz93qV
+         5QbpC/rMmZKSYhURoQTSbtYxzYcR/XlFr15MvrC1TbFW0FM5/TkF8B+2EfSo15+cqi/R
+         Ckzt91lQC5hTgYTyTW2ETBURgTaHgthCx4vy4QEZWm9xsHC+ydRbiHsQrybArlCFeNAJ
+         BPw5AHDyCOkJVjCbeHxctg/TQ3ncEETR4nlOMAloTiPr8K+SCPRY6FCa0KS6PZo5FOx/
+         DSdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bR/IhUckEHa0IuDp4LpofYq5xrM/m2D7Ojkw4Y/+w3U=;
-        b=5zInzImfg3kfkwQ6s0R4mGH5PBuqV0/GeGDciLW9fWyZoZMEtxzsp7qNQBcP6jKBhi
-         funO1IYTsFOPpcwLh0WwKZJYka3GsHV9vyWmO87qqxOciv1srmCjgMLuXvaucAsseBqO
-         jm/MH81PJa4m/RL5sgyDl6840xS+bOBdy0tyZ1f/zCuwlJYKXcUmFbIVb1wXhp+/JK6u
-         kf2Le1VhtSWeZaSj+bqejoA5u2hOkrTN0lLKMIrRgWLf6/BKJubpSWyx1GZy1emOgDEx
-         hHPqhGK0HDyk2EDREHunuJHzT5WeZ2FrJkbQyRnlyqti+N2y8OauN9JcciQgn1O3Y0IZ
-         /P+Q==
-X-Gm-Message-State: ACrzQf0lMp6VojRoDLMwyOaWRYkZiRHxA02j5GS0MhYeJLU0V3Ed7ZGm
-        V109EyooLiAjikJppBn73n8=
-X-Google-Smtp-Source: AMsMyM6Y0EJ9fKVz8wvZSCc6WuQtwmnn//WLkH4s1Kd1TwrsGcVuo+mXNhDHLhIurlPR+3TjhPdzSQ==
-X-Received: by 2002:ac2:4db8:0:b0:4a4:5e0e:b75e with SMTP id h24-20020ac24db8000000b004a45e0eb75emr6343437lfe.64.1666356443312;
-        Fri, 21 Oct 2022 05:47:23 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:16f3:4a00::2? (dc75zzyyyyyyyyyyyyyby-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::2])
-        by smtp.gmail.com with ESMTPSA id 6-20020ac25f46000000b00492d064e8f8sm3136967lfz.263.2022.10.21.05.47.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Oct 2022 05:47:22 -0700 (PDT)
-Message-ID: <82dcb300-5cf9-db86-2264-ba3b04a50ed0@gmail.com>
-Date:   Fri, 21 Oct 2022 15:47:21 +0300
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0KlGUTvUZl89L8eZO3gvANACbFJz3GB1qo5LaPEgyIY=;
+        b=3YEf64LAaYo9iGH4A3u691Ub3A6vJxVy9Rghti8aS6xhmzk+K/OnRE0aGbhPpit5sd
+         EPwh8vxhEAksPTWKpNa8hh8tP4/GaTK7+tgZtxx53cWoi+ifa5IN+pqw0YTj1DjxvtqL
+         txg5Aku+BbDxBuJyeobZ5h+jUR8Q9ITzr/BDgCzT2iQrhwAr6mj6IBKKse1OfUUMujyl
+         ND+qTYPolBDoHz9UE5qZS1lTH8u/B4eYmJLp3c0RK/AOz2cYsfmkWSI7z1GCX9GybRjQ
+         1/qK8vFnTxlLuYLX8fAwqKzJok+gERBS085WmHMJsATGULPdq4mNvlNK/Beaio4OFrrq
+         1IZA==
+X-Gm-Message-State: ACrzQf0wivyTgKMmqjrH7B7WYkYeCS9YP9R1SJWJHqhO/kD7/Pcjw8d1
+        IihgZ2Qt3mwzSEG2ug77RqM=
+X-Google-Smtp-Source: AMsMyM5VtbQVLrxlDDH0TECkFcm7zJxpX3ZGD4GUkkz9eckNYZa8aAhB98yUWjsRw19TL45h4Y4/3w==
+X-Received: by 2002:a17:903:11c7:b0:178:af17:e93e with SMTP id q7-20020a17090311c700b00178af17e93emr19100722plh.78.1666356629150;
+        Fri, 21 Oct 2022 05:50:29 -0700 (PDT)
+Received: from hoboy.vegasvil.org ([2601:640:8200:33:e2d5:5eff:fea5:802f])
+        by smtp.gmail.com with ESMTPSA id x2-20020a170902a38200b00177ff4019d9sm14701153pla.274.2022.10.21.05.50.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Oct 2022 05:50:28 -0700 (PDT)
+Date:   Fri, 21 Oct 2022 05:50:26 -0700
+From:   Richard Cochran <richardcochran@gmail.com>
+To:     Sarath Babu Naidu Gaddam <sarath.babu.naidu.gaddam@amd.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yangbo.lu@nxp.com, radhey.shyam.pandey@amd.com,
+        anirudha.sarangi@amd.com, harini.katakam@amd.com, git@amd.com
+Subject: Re: [PATCH net-next V2] dt-bindings: net: ethernet-controller: Add
+ ptp-hardware-clock
+Message-ID: <Y1KVka41Kza3IOXx@hoboy.vegasvil.org>
+References: <20221021054111.25852-1-sarath.babu.naidu.gaddam@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v4 2/3] iio: accel: Support Kionix/ROHM KX022A
- accelerometer
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Dmitry Rokosov <DDRokosov@sberdevices.ru>,
-        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
-        Cosmin Tanislav <demonsingur@gmail.com>,
-        Jagath Jog J <jagathjog1996@gmail.com>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1666350457.git.mazziesaccount@gmail.com>
- <7baf3dd482ab1db0d8a3676d6d5d3e4ab7f3cf9d.1666350457.git.mazziesaccount@gmail.com>
- <Y1KTibIKKz/KdJDj@smile.fi.intel.com>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <Y1KTibIKKz/KdJDj@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221021054111.25852-1-sarath.babu.naidu.gaddam@amd.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -87,36 +76,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/21/22 15:41, Andy Shevchenko wrote:
-> On Fri, Oct 21, 2022 at 02:22:49PM +0300, Matti Vaittinen wrote:
->> KX022A is a 3-axis accelerometer from ROHM/Kionix. The sensor features
->> include variable ODRs, I2C and SPI control, FIFO/LIFO with watermark IRQ,
->> tap/motion detection, wake-up & back-to-sleep events, four acceleration
->> ranges (2, 4, 8 and 16g), and probably some other cool features.
->>
->> Add support for the basic accelerometer features such as getting the
->> acceleration data via IIO. (raw reads, triggered buffer [data-ready] or
->> using the WMI IRQ).
->>
->> Important things to be added include the double-tap, motion
->> detection and wake-up as well as the runtime power management.
+On Thu, Oct 20, 2022 at 11:41:10PM -0600, Sarath Babu Naidu Gaddam wrote:
+> There is currently no standard property to pass PTP device index
+> information to ethernet driver when they are independent.
 > 
-> While I have some disagreements on some code
-> pieces, this version is okay to go I think.
+> ptp-hardware-clock property will contain phandle to PTP clock node.
 > 
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Freescale driver currently has this implementation but it will be
+> good to agree on a generic (optional) property name to link to PTP
+> phandle to Ethernet node. In future or any current ethernet driver
+> wants to use this method of reading the PHC index,they can simply use
+> this generic name and point their own PTP clock node, instead of
+> creating separate property names in each ethernet driver DT node.
+> 
+> axiethernet driver uses this method when PTP support is integrated.
+> 
+> Example:
+> 	fman0: fman@1a00000 {
+> 		ptp-hardware-clock = <&ptp_timer0>;
+> 	}
+> 
+> 	ptp_timer0: ptp-timer@1afe000 {
+> 		compatible = "fsl,fman-ptp-timer";
+> 		reg = <0x0 0x1afe000 0x0 0x1000>;
+> 	}
+> 
+> Signed-off-by: Sarath Babu Naidu Gaddam <sarath.babu.naidu.gaddam@amd.com>
 
-Thanks for the thorough review Andy.
-
-> Below a few nit-picks in case it needs to be a v5.
-
-Just a note that I do agree with these 'nits'. I'll fix them if I need 
-to respin the series.
-
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
-
+Acked-by: Richard Cochran <richardcochran@gmail.com>
