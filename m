@@ -2,83 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 884066080B3
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 23:19:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA10D6080B1
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 23:19:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230248AbiJUVT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 17:19:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41158 "EHLO
+        id S230387AbiJUVTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 17:19:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230220AbiJUVT3 (ORCPT
+        with ESMTP id S230295AbiJUVS5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 17:19:29 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 111CE2A4E1A
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 14:18:56 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29LIiS0M031107;
-        Fri, 21 Oct 2022 21:18:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=iSfB6CFrLnDJogdTTq89EiJJa3m0+y1c9gv1TDJFjvg=;
- b=JHDyZb31TRFwJzdoXbQXrP1FzKU9SGL3XasmDj1LWEohW/gxyx8D9GhpTMN6zp/a+BS4
- qiUnClpQR2mGie5UHapHJPnRu6OgapmswPbm5WFYVXAqV9hRLwDqL+qEO+4LLMXuP1RT
- l0lrJp3wlW64mkZF0stWOCe8A6lMxNPxpeOUnJ04j1j+2L+ujeTf7QxwI9zBxHoA0HD6
- yL4/pcytlnd0RsweU1HnV9w7LXoqg/jh1xcLqqESWa4ZJITfvN2RgCN1jteMWjgsYjt9
- HpFXb2Kv3TuHZ1PqI8sNpCnFDVscPvriW8VBYg15Jh0YqNQoe0iar0J3QpmTw9/zBN2j bA== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kb2c653y8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 21 Oct 2022 21:18:22 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29LLIKKt012378
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 21 Oct 2022 21:18:20 GMT
-Received: from [10.111.175.17] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Fri, 21 Oct
- 2022 14:18:18 -0700
-Message-ID: <e6bc800b-2d3b-aac9-c1cb-7c08d618fc8e@quicinc.com>
-Date:   Fri, 21 Oct 2022 14:18:16 -0700
+        Fri, 21 Oct 2022 17:18:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A6E72A6840
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 14:18:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E11BF61F75
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 21:18:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6AF1C433D6;
+        Fri, 21 Oct 2022 21:18:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666387121;
+        bh=2FFkvVZkTQ0PEfbYfPFvB9iZXcB1wpS7dr0mDk8aJ0k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oS6ib6/LIiPT2vSvTz+OGN+caOtzyRlmDcCxFXLZSeUGVvrI9ol4o0x26Oikuj8QQ
+         c/aFCV0tQXJMgdmx2bOR2MIB/wFG2PDOBax4W0rFvOzD7mw41KzVgKAn5p2V+mXibU
+         ONdB0wtmjqmA8LyoMEPsL839AcxvuemQXTgcMuEUX7ql4yAgyJ6pUDTc72xOpVxkFI
+         JRTze+sz99w2x1Lfm9KINIOCGV1alx3u0tR3xgFy4pW5EOsu1OziriEuu/x6pTrGyS
+         /BTurvNg1HbI2Vrx6UPaHbVkXg4E6L8h2arfqvA2HP/pAmQ+G1mPSDqhHtlgZS5IhK
+         h3/MMzfaNgkhg==
+Date:   Fri, 21 Oct 2022 14:18:38 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Miguel Ojeda <ojeda@kernel.org>
+Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Marco Elver <elver@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Uros Bizjak <ubizjak@gmail.com>,
+        Dan Li <ashimida@linux.alibaba.com>,
+        Alexander Potapenko <glider@google.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/5] compiler-gcc: remove attribute support check for
+ `__no_sanitize_thread__`
+Message-ID: <Y1MMrhxFdYek3sIo@dev-arch.thelio-3990X>
+References: <20221021115956.9947-1-ojeda@kernel.org>
+ <20221021115956.9947-3-ojeda@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH] drm/edid: Dump the EDID when drm_edid_get_panel_id() has
- an error
-Content-Language: en-US
-To:     Douglas Anderson <dianders@chromium.org>,
-        <dri-devel@lists.freedesktop.org>
-CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        <linux-kernel@vger.kernel.org>
-References: <20221021130637.1.I8c2de0954a4e54e0c59a72938268e2ead91daa98@changeid>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <20221021130637.1.I8c2de0954a4e54e0c59a72938268e2ead91daa98@changeid>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: sHNLh55rX_DR4gs-fYbux6RV15qG-tpi
-X-Proofpoint-ORIG-GUID: sHNLh55rX_DR4gs-fYbux6RV15qG-tpi
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-21_04,2022-10-21_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
- clxscore=1011 impostorscore=0 bulkscore=0 malwarescore=0
- lowpriorityscore=0 spamscore=0 priorityscore=1501 mlxlogscore=729
- phishscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210210124
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221021115956.9947-3-ojeda@kernel.org>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -87,40 +65,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Doug
-
-On 10/21/2022 1:07 PM, Douglas Anderson wrote:
-> If we fail to get a valid panel ID in drm_edid_get_panel_id() we'd
-> like to see the EDID that was read so we have a chance of
-> understanding what's wrong. There's already a function for that, so
-> let's call it in the error case.
+On Fri, Oct 21, 2022 at 01:59:54PM +0200, Miguel Ojeda wrote:
+> The attribute was added in GCC 5.1, which matches the minimum GCC version
+> supported by the kernel.
 > 
-> NOTE: edid_block_read() has a retry loop in it, so actually we'll only
-> print the block read back from the final attempt. This still seems
-> better than nothing.
+> Therefore, remove the check.
 > 
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> Link: https://godbolt.org/z/vbxKejxbx
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 
-Instead of checkinf for edid_block_status_valid() on the base_block, do 
-you want to use drm_edid_block_valid() instead?
-
-That way you get the edid_block_dump() for free if it was invalid.
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
 > ---
+>  include/linux/compiler-gcc.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
->   drivers/gpu/drm/drm_edid.c | 2 ++
->   1 file changed, 2 insertions(+)
+> diff --git a/include/linux/compiler-gcc.h b/include/linux/compiler-gcc.h
+> index bfce7f4d0978..ba207deb77ca 100644
+> --- a/include/linux/compiler-gcc.h
+> +++ b/include/linux/compiler-gcc.h
+> @@ -84,7 +84,7 @@
+>  
+>  #define __no_sanitize_address __attribute__((__no_sanitize_address__))
+>  
+> -#if defined(__SANITIZE_THREAD__) && __has_attribute(__no_sanitize_thread__)
+> +#if defined(__SANITIZE_THREAD__)
+>  #define __no_sanitize_thread __attribute__((__no_sanitize_thread__))
+>  #else
+>  #define __no_sanitize_thread
+> -- 
+> 2.38.1
 > 
-> diff --git a/drivers/gpu/drm/drm_edid.c b/drivers/gpu/drm/drm_edid.c
-> index 47465b9765f1..d63e26ec88b1 100644
-> --- a/drivers/gpu/drm/drm_edid.c
-> +++ b/drivers/gpu/drm/drm_edid.c
-> @@ -2721,6 +2721,8 @@ u32 drm_edid_get_panel_id(struct i2c_adapter *adapter)
->   
->   	if (edid_block_status_valid(status, edid_block_tag(base_block)))
->   		panel_id = edid_extract_panel_id(base_block);
-> +	else
-> +		edid_block_dump(KERN_NOTICE, base_block, 0);
->   
->   	kfree(base_block);
->   
+> 
