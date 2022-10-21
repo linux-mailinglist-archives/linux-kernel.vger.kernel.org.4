@@ -2,136 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCC8F606E1F
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 05:06:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC106606E26
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 05:10:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229657AbiJUDGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 23:06:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32942 "EHLO
+        id S229744AbiJUDKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 23:10:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiJUDG3 (ORCPT
+        with ESMTP id S229489AbiJUDKM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 23:06:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0715167252
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 20:06:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6AC5D61DA5
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 03:06:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C26FEC43140
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 03:06:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666321586;
-        bh=nnTz6BbYm16k0pymxCXW1qmPXNG1V5s2aBk/OjUH7BY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=UJ6sb8WV0xREV3cW37N/YPanGFWLWII4Keozt6NE5BFxA5pIbczICwED/D6cbxzZb
-         Kb2NFf5mZS32sbOZoJgf3udRyg0igD4xvqfYZS7tYf3lCU3qO3uBl6lVuM4HoCppWo
-         1XCNouWrAwY/RHHOOOseBclciVWuFUrlgDjXqEbdSlUV66PwSPJu0/f+XI6abjul37
-         MrWgoJZ9b8efNtdMvgwcIG2/0rgxSauwnwaz065fQ6uxjOlkYOp6uzZU9EeC4BuWHD
-         8MiHdmUqDR7st3VAdkSlSa6hfwOb1luHeYH1TAL+yOCpZPHR5xruRnDL1gxA5kuF1z
-         vw0sa72x8sMPQ==
-Received: by mail-ot1-f46.google.com with SMTP id r8-20020a056830120800b00661a0a236efso1062499otp.4
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 20:06:26 -0700 (PDT)
-X-Gm-Message-State: ACrzQf0r9c+s0c31wrqvSMB3B8xR2/5XRga/mp2EuwO2KjXaf54Twtl/
-        O+ffICFI+Qb6gkImHi0aG2eDY7E2uvJ0NCyh9f4=
-X-Google-Smtp-Source: AMsMyM7ORoMBIMno6AdJgmO8am2C+XtwrCTgg8wGdEDBszktYCFqgSUmm5ITEUqn6IVJ0grQWuCwXB7GOht0Qcv3/8c=
-X-Received: by 2002:a9d:3634:0:b0:661:a991:7c57 with SMTP id
- w49-20020a9d3634000000b00661a9917c57mr8230356otb.308.1666321585880; Thu, 20
- Oct 2022 20:06:25 -0700 (PDT)
+        Thu, 20 Oct 2022 23:10:12 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF97B5BCB5
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 20:10:09 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id q1so1346386pgl.11
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 20:10:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GVDeaTKoSrOeCfd6nCXKEY/GIy0Kyct0/tmYk1UcIUw=;
+        b=G7ifq2dkQ3DICOfSgmtHGTZ7dMZQvQ34Tb5+dVJfD2zOpDahc0SV/2oshuQWvCf6pt
+         9deeHDnwhW7MiA3yoVmNPYOXnzV4MwmD0GpkGPthCONqn2aTzTJK6wrMlUMhkykGEFvy
+         n2v9TZFznNTvYsGiPco24OZ6rOnhZmQStzhFXtETn52/E6Exb/I1FBrTGxQseO7oodpR
+         CooPpXLJRSt9+tkD84l6RjAPx+MEb//8Z8BnP7EtIeFZbYXN8/fpyPjGKHIp6DJVhzpl
+         e6SaUXP41JKGFksQx2qg3cU4m/93bp1oftck7u/xSdila5m8HCKaJ695CxvY0YofVh6J
+         Hxdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GVDeaTKoSrOeCfd6nCXKEY/GIy0Kyct0/tmYk1UcIUw=;
+        b=zsE/2OBZ0JOGMZSwARO10AknKROumqksPcceOVNBClXFc1gFHNlWgQwvj8ymEk9vfu
+         boQHFnPzlmkTPnv7TdVW4z3vomkmemZXtXVHq35IZ+6c9LjyesVdRWUZAYJs0PKh9rNc
+         Aw1SymdlSRj4N5oopfHBVtu8dgUFlnAIV91c3bWzJZ4WAVPowPVOGyivin32sYgc9TWy
+         WHVlxd85X/Xso61rbuiBBH2AkOXZ9EkUDywJV4zPtlhTaOinaIN4mmV9CGWm9/UR+mNv
+         ckgck744di7R4XZ6lH3yGs5DjXnB1rPdBztr206RcDan1ztHZXDFf2lnbZudVaJdJSWf
+         Wm5Q==
+X-Gm-Message-State: ACrzQf27rSxbUvR+9DewtX8w1NtI/1PVPPiziOsWFtKTdAYsh/UmzqQs
+        3UBgkJZSpCpmUBVbJz6ee8M=
+X-Google-Smtp-Source: AMsMyM6nZwydnbhiGjYYOg1vjURXDJppqkZDoIFpqjmqd3F6r8dH8h2ooGiNvrvceeA+xaHFsi1eUw==
+X-Received: by 2002:a63:8841:0:b0:461:24b7:a621 with SMTP id l62-20020a638841000000b0046124b7a621mr14679280pgd.277.1666321809230;
+        Thu, 20 Oct 2022 20:10:09 -0700 (PDT)
+Received: from localhost.localdomain ([111.203.234.211])
+        by smtp.googlemail.com with ESMTPSA id f26-20020aa7969a000000b00561879b0f3asm13743395pfk.203.2022.10.20.20.10.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Oct 2022 20:10:08 -0700 (PDT)
+From:   Jintao Yin <nicememory@gmail.com>
+To:     phillip@squashfs.org.uk
+Cc:     bagasdotme@gmail.com, hsinyi@chromium.org,
+        linux-kernel@vger.kernel.org, marcmiltenberger@gmail.com,
+        mirsad.todorovac@alu.unizg.hr, nicememory@gmail.com,
+        regressions@leemhuis.info, regressions@lists.linux.dev,
+        srw@sladewatkins.net
+Subject: Re: BISECT result: 6.0.0-RC kernels trigger Firefox snap bug with 6.0.0-rc3 through 6.0.0-rc7
+Date:   Fri, 21 Oct 2022 11:09:24 +0800
+Message-Id: <20221021030924.687-1-nicememory@gmail.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <41ef4b22-eea8-2d67-99d8-6aaae7d25ac1@squashfs.org.uk>
+References: <41ef4b22-eea8-2d67-99d8-6aaae7d25ac1@squashfs.org.uk>
 MIME-Version: 1.0
-References: <20221020143329.3276-1-jszhang@kernel.org>
-In-Reply-To: <20221020143329.3276-1-jszhang@kernel.org>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 21 Oct 2022 11:06:13 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTTZX48_psz31gJCi9h9ayUV1tfWYr32Br8CmLLrCZPpPg@mail.gmail.com>
-Message-ID: <CAJF2gTTZX48_psz31gJCi9h9ayUV1tfWYr32Br8CmLLrCZPpPg@mail.gmail.com>
-Subject: Re: [PATCH v2] riscv: fix race when vmap stack overflow
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 10:43 PM Jisheng Zhang <jszhang@kernel.org> wrote:
->
-> Currently, when detecting vmap stack overflow, riscv firstly switches
-> to the so called shadow stack, then use this shadow stack to call the
-> get_overflow_stack() to get the overflow stack. However, there's
-> a race here if two or more harts use the same shadow stack at the same
-> time.
->
-> To solve this race, we introduce spin_shadow_stack atomic var, which
-> will be swap between its own address and 0 in atomic way, when the
-> var is set, it means the shadow_stack is being used; when the var
-> is cleared, it means the shadow_stack isn't being used.
->
-> Fixes: 31da94c25aea ("riscv: add VMAP_STACK overflow detection")
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> Suggested-by: Guo Ren <guoren@kernel.org>
-> ---
-> Since v1:
->  - use smp_store_release directly
->  - use unsigned int instead of atomic_t
->
->  arch/riscv/kernel/entry.S | 4 ++++
->  arch/riscv/kernel/traps.c | 4 ++++
->  2 files changed, 8 insertions(+)
->
-> diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-> index b9eda3fcbd6d..7b924b16792b 100644
-> --- a/arch/riscv/kernel/entry.S
-> +++ b/arch/riscv/kernel/entry.S
-> @@ -404,6 +404,10 @@ handle_syscall_trace_exit:
->
->  #ifdef CONFIG_VMAP_STACK
->  handle_kernel_stack_overflow:
-> +1:     la sp, spin_shadow_stack
-> +       amoswap.w sp, sp, (sp)
-Using ".w" is tricky for 64 BIT, I've hesitated. ';)
-Let's move to REG_AMOSWAP, or you must make sure the address of
-spin_shadow_stack won't be 4GB aligned.
-
-> +       bnez sp, 1b
-> +
->         la sp, shadow_stack
->         addi sp, sp, SHADOW_OVERFLOW_STACK_SIZE
->
-> diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
-> index f3e96d60a2ff..f1f57c1241b6 100644
-> --- a/arch/riscv/kernel/traps.c
-> +++ b/arch/riscv/kernel/traps.c
-> @@ -221,11 +221,15 @@ asmlinkage unsigned long get_overflow_stack(void)
->                 OVERFLOW_STACK_SIZE;
->  }
->
-> +unsigned int spin_shadow_stack;
-> +
->  asmlinkage void handle_bad_stack(struct pt_regs *regs)
->  {
->         unsigned long tsk_stk = (unsigned long)current->stack;
->         unsigned long ovf_stk = (unsigned long)this_cpu_ptr(overflow_stack);
->
-> +       smp_store_release(&spin_shadow_stack, 0);
-> +
->         console_verbose();
->
->         pr_emerg("Insufficient stack space to handle exception!\n");
-> --
-> 2.37.2
+On Thu, Oct 20, 2022 at 04:45:53PM +0100, Phillip Lougher wrote:
+> On 20/10/2022 14:55, Jintao Yin wrote:
+> > Hi all,
+> > 
+> > After review the details of page actor, the tail bytes may be written to
+> > a temp buffer instead the last used page. So before diff would wrongly
+> > memzero a page which is not the tail bytes in.
+> > 
+> > In this diff fixes it by caculation of the real index the trailing bytes
+> > in and check if the last used page matches this index. If the page is
+> > the real tail bytes in, then memzero the trailing bypte of the page.
+> > 
+> > Please help test and any feedbacks are welcome.
+> > 
+> > Thanks,
+> 
+> This is a rediculously complex patch.  Sorry, but, absolute NACK.
+> 
+> Additionally, it is poor etiquette and pointless to fix an
+> already fixed issue with a _more_ complex patch.
+> 
+> Phillip
 >
 
+Dear Phillip,
 
--- 
-Best Regards
- Guo Ren
+I'd like to apologize to you for my serious breakages of code of conduct. And
+I had no intend to offend you. I'm new to this community and I will do my best to
+follow the code of conduct and keep with good etiquettes.
+
+Best Regards,
+Jintao
