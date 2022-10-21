@@ -2,95 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5714C6073D9
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 11:19:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 936846073E3
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 11:20:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231208AbiJUJT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 05:19:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45682 "EHLO
+        id S231271AbiJUJUi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 05:20:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231371AbiJUJTS (ORCPT
+        with ESMTP id S231137AbiJUJU2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 05:19:18 -0400
-Received: from outbound-smtp22.blacknight.com (outbound-smtp22.blacknight.com [81.17.249.190])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6FE5211284
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 02:19:14 -0700 (PDT)
-Received: from mail.blacknight.com (pemlinmail06.blacknight.ie [81.17.255.152])
-        by outbound-smtp22.blacknight.com (Postfix) with ESMTPS id 6E46CBAD1D
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 10:19:13 +0100 (IST)
-Received: (qmail 8314 invoked from network); 21 Oct 2022 09:19:13 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 21 Oct 2022 09:19:13 -0000
-Date:   Fri, 21 Oct 2022 10:19:11 +0100
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Yang Shi <shy828301@gmail.com>
-Cc:     agk@redhat.com, snitzer@kernel.org, dm-devel@redhat.com,
-        akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/4] mm: mempool: introduce page bulk allocator
-Message-ID: <20221021091911.ak3a7a3wr3qcbe3b@techsingularity.net>
-References: <20221005180341.1738796-1-shy828301@gmail.com>
- <20221005180341.1738796-3-shy828301@gmail.com>
- <20221013123830.opbulq4qad56kuev@techsingularity.net>
- <CAHbLzkpc+CAfsYe6gXjh=-3MxMH_aWhPMYhic7ddFZgWttOhng@mail.gmail.com>
- <20221017094132.vnanndrwa2yn7qcw@techsingularity.net>
- <CAHbLzkpmbmtOdOsud-VG+wyk18wFAFnan8T55XxxwkHrnhLCmw@mail.gmail.com>
+        Fri, 21 Oct 2022 05:20:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9C2A4C616;
+        Fri, 21 Oct 2022 02:20:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C5DF9B82B8B;
+        Fri, 21 Oct 2022 09:20:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C61B8C433D6;
+        Fri, 21 Oct 2022 09:19:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666344001;
+        bh=n61WhtB8RDgb/YLx/+f1mYKaXfwPFpMD7fM3DSUCbGs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HRubYOAn0g2mvXoP3PuhzS3UzkN/HXpk3plxrTr3UBSCv+6q4lNk+9jHnshNK+Ml/
+         asTyszrggGPR7HgHT7yWjrfxHRCrf7pP8uHFfduDzXBiiGkhRu9DYd3TI4WRXorRma
+         f4D/T1xSdvW6lTW3Pd+KEsguTNgTARW458iYoPuc9W+9Rg3/QBVDVVV8q6AqyBmMUz
+         Ny2xCrbBrCT+x7c/4NjP72w8wMqK54aEXAIwkQ4GMwUhlJt0lR9JLrscSfGySDQ12q
+         UTt1rLLNDAwj8kYYNFq46sgjeGAugJgxgbLQa7+cjlcOyJnJweoM0Rdcx874vmVpWl
+         Te3o5xCpOzQfQ==
+Date:   Fri, 21 Oct 2022 11:19:55 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, Thomas Schmitt <scdbackup@gmx.net>,
+        stable@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Jan Kara <jack@suse.cz>, Jeff Layton <jlayton@kernel.org>,
+        Deepa Dinamani <deepa.kernel@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] isofs: prevent file time rollover after year 2038
+Message-ID: <20221021091955.s2kictcxek5e456w@wittgenstein>
+References: <20221020160037.4002270-1-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAHbLzkpmbmtOdOsud-VG+wyk18wFAFnan8T55XxxwkHrnhLCmw@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221020160037.4002270-1-arnd@kernel.org>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 11:01:31AM -0700, Yang Shi wrote:
-> > > Yeah, I didn't think of a better way to pass the pages to dm-crypt.
-> > >
-> > > >
-> > > > How about this
-> > > >
-> > > > 1. Add a callback to __alloc_pages_bulk() that takes a page as a
-> > > >    parameter like bulk_add_page() or whatever.
-> > > >
-> > > > 2. For page_list == NULL && page_array == NULL, the callback is used
-> > > >
-> > > > 3. Add alloc_pages_bulk_cb() that passes in the name of a callback
-> > > >    function
-> > > >
-> > > > 4. In the dm-crypt case, use the callback to pass the page to bio_add_page
-> > > >    for the new page allocated.
-> > >
-> > > Thank you so much for the suggestion. But I have a hard time
-> > > understanding how these work together. Do you mean call bio_add_page()
-> > > in the callback? But bio_add_page() needs other parameters. Or I
-> > > misunderstood you?
-> > >
-> >
-> > I expected dm-crypt to define the callback. Using bio_add_page
-> > directly would not work as the bulk allocator has no idea what to pass
-> > bio_add_page. dm-crypt would likely need to create both a callback and an
-> > opaque data structure passed as (void *) to track "clone" and "len"
+On Thu, Oct 20, 2022 at 06:00:29PM +0200, Arnd Bergmann wrote:
+> From: Thomas Schmitt <scdbackup@gmx.net>
 > 
-> I see. Yeah, we have to pass the "clone" and "len" to the callback via
-> pool_data. It should not be hard since dm-crypt already uses
-> crypt_config to maintain a counter for allocated pages, we should just
-> need to pass the struct to the callback as a parameter.
+> Change the return type of function iso_date() from int to time64_t,
+> to avoid truncating to the 1902..2038 date range.
 > 
-> But I'm wondering whether this is worth it or not? Will it make the
-> code harder to follow?
+> After this patch, the reported timestamps should fall into the
+> range reported in the s_time_min/s_time_max fields.
 > 
+> Signed-off-by: Thomas Schmitt <scdbackup@gmx.net>
+> Cc: stable@vger.kernel.org
+> Link: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=800627
+> Fixes: 34be4dbf87fc ("isofs: fix timestamps beyond 2027")
+> Fixes: 5ad32b3acded ("isofs: Initialize filesystem timestamp ranges")
+> [arnd: expand changelog text slightly]
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
 
-A little because a callback is involved but it's not the only place in the
-kernel where a callback is used like this and a comment should suffice. It
-should be faster than list manipulation if nothing else. Mostly, I'm wary
-of adding the first user of the list interface for the bulk allocator that
-does not even want a list. If there isn't a user of the list interface
-that *requires* it, the support will simply be deleted as dead code.
-
--- 
-Mel Gorman
-SUSE Labs
+Looks good to me,
+Acked-by: Christian Brauner (Microsoft) <brauner@kernel.org>
