@@ -2,40 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 647A36070AC
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 09:04:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 231226070B7
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 09:10:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230206AbiJUHEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 03:04:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52460 "EHLO
+        id S229904AbiJUHKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 03:10:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230158AbiJUHEn (ORCPT
+        with ESMTP id S229679AbiJUHKO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 03:04:43 -0400
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B6B13FF08
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 00:04:30 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R311e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VSiUXvO_1666335866;
-Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VSiUXvO_1666335866)
-          by smtp.aliyun-inc.com;
-          Fri, 21 Oct 2022 15:04:27 +0800
-Date:   Fri, 21 Oct 2022 15:04:25 +0800
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-To:     huyue2@coolpad.com
-Cc:     syzbot <syzbot+3faecbfd845a895c04cb@syzkaller.appspotmail.com>,
-        chao@kernel.org, jefflexu@linux.alibaba.com,
-        linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, xiang@kernel.org
-Subject: Re: [syzbot] general protection fault in erofs_bread
-Message-ID: <Y1JEeTVcuI7QEV+2@B-P7TQMD6M-0146.local>
-References: <0000000000002e7a8905eb841ddd@google.com>
+        Fri, 21 Oct 2022 03:10:14 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6AEBF6824;
+        Fri, 21 Oct 2022 00:10:11 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id j14so2451701ljh.12;
+        Fri, 21 Oct 2022 00:10:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:content-language
+         :references:cc:to:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=P+DyRnzX2NJL/tNy1TqvA1u8dEYMW2T23e/Syk4DuRA=;
+        b=U4Ol12POOgdO5lIAPaSKDT6b5WeLLMHMRhTck8cmXOyUJdEMLC+5ItAPZowF4M9rWO
+         BS7AV5mp+92ZFULfsI+LP8EXM5/mGdHZCs2SjRnzwgbz+gFrlm1ZZiMmMhQM7zWDaDha
+         24ist3kMujvdltRs5ps95P0cC7MyYdmi2Zf1X+fwEK8zgADnxRQpd/8REuV6O7sQc6vI
+         sHEB2pu0lMJtlGB+G5XEPAXBpbT9Xn6F1HmGg+dZWrjPybkGZGvTsCKAu2SBgByPKwjU
+         2fDP25UuOkQ9siuh4oa4SAg7g86Ku9OwgE0QiznFE5YrsWX90IdP9ipeOCV949smgX7w
+         zwOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:content-language
+         :references:cc:to:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=P+DyRnzX2NJL/tNy1TqvA1u8dEYMW2T23e/Syk4DuRA=;
+        b=2lxPVxrdzhwV/UjtDOeZoHip422VacTAVau7VxOvLPDSI0FCeW+BS5QOlf/dsBRv93
+         mFeyHsJYySizvCEJNQwqWlruKBg2NP7NeE2KT/9CuDFy48FMcjiMLvp1qRYwhNl/FOae
+         pv5GF5Vt9uCpHVN2hi0gvERaO4uuzvRkqVwklqZxc2bc3FaehMDDDF8+MgoWVSzhcQ1F
+         +6XvB6oXJF+OJomuxB4IkGOnnfkbDuby6da4pgDD+9dZ4MZEcM+5huL22tOszXdaFF5k
+         VyBKEG2eIg7ufcUaz/jweHMoZiV+V6eX0Cs2weyKbhRS8YtcPLJan9gfoMlJeIa+d3CF
+         jPCg==
+X-Gm-Message-State: ACrzQf2Pcxce5YJ+v89jqfhtEvFBQjY3YbfG/d2XIGwmrvqwQywq8fhm
+        dwswIlpyLhhxDYRXxyKwg14=
+X-Google-Smtp-Source: AMsMyM5fecE/7tVBOtJL0ll7ohXyQOHQk2BhGfAqhPz0IZTQYSNLhhSv0+wV9q4v01GtZMfSi7wwgQ==
+X-Received: by 2002:a2e:8781:0:b0:26d:e758:ce84 with SMTP id n1-20020a2e8781000000b0026de758ce84mr6069368lji.178.1666336209831;
+        Fri, 21 Oct 2022 00:10:09 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:16f3:4a00::2? (dc75zzyyyyyyyyyyyyyby-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::2])
+        by smtp.gmail.com with ESMTPSA id t16-20020a056512209000b0048b26d4bb64sm3051993lfr.40.2022.10.21.00.10.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Oct 2022 00:10:09 -0700 (PDT)
+Message-ID: <2cad533d-32d1-5ca1-74e6-e2debcbdad81@gmail.com>
+Date:   Fri, 21 Oct 2022 10:10:08 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <0000000000002e7a8905eb841ddd@google.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_IN_DEF_SPF_WL autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
+        Dmitry Rokosov <DDRokosov@sberdevices.ru>,
+        Jagath Jog J <jagathjog1996@gmail.com>,
+        Cosmin Tanislav <demonsingur@gmail.com>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <cover.1666263249.git.mazziesaccount@gmail.com>
+ <5000bd61650554658d13619c8244f02cedbc182a.1666263249.git.mazziesaccount@gmail.com>
+ <Y1FcftQKimmvcOej@smile.fi.intel.com>
+Content-Language: en-US
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+Subject: Re: [PATCH v3 2/3] iio: accel: Support Kionix/ROHM KX022A
+ accelerometer
+In-Reply-To: <Y1FcftQKimmvcOej@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -43,56 +87,367 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yue,
+Hi Andy & All,
 
-On Thu, Oct 20, 2022 at 09:45:41PM -0700, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    493ffd6605b2 Merge tag 'ucount-rlimits-cleanups-for-v5.19'..
-> git tree:       upstream
-> console+strace: https://syzkaller.appspot.com/x/log.txt?x=168c673c880000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=d19f5d16783f901
-> dashboard link: https://syzkaller.appspot.com/bug?extid=3faecbfd845a895c04cb
-> compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17fb206a880000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13b166ba880000
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/f1ff6481e26f/disk-493ffd66.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/101bd3c7ae47/vmlinux-493ffd66.xz
-> mounted in repro: https://storage.googleapis.com/syzbot-assets/c1b35fb0988a/mount_0.gz
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+3faecbfd845a895c04cb@syzkaller.appspotmail.com
-> 
-> loop0: detected capacity change from 0 to 264192
-> erofs: (device loop0): mounted with root inode @ nid 36.
-> general protection fault, probably for non-canonical address 0xdffffc0000000006: 0000 [#1] PREEMPT SMP KASAN
-> KASAN: null-ptr-deref in range [0x0000000000000030-0x0000000000000037]
-> CPU: 0 PID: 3611 Comm: syz-executor373 Not tainted 6.0.0-syzkaller-09423-g493ffd6605b2 #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
-> RIP: 0010:erofs_bread+0x33/0x760 fs/erofs/data.c:35
-> Code: 53 48 83 ec 28 89 cb 41 89 d6 48 89 f5 49 89 fd 49 bc 00 00 00 00 00 fc ff df e8 78 b3 a5 fd 48 83 c5 30 48 89 e8 48 c1 e8 03 <42> 80 3c 20 00 74 08 48 89 ef e8 0e 1e f9 fd 89 5c 24 04 4c 8b 7d
-> RSP: 0018:ffffc90003bdf2e0 EFLAGS: 00010206
-> RAX: 0000000000000006 RBX: 0000000000000001 RCX: ffff888018de5880
-> RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffffc90003bdf4e0
-> RBP: 0000000000000030 R08: ffffffff83e25022 R09: ffffc90003bdf4e0
-> R10: fffff5200077be9f R11: 1ffff9200077be9c R12: dffffc0000000000
-> R13: ffffc90003bdf4e0 R14: 000000007ec94954 R15: 000032487ec94954
-> FS:  00005555571fa300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007fa00d733260 CR3: 000000007d91f000 CR4: 00000000003506f0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  z_erofs_read_fragment fs/erofs/zdata.c:667 [inline]
+Thanks again for the review.
 
-Could you look into this issue? I think it's a simple issue (the
-fragment feature sb flag is not set, but so packed_inode != NULL
-needs to be checked in z_erofs_read_fragment()).
+On 10/20/22 17:34, Andy Shevchenko wrote:
+> On Thu, Oct 20, 2022 at 02:37:15PM +0300, Matti Vaittinen wrote:
+>> KX022A is a 3-axis accelerometer from ROHM/Kionix. The sensor features
+>> include variable ODRs, I2C and SPI control, FIFO/LIFO with watermark IRQ,
+>> tap/motion detection, wake-up & back-to-sleep events, four acceleration
+>> ranges (2, 4, 8 and 16g) and probably some other cool features.
+>>
+>> Add support for the basic accelerometer features such as getting the
+>> acceleration data via IIO. (raw reads, triggered buffer [data-ready] or
+>> using the WMI IRQ).
+>>
+>> Important things to be added include the double-tap, motion
+>> detection and wake-up as well as the runtime power management.
+> 
+> ...
+> 
+>> +	if (!i2c->irq) {
+>> +		dev_err(dev, "No IRQ configured\n");
+>> +		return -EINVAL;
+> 
+> At least
+> 
+> 	return dev_err_probe(...);
+> 
+> for know error codes (or when we know that there won't be EPROBE_DEFER), takes
+> less LoCs in the source file.
 
-Thanks,
-Gao Xiang
+I think we discussed this already (and disagreed). To me it looks plain 
+ugly to have hard-coded return value in dev_err_probe(). That's why I 
+prefer the
+
+ >> +		dev_err(dev, "No IRQ configured\n");
+ >> +		return -EINVAL;
+
+when -EINVAL is hard-coded. On the other hand, your comment below is 
+very valid...
+
+> 
+>> +	}
+> 
+> ...
+> 
+>> +	regmap = devm_regmap_init_i2c(i2c, &kx022a_regmap);
+>> +	if (IS_ERR(regmap)) {
+>> +		dev_err(dev, "Failed to initialize Regmap\n");
+>> +		return PTR_ERR(regmap);
+>  > Ditto here and anywhere else for the similar cases.
+
+...Yes. This is different from the case above, and I agree the 
+dev_err_probe() should be used here. Thanks for pointing it out. I'll 
+change this and the one in SPI driver as well.
+
+> 
+>> +	}
+> 
+> ...
+> 
+>> +	case IIO_CHAN_INFO_SAMP_FREQ:
+>> +		*vals = (const int *)kx022a_accel_samp_freq_table;
+>> +		*length = ARRAY_SIZE(kx022a_accel_samp_freq_table) * 2;
+>> +		*type = IIO_VAL_INT_PLUS_MICRO;
+>> +		return IIO_AVAIL_LIST;
+>> +	case IIO_CHAN_INFO_SCALE:
+>> +		*vals = (const int *)kx022a_scale_table;
+>> +		*length = ARRAY_SIZE(kx022a_scale_table) * 2;
+>> +		*type = IIO_VAL_INT_PLUS_MICRO;
+>> +		return IIO_AVAIL_LIST;
+> 
+> These  ' * 2' can be replaced with respective ARRAY_SIZE() of nested element
+
+To me this sounds good. I'll see how it would look like.
+
+> 
+> ...
+> 
+>> +static int kx022a_turn_on_off_unlocked(struct kx022a_data *data, bool on)
+>> +{
+>> +	int ret;
+>> +
+>> +	if (on)
+>> +		ret = regmap_set_bits(data->regmap, KX022A_REG_CNTL,
+>> +				      KX022A_MASK_PC1);
+>> +	else
+>> +		ret = regmap_clear_bits(data->regmap, KX022A_REG_CNTL,
+>> +					KX022A_MASK_PC1);
+>> +
+>> +	if (ret)
+>> +		dev_err(data->dev, "Turn %s fail %d\n", (on) ? "ON" : "OFF",
+>> +			ret);
+> 
+> str_on_off() ?
+
+Never heard of that before. Seems we have all kinds of gadgets in kernel 
+:) I deeply dislike how ternary looks like so I will gladly hide it in 
+str_on_off() - thanks!
+
+>> +	switch (mask) {
+>> +	case IIO_CHAN_INFO_SAMP_FREQ:
+>> +		n = ARRAY_SIZE(kx022a_accel_samp_freq_table);
+>> +
+>> +		while (n--)
+>> +			if (val == kx022a_accel_samp_freq_table[n][0] &&
+>> +			    kx022a_accel_samp_freq_table[n][1] == val2)
+> 
+> Why not to use the same kind of l and r arguments in == lines?
+> In current form it's a bit harder to see what the catch here.
+
+As to why I didn't - because for me the order does not matter regarding 
+how hard it is to catch the meaning here. However, there is no problem 
+changing this because the order does not matter for me :)
+> 
+> ...
+> 
+>> +static int kx022a_get_axis(struct kx022a_data *data,
+>> +			   struct iio_chan_spec const *chan,
+>> +			   int *val)
+>> +{
+>> +	int ret;
+>> +
+>> +	ret = regmap_bulk_read(data->regmap, chan->address, &data->buffer,
+>> +			       sizeof(__le16));
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	*val = le16_to_cpu(data->buffer[0]);
+> 
+> 'p'-variant of the above would look better
+> 
+> 	*val = le16_to_cpup(data->buffer);
+> 
+> since it will be the same as above address without any additional arithmetics.
+> 
+
+I guess there is no significant performance difference? To my eye the 
+le16_to_cpu(data->buffer[0]) is much more clear. I see right from the 
+call that we have an array here and use the first member. If there is no 
+obvious technical merit for using le16_to_cpup(data->buffer) over 
+le16_to_cpu(data->buffer[0]), then I do really prefer the latter for 
+clarity.
+
+>> +	return IIO_VAL_INT;
+>> +}
+> 
+> 
+> ...
+> 
+>> +	return regmap_write(data->regmap, KX022A_REG_BUF_CLEAR, 0x0);
+> 
+> Would simple '0' suffice? 
+
+Technically, yes. I however prefer having the register values in hex - 
+unless they directly map to some meaningful physical world entity that 
+is easier to understand when in decimal. (For example, a register which 
+content would directly represent millivolts or divider or any such 
+meaningful physical entity).
+
+> ...
+> 
+>> +	for (i = 0; i < count; i++) {
+>> +		int bit;
+>> +		u16 *samples = &buffer[i * 3];
+> 
+> I would put it as
+> 
+> 		u16 *samples = &buffer[i * 3];
+> 		int bit;
+
+Well, you know my opinion but Ok ;)
+
+Now I also noticed that the name of the block scoped variable 'samples' 
+collides with the function scoped variable of same name. I'll rename the 
+block scoped 'samples' just to avoid confusion.
+
+> 
+>> +		for_each_set_bit(bit, idev->active_scan_mask, AXIS_MAX)
+>> +			memcpy(&data->scan.channels[bit], &samples[bit],
+>> +			       sizeof(data->scan.channels[0]));
+> 
+> Why not use bit instead of 0 for the sake of consistency?
+
+Because, again, using 0 is clearer to me. It leaves zero room for 
+wondering :)
+
+> 
+> Also might be good to have a temporary for channels:
+> 
+> 		... *chs = data->scan.channels;
+
+I think we have discussed this too previously somewhere. I do dislike 
+hiding things in temporary variables. I like seeing that we are really 
+using the driver private data and not some stack variable and only use 
+temporary variables when they significantly reduce the line count.
+
+However, in this particular case I can scope the temporary variable in 
+this smallish block of code - which makes it pretty easy to spot we are 
+using the data->scan.channel underneath (as the chs is assigned just a 
+row above). And it helps us avoid line split so ... Ok.
+
+> 
+> 
+> 		for_each_set_bit(bit, idev->active_scan_mask, AXIS_MAX)
+> 			memcpy(&chs[bit], &samples[bit], sizeof(chs[bit]));
+> 
+>> +		iio_push_to_buffers_with_timestamp(idev, &data->scan, tstamp);
+>> +
+>> +		tstamp += sample_period;
+>> +	}
+> 
+> ...
+> 
+>> +	ret = regmap_clear_bits(data->regmap, data->ien_reg,
+>> +				KX022A_MASK_WMI);
+> 
+> I don't see why it's not on a single line. Even if you are a conservative
+> adept of 80.
+
+Good catch. Thanks.
+
+> ...
+> 
+>> +	int ret = IRQ_NONE;
+>> +
+>> +	mutex_lock(&data->mutex);
+>> +
+>> +	if (data->trigger_enabled) {
+>> +		iio_trigger_poll_chained(data->trig);
+>> +		ret = IRQ_HANDLED;
+>> +	}
+>> +
+>> +	if (data->state & KX022A_STATE_FIFO) {
+> 
+>> +		ret = __kx022a_fifo_flush(idev, KX022A_FIFO_LENGTH, true);
+>> +		if (ret > 0)
+>> +			ret = IRQ_HANDLED;
+> 
+> I don't like it. Perhaps
+> 
+> 	bool handled = false;
+> 	int ret;
+> 
+> 	...
+> 		ret = ...
+> 		if (ret > 0)
+> 			handled = true;
+> 	...
+> 
+> 	return IRQ_RETVAL(handled);
+
+I don't see the benefit of adding another variable 'handled'.
+If I understand correctly, it just introduces one extra 'if' in IRQ 
+thread handling while hiding the return value in IRQ_RETVAL() - macro.
+
+I do like seeing the IRQ_NONE being returned by default and IRQ_HANDLED 
+only when "handlers" are successfully executed. Adding extra variable 
+just obfuscates this (from my eyes) while adding also the additional 'if'.
+
+> 
+>> +	}
+>> +
+>> +	mutex_unlock(&data->mutex);
+>> +
+>> +	return ret;
+> 
+> ...
+> 
+>> +	if (!dev)
+>> +		return -ENODEV;
+> 
+> Do you really need this check?
+
+Good question. In principle I do like checking the parameters of 
+exported calls. OTOH, this export is now done using the driver namespace 
+so yes, I think we can drop the check.
+
+> 
+> ...
+> 
+>> +	fw = dev_fwnode(dev);
+>> +	if (!fw)
+>> +		return -ENODEV;
+> 
+> You may combine these two in one.
+> 
+> 	struct fwnode_handle *fwnode;
+> 
+> 
+> 	fwnode = dev ? dev_fwnode(dev) : NULL;
+> 	if (!fwnode)
+> 		return -ENODEV;
+
+I just drop the check for !dev. But even if I didn't, I wouldn't use 
+ternary here - to me it is _much_ harder to read compared to two 
+separate ifs while giving no obvious benefits.
+
+> And please, call it fwnode.
+
+Ok. I personally like fw more - probably because I'm used to that - but 
+I guess the 'fwnode' is used in number of other places. Thanks.
+
+> ...
+> 
+>> +	irq = fwnode_irq_get_byname(fw, "INT1");
+>> +	if (irq > 0) {
+>> +		data->inc_reg = KX022A_REG_INC1;
+>> +		data->ien_reg = KX022A_REG_INC4;
+>> +
+>> +		if (fwnode_irq_get_byname(dev_fwnode(dev), "INT2") > 0)
+> 
+> Why not use fwnode again
+
+I think I've beeen distracted while writing this part :) I guess I have 
+added the temporary variable 'fw' just for the purpose of being able to 
+call the dev_fwnode() just once. So, Thanks!
+
+> 
+> ...
+> 
+>> +	if (ret)
+>> +		return dev_err_probe(data->dev, ret,
+>> +				     "iio_triggered_buffer_setup_ext FAIL %d\n",
+>> +				     ret);
+> 
+> Drop dup ret at the end, dev_err_probe() has been adding it to each message.
+
+Thanks!
+
+> 
+> ...
+> 
+>> +	/*
+>> +	 * No need to check for NULL. request_threadedI_irq() defaults to
+>> +	 * dev_name() should the alloc fail.
+>> +	 */
+>> +	name = devm_kasprintf(data->dev, GFP_KERNEL, "%s-kx022a",
+>> +			      dev_name(data->dev));
+> 
+> It's not clear why do you need a suffix here.
+> 
+
+Because for example just "spi0,0" is much less informative compared to 
+"spi0.0-kx022a". As an user I like seeing the device generating the IRQ. 
+I don't wan't to dig out details like which bus/chipselect my device is 
+connected to - especially if I have only one accelerometer connected. 
+The dev_name() is used just to make this unique for cases where we could 
+have multiple similar devices connected to the system (as you suggested 
+in previous review).
+
+
+Once again, thanks for the review! I appreciate your help/suggestions.
+
+Yours
+	-- Matti
+
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
+
