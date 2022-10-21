@@ -2,103 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22D846073CE
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 11:18:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98B2A6073DA
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 11:19:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230518AbiJUJSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 05:18:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44112 "EHLO
+        id S231246AbiJUJTc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 05:19:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231192AbiJUJSp (ORCPT
+        with ESMTP id S231218AbiJUJS4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 05:18:45 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 992152565CC
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 02:18:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666343915; x=1697879915;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version:content-transfer-encoding;
-  bh=nVetjXHRfqyVKF1htzqfquwo9eva30/LnRsHGeRwraI=;
-  b=izw9NJTLiTeO0uYbnqORVEMSLxV3ATL6LIVQ+oScCGs/cGw6GoTS+R6Z
-   KpBFPXiAWwrbZohUKo7uW4opggiKFr/EtxfWIkT8dTjx42ycVfRZUcdCy
-   yk6/WCpbPnFMQMbM2emEv3gmXq8v08bUiYgj7R4pO9k9BOIV1cV0LPpAL
-   J7qnkgHp/RdQwGWg2uHnB1QCdt0WQVt2V1/AEin1yS8buHIpo5dnI/rhR
-   AhJzAvmj/bWsASwbC8m7keEztP/JWNEKYfohYVTOaJUNPAG0pXwfOdxGa
-   V6CfCTk4YC2gi3Ey9qs8nfOAsU+wJUY2FSjAF1gNyPifa2uQwhDvx5I0R
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="306948910"
-X-IronPort-AV: E=Sophos;i="5.95,200,1661842800"; 
-   d="scan'208";a="306948910"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2022 02:18:24 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="755707666"
-X-IronPort-AV: E=Sophos;i="5.95,200,1661842800"; 
-   d="scan'208";a="755707666"
-Received: from avilla3-mobl2.amr.corp.intel.com (HELO localhost) ([10.252.53.153])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2022 02:18:19 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Ville =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Cc:     Jim Cromie <jim.cromie@gmail.com>, daniel.vetter@ffwll.ch,
-        intel-gfx@lists.freedesktop.org, linux@rasmusvillemoes.dk,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        jbaron@akamai.com, seanpaul@chromium.org,
-        dri-devel@lists.freedesktop.org, joe@perches.com,
-        intel-gvt-dev@lists.freedesktop.org
-Subject: Re: [Intel-gfx] [PATCH v7 0/9] dyndbg: drm.debug adaptation
-In-Reply-To: <Y1Fyuh12g/gt3Izn@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20220912052852.1123868-1-jim.cromie@gmail.com>
- <Yy7/6oTBW2lqVSK1@kroah.com> <Y1Fyuh12g/gt3Izn@intel.com>
-Date:   Fri, 21 Oct 2022 12:18:17 +0300
-Message-ID: <87a65pfsbq.fsf@intel.com>
+        Fri, 21 Oct 2022 05:18:56 -0400
+Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A87E7256419;
+        Fri, 21 Oct 2022 02:18:41 -0700 (PDT)
+Received: by mail-ua1-x92b.google.com with SMTP id t26so2059550uaj.9;
+        Fri, 21 Oct 2022 02:18:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=RspFCGdeHKFVtiL7mY5i6+AzFfiQ+TnzlRAcVHGM8Uw=;
+        b=nhdOt3f6nhtRgIHy+opGJjTPLVS/SpUWCKN4ssz0jGxz5+NrvF1ak+DEF4wkDUfVqL
+         r57aFsTkhy6kyu7rYKcTlr2dC/6PFLackRJwcXnmSB33KAYC5OmyRiDGN2BhDL+hl5p+
+         lykzanUlh15HGatbmLg4sAkyt5vL6VV1u8uMNX+VeNF01q7d1Xue8M1EVpgd1OLWzspD
+         IuRGTkQBhXRBW3ZNG0koUZVmqw55VPAdW6nKnOhOgnoRU8jzpjVp+KPRVMjnwTFb4/J+
+         o+jSKCVIMpZXrGptMyfIgJcMTWqHWqlqXW6yZdnSLDlT+LrGC+gZKdCnWMPPmTarbp8W
+         TZaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RspFCGdeHKFVtiL7mY5i6+AzFfiQ+TnzlRAcVHGM8Uw=;
+        b=z43bMMkVQvkfoNRRCR8Oe82DSJ8Weu7K4R2WKAQKARQDMyBBzZRb8+RlkaTCSUg0MK
+         uYd+EmxwpzbdN6FLq6mHyO7VmnfCPLYzA+rdi3P3liBRDmxuNwIdCAjo/BQwLshZX9Gf
+         YKyBR0jVCn20KmgmvzE27LWxIADdwbzyYjBgGCSJHfb/8WKS6OGcfRJ5tCuEDOQ59+tM
+         B3sOOWbOL7OpDnkhskkIIwJI7YgvMbjIVRk/uLhgpH4+mFLd04ZbGZYpChxZ018H11ni
+         kDTROEoLwpb0nEYMEECaNaPLOgpNiyiWQxyj4CExVPCkhEEWko+BLqUFR1Qs9CwjASqn
+         fCfA==
+X-Gm-Message-State: ACrzQf3cuAZtFwEZqbxDFvuNbejWADPLTtynL7WghjDGChtMjs2EBp4P
+        neVNUJ215ebbuzixFwC5VZUoJE31UFBeErm7yu6q+cAh
+X-Google-Smtp-Source: AMsMyM42DNIMYIU/A71Cdzam48ZdKegxOuiwzMH5eaGQXMQ17jcIOfFRs7Ur4irkh7zID7MmWCCp0O0e/ZaPNwwmYTU=
+X-Received: by 2002:ab0:298d:0:b0:402:3608:3ec5 with SMTP id
+ u13-20020ab0298d000000b0040236083ec5mr1400961uap.60.1666343920021; Fri, 21
+ Oct 2022 02:18:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20221018041233.376977-1-stephen.s.brennan@oracle.com>
+ <20221021010310.29521-1-stephen.s.brennan@oracle.com> <20221021010310.29521-3-stephen.s.brennan@oracle.com>
+ <CAOQ4uxj+ctptwuJ__gn=2URvzkXUc2NZkJaY=woGFEQQZdZn9Q@mail.gmail.com>
+In-Reply-To: <CAOQ4uxj+ctptwuJ__gn=2URvzkXUc2NZkJaY=woGFEQQZdZn9Q@mail.gmail.com>
+From:   Amir Goldstein <amir73il@gmail.com>
+Date:   Fri, 21 Oct 2022 12:18:28 +0300
+Message-ID: <CAOQ4uxh7OvmH6o1fUmMoQ_D347jVBx53TLe4R=BjtXTuvCzKCA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] fsnotify: Protect i_fsnotify_mask and child flags
+ with inode rwsem
+To:     Stephen Brennan <stephen.s.brennan@oracle.com>
+Cc:     Jan Kara <jack@suse.cz>, Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 20 Oct 2022, Ville Syrj=C3=A4l=C3=A4 <ville.syrjala@linux.intel.com=
-> wrote:
-> On Sat, Sep 24, 2022 at 03:02:34PM +0200, Greg KH wrote:
->> On Sun, Sep 11, 2022 at 11:28:43PM -0600, Jim Cromie wrote:
->> > hi Greg, Dan, Jason, DRM-folk,
->> >=20
->> > heres follow-up to V6:
->> >   rebased on driver-core/driver-core-next for -v6 applied bits (thanks)
->> >   rework drm_debug_enabled{_raw,_instrumented,} per Dan.
->> >=20
->> > It excludes:
->> >   nouveau parts (immature)
->> >   tracefs parts (I missed --to=3DSteve on v6)
->> >   split _ddebug_site and de-duplicate experiment (way unready)
->> >=20
->> > IOW, its the remaining commits of V6 on which Dan gave his Reviewed-by.
->> >=20
->> > If these are good to apply, I'll rebase and repost the rest separately.
->>=20
->> All now queued up, thanks.
+On Fri, Oct 21, 2022 at 11:22 AM Amir Goldstein <amir73il@gmail.com> wrote:
+...
+> > +/*
+> > + * Objects may need some additional actions to be taken when the last reference
+> > + * is dropped. Define flags to indicate which actions are necessary.
+> > + */
+> > +#define FSNOTIFY_OBJ_FLAG_NEED_IPUT            0x01
+> > +#define FSNOTIFY_OBJ_FLAG_UPDATE_CHILDREN      0x02
 >
-> This stuff broke i915 debugs. When I first load i915 no debug prints are
-> produced. If I then go fiddle around in /sys/module/drm/parameters/debug
-> the debug prints start to suddenly work.
+> with changed_flags argument, you do not need these, you can use
+> the existing CONN_FLAGS.
+>
+> It is a bit ugly that the direction of the change is not expressed
+> in changed_flags, but for the current code, it is not needed, because
+> update_children does care about the direction of the change and
+> the direction of change to HAS_IREF is expressed by the inode
+> object return value.
+>
 
-Wait what? I always assumed the default behaviour would stay the same,
-which is usually how we roll. It's a regression in my books. We've got a
-CI farm that's not very helpful in terms of dmesg logging right now
-because of this.
+Oh that is a lie...
 
-BR,
-Jani.
+return value can be non NULL because of an added mark
+that wants iref and also wants to watch children, but the
+only practical consequence of this is that you can only
+do the WARN_ON for the else case of update_children
+in fsnotify_recalc_mask().
 
+I still think it is a win for code simplicity as I detailed
+in my comments.
 
---=20
-Jani Nikula, Intel Open Source Graphics Center
+> Maybe try it out in v3 to see how it works.
+>
+> Unless Jan has an idea that will be easier to read and maintain...
+>
+
+Maybe fsnotify_update_inode_conn_flags() should return "update_flags"
+and not "changed_flags", because actually the WATCHING_CHILDREN
+flag is not changed by the helper itself.
+
+Then, HAS_IREF is not returned when helper did get_iref() and changed
+HAS_IREF itself and then the comment that says:
+     /* Unpin inode after detach of last mark that wanted iref */
+will be even clearer:
+
+        if (want_iref) {
+                /* Pin inode if any mark wants inode refcount held */
+                fsnotify_get_inode_ref(fsnotify_conn_inode(conn));
+                conn->flags |= FSNOTIFY_CONN_FLAG_HAS_IREF;
+        } else {
+                /* Unpin inode after detach of last mark that wanted iref */
+                ret = inode;
+                update_flags |= FSNOTIFY_CONN_FLAG_HAS_IREF;
+        }
+
+Thanks,
+Amir.
