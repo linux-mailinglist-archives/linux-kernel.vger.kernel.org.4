@@ -2,121 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36889607728
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 14:43:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53D59607729
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 14:43:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229645AbiJUMnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 08:43:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57778 "EHLO
+        id S229876AbiJUMnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 08:43:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbiJUMnH (ORCPT
+        with ESMTP id S229568AbiJUMnI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 08:43:07 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 918F1357F6
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 05:42:56 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id 126so3222916ybw.3
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 05:42:56 -0700 (PDT)
+        Fri, 21 Oct 2022 08:43:08 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CDA5386B9
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 05:43:01 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id v4-20020a17090a088400b00212cb0ed97eso2554367pjc.5
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 05:43:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=H18fgacNDQLgrpVz2xT5w7SDdDDbUEcHj1IYxxrtq/s=;
-        b=NZp3CanJ6NUzRaq6R3kgGsJHZZMPIL+BXN3fL8n5ldwI7gm0BhmSbJOWnEwUqwAEsp
-         8DNff/mUS+/dhLSiRe9mm/rCitSHu3Zmi8GOG02WaD5w2fg2FN7Y4pNkhZ3EBmug/iSB
-         q0+j2D7mhNSEyuN9RYAz/ZuMqUfxXiswXCc2vHtKYQ7rxHGj4OMG7beikG5npRD+jDm0
-         ZzdDnT25sBi7B3buZkA9fDkx0aMyo31er2BQmfxMTLe7XdkGIJqyfnwSL97fFeZQqcRj
-         Z/v42mbCV4Eo6hEBiMkK58iyrQHPuQgFVP9otIGDVYwcpEMDqrUFPyp40NYSPCeAy9K+
-         16nA==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=h0RDr7X8enYPRgtIijt6W6MecVFMwU1GrniMgEKKoSs=;
+        b=jUcacOPaVFVEXRPxUx3iksnmpIM3r3xX24BY4Q4Ckg9tRwBdtjrm+Fqaa/QONVDk7f
+         pHV8fLSVEITs0Xl05kSsHLjuXAzhUsvo4VbLGjzEZGHgxPSRlo4L+xf0RWz777X/f4vS
+         JBG454DSCTP3b3UpMSF1NnqQxHOyQa5lBPmsX3eMAxcek8CJu5e89YhhMhnQPu4xlhxu
+         ajAVbT93VmeGJ2zaEA8EJ4aYAztYe69BTnVEO6Y7xVI+1v1j1T2OnOCjd6NlVSwhk/lM
+         5QPqxNugKgveF9Nx9PrK+13tu2QBMr4y3ido5IbTD6SACRHSRhBi5xbsIiouUrC5gsoU
+         mUWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=H18fgacNDQLgrpVz2xT5w7SDdDDbUEcHj1IYxxrtq/s=;
-        b=s1ANoDUrW7PTxXZvnj69eDFiJb+vKxrm45Qvs43S4AB1k95tQ9X+HQq+JDNI+4d6VZ
-         RcLHGG0EnBoB2kp/mK8KBzz3Z+0WpCxXtCWEZSAM9wX6gSfQI2XdwHz4qZFVv+bSEvmr
-         oh37gyhV6SPGKA2Gh6Si7K9nNMqsBq0/dbXdX62e6u8hX+dMuUtMCBF1dRouWMtMJ2T9
-         SNAqiWIaMXPJmY+PUjymNHBVPhrd2eCTWClwnlw0lUOqAPb4auj7t3vfqZrZRPNqT53I
-         NFrB+sPRPCe/L0qUMrrGW0lxyMHCGujm4sPVkd1Ltn4psV4IyrWn0rxF7B8bdG/cgPee
-         Nvpw==
-X-Gm-Message-State: ACrzQf0Nrb0CA9uohFmAGH+5orVCpUt4jngQNNUzWhfuHVJjJ6pulwKI
-        w7X5zu3wzqXf17fTTIz+gvO3mapReEBqJzKUYkOOuQ==
-X-Google-Smtp-Source: AMsMyM4j0zvIhhQgbUc087N6XCBPmc7zOkEBbj/aCq0dZejSsCLUzts9QUOrV/x18trUAJWUjXt4hHlLjIwQTGrNTNc=
-X-Received: by 2002:a25:4a06:0:b0:695:c6a0:c8e1 with SMTP id
- x6-20020a254a06000000b00695c6a0c8e1mr16534878yba.181.1666356175684; Fri, 21
- Oct 2022 05:42:55 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=h0RDr7X8enYPRgtIijt6W6MecVFMwU1GrniMgEKKoSs=;
+        b=GxSx7QbNzdUew3jWvB1En9VXM+/pS+nqf+lVnRLPNWeH2ncUGtRAaJMUHqI1hmE+qL
+         CPsAFNNXLTyrTk/JqyvmmmU9rYyRoxE3SmpzqLQnzeoAkb4c4tD+5B/PBIBnKd0aP2br
+         Iz3IrCcgObdjinOa7D2M4qLCPW3sB4l92gGevepp4GcJzDjh+mts169JOXduX4vT7j5s
+         bJoR8XpzXm+jNgVFVOpyKXdC0/kayd731bQUCZYpgDEZ382AtpZq7WHYJ11MJbJ2+yd8
+         Ko/C7gJMyyGDpgdOwEJsNi//qtIeko8bUMk8XLvd+QRB41BK1QUQ/Hjx5J8xqeHR8mYE
+         3s7g==
+X-Gm-Message-State: ACrzQf2lko1IgecfxEPxvBs/dqc+LEDprTIB/63a0MAOIK9BOs+taaE4
+        bam5E3zwEmrE2IWBN1deThQ=
+X-Google-Smtp-Source: AMsMyM6fl7F8ZGP+lX5Ysz5l0bfjc0V1s9qkuHwWaw2QKSWmNosQe0hnoM4ogvqGeuV0kQxnpJM1cg==
+X-Received: by 2002:a17:902:8e84:b0:178:71f2:113c with SMTP id bg4-20020a1709028e8400b0017871f2113cmr18900771plb.79.1666356180664;
+        Fri, 21 Oct 2022 05:43:00 -0700 (PDT)
+Received: from debian.me (subs03-180-214-233-72.three.co.id. [180.214.233.72])
+        by smtp.gmail.com with ESMTPSA id w62-20020a623041000000b00565c8634e55sm15144046pfw.135.2022.10.21.05.42.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Oct 2022 05:43:00 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 1B78D1004BB; Fri, 21 Oct 2022 19:42:55 +0700 (WIB)
+Date:   Fri, 21 Oct 2022 19:42:55 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Phillip Lougher <phillip@squashfs.org.uk>
+Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        hsinyi@chromium.org, regressions@leemhuis.info,
+        regressions@lists.linux.dev, dimitri.ledkov@canonical.com,
+        michael.vogt@canonical.com, phillip.lougher@gmail.com,
+        ogra@ubuntu.com, olivier.tilloy@canonical.com
+Subject: Re: [0/3] squashfs: fix some regressions introduced in the readahead
+ code
+Message-ID: <Y1KTz7kTQqZNjwMe@debian.me>
+References: <20221020223616.7571-1-phillip@squashfs.org.uk>
 MIME-Version: 1.0
-References: <CALPaoCj-zav4x6H3ffXo_O+RFan8Qb-uLy-DdtkaQTfuxY4a0w@mail.gmail.com>
- <b2e020b1-f6b2-e236-a042-4eb2fd27d8b0@intel.com> <IA1PR11MB6097236CFF891041DBA42ECB9B5F9@IA1PR11MB6097.namprd11.prod.outlook.com>
- <Y0BhzKkksSjSeE3W@agluck-desk3.sc.intel.com> <81a7b4f6-fbb5-380e-532d-f2c1fc49b515@intel.com>
- <CALPaoCjdeRjyX5L6BBX688ZM21eMwetuL9QLF1+GEDUskGcU2w@mail.gmail.com>
- <76bb4dc9-ab7c-4cb6-d1bf-26436c88c6e2@arm.com> <CALPaoCiKUQC+LxDwKQ0gE5AQniJi_nbzrXi_HA9ZBRtiXdw_dg@mail.gmail.com>
- <835d769b-3662-7be5-dcdd-804cb1f3999a@arm.com> <CALPaoCgiwtvxZMJ6f-BOTNMPXDbMB8QM42HyCAvYRi4grPiphQ@mail.gmail.com>
-In-Reply-To: <CALPaoCgiwtvxZMJ6f-BOTNMPXDbMB8QM42HyCAvYRi4grPiphQ@mail.gmail.com>
-From:   Peter Newman <peternewman@google.com>
-Date:   Fri, 21 Oct 2022 14:42:44 +0200
-Message-ID: <CALPaoCg2-9ARbK+MEgdvdcjJtSy_2H6YeRkLrT97zgy8Aro3Vg@mail.gmail.com>
-Subject: Re: [RFD] resctrl: reassigning a running container's CTRL_MON group
-To:     James Morse <james.morse@arm.com>
-Cc:     Reinette Chatre <reinette.chatre@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Babu Moger <Babu.Moger@amd.com>,
-        Gaurang Upasani <gupasani@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="xrLs7a11N8af3aPI"
+Content-Disposition: inline
+In-Reply-To: <20221020223616.7571-1-phillip@squashfs.org.uk>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 12:39 PM Peter Newman <peternewman@google.com> wrote:
->
-> On Wed, Oct 19, 2022 at 3:58 PM James Morse <james.morse@arm.com> wrote:
-> > The devil is in the detail, I'm not sure how it serialises with a fork()ing process, I'd
-> > hope to do better than relying on the kernel walking the list of processes a lot quicker
-> > than user-space can.
->
-> I wasn't planning to do it any more optimally than the rmdir
-> implementation today when looking for all tasks impacted by a
-> CLOSID/RMID deletion.
 
-This is probably a separate topic, but I noticed this when looking at how rmdir
-moves tasks to a new closid/rmid...
+--xrLs7a11N8af3aPI
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-In rdt_move_group_tasks(), how do we know that a task switching in on another
-CPU will observe the updated closid and rmid values soon enough?
+On Thu, Oct 20, 2022 at 11:36:13PM +0100, Phillip Lougher wrote:
+> Hi,
+>=20
+> This patch-set fixes 3 regressions introduced by the recent readahead cod=
+e.
+> The first regression is causing "snaps" to randomly fail after a couple of
+> hours or days, which how the regression came to light.
+>=20
+> ----------------------------------------------------------------
+> Phillip Lougher (3):
+>       squashfs: fix read regression introduced in readahead code
+>       squashfs: fix extending readahead beyond end of file
+>       squashfs: fix buffer release race condition in readahead code
+>=20
+>  fs/squashfs/file.c       | 23 ++++++++++++++---------
+>  fs/squashfs/page_actor.c |  3 +++
+>  fs/squashfs/page_actor.h |  6 +++++-
+>  3 files changed, 22 insertions(+), 10 deletions(-)
 
-Even on x86, without an smp_mb(), the stores to t->closid and t->rmid could be
-reordered with the task_curr(t) and task_cpu(t) reads which follow. The original
-description of this scenario seemed to assume that accesses below would happen
-in program order:
+The regression goes away with this series, thanks.
 
-    WRITE_ONCE(t->closid, to->closid);
-    WRITE_ONCE(t->rmid, to->mon.rmid);
+For the series,
 
-    /*
-     * If the task is on a CPU, set the CPU in the mask.
-     * The detection is inaccurate as tasks might move or
-     * schedule before the smp function call takes place.
-     * In such a case the function call is pointless, but
-     * there is no other side effect.
-     */
-    if (IS_ENABLED(CONFIG_SMP) && mask && task_curr(t))
-         cpumask_set_cpu(task_cpu(t), mask);
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
-If the task concurrently switches in on another CPU, the code above may not
-observed that it's running, and the CPU running the task may not have observed
-the updated rmid and closid yet, so it could continue with the old rmid/closid
-and not get interrupted.
+--=20
+An old man doll... just what I always wanted! - Clara
 
--Peter
+--xrLs7a11N8af3aPI
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY1KTygAKCRD2uYlJVVFO
+o4ugAP44cDAotKNStnaL01EGao1iGldQGIDkz/o+sDpup29RmwEA6RfZ8WgBU/c6
+PCBgzzpacjDD+a1ePJS7FHZXJTQKBQ0=
+=QLTt
+-----END PGP SIGNATURE-----
+
+--xrLs7a11N8af3aPI--
