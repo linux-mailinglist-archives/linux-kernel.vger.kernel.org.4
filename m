@@ -2,65 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 034DC607D92
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 19:32:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DF3A607D94
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 19:33:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230394AbiJURcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 13:32:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33154 "EHLO
+        id S229865AbiJURdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 13:33:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229864AbiJURcM (ORCPT
+        with ESMTP id S229484AbiJURdh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 13:32:12 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCECE44CF9
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 10:32:08 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id 8so2482981qka.1
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 10:32:08 -0700 (PDT)
+        Fri, 21 Oct 2022 13:33:37 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 919D0261AE1
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 10:33:36 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id bx24-20020a17090af49800b0020d9ac4b475so1476912pjb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 10:33:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=8YsPJ6YAEeb+wvwrd2DUY6/tG224J3XS2r7bRlx+/Ns=;
-        b=FRyyiO85auQ2mjd1N9YVBg+1RctotWb+KPqF019ikZ6jcJ9+Y0cGsMxgDfZU9jjB2B
-         XybCONEp8KgybtPD1wolhfjV4hslgrjjlyX7sdZV1VvHuVtwbDlqQaoW0fjIwobR90au
-         Giyzl2eloPif2IbcLVUy6UkY7F7xUUWEGS9mTXDbP0/SopZFA+9stxbB5XWwRxU6g7QV
-         YDf4k+YvEhNOq+IzETXbX02l8Jy4R060beofSk1Htm2eCDwaEROprviJAaLhF+KSp/hd
-         JZFqwcVjSNljxm10p+WXGK+77Q9XuRIic6b9xGPq/JALUPC/gX/JU0S9Y7Bk9wm9R0n0
-         LdmA==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Rm31qAFaq+M5EgnK0auSpdF+G0fRaJUMCym7D7tYLvw=;
+        b=YrHCpg3QEb9QJEUkOK3NXTmjU0qVBg1fZfBzLdxZoVUVe0ZbDSdSlLJs50rvbe0zL6
+         2i2fHKgaCdM4MDMWA5FB4J4yF4zEfp+172NtQvekyq98xeDI6wNceG2aYhaUu/hujtnI
+         YofEh9QFhpuWWjI9yEK5Ctgai33+KfV9F5nHvKjHs6OOgZRrC9TeP4Id6FfXZOYFx1ks
+         zVArlk9s0+tGOBcHEMb61aVIfLhlw1x8KzO95Zn1gAq/c+BgeUb/hVGf43b04o7hLrr5
+         3ktFYcBGfUHLyUkDqJXHQIZ/ynGYfinJFlUSXEIMvDpv47Hq+Ur+ogXGIiUf+MdJxl7L
+         ijXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8YsPJ6YAEeb+wvwrd2DUY6/tG224J3XS2r7bRlx+/Ns=;
-        b=scvpt1K+a6dvqyivAtIDb1c5J9hnMNpjWCwkwOQDsa0eHzGzw212o1jBstRu9LcuAc
-         Cib8a5SopqIYLQBieOf3dK80oCS7Gikl+u89q5dta3qR4welBh60DE/S8c/i6ekRdsSP
-         6rBkAD71Uzzb6uhYjb+ILwRnGMTieYmkwclj2oiOsv2vhr2LFVbraloZotmX0+umKEe9
-         8UjmTWS7R7ZGMrhmeDOHqD55zhWbdhhG6lqc47r6V72H6hAqChNkv+tl0eKeuX9Oq8lg
-         8NiIj46M7JT7hpdhpl/e3Ej/lCxFh8VQrttcJ4TwKcST+PXhrvVMZfgrIowCyGevRXIp
-         YkRw==
-X-Gm-Message-State: ACrzQf3oTNeVOQKdeX8y1eUQJcOocFjW6taxavHwaLGUH1UN6Ojc6jTu
-        gSNjZulHEL2UbbHWi3KushEDm7l7Lu5oIiwgLRPza6VOWIo6+XEGlQA=
-X-Google-Smtp-Source: AMsMyM4xV/hfGYrXACJL6TzKjc3tD8Fk/yxCpSYr9hqTCdiR1yHLvtnvMAXP+xm7ftQhuQK1vg+QJFgE04ISGOiamKs=
-X-Received: by 2002:a05:620a:2699:b0:6cf:3a7f:5fe6 with SMTP id
- c25-20020a05620a269900b006cf3a7f5fe6mr15093597qkp.103.1666373526980; Fri, 21
- Oct 2022 10:32:06 -0700 (PDT)
-MIME-Version: 1.0
-References: <Y1JlnJ/UpBgm9XEC@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
- <1db48b50-6dac-5f36-315d-72208156f196@linux.microsoft.com>
-In-Reply-To: <1db48b50-6dac-5f36-315d-72208156f196@linux.microsoft.com>
-From:   Tanju Brunostar <tanjubrunostar0@gmail.com>
-Date:   Fri, 21 Oct 2022 18:31:54 +0100
-Message-ID: <CAHJEyKVxBNm+3hVy605+HJ6M6qa2nSONZ-aHc62B7eeRwowQiw@mail.gmail.com>
-Subject: Re: [PATCH v4] staging: vt6655: Fix Lines should not end with a '('
-To:     Praveen Kumar <kumarpraveen@linux.microsoft.com>
-Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Rm31qAFaq+M5EgnK0auSpdF+G0fRaJUMCym7D7tYLvw=;
+        b=c+F/Xb/2qFNXSdyy3x626P2BmwLOXueztHFTzzpeLr8gcucGl8T75WsH0vSNnXpXdu
+         RtgAf8VxY0Sor4j5BHiWvaBjFUp1Jl0DR4g87CWHYT60RbkWYxPlwFMc2RnKAKhrMXNR
+         wjXjPtZLo/wWcD2e97KcmkljjWWMIXFcd9fVEhYHnblG13xErEe5dBAEAB+YiK4pvtPi
+         COTDTS9l1EWW4XVDHgYarRgvJLLu5+VzQVWmwA74fVWlOATO9jntrhHiHAe115FgWHxa
+         pIlCpVuwJZXo/pvWJRWkRrlMwZHjCZ+mYu38Qs3ogVuFEjn5xh6lM4YKsevz0ZrC+iog
+         cYfg==
+X-Gm-Message-State: ACrzQf0W4Nu9VUi/YC7U/dMbldWwcQzYDTju9pOAfl8W7v2T/A4Fwroo
+        LllzQvNM7uAii7iIEEEfrzZj8SO3Uqo=
+X-Google-Smtp-Source: AMsMyM4fVZqqp2S5uhWZHjdVvRNZU+skQdKq/j16fQ/MICKD5HU6uWA/WkxAVI1JxfGo+yZxrVtCIqMNGng=
+X-Received: from pgonda1.kir.corp.google.com ([2620:15c:29:203:3e70:6547:73ac:76aa])
+ (user=pgonda job=sendgmr) by 2002:a17:902:cecf:b0:185:475a:4073 with SMTP id
+ d15-20020a170902cecf00b00185475a4073mr20663741plg.60.1666373616083; Fri, 21
+ Oct 2022 10:33:36 -0700 (PDT)
+Date:   Fri, 21 Oct 2022 10:33:28 -0700
+Message-Id: <20221021173328.2489411-1-pgonda@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.0.135.g90850a2211-goog
+Subject: [PATCH V2] virt: Prevent IV reuse in SNP guest driver
+From:   Peter Gonda <pgonda@google.com>
+To:     thomas.lendacky@amd.com
+Cc:     Peter Gonda <pgonda@google.com>,
+        Dionna Glaze <dionnaglaze@google.com>,
+        Borislav Petkov <bp@suse.de>,
+        Michael Roth <michael.roth@amd.com>,
+        Haowen Bai <baihaowen@meizu.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Marc Orr <marcorr@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Ashish Kalra <Ashish.Kalra@amd.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,130 +74,234 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 11:49 AM Praveen Kumar
-<kumarpraveen@linux.microsoft.com> wrote:
->
-> On 21-10-2022 14:55, Tanjuate Brunostar wrote:
-> > Code style warnings reported by checkpatch.
-> > Improve the layout of a function header:
-> > Put the first parameter immediately after the '(' and align the other
-> > parameters underneath it.
-> >
-> > Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
-> >
-> > ---
-> > v2: put static and void on the same line and adjusted the indentation as
-> > suggested by Greg KH
-> > ---
-> > v3: Reformat the code by inserting tabs and white space as recommended
-> > by Nam Cao and Julia Lawall
-> > ---
-> > v4: final version of this patch
-> >
-> >  drivers/staging/vt6655/rxtx.c | 78 +++++++++++++++--------------------
-> >  1 file changed, 33 insertions(+), 45 deletions(-)
-> >
-> > diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
-> > index 5bdb5176772c..1e5036121665 100644
-> > --- a/drivers/staging/vt6655/rxtx.c
-> > +++ b/drivers/staging/vt6655/rxtx.c
-> > @@ -85,35 +85,27 @@ static const unsigned short wFB_Opt1[2][5] = {
-> >  #define DATADUR_A_F1    13
-> >
-> >  /*---------------------  Static Functions  --------------------------*/
-> > -static
-> > -void
-> > -s_vFillRTSHead(
-> > -     struct vnt_private *pDevice,
-> > -     unsigned char byPktType,
-> > -     void *pvRTS,
-> > -     unsigned int    cbFrameLength,
-> > -     bool bNeedAck,
-> > -     bool bDisCRC,
-> > -     struct ieee80211_hdr *hdr,
-> > -     unsigned short wCurrentRate,
-> > -     unsigned char byFBOption
-> > -);
-> > -
-> > -static
-> > -void
-> > -s_vGenerateTxParameter(
-> > -     struct vnt_private *pDevice,
-> > -     unsigned char byPktType,
-> > -     struct vnt_tx_fifo_head *,
-> > -     void *pvRrvTime,
-> > -     void *pvRTS,
-> > -     void *pvCTS,
-> > -     unsigned int    cbFrameSize,
-> > -     bool bNeedACK,
-> > -     unsigned int    uDMAIdx,
-> > -     void *psEthHeader,
-> > -     unsigned short wCurrentRate
-> > -);
-> > +static void s_vFillRTSHead(struct vnt_private *pDevice,
-> > +                        unsigned char byPktType,
-> > +                        void *pvRTS,
-> > +                        unsigned int cbFrameLength,
-> > +                        bool bNeedAck,
-> > +                        bool bDisCRC,
-> > +                        struct ieee80211_hdr *hdr,
-> > +                        unsigned short wCurrentRate,
-> > +                        unsigned char byFBOption);
-> > +
-> > +static void s_vGenerateTxParameter(struct vnt_private *pDevice,
-> > +                                unsigned char byPktType,
-> > +                                struct vnt_tx_fifo_head *,
-> > +                                void *pvRrvTime,
-> > +                                void *pvRTS,
-> > +                                void *pvCTS,
-> > +                                unsigned int cbFrameSize,
-> > +                                bool bNeedACK,
-> > +                                unsigned int uDMAIdx,
-> > +                                void *psEthHeader,
-> > +                                unsigned short wCurrentRate);
-> >
-> >  static unsigned int
-> >  s_cbFillTxBufHead(struct vnt_private *pDevice, unsigned char byPktType,
-> > @@ -121,22 +113,18 @@ s_cbFillTxBufHead(struct vnt_private *pDevice, unsigned char byPktType,
-> >                 unsigned int uDMAIdx, struct vnt_tx_desc *pHeadTD,
-> >                 unsigned int uNodeIndex);
-> >
-> > -static
-> > -__le16
-> > -s_uFillDataHead(
-> > -     struct vnt_private *pDevice,
-> > -     unsigned char byPktType,
-> > -     void *pTxDataHead,
-> > -     unsigned int cbFrameLength,
-> > -     unsigned int uDMAIdx,
-> > -     bool bNeedAck,
-> > -     unsigned int uFragIdx,
-> > -     unsigned int cbLastFragmentSize,
-> > -     unsigned int uMACfragNum,
-> > -     unsigned char byFBOption,
-> > -     unsigned short wCurrentRate,
-> > -     bool is_pspoll
-> > -);
-> > +static __le16 s_uFillDataHead(struct vnt_private *pDevice,
-> > +                           unsigned char byPktType,
-> > +                           void *pTxDataHead,
-> > +                           unsigned int cbFrameLength,
-> > +                           unsigned int uDMAIdx,
-> > +                           bool bNeedAck,
-> > +                           unsigned int uFragIdx,
-> > +                           unsigned int cbLastFragmentSize,
-> > +                           unsigned int uMACfragNum,
-> > +                           unsigned char byFBOption,
-> > +                           unsigned short wCurrentRate,
-> > +                           bool is_pspoll);
-> >
-> >  /*---------------------  Export Variables  --------------------------*/
-> >
->
-> Can we also work upon the naming convention from pDevice -> p_device and other places if that make sense here.
->
-> Regards,
->
-> ~Praveen.
->
-I intend to do this as a separate patch
+The ASP and an SNP guest use a series of AES-GCM keys called VMPCKs to
+communicate securely with each other. The IV to this scheme is a
+sequence number that both the ASP and the guest track. Currently this
+sequence number in a guest request must exactly match the sequence
+number tracked by the ASP. This means that if the guest sees an error
+from the host during a request it can only retry that exact request or
+disable the VMPCK to prevent an IV reuse. AES-GCM cannot tolerate IV
+reuse see:
+https://csrc.nist.gov/csrc/media/projects/block-cipher-techniques/documents/bcm/comments/800-38-series-drafts/gcm/joux_comments.pdf
+
+To handle userspace querying the cert_data length. Instead of requesting
+the cert length from userspace use the size of the drivers allocated
+shared buffer. Then copy that buffer to userspace, or give userspace an
+error depending on the size of the buffer given by userspace.
+
+Fixes: fce96cf044308 ("virt: Add SEV-SNP guest driver")
+Signed-off-by: Peter Gonda <pgonda@google.com>
+Reported-by: Peter Gonda <pgonda@google.com>
+Reviewed-by: Dionna Glaze <dionnaglaze@google.com>
+Cc: Borislav Petkov <bp@suse.de>
+Cc: Tom Lendacky <thomas.lendacky@amd.com>
+Cc: Michael Roth <michael.roth@amd.com>
+Cc: Haowen Bai <baihaowen@meizu.com>
+Cc: Yang Yingliang <yangyingliang@huawei.com>
+Cc: Marc Orr <marcorr@google.com>
+Cc: David Rientjes <rientjes@google.com>
+Cc: Ashish Kalra <Ashish.Kalra@amd.com>
+Cc: linux-kernel@vger.kernel.org
+Cc: kvm@vger.kernel.org
+---
+ drivers/virt/coco/sev-guest/sev-guest.c | 93 ++++++++++++++++---------
+ 1 file changed, 62 insertions(+), 31 deletions(-)
+
+diff --git a/drivers/virt/coco/sev-guest/sev-guest.c b/drivers/virt/coco/sev-guest/sev-guest.c
+index f422f9c58ba7..8c54ea84bc57 100644
+--- a/drivers/virt/coco/sev-guest/sev-guest.c
++++ b/drivers/virt/coco/sev-guest/sev-guest.c
+@@ -41,7 +41,7 @@ struct snp_guest_dev {
+ 	struct device *dev;
+ 	struct miscdevice misc;
+ 
+-	void *certs_data;
++	u8 (*certs_data)[SEV_FW_BLOB_MAX_SIZE];
+ 	struct snp_guest_crypto *crypto;
+ 	struct snp_guest_msg *request, *response;
+ 	struct snp_secrets_page_layout *layout;
+@@ -67,8 +67,27 @@ static bool is_vmpck_empty(struct snp_guest_dev *snp_dev)
+ 	return true;
+ }
+ 
++/*
++ * If we receive an error from the host or ASP we have two options. We can
++ * either retry the exact same encrypted request or we can discontinue using the
++ * VMPCK.
++ *
++ * This is because in the current encryption scheme GHCB v2 uses AES-GCM to
++ * encrypt the requests. The IV for this scheme is the sequence number. GCM
++ * cannot tolerate IV reuse.
++ *
++ * The ASP FW v1.51 only increments the sequence numbers on a successful
++ * guest<->ASP back and forth and only accepts messages at its exact sequence
++ * number.
++ *
++ * So if we were to reuse the sequence number the encryption scheme is
++ * vulnerable. If we encrypt the sequence number for a fresh IV the ASP will
++ * reject our request.
++ */
+ static void snp_disable_vmpck(struct snp_guest_dev *snp_dev)
+ {
++	dev_alert(snp_dev->dev, "Disabling vmpck_id: %d to prevent IV reuse.\n",
++		  vmpck_id);
+ 	memzero_explicit(snp_dev->vmpck, VMPCK_KEY_LEN);
+ 	snp_dev->vmpck = NULL;
+ }
+@@ -326,29 +345,29 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
+ 	if (fw_err)
+ 		*fw_err = err;
+ 
+-	if (rc)
+-		return rc;
++	if (rc) {
++		dev_alert(snp_dev->dev,
++			  "Detected error from ASP request. rc: %d, fw_err: %llu\n",
++			  rc, *fw_err);
++		goto disable_vmpck;
++	}
+ 
+-	/*
+-	 * The verify_and_dec_payload() will fail only if the hypervisor is
+-	 * actively modifying the message header or corrupting the encrypted payload.
+-	 * This hints that hypervisor is acting in a bad faith. Disable the VMPCK so that
+-	 * the key cannot be used for any communication. The key is disabled to ensure
+-	 * that AES-GCM does not use the same IV while encrypting the request payload.
+-	 */
+ 	rc = verify_and_dec_payload(snp_dev, resp_buf, resp_sz);
+ 	if (rc) {
+ 		dev_alert(snp_dev->dev,
+-			  "Detected unexpected decode failure, disabling the vmpck_id %d\n",
+-			  vmpck_id);
+-		snp_disable_vmpck(snp_dev);
+-		return rc;
++			  "Detected unexpected decode failure from ASP. rc: %d\n",
++			  rc);
++		goto disable_vmpck;
+ 	}
+ 
+ 	/* Increment to new message sequence after payload decryption was successful. */
+ 	snp_inc_msg_seqno(snp_dev);
+ 
+ 	return 0;
++
++disable_vmpck:
++	snp_disable_vmpck(snp_dev);
++	return rc;
+ }
+ 
+ static int get_report(struct snp_guest_dev *snp_dev, struct snp_guest_request_ioctl *arg)
+@@ -437,7 +456,7 @@ static int get_ext_report(struct snp_guest_dev *snp_dev, struct snp_guest_reques
+ 	struct snp_guest_crypto *crypto = snp_dev->crypto;
+ 	struct snp_ext_report_req req;
+ 	struct snp_report_resp *resp;
+-	int ret, npages = 0, resp_len;
++	int ret, resp_len, req_cert_len, resp_cert_len;
+ 
+ 	lockdep_assert_held(&snp_cmd_mutex);
+ 
+@@ -448,14 +467,15 @@ static int get_ext_report(struct snp_guest_dev *snp_dev, struct snp_guest_reques
+ 		return -EFAULT;
+ 
+ 	/* userspace does not want certificate data */
+-	if (!req.certs_len || !req.certs_address)
++	req_cert_len = req.certs_len;
++	if (!req_cert_len || !req.certs_address)
+ 		goto cmd;
+ 
+-	if (req.certs_len > SEV_FW_BLOB_MAX_SIZE ||
+-	    !IS_ALIGNED(req.certs_len, PAGE_SIZE))
++	if (req_cert_len > sizeof(*snp_dev->certs_data) ||
++	    !IS_ALIGNED(req_cert_len, PAGE_SIZE))
+ 		return -EINVAL;
+ 
+-	if (!access_ok((const void __user *)req.certs_address, req.certs_len))
++	if (!access_ok((const void __user *)req.certs_address, req_cert_len))
+ 		return -EFAULT;
+ 
+ 	/*
+@@ -464,8 +484,7 @@ static int get_ext_report(struct snp_guest_dev *snp_dev, struct snp_guest_reques
+ 	 * the host. If host does not supply any certs in it, then copy
+ 	 * zeros to indicate that certificate data was not provided.
+ 	 */
+-	memset(snp_dev->certs_data, 0, req.certs_len);
+-	npages = req.certs_len >> PAGE_SHIFT;
++	memset(snp_dev->certs_data, 0, sizeof(*snp_dev->certs_data));
+ cmd:
+ 	/*
+ 	 * The intermediate response buffer is used while decrypting the
+@@ -477,25 +496,37 @@ static int get_ext_report(struct snp_guest_dev *snp_dev, struct snp_guest_reques
+ 	if (!resp)
+ 		return -ENOMEM;
+ 
+-	snp_dev->input.data_npages = npages;
++	snp_dev->input.data_npages = sizeof(*snp_dev->certs_data) >> PAGE_SHIFT;
+ 	ret = handle_guest_request(snp_dev, SVM_VMGEXIT_EXT_GUEST_REQUEST, arg->msg_version,
+ 				   SNP_MSG_REPORT_REQ, &req.data,
+ 				   sizeof(req.data), resp->data, resp_len, &arg->fw_err);
+ 
++	resp_cert_len = snp_dev->input.data_npages << PAGE_SHIFT;
++
+ 	/* If certs length is invalid then copy the returned length */
+ 	if (arg->fw_err == SNP_GUEST_REQ_INVALID_LEN) {
+-		req.certs_len = snp_dev->input.data_npages << PAGE_SHIFT;
++		dev_alert(snp_dev->dev,
++			  "Certificate data from host: %d, Max size allocated by driver: %lu.\n",
++			  resp_cert_len, sizeof(*snp_dev->certs_data));
++		ret = -EFAULT;
++	}
++
++	if (ret)
++		goto e_free;
++
++	/* Pass the actual certificate data size back to userspace */
++	req.certs_len = resp_cert_len;
++	if (resp_cert_len > req_cert_len) {
++		arg->fw_err = SNP_GUEST_REQ_INVALID_LEN;
+ 
+ 		if (copy_to_user((void __user *)arg->req_data, &req, sizeof(req)))
+ 			ret = -EFAULT;
+-	}
+ 
+-	if (ret)
+ 		goto e_free;
++	}
+ 
+-	if (npages &&
+-	    copy_to_user((void __user *)req.certs_address, snp_dev->certs_data,
+-			 req.certs_len)) {
++	if (copy_to_user((void __user *)req.certs_address, snp_dev->certs_data,
++			 resp_cert_len)) {
+ 		ret = -EFAULT;
+ 		goto e_free;
+ 	}
+@@ -676,7 +707,7 @@ static int __init sev_guest_probe(struct platform_device *pdev)
+ 	if (!snp_dev->response)
+ 		goto e_free_request;
+ 
+-	snp_dev->certs_data = alloc_shared_pages(dev, SEV_FW_BLOB_MAX_SIZE);
++	snp_dev->certs_data = alloc_shared_pages(dev, sizeof(*snp_dev->certs_data));
+ 	if (!snp_dev->certs_data)
+ 		goto e_free_response;
+ 
+@@ -703,7 +734,7 @@ static int __init sev_guest_probe(struct platform_device *pdev)
+ 	return 0;
+ 
+ e_free_cert_data:
+-	free_shared_pages(snp_dev->certs_data, SEV_FW_BLOB_MAX_SIZE);
++	free_shared_pages(snp_dev->certs_data, sizeof(*snp_dev->certs_data));
+ e_free_response:
+ 	free_shared_pages(snp_dev->response, sizeof(struct snp_guest_msg));
+ e_free_request:
+@@ -717,7 +748,7 @@ static int __exit sev_guest_remove(struct platform_device *pdev)
+ {
+ 	struct snp_guest_dev *snp_dev = platform_get_drvdata(pdev);
+ 
+-	free_shared_pages(snp_dev->certs_data, SEV_FW_BLOB_MAX_SIZE);
++	free_shared_pages(snp_dev->certs_data, sizeof(*snp_dev->certs_data));
+ 	free_shared_pages(snp_dev->response, sizeof(struct snp_guest_msg));
+ 	free_shared_pages(snp_dev->request, sizeof(struct snp_guest_msg));
+ 	deinit_crypto(snp_dev->crypto);
+-- 
+2.38.0.135.g90850a2211-goog
+
