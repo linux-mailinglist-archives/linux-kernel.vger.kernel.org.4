@@ -2,101 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DD2D6075E4
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 13:16:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8298E6075E7
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 13:16:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230386AbiJULQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 07:16:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56828 "EHLO
+        id S230394AbiJULQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 07:16:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiJULPq (ORCPT
+        with ESMTP id S230312AbiJULQJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 07:15:46 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDB3814C50F
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 04:15:39 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id b2so4515456lfp.6
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 04:15:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PGR+GHvgRaXGJ8GYA/JSnsVO1HGR1HQ8rDlPdx2J0GE=;
-        b=Z3o0lJQTWWf+sLuoqLF4dPCeL0HiQ1XgqGi3YTWdIoci3Pu5NCfL1G5IlOHFzViv/n
-         9Q9ScniGL5TvZErLYHSOV1KIs1/JrcBJBFVe3DSQDCyi8Lh/dmfrv/eXf+9sPKCN9Xm2
-         KSDszK4S46rhE/N0hEaJoN6+UIR74iqcMQ9nPyqlfBGA2lkgUD1eYg2oPPsw2QEKi5So
-         xqu6DGpxjwWmG6wAqCCNPDN/i1lcWZAsPMlroDtA+4/QjTj2Azxb7JBMkwbeWwYodg/w
-         UjYMmCfI9fA0DncXPSUP/ZpffTg3XkW0YQr2MdqbsYBu2XXKr5o4yAhgiKEYKcxGO0m4
-         T29Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PGR+GHvgRaXGJ8GYA/JSnsVO1HGR1HQ8rDlPdx2J0GE=;
-        b=TmGYyKs3CLpOOXzZCLM9E7is2lgkctYo3Pgo8ptIEcAnKib5uUM5fASm1UHIwqn0BB
-         zsYCqtyT3+ZmnmbOUl25GlI/HKfOyb+NaaHLw9el/rMDLH5W+pamcAuPQmnm5bm0AL11
-         GjicxBLTGkohM7KkmKgqhVTaA/Ddtf1hLT7VjDQAF8TfyMSy12wzG7VoT6LodXhUg4fQ
-         V8YQ8fNg975hjZSTQZR//j6qeIEzhBRG83ilroPEkt8scJxTYQ1ASotz3q+yCRqbmX7Y
-         SoILsu3nJeCFup+yEoBnlzTcKq97KftfaIpnPcKODzGXMwz0hLNxdnPig/Ui/vE9EniZ
-         a9oA==
-X-Gm-Message-State: ACrzQf1FpLYgJCMMCa7MHQ49LsyoCpI7Z/idcPdWqdmBBneGdfRhqbz3
-        OcS/23legSlIOZnG56CT4xja9w==
-X-Google-Smtp-Source: AMsMyM4c/eGqlpbOOHaW2mpXrdmycPI1J44m2HICJwRMS6hlVOFS7eNhqKrKuU11PFtWZaDto+hN7g==
-X-Received: by 2002:a05:6512:224d:b0:4a2:7710:9b8b with SMTP id i13-20020a056512224d00b004a277109b8bmr6201264lfu.128.1666350936509;
-        Fri, 21 Oct 2022 04:15:36 -0700 (PDT)
-Received: from [10.27.10.248] ([195.165.23.90])
-        by smtp.gmail.com with ESMTPSA id q11-20020a19430b000000b0049ad2619becsm3119222lfa.131.2022.10.21.04.15.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Oct 2022 04:15:36 -0700 (PDT)
-Message-ID: <8b0389f2-66ba-b707-a026-0b7e06d9bfb4@linaro.org>
-Date:   Fri, 21 Oct 2022 14:15:35 +0300
+        Fri, 21 Oct 2022 07:16:09 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42AA523923A;
+        Fri, 21 Oct 2022 04:16:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666350965; x=1697886965;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LAn3ijLl8vdyojji+zoDVIBj6GTriBASs9iZAxj3n/E=;
+  b=GceQTu+C5wmuPI/9NM4xIGX2+5P+RSLLTd8DXBqdfZN3mrghpRW6KbKE
+   wQe2O6Ph82cCV5w3W86Yz+bMgIO3WeymeFgNmSdsWpU0XmK74oMW+GYX9
+   kFpqwbZJ6Y/d2ss9XHhEQJz4OXRPSqaoDBpWZ1u1HRbbJ4MbuyQ+UoEv2
+   nQZwCPNiXpALA/b6qQfED+k33/JOAKk406e5JBYNbMuyW3CcrIW99A2NF
+   +Yls5pltMhXeVGLX4PhhbZwIYPOCMvtSBeTAVkseYTwk4ItWCHk6uKfRU
+   OPepVIJOaj7x+rYkIWkttk8W/ZEBj5zGguDT12N3g+CRPafbxx9/oKUG2
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="371189588"
+X-IronPort-AV: E=Sophos;i="5.95,200,1661842800"; 
+   d="scan'208";a="371189588"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2022 04:16:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="632875295"
+X-IronPort-AV: E=Sophos;i="5.95,200,1661842800"; 
+   d="scan'208";a="632875295"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga007.fm.intel.com with ESMTP; 21 Oct 2022 04:16:01 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1olq0O-00B7Xg-0E;
+        Fri, 21 Oct 2022 14:16:00 +0300
+Date:   Fri, 21 Oct 2022 14:15:59 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>
+Subject: Re: [PATCH v1 3/6] spi: pxa2xx: Remove no more needed PCI ID table
+Message-ID: <Y1J/by2TGbaYgoDq@smile.fi.intel.com>
+References: <Y1F/aVEYn3GIVEN2@smile.fi.intel.com>
+ <Y1GEqa07/b25utui@sirena.org.uk>
+ <Y1GIVy8l4vKsUYLr@smile.fi.intel.com>
+ <Y1GJL8/YfeoUy8wB@sirena.org.uk>
+ <Y1GLdp9GCqD7CdfW@smile.fi.intel.com>
+ <Y1GOTtYIeOFmrmm7@sirena.org.uk>
+ <Y1GRGrt8EvhoeV0z@smile.fi.intel.com>
+ <Y1J3lyrygPvVGUJw@sirena.org.uk>
+ <Y1J5wx63bzq4tnik@smile.fi.intel.com>
+ <Y1J7iJ967d0I83oZ@sirena.org.uk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v3 13/15] phy: qcom-qmp-pcie: add support for pipediv2
- clock
-Content-Language: en-GB
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221021110947.28103-1-johan+linaro@kernel.org>
- <20221021110947.28103-14-johan+linaro@kernel.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20221021110947.28103-14-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1J7iJ967d0I83oZ@sirena.org.uk>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/10/2022 14:09, Johan Hovold wrote:
-> Some QMP PHYs have a second fixed-divider pipe clock that needs to be
-> enabled along with the pipe clock.
+On Fri, Oct 21, 2022 at 11:59:20AM +0100, Mark Brown wrote:
+> On Fri, Oct 21, 2022 at 01:51:47PM +0300, Andy Shevchenko wrote:
+> > On Fri, Oct 21, 2022 at 11:42:31AM +0100, Mark Brown wrote:
 > 
-> Add support for an optional "pipediv2" clock.
+> > > > That's exactly what I'm talking about when said "named resource check".
 > 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->   drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 25 ++++++++++++++----------
->   1 file changed, 15 insertions(+), 10 deletions(-)
+> > > Like I say a property can come from any firmware interface.
+> 
+> > But I'm talking about resource (not a property) as IO memory. It doesn't come
+> > via firmware at all. Have you had a chance to look into the v4?
+> 
+> On DT based systems resources can be named by the firmware, I don't know
+> if that's possible with ACPI but as the name suggests the driver gets
+> used on PXA systems too.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+And how is it related to DT if the enumeration happens via platform driver
+code? As for PXA this is all comes via board files:
+
+$ git grep -n -w '"pxa2xx-spi"'
+Documentation/spi/pxa2xx.rst:66:        .name = "pxa2xx-spi", /* MUST BE THIS VALUE, so device match driver */
+arch/arm/mach-pxa/devices.c:1082:       pd = platform_device_alloc("pxa2xx-spi", id);
+arch/arm/mach-pxa/icontrol.c:127:       .name          = "pxa2xx-spi",
+arch/arm/mach-pxa/icontrol.c:135:       .name          = "pxa2xx-spi",
+drivers/mfd/intel-lpss.c:123:   .name = "pxa2xx-spi",
+drivers/spi/spi-pxa2xx-pci.c:298:       pi.name = "pxa2xx-spi";
+drivers/spi/spi-pxa2xx.c:1765:          .name   = "pxa2xx-spi",
+
+In the current code and after my patch series the priority is that
+the driver data from the spi-pxa2xx.c is the first. So, if compatible
+(which is by fact the only "marvell,mmp2-ssp") has named resources
+that exactly the same as LPSS for MFD, nothing will change the driver
+behaviour.
+
+For the ACPI there is no names for the resources so far.
 
 -- 
-With best wishes
-Dmitry
+With Best Regards,
+Andy Shevchenko
+
 
