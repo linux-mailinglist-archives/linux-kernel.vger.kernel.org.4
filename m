@@ -2,91 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1278C6076A5
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 14:00:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD0F16076A9
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 14:01:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230388AbiJUMAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 08:00:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60694 "EHLO
+        id S229711AbiJUMBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 08:01:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230244AbiJUMAr (ORCPT
+        with ESMTP id S229793AbiJUMBc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 08:00:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F0D725F8C0
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 05:00:39 -0700 (PDT)
+        Fri, 21 Oct 2022 08:01:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0047025E88A;
+        Fri, 21 Oct 2022 05:01:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8D3C1B82B1D
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 12:00:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61B2EC433D6;
-        Fri, 21 Oct 2022 12:00:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 906C761E68;
+        Fri, 21 Oct 2022 12:01:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC042C433C1;
+        Fri, 21 Oct 2022 12:01:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666353636;
-        bh=LMbm0RHnpHjF4XALs9PiF0EN08cXmWMXDuFm/StCLYo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uY6civyb7kDMMqoM8kDnJuXgTvt96br4iOPCoRINeo7pN3UFMG2jZU+pbngyk4L32
-         mAEA5B5nw1nn2mZ3ztnJipCUK25eHx0Vn5DcQMhwX0e3namZGj91GAHkRC38Fze3Sv
-         MVO4Uny0Tp80q6nH1WfO8QZnjWHApp7P80ZG/D9JQyQiUdRBGj9eHkbVJfB2iGGK7X
-         ZIQWFovF/ERwkF6hJTF9msGZXnw0qQKGvv6NgTMLXfQWeI6xi8QOe5SBrKqD/OwTUX
-         t+SZfkGLXNRgJ838gDjofYl5p25Oc5nEv/Y0o37GjJvY2Z9EeIaujzLZTtVk1akrSF
-         tL30aNK+edApA==
-From:   Miguel Ojeda <ojeda@kernel.org>
-To:     Andrey Konovalov <andreyknvl@gmail.com>,
-        Marco Elver <elver@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Uros Bizjak <ubizjak@gmail.com>,
-        Dan Li <ashimida@linux.alibaba.com>,
-        Alexander Potapenko <glider@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH 5/5] compiler-gcc: document minimum version for `__no_sanitize_coverage__`
-Date:   Fri, 21 Oct 2022 13:59:56 +0200
-Message-Id: <20221021115956.9947-5-ojeda@kernel.org>
-In-Reply-To: <20221021115956.9947-1-ojeda@kernel.org>
-References: <20221021115956.9947-1-ojeda@kernel.org>
+        s=k20201202; t=1666353691;
+        bh=lFmVFFa/5/iKN/Yo2q9AW/qANwcO3UhaXshlV3Z6Umw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=kiQBMbsyBg7JyvM9JlDzqbseUWfTuCFGqmjFOrnS5Bv/B3HdA51uDLNEdVMBpg/kT
+         6l8LizZqkldUz1mlD6Y+9Pgv9sfIRTMbSFWgOZmGX6Ep2yGBsOflaog3GWqgdNzwxt
+         /nFEQcLM4KyuKH4dNMc71cXam5P/6b0ekEQInTjLZZtKg57J8PkyUxX9SnQceiqN4v
+         yg/snDhaEwK5kRPUDF0Ggg2/MfsrrqBMun+XVylanKhuJfW6Zitw+RyVQhsyhIDuTC
+         SIAQec1Vjjs46rwSe/Um12tcq/3lOVXKN4g3ZlORt717fbLaCoNxgDK7i1F8e9HSQO
+         c3M2OC7XJ1DNQ==
+Date:   Fri, 21 Oct 2022 07:01:29 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Jianmin Lv <lvjianmin@loongson.cn>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Len Brown <lenb@kernel.org>, rafael@kernel.org,
+        linux-pci@vger.kernel.org, linux-acpi@vger.kernel.org
+Subject: Re: [PATCH V4 1/4] ACPI / PCI: fix LPIC IRQ model default PCI IRQ
+ polarity
+Message-ID: <20221021120129.GA185586@bhelgaas>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <f8a64289-6560-7d75-461c-39b7a612e9c2@loongson.cn>
 X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The attribute was added in GCC 12.1.
+On Fri, Oct 21, 2022 at 09:58:57AM +0800, Jianmin Lv wrote:
+> On 2022/10/21 上午12:47, Bjorn Helgaas wrote:
+> > On Thu, Oct 20, 2022 at 04:22:02PM +0800, Jianmin Lv wrote:
+> > > On LoongArch ACPI based systems, the PCI devices (e.g. sata
+> > > controlers and PCI-to-to PCI bridge controlers) existed in
+> > > Loongson chipsets output high-level interrupt signal to the
+> > > interrupt controller they connected to,
 
-This will simplify future cleanups, and is closer to what we do
-in `compiler_attributes.h`.
+> > The point is that one should be able to write this code from a spec,
+> > without having to empirically discover the interrupt polarity.  What
+> > spec tells you about using ACTIVE_HIGH here?
+> > 
+> Yes, no mentions for the inverter in ACPI spec, the description about
+> device interrupt type can be found in Loongson chipset manual:
+> 
+> https://github.com/loongson/LoongArch-Documentation/blob/main/docs/Loongson-7A1000-usermanual-EN/interrupt-controller/device-interrupt-types.adoc
 
-Link: https://godbolt.org/z/MGbT76j6G
-Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
----
- include/linux/compiler-gcc.h | 3 +++
- 1 file changed, 3 insertions(+)
+That's the kind of reference I was looking for.  The link to HTML is
+convenient in some ways, but since specs evolve over time and URLs are
+ephemeral, I think a citation like "Loongson 7A1000 Bridge User Manual
+v2.00, sec 5.3" is more likely to be useful far in the future.
 
-diff --git a/include/linux/compiler-gcc.h b/include/linux/compiler-gcc.h
-index 7f2c2bb73815..7af9e34ec261 100644
---- a/include/linux/compiler-gcc.h
-+++ b/include/linux/compiler-gcc.h
-@@ -92,6 +92,9 @@
- 
- #define __no_sanitize_undefined __attribute__((__no_sanitize_undefined__))
- 
-+/*
-+ * Only supported since gcc >= 12
-+ */
- #if defined(CONFIG_KCOV) && __has_attribute(__no_sanitize_coverage__)
- #define __no_sanitize_coverage __attribute__((__no_sanitize_coverage__))
- #else
--- 
-2.38.1
-
+Bjorn
