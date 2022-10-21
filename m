@@ -2,182 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F15AF606E34
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 05:13:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B84F6606E37
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 05:14:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbiJUDNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 23:13:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46376 "EHLO
+        id S229874AbiJUDOv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 23:14:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229875AbiJUDNF (ORCPT
+        with ESMTP id S229968AbiJUDOk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 23:13:05 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1441A1D7982;
-        Thu, 20 Oct 2022 20:13:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666321982; x=1697857982;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=t0mbhePNMhxVH3bu6M8dRQS/SgQ0nfCNRaQmnJ0MhhY=;
-  b=AuHdmcUpL2bRLPiHfYxC2d+mne7L6GJRO1ax81enQhEOYxdxhuzh76ZQ
-   YhZpX9V8JvjnO6Q3FlSH2OpspV/nFbFToVe0LVOCtX5Nzfvc17S1AsRJO
-   7Ua3wx35v+sXrkNb6kfGEtz6tA9r3vdA65i3gxTNNCkG2CdNU+Ti3l4wn
-   AK6Fc5feGAEmbNhMyrrjY8P4+fEdMnHHqMV+GUBdzZDTqWIeGFaDBBYkL
-   lQ26FX1b91bCxn9N5Ey0eLN4Cp9Ik7pespsGpnJoXlu+QR6GkKoTxU88X
-   sDxTaL50lG6yMkDxLja8YfOD3fBlY0wRIcpnIcS26QtY3UaTYC3z+Iawx
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="294295175"
-X-IronPort-AV: E=Sophos;i="5.95,200,1661842800"; 
-   d="scan'208";a="294295175"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 20:13:01 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="755546133"
-X-IronPort-AV: E=Sophos;i="5.95,200,1661842800"; 
-   d="scan'208";a="755546133"
-Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.255.28.117]) ([10.255.28.117])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 20:13:00 -0700
-Message-ID: <b40fd338-cb3b-b602-0059-39f775e77ad6@intel.com>
-Date:   Fri, 21 Oct 2022 11:12:57 +0800
+        Thu, 20 Oct 2022 23:14:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CF43B85C;
+        Thu, 20 Oct 2022 20:14:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5AC3CB828B5;
+        Fri, 21 Oct 2022 03:14:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 790D6C433D6;
+        Fri, 21 Oct 2022 03:14:22 +0000 (UTC)
+Date:   Thu, 20 Oct 2022 23:14:27 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Primiano Tucci <primiano@google.com>
+Subject: [PATCH] tracing/ring-buffer: Have polling block on watermark
+Message-ID: <20221020231427.41be3f26@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.3.3
-Subject: Re: [PATCH] KVM: x86: Fix the initial value of mcg_cap
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221020031615.890400-1-xiaoyao.li@intel.com>
- <Y1FatU6Yf9n5pWB+@google.com>
- <092dc961-76f6-331a-6f91-a77a58f6732d@intel.com>
- <Y1F4AoeOhNFQnHnJ@google.com>
-From:   Xiaoyao Li <xiaoyao.li@intel.com>
-In-Reply-To: <Y1F4AoeOhNFQnHnJ@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/21/2022 12:32 AM, Sean Christopherson wrote:
-> On Thu, Oct 20, 2022, Xiaoyao Li wrote:
->> On 10/20/2022 10:27 PM, Sean Christopherson wrote:
->>> On Thu, Oct 20, 2022, Xiaoyao Li wrote:
->>>> vcpu->arch.mcg_cap represents the value of MSR_IA32_MCG_CAP. It's
->>>> set via ioctl(KVM_X86_SETUP_MCE) from userspace when exposing and
->>>> configuring MCE to guest.
->>>>
->>>> It's wrong to leave the default value as KVM_MAX_MCE_BANKS.
->>>
->>> Why?  I agree it's an odd default, but the whole MCE API is odd.  Functionally,
->>> I don't see anything that's broken by allowing the guest to access the MCx_CTL MSRs
->>> by default.
->>
->> Yes. Allowing the access doesn't cause any issue for a VM.
->>
->> However, for the perspective of virtualization. It virtualizes a magic
->> hardware that even CPUID.MCA/MCE is not advertised and MCE is not set up by
->> userspace, guest is told there are 32 banks and all the banks can be
->> accessed.
-> 
-> '0' isn't necessarily better though, e.g. if userspace parrots back KVM's "supported"
-> CPUID without invoking KVM_X86_SETUP_MCE, then it's equally odd that the guest will
-> see no supported MCE MSRS.
-> 
-> Older versions of the SDM also state (or at least very strongly imply) that banks
-> 0-3 are always available on P6.
-> 
-> Bank 0 is an especially weird case, as several of the MSRs are aliased to other
-> MSRs that predate the machine check architecture.
-> 
-> Anyways, if this were newly introduced code I'd be all for defaulting to '0', but
-> KVM has defaulted to KVM_MAX_MCE_BANKS since KVM_X86_SETUP_MCE was added way back
-> in 2009.  Unless there's a bug that's fixed by this, I'm inclined to keep the
-> current behavior even though it's weird, as hiding all MCE MSRs by default could
-> theoretically cause a regression, e.g. by triggering #GP on MSRs that an older
-> guest expects to always exist.
+From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-fair enough.
+Currently the way polling works on the ring buffer is broken. It will
+return immediately if there's any data in the ring buffer whereas a read
+will block until the watermark (defined by the tracefs buffer_percent file)
+is hit.
 
-> If we really want to clean up this code, I think the correct approach would be to
-> inject #GP on all relevant MSRs if CPUID.MCA==0, e.g.
+That is, a select() or poll() will return as if there's data available,
+but then the following read will block. This is broken for the way
+select()s and poll()s are supposed to work.
 
-It's what I thought of as well. But I didn't find any statement in SDM 
-of "Accessing Machine Check MSRs gets #GP if no CPUID.MCA"
+Have the polling on the ring buffer also block the same way reads and
+splice does on the ring buffer.
 
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 4bd5f8a751de..97fafd851d8d 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -3260,6 +3260,9 @@ static int set_msr_mce(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->          u64 data = msr_info->data;
->          u32 offset, last_msr;
->   
-> +       if (!msr_info->host_initiated && !guest_cpuid_has(X86_FEATURE_MCA))
-> +               return 1;
-> +
->          switch (msr) {
->          case MSR_IA32_MCG_STATUS:
->                  vcpu->arch.mcg_status = data;
-> @@ -3891,6 +3894,14 @@ static int get_msr_mce(struct kvm_vcpu *vcpu, u32 msr, u64 *pdata, bool host)
->          unsigned bank_num = mcg_cap & 0xff;
->          u32 offset, last_msr;
->   
-> +       if (msr == MSR_IA32_P5_MC_ADDR || msr == MSR_IA32_P5_MC_TYPE) {
-> +               *pdata = 0;
-> +               return 0;
-> +       }
-> +
-> +       if (!host && !guest_cpuid_has(X86_FEATURE_MCA))
-> +               return 1;
-> +
->          switch (msr) {
->          case MSR_IA32_P5_MC_ADDR:
->          case MSR_IA32_P5_MC_TYPE:
-> 
-> Or alternatively, this should work too:
-> 
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 4bd5f8a751de..e4a44d7af0a6 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -3774,6 +3774,9 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->          case MSR_IA32_MCG_STATUS:
->          case MSR_IA32_MC0_CTL ... MSR_IA32_MCx_CTL(KVM_MAX_MCE_BANKS) - 1:
->          case MSR_IA32_MC0_CTL2 ... MSR_IA32_MCx_CTL2(KVM_MAX_MCE_BANKS) - 1:
-> +               if (!msr_info->host_initiated &&
-> +                   !guest_cpuid_has(X86_FEATURE_MCA))
-> +                       return 1;
->                  return set_msr_mce(vcpu, msr_info);
->   
->          case MSR_K7_PERFCTR0 ... MSR_K7_PERFCTR3:
-> @@ -4142,13 +4145,17 @@ int kvm_get_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->   
->                  msr_info->data = vcpu->arch.msr_kvm_poll_control;
->                  break;
-> -       case MSR_IA32_P5_MC_ADDR:
-> -       case MSR_IA32_P5_MC_TYPE:
->          case MSR_IA32_MCG_CAP:
->          case MSR_IA32_MCG_CTL:
->          case MSR_IA32_MCG_STATUS:
->          case MSR_IA32_MC0_CTL ... MSR_IA32_MCx_CTL(KVM_MAX_MCE_BANKS) - 1:
->          case MSR_IA32_MC0_CTL2 ... MSR_IA32_MCx_CTL2(KVM_MAX_MCE_BANKS) - 1:
-> +               if (!msr_info->host_initiated &&
-> +                   !guest_cpuid_has(X86_FEATURE_MCA))
-> +                       return 1;
-> +               fallthrough;
-> +       case MSR_IA32_P5_MC_ADDR:
-> +       case MSR_IA32_P5_MC_TYPE:
->                  return get_msr_mce(vcpu, msr_info->index, &msr_info->data,
->                                     msr_info->host_initiated);
->          case MSR_IA32_XSS:
-> 
+Cc: stable@vger.kernel.org
+Fixes: 1e0d6714aceb7 ("ring-buffer: Do not wake up a splice waiter when page is not full")
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ include/linux/ring_buffer.h |  2 +-
+ kernel/trace/ring_buffer.c  | 55 ++++++++++++++++++++++++-------------
+ kernel/trace/trace.c        |  2 +-
+ 3 files changed, 38 insertions(+), 21 deletions(-)
+
+diff --git a/include/linux/ring_buffer.h b/include/linux/ring_buffer.h
+index 2504df9a0453..3c7d295746f6 100644
+--- a/include/linux/ring_buffer.h
++++ b/include/linux/ring_buffer.h
+@@ -100,7 +100,7 @@ __ring_buffer_alloc(unsigned long size, unsigned flags, struct lock_class_key *k
+ 
+ int ring_buffer_wait(struct trace_buffer *buffer, int cpu, int full);
+ __poll_t ring_buffer_poll_wait(struct trace_buffer *buffer, int cpu,
+-			  struct file *filp, poll_table *poll_table);
++			  struct file *filp, poll_table *poll_table, int full);
+ void ring_buffer_wake_waiters(struct trace_buffer *buffer, int cpu);
+ 
+ #define RING_BUFFER_ALL_CPUS -1
+diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
+index 199759c73519..b60047de897e 100644
+--- a/kernel/trace/ring_buffer.c
++++ b/kernel/trace/ring_buffer.c
+@@ -907,6 +907,21 @@ size_t ring_buffer_nr_dirty_pages(struct trace_buffer *buffer, int cpu)
+ 	return cnt - read;
+ }
+ 
++static __always_inline bool full_hit(struct trace_buffer *buffer, int cpu, int full)
++{
++	struct ring_buffer_per_cpu *cpu_buffer = buffer->buffers[cpu];
++	size_t nr_pages;
++	size_t dirty;
++
++	nr_pages = cpu_buffer->nr_pages;
++	if (!nr_pages || !full)
++		return true;
++
++	dirty = ring_buffer_nr_dirty_pages(buffer, cpu);
++
++	return (dirty * 100) > (full * nr_pages);
++}
++
+ /*
+  * rb_wake_up_waiters - wake up tasks waiting for ring buffer input
+  *
+@@ -1035,22 +1050,20 @@ int ring_buffer_wait(struct trace_buffer *buffer, int cpu, int full)
+ 		    !ring_buffer_empty_cpu(buffer, cpu)) {
+ 			unsigned long flags;
+ 			bool pagebusy;
+-			size_t nr_pages;
+-			size_t dirty;
++			bool done;
+ 
+ 			if (!full)
+ 				break;
+ 
+ 			raw_spin_lock_irqsave(&cpu_buffer->reader_lock, flags);
+ 			pagebusy = cpu_buffer->reader_page == cpu_buffer->commit_page;
+-			nr_pages = cpu_buffer->nr_pages;
+-			dirty = ring_buffer_nr_dirty_pages(buffer, cpu);
++			done = !pagebusy && full_hit(buffer, cpu, full);
++
+ 			if (!cpu_buffer->shortest_full ||
+ 			    cpu_buffer->shortest_full > full)
+ 				cpu_buffer->shortest_full = full;
+ 			raw_spin_unlock_irqrestore(&cpu_buffer->reader_lock, flags);
+-			if (!pagebusy &&
+-			    (!nr_pages || (dirty * 100) > full * nr_pages))
++			if (done)
+ 				break;
+ 		}
+ 
+@@ -1076,6 +1089,7 @@ int ring_buffer_wait(struct trace_buffer *buffer, int cpu, int full)
+  * @cpu: the cpu buffer to wait on
+  * @filp: the file descriptor
+  * @poll_table: The poll descriptor
++ * @full: wait until the percentage of pages are available, if @cpu != RING_BUFFER_ALL_CPUS
+  *
+  * If @cpu == RING_BUFFER_ALL_CPUS then the task will wake up as soon
+  * as data is added to any of the @buffer's cpu buffers. Otherwise
+@@ -1085,14 +1099,15 @@ int ring_buffer_wait(struct trace_buffer *buffer, int cpu, int full)
+  * zero otherwise.
+  */
+ __poll_t ring_buffer_poll_wait(struct trace_buffer *buffer, int cpu,
+-			  struct file *filp, poll_table *poll_table)
++			  struct file *filp, poll_table *poll_table, int full)
+ {
+ 	struct ring_buffer_per_cpu *cpu_buffer;
+ 	struct rb_irq_work *work;
+ 
+-	if (cpu == RING_BUFFER_ALL_CPUS)
++	if (cpu == RING_BUFFER_ALL_CPUS) {
+ 		work = &buffer->irq_work;
+-	else {
++		full = 0;
++	} else {
+ 		if (!cpumask_test_cpu(cpu, buffer->cpumask))
+ 			return -EINVAL;
+ 
+@@ -1100,8 +1115,14 @@ __poll_t ring_buffer_poll_wait(struct trace_buffer *buffer, int cpu,
+ 		work = &cpu_buffer->irq_work;
+ 	}
+ 
+-	poll_wait(filp, &work->waiters, poll_table);
+-	work->waiters_pending = true;
++	if (full) {
++		poll_wait(filp, &work->full_waiters, poll_table);
++		work->full_waiters_pending = true;
++	} else {
++		poll_wait(filp, &work->waiters, poll_table);
++		work->waiters_pending = true;
++	}
++
+ 	/*
+ 	 * There's a tight race between setting the waiters_pending and
+ 	 * checking if the ring buffer is empty.  Once the waiters_pending bit
+@@ -1117,6 +1138,9 @@ __poll_t ring_buffer_poll_wait(struct trace_buffer *buffer, int cpu,
+ 	 */
+ 	smp_mb();
+ 
++	if (full)
++		return full_hit(buffer, cpu, full) ? EPOLLIN | EPOLLRDNORM : 0;
++
+ 	if ((cpu == RING_BUFFER_ALL_CPUS && !ring_buffer_empty(buffer)) ||
+ 	    (cpu != RING_BUFFER_ALL_CPUS && !ring_buffer_empty_cpu(buffer, cpu)))
+ 		return EPOLLIN | EPOLLRDNORM;
+@@ -3144,10 +3168,6 @@ static void rb_commit(struct ring_buffer_per_cpu *cpu_buffer,
+ static __always_inline void
+ rb_wakeups(struct trace_buffer *buffer, struct ring_buffer_per_cpu *cpu_buffer)
+ {
+-	size_t nr_pages;
+-	size_t dirty;
+-	size_t full;
+-
+ 	if (buffer->irq_work.waiters_pending) {
+ 		buffer->irq_work.waiters_pending = false;
+ 		/* irq_work_queue() supplies it's own memory barriers */
+@@ -3171,10 +3191,7 @@ rb_wakeups(struct trace_buffer *buffer, struct ring_buffer_per_cpu *cpu_buffer)
+ 
+ 	cpu_buffer->last_pages_touch = local_read(&cpu_buffer->pages_touched);
+ 
+-	full = cpu_buffer->shortest_full;
+-	nr_pages = cpu_buffer->nr_pages;
+-	dirty = ring_buffer_nr_dirty_pages(buffer, cpu_buffer->cpu);
+-	if (full && nr_pages && (dirty * 100) <= full * nr_pages)
++	if (!full_hit(buffer, cpu_buffer->cpu, cpu_buffer->shortest_full))
+ 		return;
+ 
+ 	cpu_buffer->irq_work.wakeup_full = true;
+diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+index 47a44b055a1d..c6c7a0af3ed2 100644
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -6681,7 +6681,7 @@ trace_poll(struct trace_iterator *iter, struct file *filp, poll_table *poll_tabl
+ 		return EPOLLIN | EPOLLRDNORM;
+ 	else
+ 		return ring_buffer_poll_wait(iter->array_buffer->buffer, iter->cpu_file,
+-					     filp, poll_table);
++					     filp, poll_table, iter->tr->buffer_percent);
+ }
+ 
+ static __poll_t
+-- 
+2.35.1
 
