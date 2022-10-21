@@ -2,68 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E3836072F1
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 10:53:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 281C46072ED
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 10:53:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229921AbiJUIxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 04:53:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44832 "EHLO
+        id S229911AbiJUIxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 04:53:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230018AbiJUIxK (ORCPT
+        with ESMTP id S229816AbiJUIw7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 04:53:10 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C841125437E;
-        Fri, 21 Oct 2022 01:53:08 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id bs14so2763097ljb.9;
-        Fri, 21 Oct 2022 01:53:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eizb7N3bu2n05M5ghdt2hPY1rJNDJn8OFWYirn9hQHU=;
-        b=bl7YSiDR4nOEXF69XS5hW0a54M6d7/EgjS2Ojz/wEZdScu4zn2r7ipl2fKF8PacJ24
-         wEMlNyKNJjLWyWR3O0cz9Gt2CYhlmCHEBdT8/wFwlGj1zklEJQ/4e5NyZkov1gERqkc9
-         //DlfK1Ep95C/9OqOlsoV/aLg1XPdnGJ8rOj0X/4zJ+ymFrAJyAfzDYEhn/u8XL3khm0
-         6taHzFq1K1e5+XjLtz3EW0ghGy/Jn+fuCQZxMV7ENF+NyrXWScojfuoM2rhE+EoEVl+U
-         OeaJpFMEWhATBiaJMkdah9p+O5AC+B52T3XnBH1Wel0jVTr089lWEHt/NmF113bDw2YO
-         n4nA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eizb7N3bu2n05M5ghdt2hPY1rJNDJn8OFWYirn9hQHU=;
-        b=bN3T6yRYncVwtdQ35JQeGABlvGjxWq/4KQEnUqVT0XGI2AihMVOAYq+pQw4nRKq9K0
-         jT9gWS6EFRLoxtnWcf9bR80gBb7g6GK6Vg5bIKrNpXNQu05SDJ+YPdWOXqsj/pMGK+qk
-         mAgVS/k+M9KEZkCPF17WM53548Aw2IfxcIWH1OM/xY02BLsciCGUEdCRj76IzbV1uXHU
-         1BqsjVsGt8Fbiexs9W05rZ7aELU6wCqq+lqURrtmaMiYFV0cAsRfJWSVB67JtlU9Y15N
-         XoaM4mzUPwrTWX4Y5uCw1ULJKg4iWv21TIPntkiTYNFJJ8kZyxJDO1JLoh05Al5cLEyZ
-         EBEg==
-X-Gm-Message-State: ACrzQf3mOmbKtOhzixe7pPt6ZiuvLE1KpPCY4pcJrygwGa4FZjViSYOf
-        doQ2YyCo864j5+ipMb8jgKM6Dk1ft9t8lWmFD2I=
-X-Google-Smtp-Source: AMsMyM7GIRqgThOeoDmVWLt/zv5EzFfBx6OIJb78ZOgWqOwCkAvudIo6Z37nBr9//f9xCJV17qRmMcj0LLsKoVx6vFc=
-X-Received: by 2002:a2e:8881:0:b0:255:7790:25e6 with SMTP id
- k1-20020a2e8881000000b00255779025e6mr6405991lji.525.1666342386867; Fri, 21
- Oct 2022 01:53:06 -0700 (PDT)
+        Fri, 21 Oct 2022 04:52:59 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2088.outbound.protection.outlook.com [40.107.220.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BA8024FED5
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 01:52:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Px6XYnBqhpU1/Nyy6U9ykVTKqHY2mTE3tMI+xsrwspUKeXBjvFBqiaEXkrX52c1X1QZMn3+n8AJDCxwHuKsJ3QA801wQHhxDA4YmY3USPcygzmi2UhhHUby/7wah+B52eSPSAxmhY4dPyHp154UK8SnBBCBpPcuzRQ3tM5FGA0a5B6SJ3Sefiyv8xrCNhB9mtp1EhWUw5RdCVlWlRRJvXDrd+Fmv4j+vVI9B4BoKkoHb8XTk0Oq5ouQVXYs/wBxJTrwDQtXJ+qkKs817ibpQxmXxY5nfzr5BEs6zb6MKBbQjR4UroI49o54Fn4LwdIfXPMW1GL7yZ1/iSGh33Mxxtg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8tgJbDECy1xY+raNOW2piIhcXYjWuQC+Pyq127+CAqg=;
+ b=fJcFq+b9F3odM9dXa1Ko7Dbvhr46PoLuLX577NEIT1QXRe+ngyGJn7DX0Sxjt0J3JgqXqeslyvFhSjKF1S755WTTc0Ef3Mh+IJXYJPV5jxkJ21NU6RrXeNr4E/RxflMD5KmDAS653gICLKzDvSAHiLjk+WXptIFvUbf3c3Wczziq4RTx1aRc26kxUfneETHGw1ZwL6nrhi6wGk+P9zeLN7b5LcsB1jvOjp1/CQsBYMDJcDaWI7czWMrYvUrLEOTwT67WvwPJCtOoWab1ekGMIMX1u61clSUfY/UXZ9d2MHpBvBJf3j0s7yx3G4tGB7KPIbHtZGzxz7OZiIXQqVE8Qg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8tgJbDECy1xY+raNOW2piIhcXYjWuQC+Pyq127+CAqg=;
+ b=aS5L/YiHt+BVLXemKUlcQUXysD8R/la2eYB30LBoC5+YNne6DDbtD5AQvCKQjKxnqdpj0ZrsUt/cS+AHnbQYIy9zYDlfGyZS9JuU3z84GmawXY0H4eSxLobkVy8cqPDg80CW0lo97rbZ3czkbwqAAZSifT5cnTGYJXfP7i5zEi4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM6PR12MB3370.namprd12.prod.outlook.com (2603:10b6:5:38::25) by
+ DM4PR12MB5215.namprd12.prod.outlook.com (2603:10b6:5:397::21) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5723.35; Fri, 21 Oct 2022 08:52:56 +0000
+Received: from DM6PR12MB3370.namprd12.prod.outlook.com
+ ([fe80::d309:77d2:93d8:2425]) by DM6PR12MB3370.namprd12.prod.outlook.com
+ ([fe80::d309:77d2:93d8:2425%7]) with mapi id 15.20.5723.035; Fri, 21 Oct 2022
+ 08:52:56 +0000
+Message-ID: <1c150db1-dc49-e3b0-4dca-f1427a180e4b@amd.com>
+Date:   Fri, 21 Oct 2022 04:52:53 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH 00/11] fix memory leak while kset_register() fails
+Content-Language: en-CA
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-erofs@lists.ozlabs.org, ocfs2-devel@oss.oracle.com,
+        linux-mtd@lists.infradead.org, amd-gfx@lists.freedesktop.org,
+        rafael@kernel.org, somlo@cmu.edu, mst@redhat.com,
+        jaegeuk@kernel.org, chao@kernel.org, hsiangkao@linux.alibaba.com,
+        huangjianan@oppo.com, mark@fasheh.com, jlbec@evilplan.org,
+        joseph.qi@linux.alibaba.com, akpm@linux-foundation.org,
+        alexander.deucher@amd.com, richard@nod.at, liushixin2@huawei.com
+References: <20221021022102.2231464-1-yangyingliang@huawei.com>
+ <d559793a-0ce4-3384-e74e-19855aa31f31@amd.com> <Y1IwLOUGayjT9p6d@kroah.com>
+ <0591e66f-731a-5f81-fc9d-3a6d80516c65@huawei.com>
+ <Y1JZ9IUPL6jZIQ8E@kroah.com>
+From:   Luben Tuikov <luben.tuikov@amd.com>
+In-Reply-To: <Y1JZ9IUPL6jZIQ8E@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: YT3PR01CA0036.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:82::35) To DM6PR12MB3370.namprd12.prod.outlook.com
+ (2603:10b6:5:38::25)
 MIME-Version: 1.0
-References: <20221021083501.347066-1-me@lirui.org>
-In-Reply-To: <20221021083501.347066-1-me@lirui.org>
-From:   Alex Shi <seakeel@gmail.com>
-Date:   Fri, 21 Oct 2022 16:52:30 +0800
-Message-ID: <CAJy-Am=sP47+n6ZQUjjQVzu5frsnBjnc7ZxGsz9M4uK7cZ96iw@mail.gmail.com>
-Subject: Re: [PATCH] docs/zh_CN: Add subsystem-apis Chinese translation
-To:     Rui Li <me@lirui.org>
-Cc:     Alex Shi <alexs@kernel.org>, Yanteng Si <siyanteng@loongson.cn>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Wu XiangCheng <wu.xiangcheng@linux.dev>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_20,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR12MB3370:EE_|DM4PR12MB5215:EE_
+X-MS-Office365-Filtering-Correlation-Id: c35ac337-61fd-4e8a-9c78-08dab341a5c2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: s2nLFrbuhJHsKhSgpZ7C/fUA3n6j6d/EHHwT+HVUXO4Q1zUKhWelW6H39+RTAjQeAkD9ayjMdsrZ5kBLak/Gkuy6MxeXEEgsJZRIKSFTwbJJN8PUYt8VgPa1e9fdqX6VVAX7EirXley62g7KQIGpqGdVyYUThEtezm1LRUyzA97mPtLjwBhtQgNKBuFRLvmj6abTCjclR19p6tU+0zqphvGP007LJ1YJYTGk7JdG1cm9h39gpXZ1taXU0uVwOpYQlFAHU7rTyjP7aNqJriKS7E8tCoeRh/eWh/yoeagCGl2la7+42shG5Gbx8KnJi9msayN4SXoWD/15xiW4cj+nnRQmWJiJ03n4Eg4PBTYAta9M5osqJAhV+BOc1M8NxQKNUFAHMsE3cEnMenKKRmptFP8H8tjNJ5aaoBvvtvW7N3rMpXAkQ3c3KoIwQ/HJU0CrlpVH2hCaWmK1cbxuXkIVwdAeqpBYVs4deiUwkj7JlhVcl6tM6nqAFHYN4aTTMygu5Av6PaWzvrK1jWv+U/qODhPKHRIg6sg/Lv2PjWLH2wxCk28DsYDFlzmpnq0encVgLRmJA+rx/REvSOSdyB1M2BDdEynC+CQI20VCBYDrEVLOEVgg2UUphEK4s8LfklsULxLp1IeT2MGAXklK0WUOtLZqA5cuzzBJSJAxOtY/x9qZJwV+59TyT/BBEOQC3I/VPlKF+FgO8g4FpmuIZZTaXS0Nwnh6AnoqaVUznlCYJoFPJ2dSApnsKvnb6oy0io6ppXZflnKfG/f6YPb05mq5U6S2pAjrUnw7GOjN7FZxqdYRpQUGj1NasM1CrK0n9K2o
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3370.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(366004)(346002)(136003)(376002)(396003)(451199015)(26005)(66899015)(4326008)(8676002)(41300700001)(38100700002)(6512007)(86362001)(6506007)(966005)(53546011)(8936002)(31696002)(6486002)(36756003)(316002)(4001150100001)(66476007)(66946007)(31686004)(2906002)(66556008)(110136005)(478600001)(186003)(7416002)(5660300002)(2616005)(44832011)(45080400002)(6666004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eGtnZXUvUEkrQmE3cm9nMVl6TTlxT1RVN245SElTVVF3T0lXSEpJcHkwL2Vi?=
+ =?utf-8?B?UXhvOFcyYTlNcHcra1c1K1cyUDJrcTUwT08zRDRpbmZKalI5aEVYak5aU3Ji?=
+ =?utf-8?B?QmFjTmg0dkRQZmdSQTZha2hsTlhValM1TnJMdWxrcm5vL2dVc1VLVnQ3VFJ5?=
+ =?utf-8?B?bWJjRlpxZ0tlL3l2QzNGQ1QzQzE1S2pPQWRqR1RsTHZ1cE0raFJxeUZSZDRH?=
+ =?utf-8?B?NDdCRkJmZUpzQlBZei9RRFhyOHA2cW42bERtSzU1T2JHc29aNU9rQ0xsdVBu?=
+ =?utf-8?B?V3liSGdPT1RRM3E1eERlVTVqbjBGbWVEcW5janArYURIN1JqUzFCU3Zmcmx6?=
+ =?utf-8?B?c1B0cm91MURyaklxWnZYT2FWODhTZ1JRVCtwS3JHTjZ5UDdsRUpnTTA2cGZY?=
+ =?utf-8?B?VXhXekNDcFFPSkR2dit6MFZOTW44MXdDUmF3Z1ZCUGg5NkNoY1Z5UVdnRVNI?=
+ =?utf-8?B?WjUzVFpVcnhlWkpwdWVRcktscHhHZUtTeVNlRWdlVGI4eTgvaEtFdS9BRmp4?=
+ =?utf-8?B?ZFMrUDl3UEd0bnJ2TDNmQzN5ZkhSZEtTVjF3QUgyK1RXNkJmdUloSTgxTUZt?=
+ =?utf-8?B?SGJuYmR2YjdMT1NJN0tsVmtvSmVtb1lqR2taUDNwSmgvWkx3Q2JURnMxRDlv?=
+ =?utf-8?B?ajlZVC9EalVUZ29mV0YzTmt0ckc2ek1HR2NsenR1SzV5UHEyUWZEOXpPVkRs?=
+ =?utf-8?B?UTN1eXYxOWRmeEpheWdSUGxJemdIMXBZZTEzcEZTeVZybzZTQjg5UjR0blZ5?=
+ =?utf-8?B?T1NoSmhyckFJSGtPa3o0R2lBYVZzd21rc2NkYU91SGErLzNnTW0vUVF0NTQ2?=
+ =?utf-8?B?Y0xZcDdSRytKMlFnZDhyNmRqUDFmT3FkVHdHeEpvZlFKSU1DcmRoOFhLaWU2?=
+ =?utf-8?B?c3FBZEM4VWNpaSt5L1UyS1ZLeUgyT1pIVWdJU1NoK0hkVlZRV2NiQXBkY2JT?=
+ =?utf-8?B?VEVrc0JOUWdONi8zMU1hOStKaytmblBmMklsV0dYbERhSHFIUldIRkxzZDRx?=
+ =?utf-8?B?dWtSNGVQQVdIS1g3SHZvaVBBZ2N2b290OFZOWTRJRkFOMldJY2lSbC9Lc25D?=
+ =?utf-8?B?Y2hZTjVCWjhSb3Y3ZzhsYUswUGEvSjFtSGZnNnVjbkdJcDEzN1lxaHFVMEpY?=
+ =?utf-8?B?bS9UUlptZzd4TXI0dnBxaU1hcUpzR2Fxa0VYSzRKRCtqNys1Ti85Sk05anBV?=
+ =?utf-8?B?cm9aa0VjaldSRWtYclZhVnd4ZmxWK1daeStweDE4djI1SUpLMk8zMDVRUHpI?=
+ =?utf-8?B?VGp6eXdPNkxIQllqcXV4M3VoYnMvWVZFVkhxUVVDOU1HRXBFVnBVNkYvWldi?=
+ =?utf-8?B?Nm1jUWJ1ZTNOcHMyQ1ltbXRlQlYyc3I4ZkZPZkJ6bndsTEwwbjlyNVJYbERL?=
+ =?utf-8?B?eWJtcU4xcVRBT2dVTVZSNjJTZTh0SGpNL0xHMmY4N29vS0ViWXp0eUt3TUhn?=
+ =?utf-8?B?ZnBTUU1zYkhrdVUwQnJ2WERSeUVCNkVYN1JmS3BZNmYvdXhjR29ZQ29RQmtG?=
+ =?utf-8?B?aWIwQUhjZXBocmt5WnRpc0E3cU9iTThHL0tFTE5ycllWMnh4SE9RcFdlOWRJ?=
+ =?utf-8?B?dkpwZ3dhaGRBNVpZMkZQT1NkU0lOcFRUOTA2ZWQ0aVNxUDErelhWK1NTaEc4?=
+ =?utf-8?B?MWgxOW5ZV2RodVEweUt6UFhqU1Flc0VPanl3V2RtWXNKQ0JJcThaOU9qMlV5?=
+ =?utf-8?B?R1oyMjNFN05HbzJReUxIcCsrd3RLZ0NIK2VhaVR1MWR4aFBzNTh5ckNjcGRY?=
+ =?utf-8?B?MVp1dUJPYWFiTjNuT08rUVAyd05tQmpUZDFZd1lYMWljSStUdnpTQ29UcVNJ?=
+ =?utf-8?B?YitMQWVzRHltNTZaVnc2QnA1dGJLSmIwR21zY1FFeVhIVENFMjlCdFBBZ1lT?=
+ =?utf-8?B?Qnd0K1VJcDBiUFp6N2svQk5XNnVhb2FhZVQ3dWNKalllem1IRExxeXk0N3pR?=
+ =?utf-8?B?Q1FFYjNlUVF3UW5VYUQ1WHRBN29xWlNOMHNCZDFHMTIxcUJDNFNkejNTdStT?=
+ =?utf-8?B?dEdkVWFOUHZoQit2V3ZhdHRZOWFWdEN4YUliRFJqMSszZTAzdlE2VGd0am91?=
+ =?utf-8?B?Ryt4VW4xL3c2eWJJQ0JPUkFIM2VaUHFacW9FRUZxTXZtMGFZR0dza2dOc0J1?=
+ =?utf-8?Q?uSEokRlrA5NJ8Otkiic9IY7Of?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c35ac337-61fd-4e8a-9c78-08dab341a5c2
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3370.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Oct 2022 08:52:56.3462
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: XSzjlRoWN73eufyNO9FEyRxUfRhlplZ4QvI49ZCld/3HcNILECOnKYpicxvYAJx6
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5215
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,122 +134,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-it's better to come with some real doc translation.
+On 2022-10-21 04:36, Greg KH wrote:
+> On Fri, Oct 21, 2022 at 04:24:23PM +0800, Yang Yingliang wrote:
+>>
+>> On 2022/10/21 13:37, Greg KH wrote:
+>>> On Fri, Oct 21, 2022 at 01:29:31AM -0400, Luben Tuikov wrote:
+>>>> On 2022-10-20 22:20, Yang Yingliang wrote:
+>>>>> The previous discussion link:
+>>>>> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Flkml%2F0db486eb-6927-927e-3629-958f8f211194%40huawei.com%2FT%2F&amp;data=05%7C01%7Cluben.tuikov%40amd.com%7Ca8206f9348e04b13e3da08dab33f4f53%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C638019381738406942%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=HqvF1p4ejF6%2BYS5u0pe15ZdDgUAIVP%2BB1xQXICWjNwY%3D&amp;reserved=0
+>>>> The very first discussion on this was here:
+>>>>
+>>>> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fwww.spinics.net%2Flists%2Fdri-devel%2Fmsg368077.html&amp;data=05%7C01%7Cluben.tuikov%40amd.com%7Ca8206f9348e04b13e3da08dab33f4f53%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C638019381738406942%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=LmRgWUSQgK6wJvMdfBgjO4CiaKQ2TBoeW836r0UbcjU%3D&amp;reserved=0
+>>>>
+>>>> Please use this link, and not the that one up there you which quoted above,
+>>>> and whose commit description is taken verbatim from the this link.
+>>>>
+>>>>> kset_register() is currently used in some places without calling
+>>>>> kset_put() in error path, because the callers think it should be
+>>>>> kset internal thing to do, but the driver core can not know what
+>>>>> caller doing with that memory at times. The memory could be freed
+>>>>> both in kset_put() and error path of caller, if it is called in
+>>>>> kset_register().
+>>>> As I explained in the link above, the reason there's
+>>>> a memory leak is that one cannot call kset_register() without
+>>>> the kset->kobj.name being set--kobj_add_internal() returns -EINVAL,
+>>>> in this case, i.e. kset_register() fails with -EINVAL.
+>>>>
+>>>> Thus, the most common usage is something like this:
+>>>>
+>>>> 	kobj_set_name(&kset->kobj, format, ...);
+>>>> 	kset->kobj.kset = parent_kset;
+>>>> 	kset->kobj.ktype = ktype;
+>>>> 	res = kset_register(kset);
+>>>>
+>>>> So, what is being leaked, is the memory allocated in kobj_set_name(),
+>>>> by the common idiom shown above. This needs to be mentioned in
+>>>> the documentation, at least, in case, in the future this is absolved
+>>>> in kset_register() redesign, etc.
+>>> Based on this, can kset_register() just clean up from itself when an
+>>> error happens?  Ideally that would be the case, as the odds of a kset
+>>> being embedded in a larger structure is probably slim, but we would have
+>>> to search the tree to make sure.
+>> I have search the whole tree, the kset used in bus_register() - patch #3,
+>> kset_create_and_add() - patch #4
+>> __class_register() - patch #5,  fw_cfg_build_symlink() - patch #6 and
+>> amdgpu_discovery.c - patch #10
+>> is embedded in a larger structure. In these cases, we can not call
+>> kset_put() in error path in kset_register()
+> 
+> Yes you can as the kobject in the kset should NOT be controling the
+> lifespan of those larger objects.
+> 
+> If it is, please point out the call chain here as I don't think that
+> should be possible.
 
-Thanks
-Alex
+WLOG, I believe it is something like this:
 
-On Fri, Oct 21, 2022 at 4:36 PM Rui Li <me@lirui.org> wrote:
->
-> Translate subsystem-apis.rst into Chinese.
->
-> Signed-off-by: Rui Li <me@lirui.org>
-> ---
->  Documentation/translations/zh_CN/index.rst    |  5 +-
->  .../translations/zh_CN/subsystem-apis.rst     | 66 +++++++++++++++++++
->  2 files changed, 67 insertions(+), 4 deletions(-)
->  create mode 100644 Documentation/translations/zh_CN/subsystem-apis.rst
->
-> diff --git a/Documentation/translations/zh_CN/index.rst b/Documentation/t=
-ranslations/zh_CN/index.rst
-> index ec99ef5fe990..1250f2afd928 100644
-> --- a/Documentation/translations/zh_CN/index.rst
-> +++ b/Documentation/translations/zh_CN/index.rst
-> @@ -53,10 +53,7 @@
->     core-api/index
->     driver-api/index
->     =E5=86=85=E6=A0=B8=E4=B8=AD=E7=9A=84=E9=94=81 <locking/index>
-> -
-> -TODOList:
-> -
-> -* subsystem-apis
-> +   subsystem-apis
->
->  =E5=BC=80=E5=8F=91=E5=B7=A5=E5=85=B7=E5=92=8C=E6=B5=81=E7=A8=8B
->  --------------
-> diff --git a/Documentation/translations/zh_CN/subsystem-apis.rst b/Docume=
-ntation/translations/zh_CN/subsystem-apis.rst
-> new file mode 100644
-> index 000000000000..5ceca6c3ca1b
-> --- /dev/null
-> +++ b/Documentation/translations/zh_CN/subsystem-apis.rst
-> @@ -0,0 +1,66 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +.. include:: ./disclaimer-zh_CN.rst
-> +
-> +:Original: Documentation/subsystem-apis.rst
-> +
-> +:=E7=BF=BB=E8=AF=91:
-> +
-> +  =E6=9D=8E=E7=9D=BF Rui Li <me@lirui.org>
-> +
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +=E5=86=85=E6=A0=B8=E5=AD=90=E7=B3=BB=E7=BB=9F=E6=96=87=E6=A1=A3
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +
-> +=E8=BF=99=E4=BA=9B=E6=96=87=E6=A1=A3=E4=BC=9A=E4=BB=8E=E4=B8=80=E4=B8=AA=
-=E5=86=85=E6=A0=B8=E5=BC=80=E5=8F=91=E8=80=85=E7=9A=84=E8=A7=92=E5=BA=A6=E5=
-=8E=BB=E6=B7=B1=E5=85=A5=E8=AE=B2=E8=BF=B0=E4=B8=80=E4=BA=9B=E5=86=85=E6=A0=
-=B8=E5=AD=90=E7=B3=BB=E7=BB=9F=E7=9A=84=E8=BF=90=E8=A1=8C=E7=BB=86=E8=8A=82=
-=E3=80=82=E8=BF=99=E9=87=8C
-> +=E7=9A=84=E8=AE=B8=E5=A4=9A=E4=BF=A1=E6=81=AF=E7=9B=B4=E6=8E=A5=E6=9D=A5=
-=E6=BA=90=E4=BA=8E=E5=86=85=E6=A0=B8=E6=BA=90=E7=A0=81=EF=BC=8C=E5=8A=A0=E4=
-=B8=8A=E4=B8=80=E4=BA=9B=E5=BF=85=E8=A6=81=E7=9A=84=E8=A1=A5=E5=85=85=E6=9D=
-=90=E6=96=99=EF=BC=88=E6=88=96=E8=80=85=E8=87=B3=E5=B0=91=E6=98=AF=E6=88=91=
-=E4=BB=AC=E4=BA=BA=E4=B8=BA
-> +=E5=8A=A0=E4=B8=8A=E7=9A=84=E2=80=94=E2=80=94=E5=B0=BD=E7=AE=A1=E6=9C=89=
-=E4=BA=9B=E5=B9=B6 *=E4=B8=8D* =E5=BF=85=E8=A6=81=EF=BC=89=E3=80=82
-> +
-> +**Fixme**: =E9=9C=80=E8=A6=81=E6=9B=B4=E5=A4=9A=E6=96=87=E6=A1=A3=E7=BB=
-=84=E7=BB=87=E5=B7=A5=E4=BD=9C=E3=80=82
-> +
-> +.. toctree::
-> +   :maxdepth: 1
-> +
-> +   driver-api/index
-> +   core-api/index
-> +   locking/index
-> +   accounting/index
-> +   cpu-freq/index
-> +   iio/index
-> +   infiniband/index
-> +   power/index
-> +   virt/index
-> +   sound/index
-> +   filesystems/index
-> +   mm/index
-> +   PCI/index
-> +   scheduler/index
-> +   peci/index
-> +
-> +TODOList:
-> +
-> +* block/index
-> +* cdrom/index
-> +* fb/index
-> +* fpga/index
-> +* hid/index
-> +* i2c/index
-> +* isdn/index
-> +* leds/index
-> +* netlabel/index
-> +* networking/index
-> +* pcmcia/index
-> +* target/index
-> +* timers/index
-> +* spi/index
-> +* w1/index
-> +* watchdog/index
-> +* input/index
-> +* hwmon/index
-> +* gpu/index
-> +* security/index
-> +* crypto/index
-> +* bpf/index
-> +* usb/index
-> +* scsi/index
-> +* misc-devices/index
-> +* mhi/index
-> --
-> 2.30.2
->
+	x = kzalloc();
+
+	kobject_set_name(&x->kset.kobj, format, ...);
+	x->kset.kobj.kset = parent_kset;
+	x->kset.kobj.ktype = this_ktype;  /* this has a .release which frees x */
+	res = kset_register(&x->kset);
+	if (res) {
+		kset_put(&x->kset);       /* calls this_ktype->release() which frees x */ 
+		kfree(x);                 /* <-- double free */
+	}
+
+And since kref is set to 1, in kset_register(), then we'd double free.
+This is why I don't have kset_put() in that error path in amdgpu.
+
+Regards,
+Luben
