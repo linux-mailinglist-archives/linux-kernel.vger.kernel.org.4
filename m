@@ -2,181 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BE9A607C10
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 18:20:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 354F8607BC1
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 18:06:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230321AbiJUQUj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 12:20:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57066 "EHLO
+        id S230228AbiJUQG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 12:06:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230392AbiJUQUH (ORCPT
+        with ESMTP id S230219AbiJUQGV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 12:20:07 -0400
-Received: from beige.elm.relay.mailchannels.net (beige.elm.relay.mailchannels.net [23.83.212.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9247856BA8;
-        Fri, 21 Oct 2022 09:19:45 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 6CC7A418E6;
-        Fri, 21 Oct 2022 16:19:44 +0000 (UTC)
-Received: from pdx1-sub0-mail-a201 (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id D1C3B40E67;
-        Fri, 21 Oct 2022 16:19:43 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1666369183; a=rsa-sha256;
-        cv=none;
-        b=z6nCKeO+lcnn3+aKluxACZRN/pPuT45Bb+SOwqOvxogbT0xwsM9ELMkhmFKLY0s0sQkAd8
-        XBAemYJvjZdpp5gkALeLixHfco219fSUvyl2cSZpLH7DKQ52dkxSqknC4DG5DxwVNgVrVx
-        dZvTmFHqwDCtOundqFfcB+G9bzCxtEOzKQ9at1VcNqLXC12x8nTJNbIgRo6vCsbUomwi6x
-        2n9TnLBumrdZ5XSUX79Zr22MbPGyBWouBz8SWqSuEPdBOBZmpyCvXT8JgNrW7c0JS9tn7I
-        WkOQRS++ZCMX9Ei3rxu/eD3rRwhty8awRve8N+deMV8jAYT7ns92Lfr3a5P06w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1666369183;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=NW6vJ8DeFyk7asXbesj79NddbzSxSYq+RveUfuG553Q=;
-        b=+AJBs71HI0T0gS65Tr2uUDf+M091WTaOoiYSrDJROzGvBGFgPtsXE08azLXNvQsVFjOwaK
-        z0YFBTG++HZasFvloHWCnn5L8hVw4iePqYwffNrRwUR+PGyiPifnENjEqb7GLeVwCtSWLH
-        64lUlynpvAzJ4p6mkcQTzNWCki4mmikJnZNZpKPXCcxwX0UQMJf5BeuOh6kgYJ7Nci+TdU
-        WwE3YGsBhkW6Su9JuZxCFBfvlx8CdH94nHHVbhQDKBijDi4qzIKVdq0YugOc9bQBiNI/ek
-        dEeUUAmXWLqrBInFMYA767Neri2TDQY9tPGzEMQTDsqjptX6k8W3KUb0qa5Rhw==
-ARC-Authentication-Results: i=1;
-        rspamd-6955c7cd5b-khjbw;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Chief-Wiry: 50cdf9746f680e89_1666369184189_97444717
-X-MC-Loop-Signature: 1666369184189:1827427503
-X-MC-Ingress-Time: 1666369184189
-Received: from pdx1-sub0-mail-a201 (pop.dreamhost.com [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.120.183.105 (trex/6.7.1);
-        Fri, 21 Oct 2022 16:19:44 +0000
-Received: from offworld (ip72-199-50-187.sd.sd.cox.net [72.199.50.187])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a201 (Postfix) with ESMTPSA id 4Mv8nB0rB2z2d;
-        Fri, 21 Oct 2022 09:19:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1666369182;
-        bh=NW6vJ8DeFyk7asXbesj79NddbzSxSYq+RveUfuG553Q=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=dX0PmMOhuURcIdOlni51tOvsbJYcE0F2poC8cjMTcF+0caw46mWq3ppZVEbLhNPdy
-         6b6NiNtaXMbz6GRXgwFI3GZ/v6Vajkr8F2l4fYg6U3YgmcEfFWWYCrxhNhyVMqYsdA
-         snAuQkG89oIRFdAs4vXmNGvLw/R7w/xPshMR7oFNNx2eViaXvKIfymku/FhzNKepJZ
-         5RCVWrCw0NBpYq7sgHHQ0qWvReRZnTTSdb+0N6Epb7M0OeMDhdikdj3uRsS0x11Thp
-         lHSapcKKj9pOsAfaIS6GGS1AG4ZrM7VP3BtOyEog3au/f2cE4YkkVkxDHKENzKUHjK
-         XOlChH0QY5g9Q==
-Date:   Fri, 21 Oct 2022 08:58:18 -0700
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc:     Ira Weiny <ira.weiny@intel.com>, dan.j.williams@intel.com,
-        dave.jiang@intel.com, alison.schofield@intel.com,
-        bwidawsk@kernel.org, vishal.l.verma@intel.com,
-        a.manzanares@samsung.com, linux-cxl@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] cxl/pci: Add generic MSI-X/MSI irq support
-Message-ID: <20221021155818.rxp6e3x4lid7eume@offworld>
-References: <20221018030010.20913-1-dave@stgolabs.net>
- <20221018030010.20913-2-dave@stgolabs.net>
- <20221018103619.00004c39@huawei.com>
- <20221018115227.00002a4c@huawei.com>
- <Y1IcpaodrrVrkEcL@iweiny-desk3>
- <20221021095818.00006ed1@huawei.com>
+        Fri, 21 Oct 2022 12:06:21 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78CC8209F80;
+        Fri, 21 Oct 2022 09:06:18 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29L8rYue008650;
+        Fri, 21 Oct 2022 16:06:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=R8emWiLBFPkOphvZD7XQZDyKcPgVRPFkVJwpvC3ik0w=;
+ b=Mb3McpJsM0kCnDdicPBol6ZL9QyCqdi9UeLUL660+CvUku0N6M+Lp/P/d+QBavd2fkJd
+ UgQhPpEvqqfZbWUpPhZXJ/qVcpt7fhvemmm+xpw0mJAsoQlvKgtZrsTqsyjEWQt6o13U
+ IHBM8f0RkDf1uSPLhawilz1jK4nNHj+6iowJrDla+BO7Y3+v5kT2zCgHzzsoj8AFhGVl
+ KUlcDDZOi8YxNa3zP28F9Zug5qtD7CeZLZ8Hn2yk5mP6Tx+7aGpsu603PNvEMon72BIi
+ gVGYhGGbcvyePpyWuul01AojORpZLwhkzzWVWqNfnRopfUCJAoc+LlgliJ1ZqEpVRYG1 lg== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kbnqt29b3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 21 Oct 2022 16:06:01 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29LG60J1019984
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 21 Oct 2022 16:06:00 GMT
+Received: from [10.111.175.17] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Fri, 21 Oct
+ 2022 09:05:56 -0700
+Message-ID: <139426b9-0e5b-e4c3-27c6-584ab48517c2@quicinc.com>
+Date:   Fri, 21 Oct 2022 09:05:52 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20221021095818.00006ed1@huawei.com>
-User-Agent: NeoMutt/20220429
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v2 00/10] drm/msm: probe deferral fixes
+Content-Language: en-US
+To:     Johan Hovold <johan@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Clark <robdclark@gmail.com>
+CC:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        "Laurent Pinchart" <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Sean Paul <sean@poorly.run>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Manivannan Sadhasivam" <manivannan.sadhasivam@linaro.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Steev Klimaszewski <steev@kali.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+References: <20220913085320.8577-1-johan+linaro@kernel.org>
+ <YymCll02tRIMb+9Z@hovoldconsulting.com>
+ <Y1I77HYeOkx1fz1E@hovoldconsulting.com>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <Y1I77HYeOkx1fz1E@hovoldconsulting.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: Gls1jzuKGH2PD6_I00PqYRbhQlT3-yDP
+X-Proofpoint-ORIG-GUID: Gls1jzuKGH2PD6_I00PqYRbhQlT3-yDP
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-21_04,2022-10-21_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 spamscore=0
+ adultscore=0 clxscore=1011 lowpriorityscore=0 bulkscore=0 mlxlogscore=999
+ phishscore=0 suspectscore=0 priorityscore=1501 malwarescore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210210096
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 21 Oct 2022, Jonathan Cameron wrote:
+Hi Johan
 
->> FWIW I did this for the event stuff and did not find it so distasteful...  :-/
+On 10/20/2022 11:27 PM, Johan Hovold wrote:
+> On Tue, Sep 20, 2022 at 11:06:30AM +0200, Johan Hovold wrote:
+>> On Tue, Sep 13, 2022 at 10:53:10AM +0200, Johan Hovold wrote:
+>>> The MSM DRM driver is currently broken in multiple ways with respect to
+>>> probe deferral. Not only does the driver currently fail to probe again
+>>> after a late deferral, but due to a related use-after-free bug this also
+>>> triggers NULL-pointer dereferences.
+>>>
+>>> These bugs are not new but have become critical with the release of
+>>> 5.19 where probe is deferred in case the aux-bus EP panel driver has not
+>>> yet been loaded.
+>>>
+>>> The underlying problem is lifetime issues due to careless use of
+>>> device-managed resources.
 >>
->> However the information I am stashing in the cxlds is all interrupt
->> information.  So I think it is different from what I see in the CPMU stuff.
->
->Right now I'm just stashing the max interrupt number to squirt into a callback
->a few lines later. That feels like a hack to get around parsing the structures
->4 times.  If it's an acceptable hack then fair enough.
->
->>
->> > 2. The callback below to find those numbers
->> > 3. Registration of the cpmu devices.
->> >
->> > Reality is that it is cleaner to more or less ignore the infrastructure
->> > proposed in this patch.
->> >
->> > 1. Query how many CPMU devices there are. Whilst there stash the maximim
->> >    cpmu vector number in the cxlds.
->> > 2. Run a stub in this infrastructure that does max(irq, cxlds->irq_num);
->> > 3. Carry on as before.
->> >
->> > Thus destroying the point of this infrastructure for that usecase at least
->> > and leaving an extra bit of state in the cxl_dev_state that is just
->> > to squirt a value into the callback...
->>
->> I'm not sure I follow?  Do you mean this?
->>
->> static int cxl_cpmu_get_max_msgnum(struct cxl_dev_state *cxlds)
->> {
->>	return cxlds->cpmu_max_vector;
->> }
->
->Yup. That state is no relevance to the cxl_dev_state outside of this tiny
->block of code.  Hence I really don't like putting it in there.
+>> Any chance of getting this merged for 6.1?
+> 
+> Is anyone picking these up as fixes for 6.1-rc as we discussed?
+> 
+> Johan
 
-Oh absolutely, this is ugly as sin. And if there is anything even worth stashing
-the max would only be mbox, as Ira suggested earlier in v1, iirc. So no,
-we should not be doing this sort of thing. And if pass one were done in the
-callback the need for this would disappear.
+All of these except the last two ( as discussed ) have landed in the 
+-fixes tree
 
->>
->> >
->> > So with that in mind I'm withdrawing the RB above.  This looks to be
->> > an idea that with hindsight doesn't necessarily pan out.
->> > Long hand equivalent with the specific handling needed for each case
->> > is probably going to be neater than walking a table of much more
->> > restricted callbacks.
->>
->> I'm not married to the idea of the array of callbacks but I'm not sure how this
->> solves having to iterate on the CPMU devices twice?
->
->Laid that out in the other branch of the thread but basically either
->1) We stash irrelevant information in cxl_dev_state just to get it into the callback
->   It's not used for anything else and this makes a fiddly and non obvious tie
->   up between different registration steps that appear somewhat independent.
+https://gitlab.freedesktop.org/drm/msm/-/commit/6808abdb33bf90330e70a687d29f038507e06ebb
 
-Yeah anything _but_ this.
+Thanks
 
->
->2) We do the whole double parse twice (so 4 times in total) which is the right
->   option to keep the layering if using this array of callbacks approach, but
->   really ugly.  If we flatten it to straight line code there is no implication
->   of layering and the state being parsed on is right there in a local variable.
+Abhinav
 
-If we are keeping this patch, then as mentioned before, I would prefer this. imo
-this is better than both 1 above and the open-coding approach.
-
->I can live with it either way, but it's definitely not as pretty as it looks
->for the mailbox case.
-
-Agreed.
-
-Thanks,
-Davidlohr
+>   
+>>> Changes in v2
+>>>   - use a custom devres action instead of amending the AUX bus interface
+>>>     (Doug)
+>>>   - split sanity check fixes and cleanups per bridge type (Dmitry)
+>>>   - add another Fixes tag for the missing bridge counter reset (Dmitry)
+>>>
+>>>
+>>> Johan Hovold (10):
+>>>    drm/msm: fix use-after-free on probe deferral
+>>>    drm/msm/dp: fix memory corruption with too many bridges
+>>>    drm/msm/dsi: fix memory corruption with too many bridges
+>>>    drm/msm/hdmi: fix memory corruption with too many bridges
+>>>    drm/msm/dp: fix IRQ lifetime
+>>>    drm/msm/dp: fix aux-bus EP lifetime
+>>>    drm/msm/dp: fix bridge lifetime
+>>>    drm/msm/hdmi: fix IRQ lifetime
+>>>    drm/msm/dp: drop modeset sanity checks
+>>>    drm/msm/dsi: drop modeset sanity checks
+>>>
+>>>   drivers/gpu/drm/msm/dp/dp_display.c | 26 +++++++++++++++++++-------
+>>>   drivers/gpu/drm/msm/dp/dp_parser.c  |  6 +++---
+>>>   drivers/gpu/drm/msm/dp/dp_parser.h  |  5 +++--
+>>>   drivers/gpu/drm/msm/dsi/dsi.c       |  9 +++++----
+>>>   drivers/gpu/drm/msm/hdmi/hdmi.c     |  7 ++++++-
+>>>   drivers/gpu/drm/msm/msm_drv.c       |  1 +
+>>>   6 files changed, 37 insertions(+), 17 deletions(-)
