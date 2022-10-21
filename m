@@ -2,255 +2,322 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1638A606F48
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 07:14:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B261606F4A
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 07:15:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229922AbiJUFOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 01:14:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36932 "EHLO
+        id S229921AbiJUFPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 01:15:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbiJUFOF (ORCPT
+        with ESMTP id S229604AbiJUFPe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 01:14:05 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07D3C22AB6C;
-        Thu, 20 Oct 2022 22:14:01 -0700 (PDT)
+        Fri, 21 Oct 2022 01:15:34 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF577ED99F
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 22:15:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666329242; x=1697865242;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=bH4qLRzjabx3RPPLjOpBiiwHP1adhWczYOoOT+L+SvA=;
-  b=JYKfyQoAY5t3UiDBoqksvVXeSDYJdhyvPeHwvF17KMGuluGkmUdh6x86
-   V1RSH05qnMhu6nLcyK4dWudRlB63ttQlyLu7FPvbigpK6ivUm5QDQsMgY
-   Ehuah7RRzjc2V1oloQHhCSQFs0SbKLNk0ktWb9+HDt6JqEeAAfa6DO6FT
-   09DPkYPKXB1ysKHsIY4JqcsnUtrV6cH79xTn9hPy3Lkhau6/1OO3susZD
-   4SkHn5oBG7ISXfXOS5alynU0Jh9CvxWFZR7ip32l3AYGmrD3P4aYrJbTk
-   Dp0K1vCf86bDxdJmpwkKkPcN0O+JK4kOQOAICnbjx6HZnJEY8/259Mdmk
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="304527198"
+  t=1666329332; x=1697865332;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=OwujiVsPY73qUJgzVYNfCMaZryrW3pmRX6gnEm2gZYs=;
+  b=dDU0znywYemRypRWAHZ5mVMQiVEUpMpn3IbpdFJouEHJb0ufSM2MAs/R
+   aIWVdkUBJxndR4b1GOvaUQHX2vLqQxrZChW1n9iie14i5vQZs/ITdCMdF
+   pLREH0Xg3bJJ0CZFOzGVlMLsoLFqUEsSd2L+n/fmAIlB0msC34XlDsbEI
+   h2tDyMFNF/dJnom8wYahOOqGpHQoFcGA0uAl4NZhuS+4BL61ONe5GSfV3
+   N+v/wazmqMEZJ+ZJdaTjDOHJ/Vr7gmir0CIJvXncZz9yH/QzF9y27PUos
+   Uu1uG0Ki5RjKps1UrAcqcH9MFlDulI7JOyZOq52t7TUCi67lGgy3DcDTC
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="287314789"
 X-IronPort-AV: E=Sophos;i="5.95,200,1661842800"; 
-   d="scan'208";a="304527198"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 22:14:00 -0700
+   d="scan'208";a="287314789"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 22:15:31 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="693476088"
+X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="625139260"
 X-IronPort-AV: E=Sophos;i="5.95,200,1661842800"; 
-   d="scan'208";a="693476088"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by fmsmga008.fm.intel.com with ESMTP; 20 Oct 2022 22:14:00 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 20 Oct 2022 22:14:00 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 20 Oct 2022 22:13:59 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Thu, 20 Oct 2022 22:13:59 -0700
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.168)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Thu, 20 Oct 2022 22:13:59 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EvQkIoeq1AbXsKm3fNJMc5HqBXCoBs+94viraUbJVf9l+lpacGtpXF2R2TankdUpWS7RvH71aFLXOaTJnm8yo1RU5johnpIYFLR8sPYAq24VPFHPzhCo9soJN7UfWpCuSl+DdmnwWyz4Rx7B47WbIZ5EnNkS6fIqhP0Xfo98LWn3jkm85/dj5kdAaWdmYIbF84ICaclqtzXNFx6OdWvfjum1MlVVVQPWvJyjUF8lSjqMRKajGiV0lxfX1qgzUJV7KKIoYWc0Z5jnxFphDC3obcwJJL1RsSgOAWwnsrJfnulugfPpDCPPV5mcMUkmoET08YizK1vPZesjM4WonBUsiA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VB/jyu4LpEeuD4qJnI4oz9F8Houe4PsTMzcQ7V8+yEs=;
- b=WKKrhYEJSRlAUe0KKi3QoNBYdMLv/i3toUvCdI7rFucFeUpYfIluaE603vUB65/Z0C4t/IQRin94IHYKvAryO3KZktOMnnAlshDcpT4n+Mm96ELO8xmKen9aBOacbQJTg2eU8TBrsUzfnldYlJy+f5Zhprsvdv0W8JEUiAEAVqfeOuWCogKrPhv8Jx+Kh9pgqV2odXBjIbw90jrbE7h2TMe51i0PCVklAKYb3U/RfBX5rPQbn6i+QrpElGgVAA23CdrSZURznEArdDMjxtHWK/cwCUGjPYMOWl98sSUZ1Lfixpl0J3fflV9tPS22x9bA1yK1cX0UOrE6siS3cFtE8g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SA1PR11MB6733.namprd11.prod.outlook.com (2603:10b6:806:25c::17)
- by DM6PR11MB4593.namprd11.prod.outlook.com (2603:10b6:5:2a3::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.21; Fri, 21 Oct
- 2022 05:13:58 +0000
-Received: from SA1PR11MB6733.namprd11.prod.outlook.com
- ([fe80::6f83:c165:aa0c:efae]) by SA1PR11MB6733.namprd11.prod.outlook.com
- ([fe80::6f83:c165:aa0c:efae%8]) with mapi id 15.20.5723.033; Fri, 21 Oct 2022
- 05:13:58 +0000
-Date:   Thu, 20 Oct 2022 22:13:54 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
-CC:     Steven Rostedt <rostedt@goodmis.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>
-Subject: Re: [RFC V2 PATCH 05/11] cxl/mem: Trace General Media Event Record
-Message-ID: <Y1Iqkmq5qho10bmm@iweiny-desk3>
-References: <20221010224131.1866246-1-ira.weiny@intel.com>
- <20221010224131.1866246-6-ira.weiny@intel.com>
- <20221011135702.00006f74@huawei.com>
- <Y0nx1UOeYfQu5WYO@iweiny-desk3>
- <20221017173717.00005921@huawei.com>
- <20221017132143.360d2d46@gandalf.local.home>
- <20221018104636.000016fc@huawei.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20221018104636.000016fc@huawei.com>
-X-ClientProxiedBy: SJ0PR13CA0043.namprd13.prod.outlook.com
- (2603:10b6:a03:2c2::18) To SA1PR11MB6733.namprd11.prod.outlook.com
- (2603:10b6:806:25c::17)
+   d="scan'208";a="625139260"
+Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 20 Oct 2022 22:15:30 -0700
+Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1olkNV-0002Eg-1T;
+        Fri, 21 Oct 2022 05:15:29 +0000
+Date:   Fri, 21 Oct 2022 13:15:15 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/misc] BUILD SUCCESS
+ a545b48c2d907d6096e7bcf65d9b0681cc850e69
+Message-ID: <63522ae3.y4JrOF53jWCKt3Wg%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA1PR11MB6733:EE_|DM6PR11MB4593:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6e8aac61-be58-4801-5ac8-08dab3230eab
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qmKd2qhrnk7l/fp0qSndl5twO4KJv1BDvqiAPZbZAcgYue5Ir3aEEi1jcfdSoKUEdB3gf8iO3RUcnjKIYZmjeLuaM9m9XTRQtNnDqwOupKrgCGpqlOgISeb/NppBPm+JORkdD+t2Yr+v1dGaKrZOXqK858BfYDNKw8WWBOD2FKivKE5C0DVYX+Ryofpt7hHzhiG3yPMdwEv4FM1faBpKwekDgqACq90AyYItu6G0hGmFS9mMDOme4XLyABsFLB9oOxvAP3e2J+dRt+qUyP4icMvUy3NPblcdYnyoExJj38OD76VjmfSXgEvxoLEUFVB5uSOH3bLz2nz8lBm0Ujvwicyo7M96NCB6FGxyrYrDoBcE5iyD9s4421kzAoFbPRe9zlh2nl8TfQDcCQpd+Wh1jAQgtJJ3zniFagCFztpS8PpeGDh0XKZW05FQCZAfmlRms3GmRVJUfU4qQNOb/UOlcU46kA7VVMWzF5CZzZXm6Kds5y/ZOEdLf9SYcOGBNgdbTk/gen0kjHNwPa+2Rb6E/pUjy2u30064cFehbb1Ap7NQt8aMVMGUdaTpg3ruWsVFUvAk8MOeBuuXNK4mTOklZnQF5Ox2700p9CxhjC++W7yneCXoq3ZS6JgZcUrng5uZ8szKY1NMU0PQrUKPlJccXzctqq5vQWv6UceTxAL/NiaUxKCeXExAvMWC7Kry2tIQ6LoEx8T/zaB7AEL74plvfbIVUw+5JFiWSMCg+8HsFac=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6733.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(136003)(396003)(376002)(39860400002)(366004)(346002)(451199015)(6666004)(186003)(6506007)(478600001)(9686003)(6512007)(26005)(6486002)(2906002)(83380400001)(966005)(6916009)(316002)(54906003)(8676002)(66476007)(66946007)(66556008)(4326008)(8936002)(41300700001)(86362001)(5660300002)(44832011)(38100700002)(33716001)(82960400001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?YlQr4luDfkaYpLM4OfvqHUXzycVOSKRVuRXwAWTOfCqW+jG3G8kSEYnzYkzq?=
- =?us-ascii?Q?oYF9M6ruc7WvUvHCv2Inr0mtWhkIC1MSHUCcFHSgeMKw3ITxW/K0kYjMNSqY?=
- =?us-ascii?Q?1HEXdoAOoghxoZtYH0h6HtEgWUp0Uea5Uh/D5kmwOXGrS39+siImn+FF7X3x?=
- =?us-ascii?Q?bPRxd4GbZSYN8d8NjxjZhqm0LuBqe1exXndLppmtTANu8VN8EXljf8A+lSOQ?=
- =?us-ascii?Q?h5qXpjpLC7y3rp8xtJSi7MjVMDsXt78BK55jbFidjeOhuYka+Z2ZAfyMyfzN?=
- =?us-ascii?Q?S5Gc59lHAZOlviwfR1kzkhVB9u7fHNwAiMi/dacFQBrlpese+3hmWGanzeJR?=
- =?us-ascii?Q?wcTFasXCGtHVzRlNZY2tl1k8GCo8M5Rjh0fPAU/cTRcgv4cmTbAOoP2cYidk?=
- =?us-ascii?Q?BkJ7GRD2RAzHUnN3c5Wyq+9BLH4uDCLQndEF6jj18FJgbCsMIQQvNO/UstQq?=
- =?us-ascii?Q?ffo7hNo4RnWN7lhAwNsSYXkp4MnIl2ZkWqp2Ew/moqUYp/YxLE8mNoIXQsVY?=
- =?us-ascii?Q?kn5KVzPEPCbEMLhGq9MaQaQybRKb7CtLQ9+MsJNWdUtmhbtY2byarCGzl29d?=
- =?us-ascii?Q?bZCT9foqyNaWNlJimgCpCYrA0ZmW/AFBtBVyod7h84/4bRQrJfAD76616Cqk?=
- =?us-ascii?Q?9ItaJby+j8bUuWXWNy88iXY7gimK/yzWCs/JG8MWXgXq5uVTXUk1VeVEYNnM?=
- =?us-ascii?Q?f9YXiwPDCInh1U3MtuRhjAXopX7MlLImWyhkOpl25DoTAKY/RiEFYi3A/PhH?=
- =?us-ascii?Q?AVU+7eYSD0MhU/r7g9aAiKsAlciFPmVZE0QsEiotpVreUl7OquTPhxbYVAfe?=
- =?us-ascii?Q?BwJprEw/5CGQ28pf5HKxTeuNpHyxlIQQUIP64Zqsrrb9a9zSCz/7yuSnN/7j?=
- =?us-ascii?Q?3TdxvUn3cPvMfsiDEaiA030en2MZQs6hn9duFI6iwSYm+t449Wl7NsOQSGmy?=
- =?us-ascii?Q?cItC5xGrb34jVuMAmIn5UkG8m80pvabz7lUZq1oCKTMj5lZNq1n/sCd+Ih8D?=
- =?us-ascii?Q?q5pXv3KIeJA7OI05eMgiSKkloTh6pHC8AXGuH5+lUm1lO954T1KVR8Iw+n2P?=
- =?us-ascii?Q?v0MPF3pOu7x9gh6paxIhiDFy/WHJmNhLoDLVWVWQWKW2pDwTl0vVTsTrjJ+H?=
- =?us-ascii?Q?g+ic4rA2ZJZOAX0nn3UvKdXMSfamkf1clsvsHqzRcOpa8pWQ2KRBrf8RXI0E?=
- =?us-ascii?Q?zqWxcGDc6LzxnK7KbI22BGIxOYm1KQ6hzcpIpqCTNrMVMEoje5cpwfkpI7L4?=
- =?us-ascii?Q?25Vgx8ILWDLp3mxPYoi6WVEG/59l04AFp8GdW+Q671EvAGFV+WHJI+u167wg?=
- =?us-ascii?Q?iMpVBowfQj+vIHsIVNoOQp6AACrMB52pMRF2Hox6JGPvhdYFlCkm+3FeL2do?=
- =?us-ascii?Q?WAwmQRTlZ0Tywd9rKgIGC2oBWbqqC6rvmo409g8tr1KhH4bcAmm8nnznEB9z?=
- =?us-ascii?Q?WpXDVQRgl37aMHFk4mEEnheu8Kv0xg8dofA/NMmduyReaRIxubiDHFJhymis?=
- =?us-ascii?Q?yRk4pB906ioqsrod7ecIXIPH0ASHAEpIvTTVQT+G6yfjUqMh2uDOn5gtM/qn?=
- =?us-ascii?Q?SmH7wFOs+/eOoiu+gc8sJeSTutaBAEFdy9NfCnfA?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6e8aac61-be58-4801-5ac8-08dab3230eab
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6733.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Oct 2022 05:13:57.9090
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: O+QGFoV7g6eIvcmuL78uIwfBoySj6Ahq+tLBGRBjqBjfHpEZ21NktMB1U46t2CaC5HlV1F9KLnodrtm4Jv97sg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4593
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 10:46:36AM +0100, Jonathan Cameron wrote:
-> On Mon, 17 Oct 2022 13:21:43 -0400
-> Steven Rostedt <rostedt@goodmis.org> wrote:
-> 
-> > On Mon, 17 Oct 2022 17:37:17 +0100
-> > Jonathan Cameron <Jonathan.Cameron@huawei.com> wrote:
-> > 
-> > > Looking at other similar cases though and we have a lot of use
-> > > of trace_seq_printf() e.g. libata_trace_parse_status() though note
-> > > there is some magic macro stuff in include/trace/events/libata.h 
-> > > to tie that together.
-> > > https://elixir.bootlin.com/linux/latest/source/drivers/ata/libata-trace.c#L14
-> > > 
-> > > That seems to get you access to the actual buffer we are printing into
-> > > in similar cases.  
-> > 
-> > Looking at the code you linked to, I wonder why __print_flags() wasn't used?
-> > 
-> > For instance, you have:
-> > 
-> > const char *
-> > libata_trace_parse_status(struct trace_seq *p, unsigned char status)
-> > {
-> >         const char *ret = trace_seq_buffer_ptr(p);
-> > 
-> >         trace_seq_printf(p, "{ ");
-> >         if (status & ATA_BUSY)
-> >                 trace_seq_printf(p, "BUSY ");
-> >         if (status & ATA_DRDY)
-> >                 trace_seq_printf(p, "DRDY ");
-> >         if (status & ATA_DF)
-> >                 trace_seq_printf(p, "DF ");
-> >         if (status & ATA_DSC)
-> >                 trace_seq_printf(p, "DSC ");
-> >         if (status & ATA_DRQ)
-> >                 trace_seq_printf(p, "DRQ ");
-> >         if (status & ATA_CORR)
-> >                 trace_seq_printf(p, "CORR ");
-> >         if (status & ATA_SENSE)
-> >                 trace_seq_printf(p, "SENSE ");
-> >         if (status & ATA_ERR)
-> >                 trace_seq_printf(p, "ERR ");
-> >         trace_seq_putc(p, '}');
-> >         trace_seq_putc(p, 0);
-> > 
-> >         return ret;
-> > }
-> > 
-> > 
-> > Which is just a re-implementation of:
-> > 
-> > __print_flags(status, " ", 
-> > 	{ ATA_BUSY, "BUSY" },
-> > 	{ ATA_DRDY, "DRDY" },
-> > 	{ ATA_DF, "DF" },
-> > 	{ ATA_DSC, "DSC" },
-> > 	{ ATA_DRQ, "DRQ" },
-> > 	{ ATA_CORR, "CORR" },
-> > 	{ ATA_SENSE, "SENSE" },
-> > 	{ ATA_ERR, "ERR" })
-> > 
-> > 
-> > The major difference between the two, is that libtraceevent will be able to
-> > parse the above and convert the status bits into strings, whereas using
-> > libata_trace_parse_status() will just give you a parsing error.
-> > 
-> > That is, perf and trace-cmd will not be able to parse it unless you write a
-> > separate plugin for libtraceevent to do it but that means you'll have
-> > duplicate code.
-> > 
-> > I know you just want echo and cat, but that will still work, and this will
-> > make it work for the tooling as well.
-> 
-> Excellent point, though in the case we are interested in for CXL,
-> __print_flags() is not enough.
-> 
-> We have a mass of fields that only contain something useful to print if
-> the valid bits in a mask are set. I just pulled that example to
-> show how trace_seq_printf() could be used to achieve optional printing
-> as opposed to current situation where the reader of the print has
-> to interpret the mask to work out if fields contain anything useful.
-> 
-> To do something nice with them in perf (well probably ras-daemon in
-> this case) we'll have to parse the valid bits anyway so effectively
-> write such a plugin.  There we need to do a bunch of mangling to get
-> the events stored in a DB anyway, so this isn't a huge overhead.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/misc
+branch HEAD: a545b48c2d907d6096e7bcf65d9b0681cc850e69  x86/signal/64: Move 64-bit signal code to its own file
 
-Given this information I think I'm going to punt on this and take your reviewed
-by on the code as it is.
+elapsed time: 2509m
 
-We can certainly try to change it later but for now I think it serves our
-purpose.  Better to focus on getting the code working with irq's.
+configs tested: 236
+configs skipped: 8
 
-Ira
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arc                                 defconfig
+alpha                               defconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+arc                  randconfig-r043-20221018
+riscv                randconfig-r042-20221018
+s390                 randconfig-r044-20221018
+s390                                defconfig
+s390                             allmodconfig
+s390                             allyesconfig
+powerpc                           allnoconfig
+x86_64                              defconfig
+x86_64                           rhel-8.3-kvm
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+x86_64                               rhel-8.3
+arc                              allyesconfig
+alpha                            allyesconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+x86_64                        randconfig-a004
+m68k                             allmodconfig
+x86_64                        randconfig-a002
+x86_64                        randconfig-a006
+m68k                             allyesconfig
+x86_64                           allyesconfig
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+arm                      integrator_defconfig
+powerpc                      ppc6xx_defconfig
+powerpc                 mpc834x_mds_defconfig
+sh                          kfr2r09_defconfig
+i386                             allyesconfig
+i386                                defconfig
+arm                             pxa_defconfig
+powerpc                 mpc85xx_cds_defconfig
+sh                           se7712_defconfig
+arm64                            alldefconfig
+sh                        sh7757lcr_defconfig
+mips                           jazz_defconfig
+powerpc                        warp_defconfig
+sh                               j2_defconfig
+m68k                        m5272c3_defconfig
+arm                         cm_x300_defconfig
+sh                             sh03_defconfig
+sh                          r7785rp_defconfig
+sh                             espt_defconfig
+arm                          iop32x_defconfig
+sh                            hp6xx_defconfig
+xtensa                  audio_kc705_defconfig
+arm                          simpad_defconfig
+sh                           se7206_defconfig
+powerpc                 mpc834x_itx_defconfig
+ia64                          tiger_defconfig
+m68k                       m5475evb_defconfig
+xtensa                              defconfig
+powerpc                       maple_defconfig
+sh                             shx3_defconfig
+sh                          polaris_defconfig
+mips                         cobalt_defconfig
+i386                          randconfig-c001
+arm                          pxa3xx_defconfig
+m68k                          sun3x_defconfig
+openrisc                       virt_defconfig
+m68k                           virt_defconfig
+xtensa                          iss_defconfig
+sh                   rts7751r2dplus_defconfig
+powerpc                   currituck_defconfig
+arc                        vdk_hs38_defconfig
+arm                         assabet_defconfig
+openrisc                            defconfig
+nios2                            alldefconfig
+sh                   sh7770_generic_defconfig
+m68k                                defconfig
+loongarch                         allnoconfig
+sh                          urquell_defconfig
+arm                           stm32_defconfig
+openrisc                  or1klitex_defconfig
+sh                        sh7763rdp_defconfig
+mips                           gcw0_defconfig
+sh                            shmin_defconfig
+sh                         apsh4a3a_defconfig
+arm                        cerfcube_defconfig
+arm                        keystone_defconfig
+ia64                                defconfig
+arm                        clps711x_defconfig
+xtensa                           alldefconfig
+csky                              allnoconfig
+arm                          exynos_defconfig
+nios2                               defconfig
+x86_64                        randconfig-a011
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+arc                          axs101_defconfig
+powerpc                   motionpro_defconfig
+powerpc                     mpc83xx_defconfig
+riscv                    nommu_k210_defconfig
+sh                          rsk7269_defconfig
+s390                          debug_defconfig
+sh                     sh7710voipgw_defconfig
+loongarch                           defconfig
+loongarch                        allmodconfig
+csky                                defconfig
+arm                         s3c6400_defconfig
+powerpc                     tqm8555_defconfig
+xtensa                         virt_defconfig
+powerpc                     sequoia_defconfig
+arm                           h3600_defconfig
+sparc64                          alldefconfig
+m68k                       bvme6000_defconfig
+sh                        dreamcast_defconfig
+mips                           ip32_defconfig
+sh                            titan_defconfig
+arm                       aspeed_g5_defconfig
+m68k                          amiga_defconfig
+arc                               allnoconfig
+nios2                            allyesconfig
+parisc                              defconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20221019
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                             allnoconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+arm                  randconfig-c002-20221020
+sparc                               defconfig
+xtensa                           allyesconfig
+sparc                            allyesconfig
+x86_64                                  kexec
+arc                  randconfig-r043-20221020
+s390                 randconfig-r044-20221020
+riscv                randconfig-r042-20221020
+sparc                       sparc32_defconfig
+arc                        nsimosci_defconfig
+sh                           se7619_defconfig
+i386                          randconfig-a003
+i386                          randconfig-a001
+i386                          randconfig-a005
+arc                  randconfig-r043-20221019
+mips                 randconfig-c004-20221020
+ia64                         bigsur_defconfig
+m68k                        stmark2_defconfig
+powerpc                      cm5200_defconfig
+sh                ecovec24-romimage_defconfig
+arm                      footbridge_defconfig
+sh                     magicpanelr2_defconfig
+arm                          gemini_defconfig
+mips                  maltasmvp_eva_defconfig
+um                               alldefconfig
+powerpc                  iss476-smp_defconfig
+powerpc                          allyesconfig
+riscv                               defconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+openrisc                         alldefconfig
+powerpc                       holly_defconfig
+m68k                         apollo_defconfig
+arm                        oxnas_v6_defconfig
+m68k                            q40_defconfig
+powerpc                     tqm8541_defconfig
+powerpc                      chrp32_defconfig
+sparc                            alldefconfig
+arm                          badge4_defconfig
+sh                           se7750_defconfig
+sh                           se7343_defconfig
+nios2                         10m50_defconfig
+mips                           ci20_defconfig
+m68k                        mvme147_defconfig
+mips                       bmips_be_defconfig
+
+clang tested configs:
+hexagon              randconfig-r041-20221018
+hexagon              randconfig-r045-20221018
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+i386                 randconfig-a011-20221017
+s390                 randconfig-r044-20221019
+hexagon              randconfig-r045-20221019
+riscv                randconfig-r042-20221019
+hexagon              randconfig-r041-20221019
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+i386                 randconfig-a013-20221017
+x86_64                        randconfig-a005
+i386                 randconfig-a012-20221017
+i386                 randconfig-a014-20221017
+i386                 randconfig-a016-20221017
+i386                 randconfig-a015-20221017
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+x86_64                        randconfig-k001
+hexagon                             defconfig
+powerpc                     tqm8540_defconfig
+powerpc                      pmac32_defconfig
+powerpc                     ksi8560_defconfig
+powerpc               mpc834x_itxgp_defconfig
+x86_64                        randconfig-c007
+mips                 randconfig-c004-20221019
+i386                          randconfig-c001
+s390                 randconfig-c005-20221019
+arm                  randconfig-c002-20221019
+riscv                randconfig-c006-20221019
+powerpc              randconfig-c003-20221019
+hexagon              randconfig-r041-20221020
+hexagon              randconfig-r045-20221020
+arm                       mainstone_defconfig
+powerpc                      obs600_defconfig
+i386                          randconfig-a013
+i386                          randconfig-a015
+i386                          randconfig-a011
+powerpc                    gamecube_defconfig
+mips                          ath79_defconfig
+arm                         shannon_defconfig
+mips                     cu1830-neo_defconfig
+arm                          ep93xx_defconfig
+powerpc                 mpc836x_rdk_defconfig
+mips                       lemote2f_defconfig
+powerpc                    socrates_defconfig
+arm                         orion5x_defconfig
+powerpc                     tqm8560_defconfig
+powerpc                     kmeter1_defconfig
+arm                           omap1_defconfig
+mips                      malta_kvm_defconfig
+arm                                 defconfig
+arm                        magician_defconfig
+arm                  colibri_pxa300_defconfig
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
