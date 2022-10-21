@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70E98608012
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 22:46:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D70DA608018
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 22:47:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbiJUUqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 16:46:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60480 "EHLO
+        id S230224AbiJUUrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 16:47:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230199AbiJUUpz (ORCPT
+        with ESMTP id S230080AbiJUUqc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 16:45:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B04A12E0F3;
-        Fri, 21 Oct 2022 13:45:15 -0700 (PDT)
+        Fri, 21 Oct 2022 16:46:32 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A11BD2995C9;
+        Fri, 21 Oct 2022 13:46:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E56D60D3F;
-        Fri, 21 Oct 2022 20:43:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AF1EC433D6;
-        Fri, 21 Oct 2022 20:43:48 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id A496FCE2BD4;
+        Fri, 21 Oct 2022 20:45:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBEA3C433D6;
+        Fri, 21 Oct 2022 20:45:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666385030;
-        bh=+Wm8MnCfMgvnGrZkq/NSP4dC8FF3aoE+uGAAN10YMp4=;
+        s=k20201202; t=1666385112;
+        bh=tq2/NapKhyhj/nZ7UhIrjnv6uKjQg8q5BUCehbxRKV8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=f6vZ1lB04Q4TXb1CgW8wRsJ4HWkOrqhlckVmlf+mRNd/LcroMsYrFwPCHG1lmaUzO
-         alsuvLolOa28fyoK6qHgIe+K73j1WCZEPyScREViZ3ckfr/xHK8OvhszHjRWbhxUTi
-         2SLfVgp2omGRSJm3EKjmwzCT2o5KAVMLKnSBQROO7XoA/ZnIgWwtkCZ1IA7lmyhtCS
-         NbTvyksRyesuyfpqrQStweLjs8wuhjOJRIuUilO1CHUZaCXPJZYbonrg3dlJg6EWyL
-         Z1peDjawp56ux1LP0A6fzreFmY75Ypd7LRBbcN+f+jzEAXam7zeXUBdI1sqtkUkgNL
-         K6sMpHKQovFqw==
+        b=SB3QFe5LK0b+E/lFpE+2wEY35sjtJodRiiuoDy9SLn5Cqeu0V/vx5oviEBkxpnoqP
+         vvm12zSEEnmDRnYlw2pbjdkW6Gfx+FT75vQFcbslNL4I19GusCdiFRJMQRowqqGF5w
+         /pn1S70gZTkepqPHjiaNIaB/RAFOgP8HuWbQqilStb3w6UUVAyaFtrYR504COnoE5Q
+         Q8UACn9Mvil3BLSmCJZ3dnhqa4u64sVt4Yh1rQDqSgWrYKip3Geqd/G2OnUgME95AR
+         qdcQ0XADqEcloCkpN4EQ/KUo5+RC2XAGHOqMk6SO9LnEQuCmQSjy36QUy5rViHDuIn
+         wsDWlpY+5/9+w==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     linux-arm-kernel@lists.infradead.org,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>
+        Ulf Hansson <ulf.hansson@linaro.org>
 Cc:     linux-kernel@vger.kernel.org, Ben Dooks <ben-linux@fluff.org>,
         Simtec Linux Team <linux@simtec.co.uk>,
         Arnd Bergmann <arnd@arndb.de>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Hannes Reinecke <hare@suse.de>, linux-ide@vger.kernel.org
-Subject: [PATCH 09/21] pata: remove samsung_cf driver
-Date:   Fri, 21 Oct 2022 22:27:42 +0200
-Message-Id: <20221021203329.4143397-9-arnd@kernel.org>
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-mmc@vger.kernel.org, linux-samsung-soc@vger.kernel.org
+Subject: [PATCH 10/21] mmc: remove s3cmci driver
+Date:   Fri, 21 Oct 2022 22:27:43 +0200
+Message-Id: <20221021203329.4143397-10-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20221021202254.4142411-1-arnd@kernel.org>
 References: <20221021202254.4142411-1-arnd@kernel.org>
@@ -60,58 +60,113 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-This device was only used by the smdk6410 board file that is now
-gone, so the driver can be removed as well.
+The s3c24xx platform is gone, so this driver can be removed as well.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/ata/Kconfig                          |  10 -
- drivers/ata/Makefile                         |   1 -
- drivers/ata/pata_samsung_cf.c                | 662 -------------------
- include/linux/platform_data/ata-samsung_cf.h |  31 -
- 4 files changed, 704 deletions(-)
- delete mode 100644 drivers/ata/pata_samsung_cf.c
- delete mode 100644 include/linux/platform_data/ata-samsung_cf.h
+ MAINTAINERS                              |    6 -
+ drivers/mmc/host/Kconfig                 |   43 -
+ drivers/mmc/host/Makefile                |    1 -
+ drivers/mmc/host/s3cmci.c                | 1777 ----------------------
+ drivers/mmc/host/s3cmci.h                |   75 -
+ include/linux/platform_data/mmc-s3cmci.h |   51 -
+ 6 files changed, 1953 deletions(-)
+ delete mode 100644 drivers/mmc/host/s3cmci.c
+ delete mode 100644 drivers/mmc/host/s3cmci.h
+ delete mode 100644 include/linux/platform_data/mmc-s3cmci.h
 
-diff --git a/drivers/ata/Kconfig b/drivers/ata/Kconfig
-index 6b446cfc3455..3b8cb7a29efd 100644
---- a/drivers/ata/Kconfig
-+++ b/drivers/ata/Kconfig
-@@ -1136,16 +1136,6 @@ config PATA_RZ1000
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 2caf42b0328a..503ebd9800db 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -17920,12 +17920,6 @@ S:	Supported
+ W:	http://www.ibm.com/developerworks/linux/linux390/
+ F:	drivers/s390/scsi/zfcp_*
  
- 	  If unsure, say N.
+-S3C24XX SD/MMC Driver
+-M:	Ben Dooks <ben-linux@fluff.org>
+-L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+-S:	Supported
+-F:	drivers/mmc/host/s3cmci.*
+-
+ SAA6588 RDS RECEIVER DRIVER
+ M:	Hans Verkuil <hverkuil@xs4all.nl>
+ L:	linux-media@vger.kernel.org
+diff --git a/drivers/mmc/host/Kconfig b/drivers/mmc/host/Kconfig
+index 79d8ddf1f616..75e8c364243d 100644
+--- a/drivers/mmc/host/Kconfig
++++ b/drivers/mmc/host/Kconfig
+@@ -619,49 +619,6 @@ config MMC_SPI
  
--config PATA_SAMSUNG_CF
--	tristate "Samsung SoC PATA support"
--	depends on SAMSUNG_DEV_IDE || COMPILE_TEST
--	select PATA_TIMINGS
+ 	  If unsure, or if your system has no SPI master driver, say N.
+ 
+-config MMC_S3C
+-	tristate "Samsung S3C SD/MMC Card Interface support"
+-	depends on ARCH_S3C24XX || COMPILE_TEST
+-	depends on S3C24XX_DMAC || COMPILE_TEST
 -	help
--	  This option enables basic support for Samsung's S3C/S5P board
--	  PATA controllers via the new ATA layer
+-	  This selects a driver for the MCI interface found in
+-	  Samsung's S3C2410, S3C2412, S3C2440, S3C2442 CPUs.
+-	  If you have a board based on one of those and a MMC/SD
+-	  slot, say Y or M here.
 -
 -	  If unsure, say N.
 -
- config PATA_WINBOND_VLB
- 	tristate "Winbond W83759A VLB PATA support (Experimental)"
- 	depends on ISA
-diff --git a/drivers/ata/Makefile b/drivers/ata/Makefile
-index 2cca9f500649..4ee5c0761d90 100644
---- a/drivers/ata/Makefile
-+++ b/drivers/ata/Makefile
-@@ -109,7 +109,6 @@ obj-$(CONFIG_PATA_PLATFORM)	+= pata_platform.o
- obj-$(CONFIG_PATA_OF_PLATFORM)	+= pata_of_platform.o
- obj-$(CONFIG_PATA_RB532)	+= pata_rb532_cf.o
- obj-$(CONFIG_PATA_RZ1000)	+= pata_rz1000.o
--obj-$(CONFIG_PATA_SAMSUNG_CF)	+= pata_samsung_cf.o
- 
- obj-$(CONFIG_PATA_PXA)		+= pata_pxa.o
- 
-diff --git a/drivers/ata/pata_samsung_cf.c b/drivers/ata/pata_samsung_cf.c
+-config MMC_S3C_HW_SDIO_IRQ
+-	bool "Hardware support for SDIO IRQ"
+-	depends on MMC_S3C
+-	help
+-	  Enable the hardware support for SDIO interrupts instead of using
+-	  the generic polling code.
+-
+-choice
+-	prompt "Samsung S3C SD/MMC transfer code"
+-	depends on MMC_S3C
+-
+-config MMC_S3C_PIO
+-	bool "Use PIO transfers only"
+-	help
+-	  Use PIO to transfer data between memory and the hardware.
+-
+-	  PIO is slower than DMA as it requires CPU instructions to
+-	  move the data. This has been the traditional default for
+-	  the S3C MCI driver.
+-
+-config MMC_S3C_DMA
+-	bool "Use DMA transfers only"
+-	help
+-	  Use DMA to transfer data between memory and the hardware.
+-
+-	  Currently, the DMA support in this driver seems to not be
+-	  working properly and needs to be debugged before this
+-	  option is useful.
+-
+-endchoice
+-
+ config MMC_SDRICOH_CS
+ 	tristate "MMC/SD driver for Ricoh Bay1Controllers"
+ 	depends on PCI && PCMCIA
+diff --git a/drivers/mmc/host/Makefile b/drivers/mmc/host/Makefile
+index 0baeb0b004f7..885e19e21e75 100644
+--- a/drivers/mmc/host/Makefile
++++ b/drivers/mmc/host/Makefile
+@@ -34,7 +34,6 @@ obj-$(CONFIG_MMC_MVSDIO)	+= mvsdio.o
+ obj-$(CONFIG_MMC_DAVINCI)       += davinci_mmc.o
+ obj-$(CONFIG_MMC_SPI)		+= mmc_spi.o
+ obj-$(CONFIG_MMC_SPI)		+= of_mmc_spi.o
+-obj-$(CONFIG_MMC_S3C)   	+= s3cmci.o
+ obj-$(CONFIG_MMC_SDRICOH_CS)	+= sdricoh_cs.o
+ obj-$(CONFIG_MMC_TMIO_CORE)	+= tmio_mmc_core.o
+ obj-$(CONFIG_MMC_SDHI)		+= renesas_sdhi_core.o
+diff --git a/drivers/mmc/host/s3cmci.c b/drivers/mmc/host/s3cmci.c
 deleted file mode 100644
-index aba1536ddd44..000000000000
-diff --git a/include/linux/platform_data/ata-samsung_cf.h b/include/linux/platform_data/ata-samsung_cf.h
+index 8d5929a32d34..000000000000
+diff --git a/drivers/mmc/host/s3cmci.h b/drivers/mmc/host/s3cmci.h
 deleted file mode 100644
-index fccf969dc4da..000000000000
+index 8b65d7ad9f97..000000000000
+diff --git a/include/linux/platform_data/mmc-s3cmci.h b/include/linux/platform_data/mmc-s3cmci.h
+deleted file mode 100644
+index bacb86db3112..000000000000
 -- 
 2.29.2
 
