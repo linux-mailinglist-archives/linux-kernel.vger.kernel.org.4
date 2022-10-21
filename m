@@ -2,107 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78172607BD3
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 18:10:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 541C7607BD8
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 18:11:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230091AbiJUQKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 12:10:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54898 "EHLO
+        id S230270AbiJUQLg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 12:11:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230086AbiJUQK3 (ORCPT
+        with ESMTP id S230418AbiJUQLN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 12:10:29 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F8111A3E32
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:10:24 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id i3-20020a17090a3d8300b00212cf2e2af9so2156982pjc.1
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:10:24 -0700 (PDT)
+        Fri, 21 Oct 2022 12:11:13 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C90D254367
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:11:13 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-13b103a3e5dso4134833fac.2
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:11:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FDqnpfZF/Nba9iYmW6afwPV/BMJnF3T8pQZy3ug2lYs=;
-        b=VhgDsydIsST92Z8iLWFT8d537teN8JdhwWV9Y5XaFP3t43g8INhBSMM4r2y9VtiyqJ
-         KcVTFWIpbQ9V8f1FNT9bkfza/ITvG0mrZmI1U4ngEjEenk8ZvFon0Ny8Qj8gR2aheBFM
-         PLhy3siwCWSHxwLVevJILDvYx1txt2fYHVIdk=
+        bh=+0WJj/Xm68bjTUQLzpFK8ciTVE6HKPCLS1ySBCZyagU=;
+        b=m/whR+PkvunDysIgKB+mtr6JlxgiRlZZrPeqhbPPgzbSGfPJEdfJEGXVvmP8dO0g+o
+         HSPFO7eu0/dAPyubEn7gBnYmrpuZkwVL/eFPiSeoLCUeX4QVDY19kyFYwql/MsTeYlzR
+         AJG94aCUoyJ/bc8EIfvMD9cMcF5/gUCMnubwI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FDqnpfZF/Nba9iYmW6afwPV/BMJnF3T8pQZy3ug2lYs=;
-        b=oQmQprBvk+pyQTb+SQUdqkcLvH8v1FIGEWIIYI82rQiigfxZp49ElAOd7L85Kx5Ufa
-         3/wpMWNnt3KprtNpgi8Tw/Z2ahOgK9V5VxoXLIeTkOG2dzGK1ufNcZtumCFsgHV5EVea
-         h2KgRElQFNvWBHODupx9MwMRYlnm8kBYXuwN2NSEoOkGeiF4ec4saihvn8ZR6fL+vVQR
-         j1TS9Z0P2NUpb9vLU6pB+hMYmEIj+NcQWWZgmaTjsmI5fkfjSpggX82cOejyB0d3TmYo
-         r8UwUN7vsi8rOPADOeQ8+BHBcVNaUnoYsf8h5TeMvHw237fx7W3YlRh6pJUTjwvtohkQ
-         EyFw==
-X-Gm-Message-State: ACrzQf3GN8tnF/dgXj9z2b49em5Rp9BZ/2sCkuSowORdiExN338I9guD
-        Tqbh1PSI761TlVvAgCz9ZnlijA==
-X-Google-Smtp-Source: AMsMyM6M95hLAa5MMJ+J4YgUSd5tsutQHFC5gF7615PbGgrbbJFxj0hfKDmnrgng3LBBSLDfIP/MKg==
-X-Received: by 2002:a17:902:cf01:b0:186:810c:d994 with SMTP id i1-20020a170902cf0100b00186810cd994mr2366202plg.151.1666368622967;
-        Fri, 21 Oct 2022 09:10:22 -0700 (PDT)
+        bh=+0WJj/Xm68bjTUQLzpFK8ciTVE6HKPCLS1ySBCZyagU=;
+        b=OtwVYFlvBNx+1O1aGtJME6d4ghUe4cQ8lsUO1ft8i0R0XHFYlUpFBzwlQR4hr2pRPa
+         B0zrZFzLzowJkvbYzs90Kmnqu+3V/TYELli4mmBzBA6DwLsw8A5/+nbHYV+cpTeSp5ZR
+         GCYUuxKAIr/TLtbwRsqfZwlpUaFc71owCgqsOEARX1Ms6CgFbW5nirwtz6bIFXywS+2X
+         V50lwtBD09RB2t6P26xCb/mX9oNXVVIvJPZeCDztlRBoGyZsTiRC2HKaLMbA4PiOip6A
+         B5gJM5HMXfGrEHbOBjcmNRlhIxLRihwyQkVcOye/XKGust6XfhZATA2361dJr9xcXW6X
+         ed2Q==
+X-Gm-Message-State: ACrzQf2BOuL5BnvCqtie+COZnl/GtyfsXGnmHq+Qm8TyVgDjWuu7joXL
+        WsPTdb3inOwUDDzxDpIU5MoG0DiSCG6HpA==
+X-Google-Smtp-Source: AMsMyM5Ped1GymghFX3fXxoQdhGpI06mVB4mjwiuR1szQNHQ/Kth5nOp3MCuU9p3NfrBvmu5zmRnHA==
+X-Received: by 2002:a17:90b:4b4b:b0:20a:926f:3c2e with SMTP id mi11-20020a17090b4b4b00b0020a926f3c2emr22444744pjb.87.1666368662046;
+        Fri, 21 Oct 2022 09:11:02 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id o125-20020a62cd83000000b00561c179e17dsm15345794pfg.76.2022.10.21.09.10.22
+        by smtp.gmail.com with ESMTPSA id a9-20020a1709027e4900b00176ea6ce0efsm14888186pln.109.2022.10.21.09.11.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Oct 2022 09:10:22 -0700 (PDT)
-Date:   Fri, 21 Oct 2022 09:10:21 -0700
+        Fri, 21 Oct 2022 09:11:01 -0700 (PDT)
+Date:   Fri, 21 Oct 2022 09:11:00 -0700
 From:   Kees Cook <keescook@chromium.org>
-To:     Paolo Abeni <pabeni@redhat.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+To:     Miguel Ojeda <ojeda@kernel.org>
+Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Marco Elver <elver@google.com>, Arnd Bergmann <arnd@arndb.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
         Nick Desaulniers <ndesaulniers@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Menglong Dong <imagedong@tencent.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v3][next] skbuff: Proactively round up to kmalloc bucket
- size
-Message-ID: <202210210909.76CDB7A2@keescook>
-References: <20221018093005.give.246-kees@kernel.org>
- <0ea1fc165a6c6117f982f4f135093e69cb884930.camel@redhat.com>
+        Nathan Chancellor <nathan@kernel.org>,
+        Uros Bizjak <ubizjak@gmail.com>,
+        Dan Li <ashimida@linux.alibaba.com>,
+        Alexander Potapenko <glider@google.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/5] compiler-gcc: be consistent with underscores use for
+ `no_sanitize`
+Message-ID: <202210210910.5085358FBC@keescook>
+References: <20221021115956.9947-1-ojeda@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0ea1fc165a6c6117f982f4f135093e69cb884930.camel@redhat.com>
+In-Reply-To: <20221021115956.9947-1-ojeda@kernel.org>
 X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 10:42:47AM +0200, Paolo Abeni wrote:
-> >  	size = SKB_DATA_ALIGN(size);
-> >  	size += SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
-> > -	data = kmalloc_reserve(size, gfp_mask, node, &pfmemalloc);
-> > -	if (unlikely(!data))
-> > -		goto nodata;
+On Fri, Oct 21, 2022 at 01:59:52PM +0200, Miguel Ojeda wrote:
+> Other macros that define shorthands for attributes in e.g.
+> `compiler_attributes.h` and elsewhere use underscores.
 > 
-> I'm sorry for not noticing the above in the previous iteration, but I
-> think this revision will produce worse code than the V1, as
-> kmalloc_reserve() now pollutes an additional register.
-> 
-> Why did you prefer adding an additional parameter to kmalloc_reserve()?
-> I think computing the alloc_size in the caller is even more readable.
-> 
-> Additionally, as a matter of personal preference, I would not introduce
-> an additional variable for alloc_size, just:
-> 
-> 	// ...
-> 	size = kmalloc_size_roundup(size);
-> 	data = kmalloc_reserve(size, gfp_mask, node, &pfmemalloc);
-> 
-> The rationale is smaller diff, and consistent style with the existing
-> code where 'size' is already adjusted multiple times icrementally.
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 
-Sure, I can do that. I will respin it. :)
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
 -- 
 Kees Cook
