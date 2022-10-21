@@ -2,151 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DD3660702C
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 08:39:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60DF260702F
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 08:39:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229872AbiJUGjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 02:39:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33020 "EHLO
+        id S229956AbiJUGjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 02:39:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbiJUGj2 (ORCPT
+        with ESMTP id S229515AbiJUGju (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 02:39:28 -0400
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 241CD6272
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 23:39:25 -0700 (PDT)
-Received: by mail-qv1-f46.google.com with SMTP id t16so1236863qvm.9
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 23:39:25 -0700 (PDT)
+        Fri, 21 Oct 2022 02:39:50 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D5AB4D14F;
+        Thu, 20 Oct 2022 23:39:48 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id a6so2422634ljq.5;
+        Thu, 20 Oct 2022 23:39:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:references:in-reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=FFzVqav4ytL2f0CsiBF+eInTfMA8Iy0X1Q8WlCib4/Q=;
+        b=EeuUWgJRyRVkPZSaJYbew7R1hyU+bTUqCMY7+N+xsileGZvgqQhRjJwIFKuO7HmDrb
+         bQHMgelR1wfFrvqjoMmlaGOLdTRP9gMDOWOXbUg2AJYoFDXMNqi+SKBmAq6zGoeREQNz
+         Y4WFohrE7QxGDnjHl2VqAyMJ/gTHDLhC8MhuyDd/nj+RAjS1ZAG1gml6XdBRPTdSkVCs
+         2/N+X0Qyxim7k5rXj4vRb9R1jRMgCaOPyyLGjC39SUnku+JYkTaArB0q2xT0LPxg7B7v
+         +G7VV7ut0/i2IDbQF6qohLPQelmq4jhw2U846FOs07YLHodWw5gXtquQeY3o0P1/5jwm
+         LSEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
+        h=cc:to:subject:message-id:date:from:references:in-reply-to
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=TWBVsxHhiv9xCEiXFNrEhpq+HZmBy55Vo5JJjjlyPeI=;
-        b=cU5Qu2ClpzMDSEboebGlxnVVTBdQlxVVsy1wmFAWgLKfLVBayQ5ghBu/+HfjqdJyM/
-         l6OGGl6wm/ct4fICI8qFGX30FkG+Km+UY6/lBW9z313JEb4IfZrclZjEIdFBA+NQqUVv
-         qu4g+ctOOEAOy/645Rrvhy7c3gjjC42VomUOkEDpUBUFPebjRNZvE4+fqpk06Dkel/Hi
-         3cLeMAmx8Z4QMjsP+w31K8PzTyigZ8Nt4hShQn/e9F1aKL/xATpOkwTujymg4aqr4Y1O
-         MlYGT014R+4yVXw0ZOvRLqwm26W7Qj8AJvhmhbVd0KfAQYhTu04ajDQYEkQ2NFwElJRM
-         vqjA==
-X-Gm-Message-State: ACrzQf0ovIMfo1MV4OvBoZae9MggygYEKCweDQt1L0GccsdX5HXvTS35
-        YzP8Ymtob3g7skBnee67UkbpUqA8BbO5Ng==
-X-Google-Smtp-Source: AMsMyM5Wbnf1EqjAKujyusoUrMxmnau8ilXzlXH/KJqMVLXaaoQRxoU0j+ji/FgxiuHjRXjtlDn8hA==
-X-Received: by 2002:a0c:cd13:0:b0:4b3:beaa:83b with SMTP id b19-20020a0ccd13000000b004b3beaa083bmr15712436qvm.129.1666334364034;
-        Thu, 20 Oct 2022 23:39:24 -0700 (PDT)
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com. [209.85.128.173])
-        by smtp.gmail.com with ESMTPSA id r19-20020a05622a035300b00398313f286dsm7725490qtw.40.2022.10.20.23.39.23
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Oct 2022 23:39:23 -0700 (PDT)
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-369426664f9so14712547b3.12
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 23:39:23 -0700 (PDT)
-X-Received: by 2002:a81:a24e:0:b0:358:934b:980c with SMTP id
- z14-20020a81a24e000000b00358934b980cmr15019528ywg.383.1666334363332; Thu, 20
- Oct 2022 23:39:23 -0700 (PDT)
+        bh=FFzVqav4ytL2f0CsiBF+eInTfMA8Iy0X1Q8WlCib4/Q=;
+        b=C4Xy+JnWOrzz2M0JeiIZyk8nSfdoYnX1q9SiufvGEYw2mLA9nk44zoyggJxuJjSZkn
+         Y6cLRJsyqTjNckRGP0iTvAbzLJgJ1VlzKvaKLepR4/iuvUsOFQK2Kft+Dot03ODQWNuc
+         kvfH6njuiwK+AKjm28z7uJOl0Hbi1KHrdM8Kvjz43RY2DzmS7UkHS6kJ1rxknicZrB6Z
+         D18oSKT/6FoL8+eghWV95rOdDKeYCgrhiTD0BjNEuD+qIIoq27fvI79OTLBdnQgs0GYI
+         KLWP6Ls/RbvVlUhkVkx6DpJp+GKA7Bg/jAMdm4viskVYOzcTdLY11f78VilN/LHazvgv
+         QQ5Q==
+X-Gm-Message-State: ACrzQf2G0M77hCmtzoZPtPIExLSp1T/BaY1adu2OkhLL7gXwlq5yIJ5J
+        QNU0JxlpDYceOOvCNqKNB2nb7htssBXtYOcfcv0=
+X-Google-Smtp-Source: AMsMyM4sbtX82B5mKKEHXGcxQPQfO0Xlq0H1c39lDL8xvOXWXw5Gb+e0I9Rx/xGyhKm+X9hJsrod4+dymJAVsZtidxk=
+X-Received: by 2002:a2e:9652:0:b0:276:34ad:75c0 with SMTP id
+ z18-20020a2e9652000000b0027634ad75c0mr398362ljh.59.1666334386089; Thu, 20 Oct
+ 2022 23:39:46 -0700 (PDT)
 MIME-Version: 1.0
-References: <202210201612.9d7547bf-yujie.liu@intel.com> <Y1FzKVLlLPrhb47D@yury-laptop>
- <Y1GHthWAyAq2Q+Yz@yujie-X299>
-In-Reply-To: <Y1GHthWAyAq2Q+Yz@yujie-X299>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 21 Oct 2022 08:39:10 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWtXzO+gv7g+0kRgj2LnV27Jn8Ehv1H4KH3CBSuwen+zg@mail.gmail.com>
-Message-ID: <CAMuHMdWtXzO+gv7g+0kRgj2LnV27Jn8Ehv1H4KH3CBSuwen+zg@mail.gmail.com>
-Subject: Re: [lib/cpumask] 6f9c07be9d: WARNING:at_include/linux/cpumask.h:#prefill_possible_map
-To:     Yujie Liu <yujie.liu@intel.com>
-Cc:     Yury Norov <yury.norov@gmail.com>, lkp@lists.01.org, lkp@intel.com,
-        linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        feng.tang@intel.com, ying.huang@intel.com
+Received: by 2002:ab3:5411:0:b0:1f6:575a:5fb7 with HTTP; Thu, 20 Oct 2022
+ 23:39:44 -0700 (PDT)
+In-Reply-To: <CANpmjNMUCsRm9qmi5eydHUHP2f5Y+Bt_thA97j8ZrEa5PN3sQg@mail.gmail.com>
+References: <20220915150417.722975-19-glider@google.com> <20221019173620.10167-1-youling257@gmail.com>
+ <CAOzgRda_CToTVicwxx86E7YcuhDTcayJR=iQtWQ3jECLLhHzcg@mail.gmail.com>
+ <CANpmjNMPKokoJVFr9==-0-+O1ypXmaZnQT3hs4Ys0Y4+o86OVA@mail.gmail.com>
+ <CAOzgRdbbVWTWR0r4y8u5nLUeANA7bU-o5JxGCHQ3r7Ht+TCg1Q@mail.gmail.com>
+ <Y1BXQlu+JOoJi6Yk@elver.google.com> <CAOzgRdY6KSxDMRJ+q2BWHs4hRQc5y-PZ2NYG++-AMcUrO8YOgA@mail.gmail.com>
+ <Y1Bt+Ia93mVV/lT3@elver.google.com> <CAG_fn=WLRN=C1rKrpq4=d=AO9dBaGxoa6YsG7+KrqAck5Bty0Q@mail.gmail.com>
+ <CAOzgRdb+W3_FuOB+P_HkeinDiJdgpQSsXMC4GArOSixL9K5avg@mail.gmail.com> <CANpmjNMUCsRm9qmi5eydHUHP2f5Y+Bt_thA97j8ZrEa5PN3sQg@mail.gmail.com>
+From:   youling 257 <youling257@gmail.com>
+Date:   Fri, 21 Oct 2022 14:39:44 +0800
+Message-ID: <CAOzgRdZsNWRHOUUksiOhGfC7XDc+Qs2TNKtXQyzm2xj4to+Y=Q@mail.gmail.com>
+Subject: Re: [PATCH v7 18/43] instrumented.h: add KMSAN support
+To:     Marco Elver <elver@google.com>
+Cc:     Alexander Potapenko <glider@google.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
+        linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yukie,
+PerfTop:    8253 irqs/sec  kernel:75.3%  exact: 100.0% lost: 0/0 drop:
+0/17899 [4000Hz cycles],  (all, 8 CPUs)
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-On Thu, Oct 20, 2022 at 7:40 PM Yujie Liu <yujie.liu@intel.com> wrote:
-> On Thu, Oct 20, 2022 at 09:11:21AM -0700, Yury Norov wrote:
-> > On Thu, Oct 20, 2022 at 06:05:51PM +0800, kernel test robot wrote:
-> > > We noticed that below patch adds a FORCE_NR_CPUS config, and it is
-> > > expected to show a warning when this config is enabled and
-> > > CONFIG_NR_CPUS doesn't match the actual number of CPUs we have. But we
-> > > also noticed that it not only shows a warning but could also break boot
-> > > test in some cases. We are not sure if the break is actually related to
-> > > this patch or not, so we send this report FYI.
-> > >
-> > > We noticed that a fix patch was posted at:
-> > >
-> > > https://lore.kernel.org/all/20221019225939.1646349-1-yury.norov@gmail.com/
-> > >
-> > > FORCE_NR_CPUS won't be enabled by allmodconfig or allyesconfig after
-> > > applying the fix, but looks it could still be enabled by randconfig. Not
-> > > sure if this is an expected behavior, but since our test robot runs many
-> > > randconfig tests, this warning could still be triggered frequently and
-> > > go to boot failure at last.
-> > >
-> > > Please kindly help to give some advice on handling this config in our
-> > > testing. Thanks.
-> > >
-> > > Please check below report for more details:
+    14.87%  [kernel]              [k] 0xffffffff941d1f37
+     6.71%  [kernel]              [k] 0xffffffff942016cf
 
-> > Indeed, if FORCE_NR_CPUS is enabled by randconfig, it may cause at least
-> > boot warning. I'm either not sure if the following alloc_pages is
-> > related to the config, but anyways...
-> >
-> > The most logical solution would be disabling FORCE_NR_CPUS in
-> > randconfig before building the kernel. We can do it in a post-script,
-> > like:
-> >
-> > make randconfig
-> > scripts/config -d FORCE_NR_CPUS
-> > scripts/config -e UNFORCE_NR_CPUS
-> > make
+what is 0xffffffff941d1f37?
+
+2022-10-21 14:16 GMT+08:00, Marco Elver <elver@google.com>:
+> On Thu, 20 Oct 2022 at 22:55, youling 257 <youling257@gmail.com> wrote:
+>>
+>> How to use perf tool?
 >
-> This seems to need extra work to run config script for each randconfig
-> build.
-
-While randconfig is great for doing build tests, I would not use it
-for boot tests, until you have some way to make sure critical options
-are enabled (or disabled).  A plain randconfig kernel is almost
-guaranteed to lack some driver you need.
-
-> > Or we can create a pre-configuration file, so that randconfig would do
-> > its work based on that. We already have such pre-configs for powerpc
-> > and risc:
-> >         arch/riscv/configs/32-bit.config
-> >         arch/powerpc/configs/32-bit.config
-> >         arch/powerpc/configs/64-bit.config
-> >         arch/riscv/configs/64-bit.config
-> >
-> > Maybe it's time to create a generic config of this sort.
+> The simplest would be to try just "perf top" - and see which kernel
+> functions consume most CPU cycles. I would suggest you compare both
+> kernels, and see if you can spot a function which uses more cycles% in
+> the problematic kernel.
 >
-> It would be nice to have a pre-config file to ensure this config won't
-> be enabled accidentally by randconfig if users are not aware of. This
-> would also be consistent with common build flow so no extra steps are
-> needed.
-
-The above configs don't contain any options controlling included
-drivers.
-Which options would you add to it? This is very platform-specific.
-
-> > Please let me know if that sounds sane to you. I'm not very familiar
-> > to build system things, but I'll be happy to help implementing this,
-> > if needed.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
