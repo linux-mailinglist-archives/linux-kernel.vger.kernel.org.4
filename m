@@ -2,148 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3245E609256
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 12:56:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84D36609267
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 13:04:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230326AbiJWK4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 06:56:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51846 "EHLO
+        id S230351AbiJWLES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 07:04:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229973AbiJWK4h (ORCPT
+        with ESMTP id S229618AbiJWLEP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 06:56:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B635A8DB;
-        Sun, 23 Oct 2022 03:56:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A888B60B61;
-        Sun, 23 Oct 2022 10:56:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D14D3C433C1;
-        Sun, 23 Oct 2022 10:56:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666522596;
-        bh=lyTdIKeZjwi6PoGVvjTDLmW7YJbAZtMOfj7JmOF6Gmw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=NYPN8VkGrvo19tKNOorOnl8MKQZvblC5h8iXLPadyri41aTPyDui7E+JY5laKk+DL
-         HLXoCzTDhLStJFiOsTWS7Ncr1r0Q1BZF8UMrxr8FSNQw10fyEnSJvTK9KVZipqgMvu
-         Pm06NM/KwM3bDnwN6EgJ5sg+pW6tCqZcRnCOZ3HBg5qOnzkoejcMbW072nABaLReYu
-         mx60T4xZD0Lx1O0iMQEHmgnQ0Pbc4lwiMYYdl2OZ0wlBlNfEKSUk3/FlhgO4qHfiUT
-         gdTCJn9FaCuXP6NgrgH/Q35es00kmSD38ewz/SOd9ZOWo/MCEdOnPw5IlbI+dJeBFy
-         MqZCizIzCf3Tg==
-Date:   Sat, 25 Jun 2022 14:32:53 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Cosmin Tanislav <demonsingur@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Cosmin Tanislav <cosmin.tanislav@analog.com>
-Subject: Re: [PATCH v5 2/2] iio: adc: ad4130: add AD4130 driver
-Message-ID: <20220625143253.0c022fcd@jic23-huawei>
-In-Reply-To: <CAHp75VeRgnCLP0YqiOe8OkW3hQ178ia+Y3PjFtCMW4Sh7JfCZQ@mail.gmail.com>
-References: <20220620162059.1097264-1-cosmin.tanislav@analog.com>
-        <20220620162059.1097264-3-cosmin.tanislav@analog.com>
-        <CAHp75VcBJkQ+CwyoDaTJ_AD+mv9d0tEd_txqHwkPRy4-xvnyKg@mail.gmail.com>
-        <2aa93eab-de6d-866b-a829-36b47ff00982@gmail.com>
-        <CAHp75Vc_fcAP6gGwMkYZUoMM6jKeUoQr8J+zYCUz8inSHnTF_w@mail.gmail.com>
-        <54bfff70-938f-16e1-198d-47ed9ba95db4@gmail.com>
-        <CAHp75VeRgnCLP0YqiOe8OkW3hQ178ia+Y3PjFtCMW4Sh7JfCZQ@mail.gmail.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Sun, 23 Oct 2022 07:04:15 -0400
+Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA392733E8
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 04:04:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1666523044; bh=CXFYkS/9I3ecfwQqOB0xh0UmIHm5NvOthOCQ+wQCho4=;
+        h=X-EA-Auth:Date:From:To:Subject:Message-ID:MIME-Version:
+         Content-Type;
+        b=TeJ3SkKVax6heRHLZamZ2Mmo62DLNhNYc5TxC/0rdoGn4kut72/lY6+GaQVBYSYKf
+         e/Kou/u3O6zE0sXJRlh1Ij8RHXyF1mQ2MbzvfWnSuopE/D6MRFTG3dOYNcNs6URTy9
+         w5dMGaBBAMkxzTtql7EJnY7swAt/++k4hx7T+E5E=
+Received: by b-4.in.mailobj.net [192.168.90.14] with ESMTP
+        via [213.182.55.206]
+        Sun, 23 Oct 2022 13:04:04 +0200 (CEST)
+X-EA-Auth: Yjri6/BpUBj1GUUFqZyfaA0i881R5h6QtDnu49t/H5do4HKgbeG8VkdOdzAdzB+pCSYB6zJ2QORaobSbl4yso6Khm2FmV9wY
+Date:   Sat, 22 Oct 2022 01:03:42 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     outreachy@lists.linux.dev, gregkh@linuxfoundation.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] staging: wlan-ng: remove commented debug printk messages
+Message-ID: <Y1L0FiKvrM9jjZG9@debian-BULLSEYE-live-builder-AMD64>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DATE_IN_PAST_24_48,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 23 Jun 2022 19:33:45 +0200
-Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+printk messages are added for program flow tracing and are left
+commented. These commented log messages should be removed as they
+are no more useful for program execution.
 
-> On Thu, Jun 23, 2022 at 6:14 PM Cosmin Tanislav <demonsingur@gmail.com> wrote:
-> > On 6/23/22 18:39, Andy Shevchenko wrote:  
-> > > On Thu, Jun 23, 2022 at 5:27 PM Cosmin Tanislav <demonsingur@gmail.com> wrote:  
-> > >> On 6/20/22 21:29, Andy Shevchenko wrote:  
-> > >>> On Mon, Jun 20, 2022 at 6:27 PM Cosmin Tanislav <demonsingur@gmail.com> wrote:  
-> 
-> ...
-> 
-> > >>>> +       /*
-> > >>>> +        * DMA (thus cache coherency maintenance) requires the
-> > >>>> +        * transfer buffers to live in their own cache lines.
-> > >>>> +        */  
-> > >>>
-> > >>> This is a good comment, but what fields does it apply to?  
-> > >>
-> > >> Whatever is below it, grouped together. This is not hard to
-> > >> understand.  
-> > >
-> > > It's hard to understand what exactly is DMA-aware here. I see only one
-> > > buffer that is aligned properly for DMA, the rest are not, except the
-> > > case if all of them are going in one DMA transaction. Is this the case
-> > > here?
-> > >  
-> > >>>> +       u8                      reset_buf[AD4130_RESET_BUF_SIZE] __aligned(IIO_DMA_MINALIGN);  
-> > >
-> > > This is aligned.
-> > >  
-> > >>>> +       u8                      reg_write_tx_buf[4];  
-> > >
-> > > This one is aligned + offset (== AD4130_RESET_BUF_SIZE + 0).
-> > >  
-> > >>>> +       u8                      reg_read_tx_buf[1];  
-> > >
-> > > This one is aligned + offset (== AD4130_RESET_BUF_SIZE + 0 + 4).
-> > >  
-> > >>>> +       u8                      reg_read_rx_buf[3];  
-> > >
-> > > This one is aligned + offset (== AD4130_RESET_BUF_SIZE + 0 + 4 + 1).
-> > > And this is Rx.
-> > >  
-> > >>>> +       u8                      fifo_tx_buf[2];  
-> > >
-> > > Here is Tx again which is most likely is not aligned...
-> > >  
-> > >>>> +       u8                      fifo_rx_buf[AD4130_FIFO_SIZE *
-> > >>>> +                                           AD4130_FIFO_MAX_SAMPLE_SIZE];
-> > >>>> +};  
-> > >  
-> >
-> > This has been mentioned before by Jonathan as a reply to V6 of my
-> > AD74413R driver.
-> >  
-> >  > I'm surprised I didn't mention this before but you only need to  
-> > ensure  > that any memory used for DMA is not in a cacheline with memory
-> > used  
-> >  > for other things that might change concurrently.  
-> >
-> > To my understanding, as long as the DMA buffers will all be accessed by
-> > the same DMA-compatible SPI controller, you only need to align them so
-> > they're not in the same cacheline with memory that will not be accessed
-> > by the SPI controller.  
-> 
-> SPI is synchronous by nature, what will happen if the Tx and Rx
-> buffers are sharing the same cache line? Anybody to shed a light here?
-> 
-> (I.o.w. I'm not sure that we don't need to split the Rx and Tx buffers
-> of the same transfer.)
+Signed-off-by: Deepak R Varma <drv@mailo.com>
+---
 
-My understanding is that any device that stamps on itself is considered broken
-and needs to do it's own bounce buffering.  We just need to ensure no
-CPU writes hit stuff in the same cacheline whilst DMA is in progress.
+Changes in v2:
+   1. Resending as v2 since I incorrectly send multiple emails for the patch
+   earlier. Feedback from gregkh@linuxfoundation.org
 
-A clarification to the comment to say that it covers all the buffers at the
-end of the structure would be a good addition.
 
-Jonathan
+ drivers/staging/wlan-ng/p80211netdev.c | 22 ----------------------
+ 1 file changed, 22 deletions(-)
+
+diff --git a/drivers/staging/wlan-ng/p80211netdev.c b/drivers/staging/wlan-ng/p80211netdev.c
+index e04fc666d218..6bef419e8ad0 100644
+--- a/drivers/staging/wlan-ng/p80211netdev.c
++++ b/drivers/staging/wlan-ng/p80211netdev.c
+@@ -881,55 +881,42 @@ static int p80211_rx_typedrop(struct wlandevice *wlandev, u16 fc)
+ 		wlandev->rx.mgmt++;
+ 		switch (fstype) {
+ 		case WLAN_FSTYPE_ASSOCREQ:
+-			/* printk("assocreq"); */
+ 			wlandev->rx.assocreq++;
+ 			break;
+ 		case WLAN_FSTYPE_ASSOCRESP:
+-			/* printk("assocresp"); */
+ 			wlandev->rx.assocresp++;
+ 			break;
+ 		case WLAN_FSTYPE_REASSOCREQ:
+-			/* printk("reassocreq"); */
+ 			wlandev->rx.reassocreq++;
+ 			break;
+ 		case WLAN_FSTYPE_REASSOCRESP:
+-			/* printk("reassocresp"); */
+ 			wlandev->rx.reassocresp++;
+ 			break;
+ 		case WLAN_FSTYPE_PROBEREQ:
+-			/* printk("probereq"); */
+ 			wlandev->rx.probereq++;
+ 			break;
+ 		case WLAN_FSTYPE_PROBERESP:
+-			/* printk("proberesp"); */
+ 			wlandev->rx.proberesp++;
+ 			break;
+ 		case WLAN_FSTYPE_BEACON:
+-			/* printk("beacon"); */
+ 			wlandev->rx.beacon++;
+ 			break;
+ 		case WLAN_FSTYPE_ATIM:
+-			/* printk("atim"); */
+ 			wlandev->rx.atim++;
+ 			break;
+ 		case WLAN_FSTYPE_DISASSOC:
+-			/* printk("disassoc"); */
+ 			wlandev->rx.disassoc++;
+ 			break;
+ 		case WLAN_FSTYPE_AUTHEN:
+-			/* printk("authen"); */
+ 			wlandev->rx.authen++;
+ 			break;
+ 		case WLAN_FSTYPE_DEAUTHEN:
+-			/* printk("deauthen"); */
+ 			wlandev->rx.deauthen++;
+ 			break;
+ 		default:
+-			/* printk("unknown"); */
+ 			wlandev->rx.mgmt_unknown++;
+ 			break;
+ 		}
+-		/* printk("\n"); */
+ 		drop = 2;
+ 		break;
+
+@@ -943,35 +930,27 @@ static int p80211_rx_typedrop(struct wlandevice *wlandev, u16 fc)
+ 		wlandev->rx.ctl++;
+ 		switch (fstype) {
+ 		case WLAN_FSTYPE_PSPOLL:
+-			/* printk("pspoll"); */
+ 			wlandev->rx.pspoll++;
+ 			break;
+ 		case WLAN_FSTYPE_RTS:
+-			/* printk("rts"); */
+ 			wlandev->rx.rts++;
+ 			break;
+ 		case WLAN_FSTYPE_CTS:
+-			/* printk("cts"); */
+ 			wlandev->rx.cts++;
+ 			break;
+ 		case WLAN_FSTYPE_ACK:
+-			/* printk("ack"); */
+ 			wlandev->rx.ack++;
+ 			break;
+ 		case WLAN_FSTYPE_CFEND:
+-			/* printk("cfend"); */
+ 			wlandev->rx.cfend++;
+ 			break;
+ 		case WLAN_FSTYPE_CFENDCFACK:
+-			/* printk("cfendcfack"); */
+ 			wlandev->rx.cfendcfack++;
+ 			break;
+ 		default:
+-			/* printk("unknown"); */
+ 			wlandev->rx.ctl_unknown++;
+ 			break;
+ 		}
+-		/* printk("\n"); */
+ 		drop = 2;
+ 		break;
+
+@@ -1007,7 +986,6 @@ static int p80211_rx_typedrop(struct wlandevice *wlandev, u16 fc)
+ 			wlandev->rx.cfack_cfpoll++;
+ 			break;
+ 		default:
+-			/* printk("unknown"); */
+ 			wlandev->rx.data_unknown++;
+ 			break;
+ 		}
+--
+2.30.2
+
+
 
