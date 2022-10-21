@@ -2,117 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86591607780
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 15:04:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B316607783
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 15:04:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230018AbiJUNEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 09:04:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35388 "EHLO
+        id S230057AbiJUNEt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 09:04:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229887AbiJUNEG (ORCPT
+        with ESMTP id S229887AbiJUNEp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 09:04:06 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9501926B4A7
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 06:04:01 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id f22so1562176qto.3
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 06:04:01 -0700 (PDT)
+        Fri, 21 Oct 2022 09:04:45 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 413484AD7C
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 06:04:43 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id n12so4682757wrp.10
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 06:04:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=A087xfPnfRZDD4Nb29Zcz9+fc/XZRZslqD+L3nx5U8o=;
-        b=YMYrNvqItT7MQMmo9LWwYRVYx4aF/sYZJ5D1qGL4wLwQjVjkl8qg/WbibaohVaX2RW
-         26xgDRko/joh7KoDh0Yc3bL8wlIXzT1iZJJu5efx/Q/UXTOp6JMYzEqv95dPqxul9Y9/
-         0yvXRkofqrNuMNQ0tj/lB+PDITSCrexNB7ulkoMMqfBEssEMim6XLKKQKFdzKiJ1kr2R
-         7WfmVqLRqkzFuzuYeGytTB7QsN3t7wgT6/H+YyDxb0GUEZx4zOEzyTjU60a9qDmbbaEf
-         49WE/hAB3utPV1JikEp+qJ+stCnuJOh6F+WLEdOosTvx2vaYl1Ml1k/jPrIY8TOdFFII
-         iSgA==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ub/Q3aGASlrAXKX6JbBno3sJc5izj2B9kHx5Vfj31no=;
+        b=gEJ6INl1uo2EhdrqvpQPhIeMhpnTp/XTU+JHgRvsZWO7q0dliF+YoqCWZGjqTDPHmV
+         NZH1YUUL4hRBFfUiUbBxtJlGJEGGhg+dCZZ5CXddKxrwdK8Y/zY35MWxxyY+6rJdfWjg
+         CnbFzh/3uiviFDfs2zHAudI3cY/42hpKZeJehUUk9xx3FSp3PBuGwS/5p4sFoknG0opI
+         gVV94ui6Y5m95IH2FzeDetax+EyO183Vv4HjyeOnWa/m0s6DKjbB4cyPxwYDCFH386sI
+         xHdi6c3J+arK/FjKtZNzt6ZtvYDD8D58x/R8xf4TT33C6TWaVCThCozrmMCQ0Arl9o/Y
+         x6Yw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=A087xfPnfRZDD4Nb29Zcz9+fc/XZRZslqD+L3nx5U8o=;
-        b=DUs0/hcU4mf1wjkJo9MA7R9t3tni48859H7nleFHDwarG5kJ1kM3ayblgyqqQ2nIy2
-         nJ92azr7B+kI/VodLZE4AAsgfKoeqasilycFdtZa9V0Yeprz18NlShlIshforenHpCHR
-         6aOXJ0lBarXEj1owsqDFAyZSAvt6sFkCPtzWG2s89xg7fIxFJfQgeu1WUFLehuCv30VX
-         zkbMlqhGt62hYNb1QTPRcObMfiJbUrABScvp1GsDgqdhoKtDKxSrI1jInO8RaNpRvh6J
-         ocM3ctmQ/xu8GoK5x5+zaSST8Yd46imN09uLwCSex/U7E9o6ji3HLF7uhgkMFa5I+oXR
-         7rmQ==
-X-Gm-Message-State: ACrzQf0JGdmHa2id7zc7pOtPsuayomLh9lNHRXAjJCR4SdUqHGNJ8xk4
-        90N1gPepDHm04/CrhM1OH7/6oA==
-X-Google-Smtp-Source: AMsMyM4/pAptnbP1P52KaZOdwJpVSrGmFwhfpTBlvQ+B3gx2aaPjEwUzezn1/ib91nXqhM06MhPEWw==
-X-Received: by 2002:ac8:59c4:0:b0:39c:bab7:f937 with SMTP id f4-20020ac859c4000000b0039cbab7f937mr16397221qtf.657.1666357440273;
-        Fri, 21 Oct 2022 06:04:00 -0700 (PDT)
-Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
-        by smtp.gmail.com with ESMTPSA id m11-20020a05620a290b00b006b929a56a2bsm9933799qkp.3.2022.10.21.06.03.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Oct 2022 06:03:59 -0700 (PDT)
-Message-ID: <ceb8eb7f-8e10-bfdf-bc22-1f9eddb2ea83@linaro.org>
-Date:   Fri, 21 Oct 2022 09:03:57 -0400
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ub/Q3aGASlrAXKX6JbBno3sJc5izj2B9kHx5Vfj31no=;
+        b=FcyiANvz8w8jT5kUhVs0DZXF80AE6h+Azdgsz6D5yKPjrN92FfDeOx7zZCS6vBKqDW
+         bvA37qBYi0Iv7BTNpGasUa0kVfaPvZUZEUe10PSQjMU8RPScAHzuhaXAMA898cBQvWcx
+         1IGNnRGVZ/cmFhp/2ZcBXZLUxX1oXhaX3jLX8XrmFquJ2z3I3LmRJOWzNWwJ9SXaUUgn
+         pOwFT0vCMoF8bxF/26X6nc3/kHcB4iBQIqePB2gfuK8nG7umxB7zGo5ojuHqzdlsgCLN
+         /xrbcsa9JC18e2g2CBt+UTSr3jCmFM1Q4Ncfp6Y980NOIZs4VADuTWAl3yVfYDkdiePs
+         Q66Q==
+X-Gm-Message-State: ACrzQf10WSHsfKQD0Ic0vJebsFibJGqUhCX0LGkcblS34+dYzhlMDjkr
+        lwg3lLcdNFeot4iaqwuNlXP5joBfwWY9Mg==
+X-Google-Smtp-Source: AMsMyM7Upp2advF48Gmvc7xuqXWi5BXIj28tAi5l0CGstD4rPMbCg2nWp/QDAkA7mw9jbyrpjk+Z9w==
+X-Received: by 2002:adf:fa05:0:b0:22e:362a:ce57 with SMTP id m5-20020adffa05000000b0022e362ace57mr12200802wrr.96.1666357481661;
+        Fri, 21 Oct 2022 06:04:41 -0700 (PDT)
+Received: from localhost ([2a01:cb19:8b2c:5e00:becf:29f6:2774:7ce2])
+        by smtp.gmail.com with ESMTPSA id c5-20020a05600c0a4500b003bdd2add8fcsm2878337wmq.24.2022.10.21.06.04.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Oct 2022 06:04:41 -0700 (PDT)
+From:   Mattijs Korpershoek <mkorpershoek@baylibre.com>
+To:     Colin Ian King <colin.i.king@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-input@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Input: tps6507x-ts: remove variable loops
+In-Reply-To: <20221020181642.24417-1-colin.i.king@gmail.com>
+References: <20221020181642.24417-1-colin.i.king@gmail.com>
+Date:   Fri, 21 Oct 2022 15:04:39 +0200
+Message-ID: <87y1t9pbtk.fsf@baylibre.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [EXT] Re: [PATCH v7 1/2] dt-bindings: fsl-imx-sdma: Convert imx
- sdma to DT schema
-Content-Language: en-US
-To:     Joy Zou <joy.zou@nxp.com>, "vkoul@kernel.org" <vkoul@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>
-Cc:     "S.J. Wang" <shengjiu.wang@nxp.com>,
-        "martink@posteo.de" <martink@posteo.de>,
-        "dev@lynxeye.de" <dev@lynxeye.de>,
-        "alexander.stein@ew.tq-group.com" <alexander.stein@ew.tq-group.com>,
-        Peng Fan <peng.fan@nxp.com>, "david@ixit.cz" <david@ixit.cz>,
-        "aford173@gmail.com" <aford173@gmail.com>,
-        Hongxing Zhu <hongxing.zhu@nxp.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20221020101402.1856818-1-joy.zou@nxp.com>
- <20221020101402.1856818-2-joy.zou@nxp.com>
- <caae2af7-96ea-195f-6f33-05d9e79fa518@linaro.org>
- <AM6PR04MB5925C0AC7A4066AF52E2004CE12D9@AM6PR04MB5925.eurprd04.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <AM6PR04MB5925C0AC7A4066AF52E2004CE12D9@AM6PR04MB5925.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/10/2022 04:10, Joy Zou wrote:
->>> +
->>> +required:
->>> +  - compatible
->>> +  - reg
->>> +  - interrupts
->>> +  - fsl,sdma-ram-script-name
->>> +  - "#dma-cells"
->>
->> and then this can one be dropped.
-> Thanks your comments.
-> I have tried to delete the additionalProperties, but I run dtbs_check. The log as follow:
+On Thu, Oct 20, 2022 at 19:16, Colin Ian King <colin.i.king@gmail.com> wrote:
 
-Why would you do that? No one asks that. Please read mailing list
-netiquette/conversation style.
+> The variable loops is being incremented but is never referenced,
+> it is redundant and can be removed.
+>
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 
-Best regards,
-Krzysztof
+Reviewed-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
 
+> ---
+>  drivers/input/touchscreen/tps6507x-ts.c | 2 --
+>  1 file changed, 2 deletions(-)
+>
+> diff --git a/drivers/input/touchscreen/tps6507x-ts.c b/drivers/input/touchscreen/tps6507x-ts.c
+> index 357a3108f2e5..f48871767763 100644
+> --- a/drivers/input/touchscreen/tps6507x-ts.c
+> +++ b/drivers/input/touchscreen/tps6507x-ts.c
+> @@ -119,7 +119,6 @@ static s32 tps6507x_adc_conversion(struct tps6507x_ts *tsc,
+>  static s32 tps6507x_adc_standby(struct tps6507x_ts *tsc)
+>  {
+>  	s32 ret;
+> -	s32 loops = 0;
+>  	u8 val;
+>  
+>  	ret = tps6507x_write_u8(tsc,  TPS6507X_REG_ADCONFIG,
+> @@ -141,7 +140,6 @@ static s32 tps6507x_adc_standby(struct tps6507x_ts *tsc)
+>  		ret = tps6507x_read_u8(tsc, TPS6507X_REG_INT, &val);
+>  		if (ret)
+>  			return ret;
+> -		loops++;
+>  	}
+>  
+>  	return ret;
+> -- 
+> 2.37.3
