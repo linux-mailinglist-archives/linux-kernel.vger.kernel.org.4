@@ -2,145 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF3CF607A09
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 17:01:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EACA0607A0D
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 17:02:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229634AbiJUPA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 11:00:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53944 "EHLO
+        id S229935AbiJUPB7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 11:01:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiJUPA5 (ORCPT
+        with ESMTP id S229794AbiJUPB4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 11:00:57 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D0E1175A0
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 08:00:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666364456; x=1697900456;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ooS/g02rrEhFbNqnPJ7eHJgo/Vorjf5ZQuiW0wKvezk=;
-  b=EyFuWIw4zrLjnuMl9kKBTPb5iTCebFvKtFK6jyxpiYCEhmb2g3l0UTIM
-   o59DQzf1XUaD7RFwid5mGn1zMwBHjl6Zo7QOaT8k7pJ6DXzR3wKDCDa34
-   NMQt2g6MjdLvSkvlvsDv3Kcw/YCPTyCdQdl0zImHlw40Z/0w44VWNssUB
-   foKqgG6GZExS0R1m2V8DivZqaqwkn8K+fkkjX8yAQdmg+00b4lIk8deR7
-   z3krS5E5Sbc7fc90G4n4GKCqhd4MsC8RVB8xUDNq5PmYFilgqSBLF5hY2
-   jEqOzoTrCm8VrJ8EQYIRVT0Uttc0o3vkNAQ5IMxaX8acjJ78wgpJc8ahb
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10507"; a="305756283"
-X-IronPort-AV: E=Sophos;i="5.95,202,1661842800"; 
-   d="scan'208";a="305756283"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2022 08:00:51 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10507"; a="661635301"
-X-IronPort-AV: E=Sophos;i="5.95,202,1661842800"; 
-   d="scan'208";a="661635301"
-Received: from zhiyizhu-mobl.ccr.corp.intel.com ([10.254.215.216])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2022 08:00:47 -0700
-Message-ID: <f27e4b3f858890c657df9a7d6f34dc2d60b89757.camel@intel.com>
-Subject: Re: [PATCH v1 1/2] x86/tsc: use logical_package as a better
- estimation of socket numbers
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     Feng Tang <feng.tang@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     tim.c.chen@intel.com, Xiongfeng Wang <wangxiongfeng2@huawei.com>,
-        liaoyu15@huawei.com
-Date:   Fri, 21 Oct 2022 23:00:44 +0800
-In-Reply-To: <20221021062131.1826810-1-feng.tang@intel.com>
-References: <20221021062131.1826810-1-feng.tang@intel.com>
+        Fri, 21 Oct 2022 11:01:56 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC5EA3A14C;
+        Fri, 21 Oct 2022 08:01:53 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29LErsmm007496;
+        Fri, 21 Oct 2022 15:01:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=PS41lPi48juvAx3RMPCHcOw28hGdVSW7qqzoEp0WXQ8=;
+ b=nRLAbskwISHVjDg5xh8X0lVKuSzeeJa4TviurZu7EVk335MUH5o6kUsXvyrSPDkYia7i
+ tP1weoIz3FVLvmCCgW3LpRlxbn85SEvOf6HGm8014YhDFiJJwULl4crrMDrXjV6aN0m0
+ FzKZQFAEavUFrnhu/uL/uAwvrU10t85o5SHmFhnYeUj5XfDYVCV9HmAV+f+NYZFs69lM
+ uwanMC1d4xz65hiRkpAxiKUsjsW6jnK8Ocm/egaEv/6/8IwQ9c7qe/oltcD9ZohoCEvM
+ 59rPoSILauyE0uWteaUIc/sj9WxfkqZr5MJ+k7nYYMCwADg2QLD/ZMxGUey4Kq/X9W6t RQ== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kbwk5g7dh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 21 Oct 2022 15:01:39 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29LEoTd9026945;
+        Fri, 21 Oct 2022 15:01:36 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma06ams.nl.ibm.com with ESMTP id 3kajmrufnq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 21 Oct 2022 15:01:36 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29LF1XIA3932696
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 21 Oct 2022 15:01:33 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6828E4C044;
+        Fri, 21 Oct 2022 15:01:33 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A09544C040;
+        Fri, 21 Oct 2022 15:01:32 +0000 (GMT)
+Received: from sig-9-145-0-12.uk.ibm.com (unknown [9.145.0.12])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 21 Oct 2022 15:01:32 +0000 (GMT)
+Message-ID: <89a748fb5caee8be5d91806aa5dfd131e92d5d82.camel@linux.ibm.com>
+Subject: Re: [PATCH 3/5] iommu/s390: Use RCU to allow concurrent domain_list
+ iteration
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Matthew Rosato <mjrosato@linux.ibm.com>, iommu@lists.linux.dev,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Gerd Bayer <gbayer@linux.ibm.com>,
+        Pierre Morel <pmorel@linux.ibm.com>,
+        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        svens@linux.ibm.com, linux-kernel@vger.kernel.org
+Date:   Fri, 21 Oct 2022 17:01:32 +0200
+In-Reply-To: <Y1KgX8EwH8T+FgWC@nvidia.com>
+References: <20221018145132.998866-1-schnelle@linux.ibm.com>
+         <20221018145132.998866-4-schnelle@linux.ibm.com>
+         <Y07Dz/NROAMI0Hku@nvidia.com>
+         <8e268ab5e0dadf86be5fd7ffaa9debb76cea67f3.camel@linux.ibm.com>
+         <Y0/lMCQ8oeXJ2HTg@nvidia.com>
+         <f3551bb461b3ef3cfc1a0c644093816be1835b3f.camel@linux.ibm.com>
+         <Y1ErcEe82yjJI+ET@nvidia.com>
+         <68d91d7a5aadbd46dc34470eccd6b86a84c9e47b.camel@linux.ibm.com>
+         <Y1KgX8EwH8T+FgWC@nvidia.com>
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
-MIME-Version: 1.0
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: JPssOqhliGRWJM7DZfKxHx-2QW_i9xrc
+X-Proofpoint-ORIG-GUID: JPssOqhliGRWJM7DZfKxHx-2QW_i9xrc
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-21_04,2022-10-21_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 clxscore=1015
+ mlxlogscore=802 mlxscore=0 suspectscore=0 malwarescore=0 bulkscore=0
+ impostorscore=0 lowpriorityscore=0 priorityscore=1501 spamscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210210088
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-10-21 at 14:21 +0800, Feng Tang wrote:
-> Commit b50db7095fe0 ("x86/tsc: Disable clocksource watchdog for TSC
-> on qualified platorms") was introduced to solve problem that
-> sometimes TSC clocksource is wrongly judged as unstable by watchdog
-> like 'jiffies', HPET, etc.
+On Fri, 2022-10-21 at 10:36 -0300, Jason Gunthorpe wrote:
+> On Fri, Oct 21, 2022 at 02:08:02PM +0200, Niklas Schnelle wrote:
+> > On Thu, 2022-10-20 at 08:05 -0300, Jason Gunthorpe wrote:
+> > > On Thu, Oct 20, 2022 at 10:51:10AM +0200, Niklas Schnelle wrote:
+> > > 
+> > > > Ok that makes sense thanks for the explanation. So yes my assessment is
+> > > > still that in this situation the IOTLB flush is architected to return
+> > > > an error that we can ignore. Not the most elegant I admit but at least
+> > > > it's simple. Alternatively I guess we could use call_rcu() to do the
+> > > > zpci_unregister_ioat() but I'm not sure how to then make sure that a
+> > > > subsequent zpci_register_ioat() only happens after that without adding
+> > > > too much more logic.
+> > > 
+> > > This won't work either as the domain could have been freed before the
+> > > call_rcu() happens, the domain needs to be detached synchronously
+> > > 
+> > > Jason
+> > 
+> > Yeah right, that is basically the same issue I was thinking of for a
+> > subsequent zpci_register_ioat(). What about the obvious one. Just call
+> > synchronize_rcu() before zpci_unregister_ioat()?
 > 
-> In it, the hardware socket number is a key factor for judging
-> whether to disable the watchdog for TSC, and 'nr_online_nodes' was
-> chosen as an estimation due to it is needed in early boot phase
-> before registering 'tsc-early' clocksource, where all none-boot
-> CPUs are not brought up yet.
+> Ah, it can be done, but be prepared to wait >> 1s for synchronize_rcu
+> to complete in some cases.
 > 
-> In recent patch review, Dave Hansen pointed out there are many
-> cases that 'nr_online_nodes' could have issue, like:
-> * numa emulation (numa=fake=4 etc.)
-> * numa=off
-> * platforms with CPU+DRAM nodes, CPU-less HBM nodes, CPU-less
->   persistent memory nodes.
-> * SNC (sub-numa cluster) mode is enabled
+> What you have seems like it could be OK, just deal with the ugly racy
+> failure
 > 
-> Peter Zijlstra suggested to use logical package ids, but it is
-> only usable after smp_init() and all CPUs are initialized.
-> 
-> One solution is to skip the watchdog for 'tsc-early' clocksource,
-> and move the check after smp_init(), while before 'tsc'
-> clocksoure is registered, where 'logical_packages' could be used
-> as a much more accurate socket number.
-> 
-> Signed-off-by: Feng Tang <feng.tang@intel.com>
-> ---
-> Hi reviewers,
-> 
-> I separate the code to 2 patches, as I think they are covering 2
-> problems and easy for bisect. Feel free to combine them into one,
-> as the 2/2 are a trivial change.
-> 
-> Thanks,
-> Feng
-> 
-> Changelog:
->  
->  Since RFC:
->  * use 'logical_packages' instead of topology_max_packages(), whose
->    implementaion is not accurate, like for heterogeneous systems
->    which have combination of Core/Atom CPUs like Alderlake (Dave
-> Hansen)
+> Jason
 
-I checked the history of '__max_logical_packages', and realized that
+I'd tend to go with synchronize_rcu(). It won't leave us with spurious
+error logs for the failed IOTLB flushes and as you said one expects
+detach to be synchronous. I don't think waiting in it will be a
+problem. But this is definitely something you're more of an expert on
+so I'll trust your judgement. Looking at other callers of
+synchronize_rcu() quite a few of them look to be in similar
+detach/release kind of situations though not sure how frequent and
+performance critical IOMMU domain detaching is in comparison.
 
-1. for topology_max_packages()/'__max_logical_packages', the divisor
-   'ncpus' uses cpu_data(0).booted_cores, which is based on the
-   *online* CPUs. So when using kernel cmdlines like maxcpus=/nr_cpus=,
-   '__max_logical_packages' can get over-estimated.
-
-2. for 'logical_packages', it equals the number of different physical
-   Package IDs for all *online* CPUs. So with kernel cmdlines like
-   nr_cpus=/maxcpus=, it can gets under-estimated.
-
-BTW, I also checked CPUID.B/1F, which can tell a fixed number of CPUs
-within a package. But we don't have a fixed number of total CPUs from
-hardware.
-On my Dell laptop, BIOS allows me to disable/enable one or several
-cores. When this happens, the 'total_cpus' changes, but CPUID.B/1F does
-not change. So I don't think CPUID.B/1F can be used to optimize the '__
-max_logical_packages' calculation.
-
-I'm not sure if we have a perfect solution here.
-
-thanks,
-rui
-
-
-
-
-
+Thanks,
+Niklas
 
