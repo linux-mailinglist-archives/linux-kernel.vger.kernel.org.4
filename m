@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4DD2607EB1
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 21:09:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A638E607EB2
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 21:09:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230313AbiJUTJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 15:09:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34460 "EHLO
+        id S230302AbiJUTJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 15:09:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230305AbiJUTJS (ORCPT
+        with ESMTP id S230310AbiJUTJT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 15:09:18 -0400
+        Fri, 21 Oct 2022 15:09:19 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D71D82958FD;
-        Fri, 21 Oct 2022 12:09:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E783F4621F;
+        Fri, 21 Oct 2022 12:09:17 -0700 (PDT)
 Received: from notapiano.myfiosgateway.com (unknown [IPv6:2600:4041:5b1a:cd00:524d:e95d:1a9c:492a])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id BEE05660253A;
-        Fri, 21 Oct 2022 20:09:13 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 49EE066026E6;
+        Fri, 21 Oct 2022 20:09:15 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1666379355;
-        bh=ywauAsdLjkUJQdp0DsPF37EGmMMhN0y3N+sXyQYS3Qg=;
+        s=mail; t=1666379356;
+        bh=DS3kNRrxvQNnQ5FSBW8HqwtDWRSQIlWA9aI0kdJZTLQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iu0jAwwGrKbqJzEzPiKUlOya7r6lOCskEMWFOVGoIzf/0Y7zjRuxwWsHvs8VPDIAR
-         1aPXxUaTwKc3rthrwR/k6jEs1J74w5Uet7EHlnItZNBs4SKUgNerZSxQuWDWcRaVyb
-         djtz+Toe9r/ZwCyOJsztGqOreeuC+qrb95HBpPLxqmDArPj39ryaBRzB+Jwxht9P1F
-         Jjwx1J9n8oCVFShIQRxzCh+j/n825V6z1jryXCbI/aA/eM01c1GRVIxFWSncFpqzFg
-         HbLoX3UYi4M8enWCq4jEAlnsx0pixO2hI3eEJp71gftL6KjfB6zprKWRTy2XZAUMrf
-         Y3T34Z9UTdS8A==
+        b=N/oJ4KJNyg6WVSLigu+m3R6pG774ED2lh9CHfCen5Xvwl3LEtWmXDkQD1JIqUOcGG
+         2rRbhrj4MkXSw9/V1xWZxWI82K6mrLCQU7ZCdx3g6jeccBPQ1i3tJewuNV40lAXdpp
+         OH9OSCbWbAU9tvVdm3QhatLiEdL/3OREevzsXZf7lYmn72QJhysaKIETFH8z8Ap5pn
+         d8ZIXyOehrZtBJncoi6WBd296/nulbmmnEoWvcu+lXSSz9IwGExC0a8KF1I0k0Ty0n
+         H7f7HDfvzxztz7vpMo8wEkI//53M35J/j4LQxEI/PwoSmzH9kABPMPK8OWzCQyqcEl
+         9HB6ll62hMaaw==
 From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
         <nfraprado@collabora.com>
 To:     Mark Brown <broonie@kernel.org>
@@ -43,9 +43,9 @@ Cc:     AngeloGioacchino Del Regno
         Liam Girdwood <lgirdwood@gmail.com>,
         Rob Herring <robh+dt@kernel.org>, alsa-devel@alsa-project.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/3] ASoC: dt-bindings: realtek,rt5682s: Add #sound-dai-cells
-Date:   Fri, 21 Oct 2022 15:09:06 -0400
-Message-Id: <20221021190908.1502026-2-nfraprado@collabora.com>
+Subject: [PATCH 2/3] ASoC: dt-bindings: realtek,rt5682s: Add AVDD and MICVDD supplies
+Date:   Fri, 21 Oct 2022 15:09:07 -0400
+Message-Id: <20221021190908.1502026-3-nfraprado@collabora.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221021190908.1502026-1-nfraprado@collabora.com>
 References: <20221021190908.1502026-1-nfraprado@collabora.com>
@@ -61,28 +61,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The rt5682s codec can be pointed to through a sound-dai property to be
-used as part of a machine sound driver. dtc expects #sound-dai-cells to
-be defined in the codec's node in those cases, so add it in the
-dt-binding and set it to 0.
+The rt5682s codec can have two supplies: AVDD and MICVDD. Add properties
+for them.
 
 Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-
 ---
 
- Documentation/devicetree/bindings/sound/realtek,rt5682s.yaml | 3 +++
- 1 file changed, 3 insertions(+)
+ Documentation/devicetree/bindings/sound/realtek,rt5682s.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/Documentation/devicetree/bindings/sound/realtek,rt5682s.yaml b/Documentation/devicetree/bindings/sound/realtek,rt5682s.yaml
-index ca5b8987b749..ea53a55015c4 100644
+index ea53a55015c4..ca1037e76f96 100644
 --- a/Documentation/devicetree/bindings/sound/realtek,rt5682s.yaml
 +++ b/Documentation/devicetree/bindings/sound/realtek,rt5682s.yaml
-@@ -87,6 +87,9 @@ properties:
-     maxItems: 2
-     description: Name given for DAI word clock and bit clock outputs.
+@@ -90,6 +90,10 @@ properties:
+   "#sound-dai-cells":
+     const: 0
  
-+  "#sound-dai-cells":
-+    const: 0
++  AVDD-supply: true
++
++  MICVDD-supply: true
 +
  additionalProperties: false
  
