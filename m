@@ -2,74 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22EB2607326
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 11:00:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB90A60732A
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 11:01:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230146AbiJUJAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 05:00:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40802 "EHLO
+        id S229810AbiJUJA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 05:00:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230445AbiJUJAU (ORCPT
+        with ESMTP id S229939AbiJUJAs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 05:00:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD8CD356C9;
-        Fri, 21 Oct 2022 02:00:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3A211B82B6F;
-        Fri, 21 Oct 2022 09:00:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id EAC23C43470;
-        Fri, 21 Oct 2022 09:00:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666342811;
-        bh=HK5VUIChYWOulCOh1Ui31mU7JvliKLDNu9EHGlrImYY=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=qWwvuBpTVtQf0vstmxHP+4LZ5mQdk3qFuB4ZTLrBxiAhTnV4d5MOOuYOJf1OPudZg
-         6bPXRcq3+quXBCiPUufdktkhHODP1bKAp0FDMOP8BpAum6VyUo0Bpnz587766znfmw
-         M5esSoPn4YO0JO+McWEN5hxzercSN8wPZFcOwW401dCpTzf2rXGTr0dPcCpsklvkdV
-         a7pXUELoS3mzGVJbpXKoexNa96R8YuXhASRPu9uAN4vW00/UMcc5SqBq1kFxOW5UqF
-         Pb+R0vULbua5ckCW/80CHDZe3F9yarxYM5KOYz6sEypAOOHBC1aU6SUV3T0ceckVQy
-         ldA+0OMJizhbA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CC67DE270DF;
-        Fri, 21 Oct 2022 09:00:10 +0000 (UTC)
-Subject: Re: [GIT PULL] pin control fixes for the v6.1 series
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CACRpkdbqRy5pXiy2r5CBiBXd8j7VbXKq40pmx_eXtFMynyAMug@mail.gmail.com>
-References: <CACRpkdbqRy5pXiy2r5CBiBXd8j7VbXKq40pmx_eXtFMynyAMug@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-gpio.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CACRpkdbqRy5pXiy2r5CBiBXd8j7VbXKq40pmx_eXtFMynyAMug@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git tags/pinctrl-v6.1-2
-X-PR-Tracked-Commit-Id: 9abf2313adc1ca1b6180c508c25f22f9395cc780
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 664609e49f1c84fc97987b2bf64544e586b8849c
-Message-Id: <166634281076.24263.407964543442837334.pr-tracker-bot@kernel.org>
-Date:   Fri, 21 Oct 2022 09:00:10 +0000
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 21 Oct 2022 05:00:48 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C6E034990;
+        Fri, 21 Oct 2022 02:00:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=4iMBphw13KTQLLQRfUG/2Q1TsUUh89Ar5EYrCCnD96k=; b=wh3/gEmC9mepUk1fTEqfrqlJEy
+        7LxX5iGvzCultd99ss4GAQLzu47Tznnc1PQKPA+dLeQQ1U/2J0eqEGdpKKoAMVIlGBtg41DJUL7cD
+        kcASAQQfNiEmBACrIMYPnPdNwR1cusbIry2QS08ZHAZiCmSloL5Ym4v98A+J/P1nkT590E9zRlIua
+        25f64/PnDS4f9cbTgmeBIOoleCgTLQcVqfoLRA/XV0olSiogHasssrNWEnijciwmDoNXVvTVafw+/
+        lA7mEPSANpOChXuPjPHmwwrtNfqsNiOMwW05rDG0nm9rCzYooiOCisTqROtT2k8ckMA2rME1CHzYi
+        1ZAZ8JSw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34854)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1olnt7-0008PG-Jd; Fri, 21 Oct 2022 10:00:21 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1olnt2-000421-4a; Fri, 21 Oct 2022 10:00:16 +0100
+Date:   Fri, 21 Oct 2022 10:00:16 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Frank Wunderlich <linux@fw-web.de>
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        linux-mediatek@lists.infradead.org,
+        Alexander Couzens <lynxis@fe80.eu>,
+        Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] net: mtk_sgmii: implement mtk_pcs_ops
+Message-ID: <Y1JfoAD8NxvvR8+6@shell.armlinux.org.uk>
+References: <20221020144431.126124-1-linux@fw-web.de>
+ <Y1F0pSrJnNlYzehq@shell.armlinux.org.uk>
+ <02A54E45-2084-440A-A643-772C0CC9F988@public-files.de>
+ <Y1JJEtvra2F3JGQS@shell.armlinux.org.uk>
+ <9E91B812-8687-463D-8B98-3C4BF26CBE08@fw-web.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9E91B812-8687-463D-8B98-3C4BF26CBE08@fw-web.de>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 21 Oct 2022 10:55:52 +0200:
+On Fri, Oct 21, 2022 at 10:41:22AM +0200, Frank Wunderlich wrote:
+> Am 21. Oktober 2022 09:24:02 MESZ schrieb "Russell King (Oracle)" <linux@armlinux.org.uk>:
+> >On Fri, Oct 21, 2022 at 08:04:51AM +0200, Frank Wunderlich wrote:
+> >> On my board (bpi-r3) we have no autoneg on the gmacs. We have a switch (mt7531) with fixed-link on the first and a sfp-cage on the other. Second mac gets speed-setting (1000base-X or 2500base-X) from sfp eeprom, but no advertisement from the "other end". Imho it is always full duplex.
+> >
+> >If it's a fixed link, then this function you're adding won't be called.
+> >It's only called for in-band mode which is exclusive with fixed-link
+> >mode.
+> >
+> >-- 
+> >RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+> >FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+> 
+> Right, i get this trace for the second mac which is without fixed-link because of in-band-managed for sfp (read speed settings from sfp eeprom).
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git tags/pinctrl-v6.1-2
-
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/664609e49f1c84fc97987b2bf64544e586b8849c
-
-Thank you!
+So, you need to set state->duplex to DUPLEX_FULL if this is what the
+hardware is actually doing.
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
