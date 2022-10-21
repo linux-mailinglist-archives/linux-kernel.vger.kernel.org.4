@@ -2,145 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9A24607613
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 13:23:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F0AE60761C
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 13:28:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229497AbiJULXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 07:23:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37214 "EHLO
+        id S230084AbiJUL15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 07:27:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbiJULX2 (ORCPT
+        with ESMTP id S229501AbiJUL1y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 07:23:28 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2BB1263093;
-        Fri, 21 Oct 2022 04:23:21 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id g7so4550943lfv.5;
-        Fri, 21 Oct 2022 04:23:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Aqpdzxh11piHyrsdYH/hMiJ+aTKND0zUJe+5TRJCoCA=;
-        b=Z0bH4IF8UY8KyFRVfg89Ce9qfemn10tWWyc9UKPS5DUGTeX+mCHfG1Rl9Akl6r/MCx
-         YeLIDU5fEhR1wlP2osDsN8bXKglWOOBIj7dL+Il5+JKJc8pD0poBJZUgXi9n4JrxcLqo
-         IRtelBKZIP0czN0m0WulZbOhzyRuTIsnZTChhBVu7NRDtpj76wqDx9WsIL5lYVsT9W/m
-         40njxh8s1iO91waXHneCSNnRvnkYaW+Q0HS8p/VcTLMDWdv82I5iBkNNWxSDVbOg9IYe
-         cJ5pUj4QCBKAWbUp3AeizEpFR3ikXcAkMowHS+/o8N7Df1mmduCtAG6x5Tto04Hu0sp0
-         KurQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Aqpdzxh11piHyrsdYH/hMiJ+aTKND0zUJe+5TRJCoCA=;
-        b=39n9HEWBtPCQM3gQT9g/ojO/H97uaT01E10LwkwSGX25iI/3pakwQMnp9EDp22cy/j
-         wRFc/I+RPg2wqhEaXO8PhrKt1YanDFTmqHgnQeC7/pOMANGSFbCWwF0/slaeEnl6VV7o
-         moKDsifkYAyv9ityGIX0XtZYoKwlGj5eWUwl4QpFNesEuie5YAeBAs/NMMTBmZZqcXpz
-         J2mX2WXONNnmPTg4qhJejasXRsanxL7w/AIf4InHYg+REJImRQQ3nWNdBOfc/01CGgzN
-         xrveznXfwu8at31yt/CX96DG0FG17p6utP9KzVxVlwC30slLLp4wLYBMIV6uNn/daGLb
-         FT2Q==
-X-Gm-Message-State: ACrzQf3LIlgAaGAtZRevbZZhz9WT8IxHOnCE/lIf361SfY2FCH5RYdkK
-        VXjRKD3R9veB/OOX9Lmf450=
-X-Google-Smtp-Source: AMsMyM5o5dWYAn/8FS+pHRs7ka8TDtNjya43of5VK6oNagezPOdvuy5HO5EVbsUKFJI+n+5l9iDTcA==
-X-Received: by 2002:a19:6558:0:b0:4a4:7fc2:7927 with SMTP id c24-20020a196558000000b004a47fc27927mr7038375lfj.674.1666351399998;
-        Fri, 21 Oct 2022 04:23:19 -0700 (PDT)
-Received: from dc75zzyyyyyyyyyyyyyby-3.rev.dnainternet.fi (dc75zzyyyyyyyyyyyyyby-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::2])
-        by smtp.gmail.com with ESMTPSA id l2-20020a2e3e02000000b0026be1de1500sm3341009lja.79.2022.10.21.04.23.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Oct 2022 04:23:18 -0700 (PDT)
-Date:   Fri, 21 Oct 2022 14:23:13 +0300
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Dmitry Rokosov <DDRokosov@sberdevices.ru>,
-        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
-        Cosmin Tanislav <demonsingur@gmail.com>,
-        Jagath Jog J <jagathjog1996@gmail.com>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4 3/3] MAINTAINERS: Add KX022A maintainer entry
-Message-ID: <db45c0ee76c3205b9253cb2200a79119c2f2b946.1666350457.git.mazziesaccount@gmail.com>
-References: <cover.1666350457.git.mazziesaccount@gmail.com>
+        Fri, 21 Oct 2022 07:27:54 -0400
+Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1181825D64F;
+        Fri, 21 Oct 2022 04:27:52 -0700 (PDT)
+Received: from unknown (HELO iyokan2-ex.css.socionext.com) ([172.31.9.54])
+  by mx.socionext.com with ESMTP; 21 Oct 2022 20:27:52 +0900
+Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
+        by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id 6D0DF20584CE;
+        Fri, 21 Oct 2022 20:27:52 +0900 (JST)
+Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Fri, 21 Oct 2022 20:27:52 +0900
+Received: from [10.212.242.61] (unknown [10.212.242.61])
+        by kinkan2.css.socionext.com (Postfix) with ESMTP id 20D3CB62A4;
+        Fri, 21 Oct 2022 20:27:52 +0900 (JST)
+Subject: Re: [PATCH net] net: phy: Avoid WARN_ON for PHY_NOLINK during
+ resuming
+To:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221021074154.25906-1-hayashi.kunihiko@socionext.com>
+ <4d2d6349-6910-3e73-e6c5-db9041bcfdb8@gmail.com>
+ <86262217-a620-dc5b-cf5a-3a23ea869834@socionext.com>
+ <125eddc1-8791-e8c4-39ac-fb5b864d91ba@gmail.com>
+From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Message-ID: <fe078840-b54d-d18b-da73-e6e66406bede@socionext.com>
+Date:   Fri, 21 Oct 2022 20:27:52 +0900
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="T137bSOkmQEtsLas"
-Content-Disposition: inline
-In-Reply-To: <cover.1666350457.git.mazziesaccount@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <125eddc1-8791-e8c4-39ac-fb5b864d91ba@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022/10/21 20:12, Heiner Kallweit wrote:
+> On 21.10.2022 11:35, Kunihiko Hayashi wrote:
+>> Hi Heiner,
+>>
+>> Thank you for your comment.
+>>
+>> On 2022/10/21 17:38, Heiner Kallweit wrote:
+>>> On 21.10.2022 09:41, Kunihiko Hayashi wrote:
+>>>> When resuming from sleep, if there is a time lag from link-down to
+>>>> link-up
+>>>> due to auto-negotiation, the phy status has been still PHY_NOLINK, so
+>>>> WARN_ON dump occurs in mdio_bus_phy_resume(). For example, UniPhier AVE
+>>>> ethernet takes about a few seconds to link up after resuming.
+>>>>
+>>> That autoneg takes some time is normal. If this would actually the root
+>>> cause then basically every driver should be affected. But it's not.
+>>
+>> Although the auto-neg should happen normally, I'm not sure about other
+>> platforms.
+>>
+>>>> To avoid this issue, should remove PHY_NOLINK the WARN_ON conditions.
+>>>>
+>>>> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+>>>> ---
+>>>>    drivers/net/phy/phy_device.c | 8 ++++----
+>>>>    1 file changed, 4 insertions(+), 4 deletions(-)
+>>>>
+>>>> diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
+>>>> index 57849ac0384e..c647d027bb5d 100644
+>>>> --- a/drivers/net/phy/phy_device.c
+>>>> +++ b/drivers/net/phy/phy_device.c
+>>>> @@ -318,12 +318,12 @@ static __maybe_unused int
+>>>> mdio_bus_phy_resume(struct
+>>>> device *dev)
+>>>>        phydev->suspended_by_mdio_bus = 0;
+>>>>
+>>>>        /* If we managed to get here with the PHY state machine in a state
+>>>> -     * neither PHY_HALTED, PHY_READY nor PHY_UP, this is an indication
+>>>> -     * that something went wrong and we should most likely be using
+>>>> -     * MAC managed PM, but we are not.
+>>>> +     * neither PHY_HALTED, PHY_READY, PHY_UP nor PHY_NOLINK, this is an
+>>>> +     * indication that something went wrong and we should most likely
+>>>> +     * be using MAC managed PM, but we are not.
+>>>>         */
+>>>
+>>> Did you read the comment you're changing? ave_resume() calls
+>>> phy_resume(),
+>>> so you should follow the advice in the comment.
+>>
+>> I understand something is wrong with "PHY_NOLINK" here, and need to
+>> investigate
+>> the root cause of the phy state issue.
+>>
+> Best look at how phydev->mac_managed_pm is used in phylib and by MAC
+> drivers.
 
---T137bSOkmQEtsLas
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thank you for the clue!
+I'll try the flag and check the behavior of MAC/PHY.
 
-Add maintainer entry for ROHM/Kionix KX022A accelerometer sensor driver.
+Thank you,
 
-Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
 ---
- MAINTAINERS | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index cf0f18502372..3ab9c5f97dfe 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11435,6 +11435,11 @@ F:	drivers/mfd/khadas-mcu.c
- F:	include/linux/mfd/khadas-mcu.h
- F:	drivers/thermal/khadas_mcu_fan.c
-=20
-+KIONIX/ROHM KX022A ACCELEROMETER
-+R:	Matti Vaittinen <mazziesaccount@gmail.com>
-+S:	Supported
-+F:	drivers/iio/accel/kionix-kx022a*
-+
- KMEMLEAK
- M:	Catalin Marinas <catalin.marinas@arm.com>
- S:	Maintained
---=20
-2.37.3
-
-
---=20
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
-
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =3D]=20
-
---T137bSOkmQEtsLas
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmNSgSEACgkQeFA3/03a
-ocUp0AgAmJzPCSyJryGc0AplYi/SZHhLE6YmLR4uVa2187xwviNdIPY40G47bRcg
-+Au2IT6ckmurn5UWX6a3wvsN8tWvjnfSSVcXAuu2HVNRExVCAuSvXgP2GQcmlNyh
-q1baK+3n5itvJvf1mz8EbvqEXeTzZUZ5iux7VT0uXiAcyf3Zve2J8QlwSZUtnvGT
-axuvQ2XW/KXnB3ifNFDiDkO5VS0S4buzNOUyrYPRH8VXq48vIawydM0gvwl8oBFK
-mFRaDCUnukmo7gOCfL6Ts+Yt4JqpI9QL8t1ueOZ4YQL2UbUf3bBmPJ1FgTm3H8vU
-cNa7g4qIJNubuZn3NpFLCKrAizbFQQ==
-=Muhs
------END PGP SIGNATURE-----
-
---T137bSOkmQEtsLas--
+Best Regards
+Kunihiko Hayashi
