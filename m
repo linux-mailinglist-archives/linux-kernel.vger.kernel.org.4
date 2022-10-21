@@ -2,149 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEBD4607239
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 10:28:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D972C607258
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 10:32:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229906AbiJUI2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 04:28:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46180 "EHLO
+        id S229716AbiJUIcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 04:32:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230086AbiJUI1q (ORCPT
+        with ESMTP id S230111AbiJUIbx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 04:27:46 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6622824D8B8;
-        Fri, 21 Oct 2022 01:27:35 -0700 (PDT)
-X-UUID: 4a3042e008bd4c46acad81b23a815b96-20221021
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=JL8AFYMysNNf9UxBZE3zL4dL4XsI5WhKFUEMitMqTgo=;
-        b=TnwMgnYlUD2S4H8mXGHoHeANy5A8Lcrt8xeTe32ujjw488ckDcB83Py/XS1QIv0nqVbfhj36dWgsmICrnFEWiwOVBVMeAOHdb0HPYt1Q/OvAsEketqAQhZp5min2FtLSspnShaG6URczHZqHUYuL8TWT4kZhijXNZnv6bXWFVc0=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.12,REQID:ee91c1e6-8407-43af-97b1-34800871d109,IP:0,U
-        RL:25,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:25
-X-CID-META: VersionHash:62cd327,CLOUDID:5584ac6c-89d3-4bfa-baad-dc632a24bca3,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 4a3042e008bd4c46acad81b23a815b96-20221021
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
-        (envelope-from <trevor.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 62873104; Fri, 21 Oct 2022 16:27:26 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Fri, 21 Oct 2022 16:27:25 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Fri, 21 Oct 2022 16:27:25 +0800
-From:   Trevor Wu <trevor.wu@mediatek.com>
-To:     <broonie@kernel.org>, <tiwai@suse.com>, <robh+dt@kernel.org>,
-        <matthias.bgg@gmail.com>, <p.zabel@pengutronix.de>
-CC:     <trevor.wu@mediatek.com>,
-        <angelogioacchino.delregno@collabora.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <alsa-devel@alsa-project.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-Subject: [PATCH v2 12/12] dt-bindings: mediatek: mt8188: add mt8188-mt6359 document
-Date:   Fri, 21 Oct 2022 16:27:19 +0800
-Message-ID: <20221021082719.18325-13-trevor.wu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20221021082719.18325-1-trevor.wu@mediatek.com>
-References: <20221021082719.18325-1-trevor.wu@mediatek.com>
+        Fri, 21 Oct 2022 04:31:53 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 927E921CD65;
+        Fri, 21 Oct 2022 01:30:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666341042; x=1697877042;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=iStXbW6utP2Sr5Eu3lyDBrnn9cA6vtUAUyNGvoK3NtY=;
+  b=Uf7JYtBywDSGtclTl8KAQ32yCvKAI6TjiFi3YDrgVn+NbIQonDa/x7cM
+   RUodL6IlY5VTHVBrSiaNAPYzwIYJTz+6H1rQTjYTaTDNnTTvYmQg2pSjY
+   AGms6hD1nAtvJa/GVDiXltS9jmysp0w9U5tTfo3UkT5r0H4x/fmU5fowY
+   Q7oH6qmKghprkhHWQFWRNuRgzjjoYYmFm9EqvaTu4Pb4ngRAxe+c2oXfn
+   OTywvp46gsgOKiVlEoiDtwUoVFJUalwkKSpMEH9qLMP/Vt5omXZY1Tvi/
+   Gjw8dowt0DsZZ2NpXKZ3ZKxml0Mrymw+jH5Tp12Uup1SV18d9C0PdeqhO
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="371162339"
+X-IronPort-AV: E=Sophos;i="5.95,200,1661842800"; 
+   d="scan'208";a="371162339"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2022 01:29:05 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="719594843"
+X-IronPort-AV: E=Sophos;i="5.95,200,1661842800"; 
+   d="scan'208";a="719594843"
+Received: from lramir2-mobl1.ger.corp.intel.com ([10.252.44.179])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2022 01:29:00 -0700
+Date:   Fri, 21 Oct 2022 11:28:58 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Matthew Gerlach <matthew.gerlach@linux.intel.com>
+cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>, geert+renesas@glider.be,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
+        johan@kernel.org, Lukas Wunner <lukas@wunner.de>,
+        marpagan@redhat.com
+Subject: Re: [PATCH v4 1/4] Documentation: fpga: dfl: Add documentation for
+ DFHv1
+In-Reply-To: <20221020212610.697729-2-matthew.gerlach@linux.intel.com>
+Message-ID: <d265dae0-fe4b-8ac0-fb9e-2a7345b279a2@linux.intel.com>
+References: <20221020212610.697729-1-matthew.gerlach@linux.intel.com> <20221020212610.697729-2-matthew.gerlach@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add document for mt8188 board with mt6359.
+On Thu, 20 Oct 2022, matthew.gerlach@linux.intel.com wrote:
 
-Signed-off-by: Trevor Wu <trevor.wu@mediatek.com>
----
- .../bindings/sound/mt8188-mt6359.yaml         | 64 +++++++++++++++++++
- 1 file changed, 64 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/sound/mt8188-mt6359.yaml
+> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> 
+> Add documentation describing the extensions provided by Version
+> 1 of the Device Feature Header (DFHv1).
+> 
+> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> ---
+> v4: Remove marketing speak and separate v0 and v1 descriptions.
+>     Fix errors reported by "make htmldocs".
+> 
+> v3: no change
+> 
+> v2: s/GUILD/GUID/
+>     add picture
+> ---
+>  Documentation/fpga/dfl.rst | 96 ++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 96 insertions(+)
+> 
+> diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
+> index 15b670926084..12365be435a8 100644
+> --- a/Documentation/fpga/dfl.rst
+> +++ b/Documentation/fpga/dfl.rst
+> @@ -561,6 +561,102 @@ new DFL feature via UIO direct access, its feature id should be added to the
+>  driver's id_table.
+>  
+>  
+> +Device Feature Header - Version 0
+> +===========================================
+> +The format of Version 0 of a Device Feature Header (DFH) is shown below::
+> +
+> +    +-----------------------------------------------------------------------+
+> +    |63 Type 60|59 DFH VER 52|51 Rsvd 41|40 EOL|39 Next 16|15 VER 12|11 ID 0| 0x00
+> +    +-----------------------------------------------------------------------+
+> +    |63                                 GUID_L                             0| 0x08
+> +    +-----------------------------------------------------------------------+
+> +    |63                                 GUID_H                             0| 0x10
+> +    +-----------------------------------------------------------------------+
+> +
+> +Offset 0x00
+> +Type - The type of DFH (e.g. FME, AFU, or private feature).
+> +DFH VER - The version of the DFH.
+> +Rsvd - Currently unused.
+> +EOL - Set if this DFH is the end of the Device Feature List (DFL).
+> +Next - The offset of the next DFH in the DFL from the start of the DFH.
+> +If EOL is set, Next refers to size of mmio for last feature in the list.
+> +ID - If Type field is 'private feature', then ID of the private feature.
+> +
+> +Offset 0x08
+> +GUID_L - Least significant 64 bits of a 128 bit Globally Unique Identifier
+> +if Type is FME or AFU.
+> +
+> +Offset 0x10
+> +GUID_H - Most significant 64 bits of a 128 bit Globally Unique Identifier
+> +if Type is FME or AFU.
+> +
+> +
+> +Device Feature Header - Version 1
+> +===========================================
 
-diff --git a/Documentation/devicetree/bindings/sound/mt8188-mt6359.yaml b/Documentation/devicetree/bindings/sound/mt8188-mt6359.yaml
-new file mode 100644
-index 000000000000..9c493a6101ff
---- /dev/null
-+++ b/Documentation/devicetree/bindings/sound/mt8188-mt6359.yaml
-@@ -0,0 +1,64 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/sound/mt8188-mt6359.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: MediaTek MT8188 ASoC sound card driver
-+
-+maintainers:
-+  - Trevor Wu <trevor.wu@mediatek.com>
-+
-+description:
-+  This binding describes the MT8188 sound card.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - mediatek,mt8188_mt6359_evb
-+
-+  model:
-+    $ref: /schemas/types.yaml#/definitions/string
-+    description: User specified audio sound card name
-+
-+  audio-routing:
-+    $ref: /schemas/types.yaml#/definitions/non-unique-string-array
-+    description:
-+      A list of the connections between audio components. Each entry is a
-+      sink/source pair of strings. Valid names could be the input or output
-+      widgets of audio components, power supplies, MicBias of codec and the
-+      software switch.
-+
-+  mediatek,platform:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description: The phandle of MT8188 ASoC platform.
-+
-+  mediatek,dptx-codec:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description: The phandle of MT8188 Display Port Tx codec node.
-+
-+  mediatek,hdmi-codec:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description: The phandle of MT8188 HDMI codec node.
-+
-+additionalProperties: false
-+
-+required:
-+  - compatible
-+  - mediatek,platform
-+
-+examples:
-+  - |
-+
-+    sound: mt8188-sound {
-+        compatible = "mediatek,mt8188_mt6359_evb";
-+        mediatek,platform = <&afe>;
-+        pinctrl-names = "default";
-+        pinctrl-0 = <&aud_pins_default>;
-+        audio-routing =
-+            "Headphone", "Headphone L",
-+            "Headphone", "Headphone R",
-+            "AIN1", "Headset Mic";
-+    };
-+
-+...
+While this is structurally better than the previous one. I'd still include
+at least one paragraph about the purpose. Something along these lines 
+(picked from v3 + edited the marketing speak/v0 compare away from it):
+
+Version 1 of the Device Feature Header (DFHv1) provides flexibility and 
+extensibility to hardware designs using Device Feature Lists. It is a
+standardized mechanism for features to describe parameters/capabilities to 
+software.
+
+With DFHv1:
+* GUID is mandatory for all types
+* The register space of the feature is decoupled from the location of the DFH
+* A list of parameter values associates to a particular feature.
+
+After that, the header itself makes much more sense already.
+
+> +The format of Version 1 of a Device Feature Header (DFH) is shown below::
+> +
+> +    +-----------------------------------------------------------------------+
+> +    |63 Type 60|59 DFH VER 52|51 Rsvd 41|40 EOL|39 Next 16|15 VER 12|11 ID 0| 0x00
+> +    +-----------------------------------------------------------------------+
+> +    |63                                 GUID_L                             0| 0x08
+> +    +-----------------------------------------------------------------------+
+> +    |63                                 GUID_H                             0| 0x10
+> +    +-----------------------------------------------------------------------+
+> +    |63                 Address/Offset                            1|  Rel  0| 0x18
+
+Should this mention it's addr/offs of registers? As is it's bit hard to 
+figure out from the diagram w/o the extra description. I think you have 
+plenty of space for adding that extra bit of info.
+
+> +    +-----------------------------------------------------------------------+
+> +    |63        Reg Size       32|Params 31|30 Group    16|15 Instance      0| 0x20
+> +    +-----------------------------------------------------------------------+
+> +    |63 Next      34|RSV33|EOP32|31 Param Version 16|15 Param ID           0| 0x28
+> +    +-----------------------------------------------------------------------+
+> +    |63                 Parameter Data                                     0| 0x30
+> +    +-----------------------------------------------------------------------+
+> +
+> +                                  ...
+> +
+> +    +-----------------------------------------------------------------------+
+> +    |63 Next parameter offset 32|31 Param Version 16|15 Param ID           0|
+> +    +-----------------------------------------------------------------------+
+> +    |63                 Parameter Data                                     0|
+> +    +-----------------------------------------------------------------------+
+> +
+> +Offset 0x00
+> +Type - The type of DFH (e.g. FME, AFU, or private feature).
+> +DFH VER - The version of the DFH.
+> +Rsvd - Currently unused.
+> +EOL - Set if this DFH is the end of the Device Feature List (DFL).
+> +Next - The offset of the next DFH in the DFL from the start of the DFH.
+> +If EOL is set, Next refers to size of mmio for last feature in the list.
+> +ID - If Type field is 'private feature', then ID of the private feature.
+> +
+> +Offset 0x08
+> +GUID_L - Least significant 64 bits of a 128 bit Globally Unique Identifier.
+> +
+> +Offset 0x10
+> +GUID_H - Most significant 64 bits of a 128 bit Globally Unique Identifier
+> +if Type is FME or AFU.
+
+A copy-paste error?
+
+> +
+> +Offset 0x18
+> +Address/Offset - If Rel bit is set, then high 63 bits of a 16 bit aligned
+> +absolute address for the location of the feature's registers.
+> +If Rel bit is clear, then the feature's registers start at the
+> +offset from the start of the DFH.
+> +
+> +Offset 0x20
+> +Reg Size - Size of feature's register set.
+> +Params - Set if DFH has one or more parameter blocks.
+> +Group - Id of group if feature is part of a group.
+> +Instance - Id of instance of feature within a group.
+> +
+> +Offset 0x28 if feature has parameters
+> +Next - High 30 bits of a 32 bit aligned offset to the next parameter block.
+> +If EOP set, size of last parameter.
+> +Param Version - Version of Param ID.
+> +Param ID - ID of parameter.
+> +
+> +Offset 0x30
+> +Parameter Data - Parameter data whose size and format is defined by version
+> +and ID of the parameter.
+
+I'd reverse the order and say "ID and version" (kind of major thing 
+first).
+
+> +
+>  Open discussion
+>  ===============
+>  FME driver exports one ioctl (DFL_FPGA_FME_PORT_PR) for partial reconfiguration
+> 
+
 -- 
-2.18.0
+ i.
 
