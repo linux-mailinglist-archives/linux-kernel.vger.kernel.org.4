@@ -2,66 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1279A606E2D
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 05:10:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F15AF606E34
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 05:13:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbiJUDKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 20 Oct 2022 23:10:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40946 "EHLO
+        id S229925AbiJUDNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 20 Oct 2022 23:13:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbiJUDKg (ORCPT
+        with ESMTP id S229875AbiJUDNF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 20 Oct 2022 23:10:36 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 167A6FC1EC
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 20:10:29 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id y1so1374660pfr.3
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 20:10:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=quanta-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Lqy88kgcdqgVJZiFTICz5DdP4bxwc+5bmeTWZHzDx0Y=;
-        b=Vm54pQmKTiZYDhJDqnLWts3Q4KaijkpvkPRKZ9iQIKybieWKuKKPyBdS4kLqddffpX
-         oBPvk9kzrb3bqPp2Igg7kQSlAjJv6bMQnSawt11kJvEk6NI6LbbD5QxeMRcm1GDvorvG
-         2hUYsWjpDTbw4GQckWvdL4ZmqqcfZVLnUxcbgSUWOIwCIE0O8AKD9S+2QHb5xNIwpif8
-         AZJRj0ySLjZ4rkBkhNP5Mxkx9dE0hlH+DHGwB2FWCaR436+aQAOl39ttvPpSZ7wbYzLY
-         UcvWT5YjUvwi092vPjeOuu4vtDfd21Ltmgc/374RLBhDBMyY0vaRwGPcBInr6D/u0x6x
-         RAKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Lqy88kgcdqgVJZiFTICz5DdP4bxwc+5bmeTWZHzDx0Y=;
-        b=o59sTJOsuxW9XrXMjiQzZDiIoPq2skRHjeVJUkrCvOOZFvVj8zL6iYWdY7PqXdbkQ8
-         KssGZdlXygWSlSGpJFy4oRsMNU1KyR+N/Pn+x11pIDH4fb6v5lV0LCkFzkmaAe9f2lt7
-         bN1a+ptn4r2xMFINEy7fNdKobyxR/LqLPH8wgALqUKT7VOEChmmO6U4Qs9cPiXfRVqID
-         V6NOhLziJrR3+lQA/L62ZJTR37T1wBweNy7M6HOOesF+GqczKnu9TvtbCVgv4l2KDzvr
-         VlwL14Z2gxlghkdWCDXptq9FlBeYOCPyFRma0se9owmG7U0t8C2nlSZtGRhQ4ercZJZa
-         uenQ==
-X-Gm-Message-State: ACrzQf1HLwDD8ECArR0nAVuN1n0Qr6thwvDeRerPKMcCOpttHQiP6KMM
-        FUNOjQJ7VUHumucoOfdT75uZNA==
-X-Google-Smtp-Source: AMsMyM6N78wjujSI1lfFxzM6CMjAXO093s8B96q91MqDf39PAYKlSzniPHslFTatE4kIY2Lf8F+WSQ==
-X-Received: by 2002:a63:485f:0:b0:458:764a:2224 with SMTP id x31-20020a63485f000000b00458764a2224mr14235293pgk.620.1666321829224;
-        Thu, 20 Oct 2022 20:10:29 -0700 (PDT)
-Received: from sean-biuld-server.itotolink.net (1-34-200-211.hinet-ip.hinet.net. [1.34.200.211])
-        by smtp.gmail.com with ESMTPSA id i34-20020a632222000000b0045913a96837sm12459499pgi.24.2022.10.20.20.10.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 20:10:28 -0700 (PDT)
-From:   Sean Hong <sean.hong@quanta.corp-partner.google.com>
-To:     dianders@chromium.org, thierry.reding@gmail.com, sam@ravnborg.org,
-        airlied@gmail.com, daniel@ffwll.ch
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Sean Hong <sean.hong@quanta.corp-partner.google.com>
-Subject: [PATCH] drm/panel-edp: Add INX N116BGE-EA2 (HW: C4)
-Date:   Fri, 21 Oct 2022 11:10:24 +0800
-Message-Id: <20221021031024.2899082-1-sean.hong@quanta.corp-partner.google.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 20 Oct 2022 23:13:05 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1441A1D7982;
+        Thu, 20 Oct 2022 20:13:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666321982; x=1697857982;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=t0mbhePNMhxVH3bu6M8dRQS/SgQ0nfCNRaQmnJ0MhhY=;
+  b=AuHdmcUpL2bRLPiHfYxC2d+mne7L6GJRO1ax81enQhEOYxdxhuzh76ZQ
+   YhZpX9V8JvjnO6Q3FlSH2OpspV/nFbFToVe0LVOCtX5Nzfvc17S1AsRJO
+   7Ua3wx35v+sXrkNb6kfGEtz6tA9r3vdA65i3gxTNNCkG2CdNU+Ti3l4wn
+   AK6Fc5feGAEmbNhMyrrjY8P4+fEdMnHHqMV+GUBdzZDTqWIeGFaDBBYkL
+   lQ26FX1b91bCxn9N5Ey0eLN4Cp9Ik7pespsGpnJoXlu+QR6GkKoTxU88X
+   sDxTaL50lG6yMkDxLja8YfOD3fBlY0wRIcpnIcS26QtY3UaTYC3z+Iawx
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="294295175"
+X-IronPort-AV: E=Sophos;i="5.95,200,1661842800"; 
+   d="scan'208";a="294295175"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 20:13:01 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="755546133"
+X-IronPort-AV: E=Sophos;i="5.95,200,1661842800"; 
+   d="scan'208";a="755546133"
+Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.255.28.117]) ([10.255.28.117])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 20:13:00 -0700
+Message-ID: <b40fd338-cb3b-b602-0059-39f775e77ad6@intel.com>
+Date:   Fri, 21 Oct 2022 11:12:57 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.3.3
+Subject: Re: [PATCH] KVM: x86: Fix the initial value of mcg_cap
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221020031615.890400-1-xiaoyao.li@intel.com>
+ <Y1FatU6Yf9n5pWB+@google.com>
+ <092dc961-76f6-331a-6f91-a77a58f6732d@intel.com>
+ <Y1F4AoeOhNFQnHnJ@google.com>
+From:   Xiaoyao Li <xiaoyao.li@intel.com>
+In-Reply-To: <Y1F4AoeOhNFQnHnJ@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,25 +67,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the INX - N116BGE-EA2 (HW: C4) panel.
+On 10/21/2022 12:32 AM, Sean Christopherson wrote:
+> On Thu, Oct 20, 2022, Xiaoyao Li wrote:
+>> On 10/20/2022 10:27 PM, Sean Christopherson wrote:
+>>> On Thu, Oct 20, 2022, Xiaoyao Li wrote:
+>>>> vcpu->arch.mcg_cap represents the value of MSR_IA32_MCG_CAP. It's
+>>>> set via ioctl(KVM_X86_SETUP_MCE) from userspace when exposing and
+>>>> configuring MCE to guest.
+>>>>
+>>>> It's wrong to leave the default value as KVM_MAX_MCE_BANKS.
+>>>
+>>> Why?  I agree it's an odd default, but the whole MCE API is odd.  Functionally,
+>>> I don't see anything that's broken by allowing the guest to access the MCx_CTL MSRs
+>>> by default.
+>>
+>> Yes. Allowing the access doesn't cause any issue for a VM.
+>>
+>> However, for the perspective of virtualization. It virtualizes a magic
+>> hardware that even CPUID.MCA/MCE is not advertised and MCE is not set up by
+>> userspace, guest is told there are 32 banks and all the banks can be
+>> accessed.
+> 
+> '0' isn't necessarily better though, e.g. if userspace parrots back KVM's "supported"
+> CPUID without invoking KVM_X86_SETUP_MCE, then it's equally odd that the guest will
+> see no supported MCE MSRS.
+> 
+> Older versions of the SDM also state (or at least very strongly imply) that banks
+> 0-3 are always available on P6.
+> 
+> Bank 0 is an especially weird case, as several of the MSRs are aliased to other
+> MSRs that predate the machine check architecture.
+> 
+> Anyways, if this were newly introduced code I'd be all for defaulting to '0', but
+> KVM has defaulted to KVM_MAX_MCE_BANKS since KVM_X86_SETUP_MCE was added way back
+> in 2009.  Unless there's a bug that's fixed by this, I'm inclined to keep the
+> current behavior even though it's weird, as hiding all MCE MSRs by default could
+> theoretically cause a regression, e.g. by triggering #GP on MSRs that an older
+> guest expects to always exist.
 
-Signed-off-by: Sean Hong <sean.hong@quanta.corp-partner.google.com>
----
- drivers/gpu/drm/panel/panel-edp.c | 1 +
- 1 file changed, 1 insertion(+)
+fair enough.
 
-diff --git a/drivers/gpu/drm/panel/panel-edp.c b/drivers/gpu/drm/panel/panel-edp.c
-index 4b39d1dd9140..82c81622a169 100644
---- a/drivers/gpu/drm/panel/panel-edp.c
-+++ b/drivers/gpu/drm/panel/panel-edp.c
-@@ -1885,6 +1885,7 @@ static const struct edp_panel_entry edp_panels[] = {
- 
- 	EDP_PANEL_ENTRY('C', 'M', 'N', 0x114c, &innolux_n116bca_ea1.delay, "N116BCA-EA1"),
- 	EDP_PANEL_ENTRY('C', 'M', 'N', 0x1152, &delay_200_500_e80_d50, "N116BCN-EA1"),
-+	EDP_PANEL_ENTRY('C', 'M', 'N', 0x1153, &delay_200_500_e80_d50, "N116BGE-EA2"),
- 	EDP_PANEL_ENTRY('C', 'M', 'N', 0x1154, &delay_200_500_e80_d50, "N116BCA-EA2"),
- 	EDP_PANEL_ENTRY('C', 'M', 'N', 0x1247, &delay_200_500_e80_d50, "N120ACA-EA1"),
- 
--- 
-2.25.1
+> If we really want to clean up this code, I think the correct approach would be to
+> inject #GP on all relevant MSRs if CPUID.MCA==0, e.g.
+
+It's what I thought of as well. But I didn't find any statement in SDM 
+of "Accessing Machine Check MSRs gets #GP if no CPUID.MCA"
+
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 4bd5f8a751de..97fafd851d8d 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -3260,6 +3260,9 @@ static int set_msr_mce(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+>          u64 data = msr_info->data;
+>          u32 offset, last_msr;
+>   
+> +       if (!msr_info->host_initiated && !guest_cpuid_has(X86_FEATURE_MCA))
+> +               return 1;
+> +
+>          switch (msr) {
+>          case MSR_IA32_MCG_STATUS:
+>                  vcpu->arch.mcg_status = data;
+> @@ -3891,6 +3894,14 @@ static int get_msr_mce(struct kvm_vcpu *vcpu, u32 msr, u64 *pdata, bool host)
+>          unsigned bank_num = mcg_cap & 0xff;
+>          u32 offset, last_msr;
+>   
+> +       if (msr == MSR_IA32_P5_MC_ADDR || msr == MSR_IA32_P5_MC_TYPE) {
+> +               *pdata = 0;
+> +               return 0;
+> +       }
+> +
+> +       if (!host && !guest_cpuid_has(X86_FEATURE_MCA))
+> +               return 1;
+> +
+>          switch (msr) {
+>          case MSR_IA32_P5_MC_ADDR:
+>          case MSR_IA32_P5_MC_TYPE:
+> 
+> Or alternatively, this should work too:
+> 
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 4bd5f8a751de..e4a44d7af0a6 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -3774,6 +3774,9 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+>          case MSR_IA32_MCG_STATUS:
+>          case MSR_IA32_MC0_CTL ... MSR_IA32_MCx_CTL(KVM_MAX_MCE_BANKS) - 1:
+>          case MSR_IA32_MC0_CTL2 ... MSR_IA32_MCx_CTL2(KVM_MAX_MCE_BANKS) - 1:
+> +               if (!msr_info->host_initiated &&
+> +                   !guest_cpuid_has(X86_FEATURE_MCA))
+> +                       return 1;
+>                  return set_msr_mce(vcpu, msr_info);
+>   
+>          case MSR_K7_PERFCTR0 ... MSR_K7_PERFCTR3:
+> @@ -4142,13 +4145,17 @@ int kvm_get_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+>   
+>                  msr_info->data = vcpu->arch.msr_kvm_poll_control;
+>                  break;
+> -       case MSR_IA32_P5_MC_ADDR:
+> -       case MSR_IA32_P5_MC_TYPE:
+>          case MSR_IA32_MCG_CAP:
+>          case MSR_IA32_MCG_CTL:
+>          case MSR_IA32_MCG_STATUS:
+>          case MSR_IA32_MC0_CTL ... MSR_IA32_MCx_CTL(KVM_MAX_MCE_BANKS) - 1:
+>          case MSR_IA32_MC0_CTL2 ... MSR_IA32_MCx_CTL2(KVM_MAX_MCE_BANKS) - 1:
+> +               if (!msr_info->host_initiated &&
+> +                   !guest_cpuid_has(X86_FEATURE_MCA))
+> +                       return 1;
+> +               fallthrough;
+> +       case MSR_IA32_P5_MC_ADDR:
+> +       case MSR_IA32_P5_MC_TYPE:
+>                  return get_msr_mce(vcpu, msr_info->index, &msr_info->data,
+>                                     msr_info->host_initiated);
+>          case MSR_IA32_XSS:
+> 
 
