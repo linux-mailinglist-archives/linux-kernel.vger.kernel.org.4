@@ -2,37 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1571660723E
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 10:28:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5EC5607238
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 10:28:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230249AbiJUI23 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 04:28:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46234 "EHLO
+        id S230081AbiJUI2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 04:28:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230106AbiJUI1s (ORCPT
+        with ESMTP id S229933AbiJUI1p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 04:27:48 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FCA724D8BE;
-        Fri, 21 Oct 2022 01:27:35 -0700 (PDT)
-X-UUID: 70e8c73822034951b7522869dea50f34-20221021
+        Fri, 21 Oct 2022 04:27:45 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6379524D8B7;
+        Fri, 21 Oct 2022 01:27:34 -0700 (PDT)
+X-UUID: cb4b94e4bf7c4bf0ba7c4d4f52050465-20221021
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=i+IuxvMnobEvIOSPfxLzitjAj/zyGghsWarqDqoyqPc=;
-        b=XtLQvKnVHnEwQwhRJCtr6GBb0sB12RJeeX6prpZu5CDMirzcqs+RPm8lNGpPg9rNwYXjN0Pi9RYrIj3I78f/wcc04CKjbZHwDR/BlL8hWoi51OCf13cP8fgEblijI1e3Us9/HHVuF0xzk4QARYaMVNdd+3RjNyAdtIru8DcePTA=;
+        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=ZvfWNSFxycEwY7XS039kQ3D+Wofpm1pIipc59irqP3g=;
+        b=F1gpr2UmJMW2yq64L9tIxAotydFWLst04fmIOkz/cge4twxJWpQZgn52NX6fegFpbX0b8ZsdUQaIObGZssK0ml2Aek0+sqy78KvGZ9SMkx7meBq6FA2X3DOR9edhrkrr+BKHoa0Hb9Uy2NwPRUVrezhI+YsBcGBtYTNByRvL/vM=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.12,REQID:08ad9e89-8990-4ae8-b8f3-1fdf9581106f,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:62cd327,CLOUDID:66f742c8-03ab-4171-989e-341ab5339257,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 70e8c73822034951b7522869dea50f34-20221021
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
+X-CID-O-INFO: VERSION:1.1.12,REQID:680fff68-792d-44ae-b74b-ad3a08478187,IP:0,U
+        RL:25,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACT
+        ION:release,TS:95
+X-CID-INFO: VERSION:1.1.12,REQID:680fff68-792d-44ae-b74b-ad3a08478187,IP:0,URL
+        :25,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACT
+        ION:quarantine,TS:95
+X-CID-META: VersionHash:62cd327,CLOUDID:17f742c8-03ab-4171-989e-341ab5339257,B
+        ulkID:22102116272965RFP7TL,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
+        il,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: cb4b94e4bf7c4bf0ba7c4d4f52050465-20221021
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
         (envelope-from <trevor.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1514769329; Fri, 21 Oct 2022 16:27:26 +0800
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 281274760; Fri, 21 Oct 2022 16:27:27 +0800
 Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
  15.2.792.15; Fri, 21 Oct 2022 16:27:25 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
@@ -48,9 +51,9 @@ CC:     <trevor.wu@mediatek.com>,
         <linux-mediatek@lists.infradead.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-Subject: [PATCH v2 09/12] ASoC: mediatek: mt8188: add control for timing select
-Date:   Fri, 21 Oct 2022 16:27:16 +0800
-Message-ID: <20221021082719.18325-10-trevor.wu@mediatek.com>
+Subject: [PATCH v2 10/12] dt-bindings: mediatek: mt8188: add audio afe document
+Date:   Fri, 21 Oct 2022 16:27:17 +0800
+Message-ID: <20221021082719.18325-11-trevor.wu@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20221021082719.18325-1-trevor.wu@mediatek.com>
 References: <20221021082719.18325-1-trevor.wu@mediatek.com>
@@ -67,537 +70,207 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add mixer control for irq and memif timing selection.
+Add mt8188 audio afe document.
 
 Signed-off-by: Trevor Wu <trevor.wu@mediatek.com>
 ---
- sound/soc/mediatek/mt8188/mt8188-afe-pcm.c | 506 +++++++++++++++++++++
- 1 file changed, 506 insertions(+)
+ .../bindings/sound/mt8188-afe-pcm.yaml        | 187 ++++++++++++++++++
+ 1 file changed, 187 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/sound/mt8188-afe-pcm.yaml
 
-diff --git a/sound/soc/mediatek/mt8188/mt8188-afe-pcm.c b/sound/soc/mediatek/mt8188/mt8188-afe-pcm.c
-index 6bef980846fa..57a31330e5f4 100644
---- a/sound/soc/mediatek/mt8188/mt8188-afe-pcm.c
-+++ b/sound/soc/mediatek/mt8188/mt8188-afe-pcm.c
-@@ -1394,6 +1394,510 @@ static const struct snd_soc_dapm_route mt8188_memif_routes[] = {
- 	{"O041", "I169 Switch", "I169"},
- };
- 
-+static const char * const mt8188_afe_1x_en_sel_text[] = {
-+	"a1sys_a2sys", "a3sys", "a4sys",
-+};
+diff --git a/Documentation/devicetree/bindings/sound/mt8188-afe-pcm.yaml b/Documentation/devicetree/bindings/sound/mt8188-afe-pcm.yaml
+new file mode 100644
+index 000000000000..b2c548c31e4d
+--- /dev/null
++++ b/Documentation/devicetree/bindings/sound/mt8188-afe-pcm.yaml
+@@ -0,0 +1,187 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/sound/mt8188-afe-pcm.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+static const unsigned int mt8188_afe_1x_en_sel_values[] = {
-+	0, 1, 2,
-+};
++title: MediaTek AFE PCM controller for mt8188
 +
-+static SOC_VALUE_ENUM_SINGLE_DECL(dl2_1x_en_sel_enum,
-+				  A3_A4_TIMING_SEL1, 18, 0x3,
-+				  mt8188_afe_1x_en_sel_text,
-+				  mt8188_afe_1x_en_sel_values);
-+static SOC_VALUE_ENUM_SINGLE_DECL(dl3_1x_en_sel_enum,
-+				  A3_A4_TIMING_SEL1, 20, 0x3,
-+				  mt8188_afe_1x_en_sel_text,
-+				  mt8188_afe_1x_en_sel_values);
-+static SOC_VALUE_ENUM_SINGLE_DECL(dl6_1x_en_sel_enum,
-+				  A3_A4_TIMING_SEL1, 22, 0x3,
-+				  mt8188_afe_1x_en_sel_text,
-+				  mt8188_afe_1x_en_sel_values);
-+static SOC_VALUE_ENUM_SINGLE_DECL(dl7_1x_en_sel_enum,
-+				  A3_A4_TIMING_SEL1, 24, 0x3,
-+				  mt8188_afe_1x_en_sel_text,
-+				  mt8188_afe_1x_en_sel_values);
-+static SOC_VALUE_ENUM_SINGLE_DECL(dl8_1x_en_sel_enum,
-+				  A3_A4_TIMING_SEL1, 26, 0x3,
-+				  mt8188_afe_1x_en_sel_text,
-+				  mt8188_afe_1x_en_sel_values);
-+static SOC_VALUE_ENUM_SINGLE_DECL(dl10_1x_en_sel_enum,
-+				  A3_A4_TIMING_SEL1, 28, 0x3,
-+				  mt8188_afe_1x_en_sel_text,
-+				  mt8188_afe_1x_en_sel_values);
-+static SOC_VALUE_ENUM_SINGLE_DECL(dl11_1x_en_sel_enum,
-+				  A3_A4_TIMING_SEL1, 30, 0x3,
-+				  mt8188_afe_1x_en_sel_text,
-+				  mt8188_afe_1x_en_sel_values);
-+static SOC_VALUE_ENUM_SINGLE_DECL(ul1_1x_en_sel_enum,
-+				  A3_A4_TIMING_SEL1, 0, 0x3,
-+				  mt8188_afe_1x_en_sel_text,
-+				  mt8188_afe_1x_en_sel_values);
-+static SOC_VALUE_ENUM_SINGLE_DECL(ul2_1x_en_sel_enum,
-+				  A3_A4_TIMING_SEL1, 2, 0x3,
-+				  mt8188_afe_1x_en_sel_text,
-+				  mt8188_afe_1x_en_sel_values);
-+static SOC_VALUE_ENUM_SINGLE_DECL(ul3_1x_en_sel_enum,
-+				  A3_A4_TIMING_SEL1, 4, 0x3,
-+				  mt8188_afe_1x_en_sel_text,
-+				  mt8188_afe_1x_en_sel_values);
-+static SOC_VALUE_ENUM_SINGLE_DECL(ul4_1x_en_sel_enum,
-+				  A3_A4_TIMING_SEL1, 6, 0x3,
-+				  mt8188_afe_1x_en_sel_text,
-+				  mt8188_afe_1x_en_sel_values);
-+static SOC_VALUE_ENUM_SINGLE_DECL(ul5_1x_en_sel_enum,
-+				  A3_A4_TIMING_SEL1, 8, 0x3,
-+				  mt8188_afe_1x_en_sel_text,
-+				  mt8188_afe_1x_en_sel_values);
-+static SOC_VALUE_ENUM_SINGLE_DECL(ul6_1x_en_sel_enum,
-+				  A3_A4_TIMING_SEL1, 10, 0x3,
-+				  mt8188_afe_1x_en_sel_text,
-+				  mt8188_afe_1x_en_sel_values);
-+static SOC_VALUE_ENUM_SINGLE_DECL(ul8_1x_en_sel_enum,
-+				  A3_A4_TIMING_SEL1, 12, 0x3,
-+				  mt8188_afe_1x_en_sel_text,
-+				  mt8188_afe_1x_en_sel_values);
-+static SOC_VALUE_ENUM_SINGLE_DECL(ul9_1x_en_sel_enum,
-+				  A3_A4_TIMING_SEL1, 14, 0x3,
-+				  mt8188_afe_1x_en_sel_text,
-+				  mt8188_afe_1x_en_sel_values);
-+static SOC_VALUE_ENUM_SINGLE_DECL(ul10_1x_en_sel_enum,
-+				  A3_A4_TIMING_SEL1, 16, 0x3,
-+				  mt8188_afe_1x_en_sel_text,
-+				  mt8188_afe_1x_en_sel_values);
++maintainers:
++  - Trevor Wu <trevor.wu@mediatek.com>
 +
-+static SOC_VALUE_ENUM_SINGLE_DECL(asys_irq1_1x_en_sel_enum,
-+				  A3_A4_TIMING_SEL6, 0, 0x3,
-+				  mt8188_afe_1x_en_sel_text,
-+				  mt8188_afe_1x_en_sel_values);
-+static SOC_VALUE_ENUM_SINGLE_DECL(asys_irq2_1x_en_sel_enum,
-+				  A3_A4_TIMING_SEL6, 2, 0x3,
-+				  mt8188_afe_1x_en_sel_text,
-+				  mt8188_afe_1x_en_sel_values);
-+static SOC_VALUE_ENUM_SINGLE_DECL(asys_irq3_1x_en_sel_enum,
-+				  A3_A4_TIMING_SEL6, 4, 0x3,
-+				  mt8188_afe_1x_en_sel_text,
-+				  mt8188_afe_1x_en_sel_values);
-+static SOC_VALUE_ENUM_SINGLE_DECL(asys_irq4_1x_en_sel_enum,
-+				  A3_A4_TIMING_SEL6, 6, 0x3,
-+				  mt8188_afe_1x_en_sel_text,
-+				  mt8188_afe_1x_en_sel_values);
-+static SOC_VALUE_ENUM_SINGLE_DECL(asys_irq5_1x_en_sel_enum,
-+				  A3_A4_TIMING_SEL6, 8, 0x3,
-+				  mt8188_afe_1x_en_sel_text,
-+				  mt8188_afe_1x_en_sel_values);
-+static SOC_VALUE_ENUM_SINGLE_DECL(asys_irq6_1x_en_sel_enum,
-+				  A3_A4_TIMING_SEL6, 10, 0x3,
-+				  mt8188_afe_1x_en_sel_text,
-+				  mt8188_afe_1x_en_sel_values);
-+static SOC_VALUE_ENUM_SINGLE_DECL(asys_irq7_1x_en_sel_enum,
-+				  A3_A4_TIMING_SEL6, 12, 0x3,
-+				  mt8188_afe_1x_en_sel_text,
-+				  mt8188_afe_1x_en_sel_values);
-+static SOC_VALUE_ENUM_SINGLE_DECL(asys_irq8_1x_en_sel_enum,
-+				  A3_A4_TIMING_SEL6, 14, 0x3,
-+				  mt8188_afe_1x_en_sel_text,
-+				  mt8188_afe_1x_en_sel_values);
-+static SOC_VALUE_ENUM_SINGLE_DECL(asys_irq9_1x_en_sel_enum,
-+				  A3_A4_TIMING_SEL6, 16, 0x3,
-+				  mt8188_afe_1x_en_sel_text,
-+				  mt8188_afe_1x_en_sel_values);
-+static SOC_VALUE_ENUM_SINGLE_DECL(asys_irq10_1x_en_sel_enum,
-+				  A3_A4_TIMING_SEL6, 18, 0x3,
-+				  mt8188_afe_1x_en_sel_text,
-+				  mt8188_afe_1x_en_sel_values);
-+static SOC_VALUE_ENUM_SINGLE_DECL(asys_irq11_1x_en_sel_enum,
-+				  A3_A4_TIMING_SEL6, 20, 0x3,
-+				  mt8188_afe_1x_en_sel_text,
-+				  mt8188_afe_1x_en_sel_values);
-+static SOC_VALUE_ENUM_SINGLE_DECL(asys_irq12_1x_en_sel_enum,
-+				  A3_A4_TIMING_SEL6, 22, 0x3,
-+				  mt8188_afe_1x_en_sel_text,
-+				  mt8188_afe_1x_en_sel_values);
-+static SOC_VALUE_ENUM_SINGLE_DECL(asys_irq13_1x_en_sel_enum,
-+				  A3_A4_TIMING_SEL6, 24, 0x3,
-+				  mt8188_afe_1x_en_sel_text,
-+				  mt8188_afe_1x_en_sel_values);
-+static SOC_VALUE_ENUM_SINGLE_DECL(asys_irq14_1x_en_sel_enum,
-+				  A3_A4_TIMING_SEL6, 26, 0x3,
-+				  mt8188_afe_1x_en_sel_text,
-+				  mt8188_afe_1x_en_sel_values);
-+static SOC_VALUE_ENUM_SINGLE_DECL(asys_irq15_1x_en_sel_enum,
-+				  A3_A4_TIMING_SEL6, 28, 0x3,
-+				  mt8188_afe_1x_en_sel_text,
-+				  mt8188_afe_1x_en_sel_values);
-+static SOC_VALUE_ENUM_SINGLE_DECL(asys_irq16_1x_en_sel_enum,
-+				  A3_A4_TIMING_SEL6, 30, 0x3,
-+				  mt8188_afe_1x_en_sel_text,
-+				  mt8188_afe_1x_en_sel_values);
++properties:
++  compatible:
++    const: mediatek,mt8188-afe
 +
-+static const char * const mt8188_afe_fs_timing_sel_text[] = {
-+	"asys",
-+	"etdmout1_1x_en",
-+	"etdmout2_1x_en",
-+	"etdmout3_1x_en",
-+	"etdmin1_1x_en",
-+	"etdmin2_1x_en",
-+	"etdmin1_nx_en",
-+	"etdmin2_nx_en",
-+};
++  reg:
++    maxItems: 1
 +
-+static const unsigned int mt8188_afe_fs_timing_sel_values[] = {
-+	0,
-+	MT8188_ETDM_OUT1_1X_EN,
-+	MT8188_ETDM_OUT2_1X_EN,
-+	MT8188_ETDM_OUT3_1X_EN,
-+	MT8188_ETDM_IN1_1X_EN,
-+	MT8188_ETDM_IN2_1X_EN,
-+	MT8188_ETDM_IN1_NX_EN,
-+	MT8188_ETDM_IN2_NX_EN,
-+};
++  interrupts:
++    maxItems: 1
 +
-+static SOC_VALUE_ENUM_SINGLE_DECL(dl2_fs_timing_sel_enum,
-+				  SND_SOC_NOPM, 0, 0,
-+				  mt8188_afe_fs_timing_sel_text,
-+				  mt8188_afe_fs_timing_sel_values);
-+static SOC_VALUE_ENUM_SINGLE_DECL(dl3_fs_timing_sel_enum,
-+				  SND_SOC_NOPM, 0, 0,
-+				  mt8188_afe_fs_timing_sel_text,
-+				  mt8188_afe_fs_timing_sel_values);
-+static SOC_VALUE_ENUM_SINGLE_DECL(dl6_fs_timing_sel_enum,
-+				  SND_SOC_NOPM, 0, 0,
-+				  mt8188_afe_fs_timing_sel_text,
-+				  mt8188_afe_fs_timing_sel_values);
-+static SOC_VALUE_ENUM_SINGLE_DECL(dl8_fs_timing_sel_enum,
-+				  SND_SOC_NOPM, 0, 0,
-+				  mt8188_afe_fs_timing_sel_text,
-+				  mt8188_afe_fs_timing_sel_values);
-+static SOC_VALUE_ENUM_SINGLE_DECL(dl11_fs_timing_sel_enum,
-+				  SND_SOC_NOPM, 0, 0,
-+				  mt8188_afe_fs_timing_sel_text,
-+				  mt8188_afe_fs_timing_sel_values);
-+static SOC_VALUE_ENUM_SINGLE_DECL(ul2_fs_timing_sel_enum,
-+				  SND_SOC_NOPM, 0, 0,
-+				  mt8188_afe_fs_timing_sel_text,
-+				  mt8188_afe_fs_timing_sel_values);
-+static SOC_VALUE_ENUM_SINGLE_DECL(ul4_fs_timing_sel_enum,
-+				  SND_SOC_NOPM, 0, 0,
-+				  mt8188_afe_fs_timing_sel_text,
-+				  mt8188_afe_fs_timing_sel_values);
-+static SOC_VALUE_ENUM_SINGLE_DECL(ul5_fs_timing_sel_enum,
-+				  SND_SOC_NOPM, 0, 0,
-+				  mt8188_afe_fs_timing_sel_text,
-+				  mt8188_afe_fs_timing_sel_values);
-+static SOC_VALUE_ENUM_SINGLE_DECL(ul9_fs_timing_sel_enum,
-+				  SND_SOC_NOPM, 0, 0,
-+				  mt8188_afe_fs_timing_sel_text,
-+				  mt8188_afe_fs_timing_sel_values);
-+static SOC_VALUE_ENUM_SINGLE_DECL(ul10_fs_timing_sel_enum,
-+				  SND_SOC_NOPM, 0, 0,
-+				  mt8188_afe_fs_timing_sel_text,
-+				  mt8188_afe_fs_timing_sel_values);
++  resets:
++    maxItems: 1
 +
-+static int mt8188_memif_1x_en_sel_put(struct snd_kcontrol *kcontrol,
-+				      struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct snd_soc_component *component =
-+		snd_soc_kcontrol_component(kcontrol);
-+	struct mtk_base_afe *afe = snd_soc_component_get_drvdata(component);
-+	struct mt8188_afe_private *afe_priv = afe->platform_priv;
-+	struct mtk_dai_memif_priv *memif_priv;
-+	unsigned int dai_id = kcontrol->id.device;
-+	long val = ucontrol->value.integer.value[0];
-+	int ret = 0;
++  reset-names:
++    const: audiosys
 +
-+	memif_priv = afe_priv->dai_priv[dai_id];
++  mediatek,topckgen:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description: The phandle of the mediatek topckgen controller
 +
-+	if (val == memif_priv->asys_timing_sel)
-+		return 0;
++  power-domains:
++    maxItems: 1
 +
-+	ret = snd_soc_put_enum_double(kcontrol, ucontrol);
++  clocks:
++    items:
++      - description: 26M clock
++      - description: audio pll1 clock
++      - description: audio pll2 clock
++      - description: clock divider for i2si1_mck
++      - description: clock divider for i2si2_mck
++      - description: clock divider for i2so1_mck
++      - description: clock divider for i2so2_mck
++      - description: clock divider for dptx_mck
++      - description: a1sys hoping clock
++      - description: audio intbus clock
++      - description: audio hires clock
++      - description: audio local bus clock
++      - description: mux for dptx_mck
++      - description: mux for i2so1_mck
++      - description: mux for i2so2_mck
++      - description: mux for i2si1_mck
++      - description: mux for i2si2_mck
++      - description: audio 26m clock
 +
-+	memif_priv->asys_timing_sel = val;
++  clock-names:
++    items:
++      - const: clk26m
++      - const: apll1_ck
++      - const: apll2_ck
++      - const: apll12_div0
++      - const: apll12_div1
++      - const: apll12_div2
++      - const: apll12_div3
++      - const: apll12_div9
++      - const: a1sys_hp_sel
++      - const: aud_intbus_sel
++      - const: audio_h_sel
++      - const: audio_local_bus_sel
++      - const: dptx_m_sel
++      - const: i2so1_m_sel
++      - const: i2so2_m_sel
++      - const: i2si1_m_sel
++      - const: i2si2_m_sel
++      - const: adsp_audio_26m
 +
-+	return ret;
-+}
++patternProperties:
++  "^mediatek,etdm-in[1-2]-chn-disabled$":
++    $ref: /schemas/types.yaml#/definitions/uint8-array
++    maxItems: 16
++    description: |
++      Specify which input channel should be disabled, so the data of
++      specified channel won't be outputted to memory.
++    items:
++      enum: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 +
-+static int mt8188_asys_irq_1x_en_sel_put(struct snd_kcontrol *kcontrol,
-+					 struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct snd_soc_component *component =
-+		snd_soc_kcontrol_component(kcontrol);
-+	struct mtk_base_afe *afe = snd_soc_component_get_drvdata(component);
-+	struct mt8188_afe_private *afe_priv = afe->platform_priv;
-+	unsigned int id = kcontrol->id.device;
-+	long val = ucontrol->value.integer.value[0];
-+	int ret = 0;
++  "^mediatek,etdm-in[1-2]-mclk-always-on-rate-hz$":
++    description: Specify etdm in mclk output rate for always on case.
 +
-+	if (val == afe_priv->irq_priv[id].asys_timing_sel)
-+		return 0;
++  "^mediatek,etdm-out[1-3]-mclk-always-on-rate-hz$":
++    description: Specify etdm out mclk output rate for always on case.
 +
-+	ret = snd_soc_put_enum_double(kcontrol, ucontrol);
++  "^mediatek,etdm-in[1-2]-multi-pin-mode$":
++    type: boolean
++    description: if present, the etdm data mode is I2S.
 +
-+	afe_priv->irq_priv[id].asys_timing_sel = val;
++  "^mediatek,etdm-out[1-3]-multi-pin-mode$":
++    type: boolean
++    description: if present, the etdm data mode is I2S.
 +
-+	return ret;
-+}
++  "^mediatek,etdm-in[1-2]-cowork-source$":
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: |
++      etdm modules can share the same external clock pin. Specify
++      which etdm clock source is required by this etdm in moudule.
++    enum:
++      - 0 # etdm1_in
++      - 1 # etdm2_in
++      - 2 # etdm1_out
++      - 3 # etdm2_out
 +
-+static int mt8188_memif_fs_timing_sel_get(struct snd_kcontrol *kcontrol,
-+					  struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct snd_soc_component *component = snd_soc_kcontrol_component(kcontrol);
-+	struct mtk_base_afe *afe = snd_soc_component_get_drvdata(component);
-+	struct mt8188_afe_private *afe_priv = afe->platform_priv;
-+	struct mtk_dai_memif_priv *memif_priv;
-+	unsigned int dai_id = kcontrol->id.device;
-+	struct soc_enum *e = (struct soc_enum *)kcontrol->private_value;
++  "^mediatek,etdm-out[1-2]-cowork-source$":
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: |
++      etdm modules can share the same external clock pin. Specify
++      which etdm clock source is required by this etdm out moudule.
++    enum:
++      - 0 # etdm1_in
++      - 1 # etdm2_in
++      - 2 # etdm1_out
++      - 3 # etdm2_out
 +
-+	memif_priv = afe_priv->dai_priv[dai_id];
++required:
++  - compatible
++  - reg
++  - interrupts
++  - resets
++  - reset-names
++  - mediatek,topckgen
++  - power-domains
++  - clocks
++  - clock-names
 +
-+	ucontrol->value.enumerated.item[0] =
-+		snd_soc_enum_val_to_item(e, memif_priv->fs_timing);
++additionalProperties: false
 +
-+	return 0;
-+}
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
 +
-+static int mt8188_memif_fs_timing_sel_put(struct snd_kcontrol *kcontrol,
-+					  struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct snd_soc_component *component = snd_soc_kcontrol_component(kcontrol);
-+	struct mtk_base_afe *afe = snd_soc_component_get_drvdata(component);
-+	struct mt8188_afe_private *afe_priv = afe->platform_priv;
-+	struct mtk_dai_memif_priv *memif_priv;
-+	unsigned int dai_id = kcontrol->id.device;
-+	struct soc_enum *e = (struct soc_enum *)kcontrol->private_value;
-+	unsigned int *item = ucontrol->value.enumerated.item;
-+	unsigned int prev_item = 0;
++    afe: afe@10b10000 {
++        compatible = "mediatek,mt8188-afe";
++        reg = <0x10b10000 0x10000>;
++        interrupts = <GIC_SPI 822 IRQ_TYPE_LEVEL_HIGH 0>;
++        resets = <&watchdog 14>;
++        reset-names = "audiosys";
++        mediatek,topckgen = <&topckgen>;
++        power-domains = <&spm 13>; //MT8188_POWER_DOMAIN_AUDIO
++        clocks = <&clk26m>,
++                 <&topckgen 72>, //CLK_TOP_APLL1
++                 <&topckgen 73>, //CLK_TOP_APLL2
++                 <&topckgen 186>, //CLK_TOP_APLL12_CK_DIV0
++                 <&topckgen 187>, //CLK_TOP_APLL12_CK_DIV1
++                 <&topckgen 188>, //CLK_TOP_APLL12_CK_DIV2
++                 <&topckgen 189>, //CLK_TOP_APLL12_CK_DIV3
++                 <&topckgen 191>, //CLK_TOP_APLL12_CK_DIV9
++                 <&topckgen 83>, //CLK_TOP_A1SYS_HP
++                 <&topckgen 31>, //CLK_TOP_AUD_INTBUS
++                 <&topckgen 32>, //CLK_TOP_AUDIO_H
++                 <&topckgen 69>, //CLK_TOP_AUDIO_LOCAL_BUS
++                 <&topckgen 81>, //CLK_TOP_DPTX
++                 <&topckgen 77>, //CLK_TOP_I2SO1
++                 <&topckgen 78>, //CLK_TOP_I2SO2
++                 <&topckgen 79>, //CLK_TOP_I2SI1
++                 <&topckgen 80>, //CLK_TOP_I2SI2
++                 <&adsp_audio26m 0>; //CLK_AUDIODSP_AUDIO26M
++        clock-names = "clk26m",
++                      "apll1_ck",
++                      "apll2_ck",
++                      "apll12_div0",
++                      "apll12_div1",
++                      "apll12_div2",
++                      "apll12_div3",
++                      "apll12_div9",
++                      "a1sys_hp_sel",
++                      "aud_intbus_sel",
++                      "audio_h_sel",
++                      "audio_local_bus_sel",
++                      "dptx_m_sel",
++                      "i2so1_m_sel",
++                      "i2so2_m_sel",
++                      "i2si1_m_sel",
++                      "i2si2_m_sel",
++                      "adsp_audio_26m";
++    };
 +
-+	if (item[0] >= e->items)
-+		return -EINVAL;
-+
-+	memif_priv = afe_priv->dai_priv[dai_id];
-+
-+	prev_item = snd_soc_enum_val_to_item(e, memif_priv->fs_timing);
-+
-+	if (item[0] == prev_item)
-+		return 0;
-+
-+	memif_priv->fs_timing = snd_soc_enum_item_to_val(e, item[0]);
-+
-+	return 1;
-+}
-+
-+static const struct snd_kcontrol_new mt8188_memif_controls[] = {
-+	MT8188_SOC_ENUM_EXT("dl2_1x_en_sel",
-+			    dl2_1x_en_sel_enum,
-+			    snd_soc_get_enum_double,
-+			    mt8188_memif_1x_en_sel_put,
-+			    MT8188_AFE_MEMIF_DL2),
-+	MT8188_SOC_ENUM_EXT("dl3_1x_en_sel",
-+			    dl3_1x_en_sel_enum,
-+			    snd_soc_get_enum_double,
-+			    mt8188_memif_1x_en_sel_put,
-+			    MT8188_AFE_MEMIF_DL3),
-+	MT8188_SOC_ENUM_EXT("dl6_1x_en_sel",
-+			    dl6_1x_en_sel_enum,
-+			    snd_soc_get_enum_double,
-+			    mt8188_memif_1x_en_sel_put,
-+			    MT8188_AFE_MEMIF_DL6),
-+	MT8188_SOC_ENUM_EXT("dl7_1x_en_sel",
-+			    dl7_1x_en_sel_enum,
-+			    snd_soc_get_enum_double,
-+			    mt8188_memif_1x_en_sel_put,
-+			    MT8188_AFE_MEMIF_DL7),
-+	MT8188_SOC_ENUM_EXT("dl8_1x_en_sel",
-+			    dl8_1x_en_sel_enum,
-+			    snd_soc_get_enum_double,
-+			    mt8188_memif_1x_en_sel_put,
-+			    MT8188_AFE_MEMIF_DL8),
-+	MT8188_SOC_ENUM_EXT("dl10_1x_en_sel",
-+			    dl10_1x_en_sel_enum,
-+			    snd_soc_get_enum_double,
-+			    mt8188_memif_1x_en_sel_put,
-+			    MT8188_AFE_MEMIF_DL10),
-+	MT8188_SOC_ENUM_EXT("dl11_1x_en_sel",
-+			    dl11_1x_en_sel_enum,
-+			    snd_soc_get_enum_double,
-+			    mt8188_memif_1x_en_sel_put,
-+			    MT8188_AFE_MEMIF_DL11),
-+	MT8188_SOC_ENUM_EXT("ul1_1x_en_sel",
-+			    ul1_1x_en_sel_enum,
-+			    snd_soc_get_enum_double,
-+			    mt8188_memif_1x_en_sel_put,
-+			    MT8188_AFE_MEMIF_UL1),
-+	MT8188_SOC_ENUM_EXT("ul2_1x_en_sel",
-+			    ul2_1x_en_sel_enum,
-+			    snd_soc_get_enum_double,
-+			    mt8188_memif_1x_en_sel_put,
-+			    MT8188_AFE_MEMIF_UL2),
-+	MT8188_SOC_ENUM_EXT("ul3_1x_en_sel",
-+			    ul3_1x_en_sel_enum,
-+			    snd_soc_get_enum_double,
-+			    mt8188_memif_1x_en_sel_put,
-+			    MT8188_AFE_MEMIF_UL3),
-+	MT8188_SOC_ENUM_EXT("ul4_1x_en_sel",
-+			    ul4_1x_en_sel_enum,
-+			    snd_soc_get_enum_double,
-+			    mt8188_memif_1x_en_sel_put,
-+			    MT8188_AFE_MEMIF_UL4),
-+	MT8188_SOC_ENUM_EXT("ul5_1x_en_sel",
-+			    ul5_1x_en_sel_enum,
-+			    snd_soc_get_enum_double,
-+			    mt8188_memif_1x_en_sel_put,
-+			    MT8188_AFE_MEMIF_UL5),
-+	MT8188_SOC_ENUM_EXT("ul6_1x_en_sel",
-+			    ul6_1x_en_sel_enum,
-+			    snd_soc_get_enum_double,
-+			    mt8188_memif_1x_en_sel_put,
-+			    MT8188_AFE_MEMIF_UL6),
-+	MT8188_SOC_ENUM_EXT("ul8_1x_en_sel",
-+			    ul8_1x_en_sel_enum,
-+			    snd_soc_get_enum_double,
-+			    mt8188_memif_1x_en_sel_put,
-+			    MT8188_AFE_MEMIF_UL8),
-+	MT8188_SOC_ENUM_EXT("ul9_1x_en_sel",
-+			    ul9_1x_en_sel_enum,
-+			    snd_soc_get_enum_double,
-+			    mt8188_memif_1x_en_sel_put,
-+			    MT8188_AFE_MEMIF_UL9),
-+	MT8188_SOC_ENUM_EXT("ul10_1x_en_sel",
-+			    ul10_1x_en_sel_enum,
-+			    snd_soc_get_enum_double,
-+			    mt8188_memif_1x_en_sel_put,
-+			    MT8188_AFE_MEMIF_UL10),
-+	MT8188_SOC_ENUM_EXT("asys_irq1_1x_en_sel",
-+			    asys_irq1_1x_en_sel_enum,
-+			    snd_soc_get_enum_double,
-+			    mt8188_asys_irq_1x_en_sel_put,
-+			    MT8188_AFE_IRQ_13),
-+	MT8188_SOC_ENUM_EXT("asys_irq2_1x_en_sel",
-+			    asys_irq2_1x_en_sel_enum,
-+			    snd_soc_get_enum_double,
-+			    mt8188_asys_irq_1x_en_sel_put,
-+			    MT8188_AFE_IRQ_14),
-+	MT8188_SOC_ENUM_EXT("asys_irq3_1x_en_sel",
-+			    asys_irq3_1x_en_sel_enum,
-+			    snd_soc_get_enum_double,
-+			    mt8188_asys_irq_1x_en_sel_put,
-+			    MT8188_AFE_IRQ_15),
-+	MT8188_SOC_ENUM_EXT("asys_irq4_1x_en_sel",
-+			    asys_irq4_1x_en_sel_enum,
-+			    snd_soc_get_enum_double,
-+			    mt8188_asys_irq_1x_en_sel_put,
-+			    MT8188_AFE_IRQ_16),
-+	MT8188_SOC_ENUM_EXT("asys_irq5_1x_en_sel",
-+			    asys_irq5_1x_en_sel_enum,
-+			    snd_soc_get_enum_double,
-+			    mt8188_asys_irq_1x_en_sel_put,
-+			    MT8188_AFE_IRQ_17),
-+	MT8188_SOC_ENUM_EXT("asys_irq6_1x_en_sel",
-+			    asys_irq6_1x_en_sel_enum,
-+			    snd_soc_get_enum_double,
-+			    mt8188_asys_irq_1x_en_sel_put,
-+			    MT8188_AFE_IRQ_18),
-+	MT8188_SOC_ENUM_EXT("asys_irq7_1x_en_sel",
-+			    asys_irq7_1x_en_sel_enum,
-+			    snd_soc_get_enum_double,
-+			    mt8188_asys_irq_1x_en_sel_put,
-+			    MT8188_AFE_IRQ_19),
-+	MT8188_SOC_ENUM_EXT("asys_irq8_1x_en_sel",
-+			    asys_irq8_1x_en_sel_enum,
-+			    snd_soc_get_enum_double,
-+			    mt8188_asys_irq_1x_en_sel_put,
-+			    MT8188_AFE_IRQ_20),
-+	MT8188_SOC_ENUM_EXT("asys_irq9_1x_en_sel",
-+			    asys_irq9_1x_en_sel_enum,
-+			    snd_soc_get_enum_double,
-+			    mt8188_asys_irq_1x_en_sel_put,
-+			    MT8188_AFE_IRQ_21),
-+	MT8188_SOC_ENUM_EXT("asys_irq10_1x_en_sel",
-+			    asys_irq10_1x_en_sel_enum,
-+			    snd_soc_get_enum_double,
-+			    mt8188_asys_irq_1x_en_sel_put,
-+			    MT8188_AFE_IRQ_22),
-+	MT8188_SOC_ENUM_EXT("asys_irq11_1x_en_sel",
-+			    asys_irq11_1x_en_sel_enum,
-+			    snd_soc_get_enum_double,
-+			    mt8188_asys_irq_1x_en_sel_put,
-+			    MT8188_AFE_IRQ_23),
-+	MT8188_SOC_ENUM_EXT("asys_irq12_1x_en_sel",
-+			    asys_irq12_1x_en_sel_enum,
-+			    snd_soc_get_enum_double,
-+			    mt8188_asys_irq_1x_en_sel_put,
-+			    MT8188_AFE_IRQ_24),
-+	MT8188_SOC_ENUM_EXT("asys_irq13_1x_en_sel",
-+			    asys_irq13_1x_en_sel_enum,
-+			    snd_soc_get_enum_double,
-+			    mt8188_asys_irq_1x_en_sel_put,
-+			    MT8188_AFE_IRQ_25),
-+	MT8188_SOC_ENUM_EXT("asys_irq14_1x_en_sel",
-+			    asys_irq14_1x_en_sel_enum,
-+			    snd_soc_get_enum_double,
-+			    mt8188_asys_irq_1x_en_sel_put,
-+			    MT8188_AFE_IRQ_26),
-+	MT8188_SOC_ENUM_EXT("asys_irq15_1x_en_sel",
-+			    asys_irq15_1x_en_sel_enum,
-+			    snd_soc_get_enum_double,
-+			    mt8188_asys_irq_1x_en_sel_put,
-+			    MT8188_AFE_IRQ_27),
-+	MT8188_SOC_ENUM_EXT("asys_irq16_1x_en_sel",
-+			    asys_irq16_1x_en_sel_enum,
-+			    snd_soc_get_enum_double,
-+			    mt8188_asys_irq_1x_en_sel_put,
-+			    MT8188_AFE_IRQ_28),
-+	MT8188_SOC_ENUM_EXT("dl2_fs_timing_sel",
-+			    dl2_fs_timing_sel_enum,
-+			    mt8188_memif_fs_timing_sel_get,
-+			    mt8188_memif_fs_timing_sel_put,
-+			    MT8188_AFE_MEMIF_DL2),
-+	MT8188_SOC_ENUM_EXT("dl3_fs_timing_sel",
-+			    dl3_fs_timing_sel_enum,
-+			    mt8188_memif_fs_timing_sel_get,
-+			    mt8188_memif_fs_timing_sel_put,
-+			    MT8188_AFE_MEMIF_DL3),
-+	MT8188_SOC_ENUM_EXT("dl6_fs_timing_sel",
-+			    dl6_fs_timing_sel_enum,
-+			    mt8188_memif_fs_timing_sel_get,
-+			    mt8188_memif_fs_timing_sel_put,
-+			    MT8188_AFE_MEMIF_DL6),
-+	MT8188_SOC_ENUM_EXT("dl8_fs_timing_sel",
-+			    dl8_fs_timing_sel_enum,
-+			    mt8188_memif_fs_timing_sel_get,
-+			    mt8188_memif_fs_timing_sel_put,
-+			    MT8188_AFE_MEMIF_DL8),
-+	MT8188_SOC_ENUM_EXT("dl11_fs_timing_sel",
-+			    dl11_fs_timing_sel_enum,
-+			    mt8188_memif_fs_timing_sel_get,
-+			    mt8188_memif_fs_timing_sel_put,
-+			    MT8188_AFE_MEMIF_DL11),
-+	MT8188_SOC_ENUM_EXT("ul2_fs_timing_sel",
-+			    ul2_fs_timing_sel_enum,
-+			    mt8188_memif_fs_timing_sel_get,
-+			    mt8188_memif_fs_timing_sel_put,
-+			    MT8188_AFE_MEMIF_UL2),
-+	MT8188_SOC_ENUM_EXT("ul4_fs_timing_sel",
-+			    ul4_fs_timing_sel_enum,
-+			    mt8188_memif_fs_timing_sel_get,
-+			    mt8188_memif_fs_timing_sel_put,
-+			    MT8188_AFE_MEMIF_UL4),
-+	MT8188_SOC_ENUM_EXT("ul5_fs_timing_sel",
-+			    ul5_fs_timing_sel_enum,
-+			    mt8188_memif_fs_timing_sel_get,
-+			    mt8188_memif_fs_timing_sel_put,
-+			    MT8188_AFE_MEMIF_UL5),
-+	MT8188_SOC_ENUM_EXT("ul9_fs_timing_sel",
-+			    ul9_fs_timing_sel_enum,
-+			    mt8188_memif_fs_timing_sel_get,
-+			    mt8188_memif_fs_timing_sel_put,
-+			    MT8188_AFE_MEMIF_UL9),
-+	MT8188_SOC_ENUM_EXT("ul10_fs_timing_sel",
-+			    ul10_fs_timing_sel_enum,
-+			    mt8188_memif_fs_timing_sel_get,
-+			    mt8188_memif_fs_timing_sel_put,
-+			    MT8188_AFE_MEMIF_UL10),
-+};
-+
- static const struct snd_soc_component_driver mt8188_afe_pcm_dai_component = {
- 	.name = "mt8188-afe-pcm-dai",
- };
-@@ -2583,6 +3087,8 @@ static int mt8188_dai_memif_register(struct mtk_base_afe *afe)
- 	dai->num_dapm_widgets = ARRAY_SIZE(mt8188_memif_widgets);
- 	dai->dapm_routes = mt8188_memif_routes;
- 	dai->num_dapm_routes = ARRAY_SIZE(mt8188_memif_routes);
-+	dai->controls = mt8188_memif_controls;
-+	dai->num_controls = ARRAY_SIZE(mt8188_memif_controls);
- 
- 	return init_memif_priv_data(afe);
- }
++...
 -- 
 2.18.0
 
