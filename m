@@ -2,140 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A5316078D6
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 15:47:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C98E46078E4
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 15:52:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231218AbiJUNrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 09:47:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40648 "EHLO
+        id S230462AbiJUNwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 09:52:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230116AbiJUNrH (ORCPT
+        with ESMTP id S230446AbiJUNvy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 09:47:07 -0400
-Received: from mail.sf-mail.de (mail.sf-mail.de [IPv6:2a01:4f8:1c17:6fae:616d:6c69:616d:6c69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5577425C486
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 06:47:05 -0700 (PDT)
-Received: (qmail 18710 invoked from network); 21 Oct 2022 13:46:14 -0000
-Received: from p200300cf07087500581cdcfffecf391f.dip0.t-ipconnect.de ([2003:cf:708:7500:581c:dcff:fecf:391f]:35114 HELO eto.sf-tec.de) (auth=eike@sf-mail.de)
-        by mail.sf-mail.de (Qsmtpd 0.38dev) with (TLS_AES_256_GCM_SHA384 encrypted) ESMTPSA
-        for <tgraf@suug.ch>; Fri, 21 Oct 2022 15:46:14 +0200
-From:   Rolf Eike Beer <eike-kernel@sf-tec.de>
-To:     Thomas Graf <tgraf@suug.ch>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Florian Westphal <fw@strlen.de>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH][Resend] rhashtable: make test actually random
-Date:   Fri, 21 Oct 2022 15:47:03 +0200
-Message-ID: <5894765.lOV4Wx5bFT@eto.sf-tec.de>
+        Fri, 21 Oct 2022 09:51:54 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D35D5277099;
+        Fri, 21 Oct 2022 06:51:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666360312; x=1697896312;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=DaWZG1/RJ5yq5HjRGu08lgshjmm5vbZXlRwrj8iUEyQ=;
+  b=UhpLSBbzCwnl8MpjzDPT1/5gwzSO7dJ0nn/hotq4zUIC4OrXvPniCmQa
+   qCuG3vE1YOSlh1S8gcgwiBp6qMsMfPioGkHhidLAm6nTtvsKhyyPmgTz+
+   R4dpbGwOHbF/nvyLyj/r6XQLCp0MuBC3pc4U+qBhdYLTc/IngCjbGIz8B
+   suEEeFHUpNPzPitQ+jV8Tq7GNS9/+jNm3/nkHSVAEojLHUK965vp47AMM
+   9OiH1DzHcdNIO99blsW9HbyIj7VVLXD5cF9SzAwpTNlzG6Ci4TBp4TdR5
+   6leqzRPqbYahWvuhthY3VnlNO36yC2jPn/jaOoAxfJc0TKup8IB6+qfvq
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10507"; a="286725182"
+X-IronPort-AV: E=Sophos;i="5.95,200,1661842800"; 
+   d="scan'208";a="286725182"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2022 06:51:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10507"; a="625348380"
+X-IronPort-AV: E=Sophos;i="5.95,200,1661842800"; 
+   d="scan'208";a="625348380"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
+  by orsmga007.jf.intel.com with ESMTP; 21 Oct 2022 06:51:41 -0700
+Date:   Fri, 21 Oct 2022 21:47:11 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Vishal Annapurve <vannapurve@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
+Subject: Re: [PATCH v8 1/8] mm/memfd: Introduce userspace inaccessible memfd
+Message-ID: <20221021134711.GA3607894@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
+ <20220915142913.2213336-2-chao.p.peng@linux.intel.com>
+ <CAGtprH_MiCxT2xSxD2UrM4M+ghL0V=XEZzEX4Fo5wQKV4fAL4w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGtprH_MiCxT2xSxD2UrM4M+ghL0V=XEZzEX4Fo5wQKV4fAL4w@mail.gmail.com>
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The "random rhlist add/delete operations" actually wasn't very random, as all
-cases tested the same bit. Since the later parts of this loop depend on the
-first case execute this unconditionally, and then test on different bits for the
-remaining tests. While at it only request as much random bits as are actually
-used.
+> 
+> In the context of userspace inaccessible memfd, what would be a
+> suggested way to enforce NUMA memory policy for physical memory
+> allocation? mbind[1] won't work here in absence of virtual address
+> range.
 
-Signed-off-by: Rolf Eike Beer <eike-kernel@sf-tec.de>
----
- lib/test_rhashtable.c | 58 ++++++++++++++++---------------------------
- 1 file changed, 22 insertions(+), 36 deletions(-)
+How about set_mempolicy():
+https://www.man7.org/linux/man-pages/man2/set_mempolicy.2.html
 
-[Resend with correct from address]
-
-diff --git a/lib/test_rhashtable.c b/lib/test_rhashtable.c
-index b358a74ed7ed..f2ba5787055a 100644
---- a/lib/test_rhashtable.c
-+++ b/lib/test_rhashtable.c
-@@ -369,18 +369,10 @@ static int __init test_rhltable(unsigned int entries)
- 	pr_info("test %d random rhlist add/delete operations\n", entries);
- 	for (j = 0; j < entries; j++) {
- 		u32 i = prandom_u32_max(entries);
--		u32 prand = get_random_u32();
-+		u32 prand = prandom_u32_max(4);
- 
- 		cond_resched();
- 
--		if (prand == 0)
--			prand = get_random_u32();
--
--		if (prand & 1) {
--			prand >>= 1;
--			continue;
--		}
--
- 		err = rhltable_remove(&rhlt, &rhl_test_objects[i].list_node, test_rht_params);
- 		if (test_bit(i, obj_in_table)) {
- 			clear_bit(i, obj_in_table);
-@@ -393,35 +385,29 @@ static int __init test_rhltable(unsigned int entries)
- 		}
- 
- 		if (prand & 1) {
--			prand >>= 1;
--			continue;
--		}
--
--		err = rhltable_insert(&rhlt, &rhl_test_objects[i].list_node, test_rht_params);
--		if (err == 0) {
--			if (WARN(test_and_set_bit(i, obj_in_table), "succeeded to insert same object %d", i))
--				continue;
--		} else {
--			if (WARN(!test_bit(i, obj_in_table), "failed to insert object %d", i))
--				continue;
--		}
--
--		if (prand & 1) {
--			prand >>= 1;
--			continue;
-+			err = rhltable_insert(&rhlt, &rhl_test_objects[i].list_node, test_rht_params);
-+			if (err == 0) {
-+				if (WARN(test_and_set_bit(i, obj_in_table), "succeeded to insert same object %d", i))
-+					continue;
-+			} else {
-+				if (WARN(!test_bit(i, obj_in_table), "failed to insert object %d", i))
-+					continue;
-+			}
- 		}
- 
--		i = prandom_u32_max(entries);
--		if (test_bit(i, obj_in_table)) {
--			err = rhltable_remove(&rhlt, &rhl_test_objects[i].list_node, test_rht_params);
--			WARN(err, "cannot remove element at slot %d", i);
--			if (err == 0)
--				clear_bit(i, obj_in_table);
--		} else {
--			err = rhltable_insert(&rhlt, &rhl_test_objects[i].list_node, test_rht_params);
--			WARN(err, "failed to insert object %d", i);
--			if (err == 0)
--				set_bit(i, obj_in_table);
-+		if (prand & 2) {
-+			i = prandom_u32_max(entries);
-+			if (test_bit(i, obj_in_table)) {
-+				err = rhltable_remove(&rhlt, &rhl_test_objects[i].list_node, test_rht_params);
-+				WARN(err, "cannot remove element at slot %d", i);
-+				if (err == 0)
-+					clear_bit(i, obj_in_table);
-+			} else {
-+				err = rhltable_insert(&rhlt, &rhl_test_objects[i].list_node, test_rht_params);
-+				WARN(err, "failed to insert object %d", i);
-+				if (err == 0)
-+					set_bit(i, obj_in_table);
-+			}
- 		}
- 	}
- 
--- 
-2.35.3
-
-
-
-
+Chao
+> 
+> [1] https://github.com/chao-p/qemu/blob/privmem-v8/backends/hostmem.c#L382
