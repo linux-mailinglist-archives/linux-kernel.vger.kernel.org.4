@@ -2,213 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64BF1607F8F
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 22:13:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 226F3607F96
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 22:16:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230048AbiJUUNf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 16:13:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45756 "EHLO
+        id S229663AbiJUUQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 16:16:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229987AbiJUUNc (ORCPT
+        with ESMTP id S229776AbiJUUQy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 16:13:32 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61D1329E999
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 13:13:31 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id ez6so3366321pjb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 13:13:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=SsTrKyn4D6bUIajE0OuRcI1eQtyN8Db+ITFw4jj2MPM=;
-        b=KEbIkqbaFppP5trnLE3+Bq6MI1q5c4gTevgjr1cuDmInMwjCCGQzAQYqNOvb2IGv9+
-         8pBQN+rrJMfDOOfKOqiY4AetSsT5QQNB5tH0FLHKyvuC0wibPylmafhvzIwRH824efVz
-         RQK1RdhVxTNUWGKArm3L1eux9n3X4c2Mgznfnh88INuWMq3AZqYoj626iQxOJWiop/wq
-         sk7jloKq2UhvQ6TRdHGGc8gfO2xlVS34r4L5kMVT4KQ/imoNTmsVlDdPd07AWpVuuIn+
-         oAPr3qWgRSvCzraPR05esOCe5BU90qd1gnDZWxTN/yQDOWEddbkHiXtPqo11VMBSyMM1
-         3BXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SsTrKyn4D6bUIajE0OuRcI1eQtyN8Db+ITFw4jj2MPM=;
-        b=Bpb0MwIzXTK/fZJi7O6RlIzjXUPyTu36qhoux+V58o4XPDfQHuvBDfXezHeQSYeRDd
-         BImnZtH8F0qFCO7vh+mANzvgeAKQXQXtyyFiHVeACAPtZEwsGg6BRzHPq3B/boyg0zpA
-         z2eesrtNY2TuDjTvTPBxX3k5QY/fxb6x0wfNUptS20VzcTOYhUgES4FMhpxSTPq28sGi
-         IQCrTxHBUeNu64KNQ3nnkP4A89voDwCrL5Bua2NZe/ri8I4toIf0sr3D8a8ioNwgjGWz
-         XXua6g94cgyVCXwhNuWLJVj8eNhBnRQqB9bNHojpmimfh9VnSNrjyMn/yuKawLPXN2kp
-         GyQw==
-X-Gm-Message-State: ACrzQf38vDCHPapbp+PR2/XxOYnC789sq0l3X+dbKBMs9tFQMvZtP350
-        8JKlZdMv4oo5Er0t3L5NVseEWw==
-X-Google-Smtp-Source: AMsMyM6gDlDqchxuAvlSVTovrxJg6Ns53+Pr2a+hXKGM4UEFJD4Hp3hXH/8Qi2uTBQm3FyOYcClOGA==
-X-Received: by 2002:a17:903:22c8:b0:17f:7039:a2d4 with SMTP id y8-20020a17090322c800b0017f7039a2d4mr21566760plg.2.1666383210794;
-        Fri, 21 Oct 2022 13:13:30 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id h190-20020a6283c7000000b00561578478f9sm15430062pfe.134.2022.10.21.13.13.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Oct 2022 13:13:30 -0700 (PDT)
-Date:   Fri, 21 Oct 2022 20:13:27 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vipin Sharma <vipinsh@google.com>
-Cc:     vkuznets@redhat.com, pbonzini@redhat.com, dmatlack@google.com,
-        kvm@vger.kernel.org, shujunxue@google.com, terrytaehyun@google.com,
+        Fri, 21 Oct 2022 16:16:54 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A2F329E5A0;
+        Fri, 21 Oct 2022 13:16:52 -0700 (PDT)
+Date:   Fri, 21 Oct 2022 20:16:48 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1666383410;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=rL3oVgJETn6O3bWX+jYbwettXNPsuf0/KLBlpRfdKuE=;
+        b=G6Ofe4e6tD9SxU/71931ZAZDTZV+6Mhp+qlH8PVmta9/th+zFdLai0I9J2x9BbBwCogiw3
+        B8Lff1+vm5oUt1mLynEbJu7AQybbmb6O+2R/3xvd3e2SE9GM00qwOpx5Lbkn7sDm402DIO
+        yROQMzupcP/rdCKl3Ev4jPWgdEevbe5SL6AgS3Jn8+nWJ2WYBxpwNLNQeuKK6uobwAQ3I4
+        rQIAX5uNWuDNT9IgeNrPdPZ3lw+FYIfQpmy0FKp3/5XUuxtaeeUJQZ3UO+IRfAcoZ93osm
+        nf9RoFHbRAH5xc1JHw5s8K1pfbsEwUSDaCKeMVhSkVrvQaW+DntPS+NnMH7USg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1666383410;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=rL3oVgJETn6O3bWX+jYbwettXNPsuf0/KLBlpRfdKuE=;
+        b=jcLVAxS35afWjaCEppXqwCwEbcMTTjDaZf2DfNJOhgauV6ImL/kUor/TX8CGwYswMkdc7J
+        URj49hczmkOYEwDw==
+From:   "tip-bot2 for Chen Zhongjin" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: objtool/urgent] x86/unwind/orc: Fix unreliable stack dump with gcov
+Cc:     Chen Zhongjin <chenzhongjin@huawei.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH] Add Hyperv extended hypercall support in KVM
-Message-ID: <Y1L9Z8RgIs8yrU6o@google.com>
-References: <20221021185916.1494314-1-vipinsh@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221021185916.1494314-1-vipinsh@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <166638340876.401.7064883651633264359.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022, Vipin Sharma wrote:
-> Hyperv hypercalls above 0x8000 are called as extended hypercalls as per
-> Hyperv TLFS. Hypercall 0x8001 is used to enquire about available
-> hypercalls by guest VMs.
-> 
-> Add support for HvExtCallQueryCapabilities (0x8001) and
-> HvExtCallGetBootZeroedMemory (0x8002) in KVM.
-> 
-> A guest VM finds availability of HvExtCallQueryCapabilities (0x8001) by
-> using CPUID.0x40000003.EBX BIT(20). If the bit is set then the guest VM
-> make hypercall HvExtCallQueryCapabilities (0x8001) to know what all
-> extended hypercalls are supported by hypervisor.
-> 
-> A userspace VMM can query capability KVM_CAP_HYPERV_EXT_CALL_QUERY to
-> know which extended hypercalls are supported in KVM. After which the
-> userspace will enable capabilities for the guest VM.
-> 
-> HvExtCallQueryCapabilities (0x8001) is handled by KVM in kernel,
+The following commit has been merged into the objtool/urgent branch of tip:
 
-Does this really need to be handle by KVM?  I assume this is a rare operation,
-e.g. done once during guest boot, so performance shouldn't be a concern.  To
-avoid breaking existing userspace, KVM can forward HV_EXT_CALL_GET_BOOT_ZEROED_MEMORY
-to userspace if and only if HV_ENABLE_EXTENDED_HYPERCALLS is enabled in CPUID,
-but otherwise KVM can let userspace deal with the "is this enabled" check.
+Commit-ID:     230db82413c091bc16acee72650f48d419cebe49
+Gitweb:        https://git.kernel.org/tip/230db82413c091bc16acee72650f48d419cebe49
+Author:        Chen Zhongjin <chenzhongjin@huawei.com>
+AuthorDate:    Wed, 27 Jul 2022 11:15:06 +08:00
+Committer:     Peter Zijlstra <peterz@infradead.org>
+CommitterDate: Fri, 21 Oct 2022 14:56:42 +02:00
 
-Aha!  And if KVM "allows" all theoretically possible extended hypercalls, then
-KVM will never need a capability to announce "support" for a new hypercall, i.e.
-define KVM's ABI to be that KVM punts all possible extended hypercalls to userspace
-if CPUID.0x40000003.EBX BIT(20) is enabled.
+x86/unwind/orc: Fix unreliable stack dump with gcov
 
-> whereas, HvExtCallGetBootZeroedMemory (0x8002) is passed to userspace
-> for further action.
-> 
-> Change-Id: Ib3709fadbf11f91be2842c8486bcbe755e09cbea
+When a console stack dump is initiated with CONFIG_GCOV_PROFILE_ALL
+enabled, show_trace_log_lvl() gets out of sync with the ORC unwinder,
+causing the stack trace to show all text addresses as unreliable:
 
-Drop gerrit's Change-Id when posting publicly.
+  # echo l > /proc/sysrq-trigger
+  [  477.521031] sysrq: Show backtrace of all active CPUs
+  [  477.523813] NMI backtrace for cpu 0
+  [  477.524492] CPU: 0 PID: 1021 Comm: bash Not tainted 6.0.0 #65
+  [  477.525295] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.0-1.fc36 04/01/2014
+  [  477.526439] Call Trace:
+  [  477.526854]  <TASK>
+  [  477.527216]  ? dump_stack_lvl+0xc7/0x114
+  [  477.527801]  ? dump_stack+0x13/0x1f
+  [  477.528331]  ? nmi_cpu_backtrace.cold+0xb5/0x10d
+  [  477.528998]  ? lapic_can_unplug_cpu+0xa0/0xa0
+  [  477.529641]  ? nmi_trigger_cpumask_backtrace+0x16a/0x1f0
+  [  477.530393]  ? arch_trigger_cpumask_backtrace+0x1d/0x30
+  [  477.531136]  ? sysrq_handle_showallcpus+0x1b/0x30
+  [  477.531818]  ? __handle_sysrq.cold+0x4e/0x1ae
+  [  477.532451]  ? write_sysrq_trigger+0x63/0x80
+  [  477.533080]  ? proc_reg_write+0x92/0x110
+  [  477.533663]  ? vfs_write+0x174/0x530
+  [  477.534265]  ? handle_mm_fault+0x16f/0x500
+  [  477.534940]  ? ksys_write+0x7b/0x170
+  [  477.535543]  ? __x64_sys_write+0x1d/0x30
+  [  477.536191]  ? do_syscall_64+0x6b/0x100
+  [  477.536809]  ? entry_SYSCALL_64_after_hwframe+0x63/0xcd
+  [  477.537609]  </TASK>
 
-If KVM punts the support checks to userspace, then the KVM side of things is very
-minimal and future proof (unless Microsoft hoses us).  E.g. with code deduplication
-that should be moved to a prep patch:
+This happens when the compiled code for show_stack() has a single word
+on the stack, and doesn't use a tail call to show_stack_log_lvl().
+(CONFIG_GCOV_PROFILE_ALL=y is the only known case of this.)  Then the
+__unwind_start() skip logic hits an off-by-one bug and fails to unwind
+all the way to the intended starting frame.
 
+Fix it by reverting the following commit:
+
+  f1d9a2abff66 ("x86/unwind/orc: Don't skip the first frame for inactive tasks")
+
+The original justification for that commit no longer exists.  That
+original issue was later fixed in a different way, with the following
+commit:
+
+  f2ac57a4c49d ("x86/unwind/orc: Fix inactive tasks with stack pointer in %sp on GCC 10 compiled kernels")
+
+Fixes: f1d9a2abff66 ("x86/unwind/orc: Don't skip the first frame for inactive tasks")
+Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+[jpoimboe: rewrite commit log]
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Signed-off-by: Peter Zijlstra <peterz@infradead.org>
 ---
- arch/x86/kvm/hyperv.c | 43 +++++++++++++++++++++++++++----------------
- 1 file changed, 27 insertions(+), 16 deletions(-)
+ arch/x86/kernel/unwind_orc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
-index 0adf4a437e85..f9253249de00 100644
---- a/arch/x86/kvm/hyperv.c
-+++ b/arch/x86/kvm/hyperv.c
-@@ -2138,6 +2138,12 @@ static void kvm_hv_hypercall_read_xmm(struct kvm_hv_hcall *hc)
- 	kvm_fpu_put();
- }
+diff --git a/arch/x86/kernel/unwind_orc.c b/arch/x86/kernel/unwind_orc.c
+index 0ea57da..c059820 100644
+--- a/arch/x86/kernel/unwind_orc.c
++++ b/arch/x86/kernel/unwind_orc.c
+@@ -713,7 +713,7 @@ void __unwind_start(struct unwind_state *state, struct task_struct *task,
+ 	/* Otherwise, skip ahead to the user-specified starting frame: */
+ 	while (!unwind_done(state) &&
+ 	       (!on_stack(&state->stack_info, first_frame, sizeof(long)) ||
+-			state->sp < (unsigned long)first_frame))
++			state->sp <= (unsigned long)first_frame))
+ 		unwind_next_frame(state);
  
-+/*
-+ * The TLFS carves out 64 possible extended hypercalls, numbered sequentially
-+ * after the base capabilities extended hypercall.
-+ */
-+#define HV_EXT_CALL_MAX (HV_EXT_CALL_QUERY_CAPABILITIES + 64)
-+
- static bool hv_check_hypercall_access(struct kvm_vcpu_hv *hv_vcpu, u16 code)
- {
- 	if (!hv_vcpu->enforce_cpuid)
-@@ -2178,6 +2184,10 @@ static bool hv_check_hypercall_access(struct kvm_vcpu_hv *hv_vcpu, u16 code)
- 	case HVCALL_SEND_IPI:
- 		return hv_vcpu->cpuid_cache.enlightenments_eax &
- 			HV_X64_CLUSTER_IPI_RECOMMENDED;
-+	case HV_EXT_CALL_QUERY_CAPABILITIES ... HV_EXT_CALL_MAX:
-+		return hv_vcpu->cpuid_cache.features_ebx &
-+		       HV_ENABLE_EXTENDED_HYPERCALLS;
-+		break;
- 	default:
- 		break;
- 	}
-@@ -2270,14 +2280,7 @@ int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
- 			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
- 			break;
- 		}
--		vcpu->run->exit_reason = KVM_EXIT_HYPERV;
--		vcpu->run->hyperv.type = KVM_EXIT_HYPERV_HCALL;
--		vcpu->run->hyperv.u.hcall.input = hc.param;
--		vcpu->run->hyperv.u.hcall.params[0] = hc.ingpa;
--		vcpu->run->hyperv.u.hcall.params[1] = hc.outgpa;
--		vcpu->arch.complete_userspace_io =
--				kvm_hv_hypercall_complete_userspace;
--		return 0;
-+		goto hypercall_userspace_exit;
- 	case HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST:
- 		if (unlikely(hc.var_cnt)) {
- 			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
-@@ -2336,15 +2339,14 @@ int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
- 			ret = HV_STATUS_OPERATION_DENIED;
- 			break;
- 		}
--		vcpu->run->exit_reason = KVM_EXIT_HYPERV;
--		vcpu->run->hyperv.type = KVM_EXIT_HYPERV_HCALL;
--		vcpu->run->hyperv.u.hcall.input = hc.param;
--		vcpu->run->hyperv.u.hcall.params[0] = hc.ingpa;
--		vcpu->run->hyperv.u.hcall.params[1] = hc.outgpa;
--		vcpu->arch.complete_userspace_io =
--				kvm_hv_hypercall_complete_userspace;
--		return 0;
-+		goto hypercall_userspace_exit;
- 	}
-+	case HV_EXT_CALL_QUERY_CAPABILITIES ... HV_EXT_CALL_MAX:
-+		if (unlikely(hc.fast)) {
-+			ret = HV_STATUS_INVALID_PARAMETER;
-+			break;
-+		}
-+		goto hypercall_userspace_exit;
- 	default:
- 		ret = HV_STATUS_INVALID_HYPERCALL_CODE;
- 		break;
-@@ -2352,6 +2354,14 @@ int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
- 
- hypercall_complete:
- 	return kvm_hv_hypercall_complete(vcpu, ret);
-+hypercall_userspace_exit:
-+	vcpu->run->exit_reason = KVM_EXIT_HYPERV;
-+	vcpu->run->hyperv.type = KVM_EXIT_HYPERV_HCALL;
-+	vcpu->run->hyperv.u.hcall.input = hc.param;
-+	vcpu->run->hyperv.u.hcall.params[0] = hc.ingpa;
-+	vcpu->run->hyperv.u.hcall.params[1] = hc.outgpa;
-+	vcpu->arch.complete_userspace_io = kvm_hv_hypercall_complete_userspace;
-+	return 0;
- }
- 
- void kvm_hv_init_vm(struct kvm *kvm)
-@@ -2494,6 +2504,7 @@ int kvm_get_hv_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid2 *cpuid,
- 
- 			ent->ebx |= HV_POST_MESSAGES;
- 			ent->ebx |= HV_SIGNAL_EVENTS;
-+			ent->ebx |= HV_ENABLE_EXTENDED_HYPERCALLS;
- 
- 			ent->edx |= HV_X64_HYPERCALL_XMM_INPUT_AVAILABLE;
- 			ent->edx |= HV_FEATURE_FREQUENCY_MSRS_AVAILABLE;
-
-base-commit: e18d6152ff0f41b7f01f9817372022df04e0d354
--- 
-
+ 	return;
