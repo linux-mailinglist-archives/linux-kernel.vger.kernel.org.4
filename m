@@ -2,59 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84661607B69
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 17:42:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CC76607B73
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 17:49:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231162AbiJUPmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 11:42:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37266 "EHLO
+        id S229815AbiJUPtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 11:49:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231282AbiJUPmV (ORCPT
+        with ESMTP id S229574AbiJUPsu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 11:42:21 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85211B1BA5
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 08:42:06 -0700 (PDT)
-Received: from notapiano (unknown [IPv6:2600:4041:5b1a:cd00:524d:e95d:1a9c:492a])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3F082660253A;
-        Fri, 21 Oct 2022 16:39:16 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1666366757;
-        bh=mcY5W1aNUc9TuXX/LiaYgX6EI84dVVWfCrHpt2rgnVA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LLhRbjf8DyKpkWFIx+b9FPkQ8VjrOX7guQ5DttHx6UQ4tJrPP13ddNYsn3udJ9tkq
-         hqmSdMhhi4VB/5TxgnizC19+q9Ss+6wUNNzUZ2KZwmDRsm3qW3m8EehpGJ+WCwKaan
-         Gu4NK1kSlQVDM4l3W0nGMHvmHsbdeMrDpr18tMFVhVbnbgtYqRmxA3stdZd1+Lsxfs
-         JfrFeB5OVPwjzXXijkW2g628u/mRHMMJEVzQxlXqce93v77tzEQuSN040ozHRF6nQF
-         cL/cW3hElLDjSLm7UtZtcnzSiK311AFtiKC8OzOLHw+9EZfIorkwQ/TkT5hZJSbadL
-         CfUs5tT+/CCWA==
-Date:   Fri, 21 Oct 2022 11:39:12 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     "xinlei.lee" <xinlei.lee@mediatek.com>
-Cc:     matthias.bgg@gmail.com, rex-bc.chen@mediatek.com,
-        angelogioacchino.delregno@collabora.com, jason-jh.lin@mediatek.com,
-        chunkuang.hu@kernel.org, p.zabel@pengutronix.de, airlied@linux.ie,
-        daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Jitao Shi <jitao.shi@mediatek.com>
-Subject: Re: [PATCH v12,2/3] drm: mediatek: Set dpi format in mmsys
-Message-ID: <20221021153912.bddr5g4tm4kch7dn@notapiano>
-References: <1666147936-27368-1-git-send-email-xinlei.lee@mediatek.com>
- <1666147936-27368-3-git-send-email-xinlei.lee@mediatek.com>
- <20221020164022.vtnumo3fob2sh54w@notapiano>
- <2e1899236144774d4a1c0224532b11ef7e1f9862.camel@mediatek.com>
+        Fri, 21 Oct 2022 11:48:50 -0400
+Received: from vps.xff.cz (vps.xff.cz [195.181.215.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29DE8222F00;
+        Fri, 21 Oct 2022 08:48:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xff.cz; s=mail;
+        t=1666366753; bh=CMrmPvkFy9Rnj6R3j7QT0enTO4XoE0Vw26Epmtis0+g=;
+        h=Date:From:To:Cc:Subject:X-My-GPG-KeyId:References:From;
+        b=AOEvKLBb8mH5u5eqhb3ggdx4wGRkJSHhVMZlbDA6lj7TZ23qsX+M5kXwKbXYSA7zL
+         dm61z2GB1I3COTwrpB0emSpvNhhxGFJJY9AzPLkoIQO9CvBW+OTXGJrXefYDfdhOCF
+         GZoHMuRtRf2OZMAAscspxS669F9IH1l5GhgTp+5I=
+Date:   Fri, 21 Oct 2022 17:39:13 +0200
+From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>
+To:     Peter Geis <pgwipeout@gmail.com>
+Cc:     Heiko Stuebner <heiko@sntech.de>,
+        linux-rockchip@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Yifeng Zhao <yifeng.zhao@rock-chips.com>,
+        Johan Jonker <jbx6244@gmail.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/Rockchip SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] arm64: dts: rockchip: rk356x: Fix PCIe register map
+ and ranges
+Message-ID: <20221021153913.l5ry6v4mcnzcmj2v@core>
+Mail-Followup-To: =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>,
+        Peter Geis <pgwipeout@gmail.com>, Heiko Stuebner <heiko@sntech.de>,
+        linux-rockchip@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Yifeng Zhao <yifeng.zhao@rock-chips.com>,
+        Johan Jonker <jbx6244@gmail.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
+        "moderated list:ARM/Rockchip SoC support" <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
+ <https://xff.cz/key.txt>
+References: <20221005085439.740992-1-megi@xff.cz>
+ <CAMdYzYrEXEqOmMeozGBbAAvrujZcOxLh4VYOmu5DSjPWTS-5zQ@mail.gmail.com>
+ <20221005220812.4psu6kckej63yo2z@core>
+ <4679102.Wku2Vz74k6@phil>
+ <CAMdYzYq3S2rR3Kb61irpV9xHYijNiJY0mkVnJwPrpXzxg_Zh9g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2e1899236144774d4a1c0224532b11ef7e1f9862.camel@mediatek.com>
+In-Reply-To: <CAMdYzYq3S2rR3Kb61irpV9xHYijNiJY0mkVnJwPrpXzxg_Zh9g@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
@@ -64,67 +78,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 08:18:25PM +0800, xinlei.lee wrote:
-> On Thu, 2022-10-20 at 12:40 -0400, Nícolas F. R. A. Prado wrote:
-> > On Wed, Oct 19, 2022 at 10:52:15AM +0800, xinlei.lee@mediatek.com
-> > wrote:
-[..]
-> > > @@ -448,8 +453,12 @@ static void mtk_dpi_dual_edge(struct mtk_dpi
-> > > *dpi)
-> > >  		mtk_dpi_mask(dpi, DPI_OUTPUT_SETTING,
-> > >  			     dpi->output_fmt ==
-> > > MEDIA_BUS_FMT_RGB888_2X12_LE ?
-> > >  			     EDGE_SEL : 0, EDGE_SEL);
-> > > +		if (dpi->conf->edge_cfg_in_mmsys)
-> > > +			mtk_mmsys_ddp_dpi_fmt_config(dpi->mmsys_dev,
-> > > MTK_DPI_RGB888_DDR_CON);
-> > >  	} else {
-> > >  		mtk_dpi_mask(dpi, DPI_DDR_SETTING, DDR_EN | DDR_4PHASE,
-> > > 0);
-> > > +		if (dpi->conf->edge_cfg_in_mmsys)
-> > > +			mtk_mmsys_ddp_dpi_fmt_config(dpi->mmsys_dev,
-> > > MTK_DPI_RGB888_SDR_CON);
-> > 
-> > I know this isn't one of the formats supported by MT8186, but since
-> > we're using
-> > platform-agnostic formats now... This else branch in theory could
-> > also run for a
-> > format like MEDIA_BUS_FMT_YUYV8_1X16. Would it make sense to set
-> > MTK_DPI_RGB888_SDR_CON in that case?
-> > 
-> > Thanks,
-> > Nícolas
-> > 
-> > >  	}
-> > 
-> > [..]
+On Fri, Oct 21, 2022 at 09:07:50AM -0400, Peter Geis wrote:
+> Good Morning Heiko,
 > 
-> Hi Nícolas:
+> Apologies for just getting to this, I'm still in the middle of moving
+> and just got my lab set back up.
 > 
-> Thanks for your review!
->  
-> You are right, I understand you think this MTK_DPI_RGB888_SDR_CON 
-> format seems useless as it will not be set, I confirmed with the 
-> designer how the setting in mmsys affects the output format of the 
-> MT8186, this mmsys setting will not be used by other ICs.
+> I've tested this patch series and it leads to the same regression with
+> NVMe drives. A loop of md5sum on two identical 4GB random files
+> produces the following results:
+> d11cf0caa541b72551ca22dc5bef2de0  test-rand.img
+> fad97e91da8d4fd554c895cafa89809b  test-rand2.img
+> 2d56a7baa05c38535f4c19a2b371f90a  test-rand.img
+> 74e8e6f93d7c3dc3ad250e91176f5901  test-rand2.img
+> 25cfcfecf4dd529e4e9fbbe2be482053  test-rand.img
+> 74e8e6f93d7c3dc3ad250e91176f5901  test-rand2.img
+> b9637505bf88ed725f6d03deb7065dab  test-rand.img
+> f7437e88d524ea92e097db51dce1c60d  test-rand2.img
 > 
-> As mentioned earlier, the mmsys setting will make the MT8186dpi have 
-> four output formats, even though the MT8186 dpi may not use them all.
+> Before this patch series:
+> d11cf0caa541b72551ca22dc5bef2de0  test-rand.img
+> d11cf0caa541b72551ca22dc5bef2de0  test-rand2.img
+> d11cf0caa541b72551ca22dc5bef2de0  test-rand.img
+> d11cf0caa541b72551ca22dc5bef2de0  test-rand2.img
+> d11cf0caa541b72551ca22dc5bef2de0  test-rand.img
+> d11cf0caa541b72551ca22dc5bef2de0  test-rand2.img
+> d11cf0caa541b72551ca22dc5bef2de0  test-rand.img
+> d11cf0caa541b72551ca22dc5bef2de0  test-rand2.img
 > 
-> So what needs to change here?
+> Though I do love where this patch is going and would like to see if it
+> can be made to work, in its current form it does not.
 
-We could check that the format in the else path is a single edge RGB888 format
-like MEDIA_BUS_FMT_RGB888_1X24 before setting the mmsys config, but there are
-also other formats possible, and I actually don't think it's worth it to
-complicate the logic further to protect from an edge-case that can't be hit
-yet...
+Thanks for the test. Can you please also test v1? Also please share lspci -vvv
+of your nvme drive, so that we can see allocated address ranges, etc.
 
-So just leave it as it is. We can worry about it when/if a non-RGB888 single
-edge format needs to be setup on mmsys.
+kind regards,
+	o.
 
-So,
-
-Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-
-Thanks,
-Nícolas
+> Very Respectfully,
+> Peter Geis
