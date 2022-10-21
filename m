@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDE0A607C87
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 18:40:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B21E607C88
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 18:41:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231449AbiJUQkx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 12:40:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52604 "EHLO
+        id S231460AbiJUQlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 12:41:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231190AbiJUQjI (ORCPT
+        with ESMTP id S231334AbiJUQjN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 12:39:08 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FEF82892EC
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:37:53 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-367dc159c2fso33850737b3.19
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:37:53 -0700 (PDT)
+        Fri, 21 Oct 2022 12:39:13 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B71328B1B2
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:37:54 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id f9-20020a25b089000000b006be298e2a8dso3756312ybj.20
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:37:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=l0T+gx8ZiJIGzUiHsY9RRIxEbYNQB6e8ZQhqkah5o0o=;
-        b=hcmOSRNpRjq1NSM7DS6HOkNcODOyUhsGlgn2j//u74i5fPh2pgjEybQjits1Mwk5lZ
-         lKPtFsy9JwRZ/QpCoIUrz+BOUQpmPn+x03wKvOaw4dkIE0YqoVSiYMWvcQlk22duLcOv
-         Ih4SJ+4n2QJdtBkeEPXivg1YLJg/nUSmvxiKAqqtuM0iOZOwSeuYV7oa76jrjZexxv2d
-         g2n70JA8Q7a6iYcl4XXTqj8YTsteJE6rxVLegrKhAN80Er0f8yLjwpslDHiqVDzr/NBy
-         kxGlC87klGgk8zgpyI9hmrUjjd9CbOO8P2QhjI2W0lQZebZNHlUuk/9YNIni/j2WIMky
-         1A6A==
+        bh=aZtBH3hoHoyLKHZRtw1whotmEhRsDJhNWbtzAg1Amnw=;
+        b=hgVq1BGI9uAPQNPd5svcoZ0uICUDeObQg8sjHrHyUINwI5zeVQNqGOHjoo/I6apJKi
+         k/JHaeZ4Yl0qrBsh6RDFwRouNrgEUvtGuCUfpRfpfN4sO+Xf2T8PiR1oaMkO0yS/UNTz
+         23yBS9W01SZ1r6pO17zULLRSmQAG2HfnAL6Oj1CQ5zD5aGiHW6MLxM2mYGGk74xNkJVY
+         PqQQmAGOeK1qbySxR4UJaQgs9hCNXsrXirmumCJnGX6I+NXqom+pwXFznBlBrvL3S+zD
+         jT93upMwLSjpb8myFKnMEGe3Y5MDjPbD5ykOxmhldKIp5uvY/jR4K4NRBGpRWxnp01tl
+         jMzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=l0T+gx8ZiJIGzUiHsY9RRIxEbYNQB6e8ZQhqkah5o0o=;
-        b=GNWCZCcJNr+I3WzFPBtrqKMrn0XqxMbnh1cWkmQaTkl1ol0CYuI9xc5+9sLVndWJVq
-         WsIZZW7P+0XNJko8mP0TwSUtZ2Ew1OfWAhmZmWh7WpjEYISoocUOEydZLIWiFL9bpW5w
-         LcYcpsZhxoGS1fSIDoUF7HjjFrZ7ruzGePyo+wOQRnvBPBgWTTfmYnIGAFS3tFC7wRtz
-         UfOyk94EWk3ejF4N7CwPPmOG6ONSau728aZrkz+JH50M3196hOUdUYA9humduQKdEGHe
-         HUUq/N2K4oOJf9OB3ad0efC83PHkTVzIFLLrmURhG59OMv6h2wijHIhff7eWQClWNtEb
-         CVOg==
-X-Gm-Message-State: ACrzQf1+L6S1007Bt3iW9WatFfTMWHBt1liCozudrGEdliuMzV09B9/2
-        YgyzUODhor5wEMeSidteg+8j/VMV+va+rO2g
-X-Google-Smtp-Source: AMsMyM4JAXwy24rXZvtJd9kUyV3ZJKwuo8Rj2q9Eu3xMQ2hWwGLVEU/aYB0TsW+nYhoV4WdGOlqlbvyyVDobsOLq
+        bh=aZtBH3hoHoyLKHZRtw1whotmEhRsDJhNWbtzAg1Amnw=;
+        b=0tAWEkzxssSMde6OIaUykJVpz1t9uMOAg0ko8Ek2ZJC+MbQFrQVv0LkR8Dyd61WANH
+         R5XEs6+XfUgtI+G9sNaBA4rps00+HiQN0H0UlUeGApVyuF45BB2+RHetlPamUS/HSId2
+         GozY6Kvon5LWTAIQrmY9rf6VJTGRlxE5Af47M8RSmXCGGBRBG/5ieKnimCrJRoE/NhKO
+         X8ufjwbAxZNm0p8gQSheKWKTrSoqeHSEOO52ckioy5WpER+AFcSbFRw2i/uWeLueaLHZ
+         aoDyarFRvnOYWO80CDQLjLiTq6EfThB/OwbzBqNB1okzD3WdJc1LStLh0+e6HIhrMb4W
+         vpwA==
+X-Gm-Message-State: ACrzQf0QSXuZYp0CkXO6A9MW3UsEpDkkZo+ruqUOo23xJ83qGX3JKedu
+        dfoP0+/tT1vbzk8Qo75IE60xvREDpAoHznwC
+X-Google-Smtp-Source: AMsMyM4WUFFcbz+a39rMX4Pd0dvJkqMzPaAe4hK5UbBTGwsMnH/jSNJj+49mYcOwtGDlZYF7vGruuaB3FpImvesN
 X-Received: from jthoughton.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:2a4f])
- (user=jthoughton job=sendgmr) by 2002:a81:5789:0:b0:35d:f12:4c0e with SMTP id
- l131-20020a815789000000b0035d0f124c0emr17814525ywb.26.1666370272899; Fri, 21
- Oct 2022 09:37:52 -0700 (PDT)
-Date:   Fri, 21 Oct 2022 16:36:55 +0000
+ (user=jthoughton job=sendgmr) by 2002:a05:6902:1083:b0:6c0:7c4f:f093 with
+ SMTP id v3-20020a056902108300b006c07c4ff093mr17523772ybu.25.1666370273909;
+ Fri, 21 Oct 2022 09:37:53 -0700 (PDT)
+Date:   Fri, 21 Oct 2022 16:36:56 +0000
 In-Reply-To: <20221021163703.3218176-1-jthoughton@google.com>
 Mime-Version: 1.0
 References: <20221021163703.3218176-1-jthoughton@google.com>
 X-Mailer: git-send-email 2.38.0.135.g90850a2211-goog
-Message-ID: <20221021163703.3218176-40-jthoughton@google.com>
-Subject: [RFC PATCH v2 39/47] mm: smaps: add stats for HugeTLB mapping size
+Message-ID: <20221021163703.3218176-41-jthoughton@google.com>
+Subject: [RFC PATCH v2 40/47] hugetlb: x86: enable high-granularity mapping
 From:   James Houghton <jthoughton@google.com>
 To:     Mike Kravetz <mike.kravetz@oracle.com>,
         Muchun Song <songmuchun@bytedance.com>,
@@ -84,173 +84,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the kernel is compiled with HUGETLB_HIGH_GRANULARITY_MAPPING,
-smaps may provide HugetlbPudMapped, HugetlbPmdMapped, and
-HugetlbPteMapped. Levels that are folded will not be outputted.
+Now that HGM is fully supported for GENERAL_HUGETLB, x86 can enable it.
+The x86 KVM MMU already properly handles HugeTLB HGM pages (it does a
+page table walk to determine which size to use in the second-stage page
+table instead of, for example, checking vma_mmu_pagesize, like arm64
+does).
+
+We could also enable HugeTLB HGM for arm (32-bit) at this point, as it
+also uses GENERAL_HUGETLB and I don't see anything else that is needed
+for it. However, I haven't tested on arm at all, so I won't enable it.
 
 Signed-off-by: James Houghton <jthoughton@google.com>
 ---
- fs/proc/task_mmu.c | 101 +++++++++++++++++++++++++++++++++------------
- 1 file changed, 75 insertions(+), 26 deletions(-)
+ arch/x86/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-index be78cdb7677e..16288d6dbf1d 100644
---- a/fs/proc/task_mmu.c
-+++ b/fs/proc/task_mmu.c
-@@ -405,6 +405,15 @@ struct mem_size_stats {
- 	unsigned long swap;
- 	unsigned long shared_hugetlb;
- 	unsigned long private_hugetlb;
-+#ifdef CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING
-+#ifndef __PAGETABLE_PUD_FOLDED
-+	unsigned long hugetlb_pud_mapped;
-+#endif
-+#ifndef __PAGETABLE_PMD_FOLDED
-+	unsigned long hugetlb_pmd_mapped;
-+#endif
-+	unsigned long hugetlb_pte_mapped;
-+#endif
- 	u64 pss;
- 	u64 pss_anon;
- 	u64 pss_file;
-@@ -720,6 +729,35 @@ static void show_smap_vma_flags(struct seq_file *m, struct vm_area_struct *vma)
- }
- 
- #ifdef CONFIG_HUGETLB_PAGE
-+
-+static void smaps_hugetlb_hgm_account(struct mem_size_stats *mss,
-+		struct hugetlb_pte *hpte)
-+{
-+#ifdef CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING
-+	unsigned long size = hugetlb_pte_size(hpte);
-+
-+	switch (hpte->level) {
-+#ifndef __PAGETABLE_PUD_FOLDED
-+	case HUGETLB_LEVEL_PUD:
-+		mss->hugetlb_pud_mapped += size;
-+		break;
-+#endif
-+#ifndef __PAGETABLE_PMD_FOLDED
-+	case HUGETLB_LEVEL_PMD:
-+		mss->hugetlb_pmd_mapped += size;
-+		break;
-+#endif
-+	case HUGETLB_LEVEL_PTE:
-+		mss->hugetlb_pte_mapped += size;
-+		break;
-+	default:
-+		break;
-+	}
-+#else
-+	return;
-+#endif /* CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING */
-+}
-+
- static int smaps_hugetlb_range(struct hugetlb_pte *hpte,
- 				unsigned long addr,
- 				struct mm_walk *walk)
-@@ -753,6 +791,8 @@ static int smaps_hugetlb_range(struct hugetlb_pte *hpte,
- 			mss->shared_hugetlb += hugetlb_pte_size(hpte);
- 		else
- 			mss->private_hugetlb += hugetlb_pte_size(hpte);
-+
-+		smaps_hugetlb_hgm_account(mss, hpte);
- 	}
- 	return 0;
- }
-@@ -822,38 +862,47 @@ static void smap_gather_stats(struct vm_area_struct *vma,
- static void __show_smap(struct seq_file *m, const struct mem_size_stats *mss,
- 	bool rollup_mode)
- {
--	SEQ_PUT_DEC("Rss:            ", mss->resident);
--	SEQ_PUT_DEC(" kB\nPss:            ", mss->pss >> PSS_SHIFT);
--	SEQ_PUT_DEC(" kB\nPss_Dirty:      ", mss->pss_dirty >> PSS_SHIFT);
-+	SEQ_PUT_DEC("Rss:              ", mss->resident);
-+	SEQ_PUT_DEC(" kB\nPss:              ", mss->pss >> PSS_SHIFT);
-+	SEQ_PUT_DEC(" kB\nPss_Dirty:        ", mss->pss_dirty >> PSS_SHIFT);
- 	if (rollup_mode) {
- 		/*
- 		 * These are meaningful only for smaps_rollup, otherwise two of
- 		 * them are zero, and the other one is the same as Pss.
- 		 */
--		SEQ_PUT_DEC(" kB\nPss_Anon:       ",
-+		SEQ_PUT_DEC(" kB\nPss_Anon:         ",
- 			mss->pss_anon >> PSS_SHIFT);
--		SEQ_PUT_DEC(" kB\nPss_File:       ",
-+		SEQ_PUT_DEC(" kB\nPss_File:         ",
- 			mss->pss_file >> PSS_SHIFT);
--		SEQ_PUT_DEC(" kB\nPss_Shmem:      ",
-+		SEQ_PUT_DEC(" kB\nPss_Shmem:        ",
- 			mss->pss_shmem >> PSS_SHIFT);
- 	}
--	SEQ_PUT_DEC(" kB\nShared_Clean:   ", mss->shared_clean);
--	SEQ_PUT_DEC(" kB\nShared_Dirty:   ", mss->shared_dirty);
--	SEQ_PUT_DEC(" kB\nPrivate_Clean:  ", mss->private_clean);
--	SEQ_PUT_DEC(" kB\nPrivate_Dirty:  ", mss->private_dirty);
--	SEQ_PUT_DEC(" kB\nReferenced:     ", mss->referenced);
--	SEQ_PUT_DEC(" kB\nAnonymous:      ", mss->anonymous);
--	SEQ_PUT_DEC(" kB\nLazyFree:       ", mss->lazyfree);
--	SEQ_PUT_DEC(" kB\nAnonHugePages:  ", mss->anonymous_thp);
--	SEQ_PUT_DEC(" kB\nShmemPmdMapped: ", mss->shmem_thp);
--	SEQ_PUT_DEC(" kB\nFilePmdMapped:  ", mss->file_thp);
--	SEQ_PUT_DEC(" kB\nShared_Hugetlb: ", mss->shared_hugetlb);
--	seq_put_decimal_ull_width(m, " kB\nPrivate_Hugetlb: ",
-+	SEQ_PUT_DEC(" kB\nShared_Clean:     ", mss->shared_clean);
-+	SEQ_PUT_DEC(" kB\nShared_Dirty:     ", mss->shared_dirty);
-+	SEQ_PUT_DEC(" kB\nPrivate_Clean:    ", mss->private_clean);
-+	SEQ_PUT_DEC(" kB\nPrivate_Dirty:    ", mss->private_dirty);
-+	SEQ_PUT_DEC(" kB\nReferenced:       ", mss->referenced);
-+	SEQ_PUT_DEC(" kB\nAnonymous:        ", mss->anonymous);
-+	SEQ_PUT_DEC(" kB\nLazyFree:         ", mss->lazyfree);
-+	SEQ_PUT_DEC(" kB\nAnonHugePages:    ", mss->anonymous_thp);
-+	SEQ_PUT_DEC(" kB\nShmemPmdMapped:   ", mss->shmem_thp);
-+	SEQ_PUT_DEC(" kB\nFilePmdMapped:    ", mss->file_thp);
-+	SEQ_PUT_DEC(" kB\nShared_Hugetlb:   ", mss->shared_hugetlb);
-+	seq_put_decimal_ull_width(m, " kB\nPrivate_Hugetlb:   ",
- 				  mss->private_hugetlb >> 10, 7);
--	SEQ_PUT_DEC(" kB\nSwap:           ", mss->swap);
--	SEQ_PUT_DEC(" kB\nSwapPss:        ",
-+#ifdef CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING
-+#ifndef __PAGETABLE_PUD_FOLDED
-+	SEQ_PUT_DEC(" kB\nHugetlbPudMapped: ", mss->hugetlb_pud_mapped);
-+#endif
-+#ifndef __PAGETABLE_PMD_FOLDED
-+	SEQ_PUT_DEC(" kB\nHugetlbPmdMapped: ", mss->hugetlb_pmd_mapped);
-+#endif
-+	SEQ_PUT_DEC(" kB\nHugetlbPteMapped: ", mss->hugetlb_pte_mapped);
-+#endif /* CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING */
-+	SEQ_PUT_DEC(" kB\nSwap:             ", mss->swap);
-+	SEQ_PUT_DEC(" kB\nSwapPss:          ",
- 					mss->swap_pss >> PSS_SHIFT);
--	SEQ_PUT_DEC(" kB\nLocked:         ",
-+	SEQ_PUT_DEC(" kB\nLocked:           ",
- 					mss->pss_locked >> PSS_SHIFT);
- 	seq_puts(m, " kB\n");
- }
-@@ -869,18 +918,18 @@ static int show_smap(struct seq_file *m, void *v)
- 
- 	show_map_vma(m, vma);
- 
--	SEQ_PUT_DEC("Size:           ", vma->vm_end - vma->vm_start);
--	SEQ_PUT_DEC(" kB\nKernelPageSize: ", vma_kernel_pagesize(vma));
--	SEQ_PUT_DEC(" kB\nMMUPageSize:    ", vma_mmu_pagesize(vma));
-+	SEQ_PUT_DEC("Size:             ", vma->vm_end - vma->vm_start);
-+	SEQ_PUT_DEC(" kB\nKernelPageSize:   ", vma_kernel_pagesize(vma));
-+	SEQ_PUT_DEC(" kB\nMMUPageSize:      ", vma_mmu_pagesize(vma));
- 	seq_puts(m, " kB\n");
- 
- 	__show_smap(m, &mss, false);
- 
--	seq_printf(m, "THPeligible:    %d\n",
-+	seq_printf(m, "THPeligible:      %d\n",
- 		   hugepage_vma_check(vma, vma->vm_flags, true, false, true));
- 
- 	if (arch_pkeys_enabled())
--		seq_printf(m, "ProtectionKey:  %8u\n", vma_pkey(vma));
-+		seq_printf(m, "ProtectionKey:    %8u\n", vma_pkey(vma));
- 	show_smap_vma_flags(m, vma);
- 
- 	return 0;
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 6d1879ef933a..6d7103266e61 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -124,6 +124,7 @@ config X86
+ 	select ARCH_WANT_GENERAL_HUGETLB
+ 	select ARCH_WANT_HUGE_PMD_SHARE
+ 	select ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP	if X86_64
++	select ARCH_WANT_HUGETLB_HIGH_GRANULARITY_MAPPING
+ 	select ARCH_WANT_LD_ORPHAN_WARN
+ 	select ARCH_WANTS_THP_SWAP		if X86_64
+ 	select ARCH_HAS_PARANOID_L1D_FLUSH
 -- 
 2.38.0.135.g90850a2211-goog
 
