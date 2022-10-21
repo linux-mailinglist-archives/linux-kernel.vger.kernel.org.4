@@ -2,138 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACCB66078C5
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 15:43:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA6696078CA
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 15:43:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231233AbiJUNnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 09:43:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53354 "EHLO
+        id S229542AbiJUNn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 09:43:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231199AbiJUNnX (ORCPT
+        with ESMTP id S231223AbiJUNnn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 09:43:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F87E2770A2;
-        Fri, 21 Oct 2022 06:43:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 50D59B82C0F;
-        Fri, 21 Oct 2022 13:43:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E216C433C1;
-        Fri, 21 Oct 2022 13:43:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666359790;
-        bh=us1J0dCE1REYIezCjAu1YMUYQob1cMhrvtcKGxT/olc=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=su1sg/dZqqAZKoMwQxWADqs1tKW7L3a4JdWl47aZFJ3FnMpO+6e4N9jAdl4uQbWQw
-         hksaT/j1RmXWEk1L7c0cMQtgyVJesGQmb7u5AS9DJLbeybdmkfnBxlaYBOFYPwvi7k
-         ieK/11cMkvLXVZnTdL4p70dG6ugbmODcymwEcHP5GH7CP/kluKwssj6iujiVd/lQmJ
-         1ezTJ+I+8x2n8Km3NhPw0OKrfPwoJYk89Q7a9NIsSNLwdB8OJLYxakRHRcicgvG66X
-         dh6GpWQZSJKdCwPEyuoGGHAFxkScxC0niSEf3X5vZ2YuLvK5uxn1ge3J41THhZHDeo
-         7ryZHw75ZJRtQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 957525C033E; Fri, 21 Oct 2022 06:43:09 -0700 (PDT)
-Date:   Fri, 21 Oct 2022 06:43:09 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Christoph Lameter <cl@gentwo.de>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@fb.com, rostedt@goodmis.org,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org
-Subject: Re: [PATCH rcu 5/8] slab: Explain why SLAB_DESTROY_BY_RCU reference
- before locking
-Message-ID: <20221021134309.GG5600@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221019224652.GA2499358@paulmck-ThinkPad-P17-Gen-1>
- <20221019224659.2499511-5-paulmck@kernel.org>
- <03d5730-9241-542d-76c6-728be4487c4@gentwo.de>
+        Fri, 21 Oct 2022 09:43:43 -0400
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48D49253BD0
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 06:43:38 -0700 (PDT)
+Received: by mail-qk1-x72a.google.com with SMTP id x13so1982381qkg.11
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 06:43:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=68YdhNq4klXYc5Yx3t3w6nqtAfwxq5Tm5goHX4+ewlQ=;
+        b=RUXESQr8aeDoE097KVeOA//3Qe2hrCWZULTkGcHjkMecIx+JTUkPgfQJK10qAQyzf+
+         Oz2rbRUI/jIIlC72z8FJ6P7IkZLM2uJNSim51P3f/MZC4dJQ2mgf6MkBhG2l9b2GNriD
+         wQXoVSiOb/4+hGEqLOLQXhAbwwYGDnIJDXAUKfvuVbPE/rVCGT16KfvCTIW9UocpGEF3
+         BkQVjq7pMObYYXSCQ+MC2lHQ3dOLFEOU8ogdGZoAnNGEvgX9mgjo7SF4LcrYpRZj/QrX
+         0qmpghMOHpzkVcEg0H1ok4CzLXB6BjFLDz/UsyIvT/QxRNxX9yiGq3MMp1WVqkWQk29G
+         9yOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=68YdhNq4klXYc5Yx3t3w6nqtAfwxq5Tm5goHX4+ewlQ=;
+        b=aER6+DtKXvH20ym2vFFF9op64k8Wu93mXTeGYQGRDUJ8RQVtqsOvXZ30lGx4IXXqZr
+         3kJmlub1/QBt8p52kPBIm+aUvqq13ZQfAUcUkY+zdEdlgSGXfNtVUdF5wSPeQA6YMdM3
+         RG6NwcI1f1Ry5/7cKhAf+uvj++TP4kzoFre+krHrMRyasRKL37UDXdZkN2h3y/I717TX
+         SilWczpO18IHtjmZ9AM7azEE6XXiNGS4uqAHpOCsimOorwHpLxDs1tNbvan2AsEAYms5
+         QgVKOgd3F/6FQemmTk9mOPzYfj03mQciJfR/zuyv7UcQ1jp7Ue+xlPiR0YfEpjKIgjG1
+         tPsg==
+X-Gm-Message-State: ACrzQf39A3b0Cr/PVjRYItpLPaS8t7zArS1JWVrARiMzPWOUiFxp0g4P
+        1d+kz+vS//9Kjx83NaXTDfZnig==
+X-Google-Smtp-Source: AMsMyM5JM5KpQQYFv6OYpXqUq63GuzYcwkwH/6fk6e7+zOFCL+WAybBK621N4LdQPq2JrDmfuOQeOQ==
+X-Received: by 2002:a05:620a:1a22:b0:6ee:d333:d4a8 with SMTP id bk34-20020a05620a1a2200b006eed333d4a8mr13101988qkb.680.1666359816796;
+        Fri, 21 Oct 2022 06:43:36 -0700 (PDT)
+Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
+        by smtp.gmail.com with ESMTPSA id hf8-20020a05622a608800b0039cbbcc7da8sm7855038qtb.7.2022.10.21.06.43.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Oct 2022 06:43:36 -0700 (PDT)
+Message-ID: <65bb7736-9095-d9eb-32dd-dfcb7c3ca272@linaro.org>
+Date:   Fri, 21 Oct 2022 09:43:35 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <03d5730-9241-542d-76c6-728be4487c4@gentwo.de>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v4 02/11] arm: dts: qcom: mdm9615*: add
+ SPDX-License-Identifier
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Satya Priya <quic_c_skakit@quicinc.com>,
+        Lee Jones <lee@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Andy Gross <agross@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>
+Cc:     linux-input@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220928-mdm9615-dt-schema-fixes-v4-0-dac2dfaac703@linaro.org>
+ <20220928-mdm9615-dt-schema-fixes-v4-2-dac2dfaac703@linaro.org>
+ <76eca66c-5449-a125-23eb-c872324f321b@linaro.org>
+In-Reply-To: <76eca66c-5449-a125-23eb-c872324f321b@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 09:44:23AM +0200, Christoph Lameter wrote:
-> On Wed, 19 Oct 2022, Paul E. McKenney wrote:
+On 21/10/2022 09:42, Krzysztof Kozlowski wrote:
+> On 21/10/2022 05:06, Neil Armstrong wrote:
+>> Replace the license blob by a clean SPDX-License-Identifier with GPL2+
+>> or MIT even if X11 is specified in the original blob since the actual
+>> license text corresponds to a MIT license.
+>>
+>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 > 
-> > It is not obvious to the casual user why it is absolutely necessary to
-> > acquire a reference to a SLAB_DESTROY_BY_RCU structure before acquiring
-> > a lock in that structure.  Therefore, add a comment explaining this point.
 > 
-> Sorry but this is not correct and difficult to comprehend.
-> 
-> 1. You do not need a reference to a slab object after it was allocated.
->    Objects must be properly protected by rcu_locks.
-> 
-> 2. Locks are initialized once on slab allocation via a constructor (*not* on object allocation via kmem_cache_alloc)
-> 
-> 3. Modifying locks at allocation/free is not possible since references to
->    these objects may still persist after free and before alloc.
-> 
-> 4. The old term SLAB_DESTROY_BY_RCU is used here.
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Thank you for looking this over, but Vlastimil beat you to it.  How does
-the update below look?
+But just to clarify: I was not involved in the DTS, so I hold no
+copyrights over it. The review is only confirming the code looks good to me.
 
-							Thanx, Paul
 
-------------------------------------------------------------------------
+Best regards,
+Krzysztof
 
-commit ff4c536e6b44e2e185e38c3653851f92e07139da
-Author: Paul E. McKenney <paulmck@kernel.org>
-Date:   Mon Sep 26 08:57:56 2022 -0700
-
-    slab: Explain why SLAB_TYPESAFE_BY_RCU reference before locking
-    
-    It is not obvious to the casual user why it is absolutely necessary to
-    acquire a reference to a SLAB_TYPESAFE_BY_RCU structure before acquiring
-    a lock in that structure.  Therefore, add a comment explaining this point.
-    
-    [ paulmck: Apply Vlastimil Babka feedback. ]
-    
-    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-    Cc: Christoph Lameter <cl@linux.com>
-    Cc: Pekka Enberg <penberg@kernel.org>
-    Cc: David Rientjes <rientjes@google.com>
-    Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
-    Cc: Andrew Morton <akpm@linux-foundation.org>
-    Cc: Vlastimil Babka <vbabka@suse.cz>
-    Cc: Roman Gushchin <roman.gushchin@linux.dev>
-    Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-    Cc: <linux-mm@kvack.org>
-
-diff --git a/include/linux/slab.h b/include/linux/slab.h
-index 90877fcde70bd..487418c7ea8cd 100644
---- a/include/linux/slab.h
-+++ b/include/linux/slab.h
-@@ -76,6 +76,17 @@
-  * rcu_read_lock before reading the address, then rcu_read_unlock after
-  * taking the spinlock within the structure expected at that address.
-  *
-+ * Note that it is not possible to acquire a lock within a structure
-+ * allocated with SLAB_TYPESAFE_BY_RCU without first acquiring a reference
-+ * as described above.  The reason is that SLAB_TYPESAFE_BY_RCU pages
-+ * are not zeroed before being given to the slab, which means that any
-+ * locks must be initialized after each and every kmem_struct_alloc().
-+ * Alternatively, make the ctor passed to kmem_cache_create() initialize
-+ * the locks at page-allocation time, as is done in __i915_request_ctor(),
-+ * sighand_ctor(), and anon_vma_ctor().  Such a ctor permits readers
-+ * to safely acquire those ctor-initialized locks under rcu_read_lock()
-+ * protection.
-+ *
-  * Note that SLAB_TYPESAFE_BY_RCU was originally named SLAB_DESTROY_BY_RCU.
-  */
- /* Defer freeing slabs to RCU */
