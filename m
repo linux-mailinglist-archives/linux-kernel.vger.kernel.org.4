@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69185607B90
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 17:54:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC7FA607B93
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 17:55:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229494AbiJUPyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 11:54:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59452 "EHLO
+        id S229902AbiJUPzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 11:55:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230039AbiJUPyc (ORCPT
+        with ESMTP id S229740AbiJUPzF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 11:54:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 806C727D4D8
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 08:54:17 -0700 (PDT)
+        Fri, 21 Oct 2022 11:55:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF3FCBE532;
+        Fri, 21 Oct 2022 08:54:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6A56CB82A47
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 15:54:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2BF1C433D6;
-        Fri, 21 Oct 2022 15:54:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C60361F0B;
+        Fri, 21 Oct 2022 15:54:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD80EC433B5;
+        Fri, 21 Oct 2022 15:54:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666367654;
-        bh=YIHBEzPM9Cv9Y2LCFh9IV1aRzulaJHiC6d8jP3aN1Yg=;
+        s=k20201202; t=1666367684;
+        bh=GmW53LJo22UqZsQom5RVQJUjOo34/GKH+2iN7vYTsKc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RbX06NgPeDyB+ufxvzRhFAo+EHJM4scQeiYnN/uCSMJ6PEcGf9i2rk6sQOtrE0xlC
-         LPFLrkn5qFcvRCLLB0wK+E2O2aG4Y0svXdW1x1m8po8IZul12ist1Y2L2I347TiMn5
-         rk8iynnm3bdoS3gmyjOqjWYzelf9NKP1BLoIHvuSEq6r1Rxnu+1fwv6IOeancbOT99
-         HyVhdu5qSzDBI3xXmFuuAZjJrvci7qg1s3m0rKaMlQHUPRvgmhi3O+lRi5TIchl+Qt
-         j3O95PfdfqU/6ERLNpaI04GbROfLV1vB6jz/NFXzCBu35fIx9jc6zLdhZQpBpzdNMi
-         J1iZv7qeI6n6w==
+        b=drcj45CMGOdbT6gQ7oc6iW0maJ/F4A7aDDG3q8CMEUhMj6kHZJ9TzcuZBMSDTN47W
+         /54pExNenZQ0rlYMSkbga6w/tEfFQKMteBBLKQ8IgUBT1dklhQWW3E9v6R512FZsyE
+         GWCAW56Tc0yN6RZcsY/UIsSP1QyAtGPO4aG5U4Lqee4KTUpkaMVDIfcTsofxqBaKR8
+         s47f0CnF7bAqcFO+XjQ2+B56unnlcrnE7L1H8LYHTPY1DuTj+NeW+5zHYC6NCP826O
+         PxvCwATnD5UsQq29ILBSrcboSsjitMId+xf5CN+5FDgqG8nUeSNvgxo8qPOZizDCJa
+         MExojCoKO5byQ==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     linux-arm-kernel@lists.infradead.org,
         Russell King <linux@armlinux.org.uk>,
         Linus Walleij <linus.walleij@linaro.org>,
-        Lubomir Rintel <lkundrak@v3.sk>
-Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH 03/11] ARM: sa1100: remove irda references
-Date:   Fri, 21 Oct 2022 17:49:33 +0200
-Message-Id: <20221021155000.4108406-4-arnd@kernel.org>
+        Lubomir Rintel <lkundrak@v3.sk>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        linux-pm@vger.kernel.org
+Subject: [PATCH 04/11] ARM: sa1100: make cpufreq driver build standalone
+Date:   Fri, 21 Oct 2022 17:49:34 +0200
+Message-Id: <20221021155000.4108406-5-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20221021155000.4108406-1-arnd@kernel.org>
 References: <20221021155000.4108406-1-arnd@kernel.org>
@@ -57,78 +60,135 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-IRDA support is long gone, so there is no need to declare the
-platform device structure.
+Commit 59a2e613d07f ("cpufreq: sa11x0: move cpufreq driver
+to drivers/cpufreq") added an unnecessary reference to
+mach/generic.h. Just remove it again after moving the code
+into the corresponding driver.
 
-See-also: d64c2a76123f ("staging: irda: remove the irda network stack and drivers")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/arm/mach-sa1100/assabet.c            |  1 -
- arch/arm/mach-sa1100/collie.c             |  1 -
- arch/arm/mach-sa1100/h3600.c              |  1 -
- include/linux/platform_data/irda-sa11x0.h | 17 -----------------
- 4 files changed, 20 deletions(-)
- delete mode 100644 include/linux/platform_data/irda-sa11x0.h
+ arch/arm/mach-sa1100/generic.c              | 32 ---------------------
+ arch/arm/mach-sa1100/generic.h              |  4 ---
+ arch/arm/mach-sa1100/include/mach/generic.h |  1 -
+ drivers/cpufreq/sa1110-cpufreq.c            | 32 +++++++++++++++++++++
+ 4 files changed, 32 insertions(+), 37 deletions(-)
+ delete mode 100644 arch/arm/mach-sa1100/include/mach/generic.h
 
-diff --git a/arch/arm/mach-sa1100/assabet.c b/arch/arm/mach-sa1100/assabet.c
-index 9919e0f32c4b..a71bdc634876 100644
---- a/arch/arm/mach-sa1100/assabet.c
-+++ b/arch/arm/mach-sa1100/assabet.c
-@@ -38,7 +38,6 @@
+diff --git a/arch/arm/mach-sa1100/generic.c b/arch/arm/mach-sa1100/generic.c
+index 6c21f214cd60..424f08eece20 100644
+--- a/arch/arm/mach-sa1100/generic.c
++++ b/arch/arm/mach-sa1100/generic.c
+@@ -39,38 +39,6 @@
+ #include "generic.h"
+ #include <clocksource/pxa.h>
  
- #include <asm/mach/arch.h>
- #include <asm/mach/flash.h>
--#include <linux/platform_data/irda-sa11x0.h>
- #include <asm/mach/map.h>
- #include <mach/assabet.h>
- #include <linux/platform_data/mfd-mcp-sa11x0.h>
-diff --git a/arch/arm/mach-sa1100/collie.c b/arch/arm/mach-sa1100/collie.c
-index 14c33ed05318..92c9ea7d7d25 100644
---- a/arch/arm/mach-sa1100/collie.c
-+++ b/arch/arm/mach-sa1100/collie.c
-@@ -44,7 +44,6 @@
- #include <asm/mach/arch.h>
- #include <asm/mach/flash.h>
- #include <asm/mach/map.h>
--#include <linux/platform_data/irda-sa11x0.h>
- 
- #include <asm/hardware/scoop.h>
- #include <asm/mach/sharpsl_param.h>
-diff --git a/arch/arm/mach-sa1100/h3600.c b/arch/arm/mach-sa1100/h3600.c
-index baf529117b26..05aa707e239e 100644
---- a/arch/arm/mach-sa1100/h3600.c
-+++ b/arch/arm/mach-sa1100/h3600.c
-@@ -14,7 +14,6 @@
- 
- #include <asm/mach-types.h>
- #include <asm/mach/arch.h>
--#include <linux/platform_data/irda-sa11x0.h>
- 
- #include <mach/h3xxx.h>
- #include <mach/irqs.h>
-diff --git a/include/linux/platform_data/irda-sa11x0.h b/include/linux/platform_data/irda-sa11x0.h
-deleted file mode 100644
-index 7db59c917575..000000000000
---- a/include/linux/platform_data/irda-sa11x0.h
-+++ /dev/null
-@@ -1,17 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-only */
--/*
-- *  arch/arm/include/asm/mach/irda.h
-- *
-- *  Copyright (C) 2004 Russell King.
-- */
--#ifndef __ASM_ARM_MACH_IRDA_H
--#define __ASM_ARM_MACH_IRDA_H
+-#define NR_FREQS	16
 -
--struct irda_platform_data {
--	int (*startup)(struct device *);
--	void (*shutdown)(struct device *);
--	int (*set_power)(struct device *, unsigned int state);
--	void (*set_speed)(struct device *, unsigned int speed);
+-/*
+- * This table is setup for a 3.6864MHz Crystal.
+- */
+-struct cpufreq_frequency_table sa11x0_freq_table[NR_FREQS+1] = {
+-	{ .frequency = 59000,	/*  59.0 MHz */},
+-	{ .frequency = 73700,	/*  73.7 MHz */},
+-	{ .frequency = 88500,	/*  88.5 MHz */},
+-	{ .frequency = 103200,	/* 103.2 MHz */},
+-	{ .frequency = 118000,	/* 118.0 MHz */},
+-	{ .frequency = 132700,	/* 132.7 MHz */},
+-	{ .frequency = 147500,	/* 147.5 MHz */},
+-	{ .frequency = 162200,	/* 162.2 MHz */},
+-	{ .frequency = 176900,	/* 176.9 MHz */},
+-	{ .frequency = 191700,	/* 191.7 MHz */},
+-	{ .frequency = 206400,	/* 206.4 MHz */},
+-	{ .frequency = 221200,	/* 221.2 MHz */},
+-	{ .frequency = 235900,	/* 235.9 MHz */},
+-	{ .frequency = 250700,	/* 250.7 MHz */},
+-	{ .frequency = 265400,	/* 265.4 MHz */},
+-	{ .frequency = 280200,	/* 280.2 MHz */},
+-	{ .frequency = CPUFREQ_TABLE_END, },
 -};
 -
--#endif
+-unsigned int sa11x0_getspeed(unsigned int cpu)
+-{
+-	if (cpu)
+-		return 0;
+-	return sa11x0_freq_table[PPCR & 0xf].frequency;
+-}
+-
+ /*
+  * Default power-off for SA1100
+  */
+diff --git a/arch/arm/mach-sa1100/generic.h b/arch/arm/mach-sa1100/generic.h
+index 158a4fd5ca24..cc891c57d306 100644
+--- a/arch/arm/mach-sa1100/generic.h
++++ b/arch/arm/mach-sa1100/generic.h
+@@ -4,7 +4,6 @@
+  *
+  * Author: Nicolas Pitre
+  */
+-#include <linux/cpufreq.h>
+ #include <linux/reboot.h>
+ 
+ extern void sa1100_timer_init(void);
+@@ -21,9 +20,6 @@ extern void sa11x0_init_late(void);
+ extern void sa1110_mb_enable(void);
+ extern void sa1110_mb_disable(void);
+ 
+-extern struct cpufreq_frequency_table sa11x0_freq_table[];
+-extern unsigned int sa11x0_getspeed(unsigned int cpu);
+-
+ struct flash_platform_data;
+ struct resource;
+ 
+diff --git a/arch/arm/mach-sa1100/include/mach/generic.h b/arch/arm/mach-sa1100/include/mach/generic.h
+deleted file mode 100644
+index 665542e0c9e2..000000000000
+--- a/arch/arm/mach-sa1100/include/mach/generic.h
++++ /dev/null
+@@ -1 +0,0 @@
+-#include "../../generic.h"
+diff --git a/drivers/cpufreq/sa1110-cpufreq.c b/drivers/cpufreq/sa1110-cpufreq.c
+index bb7f591a8b05..ce636c1147a6 100644
+--- a/drivers/cpufreq/sa1110-cpufreq.c
++++ b/drivers/cpufreq/sa1110-cpufreq.c
+@@ -29,6 +29,38 @@
+ 
+ #undef DEBUG
+ 
++#define NR_FREQS	16
++
++/*
++ * This table is setup for a 3.6864MHz Crystal.
++ */
++static struct cpufreq_frequency_table sa11x0_freq_table[NR_FREQS+1] = {
++	{ .frequency = 59000,	/*  59.0 MHz */},
++	{ .frequency = 73700,	/*  73.7 MHz */},
++	{ .frequency = 88500,	/*  88.5 MHz */},
++	{ .frequency = 103200,	/* 103.2 MHz */},
++	{ .frequency = 118000,	/* 118.0 MHz */},
++	{ .frequency = 132700,	/* 132.7 MHz */},
++	{ .frequency = 147500,	/* 147.5 MHz */},
++	{ .frequency = 162200,	/* 162.2 MHz */},
++	{ .frequency = 176900,	/* 176.9 MHz */},
++	{ .frequency = 191700,	/* 191.7 MHz */},
++	{ .frequency = 206400,	/* 206.4 MHz */},
++	{ .frequency = 221200,	/* 221.2 MHz */},
++	{ .frequency = 235900,	/* 235.9 MHz */},
++	{ .frequency = 250700,	/* 250.7 MHz */},
++	{ .frequency = 265400,	/* 265.4 MHz */},
++	{ .frequency = 280200,	/* 280.2 MHz */},
++	{ .frequency = CPUFREQ_TABLE_END, },
++};
++
++static unsigned int sa11x0_getspeed(unsigned int cpu)
++{
++	if (cpu)
++		return 0;
++	return sa11x0_freq_table[PPCR & 0xf].frequency;
++}
++
+ struct sdram_params {
+ 	const char name[20];
+ 	u_char  rows;		/* bits				 */
 -- 
 2.29.2
 
