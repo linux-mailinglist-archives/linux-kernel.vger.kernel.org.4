@@ -2,189 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58B536070B8
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 09:11:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1532F6070BA
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 09:12:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229930AbiJUHLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 03:11:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42936 "EHLO
+        id S229828AbiJUHMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 03:12:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbiJUHLB (ORCPT
+        with ESMTP id S229679AbiJUHMK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 03:11:01 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9FC04127BE3
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 00:11:00 -0700 (PDT)
-Received: from [192.168.1.139] (unknown [122.171.21.142])
-        by linux.microsoft.com (Postfix) with ESMTPSA id EE77520FEB27;
-        Fri, 21 Oct 2022 00:10:58 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com EE77520FEB27
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1666336260;
-        bh=xnzg67LV5knxCeMRSPiloqnhL559eU/+outHuXMHcFo=;
+        Fri, 21 Oct 2022 03:12:10 -0400
+Received: from domac.alu.hr (domac.alu.hr [IPv6:2001:b68:2:2800::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BAF36156
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 00:12:09 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id D9D86604F6;
+        Fri, 21 Oct 2022 09:12:06 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1666336326; bh=/3PWYcnWXVIz8kqWweN+aE56j9N52ods25cY6FPuoko=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=STzw7rTsacbxk11XQu4oqwXxr3MIndYUfRTNZoZ0K/7tAX6+ckOehjHLbP60HWIhT
-         iWZellbClmbf4Br8CmqLNhiwtmYYCAkW8qO5elScASJpCrhCOz7TiBPNpKw5l2gl59
-         tk6dFgdtiAxlI06ad5Lg8hyoKiG2rb2FC4KIBghU=
-Message-ID: <605ec34c-202f-dcba-20f8-a0f2653b59dc@linux.microsoft.com>
-Date:   Fri, 21 Oct 2022 12:40:53 +0530
+        b=dFINKL1jhxgnngpAfyAsU0P2J3x7chBayHK20zTAOnMbMJyvjP4R60KqYgMc29YrF
+         x+LrtvE9nRHxLtPvo6+nJgBDN07s+uWoDBFo62vmOkNDhDFkAbZ9rVtBneHMzrlFng
+         w1Ezfd4oa/SNKksTpVU8y1Za4ZiemYLiMbqfV08hdCGOiANt88DyzRKUKLBS7YJgFx
+         XNAqJv32ynbafYlHbZg0nhZoyQcZsZyIqfa7yZFhi7mTsZ35nDDjvooK8wdn7ha+jI
+         Nagz7msbjNYn6de5FGy490JRZxOwtOk4D+EJvsnThKxR8MpLTFyvMcVULW04r8KFXg
+         M+ZUEd1Cm/K9Q==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id nFOXzUTzzb2B; Fri, 21 Oct 2022 09:12:04 +0200 (CEST)
+Received: from [10.0.2.105] (grf-nat.grf.hr [161.53.83.23])
+        by domac.alu.hr (Postfix) with ESMTPSA id AA4E6604EC;
+        Fri, 21 Oct 2022 09:12:03 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1666336324; bh=/3PWYcnWXVIz8kqWweN+aE56j9N52ods25cY6FPuoko=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=BREGvZnrSouo9uMQ7jrwaTnDjjWzHlCSS7PTC70SmZm8LY6pzDQZ3MSgfuYo+rTIT
+         ueiNtG8IkwoM7qcWqSS7Dopyxt8cFLjORcRcbUokwD/rZ8CzGViOww1MeBn2zWq+my
+         P8po+xk7H4av+XY279KuT5UMdNtxJJfhDxI+JrEfwnfv/WKBxrSNNt+oG7GBCeN4pt
+         1YHTutt66iK9HDmnboIrBDKDOSfuWgY26aMOotQGW9eKOZHCBwTtLJT6Kmr7HUjgR9
+         HjEmEtQQKDEnxfVjET+EVu20qgvDkv61YLWz9+Eas4PMsCuybsO31Ro/4HGg/W2pHX
+         6ATukTq2DHNAA==
+Message-ID: <6b23f145-9bb3-281d-5d59-ccc73afd617d@alu.unizg.hr>
+Date:   Fri, 21 Oct 2022 09:12:03 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.3
-Subject: Re: [PATCH 4/6] staging: vt6655: refactor long lines of code in
- s_vGenerateTxParameter
+Subject: Re: BISECT result: 6.0.0-RC kernels trigger Firefox snap bug with
+ 6.0.0-rc3 through 6.0.0-rc7
 Content-Language: en-US
-To:     Tanjuate Brunostar <tanjubrunostar0@gmail.com>,
-        forest@alittletooquiet.net
-Cc:     greg@kroah.com, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
-References: <cover.1666288416.git.tanjubrunostar0@gmail.com>
- <03dd39114b1e5c029cd8022245403a079ff03ae7.1666288416.git.tanjubrunostar0@gmail.com>
-From:   Praveen Kumar <kumarpraveen@linux.microsoft.com>
-In-Reply-To: <03dd39114b1e5c029cd8022245403a079ff03ae7.1666288416.git.tanjubrunostar0@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+To:     Phillip Lougher <phillip@squashfs.org.uk>,
+        Slade Watkins <srw@sladewatkins.net>,
+        Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Jintao Yin <nicememory@gmail.com>, hsinyi@chromium.org,
+        linux-kernel@vger.kernel.org, marcmiltenberger@gmail.com,
+        regressions@leemhuis.info, regressions@lists.linux.dev
+References: <20221018174157.1897-1-phillip@squashfs.org.uk>
+ <20221020135545.586-1-nicememory@gmail.com>
+ <41ef4b22-eea8-2d67-99d8-6aaae7d25ac1@squashfs.org.uk>
+ <02b72b86-7240-5530-477a-c8bdcfd35ef5@gmail.com>
+ <CA+pv=HO36vMH6Uqu412MF+Hmu-+57QeapGt6k+QDDxr-AsbJkw@mail.gmail.com>
+ <3a6c0d0c-68ad-ffbb-0e56-c0282ac84149@squashfs.org.uk>
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <3a6c0d0c-68ad-ffbb-0e56-c0282ac84149@squashfs.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20-10-2022 23:57, Tanjuate Brunostar wrote:
-> fix checkpatch errors by refactoring long lines of code in the function: s_vGenerateTxParameter
-> 
-> Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
-> ---
->  drivers/staging/vt6655/rxtx.c | 70 ++++++++++++++++++++++++-----------
->  1 file changed, 48 insertions(+), 22 deletions(-)
-> 
-> diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
-> index dc853b83459b..42f4261293ba 100644
-> --- a/drivers/staging/vt6655/rxtx.c
-> +++ b/drivers/staging/vt6655/rxtx.c
-> @@ -839,7 +839,8 @@ s_vFillCTSHead(struct vnt_private *pDevice,
->  	}
->  
->  	if (byPktType == PK_TYPE_11GB || byPktType == PK_TYPE_11GA) {
-> -		if (byFBOption != AUTO_FB_NONE && uDMAIdx != TYPE_ATIMDMA && uDMAIdx != TYPE_BEACONDMA) {
-> +		if (byFBOption != AUTO_FB_NONE && uDMAIdx !=
-> +		    TYPE_ATIMDMA && uDMAIdx != TYPE_BEACONDMA) {
->  			/* Auto Fall back */
->  			struct vnt_cts_fb *buf = pvCTS;
->  			/* Get SignalField, ServiceField & Length */
-> @@ -878,7 +879,10 @@ s_vFillCTSHead(struct vnt_private *pDevice,
->  
->  			ether_addr_copy(buf->data.ra,
->  					pDevice->abyCurrentNetAddr);
-> -		} else { /* if (byFBOption != AUTO_FB_NONE && uDMAIdx != TYPE_ATIMDMA && uDMAIdx != TYPE_BEACONDMA) */
-> +		} else {
-> +			/* if (byFBOption != AUTO_FB_NONE && uDMAIdx != TYPE_ATIMDMA &&
-> +			 * uDMAIdx != TYPE_BEACONDMA)
-> +			 */
->  			struct vnt_cts *buf = pvCTS;
->  			/* Get SignalField, ServiceField & Length */
->  			vnt_get_phy_field(pDevice, uCTSFrameLen,
-> @@ -964,50 +968,72 @@ static void s_vGenerateTxParameter(struct vnt_private *pDevice,
->  			/* Fill RsvTime */
->  			struct vnt_rrv_time_rts *buf = pvRrvTime;
->  
-> -			buf->rts_rrv_time_aa = get_rtscts_time(pDevice, 2, byPktType, cbFrameSize, wCurrentRate);
-> -			buf->rts_rrv_time_ba = get_rtscts_time(pDevice, 1, byPktType, cbFrameSize, wCurrentRate);
-> -			buf->rts_rrv_time_bb = get_rtscts_time(pDevice, 0, byPktType, cbFrameSize, wCurrentRate);
-> -			buf->rrv_time_a = vnt_rxtx_rsvtime_le16(pDevice, byPktType, cbFrameSize, wCurrentRate, bNeedACK);
-> -			buf->rrv_time_b = vnt_rxtx_rsvtime_le16(pDevice, PK_TYPE_11B, cbFrameSize, pDevice->byTopCCKBasicRate, bNeedACK);
-> -
-> -			s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
-> +			buf->rts_rrv_time_aa = get_rtscts_time(pDevice, 2, byPktType, cbFrameSize,
-> +							       wCurrentRate);
-> +			buf->rts_rrv_time_ba = get_rtscts_time(pDevice, 1, byPktType, cbFrameSize,
-> +							       wCurrentRate);
-> +			buf->rts_rrv_time_bb = get_rtscts_time(pDevice, 0, byPktType, cbFrameSize,
-> +							       wCurrentRate);
-> +			buf->rrv_time_a = vnt_rxtx_rsvtime_le16(pDevice, byPktType, cbFrameSize,
-> +								wCurrentRate, bNeedACK);
-> +			buf->rrv_time_b =
-> +				vnt_rxtx_rsvtime_le16(pDevice, PK_TYPE_11B, cbFrameSize,
-> +						      pDevice->byTopCCKBasicRate, bNeedACK);
-> +
-> +			s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC,
-> +				       psEthHeader, wCurrentRate, byFBOption);
->  		} else {/* RTS_needless, PCF mode */
->  			struct vnt_rrv_time_cts *buf = pvRrvTime;
->  
-> -			buf->rrv_time_a = vnt_rxtx_rsvtime_le16(pDevice, byPktType, cbFrameSize, wCurrentRate, bNeedACK);
-> -			buf->rrv_time_b = vnt_rxtx_rsvtime_le16(pDevice, PK_TYPE_11B, cbFrameSize, pDevice->byTopCCKBasicRate, bNeedACK);
-> -			buf->cts_rrv_time_ba = get_rtscts_time(pDevice, 3, byPktType, cbFrameSize, wCurrentRate);
-> +			buf->rrv_time_a = vnt_rxtx_rsvtime_le16(pDevice, byPktType, cbFrameSize,
-> +								wCurrentRate, bNeedACK);
-> +			buf->rrv_time_b =
-> +				vnt_rxtx_rsvtime_le16(pDevice, PK_TYPE_11B, cbFrameSize,
-> +						      pDevice->byTopCCKBasicRate, bNeedACK);
-> +			buf->cts_rrv_time_ba = get_rtscts_time(pDevice, 3, byPktType, cbFrameSize,
-> +							       wCurrentRate);
->  
->  			/* Fill CTS */
-> -			s_vFillCTSHead(pDevice, uDMAIdx, byPktType, pvCTS, cbFrameSize, bNeedACK, bDisCRC, wCurrentRate, byFBOption);
-> +			s_vFillCTSHead(pDevice, uDMAIdx, byPktType, pvCTS, cbFrameSize, bNeedACK,
-> +				       bDisCRC, wCurrentRate, byFBOption);
->  		}
->  	} else if (byPktType == PK_TYPE_11A) {
->  		if (pvRTS) {/* RTS_need, non PCF mode */
-> -			struct vnt_rrv_time_ab *buf = pvRrvTime;
-> +			struct vnt_rrv_time_ab *buf = pvRrvT
-> +				ime;
+On 21.10.2022. 3:48, Phillip Lougher wrote:
 
-I'm not sure if this patch is compiled ? In my understanding the recommendation is have the patch compiled and if possible basic sanity done (can discuss with respective maintainers if they can help / guide) before sending here. Please do the needful. Thanks.
+> On 21/10/2022 00:44, Slade Watkins wrote:
+>> [Resend due to formatting issue, thanks gmail.]
+>>
+>> On Thu, Oct 20, 2022 at 7:23 PM Bagas Sanjaya <bagasdotme@gmail.com> 
+>> wrote:
+>>>
+>>> Ah! I was about to test his third fixup patch. I prefer to go
+>>> with your fix instead (as the formal patch).
+>>
+>> +1, agreed.
+>>
+>> -srw
+>
+> His patch is wrong, plus he's broken a number of rules of conduct, two 
+> serious.  But, I will not reprimand him as kernel maintainer for what is
+> probably extreme naivety, unless I have to.
+>
+> The link to the full set of patches is here
+>
+> https://lore.kernel.org/lkml/20221020223616.7571-1-phillip@squashfs.org.uk/ 
+>
+>
+> The first patch fixes the regression reported here in the correct way.
+>
+> The second patch fixes another regression (which is separate to the
+> regression causing the issue here).  This is where the code incorrectly
+> extends readahead beyond the end of the file.  This is the reason for
+> the unused trailing pages that Jintao Yin noticed.  But, this patch
+> fixes the cause, rather than fixing the symptom.
+>
+> The third patch fixes the buffer release race condition that I
+> posted a fix for earlier.
+>
+> Spitting this into three patches is one of the rules.  Each patch should
+> do one thing, and one thing only.  Three separate regressions means
+> three separate patches.  This is a requirement for "git bisect" to work
+> effectively.
 
->  
-> -			buf->rts_rrv_time = get_rtscts_time(pDevice, 2, byPktType, cbFrameSize, wCurrentRate);
-> -			buf->rrv_time = vnt_rxtx_rsvtime_le16(pDevice, byPktType, cbFrameSize, wCurrentRate, bNeedACK);
-> +			buf->rts_rrv_time = get_rtscts_time(pDevice, 2, byPktType, cbFrameSize,
-> +							    wCurrentRate);
-> +			buf->rrv_time = vnt_rxtx_rsvtime_le16(pDevice, byPktType, cbFrameSize,
-> +							      wCurrentRate, bNeedACK);
->  
->  			/* Fill RTS */
-> -			s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
-> +			s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC,
-> +				       psEthHeader, wCurrentRate, byFBOption);
->  		} else if (!pvRTS) {/* RTS_needless, non PCF mode */
->  			struct vnt_rrv_time_ab *buf = pvRrvTime;
->  
-> -			buf->rrv_time = vnt_rxtx_rsvtime_le16(pDevice, PK_TYPE_11A, cbFrameSize, wCurrentRate, bNeedACK);
-> +			buf->rrv_time =
-> +				vnt_rxtx_rsvtime_le16(pDevice, PK_TYPE_11A, cbFrameSize,
-> +						      wCurrentRate, bNeedACK);
->  		}
->  	} else if (byPktType == PK_TYPE_11B) {
->  		if (pvRTS) {/* RTS_need, non PCF mode */
->  			struct vnt_rrv_time_ab *buf = pvRrvTime;
->  
-> -			buf->rts_rrv_time = get_rtscts_time(pDevice, 0, byPktType, cbFrameSize, wCurrentRate);
-> -			buf->rrv_time = vnt_rxtx_rsvtime_le16(pDevice, PK_TYPE_11B, cbFrameSize, wCurrentRate, bNeedACK);
-> +			buf->rts_rrv_time = get_rtscts_time(pDevice, 0, byPktType, cbFrameSize,
-> +							    wCurrentRate);
-> +			buf->rrv_time = vnt_rxtx_rsvtime_le16(pDevice, PK_TYPE_11B, cbFrameSize,
-> +							      wCurrentRate, bNeedACK);
->  
->  			/* Fill RTS */
-> -			s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
-> +			s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC,
-> +				       psEthHeader, wCurrentRate, byFBOption);
->  		} else { /* RTS_needless, non PCF mode */
->  			struct vnt_rrv_time_ab *buf = pvRrvTime;
->  
-> -			buf->rrv_time = vnt_rxtx_rsvtime_le16(pDevice, PK_TYPE_11B, cbFrameSize, wCurrentRate, bNeedACK);
-> +			buf->rrv_time = vnt_rxtx_rsvtime_le16(pDevice, PK_TYPE_11B, cbFrameSize,
-> +							      wCurrentRate, bNeedACK);
->  		}
->  	}
->  }
+Dear Mr. Phillip,
 
-Regards,
+My squashfs learning curve isn't yet at the stage to verify what your 
+statements,
+however, separating each of the regression causes into different patches 
+seems
+logical even to me.
 
-~Praveen.
+I can confirm a successful build of mainline vanilla 6.1-rc1 + your 
+patches-[012/3].
+
+The snapped Firefox with the previously held windows and tabs that caused
+the initial regression reproduce now work seemingly OK.
+
+Have a nice day.
+
+Best regards,
+Mirsad
+
+-- 
+Mirsad Todorovac
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb
+Republic of Croatia, the European Union
+--
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
+
