@@ -2,103 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62A7760755C
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 12:48:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19444607561
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 12:50:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230157AbiJUKsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 06:48:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46794 "EHLO
+        id S230202AbiJUKuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 06:50:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230078AbiJUKsZ (ORCPT
+        with ESMTP id S230290AbiJUKtl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 06:48:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 173F525F1F4;
-        Fri, 21 Oct 2022 03:48:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5B35AB82B95;
-        Fri, 21 Oct 2022 10:48:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7943C433B5;
-        Fri, 21 Oct 2022 10:48:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666349301;
-        bh=Yl3qRQQpWdMPUbGxJERyNc/a/LusWFS2QJF+ezf+FSQ=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=TgA9vbS6vmkee+djXhez8XsX6q6q1k2rY96M7LgzmPrdDZPi5mQ6jF/HZBcaB7ySU
-         j8m64Y7onysoEui/gN8yxtcBzMLgXCrmYn6oRiTicigWyuHey2t6Auz21mRvYeqpS5
-         fpN/oagLoQJJi25vqOB90BmrTDzvB8MJl+/zuRLSdckp2f1e+iemccjiKzuDF9/ylz
-         rLREgmw9skT4GXZwRZSS3HUvqxq59RRVIjQGYf/7aEycG3OCnepfg1pF2lwqEkR/sO
-         fKbdssWhwxeVuoQ/Ge0+keJL7SqL0oMs9a+yj0bntYMeqVElqeHoOz+zaOoD888Khx
-         6QW13DEahU5hw==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Colin Ian King <colin.i.king@gmail.com>
-Cc:     Jes Sorensen <Jes.Sorensen@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Bitterblue Smith <rtl8821cerfe2@gmail.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH][next] wifi: rtl8xxxu: Fix reads of uninitialized variables hw_ctrl_s1, sw_ctrl_s1
-References: <20221020135709.1549086-1-colin.i.king@gmail.com>
-        <87ilkdlq48.fsf@kernel.org>
-Date:   Fri, 21 Oct 2022 13:48:11 +0300
-In-Reply-To: <87ilkdlq48.fsf@kernel.org> (Kalle Valo's message of "Fri, 21 Oct
-        2022 08:09:27 +0300")
-Message-ID: <87bkq51mhg.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Fri, 21 Oct 2022 06:49:41 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E73FCBDE;
+        Fri, 21 Oct 2022 03:49:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666349361; x=1697885361;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=w0a33PigWSTiQkXsbRap1wdMtX5M30vWOtN5yDWKwAk=;
+  b=a5P3ItN1PE4ZxpTrwEnRlk4OKdTZiiNfH/3JYqmqsdzIDgL58H9F6iHn
+   JhqTqTjndFgEJhHJhAAM+EbP9x1J70ClKUdsS2nE8jScRMzaQjVdYLG0g
+   ZuIXRhbmT+I01cbBEnAN21T7lV8O+AggLcnpAExrMfxUc1BCN9Qj++ecc
+   /RnxvGOzC29H2wsOczg9EQ/xcD5GiyR2ef9btyPyWf8w4YgFo+bJZ+uHj
+   oh9vFoIm6GBKPzofUPtoRLv8M9p0V3deyvHR/Os2d4rJPoT32L8R5+BEk
+   UV8RrlXCeep47fWGCfygL7KCvW6qLIGgMVCmIaBbPc/XNhBy1k2gewY5p
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="308070032"
+X-IronPort-AV: E=Sophos;i="5.95,200,1661842800"; 
+   d="scan'208";a="308070032"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2022 03:49:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="632863745"
+X-IronPort-AV: E=Sophos;i="5.95,200,1661842800"; 
+   d="scan'208";a="632863745"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga007.fm.intel.com with ESMTP; 21 Oct 2022 03:49:17 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1olpaV-00B6rD-0Q;
+        Fri, 21 Oct 2022 13:49:15 +0300
+Date:   Fri, 21 Oct 2022 13:49:14 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
+        Dmitry Rokosov <DDRokosov@sberdevices.ru>,
+        Jagath Jog J <jagathjog1996@gmail.com>,
+        Cosmin Tanislav <demonsingur@gmail.com>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/3] iio: accel: Support Kionix/ROHM KX022A
+ accelerometer
+Message-ID: <Y1J5KiH6IJLmrWH4@smile.fi.intel.com>
+References: <cover.1666263249.git.mazziesaccount@gmail.com>
+ <5000bd61650554658d13619c8244f02cedbc182a.1666263249.git.mazziesaccount@gmail.com>
+ <Y1FcftQKimmvcOej@smile.fi.intel.com>
+ <2cad533d-32d1-5ca1-74e6-e2debcbdad81@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2cad533d-32d1-5ca1-74e6-e2debcbdad81@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kalle Valo <kvalo@kernel.org> writes:
+On Fri, Oct 21, 2022 at 10:10:08AM +0300, Matti Vaittinen wrote:
+> On 10/20/22 17:34, Andy Shevchenko wrote:
+> > On Thu, Oct 20, 2022 at 02:37:15PM +0300, Matti Vaittinen wrote:
 
-> Colin Ian King <colin.i.king@gmail.com> writes:
->
->> Variables hw_ctrl_s1 and sw_ctrl_s1 are not being initialized and
->> potentially can contain any garbage value. Currently there is an if
->> statement that sets one or the other of these variables, followed
->> by an if statement that checks if any of these variables have been
->> set to a non-zero value. In the case where they may contain
->> uninitialized non-zero values, the latter if statement may be
->> taken as true when it was not expected to.
->>
->> Fix this by ensuring hw_ctrl_s1 and sw_ctrl_s1 are initialized.
->>
->> Cleans up clang warning:
->> drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8188f.c:432:7: warning:
->> variable 'hw_ctrl_s1' is used uninitialized whenever 'if' condition is
->> false [-Wsometimes-uninitialized]
->>                 if (hw_ctrl) {
->>                     ^~~~~~~
->> drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8188f.c:440:7: note: uninitialized
->> use occurs here
->>                 if (hw_ctrl_s1 || sw_ctrl_s1) {
->>                     ^~~~~~~~~~
->> drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8188f.c:432:3: note: remove the 'if'
->> if its condition is always true
->>                 if (hw_ctrl) {
->>                 ^~~~~~~~~~~~~
->>
->> Fixes: c888183b21f3 ("wifi: rtl8xxxu: Support new chip RTL8188FU")
->> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
->
-> I'll queue this to v6.1.
+...
 
-Actually commit c888183b21f3 is in wireless-next so this patch should go
-to wireless-next, for v6.2.
+> > > +	ret = regmap_bulk_read(data->regmap, chan->address, &data->buffer,
+> > > +			       sizeof(__le16));
+> > > +	if (ret)
+> > > +		return ret;
+> > > +
+> > > +	*val = le16_to_cpu(data->buffer[0]);
+> > 
+> > 'p'-variant of the above would look better
+> > 
+> > 	*val = le16_to_cpup(data->buffer);
+> > 
+> > since it will be the same as above address without any additional arithmetics.
+> > 
+> 
+> I guess there is no significant performance difference? To my eye the
+> le16_to_cpu(data->buffer[0]) is much more clear. I see right from the call
+> that we have an array here and use the first member. If there is no obvious
+> technical merit for using le16_to_cpup(data->buffer) over
+> le16_to_cpu(data->buffer[0]), then I do really prefer the latter for
+> clarity.
+
+Then you probably wanted to have &data->buffer[0] as a parameter to
+regmap_bulk_read()?
+
+...
+
+> > > +	if (data->trigger_enabled) {
+> > > +		iio_trigger_poll_chained(data->trig);
+> > > +		ret = IRQ_HANDLED;
+> > > +	}
+> > > +
+> > > +	if (data->state & KX022A_STATE_FIFO) {
+> > 
+> > > +		ret = __kx022a_fifo_flush(idev, KX022A_FIFO_LENGTH, true);
+> > > +		if (ret > 0)
+> > > +			ret = IRQ_HANDLED;
+> > 
+> > I don't like it. Perhaps
+> > 
+> > 	bool handled = false;
+> > 	int ret;
+> > 
+> > 	...
+> > 		ret = ...
+> > 		if (ret > 0)
+> > 			handled = true;
+> > 	...
+> > 
+> > 	return IRQ_RETVAL(handled);
+> 
+> I don't see the benefit of adding another variable 'handled'.
+> If I understand correctly, it just introduces one extra 'if' in IRQ thread
+> handling while hiding the return value in IRQ_RETVAL() - macro.
+> 
+> I do like seeing the IRQ_NONE being returned by default and IRQ_HANDLED only
+> when "handlers" are successfully executed. Adding extra variable just
+> obfuscates this (from my eyes) while adding also the additional 'if'.
+
+You assigning semantically different values to the same variable inside the
+function.
 
 -- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+With Best Regards,
+Andy Shevchenko
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+
