@@ -2,224 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD8E960823E
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 01:50:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7E87608243
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 01:50:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229894AbiJUXuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 19:50:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37744 "EHLO
+        id S229937AbiJUXug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 19:50:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229833AbiJUXto (ORCPT
+        with ESMTP id S229919AbiJUXuX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 19:49:44 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A2283685A
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 16:49:42 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id m14-20020a17090a3f8e00b00212dab39bcdso1592572pjc.0
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 16:49:42 -0700 (PDT)
+        Fri, 21 Oct 2022 19:50:23 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2A13111B88
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 16:50:05 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id f205so5068356yba.2
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 16:50:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=8BvgID2Mlp1LOZxFRRSQflp2rM/AmsvDLSJ/CidGjBk=;
-        b=SipCePk/H4Ki27ow1q+KXNmCpWZJrBEfUawrVZrBsrf5flcWPAmOAbGluKxY12Iw/G
-         bVtX/aW+LoBt1hQNS5jlDmWnBHFYNm84mGdiUKexkqYKjorbdT9UX3ZNLwsHmrTBQPvx
-         YQ0XzkJG+Y1al9YY/M3wkrM4PXev+5RvO+WJc=
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=4czg/qu66NqXwzG9dGIHux0nNP2u6mY7jwy4TsVK5Qo=;
+        b=PAqL0RrRpzks/1kCgPwxA0aauRVXAAvI50NOPlDnErX6FN8JJsKbfuEP5unQWM5Wz+
+         AqfMOd9PGj71bXMvEiuVMXz584XiiOihZoVLqjgbE14BAKiWSsG4IVRR2sR2k0SenUzH
+         bMgu71YXtxO/KphcLDkw+UDRaNu+nZAHyU3ialrllbJBR4HX2jAtm7gbGgRH28VEuDqM
+         UGwIJ4yFtMPndZJSoD2IMdOcLTQMmtq+snDNn9nnNwQBHy+IGifZTU8c8b1zbMzkqEXB
+         Wje8DNaUaogKGaDIVxEpcEe0UNmwY482X4Djpr6XcK1Fq3aPfD/RsEQjHQsAgBQF+qvl
+         QenA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=8BvgID2Mlp1LOZxFRRSQflp2rM/AmsvDLSJ/CidGjBk=;
-        b=3CEpq35m8RYy4K43USiXnhRfGJTHwvDvrV0BLybJFySnCSwoCZZhrp1HCSrbfKPNXl
-         xwCSJnQA/w/LdhmyHzJ/OkvcGCBcfSX7qUTURoyndD7k3rh5SVuD3v9iCIchxFTNu2MX
-         DQvdf8hErwympfZ/0Dyza0Pk0fcUEDLSRrTJIjlWUefEptjYGfFY8O4QsiETw27oEKPq
-         yunahsRTkfDHtwzcgfWYVCGmr8jHvPaj7menf9rc5hwTsCbKrKnRABJOpnbwf8DuXr+g
-         pRVoiIwumtCMQH4tBeFarWFtYhX1nO+cannvvcG9kqGlTIgTWp/R0aCiyINzrwbRwBwz
-         MujA==
-X-Gm-Message-State: ACrzQf0pTvameBkY9Ah7ccTU3111WheqzzGKwgHqjXUdBMNd6ZUtpszc
-        imjsnWCRa4e2xGV+t+cHw2AffQ==
-X-Google-Smtp-Source: AMsMyM4/tYwwOvCUIhmt8St2bueqQMk53krDt6Pxm+2ScI1STCM9fObrX/gRa0a5O/cIC5IEGbZKew==
-X-Received: by 2002:a17:90a:e297:b0:212:dc30:7fed with SMTP id d23-20020a17090ae29700b00212dc307fedmr2146955pjz.90.1666396181692;
-        Fri, 21 Oct 2022 16:49:41 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id n21-20020a63ee55000000b00439d071c110sm13864837pgk.43.2022.10.21.16.49.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Oct 2022 16:49:40 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     "David S. Miller" <davem@davemloft.net>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Menglong Dong <imagedong@tencent.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH v4] skbuff: Proactively round up to kmalloc bucket size
-Date:   Fri, 21 Oct 2022 16:49:36 -0700
-Message-Id: <20221021234713.you.031-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        bh=4czg/qu66NqXwzG9dGIHux0nNP2u6mY7jwy4TsVK5Qo=;
+        b=GBXKX3fk+xNrNUddithQVPBWxrdXXqmAhfLWJjhYVquuKfOmWhssvPi0R2oEX2OiWQ
+         +jFBeGgoia93JG8upWRMD6UFhW00L5BWbTmnJKHrqGki6tOmNU6dzf2eixGflBz0RpaK
+         r1zZTowoexI3vvGW+2A0MhZTaLYBxO3Bbeyl2/mIV6mNXSLyVZNwOc434UWXtEm6Yuq2
+         64BCxA/aEJW6wHcqsP8rH6UN9goysGXzGUswyYsEqR+c++ugHHHhzG2y+iEdA/Pavdj+
+         nAn/Wpbc86aFXNnHSEXYVTUQPcLcl0v4C5nsAp2KzaqSVLqUMX1VKX731XERkz2qoXJ5
+         1hFg==
+X-Gm-Message-State: ACrzQf05xwZRAl+LOfZh0pH1hEBCVNuo+H2xvamE0cF8RtbR/OYeClfk
+        g2Z/kuKqSqA1XVHbxs76asTCIqyvkwDafrOg3S/2Ag==
+X-Google-Smtp-Source: AMsMyM5E7jZo6BTmud2RI2C8DSRQNm54+96yeahdYhyXq4B18Z+mie34vjzYsulAtGe34Wo33RiLxnhSWgITDDSFXJI=
+X-Received: by 2002:a05:6902:1244:b0:6bd:6409:9591 with SMTP id
+ t4-20020a056902124400b006bd64099591mr19158433ybu.431.1666396204051; Fri, 21
+ Oct 2022 16:50:04 -0700 (PDT)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5254; h=from:subject:message-id; bh=mBqppqtvL2/WoVg/f5+5q7YdX/5rZQrDaP9jvq5SNds=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjUzAQj4YnF7sfaNOXHp6h942Zp2pVBhavIZsxhufy hDpdcbqJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY1MwEAAKCRCJcvTf3G3AJlswD/ 9Y3r9CwzM02Mmy50J+PYZcLUgI4ibXyNuMNwupIkwi6KUI2W9fvMVSawsAkM5b/x+M1CWBOI0Y8Koe YtS6rlW11Th17D7xxNhqDh2MViFxJSFl9x1j5zs7OR895024SdmRLS/eT+GonMGTWn65cJoNCutmED 7tuxvlsf4mYqHJkQT/f6ewQ18P9JVGQhhu+aR1dFaiEAHE/2WuZflnqMP6crdv/DEfH2pc6kwKXjy/ 97qL1b2eKrjXbKQX3EydGxGUPRVD0ceddrFUGftCdz0J2H4sZHhFMCQRzbcCrJDNSiAAIVqdbyvrvI Jt+jYK4+8/K5qUobuq2jd85Yrp9gyfx7TX5TmMMWPq9ylU3VD8rCk3x//Wcf0+gJH8QzVFEbPas4OS XK8PyLEgI+uqZZhyHZCbo1hND4yu4lSZfeoRYp3nn3vyqOzaX6+CAPOJUD7+Yl4FSBZZa2EwDVkwKe FfNAS6xx79PI5Fvkyu2+hz6JPiOauASQTiFUe9wC/G+drcJFepnqlm8uPEqlCf02NGzyRrQUnkzDL7 rCEZs2bEF/laMbAR8K1Jq6vke2ET07GdEDOYiheaSE0SM6XfAq5rcn9hTReprIdJWKY6qJsB6986Qv nkOewbajlHJi/78QLUwtnxa+p096QwNqqhJpAAolsFrvQVy2XY5vLah1Snnw==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <0000000000009fa63105eb7648d8@google.com> <00000000000031aec805eb76a2d4@google.com>
+ <20221020182155.ecd44ee984b1aeb2e5a2e8ed@linux-foundation.org>
+ <CAJuCfpEh0byROe58H_FtL+NMLKAvSrQW0f0wd3QiVTBdRg5CTA@mail.gmail.com>
+ <CAJuCfpF7xsZJevfj6ERsJi5tPFj0o6FATAm4k=CMsONFG86EmQ@mail.gmail.com> <CANp29Y7aNP+0hd01feB24XrCUPVa0+7kf7NiDAV_FdhPx2VkOQ@mail.gmail.com>
+In-Reply-To: <CANp29Y7aNP+0hd01feB24XrCUPVa0+7kf7NiDAV_FdhPx2VkOQ@mail.gmail.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Fri, 21 Oct 2022 16:49:52 -0700
+Message-ID: <CAJuCfpF0eYsNZjQO4OcT8Pnaj9+H8UK_o4bwtLzD=n53-48hJw@mail.gmail.com>
+Subject: Re: [syzbot] BUG: sleeping function called from invalid context in vm_area_dup
+To:     Aleksandr Nogikh <nogikh@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        syzbot <syzbot+b910411d3d253dab25d8@syzkaller.appspotmail.com>,
+        bigeasy@linutronix.de, bpf@vger.kernel.org, brauner@kernel.org,
+        ebiederm@xmission.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
+        linux-mm@kvack.org, David Hildenbrand <david@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of discovering the kmalloc bucket size _after_ allocation, round
-up proactively so the allocation is explicitly made for the full size,
-allowing the compiler to correctly reason about the resulting size of
-the buffer through the existing __alloc_size() hint.
+On Fri, Oct 21, 2022 at 4:12 PM Aleksandr Nogikh <nogikh@google.com> wrote:
+>
+> On Fri, Oct 21, 2022 at 2:52 PM 'Suren Baghdasaryan' via
+> syzkaller-bugs <syzkaller-bugs@googlegroups.com> wrote:
+> >
+> > On Thu, Oct 20, 2022 at 6:58 PM Suren Baghdasaryan <surenb@google.com> wrote:
+> > >
+> > > On Thu, Oct 20, 2022 at 6:22 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+> > > >
+> > > > On Thu, 20 Oct 2022 05:40:43 -0700 syzbot <syzbot+b910411d3d253dab25d8@syzkaller.appspotmail.com> wrote:
+> > > >
+> > > > > syzbot has found a reproducer for the following issue on:
+> > > >
+> > > > Thanks.
+> > > >
+> > > >
+> > > > > HEAD commit:    acee3e83b493 Add linux-next specific files for 20221020
+> > > > > git tree:       linux-next
+> > > > > console+strace: https://syzkaller.appspot.com/x/log.txt?x=170a8016880000
+> > > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=c82245cfb913f766
+> > > > > dashboard link: https://syzkaller.appspot.com/bug?extid=b910411d3d253dab25d8
+> > > > > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > > > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=109e0372880000
+> > > > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1770d752880000
+> > > > >
+> > > > > Downloadable assets:
+> > > > > disk image: https://storage.googleapis.com/syzbot-assets/98cc5896cded/disk-acee3e83.raw.xz
+> > > > > vmlinux: https://storage.googleapis.com/syzbot-assets/b3d3eb3aa10a/vmlinux-acee3e83.xz
+> > > > >
+> > > > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > > > > Reported-by: syzbot+b910411d3d253dab25d8@syzkaller.appspotmail.com
+> > > > >
+> > > > > BUG: sleeping function called from invalid context at include/linux/sched/mm.h:274
+> > > >
+> > > > This is happening under dup_anon_vma_name().
+> > > >
+> > > > I can't spot preemption being disabled on that call path, and I assume
+> > > > this code has been exercised for some time.
+> > >
+> > > Indeed, it is unclear why copy_vma() would be called in atomic
+> > > context. I'll try to reproduce tomorrow. Maybe with lockdep enabled we
+> > > can get something interesting.
+> >
+> > Sorry for the delay. Having trouble booting the image built with the
+> > attached config. My qemu crashes with a "sched: CPU #1's llc-sibling
+> > CPU #0 is not on the same node! [node: 1 != 0]." warning before the
+> > crash. Trying to figure out why.
+>
+> qemu 6.2 changed the core-to-socket assignment and it looks like we
+> get such errors when a kernel with "numa=fake=" is run under qemu on a
+> system with multiple CPUs.
+>
+> You can try removing numa=fake=... from the CMDLINE config or just
+> manually setting the smp argument of the qemu process (e.g. -smp
+> 2,sockets=2,cores=1)
+>
+> See https://gitlab.com/qemu-project/qemu/-/issues/877
 
-This will allow for kernels built with CONFIG_UBSAN_BOUNDS or the
-coming dynamic bounds checking under CONFIG_FORTIFY_SOURCE to gain
-back the __alloc_size() hints that were temporarily reverted in commit
-93dd04ab0b2b ("slab: remove __alloc_size attribute from __kmalloc_track_caller")
+That was it. Thank you, Aleksandr!
+I can boot with the image built using the attached config but still
+can't reproduce the issue using the C reproducer... Will keep it
+running for some time to see if it eventually shows up.
+Thanks,
+Suren.
 
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: netdev@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: David Rientjes <rientjes@google.com>
-Cc: Vlastimil Babka <vbabka@suse.cz>
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
-v4: use kmalloc_size_roundup() in callers, not kmalloc_reserve()
-v3: https://lore.kernel.org/lkml/20221018093005.give.246-kees@kernel.org
-v2: https://lore.kernel.org/lkml/20220923202822.2667581-4-keescook@chromium.org
----
- net/core/skbuff.c | 50 +++++++++++++++++++++++------------------------
- 1 file changed, 25 insertions(+), 25 deletions(-)
-
-diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index 651a82d30b09..77af430296e2 100644
---- a/net/core/skbuff.c
-+++ b/net/core/skbuff.c
-@@ -508,14 +508,14 @@ struct sk_buff *__alloc_skb(unsigned int size, gfp_t gfp_mask,
- 	 */
- 	size = SKB_DATA_ALIGN(size);
- 	size += SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
--	data = kmalloc_reserve(size, gfp_mask, node, &pfmemalloc);
-+	osize = kmalloc_size_roundup(size);
-+	data = kmalloc_reserve(osize, gfp_mask, node, &pfmemalloc);
- 	if (unlikely(!data))
- 		goto nodata;
- 	/* kmalloc(size) might give us more room than requested.
- 	 * Put skb_shared_info exactly at the end of allocated zone,
- 	 * to allow max possible filling before reallocation.
- 	 */
--	osize = ksize(data);
- 	size = SKB_WITH_OVERHEAD(osize);
- 	prefetchw(data + size);
- 
-@@ -1816,10 +1816,11 @@ EXPORT_SYMBOL(__pskb_copy_fclone);
- int pskb_expand_head(struct sk_buff *skb, int nhead, int ntail,
- 		     gfp_t gfp_mask)
- {
--	int i, osize = skb_end_offset(skb);
--	int size = osize + nhead + ntail;
-+	unsigned int osize = skb_end_offset(skb);
-+	unsigned int size = osize + nhead + ntail;
- 	long off;
- 	u8 *data;
-+	int i;
- 
- 	BUG_ON(nhead < 0);
- 
-@@ -1827,15 +1828,16 @@ int pskb_expand_head(struct sk_buff *skb, int nhead, int ntail,
- 
- 	skb_zcopy_downgrade_managed(skb);
- 
--	size = SKB_DATA_ALIGN(size);
--
- 	if (skb_pfmemalloc(skb))
- 		gfp_mask |= __GFP_MEMALLOC;
--	data = kmalloc_reserve(size + SKB_DATA_ALIGN(sizeof(struct skb_shared_info)),
--			       gfp_mask, NUMA_NO_NODE, NULL);
-+
-+	size = SKB_DATA_ALIGN(size);
-+	size += SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
-+	size = kmalloc_size_roundup(size);
-+	data = kmalloc_reserve(size, gfp_mask, NUMA_NO_NODE, NULL);
- 	if (!data)
- 		goto nodata;
--	size = SKB_WITH_OVERHEAD(ksize(data));
-+	size = SKB_WITH_OVERHEAD(size);
- 
- 	/* Copy only real data... and, alas, header. This should be
- 	 * optimized for the cases when header is void.
-@@ -6169,21 +6171,20 @@ static int pskb_carve_inside_header(struct sk_buff *skb, const u32 off,
- 				    const int headlen, gfp_t gfp_mask)
- {
- 	int i;
--	int size = skb_end_offset(skb);
-+	unsigned int size = skb_end_offset(skb);
- 	int new_hlen = headlen - off;
- 	u8 *data;
- 
--	size = SKB_DATA_ALIGN(size);
--
- 	if (skb_pfmemalloc(skb))
- 		gfp_mask |= __GFP_MEMALLOC;
--	data = kmalloc_reserve(size +
--			       SKB_DATA_ALIGN(sizeof(struct skb_shared_info)),
--			       gfp_mask, NUMA_NO_NODE, NULL);
-+
-+	size = SKB_DATA_ALIGN(size);
-+	size += SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
-+	size = kmalloc_size_roundup(size);
-+	data = kmalloc_reserve(size, gfp_mask, NUMA_NO_NODE, NULL);
- 	if (!data)
- 		return -ENOMEM;
--
--	size = SKB_WITH_OVERHEAD(ksize(data));
-+	size = SKB_WITH_OVERHEAD(size);
- 
- 	/* Copy real data, and all frags */
- 	skb_copy_from_linear_data_offset(skb, off, data, new_hlen);
-@@ -6288,22 +6289,21 @@ static int pskb_carve_inside_nonlinear(struct sk_buff *skb, const u32 off,
- 				       int pos, gfp_t gfp_mask)
- {
- 	int i, k = 0;
--	int size = skb_end_offset(skb);
-+	unsigned int size = skb_end_offset(skb);
- 	u8 *data;
- 	const int nfrags = skb_shinfo(skb)->nr_frags;
- 	struct skb_shared_info *shinfo;
- 
--	size = SKB_DATA_ALIGN(size);
--
- 	if (skb_pfmemalloc(skb))
- 		gfp_mask |= __GFP_MEMALLOC;
--	data = kmalloc_reserve(size +
--			       SKB_DATA_ALIGN(sizeof(struct skb_shared_info)),
--			       gfp_mask, NUMA_NO_NODE, NULL);
-+
-+	size = SKB_DATA_ALIGN(size);
-+	size += SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
-+	size = kmalloc_size_roundup(size);
-+	data = kmalloc_reserve(size, gfp_mask, NUMA_NO_NODE, NULL);
- 	if (!data)
- 		return -ENOMEM;
--
--	size = SKB_WITH_OVERHEAD(ksize(data));
-+	size = SKB_WITH_OVERHEAD(size);
- 
- 	memcpy((struct skb_shared_info *)(data + size),
- 	       skb_shinfo(skb), offsetof(struct skb_shared_info, frags[0]));
--- 
-2.34.1
-
+>
+> > defconfig with CONFIG_ANON_VMA_NAME=y boots fine but does not
+> > reproduce the issue.
+> >
+> > >
+> > > >
+> > > > I wonder if this could be fallout from the KSM locking error which
+> > > > https://lkml.kernel.org/r/8c86678a-3bfb-3854-b1a9-ae5969e730b8@redhat.com
+> > > > addresses.  Seems quite unlikely.
+> > > >
+> > > > > in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 3602, name: syz-executor107
+> > > > > preempt_count: 1, expected: 0
+> > > > > RCU nest depth: 0, expected: 0
+> > > > > INFO: lockdep is turned off.
+> > > > > Preemption disabled at:
+> > > > > [<0000000000000000>] 0x0
+> > > > > CPU: 0 PID: 3602 Comm: syz-executor107 Not tainted 6.1.0-rc1-next-20221020-syzkaller #0
+> > > > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+> > > > > Call Trace:
+> > > > >  <TASK>
+> > > > >  __dump_stack lib/dump_stack.c:88 [inline]
+> > > > >  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+> > > > >  __might_resched.cold+0x222/0x26b kernel/sched/core.c:9890
+> > > > >  might_alloc include/linux/sched/mm.h:274 [inline]
+> > > > >  slab_pre_alloc_hook mm/slab.h:727 [inline]
+> > > > >  slab_alloc_node mm/slub.c:3323 [inline]
+> > > > >  slab_alloc mm/slub.c:3411 [inline]
+> > > > >  __kmem_cache_alloc_lru mm/slub.c:3418 [inline]
+> > > > >  kmem_cache_alloc+0x2e6/0x3c0 mm/slub.c:3427
+> > > > >  vm_area_dup+0x81/0x380 kernel/fork.c:466
+> > > > >  copy_vma+0x376/0x8d0 mm/mmap.c:3216
+> > > > >  move_vma+0x449/0xf60 mm/mremap.c:626
+> > > > >  __do_sys_mremap+0x487/0x16b0 mm/mremap.c:1075
+> > > > >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> > > > >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+> > > > >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> > > > > RIP: 0033:0x7fd090fa5b29
+> > > > > Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+> > > > > RSP: 002b:00007ffc2e90bd38 EFLAGS: 00000246 ORIG_RAX: 0000000000000019
+> > > > > RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fd090fa5b29
+> > > > > RDX: 0000000000001000 RSI: 0000000000004000 RDI: 00000000201c4000
+> > > > > RBP: 00007fd090f69cd0 R08: 00000000202ef000 R09: 0000000000000000
+> > > > > R10: 0000000000000003 R11: 0000000000000246 R12: 00007fd090f69d60
+> > > > > R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+> > > > >  </TASK>
+> >
+> > --
+> > You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
+> > To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> > To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/CAJuCfpF7xsZJevfj6ERsJi5tPFj0o6FATAm4k%3DCMsONFG86EmQ%40mail.gmail.com.
