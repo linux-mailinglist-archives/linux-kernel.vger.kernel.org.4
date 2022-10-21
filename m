@@ -2,508 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83D1E6074B1
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 12:11:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D4F46074B5
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 12:12:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230151AbiJUKLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 06:11:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48310 "EHLO
+        id S230306AbiJUKMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 06:12:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230343AbiJUKKU (ORCPT
+        with ESMTP id S230251AbiJUKM0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 06:10:20 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AB64E4C2F;
-        Fri, 21 Oct 2022 03:10:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666347014; x=1697883014;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=oB9l/0o4/yaYsJ9UAMCCcRl4uhdWFkkMsT782/0+1hs=;
-  b=Y4+3SBVr3Q3Y9XCgyJwd/FqIuQ4J/8FjaHsgg2Nk5Pm0w7KJhHRkQBbL
-   iWFuhXHMMho7fkGvX/Au0A8X2qEWmvgqd0vSdyTFYdPvZOppE7M+EAvRd
-   iB5IKq9TanaVty/foX2tjccC1WJNt4NMJN1smtdi5GKTzzSjmSI1+4RSJ
-   MY6uiGQosb/qhtkK1zi6BamNTGcCmrxMGDoEJ69RTfqa++NDiAH91NpwU
-   cdtOiX6PUwswTXBGH7ObMiQ8zQ4n4pr052xCVDtwDwW0vOVfdtX9pEWWG
-   w3NxVfXGzqtgRP6o9xm/oABGu1C5fQaeygUd338Gjt/VB+42V1evFG57T
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="369013035"
-X-IronPort-AV: E=Sophos;i="5.95,200,1661842800"; 
-   d="scan'208";a="369013035"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2022 03:10:08 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="735464210"
-X-IronPort-AV: E=Sophos;i="5.95,200,1661842800"; 
-   d="scan'208";a="735464210"
-Received: from lramir2-mobl1.ger.corp.intel.com ([10.252.44.179])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2022 03:09:59 -0700
-Date:   Fri, 21 Oct 2022 13:09:57 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     "D. Starke" <daniel.starke@siemens.com>
-cc:     linux-serial <linux-serial@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 3/3] tty: n_gsm: add parameter negotiation support
-In-Reply-To: <20221021084315.2306-3-daniel.starke@siemens.com>
-Message-ID: <8c2b9492-caf4-7a48-3a7b-da939a4ac8b6@linux.intel.com>
-References: <20221021084315.2306-1-daniel.starke@siemens.com> <20221021084315.2306-3-daniel.starke@siemens.com>
+        Fri, 21 Oct 2022 06:12:26 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 770D17AB16
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 03:12:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666347144;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=aghhJvVu2AzGZHMKahkE2d4moWkPJZMDtfGDcWTlxz0=;
+        b=ggHARlN58ztbHKfWjdmxfx6MW6uLvIt4baXwtoXsq1IX8BNyF9MGldGPibUaUmtfPEj5eS
+        MHhMSEAPYve3qh7fUVunarjNKfNFrdcRzhSrd53UGZH/v3eH4PVzwk0g6qt33VvdwVNNjp
+        hNWZmA2yObt09RGQE6j4IfPWANXKgl8=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-542-X4wZcbWdNd6TO9gjx7dqew-1; Fri, 21 Oct 2022 06:12:23 -0400
+X-MC-Unique: X4wZcbWdNd6TO9gjx7dqew-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C7F8729ABA00;
+        Fri, 21 Oct 2022 10:11:51 +0000 (UTC)
+Received: from t480s.fritz.box (unknown [10.39.193.99])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 69A9F40D298B;
+        Fri, 21 Oct 2022 10:11:42 +0000 (UTC)
+From:   David Hildenbrand <david@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Hugh Dickins <hughd@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Peter Xu <peterx@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>
+Subject: [PATCH v2 0/9] mm/ksm: break_ksm() cleanups and fixes
+Date:   Fri, 21 Oct 2022 12:11:32 +0200
+Message-Id: <20221021101141.84170-1-david@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 21 Oct 2022, D. Starke wrote:
+This series cleans up and fixes break_ksm(). In summary, we no longer
+use fake write faults to break COW but instead FAULT_FLAG_UNSHARE. Further,
+we move away from using follow_page() --- that we can hopefully remove
+completely at one point --- and use new walk_page_range_vma() instead.
 
-> From: Daniel Starke <daniel.starke@siemens.com>
-> 
-> n_gsm is based on the 3GPP 07.010 and its newer version is the 3GPP 27.010.
-> See https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=1516
-> The changes from 07.010 to 27.010 are non-functional. Therefore, I refer to
-> the newer 27.010 here. Chapter 5.1.8.1.1 describes the parameter negotiation
-> messages and parameters. Chapter 5.4.1 states that the default parameters
-> are to be used if no negotiation is performed. Chapter 5.4.6.3.1 describes
-> the encoding of the parameter negotiation message. The meaning of the
-> parameters and allowed value ranges can be found in chapter 5.7.
-> 
-> Add parameter negotiation support accordingly. DLCI specific parameter
-> configuration by the user requires additional ioctls. This is subject to another
-> patch.
-> 
-> Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
-> ---
->  drivers/tty/n_gsm.c | 308 ++++++++++++++++++++++++++++++++++++++++++--
->  1 file changed, 300 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
-> index b6813a134c18..c6fe00afe1b2 100644
-> --- a/drivers/tty/n_gsm.c
-> +++ b/drivers/tty/n_gsm.c
-> @@ -123,6 +123,7 @@ struct gsm_msg {
->  
->  enum gsm_dlci_state {
->  	DLCI_CLOSED,
-> +	DLCI_CONFIGURE,		/* Sending PN (for adaption > 1) */
->  	DLCI_OPENING,		/* Sending SABM not seen UA */
->  	DLCI_OPEN,		/* SABM/UA complete */
->  	DLCI_CLOSING,		/* Sending DISC not seen UA/DM */
-> @@ -406,6 +407,7 @@ static const u8 gsm_fcs8[256] = {
->  #define INIT_FCS	0xFF
->  #define GOOD_FCS	0xCF
->  
-> +static void gsm_dlci_close(struct gsm_dlci *dlci);
->  static int gsmld_output(struct gsm_mux *gsm, u8 *data, int len);
->  static int gsm_modem_update(struct gsm_dlci *dlci, u8 brk);
->  static struct gsm_msg *gsm_data_alloc(struct gsm_mux *gsm, u8 addr, int len,
-> @@ -528,6 +530,55 @@ static void gsm_hex_dump_bytes(const char *fname, const u8 *data,
->  	kfree(prefix);
->  }
->  
-> +/**
-> + * gsm_encode_params	-	encode DLCI parameters
-> + * @dlci: DLCI to encode from
-> + * @data: 8 byte buffer for encoded data
-> + * @dlen: length of buffer
-> + *
-> + * Encodes the parameters according to GSM 07.10 section 5.4.6.3.1
-> + * table 3.
-> + */
-> +static int gsm_encode_params(const struct gsm_dlci *dlci, u8 *data,
-> +			     unsigned int dlen)
-> +{
-> +	struct gsm_mux *gsm = dlci->gsm;
-> +
-> +	if (dlen < 8)
-> +		return -EINVAL;
+Fortunately, we can get rid of VM_FAULT_WRITE and FOLL_MIGRATION in common
+code now.
 
-Should this be MIN_MTU?
+Extend the existing ksm tests by an unmerge benchmark, and a some new
+unmerge tests.
 
-> +	data[0] = dlci->addr;
-> +	data[1] = 0x00; /* UIH, convergence layer type 1 */
-> +	data[2] = dlci->prio;
-> +	data[3] = gsm->t1;
-> +	data[4] = dlci->mtu & 0xFF;
-> +	data[5] = (dlci->mtu >> 8) & 0xFF;
-> +	data[6] = gsm->n2;
-> +	data[7] = dlci->k;
+Add a selftest to measure MADV_UNMERGEABLE performance. In my setup
+(AMD Ryzen 9 3900X), running the KSM selftest to test unmerge performance
+on 2 GiB (taskset 0x8 ./ksm_tests -D -s 2048), this results in a
+performance degradation of ~6% -- 7% (old: ~5250 MiB/s, new: ~4900 MiB/s).
+I don't think we particularly care for now, but it's good to be aware
+of the implication.
 
-Magic offsets, shouldn't you define a struct and assign to the named 
-fields (and use the correct endian type + accessors for that two-byte 
-field).
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Hugh Dickins <hughd@google.com>
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Cc: Peter Xu <peterx@redhat.com>
+Cc: Andrea Arcangeli <aarcange@redhat.com>
+Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc: Jason Gunthorpe <jgg@nvidia.com>
+Cc: John Hubbard <jhubbard@nvidia.com>
 
-> +	if (dlci->ftype == UI) {
-> +		data[1] = 0x01; /* UI */
-> +	} else if (dlci->ftype != UIH) {
-> +		pr_err("%s: unsupported frame type %d\n", __func__,
-> +		       dlci->ftype);
-> +		return -EINVAL;
-> +	}
-> +
-> +	switch (dlci->adaption) {
-> +	case 1: /* Unstructured */
-> +		break;
-> +	case 2: /* Unstructured with modem bits. */
-> +		data[1] |= 0x10; /* convergence layer type 2 */
-> +		break;
-> +	default:
-> +		pr_err("%s: unsupported adaption %d\n", __func__,
-> +		       dlci->adaption);
-> +		return -EINVAL;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  /**
->   *	gsm_register_devices	-	register all tty devices for a given mux index
->   *
-> @@ -1445,6 +1496,122 @@ static void gsm_process_modem(struct tty_struct *tty, struct gsm_dlci *dlci,
->  	dlci->modem_rx = mlines;
->  }
->  
-> +/**
-> + * gsm_process_negotiation	-	process received parameters
-> + * @gsm: GSM channel
-> + * @addr: DLCI address
-> + * @cr: command/response
-> + * @data: data following command
-> + * @clen: length of data
-> + *
-> + * Used when the response for our parameter negotiation command was
-> + * received.
-> + */
-> +static int gsm_process_negotiation(struct gsm_mux *gsm, unsigned int addr,
-> +				   unsigned int cr, const u8 *data,
-> +				   unsigned int clen)
-> +{
-> +	struct gsm_dlci *dlci = gsm->dlci[addr];
-> +	unsigned int ftype, i, adaption, prio, n1, k;
-> +
-> +	if (clen < 8)
-> +		return -EINVAL;
-> +
-> +	i = data[1] & 0x0F;
-> +	adaption = ((data[1] >> 4) & 0x0F) + 1;
-> +	prio = data[2] & 0x3F;
-> +	/* t1 = data[3]; */
-> +	n1 = data[4] | (data[5] << 8);
-> +	/* n2 = data[6]; */
-> +	k = data[7] & 0x07;
+v1 -> v2:
+* "selftests/vm: add KSM unmerge tests"
+ -> Add new unmerge tests
+* "mm/ksm: fix KSM COW breaking with userfaultfd-wp via FAULT_FLAG_UNSHARE"
+ -> Simplify patch description now that we have a selftest
+* "mm/pagewalk: don't trigger test_walk() in walk_page_vma()"
+ -> Added
+* "mm/pagewalk: add walk_page_range_vma()"
+ -> Don't call test_walk()
+* "mm/ksm: convert break_ksm() to use walk_page_range_vma()"
+ -> Simplify and fix missing unlock, fix missing "static"
 
-Magic offsets.
+David Hildenbrand (9):
+  selftests/vm: add test to measure MADV_UNMERGEABLE performance
+  mm/ksm: simplify break_ksm() to not rely on VM_FAULT_WRITE
+  mm: remove VM_FAULT_WRITE
+  selftests/vm: add KSM unmerge tests
+  mm/ksm: fix KSM COW breaking with userfaultfd-wp via
+    FAULT_FLAG_UNSHARE
+  mm/pagewalk: don't trigger test_walk() in walk_page_vma()
+  mm/pagewalk: add walk_page_range_vma()
+  mm/ksm: convert break_ksm() to use walk_page_range_vma()
+  mm/gup: remove FOLL_MIGRATION
 
-Define these fields properly too with names and GENMASK. Use FIELD_GET() 
-to extract values.
+ include/linux/mm.h                            |   1 -
+ include/linux/mm_types.h                      |   3 -
+ include/linux/pagewalk.h                      |   5 +
+ mm/gup.c                                      |  55 +---
+ mm/huge_memory.c                              |   2 +-
+ mm/ksm.c                                      |  78 +++--
+ mm/memory.c                                   |   9 +-
+ mm/pagewalk.c                                 |  27 +-
+ tools/testing/selftests/vm/Makefile           |   2 +
+ .../selftests/vm/ksm_functional_tests.c       | 279 ++++++++++++++++++
+ tools/testing/selftests/vm/ksm_tests.c        |  76 ++++-
+ tools/testing/selftests/vm/run_vmtests.sh     |   2 +
+ tools/testing/selftests/vm/vm_util.c          |  10 +
+ tools/testing/selftests/vm/vm_util.h          |   1 +
+ 14 files changed, 456 insertions(+), 94 deletions(-)
+ create mode 100644 tools/testing/selftests/vm/ksm_functional_tests.c
 
-> +	if (n1 < MIN_UNIT_SIZE) {
-> +		if (debug & DBG_ERRORS)
-> +			pr_info("%s N1 out of range in PN\n", __func__);
-> +		return -EINVAL;
-> +	}
-> +
-> +	switch (i) {
-> +	case 0x00:
-> +		ftype = UIH;
-> +		break;
-> +	case 0x01:
-> +		ftype = UI;
-> +		break;
-> +	case 0x02: /* I frames are not supported */
-> +		if (debug & DBG_ERRORS)
-> +			pr_info("%s unsupported I frame request in PN\n",
-> +				__func__);
-> +		return -EINVAL;
-> +	default:
-> +		if (debug & DBG_ERRORS)
-> +			pr_info("%s i out of range in PN\n", __func__);
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (!cr && gsm->initiator) {
-> +		if (adaption != dlci->adaption) {
-> +			if (debug & DBG_ERRORS)
-> +				pr_info("%s invalid adaption %d in PN\n",
-> +					__func__, adaption);
-> +			return -EINVAL;
-> +		}
-> +		if (prio != dlci->prio) {
-> +			if (debug & DBG_ERRORS)
-> +				pr_info("%s invalid priority %d in PN",
-> +					__func__, prio);
-> +			return -EINVAL;
-> +		}
-> +		if (n1 > gsm->mru || n1 > dlci->mtu) {
-> +			/* We requested a frame size but the other party wants
-> +			 * to send larger frames. The standard allows only a
-> +			 * smaller response value than requested (5.4.6.3.1).
-> +			 */
-> +			if (debug & DBG_ERRORS)
-> +				pr_info("%s invalid N1 %d in PN\n", __func__,
-> +					n1);
-> +			return -EINVAL;
-> +		}
-> +		dlci->mtu = n1;
-> +		if (ftype != dlci->ftype) {
-> +			if (debug & DBG_ERRORS)
-> +				pr_info("%s invalid i %d in PN\n", __func__, i);
-> +			return -EINVAL;
-> +		}
-> +		if (ftype != UI && ftype != UIH && k > dlci->k) {
-> +			if (debug & DBG_ERRORS)
-> +				pr_info("%s invalid k %d in PN\n", __func__, k);
-> +			return -EINVAL;
-> +		}
-> +		dlci->k = k;
-> +	} else if (cr && !gsm->initiator) {
-> +		/* Only convergence layer type 1 and 2 are supported. */
-> +		if (adaption != 1 && adaption != 2) {
-> +			if (debug & DBG_ERRORS)
-> +				pr_info("%s invalid adaption %d in PN\n",
-> +					__func__, adaption);
-> +			return -EINVAL;
-> +		}
-> +		dlci->adaption = adaption;
-> +		if (n1 > gsm->mru) {
-> +			/* Propose a smaller value */
-> +			dlci->mtu = gsm->mru;
-> +		} else if (n1 > MAX_MTU) {
-> +			/* Propose a smaller value */
-> +			dlci->mtu = MAX_MTU;
-> +		} else {
-> +			dlci->mtu = n1;
-> +		}
-> +		dlci->prio = prio;
-> +		dlci->ftype = ftype;
-> +		dlci->k = k;
-> +	} else {
-> +		return -EINVAL;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  /**
->   *	gsm_control_modem	-	modem status received
->   *	@gsm: GSM channel
-> @@ -1498,6 +1665,62 @@ static void gsm_control_modem(struct gsm_mux *gsm, const u8 *data, int clen)
->  	gsm_control_reply(gsm, CMD_MSC, data, clen);
->  }
->  
-> +/**
-> + * gsm_control_negotiation	-	parameter negotiation received
-> + * @gsm: GSM channel
-> + * @cr: command/response flag
-> + * @data: data following command
-> + * @dlen: data length
-> + *
-> + * We have received a parameter negotiation message. This is used by
-> + * the GSM mux protocol to configure protocol parameters for a new DLCI.
-> + */
-> +static void gsm_control_negotiation(struct gsm_mux *gsm, unsigned int cr,
-> +				    const u8 *data, unsigned int dlen)
-> +{
-> +	unsigned int addr;
-> +	u8 params[8];
-> +	struct gsm_dlci *dlci;
-> +
-> +	if (dlen < 8)
-> +		return;
 
-MIN_MTU?
-
-> +
-> +	/* Invalid DLCI? */
-> +	addr = data[0] & 0x3F;
-
-#define + FIELD_GET()
-
-> +	if (addr == 0 || addr >= NUM_DLCI || !gsm->dlci[addr])
-> +		return;
-> +	dlci = gsm->dlci[addr];
-> +
-> +	/* Too late for parameter negotiation? */
-> +	if ((!cr && dlci->state == DLCI_OPENING) || dlci->state == DLCI_OPEN)
-> +		return;
-> +
-> +	/* Process the received parameters */
-> +	if (gsm_process_negotiation(gsm, addr, cr, data, dlen) != 0) {
-> +		/* Negotiation failed. Close the link. */
-> +		if (debug & DBG_ERRORS)
-> +			pr_info("%s PN failed\n", __func__);
-> +		gsm_dlci_close(dlci);
-> +		return;
-> +	}
-> +
-> +	if (cr) {
-> +		/* Reply command with accepted parameters. */
-> +		if (gsm_encode_params(dlci, params, sizeof(params)) == 0)
-> +			gsm_control_reply(gsm, CMD_PN, params, sizeof(params));
-> +		else if (debug & DBG_ERRORS)
-> +			pr_info("%s PN invalid\n", __func__);
-> +	} else if (dlci->state == DLCI_CONFIGURE) {
-> +		/* Proceed with link setup by sending SABM before UA */
-> +		dlci->state = DLCI_OPENING;
-> +		gsm_command(gsm, dlci->addr, SABM|PF);
-> +		mod_timer(&dlci->t1, jiffies + gsm->t1 * HZ / 100);
-> +	} else {
-> +		if (debug & DBG_ERRORS)
-> +			pr_info("%s PN in invalid state\n", __func__);
-> +	}
-> +}
-> +
->  /**
->   *	gsm_control_rls		-	remote line status
->   *	@gsm: GSM channel
-> @@ -1607,8 +1830,12 @@ static void gsm_control_message(struct gsm_mux *gsm, unsigned int command,
->  		/* Modem wishes to enter power saving state */
->  		gsm_control_reply(gsm, CMD_PSC, NULL, 0);
->  		break;
-> +		/* Optional commands */
-> +	case CMD_PN:
-> +		/* Modem sends a parameter negotiation command */
-> +		gsm_control_negotiation(gsm, 1, data, clen);
-> +		break;
->  		/* Optional unsupported commands */
-> -	case CMD_PN:	/* Parameter negotiation */
->  	case CMD_RPN:	/* Remote port negotiation */
->  	case CMD_SNC:	/* Service negotiation command */
->  	default:
-> @@ -1641,8 +1868,8 @@ static void gsm_control_response(struct gsm_mux *gsm, unsigned int command,
->  	spin_lock_irqsave(&gsm->control_lock, flags);
->  
->  	ctrl = gsm->pending_cmd;
-> -	/* Does the reply match our command */
->  	command |= 1;
-> +	/* Does the reply match our command */
->  	if (ctrl != NULL && (command == ctrl->cmd || command == CMD_NSC)) {
->  		/* Our command was replied to, kill the retry timer */
->  		del_timer(&gsm->t2_timer);
-> @@ -1652,6 +1879,9 @@ static void gsm_control_response(struct gsm_mux *gsm, unsigned int command,
->  			ctrl->error = -EOPNOTSUPP;
->  		ctrl->done = 1;
->  		wake_up(&gsm->event);
-> +	/* Or did we receive the PN response to our PN command */
-> +	} else if (command == CMD_PN) {
-> +		gsm_control_negotiation(gsm, 0, data, clen);
->  	}
->  	spin_unlock_irqrestore(&gsm->control_lock, flags);
->  }
-> @@ -1829,6 +2059,31 @@ static void gsm_dlci_open(struct gsm_dlci *dlci)
->  	wake_up(&dlci->gsm->event);
->  }
->  
-> +/**
-> + * gsm_dlci_negotiate	-	start parameter negotiation
-> + * @dlci: DLCI to open
-> + *
-> + * Starts the parameter negotiation for the new DLCI. This needs to be done
-> + * before the DLCI initialized the channel via SABM.
-> + */
-> +static int gsm_dlci_negotiate(struct gsm_dlci *dlci)
-> +{
-> +	struct gsm_mux *gsm = dlci->gsm;
-> +	u8 params[8];
-> +	int ret;
-> +
-> +	ret = gsm_encode_params(dlci, params, sizeof(params));
-> +	if (ret != 0)
-> +		return ret;
-> +
-> +	/* We cannot asynchronous wait for the command response with
-> +	 * gsm_command() and gsm_control_wait() at this point.
-> +	 */
-> +	ret = gsm_control_command(gsm, CMD_PN, params, sizeof(params));
-> +
-> +	return ret;
-> +}
-> +
->  /**
->   *	gsm_dlci_t1		-	T1 timer expiry
->   *	@t: timer contained in the DLCI that opened
-> @@ -1850,6 +2105,14 @@ static void gsm_dlci_t1(struct timer_list *t)
->  	struct gsm_mux *gsm = dlci->gsm;
->  
->  	switch (dlci->state) {
-> +	case DLCI_CONFIGURE:
-> +		if (dlci->retries && gsm_dlci_negotiate(dlci) == 0) {
-> +			dlci->retries--;
-> +			mod_timer(&dlci->t1, jiffies + gsm->t1 * HZ / 100);
-
-I'd tend to think a helper for this wouldn't hurt. There are already a 
-few of them.
-
-> +		} else {
-> +			gsm_dlci_begin_close(dlci); /* prevent half open link */
-> +		}
-> +		break;
->  	case DLCI_OPENING:
->  		if (dlci->retries) {
->  			dlci->retries--;
-> @@ -1888,17 +2151,46 @@ static void gsm_dlci_t1(struct timer_list *t)
->   *	to the modem which should then reply with a UA or ADM, at which point
->   *	we will move into open state. Opening is done asynchronously with retry
->   *	running off timers and the responses.
-> + *	Parameter negotiation is performed before SABM if required.
->   */
->  
->  static void gsm_dlci_begin_open(struct gsm_dlci *dlci)
->  {
-> -	struct gsm_mux *gsm = dlci->gsm;
-> -	if (dlci->state == DLCI_OPEN || dlci->state == DLCI_OPENING)
-> +	struct gsm_mux *gsm = dlci ? dlci->gsm : NULL;
-> +	bool need_pn = false;
-> +
-> +	if (!gsm)
->  		return;
-> -	dlci->retries = gsm->n2;
-> -	dlci->state = DLCI_OPENING;
-> -	gsm_command(dlci->gsm, dlci->addr, SABM|PF);
-> -	mod_timer(&dlci->t1, jiffies + gsm->t1 * HZ / 100);
-> +
-> +	if (dlci->addr != 0) {
-> +		if (gsm->adaption != 1 || gsm->adaption != dlci->adaption)
-> +			need_pn = true;
-> +		if (dlci->prio != ((((dlci->addr / 8) + 1) * 8) - 1))
-
-roundup(addr, 8) - 1 again?
-
+base-commit: 9abf2313adc1ca1b6180c508c25f22f9395cc780
 -- 
- i.
+2.37.3
 
-
-> +			need_pn = true;
-> +		if (gsm->ftype != dlci->ftype)
-> +			need_pn = true;
-> +	}
-> +
-> +	switch (dlci->state) {
-> +	case DLCI_CLOSED:
-> +	case DLCI_CLOSING:
-> +		dlci->retries = gsm->n2;
-> +		if (!need_pn) {
-> +			dlci->state = DLCI_OPENING;
-> +			gsm_command(gsm, dlci->addr, SABM|PF);
-> +		} else {
-> +			/* Configure DLCI before setup */
-> +			dlci->state = DLCI_CONFIGURE;
-> +			if (gsm_dlci_negotiate(dlci) != 0) {
-> +				gsm_dlci_close(dlci);
-> +				return;
-> +			}
-> +		}
-> +		mod_timer(&dlci->t1, jiffies + gsm->t1 * HZ / 100);
-> +		break;
-> +	default:
-> +		break;
-> +	}
->  }
->  
->  /**
-> 
