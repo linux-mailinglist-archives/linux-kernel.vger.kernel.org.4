@@ -2,57 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E19EC606F3C
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 07:11:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4523606F35
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 07:11:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbiJUFLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 01:11:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57822 "EHLO
+        id S229958AbiJUFLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 01:11:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229909AbiJUFKh (ORCPT
+        with ESMTP id S229695AbiJUFKe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 01:10:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E564DBBCD;
-        Thu, 20 Oct 2022 22:10:27 -0700 (PDT)
+        Fri, 21 Oct 2022 01:10:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13FB1181954;
+        Thu, 20 Oct 2022 22:10:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D751AB82AD4;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DF29361DD1;
         Fri, 21 Oct 2022 05:10:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8CEC8C433C1;
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B926DC43141;
         Fri, 21 Oct 2022 05:10:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1666329020;
-        bh=uiS8E7UZqqx9dw/HCUIiU9iQ8Po61sH0v6P41uEyu1M=;
+        bh=fAl4fpRSHA7TY4cscfYXpG3I2q0TOJ4NCxgV3cR0hZY=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=hgy+5XSWy435v2fDfR9qVLsF55x04HqwFshY9/BHVM/YjoKois8BLUfckBRFJC3xG
-         mHC0u560hsl37pJpPPFxZRF3aS1psw+iVyyIzsNhZw7XVS7MFHri4Wwy5PRZVNKXiz
-         U68DKoDj4Wvkak4zvg7caGDC/tyc2s6Hl6MowlWlN2ZL7HUSmv4obSZQEMcJYX6I/d
-         hoE4/wnOvVWjW+8aozsSD8N5wJKeDWYL0lsftv0PzeGyZDGV6nluOdyJHohzZUiWwb
-         XsAai3rnDzjnYGqdaqrqknalewwywORa4aYh77dRLfKQ/Q6b6vjy3DvUQnzrlbGMVj
-         hdHooe3DST+1Q==
+        b=Q3SJUCfn7e5Qi6CSxBgeVTpZtUXcAK3OQVIleXcmhhawJ3yRLonDqCh4SQih16uhB
+         uSxhMrUkDqMai/bu4GDcnJFFO295L0Dj5reZ2cltmnZcFWYw6iAesxko3svxLlBkz1
+         8mWZ37XMCH19u7+fMEtvEhTqXXHKGLpo/JGcUGjCzZPOMelJfP0LNEy+pj7GtxSojW
+         BslMNUtLc0NaYPpBsnYf4t3RyiIjTdQ4cH0OjGQQT7/+McroVbBU82QH9ix4xAmzTN
+         tjSDKjb24hhDx6xjvexv8gCPf6qYrd7SSCLzBE6TSN7R2ZYfBMLkC4zCLRl+OJOe6t
+         7xnrtVWbaEF/Q==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 71345E270E0;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A06ABE270E1;
         Fri, 21 Oct 2022 05:10:20 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net 0/2] selftests: net: Fix problems in some drivers/net
- tests
+Subject: Re: [PATCH v2] net: macb: Specify PHY PM management done by MAC
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166632902045.25874.5012108937559240231.git-patchwork-notify@kernel.org>
+Message-Id: <166632902065.25874.11806120795361484101.git-patchwork-notify@kernel.org>
 Date:   Fri, 21 Oct 2022 05:10:20 +0000
-References: <20221019091042.783786-1-bpoirier@nvidia.com>
-In-Reply-To: <20221019091042.783786-1-bpoirier@nvidia.com>
-To:     Benjamin Poirier <bpoirier@nvidia.com>
-Cc:     netdev@vger.kernel.org, j.vosburgh@gmail.com, vfalico@gmail.com,
-        andy@greyhouse.net, shuah@kernel.org, andrew@lunn.ch,
-        vivien.didelot@gmail.com, f.fainelli@gmail.com, olteanv@gmail.com,
-        jiri@resnulli.us, davem@davemloft.net,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        jtoppins@redhat.com, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
+References: <20221019120929.63098-1-sergiu.moga@microchip.com>
+In-Reply-To: <20221019120929.63098-1-sergiu.moga@microchip.com>
+To:     Sergiu Moga <sergiu.moga@microchip.com>
+Cc:     nicolas.ferre@microchip.com, claudiu.beznea@microchip.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux@armlinux.org.uk, f.fainelli@gmail.com,
+        tudor.ambarus@microchip.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -64,26 +61,23 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hello:
 
-This series was applied to netdev/net.git (master)
+This patch was applied to netdev/net.git (master)
 by Jakub Kicinski <kuba@kernel.org>:
 
-On Wed, 19 Oct 2022 18:10:40 +0900 you wrote:
-> From: Benjamin Poirier <benjamin.poirier@gmail.com>
+On Wed, 19 Oct 2022 15:09:32 +0300 you wrote:
+> The `macb_resume`/`macb_suspend` methods already call the
+> `phylink_start`/`phylink_stop` methods during their execution so
+> explicitly say that the PM of the PHY is done by MAC by using the
+> `mac_managed_pm` flag of the `struct phylink_config`.
 > 
-> Fix two problems mostly introduced in commit bbb774d921e2 ("net: Add tests
-> for bonding and team address list management").
-> 
-> Benjamin Poirier (2):
->   selftests: net: Fix cross-tree inclusion of scripts
->   selftests: net: Fix netdev name mismatch in cleanup
+> This also fixes the warning message issued during resume:
+> WARNING: CPU: 0 PID: 237 at drivers/net/phy/phy_device.c:323 mdio_bus_phy_resume+0x144/0x148
 > 
 > [...]
 
 Here is the summary with links:
-  - [net,1/2] selftests: net: Fix cross-tree inclusion of scripts
-    https://git.kernel.org/netdev/net/c/ae108c48b5d2
-  - [net,2/2] selftests: net: Fix netdev name mismatch in cleanup
-    https://git.kernel.org/netdev/net/c/b2c0921b926c
+  - [v2] net: macb: Specify PHY PM management done by MAC
+    https://git.kernel.org/netdev/net/c/15a9dbec631c
 
 You are awesome, thank you!
 -- 
