@@ -2,110 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C1106076DD
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 14:26:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BC8A6076DF
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 14:27:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbiJUM0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 08:26:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40580 "EHLO
+        id S229889AbiJUM12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 08:27:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbiJUM02 (ORCPT
+        with ESMTP id S229711AbiJUM10 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 08:26:28 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E99924C971;
-        Fri, 21 Oct 2022 05:26:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666355188; x=1697891188;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3qxDgWjz7WhDR7p1gpy2Yx6ovUUtnsHE9EkR/x054u8=;
-  b=Bk79VNhENJtrqNCHi2pQPvEuG3LVDwx4yM0CWxT8ILPV5eCH54zzxE0e
-   /LaZiSdpfK+LSwGzLvo7+HkrR42xpoxvhpR1hAZvQA7PKjMcr1+I1GVNb
-   Y1uIMhmpV6wcwFoWQeIvGAknbcsXb0MeV+tqTzrl7lctTFtl9q/W6jH8i
-   zPv7ycMFsVDyE9IvzeFn4qu0Gqx3NVh9pEn6sm1bh+2I6s6Xvqo1GmFiB
-   o9NMU+MGiI7Zi4qPZo8ZculPerA7YEMtFfMWvjH4cZommHop0J4vBF6IA
-   ozzXPMFNvJEkNsGQ/6/bxh3F1au5AcQlqPFRfu4hTqfLsAwdcQUIgB/ny
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10507"; a="393292249"
-X-IronPort-AV: E=Sophos;i="5.95,200,1661842800"; 
-   d="scan'208";a="393292249"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2022 05:26:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10507"; a="630466609"
-X-IronPort-AV: E=Sophos;i="5.95,200,1661842800"; 
-   d="scan'208";a="630466609"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga002.jf.intel.com with ESMTP; 21 Oct 2022 05:26:25 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1olr6W-00B9Nk-0c;
-        Fri, 21 Oct 2022 15:26:24 +0300
-Date:   Fri, 21 Oct 2022 15:26:23 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>
-Subject: Re: [PATCH v4 1/5] spi: pxa2xx: Respect Intel SSP type given by a
- property
-Message-ID: <Y1KP7xYRAmDppvZG@smile.fi.intel.com>
-References: <20221020194500.10225-1-andriy.shevchenko@linux.intel.com>
- <20221020194500.10225-2-andriy.shevchenko@linux.intel.com>
- <Y1KNgS6xQ1VhMjo1@sirena.org.uk>
+        Fri, 21 Oct 2022 08:27:26 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C1CD25FD03;
+        Fri, 21 Oct 2022 05:27:25 -0700 (PDT)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1666355243;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=S6dTb60kjmg47ocoU6HZ3Jj5gJEz3YIhFuigbVZaNJM=;
+        b=n6FmS0/4dWhc8jTwfYQRD0Ikece68bOOrCIaYj2rN70DFlrOp6fc4cOFJD1q4ouO6Refoa
+        w/JMiTJHmpf1zI94fm+G7VrwUzw5h9GMS5Kgx8yXeykpMeRgkLJz9ab423Ii5uHHguY8lH
+        TZSoXoul5SVlfjLlms+iSxF3SZiDAAG8jYxnDs8jR3/eV6mJZgubawZTNTo4e4oNoPC/zU
+        1HZerjR/dEP0ODDE+FhAfxIgHBjCTEPKfGpZP+eKNvvj5z2IPCbDpqCbA2GcUW+763YNSr
+        yM2tczO2iUnsKQ/0YIv9Njw9hV6K06KdCOEl0a4Gr3twWxADQ/l9vwHtpSCn0w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1666355243;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=S6dTb60kjmg47ocoU6HZ3Jj5gJEz3YIhFuigbVZaNJM=;
+        b=T2PPwc0trid0JhblC1dEpVLV6LIudIng+ZTZ9MMbJVF4ZEnfVvonRAfpvTuJWFygg4jy09
+        1iylHMK5Se6IlZCQ==
+To:     paulmck@kernel.org, Frederic Weisbecker <frederic@kernel.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com, rostedt@goodmis.org, tglx@linutronix.de,
+        pmladek@suse.com
+Subject: Re: [PATCH v2 rcu 0/8] NMI-safe SRCU reader API
+In-Reply-To: <20221020222718.GA5600@paulmck-ThinkPad-P17-Gen-1>
+References: <20220921144620.GA1200846@paulmck-ThinkPad-P17-Gen-1>
+ <20220929180714.GA2874192@paulmck-ThinkPad-P17-Gen-1>
+ <87k04x4e0r.fsf@jogness.linutronix.de>
+ <20221018152418.GR5600@paulmck-ThinkPad-P17-Gen-1>
+ <87ilkh0y52.fsf@jogness.linutronix.de>
+ <20221018185936.GX5600@paulmck-ThinkPad-P17-Gen-1>
+ <20221018215721.GA1716567@paulmck-ThinkPad-P17-Gen-1>
+ <87pmeoawwe.fsf@jogness.linutronix.de>
+ <20221019191418.GF5600@paulmck-ThinkPad-P17-Gen-1>
+ <20221019220537.GA1234896@lothringen>
+ <20221020222718.GA5600@paulmck-ThinkPad-P17-Gen-1>
+Date:   Fri, 21 Oct 2022 14:33:22 +0206
+Message-ID: <87r0z1gy51.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y1KNgS6xQ1VhMjo1@sirena.org.uk>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 01:16:01PM +0100, Mark Brown wrote:
-> On Thu, Oct 20, 2022 at 10:44:56PM +0300, Andy Shevchenko wrote:
-> 
-> > Allow to set the Intel SSP type by reading the property.
-> > Only apply this to the known MFD enumerated devices.
-> 
-> > +	/* For MFD enumerated devices always ask for a property */
-> > +	mfd_enumerated = platform_get_resource_byname(pdev, IORESOURCE_MEM, "lpss_priv");
-> > +	if (mfd_enumerated) {
-> > +		status = device_property_read_u32(dev, "intel,spi-pxa2xx-type", &value);
-> > +		if (status)
-> > +			return ERR_PTR(status);
-> > +	}
-> > +
-> >  	if (pcidev)
-> >  		pcidev_id = pci_match_id(pxa2xx_spi_pci_compound_match, pcidev);
-> >  
-> >  	match = device_get_match_data(&pdev->dev);
-> >  	if (match)
-> >  		type = (enum pxa_ssp_type)match;
-> > +	else if (value > SSP_UNDEFINED && value < SSP_MAX)
-> > +		type = (enum pxa_ssp_type)value;
-> 
-> This is quite hard to follow, partly because value isn't exactly a clear
-> variable name and partly because the initialisation to SSP_UNDEFINED,
-> the attempt to read via device property and this if/else chain are split
-> up and not clearly joined up with each other.  This is partly an issue
-> with the existing code but the extra layer of spreading things
-> throughout the function being added amplifies things a bit.
+On 2022-10-20, "Paul E. McKenney" <paulmck@kernel.org> wrote:
+> I have an untested but allegedly fixed branch on -rcu on branch
+> srcunmisafe.2022.10.20a.
 
-The next patch removes the PCI part in this equation, at the end there is
-no "new" complexity on top of the existing one. But I'm all ears on how
-to simplify the existing code.
+FWIW, my C-I build system was happy with srcunmisafe.2022.10.20a.
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+John
