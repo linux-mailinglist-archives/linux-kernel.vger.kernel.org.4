@@ -2,130 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FEC16071EE
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 10:18:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B0ED6071F6
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 10:19:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230086AbiJUISk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 04:18:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46716 "EHLO
+        id S229604AbiJUITY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 04:19:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbiJUISi (ORCPT
+        with ESMTP id S229760AbiJUITS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 04:18:38 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC0B1C2E8C
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 01:18:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 21 Oct 2022 04:19:18 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC7A24AE27;
+        Fri, 21 Oct 2022 01:19:12 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 4ABB1CE2A1B
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 08:18:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C09FC433D7;
-        Fri, 21 Oct 2022 08:18:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666340313;
-        bh=8++5V96CRoT3offEW1sfGPjlBhG5kCvkZ9nTWWOETBI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jgzWKnVMDL4jjfh3rpyIZnQ6lzYGvVQFOfB2Sz0ckbK8TSaMML0PB6ejva6LPIpVh
-         ec2TKJYGoaFx30SX5W4+m5zVlvfmFnd1+qS08e2EpH9AWzJBI41sDGDR+b9qaC68rY
-         UySyAc400Lqb6/UqLIyGB/GHeIBa76ZzCFASzYBo=
-Date:   Fri, 21 Oct 2022 10:18:31 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Luben Tuikov <luben.tuikov@amd.com>
-Cc:     Yang Yingliang <yangyingliang@huawei.com>,
-        linux-kernel@vger.kernel.org, qemu-devel@nongnu.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-erofs@lists.ozlabs.org, ocfs2-devel@oss.oracle.com,
-        linux-mtd@lists.infradead.org, amd-gfx@lists.freedesktop.org,
-        rafael@kernel.org, somlo@cmu.edu, mst@redhat.com,
-        jaegeuk@kernel.org, chao@kernel.org, hsiangkao@linux.alibaba.com,
-        huangjianan@oppo.com, mark@fasheh.com, jlbec@evilplan.org,
-        joseph.qi@linux.alibaba.com, akpm@linux-foundation.org,
-        alexander.deucher@amd.com, richard@nod.at, liushixin2@huawei.com
-Subject: Re: [PATCH 00/11] fix memory leak while kset_register() fails
-Message-ID: <Y1JV1wxf/7ERAMhl@kroah.com>
-References: <20221021022102.2231464-1-yangyingliang@huawei.com>
- <d559793a-0ce4-3384-e74e-19855aa31f31@amd.com>
- <Y1IwLOUGayjT9p6d@kroah.com>
- <5efd73b0-d634-d34f-3d7a-13d674e40d04@amd.com>
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id B8A38660252D;
+        Fri, 21 Oct 2022 09:19:09 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1666340350;
+        bh=ZYx/Yzop9D7hc2wSOTEttiAxiuCQ7YU4rCEkjT3yODU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=NnYwy9OltXtkN2rnajIF1cE5Y9s4R7U85GX8iWvq4m8gIQl0S2ezVgBlgdsL8gGdW
+         8E/6wjGfB2RKZtExdgYrMbI+edoWnvOUH+v0zP5Yx8b+9r3E90LERx+tyzY+wcLuoh
+         1TRM20fQoWQC0N5R7KZRM+RFJKmHa//z5zL37eVS2uLeaufj5WMWGVnp154J4zjQ9m
+         +lYm4W+XjmeVU+mY+8QSePC3Ua0V4B+ocpDyDfKrzTiiCxL0j/U8/BuNjkI3a8aL+I
+         U8ysZbdcMmfFRMP/pQoz054r6mZR6+X1VKeVob+7LVnQSJNL0e4+a2Sm8egXQ3G89F
+         rMgbRUPHXZ31g==
+Message-ID: <c34ccb61-8a8d-1d44-35f0-1433eceb3e9c@collabora.com>
+Date:   Fri, 21 Oct 2022 10:19:07 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5efd73b0-d634-d34f-3d7a-13d674e40d04@amd.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH v3 06/10] dt-bindings: pinctrl: mediatek,mt6779-pinctrl:
+ Add MT6795
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Yassine Oudjana <yassine.oudjana@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@kernel.org>,
+        Andy Teng <andy.teng@mediatek.com>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20221007125904.55371-1-y.oudjana@protonmail.com>
+ <20221007125904.55371-7-y.oudjana@protonmail.com>
+ <0f078a85-056a-c11e-377b-27764a34485d@linaro.org>
+ <8WU1KR.065JU8WYUX9C3@gmail.com>
+ <2cfed688-f401-e69e-1ff4-f775c6d90f64@linaro.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <2cfed688-f401-e69e-1ff4-f775c6d90f64@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 03:55:18AM -0400, Luben Tuikov wrote:
-> On 2022-10-21 01:37, Greg KH wrote:
-> > On Fri, Oct 21, 2022 at 01:29:31AM -0400, Luben Tuikov wrote:
-> >> On 2022-10-20 22:20, Yang Yingliang wrote:
-> >>> The previous discussion link:
-> >>> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Flkml%2F0db486eb-6927-927e-3629-958f8f211194%40huawei.com%2FT%2F&amp;data=05%7C01%7Cluben.tuikov%40amd.com%7C65b33f087ef245a9f23708dab3264840%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C638019274318153227%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=1ZoieEob62iU9kI8fvpp20qGut9EeHKIHtCAT01t%2Bz8%3D&amp;reserved=0
-> >>
-> >> The very first discussion on this was here:
-> >>
-> >> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fwww.spinics.net%2Flists%2Fdri-devel%2Fmsg368077.html&amp;data=05%7C01%7Cluben.tuikov%40amd.com%7C65b33f087ef245a9f23708dab3264840%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C638019274318153227%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=9joWxGLUxZZMvrfkxCR8KbkoXifsqoMK0vGR%2FyEG62w%3D&amp;reserved=0
-> >>
-> >> Please use this link, and not the that one up there you which quoted above,
-> >> and whose commit description is taken verbatim from the this link.
-> >>
-> >>>
-> >>> kset_register() is currently used in some places without calling
-> >>> kset_put() in error path, because the callers think it should be
-> >>> kset internal thing to do, but the driver core can not know what
-> >>> caller doing with that memory at times. The memory could be freed
-> >>> both in kset_put() and error path of caller, if it is called in
-> >>> kset_register().
-> >>
-> >> As I explained in the link above, the reason there's
-> >> a memory leak is that one cannot call kset_register() without
-> >> the kset->kobj.name being set--kobj_add_internal() returns -EINVAL,
-> >> in this case, i.e. kset_register() fails with -EINVAL.
-> >>
-> >> Thus, the most common usage is something like this:
-> >>
-> >> 	kobj_set_name(&kset->kobj, format, ...);
-> >> 	kset->kobj.kset = parent_kset;
-> >> 	kset->kobj.ktype = ktype;
-> >> 	res = kset_register(kset);
-> >>
-> >> So, what is being leaked, is the memory allocated in kobj_set_name(),
-> >> by the common idiom shown above. This needs to be mentioned in
-> >> the documentation, at least, in case, in the future this is absolved
-> >> in kset_register() redesign, etc.
-> > 
-> > Based on this, can kset_register() just clean up from itself when an
-> > error happens?  Ideally that would be the case, as the odds of a kset
-> > being embedded in a larger structure is probably slim, but we would have
-> > to search the tree to make sure.
+Il 20/10/22 14:21, Krzysztof Kozlowski ha scritto:
+> On 20/10/2022 07:36, Yassine Oudjana wrote:
+>>
+>> On Mon, Oct 10 2022 at 07:24:59 -04:00:00, Krzysztof Kozlowski
+>> <krzysztof.kozlowski@linaro.org> wrote:
+>>> On 07/10/2022 08:59, Yassine Oudjana wrote:
+>>>>   From: Yassine Oudjana <y.oudjana@protonmail.com>
+>>>>
+>>>>   Combine MT6795 pin controller document into MT6779 one. In the
+>>>>   process, replace the current interrupts property description with
+>>>>   the one from the MT6795 document since it makes more sense. Also
+>>>>   amend property descriptions and examples with more detailed
+>>>>   information that was available in the MT6795 document, and replace
+>>>>   the current pinmux node name patterns with ones from it since they
+>>>>   are more common across mediatek pin controller bindings.
+>>>>
+>>>>   Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+>>>>   ---
+>>>>    .../pinctrl/mediatek,mt6779-pinctrl.yaml      |  94 ++++++--
+>>>>    .../pinctrl/mediatek,pinctrl-mt6795.yaml      | 227
+>>>> ------------------
+>>>>    2 files changed, 77 insertions(+), 244 deletions(-)
+>>>>    delete mode 100644
+>>>> Documentation/devicetree/bindings/pinctrl/mediatek,pinctrl-mt6795.yaml
+>>>>
+>>>>   diff --git
+>>>> a/Documentation/devicetree/bindings/pinctrl/mediatek,mt6779-pinctrl.yaml
+>>>> b/Documentation/devicetree/bindings/pinctrl/mediatek,mt6779-pinctrl.yaml
+>>>>   index a2141eb0854e..cada3530dd0a 100644
+>>>>   ---
+>>>> a/Documentation/devicetree/bindings/pinctrl/mediatek,mt6779-pinctrl.yaml
+>>>>   +++
+>>>> b/Documentation/devicetree/bindings/pinctrl/mediatek,mt6779-pinctrl.yaml
+>>>>   @@ -8,6 +8,7 @@ title: Mediatek MT6779 Pin Controller
+>>>>
+>>>>    maintainers:
+>>>>      - Andy Teng <andy.teng@mediatek.com>
+>>>>   +  - AngeloGioacchino Del Regno
+>>>> <angelogioacchino.delregno@collabora.com>
+>>>>      - Sean Wang <sean.wang@kernel.org>
+>>>>
+>>>>    description:
+>>>>   @@ -18,6 +19,7 @@ properties:
+>>>>      compatible:
+>>>>        enum:
+>>>>          - mediatek,mt6779-pinctrl
+>>>>   +      - mediatek,mt6795-pinctrl
+>>>>          - mediatek,mt6797-pinctrl
+>>>>
+>>>>      reg:
+>>>>   @@ -43,9 +45,10 @@ properties:
+>>>>      interrupt-controller: true
+>>>>
+>>>>      interrupts:
+>>>>   -    maxItems: 1
+>>>>   +    minItems: 1
+>>>>   +    maxItems: 2
+>>>>        description: |
+>>>>   -      Specifies the summary IRQ.
+>>>>   +      The interrupt outputs to sysirq.
+>>>
+>>> I am not sure if description is relevant now for all variants... what
+>>> is
+>>> the sysirq? You have two interrupts so both go to one sysirq?
+>>
+>> It's the system interrupt controller and it has several inputs. Both
+>> interrupts go to it.
 > 
-> Looking at kset_register(), we can add kset_put() in the error path,
-> when kobject_add_internal(&kset->kobj) fails.
+> Then the naming is confusing because "sysirq" sounds like "system
+> interrupt".
 > 
-> See the attached patch. It needs to be tested with the same error injection
-> as Yang has been doing.
-> 
-> Now, struct kset is being embedded in larger structs--see amdgpu_discovery.c
-> starting at line 575. If you're on an AMD system, it gets you the tree
-> structure you'll see when you run "tree /sys/class/drm/card0/device/ip_discovery/".
-> That shouldn't be a problem though.
 
-Yes, that shouldn't be an issue as the kobject embedded in a kset is
-ONLY for that kset itself, the kset structure should not be controling
-the lifespan of the object it is embedded in, right?
+Yassine: "Interrupt outputs to the system interrupt controller (sysirq)"
 
-Note, the use of ksets by a device driver like you are doing here in the
-amd driver is BROKEN and will cause problems by userspace tools.  Don't
-do that please, just use a single subdirectory for an attribute.  Doing
-deeper stuff like this is sure to cause problems and be a headache.
+That will surely clear up the confusion... :-)
 
-thanks,
-
-greg k-h
+Cheers,
+Angelo
