@@ -2,95 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01C3F6079CA
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 16:40:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB1826079CC
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 16:40:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230399AbiJUOkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 10:40:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48092 "EHLO
+        id S230387AbiJUOkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 10:40:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230351AbiJUOj4 (ORCPT
+        with ESMTP id S231169AbiJUOk2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 10:39:56 -0400
-Received: from vps0.lunn.ch (unknown [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28CEC4B0E1;
-        Fri, 21 Oct 2022 07:39:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=D9L9gWEpqVSBkoML8PsO+P3x7+AWH1EUh92SK7KY3pI=; b=49jIcLnMiwuJE4tD9XSbawbmB/
-        FlTXGg0PNbhAHZtw7MLLHh7r4VhO/o6+PWH/z73jgqoIE0pY4PhHvueaHneuKFtTddu3hl5oK5iar
-        AgDV+G9JDLgWMxdCjOqupEEib4aZOPKg5M3/yKyrTZC1oZUnwag5TOHtsK4gVgvEeudc=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1oltBU-000F8B-6x; Fri, 21 Oct 2022 16:39:40 +0200
-Date:   Fri, 21 Oct 2022 16:39:40 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Maxime Chevallier <maxime.chevallier@bootlin.com>
-Cc:     davem@davemloft.net, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, thomas.petazzoni@bootlin.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Robert Marko <robert.marko@sartura.hr>
-Subject: Re: [PATCH net-next v5 2/5] net: ipqess: introduce the Qualcomm
- IPQESS driver
-Message-ID: <Y1KvLP39QFyvbARB@lunn.ch>
-References: <20221021124556.100445-1-maxime.chevallier@bootlin.com>
- <20221021124556.100445-3-maxime.chevallier@bootlin.com>
+        Fri, 21 Oct 2022 10:40:28 -0400
+Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 566356A52D;
+        Fri, 21 Oct 2022 07:40:19 -0700 (PDT)
+Received: by mail-vs1-xe31.google.com with SMTP id 128so1449280vsz.12;
+        Fri, 21 Oct 2022 07:40:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=tzT1c25RoKfBc8ntTciHpfUO5h//KgZAglB7BspiwMw=;
+        b=P7v4RpkkWYxhLM9w+bS/amDjV8NSrzu+p2jF3zRrEYZGHg4eIqO0I0tKJ7WAJ+ST+C
+         1VAJB6PCAq8FjGxklcd2g4cqRXoj1INza+L4A0WYNyrKS0jHKKleVvqQ+lcgEKsiKr/l
+         Ijs8rtRPbSfAwHZJbU8FKdq0a4YvO8HWnCUjpcwOX+8P8biV5r/UrRGlf43kfLhIoUmC
+         Y7Wt4+3HrfKXGtsOknWua9qrJ5tFHnXhCXTx0I98ObwR/NmdWh8qSoD6mHHvdsqaLmpF
+         IqzolCvr8C66QoLOiVlQuE7sm1dk6/Ky4zB695FRCsnZiwmifpzwYhK8KKG+tzorI/AE
+         MxbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tzT1c25RoKfBc8ntTciHpfUO5h//KgZAglB7BspiwMw=;
+        b=iHGEJlmrZD+veKhzIK43XkbAuYFX5w+/zGweeutx4eYAbCL7m5TZZvPkr081h/RFIc
+         kyHjx+fTcoYuVtIr0J/SFSulrNGE9sLz6ARpc4cPNNrRsQ+WxQe37prjLlF/f0jmw6ML
+         Vfjg8+t6glkUJN/wbF9YcKST9SA3GerKVE6QfX53AGeQQM6waJ4A6US4j6sRyDVMaPjA
+         FQ+czA1ll0lUn42jCC3bCelMS2u2a/s+Cp6i+rp4LEjkexoSjv4fC8/XnE71ei3rSzrP
+         Y6q276hnzWWBbPknUDYU9h+igTt01q82sUx+FNpGbgb4H1dUWByMFGpYEQrmtqfKvD28
+         3aUg==
+X-Gm-Message-State: ACrzQf2INlAWS6UvjSGB9dCn/uOEdKsu6JtNe4nzLmlVlHTPRQWdhkDk
+        5a1h7ExkG2ngaabtfJCtoron/Bplfz3qSV8D3Xlt4HI2
+X-Google-Smtp-Source: AMsMyM4hGV1xVyZ+pKR/5uztm9opOFajadV7VupRkFxbzJ7GA4O0glyLbBWzdS/+omJuGMGB3AsGA8ONOMPhsp+MrKA=
+X-Received: by 2002:a67:fc97:0:b0:3a6:d37e:e7a3 with SMTP id
+ x23-20020a67fc97000000b003a6d37ee7a3mr12979874vsp.29.1666363218247; Fri, 21
+ Oct 2022 07:40:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221021124556.100445-3-maxime.chevallier@bootlin.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NEUTRAL,SPF_NEUTRAL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+From:   Steve French <smfrench@gmail.com>
+Date:   Fri, 21 Oct 2022 09:40:07 -0500
+Message-ID: <CAH2r5mvjQ5cnR0dc0oSRpF0Ck7cMyQRX2mng56UXZjHJ=JhMmQ@mail.gmail.com>
+Subject: [GIT PULL] smb3 client fixes
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        CIFS <linux-cifs@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +static int ipqess_axi_remove(struct platform_device *pdev)
-> +{
-> +	const struct net_device *netdev = platform_get_drvdata(pdev);
-> +	struct ipqess *ess = netdev_priv(netdev);
-> +
-> +	ipqess_hw_stop(ess);
-> +	unregister_netdev(ess->netdev);
+Please pull the following changes since commit
+9abf2313adc1ca1b6180c508c25f22f9395cc780:
 
-Should the unregister come first? What happens if the network stack
-tries to use the interface during/after ipqess_hw_stop()? It just
-seems like it would be safer to first unregister the interface, and
-then stop it?
+  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
 
-> +struct ipqess_tx_desc {
-> +	__le16  len;
-> +	__le16  svlan_tag;
-> +	__le32  word1;
-> +	__le32  addr;
-> +	__le32  word3;
-> +} __aligned(16) __packed;
-> +
-> +struct ipqess_rx_desc {
-> +	u16 rrd0;
-> +	u16 rrd1;
-> +	u16 rrd2;
-> +	u16 rrd3;
-> +	u16 rrd4;
-> +	u16 rrd5;
-> +	u16 rrd6;
-> +	u16 rrd7;
-> +} __aligned(16) __packed;
+are available in the Git repository at:
 
-The TX descriptor is little endian, but the RX descriptor is host
-endian?
+  git://git.samba.org/sfrench/cifs-2.6.git tags/6.1-rc1-smb3-fixes
 
-	Andrew
+for you to fetch changes up to 73b1b8d25e39a1478b3792a7075f43e053ee62c2:
+
+  cifs: update internal module number (2022-10-19 17:57:51 -0500)
+
+----------------------------------------------------------------
+12 small cifs/smb3 fixes, half for stable
+- two memory leak fixes
+- two fixes for directory leases, including an important one which
+fixes a problem noticed by git functional tests
+- five fixes relating to missing free_xid calls (helpful for
+tracing/debugging of entry/exit into cifs.ko)
+- a multichannel fix
+- a small cleanup fix (use of list_move instead of list_del/list_add)
+----------------------------------------------------------------
+Paulo Alcantara (1):
+      cifs: fix memory leaks in session setup
+
+Ronnie Sahlberg (2):
+      cifs: set rc to -ENOENT if we can not get a dentry for the cached dir
+      cifs: drop the lease for cached directories on rmdir or rename
+
+Steve French (2):
+      smb3: interface count displayed incorrectly
+      cifs: update internal module number
+
+Yang Yingliang (1):
+      cifs: use LIST_HEAD() and list_move() to simplify code
+
+Zhang Xiaoxu (6):
+      cifs: Fix xid leak in cifs_create()
+      cifs: Fix xid leak in cifs_copy_file_range()
+      cifs: Fix xid leak in cifs_flock()
+      cifs: Fix xid leak in cifs_ses_add_channel()
+      cifs: Fix xid leak in cifs_get_file_info_unix()
+      cifs: Fix memory leak when build ntlmssp negotiate blob failed
+
+ fs/cifs/cached_dir.c | 39 +++++++++++++++++++++++++++++----------
+ fs/cifs/cached_dir.h |  4 ++++
+ fs/cifs/cifsfs.c     |  7 +++++--
+ fs/cifs/cifsfs.h     |  4 ++--
+ fs/cifs/dir.c        |  6 ++++--
+ fs/cifs/file.c       | 11 +++++++----
+ fs/cifs/inode.c      |  6 ++++--
+ fs/cifs/sess.c       |  1 +
+ fs/cifs/smb2inode.c  |  2 ++
+ fs/cifs/smb2ops.c    |  3 ++-
+ fs/cifs/smb2pdu.c    | 17 ++++++++---------
+ 11 files changed, 68 insertions(+), 32 deletions(-)
+
+
+--
+Thanks,
+
+Steve
