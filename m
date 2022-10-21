@@ -2,193 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56FCA607EE7
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 21:16:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82CEE607EE9
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 21:16:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230464AbiJUTQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 15:16:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48840 "EHLO
+        id S230351AbiJUTQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 15:16:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230395AbiJUTQM (ORCPT
+        with ESMTP id S230416AbiJUTQW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 15:16:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD4DB11DA9A;
-        Fri, 21 Oct 2022 12:15:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C6B661F55;
-        Fri, 21 Oct 2022 19:15:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4520C433D6;
-        Fri, 21 Oct 2022 19:15:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666379700;
-        bh=AbUS1JFjhdv2c6YdetyoszWM62iOHLCtRYVnnCFAhoM=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=GLJTK/LEUuv3GZyohwrD7kcLsCb/T4vxGwS3o8IX3TsHCXrW81WfQuJaxBVG7D1Ap
-         Y1wQawJjdUNzaeellVjogxe/VoBs6QocR6Oy1JJXbdupfo3AW1PY5ZD85xmsXO6vsj
-         37sWYdn357YvoQ+ROvKKbHR53asY7cu2a5kBXxjaOaNKS3uvUeujNxynhatIojJGcg
-         007MEQQ/xxaigY8yRwBm2BEQsiUhD8+pcCKxfdDils+FnrhI7ZuT2XvXh3qss1VQsq
-         HR3XEFhNm2MJhCAX2+HGmvoMb6WSpZaiZsrCsCLG3dBq7GocnNYJN2//mkB1kzToHF
-         WCNB1TjtNp/7A==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 4F4AB5C0543; Fri, 21 Oct 2022 12:15:00 -0700 (PDT)
-Date:   Fri, 21 Oct 2022 12:15:00 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Cc:     Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] rcu: Add RCU stall diagnosis information
-Message-ID: <20221021191500.GQ5600@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221017100108.2063-1-thunder.leizhen@huawei.com>
- <20221020231353.GC5600@paulmck-ThinkPad-P17-Gen-1>
- <f71fa16b-10c8-58a8-4646-9b5efc44a429@huawei.com>
+        Fri, 21 Oct 2022 15:16:22 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16AF31116D
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 12:15:42 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29LDufN2004136;
+        Fri, 21 Oct 2022 21:15:25 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=rpB0t4cce39ShZcMP7Omj98OzqHAfccHfhWe9Hk8V0g=;
+ b=JYGOVtHzsm8o02qL7Ie8vsiw5bieAN68feZKusIqBTYDiJ/puZ/I20pL1xd1f9lwbYUz
+ Y1GSNBCHOQUdhf7APHLxKXW7BB3vEa/Ncqo8B49W3jQfapiAhODJkXgkSkvqsQZxLnwB
+ z9U/m+KaTnT+Tu5FgDKaFoUDzeSBmrbQOAzv9oTBRtJqmpHzIThp6Rx8KLhQ5+6CaxpR
+ LunZSi9VFT2Uf8aEwC/5mQtqPRY0nmPiIQstCcxPSqKHWsCYHVa8WGkwz5o+rPAlhXdT
+ b23Jn+HeqAi4RzltqWCU6PlYmWqYmQZKHe7yHKR8+hvJqXpOvdR82vuMmOoRyJfEdLbX VA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3kbrgtk7r0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 21 Oct 2022 21:15:25 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id D145B10002A;
+        Fri, 21 Oct 2022 21:15:19 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 67F0B2C4212;
+        Fri, 21 Oct 2022 21:15:19 +0200 (CEST)
+Received: from localhost (10.211.9.227) by SHFDAG1NODE1.st.com (10.75.129.69)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 21 Oct
+ 2022 21:15:19 +0200
+From:   Antonio Borneo <antonio.borneo@foss.st.com>
+To:     Andy Whitcroft <apw@canonical.com>, Joe Perches <joe@perches.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        <linux-kernel@vger.kernel.org>
+CC:     Antonio Borneo <antonio.borneo@foss.st.com>
+Subject: [PATCH] checkpatch: handle utf8 while computing length of commit msg lines
+Date:   Fri, 21 Oct 2022 21:15:07 +0200
+Message-ID: <20221021191507.9026-1-antonio.borneo@foss.st.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f71fa16b-10c8-58a8-4646-9b5efc44a429@huawei.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.211.9.227]
+X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-21_04,2022-10-21_01,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 04:07:43PM +0800, Leizhen (ThunderTown) wrote:
-> 
-> 
-> On 2022/10/21 7:13, Paul E. McKenney wrote:
-> > On Mon, Oct 17, 2022 at 06:01:05PM +0800, Zhen Lei wrote:
-> >> In some extreme cases, such as the I/O pressure test, the CPU usage may
-> >> be 100%, causing RCU stall. In this case, the printed information about
-> >> current is not useful. Displays the number and usage of hard interrupts,
-> >> soft interrupts, and context switches that are generated within half of
-> >> the CPU stall timeout, can help us make a general judgment. In other
-> >> cases, we can preliminarily determine whether an infinite loop occurs
-> >> when local_irq, local_bh or preempt is disabled.
-> >>
-> >> Zhen Lei (3):
-> >>   sched: Add helper kstat_cpu_softirqs_sum()
-> >>   sched: Add helper nr_context_switches_cpu()
-> >>   rcu: Add RCU stall diagnosis information
-> > 
-> > Interesting approach, thank you!
-> > 
-> > I have pulled this in for testing and review, having rescued it from my
-> > spam folder.
-> 
-> Thanks. My company's mail system has been having some problems lately.
-> 
-> Also, I need to apologize that yesterday I found out there was a mistake
-> in patch 3/3. Yesterday, I finally got to print_other_cpu_stall() by forcing
-> a stub.
+The current check for the length of each line in the commit msg
+uses length($line) that counts line's bytes.
+If the line contains utf8 characters, the byte count can exceed
+the cap even on quite short lines.
 
-OK, I done dropped your three patches for the time being.
+Count the utf8 characters for checking line length.
 
-Please feel free to submit v2 whenever you are ready to do so.
+Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
 
-> diff --git a/kernel/rcu/tree_stall.h b/kernel/rcu/tree_stall.h
-> index 08cfcf526f7d245..caaee5f4ee091df 100644
-> --- a/kernel/rcu/tree_stall.h
-> +++ b/kernel/rcu/tree_stall.h
-> @@ -451,7 +451,7 @@ static void print_cpu_stat_info(int cpu)
->         if (r->gp_seq != rdp->gp_seq)
->                 return;
-> 
-> -       cpustat = kcpustat_this_cpu->cpustat;
-> +       cpustat = kcpustat_cpu(cpu).cpustat;
->         half_timeout = rcu_jiffies_till_stall_check() / 2;
-> 
->         pr_err("         hardirqs   softirqs   csw/system\n");
-> 
-> > 
-> > Some questions that might come up include:  (1) Can the addition of
-> > things like cond_resched() make RCU happier with the I/O pressure test?
-> > (2) Should there be a way to turn this off for environments with slow
-> > consoles?  (3) If this information shows heavy CPU usage, what debug
-> > and fix approach should be used?
-> 
-> If the CPU usage is high due to busy services, I think it is excusable
-> to report RCU stall warning.
+---
 
-Not so much.  RCU CPU stall warning usually means that there is some
-overly long loop in the kernel.
+Actually it's not fully clear to me if utf8 characters in the
+commit msg are acceptable/tolerated or to be avoided.
+In the commit msg of 15662b3e8644 ("checkpatch: add a --strict
+check for utf-8 in commit logs") is stated:
+	Some find using utf-8 in commit logs inappropriate.
 
->                              When users see RCU stall, they are most
-> worried about whether there are unrecoverable errors, such as dead loop.
-> If the cause is known to be the CPU usage, the I/O performance has
-> reached its peak, this is probably what people want to see.
 
-You have a workload that can be carried out entirely in interrupt
-handlers?  If not, the kernel code really should be updated to avoid
-the RCU CPU stall warnings.
+ scripts/checkpatch.pl | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> (1) This needs to be considered by the business task itself. As far as I
->     know some drivers' data processing is done in an interrupt context.
+diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+index 1e5e66ae5a52..eaad5da50554 100755
+--- a/scripts/checkpatch.pl
++++ b/scripts/checkpatch.pl
+@@ -3220,7 +3220,7 @@ sub process {
+ 
+ # Check for line lengths > 75 in commit log, warn once
+ 		if ($in_commit_log && !$commit_log_long_line &&
+-		    length($line) > 75 &&
++		    length(decode("utf8", $line)) > 75 &&
+ 		    !($line =~ /^\s*[a-zA-Z0-9_\/\.]+\s+\|\s+\d+/ ||
+ 					# file delta changes
+ 		      $line =~ /^\s*(?:[\w\.\-\+]*\/)++[\w\.\-\+]+:/ ||
 
-You are seeing an entire CPU being consumed by interrupt handlers?
-If so, is the CPU being carefully placed in the idle loop beforehand?
-If not, how do you keep the long delays in the interrupted processing
-from causing problems?
+base-commit: 9abf2313adc1ca1b6180c508c25f22f9395cc780
+-- 
+2.38.0
 
-> (2) Do you mean to suppress such new debugging information that I added?
->     or the whole RCU stall information?
-
-Only the new debugging information.  I already get complaints about RCU
-CPU stall warnings producing more output than people like.
-
-> (3) The statistics can be accurate to a single hard interrupt, software
->     interrupt, or task. However, the price will be higher. Users can
->     recall what they did at the time, then reproduce it. Maybe we can get
->     this code ready, add a new debugging option, and turn it on when needed.
-
-Let me ask this a different way.  What combination of numbers would lead
-you to believe that a given RCU CPU stall warning can safely be ignored?
-
-> > For an example of #1, if a CPU is flooded with softirq activity, one
-> > might hope that the call to rcu_softirq_qs() would prevent the RCU CPU
-> > stall warning, at least for kernels built with CONFIG_PREEMPT_RT=n.
-> > Similarly, if there are huge numbers of context switches, one might hope
-> > that the rcu_note_context_switch() would report a quiescent state sooner
-> > rather than later.
-> 
-> Good idea. I'm going to dig deeper.
-> 
-> How about dynamically extending the stall timeout if the CPU usage is too high?
-
-Let's first work out why the RCU CPU stalls are happening.  After all, if
-there is a particular case that is truly harmless, it would be better to
-arrange that stalls not be printed at all in that case.  It is better to
-just not have false positives, right?
-
-							Thanx, Paul
-
-> > Thoughts?
-> > 
-> > 							Thanx, Paul
-> > 
-> >>  include/linux/kernel_stat.h | 12 +++++++++++
-> >>  kernel/rcu/tree.h           | 11 ++++++++++
-> >>  kernel/rcu/tree_stall.h     | 40 +++++++++++++++++++++++++++++++++++++
-> >>  kernel/sched/core.c         |  5 +++++
-> >>  4 files changed, 68 insertions(+)
-> >>
-> >> -- 
-> >> 2.25.1
-> >>
-> > .
-> > 
-> 
-> -- 
-> Regards,
->   Zhen Lei
