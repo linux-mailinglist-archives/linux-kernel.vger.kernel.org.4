@@ -2,355 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0A5160759E
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 13:08:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D37036075B1
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 13:10:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbiJULI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 07:08:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41480 "EHLO
+        id S229988AbiJULKy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 07:10:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229810AbiJULIX (ORCPT
+        with ESMTP id S229574AbiJULKq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 07:08:23 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F5525FD19;
-        Fri, 21 Oct 2022 04:08:21 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id ez6so2168481pjb.1;
-        Fri, 21 Oct 2022 04:08:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=F5kgS7yQEGO9LUqVSDqp3CpkexPsyHSXYjDOzxzQR48=;
-        b=qg9PNFoKtrgWoO8IqWXLSGVXwrCFhdNWy7zL6z85SZ69qdgubrTSoEFtg81C0kD87u
-         yzmwSV5f5wH1lIUrugZqQleGxsiHDh5xRQWHYEA4xRxAP+YU/ajgG+zMcwJnYZvMst3N
-         Jehz0e9d9bOaWJHofFpapdhSNUNbmsZV2ZBCqSGDw0Azx7/+xds6pgm0i8n3mcDUnhTU
-         yOzLWICfVihzW43Q+w4SfF5paSEIZtaYpQG86OsAS19EQQ/oHdb9RKWaDBlea+Hlj/9k
-         z2hKT4YD47UGUqZBYz64aXmpZwt1bIQmM4ZW2b19jrxek5vIiKeSCwuSGlQRh8XiK+Kd
-         IDlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=F5kgS7yQEGO9LUqVSDqp3CpkexPsyHSXYjDOzxzQR48=;
-        b=6qVVUNVNjSHzPdlhHu+IsGWBiG4bVyl27mcgOeNybWFf+4SS5AVrdlAwYPe/l/Ritn
-         G0MKcsV9OJsRaLLyiBwTgIMBcm+nvtWF2UBVukzM1M+aKBgDZFLSiVnYvvIffd4X9ruJ
-         ql8qAVHXWCPp3Bv/0wZ2JEIyXDrKbH55II7bnfJBaNlL1pEUlpuT+SY70kf38VvUTInc
-         oMa2EquOEeskZx3AKQKYr6+tuKHlNqVKptMdDCtPinY9nnYw2cpVZrdmIdUh8Fx9zjSb
-         adKEO/Ge+3iO6tDG9KpSnOzQE7O7UsVjt8FG7RNnQ+EYXKcFvn5iTa0IbccDE0tyaD7v
-         AF+A==
-X-Gm-Message-State: ACrzQf0ZUqJ7r5F/WPd3GfFyQ9Tg3BU4Z/hCatxB9krtdmpl/2WHAIo+
-        zZqTgTetI9bzj1WEgyOnwQA=
-X-Google-Smtp-Source: AMsMyM7P3IKbMkFSIANcIM28f5PtNsCcRQ2AQ36V1wZvaWzavwTCGTNLqzI36pRWAYJGMjZp1g2X9Q==
-X-Received: by 2002:a17:90b:1bc3:b0:20d:75b8:ee74 with SMTP id oa3-20020a17090b1bc300b0020d75b8ee74mr58860891pjb.1.1666350500670;
-        Fri, 21 Oct 2022 04:08:20 -0700 (PDT)
-Received: from [192.168.123.101] ([182.213.254.91])
-        by smtp.gmail.com with ESMTPSA id o68-20020a625a47000000b005699dd316ebsm1947869pfb.35.2022.10.21.04.08.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Oct 2022 04:08:19 -0700 (PDT)
-Message-ID: <8bac748a-3309-b249-c098-f0a86ed7d384@gmail.com>
-Date:   Fri, 21 Oct 2022 20:08:13 +0900
+        Fri, 21 Oct 2022 07:10:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B4E172509;
+        Fri, 21 Oct 2022 04:10:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 24BA761E63;
+        Fri, 21 Oct 2022 11:10:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FC07C433D7;
+        Fri, 21 Oct 2022 11:10:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666350643;
+        bh=DWAifErFWoOZm3KXJ7C5WfdvDrTHXU8ehmXjnEMpk9c=;
+        h=From:To:Cc:Subject:Date:From;
+        b=QgNFhYv8G/Asx+lSdBReO86jSAJEjxgSWMogrbsT6YOtT6jUHTfv5oVl2O/0+Qo+m
+         /tNVIUygthIrO1Rdq6ngwc29Lr0kCwuddqQdtTimhDrBNucgtQ1EiW9JZUrdVoma6t
+         pSKABao6T6G603SZRiWqeBwVotIv+Wigh938lM3pXqTzqQsWBNLeVokv/jYPy5mXte
+         XjvX87LGEOaPDQWzP1+TLnH3ydtU4Rdsd3NNolNaOhR1J813G/UeDNlymg2y/1QoXQ
+         ovGuLVSNz1NFOFivgJFsAeM/hwWru1HD/d1XGMgmZzpa7Kc3GXFygRSTa50Ht1sYQw
+         MsFdyPhc8Algg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan+linaro@kernel.org>)
+        id 1olpv4-0007KS-9d; Fri, 21 Oct 2022 13:10:30 +0200
+From:   Johan Hovold <johan+linaro@kernel.org>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>
+Subject: [PATCH v3 00/15] phy: qcom-qmp-pcie: add support for sc8280xp
+Date:   Fri, 21 Oct 2022 13:09:32 +0200
+Message-Id: <20221021110947.28103-1-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.1
-Subject: Re: [syzbot] kernel panic: kernel stack overflow
-From:   Taehee Yoo <ap420073@gmail.com>
-To:     Eric Dumazet <edumazet@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>
-Cc:     syzbot <syzbot+60748c96cf5c6df8e581@syzkaller.appspotmail.com>,
-        =?UTF-8?B?SmnFmcOtIFDDrXJrbw==?= <jiri@resnulli.us>,
-        davem@davemloft.net, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com,
-        Cong Wang <xiyou.wangcong@gmail.com>
-References: <000000000000c8900705ead19e41@google.com>
- <CACT4Y+Zuoo_rgf=DP90wgSVm909Qboj5kdYQjZELPDfdkQWJqA@mail.gmail.com>
- <CANn89iLkk75vy6fKMzwQXFEBdyTrQghnFKSxR3HPaeWS4oT+8g@mail.gmail.com>
- <f22f16ec-e78b-bf9e-ea43-5232b2403fa1@gmail.com>
-In-Reply-To: <f22f16ec-e78b-bf9e-ea43-5232b2403fa1@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+This series adds support for the PCIe PHYs on SC8280XP including its
+four-lane PHYs.
 
-2022. 10. 14. 오전 12:00에 Taehee Yoo 이(가) 쓴 글:
- > Hi,
- >
- > On 10/12/22 21:19, Eric Dumazet wrote:
- >  > On Wed, Oct 12, 2022 at 12:53 AM Dmitry Vyukov <dvyukov@google.com>
- > wrote:
- >  >>
- >  >> On Wed, 12 Oct 2022 at 09:48, syzbot
- >  >> <syzbot+60748c96cf5c6df8e581@syzkaller.appspotmail.com> wrote:
- >  >>>
- >  >>> Hello,
- >  >>>
- >  >>> syzbot found the following issue on:
- >  >>>
- >  >>> HEAD commit:    bbed346d5a96 Merge branch 'for-next/core' into
- > for-kernelci
- >  >>> git tree:
- > git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git 
-for-kernelci
- >  >>> console output:
- > https://syzkaller.appspot.com/x/log.txt?x=14a03a2a880000
- >  >>> kernel config:
- > https://syzkaller.appspot.com/x/.config?x=aae2d21e7dd80684
- >  >>> dashboard link:
- > https://syzkaller.appspot.com/bug?extid=60748c96cf5c6df8e581
- >  >>> compiler:       Debian clang version
- > 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld
- > (GNU Binutils for Debian) 2.35.2
- >  >>> userspace arch: arm64
- >  >>>
- >  >>> Unfortunately, I don't have any reproducer for this issue yet.
- >  >>>
- >  >>> Downloadable assets:
- >  >>> disk image:
- > 
-https://storage.googleapis.com/syzbot-assets/11078f50b80b/disk-bbed346d.raw.xz 
+The first half of the series clean up the driver in preparation for
+supporting SC8280XP and its new devicetree bindings that drops the
+legacy child node and the (incomplete) description of register
+subregions.
 
- >
- >  >>> vmlinux:
- > 
-https://storage.googleapis.com/syzbot-assets/398e5f1e6c84/vmlinux-bbed346d.xz 
+The other QMP bindings suffer from similar problems and follow-on series
+will do corresponding changes to the UFS, USB and combo QMP bindings and
+drivers.
 
- >
- >  >>>
- >  >>> IMPORTANT: if you fix the issue, please add the following tag to
- > the commit:
- >  >>> Reported-by: syzbot+60748c96cf5c6df8e581@syzkaller.appspotmail.com
- >  >>
- >  >> +Jiri
- >  >>
- >  >> It looks like the issue is with the team device. It seems to call
- >  >> itself infinitely.
- >  >> team_device_event was mentioned in stack overflow bugs in the past:
- >  >>
- > 
-https://groups.google.com/g/syzkaller-bugs/search?q=%22team_device_event%22
- >  >>
- >  >
- >  >
- >  > Taehee Yoo, can you take a look ?
- >  >
- >  > Patch series of yours was supposed to limit max nest level to 8
- >  >
- >  >
- > 
-https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git/commit/?id=65921376425fc9c8b7ce647e1f7989f7cdf5dd70 
+Note that these patches depend on the linux-phy next branch of today and
+the following two series:
 
- >
- >  >
- >
- > I found a reproducer.
- >
- > #test_team.sh
- > ip link add dummy0 type dummy
- > ip link set dummy0 up
- > for a1 in {0..1}
- > do
- >          ip link add team$a1 type team
- >          for a2 in {0..1}
- >          do
- >                  ip link add team$a1$a2 master team$a1 type team
- >                  for a3 in {0..1}
- >                  do
- >                          ip link add team$a1$a2$a3 master team$a1$a2
- > type team
- >                          for a4 in {0..1}
- >                          do
- >                                  ip link add team$a1$a2$a3$a4 master
- > team$a1$a2$a3 type team
- >                                  for a5 in {0..1}
- >                                  do
- >                                          ip link add team$a1$a2$a3$a4$a5
- > master team$a1$a2$a3$a4 type team
- >                                          for a6 in {0..1}
- >                                          do
- >                                                  ip link add
- > team$a1$a2$a3$a4$a5$a6 master team$a1$a2$a3$a4$a5 type team
- >                                                  ip link add
- > macvlan$a1$a2$a3$a4$a5$a6 link dummy0 master team$a1$a2$a3$a4$a5$a6 type
- > macvlan
- >                                                  ip link set
- > macvlan$a1$a2$a3$a4$a5$a6 up
- >                                                  ip link set
- > team$a1$a2$a3$a4$a5$a6 up
- >                                          done
- >                                          ip link set 
-team$a1$a2$a3$a4$a5 up
- >                                  done
- >                                  ip link set team$a1$a2$a3$a4 up
- >                          done
- >                          ip link set team$a1$a2$a3 up
- >                  done
- >                  ip link set team$a1$a2 up
- >          done
- >          ip link set team$a1 up
- > done
- >
- > #test_ethtool.sh
- > for a1 in {0..1}
- > do
- >          ethtool -K team$a1 lro $1
- >          for a2 in {0..1}
- >          do
- >                  ethtool -K team$a1$a2 lro $1
- >                  for a3 in {0..1}
- >                  do
- >                          ethtool -K team$a1$a2$a3 lro $1
- >                          for a4 in {0..1}
- >                          do
- >                                  ethtool -K team$a1$a2$a3$a4 lro $1
- >                                  for a5 in {0..1}
- >                                  do
- >                                          ethtool -K team$a1$a2$a3$a4$a5
- > lro $1
- >                                          for a6 in {0..1}
- >                                          do
- >                                                  ethtool -K
- > team$a1$a2$a3$a4$a5$a6 lro $1
- >                                                  ethtool -K
- > macvlan$a1$a2$a3$a4$a5$a6 lro $1
- >                                          done
- >                                  done
- >                          done
- >                  done
- >          done
- > done
- >
- > shell#1
- > bash test_team.sh
- > while :
- > do
- > bash test_ethtool.sh on
- > done
- > shell#2
- > while :
- > do
- > bash test_ethtool.sh off
- > done
- >
- > We can see a very similar call trace with the above reproducer.
- > I think it is the same issue.
- > Could you please test it?
- >
- > And, I found the fixed same issue too.
- > 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?h=v6.0&id=dd912306ff008891c82cd9f63e8181e47a9cb2fb 
+ 1. [PATCH v2 00/14] phy: qcom-qmp: further prep cleanups
 
- >
- > https://groups.google.com/g/syzkaller-bugs/c/-5OV1OW-dS4/m/o2Oq6AYSAwAJ
- >
+    https://lore.kernel.org/lkml/20221012081241.18273-1-johan+linaro@kernel.org
 
-I found the root cause of this issue.
+ 2. [PATCH 00/20] phy: qcom-qmp: further prep fixes and cleanups (set 3)
 
-This is simpler reproducer.
+    https://lore.kernel.org/lkml/20221012084846.24003-1-johan+linaro@kernel.org
 
-ip link add team0 type team
-ethtool -K team0 lro on
-for i in {1..100}
-do
-         ip link add team$i master team0 type team
-         ethtool -K team$i lro on
-done
-
-ethtool -K team0 lro off
-
-The above graph is like below:
-        team0
-          |
-   +------+------+-----+-----+
-   |      |      |     |     |
-team1  team2  team3  ...  team100
-
-int __netdev_update_features(struct net_device *dev)
-{
-         struct net_device *upper, *lower;
-         netdev_features_t features;
-         struct list_head *iter;
-         int err = -1;
-...
-sync_lower:
-         /* some features must be disabled on lower devices when disabled
-          * on an upper device (think: bonding master or bridge)
-          */
-         netdev_for_each_lower_dev(dev, lower, iter)
-                 netdev_sync_lower_features(dev, lower, features);
-...
+Johan
 
 
-static void netdev_sync_lower_features(struct net_device *upper,
-         struct net_device *lower, netdev_features_t features)
-{
-         netdev_features_t upper_disables = NETIF_F_UPPER_DISABLES;
-         netdev_features_t feature;
-         int feature_bit;
+Changes in v3
+ - use bulk clk API for pipe clocks (Dmitry)
 
-         for_each_netdev_feature(upper_disables, feature_bit) {
-                 feature = __NETIF_F_BIT(feature_bit);
-                 if (!(features & feature) && (lower->features & feature)) {
-                         netdev_dbg(upper, "Disabling feature %pNF on 
-lower dev %s.\n",
-                                    &feature, lower->name);
-                         lower->wanted_features &= ~feature;
-                         __netdev_update_features(lower);
+Changes in v2
+ - rename current DT schema after first SoC added to the original
+   bindings (IPQ8074) and add a reference to the new SC8280XP bindings
+   instead of marking the current bindings as "legacy" (Krzysztof)
 
-                         if (unlikely(lower->features & feature))
-                                 netdev_WARN(upper, "failed to disable 
-%pNF on %s!\n",
-                                             &feature, lower->name);
-                         else
-                                 netdev_features_change(lower);<-----HERE
-                 }
-         }
-}
+ - add "sc8280xp" infix to the new DT schema filename (Krzysztof)
 
-void netdev_features_change(struct net_device *dev)
-{
-         call_netdevice_notifiers(NETDEV_FEAT_CHANGE, dev);
-}
+ - tighten description of the 'qcom,4ln-config-sel' phandle array
+   (Krzysztof)
 
-The code looks like an iterator.
-But it would work recursively because of notification.
 
-When team0's feature(LRO) is changed with <ethtool -K team0 lro off>", 
-__netdev_update_features(team0) is called.
-__netdev_update_features(team0) internally sends NETDEV_FEAT_CHANGE 
-event to all lower interfaces(team1, team2, ... team100).
-team1 will receive NETDEV_FEAT_CHANGE, and it sends NETDEV_FEAT_CHANGE 
-to the upper interface(team0).
-team0 will receive NETDEV_FEAT_CHANGE again, and it sends 
-NETDEV_FEAT_CHANGE to the all lower interfaces(team1, team2, ... team100).
-(At this point, team1 flag was already set, so it will be skipped.)
-team2 will receive NETDEV_FEAT_CHANGE, and it sends NETDEV_FEAT_CHANGE 
-to the upper interface(team0).
-team0 will receive NETDEV_FEAT_CHANGE again again, and it sends 
-NETDEV_FEAT_CHANGE to the all lower interfaces(team1, team2, ... team100).
-(team1, team2 skipped.)
-...
-So, if there are a few lower interfaces(roughly under 30 lower 
-interfaces), it anyway works even if internally works recursively.
-But so many lower interfaces exist, stack overflow will occur.
-This is the root cause of this issue.
+Johan Hovold (15):
+  phy: qcom-qmp-pcie: sort device-id table
+  phy: qcom-qmp-pcie: move device-id table
+  phy: qcom-qmp-pcie: merge driver data
+  phy: qcom-qmp-pcie: clean up device-tree parsing
+  phy: qcom-qmp-pcie: clean up probe initialisation
+  phy: qcom-qmp-pcie: rename PHY ops structure
+  phy: qcom-qmp-pcie: clean up PHY lane init
+  phy: qcom-qmp-pcie: add register init helper
+  dt-bindings: phy: qcom,qmp-pcie: rename current bindings
+  dt-bindings: phy: qcom,qmp-pcie: add sc8280xp bindings
+  phy: qcom-qmp-pcie: restructure PHY creation
+  phy: qcom-qmp-pcie: fix initialisation reset
+  phy: qcom-qmp-pcie: add support for pipediv2 clock
+  phy: qcom-qmp-pcie: add support for sc8280xp
+  phy: qcom-qmp-pcie: add support for sc8280xp 4-lane PHYs
 
-I think synchronization direction should be one way.
-Up or Down.
-It means that if the team0 interface can send the NETDEV_FEAT_CHANGE 
-notification event to the lower interface,
-the lower interfaces should be disallowed to send NETDEV_FEAT_CHANGE 
-event to the upper interface.
+ ...hy.yaml => qcom,ipq8074-qmp-pcie-phy.yaml} |   7 +-
+ .../phy/qcom,sc8280xp-qmp-pcie-phy.yaml       | 165 ++++
+ drivers/phy/qualcomm/Kconfig                  |   1 +
+ drivers/phy/qualcomm/phy-qcom-qmp-pcie.c      | 824 ++++++++++++------
+ .../phy/qualcomm/phy-qcom-qmp-pcs-pcie-v5.h   |   2 +
+ 5 files changed, 745 insertions(+), 254 deletions(-)
+ rename Documentation/devicetree/bindings/phy/{qcom,qmp-pcie-phy.yaml => qcom,ipq8074-qmp-pcie-phy.yaml} (96%)
+ create mode 100644 Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-pcie-phy.yaml
 
-bonding has same issue.
+-- 
+2.37.3
+
