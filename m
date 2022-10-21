@@ -2,73 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95F72607D3C
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 19:11:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39CEA607D3D
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 19:12:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230349AbiJURLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 13:11:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33186 "EHLO
+        id S230450AbiJURMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 13:12:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230376AbiJURLe (ORCPT
+        with ESMTP id S230334AbiJURMN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 13:11:34 -0400
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78D8C275DEF;
-        Fri, 21 Oct 2022 10:11:30 -0700 (PDT)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-1322d768ba7so4330676fac.5;
-        Fri, 21 Oct 2022 10:11:30 -0700 (PDT)
+        Fri, 21 Oct 2022 13:12:13 -0400
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A517D27211F
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 10:12:12 -0700 (PDT)
+Received: by mail-qv1-xf36.google.com with SMTP id u7so2215139qvn.13
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 10:12:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=afEUghWz7sOxgv3FmvGEE+cUfKZxWWGQrmHoQD9JZfU=;
-        b=Zy+MEmavVhLdGV+K3T/Q5I9ztrxIuxp+DE/ygf+755KVRMPMRIM38TDVt7Ch9XGLgG
-         qE3pMh3UmBMOZxzChAGlhMTxWbGsC7JlWvrWD8T/tv3mcRypPG2aIb6g+mNO2xiUvkLx
-         5hXXZUqQfGKzO+WdTEO0IqmB+yu0lbcjzRddkpx6ofJELF092Zq7Fij+zUQ5HeLcQokz
-         0kJ7YcuKniWa835q++bpcxziF0rFhYHl4kuDlCwc3+yg3PP/HqIap9EQtSGICK26jldI
-         N+1Z23TDS1/hs5nN1gqwAKMOdEu4vWqpVkzIvnqG7LtCiP06XVwTB6Ixz0T1jpMObOQT
-         Mx8g==
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=fA23PvnW2TkEor3AGh4qqWJ27zBPKP6Rq7CyNG5ZoaQ=;
+        b=F9iesT9sVOBML10kVss+fxf/+/rIWx7ZVI0+qHddifn2dCRWDIjFZFYxS5vQRMMowi
+         fH1ez7hyh0pthAxEdO8vzPtuVNHasINp6Ow6mf9CF9QMw+xAdkzSsS8d6HT3ohx92eY1
+         73gEQNXDvyI8VcMSyIyjBwhbaVSF4uw2hPjP4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=afEUghWz7sOxgv3FmvGEE+cUfKZxWWGQrmHoQD9JZfU=;
-        b=7l/AWgz+f3lLf41GamIKQhI5IMDg3PMGlJcVrt2Lj+GYt3Mg585G5v+7QXZLs6cVLL
-         ZB5tIRuX6n7ApsvWdgzRCU4xX/v1w6lc6EqJ5Wrt/Lav3c+qFWgV3L0A1GgIdPXOa1ZT
-         ihWYbr8M0loinYWI6k4K5d/fBpb3ic21QHLIo27C+Lc1nJmqzEPNLn64HCgkbA32Z3wY
-         e6jaDv2ygzTCb2ATVtOtBxgdpKbxHOUyk/4oqiNHukerrk5u5UsUclx/wq1lu1Q8WUbw
-         7hwG3eLDCJCFdgEZd2GoL+OJ85aRrrOYvBomCuPLcCPxliXerahIGfyBdc614p1rkFw2
-         giGg==
-X-Gm-Message-State: ACrzQf1/RlUvuL9aG5ylpkUicWFlmi5qkDhksaU9uzMSTqDUMRO7ZDRn
-        1ccLH/PRrbh0R2BRJ2Si7JKSforXKRs=
-X-Google-Smtp-Source: AMsMyM44j3t4Wz/XNPXP5iCopLHBMtmW0llHbqaBA8JXbnhLqI14kTX66Gt/CqHW5/1v30dPaK4RJA==
-X-Received: by 2002:a05:6870:2107:b0:137:a7:3d3c with SMTP id f7-20020a056870210700b0013700a73d3cmr4929660oae.34.1666372289303;
-        Fri, 21 Oct 2022 10:11:29 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y20-20020a4a6254000000b0047f89d8c7ebsm8858982oog.46.2022.10.21.10.11.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Oct 2022 10:11:28 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 21 Oct 2022 10:11:27 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     linux-hwmon@vger.kernel.org, jdelvare@suse.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] hwmon: (jc42) Convert register access and caching
- to regmap/regcache
-Message-ID: <20221021171127.GB1888515@roeck-us.net>
-References: <20221021165000.1865615-1-martin.blumenstingl@googlemail.com>
- <20221021165000.1865615-2-martin.blumenstingl@googlemail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fA23PvnW2TkEor3AGh4qqWJ27zBPKP6Rq7CyNG5ZoaQ=;
+        b=D0n421RgJVkzBgozB4RVUSwdmvHtCNy1OEcaUjsiOOCI7Z8g7+Otl0DWAGjW6CpPQD
+         uYdsPhYpwUkM54TJ76y9sonFkA7i3jKtH+xQub3Bw6ZninGwaKX2yk/NtBUl9NrBT3fA
+         bX9HPfR0cJclBZKR5ZEwyQzCKUTj/I0GqCtaRxwewStd6KvMOpuKtKbiwdaC1QPriMLJ
+         osJNI/5CkN/czvEgPjZcDQsE+vFst3ccACL04JA2eewV+czfKQBe5zto/2a06sr/ns2a
+         0ef5Fv07Z6oTsK9dwkLjDoSCvIfehDXqU3sFuCzXCMiHw/u8d5KipvfkhrUmyXCGd+3B
+         AW2g==
+X-Gm-Message-State: ACrzQf39iiZot5FnILXGgPsStYKovGTuMs7fHShmDWZV7v+AoGWwWQ0N
+        jj5TVoXyLd29MWfPzNePyq1v1D+69bK5Lg==
+X-Google-Smtp-Source: AMsMyM56TjjeQ4lzXVGmE6JWk+IyAZNicSA01x0WbxjDxrRHRSCVRBev7TKkBzL1+DnMLHUA30bI7w==
+X-Received: by 2002:a0c:e2c8:0:b0:4b7:c1bf:784a with SMTP id t8-20020a0ce2c8000000b004b7c1bf784amr9983306qvl.17.1666372331444;
+        Fri, 21 Oct 2022 10:12:11 -0700 (PDT)
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
+        by smtp.gmail.com with ESMTPSA id x5-20020a05620a258500b006bb366779a4sm9710236qko.6.2022.10.21.10.12.08
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Oct 2022 10:12:09 -0700 (PDT)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-36a4b86a0abso13492087b3.7
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 10:12:08 -0700 (PDT)
+X-Received: by 2002:a81:11d0:0:b0:35b:dd9f:5358 with SMTP id
+ 199-20020a8111d0000000b0035bdd9f5358mr17690127ywr.401.1666372328545; Fri, 21
+ Oct 2022 10:12:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221021165000.1865615-2-martin.blumenstingl@googlemail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <20221020000356.177CDC433C1@smtp.kernel.org> <Y1EZuQcO8UoN91cX@localhost.localdomain>
+ <CAHmME9prEhkHqQmtDGCSFunNnxiKdE_8FHKiksyqebUN63U81Q@mail.gmail.com>
+ <CAHk-=whFow9Wd6C8htoRUt5wXbwf1i_qbuArBbhXOPqYsTFvtw@mail.gmail.com> <Y1I1S86zbBmeJ+jq@localhost.localdomain>
+In-Reply-To: <Y1I1S86zbBmeJ+jq@localhost.localdomain>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 21 Oct 2022 10:11:52 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgb3RYTPd24rXs8dRdiqiPAzq7uc4Suxu1On6_DTDnf5g@mail.gmail.com>
+Message-ID: <CAHk-=wgb3RYTPd24rXs8dRdiqiPAzq7uc4Suxu1On6_DTDnf5g@mail.gmail.com>
+Subject: Re: [PATCH -mm] -funsigned-char, x86: make struct p4_event_bind::cntr
+ signed array
+To:     Alexey Dobriyan <adobriyan@gmail.com>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, mm-commits@vger.kernel.org,
+        masahiroy@kernel.org, keescook@chromium.org,
+        gregkh@linuxfoundation.org, andriy.shevchenko@linux.intel.com
+Content-Type: multipart/mixed; boundary="000000000000b548f505eb8e8ad9"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,55 +79,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 06:49:59PM +0200, Martin Blumenstingl wrote:
-> Switch the jc42 driver to use an I2C regmap to access the registers.
-> Also move over to regmap's built-in caching instead of adding a
-> custom caching implementation. This works for JC42_REG_TEMP_UPPER,
-> JC42_REG_TEMP_LOWER and JC42_REG_TEMP_CRITICAL as these values never
-> change except when explicitly written. The cache For JC42_REG_TEMP is
-> dropped (regmap can't cache it because it's volatile, meaning it can
-> change at any time) as well for simplicity and consistency with other
-> drivers.
-> 
-> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> ---
+--000000000000b548f505eb8e8ad9
+Content-Type: text/plain; charset="UTF-8"
 
-...
+On Thu, Oct 20, 2022 at 10:59 PM Alexey Dobriyan <adobriyan@gmail.com> wrote:
+>
+> It is very entertaining, i've given up and started patching sparse
+> but it needs more because char constants are ints:
 
->  	case hwmon_temp_crit_hyst:
-> +		ret = regmap_read(data->regmap, JC42_REG_TEMP_CRITICAL,
-> +				  &regval);
-> +		if (ret)
-> +			return ret;
-> +
->  		/*
->  		 * JC42.4 compliant chips only support four hysteresis values.
->  		 * Pick best choice and go from there.
-> @@ -356,7 +349,7 @@ static int jc42_write(struct device *dev, enum hwmon_sensor_types type,
->  		val = clamp_val(val, (data->extended ? JC42_TEMP_MIN_EXTENDED
->  						     : JC42_TEMP_MIN) - 6000,
->  				JC42_TEMP_MAX);
-> -		diff = jc42_temp_from_reg(data->temp[t_crit]) - val;
-> +		diff = jc42_temp_from_reg(regval) - val;
->  		hyst = 0;
->  		if (diff > 0) {
->  			if (diff < 2250)
-> @@ -368,17 +361,14 @@ static int jc42_write(struct device *dev, enum hwmon_sensor_types type,
->  		}
->  		data->config = (data->config & ~JC42_CFG_HYST_MASK) |
->  				(hyst << JC42_CFG_HYST_SHIFT);
-> -		ret = i2c_smbus_write_word_swapped(data->client,
-> -						   JC42_REG_CONFIG,
-> -						   data->config);
-> +		ret = regmap_write(data->regmap, JC42_REG_CONFIG,
-> +				   data->config);
->  		break;
+I think you can fix that by simply warning about character constants
+with the high bit set.
 
-This code sequence still requires a mutex since another thread could modify
-the upper limit (and/or the hysteresis) while the hysteresis is in the process
-of being written. Worst case there could be a mismatch between the value in
-data->config and the value actually written into the chip. Granted, that is
-unlikely to happen, but the race still exists.
+Something like this..
 
-Thanks,
-Guenter
+              Linus
+
+--000000000000b548f505eb8e8ad9
+Content-Type: text/x-patch; charset="US-ASCII"; name="patch.diff"
+Content-Disposition: attachment; filename="patch.diff"
+Content-Transfer-Encoding: base64
+Content-ID: <f_l9ir1rfw0>
+X-Attachment-Id: f_l9ir1rfw0
+
+IGNoYXIuYyB8IDQgKysrKwogMSBmaWxlIGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygrKQoKZGlmZiAt
+LWdpdCBhL2NoYXIuYyBiL2NoYXIuYwppbmRleCA3MzBhZTNmNS4uMzcwNmUwMzMgMTAwNjQ0Ci0t
+LSBhL2NoYXIuYworKysgYi9jaGFyLmMKQEAgLTkzLDYgKzkzLDEwIEBAIHZvaWQgZ2V0X2NoYXJf
+Y29uc3RhbnQoc3RydWN0IHRva2VuICp0b2tlbiwgdW5zaWduZWQgbG9uZyBsb25nICp2YWwpCiAJ
+aWYgKHAgIT0gZW5kKQogCQl3YXJuaW5nKHRva2VuLT5wb3MsCiAJCQkibXVsdGktY2hhcmFjdGVy
+IGNoYXJhY3RlciBjb25zdGFudCIpOworCWlmICh2ICYgMHg4MCkgeworCQlpZiAodHlwZSA+PSBU
+T0tFTl9DSEFSICYmIHR5cGUgPD0gVE9LRU5fQ0hBUl9FTUJFRERFRF8zKQorCQkJd2FybmluZyh0
+b2tlbi0+cG9zLCAiY2hhcmFjdGVyIGNvbnN0YW50IHdpdGggc2lnbiBiaXQgc2V0Iik7CisJfQog
+CSp2YWwgPSB2OwogfQogCg==
+--000000000000b548f505eb8e8ad9--
