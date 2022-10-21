@@ -2,49 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 235CF608003
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 22:42:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 664D460800A
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 22:43:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229949AbiJUUmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 16:42:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45838 "EHLO
+        id S230133AbiJUUnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 16:43:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230125AbiJUUmB (ORCPT
+        with ESMTP id S229919AbiJUUm4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 16:42:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED52140E43;
-        Fri, 21 Oct 2022 13:41:13 -0700 (PDT)
+        Fri, 21 Oct 2022 16:42:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D53E22A17D1;
+        Fri, 21 Oct 2022 13:42:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2ADFBB82D23;
-        Fri, 21 Oct 2022 20:41:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0017C433D6;
-        Fri, 21 Oct 2022 20:41:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 744E761F1A;
+        Fri, 21 Oct 2022 20:42:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68425C433D7;
+        Fri, 21 Oct 2022 20:42:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666384870;
-        bh=tehsC4Nds0UIzYea1wZIFRCjPzJjx5qNx8jGpeoAIiA=;
+        s=k20201202; t=1666384946;
+        bh=OzXG9cO8TgE4LXZUmE+an4SXeiNKfPtvb8eemwziMgg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WR4HBn2uLAMK7iJnrKPhpVEnsfLCJJllc74DrBjEEEi+RSzERCAb8G9TZoB57X4BX
-         BdhZAvgCX2PCD6Ek5iHcozKkz+dJL3EXuxNPK/Xe65IRHHb8PfLL1pyK+4VTK8wrSa
-         6ZZvW62Y5X7w1gQYJ+V9s854nUlnB1XrmWE4Iflk2Nb97BbF8M8hY8puonuqLNE4xJ
-         IGG04GlSLx/LUVIZJ4Z2VHj3ym+WhGGX5cpGGwbp3/vkzicdgrIH1SDGBSKdc+CWWF
-         pgndYGl/e+ujgbprZUF7rnWeRJ+gHEAaytfiTF5x2AuQ3Q3r1Szpxmz4pSo/boaozf
-         pmA+VLYedJgkw==
+        b=SlEHXZ9W2VW1K52a5l4DiStfpB9gQRQ6g2Tk+CoAgvtDQeGYfFsYhfq7Frqyctheq
+         luxePxPLnWV3P9teeQoo9DosYZ2TiinjkErIM/X1hVivH6/ahkulu7cB4NQ5cComLR
+         QL4mayyptJxKtQIxIi/ZbJ7OOysW4KQ0pbF49GQa4rNxhX29ZW8xkoO8ly8VoYQdnu
+         BQsgZHlftzNJ7NY8Y7TpmoTHNWuq6hiJqHelMhzMC5DlO0pyviGOb1vLpjJ+c9jzbd
+         rrA0XiCMxMTFOB+vD9WwMgs9CB9/O16x30FOsGCjSOyYsb4oWgx4Ml+iuFA7MLjMRW
+         t+dlMmUNYQh8g==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, Ben Dooks <ben-linux@fluff.org>,
         Simtec Linux Team <linux@simtec.co.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        linux-samsung-soc@vger.kernel.org
-Subject: [PATCH 06/21] ARM: s3c: remove s3c6400 support
-Date:   Fri, 21 Oct 2022 22:27:39 +0200
-Message-Id: <20221021203329.4143397-6-arnd@kernel.org>
+        Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Joe Perches <joe@perches.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Lee Jones <lee@kernel.org>, linux-pm@vger.kernel.org
+Subject: [PATCH 07/21] power: remove s3c adc battery driver
+Date:   Fri, 21 Oct 2022 22:27:40 +0200
+Message-Id: <20221021203329.4143397-7-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20221021202254.4142411-1-arnd@kernel.org>
 References: <20221021202254.4142411-1-arnd@kernel.org>
@@ -61,55 +66,73 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-No board file and no dts file references the s3c6400 now, it's only
-s3c6410, so remove the final bits as well.
+The s3c-adc driver is removed along with the s3c24xx platform,
+so the battery driver is no longer needed either.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/arm/mach-s3c/Makefile.s3c64xx |  1 -
- arch/arm/mach-s3c/s3c6400.c        | 84 ------------------------------
- arch/arm/mach-s3c/s3c64xx.c        |  8 ---
- 3 files changed, 93 deletions(-)
- delete mode 100644 arch/arm/mach-s3c/s3c6400.c
+ MAINTAINERS                            |   7 -
+ drivers/power/supply/Kconfig           |   6 -
+ drivers/power/supply/Makefile          |   1 -
+ drivers/power/supply/s3c_adc_battery.c | 453 -------------------------
+ include/linux/s3c_adc_battery.h        |  39 ---
+ 5 files changed, 506 deletions(-)
+ delete mode 100644 drivers/power/supply/s3c_adc_battery.c
+ delete mode 100644 include/linux/s3c_adc_battery.h
 
-diff --git a/arch/arm/mach-s3c/Makefile.s3c64xx b/arch/arm/mach-s3c/Makefile.s3c64xx
-index 13cda2fe7b6c..61287ad2ea42 100644
---- a/arch/arm/mach-s3c/Makefile.s3c64xx
-+++ b/arch/arm/mach-s3c/Makefile.s3c64xx
-@@ -16,7 +16,6 @@ obj-$(CONFIG_PM_SLEEP)          += irq-pm-s3c64xx.o
- # Core
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 071d64e2a7ca..2caf42b0328a 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -17920,13 +17920,6 @@ S:	Supported
+ W:	http://www.ibm.com/developerworks/linux/linux390/
+ F:	drivers/s390/scsi/zfcp_*
  
- obj-y				+= s3c64xx.o
--obj-$(CONFIG_CPU_S3C6400)	+= s3c6400.o
- obj-$(CONFIG_CPU_S3C6410)	+= s3c6410.o
+-S3C ADC BATTERY DRIVER
+-M:	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+-L:	linux-samsung-soc@vger.kernel.org
+-S:	Odd Fixes
+-F:	drivers/power/supply/s3c_adc_battery.c
+-F:	include/linux/s3c_adc_battery.h
+-
+ S3C24XX SD/MMC Driver
+ M:	Ben Dooks <ben-linux@fluff.org>
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
+index 568b3ede993a..e2f8dfcdd2a9 100644
+--- a/drivers/power/supply/Kconfig
++++ b/drivers/power/supply/Kconfig
+@@ -406,12 +406,6 @@ config BATTERY_MAX1721X
+ 	  Say Y here to enable support for the MAX17211/MAX17215 standalone
+ 	  battery gas-gauge.
  
- # DMA support
-diff --git a/arch/arm/mach-s3c/s3c6400.c b/arch/arm/mach-s3c/s3c6400.c
+-config BATTERY_S3C_ADC
+-	tristate "Battery driver for Samsung ADC based monitoring"
+-	depends on S3C_ADC
+-	help
+-	  Say Y here to enable support for iPAQ h1930/h1940/rx1950 battery
+-
+ config BATTERY_TWL4030_MADC
+ 	tristate "TWL4030 MADC battery driver"
+ 	depends on TWL4030_MADC
+diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
+index af43866b3980..8cb3c7f5c111 100644
+--- a/drivers/power/supply/Makefile
++++ b/drivers/power/supply/Makefile
+@@ -54,7 +54,6 @@ obj-$(CONFIG_BATTERY_MAX17042)	+= max17042_battery.o
+ obj-$(CONFIG_BATTERY_MAX1721X)	+= max1721x_battery.o
+ obj-$(CONFIG_BATTERY_RT5033)	+= rt5033_battery.o
+ obj-$(CONFIG_CHARGER_RT9455)	+= rt9455_charger.o
+-obj-$(CONFIG_BATTERY_S3C_ADC)	+= s3c_adc_battery.o
+ obj-$(CONFIG_BATTERY_TWL4030_MADC)	+= twl4030_madc_battery.o
+ obj-$(CONFIG_CHARGER_88PM860X)	+= 88pm860x_charger.o
+ obj-$(CONFIG_CHARGER_PCF50633)	+= pcf50633-charger.o
+diff --git a/drivers/power/supply/s3c_adc_battery.c b/drivers/power/supply/s3c_adc_battery.c
 deleted file mode 100644
-index d47f1d6067b4..000000000000
-diff --git a/arch/arm/mach-s3c/s3c64xx.c b/arch/arm/mach-s3c/s3c64xx.c
-index 0a8116c108fe..ad13d7e13e5e 100644
---- a/arch/arm/mach-s3c/s3c64xx.c
-+++ b/arch/arm/mach-s3c/s3c64xx.c
-@@ -72,18 +72,10 @@ static void __init s3c64xx_init_uarts(struct s3c2410_uartcfg *cfg, int no)
- 
- /* table of supported CPUs */
- 
--static const char name_s3c6400[] = "S3C6400";
- static const char name_s3c6410[] = "S3C6410";
- 
- static struct cpu_table cpu_ids[] __initdata = {
- 	{
--		.idcode		= S3C6400_CPU_ID,
--		.idmask		= S3C64XX_CPU_MASK,
--		.map_io		= s3c6400_map_io,
--		.init_uarts	= s3c64xx_init_uarts,
--		.init		= s3c6400_init,
--		.name		= name_s3c6400,
--	}, {
- 		.idcode		= S3C6410_CPU_ID,
- 		.idmask		= S3C64XX_CPU_MASK,
- 		.map_io		= s3c6410_map_io,
+index 68d31a3bee48..000000000000
+diff --git a/include/linux/s3c_adc_battery.h b/include/linux/s3c_adc_battery.h
+deleted file mode 100644
+index 57f982c375f8..000000000000
 -- 
 2.29.2
 
