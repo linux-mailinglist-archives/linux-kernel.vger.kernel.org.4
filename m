@@ -2,161 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8E8A607CDB
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 18:53:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C1EF607CC6
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 18:52:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231289AbiJUQx4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 12:53:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51154 "EHLO
+        id S230520AbiJUQwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 12:52:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230078AbiJUQxX (ORCPT
+        with ESMTP id S230475AbiJUQwj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 12:53:23 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E9128F26F
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:53:18 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id bu30so5873442wrb.8
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:53:18 -0700 (PDT)
+        Fri, 21 Oct 2022 12:52:39 -0400
+Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC4E328C31E;
+        Fri, 21 Oct 2022 09:52:34 -0700 (PDT)
+Received: from relayfre-01.paragon-software.com (unknown [172.30.72.12])
+        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id BACA52201;
+        Fri, 21 Oct 2022 16:49:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=P38kTBSJr/DRXyh4Je0XkAOEtRTZS4roS95ylRUlbWA=;
-        b=v2L7/MLQEM62vRMDJl2OvRagyQDMvI9Nymr91iGl6SCFtRwreusq9eArbalmCitKmw
-         +hhaFtS/OnHIn+5Xf6nwDNqdfoUMc7HgHUiF2pUGEE3DwN7QEYkAcxb4cK4TRHIDHee5
-         qtcn/Zh7JexBtSjqDnAv3pzmWv3BQM8oepnsMsqkgFsgD7GAXqIIdx6gyUhxyW1yZf0a
-         jJ9asdZ03lPN3bVlMf+Jf6yZGUdf3sE3aPcWLKN0O7T8ZGPUQl3+gJSbTImklJ8iGhlu
-         wGxVv2oHVoc11MJe/Ebl0h3dBwVu89Zv+HwtG2xPUafiph0CvZLyUJXmP5rEAerNZreA
-         6mJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=P38kTBSJr/DRXyh4Je0XkAOEtRTZS4roS95ylRUlbWA=;
-        b=7DoqgyLV0Ul2nSKeTNdQo5MJh5ekjaLxTVfKAcLmZp1MQuz4iGNbTp17sjv8VV5duL
-         d8dX7fvDHusAXPtzTCaB+JTxWK5DGxGDaWcOFHeaNcppbOx2ngDkOoyKMfv/fhMLuHzf
-         JsBoaLYmc6uOrXxYYol89inFcgOb4oqlJOZ2fW52pRqrHoY5u96fbTqZnj4jsbriEeFO
-         qmdydC+tjSU5p2TCT2gBBpWK4aa6rz4ojiLZadkCIAPrJ7Y7ephMTeuP3y3HiLeVQbw+
-         Oou/5ntU19Jxp5IsGfM4b1sAyNGvqivdHbepRXak3oEZMom5eHd/Upc2LrqmDFjYDthi
-         wuUQ==
-X-Gm-Message-State: ACrzQf2VpiJ359+jxG6kLhXupxFc+X/+5SVoxKl2r7rQxaoyjnKYtJzu
-        aMWqI46aP3GeVa2QTRGeQdyMow==
-X-Google-Smtp-Source: AMsMyM6zQoWParlSxvfB2HUAFHKdeQhoLVug903b1NjXtgJhHefeJargZB0bYfSyjxfnLy/MCiC+Eg==
-X-Received: by 2002:a5d:598d:0:b0:230:f238:a485 with SMTP id n13-20020a5d598d000000b00230f238a485mr13533983wri.71.1666371196492;
-        Fri, 21 Oct 2022 09:53:16 -0700 (PDT)
-Received: from localhost.localdomain ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id n14-20020a5d400e000000b0022ae401e9e0sm19541773wrp.78.2022.10.21.09.53.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Oct 2022 09:53:15 -0700 (PDT)
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-To:     broonie@kernel.org
-Cc:     lgirdwood@gmail.com, bgoswami@quicinc.com, perex@perex.cz,
-        tiwai@suse.com, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH v2 9/9] ASoC: qdsp6: audioreach: add support to enable module command
-Date:   Fri, 21 Oct 2022 17:52:07 +0100
-Message-Id: <20221021165207.13220-10-srinivas.kandagatla@linaro.org>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20221021165207.13220-1-srinivas.kandagatla@linaro.org>
-References: <20221021165207.13220-1-srinivas.kandagatla@linaro.org>
+        d=paragon-software.com; s=mail; t=1666370998;
+        bh=ruk+lQ8qKBUjR2PcFFn3GTmQ4eFByEiHHGss+6fUTZ8=;
+        h=Date:Subject:From:To:CC:References:In-Reply-To;
+        b=RYcHTwaYadig9g3dq3DE/EsAuj8ufRfIUeOp9DmUzmeisYwyaDIZeYeS8cjEWXfMp
+         cnwgQFaFyUo8OzUwZI5dhaUfAbzs4o3dW5pVmTZO0f1QTO5h581+Dd5sRwOpcJHbK0
+         huOHLkKGmHrHW/4abEtAM6FVOaFbAnqxFFy8btzE=
+Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
+        by relayfre-01.paragon-software.com (Postfix) with ESMTPS id C17262138;
+        Fri, 21 Oct 2022 16:52:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paragon-software.com; s=mail; t=1666371151;
+        bh=ruk+lQ8qKBUjR2PcFFn3GTmQ4eFByEiHHGss+6fUTZ8=;
+        h=Date:Subject:From:To:CC:References:In-Reply-To;
+        b=Xnxxfd7dZjye45gfV7Eow7bKYgGbxFUQimrS7c1L53CnajVIauM7nsi/yMzxiWO7Y
+         6Li0EzTF7CVc/hq4AXbxV4ttSLsud9MRCydq3dFbYaCeB7xUhk9RQwYuyhvZzu8rk8
+         jFsofz73zfGWwYXHKmlrGBPUl+0zg4l3OhO0G0fw=
+Received: from [172.30.8.65] (172.30.8.65) by
+ vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Fri, 21 Oct 2022 19:52:31 +0300
+Message-ID: <53145791-effe-ed2a-09f0-db042a6a9f5e@paragon-software.com>
+Date:   Fri, 21 Oct 2022 19:52:31 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: [PATCH 3/4] fs/ntfs3: Remove unused functions
+Content-Language: en-US
+From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+To:     <ntfs3@lists.linux.dev>
+CC:     <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>
+References: <9a7d08c2-e503-ac1d-1621-20369c073530@paragon-software.com>
+In-Reply-To: <9a7d08c2-e503-ac1d-1621-20369c073530@paragon-software.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.30.8.65]
+X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
+ vdlg-exch-02.paragon-software.com (172.30.1.105)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support to enable Module command which is required for logging
-module to be able to debug.
+Removed attr_must_be_resident and ntfs_query_def.
 
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 ---
- sound/soc/qcom/qdsp6/audioreach.c | 40 ++++++++++++++++++++++++++++++-
- sound/soc/qcom/qdsp6/audioreach.h |  5 ++++
- 2 files changed, 44 insertions(+), 1 deletion(-)
+  fs/ntfs3/attrib.c  | 27 ---------------------------
+  fs/ntfs3/fsntfs.c  | 29 -----------------------------
+  fs/ntfs3/ntfs_fs.h |  2 --
+  3 files changed, 58 deletions(-)
 
-diff --git a/sound/soc/qcom/qdsp6/audioreach.c b/sound/soc/qcom/qdsp6/audioreach.c
-index 1338b99f37e1..1e0c918eb576 100644
---- a/sound/soc/qcom/qdsp6/audioreach.c
-+++ b/sound/soc/qcom/qdsp6/audioreach.c
-@@ -731,6 +731,42 @@ static int audioreach_sal_set_media_format(struct q6apm_graph *graph,
- 	return rc;
- }
- 
-+static int audioreach_module_enable(struct q6apm_graph *graph,
-+				    struct audioreach_module *module,
-+				    bool enable)
-+{
-+	struct apm_module_param_data *param_data;
-+	struct param_id_module_enable *param;
-+	int payload_size;
-+	struct gpr_pkt *pkt;
-+	int rc;
-+	void *p;
-+
-+	payload_size = sizeof(*param) + APM_MODULE_PARAM_DATA_SIZE;
-+
-+	pkt = audioreach_alloc_apm_cmd_pkt(payload_size, APM_CMD_SET_CFG, 0);
-+	if (IS_ERR(pkt))
-+		return PTR_ERR(pkt);
-+
-+	p = (void *)pkt + GPR_HDR_SIZE + APM_CMD_HDR_SIZE;
-+
-+	param_data = p;
-+	param_data->module_instance_id = module->instance_id;
-+	param_data->error_code = 0;
-+	param_data->param_id = PARAM_ID_MODULE_ENABLE;
-+	param_data->param_size = sizeof(*param);
-+	p = p + APM_MODULE_PARAM_DATA_SIZE;
-+	param = p;
-+
-+	param->enable = enable;
-+
-+	rc = q6apm_send_cmd_sync(graph->apm, pkt, 0);
-+
-+	kfree(pkt);
-+
-+	return rc;
-+}
-+
- static int audioreach_mfc_set_media_format(struct q6apm_graph *graph,
- 					   struct audioreach_module *module,
- 					   struct audioreach_module_config *cfg)
-@@ -1077,7 +1113,9 @@ int audioreach_set_media_format(struct q6apm_graph *graph, struct audioreach_mod
- 
- 	switch (module->module_id) {
- 	case MODULE_ID_DATA_LOGGING:
--		rc = audioreach_logging_set_media_format(graph, module);
-+		rc = audioreach_module_enable(graph, module, true);
-+		if (!rc)
-+			rc = audioreach_logging_set_media_format(graph, module);
- 		break;
- 	case MODULE_ID_PCM_DEC:
- 	case MODULE_ID_PCM_ENC:
-diff --git a/sound/soc/qcom/qdsp6/audioreach.h b/sound/soc/qcom/qdsp6/audioreach.h
-index 707dfbdbc156..1d1d47d47d40 100644
---- a/sound/soc/qcom/qdsp6/audioreach.h
-+++ b/sound/soc/qcom/qdsp6/audioreach.h
-@@ -537,6 +537,11 @@ struct payload_media_fmt_pcm {
- 	uint8_t channel_mapping[];
- } __packed;
- 
-+#define PARAM_ID_MODULE_ENABLE			0x08001026
-+struct param_id_module_enable {
-+	uint32_t enable;
-+} __packed;
-+
- #define PARAM_ID_CODEC_DMA_INTF_CFG		0x08001063
- 
- struct param_id_codec_dma_intf_cfg {
+diff --git a/fs/ntfs3/attrib.c b/fs/ntfs3/attrib.c
+index b2f54fab4001..7c00656151fb 100644
+--- a/fs/ntfs3/attrib.c
++++ b/fs/ntfs3/attrib.c
+@@ -54,33 +54,6 @@ static inline u64 get_pre_allocated(u64 size)
+  	return ret;
+  }
+  
+-/*
+- * attr_must_be_resident
+- *
+- * Return: True if attribute must be resident.
+- */
+-static inline bool attr_must_be_resident(struct ntfs_sb_info *sbi,
+-					 enum ATTR_TYPE type)
+-{
+-	const struct ATTR_DEF_ENTRY *de;
+-
+-	switch (type) {
+-	case ATTR_STD:
+-	case ATTR_NAME:
+-	case ATTR_ID:
+-	case ATTR_LABEL:
+-	case ATTR_VOL_INFO:
+-	case ATTR_ROOT:
+-	case ATTR_EA_INFO:
+-		return true;
+-	default:
+-		de = ntfs_query_def(sbi, type);
+-		if (de && (de->flags & NTFS_ATTR_MUST_BE_RESIDENT))
+-			return true;
+-		return false;
+-	}
+-}
+-
+  /*
+   * attr_load_runs - Load all runs stored in @attr.
+   */
+diff --git a/fs/ntfs3/fsntfs.c b/fs/ntfs3/fsntfs.c
+index 29e55fddf4e0..99dc2a287eab 100644
+--- a/fs/ntfs3/fsntfs.c
++++ b/fs/ntfs3/fsntfs.c
+@@ -321,35 +321,6 @@ int ntfs_loadlog_and_replay(struct ntfs_inode *ni, struct ntfs_sb_info *sbi)
+  	return err;
+  }
+  
+-/*
+- * ntfs_query_def
+- *
+- * Return: Current ATTR_DEF_ENTRY for given attribute type.
+- */
+-const struct ATTR_DEF_ENTRY *ntfs_query_def(struct ntfs_sb_info *sbi,
+-					    enum ATTR_TYPE type)
+-{
+-	int type_in = le32_to_cpu(type);
+-	size_t min_idx = 0;
+-	size_t max_idx = sbi->def_entries - 1;
+-
+-	while (min_idx <= max_idx) {
+-		size_t i = min_idx + ((max_idx - min_idx) >> 1);
+-		const struct ATTR_DEF_ENTRY *entry = sbi->def_table + i;
+-		int diff = le32_to_cpu(entry->type) - type_in;
+-
+-		if (!diff)
+-			return entry;
+-		if (diff < 0)
+-			min_idx = i + 1;
+-		else if (i)
+-			max_idx = i - 1;
+-		else
+-			return NULL;
+-	}
+-	return NULL;
+-}
+-
+  /*
+   * ntfs_look_for_free_space - Look for a free space in bitmap.
+   */
+diff --git a/fs/ntfs3/ntfs_fs.h b/fs/ntfs3/ntfs_fs.h
+index 2f6fb6ceaeca..e9f6898ec924 100644
+--- a/fs/ntfs3/ntfs_fs.h
++++ b/fs/ntfs3/ntfs_fs.h
+@@ -584,8 +584,6 @@ int ntfs_fix_post_read(struct NTFS_RECORD_HEADER *rhdr, size_t bytes,
+  		       bool simple);
+  int ntfs_extend_init(struct ntfs_sb_info *sbi);
+  int ntfs_loadlog_and_replay(struct ntfs_inode *ni, struct ntfs_sb_info *sbi);
+-const struct ATTR_DEF_ENTRY *ntfs_query_def(struct ntfs_sb_info *sbi,
+-					    enum ATTR_TYPE Type);
+  int ntfs_look_for_free_space(struct ntfs_sb_info *sbi, CLST lcn, CLST len,
+  			     CLST *new_lcn, CLST *new_len,
+  			     enum ALLOCATE_OPT opt);
 -- 
-2.21.0
+2.37.0
+
 
