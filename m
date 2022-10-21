@@ -2,124 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 095F5607445
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 11:39:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7654560742F
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 11:37:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230187AbiJUJjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 05:39:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51728 "EHLO
+        id S230116AbiJUJhQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 05:37:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbiJUJjl (ORCPT
+        with ESMTP id S229587AbiJUJhO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 05:39:41 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D4624362F;
-        Fri, 21 Oct 2022 02:39:36 -0700 (PDT)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Mtzp02GvDz15Lwd;
-        Fri, 21 Oct 2022 17:34:48 +0800 (CST)
-Received: from ubuntu1804.huawei.com (10.67.174.58) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 21 Oct 2022 17:39:34 +0800
-From:   Xiu Jianfeng <xiujianfeng@huawei.com>
-To:     <john.johansen@canonical.com>, <paul@paul-moore.com>,
-        <serge@hallyn.com>
-CC:     <apparmor@lists.ubuntu.com>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] apparmor: Fix memleak issue in unpack_profile()
-Date:   Fri, 21 Oct 2022 17:36:02 +0800
-Message-ID: <20221021093602.102839-1-xiujianfeng@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Fri, 21 Oct 2022 05:37:14 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E2141EB57E
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 02:37:13 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id D25A11F8E6;
+        Fri, 21 Oct 2022 09:37:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1666345031; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=SP/xOFq5VWAiT02lFf7m/dkOT2AkY39WiNsp2spIQFY=;
+        b=EOrUXXm8fy36SGxog6SS8Qy3YOQDu9TlhOSUN4uipD3n75CtwFW/iPoDgA+0XVZq37nAKT
+        3AapXkDGNHIzNebGPp7n+YZDUkzq8d4QXFLm5cdNUQd7OXbWXg5/NqzR7aiPeCf90GQhTV
+        aOVtFr+/HhT3Iy5PaHlmlJ4qb/sUoDc=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id AD3012C141;
+        Fri, 21 Oct 2022 09:37:11 +0000 (UTC)
+Date:   Fri, 21 Oct 2022 11:37:11 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH printk v2 04/38] printk: introduce console_is_enabled()
+ wrapper
+Message-ID: <Y1JoR+kqMU9FRUBh@alley>
+References: <20221019145600.1282823-1-john.ogness@linutronix.de>
+ <20221019145600.1282823-5-john.ogness@linutronix.de>
+ <Y1JfFTAIbcFOrPtD@alley>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.174.58]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500023.china.huawei.com (7.185.36.114)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1JfFTAIbcFOrPtD@alley>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Before aa_alloc_profile(), it has allocated string for @*ns_name if @tmpns
-is not NULL, so directly return -ENOMEM if aa_alloc_profile() failed will
-cause a memleak issue, and even if aa_alloc_profile() succeed, in the
-@fail_profile tag of aa_unpack(), it need to free @ns_name as well, this
-patch fixes them.
+On Fri 2022-10-21 10:57:58, Petr Mladek wrote:
+> On Wed 2022-10-19 17:01:26, John Ogness wrote:
+> > After switching to SRCU for console list iteration, some readers
+> > will begin accessing console->flags as a data race. This is safe
+> > because there is at most one CPU modifying console->flags and
+> > using rmw operations.
+> > 
+> > The primary reason for readers to access console->flags is to
+> > check if the console is enabled. Introduce console_is_enabled()
+> > to mark such access as a data race.
+> > 
+> > Signed-off-by: John Ogness <john.ogness@linutronix.de>
+> > ---
+> >  include/linux/console.h | 20 ++++++++++++++++++++
+> >  1 file changed, 20 insertions(+)
+> > 
+> > diff --git a/include/linux/console.h b/include/linux/console.h
+> > index cff86cc615f8..60195cd086dc 100644
+> > --- a/include/linux/console.h
+> > +++ b/include/linux/console.h
+> > @@ -172,6 +172,26 @@ extern void console_srcu_read_unlock(int cookie);
+> >  
+> >  extern struct hlist_head console_list;
+> >  
+> > +/**
+> > + * console_is_enabled - Check if the console is enabled
+> > + * @con:	struct console pointer of console to check
+> > + *
+> > + * This should be used instead of manually testing for the CON_ENABLED
+> > + * bit in the console->flags.
+> > + *
+> > + * Context: Any context.
+> > + */
+> > +static inline bool console_is_enabled(const struct console *con)
+> > +{
+> > +	/*
+> > +	 * If SRCU is used, reading of console->flags can be a data
+> > +	 * race. However, this is safe because there is at most one
+> > +	 * CPU modifying console->flags and it is using only
+> > +	 * read-modify-write operations to do so.
+> 
+> Hmm, I somehow do not understand the explanation. How does
+> read-modify-write operation make this safe, please?
+> 
+> We are interested into one bit. IMHO, it is not important
+> if the flags variable is modified atomically or byte by byte.
+> The important thing is if the reading is synchronized against
+> modifications.
+> 
+> This function does not do any synchronization on its own.
+> So, it depends on the caller.
+> 
+> 
+> I would personally do two variants. for example:
+> 
+>     console_is_enabled()
+>     console_is_enabled_safe()
+> 
+> The first variant would be called in situations where the race
+> does not matter and the other when it matters.
 
-Fixes: 736ec752d95e ("AppArmor: policy routines for loading and unpacking policy")
-Fixes: 04dc715e24d0 ("apparmor: audit policy ns specified in policy load")
-Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
----
- security/apparmor/policy_unpack.c | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+Still thinking about it.
 
-diff --git a/security/apparmor/policy_unpack.c b/security/apparmor/policy_unpack.c
-index 2e028d540c6b..1bf8cfb8700a 100644
---- a/security/apparmor/policy_unpack.c
-+++ b/security/apparmor/policy_unpack.c
-@@ -858,8 +858,11 @@ static struct aa_profile *unpack_profile(struct aa_ext *e, char **ns_name)
- 	}
- 
- 	profile = aa_alloc_profile(name, NULL, GFP_KERNEL);
--	if (!profile)
--		return ERR_PTR(-ENOMEM);
-+	if (!profile) {
-+		info = "out of memory";
-+		error = -ENOMEM;
-+		goto fail;
-+	}
- 	rules = list_first_entry(&profile->rules, typeof(*rules), list);
- 
- 	/* profile renaming is optional */
-@@ -1090,6 +1093,10 @@ static struct aa_profile *unpack_profile(struct aa_ext *e, char **ns_name)
- 	if (error == 0)
- 		/* default error covers most cases */
- 		error = -EPROTO;
-+	if (*ns_name) {
-+		kfree(*ns_name);
-+		*ns_name = NULL;
-+	}
- 	if (profile)
- 		name = NULL;
- 	else if (!name)
-@@ -1392,6 +1399,7 @@ int aa_unpack(struct aa_loaddata *udata, struct list_head *lh,
- {
- 	struct aa_load_ent *tmp, *ent;
- 	struct aa_profile *profile = NULL;
-+	char *ns_name = NULL;
- 	int error;
- 	struct aa_ext e = {
- 		.start = udata->data,
-@@ -1401,7 +1409,6 @@ int aa_unpack(struct aa_loaddata *udata, struct list_head *lh,
- 
- 	*ns = NULL;
- 	while (e.pos < e.end) {
--		char *ns_name = NULL;
- 		void *start;
- 		error = verify_header(&e, e.pos == e.start, ns);
- 		if (error)
-@@ -1432,6 +1439,7 @@ int aa_unpack(struct aa_loaddata *udata, struct list_head *lh,
- 
- 		ent->new = profile;
- 		ent->ns_name = ns_name;
-+		ns_name = NULL;
- 		list_add_tail(&ent->list, lh);
- 	}
- 	udata->abi = e.version & K_ABI_MASK;
-@@ -1452,6 +1460,7 @@ int aa_unpack(struct aa_loaddata *udata, struct list_head *lh,
- 	return 0;
- 
- fail_profile:
-+	kfree(ns_name);
- 	aa_put_profile(profile);
- 
- fail:
--- 
-2.17.1
+It is possible that console_is_enabled_safe() variant won't be
+needed because all the callers will be either naturally serialized
+or can be racy.
 
+By other words, it makes sense to use data_race() because there are
+used racy checks. And there probably is not any caller that would
+strictly require explicit synchronization when reading this flag.
+
+Anyway, if there is any caller that would require explicit
+synchronization than we need a variant without data_race().
+
+It would be great to somehow explain this in the commit message.
+
+Best Regards,
+Petr
