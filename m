@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 433EF6074BF
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 12:13:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25FBD6074BE
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 12:13:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230363AbiJUKNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 06:13:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56444 "EHLO
+        id S230455AbiJUKNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 06:13:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230410AbiJUKNI (ORCPT
+        with ESMTP id S230398AbiJUKNG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 06:13:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECD0025B27E
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 03:12:46 -0700 (PDT)
+        Fri, 21 Oct 2022 06:13:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F9F924CCB7
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 03:12:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666347165;
+        s=mimecast20190719; t=1666347164;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=RBzNhruieU6ZfUTXGoryk7ArPTHcpoWfg1dNbBcF6Js=;
-        b=AZtaZF+4iGNg24ymVruN1Tf/FWJtig4Rvz4nFUQgm28nObf6Z1VSqS06XgjShtIOaGDsfc
-        qW7/4CZYC2dvO8HJ4u/Q9jWHQJ9IkHuDJE49CUKkdAFnykSk4Z9VYE6EaS1Z1iXEky5VIQ
-        q5ceA2E7N5bUrvOBzdPlIAPZCXSNPWo=
+        bh=F2jxpEehZg91tvyIg0dyRa8PzGRQ+ddZdBpCZCuDxx0=;
+        b=VYTq5ysQ9mtvp3sVWLrSZeBzOHa8Pv6ez/2Ci7EBnSTWyLo58ymtaZOF8BeIwuWtStx84y
+        RhW0npNkREO6l1RhcW9zv9jl2d0OXfxJQ2QtAjAXebmbHVx4+wmcyf1BBFQ2zb/6HSPsGh
+        DXEK5fDxsOBudwFLUKGB/DTbiJeUPHI=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-632-nBZ72PQWNyWQLn-TMGl-EA-1; Fri, 21 Oct 2022 06:12:38 -0400
-X-MC-Unique: nBZ72PQWNyWQLn-TMGl-EA-1
+ us-mta-91-tMySy2NHMr6eu_lQNLJ3Qw-1; Fri, 21 Oct 2022 06:12:40 -0400
+X-MC-Unique: tMySy2NHMr6eu_lQNLJ3Qw-1
 Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 230601C06EDC;
-        Fri, 21 Oct 2022 10:12:38 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 319E83C0F240;
+        Fri, 21 Oct 2022 10:12:40 +0000 (UTC)
 Received: from t480s.fritz.box (unknown [10.39.193.99])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D93DC40E80E3;
-        Fri, 21 Oct 2022 10:12:35 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5F9BF40E80E4;
+        Fri, 21 Oct 2022 10:12:38 +0000 (UTC)
 From:   David Hildenbrand <david@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-mm@kvack.org, David Hildenbrand <david@redhat.com>,
@@ -48,9 +48,9 @@ Cc:     linux-mm@kvack.org, David Hildenbrand <david@redhat.com>,
         "Matthew Wilcox (Oracle)" <willy@infradead.org>,
         Jason Gunthorpe <jgg@nvidia.com>,
         John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH v2 8/9] mm/ksm: convert break_ksm() to use walk_page_range_vma()
-Date:   Fri, 21 Oct 2022 12:11:40 +0200
-Message-Id: <20221021101141.84170-9-david@redhat.com>
+Subject: [PATCH v2 9/9] mm/gup: remove FOLL_MIGRATION
+Date:   Fri, 21 Oct 2022 12:11:41 +0200
+Message-Id: <20221021101141.84170-10-david@redhat.com>
 In-Reply-To: <20221021101141.84170-1-david@redhat.com>
 References: <20221021101141.84170-1-david@redhat.com>
 MIME-Version: 1.0
@@ -66,112 +66,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-FOLL_MIGRATION exists only for the purpose of break_ksm(), and
-actually, there is not even the need to wait for the migration to
-finish, we only want to know if we're dealing with a KSM page.
-
-Using follow_page() just to identify a KSM page overcomplicates GUP
-code. Let's use walk_page_range_vma() instead, because we don't actually
-care about the page itself, we only need to know a single property --
-no need to even grab a reference.
-
-So, get rid of follow_page() usage such that we can get rid of
-FOLL_MIGRATION now and eventually be able to get rid of follow_page() in
-the future.
-
-In my setup (AMD Ryzen 9 3900X), running the KSM selftest to test unmerge
-performance on 2 GiB (taskset 0x8 ./ksm_tests -D -s 2048), this results in
-a performance degradation of ~2% (old: ~5010 MiB/s, new: ~4900 MiB/s).
-I don't think we particularly care for now.
-
-Interestingly, the benchmark reduction is due to the single callback.
-Adding a second callback (e.g., pud_entry()) reduces the benchmark by
-another 100-200 MiB/s.
+Fortunately, the last user (KSM) is gone, so let's just remove this
+rather special code from generic GUP handling -- especially because KSM
+never required the PMD handling as KSM only deals with individual base
+pages.
 
 Signed-off-by: David Hildenbrand <david@redhat.com>
 ---
- mm/ksm.c | 49 +++++++++++++++++++++++++++++++++++++++----------
- 1 file changed, 39 insertions(+), 10 deletions(-)
+ include/linux/mm.h |  1 -
+ mm/gup.c           | 55 +++++-----------------------------------------
+ 2 files changed, 5 insertions(+), 51 deletions(-)
 
-diff --git a/mm/ksm.c b/mm/ksm.c
-index c6f58aa6e731..5cdb852ff132 100644
---- a/mm/ksm.c
-+++ b/mm/ksm.c
-@@ -39,6 +39,7 @@
- #include <linux/freezer.h>
- #include <linux/oom.h>
- #include <linux/numa.h>
-+#include <linux/pagewalk.h>
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 8bbcccbc5565..a63415ac9dc2 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -2950,7 +2950,6 @@ struct page *follow_page(struct vm_area_struct *vma, unsigned long address,
+ 				 * and return without waiting upon it */
+ #define FOLL_NOFAULT	0x80	/* do not fault in pages */
+ #define FOLL_HWPOISON	0x100	/* check page is hwpoisoned */
+-#define FOLL_MIGRATION	0x400	/* wait for page to replace migration entry */
+ #define FOLL_TRIED	0x800	/* a retry, previous pass started an IO */
+ #define FOLL_REMOTE	0x2000	/* we are working on non-current tsk/mm */
+ #define FOLL_ANON	0x8000	/* don't do file mappings */
+diff --git a/mm/gup.c b/mm/gup.c
+index fe195d47de74..bcb46e9d496e 100644
+--- a/mm/gup.c
++++ b/mm/gup.c
+@@ -549,30 +549,13 @@ static struct page *follow_page_pte(struct vm_area_struct *vma,
+ 		return no_page_table(vma, flags);
+ 	}
  
- #include <asm/tlbflush.h>
- #include "internal.h"
-@@ -419,6 +420,39 @@ static inline bool ksm_test_exit(struct mm_struct *mm)
- 	return atomic_read(&mm->mm_users) == 0;
- }
+-retry:
+ 	if (unlikely(pmd_bad(*pmd)))
+ 		return no_page_table(vma, flags);
  
-+static int break_ksm_pmd_entry(pmd_t *pmd, unsigned long addr, unsigned long next,
-+			struct mm_walk *walk)
-+{
-+	struct page *page = NULL;
-+	spinlock_t *ptl;
-+	pte_t *pte;
-+	int ret;
-+
-+	if (pmd_leaf(*pmd) || !pmd_present(*pmd))
-+		return 0;
-+
-+	pte = pte_offset_map_lock(walk->mm, pmd, addr, &ptl);
-+	if (pte_present(*pte)) {
-+		page = vm_normal_page(walk->vma, addr, *pte);
-+	} else if (!pte_none(*pte)) {
-+		swp_entry_t entry = pte_to_swp_entry(*pte);
-+
-+		/*
-+		 * As KSM pages remain KSM pages until freed, no need to wait
-+		 * here for migration to end.
-+		 */
-+		if (is_migration_entry(entry))
-+			page = pfn_swap_entry_to_page(entry);
-+	}
-+	ret = page && PageKsm(page);
-+	pte_unmap_unlock(pte, ptl);
-+	return ret;
-+}
-+
-+static const struct mm_walk_ops break_ksm_ops = {
-+	.pmd_entry = break_ksm_pmd_entry,
-+};
-+
- /*
-  * We use break_ksm to break COW on a ksm page by triggering unsharing,
-  * such that the ksm page will get replaced by an exclusive anonymous page.
-@@ -434,21 +468,16 @@ static inline bool ksm_test_exit(struct mm_struct *mm)
-  */
- static int break_ksm(struct vm_area_struct *vma, unsigned long addr)
- {
--	struct page *page;
- 	vm_fault_t ret = 0;
+ 	ptep = pte_offset_map_lock(mm, pmd, address, &ptl);
+ 	pte = *ptep;
+-	if (!pte_present(pte)) {
+-		swp_entry_t entry;
+-		/*
+-		 * KSM's break_ksm() relies upon recognizing a ksm page
+-		 * even while it is being migrated, so for that case we
+-		 * need migration_entry_wait().
+-		 */
+-		if (likely(!(flags & FOLL_MIGRATION)))
+-			goto no_page;
+-		if (pte_none(pte))
+-			goto no_page;
+-		entry = pte_to_swp_entry(pte);
+-		if (!is_migration_entry(entry))
+-			goto no_page;
+-		pte_unmap_unlock(ptep, ptl);
+-		migration_entry_wait(mm, pmd, address);
+-		goto retry;
+-	}
++	if (!pte_present(pte))
++		goto no_page;
+ 	if (pte_protnone(pte) && !gup_can_follow_protnone(flags))
+ 		goto no_page;
  
- 	do {
--		bool ksm_page = false;
-+		int ksm_page;
- 
- 		cond_resched();
--		page = follow_page(vma, addr,
--				FOLL_GET | FOLL_MIGRATION | FOLL_REMOTE);
--		if (IS_ERR_OR_NULL(page))
--			break;
--		if (PageKsm(page))
--			ksm_page = true;
--		put_page(page);
+@@ -694,28 +677,8 @@ static struct page *follow_pmd_mask(struct vm_area_struct *vma,
+ 			return page;
+ 		return no_page_table(vma, flags);
+ 	}
+-retry:
+-	if (!pmd_present(pmdval)) {
+-		/*
+-		 * Should never reach here, if thp migration is not supported;
+-		 * Otherwise, it must be a thp migration entry.
+-		 */
+-		VM_BUG_ON(!thp_migration_supported() ||
+-				  !is_pmd_migration_entry(pmdval));
 -
-+		ksm_page = walk_page_range_vma(vma, addr, addr + 1,
-+					       &break_ksm_ops, NULL);
-+		if (WARN_ON_ONCE(ksm_page < 0))
-+			return ksm_page;
- 		if (!ksm_page)
- 			return 0;
- 		ret = handle_mm_fault(vma, addr,
+-		if (likely(!(flags & FOLL_MIGRATION)))
+-			return no_page_table(vma, flags);
+-
+-		pmd_migration_entry_wait(mm, pmd);
+-		pmdval = READ_ONCE(*pmd);
+-		/*
+-		 * MADV_DONTNEED may convert the pmd to null because
+-		 * mmap_lock is held in read mode
+-		 */
+-		if (pmd_none(pmdval))
+-			return no_page_table(vma, flags);
+-		goto retry;
+-	}
++	if (!pmd_present(pmdval))
++		return no_page_table(vma, flags);
+ 	if (pmd_devmap(pmdval)) {
+ 		ptl = pmd_lock(mm, pmd);
+ 		page = follow_devmap_pmd(vma, address, pmd, flags, &ctx->pgmap);
+@@ -729,18 +692,10 @@ static struct page *follow_pmd_mask(struct vm_area_struct *vma,
+ 	if (pmd_protnone(pmdval) && !gup_can_follow_protnone(flags))
+ 		return no_page_table(vma, flags);
+ 
+-retry_locked:
+ 	ptl = pmd_lock(mm, pmd);
+-	if (unlikely(pmd_none(*pmd))) {
+-		spin_unlock(ptl);
+-		return no_page_table(vma, flags);
+-	}
+ 	if (unlikely(!pmd_present(*pmd))) {
+ 		spin_unlock(ptl);
+-		if (likely(!(flags & FOLL_MIGRATION)))
+-			return no_page_table(vma, flags);
+-		pmd_migration_entry_wait(mm, pmd);
+-		goto retry_locked;
++		return no_page_table(vma, flags);
+ 	}
+ 	if (unlikely(!pmd_trans_huge(*pmd))) {
+ 		spin_unlock(ptl);
 -- 
 2.37.3
 
