@@ -2,170 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DAE5607102
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 09:26:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8EEE6070E7
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 09:23:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230083AbiJUH0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 03:26:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51234 "EHLO
+        id S229880AbiJUHXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 03:23:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230040AbiJUH0I (ORCPT
+        with ESMTP id S229893AbiJUHW7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 03:26:08 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84039FF3
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 00:26:05 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Mtwr34fC2zVj5k;
-        Fri, 21 Oct 2022 15:21:23 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+        Fri, 21 Oct 2022 03:22:59 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30E48245EBD;
+        Fri, 21 Oct 2022 00:22:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1666336978; x=1697872978;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=j/iJEREQc6b5PWNxao/a5BkD1vhPEB7D4sLoJaR31eo=;
+  b=HpmJLcFxvYv8WeqhLaI05e3WfYwVvZOu8cOjFHlVuJSUfPZLXnC7/862
+   yyiwByZ8Jc1wY33+Kb2hFn64rHZRKOICqyozMZMlcd/VYvBVqOzCnSjBy
+   885bHf62MznmNevkoTt8pS2hvuWW8fsysCpmId41kCu8hQI7sThS/XZYD
+   I3cMqdjKqj7iu97ngBlodTgPZGswphULO9EfyGTJ2WN4/xHZMiMXNlGcI
+   AMUmDEciIe1EkLUUoYE5+0Iy+womqqiCsOVu03I2btIJKu+0iUAZjgp1o
+   kafKdIpHXjuF6YBlS6S4sPSN6Mwb+T8yA2AT1xeMV6NPX4OF6iUkLzw5h
+   g==;
+X-IronPort-AV: E=Sophos;i="5.95,200,1661842800"; 
+   d="scan'208";a="179895228"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 21 Oct 2022 00:22:58 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 21 Oct 2022 15:25:54 +0800
-Received: from [10.174.178.174] (10.174.178.174) by
- dggpemm500007.china.huawei.com (7.185.36.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 21 Oct 2022 15:25:53 +0800
-Subject: Re: [PATCH 00/11] fix memory leak while kset_register() fails
-To:     Luben Tuikov <luben.tuikov@amd.com>,
-        <linux-kernel@vger.kernel.org>, <qemu-devel@nongnu.org>,
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        <linux-erofs@lists.ozlabs.org>, <ocfs2-devel@oss.oracle.com>,
-        <linux-mtd@lists.infradead.org>, <amd-gfx@lists.freedesktop.org>
-CC:     <gregkh@linuxfoundation.org>, <rafael@kernel.org>, <somlo@cmu.edu>,
-        <mst@redhat.com>, <jaegeuk@kernel.org>, <chao@kernel.org>,
-        <hsiangkao@linux.alibaba.com>, <huangjianan@oppo.com>,
-        <mark@fasheh.com>, <jlbec@evilplan.org>,
-        <joseph.qi@linux.alibaba.com>, <akpm@linux-foundation.org>,
-        <alexander.deucher@amd.com>, <richard@nod.at>,
-        <liushixin2@huawei.com>
-References: <20221021022102.2231464-1-yangyingliang@huawei.com>
- <d559793a-0ce4-3384-e74e-19855aa31f31@amd.com>
-From:   Yang Yingliang <yangyingliang@huawei.com>
-Message-ID: <2a99c52c-d29c-5f5c-57a8-9851018e7420@huawei.com>
-Date:   Fri, 21 Oct 2022 15:25:51 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+ 15.1.2507.12; Fri, 21 Oct 2022 00:22:56 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
+ Transport; Fri, 21 Oct 2022 00:22:56 -0700
+Date:   Fri, 21 Oct 2022 09:27:35 +0200
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
+CC:     <netdev@vger.kernel.org>, <davem@davemloft.net>, <kuba@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <bryan.whitehead@microchip.com>,
+        <hkallweit1@gmail.com>, <pabeni@redhat.com>, <edumazet@google.com>,
+        <linux@armlinux.org.uk>, <UNGLinuxDriver@microchip.com>,
+        <andrew@lunn.ch>, <Ian.Saturley@microchip.com>
+Subject: Re: [PATCH net-next 2/2] net: phy: micrel: Add PHY Auto/MDI/MDI-X
+ set driver for KSZ9131
+Message-ID: <20221021072735.pcx6wlnujhhxgy3q@soft-dev3-1>
+References: <20221021055642.255413-1-Raju.Lakkaraju@microchip.com>
+ <20221021055642.255413-3-Raju.Lakkaraju@microchip.com>
 MIME-Version: 1.0
-In-Reply-To: <d559793a-0ce4-3384-e74e-19855aa31f31@amd.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.174.178.174]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <20221021055642.255413-3-Raju.Lakkaraju@microchip.com>
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+The 10/21/2022 11:26, Raju Lakkaraju wrote:
 
-On 2022/10/21 13:29, Luben Tuikov wrote:
-> On 2022-10-20 22:20, Yang Yingliang wrote:
->> The previous discussion link:
->> https://lore.kernel.org/lkml/0db486eb-6927-927e-3629-958f8f211194@huawei.com/T/
-> The very first discussion on this was here:
->
-> https://www.spinics.net/lists/dri-devel/msg368077.html
->
-> Please use this link, and not the that one up there you which quoted above,
-> and whose commit description is taken verbatim from the this link.
-I found this leaks in 
-bus_register()/class_register()/kset_create_and_add() at first, and describe
-the reason in these patches which is using kobject_set_name() 
-description, here is the patches:
+Hi Raju,
 
-https://lore.kernel.org/lkml/20221017014957.156645-1-yangyingliang@huawei.com/T/
-https://lore.kernel.org/lkml/20221017031335.1845383-1-yangyingliang@huawei.com/
-https://lore.kernel.org/lkml/Y0zfPKAgQSrYZg5o@kroah.com/T/
+> Add support for MDI-X status and configuration for KSZ9131 chips
+> 
+> Signed-off-by: Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
+> ---
+>  drivers/net/phy/micrel.c | 77 ++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 77 insertions(+)
+> 
+> diff --git a/drivers/net/phy/micrel.c b/drivers/net/phy/micrel.c
+> index 54a17b576eac..40aa52d442f8 100644
+> --- a/drivers/net/phy/micrel.c
+> +++ b/drivers/net/phy/micrel.c
+> @@ -1295,6 +1295,81 @@ static int ksz9131_config_init(struct phy_device *phydev)
+>  	return 0;
+>  }
+>  
+> +#define MII_KSZPHY_AUTO_MDIX		0x1C
+> +#define MII_KSZPHY_AUTO_MDI_SET_	BIT(7)
+> +#define MII_KSZPHY_AUTO_MDIX_SWAP_OFF_	BIT(6)
 
-And then I found other subsystem also have this problem, so posted the 
-fix patches for them
-(including qemu_fw_cfg/f2fs/erofs/ocfs2/amdgpu_discovery):
+Can you please drop the "_" from the end of the macros. The only
+macros that have that suffix are those used by PTP.
 
-https://www.mail-archive.com/qemu-devel@nongnu.org/msg915553.html
-https://lore.kernel.org/linux-f2fs-devel/7908686b-9a7c-b754-d312-d689fc28366e@kernel.org/T/#t
-https://lore.kernel.org/linux-erofs/20221018073947.693206-1-yangyingliang@huawei.com/
-https://lore.kernel.org/lkml/0db486eb-6927-927e-3629-958f8f211194@huawei.com/T/
+Are these KSZPHY registers generic for all KSZ phys? Then the functions
+'ksz9131_mdix_update' and 'ksz9131_config_mdix' shouldn't be rename to
+something like 'kszphy_mdix_update' and 'kszphy_config_mdix'?
+Otherwise shoudln't these register contain 9131 in their name?
 
-https://www.spinics.net/lists/dri-devel/msg368092.html
-In the amdgpu_discovery patch, I sent a old one which using wrong 
-description and you pointer out,
-and then I send a v2.
+I know that also lan8841 and lan8804 have the same layout for these
+registers.
 
-And then the maintainer of ocfs2 has different thought about this, so we 
-had a discussion in the link
-that I gave out, and Greg suggested me to update kset_register() 
-documentation and then put the fix
-patches together in one series, so I sent this patchset and use the link.
+> +
+> +static int ksz9131_mdix_update(struct phy_device *phydev)
+> +{
+> +	int ret;
+> +
+> +	ret = phy_read(phydev, MII_KSZPHY_AUTO_MDIX);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	if (ret & MII_KSZPHY_AUTO_MDIX_SWAP_OFF_) {
+> +		if (ret & MII_KSZPHY_AUTO_MDI_SET_)
+> +			phydev->mdix_ctrl = ETH_TP_MDI;
+> +		else
+> +			phydev->mdix_ctrl = ETH_TP_MDI_X;
+> +	} else {
+> +		phydev->mdix_ctrl = ETH_TP_MDI_AUTO;
+> +	}
+> +
+> +	if (ret & MII_KSZPHY_AUTO_MDI_SET_)
+> +		phydev->mdix = ETH_TP_MDI;
+> +	else
+> +		phydev->mdix = ETH_TP_MDI_X;
+> +
+> +	return 0;
+> +}
+> +
+> +static int ksz9131_config_mdix(struct phy_device *phydev, u8 ctrl)
+> +{
+> +	u16 val;
+> +
+> +	switch (ctrl) {
+> +	case ETH_TP_MDI:
+> +		val = MII_KSZPHY_AUTO_MDIX_SWAP_OFF_ |
+> +		      MII_KSZPHY_AUTO_MDI_SET_;
+> +		break;
+> +	case ETH_TP_MDI_X:
+> +		val = MII_KSZPHY_AUTO_MDIX_SWAP_OFF_;
+> +		break;
+> +	case ETH_TP_MDI_AUTO:
+> +		val = 0;
+> +		break;
+> +	default:
+> +		return 0;
+> +	}
+> +
+> +	return phy_modify(phydev, MII_KSZPHY_AUTO_MDIX,
+> +			  MII_KSZPHY_AUTO_MDIX_SWAP_OFF_ |
+> +			  MII_KSZPHY_AUTO_MDI_SET_, val);
+> +}
+> +
+> +static int ksz9131_read_status(struct phy_device *phydev)
+> +{
+> +	int ret;
+> +
+> +	ret = ksz9131_mdix_update(phydev);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	return genphy_read_status(phydev);
+> +}
+> +
+> +static int ksz9131_config_aneg(struct phy_device *phydev)
+> +{
+> +	int ret;
+> +
+> +	ret = genphy_config_aneg(phydev);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return ksz9131_config_mdix(phydev, phydev->mdix_ctrl);
+> +}
+> +
+>  #define KSZ8873MLL_GLOBAL_CONTROL_4	0x06
+>  #define KSZ8873MLL_GLOBAL_CONTROL_4_DUPLEX	BIT(6)
+>  #define KSZ8873MLL_GLOBAL_CONTROL_4_SPEED	BIT(4)
+> @@ -3304,6 +3379,8 @@ static struct phy_driver ksphy_driver[] = {
+>  	.probe		= kszphy_probe,
+>  	.config_init	= ksz9131_config_init,
+>  	.config_intr	= kszphy_config_intr,
+> +	.config_aneg	= ksz9131_config_aneg,
+> +	.read_status	= ksz9131_read_status,
+>  	.handle_interrupt = kszphy_handle_interrupt,
+>  	.get_sset_count = kszphy_get_sset_count,
+>  	.get_strings	= kszphy_get_strings,
+> -- 
+> 2.25.1
+> 
 
-Thanks,
-Yang
-
->
->> kset_register() is currently used in some places without calling
->> kset_put() in error path, because the callers think it should be
->> kset internal thing to do, but the driver core can not know what
->> caller doing with that memory at times. The memory could be freed
->> both in kset_put() and error path of caller, if it is called in
->> kset_register().
-> As I explained in the link above, the reason there's
-> a memory leak is that one cannot call kset_register() without
-> the kset->kobj.name being set--kobj_add_internal() returns -EINVAL,
-> in this case, i.e. kset_register() fails with -EINVAL.
->
-> Thus, the most common usage is something like this:
->
-> 	kobj_set_name(&kset->kobj, format, ...);
-> 	kset->kobj.kset = parent_kset;
-> 	kset->kobj.ktype = ktype;
-> 	res = kset_register(kset);
->
-> So, what is being leaked, is the memory allocated in kobj_set_name(),
-> by the common idiom shown above. This needs to be mentioned in
-> the documentation, at least, in case, in the future this is absolved
-> in kset_register() redesign, etc.
->
-> Regards,
-> Luben
->
->> So make the function documentation more explicit about calling
->> kset_put() in the error path of caller first, so that people
->> have a chance to know what to do here, then fixes this leaks
->> by calling kset_put() from callers.
->>
->> Liu Shixin (1):
->>    ubifs: Fix memory leak in ubifs_sysfs_init()
->>
->> Yang Yingliang (10):
->>    kset: fix documentation for kset_register()
->>    kset: add null pointer check in kset_put()
->>    bus: fix possible memory leak in bus_register()
->>    kobject: fix possible memory leak in kset_create_and_add()
->>    class: fix possible memory leak in __class_register()
->>    firmware: qemu_fw_cfg: fix possible memory leak in
->>      fw_cfg_build_symlink()
->>    f2fs: fix possible memory leak in f2fs_init_sysfs()
->>    erofs: fix possible memory leak in erofs_init_sysfs()
->>    ocfs2: possible memory leak in mlog_sys_init()
->>    drm/amdgpu/discovery: fix possible memory leak
->>
->>   drivers/base/bus.c                            | 4 +++-
->>   drivers/base/class.c                          | 6 ++++++
->>   drivers/firmware/qemu_fw_cfg.c                | 2 +-
->>   drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c | 5 +++--
->>   fs/erofs/sysfs.c                              | 4 +++-
->>   fs/f2fs/sysfs.c                               | 4 +++-
->>   fs/ocfs2/cluster/masklog.c                    | 7 ++++++-
->>   fs/ubifs/sysfs.c                              | 2 ++
->>   include/linux/kobject.h                       | 3 ++-
->>   lib/kobject.c                                 | 5 ++++-
->>   10 files changed, 33 insertions(+), 9 deletions(-)
->>
-> .
+-- 
+/Horatiu
