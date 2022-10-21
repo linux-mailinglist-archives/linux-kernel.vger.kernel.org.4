@@ -2,140 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89272607AC8
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 17:32:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8328607ACE
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 17:34:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229484AbiJUPce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 11:32:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48258 "EHLO
+        id S229779AbiJUPei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 11:34:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229817AbiJUPcI (ORCPT
+        with ESMTP id S229657AbiJUPed (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 11:32:08 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 491EA25E8BD;
-        Fri, 21 Oct 2022 08:31:59 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id bs14so4162579ljb.9;
-        Fri, 21 Oct 2022 08:31:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=B+p99hO3JZsR3seDJh1ppmG0TxM1BLGHE9A9k9GaJDs=;
-        b=BcTN4zri20y46WsjqEfUjS5FU+fZeCOVKrwpNqQxB7BbjtnOGV4eIgVh5PktzREHx1
-         1vvM+zqgn8rLOcueR338/w5rKClqs7BOXESRRhfgMzyalI5r9y+M+w7Rrt7v9WDS6o8m
-         4aEuDr1TBr+EkQnwdGqGBFfa0qLJDcic49rSFu0wOk9VLbb4tIy/nl5xU6yW9xqRsCBe
-         biw2n+MrI00XXYFJ+zIgxSvaegs1LTuUsKsOVG+rf6qA5NRMgu7KN68Zk3Z61c6e6EEx
-         y12uJHvEFfT3ybVwgH68WzEMl03/umEbC5TFGNvlrQCWU6VWUD7hKZoUx80bm3nZdWND
-         v1YQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=B+p99hO3JZsR3seDJh1ppmG0TxM1BLGHE9A9k9GaJDs=;
-        b=CUHFLEjxp7P0ExiW6M/WArkLj0M5bI1V+IvpZ6xnoSZftZcNjj9EYhz3gGDg32svRz
-         IAfkFCc319sy5XXo+2wlRQlctfYv0G5zYQaYrmDGnyhIn9DD2zSMjTewQ/H8zCZpmAQh
-         wZlJPT83Typ7uAcB7nN2lfzA4MisiiUBVVWeNk/z6sGZPuZSngNy1tIHR42/9/66JUMq
-         obhg1Vlu1zebt8jUOwohWuh8aLkzDlratT6e5mh9nNk1hdKt58RB3ap0yFLkufG1j07V
-         doo+hvzDymR+kf0cq3L+/4ZsL+6ODVzxz9qBGaij4R03HRZEksXsjvqP0yq0B7hJedvI
-         BL6Q==
-X-Gm-Message-State: ACrzQf1Tis46zN9U+L3kqIWggcf13Hr57bGn/LJKJPOOwcFwtOM5+Fq6
-        AStBSHpTrMuRIkXJKzopTqSRfxJu56SdZQ==
-X-Google-Smtp-Source: AMsMyM7Xac7NFe3v49LtkmSLbfyCv1+e8q8cfcpBfkJG/xly/TehfvdFn9GUNIPfFYzFN6fC1AjDtQ==
-X-Received: by 2002:a2e:9dd3:0:b0:26f:b69f:289a with SMTP id x19-20020a2e9dd3000000b0026fb69f289amr6699446ljj.53.1666366317476;
-        Fri, 21 Oct 2022 08:31:57 -0700 (PDT)
-Received: from gmail.com (82-209-154-112.cust.bredband2.com. [82.209.154.112])
-        by smtp.gmail.com with ESMTPSA id n24-20020a195518000000b00492c663bba2sm3200062lfe.124.2022.10.21.08.31.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Oct 2022 08:31:56 -0700 (PDT)
-Date:   Fri, 21 Oct 2022 17:32:21 +0200
-From:   Marcus Folkesson <marcus.folkesson@gmail.com>
-To:     Mitja Spes <mitja@lxnav.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Tomasz Duszynski <tduszyns@gmail.com>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] iio: pressure: ms5611: changed hardcoded SPI
- speed to value limited
-Message-ID: <Y1K7hWKl0siEtaAl@gmail.com>
-References: <20221021135827.1444793-1-mitja@lxnav.com>
- <20221021135827.1444793-3-mitja@lxnav.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="v0Xw8fmF8ByqwP89"
+        Fri, 21 Oct 2022 11:34:33 -0400
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2135.outbound.protection.outlook.com [40.107.20.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FAB029815;
+        Fri, 21 Oct 2022 08:34:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=deff8E3+n14d/ifocU8evORG/mv/i+ggXvqyHK0D9b7kHqoxPIuFWC86+lKJ3CpVFFXydc8zY1eCtl/bnwtsrnW7VBqh1P5/vvNyNX4APd0SL/egDjq0wPS908pAEKRsfJwBut1+5pNgSc5F7e2vz1eVc8W6HYxYV7BbjCBqw1U1km5f58jLkBEg6DuvFJ/CHkXJRhftXPvmGzHO+L1TYyLoue9NbcNVocse+MfaryFXEQRA+IqFBvGDD4okaeva6NZr7A31lUuErN2C8uABtzk9qRjP0mb5kBCwnsRoI8451fqKA3Rk5TBQPjEHFamrmx07HY+a30FcyZH703Nwjw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6IR26zvGQfYXSBKJCweO48Zc6askbHt7qx2j8/ElUvU=;
+ b=i0BuBY0XzvPECjFWBdF1hDemk0FUbJjZvdH5IkuCdXRyUrmMOgQJslWjGYBM0x4GbzkT0Zemhd0mpnJTidRfoMCxxrHlc/veWuB5H08bvkEJzbZ5Ckc6gkmnHW8KU2NDfksIUTYgCIzOyCd4P8SgCz+zCL30GqMfSgZH6yG+kDc/f5vA7FsvipTORYU3iHX7vF5QJoh/bf+hcye4fudTvdYtiq9RwH8U8Bci2voxtdjBnhaZIZpdI2aC7zZiahycU7H2pxRZWDE2tn6or5qBWy5RP3zpXZ/FrB+XOMR93oSnPnPhbpP95dmi4siEo1oNiq3MPwsJtN4am4r7wFiCHA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=concurrent-rt.com; dmarc=pass action=none
+ header.from=concurrent-rt.com; dkim=pass header.d=concurrent-rt.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bksv.onmicrosoft.com;
+ s=selector1-bksv-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6IR26zvGQfYXSBKJCweO48Zc6askbHt7qx2j8/ElUvU=;
+ b=RqsdNJSUDUM2LU2nQnMKNpO999iKcsvw2RwGYnlIaNxQHqXcvJPqrPebP83VHm+eOgbiqwOL5lFe4F9zc7LwpGTe4p8sO8kJ88GXdORCSVULFv+JtoEdO9YWZRtos86NSeLy7aGu/Pq2pjPwToU1lJoq4i1hgTgWzUplOEjC89g=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=concurrent-rt.com;
+Received: from DB8PR09MB3580.eurprd09.prod.outlook.com (2603:10a6:10:119::23)
+ by AS2PR09MB6079.eurprd09.prod.outlook.com (2603:10a6:20b:55a::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.35; Fri, 21 Oct
+ 2022 15:34:29 +0000
+Received: from DB8PR09MB3580.eurprd09.prod.outlook.com
+ ([fe80::c48e:11a3:c89c:f655]) by DB8PR09MB3580.eurprd09.prod.outlook.com
+ ([fe80::c48e:11a3:c89c:f655%7]) with mapi id 15.20.5723.033; Fri, 21 Oct 2022
+ 15:34:29 +0000
+Date:   Fri, 21 Oct 2022 11:34:24 -0400
+From:   Joe Korty <joe.korty@concurrent-rt.com>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: [PATCH] arm64: arch_timer: XGene-1 has 31 bit, not 32 bit, arch
+ timer.
+Message-ID: <20221021153424.GA25677@zipoli.concurrent-rt.com>
+Reply-To: Joe Korty <joe.korty@concurrent-rt.com>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221021135827.1444793-3-mitja@lxnav.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-ClientProxiedBy: BN9PR03CA0236.namprd03.prod.outlook.com
+ (2603:10b6:408:f8::31) To DB8PR09MB3580.eurprd09.prod.outlook.com
+ (2603:10a6:10:119::23)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB8PR09MB3580:EE_|AS2PR09MB6079:EE_
+X-MS-Office365-Filtering-Correlation-Id: c05c053d-a16d-4c7d-4543-08dab379be79
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: G1Fo3kQHUzc7QNODtDfr9cAXAZ8BAQDkcYqqq1J3sAM4IsaP9QN4nnEcZkHQL4ca41FeTOPlImlXYB/3ijPSQd9eKQ+iUZ0KZylsJIdhqei9D+kMKi8hqvy1U2Um3F7lXCSZbpJTYJI0jbnaLbmUEmj+KYzZwDH0nrb15exSmLa5zbvtQd3Xt8sJWrEsTli4rQHve06Q6AmOT6/V8kw5nPaa7tOik/W40kUXvdNdRW3KSHAUhaX+k/6/+8PmuKt3qqU2NtDdvfIHEZ+GyZA6xWeY2PYskwZrUyWJhN3yoSxPHn7pSJjl3xX0x6XY9ltZyZBymmNr8wje+RZhPFrRyeON7bFMoVmFMmosLrQnZembXTT/RGCe406OFgG+bw3qYvG2GGQprKM+pEhbvRDRD1S9eLzJexbd1lvY7AVyfsgUDxuuMcgFWMmINAilFUG6W7uL5++CE22EcT4rK7VxABvZe6PLpo3lMhy7ct2gvb0Yy545Ti/Kb67a/+a+sqwEFyWXG74R0UHxil6gzeSOpGtczVfrit57HtbKR7Ni6cYPAH4QPnU6qsaVxCv14jAPbmnEu0GqSjoSxK3zWYZl3bUSYKCxc8v/KVdtjRCN0cD783+SjevmEvsWtrjvcX8OBkC1DFKrdpIPc0SeM5BEFbGbjcxMUH/SJRXl83qsr+HhTPCHEE7lGCeHso43SRnnk5MwhOyJ2PkR6OwhQ5pk/0V38SyZlSOgeKOjtSpI4rTgiYz6ayQEDTpZnJj3A0lsmHsaGkffjun8X5B8AdtGpg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR09MB3580.eurprd09.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39850400004)(376002)(346002)(366004)(396003)(136003)(451199015)(6916009)(478600001)(316002)(6666004)(6506007)(6486002)(66946007)(66476007)(66556008)(4326008)(8676002)(3450700001)(41300700001)(8936002)(6512007)(1076003)(26005)(2906002)(52116002)(186003)(5660300002)(44832011)(83380400001)(38100700002)(38350700002)(86362001)(33656002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?hw3Y8t1OsW5eg1p50x96xJCDx8uWqUoWSy3huFbfsA5zxGmvXQBOLFikZJAN?=
+ =?us-ascii?Q?NYlMVLoh0yCzQFnWbXs58kMKwTg85Y6W/ODEgRS3Dd5wtuydO8jnBhDC2hjg?=
+ =?us-ascii?Q?7FyGgDNpAS2NLn0ziQJQttAO/1FBTheE2Dg2w8EpiUH9RoDmlNULduxaQMtO?=
+ =?us-ascii?Q?46IhCSSnnIwT9mgf3gApuF/g9puu38zSghRFg09bKjP9+gmcQQFm68TVfvDD?=
+ =?us-ascii?Q?GaqK8PPrp9TPfKpPLeutgMEmy2UgJVKuL2UAokNer22CIRmcVLTigEihna4N?=
+ =?us-ascii?Q?LOF2L6EJWf1U6tMfp5oClC2eWanh2oaa115LoI+mtXXc4DWJOCEZSF2jLPN7?=
+ =?us-ascii?Q?tzDqisTlbmn5sKyAOvvOeBR5jJsWMm5kO6tleMUFFERe0/XF3VgGTdOkTWc8?=
+ =?us-ascii?Q?ocy2Xgd+vg2wo0nmhlYTXDbWVwG7+iifc6nAHgB1K5rs2oWEz7M8XY4+1CDL?=
+ =?us-ascii?Q?o4osTrV3RB3VKRM04ifWg/mpdIRi7Vvj1AkOGtKBkv9wXXtp2yzIe9PFGvIW?=
+ =?us-ascii?Q?d1UGDcGBFKd9daC2ccP6yc0oe3s9D8VjiF94yi0CriTPFpZebP+TsbLFyzSm?=
+ =?us-ascii?Q?FbogQKNaWsZ3FIJfahltkssVYWQJAATIP3dyG1xtVHp5Oaii1MO9XWs6hIkX?=
+ =?us-ascii?Q?1VVg2MQHu6Sp/sANJ4KShzM5smV6nPjIpVUU8j1jbpe1Sxreq0MUXLrJTJXJ?=
+ =?us-ascii?Q?Gr6LdxNQOG06bFtBW6fIIuww0HbXiClhrFkRuPyhszEHhWZUSZddrdEk0JDp?=
+ =?us-ascii?Q?N5c9Qo0rg0TGel8sTOYrjS2C3zL8W/D1AN6PqdS9iZdNUQddNfDH9p6WiqVK?=
+ =?us-ascii?Q?fZC8HxjQjSt1LhtEhki+bfWkJlVYilKYPXO6Pj5SOfD0nEZbgywTEjJ9Kq54?=
+ =?us-ascii?Q?sVfdGX2Hduw3dJO8Dg68Wjw272hLEpa29oalBaNAvy84RKAkVwdAPHzy6RaW?=
+ =?us-ascii?Q?4haUGocB6UycWrUGHEM5eImBELy/r4o/78xzF/TtG5vaAcHO99mExiIC3MAf?=
+ =?us-ascii?Q?VG5dQrrwHJc2pvlXh4Im8u6wBzH6Y/k9BQTVwOIyxW6lq10Xy7ZHtwOdfBhs?=
+ =?us-ascii?Q?wxrwY9A+FYTOXHoX3r8YrsRvpo13x1PjsX7Xc+LpL7c6UH14LuusdgEd15Bt?=
+ =?us-ascii?Q?P1igyO4d7xE26X741H25hfB3Fa7uecxyRGInphKwoASJRZmEQ8d7KcGOEXwE?=
+ =?us-ascii?Q?d/tQ98LEXcQXkyF7Dov3Onmu5lI36FOnAd4eNGZddRuGXDxbRlm0ipfZPLoX?=
+ =?us-ascii?Q?sTf+Wa35r1Ivohi77rhifnQyvxgcpd276CMyqwYm7MlKL9/ipjRof7xQrCxy?=
+ =?us-ascii?Q?9CMF6dh5wNmR3flnil0wPzTHmfytbnP8umlaKrREzu81nAvLx4icMP4dQleV?=
+ =?us-ascii?Q?+o/Cf8NZYEPxiNWp1z8XFVzmoWyWyubiFJcF/dPOEF2lW9L2RaOKdkYur4RE?=
+ =?us-ascii?Q?sVmaJu4eZiIHJGuUVD7cLtKpBDQtEcNGu9GZVQjjvumBNCXMmEBYPyplaZIG?=
+ =?us-ascii?Q?TTe2pz5LxHhKzwOosYQoigvE+LKKiW3WzGuCJWsc/FGkkxiWGb/5L1om3YjN?=
+ =?us-ascii?Q?6P+w1mJ3Wqk/04OLxdg80Ou3PxDyikLKvBrCnRquYPSJLwqpcrsHIMIFLpTv?=
+ =?us-ascii?Q?Rw=3D=3D?=
+X-OriginatorOrg: concurrent-rt.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c05c053d-a16d-4c7d-4543-08dab379be79
+X-MS-Exchange-CrossTenant-AuthSource: DB8PR09MB3580.eurprd09.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Oct 2022 15:34:29.5160
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 6cce74a3-3975-45e0-9893-b072988b30b6
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Trsj/awzwBjkABz8ZT6mzhBFWMBmXgLpQlUJB39alDXojWgvM73W6EQ9YsfQ6vE9HjDstoN78OFGOj47lTVoOaxLXm4a/DLPYO3EiM78k7o=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS2PR09MB6079
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+arm64: XGene-1 has a 31 bit, not a 32 bit, arch timer.
 
---v0Xw8fmF8ByqwP89
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Fixes: 012f188504528b8cb32f441ac3bd9ea2eba39c9e ("clocksource/drivers/arm_arch_timer:
+  Work around broken CVAL implementations")
 
-Hi Mitja,
+Testing:
+  On an 8-cpu Mustang, the following sequence no longer locks up the system:
 
-On Fri, Oct 21, 2022 at 03:58:21PM +0200, Mitja Spes wrote:
-> Don't hardcode the ms5611 SPI speed, limit it instead.
->=20
-> Signed-off-by: Mitja Spes <mitja@lxnav.com>
-> ---
->  drivers/iio/pressure/ms5611_spi.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/iio/pressure/ms5611_spi.c b/drivers/iio/pressure/ms5=
-611_spi.c
-> index 432e912096f4..a0a7205c9c3a 100644
-> --- a/drivers/iio/pressure/ms5611_spi.c
-> +++ b/drivers/iio/pressure/ms5611_spi.c
-> @@ -91,7 +91,7 @@ static int ms5611_spi_probe(struct spi_device *spi)
->  	spi_set_drvdata(spi, indio_dev);
-> =20
->  	spi->mode =3D SPI_MODE_0;
-> -	spi->max_speed_hz =3D 20000000;
-> +	spi->max_speed_hz =3D min(spi->max_speed_hz, 20000000U);
+     echo 0 >/proc/sys/kernel/watchdog
+     for i in {0..7}; do taskset -c $i echo hi there $i; done
 
-max_speed_hz is a limit, and the max frequency the ms5611 support is
-20MHz.
+Stable:
+  To be applied to 5.16 and above, once accepted by mainline.
 
-Best regards,
-Marcus Folkesson
+Signed-off-by: Joe Korty <joe.korty@concurrent-rt.com>
 
---v0Xw8fmF8ByqwP89
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEBVGi6LZstU1kwSxliIBOb1ldUjIFAmNSu4EACgkQiIBOb1ld
-UjK1VQ/9Fr5fWh7p566FC/TtB0AR3vyoNNvzkF/tnqTagW0bJ4+uelZqyFYxn8Iw
-kS97p1YUm7zHYGWMAL2UCD8+BnGmSJBgtqxEMoa/Ew5ULHCvEVRfpVUFoM//e5EJ
-fNFP65loD41VTggRSNTOcNUbdBMrHpzo5L/ENecV4fWQrwc1xKd4DDCu/dL0GlAd
-2uQrKcOJbBJh4wR3n7SslOqsL4cQgZWPi89S/xvVf5VPJNjoUAmf0Lic4ZVT1FJn
-ZffsTT+oTrkfUnddb26djSp+KxMg9mqaK3OPOFyWebxe4Cp9Ot+4I3uIGguSA9JP
-byvoQsg17ds/EalPufTcVl11+YVqrBQ7qnUM/zlXirTzeSbm4NkEQagHkVrwgi3H
-dHoF+bURYV23enpF7FQjCm/XsFHXYuiop7NzFtYTZbC9O4+g2C7i806fit0XhbY+
-AJ7irSOgVTMat+UUi8M0irAVbI+GHl8U9ww/ptrghm2hUnQmmvlrI1BLYu8LOZ9P
-tdtUq0a+YYFlX+1fwDUIYdLV9ELZlJOIfmvlX5skBge8C8H0qWPLTOdxISra8pP4
-QIFWPQYkx4PPOcNEppCc0fX576aiYyY9RLZany6vRKspgIJwNton90OqjmOzO0RG
-2V6zmX7NGPtalh1Nz1t8RRtT1UvaOqBd4hfZG+KF4yoxgO/5QwU=
-=92FB
------END PGP SIGNATURE-----
-
---v0Xw8fmF8ByqwP89--
+Index: b/drivers/clocksource/arm_arch_timer.c
+===================================================================
+--- a/drivers/clocksource/arm_arch_timer.c
++++ b/drivers/clocksource/arm_arch_timer.c
+@@ -805,7 +805,7 @@ static u64 __arch_timer_check_delta(void
+ 	const struct midr_range broken_cval_midrs[] = {
+ 		/*
+ 		 * XGene-1 implements CVAL in terms of TVAL, meaning
+-		 * that the maximum timer range is 32bit. Shame on them.
++		 * that the maximum timer range is 31bit. Shame on them.
+ 		 */
+ 		MIDR_ALL_VERSIONS(MIDR_CPU_MODEL(ARM_CPU_IMP_APM,
+ 						 APM_CPU_PART_POTENZA)),
+@@ -813,8 +813,8 @@ static u64 __arch_timer_check_delta(void
+ 	};
+ 
+ 	if (is_midr_in_range_list(read_cpuid_id(), broken_cval_midrs)) {
+-		pr_warn_once("Broken CNTx_CVAL_EL1, limiting width to 32bits");
+-		return CLOCKSOURCE_MASK(32);
++		pr_warn_once("Broken CNTx_CVAL_EL1, limiting width to 31bits");
++		return CLOCKSOURCE_MASK(31);
+ 	}
+ #endif
+ 	return CLOCKSOURCE_MASK(arch_counter_get_width());
