@@ -2,117 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BD01607A58
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 17:18:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94D71607A5E
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 17:19:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230263AbiJUPSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 11:18:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49410 "EHLO
+        id S230306AbiJUPTl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 11:19:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230041AbiJUPSB (ORCPT
+        with ESMTP id S230311AbiJUPTd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 11:18:01 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED5EA23E94
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 08:17:59 -0700 (PDT)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Mv7Lr1JgvzJn3N;
-        Fri, 21 Oct 2022 23:15:16 +0800 (CST)
-Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 21 Oct 2022 23:17:54 +0800
-Received: from [10.174.179.234] (10.174.179.234) by
- kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 21 Oct 2022 23:17:53 +0800
-Message-ID: <41608bda-3c20-060e-a9b4-afa2fe615b41@huawei.com>
-Date:   Fri, 21 Oct 2022 23:17:52 +0800
+        Fri, 21 Oct 2022 11:19:33 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89A361ADB0;
+        Fri, 21 Oct 2022 08:19:28 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id g1so5622071lfu.12;
+        Fri, 21 Oct 2022 08:19:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:references:in-reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=nLPDviM40EFa/Qu4CMFk6R9DVn/gn4Pe+x/zBYpv/KU=;
+        b=XhEIMtohA6qebiZAOtvEzdbblBUp4RmVtoikpz0bOemQeKrz0hx6m5VW+QD50hW3h0
+         2RjU721QaaqALbbUVPsNBdm5kJsuy33gZ1Fiyegf207NHPa3Km3EuydthPTsiTlxTlsV
+         ttaj4LAfz+EEBtV0n5Ww6F/Ddgj0t6OilnUkR81XaimlbW5yfwKdFBeL870iMKzwNFwu
+         EBDv+8HkoEW5pYtcWRSQMoRg84NPkjxDzsABW0MxlZJZBcU0pYgMogFmyJJsm54tDjeC
+         j209GxYlVoKNiLpIA6jJThvQ5HmQjnRYcPennaza+uId3mgauL88T4TuWEMJ4sLx9EcM
+         jQpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:references:in-reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nLPDviM40EFa/Qu4CMFk6R9DVn/gn4Pe+x/zBYpv/KU=;
+        b=GMN2kHuQ/J3tHP0feDpb0LPhHVPeTec5QMh2YGoJ6OVRLS8Y7eNEKqedFk2Ptp0fx3
+         Nkg72mg0hJfjG4CoJcKlRWBJwTNMZGW5cC6NcpGPVXtuLtrHC3KVJQ3Jdn7fU2S4RvqZ
+         XjI71TLXEDPYQ9+srhohSTZx126iB3PD/LNYpOkvaN2aqsoZJxMR8ZK19/HqLS6Rf1wY
+         nZEKRdpgvE+wvrtGFTv+agei+KRtCwY1XGZEmg9Ari9XNCWfkW3gvIkI0wAPXe4Zw+KT
+         NgzHomYGRiQy7c+FFUsVPL03B6Z2LTtBOJfwOry8LB6CJkIeopnU8AXlKmmztF2ArAtp
+         4XvQ==
+X-Gm-Message-State: ACrzQf0o4w2lcX2xBSwfimiI7iXGbwh7fRCj3coOPJlKBJbLwtwkY7ak
+        ghnDMwVaa3eeYmUgNeeaGeEZmeB/zJqNSQkUjC0=
+X-Google-Smtp-Source: AMsMyM512XVtiUKIJWXuDsQvik0/Z3SsK9ULwn0I2JQT+zvcMZWojkirDhRouC7SL5La3bSLv7lS2lxj1KygSodjF80=
+X-Received: by 2002:a05:6512:4002:b0:4a2:6243:8384 with SMTP id
+ br2-20020a056512400200b004a262438384mr6716302lfb.29.1666365566622; Fri, 21
+ Oct 2022 08:19:26 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] riscv: fix race when vmap stack overflow
-To:     Guo Ren <guoren@kernel.org>
-CC:     Andrea Parri <parri.andrea@gmail.com>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-References: <20221019154727.2395-1-jszhang@kernel.org>
- <Y1HZFcBo21SQzXVj@andrea>
- <CAJF2gTRAEX_jQ_w5H05dyafZzHq+P5j05TJ=C+v+OL__GQam4A@mail.gmail.com>
- <Y1JaE/ot91Z0KXuC@andrea> <ed7c4027-8e15-245f-cdda-0551063761e7@huawei.com>
- <Y1KdKATQx16Xl/iL@andrea> <f1eb4756-e1e1-1f12-e767-a69a891786d6@huawei.com>
- <CAJF2gTRdtcpccL5W48O8VEXCMvxNAyyrKJzhwNJkc8js+H2iJg@mail.gmail.com>
-From:   Tong Tiangen <tongtiangen@huawei.com>
-In-Reply-To: <CAJF2gTRdtcpccL5W48O8VEXCMvxNAyyrKJzhwNJkc8js+H2iJg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.234]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600017.china.huawei.com (7.193.23.234)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:ab3:5411:0:b0:1f6:575a:5fb7 with HTTP; Fri, 21 Oct 2022
+ 08:19:25 -0700 (PDT)
+In-Reply-To: <CANpmjNPUqVwHLVg5weN3+m7RJ7pCfDjBqJ2fBKueeMzKn=R=jA@mail.gmail.com>
+References: <20220915150417.722975-19-glider@google.com> <20221019173620.10167-1-youling257@gmail.com>
+ <CAOzgRda_CToTVicwxx86E7YcuhDTcayJR=iQtWQ3jECLLhHzcg@mail.gmail.com>
+ <CANpmjNMPKokoJVFr9==-0-+O1ypXmaZnQT3hs4Ys0Y4+o86OVA@mail.gmail.com>
+ <CAOzgRdbbVWTWR0r4y8u5nLUeANA7bU-o5JxGCHQ3r7Ht+TCg1Q@mail.gmail.com>
+ <Y1BXQlu+JOoJi6Yk@elver.google.com> <CAOzgRdY6KSxDMRJ+q2BWHs4hRQc5y-PZ2NYG++-AMcUrO8YOgA@mail.gmail.com>
+ <Y1Bt+Ia93mVV/lT3@elver.google.com> <CAG_fn=WLRN=C1rKrpq4=d=AO9dBaGxoa6YsG7+KrqAck5Bty0Q@mail.gmail.com>
+ <CAOzgRdb+W3_FuOB+P_HkeinDiJdgpQSsXMC4GArOSixL9K5avg@mail.gmail.com>
+ <CANpmjNMUCsRm9qmi5eydHUHP2f5Y+Bt_thA97j8ZrEa5PN3sQg@mail.gmail.com>
+ <CAOzgRdZsNWRHOUUksiOhGfC7XDc+Qs2TNKtXQyzm2xj4to+Y=Q@mail.gmail.com> <CANpmjNPUqVwHLVg5weN3+m7RJ7pCfDjBqJ2fBKueeMzKn=R=jA@mail.gmail.com>
+From:   youling 257 <youling257@gmail.com>
+Date:   Fri, 21 Oct 2022 23:19:25 +0800
+Message-ID: <CAOzgRdYr82TztbX4j7SDjJFiTd8b1B60QZ7jPkNOebB-jO9Ocg@mail.gmail.com>
+Subject: Re: [PATCH v7 18/43] instrumented.h: add KMSAN support
+To:     Marco Elver <elver@google.com>
+Cc:     Alexander Potapenko <glider@google.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
+        linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+CONFIG_DEBUG_INFO=y
+CONFIG_AS_HAS_NON_CONST_LEB128=y
+# CONFIG_DEBUG_INFO_NONE is not set
+CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+# CONFIG_DEBUG_INFO_DWARF4 is not set
+# CONFIG_DEBUG_INFO_DWARF5 is not set
+# CONFIG_DEBUG_INFO_REDUCED is not set
+# CONFIG_DEBUG_INFO_COMPRESSED is not set
+# CONFIG_DEBUG_INFO_SPLIT is not set
+# CONFIG_DEBUG_INFO_BTF is not set
+# CONFIG_GDB_SCRIPTS is not set
 
+perf top still no function name.
 
-在 2022/10/21 22:41, Guo Ren 写道:
-> On Fri, Oct 21, 2022 at 9:46 PM Tong Tiangen <tongtiangen@huawei.com> wrote:
->>
->>
->>
->> 在 2022/10/21 21:22, Andrea Parri 写道:
->>> Hi Tong,
->>>
->>>>>> I use atomic_set_release here, because I need earlier memory
->>>>>> operations finished to make sure the sp is ready then set the spin
->>>>>> flag.
->>>
->>>>       Consider this implementation:)
->>>>
->>>>       smp_store_mb(&spin_shadow_stack, 0);
->>>
->>> smp_store_mb() has "WRITE_ONCE(); smp_mb()" semantics; so it doesn't
->>> guarantee that the store to spin_shadow_stack is ordered after program
->>> -order earlier memory accesses.
->>>
->>>     Andrea
->>> .
->>
->> Hi Andrea:
->>
->> IIUC, the earlier memory access amoswap.aqrl, here .aqrl guarantee it.
->> But anyway, consider we don't care about performance here, using
->> smp_store_release()(add barrier()) surely right.
-> We use smp_store_release() is for:
->          //load per-cpu overflow stack
->          REG_L sp, -8(sp)
+12.90%  [kernel]              [k] 0xffffffff833dfa64
+     3.78%  [kernel]              [k] 0xffffffff8285b439
+     3.61%  [kernel]              [k] 0xffffffff83370254
+     2.32%  [kernel]              [k] 0xffffffff8337025b
+     1.88%  bluetooth.default.so  [.] 0x000000000000d09d
 
-Oh, missing that, you're right. This guarantee the spin flag is set 
-after the sp is used.
-
-> 
-> Not amoswap.
-> 
-> Actually, amoswap.aqrl guarantees nothing because all instructions
-> depend on the sp register.
-right.
-
-Thanks,
-Tong.
-
-> 
+2022-10-21 15:37 GMT+08:00, Marco Elver <elver@google.com>:
+> On Thu, 20 Oct 2022 at 23:39, youling 257 <youling257@gmail.com> wrote:
 >>
->> Thanks,
->> Tong.
-> 
-> 
-> 
+>> PerfTop:    8253 irqs/sec  kernel:75.3%  exact: 100.0% lost: 0/0 drop:
+>> 0/17899 [4000Hz cycles],  (all, 8 CPUs)
+>> ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+>>
+>>     14.87%  [kernel]              [k] 0xffffffff941d1f37
+>>      6.71%  [kernel]              [k] 0xffffffff942016cf
+>>
+>> what is 0xffffffff941d1f37?
+>
+> You need to build with debug symbols:
+> CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+>
+> Then it'll show function names.
+>
+>> 2022-10-21 14:16 GMT+08:00, Marco Elver <elver@google.com>:
+>> > On Thu, 20 Oct 2022 at 22:55, youling 257 <youling257@gmail.com> wrote:
+>> >>
+>> >> How to use perf tool?
+>> >
+>> > The simplest would be to try just "perf top" - and see which kernel
+>> > functions consume most CPU cycles. I would suggest you compare both
+>> > kernels, and see if you can spot a function which uses more cycles% in
+>> > the problematic kernel.
+>> >
+>
