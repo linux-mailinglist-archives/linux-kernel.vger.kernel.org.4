@@ -2,96 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5644A6080A7
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 23:18:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F5596080A3
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 23:18:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229876AbiJUVSn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 17:18:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40092 "EHLO
+        id S230045AbiJUVSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 17:18:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230038AbiJUVS1 (ORCPT
+        with ESMTP id S230139AbiJUVSS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 17:18:27 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B48982A4E11
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 14:18:26 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id c10-20020a170902d48a00b001825736b382so2320763plg.15
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 14:18:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2nZIMOkxkPqMdJjizNd12NlButg+wAhOHsOCFogicCg=;
-        b=WcPSPUKF7ggBl0Y2IXHy1DMp3RWNL9m8VHXZLCw+DdLzcdtF1JNMgKQ4+7na6BJAIO
-         AW0w9JlOFe31ljI0u5nBDWCR37+o2mlUwocMEAqlXjxOFu3JOXkgDD+L7q3ytVQ0j/d0
-         UP6haL7G1S52AUDMJEYSVcTRzCj5FokhTEhpN4n5Munvo7sDoC1885BRAhDqnqDwLtC9
-         dof/6ipmS0UF3J3LivuOP9ww1qTXAHQ0nYkCdlgv5JnnQNjCbZpfv2DMclRVGtRirlmi
-         d3k13p9vzhP6XRidDpiN63cvd8szHaO9Ra9A2xCCBM+I8GXMEtMCp5Kc00ArOhXzxz0l
-         cEoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2nZIMOkxkPqMdJjizNd12NlButg+wAhOHsOCFogicCg=;
-        b=YCyqlXBjjADU5jTaANl9Sp0EHgRaTSBg7w/0am5FRjtENUcTgNAWInXNuOOQ8FJye/
-         ZZ7CGomzeB6MSDeILQH0oS88Fv//8gO7HMyW0Ja1+Rdjg4qkL2hb+uuUeaZxkSwWH940
-         Bpck29o+jJ3mSREcd/ZRxmnu96APIzFklIqvP+pHR2cKgEJbe5001AZyXRJ0FOM16MTj
-         HiaxOE83+dS6YiL+ykNfnzsQROluLhbZksP0sonbcl4hQj7L2FP090IG5MfHHbb2fHFj
-         VrK5jt9lH2sP6lVOEr8aDjgx5ou1ZsXqwwnBo/LyRnIXKw5xsuEqRPU+5OggHGcfqlum
-         mXjw==
-X-Gm-Message-State: ACrzQf1xcvQ4rkTHUzMa59IpW1r6wt00RIeSyaHhV4LXbgJvX8FVC8HN
-        fww3rOsnd/ANoNkHTH8ephv5AbT5jLjp
-X-Google-Smtp-Source: AMsMyM4OXiD+7ajtPxOEHRiPXDK+Af2oMl5k7lHB7wGjmfZQr6qEo6HimWCgs7KwZeOsUn41bSVTpJY776yt
-X-Received: from vipin.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:479f])
- (user=vipinsh job=sendgmr) by 2002:a63:91c7:0:b0:460:156c:ded7 with SMTP id
- l190-20020a6391c7000000b00460156cded7mr17952216pge.298.1666387106255; Fri, 21
- Oct 2022 14:18:26 -0700 (PDT)
+        Fri, 21 Oct 2022 17:18:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9387A2A4E24
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 14:18:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D6C2561F8E
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 21:18:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A7D7C433D6;
+        Fri, 21 Oct 2022 21:18:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666387094;
+        bh=lNMTqMjhK1y8wiMz79oWkjOtjdhIp9WkAVwBJUh/kaU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Hh8YtN8AxnWUGkIkwfNjdnp3qyCNqcD/fifW3dmMQ2+g/DJHBOuem4WYf1CENjENw
+         fm9/pZlUuwvAZKnTb1ZGFo9fGjiNA8cJoN2LmQSSzwk91+wdWnpoSdS6bivUhAhuoR
+         WPAaLexRQR9SrWLIHcEPeXOJdTmFcRUarNadK5KGL7P4P9tMPNaXs6CKVhpCSQeyPU
+         pwp8qFuxO1qNaolj6HmLAovHhZrawy4I7nTg43t8XwEGHTEo7SkZNV2pjm3YO7tlUU
+         MXiWTvq8Mhvdjz5NFjmtuQiLupn4BdbEWZcDloW4xOX/u6SPNvEVQjeLBljj+UftEa
+         onMMxnqzse3qw==
 Date:   Fri, 21 Oct 2022 14:18:12 -0700
-In-Reply-To: <20221021211816.1525201-1-vipinsh@google.com>
-Mime-Version: 1.0
-References: <20221021211816.1525201-1-vipinsh@google.com>
-X-Mailer: git-send-email 2.38.0.135.g90850a2211-goog
-Message-ID: <20221021211816.1525201-2-vipinsh@google.com>
-Subject: [PATCH v6 1/5] KVM: selftests: Add missing break between -e and -g
- option in dirty_log_perf_test
-From:   Vipin Sharma <vipinsh@google.com>
-To:     seanjc@google.com, pbonzini@redhat.com, dmatlack@google.com
-Cc:     andrew.jones@linux.dev, wei.w.wang@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Vipin Sharma <vipinsh@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Miguel Ojeda <ojeda@kernel.org>
+Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Marco Elver <elver@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Uros Bizjak <ubizjak@gmail.com>,
+        Dan Li <ashimida@linux.alibaba.com>,
+        Alexander Potapenko <glider@google.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/5] compiler-gcc: remove attribute support check for
+ `__no_sanitize_address__`
+Message-ID: <Y1MMlE3A2Gdw599+@dev-arch.thelio-3990X>
+References: <20221021115956.9947-1-ojeda@kernel.org>
+ <20221021115956.9947-2-ojeda@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221021115956.9947-2-ojeda@kernel.org>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Passing -e option (Run VCPUs while dirty logging is being disabled) in
-dirty_log_perf_test also unintentionally enables -g (Do not enable
-KVM_CAP_MANUAL_DIRTY_LOG_PROTECT2). Add break between two switch case
-logic.
+On Fri, Oct 21, 2022 at 01:59:53PM +0200, Miguel Ojeda wrote:
+> The attribute was added in GCC 4.8, while the minimum GCC version
+> supported by the kernel is GCC 5.1.
+> 
+> Therefore, remove the check.
+> 
+> Link: https://godbolt.org/z/84v56vcn8
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 
-Fixes: cfe12e64b065 ("KVM: selftests: Add an option to run vCPUs while disabling dirty logging")
-Signed-off-by: Vipin Sharma <vipinsh@google.com>
----
- tools/testing/selftests/kvm/dirty_log_perf_test.c | 1 +
- 1 file changed, 1 insertion(+)
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-diff --git a/tools/testing/selftests/kvm/dirty_log_perf_test.c b/tools/testing/selftests/kvm/dirty_log_perf_test.c
-index f99e39a672d3..56e08da3a87f 100644
---- a/tools/testing/selftests/kvm/dirty_log_perf_test.c
-+++ b/tools/testing/selftests/kvm/dirty_log_perf_test.c
-@@ -411,6 +411,7 @@ int main(int argc, char *argv[])
- 		case 'e':
- 			/* 'e' is for evil. */
- 			run_vcpus_while_disabling_dirty_logging = true;
-+			break;
- 		case 'g':
- 			dirty_log_manual_caps = 0;
- 			break;
--- 
-2.38.0.135.g90850a2211-goog
-
+> ---
+>  include/linux/compiler-gcc.h | 4 ----
+>  1 file changed, 4 deletions(-)
+> 
+> diff --git a/include/linux/compiler-gcc.h b/include/linux/compiler-gcc.h
+> index b9530d3515ac..bfce7f4d0978 100644
+> --- a/include/linux/compiler-gcc.h
+> +++ b/include/linux/compiler-gcc.h
+> @@ -82,11 +82,7 @@
+>  #define __noscs __attribute__((__no_sanitize__("shadow-call-stack")))
+>  #endif
+>  
+> -#if __has_attribute(__no_sanitize_address__)
+>  #define __no_sanitize_address __attribute__((__no_sanitize_address__))
+> -#else
+> -#define __no_sanitize_address
+> -#endif
+>  
+>  #if defined(__SANITIZE_THREAD__) && __has_attribute(__no_sanitize_thread__)
+>  #define __no_sanitize_thread __attribute__((__no_sanitize_thread__))
+> -- 
+> 2.38.1
+> 
+> 
