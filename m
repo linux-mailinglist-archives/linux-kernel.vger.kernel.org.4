@@ -2,157 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94D71607A5E
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 17:19:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23660607A5F
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 17:19:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230306AbiJUPTl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 11:19:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51288 "EHLO
+        id S230308AbiJUPTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 11:19:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230311AbiJUPTd (ORCPT
+        with ESMTP id S230294AbiJUPTg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 11:19:33 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89A361ADB0;
-        Fri, 21 Oct 2022 08:19:28 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id g1so5622071lfu.12;
-        Fri, 21 Oct 2022 08:19:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:references:in-reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=nLPDviM40EFa/Qu4CMFk6R9DVn/gn4Pe+x/zBYpv/KU=;
-        b=XhEIMtohA6qebiZAOtvEzdbblBUp4RmVtoikpz0bOemQeKrz0hx6m5VW+QD50hW3h0
-         2RjU721QaaqALbbUVPsNBdm5kJsuy33gZ1Fiyegf207NHPa3Km3EuydthPTsiTlxTlsV
-         ttaj4LAfz+EEBtV0n5Ww6F/Ddgj0t6OilnUkR81XaimlbW5yfwKdFBeL870iMKzwNFwu
-         EBDv+8HkoEW5pYtcWRSQMoRg84NPkjxDzsABW0MxlZJZBcU0pYgMogFmyJJsm54tDjeC
-         j209GxYlVoKNiLpIA6jJThvQ5HmQjnRYcPennaza+uId3mgauL88T4TuWEMJ4sLx9EcM
-         jQpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:references:in-reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nLPDviM40EFa/Qu4CMFk6R9DVn/gn4Pe+x/zBYpv/KU=;
-        b=GMN2kHuQ/J3tHP0feDpb0LPhHVPeTec5QMh2YGoJ6OVRLS8Y7eNEKqedFk2Ptp0fx3
-         Nkg72mg0hJfjG4CoJcKlRWBJwTNMZGW5cC6NcpGPVXtuLtrHC3KVJQ3Jdn7fU2S4RvqZ
-         XjI71TLXEDPYQ9+srhohSTZx126iB3PD/LNYpOkvaN2aqsoZJxMR8ZK19/HqLS6Rf1wY
-         nZEKRdpgvE+wvrtGFTv+agei+KRtCwY1XGZEmg9Ari9XNCWfkW3gvIkI0wAPXe4Zw+KT
-         NgzHomYGRiQy7c+FFUsVPL03B6Z2LTtBOJfwOry8LB6CJkIeopnU8AXlKmmztF2ArAtp
-         4XvQ==
-X-Gm-Message-State: ACrzQf0o4w2lcX2xBSwfimiI7iXGbwh7fRCj3coOPJlKBJbLwtwkY7ak
-        ghnDMwVaa3eeYmUgNeeaGeEZmeB/zJqNSQkUjC0=
-X-Google-Smtp-Source: AMsMyM512XVtiUKIJWXuDsQvik0/Z3SsK9ULwn0I2JQT+zvcMZWojkirDhRouC7SL5La3bSLv7lS2lxj1KygSodjF80=
-X-Received: by 2002:a05:6512:4002:b0:4a2:6243:8384 with SMTP id
- br2-20020a056512400200b004a262438384mr6716302lfb.29.1666365566622; Fri, 21
- Oct 2022 08:19:26 -0700 (PDT)
+        Fri, 21 Oct 2022 11:19:36 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1FDE15FDA;
+        Fri, 21 Oct 2022 08:19:33 -0700 (PDT)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Mv7LF0xC2zmV9d;
+        Fri, 21 Oct 2022 23:14:45 +0800 (CST)
+Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 21 Oct 2022 23:19:31 +0800
+Received: from [10.174.179.234] (10.174.179.234) by
+ kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 21 Oct 2022 23:19:31 +0800
+Message-ID: <61e636e0-9dac-fa9a-7a4f-aa50a336505f@huawei.com>
+Date:   Fri, 21 Oct 2022 23:19:30 +0800
 MIME-Version: 1.0
-Received: by 2002:ab3:5411:0:b0:1f6:575a:5fb7 with HTTP; Fri, 21 Oct 2022
- 08:19:25 -0700 (PDT)
-In-Reply-To: <CANpmjNPUqVwHLVg5weN3+m7RJ7pCfDjBqJ2fBKueeMzKn=R=jA@mail.gmail.com>
-References: <20220915150417.722975-19-glider@google.com> <20221019173620.10167-1-youling257@gmail.com>
- <CAOzgRda_CToTVicwxx86E7YcuhDTcayJR=iQtWQ3jECLLhHzcg@mail.gmail.com>
- <CANpmjNMPKokoJVFr9==-0-+O1ypXmaZnQT3hs4Ys0Y4+o86OVA@mail.gmail.com>
- <CAOzgRdbbVWTWR0r4y8u5nLUeANA7bU-o5JxGCHQ3r7Ht+TCg1Q@mail.gmail.com>
- <Y1BXQlu+JOoJi6Yk@elver.google.com> <CAOzgRdY6KSxDMRJ+q2BWHs4hRQc5y-PZ2NYG++-AMcUrO8YOgA@mail.gmail.com>
- <Y1Bt+Ia93mVV/lT3@elver.google.com> <CAG_fn=WLRN=C1rKrpq4=d=AO9dBaGxoa6YsG7+KrqAck5Bty0Q@mail.gmail.com>
- <CAOzgRdb+W3_FuOB+P_HkeinDiJdgpQSsXMC4GArOSixL9K5avg@mail.gmail.com>
- <CANpmjNMUCsRm9qmi5eydHUHP2f5Y+Bt_thA97j8ZrEa5PN3sQg@mail.gmail.com>
- <CAOzgRdZsNWRHOUUksiOhGfC7XDc+Qs2TNKtXQyzm2xj4to+Y=Q@mail.gmail.com> <CANpmjNPUqVwHLVg5weN3+m7RJ7pCfDjBqJ2fBKueeMzKn=R=jA@mail.gmail.com>
-From:   youling 257 <youling257@gmail.com>
-Date:   Fri, 21 Oct 2022 23:19:25 +0800
-Message-ID: <CAOzgRdYr82TztbX4j7SDjJFiTd8b1B60QZ7jPkNOebB-jO9Ocg@mail.gmail.com>
-Subject: Re: [PATCH v7 18/43] instrumented.h: add KMSAN support
-To:     Marco Elver <elver@google.com>
-Cc:     Alexander Potapenko <glider@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
-        linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH -next] csky: add arch support current_stack_pointer
+To:     Guo Ren <guoren@kernel.org>
+CC:     <linux-csky@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <wangkefeng.wang@huawei.com>, Guohanjun <guohanjun@huawei.com>
+References: <20221021115654.5278-1-tongtiangen@huawei.com>
+ <CAJF2gTQN9j=cXLTgUp++438b2acqNoZF0r_D_9xFdaxUEc3c-w@mail.gmail.com>
+From:   Tong Tiangen <tongtiangen@huawei.com>
+In-Reply-To: <CAJF2gTQN9j=cXLTgUp++438b2acqNoZF0r_D_9xFdaxUEc3c-w@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.234]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600017.china.huawei.com (7.193.23.234)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CONFIG_DEBUG_INFO=y
-CONFIG_AS_HAS_NON_CONST_LEB128=y
-# CONFIG_DEBUG_INFO_NONE is not set
-CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
-# CONFIG_DEBUG_INFO_DWARF4 is not set
-# CONFIG_DEBUG_INFO_DWARF5 is not set
-# CONFIG_DEBUG_INFO_REDUCED is not set
-# CONFIG_DEBUG_INFO_COMPRESSED is not set
-# CONFIG_DEBUG_INFO_SPLIT is not set
-# CONFIG_DEBUG_INFO_BTF is not set
-# CONFIG_GDB_SCRIPTS is not set
 
-perf top still no function name.
 
-12.90%  [kernel]              [k] 0xffffffff833dfa64
-     3.78%  [kernel]              [k] 0xffffffff8285b439
-     3.61%  [kernel]              [k] 0xffffffff83370254
-     2.32%  [kernel]              [k] 0xffffffff8337025b
-     1.88%  bluetooth.default.so  [.] 0x000000000000d09d
+在 2022/10/21 22:48, Guo Ren 写道:
+> On Fri, Oct 21, 2022 at 7:31 PM Tong Tiangen <tongtiangen@huawei.com> wrote:
+>>
+>> To follow the existing per-arch conventions, using "current_stack_pointer"
+>> to set sp.
+>>
+>> This will let it be used in non-arch places(like HARDENED_USERCOPY).
+>>
+> 
+> Add a Link tag here. The original patch series lore.kernel.org link.
+> One tip: commit fdecfea09328b33fd08a4d418237cce9fd176d69 riscv: Rename
+> "sp_in_global" to "current_stack_pointer"
+> 
+>      To follow the existing per-arch conventions, rename "sp_in_global" to
+>      "current_stack_pointer". This will let it be used in non-arch places
+>      (like HARDENED_USERCOPY).
 
-2022-10-21 15:37 GMT+08:00, Marco Elver <elver@google.com>:
-> On Thu, 20 Oct 2022 at 23:39, youling 257 <youling257@gmail.com> wrote:
+Hi guo:
+
+Ok, Will be added in v2.
+
+Thanks.
+Tong.
+
+>> Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
+>> ---
+>>   arch/csky/Kconfig                 | 1 +
+>>   arch/csky/include/asm/processor.h | 2 ++
+>>   arch/csky/kernel/stacktrace.c     | 6 ++----
+>>   3 files changed, 5 insertions(+), 4 deletions(-)
 >>
->> PerfTop:    8253 irqs/sec  kernel:75.3%  exact: 100.0% lost: 0/0 drop:
->> 0/17899 [4000Hz cycles],  (all, 8 CPUs)
->> ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+>> diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
+>> index adee6ab36862..2236b5c0c213 100644
+>> --- a/arch/csky/Kconfig
+>> +++ b/arch/csky/Kconfig
+>> @@ -9,6 +9,7 @@ config CSKY
+>>          select ARCH_USE_BUILTIN_BSWAP
+>>          select ARCH_USE_QUEUED_RWLOCKS
+>>          select ARCH_USE_QUEUED_SPINLOCKS
+>> +       select ARCH_HAS_CURRENT_STACK_POINTER
+>>          select ARCH_INLINE_READ_LOCK if !PREEMPTION
+>>          select ARCH_INLINE_READ_LOCK_BH if !PREEMPTION
+>>          select ARCH_INLINE_READ_LOCK_IRQ if !PREEMPTION
+>> diff --git a/arch/csky/include/asm/processor.h b/arch/csky/include/asm/processor.h
+>> index 63ad71fab30d..ea75d72dea86 100644
+>> --- a/arch/csky/include/asm/processor.h
+>> +++ b/arch/csky/include/asm/processor.h
+>> @@ -84,4 +84,6 @@ unsigned long __get_wchan(struct task_struct *p);
 >>
->>     14.87%  [kernel]              [k] 0xffffffff941d1f37
->>      6.71%  [kernel]              [k] 0xffffffff942016cf
+>>   #define cpu_relax() barrier()
 >>
->> what is 0xffffffff941d1f37?
->
-> You need to build with debug symbols:
-> CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
->
-> Then it'll show function names.
->
->> 2022-10-21 14:16 GMT+08:00, Marco Elver <elver@google.com>:
->> > On Thu, 20 Oct 2022 at 22:55, youling 257 <youling257@gmail.com> wrote:
->> >>
->> >> How to use perf tool?
->> >
->> > The simplest would be to try just "perf top" - and see which kernel
->> > functions consume most CPU cycles. I would suggest you compare both
->> > kernels, and see if you can spot a function which uses more cycles% in
->> > the problematic kernel.
->> >
->
+>> +register unsigned long current_stack_pointer __asm__("sp");
+>> +
+>>   #endif /* __ASM_CSKY_PROCESSOR_H */
+>> diff --git a/arch/csky/kernel/stacktrace.c b/arch/csky/kernel/stacktrace.c
+>> index 9f78f5d21511..27ecd63e321b 100644
+>> --- a/arch/csky/kernel/stacktrace.c
+>> +++ b/arch/csky/kernel/stacktrace.c
+>> @@ -23,10 +23,9 @@ void notrace walk_stackframe(struct task_struct *task, struct pt_regs *regs,
+>>                  sp = user_stack_pointer(regs);
+>>                  pc = instruction_pointer(regs);
+>>          } else if (task == NULL || task == current) {
+>> -               const register unsigned long current_sp __asm__ ("sp");
+>>                  const register unsigned long current_fp __asm__ ("r8");
+>>                  fp = current_fp;
+>> -               sp = current_sp;
+>> +               sp = current_stack_pointer;
+>>                  pc = (unsigned long)walk_stackframe;
+>>          } else {
+>>                  /* task blocked in __switch_to */
+>> @@ -68,8 +67,7 @@ static void notrace walk_stackframe(struct task_struct *task,
+>>                  sp = user_stack_pointer(regs);
+>>                  pc = instruction_pointer(regs);
+>>          } else if (task == NULL || task == current) {
+>> -               const register unsigned long current_sp __asm__ ("sp");
+>> -               sp = current_sp;
+>> +               sp = current_stack_pointer;
+>>                  pc = (unsigned long)walk_stackframe;
+>>          } else {
+>>                  /* task blocked in __switch_to */
+>> --
+>> 2.25.1
+>>
+> 
+> 
