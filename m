@@ -2,210 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CE4D607755
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 14:54:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6CA5607758
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 14:54:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229908AbiJUMxy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 08:53:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35366 "EHLO
+        id S229631AbiJUMyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 08:54:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229897AbiJUMxv (ORCPT
+        with ESMTP id S229890AbiJUMyQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 08:53:51 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF8B26B6D6
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 05:53:49 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id z30so1882991qkz.13
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 05:53:49 -0700 (PDT)
+        Fri, 21 Oct 2022 08:54:16 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF75D267792
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 05:54:13 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id fn7-20020a05600c688700b003b4fb113b86so1944523wmb.0
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 05:54:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=/oSeaW5mIul8TIhIXdrPxIKt9VEUuWQxs7k14eD/1Ss=;
-        b=sNK2bvtb0ckWlAzBW2zlR/iBOi7oAQTHNcdG3EQDc0gDVdJvQWJSne5nmtCTDeKv01
-         LEFxTjBtiZGtP76wki/rZRcTfgMtxgXQ2fIVgTZvHVZxhvQWXGHWV+LR/IHyhLuZburc
-         9rUKFqAC+xjzt721U30STNJfbv76tSnlTFjbzuaMOk9wEsDfYJNh3vHB6+BaUvOoG2p5
-         OtuPWxE7KbYy7QIy3Y7DKlKwULDiMVgLJTWdUMpntiC6Oih/Lnt7UoaAvTTT28BXeegI
-         6d+xkHbZ3qQGW87JffuysvRdnff8FaHQGRcmJjJ51D7lpVozc2ViYex1iqvmZ1ymuZWJ
-         X8nQ==
+        bh=dcJ0BXzywjnrhti2p9MqhHIKm9sRkuR/9GbeUPAwfiI=;
+        b=wX+jp2ux54182Z8x2Qwm/qwDyhMnic5dnmOdyq4OJf4qq+urYKyfHlPxL/in0oa5oF
+         4qLB2JlpciF4ApNRMDcWA7A4cyvRRbOdo0Lc3VCE9MEJ5VvAeQgBhrh7agYl9OS1dIef
+         aj7xwk1SLPArT/0Nw7IMxsWhui2uWtgEl5krn5a38S3qeA4MPuGW1HrdF6BfPOJPQXgT
+         sl3UZgW1GejlPA1sde8euEY8rnngkUHgXYVI88BzrsfK71/jJZq0c7XYMmlfQAwuadSM
+         MalxMQBacmlBQDSQ7Y+5HuKVWIEb0gGqAUYGfWT0CM27tWmu1lMpCo53wxLxx3AQ0iEk
+         fwQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/oSeaW5mIul8TIhIXdrPxIKt9VEUuWQxs7k14eD/1Ss=;
-        b=8ITrXQoJ3oQiaCdtzYUjHAhSckXupuRPZpqaN5h/hAQIiZA8Z2lPyymEaFVFwnlQV0
-         E+EavcFfcXOPdc18zzWNOYxt77p3gx5LoBplpdpvU5u76yBuiD0vdBduAQ6v+V+wzKmY
-         tk60jN1db5S86hhbsjDAVwCoGlVaeF3cFTWp9O5zXQ/mgfxJVgIAfjMnzmh8ETYv7qiu
-         GuBguB76BAK7YjG82Ic/xRsjlksmQ9VWa0ak4P4efcw1Ty7Dk8FSHzt3Qp6DIiLdj5cP
-         ZOq0voVBNMu5e7RVdxdaKF37xbeY+i1P++x3X/XGsfwE/93uU2n1pAd8BVcZC8temNLC
-         GL8A==
-X-Gm-Message-State: ACrzQf1Yy/Ocn4NVzIgyY1660hB0JqHEB7rsN1KYXbIhQRw3kKXcd88B
-        mhJ0wfG9IngPe1DCqKcmBxEblg==
-X-Google-Smtp-Source: AMsMyM6L4xxVRWdbLocFykTdac6DlxEUJbXwJLGOhwqvAy4RhLV8T3Niy3e9l/kTxGIuF9J8/g+4jQ==
-X-Received: by 2002:a05:620a:2487:b0:6ee:74a7:934b with SMTP id i7-20020a05620a248700b006ee74a7934bmr14077470qkn.625.1666356828594;
-        Fri, 21 Oct 2022 05:53:48 -0700 (PDT)
-Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
-        by smtp.gmail.com with ESMTPSA id w27-20020a05620a0e9b00b006cdd0939ffbsm9345492qkm.86.2022.10.21.05.53.46
+        bh=dcJ0BXzywjnrhti2p9MqhHIKm9sRkuR/9GbeUPAwfiI=;
+        b=jN1oHqBnnk03MIFymEl+TSsY7Qj44Gr1bb1xKU87Kqq9AJb67rE2/nBnyZOc6TYgAM
+         vTf1t0NGo+Lx9bfFhGB6K1BdXU4hXHCYHFAeZWpZwagf4GHysH0hFVAzkLoFaM1g0KwP
+         pVHq3EVxaF4aZ1ahic8p80jtIOrS5SFTnOSTMp67kZu8p3vcL6mjjRPfOGQ9RwR7r1aV
+         6qVvYjiRv9CGopHLFtBIpz6Y4KXQnxrmalhq9/wACszuUT2Dta1Z3zZHzsBrCU7wgmU9
+         KSq7Gt5dJbTQ2mK4Ya9EHcFIEMQquQya3PvhBw4bRuByJrjFhoh3oNngFlPbEyAogJUR
+         zPPg==
+X-Gm-Message-State: ACrzQf2BZnGYDsqoB5lMVWYL+Yd/Edqh96rFNgKnLa54uodDUlqB+CWP
+        V8dw+avAyRaFjtVN+feXiKgLRQ==
+X-Google-Smtp-Source: AMsMyM6kt3xg2Xdg1CINtQr1rmLE0ZAUwFgzhyCyK+jU6LLz4X4K28erCFd4qZOffTf1L/Q7a3BJYw==
+X-Received: by 2002:a05:600c:198d:b0:3b4:a62c:a085 with SMTP id t13-20020a05600c198d00b003b4a62ca085mr32345777wmq.140.1666356852156;
+        Fri, 21 Oct 2022 05:54:12 -0700 (PDT)
+Received: from [192.168.0.20] (210.145.15.109.rev.sfr.net. [109.15.145.210])
+        by smtp.gmail.com with ESMTPSA id o10-20020a1c750a000000b003b4868eb6bbsm3033961wmc.23.2022.10.21.05.54.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Oct 2022 05:53:47 -0700 (PDT)
-Message-ID: <89340edb-2451-e648-e2e6-94c8f2410084@linaro.org>
-Date:   Fri, 21 Oct 2022 08:53:45 -0400
+        Fri, 21 Oct 2022 05:54:11 -0700 (PDT)
+Message-ID: <df1895c8-aec6-cada-e208-ccda8042860d@baylibre.com>
+Date:   Fri, 21 Oct 2022 14:54:10 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 6/6] arm64: dts: fsd: Add sound card node for Tesla FSD
-To:     Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>,
-        'Alim Akhtar' <alim.akhtar@samsung.com>, lgirdwood@gmail.com,
-        broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, s.nawrocki@samsung.com,
-        perex@perex.cz, tiwai@suse.com, pankaj.dubey@samsung.com,
-        rcsekar@samsung.com, aswani.reddy@samsung.com
-Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-References: <20221014102151.108539-1-p.rajanbabu@samsung.com>
- <CGME20221014104915epcas5p12414b87ea127b2d5bf521556bf841b00@epcas5p1.samsung.com>
- <20221014102151.108539-7-p.rajanbabu@samsung.com>
- <00c301d8dfd0$f55ca230$e015e690$@samsung.com>
- <04aa01d8e524$d253f2d0$76fbd870$@samsung.com>
+ Thunderbird/102.3.3
+Subject: Re: [PATCH v3 1/2] spi: dt-bindings: amlogic, meson-gx-spicc: Add
+ pinctrl names for SPI signal states
 Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <04aa01d8e524$d253f2d0$76fbd870$@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        neil.armstrong@linaro.org, Mark Brown <broonie@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Da Xue <da@libre.computer>, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221004-up-aml-fix-spi-v3-0-89de126fd163@baylibre.com>
+ <20221004-up-aml-fix-spi-v3-1-89de126fd163@baylibre.com>
+ <d355ee40-5905-4d10-8300-81e9a63117ee@linaro.org>
+ <dc918114-8b89-441b-5ba1-aaf3ae084860@linaro.org>
+ <20c115e0-0acf-dac2-2a30-0f394fa513ab@linaro.org>
+From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
+In-Reply-To: <20c115e0-0acf-dac2-2a30-0f394fa513ab@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/10/2022 04:12, Padmanabhan Rajanbabu wrote:
-> 
-> 
->> -----Original Message-----
->> From: Alim Akhtar [mailto:alim.akhtar@samsung.com]
->> Sent: 14 October 2022 06:59 PM
->> To: 'Padmanabhan Rajanbabu' <p.rajanbabu@samsung.com>;
->> lgirdwood@gmail.com; broonie@kernel.org; robh+dt@kernel.org;
->> krzysztof.kozlowski+dt@linaro.org; s.nawrocki@samsung.com;
->> perex@perex.cz; tiwai@suse.com; pankaj.dubey@samsung.com;
->> rcsekar@samsung.com; aswani.reddy@samsung.com
->> Cc: alsa-devel@alsa-project.org; devicetree@vger.kernel.org; linux-
->> kernel@vger.kernel.org; linux-samsung-soc@vger.kernel.org
->> Subject: RE: [PATCH 6/6] arm64: dts: fsd: Add sound card node for Tesla FSD
+Hi
+
+On 10/20/22 14:49, Krzysztof Kozlowski wrote:
+>>>> +      properties:
+>>>> +        pinctrl-names:
+>>>> +          minItems: 1
+>>>> +          items:
+>>>> +            - const: default
+>>>> +            - const: idle-high
+>>>> +            - const: idle-low
+>>> You should also define in such case pinctrl-0 and others.
+>> Ok I thought it would be covered by the pinctrl-consumer.yaml
+>> but yeah we should allow pinctrl-1 and pinctrl-2 here aswell by adding:
+>>
+>>               pinctrl-1: true
+>>               pinctrl-2: true
 >>
 >>
->>
->>> -----Original Message-----
->>> From: Padmanabhan Rajanbabu [mailto:p.rajanbabu@samsung.com]
->>> Sent: Friday, October 14, 2022 3:52 PM
->>> To: lgirdwood@gmail.com; broonie@kernel.org; robh+dt@kernel.org;
->>> krzysztof.kozlowski+dt@linaro.org; s.nawrocki@samsung.com;
->>> perex@perex.cz; tiwai@suse.com; pankaj.dubey@samsung.com;
->>> alim.akhtar@samsung.com; rcsekar@samsung.com;
->> aswani.reddy@samsung.com
->>> Cc: alsa-devel@alsa-project.org; devicetree@vger.kernel.org; linux-
->>> kernel@vger.kernel.org; linux-samsung-soc@vger.kernel.org;
->> Padmanabhan
->>> Rajanbabu <p.rajanbabu@samsung.com>
->>> Subject: [PATCH 6/6] arm64: dts: fsd: Add sound card node for Tesla FSD
->>>
->>> Add device tree node support for sound card on Tesla FSD board
->>>
->>> Signed-off-by: Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>
->>> ---
->>> arch/arm64/boot/dts/tesla/fsd-evb.dts | 49
->>> +++++++++++++++++++++++++++
->>> arch/arm64/boot/dts/tesla/fsd.dtsi    |  3 ++
->>> 2 files changed, 52 insertions(+)
->>>
->>> diff --git a/arch/arm64/boot/dts/tesla/fsd-evb.dts
->>> b/arch/arm64/boot/dts/tesla/fsd-evb.dts
->>> index c0a4509499ab..ecaa3c2e3045 100644
->>> --- a/arch/arm64/boot/dts/tesla/fsd-evb.dts
->>> +++ b/arch/arm64/boot/dts/tesla/fsd-evb.dts
->>> @@ -49,3 +49,52 @@
->>> &tdm_1 {
->>> 	status = "okay";
->>> };
->>> +
->>> +&sound {
->>> +	compatible = "tesla,fsd-sndcard";
->>> +	status = "okay";
->>> +	model = "fsd-i2s";
->>> +	widgets =
->>> +		"Speaker", "MAIN SPK",
->>> +		"Microphone", "MAIN MIC";
->>> +
->>> +	primary-dai-link-0 {
->>> +		link-name = "fsd-primary-0";
->>> +		dai-format = "i2s";
->>> +		tesla,bitclock-master = <&tdm_0>;
->>> +		tesla,frame-master = <&tdm_0>;
->>> +		cpu {
->>> +			sound-dai = <&tdm_0 0>;
->>> +		};
->>> +	};
->>> +
->>> +	secondary-dai-link-0 {
->>> +		link-name = "fsd-secondary-0";
->>> +		dai-format = "i2s";
->>> +		tesla,bitclock-master = <&tdm_0>;
->>> +		tesla,frame-master = <&tdm_0>;
->>> +		cpu {
->>> +			sound-dai = <&tdm_0 1>;
->>> +		};
->>> +	};
->>> +
->>> +	primary-dai-link-1 {
->>> +		link-name = "fsd-primary-1";
->>> +		dai-format = "i2s";
->>> +		tesla,bitclock-master = <&tdm_1>;
->>> +		tesla,frame-master = <&tdm_1>;
->>> +		cpu {
->>> +			sound-dai = <&tdm_1 0>;
->>> +		};
->>> +	};
->>> +
->>> +	secondary-dai-link-1 {
->>> +		link-name = "fsd-secondary-1";
->>> +		dai-format = "i2s";
->>> +		tesla,bitclock-master = <&tdm_1>;
->>> +		tesla,frame-master = <&tdm_1>;
->>> +		cpu {
->>> +			sound-dai = <&tdm_1 1>;
->>> +		};
->>> +	};
->>> +};
->>> diff --git a/arch/arm64/boot/dts/tesla/fsd.dtsi
->>> b/arch/arm64/boot/dts/tesla/fsd.dtsi
->>> index 5decad45a1b6..fc8931f830a7 100644
->>> --- a/arch/arm64/boot/dts/tesla/fsd.dtsi
->>> +++ b/arch/arm64/boot/dts/tesla/fsd.dtsi
->>> @@ -847,6 +847,9 @@
->>> 			status = "disabled";
->>> 		};
->>>
->>> +		sound: sound {
->>> +		};
->>> +
->> Why to have an empty node in dtsi?
-> This is required as every node we use in dts should have the same declared in
+In such case, should I define pinctrl- as part of the if statement, as shown below,
 
-I see no reason why this is required.
+or before allOf ?
 
-> dtsi. Sound nodes in most of the platform is only declared (dummy node) in
-> dtsi and defining only in dts. Thus we are following the same.
+[...]
 
-Can you point me to Samsung platform doing this?
+   - if:
+       properties:
+         compatible:
+           contains:
+             enum:
+               - amlogic,meson-gx-spicc
 
-Keep the code consistent with Exynos style.
+     then:
+       properties:
+         pinctrl-0: true
+         pinctrl-1: true
+         pinctrl-2: true
 
-Best regards,
-Krzysztof
+         pinctrl-names:
+           minItems: 1
+           items:
+             - const: default
+             - const: idle-high
+             - const: idle-low
 
+[...]
+
+Regards
+
+Amjad
+
+> Yes.
+>
+> Best regards,
+> Krzysztof
+>
