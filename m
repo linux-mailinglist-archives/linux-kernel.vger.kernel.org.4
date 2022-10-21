@@ -2,167 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C30C2606FCF
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 08:05:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDF14606FD4
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 08:05:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229514AbiJUGFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 02:05:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60292 "EHLO
+        id S230089AbiJUGFp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 02:05:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230048AbiJUGE4 (ORCPT
+        with ESMTP id S230055AbiJUGFj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 02:04:56 -0400
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 162DB4F189
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 23:04:47 -0700 (PDT)
-Received: by mail-ot1-x331.google.com with SMTP id z11-20020a05683020cb00b00661a95cf920so1233159otq.5
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 23:04:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=X/GRjlz3OBLLftzrQwN2BllHc/DggggRf8lVr8VG4SA=;
-        b=PlbM5iStfkae1Q3fuihRV3OvtIMUFdbkjn19h/HY9jKFba1Tf4urYPX0EG/zB7yatG
-         s7vi3YRFmTBcLp1LBp6rk7GZYOgD1/amQUMV/ti4hR0UXKg4gZbsYdrIwLIUYvM2zsmx
-         6gTBEYHnhNuL58sglAB9TkyAsGMYRAk/2FexE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=X/GRjlz3OBLLftzrQwN2BllHc/DggggRf8lVr8VG4SA=;
-        b=yZ7VefwuY2J7htivvvMDDOZ2MEXfaq9wIoMxr2FIM8Z3kqcHT1cOA1V62GgD7f1wqD
-         5DNny7u/h2Ft+CdiTBi3jEfhnq4GS46FH2fWyY1CCa7xv7W/oDBJEdPMFhIkanSplm+B
-         gzuLIVa7MPNPijMOyPZ9SNaVkuclNcog25o+biNdVldOoPxYv24Xwz18h1qW4HHHaMmd
-         ZELeQ4ZYmXRXWxjRcSArRYycr0AXTJLQo2tXXz7AWZtGAUKXqWU3xlK086pGVRaQB+4H
-         aA7jbkvMsqjSW6VbUL8xAqHt9DPX4PBiWsoHjyuDGer2jzQ1krV/zKBRU8bJfE26CYUG
-         pbeQ==
-X-Gm-Message-State: ACrzQf0/hbn3+UNGuWcj8AUTg3H/S8GSLeJE3Dy500wDEPnxkNfghVJ3
-        gYy9wjJOfJQeACM8NqUae9fd4nKSx840UI1ohYLB
-X-Google-Smtp-Source: AMsMyM7K0WAbqwMo/2+Tsz5RDOWzcEbuFbaCbLvJ8fnArjfYzaxeNfAApLoIPWQ2DzfEEIfMA3J1eUSOnC2ZFwE0G5c=
-X-Received: by 2002:a05:6830:6611:b0:662:2725:d309 with SMTP id
- cp17-20020a056830661100b006622725d309mr507738otb.293.1666332286395; Thu, 20
- Oct 2022 23:04:46 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221019114535.131469-1-apatel@ventanamicro.com>
-In-Reply-To: <20221019114535.131469-1-apatel@ventanamicro.com>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Thu, 20 Oct 2022 23:04:35 -0700
-Message-ID: <CAOnJCUJYQegEa3H+1drGAcy5ptEku9A3gtKWkOm=imC62S4UZw@mail.gmail.com>
-Subject: Re: [PATCH] RISC-V: KVM: Fix kvm_riscv_vcpu_timer_pending() for Sstc
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        Fri, 21 Oct 2022 02:05:39 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5B701A0444;
+        Thu, 20 Oct 2022 23:05:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1666332300;
+        bh=XcKCqy9WT0HZU+yGc89UpnlSmGCGlPa9TVxnjEkCmbs=;
+        h=X-UI-Sender-Class:Date:From:To:CC:Subject:Reply-to:In-Reply-To:
+         References;
+        b=IIAptyNrk5ip/23Pap1EkWy7Djnd4uKJ5axDJ/QSVnP9t6esIaJBBSv9KdUoFOyWv
+         LPNSlsUbBqGlo42TvWZMjNW62U1A2enJzMWvW0ZPIeYl5x2o/K+12ALHunP1UuDuDV
+         lTBRtPEu7TU4R58bLR7AGwFESU0FHOfTxAcaJ4/I=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [127.0.0.1] ([217.61.146.132]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1M9Fjb-1oiA7X2mIB-006O7z; Fri, 21
+ Oct 2022 08:05:00 +0200
+Date:   Fri, 21 Oct 2022 08:04:51 +0200
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Frank Wunderlich <linux@fw-web.de>
+CC:     linux-mediatek@lists.infradead.org,
+        Alexander Couzens <lynxis@fe80.eu>,
+        Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2] net: mtk_sgmii: implement mtk_pcs_ops
+User-Agent: K-9 Mail for Android
+Reply-to: frank-w@public-files.de
+In-Reply-To: <Y1F0pSrJnNlYzehq@shell.armlinux.org.uk>
+References: <20221020144431.126124-1-linux@fw-web.de> <Y1F0pSrJnNlYzehq@shell.armlinux.org.uk>
+Message-ID: <02A54E45-2084-440A-A643-772C0CC9F988@public-files.de>
+MIME-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:T0xeOlwWh+mj7CEVR5iha6HOYXAeiLwNgtwZuW5tfseTPyJVnow
+ GV12rB5Z7Gqzk4O4+QSM50R55FX0xEos8jDSOVx7p8bZMP7lN6VctuiyK9OHcZ+uEFsgQv4
+ JmPyLp3jiGosxAujzutswr5HylZYkhCoKZiWednBXfVzEw2fOqJUw2npQUORevq0ZHGKkr9
+ /CW12oH2hbgX05Otva25Q==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:jngH6wwMaIk=:Lbh6chv5Fo/u3adZRcy8WY
+ UROP3LiJwPScWNqtO1rXkSwcYkO1jIvsrsDDgNw/nt5hAuHoHp80XTPdd8todANvmQbo9c5qQ
+ uYi0iYeEkg436tCdoWQnU4IYLPHGVNW8dxQyyZPBm7339abBVmdTW0kcJWuXNp+fECebeiA69
+ gMyHGriGupxS/S/f8Ji+bzLr7GZilATTR4pifgEJYxa7zwq9838O54IL3x3xdTm7FIbSJ24g7
+ ad5IPsACPbocj3P0IN7xSjQNyVTGF3LTBWtcGhEvxZDdpyTHCrYsMhptt68l7XlphCrzNulmY
+ eK/gudWKVspn51337DOPk33FixZg2Hp90zCepk6qMNoN7j4n1iB4yJlwwaduuO0UtGZqqtGDn
+ yKZS2v3e/5a6YNXL7XsO/k30Efr+tULO7d74jbiRpkXPJid5YtnL1egFL/+Vmqi5ia6fGsUZa
+ S7hfwfEYOyuJ+VhnT+VW7MLjoIMEdpAjIj8jNXIjhZLQ3nNFXSmVuZGbQ6Ht3E7hVkc9wFEUc
+ hmIrQnSgV/ERuC2STMzykK8QSc7Nq4SftpVx1vaaoFgBM0f6rLOtA/g5UjdOt0jsCDdwaDKaG
+ f9Rbs5ApnovfNJ2PpjlEOSfc5otcTGpPkUMze0D+xf85BL4S9K9SXStrwz5YTb9FVdfxG/mWq
+ MioYe07Pdq/9zDsIuijDa7ixTqc3cN//7BmP3htkqGFu9/M2WW61E+4+m1Nxk5UC/SbkhrGUs
+ b4GiMSux3EWzApRepcEh1lojYbghJA4HqoBFHnnxoMXYlMNfao8/hz34Zx97JhzHI8YSnj2GM
+ 6wD/xeCSZ8NW74byHkgvxG24xQRUdDaArwh6rQWVJUAS6l9Dj0thzIrkARs4jYYWln+DjBknm
+ LrwksjMJhx9rnBJ/NtMzpYOWo14Aqn28nEULVTzUZ+VekU3xFj6/s5amcZ3Il5CKQikG4Jp3Z
+ e7QL98ygI5hA73hoY41KZhsYMgNbnySy8JcIT2lYeUnHykc51MSAWyqb7FvmOdxqacRqIOuSH
+ f+QjZyqsE0of3/u0nOnNhsBfEyd6dPol8Bk1aENbg008hAMHzWsaJrRsABfB9NLNvtGEc1kuJ
+ x/ObPH0UV26ZJy5HBWd4CGpW9Cuxz1VudUcSKxuiRmfEOyiZcJo/WDn46qByQd2g/X4dQKWe9
+ jlhtXzcbJAjjVRAz9OvVH7Jh9BCpRYIMZaQst8cC7lT1FrdjJrQ40AtUnxfFvYKdChtLgc1fF
+ DNlh7cepMA9QwJTCer4XRs12lLMcW+lJNh+ljqgCnDYheC8+xrgK2fWVHmbHLcTIbZicZr3a5
+ OoQc+Qt2xmBkbVzh+S3+oLBuNlxrfqR5BxDa7w6kacrUPSLxH7bwT7sBmvk/iR4Ixq9OBkzQa
+ tjvXGATGtlZmdzDGhjZhxXlXd12B4KoNiN4ROGo10uXnij0jghf93ktmCu37a9/NZn+WodaDO
+ s64iZQtIZ0Q8IE42Qhj7QJdS7wr3ExhEWrate7mjuJN5vVETIRCkmpGNG8Rd6J5AUGd5wrmU2
+ /iJfb3+hMH+cKLDaZzi2j3udXCAYV86+nhm5bT5L61Erm
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 4:45 AM Anup Patel <apatel@ventanamicro.com> wrote:
+Am 20=2E Oktober 2022 18:17:41 MESZ schrieb "Russell King (Oracle)" <linux@=
+armlinux=2Eorg=2Euk>:
+>On Thu, Oct 20, 2022 at 04:44:31PM +0200, Frank Wunderlich wrote:
+>> diff --git a/drivers/net/ethernet/mediatek/mtk_sgmii=2Ec b/drivers/net/=
+ethernet/mediatek/mtk_sgmii=2Ec
+>> index 736839c84130=2E=2E8b7465057e57 100644
+>> --- a/drivers/net/ethernet/mediatek/mtk_sgmii=2Ec
+>> +++ b/drivers/net/ethernet/mediatek/mtk_sgmii=2Ec
+>> @@ -122,7 +122,21 @@ static void mtk_pcs_link_up(struct phylink_pcs *pc=
+s, unsigned int mode,
+>>  	regmap_write(mpcs->regmap, SGMSYS_SGMII_MODE, val);
+>>  }
+>> =20
+>> +static void mtk_pcs_get_state(struct phylink_pcs *pcs, struct phylink_=
+link_state *state)
+>> +{
+>> +	struct mtk_pcs *mpcs =3D pcs_to_mtk_pcs(pcs);
+>> +	unsigned int val;
+>> +
+>> +	regmap_read(mpcs->regmap, mpcs->ana_rgc3, &val);
+>> +	state->speed =3D val & RG_PHY_SPEED_3_125G ? SPEED_2500 : SPEED_1000;
+>> +
 >
-> The kvm_riscv_vcpu_timer_pending() checks per-VCPU next_cycles
-> and per-VCPU software injected VS timer interrupt. This function
-> returns incorrect value when Sstc is available because the per-VCPU
-> next_cycles are only updated by kvm_riscv_vcpu_timer_save() called
-> from kvm_arch_vcpu_put(). As a result, when Sstc is available the
-> VCPU does not block properly upon WFI traps.
+>Sorry, looking back at my initial comment on the first revision of this
+>patch, I see my second point was confused=2E It should have read:
 >
-> To fix the above issue, we introduce kvm_riscv_vcpu_timer_sync()
-> which will update per-VCPU next_cycles upon every VM exit instead
-> of kvm_riscv_vcpu_timer_save().
+>"2) There should also be a setting for state->duplex=2E"
 >
-> Fixes: 8f5cb44b1bae ("RISC-V: KVM: Support sstc extension")
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> ---
->  arch/riscv/include/asm/kvm_vcpu_timer.h |  1 +
->  arch/riscv/kvm/vcpu.c                   |  3 +++
->  arch/riscv/kvm/vcpu_timer.c             | 17 +++++++++++++++--
->  3 files changed, 19 insertions(+), 2 deletions(-)
+>IOW, "duplex" instead of "pause"=2E
 >
-> diff --git a/arch/riscv/include/asm/kvm_vcpu_timer.h b/arch/riscv/include/asm/kvm_vcpu_timer.h
-> index 0d8fdb8ec63a..82f7260301da 100644
-> --- a/arch/riscv/include/asm/kvm_vcpu_timer.h
-> +++ b/arch/riscv/include/asm/kvm_vcpu_timer.h
-> @@ -45,6 +45,7 @@ int kvm_riscv_vcpu_timer_deinit(struct kvm_vcpu *vcpu);
->  int kvm_riscv_vcpu_timer_reset(struct kvm_vcpu *vcpu);
->  void kvm_riscv_vcpu_timer_restore(struct kvm_vcpu *vcpu);
->  void kvm_riscv_guest_timer_init(struct kvm *kvm);
-> +void kvm_riscv_vcpu_timer_sync(struct kvm_vcpu *vcpu);
->  void kvm_riscv_vcpu_timer_save(struct kvm_vcpu *vcpu);
->  bool kvm_riscv_vcpu_timer_pending(struct kvm_vcpu *vcpu);
->
-> diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
-> index a032c4f0d600..71ebbc4821f0 100644
-> --- a/arch/riscv/kvm/vcpu.c
-> +++ b/arch/riscv/kvm/vcpu.c
-> @@ -708,6 +708,9 @@ void kvm_riscv_vcpu_sync_interrupts(struct kvm_vcpu *vcpu)
->                                 clear_bit(IRQ_VS_SOFT, &v->irqs_pending);
->                 }
->         }
-> +
-> +       /* Sync-up timer CSRs */
-> +       kvm_riscv_vcpu_timer_sync(vcpu);
->  }
->
->  int kvm_riscv_vcpu_set_interrupt(struct kvm_vcpu *vcpu, unsigned int irq)
-> diff --git a/arch/riscv/kvm/vcpu_timer.c b/arch/riscv/kvm/vcpu_timer.c
-> index 185f2386a747..ad34519c8a13 100644
-> --- a/arch/riscv/kvm/vcpu_timer.c
-> +++ b/arch/riscv/kvm/vcpu_timer.c
-> @@ -320,20 +320,33 @@ void kvm_riscv_vcpu_timer_restore(struct kvm_vcpu *vcpu)
->         kvm_riscv_vcpu_timer_unblocking(vcpu);
->  }
->
-> -void kvm_riscv_vcpu_timer_save(struct kvm_vcpu *vcpu)
-> +void kvm_riscv_vcpu_timer_sync(struct kvm_vcpu *vcpu)
->  {
->         struct kvm_vcpu_timer *t = &vcpu->arch.timer;
->
->         if (!t->sstc_enabled)
->                 return;
->
-> -       t = &vcpu->arch.timer;
->  #if defined(CONFIG_32BIT)
->         t->next_cycles = csr_read(CSR_VSTIMECMP);
->         t->next_cycles |= (u64)csr_read(CSR_VSTIMECMPH) << 32;
->  #else
->         t->next_cycles = csr_read(CSR_VSTIMECMP);
->  #endif
-> +}
-> +
-> +void kvm_riscv_vcpu_timer_save(struct kvm_vcpu *vcpu)
-> +{
-> +       struct kvm_vcpu_timer *t = &vcpu->arch.timer;
-> +
-> +       if (!t->sstc_enabled)
-> +               return;
-> +
-> +       /*
-> +        * The vstimecmp CSRs are saved by kvm_riscv_vcpu_timer_sync()
-> +        * upon every VM exit so no need to save here.
-> +        */
-> +
->         /* timer should be enabled for the remaining operations */
->         if (unlikely(!t->init_done))
->                 return;
-> --
-> 2.34.1
->
+>Also, is there no way to read the link partner advertisement?
 
-Ahh. That's a tricky one. Thanks for fixing it.
+Hi,
 
-Reviewed-by: Atish Patra <atishp@rivosinc.com>
--- 
-Regards,
-Atish
+On my board (bpi-r3) we have no autoneg on the gmacs=2E We have a switch (=
+mt7531) with fixed-link on the first and a sfp-cage on the other=2E Second =
+mac gets speed-setting (1000base-X or 2500base-X) from sfp eeprom, but no a=
+dvertisement from the "other end"=2E Imho it is always full duplex=2E
+
+I have no register documentation to check if there is any way to read out =
+pause/duplex setting=2E Maybe MTK can answer this or extend function later=
+=2E
+
+regards Frank
