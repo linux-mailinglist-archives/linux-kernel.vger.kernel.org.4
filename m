@@ -2,127 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E15C606FC2
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 08:01:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 676CD6070D0
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 09:17:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229874AbiJUGBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 02:01:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52920 "EHLO
+        id S230147AbiJUHRG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 03:17:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbiJUGBC (ORCPT
+        with ESMTP id S229838AbiJUHQ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 02:01:02 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D17C1D3A47;
-        Thu, 20 Oct 2022 23:01:00 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id f37so3290211lfv.8;
-        Thu, 20 Oct 2022 23:01:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RJ9xIMP9KJSnyP3kmEcAZFEOTKsj48z0+6bhrdbyYmQ=;
-        b=d1Ic9JTyYswqZsEL5SydOKhL435NQPu3xf45ckQx+lh0zbljdQXq32zSHLZSdZhfGK
-         0NTAOfVvX/A9wGkQREP8rf4nIZ2eIZ5dknqfY6MXMR5wSF0tSbL4i443zXJDCpCu3dM9
-         LLnBbM0HkC7bE2lEC8Iy4RpSsR3VM4UbZ+Zpsx8RVHF/cPNO94o8MVbVdBkF3vhnNQwW
-         mlkB2aOzr2RpA5I+GZX0sodWgJkknZuegcQYzVXIU+R998qS1zhMaoGJPt1ym+bJXFnj
-         Rx7DyriZhROpSd0A7uzEvPKl8bRHVk8I3Jy7cM6KPFBLtnciJLQ99aHoQQTYutgufa8r
-         Qpzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RJ9xIMP9KJSnyP3kmEcAZFEOTKsj48z0+6bhrdbyYmQ=;
-        b=MUsJUVCW01sjDCRqvw0m4Ke85r6wgPvakkMyPDVpv/VPvAHV65Q1oWQjBfbVuPSC1U
-         1lu4b01IRmw46vaNAhkcg4FgM8xGR4SPtVRDHt7O8UfFnskAcgRLfOyx152aDhbCILZ5
-         wSgURWSUPLHNe3ZKnP0iXVmtObF3T5L4MpWLUdFqSz4q2VnsS5Tkt5rxVzxR/gJBtaeE
-         V6fPc9w96e52B2zXwmEDqgTq+eBHPP2vMD9BHDO/+fx4f6ep0sd6bMY5PGWJHtk1tH0J
-         ODRU7kbag79j74AH12HAdg2NxZZGAxGpEHlJrlYHtZ38Hmo+SsMtxBhVvMykRkyy5nYt
-         MKtA==
-X-Gm-Message-State: ACrzQf0TlujcIFkOhAGz6SJh5nPNylQgLSBNRKvdIh0z0yAsqwtzx0ln
-        ymcnC5rb8S5i1mIx5BBLkzg=
-X-Google-Smtp-Source: AMsMyM6B1qDtmd+KvrXozhnnD4v6SqdWdIOD/IrSleQ9kdprEflFZM9GH+ldehIYgYyV0Ptm4xo4Qg==
-X-Received: by 2002:a05:6512:11e9:b0:49f:d530:9f25 with SMTP id p9-20020a05651211e900b0049fd5309f25mr6513590lfs.533.1666332058608;
-        Thu, 20 Oct 2022 23:00:58 -0700 (PDT)
-Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.gmail.com with ESMTPSA id p6-20020ac246c6000000b0049e9122bd0esm3021950lfo.114.2022.10.20.23.00.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 23:00:58 -0700 (PDT)
-From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
+        Fri, 21 Oct 2022 03:16:58 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2A1691F9A22;
+        Fri, 21 Oct 2022 00:16:50 -0700 (PDT)
+Received: from loongson.cn (unknown [10.180.13.64])
+        by gateway (Coremail) with SMTP id _____8DxvreJ9VFjH0YBAA--.991S3;
+        Fri, 21 Oct 2022 09:27:37 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.180.13.64])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxLeCC9VFjxFUCAA--.9496S3;
+        Fri, 21 Oct 2022 09:27:35 +0800 (CST)
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+To:     Linus Walleij <linus.walleij@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Mikhail Zhilkin <csharper2005@gmail.com>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH V2 2/2] mtd: core: set ROOT_DEV for partitions marked as rootfs in DT
-Date:   Fri, 21 Oct 2022 08:00:51 +0200
-Message-Id: <20221021060051.2508-2-zajec5@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221021060051.2508-1-zajec5@gmail.com>
-References: <20221021060051.2508-1-zajec5@gmail.com>
+        zhanghongchen <zhanghongchen@loongson.cn>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>
+Subject: [PATCH v1 2/2] dt-bindings: pinctrl: add loongson2 pinctrl
+Date:   Fri, 21 Oct 2022 09:27:28 +0800
+Message-Id: <20221021012728.22373-2-zhuyinbo@loongson.cn>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20221021012728.22373-1-zhuyinbo@loongson.cn>
+References: <20221021012728.22373-1-zhuyinbo@loongson.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8DxLeCC9VFjxFUCAA--.9496S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxXF47tFy8Kr4fJF43AFW8JFb_yoW5urW8pF
+        4fC3sxGF1xtF4xX39xCa40vw1fGan7AF9rCasFv34jqr4Dta4vvay5Krn0q3yDCF43ArW5
+        WFy5u342qF1UAw7anT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        b78Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUGVWUXwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Cr0_Gr1UM2
+        8EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l
+        57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20x
+        vE14v26r126r1DMcIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xv
+        r2IYc2Ij64vIr41l42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VWrMxC20s026x
+        CaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_
+        JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r
+        1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_
+        Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8Jr
+        UvcSsGvfC2KfnxnUUI43ZEXa7IU8cBMtUUUUU==
+X-Gw-Check: 27be656114213f6f
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafał Miłecki <rafal@milecki.pl>
+Add the loongson2 pinctrl binding with DT schema format using
+json-schema.
 
-This adds support for "linux,rootfs" binding that is used to mark flash
-partition containing rootfs. It's useful for devices using device tree
-that don't have bootloader passing root info in cmdline.
-
-Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
 ---
-V2: Use "linux,rootfs" as more accurate. Thanks Rob.
----
- drivers/mtd/mtdcore.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ .../pinctrl/loongson,ls2k-pinctrl.yaml        | 118 ++++++++++++++++++
+ MAINTAINERS                                   |   1 +
+ 2 files changed, 119 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/loongson,ls2k-pinctrl.yaml
 
-diff --git a/drivers/mtd/mtdcore.c b/drivers/mtd/mtdcore.c
-index 07249af4f890..034b06aff660 100644
---- a/drivers/mtd/mtdcore.c
-+++ b/drivers/mtd/mtdcore.c
-@@ -28,6 +28,7 @@
- #include <linux/leds.h>
- #include <linux/debugfs.h>
- #include <linux/nvmem-provider.h>
-+#include <linux/root_dev.h>
- 
- #include <linux/mtd/mtd.h>
- #include <linux/mtd/partitions.h>
-@@ -735,6 +736,12 @@ int add_mtd_device(struct mtd_info *mtd)
- 		not->add(mtd);
- 
- 	mutex_unlock(&mtd_table_mutex);
+diff --git a/Documentation/devicetree/bindings/pinctrl/loongson,ls2k-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/loongson,ls2k-pinctrl.yaml
+new file mode 100644
+index 000000000000..038d38ad1785
+--- /dev/null
++++ b/Documentation/devicetree/bindings/pinctrl/loongson,ls2k-pinctrl.yaml
+@@ -0,0 +1,118 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/pinctrl/loongson,ls2k-pinctrl.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+	if (of_find_property(mtd_get_of_node(mtd), "linux,rootfs", NULL)) {
-+		pr_info("mtd: setting mtd%d (%s) as root device\n", mtd->index, mtd->name);
-+		ROOT_DEV = MKDEV(MTD_BLOCK_MAJOR, mtd->index);
-+	}
++title: Loongson2 SoC Pinctrl Controller
 +
- 	/* We _know_ we aren't being removed, because
- 	   our caller is still holding us here. So none
- 	   of this try_ nonsense, and no bitching about it
++maintainers:
++  - zhanghongchen <zhanghongchen@loongson.cn>
++  - Yinbo Zhu <zhuyinbo@loongson.cn>
++
++properties:
++  compatible:
++    const: loongson,ls2k-pinctrl
++
++  reg:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++
++patternProperties:
++  '-pins$':
++    type: object
++    patternProperties:
++      'pinmux$':
++        type: object
++        description: node for pinctrl.
++        $ref: pinmux-node.yaml#
++
++    properties:
++      groups:
++        description:
++          One or more groups of pins to mux to a certain function
++        items:
++          enum: [gpio, sdio, can1, can0, pwm3, pwm2, pwm1, pwm0, i2c1, i2c0,
++                 nand, sata_led, lio, i2s, hda, uart2, uart1, camera, dv01,
++                 dvo0]
++      function:
++        description:
++          The function that a group of pins is muxed to
++        items:
++          enum: [gpio, sdio, can1, can0, pwm3, pwm2, pwm1, pwm0, i2c1, i2c0,
++                 nand, sata_led, lio, i2s, hda, uart2, uart1, camera, dv01,
++                 dvo0]
++
++    dependencies:
++      groups: [function]
++      function: [groups]
++
++additionalProperties: false
++
++examples:
++  - |
++    pctrl: pinctrl@1fe00420 {
++           compatible = "loongson,ls2k-pinctrl";
++           reg = <0x1fe00420 0x18>;
++           sdio_pins_default: sdio-pins {
++                sdio-pinmux {
++                        groups ="sdio";
++                        function ="sdio";
++                };
++
++                sdio-det-pinmux {
++                        groups ="pwm2";
++                        function ="gpio";
++                };
++           };
++
++           pwm1_pins_default: pwm1-pins {
++                        pinmux {
++                                groups ="pwm1";
++                                function ="pwm1";
++                        };
++           };
++
++           pwm0_pins_default: pwm0-pins {
++                        pinmux {
++                                groups ="pwm0";
++                                function ="pwm0";
++                        };
++           };
++
++           i2c1_pins_default: i2c1-pins {
++                        pinmux {
++                                groups ="i2c1";
++                                function ="i2c1";
++                        };
++           };
++
++           i2c0_pins_default: i2c0-pins {
++                        pinmux {
++                                groups ="i2c0";
++                                function ="i2c0";
++                        };
++           };
++
++           nand_pins_default: nand-pins {
++                        pinmux {
++                                groups ="nand";
++                                function ="nand";
++                        };
++           };
++
++           hda_pins_default: hda-pins {
++                        grp0-pinmux {
++                                groups ="hda";
++                                function ="hda";
++                        };
++
++                        grp1-pinmux {
++                                groups ="i2s";
++                                function ="gpio";
++                        };
++           };
++    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index c9883f145acb..2d002509fc65 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11927,6 +11927,7 @@ M:	zhanghongchen <zhanghongchen@loongson.cn>
+ M:	Yinbo Zhu <zhuyinbo@loongson.cn>
+ L:	linux-gpio@vger.kernel.org
+ S:	Maintained
++F:	Documentation/devicetree/bindings/pinctrl/loongson,ls2k-pinctrl.yaml
+ F:	drivers/pinctrl/pinctrl-loongson2.c
+ 
+ LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
 -- 
-2.34.1
+2.20.1
 
