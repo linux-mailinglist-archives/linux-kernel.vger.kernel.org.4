@@ -2,95 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 159D0607C59
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 18:35:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BE9A607C10
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 18:20:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230221AbiJUQfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 12:35:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50380 "EHLO
+        id S230321AbiJUQUj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 12:20:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230159AbiJUQfp (ORCPT
+        with ESMTP id S230392AbiJUQUH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 12:35:45 -0400
-X-Greylist: delayed 1798 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 21 Oct 2022 09:35:41 PDT
-Received: from wind.enjellic.com (wind.enjellic.com [76.10.64.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6E36C203570;
-        Fri, 21 Oct 2022 09:35:39 -0700 (PDT)
-Received: from wind.enjellic.com (localhost [127.0.0.1])
-        by wind.enjellic.com (8.15.2/8.15.2) with ESMTP id 29LEroap015522;
-        Fri, 21 Oct 2022 09:53:50 -0500
-Received: (from greg@localhost)
-        by wind.enjellic.com (8.15.2/8.15.2/Submit) id 29LErmuU015521;
-        Fri, 21 Oct 2022 09:53:48 -0500
-Date:   Fri, 21 Oct 2022 09:53:48 -0500
-From:   "Dr. Greg" <greg@enjellic.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>, Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Micka?l Sala?n <mic@digikod.net>, Petr Vorel <pvorel@suse.cz>,
-        Borislav Petkov <bp@suse.de>, Takashi Iwai <tiwai@suse.de>,
-        Jonathan McDowell <noodles@fb.com>,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, KP Singh <kpsingh@kernel.org>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        John Johansen <john.johansen@canonical.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 2/9] security: Move trivial IMA hooks into LSM
-Message-ID: <20221021145348.GA15390@wind.enjellic.com>
-Reply-To: "Dr. Greg" <greg@enjellic.com>
-References: <20221013222702.never.990-kees@kernel.org> <20221013223654.659758-2-keescook@chromium.org> <16e008b3709f3c85dbad1accb9fce8ddad552205.camel@linux.ibm.com> <202210191134.FC646AFC71@keescook>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+        Fri, 21 Oct 2022 12:20:07 -0400
+Received: from beige.elm.relay.mailchannels.net (beige.elm.relay.mailchannels.net [23.83.212.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9247856BA8;
+        Fri, 21 Oct 2022 09:19:45 -0700 (PDT)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 6CC7A418E6;
+        Fri, 21 Oct 2022 16:19:44 +0000 (UTC)
+Received: from pdx1-sub0-mail-a201 (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id D1C3B40E67;
+        Fri, 21 Oct 2022 16:19:43 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1666369183; a=rsa-sha256;
+        cv=none;
+        b=z6nCKeO+lcnn3+aKluxACZRN/pPuT45Bb+SOwqOvxogbT0xwsM9ELMkhmFKLY0s0sQkAd8
+        XBAemYJvjZdpp5gkALeLixHfco219fSUvyl2cSZpLH7DKQ52dkxSqknC4DG5DxwVNgVrVx
+        dZvTmFHqwDCtOundqFfcB+G9bzCxtEOzKQ9at1VcNqLXC12x8nTJNbIgRo6vCsbUomwi6x
+        2n9TnLBumrdZ5XSUX79Zr22MbPGyBWouBz8SWqSuEPdBOBZmpyCvXT8JgNrW7c0JS9tn7I
+        WkOQRS++ZCMX9Ei3rxu/eD3rRwhty8awRve8N+deMV8jAYT7ns92Lfr3a5P06w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1666369183;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=NW6vJ8DeFyk7asXbesj79NddbzSxSYq+RveUfuG553Q=;
+        b=+AJBs71HI0T0gS65Tr2uUDf+M091WTaOoiYSrDJROzGvBGFgPtsXE08azLXNvQsVFjOwaK
+        z0YFBTG++HZasFvloHWCnn5L8hVw4iePqYwffNrRwUR+PGyiPifnENjEqb7GLeVwCtSWLH
+        64lUlynpvAzJ4p6mkcQTzNWCki4mmikJnZNZpKPXCcxwX0UQMJf5BeuOh6kgYJ7Nci+TdU
+        WwE3YGsBhkW6Su9JuZxCFBfvlx8CdH94nHHVbhQDKBijDi4qzIKVdq0YugOc9bQBiNI/ek
+        dEeUUAmXWLqrBInFMYA767Neri2TDQY9tPGzEMQTDsqjptX6k8W3KUb0qa5Rhw==
+ARC-Authentication-Results: i=1;
+        rspamd-6955c7cd5b-khjbw;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Chief-Wiry: 50cdf9746f680e89_1666369184189_97444717
+X-MC-Loop-Signature: 1666369184189:1827427503
+X-MC-Ingress-Time: 1666369184189
+Received: from pdx1-sub0-mail-a201 (pop.dreamhost.com [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.120.183.105 (trex/6.7.1);
+        Fri, 21 Oct 2022 16:19:44 +0000
+Received: from offworld (ip72-199-50-187.sd.sd.cox.net [72.199.50.187])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dave@stgolabs.net)
+        by pdx1-sub0-mail-a201 (Postfix) with ESMTPSA id 4Mv8nB0rB2z2d;
+        Fri, 21 Oct 2022 09:19:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+        s=dreamhost; t=1666369182;
+        bh=NW6vJ8DeFyk7asXbesj79NddbzSxSYq+RveUfuG553Q=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=dX0PmMOhuURcIdOlni51tOvsbJYcE0F2poC8cjMTcF+0caw46mWq3ppZVEbLhNPdy
+         6b6NiNtaXMbz6GRXgwFI3GZ/v6Vajkr8F2l4fYg6U3YgmcEfFWWYCrxhNhyVMqYsdA
+         snAuQkG89oIRFdAs4vXmNGvLw/R7w/xPshMR7oFNNx2eViaXvKIfymku/FhzNKepJZ
+         5RCVWrCw0NBpYq7sgHHQ0qWvReRZnTTSdb+0N6Epb7M0OeMDhdikdj3uRsS0x11Thp
+         lHSapcKKj9pOsAfaIS6GGS1AG4ZrM7VP3BtOyEog3au/f2cE4YkkVkxDHKENzKUHjK
+         XOlChH0QY5g9Q==
+Date:   Fri, 21 Oct 2022 08:58:18 -0700
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     Ira Weiny <ira.weiny@intel.com>, dan.j.williams@intel.com,
+        dave.jiang@intel.com, alison.schofield@intel.com,
+        bwidawsk@kernel.org, vishal.l.verma@intel.com,
+        a.manzanares@samsung.com, linux-cxl@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] cxl/pci: Add generic MSI-X/MSI irq support
+Message-ID: <20221021155818.rxp6e3x4lid7eume@offworld>
+References: <20221018030010.20913-1-dave@stgolabs.net>
+ <20221018030010.20913-2-dave@stgolabs.net>
+ <20221018103619.00004c39@huawei.com>
+ <20221018115227.00002a4c@huawei.com>
+ <Y1IcpaodrrVrkEcL@iweiny-desk3>
+ <20221021095818.00006ed1@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <202210191134.FC646AFC71@keescook>
-User-Agent: Mutt/1.4i
-X-Greylist: Sender passed SPF test, not delayed by milter-greylist-4.2.3 (wind.enjellic.com [127.0.0.1]); Fri, 21 Oct 2022 09:53:50 -0500 (CDT)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221021095818.00006ed1@huawei.com>
+User-Agent: NeoMutt/20220429
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 11:59:40AM -0700, Kees Cook wrote:
+On Fri, 21 Oct 2022, Jonathan Cameron wrote:
 
-Good morning, I hope the week is ending well for everyone.
+>> FWIW I did this for the event stuff and did not find it so distasteful...  :-/
+>>
+>> However the information I am stashing in the cxlds is all interrupt
+>> information.  So I think it is different from what I see in the CPMU stuff.
+>
+>Right now I'm just stashing the max interrupt number to squirt into a callback
+>a few lines later. That feels like a hack to get around parsing the structures
+>4 times.  If it's an acceptable hack then fair enough.
+>
+>>
+>> > 2. The callback below to find those numbers
+>> > 3. Registration of the cpmu devices.
+>> >
+>> > Reality is that it is cleaner to more or less ignore the infrastructure
+>> > proposed in this patch.
+>> >
+>> > 1. Query how many CPMU devices there are. Whilst there stash the maximim
+>> >    cpmu vector number in the cxlds.
+>> > 2. Run a stub in this infrastructure that does max(irq, cxlds->irq_num);
+>> > 3. Carry on as before.
+>> >
+>> > Thus destroying the point of this infrastructure for that usecase at least
+>> > and leaving an extra bit of state in the cxl_dev_state that is just
+>> > to squirt a value into the callback...
+>>
+>> I'm not sure I follow?  Do you mean this?
+>>
+>> static int cxl_cpmu_get_max_msgnum(struct cxl_dev_state *cxlds)
+>> {
+>>	return cxlds->cpmu_max_vector;
+>> }
+>
+>Yup. That state is no relevance to the cxl_dev_state outside of this tiny
+>block of code.  Hence I really don't like putting it in there.
 
-> On Wed, Oct 19, 2022 at 10:34:48AM -0400, Mimi Zohar wrote:
-> >
-> > The only thing trivial about making IMA and EVM LSMs is moving
-> > them to LSM hooks.  Although static files may be signed and the
-> > signatures distributed with the file data through the normal
-> > distribution mechanisms (e.g. RPM), other files cannot be signed
-> > remotely (e.g.  configuration files).  For these files, both IMA
-> > and EVM may be configured to maintain persistent file state stored
-> > as security xattrs in the form of security.ima file hashes or
-> > security.evm HMACs.  The LSM flexibility of enabling/disabling IMA
-> > or EVM on a per boot basis breaks this usage, potentially
-> > preventing subsequent boots.
+Oh absolutely, this is ugly as sin. And if there is anything even worth stashing
+the max would only be mbox, as Ira suggested earlier in v1, iirc. So no,
+we should not be doing this sort of thing. And if pass one were done in the
+callback the need for this would disappear.
 
-> I'm not suggesting IMA and EVM don't have specific behaviors that
-> need to be correctly integrated into the LSM infrastructure. In
-> fact, I spent a lot of time designing that infrastructure to be
-> flexible enough to deal with these kinds of things. (e.g. plumbing
-> "enablement", etc.) As I mentioned, this was more of trying to
-> provide a head-start on the conversion. I don't intend to drive this
-> -- please take whatever is useful from this example and use it. :)
-> I'm happy to help construct any missing infrastructure needed
-> (e.g. LSM_ORDER_LAST, etc).
+>>
+>> >
+>> > So with that in mind I'm withdrawing the RB above.  This looks to be
+>> > an idea that with hindsight doesn't necessarily pan out.
+>> > Long hand equivalent with the specific handling needed for each case
+>> > is probably going to be neater than walking a table of much more
+>> > restricted callbacks.
+>>
+>> I'm not married to the idea of the array of callbacks but I'm not sure how this
+>> solves having to iterate on the CPMU devices twice?
+>
+>Laid that out in the other branch of the thread but basically either
+>1) We stash irrelevant information in cxl_dev_state just to get it into the callback
+>   It's not used for anything else and this makes a fiddly and non obvious tie
+>   up between different registration steps that appear somewhat independent.
 
-We are 2-3 weeks out from submitting for review and inclusion in the
-kernel, a new LSM, and an associated userspace stack, that will have a
-high degree of significance with respect to these conversations.
+Yeah anything _but_ this.
 
-> Kees Cook
+>
+>2) We do the whole double parse twice (so 4 times in total) which is the right
+>   option to keep the layering if using this array of callbacks approach, but
+>   really ugly.  If we flatten it to straight line code there is no implication
+>   of layering and the state being parsed on is right there in a local variable.
 
-Best wishes for a pleasant fall weekend.
+If we are keeping this patch, then as mentioned before, I would prefer this. imo
+this is better than both 1 above and the open-coding approach.
 
-As always,
+>I can live with it either way, but it's definitely not as pretty as it looks
+>for the mailbox case.
 
-Dr. Greg
-The Quixote Project - Flailing at the Travails of Cybersecurity
+Agreed.
+
+Thanks,
+Davidlohr
