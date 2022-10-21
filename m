@@ -2,231 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D972C607258
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 10:32:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B55F607262
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 10:33:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbiJUIcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 04:32:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47256 "EHLO
+        id S229908AbiJUIdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 04:33:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230111AbiJUIbx (ORCPT
+        with ESMTP id S229734AbiJUIdq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 04:31:53 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 927E921CD65;
-        Fri, 21 Oct 2022 01:30:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666341042; x=1697877042;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=iStXbW6utP2Sr5Eu3lyDBrnn9cA6vtUAUyNGvoK3NtY=;
-  b=Uf7JYtBywDSGtclTl8KAQ32yCvKAI6TjiFi3YDrgVn+NbIQonDa/x7cM
-   RUodL6IlY5VTHVBrSiaNAPYzwIYJTz+6H1rQTjYTaTDNnTTvYmQg2pSjY
-   AGms6hD1nAtvJa/GVDiXltS9jmysp0w9U5tTfo3UkT5r0H4x/fmU5fowY
-   Q7oH6qmKghprkhHWQFWRNuRgzjjoYYmFm9EqvaTu4Pb4ngRAxe+c2oXfn
-   OTywvp46gsgOKiVlEoiDtwUoVFJUalwkKSpMEH9qLMP/Vt5omXZY1Tvi/
-   Gjw8dowt0DsZZ2NpXKZ3ZKxml0Mrymw+jH5Tp12Uup1SV18d9C0PdeqhO
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="371162339"
-X-IronPort-AV: E=Sophos;i="5.95,200,1661842800"; 
-   d="scan'208";a="371162339"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2022 01:29:05 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="719594843"
-X-IronPort-AV: E=Sophos;i="5.95,200,1661842800"; 
-   d="scan'208";a="719594843"
-Received: from lramir2-mobl1.ger.corp.intel.com ([10.252.44.179])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2022 01:29:00 -0700
-Date:   Fri, 21 Oct 2022 11:28:58 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Matthew Gerlach <matthew.gerlach@linux.intel.com>
-cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        tianfei.zhang@intel.com, corbet@lwn.net,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>, geert+renesas@glider.be,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
-        johan@kernel.org, Lukas Wunner <lukas@wunner.de>,
-        marpagan@redhat.com
-Subject: Re: [PATCH v4 1/4] Documentation: fpga: dfl: Add documentation for
- DFHv1
-In-Reply-To: <20221020212610.697729-2-matthew.gerlach@linux.intel.com>
-Message-ID: <d265dae0-fe4b-8ac0-fb9e-2a7345b279a2@linux.intel.com>
-References: <20221020212610.697729-1-matthew.gerlach@linux.intel.com> <20221020212610.697729-2-matthew.gerlach@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 21 Oct 2022 04:33:46 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E02D411CB41
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 01:33:29 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id z5-20020a17090a8b8500b00210a3a2364fso4017482pjn.0
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 01:33:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YUhUf8tD5P9UtY7kvr1O4iHq3ocdqCg7p3bMwN8zrt4=;
+        b=SQLfosJ00IIaQWaztjwBMmwEMk2b/3/oJ1NnBipOaC+XOHnQRX+9CmqfOdvo3fCRl0
+         n3vIk9R5MCtn/iXYYLrWHXlXYecIMGvuyt93PTOcDa5xCS52bFtcHH6vMI5kge6/udx1
+         P2undt15ogyw2MiL1e3SeYyPZ4HQ4dsJrB54xL0ys+uG0A7Rv5OVnb6RvJEWKTya4OHd
+         ZTFgBHFll4j5hdLMLCTxGl344rzT9Ab77+DbuTJmSXBFyz+7uYGtEZ+4qA+DWECLt5F8
+         hMan3jzzD3INwa8sZdelPDOLHS2qXKPV/5tm2TshM3tgDlYonvnsbWFNXAqdpHs/eQ6w
+         o9JQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YUhUf8tD5P9UtY7kvr1O4iHq3ocdqCg7p3bMwN8zrt4=;
+        b=Jz4+UKdFIZi/Tb+MLFo0MaFpxrNx/EUQHEeUUmxrNBQ3TzCMKt+bDwnWSmn8m7M6Aw
+         KZymV2WPCAZ2thNxh8mR27e0kd+8J5O7XoF9vL2gnghmFRoDccj/uoJUUu7hVHxpiv09
+         Vrsadhwi/ADSx9vzcoOACH6bBYjV6JpeUWkOyxI5RZz1rYnbW1E//XdPxkjjo0k0FjSE
+         Lze8NU3HmEq3+Ypt+Qe/wsisV1U3dpEf+s+jZOzd5Na7LxRyROS8mymEAF6D4jFFDTWJ
+         nhQMJ3/KsRM42seA4gVvmRVxo5S0PtT/Z/DYUhC/RRo+jvkogunfcx9knRT4GR3WLHOj
+         xZnQ==
+X-Gm-Message-State: ACrzQf15c8WS7ycqOuIsh/1T7YQwhw/ncitOYhJsN02KWXHJEnC9GxfS
+        bv0OL6LAtZNLtsgl3iPgMXs=
+X-Google-Smtp-Source: AMsMyM71jJ7gDgk17Qb+d6fmhl6HWAVPYZLi9r4XOtM3m+aM3RfKluid6P6DtU51uQGlUgqwpgispQ==
+X-Received: by 2002:a17:90b:1d4c:b0:20a:8db1:da52 with SMTP id ok12-20020a17090b1d4c00b0020a8db1da52mr55567602pjb.98.1666341146252;
+        Fri, 21 Oct 2022 01:32:26 -0700 (PDT)
+Received: from localhost.localdomain ([156.236.96.165])
+        by smtp.gmail.com with ESMTPSA id i5-20020a17090a650500b002009db534d1sm1098630pjj.24.2022.10.21.01.32.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Oct 2022 01:32:24 -0700 (PDT)
+From:   Yue Hu <zbestahu@gmail.com>
+To:     xiang@kernel.org, chao@kernel.org
+Cc:     linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        syzbot+3faecbfd845a895c04cb@syzkaller.appspotmail.com,
+        syzkaller-bugs@googlegroups.com, zhangwen@coolpad.com,
+        Yue Hu <huyue2@coolpad.com>
+Subject: [PATCH] erofs: fix general protection fault when reading fragment
+Date:   Fri, 21 Oct 2022 16:31:16 +0800
+Message-Id: <20221021083116.20048-1-zbestahu@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 20 Oct 2022, matthew.gerlach@linux.intel.com wrote:
+From: Yue Hu <huyue2@coolpad.com>
 
-> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> 
-> Add documentation describing the extensions provided by Version
-> 1 of the Device Feature Header (DFHv1).
-> 
-> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> ---
-> v4: Remove marketing speak and separate v0 and v1 descriptions.
->     Fix errors reported by "make htmldocs".
-> 
-> v3: no change
-> 
-> v2: s/GUILD/GUID/
->     add picture
-> ---
->  Documentation/fpga/dfl.rst | 96 ++++++++++++++++++++++++++++++++++++++
->  1 file changed, 96 insertions(+)
-> 
-> diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
-> index 15b670926084..12365be435a8 100644
-> --- a/Documentation/fpga/dfl.rst
-> +++ b/Documentation/fpga/dfl.rst
-> @@ -561,6 +561,102 @@ new DFL feature via UIO direct access, its feature id should be added to the
->  driver's id_table.
->  
->  
-> +Device Feature Header - Version 0
-> +===========================================
-> +The format of Version 0 of a Device Feature Header (DFH) is shown below::
-> +
-> +    +-----------------------------------------------------------------------+
-> +    |63 Type 60|59 DFH VER 52|51 Rsvd 41|40 EOL|39 Next 16|15 VER 12|11 ID 0| 0x00
-> +    +-----------------------------------------------------------------------+
-> +    |63                                 GUID_L                             0| 0x08
-> +    +-----------------------------------------------------------------------+
-> +    |63                                 GUID_H                             0| 0x10
-> +    +-----------------------------------------------------------------------+
-> +
-> +Offset 0x00
-> +Type - The type of DFH (e.g. FME, AFU, or private feature).
-> +DFH VER - The version of the DFH.
-> +Rsvd - Currently unused.
-> +EOL - Set if this DFH is the end of the Device Feature List (DFL).
-> +Next - The offset of the next DFH in the DFL from the start of the DFH.
-> +If EOL is set, Next refers to size of mmio for last feature in the list.
-> +ID - If Type field is 'private feature', then ID of the private feature.
-> +
-> +Offset 0x08
-> +GUID_L - Least significant 64 bits of a 128 bit Globally Unique Identifier
-> +if Type is FME or AFU.
-> +
-> +Offset 0x10
-> +GUID_H - Most significant 64 bits of a 128 bit Globally Unique Identifier
-> +if Type is FME or AFU.
-> +
-> +
-> +Device Feature Header - Version 1
-> +===========================================
+As syzbot reported [1], the fragment feature sb flag is not set, so
+packed_inode != NULL needs to be checked in z_erofs_read_fragment().
 
-While this is structurally better than the previous one. I'd still include
-at least one paragraph about the purpose. Something along these lines 
-(picked from v3 + edited the marketing speak/v0 compare away from it):
+[1] https://lore.kernel.org/all/0000000000002e7a8905eb841ddd@google.com/
 
-Version 1 of the Device Feature Header (DFHv1) provides flexibility and 
-extensibility to hardware designs using Device Feature Lists. It is a
-standardized mechanism for features to describe parameters/capabilities to 
-software.
+Reported-by: syzbot+3faecbfd845a895c04cb@syzkaller.appspotmail.com
+Fixes: 08a0c9ef3e7e ("erofs: support on-disk compressed fragments data")
+Signed-off-by: Yue Hu <huyue2@coolpad.com>
+---
+ fs/erofs/zdata.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-With DFHv1:
-* GUID is mandatory for all types
-* The register space of the feature is decoupled from the location of the DFH
-* A list of parameter values associates to a particular feature.
-
-After that, the header itself makes much more sense already.
-
-> +The format of Version 1 of a Device Feature Header (DFH) is shown below::
-> +
-> +    +-----------------------------------------------------------------------+
-> +    |63 Type 60|59 DFH VER 52|51 Rsvd 41|40 EOL|39 Next 16|15 VER 12|11 ID 0| 0x00
-> +    +-----------------------------------------------------------------------+
-> +    |63                                 GUID_L                             0| 0x08
-> +    +-----------------------------------------------------------------------+
-> +    |63                                 GUID_H                             0| 0x10
-> +    +-----------------------------------------------------------------------+
-> +    |63                 Address/Offset                            1|  Rel  0| 0x18
-
-Should this mention it's addr/offs of registers? As is it's bit hard to 
-figure out from the diagram w/o the extra description. I think you have 
-plenty of space for adding that extra bit of info.
-
-> +    +-----------------------------------------------------------------------+
-> +    |63        Reg Size       32|Params 31|30 Group    16|15 Instance      0| 0x20
-> +    +-----------------------------------------------------------------------+
-> +    |63 Next      34|RSV33|EOP32|31 Param Version 16|15 Param ID           0| 0x28
-> +    +-----------------------------------------------------------------------+
-> +    |63                 Parameter Data                                     0| 0x30
-> +    +-----------------------------------------------------------------------+
-> +
-> +                                  ...
-> +
-> +    +-----------------------------------------------------------------------+
-> +    |63 Next parameter offset 32|31 Param Version 16|15 Param ID           0|
-> +    +-----------------------------------------------------------------------+
-> +    |63                 Parameter Data                                     0|
-> +    +-----------------------------------------------------------------------+
-> +
-> +Offset 0x00
-> +Type - The type of DFH (e.g. FME, AFU, or private feature).
-> +DFH VER - The version of the DFH.
-> +Rsvd - Currently unused.
-> +EOL - Set if this DFH is the end of the Device Feature List (DFL).
-> +Next - The offset of the next DFH in the DFL from the start of the DFH.
-> +If EOL is set, Next refers to size of mmio for last feature in the list.
-> +ID - If Type field is 'private feature', then ID of the private feature.
-> +
-> +Offset 0x08
-> +GUID_L - Least significant 64 bits of a 128 bit Globally Unique Identifier.
-> +
-> +Offset 0x10
-> +GUID_H - Most significant 64 bits of a 128 bit Globally Unique Identifier
-> +if Type is FME or AFU.
-
-A copy-paste error?
-
-> +
-> +Offset 0x18
-> +Address/Offset - If Rel bit is set, then high 63 bits of a 16 bit aligned
-> +absolute address for the location of the feature's registers.
-> +If Rel bit is clear, then the feature's registers start at the
-> +offset from the start of the DFH.
-> +
-> +Offset 0x20
-> +Reg Size - Size of feature's register set.
-> +Params - Set if DFH has one or more parameter blocks.
-> +Group - Id of group if feature is part of a group.
-> +Instance - Id of instance of feature within a group.
-> +
-> +Offset 0x28 if feature has parameters
-> +Next - High 30 bits of a 32 bit aligned offset to the next parameter block.
-> +If EOP set, size of last parameter.
-> +Param Version - Version of Param ID.
-> +Param ID - ID of parameter.
-> +
-> +Offset 0x30
-> +Parameter Data - Parameter data whose size and format is defined by version
-> +and ID of the parameter.
-
-I'd reverse the order and say "ID and version" (kind of major thing 
-first).
-
-> +
->  Open discussion
->  ===============
->  FME driver exports one ioctl (DFL_FPGA_FME_PORT_PR) for partial reconfiguration
-> 
-
+diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
+index cce56dde135c..310f6916787a 100644
+--- a/fs/erofs/zdata.c
++++ b/fs/erofs/zdata.c
+@@ -659,6 +659,9 @@ static int z_erofs_read_fragment(struct inode *inode, erofs_off_t pos,
+ 	u8 *src, *dst;
+ 	unsigned int i, cnt;
+ 
++	if (!packed_inode)
++		return -EFAULT;
++
+ 	pos += EROFS_I(inode)->z_fragmentoff;
+ 	for (i = 0; i < len; i += cnt) {
+ 		cnt = min_t(unsigned int, len - i,
 -- 
- i.
+2.17.1
 
