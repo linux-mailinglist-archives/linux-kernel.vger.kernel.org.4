@@ -2,71 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70B09606FE9
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 08:16:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6DB2606FED
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 08:17:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230137AbiJUGQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 02:16:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60338 "EHLO
+        id S229731AbiJUGRb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 02:17:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230126AbiJUGQ1 (ORCPT
+        with ESMTP id S229583AbiJUGR0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 02:16:27 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 802F4102DF6
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 23:16:26 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id f8-20020a17090a664800b00212464cd49fso1883435pjm.4
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 23:16:26 -0700 (PDT)
+        Fri, 21 Oct 2022 02:17:26 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12928237952
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 23:17:25 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-333a4a5d495so14417137b3.10
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 23:17:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hVI308eXyS8Lbu1XFDgJY09yiy/y64U8mWrCVAZtfNM=;
-        b=ApOsebNMMrUy1nIx9uaw7MCe9ozsGFebYEhBLz0bsBGKXFN129y/H60GbCNJZsA9iX
-         hwsUE9Z2hqIjcaf8wEsh4qz6GtRIbp6UK2WD0PeZ0gnEFZojbgAsAjRGBYeBsZzQY/rk
-         mdA+TPES9mVRCvQ3uBb77fJAq7rfD5iqvrmB9GZUcsTkC2nlJcJ6NWenQDAvFktb/zA9
-         4iS7qgImoGOZcEdP5Q/t0LgUISEoSSXgvwjpuch/meb4HXpzSM8/75GBDzTBZQrl9DLu
-         gecBtwLI7dxO/7Wzp7s43WQYUw17KPE68jK2Fd/D+9UR7Adf5blpFf/TixbL/cY1yPPl
-         enWw==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=zIf8ZNnAW78yhJlmbsbMxnLGL5lK8A9xrLkSuvVZ5vY=;
+        b=SkzcDLX4HCkfZeJ9ffrRFeR1h5/bxkAsdXmLb5xZZmI03lb+SNf+d4CJAr80URmmy0
+         VR5Di0JZnz+kr3tals3VVIh3jR2iWhSZI/NM5+uOl5cKJIRiARAj20NYRdK/pq2DsehB
+         ftLO6oIhs1qZ+0gh/jwgpJXcIAhFxuKoHcih6iyh8wkmy3epW/EeJamTH/OgoRUKgxzV
+         T6HWPkAnzVQdg206eX9SlmLMsow6Tw234D7CwkIlwxvQVbEcbRtlwmVWYANJOjYAVQKD
+         YCCFizqNNPoPYI1thXrJENlejclBt0Zn8gxFlPWCCBlC3wvG6Gp6FIIYGziDgBDs/3N+
+         3MMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hVI308eXyS8Lbu1XFDgJY09yiy/y64U8mWrCVAZtfNM=;
-        b=jyZRBLjOEW9oeQPIgm41VZUxlY3Jsobhetfp8SnQZbiL6Y9Ij8IOWE2iY5NrEUaHPa
-         JZyECnKB6jFODJJsCTqAFLTUg738jTIilxhf+3rqeYpZN3hYasNvLg0SjH3H5HKBYhYx
-         MGDd14zXLF7U2qRvbJvShJ/vua9711sLpO8T95qVqj8PvFd4ZhSBx94njU/G2v1RssMu
-         5QtAJcr1VxMaXoViI4rSd1hSimvOumDtZrQ6z4FrH58tsjSPDw0+8k0AXqYPaZSQHlFg
-         UA8FsWUrJKmsb7m4cRJf/BjktFTRlHqE9lw7TQTltDn8n9u6gZ3G+R9nssF05BAF6YfT
-         flZw==
-X-Gm-Message-State: ACrzQf0eBY91qTJmm/YCUUrVWhdHj+bL6k1HoQIPViC7ic5MIorwsmwR
-        82qlA2gg1+KrL5iebALnLvlp+Q==
-X-Google-Smtp-Source: AMsMyM6DxwLTzE9ETzTH1ou+CRSd18+kc0m8Tvrp6rLi1Ure9JvkMSuTkm9C9fMGW45Hswz0GBWmwQ==
-X-Received: by 2002:a17:90b:1b0b:b0:20d:7c31:e75d with SMTP id nu11-20020a17090b1b0b00b0020d7c31e75dmr19924620pjb.101.1666332985621;
-        Thu, 20 Oct 2022 23:16:25 -0700 (PDT)
-Received: from C02G87K0MD6R.bytedance.net ([139.177.225.244])
-        by smtp.gmail.com with ESMTPSA id o11-20020a17090a4b4b00b0020d45a155d9sm327532pjl.35.2022.10.20.23.16.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 23:16:24 -0700 (PDT)
-From:   Hao Jia <jiahao.os@bytedance.com>
-To:     mingo@redhat.com, peterz@infradead.org, mingo@kernel.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        mgorman@techsingularity.net
-Cc:     linux-kernel@vger.kernel.org, Hao Jia <jiahao.os@bytedance.com>
-Subject: [PATCH 2/2] sched/core: Optimize the order of scanning CPU
-Date:   Fri, 21 Oct 2022 14:15:58 +0800
-Message-Id: <20221021061558.34767-3-jiahao.os@bytedance.com>
-X-Mailer: git-send-email 2.37.0 (Apple Git-136)
-In-Reply-To: <20221021061558.34767-1-jiahao.os@bytedance.com>
-References: <20221021061558.34767-1-jiahao.os@bytedance.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zIf8ZNnAW78yhJlmbsbMxnLGL5lK8A9xrLkSuvVZ5vY=;
+        b=Tg5xZRr9/+LvRlXLVkUKhTShJWYAZcLb7q7uMgPp/2f5xcDeHRn/iTOvEpyfbCeyAU
+         P0OuyYJqLZP4mDVw6fE1l4fIAgFD0tfXmfg36eiZ+xMCcKIXSL+mVJKTmf1qr73WPrRu
+         hqB5p4kdwJgL4tFx1jh8Vs3BGYpEIi61eE8KAbit/PDpZs/YmKgbbFrATZqSB4pRnnb/
+         kZspWOi2mQ9dRcEIoDJyGoEwnRnrNq1Qt0zMbn9I0ReZXxvUV+Nj0p7vecwK+GY8jvoY
+         hzQXnMeMvp4trXIS5KBnF6mH8cvICXEgvJUgXOi4byxYKmZ/aQSManuy2tUrk0c/O8D6
+         +vhQ==
+X-Gm-Message-State: ACrzQf0Rh/lcMgR7QHt3D54bbA4cI3j7usTy04CTGL7Vz5QdnLkoaNaP
+        OkT6boP4DpqwPKXLBz8O3Yb7wgaSwHNEI63QBFrK4A==
+X-Google-Smtp-Source: AMsMyM7wJTOUnM+n70HWlfhBUHKFGcN4iKPxR8GF36jf5eJRQLjoB9h8ZtenONZtSS8A8XeX5r7Z9kot0IMW+IJOSFQ=
+X-Received: by 2002:a81:1c07:0:b0:358:6e7d:5118 with SMTP id
+ c7-20020a811c07000000b003586e7d5118mr16062156ywc.255.1666333044032; Thu, 20
+ Oct 2022 23:17:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20220915150417.722975-19-glider@google.com> <20221019173620.10167-1-youling257@gmail.com>
+ <CAOzgRda_CToTVicwxx86E7YcuhDTcayJR=iQtWQ3jECLLhHzcg@mail.gmail.com>
+ <CANpmjNMPKokoJVFr9==-0-+O1ypXmaZnQT3hs4Ys0Y4+o86OVA@mail.gmail.com>
+ <CAOzgRdbbVWTWR0r4y8u5nLUeANA7bU-o5JxGCHQ3r7Ht+TCg1Q@mail.gmail.com>
+ <Y1BXQlu+JOoJi6Yk@elver.google.com> <CAOzgRdY6KSxDMRJ+q2BWHs4hRQc5y-PZ2NYG++-AMcUrO8YOgA@mail.gmail.com>
+ <Y1Bt+Ia93mVV/lT3@elver.google.com> <CAG_fn=WLRN=C1rKrpq4=d=AO9dBaGxoa6YsG7+KrqAck5Bty0Q@mail.gmail.com>
+ <CAOzgRdb+W3_FuOB+P_HkeinDiJdgpQSsXMC4GArOSixL9K5avg@mail.gmail.com>
+In-Reply-To: <CAOzgRdb+W3_FuOB+P_HkeinDiJdgpQSsXMC4GArOSixL9K5avg@mail.gmail.com>
+From:   Marco Elver <elver@google.com>
+Date:   Thu, 20 Oct 2022 23:16:47 -0700
+Message-ID: <CANpmjNMUCsRm9qmi5eydHUHP2f5Y+Bt_thA97j8ZrEa5PN3sQg@mail.gmail.com>
+Subject: Re: [PATCH v7 18/43] instrumented.h: add KMSAN support
+To:     youling 257 <youling257@gmail.com>
+Cc:     Alexander Potapenko <glider@google.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
+        linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,54 +105,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When select_idle_capacity() starts scanning for an idle CPU, it starts
-with target CPU that has already been checked in select_idle_sibling().
-So, we finally try the target CPU. Similarly for task_numa_assign(),
-we have just checked numa_migrate_on of dst_cpu, so start from the
-next CPU. This also works for steal_cookie_task(), the first scan
-must fail and start directly from the next one.
+On Thu, 20 Oct 2022 at 22:55, youling 257 <youling257@gmail.com> wrote:
+>
+> How to use perf tool?
 
-Signed-off-by: Hao Jia <jiahao.os@bytedance.com>
----
- kernel/sched/core.c | 2 +-
- kernel/sched/fair.c | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 5800b0623ff3..f6ad68714546 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -6154,7 +6154,7 @@ static bool steal_cookie_task(int cpu, struct sched_domain *sd)
- {
- 	int i;
- 
--	for_each_cpu_wrap(i, sched_domain_span(sd), cpu) {
-+	for_each_cpu_wrap(i, sched_domain_span(sd), cpu + 1) {
- 		if (i == cpu)
- 			continue;
- 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index b7cbec539c77..d95ee285734e 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -1824,7 +1824,7 @@ static void task_numa_assign(struct task_numa_env *env,
- 		int start = env->dst_cpu;
- 
- 		/* Find alternative idle CPU. */
--		for_each_cpu_wrap(cpu, cpumask_of_node(env->dst_nid), start) {
-+		for_each_cpu_wrap(cpu, cpumask_of_node(env->dst_nid), start + 1) {
- 			if (cpu == env->best_cpu || !idle_cpu(cpu) ||
- 			    !cpumask_test_cpu(cpu, env->p->cpus_ptr)) {
- 				continue;
-@@ -6663,7 +6663,7 @@ select_idle_capacity(struct task_struct *p, struct sched_domain *sd, int target)
- 
- 	task_util = uclamp_task_util(p);
- 
--	for_each_cpu_wrap(cpu, cpus, target) {
-+	for_each_cpu_wrap(cpu, cpus, target + 1) {
- 		unsigned long cpu_cap = capacity_of(cpu);
- 
- 		if (!available_idle_cpu(cpu) && !sched_idle_cpu(cpu))
--- 
-2.37.0
-
+The simplest would be to try just "perf top" - and see which kernel
+functions consume most CPU cycles. I would suggest you compare both
+kernels, and see if you can spot a function which uses more cycles% in
+the problematic kernel.
