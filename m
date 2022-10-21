@@ -2,128 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB1826079CC
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 16:40:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCBF86079CF
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 16:41:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230387AbiJUOkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 10:40:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51328 "EHLO
+        id S230368AbiJUOlt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 10:41:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231169AbiJUOk2 (ORCPT
+        with ESMTP id S230106AbiJUOlr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 10:40:28 -0400
-Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 566356A52D;
-        Fri, 21 Oct 2022 07:40:19 -0700 (PDT)
-Received: by mail-vs1-xe31.google.com with SMTP id 128so1449280vsz.12;
-        Fri, 21 Oct 2022 07:40:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=tzT1c25RoKfBc8ntTciHpfUO5h//KgZAglB7BspiwMw=;
-        b=P7v4RpkkWYxhLM9w+bS/amDjV8NSrzu+p2jF3zRrEYZGHg4eIqO0I0tKJ7WAJ+ST+C
-         1VAJB6PCAq8FjGxklcd2g4cqRXoj1INza+L4A0WYNyrKS0jHKKleVvqQ+lcgEKsiKr/l
-         Ijs8rtRPbSfAwHZJbU8FKdq0a4YvO8HWnCUjpcwOX+8P8biV5r/UrRGlf43kfLhIoUmC
-         Y7Wt4+3HrfKXGtsOknWua9qrJ5tFHnXhCXTx0I98ObwR/NmdWh8qSoD6mHHvdsqaLmpF
-         IqzolCvr8C66QoLOiVlQuE7sm1dk6/Ky4zB695FRCsnZiwmifpzwYhK8KKG+tzorI/AE
-         MxbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tzT1c25RoKfBc8ntTciHpfUO5h//KgZAglB7BspiwMw=;
-        b=iHGEJlmrZD+veKhzIK43XkbAuYFX5w+/zGweeutx4eYAbCL7m5TZZvPkr081h/RFIc
-         kyHjx+fTcoYuVtIr0J/SFSulrNGE9sLz6ARpc4cPNNrRsQ+WxQe37prjLlF/f0jmw6ML
-         Vfjg8+t6glkUJN/wbF9YcKST9SA3GerKVE6QfX53AGeQQM6waJ4A6US4j6sRyDVMaPjA
-         FQ+czA1ll0lUn42jCC3bCelMS2u2a/s+Cp6i+rp4LEjkexoSjv4fC8/XnE71ei3rSzrP
-         Y6q276hnzWWBbPknUDYU9h+igTt01q82sUx+FNpGbgb4H1dUWByMFGpYEQrmtqfKvD28
-         3aUg==
-X-Gm-Message-State: ACrzQf2INlAWS6UvjSGB9dCn/uOEdKsu6JtNe4nzLmlVlHTPRQWdhkDk
-        5a1h7ExkG2ngaabtfJCtoron/Bplfz3qSV8D3Xlt4HI2
-X-Google-Smtp-Source: AMsMyM4hGV1xVyZ+pKR/5uztm9opOFajadV7VupRkFxbzJ7GA4O0glyLbBWzdS/+omJuGMGB3AsGA8ONOMPhsp+MrKA=
-X-Received: by 2002:a67:fc97:0:b0:3a6:d37e:e7a3 with SMTP id
- x23-20020a67fc97000000b003a6d37ee7a3mr12979874vsp.29.1666363218247; Fri, 21
- Oct 2022 07:40:18 -0700 (PDT)
+        Fri, 21 Oct 2022 10:41:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 086583AE5B
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 07:41:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 987C561E9B
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 14:41:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 018BEC43470
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 14:41:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666363306;
+        bh=ropLClIeHzFRkVhJYXOsh1KnHR2hkSkJ7NM6ho2IP+c=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=kN8e2I0x6jmgx9kop7mSITV8Rqm4QU+8c0Be7/Bb/5PC5JQ6zoN1hL/hIAOSqU4o1
+         GSAAHt9qf0c9TVi6ksvMUh5ki00dahMuKNSmlO/bDY+0IErGYa3jPBmdPi0xT1D8sz
+         0a002Vdep6v2Nl89ppHI3kiqyI9CW8iGERxdB4bJxQUp9ZUzunzGt04Inx8Fh57afD
+         pXzsN1NSaSEDNxiWQcO2T8k2WvRDdyh3LWbG4HgO3RUlWwl4O09NzTLUkvM2REZTON
+         UEEFZQg6GV7jzAXat4R3OinHjqQwKwTpQPMc4gqsinKcnavd/WlwQlS66K+KLEhsaJ
+         FMqXcYT/zl6SQ==
+Received: by mail-oi1-f180.google.com with SMTP id n130so3437789oia.6
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 07:41:45 -0700 (PDT)
+X-Gm-Message-State: ACrzQf20zNWeVyRnUYPNhsm+fq8AMFk+QEeC0WRXHj5AMbm8sMovy1K6
+        D8RDmRWe+sUNw7kup2Z5cLnZqeD8GPAYVmrk3kM=
+X-Google-Smtp-Source: AMsMyM6vmu+6l7PBPl70AuuJwzmJIjFT3lQyrGPa9CZ9CzkdkiEtFZNRG79H8ghNVYAPWvYYCNoj1G0z2mZ1h+SqLr4=
+X-Received: by 2002:a05:6808:2222:b0:354:9c65:79ed with SMTP id
+ bd34-20020a056808222200b003549c6579edmr23550708oib.19.1666363305134; Fri, 21
+ Oct 2022 07:41:45 -0700 (PDT)
 MIME-Version: 1.0
-From:   Steve French <smfrench@gmail.com>
-Date:   Fri, 21 Oct 2022 09:40:07 -0500
-Message-ID: <CAH2r5mvjQ5cnR0dc0oSRpF0Ck7cMyQRX2mng56UXZjHJ=JhMmQ@mail.gmail.com>
-Subject: [GIT PULL] smb3 client fixes
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>
+References: <20221019154727.2395-1-jszhang@kernel.org> <Y1HZFcBo21SQzXVj@andrea>
+ <CAJF2gTRAEX_jQ_w5H05dyafZzHq+P5j05TJ=C+v+OL__GQam4A@mail.gmail.com>
+ <Y1JaE/ot91Z0KXuC@andrea> <ed7c4027-8e15-245f-cdda-0551063761e7@huawei.com>
+ <Y1KdKATQx16Xl/iL@andrea> <f1eb4756-e1e1-1f12-e767-a69a891786d6@huawei.com>
+In-Reply-To: <f1eb4756-e1e1-1f12-e767-a69a891786d6@huawei.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Fri, 21 Oct 2022 22:41:33 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTRdtcpccL5W48O8VEXCMvxNAyyrKJzhwNJkc8js+H2iJg@mail.gmail.com>
+Message-ID: <CAJF2gTRdtcpccL5W48O8VEXCMvxNAyyrKJzhwNJkc8js+H2iJg@mail.gmail.com>
+Subject: Re: [PATCH] riscv: fix race when vmap stack overflow
+To:     Tong Tiangen <tongtiangen@huawei.com>
+Cc:     Andrea Parri <parri.andrea@gmail.com>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please pull the following changes since commit
-9abf2313adc1ca1b6180c508c25f22f9395cc780:
+On Fri, Oct 21, 2022 at 9:46 PM Tong Tiangen <tongtiangen@huawei.com> wrote=
+:
+>
+>
+>
+> =E5=9C=A8 2022/10/21 21:22, Andrea Parri =E5=86=99=E9=81=93:
+> > Hi Tong,
+> >
+> >>>> I use atomic_set_release here, because I need earlier memory
+> >>>> operations finished to make sure the sp is ready then set the spin
+> >>>> flag.
+> >
+> >>      Consider this implementation:)
+> >>
+> >>      smp_store_mb(&spin_shadow_stack, 0);
+> >
+> > smp_store_mb() has "WRITE_ONCE(); smp_mb()" semantics; so it doesn't
+> > guarantee that the store to spin_shadow_stack is ordered after program
+> > -order earlier memory accesses.
+> >
+> >    Andrea
+> > .
+>
+> Hi Andrea:
+>
+> IIUC, the earlier memory access amoswap.aqrl, here .aqrl guarantee it.
+> But anyway, consider we don't care about performance here, using
+> smp_store_release()(add barrier()) surely right.
+We use smp_store_release() is for:
+        //load per-cpu overflow stack
+        REG_L sp, -8(sp)
 
-  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+Not amoswap.
 
-are available in the Git repository at:
+Actually, amoswap.aqrl guarantees nothing because all instructions
+depend on the sp register.
 
-  git://git.samba.org/sfrench/cifs-2.6.git tags/6.1-rc1-smb3-fixes
-
-for you to fetch changes up to 73b1b8d25e39a1478b3792a7075f43e053ee62c2:
-
-  cifs: update internal module number (2022-10-19 17:57:51 -0500)
-
-----------------------------------------------------------------
-12 small cifs/smb3 fixes, half for stable
-- two memory leak fixes
-- two fixes for directory leases, including an important one which
-fixes a problem noticed by git functional tests
-- five fixes relating to missing free_xid calls (helpful for
-tracing/debugging of entry/exit into cifs.ko)
-- a multichannel fix
-- a small cleanup fix (use of list_move instead of list_del/list_add)
-----------------------------------------------------------------
-Paulo Alcantara (1):
-      cifs: fix memory leaks in session setup
-
-Ronnie Sahlberg (2):
-      cifs: set rc to -ENOENT if we can not get a dentry for the cached dir
-      cifs: drop the lease for cached directories on rmdir or rename
-
-Steve French (2):
-      smb3: interface count displayed incorrectly
-      cifs: update internal module number
-
-Yang Yingliang (1):
-      cifs: use LIST_HEAD() and list_move() to simplify code
-
-Zhang Xiaoxu (6):
-      cifs: Fix xid leak in cifs_create()
-      cifs: Fix xid leak in cifs_copy_file_range()
-      cifs: Fix xid leak in cifs_flock()
-      cifs: Fix xid leak in cifs_ses_add_channel()
-      cifs: Fix xid leak in cifs_get_file_info_unix()
-      cifs: Fix memory leak when build ntlmssp negotiate blob failed
-
- fs/cifs/cached_dir.c | 39 +++++++++++++++++++++++++++++----------
- fs/cifs/cached_dir.h |  4 ++++
- fs/cifs/cifsfs.c     |  7 +++++--
- fs/cifs/cifsfs.h     |  4 ++--
- fs/cifs/dir.c        |  6 ++++--
- fs/cifs/file.c       | 11 +++++++----
- fs/cifs/inode.c      |  6 ++++--
- fs/cifs/sess.c       |  1 +
- fs/cifs/smb2inode.c  |  2 ++
- fs/cifs/smb2ops.c    |  3 ++-
- fs/cifs/smb2pdu.c    | 17 ++++++++---------
- 11 files changed, 68 insertions(+), 32 deletions(-)
+>
+> Thanks,
+> Tong.
 
 
---
-Thanks,
 
-Steve
+--=20
+Best Regards
+ Guo Ren
