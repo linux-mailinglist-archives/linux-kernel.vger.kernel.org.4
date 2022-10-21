@@ -2,68 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C3A3607B7F
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 17:51:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52718607B81
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 17:51:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230315AbiJUPvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 11:51:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43580 "EHLO
+        id S229940AbiJUPv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 11:51:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbiJUPvD (ORCPT
+        with ESMTP id S229864AbiJUPvI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 11:51:03 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4771817F291;
+        Fri, 21 Oct 2022 11:51:08 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2DFE16E295;
         Fri, 21 Oct 2022 08:50:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666367460; x=1697903460;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=arY4EvxAT/KvXp/JPvYXdDFVIm3QFZ803U2WXf8eouw=;
-  b=mjoM7Ko25VVgIsTbYKrIF7uepSKa+p3ZXUfJDMPM7/rkdwLSCwuTA5Hm
-   Ao6nD3PzFZVtmZzWvqGP5k82bTU1WjlwIkw0fEHB8X5YdsL6twsv4e8BR
-   DyKzZxx28DbYqYw7NydP2BEHbYGMSEaSGrBdZJ6a7Fpe/hYxnvJtfAiz2
-   1cvMctVsFXNbAhsrf6952PBzBjoS06LmO+I4tWtTz4BHiIgKb1YLd1hsT
-   5ctMFfogNp4FzO1LkmMoWIdRW4qdUyNGvB55XY9clqFvndqhiaYsuKw9s
-   hMbWlw9gTLWBtSjyACa3BCIkFBni1zsrz+oWIMm1TiEs4/3XNnOuoei/L
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10507"; a="393334481"
-X-IronPort-AV: E=Sophos;i="5.95,202,1661842800"; 
-   d="scan'208";a="393334481"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2022 08:50:54 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10507"; a="608425439"
-X-IronPort-AV: E=Sophos;i="5.95,202,1661842800"; 
-   d="scan'208";a="608425439"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.45.134])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2022 08:50:49 -0700
-Message-ID: <22499ab9-340d-7059-b3ff-45342b0810cf@intel.com>
-Date:   Fri, 21 Oct 2022 18:50:39 +0300
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 7B17E1F8BA;
+        Fri, 21 Oct 2022 15:50:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1666367440; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DII+7luap8mc/o2KNlYlLUHPxsLxFa8m0/bo2FeFrWc=;
+        b=ZV1+yQgR0xpwvV6lamom5Ibq+hV6T/KsS7K3EaKO0yCCSmBSXkV+0kRiWuGeS/M7qXyWaE
+        1/4KjYpuerhzVC6QZSvESKSJ031CNpm/n73JIS3jssM5JusJOeM0ymjBp7YXRjZsyosms9
+        jKINnM47UttlK5nezUS2x0htPyLLRX8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1666367440;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DII+7luap8mc/o2KNlYlLUHPxsLxFa8m0/bo2FeFrWc=;
+        b=YJsJVMrEDWM3iFfSqdB24dtvyunJ1pk4mK8ZDg1QBCyfA3AF6IkAzDh8SwJ5nLGA497u1l
+        490sLdmWnNYFu+Cg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 445B71331A;
+        Fri, 21 Oct 2022 15:50:40 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 5gDAD9C/UmPnSgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Fri, 21 Oct 2022 15:50:40 +0000
+Message-ID: <e6183d91-cb6d-7d14-85d0-3b112a5c7c1f@suse.cz>
+Date:   Fri, 21 Oct 2022 17:50:39 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.0
-Subject: Re: [PATCH V2 0/2] mmc: block: Support Host to control FUA
+ Thunderbird/102.3.3
+Subject: Re: [PATCH rcu 5/8] slab: Explain why SLAB_DESTROY_BY_RCU reference
+ before locking
 Content-Language: en-US
-To:     Wenchao Chen <wenchao.chen666@gmail.com>, ulf.hansson@linaro.org,
-        orsonzhai@gmail.com, baolin.wang@linux.alibaba.com,
-        zhang.lyra@gmail.com, axboe@kernel.dk, avri.altman@wdc.com,
-        kch@nvidia.com
-Cc:     CLoehle@hyperstone.com, vincent.whitchurch@axis.com,
-        bigeasy@linutronix.de, s.shtylyov@omp.ru,
-        michael@allwinnertech.com, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, megoo.tang@gmail.com,
-        lzx.stg@gmail.com
-References: <20221021073025.18831-1-wenchao.chen666@gmail.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20221021073025.18831-1-wenchao.chen666@gmail.com>
+To:     paulmck@kernel.org
+Cc:     Christoph Lameter <cl@gentwo.de>, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com,
+        rostedt@goodmis.org, Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org
+References: <20221019224652.GA2499358@paulmck-ThinkPad-P17-Gen-1>
+ <20221019224659.2499511-5-paulmck@kernel.org>
+ <03d5730-9241-542d-76c6-728be4487c4@gentwo.de>
+ <20221021134309.GG5600@paulmck-ThinkPad-P17-Gen-1>
+ <8504f36a-b6bc-4c46-843e-55d8cd5a1dd0@suse.cz>
+ <20221021154224.GJ5600@paulmck-ThinkPad-P17-Gen-1>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20221021154224.GJ5600@paulmck-ThinkPad-P17-Gen-1>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_SOFTFAIL,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,124 +86,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/10/22 10:30, Wenchao Chen wrote:
-> From: Wenchao Chen <wenchao.chen@unisoc.com>
+On 10/21/22 17:42, Paul E. McKenney wrote:
+> On Fri, Oct 21, 2022 at 03:50:17PM +0200, Vlastimil Babka wrote:
+>> On 10/21/22 15:43, Paul E. McKenney wrote:
+>> > On Fri, Oct 21, 2022 at 09:44:23AM +0200, Christoph Lameter wrote:
+>> >> On Wed, 19 Oct 2022, Paul E. McKenney wrote:
+>> >> 
+>> >> > It is not obvious to the casual user why it is absolutely necessary to
+>> >> > acquire a reference to a SLAB_DESTROY_BY_RCU structure before acquiring
+>> >> > a lock in that structure.  Therefore, add a comment explaining this point.
+>> >> 
+>> >> Sorry but this is not correct and difficult to comprehend.
+>> >> 
+>> >> 1. You do not need a reference to a slab object after it was allocated.
+>> >>    Objects must be properly protected by rcu_locks.
+>> >> 
+>> >> 2. Locks are initialized once on slab allocation via a constructor (*not* on object allocation via kmem_cache_alloc)
+>> >> 
+>> >> 3. Modifying locks at allocation/free is not possible since references to
+>> >>    these objects may still persist after free and before alloc.
+>> >> 
+>> >> 4. The old term SLAB_DESTROY_BY_RCU is used here.
+>> > 
+>> > Thank you for looking this over, but Vlastimil beat you to it.  How does
+>> > the update below look?
+>> 
+>> LGTM.
 > 
-> Summary
-> =======
-> These patches[1] supports the host to turn off FUA.
+> May I please have your ack?
 > 
-> About FUA, roughly deal with the following two parts:
-> 1) FUA(Forced Unit Access):
-> - The REQ_FUA flag can be OR ed into the r/w flags of a bio submitted from the
->   filesystem and will make sure that I/O completion for this request is only
->   signaled after the data has been committed to non-volatile storage.
+> 							Thanx, Paul
 > 
-> 2) In emmc, FUA is represented as Reliable write. code show as below:
-> static void mmc_blk_data_prep(struct mmc_queue *mq, struct mmc_queue_req *mqrq,
-> 		int recovery_mode, bool *do_rel_wr_p, bool *do_data_tag_p)
-> {
-> 	...
-> 	/*
-> 	 * Reliable writes are used to implement Forced Unit Access and
-> 	 * are supported only on MMCs.
-> 	 */
-> 	do_rel_wr = (req->cmd_flags & REQ_FUA) &&
-> 			rq_data_dir(req) == WRITE &&
-> 			(md->flags & MMC_BLK_REL_WR);
-> 	...
-> }
-> 
-> Patch structure
-> ===============
-> patch#1:  for block
-> patch#2:  for sdhci-sprd
-> 
-> Tests
-> =====
-> Ran 'AndroBench' to evaluate the performance:
+>> > ------------------------------------------------------------------------
+>> > 
+>> > commit ff4c536e6b44e2e185e38c3653851f92e07139da
+>> > Author: Paul E. McKenney <paulmck@kernel.org>
+>> > Date:   Mon Sep 26 08:57:56 2022 -0700
+>> > 
+>> >     slab: Explain why SLAB_TYPESAFE_BY_RCU reference before locking
+>> >     
+>> >     It is not obvious to the casual user why it is absolutely necessary to
+>> >     acquire a reference to a SLAB_TYPESAFE_BY_RCU structure before acquiring
+>> >     a lock in that structure.  Therefore, add a comment explaining this point.
+>> >     
+>> >     [ paulmck: Apply Vlastimil Babka feedback. ]
+>> >     
+>> >     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+>> 
+>> Acked-by: Vlastimil Babka <vbabka@suse.cz>
 
-It would be good to have more details e.g.
-What file system? What block size?  What journal size?
-What file size? What record size?
+It was there :)
 
-> 1. fua_disable = 1
-> /sys/block/mmcblk0/queue # cat fua 0
-> I tested 5 times for each case and output a average speed.
-> 
-> 1) Sequential read:
-> Speed: 266.8MiB/s, 265.1MiB/s, 262.9MiB/s, 268.7MiB/s, 265.2MiB/s
-> Average speed: 265.74MiB/s
-> 
-> 2) Random read:
-> Speed: 98.75MiB/s, 98.7MiB/s, 98.5MiB/s, 99.4MiB/s, 98.7MiB/s
-> Average speed: 98.81MiB/s
-> 
-> 3) Sequential write:
-> Speed: 199.94MiB/s, 199.1MiB/s, 205.5MiB/s, 206.5MiB/s, 191.5MiB/s
-> Average speed: 200.5MiB/s
-> 
-> 4) Random write:
-> Speed: 68.6MiB/s, 71.8MiB/s, 77.1MiB/s, 64.8MiB/s, 69.3MiB/s
-> Average speed: 70.32MiB/s
-> 
-> 2. fua_disable = 0 (default 0)
-> /sys/block/mmcblk0/queue # cat fua 1
-> I tested 5 times for each case and output a average speed.
-> 	
-> 1) Sequential read:
-> Speed: 259.3MiB/s, 258.8MiB/s, 258.2MiB/s, 259.5MiB/s, 253.5MiB/s
-> Average speed: 257.86MiB/s
-> 	
-> 2) Random read:
-> Speed: 98.9MiB/s, 101MiB/s, 101MiB/s, 99MiB/s, 101.1MiB/s
-> Average speed: 100.2MiB/s
-> 	
-> 3) Sequential write:
-> Speed: 153.7MiB/s, 146.2MiB/s, 151.2MiB/s, 148.8MiB/s, 147.5MiB/s
-> Average speed: 149.48MiB/s
-> 	
-> 4) Random write:
-> Speed: 12.9MiB/s, 12.3MiB/s, 12.6MiB/s, 12.8MiB/s, 12.8MiB/s
-> Average speed: 12.68MiB/s
-
-Is every write being sync'ed of just sync at the end?
-
-> 	
-> According to the above data, disable FUA (fua_disable = 1) improves the
-> performance:
-> 1)Sequential read improved by 3%.
-> 2)Random read were down 1%.
-
-FUA should not affect reads.  If it is, you may want to investigate how.
-
-> 3)Sequential write improved by 34%.
-> 4)Random write improved by 454%.
-> Therefore, it is recommended to support the host to control FUA.
-> 	
-> Reference
-> =========
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/block/writeback_cache_control.rst
-> [2] Embedded Multi-Media Card (e•MMC) Electrical Standard (5.1)''
-
-You do not seem to have considered data integrity.
-
-Regular disks are assumed to provide atomic sector writes.  That is, a sector has either the old data or the new data, but not some corrupt mixture.
-
-mmc does not have that assumption, which is presumably why Reliable Write has been used instead.  Although that idea appears to have been thrown away for devices with no cache by commit 08ebf903af57 ("mmc: core: Fixup support for writeback-cache for eMMC and SD").
-
-File systems can use FUA to mark a successful journal flush.  Whether or not getting a torn sector at that point will corrupt the file system recovery is presumably file system specific, and maybe specific to file system options e.g. the use of checksums.
-
-It may well be that a file system can survive a torn sector at that point, or that user space would prefer to take the risk in order to get better performance.  In either of those cases, it is not really a decision for the host controller driver.
-
-> 
-> Wenchao Chen (2):
->   mmc: block: Support Host to control FUA
->   mmc: sdhci-sprd: enable fua_disable for SPRDSDHCI
-> 
->  drivers/mmc/core/block.c      | 3 ++-
->  drivers/mmc/host/sdhci-sprd.c | 2 ++
->  include/linux/mmc/host.h      | 3 +++
->  3 files changed, 7 insertions(+), 1 deletion(-)
-> 
+>> >     Cc: Christoph Lameter <cl@linux.com>
+>> >     Cc: Pekka Enberg <penberg@kernel.org>
+>> >     Cc: David Rientjes <rientjes@google.com>
+>> >     Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
+>> >     Cc: Andrew Morton <akpm@linux-foundation.org>
+>> >     Cc: Vlastimil Babka <vbabka@suse.cz>
+>> >     Cc: Roman Gushchin <roman.gushchin@linux.dev>
+>> >     Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+>> >     Cc: <linux-mm@kvack.org>
+>> > 
+>> > diff --git a/include/linux/slab.h b/include/linux/slab.h
+>> > index 90877fcde70bd..487418c7ea8cd 100644
+>> > --- a/include/linux/slab.h
+>> > +++ b/include/linux/slab.h
+>> > @@ -76,6 +76,17 @@
+>> >   * rcu_read_lock before reading the address, then rcu_read_unlock after
+>> >   * taking the spinlock within the structure expected at that address.
+>> >   *
+>> > + * Note that it is not possible to acquire a lock within a structure
+>> > + * allocated with SLAB_TYPESAFE_BY_RCU without first acquiring a reference
+>> > + * as described above.  The reason is that SLAB_TYPESAFE_BY_RCU pages
+>> > + * are not zeroed before being given to the slab, which means that any
+>> > + * locks must be initialized after each and every kmem_struct_alloc().
+>> > + * Alternatively, make the ctor passed to kmem_cache_create() initialize
+>> > + * the locks at page-allocation time, as is done in __i915_request_ctor(),
+>> > + * sighand_ctor(), and anon_vma_ctor().  Such a ctor permits readers
+>> > + * to safely acquire those ctor-initialized locks under rcu_read_lock()
+>> > + * protection.
+>> > + *
+>> >   * Note that SLAB_TYPESAFE_BY_RCU was originally named SLAB_DESTROY_BY_RCU.
+>> >   */
+>> >  /* Defer freeing slabs to RCU */
+>> 
 
