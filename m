@@ -2,66 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86EBB607D23
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 19:00:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CEAB607D20
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 19:00:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230476AbiJURAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 13:00:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51374 "EHLO
+        id S229993AbiJURAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 13:00:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230142AbiJURAN (ORCPT
+        with ESMTP id S229934AbiJURAE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 13:00:13 -0400
-Received: from mail-qv1-xf4a.google.com (mail-qv1-xf4a.google.com [IPv6:2607:f8b0:4864:20::f4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B31D631DC
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 10:00:01 -0700 (PDT)
-Received: by mail-qv1-xf4a.google.com with SMTP id i7-20020a0cab47000000b004b4376895bfso2675383qvb.20
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 10:00:01 -0700 (PDT)
+        Fri, 21 Oct 2022 13:00:04 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F6D2558C5
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:59:52 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-367dc159c2fso34348827b3.19
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:59:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=nFhv/vtA62WAg7cu+g2W7nnuN+CB9hRxAwVFjCLPz/E=;
-        b=N3PqebcHnGpwfb1EnrsvDdTvnRYDuxYhO7jFoLMpeBfvGrzFNly5uNbjeVK5y2xGO/
-         6is2b55BOjkY6q1yB8VZCB1u/xQFL0J49wVNIgjwQofBWyMzefs74wMwT29HxhdVPLDx
-         1uJFleYdC9+M5SFk4Yy4AJZDSsLv2CzSEBuC4vnNk+Q4sx48CtPhqS9k4gls0mbDN0xe
-         3fbV6p0GpUzduBPrg3/ND8aoLaMa7lIWWkj6FjmQnzYlQGVbCgUFuzgASs5w802IJ3Nq
-         XGfXTMMdhfb4YTuAPEvL7N8WfkSnXvF+m963gH42Epe6KwLZwnMGDQJP8PIYiPJhhCz4
-         sKfw==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=m+6LJgKl0wRgTRLkq4f9veim6S7HXx9ZKXbkLf1zrmQ=;
+        b=IAUiu92eRZoXbbSs2RkIa1od4MS2ZKai3lK1I9O75aKToczZ/VnpZ5z1vxJPMa/GkC
+         0lZR6s0KSFCVAgw42q/iyvA+kgH4bPDygEOtwmVRuTsGKEsMBFRUYetzcXtvMGluFGsl
+         oIRPkUIp+AaAMleOZpYIYm4+q9lNnERRe31K2FGn/prPllHO4BM6VzlqX/JTedIRXn/g
+         TVsFJnaJx3ZF69jFYpZyw6YK4mL41IWE/4P1ddXk2c0qHtRj8j6fw0AoQdrvpaI34rP4
+         WL66+HcMTo/T5w05qnW0jiXQlTMkXwyTHlgJbbqfWCuOFHRFxD2mQpcOSJyBL1gCfEvx
+         C27w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nFhv/vtA62WAg7cu+g2W7nnuN+CB9hRxAwVFjCLPz/E=;
-        b=oAc2B292xzeOjCIGgTLF1qjqLq9gn8zlHlI8ATlDrvKEj4gY5msd6KR95QGtmwtJXf
-         2jl7RAse4XwQaLW/FWBLW7wwTcGrNR74cuXnpG7e0Elr7ElSTHGcgjIZMAZ39a5iA5zz
-         MoDkW+w/YZlg10tcMsfSJZ1doGNbYw5O+7lcFFKZPy4H5oXjKZcmpgq8F6H7GtAPkQLS
-         EjOJ6obp4AcASGf4RUaR52HPpAzKOYjbWbZBfH+f9giXpeJOs8JidWzuGDamNpOlJyUD
-         rZPJhhJLjSQe8Wo7MsxOV/5TByaddUnrUnPM2eIF9QBM2/mjUnrg2nTq/4y4RaD33cXR
-         OJ6A==
-X-Gm-Message-State: ACrzQf2d4HafIOJUIitxszzTEV1BvKJ8dy+jjd4Xt9wlSgJrxvCi9GS8
-        uARct9YcuFvxNY7DqYBl5pxvhSnbzwf/MV6K2z9hXz5ZEIyfIx4F/scJGe3Kd8B51THI4tXe96Z
-        hu9EIplRK9BlUobhUlkWBSXHaaCgcj2OwyRFhEMrxbpwcCBe6BS17itje2MrFoMUKl4+Oe6o/he
-        efMHovS60=
-X-Google-Smtp-Source: AMsMyM7Wi00SxhbDGTUYIzg/4rocJUC06QDfyyWfEnn2zSQ8aKkHQNCpHL+gClLu2odOPwt5pub0FhA0xR+oQmo8/Q==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=m+6LJgKl0wRgTRLkq4f9veim6S7HXx9ZKXbkLf1zrmQ=;
+        b=yp8szvCtnWYMUUFBitjJAtlpaXCt9sLFXDFHyTJNLXO71il5RPh7bR78t+IM+FWeej
+         QG7lXqUow7WpQgwWTgbz+7TRGORVjRsdBzTX1xwELWY9oLteOhZPm31/qDMV/hC1Y8Sj
+         CcxMaatZ4+YBW2l55TTQKZoKk491E4zrYc6I9uHL8qNgnuYxPvTBVcZsh2kkiOXWBqLZ
+         Ua65z3tg9FBkl8egnV5eBmsHSGXwQ9mO8CzvA6D/Su+x4LdR6qLQFlfmvttWAC5NRyF8
+         Tr5n83KS+5aJscu5eLI0oM9dUY9xEnUd3ng7xEywjnnbyA88Tckhx0GK36xRQ2IrCKPK
+         Uq6w==
+X-Gm-Message-State: ACrzQf1kHqhRBOqQvL7/RQzKc1wt1dnb0tSbqyughu4DUZSGF7JPdNno
+        TnejQSjzCJk8cXxEqJ25AGYcbLNJ9YviGJc60Ipikov+ADQ99g3hZifOgP9KynXpk2V2L7LAewE
+        VF9WJZMWgs+GAenwCHblRFWS0sfCnAcxPiSKmuz7HjKRz+SMzkyV6CSu9U5mdEYg0NdMXtpi4Ot
+        6OOIe/X9g=
+X-Google-Smtp-Source: AMsMyM5CQH4TFkLl4P/9mkWXy3i+ItjFbQYaMrom0RyvhQqef8RqBnFfeGLST8i6w2fb1FCTGC49V9uXDGyOMCsLeA==
 X-Received: from dionnaglaze.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2ee6])
- (user=dionnaglaze job=sendgmr) by 2002:a17:903:248:b0:172:7520:db07 with SMTP
- id j8-20020a170903024800b001727520db07mr19594238plh.76.1666371588758; Fri, 21
- Oct 2022 09:59:48 -0700 (PDT)
-Date:   Fri, 21 Oct 2022 16:59:39 +0000
+ (user=dionnaglaze job=sendgmr) by 2002:a25:be14:0:b0:6be:885f:20bb with SMTP
+ id h20-20020a25be14000000b006be885f20bbmr17567487ybk.480.1666371590674; Fri,
+ 21 Oct 2022 09:59:50 -0700 (PDT)
+Date:   Fri, 21 Oct 2022 16:59:40 +0000
+In-Reply-To: <20221021165943.1968044-1-dionnaglaze@google.com>
 Mime-Version: 1.0
+References: <20221021165943.1968044-1-dionnaglaze@google.com>
 X-Mailer: git-send-email 2.38.0.135.g90850a2211-goog
-Message-ID: <20221021165943.1968044-1-dionnaglaze@google.com>
-Subject: [PATCH v3 0/4] Add throttling detection to sev-guest
+Message-ID: <20221021165943.1968044-2-dionnaglaze@google.com>
+Subject: [PATCH v3 1/4] ccp: Name -1 return value as SEV_RET_NO_FW_CALL
 From:   Dionna Glaze <dionnaglaze@google.com>
 To:     linux-kernel@vger.kernel.org, x86@kernel.org
 Cc:     Dionna Glaze <dionnaglaze@google.com>,
-        Tom Lendacky <Thomas.Lendacky@amd.com>,
+        Thomas Lendacky <Thomas.Lendacky@amd.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Peter Gonda <pgonda@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>
+        Joerg Roedel <jroedel@suse.de>, Ingo Molnar <mingo@redhat.com>,
+        Andy Lutomirsky <luto@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -73,56 +73,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The guest request synchronous API from SEV-SNP VMs to the host's security
-processor consumes a global resource. For this reason, AMD's docs
-recommend that the host implements a throttling mechanism. In order for
-the guest to know it's been throttled and should try its request again,
-we need some good-faith communication from the host that the request
-has been throttled.
+The PSP can return a "firmware error" code of -1 in circumstances where
+the PSP is not actually called. To make this protocol unambiguous, we
+add a constant naming the return value.
 
-These patches work with the existing /dev/sev-guest ABI to detect a
-throttling code.
-
-Changes from v2:
-  * Codified the non-firmware-call firmware error code as (u32)-1.
-  * Changed sev_issue_guest_request unsigned long *fw_err argument to
-    u64 *exitinfo2 to more accurately and type-safely describe the
-    value that it outputs.
-  * Changed sev_issue_guest_request to always set its exitinfo2
-    argument to either the non-firmware-call error code, the
-    EXIT_INFO_2 returned from the VMM if the request failed, or 0 on
-    success. This fixes a bug that returned uninitialized kernel stack
-    memory to the user when there is no error.
-  * Changed the throttle behavior to retry in the driver instead of
-    returning -EAGAIN, due to possible message sequence number reuse
-    on different message contents.
-    
-Changes from v1:
-  * Changed throttle error code to 2
-
-Cc: Tom Lendacky <Thomas.Lendacky@amd.com>
+From: Peter Gonda <pgonda@google.com>
+Cc: Thomas Lendacky <Thomas.Lendacky@amd.com>
 Cc: Paolo Bonzini <pbonzini@redhat.com>
 Cc: Joerg Roedel <jroedel@suse.de>
-Cc: Peter Gonda <pgonda@google.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Andy Lutomirsky <luto@kernel.org>
 
 Signed-off-by: Dionna Glaze <dionnaglaze@google.com>
+---
+ drivers/crypto/ccp/sev-dev.c | 2 +-
+ include/uapi/linux/psp-sev.h | 7 +++++++
+ 2 files changed, 8 insertions(+), 1 deletion(-)
 
-Dionna Glaze (4):
-  ccp: Name -1 return value as SEV_RET_NO_FW_CALL
-  x86/sev: Change snp_guest_issue_request's fw_err
-  virt/coco/sev-guest: Remove err in handle_guest_request
-  virt/coco/sev-guest: interpret VMM errors from guest request
-
- arch/x86/include/asm/sev.h              |  4 +--
- arch/x86/kernel/sev.c                   | 11 +++++--
- drivers/crypto/ccp/sev-dev.c            |  2 +-
- drivers/virt/coco/sev-guest/sev-guest.c | 39 ++++++++++++++++++-------
- include/uapi/linux/psp-sev.h            |  7 +++++
- include/uapi/linux/sev-guest.h          | 18 ++++++++++--
- 6 files changed, 62 insertions(+), 19 deletions(-)
-
+diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
+index 06fc7156c04f..97eb3544ab36 100644
+--- a/drivers/crypto/ccp/sev-dev.c
++++ b/drivers/crypto/ccp/sev-dev.c
+@@ -444,7 +444,7 @@ static int __sev_platform_init_locked(int *error)
+ {
+ 	struct psp_device *psp = psp_master;
+ 	struct sev_device *sev;
+-	int rc = 0, psp_ret = -1;
++	int rc = 0, psp_ret = SEV_RET_NO_FW_CALL;
+ 	int (*init_function)(int *error);
+ 
+ 	if (!psp || !psp->sev_data)
+diff --git a/include/uapi/linux/psp-sev.h b/include/uapi/linux/psp-sev.h
+index 91b4c63d5cbf..fb61e083d42e 100644
+--- a/include/uapi/linux/psp-sev.h
++++ b/include/uapi/linux/psp-sev.h
+@@ -36,6 +36,13 @@ enum {
+  * SEV Firmware status code
+  */
+ typedef enum {
++	/*
++	 * This error code is not in the SEV spec but is added to convey that
++	 * there was an error that prevented the SEV Firmware from being called.
++	 * This is (u32)-1 since the firmware error code part of EXIT_INFO_2 is
++	 * the lower 32 bits.
++	 */
++	SEV_RET_NO_FW_CALL = 0xffffffff,
+ 	SEV_RET_SUCCESS = 0,
+ 	SEV_RET_INVALID_PLATFORM_STATE,
+ 	SEV_RET_INVALID_GUEST_STATE,
 -- 
 2.38.0.135.g90850a2211-goog
 
