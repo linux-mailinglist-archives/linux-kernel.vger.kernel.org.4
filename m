@@ -2,129 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2BC0607BCC
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 18:09:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5169C607BCD
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 18:10:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbiJUQJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 12:09:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49986 "EHLO
+        id S230175AbiJUQKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 12:10:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229987AbiJUQJi (ORCPT
+        with ESMTP id S230091AbiJUQKG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 12:09:38 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C2132A707
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:09:36 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id w189so1540725pfw.4
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:09:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=atEq6XUnsLTgZQ8a4NCS/ZdYKRgZxn+iMuufQefZZ+0=;
-        b=eGudQkg8P8RMl4BgAU2RN15mrO604mY8d7L9SluZ5vfEphfK8FH7nibeyrpuqFY5sf
-         p7JoTrF3vkT3pQQ687p5uCVlz3hBZEZqDF7RvVriqwzkJn0l68SrwwL0sTpsyeSvwfgX
-         H6AQVmtqTCd9U/brN7SMkNnXhT6I6I6nc7s9UZcrXbiKy7HQt/ZuOevcfvLNcNy3mBQZ
-         X2gn4sOn/1WY7ZQQi9ZN2vhhgBY34o4uyF9JFme6c3IbpUFKVHB8gsMTJDQF9a0ktwth
-         Xh28UFr5CJOxRW05+fJb0BIrZRFmq7OO8QmW9LWD85TqgpJN4qPxYQ+sBDBsVLXhi8XH
-         H32w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=atEq6XUnsLTgZQ8a4NCS/ZdYKRgZxn+iMuufQefZZ+0=;
-        b=vLuFa1eoP07C8xws/pys5zMpGjcbnyvntgZOQj86lIAxzFlv4BBylbQVrnIahiWRJY
-         vyO6nm2fVf65wI6R0cXDkZvKh/F1dHA50aBL4R9DXmzJ9Qt4W819d/RENcmms2bsLuEa
-         1myzDXfNUM1kn6XugmU29DCFdqG54hVxLzVjrRV1ooh++6wmQI3FuLLr4a27DUgtTiY4
-         PE9AVM92ABYK1W5VpJWSoRn3M1fLgJp297ggmjC4gqe5fuS3OjUzDeUdv6vIA6Bn96yA
-         ND+0OtYRSOHb/uUhw58EJUUdVDbc3SYTu/cGK6B10yVpY+P6cC/EGzLWIfVYo+gTVXfF
-         OR+Q==
-X-Gm-Message-State: ACrzQf04lmLp0vL/2HcGMwpPe9ZwFyMbUyNSi+R6gQ9JVCVfNqeX1b44
-        FCuWHrAbM8srB/WevEYOqntWog==
-X-Google-Smtp-Source: AMsMyM5VbR5/UAQSg+UhJJqI6jBw64vdS9WWCcLNP6Vn9WaGw+m23DD/2YTSRI+OcSJmG9D5iEXQMA==
-X-Received: by 2002:a63:1a46:0:b0:464:3966:54b9 with SMTP id a6-20020a631a46000000b00464396654b9mr17052629pgm.390.1666368575536;
-        Fri, 21 Oct 2022 09:09:35 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id g17-20020aa79dd1000000b0053e5daf1a25sm15379550pfq.45.2022.10.21.09.09.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Oct 2022 09:09:35 -0700 (PDT)
-Date:   Fri, 21 Oct 2022 16:09:31 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        Yuan Yao <yuan.yao@linux.intel.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v11 16/46] KVM: x86: hyper-v: Don't use
- sparse_set_to_vcpu_mask() in kvm_hv_send_ipi()
-Message-ID: <Y1LEO49pDvZ1yrNV@google.com>
-References: <20221004123956.188909-1-vkuznets@redhat.com>
- <20221004123956.188909-17-vkuznets@redhat.com>
- <Y1BahCzO4jxFC9Ey@google.com>
- <87czalczo6.fsf@redhat.com>
- <877d0tcpsg.fsf@ovpn-192-65.brq.redhat.com>
+        Fri, 21 Oct 2022 12:10:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C6FF9876;
+        Fri, 21 Oct 2022 09:10:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A3FC61F0B;
+        Fri, 21 Oct 2022 16:10:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2AA5C433D6;
+        Fri, 21 Oct 2022 16:10:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666368603;
+        bh=NZzqyU+bobEWKzEadvtSYF/+VAx77MPAMZ3IBqV2Hl0=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=LmM4Bmy9Tiahnfw2j7UouzsVbcjxZOVggWesE6VdAlwRXf0pXtTqcsoCw8kUHTtJM
+         ijZIu9TAksJIEbTVuD7CXtD1427Pt15UIYLpp+qzo2Y3Fa8YCRcjo/TjxgZ4duGPVF
+         1vckVYgpYgfHjurtpZaPL3cBnsF4bGM8k4c9TnhMZ6Aoil+3uoKgwUibXl1NTDuXfi
+         5FIIv0PciLlyJYDCnllEwFvbh8CiZDL/HzuKQ+gImEOcTjuWXlGRiSsu8gbfIyFkYK
+         RbTtav+ERW963sW//fHdaPpkw5nI2XYhYFYhCad72PkSUARwFNgCwK2z0d06guhX4f
+         RQQzOsLPSnVHA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 5861B5C0543; Fri, 21 Oct 2022 09:10:03 -0700 (PDT)
+Date:   Fri, 21 Oct 2022 09:10:03 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Christoph Lameter <cl@gentwo.de>, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com,
+        rostedt@goodmis.org, Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org
+Subject: Re: [PATCH rcu 5/8] slab: Explain why SLAB_DESTROY_BY_RCU reference
+ before locking
+Message-ID: <20221021161003.GL5600@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221019224652.GA2499358@paulmck-ThinkPad-P17-Gen-1>
+ <20221019224659.2499511-5-paulmck@kernel.org>
+ <03d5730-9241-542d-76c6-728be4487c4@gentwo.de>
+ <20221021134309.GG5600@paulmck-ThinkPad-P17-Gen-1>
+ <8504f36a-b6bc-4c46-843e-55d8cd5a1dd0@suse.cz>
+ <20221021154224.GJ5600@paulmck-ThinkPad-P17-Gen-1>
+ <e6183d91-cb6d-7d14-85d0-3b112a5c7c1f@suse.cz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <877d0tcpsg.fsf@ovpn-192-65.brq.redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <e6183d91-cb6d-7d14-85d0-3b112a5c7c1f@suse.cz>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022, Vitaly Kuznetsov wrote:
-> Vitaly Kuznetsov <vkuznets@redhat.com> writes:
+On Fri, Oct 21, 2022 at 05:50:39PM +0200, Vlastimil Babka wrote:
+> On 10/21/22 17:42, Paul E. McKenney wrote:
+> > On Fri, Oct 21, 2022 at 03:50:17PM +0200, Vlastimil Babka wrote:
+> >> On 10/21/22 15:43, Paul E. McKenney wrote:
+> >> > On Fri, Oct 21, 2022 at 09:44:23AM +0200, Christoph Lameter wrote:
+> >> >> On Wed, 19 Oct 2022, Paul E. McKenney wrote:
+> >> >> 
+> >> >> > It is not obvious to the casual user why it is absolutely necessary to
+> >> >> > acquire a reference to a SLAB_DESTROY_BY_RCU structure before acquiring
+> >> >> > a lock in that structure.  Therefore, add a comment explaining this point.
+> >> >> 
+> >> >> Sorry but this is not correct and difficult to comprehend.
+> >> >> 
+> >> >> 1. You do not need a reference to a slab object after it was allocated.
+> >> >>    Objects must be properly protected by rcu_locks.
+> >> >> 
+> >> >> 2. Locks are initialized once on slab allocation via a constructor (*not* on object allocation via kmem_cache_alloc)
+> >> >> 
+> >> >> 3. Modifying locks at allocation/free is not possible since references to
+> >> >>    these objects may still persist after free and before alloc.
+> >> >> 
+> >> >> 4. The old term SLAB_DESTROY_BY_RCU is used here.
+> >> > 
+> >> > Thank you for looking this over, but Vlastimil beat you to it.  How does
+> >> > the update below look?
+> >> 
+> >> LGTM.
+> > 
+> > May I please have your ack?
+> > 
+> > 							Thanx, Paul
+> > 
+> >> > ------------------------------------------------------------------------
+> >> > 
+> >> > commit ff4c536e6b44e2e185e38c3653851f92e07139da
+> >> > Author: Paul E. McKenney <paulmck@kernel.org>
+> >> > Date:   Mon Sep 26 08:57:56 2022 -0700
+> >> > 
+> >> >     slab: Explain why SLAB_TYPESAFE_BY_RCU reference before locking
+> >> >     
+> >> >     It is not obvious to the casual user why it is absolutely necessary to
+> >> >     acquire a reference to a SLAB_TYPESAFE_BY_RCU structure before acquiring
+> >> >     a lock in that structure.  Therefore, add a comment explaining this point.
+> >> >     
+> >> >     [ paulmck: Apply Vlastimil Babka feedback. ]
+> >> >     
+> >> >     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> >> 
+> >> Acked-by: Vlastimil Babka <vbabka@suse.cz>
 > 
-> > Sean Christopherson <seanjc@google.com> writes:
-> >> Mostly because it's somewhat arbitrary that earlier code ensures valid_bank_mask
-> >> is set in the all_cpus=true case, e.g. arguably KVM doesn't need to do the var_cnt
-> >> sanity check in the all_cpus case:
-> >>
-> >> 		all_cpus = send_ipi_ex.vp_set.format == HV_GENERIC_SET_ALL;
-> >> 		if (all_cpus)
-> >> 			goto check_and_send_ipi;
-> >>
-> >> 		valid_bank_mask = send_ipi_ex.vp_set.valid_bank_mask;
-> >> 		if (hc->var_cnt != hweight64(valid_bank_mask))
-> >> 			return HV_STATUS_INVALID_HYPERCALL_INPUT;
-> >>
-> >> 		if (!hc->var_cnt)
-> >> 			goto ret_success;
-> >>
-> >
-> > I think 'var_cnt' (== hweight64(valid_bank_mask)) has to be checked in
-> > 'all_cpus' case, especially in kvm_hv_flush_tlb(): the code which reads
-> > TLB flush entries will read them from the wrong offset (data_offset/
-> > consumed_xmm_halves) otherwise. The problem is less severe in
-> > kvm_hv_send_ipi() as there's no data after CPU banks. 
-> >
-> > At the bare minimum, "KVM: x86: hyper-v: Handle
-> > HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST{,EX} calls gently" patch from this
-> > series will have to be adjusted. I *think* mandating var_cnt==0 in 'all_cpus'
-> > is OK but I don't recall such requirement from TLFS, maybe it's safer to
-> > just adjust 'data_offset'/'consumed_xmm_halves' even in 'all_cpus' case.
-> >
-> > Let me do some tests... 
+> It was there :)
+
+One of those mornings, I guess...
+
+Thank you very much!!!
+
+							Thanx, Paul
+
+> >> >     Cc: Christoph Lameter <cl@linux.com>
+> >> >     Cc: Pekka Enberg <penberg@kernel.org>
+> >> >     Cc: David Rientjes <rientjes@google.com>
+> >> >     Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
+> >> >     Cc: Andrew Morton <akpm@linux-foundation.org>
+> >> >     Cc: Vlastimil Babka <vbabka@suse.cz>
+> >> >     Cc: Roman Gushchin <roman.gushchin@linux.dev>
+> >> >     Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+> >> >     Cc: <linux-mm@kvack.org>
+> >> > 
+> >> > diff --git a/include/linux/slab.h b/include/linux/slab.h
+> >> > index 90877fcde70bd..487418c7ea8cd 100644
+> >> > --- a/include/linux/slab.h
+> >> > +++ b/include/linux/slab.h
+> >> > @@ -76,6 +76,17 @@
+> >> >   * rcu_read_lock before reading the address, then rcu_read_unlock after
+> >> >   * taking the spinlock within the structure expected at that address.
+> >> >   *
+> >> > + * Note that it is not possible to acquire a lock within a structure
+> >> > + * allocated with SLAB_TYPESAFE_BY_RCU without first acquiring a reference
+> >> > + * as described above.  The reason is that SLAB_TYPESAFE_BY_RCU pages
+> >> > + * are not zeroed before being given to the slab, which means that any
+> >> > + * locks must be initialized after each and every kmem_struct_alloc().
+> >> > + * Alternatively, make the ctor passed to kmem_cache_create() initialize
+> >> > + * the locks at page-allocation time, as is done in __i915_request_ctor(),
+> >> > + * sighand_ctor(), and anon_vma_ctor().  Such a ctor permits readers
+> >> > + * to safely acquire those ctor-initialized locks under rcu_read_lock()
+> >> > + * protection.
+> >> > + *
+> >> >   * Note that SLAB_TYPESAFE_BY_RCU was originally named SLAB_DESTROY_BY_RCU.
+> >> >   */
+> >> >  /* Defer freeing slabs to RCU */
+> >> 
 > 
-> "We can neither confirm nor deny the existence of the problem". Windows
-> guests seem to be smart enough to avoid using *_EX hypercalls altogether
-> for "all cpus" case (as non-ex versions are good enough). Let's keep
-> allowing non-zero var_cnt for 'all cpus' case for now
-
-Sounds good.
-
-> and think about hardening it later...
-
-Eh, no need to add more work for ourselves.  I wasn't thinking about hardening so
-much as slightly simplifying KVM code.
