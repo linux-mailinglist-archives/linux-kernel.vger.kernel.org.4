@@ -2,57 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22331607ECD
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 21:13:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18AE6607ED7
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 21:14:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbiJUTNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 15:13:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47452 "EHLO
+        id S230220AbiJUTNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 15:13:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229777AbiJUTNM (ORCPT
+        with ESMTP id S229506AbiJUTNq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 15:13:12 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 989E0286C8E;
-        Fri, 21 Oct 2022 12:13:11 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1olxS3-0008KG-LP; Fri, 21 Oct 2022 21:13:03 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        kernel@collabora.com
-Subject: Re: [PATCH 2/2] dt-bindings: rockchip-thermal: Support the RK3588 SoC compatible
-Date:   Fri, 21 Oct 2022 21:13:02 +0200
-Message-ID: <3197889.aeNJFYEL58@diego>
-In-Reply-To: <20221021174721.92468-3-sebastian.reichel@collabora.com>
-References: <20221021174721.92468-1-sebastian.reichel@collabora.com> <20221021174721.92468-3-sebastian.reichel@collabora.com>
+        Fri, 21 Oct 2022 15:13:46 -0400
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 509B315A8D3
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 12:13:45 -0700 (PDT)
+Received: by mail-io1-xd2b.google.com with SMTP id n73so3090062iod.13
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 12:13:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3i+Pa4J8bcK4+v/ZgymWwGim+h5u0D8ub/WCEgMRWbs=;
+        b=QQ6cVsALVD1ZESHIkBeya46B5Mdalbmf/0qaiyDp1Az+go8Ycxao0O8cZ/g4Fp5Nud
+         Z94Wo+WKnBW2aK5T9TexSRJuG8PXvgwfZLzQeym4Q9kpR3d9KeNuw+FD3XdG0ci7K33U
+         RFBK0Zl+UAqrbldAGAYIgH5jP5TI6w25m5iKOmjNFicamnrhLBYbRDPwwdCPqyOL9QDE
+         zhA9gWowntH1kYECvtPKHOT7+SGVomqzIKad5D2J+Nc3FNk4QHR1hPR8qq3yDPIAqxRm
+         RGHWtfgSlhZfpoN0b2OxQP8kuGNAL/tzzur1nHBIJpEr0ms4PVKSyag2CWDKVgWDW07H
+         eEAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3i+Pa4J8bcK4+v/ZgymWwGim+h5u0D8ub/WCEgMRWbs=;
+        b=VuQYQGzlnK/c5KjzZjrsLEZZ0PDYoZEK2rTPRRR2Pi1WCpd+enSW9XeuDE1vcH7h16
+         2fa3NFcwgnT2xS1LRTHOhTQFRr1lYlLscESwp4KOLpdnSNE0bdvkYUXcXlMO9+wKyjI6
+         Ql/2UbRBy4l7TsLV25TIpIts/IMx0tsntFDNwKffd0TPt52dpW90P095/hbrRHhgHHc4
+         xKjvVZBIgtQoOTruj19ZdR7/A59NPWq4HWHTlosm0tJBFHCkKygSBbNEm7BLoT/V9fiH
+         B+9GhPZlB45JwuzXNzZAfAS2sBXBS2wAsPfbZoi7Rp3zPIGhs6VeqFuAqg4PHr4FOJQG
+         X66Q==
+X-Gm-Message-State: ACrzQf3l3NaN2WdFp5U1GrkN7eXFBf756DBMiAys/RKIULplYsGTN3Tk
+        GJxrGH+EmQQXcll1yk2pmC2b1A==
+X-Google-Smtp-Source: AMsMyM6xvJ0iBZmfYAklZzuwVetfYY4s78LgfUYuEf/mPq8EVumDozWszKXGumGw9YLLkjGom8o/Iw==
+X-Received: by 2002:a6b:4a01:0:b0:6bc:d4ae:321c with SMTP id w1-20020a6b4a01000000b006bcd4ae321cmr14889741iob.59.1666379624609;
+        Fri, 21 Oct 2022 12:13:44 -0700 (PDT)
+Received: from presto.localdomain ([98.61.227.136])
+        by smtp.gmail.com with ESMTPSA id e3-20020a022103000000b00363c68aa348sm4439362jaa.72.2022.10.21.12.13.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Oct 2022 12:13:43 -0700 (PDT)
+From:   Alex Elder <elder@linaro.org>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     mka@chromium.org, evgreen@chromium.org, andersson@kernel.org,
+        quic_cpratapa@quicinc.com, quic_avuyyuru@quicinc.com,
+        quic_jponduru@quicinc.com, quic_subashab@quicinc.com,
+        elder@kernel.org, netdev@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net-next 0/7] net: ipa: validation cleanup
+Date:   Fri, 21 Oct 2022 14:13:33 -0500
+Message-Id: <20221021191340.4187935-1-elder@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Freitag, 21. Oktober 2022, 19:47:21 CEST schrieb Sebastian Reichel:
-> Add a new compatible for the thermal sensor device on RK3588 SoCs.
-> 
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+This series gathers a set of IPA driver cleanups, mostly involving
+code that ensures certain things are known to be correct *early*
+(either at build or initializatin time), so they can be assumed good
+during normal operation.
 
-Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+The first removes three constant symbols, by making a (reasonable)
+assumption that a routing table consists of entries for the modem
+followed by entries for the AP, with no unused entries between them.
 
+The second removes two checks that are redundant (they verify the
+sizes of two memory regions are in range, which will have been done
+earlier for all regions).
+
+The third adds some new checks to routing and filter tables that
+can be done at "init time" (without requiring any access to IPA
+hardware).
+
+The fourth moves a check that routing and filter table addresses can
+be encoded within certain IPA immediate commands, so it's performed
+earlier; the checks can be done without touching IPA hardware.  The
+fifth moves some other command-related checks earlier, for the same
+reason.
+
+The sixth removes the definition ipa_table_valid(), because what it
+does has become redundant.  Finally, the last patch moves two more
+validation calls so they're done very early in the probe process.
+This will be required by some upcoming patches, which will record
+the size of the routing and filter tables at this time so they're
+available for subsequent initialization.
+
+					-Alex
+
+Alex Elder (7):
+  net: ipa: kill two constant symbols
+  net: ipa: remove two memory region checks
+  net: ipa: validate IPA table memory earlier
+  net: ipa: verify table sizes fit in commands early
+  net: ipa: introduce ipa_cmd_init()
+  net: ipa: kill ipa_table_valid()
+  net: ipa: check table memory regions earlier
+
+ drivers/net/ipa/ipa_cmd.c   |  53 ++++--------
+ drivers/net/ipa/ipa_cmd.h   |  16 +++-
+ drivers/net/ipa/ipa_mem.c   |  14 ++--
+ drivers/net/ipa/ipa_table.c | 162 +++++++++++++++++++++---------------
+ drivers/net/ipa/ipa_table.h |  15 ++--
+ 5 files changed, 138 insertions(+), 122 deletions(-)
+
+-- 
+2.34.1
 
