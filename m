@@ -2,64 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF1166073FE
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 11:26:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A004607402
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 11:26:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230150AbiJUJ0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 05:26:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45982 "EHLO
+        id S229910AbiJUJ0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 05:26:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229988AbiJUJ0H (ORCPT
+        with ESMTP id S229987AbiJUJ0Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 05:26:07 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFB7216D55C
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 02:25:51 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id f37so4043385lfv.8
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 02:25:51 -0700 (PDT)
+        Fri, 21 Oct 2022 05:26:16 -0400
+Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE4CD14DF37;
+        Fri, 21 Oct 2022 02:26:09 -0700 (PDT)
+Received: by mail-vs1-xe30.google.com with SMTP id p7so629633vsr.7;
+        Fri, 21 Oct 2022 02:26:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=C2MVCCy2Kj88bAGrrwyous+SY2zFdp50BJwaTNbSgJs=;
-        b=e1Ug2fbqBV828vW2hp81OZQM8ZZrtqzFoCgUtgF1WPGaTyc+HKq4vG6c/GhnbLHqs/
-         G34p+YJXUqnyngkTTPuvqC3bVytW4N/GYy4OyczPzpg+BBUlNFmJwrqC4xICbSIJdGVq
-         oTLTLNJXWuZlKtpB3+ZcBBceSmeXnnTjQCghJpJqk+BztA39iGgHGgeYr1Ypb5DonO0A
-         JWnPCiGhpyQg5gtS4ywgKcQRgr3cLDK3m/cZ6jrod8s+I6nZbZX3XkZxrYocUebwMO1v
-         RZBtWS7qIZ1PY9GrYy4RBUurwv1D8cznf9ihBC01AYjnLx2RhjAL4LG31co9eZKB1iQg
-         m15w==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=tRt0MF7331zR5Ag7+1JIjxszPiAdl3Ci8P/Vs3dYn0o=;
+        b=dv1bg3qY6nmZbE4+Okgh9ftZiz8zOpsZ7LlWiMZEe3yqXOl7940q7I7tIF+cPqaQxB
+         gZlm7cN43XgbRTPkJhW7Ia92bdDNcGZKaB7t87ZtpeHzNSb0trKkEdiAw3PkZeudHmiE
+         +0l3UAXXVYN7GACkX1COcSS5NUEmLVgL8ThqfKsC8+JYCxsv3TWE0rcg7+9BYrQ2J20v
+         uNS4cFz+0B7+mJL8wOgXkj3XSSktwnp/pSJhgX+MHLPf1019pgarYERBZ6OC/C4RSLwp
+         fGKczS3IiztCgWXWDhYuSBzj8mmu2jjF6GSOOuwVMNslo1cJLFizJXc0M0iWLY8Q52qG
+         ZhpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=C2MVCCy2Kj88bAGrrwyous+SY2zFdp50BJwaTNbSgJs=;
-        b=FjeH6GpgB3da3nPWVbpFe13ErORd3twwswaREbAZUpbQ0ftkAy2tLnVI88AFvDad4R
-         kZwBZo7GU9s0pkHp/Czpmo4DvTqFE/c2OsI2n/cd11XtXEL9hImr3dbUfROIYU3J6zX3
-         BTiFtjaVda/OZl6BuWxsHIoT2I9O9H9lrj8sI3N3p39DGoJ5wHh6Mc94Pwj9XJjFW3JU
-         ErNZ+J7logyFx8aXc9ZhrkrgLdmlEdIDzvNbrGEzXXo/M6H3Sf2YnU90Gx+opWP565Ne
-         XCMdN17uv2CYrTlDPMOJ6bLdi120N49fZNCqxjSG9gT79wjQcuc+cgLyW2+6KFzssjWc
-         Hs4Q==
-X-Gm-Message-State: ACrzQf2p8/rbXu855apPCU8B4DIQV7/654RFNmbvlHSeYHlO/XbXSL+l
-        o8SmScwyl2oVxvymFqZroj5DQpJntAYJ8qbu
-X-Google-Smtp-Source: AMsMyM4+5YCd0Luf4TS2xNZ0ncMzTartBJCb60IU0qioV9xKWdxD8sActTvNkZmCQGyb5TZ9G5oWjA==
-X-Received: by 2002:ac2:44c1:0:b0:4a6:113f:ab60 with SMTP id d1-20020ac244c1000000b004a6113fab60mr4222002lfm.475.1666344349940;
-        Fri, 21 Oct 2022 02:25:49 -0700 (PDT)
-Received: from elroy-temp-vm ([20.240.130.248])
-        by smtp.gmail.com with ESMTPSA id n13-20020ac2490d000000b0049b8c0571e5sm3091491lfi.113.2022.10.21.02.25.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Oct 2022 02:25:49 -0700 (PDT)
-Date:   Fri, 21 Oct 2022 09:25:48 +0000
-From:   Tanjuate Brunostar <tanjubrunostar0@gmail.com>
-To:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
-Subject: [PATCH v4] staging: vt6655: Fix Lines should not end with a '('
-Message-ID: <Y1JlnJ/UpBgm9XEC@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tRt0MF7331zR5Ag7+1JIjxszPiAdl3Ci8P/Vs3dYn0o=;
+        b=SfAjF8MMXae/7wErag2MI2aP1dcE9wVc+0Arc5rajsYHCAabEgkpiNmSvh9j7QcF8m
+         rkoQo3Qv2an/Y7Dv8XGMJN+TByFGt9eSkVkLXo+1z8Wzh0EbUhzl4udCMpVGvfEwhEHu
+         Q2aBMajsvo0a6+/SWBuJFX77aLkauhQEpgcETkQaIwdYCkzOlFTjhmkOb7lpsBWiRPzH
+         hJMfefb7N5lk96zTxsVaD08SUtqyJM2/KzKhpzhcpWICFYt8EX8Ro8XOrpqqK+u+FTBh
+         umq1OMyo2z1EaMPea7eQ7MsPZPwOIMDKmNgUdKvrHL/TEKH1BmlkF3PItcjJXaiBd/EN
+         YF0w==
+X-Gm-Message-State: ACrzQf2LrBVKcfhQhfF3UHOO2UAM6gIZ1WZYCFBxay1GpmvlFNpqZOr/
+        6ZW/rdkSXlbomwQilLYoVk9rEgkYhMpzFKNBerbRoehqmdg=
+X-Google-Smtp-Source: AMsMyM5nKN5s646XTnQU4lqNZbJvzYobVrd5JslImVEs9THy7vWttLpi0XHRXW/bkUaPhaZikLYXRmyLzmkLHwQWu78=
+X-Received: by 2002:a67:c190:0:b0:3a7:e91:9072 with SMTP id
+ h16-20020a67c190000000b003a70e919072mr11412420vsj.36.1666344368464; Fri, 21
+ Oct 2022 02:26:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221018041233.376977-1-stephen.s.brennan@oracle.com>
+ <20221021010310.29521-1-stephen.s.brennan@oracle.com> <20221021010310.29521-2-stephen.s.brennan@oracle.com>
+In-Reply-To: <20221021010310.29521-2-stephen.s.brennan@oracle.com>
+From:   Amir Goldstein <amir73il@gmail.com>
+Date:   Fri, 21 Oct 2022 12:25:57 +0300
+Message-ID: <CAOQ4uxgxN+-Q+C7fHJ7PwEbM0GVH9mVKiAzdpCb+wFd6M=zsuQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] fsnotify: Use d_find_any_alias to get dentry
+ associated with inode
+To:     Stephen Brennan <stephen.s.brennan@oracle.com>
+Cc:     Jan Kara <jack@suse.cz>, Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,121 +69,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Code style warnings reported by checkpatch.
-Improve the layout of a function header:
-Put the first parameter immediately after the '(' and align the other
-parameters underneath it.
+On Fri, Oct 21, 2022 at 4:03 AM Stephen Brennan
+<stephen.s.brennan@oracle.com> wrote:
+>
+> Rather than iterating over the inode's i_dentry (requiring holding the
+> i_lock for the entire duration of the function), we know that there
+> should be only one item in the list. Use d_find_any_alias() and no
+> longer hold i_lock.
+>
+> Signed-off-by: Stephen Brennan <stephen.s.brennan@oracle.com>
 
-Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+Reviewed-by: Amir Goldstein <amir73il@gmail.com>
 
----
-v2: put static and void on the same line and adjusted the indentation as
-suggested by Greg KH
----
-v3: Reformat the code by inserting tabs and white space as recommended
-by Nam Cao and Julia Lawall
----
-v4: final version of this patch
+one nit below
 
- drivers/staging/vt6655/rxtx.c | 78 +++++++++++++++--------------------
- 1 file changed, 33 insertions(+), 45 deletions(-)
+> ---
+>  fs/notify/fsnotify.c | 41 ++++++++++++++++++-----------------------
+>  1 file changed, 18 insertions(+), 23 deletions(-)
+>
+> diff --git a/fs/notify/fsnotify.c b/fs/notify/fsnotify.c
+> index 7974e91ffe13..6c338322f0c3 100644
+> --- a/fs/notify/fsnotify.c
+> +++ b/fs/notify/fsnotify.c
+> @@ -105,7 +105,7 @@ void fsnotify_sb_delete(struct super_block *sb)
+>   */
+>  void __fsnotify_update_child_dentry_flags(struct inode *inode)
+>  {
+> -       struct dentry *alias;
+> +       struct dentry *alias, *child;
+>         int watched;
+>
+>         if (!S_ISDIR(inode->i_mode))
+> @@ -114,30 +114,25 @@ void __fsnotify_update_child_dentry_flags(struct inode *inode)
+>         /* determine if the children should tell inode about their events */
+>         watched = fsnotify_inode_watches_children(inode);
+>
+> -       spin_lock(&inode->i_lock);
+> -       /* run all of the dentries associated with this inode.  Since this is a
+> -        * directory, there damn well better only be one item on this list */
+> -       hlist_for_each_entry(alias, &inode->i_dentry, d_u.d_alias) {
+> -               struct dentry *child;
+> -
+> -               /* run all of the children of the original inode and fix their
+> -                * d_flags to indicate parental interest (their parent is the
+> -                * original inode) */
+> -               spin_lock(&alias->d_lock);
+> -               list_for_each_entry(child, &alias->d_subdirs, d_child) {
+> -                       if (!child->d_inode)
+> -                               continue;
+> +       /* Since this is a directory, there damn well better only be one child */
+> +       alias = d_find_any_alias(inode);
+>
+> -                       spin_lock_nested(&child->d_lock, DENTRY_D_LOCK_NESTED);
+> -                       if (watched)
+> -                               child->d_flags |= DCACHE_FSNOTIFY_PARENT_WATCHED;
+> -                       else
+> -                               child->d_flags &= ~DCACHE_FSNOTIFY_PARENT_WATCHED;
+> -                       spin_unlock(&child->d_lock);
+> -               }
+> -               spin_unlock(&alias->d_lock);
+> +       /* run all of the children of the original inode and fix their
+> +        * d_flags to indicate parental interest (their parent is the
+> +        * original inode) */
 
-diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
-index 5bdb5176772c..1e5036121665 100644
---- a/drivers/staging/vt6655/rxtx.c
-+++ b/drivers/staging/vt6655/rxtx.c
-@@ -85,35 +85,27 @@ static const unsigned short wFB_Opt1[2][5] = {
- #define DATADUR_A_F1    13
- 
- /*---------------------  Static Functions  --------------------------*/
--static
--void
--s_vFillRTSHead(
--	struct vnt_private *pDevice,
--	unsigned char byPktType,
--	void *pvRTS,
--	unsigned int	cbFrameLength,
--	bool bNeedAck,
--	bool bDisCRC,
--	struct ieee80211_hdr *hdr,
--	unsigned short wCurrentRate,
--	unsigned char byFBOption
--);
--
--static
--void
--s_vGenerateTxParameter(
--	struct vnt_private *pDevice,
--	unsigned char byPktType,
--	struct vnt_tx_fifo_head *,
--	void *pvRrvTime,
--	void *pvRTS,
--	void *pvCTS,
--	unsigned int	cbFrameSize,
--	bool bNeedACK,
--	unsigned int	uDMAIdx,
--	void *psEthHeader,
--	unsigned short wCurrentRate
--);
-+static void s_vFillRTSHead(struct vnt_private *pDevice,
-+			   unsigned char byPktType,
-+			   void *pvRTS,
-+			   unsigned int	cbFrameLength,
-+			   bool bNeedAck,
-+			   bool bDisCRC,
-+			   struct ieee80211_hdr *hdr,
-+			   unsigned short wCurrentRate,
-+			   unsigned char byFBOption);
-+
-+static void s_vGenerateTxParameter(struct vnt_private *pDevice,
-+				   unsigned char byPktType,
-+				   struct vnt_tx_fifo_head *,
-+				   void *pvRrvTime,
-+				   void *pvRTS,
-+				   void *pvCTS,
-+				   unsigned int	cbFrameSize,
-+				   bool bNeedACK,
-+				   unsigned int	uDMAIdx,
-+				   void *psEthHeader,
-+				   unsigned short wCurrentRate);
- 
- static unsigned int
- s_cbFillTxBufHead(struct vnt_private *pDevice, unsigned char byPktType,
-@@ -121,22 +113,18 @@ s_cbFillTxBufHead(struct vnt_private *pDevice, unsigned char byPktType,
- 		  unsigned int uDMAIdx, struct vnt_tx_desc *pHeadTD,
- 		  unsigned int uNodeIndex);
- 
--static
--__le16
--s_uFillDataHead(
--	struct vnt_private *pDevice,
--	unsigned char byPktType,
--	void *pTxDataHead,
--	unsigned int cbFrameLength,
--	unsigned int uDMAIdx,
--	bool bNeedAck,
--	unsigned int uFragIdx,
--	unsigned int cbLastFragmentSize,
--	unsigned int uMACfragNum,
--	unsigned char byFBOption,
--	unsigned short wCurrentRate,
--	bool is_pspoll
--);
-+static __le16 s_uFillDataHead(struct vnt_private *pDevice,
-+			      unsigned char byPktType,
-+			      void *pTxDataHead,
-+			      unsigned int cbFrameLength,
-+			      unsigned int uDMAIdx,
-+			      bool bNeedAck,
-+			      unsigned int uFragIdx,
-+			      unsigned int cbLastFragmentSize,
-+			      unsigned int uMACfragNum,
-+			      unsigned char byFBOption,
-+			      unsigned short wCurrentRate,
-+			      bool is_pspoll);
- 
- /*---------------------  Export Variables  --------------------------*/
- 
--- 
-2.34.1
+Please add new lines at the beginning and end of this multi line comment.
 
+Thanks,
+Amir.
