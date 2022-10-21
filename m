@@ -2,217 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC682607180
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 09:55:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAECD60708A
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 08:54:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229711AbiJUHz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 03:55:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40786 "EHLO
+        id S230106AbiJUGyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 02:54:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiJUHzY (ORCPT
+        with ESMTP id S229747AbiJUGyO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 03:55:24 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2071.outbound.protection.outlook.com [40.107.243.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E2D51213D9
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 00:55:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ATvZqhoNDTgmQDjui9UdC6sQJmcgaupRemuya8Di5wd6XtS9KLKhy19vpu9aUDTvmybdL1vLkNUDQsSV+s8GQQQlg2AF/TNDW22MUbQf9xUOQnuXsghTsg8fEn1uZeM9x6OeFYPJLWZZGgRj2OWl2Sei9MLnhbyiPR7ZLTE+mHNZI7hvKbuHgM3PHc0+vFdWqSyVekXY9RZAjfJIvtlBFRMqFz10UQWscVtDpDLyY296XHSbnnSIso6iTJ1uJpxb/bvvHSrlWFeI+HhxH7MkMgoPOk6dF4kDOPPYaYokWAd2aBK5/mOg/bsukj3AvlBFs3V8O/Fbb4+qyWd5rHeyYw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fRACIIBShcs17dxhNMHJKvpK8tgIULqC76X2wJf8Or8=;
- b=nJVNZHhN8ycmpPVh69If9/Kl4T/A6A2qO4ux8e7w+Vp3mDpa+A274zroG4rNu3IVy3ZHGqstn1pattRlWlK0ebUmBMsoX00S8Y+AJowy0muds5d1hbYen/z6RLrCsrcuBNplGHV0OkqK12CAYq3REeLmtVVKXYROh1QBSGLWRzFntKQpU4GHMzKD6eA8aYTNLs7TUV1bm2sf8wCy0lxcLebGhgH8mBqDlx55epRqbmYzTQgwuGQy+LozB0rM/1s2dRDMPF/YBDUGEhB4QKnyUkFFSNyWkt6GqtLQMSG9upmaoWIyL6NFCIhRJfnorY4vbZUsIsgTBCehFv0m2CidUw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fRACIIBShcs17dxhNMHJKvpK8tgIULqC76X2wJf8Or8=;
- b=eu5aPyobWzNkm2k0Dzjcbw9k29s3XuTWhNhJxlz0zsM/YoAlGi72fSLTGn7Q6G2AbOfjkCEcUBdgPqMfHz7FLtytsp8LiyvTHvXRaHnlb93Qh1eVkgRNMePaCBsMQJNxUHlQtLNjhZjrEWroA6fcmdCRQPdw3wM6yOz26wDMfME=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM6PR12MB3370.namprd12.prod.outlook.com (2603:10b6:5:38::25) by
- DS0PR12MB6582.namprd12.prod.outlook.com (2603:10b6:8:d2::14) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5723.29; Fri, 21 Oct 2022 07:55:21 +0000
-Received: from DM6PR12MB3370.namprd12.prod.outlook.com
- ([fe80::d309:77d2:93d8:2425]) by DM6PR12MB3370.namprd12.prod.outlook.com
- ([fe80::d309:77d2:93d8:2425%7]) with mapi id 15.20.5723.035; Fri, 21 Oct 2022
- 07:55:21 +0000
-Content-Type: multipart/mixed; boundary="------------9VtOs3mF29K0mdP7SyPs0VFr"
-Message-ID: <5efd73b0-d634-d34f-3d7a-13d674e40d04@amd.com>
-Date:   Fri, 21 Oct 2022 03:55:18 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH 00/11] fix memory leak while kset_register() fails
-Content-Language: en-CA
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Yang Yingliang <yangyingliang@huawei.com>,
-        linux-kernel@vger.kernel.org, qemu-devel@nongnu.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-erofs@lists.ozlabs.org, ocfs2-devel@oss.oracle.com,
-        linux-mtd@lists.infradead.org, amd-gfx@lists.freedesktop.org,
-        rafael@kernel.org, somlo@cmu.edu, mst@redhat.com,
-        jaegeuk@kernel.org, chao@kernel.org, hsiangkao@linux.alibaba.com,
-        huangjianan@oppo.com, mark@fasheh.com, jlbec@evilplan.org,
-        joseph.qi@linux.alibaba.com, akpm@linux-foundation.org,
-        alexander.deucher@amd.com, richard@nod.at, liushixin2@huawei.com
-References: <20221021022102.2231464-1-yangyingliang@huawei.com>
- <d559793a-0ce4-3384-e74e-19855aa31f31@amd.com> <Y1IwLOUGayjT9p6d@kroah.com>
-From:   Luben Tuikov <luben.tuikov@amd.com>
-In-Reply-To: <Y1IwLOUGayjT9p6d@kroah.com>
-X-ClientProxiedBy: YT3PR01CA0085.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:84::16) To DM6PR12MB3370.namprd12.prod.outlook.com
- (2603:10b6:5:38::25)
+        Fri, 21 Oct 2022 02:54:14 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DAD822E8F8
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 23:54:13 -0700 (PDT)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MtwDV50ZbzHty9;
+        Fri, 21 Oct 2022 14:54:02 +0800 (CST)
+Received: from huawei.com (10.175.101.6) by kwepemi500012.china.huawei.com
+ (7.221.188.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 21 Oct
+ 2022 14:54:10 +0800
+From:   Li Zetao <lizetao1@huawei.com>
+To:     <richard@nod.at>, <miquel.raynal@bootlin.com>, <vigneshr@ti.com>,
+        <axboe@kernel.dk>, <chaitanya.kulkarni@wdc.com>
+CC:     <lizetao1@huawei.com>, <hch@lst.de>,
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] ubi: block: KASAN null-ptr-deref in ubiblock_create()
+Date:   Fri, 21 Oct 2022 15:57:28 +0800
+Message-ID: <20221021075728.1209184-1-lizetao1@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR12MB3370:EE_|DS0PR12MB6582:EE_
-X-MS-Office365-Filtering-Correlation-Id: ac1e6fa5-9788-4e1f-24b3-08dab3399a5b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: okpt7L5SEG56woasM5xJeTJ1nidp7lS0w9DZdMiCIOImiXifT4iHjbmrbqsztJz4zIZl0xeGE6jPoP8uSkPjNxnwUR1WyJ9EQGKLMxhMy209JndaDT6YchKwFcKkeM0j0aZBdJ2ZcAiv536fIK5NNmbGPM3tuZgT4FXYdZb8xjeymm0cy3Ec7zt6VcB7zmL1i1pTvz1abLWF2PoDRw+aSFKEw2OxW6okijr9Ihe1kt+84UQBqjIf9NqPVLXw7a2AfF3nH1UXYlrjs16ACWMQ5I1EOQx84UUiCOR2/QLkjmb4oOYyd+L1lxzqJFofg6MzeOe54GFfQULXEa/2iIaUTZIRvSqL1LeRoS1AkpwXqffdbqB/NTFJnN0PbY7wK3xEREA8Idr7Gi9sWXqOka77lRvh+0NrOPtHNo89LjiQeEEYT42+yPJBfyVBJsQtetGTFSOluhOZe9C7YyCHSZJHP1Ufe1F3zINjORwcuU/Ykc/h8xsY8lXOzAtlvL3tFcP1WGMKOPlT+jTv9Gj43vaelaXt4Z3nagLOjkN4hM6qPyIySJvcQGfvJZQj71nTqUW0rUHMfwEjovtKNU60CW9pyctGyrFTIWhKHdynLnGNbOjkmbomH/hWnIPg4+7Zcx+Jb0Z1m/WJp8CP+yENn7B7kb78UCii0bRhNp0zC9LqwaNGfucS56PpIlFZjz2ozr3MZFSaBzaTF5/6sFQXXW/q73GKDFRt0axqqYtwyFfAOMK87rcqDgrzQKcdShi5zLoqWpx/UyplcaUh9MxS3FONN10HoIa70t33tjg+V6u43L5Hq9d0HeBmBdLitvxOMaV19LbZu1E9jnHTdHwnGQU2vA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3370.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(366004)(396003)(346002)(376002)(39860400002)(451199015)(478600001)(6512007)(26005)(33964004)(6506007)(2906002)(6666004)(186003)(5660300002)(7416002)(2616005)(53546011)(44832011)(235185007)(66946007)(4001150100001)(6916009)(8676002)(45080400002)(966005)(6486002)(8936002)(4326008)(66556008)(41300700001)(66476007)(316002)(66899015)(31696002)(86362001)(36756003)(38100700002)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dHpQLzVNVFVFak5yTTZvbTQ3c0pEdi9Ob1p6MUVJZk1SWjJtNXpLaTNTOTJj?=
- =?utf-8?B?aVVIT0dnbExDcjczbnpKRDluY29UZWhvNmVrQUhwT25GclRnSEdhMDZYT1BX?=
- =?utf-8?B?WjkyY1cyMFpTWXl4RWF3cmV5R1VYNUcrcmt1U0syaVkzQ0NvZGxUT0VkaVdn?=
- =?utf-8?B?WDNKbnZrdzRyb09ScFIrR1lsNGJ3cEQxZi85Y0d1dUpFOGdkdkxVWDR1RzJo?=
- =?utf-8?B?S3pIbmNWV0NoRGxZWXd4clAxU1ViUnFQNlBnK2Zybjg3T3JVMk13Qzdka3Jh?=
- =?utf-8?B?ZFg1cDlsRGlxM0ludnZaV1A2NlJjVE83U1p0UmhOYVprUGdpbmVxNFpjcCtJ?=
- =?utf-8?B?NmV1aUVEaVZIVDhDMlk4ZEZxMWd4MEhCK1lBRjFsUUFNTWUyc1FNRjdzaDZ4?=
- =?utf-8?B?MTNZQ1RjcmVqck1PeENEd0tMTXRrSnd6YUQrTlBpclRSQ2ZJTUtuc0VhL0ZN?=
- =?utf-8?B?R0k1TURRdmNScWpZYURNQk1oY1I4dFJ6aWJNR29icWl3ajEwUHUxMkkyNTg2?=
- =?utf-8?B?cmhsc2JFcmNEVWVQODhiWFh3eDRXdGg2SzlNZXZ4MnQxU0MyLzYxU2xmZGVp?=
- =?utf-8?B?MDhoRGppZG9xanlDb3BHQjlSVWxHZHVLZjJIQlplNUMvVWg0a3RiTFFGUlBN?=
- =?utf-8?B?Y2dKUlZIQkc0M0krTEdZRFRCbW9GTWZObTZpNk1vaVVFNVYycXg2cnZPZWdL?=
- =?utf-8?B?dmc3VVRmalBNRTV1c3BzS1lQZ0kyZTJFVVVJM05RbGtrekdoMyt4NlliWmo5?=
- =?utf-8?B?ZmdEMnFwOUFiak43MWNZWk9nVlI0amN0R2IvOGhEa1FFZ0prVFNnaVlVdS8r?=
- =?utf-8?B?WGFiNjQwdk1VSkFRMTBxRmFuNSs0eEw0SlBPaW9VN1NqcFNDRDRZK09NZ0pn?=
- =?utf-8?B?Q1l4Ny8yd0JDb1J0VlhPY2hLRXJ3MGN3S255a0pMTjNyKytXeTk0MnJaT0tq?=
- =?utf-8?B?QnJxMWNxdTVWV3Vlc2N4aCtnenBnNjBJZmcxenFNYnFFbk5OWURQWFJpbWJC?=
- =?utf-8?B?ckRQUWVCeXp6dTljQ1Y3ck9LNk9qZ1lrK1dtSzJPcmFMV21EMWtiWEhIcFZC?=
- =?utf-8?B?ODZVa1d1NjlTTDREazRqUVo3RXdxai9JQTBCb25VYU84NWQ1QnNxTCtJUXBl?=
- =?utf-8?B?VGp1Kzd5T3NBOHBqRmQ1eU5adkJyMkdseHBmcG5sd3dqNm1USkhtZDVCa0xy?=
- =?utf-8?B?azlUSGw4RUQ5bUVTKzdUNnNmNWt2U2gyYTNLMHRJNU1OQzF2cmxZUDU1Qzly?=
- =?utf-8?B?OVRIUVpoL3JSenBVZG1QMi9UTDJQWjd2bTZRZzkwMWtHM0s1eHNZNXNBMENt?=
- =?utf-8?B?REg5UGRHRDNSc1lUMDdNWXdKeUJZWG4wc2k4MUg2UFd3VU5ZVkttM2dtOXJN?=
- =?utf-8?B?emJuL1BCaWFjd2MvcjdJSmJPaS9jc1dUVFUrKzVtR3pSK3ZKUk1QUzc1cVpO?=
- =?utf-8?B?bEFiWVViSXQzTnM4SkVoMTkvcm1VWTB5ZkY1ODFhOCs4S3FmRDNRcEdEM1dh?=
- =?utf-8?B?dVZCc2VIQ05BeXpCL3l5TVJXeE9ZZERYeTRRUGFTOUZzL1duNlBoMHMwMnZr?=
- =?utf-8?B?eEpaV29scDRZYlVFcGcyMkF4cCtqL3o2ZUwrTmpDc0szWGtOZVBrZnovdUxm?=
- =?utf-8?B?N0J3TUlqRnV2UUxINzRuVWtwZ1dWNHU5UUZlNGhWMktzUngzZkUrb3doNktH?=
- =?utf-8?B?K0dpa1BZbzl3eExnVTM4WS9RWkhyck56MzY5OGlUMm5LS0ZzLzRZdENoR2ZR?=
- =?utf-8?B?azVwVEtKVUc3ZW4wVHd1VWM4SkVFRXJwazZEUS9OR3Z2dDVDTzdzakh5OXpo?=
- =?utf-8?B?WmJWL2d3aFVDUXRKT0t2Y2k4WHV1Qk5HSytoWHdSTXRTYVFtMmdJcExuSHJo?=
- =?utf-8?B?RnE2cnZjbUtmczlmZEYrYmpGaHVXUHhjWEM3WkkzN21jNU5iM1k3OUkwSWhi?=
- =?utf-8?B?RzNmYzZMcVdlV2xvd1IrMTFMOE5qOUVZdDY0ZlFEZTR4ZGJZUnk0R3pGVDVx?=
- =?utf-8?B?VFB0NmhMQkkyUTlFVFFaTTZnYytac3Z0UzRpNFBuZWFvZjZKMi82Q0k1Tjcv?=
- =?utf-8?B?blpqckxoNmhHRXJGZTFjZnJtVmhMMGtOOTZyVkc1RnJ1Q1lqU2tYZDZpVXpB?=
- =?utf-8?Q?rHD4keo7VELYlXoW8XTJnROxt?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ac1e6fa5-9788-4e1f-24b3-08dab3399a5b
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3370.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Oct 2022 07:55:21.2393
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8qc+2mMOM8ktWZqlUNOqGC2E7s39vqX1JDZkziPRqfJoYgYiV8bMo9eH7CaE+4Pc
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6582
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemi500012.china.huawei.com (7.221.188.12)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---------------9VtOs3mF29K0mdP7SyPs0VFr
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+There is a null-ptr-deref when testing the ubiblock tools:
 
-On 2022-10-21 01:37, Greg KH wrote:
-> On Fri, Oct 21, 2022 at 01:29:31AM -0400, Luben Tuikov wrote:
->> On 2022-10-20 22:20, Yang Yingliang wrote:
->>> The previous discussion link:
->>> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Flkml%2F0db486eb-6927-927e-3629-958f8f211194%40huawei.com%2FT%2F&amp;data=05%7C01%7Cluben.tuikov%40amd.com%7C65b33f087ef245a9f23708dab3264840%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C638019274318153227%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=1ZoieEob62iU9kI8fvpp20qGut9EeHKIHtCAT01t%2Bz8%3D&amp;reserved=0
->>
->> The very first discussion on this was here:
->>
->> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fwww.spinics.net%2Flists%2Fdri-devel%2Fmsg368077.html&amp;data=05%7C01%7Cluben.tuikov%40amd.com%7C65b33f087ef245a9f23708dab3264840%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C638019274318153227%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=9joWxGLUxZZMvrfkxCR8KbkoXifsqoMK0vGR%2FyEG62w%3D&amp;reserved=0
->>
->> Please use this link, and not the that one up there you which quoted above,
->> and whose commit description is taken verbatim from the this link.
->>
->>>
->>> kset_register() is currently used in some places without calling
->>> kset_put() in error path, because the callers think it should be
->>> kset internal thing to do, but the driver core can not know what
->>> caller doing with that memory at times. The memory could be freed
->>> both in kset_put() and error path of caller, if it is called in
->>> kset_register().
->>
->> As I explained in the link above, the reason there's
->> a memory leak is that one cannot call kset_register() without
->> the kset->kobj.name being set--kobj_add_internal() returns -EINVAL,
->> in this case, i.e. kset_register() fails with -EINVAL.
->>
->> Thus, the most common usage is something like this:
->>
->> 	kobj_set_name(&kset->kobj, format, ...);
->> 	kset->kobj.kset = parent_kset;
->> 	kset->kobj.ktype = ktype;
->> 	res = kset_register(kset);
->>
->> So, what is being leaked, is the memory allocated in kobj_set_name(),
->> by the common idiom shown above. This needs to be mentioned in
->> the documentation, at least, in case, in the future this is absolved
->> in kset_register() redesign, etc.
-> 
-> Based on this, can kset_register() just clean up from itself when an
-> error happens?  Ideally that would be the case, as the odds of a kset
-> being embedded in a larger structure is probably slim, but we would have
-> to search the tree to make sure.
+  KASAN: null-ptr-deref in range [0x0000000000000040-0x0000000000000047]
+  CPU: 1 PID: 2299 Comm: ubiblock Not tainted
+  6.1.0-rc1-00002-gebb24af8c872-dirty #12
+  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
+  BIOS 1.14.0-1.fc33 04/01/2014
+  RIP: 0010:ubiblock_create.cold+0x175/0x1b5 [ubi]
+  ...
+  Call Trace:
+   vol_cdev_ioctl+0x6ce/0x870 [ubi]
+   __x64_sys_ioctl+0x11d/0x170
+   do_syscall_64+0x35/0x80
+   entry_SYSCALL_64_after_hwframe+0x46/0xb0
+  RIP: 0033:0x7fd9141230ab
 
-Looking at kset_register(), we can add kset_put() in the error path,
-when kobject_add_internal(&kset->kobj) fails.
+when blk_mq_alloc_tag_set() returns an error, the dev->gd is
+uninitialized, that causing null-ptr-deref fault.
 
-See the attached patch. It needs to be tested with the same error injection
-as Yang has been doing.
+Fix it by replacing the disk_to_dev(dev->gd) with NULL, that
+will printk "(NULL device *): ..." message if blk_mq_alloc_tag_set()
+returns an error.
 
-Now, struct kset is being embedded in larger structs--see amdgpu_discovery.c
-starting at line 575. If you're on an AMD system, it gets you the tree
-structure you'll see when you run "tree /sys/class/drm/card0/device/ip_discovery/".
-That shouldn't be a problem though.
+Fixes: 77567b25ab9f ("ubi: use blk_mq_alloc_disk and blk_cleanup_disk")
+Signed-off-by: Li Zetao <lizetao1@huawei.com>
+---
+ drivers/mtd/ubi/block.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Regards,
-Luben
---------------9VtOs3mF29K0mdP7SyPs0VFr
-Content-Type: text/x-patch; charset=UTF-8;
- name="0001-kobject-Add-kset_put-if-kset_register-fails.patch"
-Content-Disposition: attachment;
- filename="0001-kobject-Add-kset_put-if-kset_register-fails.patch"
-Content-Transfer-Encoding: base64
+diff --git a/drivers/mtd/ubi/block.c b/drivers/mtd/ubi/block.c
+index 75eaecc8639f..9625dc2f45e2 100644
+--- a/drivers/mtd/ubi/block.c
++++ b/drivers/mtd/ubi/block.c
+@@ -408,7 +408,7 @@ int ubiblock_create(struct ubi_volume_info *vi)
+ 
+ 	ret = blk_mq_alloc_tag_set(&dev->tag_set);
+ 	if (ret) {
+-		dev_err(disk_to_dev(dev->gd), "blk_mq_alloc_tag_set failed");
++		dev_err(NULL, "blk_mq_alloc_tag_set failed");
+ 		goto out_free_dev;
+ 	}
+ 
+-- 
+2.31.1
 
-RnJvbSA3MWUwYTIyODAxYzA2OTlmNjdlYTQwZWQ5NmUwYTdkN2Q5ZTBmMzE4IE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBMdWJlbiBUdWlrb3YgPGx1YmVuLnR1aWtvdkBhbWQuY29tPgpE
-YXRlOiBGcmksIDIxIE9jdCAyMDIyIDAzOjM0OjIxIC0wNDAwClN1YmplY3Q6IFtQQVRDSF0ga29i
-amVjdDogQWRkIGtzZXRfcHV0KCkgaWYga3NldF9yZWdpc3RlcigpIGZhaWxzClgtY2hlY2stc3Ry
-aW5nLWxlYWs6IHYxLjAKCklmIGtzZXRfcmVnaXN0ZXIoKSBmYWlscywgd2UgY2FsbCBrc2V0X3B1
-dCgpIGJlZm9yZSByZXR1cm5pbmcgdGhlCmVycm9yLiBUaGlzIG1ha2VzIHN1cmUgdGhhdCB3ZSBm
-cmVlIG1lbW9yeSBhbGxvY2F0ZWQgYnkga29ial9zZXRfbmFtZSgpCmZvciB0aGUga3NldCwgc2lu
-Y2Uga3NldF9yZWdpc3RlcigpIGNhbm5vdCBiZSBjYWxsZWQgdW5sZXNzIHRoZSBrc2V0IGhhcwph
-IG5hbWUsIHVzdWFsbHkgZ290dGVuIHZpYSBrb2JqX3NldF9uYW1lKCZrc2V0LT5rb2JqLCBmb3Jt
-YXQsIC4uLik7CgpDYzogR3JlZyBLcm9haC1IYXJ0bWFuIDxncmVna2hAbGludXhmb3VuZGF0aW9u
-Lm9yZz4KQ2M6IFJhZmFlbCBKLiBXeXNvY2tpIDxyYWZhZWxAa2VybmVsLm9yZz4KQ2M6IFlhbmcg
-WWluZ2xpYW5nIDx5YW5neWluZ2xpYW5nQGh1YXdlaS5jb20+CkNjOiBMaW51eCBLZXJuZWwgTWFp
-bGluZyBMaXN0IDxsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnPgpTaWduZWQtb2ZmLWJ5OiBM
-dWJlbiBUdWlrb3YgPGx1YmVuLnR1aWtvdkBhbWQuY29tPgotLS0KIGxpYi9rb2JqZWN0LmMgfCA0
-ICsrKy0KIDEgZmlsZSBjaGFuZ2VkLCAzIGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkKCmRp
-ZmYgLS1naXQgYS9saWIva29iamVjdC5jIGIvbGliL2tvYmplY3QuYwppbmRleCBhMGIyZGJmY2Zh
-MjMzNC4uYzEyMmI5NzlmMmI3NWUgMTAwNjQ0Ci0tLSBhL2xpYi9rb2JqZWN0LmMKKysrIGIvbGli
-L2tvYmplY3QuYwpAQCAtODQ0LDggKzg0NCwxMCBAQCBpbnQga3NldF9yZWdpc3RlcihzdHJ1Y3Qg
-a3NldCAqaykKIAogCWtzZXRfaW5pdChrKTsKIAllcnIgPSBrb2JqZWN0X2FkZF9pbnRlcm5hbCgm
-ay0+a29iaik7Ci0JaWYgKGVycikKKwlpZiAoZXJyKSB7CisJCWtzZXRfcHV0KGspOwogCQlyZXR1
-cm4gZXJyOworCX0KIAlrb2JqZWN0X3VldmVudCgmay0+a29iaiwgS09CSl9BREQpOwogCXJldHVy
-biAwOwogfQotLSAKMi4zOC4wLXJjMgoK
-
---------------9VtOs3mF29K0mdP7SyPs0VFr--
