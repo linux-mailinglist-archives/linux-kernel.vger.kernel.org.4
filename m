@@ -2,69 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FB896072C5
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 10:46:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F1DF6072C3
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 10:46:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230082AbiJUIqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 04:46:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43810 "EHLO
+        id S230339AbiJUIqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 04:46:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230273AbiJUIqI (ORCPT
+        with ESMTP id S230312AbiJUIpy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 04:46:08 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC95811E47E;
-        Fri, 21 Oct 2022 01:45:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666341955; x=1697877955;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=MC3e58wHe4Ov1qfXX/UpYagXIF2oKZtIqFoVB0OWPpQ=;
-  b=BAskgQZsTt1JqtWI+oARsz0NOAcFEJMlB+W6q5szK/JPDdRu03o31E0s
-   XF5iWr4u41NNBn07ixCqGwSsDrbauBuX4EpLtck8Ueqe4CC/d5s+82l06
-   IxAx3ctQIFh+Fy+/z2NeN67IXPItmqG28wH8QS/QaRaNFHwWNDV563XLt
-   6w6sPiI1k6dFLuJqLzmXX2FPHN8M7PX1vnpXubjFfIJlSsJ17J5+0uiVw
-   1fEVV021NGu8REsFT3cbA2Ce+sC8HQNwEtK6nJohAAHF9aDcB2zH9OQxZ
-   XHWmRf+xLVPsCBD/9EGHdjDuVPhKhV7hAtqlMTyVPgj181bnlQ5xA69um
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="305687725"
-X-IronPort-AV: E=Sophos;i="5.95,200,1661842800"; 
-   d="scan'208";a="305687725"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2022 01:45:49 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="630376913"
-X-IronPort-AV: E=Sophos;i="5.95,200,1661842800"; 
-   d="scan'208";a="630376913"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.45.134])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2022 01:45:46 -0700
-Message-ID: <723b1feb-b36b-ae7f-172d-24cbb46447ea@intel.com>
-Date:   Fri, 21 Oct 2022 11:45:43 +0300
+        Fri, 21 Oct 2022 04:45:54 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6972511CB71;
+        Fri, 21 Oct 2022 01:45:48 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id bk15so3670720wrb.13;
+        Fri, 21 Oct 2022 01:45:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=JxsO3aS7NjLpZUBDpCGoh/+bxorngRfIVIYvqLMlg2w=;
+        b=BySkZbgUWMqqHNxMGo1gF6+KBubryJBs8Bou3znSPFC6nKDtO3lj2HdgvK++atrWvF
+         KLvM06m+uoiRSbqpF97+wMG7+ksLIGtMuM4iLu0OHcwD3VG6WEwDLWpU7BPOXpvmcQcz
+         tPTJizRnZRsT+oPZ8smNdDYr8UPjWZuIwSaJ2EF/8lpGe7U7rqzyJzfRQQHAAMWRKyGK
+         AW9XiBX1UdY1GpjABdJRMwzWO+4h2tza1t5i/WpsGDt22rXziAge/rsTIy9mKOFflJQA
+         u3mVq0TKWU47iODMmAS7DU74odTQGEZZDzuJ+ZFu7DklJsrJA13x/0Ys4NVoC/oPR2yJ
+         gVzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JxsO3aS7NjLpZUBDpCGoh/+bxorngRfIVIYvqLMlg2w=;
+        b=Vjj498ntJ5nLUboOqkRLtUPYaQoo6CJ9mGG09C83dNTZ6sMM1t762+ymdafplhhBUU
+         Pu0B+eATI1nYvb3wlduBOV0vGvFqKSq3Idq/uRh8YILJBw1bIMFcFGbejx7cvjjzG4a2
+         4PKUnEK0VIoSfEYgm0L9OX3XT1vcO9iLptuUkm/+1Yf3ISKLOxRePDeQK2H9YUmRSOFu
+         UNbUk5VRwoortAl7rI9AGyfsZGjaGSZ3/9h+qzxhL/Uid/76PikykR7KhQXEmHvMFBn0
+         PR5M+B4PJ5Z7A6ph/IhVPAeDJZcp6gSqYs9Cz8DyhhqsrCWk2xJSOctrHoE3s6Q+Qj6y
+         2O6Q==
+X-Gm-Message-State: ACrzQf0fq7cI+iTftY0oL4dX50MbdQ6XBtDSqa+DQzn8kSDZGnD7E2/8
+        MnPkaJt2KEIM5T+Y/f2a2YPGSsnwT7Zb87tp
+X-Google-Smtp-Source: AMsMyM6XDUT6X/iWNzzTZNVgmPGxFjL4tJSmQ3m8l/mUiVDpjEDHPQrOqLtNM95ZeM+p6vHgNuqcUQ==
+X-Received: by 2002:adf:d23a:0:b0:236:467e:a3bc with SMTP id k26-20020adfd23a000000b00236467ea3bcmr4323041wrh.542.1666341946452;
+        Fri, 21 Oct 2022 01:45:46 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id t13-20020a05600c198d00b003c6c1686b10sm2352593wmq.7.2022.10.21.01.45.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Oct 2022 01:45:46 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Shuah Khan <shuah@kernel.org>, linuxppc-dev@lists.ozlabs.org,
+        linux-kselftest@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests/powerpc: Fix spelling mistake "mmaping" -> "mmapping"
+Date:   Fri, 21 Oct 2022 09:45:45 +0100
+Message-Id: <20221021084545.65973-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.0
-Subject: Re: [PATCH 4/8] perf test: Wait for a new thread when testing
- --per-thread record
-Content-Language: en-US
-To:     Namhyung Kim <namhyung@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users@vger.kernel.org
-References: <20221020172643.3458767-1-namhyung@kernel.org>
- <20221020172643.3458767-5-namhyung@kernel.org>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20221020172643.3458767-5-namhyung@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,66 +73,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/10/22 20:26, Namhyung Kim wrote:
-> Just running the target program is not enough to test multi-thread
-> target because it'd be racy perf vs target startup.  I used the
-> initial delay but it cannot guarantee for perf to see the thread.
-> 
-> Instead, use wait_for_threads helper from shell/lib/waiting.sh to make
-> sure it starts the sibling thread first.  Then perf record can use -p
-> option to profile the target process.
-> 
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+There is a spelling mistake in a perror message. Fix it.
 
-Reviewed-by: Adrian Hunter <adrian.hunter@intel.com>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ tools/testing/selftests/powerpc/ptrace/core-pkey.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> ---
->  tools/perf/tests/shell/record.sh | 27 +++++++++++++++++++++++++++
->  1 file changed, 27 insertions(+)
-> 
-> diff --git a/tools/perf/tests/shell/record.sh b/tools/perf/tests/shell/record.sh
-> index 952981481239..d1640d1daf2e 100755
-> --- a/tools/perf/tests/shell/record.sh
-> +++ b/tools/perf/tests/shell/record.sh
-> @@ -4,6 +4,9 @@
->  
->  set -e
->  
-> +shelldir=$(dirname "$0")
-> +. "${shelldir}"/lib/waiting.sh
-> +
->  err=0
->  perfdata=$(mktemp /tmp/__perf_test.perf.data.XXXXX)
->  testprog=$(mktemp /tmp/__perf_test.prog.XXXXXX)
-> @@ -96,6 +99,30 @@ test_per_thread() {
->      err=1
->      return
->    fi
-> +
-> +  # run the test program in background (forever)
-> +  ${testprog} 1 &
-> +  TESTPID=$!
-> +
-> +  rm -f "${perfdata}"
-> +
-> +  wait_for_threads ${TESTPID} 2
-> +  perf record -p "${TESTPID}" --per-thread -o "${perfdata}" sleep 1 2> /dev/null
-> +  kill ${TESTPID}
-> +
-> +  if [ ! -e "${perfdata}" ]
-> +  then
-> +    echo "Per-thread record [Failed record -p]"
-> +    err=1
-> +    return
-> +  fi
-> +  if ! perf report -i "${perfdata}" -q | grep -q "${testsym}"
-> +  then
-> +    echo "Per-thread record [Failed -p missing output]"
-> +    err=1
-> +    return
-> +  fi
-> +
->    echo "Basic --per-thread mode test [Success]"
->  }
->  
+diff --git a/tools/testing/selftests/powerpc/ptrace/core-pkey.c b/tools/testing/selftests/powerpc/ptrace/core-pkey.c
+index bbc05ffc5860..1a70a96f0bfe 100644
+--- a/tools/testing/selftests/powerpc/ptrace/core-pkey.c
++++ b/tools/testing/selftests/powerpc/ptrace/core-pkey.c
+@@ -329,7 +329,7 @@ static int parent(struct shared_info *info, pid_t pid)
+ 
+ 	core = mmap(NULL, core_size, PROT_READ, MAP_PRIVATE, fd, 0);
+ 	if (core == (void *) -1) {
+-		perror("Error mmaping core file");
++		perror("Error mmapping core file");
+ 		ret = TEST_FAIL;
+ 		goto out;
+ 	}
+-- 
+2.37.3
 
