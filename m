@@ -2,154 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8328607ACE
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 17:34:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39257607AD5
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 17:35:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbiJUPei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 11:34:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36622 "EHLO
+        id S229849AbiJUPfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 11:35:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbiJUPed (ORCPT
+        with ESMTP id S229531AbiJUPfb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 11:34:33 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2135.outbound.protection.outlook.com [40.107.20.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FAB029815;
-        Fri, 21 Oct 2022 08:34:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=deff8E3+n14d/ifocU8evORG/mv/i+ggXvqyHK0D9b7kHqoxPIuFWC86+lKJ3CpVFFXydc8zY1eCtl/bnwtsrnW7VBqh1P5/vvNyNX4APd0SL/egDjq0wPS908pAEKRsfJwBut1+5pNgSc5F7e2vz1eVc8W6HYxYV7BbjCBqw1U1km5f58jLkBEg6DuvFJ/CHkXJRhftXPvmGzHO+L1TYyLoue9NbcNVocse+MfaryFXEQRA+IqFBvGDD4okaeva6NZr7A31lUuErN2C8uABtzk9qRjP0mb5kBCwnsRoI8451fqKA3Rk5TBQPjEHFamrmx07HY+a30FcyZH703Nwjw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6IR26zvGQfYXSBKJCweO48Zc6askbHt7qx2j8/ElUvU=;
- b=i0BuBY0XzvPECjFWBdF1hDemk0FUbJjZvdH5IkuCdXRyUrmMOgQJslWjGYBM0x4GbzkT0Zemhd0mpnJTidRfoMCxxrHlc/veWuB5H08bvkEJzbZ5Ckc6gkmnHW8KU2NDfksIUTYgCIzOyCd4P8SgCz+zCL30GqMfSgZH6yG+kDc/f5vA7FsvipTORYU3iHX7vF5QJoh/bf+hcye4fudTvdYtiq9RwH8U8Bci2voxtdjBnhaZIZpdI2aC7zZiahycU7H2pxRZWDE2tn6or5qBWy5RP3zpXZ/FrB+XOMR93oSnPnPhbpP95dmi4siEo1oNiq3MPwsJtN4am4r7wFiCHA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=concurrent-rt.com; dmarc=pass action=none
- header.from=concurrent-rt.com; dkim=pass header.d=concurrent-rt.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bksv.onmicrosoft.com;
- s=selector1-bksv-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6IR26zvGQfYXSBKJCweO48Zc6askbHt7qx2j8/ElUvU=;
- b=RqsdNJSUDUM2LU2nQnMKNpO999iKcsvw2RwGYnlIaNxQHqXcvJPqrPebP83VHm+eOgbiqwOL5lFe4F9zc7LwpGTe4p8sO8kJ88GXdORCSVULFv+JtoEdO9YWZRtos86NSeLy7aGu/Pq2pjPwToU1lJoq4i1hgTgWzUplOEjC89g=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=concurrent-rt.com;
-Received: from DB8PR09MB3580.eurprd09.prod.outlook.com (2603:10a6:10:119::23)
- by AS2PR09MB6079.eurprd09.prod.outlook.com (2603:10a6:20b:55a::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.35; Fri, 21 Oct
- 2022 15:34:29 +0000
-Received: from DB8PR09MB3580.eurprd09.prod.outlook.com
- ([fe80::c48e:11a3:c89c:f655]) by DB8PR09MB3580.eurprd09.prod.outlook.com
- ([fe80::c48e:11a3:c89c:f655%7]) with mapi id 15.20.5723.033; Fri, 21 Oct 2022
- 15:34:29 +0000
-Date:   Fri, 21 Oct 2022 11:34:24 -0400
-From:   Joe Korty <joe.korty@concurrent-rt.com>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: [PATCH] arm64: arch_timer: XGene-1 has 31 bit, not 32 bit, arch
- timer.
-Message-ID: <20221021153424.GA25677@zipoli.concurrent-rt.com>
-Reply-To: Joe Korty <joe.korty@concurrent-rt.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-ClientProxiedBy: BN9PR03CA0236.namprd03.prod.outlook.com
- (2603:10b6:408:f8::31) To DB8PR09MB3580.eurprd09.prod.outlook.com
- (2603:10a6:10:119::23)
+        Fri, 21 Oct 2022 11:35:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23EBB2591D3
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 08:35:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666366529;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=RdMUO1Mlu1/ZUh+wzNpYI1KIEbL7QcoLpz3uFBLXqjo=;
+        b=Ej/XwU7Bz01Zxv3GJ9ymnh8leTpW04XYpVyBKfd3N+7q9YcFF3H2Rcl3OZ7o8B7wgvsBmc
+        iqutUqseG5Mi/G5qqoIKDcob0mt3L61EaRumWMX7C4YuxSSRPwKgZeK853innFNRRuSdXB
+        i3Io/dhFIGjCKBpqgbhX4CzRDuDGke4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-557-TZZ2I2B3PaCmrcA8szPSGQ-1; Fri, 21 Oct 2022 11:35:26 -0400
+X-MC-Unique: TZZ2I2B3PaCmrcA8szPSGQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 780F6803D48;
+        Fri, 21 Oct 2022 15:35:25 +0000 (UTC)
+Received: from ovpn-192-65.brq.redhat.com (ovpn-192-65.brq.redhat.com [10.40.192.65])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DF49C40CA41F;
+        Fri, 21 Oct 2022 15:35:22 +0000 (UTC)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        Yuan Yao <yuan.yao@linux.intel.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v12 00/46] KVM: x86: hyper-v: Fine-grained TLB flush + L2 TLB flush features
+Date:   Fri, 21 Oct 2022 17:34:35 +0200
+Message-Id: <20221021153521.1216911-1-vkuznets@redhat.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB8PR09MB3580:EE_|AS2PR09MB6079:EE_
-X-MS-Office365-Filtering-Correlation-Id: c05c053d-a16d-4c7d-4543-08dab379be79
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: G1Fo3kQHUzc7QNODtDfr9cAXAZ8BAQDkcYqqq1J3sAM4IsaP9QN4nnEcZkHQL4ca41FeTOPlImlXYB/3ijPSQd9eKQ+iUZ0KZylsJIdhqei9D+kMKi8hqvy1U2Um3F7lXCSZbpJTYJI0jbnaLbmUEmj+KYzZwDH0nrb15exSmLa5zbvtQd3Xt8sJWrEsTli4rQHve06Q6AmOT6/V8kw5nPaa7tOik/W40kUXvdNdRW3KSHAUhaX+k/6/+8PmuKt3qqU2NtDdvfIHEZ+GyZA6xWeY2PYskwZrUyWJhN3yoSxPHn7pSJjl3xX0x6XY9ltZyZBymmNr8wje+RZhPFrRyeON7bFMoVmFMmosLrQnZembXTT/RGCe406OFgG+bw3qYvG2GGQprKM+pEhbvRDRD1S9eLzJexbd1lvY7AVyfsgUDxuuMcgFWMmINAilFUG6W7uL5++CE22EcT4rK7VxABvZe6PLpo3lMhy7ct2gvb0Yy545Ti/Kb67a/+a+sqwEFyWXG74R0UHxil6gzeSOpGtczVfrit57HtbKR7Ni6cYPAH4QPnU6qsaVxCv14jAPbmnEu0GqSjoSxK3zWYZl3bUSYKCxc8v/KVdtjRCN0cD783+SjevmEvsWtrjvcX8OBkC1DFKrdpIPc0SeM5BEFbGbjcxMUH/SJRXl83qsr+HhTPCHEE7lGCeHso43SRnnk5MwhOyJ2PkR6OwhQ5pk/0V38SyZlSOgeKOjtSpI4rTgiYz6ayQEDTpZnJj3A0lsmHsaGkffjun8X5B8AdtGpg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR09MB3580.eurprd09.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39850400004)(376002)(346002)(366004)(396003)(136003)(451199015)(6916009)(478600001)(316002)(6666004)(6506007)(6486002)(66946007)(66476007)(66556008)(4326008)(8676002)(3450700001)(41300700001)(8936002)(6512007)(1076003)(26005)(2906002)(52116002)(186003)(5660300002)(44832011)(83380400001)(38100700002)(38350700002)(86362001)(33656002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?hw3Y8t1OsW5eg1p50x96xJCDx8uWqUoWSy3huFbfsA5zxGmvXQBOLFikZJAN?=
- =?us-ascii?Q?NYlMVLoh0yCzQFnWbXs58kMKwTg85Y6W/ODEgRS3Dd5wtuydO8jnBhDC2hjg?=
- =?us-ascii?Q?7FyGgDNpAS2NLn0ziQJQttAO/1FBTheE2Dg2w8EpiUH9RoDmlNULduxaQMtO?=
- =?us-ascii?Q?46IhCSSnnIwT9mgf3gApuF/g9puu38zSghRFg09bKjP9+gmcQQFm68TVfvDD?=
- =?us-ascii?Q?GaqK8PPrp9TPfKpPLeutgMEmy2UgJVKuL2UAokNer22CIRmcVLTigEihna4N?=
- =?us-ascii?Q?LOF2L6EJWf1U6tMfp5oClC2eWanh2oaa115LoI+mtXXc4DWJOCEZSF2jLPN7?=
- =?us-ascii?Q?tzDqisTlbmn5sKyAOvvOeBR5jJsWMm5kO6tleMUFFERe0/XF3VgGTdOkTWc8?=
- =?us-ascii?Q?ocy2Xgd+vg2wo0nmhlYTXDbWVwG7+iifc6nAHgB1K5rs2oWEz7M8XY4+1CDL?=
- =?us-ascii?Q?o4osTrV3RB3VKRM04ifWg/mpdIRi7Vvj1AkOGtKBkv9wXXtp2yzIe9PFGvIW?=
- =?us-ascii?Q?d1UGDcGBFKd9daC2ccP6yc0oe3s9D8VjiF94yi0CriTPFpZebP+TsbLFyzSm?=
- =?us-ascii?Q?FbogQKNaWsZ3FIJfahltkssVYWQJAATIP3dyG1xtVHp5Oaii1MO9XWs6hIkX?=
- =?us-ascii?Q?1VVg2MQHu6Sp/sANJ4KShzM5smV6nPjIpVUU8j1jbpe1Sxreq0MUXLrJTJXJ?=
- =?us-ascii?Q?Gr6LdxNQOG06bFtBW6fIIuww0HbXiClhrFkRuPyhszEHhWZUSZddrdEk0JDp?=
- =?us-ascii?Q?N5c9Qo0rg0TGel8sTOYrjS2C3zL8W/D1AN6PqdS9iZdNUQddNfDH9p6WiqVK?=
- =?us-ascii?Q?fZC8HxjQjSt1LhtEhki+bfWkJlVYilKYPXO6Pj5SOfD0nEZbgywTEjJ9Kq54?=
- =?us-ascii?Q?sVfdGX2Hduw3dJO8Dg68Wjw272hLEpa29oalBaNAvy84RKAkVwdAPHzy6RaW?=
- =?us-ascii?Q?4haUGocB6UycWrUGHEM5eImBELy/r4o/78xzF/TtG5vaAcHO99mExiIC3MAf?=
- =?us-ascii?Q?VG5dQrrwHJc2pvlXh4Im8u6wBzH6Y/k9BQTVwOIyxW6lq10Xy7ZHtwOdfBhs?=
- =?us-ascii?Q?wxrwY9A+FYTOXHoX3r8YrsRvpo13x1PjsX7Xc+LpL7c6UH14LuusdgEd15Bt?=
- =?us-ascii?Q?P1igyO4d7xE26X741H25hfB3Fa7uecxyRGInphKwoASJRZmEQ8d7KcGOEXwE?=
- =?us-ascii?Q?d/tQ98LEXcQXkyF7Dov3Onmu5lI36FOnAd4eNGZddRuGXDxbRlm0ipfZPLoX?=
- =?us-ascii?Q?sTf+Wa35r1Ivohi77rhifnQyvxgcpd276CMyqwYm7MlKL9/ipjRof7xQrCxy?=
- =?us-ascii?Q?9CMF6dh5wNmR3flnil0wPzTHmfytbnP8umlaKrREzu81nAvLx4icMP4dQleV?=
- =?us-ascii?Q?+o/Cf8NZYEPxiNWp1z8XFVzmoWyWyubiFJcF/dPOEF2lW9L2RaOKdkYur4RE?=
- =?us-ascii?Q?sVmaJu4eZiIHJGuUVD7cLtKpBDQtEcNGu9GZVQjjvumBNCXMmEBYPyplaZIG?=
- =?us-ascii?Q?TTe2pz5LxHhKzwOosYQoigvE+LKKiW3WzGuCJWsc/FGkkxiWGb/5L1om3YjN?=
- =?us-ascii?Q?6P+w1mJ3Wqk/04OLxdg80Ou3PxDyikLKvBrCnRquYPSJLwqpcrsHIMIFLpTv?=
- =?us-ascii?Q?Rw=3D=3D?=
-X-OriginatorOrg: concurrent-rt.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c05c053d-a16d-4c7d-4543-08dab379be79
-X-MS-Exchange-CrossTenant-AuthSource: DB8PR09MB3580.eurprd09.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Oct 2022 15:34:29.5160
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 6cce74a3-3975-45e0-9893-b072988b30b6
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Trsj/awzwBjkABz8ZT6mzhBFWMBmXgLpQlUJB39alDXojWgvM73W6EQ9YsfQ6vE9HjDstoN78OFGOj47lTVoOaxLXm4a/DLPYO3EiM78k7o=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS2PR09MB6079
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-arm64: XGene-1 has a 31 bit, not a 32 bit, arch timer.
+Changes since v11:
+- Don't export kvm_vcpu_flush_tlb_guest() and don't call it from
+ kvm_hv_vcpu_flush_tlb(), these are just leftovers from older versions
+ [Sean]
+- Correctly adjust data_offset/consumed_xmm_halves in kvm_hv_flush_tlb()
+ in 'all_cpus' case. Leave a comment about the fact that it is 
+(theoretically) possible to meet non-zero 'var_cnt'.
+- Don't use ternary operator in kvm_hv_send_ipi() [Sean]
+- Don't inject GP in kvm_hv_hypercall_complete() [Sean]
+- Fix various asserts in PV IPI/PV TLB flush selftests [Sean]
+- Add a check that L2 has exited due to NMI to 'evmcs_test' [Sean]
+- Rebase to the latest kvm/queue [e18d6152ff0f]
 
-Fixes: 012f188504528b8cb32f441ac3bd9ea2eba39c9e ("clocksource/drivers/arm_arch_timer:
-  Work around broken CVAL implementations")
+Original description:
 
-Testing:
-  On an 8-cpu Mustang, the following sequence no longer locks up the system:
+Currently, KVM handles HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST{,EX} requests
+by flushing the whole VPID and this is sub-optimal. This series introduces
+the required mechanism to make handling of these requests more 
+fine-grained by flushing individual GVAs only (when requested). On this
+foundation, "Direct Virtual Flush" Hyper-V feature is implemented. The 
+feature allows L0 to handle Hyper-V TLB flush hypercalls directly at
+L0 without the need to reflect the exit to L1. This has at least two
+benefits: reflecting vmexit and the consequent vmenter are avoided + L0
+has precise information whether the target vCPU is actually running (and
+thus requires a kick).
 
-     echo 0 >/proc/sys/kernel/watchdog
-     for i in {0..7}; do taskset -c $i echo hi there $i; done
+Sean Christopherson (7):
+  x86/hyperv: Move VMCB enlightenment definitions to hyperv-tlfs.h
+  KVM: selftests: Move "struct hv_enlightenments" to x86_64/svm.h
+  KVM: SVM: Add a proper field for Hyper-V VMCB enlightenments
+  x86/hyperv: KVM: Rename "hv_enlightenments" to
+    "hv_vmcb_enlightenments"
+  KVM: x86: Move clearing of TLB_FLUSH_CURRENT to
+    kvm_vcpu_flush_tlb_all()
+  KVM: x86: hyper-v: Add helper to read hypercall data for array
+  KVM: selftests: Drop helpers to read/write page table entries
 
-Stable:
-  To be applied to 5.16 and above, once accepted by mainline.
+Vitaly Kuznetsov (39):
+  KVM: x86: Rename 'enable_direct_tlbflush' to 'enable_l2_tlb_flush'
+  KVM: VMX: Rename "vmx/evmcs.{ch}" to "vmx/hyperv.{ch}"
+  KVM: x86: hyper-v: Resurrect dedicated KVM_REQ_HV_TLB_FLUSH flag
+  KVM: x86: hyper-v: Introduce TLB flush fifo
+  KVM: x86: hyper-v: Handle HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST{,EX} calls
+    gently
+  KVM: x86: hyper-v: Expose support for extended gva ranges for flush
+    hypercalls
+  KVM: x86: Prepare kvm_hv_flush_tlb() to handle L2's GPAs
+  x86/hyperv: Introduce
+    HV_MAX_SPARSE_VCPU_BANKS/HV_VCPUS_PER_SPARSE_BANK constants
+  KVM: x86: hyper-v: Use
+    HV_MAX_SPARSE_VCPU_BANKS/HV_VCPUS_PER_SPARSE_BANK instead of raw
+    '64'
+  KVM: x86: hyper-v: Don't use sparse_set_to_vcpu_mask() in
+    kvm_hv_send_ipi()
+  KVM: x86: hyper-v: Create a separate fifo for L2 TLB flush
+  KVM: x86: hyper-v: Use preallocated buffer in 'struct kvm_vcpu_hv'
+    instead of on-stack 'sparse_banks'
+  KVM: nVMX: Keep track of hv_vm_id/hv_vp_id when eVMCS is in use
+  KVM: nSVM: Keep track of Hyper-V hv_vm_id/hv_vp_id
+  KVM: x86: Introduce .hv_inject_synthetic_vmexit_post_tlb_flush()
+    nested hook
+  KVM: x86: hyper-v: Introduce kvm_hv_is_tlb_flush_hcall()
+  KVM: x86: hyper-v: L2 TLB flush
+  KVM: x86: hyper-v: Introduce fast guest_hv_cpuid_has_l2_tlb_flush()
+    check
+  KVM: nVMX: hyper-v: Cache VP assist page in 'struct kvm_vcpu_hv'
+  KVM: nVMX: hyper-v: Enable L2 TLB flush
+  KVM: x86: Make kvm_hv_get_assist_page() return 0/-errno
+  KVM: nSVM: hyper-v: Enable L2 TLB flush
+  KVM: x86: Expose Hyper-V L2 TLB flush feature
+  KVM: selftests: Better XMM read/write helpers
+  KVM: selftests: Move HYPERV_LINUX_OS_ID definition to a common header
+  KVM: selftests: Move the function doing Hyper-V hypercall to a common
+    header
+  KVM: selftests: Hyper-V PV IPI selftest
+  KVM: selftests: Fill in vm->vpages_mapped bitmap in virt_map() too
+  KVM: selftests: Export vm_vaddr_unused_gap() to make it possible to
+    request unmapped ranges
+  KVM: selftests: Hyper-V PV TLB flush selftest
+  KVM: selftests: Sync 'struct hv_enlightened_vmcs' definition with
+    hyperv-tlfs.h
+  KVM: selftests: Sync 'struct hv_vp_assist_page' definition with
+    hyperv-tlfs.h
+  KVM: selftests: Move Hyper-V VP assist page enablement out of evmcs.h
+  KVM: selftests: Split off load_evmcs() from load_vmcs()
+  KVM: selftests: Create a vendor independent helper to allocate Hyper-V
+    specific test pages
+  KVM: selftests: Allocate Hyper-V partition assist page
+  KVM: selftests: evmcs_test: Introduce L2 TLB flush test
+  KVM: selftests: hyperv_svm_test: Introduce L2 TLB flush test
+  KVM: selftests: Rename 'evmcs_test' to 'hyperv_evmcs'
 
-Signed-off-by: Joe Korty <joe.korty@concurrent-rt.com>
+ arch/x86/include/asm/hyperv-tlfs.h            |  37 +
+ arch/x86/include/asm/kvm-x86-ops.h            |   2 +-
+ arch/x86/include/asm/kvm_host.h               |  42 +-
+ arch/x86/include/asm/svm.h                    |   7 +-
+ arch/x86/kvm/Makefile                         |   5 +-
+ arch/x86/kvm/hyperv.c                         | 346 +++++++--
+ arch/x86/kvm/hyperv.h                         |  64 +-
+ arch/x86/kvm/svm/hyperv.c                     |  18 +
+ arch/x86/kvm/svm/hyperv.h                     |  50 +-
+ arch/x86/kvm/svm/nested.c                     |  49 +-
+ arch/x86/kvm/svm/svm.c                        |   7 +
+ arch/x86/kvm/svm/svm.h                        |   5 +-
+ arch/x86/kvm/svm/svm_onhyperv.c               |   8 +-
+ arch/x86/kvm/svm/svm_onhyperv.h               |  25 +-
+ arch/x86/kvm/trace.h                          |  21 +-
+ arch/x86/kvm/vmx/{evmcs.c => hyperv.c}        |  45 +-
+ arch/x86/kvm/vmx/{evmcs.h => hyperv.h}        |  12 +-
+ arch/x86/kvm/vmx/nested.c                     |  43 +-
+ arch/x86/kvm/vmx/vmx.c                        |   7 +-
+ arch/x86/kvm/vmx/vmx_ops.h                    |   2 +-
+ arch/x86/kvm/x86.c                            |  36 +-
+ include/asm-generic/hyperv-tlfs.h             |   5 +
+ include/asm-generic/mshyperv.h                |  11 +-
+ tools/testing/selftests/kvm/.gitignore        |   4 +-
+ tools/testing/selftests/kvm/Makefile          |   5 +-
+ .../selftests/kvm/include/kvm_util_base.h     |   1 +
+ .../selftests/kvm/include/x86_64/evmcs.h      |  48 +-
+ .../selftests/kvm/include/x86_64/hyperv.h     | 102 +++
+ .../selftests/kvm/include/x86_64/processor.h  |  76 +-
+ .../selftests/kvm/include/x86_64/svm.h        |  26 +-
+ .../selftests/kvm/include/x86_64/vmx.h        |   8 -
+ tools/testing/selftests/kvm/lib/kvm_util.c    |   9 +-
+ .../testing/selftests/kvm/lib/x86_64/hyperv.c |  46 ++
+ .../selftests/kvm/lib/x86_64/processor.c      |  21 +-
+ tools/testing/selftests/kvm/lib/x86_64/vmx.c  |  45 +-
+ .../kvm/x86_64/emulator_error_test.c          |   6 +-
+ .../x86_64/{evmcs_test.c => hyperv_evmcs.c}   |  71 +-
+ .../selftests/kvm/x86_64/hyperv_features.c    |  25 +-
+ .../testing/selftests/kvm/x86_64/hyperv_ipi.c | 314 ++++++++
+ .../selftests/kvm/x86_64/hyperv_svm_test.c    |  86 ++-
+ .../selftests/kvm/x86_64/hyperv_tlb_flush.c   | 690 ++++++++++++++++++
+ 41 files changed, 2074 insertions(+), 356 deletions(-)
+ create mode 100644 arch/x86/kvm/svm/hyperv.c
+ rename arch/x86/kvm/vmx/{evmcs.c => hyperv.c} (95%)
+ rename arch/x86/kvm/vmx/{evmcs.h => hyperv.h} (95%)
+ create mode 100644 tools/testing/selftests/kvm/lib/x86_64/hyperv.c
+ rename tools/testing/selftests/kvm/x86_64/{evmcs_test.c => hyperv_evmcs.c} (72%)
+ create mode 100644 tools/testing/selftests/kvm/x86_64/hyperv_ipi.c
+ create mode 100644 tools/testing/selftests/kvm/x86_64/hyperv_tlb_flush.c
 
-Index: b/drivers/clocksource/arm_arch_timer.c
-===================================================================
---- a/drivers/clocksource/arm_arch_timer.c
-+++ b/drivers/clocksource/arm_arch_timer.c
-@@ -805,7 +805,7 @@ static u64 __arch_timer_check_delta(void
- 	const struct midr_range broken_cval_midrs[] = {
- 		/*
- 		 * XGene-1 implements CVAL in terms of TVAL, meaning
--		 * that the maximum timer range is 32bit. Shame on them.
-+		 * that the maximum timer range is 31bit. Shame on them.
- 		 */
- 		MIDR_ALL_VERSIONS(MIDR_CPU_MODEL(ARM_CPU_IMP_APM,
- 						 APM_CPU_PART_POTENZA)),
-@@ -813,8 +813,8 @@ static u64 __arch_timer_check_delta(void
- 	};
- 
- 	if (is_midr_in_range_list(read_cpuid_id(), broken_cval_midrs)) {
--		pr_warn_once("Broken CNTx_CVAL_EL1, limiting width to 32bits");
--		return CLOCKSOURCE_MASK(32);
-+		pr_warn_once("Broken CNTx_CVAL_EL1, limiting width to 31bits");
-+		return CLOCKSOURCE_MASK(31);
- 	}
- #endif
- 	return CLOCKSOURCE_MASK(arch_counter_get_width());
+-- 
+2.37.3
+
