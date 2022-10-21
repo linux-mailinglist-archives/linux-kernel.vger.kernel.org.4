@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAF6F607C75
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 18:39:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02F7C607C76
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 18:39:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231197AbiJUQjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 12:39:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52568 "EHLO
+        id S231214AbiJUQjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 12:39:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231165AbiJUQiP (ORCPT
+        with ESMTP id S230417AbiJUQiP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 21 Oct 2022 12:38:15 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D59192859B4
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:37:36 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-36772c0c795so33791817b3.23
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:37:36 -0700 (PDT)
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBA24285B77
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:37:38 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id f9-20020a25b089000000b006be298e2a8dso3755480ybj.20
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:37:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=b10z9K2d7yL2NkYZoSYI1eqym2z6cE2oNjVSRM+YxM4=;
-        b=RdBFlvTWkP0mOj/+10aeT3pEp8gO1xe67MKNQAL9eJH8ygvwfl65HnLVJ/TXb07S8J
-         Ekg4eIzJiS8mFJVRjcHyYUexaJ2Wpz0KD24tdJaK9vQvVpzHw4Swadb/CS9sPPIaClpx
-         a4pSknIHqn7yKEu2xGQn6BM9ClrfpieKDQTxfc134vaHcOGtZtUzcwwZ/+hyo2Y9SDbU
-         EqxOcGGs64poU/YYQXMdII6wUC0HnwMTfwDML9Jw5n3ISsd1571avOMoRlykby8HbVOv
-         iidSXRx0txEQjxJng6lLm/tQXQGCk4PTQsXMvO/tZsN0O2ZrP+47TYzob91093CTHxXV
-         vE5Q==
+        bh=8wv1ndA1KF8oaMnIrotaSvG0oK1F475ZCcDJjASpTlQ=;
+        b=hA8J326O7a0EqIeFifBsH7a/imYAoEv3Fjm/FsWS/2l67p7YL4UTp4delGk3izcl+P
+         yUMlvya8wwiX0QoCutq/CYssZPSkjElnj1/ElmaX1Yv0en/RWLhHh7JnxK7ihEFGucid
+         sPn7Jj6tEBM2NrRJYPvUv4K5hnyaC9+Ddpv1Ik/07iw1wk6iQd8BFDrNfG9dJysMepUC
+         Rk6k301F/i5SC3oHp9J/MopKdD70L4fAd+UF5uQtHniRZAMT/o0Qu3QtZI+LtO+vEwiz
+         1K/dd5p1zQhugJO2OzYe1+HctzunUY0PXuEreoURlPTPkCfYe98jsMbHS423j8l/98PY
+         A6zg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=b10z9K2d7yL2NkYZoSYI1eqym2z6cE2oNjVSRM+YxM4=;
-        b=ugRGnq3Otogx+T2tmhZUiCeEjyUgUxsc+Z8ijVoLEn/k0gE+yx4FZ7SyqxRBiBvgfr
-         h/OmZ2+cog51m7tdIDGtBcjhOKzQOrRolgYq4gNn5D2xtiM2qd1ZtUVmfujKKaTEH8LH
-         ZYmSTuw2djMJEx2aUEQAVE9UqOjSuV+g4vFt1MSfSyaOpuLNk3xaG9dAlTs1r9T084Ga
-         +/3N+qJmbolSNWIlxkjf6RXy8dcABYzif7yVHF7UzjqVuT55SM75OcnEP5spsKDIyVdk
-         g+KlujAqvXr343olNXJiH+piKuT6a7ZY5ZTIbZWOp/Vur7JKPE1V9MAsBSGPJ6ET8It6
-         MwOw==
-X-Gm-Message-State: ACrzQf2DlbhLWtgrhGwe1GSgS12MPEOO5TADZN6TyKONKVWBbfJR961k
-        9LQybsqY6L9hJOLjDp4rK8bPp1dIL9kAf6Wt
-X-Google-Smtp-Source: AMsMyM4a1Xbq88agbnwbbrlQOayFRrDGXm2X6sV7Iqp0l2y6+5WLGgjVLDxiqSHzLLJPyqPxXNBrDUUp2xxQ0SZu
+        bh=8wv1ndA1KF8oaMnIrotaSvG0oK1F475ZCcDJjASpTlQ=;
+        b=YIF891OxMVAA8HgRpv4ltLYgkf8dJFqR3hvWlFf7s1sxVUKYomhPnCs3WuIIdLH9X4
+         7yAtpkDEoS3HUiDDHKeeraR/X2wv4YiQg0u93DsBgqYS2XM+/CUKrnX3lEWhWsgMQb72
+         BD55CegNH5RLRij3/LnIBf67nKLGHq/rFxBQvNOvuf/ifhyvkGf1FgZzjiCLDLJrfl8/
+         YmTQBlS2okonYX1e4yMZkKfufU79LKMspAu7IvaiYNj7wy3VxTH3wBlQGM+gO9gFuvx3
+         MgnShFlWXWmRwOYp/gGX1o2hlllq4wI5eReGB7KtpnZb0UJC6ETnfqX88a9SGMbONWOd
+         ggZw==
+X-Gm-Message-State: ACrzQf1MaMPNul0YCxMccZqX/iDlsSTr8IHkkNmYdruB05oC8ZAXhTyn
+        sCnfnSBYl28qTYdUcbAGPdy0LqhJjMoaQ+qM
+X-Google-Smtp-Source: AMsMyM7U6QtOfjRtLEvHhafVxd2Typ3vGFACBScGTzt4dGpN5ExRr+u3NtmZyooil8Yr5UMNKl7jIoiR4PCD61EC
 X-Received: from jthoughton.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:2a4f])
- (user=jthoughton job=sendgmr) by 2002:a81:8d14:0:b0:361:4e59:a90e with SMTP
- id d20-20020a818d14000000b003614e59a90emr17171702ywg.288.1666370255675; Fri,
- 21 Oct 2022 09:37:35 -0700 (PDT)
-Date:   Fri, 21 Oct 2022 16:36:37 +0000
+ (user=jthoughton job=sendgmr) by 2002:a05:6902:110e:b0:66d:e6dc:5f31 with
+ SMTP id o14-20020a056902110e00b0066de6dc5f31mr17202827ybu.628.1666370256631;
+ Fri, 21 Oct 2022 09:37:36 -0700 (PDT)
+Date:   Fri, 21 Oct 2022 16:36:38 +0000
 In-Reply-To: <20221021163703.3218176-1-jthoughton@google.com>
 Mime-Version: 1.0
 References: <20221021163703.3218176-1-jthoughton@google.com>
 X-Mailer: git-send-email 2.38.0.135.g90850a2211-goog
-Message-ID: <20221021163703.3218176-22-jthoughton@google.com>
-Subject: [RFC PATCH v2 21/47] mm: rmap: provide pte_order in page_vma_mapped_walk
+Message-ID: <20221021163703.3218176-23-jthoughton@google.com>
+Subject: [RFC PATCH v2 22/47] mm: rmap: make page_vma_mapped_walk callers use pte_order
 From:   James Houghton <jthoughton@google.com>
 To:     Mike Kravetz <mike.kravetz@oracle.com>,
         Muchun Song <songmuchun@bytedance.com>,
@@ -84,55 +84,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-page_vma_mapped_walk callers will need this information to know how
-HugeTLB pages are mapped. pte_order only applies if pte is not NULL.
+This also updates the callers' hugetlb mapcounting code to handle
+mapcount properly for subpage-mapped hugetlb pages.
 
 Signed-off-by: James Houghton <jthoughton@google.com>
 ---
- include/linux/rmap.h | 1 +
- mm/page_vma_mapped.c | 3 +++
- 2 files changed, 4 insertions(+)
+ mm/migrate.c |  2 +-
+ mm/rmap.c    | 17 +++++++++++++----
+ 2 files changed, 14 insertions(+), 5 deletions(-)
 
-diff --git a/include/linux/rmap.h b/include/linux/rmap.h
-index bd3504d11b15..e0557ede2951 100644
---- a/include/linux/rmap.h
-+++ b/include/linux/rmap.h
-@@ -378,6 +378,7 @@ struct page_vma_mapped_walk {
- 	pmd_t *pmd;
- 	pte_t *pte;
- 	spinlock_t *ptl;
-+	unsigned int pte_order;
- 	unsigned int flags;
- };
+diff --git a/mm/migrate.c b/mm/migrate.c
+index a0105fa6e3b2..8712b694c5a7 100644
+--- a/mm/migrate.c
++++ b/mm/migrate.c
+@@ -235,7 +235,7 @@ static bool remove_migration_pte(struct folio *folio,
  
-diff --git a/mm/page_vma_mapped.c b/mm/page_vma_mapped.c
-index 93e13fc17d3c..395ca4e21c56 100644
---- a/mm/page_vma_mapped.c
-+++ b/mm/page_vma_mapped.c
-@@ -16,6 +16,7 @@ static inline bool not_found(struct page_vma_mapped_walk *pvmw)
- static bool map_pte(struct page_vma_mapped_walk *pvmw)
- {
- 	pvmw->pte = pte_offset_map(pvmw->pmd, pvmw->address);
-+	pvmw->pte_order = 0;
- 	if (!(pvmw->flags & PVMW_SYNC)) {
- 		if (pvmw->flags & PVMW_MIGRATION) {
- 			if (!is_swap_pte(*pvmw->pte))
-@@ -174,6 +175,7 @@ bool page_vma_mapped_walk(struct page_vma_mapped_walk *pvmw)
- 		if (!pvmw->pte)
- 			return false;
+ #ifdef CONFIG_HUGETLB_PAGE
+ 		if (folio_test_hugetlb(folio)) {
+-			unsigned int shift = huge_page_shift(hstate_vma(vma));
++			unsigned int shift = pvmw.pte_order + PAGE_SHIFT;
  
-+		pvmw->pte_order = huge_page_order(hstate);
- 		pvmw->ptl = huge_pte_lock(hstate, mm, pvmw->pte);
- 		if (!check_pte(pvmw))
- 			return not_found(pvmw);
-@@ -269,6 +271,7 @@ bool page_vma_mapped_walk(struct page_vma_mapped_walk *pvmw)
- 				}
- 				pte_unmap(pvmw->pte);
- 				pvmw->pte = NULL;
-+				pvmw->pte_order = 0;
- 				goto restart;
- 			}
- 			pvmw->pte++;
+ 			pte = arch_make_huge_pte(pte, shift, vma->vm_flags);
+ 			if (folio_test_anon(folio))
+diff --git a/mm/rmap.c b/mm/rmap.c
+index 9bba65b30e4d..19850d955aea 100644
+--- a/mm/rmap.c
++++ b/mm/rmap.c
+@@ -1626,7 +1626,7 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
+ 		if (PageHWPoison(subpage) && !(flags & TTU_IGNORE_HWPOISON)) {
+ 			pteval = swp_entry_to_pte(make_hwpoison_entry(subpage));
+ 			if (folio_test_hugetlb(folio)) {
+-				hugetlb_count_sub(folio_nr_pages(folio), mm);
++				hugetlb_count_sub(1UL << pvmw.pte_order, mm);
+ 				set_huge_pte_at(mm, address, pvmw.pte, pteval);
+ 			} else {
+ 				dec_mm_counter(mm, mm_counter(&folio->page));
+@@ -1785,7 +1785,11 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
+ 		 *
+ 		 * See Documentation/mm/mmu_notifier.rst
+ 		 */
+-		page_remove_rmap(subpage, vma, folio_test_hugetlb(folio));
++		if (folio_test_hugetlb(folio))
++			page_remove_rmap(&folio->page, vma, true);
++		else
++			page_remove_rmap(subpage, vma, false);
++
+ 		if (vma->vm_flags & VM_LOCKED)
+ 			mlock_page_drain_local();
+ 		folio_put(folio);
+@@ -2034,7 +2038,7 @@ static bool try_to_migrate_one(struct folio *folio, struct vm_area_struct *vma,
+ 		} else if (PageHWPoison(subpage)) {
+ 			pteval = swp_entry_to_pte(make_hwpoison_entry(subpage));
+ 			if (folio_test_hugetlb(folio)) {
+-				hugetlb_count_sub(folio_nr_pages(folio), mm);
++				hugetlb_count_sub(1L << pvmw.pte_order, mm);
+ 				set_huge_pte_at(mm, address, pvmw.pte, pteval);
+ 			} else {
+ 				dec_mm_counter(mm, mm_counter(&folio->page));
+@@ -2126,7 +2130,10 @@ static bool try_to_migrate_one(struct folio *folio, struct vm_area_struct *vma,
+ 		 *
+ 		 * See Documentation/mm/mmu_notifier.rst
+ 		 */
+-		page_remove_rmap(subpage, vma, folio_test_hugetlb(folio));
++		if (folio_test_hugetlb(folio))
++			page_remove_rmap(&folio->page, vma, true);
++		else
++			page_remove_rmap(subpage, vma, false);
+ 		if (vma->vm_flags & VM_LOCKED)
+ 			mlock_page_drain_local();
+ 		folio_put(folio);
+@@ -2210,6 +2217,8 @@ static bool page_make_device_exclusive_one(struct folio *folio,
+ 				      args->owner);
+ 	mmu_notifier_invalidate_range_start(&range);
+ 
++	VM_BUG_ON_FOLIO(folio_test_hugetlb(folio), folio);
++
+ 	while (page_vma_mapped_walk(&pvmw)) {
+ 		/* Unexpected PMD-mapped THP? */
+ 		VM_BUG_ON_FOLIO(!pvmw.pte, folio);
 -- 
 2.38.0.135.g90850a2211-goog
 
