@@ -2,86 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1DDB607BE1
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 18:13:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C86C607BE7
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 18:14:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230285AbiJUQNe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 12:13:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36164 "EHLO
+        id S230335AbiJUQOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 12:14:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbiJUQNb (ORCPT
+        with ESMTP id S230175AbiJUQOm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 12:13:31 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50506241B01
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:13:31 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id k9so2757772pll.11
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:13:31 -0700 (PDT)
+        Fri, 21 Oct 2022 12:14:42 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E7525C72
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:14:42 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id y4so2791845plb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:14:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=google.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=sRcCA+5xknaIw0oVE/LCld7bURKOPX8fuup0u7sV01I=;
-        b=nGhz4uL2FlpW+2qKaaVqqONDhMf3mWlt0Lf/r4bWcTUH+m0huCqWKbCR4vJq8SGTNM
-         bCHL+9g17wqPsbCznSOQN/828m/mh1ws+NLX3TKsDxmOMV9WuXobKYaCber7c483bQL8
-         W0I7cFBcWd+kD3ifGklrmxeUBoDJ7E1YrLRYg=
+        bh=p7w2w/MW5/bGGzHO7GkFEcxzqWCtxzoSheQKtFpB84Y=;
+        b=BmUYkTmUpsesYJyivwIPLevFmUf6sU0taECjMGBg33SFdAXRch3kIcYKTsgPdCj0eA
+         Dh5wnT1v1UeLobi8vP+wn4T13hvmvqofLTxVPv+6x0qqlsmcC2/AIuAB/JBtqV1/Aueq
+         7/7uj+rZsOlCkErDp3ANt4ikeTEO1DPxPXXrpb75nadH9g+vxn92tYzIN5bzWO3/UwTs
+         iFvLLkbBIyHU/dcTwlcyYD5hSYEHbh4NnvR220hmTfXqxxFrWmXZFicGXx3DpiXw0kly
+         GWDUh6Z9VFG1o/6zyntBJIkuEggSyRaIwR0pzMazLj5OZY6ONAu4Rm8x8qMr7SUxLjo2
+         qw4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=sRcCA+5xknaIw0oVE/LCld7bURKOPX8fuup0u7sV01I=;
-        b=7TM6oyJGzVKP+RaMAHQn0IzY+xp8gI8MEAsY+mOtA8FilseZX0uMKlwSzIo3fHwf2b
-         yQ+lovzY56Z/EFvR3A9Vxt/nrMwupLYh1/guSt9SHF7TL9C2YuaZvxuyI3QJ2oGwQMJZ
-         cp/QgENjhz6ifqjzMsAcz0ap0gKq9ik6al8GVEpFShGT4Ml4yJB60u8yIgNzuvbUca6N
-         W5XLfXcMeDPHGpdFTRdVbP1cPKSSoihVDx0GiPc+FrWVpx/AOYtkSqtJix+wpi+cSLH7
-         s5ByNEK11XRqpbeHYLhUtCaPLgj3JKxAVdVD3UpGuvJ2CO3sZ4ht+5Jrgix8fZc+hY6r
-         zvpg==
-X-Gm-Message-State: ACrzQf3MNT2Y3AUg/9EkDI+XYnN9ZS84ZeYylIm/G96a0Az3uHEamsNY
-        z2gAfDa7EyhpvB4x4AChqHEi8Q==
-X-Google-Smtp-Source: AMsMyM74D9XTVDNnNdcogrVBFjPfuYyInNjCVCouu44cKdwQZRhllLmJvP00FcyQ/bx4PXgj2WI2Yw==
-X-Received: by 2002:a17:902:e552:b0:179:e796:b432 with SMTP id n18-20020a170902e55200b00179e796b432mr19532013plf.21.1666368810845;
-        Fri, 21 Oct 2022 09:13:30 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id y18-20020aa79e12000000b0056246403534sm15443919pfq.88.2022.10.21.09.13.29
+        bh=p7w2w/MW5/bGGzHO7GkFEcxzqWCtxzoSheQKtFpB84Y=;
+        b=QlzdcBKG/yIUtjok6msFuIOWKXTuVnYQZDmSjq9pVfem6DVxIPAJb6U7RpkJMtgNb2
+         UJTwnM+fecKPHmfF1/LxqFWpjoelUxk6cHzXdcQs16BlVpFuX2I1KVu9wg9t3BIBHJxc
+         ugcv5EEw+prhRuZORbgl8lyCf9pZ3AvM5QocAvvoaT0kmgeW7a1c7rI7QSJYayj9UFBf
+         uoNXOvEKLCIMh9SPpv2RWnAQTwwW5TmkY0Lect/0LtLk1uUxB7ho//IWtdpzk/o+1M+Q
+         LeZhK2f7XvkRXH6z1jf7xBsSTHM5cvs9mLzUSG8CL9nUC30NOkl9hlTdPG6guZMFx5NU
+         7TxA==
+X-Gm-Message-State: ACrzQf0iW/bTKBTr7FiWeFrT701y5G09D8JxQYy9y3rMzCStd7/yHK9O
+        S8R1HwM/xUBQNs83L73AkG8cRaIHeScoPg==
+X-Google-Smtp-Source: AMsMyM7AE5cybZSwUAcHvmbFDD0MxtcuNgDjw2xBVntg7RiOogbLwEi3+65vwuefObLaB9Bh4tmYSg==
+X-Received: by 2002:a17:902:ec83:b0:185:581a:1c with SMTP id x3-20020a170902ec8300b00185581a001cmr19470371plg.78.1666368870573;
+        Fri, 21 Oct 2022 09:14:30 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id d11-20020a17090ab30b00b00202618f0df4sm36832pjr.0.2022.10.21.09.14.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Oct 2022 09:13:30 -0700 (PDT)
-Date:   Fri, 21 Oct 2022 09:13:29 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: Re: {standard input}:24403: Error: Insn slot not set in unwind
- record.
-Message-ID: <202210210913.11F9095@keescook>
-References: <202210211348.RQ11yRji-lkp@intel.com>
+        Fri, 21 Oct 2022 09:14:30 -0700 (PDT)
+Date:   Fri, 21 Oct 2022 16:14:26 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        Yuan Yao <yuan.yao@linux.intel.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v11 33/46] KVM: selftests: Hyper-V PV IPI selftest
+Message-ID: <Y1LFYjyyHRiP8rNe@google.com>
+References: <20221004123956.188909-1-vkuznets@redhat.com>
+ <20221004123956.188909-34-vkuznets@redhat.com>
+ <Y1B1eBIL9WhB4dwc@google.com>
+ <874jvxcnyp.fsf@ovpn-192-65.brq.redhat.com>
+ <87zgdpb8dc.fsf@ovpn-192-65.brq.redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202210211348.RQ11yRji-lkp@intel.com>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <87zgdpb8dc.fsf@ovpn-192-65.brq.redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 01:32:16PM +0800, kernel test robot wrote:
-> Hi Kees,
+On Fri, Oct 21, 2022, Vitaly Kuznetsov wrote:
+> Vitaly Kuznetsov <vkuznets@redhat.com> writes:
 > 
-> FYI, the error/warning still remains.
+> > Sean Christopherson <seanjc@google.com> writes:
+> >> Do you happen to know if errno is preserved?  I.e. if TEST_ASSERT()'s print of
+> >> errno will capture the right errno?  If so, this and the pthread_join() assert
+> >> can be:
+> >>
+> >> 	TEST_ASSERT(!r, pthread_cancel() failed on vcpu_id=%d, vcpu->id);
+> >>
+> >
+> > The example from 'man 3 pthread_cancel' makes me think errno is not
+> > set. 'man 3 errno' confirms that:
+> >
+> > "
+> >        Note  that the POSIX threads APIs do not set errno on error.
+
+Ah, that's annoying.
+
+> > Instead, on failure they return an error number as the function result.
+> > These error numbers have the same meanings as the error numbers returned
+> > in errno by other APIs.
+> > "
+> >
+> > but nothing stops us from doing something like
+> >
+> > #include <errno.h>
+> > ...
+> >
+> > errno = pthread_cancel(thread);
+> > TEST_ASSERT(!errno, pthread_cancel() failed on vcpu_id=%d, vcpu->id);
+> >
+> > I believe.
 > 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   aae703b02f92bde9264366c545e87cec451de471
-> commit: a82adfd5c7cb4b8bb37ef439aed954f9972bb618 hardening: Introduce CONFIG_ZERO_CALL_USED_REGS
-> date:   1 year, 3 months ago
-> config: ia64-randconfig-r024-20221020
-> compiler: ia64-linux-gcc (GCC) 12.1.0
+> ... only the fact that this won't be thread safe :-( i.e. if we also try
+> setting 'errno' from vcpu_thread() (where the pattern for
+> pthread_setcanceltype() is exactly the same), we will likely be
+> reporting the wrong errno.
 
-This feature isn't supported on ia64 -- I don't see how this commit
-could be causing the warnings.
+errno is thread safe.  From https://man7.org/linux/man-pages/man3/errno.3.html:
 
--- 
-Kees Cook
+       errno is defined by the ISO C standard to be a modifiable lvalue
+       of type int, and must not be explicitly declared; errno may be a
+       macro.  errno is thread-local; setting it in one thread does not
+       affect its value in any other thread.
+
+
+> I think it's better to keep reporting 'r' for now (and maybe think about
+> pthread* wrappers later).
+
+Yeah, definitely a future problem.  pthread wrappers are a good idea, I doubt
+there's a single KVM selftest that wants to do anything but assert on failure.
