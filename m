@@ -2,108 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94D4F607D44
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 19:17:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCD55607D59
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 19:19:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230153AbiJURRJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 13:17:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44384 "EHLO
+        id S230516AbiJURTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 13:19:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230286AbiJURRG (ORCPT
+        with ESMTP id S231182AbiJURTM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 13:17:06 -0400
-Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41CEA186D52;
-        Fri, 21 Oct 2022 10:17:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1666372622; x=1697908622;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=CV+NY/BAd5lnPCpeR2rWITvTgvey4xp2CjuPYqhTAMA=;
-  b=HvW1ElULsN9qc1gdQwdWPH+0GRnvh8I5n97iZhVC+lRwmQfYxOQf9+bl
-   Y8fKgkvvlGT5laMWsn7rWjAVu2QtZ8stGl/XHgfjT7jVG1qy5at9EPyPc
-   eQGWN7eP4HxMLjT5dLKSVyRbssHe5IR59+pVNh/D+X/ar3YA/Xjteta6M
-   c=;
-Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-pdx-2c-m6i4x-8c5b1df3.us-west-2.amazon.com) ([10.43.8.2])
-  by smtp-border-fw-6001.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2022 17:16:58 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2c-m6i4x-8c5b1df3.us-west-2.amazon.com (Postfix) with ESMTPS id 60E80416F7;
-        Fri, 21 Oct 2022 17:16:56 +0000 (UTC)
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
- id 15.0.1497.42; Fri, 21 Oct 2022 17:16:55 +0000
-Received: from 88665a182662.ant.amazon.com.com (10.43.161.179) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.15;
- Fri, 21 Oct 2022 17:16:52 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.com>
-To:     <luwei32@huawei.com>
-CC:     <asml.silence@gmail.com>, <ast@kernel.org>, <davem@davemloft.net>,
-        <dsahern@kernel.org>, <edumazet@google.com>,
-        <imagedong@tencent.com>, <kuba@kernel.org>, <kuniyu@amazon.com>,
-        <linux-kernel@vger.kernel.org>, <martin.lau@kernel.org>,
-        <ncardwell@google.com>, <netdev@vger.kernel.org>,
-        <pabeni@redhat.com>, <yoshfuji@linux-ipv6.org>
-Subject: Re: [PATCH net,v3] tcp: fix a signed-integer-overflow bug in tcp_add_backlog()
-Date:   Fri, 21 Oct 2022 10:16:42 -0700
-Message-ID: <20221021171642.89090-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221021040622.815143-1-luwei32@huawei.com>
-References: <20221021040622.815143-1-luwei32@huawei.com>
+        Fri, 21 Oct 2022 13:19:12 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03A6C1AD680;
+        Fri, 21 Oct 2022 10:19:08 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29LHIQk9061331;
+        Fri, 21 Oct 2022 12:18:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1666372706;
+        bh=FEGOaZ67utUsN11Pn5uOK1m2QmT4JoKx1uzon8eizgU=;
+        h=From:To:CC:Subject:Date;
+        b=JivFkZkC6YLxsN9D9qPG4jQqZ8lvNo0FYYBWhNCzsMmW/HUJbvS8xLfvu6HQH9+ZL
+         fJpN7VMFx56fyzDT5oD2DuxX74amoU6S4PPX75ZmONltLPv0u1WYUzfXj6d4icEiwQ
+         R/HArc3HUkx00jauzMZR7RF1CE4zEQg69XZP0cZ8=
+Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29LHIQ89017549
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 21 Oct 2022 12:18:26 -0500
+Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Fri, 21
+ Oct 2022 12:18:25 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Fri, 21 Oct 2022 12:18:25 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29LHIOgo037257;
+        Fri, 21 Oct 2022 12:18:25 -0500
+From:   Rahul T R <r-ravikumar@ti.com>
+To:     <dri-devel@lists.freedesktop.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <tomi.valkeinen@ideasonboard.com>
+CC:     <andrzej.hajda@intel.com>, <narmstrong@baylibre.com>,
+        <robert.foss@linaro.org>, <jonas@kwiboo.se>,
+        <jernej.skrabec@gmail.com>, <airlied@linux.ie>, <daniel@ffwll.ch>,
+        <p.zabel@pengutronix.de>, <laurent.pinchart@ideasonboard.com>,
+        <linux-kernel@vger.kernel.org>, <jpawar@cadence.com>,
+        <sjakhade@cadence.com>, <mparab@cadence.com>, <a-bhatia1@ti.com>,
+        <devicetree@vger.kernel.org>, <vigneshr@ti.com>,
+        <lee.jones@linaro.org>, Rahul T R <r-ravikumar@ti.com>
+Subject: [PATCH v8 0/5] Add support for CDNS DSI J721E wrapper
+Date:   Fri, 21 Oct 2022 22:48:15 +0530
+Message-ID: <20221021171820.15984-1-r-ravikumar@ti.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Originating-IP: [10.43.161.179]
-X-ClientProxiedBy: EX13D37UWA003.ant.amazon.com (10.43.160.25) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From:   Lu Wei <luwei32@huawei.com>
-Date:   Fri, 21 Oct 2022 12:06:22 +0800
-> The type of sk_rcvbuf and sk_sndbuf in struct sock is int, and
-> in tcp_add_backlog(), the variable limit is caculated by adding
-> sk_rcvbuf, sk_sndbuf and 64 * 1024, it may exceed the max value
-> of int and overflow. This patch reduces the limit budget by
-> halving the sndbuf to solve this issue since ACK packets are much
-> smaller than the payload.
-> 
-> Fixes: c9c3321257e1 ("tcp: add tcp_add_backlog()")
-> Signed-off-by: Lu Wei <luwei32@huawei.com>
+Following series of patches adds supports for CDNS DSI
+bridge on j721e.
 
-Acked-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+v8:
+ - Rebased to 6.1-rc1
 
+v7:
+ - Rebased to next-20220920
+ - Accumulated the Reviewed-by acks
 
-> ---
->  net/ipv4/tcp_ipv4.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
-> index 7a250ef9d1b7..87d440f47a70 100644
-> --- a/net/ipv4/tcp_ipv4.c
-> +++ b/net/ipv4/tcp_ipv4.c
-> @@ -1874,11 +1874,13 @@ bool tcp_add_backlog(struct sock *sk, struct sk_buff *skb,
->  	__skb_push(skb, hdrlen);
->  
->  no_coalesce:
-> +	limit = (u32)READ_ONCE(sk->sk_rcvbuf) + (u32)(READ_ONCE(sk->sk_sndbuf) >> 1);
-> +
->  	/* Only socket owner can try to collapse/prune rx queues
->  	 * to reduce memory overhead, so add a little headroom here.
->  	 * Few sockets backlog are possibly concurrently non empty.
->  	 */
-> -	limit = READ_ONCE(sk->sk_rcvbuf) + READ_ONCE(sk->sk_sndbuf) + 64*1024;
-> +	limit += 64 * 1024;
->  
->  	if (unlikely(sk_add_backlog(sk, skb, limit))) {
->  		bh_unlock_sock(sk);
-> -- 
-> 2.31.1
+v6:
+ - Dropped generic definations for properties like reg, resets etc..
+ - Fixed the defination for port@0 and port@1
+ - removed the ti,sn65dsi86 node from the example, which is not related
+
+v5:
+ - Remove power-domain property in the conversion commit
+ - Add power-domain only for j721e compatible
+ - Fix white space error in one of the commit
+
+v4:
+ - split conversion txt to yaml
+ - seperate commit for addinig new compatible
+ - conditionally limit the items for reg property, based on the compatible
+
+v3:
+ - Convert cdns-dsi.txt binding to yaml
+ - Move the bridge under display/bridge/cadence
+ - Add new compatible to enable the wrapper module
+
+v2:
+ - Moved setting DPI0 to bridge_enable, since it
+   should be done after pm_runtime_get
+
+Rahul T R (5):
+  dt-bindings: display: bridge: Convert cdns,dsi.txt to yaml
+  dt-bindings: display: bridge: cdns,dsi: Add compatible for dsi on
+    j721e
+  drm/bridge: cdns-dsi: Move to drm/bridge/cadence
+  drm/bridge: cdns-dsi: Create a header file
+  drm/bridge: cdns-dsi: Add support for J721E wrapper
+
+ .../bindings/display/bridge/cdns,dsi.txt      | 112 ----
+ .../bindings/display/bridge/cdns,dsi.yaml     | 180 +++++++
+ drivers/gpu/drm/bridge/Kconfig                |  11 -
+ drivers/gpu/drm/bridge/Makefile               |   1 -
+ drivers/gpu/drm/bridge/cadence/Kconfig        |  21 +
+ drivers/gpu/drm/bridge/cadence/Makefile       |   3 +
+ .../{cdns-dsi.c => cadence/cdns-dsi-core.c}   | 483 ++----------------
+ .../gpu/drm/bridge/cadence/cdns-dsi-core.h    | 471 +++++++++++++++++
+ .../gpu/drm/bridge/cadence/cdns-dsi-j721e.c   |  51 ++
+ .../gpu/drm/bridge/cadence/cdns-dsi-j721e.h   |  18 +
+ 10 files changed, 781 insertions(+), 570 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/display/bridge/cdns,dsi.txt
+ create mode 100644 Documentation/devicetree/bindings/display/bridge/cdns,dsi.yaml
+ rename drivers/gpu/drm/bridge/{cdns-dsi.c => cadence/cdns-dsi-core.c} (65%)
+ create mode 100644 drivers/gpu/drm/bridge/cadence/cdns-dsi-core.h
+ create mode 100644 drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.c
+ create mode 100644 drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.h
+
+-- 
+2.38.0
+
