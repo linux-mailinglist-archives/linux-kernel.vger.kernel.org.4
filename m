@@ -2,54 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94594607850
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 15:24:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17825607852
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 15:24:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230448AbiJUNYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 09:24:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43086 "EHLO
+        id S230456AbiJUNYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 09:24:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230190AbiJUNYN (ORCPT
+        with ESMTP id S230291AbiJUNYX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 09:24:13 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2EE02700E4
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 06:24:09 -0700 (PDT)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Mv4n50q9HzmV8R;
-        Fri, 21 Oct 2022 21:19:21 +0800 (CST)
-Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 21 Oct 2022 21:24:07 +0800
-Received: from [10.174.178.46] (10.174.178.46) by
- kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 21 Oct 2022 21:24:06 +0800
-Subject: Re: [PATCH 1/2] ubi: Fix use-after-free when volume resizing failed
-To:     Li Zetao <lizetao1@huawei.com>, <richard@nod.at>,
-        <miquel.raynal@bootlin.com>, <vigneshr@ti.com>,
-        <dedekind@linutronix.de>, <haver@vnet.ibm.com>,
-        <bbrezillon@kernel.org>
-CC:     <boris.brezillon@free-electrons.com>,
-        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-References: <20221021102157.1341807-1-lizetao1@huawei.com>
- <20221021102157.1341807-2-lizetao1@huawei.com>
-From:   Zhihao Cheng <chengzhihao1@huawei.com>
-Message-ID: <017d217a-5497-2627-afe3-c3c4ef70723a@huawei.com>
-Date:   Fri, 21 Oct 2022 21:24:06 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        Fri, 21 Oct 2022 09:24:23 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66F76DCA;
+        Fri, 21 Oct 2022 06:24:21 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id bs14so3642003ljb.9;
+        Fri, 21 Oct 2022 06:24:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8XVCt8zk03c9asrvK7r0rw8Bvfy8tRtb9InAD3Pc+wE=;
+        b=I1uw4Swogq+wFwM4eZF4U7T0psUAUtaSiBLONbK7SmiRmwri2Fli7EFsCSAelhpI/E
+         pKi+pRrn4XFdYMyRvAi+m+J81nErFKriRGZxtqEQVBFXDoEspocnP1KnqSQwzt3jYUm4
+         xO+mMbAeugwp0EZBTbl26sFFg82143NQxMzILi2pRWuu8m7kkMQbYhQN8eLLcvxRWERw
+         LGnlWFD6YQcQt6Pt5+DztsobpIts7k6ac5FIFQi3nwed8pbLI1Q2McNcAokKzK0DeDXB
+         Al/YixJncrcx5IpuYgoqbgggSY5btOl8oeRJyLQJnKpaLmMxvfZ9ct7mTS8/84XXpsj3
+         Qbow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8XVCt8zk03c9asrvK7r0rw8Bvfy8tRtb9InAD3Pc+wE=;
+        b=X7DEoRsazPFppDB/pL+kEs2oqRfj/l0TBOLDT5pXTzwPiB72B/B45Zj4/I9Gvq8f+R
+         +lhuRxxGTWChW46C8KpYGZbZMeI7TyYV1xs+wESi68fHfePeEoTI91oeQjQOhMkiUgQJ
+         RgzhS2XPWan5rvHJAHoWPat+ZhystgaQNqPRUHnCoVDCiNQb+iCmf71pMVpd1DHQhju6
+         tVKsKe6FpzFzAfxye6BXfm8SnSH8v0uCB13/Jf4rRsINKt3W8683JkA88gnQJT1sgMcL
+         KF1A6D+j219aGlh89FcKx2TWVYFepmpH07prnvX3x9V9HwwUUm0u+5NMJVpWUvfkujyZ
+         JwgQ==
+X-Gm-Message-State: ACrzQf3xaKgUkTkhoqoMsgLpYVXpJ2sCki87sY8OPujnC3YZtCU96s9n
+        RnQmx+BOb0k13dBJ1VtS4GM=
+X-Google-Smtp-Source: AMsMyM5sFCxauhaoyvskm4EO/dQHCsltNX5NPBoPJjuzzzwYzLjYNbmiDc0KlKoPXWDpf5yJVFWRgA==
+X-Received: by 2002:a2e:bd0e:0:b0:267:fad4:7f72 with SMTP id n14-20020a2ebd0e000000b00267fad47f72mr7117490ljq.130.1666358659630;
+        Fri, 21 Oct 2022 06:24:19 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:16f3:4a00::2? (dc75zzyyyyyyyyyyyyyby-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::2])
+        by smtp.gmail.com with ESMTPSA id q8-20020a056512210800b0049d3614463dsm3158404lfr.77.2022.10.21.06.24.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Oct 2022 06:24:18 -0700 (PDT)
+Message-ID: <d1ed9ab7-6d67-fd93-6a77-86ea029eedc5@gmail.com>
+Date:   Fri, 21 Oct 2022 16:24:16 +0300
 MIME-Version: 1.0
-In-Reply-To: <20221021102157.1341807-2-lizetao1@huawei.com>
-Content-Type: text/plain; charset="gbk"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.46]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v4 2/4] gpu: drm: sii902x: Use
+ devm_regulator_bulk_get_enable()
+Content-Language: en-US
+To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org
+References: <cover.1666357434.git.mazziesaccount@gmail.com>
+ <1ed8351c2cb4911fcda21b97f7a7b089e955c301.1666357434.git.mazziesaccount@gmail.com>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+In-Reply-To: <1ed8351c2cb4911fcda21b97f7a7b089e955c301.1666357434.git.mazziesaccount@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,66 +94,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ÔÚ 2022/10/21 18:21, Li Zetao Ð´µÀ:
-> There is an use-after-free problem reported by KASAN:
->    ==================================================================
->    BUG: KASAN: use-after-free in ubi_eba_copy_table+0x11f/0x1c0 [ubi]
->    Read of size 8 at addr ffff888101eec008 by task ubirsvol/4735
->
->    CPU: 2 PID: 4735 Comm: ubirsvol
->    Not tainted 6.1.0-rc1-00003-g84fa3304a7fc-dirty #14
->    Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
->    BIOS 1.14.0-1.fc33 04/01/2014
->    Call Trace:
->     <TASK>
->     dump_stack_lvl+0x34/0x44
->     print_report+0x171/0x472
->     kasan_report+0xad/0x130
->     ubi_eba_copy_table+0x11f/0x1c0 [ubi]
->     ubi_resize_volume+0x4f9/0xbc0 [ubi]
->     ubi_cdev_ioctl+0x701/0x1850 [ubi]
->     __x64_sys_ioctl+0x11d/0x170
->     do_syscall_64+0x35/0x80
->     entry_SYSCALL_64_after_hwframe+0x46/0xb0
->     </TASK>
->
-> When ubi_change_vtbl_record() returns an error in ubi_resize_volume(),
-> "new_eba_tbl" will be freed on error handing path, but it is holded
-> by "vol->eba_tbl" in ubi_eba_replace_table(). It means that the liftcycle
-> of "vol->eba_tbl" and "vol" are different, so when resizing volume in
-> next time, it causing an use-after-free fault.
->
-> Fix it by not freeing "new_eba_tbl" after it replaced in
-> ubi_eba_replace_table(), while will be freed in next volume resizing.
->
-> Fixes: 801c135ce73d ("UBI: Unsorted Block Images")
-> Signed-off-by: Li Zetao <lizetao1@huawei.com>
-> ---
->   drivers/mtd/ubi/vmt.c | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/mtd/ubi/vmt.c b/drivers/mtd/ubi/vmt.c
-> index 8fcc0bdf0635..74637575346e 100644
-> --- a/drivers/mtd/ubi/vmt.c
-> +++ b/drivers/mtd/ubi/vmt.c
-> @@ -464,7 +464,7 @@ int ubi_resize_volume(struct ubi_volume_desc *desc, int reserved_pebs)
->   		for (i = 0; i < -pebs; i++) {
->   			err = ubi_eba_unmap_leb(ubi, vol, reserved_pebs + i);
->   			if (err)
-> -				goto out_acc;
-> +				goto out_free;
->   		}
->   		spin_lock(&ubi->volumes_lock);
->   		ubi->rsvd_pebs += pebs;
-> @@ -512,6 +512,8 @@ int ubi_resize_volume(struct ubi_volume_desc *desc, int reserved_pebs)
->   		ubi->avail_pebs += pebs;
->   		spin_unlock(&ubi->volumes_lock);
->   	}
-> +	return err;
-> +
->   out_free:
->   	kfree(new_eba_tbl);
->   	return err;
+On 10/21/22 16:18, Matti Vaittinen wrote:
+> Simplify using devm_regulator_bulk_get_enable()
+> 
+> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+> Reviewed-by: Robert Foss <robert.foss@linaro.org>
 
-Reviewed-by: Zhihao Cheng <chengzhihao1@huawei.com>
+Robert, I did slightly modify the return from probe when using the 
+dev_err_probe(). I still decided to keep your RBT - please let me know 
+if you disagree.
+
+Eg, this:
+> -	if (ret < 0) {
+> -		dev_err_probe(dev, ret, "Failed to enable supplies");
+> -		return ret;
+> -	}
+
+was converted to:
+ >   	if (ret < 0)
+> +		return dev_err_probe(dev, ret, "Failed to enable supplies");
+
+Yours
+	-- Matti
+
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
 
