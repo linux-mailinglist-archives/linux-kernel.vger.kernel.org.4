@@ -2,177 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 799A9607094
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 08:57:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61334607095
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 08:57:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbiJUG5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 02:57:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35140 "EHLO
+        id S230201AbiJUG5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 02:57:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbiJUG51 (ORCPT
+        with ESMTP id S230158AbiJUG5g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 02:57:27 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A723B24470C
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 23:57:24 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id ot12so4950987ejb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 23:57:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=D0qREkhtBFfUSew1zsFqOFwIS6EywWtUfuoiS8sZqVk=;
-        b=MFHrN7qGaabnyWRR9UENgIArfJYl3CIKOElAqKHJShrAoSabyqqwVnoRBzXEWRM2Qg
-         jNloPn8mozbUus10zCY53V/ac93pJYSfZinxn5iZ9ruC6dVJQrIzjN56ep1TqgMVd9tI
-         GvALIONGSYw4+B52usWLQCgO4Ea9sl/3e61ME=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=D0qREkhtBFfUSew1zsFqOFwIS6EywWtUfuoiS8sZqVk=;
-        b=r00PxHe52eqnoaJu+7nD2iU/sn6w0npljL2YgjRpKbvL3ZXjdn9eWT1OvItwDVDBOa
-         cRi6xzzQmQPuLOtTg6exg5qG5h1jUeyyl+3uv2mUXTg73QwQGdeBVxzgVAKaDDFiWfRW
-         gPP9h2/9IDO4x1zvg3OC7+8G39x7e2H2DD2CAgM0I84iZIeBrLlPAchizFpdskilwtLr
-         pYVmKB8caGBW9J7u09NhwXC19p3SSwRJKfvMpcA47ahN2u17OvOwcXOZjMrQbsliyYmz
-         FUEKbDFM1Bj6HhxGq21wwyZUkOFu6ax8GHCt7TvHhWt/8u+v/PfJcrcMgLNUtZ/qsRcj
-         pLHw==
-X-Gm-Message-State: ACrzQf2sNdT3+6W3Wmc6edJgWmcu31A5GSPd9pLhk6qvXxCvEX4gP7H5
-        YixAaxmBu13rfdRCfpTQQ0bMwzNWhtEDeSBSV7Iq3Q==
-X-Google-Smtp-Source: AMsMyM5Neyg680cumjv6r9jMvW6X80/vorKpk/U8Or4N1HdNRw8fr5qRp706CxrBUalv7ZXY24e4ULL/g4pVnn6Q8s0=
-X-Received: by 2002:a17:906:ef8c:b0:78d:4a00:7c7b with SMTP id
- ze12-20020a170906ef8c00b0078d4a007c7bmr14709843ejb.187.1666335443006; Thu, 20
- Oct 2022 23:57:23 -0700 (PDT)
+        Fri, 21 Oct 2022 02:57:36 -0400
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32740244708
+        for <linux-kernel@vger.kernel.org>; Thu, 20 Oct 2022 23:57:34 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VSiKiEG_1666335448;
+Received: from 30.32.67.117(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VSiKiEG_1666335448)
+          by smtp.aliyun-inc.com;
+          Fri, 21 Oct 2022 14:57:29 +0800
+Message-ID: <fc9fa0b2-16d3-9aba-02a2-61d492bde95f@linux.alibaba.com>
+Date:   Fri, 21 Oct 2022 14:57:26 +0800
 MIME-Version: 1.0
-References: <20220617071027.6569-1-dharamhans87@gmail.com> <20220617071027.6569-2-dharamhans87@gmail.com>
- <CAJfpegtRzDbcayn7MYKpgO1MBFeBihyfRB402JHtJkbXg1dvLg@mail.gmail.com>
- <08d11895-cc40-43da-0437-09d3a831b27b@fastmail.fm> <CAJfpegvSK0VmU6cLx5kiuXJ=RyL0d4=gvGLFCWQ16FrBGKmhMQ@mail.gmail.com>
- <4f0f82ff-69aa-e143-e254-f3da7ccf414d@ddn.com>
-In-Reply-To: <4f0f82ff-69aa-e143-e254-f3da7ccf414d@ddn.com>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Fri, 21 Oct 2022 08:57:11 +0200
-Message-ID: <CAJfpegt6QBZK68aXMg2OA=id3fMjBPZHTr6AqkKVqzV3eA_4Fw@mail.gmail.com>
-Subject: Re: [PATCH v5 1/1] Allow non-extending parallel direct writes on the
- same file.
-To:     Bernd Schubert <bschubert@ddn.com>
-Cc:     Dharmendra Singh <dharamhans87@gmail.com>,
-        Vivek Goyal <vgoyal@redhat.com>, linux-fsdevel@vger.kernel.org,
-        fuse-devel <fuse-devel@lists.sourceforge.net>,
-        linux-kernel@vger.kernel.org, Dharmendra Singh <dsingh@ddn.com>,
-        Horst Birthelmer <hbirthelmer@ddn.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.0
+Subject: Re: [PATCH v2] mm, hwpoison: Try to recover from copy-on write faults
+Content-Language: en-US
+To:     Tony Luck <tony.luck@intel.com>
+Cc:     Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+References: <SJ1PR11MB60838C1F65CA293188BB442DFC289@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <20221019170835.155381-1-tony.luck@intel.com>
+ <893b681b-726e-94e3-441e-4d68c767778a@linux.alibaba.com>
+ <Y1GqGbBNk6fX/OnD@agluck-desk3.sc.intel.com>
+ <359bae4e-6ce3-cc7e-33d0-252064157bc6@linux.alibaba.com>
+ <Y1IbOAvpGzA8bst1@agluck-desk3.sc.intel.com>
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <Y1IbOAvpGzA8bst1@agluck-desk3.sc.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 13 Sept 2022 at 10:44, Bernd Schubert <bschubert@ddn.com> wrote:
->
->
->
-> On 6/17/22 14:43, Miklos Szeredi wrote:
-> > On Fri, 17 Jun 2022 at 11:25, Bernd Schubert <bernd.schubert@fastmail.fm> wrote:
-> >>
-> >> Hi Miklos,
-> >>
-> >> On 6/17/22 09:36, Miklos Szeredi wrote:
-> >>> On Fri, 17 Jun 2022 at 09:10, Dharmendra Singh <dharamhans87@gmail.com> wrote:
-> >>>
-> >>>> This patch relaxes the exclusive lock for direct non-extending writes
-> >>>> only. File size extending writes might not need the lock either,
-> >>>> but we are not entirely sure if there is a risk to introduce any
-> >>>> kind of regression. Furthermore, benchmarking with fio does not
-> >>>> show a difference between patch versions that take on file size
-> >>>> extension a) an exclusive lock and b) a shared lock.
-> >>>
-> >>> I'm okay with this, but ISTR Bernd noted a real-life scenario where
-> >>> this is not sufficient.  Maybe that should be mentioned in the patch
-> >>> header?
-> >>
-> >>
-> >> the above comment is actually directly from me.
-> >>
-> >> We didn't check if fio extends the file before the runs, but even if it
-> >> would, my current thinking is that before we serialized n-threads, now
-> >> we have an alternation of
-> >>          - "parallel n-1 threads running" + 1 waiting thread
-> >>          - "blocked  n-1 threads" + 1 running
-> >>
-> >> I think if we will come back anyway, if we should continue to see slow
-> >> IO with MPIIO. Right now we want to get our patches merged first and
-> >> then will create an updated module for RHEL8 (+derivatives) customers.
-> >> Our benchmark machines are also running plain RHEL8 kernels - without
-> >> back porting the modules first we don' know yet what we will be the
-> >> actual impact to things like io500.
-> >>
-> >> Shall we still extend the commit message or are we good to go?
-> >
-> > Well, it would be nice to see the real workload on the backported
-> > patch.   Not just because it would tell us if this makes sense in the
-> > first place, but also to have additional testing.
->
->
-> Sorry for the delay, Dharmendra and me got busy with other tasks and
-> Horst (in CC) took over the patches and did the MPIIO benchmarks on 5.19.
->
-> Results with https://github.com/dchirikov/mpiio.git
->
->                 unpatched    patched      patched
->                 (extending) (extending)  (non-extending)
-> ----------------------------------------------------------
->                  MB/s        MB/s            MB/s
-> 2 threads     2275.00      2497.00       5688.00
-> 4 threads     2438.00      2560.00      10240.00
-> 8 threads     2925.00      3792.00      25600.00
-> 16 threads    3792.00     10240.00      20480.00
->
->
-> (Patched-nonextending is a manual operation on the file to extend the
-> size, mpiio does not support that natively, as far as I know.)
->
->
->
-> Results with IOR (HPC quasi standard benchmark)
->
-> ior -w -E -k -o /tmp/test/home/hbi/test/test.1 -a mpiio -s 1280 -b 8m -t 8m
->
->
->                 unpatched       patched
->                 (extending)     (extending)
-> -------------------------------------------
->                    MB/s           MB/s
-> 2 threads       2086.10         2027.76
-> 4 threads       1858.94         2132.73
-> 8 threads       1792.68         4609.05
-> 16 threads      1786.48         8627.96
->
->
-> (IOR does not allow manual file extension, without changing its code.)
->
-> We can see that patched non-extending gives the best results, as
-> Dharmendra has already posted before, but results are still
-> much better with the patches in extending mode. My assumption is here
-> instead serializing N-writers, there is an alternative
-> run of
->         - 1 thread extending, N-1 waiting
->         - N-1 writing, 1 thread waiting
-> in the patched version.
->
-
-Okay, thanks for the heads up.
-
-I queued the patch up for v6.2
-
-Thanks,
-Miklos
 
 
->
->
-> Thanks,
-> Bernd
+在 2022/10/21 PM12:08, Tony Luck 写道:
+> On Fri, Oct 21, 2022 at 09:52:01AM +0800, Shuai Xue wrote:
+>>
+>>
+>> 在 2022/10/21 AM4:05, Tony Luck 写道:
+>>> On Thu, Oct 20, 2022 at 09:57:04AM +0800, Shuai Xue wrote:
+>>>>
+>>>>
+>>>> 在 2022/10/20 AM1:08, Tony Luck 写道:
+> 
+>>> I'm experimenting with using sched_work() to handle the call to
+>>> memory_failure() (echoing what the machine check handler does using
+>>> task_work)_add() to avoid the same problem of not being able to directly
+>>> call memory_failure()).
+>>
+>> Work queues permit work to be deferred outside of the interrupt context
+>> into the kernel process context. If we return to user-space before the
+>> queued memory_failure() work is processed, we will take the fault again,
+>> as we discussed recently.
+>>
+>>     commit 7f17b4a121d0d ACPI: APEI: Kick the memory_failure() queue for synchronous errors
+>>     commit 415fed694fe11 ACPI: APEI: do not add task_work to kernel thread to avoid memory leak
+>>
+>> So, in my opinion, we should add memory failure as a task work, like
+>> do_machine_check does, e.g.
+>>
+>>     queue_task_work(&m, msg, kill_me_maybe);
+> 
+> Maybe ... but this case isn't pending back to a user instruction
+> that is trying to READ the poison memory address. The task is just
+> trying to WRITE to any address within the page.
+
+Aha, I see the difference. Thank you. But I still have a question on
+this. Let us discuss in your reply to David Laight.
+
+Best Regards,
+Shuai
+
+> 
+> So this is much more like a patrol scrub error found asynchronously
+> by the memory controller (in this case found asynchronously by the
+> Linux page copy function).  So I don't feel that it's really the
+> responsibility of the current task.
+> 
+> When we do return to user mode the task is going to be busy servicing
+> a SIGBUS ... so shouldn't try to touch the poison page before the
+> memory_failure() called by the worker thread cleans things up.
+> 
+>>> +	INIT_WORK(&p->work, do_sched_memory_failure);
+>>> +	p->pfn = pfn;
+>>> +	schedule_work(&p->work);
+>>> +}
+>>
+>> I think there is already a function to do such work in mm/memory-failure.c.
+>>
+>> 	void memory_failure_queue(unsigned long pfn, int flags)
+> 
+> Also pointed out by Miaohe Lin <linmiaohe@huawei.com> ... this does
+> exacly what I want, and is working well in tests so far. So perhaps
+> a cleaner solution than making the kill_me_maybe() function globally
+> visible.
+> 
+> -Tony
