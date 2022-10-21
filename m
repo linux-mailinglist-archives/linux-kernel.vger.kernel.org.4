@@ -2,90 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE49B608EE2
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 19:59:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69170608F3C
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 21:30:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229679AbiJVR7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 13:59:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57702 "EHLO
+        id S229752AbiJVTat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 15:30:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiJVR7L (ORCPT
+        with ESMTP id S229460AbiJVTar (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 13:59:11 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9FC1EEA84
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 10:59:10 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id d13so3938943qko.5
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 10:59:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=kR2lCTGWgMz214b8GhdMkfWykvXGjxW4l/uIri5q9eM=;
-        b=BujJmMDP9ZReOG8zY3PgE6e6S/Hhw5l0z5I52WDJ6i6xJptA66E8g639Mk5ekrks2J
-         2aN20iNRWvbrfcRDDw9sbN6olaV6Wk4UZAHCESJb1ipxl8Kzkt5F07QVdM7xlxdHEuJ9
-         TiQ33g53l8YKIJ7qB+JvQVGhJFeZdQT2e5rnA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kR2lCTGWgMz214b8GhdMkfWykvXGjxW4l/uIri5q9eM=;
-        b=OPSvWtmvWolqziJhjX8kccHH4enwLUiNn91Y8ZcvW0KqIrv2a7OUDt2LHPTvVzkszv
-         2peBoGFBSult8oarITl+tgq8azihKJCLBJJTHZRSacWJnINjfeUdb3jShCUjcl1R7WL2
-         s8xZsLR35RfgEtcN5SMJY7puoIkW/TQEcpaUhzn3hYz1+bzgBI6lUR1T+HsI7HWousqY
-         w/skfFqsLJ5tql+rYl1zvOw+cVGg/ADiQG5uN/fbz4Y3uJku7uMuTo62cFQPka6c6Ib3
-         yn5OG8mby5uqxWmPuj30bGb2EyIyrQz3YW44dBZG3psP1zHGCcS6P3WcKxHbtQ++iZSU
-         COIg==
-X-Gm-Message-State: ACrzQf0MeUZQj8RD7JiMDNHs+fjXE8/nLm1U03SXydlBDXT406aYlfzA
-        wWCDZrIKaw3i6qgIiGc91NZ1TdVvrUnHJg==
-X-Google-Smtp-Source: AMsMyM62And5Tx9hPBVVvDky8y3wdywtQl9mbAadnVwlGdfVRE1719wGRsJXGc1EtnU3A8Ljd2Faog==
-X-Received: by 2002:a37:8981:0:b0:6f1:1560:ac7d with SMTP id l123-20020a378981000000b006f11560ac7dmr4128667qkd.659.1666461481675;
-        Sat, 22 Oct 2022 10:58:01 -0700 (PDT)
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
-        by smtp.gmail.com with ESMTPSA id x5-20020a05620a258500b006bb366779a4sm11519394qko.6.2022.10.22.10.58.00
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 22 Oct 2022 10:58:00 -0700 (PDT)
-Received: by mail-yb1-f170.google.com with SMTP id r3so6804341yba.5
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 10:58:00 -0700 (PDT)
-X-Received: by 2002:a05:6902:124f:b0:66e:e3da:487e with SMTP id
- t15-20020a056902124f00b0066ee3da487emr23340212ybu.310.1666461480005; Sat, 22
- Oct 2022 10:58:00 -0700 (PDT)
+        Sat, 22 Oct 2022 15:30:47 -0400
+Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFF43D4A34
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 12:30:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1666467028; bh=JTheIU4xRSl5mc5GqAxkbn7h52Wsca6LkI5NJTEdf14=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
+         MIME-Version:Content-Type:In-Reply-To;
+        b=Qh53FDKBB8GpVmydYu0rAMSAIM7UQCNf0n1mm65q1cWDp/lhMAlJb0R198wts5ovT
+         KDdjRmXtmU5CXIt9eZw5hp95n7x5kwdv+yvCMHcD8DL2lpJrHOMdinoB5vj0kve1rq
+         FJCMJfjYCKVlZ5/exrMW2RITnaE/jeeqWfvm/L1M=
+Received: by b-4.in.mailobj.net [192.168.90.14] with ESMTP
+        via [213.182.55.206]
+        Sat, 22 Oct 2022 21:30:28 +0200 (CEST)
+X-EA-Auth: q56hZWDqs4iRisuzWFTQxUzkR7F6O3dEDdwhc1oJruUtjsotfYf2wsL9j+FGNIfmaGRgyagBhcnOJGsIix2u85/cZr7HhW7R
+Date:   Fri, 21 Oct 2022 22:04:22 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     outreachy@lists.linux.dev, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: wlan-ng: remove commented debug printk messages
+Message-ID: <Y1LKDv7vSmNrZDEI@debian-BULLSEYE-live-builder-AMD64>
+References: <Y1H5tJXjMZqiB6rh@debian-BULLSEYE-live-builder-AMD64>
+ <Y1OikehVJv/teZ9e@kroah.com>
 MIME-Version: 1.0
-References: <20221022111403.531902164@infradead.org>
-In-Reply-To: <20221022111403.531902164@infradead.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sat, 22 Oct 2022 10:57:44 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjBOOY6ph_NByY0Xiuf-fQ2QdAWdE=9Lni81BEUgxeWQA@mail.gmail.com>
-Message-ID: <CAHk-=wjBOOY6ph_NByY0Xiuf-fQ2QdAWdE=9Lni81BEUgxeWQA@mail.gmail.com>
-Subject: Re: [PATCH 00/13] Clean up pmd_get_atomic() and i386-PAE
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, willy@infradead.org, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        aarcange@redhat.com, kirill.shutemov@linux.intel.com,
-        jroedel@suse.de, ubizjak@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1OikehVJv/teZ9e@kroah.com>
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DATE_IN_PAST_24_48,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 22, 2022 at 4:48 AM Peter Zijlstra <peterz@infradead.org> wrote:
+On Sat, Oct 22, 2022 at 09:58:09AM +0200, Greg KH wrote:
+> On Fri, Oct 21, 2022 at 07:15:24AM +0530, Deepak R Varma wrote:
+> > printk messages are added for program flow tracing and are left
+> > commented. These commented log messages should be removed as they
+> > are no more useful for program execution.
+> >
+> > Signed-off-by: Deepak R Varma <drv@mailo.com>
+> > ---
+> >  drivers/staging/wlan-ng/p80211netdev.c | 22 ----------------------
+> >  1 file changed, 22 deletions(-)
 >
-> The robot doesn't hate on these patches and they boot in kvm (because who still
-> has i386 hardware).
+> I recieved 3 different copies of this patch, and do not know which one
+> to take at all.
 
-Well, I had a couple of comments, the only serious one being that odd
-'__HAVE_ARCH_PMDP_GET' that I really didn't see anywhere else and
-seemed actively wrong.
+Hello Greg,
+My apologies for the spam. There have been some trouble with my email
+transactions. I was unable to see my own email and hence ended up resending the
+same patch 3 times.
 
-Other than that, it all looks good to me.
+>
+> So please resend this as a v2 patch, only once, and I will be glad to
+> review it.
 
-Thanks,
-              Linus
+Sure and thank you very much. Will send in v2 shortly.
+
+./drv
+
+>
+> thanks,
+>
+> greg k-h
+
+
