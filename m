@@ -2,126 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85ADF607CA5
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 18:47:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82014607CAB
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 18:48:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231330AbiJUQrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 12:47:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48278 "EHLO
+        id S229993AbiJUQst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 12:48:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231327AbiJUQrX (ORCPT
+        with ESMTP id S230473AbiJUQsd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 12:47:23 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03756C4C07;
-        Fri, 21 Oct 2022 09:47:01 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29LFt5LV019099;
-        Fri, 21 Oct 2022 16:46:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=ez5BH5Dj8oFv/HPxDtmpfHFCn9TPkAsmPS3teW9LZxI=;
- b=kdS+nE/+QjBqT5qrsCBMVpsw0UEEh1PKgoB1G9jMkoh3K1jhOj5Wp/8rJ3Kp8b/KLBIj
- xn83asJAQSXcYahmKJ9SRsoN4GC5xH2pcZiCGtJrh60ivrqZfrQa7bbMilMF2Lr6vFwm
- ytcHJl1v42TdFsUoMj47crKHKgi5uytmnA4CVqLo7DYz2LRWad+W6JEQwKF9NXHF6w0Q
- U5YRHsRGRJFhbRaI7A6DTBTcdI7JTWh+6riInsuYFNYkqby8pprwMbnxVpgBIkOOdPh/
- HRFBMNXa9girYcE33EpT21RN8ZfEveBLofHPfABNev+MXJ9WPo2A22IHWibd4sAyyL7S ww== 
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kbxg5stcs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 21 Oct 2022 16:46:52 +0000
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29LGawOw026132;
-        Fri, 21 Oct 2022 16:46:52 GMT
-Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
-        by ppma04wdc.us.ibm.com with ESMTP id 3kakejvqa0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 21 Oct 2022 16:46:52 +0000
-Received: from smtpav04.wdc07v.mail.ibm.com ([9.208.128.116])
-        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29LGkoxX10945196
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 21 Oct 2022 16:46:51 GMT
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 989E458050;
-        Fri, 21 Oct 2022 16:46:50 +0000 (GMT)
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E09C25805E;
-        Fri, 21 Oct 2022 16:46:49 +0000 (GMT)
-Received: from [9.160.117.177] (unknown [9.160.117.177])
-        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 21 Oct 2022 16:46:49 +0000 (GMT)
-Message-ID: <c0f5c096-3cab-1df4-6cc5-7f4c42271fc0@linux.ibm.com>
-Date:   Fri, 21 Oct 2022 12:46:49 -0400
+        Fri, 21 Oct 2022 12:48:33 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5A4100BE6;
+        Fri, 21 Oct 2022 09:48:28 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id c3-20020a1c3503000000b003bd21e3dd7aso5509653wma.1;
+        Fri, 21 Oct 2022 09:48:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XbPvSXhOFP986gsXwgJkoWhk6VMKEDH9VysMFA4exvU=;
+        b=I3PLxPuc2tV4wZKG9QH1dxt6KVSHYn4tUeqoMo7D1YkEwEWRqEqj30vZIfAaWSSq5C
+         gsgA/KjAeXIVc47AAOdFcimD0GwGpL15rAMwbY5utUNOf1aTfVHri9HYZCxF5c+choLo
+         ua/Y2AhmzXrIq1vDLskNd6C8d6MYQbw0uyBg7Ou5Pmb5lWMkn1VnzE0MkReOBJED8O0I
+         Khwz/aGMUrJyQyFQnA/xdcs5dEIlpT47mJu1oQShXjI1ruwjrsNsOExGp3OMSbSeZrqq
+         zzsRaGYow5CXpG1EUOUNNs9pUV7VVZ7/QQacIfexqVvw0Zm+TFtKaUFbqrsfooS3o+u9
+         9Tfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XbPvSXhOFP986gsXwgJkoWhk6VMKEDH9VysMFA4exvU=;
+        b=0HMpGtPCJuzStiQKmr6Dnj8/0mU+0twy6GoPedIy+sTbkk6Hu7lH4YxlhZ1qNmkHNJ
+         pV0PXdSW/YyxBE4Am+QFL/K8Wjs73b5z6JI24f0/UBVlSYltNILR0vb7DuUUctKQ7wcK
+         m4bi55uS++NE2j//NmXqRFZz7a78M+keRonVTi9NqE2ErmiUWfX3hjD/eHQroPG9jjSm
+         ahzHUR3m5ylUE40Tn/MD/x5SL/3GGHu96BsAoy8RR+goQ/GFW9Xmf8zYbR5TR6gM2ZHq
+         HXaCiJT/4Q9OSi+F5NGmNeAZxuQYKUURslzkIrbzOH83VwZZc0g0t37uLSeHTs42mvYB
+         vcJA==
+X-Gm-Message-State: ACrzQf1K+y/DiYWUNiq/WQoKtlZzHB81IBAs87SuF15E/PYWysI2GKN1
+        fyS0gGzPJkMf4UA3dPiFoZnPolnM7UUIbVp6XR4=
+X-Google-Smtp-Source: AMsMyM6kdlYPtik0hBPcElvkVtBLOUl4VQ2V+hrKmnXSe6JHzGq2jHZKtAJrwAW+3HP4dw+SR+MGiRqRn85wdeVCmIE=
+X-Received: by 2002:a05:600c:6885:b0:3bd:d782:623c with SMTP id
+ fn5-20020a05600c688500b003bdd782623cmr13697576wmb.102.1666370906852; Fri, 21
+ Oct 2022 09:48:26 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH] s390/vfio-ap: Fix memory allocation for mdev_types array
-Content-Language: en-US
-To:     "Jason J. Herne" <jjherne@linux.ibm.com>,
-        linux-s390@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Christoph Hellwig <hch@infradead.org>
-References: <20221021145905.15100-1-jjherne@linux.ibm.com>
-From:   Matthew Rosato <mjrosato@linux.ibm.com>
-In-Reply-To: <20221021145905.15100-1-jjherne@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: GZSjgrTMJ3slCcpxeeLLAZQYKPFre41w
-X-Proofpoint-ORIG-GUID: GZSjgrTMJ3slCcpxeeLLAZQYKPFre41w
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-21_04,2022-10-21_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 clxscore=1015
- suspectscore=0 mlxlogscore=999 lowpriorityscore=0 priorityscore=1501
- phishscore=0 malwarescore=0 impostorscore=0 spamscore=0 adultscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210210099
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221005085439.740992-1-megi@xff.cz> <CAMdYzYrEXEqOmMeozGBbAAvrujZcOxLh4VYOmu5DSjPWTS-5zQ@mail.gmail.com>
+ <20221005220812.4psu6kckej63yo2z@core> <4679102.Wku2Vz74k6@phil>
+ <CAMdYzYq3S2rR3Kb61irpV9xHYijNiJY0mkVnJwPrpXzxg_Zh9g@mail.gmail.com> <20221021153913.l5ry6v4mcnzcmj2v@core>
+In-Reply-To: <20221021153913.l5ry6v4mcnzcmj2v@core>
+From:   Peter Geis <pgwipeout@gmail.com>
+Date:   Fri, 21 Oct 2022 12:48:15 -0400
+Message-ID: <CAMdYzYpYC6ME_ZYE65UWq__i+rit6_os-+do+JLmEL7y-jKr9g@mail.gmail.com>
+Subject: Re: [PATCH v2] arm64: dts: rockchip: rk356x: Fix PCIe register map
+ and ranges
+To:     =?UTF-8?Q?Ond=C5=99ej_Jirman?= <megi@xff.cz>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        linux-rockchip@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Yifeng Zhao <yifeng.zhao@rock-chips.com>,
+        Johan Jonker <jbx6244@gmail.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/Rockchip SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/21/22 10:59 AM, Jason J. Herne wrote:
-> The vfio-ap crypto driver fails to allocate memory for an array of
-> pointers used to pass supported mdev types to mdev_register_parent().
-> 
-> Since we only support a single mdev type, the fix is to allocate a
-> single entry in the ap_matrix_dev->mdev_types array.
-> 
-> Fixes: 63e685747784 ("s390: vfio-ap: base implementation of VFIO AP device driver")
+On Fri, Oct 21, 2022 at 11:39 AM Ond=C5=99ej Jirman <megi@xff.cz> wrote:
+>
+> On Fri, Oct 21, 2022 at 09:07:50AM -0400, Peter Geis wrote:
+> > Good Morning Heiko,
+> >
+> > Apologies for just getting to this, I'm still in the middle of moving
+> > and just got my lab set back up.
+> >
+> > I've tested this patch series and it leads to the same regression with
+> > NVMe drives. A loop of md5sum on two identical 4GB random files
+> > produces the following results:
+> > d11cf0caa541b72551ca22dc5bef2de0  test-rand.img
+> > fad97e91da8d4fd554c895cafa89809b  test-rand2.img
+> > 2d56a7baa05c38535f4c19a2b371f90a  test-rand.img
+> > 74e8e6f93d7c3dc3ad250e91176f5901  test-rand2.img
+> > 25cfcfecf4dd529e4e9fbbe2be482053  test-rand.img
+> > 74e8e6f93d7c3dc3ad250e91176f5901  test-rand2.img
+> > b9637505bf88ed725f6d03deb7065dab  test-rand.img
+> > f7437e88d524ea92e097db51dce1c60d  test-rand2.img
+> >
+> > Before this patch series:
+> > d11cf0caa541b72551ca22dc5bef2de0  test-rand.img
+> > d11cf0caa541b72551ca22dc5bef2de0  test-rand2.img
+> > d11cf0caa541b72551ca22dc5bef2de0  test-rand.img
+> > d11cf0caa541b72551ca22dc5bef2de0  test-rand2.img
+> > d11cf0caa541b72551ca22dc5bef2de0  test-rand.img
+> > d11cf0caa541b72551ca22dc5bef2de0  test-rand2.img
+> > d11cf0caa541b72551ca22dc5bef2de0  test-rand.img
+> > d11cf0caa541b72551ca22dc5bef2de0  test-rand2.img
+> >
+> > Though I do love where this patch is going and would like to see if it
+> > can be made to work, in its current form it does not.
+>
+> Thanks for the test. Can you please also test v1? Also please share lspci=
+ -vvv
+> of your nvme drive, so that we can see allocated address ranges, etc.
 
-I think you want
+Good catch, with your patch as is, the following issue crops up:
+Region 0: Memory at 300000000 (64-bit, non-prefetchable) [size=3D16K]
+Region 2: I/O ports at 1000 [disabled] [size=3D256]
 
-Fixes: da44c340c4fe ("vfio/mdev: simplify mdev_type handling")
+However, with a simple fix, we can get this:
+Region 0: Memory at 300000000 (64-bit, non-prefetchable) [virtual] [size=3D=
+16K]
+Region 2: I/O ports at 1000 [virtual] [size=3D256]
 
-Where *mdev_types[] was introduced.  The fix you propose is the same way Christoph (added to CC) handled vfio-ccw, LGTM.
+and with it a working NVMe drive.
 
-Reviewed-by: Matthew Rosato <mjrosato@linux.ibm.com>
+Change the following range:
+0x02000000 0x0 0x40000000 0x3 0x00000000 0x0 0x40000000>;
+to
+0x02000000 0x0 0x00000000 0x3 0x00000000 0x0 0x40000000>;
 
-> Cc: stable@vger.kernel.org
-> Cc: Tony Krowiak <akrowiak@linux.ibm.com>
-> Reported-by: Christian Borntraeger <borntraeger@linux.ibm.com>
-> Signed-off-by: Jason J. Herne <jjherne@linux.ibm.com>
-> ---
->  drivers/s390/crypto/vfio_ap_private.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/s390/crypto/vfio_ap_private.h b/drivers/s390/crypto/vfio_ap_private.h
-> index 2eddd5f34ed3..976a65f32e7d 100644
-> --- a/drivers/s390/crypto/vfio_ap_private.h
-> +++ b/drivers/s390/crypto/vfio_ap_private.h
-> @@ -52,7 +52,7 @@ struct ap_matrix_dev {
->  	struct mutex guests_lock; /* serializes access to each KVM guest */
->  	struct mdev_parent parent;
->  	struct mdev_type mdev_type;
-> -	struct mdev_type *mdev_types[];
-> +	struct mdev_type *mdev_types[1];
->  };
->  
->  extern struct ap_matrix_dev *matrix_dev;
+I still haven't tested this with other cards yet, and another patch
+that does similar work I've tested successfully as well with NVMe
+drives. I'll have to get back to you on the results of greater
+testing.
 
+Very Respectfully,
+Peter Geis
+
+>
+> kind regards,
+>         o.
+>
+> > Very Respectfully,
+> > Peter Geis
