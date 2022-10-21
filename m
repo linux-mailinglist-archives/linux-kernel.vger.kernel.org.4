@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31D48607829
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 15:18:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD9DE60782E
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 15:18:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230362AbiJUNSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 09:18:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55318 "EHLO
+        id S230473AbiJUNSx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 09:18:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230472AbiJUNSB (ORCPT
+        with ESMTP id S230432AbiJUNSc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 09:18:01 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE3DB26D92B;
-        Fri, 21 Oct 2022 06:17:49 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id o12so5037005lfq.9;
-        Fri, 21 Oct 2022 06:17:49 -0700 (PDT)
+        Fri, 21 Oct 2022 09:18:32 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EF9027354E;
+        Fri, 21 Oct 2022 06:18:10 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id b1so5049344lfs.7;
+        Fri, 21 Oct 2022 06:18:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=L6OsdhUjW7L1QAZe7IfDCMt4jC7eaRPds2f3xTvTcWM=;
-        b=NvXmRpLEwW15x4sHw8WsKT9UISkiiOEvlUYJsc3+jtM5BAz28eKD5C8fMmm2QEafXQ
-         i9Iymyq6iBLiS2ccEq8b6W4IZS+Fcyjh3rsbLHN8wSvQqAm0yVLSqzl/PEHgfYYRahJ3
-         +VHk7QCBW1774fIlJrdE4xfOUNzoRqGKay+NDBvJhMBd0RKK3fGvl+tJc6sde66KVPn6
-         COZB2dWm/yBfpCIsUh6m48vuO4BKIL6Her8uuHef5YkURs86J2WBWpDGrbC+sfsF5PgG
-         1pArS5cCtKAg/1z/HAdiHw6TnEj2cr/FKxFi/isKtdBv2owKM/6Bp7OR5xmT8lbSkgV0
-         vptw==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ihyfIhpnzq65oKa3RDOB7v3ysoQ+yvmg3Y0WFsPd1bw=;
+        b=I9NeRnvmBddsliQwQ2JpFRY+yBhvSinkJq/RCwn5uMf4MgZObYFZAv/iOK3QP8HDji
+         9FhiOcX3yboLmgid/jqKyVngYBvuPvf5BkzKMNFWrL8KQT1Tl6iFXObUupxvMPyj6ipV
+         hTwvZClXLoQOmaru2RChDi02M5YSHTfFduAL2+4oTQGWTpzWlEA43DlIrC6Xrq73NH5O
+         7Zs1g3PN9W+9D9GL2WBG90EoQeCFaYYsg3kjewxiPQUlMaz2PZmj+0fcCPZO2Un+43ag
+         2qgx1yDok3Bs6op5lq+uaO6uVmesvlIp5o4EQAeDUAca5dg6zkwSVqXiapNee7MfkIoj
+         SUGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=L6OsdhUjW7L1QAZe7IfDCMt4jC7eaRPds2f3xTvTcWM=;
-        b=ocKWb2UYNo4j12omz5rpneYUzbDhPGSz4O9aK7S/26OqMszvk25Ewgsc/q/WM3qeOU
-         n1jO7PQ6QCLJuDTlzw90GRQB1aYEixKYLBqa3Ua1idHJ59CxcvXTWz5af/VGSddpNq4l
-         aiazu+H45Upe7vaZcm80bGtNIO7cZdxcGDmZ70xTVmSY0EwghL+1X+urpp8au/r3JdWr
-         vX06ifOd6C739RD59s80f5xCLRF7XVZfoqHIxskSq+r1pPNz+u8AjJjtDIKSnuCJxW26
-         5KbCLFD2ARSEGX0UOev4U0h11iSYAjsNi1HUgzUAEz2ZNEPTkXEUr/dCUvg2o1VPBhj8
-         7ccA==
-X-Gm-Message-State: ACrzQf10nJQWvW056b9g6uarn7wTA09+9buh89N9fVfzQT6Gn2ArMnuJ
-        Hfl3lijN6g9E94Dqu0xZDZw=
-X-Google-Smtp-Source: AMsMyM45sQCWIL00BKCqmckZv7XIyZNPhMuNPcqRjItA+8zp2cjZJgscTuO6QkpAf44MY1NK69uMIA==
-X-Received: by 2002:ac2:483b:0:b0:4a6:f5d3:dd07 with SMTP id 27-20020ac2483b000000b004a6f5d3dd07mr1723500lft.233.1666358266558;
-        Fri, 21 Oct 2022 06:17:46 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ihyfIhpnzq65oKa3RDOB7v3ysoQ+yvmg3Y0WFsPd1bw=;
+        b=jVb9PcnpXr+uEaKDgc7OtKLl5ba5omCn5WlvLO1hVWXNw1jF8Pxl9sU64NjFke7OwZ
+         haG4gaZI0rCSqapdDdj9So+Ib78bAdqYRlKDcxDfdmyBAfBDxPhg2VEBPpmzBDvRnmqk
+         K5bHOPttgiGIlb5N3ndlhoXVAKeuUiDbR/Z9rlVb2hwarP3eHbblDyDNGWmSCgyMafb6
+         rmSg2+mJeSQKVZfzJwRGWdRW4ZO0Brfr9A/XzwlsUcJ33E4u9Nh91wBGaSAKuW1uQ6JS
+         phV3F5a1nfJFKavn91hYeSKKDlnbcgO0lPES7EJ/n/yCn4FxGctovhTxciwpoYKzUr/H
+         PPzA==
+X-Gm-Message-State: ACrzQf0L6qSqccQb1TD9EYuWqPnTUsGt/szVCz37x4LBkCLtgBnlFJK9
+        MWVbacdBtVHeWTxSaIExM8o=
+X-Google-Smtp-Source: AMsMyM5r/E/MTpA6dpEKyj/vPwlJ3EnRAGRQWeDHieNWdktxJ3gFXIx6Cn2GnJ4y5gYcXpejtbqXhg==
+X-Received: by 2002:a05:6512:3085:b0:4a2:7d80:d4b4 with SMTP id z5-20020a056512308500b004a27d80d4b4mr7150541lfd.534.1666358288796;
+        Fri, 21 Oct 2022 06:18:08 -0700 (PDT)
 Received: from dc75zzyyyyyyyyyyyyyby-3.rev.dnainternet.fi (dc75zzyyyyyyyyyyyyyby-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::2])
-        by smtp.gmail.com with ESMTPSA id m7-20020a2e9107000000b0026fb4d20636sm3417298ljg.17.2022.10.21.06.17.44
+        by smtp.gmail.com with ESMTPSA id a13-20020a056512200d00b00494747ba5f7sm2210665lfb.272.2022.10.21.06.18.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Oct 2022 06:17:45 -0700 (PDT)
-Date:   Fri, 21 Oct 2022 16:17:37 +0300
+        Fri, 21 Oct 2022 06:18:07 -0700 (PDT)
+Date:   Fri, 21 Oct 2022 16:18:01 +0300
 From:   Matti Vaittinen <mazziesaccount@gmail.com>
 To:     Matti Vaittinen <mazziesaccount@gmail.com>,
         Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
@@ -71,12 +72,14 @@ Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
         dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         linux-amlogic@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org
-Subject: [PATCH v4 0/4] Use devm helpers for regulator get and enable
-Message-ID: <cover.1666357434.git.mazziesaccount@gmail.com>
+Subject: [PATCH v4 1/4] gpu: drm: meson: Use devm_regulator_*get_enable*()
+Message-ID: <c14058c4b7018556a78455ffef484a7ebe4d8ea2.1666357434.git.mazziesaccount@gmail.com>
+References: <cover.1666357434.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="uZtN7dB4zT5zFsmG"
+        protocol="application/pgp-signature"; boundary="I73xNqd38oT7/msC"
 Content-Disposition: inline
+In-Reply-To: <cover.1666357434.git.mazziesaccount@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -88,54 +91,80 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---uZtN7dB4zT5zFsmG
+--I73xNqd38oT7/msC
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Simplify couple of drivers by using the new devm_regulator_*get_enable*()
+Simplify using the devm_regulator_get_enable_optional(). Also drop the
+seemingly unused struct member 'hdmi_supply'.
 
-These patches were previously part of the series:
-https://lore.kernel.org/lkml/cover.1660934107.git.mazziesaccount@gmail.com/
-"Devm helpers for regulator get and enable". I did keep the patch series
-versioning even though I changed the series name (subject of this mail)
-to "Use devm helpers for regulator get and enable". Name was changed
-because the devm helpers are already in 6.1-rc1.
-
-Also, most of the patches in the series are already merged to subsystem
-trees so this series now contains only the patches that have not yet
-been merged. I hope they can be now directly taken sirectly into
-respective subsystem trees as the dependencies should be in v6.1-rc1.
-
-Please note that these changes are only compile-tested as I don't have
-the HW to do proper testing. Thus, reviewing / testing is highly
-appreciated.
-
-Revision history:
-
-v3 =3D> v4:
-	- Drop applied patches
-	- rewrite cover-letter
-	- rebase on v6.1-rc1
-	- split meson and sii902x into own patches as requested.
-	- slightly modify dev_err_probe() return in sii902x.
+Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
 
 ---
+v3 =3D> v4:
+- split meson part to own patch
 
-Matti Vaittinen (4):
-  gpu: drm: meson: Use devm_regulator_*get_enable*()
-  gpu: drm: sii902x: Use devm_regulator_bulk_get_enable()
-  hwmon: lm90: simplify using devm_regulator_get_enable()
-  hwmon: adm1177: simplify using devm_regulator_get_enable()
+RFCv1 =3D> v2:
+- Change also sii902x to use devm_regulator_bulk_get_enable()
 
- drivers/gpu/drm/bridge/sii902x.c      | 26 ++++----------------------
+Please note - this is only compile-tested due to the lack of HW. Careful
+review and testing is _highly_ appreciated.
+---
  drivers/gpu/drm/meson/meson_dw_hdmi.c | 23 +++--------------------
- drivers/hwmon/adm1177.c               | 27 +++------------------------
- drivers/hwmon/lm90.c                  | 20 ++------------------
- 4 files changed, 12 insertions(+), 84 deletions(-)
+ 1 file changed, 3 insertions(+), 20 deletions(-)
 
-
-base-commit: 9abf2313adc1ca1b6180c508c25f22f9395cc780
+diff --git a/drivers/gpu/drm/meson/meson_dw_hdmi.c b/drivers/gpu/drm/meson/=
+meson_dw_hdmi.c
+index 5cd2b2ebbbd3..7642f740272b 100644
+--- a/drivers/gpu/drm/meson/meson_dw_hdmi.c
++++ b/drivers/gpu/drm/meson/meson_dw_hdmi.c
+@@ -140,7 +140,6 @@ struct meson_dw_hdmi {
+ 	struct reset_control *hdmitx_apb;
+ 	struct reset_control *hdmitx_ctrl;
+ 	struct reset_control *hdmitx_phy;
+-	struct regulator *hdmi_supply;
+ 	u32 irq_stat;
+ 	struct dw_hdmi *hdmi;
+ 	struct drm_bridge *bridge;
+@@ -665,11 +664,6 @@ static void meson_dw_hdmi_init(struct meson_dw_hdmi *m=
+eson_dw_hdmi)
+=20
+ }
+=20
+-static void meson_disable_regulator(void *data)
+-{
+-	regulator_disable(data);
+-}
+-
+ static void meson_disable_clk(void *data)
+ {
+ 	clk_disable_unprepare(data);
+@@ -723,20 +717,9 @@ static int meson_dw_hdmi_bind(struct device *dev, stru=
+ct device *master,
+ 	meson_dw_hdmi->data =3D match;
+ 	dw_plat_data =3D &meson_dw_hdmi->dw_plat_data;
+=20
+-	meson_dw_hdmi->hdmi_supply =3D devm_regulator_get_optional(dev, "hdmi");
+-	if (IS_ERR(meson_dw_hdmi->hdmi_supply)) {
+-		if (PTR_ERR(meson_dw_hdmi->hdmi_supply) =3D=3D -EPROBE_DEFER)
+-			return -EPROBE_DEFER;
+-		meson_dw_hdmi->hdmi_supply =3D NULL;
+-	} else {
+-		ret =3D regulator_enable(meson_dw_hdmi->hdmi_supply);
+-		if (ret)
+-			return ret;
+-		ret =3D devm_add_action_or_reset(dev, meson_disable_regulator,
+-					       meson_dw_hdmi->hdmi_supply);
+-		if (ret)
+-			return ret;
+-	}
++	ret =3D devm_regulator_get_enable_optional(dev, "hdmi");
++	if (ret !=3D -ENODEV)
++		return ret;
+=20
+ 	meson_dw_hdmi->hdmitx_apb =3D devm_reset_control_get_exclusive(dev,
+ 						"hdmitx_apb");
 --=20
 2.37.3
 
@@ -152,19 +181,19 @@ Simon says - in Latin please.
 ~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
 Thanks to Simon Glass for the translation =3D]=20
 
---uZtN7dB4zT5zFsmG
+--I73xNqd38oT7/msC
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmNSm+wACgkQeFA3/03a
-ocUk8wf9GPfjBtyvD9zhemcPtbAvMi1mDRXVTeferJLMfZOaxAHzotYu/L1BsSmr
-tHKDT7ApHkeVbmnnc9jzIb1g71n9qBPkNWj5fsXkYMLrwv8ngU9OVZjKSXj2du+n
-hpc3j+0OLO4v8KYQN7wcHo4vyINm/3xXwoiKDAm43IWja45PBti+r8V3WvtiVf1h
-GWPmS0ZiU2imPdmNSnOxVjh+1EtNDMQlFDu/Fv1dU2MYuLZAM6bkJfRs9gYmu1w9
-RvKW1HEEk2moacyue7LVlseaa2Y38togIUAYEy5Hz/h+MqZPEuE1KirPlrW7/6wP
-TVYakMaJuld2nhQS8hIce5Tuds4jsg==
-=wmbp
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmNSnAkACgkQeFA3/03a
+ocVRkQgAmAp5C+Mg1nONvKcJHcITidnpA5Ktq6dm9OB4A11/VOy5Y8vZKLKVXldv
+ejqrFYrMUa//jhZlfwE1dFQbnKn+XXFd06QurEX/mGMBncGU6+i97cXjCF6EYPEH
+H75CW6UyXgbz0rJ2tZ/OZCcwYDG9eqHbpgaFY1EGeznu7QkGwV+M4pREhesDo+nm
+mXIsmGEztzGu2TMM+TI8mrWodczDnF66iTQRHDQy0t12jnrrCB3uemE4wjpyZCJP
+ftoZuJbu0T4lhagXnftz1H7ymW7/qFeCxr85CCCHndF19IUBs3YuWXaRQ1YoaKkJ
+olB+Ubu0zJfGizSC/oJqDwtKUthyeA==
+=ECH6
 -----END PGP SIGNATURE-----
 
---uZtN7dB4zT5zFsmG--
+--I73xNqd38oT7/msC--
