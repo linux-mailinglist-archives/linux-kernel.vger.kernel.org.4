@@ -2,123 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7CC36073EA
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 11:22:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 308146073EC
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 11:23:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229497AbiJUJW3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 05:22:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34040 "EHLO
+        id S229922AbiJUJXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 05:23:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231219AbiJUJWN (ORCPT
+        with ESMTP id S229556AbiJUJW3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 05:22:13 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 937D7173FD0;
-        Fri, 21 Oct 2022 02:22:04 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id z97so3464904ede.8;
-        Fri, 21 Oct 2022 02:22:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=WXeFO3tUDl+b4UBpDrafdYBgxDIIGsV6RGnq49HKvNI=;
-        b=hGMYaCIQsODSXmUvaY7dBUd2U2fMUgPvXW4wWk5uDSx1XjF78IynDgvKXOhCLulFBl
-         8hXFr2eXM1Zx4OJNqXEkXVYSIhHAizQoeTh/jpsyv8RR4l3NzW63pGBrf42ZXbULdxTu
-         S2O5YjTt49V8LazCHhtJvkJ2zVYI45/rFtbvbosZCKi27vi/GX0txr2FgCVjp6FC8uyI
-         49MAsnenU1EKvKMcWv8IWfGIpCmXyObx+JdGzZ/7r8V8ZcTknvDVkzPpdCtH/VyqnZHU
-         brE0r+V8+EcugxdCWjm5DOpRW45lXk9obU7MuHjbnGPc2BbpjVtF+Dpd3x+t23gdR/KN
-         8PmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WXeFO3tUDl+b4UBpDrafdYBgxDIIGsV6RGnq49HKvNI=;
-        b=7kuy4KtMIdplCwgcv77nWGdTZvh6b1Y1ZJrpiHTK8vysOv+C/qXkN62fMn7ZHFSiH7
-         TXSc9Ek06MvSbXnnEuADQ29rs13lSqfmgj1eTZmyZrJvNrJnwIhSetqBCIfD6MPLGl/9
-         q4JQ16d0X7wYQ/D7z4avMmR1SUX/vgZV2eaixmmVGqApFV7TNJUN64wSNxlpSdZ+N95O
-         j2W3KtMnC+S6G31J9Slvz4TjHlRGGa906F86dropXDyNOR5zIvNIHMsvfxu4vMB2o2Bb
-         haUGsHdIfxHCHDDDKnK2d03Xrq7XEFjtgGuuQtT9wVCn0Ngguq69flP6nsvVpxgc5K8K
-         sgUw==
-X-Gm-Message-State: ACrzQf3hTlFjLRlPviglReGW5VsHcBh3xA/+7K5rcfkcxKW4i4FEOVyu
-        GpBZ52V5Jp4/4wP9zvw7XzE=
-X-Google-Smtp-Source: AMsMyM6kVJkpq4aVxDJwEu5TH4lJhVBGtKdR/DRP6PPqVKrAR+U8WqfRUdPGImQBGmUZTH1RlEwYeg==
-X-Received: by 2002:a05:6402:f18:b0:460:cf08:2b41 with SMTP id i24-20020a0564020f1800b00460cf082b41mr6034825eda.400.1666344122646;
-        Fri, 21 Oct 2022 02:22:02 -0700 (PDT)
-Received: from eldamar.lan (c-82-192-242-114.customer.ggaweb.ch. [82.192.242.114])
-        by smtp.gmail.com with ESMTPSA id nb36-20020a1709071ca400b00780f24b797dsm11445031ejc.108.2022.10.21.02.22.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Oct 2022 02:22:01 -0700 (PDT)
-Sender: Salvatore Bonaccorso <salvatore.bonaccorso@gmail.com>
-Received: by eldamar.lan (Postfix, from userid 1000)
-        id 97626BE2DE0; Fri, 21 Oct 2022 11:22:00 +0200 (CEST)
-Date:   Fri, 21 Oct 2022 11:22:00 +0200
-From:   Salvatore Bonaccorso <carnil@debian.org>
-To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        sathya.prakash@broadcom.com, sreekanth.reddy@broadcom.com,
-        suganath-prabu.subramani@broadcom.com,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        MPT-FusionLinux.pdl@broadcom.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xen-devel@lists.xenproject.org, adi@kriegisch.at
-Subject: Report in downstream Debian: mpt3sas broken with xen dom0 with
- update to 5.10.149 in 5.10.y.
-Message-ID: <Y1JkuKTjVYrOWbvm@eldamar.lan>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Fri, 21 Oct 2022 05:22:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2780825476D
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 02:22:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F2BEC61E22
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:22:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55CB4C433C1;
+        Fri, 21 Oct 2022 09:22:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666344137;
+        bh=7Snnzq6qW0cGEzNnTTyczHtO+YmOZjSZPvOC7Gw8gVk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Ml2lZv+tqpo6DTdZJ8C61D1cDcCDi+WPNpUVkBsuwCQyBpZtWAjEZhCs4zckoyprL
+         Xm1EWr5fILo5Y3NqlTPngi4DoOivJpGEzhGspuiO/CWa53mblQ5gnKczl5raq/sfmf
+         IZjXw9lMGfSZAwlNTDD91JJMyoHCgOcuc1cm9U7ZWfwYfAO0d5P1VSi1L5qtqwWmz8
+         jnv/ZupMXQyZE0sHYybI4pIyzMSu3zmsLH1Zw2g6cR00uSQE8X/Sz1tbWOYyrndHhb
+         FeXnLoMGrnKwH1bTi1GcqJiBB3Qr0IkbKLz5m9K639dKpbfUtolX9YT/OgU159RWfg
+         lT3r/Zo78SknA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oloEI-000TC4-W5;
+        Fri, 21 Oct 2022 10:22:15 +0100
+Date:   Fri, 21 Oct 2022 10:22:14 +0100
+Message-ID: <861qr1fs55.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Firas Ashkar <firas.ashkar@savoirfairelinux.com>
+Cc:     alex@digriz.org.uk, tglx@linutronix.de,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2] irqchip: add TS7800v1 fpga based controller driver
+In-Reply-To: <20221020141351.14829-1-firas.ashkar@savoirfairelinux.com>
+References: <20221020141351.14829-1-firas.ashkar@savoirfairelinux.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: firas.ashkar@savoirfairelinux.com, alex@digriz.org.uk, tglx@linutronix.de, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, 20 Oct 2022 15:13:51 +0100,
+Firas Ashkar <firas.ashkar@savoirfairelinux.com> wrote:
+> 
+> 1. add TS-7800v1 fpga based irq controller driver, and
+> 2. add related memory and irq resources
+> 
+> By default only mapped FPGA interrupts will be chained/multiplexed, these
+> chained interrupts will then be available to other device drivers to
+> request via the corresponding Linux IRQs.
+> 
+> $ cat /proc/cpuinfo
+> processor	: 0
+> model name	: Feroceon rev 0 (v5l)
+> BogoMIPS	: 333.33
+> Features	: swp half thumb fastmult edsp
+> CPU implementer	: 0x41
+> CPU architecture: 5TEJ
+> CPU variant	: 0x0
+> CPU part	: 0x926
+> CPU revision	: 0
+> 
+> Hardware	: Technologic Systems TS-78xx SBC
+> Revision	: 0000
+> Serial		: 0000000000000000
+> $
+> 
+> $ cat /proc/interrupts
+>            CPU0
+>   1:        902  orion_irq     Level     orion_tick
+>   4:        795  orion_irq     Level     ttyS0
+>  13:          0  orion_irq     Level     ehci_hcd:usb2
+>  18:          0  orion_irq     Level     ehci_hcd:usb1
+>  22:         69  orion_irq     Level     eth0
+>  23:        171  orion_irq     Level     orion-mdio
+>  29:          0  orion_irq     Level     mv_crypto
+>  31:          2  orion_irq     Level     mv_xor.0
+>  65:          1  ts7800-irqc   0 Edge      ts-dmac-cpupci
+> Err:          0
+> $
+> 
+> $ uname -a
+> Linux ts-7800 6.1.0-rc1 #2 PREEMPT Mon Oct 17 11:19:12 EDT 2022 armv5tel
+>  GNU/Linux
+> $
+> 
+> Signed-off-by: Firas Ashkar <firas.ashkar@savoirfairelinux.com>
+> ---
+> 
+> Notes:
+>     Changes in V2
+>     * limit the commit message
 
-We got the following report in Debian after an update from 5.10.140 to
-the current 5.10.149. Full quoting below (from
-https://bugs.debian.org/1022126). Does this ring some bell about known
-regressions?
-On Thu, Oct 20, 2022 at 05:21:03PM +0200, Adi Kriegisch wrote:
-> Package: linux-image-5.10.0-19-amd64
-> Version: 5.10.149-1
-> Severity: important
-> 
-> Dear maintainers,
-> 
-> with the upgrade to the latest bullseye kernel (5.10.149-1), our xen setup
-> is unbootable due to swiotlb buffer errors:
->   | sd 0:0:0:0: scsi_dma_map failed: request for 401408 bytes!
-> and
->   | mpt3sas 0000:01:00.0: swiotlb buffer is full (sz: 401408 bytes),
->   |     total 32768 (slots), used 0 (slots)
-> (the byte sizes vary between boots).
-> 
-> After reading bug #850425[1], we also tried to force 32bit mode in the
-> mpt3sas driver by specifying a dom0 memory below 4G; this lets the machine
-> boot, but almost immediately after that fails with the same error. Notable
-> difference is that the used slots are 128.
-> 
-> Xen commandline:
->   dom0_mem=4096M,max:4096M dom0_max_vcpus=4 dom0_vcpus_pin
->   ucode=scan xpti=dom0=false,domu=true gnttab_max_frames=128
-> 
-> Using dom0-iommu=map-inclusive in some combinations with swiotlb on the
-> kernel commandline gives us some used slots (way below 128) in the error
-> message even in 64bit dma mode in the mpt3sas driver.
-> 
-> The kernel works when booted without xen. We'd be more than happy to get
-> pointers on how to fix that issue or patches to test!
-> 
-> Thanks for your help!
-> 
-> -- Adi
-> 
-> [1] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=850425
+Well, there is still a lot of work to do. Most of this commit message
+could be reduced to a single paragraph:
 
-Regards,
-Salvatore
+"Add support for FooBar IRQ controller usually found on Zorglub
+platform."
+
+The rest is plain obvious.
+
+>     * format comments in source code
+>     * use raw spin locks to protect mask/unmask ops
+>     * use 'handle_edge_irq' and 'irq_ack' logic
+>     * remove 'irq_domain_xlate_onecell'
+>     * remove unnecessary status flags
+>     * use 'builtin_platform_driver' helper routine
+> 
+> :100644 100644 2f4fe3ca5c1a ed8378893208 M	arch/arm/mach-orion5x/ts78xx-fpga.h
+> :100644 100644 af810e7ccd79 d319a68b7160 M	arch/arm/mach-orion5x/ts78xx-setup.c
+> :100644 100644 7ef9f5e696d3 d184fb435c5d M	drivers/irqchip/Kconfig
+> :100644 100644 87b49a10962c b022eece2042 M	drivers/irqchip/Makefile
+> :000000 100644 000000000000 e975607fa4d5 A	drivers/irqchip/irq-ts7800.c
+>  arch/arm/mach-orion5x/ts78xx-fpga.h  |   1 +
+>  arch/arm/mach-orion5x/ts78xx-setup.c |  55 +++++
+>  drivers/irqchip/Kconfig              |  12 +
+>  drivers/irqchip/Makefile             |   1 +
+>  drivers/irqchip/irq-ts7800.c         | 347 +++++++++++++++++++++++++++
+>  5 files changed, 416 insertions(+)
+> 
+> diff --git a/arch/arm/mach-orion5x/ts78xx-fpga.h b/arch/arm/mach-orion5x/ts78xx-fpga.h
+> index 2f4fe3ca5c1a..ed8378893208 100644
+> --- a/arch/arm/mach-orion5x/ts78xx-fpga.h
+> +++ b/arch/arm/mach-orion5x/ts78xx-fpga.h
+> @@ -32,6 +32,7 @@ struct fpga_devices {
+>  	struct fpga_device	ts_rtc;
+>  	struct fpga_device	ts_nand;
+>  	struct fpga_device	ts_rng;
+> +	struct fpga_device	ts_irqc;
+>  };
+>  
+>  struct ts78xx_fpga_data {
+> diff --git a/arch/arm/mach-orion5x/ts78xx-setup.c b/arch/arm/mach-orion5x/ts78xx-setup.c
+> index af810e7ccd79..d319a68b7160 100644
+> --- a/arch/arm/mach-orion5x/ts78xx-setup.c
+> +++ b/arch/arm/mach-orion5x/ts78xx-setup.c
+> @@ -322,6 +322,49 @@ static void ts78xx_ts_rng_unload(void)
+>  	platform_device_del(&ts78xx_ts_rng_device);
+>  }
+>  
+> +/*****************************************************************************
+> + * fpga irq controller
+> + ****************************************************************************/
+
+[...]
+
+Sorry, but I have to ask: what part of "we're not taking any
+additional non-DT changes to these obsolete setups" did I fail to
+accurately communicate?
+
+Until this board is entirely converted to DT, I'm not taking any
+irqchip changes other than the most obvious bug fixes.
+
+[...]
+
+> +static void ts7800_irq_mask(struct irq_data *d)
+> +{
+> +	struct ts7800_irq_data *data = irq_data_get_irq_chip_data(d);
+> +	u32 fpga_mask_reg = readl(data->base + IRQ_MASK_REG);
+> +	u32 mask_bits = 1 << d->hwirq;
+> +	unsigned long flags;
+> +
+> +	raw_spin_lock_irqsave(&data->lock, flags);
+> +	writel(fpga_mask_reg & ~mask_bits, data->base + IRQ_MASK_REG);
+> +	writel(fpga_mask_reg & ~mask_bits, data->bridge + IRQ_MASK_REG);
+> +	raw_spin_unlock_irqrestore(&data->lock, flags);
+
+OMFG. What do you expect this protects? Same question applies to all
+the instances where you take this pointless lock.
+
+[...]
+
+> +static void ts7800_ic_chained_handle_irq(struct irq_desc *desc)
+> +{
+> +	struct ts7800_irq_data *data = irq_desc_get_handler_data(desc);
+> +	struct irq_chip *chip = irq_desc_get_chip(desc);
+> +	u32 mask_bits = readl(data->base + IRQ_MASK_REG);
+> +	u32 status = readl(data->bridge);
+> +
+> +	chained_irq_enter(chip, desc);
+> +
+> +	if (unlikely(status == 0)) {
+> +		handle_bad_irq(desc);
+> +		goto out;
+> +	}
+> +
+> +	do {
+> +		unsigned int bit = __ffs(status);
+> +		int irq = irq_find_mapping(data->domain, bit);
+> +
+> +		if (irq && (mask_bits & BIT(bit)))
+> +			generic_handle_irq(irq);
+
+Again, this is not appropriate. I've pointed you to the right API in
+my previous review of this patch.
+
+[...]
+
+> +static struct platform_driver ts7800_ic_driver = {
+> +	.probe  = ts7800_ic_probe,
+> +	.remove = ts7800_ic_remove,
+> +	.id_table	= ts7800v1_ic_ids,
+> +	.driver = {
+> +		.name = DRIVER_NAME,
+> +		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
+> +	},
+> +};
+> +builtin_platform_driver(ts7800_ic_driver);
+
+Again, this isn't appropriate either, and I pointed it out last
+time. We have specific helpers for irqchip, and using them isn't
+optional. But of course, you'll need to move to DT for that.
+
+Anyway, this is the last time I review this patch until you convert
+the corresponding platform to DT.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
