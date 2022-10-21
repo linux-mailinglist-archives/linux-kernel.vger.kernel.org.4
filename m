@@ -2,181 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25FBD6074BE
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 12:13:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23F006074C7
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 12:14:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230455AbiJUKNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 06:13:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56380 "EHLO
+        id S230117AbiJUKOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 06:14:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230398AbiJUKNG (ORCPT
+        with ESMTP id S230452AbiJUKNm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 06:13:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F9F924CCB7
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 03:12:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666347164;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=F2jxpEehZg91tvyIg0dyRa8PzGRQ+ddZdBpCZCuDxx0=;
-        b=VYTq5ysQ9mtvp3sVWLrSZeBzOHa8Pv6ez/2Ci7EBnSTWyLo58ymtaZOF8BeIwuWtStx84y
-        RhW0npNkREO6l1RhcW9zv9jl2d0OXfxJQ2QtAjAXebmbHVx4+wmcyf1BBFQ2zb/6HSPsGh
-        DXEK5fDxsOBudwFLUKGB/DTbiJeUPHI=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-91-tMySy2NHMr6eu_lQNLJ3Qw-1; Fri, 21 Oct 2022 06:12:40 -0400
-X-MC-Unique: tMySy2NHMr6eu_lQNLJ3Qw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 319E83C0F240;
-        Fri, 21 Oct 2022 10:12:40 +0000 (UTC)
-Received: from t480s.fritz.box (unknown [10.39.193.99])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5F9BF40E80E4;
-        Fri, 21 Oct 2022 10:12:38 +0000 (UTC)
-From:   David Hildenbrand <david@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, David Hildenbrand <david@redhat.com>,
+        Fri, 21 Oct 2022 06:13:42 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 726F77AB08;
+        Fri, 21 Oct 2022 03:13:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ooz5VtSjs4RZMmj3qfhcsaEMXb528lP3FjIYWM1xcMc=; b=u2LjmYm+CRL3dWou+qpwpdagKS
+        7NsqLW5RzyDxZQyFIWn5lZcJ+RhPvoFMW8jTUvgSIL18F1n4WxqbWWvp2tsflWlAx/H0Ush/f1qAq
+        PjSG89JWlJvjit26gWit1CwruYOYJHeuihgxguw47Kt6gYxizytite+2CcXk6A47D5pkj9Cd5jtHm
+        CpZjFVFzxsnvFd70EfvcRF4DjSYuE5p07TXfLy9KGVlqJ9rS7Jgzl6Ffhet9t6VH67MfrJcUgSRym
+        c0X2/lxVehA3xDRMaC+cV1Z/fYO7X5u5pXq4EQ1eqNK0fqHrYsMvEM9J2zNXYFicFCLcIRZhoLNe+
+        EoJOch+A==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1olp11-00D3h4-2X; Fri, 21 Oct 2022 10:12:35 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A5EDF300155;
+        Fri, 21 Oct 2022 12:12:27 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 8DB9E209A1C9E; Fri, 21 Oct 2022 12:12:27 +0200 (CEST)
+Date:   Fri, 21 Oct 2022 12:12:27 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     the arch/x86 maintainers <x86@kernel.org>,
+        Yu Zhao <yuzhao@google.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Hugh Dickins <hughd@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>, Peter Xu <peterx@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH v2 9/9] mm/gup: remove FOLL_MIGRATION
-Date:   Fri, 21 Oct 2022 12:11:41 +0200
-Message-Id: <20221021101141.84170-10-david@redhat.com>
-In-Reply-To: <20221021101141.84170-1-david@redhat.com>
-References: <20221021101141.84170-1-david@redhat.com>
+        Andi Kleen <ak@linux.intel.com>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        page-reclaim@google.com, Brian Geffon <bgeffon@google.com>,
+        Jan Alexander Steffens <heftig@archlinux.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Steven Barrett <steven@liquorix.net>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Daniel Byrne <djbyrne@mtu.edu>,
+        Donald Carr <d@chaos-reins.com>,
+        Holger =?iso-8859-1?Q?Hoffst=E4tte?= 
+        <holger@applied-asynchrony.com>,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
+        Shuang Zhai <szhai2@cs.rochester.edu>,
+        Sofia Trinh <sofia.trinh@edi.works>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>
+Subject: Re: [PATCH v14 08/14] mm: multi-gen LRU: support page table walks
+Message-ID: <Y1Jwi9xS8ZCdbIUY@hirez.programming.kicks-ass.net>
+References: <20220815071332.627393-1-yuzhao@google.com>
+ <20220815071332.627393-9-yuzhao@google.com>
+ <Y0go8wWtdcyH1+Ch@hirez.programming.kicks-ass.net>
+ <CAOUHufa9+FTO3Pv-5jC-e3S5goPsUGu-5KcPVHa4bWb0X+d2ug@mail.gmail.com>
+ <CAHk-=wj1rc2t5noMtVOgu8XXeTM4KiggEub9PdcexxeQrYPZvA@mail.gmail.com>
+ <Y1FXpHdyvXjrjbLw@hirez.programming.kicks-ass.net>
+ <CAHk-=whQchubuDpRGFabhmcZuzdt13OOF8wznXb+Dbi3GzBQhQ@mail.gmail.com>
+ <Y1GZjPO+szk7X0wP@hirez.programming.kicks-ass.net>
+ <CAHk-=wikUaRM5H_y1Bc+QyvGi40dKDL8fnCTyz7ECbwK7aHNPQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wikUaRM5H_y1Bc+QyvGi40dKDL8fnCTyz7ECbwK7aHNPQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fortunately, the last user (KSM) is gone, so let's just remove this
-rather special code from generic GUP handling -- especially because KSM
-never required the PMD handling as KSM only deals with individual base
-pages.
+On Thu, Oct 20, 2022 at 07:10:46PM -0700, Linus Torvalds wrote:
 
-Signed-off-by: David Hildenbrand <david@redhat.com>
----
- include/linux/mm.h |  1 -
- mm/gup.c           | 55 +++++-----------------------------------------
- 2 files changed, 5 insertions(+), 51 deletions(-)
+> Maybe we should just bite the bullet, and say that we only support
+> x86-32 with 'cmpxchg8b' (ie Pentium and later).
+> 
+> Get rid of all the "emulate 64-bit atomics with cli/sti, knowing that
+> nobody has SMP on those CPU's anyway", and implement a generic x86-32
+> xchg() setup using that try_cmpxchg64 loop.
+> 
+> I think most (all?) distros already enable X86_PAE anyway, which makes
+> that X86_CMPXCHG64 be part of the base requirement.
+> 
+> Not that I'm convinced most distros even do 32-bit development anyway
+> these days.
+> 
+> (Of course, if we require X86_CMPXCHG64, we'll also hit some of the
+> odd clone CPU's that actually *do* support the instruction, but do not
+> report it in cpuid due to an odd old Windows NT bug. IOW, things like
+> the Cyrix and Transmeta CPU's did support the instruction, but had the
+> CX8 bit clear because otherwise NT wouldn't boot. We may or may not
+> get those cases right, but I doubt anybody really has any of those old
+> CPUs).
+> 
+> We got rid of i386 support back in 2012. Maybe it's time to get rid of
+> i486 support in 2022?
+> 
+> That way we could finally get rid of CONFIG_MATH_EMULATION too.
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 8bbcccbc5565..a63415ac9dc2 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -2950,7 +2950,6 @@ struct page *follow_page(struct vm_area_struct *vma, unsigned long address,
- 				 * and return without waiting upon it */
- #define FOLL_NOFAULT	0x80	/* do not fault in pages */
- #define FOLL_HWPOISON	0x100	/* check page is hwpoisoned */
--#define FOLL_MIGRATION	0x400	/* wait for page to replace migration entry */
- #define FOLL_TRIED	0x800	/* a retry, previous pass started an IO */
- #define FOLL_REMOTE	0x2000	/* we are working on non-current tsk/mm */
- #define FOLL_ANON	0x8000	/* don't do file mappings */
-diff --git a/mm/gup.c b/mm/gup.c
-index fe195d47de74..bcb46e9d496e 100644
---- a/mm/gup.c
-+++ b/mm/gup.c
-@@ -549,30 +549,13 @@ static struct page *follow_page_pte(struct vm_area_struct *vma,
- 		return no_page_table(vma, flags);
- 	}
- 
--retry:
- 	if (unlikely(pmd_bad(*pmd)))
- 		return no_page_table(vma, flags);
- 
- 	ptep = pte_offset_map_lock(mm, pmd, address, &ptl);
- 	pte = *ptep;
--	if (!pte_present(pte)) {
--		swp_entry_t entry;
--		/*
--		 * KSM's break_ksm() relies upon recognizing a ksm page
--		 * even while it is being migrated, so for that case we
--		 * need migration_entry_wait().
--		 */
--		if (likely(!(flags & FOLL_MIGRATION)))
--			goto no_page;
--		if (pte_none(pte))
--			goto no_page;
--		entry = pte_to_swp_entry(pte);
--		if (!is_migration_entry(entry))
--			goto no_page;
--		pte_unmap_unlock(ptep, ptl);
--		migration_entry_wait(mm, pmd, address);
--		goto retry;
--	}
-+	if (!pte_present(pte))
-+		goto no_page;
- 	if (pte_protnone(pte) && !gup_can_follow_protnone(flags))
- 		goto no_page;
- 
-@@ -694,28 +677,8 @@ static struct page *follow_pmd_mask(struct vm_area_struct *vma,
- 			return page;
- 		return no_page_table(vma, flags);
- 	}
--retry:
--	if (!pmd_present(pmdval)) {
--		/*
--		 * Should never reach here, if thp migration is not supported;
--		 * Otherwise, it must be a thp migration entry.
--		 */
--		VM_BUG_ON(!thp_migration_supported() ||
--				  !is_pmd_migration_entry(pmdval));
--
--		if (likely(!(flags & FOLL_MIGRATION)))
--			return no_page_table(vma, flags);
--
--		pmd_migration_entry_wait(mm, pmd);
--		pmdval = READ_ONCE(*pmd);
--		/*
--		 * MADV_DONTNEED may convert the pmd to null because
--		 * mmap_lock is held in read mode
--		 */
--		if (pmd_none(pmdval))
--			return no_page_table(vma, flags);
--		goto retry;
--	}
-+	if (!pmd_present(pmdval))
-+		return no_page_table(vma, flags);
- 	if (pmd_devmap(pmdval)) {
- 		ptl = pmd_lock(mm, pmd);
- 		page = follow_devmap_pmd(vma, address, pmd, flags, &ctx->pgmap);
-@@ -729,18 +692,10 @@ static struct page *follow_pmd_mask(struct vm_area_struct *vma,
- 	if (pmd_protnone(pmdval) && !gup_can_follow_protnone(flags))
- 		return no_page_table(vma, flags);
- 
--retry_locked:
- 	ptl = pmd_lock(mm, pmd);
--	if (unlikely(pmd_none(*pmd))) {
--		spin_unlock(ptl);
--		return no_page_table(vma, flags);
--	}
- 	if (unlikely(!pmd_present(*pmd))) {
- 		spin_unlock(ptl);
--		if (likely(!(flags & FOLL_MIGRATION)))
--			return no_page_table(vma, flags);
--		pmd_migration_entry_wait(mm, pmd);
--		goto retry_locked;
-+		return no_page_table(vma, flags);
- 	}
- 	if (unlikely(!pmd_trans_huge(*pmd))) {
- 		spin_unlock(ptl);
--- 
-2.37.3
-
+Would love that; but as pointed out, there's still a few stragglers out
+there. OTOH, they *could* use one of the LTS kernels.
