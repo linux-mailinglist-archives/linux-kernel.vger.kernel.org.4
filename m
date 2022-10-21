@@ -2,94 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AF4C607846
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 15:22:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 266F1607848
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 15:23:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbiJUNWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 09:22:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41452 "EHLO
+        id S230442AbiJUNW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 09:22:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229839AbiJUNWU (ORCPT
+        with ESMTP id S229839AbiJUNW4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 09:22:20 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CD342475DA
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 06:22:19 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 1B17C219C9;
-        Fri, 21 Oct 2022 13:22:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1666358538; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1VumRopmkMGi42CeTbKazupolMyzZhURL00ZfaW4xkE=;
-        b=gdVZ4fSvrckrlGvFlTSb40MpTj1ZsqvTB7WK7LgbNOk+VtT8zH0CiWHKKRfqD+Tclsv4xI
-        0mEmRZ+ChIZ5Pf66NbeD2oaws4fTZkCO4EnKliGVzXJrofHQZ2xuUYdxuikY3XaH2JhyLq
-        GrpRfBiRz1oFHrjEoTuYOhMVYh3Jd+o=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id BEB062C141;
-        Fri, 21 Oct 2022 13:22:17 +0000 (UTC)
-Date:   Fri, 21 Oct 2022 15:22:17 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Shile Zhang <shile.zhang@linux.alibaba.com>,
-        Xianting Tian <xianting.tian@linux.alibaba.com>,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH printk v2 10/38] tty: hvc: use console_is_enabled()
-Message-ID: <Y1KdCes7Ag6wJ3DE@alley>
-References: <20221019145600.1282823-1-john.ogness@linutronix.de>
- <20221019145600.1282823-11-john.ogness@linutronix.de>
+        Fri, 21 Oct 2022 09:22:56 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 379432527E8
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 06:22:55 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id b12so5778935edd.6
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 06:22:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=aTHKaZCiit3Ul01YDGFtP12Qx3iKFThlFmh66angHUc=;
+        b=fiKApkDmp6tyrlKol5Kb4NK0cPmQ+F4mux4TjM51jKFVSqtU6Qcoizqk9zF9Af4k2Z
+         AKGDRbIELDjq/0ek3b+/CKd+oxjLLIYsqPBU10Uok+k5CHQBv7lsiYRdZDgD1bRcUIaP
+         UC9VBncfA7Mi+4PPHP+68gNwVaxFA0p57NuGRrG/4R3Wdb2PSpqrFJxiRMIUBQDUJBdW
+         TsTG7SLdkLaoyy5P2famgp01xlnUgT7yVEYfVjcheym6Jl6U6GUU/ruy27ZPy6b328qV
+         I9ixf1Q9xGAVdSAAJqyExDRc4TNobtnPbGnlmNp/QxAFiaffbdG06X3xPF0wPavtg7lQ
+         TsHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aTHKaZCiit3Ul01YDGFtP12Qx3iKFThlFmh66angHUc=;
+        b=gqXa0yAw2MkJMtGOt3ujDYEJ+8GWSILSsm1cs67MO+b6+8t4nH0fmlBXNtF1q+5lsF
+         8+/gkcKMrXmyC55Brn1xAvysLg8VizgqK9WfIttgpQqLPg3NG1mtB1K8tFx8hXnzZZnx
+         xVBhtlVUn9PdrtRMnbF/hRMBi9fbWfmZjnApWMrBGRUln6Mi1Xkl5WjKjT2CQg/QaBew
+         F61GdkELWm0r5FcdsrSkjSYaaL9NQgpZVTAZsF48X5+10Fy/+9kmFobr+RtMzB6iZSjn
+         BMoRitGRgzXsSxOUveFZ0Wf6l6ZukSpSlHmSb5Z7lluju5J9NXkKWyQdZ0z1aqNJ3uv6
+         MFJA==
+X-Gm-Message-State: ACrzQf0dLf4M5eqnYExcYmO89cy/7VhOxOokMuPfjAG9+G7/4SpfqOe8
+        e2K/POimN/kfE4Tqa/cKj0Iy7EB5kmooow==
+X-Google-Smtp-Source: AMsMyM5syXbdOdYghEOb2IW3LQ96J2f99FQy3tqIx70r6rE6I/rZ/NQEu6JeomSCSuBNsoX5g4Hi0A==
+X-Received: by 2002:a05:6402:28b7:b0:459:3115:aa07 with SMTP id eg55-20020a05640228b700b004593115aa07mr16798195edb.280.1666358573617;
+        Fri, 21 Oct 2022 06:22:53 -0700 (PDT)
+Received: from andrea ([77.89.52.45])
+        by smtp.gmail.com with ESMTPSA id u9-20020a1709061da900b0078e0973d1f5sm10694622ejh.0.2022.10.21.06.22.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Oct 2022 06:22:53 -0700 (PDT)
+Date:   Fri, 21 Oct 2022 15:22:48 +0200
+From:   Andrea Parri <parri.andrea@gmail.com>
+To:     Tong Tiangen <tongtiangen@huawei.com>
+Cc:     Guo Ren <guoren@kernel.org>, Jisheng Zhang <jszhang@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] riscv: fix race when vmap stack overflow
+Message-ID: <Y1KdKATQx16Xl/iL@andrea>
+References: <20221019154727.2395-1-jszhang@kernel.org>
+ <Y1HZFcBo21SQzXVj@andrea>
+ <CAJF2gTRAEX_jQ_w5H05dyafZzHq+P5j05TJ=C+v+OL__GQam4A@mail.gmail.com>
+ <Y1JaE/ot91Z0KXuC@andrea>
+ <ed7c4027-8e15-245f-cdda-0551063761e7@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221019145600.1282823-11-john.ogness@linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ed7c4027-8e15-245f-cdda-0551063761e7@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 2022-10-19 17:01:32, John Ogness wrote:
-> Replace (console->flags & CON_ENABLED) usage with console_is_enabled().
+Hi Tong,
+ 
+> > > I use atomic_set_release here, because I need earlier memory
+> > > operations finished to make sure the sp is ready then set the spin
+> > > flag.
+
+> 	Consider this implementation:)
 > 
-> Signed-off-by: John Ogness <john.ogness@linutronix.de>
-> ---
->  drivers/tty/hvc/hvc_console.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/tty/hvc/hvc_console.c b/drivers/tty/hvc/hvc_console.c
-> index 4802cfaa107f..6d1d7b72488c 100644
-> --- a/drivers/tty/hvc/hvc_console.c
-> +++ b/drivers/tty/hvc/hvc_console.c
-> @@ -265,7 +265,7 @@ static void hvc_port_destruct(struct tty_port *port)
->  static void hvc_check_console(int index)
->  {
->  	/* Already enabled, bail out */
-> -	if (hvc_console.flags & CON_ENABLED)
-> +	if (console_is_enabled(&hvc_console))
->  		return;
+> 	smp_store_mb(&spin_shadow_stack, 0);
 
-The check is not reliable. The console might be disabled even when
-it is already registered.
+smp_store_mb() has "WRITE_ONCE(); smp_mb()" semantics; so it doesn't
+guarantee that the store to spin_shadow_stack is ordered after program
+-order earlier memory accesses.
 
-I would be nice to fix this. But it might be done later.
-Feel free to use:
-
-Reviewed-by: Petr Mladek <pmladek@suse.com>
-
->  
->   	/* If this index is what the user requested, then register
-
-Best Regards,
-Petr
+  Andrea
