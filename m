@@ -2,74 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8864D60790F
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 16:00:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 771AA607917
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 16:01:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231205AbiJUOAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 10:00:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44740 "EHLO
+        id S231154AbiJUOBu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 10:01:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231302AbiJUN7o (ORCPT
+        with ESMTP id S231160AbiJUOBa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 09:59:44 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F2582A412
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 06:59:26 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id l10-20020a056e021aaa00b002ff950bc0deso1525926ilv.19
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 06:59:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BUVxkOrQ0ve+76/9pJtO6CtnkmWrKX6j90T6Mm/+oY0=;
-        b=CDEdVAQc7YfAR1XzT5gxW2Pv+dvejBpPfwtvJaAGsFF+gTC5WoDAdtBV3U4fYygBlR
-         di80HO/iyM30dQJqW1PLuqQ4ifgIJvEux+UFqAG2HhlPILdnPnnBFojzLbKxaol9/IBl
-         eS+cPTLFLK6P+4ooKOWUhXoWKK364vfP6Kt2CrLBjxY+cALZeYsnvL1FMLEkTd/DJgG4
-         vQT8YfkM5XFC+nc2oiaq4t4J8iu6qAA8P8ghZMRxK95yRTj/AkyqBhE8VxAusR3kH9D3
-         dJkHSe36LXopl+BllqE8Ev5BPXeCM8qoz71a8MCMUkmNRQubfcL+VWncOg25L5c2UQ2n
-         ZIeQ==
-X-Gm-Message-State: ACrzQf0M+AxytVfAUffbpqVVzQ1Fo666O8ya9g6SolQLcQK/Pm/JySqG
-        bam+54ArGFNvlyU/qBtRS+4f12tnY9jHS3o9QTpo4Ftc/hN6
-X-Google-Smtp-Source: AMsMyM77pEUVbk4C33OqaQqZSWv7cNteCorjSy/aj/ePscnqTq+1TKCGcdsfZcxZ0BN+V6JOkhqmYcmbJhbQjG/uJ04iVWiJw4WA
+        Fri, 21 Oct 2022 10:01:30 -0400
+X-Greylist: delayed 908 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 21 Oct 2022 07:01:25 PDT
+Received: from vps0.lunn.ch (unknown [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D1A11DEC02;
+        Fri, 21 Oct 2022 07:01:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=vR9tuJLMZg0cMd3jQGnOxd3F/CrROjT+eEFqWGMwYQw=; b=AYNxB7zZPHCxzQl8NpX/bHuNQp
+        4jTepzz/MKMcCl9REv7QPur/g0V2/IqfhFRT1vsvGBGJ4WwV/Tz57Dbws4L+AISxwKrq+Yv5NShQQ
+        z3GeJ5IT5Sgfa3k8MFrSUQY4LeSvsoubXdHpknc9gTwTFYlvOHzDrmM8mtfaLhqmb6LA=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1olsaN-000F41-RP; Fri, 21 Oct 2022 16:01:19 +0200
+Date:   Fri, 21 Oct 2022 16:01:19 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, lxu@maxlinear.com,
+        hkallweit1@gmail.com, pabeni@redhat.com, edumazet@google.com,
+        linux@armlinux.org.uk, UNGLinuxDriver@microchip.com,
+        Ian.Saturley@microchip.com
+Subject: Re: [PATCH net-next] net: phy: mxl-gpy: Add PHY Auto/MDI/MDI-X set
+ driver for GPY211 chips
+Message-ID: <Y1KmL7vTunvbw1/U@lunn.ch>
+References: <20221021100305.6576-1-Raju.Lakkaraju@microchip.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:2e0b:b0:6bc:d134:4791 with SMTP id
- o11-20020a0566022e0b00b006bcd1344791mr14618026iow.45.1666360765409; Fri, 21
- Oct 2022 06:59:25 -0700 (PDT)
-Date:   Fri, 21 Oct 2022 06:59:25 -0700
-In-Reply-To: <20221021133530.1693-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000007d6fff05eb8bd978@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in kernfs_next_descendant_post
- (2)
-From:   syzbot <syzbot+6bc35f3913193fe7f0d3@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, tj@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221021100305.6576-1-Raju.Lakkaraju@microchip.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NEUTRAL,SPF_NEUTRAL,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+> +static void gpy_update_mdix(struct phy_device *phydev)
+> +{
+> +	int ret;
+> +
+> +	ret = phy_read(phydev, PHY_CTL1);
+> +	if (ret < 0) {
+> +		phydev_err(phydev, "Error: MDIO register access failed: %d\n",
+> +			   ret);
+> +		return;
+> +	}
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+> @@ -413,6 +490,8 @@ static void gpy_update_interface(struct phy_device *phydev)
+>  
+>  	if (phydev->speed == SPEED_2500 || phydev->speed == SPEED_1000)
+>  		genphy_read_master_slave(phydev);
+> +
+> +	gpy_update_mdix(phydev);
 
-Reported-and-tested-by: syzbot+6bc35f3913193fe7f0d3@syzkaller.appspotmail.com
+Do you know why gpy_update_interface() is a void function? It is
+called from gpy_read_status() which does return error codes. And it
+seems like gpy_read_status() would benefit from returning -EINVAL, etc.
 
-Tested on:
-
-commit:         aae703b0 Merge tag 'for-6.1-rc1-tag' of git://git.kern..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=16261486880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ea03ca45176080bc
-dashboard link: https://syzkaller.appspot.com/bug?extid=6bc35f3913193fe7f0d3
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1103ce4a880000
-
-Note: testing is done by a robot and is best-effort only.
+      Andrew
