@@ -2,100 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BA00607BF1
-	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 18:17:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFE74607BF9
+	for <lists+linux-kernel@lfdr.de>; Fri, 21 Oct 2022 18:18:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230393AbiJUQRR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 12:17:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50730 "EHLO
+        id S230006AbiJUQSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 12:18:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230196AbiJUQRP (ORCPT
+        with ESMTP id S230206AbiJUQSU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 12:17:15 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C97B121345F
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:17:12 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id f193so2996586pgc.0
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:17:12 -0700 (PDT)
+        Fri, 21 Oct 2022 12:18:20 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0334E249887
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:18:19 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id f9so2758746plb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 09:18:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=google.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=a5HwjrEsbZ06mtwjRmKc4OTOM9VDMQ8gzVbnsFrHZGA=;
-        b=kyBgeRNVpPf/+eXjNWn65VlUrSqNsGqjPFtMYOaqRVFLwdPydK/8yWXIZzuDfhzfU5
-         LC4RwAymTmM9iT1vywnM2HLhDMbzxKM66c/hOsP+f9KVoy0wvICCh7b9Tt0HJKVi7Eos
-         qkZ0AXkOg3UND2knqk7S46zKAxzGzsYdrAMm8=
+        bh=PIRb6+ovxp5J4uJ1hVDeWHpfyBDCzaaTh1iPpdxBBXo=;
+        b=LBbRjb9HoKMsM0BrB5Yx8EKkNw2z2slGB6RREjreEOgAz6cf4w0roEfiOfI1ISkxC3
+         umCpqoYJ+BxiTeH6mDoFf2MIPMRAa8KHajTmAG5q0NIMZtDgJyPYDAp4OEAVmIJyfonP
+         YVdGEHCQT54p0r2x+JlsthZbC8pGVdj+LT/dxHs3Utvt9tNW6l/hE2qLrAwkHAoOVZeH
+         cqWWQ1T7dnKxpoX4VIogeOoRSjB+ibtFx6bQv9mAbDdRyNK9AcGDi4qG7P8xM/rtcTeQ
+         giQByT9/HXaV3sGzuy8Kux9ZJVNncssFk2zzM8JEHArzX1QytiIWnjlmf1c2NjGzQeqm
+         YCQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=a5HwjrEsbZ06mtwjRmKc4OTOM9VDMQ8gzVbnsFrHZGA=;
-        b=IsCf7+r+bkm+Xf9YtFOZWeebuxv+leA5rOcPuXIzcnSeFdrAWo8EjW1hSxFaJ05dWJ
-         18JHyI0jKFKzJI99h/kcsXSmKitQ53D7xPB++ztptP4Yp/M7b6Sz6ZKXacOML04wlhbp
-         dr66U+nmHOgyhNUuwzm5lFGumkwsJA84q9lyHP4BC0Iry6oCnOno+ncj3kUE5nwHeG1r
-         juqf76TZY752/AEhC6xg2Q5j+VJ3pStM1JY5831zUue1m66BFsA5wM2Guv2IGFxes/kH
-         4Sqr1PeUBzRjQ/GRvXJSyq8R6un3WiGC7ozimz5vLS5QyBV+o6s/25JeYxb9q/+kbv7A
-         p2Ow==
-X-Gm-Message-State: ACrzQf1DIG5kOx9gCX89IHfAP8nxA0C3W/6VGw4V/BWqT87QYIGbIoTz
-        j/GKDeAN9K5pix0RUj0/5xC+9Q==
-X-Google-Smtp-Source: AMsMyM64Or+Td8E+kV3nCHTUjyveWm5i1vbiel8OqdocW5woDhFBuqDDrj7pqamKaSO8jyNxwlC9Pw==
-X-Received: by 2002:a05:6a00:be8:b0:56b:2c80:31e0 with SMTP id x40-20020a056a000be800b0056b2c8031e0mr2146538pfu.44.1666369032312;
-        Fri, 21 Oct 2022 09:17:12 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id l1-20020a170902f68100b0017d12d86901sm15260123plg.187.2022.10.21.09.17.11
+        bh=PIRb6+ovxp5J4uJ1hVDeWHpfyBDCzaaTh1iPpdxBBXo=;
+        b=Gw7r/3PvD7Sr1soPKHOxS2D3kb1wZnSaOSoyUyhhIemrd7sYrETd6Cj2Mh/7X3V3cj
+         nHKeRdynHLTwfo5IzHS8OpoKOOzc/GopCrULSO/i/IX23SEKo86GFGbBZOWDG33A7nsI
+         7kCEL7igX6Z7rblIiXiGeH5wawUE5jzgAVItaYFza+Zsn25ZMpqbS9HJJhpsFia1w5JY
+         BVzZNzOtFRY56Ex7SR/5GX+rXDaTjRjsPQmgHj2beJgEvI4U5fl1kMHq75iFEYtNtHjC
+         O29OKKAaCHlD8FCqxTw78/jvIDBS3SwhZBgE04ChMxXeSWN6dLBslX34nxHJ5xLXQxYE
+         1uzw==
+X-Gm-Message-State: ACrzQf3SX1LR50t9AAT8hsQKWGUusIvcUYp+aOEUNv1Yah/vVumg5JKf
+        QUPQkCAuLP7bDKoRSK/GTa2PrA==
+X-Google-Smtp-Source: AMsMyM7vsZ30ExGufg/GPlnIb76AAev1l4p5ZYo9iokYaR6mEcu4bpMFXgiNWD7ik43HxyivyjTj/A==
+X-Received: by 2002:a17:903:50e:b0:182:631b:df6f with SMTP id jn14-20020a170903050e00b00182631bdf6fmr20228449plb.66.1666369098415;
+        Fri, 21 Oct 2022 09:18:18 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id t3-20020a170902b20300b0017f61576dbesm14948739plr.304.2022.10.21.09.18.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Oct 2022 09:17:11 -0700 (PDT)
-Date:   Fri, 21 Oct 2022 09:17:10 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     jinpeng Cui <cuijinpeng666@gmail.com>,
-        Zeal Robot <zealci@zte.com.cn>, alan.maguire@oracle.com,
-        ast@kernel.org, bpf@vger.kernel.org, cui.jinpeng2@zte.com.cn,
-        jolsa@kernel.org, linux-kernel@vger.kernel.org,
-        peterz@infradead.org, stephen.s.brennan@oracle.com
-Subject: Re: [PATCH linux-next] kallsyms: Use strscpy() instead of strlcpy()
-Message-ID: <202210210915.B177280DA8@keescook>
-References: <20221020090547.398680-1-cui.jinpeng2@zte.com.cn>
- <Y1EVnZS9BalesrC1@kroah.com>
- <CANhqVYZ+trZzPdB=Vd9YV53DAJt0p5LZQH-u94+VRrDQ5+w2MA@mail.gmail.com>
- <Y1FCiH16RIetS0hZ@kroah.com>
+        Fri, 21 Oct 2022 09:18:17 -0700 (PDT)
+Date:   Fri, 21 Oct 2022 16:18:14 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     Vishal Annapurve <vannapurve@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
+Subject: Re: [PATCH v8 1/8] mm/memfd: Introduce userspace inaccessible memfd
+Message-ID: <Y1LGRvVaWwHS+Zna@google.com>
+References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
+ <20220915142913.2213336-2-chao.p.peng@linux.intel.com>
+ <CAGtprH_MiCxT2xSxD2UrM4M+ghL0V=XEZzEX4Fo5wQKV4fAL4w@mail.gmail.com>
+ <20221021134711.GA3607894@chaop.bj.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y1FCiH16RIetS0hZ@kroah.com>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20221021134711.GA3607894@chaop.bj.intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 02:43:52PM +0200, Greg KH wrote:
-> > I am very sorry if the patches from zte.com.cn
-> > in the past few months have made you angry,
-> > we have decided to fix the problem you pointed out
-> > as soon as possible.
-> > Our company's mailbox name@zte.com.cn
-> > cannot send emails to the external network,
-> > so we use name@gmail.com to send patches;
+On Fri, Oct 21, 2022, Chao Peng wrote:
+> > 
+> > In the context of userspace inaccessible memfd, what would be a
+> > suggested way to enforce NUMA memory policy for physical memory
+> > allocation? mbind[1] won't work here in absence of virtual address
+> > range.
 > 
-> You all have been warned numerous times over many weeks and months and
-> never responded to our emails.
-> 
-> We have no proof that using gmail accounts is actually coming from a ZTE
-> employee, so until that happens, we can not take your changes (not to
-> mention the basic fact that you all keep ignoring our review comments,
-> which is a good enough reason to ignore them.)
+> How about set_mempolicy():
+> https://www.man7.org/linux/man-pages/man2/set_mempolicy.2.html
 
-Aren't there a few solutions here?
+Andy Lutomirski brought this up in an off-list discussion way back when the whole
+private-fd thing was first being proposed.
 
-1) Just send the emails from @gmail with matching S-o-b.
-2) Send an @zte.com.cn to lkml to confirm their @gmail/@zte.com.cn mapping.
-3) Fix the email systems.
-
--- 
-Kees Cook
+  : The current Linux NUMA APIs (mbind, move_pages) work on virtual addresses.  If
+  : we want to support them for TDX private memory, we either need TDX private
+  : memory to have an HVA or we need file-based equivalents. Arguably we should add
+  : fmove_pages and fbind syscalls anyway, since the current API is quite awkward
+  : even for tools like numactl.
