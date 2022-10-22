@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24F156087CB
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 10:06:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB5F0608915
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 10:31:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232792AbiJVIGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 04:06:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48632 "EHLO
+        id S229947AbiJVIbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 04:31:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232708AbiJVH7m (ORCPT
+        with ESMTP id S230000AbiJVI2T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 03:59:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF5DAFC1C9;
-        Sat, 22 Oct 2022 00:49:59 -0700 (PDT)
+        Sat, 22 Oct 2022 04:28:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56B552D6540;
+        Sat, 22 Oct 2022 01:01:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E08860B28;
-        Sat, 22 Oct 2022 07:49:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54AD5C433D7;
-        Sat, 22 Oct 2022 07:49:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8D657B82E17;
+        Sat, 22 Oct 2022 07:49:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0214CC433D7;
+        Sat, 22 Oct 2022 07:49:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666424990;
-        bh=j2FU4rD3Ftcr09PDebDiLe2go+wH3L/m5kM1bnd19uA=;
+        s=korg; t=1666424993;
+        bh=XQAYMWo06//zIHjMBtnXreMiMDYguIyBbLd57r3zYXE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BzAtGnuzlIQyGHfBz45n/WzXYi86oF4ahJjjqZT7PFy9EQ8CQWCpzNuYmBVHSGSUY
-         KG7HHCpOITFqbsb6t+bU5lBvQWowsN0RDdQS9wX8WrnK8zWN07H0QwaaW/3T0XCn9Y
-         ExXB9JEUlWpLQGhewGPsCeTxY6TNoG9ppRFPTgEA=
+        b=kkGVWq0PBZxzGX55+9eD9Y8tpyoeZJ2TTrVc0HiS+qJ4uVJhskW4EiFFW2rLVBhWx
+         XjGDckeXtZwu908LZ3vTpDLsvshFC8xCLF7fP8yqXMJoWuipiHbzELpSNYTbuJ9vpF
+         HX/d/3Qp/VK6xoCLLhIbWhZ5utNIKpyDMwv7sR6M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jeff Layton <jlayton@kernel.org>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
+        stable@vger.kernel.org, Liang He <windhl@126.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 351/717] locks: fix TOCTOU race when granting write lease
-Date:   Sat, 22 Oct 2022 09:23:50 +0200
-Message-Id: <20221022072511.297825603@linuxfoundation.org>
+Subject: [PATCH 5.19 352/717] soc: qcom: smsm: Fix refcount leak bugs in qcom_smsm_probe()
+Date:   Sat, 22 Oct 2022 09:23:51 +0200
+Message-Id: <20221022072511.394210487@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221022072415.034382448@linuxfoundation.org>
 References: <20221022072415.034382448@linuxfoundation.org>
@@ -55,112 +54,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Amir Goldstein <amir73il@gmail.com>
+From: Liang He <windhl@126.com>
 
-[ Upstream commit d6da19c9cace63290ccfccb1fc35151ffefc0bec ]
+[ Upstream commit af8f6f39b8afd772fda4f8e61823ef8c021bf382 ]
 
-Thread A trying to acquire a write lease checks the value of i_readcount
-and i_writecount in check_conflicting_open() to verify that its own fd
-is the only fd referencing the file.
+There are two refcount leak bugs in qcom_smsm_probe():
 
-Thread B trying to open the file for read will call break_lease() in
-do_dentry_open() before incrementing i_readcount, which leaves a small
-window where thread A can acquire the write lease and then thread B
-completes the open of the file for read without breaking the write lease
-that was acquired by thread A.
+(1) The 'local_node' is escaped out from for_each_child_of_node() as
+the break of iteration, we should call of_node_put() for it in error
+path or when it is not used anymore.
+(2) The 'node' is escaped out from for_each_available_child_of_node()
+as the 'goto', we should call of_node_put() for it in goto target.
 
-Fix this race by incrementing i_readcount before checking for existing
-leases, same as the case with i_writecount.
-
-Use a helper put_file_access() to decrement i_readcount or i_writecount
-in do_dentry_open() and __fput().
-
-Fixes: 387e3746d01c ("locks: eliminate false positive conflicts for write lease")
-Reviewed-by: Jeff Layton <jlayton@kernel.org>
-Signed-off-by: Amir Goldstein <amir73il@gmail.com>
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+Fixes: c97c4090ff72 ("soc: qcom: smsm: Add driver for Qualcomm SMSM")
+Signed-off-by: Liang He <windhl@126.com>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20220721135217.1301039-1-windhl@126.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/file_table.c |  7 +------
- fs/internal.h   | 10 ++++++++++
- fs/open.c       | 11 ++++-------
- 3 files changed, 15 insertions(+), 13 deletions(-)
+ drivers/soc/qcom/smsm.c | 20 +++++++++++++-------
+ 1 file changed, 13 insertions(+), 7 deletions(-)
 
-diff --git a/fs/file_table.c b/fs/file_table.c
-index 5424e3a8df5f..543a501b0247 100644
---- a/fs/file_table.c
-+++ b/fs/file_table.c
-@@ -321,12 +321,7 @@ static void __fput(struct file *file)
- 	}
- 	fops_put(file->f_op);
- 	put_pid(file->f_owner.pid);
--	if ((mode & (FMODE_READ | FMODE_WRITE)) == FMODE_READ)
--		i_readcount_dec(inode);
--	if (mode & FMODE_WRITER) {
--		put_write_access(inode);
--		__mnt_drop_write(mnt);
--	}
-+	put_file_access(file);
- 	dput(dentry);
- 	if (unlikely(mode & FMODE_NEED_UNMOUNT))
- 		dissolve_on_fput(mnt);
-diff --git a/fs/internal.h b/fs/internal.h
-index 3e206d3e317c..4372d67a3753 100644
---- a/fs/internal.h
-+++ b/fs/internal.h
-@@ -102,6 +102,16 @@ extern void chroot_fs_refs(const struct path *, const struct path *);
- extern struct file *alloc_empty_file(int, const struct cred *);
- extern struct file *alloc_empty_file_noaccount(int, const struct cred *);
- 
-+static inline void put_file_access(struct file *file)
-+{
-+	if ((file->f_mode & (FMODE_READ | FMODE_WRITE)) == FMODE_READ) {
-+		i_readcount_dec(file->f_inode);
-+	} else if (file->f_mode & FMODE_WRITER) {
-+		put_write_access(file->f_inode);
-+		__mnt_drop_write(file->f_path.mnt);
-+	}
-+}
-+
- /*
-  * super.c
-  */
-diff --git a/fs/open.c b/fs/open.c
-index 1d57fbde2feb..5874258b54bd 100644
---- a/fs/open.c
-+++ b/fs/open.c
-@@ -810,7 +810,9 @@ static int do_dentry_open(struct file *f,
- 		return 0;
+diff --git a/drivers/soc/qcom/smsm.c b/drivers/soc/qcom/smsm.c
+index 9df9bba242f3..3e8994d6110e 100644
+--- a/drivers/soc/qcom/smsm.c
++++ b/drivers/soc/qcom/smsm.c
+@@ -526,7 +526,7 @@ static int qcom_smsm_probe(struct platform_device *pdev)
+ 	for (id = 0; id < smsm->num_hosts; id++) {
+ 		ret = smsm_parse_ipc(smsm, id);
+ 		if (ret < 0)
+-			return ret;
++			goto out_put;
  	}
  
--	if (f->f_mode & FMODE_WRITE && !special_file(inode->i_mode)) {
-+	if ((f->f_mode & (FMODE_READ | FMODE_WRITE)) == FMODE_READ) {
-+		i_readcount_inc(inode);
-+	} else if (f->f_mode & FMODE_WRITE && !special_file(inode->i_mode)) {
- 		error = get_write_access(inode);
- 		if (unlikely(error))
- 			goto cleanup_file;
-@@ -850,8 +852,6 @@ static int do_dentry_open(struct file *f,
- 			goto cleanup_all;
+ 	/* Acquire the main SMSM state vector */
+@@ -534,13 +534,14 @@ static int qcom_smsm_probe(struct platform_device *pdev)
+ 			      smsm->num_entries * sizeof(u32));
+ 	if (ret < 0 && ret != -EEXIST) {
+ 		dev_err(&pdev->dev, "unable to allocate shared state entry\n");
+-		return ret;
++		goto out_put;
  	}
- 	f->f_mode |= FMODE_OPENED;
--	if ((f->f_mode & (FMODE_READ | FMODE_WRITE)) == FMODE_READ)
--		i_readcount_inc(inode);
- 	if ((f->f_mode & FMODE_READ) &&
- 	     likely(f->f_op->read || f->f_op->read_iter))
- 		f->f_mode |= FMODE_CAN_READ;
-@@ -902,10 +902,7 @@ static int do_dentry_open(struct file *f,
- 	if (WARN_ON_ONCE(error > 0))
- 		error = -EINVAL;
- 	fops_put(f->f_op);
--	if (f->f_mode & FMODE_WRITER) {
--		put_write_access(inode);
--		__mnt_drop_write(f->f_path.mnt);
--	}
-+	put_file_access(f);
- cleanup_file:
- 	path_put(&f->f_path);
- 	f->f_path.mnt = NULL;
+ 
+ 	states = qcom_smem_get(QCOM_SMEM_HOST_ANY, SMEM_SMSM_SHARED_STATE, NULL);
+ 	if (IS_ERR(states)) {
+ 		dev_err(&pdev->dev, "Unable to acquire shared state entry\n");
+-		return PTR_ERR(states);
++		ret = PTR_ERR(states);
++		goto out_put;
+ 	}
+ 
+ 	/* Acquire the list of interrupt mask vectors */
+@@ -548,13 +549,14 @@ static int qcom_smsm_probe(struct platform_device *pdev)
+ 	ret = qcom_smem_alloc(QCOM_SMEM_HOST_ANY, SMEM_SMSM_CPU_INTR_MASK, size);
+ 	if (ret < 0 && ret != -EEXIST) {
+ 		dev_err(&pdev->dev, "unable to allocate smsm interrupt mask\n");
+-		return ret;
++		goto out_put;
+ 	}
+ 
+ 	intr_mask = qcom_smem_get(QCOM_SMEM_HOST_ANY, SMEM_SMSM_CPU_INTR_MASK, NULL);
+ 	if (IS_ERR(intr_mask)) {
+ 		dev_err(&pdev->dev, "unable to acquire shared memory interrupt mask\n");
+-		return PTR_ERR(intr_mask);
++		ret = PTR_ERR(intr_mask);
++		goto out_put;
+ 	}
+ 
+ 	/* Setup the reference to the local state bits */
+@@ -565,7 +567,8 @@ static int qcom_smsm_probe(struct platform_device *pdev)
+ 	smsm->state = qcom_smem_state_register(local_node, &smsm_state_ops, smsm);
+ 	if (IS_ERR(smsm->state)) {
+ 		dev_err(smsm->dev, "failed to register qcom_smem_state\n");
+-		return PTR_ERR(smsm->state);
++		ret = PTR_ERR(smsm->state);
++		goto out_put;
+ 	}
+ 
+ 	/* Register handlers for remote processor entries of interest. */
+@@ -595,16 +598,19 @@ static int qcom_smsm_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	platform_set_drvdata(pdev, smsm);
++	of_node_put(local_node);
+ 
+ 	return 0;
+ 
+ unwind_interfaces:
++	of_node_put(node);
+ 	for (id = 0; id < smsm->num_entries; id++)
+ 		if (smsm->entries[id].domain)
+ 			irq_domain_remove(smsm->entries[id].domain);
+ 
+ 	qcom_smem_state_unregister(smsm->state);
+-
++out_put:
++	of_node_put(local_node);
+ 	return ret;
+ }
+ 
 -- 
 2.35.1
 
