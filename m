@@ -2,79 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48402608499
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 07:33:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2677160849F
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 07:36:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbiJVFc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 01:32:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43552 "EHLO
+        id S229776AbiJVFgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 01:36:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiJVFct (ORCPT
+        with ESMTP id S229765AbiJVFgR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 01:32:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25C202B02D4;
-        Fri, 21 Oct 2022 22:32:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A63E760917;
-        Sat, 22 Oct 2022 05:32:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9AE7C433D6;
-        Sat, 22 Oct 2022 05:32:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666416765;
-        bh=uf/R6l7THqxM2eHX/ustV805xoE8PhYT+1NbCR1d9A0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=XiKRpGGCmE/1hVye3ks4VJsdgQWl4ep8RDm+RId5IAAujaPtM2G+4i6YdPrtEB8nH
-         q1Qj8HSnwQEOWQWPR8bzNYtYmBI1rIvEGKyk/TxU5aHsFRNHSNZO56sQy1qHdU3rI9
-         U0WQ+d+xKvGWN2I6VU9wZCRGKaE4CeIj2zJodGKNkBO8/gxw10rMKSLqOi9+fm9XL2
-         aVxqSKiID3UJMx6AplycmP9wIR/o3WiE2TTEdqTvywk+wi1rvKyOtrwa5kAC+IvOzs
-         /uJLZkjhd3iv/Hr57ZGnG61GWwtYesQTjbIs3uQ9LNEHWpQYfNMZdpP0JfeK0o9opa
-         S++WYI56QMg6A==
-Date:   Fri, 21 Oct 2022 22:32:42 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Christoph =?UTF-8?B?QsO2aG13YWxkZXI=?= 
-        <christoph.boehmwalder@linbit.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        "Darrick J . Wong" <djwong@kernel.org>,
-        SeongJae Park <sj@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Helge Deller <deller@gmx.de>, netdev@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-mmc@vger.kernel.org, linux-parisc@vger.kernel.org
-Subject: Re: [PATCH v1 0/5] convert tree to
- get_random_u32_{below,above,between}()
-Message-ID: <20221021223242.05df0a5b@kernel.org>
-In-Reply-To: <Y1NwJJOIB4gI5G11@zx2c4.com>
-References: <20221022014403.3881893-1-Jason@zx2c4.com>
-        <20221021205522.6b56fd24@kernel.org>
-        <Y1NwJJOIB4gI5G11@zx2c4.com>
+        Sat, 22 Oct 2022 01:36:17 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB03A28B1FC;
+        Fri, 21 Oct 2022 22:36:13 -0700 (PDT)
+X-QQ-mid: bizesmtp63t1666416969tzmap60o
+Received: from localhost.localdomain ( [182.148.15.254])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sat, 22 Oct 2022 13:36:08 +0800 (CST)
+X-QQ-SSF: 01000000000000C0E000000A0000000
+X-QQ-FEAT: r/cTxDoDoiHtF+qYAVJu9vtCCJV3DBLH0AuDzXdVIaIYzdJI/plmbSJG/poTi
+        f8FWgJBNC5GsvpMTk4rwvAGIK011LhmQ5n+pNVuhZn6maA/82oSYG/rPr+JaIHgYa7K3trM
+        6I+bAlbLZqLQUDKOhd3sIU/Z8R7oSpQyAf8yKUURdYGKz8UeHxucVcYo3jwWkokZL2wgucQ
+        zJLO62qhpuecQLB7oe5kpnoaTIrslVOTLDmuzKLb41DtQJ9gzF6m7n11JLvTT65hUGl7x+K
+        q46k3W9AohUOS2SSk0LY34u4sbk+SJvnDKHdGDahcWNOOMsjE4yYNwoaQrZasGZLSKG6Zys
+        dia0Ke3OIkT+kBXwmjjBs1FieekT2ZnGfaH1z9x8AdicvwltCU=
+X-QQ-GoodBg: 0
+From:   wangjianli <wangjianli@cdjrlc.com>
+To:     tony@atomide.com
+Cc:     linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
+        wangjianli <wangjianli@cdjrlc.com>
+Subject: [PATCH] drivers/bus: fix repeated words in comments
+Date:   Sat, 22 Oct 2022 13:36:02 +0800
+Message-Id: <20221022053602.24624-1-wangjianli@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr7
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,57 +47,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 22 Oct 2022 00:23:00 -0400 Jason A. Donenfeld wrote:
-> > How big is it?  Can you provide a stable branch to pull in the new
-> > helpers and then everyone will be able to apply the patches to their
-> > subsystem?  
-> 
-> It's a patch. But what you suggest sounds crazy to me. Supply some
-> branch and have every tree merge that branch separately, in duplicate,
-> and then get all of the conversion patches through every tree, and then
-> somehow coordinate the removal of the deprecated function after all of
-> that, and then baby sit the grand orchestration of all this over the
-> course of two and half months, watch it fail because of some
-> unmaintained corner that's affected, and then try to herd it through for
-> another two and a half months after that? Holy crap. That's torture.
+Delete the redundant word 'the'.
 
-I clean up some random networking API every couple of releases.
-Unfortunately other subsystems use networking APIs too, so I have 
-to do what you describe as "torture". It's not that hard in my
-experience but perhaps I'm incredibly gifted. Or resilient to pain.
+Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
+---
+ drivers/bus/ti-sysc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Were this an actually technically interesting patchset that required
-> some really detailed expert review, maybe that'd have some iota of
-> merit. But this is a really boring refactoring, mostly automated with
-> Coccinelle. If having to baby sit one hundred separate patches over the
-> course of months, handling confusion of walking maintainers through the
-> exercise of merging some weird duplicate branch into their trees before,
-> and so forth, is required to get this kind of grunt work done, I'm just
-> going to wind up losing all motivation for this kind of thing, and
-> naturally, as a matter of human nature, stop doing it. The result will
-> be that we have garbage pile up over time that operates on the principle
-> of "least hassle to deal with for the time being" rather than "love of
-> the code and a desire for long term maintainability and quality". The
-> former is sometimes how things go. The latter is what I'm striving for.
-> 
-> So what you suggest sounds really dreadful to me. Sorry.
-> 
-> Instead, this series follows the same template as the last one, and the
-> last one was much more nuanced and invasive and went fine. In the very
-> worst case, it'll require me to be on the ball with what's happening
-> with -next, which is something I've done before and can do again.
+diff --git a/drivers/bus/ti-sysc.c b/drivers/bus/ti-sysc.c
+index 9a7d12332fad..a864f24d6b4f 100644
+--- a/drivers/bus/ti-sysc.c
++++ b/drivers/bus/ti-sysc.c
+@@ -912,7 +912,7 @@ static int sysc_check_registers(struct sysc *ddata)
+  * Note that the interconnect target module registers can be anywhere
+  * within the interconnect target module range. For example, SGX has
+  * them at offset 0x1fc00 in the 32MB module address space. And cpsw
+- * has them at offset 0x1200 in the CPSW_WR child. Usually the
++ * has them at offset 0x1200 in the CPSW_WR child. Usually
+  * the interconnect target module registers are at the beginning of
+  * the module range though.
+  */
+-- 
+2.36.1
 
-Not sure what you mean by "being on the ball with what's happening with
--next" surely it's Steven who'll be fixing the conflicts and paying
-with his time? Or carrying extra patches because neither you will be
-able to convert the new cases in your tree nor in the origin tree since
-it won't have your new helpers.
-
-To me putting the new helpers first, on a clean branch off Linus's tree
-so in case of emergency it can be pulled into a random^W arbitrary tree
-is just good hygiene.
-
-But whatever. I mean - hopefully there aren't any conflicts in the ~50
-networking files you touch. I just wish that people didn't pipe up with
-the tree wide changes right after the merge window. Feels like the
-worst possible timing.
