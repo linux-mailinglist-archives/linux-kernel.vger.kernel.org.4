@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3918C608799
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 10:05:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5E03608AE0
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 11:12:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232701AbiJVIEA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 04:04:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48634 "EHLO
+        id S231204AbiJVJL4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 05:11:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232041AbiJVH5V (ORCPT
+        with ESMTP id S232165AbiJVJLa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 03:57:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5320374CC7;
-        Sat, 22 Oct 2022 00:48:47 -0700 (PDT)
+        Sat, 22 Oct 2022 05:11:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02BD32514E3;
+        Sat, 22 Oct 2022 01:25:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 69BF7B82E0C;
-        Sat, 22 Oct 2022 07:48:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1963C433D6;
-        Sat, 22 Oct 2022 07:48:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6564560B0C;
+        Sat, 22 Oct 2022 07:48:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 766DCC433C1;
+        Sat, 22 Oct 2022 07:48:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666424900;
-        bh=OzLtw84/qExOO0VigNtqfN9GRq/sTIKWBf6EPPnoyMA=;
+        s=korg; t=1666424902;
+        bh=CKtuwDOYPsb0DMnuLbGcnbkAajbl8yEKG+j15wLGQfA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lMM+U4CAeLrUZ8QVCmmkcpVuhCUG2nbd8/wAwNnLojG4olmyTDiPJ/rpK0N+u9gaa
-         7vNbJ6rSUZGPF+TLxOfndI0x56mx26dT5RWwG3r0oF3cGemq5AA66HZMfdRga04oie
-         HdLFFoZ0xFbuEkaHqg9eLDFHWRDXQtRHpAX3BtrQ=
+        b=u3yjSkGKQ1+NLzAf42T76EK+ulDzpZarpQjMrYhqKF3aqP6Z7nvtgtU3JO2YemP3b
+         N3pE6TpE5XhflqeJKXpCWP7Lf+3aTC2sZ6NwK9oQvJ+hH381gFqfy7reMIesbdpPtQ
+         7J48jMsXzJVCZ63Hp6ut5hzCdwrZ9ehIiigLfW/Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
+        stable@vger.kernel.org, Pin-yen Lin <treapking@chromium.org>,
         Robert Foss <robert.foss@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 318/717] drm/bridge: megachips: Fix a null pointer dereference bug
-Date:   Sat, 22 Oct 2022 09:23:17 +0200
-Message-Id: <20221022072508.308070614@linuxfoundation.org>
+Subject: [PATCH 5.19 319/717] drm/bridge: it6505: Fix the order of DP_SET_POWER commands
+Date:   Sat, 22 Oct 2022 09:23:18 +0200
+Message-Id: <20221022072508.422913883@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221022072415.034382448@linuxfoundation.org>
 References: <20221022072415.034382448@linuxfoundation.org>
@@ -54,50 +54,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zheyu Ma <zheyuma97@gmail.com>
+From: Pin-yen Lin <treapking@chromium.org>
 
-[ Upstream commit 1ff673333d46d2c1b053ebd0c1c7c7c79e36943e ]
+[ Upstream commit 7c1dceaffd99247bf443606730515b54d6285969 ]
 
-When removing the module we will get the following warning:
+Send DP_SET_POWER_D3 command to the downstream before stopping DP, so the
+suspend process will not be interrupted by the HPD interrupt. Also modify
+the order in .atomic_enable callback to make the callbacks symmetric.
 
-[   31.911505] i2c-core: driver [stdp2690-ge-b850v3-fw] unregistered
-[   31.912484] general protection fault, probably for non-canonical address 0xdffffc0000000001: 0000 [#1] PREEMPT SMP KASAN PTI
-[   31.913338] KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
-[   31.915280] RIP: 0010:drm_bridge_remove+0x97/0x130
-[   31.921825] Call Trace:
-[   31.922533]  stdp4028_ge_b850v3_fw_remove+0x34/0x60 [megachips_stdpxxxx_ge_b850v3_fw]
-[   31.923139]  i2c_device_remove+0x181/0x1f0
-
-The two bridges (stdp2690, stdp4028) do not probe at the same time, so
-the driver does not call ge_b850v3_resgiter() when probing, causing the
-driver to try to remove the object that has not been initialized.
-
-Fix this by checking whether both the bridges are probed.
-
-Fixes: 11632d4aa2b3 ("drm/bridge: megachips: Ensure both bridges are probed before registration")
-Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+Fixes: 46ca7da7f1e8 ("drm/bridge: it6505: Send DPCD SET_POWER to downstream")
+Signed-off-by: Pin-yen Lin <treapking@chromium.org>
+Reviewed-by: Robert Foss <robert.foss@linaro.org>
 Signed-off-by: Robert Foss <robert.foss@linaro.org>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220830073450.1897020-1-zheyuma97@gmail.com
+Link: https://patchwork.freedesktop.org/patch/msgid/20220830045756.1655954-1-treapking@chromium.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/bridge/megachips-stdpxxxx-ge-b850v3-fw.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/bridge/ite-it6505.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/gpu/drm/bridge/megachips-stdpxxxx-ge-b850v3-fw.c b/drivers/gpu/drm/bridge/megachips-stdpxxxx-ge-b850v3-fw.c
-index cce98bf2a4e7..72248a565579 100644
---- a/drivers/gpu/drm/bridge/megachips-stdpxxxx-ge-b850v3-fw.c
-+++ b/drivers/gpu/drm/bridge/megachips-stdpxxxx-ge-b850v3-fw.c
-@@ -296,7 +296,9 @@ static void ge_b850v3_lvds_remove(void)
- 	 * This check is to avoid both the drivers
- 	 * removing the bridge in their remove() function
- 	 */
--	if (!ge_b850v3_lvds_ptr)
-+	if (!ge_b850v3_lvds_ptr ||
-+	    !ge_b850v3_lvds_ptr->stdp2690_i2c ||
-+		!ge_b850v3_lvds_ptr->stdp4028_i2c)
- 		goto out;
+diff --git a/drivers/gpu/drm/bridge/ite-it6505.c b/drivers/gpu/drm/bridge/ite-it6505.c
+index e5626035f311..a09d1a39ab0a 100644
+--- a/drivers/gpu/drm/bridge/ite-it6505.c
++++ b/drivers/gpu/drm/bridge/ite-it6505.c
+@@ -2945,9 +2945,6 @@ static void it6505_bridge_atomic_enable(struct drm_bridge *bridge,
+ 	if (ret)
+ 		dev_err(dev, "Failed to setup AVI infoframe: %d", ret);
  
- 	drm_bridge_remove(&ge_b850v3_lvds_ptr->bridge);
+-	it6505_drm_dp_link_set_power(&it6505->aux, &it6505->link,
+-				     DP_SET_POWER_D0);
+-
+ 	it6505_update_video_parameter(it6505, mode);
+ 
+ 	ret = it6505_send_video_infoframe(it6505, &frame);
+@@ -2957,6 +2954,9 @@ static void it6505_bridge_atomic_enable(struct drm_bridge *bridge,
+ 
+ 	it6505_int_mask_enable(it6505);
+ 	it6505_video_reset(it6505);
++
++	it6505_drm_dp_link_set_power(&it6505->aux, &it6505->link,
++				     DP_SET_POWER_D0);
+ }
+ 
+ static void it6505_bridge_atomic_disable(struct drm_bridge *bridge,
+@@ -2968,9 +2968,9 @@ static void it6505_bridge_atomic_disable(struct drm_bridge *bridge,
+ 	DRM_DEV_DEBUG_DRIVER(dev, "start");
+ 
+ 	if (it6505->powered) {
+-		it6505_video_disable(it6505);
+ 		it6505_drm_dp_link_set_power(&it6505->aux, &it6505->link,
+ 					     DP_SET_POWER_D3);
++		it6505_video_disable(it6505);
+ 	}
+ }
+ 
 -- 
 2.35.1
 
