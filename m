@@ -2,158 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E76EA608D74
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 15:39:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A56E3608D77
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 15:43:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229494AbiJVNju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 09:39:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49700 "EHLO
+        id S229658AbiJVNn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 09:43:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbiJVNjq (ORCPT
+        with ESMTP id S229514AbiJVNn0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 09:39:46 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD3924D142;
-        Sat, 22 Oct 2022 06:39:43 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id b12so15610983edd.6;
-        Sat, 22 Oct 2022 06:39:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ONqnfeRbIJEBHcDA0JYek+JtscZ4zltaVyYcDCSC9kw=;
-        b=fYrsxTBTWLXveezVAf3JTB5d1JyTHlrtLy9F2w+mCV3f9qlz4zaL6/KTHWUm9h/MaY
-         ml7uAqQR7ELdaNdsh8CMrwhkVd2tVPYE6NutMYTX5/DbWGpLIxzkGkwQSfEL4IC7b+G4
-         SvKMOXuG4rl0pJDR4qXG1aNtEM7afgMx4jmNbEo+5o9nOmH71LDVrrweaDE4lN27Mxe8
-         /AmFI8FeeE1TTg2SGAzP6qrDDqejZXUWcSIds86ZMkEQdpwzyg2K4Cc+kMUIjGkGfFDi
-         1gKAAyMnObim1Vzp8cBs3o667dOJYCsuMtSoeelmb9050ZwCvcYPWWS/k6FIBTPH1qSY
-         doEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ONqnfeRbIJEBHcDA0JYek+JtscZ4zltaVyYcDCSC9kw=;
-        b=kfpwaNXwHCjYuttEsY1rleSoy2AcrWGtmhUtsvqPkg3HWIVLueY99Kc03MU6dvWT4P
-         YUvPMvoeNvE+4ORgZJAmrBSGRATk92vbqHL+EOKbNiyzgkaFEN8Pdhr4syF7XxdKSd7Z
-         kyqi15mKWXavEeJhK5Q4A9Gvj2Zub1GQtxoEGQLtph3gfCE/VFSaUJEq4emKiW3uHFgx
-         aOMfbAmwS4CKC0gnTedv9US6kBppPAQg7EqzzKnp5pvaIUd1IhcGyGJt3f+ihTyvA8uT
-         CUg4dDUZyk+84UYgC6melTYyRxQeazXzgCBXsG7gVsvvGOQCxnSCs09NMK/hgFrDRhB8
-         hX2g==
-X-Gm-Message-State: ACrzQf2p6hCm4Vecq9mOy9+tt+JBTHNCupJgpgp39cdFxKsFt4yIAuWW
-        mTc67ifRAYx5Lw9tjZDyg6c=
-X-Google-Smtp-Source: AMsMyM4SB7mv6NPFG5Y2VSE+Th+55/a9uKkLQcMf9lcPuog1lmcinWHAY+7KZ7do0aDq5OVu4/Y4AA==
-X-Received: by 2002:a05:6402:144a:b0:461:8e34:d07b with SMTP id d10-20020a056402144a00b004618e34d07bmr1085496edx.426.1666445982163;
-        Sat, 22 Oct 2022 06:39:42 -0700 (PDT)
-Received: from skbuf ([188.27.184.197])
-        by smtp.gmail.com with ESMTPSA id q11-20020a17090676cb00b0074150f51d86sm13083352ejn.162.2022.10.22.06.39.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 22 Oct 2022 06:39:41 -0700 (PDT)
-Date:   Sat, 22 Oct 2022 16:39:37 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Oleksandr Mazur <oleksandr.mazur@plvision.eu>
-Cc:     "netdev@kapio-technology.com" <netdev@kapio-technology.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Florent Fourcot <florent.fourcot@wifirst.fr>,
-        Hans Schultz <schultz.hans@gmail.com>,
-        Joachim Wiberg <troglobit@gmail.com>,
-        Amit Cohen <amcohen@nvidia.com>,
+        Sat, 22 Oct 2022 09:43:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77AF41D0E9;
+        Sat, 22 Oct 2022 06:43:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D140600A0;
+        Sat, 22 Oct 2022 13:43:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32D11C433C1;
+        Sat, 22 Oct 2022 13:43:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666446204;
+        bh=23QxA+M5S6H4DcowzMHJG00jNE/2O8r9A640gDM5zu8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jXyOk6gbU1Fzfuj8+1dyFfm2/PEN5YaPlKVloWqQkm1bSey+JZcTauOMh5hXBfXZQ
+         SDS7weCSdbOpVxCCEm/Hqjr8P1QiCG9ai/nBtCNxiJigEnIZKG/dHmVpj4IDZtDj6B
+         otsBPBdgHMW6VSHVQZdXi/qoNZpZz/ILlQWpQzG1ppDwMHM7b2ChZQ49vunhKyODwO
+         HnTL0U6gVwoehGJK/TEX4ieRHJ9wUv1mgpNvr9hD6OFhgyK6tqeT4O+vaE/jH7UAin
+         kuf01/WI4NNiZbCL2b+0Zc4PxlmlI3UUl9ug7NWXkSbs3ZoVlYwBrxzhFUz09s375P
+         rxwoVSfVjb0HQ==
+Date:   Sat, 22 Oct 2022 21:43:18 +0800
+From:   Peter Chen <peter.chen@kernel.org>
+To:     Pawel Laszczak <pawell@cadence.com>
+Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "bridge@lists.linux-foundation.org" 
-        <bridge@lists.linux-foundation.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v8 net-next 10/12] net: dsa: mv88e6xxx: mac-auth/MAB
- implementation
-Message-ID: <20221022133937.hfrr7sxaq2zlbnoq@skbuf>
-References: <20221021112216.6bw6sjrieh2znlti@skbuf>
- <7bfaae46b1913fe81654a4cd257d98b1@kapio-technology.com>
- <20221021163005.xljk2j3fkikr6uge@skbuf>
- <d1fb07de4b55d64f98425fe66156c4e4@kapio-technology.com>
- <20221021173014.oit3qmpkrsjwzbgu@skbuf>
- <b88e331e016ad3801f1bf1a0dec507f3@kapio-technology.com>
- <20221021181411.sv52q4yxr5r7urab@skbuf>
- <GV1P190MB2019CFA0EB9B5E717F39B621E42C9@GV1P190MB2019.EURP190.PROD.OUTLOOK.COM>
- <20221022113238.beo5zhufl2x645lf@skbuf>
- <GV1P190MB20196AE55C37EB6B88B54CB6E42C9@GV1P190MB2019.EURP190.PROD.OUTLOOK.COM>
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH] usb: cdnsp: fix issue with ZLP - added TD_SIZE = 1
+Message-ID: <20221022134318.GA51416@nchen-desktop>
+References: <1666159637-161135-1-git-send-email-pawell@cadence.com>
+ <20221020132010.GA29690@nchen-desktop>
+ <BYAPR07MB5381E4649DFD2BD0C528AC0FDD2D9@BYAPR07MB5381.namprd07.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <GV1P190MB20196AE55C37EB6B88B54CB6E42C9@GV1P190MB2019.EURP190.PROD.OUTLOOK.COM>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <BYAPR07MB5381E4649DFD2BD0C528AC0FDD2D9@BYAPR07MB5381.namprd07.prod.outlook.com>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 22, 2022 at 12:55:14PM +0000, Oleksandr Mazur wrote:
+On 22-10-21 05:03:25, Pawel Laszczak wrote:
+> >
+> >
+> >On 22-10-19 02:07:17, Pawel Laszczak wrote:
+> >> Patch modifies the TD_SIZE in TRB before ZLP TRB.
+> >> The TD_SIZE in TRB before ZLP TRB must be set to 1 to force processing
+> >> ZLP TRB by controller.
+> >>
+> >> Cc: <stable@vger.kernel.org>
+> >> Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence
+> >> USBSSP DRD Driver")
+> >> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+> >> ---
+> >>  drivers/usb/cdns3/cdnsp-ring.c | 15 ++++++++-------
+> >>  1 file changed, 8 insertions(+), 7 deletions(-)
+> >>
+> >> diff --git a/drivers/usb/cdns3/cdnsp-ring.c
+> >> b/drivers/usb/cdns3/cdnsp-ring.c index 794e413800ae..4809d0e894bb
+> >> 100644
+> >> --- a/drivers/usb/cdns3/cdnsp-ring.c
+> >> +++ b/drivers/usb/cdns3/cdnsp-ring.c
+> >> @@ -1765,18 +1765,19 @@ static u32 cdnsp_td_remainder(struct
+> >cdnsp_device *pdev,
+> >>  			      struct cdnsp_request *preq,
+> >>  			      bool more_trbs_coming)
+> >>  {
+> >> -	u32 maxp, total_packet_count;
+> >> -
+> >> -	/* One TRB with a zero-length data packet. */
+> >> -	if (!more_trbs_coming || (transferred == 0 && trb_buff_len == 0) ||
+> >> -	    trb_buff_len == td_total_len)
+> >> -		return 0;
+> >> +	u32 maxp, total_packet_count, remainder;
+> >>
+> >>  	maxp = usb_endpoint_maxp(preq->pep->endpoint.desc);
+> >>  	total_packet_count = DIV_ROUND_UP(td_total_len, maxp);
+> >>
+> >>  	/* Queuing functions don't count the current TRB into transferred. */
+> >> -	return (total_packet_count - ((transferred + trb_buff_len) / maxp));
+> >> +	remainder = (total_packet_count - ((transferred + trb_buff_len) /
+> >> +maxp));
+> >> +
+> >> +	/* Before ZLP driver needs set TD_SIZE=1. */
+> >> +	if (!remainder && more_trbs_coming)
+> >> +		remainder = 1;
+> >
+> >Without ZLP, TD_SIZE = 0 for the last TRB.
+> >With ZLP, TD_SIZE = 1 for current TRB, and TD_SIZE = 0 for the next TRB (the
+> >last zero-length packet) right?
 > 
-> > I hope the following script will exemplify what I mean.
-> ..
-> Oh, i get it now.
+> Yes, you have right.
 > 
-> Frankly speaking we haven't stumbled across such scenario / issue
-> before. But i can tell it does indeed seems a bit broken;
-> 
-> I think there are 2 options here:
->   1. The setup itself seems insecure, and user should be aware of such behavior / issue;
 
-Be aware, and do what? Port locking is unfit for use if learning is left
-enabled (in the way learning is currently done).
+Pawel, With your changes, the return value is 1 for function
+cdnsp_queue_ctrl_tx. Without your changes, it is 0, something wrong?
 
->   2. Bridge indeed should not learn MACs if BR_PORT_LOCKED is set.
->   E.g. learning condition should be something like: not BR_PORT_locked
->   and learning is on; 
+-- 
 
-Rather than violate the BR_LEARNING flag (have it set but do nothing,
-which would require even more checks in the fast path), I was proposing
-to not allow the BR_PORT_LOCKED | BR_LEARNING configuration at all.
-My question to you was if you're aware of any regression in prestera
-with such a change.
-
-> > I don't understand the last step. Why is the BR_PORT_LOCKED flag disabled?
-> > If disabled, the port will receive frames with any unknown MAC SA,
-> > not just the authorized ones.
-> 
-> Sorry for the confusion. Basically, what i described what i would
-> expect from a daemon (e.g. daemon would disable LOCKED); So just
-> ignore that part.
-
-But still, why would the daemon disable BR_PORT_LOCKED once a station is
-authorized? You're describing a sample/test application, not a port
-security solution...
+Thanks,
+Peter Chen
