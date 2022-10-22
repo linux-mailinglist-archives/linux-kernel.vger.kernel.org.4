@@ -2,62 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9565E608557
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 09:06:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81E74608558
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 09:06:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229906AbiJVHGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 03:06:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39676 "EHLO
+        id S230104AbiJVHGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 03:06:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230125AbiJVHGZ (ORCPT
+        with ESMTP id S230094AbiJVHGh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 03:06:25 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B45E2A79C9
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 00:06:23 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id b2so8746749lfp.6
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 00:06:23 -0700 (PDT)
+        Sat, 22 Oct 2022 03:06:37 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10C242A79E2
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 00:06:35 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id j4so8854965lfk.0
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 00:06:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=CKp0vNQJo1Xjancyd+0lhoBs/j1rOPyn9CnjbmCY3h4=;
-        b=N9jN1oR4Tl0T5jyg3x5iKJa8xLdEYKinhrjmzufnw2qDIQkR0IyFYM8zNzqDa0qehy
-         0BAtdlc7B+C7OdpATs/zbuwdvmcSg4+Se6//Ew+twkb0zuZagLdT5l7440NWSHLuCFhU
-         yn74RR+sEaZPXt63syylA0d7yl6WcuzRDs29/geUfEq62kgVDW3iyFYX/r188kmx+m/x
-         v9p2h+DK460iYGJYdqxY+AJNFOcf0txZauXuaq7TFJmlLokNqbtudpL02sun7IJOAtLt
-         ExT/wPX4TiEPhS11wmGO2vCuziIGdm6an4kBARMZay/R99V8COaSteWoZ4/Tu1/NR++5
-         MyeA==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4maC1ewmpW31x1+/ZutwiTXSSsedpc4aQ1ME2Ogiqcg=;
+        b=jjxDV72HaiWcEUJCW06k9mJBVN5H6X/Aths+c3EBdFIBlrt3Bf+FfS4Z1/12AfQUZy
+         Ap30xeYUHVL8jHCGmoUNnEDePlLL+FojmVbXpCM3sFtA6pH6j5yIZ0sV9TXI5UkkvvEB
+         64eVqysV9GN9eTJUEN4HAxEXlga+5dAmITIV3XBbLUP9/QYpXMgvIin0MHjtCOaLoZ3z
+         VUHPFt9MiEy4JufBg9JmqN04ao5/u0K1edtoE7mrBNpqOVPCG0Fdhb6Mbh3TXEAn1vMm
+         +e9dEFlGoU/HYyFiLFQesma90kTI9qf8vOc0UArXfQcJnHWuXxcDYV2wyiCq4jJcyXqy
+         TAGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CKp0vNQJo1Xjancyd+0lhoBs/j1rOPyn9CnjbmCY3h4=;
-        b=SePCde4P5L5wcyqOacqXaJk/8OLgDLG3e5nF8GNqqrjh7q96Sk7dwv0JYaDFDNDeSU
-         wFZXEGYwANkUXt2qOokoJBYoATrctLReaQ2xY3PGmK49ZWtKm7An4cUqTQGvT1nIEDGr
-         0qQcm+nbyL0KPlfbcHOyyT7FnVniQNrYsBsvv7FItBUjCAel6/hxu47qmN4tVLV4Yl/i
-         2W46XOaeI7thHS8XoRAqsAfC9RzpYuGU9J4gv+h9wwvNo4Rs7IbKCzDwnyXCAZBjLhZC
-         TYe/QoYwiEv3P5rxiW1iECaOYUwZGzZ8V82ueACrC2ijTad8UJPvsz7zBRJ6y9OEGnaJ
-         M+pA==
-X-Gm-Message-State: ACrzQf0ox2H1gMImHfpmp4f8p74RUt/BGnIARke5ljCXEQ5eR6IzPNUK
-        HLyQNi7WMFfFVD0VMMr0APQGCqtqFjeo4QXw
-X-Google-Smtp-Source: AMsMyM5i8jcmTVSuJJsemiVoGPbJ4DVnYIne0FheNXPwydmvxdU908gexeN3q6ZPBOj0rv/rduiDYQ==
-X-Received: by 2002:a05:6512:304e:b0:4a2:6c66:8355 with SMTP id b14-20020a056512304e00b004a26c668355mr9101117lfb.238.1666422381725;
-        Sat, 22 Oct 2022 00:06:21 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4maC1ewmpW31x1+/ZutwiTXSSsedpc4aQ1ME2Ogiqcg=;
+        b=E0Mv+XMUmIm8arP0ZuAGhzHgC9rnUkAGYU5Wue09Jy3uUkYZmn7ifNPOaOjXYRVB1e
+         ca6PlS+4yEqGr7vtPMeiDXYNt1cq0Frbp+Li8mbQsDTHfBsnFo8cBTVvvyseUI26uzKA
+         MVWXV/kJCdJS3nPe+Pn/cW4sas4GNDZY3/u9yMT4WnAetgDYFy29KgrdaveMTQauVHVU
+         mi3LtUJxsLwwOFwsjePUzMV0uxzgX2M0ukMg5h3pafs3A0ZbdGuT5MKkPUs1YU/Ds8Ub
+         ntiSYZ2uPYWy5dPsK1fYJHYSqefoC9CHhVqVPzqiWU+xFvtjno9V2UA/5/TeKWiRgGwF
+         Em2Q==
+X-Gm-Message-State: ACrzQf2bekUOkH4JrKY+rItSCWfRTfPFJk5/NG2jLOXZVmTZUDikggoM
+        l0CQkUb1KuJPej8QiGsGjP0=
+X-Google-Smtp-Source: AMsMyM6dBV4osBfec7LziKg54FEX6hrZcnfpZDYeW13Gbs0USaCoakMtOybJOnJI2MZ/mXb8d0ER5A==
+X-Received: by 2002:ac2:47e1:0:b0:4a2:40e5:781a with SMTP id b1-20020ac247e1000000b004a240e5781amr7805580lfp.335.1666422393414;
+        Sat, 22 Oct 2022 00:06:33 -0700 (PDT)
 Received: from elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net ([20.240.130.248])
-        by smtp.googlemail.com with ESMTPSA id s5-20020a2e1505000000b00276d2537921sm390404ljd.59.2022.10.22.00.06.21
+        by smtp.googlemail.com with ESMTPSA id s5-20020a2e1505000000b00276d2537921sm390404ljd.59.2022.10.22.00.06.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 22 Oct 2022 00:06:21 -0700 (PDT)
+        Sat, 22 Oct 2022 00:06:33 -0700 (PDT)
 From:   Tanjuate Brunostar <tanjubrunostar0@gmail.com>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         outreachy@lists.linux.dev,
         Tanjuate Brunostar <tanjubrunostar0@gmail.com>
-Subject: [PATCH v3 0/6] a series of checkpatch fixes on the file: rxtx.c
-Date:   Sat, 22 Oct 2022 07:06:06 +0000
-Message-Id: <20221022070612.13009-1-tanjubrunostar0@gmail.com>
+Subject: [PATCH v3 1/6] staging: vt6655: fix lines ending in a '('
+Date:   Sat, 22 Oct 2022 07:06:07 +0000
+Message-Id: <20221022070612.13009-2-tanjubrunostar0@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221022070612.13009-1-tanjubrunostar0@gmail.com>
+References: <20221022070612.13009-1-tanjubrunostar0@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -70,26 +73,216 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The fixes are similar, mostly long lines splitting. I had to make
-serveral patches to ease the work of inspectors
+fix serveral checkpatch errors related to lines ending with a '(' by
+refactoring the code lines
 
-v2: fixed a compilation error found by the kernel test robot and
-recompiled the code
+Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+---
+ drivers/staging/vt6655/rxtx.c | 149 ++++++++++++++--------------------
+ 1 file changed, 63 insertions(+), 86 deletions(-)
 
-v3: tends out the error persisted in the second version. this version is
-a correction of that
-
-Tanjuate Brunostar (6):
-  staging: vt6655: fix lines ending in a '('
-  staging: vt6655: refactor long lines of code in s_uGetRTSCTSDuration
-  staging: vt6655: refactor long lines of code in s_uFillDataHead
-  staging: vt6655: refactor long lines of code in s_vGenerateTxParameter
-  staging: vt6655: refactor long lines of code in the rest of the file
-  staging: vt6655: refactor code to avoid a line ending in '('
-
- drivers/staging/vt6655/rxtx.c | 532 ++++++++++++++++++++--------------
- 1 file changed, 321 insertions(+), 211 deletions(-)
-
+diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
+index 1e5036121665..f9d0b00d7cff 100644
+--- a/drivers/staging/vt6655/rxtx.c
++++ b/drivers/staging/vt6655/rxtx.c
+@@ -141,13 +141,11 @@ static __le16 vnt_time_stamp_off(struct vnt_private *priv, u16 rate)
+  */
+ static
+ unsigned int
+-s_uGetTxRsvTime(
+-	struct vnt_private *pDevice,
+-	unsigned char byPktType,
+-	unsigned int cbFrameLength,
+-	unsigned short wRate,
+-	bool bNeedAck
+-)
++s_uGetTxRsvTime(struct vnt_private *pDevice,
++		unsigned char byPktType,
++		unsigned int cbFrameLength,
++		unsigned short wRate,
++		bool bNeedAck)
+ {
+ 	unsigned int uDataTime, uAckTime;
+ 
+@@ -215,19 +213,16 @@ static __le16 get_rtscts_time(struct vnt_private *priv,
+ 
+ /* byFreqType 0: 5GHz, 1:2.4Ghz */
+ static
+-unsigned int
+-s_uGetDataDuration(
+-	struct vnt_private *pDevice,
+-	unsigned char byDurType,
+-	unsigned int cbFrameLength,
+-	unsigned char byPktType,
+-	unsigned short wRate,
+-	bool bNeedAck,
+-	unsigned int uFragIdx,
+-	unsigned int cbLastFragmentSize,
+-	unsigned int uMACfragNum,
+-	unsigned char byFBOption
+-)
++unsigned int s_uGetDataDuration(struct vnt_private *pDevice,
++				unsigned char byDurType,
++				unsigned int cbFrameLength,
++				unsigned char byPktType,
++				unsigned short wRate,
++				bool bNeedAck,
++				unsigned int uFragIdx,
++				unsigned int cbLastFragmentSize,
++				unsigned int uMACfragNum,
++				unsigned char byFBOption)
+ {
+ 	bool bLastFrag = false;
+ 	unsigned int uAckTime = 0, uNextPktTime = 0, len;
+@@ -316,17 +311,13 @@ s_uGetDataDuration(
+ }
+ 
+ /* byFreqType: 0=>5GHZ 1=>2.4GHZ */
+-static
+-__le16
+-s_uGetRTSCTSDuration(
+-	struct vnt_private *pDevice,
+-	unsigned char byDurType,
+-	unsigned int cbFrameLength,
+-	unsigned char byPktType,
+-	unsigned short wRate,
+-	bool bNeedAck,
+-	unsigned char byFBOption
+-)
++static __le16 s_uGetRTSCTSDuration(struct vnt_private *pDevice,
++				   unsigned char byDurType,
++				   unsigned int cbFrameLength,
++				   unsigned char byPktType,
++				   unsigned short wRate,
++				   bool bNeedAck,
++				   unsigned char byFBOption)
+ {
+ 	unsigned int uCTSTime = 0, uDurTime = 0;
+ 
+@@ -409,22 +400,18 @@ s_uGetRTSCTSDuration(
+ 	return cpu_to_le16((u16)uDurTime);
+ }
+ 
+-static
+-__le16
+-s_uFillDataHead(
+-	struct vnt_private *pDevice,
+-	unsigned char byPktType,
+-	void *pTxDataHead,
+-	unsigned int cbFrameLength,
+-	unsigned int uDMAIdx,
+-	bool bNeedAck,
+-	unsigned int uFragIdx,
+-	unsigned int cbLastFragmentSize,
+-	unsigned int uMACfragNum,
+-	unsigned char byFBOption,
+-	unsigned short wCurrentRate,
+-	bool is_pspoll
+-)
++static __le16 s_uFillDataHead(struct vnt_private *pDevice,
++			      unsigned char byPktType,
++			      void *pTxDataHead,
++			      unsigned int cbFrameLength,
++			      unsigned int uDMAIdx,
++			      bool bNeedAck,
++			      unsigned int uFragIdx,
++			      unsigned int cbLastFragmentSize,
++			      unsigned int uMACfragNum,
++			      unsigned char byFBOption,
++			      unsigned short wCurrentRate,
++			      bool is_pspoll)
+ {
+ 	struct vnt_tx_datahead_ab *buf = pTxDataHead;
+ 
+@@ -555,19 +542,15 @@ s_uFillDataHead(
+ 	return buf->duration;
+ }
+ 
+-static
+-void
+-s_vFillRTSHead(
+-	struct vnt_private *pDevice,
+-	unsigned char byPktType,
+-	void *pvRTS,
+-	unsigned int cbFrameLength,
+-	bool bNeedAck,
+-	bool bDisCRC,
+-	struct ieee80211_hdr *hdr,
+-	unsigned short wCurrentRate,
+-	unsigned char byFBOption
+-)
++static void s_vFillRTSHead(struct vnt_private *pDevice,
++			   unsigned char byPktType,
++			   void *pvRTS,
++			   unsigned int cbFrameLength,
++			   bool bNeedAck,
++			   bool bDisCRC,
++			   struct ieee80211_hdr *hdr,
++			   unsigned short wCurrentRate,
++			   unsigned char byFBOption)
+ {
+ 	unsigned int uRTSFrameLen = 20;
+ 
+@@ -752,17 +735,15 @@ s_vFillRTSHead(
+ 
+ static
+ void
+-s_vFillCTSHead(
+-	struct vnt_private *pDevice,
+-	unsigned int uDMAIdx,
+-	unsigned char byPktType,
+-	void *pvCTS,
+-	unsigned int cbFrameLength,
+-	bool bNeedAck,
+-	bool bDisCRC,
+-	unsigned short wCurrentRate,
+-	unsigned char byFBOption
+-)
++s_vFillCTSHead(struct vnt_private *pDevice,
++	       unsigned int uDMAIdx,
++	       unsigned char byPktType,
++	       void *pvCTS,
++	       unsigned int cbFrameLength,
++	       bool bNeedAck,
++	       bool bDisCRC,
++	       unsigned short wCurrentRate,
++	       unsigned char byFBOption)
+ {
+ 	unsigned int uCTSFrameLen = 14;
+ 
+@@ -868,21 +849,17 @@ s_vFillCTSHead(
+  -
+  * unsigned int cbFrameSize, Hdr+Payload+FCS
+  */
+-static
+-void
+-s_vGenerateTxParameter(
+-	struct vnt_private *pDevice,
+-	unsigned char byPktType,
+-	struct vnt_tx_fifo_head *tx_buffer_head,
+-	void *pvRrvTime,
+-	void *pvRTS,
+-	void *pvCTS,
+-	unsigned int cbFrameSize,
+-	bool bNeedACK,
+-	unsigned int uDMAIdx,
+-	void *psEthHeader,
+-	unsigned short wCurrentRate
+-)
++static void s_vGenerateTxParameter(struct vnt_private *pDevice,
++				   unsigned char byPktType,
++				   struct vnt_tx_fifo_head *tx_buffer_head,
++				   void *pvRrvTime,
++				   void *pvRTS,
++				   void *pvCTS,
++				   unsigned int cbFrameSize,
++				   bool bNeedACK,
++				   unsigned int uDMAIdx,
++				   void *psEthHeader,
++				   unsigned short wCurrentRate)
+ {
+ 	u16 fifo_ctl = le16_to_cpu(tx_buffer_head->fifo_ctl);
+ 	bool bDisCRC = false;
 -- 
 2.34.1
 
