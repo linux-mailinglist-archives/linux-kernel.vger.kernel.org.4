@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE1D76088B6
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 10:21:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD65F6087CE
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 10:06:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233815AbiJVIVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 04:21:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44336 "EHLO
+        id S232385AbiJVIGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 04:06:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233797AbiJVITo (ORCPT
+        with ESMTP id S232738AbiJVH7q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 04:19:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07FD22DE461;
-        Sat, 22 Oct 2022 00:58:05 -0700 (PDT)
+        Sat, 22 Oct 2022 03:59:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F0DE72975;
+        Sat, 22 Oct 2022 00:49:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B0F79B82DEF;
-        Sat, 22 Oct 2022 07:49:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D37BC433D6;
-        Sat, 22 Oct 2022 07:49:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 61C2DB82DF6;
+        Sat, 22 Oct 2022 07:49:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6F0FC433D7;
+        Sat, 22 Oct 2022 07:49:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666424985;
-        bh=VDRe/5Hbi95puk/YwoQKy5coXP8NgEp+rB9ALswaBwg=;
+        s=korg; t=1666424988;
+        bh=EDcfOZ9GiROdzrYcCV/i2Qx1Q4cPalUM4Bdj4HFS6+A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=geNApx98+8y52WChecnzNJ5W1XFPnKSNGY251SlLxqIHF33FvizogYOF3LD4qOHLK
-         MLRCQwLH2U4RR7pEDrK6zlGqgY6IIfEBafDwHL+unctAq5RWMbViq+4aTgbLw6cAGb
-         u45alUgL1TBZUSUkvWg9/etvAHiZ7vzwPuNYAkDk=
+        b=XTie77RxBdAB48J9HR9mrbCedZbWfA1OfbgSP4E1Ra4bTt990L8rfucwz3pPYKYC+
+         kjfYldXgBhsV3R3bp4b+PGt5y/voKT7e89mBWG15faUrysw02OFpxJciDak6IlBS38
+         fY8U55JAwNBdz3IRo3HVtn/5SZS/aQFSxgDFYoxc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Liang He <windhl@126.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 349/717] memory: of: Fix refcount leak bug in of_get_ddr_timings()
-Date:   Sat, 22 Oct 2022 09:23:48 +0200
-Message-Id: <20221022072511.162072362@linuxfoundation.org>
+Subject: [PATCH 5.19 350/717] memory: of: Fix refcount leak bug in of_lpddr3_get_ddr_timings()
+Date:   Sat, 22 Oct 2022 09:23:49 +0200
+Message-Id: <20221022072511.220388639@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221022072415.034382448@linuxfoundation.org>
 References: <20221022072415.034382448@linuxfoundation.org>
@@ -56,33 +56,33 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Liang He <windhl@126.com>
 
-[ Upstream commit 05215fb32010d4afb68fbdbb4d237df6e2d4567b ]
+[ Upstream commit 48af14fb0eaa63d9aa68f59fb0b205ec55a95636 ]
 
 We should add the of_node_put() when breaking out of
 for_each_child_of_node() as it will automatically increase
 and decrease the refcount.
 
-Fixes: e6b42eb6a66c ("memory: emif: add device tree support to emif driver")
+Fixes: 976897dd96db ("memory: Extend of_memory with LPDDR3 support")
 Signed-off-by: Liang He <windhl@126.com>
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Link: https://lore.kernel.org/r/20220719085640.1210583-1-windhl@126.com
+Link: https://lore.kernel.org/r/20220719085640.1210583-2-windhl@126.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
  drivers/memory/of_memory.c | 1 +
  1 file changed, 1 insertion(+)
 
 diff --git a/drivers/memory/of_memory.c b/drivers/memory/of_memory.c
-index dbdf87bc0b78..8e2ef4bf6b17 100644
+index 8e2ef4bf6b17..fcd20d85d385 100644
 --- a/drivers/memory/of_memory.c
 +++ b/drivers/memory/of_memory.c
-@@ -134,6 +134,7 @@ const struct lpddr2_timings *of_get_ddr_timings(struct device_node *np_ddr,
- 	for_each_child_of_node(np_ddr, np_tim) {
+@@ -285,6 +285,7 @@ const struct lpddr3_timings
  		if (of_device_is_compatible(np_tim, tim_compat)) {
- 			if (of_do_get_timings(np_tim, &timings[i])) {
-+				of_node_put(np_tim);
+ 			if (of_lpddr3_do_get_timings(np_tim, &timings[i])) {
  				devm_kfree(dev, timings);
++				of_node_put(np_tim);
  				goto default_timings;
  			}
+ 			i++;
 -- 
 2.35.1
 
