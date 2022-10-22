@@ -2,121 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE296608BDA
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 12:44:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09F59608C5D
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 13:12:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229838AbiJVKoq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 06:44:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41878 "EHLO
+        id S231162AbiJVLMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 07:12:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbiJVKoS (ORCPT
+        with ESMTP id S229824AbiJVLM1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 06:44:18 -0400
-Received: from mxout1.routing.net (mxout1.routing.net [IPv6:2a03:2900:1:a::a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA22F31BF49;
-        Sat, 22 Oct 2022 03:01:50 -0700 (PDT)
-Received: from mxbox1.masterlogin.de (unknown [192.168.10.88])
-        by mxout1.routing.net (Postfix) with ESMTP id 8AA8A41A25;
-        Sat, 22 Oct 2022 09:05:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
-        s=20200217; t=1666429540;
+        Sat, 22 Oct 2022 07:12:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 309682D940F
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 03:33:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666434783;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=uwE9fx2tS9oduVfTIs9Hd6/Fb9a+3JIsjdgPxEZuCWk=;
-        b=G1xnd0RAP2vFdUQcNsw9U+lz+xRBas2yonC7dKl/xdx4sQpNoL0h2wCEjl4zSw/hjbN97h
-        XqXubJCBuU3O8GVbLOnfbLZ8regoUcyCtf/Iinridt3NAixHPzUNZHPfCHH4313o5u5VVv
-        IXlpKKROuQzbWa7VeD+offVODzc0hm8=
-Received: from frank-G5.. (fttx-pool-80.245.73.148.bambit.de [80.245.73.148])
-        by mxbox1.masterlogin.de (Postfix) with ESMTPSA id CB46C40690;
-        Sat, 22 Oct 2022 09:05:39 +0000 (UTC)
-From:   Frank Wunderlich <linux@fw-web.de>
-To:     linux-mediatek@lists.infradead.org
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        Chaotian Jing <chaotian.jing@mediatek.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Wenbin Mei <wenbin.mei@mediatek.com>,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 5/5] dt-bindings: mmc: mtk-sd: add mt7986
-Date:   Sat, 22 Oct 2022 11:05:30 +0200
-Message-Id: <20221022090530.16265-6-linux@fw-web.de>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221022090530.16265-1-linux@fw-web.de>
-References: <20221022090530.16265-1-linux@fw-web.de>
+        bh=odmDeDwQVjher/qM3oM9cGdcAm/X6A1KhHi4v9Q2U1k=;
+        b=bKzeLpU4I2gtRsgn+7QInweC+U+i6c+lE8qL+BvlWSNef58i9NC6UFfup7SXlarAmar0Wg
+        OaWIVt9lFTXxAlL8LB4k/Oar2ji7RzhKJA2BfYB1/3jZbnj870wSE+uXpLX1+xPYvSzGxZ
+        f5VYUcWJiRj/SDoD96+Uq5Vh03czPi4=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-302-xedZt-LIMGWiqEZtWGENMQ-1; Sat, 22 Oct 2022 05:09:01 -0400
+X-MC-Unique: xedZt-LIMGWiqEZtWGENMQ-1
+Received: by mail-ed1-f72.google.com with SMTP id m20-20020a056402511400b0045da52f2d3cso4986163edd.20
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 02:09:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=odmDeDwQVjher/qM3oM9cGdcAm/X6A1KhHi4v9Q2U1k=;
+        b=S2wHx2C80419Xq4iyqsTTyQQbMuKEcuItTL1swlh/zGffsIQn46GyNxcoMeFurVSag
+         GjqIIlYUvNLk/gETceSkidxX6asYgUN6ua6iUfAdtwU6Oq7W3AX1GXJb7XYQ8NWU3r6S
+         gCLVikLbWm/SEKOlzgitWQnQa6g/rRjpfdnhxFU7QwTmkXJs/JPcs/AvNdHup76jS1ct
+         kjBjTbtszt4gEtllbk9WTKxiocMml7uip3nQcwzXJ1Zq0xC+y287/VUPyl7d7kcfrQdB
+         lBf7xNjXmrnzf8klRGKjJH4tGXcH+u0eiUBKQQQi0H/ng1dhspKV3yS4UGuixyt8rHNS
+         l5/w==
+X-Gm-Message-State: ACrzQf3ybouTGUr2gZJri9E7ePG+iuCpjsLqb38JXfX1tNGXjkjV25kv
+        /dMzp1WKEPquKgNS8Rr4q8P4UyaeprEZWWfg9LNPF+EYYV8amYuSB1SsjDU6I2yCR22OPOKGIJw
+        gvqJiOVsQc3v06YW5cOE3vLcC
+X-Received: by 2002:a17:907:808:b0:730:54cc:b597 with SMTP id wv8-20020a170907080800b0073054ccb597mr19086045ejb.434.1666429740459;
+        Sat, 22 Oct 2022 02:09:00 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5wEhhR2mnLJxetCB4SBQ0vEMlRcc1Nv8fTyENEUMtmBOswEAYXdwj/+tYLUYoPRamA0FH1xw==
+X-Received: by 2002:a17:907:808:b0:730:54cc:b597 with SMTP id wv8-20020a170907080800b0073054ccb597mr19086033ejb.434.1666429740217;
+        Sat, 22 Oct 2022 02:09:00 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:2f4b:62da:3159:e077? ([2001:b07:6468:f312:2f4b:62da:3159:e077])
+        by smtp.googlemail.com with ESMTPSA id t5-20020a056402524500b0045726e8a22bsm15111235edd.46.2022.10.22.02.08.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 22 Oct 2022 02:08:59 -0700 (PDT)
+Message-ID: <f9327f38-72b3-bf65-a318-bf5982364c15@redhat.com>
+Date:   Sat, 22 Oct 2022 11:08:58 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Mail-ID: 2ff8b4a6-6a4a-400a-8436-ce86973b8370
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH v2 2/2] KVM: debugfs: Return retval of simple_attr_open()
+ if it fails
+Content-Language: en-US
+To:     Hou Wenlong <houwenlong.hwl@antgroup.com>, kvm@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+References: <5ddb7c97d2f1edbd000020aa842b0619374e6951.1665975828.git.houwenlong.hwl@antgroup.com>
+ <69d64d93accd1f33691b8a383ae555baee80f943.1665975828.git.houwenlong.hwl@antgroup.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <69d64d93accd1f33691b8a383ae555baee80f943.1665975828.git.houwenlong.hwl@antgroup.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Frank Wunderlich <frank-w@public-files.de>
+On 10/17/22 05:06, Hou Wenlong wrote:
+> Although simple_attr_open() fails only with -ENOMEM with current code
+> base, it would be nicer to return retval of simple_attr_open() directly
+> in kvm_debugfs_open().
+> 
+> No functional change intended.
+> 
+> Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
+> ---
+>   virt/kvm/kvm_main.c | 13 ++++++-------
+>   1 file changed, 6 insertions(+), 7 deletions(-)
+> 
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index e30f1b4ecfa5..f7b06c1e8827 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -5398,6 +5398,7 @@ static int kvm_debugfs_open(struct inode *inode, struct file *file,
+>   			   int (*get)(void *, u64 *), int (*set)(void *, u64),
+>   			   const char *fmt)
+>   {
+> +	int ret;
+>   	struct kvm_stat_data *stat_data = (struct kvm_stat_data *)
+>   					  inode->i_private;
+>   
+> @@ -5409,15 +5410,13 @@ static int kvm_debugfs_open(struct inode *inode, struct file *file,
+>   	if (!kvm_get_kvm_safe(stat_data->kvm))
+>   		return -ENOENT;
+>   
+> -	if (simple_attr_open(inode, file, get,
+> -		    kvm_stats_debugfs_mode(stat_data->desc) & 0222
+> -		    ? set : NULL,
+> -		    fmt)) {
+> +	ret = simple_attr_open(inode, file, get,
+> +			       kvm_stats_debugfs_mode(stat_data->desc) & 0222
+> +			       ? set : NULL, fmt);
+> +	if (ret)
+>   		kvm_put_kvm(stat_data->kvm);
+> -		return -ENOMEM;
+> -	}
+>   
+> -	return 0;
+> +	return ret;
+>   }
+>   
+>   static int kvm_debugfs_release(struct inode *inode, struct file *file)
 
-Add SoC specific section for defining clock configuration.
+Queued, thanks.
 
-Add compatible in "not" section to avoid override the settings again.
-
-Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
----
- .../devicetree/bindings/mmc/mtk-sd.yaml       | 28 +++++++++++++++++++
- 1 file changed, 28 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/mmc/mtk-sd.yaml b/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
-index c7bcf0c3dd5d..9df63c461f1f 100644
---- a/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
-+++ b/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
-@@ -229,6 +229,33 @@ allOf:
-             - const: hclk
-             - const: source_cg
-             - const: bus_clk
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - mediatek,mt7986-mmc
-+    then:
-+      properties:
-+        assigned-clock-parents:
-+          maxItems: 2
-+        assigned-clocks:
-+          maxItems: 2
-+        clocks:
-+          minItems: 3
-+          items:
-+            - description: source clock
-+            - description: HCLK which used for host
-+            - description: independent source clock gate
-+            - description: bus clock used for internal register access
-+            - description: msdc subsys clock gate
-+        clock-names:
-+          minItems: 3
-+          items:
-+            - const: source
-+            - const: hclk
-+            - const: axi_cg
-+            - const: ahb_cg
-   - if:
-       not:
-         properties:
-@@ -237,6 +264,7 @@ allOf:
-               enum:
-                 - mediatek,mt2712-mmc
-                 - mediatek,mt8192-mmc
-+                - mediatek,mt7986-mmc
-     then:
-       properties:
-         clocks:
--- 
-2.34.1
+Paolo
 
