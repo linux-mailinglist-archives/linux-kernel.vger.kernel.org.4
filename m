@@ -2,125 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73D3460830D
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 03:09:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E56B608310
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 03:13:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229919AbiJVBJy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 21:09:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57538 "EHLO
+        id S229849AbiJVBNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 21:13:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbiJVBJv (ORCPT
+        with ESMTP id S229663AbiJVBNn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 21:09:51 -0400
-Received: from esa4.hc1455-7.c3s2.iphmx.com (esa4.hc1455-7.c3s2.iphmx.com [68.232.139.117])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F02932FFC5;
-        Fri, 21 Oct 2022 18:09:45 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6500,9779,10507"; a="93171868"
-X-IronPort-AV: E=Sophos;i="5.95,203,1661785200"; 
-   d="scan'208";a="93171868"
-Received: from unknown (HELO oym-r2.gw.nic.fujitsu.com) ([210.162.30.90])
-  by esa4.hc1455-7.c3s2.iphmx.com with ESMTP; 22 Oct 2022 10:09:43 +0900
-Received: from oym-m1.gw.nic.fujitsu.com (oym-nat-oym-m1.gw.nic.fujitsu.com [192.168.87.58])
-        by oym-r2.gw.nic.fujitsu.com (Postfix) with ESMTP id 1B135D4332;
-        Sat, 22 Oct 2022 10:09:42 +0900 (JST)
-Received: from kws-ab2.gw.nic.fujitsu.com (kws-ab2.gw.nic.fujitsu.com [192.51.206.12])
-        by oym-m1.gw.nic.fujitsu.com (Postfix) with ESMTP id 4C9E7D9942;
-        Sat, 22 Oct 2022 10:09:41 +0900 (JST)
-Received: from [10.167.226.45] (unknown [10.167.226.45])
-        by kws-ab2.gw.nic.fujitsu.com (Postfix) with ESMTP id 5E0CE2340A4F;
-        Sat, 22 Oct 2022 10:09:40 +0900 (JST)
-Message-ID: <1846f2e1-ff13-5fa2-240f-fd7749921ce2@fujitsu.com>
-Date:   Sat, 22 Oct 2022 09:09:39 +0800
+        Fri, 21 Oct 2022 21:13:43 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DB4B2B2E00
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 18:13:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666401222; x=1697937222;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=/pjc7b84rQqrPJ0zpJn4Gy3GmDI34zVW03V/ID43gkc=;
+  b=kdczngl3Uiv7ahVMygTPObZLMUseFt04kiu/Y/sxsWxw821wjcNvjUaN
+   3gqQ+0JQP8AJAjjRXX2N2VPXiMvhY8S6iKjiLOoq3TCq85ABINmOAnYlq
+   Cik2jV7EW4S8/Yjf8tDFytt9d+CuOGdr3UQg/54rSGbXKl3MWrG0WpYTH
+   +h0xaD+xApbwSR9i24oLqGUl8fx8fs0o5rU5IllLGKXYAioh+rmDXPcwM
+   K2E/1uo79VJeFDj0gKaIjb1ZGj6P6buMKxY86ZhfaN6fqNIXGwUYfXXDE
+   WZlwEYblUzaBLv56AwzmGm4Ochsni+/n92mlBjOuZmTCQ5phm+x+W8LeU
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10507"; a="333719761"
+X-IronPort-AV: E=Sophos;i="5.95,203,1661842800"; 
+   d="scan'208";a="333719761"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2022 18:13:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10507"; a="773260222"
+X-IronPort-AV: E=Sophos;i="5.95,203,1661842800"; 
+   d="scan'208";a="773260222"
+Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 21 Oct 2022 18:13:28 -0700
+Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1om34p-000399-1v;
+        Sat, 22 Oct 2022 01:13:27 +0000
+Date:   Sat, 22 Oct 2022 09:13:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:objtool/urgent] BUILD SUCCESS
+ 230db82413c091bc16acee72650f48d419cebe49
+Message-ID: <635343b1.f88E7w9J+tc7iYv5%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [for-next PATCH v2 1/2] RDMA/rxe: Remove unnecessary mr testing
-Content-Language: en-US
-To:     Zhu Yanjun <zyjzyj2000@gmail.com>
-Cc:     jgg@ziepe.ca, leon@kernel.org, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1666338764-2-1-git-send-email-lizhijian@fujitsu.com>
- <1666338764-2-2-git-send-email-lizhijian@fujitsu.com>
- <CAD=hENeGMKri0nYMtcu98K2j3D+ZBkxO6fFX5cvvyJsEghrrmQ@mail.gmail.com>
-From:   Li Zhijian <lizhijian@fujitsu.com>
-In-Reply-To: <CAD=hENeGMKri0nYMtcu98K2j3D+ZBkxO6fFX5cvvyJsEghrrmQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-TM-AS-Product-Ver: IMSS-9.1.0.1408-9.0.0.1002-27216.003
-X-TM-AS-User-Approved-Sender: Yes
-X-TMASE-Version: IMSS-9.1.0.1408-9.0.1002-27216.003
-X-TMASE-Result: 10--15.594600-10.000000
-X-TMASE-MatchedRID: mZljRXDwq+6PvrMjLFD6eK5i3jK3KDOoC/ExpXrHizy+eGAmqR+bQDss
-        suIpK9WSfr1jt5raS6thWgNOVfhPTFzsSetYc4qWEhGH3CRdKUV2ZYwNBqM6Ii3euai/vqCsuxW
-        P7AlD8NO/6ou3CTYXxvju9Pl12bPveAhnd12HpxeOtWfhyZ77Dn5Lmbb/xUuawLkNMQzGl5B+Kr
-        WCPbERP9wZQbxQpGvbrXE1vkBdsJHOErCEPfcsyp4CIKY/Hg3AWQy9YC5qGvwCwwGD+AF1Ue52O
-        dZcC6tPIAcCikR3vq8WENZibi59zo1JkjUDAhp4iX5CWPaSNeLN5TTK7oKHbLCAKbbvwUtP
-X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git objtool/urgent
+branch HEAD: 230db82413c091bc16acee72650f48d419cebe49  x86/unwind/orc: Fix unreliable stack dump with gcov
 
+elapsed time: 721m
 
-On 21/10/2022 22:39, Zhu Yanjun wrote:
-> On Fri, Oct 21, 2022 at 3:53 PM Li Zhijian <lizhijian@fujitsu.com> wrote:
->> Before the testing, we already passed it to rxe_mr_copy() where mr could
->> be dereferenced. so this checking is not exactly correct.
->>
->> I tried to figure out the details how/when mr could be NULL, but failed
->> at last. Add a WARN_ON(!mr) to that path to tell us more when it
->> happends.
-> If I get you correctly, you confronted a problem,
-Not exactly,  I removed the mr checking since i think this checking is not correct.
-the newly added WARN_ON(!mr) is the only once place where the mr can be NULL but not handled correctly.
-At least with/without this patch, once WARN_ON(!mr) is triggered, kernel will go something wrong.
+configs tested: 128
+configs skipped: 99
 
-so i want to place this  WARN_ON(!mr) to point to the problem.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Thanks
-Zhijian
+gcc tested configs:
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                        randconfig-a013
+i386                                defconfig
+x86_64                        randconfig-a011
+x86_64                        randconfig-a004
+x86_64                               rhel-8.3
+x86_64                        randconfig-a002
+x86_64                        randconfig-a015
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+x86_64                        randconfig-a006
+x86_64                           allyesconfig
+x86_64                           rhel-8.3-kvm
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+i386                             allyesconfig
+powerpc                           allnoconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+s390                                defconfig
+s390                             allmodconfig
+arc                                 defconfig
+alpha                               defconfig
+s390                             allyesconfig
+arc                  randconfig-r043-20221019
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+arm                        multi_v7_defconfig
+sh                           se7721_defconfig
+powerpc                         ps3_defconfig
+m68k                           virt_defconfig
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+sparc                       sparc32_defconfig
+sh                          sdk7786_defconfig
+parisc                           alldefconfig
+mips                      fuloong2e_defconfig
+ia64                          tiger_defconfig
+arm                        mvebu_v7_defconfig
+mips                    maltaup_xpa_defconfig
+arm                       omap2plus_defconfig
+arm                        clps711x_defconfig
+powerpc                 linkstation_defconfig
+arc                            hsdk_defconfig
+openrisc                 simple_smp_defconfig
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+arc                           tb10x_defconfig
+sh                            titan_defconfig
+powerpc                     pq2fads_defconfig
+arm                         nhk8815_defconfig
+arc                              alldefconfig
+m68k                          atari_defconfig
+powerpc                     tqm8548_defconfig
+arm                          lpd270_defconfig
+arc                  randconfig-r043-20221018
+s390                 randconfig-r044-20221018
+riscv                randconfig-r042-20221018
+arm                          exynos_defconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+arm                           u8500_defconfig
+csky                                defconfig
+parisc                generic-64bit_defconfig
+i386                          randconfig-c001
+sh                           se7722_defconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+arc                  randconfig-r043-20221022
+s390                 randconfig-r044-20221022
+riscv                randconfig-r042-20221022
+arc                  randconfig-r043-20221020
+s390                 randconfig-r044-20221020
+riscv                randconfig-r042-20221020
 
->   but you can not figure it out.
-> So you send it upstream as a patch?
->
-> I am not sure if it is a good idea.
->
-> Zhu Yanjun
->
->> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
->> ---
->>   drivers/infiniband/sw/rxe/rxe_resp.c | 4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/infiniband/sw/rxe/rxe_resp.c b/drivers/infiniband/sw/rxe/rxe_resp.c
->> index ed5a09e86417..218c14fb07c6 100644
->> --- a/drivers/infiniband/sw/rxe/rxe_resp.c
->> +++ b/drivers/infiniband/sw/rxe/rxe_resp.c
->> @@ -778,6 +778,7 @@ static enum resp_states read_reply(struct rxe_qp *qp,
->>          if (res->state == rdatm_res_state_new) {
->>                  if (!res->replay) {
->>                          mr = qp->resp.mr;
->> +                       WARN_ON(!mr);
->>                          qp->resp.mr = NULL;
->>                  } else {
->>                          mr = rxe_recheck_mr(qp, res->read.rkey);
->> @@ -811,8 +812,7 @@ static enum resp_states read_reply(struct rxe_qp *qp,
->>
->>          rxe_mr_copy(mr, res->read.va, payload_addr(&ack_pkt),
->>                      payload, RXE_FROM_MR_OBJ);
->> -       if (mr)
->> -               rxe_put(mr);
->> +       rxe_put(mr);
->>
->>          if (bth_pad(&ack_pkt)) {
->>                  u8 *pad = payload_addr(&ack_pkt) + payload;
->> --
->> 2.31.1
->>
+clang tested configs:
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+x86_64                        randconfig-a012
+x86_64                        randconfig-a005
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+i386                 randconfig-a011-20221017
+i386                 randconfig-a013-20221017
+i386                 randconfig-a012-20221017
+i386                 randconfig-a014-20221017
+i386                 randconfig-a016-20221017
+i386                          randconfig-a002
+i386                 randconfig-a015-20221017
+i386                          randconfig-a004
+i386                          randconfig-a006
+hexagon              randconfig-r045-20221018
+hexagon              randconfig-r041-20221018
+s390                 randconfig-r044-20221019
+hexagon              randconfig-r045-20221019
+riscv                randconfig-r042-20221019
+hexagon              randconfig-r041-20221019
+arm                       netwinder_defconfig
+mips                        maltaup_defconfig
+powerpc                 mpc8560_ads_defconfig
+arm                      pxa255-idp_defconfig
+mips                          ath79_defconfig
+powerpc                      acadia_defconfig
+arm                             mxs_defconfig
+arm                        vexpress_defconfig
+mips                       rbtx49xx_defconfig
+arm                           spitz_defconfig
+hexagon              randconfig-r041-20221020
+hexagon              randconfig-r045-20221020
+x86_64                        randconfig-k001
+powerpc                   microwatt_defconfig
+arm                         orion5x_defconfig
+powerpc                      obs600_defconfig
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
