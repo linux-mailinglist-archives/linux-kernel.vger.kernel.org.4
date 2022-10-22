@@ -2,102 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB690608FA6
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 23:04:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E420608F9B
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 22:41:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229738AbiJVVEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 17:04:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48836 "EHLO
+        id S229491AbiJVUlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 16:41:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbiJVVEi (ORCPT
+        with ESMTP id S229506AbiJVUlp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 17:04:38 -0400
-X-Greylist: delayed 1474 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 22 Oct 2022 14:04:35 PDT
-Received: from mx.treblig.org (mx.treblig.org [46.43.15.161])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61B7D1B797
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 14:04:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
-        ; s=bytemarkmx; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:
-        Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=mZ7ZhD4cvnKSycRl1+l3M39tGHDRpDCkJZSVTXRFl8w=; b=WJKfcJmuhyS3Dp1MiLdjvyeksT
-        VYgoPFLU1O+GHcSt2FfvvS36yWVasgGv8oHusCk+fnHV+CPjX4KOeHjLZduy/o6pm3+2/BNOmfVuT
-        TQaK+/t8dCl6hbhOO5PVkPryza29I+Vz9a/yRHjocI0b5UX92kGgKjT9t2ejYTOwp+lGEqidBybeE
-        k1WfMvmAE1pVR65MTCaQuXbQohxOWQeI3Mh8cj/GD466J16FyZbk/DrCCpsMp6H2gBQTcNm8sMhYN
-        2qfZFHyR7QOdwFV4iXf5vyj2vXfBwoVKlBRLHU7t/v1aeiELZG8L1jnQ5yta8K14JwmkaaDxqeFPF
-        8E8vfbNA==;
-Received: from localhost ([127.0.0.1] helo=dalek.home.treblig.org)
-        by mx.treblig.org with esmtp (Exim 4.94.2)
-        (envelope-from <linux@treblig.org>)
-        id 1omLHV-005mx1-2y; Sat, 22 Oct 2022 21:39:44 +0100
-From:   linux@treblig.org
-To:     linux@treblig.org, shaggy@kernel.org,
-        jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org
-Cc:     syzbot+5fc38b2ddbbca7f5c680@syzkaller.appspotmail.com
-Subject: [PATCH] jfs: Fix fortify moan in symlink
-Date:   Sat, 22 Oct 2022 21:39:14 +0100
-Message-Id: <20221022203913.264855-1-linux@treblig.org>
-X-Mailer: git-send-email 2.37.3
+        Sat, 22 Oct 2022 16:41:45 -0400
+Received: from mail-vs1-xe41.google.com (mail-vs1-xe41.google.com [IPv6:2607:f8b0:4864:20::e41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 155DFDCADF
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 13:41:45 -0700 (PDT)
+Received: by mail-vs1-xe41.google.com with SMTP id 1so4493588vsx.1
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 13:41:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=j6c6RloR1f1meVJL/BrGR4Y0ez6uzlYlKHhaiRNYhs0=;
+        b=mMXnHE2jkEoKwZPGDdmZJDfFAGQtJnF4ttjQru9IV9yoRrQP0CoheGJXMgk/+cUT6U
+         W8q2mczs07PLGk+V+04geYp2/bPcXqUcavJTvT+Zsky6VL0RQjGeTvniz9RcvIq8YDTQ
+         QnK7Vfe296qwOImib8bAPCN02PU8oJQS3fd84UcpquY+77e4ejx5IJZjfNmL9e6w7k6e
+         NPqYuJ5Y9fc2OyDoO6NUGFtDO/5DJg2XjMDwbBWS0p4rRpfHA8r1kG6C5hnb3hTbv5nl
+         Yg3oeToRn8y0+Awxa3jEgYhVjCmkDHJJXmGQOxUj1CrnuEJzF7OPLSVjLf+i1vSMumtC
+         p1Mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=j6c6RloR1f1meVJL/BrGR4Y0ez6uzlYlKHhaiRNYhs0=;
+        b=gSycCJ2B+ssn+RHRPNP3ptn4wrvhWkiTvnNb4Xc+yadYVaNHRUU645jOLbkqCdFvp2
+         wiB+KKv1PHXpgPHO04vCeloujsePKr7LQ6uOqX+qqOv3ldXe6x4Wb+0lRDady+EggqUg
+         Q96iUq4awpj1Pax4q5sE/X2/vWS5Sw9HDREgt52b7iBr5tyRe/BQncpwfFPH38k1XG4K
+         4f1bAzur6aCXt8wTHofMbTAnWfCmSBV1LT5YF2biGwa1t9hDyy2KMr6wsVmZoDAEn4Ru
+         jt+guMRVJhJI1a1YE6ut/Yeyg3DUd6QQm7fhGLTeN9CRpN2am9G0cZEVQLZ3nAhTh1Jr
+         L7lQ==
+X-Gm-Message-State: ACrzQf3fac146KwWpSEt1mCnfjYLal4kh99DlRkcCiWe0dlYRwJqKTYm
+        7HnMKWpOMqGOiQJvWeNT33PK/lyZlipqI/cKOvE=
+X-Google-Smtp-Source: AMsMyM7wqn/TWgRi37Of0kHT3Q53wXsnl+FZFnwiThrekfEnRgXqi83MGMxTqgWJOLBXr3BmpOOdg4UyUNGey8aVAm0=
+X-Received: by 2002:a05:6102:15ac:b0:3a6:3e41:b163 with SMTP id
+ g44-20020a05610215ac00b003a63e41b163mr16250105vsv.81.1666471303924; Sat, 22
+ Oct 2022 13:41:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:612c:2106:b0:2d5:1bad:2def with HTTP; Sat, 22 Oct 2022
+ 13:41:43 -0700 (PDT)
+Reply-To: mmrstephen16@gmail.com
+From:   "Mr. Stephen Melvin" <matlgxl@gmail.com>
+Date:   Sat, 22 Oct 2022 13:41:43 -0700
+Message-ID: <CAKXX3NGAEc925EVXcTzp+jZeXnVSPc5_Ee1bYoSWw7E=HEVFsw@mail.gmail.com>
+Subject: Reply and let me know if you received this email.!!!
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5008]
+        *  0.8 HK_RANDOM_ENVFROM Envelope sender username looks random
+        *  1.0 HK_RANDOM_FROM From username looks random
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [matlgxl[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [mmrstephen16[at]gmail.com]
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:e41 listed in]
+        [list.dnswl.org]
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Dr. David Alan Gilbert" <linux@treblig.org>
+Hello Dear, How are you today and your family? Want to believe you are
+all doing great.
 
-JFS has in jfs_incore.h:
+Please reply to me as fast as possible. I have important information for you.
 
-      /* _inline may overflow into _inline_ea when needed */
-      /* _inline_ea may overlay the last part of
-       * file._xtroot if maxentry = XTROOTINITSLOT
-       */
-      union {
-        struct {
-          /* 128: inline symlink */
-          unchar _inline[128];
-          /* 128: inline extended attr */
-          unchar _inline_ea[128];
-        };
-        unchar _inline_all[256];
-
-and currently the symlink code copies into _inline;
-if this is larger than 128 bytes it triggers a fortify warning of the
-form:
-
-  memcpy: detected field-spanning write (size 132) of single field
-     "ip->i_link" at fs/jfs/namei.c:950 (size 18446744073709551615)
-
-when it's actually OK.
-
-Copy it into _inline_all instead.
-
-Reported-by: syzbot+5fc38b2ddbbca7f5c680@syzkaller.appspotmail.com
-Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
----
- fs/jfs/namei.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/fs/jfs/namei.c b/fs/jfs/namei.c
-index 9db4f5789c0ec..4fbbf88435e69 100644
---- a/fs/jfs/namei.c
-+++ b/fs/jfs/namei.c
-@@ -946,7 +946,7 @@ static int jfs_symlink(struct user_namespace *mnt_userns, struct inode *dip,
- 	if (ssize <= IDATASIZE) {
- 		ip->i_op = &jfs_fast_symlink_inode_operations;
- 
--		ip->i_link = JFS_IP(ip)->i_inline;
-+		ip->i_link = JFS_IP(ip)->i_inline_all;
- 		memcpy(ip->i_link, name, ssize);
- 		ip->i_size = ssize - 1;
- 
--- 
-2.37.3
-
+Kind Regards,
+Mr. Stephen Melvin.
