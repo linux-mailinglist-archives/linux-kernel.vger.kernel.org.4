@@ -2,147 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8675F6082EF
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 02:38:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B4B66082F1
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 02:39:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229867AbiJVAin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 20:38:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40500 "EHLO
+        id S229871AbiJVAjs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 20:39:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbiJVAij (ORCPT
+        with ESMTP id S229893AbiJVAjm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 20:38:39 -0400
-Received: from na01-obe.outbound.protection.outlook.com (mail-westcentralusazon11022014.outbound.protection.outlook.com [40.93.200.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF4AF2B4EAD;
-        Fri, 21 Oct 2022 17:38:38 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BadBo7+J/ne7od0YxMgkOCbGCIJrfHsQ/S5F7V1jgyQifu5dSDav6XgYNDaO2goY28H4piV0VC5fYkGGpxobCaecLAAl5XCHvYB6a6MDT5mkGO6CJVmf4XQD88Q8UMRlAeg0ky6lJ9nuhBaPNuWNqqg98PTDWBYD1v8s3jJNPh0U/vodrGMPWi/ktxfJfCH5Jw85KF0UkqbD0ffox+Q9HPjce3nMl6NmKOlsEBY2W9W4Fz4JUsxWxXeztKr+YC77IDG8GrrhfuoMdoYxDtlq0cbxJ1vIkimLcFrla29o15XNGvaN2M/jNyzo/76n6u4WDULFKroArMYOMOdjPC1clA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BGCY2cep5WuPqOgMsLE5FePPPfvwAjz3rJ8KBDyaADY=;
- b=hryS5EojxNEg6/vuphhbwOT6YlaJ6Y/usvKINturW6mpKk5vvH4ephmTQtRK/GrlAgAn7EdIW+rM7sMG1yixTk8ZBccGHkpzIEFAxLrEbKjP57d4qzn6P8wOT6wqPKCvpqLNgImzXC0AAJPNW9Q6JWmzRW8uyA3mlTn8glLnVfcIT1p/VJeiR0N1XhWQJMK7S52Kj3MNLBbz03SfVCggMWhZsVJ7OTS4X91tKzhTkqjIDYLmaATno+qA/2zxMljC4/NXyc27h1U7PWY/S4rAcNG/0+8sSnJzCtFcNQYaWpUiHW+vLaYRwkxzhPT5KIzKGQZwKjSmtP4xGkxs5AGGXA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BGCY2cep5WuPqOgMsLE5FePPPfvwAjz3rJ8KBDyaADY=;
- b=eeFVQpqTBpnXlSi8HzUFyJtpep8vj6J9iDBvq5h5pCLQZbq4XRQfHlhcBn7M9UDrErw3EYG6X4UudzTJHwMst/ThYULoiqgxN0xI1vkjJSHOwrfx6WtePWaDXnbo2BzJ2LhWtzXwwK4Ka+1YZlro9M9QAHMca2FjoQPhf1CVVz4=
-Received: from PH7PR21MB3263.namprd21.prod.outlook.com (2603:10b6:510:1db::16)
- by CH2PR21MB1494.namprd21.prod.outlook.com (2603:10b6:610:88::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.6; Sat, 22 Oct
- 2022 00:38:35 +0000
-Received: from PH7PR21MB3263.namprd21.prod.outlook.com
- ([fe80::c376:127c:aa44:f3c8]) by PH7PR21MB3263.namprd21.prod.outlook.com
- ([fe80::c376:127c:aa44:f3c8%7]) with mapi id 15.20.5769.006; Sat, 22 Oct 2022
- 00:38:35 +0000
-From:   Long Li <longli@microsoft.com>
-To:     tom <tom@talpey.com>, Bernard Metzler <BMT@zurich.ibm.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "shiraz.saleem@intel.com" <shiraz.saleem@intel.com>,
-        Ajay Sharma <sharmaajay@microsoft.com>
-CC:     "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>
-Subject: RE: [Patch v8 12/12] RDMA/mana_ib: Add a driver for Microsoft Azure
- Network Adapter
-Thread-Topic: [Patch v8 12/12] RDMA/mana_ib: Add a driver for Microsoft Azure
- Network Adapter
-Thread-Index: AQHY5AmQQ427gtVraEOIJ5+rCERFPa4XHQ2AgACeAYCAATEdAIAAAKcAgACKjjCAABy+gIAAAHfA
-Date:   Sat, 22 Oct 2022 00:38:35 +0000
-Message-ID: <PH7PR21MB3263908FB7410B98F29490DECE2C9@PH7PR21MB3263.namprd21.prod.outlook.com>
-References: <1666218252-32191-1-git-send-email-longli@linuxonhyperv.com>
- <1666218252-32191-13-git-send-email-longli@linuxonhyperv.com>
- <SA0PR15MB39198F9538CBDC8A88D63DF0992A9@SA0PR15MB3919.namprd15.prod.outlook.com>
- <PH7PR21MB3263D4CFF3B0AAB0C4FAE5D5CE2A9@PH7PR21MB3263.namprd21.prod.outlook.com>
- <9af99f89-8f1d-b83f-6e77-4e411223f412@talpey.com>
- <SA0PR15MB3919DE8DE2C407D8E8A07E1F992D9@SA0PR15MB3919.namprd15.prod.outlook.com>
- <PH7PR21MB3263A40A380B9D7F00F02529CE2D9@PH7PR21MB3263.namprd21.prod.outlook.com>
- <b2de197c-0c5b-c815-23c8-3f90c2e226ed@talpey.com>
-In-Reply-To: <b2de197c-0c5b-c815-23c8-3f90c2e226ed@talpey.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=e24aea1b-78fd-4f48-b579-1bab022d25dd;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-10-22T00:36:30Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH7PR21MB3263:EE_|CH2PR21MB1494:EE_
-x-ms-office365-filtering-correlation-id: 060d4a62-ffa2-458b-6b28-08dab3c5c12f
-x-ld-processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: eNa9+LqlapohMR+aBlgsUBpo6KIi7vuzqsXeROIWfQmskHj6tYT0buPEwlXYoxnnQvVBIDiMc9yj8G/LsY0vxWvI8SgnC1JNcu+Ielo65Lz5iGCjjykzNSA2oKFbxxfp5G6NIqer4jxXsjrVUFmjHrs8XtFDIUgBqLci+j9vPeSK5vTrn8HxT9qyxGSjqWhUqCP00Fs1wI+UE5Kx6mvJqY5aqMVdrGSuFlKMmParpjwMHhhvVtnfUUHmjZUfBNsQ6kfnYP04QY/kCzCMXD/a4PrpNhuhbZGjz1SbCpNw7I4dMRWXvxy88SJ2KmVS8dDFo0puWXlnmI6SGK4VNIsDNx19d7yoERxqMky7QSCj/K+j+CO6Cvy9vC2ft0AVaakz6B3PV6SSi+FsrLKwvVhZPLDZFMinGAxPr0DxVTJvNSSEKn5Kbtg7Vk/xCyaHzR8P0ElXEmrhBvMtvtDF6MbEogF7EYRWCPxF13OJk2UkNZQzHCsqkT+WalKFyYQY2fYyD9JhEMFJ6nTbGyEmxNFziwvPGFY/zy+Lak8gG8VvuZ7IHw5bZRVUnhw0ia3POgt4dst5aHH8jO1OU3mdp6qEeVtpdE9tpq8mDP/sVxfyGZO2sUSHIJM//iza2tE6o4NMLsO9nlRtwTTiMXKM5QMqK+DmHgKQdzg2yUIt7DICf09p8qLotHdEzpet1j58OYXE3dYStvY8gDEGyZV7HUkMMUm/Fx3KMiFEfqsbkaHKEcJjwgjHhXThTsvI/lU1ZdCa5Cfhye8pr6qK39igQSpS9R0gnrWpAjLMFVRPqzCeofB7uj4k7MzaBChJt2mhUpt0oGuDX3k2PvhQqxIkcn+E0g==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR21MB3263.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(346002)(396003)(39860400002)(366004)(47530400004)(451199015)(5660300002)(186003)(2906002)(7696005)(6506007)(38100700002)(26005)(10290500003)(110136005)(316002)(82960400001)(53546011)(54906003)(86362001)(6636002)(66556008)(8676002)(64756008)(82950400001)(8936002)(41300700001)(66446008)(8990500004)(4744005)(9686003)(921005)(7416002)(66476007)(83380400001)(4326008)(52536014)(122000001)(38070700005)(55016003)(71200400001)(478600001)(66946007)(76116006)(33656002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?eWpmSUIwWTdTbUozUWtSajZzcmhqMXRkVWp5VzkrZXp4NDlNR2htam5kQWV3?=
- =?utf-8?B?T0paN1ozNlNSUWN6eTd1eWk5czFCczYrTFNXbk43TmlCcGJiTjBGNE0xMVNn?=
- =?utf-8?B?bXU3ZndFeEhiVjNTL2hyVHRud2RMMjdnRSsxOFJlYzRzYVZrbWZ0bnp3V254?=
- =?utf-8?B?L1NrZUxURUVHbnRiMVdwcTZjTGpvZnloWm45dEJMcE04ZTVzSmNxUm5sT0d1?=
- =?utf-8?B?YjVnOElTN2I3N3lFU1JOSDhRczRnNy9OcTBHL3JubXBRQnR5bmN1cUtUeW5h?=
- =?utf-8?B?bDdGVHdraXVRb0JVTVZZaXluUlFpNGk2UThVTFdsRXBUQWxHQWdmM3p0VCtD?=
- =?utf-8?B?eTZoTnhXYW9IU1cxVXF1bVJHTnVRMUllQUlGSzQwSE5OLysxWElwYitUcGtt?=
- =?utf-8?B?a29aSmUrZUtJZnZjQ3Y3UC9xSVJ3dWZRY1MrN0hhRGJsZ3hOQzMyWHVJK0l2?=
- =?utf-8?B?VGUydFBld2RJUkN2STJKNE5qV1crNk5XcHJqU1psajhoT1JPQ0piME9FWnVT?=
- =?utf-8?B?L1V2aURNM0VIRlY2SEVRTVZtTGpxdE5Sa0NTUFZRUVJwckRFRThxOWFreGN2?=
- =?utf-8?B?eFN0amlpTjY4Zm1nNG1pRFdCdjJtTkdJTUJsR21mYTJzNUUwQ0JiU1N2UTN1?=
- =?utf-8?B?RHZUSXBUc1RuV25nV2xVeHBXRjFwOUNSUUU4MGZtcERhdnpiYTFtWDk5T1Zl?=
- =?utf-8?B?aGFkZlNXeERtNHBSclg4dmdiVGNrM21MZGZWSFk0SUpHY1RaMEhlS3VyTEhQ?=
- =?utf-8?B?OHdqeFlUZ0VCTml6ODhvc2QwdDFvdUd1NDh3REd0MnlHdnIxL3hZMitrdVoy?=
- =?utf-8?B?NFZBVTdxcTF2U01kMzlIdVEwRlljb2d2MGZac3oxWStkOWFOYm5Kb0pRTTlv?=
- =?utf-8?B?ak1uNWpZK2VZQlh5dXJ4TzJ2dXJMZCtxbHI3eXdkbEVmN2ZmZzNzdnZoNm1Z?=
- =?utf-8?B?UDBxOFAzWEJiR1J4bEhnWXE4SnhqNXpqYlhVWERpY3FVZDFJNEFSV0YrcTJO?=
- =?utf-8?B?RWVpdGZ5N2s1Mnp1SlI4TUM4SFVkVXBXSldITytySWdzc3RUcFVLMlNrNjNV?=
- =?utf-8?B?eFRicXRDWko4NHNndDIrMFVhTHJWU0duWE0rSDV5UE5rdkhiaFFjdVJjVHVH?=
- =?utf-8?B?dTBaMnZBOE5LQyt3TTk4ZFdvVDlqTzY3QWxLdlBySnpPWDRmRDJQeXhBQ2lL?=
- =?utf-8?B?TzdiLzhtaTVyZEkycUo0Y0MyMHdXaS9tNmtOZ3dQYTkrbVRRbUZTVmFZTzdF?=
- =?utf-8?B?YUQ0aGZ5OWdtTk56YUVsUmdTWmpZZU9ZTkxRSUJpRHhGQnJnRnZNTHVReHhI?=
- =?utf-8?B?elFpUEhyYkF0QzlEOXNDb1ViOVdwMGtJZ051UWFRQy9NbGpuYTZMV0Z1R1Ro?=
- =?utf-8?B?ZVFSMDAyb1FabTRucTZJMVlnZDJnYTJrdXgrL2lsN3M5NWJwNG1SMjNFaEFi?=
- =?utf-8?B?QkxQZ285T3pyQit1WFBTMzFWR2VVc3dYVGJ1SEQ5SVljSEIvZmVMSnFWMWRj?=
- =?utf-8?B?LzBYWXhoTTR0aUpVYjNrdXBwMER5Mk1XMytVUk9LY1hQTEpoUlJMWEI4MUVy?=
- =?utf-8?B?bEc5U1NqaHdPTC9Fb015TmNuWEcvaTJ6eUhieG0xcUI0bHhTSEFYMGpTOUxW?=
- =?utf-8?B?b2xFZ2VQWmUwYzY0S1puSnIxL0hucTlhMmQ1ajl3MHBwa2xkbTNhZktRVi9F?=
- =?utf-8?B?OHBsMUJ1R2dYTTZjM1k4em5QMVAyWThsS3h3NWxIQkRUYkY2ZjFicm9pTVlL?=
- =?utf-8?B?dGh3SUZmeDBodVRaQStkK0podDdPRTBGWUxyOXpxZFZLV2lncDZ5cFZqS2ky?=
- =?utf-8?B?bkprK0l3WG1Ob0dOV00xcVJqRkMwUlFvQ284RGtxMUNzMFdjY2ZlSUlsMFJk?=
- =?utf-8?B?cVp2L2FYelVwY3MrUzFpaFhzZlZyVHZTR0hRd2FZb2MzZFRYTXBKUUphYUts?=
- =?utf-8?B?YTJNdk1JdndIMlFIazE0cDhlYytSYUxRUVBvYVYveEtLcjJYcGtlNGtBb0ll?=
- =?utf-8?B?NVdpcWhFM05QYWN6Ylh3UzBPdEJ2bm5WRW1JaWNucEFRR3VYcCtmdlZ4SXZR?=
- =?utf-8?B?a2NGWVpha1M0NXpNMFNST283MjU1WU8zeFY5cUZxQ2JJVms5WmJRYUdWWXNs?=
- =?utf-8?Q?n9IVW/Lew9hMVvbXC/LyB9ioc?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Fri, 21 Oct 2022 20:39:42 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77FBF2AC66
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 17:39:36 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id e83so5163335ybh.1
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 17:39:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=l84h+95uPFWgwmJWetM0d/oMxOiEskPlKADirbzP7Us=;
+        b=DFyPNEk3wXK5A66+oHZ3yANgAWVKRJIrQfIUycHJQNSS9zALAdzPOaNpQmm3Dg8ulZ
+         FfMMPN4ByIgH6CYisa8MhIjYA+/6IMv8091hM8WCamxBTAQFy1GZan+TlGXuXfZ5Y70d
+         W8zmcEID+QkqtzcHaTzhEnisAD5qQAhyHRc8cPjU1Y/rYIlPYvqoZ3CbrzYe1Fbq/Mye
+         HTaxtI0M8mz/sl9Cs+lHHoTV0y/bBcRQUThqMpdEon1j0pJIMDOHx0fkuOXL5JqFOHTJ
+         UD6YA9IEiyRESKd8y0E7YpAxrlYG3yPMRja4C/1+cUw9ISDHPKpio720VBnLhEU3d6Ug
+         hisg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=l84h+95uPFWgwmJWetM0d/oMxOiEskPlKADirbzP7Us=;
+        b=RryY4ZgUX6rTXN9liR/gvg4UKoDLqwOi1znINfI2zSsG/Mai6DniNAeVlxdc7A2Wm0
+         fN6muDU4mBaMzn7sbzJaYeIiC0gLBzAkb6Ubt7WvwHs0M4jvGvu0cQfxbmrGZ0Y7Vm9r
+         s7R7ELAbUI5I07E35gRg9ZzsYGZxXZa1aMh2jDn0ogj12whyvj5uDY6bDdK/3sYho79t
+         IqXsYwLQhDqz5l3+0B0NydNxS9qgZJhXgF+QkFmgF8BdAFsKOnaNOss/p5CynGTiSJvJ
+         oiBHk1vDMiT63dKQFzsMrAsOvJRZuAuZx5erra2sVDT2uL5kQve9rMPZuLbK0IZ5gkZg
+         GTcQ==
+X-Gm-Message-State: ACrzQf01u4swgSH2aTyn0S+JtP5iZkzEz4e5j1v6VgFMVCTjcT19RQ9P
+        pENvs6tUQmtJtRVtcMHkLsmHGy+n/F9JZmxz6a/ZBw==
+X-Google-Smtp-Source: AMsMyM7n0zZBl0C7K3QFANxmzAQ2NDWe9GTyXcS2nZzmblnlK5p+9xGCXBbfNLGTDYwxaVZW+o8nsSUq7QC/CjEfJa8=
+X-Received: by 2002:a05:6902:70a:b0:6be:e740:9c0a with SMTP id
+ k10-20020a056902070a00b006bee7409c0amr19406319ybt.316.1666399175337; Fri, 21
+ Oct 2022 17:39:35 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR21MB3263.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 060d4a62-ffa2-458b-6b28-08dab3c5c12f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Oct 2022 00:38:35.6917
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: pzjucHIjYklpmj3bXcyNjol0JpPtA/iv9GMBN3oD1JygV0TCDnufN4Auy0R2abMom55ZVYcmVsQOB5ackzkOVg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR21MB1494
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
+References: <0000000000009fa63105eb7648d8@google.com> <00000000000031aec805eb76a2d4@google.com>
+ <20221020182155.ecd44ee984b1aeb2e5a2e8ed@linux-foundation.org>
+ <CAJuCfpEh0byROe58H_FtL+NMLKAvSrQW0f0wd3QiVTBdRg5CTA@mail.gmail.com>
+ <CAJuCfpF7xsZJevfj6ERsJi5tPFj0o6FATAm4k=CMsONFG86EmQ@mail.gmail.com>
+ <CANp29Y7aNP+0hd01feB24XrCUPVa0+7kf7NiDAV_FdhPx2VkOQ@mail.gmail.com>
+ <CAJuCfpF0eYsNZjQO4OcT8Pnaj9+H8UK_o4bwtLzD=n53-48hJw@mail.gmail.com> <CANp29Y4Q3X_KqxjajigGHXHFaY54vEdYkPf+5tcg3k2YyRh+jw@mail.gmail.com>
+In-Reply-To: <CANp29Y4Q3X_KqxjajigGHXHFaY54vEdYkPf+5tcg3k2YyRh+jw@mail.gmail.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Fri, 21 Oct 2022 17:39:24 -0700
+Message-ID: <CAJuCfpGOF7fvMH671rBJyGQiEPXVs7E3SnoNeEJBAwV6jBH07A@mail.gmail.com>
+Subject: Re: [syzbot] BUG: sleeping function called from invalid context in vm_area_dup
+To:     Aleksandr Nogikh <nogikh@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        syzbot <syzbot+b910411d3d253dab25d8@syzkaller.appspotmail.com>,
+        bigeasy@linutronix.de, bpf@vger.kernel.org, brauner@kernel.org,
+        ebiederm@xmission.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
+        linux-mm@kvack.org, David Hildenbrand <david@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -150,21 +77,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBTdWJqZWN0OiBSZTogW1BhdGNoIHY4IDEyLzEyXSBSRE1BL21hbmFfaWI6IEFkZCBhIGRyaXZl
-ciBmb3IgTWljcm9zb2Z0DQo+IEF6dXJlIE5ldHdvcmsgQWRhcHRlcg0KPiANCj4gT24gMTAvMjEv
-MjAyMiA2OjU1IFBNLCBMb25nIExpIHdyb3RlOg0KPiA+Pj4gVGhlIHVwcGVyIDggYml0cyBvZiBh
-biBpYl9tciByZW1vdGUgdG9rZW4gYXJlIHJlc2VydmVkIGZvciB1c2UgYXMgYQ0KPiA+Pj4gcm90
-YXRpbmcga2V5LCB0aGlzIGFsbG93cyBhIGNvbnN1bWVyIHRvIG1vcmUgc2FmZWx5IHJldXNlIGFu
-IGliX21yDQo+ID4+PiB3aXRob3V0IGhhdmluZyB0byBvdmVyYWxsb2NhdGUgbGFyZ2UgcmVnaW9u
-IHBvb2xzLg0KPiA+Pj4NCj4gPj4+IFRvbS4NCj4gPj4NCj4gPj4gUmlnaHQsIG15IHBvaW50IHdh
-cyB0aGF0IG9uZSBjYW5ub3QgZW5jb2RlIElOVF9NQVggZGlmZmVyZW50IE1SDQo+ID4+IGlkZW50
-aWZpZXJzIGludG8gMzIgLSA4ID0gMjQgYml0cy4NCj4gPj4NCj4gPj4gQmVzdCwNCj4gPj4gQmVy
-bmFyZC4NCj4gPg0KPiA+IFRoZSBoYXJkd2FyZSBleHBvc2VzIHRoZSBudW1iZXIgb2YgTVJzIHRo
-YXQgZXhjZWVkcyBVSU5UMzJfTUFYLg0KPiA+IFRoZXJlIGlzIG5vIHNvZnR3YXJlIHN0YWNrIGxp
-bWl0IGZyb20gaGFyZHdhcmUgcGVyc3BlY3RpdmUuDQo+ID4NCj4gPiBJbiB0aGlzIGNhc2UsIG1h
-eWJlIGl0J3MgYSBnb29kIGlkZWEgdG8gc2V0IGl0IHRvIDB4RkZGRkZGLiBJJ20gbWFraW5nIHRo
-ZQ0KPiBjaGFuZ2UuDQo+IA0KPiBBY3R1YWxseSwgMl4yNCBNUnMgaXMgZW5vcm1vdXMgaW4gaXRz
-ZWxmLiBEb2VzIHRoaXMgZHJpdmVyIGFjdHVhbGx5IHN1cHBvcnQgdGhhdA0KPiBtYW55PyBXaXRo
-b3V0IGZhbGxpbmcgb3Zlcj8NCj4gDQo+IFRvbS4NCg0KVGhlIGhhcmR3YXJlIGNhbiBzdXBwb3J0
-IHRoYXQgbXVjaC4gSSBkb24ndCBzZWUgdGhpcyBkcml2ZXIgd2lsbCBlbmZvcmNlIG90aGVyDQps
-aW1pdGF0aW9uIG9uIHRoYXQuDQo=
+On Fri, Oct 21, 2022 at 5:22 PM Aleksandr Nogikh <nogikh@google.com> wrote:
+>
+> On Fri, Oct 21, 2022 at 4:50 PM Suren Baghdasaryan <surenb@google.com> wrote:
+> >
+> > On Fri, Oct 21, 2022 at 4:12 PM Aleksandr Nogikh <nogikh@google.com> wrote:
+> > >
+> > > On Fri, Oct 21, 2022 at 2:52 PM 'Suren Baghdasaryan' via
+> > > syzkaller-bugs <syzkaller-bugs@googlegroups.com> wrote:
+> > > >
+> > > > On Thu, Oct 20, 2022 at 6:58 PM Suren Baghdasaryan <surenb@google.com> wrote:
+> > > > >
+> > > > > On Thu, Oct 20, 2022 at 6:22 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+> > > > > >
+> > > > > > On Thu, 20 Oct 2022 05:40:43 -0700 syzbot <syzbot+b910411d3d253dab25d8@syzkaller.appspotmail.com> wrote:
+> > > > > >
+> > > > > > > syzbot has found a reproducer for the following issue on:
+> > > > > >
+> > > > > > Thanks.
+> > > > > >
+> > > > > >
+> > > > > > > HEAD commit:    acee3e83b493 Add linux-next specific files for 20221020
+> > > > > > > git tree:       linux-next
+> > > > > > > console+strace: https://syzkaller.appspot.com/x/log.txt?x=170a8016880000
+> > > > > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=c82245cfb913f766
+> > > > > > > dashboard link: https://syzkaller.appspot.com/bug?extid=b910411d3d253dab25d8
+> > > > > > > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > > > > > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=109e0372880000
+> > > > > > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1770d752880000
+> > > > > > >
+> > > > > > > Downloadable assets:
+> > > > > > > disk image: https://storage.googleapis.com/syzbot-assets/98cc5896cded/disk-acee3e83.raw.xz
+> > > > > > > vmlinux: https://storage.googleapis.com/syzbot-assets/b3d3eb3aa10a/vmlinux-acee3e83.xz
+> > > > > > >
+> > > > > > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > > > > > > Reported-by: syzbot+b910411d3d253dab25d8@syzkaller.appspotmail.com
+> > > > > > >
+> > > > > > > BUG: sleeping function called from invalid context at include/linux/sched/mm.h:274
+> > > > > >
+> > > > > > This is happening under dup_anon_vma_name().
+> > > > > >
+> > > > > > I can't spot preemption being disabled on that call path, and I assume
+> > > > > > this code has been exercised for some time.
+> > > > >
+> > > > > Indeed, it is unclear why copy_vma() would be called in atomic
+> > > > > context. I'll try to reproduce tomorrow. Maybe with lockdep enabled we
+> > > > > can get something interesting.
+> > > >
+> > > > Sorry for the delay. Having trouble booting the image built with the
+> > > > attached config. My qemu crashes with a "sched: CPU #1's llc-sibling
+> > > > CPU #0 is not on the same node! [node: 1 != 0]." warning before the
+> > > > crash. Trying to figure out why.
+> > >
+> > > qemu 6.2 changed the core-to-socket assignment and it looks like we
+> > > get such errors when a kernel with "numa=fake=" is run under qemu on a
+> > > system with multiple CPUs.
+> > >
+> > > You can try removing numa=fake=... from the CMDLINE config or just
+> > > manually setting the smp argument of the qemu process (e.g. -smp
+> > > 2,sockets=2,cores=1)
+> > >
+> > > See https://gitlab.com/qemu-project/qemu/-/issues/877
+> >
+> > That was it. Thank you, Aleksandr!
+> > I can boot with the image built using the attached config but still
+> > can't reproduce the issue using the C reproducer... Will keep it
+> > running for some time to see if it eventually shows up.
+>
+> Just in case -- did you also try executing the reproducer against the
+> attached bootable disk image? Syzbot attaches the exact images on
+> which it managed to find the bug. The image should work for both GCE
+> and qemu.
+
+I just tried replacing stretch.img in my qemu command line with the
+attached disk-acee3e83.raw and that didn't work ("VFS: Unable to mount
+root fs on unknown-block(8,0)"), so I'm obviously doing something
+stupid. Any instructions on how to use the attached raw image?
+
+>
+> > Thanks,
+> > Suren.
+> >
+> > >
+> > > > defconfig with CONFIG_ANON_VMA_NAME=y boots fine but does not
+> > > > reproduce the issue.
+> > > >
+> > > > >
+> > > > > >
+> > > > > > I wonder if this could be fallout from the KSM locking error which
+> > > > > > https://lkml.kernel.org/r/8c86678a-3bfb-3854-b1a9-ae5969e730b8@redhat.com
+> > > > > > addresses.  Seems quite unlikely.
+> > > > > >
+> > > > > > > in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 3602, name: syz-executor107
+> > > > > > > preempt_count: 1, expected: 0
+> > > > > > > RCU nest depth: 0, expected: 0
+> > > > > > > INFO: lockdep is turned off.
+> > > > > > > Preemption disabled at:
+> > > > > > > [<0000000000000000>] 0x0
+> > > > > > > CPU: 0 PID: 3602 Comm: syz-executor107 Not tainted 6.1.0-rc1-next-20221020-syzkaller #0
+> > > > > > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+> > > > > > > Call Trace:
+> > > > > > >  <TASK>
+> > > > > > >  __dump_stack lib/dump_stack.c:88 [inline]
+> > > > > > >  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+> > > > > > >  __might_resched.cold+0x222/0x26b kernel/sched/core.c:9890
+> > > > > > >  might_alloc include/linux/sched/mm.h:274 [inline]
+> > > > > > >  slab_pre_alloc_hook mm/slab.h:727 [inline]
+> > > > > > >  slab_alloc_node mm/slub.c:3323 [inline]
+> > > > > > >  slab_alloc mm/slub.c:3411 [inline]
+> > > > > > >  __kmem_cache_alloc_lru mm/slub.c:3418 [inline]
+> > > > > > >  kmem_cache_alloc+0x2e6/0x3c0 mm/slub.c:3427
+> > > > > > >  vm_area_dup+0x81/0x380 kernel/fork.c:466
+> > > > > > >  copy_vma+0x376/0x8d0 mm/mmap.c:3216
+> > > > > > >  move_vma+0x449/0xf60 mm/mremap.c:626
+> > > > > > >  __do_sys_mremap+0x487/0x16b0 mm/mremap.c:1075
+> > > > > > >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> > > > > > >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+> > > > > > >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> > > > > > > RIP: 0033:0x7fd090fa5b29
+> > > > > > > Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+> > > > > > > RSP: 002b:00007ffc2e90bd38 EFLAGS: 00000246 ORIG_RAX: 0000000000000019
+> > > > > > > RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fd090fa5b29
+> > > > > > > RDX: 0000000000001000 RSI: 0000000000004000 RDI: 00000000201c4000
+> > > > > > > RBP: 00007fd090f69cd0 R08: 00000000202ef000 R09: 0000000000000000
+> > > > > > > R10: 0000000000000003 R11: 0000000000000246 R12: 00007fd090f69d60
+> > > > > > > R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+> > > > > > >  </TASK>
+> > > >
+> > > > --
+> > > > You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
+> > > > To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> > > > To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/CAJuCfpF7xsZJevfj6ERsJi5tPFj0o6FATAm4k%3DCMsONFG86EmQ%40mail.gmail.com.
