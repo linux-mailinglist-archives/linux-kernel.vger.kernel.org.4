@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A760760878A
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 10:03:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A753608878
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 10:17:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232480AbiJVIDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 04:03:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47420 "EHLO
+        id S233006AbiJVIRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 04:17:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232387AbiJVHyx (ORCPT
+        with ESMTP id S233886AbiJVIPb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 03:54:53 -0400
+        Sat, 22 Oct 2022 04:15:31 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD36B3FA07;
-        Sat, 22 Oct 2022 00:48:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B2982DA752;
+        Sat, 22 Oct 2022 00:56:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 15D99B82E04;
-        Sat, 22 Oct 2022 07:47:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84152C433D6;
-        Sat, 22 Oct 2022 07:47:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B6E78B82E1A;
+        Sat, 22 Oct 2022 07:46:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B076C433C1;
+        Sat, 22 Oct 2022 07:46:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666424846;
-        bh=ipVy3jWeRp0xJbTVsGRKB0dSH6uQrgwCt2Ovp5+8Yww=;
+        s=korg; t=1666424790;
+        bh=RZ6NS0SnC3gnbfETbcJ/j5wvx8/vJ3dE1h7eQRYb3WY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jJ6MgLhBB5rbAHpwm2ru9lSu6+Wlc2zDqJdqzA34omWHBkvfxRYgxlmvjTztalDwz
-         BkufMn0PLCo4luzUIC++bTt382ZK6vlIlKogx/JKoTgosUrordSJQM/sNWhfmrBOlA
-         g+NxZOOTxeblC2A39RX3TihY7F/e1C3lq20pjGkE=
+        b=0sPKgkrZ3TZJnjUDyz8hPAOCGn4bnMoaDxXcCx+2SQWVj9/jeKYMe/CGuKkLVM1Yg
+         hdsen7OyeGJFLhjmicQ0wmnSr/wZvCKB2j4m37CcHdV6zjRwquSIqzZu4ZldUqI7KG
+         C5SPFhJaQ9BshLVj+qFS1WBrGPauJn7z+m2wIy/g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Liu Jian <liujian56@huawei.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 268/717] skmsg: Schedule psock work if the cached skb exists on the psock
-Date:   Sat, 22 Oct 2022 09:22:27 +0200
-Message-Id: <20221022072501.806164079@linuxfoundation.org>
+        stable@vger.kernel.org, Niels Dossche <dossche.niels@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>,
+        Zbynek Michl <zbynek.michl@gmail.com>
+Subject: [PATCH 5.19 278/717] eth: alx: take rtnl_lock on resume
+Date:   Sat, 22 Oct 2022 09:22:37 +0200
+Message-Id: <20221022072503.183456425@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221022072415.034382448@linuxfoundation.org>
 References: <20221022072415.034382448@linuxfoundation.org>
@@ -55,63 +55,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liu Jian <liujian56@huawei.com>
+From: Jakub Kicinski <kuba@kernel.org>
 
-[ Upstream commit bec217197b412d74168c6a42fc0f76d0cc9cad00 ]
+[ Upstream commit 6ad1c94e1e7e374d88f0cfd77936dddb8339aaba ]
 
-In sk_psock_backlog function, for ingress direction skb, if no new data
-packet arrives after the skb is cached, the cached skb does not have a
-chance to be added to the receive queue of psock. As a result, the cached
-skb cannot be received by the upper-layer application. Fix this by reschedule
-the psock work to dispose the cached skb in sk_msg_recvmsg function.
+Zbynek reports that alx trips an rtnl assertion on resume:
 
-Fixes: 604326b41a6f ("bpf, sockmap: convert to generic sk_msg interface")
-Signed-off-by: Liu Jian <liujian56@huawei.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: John Fastabend <john.fastabend@gmail.com>
-Link: https://lore.kernel.org/bpf/20220907071311.60534-1-liujian56@huawei.com
+ RTNL: assertion failed at net/core/dev.c (2891)
+ RIP: 0010:netif_set_real_num_tx_queues+0x1ac/0x1c0
+ Call Trace:
+  <TASK>
+  __alx_open+0x230/0x570 [alx]
+  alx_resume+0x54/0x80 [alx]
+  ? pci_legacy_resume+0x80/0x80
+  dpm_run_callback+0x4a/0x150
+  device_resume+0x8b/0x190
+  async_resume+0x19/0x30
+  async_run_entry_fn+0x30/0x130
+  process_one_work+0x1e5/0x3b0
+
+indeed the driver does not hold rtnl_lock during its internal close
+and re-open functions during suspend/resume. Note that this is not
+a huge bug as the driver implements its own locking, and does not
+implement changing the number of queues, but we need to silence
+the splat.
+
+Fixes: 4a5fe57e7751 ("alx: use fine-grained locking instead of RTNL")
+Reported-and-tested-by: Zbynek Michl <zbynek.michl@gmail.com>
+Reviewed-by: Niels Dossche <dossche.niels@gmail.com>
+Link: https://lore.kernel.org/r/20220928181236.1053043-1-kuba@kernel.org
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/core/skmsg.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ drivers/net/ethernet/atheros/alx/main.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-index 69ac686c7cae..864cd7ded2ca 100644
---- a/net/core/skmsg.c
-+++ b/net/core/skmsg.c
-@@ -435,8 +435,10 @@ int sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
- 			if (copied + copy > len)
- 				copy = len - copied;
- 			copy = copy_page_to_iter(page, sge->offset, copy, iter);
--			if (!copy)
--				return copied ? copied : -EFAULT;
-+			if (!copy) {
-+				copied = copied ? copied : -EFAULT;
-+				goto out;
-+			}
+diff --git a/drivers/net/ethernet/atheros/alx/main.c b/drivers/net/ethernet/atheros/alx/main.c
+index a89b93cb4e26..d5939586c82e 100644
+--- a/drivers/net/ethernet/atheros/alx/main.c
++++ b/drivers/net/ethernet/atheros/alx/main.c
+@@ -1912,11 +1912,14 @@ static int alx_suspend(struct device *dev)
  
- 			copied += copy;
- 			if (likely(!peek)) {
-@@ -456,7 +458,7 @@ int sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
- 				 * didn't copy the entire length lets just break.
- 				 */
- 				if (copy != sge->length)
--					return copied;
-+					goto out;
- 				sk_msg_iter_var_next(i);
- 			}
+ 	if (!netif_running(alx->dev))
+ 		return 0;
++
++	rtnl_lock();
+ 	netif_device_detach(alx->dev);
  
-@@ -478,7 +480,9 @@ int sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
- 		}
- 		msg_rx = sk_psock_peek_msg(psock);
- 	}
--
-+out:
-+	if (psock->work_state.skb && copied > 0)
-+		schedule_work(&psock->work);
- 	return copied;
+ 	mutex_lock(&alx->mtx);
+ 	__alx_stop(alx);
+ 	mutex_unlock(&alx->mtx);
++	rtnl_unlock();
+ 
+ 	return 0;
  }
- EXPORT_SYMBOL_GPL(sk_msg_recvmsg);
+@@ -1927,6 +1930,7 @@ static int alx_resume(struct device *dev)
+ 	struct alx_hw *hw = &alx->hw;
+ 	int err;
+ 
++	rtnl_lock();
+ 	mutex_lock(&alx->mtx);
+ 	alx_reset_phy(hw);
+ 
+@@ -1943,6 +1947,7 @@ static int alx_resume(struct device *dev)
+ 
+ unlock:
+ 	mutex_unlock(&alx->mtx);
++	rtnl_unlock();
+ 	return err;
+ }
+ 
 -- 
 2.35.1
 
