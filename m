@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32719609051
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 00:54:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F13BF609052
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 00:54:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229887AbiJVWyI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 18:54:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50438 "EHLO
+        id S229678AbiJVWy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 18:54:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbiJVWyC (ORCPT
+        with ESMTP id S229908AbiJVWyQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 18:54:02 -0400
+        Sat, 22 Oct 2022 18:54:16 -0400
 Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A99E80F77
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 15:54:01 -0700 (PDT)
-Received: by mail-io1-xd31.google.com with SMTP id b79so5099999iof.5
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 15:54:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85DB3EA9E8
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 15:54:11 -0700 (PDT)
+Received: by mail-io1-xd31.google.com with SMTP id 187so5075766iov.10
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 15:54:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
         bh=ORhdzvQEaSdepN8FuCdBMVAeS8RbuY3+hyzMb2MUCmU=;
-        b=cmegG/cQDs9JlhTYb5B/1Yps85vDQaZe03tGZYWlnQUdwwlRGUTFrOs5tyvcOTGvEM
-         c6V+nXWdwsbn4a5bPYs99R6i792gXqvKN7u1Ehni4ivH4PEkkUmA8XKcP+tzRru7LdLU
-         sRkoyXnem6Msk2BBa9c56OlWsevI160fSBVhWuQEAyLQixWEkdz/rEo7PXJzzF9v2yOy
-         z1sd9A+cyB7ikWu2SB1rJC+bcqGFwBndlh4SKlNui9krsVp7KwZ7sJeD823B94NXEkeg
-         TCXvNxfAUP/iU6qv5oxr0n9tauN7rU4mYby6QhNT6EIf9zc4+7BpgODEBfuqeO1dP45U
-         zUlA==
+        b=ptlBFuNh0CJbHnMl5CumWjpfc0nWpUgZ4XEP1PmmV/ultNfezZtEFUw7AChzN+ItNN
+         wxEVFv3i5yU5MRYSKVoAKRNGW9NsHkN91PypPczHUDGNBpbnQYWVGd4DQarAaKRct5Zh
+         SXtKFv2vz0OyM38mOkzvjBaQ1YUiiwyu6dX03MkUFhy4eCefs738RJYGJkr9IKXVUYl0
+         kzk9RkuHNjMyk2fqwU1XuygbijL8iQjQfJobb0nqFrAS1fcVrHdycK7q8+Vh+QIUy59q
+         dT5/vSbHWu/2AWcbwjnHdqekTl6Kg9CVbPWNEVFJLVsZObJZSLv1UEzxJ4ZcPsr2NuTI
+         RrCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
         bh=ORhdzvQEaSdepN8FuCdBMVAeS8RbuY3+hyzMb2MUCmU=;
-        b=ymBkUSpSKrd+VN0eMmLSBDaqe2bwtlEE+daHDv1/nRwuslimNUB7R7/T7AT36mt7Op
-         aEN21Ee9+x8z8On7UVQPCIIX9V9NuG31ulSbPXFRFxCO3y/ZudK7GG0C7NQETvPh3ydz
-         WQ5cyw20N8TjKgXoJS450NzHZ8i4IRaBzpsDglqmcnArgch0ZKadl6DncvUFrGEDL4CI
-         gH8n4WDTCs/tqhAg0mWDIZcZiBfJ3++Kj8dVkBgm5rNEO5JIqAV9eiwjj2CdUz6lvpx4
-         LL+JCWEuVZGTLfrgGb1H5wQEK4zWTlBQz+K7ge0o6ThgX0TPWh+BQ+y4MncnnsZ+8YT+
-         w2sg==
-X-Gm-Message-State: ACrzQf1NjMFIK5NKR91CftdoZuzhF8Qxuj0x2Bds1Xi/iMbBYU54pvXV
-        j6kcSVm9PZjrCJ+2thWYtR4swgzTe8c=
-X-Google-Smtp-Source: AMsMyM66MKZKPBiSW21ttvdHgWgCjqGGvcoRwzHjguU0+YNF1b6g6A3rjfKRqhOXuUIXWCdSTK4UJA==
-X-Received: by 2002:a05:6638:16ce:b0:363:b8b5:8d6b with SMTP id g14-20020a05663816ce00b00363b8b58d6bmr19093815jat.194.1666479240444;
-        Sat, 22 Oct 2022 15:54:00 -0700 (PDT)
+        b=cKRTqnRlOWQotHjIkY7VUOmVHfGg4KoqwCF46xCGnNoQRTrq0FZNaGTK71TY9Ge2eg
+         gUAJTqrHTcdY7imfNHoDYjUjRPe4ApKIt2T8cU1gL3GThYqTO2d3H+0k5wJ44hrNFGs6
+         b6I/I60jxS6ZeLXRjk+obIxiN++SynPGwAkLCFCuMBpql2fifoPEQ9RHd9WSWdphg9WG
+         4YqjsZ752548QyfgohZIEJQQu/u2UVGHLG9Hrs390h6V7TWOyrGx3AwQ28EP9guUTh1j
+         I+RFPlA9LpRg+7FiUrhRo9ZNqERYgt7bFaXXu3LD7YVghJznCM9LE3it3nrs0OxStcoq
+         VpJA==
+X-Gm-Message-State: ACrzQf3JoKsx9gXJKXXr2Tf6POGIFVt/rjCTKleRU213Rju9dzZXip3H
+        GF0/K7EQZM9rbEQFTJ9d5iRlf+Ulwfs=
+X-Google-Smtp-Source: AMsMyM6LZYOGHckuR/62UDILXyIoTy88xXcHeQ42CxC1naP5vKcUWFWGnCcc+yiuY/MCRfxUz+hpmg==
+X-Received: by 2002:a05:6638:378d:b0:363:b8c7:13cc with SMTP id w13-20020a056638378d00b00363b8c713ccmr19383480jal.114.1666479249763;
+        Sat, 22 Oct 2022 15:54:09 -0700 (PDT)
 Received: from frodo.. (c-73-78-62-130.hsd1.co.comcast.net. [73.78.62.130])
-        by smtp.googlemail.com with ESMTPSA id y19-20020a056e02119300b002ffcf2e2e05sm534189ili.58.2022.10.22.15.53.59
+        by smtp.googlemail.com with ESMTPSA id y19-20020a056e02119300b002ffcf2e2e05sm534189ili.58.2022.10.22.15.54.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 22 Oct 2022 15:53:59 -0700 (PDT)
+        Sat, 22 Oct 2022 15:54:09 -0700 (PDT)
 From:   Jim Cromie <jim.cromie@gmail.com>
 To:     linux-kernel@vger.kernel.org, jbaron@akamai.com,
         gregkh@linuxfoundation.org
 Cc:     Jim Cromie <jim.cromie@gmail.com>
-Subject: [PATCH 2/2] vmlinux.lds.h: add a KEEP .gnu.linkonce.##_name into BOUNDED_SECTION
-Date:   Sat, 22 Oct 2022 16:53:50 -0600
-Message-Id: <20221022225351.1406492-3-jim.cromie@gmail.com>
+Subject: [PATCH 2/2] vmlinux.lds.h: place optional header space in BOUNDED_SECTION
+Date:   Sat, 22 Oct 2022 16:53:51 -0600
+Message-Id: <20221022225351.1406492-4-jim.cromie@gmail.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221022225351.1406492-1-jim.cromie@gmail.com>
 References: <20221022225351.1406492-1-jim.cromie@gmail.com>
