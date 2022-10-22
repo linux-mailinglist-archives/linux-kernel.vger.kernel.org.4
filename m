@@ -2,140 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B284608C82
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 13:21:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B12C3608D05
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 13:53:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230429AbiJVLVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 07:21:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38104 "EHLO
+        id S229937AbiJVLxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 07:53:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230346AbiJVLU6 (ORCPT
+        with ESMTP id S229648AbiJVLwy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 07:20:58 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E347EA9C8
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 03:48:59 -0700 (PDT)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MvdKz0PMgzJn3b;
-        Sat, 22 Oct 2022 18:46:15 +0800 (CST)
-Received: from huawei.com (10.175.101.6) by kwepemi500012.china.huawei.com
- (7.221.188.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Sat, 22 Oct
- 2022 18:48:56 +0800
-From:   Li Zetao <lizetao1@huawei.com>
-To:     <richard@nod.at>, <Artem.Bityutskiy@nokia.com>,
-        <ext-adrian.hunter@nokia.com>
-CC:     <lizetao1@huawei.com>, <yi.zhang@huawei.com>,
-        <chengzhihao1@huawei.com>, <linux-mtd@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] ubifs: Fix memory leak in alloc_wbufs()
-Date:   Sat, 22 Oct 2022 19:52:11 +0800
-Message-ID: <20221022115211.1969429-1-lizetao1@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Sat, 22 Oct 2022 07:52:54 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 656AEE027;
+        Sat, 22 Oct 2022 04:52:45 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id a13so15079895edj.0;
+        Sat, 22 Oct 2022 04:52:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=jrvz3xnxmWMFBldQvzy2ZgmI4h77t/gPKZnFb0toqjg=;
+        b=IkNUMBBK3F7G2PHSg4UUbh50Ru31YT5iLaRe+eXiX/kgyEVFRWM+EOsx8fOhmmHZYB
+         mpbIbh4q3vvwnGYurdPN4A+6370j/lx2BQ8nIWwsFsKx7Y9z3Heey5CL1lY0jPs9BmQs
+         phlDwix2DMjgdaGZx7K06usQjnaAJXxond0AzlVST6lU+BhY3YDU08cxFgsQ/dUXc2c7
+         LdYPI7IFyVT/b62MgoKyx+X6xWA8M1MoAde1RLXhSz1IYm4Xjv5RErUgw3uEISZC4QYx
+         hjKz433tB6OeY3mXTLp49KN3S9Tg+E2Z2NqOFJVPn3sVHkt0h8isq2wF9OnV5ADNL+8a
+         l+Vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jrvz3xnxmWMFBldQvzy2ZgmI4h77t/gPKZnFb0toqjg=;
+        b=76DF1DKUd1O9c0pGluAJxetk/BCt+lYOAlNlJfzBPYbnY3Xus5rZszjxqZQq99BBiz
+         LRnsRsRbgSxjT39YzI4uLP0zRqbOV2Gy8fCg6UJI5QsAf9CZf3Tp3lWMicD5xi5pjfi+
+         PHyFrTUVNcho/BWTWnDC9m4nbtQJUiPxSS7lsjxmMaRvlqcihdDUkgdkwB44bhRGDcea
+         cAv/kfJ+YHc2FogtEfCelzF7gvS3gYpIlc8LV/jxyp7J42FZXsPEmejYpaKNd+gwPknS
+         R4CH3+ftsZ3Fu0dMdv5HP2HktFYyCelkpMXeC9c9799Rc6IGRyVzP3m2Dno1e2Uy3Ij1
+         1NTQ==
+X-Gm-Message-State: ACrzQf3FeTBvBHQHJNuThcwUGgecjmkb/5/nbpsb9hF+3VhfZcMsc8et
+        BOMdeYQ1LhHbEUBVDCLhavgU37QOc7H+CGNh6lc=
+X-Google-Smtp-Source: AMsMyM6muR/RwsipWgBLxIPXio2nN5ILA/phMy0wSCb+hRGOvh2zvm54UfTCsw2MojaPvDmu/D2VNn3FDSPF1kaXgew=
+X-Received: by 2002:a17:907:7f92:b0:78d:ed9c:d86f with SMTP id
+ qk18-20020a1709077f9200b0078ded9cd86fmr19695128ejc.251.1666439563373; Sat, 22
+ Oct 2022 04:52:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemi500012.china.huawei.com (7.221.188.12)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221022084737.1028-1-linux.amoon@gmail.com> <CAFBinCBu_-0m9JeAr5kd-v7Z5LTi7w0WmmUYybW_kL4KJXXpOQ@mail.gmail.com>
+ <CANAwSgRzdD0FWg+z6hTFs7KvpsD64bChX-k0dPXJfACXZH2zbQ@mail.gmail.com>
+In-Reply-To: <CANAwSgRzdD0FWg+z6hTFs7KvpsD64bChX-k0dPXJfACXZH2zbQ@mail.gmail.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Sat, 22 Oct 2022 13:52:32 +0200
+Message-ID: <CAFBinCCNJiL-ZKRYesQAwys6bBMpYHJbUDK-Zi_VhGDVSvF7uQ@mail.gmail.com>
+Subject: Re: [PATCHv3] arm64: dts: meson: Enable active coling using gpio-fan
+ on Odroid N2/N2+
+To:     Anand Moon <linux.amoon@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Dan Johansen <strit@manjaro.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kmemleak reported a sequence of memory leaks, and show them as following:
+Hi Anand,
 
-  unreferenced object 0xffff8881575f8400 (size 1024):
-    comm "mount", pid 19625, jiffies 4297119604 (age 20.383s)
-    hex dump (first 32 bytes):
-      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    backtrace:
-      [<ffffffff8176cecd>] __kmalloc+0x4d/0x150
-      [<ffffffffa0406b2b>] ubifs_mount+0x307b/0x7170 [ubifs]
-      [<ffffffff819fa8fd>] legacy_get_tree+0xed/0x1d0
-      [<ffffffff81936f2d>] vfs_get_tree+0x7d/0x230
-      [<ffffffff819b2bd4>] path_mount+0xdd4/0x17b0
-      [<ffffffff819b37aa>] __x64_sys_mount+0x1fa/0x270
-      [<ffffffff83c14295>] do_syscall_64+0x35/0x80
-      [<ffffffff83e0006a>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
+On Sat, Oct 22, 2022 at 1:27 PM Anand Moon <linux.amoon@gmail.com> wrote:
+[...]
+> > > @@ -1982,7 +1982,6 @@ pwm_ao_d_10_pins: pwm-ao-d-10 {
+> > >                                                 mux {
+> > >                                                         groups = "pwm_ao_d_10";
+> > >                                                         function = "pwm_ao_d";
+> > > -                                                       bias-disable;
+> > &pwm_ao_d_10_pins is not referenced anywhere so it seems that this
+> > change has no impact on controlling the fan on Odroid-N2(+).
+> > How did you test this change?
+> >
+> Ok I felt these changes affect the behavior of the pinctrl
+>
+>   * @PIN_CONFIG_BIAS_DISABLE: disable any pin bias on the pin, a
+>  *  transition from say pull-up to pull-down implies that you disable
+>  *  pull-up in the process, this setting disables all biasing.
+>
+> I mapped this is linked in pinctrl driver, pwm_ao_d_10_pins GPIOAO_10 see below
+Yes, I understand this part.
+My concern is: &pwm_ao_d_10_pins settings only become active when this
+node is actively referenced. You can even see it in your output
+below...
 
-  unreferenced object 0xffff8881798a6e00 (size 512):
-    comm "mount", pid 19677, jiffies 4297121912 (age 37.816s)
-    hex dump (first 32 bytes):
-      6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b  kkkkkkkkkkkkkkkk
-      6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b  kkkkkkkkkkkkkkkk
-    backtrace:
-      [<ffffffff8176cecd>] __kmalloc+0x4d/0x150
-      [<ffffffffa0418342>] ubifs_wbuf_init+0x52/0x480 [ubifs]
-      [<ffffffffa0406ca5>] ubifs_mount+0x31f5/0x7170 [ubifs]
-      [<ffffffff819fa8fd>] legacy_get_tree+0xed/0x1d0
-      [<ffffffff81936f2d>] vfs_get_tree+0x7d/0x230
-      [<ffffffff819b2bd4>] path_mount+0xdd4/0x17b0
-      [<ffffffff819b37aa>] __x64_sys_mount+0x1fa/0x270
-      [<ffffffff83c14295>] do_syscall_64+0x35/0x80
-      [<ffffffff83e0006a>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
+[...]
+> pin 10 (GPIOAO_10): (MUX UNCLAIMED) aobus-banks:1958
+This shows that it's used as a GPIO. If the &pwm_ao_d_10_pins setting
+was used then it would show "function pwm_ao_d group pwm_ao_d_10"
+(similar to what GPIOE_1 shows in your output)
 
-The problem is that the ubifs_wbuf_init() returns an error in the
-loop which in the alloc_wbufs(), then the wbuf->buf and wbuf->inodes
-that were successfully alloced before are not freed.
+If you want to know if a pull-up/down is enabled you can look at the output of:
+$ cat /sys/kernel/debug/pinctrl/ff800000.sys-ctrl\:pinctrl@14-pinctrl-meson/pinconf-pins
+(I'm sure this can also be retrieved from some userspace tools, but I
+don't know how)
 
-Fix it by adding error hanging path in alloc_wbufs() which frees
-the memory alloced before when ubifs_wbuf_init() returns an error.
 
-Fixes: 1e51764a3c2a ("UBIFS: add new flash file system")
-Signed-off-by: Li Zetao <lizetao1@huawei.com>
----
- fs/ubifs/super.c | 17 +++++++++++++----
- 1 file changed, 13 insertions(+), 4 deletions(-)
-
-diff --git a/fs/ubifs/super.c b/fs/ubifs/super.c
-index d0c9a09988bc..32cb14759796 100644
---- a/fs/ubifs/super.c
-+++ b/fs/ubifs/super.c
-@@ -833,7 +833,7 @@ static int alloc_wbufs(struct ubifs_info *c)
- 		INIT_LIST_HEAD(&c->jheads[i].buds_list);
- 		err = ubifs_wbuf_init(c, &c->jheads[i].wbuf);
- 		if (err)
--			return err;
-+			goto out_wbuf;
- 
- 		c->jheads[i].wbuf.sync_callback = &bud_wbuf_callback;
- 		c->jheads[i].wbuf.jhead = i;
-@@ -841,7 +841,7 @@ static int alloc_wbufs(struct ubifs_info *c)
- 		c->jheads[i].log_hash = ubifs_hash_get_desc(c);
- 		if (IS_ERR(c->jheads[i].log_hash)) {
- 			err = PTR_ERR(c->jheads[i].log_hash);
--			goto out;
-+			goto out_log_hash;
- 		}
- 	}
- 
-@@ -854,9 +854,18 @@ static int alloc_wbufs(struct ubifs_info *c)
- 
- 	return 0;
- 
--out:
--	while (i--)
-+out_log_hash:
-+	kfree(c->jheads[i].wbuf.buf);
-+	kfree(c->jheads[i].wbuf.inodes);
-+
-+out_wbuf:
-+	while (i--) {
-+		kfree(c->jheads[i].wbuf.buf);
-+		kfree(c->jheads[i].wbuf.inodes);
- 		kfree(c->jheads[i].log_hash);
-+	}
-+	kfree(c->jheads);
-+	c->jheads = NULL;
- 
- 	return err;
- }
--- 
-2.31.1
-
+Best regards,
+Martin
