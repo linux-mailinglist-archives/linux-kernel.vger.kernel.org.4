@@ -2,91 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA3896085F0
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 09:41:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 083BB60856A
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 09:25:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230516AbiJVHl2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 03:41:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43030 "EHLO
+        id S229587AbiJVHSo convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 22 Oct 2022 03:18:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231210AbiJVHkj (ORCPT
+        with ESMTP id S229484AbiJVHSm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 03:40:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6DB465001;
-        Sat, 22 Oct 2022 00:38:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 55B1860ADC;
-        Sat, 22 Oct 2022 07:36:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F34CC433D6;
-        Sat, 22 Oct 2022 07:36:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666424213;
-        bh=lVh1oP4UqEge0pFZJpJr/ff3E2QK73mfpro3qwWesks=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OrQbbhfT4vKiJph0qERXFwuqMtIJDbHoo2UYG7koaBzqr4dwLDfTcFJrmFtXH2a3m
-         4R5lQG6ysyvNCS57u6EZZMdUO3fQrPvgEQ8UCUxNj+mRD06JxR8aQdsdtQED/f3FiD
-         uLrhXd3WY/A6ZG5hYRLUw7l9CAxCcUbyidEb7icw=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wenchao Chen <wenchao.chen@unisoc.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [PATCH 5.19 034/717] mmc: sdhci-sprd: Fix minimum clock limit
-Date:   Sat, 22 Oct 2022 09:18:33 +0200
-Message-Id: <20221022072421.181001786@linuxfoundation.org>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221022072415.034382448@linuxfoundation.org>
-References: <20221022072415.034382448@linuxfoundation.org>
-User-Agent: quilt/0.67
+        Sat, 22 Oct 2022 03:18:42 -0400
+Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64DC427FE84
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 00:18:41 -0700 (PDT)
+Received: from omf11.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay07.hostedemail.com (Postfix) with ESMTP id 35B161603C3;
+        Sat, 22 Oct 2022 07:18:40 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf11.hostedemail.com (Postfix) with ESMTPA id CEFB420029;
+        Sat, 22 Oct 2022 07:18:23 +0000 (UTC)
+Message-ID: <cae0a94e73b1e44a7d8c750a406aa77d1942a06a.camel@perches.com>
+Subject: Re: [PATCH v3 1/6] staging: vt6655: fix lines ending in a '('
+From:   Joe Perches <joe@perches.com>
+To:     Tanjuate Brunostar <tanjubrunostar0@gmail.com>,
+        gregkh@linuxfoundation.org
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev
+Date:   Sat, 22 Oct 2022 00:18:34 -0700
+In-Reply-To: <20221022070612.13009-2-tanjubrunostar0@gmail.com>
+References: <20221022070612.13009-1-tanjubrunostar0@gmail.com>
+         <20221022070612.13009-2-tanjubrunostar0@gmail.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Rspamd-Queue-Id: CEFB420029
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        KHOP_HELO_FCRDNS,SPF_HELO_PASS,SPF_NONE,UNPARSEABLE_RELAY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Stat-Signature: hking6ccz1af9g4dp75gah5faz6rb571
+X-Rspamd-Server: rspamout04
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1/Qk4Udegm35BK3jmzSWYorLoNMBhIVhOA=
+X-HE-Tag: 1666423103-706658
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wenchao Chen <wenchao.chen@unisoc.com>
+On Sat, 2022-10-22 at 07:06 +0000, Tanjuate Brunostar wrote:
+> fix serveral checkpatch errors related to lines ending with a '(' by
+> refactoring the code lines
+[]
+> diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
+[]
+> @@ -141,13 +141,11 @@ static __le16 vnt_time_stamp_off(struct vnt_private *priv, u16 rate)
+>   */
+>  static
+>  unsigned int
+> -s_uGetTxRsvTime(
+> -	struct vnt_private *pDevice,
+> -	unsigned char byPktType,
+> -	unsigned int cbFrameLength,
+> -	unsigned short wRate,
+> -	bool bNeedAck
+> -)
+> +s_uGetTxRsvTime(struct vnt_private *pDevice,
 
-commit 6e141772e6465f937458b35ddcfd0a981b6f5280 upstream.
+If you end up doing more work here, ou might consider removing the
+Hungarian style notations
 
-The Spreadtrum controller supports 100KHz minimal clock rate, which means
-that the current value 400KHz is wrong.
+Maybe something like:
 
-Unfortunately this has also lead to fail to initialize some cards, which
-are allowed to require 100KHz to work. So, let's fix the problem by
-changing the minimal supported clock rate to 100KHz.
+s_uGetTxRsvTime	-> get_tx_rsv_time
 
-Signed-off-by: Wenchao Chen <wenchao.chen@unisoc.com>
-Acked-by: Adrian Hunter <adrian.hunter@intel.com>
-Fixes: fb8bd90f83c4 ("mmc: sdhci-sprd: Add Spreadtrum's initial host controller")
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20221011104935.10980-1-wenchao.chen666@gmail.com
-[Ulf: Clarified to commit-message]
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/mmc/host/sdhci-sprd.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> +		unsigned char byPktType,
 
---- a/drivers/mmc/host/sdhci-sprd.c
-+++ b/drivers/mmc/host/sdhci-sprd.c
-@@ -309,7 +309,7 @@ static unsigned int sdhci_sprd_get_max_c
- 
- static unsigned int sdhci_sprd_get_min_clock(struct sdhci_host *host)
- {
--	return 400000;
-+	return 100000;
- }
- 
- static void sdhci_sprd_set_uhs_signaling(struct sdhci_host *host,
+byPktType	-> pkt_type
 
+etc...
+
+Perhaps patches by unique rename.
 
