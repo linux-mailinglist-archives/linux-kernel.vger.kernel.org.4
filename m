@@ -2,150 +2,324 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ECBC608EA5
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 18:44:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 215B0608EAA
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 18:49:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229835AbiJVQog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 12:44:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41034 "EHLO
+        id S229877AbiJVQtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 12:49:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229846AbiJVQod (ORCPT
+        with ESMTP id S229846AbiJVQtQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 12:44:33 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 951B8765A
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 09:44:25 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id n6-20020a056e021ba600b002fc99858e34so5871449ili.14
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 09:44:25 -0700 (PDT)
+        Sat, 22 Oct 2022 12:49:16 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8189D13B53C
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 09:49:00 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id r19so3470373qtx.6
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 09:49:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MWHwWqM3BXKlqAbT6QrzFF/UUpibvbLYi2O5amk60U4=;
+        b=ogCxatazZKWZRhhAUwP+5F6AJ8YlAWU+ohtbMidz6OXm1yNePCRATsxZp5oRVpW+A0
+         p9NYEDjH83TE8PMVPOfIkhT6CS6HDkxOGBdeUU/Sl4GpxX/p+bOp+TQ2TviTAGPYfEN7
+         Fg5gOOGp+oH8bXUlwYJ6688yOFmDGYpQbO3wjVusgiWYagHvCkKeywXEojgiHQ3WH0k4
+         mEi9Y0KzuyjiANtaGM2LmBWL4021SGDvEyZdzGZS/3PWXsSDtZFm0KM8apP73oACp0Nf
+         QN1tePmnF5nWKZJUcm8X0JoAeAJOKcdwwdlMY7prETHOllDQoTyKZ9YmXZRR0F2eQm+3
+         f6DA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DdCR4tsWSRVtW0jXptYj1WZRooswmUP38mopUatFdd8=;
-        b=GdrlYIIZ9WGg4cGW7XrYXyOiz6wQxzILC5N2cYHY/ntRpDrFRy3d5CrAt5XEjPZlxr
-         L/Sg/jz6OMAlMNQe5LeGT+jLSsHyGEgeVA/dXBO1UNP0Q4iHqH/dEt/94/5Cib46l5r9
-         MAh8Mu6vVEIiWLlBR29T1JgLCrGjxZIChBEOpPUtLegNlj0YpLbMDGcEvcI/riWvM2jm
-         qisMzuHAlr1yagJyRcJrnXc0NklieuJ7gvki7KZFTL0jTudXaAzJzzFoA0rtA2pUobr9
-         th4p/xo7IrHBASRP/zSurbJhDzKJP7TEex5FygdImFhqegPrRFT7KJaa3zIwtVx+8kgn
-         W3oQ==
-X-Gm-Message-State: ACrzQf3E8ufBLPY9UU6FfOo+qrYZxBk6vLHRfhhzFuN4uu8s2Kl/ucEz
-        kWxMbLaaaRt03YD4MzzB9aCxD7B8qRr41/i3+ZYmGodatm2b
-X-Google-Smtp-Source: AMsMyM7kQ8oXbSKD/cqyEXazGIeZSF1yQ87NZoxYGNsvNlfJJ3V1xAzkdWHAlv3XTWwoMDCcsPKib+9UE2FB5D8qTXm9eeNEjpr0
+        bh=MWHwWqM3BXKlqAbT6QrzFF/UUpibvbLYi2O5amk60U4=;
+        b=i0MgzZ1AceeC44g1s/RjM4PXOkb/UZ8Rl6CoMUgAiQrYCBEsBM8uQKD9L6KTlQr0Aw
+         P7FCfzjYsFiMdvzJ2ZN5h6sGvGyWt634ZuyZIHPZfEUWPZchvAl8QhdU7SyO7RyXtL4Z
+         aIhj9UsuuwwcxTfoeAtDUdr/ee9uTyBTqAYC/PHsO2ng/HlEk7BCCyGWO0dV4iGdM8Gr
+         vwWo0tyMFFWqJK1RKmsxrVwDeWtTd1ycLuTFUeQDDOD7vEPsaNGz0dtdk5Y4adK93MaA
+         yK1iykWccos2dPiLahLse1jKPBWyuaRncv4hU5xGjxseFlOvVMYauitAlH7y23IqOUaz
+         JS0Q==
+X-Gm-Message-State: ACrzQf2eWuMP7a2d/Vw7Z3jIPNhFNbJLBqZCyCBZvnYzIUhqLeSLMwuV
+        z3Kf2o+0zODgDEhp5MWdg4WGLw==
+X-Google-Smtp-Source: AMsMyM7MX1BEUs2JSI2Qn3PmiNnVDugW3rD+1D64oX5nMvP/6Fj64lJHcVW1yUkBKT8ar+TIesapXw==
+X-Received: by 2002:ac8:5b10:0:b0:39c:d63a:d88 with SMTP id m16-20020ac85b10000000b0039cd63a0d88mr20932702qtw.682.1666457339565;
+        Sat, 22 Oct 2022 09:48:59 -0700 (PDT)
+Received: from [10.203.8.70] ([205.153.95.177])
+        by smtp.gmail.com with ESMTPSA id c25-20020ac81119000000b003996aa171b9sm9752605qtj.97.2022.10.22.09.48.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 22 Oct 2022 09:48:58 -0700 (PDT)
+Message-ID: <253fc459-c3dc-7710-6f34-0466d5301482@linaro.org>
+Date:   Sat, 22 Oct 2022 12:48:56 -0400
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1989:b0:2fa:f3da:a013 with SMTP id
- g9-20020a056e02198900b002faf3daa013mr15623792ilf.314.1666457064984; Sat, 22
- Oct 2022 09:44:24 -0700 (PDT)
-Date:   Sat, 22 Oct 2022 09:44:24 -0700
-In-Reply-To: <20221022123406.1978-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000645a8505eba24506@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in kernfs_add_one
-From:   syzbot <syzbot+ef17b5b364116518fd65@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH 3/6] dt-bindings: sound: Add sound card bindings for Tesla
+ FSD
+Content-Language: en-US
+To:     Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>,
+        'Rob Herring' <robh@kernel.org>
+Cc:     lgirdwood@gmail.com, broonie@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, s.nawrocki@samsung.com,
+        perex@perex.cz, tiwai@suse.com, pankaj.dubey@samsung.com,
+        alim.akhtar@samsung.com, rcsekar@samsung.com,
+        aswani.reddy@samsung.com, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org
+References: <20221014102151.108539-1-p.rajanbabu@samsung.com>
+ <CGME20221014104901epcas5p1a61ea81c3b1640bd8a064633c0b1e40d@epcas5p1.samsung.com>
+ <20221014102151.108539-4-p.rajanbabu@samsung.com>
+ <20221014151325.GA1940481-robh@kernel.org>
+ <04b901d8e529$573b17e0$05b147a0$@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <04b901d8e529$573b17e0$05b147a0$@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 21/10/2022 04:44, Padmanabhan Rajanbabu wrote:
+>> On Fri, Oct 14, 2022 at 03:51:48PM +0530, Padmanabhan Rajanbabu wrote:
+>>> Add dt-binding reference document to configure the DAI link for Tesla
+>>> FSD sound card driver.
+>>
+>> The simple-card or graph-card bindings don't work for you?
+> Thank you for reviewing the patch.
+> 
+> The actual reason for having a custom sound card driver lies in the fact
+> that the Samsung i2s cpu dai requires configuration of some Samsung
+> specific properties like rfs, bfs, codec clock direction and root clock
+> source. We do not have flexibility of configuring the same in simple card
+> driver (sound/soc/generic/simple-card.c) or audio graph card driver 
+> (sound/soc/generic/audio-graph-card.c). The binding has been added to
+> support the custom sound card driver.
+> 
+> I understand from your query that the newly added card has device tree
+> nodes and properties which are used in simple card as well, but having a
+> different or new prefixes. I believe to address that, we can restructure
+> the string names to generic ones. 
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-UBSAN: object-size-mismatch in wg_xmit
+You must use generic, existing properties where applicable.
 
-================================================================================
-UBSAN: object-size-mismatch in ./include/linux/skbuff.h:2048:28
-member access within address ffffc900000074c0 with insufficient space
-for an object of type 'struct sk_buff'
-CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.15.0-rc5-syzkaller-00376-gcf52ad5ff16c-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
-Call Trace:
- <IRQ>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1e3/0x2cb lib/dump_stack.c:106
- ubsan_epilogue lib/ubsan.c:151 [inline]
- handle_object_size_mismatch lib/ubsan.c:232 [inline]
- ubsan_type_mismatch_common+0x1e6/0x390 lib/ubsan.c:245
- __ubsan_handle_type_mismatch_v1+0x4a/0x60 lib/ubsan.c:274
- __skb_queue_before include/linux/skbuff.h:2048 [inline]
- __skb_queue_tail include/linux/skbuff.h:2081 [inline]
- wg_xmit+0x565/0xda0 drivers/net/wireguard/device.c:182
- __netdev_start_xmit include/linux/netdevice.h:4988 [inline]
- netdev_start_xmit+0x7b/0x140 include/linux/netdevice.h:5002
- xmit_one net/core/dev.c:3576 [inline]
- dev_hard_start_xmit+0x182/0x2e0 net/core/dev.c:3592
- __dev_queue_xmit+0x1497/0x2140 net/core/dev.c:4202
- neigh_output include/net/neighbour.h:510 [inline]
- ip6_finish_output2+0xf45/0x1300 net/ipv6/ip6_output.c:126
- dst_output include/net/dst.h:450 [inline]
- NF_HOOK include/linux/netfilter.h:307 [inline]
- ndisc_send_skb+0x8c3/0xdd0 net/ipv6/ndisc.c:508
- addrconf_rs_timer+0x38c/0x5f0 net/ipv6/addrconf.c:3893
- call_timer_fn+0xf6/0x210 kernel/time/timer.c:1421
- expire_timers kernel/time/timer.c:1466 [inline]
- __run_timers+0x685/0x7e0 kernel/time/timer.c:1734
- run_timer_softirq+0x63/0xf0 kernel/time/timer.c:1747
- __do_softirq+0x382/0x793 kernel/softirq.c:558
- __irq_exit_rcu+0xec/0x170 kernel/softirq.c:636
- irq_exit_rcu+0x5/0x20 kernel/softirq.c:648
- sysvec_apic_timer_interrupt+0x91/0xb0 arch/x86/kernel/apic/apic.c:1097
- </IRQ>
- asm_sysvec_apic_timer_interrupt+0x12/0x20
-RIP: 0010:native_save_fl arch/x86/include/asm/irqflags.h:22 [inline]
-RIP: 0010:arch_local_save_flags arch/x86/include/asm/irqflags.h:70 [inline]
-RIP: 0010:arch_irqs_disabled arch/x86/include/asm/irqflags.h:132 [inline]
-RIP: 0010:acpi_safe_halt+0xbc/0x160 drivers/acpi/processor_idle.c:110
-Code: 83 e6 08 31 ff e8 24 39 89 f8 48 83 e3 08 75 73 4c 8d 64 24 20 e8 a4 1b 8f f8 eb 0c e8 4d 34 89 f8 0f 00 2d 16 3b c6 00 fb f4 <4c> 89 e3 48 c1 eb 03 42 80 3c 33 00 74 08 4c 89 e7 e8 9e c6 c8 f8
-RSP: 0018:ffffffff8b407bc0 EFLAGS: 00000282
-RAX: d4f825addbe56c00 RBX: 0000000000000000 RCX: ffffffff8f975703
-RDX: ffffffff8b4bbf58 RSI: ffffffff894c55a0 RDI: ffffffff89a4bbe0
-RBP: ffffffff8b407c40 R08: ffffffff81787bf0 R09: fffffbfff16976a9
-R10: fffffbfff16976a9 R11: 1ffffffff16976a8 R12: ffffffff8b407be0
-R13: ffff8880157d0064 R14: dffffc0000000000 R15: 1ffffffff1680f78
- acpi_idle_enter+0x371/0x520 drivers/acpi/processor_idle.c:688
- cpuidle_enter_state+0x2a8/0xaf0 drivers/cpuidle/cpuidle.c:237
- cpuidle_enter+0x59/0x90 drivers/cpuidle/cpuidle.c:351
- cpuidle_idle_call kernel/sched/idle.c:239 [inline]
- do_idle+0x389/0x590 kernel/sched/idle.c:306
- cpu_startup_entry+0x15/0x20 kernel/sched/idle.c:403
- start_kernel+0x4b9/0x568 init/main.c:1142
- secondary_startup_64_no_verify+0xb1/0xbb
-================================================================================
-----------------
-Code disassembly (best guess):
-   0:	83 e6 08             	and    $0x8,%esi
-   3:	31 ff                	xor    %edi,%edi
-   5:	e8 24 39 89 f8       	callq  0xf889392e
-   a:	48 83 e3 08          	and    $0x8,%rbx
-   e:	75 73                	jne    0x83
-  10:	4c 8d 64 24 20       	lea    0x20(%rsp),%r12
-  15:	e8 a4 1b 8f f8       	callq  0xf88f1bbe
-  1a:	eb 0c                	jmp    0x28
-  1c:	e8 4d 34 89 f8       	callq  0xf889346e
-  21:	0f 00 2d 16 3b c6 00 	verw   0xc63b16(%rip)        # 0xc63b3e
-  28:	fb                   	sti
-  29:	f4                   	hlt
-* 2a:	4c 89 e3             	mov    %r12,%rbx <-- trapping instruction
-  2d:	48 c1 eb 03          	shr    $0x3,%rbx
-  31:	42 80 3c 33 00       	cmpb   $0x0,(%rbx,%r14,1)
-  36:	74 08                	je     0x40
-  38:	4c 89 e7             	mov    %r12,%rdi
-  3b:	e8 9e c6 c8 f8       	callq  0xf8c8c6de
+> But I would like to understand, to reuse
+> the simple card or audio graph card bindings, can we add secondary
+> compatible strings in the simple card dt-binding for the custom sound card
+> to probe ?
 
+If you see other vendor compatibles there, then yes... But there aren't
+any, right?
 
-Tested on:
+>>
+>>>
+>>> Signed-off-by: Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>
+>>> ---
+>>>  .../bindings/sound/tesla,fsd-card.yaml        | 158 ++++++++++++++++++
+>>>  1 file changed, 158 insertions(+)
+>>>  create mode 100644
+>>> Documentation/devicetree/bindings/sound/tesla,fsd-card.yaml
+>>>
+>>> diff --git
+>>> a/Documentation/devicetree/bindings/sound/tesla,fsd-card.yaml
+>>> b/Documentation/devicetree/bindings/sound/tesla,fsd-card.yaml
+>>> new file mode 100644
+>>> index 000000000000..4bd590f4ee27
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/sound/tesla,fsd-card.yaml
+>>> @@ -0,0 +1,158 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) # Copyright
+>>> +2022 Samsung Electronics Co. Ltd.
+>>> +%YAML 1.2
+>>> +---
+>>> +$id:
+>>> +https://protect2.fireeye.com/v1/url?k=4ae54403-157e7d1c-4ae4cf4c-
+>> 000b
+>>> +abdfecba-9eb398ea304f8ae8&q=1&e=4935bed0-ce62-47dd-8faf-
+>> 4750b01e22d3&
+>>>
+>> +u=http%3A%2F%2Fdevicetree.org%2Fschemas%2Fsound%2Ftesla%2Cfsd-
+>> card.ya
+>>> +ml%23
+>>> +$schema:
+>>> +https://protect2.fireeye.com/v1/url?k=8c72226e-d3e91b71-8c73a921-
+>> 000b
+>>> +abdfecba-3ce999f6c052255b&q=1&e=4935bed0-ce62-47dd-8faf-
+>> 4750b01e22d3&
+>>> +u=http%3A%2F%2Fdevicetree.org%2Fmeta-schemas%2Fcore.yaml%23
+>>> +
+>>> +title: Tesla FSD ASoC sound card driver
+>>> +
+>>> +maintainers:
+>>> +  - Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>
+>>> +
+>>> +description: |
+>>> +  This binding describes the node properties and essential DT entries
+>>> +of FSD
+>>> +  SoC sound card node
+>>> +
+>>> +select: false
+>>
+>> Never apply this schema. Why?
+> Sorry about it, let me change the select property to true in the next
+> patchset
 
-commit:         cf52ad5f Merge tag 'driver-core-5.15-rc6' of git://git..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=10f1b16a880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e25c48e302d3bf01
-dashboard link: https://syzkaller.appspot.com/bug?extid=ef17b5b364116518fd65
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=14ca1022880000
+No, just drop it. Look at other bindings or at example-schema
+
+>>
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    enum:
+>>> +      - tesla,fsd-sndcard
+>>> +
+>>> +  model:
+>>> +    description: Describes the Name of the sound card
+>>> +    $ref: /schemas/types.yaml#/definitions/string
+>>> +
+>>> +  widgets:
+>>> +    description: A list of DAPM widgets in the sound card. Each entry
+> is a pair
+>>> +      of strings, the first being the widget name and the second being
+> the
+>>> +      widget alias
+>>> +    $ref: /schemas/types.yaml#/definitions/string-array
+>>> +
+>>> +  audio-routing:
+>>> +    description: A list of the connections between audio components.
+> Each entry
+>>> +      is a pair of strings, the first being the connection's sink, the
+> second
+>>> +      being the connection's source
+>>> +    $ref: /schemas/types.yaml#/definitions/string-array
+>>> +
+>>> +  dai-tdm-slot-num:
+>>> +    description: Enables TDM mode and specifies the number of TDM slots
+> to be
+>>> +      enabled
+>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>> +    enum: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+>>
+>> maximum: 8
+> Okay
+>>
+>>> +    default: 2
+>>> +
+>>> +  dai-tdm-slot-width:
+>>> +    description: Specifies the slot width of each TDm slot enabled
+>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>> +    enum: [8, 16, 24]
+>>> +    default: 16
+>>
+>> All the above have types defined. You should not be redefining the types.
+> Okay
+>>
+>>> +
+>>> +  dai-link:
+>>> +    description: Holds the DAI link data between CPU, Codec and
+> Platform
+>>> +    type: object
+>>
+>>        additionalProperties: false
+> okay
+>>
+>>> +    properties:
+>>> +      link-name:
+>>> +        description: Specifies the name of the DAI link
+>>> +        $ref: /schemas/types.yaml#/definitions/string
+>>> +
+>>> +      dai-format:
+>>> +        description: Specifies the serial data format of CPU DAI
+>>> +        $ref: /schemas/types.yaml#/definitions/string
+>>> +
+>>> +      tesla,bitclock-master:
+>>> +        description: Specifies the phandle of bitclock master DAI
+>>> +        $ref: /schemas/types.yaml#/definitions/phandle
+>>> +
+>>> +      tesla,frame-master:
+>>> +        description: Specifies the phandle of frameclock master DAI
+>>> +        $ref: /schemas/types.yaml#/definitions/phandle
+>>
+>> These are common properties. Drop 'tesla'.
+> Okay
+>>
+>>> +
+>>> +      cpu:
+>>> +        description: Holds the CPU DAI node and instance
+>>> +        type: object
+>>
+>>            additionalProperties: false
+> Okay
+>>
+>>> +        properties:
+>>> +          sound-dai:
+>>> +            description: Specifies the phandle of CPU DAI node
+>>> +            $ref: /schemas/types.yaml#/definitions/phandle-array
+>>> +
+>>> +        required:
+>>> +          - sound-dai
+>>> +
+>>> +      codec:
+>>> +        description: Holds the Codec DAI node and instance
+>>> +        type: object
+>>
+>>            additionalProperties: false
+> Okay
+>>
+>>> +        properties:
+>>> +          sound-dai:
+>>> +            description: Specifies the phandle of Codec DAI node
+>>> +            $ref: /schemas/types.yaml#/definitions/phandle-array
+>>
+>> Already has a type. Need to define how many entries (maxItems: 1 ?).
+> Okay. I'll update in the upcoming patch set
+>>
+>>> +
+>>> +        required:
+>>> +          - sound-dai
+>>> +
+>>> +    required:
+>>> +      - link-name
+>>> +      - dai-format
+>>> +      - tesla,bitclock-master
+>>> +      - tesla,frame-master
+>>> +      - cpu
+>>> +
+>>> +dependencies:
+>>> +  dai-tdm-slot-width: [ 'dai-tdm-slot-num' ]
+>>
+>> This should be captured with tdm-slot.txt converted to schema.
+> Okay
+>>
+>>> +
+>>> +required:
+>>> +  - compatible
+>>> +  - model
+>>> +  - dai-link
+>>> +
+>>> +additionalProperties: false
+>>> +
+>>> +examples:
+>>> +  - |
+>>> +    sound {
+>>> +        compatible = "tesla,fsd-sndcard";
+>>> +        status = "disabled";
+>>
+>> Why have a disabled example? Other than your example won't pass your
+>> schema.
+> Thanks for noticing, I'll double check and change the example keeping the
+> status 
+> as enabled
+
+No, just drop. Start with example-schema instead.
+
+Best regards,
+Krzysztof
 
