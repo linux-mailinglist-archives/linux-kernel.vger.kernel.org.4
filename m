@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23F8760898C
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 10:37:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27FFE608995
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 10:37:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234273AbiJVIhF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 04:37:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32994 "EHLO
+        id S234382AbiJVIhp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 04:37:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234507AbiJVIbE (ORCPT
+        with ESMTP id S233912AbiJVIbl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 04:31:04 -0400
+        Sat, 22 Oct 2022 04:31:41 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F93E2D0818;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 535A22E5333;
         Sat, 22 Oct 2022 01:03:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 859ACB82DEE;
-        Sat, 22 Oct 2022 08:02:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D07DAC433D6;
-        Sat, 22 Oct 2022 08:02:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8364AB82DB3;
+        Sat, 22 Oct 2022 08:02:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3AA3C433C1;
+        Sat, 22 Oct 2022 08:02:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666425773;
-        bh=KK5HySP1GwSnD/jfZaRzn+Bp85qL/Jum5XmZcPes1Ps=;
+        s=korg; t=1666425776;
+        bh=+0zKgAKqPC/pm7jWIRGut0mCN0L5qdVXBbLQYphdH1w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=REz5h/qJDw2dGA7q5UzfeANpy2lyeRgXGBVoQ3I6ZNluhc9S1WIiAnnMD18NSzQqO
-         oGq0d1yNay8ekhubJF7jeFZTjbeN3lGRnp/mzVb31hlIJdhpMBpxy5XCz4t4gQWi5Q
-         mmmYVApCkT0s9HXDNcjre8YTMbZx1qYCLAkkv0II=
+        b=IAM2JlnwihNy6tbgN4xpjsBgzdS3AZTqy6mqnXiq4tUNSoK7p/+C3VJ4vq5BpxodM
+         MKhk4Dq5MWOjyIpm15erKSM2bhNqTurPehkLJuj6OjrxvEbFrfZQV/scaO72Bc/pgL
+         vZVMc+LDwjTwzWsEreRGvpPdr5o/slEXbrbhvyJc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Maya Matuszczyk <maccraft123mc@gmail.com>,
         Hans de Goede <hdegoede@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 611/717] drm: panel-orientation-quirks: Add quirk for Anbernic Win600
-Date:   Sat, 22 Oct 2022 09:28:10 +0200
-Message-Id: <20221022072525.471921643@linuxfoundation.org>
+Subject: [PATCH 5.19 612/717] drm: panel-orientation-quirks: Add quirk for Aya Neo Air
+Date:   Sat, 22 Oct 2022 09:28:11 +0200
+Message-Id: <20221022072525.522322236@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221022072415.034382448@linuxfoundation.org>
 References: <20221022072415.034382448@linuxfoundation.org>
@@ -56,37 +56,51 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Maya Matuszczyk <maccraft123mc@gmail.com>
 
-[ Upstream commit 770e19076065e079a32f33eb11be2057c87f1cde ]
+[ Upstream commit e10ea7b9b90219da305a16b3c1252169715a807b ]
 
-This device is another x86 gaming handheld, and as (hopefully) there is
-only one set of DMI IDs it's using DMI_EXACT_MATCH
+Yet another x86 gaming handheld.
+
+This one has many SKUs with quite a few of DMI strings,
+so let's just use a catchall, just as with Aya Neo Next.
 
 Signed-off-by: Maya Matuszczyk <maccraft123mc@gmail.com>
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220803182402.1217293-1-maccraft123mc@gmail.com
+Link: https://patchwork.freedesktop.org/patch/msgid/20220825191946.1678798-1-maccraft123mc@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/drm_panel_orientation_quirks.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/gpu/drm/drm_panel_orientation_quirks.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
 diff --git a/drivers/gpu/drm/drm_panel_orientation_quirks.c b/drivers/gpu/drm/drm_panel_orientation_quirks.c
-index d4e0f2e85548..a8681610ede7 100644
+index a8681610ede7..2d82f236d669 100644
 --- a/drivers/gpu/drm/drm_panel_orientation_quirks.c
 +++ b/drivers/gpu/drm/drm_panel_orientation_quirks.c
-@@ -128,6 +128,12 @@ static const struct dmi_system_id orientation_data[] = {
- 		  DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "One S1003"),
+@@ -103,6 +103,12 @@ static const struct drm_dmi_panel_orientation_data lcd800x1280_rightside_up = {
+ 	.orientation = DRM_MODE_PANEL_ORIENTATION_RIGHT_UP,
+ };
+ 
++static const struct drm_dmi_panel_orientation_data lcd1080x1920_leftside_up = {
++	.width = 1080,
++	.height = 1920,
++	.orientation = DRM_MODE_PANEL_ORIENTATION_LEFT_UP,
++};
++
+ static const struct drm_dmi_panel_orientation_data lcd1200x1920_rightside_up = {
+ 	.width = 1200,
+ 	.height = 1920,
+@@ -158,6 +164,12 @@ static const struct dmi_system_id orientation_data[] = {
+ 		  DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "AYA NEO 2021"),
  		},
  		.driver_data = (void *)&lcd800x1280_rightside_up,
-+	}, {	/* Anbernic Win600 */
++	}, {	/* AYA NEO AIR */
 +		.matches = {
-+		  DMI_EXACT_MATCH(DMI_BOARD_VENDOR, "Anbernic"),
-+		  DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Win600"),
++		  DMI_EXACT_MATCH(DMI_SYS_VENDOR, "AYANEO"),
++		  DMI_MATCH(DMI_BOARD_NAME, "AIR"),
 +		},
-+		.driver_data = (void *)&lcd720x1280_rightside_up,
- 	}, {	/* Asus T100HA */
++		.driver_data = (void *)&lcd1080x1920_leftside_up,
+ 	}, {	/* AYA NEO NEXT */
  		.matches = {
- 		  DMI_EXACT_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
+ 		  DMI_EXACT_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
 -- 
 2.35.1
 
