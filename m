@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94FF0608AA5
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 11:04:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDAE76087D7
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 10:06:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235135AbiJVJDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 05:03:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51766 "EHLO
+        id S232868AbiJVIGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 04:06:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235000AbiJVJDP (ORCPT
+        with ESMTP id S232842AbiJVIAD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 05:03:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4EB12FA5DD;
-        Sat, 22 Oct 2022 01:18:13 -0700 (PDT)
+        Sat, 22 Oct 2022 04:00:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C80314EC7F;
+        Sat, 22 Oct 2022 00:50:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B4B3F60B24;
-        Sat, 22 Oct 2022 07:49:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9A80C433C1;
-        Sat, 22 Oct 2022 07:49:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F351460ADB;
+        Sat, 22 Oct 2022 07:50:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C941C433C1;
+        Sat, 22 Oct 2022 07:50:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666424996;
-        bh=OIyPrmQIsCOKB3WtDB3t9YMhRPWseYg73YUNm3OcaiI=;
+        s=korg; t=1666425001;
+        bh=886F7+QHCEAnDMEkfjueOSSJcarr3O9tSlES4/xq6vE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GdX4p6vKVwqTSNfWVaGN2W02qApZvz38XqjebpiyS/7TGny9b9FIj+2isHl5gupbh
-         IKNw+fHX6KaDg/7f6ZNeu04Q9en/0VlF0rHpbAn6aY7Qw2NS38wD4knQG42fA/pVQr
-         ECv+XyP2NRTlUk2BCCxuBDvOGNpvVUKaTCynuDlY=
+        b=soyMxvvS23cSbGkpnTyhJlJ0LCO5iuHdHqxZA4tIhAusYouP3MX1r6aX4l90oPH2R
+         ZS3Oc29zjhK80mjJ8Fbwo43s0ZKWnGlLdydKmA/hCEJ1RI1cb5p59upZ3oEwbFSBdO
+         8q+DKe0afX/Xl+pZjoDDNWei8IhfryF1wbCuwPhA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Liang He <windhl@126.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        stable@vger.kernel.org, Lucas Stach <l.stach@pengutronix.de>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 353/717] soc: qcom: smem_state: Add refcounting for the state->of_node
-Date:   Sat, 22 Oct 2022 09:23:52 +0200
-Message-Id: <20221022072511.527968726@linuxfoundation.org>
+Subject: [PATCH 5.19 354/717] ARM: dts: imx6qdl-kontron-samx6i: hook up DDC i2c bus
+Date:   Sat, 22 Oct 2022 09:23:53 +0200
+Message-Id: <20221022072511.680808682@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221022072415.034382448@linuxfoundation.org>
 References: <20221022072415.034382448@linuxfoundation.org>
@@ -54,44 +55,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liang He <windhl@126.com>
+From: Lucas Stach <l.stach@pengutronix.de>
 
-[ Upstream commit 90681f53b9381c23ff7762a3b13826d620c272de ]
+[ Upstream commit afd8f77957e3e83adf21d9229c61ff37f44a177a ]
 
-In qcom_smem_state_register() and qcom_smem_state_release(), we
-should better use of_node_get() and of_node_put() for the reference
-creation and destruction of 'device_node'.
+i2c2 is routed to the pins dedicated as DDC in the module standard.
+Reduce clock rate to 100kHz to be in line with VESA standard and hook
+this bus up to the HDMI node.
 
-Fixes: 9460ae2ff308 ("soc: qcom: Introduce common SMEM state machine code")
-Signed-off-by: Liang He <windhl@126.com>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20220721135217.1301039-2-windhl@126.com
+Fixes: 708ed2649ad8 ("ARM: dts: imx6qdl-kontron-samx6i: increase i2c-frequency")
+Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
+[m.felsch@pengutronix.de: add fixes line]
+Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/soc/qcom/smem_state.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ arch/arm/boot/dts/imx6qdl-kontron-samx6i.dtsi | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/soc/qcom/smem_state.c b/drivers/soc/qcom/smem_state.c
-index 31faf4aa868e..e848cc9a3cf8 100644
---- a/drivers/soc/qcom/smem_state.c
-+++ b/drivers/soc/qcom/smem_state.c
-@@ -136,6 +136,7 @@ static void qcom_smem_state_release(struct kref *ref)
- 	struct qcom_smem_state *state = container_of(ref, struct qcom_smem_state, refcount);
+diff --git a/arch/arm/boot/dts/imx6qdl-kontron-samx6i.dtsi b/arch/arm/boot/dts/imx6qdl-kontron-samx6i.dtsi
+index 6b791d515e29..683f6e58ab23 100644
+--- a/arch/arm/boot/dts/imx6qdl-kontron-samx6i.dtsi
++++ b/arch/arm/boot/dts/imx6qdl-kontron-samx6i.dtsi
+@@ -263,6 +263,10 @@
+ 	phy-reset-gpios = <&gpio1 25 GPIO_ACTIVE_LOW>;
+ };
  
- 	list_del(&state->list);
-+	of_node_put(state->of_node);
- 	kfree(state);
- }
++&hdmi {
++	ddc-i2c-bus = <&i2c2>;
++};
++
+ &i2c_intern {
+ 	pmic@8 {
+ 		compatible = "fsl,pfuze100";
+@@ -387,7 +391,7 @@
  
-@@ -205,7 +206,7 @@ struct qcom_smem_state *qcom_smem_state_register(struct device_node *of_node,
- 
- 	kref_init(&state->refcount);
- 
--	state->of_node = of_node;
-+	state->of_node = of_node_get(of_node);
- 	state->ops = *ops;
- 	state->priv = priv;
- 
+ /* HDMI_CTRL */
+ &i2c2 {
+-	clock-frequency = <375000>;
++	clock-frequency = <100000>;
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_i2c2>;
+ };
 -- 
 2.35.1
 
