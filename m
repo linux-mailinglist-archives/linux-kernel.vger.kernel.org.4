@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05EE4608519
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 08:28:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A41E60851C
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 08:29:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230008AbiJVG2g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 02:28:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49884 "EHLO
+        id S229519AbiJVG3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 02:29:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229838AbiJVG2d (ORCPT
+        with ESMTP id S229765AbiJVG3e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 02:28:33 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF8FB2AD9DD;
-        Fri, 21 Oct 2022 23:28:30 -0700 (PDT)
-X-QQ-mid: bizesmtp70t1666420097td25yqlv
+        Sat, 22 Oct 2022 02:29:34 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32CBF22289;
+        Fri, 21 Oct 2022 23:29:30 -0700 (PDT)
+X-QQ-mid: bizesmtp76t1666420162tubmy0fx
 Received: from localhost.localdomain ( [182.148.15.254])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 22 Oct 2022 14:28:15 +0800 (CST)
+        id ; Sat, 22 Oct 2022 14:29:21 +0800 (CST)
 X-QQ-SSF: 01000000000000C0E000000A0000000
-X-QQ-FEAT: Fc2LLDWeHZ9ajbpUxL1eNYj5EshCNlonHPERxMR7h6JlzehtAEK0/ndc8XjwX
-        6CAOXPiKl6O4ab1ZYeuHbSVECxK2js+dpbck2IvIKK6htRjUnkUuXZsSehTEMJP17j9GQis
-        ePj/ol+C7O8KGL02XhEMqMOnfB0gbqkT1tJVAo5q/2n6E/5QNqv42+i62+NMeH9l7fa1/Ty
-        OgFbWIY9auuIC81lwt5SqC4y57nFndJJt5IO6m4RDUHnk0Oskn7xLiOJBYm6NNBqsuupwpi
-        dkeQG0FUq//IIVGMp6hAWeJOMOLYdHFAfMAbTcEajM8TAz7hxbKlNCoWghx9XNHxY00o7Nr
-        7BpXRUserPF9gbHlAI87aSI60cuZ8jvx7fzACmKIXZ0qpBA3E4=
+X-QQ-FEAT: DZSqRUnexJ/LZ3Ck6z2lbtPFRr17dgnHrPHlvTkEDuzz/5eWGRBKncRUQHrEG
+        unB8U3FyWHgVg7FSKWFTDjKNK9/jzuztwtGLx3F5RXzuz2ABQNXibyX03AOTRZXi76inpc/
+        Dle/uIx1NpTX3YgbFpc1jjLx38cAaZpIgkrJdK+jmbwhPa/Sw0PBWnVBKqTuPK6psmWn4oo
+        XOpYj2qyd/sqlGMFzz89BAn5EbXikkMGbDS/GVGpH7kK9vzipKemXk0zFgtoecQrPpw6zo7
+        tAmDCPYNnr0DADMARZAYkC7UgGNqsr40tGj51wNXfvi6V6fIV4LCAnOYMEgJ5x+zthIT9hE
+        0ZI/Bjdk0z+ygzM1HyQYN/oIur8I0xOiI/oiL/l5O8537R2JbY=
 X-QQ-GoodBg: 0
 From:   wangjianli <wangjianli@cdjrlc.com>
-To:     fthain@linux-m68k.org, schmitzmic@gmail.com, jejb@linux.ibm.com,
+To:     artur.paszkiewicz@intel.com, jejb@linux.ibm.com,
         martin.petersen@oracle.com
-Cc:     inux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
         wangjianli <wangjianli@cdjrlc.com>
-Subject: [PATCH] drivers/scsi: fix repeated words in comments
-Date:   Sat, 22 Oct 2022 14:28:09 +0800
-Message-Id: <20221022062809.16538-1-wangjianli@cdjrlc.com>
+Subject: [PATCH] scsi/isci: fix repeated words in comments
+Date:   Sat, 22 Oct 2022 14:29:15 +0800
+Message-Id: <20221022062915.17842-1-wangjianli@cdjrlc.com>
 X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr7
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -52,22 +52,23 @@ Delete the redundant word 'the'.
 
 Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
 ---
- drivers/scsi/NCR5380.c | 2 +-
+ drivers/scsi/isci/remote_device.h | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/NCR5380.c b/drivers/scsi/NCR5380.c
-index dece7d9eb4d3..36f8133ad7d8 100644
---- a/drivers/scsi/NCR5380.c
-+++ b/drivers/scsi/NCR5380.c
-@@ -857,7 +857,7 @@ static void NCR5380_dma_complete(struct Scsi_Host *instance)
-  * Checking for bus reset by reading RST is futile because of interrupt
-  * latency, but a bus reset will reset chip logic. Checking for parity error
-  * is unnecessary because that interrupt is never enabled. A Loss of BSY
-- * condition will clear DMA Mode. We can tell when this occurs because the
-+ * condition will clear DMA Mode. We can tell when this occurs because
-  * the Busy Monitor interrupt is enabled together with DMA Mode.
-  */
- 
+diff --git a/drivers/scsi/isci/remote_device.h b/drivers/scsi/isci/remote_device.h
+index 3ad681c4c20a..db097483ff04 100644
+--- a/drivers/scsi/isci/remote_device.h
++++ b/drivers/scsi/isci/remote_device.h
+@@ -198,7 +198,7 @@ enum sci_status sci_remote_device_reset_complete(
+  * permitted.  This state is entered from the INITIAL state.  This state
+  * is entered from the STOPPING state.
+  *
+- * @SCI_DEV_STARTING: This state indicates the the remote device is in
++ * @SCI_DEV_STARTING: This state indicates the remote device is in
+  * the process of becoming ready (i.e. starting).  In this state no new
+  * IO operations are permitted.  This state is entered from the STOPPED
+  * state.
 -- 
 2.36.1
+
 
