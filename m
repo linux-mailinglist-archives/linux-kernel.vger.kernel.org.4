@@ -2,80 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 438B4608EEB
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 20:08:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FCA3608EF0
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 20:11:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbiJVSIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 14:08:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54752 "EHLO
+        id S229895AbiJVSLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 14:11:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbiJVSIj (ORCPT
+        with ESMTP id S229788AbiJVSLh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 14:08:39 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5FD84A128
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 11:08:37 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id b29so1114772pfp.13
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 11:08:37 -0700 (PDT)
+        Sat, 22 Oct 2022 14:11:37 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68463132DF3
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 11:11:36 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id z97so17119782ede.8
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 11:11:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=1a2EeARYSnWxiJw6oHJsoY33Y0se207PXHB1ow0Ga1Y=;
-        b=Hzo7fVyDyFo2PJFAkfNzn9H8cbKapupAWZ5PWbxzDFu82rpQAFcp0pBFsW8R7uFijG
-         4c6NctRkB0FBvA2D/ZwyDwgS67NBZmZ/NShhOqVLXgDYeK1U/eot0KlY2WnH1VrVn4U9
-         5EzUbeK2TvySp/qbXSuO7krMs86UA1bsVsSZc=
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=rRTMHQ1BmhsX3nP3r+K4SG1SFZ05Xk8b/C+EBfXX5XY=;
+        b=jN7tam/20zmMEAQOdVB/wRM0cYIbw7Z3JgNQrb9QunLbUk/uzz7sgcpCjh9gbi1RLb
+         rPJapVCrIUCVMdhMizZaX5siio8Xw+ao22pKVlGAWQl8WX2C0P/YAuTt4lNl5e4Zb1xe
+         qSeoCOWXMG4CKJFAbGTrtQ/rMIGjCzu9MvAS1Sa8orDj1DeJ5dGAG0vHP7U9Tn3jAEHM
+         eeampVMs08mbEe+AlfE/8ixb58Wm+CuT0NTEJh0holG4WSDlUnnpxjZTQvXEzEqu2aLQ
+         NErvCdHtWAtbXcpIyiafMnnnglHqzrG8eVu+VLZZtKdLi7dvI+6/ADoU9ONdcWjuUJQ/
+         B1XQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=1a2EeARYSnWxiJw6oHJsoY33Y0se207PXHB1ow0Ga1Y=;
-        b=eqlF5K6+HeV6l1KBzRsRMgn4JZrrHIYhK7Xa/8AphCVlIPINOp0W4XHGsuLaxmWTY9
-         cfw5MiZjQtxMUyJulZQE1QwFiZs8pijXzz/2BWa36MHdtU5jdJKPHx7c/+VCJ02mSfSq
-         /aDQepBHvi1iZS3iEu1TU9dFDNoFwAPzJDmNSvO8aj2ElZwz0gToy/Kkf8dKy7vqN5JM
-         UFYOySjIE+Nm13yaprcFNQEl2ytTYwe0jWMv6P8BsqID81GYoCg+vyjVbmivFLS3F0vr
-         +OpvGxNg9e4+unpVb0hdsqP0JT/LIEkn1VY+Zz8NnV3jOFX4vPF0M0q4zoOrcPz3Uqiw
-         Tt+w==
-X-Gm-Message-State: ACrzQf2iiD+YifGCG66hYc/kVsMEdZTZQXsjOad0MDFySKSLw5i7UmpF
-        WoESX41j3W1J7eSoT9qjzzvdtg==
-X-Google-Smtp-Source: AMsMyM4Nue+tbOGtKU+IRmf58DnKvAfMKg6+agJyUnqspmk2WdNO1OCFohOfwRpBp0gIJxQaEwwR5w==
-X-Received: by 2002:a05:6a00:2485:b0:561:c0a5:88aa with SMTP id c5-20020a056a00248500b00561c0a588aamr25296071pfv.51.1666462117133;
-        Sat, 22 Oct 2022 11:08:37 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id w9-20020a628209000000b0056276519e8fsm10507248pfd.73.2022.10.22.11.08.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 22 Oct 2022 11:08:36 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Christoph Lameter <cl@linux.com>,
-        Dmitry Vyukov <dvyukov@google.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        linux-mm@kvack.org, kasan-dev@googlegroups.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH] mm: Make ksize() a reporting-only function
-Date:   Sat, 22 Oct 2022 11:08:15 -0700
-Message-Id: <20221022180455.never.023-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        bh=rRTMHQ1BmhsX3nP3r+K4SG1SFZ05Xk8b/C+EBfXX5XY=;
+        b=sv4KlUyi0CPF6wAVDFA+ye0xrUN3mFsxw+fSDwxJdz1PPcJXDamK2u9qwYdA7Ds6Z1
+         qjtQzx7kyuu4Cl9nQD5yOKuJLd788boLnoCkvJ/EMb1AYaWW7MRu2IlDLoCUh6vwEuvz
+         UQ23ixAnIjCXmwa42PqsagQob/J+4ftvuvwFguesbIciyShwsTZCaR13QEBBwnHZ8H0a
+         wmOWE/EqQIoEiqWVcYxInheRhWaIx++Sgf19wbzhGmANh2McBG8hLWgTBfDkKgkcRh0U
+         Qu+yHX7KZInXgULoYOa7o6i3NUGUcS13iu9jvx2WSo7bK5ERrZN1dD+d4yTSE7tbvJpB
+         2U9A==
+X-Gm-Message-State: ACrzQf1FfHkrJI0QGE0TUo8whDVI9PRWQ/I6aIOslyeA0H8p4n04rVQG
+        0O83M0FQYG6t6YL5EtEAa2/I2TJ2DSZdK+XHzY7m5LPPoRwaKA==
+X-Google-Smtp-Source: AMsMyM4xpd/jqgQ33l/RU+SBojdxL7CQOdFTCjH/sLDY2OjlOg1+KtxG/r7X4JI1/LzfXayU6yGtc4a92+ZP+j1exjQ=
+X-Received: by 2002:a05:6402:190f:b0:45d:2c25:3a1d with SMTP id
+ e15-20020a056402190f00b0045d2c253a1dmr23788397edz.175.1666462294771; Sat, 22
+ Oct 2022 11:11:34 -0700 (PDT)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5852; h=from:subject:message-id; bh=HZuoaDzt6/LPxyvOVuzqy3FtD9MM88oVQvBYI2b7PvI=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjVDGPT373RHlxlNzRB3FSVMPSd+3N5IOFs8nbEih6 a4JcCZSJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY1QxjwAKCRCJcvTf3G3AJg0sEA CJQgeNhzT7kGutiZ6DfvUQ98sYDiSG8cy5fz0XvctLjXFa0E+0jHWMYAU49DaTSiJAPjvkJtC3eGqU 6H9Yhzx9OnK6+3Pf6CkgpLB2j2roioL0N9/uKNk3O/B2Zg1vC5X5WSChvXQKKYa/DWRZFjm1hYuSe6 eJtnb4TJbTlAswbsKtrfUiRdurXNZNeo93YLboPpjS3Oui2Zmkjs3yXUfQ0wbI1EAg7/Lt76SiyOEk xNIhZchALtO+3yxGXJbt5/E4CJQNgHyzMQ3zidIrYmZSMr0kRDJiFI7yTRmMMI0lBclAXkUM9DX4qW hRRkLsDseezDlETYXdhqTUlsufdXvAkrRPatPCnP/z66b+G0HAlR4Op/K5RMvloMen54XAbuXSCb3f szujhc7zJ0Ivi0uis3misDev9gs4NVzX6jAIfK9HQaWVf5ybskYfX13uIDyQUgrDAJ2zz9nkWvzhs2 4hTLhJWpQfeMm38oPVkvCP7IbG6I4mdB1J5OdiYiA8VeriacD3+wR/UupDY/Jj8Jg7UfZ1mOVC8sv5 om+rocuJfmZOlkrezs1scXeeSujkP68ukOUtcdRMlNVkHBcNBzjUQ0SGgx0J2ToE0V2CFsQEG4XXjz 833VvH5PsOTeK7/T5CefUcbv4z3/iq4+gl9YtUf8Rd5EvVizs2QIsOzNYy2g==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+References: <20221022072415.034382448@linuxfoundation.org>
+In-Reply-To: <20221022072415.034382448@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Sat, 22 Oct 2022 23:41:22 +0530
+Message-ID: <CA+G9fYtsv3869wko8khDOyqNCOSxVd2N46RpApxLzNxodpG5SQ@mail.gmail.com>
+Subject: Re: [PATCH 5.19 000/717] 5.19.17-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -84,158 +71,185 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With all "silently resizing" callers of ksize() refactored, remove the
-logic in ksize() that would allow it to be used to effectively change
-the size of an allocation (bypassing __alloc_size hints, etc). Users
-wanting this feature need to either use kmalloc_size_roundup() before an
-allocation, or use krealloc() directly.
+On Sat, 22 Oct 2022 at 13:05, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.19.17 release.
+> There are 717 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Note, this will be the LAST 5.19.y kernel to be released.  Please move
+> to the 6.0.y kernel branch at this point in time, as after this is
+> released, this branch will be end-of-life.
+>
+> Responses should be made by Mon, 24 Oct 2022 07:19:57 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.17-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-For kfree_sensitive(), move the unpoisoning logic inline. Replace the
-some of the partially open-coded ksize() in __do_krealloc with ksize()
-now that it doesn't perform unpoisoning.
+Results from Linaro's test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Adjust the KUnit tests to match the new ksize() behavior.
+## Build
+* kernel: 5.19.17-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.19.y
+* git commit: b0c2a34d484bc2819f59332935fd31bc30ebfbba
+* git describe: v5.19.16-718-gb0c2a34d484b
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.19.y/build/v5.19.16-718-gb0c2a34d484b
 
-Cc: Dmitry Vyukov <dvyukov@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: Christoph Lameter <cl@linux.com>
-Cc: Pekka Enberg <penberg@kernel.org>
-Cc: David Rientjes <rientjes@google.com>
-Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Vlastimil Babka <vbabka@suse.cz>
-Cc: Roman Gushchin <roman.gushchin@linux.dev>
-Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
-Cc: Alexander Potapenko <glider@google.com>
-Cc: Andrey Konovalov <andreyknvl@gmail.com>
-Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
-Cc: linux-mm@kvack.org
-Cc: kasan-dev@googlegroups.com
-Cc: netdev@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
-This requires at least this be landed first:
-https://lore.kernel.org/lkml/20221021234713.you.031-kees@kernel.org/
-I suspect given that is the most central ksize() user, this ksize()
-fix might be best to land through the netdev tree...
----
- mm/kasan/kasan_test.c |  8 +++++---
- mm/slab_common.c      | 33 ++++++++++++++-------------------
- 2 files changed, 19 insertions(+), 22 deletions(-)
+## No Test Regressions (compared to v5.19.16)
 
-diff --git a/mm/kasan/kasan_test.c b/mm/kasan/kasan_test.c
-index 0d59098f0876..cb5c54adb503 100644
---- a/mm/kasan/kasan_test.c
-+++ b/mm/kasan/kasan_test.c
-@@ -783,7 +783,7 @@ static void kasan_global_oob_left(struct kunit *test)
- 	KUNIT_EXPECT_KASAN_FAIL(test, *(volatile char *)p);
- }
- 
--/* Check that ksize() makes the whole object accessible. */
-+/* Check that ksize() does NOT unpoison whole object. */
- static void ksize_unpoisons_memory(struct kunit *test)
- {
- 	char *ptr;
-@@ -791,15 +791,17 @@ static void ksize_unpoisons_memory(struct kunit *test)
- 
- 	ptr = kmalloc(size, GFP_KERNEL);
- 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ptr);
-+
- 	real_size = ksize(ptr);
-+	KUNIT_EXPECT_GT(test, real_size, size);
- 
- 	OPTIMIZER_HIDE_VAR(ptr);
- 
- 	/* This access shouldn't trigger a KASAN report. */
--	ptr[size] = 'x';
-+	ptr[size - 1] = 'x';
- 
- 	/* This one must. */
--	KUNIT_EXPECT_KASAN_FAIL(test, ((volatile char *)ptr)[real_size]);
-+	KUNIT_EXPECT_KASAN_FAIL(test, ((volatile char *)ptr)[real_size - 1]);
- 
- 	kfree(ptr);
- }
-diff --git a/mm/slab_common.c b/mm/slab_common.c
-index 33b1886b06eb..eabd66fcabd0 100644
---- a/mm/slab_common.c
-+++ b/mm/slab_common.c
-@@ -1333,11 +1333,11 @@ __do_krealloc(const void *p, size_t new_size, gfp_t flags)
- 	void *ret;
- 	size_t ks;
- 
--	/* Don't use instrumented ksize to allow precise KASAN poisoning. */
-+	/* Check for double-free before calling ksize. */
- 	if (likely(!ZERO_OR_NULL_PTR(p))) {
- 		if (!kasan_check_byte(p))
- 			return NULL;
--		ks = kfence_ksize(p) ?: __ksize(p);
-+		ks = ksize(p);
- 	} else
- 		ks = 0;
- 
-@@ -1405,8 +1405,10 @@ void kfree_sensitive(const void *p)
- 	void *mem = (void *)p;
- 
- 	ks = ksize(mem);
--	if (ks)
-+	if (ks) {
-+		kasan_unpoison_range(mem, ks);
- 		memzero_explicit(mem, ks);
-+	}
- 	kfree(mem);
- }
- EXPORT_SYMBOL(kfree_sensitive);
-@@ -1415,10 +1417,11 @@ EXPORT_SYMBOL(kfree_sensitive);
-  * ksize - get the actual amount of memory allocated for a given object
-  * @objp: Pointer to the object
-  *
-- * kmalloc may internally round up allocations and return more memory
-+ * kmalloc() may internally round up allocations and return more memory
-  * than requested. ksize() can be used to determine the actual amount of
-- * memory allocated. The caller may use this additional memory, even though
-- * a smaller amount of memory was initially specified with the kmalloc call.
-+ * allocated memory. The caller may NOT use this additional memory, unless
-+ * it calls krealloc(). To avoid an alloc/realloc cycle, callers can use
-+ * kmalloc_size_roundup() to find the size of the associated kmalloc bucket.
-  * The caller must guarantee that objp points to a valid object previously
-  * allocated with either kmalloc() or kmem_cache_alloc(). The object
-  * must not be freed during the duration of the call.
-@@ -1427,13 +1430,11 @@ EXPORT_SYMBOL(kfree_sensitive);
-  */
- size_t ksize(const void *objp)
- {
--	size_t size;
--
- 	/*
--	 * We need to first check that the pointer to the object is valid, and
--	 * only then unpoison the memory. The report printed from ksize() is
--	 * more useful, then when it's printed later when the behaviour could
--	 * be undefined due to a potential use-after-free or double-free.
-+	 * We need to first check that the pointer to the object is valid.
-+	 * The KASAN report printed from ksize() is more useful, then when
-+	 * it's printed later when the behaviour could be undefined due to
-+	 * a potential use-after-free or double-free.
- 	 *
- 	 * We use kasan_check_byte(), which is supported for the hardware
- 	 * tag-based KASAN mode, unlike kasan_check_read/write().
-@@ -1447,13 +1448,7 @@ size_t ksize(const void *objp)
- 	if (unlikely(ZERO_OR_NULL_PTR(objp)) || !kasan_check_byte(objp))
- 		return 0;
- 
--	size = kfence_ksize(objp) ?: __ksize(objp);
--	/*
--	 * We assume that ksize callers could use whole allocated area,
--	 * so we need to unpoison this area.
--	 */
--	kasan_unpoison_range(objp, size);
--	return size;
-+	return kfence_ksize(objp) ?: __ksize(objp);
- }
- EXPORT_SYMBOL(ksize);
- 
--- 
-2.34.1
+## No Metric Regressions (compared to v5.19.16)
 
+## No Test Fixes (compared to v5.19.16)
+
+## No Metric Fixes (compared to v5.19.16)
+
+## Test result summary
+total: 121631, pass: 106766, fail: 1652, skip: 12837, xfail: 376
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 333 total, 333 passed, 0 failed
+* arm64: 65 total, 63 passed, 2 failed
+* i386: 55 total, 53 passed, 2 failed
+* mips: 56 total, 56 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 69 total, 63 passed, 6 failed
+* riscv: 27 total, 22 passed, 5 failed
+* s390: 21 total, 21 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 58 total, 56 passed, 2 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-at
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simpl
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
