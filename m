@@ -2,2916 +2,6810 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDD25608396
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 04:25:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCBF060839F
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 04:36:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229777AbiJVCZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 22:25:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54228 "EHLO
+        id S229683AbiJVCfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 22:35:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbiJVCZt (ORCPT
+        with ESMTP id S229760AbiJVCfu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 22:25:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C5062514D9;
-        Fri, 21 Oct 2022 19:25:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 34FCCB82DDB;
-        Sat, 22 Oct 2022 02:25:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB5C6C433C1;
-        Sat, 22 Oct 2022 02:25:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666405540;
-        bh=XRn96Qgf+IkqJvSQ4ICsm7MugYkpZEGLsrifeFFmYa4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=b1k6rP5w6IZpZLRevZ9JlYAag/bm+PVeuZ2qMjN99+L2ViMDncwo95IF2Y7NSzBu5
-         n36Ze5ggnq3oZaiUC4bBOnslYLp2JAhcwmzHQ/NYdFxLeuTOj+061mA0V5m6Gx38Ag
-         nU72A3JKltZXXCSq2ukxzYOjJOO0rHckAqd6Fhcx5tmMt0RVhXhDZWm4RM9qlO6mbK
-         NFraZaFG/qzJbkVT6TgEM75BxtPtJXtbyl60sYEHR9h2EswJPaviyHhW99cC7/9+mS
-         r+CJNd++xE/fdiWODVwBzhQOiDZbY6I3mZmLhFgUNuoAjf4k6E6tbs0eaUn/Gfo91t
-         DGhPbqPVtGzcQ==
-Date:   Fri, 21 Oct 2022 19:25:40 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Christoph =?iso-8859-1?Q?B=F6hmwalder?= 
-        <christoph.boehmwalder@linbit.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        SeongJae Park <sj@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Helge Deller <deller@gmx.de>, netdev@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-mmc@vger.kernel.org, linux-parisc@vger.kernel.org
-Subject: Re: [PATCH v1 1/5] treewide: use get_random_u32_below() instead of
- deprecated function
-Message-ID: <Y1NUpKp5ZUtM7K2n@magnolia>
-References: <20221022014403.3881893-1-Jason@zx2c4.com>
- <20221022014403.3881893-2-Jason@zx2c4.com>
+        Fri, 21 Oct 2022 22:35:50 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7477227211C
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 19:35:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666406145; x=1697942145;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=8ST6/Vro3Up8BK7Cy4fZ8ar7JL+bMi+k27MrWexFx1s=;
+  b=LqkeAjYnZHuI3Hm5xineJBczdp884sQfyWUKzKMp4wmpKD0VSm9tgv4U
+   mE8Ff0iAvJLS25l3c5Ozo/u1z2pnofzty91fWYNgWhWakHU//xsSJSjHh
+   PshEFvg7BrEhO7d5hqgizHMgPHuCIDNaiuorv0SphHbuiAPoHmZiadAmm
+   TF4EcF3hqBR2NhVMeTI7Vj3x86j/F5wadheZp0TIOKD2UjXMXoxMGRPw2
+   FXVDwXWGSCHzaCLfN43tRHqL81JSfi7NTvPTF9txADaUqF6b4aq0QYFRu
+   rrQRqCnT7z32cEIjw7l8h28JjwoAXRsvHO+vdAwU51engi+RhMLkSsZsn
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10507"; a="333727793"
+X-IronPort-AV: E=Sophos;i="5.95,203,1661842800"; 
+   d="scan'208";a="333727793"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2022 19:35:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10507"; a="661831041"
+X-IronPort-AV: E=Sophos;i="5.95,203,1661842800"; 
+   d="scan'208";a="661831041"
+Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 21 Oct 2022 19:35:38 -0700
+Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1om4ML-0003Eu-2S;
+        Sat, 22 Oct 2022 02:35:37 +0000
+Date:   Sat, 22 Oct 2022 10:35:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, David Sterba <dsterba@suse.com>
+Subject: [kdave-btrfs-devel:ext/sweettea/fscrypt-v3 27/46]
+ fs/crypto/fscrypt_private.h:307:19: warning: field iv within 'struct
+ fscrypt_extent_context_v1' is less aligned than 'union fscrypt_iv' and is
+ usually due to 'struct fscrypt_extent_context_v1' being packed, which can
+ lead to unaligned accesses
+Message-ID: <202210221007.KRCcN9B2-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/mixed; boundary="1CjbGslkFsYgisT/"
 Content-Disposition: inline
-In-Reply-To: <20221022014403.3881893-2-Jason@zx2c4.com>
 X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        UPPERCASE_50_75 autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 09:43:59PM -0400, Jason A. Donenfeld wrote:
-> This is a simple mechanical transformation done by:
-> 
-> @@
-> expression E;
-> @@
-> - prandom_u32_max(E)
-> + get_random_u32_below(E)
-> 
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 
-I wish this patchset had included "random: use rejection sampling for
-uniform bounded random integers" since I had to go pull it out of:
+--1CjbGslkFsYgisT/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-https://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git/commit/?id=2a74fa8f83e2ab421e08462b639b703905c69249
+tree:   https://github.com/kdave/btrfs-devel.git ext/sweettea/fscrypt-v3
+head:   4303e47e934b3af3940fbccf09515645b7084d78
+commit: de4776dc6c651dbecf3aa4f8225aac3bf98e7690 [27/46] fscrypt: add extent-based encryption
+config: arm-randconfig-c002-20221019
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 791a7ae1ba3efd6bca96338e10ffde557ba83920)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/kdave/btrfs-devel/commit/de4776dc6c651dbecf3aa4f8225aac3bf98e7690
+        git remote add kdave-btrfs-devel https://github.com/kdave/btrfs-devel.git
+        git fetch --no-tags kdave-btrfs-devel ext/sweettea/fscrypt-v3
+        git checkout de4776dc6c651dbecf3aa4f8225aac3bf98e7690
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash fs/
 
-Assuming that's the correct patch, the XFS changes look ok.
-Though I'm trusting you that all the mathematics are correct since
-that's /really/ not my department (more of a languages guy ;).
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-Acked-by: Darrick J. Wong <djwong@kernel.org>
+All warnings (new ones prefixed by >>):
 
---D
+   In file included from fs/crypto/crypto.c:29:
+>> fs/crypto/fscrypt_private.h:307:19: warning: field iv within 'struct fscrypt_extent_context_v1' is less aligned than 'union fscrypt_iv' and is usually due to 'struct fscrypt_extent_context_v1' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           union fscrypt_iv iv;
+                            ^
+   1 warning generated.
 
-> ---
->  arch/arm/kernel/process.c                     |  2 +-
->  arch/arm64/kernel/process.c                   |  2 +-
->  arch/loongarch/kernel/process.c               |  2 +-
->  arch/loongarch/kernel/vdso.c                  |  2 +-
->  arch/mips/kernel/process.c                    |  2 +-
->  arch/mips/kernel/vdso.c                       |  2 +-
->  arch/parisc/kernel/vdso.c                     |  2 +-
->  arch/powerpc/crypto/crc-vpmsum_test.c         |  4 +-
->  arch/powerpc/kernel/process.c                 |  2 +-
->  arch/s390/kernel/process.c                    |  2 +-
->  arch/s390/kernel/vdso.c                       |  2 +-
->  arch/sparc/vdso/vma.c                         |  2 +-
->  arch/um/kernel/process.c                      |  2 +-
->  arch/x86/entry/vdso/vma.c                     |  2 +-
->  arch/x86/kernel/module.c                      |  2 +-
->  arch/x86/kernel/process.c                     |  2 +-
->  arch/x86/mm/pat/cpa-test.c                    |  4 +-
->  crypto/rsa-pkcs1pad.c                         |  2 +-
->  crypto/testmgr.c                              | 86 +++++++++----------
->  drivers/block/drbd/drbd_receiver.c            |  4 +-
->  drivers/bus/mhi/host/internal.h               |  2 +-
->  drivers/dma-buf/st-dma-fence-chain.c          |  6 +-
->  .../gpu/drm/i915/gem/i915_gem_execbuffer.c    |  2 +-
->  .../drm/i915/gt/intel_execlists_submission.c  |  2 +-
->  drivers/gpu/drm/i915/intel_memory_region.c    |  4 +-
->  drivers/infiniband/core/cma.c                 |  2 +-
->  drivers/infiniband/hw/cxgb4/id_table.c        |  4 +-
->  drivers/infiniband/hw/hns/hns_roce_ah.c       |  4 +-
->  drivers/infiniband/ulp/rtrs/rtrs-clt.c        |  2 +-
->  drivers/md/bcache/request.c                   |  2 +-
->  drivers/media/common/v4l2-tpg/v4l2-tpg-core.c |  8 +-
->  .../media/test-drivers/vidtv/vidtv_demod.c    |  8 +-
->  .../test-drivers/vivid/vivid-kthread-cap.c    |  2 +-
->  .../test-drivers/vivid/vivid-kthread-out.c    |  2 +-
->  .../media/test-drivers/vivid/vivid-radio-rx.c |  4 +-
->  .../media/test-drivers/vivid/vivid-sdr-cap.c  |  2 +-
->  .../test-drivers/vivid/vivid-touch-cap.c      |  2 +-
->  drivers/mmc/core/core.c                       |  4 +-
->  drivers/mmc/host/dw_mmc.c                     |  2 +-
->  drivers/mtd/nand/raw/nandsim.c                |  4 +-
->  drivers/mtd/tests/mtd_nandecctest.c           | 10 +--
->  drivers/mtd/tests/stresstest.c                |  8 +-
->  drivers/mtd/ubi/debug.c                       |  2 +-
->  drivers/mtd/ubi/debug.h                       |  6 +-
->  drivers/net/ethernet/broadcom/cnic.c          |  2 +-
->  .../chelsio/inline_crypto/chtls/chtls_io.c    |  4 +-
->  drivers/net/phy/at803x.c                      |  2 +-
->  drivers/net/team/team_mode_random.c           |  2 +-
->  drivers/net/wireguard/selftest/allowedips.c   | 20 ++---
->  drivers/net/wireguard/timers.c                |  4 +-
->  .../broadcom/brcm80211/brcmfmac/p2p.c         |  2 +-
->  .../net/wireless/intel/iwlwifi/mvm/mac-ctxt.c |  2 +-
->  drivers/pci/p2pdma.c                          |  2 +-
->  drivers/s390/scsi/zfcp_fc.c                   |  2 +-
->  drivers/scsi/fcoe/fcoe_ctlr.c                 |  4 +-
->  drivers/scsi/qedi/qedi_main.c                 |  2 +-
->  drivers/scsi/scsi_debug.c                     |  6 +-
->  fs/ceph/inode.c                               |  2 +-
->  fs/ceph/mdsmap.c                              |  2 +-
->  fs/ext2/ialloc.c                              |  2 +-
->  fs/ext4/ialloc.c                              |  2 +-
->  fs/ext4/super.c                               |  5 +-
->  fs/f2fs/gc.c                                  |  2 +-
->  fs/f2fs/segment.c                             |  8 +-
->  fs/ubifs/debug.c                              |  8 +-
->  fs/ubifs/lpt_commit.c                         | 14 +--
->  fs/ubifs/tnc_commit.c                         |  2 +-
->  fs/xfs/libxfs/xfs_alloc.c                     |  2 +-
->  fs/xfs/libxfs/xfs_ialloc.c                    |  2 +-
->  fs/xfs/xfs_error.c                            |  2 +-
->  include/linux/damon.h                         |  2 +-
->  include/linux/nodemask.h                      |  2 +-
->  kernel/bpf/core.c                             |  4 +-
->  kernel/kcsan/selftest.c                       |  4 +-
->  kernel/locking/test-ww_mutex.c                |  4 +-
->  kernel/time/clocksource.c                     |  2 +-
->  lib/fault-inject.c                            |  2 +-
->  lib/find_bit_benchmark.c                      |  4 +-
->  lib/kobject.c                                 |  2 +-
->  lib/reed_solomon/test_rslib.c                 |  6 +-
->  lib/sbitmap.c                                 |  4 +-
->  lib/test-string_helpers.c                     |  2 +-
->  lib/test_hexdump.c                            | 10 +--
->  lib/test_list_sort.c                          |  2 +-
->  lib/test_printf.c                             |  2 +-
->  lib/test_rhashtable.c                         |  4 +-
->  lib/test_vmalloc.c                            |  8 +-
->  mm/kasan/kasan_test.c                         |  6 +-
->  mm/kfence/core.c                              |  4 +-
->  mm/kfence/kfence_test.c                       |  4 +-
->  mm/slub.c                                     |  2 +-
->  mm/swapfile.c                                 |  4 +-
->  net/802/garp.c                                |  2 +-
->  net/802/mrp.c                                 |  2 +-
->  net/batman-adv/bat_iv_ogm.c                   |  4 +-
->  net/batman-adv/bat_v_elp.c                    |  2 +-
->  net/batman-adv/bat_v_ogm.c                    |  4 +-
->  net/batman-adv/network-coding.c               |  2 +-
->  net/bluetooth/mgmt.c                          |  4 +-
->  net/can/j1939/socket.c                        |  2 +-
->  net/can/j1939/transport.c                     |  2 +-
->  net/ceph/mon_client.c                         |  2 +-
->  net/ceph/osd_client.c                         |  2 +-
->  net/core/neighbour.c                          |  4 +-
->  net/core/pktgen.c                             | 28 +++---
->  net/core/stream.c                             |  2 +-
->  net/ipv4/icmp.c                               |  2 +-
->  net/ipv4/igmp.c                               |  6 +-
->  net/ipv4/inet_connection_sock.c               |  2 +-
->  net/ipv4/inet_hashtables.c                    |  2 +-
->  net/ipv4/route.c                              |  4 +-
->  net/ipv4/tcp_bbr.c                            |  2 +-
->  net/ipv4/tcp_input.c                          |  3 +-
->  net/ipv6/addrconf.c                           |  8 +-
->  net/ipv6/mcast.c                              | 10 +--
->  net/ipv6/route.c                              |  2 +-
->  net/netfilter/ipvs/ip_vs_twos.c               |  4 +-
->  net/netfilter/nf_conntrack_core.c             |  4 +-
->  net/netfilter/nf_nat_helper.c                 |  2 +-
->  net/netlink/af_netlink.c                      |  2 +-
->  net/packet/af_packet.c                        |  4 +-
->  net/sched/act_gact.c                          |  2 +-
->  net/sched/act_sample.c                        |  2 +-
->  net/sched/sch_choke.c                         |  2 +-
->  net/sched/sch_netem.c                         |  4 +-
->  net/sctp/socket.c                             |  2 +-
->  net/sctp/transport.c                          |  2 +-
->  net/sunrpc/cache.c                            |  2 +-
->  net/sunrpc/xprtsock.c                         |  2 +-
->  net/tipc/socket.c                             |  2 +-
->  net/vmw_vsock/af_vsock.c                      |  2 +-
->  net/xfrm/xfrm_state.c                         |  2 +-
->  132 files changed, 279 insertions(+), 279 deletions(-)
-> 
-> diff --git a/arch/arm/kernel/process.c b/arch/arm/kernel/process.c
-> index a2b31d91a1b6..f811733a8fc5 100644
-> --- a/arch/arm/kernel/process.c
-> +++ b/arch/arm/kernel/process.c
-> @@ -371,7 +371,7 @@ static unsigned long sigpage_addr(const struct mm_struct *mm,
->  
->  	slots = ((last - first) >> PAGE_SHIFT) + 1;
->  
-> -	offset = prandom_u32_max(slots);
-> +	offset = get_random_u32_below(slots);
->  
->  	addr = first + (offset << PAGE_SHIFT);
->  
-> diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
-> index 044a7d7f1f6a..1395a1638427 100644
-> --- a/arch/arm64/kernel/process.c
-> +++ b/arch/arm64/kernel/process.c
-> @@ -591,7 +591,7 @@ unsigned long __get_wchan(struct task_struct *p)
->  unsigned long arch_align_stack(unsigned long sp)
->  {
->  	if (!(current->personality & ADDR_NO_RANDOMIZE) && randomize_va_space)
-> -		sp -= prandom_u32_max(PAGE_SIZE);
-> +		sp -= get_random_u32_below(PAGE_SIZE);
->  	return sp & ~0xf;
->  }
->  
-> diff --git a/arch/loongarch/kernel/process.c b/arch/loongarch/kernel/process.c
-> index 1256e3582475..dfba6ffb2db7 100644
-> --- a/arch/loongarch/kernel/process.c
-> +++ b/arch/loongarch/kernel/process.c
-> @@ -293,7 +293,7 @@ unsigned long stack_top(void)
->  unsigned long arch_align_stack(unsigned long sp)
->  {
->  	if (!(current->personality & ADDR_NO_RANDOMIZE) && randomize_va_space)
-> -		sp -= prandom_u32_max(PAGE_SIZE);
-> +		sp -= get_random_u32_below(PAGE_SIZE);
->  
->  	return sp & STACK_ALIGN;
->  }
-> diff --git a/arch/loongarch/kernel/vdso.c b/arch/loongarch/kernel/vdso.c
-> index 8c9826062652..eaebd2e0f725 100644
-> --- a/arch/loongarch/kernel/vdso.c
-> +++ b/arch/loongarch/kernel/vdso.c
-> @@ -78,7 +78,7 @@ static unsigned long vdso_base(void)
->  	unsigned long base = STACK_TOP;
->  
->  	if (current->flags & PF_RANDOMIZE) {
-> -		base += prandom_u32_max(VDSO_RANDOMIZE_SIZE);
-> +		base += get_random_u32_below(VDSO_RANDOMIZE_SIZE);
->  		base = PAGE_ALIGN(base);
->  	}
->  
-> diff --git a/arch/mips/kernel/process.c b/arch/mips/kernel/process.c
-> index bbe9ce471791..093dbbd6b843 100644
-> --- a/arch/mips/kernel/process.c
-> +++ b/arch/mips/kernel/process.c
-> @@ -711,7 +711,7 @@ unsigned long mips_stack_top(void)
->  unsigned long arch_align_stack(unsigned long sp)
->  {
->  	if (!(current->personality & ADDR_NO_RANDOMIZE) && randomize_va_space)
-> -		sp -= prandom_u32_max(PAGE_SIZE);
-> +		sp -= get_random_u32_below(PAGE_SIZE);
->  
->  	return sp & ALMASK;
->  }
-> diff --git a/arch/mips/kernel/vdso.c b/arch/mips/kernel/vdso.c
-> index 5fd9bf1d596c..f6d40e43f108 100644
-> --- a/arch/mips/kernel/vdso.c
-> +++ b/arch/mips/kernel/vdso.c
-> @@ -79,7 +79,7 @@ static unsigned long vdso_base(void)
->  	}
->  
->  	if (current->flags & PF_RANDOMIZE) {
-> -		base += prandom_u32_max(VDSO_RANDOMIZE_SIZE);
-> +		base += get_random_u32_below(VDSO_RANDOMIZE_SIZE);
->  		base = PAGE_ALIGN(base);
->  	}
->  
-> diff --git a/arch/parisc/kernel/vdso.c b/arch/parisc/kernel/vdso.c
-> index 47e5960a2f96..c5cbfce7a84c 100644
-> --- a/arch/parisc/kernel/vdso.c
-> +++ b/arch/parisc/kernel/vdso.c
-> @@ -75,7 +75,7 @@ int arch_setup_additional_pages(struct linux_binprm *bprm,
->  
->  	map_base = mm->mmap_base;
->  	if (current->flags & PF_RANDOMIZE)
-> -		map_base -= prandom_u32_max(0x20) * PAGE_SIZE;
-> +		map_base -= get_random_u32_below(0x20) * PAGE_SIZE;
->  
->  	vdso_text_start = get_unmapped_area(NULL, map_base, vdso_text_len, 0, 0);
->  
-> diff --git a/arch/powerpc/crypto/crc-vpmsum_test.c b/arch/powerpc/crypto/crc-vpmsum_test.c
-> index 273c527868db..c61a874a3a5c 100644
-> --- a/arch/powerpc/crypto/crc-vpmsum_test.c
-> +++ b/arch/powerpc/crypto/crc-vpmsum_test.c
-> @@ -77,8 +77,8 @@ static int __init crc_test_init(void)
->  
->  		pr_info("crc-vpmsum_test begins, %lu iterations\n", iterations);
->  		for (i=0; i<iterations; i++) {
-> -			size_t offset = prandom_u32_max(16);
-> -			size_t len = prandom_u32_max(MAX_CRC_LENGTH);
-> +			size_t offset = get_random_u32_below(16);
-> +			size_t len = get_random_u32_below(MAX_CRC_LENGTH);
->  
->  			if (len <= offset)
->  				continue;
-> diff --git a/arch/powerpc/kernel/process.c b/arch/powerpc/kernel/process.c
-> index 67da147fe34d..fcf604370c66 100644
-> --- a/arch/powerpc/kernel/process.c
-> +++ b/arch/powerpc/kernel/process.c
-> @@ -2303,6 +2303,6 @@ void notrace __ppc64_runlatch_off(void)
->  unsigned long arch_align_stack(unsigned long sp)
->  {
->  	if (!(current->personality & ADDR_NO_RANDOMIZE) && randomize_va_space)
-> -		sp -= prandom_u32_max(PAGE_SIZE);
-> +		sp -= get_random_u32_below(PAGE_SIZE);
->  	return sp & ~0xf;
->  }
-> diff --git a/arch/s390/kernel/process.c b/arch/s390/kernel/process.c
-> index 42af4b3aa02b..3f5d2db0b854 100644
-> --- a/arch/s390/kernel/process.c
-> +++ b/arch/s390/kernel/process.c
-> @@ -224,7 +224,7 @@ unsigned long __get_wchan(struct task_struct *p)
->  unsigned long arch_align_stack(unsigned long sp)
->  {
->  	if (!(current->personality & ADDR_NO_RANDOMIZE) && randomize_va_space)
-> -		sp -= prandom_u32_max(PAGE_SIZE);
-> +		sp -= get_random_u32_below(PAGE_SIZE);
->  	return sp & ~0xf;
->  }
->  
-> diff --git a/arch/s390/kernel/vdso.c b/arch/s390/kernel/vdso.c
-> index 3105ca5bd470..119328e1e2b3 100644
-> --- a/arch/s390/kernel/vdso.c
-> +++ b/arch/s390/kernel/vdso.c
-> @@ -227,7 +227,7 @@ static unsigned long vdso_addr(unsigned long start, unsigned long len)
->  	end -= len;
->  
->  	if (end > start) {
-> -		offset = prandom_u32_max(((end - start) >> PAGE_SHIFT) + 1);
-> +		offset = get_random_u32_below(((end - start) >> PAGE_SHIFT) + 1);
->  		addr = start + (offset << PAGE_SHIFT);
->  	} else {
->  		addr = start;
-> diff --git a/arch/sparc/vdso/vma.c b/arch/sparc/vdso/vma.c
-> index ae9a86cb6f3d..136c78f28f8b 100644
-> --- a/arch/sparc/vdso/vma.c
-> +++ b/arch/sparc/vdso/vma.c
-> @@ -354,7 +354,7 @@ static unsigned long vdso_addr(unsigned long start, unsigned int len)
->  	unsigned int offset;
->  
->  	/* This loses some more bits than a modulo, but is cheaper */
-> -	offset = prandom_u32_max(PTRS_PER_PTE);
-> +	offset = get_random_u32_below(PTRS_PER_PTE);
->  	return start + (offset << PAGE_SHIFT);
->  }
->  
-> diff --git a/arch/um/kernel/process.c b/arch/um/kernel/process.c
-> index 010bc422a09d..e38f41444721 100644
-> --- a/arch/um/kernel/process.c
-> +++ b/arch/um/kernel/process.c
-> @@ -356,7 +356,7 @@ int singlestepping(void * t)
->  unsigned long arch_align_stack(unsigned long sp)
->  {
->  	if (!(current->personality & ADDR_NO_RANDOMIZE) && randomize_va_space)
-> -		sp -= prandom_u32_max(8192);
-> +		sp -= get_random_u32_below(8192);
->  	return sp & ~0xf;
->  }
->  #endif
-> diff --git a/arch/x86/entry/vdso/vma.c b/arch/x86/entry/vdso/vma.c
-> index 311eae30e089..d45c5fcfeac2 100644
-> --- a/arch/x86/entry/vdso/vma.c
-> +++ b/arch/x86/entry/vdso/vma.c
-> @@ -327,7 +327,7 @@ static unsigned long vdso_addr(unsigned long start, unsigned len)
->  	end -= len;
->  
->  	if (end > start) {
-> -		offset = prandom_u32_max(((end - start) >> PAGE_SHIFT) + 1);
-> +		offset = get_random_u32_below(((end - start) >> PAGE_SHIFT) + 1);
->  		addr = start + (offset << PAGE_SHIFT);
->  	} else {
->  		addr = start;
-> diff --git a/arch/x86/kernel/module.c b/arch/x86/kernel/module.c
-> index c032edcd3d95..c09ae279ef32 100644
-> --- a/arch/x86/kernel/module.c
-> +++ b/arch/x86/kernel/module.c
-> @@ -53,7 +53,7 @@ static unsigned long int get_module_load_offset(void)
->  		 */
->  		if (module_load_offset == 0)
->  			module_load_offset =
-> -				(prandom_u32_max(1024) + 1) * PAGE_SIZE;
-> +				(get_random_u32_below(1024) + 1) * PAGE_SIZE;
->  		mutex_unlock(&module_kaslr_mutex);
->  	}
->  	return module_load_offset;
-> diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
-> index c21b7347a26d..62671ccf0404 100644
-> --- a/arch/x86/kernel/process.c
-> +++ b/arch/x86/kernel/process.c
-> @@ -965,7 +965,7 @@ early_param("idle", idle_setup);
->  unsigned long arch_align_stack(unsigned long sp)
->  {
->  	if (!(current->personality & ADDR_NO_RANDOMIZE) && randomize_va_space)
-> -		sp -= prandom_u32_max(8192);
-> +		sp -= get_random_u32_below(8192);
->  	return sp & ~0xf;
->  }
->  
-> diff --git a/arch/x86/mm/pat/cpa-test.c b/arch/x86/mm/pat/cpa-test.c
-> index 423b21e80929..3d2f7f0a6ed1 100644
-> --- a/arch/x86/mm/pat/cpa-test.c
-> +++ b/arch/x86/mm/pat/cpa-test.c
-> @@ -136,10 +136,10 @@ static int pageattr_test(void)
->  	failed += print_split(&sa);
->  
->  	for (i = 0; i < NTEST; i++) {
-> -		unsigned long pfn = prandom_u32_max(max_pfn_mapped);
-> +		unsigned long pfn = get_random_u32_below(max_pfn_mapped);
->  
->  		addr[i] = (unsigned long)__va(pfn << PAGE_SHIFT);
-> -		len[i] = prandom_u32_max(NPAGES);
-> +		len[i] = get_random_u32_below(NPAGES);
->  		len[i] = min_t(unsigned long, len[i], max_pfn_mapped - pfn - 1);
->  
->  		if (len[i] == 0)
-> diff --git a/crypto/rsa-pkcs1pad.c b/crypto/rsa-pkcs1pad.c
-> index 3285e3af43e1..0f722f8f779b 100644
-> --- a/crypto/rsa-pkcs1pad.c
-> +++ b/crypto/rsa-pkcs1pad.c
-> @@ -253,7 +253,7 @@ static int pkcs1pad_encrypt(struct akcipher_request *req)
->  	ps_end = ctx->key_size - req->src_len - 2;
->  	req_ctx->in_buf[0] = 0x02;
->  	for (i = 1; i < ps_end; i++)
-> -		req_ctx->in_buf[i] = 1 + prandom_u32_max(255);
-> +		req_ctx->in_buf[i] = 1 + get_random_u32_below(255);
->  	req_ctx->in_buf[ps_end] = 0x00;
->  
->  	pkcs1pad_sg_set_buf(req_ctx->in_sg, req_ctx->in_buf,
-> diff --git a/crypto/testmgr.c b/crypto/testmgr.c
-> index bcd059caa1c8..079923d43ce2 100644
-> --- a/crypto/testmgr.c
-> +++ b/crypto/testmgr.c
-> @@ -855,9 +855,9 @@ static int prepare_keybuf(const u8 *key, unsigned int ksize,
->  /* Generate a random length in range [0, max_len], but prefer smaller values */
->  static unsigned int generate_random_length(unsigned int max_len)
->  {
-> -	unsigned int len = prandom_u32_max(max_len + 1);
-> +	unsigned int len = get_random_u32_below(max_len + 1);
->  
-> -	switch (prandom_u32_max(4)) {
-> +	switch (get_random_u32_below(4)) {
->  	case 0:
->  		return len % 64;
->  	case 1:
-> @@ -874,14 +874,14 @@ static void flip_random_bit(u8 *buf, size_t size)
->  {
->  	size_t bitpos;
->  
-> -	bitpos = prandom_u32_max(size * 8);
-> +	bitpos = get_random_u32_below(size * 8);
->  	buf[bitpos / 8] ^= 1 << (bitpos % 8);
->  }
->  
->  /* Flip a random byte in the given nonempty data buffer */
->  static void flip_random_byte(u8 *buf, size_t size)
->  {
-> -	buf[prandom_u32_max(size)] ^= 0xff;
-> +	buf[get_random_u32_below(size)] ^= 0xff;
->  }
->  
->  /* Sometimes make some random changes to the given nonempty data buffer */
-> @@ -891,15 +891,15 @@ static void mutate_buffer(u8 *buf, size_t size)
->  	size_t i;
->  
->  	/* Sometimes flip some bits */
-> -	if (prandom_u32_max(4) == 0) {
-> -		num_flips = min_t(size_t, 1 << prandom_u32_max(8), size * 8);
-> +	if (get_random_u32_below(4) == 0) {
-> +		num_flips = min_t(size_t, 1 << get_random_u32_below(8), size * 8);
->  		for (i = 0; i < num_flips; i++)
->  			flip_random_bit(buf, size);
->  	}
->  
->  	/* Sometimes flip some bytes */
-> -	if (prandom_u32_max(4) == 0) {
-> -		num_flips = min_t(size_t, 1 << prandom_u32_max(8), size);
-> +	if (get_random_u32_below(4) == 0) {
-> +		num_flips = min_t(size_t, 1 << get_random_u32_below(8), size);
->  		for (i = 0; i < num_flips; i++)
->  			flip_random_byte(buf, size);
->  	}
-> @@ -915,11 +915,11 @@ static void generate_random_bytes(u8 *buf, size_t count)
->  	if (count == 0)
->  		return;
->  
-> -	switch (prandom_u32_max(8)) { /* Choose a generation strategy */
-> +	switch (get_random_u32_below(8)) { /* Choose a generation strategy */
->  	case 0:
->  	case 1:
->  		/* All the same byte, plus optional mutations */
-> -		switch (prandom_u32_max(4)) {
-> +		switch (get_random_u32_below(4)) {
->  		case 0:
->  			b = 0x00;
->  			break;
-> @@ -959,24 +959,24 @@ static char *generate_random_sgl_divisions(struct test_sg_division *divs,
->  		unsigned int this_len;
->  		const char *flushtype_str;
->  
-> -		if (div == &divs[max_divs - 1] || prandom_u32_max(2) == 0)
-> +		if (div == &divs[max_divs - 1] || get_random_u32_below(2) == 0)
->  			this_len = remaining;
->  		else
-> -			this_len = 1 + prandom_u32_max(remaining);
-> +			this_len = 1 + get_random_u32_below(remaining);
->  		div->proportion_of_total = this_len;
->  
-> -		if (prandom_u32_max(4) == 0)
-> -			div->offset = (PAGE_SIZE - 128) + prandom_u32_max(128);
-> -		else if (prandom_u32_max(2) == 0)
-> -			div->offset = prandom_u32_max(32);
-> +		if (get_random_u32_below(4) == 0)
-> +			div->offset = (PAGE_SIZE - 128) + get_random_u32_below(128);
-> +		else if (get_random_u32_below(2) == 0)
-> +			div->offset = get_random_u32_below(32);
->  		else
-> -			div->offset = prandom_u32_max(PAGE_SIZE);
-> -		if (prandom_u32_max(8) == 0)
-> +			div->offset = get_random_u32_below(PAGE_SIZE);
-> +		if (get_random_u32_below(8) == 0)
->  			div->offset_relative_to_alignmask = true;
->  
->  		div->flush_type = FLUSH_TYPE_NONE;
->  		if (gen_flushes) {
-> -			switch (prandom_u32_max(4)) {
-> +			switch (get_random_u32_below(4)) {
->  			case 0:
->  				div->flush_type = FLUSH_TYPE_REIMPORT;
->  				break;
-> @@ -988,7 +988,7 @@ static char *generate_random_sgl_divisions(struct test_sg_division *divs,
->  
->  		if (div->flush_type != FLUSH_TYPE_NONE &&
->  		    !(req_flags & CRYPTO_TFM_REQ_MAY_SLEEP) &&
-> -		    prandom_u32_max(2) == 0)
-> +		    get_random_u32_below(2) == 0)
->  			div->nosimd = true;
->  
->  		switch (div->flush_type) {
-> @@ -1035,7 +1035,7 @@ static void generate_random_testvec_config(struct testvec_config *cfg,
->  
->  	p += scnprintf(p, end - p, "random:");
->  
-> -	switch (prandom_u32_max(4)) {
-> +	switch (get_random_u32_below(4)) {
->  	case 0:
->  	case 1:
->  		cfg->inplace_mode = OUT_OF_PLACE;
-> @@ -1050,12 +1050,12 @@ static void generate_random_testvec_config(struct testvec_config *cfg,
->  		break;
->  	}
->  
-> -	if (prandom_u32_max(2) == 0) {
-> +	if (get_random_u32_below(2) == 0) {
->  		cfg->req_flags |= CRYPTO_TFM_REQ_MAY_SLEEP;
->  		p += scnprintf(p, end - p, " may_sleep");
->  	}
->  
-> -	switch (prandom_u32_max(4)) {
-> +	switch (get_random_u32_below(4)) {
->  	case 0:
->  		cfg->finalization_type = FINALIZATION_TYPE_FINAL;
->  		p += scnprintf(p, end - p, " use_final");
-> @@ -1071,7 +1071,7 @@ static void generate_random_testvec_config(struct testvec_config *cfg,
->  	}
->  
->  	if (!(cfg->req_flags & CRYPTO_TFM_REQ_MAY_SLEEP) &&
-> -	    prandom_u32_max(2) == 0) {
-> +	    get_random_u32_below(2) == 0) {
->  		cfg->nosimd = true;
->  		p += scnprintf(p, end - p, " nosimd");
->  	}
-> @@ -1084,7 +1084,7 @@ static void generate_random_testvec_config(struct testvec_config *cfg,
->  					  cfg->req_flags);
->  	p += scnprintf(p, end - p, "]");
->  
-> -	if (cfg->inplace_mode == OUT_OF_PLACE && prandom_u32_max(2) == 0) {
-> +	if (cfg->inplace_mode == OUT_OF_PLACE && get_random_u32_below(2) == 0) {
->  		p += scnprintf(p, end - p, " dst_divs=[");
->  		p = generate_random_sgl_divisions(cfg->dst_divs,
->  						  ARRAY_SIZE(cfg->dst_divs),
-> @@ -1093,13 +1093,13 @@ static void generate_random_testvec_config(struct testvec_config *cfg,
->  		p += scnprintf(p, end - p, "]");
->  	}
->  
-> -	if (prandom_u32_max(2) == 0) {
-> -		cfg->iv_offset = 1 + prandom_u32_max(MAX_ALGAPI_ALIGNMASK);
-> +	if (get_random_u32_below(2) == 0) {
-> +		cfg->iv_offset = 1 + get_random_u32_below(MAX_ALGAPI_ALIGNMASK);
->  		p += scnprintf(p, end - p, " iv_offset=%u", cfg->iv_offset);
->  	}
->  
-> -	if (prandom_u32_max(2) == 0) {
-> -		cfg->key_offset = 1 + prandom_u32_max(MAX_ALGAPI_ALIGNMASK);
-> +	if (get_random_u32_below(2) == 0) {
-> +		cfg->key_offset = 1 + get_random_u32_below(MAX_ALGAPI_ALIGNMASK);
->  		p += scnprintf(p, end - p, " key_offset=%u", cfg->key_offset);
->  	}
->  
-> @@ -1652,8 +1652,8 @@ static void generate_random_hash_testvec(struct shash_desc *desc,
->  	vec->ksize = 0;
->  	if (maxkeysize) {
->  		vec->ksize = maxkeysize;
-> -		if (prandom_u32_max(4) == 0)
-> -			vec->ksize = 1 + prandom_u32_max(maxkeysize);
-> +		if (get_random_u32_below(4) == 0)
-> +			vec->ksize = 1 + get_random_u32_below(maxkeysize);
->  		generate_random_bytes((u8 *)vec->key, vec->ksize);
->  
->  		vec->setkey_error = crypto_shash_setkey(desc->tfm, vec->key,
-> @@ -2218,13 +2218,13 @@ static void mutate_aead_message(struct aead_testvec *vec, bool aad_iv,
->  	const unsigned int aad_tail_size = aad_iv ? ivsize : 0;
->  	const unsigned int authsize = vec->clen - vec->plen;
->  
-> -	if (prandom_u32_max(2) == 0 && vec->alen > aad_tail_size) {
-> +	if (get_random_u32_below(2) == 0 && vec->alen > aad_tail_size) {
->  		 /* Mutate the AAD */
->  		flip_random_bit((u8 *)vec->assoc, vec->alen - aad_tail_size);
-> -		if (prandom_u32_max(2) == 0)
-> +		if (get_random_u32_below(2) == 0)
->  			return;
->  	}
-> -	if (prandom_u32_max(2) == 0) {
-> +	if (get_random_u32_below(2) == 0) {
->  		/* Mutate auth tag (assuming it's at the end of ciphertext) */
->  		flip_random_bit((u8 *)vec->ctext + vec->plen, authsize);
->  	} else {
-> @@ -2249,7 +2249,7 @@ static void generate_aead_message(struct aead_request *req,
->  	const unsigned int ivsize = crypto_aead_ivsize(tfm);
->  	const unsigned int authsize = vec->clen - vec->plen;
->  	const bool inauthentic = (authsize >= MIN_COLLISION_FREE_AUTHSIZE) &&
-> -				 (prefer_inauthentic || prandom_u32_max(4) == 0);
-> +				 (prefer_inauthentic || get_random_u32_below(4) == 0);
->  
->  	/* Generate the AAD. */
->  	generate_random_bytes((u8 *)vec->assoc, vec->alen);
-> @@ -2257,7 +2257,7 @@ static void generate_aead_message(struct aead_request *req,
->  		/* Avoid implementation-defined behavior. */
->  		memcpy((u8 *)vec->assoc + vec->alen - ivsize, vec->iv, ivsize);
->  
-> -	if (inauthentic && prandom_u32_max(2) == 0) {
-> +	if (inauthentic && get_random_u32_below(2) == 0) {
->  		/* Generate a random ciphertext. */
->  		generate_random_bytes((u8 *)vec->ctext, vec->clen);
->  	} else {
-> @@ -2321,8 +2321,8 @@ static void generate_random_aead_testvec(struct aead_request *req,
->  
->  	/* Key: length in [0, maxkeysize], but usually choose maxkeysize */
->  	vec->klen = maxkeysize;
-> -	if (prandom_u32_max(4) == 0)
-> -		vec->klen = prandom_u32_max(maxkeysize + 1);
-> +	if (get_random_u32_below(4) == 0)
-> +		vec->klen = get_random_u32_below(maxkeysize + 1);
->  	generate_random_bytes((u8 *)vec->key, vec->klen);
->  	vec->setkey_error = crypto_aead_setkey(tfm, vec->key, vec->klen);
->  
-> @@ -2331,8 +2331,8 @@ static void generate_random_aead_testvec(struct aead_request *req,
->  
->  	/* Tag length: in [0, maxauthsize], but usually choose maxauthsize */
->  	authsize = maxauthsize;
-> -	if (prandom_u32_max(4) == 0)
-> -		authsize = prandom_u32_max(maxauthsize + 1);
-> +	if (get_random_u32_below(4) == 0)
-> +		authsize = get_random_u32_below(maxauthsize + 1);
->  	if (prefer_inauthentic && authsize < MIN_COLLISION_FREE_AUTHSIZE)
->  		authsize = MIN_COLLISION_FREE_AUTHSIZE;
->  	if (WARN_ON(authsize > maxdatasize))
-> @@ -2342,7 +2342,7 @@ static void generate_random_aead_testvec(struct aead_request *req,
->  
->  	/* AAD, plaintext, and ciphertext lengths */
->  	total_len = generate_random_length(maxdatasize);
-> -	if (prandom_u32_max(4) == 0)
-> +	if (get_random_u32_below(4) == 0)
->  		vec->alen = 0;
->  	else
->  		vec->alen = generate_random_length(total_len);
-> @@ -2958,8 +2958,8 @@ static void generate_random_cipher_testvec(struct skcipher_request *req,
->  
->  	/* Key: length in [0, maxkeysize], but usually choose maxkeysize */
->  	vec->klen = maxkeysize;
-> -	if (prandom_u32_max(4) == 0)
-> -		vec->klen = prandom_u32_max(maxkeysize + 1);
-> +	if (get_random_u32_below(4) == 0)
-> +		vec->klen = get_random_u32_below(maxkeysize + 1);
->  	generate_random_bytes((u8 *)vec->key, vec->klen);
->  	vec->setkey_error = crypto_skcipher_setkey(tfm, vec->key, vec->klen);
->  
-> diff --git a/drivers/block/drbd/drbd_receiver.c b/drivers/block/drbd/drbd_receiver.c
-> index ee69d50ba4fd..3eccc6cd5004 100644
-> --- a/drivers/block/drbd/drbd_receiver.c
-> +++ b/drivers/block/drbd/drbd_receiver.c
-> @@ -781,7 +781,7 @@ static struct socket *drbd_wait_for_connect(struct drbd_connection *connection,
->  
->  	timeo = connect_int * HZ;
->  	/* 28.5% random jitter */
-> -	timeo += prandom_u32_max(2) ? timeo / 7 : -timeo / 7;
-> +	timeo += get_random_u32_below(2) ? timeo / 7 : -timeo / 7;
->  
->  	err = wait_for_completion_interruptible_timeout(&ad->door_bell, timeo);
->  	if (err <= 0)
-> @@ -1004,7 +1004,7 @@ static int conn_connect(struct drbd_connection *connection)
->  				drbd_warn(connection, "Error receiving initial packet\n");
->  				sock_release(s);
->  randomize:
-> -				if (prandom_u32_max(2))
-> +				if (get_random_u32_below(2))
->  					goto retry;
->  			}
->  		}
-> diff --git a/drivers/bus/mhi/host/internal.h b/drivers/bus/mhi/host/internal.h
-> index 01fd10a399b6..c73621aabbd1 100644
-> --- a/drivers/bus/mhi/host/internal.h
-> +++ b/drivers/bus/mhi/host/internal.h
-> @@ -129,7 +129,7 @@ enum mhi_pm_state {
->  #define PRIMARY_CMD_RING				0
->  #define MHI_DEV_WAKE_DB					127
->  #define MHI_MAX_MTU					0xffff
-> -#define MHI_RANDOM_U32_NONZERO(bmsk)			(prandom_u32_max(bmsk) + 1)
-> +#define MHI_RANDOM_U32_NONZERO(bmsk)			(get_random_u32_below(bmsk) + 1)
->  
->  enum mhi_er_type {
->  	MHI_ER_TYPE_INVALID = 0x0,
-> diff --git a/drivers/dma-buf/st-dma-fence-chain.c b/drivers/dma-buf/st-dma-fence-chain.c
-> index 0a9b099d0518..9fbad7317d9b 100644
-> --- a/drivers/dma-buf/st-dma-fence-chain.c
-> +++ b/drivers/dma-buf/st-dma-fence-chain.c
-> @@ -400,7 +400,7 @@ static int __find_race(void *arg)
->  		struct dma_fence *fence = dma_fence_get(data->fc.tail);
->  		int seqno;
->  
-> -		seqno = prandom_u32_max(data->fc.chain_length) + 1;
-> +		seqno = get_random_u32_below(data->fc.chain_length) + 1;
->  
->  		err = dma_fence_chain_find_seqno(&fence, seqno);
->  		if (err) {
-> @@ -429,7 +429,7 @@ static int __find_race(void *arg)
->  		dma_fence_put(fence);
->  
->  signal:
-> -		seqno = prandom_u32_max(data->fc.chain_length - 1);
-> +		seqno = get_random_u32_below(data->fc.chain_length - 1);
->  		dma_fence_signal(data->fc.fences[seqno]);
->  		cond_resched();
->  	}
-> @@ -637,7 +637,7 @@ static void randomise_fences(struct fence_chains *fc)
->  	while (--count) {
->  		unsigned int swp;
->  
-> -		swp = prandom_u32_max(count + 1);
-> +		swp = get_random_u32_below(count + 1);
->  		if (swp == count)
->  			continue;
->  
-> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c b/drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c
-> index 845023c14eb3..29d2459bcc90 100644
-> --- a/drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c
-> +++ b/drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c
-> @@ -2424,7 +2424,7 @@ gen8_dispatch_bsd_engine(struct drm_i915_private *dev_priv,
->  	/* Check whether the file_priv has already selected one ring. */
->  	if ((int)file_priv->bsd_engine < 0)
->  		file_priv->bsd_engine =
-> -			prandom_u32_max(num_vcs_engines(dev_priv));
-> +			get_random_u32_below(num_vcs_engines(dev_priv));
->  
->  	return file_priv->bsd_engine;
->  }
-> diff --git a/drivers/gpu/drm/i915/gt/intel_execlists_submission.c b/drivers/gpu/drm/i915/gt/intel_execlists_submission.c
-> index c718e6dc40b5..45b605e32c87 100644
-> --- a/drivers/gpu/drm/i915/gt/intel_execlists_submission.c
-> +++ b/drivers/gpu/drm/i915/gt/intel_execlists_submission.c
-> @@ -3689,7 +3689,7 @@ static void virtual_engine_initial_hint(struct virtual_engine *ve)
->  	 * NB This does not force us to execute on this engine, it will just
->  	 * typically be the first we inspect for submission.
->  	 */
-> -	swp = prandom_u32_max(ve->num_siblings);
-> +	swp = get_random_u32_below(ve->num_siblings);
->  	if (swp)
->  		swap(ve->siblings[swp], ve->siblings[0]);
->  }
-> diff --git a/drivers/gpu/drm/i915/intel_memory_region.c b/drivers/gpu/drm/i915/intel_memory_region.c
-> index 9a4a7fb55582..b9a164efd6ae 100644
-> --- a/drivers/gpu/drm/i915/intel_memory_region.c
-> +++ b/drivers/gpu/drm/i915/intel_memory_region.c
-> @@ -38,7 +38,7 @@ static int __iopagetest(struct intel_memory_region *mem,
->  			u8 value, resource_size_t offset,
->  			const void *caller)
->  {
-> -	int byte = prandom_u32_max(pagesize);
-> +	int byte = get_random_u32_below(pagesize);
->  	u8 result[3];
->  
->  	memset_io(va, value, pagesize); /* or GPF! */
-> @@ -92,7 +92,7 @@ static int iopagetest(struct intel_memory_region *mem,
->  static resource_size_t random_page(resource_size_t last)
->  {
->  	/* Limited to low 44b (16TiB), but should suffice for a spot check */
-> -	return prandom_u32_max(last >> PAGE_SHIFT) << PAGE_SHIFT;
-> +	return get_random_u32_below(last >> PAGE_SHIFT) << PAGE_SHIFT;
->  }
->  
->  static int iomemtest(struct intel_memory_region *mem,
-> diff --git a/drivers/infiniband/core/cma.c b/drivers/infiniband/core/cma.c
-> index cc2222b85c88..631e31718bd0 100644
-> --- a/drivers/infiniband/core/cma.c
-> +++ b/drivers/infiniband/core/cma.c
-> @@ -3807,7 +3807,7 @@ static int cma_alloc_any_port(enum rdma_ucm_port_space ps,
->  
->  	inet_get_local_port_range(net, &low, &high);
->  	remaining = (high - low) + 1;
-> -	rover = prandom_u32_max(remaining) + low;
-> +	rover = get_random_u32_below(remaining) + low;
->  retry:
->  	if (last_used_port != rover) {
->  		struct rdma_bind_list *bind_list;
-> diff --git a/drivers/infiniband/hw/cxgb4/id_table.c b/drivers/infiniband/hw/cxgb4/id_table.c
-> index 280d61466855..e2188b335e76 100644
-> --- a/drivers/infiniband/hw/cxgb4/id_table.c
-> +++ b/drivers/infiniband/hw/cxgb4/id_table.c
-> @@ -54,7 +54,7 @@ u32 c4iw_id_alloc(struct c4iw_id_table *alloc)
->  
->  	if (obj < alloc->max) {
->  		if (alloc->flags & C4IW_ID_TABLE_F_RANDOM)
-> -			alloc->last += prandom_u32_max(RANDOM_SKIP);
-> +			alloc->last += get_random_u32_below(RANDOM_SKIP);
->  		else
->  			alloc->last = obj + 1;
->  		if (alloc->last >= alloc->max)
-> @@ -85,7 +85,7 @@ int c4iw_id_table_alloc(struct c4iw_id_table *alloc, u32 start, u32 num,
->  	alloc->start = start;
->  	alloc->flags = flags;
->  	if (flags & C4IW_ID_TABLE_F_RANDOM)
-> -		alloc->last = prandom_u32_max(RANDOM_SKIP);
-> +		alloc->last = get_random_u32_below(RANDOM_SKIP);
->  	else
->  		alloc->last = 0;
->  	alloc->max = num;
-> diff --git a/drivers/infiniband/hw/hns/hns_roce_ah.c b/drivers/infiniband/hw/hns/hns_roce_ah.c
-> index 480c062dd04f..b37d2a81584d 100644
-> --- a/drivers/infiniband/hw/hns/hns_roce_ah.c
-> +++ b/drivers/infiniband/hw/hns/hns_roce_ah.c
-> @@ -41,8 +41,8 @@ static inline u16 get_ah_udp_sport(const struct rdma_ah_attr *ah_attr)
->  	u16 sport;
->  
->  	if (!fl)
-> -		sport = prandom_u32_max(IB_ROCE_UDP_ENCAP_VALID_PORT_MAX + 1 -
-> -					IB_ROCE_UDP_ENCAP_VALID_PORT_MIN) +
-> +		sport = get_random_u32_below(IB_ROCE_UDP_ENCAP_VALID_PORT_MAX +
-> +					     1 - IB_ROCE_UDP_ENCAP_VALID_PORT_MIN) +
->  			IB_ROCE_UDP_ENCAP_VALID_PORT_MIN;
->  	else
->  		sport = rdma_flow_label_to_udp_sport(fl);
-> diff --git a/drivers/infiniband/ulp/rtrs/rtrs-clt.c b/drivers/infiniband/ulp/rtrs/rtrs-clt.c
-> index 8546b8816524..ab75b690ad08 100644
-> --- a/drivers/infiniband/ulp/rtrs/rtrs-clt.c
-> +++ b/drivers/infiniband/ulp/rtrs/rtrs-clt.c
-> @@ -1517,7 +1517,7 @@ static void rtrs_clt_err_recovery_work(struct work_struct *work)
->  	rtrs_clt_stop_and_destroy_conns(clt_path);
->  	queue_delayed_work(rtrs_wq, &clt_path->reconnect_dwork,
->  			   msecs_to_jiffies(delay_ms +
-> -					    prandom_u32_max(RTRS_RECONNECT_SEED)));
-> +					    get_random_u32_below(RTRS_RECONNECT_SEED)));
->  }
->  
->  static struct rtrs_clt_path *alloc_path(struct rtrs_clt_sess *clt,
-> diff --git a/drivers/md/bcache/request.c b/drivers/md/bcache/request.c
-> index 3427555b0cca..32e21ba64357 100644
-> --- a/drivers/md/bcache/request.c
-> +++ b/drivers/md/bcache/request.c
-> @@ -401,7 +401,7 @@ static bool check_should_bypass(struct cached_dev *dc, struct bio *bio)
->  	}
->  
->  	if (bypass_torture_test(dc)) {
-> -		if (prandom_u32_max(4) == 3)
-> +		if (get_random_u32_below(4) == 3)
->  			goto skip;
->  		else
->  			goto rescale;
-> diff --git a/drivers/media/common/v4l2-tpg/v4l2-tpg-core.c b/drivers/media/common/v4l2-tpg/v4l2-tpg-core.c
-> index 303d02b1d71c..a366566f22c3 100644
-> --- a/drivers/media/common/v4l2-tpg/v4l2-tpg-core.c
-> +++ b/drivers/media/common/v4l2-tpg/v4l2-tpg-core.c
-> @@ -872,7 +872,7 @@ static void precalculate_color(struct tpg_data *tpg, int k)
->  	} else if (tpg->pattern == TPG_PAT_NOISE) {
->  		r = g = b = get_random_u8();
->  	} else if (k == TPG_COLOR_RANDOM) {
-> -		r = g = b = tpg->qual_offset + prandom_u32_max(196);
-> +		r = g = b = tpg->qual_offset + get_random_u32_below(196);
->  	} else if (k >= TPG_COLOR_RAMP) {
->  		r = g = b = k - TPG_COLOR_RAMP;
->  	}
-> @@ -2286,7 +2286,7 @@ static void tpg_fill_params_extras(const struct tpg_data *tpg,
->  		params->wss_width = tpg->crop.width;
->  	params->wss_width = tpg_hscale_div(tpg, p, params->wss_width);
->  	params->wss_random_offset =
-> -		params->twopixsize * prandom_u32_max(tpg->src_width / 2);
-> +		params->twopixsize * get_random_u32_below(tpg->src_width / 2);
->  
->  	if (tpg->crop.left < tpg->border.left) {
->  		left_pillar_width = tpg->border.left - tpg->crop.left;
-> @@ -2495,9 +2495,9 @@ static void tpg_fill_plane_pattern(const struct tpg_data *tpg,
->  		linestart_newer = tpg->black_line[p];
->  	} else if (tpg->pattern == TPG_PAT_NOISE || tpg->qual == TPG_QUAL_NOISE) {
->  		linestart_older = tpg->random_line[p] +
-> -				  twopixsize * prandom_u32_max(tpg->src_width / 2);
-> +				  twopixsize * get_random_u32_below(tpg->src_width / 2);
->  		linestart_newer = tpg->random_line[p] +
-> -				  twopixsize * prandom_u32_max(tpg->src_width / 2);
-> +				  twopixsize * get_random_u32_below(tpg->src_width / 2);
->  	} else {
->  		unsigned frame_line_old =
->  			(frame_line + mv_vert_old) % tpg->src_height;
-> diff --git a/drivers/media/test-drivers/vidtv/vidtv_demod.c b/drivers/media/test-drivers/vidtv/vidtv_demod.c
-> index e7959ab1add8..d60c6d16beea 100644
-> --- a/drivers/media/test-drivers/vidtv/vidtv_demod.c
-> +++ b/drivers/media/test-drivers/vidtv/vidtv_demod.c
-> @@ -188,11 +188,11 @@ static void vidtv_demod_update_stats(struct dvb_frontend *fe)
->  	 * Also, usually, signal strength is a negative number in dBm.
->  	 */
->  	c->strength.stat[0].svalue = state->tuner_cnr;
-> -	c->strength.stat[0].svalue -= prandom_u32_max(state->tuner_cnr / 50);
-> +	c->strength.stat[0].svalue -= get_random_u32_below(state->tuner_cnr / 50);
->  	c->strength.stat[0].svalue -= 68000; /* Adjust to a better range */
->  
->  	c->cnr.stat[0].svalue = state->tuner_cnr;
-> -	c->cnr.stat[0].svalue -= prandom_u32_max(state->tuner_cnr / 50);
-> +	c->cnr.stat[0].svalue -= get_random_u32_below(state->tuner_cnr / 50);
->  }
->  
->  static int vidtv_demod_read_status(struct dvb_frontend *fe,
-> @@ -213,11 +213,11 @@ static int vidtv_demod_read_status(struct dvb_frontend *fe,
->  
->  		if (snr < cnr2qual->cnr_ok) {
->  			/* eventually lose the TS lock */
-> -			if (prandom_u32_max(100) < config->drop_tslock_prob_on_low_snr)
-> +			if (get_random_u32_below(100) < config->drop_tslock_prob_on_low_snr)
->  				state->status = 0;
->  		} else {
->  			/* recover if the signal improves */
-> -			if (prandom_u32_max(100) <
-> +			if (get_random_u32_below(100) <
->  			    config->recover_tslock_prob_on_good_snr)
->  				state->status = FE_HAS_SIGNAL  |
->  						FE_HAS_CARRIER |
-> diff --git a/drivers/media/test-drivers/vivid/vivid-kthread-cap.c b/drivers/media/test-drivers/vivid/vivid-kthread-cap.c
-> index 690daada7db4..ee65d20314d3 100644
-> --- a/drivers/media/test-drivers/vivid/vivid-kthread-cap.c
-> +++ b/drivers/media/test-drivers/vivid/vivid-kthread-cap.c
-> @@ -693,7 +693,7 @@ static noinline_for_stack void vivid_thread_vid_cap_tick(struct vivid_dev *dev,
->  
->  	/* Drop a certain percentage of buffers. */
->  	if (dev->perc_dropped_buffers &&
-> -	    prandom_u32_max(100) < dev->perc_dropped_buffers)
-> +	    get_random_u32_below(100) < dev->perc_dropped_buffers)
->  		goto update_mv;
->  
->  	spin_lock(&dev->slock);
-> diff --git a/drivers/media/test-drivers/vivid/vivid-kthread-out.c b/drivers/media/test-drivers/vivid/vivid-kthread-out.c
-> index 0833e021bb11..fac6208b51da 100644
-> --- a/drivers/media/test-drivers/vivid/vivid-kthread-out.c
-> +++ b/drivers/media/test-drivers/vivid/vivid-kthread-out.c
-> @@ -51,7 +51,7 @@ static void vivid_thread_vid_out_tick(struct vivid_dev *dev)
->  
->  	/* Drop a certain percentage of buffers. */
->  	if (dev->perc_dropped_buffers &&
-> -	    prandom_u32_max(100) < dev->perc_dropped_buffers)
-> +	    get_random_u32_below(100) < dev->perc_dropped_buffers)
->  		return;
->  
->  	spin_lock(&dev->slock);
-> diff --git a/drivers/media/test-drivers/vivid/vivid-radio-rx.c b/drivers/media/test-drivers/vivid/vivid-radio-rx.c
-> index 8bd09589fb15..79c1723bd84c 100644
-> --- a/drivers/media/test-drivers/vivid/vivid-radio-rx.c
-> +++ b/drivers/media/test-drivers/vivid/vivid-radio-rx.c
-> @@ -94,8 +94,8 @@ ssize_t vivid_radio_rx_read(struct file *file, char __user *buf,
->  
->  		if (data_blk == 0 && dev->radio_rds_loop)
->  			vivid_radio_rds_init(dev);
-> -		if (perc && prandom_u32_max(100) < perc) {
-> -			switch (prandom_u32_max(4)) {
-> +		if (perc && get_random_u32_below(100) < perc) {
-> +			switch (get_random_u32_below(4)) {
->  			case 0:
->  				rds.block |= V4L2_RDS_BLOCK_CORRECTED;
->  				break;
-> diff --git a/drivers/media/test-drivers/vivid/vivid-sdr-cap.c b/drivers/media/test-drivers/vivid/vivid-sdr-cap.c
-> index 0ae5628b86c9..a81f26b76988 100644
-> --- a/drivers/media/test-drivers/vivid/vivid-sdr-cap.c
-> +++ b/drivers/media/test-drivers/vivid/vivid-sdr-cap.c
-> @@ -90,7 +90,7 @@ static void vivid_thread_sdr_cap_tick(struct vivid_dev *dev)
->  
->  	/* Drop a certain percentage of buffers. */
->  	if (dev->perc_dropped_buffers &&
-> -	    prandom_u32_max(100) < dev->perc_dropped_buffers)
-> +	    get_random_u32_below(100) < dev->perc_dropped_buffers)
->  		return;
->  
->  	spin_lock(&dev->slock);
-> diff --git a/drivers/media/test-drivers/vivid/vivid-touch-cap.c b/drivers/media/test-drivers/vivid/vivid-touch-cap.c
-> index 6cc32eb54f9d..c7f6e23df51e 100644
-> --- a/drivers/media/test-drivers/vivid/vivid-touch-cap.c
-> +++ b/drivers/media/test-drivers/vivid/vivid-touch-cap.c
-> @@ -221,7 +221,7 @@ static void vivid_fill_buff_noise(__s16 *tch_buf, int size)
->  
->  static inline int get_random_pressure(void)
->  {
-> -	return prandom_u32_max(VIVID_PRESSURE_LIMIT);
-> +	return get_random_u32_below(VIVID_PRESSURE_LIMIT);
->  }
->  
->  static void vivid_tch_buf_set(struct v4l2_pix_format *f,
-> diff --git a/drivers/mmc/core/core.c b/drivers/mmc/core/core.c
-> index 95fa8fb1d45f..a1efda85c6f2 100644
-> --- a/drivers/mmc/core/core.c
-> +++ b/drivers/mmc/core/core.c
-> @@ -97,8 +97,8 @@ static void mmc_should_fail_request(struct mmc_host *host,
->  	    !should_fail(&host->fail_mmc_request, data->blksz * data->blocks))
->  		return;
->  
-> -	data->error = data_errors[prandom_u32_max(ARRAY_SIZE(data_errors))];
-> -	data->bytes_xfered = prandom_u32_max(data->bytes_xfered >> 9) << 9;
-> +	data->error = data_errors[get_random_u32_below(ARRAY_SIZE(data_errors))];
-> +	data->bytes_xfered = get_random_u32_below(data->bytes_xfered >> 9) << 9;
->  }
->  
->  #else /* CONFIG_FAIL_MMC_REQUEST */
-> diff --git a/drivers/mmc/host/dw_mmc.c b/drivers/mmc/host/dw_mmc.c
-> index c78bbc22e0d1..6ef410053037 100644
-> --- a/drivers/mmc/host/dw_mmc.c
-> +++ b/drivers/mmc/host/dw_mmc.c
-> @@ -1858,7 +1858,7 @@ static void dw_mci_start_fault_timer(struct dw_mci *host)
->  	 * Try to inject the error at random points during the data transfer.
->  	 */
->  	hrtimer_start(&host->fault_timer,
-> -		      ms_to_ktime(prandom_u32_max(25)),
-> +		      ms_to_ktime(get_random_u32_below(25)),
->  		      HRTIMER_MODE_REL);
->  }
->  
-> diff --git a/drivers/mtd/nand/raw/nandsim.c b/drivers/mtd/nand/raw/nandsim.c
-> index 672719023241..274a31b93100 100644
-> --- a/drivers/mtd/nand/raw/nandsim.c
-> +++ b/drivers/mtd/nand/raw/nandsim.c
-> @@ -1405,9 +1405,9 @@ static void ns_do_bit_flips(struct nandsim *ns, int num)
->  	if (bitflips && get_random_u16() < (1 << 6)) {
->  		int flips = 1;
->  		if (bitflips > 1)
-> -			flips = prandom_u32_max(bitflips) + 1;
-> +			flips = get_random_u32_below(bitflips) + 1;
->  		while (flips--) {
-> -			int pos = prandom_u32_max(num * 8);
-> +			int pos = get_random_u32_below(num * 8);
->  			ns->buf.byte[pos / 8] ^= (1 << (pos % 8));
->  			NS_WARN("read_page: flipping bit %d in page %d "
->  				"reading from %d ecc: corrected=%u failed=%u\n",
-> diff --git a/drivers/mtd/tests/mtd_nandecctest.c b/drivers/mtd/tests/mtd_nandecctest.c
-> index 440988562cfd..824cc1c03b6a 100644
-> --- a/drivers/mtd/tests/mtd_nandecctest.c
-> +++ b/drivers/mtd/tests/mtd_nandecctest.c
-> @@ -47,7 +47,7 @@ struct nand_ecc_test {
->  static void single_bit_error_data(void *error_data, void *correct_data,
->  				size_t size)
->  {
-> -	unsigned int offset = prandom_u32_max(size * BITS_PER_BYTE);
-> +	unsigned int offset = get_random_u32_below(size * BITS_PER_BYTE);
->  
->  	memcpy(error_data, correct_data, size);
->  	__change_bit_le(offset, error_data);
-> @@ -58,9 +58,9 @@ static void double_bit_error_data(void *error_data, void *correct_data,
->  {
->  	unsigned int offset[2];
->  
-> -	offset[0] = prandom_u32_max(size * BITS_PER_BYTE);
-> +	offset[0] = get_random_u32_below(size * BITS_PER_BYTE);
->  	do {
-> -		offset[1] = prandom_u32_max(size * BITS_PER_BYTE);
-> +		offset[1] = get_random_u32_below(size * BITS_PER_BYTE);
->  	} while (offset[0] == offset[1]);
->  
->  	memcpy(error_data, correct_data, size);
-> @@ -71,7 +71,7 @@ static void double_bit_error_data(void *error_data, void *correct_data,
->  
->  static unsigned int random_ecc_bit(size_t size)
->  {
-> -	unsigned int offset = prandom_u32_max(3 * BITS_PER_BYTE);
-> +	unsigned int offset = get_random_u32_below(3 * BITS_PER_BYTE);
->  
->  	if (size == 256) {
->  		/*
-> @@ -79,7 +79,7 @@ static unsigned int random_ecc_bit(size_t size)
->  		 * and 17th bit) in ECC code for 256 byte data block
->  		 */
->  		while (offset == 16 || offset == 17)
-> -			offset = prandom_u32_max(3 * BITS_PER_BYTE);
-> +			offset = get_random_u32_below(3 * BITS_PER_BYTE);
->  	}
->  
->  	return offset;
-> diff --git a/drivers/mtd/tests/stresstest.c b/drivers/mtd/tests/stresstest.c
-> index 75b6ddc5dc4d..8062098930d6 100644
-> --- a/drivers/mtd/tests/stresstest.c
-> +++ b/drivers/mtd/tests/stresstest.c
-> @@ -46,7 +46,7 @@ static int rand_eb(void)
->  
->  again:
->  	/* Read or write up 2 eraseblocks at a time - hence 'ebcnt - 1' */
-> -	eb = prandom_u32_max(ebcnt - 1);
-> +	eb = get_random_u32_below(ebcnt - 1);
->  	if (bbt[eb])
->  		goto again;
->  	return eb;
-> @@ -54,12 +54,12 @@ static int rand_eb(void)
->  
->  static int rand_offs(void)
->  {
-> -	return prandom_u32_max(bufsize);
-> +	return get_random_u32_below(bufsize);
->  }
->  
->  static int rand_len(int offs)
->  {
-> -	return prandom_u32_max(bufsize - offs);
-> +	return get_random_u32_below(bufsize - offs);
->  }
->  
->  static int do_read(void)
-> @@ -118,7 +118,7 @@ static int do_write(void)
->  
->  static int do_operation(void)
->  {
-> -	if (prandom_u32_max(2))
-> +	if (get_random_u32_below(2))
->  		return do_read();
->  	else
->  		return do_write();
-> diff --git a/drivers/mtd/ubi/debug.c b/drivers/mtd/ubi/debug.c
-> index 908d0e088557..fcca6942dbdd 100644
-> --- a/drivers/mtd/ubi/debug.c
-> +++ b/drivers/mtd/ubi/debug.c
-> @@ -590,7 +590,7 @@ int ubi_dbg_power_cut(struct ubi_device *ubi, int caller)
->  
->  		if (ubi->dbg.power_cut_max > ubi->dbg.power_cut_min) {
->  			range = ubi->dbg.power_cut_max - ubi->dbg.power_cut_min;
-> -			ubi->dbg.power_cut_counter += prandom_u32_max(range);
-> +			ubi->dbg.power_cut_counter += get_random_u32_below(range);
->  		}
->  		return 0;
->  	}
-> diff --git a/drivers/mtd/ubi/debug.h b/drivers/mtd/ubi/debug.h
-> index dc8d8f83657a..23676f32b681 100644
-> --- a/drivers/mtd/ubi/debug.h
-> +++ b/drivers/mtd/ubi/debug.h
-> @@ -73,7 +73,7 @@ static inline int ubi_dbg_is_bgt_disabled(const struct ubi_device *ubi)
->  static inline int ubi_dbg_is_bitflip(const struct ubi_device *ubi)
->  {
->  	if (ubi->dbg.emulate_bitflips)
-> -		return !prandom_u32_max(200);
-> +		return !get_random_u32_below(200);
->  	return 0;
->  }
->  
-> @@ -87,7 +87,7 @@ static inline int ubi_dbg_is_bitflip(const struct ubi_device *ubi)
->  static inline int ubi_dbg_is_write_failure(const struct ubi_device *ubi)
->  {
->  	if (ubi->dbg.emulate_io_failures)
-> -		return !prandom_u32_max(500);
-> +		return !get_random_u32_below(500);
->  	return 0;
->  }
->  
-> @@ -101,7 +101,7 @@ static inline int ubi_dbg_is_write_failure(const struct ubi_device *ubi)
->  static inline int ubi_dbg_is_erase_failure(const struct ubi_device *ubi)
->  {
->  	if (ubi->dbg.emulate_io_failures)
-> -		return !prandom_u32_max(400);
-> +		return !get_random_u32_below(400);
->  	return 0;
->  }
->  
-> diff --git a/drivers/net/ethernet/broadcom/cnic.c b/drivers/net/ethernet/broadcom/cnic.c
-> index 2198e35d9e18..74bc053a2078 100644
-> --- a/drivers/net/ethernet/broadcom/cnic.c
-> +++ b/drivers/net/ethernet/broadcom/cnic.c
-> @@ -4105,7 +4105,7 @@ static int cnic_cm_alloc_mem(struct cnic_dev *dev)
->  	for (i = 0; i < MAX_CM_SK_TBL_SZ; i++)
->  		atomic_set(&cp->csk_tbl[i].ref_count, 0);
->  
-> -	port_id = prandom_u32_max(CNIC_LOCAL_PORT_RANGE);
-> +	port_id = get_random_u32_below(CNIC_LOCAL_PORT_RANGE);
->  	if (cnic_init_id_tbl(&cp->csk_port_tbl, CNIC_LOCAL_PORT_RANGE,
->  			     CNIC_LOCAL_PORT_MIN, port_id)) {
->  		cnic_cm_free_mem(dev);
-> diff --git a/drivers/net/ethernet/chelsio/inline_crypto/chtls/chtls_io.c b/drivers/net/ethernet/chelsio/inline_crypto/chtls/chtls_io.c
-> index a4256087ac82..ae6b17b96bf1 100644
-> --- a/drivers/net/ethernet/chelsio/inline_crypto/chtls/chtls_io.c
-> +++ b/drivers/net/ethernet/chelsio/inline_crypto/chtls/chtls_io.c
-> @@ -919,8 +919,8 @@ static int csk_wait_memory(struct chtls_dev *cdev,
->  	current_timeo = *timeo_p;
->  	noblock = (*timeo_p ? false : true);
->  	if (csk_mem_free(cdev, sk)) {
-> -		current_timeo = prandom_u32_max(HZ / 5) + 2;
-> -		vm_wait = prandom_u32_max(HZ / 5) + 2;
-> +		current_timeo = get_random_u32_below(HZ / 5) + 2;
-> +		vm_wait = get_random_u32_below(HZ / 5) + 2;
->  	}
->  
->  	add_wait_queue(sk_sleep(sk), &wait);
-> diff --git a/drivers/net/phy/at803x.c b/drivers/net/phy/at803x.c
-> index 349b7b1dbbf2..b07513c61c35 100644
-> --- a/drivers/net/phy/at803x.c
-> +++ b/drivers/net/phy/at803x.c
-> @@ -1758,7 +1758,7 @@ static int qca808x_phy_fast_retrain_config(struct phy_device *phydev)
->  
->  static int qca808x_phy_ms_random_seed_set(struct phy_device *phydev)
->  {
-> -	u16 seed_value = prandom_u32_max(QCA808X_MASTER_SLAVE_SEED_RANGE);
-> +	u16 seed_value = get_random_u32_below(QCA808X_MASTER_SLAVE_SEED_RANGE);
->  
->  	return at803x_debug_reg_mask(phydev, QCA808X_PHY_DEBUG_LOCAL_SEED,
->  			QCA808X_MASTER_SLAVE_SEED_CFG,
-> diff --git a/drivers/net/team/team_mode_random.c b/drivers/net/team/team_mode_random.c
-> index f3f8dd428402..53d0ce34b8ce 100644
-> --- a/drivers/net/team/team_mode_random.c
-> +++ b/drivers/net/team/team_mode_random.c
-> @@ -16,7 +16,7 @@ static bool rnd_transmit(struct team *team, struct sk_buff *skb)
->  	struct team_port *port;
->  	int port_index;
->  
-> -	port_index = prandom_u32_max(team->en_port_count);
-> +	port_index = get_random_u32_below(team->en_port_count);
->  	port = team_get_port_by_index_rcu(team, port_index);
->  	if (unlikely(!port))
->  		goto drop;
-> diff --git a/drivers/net/wireguard/selftest/allowedips.c b/drivers/net/wireguard/selftest/allowedips.c
-> index 19eac00b2381..78a916f30c82 100644
-> --- a/drivers/net/wireguard/selftest/allowedips.c
-> +++ b/drivers/net/wireguard/selftest/allowedips.c
-> @@ -285,8 +285,8 @@ static __init bool randomized_test(void)
->  
->  	for (i = 0; i < NUM_RAND_ROUTES; ++i) {
->  		get_random_bytes(ip, 4);
-> -		cidr = prandom_u32_max(32) + 1;
-> -		peer = peers[prandom_u32_max(NUM_PEERS)];
-> +		cidr = get_random_u32_below(32) + 1;
-> +		peer = peers[get_random_u32_below(NUM_PEERS)];
->  		if (wg_allowedips_insert_v4(&t, (struct in_addr *)ip, cidr,
->  					    peer, &mutex) < 0) {
->  			pr_err("allowedips random self-test malloc: FAIL\n");
-> @@ -300,7 +300,7 @@ static __init bool randomized_test(void)
->  		for (j = 0; j < NUM_MUTATED_ROUTES; ++j) {
->  			memcpy(mutated, ip, 4);
->  			get_random_bytes(mutate_mask, 4);
-> -			mutate_amount = prandom_u32_max(32);
-> +			mutate_amount = get_random_u32_below(32);
->  			for (k = 0; k < mutate_amount / 8; ++k)
->  				mutate_mask[k] = 0xff;
->  			mutate_mask[k] = 0xff
-> @@ -311,8 +311,8 @@ static __init bool randomized_test(void)
->  				mutated[k] = (mutated[k] & mutate_mask[k]) |
->  					     (~mutate_mask[k] &
->  					      get_random_u8());
-> -			cidr = prandom_u32_max(32) + 1;
-> -			peer = peers[prandom_u32_max(NUM_PEERS)];
-> +			cidr = get_random_u32_below(32) + 1;
-> +			peer = peers[get_random_u32_below(NUM_PEERS)];
->  			if (wg_allowedips_insert_v4(&t,
->  						    (struct in_addr *)mutated,
->  						    cidr, peer, &mutex) < 0) {
-> @@ -329,8 +329,8 @@ static __init bool randomized_test(void)
->  
->  	for (i = 0; i < NUM_RAND_ROUTES; ++i) {
->  		get_random_bytes(ip, 16);
-> -		cidr = prandom_u32_max(128) + 1;
-> -		peer = peers[prandom_u32_max(NUM_PEERS)];
-> +		cidr = get_random_u32_below(128) + 1;
-> +		peer = peers[get_random_u32_below(NUM_PEERS)];
->  		if (wg_allowedips_insert_v6(&t, (struct in6_addr *)ip, cidr,
->  					    peer, &mutex) < 0) {
->  			pr_err("allowedips random self-test malloc: FAIL\n");
-> @@ -344,7 +344,7 @@ static __init bool randomized_test(void)
->  		for (j = 0; j < NUM_MUTATED_ROUTES; ++j) {
->  			memcpy(mutated, ip, 16);
->  			get_random_bytes(mutate_mask, 16);
-> -			mutate_amount = prandom_u32_max(128);
-> +			mutate_amount = get_random_u32_below(128);
->  			for (k = 0; k < mutate_amount / 8; ++k)
->  				mutate_mask[k] = 0xff;
->  			mutate_mask[k] = 0xff
-> @@ -355,8 +355,8 @@ static __init bool randomized_test(void)
->  				mutated[k] = (mutated[k] & mutate_mask[k]) |
->  					     (~mutate_mask[k] &
->  					      get_random_u8());
-> -			cidr = prandom_u32_max(128) + 1;
-> -			peer = peers[prandom_u32_max(NUM_PEERS)];
-> +			cidr = get_random_u32_below(128) + 1;
-> +			peer = peers[get_random_u32_below(NUM_PEERS)];
->  			if (wg_allowedips_insert_v6(&t,
->  						    (struct in6_addr *)mutated,
->  						    cidr, peer, &mutex) < 0) {
-> diff --git a/drivers/net/wireguard/timers.c b/drivers/net/wireguard/timers.c
-> index d54d32ac9bc4..b5706b6718b1 100644
-> --- a/drivers/net/wireguard/timers.c
-> +++ b/drivers/net/wireguard/timers.c
-> @@ -147,7 +147,7 @@ void wg_timers_data_sent(struct wg_peer *peer)
->  	if (!timer_pending(&peer->timer_new_handshake))
->  		mod_peer_timer(peer, &peer->timer_new_handshake,
->  			jiffies + (KEEPALIVE_TIMEOUT + REKEY_TIMEOUT) * HZ +
-> -			prandom_u32_max(REKEY_TIMEOUT_JITTER_MAX_JIFFIES));
-> +			get_random_u32_below(REKEY_TIMEOUT_JITTER_MAX_JIFFIES));
->  }
->  
->  /* Should be called after an authenticated data packet is received. */
-> @@ -183,7 +183,7 @@ void wg_timers_handshake_initiated(struct wg_peer *peer)
->  {
->  	mod_peer_timer(peer, &peer->timer_retransmit_handshake,
->  		       jiffies + REKEY_TIMEOUT * HZ +
-> -		       prandom_u32_max(REKEY_TIMEOUT_JITTER_MAX_JIFFIES));
-> +		       get_random_u32_below(REKEY_TIMEOUT_JITTER_MAX_JIFFIES));
->  }
->  
->  /* Should be called after a handshake response message is received and processed
-> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/p2p.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/p2p.c
-> index 10d9d9c63b28..23c971b77965 100644
-> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/p2p.c
-> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/p2p.c
-> @@ -1128,7 +1128,7 @@ static void brcmf_p2p_afx_handler(struct work_struct *work)
->  	if (afx_hdl->is_listen && afx_hdl->my_listen_chan)
->  		/* 100ms ~ 300ms */
->  		err = brcmf_p2p_discover_listen(p2p, afx_hdl->my_listen_chan,
-> -						100 * (1 + prandom_u32_max(3)));
-> +						100 * (1 + get_random_u32_below(3)));
->  	else
->  		err = brcmf_p2p_act_frm_search(p2p, afx_hdl->peer_listen_chan);
->  
-> diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/mac-ctxt.c b/drivers/net/wireless/intel/iwlwifi/mvm/mac-ctxt.c
-> index de0c545d50fd..1696fbf1009a 100644
-> --- a/drivers/net/wireless/intel/iwlwifi/mvm/mac-ctxt.c
-> +++ b/drivers/net/wireless/intel/iwlwifi/mvm/mac-ctxt.c
-> @@ -1099,7 +1099,7 @@ static void iwl_mvm_mac_ctxt_cmd_fill_ap(struct iwl_mvm *mvm,
->  			iwl_mvm_mac_ap_iterator, &data);
->  
->  		if (data.beacon_device_ts) {
-> -			u32 rand = prandom_u32_max(64 - 36) + 36;
-> +			u32 rand = get_random_u32_below(64 - 36) + 36;
->  			mvmvif->ap_beacon_time = data.beacon_device_ts +
->  				ieee80211_tu_to_usec(data.beacon_int * rand /
->  						     100);
-> diff --git a/drivers/pci/p2pdma.c b/drivers/pci/p2pdma.c
-> index 88dc66ee1c46..5565f67d6537 100644
-> --- a/drivers/pci/p2pdma.c
-> +++ b/drivers/pci/p2pdma.c
-> @@ -673,7 +673,7 @@ struct pci_dev *pci_p2pmem_find_many(struct device **clients, int num_clients)
->  	}
->  
->  	if (dev_cnt)
-> -		pdev = pci_dev_get(closest_pdevs[prandom_u32_max(dev_cnt)]);
-> +		pdev = pci_dev_get(closest_pdevs[get_random_u32_below(dev_cnt)]);
->  
->  	for (i = 0; i < dev_cnt; i++)
->  		pci_dev_put(closest_pdevs[i]);
-> diff --git a/drivers/s390/scsi/zfcp_fc.c b/drivers/s390/scsi/zfcp_fc.c
-> index 77917b339870..f21307537829 100644
-> --- a/drivers/s390/scsi/zfcp_fc.c
-> +++ b/drivers/s390/scsi/zfcp_fc.c
-> @@ -48,7 +48,7 @@ unsigned int zfcp_fc_port_scan_backoff(void)
->  {
->  	if (!port_scan_backoff)
->  		return 0;
-> -	return prandom_u32_max(port_scan_backoff);
-> +	return get_random_u32_below(port_scan_backoff);
->  }
->  
->  static void zfcp_fc_port_scan_time(struct zfcp_adapter *adapter)
-> diff --git a/drivers/scsi/fcoe/fcoe_ctlr.c b/drivers/scsi/fcoe/fcoe_ctlr.c
-> index ddc048069af2..5c8d1ba3f8f3 100644
-> --- a/drivers/scsi/fcoe/fcoe_ctlr.c
-> +++ b/drivers/scsi/fcoe/fcoe_ctlr.c
-> @@ -2233,7 +2233,7 @@ static void fcoe_ctlr_vn_restart(struct fcoe_ctlr *fip)
->  
->  	if (fip->probe_tries < FIP_VN_RLIM_COUNT) {
->  		fip->probe_tries++;
-> -		wait = prandom_u32_max(FIP_VN_PROBE_WAIT);
-> +		wait = get_random_u32_below(FIP_VN_PROBE_WAIT);
->  	} else
->  		wait = FIP_VN_RLIM_INT;
->  	mod_timer(&fip->timer, jiffies + msecs_to_jiffies(wait));
-> @@ -3125,7 +3125,7 @@ static void fcoe_ctlr_vn_timeout(struct fcoe_ctlr *fip)
->  					  fcoe_all_vn2vn, 0);
->  			fip->port_ka_time = jiffies +
->  				 msecs_to_jiffies(FIP_VN_BEACON_INT +
-> -					prandom_u32_max(FIP_VN_BEACON_FUZZ));
-> +					get_random_u32_below(FIP_VN_BEACON_FUZZ));
->  		}
->  		if (time_before(fip->port_ka_time, next_time))
->  			next_time = fip->port_ka_time;
-> diff --git a/drivers/scsi/qedi/qedi_main.c b/drivers/scsi/qedi/qedi_main.c
-> index df2fe7bd26d1..f2ee49756df8 100644
-> --- a/drivers/scsi/qedi/qedi_main.c
-> +++ b/drivers/scsi/qedi/qedi_main.c
-> @@ -618,7 +618,7 @@ static int qedi_cm_alloc_mem(struct qedi_ctx *qedi)
->  				sizeof(struct qedi_endpoint *)), GFP_KERNEL);
->  	if (!qedi->ep_tbl)
->  		return -ENOMEM;
-> -	port_id = prandom_u32_max(QEDI_LOCAL_PORT_RANGE);
-> +	port_id = get_random_u32_below(QEDI_LOCAL_PORT_RANGE);
->  	if (qedi_init_id_tbl(&qedi->lcl_port_tbl, QEDI_LOCAL_PORT_RANGE,
->  			     QEDI_LOCAL_PORT_MIN, port_id)) {
->  		qedi_cm_free_mem(qedi);
-> diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
-> index 697fc57bc711..4e476f1bc3c3 100644
-> --- a/drivers/scsi/scsi_debug.c
-> +++ b/drivers/scsi/scsi_debug.c
-> @@ -5695,16 +5695,16 @@ static int schedule_resp(struct scsi_cmnd *cmnd, struct sdebug_dev_info *devip,
->  			u64 ns = jiffies_to_nsecs(delta_jiff);
->  
->  			if (sdebug_random && ns < U32_MAX) {
-> -				ns = prandom_u32_max((u32)ns);
-> +				ns = get_random_u32_below((u32)ns);
->  			} else if (sdebug_random) {
->  				ns >>= 12;	/* scale to 4 usec precision */
->  				if (ns < U32_MAX)	/* over 4 hours max */
-> -					ns = prandom_u32_max((u32)ns);
-> +					ns = get_random_u32_below((u32)ns);
->  				ns <<= 12;
->  			}
->  			kt = ns_to_ktime(ns);
->  		} else {	/* ndelay has a 4.2 second max */
-> -			kt = sdebug_random ? prandom_u32_max((u32)ndelay) :
-> +			kt = sdebug_random ? get_random_u32_below((u32)ndelay) :
->  					     (u32)ndelay;
->  			if (ndelay < INCLUSIVE_TIMING_MAX_NS) {
->  				u64 d = ktime_get_boottime_ns() - ns_from_boot;
-> diff --git a/fs/ceph/inode.c b/fs/ceph/inode.c
-> index 4af5e55abc15..fb255988dee8 100644
-> --- a/fs/ceph/inode.c
-> +++ b/fs/ceph/inode.c
-> @@ -362,7 +362,7 @@ static int ceph_fill_fragtree(struct inode *inode,
->  	if (nsplits != ci->i_fragtree_nsplits) {
->  		update = true;
->  	} else if (nsplits) {
-> -		i = prandom_u32_max(nsplits);
-> +		i = get_random_u32_below(nsplits);
->  		id = le32_to_cpu(fragtree->splits[i].frag);
->  		if (!__ceph_find_frag(ci, id))
->  			update = true;
-> diff --git a/fs/ceph/mdsmap.c b/fs/ceph/mdsmap.c
-> index 3fbabc98e1f7..7dac21ee6ce7 100644
-> --- a/fs/ceph/mdsmap.c
-> +++ b/fs/ceph/mdsmap.c
-> @@ -29,7 +29,7 @@ static int __mdsmap_get_random_mds(struct ceph_mdsmap *m, bool ignore_laggy)
->  		return -1;
->  
->  	/* pick */
-> -	n = prandom_u32_max(n);
-> +	n = get_random_u32_below(n);
->  	for (j = 0, i = 0; i < m->possible_max_rank; i++) {
->  		if (CEPH_MDS_IS_READY(i, ignore_laggy))
->  			j++;
-> diff --git a/fs/ext2/ialloc.c b/fs/ext2/ialloc.c
-> index f4944c4dee60..78b8686d9a4a 100644
-> --- a/fs/ext2/ialloc.c
-> +++ b/fs/ext2/ialloc.c
-> @@ -277,7 +277,7 @@ static int find_group_orlov(struct super_block *sb, struct inode *parent)
->  		int best_ndir = inodes_per_group;
->  		int best_group = -1;
->  
-> -		parent_group = prandom_u32_max(ngroups);
-> +		parent_group = get_random_u32_below(ngroups);
->  		for (i = 0; i < ngroups; i++) {
->  			group = (parent_group + i) % ngroups;
->  			desc = ext2_get_group_desc (sb, group, NULL);
-> diff --git a/fs/ext4/ialloc.c b/fs/ext4/ialloc.c
-> index e9bc46684106..9fc1af8e19a3 100644
-> --- a/fs/ext4/ialloc.c
-> +++ b/fs/ext4/ialloc.c
-> @@ -465,7 +465,7 @@ static int find_group_orlov(struct super_block *sb, struct inode *parent,
->  			ext4fs_dirhash(parent, qstr->name, qstr->len, &hinfo);
->  			parent_group = hinfo.hash % ngroups;
->  		} else
-> -			parent_group = prandom_u32_max(ngroups);
-> +			parent_group = get_random_u32_below(ngroups);
->  		for (i = 0; i < ngroups; i++) {
->  			g = (parent_group + i) % ngroups;
->  			get_orlov_stats(sb, g, flex_size, &stats);
-> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-> index 989365b878a6..5d015daa6879 100644
-> --- a/fs/ext4/super.c
-> +++ b/fs/ext4/super.c
-> @@ -3782,7 +3782,7 @@ static int ext4_lazyinit_thread(void *arg)
->  			}
->  			if (!progress) {
->  				elr->lr_next_sched = jiffies +
-> -					prandom_u32_max(EXT4_DEF_LI_MAX_START_DELAY * HZ);
-> +					get_random_u32_below(EXT4_DEF_LI_MAX_START_DELAY * HZ);
->  			}
->  			if (time_before(elr->lr_next_sched, next_wakeup))
->  				next_wakeup = elr->lr_next_sched;
-> @@ -3929,8 +3929,7 @@ static struct ext4_li_request *ext4_li_request_new(struct super_block *sb,
->  	 * spread the inode table initialization requests
->  	 * better.
->  	 */
-> -	elr->lr_next_sched = jiffies + prandom_u32_max(
-> -				EXT4_DEF_LI_MAX_START_DELAY * HZ);
-> +	elr->lr_next_sched = jiffies + get_random_u32_below(EXT4_DEF_LI_MAX_START_DELAY * HZ);
->  	return elr;
->  }
->  
-> diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
-> index 4546e01b2ee0..536d332d9e2e 100644
-> --- a/fs/f2fs/gc.c
-> +++ b/fs/f2fs/gc.c
-> @@ -282,7 +282,7 @@ static void select_policy(struct f2fs_sb_info *sbi, int gc_type,
->  
->  	/* let's select beginning hot/small space first in no_heap mode*/
->  	if (f2fs_need_rand_seg(sbi))
-> -		p->offset = prandom_u32_max(MAIN_SECS(sbi) * sbi->segs_per_sec);
-> +		p->offset = get_random_u32_below(MAIN_SECS(sbi) * sbi->segs_per_sec);
->  	else if (test_opt(sbi, NOHEAP) &&
->  		(type == CURSEG_HOT_DATA || IS_NODESEG(type)))
->  		p->offset = 0;
-> diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-> index acf3d3fa4363..334415d946f8 100644
-> --- a/fs/f2fs/segment.c
-> +++ b/fs/f2fs/segment.c
-> @@ -2534,7 +2534,7 @@ static unsigned int __get_next_segno(struct f2fs_sb_info *sbi, int type)
->  
->  	sanity_check_seg_type(sbi, seg_type);
->  	if (f2fs_need_rand_seg(sbi))
-> -		return prandom_u32_max(MAIN_SECS(sbi) * sbi->segs_per_sec);
-> +		return get_random_u32_below(MAIN_SECS(sbi) * sbi->segs_per_sec);
->  
->  	/* if segs_per_sec is large than 1, we need to keep original policy. */
->  	if (__is_large_section(sbi))
-> @@ -2588,7 +2588,7 @@ static void new_curseg(struct f2fs_sb_info *sbi, int type, bool new_sec)
->  	curseg->alloc_type = LFS;
->  	if (F2FS_OPTION(sbi).fs_mode == FS_MODE_FRAGMENT_BLK)
->  		curseg->fragment_remained_chunk =
-> -				prandom_u32_max(sbi->max_fragment_chunk) + 1;
-> +				get_random_u32_below(sbi->max_fragment_chunk) + 1;
->  }
->  
->  static int __next_free_blkoff(struct f2fs_sb_info *sbi,
-> @@ -2625,9 +2625,9 @@ static void __refresh_next_blkoff(struct f2fs_sb_info *sbi,
->  			/* To allocate block chunks in different sizes, use random number */
->  			if (--seg->fragment_remained_chunk <= 0) {
->  				seg->fragment_remained_chunk =
-> -				   prandom_u32_max(sbi->max_fragment_chunk) + 1;
-> +				   get_random_u32_below(sbi->max_fragment_chunk) + 1;
->  				seg->next_blkoff +=
-> -				   prandom_u32_max(sbi->max_fragment_hole) + 1;
-> +				   get_random_u32_below(sbi->max_fragment_hole) + 1;
->  			}
->  		}
->  	}
-> diff --git a/fs/ubifs/debug.c b/fs/ubifs/debug.c
-> index 3f128b9fdfbb..9c9d3f0e36a4 100644
-> --- a/fs/ubifs/debug.c
-> +++ b/fs/ubifs/debug.c
-> @@ -2467,7 +2467,7 @@ int dbg_check_nondata_nodes_order(struct ubifs_info *c, struct list_head *head)
->  
->  static inline int chance(unsigned int n, unsigned int out_of)
->  {
-> -	return !!(prandom_u32_max(out_of) + 1 <= n);
-> +	return !!(get_random_u32_below(out_of) + 1 <= n);
->  
->  }
->  
-> @@ -2485,13 +2485,13 @@ static int power_cut_emulated(struct ubifs_info *c, int lnum, int write)
->  			if (chance(1, 2)) {
->  				d->pc_delay = 1;
->  				/* Fail within 1 minute */
-> -				delay = prandom_u32_max(60000);
-> +				delay = get_random_u32_below(60000);
->  				d->pc_timeout = jiffies;
->  				d->pc_timeout += msecs_to_jiffies(delay);
->  				ubifs_warn(c, "failing after %lums", delay);
->  			} else {
->  				d->pc_delay = 2;
-> -				delay = prandom_u32_max(10000);
-> +				delay = get_random_u32_below(10000);
->  				/* Fail within 10000 operations */
->  				d->pc_cnt_max = delay;
->  				ubifs_warn(c, "failing after %lu calls", delay);
-> @@ -2571,7 +2571,7 @@ static int corrupt_data(const struct ubifs_info *c, const void *buf,
->  	unsigned int from, to, ffs = chance(1, 2);
->  	unsigned char *p = (void *)buf;
->  
-> -	from = prandom_u32_max(len);
-> +	from = get_random_u32_below(len);
->  	/* Corruption span max to end of write unit */
->  	to = min(len, ALIGN(from + 1, c->max_write_size));
->  
-> diff --git a/fs/ubifs/lpt_commit.c b/fs/ubifs/lpt_commit.c
-> index cfbc31f709f4..c4d079328b92 100644
-> --- a/fs/ubifs/lpt_commit.c
-> +++ b/fs/ubifs/lpt_commit.c
-> @@ -1970,28 +1970,28 @@ static int dbg_populate_lsave(struct ubifs_info *c)
->  
->  	if (!dbg_is_chk_gen(c))
->  		return 0;
-> -	if (prandom_u32_max(4))
-> +	if (get_random_u32_below(4))
->  		return 0;
->  
->  	for (i = 0; i < c->lsave_cnt; i++)
->  		c->lsave[i] = c->main_first;
->  
->  	list_for_each_entry(lprops, &c->empty_list, list)
-> -		c->lsave[prandom_u32_max(c->lsave_cnt)] = lprops->lnum;
-> +		c->lsave[get_random_u32_below(c->lsave_cnt)] = lprops->lnum;
->  	list_for_each_entry(lprops, &c->freeable_list, list)
-> -		c->lsave[prandom_u32_max(c->lsave_cnt)] = lprops->lnum;
-> +		c->lsave[get_random_u32_below(c->lsave_cnt)] = lprops->lnum;
->  	list_for_each_entry(lprops, &c->frdi_idx_list, list)
-> -		c->lsave[prandom_u32_max(c->lsave_cnt)] = lprops->lnum;
-> +		c->lsave[get_random_u32_below(c->lsave_cnt)] = lprops->lnum;
->  
->  	heap = &c->lpt_heap[LPROPS_DIRTY_IDX - 1];
->  	for (i = 0; i < heap->cnt; i++)
-> -		c->lsave[prandom_u32_max(c->lsave_cnt)] = heap->arr[i]->lnum;
-> +		c->lsave[get_random_u32_below(c->lsave_cnt)] = heap->arr[i]->lnum;
->  	heap = &c->lpt_heap[LPROPS_DIRTY - 1];
->  	for (i = 0; i < heap->cnt; i++)
-> -		c->lsave[prandom_u32_max(c->lsave_cnt)] = heap->arr[i]->lnum;
-> +		c->lsave[get_random_u32_below(c->lsave_cnt)] = heap->arr[i]->lnum;
->  	heap = &c->lpt_heap[LPROPS_FREE - 1];
->  	for (i = 0; i < heap->cnt; i++)
-> -		c->lsave[prandom_u32_max(c->lsave_cnt)] = heap->arr[i]->lnum;
-> +		c->lsave[get_random_u32_below(c->lsave_cnt)] = heap->arr[i]->lnum;
->  
->  	return 1;
->  }
-> diff --git a/fs/ubifs/tnc_commit.c b/fs/ubifs/tnc_commit.c
-> index 01362ad5f804..a55e04822d16 100644
-> --- a/fs/ubifs/tnc_commit.c
-> +++ b/fs/ubifs/tnc_commit.c
-> @@ -700,7 +700,7 @@ static int alloc_idx_lebs(struct ubifs_info *c, int cnt)
->  		c->ilebs[c->ileb_cnt++] = lnum;
->  		dbg_cmt("LEB %d", lnum);
->  	}
-> -	if (dbg_is_chk_index(c) && !prandom_u32_max(8))
-> +	if (dbg_is_chk_index(c) && !get_random_u32_below(8))
->  		return -ENOSPC;
->  	return 0;
->  }
-> diff --git a/fs/xfs/libxfs/xfs_alloc.c b/fs/xfs/libxfs/xfs_alloc.c
-> index 6261599bb389..a0221e9afa19 100644
-> --- a/fs/xfs/libxfs/xfs_alloc.c
-> +++ b/fs/xfs/libxfs/xfs_alloc.c
-> @@ -1520,7 +1520,7 @@ xfs_alloc_ag_vextent_lastblock(
->  
->  #ifdef DEBUG
->  	/* Randomly don't execute the first algorithm. */
-> -	if (prandom_u32_max(2))
-> +	if (get_random_u32_below(2))
->  		return 0;
->  #endif
->  
-> diff --git a/fs/xfs/libxfs/xfs_ialloc.c b/fs/xfs/libxfs/xfs_ialloc.c
-> index 94db50eb706a..5118dedf9267 100644
-> --- a/fs/xfs/libxfs/xfs_ialloc.c
-> +++ b/fs/xfs/libxfs/xfs_ialloc.c
-> @@ -636,7 +636,7 @@ xfs_ialloc_ag_alloc(
->  	/* randomly do sparse inode allocations */
->  	if (xfs_has_sparseinodes(tp->t_mountp) &&
->  	    igeo->ialloc_min_blks < igeo->ialloc_blks)
-> -		do_sparse = prandom_u32_max(2);
-> +		do_sparse = get_random_u32_below(2);
->  #endif
->  
->  	/*
-> diff --git a/fs/xfs/xfs_error.c b/fs/xfs/xfs_error.c
-> index 7db588ed0be5..8fc58abffb8b 100644
-> --- a/fs/xfs/xfs_error.c
-> +++ b/fs/xfs/xfs_error.c
-> @@ -274,7 +274,7 @@ xfs_errortag_test(
->  
->  	ASSERT(error_tag < XFS_ERRTAG_MAX);
->  	randfactor = mp->m_errortag[error_tag];
-> -	if (!randfactor || prandom_u32_max(randfactor))
-> +	if (!randfactor || get_random_u32_below(randfactor))
->  		return false;
->  
->  	xfs_warn_ratelimited(mp,
-> diff --git a/include/linux/damon.h b/include/linux/damon.h
-> index 620ada094c3b..84525b9cdf6e 100644
-> --- a/include/linux/damon.h
-> +++ b/include/linux/damon.h
-> @@ -21,7 +21,7 @@
->  /* Get a random number in [l, r) */
->  static inline unsigned long damon_rand(unsigned long l, unsigned long r)
->  {
-> -	return l + prandom_u32_max(r - l);
-> +	return l + get_random_u32_below(r - l);
->  }
->  
->  /**
-> diff --git a/include/linux/nodemask.h b/include/linux/nodemask.h
-> index efef68c9352a..bb0ee80526b2 100644
-> --- a/include/linux/nodemask.h
-> +++ b/include/linux/nodemask.h
-> @@ -516,7 +516,7 @@ static inline int node_random(const nodemask_t *maskp)
->  		bit = first_node(*maskp);
->  		break;
->  	default:
-> -		bit = find_nth_bit(maskp->bits, MAX_NUMNODES, prandom_u32_max(w));
-> +		bit = find_nth_bit(maskp->bits, MAX_NUMNODES, get_random_u32_below(w));
->  		break;
->  	}
->  	return bit;
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index 25a54e04560e..38159f39e2af 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-> @@ -1032,7 +1032,7 @@ bpf_jit_binary_alloc(unsigned int proglen, u8 **image_ptr,
->  	hdr->size = size;
->  	hole = min_t(unsigned int, size - (proglen + sizeof(*hdr)),
->  		     PAGE_SIZE - sizeof(*hdr));
-> -	start = prandom_u32_max(hole) & ~(alignment - 1);
-> +	start = get_random_u32_below(hole) & ~(alignment - 1);
->  
->  	/* Leave a random number of instructions before BPF code. */
->  	*image_ptr = &hdr->image[start];
-> @@ -1094,7 +1094,7 @@ bpf_jit_binary_pack_alloc(unsigned int proglen, u8 **image_ptr,
->  
->  	hole = min_t(unsigned int, size - (proglen + sizeof(*ro_header)),
->  		     BPF_PROG_CHUNK_SIZE - sizeof(*ro_header));
-> -	start = prandom_u32_max(hole) & ~(alignment - 1);
-> +	start = get_random_u32_below(hole) & ~(alignment - 1);
->  
->  	*image_ptr = &ro_header->image[start];
->  	*rw_image = &(*rw_header)->image[start];
-> diff --git a/kernel/kcsan/selftest.c b/kernel/kcsan/selftest.c
-> index 1740ce389e7f..7b619f16a492 100644
-> --- a/kernel/kcsan/selftest.c
-> +++ b/kernel/kcsan/selftest.c
-> @@ -31,8 +31,8 @@ static bool __init test_encode_decode(void)
->  	int i;
->  
->  	for (i = 0; i < ITERS_PER_TEST; ++i) {
-> -		size_t size = prandom_u32_max(MAX_ENCODABLE_SIZE) + 1;
-> -		bool is_write = !!prandom_u32_max(2);
-> +		size_t size = get_random_u32_below(MAX_ENCODABLE_SIZE) + 1;
-> +		bool is_write = !!get_random_u32_below(2);
->  		unsigned long verif_masked_addr;
->  		long encoded_watchpoint;
->  		bool verif_is_write;
-> diff --git a/kernel/locking/test-ww_mutex.c b/kernel/locking/test-ww_mutex.c
-> index 43efb2a04160..29dc253d03af 100644
-> --- a/kernel/locking/test-ww_mutex.c
-> +++ b/kernel/locking/test-ww_mutex.c
-> @@ -399,7 +399,7 @@ static int *get_random_order(int count)
->  		order[n] = n;
->  
->  	for (n = count - 1; n > 1; n--) {
-> -		r = prandom_u32_max(n + 1);
-> +		r = get_random_u32_below(n + 1);
->  		if (r != n) {
->  			tmp = order[n];
->  			order[n] = order[r];
-> @@ -538,7 +538,7 @@ static void stress_one_work(struct work_struct *work)
->  {
->  	struct stress *stress = container_of(work, typeof(*stress), work);
->  	const int nlocks = stress->nlocks;
-> -	struct ww_mutex *lock = stress->locks + prandom_u32_max(nlocks);
-> +	struct ww_mutex *lock = stress->locks + get_random_u32_below(nlocks);
->  	int err;
->  
->  	do {
-> diff --git a/kernel/time/clocksource.c b/kernel/time/clocksource.c
-> index 8058bec87ace..9cf32ccda715 100644
-> --- a/kernel/time/clocksource.c
-> +++ b/kernel/time/clocksource.c
-> @@ -310,7 +310,7 @@ static void clocksource_verify_choose_cpus(void)
->  	 * CPUs that are currently online.
->  	 */
->  	for (i = 1; i < n; i++) {
-> -		cpu = prandom_u32_max(nr_cpu_ids);
-> +		cpu = get_random_u32_below(nr_cpu_ids);
->  		cpu = cpumask_next(cpu - 1, cpu_online_mask);
->  		if (cpu >= nr_cpu_ids)
->  			cpu = cpumask_first(cpu_online_mask);
-> diff --git a/lib/fault-inject.c b/lib/fault-inject.c
-> index 96e092de5b72..9f53408c545d 100644
-> --- a/lib/fault-inject.c
-> +++ b/lib/fault-inject.c
-> @@ -139,7 +139,7 @@ bool should_fail(struct fault_attr *attr, ssize_t size)
->  			return false;
->  	}
->  
-> -	if (attr->probability <= prandom_u32_max(100))
-> +	if (attr->probability <= get_random_u32_below(100))
->  		return false;
->  
->  	if (!fail_stacktrace(attr))
-> diff --git a/lib/find_bit_benchmark.c b/lib/find_bit_benchmark.c
-> index 7c3c011abd29..d3fb09e6eff1 100644
-> --- a/lib/find_bit_benchmark.c
-> +++ b/lib/find_bit_benchmark.c
-> @@ -174,8 +174,8 @@ static int __init find_bit_test(void)
->  	bitmap_zero(bitmap2, BITMAP_LEN);
->  
->  	while (nbits--) {
-> -		__set_bit(prandom_u32_max(BITMAP_LEN), bitmap);
-> -		__set_bit(prandom_u32_max(BITMAP_LEN), bitmap2);
-> +		__set_bit(get_random_u32_below(BITMAP_LEN), bitmap);
-> +		__set_bit(get_random_u32_below(BITMAP_LEN), bitmap2);
->  	}
->  
->  	test_find_next_bit(bitmap, BITMAP_LEN);
-> diff --git a/lib/kobject.c b/lib/kobject.c
-> index a0b2dbfcfa23..af1f5f2954d4 100644
-> --- a/lib/kobject.c
-> +++ b/lib/kobject.c
-> @@ -694,7 +694,7 @@ static void kobject_release(struct kref *kref)
->  {
->  	struct kobject *kobj = container_of(kref, struct kobject, kref);
->  #ifdef CONFIG_DEBUG_KOBJECT_RELEASE
-> -	unsigned long delay = HZ + HZ * prandom_u32_max(4);
-> +	unsigned long delay = HZ + HZ * get_random_u32_below(4);
->  	pr_info("kobject: '%s' (%p): %s, parent %p (delayed %ld)\n",
->  		 kobject_name(kobj), kobj, __func__, kobj->parent, delay);
->  	INIT_DELAYED_WORK(&kobj->release, kobject_delayed_cleanup);
-> diff --git a/lib/reed_solomon/test_rslib.c b/lib/reed_solomon/test_rslib.c
-> index 848e7eb5da92..75cb1adac884 100644
-> --- a/lib/reed_solomon/test_rslib.c
-> +++ b/lib/reed_solomon/test_rslib.c
-> @@ -183,7 +183,7 @@ static int get_rcw_we(struct rs_control *rs, struct wspace *ws,
->  
->  		do {
->  			/* Must not choose the same location twice */
-> -			errloc = prandom_u32_max(len);
-> +			errloc = get_random_u32_below(len);
->  		} while (errlocs[errloc] != 0);
->  
->  		errlocs[errloc] = 1;
-> @@ -194,12 +194,12 @@ static int get_rcw_we(struct rs_control *rs, struct wspace *ws,
->  	for (i = 0; i < eras; i++) {
->  		do {
->  			/* Must not choose the same location twice */
-> -			errloc = prandom_u32_max(len);
-> +			errloc = get_random_u32_below(len);
->  		} while (errlocs[errloc] != 0);
->  
->  		derrlocs[i] = errloc;
->  
-> -		if (ewsc && prandom_u32_max(2)) {
-> +		if (ewsc && get_random_u32_below(2)) {
->  			/* Erasure with the symbol intact */
->  			errlocs[errloc] = 2;
->  		} else {
-> diff --git a/lib/sbitmap.c b/lib/sbitmap.c
-> index 7280ae8ca88c..58de526ff051 100644
-> --- a/lib/sbitmap.c
-> +++ b/lib/sbitmap.c
-> @@ -21,7 +21,7 @@ static int init_alloc_hint(struct sbitmap *sb, gfp_t flags)
->  		int i;
->  
->  		for_each_possible_cpu(i)
-> -			*per_cpu_ptr(sb->alloc_hint, i) = prandom_u32_max(depth);
-> +			*per_cpu_ptr(sb->alloc_hint, i) = get_random_u32_below(depth);
->  	}
->  	return 0;
->  }
-> @@ -33,7 +33,7 @@ static inline unsigned update_alloc_hint_before_get(struct sbitmap *sb,
->  
->  	hint = this_cpu_read(*sb->alloc_hint);
->  	if (unlikely(hint >= depth)) {
-> -		hint = depth ? prandom_u32_max(depth) : 0;
-> +		hint = depth ? get_random_u32_below(depth) : 0;
->  		this_cpu_write(*sb->alloc_hint, hint);
->  	}
->  
-> diff --git a/lib/test-string_helpers.c b/lib/test-string_helpers.c
-> index 86fadd3ba08c..41d3447bc3b4 100644
-> --- a/lib/test-string_helpers.c
-> +++ b/lib/test-string_helpers.c
-> @@ -587,7 +587,7 @@ static int __init test_string_helpers_init(void)
->  	for (i = 0; i < UNESCAPE_ALL_MASK + 1; i++)
->  		test_string_unescape("unescape", i, false);
->  	test_string_unescape("unescape inplace",
-> -			     prandom_u32_max(UNESCAPE_ANY + 1), true);
-> +			     get_random_u32_below(UNESCAPE_ANY + 1), true);
->  
->  	/* Without dictionary */
->  	for (i = 0; i < ESCAPE_ALL_MASK + 1; i++)
-> diff --git a/lib/test_hexdump.c b/lib/test_hexdump.c
-> index 0927f44cd478..efc50fd30a44 100644
-> --- a/lib/test_hexdump.c
-> +++ b/lib/test_hexdump.c
-> @@ -149,7 +149,7 @@ static void __init test_hexdump(size_t len, int rowsize, int groupsize,
->  static void __init test_hexdump_set(int rowsize, bool ascii)
->  {
->  	size_t d = min_t(size_t, sizeof(data_b), rowsize);
-> -	size_t len = prandom_u32_max(d) + 1;
-> +	size_t len = get_random_u32_below(d) + 1;
->  
->  	test_hexdump(len, rowsize, 4, ascii);
->  	test_hexdump(len, rowsize, 2, ascii);
-> @@ -208,11 +208,11 @@ static void __init test_hexdump_overflow(size_t buflen, size_t len,
->  static void __init test_hexdump_overflow_set(size_t buflen, bool ascii)
->  {
->  	unsigned int i = 0;
-> -	int rs = (prandom_u32_max(2) + 1) * 16;
-> +	int rs = (get_random_u32_below(2) + 1) * 16;
->  
->  	do {
->  		int gs = 1 << i;
-> -		size_t len = prandom_u32_max(rs) + gs;
-> +		size_t len = get_random_u32_below(rs) + gs;
->  
->  		test_hexdump_overflow(buflen, rounddown(len, gs), rs, gs, ascii);
->  	} while (i++ < 3);
-> @@ -223,11 +223,11 @@ static int __init test_hexdump_init(void)
->  	unsigned int i;
->  	int rowsize;
->  
-> -	rowsize = (prandom_u32_max(2) + 1) * 16;
-> +	rowsize = (get_random_u32_below(2) + 1) * 16;
->  	for (i = 0; i < 16; i++)
->  		test_hexdump_set(rowsize, false);
->  
-> -	rowsize = (prandom_u32_max(2) + 1) * 16;
-> +	rowsize = (get_random_u32_below(2) + 1) * 16;
->  	for (i = 0; i < 16; i++)
->  		test_hexdump_set(rowsize, true);
->  
-> diff --git a/lib/test_list_sort.c b/lib/test_list_sort.c
-> index 19ff229b9c3a..cc5f335f29b5 100644
-> --- a/lib/test_list_sort.c
-> +++ b/lib/test_list_sort.c
-> @@ -71,7 +71,7 @@ static void list_sort_test(struct kunit *test)
->  		KUNIT_ASSERT_NOT_ERR_OR_NULL(test, el);
->  
->  		 /* force some equivalencies */
-> -		el->value = prandom_u32_max(TEST_LIST_LEN / 3);
-> +		el->value = get_random_u32_below(TEST_LIST_LEN / 3);
->  		el->serial = i;
->  		el->poison1 = TEST_POISON1;
->  		el->poison2 = TEST_POISON2;
-> diff --git a/lib/test_printf.c b/lib/test_printf.c
-> index 4bd15a593fbd..6d10187eddac 100644
-> --- a/lib/test_printf.c
-> +++ b/lib/test_printf.c
-> @@ -126,7 +126,7 @@ __test(const char *expect, int elen, const char *fmt, ...)
->  	 * be able to print it as expected.
->  	 */
->  	failed_tests += do_test(BUF_SIZE, expect, elen, fmt, ap);
-> -	rand = 1 + prandom_u32_max(elen+1);
-> +	rand = 1 + get_random_u32_below(elen + 1);
->  	/* Since elen < BUF_SIZE, we have 1 <= rand <= BUF_SIZE. */
->  	failed_tests += do_test(rand, expect, elen, fmt, ap);
->  	failed_tests += do_test(0, expect, elen, fmt, ap);
-> diff --git a/lib/test_rhashtable.c b/lib/test_rhashtable.c
-> index b358a74ed7ed..470acb343aed 100644
-> --- a/lib/test_rhashtable.c
-> +++ b/lib/test_rhashtable.c
-> @@ -368,7 +368,7 @@ static int __init test_rhltable(unsigned int entries)
->  
->  	pr_info("test %d random rhlist add/delete operations\n", entries);
->  	for (j = 0; j < entries; j++) {
-> -		u32 i = prandom_u32_max(entries);
-> +		u32 i = get_random_u32_below(entries);
->  		u32 prand = get_random_u32();
->  
->  		cond_resched();
-> @@ -411,7 +411,7 @@ static int __init test_rhltable(unsigned int entries)
->  			continue;
->  		}
->  
-> -		i = prandom_u32_max(entries);
-> +		i = get_random_u32_below(entries);
->  		if (test_bit(i, obj_in_table)) {
->  			err = rhltable_remove(&rhlt, &rhl_test_objects[i].list_node, test_rht_params);
->  			WARN(err, "cannot remove element at slot %d", i);
-> diff --git a/lib/test_vmalloc.c b/lib/test_vmalloc.c
-> index cf7780572f5b..104f09ea5fcc 100644
-> --- a/lib/test_vmalloc.c
-> +++ b/lib/test_vmalloc.c
-> @@ -151,7 +151,7 @@ static int random_size_alloc_test(void)
->  	int i;
->  
->  	for (i = 0; i < test_loop_count; i++) {
-> -		n = prandom_u32_max(100) + 1;
-> +		n = get_random_u32_below(100) + 1;
->  		p = vmalloc(n * PAGE_SIZE);
->  
->  		if (!p)
-> @@ -291,12 +291,12 @@ pcpu_alloc_test(void)
->  		return -1;
->  
->  	for (i = 0; i < 35000; i++) {
-> -		size = prandom_u32_max(PAGE_SIZE / 4) + 1;
-> +		size = get_random_u32_below(PAGE_SIZE / 4) + 1;
->  
->  		/*
->  		 * Maximum PAGE_SIZE
->  		 */
-> -		align = 1 << (prandom_u32_max(11) + 1);
-> +		align = 1 << (get_random_u32_below(11) + 1);
->  
->  		pcpu[i] = __alloc_percpu(size, align);
->  		if (!pcpu[i])
-> @@ -391,7 +391,7 @@ static void shuffle_array(int *arr, int n)
->  
->  	for (i = n - 1; i > 0; i--)  {
->  		/* Cut the range. */
-> -		j = prandom_u32_max(i);
-> +		j = get_random_u32_below(i);
->  
->  		/* Swap indexes. */
->  		swap(arr[i], arr[j]);
-> diff --git a/mm/kasan/kasan_test.c b/mm/kasan/kasan_test.c
-> index 0d59098f0876..640f9c7f8e44 100644
-> --- a/mm/kasan/kasan_test.c
-> +++ b/mm/kasan/kasan_test.c
-> @@ -1299,7 +1299,7 @@ static void match_all_not_assigned(struct kunit *test)
->  	KASAN_TEST_NEEDS_CONFIG_OFF(test, CONFIG_KASAN_GENERIC);
->  
->  	for (i = 0; i < 256; i++) {
-> -		size = prandom_u32_max(1024) + 1;
-> +		size = get_random_u32_below(1024) + 1;
->  		ptr = kmalloc(size, GFP_KERNEL);
->  		KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ptr);
->  		KUNIT_EXPECT_GE(test, (u8)get_tag(ptr), (u8)KASAN_TAG_MIN);
-> @@ -1308,7 +1308,7 @@ static void match_all_not_assigned(struct kunit *test)
->  	}
->  
->  	for (i = 0; i < 256; i++) {
-> -		order = prandom_u32_max(4) + 1;
-> +		order = get_random_u32_below(4) + 1;
->  		pages = alloc_pages(GFP_KERNEL, order);
->  		ptr = page_address(pages);
->  		KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ptr);
-> @@ -1321,7 +1321,7 @@ static void match_all_not_assigned(struct kunit *test)
->  		return;
->  
->  	for (i = 0; i < 256; i++) {
-> -		size = prandom_u32_max(1024) + 1;
-> +		size = get_random_u32_below(1024) + 1;
->  		ptr = vmalloc(size);
->  		KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ptr);
->  		KUNIT_EXPECT_GE(test, (u8)get_tag(ptr), (u8)KASAN_TAG_MIN);
-> diff --git a/mm/kfence/core.c b/mm/kfence/core.c
-> index 141788858b70..6cbd93f2007b 100644
-> --- a/mm/kfence/core.c
-> +++ b/mm/kfence/core.c
-> @@ -360,9 +360,9 @@ static void *kfence_guarded_alloc(struct kmem_cache *cache, size_t size, gfp_t g
->  	unsigned long flags;
->  	struct slab *slab;
->  	void *addr;
-> -	const bool random_right_allocate = prandom_u32_max(2);
-> +	const bool random_right_allocate = get_random_u32_below(2);
->  	const bool random_fault = CONFIG_KFENCE_STRESS_TEST_FAULTS &&
-> -				  !prandom_u32_max(CONFIG_KFENCE_STRESS_TEST_FAULTS);
-> +				  !get_random_u32_below(CONFIG_KFENCE_STRESS_TEST_FAULTS);
->  
->  	/* Try to obtain a free object. */
->  	raw_spin_lock_irqsave(&kfence_freelist_lock, flags);
-> diff --git a/mm/kfence/kfence_test.c b/mm/kfence/kfence_test.c
-> index a97bffe0cc3e..20028c179796 100644
-> --- a/mm/kfence/kfence_test.c
-> +++ b/mm/kfence/kfence_test.c
-> @@ -532,8 +532,8 @@ static void test_free_bulk(struct kunit *test)
->  	int iter;
->  
->  	for (iter = 0; iter < 5; iter++) {
-> -		const size_t size = setup_test_cache(test, 8 + prandom_u32_max(300), 0,
-> -						     (iter & 1) ? ctor_set_x : NULL);
-> +		const size_t size = setup_test_cache(test, 8 + get_random_u32_below(300),
-> +						     0, (iter & 1) ? ctor_set_x : NULL);
->  		void *objects[] = {
->  			test_alloc(test, size, GFP_KERNEL, ALLOCATE_RIGHT),
->  			test_alloc(test, size, GFP_KERNEL, ALLOCATE_NONE),
-> diff --git a/mm/slub.c b/mm/slub.c
-> index 157527d7101b..7cd2c657030a 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -1881,7 +1881,7 @@ static bool shuffle_freelist(struct kmem_cache *s, struct slab *slab)
->  		return false;
->  
->  	freelist_count = oo_objects(s->oo);
-> -	pos = prandom_u32_max(freelist_count);
-> +	pos = get_random_u32_below(freelist_count);
->  
->  	page_limit = slab->objects * s->size;
->  	start = fixup_red_left(s, slab_address(slab));
-> diff --git a/mm/swapfile.c b/mm/swapfile.c
-> index 5fc1237a9f21..e9318305a24a 100644
-> --- a/mm/swapfile.c
-> +++ b/mm/swapfile.c
-> @@ -773,7 +773,7 @@ static void set_cluster_next(struct swap_info_struct *si, unsigned long next)
->  		if (si->highest_bit <= si->lowest_bit)
->  			return;
->  		next = si->lowest_bit +
-> -			prandom_u32_max(si->highest_bit - si->lowest_bit + 1);
-> +			get_random_u32_below(si->highest_bit - si->lowest_bit + 1);
->  		next = ALIGN_DOWN(next, SWAP_ADDRESS_SPACE_PAGES);
->  		next = max_t(unsigned int, next, si->lowest_bit);
->  	}
-> @@ -3089,7 +3089,7 @@ SYSCALL_DEFINE2(swapon, const char __user *, specialfile, int, swap_flags)
->  		 */
->  		for_each_possible_cpu(cpu) {
->  			per_cpu(*p->cluster_next_cpu, cpu) =
-> -				1 + prandom_u32_max(p->highest_bit);
-> +				1 + get_random_u32_below(p->highest_bit);
->  		}
->  		nr_cluster = DIV_ROUND_UP(maxpages, SWAPFILE_CLUSTER);
->  
-> diff --git a/net/802/garp.c b/net/802/garp.c
-> index fc9eb02a912f..77aac2763835 100644
-> --- a/net/802/garp.c
-> +++ b/net/802/garp.c
-> @@ -407,7 +407,7 @@ static void garp_join_timer_arm(struct garp_applicant *app)
->  {
->  	unsigned long delay;
->  
-> -	delay = prandom_u32_max(msecs_to_jiffies(garp_join_time));
-> +	delay = get_random_u32_below(msecs_to_jiffies(garp_join_time));
->  	mod_timer(&app->join_timer, jiffies + delay);
->  }
->  
-> diff --git a/net/802/mrp.c b/net/802/mrp.c
-> index 155f74d8b14f..8c6f0381023b 100644
-> --- a/net/802/mrp.c
-> +++ b/net/802/mrp.c
-> @@ -592,7 +592,7 @@ static void mrp_join_timer_arm(struct mrp_applicant *app)
->  {
->  	unsigned long delay;
->  
-> -	delay = prandom_u32_max(msecs_to_jiffies(mrp_join_time));
-> +	delay = get_random_u32_below(msecs_to_jiffies(mrp_join_time));
->  	mod_timer(&app->join_timer, jiffies + delay);
->  }
->  
-> diff --git a/net/batman-adv/bat_iv_ogm.c b/net/batman-adv/bat_iv_ogm.c
-> index 7f6a7c96ac92..114ee5da261f 100644
-> --- a/net/batman-adv/bat_iv_ogm.c
-> +++ b/net/batman-adv/bat_iv_ogm.c
-> @@ -280,7 +280,7 @@ batadv_iv_ogm_emit_send_time(const struct batadv_priv *bat_priv)
->  	unsigned int msecs;
->  
->  	msecs = atomic_read(&bat_priv->orig_interval) - BATADV_JITTER;
-> -	msecs += prandom_u32_max(2 * BATADV_JITTER);
-> +	msecs += get_random_u32_below(2 * BATADV_JITTER);
->  
->  	return jiffies + msecs_to_jiffies(msecs);
->  }
-> @@ -288,7 +288,7 @@ batadv_iv_ogm_emit_send_time(const struct batadv_priv *bat_priv)
->  /* when do we schedule a ogm packet to be sent */
->  static unsigned long batadv_iv_ogm_fwd_send_time(void)
->  {
-> -	return jiffies + msecs_to_jiffies(prandom_u32_max(BATADV_JITTER / 2));
-> +	return jiffies + msecs_to_jiffies(get_random_u32_below(BATADV_JITTER / 2));
->  }
->  
->  /* apply hop penalty for a normal link */
-> diff --git a/net/batman-adv/bat_v_elp.c b/net/batman-adv/bat_v_elp.c
-> index f1741fbfb617..f9a58fb5442e 100644
-> --- a/net/batman-adv/bat_v_elp.c
-> +++ b/net/batman-adv/bat_v_elp.c
-> @@ -51,7 +51,7 @@ static void batadv_v_elp_start_timer(struct batadv_hard_iface *hard_iface)
->  	unsigned int msecs;
->  
->  	msecs = atomic_read(&hard_iface->bat_v.elp_interval) - BATADV_JITTER;
-> -	msecs += prandom_u32_max(2 * BATADV_JITTER);
-> +	msecs += get_random_u32_below(2 * BATADV_JITTER);
->  
->  	queue_delayed_work(batadv_event_workqueue, &hard_iface->bat_v.elp_wq,
->  			   msecs_to_jiffies(msecs));
-> diff --git a/net/batman-adv/bat_v_ogm.c b/net/batman-adv/bat_v_ogm.c
-> index 033639df96d8..addfd8c4fe95 100644
-> --- a/net/batman-adv/bat_v_ogm.c
-> +++ b/net/batman-adv/bat_v_ogm.c
-> @@ -90,7 +90,7 @@ static void batadv_v_ogm_start_queue_timer(struct batadv_hard_iface *hard_iface)
->  	unsigned int msecs = BATADV_MAX_AGGREGATION_MS * 1000;
->  
->  	/* msecs * [0.9, 1.1] */
-> -	msecs += prandom_u32_max(msecs / 5) - (msecs / 10);
-> +	msecs += get_random_u32_below(msecs / 5) - (msecs / 10);
->  	queue_delayed_work(batadv_event_workqueue, &hard_iface->bat_v.aggr_wq,
->  			   msecs_to_jiffies(msecs / 1000));
->  }
-> @@ -109,7 +109,7 @@ static void batadv_v_ogm_start_timer(struct batadv_priv *bat_priv)
->  		return;
->  
->  	msecs = atomic_read(&bat_priv->orig_interval) - BATADV_JITTER;
-> -	msecs += prandom_u32_max(2 * BATADV_JITTER);
-> +	msecs += get_random_u32_below(2 * BATADV_JITTER);
->  	queue_delayed_work(batadv_event_workqueue, &bat_priv->bat_v.ogm_wq,
->  			   msecs_to_jiffies(msecs));
->  }
-> diff --git a/net/batman-adv/network-coding.c b/net/batman-adv/network-coding.c
-> index 5f4aeeb60dc4..bf29fba4dde5 100644
-> --- a/net/batman-adv/network-coding.c
-> +++ b/net/batman-adv/network-coding.c
-> @@ -1009,7 +1009,7 @@ static struct batadv_nc_path *batadv_nc_get_path(struct batadv_priv *bat_priv,
->  static u8 batadv_nc_random_weight_tq(u8 tq)
->  {
->  	/* randomize the estimated packet loss (max TQ - estimated TQ) */
-> -	u8 rand_tq = prandom_u32_max(BATADV_TQ_MAX_VALUE + 1 - tq);
-> +	u8 rand_tq = get_random_u32_below(BATADV_TQ_MAX_VALUE + 1 - tq);
->  
->  	/* convert to (randomized) estimated tq again */
->  	return BATADV_TQ_MAX_VALUE - rand_tq;
-> diff --git a/net/bluetooth/mgmt.c b/net/bluetooth/mgmt.c
-> index a92e7e485feb..b2f9679066c4 100644
-> --- a/net/bluetooth/mgmt.c
-> +++ b/net/bluetooth/mgmt.c
-> @@ -7374,8 +7374,8 @@ static int get_conn_info(struct sock *sk, struct hci_dev *hdev, void *data,
->  	 * calculate conn info age as random value between min/max set in hdev.
->  	 */
->  	conn_info_age = hdev->conn_info_min_age +
-> -			prandom_u32_max(hdev->conn_info_max_age -
-> -					hdev->conn_info_min_age);
-> +			get_random_u32_below(hdev->conn_info_max_age -
-> +					     hdev->conn_info_min_age);
->  
->  	/* Query controller to refresh cached values if they are too old or were
->  	 * never read.
-> diff --git a/net/can/j1939/socket.c b/net/can/j1939/socket.c
-> index b670ba03a675..7e90f9e61d9b 100644
-> --- a/net/can/j1939/socket.c
-> +++ b/net/can/j1939/socket.c
-> @@ -189,7 +189,7 @@ static void j1939_sk_queue_activate_next_locked(struct j1939_session *session)
->  		int time_ms = 0;
->  
->  		if (err)
-> -			time_ms = 10 + prandom_u32_max(16);
-> +			time_ms = 10 + get_random_u32_below(16);
->  
->  		j1939_tp_schedule_txtimer(first, time_ms);
->  	}
-> diff --git a/net/can/j1939/transport.c b/net/can/j1939/transport.c
-> index d7d86c944d76..28606b66f119 100644
-> --- a/net/can/j1939/transport.c
-> +++ b/net/can/j1939/transport.c
-> @@ -1166,7 +1166,7 @@ static enum hrtimer_restart j1939_tp_txtimer(struct hrtimer *hrtimer)
->  		if (session->tx_retry < J1939_XTP_TX_RETRY_LIMIT) {
->  			session->tx_retry++;
->  			j1939_tp_schedule_txtimer(session,
-> -						  10 + prandom_u32_max(16));
-> +						  10 + get_random_u32_below(16));
->  		} else {
->  			netdev_alert(priv->ndev, "%s: 0x%p: tx retry count reached\n",
->  				     __func__, session);
-> diff --git a/net/ceph/mon_client.c b/net/ceph/mon_client.c
-> index db60217f911b..faabad6603db 100644
-> --- a/net/ceph/mon_client.c
-> +++ b/net/ceph/mon_client.c
-> @@ -222,7 +222,7 @@ static void pick_new_mon(struct ceph_mon_client *monc)
->  				max--;
->  		}
->  
-> -		n = prandom_u32_max(max);
-> +		n = get_random_u32_below(max);
->  		if (o >= 0 && n >= o)
->  			n++;
->  
-> diff --git a/net/ceph/osd_client.c b/net/ceph/osd_client.c
-> index 4e4f1e4bc265..11c04e7d928e 100644
-> --- a/net/ceph/osd_client.c
-> +++ b/net/ceph/osd_client.c
-> @@ -1479,7 +1479,7 @@ static bool target_should_be_paused(struct ceph_osd_client *osdc,
->  
->  static int pick_random_replica(const struct ceph_osds *acting)
->  {
-> -	int i = prandom_u32_max(acting->size);
-> +	int i = get_random_u32_below(acting->size);
->  
->  	dout("%s picked osd%d, primary osd%d\n", __func__,
->  	     acting->osds[i], acting->primary);
-> diff --git a/net/core/neighbour.c b/net/core/neighbour.c
-> index 3c4786b99907..3cfff02605b9 100644
-> --- a/net/core/neighbour.c
-> +++ b/net/core/neighbour.c
-> @@ -111,7 +111,7 @@ static void neigh_cleanup_and_release(struct neighbour *neigh)
->  
->  unsigned long neigh_rand_reach_time(unsigned long base)
->  {
-> -	return base ? prandom_u32_max(base) + (base >> 1) : 0;
-> +	return base ? get_random_u32_below(base) + (base >> 1) : 0;
->  }
->  EXPORT_SYMBOL(neigh_rand_reach_time);
->  
-> @@ -1652,7 +1652,7 @@ void pneigh_enqueue(struct neigh_table *tbl, struct neigh_parms *p,
->  		    struct sk_buff *skb)
->  {
->  	unsigned long sched_next = jiffies +
-> -			prandom_u32_max(NEIGH_VAR(p, PROXY_DELAY));
-> +			get_random_u32_below(NEIGH_VAR(p, PROXY_DELAY));
->  
->  	if (p->qlen > NEIGH_VAR(p, PROXY_QLEN)) {
->  		kfree_skb(skb);
-> diff --git a/net/core/pktgen.c b/net/core/pktgen.c
-> index c3763056c554..95da2ddc1c20 100644
-> --- a/net/core/pktgen.c
-> +++ b/net/core/pktgen.c
-> @@ -2324,7 +2324,7 @@ static inline int f_pick(struct pktgen_dev *pkt_dev)
->  				pkt_dev->curfl = 0; /*reset */
->  		}
->  	} else {
-> -		flow = prandom_u32_max(pkt_dev->cflows);
-> +		flow = get_random_u32_below(pkt_dev->cflows);
->  		pkt_dev->curfl = flow;
->  
->  		if (pkt_dev->flows[flow].count > pkt_dev->lflow) {
-> @@ -2380,8 +2380,8 @@ static void set_cur_queue_map(struct pktgen_dev *pkt_dev)
->  	else if (pkt_dev->queue_map_min <= pkt_dev->queue_map_max) {
->  		__u16 t;
->  		if (pkt_dev->flags & F_QUEUE_MAP_RND) {
-> -			t = prandom_u32_max(pkt_dev->queue_map_max -
-> -					    pkt_dev->queue_map_min + 1) +
-> +			t = get_random_u32_below(pkt_dev->queue_map_max -
-> +						 pkt_dev->queue_map_min + 1) +
->  			    pkt_dev->queue_map_min;
->  		} else {
->  			t = pkt_dev->cur_queue_map + 1;
-> @@ -2411,7 +2411,7 @@ static void mod_cur_headers(struct pktgen_dev *pkt_dev)
->  		__u32 tmp;
->  
->  		if (pkt_dev->flags & F_MACSRC_RND)
-> -			mc = prandom_u32_max(pkt_dev->src_mac_count);
-> +			mc = get_random_u32_below(pkt_dev->src_mac_count);
->  		else {
->  			mc = pkt_dev->cur_src_mac_offset++;
->  			if (pkt_dev->cur_src_mac_offset >=
-> @@ -2437,7 +2437,7 @@ static void mod_cur_headers(struct pktgen_dev *pkt_dev)
->  		__u32 tmp;
->  
->  		if (pkt_dev->flags & F_MACDST_RND)
-> -			mc = prandom_u32_max(pkt_dev->dst_mac_count);
-> +			mc = get_random_u32_below(pkt_dev->dst_mac_count);
->  
->  		else {
->  			mc = pkt_dev->cur_dst_mac_offset++;
-> @@ -2469,16 +2469,16 @@ static void mod_cur_headers(struct pktgen_dev *pkt_dev)
->  	}
->  
->  	if ((pkt_dev->flags & F_VID_RND) && (pkt_dev->vlan_id != 0xffff)) {
-> -		pkt_dev->vlan_id = prandom_u32_max(4096);
-> +		pkt_dev->vlan_id = get_random_u32_below(4096);
->  	}
->  
->  	if ((pkt_dev->flags & F_SVID_RND) && (pkt_dev->svlan_id != 0xffff)) {
-> -		pkt_dev->svlan_id = prandom_u32_max(4096);
-> +		pkt_dev->svlan_id = get_random_u32_below(4096);
->  	}
->  
->  	if (pkt_dev->udp_src_min < pkt_dev->udp_src_max) {
->  		if (pkt_dev->flags & F_UDPSRC_RND)
-> -			pkt_dev->cur_udp_src = prandom_u32_max(
-> +			pkt_dev->cur_udp_src = get_random_u32_below(
->  				pkt_dev->udp_src_max - pkt_dev->udp_src_min) +
->  				pkt_dev->udp_src_min;
->  
-> @@ -2491,7 +2491,7 @@ static void mod_cur_headers(struct pktgen_dev *pkt_dev)
->  
->  	if (pkt_dev->udp_dst_min < pkt_dev->udp_dst_max) {
->  		if (pkt_dev->flags & F_UDPDST_RND) {
-> -			pkt_dev->cur_udp_dst = prandom_u32_max(
-> +			pkt_dev->cur_udp_dst = get_random_u32_below(
->  				pkt_dev->udp_dst_max - pkt_dev->udp_dst_min) +
->  				pkt_dev->udp_dst_min;
->  		} else {
-> @@ -2508,7 +2508,7 @@ static void mod_cur_headers(struct pktgen_dev *pkt_dev)
->  		if (imn < imx) {
->  			__u32 t;
->  			if (pkt_dev->flags & F_IPSRC_RND)
-> -				t = prandom_u32_max(imx - imn) + imn;
-> +				t = get_random_u32_below(imx - imn) + imn;
->  			else {
->  				t = ntohl(pkt_dev->cur_saddr);
->  				t++;
-> @@ -2530,7 +2530,7 @@ static void mod_cur_headers(struct pktgen_dev *pkt_dev)
->  				if (pkt_dev->flags & F_IPDST_RND) {
->  
->  					do {
-> -						t = prandom_u32_max(imx - imn) +
-> +						t = get_random_u32_below(imx - imn) +
->  						    imn;
->  						s = htonl(t);
->  					} while (ipv4_is_loopback(s) ||
-> @@ -2578,8 +2578,8 @@ static void mod_cur_headers(struct pktgen_dev *pkt_dev)
->  	if (pkt_dev->min_pkt_size < pkt_dev->max_pkt_size) {
->  		__u32 t;
->  		if (pkt_dev->flags & F_TXSIZE_RND) {
-> -			t = prandom_u32_max(pkt_dev->max_pkt_size -
-> -					    pkt_dev->min_pkt_size) +
-> +			t = get_random_u32_below(pkt_dev->max_pkt_size -
-> +						 pkt_dev->min_pkt_size) +
->  			    pkt_dev->min_pkt_size;
->  		} else {
->  			t = pkt_dev->cur_pkt_size + 1;
-> @@ -2589,7 +2589,7 @@ static void mod_cur_headers(struct pktgen_dev *pkt_dev)
->  		pkt_dev->cur_pkt_size = t;
->  	} else if (pkt_dev->n_imix_entries > 0) {
->  		struct imix_pkt *entry;
-> -		__u32 t = prandom_u32_max(IMIX_PRECISION);
-> +		__u32 t = get_random_u32_below(IMIX_PRECISION);
->  		__u8 entry_index = pkt_dev->imix_distribution[t];
->  
->  		entry = &pkt_dev->imix_entries[entry_index];
-> diff --git a/net/core/stream.c b/net/core/stream.c
-> index 75fded8495f5..5b1fe2b82eac 100644
-> --- a/net/core/stream.c
-> +++ b/net/core/stream.c
-> @@ -123,7 +123,7 @@ int sk_stream_wait_memory(struct sock *sk, long *timeo_p)
->  	DEFINE_WAIT_FUNC(wait, woken_wake_function);
->  
->  	if (sk_stream_memory_free(sk))
-> -		current_timeo = vm_wait = prandom_u32_max(HZ / 5) + 2;
-> +		current_timeo = vm_wait = get_random_u32_below(HZ / 5) + 2;
->  
->  	add_wait_queue(sk_sleep(sk), &wait);
->  
-> diff --git a/net/ipv4/icmp.c b/net/ipv4/icmp.c
-> index d5d745c3e345..46aa2d65e40a 100644
-> --- a/net/ipv4/icmp.c
-> +++ b/net/ipv4/icmp.c
-> @@ -263,7 +263,7 @@ bool icmp_global_allow(void)
->  		/* We want to use a credit of one in average, but need to randomize
->  		 * it for security reasons.
->  		 */
-> -		credit = max_t(int, credit - prandom_u32_max(3), 0);
-> +		credit = max_t(int, credit - get_random_u32_below(3), 0);
->  		rc = true;
->  	}
->  	WRITE_ONCE(icmp_global.credit, credit);
-> diff --git a/net/ipv4/igmp.c b/net/ipv4/igmp.c
-> index 81be3e0f0e70..c920aa9a62a9 100644
-> --- a/net/ipv4/igmp.c
-> +++ b/net/ipv4/igmp.c
-> @@ -213,7 +213,7 @@ static void igmp_stop_timer(struct ip_mc_list *im)
->  /* It must be called with locked im->lock */
->  static void igmp_start_timer(struct ip_mc_list *im, int max_delay)
->  {
-> -	int tv = prandom_u32_max(max_delay);
-> +	int tv = get_random_u32_below(max_delay);
->  
->  	im->tm_running = 1;
->  	if (!mod_timer(&im->timer, jiffies+tv+2))
-> @@ -222,7 +222,7 @@ static void igmp_start_timer(struct ip_mc_list *im, int max_delay)
->  
->  static void igmp_gq_start_timer(struct in_device *in_dev)
->  {
-> -	int tv = prandom_u32_max(in_dev->mr_maxdelay);
-> +	int tv = get_random_u32_below(in_dev->mr_maxdelay);
->  	unsigned long exp = jiffies + tv + 2;
->  
->  	if (in_dev->mr_gq_running &&
-> @@ -236,7 +236,7 @@ static void igmp_gq_start_timer(struct in_device *in_dev)
->  
->  static void igmp_ifc_start_timer(struct in_device *in_dev, int delay)
->  {
-> -	int tv = prandom_u32_max(delay);
-> +	int tv = get_random_u32_below(delay);
->  
->  	if (!mod_timer(&in_dev->mr_ifc_timer, jiffies+tv+2))
->  		in_dev_hold(in_dev);
-> diff --git a/net/ipv4/inet_connection_sock.c b/net/ipv4/inet_connection_sock.c
-> index 4e84ed21d16f..f22051219b50 100644
-> --- a/net/ipv4/inet_connection_sock.c
-> +++ b/net/ipv4/inet_connection_sock.c
-> @@ -314,7 +314,7 @@ inet_csk_find_open_port(const struct sock *sk, struct inet_bind_bucket **tb_ret,
->  	if (likely(remaining > 1))
->  		remaining &= ~1U;
->  
-> -	offset = prandom_u32_max(remaining);
-> +	offset = get_random_u32_below(remaining);
->  	/* __inet_hash_connect() favors ports having @low parity
->  	 * We do the opposite to not pollute connect() users.
->  	 */
-> diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
-> index d3dc28156622..a879ec1a267d 100644
-> --- a/net/ipv4/inet_hashtables.c
-> +++ b/net/ipv4/inet_hashtables.c
-> @@ -1037,7 +1037,7 @@ int __inet_hash_connect(struct inet_timewait_death_row *death_row,
->  	 * on low contention the randomness is maximal and on high contention
->  	 * it may be inexistent.
->  	 */
-> -	i = max_t(int, i, prandom_u32_max(8) * 2);
-> +	i = max_t(int, i, get_random_u32_below(8) * 2);
->  	WRITE_ONCE(table_perturb[index], READ_ONCE(table_perturb[index]) + i + 2);
->  
->  	/* Head lock still held and bh's disabled */
-> diff --git a/net/ipv4/route.c b/net/ipv4/route.c
-> index cd1fa9f70f1a..de6e3515ab4f 100644
-> --- a/net/ipv4/route.c
-> +++ b/net/ipv4/route.c
-> @@ -471,7 +471,7 @@ static u32 ip_idents_reserve(u32 hash, int segs)
->  	old = READ_ONCE(*p_tstamp);
->  
->  	if (old != now && cmpxchg(p_tstamp, old, now) == old)
-> -		delta = prandom_u32_max(now - old);
-> +		delta = get_random_u32_below(now - old);
->  
->  	/* If UBSAN reports an error there, please make sure your compiler
->  	 * supports -fno-strict-overflow before reporting it that was a bug
-> @@ -689,7 +689,7 @@ static void update_or_create_fnhe(struct fib_nh_common *nhc, __be32 daddr,
->  	} else {
->  		/* Randomize max depth to avoid some side channels attacks. */
->  		int max_depth = FNHE_RECLAIM_DEPTH +
-> -				prandom_u32_max(FNHE_RECLAIM_DEPTH);
-> +				get_random_u32_below(FNHE_RECLAIM_DEPTH);
->  
->  		while (depth > max_depth) {
->  			fnhe_remove_oldest(hash);
-> diff --git a/net/ipv4/tcp_bbr.c b/net/ipv4/tcp_bbr.c
-> index 54eec33c6e1c..d2c470524e58 100644
-> --- a/net/ipv4/tcp_bbr.c
-> +++ b/net/ipv4/tcp_bbr.c
-> @@ -618,7 +618,7 @@ static void bbr_reset_probe_bw_mode(struct sock *sk)
->  	struct bbr *bbr = inet_csk_ca(sk);
->  
->  	bbr->mode = BBR_PROBE_BW;
-> -	bbr->cycle_idx = CYCLE_LEN - 1 - prandom_u32_max(bbr_cycle_rand);
-> +	bbr->cycle_idx = CYCLE_LEN - 1 - get_random_u32_below(bbr_cycle_rand);
->  	bbr_advance_cycle_phase(sk);	/* flip to next phase of gain cycle */
->  }
->  
-> diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
-> index bc2ea12221f9..f90cadd9ba5c 100644
-> --- a/net/ipv4/tcp_input.c
-> +++ b/net/ipv4/tcp_input.c
-> @@ -3645,7 +3645,8 @@ static void tcp_send_challenge_ack(struct sock *sk)
->  		u32 half = (ack_limit + 1) >> 1;
->  
->  		WRITE_ONCE(net->ipv4.tcp_challenge_timestamp, now);
-> -		WRITE_ONCE(net->ipv4.tcp_challenge_count, half + prandom_u32_max(ack_limit));
-> +		WRITE_ONCE(net->ipv4.tcp_challenge_count,
-> +			   half + get_random_u32_below(ack_limit));
->  	}
->  	count = READ_ONCE(net->ipv4.tcp_challenge_count);
->  	if (count > 0) {
-> diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
-> index 417834b7169d..d5551d9e382d 100644
-> --- a/net/ipv6/addrconf.c
-> +++ b/net/ipv6/addrconf.c
-> @@ -104,7 +104,7 @@ static inline u32 cstamp_delta(unsigned long cstamp)
->  static inline s32 rfc3315_s14_backoff_init(s32 irt)
->  {
->  	/* multiply 'initial retransmission time' by 0.9 .. 1.1 */
-> -	u64 tmp = (900000 + prandom_u32_max(200001)) * (u64)irt;
-> +	u64 tmp = (900000 + get_random_u32_below(200001)) * (u64)irt;
->  	do_div(tmp, 1000000);
->  	return (s32)tmp;
->  }
-> @@ -112,11 +112,11 @@ static inline s32 rfc3315_s14_backoff_init(s32 irt)
->  static inline s32 rfc3315_s14_backoff_update(s32 rt, s32 mrt)
->  {
->  	/* multiply 'retransmission timeout' by 1.9 .. 2.1 */
-> -	u64 tmp = (1900000 + prandom_u32_max(200001)) * (u64)rt;
-> +	u64 tmp = (1900000 + get_random_u32_below(200001)) * (u64)rt;
->  	do_div(tmp, 1000000);
->  	if ((s32)tmp > mrt) {
->  		/* multiply 'maximum retransmission time' by 0.9 .. 1.1 */
-> -		tmp = (900000 + prandom_u32_max(200001)) * (u64)mrt;
-> +		tmp = (900000 + get_random_u32_below(200001)) * (u64)mrt;
->  		do_div(tmp, 1000000);
->  	}
->  	return (s32)tmp;
-> @@ -3967,7 +3967,7 @@ static void addrconf_dad_kick(struct inet6_ifaddr *ifp)
->  	if (ifp->flags & IFA_F_OPTIMISTIC)
->  		rand_num = 0;
->  	else
-> -		rand_num = prandom_u32_max(idev->cnf.rtr_solicit_delay ?: 1);
-> +		rand_num = get_random_u32_below(idev->cnf.rtr_solicit_delay ? : 1);
->  
->  	nonce = 0;
->  	if (idev->cnf.enhanced_dad ||
-> diff --git a/net/ipv6/mcast.c b/net/ipv6/mcast.c
-> index 7860383295d8..1c02160cf7a4 100644
-> --- a/net/ipv6/mcast.c
-> +++ b/net/ipv6/mcast.c
-> @@ -1050,7 +1050,7 @@ bool ipv6_chk_mcast_addr(struct net_device *dev, const struct in6_addr *group,
->  /* called with mc_lock */
->  static void mld_gq_start_work(struct inet6_dev *idev)
->  {
-> -	unsigned long tv = prandom_u32_max(idev->mc_maxdelay);
-> +	unsigned long tv = get_random_u32_below(idev->mc_maxdelay);
->  
->  	idev->mc_gq_running = 1;
->  	if (!mod_delayed_work(mld_wq, &idev->mc_gq_work, tv + 2))
-> @@ -1068,7 +1068,7 @@ static void mld_gq_stop_work(struct inet6_dev *idev)
->  /* called with mc_lock */
->  static void mld_ifc_start_work(struct inet6_dev *idev, unsigned long delay)
->  {
-> -	unsigned long tv = prandom_u32_max(delay);
-> +	unsigned long tv = get_random_u32_below(delay);
->  
->  	if (!mod_delayed_work(mld_wq, &idev->mc_ifc_work, tv + 2))
->  		in6_dev_hold(idev);
-> @@ -1085,7 +1085,7 @@ static void mld_ifc_stop_work(struct inet6_dev *idev)
->  /* called with mc_lock */
->  static void mld_dad_start_work(struct inet6_dev *idev, unsigned long delay)
->  {
-> -	unsigned long tv = prandom_u32_max(delay);
-> +	unsigned long tv = get_random_u32_below(delay);
->  
->  	if (!mod_delayed_work(mld_wq, &idev->mc_dad_work, tv + 2))
->  		in6_dev_hold(idev);
-> @@ -1130,7 +1130,7 @@ static void igmp6_group_queried(struct ifmcaddr6 *ma, unsigned long resptime)
->  	}
->  
->  	if (delay >= resptime)
-> -		delay = prandom_u32_max(resptime);
-> +		delay = get_random_u32_below(resptime);
->  
->  	if (!mod_delayed_work(mld_wq, &ma->mca_work, delay))
->  		refcount_inc(&ma->mca_refcnt);
-> @@ -2574,7 +2574,7 @@ static void igmp6_join_group(struct ifmcaddr6 *ma)
->  
->  	igmp6_send(&ma->mca_addr, ma->idev->dev, ICMPV6_MGM_REPORT);
->  
-> -	delay = prandom_u32_max(unsolicited_report_interval(ma->idev));
-> +	delay = get_random_u32_below(unsolicited_report_interval(ma->idev));
->  
->  	if (cancel_delayed_work(&ma->mca_work)) {
->  		refcount_dec(&ma->mca_refcnt);
-> diff --git a/net/ipv6/route.c b/net/ipv6/route.c
-> index 69252eb462b2..65d20747bef6 100644
-> --- a/net/ipv6/route.c
-> +++ b/net/ipv6/route.c
-> @@ -1713,7 +1713,7 @@ static int rt6_insert_exception(struct rt6_info *nrt,
->  	net->ipv6.rt6_stats->fib_rt_cache++;
->  
->  	/* Randomize max depth to avoid some side channels attacks. */
-> -	max_depth = FIB6_MAX_DEPTH + prandom_u32_max(FIB6_MAX_DEPTH);
-> +	max_depth = FIB6_MAX_DEPTH + get_random_u32_below(FIB6_MAX_DEPTH);
->  	while (bucket->depth > max_depth)
->  		rt6_exception_remove_oldest(bucket);
->  
-> diff --git a/net/netfilter/ipvs/ip_vs_twos.c b/net/netfilter/ipvs/ip_vs_twos.c
-> index f2579fc9c75b..3308e4cc740a 100644
-> --- a/net/netfilter/ipvs/ip_vs_twos.c
-> +++ b/net/netfilter/ipvs/ip_vs_twos.c
-> @@ -71,8 +71,8 @@ static struct ip_vs_dest *ip_vs_twos_schedule(struct ip_vs_service *svc,
->  	 * from 0 to total_weight
->  	 */
->  	total_weight += 1;
-> -	rweight1 = prandom_u32_max(total_weight);
-> -	rweight2 = prandom_u32_max(total_weight);
-> +	rweight1 = get_random_u32_below(total_weight);
-> +	rweight2 = get_random_u32_below(total_weight);
->  
->  	/* Pick two weighted servers */
->  	list_for_each_entry_rcu(dest, &svc->destinations, n_list) {
-> diff --git a/net/netfilter/nf_conntrack_core.c b/net/netfilter/nf_conntrack_core.c
-> index f97bda06d2a9..8703812405eb 100644
-> --- a/net/netfilter/nf_conntrack_core.c
-> +++ b/net/netfilter/nf_conntrack_core.c
-> @@ -906,7 +906,7 @@ nf_conntrack_hash_check_insert(struct nf_conn *ct)
->  					   nf_ct_zone_id(nf_ct_zone(ct), IP_CT_DIR_REPLY));
->  	} while (nf_conntrack_double_lock(net, hash, reply_hash, sequence));
->  
-> -	max_chainlen = MIN_CHAINLEN + prandom_u32_max(MAX_CHAINLEN);
-> +	max_chainlen = MIN_CHAINLEN + get_random_u32_below(MAX_CHAINLEN);
->  
->  	/* See if there's one in the list already, including reverse */
->  	hlist_nulls_for_each_entry(h, n, &nf_conntrack_hash[hash], hnnode) {
-> @@ -1227,7 +1227,7 @@ __nf_conntrack_confirm(struct sk_buff *skb)
->  		goto dying;
->  	}
->  
-> -	max_chainlen = MIN_CHAINLEN + prandom_u32_max(MAX_CHAINLEN);
-> +	max_chainlen = MIN_CHAINLEN + get_random_u32_below(MAX_CHAINLEN);
->  	/* See if there's one in the list already, including reverse:
->  	   NAT could have grabbed it without realizing, since we're
->  	   not in the hash.  If there is, we lost race. */
-> diff --git a/net/netfilter/nf_nat_helper.c b/net/netfilter/nf_nat_helper.c
-> index a95a25196943..bf591e6af005 100644
-> --- a/net/netfilter/nf_nat_helper.c
-> +++ b/net/netfilter/nf_nat_helper.c
-> @@ -223,7 +223,7 @@ u16 nf_nat_exp_find_port(struct nf_conntrack_expect *exp, u16 port)
->  		if (res != -EBUSY || (--attempts_left < 0))
->  			break;
->  
-> -		port = min + prandom_u32_max(range);
-> +		port = min + get_random_u32_below(range);
->  	}
->  
->  	return 0;
-> diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
-> index a662e8a5ff84..7a401d94463a 100644
-> --- a/net/netlink/af_netlink.c
-> +++ b/net/netlink/af_netlink.c
-> @@ -835,7 +835,7 @@ static int netlink_autobind(struct socket *sock)
->  		/* Bind collision, search negative portid values. */
->  		if (rover == -4096)
->  			/* rover will be in range [S32_MIN, -4097] */
-> -			rover = S32_MIN + prandom_u32_max(-4096 - S32_MIN);
-> +			rover = S32_MIN + get_random_u32_below(-4096 - S32_MIN);
->  		else if (rover >= -4096)
->  			rover = -4097;
->  		portid = rover--;
-> diff --git a/net/packet/af_packet.c b/net/packet/af_packet.c
-> index 6ce8dd19f33c..51a47ade92e8 100644
-> --- a/net/packet/af_packet.c
-> +++ b/net/packet/af_packet.c
-> @@ -1350,7 +1350,7 @@ static bool fanout_flow_is_huge(struct packet_sock *po, struct sk_buff *skb)
->  		if (READ_ONCE(history[i]) == rxhash)
->  			count++;
->  
-> -	victim = prandom_u32_max(ROLLOVER_HLEN);
-> +	victim = get_random_u32_below(ROLLOVER_HLEN);
->  
->  	/* Avoid dirtying the cache line if possible */
->  	if (READ_ONCE(history[victim]) != rxhash)
-> @@ -1386,7 +1386,7 @@ static unsigned int fanout_demux_rnd(struct packet_fanout *f,
->  				     struct sk_buff *skb,
->  				     unsigned int num)
->  {
-> -	return prandom_u32_max(num);
-> +	return get_random_u32_below(num);
->  }
->  
->  static unsigned int fanout_demux_rollover(struct packet_fanout *f,
-> diff --git a/net/sched/act_gact.c b/net/sched/act_gact.c
-> index 62d682b96b88..be267ffaaba7 100644
-> --- a/net/sched/act_gact.c
-> +++ b/net/sched/act_gact.c
-> @@ -25,7 +25,7 @@ static struct tc_action_ops act_gact_ops;
->  static int gact_net_rand(struct tcf_gact *gact)
->  {
->  	smp_rmb(); /* coupled with smp_wmb() in tcf_gact_init() */
-> -	if (prandom_u32_max(gact->tcfg_pval))
-> +	if (get_random_u32_below(gact->tcfg_pval))
->  		return gact->tcf_action;
->  	return gact->tcfg_paction;
->  }
-> diff --git a/net/sched/act_sample.c b/net/sched/act_sample.c
-> index 7a25477f5d99..4194480746b0 100644
-> --- a/net/sched/act_sample.c
-> +++ b/net/sched/act_sample.c
-> @@ -168,7 +168,7 @@ static int tcf_sample_act(struct sk_buff *skb, const struct tc_action *a,
->  	psample_group = rcu_dereference_bh(s->psample_group);
->  
->  	/* randomly sample packets according to rate */
-> -	if (psample_group && (prandom_u32_max(s->rate) == 0)) {
-> +	if (psample_group && (get_random_u32_below(s->rate) == 0)) {
->  		if (!skb_at_tc_ingress(skb)) {
->  			md.in_ifindex = skb->skb_iif;
->  			md.out_ifindex = skb->dev->ifindex;
-> diff --git a/net/sched/sch_choke.c b/net/sched/sch_choke.c
-> index 3ac3e5c80b6f..19c851125901 100644
-> --- a/net/sched/sch_choke.c
-> +++ b/net/sched/sch_choke.c
-> @@ -183,7 +183,7 @@ static struct sk_buff *choke_peek_random(const struct choke_sched_data *q,
->  	int retrys = 3;
->  
->  	do {
-> -		*pidx = (q->head + prandom_u32_max(choke_len(q))) & q->tab_mask;
-> +		*pidx = (q->head + get_random_u32_below(choke_len(q))) & q->tab_mask;
->  		skb = q->tab[*pidx];
->  		if (skb)
->  			return skb;
-> diff --git a/net/sched/sch_netem.c b/net/sched/sch_netem.c
-> index fb00ac40ecb7..6ef3021e1169 100644
-> --- a/net/sched/sch_netem.c
-> +++ b/net/sched/sch_netem.c
-> @@ -513,8 +513,8 @@ static int netem_enqueue(struct sk_buff *skb, struct Qdisc *sch,
->  			goto finish_segs;
->  		}
->  
-> -		skb->data[prandom_u32_max(skb_headlen(skb))] ^=
-> -			1<<prandom_u32_max(8);
-> +		skb->data[get_random_u32_below(skb_headlen(skb))] ^=
-> +			1<<get_random_u32_below(8);
->  	}
->  
->  	if (unlikely(sch->q.qlen >= sch->limit)) {
-> diff --git a/net/sctp/socket.c b/net/sctp/socket.c
-> index 83628c347744..cfe72085fdc4 100644
-> --- a/net/sctp/socket.c
-> +++ b/net/sctp/socket.c
-> @@ -8319,7 +8319,7 @@ static int sctp_get_port_local(struct sock *sk, union sctp_addr *addr)
->  
->  		inet_get_local_port_range(net, &low, &high);
->  		remaining = (high - low) + 1;
-> -		rover = prandom_u32_max(remaining) + low;
-> +		rover = get_random_u32_below(remaining) + low;
->  
->  		do {
->  			rover++;
-> diff --git a/net/sctp/transport.c b/net/sctp/transport.c
-> index f8fd98784977..ca1eba95c293 100644
-> --- a/net/sctp/transport.c
-> +++ b/net/sctp/transport.c
-> @@ -199,7 +199,7 @@ void sctp_transport_reset_hb_timer(struct sctp_transport *transport)
->  	if ((time_before(transport->hb_timer.expires, expires) ||
->  	     !timer_pending(&transport->hb_timer)) &&
->  	    !mod_timer(&transport->hb_timer,
-> -		       expires + prandom_u32_max(transport->rto)))
-> +		       expires + get_random_u32_below(transport->rto)))
->  		sctp_transport_hold(transport);
->  }
->  
-> diff --git a/net/sunrpc/cache.c b/net/sunrpc/cache.c
-> index f075a9fb5ccc..95ff74706104 100644
-> --- a/net/sunrpc/cache.c
-> +++ b/net/sunrpc/cache.c
-> @@ -677,7 +677,7 @@ static void cache_limit_defers(void)
->  
->  	/* Consider removing either the first or the last */
->  	if (cache_defer_cnt > DFR_MAX) {
-> -		if (prandom_u32_max(2))
-> +		if (get_random_u32_below(2))
->  			discard = list_entry(cache_defer_list.next,
->  					     struct cache_deferred_req, recent);
->  		else
-> diff --git a/net/sunrpc/xprtsock.c b/net/sunrpc/xprtsock.c
-> index 915b9902f673..2e4987dcba29 100644
-> --- a/net/sunrpc/xprtsock.c
-> +++ b/net/sunrpc/xprtsock.c
-> @@ -1619,7 +1619,7 @@ static int xs_get_random_port(void)
->  	if (max < min)
->  		return -EADDRINUSE;
->  	range = max - min + 1;
-> -	rand = prandom_u32_max(range);
-> +	rand = get_random_u32_below(range);
->  	return rand + min;
->  }
->  
-> diff --git a/net/tipc/socket.c b/net/tipc/socket.c
-> index e902b01ea3cb..b35c8701876a 100644
-> --- a/net/tipc/socket.c
-> +++ b/net/tipc/socket.c
-> @@ -3010,7 +3010,7 @@ static int tipc_sk_insert(struct tipc_sock *tsk)
->  	struct net *net = sock_net(sk);
->  	struct tipc_net *tn = net_generic(net, tipc_net_id);
->  	u32 remaining = (TIPC_MAX_PORT - TIPC_MIN_PORT) + 1;
-> -	u32 portid = prandom_u32_max(remaining) + TIPC_MIN_PORT;
-> +	u32 portid = get_random_u32_below(remaining) + TIPC_MIN_PORT;
->  
->  	while (remaining--) {
->  		portid++;
-> diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
-> index ee418701cdee..f185f57c34e7 100644
-> --- a/net/vmw_vsock/af_vsock.c
-> +++ b/net/vmw_vsock/af_vsock.c
-> @@ -627,7 +627,7 @@ static int __vsock_bind_connectible(struct vsock_sock *vsk,
->  
->  	if (!port)
->  		port = LAST_RESERVED_PORT + 1 +
-> -			prandom_u32_max(U32_MAX - LAST_RESERVED_PORT);
-> +			get_random_u32_below(U32_MAX - LAST_RESERVED_PORT);
->  
->  	vsock_addr_init(&new_addr, addr->svm_cid, addr->svm_port);
->  
-> diff --git a/net/xfrm/xfrm_state.c b/net/xfrm/xfrm_state.c
-> index 3d2fe7712ac5..40f831854774 100644
-> --- a/net/xfrm/xfrm_state.c
-> +++ b/net/xfrm/xfrm_state.c
-> @@ -2072,7 +2072,7 @@ int xfrm_alloc_spi(struct xfrm_state *x, u32 low, u32 high)
->  	} else {
->  		u32 spi = 0;
->  		for (h = 0; h < high-low+1; h++) {
-> -			spi = low + prandom_u32_max(high - low + 1);
-> +			spi = low + get_random_u32_below(high - low + 1);
->  			x0 = xfrm_state_lookup(net, mark, &x->id.daddr, htonl(spi), x->id.proto, x->props.family);
->  			if (x0 == NULL) {
->  				newspi = htonl(spi);
-> -- 
-> 2.38.1
-> 
+
+vim +307 fs/crypto/fscrypt_private.h
+
+   294	
+   295	
+   296	/*
+   297	 * fscrypt_extent_context - the encryption context for an extent
+   298	 *
+   299	 * For filesystems that support extent encryption, this context provides the
+   300	 * necessary randomly-initialized IV in order to encrypt/decrypt the data
+   301	 * stored in the extent. It is stored alongside each extent, and is
+   302	 * insufficient to decrypt the extent: the extent's owning inode(s) provide the
+   303	 * policy information (including key identifier) necessary to decrypt.
+   304	 */
+   305	struct fscrypt_extent_context_v1 {
+   306		u8 version;
+ > 307		union fscrypt_iv iv;
+   308	} __packed;
+   309	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
+
+--1CjbGslkFsYgisT/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: attachment; filename=config
+
+#
+# Automatically generated file; DO NOT EDIT.
+# Linux/arm 6.1.0-rc1 Kernel Configuration
+#
+CONFIG_CC_VERSION_TEXT="clang version 16.0.0 (git://gitmirror/llvm_project 791a7ae1ba3efd6bca96338e10ffde557ba83920)"
+CONFIG_GCC_VERSION=0
+CONFIG_CC_IS_CLANG=y
+CONFIG_CLANG_VERSION=160000
+CONFIG_AS_IS_LLVM=y
+CONFIG_AS_VERSION=160000
+CONFIG_LD_VERSION=0
+CONFIG_LD_IS_LLD=y
+CONFIG_LLD_VERSION=160000
+CONFIG_RUST_IS_AVAILABLE=y
+CONFIG_CC_HAS_ASM_GOTO_OUTPUT=y
+CONFIG_TOOLS_SUPPORT_RELR=y
+CONFIG_CC_HAS_ASM_INLINE=y
+CONFIG_CC_HAS_NO_PROFILE_FN_ATTR=y
+CONFIG_PAHOLE_VERSION=123
+CONFIG_IRQ_WORK=y
+CONFIG_THREAD_INFO_IN_TASK=y
+
+#
+# General setup
+#
+CONFIG_BROKEN_ON_SMP=y
+CONFIG_INIT_ENV_ARG_LIMIT=32
+CONFIG_COMPILE_TEST=y
+# CONFIG_WERROR is not set
+CONFIG_LOCALVERSION=""
+CONFIG_BUILD_SALT=""
+CONFIG_HAVE_KERNEL_GZIP=y
+CONFIG_HAVE_KERNEL_LZMA=y
+CONFIG_HAVE_KERNEL_XZ=y
+CONFIG_HAVE_KERNEL_LZO=y
+CONFIG_HAVE_KERNEL_LZ4=y
+CONFIG_KERNEL_GZIP=y
+# CONFIG_KERNEL_LZMA is not set
+# CONFIG_KERNEL_XZ is not set
+# CONFIG_KERNEL_LZO is not set
+# CONFIG_KERNEL_LZ4 is not set
+CONFIG_DEFAULT_INIT=""
+CONFIG_DEFAULT_HOSTNAME="(none)"
+CONFIG_SYSVIPC=y
+# CONFIG_POSIX_MQUEUE is not set
+# CONFIG_WATCH_QUEUE is not set
+# CONFIG_USELIB is not set
+# CONFIG_AUDIT is not set
+CONFIG_HAVE_ARCH_AUDITSYSCALL=y
+
+#
+# IRQ subsystem
+#
+CONFIG_GENERIC_IRQ_PROBE=y
+CONFIG_GENERIC_IRQ_SHOW=y
+CONFIG_GENERIC_IRQ_SHOW_LEVEL=y
+CONFIG_HARDIRQS_SW_RESEND=y
+CONFIG_GENERIC_IRQ_CHIP=y
+CONFIG_IRQ_DOMAIN=y
+CONFIG_IRQ_SIM=y
+CONFIG_IRQ_DOMAIN_HIERARCHY=y
+CONFIG_IRQ_FORCED_THREADING=y
+CONFIG_SPARSE_IRQ=y
+# CONFIG_GENERIC_IRQ_DEBUGFS is not set
+# end of IRQ subsystem
+
+CONFIG_GENERIC_IRQ_MULTI_HANDLER=y
+CONFIG_GENERIC_CLOCKEVENTS=y
+# CONFIG_TIME_KUNIT_TEST is not set
+CONFIG_CONTEXT_TRACKING=y
+
+#
+# Timers subsystem
+#
+CONFIG_HZ_PERIODIC=y
+# CONFIG_NO_HZ_IDLE is not set
+CONFIG_CONTEXT_TRACKING_USER=y
+CONFIG_CONTEXT_TRACKING_USER_FORCE=y
+# CONFIG_NO_HZ is not set
+# CONFIG_HIGH_RES_TIMERS is not set
+# end of Timers subsystem
+
+CONFIG_BPF=y
+CONFIG_HAVE_EBPF_JIT=y
+
+#
+# BPF subsystem
+#
+CONFIG_BPF_SYSCALL=y
+# CONFIG_BPF_JIT is not set
+# CONFIG_BPF_UNPRIV_DEFAULT_OFF is not set
+# end of BPF subsystem
+
+CONFIG_PREEMPT_NONE_BUILD=y
+CONFIG_PREEMPT_NONE=y
+# CONFIG_PREEMPT_VOLUNTARY is not set
+# CONFIG_PREEMPT is not set
+CONFIG_PREEMPT_COUNT=y
+
+#
+# CPU/Task time and stats accounting
+#
+CONFIG_VIRT_CPU_ACCOUNTING=y
+# CONFIG_TICK_CPU_ACCOUNTING is not set
+CONFIG_VIRT_CPU_ACCOUNTING_GEN=y
+# CONFIG_IRQ_TIME_ACCOUNTING is not set
+# CONFIG_BSD_PROCESS_ACCT is not set
+CONFIG_TASKSTATS=y
+# CONFIG_TASK_DELAY_ACCT is not set
+# CONFIG_TASK_XACCT is not set
+# CONFIG_PSI is not set
+# end of CPU/Task time and stats accounting
+
+CONFIG_CPU_ISOLATION=y
+
+#
+# RCU Subsystem
+#
+CONFIG_TINY_RCU=y
+CONFIG_RCU_EXPERT=y
+CONFIG_SRCU=y
+CONFIG_TINY_SRCU=y
+CONFIG_TASKS_RCU_GENERIC=y
+# CONFIG_FORCE_TASKS_RCU is not set
+# CONFIG_FORCE_TASKS_RUDE_RCU is not set
+# CONFIG_FORCE_TASKS_TRACE_RCU is not set
+CONFIG_TASKS_TRACE_RCU=y
+CONFIG_RCU_NEED_SEGCBLIST=y
+CONFIG_TASKS_TRACE_RCU_READ_MB=y
+# end of RCU Subsystem
+
+CONFIG_IKCONFIG=m
+# CONFIG_IKCONFIG_PROC is not set
+# CONFIG_IKHEADERS is not set
+CONFIG_LOG_BUF_SHIFT=17
+CONFIG_PRINTK_SAFE_LOG_BUF_SHIFT=13
+# CONFIG_PRINTK_INDEX is not set
+CONFIG_GENERIC_SCHED_CLOCK=y
+
+#
+# Scheduler features
+#
+# end of Scheduler features
+
+CONFIG_CC_IMPLICIT_FALLTHROUGH="-Wimplicit-fallthrough"
+CONFIG_GCC12_NO_ARRAY_BOUNDS=y
+CONFIG_CGROUPS=y
+# CONFIG_CGROUP_FAVOR_DYNMODS is not set
+# CONFIG_MEMCG is not set
+CONFIG_CGROUP_SCHED=y
+CONFIG_FAIR_GROUP_SCHED=y
+# CONFIG_CFS_BANDWIDTH is not set
+CONFIG_RT_GROUP_SCHED=y
+# CONFIG_CGROUP_PIDS is not set
+CONFIG_CGROUP_RDMA=y
+CONFIG_CGROUP_FREEZER=y
+CONFIG_CGROUP_DEVICE=y
+# CONFIG_CGROUP_CPUACCT is not set
+CONFIG_CGROUP_PERF=y
+# CONFIG_CGROUP_BPF is not set
+# CONFIG_CGROUP_MISC is not set
+# CONFIG_CGROUP_DEBUG is not set
+CONFIG_SOCK_CGROUP_DATA=y
+# CONFIG_NAMESPACES is not set
+# CONFIG_CHECKPOINT_RESTORE is not set
+CONFIG_SCHED_AUTOGROUP=y
+CONFIG_SYSFS_DEPRECATED=y
+# CONFIG_SYSFS_DEPRECATED_V2 is not set
+CONFIG_RELAY=y
+CONFIG_BLK_DEV_INITRD=y
+CONFIG_INITRAMFS_SOURCE=""
+# CONFIG_RD_GZIP is not set
+CONFIG_RD_BZIP2=y
+CONFIG_RD_LZMA=y
+# CONFIG_RD_XZ is not set
+# CONFIG_RD_LZO is not set
+# CONFIG_RD_LZ4 is not set
+CONFIG_RD_ZSTD=y
+# CONFIG_BOOT_CONFIG is not set
+CONFIG_INITRAMFS_PRESERVE_MTIME=y
+CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE=y
+# CONFIG_CC_OPTIMIZE_FOR_SIZE is not set
+CONFIG_LD_ORPHAN_WARN=y
+CONFIG_HAVE_UID16=y
+CONFIG_EXPERT=y
+# CONFIG_UID16 is not set
+CONFIG_MULTIUSER=y
+CONFIG_SGETMASK_SYSCALL=y
+# CONFIG_SYSFS_SYSCALL is not set
+# CONFIG_FHANDLE is not set
+CONFIG_POSIX_TIMERS=y
+CONFIG_PRINTK=y
+CONFIG_BUG=y
+CONFIG_ELF_CORE=y
+# CONFIG_BASE_FULL is not set
+# CONFIG_FUTEX is not set
+CONFIG_EPOLL=y
+CONFIG_SIGNALFD=y
+# CONFIG_TIMERFD is not set
+CONFIG_EVENTFD=y
+# CONFIG_AIO is not set
+# CONFIG_IO_URING is not set
+CONFIG_ADVISE_SYSCALLS=y
+CONFIG_MEMBARRIER=y
+CONFIG_KALLSYMS=y
+CONFIG_KALLSYMS_ALL=y
+CONFIG_KALLSYMS_BASE_RELATIVE=y
+CONFIG_ARCH_HAS_MEMBARRIER_SYNC_CORE=y
+CONFIG_KCMP=y
+# CONFIG_RSEQ is not set
+CONFIG_EMBEDDED=y
+CONFIG_HAVE_PERF_EVENTS=y
+CONFIG_PERF_USE_VMALLOC=y
+# CONFIG_PC104 is not set
+
+#
+# Kernel Performance Events And Counters
+#
+CONFIG_PERF_EVENTS=y
+# CONFIG_DEBUG_PERF_USE_VMALLOC is not set
+# end of Kernel Performance Events And Counters
+
+CONFIG_PROFILING=y
+# end of General setup
+
+CONFIG_ARM=y
+CONFIG_SYS_SUPPORTS_APM_EMULATION=y
+CONFIG_NO_IOPORT_MAP=y
+CONFIG_STACKTRACE_SUPPORT=y
+CONFIG_LOCKDEP_SUPPORT=y
+CONFIG_GENERIC_HWEIGHT=y
+CONFIG_GENERIC_CALIBRATE_DELAY=y
+CONFIG_ARCH_SUPPORTS_UPROBES=y
+CONFIG_PHYS_OFFSET=0x00800000
+CONFIG_GENERIC_BUG=y
+CONFIG_PGTABLE_LEVELS=2
+
+#
+# System Type
+#
+# CONFIG_MMU is not set
+CONFIG_ARM_SINGLE_ARMV7M=y
+CONFIG_ARCH_MMAP_RND_BITS_MIN=8
+CONFIG_ARCH_MMAP_RND_BITS_MAX=16
+# CONFIG_ARCH_AT91 is not set
+# CONFIG_ARCH_MXC is not set
+# CONFIG_ARCH_STM32 is not set
+# CONFIG_ARCH_LPC18XX is not set
+# CONFIG_ARCH_MPS2 is not set
+
+#
+# Processor Type
+#
+CONFIG_CPU_V7M=y
+CONFIG_CPU_THUMBONLY=y
+CONFIG_CPU_THUMB_CAPABLE=y
+CONFIG_CPU_32v7M=y
+CONFIG_CPU_ABRT_NOMMU=y
+CONFIG_CPU_PABRT_LEGACY=y
+CONFIG_CPU_CACHE_NOP=y
+CONFIG_CPU_CACHE_V7M=y
+CONFIG_CPU_V7M_NUM_IRQ=240
+
+#
+# Processor Features
+#
+CONFIG_ARM_THUMB=y
+CONFIG_CPU_LITTLE_ENDIAN=y
+# CONFIG_CPU_ICACHE_DISABLE is not set
+CONFIG_CPU_DCACHE_DISABLE=y
+# CONFIG_CPU_BPREDICT_DISABLE is not set
+CONFIG_ARM_L1_CACHE_SHIFT=5
+CONFIG_ARM_DMA_MEM_BUFFERABLE=y
+CONFIG_SET_MEM_PARAM=y
+CONFIG_DRAM_BASE=0x00800000
+CONFIG_DRAM_SIZE=0x00800000
+CONFIG_REMAP_VECTORS_TO_RAM=y
+# CONFIG_ARM_MPU is not set
+# end of System Type
+
+#
+# Bus support
+#
+# end of Bus support
+
+#
+# Kernel Features
+#
+CONFIG_IRQSTACKS=y
+CONFIG_PAGE_OFFSET=0x00800000
+CONFIG_ARCH_NR_GPIO=0
+CONFIG_HZ_FIXED=0
+# CONFIG_HZ_100 is not set
+# CONFIG_HZ_200 is not set
+# CONFIG_HZ_250 is not set
+CONFIG_HZ_300=y
+# CONFIG_HZ_500 is not set
+# CONFIG_HZ_1000 is not set
+CONFIG_HZ=300
+CONFIG_THUMB2_KERNEL=y
+CONFIG_AEABI=y
+CONFIG_ARCH_SELECT_MEMORY_MODEL=y
+CONFIG_ARCH_FLATMEM_ENABLE=y
+CONFIG_ARCH_SPARSEMEM_ENABLE=y
+CONFIG_HW_PERF_EVENTS=y
+# CONFIG_ARM_MODULE_PLTS is not set
+CONFIG_ARCH_FORCE_MAX_ORDER=11
+CONFIG_PARAVIRT=y
+CONFIG_PARAVIRT_TIME_ACCOUNTING=y
+CONFIG_CC_HAVE_STACKPROTECTOR_TLS=y
+# end of Kernel Features
+
+#
+# Boot options
+#
+CONFIG_USE_OF=y
+# CONFIG_ATAGS is not set
+CONFIG_ZBOOT_ROM_TEXT=0x0
+CONFIG_ZBOOT_ROM_BSS=0x0
+CONFIG_ARM_APPENDED_DTB=y
+# CONFIG_ARM_ATAG_DTB_COMPAT is not set
+CONFIG_CMDLINE=""
+# CONFIG_XIP_KERNEL is not set
+CONFIG_CRASH_DUMP=y
+CONFIG_AUTO_ZRELADDR=y
+# end of Boot options
+
+#
+# CPU Power Management
+#
+
+#
+# CPU Frequency scaling
+#
+CONFIG_CPU_FREQ=y
+CONFIG_CPU_FREQ_GOV_ATTR_SET=y
+CONFIG_CPU_FREQ_GOV_COMMON=y
+# CONFIG_CPU_FREQ_STAT is not set
+CONFIG_CPU_FREQ_DEFAULT_GOV_PERFORMANCE=y
+# CONFIG_CPU_FREQ_DEFAULT_GOV_POWERSAVE is not set
+# CONFIG_CPU_FREQ_DEFAULT_GOV_USERSPACE is not set
+# CONFIG_CPU_FREQ_DEFAULT_GOV_ONDEMAND is not set
+# CONFIG_CPU_FREQ_DEFAULT_GOV_CONSERVATIVE is not set
+CONFIG_CPU_FREQ_GOV_PERFORMANCE=y
+CONFIG_CPU_FREQ_GOV_POWERSAVE=m
+# CONFIG_CPU_FREQ_GOV_USERSPACE is not set
+CONFIG_CPU_FREQ_GOV_ONDEMAND=m
+CONFIG_CPU_FREQ_GOV_CONSERVATIVE=m
+
+#
+# CPU frequency scaling drivers
+#
+# CONFIG_CPUFREQ_DT is not set
+CONFIG_ARM_BRCMSTB_AVS_CPUFREQ=y
+CONFIG_ARM_MEDIATEK_CPUFREQ_HW=m
+# CONFIG_ARM_QCOM_CPUFREQ_HW is not set
+# CONFIG_ARM_RASPBERRYPI_CPUFREQ is not set
+CONFIG_ARM_SCMI_CPUFREQ=m
+# CONFIG_QORIQ_CPUFREQ is not set
+# end of CPU Frequency scaling
+
+#
+# CPU Idle
+#
+CONFIG_CPU_IDLE=y
+CONFIG_CPU_IDLE_MULTIPLE_DRIVERS=y
+CONFIG_CPU_IDLE_GOV_LADDER=y
+CONFIG_CPU_IDLE_GOV_MENU=y
+CONFIG_CPU_IDLE_GOV_TEO=y
+CONFIG_DT_IDLE_STATES=y
+
+#
+# ARM CPU Idle Drivers
+#
+CONFIG_ARM_CPUIDLE=y
+# CONFIG_ARM_CLPS711X_CPUIDLE is not set
+# CONFIG_ARM_KIRKWOOD_CPUIDLE is not set
+# CONFIG_ARM_ZYNQ_CPUIDLE is not set
+CONFIG_ARM_AT91_CPUIDLE=y
+# CONFIG_ARM_EXYNOS_CPUIDLE is not set
+# CONFIG_ARM_MVEBU_V7_CPUIDLE is not set
+# end of ARM CPU Idle Drivers
+# end of CPU Idle
+# end of CPU Power Management
+
+#
+# Floating point emulation
+#
+
+#
+# At least one emulation must be selected
+#
+# end of Floating point emulation
+
+#
+# Power management options
+#
+# CONFIG_SUSPEND is not set
+# CONFIG_PM is not set
+CONFIG_APM_EMULATION=m
+CONFIG_CPU_PM=y
+CONFIG_ARCH_SUSPEND_POSSIBLE=y
+# end of Power management options
+
+CONFIG_AS_VFP_VMRS_FPINST=y
+
+#
+# General architecture-dependent options
+#
+CONFIG_ARCH_USE_BUILTIN_BSWAP=y
+CONFIG_HAVE_NMI=y
+CONFIG_HAVE_ARCH_TRACEHOOK=y
+CONFIG_GENERIC_SMP_IDLE_THREAD=y
+CONFIG_GENERIC_IDLE_POLL_SETUP=y
+CONFIG_ARCH_HAS_FORTIFY_SOURCE=y
+CONFIG_ARCH_HAS_KEEPINITRD=y
+CONFIG_ARCH_HAS_SET_MEMORY=y
+CONFIG_HAVE_ARCH_THREAD_STRUCT_WHITELIST=y
+CONFIG_ARCH_32BIT_OFF_T=y
+CONFIG_HAVE_REGS_AND_STACK_ACCESS_API=y
+CONFIG_HAVE_RSEQ=y
+CONFIG_HAVE_PERF_REGS=y
+CONFIG_HAVE_PERF_USER_STACK_DUMP=y
+CONFIG_ARCH_HAVE_NMI_SAFE_CMPXCHG=y
+CONFIG_ARCH_WANT_IPC_PARSE_VERSION=y
+CONFIG_HAVE_ARCH_SECCOMP=y
+CONFIG_HAVE_ARCH_SECCOMP_FILTER=y
+# CONFIG_SECCOMP is not set
+CONFIG_HAVE_STACKPROTECTOR=y
+CONFIG_STACKPROTECTOR=y
+CONFIG_STACKPROTECTOR_STRONG=y
+CONFIG_LTO_NONE=y
+CONFIG_HAVE_CONTEXT_TRACKING_USER=y
+CONFIG_HAVE_VIRT_CPU_ACCOUNTING_GEN=y
+CONFIG_HAVE_IRQ_TIME_ACCOUNTING=y
+CONFIG_HAVE_MOD_ARCH_SPECIFIC=y
+CONFIG_MODULES_USE_ELF_REL=y
+CONFIG_HAVE_IRQ_EXIT_ON_IRQ_STACK=y
+CONFIG_HAVE_SOFTIRQ_ON_OWN_STACK=y
+CONFIG_SOFTIRQ_ON_OWN_STACK=y
+CONFIG_ARCH_HAS_ELF_RANDOMIZE=y
+CONFIG_HAVE_EXIT_THREAD=y
+CONFIG_PAGE_SIZE_LESS_THAN_64KB=y
+CONFIG_PAGE_SIZE_LESS_THAN_256KB=y
+CONFIG_CLONE_BACKWARDS=y
+CONFIG_OLD_SIGSUSPEND3=y
+CONFIG_OLD_SIGACTION=y
+# CONFIG_COMPAT_32BIT_TIME is not set
+CONFIG_LOCK_EVENT_COUNTS=y
+CONFIG_ARCH_WANT_LD_ORPHAN_WARN=y
+CONFIG_HAVE_ARCH_PFN_VALID=y
+
+#
+# GCOV-based kernel profiling
+#
+# CONFIG_GCOV_KERNEL is not set
+CONFIG_ARCH_HAS_GCOV_PROFILE_ALL=y
+# end of GCOV-based kernel profiling
+
+CONFIG_HAVE_GCC_PLUGINS=y
+# end of General architecture-dependent options
+
+CONFIG_RT_MUTEXES=y
+CONFIG_BASE_SMALL=1
+CONFIG_MODULES=y
+CONFIG_MODULE_FORCE_LOAD=y
+CONFIG_MODULE_UNLOAD=y
+# CONFIG_MODULE_FORCE_UNLOAD is not set
+# CONFIG_MODULE_UNLOAD_TAINT_TRACKING is not set
+CONFIG_MODVERSIONS=y
+CONFIG_MODULE_SRCVERSION_ALL=y
+# CONFIG_MODULE_SIG is not set
+CONFIG_MODULE_COMPRESS_NONE=y
+# CONFIG_MODULE_COMPRESS_GZIP is not set
+# CONFIG_MODULE_COMPRESS_XZ is not set
+# CONFIG_MODULE_COMPRESS_ZSTD is not set
+# CONFIG_MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS is not set
+CONFIG_MODPROBE_PATH="/sbin/modprobe"
+CONFIG_MODULES_TREE_LOOKUP=y
+# CONFIG_BLOCK is not set
+CONFIG_ASN1=y
+CONFIG_UNINLINE_SPIN_UNLOCK=y
+CONFIG_ARCH_SUPPORTS_ATOMIC_RMW=y
+CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE=y
+CONFIG_FREEZER=y
+
+#
+# Executable file formats
+#
+# CONFIG_BINFMT_ELF_FDPIC is not set
+CONFIG_BINFMT_SCRIPT=y
+CONFIG_ARCH_HAS_BINFMT_FLAT=y
+# CONFIG_BINFMT_FLAT is not set
+CONFIG_BINFMT_FLAT_ARGVP_ENVP_ON_STACK=y
+CONFIG_BINFMT_MISC=m
+CONFIG_COREDUMP=y
+# end of Executable file formats
+
+#
+# Memory Management options
+#
+
+#
+# SLAB allocator options
+#
+# CONFIG_SLAB is not set
+CONFIG_SLUB=y
+# CONFIG_SLOB is not set
+CONFIG_SLAB_MERGE_DEFAULT=y
+CONFIG_SLAB_FREELIST_RANDOM=y
+CONFIG_SLAB_FREELIST_HARDENED=y
+CONFIG_SLUB_STATS=y
+# end of SLAB allocator options
+
+# CONFIG_SHUFFLE_PAGE_ALLOCATOR is not set
+# CONFIG_COMPAT_BRK is not set
+CONFIG_MMAP_ALLOW_UNINITIALIZED=y
+CONFIG_SELECT_MEMORY_MODEL=y
+CONFIG_FLATMEM_MANUAL=y
+# CONFIG_SPARSEMEM_MANUAL is not set
+CONFIG_FLATMEM=y
+CONFIG_ARCH_KEEP_MEMBLOCK=y
+CONFIG_EXCLUSIVE_SYSTEM_RAM=y
+CONFIG_SPLIT_PTLOCK_CPUS=999999
+# CONFIG_PAGE_REPORTING is not set
+CONFIG_NOMMU_INITIAL_TRIM_EXCESS=1
+CONFIG_ARCH_WANT_GENERAL_HUGETLB=y
+CONFIG_NEED_PER_CPU_KM=y
+CONFIG_GENERIC_EARLY_IOREMAP=y
+CONFIG_ARCH_HAS_CURRENT_STACK_POINTER=y
+# CONFIG_VM_EVENT_COUNTERS is not set
+# CONFIG_PERCPU_STATS is not set
+# CONFIG_GUP_TEST is not set
+
+#
+# Data Access Monitoring
+#
+# CONFIG_DAMON is not set
+# end of Data Access Monitoring
+# end of Memory Management options
+
+CONFIG_NET=y
+
+#
+# Networking options
+#
+# CONFIG_PACKET is not set
+# CONFIG_UNIX is not set
+CONFIG_XDP_SOCKETS=y
+# CONFIG_XDP_SOCKETS_DIAG is not set
+# CONFIG_INET is not set
+# CONFIG_NETWORK_SECMARK is not set
+CONFIG_NET_PTP_CLASSIFY=y
+# CONFIG_NETWORK_PHY_TIMESTAMPING is not set
+CONFIG_NETFILTER=y
+# CONFIG_NETFILTER_ADVANCED is not set
+# CONFIG_ATM is not set
+CONFIG_STP=m
+CONFIG_BRIDGE=m
+# CONFIG_BRIDGE_VLAN_FILTERING is not set
+CONFIG_BRIDGE_MRP=y
+# CONFIG_BRIDGE_CFM is not set
+CONFIG_VLAN_8021Q=m
+# CONFIG_VLAN_8021Q_GVRP is not set
+# CONFIG_VLAN_8021Q_MVRP is not set
+CONFIG_LLC=y
+CONFIG_LLC2=y
+CONFIG_ATALK=y
+# CONFIG_DEV_APPLETALK is not set
+# CONFIG_X25 is not set
+CONFIG_LAPB=m
+# CONFIG_PHONET is not set
+CONFIG_IEEE802154=y
+CONFIG_IEEE802154_NL802154_EXPERIMENTAL=y
+CONFIG_IEEE802154_SOCKET=y
+CONFIG_MAC802154=y
+# CONFIG_NET_SCHED is not set
+CONFIG_DCB=y
+CONFIG_DNS_RESOLVER=y
+CONFIG_BATMAN_ADV=m
+# CONFIG_BATMAN_ADV_BATMAN_V is not set
+CONFIG_BATMAN_ADV_NC=y
+CONFIG_BATMAN_ADV_DEBUG=y
+CONFIG_VSOCKETS=y
+# CONFIG_VSOCKETS_DIAG is not set
+CONFIG_VSOCKETS_LOOPBACK=y
+CONFIG_VIRTIO_VSOCKETS=m
+CONFIG_VIRTIO_VSOCKETS_COMMON=y
+CONFIG_NETLINK_DIAG=m
+CONFIG_MPLS=y
+CONFIG_NET_MPLS_GSO=m
+CONFIG_NET_NSH=m
+CONFIG_HSR=y
+CONFIG_QRTR=y
+# CONFIG_QRTR_SMD is not set
+# CONFIG_QRTR_TUN is not set
+CONFIG_QRTR_MHI=m
+CONFIG_CGROUP_NET_PRIO=y
+# CONFIG_CGROUP_NET_CLASSID is not set
+CONFIG_NET_RX_BUSY_POLL=y
+CONFIG_BQL=y
+
+#
+# Network testing
+#
+# end of Network testing
+# end of Networking options
+
+CONFIG_HAMRADIO=y
+
+#
+# Packet Radio protocols
+#
+CONFIG_AX25=m
+# CONFIG_AX25_DAMA_SLAVE is not set
+CONFIG_NETROM=m
+# CONFIG_ROSE is not set
+
+#
+# AX.25 network device drivers
+#
+# CONFIG_BPQETHER is not set
+CONFIG_BAYCOM_SER_FDX=m
+# CONFIG_BAYCOM_SER_HDX is not set
+# CONFIG_BAYCOM_PAR is not set
+# CONFIG_BAYCOM_EPP is not set
+CONFIG_YAM=m
+# end of AX.25 network device drivers
+
+# CONFIG_CAN is not set
+CONFIG_BT=m
+CONFIG_BT_BREDR=y
+CONFIG_BT_RFCOMM=y
+CONFIG_BT_BNEP=y
+# CONFIG_BT_BNEP_MC_FILTER is not set
+CONFIG_BT_BNEP_PROTO_FILTER=y
+# CONFIG_BT_CMTP is not set
+CONFIG_BT_HIDP=m
+# CONFIG_BT_HS is not set
+# CONFIG_BT_LE is not set
+# CONFIG_BT_LEDS is not set
+# CONFIG_BT_MSFTEXT is not set
+# CONFIG_BT_AOSPEXT is not set
+# CONFIG_BT_DEBUGFS is not set
+# CONFIG_BT_SELFTEST is not set
+
+#
+# Bluetooth device drivers
+#
+CONFIG_BT_MTK=m
+# CONFIG_BT_HCIBTUSB is not set
+CONFIG_BT_HCIBCM203X=m
+CONFIG_BT_HCIBPA10X=m
+CONFIG_BT_HCIBFUSB=m
+# CONFIG_BT_HCIVHCI is not set
+# CONFIG_BT_MRVL is not set
+CONFIG_BT_MTKUART=m
+# CONFIG_BT_QCOMSMD is not set
+# CONFIG_BT_VIRTIO is not set
+# end of Bluetooth device drivers
+
+# CONFIG_MCTP is not set
+CONFIG_WIRELESS=y
+CONFIG_CFG80211=m
+CONFIG_NL80211_TESTMODE=y
+CONFIG_CFG80211_DEVELOPER_WARNINGS=y
+CONFIG_CFG80211_CERTIFICATION_ONUS=y
+# CONFIG_CFG80211_REQUIRE_SIGNED_REGDB is not set
+CONFIG_CFG80211_REG_CELLULAR_HINTS=y
+# CONFIG_CFG80211_REG_RELAX_NO_IR is not set
+CONFIG_CFG80211_DEFAULT_PS=y
+CONFIG_CFG80211_DEBUGFS=y
+# CONFIG_CFG80211_CRDA_SUPPORT is not set
+# CONFIG_CFG80211_WEXT is not set
+CONFIG_MAC80211=m
+CONFIG_MAC80211_HAS_RC=y
+CONFIG_MAC80211_RC_MINSTREL=y
+CONFIG_MAC80211_RC_DEFAULT_MINSTREL=y
+CONFIG_MAC80211_RC_DEFAULT="minstrel_ht"
+CONFIG_MAC80211_MESH=y
+CONFIG_MAC80211_LEDS=y
+# CONFIG_MAC80211_DEBUGFS is not set
+CONFIG_MAC80211_MESSAGE_TRACING=y
+CONFIG_MAC80211_DEBUG_MENU=y
+CONFIG_MAC80211_NOINLINE=y
+# CONFIG_MAC80211_VERBOSE_DEBUG is not set
+# CONFIG_MAC80211_MLME_DEBUG is not set
+CONFIG_MAC80211_STA_DEBUG=y
+# CONFIG_MAC80211_HT_DEBUG is not set
+CONFIG_MAC80211_OCB_DEBUG=y
+CONFIG_MAC80211_IBSS_DEBUG=y
+CONFIG_MAC80211_PS_DEBUG=y
+# CONFIG_MAC80211_MPL_DEBUG is not set
+CONFIG_MAC80211_MPATH_DEBUG=y
+CONFIG_MAC80211_MHWMP_DEBUG=y
+CONFIG_MAC80211_MESH_SYNC_DEBUG=y
+# CONFIG_MAC80211_MESH_CSA_DEBUG is not set
+# CONFIG_MAC80211_MESH_PS_DEBUG is not set
+# CONFIG_MAC80211_TDLS_DEBUG is not set
+CONFIG_MAC80211_STA_HASH_MAX_SIZE=0
+# CONFIG_RFKILL is not set
+CONFIG_NET_9P=m
+CONFIG_NET_9P_FD=m
+CONFIG_NET_9P_VIRTIO=m
+CONFIG_NET_9P_DEBUG=y
+CONFIG_CAIF=m
+# CONFIG_CAIF_DEBUG is not set
+CONFIG_CAIF_NETDEV=m
+CONFIG_CAIF_USB=m
+CONFIG_NFC=m
+CONFIG_NFC_DIGITAL=m
+CONFIG_NFC_NCI=m
+CONFIG_NFC_HCI=m
+CONFIG_NFC_SHDLC=y
+
+#
+# Near Field Communication (NFC) devices
+#
+# CONFIG_NFC_SIM is not set
+CONFIG_NFC_PORT100=m
+# CONFIG_NFC_VIRTUAL_NCI is not set
+# CONFIG_NFC_FDP is not set
+# CONFIG_NFC_PN544_I2C is not set
+# CONFIG_NFC_PN533_USB is not set
+# CONFIG_NFC_PN533_I2C is not set
+# CONFIG_NFC_PN532_UART is not set
+CONFIG_NFC_MICROREAD=m
+CONFIG_NFC_MICROREAD_I2C=m
+# CONFIG_NFC_MRVL_USB is not set
+# CONFIG_NFC_ST21NFCA_I2C is not set
+CONFIG_NFC_ST_NCI=m
+CONFIG_NFC_ST_NCI_I2C=m
+CONFIG_NFC_NXP_NCI=m
+# CONFIG_NFC_NXP_NCI_I2C is not set
+CONFIG_NFC_S3FWRN5=m
+CONFIG_NFC_S3FWRN5_I2C=m
+# CONFIG_NFC_S3FWRN82_UART is not set
+# end of Near Field Communication (NFC) devices
+
+CONFIG_PSAMPLE=m
+CONFIG_NET_IFE=y
+CONFIG_LWTUNNEL=y
+CONFIG_NET_SOCK_MSG=y
+CONFIG_PAGE_POOL=y
+# CONFIG_PAGE_POOL_STATS is not set
+CONFIG_FAILOVER=m
+CONFIG_ETHTOOL_NETLINK=y
+# CONFIG_NETDEV_ADDR_LIST_TEST is not set
+
+#
+# Device Drivers
+#
+CONFIG_ARM_AMBA=y
+CONFIG_PCCARD=m
+# CONFIG_PCMCIA is not set
+
+#
+# PC-card bridges
+#
+
+#
+# Generic Driver Options
+#
+CONFIG_AUXILIARY_BUS=y
+# CONFIG_UEVENT_HELPER is not set
+# CONFIG_DEVTMPFS is not set
+# CONFIG_STANDALONE is not set
+CONFIG_PREVENT_FIRMWARE_BUILD=y
+
+#
+# Firmware loader
+#
+CONFIG_FW_LOADER=y
+CONFIG_FW_LOADER_PAGED_BUF=y
+CONFIG_FW_LOADER_SYSFS=y
+CONFIG_EXTRA_FIRMWARE=""
+CONFIG_FW_LOADER_USER_HELPER=y
+# CONFIG_FW_LOADER_USER_HELPER_FALLBACK is not set
+# CONFIG_FW_LOADER_COMPRESS is not set
+# CONFIG_FW_UPLOAD is not set
+# end of Firmware loader
+
+# CONFIG_ALLOW_DEV_COREDUMP is not set
+# CONFIG_DEBUG_DRIVER is not set
+CONFIG_DEBUG_DEVRES=y
+# CONFIG_DEBUG_TEST_DRIVER_REMOVE is not set
+CONFIG_PM_QOS_KUNIT_TEST=y
+CONFIG_TEST_ASYNC_DRIVER_PROBE=m
+# CONFIG_DRIVER_PE_KUNIT_TEST is not set
+CONFIG_GENERIC_CPU_AUTOPROBE=y
+CONFIG_REGMAP=y
+CONFIG_REGMAP_I2C=y
+CONFIG_REGMAP_SPMI=m
+CONFIG_REGMAP_MMIO=y
+CONFIG_REGMAP_IRQ=y
+CONFIG_REGMAP_SOUNDWIRE=m
+CONFIG_REGMAP_SCCB=m
+CONFIG_REGMAP_I3C=m
+CONFIG_DMA_SHARED_BUFFER=y
+CONFIG_DMA_FENCE_TRACE=y
+# end of Generic Driver Options
+
+#
+# Bus devices
+#
+# CONFIG_ARM_INTEGRATOR_LM is not set
+# CONFIG_BRCMSTB_GISB_ARB is not set
+# CONFIG_BT1_APB is not set
+# CONFIG_BT1_AXI is not set
+# CONFIG_HISILICON_LPC is not set
+# CONFIG_INTEL_IXP4XX_EB is not set
+# CONFIG_QCOM_EBI2 is not set
+CONFIG_VEXPRESS_CONFIG=m
+# CONFIG_FSL_MC_BUS is not set
+CONFIG_MHI_BUS=y
+# CONFIG_MHI_BUS_DEBUG is not set
+# CONFIG_MHI_BUS_EP is not set
+# end of Bus devices
+
+# CONFIG_CONNECTOR is not set
+
+#
+# Firmware Drivers
+#
+
+#
+# ARM System Control and Management Interface Protocol
+#
+CONFIG_ARM_SCMI_PROTOCOL=y
+CONFIG_ARM_SCMI_HAVE_TRANSPORT=y
+CONFIG_ARM_SCMI_HAVE_SHMEM=y
+CONFIG_ARM_SCMI_TRANSPORT_MAILBOX=y
+CONFIG_ARM_SCMI_POWER_DOMAIN=y
+# CONFIG_ARM_SCMI_POWER_CONTROL is not set
+# end of ARM System Control and Management Interface Protocol
+
+CONFIG_ARM_SCPI_PROTOCOL=y
+CONFIG_ARM_SCPI_POWER_DOMAIN=m
+CONFIG_FIRMWARE_MEMMAP=y
+# CONFIG_TURRIS_MOX_RWTM is not set
+# CONFIG_BCM47XX_NVRAM is not set
+# CONFIG_GOOGLE_FIRMWARE is not set
+
+#
+# Tegra firmware driver
+#
+# end of Tegra firmware driver
+# end of Firmware Drivers
+
+# CONFIG_GNSS is not set
+CONFIG_MTD=m
+CONFIG_MTD_TESTS=m
+
+#
+# Partition parsers
+#
+CONFIG_MTD_AR7_PARTS=m
+# CONFIG_MTD_BCM63XX_PARTS is not set
+# CONFIG_MTD_BRCM_U_BOOT is not set
+# CONFIG_MTD_CMDLINE_PARTS is not set
+CONFIG_MTD_OF_PARTS=m
+# CONFIG_MTD_OF_PARTS_BCM4908 is not set
+# CONFIG_MTD_OF_PARTS_LINKSYS_NS is not set
+# CONFIG_MTD_PARSER_IMAGETAG is not set
+CONFIG_MTD_AFS_PARTS=m
+# CONFIG_MTD_PARSER_TRX is not set
+# CONFIG_MTD_SHARPSL_PARTS is not set
+CONFIG_MTD_REDBOOT_PARTS=m
+CONFIG_MTD_REDBOOT_DIRECTORY_BLOCK=-1
+CONFIG_MTD_REDBOOT_PARTS_UNALLOCATED=y
+# CONFIG_MTD_REDBOOT_PARTS_READONLY is not set
+# end of Partition parsers
+
+#
+# User Modules And Translation Layers
+#
+CONFIG_MTD_OOPS=m
+CONFIG_MTD_PARTITIONED_MASTER=y
+
+#
+# RAM/ROM/Flash chip drivers
+#
+CONFIG_MTD_CFI=m
+CONFIG_MTD_JEDECPROBE=m
+CONFIG_MTD_GEN_PROBE=m
+CONFIG_MTD_CFI_ADV_OPTIONS=y
+# CONFIG_MTD_CFI_NOSWAP is not set
+CONFIG_MTD_CFI_BE_BYTE_SWAP=y
+# CONFIG_MTD_CFI_LE_BYTE_SWAP is not set
+CONFIG_MTD_CFI_GEOMETRY=y
+# CONFIG_MTD_MAP_BANK_WIDTH_1 is not set
+CONFIG_MTD_MAP_BANK_WIDTH_2=y
+CONFIG_MTD_MAP_BANK_WIDTH_4=y
+# CONFIG_MTD_MAP_BANK_WIDTH_8 is not set
+CONFIG_MTD_MAP_BANK_WIDTH_16=y
+CONFIG_MTD_MAP_BANK_WIDTH_32=y
+# CONFIG_MTD_CFI_I1 is not set
+CONFIG_MTD_CFI_I2=y
+# CONFIG_MTD_CFI_I4 is not set
+CONFIG_MTD_CFI_I8=y
+# CONFIG_MTD_OTP is not set
+CONFIG_MTD_CFI_INTELEXT=m
+CONFIG_MTD_CFI_AMDSTD=m
+CONFIG_MTD_CFI_STAA=m
+CONFIG_MTD_CFI_UTIL=m
+CONFIG_MTD_RAM=m
+# CONFIG_MTD_ROM is not set
+CONFIG_MTD_ABSENT=m
+# end of RAM/ROM/Flash chip drivers
+
+#
+# Mapping drivers for chip access
+#
+CONFIG_MTD_COMPLEX_MAPPINGS=y
+CONFIG_MTD_PHYSMAP=m
+CONFIG_MTD_PHYSMAP_COMPAT=y
+CONFIG_MTD_PHYSMAP_START=0x8000000
+CONFIG_MTD_PHYSMAP_LEN=0
+CONFIG_MTD_PHYSMAP_BANKWIDTH=2
+# CONFIG_MTD_PHYSMAP_OF is not set
+CONFIG_MTD_PHYSMAP_GPIO_ADDR=y
+# CONFIG_MTD_SC520CDP is not set
+# CONFIG_MTD_NETSC520 is not set
+# CONFIG_MTD_TS5500 is not set
+CONFIG_MTD_IMPA7=m
+CONFIG_MTD_PLATRAM=m
+# end of Mapping drivers for chip access
+
+#
+# Self-contained MTD device drivers
+#
+CONFIG_MTD_SPEAR_SMI=m
+CONFIG_MTD_SLRAM=m
+CONFIG_MTD_PHRAM=m
+# CONFIG_MTD_MTDRAM is not set
+
+#
+# Disk-On-Chip Device Drivers
+#
+# CONFIG_MTD_DOCG3 is not set
+# end of Self-contained MTD device drivers
+
+#
+# NAND
+#
+CONFIG_MTD_ONENAND=m
+CONFIG_MTD_ONENAND_VERIFY_WRITE=y
+# CONFIG_MTD_ONENAND_GENERIC is not set
+# CONFIG_MTD_ONENAND_OMAP2 is not set
+# CONFIG_MTD_ONENAND_SAMSUNG is not set
+CONFIG_MTD_ONENAND_OTP=y
+CONFIG_MTD_ONENAND_2X_PROGRAM=y
+# CONFIG_MTD_RAW_NAND is not set
+
+#
+# ECC engine support
+#
+# CONFIG_MTD_NAND_ECC_SW_HAMMING is not set
+# CONFIG_MTD_NAND_ECC_SW_BCH is not set
+# CONFIG_MTD_NAND_ECC_MXIC is not set
+# CONFIG_MTD_NAND_ECC_MEDIATEK is not set
+# end of ECC engine support
+# end of NAND
+
+#
+# LPDDR & LPDDR2 PCM memory drivers
+#
+CONFIG_MTD_LPDDR=m
+CONFIG_MTD_QINFO_PROBE=m
+# CONFIG_MTD_LPDDR2_NVM is not set
+# end of LPDDR & LPDDR2 PCM memory drivers
+
+CONFIG_MTD_UBI=m
+CONFIG_MTD_UBI_WL_THRESHOLD=4096
+CONFIG_MTD_UBI_BEB_LIMIT=20
+# CONFIG_MTD_UBI_FASTMAP is not set
+CONFIG_MTD_UBI_GLUEBI=m
+CONFIG_MTD_HYPERBUS=m
+# CONFIG_HBMC_AM654 is not set
+CONFIG_DTC=y
+CONFIG_OF=y
+CONFIG_OF_UNITTEST=y
+# CONFIG_OF_ALL_DTBS is not set
+CONFIG_OF_FLATTREE=y
+CONFIG_OF_EARLY_FLATTREE=y
+CONFIG_OF_KOBJ=y
+CONFIG_OF_DYNAMIC=y
+CONFIG_OF_ADDRESS=y
+CONFIG_OF_IRQ=y
+CONFIG_OF_RESERVED_MEM=y
+CONFIG_OF_RESOLVE=y
+CONFIG_OF_OVERLAY=y
+CONFIG_ARCH_MIGHT_HAVE_PC_PARPORT=y
+CONFIG_PARPORT=m
+CONFIG_PARPORT_PC=m
+# CONFIG_PARPORT_PC_FIFO is not set
+# CONFIG_PARPORT_PC_SUPERIO is not set
+CONFIG_PARPORT_AX88796=m
+CONFIG_PARPORT_1284=y
+CONFIG_PARPORT_NOT_PC=y
+
+#
+# NVME Support
+#
+# end of NVME Support
+
+#
+# Misc devices
+#
+CONFIG_SENSORS_LIS3LV02D=m
+CONFIG_AD525X_DPOT=y
+# CONFIG_AD525X_DPOT_I2C is not set
+CONFIG_DUMMY_IRQ=y
+CONFIG_ICS932S401=m
+# CONFIG_ATMEL_SSC is not set
+CONFIG_ENCLOSURE_SERVICES=m
+# CONFIG_HI6421V600_IRQ is not set
+# CONFIG_QCOM_COINCELL is not set
+# CONFIG_QCOM_FASTRPC is not set
+# CONFIG_APDS9802ALS is not set
+CONFIG_ISL29003=y
+CONFIG_ISL29020=y
+# CONFIG_SENSORS_TSL2550 is not set
+CONFIG_SENSORS_BH1770=y
+CONFIG_SENSORS_APDS990X=m
+CONFIG_HMC6352=y
+# CONFIG_DS1682 is not set
+CONFIG_SRAM=y
+CONFIG_SRAM_EXEC=y
+CONFIG_XILINX_SDFEC=m
+CONFIG_MISC_RTSX=m
+CONFIG_HISI_HIKEY_USB=m
+# CONFIG_OPEN_DICE is not set
+# CONFIG_VCPU_STALL_DETECTOR is not set
+# CONFIG_C2PORT is not set
+
+#
+# EEPROM support
+#
+# CONFIG_EEPROM_AT24 is not set
+CONFIG_EEPROM_LEGACY=m
+# CONFIG_EEPROM_MAX6875 is not set
+# CONFIG_EEPROM_93CX6 is not set
+# CONFIG_EEPROM_IDT_89HPESX is not set
+CONFIG_EEPROM_EE1004=y
+# end of EEPROM support
+
+#
+# Texas Instruments shared transport line discipline
+#
+# end of Texas Instruments shared transport line discipline
+
+CONFIG_SENSORS_LIS3_I2C=m
+CONFIG_ALTERA_STAPL=y
+CONFIG_ECHO=m
+CONFIG_MISC_RTSX_USB=m
+# CONFIG_PVPANIC is not set
+# end of Misc devices
+
+#
+# SCSI device support
+#
+# end of SCSI device support
+
+#
+# IEEE 1394 (FireWire) support
+#
+# CONFIG_FIREWIRE is not set
+# end of IEEE 1394 (FireWire) support
+
+CONFIG_NETDEVICES=y
+CONFIG_MII=y
+# CONFIG_NET_CORE is not set
+CONFIG_CAIF_DRIVERS=y
+CONFIG_CAIF_VIRTIO=m
+CONFIG_ETHERNET=y
+# CONFIG_NET_VENDOR_ACTIONS is not set
+CONFIG_NET_VENDOR_ALACRITECH=y
+CONFIG_ALTERA_TSE=y
+# CONFIG_NET_VENDOR_AMAZON is not set
+# CONFIG_NET_XGENE is not set
+# CONFIG_NET_XGENE_V2 is not set
+# CONFIG_NET_VENDOR_AQUANTIA is not set
+CONFIG_NET_VENDOR_ARC=y
+# CONFIG_ARC_EMAC is not set
+CONFIG_NET_VENDOR_ASIX=y
+CONFIG_NET_VENDOR_BROADCOM=y
+# CONFIG_B44 is not set
+# CONFIG_BCM4908_ENET is not set
+CONFIG_BCMGENET=m
+# CONFIG_BGMAC_PLATFORM is not set
+CONFIG_SYSTEMPORT=m
+# CONFIG_NET_VENDOR_CADENCE is not set
+# CONFIG_NET_CALXEDA_XGMAC is not set
+# CONFIG_NET_VENDOR_CAVIUM is not set
+CONFIG_NET_VENDOR_CIRRUS=y
+# CONFIG_CS89x0_PLATFORM is not set
+CONFIG_EP93XX_ETH=y
+# CONFIG_NET_VENDOR_CORTINA is not set
+CONFIG_NET_VENDOR_DAVICOM=y
+CONFIG_DM9000=y
+# CONFIG_DM9000_FORCE_SIMPLE_PHY_POLL is not set
+# CONFIG_DNET is not set
+CONFIG_NET_VENDOR_ENGLEDER=y
+# CONFIG_TSNEP is not set
+# CONFIG_NET_VENDOR_EZCHIP is not set
+# CONFIG_NET_VENDOR_FARADAY is not set
+CONFIG_NET_VENDOR_FREESCALE=y
+# CONFIG_FEC is not set
+# CONFIG_FSL_FMAN is not set
+# CONFIG_FSL_PQ_MDIO is not set
+# CONFIG_FSL_XGMAC_MDIO is not set
+# CONFIG_GIANFAR is not set
+# CONFIG_FSL_ENETC_IERB is not set
+CONFIG_NET_VENDOR_FUNGIBLE=y
+# CONFIG_NET_VENDOR_GOOGLE is not set
+# CONFIG_NET_VENDOR_HISILICON is not set
+CONFIG_NET_VENDOR_HUAWEI=y
+# CONFIG_NET_VENDOR_INTEL is not set
+CONFIG_NET_VENDOR_WANGXUN=y
+# CONFIG_KORINA is not set
+CONFIG_NET_VENDOR_LITEX=y
+# CONFIG_LITEX_LITEETH is not set
+CONFIG_NET_VENDOR_MARVELL=y
+# CONFIG_MVMDIO is not set
+# CONFIG_MVNETA is not set
+# CONFIG_MVPP2 is not set
+# CONFIG_PXA168_ETH is not set
+# CONFIG_NET_VENDOR_MEDIATEK is not set
+# CONFIG_NET_VENDOR_MELLANOX is not set
+# CONFIG_NET_VENDOR_MICREL is not set
+CONFIG_NET_VENDOR_MICROCHIP=y
+# CONFIG_NET_VENDOR_MICROSEMI is not set
+CONFIG_NET_VENDOR_MICROSOFT=y
+# CONFIG_NET_VENDOR_NI is not set
+CONFIG_NET_VENDOR_NATSEMI=y
+CONFIG_NET_VENDOR_NETRONOME=y
+# CONFIG_NET_VENDOR_8390 is not set
+# CONFIG_LPC_ENET is not set
+CONFIG_ETHOC=m
+CONFIG_NET_VENDOR_PENSANDO=y
+# CONFIG_NET_VENDOR_QUALCOMM is not set
+CONFIG_NET_VENDOR_RENESAS=y
+# CONFIG_SH_ETH is not set
+# CONFIG_RAVB is not set
+# CONFIG_NET_VENDOR_ROCKER is not set
+# CONFIG_NET_VENDOR_SAMSUNG is not set
+CONFIG_NET_VENDOR_SEEQ=y
+CONFIG_NET_VENDOR_SOLARFLARE=y
+# CONFIG_NET_VENDOR_SMSC is not set
+CONFIG_NET_VENDOR_SOCIONEXT=y
+# CONFIG_SNI_AVE is not set
+# CONFIG_SNI_NETSEC is not set
+# CONFIG_NET_VENDOR_STMICRO is not set
+CONFIG_NET_VENDOR_SUNPLUS=y
+# CONFIG_SP7021_EMAC is not set
+CONFIG_NET_VENDOR_SYNOPSYS=y
+# CONFIG_DWC_XLGMAC is not set
+CONFIG_NET_VENDOR_VERTEXCOM=y
+# CONFIG_NET_VENDOR_VIA is not set
+# CONFIG_NET_VENDOR_WIZNET is not set
+# CONFIG_NET_VENDOR_XILINX is not set
+CONFIG_PHYLINK=y
+CONFIG_PHYLIB=y
+CONFIG_SWPHY=y
+# CONFIG_LED_TRIGGER_PHY is not set
+CONFIG_FIXED_PHY=y
+# CONFIG_SFP is not set
+
+#
+# MII PHY device drivers
+#
+CONFIG_AMD_PHY=m
+# CONFIG_MESON_GXL_PHY is not set
+CONFIG_ADIN_PHY=y
+# CONFIG_ADIN1100_PHY is not set
+CONFIG_AQUANTIA_PHY=m
+CONFIG_AX88796B_PHY=m
+CONFIG_BROADCOM_PHY=m
+CONFIG_BCM54140_PHY=m
+# CONFIG_BCM63XX_PHY is not set
+CONFIG_BCM7XXX_PHY=m
+CONFIG_BCM84881_PHY=y
+# CONFIG_BCM87XX_PHY is not set
+CONFIG_BCM_NET_PHYLIB=m
+CONFIG_CICADA_PHY=y
+# CONFIG_CORTINA_PHY is not set
+# CONFIG_DAVICOM_PHY is not set
+CONFIG_ICPLUS_PHY=y
+CONFIG_LXT_PHY=m
+CONFIG_INTEL_XWAY_PHY=y
+CONFIG_LSI_ET1011C_PHY=m
+# CONFIG_MARVELL_PHY is not set
+CONFIG_MARVELL_10G_PHY=m
+# CONFIG_MARVELL_88X2222_PHY is not set
+CONFIG_MAXLINEAR_GPHY=m
+# CONFIG_MEDIATEK_GE_PHY is not set
+CONFIG_MICREL_PHY=m
+CONFIG_MICROCHIP_PHY=m
+# CONFIG_MICROCHIP_T1_PHY is not set
+CONFIG_MICROSEMI_PHY=y
+# CONFIG_MOTORCOMM_PHY is not set
+# CONFIG_NATIONAL_PHY is not set
+# CONFIG_NXP_C45_TJA11XX_PHY is not set
+CONFIG_NXP_TJA11XX_PHY=m
+CONFIG_QSEMI_PHY=y
+# CONFIG_REALTEK_PHY is not set
+CONFIG_RENESAS_PHY=y
+CONFIG_ROCKCHIP_PHY=m
+# CONFIG_SMSC_PHY is not set
+# CONFIG_STE10XP is not set
+CONFIG_TERANETICS_PHY=m
+# CONFIG_DP83822_PHY is not set
+CONFIG_DP83TC811_PHY=m
+# CONFIG_DP83848_PHY is not set
+CONFIG_DP83867_PHY=y
+CONFIG_DP83869_PHY=m
+# CONFIG_DP83TD510_PHY is not set
+# CONFIG_VITESSE_PHY is not set
+# CONFIG_XILINX_GMII2RGMII is not set
+# CONFIG_PSE_CONTROLLER is not set
+CONFIG_MDIO_DEVICE=y
+CONFIG_MDIO_BUS=y
+CONFIG_FWNODE_MDIO=y
+CONFIG_OF_MDIO=y
+CONFIG_MDIO_DEVRES=y
+# CONFIG_MDIO_SUN4I is not set
+# CONFIG_MDIO_XGENE is not set
+# CONFIG_MDIO_ASPEED is not set
+# CONFIG_MDIO_BITBANG is not set
+# CONFIG_MDIO_BCM_IPROC is not set
+CONFIG_MDIO_BCM_UNIMAC=y
+CONFIG_MDIO_HISI_FEMAC=m
+CONFIG_MDIO_MVUSB=m
+CONFIG_MDIO_MSCC_MIIM=m
+# CONFIG_MDIO_MOXART is not set
+# CONFIG_MDIO_OCTEON is not set
+CONFIG_MDIO_IPQ4019=m
+CONFIG_MDIO_IPQ8064=m
+
+#
+# MDIO Multiplexers
+#
+CONFIG_MDIO_BUS_MUX=y
+# CONFIG_MDIO_BUS_MUX_MESON_G12A is not set
+# CONFIG_MDIO_BUS_MUX_BCM6368 is not set
+# CONFIG_MDIO_BUS_MUX_BCM_IPROC is not set
+CONFIG_MDIO_BUS_MUX_GPIO=y
+# CONFIG_MDIO_BUS_MUX_MULTIPLEXER is not set
+CONFIG_MDIO_BUS_MUX_MMIOREG=m
+
+#
+# PCS device drivers
+#
+# CONFIG_PCS_RZN1_MIIC is not set
+CONFIG_PCS_ALTERA_TSE=y
+# end of PCS device drivers
+
+CONFIG_PLIP=m
+CONFIG_PPP=y
+CONFIG_PPP_BSDCOMP=y
+CONFIG_PPP_DEFLATE=m
+CONFIG_PPP_FILTER=y
+CONFIG_PPP_MPPE=y
+CONFIG_PPP_MULTILINK=y
+# CONFIG_PPPOE is not set
+CONFIG_SLHC=y
+
+#
+# Host-side USB support is needed for USB Network Adapter support
+#
+CONFIG_USB_NET_DRIVERS=m
+CONFIG_USB_CATC=m
+CONFIG_USB_KAWETH=m
+CONFIG_USB_PEGASUS=m
+CONFIG_USB_RTL8150=m
+# CONFIG_USB_RTL8152 is not set
+CONFIG_USB_LAN78XX=m
+# CONFIG_USB_USBNET is not set
+CONFIG_USB_IPHETH=m
+# CONFIG_WLAN is not set
+# CONFIG_WAN is not set
+# CONFIG_IEEE802154_DRIVERS is not set
+
+#
+# Wireless WAN
+#
+# CONFIG_WWAN is not set
+# end of Wireless WAN
+
+# CONFIG_NET_FAILOVER is not set
+CONFIG_ISDN=y
+CONFIG_ISDN_CAPI=y
+# CONFIG_MISDN is not set
+
+#
+# Input device support
+#
+CONFIG_INPUT=m
+# CONFIG_INPUT_LEDS is not set
+CONFIG_INPUT_FF_MEMLESS=m
+CONFIG_INPUT_SPARSEKMAP=m
+CONFIG_INPUT_MATRIXKMAP=m
+CONFIG_INPUT_VIVALDIFMAP=m
+
+#
+# Userland interfaces
+#
+# CONFIG_INPUT_MOUSEDEV is not set
+CONFIG_INPUT_JOYDEV=m
+CONFIG_INPUT_EVDEV=m
+CONFIG_INPUT_EVBUG=m
+CONFIG_INPUT_APMPOWER=m
+
+#
+# Input Device Drivers
+#
+CONFIG_INPUT_KEYBOARD=y
+# CONFIG_KEYBOARD_ADC is not set
+CONFIG_KEYBOARD_ADP5520=m
+CONFIG_KEYBOARD_ADP5588=m
+CONFIG_KEYBOARD_ADP5589=m
+CONFIG_KEYBOARD_ATKBD=m
+CONFIG_KEYBOARD_QT1050=m
+# CONFIG_KEYBOARD_QT1070 is not set
+# CONFIG_KEYBOARD_QT2160 is not set
+# CONFIG_KEYBOARD_CLPS711X is not set
+CONFIG_KEYBOARD_DLINK_DIR685=m
+CONFIG_KEYBOARD_LKKBD=m
+CONFIG_KEYBOARD_EP93XX=m
+# CONFIG_KEYBOARD_GPIO is not set
+CONFIG_KEYBOARD_GPIO_POLLED=m
+# CONFIG_KEYBOARD_TCA6416 is not set
+# CONFIG_KEYBOARD_TCA8418 is not set
+# CONFIG_KEYBOARD_MATRIX is not set
+# CONFIG_KEYBOARD_LM8323 is not set
+CONFIG_KEYBOARD_LM8333=m
+CONFIG_KEYBOARD_MAX7359=m
+CONFIG_KEYBOARD_MCS=m
+CONFIG_KEYBOARD_MPR121=m
+# CONFIG_KEYBOARD_SNVS_PWRKEY is not set
+# CONFIG_KEYBOARD_IMX is not set
+# CONFIG_KEYBOARD_NEWTON is not set
+CONFIG_KEYBOARD_OPENCORES=m
+CONFIG_KEYBOARD_PMIC8XXX=m
+CONFIG_KEYBOARD_SAMSUNG=m
+# CONFIG_KEYBOARD_GOLDFISH_EVENTS is not set
+CONFIG_KEYBOARD_STOWAWAY=m
+# CONFIG_KEYBOARD_ST_KEYSCAN is not set
+# CONFIG_KEYBOARD_SUNKBD is not set
+# CONFIG_KEYBOARD_SH_KEYSC is not set
+CONFIG_KEYBOARD_STMPE=m
+# CONFIG_KEYBOARD_IQS62X is not set
+CONFIG_KEYBOARD_OMAP4=m
+# CONFIG_KEYBOARD_TM2_TOUCHKEY is not set
+CONFIG_KEYBOARD_XTKBD=m
+CONFIG_KEYBOARD_CAP11XX=m
+# CONFIG_KEYBOARD_BCM is not set
+# CONFIG_KEYBOARD_MT6779 is not set
+# CONFIG_KEYBOARD_MTK_PMIC is not set
+# CONFIG_KEYBOARD_CYPRESS_SF is not set
+CONFIG_INPUT_MOUSE=y
+# CONFIG_MOUSE_PS2 is not set
+CONFIG_MOUSE_SERIAL=m
+CONFIG_MOUSE_APPLETOUCH=m
+CONFIG_MOUSE_BCM5974=m
+# CONFIG_MOUSE_CYAPA is not set
+CONFIG_MOUSE_ELAN_I2C=m
+# CONFIG_MOUSE_ELAN_I2C_I2C is not set
+CONFIG_MOUSE_ELAN_I2C_SMBUS=y
+CONFIG_MOUSE_VSXXXAA=m
+# CONFIG_MOUSE_GPIO is not set
+CONFIG_MOUSE_SYNAPTICS_I2C=m
+CONFIG_MOUSE_SYNAPTICS_USB=m
+# CONFIG_INPUT_JOYSTICK is not set
+CONFIG_INPUT_TABLET=y
+CONFIG_TABLET_USB_ACECAD=m
+CONFIG_TABLET_USB_AIPTEK=m
+# CONFIG_TABLET_USB_HANWANG is not set
+CONFIG_TABLET_USB_KBTAB=m
+CONFIG_TABLET_USB_PEGASUS=m
+CONFIG_TABLET_SERIAL_WACOM4=m
+# CONFIG_INPUT_TOUCHSCREEN is not set
+CONFIG_INPUT_MISC=y
+CONFIG_INPUT_88PM860X_ONKEY=m
+# CONFIG_INPUT_AD714X is not set
+CONFIG_INPUT_ARIZONA_HAPTICS=m
+# CONFIG_INPUT_ATMEL_CAPTOUCH is not set
+CONFIG_INPUT_BMA150=m
+CONFIG_INPUT_E3X0_BUTTON=m
+CONFIG_INPUT_PM8XXX_VIBRATOR=m
+CONFIG_INPUT_PMIC8XXX_PWRKEY=m
+CONFIG_INPUT_MAX77650_ONKEY=m
+CONFIG_INPUT_MAX77693_HAPTIC=m
+CONFIG_INPUT_MMA8450=m
+CONFIG_INPUT_GPIO_BEEPER=m
+# CONFIG_INPUT_GPIO_DECODER is not set
+# CONFIG_INPUT_GPIO_VIBRA is not set
+CONFIG_INPUT_ATI_REMOTE2=m
+CONFIG_INPUT_KEYSPAN_REMOTE=m
+# CONFIG_INPUT_KXTJ9 is not set
+CONFIG_INPUT_POWERMATE=m
+CONFIG_INPUT_YEALINK=m
+# CONFIG_INPUT_CM109 is not set
+CONFIG_INPUT_RETU_PWRBUTTON=m
+CONFIG_INPUT_TPS65218_PWRBUTTON=m
+CONFIG_INPUT_AXP20X_PEK=m
+# CONFIG_INPUT_UINPUT is not set
+CONFIG_INPUT_PCF50633_PMU=m
+CONFIG_INPUT_PCF8574=m
+# CONFIG_INPUT_PWM_BEEPER is not set
+CONFIG_INPUT_PWM_VIBRA=m
+# CONFIG_INPUT_GPIO_ROTARY_ENCODER is not set
+# CONFIG_INPUT_DA7280_HAPTICS is not set
+CONFIG_INPUT_DA9052_ONKEY=m
+CONFIG_INPUT_DA9055_ONKEY=m
+CONFIG_INPUT_DA9063_ONKEY=m
+CONFIG_INPUT_WM831X_ON=m
+CONFIG_INPUT_ADXL34X=m
+# CONFIG_INPUT_ADXL34X_I2C is not set
+# CONFIG_INPUT_IBM_PANEL is not set
+CONFIG_INPUT_IMS_PCU=m
+CONFIG_INPUT_IQS269A=m
+# CONFIG_INPUT_IQS626A is not set
+# CONFIG_INPUT_IQS7222 is not set
+CONFIG_INPUT_CMA3000=m
+CONFIG_INPUT_CMA3000_I2C=m
+CONFIG_INPUT_DRV260X_HAPTICS=m
+CONFIG_INPUT_DRV2665_HAPTICS=m
+# CONFIG_INPUT_DRV2667_HAPTICS is not set
+# CONFIG_INPUT_HISI_POWERKEY is not set
+# CONFIG_INPUT_RAVE_SP_PWRBUTTON is not set
+# CONFIG_INPUT_SC27XX_VIBRA is not set
+# CONFIG_INPUT_RT5120_PWRKEY is not set
+CONFIG_RMI4_CORE=m
+CONFIG_RMI4_I2C=m
+# CONFIG_RMI4_SMB is not set
+# CONFIG_RMI4_F03 is not set
+# CONFIG_RMI4_F11 is not set
+# CONFIG_RMI4_F12 is not set
+CONFIG_RMI4_F30=y
+# CONFIG_RMI4_F34 is not set
+# CONFIG_RMI4_F3A is not set
+# CONFIG_RMI4_F54 is not set
+# CONFIG_RMI4_F55 is not set
+
+#
+# Hardware I/O ports
+#
+CONFIG_SERIO=m
+CONFIG_SERIO_PARKBD=m
+CONFIG_SERIO_AMBAKMI=m
+CONFIG_SERIO_LIBPS2=m
+CONFIG_SERIO_RAW=m
+CONFIG_SERIO_ALTERA_PS2=m
+# CONFIG_SERIO_PS2MULT is not set
+CONFIG_SERIO_ARC_PS2=m
+CONFIG_SERIO_APBPS2=m
+# CONFIG_SERIO_OLPC_APSP is not set
+# CONFIG_SERIO_SUN4I_PS2 is not set
+# CONFIG_SERIO_GPIO_PS2 is not set
+CONFIG_USERIO=m
+CONFIG_GAMEPORT=m
+# CONFIG_GAMEPORT_NS558 is not set
+CONFIG_GAMEPORT_L4=m
+# end of Hardware I/O ports
+# end of Input device support
+
+#
+# Character devices
+#
+# CONFIG_TTY is not set
+CONFIG_SERIAL_DEV_BUS=m
+CONFIG_PRINTER=m
+CONFIG_LP_CONSOLE=y
+CONFIG_PPDEV=m
+CONFIG_IPMI_HANDLER=m
+CONFIG_IPMI_PLAT_DATA=y
+# CONFIG_IPMI_PANIC_EVENT is not set
+# CONFIG_IPMI_DEVICE_INTERFACE is not set
+CONFIG_IPMI_SI=m
+# CONFIG_IPMI_SSIF is not set
+# CONFIG_IPMI_IPMB is not set
+# CONFIG_IPMI_WATCHDOG is not set
+CONFIG_IPMI_POWEROFF=m
+# CONFIG_ASPEED_KCS_IPMI_BMC is not set
+# CONFIG_NPCM7XX_KCS_IPMI_BMC is not set
+# CONFIG_ASPEED_BT_IPMI_BMC is not set
+CONFIG_IPMB_DEVICE_INTERFACE=m
+CONFIG_HW_RANDOM=y
+CONFIG_HW_RANDOM_TIMERIOMEM=m
+CONFIG_HW_RANDOM_ATMEL=y
+CONFIG_HW_RANDOM_BA431=m
+CONFIG_HW_RANDOM_BCM2835=y
+CONFIG_HW_RANDOM_IPROC_RNG200=y
+CONFIG_HW_RANDOM_IXP4XX=y
+CONFIG_HW_RANDOM_OMAP=y
+CONFIG_HW_RANDOM_OMAP3_ROM=y
+CONFIG_HW_RANDOM_VIRTIO=m
+CONFIG_HW_RANDOM_IMX_RNGC=y
+CONFIG_HW_RANDOM_NOMADIK=y
+CONFIG_HW_RANDOM_STM32=y
+CONFIG_HW_RANDOM_MESON=y
+CONFIG_HW_RANDOM_MTK=y
+CONFIG_HW_RANDOM_EXYNOS=y
+CONFIG_HW_RANDOM_NPCM=y
+CONFIG_HW_RANDOM_KEYSTONE=y
+# CONFIG_HW_RANDOM_CCTRNG is not set
+CONFIG_HW_RANDOM_XIPHERA=y
+# CONFIG_DEVMEM is not set
+CONFIG_TCG_TPM=y
+# CONFIG_HW_RANDOM_TPM is not set
+CONFIG_TCG_TIS_CORE=y
+CONFIG_TCG_TIS=y
+# CONFIG_TCG_TIS_I2C is not set
+# CONFIG_TCG_TIS_SYNQUACER is not set
+# CONFIG_TCG_TIS_I2C_CR50 is not set
+CONFIG_TCG_TIS_I2C_ATMEL=y
+CONFIG_TCG_TIS_I2C_INFINEON=m
+CONFIG_TCG_TIS_I2C_NUVOTON=m
+CONFIG_TCG_VTPM_PROXY=m
+# CONFIG_TCG_TIS_ST33ZP24_I2C is not set
+CONFIG_XILLYBUS_CLASS=y
+CONFIG_XILLYBUS=y
+# CONFIG_XILLYBUS_OF is not set
+# CONFIG_XILLYUSB is not set
+CONFIG_RANDOM_TRUST_CPU=y
+CONFIG_RANDOM_TRUST_BOOTLOADER=y
+# end of Character devices
+
+#
+# I2C support
+#
+CONFIG_I2C=y
+CONFIG_I2C_BOARDINFO=y
+CONFIG_I2C_COMPAT=y
+CONFIG_I2C_CHARDEV=m
+CONFIG_I2C_MUX=y
+
+#
+# Multiplexer I2C Chip support
+#
+CONFIG_I2C_ARB_GPIO_CHALLENGE=y
+CONFIG_I2C_MUX_GPIO=y
+CONFIG_I2C_MUX_GPMUX=y
+CONFIG_I2C_MUX_LTC4306=y
+CONFIG_I2C_MUX_PCA9541=y
+CONFIG_I2C_MUX_PCA954x=y
+# CONFIG_I2C_MUX_PINCTRL is not set
+# CONFIG_I2C_MUX_REG is not set
+CONFIG_I2C_DEMUX_PINCTRL=m
+CONFIG_I2C_MUX_MLXCPLD=y
+# end of Multiplexer I2C Chip support
+
+CONFIG_I2C_HELPER_AUTO=y
+CONFIG_I2C_SMBUS=m
+CONFIG_I2C_ALGOBIT=y
+
+#
+# I2C Hardware Bus support
+#
+# CONFIG_I2C_HIX5HD2 is not set
+
+#
+# I2C system bus drivers (mostly embedded / system-on-chip)
+#
+# CONFIG_I2C_ALTERA is not set
+# CONFIG_I2C_ASPEED is not set
+# CONFIG_I2C_AT91 is not set
+# CONFIG_I2C_AXXIA is not set
+# CONFIG_I2C_BCM2835 is not set
+# CONFIG_I2C_BCM_IPROC is not set
+# CONFIG_I2C_BCM_KONA is not set
+CONFIG_I2C_BRCMSTB=y
+# CONFIG_I2C_CADENCE is not set
+CONFIG_I2C_CBUS_GPIO=m
+# CONFIG_I2C_DAVINCI is not set
+# CONFIG_I2C_DESIGNWARE_PLATFORM is not set
+# CONFIG_I2C_DIGICOLOR is not set
+CONFIG_I2C_EMEV2=m
+# CONFIG_I2C_EXYNOS5 is not set
+CONFIG_I2C_GPIO=y
+# CONFIG_I2C_GPIO_FAULT_INJECTOR is not set
+# CONFIG_I2C_HIGHLANDER is not set
+# CONFIG_I2C_HISI is not set
+# CONFIG_I2C_IMG is not set
+# CONFIG_I2C_IMX is not set
+# CONFIG_I2C_IMX_LPI2C is not set
+# CONFIG_I2C_IOP3XX is not set
+# CONFIG_I2C_JZ4780 is not set
+# CONFIG_I2C_KEMPLD is not set
+# CONFIG_I2C_LPC2K is not set
+# CONFIG_I2C_MESON is not set
+# CONFIG_I2C_MICROCHIP_CORE is not set
+# CONFIG_I2C_MT65XX is not set
+# CONFIG_I2C_MT7621 is not set
+# CONFIG_I2C_MV64XXX is not set
+# CONFIG_I2C_MXS is not set
+# CONFIG_I2C_NOMADIK is not set
+# CONFIG_I2C_NPCM is not set
+# CONFIG_I2C_OCORES is not set
+# CONFIG_I2C_OMAP is not set
+# CONFIG_I2C_OWL is not set
+# CONFIG_I2C_APPLE is not set
+# CONFIG_I2C_PCA_PLATFORM is not set
+# CONFIG_I2C_PNX is not set
+# CONFIG_I2C_PXA is not set
+# CONFIG_I2C_QCOM_CCI is not set
+# CONFIG_I2C_QUP is not set
+# CONFIG_I2C_RIIC is not set
+# CONFIG_I2C_RK3X is not set
+# CONFIG_I2C_RZV2M is not set
+# CONFIG_I2C_S3C2410 is not set
+# CONFIG_I2C_SH_MOBILE is not set
+# CONFIG_I2C_SIMTEC is not set
+# CONFIG_I2C_SPRD is not set
+# CONFIG_I2C_ST is not set
+# CONFIG_I2C_STM32F4 is not set
+# CONFIG_I2C_STM32F7 is not set
+# CONFIG_I2C_SUN6I_P2WI is not set
+# CONFIG_I2C_SYNQUACER is not set
+# CONFIG_I2C_TEGRA is not set
+# CONFIG_I2C_TEGRA_BPMP is not set
+# CONFIG_I2C_UNIPHIER is not set
+# CONFIG_I2C_UNIPHIER_F is not set
+# CONFIG_I2C_VERSATILE is not set
+# CONFIG_I2C_WMT is not set
+CONFIG_I2C_XILINX=y
+# CONFIG_I2C_XLP9XX is not set
+# CONFIG_I2C_RCAR is not set
+
+#
+# External I2C/SMBus adapter drivers
+#
+# CONFIG_I2C_DIOLAN_U2C is not set
+# CONFIG_I2C_CP2615 is not set
+CONFIG_I2C_PARPORT=m
+# CONFIG_I2C_ROBOTFUZZ_OSIF is not set
+CONFIG_I2C_TINY_USB=m
+
+#
+# Other I2C/SMBus bus drivers
+#
+# CONFIG_I2C_MLXCPLD is not set
+# CONFIG_I2C_FSI is not set
+# CONFIG_I2C_VIRTIO is not set
+# end of I2C Hardware Bus support
+
+CONFIG_I2C_STUB=m
+CONFIG_I2C_SLAVE=y
+CONFIG_I2C_SLAVE_EEPROM=y
+# CONFIG_I2C_SLAVE_TESTUNIT is not set
+CONFIG_I2C_DEBUG_CORE=y
+CONFIG_I2C_DEBUG_ALGO=y
+CONFIG_I2C_DEBUG_BUS=y
+# end of I2C support
+
+CONFIG_I3C=y
+CONFIG_CDNS_I3C_MASTER=m
+# CONFIG_DW_I3C_MASTER is not set
+# CONFIG_SVC_I3C_MASTER is not set
+# CONFIG_MIPI_I3C_HCI is not set
+# CONFIG_SPI is not set
+CONFIG_SPMI=m
+CONFIG_SPMI_HISI3670=m
+# CONFIG_SPMI_MSM_PMIC_ARB is not set
+# CONFIG_SPMI_MTK_PMIF is not set
+CONFIG_HSI=m
+CONFIG_HSI_BOARDINFO=y
+
+#
+# HSI controllers
+#
+# CONFIG_OMAP_SSI is not set
+
+#
+# HSI clients
+#
+CONFIG_HSI_CHAR=m
+CONFIG_PPS=m
+# CONFIG_PPS_DEBUG is not set
+# CONFIG_NTP_PPS is not set
+
+#
+# PPS clients support
+#
+CONFIG_PPS_CLIENT_KTIMER=m
+CONFIG_PPS_CLIENT_PARPORT=m
+# CONFIG_PPS_CLIENT_GPIO is not set
+
+#
+# PPS generators support
+#
+
+#
+# PTP clock support
+#
+CONFIG_PTP_1588_CLOCK=m
+CONFIG_PTP_1588_CLOCK_OPTIONAL=m
+CONFIG_PTP_1588_CLOCK_DTE=m
+CONFIG_PTP_1588_CLOCK_QORIQ=m
+
+#
+# Enable PHYLIB and NETWORK_PHY_TIMESTAMPING to see the additional clocks.
+#
+CONFIG_PTP_1588_CLOCK_IDT82P33=m
+CONFIG_PTP_1588_CLOCK_IDTCM=m
+# end of PTP clock support
+
+CONFIG_PINCTRL=y
+CONFIG_GENERIC_PINCTRL_GROUPS=y
+CONFIG_PINMUX=y
+CONFIG_GENERIC_PINMUX_FUNCTIONS=y
+CONFIG_PINCONF=y
+CONFIG_GENERIC_PINCONF=y
+# CONFIG_DEBUG_PINCTRL is not set
+# CONFIG_PINCTRL_AMD is not set
+CONFIG_PINCTRL_AS3722=m
+# CONFIG_PINCTRL_AT91PIO4 is not set
+CONFIG_PINCTRL_AXP209=m
+# CONFIG_PINCTRL_BM1880 is not set
+# CONFIG_PINCTRL_CY8C95X0 is not set
+# CONFIG_PINCTRL_DA850_PUPD is not set
+CONFIG_PINCTRL_DA9062=m
+# CONFIG_PINCTRL_EQUILIBRIUM is not set
+# CONFIG_PINCTRL_INGENIC is not set
+# CONFIG_PINCTRL_LPC18XX is not set
+CONFIG_PINCTRL_MAX77620=m
+CONFIG_PINCTRL_MCP23S08_I2C=m
+CONFIG_PINCTRL_MCP23S08=m
+# CONFIG_PINCTRL_MICROCHIP_SGPIO is not set
+CONFIG_PINCTRL_OCELOT=y
+# CONFIG_PINCTRL_PISTACHIO is not set
+# CONFIG_PINCTRL_ROCKCHIP is not set
+CONFIG_PINCTRL_SINGLE=y
+CONFIG_PINCTRL_STMFX=m
+CONFIG_PINCTRL_SX150X=y
+# CONFIG_PINCTRL_OWL is not set
+# CONFIG_PINCTRL_ASPEED_G4 is not set
+# CONFIG_PINCTRL_ASPEED_G5 is not set
+# CONFIG_PINCTRL_ASPEED_G6 is not set
+# CONFIG_PINCTRL_BCM281XX is not set
+# CONFIG_PINCTRL_BCM2835 is not set
+# CONFIG_PINCTRL_BCM4908 is not set
+# CONFIG_PINCTRL_BCM6318 is not set
+# CONFIG_PINCTRL_BCM6328 is not set
+# CONFIG_PINCTRL_BCM6358 is not set
+# CONFIG_PINCTRL_BCM6362 is not set
+# CONFIG_PINCTRL_BCM6368 is not set
+# CONFIG_PINCTRL_BCM63268 is not set
+# CONFIG_PINCTRL_IPROC_GPIO is not set
+# CONFIG_PINCTRL_CYGNUS_MUX is not set
+# CONFIG_PINCTRL_NS is not set
+# CONFIG_PINCTRL_NSP_GPIO is not set
+# CONFIG_PINCTRL_NS2_MUX is not set
+# CONFIG_PINCTRL_NSP_MUX is not set
+# CONFIG_PINCTRL_AS370 is not set
+# CONFIG_PINCTRL_BERLIN_BG4CT is not set
+CONFIG_PINCTRL_MADERA=y
+CONFIG_PINCTRL_CS47L15=y
+CONFIG_PINCTRL_CS47L85=y
+CONFIG_PINCTRL_CS47L90=y
+
+#
+# Intel pinctrl drivers
+#
+# end of Intel pinctrl drivers
+
+#
+# MediaTek pinctrl drivers
+#
+# CONFIG_EINT_MTK is not set
+# CONFIG_PINCTRL_MT2701 is not set
+# CONFIG_PINCTRL_MT7623 is not set
+# CONFIG_PINCTRL_MT7629 is not set
+# CONFIG_PINCTRL_MT8135 is not set
+# CONFIG_PINCTRL_MT8127 is not set
+# CONFIG_PINCTRL_MT2712 is not set
+# CONFIG_PINCTRL_MT6765 is not set
+# CONFIG_PINCTRL_MT6779 is not set
+# CONFIG_PINCTRL_MT6795 is not set
+# CONFIG_PINCTRL_MT6797 is not set
+# CONFIG_PINCTRL_MT7622 is not set
+# CONFIG_PINCTRL_MT7986 is not set
+# CONFIG_PINCTRL_MT8167 is not set
+# CONFIG_PINCTRL_MT8173 is not set
+# CONFIG_PINCTRL_MT8183 is not set
+# CONFIG_PINCTRL_MT8186 is not set
+# CONFIG_PINCTRL_MT8188 is not set
+# CONFIG_PINCTRL_MT8192 is not set
+# CONFIG_PINCTRL_MT8195 is not set
+# CONFIG_PINCTRL_MT8365 is not set
+# CONFIG_PINCTRL_MT8516 is not set
+# CONFIG_PINCTRL_MT6397 is not set
+# end of MediaTek pinctrl drivers
+
+CONFIG_PINCTRL_MESON=y
+CONFIG_PINCTRL_MESON8=y
+CONFIG_PINCTRL_MESON8B=y
+CONFIG_PINCTRL_MESON8_PMX=y
+# CONFIG_PINCTRL_WPCM450 is not set
+# CONFIG_PINCTRL_NPCM7XX is not set
+# CONFIG_PINCTRL_PXA25X is not set
+# CONFIG_PINCTRL_PXA27X is not set
+# CONFIG_PINCTRL_MSM is not set
+# CONFIG_PINCTRL_QCOM_SPMI_PMIC is not set
+# CONFIG_PINCTRL_QCOM_SSBI_PMIC is not set
+# CONFIG_PINCTRL_LPASS_LPI is not set
+
+#
+# Renesas pinctrl drivers
+#
+# CONFIG_PINCTRL_RENESAS is not set
+# CONFIG_PINCTRL_PFC_EMEV2 is not set
+# CONFIG_PINCTRL_PFC_R8A77995 is not set
+# CONFIG_PINCTRL_PFC_R8A7794 is not set
+# CONFIG_PINCTRL_PFC_R8A77990 is not set
+# CONFIG_PINCTRL_PFC_R8A7779 is not set
+# CONFIG_PINCTRL_PFC_R8A7790 is not set
+# CONFIG_PINCTRL_PFC_R8A77950 is not set
+# CONFIG_PINCTRL_PFC_R8A77951 is not set
+# CONFIG_PINCTRL_PFC_R8A7778 is not set
+# CONFIG_PINCTRL_PFC_R8A7793 is not set
+# CONFIG_PINCTRL_PFC_R8A7791 is not set
+# CONFIG_PINCTRL_PFC_R8A77965 is not set
+# CONFIG_PINCTRL_PFC_R8A77960 is not set
+# CONFIG_PINCTRL_PFC_R8A77961 is not set
+# CONFIG_PINCTRL_PFC_R8A779F0 is not set
+# CONFIG_PINCTRL_PFC_R8A7792 is not set
+# CONFIG_PINCTRL_PFC_R8A77980 is not set
+# CONFIG_PINCTRL_PFC_R8A77970 is not set
+# CONFIG_PINCTRL_PFC_R8A779A0 is not set
+# CONFIG_PINCTRL_PFC_R8A779G0 is not set
+# CONFIG_PINCTRL_PFC_R8A7740 is not set
+# CONFIG_PINCTRL_PFC_R8A73A4 is not set
+# CONFIG_PINCTRL_RZA1 is not set
+# CONFIG_PINCTRL_RZA2 is not set
+# CONFIG_PINCTRL_RZG2L is not set
+# CONFIG_PINCTRL_PFC_R8A77470 is not set
+# CONFIG_PINCTRL_PFC_R8A7745 is not set
+# CONFIG_PINCTRL_PFC_R8A7742 is not set
+# CONFIG_PINCTRL_PFC_R8A7743 is not set
+# CONFIG_PINCTRL_PFC_R8A7744 is not set
+# CONFIG_PINCTRL_PFC_R8A774C0 is not set
+# CONFIG_PINCTRL_PFC_R8A774E1 is not set
+# CONFIG_PINCTRL_PFC_R8A774A1 is not set
+# CONFIG_PINCTRL_PFC_R8A774B1 is not set
+# CONFIG_PINCTRL_RZN1 is not set
+# CONFIG_PINCTRL_RZV2M is not set
+# CONFIG_PINCTRL_PFC_SH7203 is not set
+# CONFIG_PINCTRL_PFC_SH7264 is not set
+# CONFIG_PINCTRL_PFC_SH7269 is not set
+# CONFIG_PINCTRL_PFC_SH7720 is not set
+# CONFIG_PINCTRL_PFC_SH7722 is not set
+# CONFIG_PINCTRL_PFC_SH7734 is not set
+# CONFIG_PINCTRL_PFC_SH7757 is not set
+# CONFIG_PINCTRL_PFC_SH7785 is not set
+# CONFIG_PINCTRL_PFC_SH7786 is not set
+# CONFIG_PINCTRL_PFC_SH73A0 is not set
+# CONFIG_PINCTRL_PFC_SH7723 is not set
+# CONFIG_PINCTRL_PFC_SH7724 is not set
+# CONFIG_PINCTRL_PFC_SHX3 is not set
+# end of Renesas pinctrl drivers
+
+# CONFIG_PINCTRL_EXYNOS is not set
+# CONFIG_PINCTRL_S3C24XX is not set
+# CONFIG_PINCTRL_S3C64XX is not set
+# CONFIG_PINCTRL_SPRD_SC9860 is not set
+# CONFIG_PINCTRL_STARFIVE_JH7100 is not set
+# CONFIG_PINCTRL_STM32F429 is not set
+# CONFIG_PINCTRL_STM32F469 is not set
+# CONFIG_PINCTRL_STM32F746 is not set
+# CONFIG_PINCTRL_STM32F769 is not set
+# CONFIG_PINCTRL_STM32H743 is not set
+# CONFIG_PINCTRL_STM32MP135 is not set
+# CONFIG_PINCTRL_STM32MP157 is not set
+# CONFIG_PINCTRL_TI_IODELAY is not set
+CONFIG_PINCTRL_UNIPHIER=y
+CONFIG_PINCTRL_UNIPHIER_LD4=y
+CONFIG_PINCTRL_UNIPHIER_PRO4=y
+CONFIG_PINCTRL_UNIPHIER_SLD8=y
+CONFIG_PINCTRL_UNIPHIER_PRO5=y
+CONFIG_PINCTRL_UNIPHIER_PXS2=y
+CONFIG_PINCTRL_UNIPHIER_LD6B=y
+# CONFIG_PINCTRL_UNIPHIER_LD11 is not set
+# CONFIG_PINCTRL_UNIPHIER_LD20 is not set
+# CONFIG_PINCTRL_UNIPHIER_PXS3 is not set
+# CONFIG_PINCTRL_UNIPHIER_NX1 is not set
+# CONFIG_PINCTRL_TMPV7700 is not set
+CONFIG_ARCH_HAVE_CUSTOM_GPIO_H=y
+CONFIG_GPIOLIB=y
+CONFIG_GPIOLIB_FASTPATH_LIMIT=512
+CONFIG_OF_GPIO=y
+CONFIG_GPIOLIB_IRQCHIP=y
+CONFIG_DEBUG_GPIO=y
+CONFIG_GPIO_SYSFS=y
+CONFIG_GPIO_CDEV=y
+# CONFIG_GPIO_CDEV_V1 is not set
+CONFIG_GPIO_GENERIC=y
+CONFIG_GPIO_MAX730X=y
+
+#
+# Memory mapped GPIO drivers
+#
+CONFIG_GPIO_74XX_MMIO=y
+# CONFIG_GPIO_ALTERA is not set
+# CONFIG_GPIO_ASPEED is not set
+# CONFIG_GPIO_ASPEED_SGPIO is not set
+# CONFIG_GPIO_ATH79 is not set
+# CONFIG_GPIO_RASPBERRYPI_EXP is not set
+# CONFIG_GPIO_BCM_KONA is not set
+# CONFIG_GPIO_BCM_XGS_IPROC is not set
+# CONFIG_GPIO_BRCMSTB is not set
+# CONFIG_GPIO_CADENCE is not set
+# CONFIG_GPIO_CLPS711X is not set
+CONFIG_GPIO_DWAPB=y
+# CONFIG_GPIO_EIC_SPRD is not set
+# CONFIG_GPIO_EM is not set
+CONFIG_GPIO_FTGPIO010=y
+CONFIG_GPIO_GENERIC_PLATFORM=m
+CONFIG_GPIO_GRGPIO=y
+# CONFIG_GPIO_HISI is not set
+CONFIG_GPIO_HLWD=y
+# CONFIG_GPIO_IOP is not set
+CONFIG_GPIO_LOGICVC=y
+# CONFIG_GPIO_LPC18XX is not set
+# CONFIG_GPIO_LPC32XX is not set
+CONFIG_GPIO_MB86S7X=y
+CONFIG_GPIO_MPC8XXX=y
+# CONFIG_GPIO_MT7621 is not set
+# CONFIG_GPIO_MXC is not set
+# CONFIG_GPIO_MXS is not set
+# CONFIG_GPIO_OMAP is not set
+CONFIG_GPIO_PL061=y
+# CONFIG_GPIO_PMIC_EIC_SPRD is not set
+# CONFIG_GPIO_PXA is not set
+# CONFIG_GPIO_RCAR is not set
+# CONFIG_GPIO_RDA is not set
+# CONFIG_GPIO_ROCKCHIP is not set
+CONFIG_GPIO_SAMA5D2_PIOBU=y
+CONFIG_GPIO_SIFIVE=y
+CONFIG_GPIO_SIOX=y
+# CONFIG_GPIO_SNPS_CREG is not set
+# CONFIG_GPIO_SPRD is not set
+# CONFIG_GPIO_STP_XWAY is not set
+CONFIG_GPIO_SYSCON=y
+# CONFIG_GPIO_TEGRA is not set
+# CONFIG_GPIO_TEGRA186 is not set
+# CONFIG_GPIO_TS4800 is not set
+# CONFIG_GPIO_UNIPHIER is not set
+# CONFIG_GPIO_VISCONTI is not set
+# CONFIG_GPIO_XGENE_SB is not set
+CONFIG_GPIO_XILINX=y
+# CONFIG_GPIO_XLP is not set
+# CONFIG_GPIO_ZEVIO is not set
+# CONFIG_GPIO_AMD_FCH is not set
+# CONFIG_GPIO_IDT3243X is not set
+# end of Memory mapped GPIO drivers
+
+#
+# I2C GPIO expanders
+#
+CONFIG_GPIO_ADNP=y
+# CONFIG_GPIO_GW_PLD is not set
+CONFIG_GPIO_MAX7300=y
+# CONFIG_GPIO_MAX732X is not set
+# CONFIG_GPIO_PCA953X is not set
+CONFIG_GPIO_PCA9570=m
+# CONFIG_GPIO_PCF857X is not set
+CONFIG_GPIO_TPIC2810=m
+# CONFIG_GPIO_TS4900 is not set
+# end of I2C GPIO expanders
+
+#
+# MFD GPIO expanders
+#
+CONFIG_GPIO_ADP5520=y
+CONFIG_GPIO_ARIZONA=y
+# CONFIG_GPIO_BD71815 is not set
+# CONFIG_GPIO_BD71828 is not set
+CONFIG_GPIO_BD9571MWV=m
+CONFIG_GPIO_DA9052=y
+# CONFIG_GPIO_DA9055 is not set
+CONFIG_HTC_EGPIO=y
+CONFIG_GPIO_KEMPLD=m
+# CONFIG_GPIO_LP3943 is not set
+CONFIG_GPIO_LP873X=m
+CONFIG_GPIO_LP87565=y
+CONFIG_GPIO_MADERA=y
+CONFIG_GPIO_MAX77620=y
+CONFIG_GPIO_MAX77650=y
+# CONFIG_GPIO_SL28CPLD is not set
+CONFIG_GPIO_STMPE=y
+CONFIG_GPIO_TPS65086=m
+CONFIG_GPIO_TPS65218=m
+# CONFIG_GPIO_TPS65912 is not set
+CONFIG_GPIO_WM831X=y
+CONFIG_GPIO_WM8994=m
+# end of MFD GPIO expanders
+
+#
+# USB GPIO expanders
+#
+# end of USB GPIO expanders
+
+#
+# Virtual GPIO drivers
+#
+CONFIG_GPIO_AGGREGATOR=m
+# CONFIG_GPIO_MOCKUP is not set
+# CONFIG_GPIO_VIRTIO is not set
+# CONFIG_GPIO_SIM is not set
+# end of Virtual GPIO drivers
+
+CONFIG_W1=y
+
+#
+# 1-wire Bus Masters
+#
+# CONFIG_W1_MASTER_DS2490 is not set
+CONFIG_W1_MASTER_DS2482=m
+# CONFIG_W1_MASTER_MXC is not set
+CONFIG_W1_MASTER_DS1WM=y
+CONFIG_W1_MASTER_GPIO=y
+CONFIG_W1_MASTER_SGI=m
+# end of 1-wire Bus Masters
+
+#
+# 1-wire Slaves
+#
+# CONFIG_W1_SLAVE_THERM is not set
+CONFIG_W1_SLAVE_SMEM=y
+CONFIG_W1_SLAVE_DS2405=m
+CONFIG_W1_SLAVE_DS2408=m
+# CONFIG_W1_SLAVE_DS2408_READBACK is not set
+CONFIG_W1_SLAVE_DS2413=m
+# CONFIG_W1_SLAVE_DS2406 is not set
+CONFIG_W1_SLAVE_DS2423=y
+# CONFIG_W1_SLAVE_DS2805 is not set
+# CONFIG_W1_SLAVE_DS2430 is not set
+CONFIG_W1_SLAVE_DS2431=m
+CONFIG_W1_SLAVE_DS2433=y
+# CONFIG_W1_SLAVE_DS2433_CRC is not set
+CONFIG_W1_SLAVE_DS2438=m
+CONFIG_W1_SLAVE_DS250X=m
+CONFIG_W1_SLAVE_DS2780=y
+CONFIG_W1_SLAVE_DS2781=y
+# CONFIG_W1_SLAVE_DS28E04 is not set
+CONFIG_W1_SLAVE_DS28E17=y
+# end of 1-wire Slaves
+
+CONFIG_POWER_RESET=y
+# CONFIG_POWER_RESET_AS3722 is not set
+# CONFIG_POWER_RESET_BRCMKONA is not set
+# CONFIG_POWER_RESET_BRCMSTB is not set
+# CONFIG_POWER_RESET_GEMINI_POWEROFF is not set
+CONFIG_POWER_RESET_GPIO=y
+# CONFIG_POWER_RESET_GPIO_RESTART is not set
+# CONFIG_POWER_RESET_LINKSTATION is not set
+# CONFIG_POWER_RESET_OCELOT_RESET is not set
+# CONFIG_POWER_RESET_LTC2952 is not set
+CONFIG_POWER_RESET_RESTART=y
+# CONFIG_POWER_RESET_TPS65086 is not set
+# CONFIG_POWER_RESET_VERSATILE is not set
+# CONFIG_POWER_RESET_KEYSTONE is not set
+CONFIG_POWER_RESET_SYSCON=y
+# CONFIG_POWER_RESET_SYSCON_POWEROFF is not set
+# CONFIG_POWER_RESET_RMOBILE is not set
+CONFIG_REBOOT_MODE=y
+CONFIG_SYSCON_REBOOT_MODE=m
+# CONFIG_POWER_RESET_SC27XX is not set
+CONFIG_NVMEM_REBOOT_MODE=y
+CONFIG_POWER_SUPPLY=y
+CONFIG_POWER_SUPPLY_DEBUG=y
+# CONFIG_PDA_POWER is not set
+CONFIG_APM_POWER=m
+CONFIG_GENERIC_ADC_BATTERY=m
+# CONFIG_IP5XXX_POWER is not set
+CONFIG_WM831X_BACKUP=m
+# CONFIG_WM831X_POWER is not set
+CONFIG_TEST_POWER=y
+# CONFIG_BATTERY_88PM860X is not set
+CONFIG_CHARGER_ADP5061=y
+CONFIG_BATTERY_ACT8945A=m
+CONFIG_BATTERY_CW2015=y
+# CONFIG_BATTERY_DS2760 is not set
+CONFIG_BATTERY_DS2780=y
+# CONFIG_BATTERY_DS2781 is not set
+CONFIG_BATTERY_DS2782=y
+# CONFIG_BATTERY_LEGO_EV3 is not set
+# CONFIG_BATTERY_SAMSUNG_SDI is not set
+CONFIG_BATTERY_SBS=m
+CONFIG_CHARGER_SBS=m
+# CONFIG_MANAGER_SBS is not set
+# CONFIG_BATTERY_BQ27XXX is not set
+CONFIG_BATTERY_DA9030=y
+CONFIG_BATTERY_DA9052=m
+CONFIG_CHARGER_AXP20X=m
+# CONFIG_BATTERY_AXP20X is not set
+# CONFIG_AXP20X_POWER is not set
+# CONFIG_BATTERY_MAX17040 is not set
+CONFIG_BATTERY_MAX17042=y
+# CONFIG_BATTERY_MAX1721X is not set
+CONFIG_CHARGER_PCF50633=m
+CONFIG_CHARGER_ISP1704=m
+CONFIG_CHARGER_MAX8903=m
+CONFIG_CHARGER_LP8727=y
+CONFIG_CHARGER_GPIO=m
+CONFIG_CHARGER_LT3651=m
+# CONFIG_CHARGER_LTC4162L is not set
+# CONFIG_CHARGER_MAX14577 is not set
+CONFIG_CHARGER_DETECTOR_MAX14656=m
+CONFIG_CHARGER_MAX77650=m
+CONFIG_CHARGER_MAX77693=m
+# CONFIG_CHARGER_MAX77976 is not set
+CONFIG_CHARGER_BQ2415X=y
+# CONFIG_CHARGER_BQ24190 is not set
+CONFIG_CHARGER_BQ24257=m
+CONFIG_CHARGER_BQ24735=y
+CONFIG_CHARGER_BQ2515X=m
+CONFIG_CHARGER_BQ25890=y
+CONFIG_CHARGER_BQ25980=y
+# CONFIG_CHARGER_BQ256XX is not set
+CONFIG_CHARGER_TPS65090=m
+CONFIG_CHARGER_TPS65217=m
+# CONFIG_BATTERY_GAUGE_LTC2941 is not set
+# CONFIG_BATTERY_GOLDFISH is not set
+CONFIG_BATTERY_RT5033=y
+CONFIG_CHARGER_RT9455=m
+# CONFIG_CHARGER_SC2731 is not set
+# CONFIG_FUEL_GAUGE_SC27XX is not set
+CONFIG_CHARGER_BD99954=y
+# CONFIG_RN5T618_POWER is not set
+# CONFIG_BATTERY_UG3105 is not set
+CONFIG_HWMON=m
+CONFIG_HWMON_VID=m
+CONFIG_HWMON_DEBUG_CHIP=y
+
+#
+# Native drivers
+#
+# CONFIG_SENSORS_AD7414 is not set
+# CONFIG_SENSORS_AD7418 is not set
+CONFIG_SENSORS_ADM1025=m
+CONFIG_SENSORS_ADM1026=m
+CONFIG_SENSORS_ADM1029=m
+CONFIG_SENSORS_ADM1031=m
+CONFIG_SENSORS_ADM1177=m
+# CONFIG_SENSORS_ADM9240 is not set
+CONFIG_SENSORS_ADT7X10=m
+CONFIG_SENSORS_ADT7410=m
+# CONFIG_SENSORS_ADT7411 is not set
+CONFIG_SENSORS_ADT7462=m
+CONFIG_SENSORS_ADT7470=m
+CONFIG_SENSORS_ADT7475=m
+# CONFIG_SENSORS_AHT10 is not set
+# CONFIG_SENSORS_AS370 is not set
+CONFIG_SENSORS_ASC7621=m
+CONFIG_SENSORS_AXI_FAN_CONTROL=m
+# CONFIG_SENSORS_ARM_SCMI is not set
+CONFIG_SENSORS_ARM_SCPI=m
+# CONFIG_SENSORS_ASB100 is not set
+CONFIG_SENSORS_ASPEED=m
+CONFIG_SENSORS_ATXP1=m
+# CONFIG_SENSORS_BT1_PVT is not set
+# CONFIG_SENSORS_CORSAIR_CPRO is not set
+# CONFIG_SENSORS_CORSAIR_PSU is not set
+CONFIG_SENSORS_DS620=m
+CONFIG_SENSORS_DS1621=m
+# CONFIG_SENSORS_DA9052_ADC is not set
+CONFIG_SENSORS_DA9055=m
+# CONFIG_SENSORS_SPARX5 is not set
+# CONFIG_SENSORS_F71805F is not set
+# CONFIG_SENSORS_F71882FG is not set
+# CONFIG_SENSORS_F75375S is not set
+CONFIG_SENSORS_GSC=m
+# CONFIG_SENSORS_FSCHMD is not set
+# CONFIG_SENSORS_FTSTEUTATES is not set
+CONFIG_SENSORS_GL518SM=m
+CONFIG_SENSORS_GL520SM=m
+CONFIG_SENSORS_G760A=m
+# CONFIG_SENSORS_G762 is not set
+CONFIG_SENSORS_GPIO_FAN=m
+CONFIG_SENSORS_HIH6130=m
+CONFIG_SENSORS_IBMAEM=m
+CONFIG_SENSORS_IBMPEX=m
+CONFIG_SENSORS_IIO_HWMON=m
+CONFIG_SENSORS_IT87=m
+CONFIG_SENSORS_JC42=m
+# CONFIG_SENSORS_POWR1220 is not set
+# CONFIG_SENSORS_LAN966X is not set
+# CONFIG_SENSORS_LINEAGE is not set
+CONFIG_SENSORS_LTC2945=m
+CONFIG_SENSORS_LTC2947=m
+CONFIG_SENSORS_LTC2947_I2C=m
+CONFIG_SENSORS_LTC2990=m
+# CONFIG_SENSORS_LTC2992 is not set
+# CONFIG_SENSORS_LTC4151 is not set
+CONFIG_SENSORS_LTC4215=m
+# CONFIG_SENSORS_LTC4222 is not set
+# CONFIG_SENSORS_LTC4245 is not set
+CONFIG_SENSORS_LTC4260=m
+CONFIG_SENSORS_LTC4261=m
+# CONFIG_SENSORS_MAX127 is not set
+# CONFIG_SENSORS_MAX16065 is not set
+# CONFIG_SENSORS_MAX1619 is not set
+CONFIG_SENSORS_MAX1668=m
+# CONFIG_SENSORS_MAX197 is not set
+CONFIG_SENSORS_MAX31730=m
+# CONFIG_SENSORS_MAX31760 is not set
+# CONFIG_SENSORS_MAX6620 is not set
+CONFIG_SENSORS_MAX6621=m
+# CONFIG_SENSORS_MAX6639 is not set
+CONFIG_SENSORS_MAX6650=m
+CONFIG_SENSORS_MAX6697=m
+# CONFIG_SENSORS_MAX31790 is not set
+CONFIG_SENSORS_MCP3021=m
+CONFIG_SENSORS_TC654=m
+# CONFIG_SENSORS_TPS23861 is not set
+CONFIG_SENSORS_MENF21BMC_HWMON=m
+CONFIG_SENSORS_MR75203=m
+CONFIG_SENSORS_LM63=m
+CONFIG_SENSORS_LM73=m
+CONFIG_SENSORS_LM75=m
+CONFIG_SENSORS_LM77=m
+CONFIG_SENSORS_LM78=m
+# CONFIG_SENSORS_LM80 is not set
+# CONFIG_SENSORS_LM83 is not set
+# CONFIG_SENSORS_LM85 is not set
+CONFIG_SENSORS_LM87=m
+CONFIG_SENSORS_LM90=m
+# CONFIG_SENSORS_LM92 is not set
+CONFIG_SENSORS_LM93=m
+# CONFIG_SENSORS_LM95234 is not set
+CONFIG_SENSORS_LM95241=m
+CONFIG_SENSORS_LM95245=m
+CONFIG_SENSORS_PC87360=m
+CONFIG_SENSORS_PC87427=m
+CONFIG_SENSORS_NTC_THERMISTOR=m
+CONFIG_SENSORS_NCT6683=m
+CONFIG_SENSORS_NCT6775_CORE=m
+CONFIG_SENSORS_NCT6775=m
+# CONFIG_SENSORS_NCT6775_I2C is not set
+# CONFIG_SENSORS_NCT7802 is not set
+CONFIG_SENSORS_NCT7904=m
+# CONFIG_SENSORS_NPCM7XX is not set
+# CONFIG_SENSORS_NSA320 is not set
+# CONFIG_SENSORS_OCC_P8_I2C is not set
+# CONFIG_SENSORS_PCF8591 is not set
+CONFIG_PMBUS=m
+# CONFIG_SENSORS_PMBUS is not set
+# CONFIG_SENSORS_ADM1266 is not set
+CONFIG_SENSORS_ADM1275=m
+# CONFIG_SENSORS_BEL_PFE is not set
+# CONFIG_SENSORS_BPA_RS600 is not set
+# CONFIG_SENSORS_DELTA_AHE50DC_FAN is not set
+# CONFIG_SENSORS_FSP_3Y is not set
+CONFIG_SENSORS_IBM_CFFPS=m
+# CONFIG_SENSORS_DPS920AB is not set
+# CONFIG_SENSORS_INSPUR_IPSPS is not set
+CONFIG_SENSORS_IR35221=m
+# CONFIG_SENSORS_IR36021 is not set
+# CONFIG_SENSORS_IR38064 is not set
+CONFIG_SENSORS_IRPS5401=m
+CONFIG_SENSORS_ISL68137=m
+# CONFIG_SENSORS_LM25066 is not set
+# CONFIG_SENSORS_LT7182S is not set
+CONFIG_SENSORS_LTC2978=m
+CONFIG_SENSORS_LTC3815=m
+# CONFIG_SENSORS_MAX15301 is not set
+CONFIG_SENSORS_MAX16064=m
+# CONFIG_SENSORS_MAX16601 is not set
+CONFIG_SENSORS_MAX20730=m
+# CONFIG_SENSORS_MAX20751 is not set
+CONFIG_SENSORS_MAX31785=m
+CONFIG_SENSORS_MAX34440=m
+CONFIG_SENSORS_MAX8688=m
+# CONFIG_SENSORS_MP2888 is not set
+CONFIG_SENSORS_MP2975=m
+# CONFIG_SENSORS_MP5023 is not set
+# CONFIG_SENSORS_PIM4328 is not set
+# CONFIG_SENSORS_PLI1209BC is not set
+# CONFIG_SENSORS_PM6764TR is not set
+# CONFIG_SENSORS_PXE1610 is not set
+# CONFIG_SENSORS_Q54SJ108A2 is not set
+# CONFIG_SENSORS_STPDDC60 is not set
+CONFIG_SENSORS_TPS40422=m
+# CONFIG_SENSORS_TPS53679 is not set
+# CONFIG_SENSORS_TPS546D24 is not set
+CONFIG_SENSORS_UCD9000=m
+CONFIG_SENSORS_UCD9200=m
+# CONFIG_SENSORS_XDPE152 is not set
+# CONFIG_SENSORS_XDPE122 is not set
+# CONFIG_SENSORS_ZL6100 is not set
+# CONFIG_SENSORS_PWM_FAN is not set
+# CONFIG_SENSORS_RASPBERRYPI_HWMON is not set
+# CONFIG_SENSORS_SL28CPLD is not set
+# CONFIG_SENSORS_SBTSI is not set
+# CONFIG_SENSORS_SBRMI is not set
+# CONFIG_SENSORS_SHT15 is not set
+# CONFIG_SENSORS_SHT21 is not set
+# CONFIG_SENSORS_SHT3x is not set
+# CONFIG_SENSORS_SHT4x is not set
+# CONFIG_SENSORS_SHTC1 is not set
+CONFIG_SENSORS_DME1737=m
+CONFIG_SENSORS_EMC1403=m
+CONFIG_SENSORS_EMC2103=m
+# CONFIG_SENSORS_EMC2305 is not set
+CONFIG_SENSORS_EMC6W201=m
+CONFIG_SENSORS_SMSC47M1=m
+CONFIG_SENSORS_SMSC47M192=m
+CONFIG_SENSORS_SMSC47B397=m
+CONFIG_SENSORS_SCH56XX_COMMON=m
+# CONFIG_SENSORS_SCH5627 is not set
+CONFIG_SENSORS_SCH5636=m
+CONFIG_SENSORS_STTS751=m
+# CONFIG_SENSORS_SMM665 is not set
+CONFIG_SENSORS_ADC128D818=m
+CONFIG_SENSORS_ADS7828=m
+CONFIG_SENSORS_AMC6821=m
+CONFIG_SENSORS_INA209=m
+CONFIG_SENSORS_INA2XX=m
+# CONFIG_SENSORS_INA238 is not set
+# CONFIG_SENSORS_INA3221 is not set
+CONFIG_SENSORS_TC74=m
+# CONFIG_SENSORS_THMC50 is not set
+CONFIG_SENSORS_TMP102=m
+# CONFIG_SENSORS_TMP103 is not set
+CONFIG_SENSORS_TMP108=m
+CONFIG_SENSORS_TMP401=m
+CONFIG_SENSORS_TMP421=m
+# CONFIG_SENSORS_TMP464 is not set
+CONFIG_SENSORS_TMP513=m
+# CONFIG_SENSORS_VEXPRESS is not set
+# CONFIG_SENSORS_VT1211 is not set
+CONFIG_SENSORS_W83773G=m
+CONFIG_SENSORS_W83781D=m
+# CONFIG_SENSORS_W83791D is not set
+# CONFIG_SENSORS_W83792D is not set
+CONFIG_SENSORS_W83793=m
+CONFIG_SENSORS_W83795=m
+CONFIG_SENSORS_W83795_FANCTRL=y
+CONFIG_SENSORS_W83L785TS=m
+CONFIG_SENSORS_W83L786NG=m
+# CONFIG_SENSORS_W83627HF is not set
+# CONFIG_SENSORS_W83627EHF is not set
+CONFIG_SENSORS_WM831X=m
+# CONFIG_THERMAL is not set
+CONFIG_WATCHDOG=y
+CONFIG_WATCHDOG_CORE=y
+CONFIG_WATCHDOG_NOWAYOUT=y
+# CONFIG_WATCHDOG_HANDLE_BOOT_ENABLED is not set
+CONFIG_WATCHDOG_OPEN_TIMEOUT=0
+CONFIG_WATCHDOG_SYSFS=y
+# CONFIG_WATCHDOG_HRTIMER_PRETIMEOUT is not set
+
+#
+# Watchdog Pretimeout Governors
+#
+# CONFIG_WATCHDOG_PRETIMEOUT_GOV is not set
+
+#
+# Watchdog Device Drivers
+#
+CONFIG_SOFT_WATCHDOG=y
+# CONFIG_DA9052_WATCHDOG is not set
+CONFIG_DA9055_WATCHDOG=m
+CONFIG_DA9063_WATCHDOG=y
+# CONFIG_DA9062_WATCHDOG is not set
+# CONFIG_GPIO_WATCHDOG is not set
+CONFIG_MENF21BMC_WATCHDOG=m
+CONFIG_WM831X_WATCHDOG=m
+CONFIG_XILINX_WATCHDOG=y
+CONFIG_ZIIRAVE_WATCHDOG=y
+CONFIG_RAVE_SP_WATCHDOG=m
+# CONFIG_SL28CPLD_WATCHDOG is not set
+CONFIG_ARM_SP805_WATCHDOG=y
+# CONFIG_ARMADA_37XX_WATCHDOG is not set
+# CONFIG_ASM9260_WATCHDOG is not set
+# CONFIG_AT91RM9200_WATCHDOG is not set
+# CONFIG_AT91SAM9X_WATCHDOG is not set
+# CONFIG_SAMA5D4_WATCHDOG is not set
+# CONFIG_CADENCE_WATCHDOG is not set
+# CONFIG_977_WATCHDOG is not set
+# CONFIG_FTWDT010_WATCHDOG is not set
+# CONFIG_S3C2410_WATCHDOG is not set
+CONFIG_DW_WATCHDOG=m
+# CONFIG_EP93XX_WATCHDOG is not set
+# CONFIG_OMAP_WATCHDOG is not set
+# CONFIG_PNX4008_WATCHDOG is not set
+# CONFIG_DAVINCI_WATCHDOG is not set
+# CONFIG_K3_RTI_WATCHDOG is not set
+# CONFIG_ORION_WATCHDOG is not set
+# CONFIG_RN5T618_WATCHDOG is not set
+# CONFIG_SUNXI_WATCHDOG is not set
+# CONFIG_NPCM7XX_WATCHDOG is not set
+# CONFIG_STMP3XXX_RTC_WATCHDOG is not set
+# CONFIG_TS4800_WATCHDOG is not set
+# CONFIG_TS72XX_WATCHDOG is not set
+CONFIG_MAX63XX_WATCHDOG=y
+CONFIG_MAX77620_WATCHDOG=m
+# CONFIG_IMX2_WDT is not set
+# CONFIG_IMX7ULP_WDT is not set
+CONFIG_RETU_WATCHDOG=m
+# CONFIG_MOXART_WDT is not set
+# CONFIG_ST_LPC_WATCHDOG is not set
+# CONFIG_TEGRA_WATCHDOG is not set
+# CONFIG_QCOM_WDT is not set
+# CONFIG_MESON_GXBB_WATCHDOG is not set
+# CONFIG_MESON_WATCHDOG is not set
+# CONFIG_MEDIATEK_WATCHDOG is not set
+# CONFIG_DIGICOLOR_WATCHDOG is not set
+# CONFIG_LPC18XX_WATCHDOG is not set
+# CONFIG_RENESAS_WDT is not set
+# CONFIG_RENESAS_RZAWDT is not set
+# CONFIG_RENESAS_RZN1WDT is not set
+# CONFIG_RENESAS_RZG2LWDT is not set
+# CONFIG_ASPEED_WATCHDOG is not set
+# CONFIG_UNIPHIER_WATCHDOG is not set
+# CONFIG_RTD119X_WATCHDOG is not set
+# CONFIG_REALTEK_OTTO_WDT is not set
+# CONFIG_SPRD_WATCHDOG is not set
+# CONFIG_VISCONTI_WATCHDOG is not set
+# CONFIG_MSC313E_WATCHDOG is not set
+# CONFIG_APPLE_WATCHDOG is not set
+# CONFIG_SUNPLUS_WATCHDOG is not set
+# CONFIG_SC520_WDT is not set
+# CONFIG_KEMPLD_WDT is not set
+# CONFIG_ATH79_WDT is not set
+# CONFIG_BCM47XX_WDT is not set
+# CONFIG_BCM2835_WDT is not set
+# CONFIG_BCM_KONA_WDT is not set
+# CONFIG_BCM7038_WDT is not set
+# CONFIG_IMGPDC_WDT is not set
+# CONFIG_MPC5200_WDT is not set
+# CONFIG_MEN_A21_WDT is not set
+# CONFIG_UML_WATCHDOG is not set
+
+#
+# USB-based Watchdog Cards
+#
+CONFIG_USBPCWATCHDOG=m
+CONFIG_SSB_POSSIBLE=y
+# CONFIG_SSB is not set
+CONFIG_BCMA_POSSIBLE=y
+# CONFIG_BCMA is not set
+
+#
+# Multifunction device drivers
+#
+CONFIG_MFD_CORE=y
+CONFIG_MFD_ACT8945A=m
+# CONFIG_MFD_SUN4I_GPADC is not set
+CONFIG_MFD_AS3711=y
+CONFIG_MFD_AS3722=m
+CONFIG_PMIC_ADP5520=y
+CONFIG_MFD_AAT2870_CORE=y
+# CONFIG_MFD_AT91_USART is not set
+CONFIG_MFD_ATMEL_FLEXCOM=y
+CONFIG_MFD_ATMEL_HLCDC=y
+# CONFIG_MFD_BCM590XX is not set
+CONFIG_MFD_BD9571MWV=m
+CONFIG_MFD_AXP20X=y
+CONFIG_MFD_AXP20X_I2C=y
+CONFIG_MFD_MADERA=y
+CONFIG_MFD_MADERA_I2C=y
+CONFIG_MFD_CS47L15=y
+# CONFIG_MFD_CS47L35 is not set
+CONFIG_MFD_CS47L85=y
+CONFIG_MFD_CS47L90=y
+# CONFIG_MFD_CS47L92 is not set
+CONFIG_MFD_ASIC3=y
+CONFIG_PMIC_DA903X=y
+CONFIG_PMIC_DA9052=y
+CONFIG_MFD_DA9052_I2C=y
+CONFIG_MFD_DA9055=y
+CONFIG_MFD_DA9062=m
+CONFIG_MFD_DA9063=y
+# CONFIG_MFD_DA9150 is not set
+# CONFIG_MFD_DLN2 is not set
+# CONFIG_MFD_ENE_KB3930 is not set
+# CONFIG_MFD_EXYNOS_LPASS is not set
+CONFIG_MFD_GATEWORKS_GSC=m
+# CONFIG_MFD_MC13XXX_I2C is not set
+CONFIG_MFD_MP2629=y
+# CONFIG_MFD_MXS_LRADC is not set
+# CONFIG_MFD_MX25_TSADC is not set
+# CONFIG_MFD_HI6421_PMIC is not set
+CONFIG_MFD_HI6421_SPMI=m
+# CONFIG_MFD_HI655X_PMIC is not set
+CONFIG_HTC_PASIC3=m
+CONFIG_HTC_I2CPLD=y
+CONFIG_MFD_IQS62X=m
+CONFIG_MFD_KEMPLD=y
+# CONFIG_MFD_88PM800 is not set
+# CONFIG_MFD_88PM805 is not set
+CONFIG_MFD_88PM860X=y
+CONFIG_MFD_MAX14577=y
+CONFIG_MFD_MAX77620=y
+CONFIG_MFD_MAX77650=y
+# CONFIG_MFD_MAX77686 is not set
+CONFIG_MFD_MAX77693=m
+# CONFIG_MFD_MAX77714 is not set
+# CONFIG_MFD_MAX77843 is not set
+CONFIG_MFD_MAX8907=y
+# CONFIG_MFD_MAX8925 is not set
+# CONFIG_MFD_MAX8997 is not set
+# CONFIG_MFD_MAX8998 is not set
+CONFIG_MFD_MT6360=m
+# CONFIG_MFD_MT6370 is not set
+# CONFIG_MFD_MT6397 is not set
+CONFIG_MFD_MENF21BMC=m
+# CONFIG_MFD_VIPERBOARD is not set
+# CONFIG_MFD_NTXEC is not set
+CONFIG_MFD_RETU=m
+CONFIG_MFD_PCF50633=m
+CONFIG_PCF50633_ADC=m
+# CONFIG_PCF50633_GPIO is not set
+CONFIG_MFD_PM8XXX=m
+# CONFIG_MFD_SPMI_PMIC is not set
+# CONFIG_MFD_SY7636A is not set
+# CONFIG_MFD_RT4831 is not set
+CONFIG_MFD_RT5033=m
+# CONFIG_MFD_RT5120 is not set
+# CONFIG_MFD_RC5T583 is not set
+# CONFIG_MFD_RK808 is not set
+CONFIG_MFD_RN5T618=y
+# CONFIG_MFD_SEC_CORE is not set
+CONFIG_MFD_SI476X_CORE=y
+# CONFIG_MFD_SL28CPLD is not set
+CONFIG_MFD_SM501=m
+# CONFIG_MFD_SM501_GPIO is not set
+# CONFIG_MFD_SKY81452 is not set
+# CONFIG_ABX500_CORE is not set
+CONFIG_MFD_STMPE=y
+
+#
+# STMicroelectronics STMPE Interface Drivers
+#
+# CONFIG_STMPE_I2C is not set
+# end of STMicroelectronics STMPE Interface Drivers
+
+# CONFIG_MFD_SUN6I_PRCM is not set
+CONFIG_MFD_SYSCON=y
+CONFIG_MFD_TI_AM335X_TSCADC=m
+CONFIG_MFD_LP3943=y
+# CONFIG_MFD_LP8788 is not set
+CONFIG_MFD_TI_LMU=m
+CONFIG_MFD_OMAP_USB_HOST=y
+# CONFIG_MFD_PALMAS is not set
+# CONFIG_TPS6105X is not set
+CONFIG_TPS65010=m
+# CONFIG_TPS6507X is not set
+CONFIG_MFD_TPS65086=m
+CONFIG_MFD_TPS65090=y
+CONFIG_MFD_TPS65217=y
+CONFIG_MFD_TI_LP873X=m
+CONFIG_MFD_TI_LP87565=y
+CONFIG_MFD_TPS65218=m
+# CONFIG_MFD_TPS6586X is not set
+# CONFIG_MFD_TPS65910 is not set
+CONFIG_MFD_TPS65912=m
+CONFIG_MFD_TPS65912_I2C=m
+# CONFIG_TWL4030_CORE is not set
+# CONFIG_TWL6040_CORE is not set
+CONFIG_MFD_WL1273_CORE=m
+# CONFIG_MFD_LM3533 is not set
+# CONFIG_MFD_TC3589X is not set
+CONFIG_MFD_TMIO=y
+CONFIG_MFD_T7L66XB=y
+# CONFIG_MFD_TC6387XB is not set
+# CONFIG_MFD_TC6393XB is not set
+# CONFIG_MFD_TQMX86 is not set
+# CONFIG_MFD_LOCHNAGAR is not set
+CONFIG_MFD_ARIZONA=y
+CONFIG_MFD_ARIZONA_I2C=y
+CONFIG_MFD_CS47L24=y
+# CONFIG_MFD_WM5102 is not set
+CONFIG_MFD_WM5110=y
+CONFIG_MFD_WM8997=y
+# CONFIG_MFD_WM8998 is not set
+CONFIG_MFD_WM8400=y
+CONFIG_MFD_WM831X=y
+CONFIG_MFD_WM831X_I2C=y
+# CONFIG_MFD_WM8350_I2C is not set
+CONFIG_MFD_WM8994=m
+# CONFIG_MFD_STW481X is not set
+CONFIG_MFD_ROHM_BD718XX=y
+CONFIG_MFD_ROHM_BD71828=m
+# CONFIG_MFD_ROHM_BD957XMUF is not set
+# CONFIG_MFD_STM32_LPTIMER is not set
+# CONFIG_MFD_STM32_TIMERS is not set
+# CONFIG_MFD_STPMIC1 is not set
+CONFIG_MFD_STMFX=y
+# CONFIG_MFD_ATC260X_I2C is not set
+# CONFIG_MFD_KHADAS_MCU is not set
+# CONFIG_MFD_ACER_A500_EC is not set
+# CONFIG_MFD_QCOM_PM8008 is not set
+CONFIG_MFD_VEXPRESS_SYSREG=m
+CONFIG_RAVE_SP_CORE=m
+# CONFIG_MFD_RSMU_I2C is not set
+# end of Multifunction device drivers
+
+# CONFIG_REGULATOR is not set
+CONFIG_RC_CORE=m
+CONFIG_LIRC=y
+CONFIG_RC_MAP=m
+# CONFIG_RC_DECODERS is not set
+CONFIG_RC_DEVICES=y
+# CONFIG_IR_ENE is not set
+# CONFIG_IR_FINTEK is not set
+CONFIG_IR_GPIO_CIR=m
+CONFIG_IR_GPIO_TX=m
+CONFIG_IR_HIX5HD2=m
+CONFIG_IR_IGORPLUGUSB=m
+# CONFIG_IR_IGUANA is not set
+CONFIG_IR_IMON=m
+CONFIG_IR_IMON_RAW=m
+# CONFIG_IR_ITE_CIR is not set
+CONFIG_IR_MCEUSB=m
+# CONFIG_IR_MESON is not set
+# CONFIG_IR_MESON_TX is not set
+# CONFIG_IR_MTK is not set
+# CONFIG_IR_NUVOTON is not set
+CONFIG_IR_PWM_TX=m
+CONFIG_IR_REDRAT3=m
+# CONFIG_IR_RX51 is not set
+CONFIG_IR_SERIAL=m
+CONFIG_IR_SERIAL_TRANSMITTER=y
+# CONFIG_IR_STREAMZAP is not set
+# CONFIG_IR_SUNXI is not set
+# CONFIG_IR_TOY is not set
+CONFIG_IR_TTUSBIR=m
+# CONFIG_IR_WINBOND_CIR is not set
+# CONFIG_RC_ATI_REMOTE is not set
+CONFIG_RC_LOOPBACK=m
+# CONFIG_RC_ST is not set
+# CONFIG_RC_XBOX_DVD is not set
+# CONFIG_IR_IMG is not set
+CONFIG_CEC_CORE=y
+CONFIG_CEC_NOTIFIER=y
+
+#
+# CEC support
+#
+# CONFIG_MEDIA_CEC_SUPPORT is not set
+# end of CEC support
+
+CONFIG_MEDIA_SUPPORT=y
+# CONFIG_MEDIA_SUPPORT_FILTER is not set
+CONFIG_MEDIA_SUBDRV_AUTOSELECT=y
+
+#
+# Media device types
+#
+CONFIG_MEDIA_CAMERA_SUPPORT=y
+CONFIG_MEDIA_ANALOG_TV_SUPPORT=y
+CONFIG_MEDIA_DIGITAL_TV_SUPPORT=y
+CONFIG_MEDIA_RADIO_SUPPORT=y
+CONFIG_MEDIA_SDR_SUPPORT=y
+CONFIG_MEDIA_PLATFORM_SUPPORT=y
+CONFIG_MEDIA_TEST_SUPPORT=y
+# end of Media device types
+
+#
+# Media core support
+#
+CONFIG_VIDEO_DEV=m
+CONFIG_MEDIA_CONTROLLER=y
+CONFIG_DVB_CORE=y
+# end of Media core support
+
+#
+# Video4Linux options
+#
+CONFIG_VIDEO_V4L2_I2C=y
+CONFIG_VIDEO_V4L2_SUBDEV_API=y
+CONFIG_VIDEO_ADV_DEBUG=y
+# CONFIG_VIDEO_FIXED_MINOR_RANGES is not set
+CONFIG_V4L2_MEM2MEM_DEV=m
+CONFIG_V4L2_FWNODE=m
+CONFIG_V4L2_ASYNC=m
+# end of Video4Linux options
+
+#
+# Media controller options
+#
+# CONFIG_MEDIA_CONTROLLER_DVB is not set
+CONFIG_MEDIA_CONTROLLER_REQUEST_API=y
+# end of Media controller options
+
+#
+# Digital TV options
+#
+CONFIG_DVB_MAX_ADAPTERS=16
+CONFIG_DVB_DYNAMIC_MINORS=y
+# CONFIG_DVB_DEMUX_SECTION_LOSS_LOG is not set
+# CONFIG_DVB_ULE_DEBUG is not set
+# end of Digital TV options
+
+#
+# Media drivers
+#
+
+#
+# Media drivers
+#
+# CONFIG_MEDIA_USB_SUPPORT is not set
+CONFIG_RADIO_ADAPTERS=m
+# CONFIG_RADIO_SAA7706H is not set
+CONFIG_RADIO_SHARK=m
+# CONFIG_RADIO_SHARK2 is not set
+CONFIG_RADIO_SI4713=m
+CONFIG_RADIO_SI476X=m
+CONFIG_RADIO_TEA575X=m
+CONFIG_RADIO_TEA5764=m
+# CONFIG_RADIO_TEF6862 is not set
+CONFIG_RADIO_WL1273=m
+CONFIG_USB_DSBR=m
+CONFIG_USB_KEENE=m
+CONFIG_USB_MA901=m
+CONFIG_USB_MR800=m
+# CONFIG_USB_RAREMONO is not set
+CONFIG_RADIO_SI470X=m
+CONFIG_USB_SI470X=m
+CONFIG_I2C_SI470X=m
+CONFIG_USB_SI4713=m
+# CONFIG_PLATFORM_SI4713 is not set
+CONFIG_I2C_SI4713=m
+# CONFIG_V4L_RADIO_ISA_DRIVERS is not set
+CONFIG_MEDIA_PLATFORM_DRIVERS=y
+# CONFIG_V4L_PLATFORM_DRIVERS is not set
+CONFIG_SDR_PLATFORM_DRIVERS=y
+# CONFIG_DVB_PLATFORM_DRIVERS is not set
+CONFIG_V4L_MEM2MEM_DRIVERS=y
+CONFIG_VIDEO_MEM2MEM_DEINTERLACE=m
+
+#
+# Allegro DVT media platform drivers
+#
+# CONFIG_VIDEO_ALLEGRO_DVT is not set
+
+#
+# Amlogic media platform drivers
+#
+# CONFIG_VIDEO_MESON_GE2D is not set
+
+#
+# Amphion drivers
+#
+# CONFIG_VIDEO_AMPHION_VPU is not set
+
+#
+# Aspeed media platform drivers
+#
+
+#
+# Atmel media platform drivers
+#
+
+#
+# Cadence media platform drivers
+#
+# CONFIG_VIDEO_CADENCE_CSI2RX is not set
+# CONFIG_VIDEO_CADENCE_CSI2TX is not set
+
+#
+# Chips&Media media platform drivers
+#
+# CONFIG_VIDEO_CODA is not set
+
+#
+# Intel media platform drivers
+#
+
+#
+# Marvell media platform drivers
+#
+
+#
+# Mediatek media platform drivers
+#
+# CONFIG_VIDEO_MEDIATEK_JPEG is not set
+# CONFIG_VIDEO_MEDIATEK_MDP is not set
+# CONFIG_VIDEO_MEDIATEK_VPU is not set
+
+#
+# NVidia media platform drivers
+#
+# CONFIG_VIDEO_TEGRA_VDE is not set
+
+#
+# NXP media platform drivers
+#
+# CONFIG_VIDEO_IMX_MIPI_CSIS is not set
+# CONFIG_VIDEO_IMX_PXP is not set
+# CONFIG_VIDEO_MX2_EMMAPRP is not set
+# CONFIG_VIDEO_DW100 is not set
+# CONFIG_VIDEO_IMX8_JPEG is not set
+
+#
+# Qualcomm media platform drivers
+#
+
+#
+# Renesas media platform drivers
+#
+# CONFIG_VIDEO_RENESAS_FCP is not set
+# CONFIG_VIDEO_RENESAS_FDP1 is not set
+# CONFIG_VIDEO_RENESAS_JPU is not set
+# CONFIG_VIDEO_RENESAS_VSP1 is not set
+# CONFIG_VIDEO_RCAR_DRIF is not set
+
+#
+# Rockchip media platform drivers
+#
+# CONFIG_VIDEO_ROCKCHIP_RGA is not set
+
+#
+# Samsung media platform drivers
+#
+# CONFIG_VIDEO_SAMSUNG_EXYNOS_GSC is not set
+# CONFIG_VIDEO_SAMSUNG_S5P_G2D is not set
+# CONFIG_VIDEO_SAMSUNG_S5P_JPEG is not set
+# CONFIG_VIDEO_SAMSUNG_S5P_MFC is not set
+
+#
+# STMicroelectronics media platform drivers
+#
+# CONFIG_VIDEO_STI_BDISP is not set
+# CONFIG_VIDEO_STI_DELTA is not set
+# CONFIG_VIDEO_STI_HVA is not set
+# CONFIG_VIDEO_STM32_DMA2D is not set
+
+#
+# Sunxi media platform drivers
+#
+
+#
+# Texas Instruments drivers
+#
+# CONFIG_VIDEO_TI_VPE is not set
+
+#
+# Verisilicon media platform drivers
+#
+# CONFIG_VIDEO_HANTRO is not set
+
+#
+# VIA media platform drivers
+#
+
+#
+# Xilinx media platform drivers
+#
+CONFIG_V4L_TEST_DRIVERS=y
+CONFIG_VIDEO_VIM2M=m
+CONFIG_VIDEO_VICODEC=m
+# CONFIG_VIDEO_VIMC is not set
+CONFIG_VIDEO_VIVID=m
+# CONFIG_VIDEO_VIVID_CEC is not set
+CONFIG_VIDEO_VIVID_MAX_DEVS=64
+CONFIG_DVB_TEST_DRIVERS=y
+CONFIG_DVB_VIDTV=m
+CONFIG_VIDEO_V4L2_TPG=m
+CONFIG_VIDEOBUF2_CORE=m
+CONFIG_VIDEOBUF2_V4L2=m
+CONFIG_VIDEOBUF2_MEMOPS=m
+CONFIG_VIDEOBUF2_DMA_CONTIG=m
+CONFIG_VIDEOBUF2_VMALLOC=m
+CONFIG_VIDEOBUF2_DMA_SG=m
+# end of Media drivers
+
+#
+# Media ancillary drivers
+#
+CONFIG_MEDIA_ATTACH=y
+
+#
+# IR I2C driver auto-selected by 'Autoselect ancillary drivers'
+#
+CONFIG_VIDEO_IR_I2C=m
+
+#
+# Camera sensor devices
+#
+CONFIG_VIDEO_APTINA_PLL=m
+# CONFIG_VIDEO_AR0521 is not set
+# CONFIG_VIDEO_HI556 is not set
+# CONFIG_VIDEO_HI846 is not set
+# CONFIG_VIDEO_HI847 is not set
+# CONFIG_VIDEO_IMX208 is not set
+CONFIG_VIDEO_IMX214=m
+# CONFIG_VIDEO_IMX219 is not set
+# CONFIG_VIDEO_IMX258 is not set
+# CONFIG_VIDEO_IMX274 is not set
+CONFIG_VIDEO_IMX290=m
+CONFIG_VIDEO_IMX319=m
+# CONFIG_VIDEO_IMX334 is not set
+# CONFIG_VIDEO_IMX335 is not set
+# CONFIG_VIDEO_IMX355 is not set
+# CONFIG_VIDEO_IMX412 is not set
+CONFIG_VIDEO_MAX9271_LIB=m
+# CONFIG_VIDEO_MT9M001 is not set
+CONFIG_VIDEO_MT9M032=m
+CONFIG_VIDEO_MT9M111=m
+CONFIG_VIDEO_MT9P031=m
+CONFIG_VIDEO_MT9T001=m
+CONFIG_VIDEO_MT9T112=m
+# CONFIG_VIDEO_MT9V011 is not set
+CONFIG_VIDEO_MT9V032=m
+CONFIG_VIDEO_MT9V111=m
+# CONFIG_VIDEO_NOON010PC30 is not set
+# CONFIG_VIDEO_OG01A1B is not set
+# CONFIG_VIDEO_OV02A10 is not set
+# CONFIG_VIDEO_OV08D10 is not set
+CONFIG_VIDEO_OV13858=m
+# CONFIG_VIDEO_OV13B10 is not set
+CONFIG_VIDEO_OV2640=m
+CONFIG_VIDEO_OV2659=m
+# CONFIG_VIDEO_OV2680 is not set
+# CONFIG_VIDEO_OV2685 is not set
+# CONFIG_VIDEO_OV2740 is not set
+CONFIG_VIDEO_OV5640=m
+CONFIG_VIDEO_OV5645=m
+# CONFIG_VIDEO_OV5647 is not set
+# CONFIG_VIDEO_OV5670 is not set
+# CONFIG_VIDEO_OV5675 is not set
+# CONFIG_VIDEO_OV5693 is not set
+CONFIG_VIDEO_OV5695=m
+CONFIG_VIDEO_OV6650=m
+CONFIG_VIDEO_OV7251=m
+# CONFIG_VIDEO_OV7640 is not set
+CONFIG_VIDEO_OV7670=m
+# CONFIG_VIDEO_OV772X is not set
+CONFIG_VIDEO_OV7740=m
+# CONFIG_VIDEO_OV8856 is not set
+# CONFIG_VIDEO_OV9282 is not set
+CONFIG_VIDEO_OV9640=m
+CONFIG_VIDEO_OV9650=m
+# CONFIG_VIDEO_OV9734 is not set
+CONFIG_VIDEO_RDACM20=m
+# CONFIG_VIDEO_RDACM21 is not set
+CONFIG_VIDEO_RJ54N1=m
+CONFIG_VIDEO_S5K4ECGX=m
+CONFIG_VIDEO_S5K5BAF=m
+# CONFIG_VIDEO_S5K6A3 is not set
+CONFIG_VIDEO_S5K6AA=m
+CONFIG_VIDEO_SR030PC30=m
+CONFIG_VIDEO_VS6624=m
+# CONFIG_VIDEO_CCS is not set
+CONFIG_VIDEO_ET8EK8=m
+CONFIG_VIDEO_M5MOLS=m
+# end of Camera sensor devices
+
+#
+# Lens drivers
+#
+CONFIG_VIDEO_AD5820=m
+# CONFIG_VIDEO_AK7375 is not set
+# CONFIG_VIDEO_DW9714 is not set
+CONFIG_VIDEO_DW9768=m
+CONFIG_VIDEO_DW9807_VCM=m
+# end of Lens drivers
+
+#
+# Flash devices
+#
+CONFIG_VIDEO_ADP1653=m
+CONFIG_VIDEO_LM3560=m
+CONFIG_VIDEO_LM3646=m
+# end of Flash devices
+
+#
+# Audio decoders, processors and mixers
+#
+# CONFIG_VIDEO_CS3308 is not set
+# CONFIG_VIDEO_CS5345 is not set
+# CONFIG_VIDEO_CS53L32A is not set
+CONFIG_VIDEO_MSP3400=m
+CONFIG_VIDEO_SONY_BTF_MPX=m
+# CONFIG_VIDEO_TDA1997X is not set
+# CONFIG_VIDEO_TDA7432 is not set
+CONFIG_VIDEO_TDA9840=m
+# CONFIG_VIDEO_TEA6415C is not set
+# CONFIG_VIDEO_TEA6420 is not set
+# CONFIG_VIDEO_TLV320AIC23B is not set
+# CONFIG_VIDEO_TVAUDIO is not set
+CONFIG_VIDEO_UDA1342=m
+# CONFIG_VIDEO_VP27SMPX is not set
+# CONFIG_VIDEO_WM8739 is not set
+CONFIG_VIDEO_WM8775=m
+# end of Audio decoders, processors and mixers
+
+#
+# RDS decoders
+#
+# CONFIG_VIDEO_SAA6588 is not set
+# end of RDS decoders
+
+#
+# Video decoders
+#
+CONFIG_VIDEO_ADV7180=m
+# CONFIG_VIDEO_ADV7183 is not set
+CONFIG_VIDEO_ADV748X=m
+CONFIG_VIDEO_ADV7604=m
+# CONFIG_VIDEO_ADV7604_CEC is not set
+CONFIG_VIDEO_ADV7842=m
+# CONFIG_VIDEO_ADV7842_CEC is not set
+CONFIG_VIDEO_BT819=m
+CONFIG_VIDEO_BT856=m
+CONFIG_VIDEO_BT866=m
+# CONFIG_VIDEO_ISL7998X is not set
+CONFIG_VIDEO_KS0127=m
+CONFIG_VIDEO_MAX9286=m
+CONFIG_VIDEO_ML86V7667=m
+CONFIG_VIDEO_SAA7110=m
+CONFIG_VIDEO_SAA711X=m
+# CONFIG_VIDEO_TC358743 is not set
+CONFIG_VIDEO_TVP514X=m
+CONFIG_VIDEO_TVP5150=m
+# CONFIG_VIDEO_TVP7002 is not set
+CONFIG_VIDEO_TW2804=m
+# CONFIG_VIDEO_TW9903 is not set
+# CONFIG_VIDEO_TW9906 is not set
+CONFIG_VIDEO_TW9910=m
+# CONFIG_VIDEO_VPX3220 is not set
+
+#
+# Video and audio decoders
+#
+CONFIG_VIDEO_SAA717X=m
+# CONFIG_VIDEO_CX25840 is not set
+# end of Video decoders
+
+#
+# Video encoders
+#
+CONFIG_VIDEO_AD9389B=m
+CONFIG_VIDEO_ADV7170=m
+CONFIG_VIDEO_ADV7175=m
+CONFIG_VIDEO_ADV7343=m
+CONFIG_VIDEO_ADV7393=m
+# CONFIG_VIDEO_ADV7511 is not set
+CONFIG_VIDEO_AK881X=m
+CONFIG_VIDEO_SAA7127=m
+CONFIG_VIDEO_SAA7185=m
+CONFIG_VIDEO_THS8200=m
+# end of Video encoders
+
+#
+# Video improvement chips
+#
+# CONFIG_VIDEO_UPD64031A is not set
+# CONFIG_VIDEO_UPD64083 is not set
+# end of Video improvement chips
+
+#
+# Audio/Video compression chips
+#
+CONFIG_VIDEO_SAA6752HS=m
+# end of Audio/Video compression chips
+
+#
+# SDR tuner chips
+#
+CONFIG_SDR_MAX2175=m
+# end of SDR tuner chips
+
+#
+# Miscellaneous helper chips
+#
+# CONFIG_VIDEO_I2C is not set
+CONFIG_VIDEO_M52790=m
+# CONFIG_VIDEO_ST_MIPID02 is not set
+# CONFIG_VIDEO_THS7303 is not set
+# end of Miscellaneous helper chips
+
+CONFIG_MEDIA_TUNER=y
+
+#
+# Customize TV tuners
+#
+# CONFIG_MEDIA_TUNER_E4000 is not set
+# CONFIG_MEDIA_TUNER_FC0011 is not set
+CONFIG_MEDIA_TUNER_FC0012=y
+# CONFIG_MEDIA_TUNER_FC0013 is not set
+CONFIG_MEDIA_TUNER_FC2580=m
+CONFIG_MEDIA_TUNER_IT913X=m
+CONFIG_MEDIA_TUNER_M88RS6000T=y
+CONFIG_MEDIA_TUNER_MAX2165=y
+CONFIG_MEDIA_TUNER_MC44S803=y
+CONFIG_MEDIA_TUNER_MT2060=m
+CONFIG_MEDIA_TUNER_MT2063=m
+CONFIG_MEDIA_TUNER_MT20XX=y
+CONFIG_MEDIA_TUNER_MT2131=y
+CONFIG_MEDIA_TUNER_MT2266=y
+CONFIG_MEDIA_TUNER_MXL301RF=m
+CONFIG_MEDIA_TUNER_MXL5005S=m
+# CONFIG_MEDIA_TUNER_MXL5007T is not set
+CONFIG_MEDIA_TUNER_QM1D1B0004=m
+CONFIG_MEDIA_TUNER_QM1D1C0042=m
+# CONFIG_MEDIA_TUNER_QT1010 is not set
+CONFIG_MEDIA_TUNER_R820T=m
+# CONFIG_MEDIA_TUNER_SI2157 is not set
+CONFIG_MEDIA_TUNER_SIMPLE=y
+CONFIG_MEDIA_TUNER_TDA18212=y
+CONFIG_MEDIA_TUNER_TDA18218=y
+# CONFIG_MEDIA_TUNER_TDA18250 is not set
+CONFIG_MEDIA_TUNER_TDA18271=y
+CONFIG_MEDIA_TUNER_TDA827X=y
+CONFIG_MEDIA_TUNER_TDA8290=y
+CONFIG_MEDIA_TUNER_TDA9887=y
+CONFIG_MEDIA_TUNER_TEA5761=y
+CONFIG_MEDIA_TUNER_TEA5767=y
+CONFIG_MEDIA_TUNER_TUA9001=y
+CONFIG_MEDIA_TUNER_XC2028=y
+CONFIG_MEDIA_TUNER_XC4000=y
+CONFIG_MEDIA_TUNER_XC5000=y
+# end of Customize TV tuners
+
+#
+# Customise DVB Frontends
+#
+
+#
+# Multistandard (satellite) frontends
+#
+# CONFIG_DVB_M88DS3103 is not set
+# CONFIG_DVB_MXL5XX is not set
+# CONFIG_DVB_STB0899 is not set
+CONFIG_DVB_STB6100=m
+CONFIG_DVB_STV090x=y
+CONFIG_DVB_STV0910=m
+CONFIG_DVB_STV6110x=m
+CONFIG_DVB_STV6111=m
+
+#
+# Multistandard (cable + terrestrial) frontends
+#
+CONFIG_DVB_DRXK=m
+# CONFIG_DVB_MN88472 is not set
+# CONFIG_DVB_MN88473 is not set
+# CONFIG_DVB_SI2165 is not set
+# CONFIG_DVB_TDA18271C2DD is not set
+
+#
+# DVB-S (satellite) frontends
+#
+CONFIG_DVB_CX24110=m
+CONFIG_DVB_CX24116=y
+CONFIG_DVB_CX24117=y
+# CONFIG_DVB_CX24120 is not set
+CONFIG_DVB_CX24123=m
+CONFIG_DVB_DS3000=m
+# CONFIG_DVB_MB86A16 is not set
+CONFIG_DVB_MT312=m
+CONFIG_DVB_S5H1420=y
+# CONFIG_DVB_SI21XX is not set
+# CONFIG_DVB_STB6000 is not set
+# CONFIG_DVB_STV0288 is not set
+CONFIG_DVB_STV0299=m
+CONFIG_DVB_STV0900=m
+CONFIG_DVB_STV6110=y
+# CONFIG_DVB_TDA10071 is not set
+CONFIG_DVB_TDA10086=m
+CONFIG_DVB_TDA8083=m
+# CONFIG_DVB_TDA8261 is not set
+CONFIG_DVB_TDA826X=m
+CONFIG_DVB_TS2020=y
+CONFIG_DVB_TUA6100=y
+CONFIG_DVB_TUNER_CX24113=m
+CONFIG_DVB_TUNER_ITD1000=y
+# CONFIG_DVB_VES1X93 is not set
+CONFIG_DVB_ZL10036=m
+# CONFIG_DVB_ZL10039 is not set
+
+#
+# DVB-T (terrestrial) frontends
+#
+CONFIG_DVB_AF9013=m
+CONFIG_DVB_CX22700=m
+# CONFIG_DVB_CX22702 is not set
+# CONFIG_DVB_CXD2820R is not set
+# CONFIG_DVB_CXD2841ER is not set
+# CONFIG_DVB_DIB3000MB is not set
+# CONFIG_DVB_DIB3000MC is not set
+CONFIG_DVB_DIB7000M=y
+# CONFIG_DVB_DIB7000P is not set
+# CONFIG_DVB_DIB9000 is not set
+CONFIG_DVB_DRXD=y
+CONFIG_DVB_EC100=y
+CONFIG_DVB_L64781=m
+CONFIG_DVB_MT352=y
+# CONFIG_DVB_NXT6000 is not set
+CONFIG_DVB_RTL2830=m
+CONFIG_DVB_RTL2832=y
+# CONFIG_DVB_RTL2832_SDR is not set
+CONFIG_DVB_S5H1432=m
+CONFIG_DVB_SI2168=y
+CONFIG_DVB_SP887X=m
+CONFIG_DVB_STV0367=m
+CONFIG_DVB_TDA10048=y
+# CONFIG_DVB_TDA1004X is not set
+# CONFIG_DVB_ZD1301_DEMOD is not set
+CONFIG_DVB_ZL10353=y
+
+#
+# DVB-C (cable) frontends
+#
+CONFIG_DVB_STV0297=m
+# CONFIG_DVB_TDA10021 is not set
+CONFIG_DVB_TDA10023=y
+CONFIG_DVB_VES1820=y
+
+#
+# ATSC (North American/Korean Terrestrial/Cable DTV) frontends
+#
+CONFIG_DVB_AU8522=y
+CONFIG_DVB_AU8522_DTV=y
+CONFIG_DVB_AU8522_V4L=m
+CONFIG_DVB_BCM3510=y
+CONFIG_DVB_LG2160=m
+CONFIG_DVB_LGDT3305=m
+# CONFIG_DVB_LGDT3306A is not set
+# CONFIG_DVB_LGDT330X is not set
+# CONFIG_DVB_MXL692 is not set
+CONFIG_DVB_NXT200X=y
+CONFIG_DVB_OR51132=m
+CONFIG_DVB_OR51211=m
+CONFIG_DVB_S5H1409=m
+CONFIG_DVB_S5H1411=y
+
+#
+# ISDB-T (terrestrial) frontends
+#
+# CONFIG_DVB_DIB8000 is not set
+# CONFIG_DVB_MB86A20S is not set
+# CONFIG_DVB_S921 is not set
+
+#
+# ISDB-S (satellite) & ISDB-T (terrestrial) frontends
+#
+# CONFIG_DVB_MN88443X is not set
+CONFIG_DVB_TC90522=y
+
+#
+# Digital terrestrial only tuners/PLL
+#
+CONFIG_DVB_PLL=m
+CONFIG_DVB_TUNER_DIB0070=y
+# CONFIG_DVB_TUNER_DIB0090 is not set
+
+#
+# SEC control devices for DVB-S
+#
+# CONFIG_DVB_A8293 is not set
+# CONFIG_DVB_AF9033 is not set
+CONFIG_DVB_ASCOT2E=m
+# CONFIG_DVB_ATBM8830 is not set
+CONFIG_DVB_HELENE=m
+CONFIG_DVB_HORUS3A=m
+CONFIG_DVB_ISL6405=m
+CONFIG_DVB_ISL6421=m
+CONFIG_DVB_ISL6423=y
+CONFIG_DVB_IX2505V=m
+CONFIG_DVB_LGS8GL5=m
+# CONFIG_DVB_LGS8GXX is not set
+CONFIG_DVB_LNBH25=m
+# CONFIG_DVB_LNBH29 is not set
+CONFIG_DVB_LNBP21=y
+CONFIG_DVB_LNBP22=y
+CONFIG_DVB_M88RS2000=m
+# CONFIG_DVB_TDA665x is not set
+# CONFIG_DVB_DRX39XYJ is not set
+
+#
+# Common Interface (EN50221) controller drivers
+#
+CONFIG_DVB_CXD2099=m
+CONFIG_DVB_SP2=y
+# end of Customise DVB Frontends
+
+#
+# Tools to develop new frontends
+#
+CONFIG_DVB_DUMMY_FE=y
+# end of Media ancillary drivers
+
+#
+# Graphics support
+#
+# CONFIG_TEGRA_HOST1X is not set
+# CONFIG_IMX_IPUV3_CORE is not set
+CONFIG_DRM=y
+CONFIG_DRM_MIPI_DSI=y
+CONFIG_DRM_DEBUG_MM=y
+# CONFIG_DRM_KUNIT_TEST is not set
+CONFIG_DRM_KMS_HELPER=y
+CONFIG_DRM_DEBUG_DP_MST_TOPOLOGY_REFS=y
+# CONFIG_DRM_DEBUG_MODESET_LOCK is not set
+# CONFIG_DRM_FBDEV_EMULATION is not set
+# CONFIG_DRM_LOAD_EDID_FIRMWARE is not set
+CONFIG_DRM_DP_AUX_BUS=y
+CONFIG_DRM_DISPLAY_HELPER=y
+CONFIG_DRM_DISPLAY_DP_HELPER=y
+CONFIG_DRM_DISPLAY_HDCP_HELPER=y
+# CONFIG_DRM_DP_AUX_CHARDEV is not set
+CONFIG_DRM_DP_CEC=y
+CONFIG_DRM_GEM_DMA_HELPER=y
+
+#
+# I2C encoder or helper chips
+#
+CONFIG_DRM_I2C_CH7006=y
+CONFIG_DRM_I2C_SIL164=m
+# CONFIG_DRM_I2C_NXP_TDA998X is not set
+CONFIG_DRM_I2C_NXP_TDA9950=y
+# end of I2C encoder or helper chips
+
+#
+# ARM devices
+#
+# CONFIG_DRM_HDLCD is not set
+# CONFIG_DRM_MALI_DISPLAY is not set
+# CONFIG_DRM_KOMEDA is not set
+# end of ARM devices
+
+# CONFIG_DRM_KMB_DISPLAY is not set
+# CONFIG_DRM_ATMEL_HLCDC is not set
+# CONFIG_DRM_RCAR_DU is not set
+# CONFIG_DRM_RCAR_DW_HDMI is not set
+# CONFIG_DRM_RCAR_USE_LVDS is not set
+# CONFIG_DRM_RCAR_MIPI_DSI is not set
+# CONFIG_DRM_SHMOBILE is not set
+# CONFIG_DRM_SUN4I is not set
+CONFIG_DRM_TILCDC=y
+# CONFIG_DRM_FSL_DCU is not set
+# CONFIG_DRM_TEGRA is not set
+CONFIG_DRM_PANEL=y
+
+#
+# Display Panels
+#
+# CONFIG_DRM_PANEL_ARM_VERSATILE is not set
+CONFIG_DRM_PANEL_ASUS_Z00T_TM5P5_NT35596=m
+# CONFIG_DRM_PANEL_BOE_BF060Y8M_AJ0 is not set
+# CONFIG_DRM_PANEL_BOE_HIMAX8279D is not set
+# CONFIG_DRM_PANEL_BOE_TV101WUM_NL6 is not set
+CONFIG_DRM_PANEL_DSI_CM=m
+CONFIG_DRM_PANEL_LVDS=y
+# CONFIG_DRM_PANEL_EBBG_FT8719 is not set
+# CONFIG_DRM_PANEL_ELIDA_KD35T133 is not set
+CONFIG_DRM_PANEL_FEIXIN_K101_IM2BA02=y
+CONFIG_DRM_PANEL_FEIYANG_FY07024DI26A30D=m
+CONFIG_DRM_PANEL_ILITEK_ILI9881C=m
+CONFIG_DRM_PANEL_INNOLUX_P079ZCA=m
+CONFIG_DRM_PANEL_JDI_LT070ME05000=y
+# CONFIG_DRM_PANEL_JDI_R63452 is not set
+# CONFIG_DRM_PANEL_KHADAS_TS050 is not set
+CONFIG_DRM_PANEL_KINGDISPLAY_KD097D04=y
+CONFIG_DRM_PANEL_LEADTEK_LTK050H3146W=y
+CONFIG_DRM_PANEL_LEADTEK_LTK500HD1829=y
+CONFIG_DRM_PANEL_NOVATEK_NT35510=y
+# CONFIG_DRM_PANEL_NOVATEK_NT35560 is not set
+# CONFIG_DRM_PANEL_NOVATEK_NT35950 is not set
+# CONFIG_DRM_PANEL_NOVATEK_NT36672A is not set
+CONFIG_DRM_PANEL_MANTIX_MLAF057WE51=m
+CONFIG_DRM_PANEL_OLIMEX_LCD_OLINUXINO=y
+# CONFIG_DRM_PANEL_ORISETECH_OTM8009A is not set
+# CONFIG_DRM_PANEL_OSD_OSD101T2587_53TS is not set
+CONFIG_DRM_PANEL_PANASONIC_VVX10F034N00=m
+# CONFIG_DRM_PANEL_RASPBERRYPI_TOUCHSCREEN is not set
+CONFIG_DRM_PANEL_RAYDIUM_RM67191=m
+CONFIG_DRM_PANEL_RAYDIUM_RM68200=m
+# CONFIG_DRM_PANEL_RONBO_RB070D30 is not set
+CONFIG_DRM_PANEL_SAMSUNG_S6D16D0=m
+CONFIG_DRM_PANEL_SAMSUNG_S6E3HA2=m
+CONFIG_DRM_PANEL_SAMSUNG_S6E63J0X03=m
+CONFIG_DRM_PANEL_SAMSUNG_S6E63M0=m
+CONFIG_DRM_PANEL_SAMSUNG_S6E63M0_DSI=m
+CONFIG_DRM_PANEL_SAMSUNG_S6E88A0_AMS452EF01=y
+CONFIG_DRM_PANEL_SAMSUNG_S6E8AA0=m
+CONFIG_DRM_PANEL_SAMSUNG_SOFEF00=y
+CONFIG_DRM_PANEL_SEIKO_43WVF1G=m
+CONFIG_DRM_PANEL_SHARP_LQ101R1SX01=m
+CONFIG_DRM_PANEL_SHARP_LS043T1LE01=y
+# CONFIG_DRM_PANEL_SHARP_LS060T1SX01 is not set
+# CONFIG_DRM_PANEL_SITRONIX_ST7701 is not set
+CONFIG_DRM_PANEL_SITRONIX_ST7703=y
+# CONFIG_DRM_PANEL_SONY_TULIP_TRULY_NT35521 is not set
+# CONFIG_DRM_PANEL_TDO_TL070WSH30 is not set
+CONFIG_DRM_PANEL_TRULY_NT35597_WQXGA=m
+CONFIG_DRM_PANEL_VISIONOX_RM69299=y
+CONFIG_DRM_PANEL_XINPENG_XPP055C272=m
+# end of Display Panels
+
+CONFIG_DRM_BRIDGE=y
+CONFIG_DRM_PANEL_BRIDGE=y
+
+#
+# Display Interface Bridges
+#
+# CONFIG_DRM_CDNS_DSI is not set
+CONFIG_DRM_CHIPONE_ICN6211=m
+CONFIG_DRM_CHRONTEL_CH7033=m
+# CONFIG_DRM_CROS_EC_ANX7688 is not set
+# CONFIG_DRM_DISPLAY_CONNECTOR is not set
+# CONFIG_DRM_FSL_LDB is not set
+# CONFIG_DRM_ITE_IT6505 is not set
+CONFIG_DRM_LONTIUM_LT8912B=m
+# CONFIG_DRM_LONTIUM_LT9211 is not set
+# CONFIG_DRM_LONTIUM_LT9611 is not set
+CONFIG_DRM_LONTIUM_LT9611UXC=y
+CONFIG_DRM_ITE_IT66121=y
+# CONFIG_DRM_LVDS_CODEC is not set
+CONFIG_DRM_MEGACHIPS_STDPXXXX_GE_B850V3_FW=y
+# CONFIG_DRM_NWL_MIPI_DSI is not set
+# CONFIG_DRM_NXP_PTN3460 is not set
+CONFIG_DRM_PARADE_PS8622=m
+# CONFIG_DRM_PARADE_PS8640 is not set
+# CONFIG_DRM_SIL_SII8620 is not set
+CONFIG_DRM_SII902X=m
+CONFIG_DRM_SII9234=m
+CONFIG_DRM_SIMPLE_BRIDGE=y
+# CONFIG_DRM_THINE_THC63LVD1024 is not set
+CONFIG_DRM_TOSHIBA_TC358762=m
+CONFIG_DRM_TOSHIBA_TC358764=m
+CONFIG_DRM_TOSHIBA_TC358767=m
+CONFIG_DRM_TOSHIBA_TC358768=y
+# CONFIG_DRM_TOSHIBA_TC358775 is not set
+# CONFIG_DRM_TI_DLPC3433 is not set
+# CONFIG_DRM_TI_TFP410 is not set
+CONFIG_DRM_TI_SN65DSI83=y
+CONFIG_DRM_TI_SN65DSI86=y
+CONFIG_DRM_TI_TPD12S015=y
+CONFIG_DRM_ANALOGIX_ANX6345=m
+CONFIG_DRM_ANALOGIX_ANX78XX=m
+CONFIG_DRM_ANALOGIX_DP=m
+CONFIG_DRM_ANALOGIX_ANX7625=m
+CONFIG_DRM_I2C_ADV7511=m
+# CONFIG_DRM_I2C_ADV7511_AUDIO is not set
+CONFIG_DRM_I2C_ADV7511_CEC=y
+CONFIG_DRM_CDNS_MHDP8546=y
+CONFIG_DRM_CDNS_MHDP8546_J721E=y
+# CONFIG_DRM_IMX8QM_LDB is not set
+# CONFIG_DRM_IMX8QXP_LDB is not set
+# CONFIG_DRM_IMX8QXP_PIXEL_COMBINER is not set
+# CONFIG_DRM_IMX8QXP_PIXEL_LINK_TO_DPI is not set
+# end of Display Interface Bridges
+
+# CONFIG_DRM_LOGICVC is not set
+# CONFIG_DRM_MXSFB is not set
+# CONFIG_DRM_IMX_LCDIF is not set
+# CONFIG_DRM_MESON is not set
+CONFIG_DRM_ARCPGU=m
+# CONFIG_DRM_PL111 is not set
+# CONFIG_DRM_TIDSS is not set
+# CONFIG_DRM_SPRD is not set
+CONFIG_DRM_PANEL_ORIENTATION_QUIRKS=y
+CONFIG_DRM_NOMODESET=y
+
+#
+# Frame buffer Devices
+#
+CONFIG_FB_CMDLINE=y
+CONFIG_FB_NOTIFY=y
+CONFIG_FB=y
+CONFIG_FIRMWARE_EDID=y
+CONFIG_FB_CFB_FILLRECT=y
+CONFIG_FB_CFB_COPYAREA=y
+CONFIG_FB_CFB_IMAGEBLIT=y
+CONFIG_FB_SYS_FILLRECT=y
+CONFIG_FB_SYS_COPYAREA=y
+CONFIG_FB_SYS_IMAGEBLIT=y
+# CONFIG_FB_FOREIGN_ENDIAN is not set
+CONFIG_FB_SYS_FOPS=y
+CONFIG_FB_DEFERRED_IO=y
+CONFIG_FB_BACKLIGHT=y
+CONFIG_FB_MODE_HELPERS=y
+# CONFIG_FB_TILEBLITTING is not set
+
+#
+# Frame buffer hardware drivers
+#
+CONFIG_FB_ARMCLCD=y
+# CONFIG_FB_CLPS711X is not set
+# CONFIG_FB_IMX is not set
+# CONFIG_FB_ARC is not set
+# CONFIG_FB_CONTROL is not set
+# CONFIG_FB_GBE is not set
+# CONFIG_FB_PVR2 is not set
+CONFIG_FB_OPENCORES=y
+CONFIG_FB_S1D13XXX=m
+# CONFIG_FB_ATMEL is not set
+# CONFIG_FB_WM8505 is not set
+# CONFIG_FB_PXA168 is not set
+# CONFIG_FB_W100 is not set
+# CONFIG_FB_SH_MOBILE_LCDC is not set
+# CONFIG_FB_TMIO is not set
+# CONFIG_FB_S3C is not set
+# CONFIG_FB_SM501 is not set
+CONFIG_FB_SMSCUFX=m
+CONFIG_FB_UDL=m
+CONFIG_FB_IBM_GXT4500=y
+# CONFIG_FB_GOLDFISH is not set
+# CONFIG_FB_DA8XX is not set
+CONFIG_FB_VIRTUAL=y
+# CONFIG_FB_METRONOME is not set
+# CONFIG_FB_BROADSHEET is not set
+# CONFIG_FB_SIMPLE is not set
+CONFIG_FB_SSD1307=y
+# CONFIG_FB_OMAP is not set
+# CONFIG_FB_OMAP2 is not set
+# CONFIG_MMP_DISP is not set
+# end of Frame buffer Devices
+
+#
+# Backlight & LCD device support
+#
+CONFIG_LCD_CLASS_DEVICE=y
+# CONFIG_LCD_PLATFORM is not set
+CONFIG_BACKLIGHT_CLASS_DEVICE=y
+CONFIG_BACKLIGHT_KTD253=m
+# CONFIG_BACKLIGHT_OMAP1 is not set
+CONFIG_BACKLIGHT_PWM=y
+CONFIG_BACKLIGHT_DA903X=m
+CONFIG_BACKLIGHT_DA9052=y
+CONFIG_BACKLIGHT_QCOM_WLED=y
+# CONFIG_BACKLIGHT_WM831X is not set
+CONFIG_BACKLIGHT_ADP5520=m
+# CONFIG_BACKLIGHT_ADP8860 is not set
+CONFIG_BACKLIGHT_ADP8870=y
+# CONFIG_BACKLIGHT_88PM860X is not set
+CONFIG_BACKLIGHT_PCF50633=m
+CONFIG_BACKLIGHT_AAT2870=y
+CONFIG_BACKLIGHT_LM3630A=y
+CONFIG_BACKLIGHT_LM3639=y
+CONFIG_BACKLIGHT_LP855X=m
+CONFIG_BACKLIGHT_TPS65217=m
+CONFIG_BACKLIGHT_AS3711=y
+CONFIG_BACKLIGHT_GPIO=y
+CONFIG_BACKLIGHT_LV5207LP=m
+CONFIG_BACKLIGHT_BD6107=m
+CONFIG_BACKLIGHT_ARCXCNN=y
+CONFIG_BACKLIGHT_RAVE_SP=m
+CONFIG_BACKLIGHT_LED=y
+# end of Backlight & LCD device support
+
+CONFIG_VIDEOMODE_HELPERS=y
+CONFIG_HDMI=y
+CONFIG_LOGO=y
+# CONFIG_LOGO_LINUX_MONO is not set
+CONFIG_LOGO_LINUX_VGA16=y
+# CONFIG_LOGO_LINUX_CLUT224 is not set
+# end of Graphics support
+
+CONFIG_SOUND=m
+CONFIG_SND=m
+CONFIG_SND_TIMER=m
+CONFIG_SND_PCM=m
+CONFIG_SND_PCM_ELD=y
+CONFIG_SND_PCM_IEC958=y
+CONFIG_SND_DMAENGINE_PCM=m
+CONFIG_SND_SEQ_DEVICE=m
+CONFIG_SND_RAWMIDI=m
+CONFIG_SND_JACK=y
+CONFIG_SND_JACK_INPUT_DEV=y
+# CONFIG_SND_OSSEMUL is not set
+CONFIG_SND_PCM_TIMER=y
+CONFIG_SND_DYNAMIC_MINORS=y
+CONFIG_SND_MAX_CARDS=32
+CONFIG_SND_SUPPORT_OLD_API=y
+# CONFIG_SND_PROC_FS is not set
+CONFIG_SND_VERBOSE_PRINTK=y
+CONFIG_SND_CTL_FAST_LOOKUP=y
+# CONFIG_SND_DEBUG is not set
+# CONFIG_SND_CTL_INPUT_VALIDATION is not set
+CONFIG_SND_SEQUENCER=m
+CONFIG_SND_SEQ_DUMMY=m
+CONFIG_SND_SEQ_MIDI_EVENT=m
+CONFIG_SND_SEQ_MIDI=m
+# CONFIG_SND_DRIVERS is not set
+
+#
+# HD-Audio
+#
+# end of HD-Audio
+
+CONFIG_SND_HDA_PREALLOC_SIZE=64
+# CONFIG_SND_ARM is not set
+# CONFIG_SND_USB is not set
+CONFIG_SND_SOC=m
+CONFIG_SND_SOC_GENERIC_DMAENGINE_PCM=y
+# CONFIG_SND_SOC_UTILS_KUNIT_TEST is not set
+# CONFIG_SND_SOC_ADI is not set
+CONFIG_SND_SOC_AMD_ACP=m
+CONFIG_SND_SOC_AMD_CZ_RT5645_MACH=m
+# CONFIG_SND_AMD_ACP_CONFIG is not set
+# CONFIG_SND_SOC_APPLE_MCA is not set
+CONFIG_SND_ATMEL_SOC=m
+# CONFIG_SND_ATMEL_SOC_CLASSD is not set
+# CONFIG_SND_ATMEL_SOC_PDMIC is not set
+# CONFIG_SND_ATMEL_SOC_I2S is not set
+CONFIG_SND_SOC_MIKROE_PROTO=m
+# CONFIG_SND_MCHP_SOC_I2S_MCC is not set
+# CONFIG_SND_MCHP_SOC_SPDIFTX is not set
+# CONFIG_SND_MCHP_SOC_SPDIFRX is not set
+# CONFIG_SND_MCHP_SOC_PDMC is not set
+# CONFIG_SND_BCM2835_SOC_I2S is not set
+# CONFIG_SND_SOC_CYGNUS is not set
+# CONFIG_SND_BCM63XX_I2S_WHISTLER is not set
+CONFIG_SND_EP93XX_SOC=m
+# CONFIG_SND_DESIGNWARE_I2S is not set
+
+#
+# SoC Audio for Freescale CPUs
+#
+
+#
+# Common SoC Audio options for Freescale CPUs:
+#
+CONFIG_SND_SOC_FSL_ASRC=m
+# CONFIG_SND_SOC_FSL_SAI is not set
+CONFIG_SND_SOC_FSL_AUDMIX=m
+CONFIG_SND_SOC_FSL_SSI=m
+# CONFIG_SND_SOC_FSL_SPDIF is not set
+CONFIG_SND_SOC_FSL_ESAI=m
+CONFIG_SND_SOC_FSL_MICFIL=m
+CONFIG_SND_SOC_FSL_EASRC=m
+# CONFIG_SND_SOC_FSL_XCVR is not set
+# CONFIG_SND_SOC_FSL_AUD2HTX is not set
+CONFIG_SND_SOC_FSL_UTILS=m
+# CONFIG_SND_SOC_FSL_RPMSG is not set
+CONFIG_SND_SOC_IMX_AUDMUX=m
+# CONFIG_SND_IMX_SOC is not set
+# end of SoC Audio for Freescale CPUs
+
+# CONFIG_SND_I2S_HI6210_I2S is not set
+# CONFIG_SND_JZ4740_SOC_I2S is not set
+# CONFIG_SND_KIRKWOOD_SOC is not set
+CONFIG_SND_SOC_IMG=y
+CONFIG_SND_SOC_IMG_I2S_IN=m
+CONFIG_SND_SOC_IMG_I2S_OUT=m
+CONFIG_SND_SOC_IMG_PARALLEL_OUT=m
+CONFIG_SND_SOC_IMG_SPDIF_IN=m
+# CONFIG_SND_SOC_IMG_SPDIF_OUT is not set
+# CONFIG_SND_SOC_IMG_PISTACHIO_INTERNAL_DAC is not set
+CONFIG_SND_SOC_INTEL_SST_TOPLEVEL=y
+# CONFIG_SND_SOC_INTEL_KEEMBAY is not set
+CONFIG_SND_SOC_INTEL_MACH=y
+# CONFIG_SND_SOC_INTEL_USER_FRIENDLY_LONG_NAMES is not set
+# CONFIG_SND_SOC_MT8186 is not set
+CONFIG_SND_SOC_MTK_BTCVSD=m
+# CONFIG_SND_SOC_MT8195 is not set
+
+#
+# ASoC support for Amlogic platforms
+#
+# CONFIG_SND_MESON_AIU is not set
+# CONFIG_SND_MESON_AXG_FRDDR is not set
+# CONFIG_SND_MESON_AXG_TODDR is not set
+# CONFIG_SND_MESON_AXG_TDMIN is not set
+# CONFIG_SND_MESON_AXG_TDMOUT is not set
+# CONFIG_SND_MESON_AXG_SOUND_CARD is not set
+# CONFIG_SND_MESON_AXG_SPDIFOUT is not set
+# CONFIG_SND_MESON_AXG_SPDIFIN is not set
+# CONFIG_SND_MESON_AXG_PDM is not set
+# CONFIG_SND_MESON_GX_SOUND_CARD is not set
+# CONFIG_SND_MESON_G12A_TOACODEC is not set
+# CONFIG_SND_MESON_G12A_TOHDMITX is not set
+# CONFIG_SND_SOC_MESON_T9015 is not set
+# end of ASoC support for Amlogic platforms
+
+# CONFIG_SND_MXS_SOC is not set
+# CONFIG_SND_PXA2XX_SOC is not set
+# CONFIG_SND_SOC_QCOM is not set
+# CONFIG_SND_SOC_ROCKCHIP is not set
+# CONFIG_SND_SOC_SAMSUNG is not set
+
+#
+# SoC Audio support for Renesas SoCs
+#
+# CONFIG_SND_SOC_SH4_FSI is not set
+# CONFIG_SND_SOC_RCAR is not set
+# CONFIG_SND_SOC_RZ is not set
+# end of SoC Audio support for Renesas SoCs
+
+# CONFIG_SND_SOC_SOF_TOPLEVEL is not set
+# CONFIG_SND_SOC_SPRD is not set
+# CONFIG_SND_SOC_STI is not set
+
+#
+# STMicroelectronics STM32 SOC audio support
+#
+# CONFIG_SND_SOC_STM32_SAI is not set
+# CONFIG_SND_SOC_STM32_I2S is not set
+# CONFIG_SND_SOC_STM32_SPDIFRX is not set
+# end of STMicroelectronics STM32 SOC audio support
+
+#
+# Allwinner SoC Audio support
+#
+# CONFIG_SND_SUN4I_CODEC is not set
+# CONFIG_SND_SUN8I_CODEC is not set
+# CONFIG_SND_SUN8I_CODEC_ANALOG is not set
+# CONFIG_SND_SUN50I_CODEC_ANALOG is not set
+# CONFIG_SND_SUN4I_I2S is not set
+# CONFIG_SND_SUN4I_SPDIF is not set
+# CONFIG_SND_SUN50I_DMIC is not set
+# end of Allwinner SoC Audio support
+
+# CONFIG_SND_SOC_TEGRA is not set
+
+#
+# Audio support for Texas Instruments SoCs
+#
+
+#
+# Texas Instruments DAI support for:
+#
+# CONFIG_SND_SOC_DAVINCI_ASP is not set
+# CONFIG_SND_SOC_DAVINCI_MCASP is not set
+# CONFIG_SND_SOC_DAVINCI_VCIF is not set
+# CONFIG_SND_SOC_OMAP_DMIC is not set
+# CONFIG_SND_SOC_OMAP_MCBSP is not set
+# CONFIG_SND_SOC_OMAP_MCPDM is not set
+
+#
+# Audio support for boards with Texas Instruments SoCs
+#
+# CONFIG_SND_SOC_OMAP_HDMI is not set
+# CONFIG_SND_SOC_J721E_EVM is not set
+# end of Audio support for Texas Instruments SoCs
+
+# CONFIG_SND_SOC_UNIPHIER is not set
+# CONFIG_SND_SOC_XILINX_I2S is not set
+# CONFIG_SND_SOC_XILINX_AUDIO_FORMATTER is not set
+# CONFIG_SND_SOC_XILINX_SPDIF is not set
+CONFIG_SND_SOC_XTFPGA_I2S=m
+CONFIG_SND_SOC_I2C_AND_SPI=m
+
+#
+# CODEC drivers
+#
+# CONFIG_SND_SOC_ALL_CODECS is not set
+# CONFIG_SND_SOC_AC97_CODEC is not set
+CONFIG_SND_SOC_ADAU_UTILS=m
+# CONFIG_SND_SOC_ADAU1372_I2C is not set
+CONFIG_SND_SOC_ADAU1701=m
+CONFIG_SND_SOC_ADAU17X1=m
+CONFIG_SND_SOC_ADAU1761=m
+CONFIG_SND_SOC_ADAU1761_I2C=m
+# CONFIG_SND_SOC_ADAU7002 is not set
+CONFIG_SND_SOC_ADAU7118=m
+# CONFIG_SND_SOC_ADAU7118_HW is not set
+CONFIG_SND_SOC_ADAU7118_I2C=m
+CONFIG_SND_SOC_AK4118=m
+# CONFIG_SND_SOC_AK4375 is not set
+CONFIG_SND_SOC_AK4458=m
+CONFIG_SND_SOC_AK4554=m
+# CONFIG_SND_SOC_AK4613 is not set
+# CONFIG_SND_SOC_AK4642 is not set
+# CONFIG_SND_SOC_AK5386 is not set
+# CONFIG_SND_SOC_AK5558 is not set
+CONFIG_SND_SOC_ALC5623=m
+# CONFIG_SND_SOC_AW8738 is not set
+CONFIG_SND_SOC_BD28623=m
+# CONFIG_SND_SOC_BT_SCO is not set
+# CONFIG_SND_SOC_CPCAP is not set
+CONFIG_SND_SOC_CS35L32=m
+# CONFIG_SND_SOC_CS35L33 is not set
+CONFIG_SND_SOC_CS35L34=m
+# CONFIG_SND_SOC_CS35L35 is not set
+CONFIG_SND_SOC_CS35L36=m
+# CONFIG_SND_SOC_CS35L41_I2C is not set
+# CONFIG_SND_SOC_CS35L45_I2C is not set
+# CONFIG_SND_SOC_CS42L42 is not set
+# CONFIG_SND_SOC_CS42L51_I2C is not set
+CONFIG_SND_SOC_CS42L52=m
+# CONFIG_SND_SOC_CS42L56 is not set
+CONFIG_SND_SOC_CS42L73=m
+# CONFIG_SND_SOC_CS42L83 is not set
+CONFIG_SND_SOC_CS4234=m
+CONFIG_SND_SOC_CS4265=m
+CONFIG_SND_SOC_CS4270=m
+CONFIG_SND_SOC_CS4271=m
+CONFIG_SND_SOC_CS4271_I2C=m
+CONFIG_SND_SOC_CS42XX8=m
+CONFIG_SND_SOC_CS42XX8_I2C=m
+CONFIG_SND_SOC_CS43130=m
+CONFIG_SND_SOC_CS4341=m
+CONFIG_SND_SOC_CS4349=m
+CONFIG_SND_SOC_CS53L30=m
+CONFIG_SND_SOC_CX2072X=m
+# CONFIG_SND_SOC_JZ4740_CODEC is not set
+# CONFIG_SND_SOC_JZ4725B_CODEC is not set
+# CONFIG_SND_SOC_JZ4760_CODEC is not set
+# CONFIG_SND_SOC_JZ4770_CODEC is not set
+CONFIG_SND_SOC_DA7213=m
+# CONFIG_SND_SOC_DMIC is not set
+CONFIG_SND_SOC_HDMI_CODEC=m
+CONFIG_SND_SOC_ES7134=m
+# CONFIG_SND_SOC_ES7241 is not set
+CONFIG_SND_SOC_ES8316=m
+# CONFIG_SND_SOC_ES8326 is not set
+CONFIG_SND_SOC_ES8328=m
+CONFIG_SND_SOC_ES8328_I2C=m
+CONFIG_SND_SOC_GTM601=m
+# CONFIG_SND_SOC_HDA is not set
+# CONFIG_SND_SOC_ICS43432 is not set
+# CONFIG_SND_SOC_INNO_RK3036 is not set
+# CONFIG_SND_SOC_LOCHNAGAR_SC is not set
+CONFIG_SND_SOC_MAX98088=m
+CONFIG_SND_SOC_MAX98357A=m
+CONFIG_SND_SOC_MAX98504=m
+CONFIG_SND_SOC_MAX9867=m
+CONFIG_SND_SOC_MAX98927=m
+# CONFIG_SND_SOC_MAX98520 is not set
+# CONFIG_SND_SOC_MAX98373_I2C is not set
+# CONFIG_SND_SOC_MAX98373_SDW is not set
+# CONFIG_SND_SOC_MAX98390 is not set
+# CONFIG_SND_SOC_MAX98396 is not set
+CONFIG_SND_SOC_MAX9860=m
+# CONFIG_SND_SOC_MSM8916_WCD_ANALOG is not set
+# CONFIG_SND_SOC_MSM8916_WCD_DIGITAL is not set
+CONFIG_SND_SOC_PCM1681=m
+# CONFIG_SND_SOC_PCM1789_I2C is not set
+CONFIG_SND_SOC_PCM179X=m
+CONFIG_SND_SOC_PCM179X_I2C=m
+CONFIG_SND_SOC_PCM186X=m
+CONFIG_SND_SOC_PCM186X_I2C=m
+# CONFIG_SND_SOC_PCM3060_I2C is not set
+CONFIG_SND_SOC_PCM3168A=m
+CONFIG_SND_SOC_PCM3168A_I2C=m
+# CONFIG_SND_SOC_PCM5102A is not set
+CONFIG_SND_SOC_PCM512x=m
+CONFIG_SND_SOC_PCM512x_I2C=m
+CONFIG_SND_SOC_RK3328=m
+# CONFIG_SND_SOC_RK817 is not set
+CONFIG_SND_SOC_RL6231=m
+CONFIG_SND_SOC_RT1308_SDW=m
+# CONFIG_SND_SOC_RT1316_SDW is not set
+CONFIG_SND_SOC_RT5616=m
+# CONFIG_SND_SOC_RT5631 is not set
+# CONFIG_SND_SOC_RT5640 is not set
+CONFIG_SND_SOC_RT5645=m
+# CONFIG_SND_SOC_RT5659 is not set
+CONFIG_SND_SOC_RT5682=m
+CONFIG_SND_SOC_RT5682_SDW=m
+# CONFIG_SND_SOC_RT700_SDW is not set
+# CONFIG_SND_SOC_RT711_SDW is not set
+# CONFIG_SND_SOC_RT711_SDCA_SDW is not set
+CONFIG_SND_SOC_RT715=m
+CONFIG_SND_SOC_RT715_SDW=m
+# CONFIG_SND_SOC_RT715_SDCA_SDW is not set
+# CONFIG_SND_SOC_RT9120 is not set
+# CONFIG_SND_SOC_SDW_MOCKUP is not set
+# CONFIG_SND_SOC_SGTL5000 is not set
+CONFIG_SND_SOC_SI476X=m
+CONFIG_SND_SOC_SIGMADSP=m
+CONFIG_SND_SOC_SIGMADSP_I2C=m
+CONFIG_SND_SOC_SIGMADSP_REGMAP=m
+# CONFIG_SND_SOC_SIMPLE_AMPLIFIER is not set
+# CONFIG_SND_SOC_SIMPLE_MUX is not set
+CONFIG_SND_SOC_SPDIF=m
+# CONFIG_SND_SOC_SRC4XXX_I2C is not set
+CONFIG_SND_SOC_SSM2305=m
+# CONFIG_SND_SOC_SSM2518 is not set
+CONFIG_SND_SOC_SSM2602=m
+CONFIG_SND_SOC_SSM2602_I2C=m
+CONFIG_SND_SOC_SSM4567=m
+# CONFIG_SND_SOC_STA32X is not set
+# CONFIG_SND_SOC_STA350 is not set
+CONFIG_SND_SOC_STI_SAS=m
+CONFIG_SND_SOC_TAS2552=m
+CONFIG_SND_SOC_TAS2562=m
+# CONFIG_SND_SOC_TAS2764 is not set
+# CONFIG_SND_SOC_TAS2770 is not set
+# CONFIG_SND_SOC_TAS2780 is not set
+# CONFIG_SND_SOC_TAS5086 is not set
+# CONFIG_SND_SOC_TAS571X is not set
+CONFIG_SND_SOC_TAS5720=m
+# CONFIG_SND_SOC_TAS5805M is not set
+CONFIG_SND_SOC_TAS6424=m
+# CONFIG_SND_SOC_TDA7419 is not set
+# CONFIG_SND_SOC_TFA9879 is not set
+# CONFIG_SND_SOC_TFA989X is not set
+# CONFIG_SND_SOC_TLV320ADC3XXX is not set
+# CONFIG_SND_SOC_TLV320AIC23_I2C is not set
+CONFIG_SND_SOC_TLV320AIC31XX=m
+# CONFIG_SND_SOC_TLV320AIC32X4_I2C is not set
+# CONFIG_SND_SOC_TLV320AIC3X_I2C is not set
+CONFIG_SND_SOC_TLV320ADCX140=m
+CONFIG_SND_SOC_TS3A227E=m
+# CONFIG_SND_SOC_TSCS42XX is not set
+CONFIG_SND_SOC_TSCS454=m
+CONFIG_SND_SOC_UDA1334=m
+# CONFIG_SND_SOC_WCD938X_SDW is not set
+CONFIG_SND_SOC_WM8510=m
+CONFIG_SND_SOC_WM8523=m
+# CONFIG_SND_SOC_WM8524 is not set
+CONFIG_SND_SOC_WM8580=m
+CONFIG_SND_SOC_WM8711=m
+CONFIG_SND_SOC_WM8728=m
+CONFIG_SND_SOC_WM8731=m
+# CONFIG_SND_SOC_WM8731_I2C is not set
+CONFIG_SND_SOC_WM8737=m
+CONFIG_SND_SOC_WM8741=m
+CONFIG_SND_SOC_WM8750=m
+CONFIG_SND_SOC_WM8753=m
+# CONFIG_SND_SOC_WM8776 is not set
+CONFIG_SND_SOC_WM8782=m
+CONFIG_SND_SOC_WM8804=m
+CONFIG_SND_SOC_WM8804_I2C=m
+CONFIG_SND_SOC_WM8903=m
+CONFIG_SND_SOC_WM8904=m
+# CONFIG_SND_SOC_WM8940 is not set
+CONFIG_SND_SOC_WM8960=m
+CONFIG_SND_SOC_WM8962=m
+# CONFIG_SND_SOC_WM8974 is not set
+# CONFIG_SND_SOC_WM8978 is not set
+# CONFIG_SND_SOC_WM8985 is not set
+# CONFIG_SND_SOC_WSA881X is not set
+# CONFIG_SND_SOC_WSA883X is not set
+CONFIG_SND_SOC_MAX9759=m
+CONFIG_SND_SOC_MT6351=m
+# CONFIG_SND_SOC_MT6358 is not set
+CONFIG_SND_SOC_MT6660=m
+# CONFIG_SND_SOC_NAU8315 is not set
+CONFIG_SND_SOC_NAU8540=m
+# CONFIG_SND_SOC_NAU8810 is not set
+# CONFIG_SND_SOC_NAU8821 is not set
+CONFIG_SND_SOC_NAU8822=m
+# CONFIG_SND_SOC_NAU8824 is not set
+# CONFIG_SND_SOC_TPA6130A2 is not set
+# CONFIG_SND_SOC_LPASS_WSA_MACRO is not set
+# CONFIG_SND_SOC_LPASS_VA_MACRO is not set
+# CONFIG_SND_SOC_LPASS_RX_MACRO is not set
+# CONFIG_SND_SOC_LPASS_TX_MACRO is not set
+# end of CODEC drivers
+
+CONFIG_SND_SIMPLE_CARD_UTILS=m
+# CONFIG_SND_SIMPLE_CARD is not set
+CONFIG_SND_AUDIO_GRAPH_CARD=m
+# CONFIG_SND_AUDIO_GRAPH_CARD2 is not set
+# CONFIG_SND_TEST_COMPONENT is not set
+# CONFIG_SND_VIRTIO is not set
+
+#
+# HID support
+#
+CONFIG_HID=m
+CONFIG_HID_BATTERY_STRENGTH=y
+CONFIG_HIDRAW=y
+CONFIG_UHID=m
+CONFIG_HID_GENERIC=m
+
+#
+# Special HID drivers
+#
+# CONFIG_HID_A4TECH is not set
+CONFIG_HID_ACRUX=m
+CONFIG_HID_ACRUX_FF=y
+CONFIG_HID_APPLE=m
+CONFIG_HID_AUREAL=m
+CONFIG_HID_BELKIN=m
+CONFIG_HID_CHERRY=m
+CONFIG_HID_COUGAR=m
+CONFIG_HID_MACALLY=m
+CONFIG_HID_CMEDIA=m
+CONFIG_HID_CYPRESS=m
+# CONFIG_HID_DRAGONRISE is not set
+CONFIG_HID_EMS_FF=m
+# CONFIG_HID_ELECOM is not set
+CONFIG_HID_EZKEY=m
+# CONFIG_HID_GEMBIRD is not set
+# CONFIG_HID_GFRM is not set
+# CONFIG_HID_GLORIOUS is not set
+# CONFIG_HID_VIVALDI is not set
+# CONFIG_HID_KEYTOUCH is not set
+CONFIG_HID_KYE=m
+CONFIG_HID_WALTOP=m
+CONFIG_HID_VIEWSONIC=m
+# CONFIG_HID_VRC2 is not set
+# CONFIG_HID_XIAOMI is not set
+CONFIG_HID_GYRATION=m
+CONFIG_HID_ICADE=m
+CONFIG_HID_ITE=m
+CONFIG_HID_JABRA=m
+CONFIG_HID_TWINHAN=m
+CONFIG_HID_KENSINGTON=m
+CONFIG_HID_LCPOWER=m
+# CONFIG_HID_LED is not set
+CONFIG_HID_LENOVO=m
+CONFIG_HID_MAGICMOUSE=m
+# CONFIG_HID_MALTRON is not set
+CONFIG_HID_MAYFLASH=m
+CONFIG_HID_REDRAGON=m
+# CONFIG_HID_MICROSOFT is not set
+# CONFIG_HID_MONTEREY is not set
+# CONFIG_HID_MULTITOUCH is not set
+# CONFIG_HID_NINTENDO is not set
+# CONFIG_HID_NTI is not set
+# CONFIG_HID_ORTEK is not set
+CONFIG_HID_PANTHERLORD=m
+CONFIG_PANTHERLORD_FF=y
+CONFIG_HID_PETALYNX=m
+CONFIG_HID_PICOLCD=m
+# CONFIG_HID_PICOLCD_FB is not set
+CONFIG_HID_PICOLCD_BACKLIGHT=y
+# CONFIG_HID_PICOLCD_LCD is not set
+CONFIG_HID_PICOLCD_LEDS=y
+# CONFIG_HID_PICOLCD_CIR is not set
+CONFIG_HID_PLANTRONICS=m
+# CONFIG_HID_PLAYSTATION is not set
+# CONFIG_HID_PXRC is not set
+# CONFIG_HID_RAZER is not set
+CONFIG_HID_PRIMAX=m
+CONFIG_HID_SAITEK=m
+# CONFIG_HID_SEMITEK is not set
+CONFIG_HID_SPEEDLINK=m
+# CONFIG_HID_STEAM is not set
+CONFIG_HID_STEELSERIES=m
+CONFIG_HID_SUNPLUS=m
+# CONFIG_HID_RMI is not set
+CONFIG_HID_GREENASIA=m
+# CONFIG_GREENASIA_FF is not set
+CONFIG_HID_SMARTJOYPLUS=m
+CONFIG_SMARTJOYPLUS_FF=y
+# CONFIG_HID_TIVO is not set
+# CONFIG_HID_TOPSEED is not set
+# CONFIG_HID_TOPRE is not set
+# CONFIG_HID_THINGM is not set
+# CONFIG_HID_UDRAW_PS3 is not set
+# CONFIG_HID_WIIMOTE is not set
+# CONFIG_HID_XINMO is not set
+# CONFIG_HID_ZEROPLUS is not set
+CONFIG_HID_ZYDACRON=m
+CONFIG_HID_SENSOR_HUB=m
+CONFIG_HID_SENSOR_CUSTOM_SENSOR=m
+CONFIG_HID_ALPS=m
+# end of Special HID drivers
+
+#
+# USB HID support
+#
+# CONFIG_USB_HID is not set
+# CONFIG_HID_PID is not set
+
+#
+# USB HID Boot Protocol drivers
+#
+CONFIG_USB_KBD=m
+# CONFIG_USB_MOUSE is not set
+# end of USB HID Boot Protocol drivers
+# end of USB HID support
+
+#
+# I2C HID support
+#
+# CONFIG_I2C_HID_OF is not set
+# CONFIG_I2C_HID_OF_ELAN is not set
+# CONFIG_I2C_HID_OF_GOODIX is not set
+# end of I2C HID support
+# end of HID support
+
+CONFIG_USB_OHCI_LITTLE_ENDIAN=y
+CONFIG_USB_SUPPORT=y
+CONFIG_USB_COMMON=m
+# CONFIG_USB_LED_TRIG is not set
+CONFIG_USB_ULPI_BUS=m
+CONFIG_USB_CONN_GPIO=m
+CONFIG_USB_ARCH_HAS_HCD=y
+CONFIG_USB=m
+CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
+
+#
+# Miscellaneous USB options
+#
+CONFIG_USB_DEFAULT_PERSIST=y
+CONFIG_USB_FEW_INIT_RETRIES=y
+# CONFIG_USB_DYNAMIC_MINORS is not set
+CONFIG_USB_OTG_PRODUCTLIST=y
+CONFIG_USB_OTG_DISABLE_EXTERNAL_HUB=y
+CONFIG_USB_LEDS_TRIGGER_USBPORT=m
+CONFIG_USB_AUTOSUSPEND_DELAY=2
+CONFIG_USB_MON=m
+
+#
+# USB Host Controller Drivers
+#
+# CONFIG_USB_C67X00_HCD is not set
+# CONFIG_USB_XHCI_HCD is not set
+# CONFIG_USB_BRCMSTB is not set
+CONFIG_USB_EHCI_HCD=m
+# CONFIG_USB_EHCI_ROOT_HUB_TT is not set
+CONFIG_USB_EHCI_TT_NEWSCHED=y
+# CONFIG_USB_EHCI_FSL is not set
+# CONFIG_USB_EHCI_HCD_NPCM7XX is not set
+CONFIG_USB_EHCI_HCD_OMAP=m
+# CONFIG_USB_EHCI_HCD_ORION is not set
+# CONFIG_USB_EHCI_HCD_SPEAR is not set
+# CONFIG_USB_EHCI_HCD_STI is not set
+# CONFIG_USB_EHCI_HCD_AT91 is not set
+# CONFIG_USB_EHCI_SH is not set
+# CONFIG_USB_EHCI_EXYNOS is not set
+# CONFIG_USB_EHCI_MV is not set
+# CONFIG_USB_CNS3XXX_EHCI is not set
+CONFIG_USB_EHCI_HCD_PLATFORM=m
+CONFIG_USB_OXU210HP_HCD=m
+CONFIG_USB_ISP116X_HCD=m
+# CONFIG_USB_ISP1362_HCD is not set
+CONFIG_USB_FOTG210_HCD=m
+# CONFIG_USB_OHCI_HCD is not set
+# CONFIG_USB_SL811_HCD is not set
+# CONFIG_USB_R8A66597_HCD is not set
+CONFIG_USB_HCD_TEST_MODE=y
+# CONFIG_USB_RENESAS_USBHS is not set
+
+#
+# USB Device Class drivers
+#
+CONFIG_USB_PRINTER=m
+CONFIG_USB_WDM=m
+CONFIG_USB_TMC=m
+
+#
+# NOTE: USB_STORAGE depends on SCSI but BLK_DEV_SD may
+#
+
+#
+# also be needed; see USB_STORAGE Help for more info
+#
+
+#
+# USB Imaging devices
+#
+CONFIG_USB_MDC800=m
+CONFIG_USBIP_CORE=m
+# CONFIG_USBIP_VHCI_HCD is not set
+CONFIG_USBIP_HOST=m
+CONFIG_USBIP_VUDC=m
+CONFIG_USBIP_DEBUG=y
+# CONFIG_USB_CDNS_SUPPORT is not set
+# CONFIG_USB_MTU3 is not set
+CONFIG_USB_MUSB_HDRC=m
+# CONFIG_USB_MUSB_HOST is not set
+CONFIG_USB_MUSB_GADGET=y
+# CONFIG_USB_MUSB_DUAL_ROLE is not set
+
+#
+# Platform Glue Layer
+#
+# CONFIG_USB_MUSB_TUSB6010 is not set
+# CONFIG_USB_MUSB_DSPS is not set
+# CONFIG_USB_MUSB_UX500 is not set
+# CONFIG_USB_MUSB_JZ4740 is not set
+# CONFIG_USB_MUSB_MEDIATEK is not set
+# CONFIG_USB_MUSB_POLARFIRE_SOC is not set
+
+#
+# MUSB DMA mode
+#
+CONFIG_MUSB_PIO_ONLY=y
+# CONFIG_USB_DWC3 is not set
+# CONFIG_USB_DWC2 is not set
+CONFIG_USB_CHIPIDEA=m
+# CONFIG_USB_CHIPIDEA_UDC is not set
+# CONFIG_USB_CHIPIDEA_HOST is not set
+# CONFIG_USB_CHIPIDEA_MSM is not set
+# CONFIG_USB_CHIPIDEA_IMX is not set
+# CONFIG_USB_CHIPIDEA_GENERIC is not set
+CONFIG_USB_CHIPIDEA_TEGRA=m
+CONFIG_USB_ISP1760=m
+CONFIG_USB_ISP1760_HCD=y
+CONFIG_USB_ISP1761_UDC=y
+# CONFIG_USB_ISP1760_HOST_ROLE is not set
+# CONFIG_USB_ISP1760_GADGET_ROLE is not set
+CONFIG_USB_ISP1760_DUAL_ROLE=y
+
+#
+# USB port drivers
+#
+# CONFIG_USB_USS720 is not set
+
+#
+# USB Miscellaneous drivers
+#
+CONFIG_USB_EMI62=m
+# CONFIG_USB_EMI26 is not set
+CONFIG_USB_ADUTUX=m
+CONFIG_USB_SEVSEG=m
+# CONFIG_USB_LEGOTOWER is not set
+CONFIG_USB_LCD=m
+CONFIG_USB_CYPRESS_CY7C63=m
+# CONFIG_USB_CYTHERM is not set
+CONFIG_USB_IDMOUSE=m
+# CONFIG_USB_FTDI_ELAN is not set
+CONFIG_USB_APPLEDISPLAY=m
+# CONFIG_USB_QCOM_EUD is not set
+# CONFIG_APPLE_MFI_FASTCHARGE is not set
+# CONFIG_USB_SISUSBVGA is not set
+CONFIG_USB_LD=m
+# CONFIG_USB_TRANCEVIBRATOR is not set
+CONFIG_USB_IOWARRIOR=m
+CONFIG_USB_TEST=m
+# CONFIG_USB_EHSET_TEST_FIXTURE is not set
+# CONFIG_USB_ISIGHTFW is not set
+CONFIG_USB_YUREX=m
+CONFIG_USB_EZUSB_FX2=m
+CONFIG_USB_HUB_USB251XB=m
+CONFIG_USB_HSIC_USB3503=m
+CONFIG_USB_HSIC_USB4604=m
+CONFIG_USB_LINK_LAYER_TEST=m
+CONFIG_USB_CHAOSKEY=m
+# CONFIG_BRCM_USB_PINMAP is not set
+# CONFIG_USB_ONBOARD_HUB is not set
+
+#
+# USB Physical Layer drivers
+#
+CONFIG_USB_PHY=y
+# CONFIG_ISP1301_OMAP is not set
+# CONFIG_KEYSTONE_USB_PHY is not set
+CONFIG_NOP_USB_XCEIV=m
+CONFIG_AM335X_CONTROL_USB=m
+CONFIG_AM335X_PHY_USB=m
+CONFIG_USB_GPIO_VBUS=m
+# CONFIG_TAHVO_USB is not set
+CONFIG_USB_ISP1301=m
+# CONFIG_USB_TEGRA_PHY is not set
+# CONFIG_USB_ULPI is not set
+# CONFIG_JZ4770_PHY is not set
+# end of USB Physical Layer drivers
+
+CONFIG_USB_GADGET=m
+CONFIG_USB_GADGET_DEBUG=y
+CONFIG_USB_GADGET_VERBOSE=y
+# CONFIG_USB_GADGET_DEBUG_FILES is not set
+# CONFIG_USB_GADGET_DEBUG_FS is not set
+CONFIG_USB_GADGET_VBUS_DRAW=2
+CONFIG_USB_GADGET_STORAGE_NUM_BUFFERS=2
+
+#
+# USB Peripheral Controller
+#
+# CONFIG_USB_LPC32XX is not set
+CONFIG_USB_FUSB300=m
+CONFIG_USB_FOTG210_UDC=m
+CONFIG_USB_GR_UDC=m
+CONFIG_USB_R8A66597=m
+# CONFIG_USB_RENESAS_USB3 is not set
+CONFIG_USB_PXA27X=m
+CONFIG_USB_MV_UDC=m
+# CONFIG_USB_MV_U3D is not set
+CONFIG_USB_SNP_CORE=m
+CONFIG_USB_SNP_UDC_PLAT=m
+# CONFIG_USB_M66592 is not set
+CONFIG_USB_BDC_UDC=m
+CONFIG_USB_NET2272=m
+CONFIG_USB_NET2272_DMA=y
+# CONFIG_USB_GADGET_XILINX is not set
+# CONFIG_USB_ASPEED_UDC is not set
+# CONFIG_USB_ASPEED_VHUB is not set
+# CONFIG_USB_DUMMY_HCD is not set
+# end of USB Peripheral Controller
+
+CONFIG_USB_LIBCOMPOSITE=m
+CONFIG_USB_F_SS_LB=m
+CONFIG_USB_U_ETHER=m
+CONFIG_USB_U_AUDIO=m
+CONFIG_USB_F_NCM=m
+CONFIG_USB_F_ECM=m
+CONFIG_USB_F_EEM=m
+CONFIG_USB_F_SUBSET=m
+CONFIG_USB_F_RNDIS=m
+CONFIG_USB_F_FS=m
+CONFIG_USB_F_UAC1=m
+CONFIG_USB_F_UAC1_LEGACY=m
+CONFIG_USB_F_UAC2=m
+CONFIG_USB_F_UVC=m
+CONFIG_USB_F_MIDI=m
+CONFIG_USB_F_HID=m
+CONFIG_USB_F_PRINTER=m
+CONFIG_USB_CONFIGFS=m
+# CONFIG_USB_CONFIGFS_NCM is not set
+CONFIG_USB_CONFIGFS_ECM=y
+CONFIG_USB_CONFIGFS_ECM_SUBSET=y
+CONFIG_USB_CONFIGFS_RNDIS=y
+CONFIG_USB_CONFIGFS_EEM=y
+CONFIG_USB_CONFIGFS_F_LB_SS=y
+CONFIG_USB_CONFIGFS_F_FS=y
+CONFIG_USB_CONFIGFS_F_UAC1=y
+CONFIG_USB_CONFIGFS_F_UAC1_LEGACY=y
+CONFIG_USB_CONFIGFS_F_UAC2=y
+# CONFIG_USB_CONFIGFS_F_MIDI is not set
+# CONFIG_USB_CONFIGFS_F_HID is not set
+CONFIG_USB_CONFIGFS_F_UVC=y
+# CONFIG_USB_CONFIGFS_F_PRINTER is not set
+
+#
+# USB Gadget precomposed configurations
+#
+CONFIG_USB_ZERO=m
+# CONFIG_USB_AUDIO is not set
+CONFIG_USB_ETH=m
+CONFIG_USB_ETH_RNDIS=y
+# CONFIG_USB_ETH_EEM is not set
+CONFIG_USB_G_NCM=m
+# CONFIG_USB_GADGETFS is not set
+CONFIG_USB_FUNCTIONFS=m
+CONFIG_USB_FUNCTIONFS_ETH=y
+CONFIG_USB_FUNCTIONFS_RNDIS=y
+CONFIG_USB_FUNCTIONFS_GENERIC=y
+CONFIG_USB_MIDI_GADGET=m
+CONFIG_USB_G_PRINTER=m
+CONFIG_USB_G_HID=m
+# CONFIG_USB_G_WEBCAM is not set
+CONFIG_USB_RAW_GADGET=m
+# end of USB Gadget precomposed configurations
+
+CONFIG_TYPEC=m
+# CONFIG_TYPEC_TCPM is not set
+CONFIG_TYPEC_UCSI=m
+CONFIG_UCSI_CCG=m
+# CONFIG_UCSI_STM32G0 is not set
+# CONFIG_TYPEC_TPS6598X is not set
+# CONFIG_TYPEC_ANX7411 is not set
+# CONFIG_TYPEC_RT1719 is not set
+# CONFIG_TYPEC_HD3SS3220 is not set
+CONFIG_TYPEC_STUSB160X=m
+# CONFIG_TYPEC_QCOM_PMIC is not set
+# CONFIG_TYPEC_WUSB3801 is not set
+
+#
+# USB Type-C Multiplexer/DeMultiplexer Switch support
+#
+# CONFIG_TYPEC_MUX_FSA4480 is not set
+# CONFIG_TYPEC_MUX_PI3USB30532 is not set
+# end of USB Type-C Multiplexer/DeMultiplexer Switch support
+
+#
+# USB Type-C Alternate Mode drivers
+#
+CONFIG_TYPEC_DP_ALTMODE=m
+CONFIG_TYPEC_NVIDIA_ALTMODE=m
+# end of USB Type-C Alternate Mode drivers
+
+CONFIG_USB_ROLE_SWITCH=y
+# CONFIG_MMC is not set
+CONFIG_MEMSTICK=y
+# CONFIG_MEMSTICK_DEBUG is not set
+
+#
+# MemoryStick drivers
+#
+# CONFIG_MEMSTICK_UNSAFE_RESUME is not set
+
+#
+# MemoryStick Host Controller Drivers
+#
+# CONFIG_MEMSTICK_REALTEK_USB is not set
+CONFIG_NEW_LEDS=y
+CONFIG_LEDS_CLASS=y
+# CONFIG_LEDS_CLASS_FLASH is not set
+CONFIG_LEDS_CLASS_MULTICOLOR=m
+# CONFIG_LEDS_BRIGHTNESS_HW_CHANGED is not set
+
+#
+# LED drivers
+#
+CONFIG_LEDS_88PM860X=y
+# CONFIG_LEDS_AN30259A is not set
+# CONFIG_LEDS_ARIEL is not set
+CONFIG_LEDS_AW2013=m
+# CONFIG_LEDS_BCM6328 is not set
+CONFIG_LEDS_BCM6358=m
+# CONFIG_LEDS_TURRIS_OMNIA is not set
+CONFIG_LEDS_LM3530=y
+CONFIG_LEDS_LM3532=m
+CONFIG_LEDS_LM3642=m
+CONFIG_LEDS_LM3692X=m
+# CONFIG_LEDS_S3C24XX is not set
+# CONFIG_LEDS_COBALT_QUBE is not set
+# CONFIG_LEDS_COBALT_RAQ is not set
+CONFIG_LEDS_PCA9532=m
+CONFIG_LEDS_PCA9532_GPIO=y
+# CONFIG_LEDS_GPIO is not set
+CONFIG_LEDS_LP3944=m
+# CONFIG_LEDS_LP3952 is not set
+# CONFIG_LEDS_LP50XX is not set
+CONFIG_LEDS_LP55XX_COMMON=m
+# CONFIG_LEDS_LP5521 is not set
+CONFIG_LEDS_LP5523=m
+CONFIG_LEDS_LP5562=m
+CONFIG_LEDS_LP8501=m
+CONFIG_LEDS_LP8860=m
+CONFIG_LEDS_PCA955X=y
+# CONFIG_LEDS_PCA955X_GPIO is not set
+CONFIG_LEDS_PCA963X=y
+# CONFIG_LEDS_WM831X_STATUS is not set
+CONFIG_LEDS_DA903X=m
+CONFIG_LEDS_DA9052=y
+CONFIG_LEDS_PWM=m
+# CONFIG_LEDS_BD2802 is not set
+CONFIG_LEDS_LT3593=m
+CONFIG_LEDS_ADP5520=y
+CONFIG_LEDS_NS2=y
+CONFIG_LEDS_NETXBIG=y
+CONFIG_LEDS_ASIC3=y
+CONFIG_LEDS_TCA6507=y
+CONFIG_LEDS_TLC591XX=y
+CONFIG_LEDS_MAX77650=y
+# CONFIG_LEDS_LM355x is not set
+# CONFIG_LEDS_OT200 is not set
+CONFIG_LEDS_MENF21BMC=m
+CONFIG_LEDS_IS31FL319X=y
+CONFIG_LEDS_IS31FL32XX=y
+
+#
+# LED driver for blink(1) USB RGB LED is under Special HID drivers (HID_THINGM)
+#
+CONFIG_LEDS_BLINKM=y
+CONFIG_LEDS_SYSCON=y
+CONFIG_LEDS_PM8058=m
+CONFIG_LEDS_MLXREG=y
+# CONFIG_LEDS_USER is not set
+CONFIG_LEDS_TI_LMU_COMMON=y
+# CONFIG_LEDS_LM3697 is not set
+CONFIG_LEDS_LM36274=m
+# CONFIG_LEDS_IP30 is not set
+# CONFIG_LEDS_BCM63138 is not set
+# CONFIG_LEDS_LGM is not set
+
+#
+# Flash and Torch LED drivers
+#
+
+#
+# RGB LED drivers
+#
+# CONFIG_LEDS_PWM_MULTICOLOR is not set
+# CONFIG_LEDS_QCOM_LPG is not set
+
+#
+# LED Triggers
+#
+CONFIG_LEDS_TRIGGERS=y
+CONFIG_LEDS_TRIGGER_TIMER=y
+CONFIG_LEDS_TRIGGER_ONESHOT=y
+# CONFIG_LEDS_TRIGGER_MTD is not set
+# CONFIG_LEDS_TRIGGER_HEARTBEAT is not set
+# CONFIG_LEDS_TRIGGER_BACKLIGHT is not set
+CONFIG_LEDS_TRIGGER_CPU=y
+CONFIG_LEDS_TRIGGER_ACTIVITY=y
+CONFIG_LEDS_TRIGGER_GPIO=m
+CONFIG_LEDS_TRIGGER_DEFAULT_ON=m
+
+#
+# iptables trigger is under Netfilter config (LED target)
+#
+CONFIG_LEDS_TRIGGER_TRANSIENT=y
+CONFIG_LEDS_TRIGGER_CAMERA=m
+CONFIG_LEDS_TRIGGER_PANIC=y
+# CONFIG_LEDS_TRIGGER_NETDEV is not set
+CONFIG_LEDS_TRIGGER_PATTERN=y
+CONFIG_LEDS_TRIGGER_AUDIO=m
+
+#
+# Simple LED drivers
+#
+CONFIG_ACCESSIBILITY=y
+
+#
+# Speakup console speech
+#
+# end of Speakup console speech
+
+CONFIG_EDAC_ATOMIC_SCRUB=y
+CONFIG_EDAC_SUPPORT=y
+CONFIG_RTC_LIB=y
+# CONFIG_RTC_CLASS is not set
+# CONFIG_DMADEVICES is not set
+
+#
+# DMABUF options
+#
+CONFIG_SYNC_FILE=y
+CONFIG_SW_SYNC=y
+# CONFIG_UDMABUF is not set
+# CONFIG_DMABUF_MOVE_NOTIFY is not set
+CONFIG_DMABUF_DEBUG=y
+CONFIG_DMABUF_SELFTESTS=y
+CONFIG_DMABUF_HEAPS=y
+CONFIG_DMABUF_SYSFS_STATS=y
+# CONFIG_DMABUF_HEAPS_SYSTEM is not set
+# end of DMABUF options
+
+CONFIG_AUXDISPLAY=y
+CONFIG_CHARLCD=m
+CONFIG_LINEDISP=m
+CONFIG_HD44780_COMMON=m
+# CONFIG_HD44780 is not set
+CONFIG_KS0108=m
+CONFIG_KS0108_PORT=0x378
+CONFIG_KS0108_DELAY=2
+# CONFIG_IMG_ASCII_LCD is not set
+CONFIG_HT16K33=m
+# CONFIG_LCD2S is not set
+CONFIG_PARPORT_PANEL=m
+CONFIG_PANEL_PARPORT=0
+CONFIG_PANEL_PROFILE=5
+# CONFIG_PANEL_CHANGE_MESSAGE is not set
+# CONFIG_CHARLCD_BL_OFF is not set
+# CONFIG_CHARLCD_BL_ON is not set
+CONFIG_CHARLCD_BL_FLASH=y
+CONFIG_PANEL=m
+# CONFIG_VFIO is not set
+CONFIG_VIRT_DRIVERS=y
+CONFIG_VIRTIO_ANCHOR=y
+CONFIG_VIRTIO=m
+# CONFIG_VIRTIO_MENU is not set
+# CONFIG_VDPA is not set
+CONFIG_VHOST_IOTLB=m
+CONFIG_VHOST_RING=m
+# CONFIG_VHOST_MENU is not set
+
+#
+# Microsoft Hyper-V guest support
+#
+# end of Microsoft Hyper-V guest support
+
+CONFIG_GREYBUS=y
+CONFIG_GREYBUS_ES2=m
+# CONFIG_COMEDI is not set
+CONFIG_STAGING=y
+# CONFIG_OCTEON_ETHERNET is not set
+
+#
+# IIO staging drivers
+#
+
+#
+# Accelerometers
+#
+# end of Accelerometers
+
+#
+# Analog to digital converters
+#
+# end of Analog to digital converters
+
+#
+# Analog digital bi-direction converters
+#
+CONFIG_ADT7316=m
+# CONFIG_ADT7316_I2C is not set
+# end of Analog digital bi-direction converters
+
+#
+# Direct Digital Synthesis
+#
+# end of Direct Digital Synthesis
+
+#
+# Network Analyzer, Impedance Converters
+#
+# CONFIG_AD5933 is not set
+# end of Network Analyzer, Impedance Converters
+
+#
+# Active energy metering IC
+#
+# CONFIG_ADE7854 is not set
+# end of Active energy metering IC
+
+#
+# Resolver to digital converters
+#
+# end of Resolver to digital converters
+# end of IIO staging drivers
+
+# CONFIG_USB_EMXX is not set
+CONFIG_STAGING_MEDIA=y
+# CONFIG_VIDEO_IMX_MEDIA is not set
+# CONFIG_VIDEO_MAX96712 is not set
+# CONFIG_VIDEO_MESON_VDEC is not set
+# CONFIG_VIDEO_OMAP4 is not set
+# CONFIG_VIDEO_ROCKCHIP_VDEC is not set
+# CONFIG_VIDEO_SUNXI is not set
+# CONFIG_STAGING_MEDIA_DEPRECATED is not set
+CONFIG_STAGING_BOARD=y
+# CONFIG_MOST_COMPONENTS is not set
+CONFIG_GREYBUS_AUDIO=m
+# CONFIG_GREYBUS_AUDIO_APB_CODEC is not set
+# CONFIG_GREYBUS_BOOTROM is not set
+CONFIG_GREYBUS_HID=m
+# CONFIG_GREYBUS_LIGHT is not set
+# CONFIG_GREYBUS_LOG is not set
+CONFIG_GREYBUS_LOOPBACK=m
+CONFIG_GREYBUS_POWER=y
+CONFIG_GREYBUS_RAW=y
+CONFIG_GREYBUS_VIBRATOR=y
+CONFIG_GREYBUS_BRIDGED_PHY=y
+CONFIG_GREYBUS_GPIO=m
+CONFIG_GREYBUS_I2C=y
+CONFIG_GREYBUS_PWM=m
+CONFIG_GREYBUS_USB=m
+# CONFIG_GREYBUS_ARCHE is not set
+CONFIG_BCM_VIDEOCORE=y
+# CONFIG_BCM2835_VCHIQ is not set
+# CONFIG_SND_BCM2835 is not set
+# CONFIG_VIDEO_BCM2835 is not set
+# CONFIG_XIL_AXIS_FIFO is not set
+# CONFIG_FIELDBUS_DEV is not set
+# CONFIG_GOLDFISH is not set
+# CONFIG_CHROME_PLATFORMS is not set
+# CONFIG_MELLANOX_PLATFORM is not set
+# CONFIG_OLPC_XO175 is not set
+CONFIG_SURFACE_PLATFORMS=y
+CONFIG_HAVE_CLK=y
+CONFIG_HAVE_CLK_PREPARE=y
+CONFIG_COMMON_CLK=y
+# CONFIG_COMMON_CLK_WM831X is not set
+
+#
+# Clock driver for ARM Reference designs
+#
+# CONFIG_CLK_ICST is not set
+# CONFIG_CLK_SP810 is not set
+# CONFIG_CLK_VEXPRESS_OSC is not set
+# end of Clock driver for ARM Reference designs
+
+# CONFIG_CLK_HSDK is not set
+# CONFIG_COMMON_CLK_APPLE_NCO is not set
+# CONFIG_COMMON_CLK_MAX77686 is not set
+# CONFIG_COMMON_CLK_MAX9485 is not set
+# CONFIG_COMMON_CLK_HI655X is not set
+# CONFIG_COMMON_CLK_SCMI is not set
+# CONFIG_COMMON_CLK_SCPI is not set
+# CONFIG_COMMON_CLK_SI5341 is not set
+# CONFIG_COMMON_CLK_SI5351 is not set
+# CONFIG_COMMON_CLK_SI514 is not set
+# CONFIG_COMMON_CLK_SI544 is not set
+# CONFIG_COMMON_CLK_SI570 is not set
+# CONFIG_COMMON_CLK_BM1880 is not set
+# CONFIG_COMMON_CLK_CDCE706 is not set
+# CONFIG_COMMON_CLK_TPS68470 is not set
+# CONFIG_COMMON_CLK_CDCE925 is not set
+# CONFIG_COMMON_CLK_CS2000_CP is not set
+# CONFIG_COMMON_CLK_EN7523 is not set
+# CONFIG_COMMON_CLK_FSL_FLEXSPI is not set
+# CONFIG_COMMON_CLK_FSL_SAI is not set
+# CONFIG_COMMON_CLK_GEMINI is not set
+# CONFIG_COMMON_CLK_LAN966X is not set
+# CONFIG_COMMON_CLK_ASPEED is not set
+# CONFIG_COMMON_CLK_S2MPS11 is not set
+# CONFIG_COMMON_CLK_AXI_CLKGEN is not set
+# CONFIG_CLK_QORIQ is not set
+# CONFIG_CLK_LS1028A_PLLDIG is not set
+# CONFIG_COMMON_CLK_XGENE is not set
+# CONFIG_COMMON_CLK_PWM is not set
+# CONFIG_COMMON_CLK_OXNAS is not set
+# CONFIG_COMMON_CLK_RS9_PCIE is not set
+# CONFIG_COMMON_CLK_VC5 is not set
+# CONFIG_COMMON_CLK_VC7 is not set
+# CONFIG_COMMON_CLK_MMP2_AUDIO is not set
+# CONFIG_COMMON_CLK_BD718XX is not set
+# CONFIG_COMMON_CLK_FIXED_MMIO is not set
+# CONFIG_CLK_ACTIONS is not set
+# CONFIG_CLK_BAIKAL_T1 is not set
+# CONFIG_CLK_BCM2711_DVP is not set
+# CONFIG_CLK_BCM2835 is not set
+# CONFIG_CLK_BCM_63XX is not set
+# CONFIG_CLK_BCM_63XX_GATE is not set
+# CONFIG_CLK_BCM_KONA is not set
+# CONFIG_CLK_BCM_CYGNUS is not set
+# CONFIG_CLK_BCM_HR2 is not set
+# CONFIG_CLK_BCM_NSP is not set
+# CONFIG_CLK_BCM_NS2 is not set
+# CONFIG_CLK_BCM_SR is not set
+# CONFIG_CLK_RASPBERRYPI is not set
+# CONFIG_COMMON_CLK_HI3516CV300 is not set
+# CONFIG_COMMON_CLK_HI3519 is not set
+# CONFIG_COMMON_CLK_HI3559A is not set
+# CONFIG_COMMON_CLK_HI3660 is not set
+# CONFIG_COMMON_CLK_HI3670 is not set
+# CONFIG_COMMON_CLK_HI3798CV200 is not set
+# CONFIG_COMMON_CLK_HI6220 is not set
+# CONFIG_RESET_HISI is not set
+# CONFIG_STUB_CLK_HI6220 is not set
+# CONFIG_STUB_CLK_HI3660 is not set
+# CONFIG_COMMON_CLK_BOSTON is not set
+# CONFIG_MXC_CLK is not set
+# CONFIG_CLK_IMX8MM is not set
+# CONFIG_CLK_IMX8MN is not set
+# CONFIG_CLK_IMX8MP is not set
+# CONFIG_CLK_IMX8MQ is not set
+# CONFIG_CLK_IMX8ULP is not set
+# CONFIG_CLK_IMX93 is not set
+
+#
+# Ingenic SoCs drivers
+#
+# CONFIG_INGENIC_CGU_JZ4740 is not set
+# CONFIG_INGENIC_CGU_JZ4725B is not set
+# CONFIG_INGENIC_CGU_JZ4760 is not set
+# CONFIG_INGENIC_CGU_JZ4770 is not set
+# CONFIG_INGENIC_CGU_JZ4780 is not set
+# CONFIG_INGENIC_CGU_X1000 is not set
+# CONFIG_INGENIC_CGU_X1830 is not set
+# CONFIG_INGENIC_TCU_CLK is not set
+# end of Ingenic SoCs drivers
+
+# CONFIG_COMMON_CLK_KEYSTONE is not set
+# CONFIG_TI_SYSCON_CLK is not set
+
+#
+# Clock driver for MediaTek SoC
+#
+# CONFIG_COMMON_CLK_MT2701 is not set
+# CONFIG_COMMON_CLK_MT2712 is not set
+# CONFIG_COMMON_CLK_MT6765 is not set
+# CONFIG_COMMON_CLK_MT6779 is not set
+# CONFIG_COMMON_CLK_MT6795 is not set
+# CONFIG_COMMON_CLK_MT6797 is not set
+# CONFIG_COMMON_CLK_MT7622 is not set
+# CONFIG_COMMON_CLK_MT7629 is not set
+# CONFIG_COMMON_CLK_MT7986 is not set
+# CONFIG_COMMON_CLK_MT8135 is not set
+# CONFIG_COMMON_CLK_MT8167 is not set
+# CONFIG_COMMON_CLK_MT8173 is not set
+# CONFIG_COMMON_CLK_MT8183 is not set
+# CONFIG_COMMON_CLK_MT8186 is not set
+# CONFIG_COMMON_CLK_MT8192 is not set
+# CONFIG_COMMON_CLK_MT8195 is not set
+# CONFIG_COMMON_CLK_MT8365 is not set
+# CONFIG_COMMON_CLK_MT8516 is not set
+# end of Clock driver for MediaTek SoC
+
+#
+# Clock support for Amlogic platforms
+#
+CONFIG_COMMON_CLK_MESON_REGMAP=y
+CONFIG_COMMON_CLK_MESON_MPLL=y
+CONFIG_COMMON_CLK_MESON_PLL=y
+CONFIG_COMMON_CLK_MESON8B=y
+# end of Clock support for Amlogic platforms
+
+# CONFIG_MSTAR_MSC313_MPLL is not set
+# CONFIG_MCHP_CLK_MPFS is not set
+# CONFIG_COMMON_CLK_PISTACHIO is not set
+# CONFIG_COMMON_CLK_QCOM is not set
+# CONFIG_CLK_MT7621 is not set
+# CONFIG_CLK_RENESAS is not set
+# CONFIG_COMMON_CLK_SAMSUNG is not set
+# CONFIG_S3C2410_COMMON_CLK is not set
+# CONFIG_S3C2412_COMMON_CLK is not set
+# CONFIG_S3C2443_COMMON_CLK is not set
+# CONFIG_CLK_SIFIVE is not set
+# CONFIG_CLK_INTEL_SOCFPGA is not set
+# CONFIG_SPRD_COMMON_CLK is not set
+# CONFIG_CLK_STARFIVE_JH7100 is not set
+CONFIG_CLK_SUNXI=y
+CONFIG_CLK_SUNXI_CLOCKS=y
+CONFIG_CLK_SUNXI_PRCM_SUN6I=y
+CONFIG_CLK_SUNXI_PRCM_SUN8I=y
+CONFIG_CLK_SUNXI_PRCM_SUN9I=y
+# CONFIG_SUNXI_CCU is not set
+# CONFIG_COMMON_CLK_TI_ADPLL is not set
+# CONFIG_CLK_UNIPHIER is not set
+# CONFIG_COMMON_CLK_VISCONTI is not set
+# CONFIG_CLK_LGM_CGU is not set
+CONFIG_XILINX_VCU=y
+# CONFIG_COMMON_CLK_XLNX_CLKWZRD is not set
+# CONFIG_COMMON_CLK_ZYNQMP is not set
+# CONFIG_CLK_KUNIT_TEST is not set
+# CONFIG_CLK_GATE_KUNIT_TEST is not set
+# CONFIG_HWSPINLOCK is not set
+
+#
+# Clock Source drivers
+#
+CONFIG_TIMER_OF=y
+CONFIG_TIMER_PROBE=y
+# CONFIG_BCM2835_TIMER is not set
+# CONFIG_BCM_KONA_TIMER is not set
+# CONFIG_DAVINCI_TIMER is not set
+# CONFIG_DIGICOLOR_TIMER is not set
+# CONFIG_OMAP_DM_TIMER is not set
+# CONFIG_DW_APB_TIMER is not set
+# CONFIG_FTTMR010_TIMER is not set
+# CONFIG_IXP4XX_TIMER is not set
+# CONFIG_ROCKCHIP_TIMER is not set
+# CONFIG_ARMADA_370_XP_TIMER is not set
+# CONFIG_MESON6_TIMER is not set
+# CONFIG_ORION_TIMER is not set
+# CONFIG_OWL_TIMER is not set
+# CONFIG_RDA_TIMER is not set
+# CONFIG_SUN4I_TIMER is not set
+# CONFIG_SUN5I_HSTIMER is not set
+# CONFIG_TEGRA_TIMER is not set
+# CONFIG_TEGRA186_TIMER is not set
+# CONFIG_VT8500_TIMER is not set
+# CONFIG_NPCM7XX_TIMER is not set
+# CONFIG_CADENCE_TTC_TIMER is not set
+# CONFIG_ASM9260_TIMER is not set
+# CONFIG_CLKSRC_NOMADIK_MTU is not set
+# CONFIG_CLKSRC_DBX500_PRCMU is not set
+# CONFIG_CLPS711X_TIMER is not set
+# CONFIG_MXS_TIMER is not set
+# CONFIG_NSPIRE_TIMER is not set
+# CONFIG_KEYSTONE_TIMER is not set
+# CONFIG_INTEGRATOR_AP_TIMER is not set
+# CONFIG_CLKSRC_LPC32XX is not set
+# CONFIG_CLKSRC_PISTACHIO is not set
+# CONFIG_CLKSRC_TI_32K is not set
+# CONFIG_CLKSRC_STM32 is not set
+# CONFIG_CLKSRC_STM32_LP is not set
+# CONFIG_CLKSRC_MPS2 is not set
+# CONFIG_ARC_TIMERS is not set
+# CONFIG_ARM_GLOBAL_TIMER is not set
+# CONFIG_ARM_TIMER_SP804 is not set
+# CONFIG_ARMV7M_SYSTICK is not set
+# CONFIG_ATMEL_PIT is not set
+# CONFIG_ATMEL_ST is not set
+# CONFIG_ATMEL_TCB_CLKSRC is not set
+# CONFIG_CLKSRC_EXYNOS_MCT is not set
+# CONFIG_CLKSRC_SAMSUNG_PWM is not set
+# CONFIG_FSL_FTM_TIMER is not set
+# CONFIG_OXNAS_RPS_TIMER is not set
+# CONFIG_MTK_TIMER is not set
+# CONFIG_SPRD_TIMER is not set
+# CONFIG_CLKSRC_JCORE_PIT is not set
+# CONFIG_SH_TIMER_CMT is not set
+# CONFIG_SH_TIMER_MTU2 is not set
+# CONFIG_RENESAS_OSTM is not set
+# CONFIG_SH_TIMER_TMU is not set
+# CONFIG_EM_TIMER_STI is not set
+# CONFIG_CLKSRC_QCOM is not set
+# CONFIG_CLKSRC_VERSATILE is not set
+# CONFIG_CLKSRC_PXA is not set
+# CONFIG_CLKSRC_IMX_GPT is not set
+# CONFIG_CLKSRC_IMX_TPM is not set
+# CONFIG_TIMER_IMX_SYS_CTR is not set
+# CONFIG_CLKSRC_ST_LPC is not set
+# CONFIG_GXP_TIMER is not set
+# CONFIG_MILBEAUT_TIMER is not set
+# CONFIG_MSC313E_TIMER is not set
+# CONFIG_INGENIC_TIMER is not set
+# CONFIG_INGENIC_SYSOST is not set
+# CONFIG_INGENIC_OST is not set
+CONFIG_MICROCHIP_PIT64B=y
+# end of Clock Source drivers
+
+CONFIG_MAILBOX=y
+CONFIG_ARM_MHU=m
+# CONFIG_ARM_MHU_V2 is not set
+# CONFIG_IMX_MBOX is not set
+CONFIG_PLATFORM_MHU=m
+# CONFIG_PL320_MBOX is not set
+# CONFIG_ARMADA_37XX_RWTM_MBOX is not set
+# CONFIG_ROCKCHIP_MBOX is not set
+CONFIG_ALTERA_MBOX=y
+# CONFIG_HI3660_MBOX is not set
+# CONFIG_HI6220_MBOX is not set
+CONFIG_MAILBOX_TEST=m
+# CONFIG_POLARFIRE_SOC_MAILBOX is not set
+# CONFIG_QCOM_APCS_IPC is not set
+# CONFIG_BCM_PDC_MBOX is not set
+# CONFIG_STM32_IPCC is not set
+# CONFIG_MTK_ADSP_MBOX is not set
+# CONFIG_MTK_CMDQ_MBOX is not set
+# CONFIG_SUN6I_MSGBOX is not set
+# CONFIG_SPRD_MBOX is not set
+# CONFIG_QCOM_IPCC is not set
+
+#
+# Remoteproc drivers
+#
+# CONFIG_REMOTEPROC is not set
+# end of Remoteproc drivers
+
+#
+# Rpmsg drivers
+#
+CONFIG_RPMSG=y
+CONFIG_RPMSG_CHAR=m
+# CONFIG_RPMSG_CTRL is not set
+# CONFIG_RPMSG_NS is not set
+CONFIG_RPMSG_QCOM_GLINK=y
+CONFIG_RPMSG_QCOM_GLINK_RPM=y
+# CONFIG_RPMSG_VIRTIO is not set
+# end of Rpmsg drivers
+
+CONFIG_SOUNDWIRE=m
+
+#
+# SoundWire Devices
+#
+CONFIG_SOUNDWIRE_QCOM=m
+
+#
+# SOC (System On Chip) specific Drivers
+#
+
+#
+# Amlogic SoC drivers
+#
+# CONFIG_MESON_CANVAS is not set
+# CONFIG_MESON_CLK_MEASURE is not set
+# CONFIG_MESON_GX_SOCINFO is not set
+# CONFIG_MESON_MX_SOCINFO is not set
+# end of Amlogic SoC drivers
+
+#
+# Apple SoC drivers
+#
+# CONFIG_APPLE_RTKIT is not set
+# CONFIG_APPLE_SART is not set
+# end of Apple SoC drivers
+
+#
+# ASPEED SoC drivers
+#
+# CONFIG_ASPEED_LPC_CTRL is not set
+# CONFIG_ASPEED_LPC_SNOOP is not set
+# CONFIG_ASPEED_UART_ROUTING is not set
+# CONFIG_ASPEED_P2A_CTRL is not set
+# CONFIG_ASPEED_SOCINFO is not set
+# end of ASPEED SoC drivers
+
+# CONFIG_AT91_SOC_ID is not set
+# CONFIG_AT91_SOC_SFR is not set
+
+#
+# Broadcom SoC drivers
+#
+# CONFIG_BCM2835_POWER is not set
+# CONFIG_SOC_BCM63XX is not set
+# CONFIG_SOC_BRCMSTB is not set
+# CONFIG_BCM_PMB is not set
+# end of Broadcom SoC drivers
+
+#
+# NXP/Freescale QorIQ SoC drivers
+#
+# CONFIG_QUICC_ENGINE is not set
+CONFIG_DPAA2_CONSOLE=y
+# end of NXP/Freescale QorIQ SoC drivers
+
+#
+# fujitsu SoC drivers
+#
+# end of fujitsu SoC drivers
+
+#
+# i.MX SoC drivers
+#
+# CONFIG_SOC_IMX8M is not set
+# CONFIG_SOC_IMX9 is not set
+# end of i.MX SoC drivers
+
+#
+# IXP4xx SoC drivers
+#
+# CONFIG_IXP4XX_QMGR is not set
+# CONFIG_IXP4XX_NPE is not set
+# end of IXP4xx SoC drivers
+
+#
+# Enable LiteX SoC Builder specific drivers
+#
+# CONFIG_LITEX_SOC_CONTROLLER is not set
+# end of Enable LiteX SoC Builder specific drivers
+
+#
+# MediaTek SoC drivers
+#
+# CONFIG_MTK_CMDQ is not set
+# CONFIG_MTK_DEVAPC is not set
+# CONFIG_MTK_INFRACFG is not set
+# CONFIG_MTK_PMIC_WRAP is not set
+# CONFIG_MTK_SCPSYS is not set
+# CONFIG_MTK_MMSYS is not set
+# end of MediaTek SoC drivers
+
+#
+# Qualcomm SoC drivers
+#
+# CONFIG_QCOM_COMMAND_DB is not set
+# CONFIG_QCOM_GENI_SE is not set
+# CONFIG_QCOM_GSBI is not set
+# CONFIG_QCOM_LLCC is not set
+# CONFIG_QCOM_RPMH is not set
+# CONFIG_QCOM_SMD_RPM is not set
+# CONFIG_QCOM_SPM is not set
+# CONFIG_QCOM_WCNSS_CTRL is not set
+# CONFIG_QCOM_APR is not set
+# CONFIG_QCOM_ICC_BWMON is not set
+# end of Qualcomm SoC drivers
+
+# CONFIG_SOC_RENESAS is not set
+# CONFIG_ROCKCHIP_GRF is not set
+# CONFIG_ROCKCHIP_IODOMAIN is not set
+# CONFIG_SOC_SAMSUNG is not set
+# CONFIG_SOC_TI is not set
+# CONFIG_UX500_SOC_ID is not set
+
+#
+# Xilinx SoC drivers
+#
+# end of Xilinx SoC drivers
+# end of SOC (System On Chip) specific Drivers
+
+CONFIG_PM_DEVFREQ=y
+
+#
+# DEVFREQ Governors
+#
+CONFIG_DEVFREQ_GOV_SIMPLE_ONDEMAND=y
+# CONFIG_DEVFREQ_GOV_PERFORMANCE is not set
+# CONFIG_DEVFREQ_GOV_POWERSAVE is not set
+# CONFIG_DEVFREQ_GOV_USERSPACE is not set
+# CONFIG_DEVFREQ_GOV_PASSIVE is not set
+
+#
+# DEVFREQ Drivers
+#
+# CONFIG_ARM_EXYNOS_BUS_DEVFREQ is not set
+# CONFIG_ARM_IMX_BUS_DEVFREQ is not set
+# CONFIG_ARM_TEGRA_DEVFREQ is not set
+# CONFIG_ARM_MEDIATEK_CCI_DEVFREQ is not set
+# CONFIG_ARM_SUN8I_A33_MBUS_DEVFREQ is not set
+# CONFIG_PM_DEVFREQ_EVENT is not set
+CONFIG_EXTCON=y
+
+#
+# Extcon Device Drivers
+#
+CONFIG_EXTCON_ADC_JACK=m
+CONFIG_EXTCON_FSA9480=m
+# CONFIG_EXTCON_GPIO is not set
+# CONFIG_EXTCON_MAX14577 is not set
+CONFIG_EXTCON_MAX3355=y
+# CONFIG_EXTCON_MAX77693 is not set
+CONFIG_EXTCON_PTN5150=m
+# CONFIG_EXTCON_QCOM_SPMI_MISC is not set
+CONFIG_EXTCON_RT8973A=m
+CONFIG_EXTCON_SM5502=y
+# CONFIG_EXTCON_USB_GPIO is not set
+# CONFIG_EXTCON_USBC_TUSB320 is not set
+CONFIG_MEMORY=y
+CONFIG_DDR=y
+CONFIG_ARM_PL172_MPMC=m
+# CONFIG_ATMEL_SDRAMC is not set
+# CONFIG_ATMEL_EBI is not set
+# CONFIG_BRCMSTB_DPFE is not set
+# CONFIG_BRCMSTB_MEMC is not set
+# CONFIG_BT1_L2_CTL is not set
+# CONFIG_TI_AEMIF is not set
+# CONFIG_TI_EMIF is not set
+# CONFIG_OMAP_GPMC is not set
+# CONFIG_FPGA_DFL_EMIF is not set
+# CONFIG_MVEBU_DEVBUS is not set
+# CONFIG_FSL_CORENET_CF is not set
+# CONFIG_FSL_IFC is not set
+# CONFIG_JZ4780_NEMC is not set
+# CONFIG_MTK_SMI is not set
+# CONFIG_DA8XX_DDRCTL is not set
+CONFIG_PL353_SMC=y
+# CONFIG_RENESAS_RPCIF is not set
+# CONFIG_STM32_FMC2_EBI is not set
+# CONFIG_SAMSUNG_MC is not set
+CONFIG_TEGRA_MC=y
+CONFIG_TEGRA20_EMC=y
+CONFIG_TEGRA30_EMC=y
+CONFIG_TEGRA124_EMC=y
+# CONFIG_TEGRA210_EMC is not set
+CONFIG_IIO=m
+CONFIG_IIO_BUFFER=y
+CONFIG_IIO_BUFFER_CB=m
+CONFIG_IIO_BUFFER_DMA=m
+CONFIG_IIO_BUFFER_DMAENGINE=m
+CONFIG_IIO_BUFFER_HW_CONSUMER=m
+CONFIG_IIO_KFIFO_BUF=m
+CONFIG_IIO_TRIGGERED_BUFFER=m
+CONFIG_IIO_CONFIGFS=m
+CONFIG_IIO_TRIGGER=y
+CONFIG_IIO_CONSUMERS_PER_TRIGGER=2
+CONFIG_IIO_SW_DEVICE=m
+CONFIG_IIO_SW_TRIGGER=m
+CONFIG_IIO_TRIGGERED_EVENT=m
+
+#
+# Accelerometers
+#
+# CONFIG_ADXL313_I2C is not set
+# CONFIG_ADXL355_I2C is not set
+# CONFIG_ADXL367_I2C is not set
+CONFIG_ADXL372=m
+CONFIG_ADXL372_I2C=m
+# CONFIG_BMA400 is not set
+CONFIG_BMC150_ACCEL=m
+CONFIG_BMC150_ACCEL_I2C=m
+CONFIG_DA280=m
+# CONFIG_DA311 is not set
+CONFIG_DMARD06=m
+CONFIG_DMARD09=m
+CONFIG_DMARD10=m
+# CONFIG_FXLS8962AF_I2C is not set
+CONFIG_HID_SENSOR_ACCEL_3D=m
+# CONFIG_IIO_ST_ACCEL_3AXIS is not set
+CONFIG_KXSD9=m
+CONFIG_KXSD9_I2C=m
+CONFIG_KXCJK1013=m
+CONFIG_MC3230=m
+CONFIG_MMA7455=m
+CONFIG_MMA7455_I2C=m
+CONFIG_MMA7660=m
+# CONFIG_MMA8452 is not set
+CONFIG_MMA9551_CORE=m
+# CONFIG_MMA9551 is not set
+CONFIG_MMA9553=m
+# CONFIG_MSA311 is not set
+CONFIG_MXC4005=m
+# CONFIG_MXC6255 is not set
+CONFIG_STK8312=m
+CONFIG_STK8BA50=m
+# end of Accelerometers
+
+#
+# Analog to digital converters
+#
+CONFIG_AD7091R5=m
+# CONFIG_AD7291 is not set
+CONFIG_AD7606=m
+CONFIG_AD7606_IFACE_PARALLEL=m
+CONFIG_AD799X=m
+CONFIG_ADI_AXI_ADC=m
+# CONFIG_ASPEED_ADC is not set
+# CONFIG_AT91_ADC is not set
+# CONFIG_AT91_SAMA5D2_ADC is not set
+CONFIG_AXP20X_ADC=m
+CONFIG_AXP288_ADC=m
+# CONFIG_BCM_IPROC_ADC is not set
+# CONFIG_BERLIN2_ADC is not set
+# CONFIG_ENVELOPE_DETECTOR is not set
+# CONFIG_EXYNOS_ADC is not set
+# CONFIG_HX711 is not set
+CONFIG_INA2XX_ADC=m
+# CONFIG_INGENIC_ADC is not set
+# CONFIG_IMX7D_ADC is not set
+# CONFIG_IMX8QXP_ADC is not set
+# CONFIG_LPC18XX_ADC is not set
+# CONFIG_LPC32XX_ADC is not set
+# CONFIG_LTC2471 is not set
+CONFIG_LTC2485=m
+CONFIG_LTC2497=m
+# CONFIG_MAX1363 is not set
+CONFIG_MAX9611=m
+# CONFIG_MCP3422 is not set
+# CONFIG_MEDIATEK_MT6360_ADC is not set
+# CONFIG_MEDIATEK_MT6577_AUXADC is not set
+# CONFIG_MESON_SARADC is not set
+# CONFIG_MP2629_ADC is not set
+CONFIG_NAU7802=m
+# CONFIG_NPCM_ADC is not set
+CONFIG_QCOM_VADC_COMMON=m
+# CONFIG_QCOM_PM8XXX_XOADC is not set
+CONFIG_QCOM_SPMI_IADC=m
+# CONFIG_QCOM_SPMI_VADC is not set
+CONFIG_QCOM_SPMI_ADC5=m
+# CONFIG_RCAR_GYRO_ADC is not set
+CONFIG_RN5T618_ADC=m
+# CONFIG_ROCKCHIP_SARADC is not set
+# CONFIG_RICHTEK_RTQ6056 is not set
+# CONFIG_RZG2L_ADC is not set
+# CONFIG_SC27XX_ADC is not set
+# CONFIG_SPEAR_ADC is not set
+CONFIG_SD_ADC_MODULATOR=m
+# CONFIG_STM32_DFSDM_CORE is not set
+# CONFIG_STM32_DFSDM_ADC is not set
+CONFIG_STMPE_ADC=m
+# CONFIG_TI_ADC081C is not set
+# CONFIG_TI_ADS1015 is not set
+CONFIG_TI_AM335X_ADC=m
+# CONFIG_VF610_ADC is not set
+CONFIG_XILINX_XADC=m
+# CONFIG_XILINX_AMS is not set
+# end of Analog to digital converters
+
+#
+# Analog to digital and digital to analog converters
+#
+# end of Analog to digital and digital to analog converters
+
+#
+# Analog Front Ends
+#
+CONFIG_IIO_RESCALE=m
+# end of Analog Front Ends
+
+#
+# Amplifiers
+#
+CONFIG_HMC425=m
+# end of Amplifiers
+
+#
+# Capacitance to digital converters
+#
+CONFIG_AD7150=m
+CONFIG_AD7746=m
+# end of Capacitance to digital converters
+
+#
+# Chemical Sensors
+#
+CONFIG_ATLAS_PH_SENSOR=m
+# CONFIG_ATLAS_EZO_SENSOR is not set
+CONFIG_BME680=m
+CONFIG_BME680_I2C=m
+# CONFIG_CCS811 is not set
+# CONFIG_IAQCORE is not set
+CONFIG_PMS7003=m
+CONFIG_SCD30_CORE=m
+# CONFIG_SCD30_I2C is not set
+CONFIG_SCD30_SERIAL=m
+# CONFIG_SCD4X is not set
+# CONFIG_SENSIRION_SGP30 is not set
+# CONFIG_SENSIRION_SGP40 is not set
+# CONFIG_SPS30_I2C is not set
+# CONFIG_SPS30_SERIAL is not set
+# CONFIG_SENSEAIR_SUNRISE_CO2 is not set
+# CONFIG_VZ89X is not set
+# end of Chemical Sensors
+
+#
+# Hid Sensor IIO Common
+#
+CONFIG_HID_SENSOR_IIO_COMMON=m
+CONFIG_HID_SENSOR_IIO_TRIGGER=m
+# end of Hid Sensor IIO Common
+
+CONFIG_IIO_MS_SENSORS_I2C=m
+
+#
+# IIO SCMI Sensors
+#
+# CONFIG_IIO_SCMI is not set
+# end of IIO SCMI Sensors
+
+#
+# SSP Sensor Common
+#
+# end of SSP Sensor Common
+
+CONFIG_IIO_ST_SENSORS_I2C=m
+CONFIG_IIO_ST_SENSORS_CORE=m
+
+#
+# Digital to analog converters
+#
+CONFIG_AD5064=m
+CONFIG_AD5380=m
+CONFIG_AD5446=m
+CONFIG_AD5592R_BASE=m
+CONFIG_AD5593R=m
+CONFIG_AD5686=m
+CONFIG_AD5696_I2C=m
+CONFIG_DPOT_DAC=m
+CONFIG_DS4424=m
+# CONFIG_LPC18XX_DAC is not set
+# CONFIG_M62332 is not set
+CONFIG_MAX517=m
+CONFIG_MAX5821=m
+CONFIG_MCP4725=m
+CONFIG_TI_DAC5571=m
+# CONFIG_VF610_DAC is not set
+# end of Digital to analog converters
+
+#
+# IIO dummy driver
+#
+CONFIG_IIO_DUMMY_EVGEN=m
+CONFIG_IIO_SIMPLE_DUMMY=m
+CONFIG_IIO_SIMPLE_DUMMY_EVENTS=y
+CONFIG_IIO_SIMPLE_DUMMY_BUFFER=y
+# end of IIO dummy driver
+
+#
+# Filters
+#
+# end of Filters
+
+#
+# Frequency Synthesizers DDS/PLL
+#
+
+#
+# Clock Generator/Distribution
+#
+# end of Clock Generator/Distribution
+
+#
+# Phase-Locked Loop (PLL) frequency synthesizers
+#
+# end of Phase-Locked Loop (PLL) frequency synthesizers
+# end of Frequency Synthesizers DDS/PLL
+
+#
+# Digital gyroscope sensors
+#
+# CONFIG_BMG160 is not set
+CONFIG_FXAS21002C=m
+CONFIG_FXAS21002C_I2C=m
+CONFIG_HID_SENSOR_GYRO_3D=m
+CONFIG_MPU3050=m
+CONFIG_MPU3050_I2C=m
+CONFIG_IIO_ST_GYRO_3AXIS=m
+CONFIG_IIO_ST_GYRO_I2C_3AXIS=m
+# CONFIG_ITG3200 is not set
+# end of Digital gyroscope sensors
+
+#
+# Health Sensors
+#
+
+#
+# Heart Rate Monitors
+#
+CONFIG_AFE4404=m
+CONFIG_MAX30100=m
+# CONFIG_MAX30102 is not set
+# end of Heart Rate Monitors
+# end of Health Sensors
+
+#
+# Humidity sensors
+#
+CONFIG_AM2315=m
+CONFIG_DHT11=m
+# CONFIG_HDC100X is not set
+# CONFIG_HDC2010 is not set
+# CONFIG_HID_SENSOR_HUMIDITY is not set
+CONFIG_HTS221=m
+CONFIG_HTS221_I2C=m
+CONFIG_HTU21=m
+# CONFIG_SI7005 is not set
+CONFIG_SI7020=m
+# end of Humidity sensors
+
+#
+# Inertial measurement units
+#
+# CONFIG_BMI160_I2C is not set
+# CONFIG_BOSCH_BNO055_SERIAL is not set
+# CONFIG_BOSCH_BNO055_I2C is not set
+CONFIG_FXOS8700=m
+CONFIG_FXOS8700_I2C=m
+# CONFIG_KMX61 is not set
+# CONFIG_INV_ICM42600_I2C is not set
+# CONFIG_INV_MPU6050_I2C is not set
+CONFIG_IIO_ST_LSM6DSX=m
+CONFIG_IIO_ST_LSM6DSX_I2C=m
+CONFIG_IIO_ST_LSM6DSX_I3C=m
+# CONFIG_IIO_ST_LSM9DS0 is not set
+# end of Inertial measurement units
+
+#
+# Light sensors
+#
+CONFIG_ADJD_S311=m
+# CONFIG_ADUX1020 is not set
+# CONFIG_AL3010 is not set
+CONFIG_AL3320A=m
+CONFIG_APDS9300=m
+# CONFIG_APDS9960 is not set
+CONFIG_AS73211=m
+# CONFIG_BH1750 is not set
+# CONFIG_BH1780 is not set
+# CONFIG_CM32181 is not set
+# CONFIG_CM3232 is not set
+# CONFIG_CM3323 is not set
+CONFIG_CM3605=m
+CONFIG_CM36651=m
+CONFIG_GP2AP002=m
+CONFIG_GP2AP020A00F=m
+# CONFIG_IQS621_ALS is not set
+CONFIG_SENSORS_ISL29018=m
+# CONFIG_SENSORS_ISL29028 is not set
+CONFIG_ISL29125=m
+CONFIG_HID_SENSOR_ALS=m
+CONFIG_HID_SENSOR_PROX=m
+CONFIG_JSA1212=m
+# CONFIG_RPR0521 is not set
+# CONFIG_LTR501 is not set
+# CONFIG_LTRF216A is not set
+# CONFIG_LV0104CS is not set
+CONFIG_MAX44000=m
+# CONFIG_MAX44009 is not set
+# CONFIG_NOA1305 is not set
+CONFIG_OPT3001=m
+CONFIG_PA12203001=m
+# CONFIG_SI1133 is not set
+# CONFIG_SI1145 is not set
+CONFIG_STK3310=m
+CONFIG_ST_UVIS25=m
+CONFIG_ST_UVIS25_I2C=m
+CONFIG_TCS3414=m
+CONFIG_TCS3472=m
+# CONFIG_SENSORS_TSL2563 is not set
+CONFIG_TSL2583=m
+# CONFIG_TSL2591 is not set
+CONFIG_TSL2772=m
+CONFIG_TSL4531=m
+# CONFIG_US5182D is not set
+CONFIG_VCNL4000=m
+# CONFIG_VCNL4035 is not set
+# CONFIG_VEML6030 is not set
+CONFIG_VEML6070=m
+CONFIG_VL6180=m
+# CONFIG_ZOPT2201 is not set
+# end of Light sensors
+
+#
+# Magnetometer sensors
+#
+CONFIG_AK8974=m
+CONFIG_AK8975=m
+# CONFIG_AK09911 is not set
+CONFIG_BMC150_MAGN=m
+CONFIG_BMC150_MAGN_I2C=m
+# CONFIG_MAG3110 is not set
+CONFIG_HID_SENSOR_MAGNETOMETER_3D=m
+CONFIG_MMC35240=m
+CONFIG_IIO_ST_MAGN_3AXIS=m
+CONFIG_IIO_ST_MAGN_I2C_3AXIS=m
+CONFIG_SENSORS_HMC5843=m
+CONFIG_SENSORS_HMC5843_I2C=m
+CONFIG_SENSORS_RM3100=m
+CONFIG_SENSORS_RM3100_I2C=m
+# CONFIG_YAMAHA_YAS530 is not set
+# end of Magnetometer sensors
+
+#
+# Multiplexers
+#
+CONFIG_IIO_MUX=m
+# end of Multiplexers
+
+#
+# Inclinometer sensors
+#
+CONFIG_HID_SENSOR_INCLINOMETER_3D=m
+CONFIG_HID_SENSOR_DEVICE_ROTATION=m
+# end of Inclinometer sensors
+
+# CONFIG_IIO_RESCALE_KUNIT_TEST is not set
+# CONFIG_IIO_FORMAT_KUNIT_TEST is not set
+
+#
+# Triggers - standalone
+#
+CONFIG_IIO_HRTIMER_TRIGGER=m
+CONFIG_IIO_INTERRUPT_TRIGGER=m
+# CONFIG_IIO_STM32_LPTIMER_TRIGGER is not set
+# CONFIG_IIO_STM32_TIMER_TRIGGER is not set
+# CONFIG_IIO_TIGHTLOOP_TRIGGER is not set
+# CONFIG_IIO_SYSFS_TRIGGER is not set
+# end of Triggers - standalone
+
+#
+# Linear and angular position sensors
+#
+CONFIG_IQS624_POS=m
+# CONFIG_HID_SENSOR_CUSTOM_INTEL_HINGE is not set
+# end of Linear and angular position sensors
+
+#
+# Digital potentiometers
+#
+# CONFIG_AD5110 is not set
+CONFIG_AD5272=m
+# CONFIG_DS1803 is not set
+CONFIG_MAX5432=m
+CONFIG_MCP4018=m
+# CONFIG_MCP4531 is not set
+CONFIG_TPL0102=m
+# end of Digital potentiometers
+
+#
+# Digital potentiostats
+#
+CONFIG_LMP91000=m
+# end of Digital potentiostats
+
+#
+# Pressure sensors
+#
+CONFIG_ABP060MG=m
+CONFIG_BMP280=m
+CONFIG_BMP280_I2C=m
+# CONFIG_DLHL60D is not set
+CONFIG_DPS310=m
+CONFIG_HID_SENSOR_PRESS=m
+CONFIG_HP03=m
+CONFIG_ICP10100=m
+CONFIG_MPL115=m
+CONFIG_MPL115_I2C=m
+CONFIG_MPL3115=m
+CONFIG_MS5611=m
+CONFIG_MS5611_I2C=m
+CONFIG_MS5637=m
+CONFIG_IIO_ST_PRESS=m
+CONFIG_IIO_ST_PRESS_I2C=m
+# CONFIG_T5403 is not set
+CONFIG_HP206C=m
+CONFIG_ZPA2326=m
+CONFIG_ZPA2326_I2C=m
+# end of Pressure sensors
+
+#
+# Lightning sensors
+#
+# end of Lightning sensors
+
+#
+# Proximity and distance sensors
+#
+CONFIG_ISL29501=m
+CONFIG_LIDAR_LITE_V2=m
+CONFIG_MB1232=m
+CONFIG_PING=m
+# CONFIG_RFD77402 is not set
+# CONFIG_SRF04 is not set
+CONFIG_SX_COMMON=m
+CONFIG_SX9310=m
+# CONFIG_SX9324 is not set
+# CONFIG_SX9360 is not set
+# CONFIG_SX9500 is not set
+# CONFIG_SRF08 is not set
+CONFIG_VCNL3020=m
+CONFIG_VL53L0X_I2C=m
+# end of Proximity and distance sensors
+
+#
+# Resolver to digital converters
+#
+# end of Resolver to digital converters
+
+#
+# Temperature sensors
+#
+CONFIG_IQS620AT_TEMP=m
+# CONFIG_HID_SENSOR_TEMP is not set
+# CONFIG_MLX90614 is not set
+CONFIG_MLX90632=m
+# CONFIG_TMP006 is not set
+# CONFIG_TMP007 is not set
+# CONFIG_TMP117 is not set
+# CONFIG_TSYS01 is not set
+CONFIG_TSYS02D=m
+# end of Temperature sensors
+
+CONFIG_PWM=y
+CONFIG_PWM_SYSFS=y
+CONFIG_PWM_DEBUG=y
+# CONFIG_PWM_ATMEL is not set
+CONFIG_PWM_ATMEL_HLCDC_PWM=m
+# CONFIG_PWM_ATMEL_TCB is not set
+# CONFIG_PWM_BCM_IPROC is not set
+# CONFIG_PWM_BCM_KONA is not set
+# CONFIG_PWM_BCM2835 is not set
+# CONFIG_PWM_BERLIN is not set
+# CONFIG_PWM_BRCMSTB is not set
+# CONFIG_PWM_CLK is not set
+# CONFIG_PWM_CLPS711X is not set
+# CONFIG_PWM_EP93XX is not set
+CONFIG_PWM_FSL_FTM=m
+# CONFIG_PWM_HIBVT is not set
+# CONFIG_PWM_IMG is not set
+# CONFIG_PWM_IMX1 is not set
+# CONFIG_PWM_IMX27 is not set
+# CONFIG_PWM_IMX_TPM is not set
+# CONFIG_PWM_INTEL_LGM is not set
+CONFIG_PWM_IQS620A=m
+# CONFIG_PWM_JZ4740 is not set
+# CONFIG_PWM_KEEMBAY is not set
+CONFIG_PWM_LP3943=m
+# CONFIG_PWM_LPC18XX_SCT is not set
+# CONFIG_PWM_LPC32XX is not set
+# CONFIG_PWM_LPSS_PLATFORM is not set
+# CONFIG_PWM_MESON is not set
+# CONFIG_PWM_MTK_DISP is not set
+# CONFIG_PWM_MEDIATEK is not set
+# CONFIG_PWM_MXS is not set
+# CONFIG_PWM_OMAP_DMTIMER is not set
+CONFIG_PWM_PCA9685=m
+# CONFIG_PWM_PXA is not set
+# CONFIG_PWM_RASPBERRYPI_POE is not set
+# CONFIG_PWM_RCAR is not set
+# CONFIG_PWM_RENESAS_TPU is not set
+# CONFIG_PWM_ROCKCHIP is not set
+# CONFIG_PWM_SAMSUNG is not set
+# CONFIG_PWM_SIFIVE is not set
+# CONFIG_PWM_SL28CPLD is not set
+# CONFIG_PWM_SPEAR is not set
+# CONFIG_PWM_SPRD is not set
+# CONFIG_PWM_STI is not set
+# CONFIG_PWM_STM32 is not set
+# CONFIG_PWM_STM32_LP is not set
+# CONFIG_PWM_STMPE is not set
+# CONFIG_PWM_SUN4I is not set
+# CONFIG_PWM_SUNPLUS is not set
+# CONFIG_PWM_TEGRA is not set
+# CONFIG_PWM_TIECAP is not set
+# CONFIG_PWM_TIEHRPWM is not set
+# CONFIG_PWM_VISCONTI is not set
+# CONFIG_PWM_VT8500 is not set
+# CONFIG_PWM_XILINX is not set
+
+#
+# IRQ chip support
+#
+CONFIG_IRQCHIP=y
+CONFIG_ARM_NVIC=y
+CONFIG_AL_FIC=y
+CONFIG_MADERA_IRQ=y
+# CONFIG_JCORE_AIC is not set
+# CONFIG_RENESAS_INTC_IRQPIN is not set
+# CONFIG_RENESAS_IRQC is not set
+# CONFIG_RENESAS_RZA1_IRQC is not set
+# CONFIG_RENESAS_RZG2L_IRQC is not set
+# CONFIG_SL28CPLD_INTC is not set
+# CONFIG_TS4800_IRQ is not set
+# CONFIG_XILINX_INTC is not set
+# CONFIG_INGENIC_TCU_IRQ is not set
+# CONFIG_IRQ_UNIPHIER_AIDET is not set
+# CONFIG_MESON_IRQ_GPIO is not set
+# CONFIG_IMX_IRQSTEER is not set
+# CONFIG_IMX_INTMUX is not set
+# CONFIG_IMX_MU_MSI is not set
+# CONFIG_EXYNOS_IRQ_COMBINER is not set
+# CONFIG_MST_IRQ is not set
+# CONFIG_MCHP_EIC is not set
+# CONFIG_SUNPLUS_SP7021_INTC is not set
+# end of IRQ chip support
+
+CONFIG_IPACK_BUS=y
+CONFIG_RESET_CONTROLLER=y
+# CONFIG_RESET_A10SR is not set
+# CONFIG_RESET_ATH79 is not set
+# CONFIG_RESET_AXS10X is not set
+# CONFIG_RESET_BCM6345 is not set
+# CONFIG_RESET_BERLIN is not set
+# CONFIG_RESET_BRCMSTB is not set
+# CONFIG_RESET_BRCMSTB_RESCAL is not set
+# CONFIG_RESET_HSDK is not set
+# CONFIG_RESET_IMX7 is not set
+# CONFIG_RESET_INTEL_GW is not set
+# CONFIG_RESET_K210 is not set
+# CONFIG_RESET_LANTIQ is not set
+# CONFIG_RESET_LPC18XX is not set
+# CONFIG_RESET_MCHP_SPARX5 is not set
+# CONFIG_RESET_MESON is not set
+# CONFIG_RESET_MESON_AUDIO_ARB is not set
+# CONFIG_RESET_NPCM is not set
+# CONFIG_RESET_PISTACHIO is not set
+# CONFIG_RESET_QCOM_AOSS is not set
+# CONFIG_RESET_QCOM_PDC is not set
+# CONFIG_RESET_RASPBERRYPI is not set
+# CONFIG_RESET_RZG2L_USBPHY_CTRL is not set
+# CONFIG_RESET_SCMI is not set
+# CONFIG_RESET_SIMPLE is not set
+# CONFIG_RESET_SOCFPGA is not set
+# CONFIG_RESET_STARFIVE_JH7100 is not set
+# CONFIG_RESET_SUNPLUS is not set
+# CONFIG_RESET_SUNXI is not set
+# CONFIG_RESET_TI_SCI is not set
+CONFIG_RESET_TI_SYSCON=m
+# CONFIG_RESET_TI_TPS380X is not set
+# CONFIG_RESET_TN48M_CPLD is not set
+# CONFIG_RESET_UNIPHIER is not set
+# CONFIG_RESET_UNIPHIER_GLUE is not set
+# CONFIG_RESET_ZYNQ is not set
+# CONFIG_COMMON_RESET_HI3660 is not set
+# CONFIG_COMMON_RESET_HI6220 is not set
+
+#
+# PHY Subsystem
+#
+CONFIG_GENERIC_PHY=y
+# CONFIG_PHY_LPC18XX_USB_OTG is not set
+# CONFIG_PHY_PISTACHIO_USB is not set
+# CONFIG_PHY_XGENE is not set
+# CONFIG_USB_LGM_PHY is not set
+# CONFIG_PHY_CAN_TRANSCEIVER is not set
+# CONFIG_PHY_SUN4I_USB is not set
+# CONFIG_PHY_SUN6I_MIPI_DPHY is not set
+# CONFIG_PHY_SUN9I_USB is not set
+# CONFIG_PHY_SUN50I_USB3 is not set
+# CONFIG_PHY_MESON8_HDMI_TX is not set
+# CONFIG_PHY_MESON8B_USB2 is not set
+# CONFIG_PHY_MESON_GXL_USB2 is not set
+# CONFIG_PHY_MESON_G12A_MIPI_DPHY_ANALOG is not set
+# CONFIG_PHY_MESON_G12A_USB2 is not set
+# CONFIG_PHY_MESON_G12A_USB3_PCIE is not set
+# CONFIG_PHY_MESON_AXG_PCIE is not set
+# CONFIG_PHY_MESON_AXG_MIPI_PCIE_ANALOG is not set
+# CONFIG_PHY_MESON_AXG_MIPI_DPHY is not set
+
+#
+# PHY drivers for Broadcom platforms
+#
+# CONFIG_PHY_BCM63XX_USBH is not set
+# CONFIG_PHY_CYGNUS_PCIE is not set
+# CONFIG_PHY_BCM_SR_USB is not set
+# CONFIG_BCM_KONA_USB2_PHY is not set
+# CONFIG_PHY_BCM_NS_USB2 is not set
+# CONFIG_PHY_BCM_NS_USB3 is not set
+# CONFIG_PHY_NS2_PCIE is not set
+# CONFIG_PHY_NS2_USB_DRD is not set
+# CONFIG_PHY_BRCM_SATA is not set
+# CONFIG_PHY_BRCM_USB is not set
+# CONFIG_PHY_BCM_SR_PCIE is not set
+# end of PHY drivers for Broadcom platforms
+
+# CONFIG_PHY_CADENCE_TORRENT is not set
+# CONFIG_PHY_CADENCE_DPHY is not set
+# CONFIG_PHY_CADENCE_DPHY_RX is not set
+CONFIG_PHY_CADENCE_SIERRA=y
+# CONFIG_PHY_CADENCE_SALVO is not set
+CONFIG_PHY_FSL_IMX8MQ_USB=y
+# CONFIG_PHY_MIXEL_LVDS_PHY is not set
+# CONFIG_PHY_MIXEL_MIPI_DPHY is not set
+# CONFIG_PHY_FSL_IMX8M_PCIE is not set
+# CONFIG_PHY_FSL_LYNX_28G is not set
+# CONFIG_PHY_HI6220_USB is not set
+# CONFIG_PHY_HI3660_USB is not set
+# CONFIG_PHY_HI3670_USB is not set
+# CONFIG_PHY_HI3670_PCIE is not set
+# CONFIG_PHY_HISTB_COMBPHY is not set
+# CONFIG_PHY_HISI_INNO_USB2 is not set
+# CONFIG_PHY_INGENIC_USB is not set
+# CONFIG_PHY_LANTIQ_VRX200_PCIE is not set
+# CONFIG_PHY_LANTIQ_RCU_USB2 is not set
+# CONFIG_ARMADA375_USBCLUSTER_PHY is not set
+# CONFIG_PHY_BERLIN_SATA is not set
+# CONFIG_PHY_BERLIN_USB is not set
+CONFIG_PHY_MVEBU_A3700_UTMI=y
+# CONFIG_PHY_MVEBU_A38X_COMPHY is not set
+# CONFIG_PHY_MVEBU_CP110_UTMI is not set
+# CONFIG_PHY_PXA_28NM_HSIC is not set
+CONFIG_PHY_PXA_28NM_USB2=y
+# CONFIG_PHY_PXA_USB is not set
+# CONFIG_PHY_MMP3_USB is not set
+# CONFIG_PHY_MMP3_HSIC is not set
+# CONFIG_PHY_MTK_PCIE is not set
+# CONFIG_PHY_MTK_TPHY is not set
+# CONFIG_PHY_MTK_UFS is not set
+# CONFIG_PHY_MTK_XSPHY is not set
+# CONFIG_PHY_MTK_HDMI is not set
+# CONFIG_PHY_MTK_MIPI_DSI is not set
+# CONFIG_PHY_MTK_DP is not set
+# CONFIG_PHY_SPARX5_SERDES is not set
+# CONFIG_PHY_LAN966X_SERDES is not set
+CONFIG_PHY_CPCAP_USB=m
+CONFIG_PHY_MAPPHONE_MDM6600=m
+CONFIG_PHY_OCELOT_SERDES=m
+CONFIG_PHY_ATH79_USB=m
+# CONFIG_PHY_QCOM_EDP is not set
+# CONFIG_PHY_QCOM_IPQ4019_USB is not set
+# CONFIG_PHY_QCOM_PCIE2 is not set
+# CONFIG_PHY_QCOM_QMP is not set
+# CONFIG_PHY_QCOM_QUSB2 is not set
+# CONFIG_PHY_QCOM_USB_HS is not set
+# CONFIG_PHY_QCOM_USB_SNPS_FEMTO_V2 is not set
+CONFIG_PHY_QCOM_USB_HSIC=m
+# CONFIG_PHY_QCOM_USB_HS_28NM is not set
+# CONFIG_PHY_QCOM_USB_SS is not set
+# CONFIG_PHY_QCOM_IPQ806X_USB is not set
+# CONFIG_PHY_MT7621_PCI is not set
+# CONFIG_PHY_RALINK_USB is not set
+# CONFIG_PHY_RCAR_GEN3_USB3 is not set
+# CONFIG_PHY_ROCKCHIP_DPHY_RX0 is not set
+# CONFIG_PHY_ROCKCHIP_INNO_HDMI is not set
+# CONFIG_PHY_ROCKCHIP_INNO_USB2 is not set
+# CONFIG_PHY_ROCKCHIP_INNO_CSIDPHY is not set
+# CONFIG_PHY_ROCKCHIP_INNO_DSIDPHY is not set
+# CONFIG_PHY_ROCKCHIP_PCIE is not set
+# CONFIG_PHY_ROCKCHIP_SNPS_PCIE3 is not set
+# CONFIG_PHY_ROCKCHIP_TYPEC is not set
+# CONFIG_PHY_EXYNOS_DP_VIDEO is not set
+# CONFIG_PHY_EXYNOS_MIPI_VIDEO is not set
+# CONFIG_PHY_EXYNOS_PCIE is not set
+# CONFIG_PHY_SAMSUNG_UFS is not set
+CONFIG_PHY_SAMSUNG_USB2=m
+# CONFIG_PHY_S5PV210_USB2 is not set
+# CONFIG_PHY_UNIPHIER_USB2 is not set
+# CONFIG_PHY_UNIPHIER_USB3 is not set
+# CONFIG_PHY_UNIPHIER_PCIE is not set
+# CONFIG_PHY_UNIPHIER_AHCI is not set
+# CONFIG_PHY_ST_SPEAR1310_MIPHY is not set
+# CONFIG_PHY_ST_SPEAR1340_MIPHY is not set
+# CONFIG_PHY_STIH407_USB is not set
+# CONFIG_PHY_STM32_USBPHYC is not set
+# CONFIG_PHY_SUNPLUS_USB is not set
+# CONFIG_PHY_TEGRA194_P2U is not set
+# CONFIG_PHY_DA8XX_USB is not set
+# CONFIG_PHY_DM816X_USB is not set
+# CONFIG_PHY_AM654_SERDES is not set
+# CONFIG_PHY_J721E_WIZ is not set
+# CONFIG_OMAP_CONTROL_PHY is not set
+# CONFIG_TI_PIPE3 is not set
+# CONFIG_PHY_TUSB1210 is not set
+# CONFIG_PHY_INTEL_KEEMBAY_EMMC is not set
+# CONFIG_PHY_INTEL_KEEMBAY_USB is not set
+# CONFIG_PHY_INTEL_LGM_COMBO is not set
+# CONFIG_PHY_INTEL_LGM_EMMC is not set
+# CONFIG_PHY_INTEL_THUNDERBAY_EMMC is not set
+# CONFIG_PHY_XILINX_ZYNQMP is not set
+# end of PHY Subsystem
+
+CONFIG_POWERCAP=y
+CONFIG_IDLE_INJECT=y
+# CONFIG_DTPM is not set
+# CONFIG_MCB is not set
+
+#
+# Performance monitor support
+#
+CONFIG_ARM_CCN=m
+# CONFIG_ARM_CMN is not set
+CONFIG_ARM_PMU=y
+# CONFIG_FSL_IMX8_DDR_PMU is not set
+# CONFIG_ARM_DMC620_PMU is not set
+# CONFIG_ALIBABA_UNCORE_DRW_PMU is not set
+# end of Performance monitor support
+
+# CONFIG_RAS is not set
+
+#
+# Android
+#
+# end of Android
+
+# CONFIG_DAX is not set
+# CONFIG_NVMEM is not set
+
+#
+# HW tracing support
+#
+CONFIG_STM=y
+CONFIG_STM_PROTO_BASIC=m
+CONFIG_STM_PROTO_SYS_T=y
+# CONFIG_STM_DUMMY is not set
+CONFIG_STM_SOURCE_CONSOLE=y
+# CONFIG_STM_SOURCE_HEARTBEAT is not set
+CONFIG_INTEL_TH=m
+CONFIG_INTEL_TH_GTH=m
+CONFIG_INTEL_TH_STH=m
+CONFIG_INTEL_TH_MSU=m
+# CONFIG_INTEL_TH_PTI is not set
+# CONFIG_INTEL_TH_DEBUG is not set
+# end of HW tracing support
+
+CONFIG_FPGA=y
+# CONFIG_FPGA_MGR_SOCFPGA is not set
+# CONFIG_FPGA_MGR_SOCFPGA_A10 is not set
+CONFIG_ALTERA_PR_IP_CORE=m
+CONFIG_ALTERA_PR_IP_CORE_PLAT=m
+# CONFIG_FPGA_MGR_ZYNQ_FPGA is not set
+CONFIG_FPGA_BRIDGE=y
+CONFIG_ALTERA_FREEZE_BRIDGE=y
+CONFIG_XILINX_PR_DECOUPLER=y
+CONFIG_FPGA_REGION=y
+CONFIG_OF_FPGA_REGION=y
+CONFIG_FPGA_DFL=y
+# CONFIG_FPGA_DFL_FME is not set
+CONFIG_FPGA_DFL_AFU=y
+# CONFIG_FPGA_DFL_NIOS_INTEL_PAC_N3000 is not set
+# CONFIG_FPGA_MGR_ZYNQMP_FPGA is not set
+# CONFIG_FPGA_MGR_VERSAL_FPGA is not set
+CONFIG_FSI=m
+# CONFIG_FSI_NEW_DEV_NODE is not set
+# CONFIG_FSI_MASTER_GPIO is not set
+# CONFIG_FSI_MASTER_HUB is not set
+# CONFIG_FSI_MASTER_ASPEED is not set
+CONFIG_FSI_SCOM=m
+# CONFIG_FSI_SBEFIFO is not set
+# CONFIG_TEE is not set
+CONFIG_MULTIPLEXER=y
+
+#
+# Multiplexer drivers
+#
+CONFIG_MUX_ADG792A=m
+CONFIG_MUX_GPIO=y
+CONFIG_MUX_MMIO=m
+# end of Multiplexer drivers
+
+CONFIG_PM_OPP=y
+CONFIG_SIOX=y
+CONFIG_SIOX_BUS_GPIO=y
+# CONFIG_SLIMBUS is not set
+CONFIG_INTERCONNECT=y
+# CONFIG_INTERCONNECT_IMX is not set
+# CONFIG_INTERCONNECT_QCOM_OSM_L3 is not set
+# CONFIG_INTERCONNECT_SAMSUNG is not set
+CONFIG_COUNTER=m
+# CONFIG_104_QUAD_8 is not set
+# CONFIG_INTERRUPT_CNT is not set
+# CONFIG_STM32_TIMER_CNT is not set
+# CONFIG_STM32_LPTIMER_CNT is not set
+# CONFIG_TI_EQEP is not set
+CONFIG_FTM_QUADDEC=m
+CONFIG_MICROCHIP_TCB_CAPTURE=m
+# CONFIG_TI_ECAP_CAPTURE is not set
+CONFIG_MOST=m
+CONFIG_MOST_USB_HDM=m
+CONFIG_MOST_CDEV=m
+# CONFIG_MOST_SND is not set
+# CONFIG_PECI is not set
+# CONFIG_HTE is not set
+# end of Device Drivers
+
+#
+# File systems
+#
+CONFIG_VALIDATE_FS_PARSER=y
+CONFIG_EXPORTFS_BLOCK_OPS=y
+CONFIG_FILE_LOCKING=y
+CONFIG_FS_ENCRYPTION=y
+# CONFIG_FS_VERITY is not set
+CONFIG_FSNOTIFY=y
+# CONFIG_DNOTIFY is not set
+CONFIG_INOTIFY_USER=y
+# CONFIG_FANOTIFY is not set
+CONFIG_QUOTA=y
+# CONFIG_QUOTA_NETLINK_INTERFACE is not set
+# CONFIG_PRINT_QUOTA_WARNING is not set
+# CONFIG_QUOTA_DEBUG is not set
+CONFIG_QFMT_V1=y
+# CONFIG_QFMT_V2 is not set
+CONFIG_QUOTACTL=y
+CONFIG_AUTOFS4_FS=y
+CONFIG_AUTOFS_FS=y
+# CONFIG_FUSE_FS is not set
+# CONFIG_OVERLAY_FS is not set
+
+#
+# Caches
+#
+# CONFIG_FSCACHE is not set
+# end of Caches
+
+#
+# Pseudo filesystems
+#
+CONFIG_PROC_FS=y
+# CONFIG_PROC_VMCORE is not set
+# CONFIG_PROC_SYSCTL is not set
+CONFIG_PROC_CHILDREN=y
+CONFIG_KERNFS=y
+CONFIG_SYSFS=y
+CONFIG_CONFIGFS_FS=y
+# end of Pseudo filesystems
+
+# CONFIG_MISC_FILESYSTEMS is not set
+CONFIG_NETWORK_FILESYSTEMS=y
+CONFIG_NLS=m
+CONFIG_NLS_DEFAULT="iso8859-1"
+CONFIG_NLS_CODEPAGE_437=m
+CONFIG_NLS_CODEPAGE_737=m
+CONFIG_NLS_CODEPAGE_775=m
+CONFIG_NLS_CODEPAGE_850=m
+# CONFIG_NLS_CODEPAGE_852 is not set
+CONFIG_NLS_CODEPAGE_855=m
+# CONFIG_NLS_CODEPAGE_857 is not set
+CONFIG_NLS_CODEPAGE_860=m
+CONFIG_NLS_CODEPAGE_861=m
+# CONFIG_NLS_CODEPAGE_862 is not set
+CONFIG_NLS_CODEPAGE_863=m
+CONFIG_NLS_CODEPAGE_864=m
+CONFIG_NLS_CODEPAGE_865=m
+CONFIG_NLS_CODEPAGE_866=m
+CONFIG_NLS_CODEPAGE_869=m
+CONFIG_NLS_CODEPAGE_936=m
+CONFIG_NLS_CODEPAGE_950=m
+CONFIG_NLS_CODEPAGE_932=m
+# CONFIG_NLS_CODEPAGE_949 is not set
+CONFIG_NLS_CODEPAGE_874=m
+CONFIG_NLS_ISO8859_8=m
+CONFIG_NLS_CODEPAGE_1250=m
+CONFIG_NLS_CODEPAGE_1251=m
+# CONFIG_NLS_ASCII is not set
+CONFIG_NLS_ISO8859_1=m
+CONFIG_NLS_ISO8859_2=m
+CONFIG_NLS_ISO8859_3=m
+CONFIG_NLS_ISO8859_4=m
+CONFIG_NLS_ISO8859_5=m
+CONFIG_NLS_ISO8859_6=m
+CONFIG_NLS_ISO8859_7=m
+CONFIG_NLS_ISO8859_9=m
+CONFIG_NLS_ISO8859_13=m
+CONFIG_NLS_ISO8859_14=m
+# CONFIG_NLS_ISO8859_15 is not set
+CONFIG_NLS_KOI8_R=m
+CONFIG_NLS_KOI8_U=m
+CONFIG_NLS_MAC_ROMAN=m
+# CONFIG_NLS_MAC_CELTIC is not set
+# CONFIG_NLS_MAC_CENTEURO is not set
+CONFIG_NLS_MAC_CROATIAN=m
+CONFIG_NLS_MAC_CYRILLIC=m
+CONFIG_NLS_MAC_GAELIC=m
+# CONFIG_NLS_MAC_GREEK is not set
+# CONFIG_NLS_MAC_ICELAND is not set
+CONFIG_NLS_MAC_INUIT=m
+CONFIG_NLS_MAC_ROMANIAN=m
+CONFIG_NLS_MAC_TURKISH=m
+CONFIG_NLS_UTF8=m
+CONFIG_UNICODE=y
+CONFIG_UNICODE_NORMALIZATION_SELFTEST=m
+# end of File systems
+
+#
+# Security options
+#
+CONFIG_KEYS=y
+CONFIG_KEYS_REQUEST_CACHE=y
+CONFIG_PERSISTENT_KEYRINGS=y
+CONFIG_TRUSTED_KEYS=y
+CONFIG_TRUSTED_KEYS_TPM=y
+# CONFIG_ENCRYPTED_KEYS is not set
+CONFIG_KEY_DH_OPERATIONS=y
+CONFIG_SECURITY_DMESG_RESTRICT=y
+# CONFIG_SECURITY is not set
+# CONFIG_SECURITYFS is not set
+CONFIG_HAVE_HARDENED_USERCOPY_ALLOCATOR=y
+CONFIG_HARDENED_USERCOPY=y
+# CONFIG_FORTIFY_SOURCE is not set
+CONFIG_STATIC_USERMODEHELPER=y
+CONFIG_STATIC_USERMODEHELPER_PATH="/sbin/usermode-helper"
+CONFIG_DEFAULT_SECURITY_DAC=y
+CONFIG_LSM="lockdown,yama,loadpin,safesetid,integrity,bpf"
+
+#
+# Kernel hardening options
+#
+
+#
+# Memory initialization
+#
+CONFIG_CC_HAS_AUTO_VAR_INIT_PATTERN=y
+CONFIG_CC_HAS_AUTO_VAR_INIT_ZERO_ENABLER=y
+CONFIG_CC_HAS_AUTO_VAR_INIT_ZERO=y
+CONFIG_INIT_STACK_NONE=y
+# CONFIG_INIT_STACK_ALL_PATTERN is not set
+# CONFIG_INIT_STACK_ALL_ZERO is not set
+CONFIG_INIT_ON_ALLOC_DEFAULT_ON=y
+CONFIG_INIT_ON_FREE_DEFAULT_ON=y
+# end of Memory initialization
+
+CONFIG_CC_HAS_RANDSTRUCT=y
+# CONFIG_RANDSTRUCT_NONE is not set
+CONFIG_RANDSTRUCT_FULL=y
+CONFIG_RANDSTRUCT=y
+# end of Kernel hardening options
+# end of Security options
+
+CONFIG_CRYPTO=y
+
+#
+# Crypto core or helper
+#
+CONFIG_CRYPTO_ALGAPI=y
+CONFIG_CRYPTO_ALGAPI2=y
+CONFIG_CRYPTO_AEAD=y
+CONFIG_CRYPTO_AEAD2=y
+CONFIG_CRYPTO_SKCIPHER=y
+CONFIG_CRYPTO_SKCIPHER2=y
+CONFIG_CRYPTO_HASH=y
+CONFIG_CRYPTO_HASH2=y
+CONFIG_CRYPTO_RNG=y
+CONFIG_CRYPTO_RNG2=y
+CONFIG_CRYPTO_RNG_DEFAULT=y
+CONFIG_CRYPTO_AKCIPHER2=y
+CONFIG_CRYPTO_AKCIPHER=m
+CONFIG_CRYPTO_KPP2=y
+CONFIG_CRYPTO_KPP=y
+CONFIG_CRYPTO_ACOMP2=y
+CONFIG_CRYPTO_MANAGER=y
+CONFIG_CRYPTO_MANAGER2=y
+CONFIG_CRYPTO_USER=m
+CONFIG_CRYPTO_MANAGER_DISABLE_TESTS=y
+CONFIG_CRYPTO_GF128MUL=y
+CONFIG_CRYPTO_NULL=y
+CONFIG_CRYPTO_NULL2=y
+CONFIG_CRYPTO_CRYPTD=y
+CONFIG_CRYPTO_AUTHENC=y
+# CONFIG_CRYPTO_TEST is not set
+# end of Crypto core or helper
+
+#
+# Public-key cryptography
+#
+# CONFIG_CRYPTO_RSA is not set
+CONFIG_CRYPTO_DH=y
+# CONFIG_CRYPTO_DH_RFC7919_GROUPS is not set
+CONFIG_CRYPTO_ECC=m
+CONFIG_CRYPTO_ECDH=m
+# CONFIG_CRYPTO_ECDSA is not set
+CONFIG_CRYPTO_ECRDSA=m
+CONFIG_CRYPTO_SM2=m
+CONFIG_CRYPTO_CURVE25519=y
+# end of Public-key cryptography
+
+#
+# Block ciphers
+#
+CONFIG_CRYPTO_AES=y
+CONFIG_CRYPTO_AES_TI=m
+# CONFIG_CRYPTO_ARIA is not set
+# CONFIG_CRYPTO_BLOWFISH is not set
+CONFIG_CRYPTO_CAMELLIA=m
+CONFIG_CRYPTO_CAST_COMMON=y
+CONFIG_CRYPTO_CAST5=y
+CONFIG_CRYPTO_CAST6=m
+CONFIG_CRYPTO_DES=y
+# CONFIG_CRYPTO_FCRYPT is not set
+CONFIG_CRYPTO_SERPENT=m
+# CONFIG_CRYPTO_SM4_GENERIC is not set
+# CONFIG_CRYPTO_TWOFISH is not set
+# end of Block ciphers
+
+#
+# Length-preserving ciphers and modes
+#
+# CONFIG_CRYPTO_ADIANTUM is not set
+# CONFIG_CRYPTO_CHACHA20 is not set
+CONFIG_CRYPTO_CBC=y
+CONFIG_CRYPTO_CFB=m
+CONFIG_CRYPTO_CTR=y
+CONFIG_CRYPTO_CTS=y
+CONFIG_CRYPTO_ECB=y
+# CONFIG_CRYPTO_HCTR2 is not set
+CONFIG_CRYPTO_KEYWRAP=m
+CONFIG_CRYPTO_LRW=m
+CONFIG_CRYPTO_OFB=y
+CONFIG_CRYPTO_PCBC=m
+CONFIG_CRYPTO_XTS=y
+# end of Length-preserving ciphers and modes
+
+#
+# AEAD (authenticated encryption with associated data) ciphers
+#
+CONFIG_CRYPTO_AEGIS128=y
+# CONFIG_CRYPTO_CHACHA20POLY1305 is not set
+CONFIG_CRYPTO_CCM=y
+CONFIG_CRYPTO_GCM=m
+CONFIG_CRYPTO_SEQIV=m
+CONFIG_CRYPTO_ECHAINIV=y
+CONFIG_CRYPTO_ESSIV=m
+# end of AEAD (authenticated encryption with associated data) ciphers
+
+#
+# Hashes, digests, and MACs
+#
+# CONFIG_CRYPTO_BLAKE2B is not set
+CONFIG_CRYPTO_CMAC=y
+CONFIG_CRYPTO_GHASH=y
+CONFIG_CRYPTO_HMAC=y
+CONFIG_CRYPTO_MD4=m
+CONFIG_CRYPTO_MD5=m
+# CONFIG_CRYPTO_MICHAEL_MIC is not set
+# CONFIG_CRYPTO_POLY1305 is not set
+CONFIG_CRYPTO_RMD160=y
+CONFIG_CRYPTO_SHA1=y
+CONFIG_CRYPTO_SHA256=y
+CONFIG_CRYPTO_SHA512=y
+CONFIG_CRYPTO_SHA3=y
+CONFIG_CRYPTO_SM3=m
+# CONFIG_CRYPTO_SM3_GENERIC is not set
+CONFIG_CRYPTO_STREEBOG=y
+CONFIG_CRYPTO_VMAC=y
+CONFIG_CRYPTO_WP512=m
+CONFIG_CRYPTO_XCBC=m
+CONFIG_CRYPTO_XXHASH=m
+# end of Hashes, digests, and MACs
+
+#
+# CRCs (cyclic redundancy checks)
+#
+CONFIG_CRYPTO_CRC32C=y
+# CONFIG_CRYPTO_CRC32 is not set
+CONFIG_CRYPTO_CRCT10DIF=m
+# end of CRCs (cyclic redundancy checks)
+
+#
+# Compression
+#
+CONFIG_CRYPTO_DEFLATE=y
+# CONFIG_CRYPTO_LZO is not set
+CONFIG_CRYPTO_842=m
+CONFIG_CRYPTO_LZ4=y
+CONFIG_CRYPTO_LZ4HC=m
+CONFIG_CRYPTO_ZSTD=m
+# end of Compression
+
+#
+# Random number generation
+#
+# CONFIG_CRYPTO_ANSI_CPRNG is not set
+CONFIG_CRYPTO_DRBG_MENU=y
+CONFIG_CRYPTO_DRBG_HMAC=y
+CONFIG_CRYPTO_DRBG_HASH=y
+# CONFIG_CRYPTO_DRBG_CTR is not set
+CONFIG_CRYPTO_DRBG=y
+CONFIG_CRYPTO_JITTERENTROPY=y
+CONFIG_CRYPTO_KDF800108_CTR=y
+# end of Random number generation
+
+#
+# Userspace interface
+#
+CONFIG_CRYPTO_USER_API=y
+# CONFIG_CRYPTO_USER_API_HASH is not set
+CONFIG_CRYPTO_USER_API_SKCIPHER=m
+CONFIG_CRYPTO_USER_API_RNG=y
+CONFIG_CRYPTO_USER_API_RNG_CAVP=y
+# CONFIG_CRYPTO_USER_API_AEAD is not set
+# CONFIG_CRYPTO_USER_API_ENABLE_OBSOLETE is not set
+CONFIG_CRYPTO_STATS=y
+# end of Userspace interface
+
+CONFIG_CRYPTO_HASH_INFO=y
+
+#
+# Accelerated Cryptographic Algorithms for CPU (arm)
+#
+# CONFIG_CRYPTO_POLY1305_ARM is not set
+# CONFIG_CRYPTO_BLAKE2S_ARM is not set
+# CONFIG_CRYPTO_SHA1_ARM is not set
+# CONFIG_CRYPTO_AES_ARM is not set
+# CONFIG_CRYPTO_CHACHA20_NEON is not set
+# end of Accelerated Cryptographic Algorithms for CPU (arm)
+
+# CONFIG_CRYPTO_HW is not set
+CONFIG_ASYMMETRIC_KEY_TYPE=y
+CONFIG_ASYMMETRIC_PUBLIC_KEY_SUBTYPE=m
+CONFIG_X509_CERTIFICATE_PARSER=m
+# CONFIG_PKCS8_PRIVATE_KEY_PARSER is not set
+CONFIG_PKCS7_MESSAGE_PARSER=m
+# CONFIG_FIPS_SIGNATURE_SELFTEST is not set
+
+#
+# Certificates for signature checking
+#
+CONFIG_SYSTEM_BLACKLIST_KEYRING=y
+CONFIG_SYSTEM_BLACKLIST_HASH_LIST=""
+# end of Certificates for signature checking
+
+CONFIG_BINARY_PRINTF=y
+
+#
+# Library routines
+#
+CONFIG_LINEAR_RANGES=y
+# CONFIG_PACKING is not set
+CONFIG_BITREVERSE=y
+CONFIG_HAVE_ARCH_BITREVERSE=y
+CONFIG_GENERIC_STRNCPY_FROM_USER=y
+CONFIG_GENERIC_STRNLEN_USER=y
+CONFIG_GENERIC_NET_UTILS=y
+# CONFIG_CORDIC is not set
+CONFIG_PRIME_NUMBERS=m
+CONFIG_RATIONAL=y
+CONFIG_GENERIC_PCI_IOMAP=y
+CONFIG_ARCH_USE_CMPXCHG_LOCKREF=y
+
+#
+# Crypto library routines
+#
+CONFIG_CRYPTO_LIB_UTILS=y
+CONFIG_CRYPTO_LIB_AES=y
+CONFIG_CRYPTO_LIB_ARC4=y
+CONFIG_CRYPTO_LIB_BLAKE2S_GENERIC=y
+CONFIG_CRYPTO_LIB_CHACHA_GENERIC=y
+CONFIG_CRYPTO_LIB_CHACHA=y
+CONFIG_CRYPTO_LIB_CURVE25519_GENERIC=y
+# CONFIG_CRYPTO_LIB_CURVE25519 is not set
+CONFIG_CRYPTO_LIB_DES=y
+CONFIG_CRYPTO_LIB_POLY1305_RSIZE=9
+CONFIG_CRYPTO_LIB_POLY1305_GENERIC=y
+CONFIG_CRYPTO_LIB_POLY1305=y
+CONFIG_CRYPTO_LIB_CHACHA20POLY1305=y
+CONFIG_CRYPTO_LIB_SHA1=y
+CONFIG_CRYPTO_LIB_SHA256=y
+# end of Crypto library routines
+
+CONFIG_CRC_CCITT=y
+CONFIG_CRC16=y
+CONFIG_CRC_T10DIF=m
+# CONFIG_CRC64_ROCKSOFT is not set
+CONFIG_CRC_ITU_T=m
+CONFIG_CRC32=y
+CONFIG_CRC32_SELFTEST=y
+CONFIG_CRC32_SLICEBY8=y
+# CONFIG_CRC32_SLICEBY4 is not set
+# CONFIG_CRC32_SARWATE is not set
+# CONFIG_CRC32_BIT is not set
+# CONFIG_CRC64 is not set
+CONFIG_CRC4=y
+CONFIG_CRC7=m
+CONFIG_LIBCRC32C=m
+CONFIG_CRC8=y
+CONFIG_XXHASH=y
+CONFIG_RANDOM32_SELFTEST=y
+CONFIG_842_COMPRESS=m
+CONFIG_842_DECOMPRESS=m
+CONFIG_ZLIB_INFLATE=y
+CONFIG_ZLIB_DEFLATE=y
+CONFIG_LZ4_COMPRESS=y
+CONFIG_LZ4HC_COMPRESS=m
+CONFIG_LZ4_DECOMPRESS=y
+CONFIG_ZSTD_COMMON=y
+CONFIG_ZSTD_COMPRESS=m
+CONFIG_ZSTD_DECOMPRESS=y
+CONFIG_XZ_DEC=m
+CONFIG_XZ_DEC_X86=y
+# CONFIG_XZ_DEC_POWERPC is not set
+# CONFIG_XZ_DEC_IA64 is not set
+CONFIG_XZ_DEC_ARM=y
+# CONFIG_XZ_DEC_ARMTHUMB is not set
+# CONFIG_XZ_DEC_SPARC is not set
+# CONFIG_XZ_DEC_MICROLZMA is not set
+CONFIG_XZ_DEC_BCJ=y
+CONFIG_XZ_DEC_TEST=m
+CONFIG_DECOMPRESS_BZIP2=y
+CONFIG_DECOMPRESS_LZMA=y
+CONFIG_DECOMPRESS_ZSTD=y
+CONFIG_GENERIC_ALLOCATOR=y
+CONFIG_REED_SOLOMON=y
+CONFIG_REED_SOLOMON_ENC16=y
+CONFIG_REED_SOLOMON_DEC16=y
+CONFIG_INTERVAL_TREE=y
+CONFIG_XARRAY_MULTI=y
+CONFIG_ASSOCIATIVE_ARRAY=y
+CONFIG_HAS_IOMEM=y
+CONFIG_HAS_DMA=y
+CONFIG_DMA_OPS=y
+CONFIG_NEED_DMA_MAP_STATE=y
+CONFIG_DMA_DECLARE_COHERENT=y
+CONFIG_ARCH_HAS_SETUP_DMA_OPS=y
+CONFIG_ARCH_HAS_SYNC_DMA_FOR_DEVICE=y
+CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU=y
+CONFIG_DMA_NONCOHERENT_MMAP=y
+CONFIG_DMA_GLOBAL_POOL=y
+CONFIG_DMA_API_DEBUG=y
+CONFIG_DMA_API_DEBUG_SG=y
+# CONFIG_DMA_MAP_BENCHMARK is not set
+CONFIG_SGL_ALLOC=y
+CONFIG_DQL=y
+CONFIG_GLOB=y
+# CONFIG_GLOB_SELFTEST is not set
+CONFIG_NLATTR=y
+CONFIG_GENERIC_ATOMIC64=y
+CONFIG_CLZ_TAB=y
+CONFIG_IRQ_POLL=y
+CONFIG_MPILIB=y
+CONFIG_DIMLIB=y
+CONFIG_LIBFDT=y
+CONFIG_OID_REGISTRY=y
+CONFIG_FONT_SUPPORT=m
+CONFIG_FONT_8x16=y
+CONFIG_FONT_AUTOSELECT=y
+CONFIG_STACKDEPOT=y
+# CONFIG_PARMAN is not set
+# CONFIG_OBJAGG is not set
+# end of Library routines
+
+CONFIG_GENERIC_LIB_DEVMEM_IS_ALLOWED=y
+CONFIG_ASN1_ENCODER=y
+CONFIG_POLYNOMIAL=m
+
+#
+# Kernel hacking
+#
+
+#
+# printk and dmesg options
+#
+# CONFIG_PRINTK_TIME is not set
+CONFIG_PRINTK_CALLER=y
+# CONFIG_STACKTRACE_BUILD_ID is not set
+CONFIG_CONSOLE_LOGLEVEL_DEFAULT=7
+CONFIG_CONSOLE_LOGLEVEL_QUIET=4
+CONFIG_MESSAGE_LOGLEVEL_DEFAULT=4
+CONFIG_BOOT_PRINTK_DELAY=y
+CONFIG_DYNAMIC_DEBUG=y
+CONFIG_DYNAMIC_DEBUG_CORE=y
+CONFIG_SYMBOLIC_ERRNAME=y
+# CONFIG_DEBUG_BUGVERBOSE is not set
+# end of printk and dmesg options
+
+CONFIG_DEBUG_KERNEL=y
+CONFIG_DEBUG_MISC=y
+
+#
+# Compile-time checks and compiler options
+#
+CONFIG_AS_HAS_NON_CONST_LEB128=y
+CONFIG_DEBUG_INFO_NONE=y
+# CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT is not set
+# CONFIG_DEBUG_INFO_DWARF4 is not set
+# CONFIG_DEBUG_INFO_DWARF5 is not set
+CONFIG_FRAME_WARN=1024
+CONFIG_STRIP_ASM_SYMS=y
+# CONFIG_HEADERS_INSTALL is not set
+CONFIG_SECTION_MISMATCH_WARN_ONLY=y
+# CONFIG_VMLINUX_MAP is not set
+# CONFIG_DEBUG_FORCE_WEAK_PER_CPU is not set
+# end of Compile-time checks and compiler options
+
+#
+# Generic Kernel Debugging Instruments
+#
+CONFIG_MAGIC_SYSRQ=y
+CONFIG_MAGIC_SYSRQ_DEFAULT_ENABLE=0x1
+# CONFIG_MAGIC_SYSRQ_SERIAL is not set
+CONFIG_DEBUG_FS=y
+# CONFIG_DEBUG_FS_ALLOW_ALL is not set
+CONFIG_DEBUG_FS_DISALLOW_MOUNT=y
+# CONFIG_DEBUG_FS_ALLOW_NONE is not set
+# CONFIG_UBSAN is not set
+# end of Generic Kernel Debugging Instruments
+
+#
+# Networking Debugging
+#
+# CONFIG_NET_DEV_REFCNT_TRACKER is not set
+# CONFIG_NET_NS_REFCNT_TRACKER is not set
+# CONFIG_DEBUG_NET is not set
+# end of Networking Debugging
+
+#
+# Memory Debugging
+#
+# CONFIG_PAGE_EXTENSION is not set
+CONFIG_DEBUG_PAGEALLOC=y
+CONFIG_DEBUG_PAGEALLOC_ENABLE_DEFAULT=y
+CONFIG_SLUB_DEBUG=y
+# CONFIG_SLUB_DEBUG_ON is not set
+# CONFIG_PAGE_OWNER is not set
+CONFIG_PAGE_POISONING=y
+CONFIG_DEBUG_OBJECTS=y
+CONFIG_DEBUG_OBJECTS_SELFTEST=y
+# CONFIG_DEBUG_OBJECTS_FREE is not set
+# CONFIG_DEBUG_OBJECTS_TIMERS is not set
+CONFIG_DEBUG_OBJECTS_WORK=y
+# CONFIG_DEBUG_OBJECTS_RCU_HEAD is not set
+CONFIG_DEBUG_OBJECTS_PERCPU_COUNTER=y
+CONFIG_DEBUG_OBJECTS_ENABLE_DEFAULT=1
+# CONFIG_SHRINKER_DEBUG is not set
+CONFIG_HAVE_DEBUG_KMEMLEAK=y
+# CONFIG_DEBUG_KMEMLEAK is not set
+CONFIG_DEBUG_STACK_USAGE=y
+CONFIG_SCHED_STACK_END_CHECK=y
+# CONFIG_DEBUG_VM is not set
+CONFIG_DEBUG_NOMMU_REGIONS=y
+CONFIG_DEBUG_MEMORY_INIT=y
+CONFIG_CC_HAS_KASAN_GENERIC=y
+CONFIG_CC_HAS_WORKING_NOSANITIZE_ADDRESS=y
+# end of Memory Debugging
+
+# CONFIG_DEBUG_SHIRQ is not set
+
+#
+# Debug Oops, Lockups and Hangs
+#
+CONFIG_PANIC_ON_OOPS=y
+CONFIG_PANIC_ON_OOPS_VALUE=1
+CONFIG_PANIC_TIMEOUT=0
+CONFIG_LOCKUP_DETECTOR=y
+CONFIG_SOFTLOCKUP_DETECTOR=y
+CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC=y
+CONFIG_DETECT_HUNG_TASK=y
+CONFIG_DEFAULT_HUNG_TASK_TIMEOUT=120
+CONFIG_BOOTPARAM_HUNG_TASK_PANIC=y
+CONFIG_WQ_WATCHDOG=y
+CONFIG_TEST_LOCKUP=m
+# end of Debug Oops, Lockups and Hangs
+
+#
+# Scheduler Debugging
+#
+CONFIG_SCHED_DEBUG=y
+CONFIG_SCHED_INFO=y
+CONFIG_SCHEDSTATS=y
+# end of Scheduler Debugging
+
+CONFIG_DEBUG_TIMEKEEPING=y
+
+#
+# Lock Debugging (spinlocks, mutexes, etc...)
+#
+CONFIG_DEBUG_RT_MUTEXES=y
+CONFIG_DEBUG_SPINLOCK=y
+CONFIG_DEBUG_MUTEXES=y
+# CONFIG_DEBUG_RWSEMS is not set
+CONFIG_DEBUG_ATOMIC_SLEEP=y
+# CONFIG_DEBUG_LOCKING_API_SELFTESTS is not set
+CONFIG_LOCK_TORTURE_TEST=y
+CONFIG_WW_MUTEX_SELFTEST=m
+CONFIG_SCF_TORTURE_TEST=m
+# end of Lock Debugging (spinlocks, mutexes, etc...)
+
+# CONFIG_DEBUG_IRQFLAGS is not set
+CONFIG_STACKTRACE=y
+CONFIG_WARN_ALL_UNSEEDED_RANDOM=y
+CONFIG_DEBUG_KOBJECT=y
+
+#
+# Debug kernel data structures
+#
+# CONFIG_DEBUG_LIST is not set
+# CONFIG_DEBUG_PLIST is not set
+CONFIG_DEBUG_SG=y
+CONFIG_DEBUG_NOTIFIERS=y
+# CONFIG_BUG_ON_DATA_CORRUPTION is not set
+# CONFIG_DEBUG_MAPLE_TREE is not set
+# end of Debug kernel data structures
+
+# CONFIG_DEBUG_CREDENTIALS is not set
+
+#
+# RCU Debugging
+#
+CONFIG_TORTURE_TEST=y
+CONFIG_RCU_SCALE_TEST=y
+CONFIG_RCU_TORTURE_TEST=y
+CONFIG_RCU_REF_SCALE_TEST=y
+CONFIG_RCU_TRACE=y
+CONFIG_RCU_EQS_DEBUG=y
+# end of RCU Debugging
+
+CONFIG_DEBUG_WQ_FORCE_RR_CPU=y
+CONFIG_LATENCYTOP=y
+CONFIG_HAVE_FUNCTION_TRACER=y
+CONFIG_HAVE_FUNCTION_GRAPH_TRACER=y
+CONFIG_HAVE_FTRACE_MCOUNT_RECORD=y
+CONFIG_HAVE_SYSCALL_TRACEPOINTS=y
+CONFIG_HAVE_C_RECORDMCOUNT=y
+CONFIG_HAVE_BUILDTIME_MCOUNT_SORT=y
+CONFIG_TRACE_CLOCK=y
+# CONFIG_SAMPLES is not set
+# CONFIG_STRICT_DEVMEM is not set
+
+#
+# arm Debugging
+#
+CONFIG_UNWINDER_ARM=y
+CONFIG_ARM_UNWIND=y
+# CONFIG_BACKTRACE_VERBOSE is not set
+CONFIG_DEBUG_USER=y
+CONFIG_DEBUG_LL=y
+CONFIG_DEBUG_ICEDCC=y
+# CONFIG_DEBUG_SEMIHOSTING is not set
+# CONFIG_DEBUG_LL_UART_8250 is not set
+# CONFIG_DEBUG_LL_UART_PL01X is not set
+CONFIG_DEBUG_UART_FLOW_CONTROL=y
+CONFIG_DEBUG_LL_INCLUDE="debug/icedcc.S"
+# CONFIG_DEBUG_UNCOMPRESS is not set
+CONFIG_UNCOMPRESS_INCLUDE="debug/uncompress.h"
+CONFIG_EARLY_PRINTK=y
+CONFIG_CORESIGHT=m
+CONFIG_CORESIGHT_LINKS_AND_SINKS=m
+CONFIG_CORESIGHT_LINK_AND_SINK_TMC=m
+CONFIG_CORESIGHT_CATU=m
+CONFIG_CORESIGHT_SINK_TPIU=m
+# CONFIG_CORESIGHT_SINK_ETBV10 is not set
+# CONFIG_CORESIGHT_SOURCE_ETM3X is not set
+# CONFIG_CORESIGHT_STM is not set
+# CONFIG_CORESIGHT_CPU_DEBUG is not set
+CONFIG_CORESIGHT_CTI=m
+# CONFIG_CORESIGHT_CTI_INTEGRATION_REGS is not set
+# end of arm Debugging
+
+#
+# Kernel Testing and Coverage
+#
+CONFIG_KUNIT=y
+# CONFIG_KUNIT_DEBUGFS is not set
+CONFIG_KUNIT_TEST=y
+CONFIG_KUNIT_EXAMPLE_TEST=m
+# CONFIG_KUNIT_ALL_TESTS is not set
+CONFIG_KUNIT_DEFAULT_ENABLED=y
+CONFIG_NOTIFIER_ERROR_INJECTION=y
+# CONFIG_OF_RECONFIG_NOTIFIER_ERROR_INJECT is not set
+# CONFIG_NETDEV_NOTIFIER_ERROR_INJECT is not set
+CONFIG_FAULT_INJECTION=y
+# CONFIG_FAILSLAB is not set
+# CONFIG_FAIL_PAGE_ALLOC is not set
+# CONFIG_FAULT_INJECTION_USERCOPY is not set
+CONFIG_FAULT_INJECTION_DEBUG_FS=y
+# CONFIG_FAULT_INJECTION_STACKTRACE_FILTER is not set
+CONFIG_ARCH_HAS_KCOV=y
+CONFIG_CC_HAS_SANCOV_TRACE_PC=y
+# CONFIG_KCOV is not set
+CONFIG_RUNTIME_TESTING_MENU=y
+CONFIG_LKDTM=y
+# CONFIG_CPUMASK_KUNIT_TEST is not set
+CONFIG_TEST_LIST_SORT=m
+CONFIG_TEST_MIN_HEAP=m
+# CONFIG_TEST_SORT is not set
+# CONFIG_TEST_DIV64 is not set
+CONFIG_BACKTRACE_SELF_TEST=m
+# CONFIG_TEST_REF_TRACKER is not set
+CONFIG_RBTREE_TEST=m
+CONFIG_REED_SOLOMON_TEST=y
+CONFIG_INTERVAL_TREE_TEST=m
+# CONFIG_PERCPU_TEST is not set
+CONFIG_ATOMIC64_SELFTEST=m
+CONFIG_TEST_HEXDUMP=m
+# CONFIG_STRING_SELFTEST is not set
+# CONFIG_TEST_STRING_HELPERS is not set
+# CONFIG_TEST_STRSCPY is not set
+CONFIG_TEST_KSTRTOX=y
+CONFIG_TEST_PRINTF=y
+# CONFIG_TEST_SCANF is not set
+# CONFIG_TEST_BITMAP is not set
+# CONFIG_TEST_UUID is not set
+CONFIG_TEST_XARRAY=y
+# CONFIG_TEST_RHASHTABLE is not set
+# CONFIG_TEST_SIPHASH is not set
+# CONFIG_TEST_IDA is not set
+CONFIG_TEST_LKM=m
+CONFIG_TEST_BITOPS=m
+CONFIG_TEST_USER_COPY=m
+CONFIG_TEST_BPF=m
+CONFIG_TEST_BLACKHOLE_DEV=m
+# CONFIG_FIND_BIT_BENCHMARK is not set
+CONFIG_TEST_FIRMWARE=m
+# CONFIG_BITFIELD_KUNIT is not set
+# CONFIG_HASH_KUNIT_TEST is not set
+# CONFIG_RESOURCE_KUNIT_TEST is not set
+CONFIG_SYSCTL_KUNIT_TEST=m
+CONFIG_LIST_KUNIT_TEST=y
+# CONFIG_LINEAR_RANGES_TEST is not set
+# CONFIG_CMDLINE_KUNIT_TEST is not set
+CONFIG_BITS_TEST=m
+# CONFIG_SLUB_KUNIT_TEST is not set
+# CONFIG_RATIONAL_KUNIT_TEST is not set
+# CONFIG_MEMCPY_KUNIT_TEST is not set
+# CONFIG_IS_SIGNED_TYPE_KUNIT_TEST is not set
+# CONFIG_OVERFLOW_KUNIT_TEST is not set
+# CONFIG_STACKINIT_KUNIT_TEST is not set
+CONFIG_TEST_UDELAY=m
+CONFIG_TEST_STATIC_KEYS=m
+# CONFIG_TEST_DYNAMIC_DEBUG is not set
+# CONFIG_TEST_MEMCAT_P is not set
+# CONFIG_TEST_MEMINIT is not set
+# CONFIG_TEST_FREE_PAGES is not set
+CONFIG_ARCH_USE_MEMTEST=y
+CONFIG_MEMTEST=y
+# end of Kernel Testing and Coverage
+
+#
+# Rust hacking
+#
+# end of Rust hacking
+
+# CONFIG_WARN_MISSING_DOCUMENTS is not set
+# CONFIG_WARN_ABI_ERRORS is not set
+# end of Kernel hacking
+
+--1CjbGslkFsYgisT/--
