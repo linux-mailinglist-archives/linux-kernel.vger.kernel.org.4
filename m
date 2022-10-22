@@ -2,70 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80D41608ACC
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 11:07:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A083A608ACF
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 11:07:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231138AbiJVJH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 05:07:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49950 "EHLO
+        id S232034AbiJVJHu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 05:07:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235179AbiJVJGx (ORCPT
+        with ESMTP id S233505AbiJVJHX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 05:06:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 221662DE474
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 01:20:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A23C6B82E07
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 08:16:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59F02C433D7;
-        Sat, 22 Oct 2022 08:16:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666426593;
-        bh=mNeH4WeyGSHFqhdspyYlVFsq2U3x4IUacITdhdMQuFI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CZCzN1MsxYG+IXMPEnNJfz9yQWpdNlVxsAU5hYH/xBroM9khylrnoyVvSumlCO0Q3
-         kUNrTdKby5Qls0yYBb4HaQF+v9h5GjsoIDePTw2NQpgBRapje56MKOurWM9PnYKteM
-         jCabtobW5vPkKtyNu4vy02+S1YAJhegwpWh0I4KY=
-Date:   Sat, 22 Oct 2022 09:58:09 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Deepak R Varma <drv@mailo.com>
-Cc:     outreachy@lists.linux.dev, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: wlan-ng: remove commented debug printk messages
-Message-ID: <Y1OikehVJv/teZ9e@kroah.com>
-References: <Y1H5tJXjMZqiB6rh@debian-BULLSEYE-live-builder-AMD64>
+        Sat, 22 Oct 2022 05:07:23 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 87C552E00A3;
+        Sat, 22 Oct 2022 01:21:27 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.32])
+        by gateway (Coremail) with SMTP id _____8Dxfbf8olNjOJ0BAA--.2006S3;
+        Sat, 22 Oct 2022 15:59:56 +0800 (CST)
+Received: from loongson-pc.loongson.cn (unknown [10.20.42.32])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx_1f7olNjLlUDAA--.13337S5;
+        Sat, 22 Oct 2022 15:59:55 +0800 (CST)
+From:   Jianmin Lv <lvjianmin@loongson.cn>
+To:     Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Len Brown <lenb@kernel.org>, rafael@kernel.org,
+        linux-pci@vger.kernel.org, linux-acpi@vger.kernel.org
+Subject: [PATCH V5 3/4] irqchip/loongson-pch-pic: Support to set IRQ type for ACPI path
+Date:   Sat, 22 Oct 2022 15:59:54 +0800
+Message-Id: <20221022075955.11726-4-lvjianmin@loongson.cn>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20221022075955.11726-1-lvjianmin@loongson.cn>
+References: <20221022075955.11726-1-lvjianmin@loongson.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y1H5tJXjMZqiB6rh@debian-BULLSEYE-live-builder-AMD64>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Dx_1f7olNjLlUDAA--.13337S5
+X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7Ar47tr4UJrWfGw48KryxuFg_yoW8GF4UpF
+        W5Cr4avwsrJry7Cw1Fkw4kG343A3s7tFW7KF4UtFnaqrn7G3s5AF1UuFWv9rn5ZFWfAF12
+        qanYqFW5ua43AFDanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bSxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_JF0_JFyl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        n4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
+        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E
+        87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxV
+        Aaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxY
+        O2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGV
+        WUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_
+        Xr0_Ar1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rV
+        WUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4U
+        JbIYCTnIWIevJa73UjIFyTuYvjxU4eMKDUUUU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 07:15:24AM +0530, Deepak R Varma wrote:
-> printk messages are added for program flow tracing and are left
-> commented. These commented log messages should be removed as they
-> are no more useful for program execution.
-> 
-> Signed-off-by: Deepak R Varma <drv@mailo.com>
-> ---
->  drivers/staging/wlan-ng/p80211netdev.c | 22 ----------------------
->  1 file changed, 22 deletions(-)
+For ACPI path, the translate callback used IRQ_TYPE_NONE and ignored
+the IRQ type in fwspec->param[1]. For supporting to set type for
+IRQs of the irqdomain, fwspec->param[1] should be used to get IRQ
+type.
 
-I recieved 3 different copies of this patch, and do not know which one
-to take at all.
+Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
+---
+ drivers/irqchip/irq-loongson-pch-pic.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-So please resend this as a v2 patch, only once, and I will be glad to
-review it.
+diff --git a/drivers/irqchip/irq-loongson-pch-pic.c b/drivers/irqchip/irq-loongson-pch-pic.c
+index 03493cda65a3..a26a3f59d4a5 100644
+--- a/drivers/irqchip/irq-loongson-pch-pic.c
++++ b/drivers/irqchip/irq-loongson-pch-pic.c
+@@ -155,9 +155,6 @@ static int pch_pic_domain_translate(struct irq_domain *d,
+ 	struct pch_pic *priv = d->host_data;
+ 	struct device_node *of_node = to_of_node(fwspec->fwnode);
+ 
+-	if (fwspec->param_count < 1)
+-		return -EINVAL;
+-
+ 	if (of_node) {
+ 		if (fwspec->param_count < 2)
+ 			return -EINVAL;
+@@ -165,8 +162,14 @@ static int pch_pic_domain_translate(struct irq_domain *d,
+ 		*hwirq = fwspec->param[0] + priv->ht_vec_base;
+ 		*type = fwspec->param[1] & IRQ_TYPE_SENSE_MASK;
+ 	} else {
++		if (fwspec->param_count < 1)
++			return -EINVAL;
++
+ 		*hwirq = fwspec->param[0] - priv->gsi_base;
+-		*type = IRQ_TYPE_NONE;
++		if (fwspec->param_count > 1)
++			*type = fwspec->param[1] & IRQ_TYPE_SENSE_MASK;
++		else
++			*type = IRQ_TYPE_NONE;
+ 	}
+ 
+ 	return 0;
+-- 
+2.31.1
 
-thanks,
-
-greg k-h
