@@ -2,243 +2,352 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D33B0608D7D
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 15:50:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD343608D83
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 15:57:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229718AbiJVNuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 09:50:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47064 "EHLO
+        id S229718AbiJVN52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 09:57:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbiJVNuD (ORCPT
+        with ESMTP id S229568AbiJVN50 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 09:50:03 -0400
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2089.outbound.protection.outlook.com [40.107.96.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D6505D8B5;
-        Sat, 22 Oct 2022 06:50:00 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VuATBWpid0/UgVzC2PItgQvaqPhTcnqHcfOIuTklGggNQFXgSqiuiyjhRkKECvKXlmd8gm9DQ4aVrv00Dyjj4zR1/2yXtJZT+XYQCTnkBwM8iKeqbl+HhqzQmPyJ8cBY7BAgBXb29yz1Y/ZflP28S7JOoU21AMIxiOXxee4aqENcXGZMF2y/puGQeLW38n0orlxMiodjqalmohiJYIL5SRFaI4jsZvuA0VYNzj295nPsJ6MqAK6u+vlFZND24f/CGsT4tU22Sf0POCTcY7uKgQP0akD1i8VATeD5OB25qhjWIa3R0v2GnTxOt9P6OB08XlMA1+9KTjviJAuj2OTpkA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KPkw3sqydEdDqWUSxJi+g/0nFlMp6TBnxJ3JPbwmh/U=;
- b=BqnD3LnK+PgdRMew+F1veQtD92qv6yaLXIugllLKcU4QAg1Xr8JKN9scRj6ZcwTkAc7hRGS295GmvjZMTDiJYFm2u4q/DbFDPLBCl8Su0SdZK4cexsygla7pgSGTcImSE+taFoAobaybGocHtiSn4BgCmYMXVuLW+2iB9csmfmH89GW0rh4Fy6st+oysb40g+W6jmQ9hhLeuo3l0W5vXBPCIv70rl/N06Uu4dSOjGK8HidSlXMU5j9C9juHsEO4xv75OPuldcU8iZRkYDHSmM/ozUFfjfS9IWFoCPpibRzP3iAYf8t8oModX/nrBofmtKnEVSRRZvab3rEqb1lY0YA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KPkw3sqydEdDqWUSxJi+g/0nFlMp6TBnxJ3JPbwmh/U=;
- b=pQc2DU2lwYwDmuwU8qlM//5MPT83/XAbgUzaFWFU9n0bSDvKQOTjdZ8ZOZ200XvI22sfkhWUfRA/RiGOljVz13ijyiMiHWlbKclfgi6NfzhmEWOtsMgZaIgsBf2QkhTUDB6s5nfHIwkUpeiw+eUz4ZB0SZ3BUxyUeEWvE4wTdIIi7grfNr9J54jWpPNO61X+FmluTFGrPBuk0trWK52YcjeGb5c344LfmHY3PS1eHL03Oe/NJacETNmjVSGem9TcYY1QTD/aEVuya1G04b8xvxqSon1MtCrnqV42KpfTmF9qtDkeh8z7dfuebmhSYDZm0heOiVRzbUfC60Ejhb9CWg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CY5PR12MB6179.namprd12.prod.outlook.com (2603:10b6:930:24::22)
- by BL1PR12MB5364.namprd12.prod.outlook.com (2603:10b6:208:314::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.34; Sat, 22 Oct
- 2022 13:49:57 +0000
-Received: from CY5PR12MB6179.namprd12.prod.outlook.com
- ([fe80::4ff2:d93e:d200:227e]) by CY5PR12MB6179.namprd12.prod.outlook.com
- ([fe80::4ff2:d93e:d200:227e%7]) with mapi id 15.20.5746.021; Sat, 22 Oct 2022
- 13:49:57 +0000
-Date:   Sat, 22 Oct 2022 16:49:50 +0300
-From:   Ido Schimmel <idosch@nvidia.com>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     netdev@kapio-technology.com, davem@davemloft.net, kuba@kernel.org,
-        netdev@vger.kernel.org,
-        Oleksandr Mazur <oleksandr.mazur@plvision.eu>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Florent Fourcot <florent.fourcot@wifirst.fr>,
-        Hans Schultz <schultz.hans@gmail.com>,
-        Joachim Wiberg <troglobit@gmail.com>,
-        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v8 net-next 10/12] net: dsa: mv88e6xxx: mac-auth/MAB
- implementation
-Message-ID: <Y1P0/gYdvrk+W866@shredder>
-References: <2565c09bb95d69142522c3c3bcaa599e@kapio-technology.com>
- <20221020225719.l5iw6vndmm7gvjo3@skbuf>
- <82d23b100b8d2c9e4647b8a134d5cbbf@kapio-technology.com>
- <20221021112216.6bw6sjrieh2znlti@skbuf>
- <7bfaae46b1913fe81654a4cd257d98b1@kapio-technology.com>
- <20221021163005.xljk2j3fkikr6uge@skbuf>
- <d1fb07de4b55d64f98425fe66156c4e4@kapio-technology.com>
- <20221021173014.oit3qmpkrsjwzbgu@skbuf>
- <b88e331e016ad3801f1bf1a0dec507f3@kapio-technology.com>
- <20221021181411.sv52q4yxr5r7urab@skbuf>
+        Sat, 22 Oct 2022 09:57:26 -0400
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3658A606BE;
+        Sat, 22 Oct 2022 06:57:24 -0700 (PDT)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-13aeccf12fbso6899765fac.11;
+        Sat, 22 Oct 2022 06:57:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PZhQznEWYNowKYy4BIKQwLooGxQM1J5Bvj9ssvaVWfY=;
+        b=LdfzLc8VDOFVilqEHWqMATGcyp3modSGAkQ9a3rdtPT9Czhk7UTorfCfkTcUOmDmo0
+         S588Lck8P0kP6XEZR3GTrPV1e1QoP3M99M/eSptfUbL5pLRZXNbhxLBwpjlPhdlMimUf
+         WC8vdzIhCUeKyeFFS0fF2tbi88BiKSz6YhdSysV10/d6n7JrShBkX7NdUHdSEJ15YxTk
+         hHKIceGQyO54jzYCM6oVNXPkpsJWWilkdj7NQRkq+3a+ZJIfpNvLIhGesOBogOpMRfnl
+         vw2iSml9CnmzaLqXONCdPHs0/HbVdQPSqBDQG/9IPyw9AASZ1ktJSlRILaGRndma/UNR
+         lt9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PZhQznEWYNowKYy4BIKQwLooGxQM1J5Bvj9ssvaVWfY=;
+        b=8OqKIfdhtZB8QNWK7E+Sd9kX2gmEyMq/fh2wn91O/vKVEttMSmE5nYLhQ07Ytbrbyv
+         GEp8OcvoISf47hplAP7/1H+GZymgPxdaTgZbKf0B8RZsaDPIatxf+6sYzjMdlAotSqG5
+         iInJI3vORquaKJ7xMmXg10qqokcnlkJcy7P+Z/LvBkvJM7C6kKCjArwpaV59T6OodRtD
+         QWJvXYGy27qNPrc0q+SOali8S063/IdChA03AY+xO1IyfQaeeV5jjxpqRbiyMQ2iAfYz
+         56cZLlovBe0lxKwa5eMm44w9XdlaTaxXNv1Y3Us3eCNeyb+vO7WEaoSYDw7Mws/S1CFq
+         Cltw==
+X-Gm-Message-State: ACrzQf3Kgrr5lsrbugdP+cqgwLUvJ7Yqnd6+wqstFtI3KDUZu/3M29PB
+        /ijXhk6g6vZGWbNb7J0IMFs=
+X-Google-Smtp-Source: AMsMyM52QrwwcQhLz+zh9MWvRb5VvWXn8b/8wQK8+KcfWyk3FrZSsk2DQldI0Ki0fxFJHedbxWa7Og==
+X-Received: by 2002:a05:6870:960d:b0:13b:254d:247e with SMTP id d13-20020a056870960d00b0013b254d247emr5832662oaq.237.1666447043445;
+        Sat, 22 Oct 2022 06:57:23 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id s16-20020a05683004d000b00661a33883b8sm2240937otd.71.2022.10.22.06.57.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 22 Oct 2022 06:57:22 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sat, 22 Oct 2022 06:57:20 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Aleksa Savic <savicaleksa83@gmail.com>
+Cc:     linux-hwmon@vger.kernel.org, leonard.anderweit@gmail.com,
+        Jack Doan <me@jackdoan.com>, Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (aquacomputer_d5next) Add support for temperature
+ sensor offsets
+Message-ID: <20221022135720.GA739650@roeck-us.net>
+References: <20221021174834.736930-1-savicaleksa83@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221021181411.sv52q4yxr5r7urab@skbuf>
-X-ClientProxiedBy: VI1PR04CA0100.eurprd04.prod.outlook.com
- (2603:10a6:803:64::35) To CY5PR12MB6179.namprd12.prod.outlook.com
- (2603:10b6:930:24::22)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY5PR12MB6179:EE_|BL1PR12MB5364:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3bdcc1f6-a257-42f3-f31e-08dab4344e0f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: UBh/HNiYb1WanlCZ6yNnRH54paqHc+wK/TtlOSZCg0VVeh0bWXl0IDAr1WkNWqKLcCojUvg3FE2bb/xUnx/jwWEkuecyYATqnDoGUmzwue9jpw6e+i3lkZJ+oo/CHvGwwKbp0T4XwbQ+AXM2uj88M7/4P3BcTibX6hb2aqQbg+kqzkqJ/S3kSntO3qLrDlRCHdumBuYdLidaNLf9ootLdiDFg5TlTmOOdIY4OrJLeKBn13nQq/tkeCWlM9WglSF7ksiYH5ILqbcQhf4abG8EwcjvYoXyRJJO2XJd7NwoPOrv1gKdcBWqwIV5XFlErGMRNSbzq3BeH3UquySLN1gj1XNr5mw0gQB0NEagZlpLvOJrTI8bLe+33D0KEbkYpo7WiHl+9kn2WXAxcAbH93a9/B3RvQwdFUrUzZfvOMn1fp75gtCJerP54ZV2QZqHH2Di9TBqwTWLXfhWJkKmIRP1hGINWpaGnYXC+MR45db124XYv95qGjdLv8h7DqDE6xSpaK1exdheD9P1Jy4ZKs6ekbx0i8NfRvXUIff84hGtqzCTd0J7ADWzSp3blDbblZbcrqkbFdbUtsls+64HAhOZo28NX/YIDGGSzj+BqNyO2MUZCgKo3wV+FM/D0XgEjfkbRn19XOI/gXwLCXbSEZ735lAK9Qx8tcmi00l2nnSPxHsvtOHOFaE+t4TFAJBoeVMDhkrpoUtzPRFJPFLwwiyOQVw1+fV31TDng1YvTFKnD8iCC8SNxX+tp0WjlRZUbdCyHTbdXnynk5GgFTbPHUeYtqIPt6yFocu7Am1PIL3dQh7gUH8bcWkREBrM6kh8c29qN/lEdBzQxsUINWoIi3zvWg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6179.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(4636009)(376002)(366004)(136003)(39860400002)(346002)(396003)(451199015)(26005)(83380400001)(41300700001)(9686003)(6506007)(6512007)(66946007)(8676002)(6916009)(86362001)(4326008)(66556008)(66476007)(7416002)(5660300002)(7406005)(8936002)(6666004)(316002)(54906003)(966005)(38100700002)(66899015)(6486002)(33716001)(186003)(2906002)(478600001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?mrVURjN1xJ4yeO1XZSJpSXItkqrh7aeQGLzeQx7sp2ij4UFc6N2j4b91IT/Z?=
- =?us-ascii?Q?D2oDLoyTYLGyZFmJxdVH0ty042GA5DzZ6ayc4+pNXK4FFhGdzA/L/2NKn24D?=
- =?us-ascii?Q?EW+dBif03+GXwl4cnGq382njyFtcDZEW1Un+PG57OF16uTrlVdWDAprGOvcz?=
- =?us-ascii?Q?pAuXWWrs9PcuOO0bQYz5g3c/LCjpln9ftN9ygcJOJ+75ac5qf/IyMWB9XgLl?=
- =?us-ascii?Q?ifTHp0zL8Cxa+jwDTNuIEE7j2eDpxffqUoNET81yEf931xMVXM/YKdAaLsme?=
- =?us-ascii?Q?9X/LgCf40cyxdeHmmmaxlFj1RdUTw2WuYgOpHhgy+qF7CsZU9VBbzRtppb5G?=
- =?us-ascii?Q?WSZcNSoG/AnHeisXHdsOqGJak6B6zKwZlC2AayfMvVj6iwrCW5hg3QOdI/xC?=
- =?us-ascii?Q?p37j1TwfpnvMeGdyAOU3emd4EL6BmpM6hJ1HRogGi8kdFkIPIofUNA3r/JT9?=
- =?us-ascii?Q?tS42H9eqbk5gsXoGyqi/06j0YMYXzgcHfqONvkFQPB/w2UdcPHF3df+Wfh2/?=
- =?us-ascii?Q?uEwRDVccLqpXytgbm2mfxUGcJ2UufscqnBKgj1PELYteN1LSK30ukeXnHZUj?=
- =?us-ascii?Q?hrGVgVWRIR4VrGhQsCkOPBA/44SBT/qidIQzRc/bKKgKOFIm+iGlgEEXYwHb?=
- =?us-ascii?Q?+sZtodJv12sNb1kovS3E995VVLD/adx3A0hZISGJZ62vT2J7btTZaYjIKfev?=
- =?us-ascii?Q?TLTmOGKZoOzFDggl/n4Kqxg/DzatmSsJDAyQsAmo3nt3EaiXc8SNfVWIVbZF?=
- =?us-ascii?Q?tuv4Qwlgu86dn9XDZ2Y7qmd3Z7vNIMRde0KgiG7RDxM+jlpiyKSfo6vpBY2H?=
- =?us-ascii?Q?MVAkcCu0GdtoNomyvMYO3cdo5OIZ+GjNoviQXkzFa2zR2bD1QjuGOMI+tEft?=
- =?us-ascii?Q?Kv6gUxep/00lPClbhWWzOXnV4cDFraroT7ghxUiy9/FqzFNfim9BcvQwJWgR?=
- =?us-ascii?Q?9Zo7NnjZUr4Ic0WE+VUno3eKS5OZEzsnq0gzSAiRAcaKrXhLWPUd4q6vSZeS?=
- =?us-ascii?Q?rKFZG1g/u8g999Yoj6HRXFF2mabFI7zH2mHkkBUy1onzx1gGZoIldbNf7qHJ?=
- =?us-ascii?Q?4c4iGdQZkiCHDaoTBPgTQTMl47Mi2G9Yo9hGbQJippHHcrWp0BkmOtDOzQ/u?=
- =?us-ascii?Q?RfIHnBa4B/yKKEpCaLeJRbGy+8z0dBl9stpgbutNlMgTrlLykRdetl4MBYix?=
- =?us-ascii?Q?zlgkYhQtoDaxLfxwblp8ddjA6IoBaiEm5+1qTPCcQ02qSlIkjuseMeJbWpye?=
- =?us-ascii?Q?u68qiML/BdVK3ypndga24ETLdyUIrVMWLIpuui8yoWjRnRWd0+DmVY2BdPAp?=
- =?us-ascii?Q?CKMZKTea6Nu+YBnS/4BWmdTmy0rF81agF8l+XQD3+KuTM8OBRQEQIZF+CFyu?=
- =?us-ascii?Q?JPruJJG4zgOH2DiUcITyOcGKmacDXAz8lsnH/4oxh9pIAPigNo1KxFVJAr5K?=
- =?us-ascii?Q?k6TmMZ7nqGjqrKhuZfEM0rzePdn1GEDQFfVi2zOKVs72H7QLGgGcTuk3Bmre?=
- =?us-ascii?Q?mtM9XsuBCEGLZBidgfbBY62IrL2487HFHB7Wn7MLRDn977HJFhbx6EiIWDDM?=
- =?us-ascii?Q?N7co8Y4OzX9zinaUcJFNlqIl2CDlj2PRfU8Ak7HJ?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3bdcc1f6-a257-42f3-f31e-08dab4344e0f
-X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6179.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Oct 2022 13:49:57.1219
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: aCcZ0mQ1JCz2re4HT17tOVDaKiqxZAGDX+WnjYFXT6MYMhqAp/P1ntLc8EJSMYl315KU+6Di/Opx3sz5sE+Y4w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5364
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20221021174834.736930-1-savicaleksa83@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 09:14:11PM +0300, Vladimir Oltean wrote:
-> On Fri, Oct 21, 2022 at 07:39:34PM +0200, netdev@kapio-technology.com wrote:
-> > Well, with this change, to have MAB working, the bridge would need learning on
-> > of course, but how things work with the bridge according to the flags, they
-> > should also work in the offloaded case if you ask me. There should be no
-> > difference between the two, thus MAB in drivers would have to be with
-> > learning on.
+On Fri, Oct 21, 2022 at 07:48:34PM +0200, Aleksa Savic wrote:
+> Add support for reading and writing temperature sensor offsets
+> on the Aquacomputer D5 Next, Farbwerk 360, Octo and Quadro,
+> for which the needed offsets are known. Implemented by
+> Leonard Anderweit [1].
 > 
-> Am I proposing for things to work differently in the offload and
-> software case, and not realizing it? :-/
+> [1] https://github.com/aleksamagicka/aquacomputer_d5next-hwmon/pull/22
 > 
-> The essence of my proposal was to send a bug fix now which denies
-> BR_LEARNING to be set together with BR_PORT_LOCKED. The fact that
-> link-local traffic is learned by the software bridge is something
-> unintended as far as I understand.
+> Originally-from: Leonard Anderweit <leonard.anderweit@gmail.com>
+> Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
+> ---
+>  Documentation/hwmon/aquacomputer_d5next.rst |  1 +
+>  drivers/hwmon/aquacomputer_d5next.c         | 91 ++++++++++++++++++---
+>  2 files changed, 79 insertions(+), 13 deletions(-)
 > 
-> You tried to fix it here, and as far as I could search in my inbox, that
-> didn't go anywhere:
-> https://lore.kernel.org/netdev/47d8d747-54ef-df52-3b9c-acb9a77fa14a@blackwall.org/T/#u
-> 
-> I thought only mv88e6xxx offloads BR_PORT_LOCKED, but now, after
-> searching, I also see prestera has support for it, so let me add
-> Oleksandr Mazur to the discussion as well. I wonder how they deal with
-> this? Has somebody come to rely on learning being enabled on a locked
-> port?
-> 
-> 
-> MAB in offloading drivers will have to be with learning on (same as in
-> software). When BR_PORT_LOCKED | BR_LEARNING will be allowed together
-> back in net-next (to denote the MAB configuration), offloading drivers
-> (mv88e6xxx and prestera) will be patched to reject them. They will only
-> accept the two together when they implement MAB support.
-> 
-> Future drivers after this mess has been cleaned up will have to look at
-> the BR_PORT_LOCKED and BR_LEARNING flag in combination, to see which
-> kind of learning is desired on a port (secure, CPU based learning or
-> autonomous learning).
-> 
-> Am I not making sense?
+> diff --git a/Documentation/hwmon/aquacomputer_d5next.rst b/Documentation/hwmon/aquacomputer_d5next.rst
+> index e238533b5fe0..15226346434d 100644
+> --- a/Documentation/hwmon/aquacomputer_d5next.rst
+> +++ b/Documentation/hwmon/aquacomputer_d5next.rst
+> @@ -62,6 +62,7 @@ Sysfs entries
+>  
+>  ================ ==============================================================
+>  temp[1-20]_input Physical/virtual temperature sensors (in millidegrees Celsius)
+> +temp[1-4]_offset Temperature sensor correction offset (in millidegrees Celsius)
+>  fan[1-8]_input   Pump/fan speed (in RPM) / Flow speed (in dL/h)
+>  power[1-8]_input Pump/fan power (in micro Watts)
+>  in[0-7]_input    Pump/fan voltage (in milli Volts)
+> diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
+> index c51a2678f0eb..862d6c284e83 100644
+> --- a/drivers/hwmon/aquacomputer_d5next.c
+> +++ b/drivers/hwmon/aquacomputer_d5next.c
+> @@ -80,6 +80,7 @@ static u8 secondary_ctrl_report[] = {
+>  #define D5NEXT_5V_VOLTAGE		0x39
+>  #define D5NEXT_12V_VOLTAGE		0x37
+>  #define D5NEXT_CTRL_REPORT_SIZE		0x329
+> +#define D5NEXT_TEMP_CTRL_OFFSET		0x2D
+>  static u8 d5next_sensor_fan_offsets[] = { D5NEXT_PUMP_OFFSET, D5NEXT_FAN_OFFSET };
+>  
+>  /* Pump and fan speed registers in D5 Next control report (from 0-100%) */
+> @@ -94,6 +95,8 @@ static u16 d5next_ctrl_fan_offsets[] = { 0x97, 0x42 };
+>  #define FARBWERK360_SENSOR_START		0x32
+>  #define FARBWERK360_NUM_VIRTUAL_SENSORS		16
+>  #define FARBWERK360_VIRTUAL_SENSORS_START	0x3a
+> +#define FARBWERK360_CTRL_REPORT_SIZE		0x682
+> +#define FARBWERK360_TEMP_CTRL_OFFSET		0x8
+>  
+>  /* Register offsets for the Octo fan controller */
+>  #define OCTO_POWER_CYCLES		0x18
+> @@ -103,6 +106,7 @@ static u16 d5next_ctrl_fan_offsets[] = { 0x97, 0x42 };
+>  #define OCTO_NUM_VIRTUAL_SENSORS	16
+>  #define OCTO_VIRTUAL_SENSORS_START	0x45
+>  #define OCTO_CTRL_REPORT_SIZE		0x65F
+> +#define OCTO_TEMP_CTRL_OFFSET		0xA
+>  static u8 octo_sensor_fan_offsets[] = { 0x7D, 0x8A, 0x97, 0xA4, 0xB1, 0xBE, 0xCB, 0xD8 };
+>  
+>  /* Fan speed registers in Octo control report (from 0-100%) */
+> @@ -117,6 +121,7 @@ static u16 octo_ctrl_fan_offsets[] = { 0x5B, 0xB0, 0x105, 0x15A, 0x1AF, 0x204, 0
+>  #define QUADRO_VIRTUAL_SENSORS_START	0x3c
+>  #define QUADRO_CTRL_REPORT_SIZE		0x3c1
+>  #define QUADRO_FLOW_SENSOR_OFFSET	0x6e
+> +#define QUADRO_TEMP_CTRL_OFFSET		0xA
+>  static u8 quadro_sensor_fan_offsets[] = { 0x70, 0x7D, 0x8A, 0x97 };
+>  
+>  /* Fan speed registers in Quadro control report (from 0-100%) */
+> @@ -282,6 +287,7 @@ struct aqc_data {
+>  	int temp_sensor_start_offset;
+>  	int num_virtual_temp_sensors;
+>  	int virtual_temp_sensor_start_offset;
+> +	u16 temp_ctrl_offset;
+>  	u16 power_cycle_count_offset;
+>  	u8 flow_sensor_offset;
+>  
+> @@ -365,8 +371,8 @@ static int aqc_send_ctrl_data(struct aqc_data *priv)
+>  	return ret;
+>  }
+>  
+> -/* Refreshes the control buffer and returns value at offset */
+> -static int aqc_get_ctrl_val(struct aqc_data *priv, int offset)
+> +/* Refreshes the control buffer and stores value at offset in val */
+> +static int aqc_get_ctrl_val(struct aqc_data *priv, int offset, long *val)
+>  {
+>  	int ret;
+>  
+> @@ -376,7 +382,7 @@ static int aqc_get_ctrl_val(struct aqc_data *priv, int offset)
+>  	if (ret < 0)
+>  		goto unlock_and_return;
+>  
+> -	ret = get_unaligned_be16(priv->buffer + offset);
+> +	*val = (s16)get_unaligned_be16(priv->buffer + offset);
+>  
+>  unlock_and_return:
+>  	mutex_unlock(&priv->mutex);
+> @@ -393,7 +399,7 @@ static int aqc_set_ctrl_val(struct aqc_data *priv, int offset, long val)
+>  	if (ret < 0)
+>  		goto unlock_and_return;
+>  
+> -	put_unaligned_be16((u16)val, priv->buffer + offset);
+> +	put_unaligned_be16((s16)val, priv->buffer + offset);
+>  
+>  	ret = aqc_send_ctrl_data(priv);
+>  
+> @@ -408,8 +414,28 @@ static umode_t aqc_is_visible(const void *data, enum hwmon_sensor_types type, u3
+>  
+>  	switch (type) {
+>  	case hwmon_temp:
+> +		if (channel < priv->num_temp_sensors) {
+> +			switch (attr) {
+> +			case hwmon_temp_label:
+> +			case hwmon_temp_input:
+> +				return 0444;
+> +			case hwmon_temp_offset:
+> +				if (priv->temp_ctrl_offset != 0)
+> +					return 0644;
+> +				break;
+> +			default:
+> +				break;
+> +			}
+> +		}
+> +
+>  		if (channel < priv->num_temp_sensors + priv->num_virtual_temp_sensors)
+> -			return 0444;
+> +			switch (attr) {
+> +			case hwmon_temp_label:
+> +			case hwmon_temp_input:
+> +				return 0444;
+> +			default:
+> +				break;
+> +			}
+>  		break;
+>  	case hwmon_pwm:
+>  		if (priv->fan_ctrl_offsets && channel < priv->num_fans) {
+> @@ -492,10 +518,26 @@ static int aqc_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+>  
+>  	switch (type) {
+>  	case hwmon_temp:
+> -		if (priv->temp_input[channel] == -ENODATA)
+> -			return -ENODATA;
+> +		switch (attr) {
+> +		case hwmon_temp_input:
+> +			if (priv->temp_input[channel] == -ENODATA)
+> +				return -ENODATA;
+> +
+> +			*val = priv->temp_input[channel];
+> +			break;
+> +		case hwmon_temp_offset:
+> +			ret =
+> +			    aqc_get_ctrl_val(priv,
+> +					     priv->temp_ctrl_offset +
+> +					     channel * AQC_TEMP_SENSOR_SIZE, val);
 
-I will try to summarize what I learned from past discussions because I
-think it is not properly explained in the commit messages.
+Please go up to 100 columns to avoid excessive line splits.
 
-If you look at the hostapd fork by Westermo [1], you will see that they
-are authorizing hosts by adding dynamic FDB entries from user space, not
-static ones. Someone from Westermo will need to confirm this, but I
-guess the reasons are that a) They want hosts that became silent to lose
-their authentication after the aging time b) They want hosts to lose
-their authentication when the carrier of the bridge port goes down. This
-will cause the bridge driver to flush dynamic FDB entries, but not
-static ones. Otherwise, an attacker with physical access to the switch
-and knowledge of the MAC address of the authenticated host can connect a
-different (malicious) host that will be able to communicate through the
-bridge.
+Is it really necessary to re-read the control buffer repeatedly
+to report this value ? I don't know how costly that is, but unlike
+the pwm value I would not expect the number to change.
 
-In the above scenario, learning does not need to be on for the bridge to
-populate its FDB, but rather for the bridge to refresh the dynamic FDB
-entries installed by hostapd. This seems like a valid use case and one
-needs a good reason to break it in future kernels.
+Also, is this number indeed not included in the regular reports
+sent from the controller ?
 
-Regarding learning from link-local frames, this can be mitigated by [2]
-without adding additional checks in the bridge. I don't know why this
-bridge option was originally added, but if it wasn't for this use case,
-then now it has another use case.
+The driver doesn't distinguish between offsets in the control buffer
+(pwm, and now temperature sensor offset) and offsets in the report buffer,
+making it a bit difficult to determine if those are the same or not.
+Some explanation in the driver would be nice if someone finds the time
+to provide one. If the control buffer offsets are in a different number
+space, they should really be marked accordingly (for example with a
+_CTRL in the define).
 
-Regarding MAB, from the above you can see that a pure 802.1X
-implementation that does not involve MAB can benefit from locked bridge
-ports with learning enabled. It is therefore not accurate to say that
-one wants MAB merely by enabling learning on a locked port. Given that
-MAB is a proprietary extension and much less secure than 802.1X, we can
-assume that there will be deployments out there that do not use MAB and
-do not care about notifications regarding locked FDB entries. I
-therefore think that MAB needs to be enabled by a separate bridge port
-flag that is rejected unless the bridge port is locked and has learning
-enabled.
+> +			if (ret < 0)
+> +				return ret;
+>  
+> -		*val = priv->temp_input[channel];
+> +			*val *= 10;
+> +			break;
+> +		default:
+> +			break;
+> +		}
+>  		break;
+>  	case hwmon_fan:
+>  		*val = priv->speed_input[channel];
+> @@ -505,7 +547,7 @@ static int aqc_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+>  		break;
+>  	case hwmon_pwm:
+>  		if (priv->fan_ctrl_offsets) {
+> -			ret = aqc_get_ctrl_val(priv, priv->fan_ctrl_offsets[channel]);
+> +			ret = aqc_get_ctrl_val(priv, priv->fan_ctrl_offsets[channel], val);
+>  			if (ret < 0)
+>  				return ret;
+>  
+> @@ -563,6 +605,22 @@ static int aqc_write(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+>  	struct aqc_data *priv = dev_get_drvdata(dev);
+>  
+>  	switch (type) {
+> +	case hwmon_temp:
+> +		switch (attr) {
+> +		case hwmon_temp_offset:
+> +			/* Limit temp offset to +/- 15K as in the official software */
+> +			val = clamp_val(val, -15000, 15000) / 10;
+> +			ret =
+> +			    aqc_set_ctrl_val(priv,
+> +					     priv->temp_ctrl_offset +
+> +					     channel * AQC_TEMP_SENSOR_SIZE, val);
 
-Regarding hardware offload, I have an idea (needs testing) on how to
-make mlxsw work in a similar way to mv88e6xxx. That is, does not involve
-injecting frames that incurred a miss to the Rx path. If you guys want,
-I'm willing to take a subset of the patches here, improve the commit
-message, do some small changes and submit them along with an mlxsw
-implementation. My intention is not to discredit anyone (I will keep the
-original authorship), but to help push this forward and give another
-example of hardware offload.
+Too many line splits. Please go up to 100 columns.
 
-[1] https://github.com/westermo/hostapd/commit/10c584b875a63a9e58b0ad39835282545351c30e#diff-338b6fad34b4bdb015d7d96930974bd96796b754257473b6c91527789656d6ed
-[2] https://git.kernel.org/pub/scm/network/iproute2/iproute2-next.git/commit/?id=c74a8bc9cf5d6b6c9d8c64d5a80c5740165f315a
+> +			if (ret < 0)
+> +				return ret;
+> +			break;
+> +		default:
+> +			return -EOPNOTSUPP;
+> +		}
+> +		break;
+>  	case hwmon_pwm:
+>  		switch (attr) {
+>  		case hwmon_pwm_input:
+> @@ -597,10 +655,10 @@ static const struct hwmon_ops aqc_hwmon_ops = {
+>  
+>  static const struct hwmon_channel_info *aqc_info[] = {
+>  	HWMON_CHANNEL_INFO(temp,
+> -			   HWMON_T_INPUT | HWMON_T_LABEL,
+> -			   HWMON_T_INPUT | HWMON_T_LABEL,
+> -			   HWMON_T_INPUT | HWMON_T_LABEL,
+> -			   HWMON_T_INPUT | HWMON_T_LABEL,
+> +			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_OFFSET,
+> +			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_OFFSET,
+> +			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_OFFSET,
+> +			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_OFFSET,
+>  			   HWMON_T_INPUT | HWMON_T_LABEL,
+>  			   HWMON_T_INPUT | HWMON_T_LABEL,
+>  			   HWMON_T_INPUT | HWMON_T_LABEL,
+> @@ -853,6 +911,7 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
+>  		priv->virtual_temp_sensor_start_offset = D5NEXT_VIRTUAL_SENSORS_START;
+>  		priv->power_cycle_count_offset = D5NEXT_POWER_CYCLES;
+>  		priv->buffer_size = D5NEXT_CTRL_REPORT_SIZE;
+> +		priv->temp_ctrl_offset = D5NEXT_TEMP_CTRL_OFFSET;
+>  
+>  		priv->temp_label = label_d5next_temp;
+>  		priv->virtual_temp_label = label_virtual_temp_sensors;
+> @@ -867,6 +926,8 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
+>  		priv->num_fans = 0;
+>  		priv->num_temp_sensors = FARBWERK_NUM_SENSORS;
+>  		priv->temp_sensor_start_offset = FARBWERK_SENSOR_START;
+> +		priv->temp_ctrl_offset = 0;
+> +
+
+It is not necessary to initialize this value with 0. It is 0 by default.
+
+>  		priv->temp_label = label_temp_sensors;
+>  		break;
+>  	case USB_PRODUCT_ID_FARBWERK360:
+> @@ -877,6 +938,8 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
+>  		priv->temp_sensor_start_offset = FARBWERK360_SENSOR_START;
+>  		priv->num_virtual_temp_sensors = FARBWERK360_NUM_VIRTUAL_SENSORS;
+>  		priv->virtual_temp_sensor_start_offset = FARBWERK360_VIRTUAL_SENSORS_START;
+> +		priv->buffer_size = FARBWERK360_CTRL_REPORT_SIZE;
+> +		priv->temp_ctrl_offset = FARBWERK360_TEMP_CTRL_OFFSET;
+>  
+>  		priv->temp_label = label_temp_sensors;
+>  		priv->virtual_temp_label = label_virtual_temp_sensors;
+> @@ -893,6 +956,7 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
+>  		priv->virtual_temp_sensor_start_offset = OCTO_VIRTUAL_SENSORS_START;
+>  		priv->power_cycle_count_offset = OCTO_POWER_CYCLES;
+>  		priv->buffer_size = OCTO_CTRL_REPORT_SIZE;
+> +		priv->temp_ctrl_offset = OCTO_TEMP_CTRL_OFFSET;
+>  
+>  		priv->temp_label = label_temp_sensors;
+>  		priv->virtual_temp_label = label_virtual_temp_sensors;
+> @@ -914,6 +978,7 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
+>  		priv->power_cycle_count_offset = QUADRO_POWER_CYCLES;
+>  		priv->buffer_size = QUADRO_CTRL_REPORT_SIZE;
+>  		priv->flow_sensor_offset = QUADRO_FLOW_SENSOR_OFFSET;
+> +		priv->temp_ctrl_offset = QUADRO_TEMP_CTRL_OFFSET;
+>  
+>  		priv->temp_label = label_temp_sensors;
+>  		priv->virtual_temp_label = label_virtual_temp_sensors;
