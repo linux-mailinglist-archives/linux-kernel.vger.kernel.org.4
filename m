@@ -2,187 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 967F9608D54
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 15:08:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B411D608D57
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 15:08:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229536AbiJVNIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 09:08:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57822 "EHLO
+        id S229765AbiJVNIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 09:08:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiJVNH6 (ORCPT
+        with ESMTP id S229606AbiJVNIv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 09:07:58 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 707262B7B45
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 06:07:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666444077; x=1697980077;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=q1uUyvjxY30CJnGf2JYeBa/8cQOEMC9GXr4VwSr82gA=;
-  b=jCc11E/UD/tIl2PZMr/zI4jPeC6K8P9DGocY+MEvENm/f/1D5oytOHZr
-   QYC+vNAAps9lIV1kEHYo4wSsIxbJyuPNQkgTzvr4GSCVriSWedlR8WyqP
-   EVHXmJXL82NH5uhr0n6HB94+HxMjNIPEbJeZuyToEDEZ4hmVsv+MNRBKQ
-   HLta6GSdHQYEsONhOE5F/1WE3/GVvbmXYBmhDVs1IxtdeyTLOIt722GSl
-   YGA3xJ1+sCo+XTsVdkYKk1kUqY2NVknyLhfYjavy5RQ2KZo6nTknX1T1P
-   QXtWQe9ttIoqB7plVFYAQW6IuyiXSZp4dVcMtKknKVAMoHsZSfc+wLUMB
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10508"; a="290490331"
-X-IronPort-AV: E=Sophos;i="5.95,205,1661842800"; 
-   d="scan'208";a="290490331"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2022 06:07:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10508"; a="581900652"
-X-IronPort-AV: E=Sophos;i="5.95,205,1661842800"; 
-   d="scan'208";a="581900652"
-Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 22 Oct 2022 06:07:55 -0700
-Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1omEEF-0003ep-0t;
-        Sat, 22 Oct 2022 13:07:55 +0000
-Date:   Sat, 22 Oct 2022 21:07:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/mm] BUILD REGRESSION
- 1248fb6a8201ddac1c86a202f05a0a1765efbfce
-Message-ID: <6353eb06.VDrziTqYsQjw5M8P%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sat, 22 Oct 2022 09:08:51 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D05072B7B7B
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 06:08:49 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id r14so15419718edc.7
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 06:08:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jECDV5SqOSdwhazWcoV6YQuDbZ4vuxgoxkQHZLW/d0g=;
+        b=gog/6lwOJlLxETauSPzlW80KFxupVitmXos7FTWhyWiRW3O19zhgcejjE/fj61fobQ
+         +5qsIYusegM8pYW28cT3cTdwg2cVWSBAm5StqJGoQtF/ZiTS4r+3feLpT8FPhvJCg7jz
+         9A5727kJCxFPeFRycDE2+QFSrICXIKPMloMeOWYa4v1EOPgK3f9uSlADWCRe8VEzlaDl
+         X3XLMbOC2bB2HeT0O0+Xd+UzI7FqQG6VtvoJcZKqfdizdT5gx1SW7pPG38jaALBHSDke
+         VRxYDIqnxpg/WqQJPEjMh0mmX0On0VRyIjL9VTyRwdaOdDntK6+7QZMQm9E52QazceYJ
+         RuQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jECDV5SqOSdwhazWcoV6YQuDbZ4vuxgoxkQHZLW/d0g=;
+        b=sqXDIkkSAoYNGFc0fM4/t9Kg4n4ozdCuIiD4fuerlgu/NDlgxmt9PagpoYoSFe+Yvj
+         qQkSxzkE2GmDBTHgpVMMK4Ee4aAoxKnIYL7svBXmuJbXSmApOYUMzQjazhoQBKiaxMW2
+         26P319Fdr5KPWQtfnvJ9KIX7oHPyNpjmYTJB4c6gJ3xvf6L0F+CBhqSoz7lpGuguzjkN
+         9yWyCXY/UMMXwV8q8MbUyNy8hHH45P4xWnv+AIj+24g8GOJT1MX7XnyPRCb1Mr9KI08d
+         n9ee9Dk5cG98dO/+vpH9XgBFB7voL6k/a9Q8bXGm95LtRoSaDSqpFoRgVKq4MO971N2h
+         YMsA==
+X-Gm-Message-State: ACrzQf032Gbvi1UJp9zSQ+wjsTrSvBIEMU7KlPA77KyxKrQVOY1997g3
+        5UnJcvcPgM+h92KrNm4t3yw1FA==
+X-Google-Smtp-Source: AMsMyM4pJJlle/WTj6w/2qTAwH+UF52YWGqi5oyIZCp6k4gzdMQDOZVvztp7Wk7OtpRpnOFttqemqw==
+X-Received: by 2002:a17:906:8b81:b0:78e:1cb:e411 with SMTP id nr1-20020a1709068b8100b0078e01cbe411mr19355882ejc.681.1666444128303;
+        Sat, 22 Oct 2022 06:08:48 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:25b:e73e:85eb:ae6e? ([2a05:6e02:1041:c10:25b:e73e:85eb:ae6e])
+        by smtp.googlemail.com with ESMTPSA id l10-20020a1709060cca00b0078d21574986sm12880330ejh.203.2022.10.22.06.08.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 22 Oct 2022 06:08:47 -0700 (PDT)
+Message-ID: <591f7038-81ed-1850-b525-d02a4e082903@linaro.org>
+Date:   Sat, 22 Oct 2022 15:08:46 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3 3/3] thermal: qcom: tsens: rework debugfs file
+ structure
+Content-Language: en-US
+To:     Christian Marangi <ansuelsmth@gmail.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221022125657.22530-1-ansuelsmth@gmail.com>
+ <20221022125657.22530-4-ansuelsmth@gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20221022125657.22530-4-ansuelsmth@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/mm
-branch HEAD: 1248fb6a8201ddac1c86a202f05a0a1765efbfce  x86/mm: Randomize per-cpu entry area
+On 22/10/2022 14:56, Christian Marangi wrote:
+> The current tsens debugfs structure is composed by:
+> - a tsens dir in debugfs with a version file
+> - a directory for each tsens istance with sensors file to dump all the
+>    sensors value.
 
-Error/Warning: (recently discovered and may have been fixed)
+s/istance/instance/
 
-vmlinux.o: warning: objtool: get_cpu_entry_area+0x0: call to cea_offset.constprop.0() leaves .noinstr.text section
-vmlinux.o: warning: objtool: get_cpu_entry_area+0x5: call to cea_offset.constprop.0() leaves .noinstr.text section
+The patch looks good to me, no need to resend, I'll fix the typos
 
-Error/Warning ids grouped by kconfigs:
+> This works on the assumption that we have the same version for each
+> istance but this assumption seems fragile and with more than one tsens
+> istance results in the version file not tracking each of them.
+> 
+> A better approach is to just create a subdirectory for each tsens
+> istance and put there version and sensors debugfs file.
+> 
+> Using this new implementation results in less code since debugfs entry
+> are created only on successful tsens probe.
+> 
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> ---
+>   drivers/thermal/qcom/tsens.c | 13 +++----------
+>   1 file changed, 3 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
+> index 467585c45d34..fc12d7c07de4 100644
+> --- a/drivers/thermal/qcom/tsens.c
+> +++ b/drivers/thermal/qcom/tsens.c
+> @@ -704,21 +704,14 @@ DEFINE_SHOW_ATTRIBUTE(dbg_sensors);
+>   static void tsens_debug_init(struct platform_device *pdev)
+>   {
+>   	struct tsens_priv *priv = platform_get_drvdata(pdev);
+> -	struct dentry *root, *file;
+>   
+> -	root = debugfs_lookup("tsens", NULL);
+> -	if (!root)
+> +	priv->debug_root = debugfs_lookup("tsens", NULL);
+> +	if (!priv->debug_root)
+>   		priv->debug_root = debugfs_create_dir("tsens", NULL);
+> -	else
+> -		priv->debug_root = root;
+> -
+> -	file = debugfs_lookup("version", priv->debug_root);
+> -	if (!file)
+> -		debugfs_create_file("version", 0444, priv->debug_root,
+> -				    pdev, &dbg_version_fops);
+>   
+>   	/* A directory for each instance of the TSENS IP */
+>   	priv->debug = debugfs_create_dir(dev_name(&pdev->dev), priv->debug_root);
+> +	debugfs_create_file("version", 0444, priv->debug, pdev, &dbg_version_fops);
+>   	debugfs_create_file("sensors", 0444, priv->debug, pdev, &dbg_sensors_fops);
+>   }
+>   #else
 
-gcc_recent_errors
-|-- x86_64-randconfig-a013
-|   `-- vmlinux.o:warning:objtool:get_cpu_entry_area:call-to-cea_offset()-leaves-.noinstr.text-section
-`-- x86_64-randconfig-c022
-    `-- vmlinux.o:warning:objtool:get_cpu_entry_area:call-to-cea_offset()-leaves-.noinstr.text-section
-clang_recent_errors
-|-- x86_64-randconfig-a001
-|   `-- vmlinux.o:warning:objtool:get_cpu_entry_area:call-to-cea_offset()-leaves-.noinstr.text-section
-`-- x86_64-randconfig-k001
-    `-- vmlinux.o:warning:objtool:get_cpu_entry_area:call-to-cea_offset()-leaves-.noinstr.text-section
-
-elapsed time: 726m
-
-configs tested: 90
-configs skipped: 81
-
-gcc tested configs:
-x86_64                    rhel-8.3-kselftests
-x86_64                          rhel-8.3-func
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-i386                                defconfig
-x86_64                        randconfig-a015
-x86_64                              defconfig
-i386                          randconfig-a001
-i386                          randconfig-a003
-x86_64                           rhel-8.3-syz
-x86_64                               rhel-8.3
-x86_64                         rhel-8.3-kunit
-i386                          randconfig-a005
-x86_64                           rhel-8.3-kvm
-x86_64                           allyesconfig
-i386                             allyesconfig
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-i386                          randconfig-a014
-x86_64                        randconfig-a006
-i386                          randconfig-a012
-i386                          randconfig-a016
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-arm                        multi_v7_defconfig
-sh                           se7721_defconfig
-powerpc                         ps3_defconfig
-m68k                           virt_defconfig
-sh                         microdev_defconfig
-arm                            qcom_defconfig
-ia64                          tiger_defconfig
-arm                        mvebu_v7_defconfig
-mips                    maltaup_xpa_defconfig
-sh                               allmodconfig
-i386                          randconfig-c001
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-arm                           u8500_defconfig
-csky                                defconfig
-parisc                generic-64bit_defconfig
-arm                            zeus_defconfig
-sh                               alldefconfig
-loongarch                         allnoconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-x86_64                        randconfig-c001
-arm                  randconfig-c002-20221019
-m68k                             allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-arm                          exynos_defconfig
-alpha                             allnoconfig
-arc                               allnoconfig
-
-clang tested configs:
-x86_64                        randconfig-a012
-x86_64                        randconfig-a016
-x86_64                        randconfig-a014
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-x86_64                        randconfig-a001
-i386                          randconfig-a013
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-i386                          randconfig-a011
-i386                          randconfig-a015
-powerpc                   microwatt_defconfig
-arm                         orion5x_defconfig
-powerpc                      obs600_defconfig
-i386                 randconfig-a013-20221017
-i386                 randconfig-a015-20221017
-i386                 randconfig-a016-20221017
-i386                 randconfig-a011-20221017
-i386                 randconfig-a014-20221017
-i386                 randconfig-a012-20221017
-x86_64                        randconfig-k001
-s390                 randconfig-r044-20221019
-hexagon              randconfig-r045-20221019
-riscv                randconfig-r042-20221019
-hexagon              randconfig-r041-20221019
-arm                      pxa255-idp_defconfig
-mips                          ath79_defconfig
-powerpc                      acadia_defconfig
-arm                             mxs_defconfig
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
