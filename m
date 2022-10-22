@@ -2,52 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F8FC6084D0
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 07:55:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C91F6084D2
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 07:58:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229864AbiJVFzz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 01:55:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49838 "EHLO
+        id S229645AbiJVF6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 01:58:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbiJVFzw (ORCPT
+        with ESMTP id S229519AbiJVF5y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 01:55:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90D881956FE;
-        Fri, 21 Oct 2022 22:55:49 -0700 (PDT)
+        Sat, 22 Oct 2022 01:57:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34CE82A5204
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 22:57:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6A519B80D5C;
-        Sat, 22 Oct 2022 05:55:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96E2DC433D6;
-        Sat, 22 Oct 2022 05:55:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C379560A36
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 05:57:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3E35C433C1;
+        Sat, 22 Oct 2022 05:57:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666418147;
-        bh=3kq5hK0aYi8nFlsQmgwwI6yjLYO0+cQb5xvgxXRv5LY=;
+        s=korg; t=1666418273;
+        bh=IJ+1ChbV+AuNZ3jJtulLPbuwkBPemms0TDHufKO/CZk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZMYI0/upfvGWZGpkrrCnCJYXnIiHoOLMmlPhFSByynalfzI/V0xqm+zKON0XsaJvo
-         kbkxK3Fh3cFzPtM5SOGbuMNSRKQW06Nt10vbeZnDm8KmG7xjfpEIlndq6e0pPsSQM1
-         z+piL1DSzqHcO9WzU+d0wsQFrjC3sbRGTy3Tltzg=
-Date:   Sat, 22 Oct 2022 07:56:32 +0200
+        b=xDWFp8lsB5TcreZjH+eG7y4wkArrhM9oZSQ2ZJmOlHIlgwb1adOh0fXxws9rCIdXZ
+         0kM1yVBE6vL6qLgicYVxmk97gMj8VcAXZXKrE2oqrBqr9iJGEPyPtjJlX9rHfPHkIr
+         oSsEQa9JHQUJFwgwwFwgSUayNdN8vRLnt8HPeXoQ=
+Date:   Sat, 22 Oct 2022 07:58:37 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     jinpeng Cui <cuijinpeng666@gmail.com>,
-        Zeal Robot <zealci@zte.com.cn>, alan.maguire@oracle.com,
-        ast@kernel.org, bpf@vger.kernel.org, cui.jinpeng2@zte.com.cn,
-        jolsa@kernel.org, linux-kernel@vger.kernel.org,
-        peterz@infradead.org, stephen.s.brennan@oracle.com
-Subject: Re: [PATCH linux-next] kallsyms: Use strscpy() instead of strlcpy()
-Message-ID: <Y1OGELD2BP2KB1nG@kroah.com>
-References: <20221020090547.398680-1-cui.jinpeng2@zte.com.cn>
- <Y1EVnZS9BalesrC1@kroah.com>
- <CANhqVYZ+trZzPdB=Vd9YV53DAJt0p5LZQH-u94+VRrDQ5+w2MA@mail.gmail.com>
- <Y1FCiH16RIetS0hZ@kroah.com>
- <202210210915.B177280DA8@keescook>
+To:     Aaron Lawrence <t4rmin@zohomail.com>
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Staging: rtl8192e: fixed multiple coding style issues
+Message-ID: <Y1OGjf7gRmhTQFJV@kroah.com>
+References: <be839b05d799ff8e62fc2f79e6f0aaec81a8cd19.camel@zohomail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202210210915.B177280DA8@keescook>
+In-Reply-To: <be839b05d799ff8e62fc2f79e6f0aaec81a8cd19.camel@zohomail.com>
 X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -57,42 +49,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 09:17:10AM -0700, Kees Cook wrote:
-> On Thu, Oct 20, 2022 at 02:43:52PM +0200, Greg KH wrote:
-> > > I am very sorry if the patches from zte.com.cn
-> > > in the past few months have made you angry,
-> > > we have decided to fix the problem you pointed out
-> > > as soon as possible.
-> > > Our company's mailbox name@zte.com.cn
-> > > cannot send emails to the external network,
-> > > so we use name@gmail.com to send patches;
-> > 
-> > You all have been warned numerous times over many weeks and months and
-> > never responded to our emails.
-> > 
-> > We have no proof that using gmail accounts is actually coming from a ZTE
-> > employee, so until that happens, we can not take your changes (not to
-> > mention the basic fact that you all keep ignoring our review comments,
-> > which is a good enough reason to ignore them.)
+On Sat, Oct 22, 2022 at 12:05:58PM +0700, Aaron Lawrence wrote:
 > 
-> Aren't there a few solutions here?
+
+> From 66a313db135ffaa86d2aaddb3b2286c7b004b5f1 Mon Sep 17 00:00:00 2001
+> From: Aaron Lawrence <t4rmin@zohomail.com>
+> Date: Sat, 22 Oct 2022 11:30:22 +0700
+> Subject: [PATCH] Staging: rtl8192e: fixed multiple coding style issues
 > 
-> 1) Just send the emails from @gmail with matching S-o-b.
+> Fixed multiple coding style issues on multiple files
+> according to the checkpatchscript.
+> 
+> Signed-off-by: Aaron Lawrence <t4rmin@zohomail.com>
+> ---
+>  drivers/staging/rtl8192e/rtl819x_HTProc.c    |  1 +
+>  drivers/staging/rtl8192e/rtl819x_TSProc.c    | 11 ++++----
+>  drivers/staging/rtl8192e/rtllib_crypt_ccmp.c | 12 +--------
+>  drivers/staging/rtl8192e/rtllib_crypt_tkip.c | 28 +-------------------
+>  drivers/staging/rtl8192e/rtllib_crypt_wep.c  | 10 +------
+>  drivers/staging/rtl8192e/rtllib_tx.c         | 15 +++++------
+>  6 files changed, 15 insertions(+), 62 deletions(-)
 
-As we know these developers are claiming to be from a company that we
-can not confirm they are actually working for, no, we can't take their
-contributions as that goes against the DCO (anonymous contributions).
+Hi,
 
-> 2) Send an @zte.com.cn to lkml to confirm their @gmail/@zte.com.cn mapping.
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-That would be great, but so far no one that I have contacted from ZTE
-has been able to confirm that these are actually ZTE developers.
+You are receiving this message because of the following common error(s)
+as indicated below:
 
-> 3) Fix the email systems.
+- Your patch was attached, please place it inline so that it can be
+  applied directly from the email message itself.
 
-That would be the best thing for them to do, and would solve the problem
-for everyone at their company.  Hopefully that happens soon.
+- Your patch did many different things all at once, making it difficult
+  to review.  All Linux kernel patches need to only do one thing at a
+  time.  If you need to do multiple things (such as clean up all coding
+  style issues in a file/driver), do it in a sequence of patches, each
+  one doing only one thing.  This will make it easier to review the
+  patches to ensure that they are correct, and to help alleviate any
+  merge issues that larger patches can cause.
+
+- You did not specify a description of why the patch is needed, or
+  possibly, any description at all, in the email body.  Please read the
+  section entitled "The canonical patch format" in the kernel file,
+  Documentation/SubmittingPatches for what is needed in order to
+  properly describe the change.
+
+- You did not write a descriptive Subject: for the patch, allowing Greg,
+  and everyone else, to know what this patch is all about.  Please read
+  the section entitled "The canonical patch format" in the kernel file,
+  Documentation/SubmittingPatches for what a proper Subject: line should
+  look like.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
 
 thanks,
 
-greg k-h
+greg k-h's patch email bot
