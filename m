@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5BA56087B4
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 10:05:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8175E6088F5
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 10:26:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232590AbiJVIF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 04:05:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47768 "EHLO
+        id S229787AbiJVIZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 04:25:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232431AbiJVH67 (ORCPT
+        with ESMTP id S233960AbiJVIYZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 03:58:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80FE7196B6E;
-        Sat, 22 Oct 2022 00:49:06 -0700 (PDT)
+        Sat, 22 Oct 2022 04:24:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E24A34720;
+        Sat, 22 Oct 2022 00:59:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 26C37B82DF1;
-        Sat, 22 Oct 2022 07:48:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BE02C433C1;
-        Sat, 22 Oct 2022 07:48:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 433B860B00;
+        Sat, 22 Oct 2022 07:48:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A942C433C1;
+        Sat, 22 Oct 2022 07:48:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666424930;
-        bh=EEbUB2+t3mQjhUpvR8BIh6PyoINtwoaI6t93TceIrNU=;
+        s=korg; t=1666424933;
+        bh=OrgKGO73y1B/u0tS6QRxRrNmb9qgT0q8a/QBwrZrYSk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=imBb4EXpPFTMr8v2qUGlyBGEomh3Sj2bovV9XCQ0FE8ESLWnZ8hKCVRXrMLj7asEs
-         i6ijqN4t7T+Im8bkkqSF0/xzZUs67eL3pZXf+BY01rrhQ5jiPv6V7y7LUL69134Hjq
-         BBLgwkx8UcCWYbNWO4c08HYMVALpzXsvzfYNL3PU=
+        b=DEUkwU0pLF9jawIfsoRIkJa5N/ZcgZNmSqmrUCaowq4v2ytuAqBmeP8JGEmZiQGne
+         YY4vtGE6ko95LYgc1x1zvTDpLKbFEhotcUIcTz+0YLCQ4igHeqygjOmxr82W5HcKQ+
+         pRh8ZdxLYBE5cvi1SRf2PQz5sEs1T8QeTPbMB8vM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Emil Velikov <emil.l.velikov@gmail.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
+        stable@vger.kernel.org, Liang He <windhl@126.com>,
+        Robert Foss <robert.foss@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 300/717] drm/virtio: Correct drm_gem_shmem_get_sg_table() error handling
-Date:   Sat, 22 Oct 2022 09:22:59 +0200
-Message-Id: <20221022072506.048459884@linuxfoundation.org>
+Subject: [PATCH 5.19 301/717] drm/bridge: tc358767: Add of_node_put() when breaking out of loop
+Date:   Sat, 22 Oct 2022 09:23:00 +0200
+Message-Id: <20221022072506.211730742@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221022072415.034382448@linuxfoundation.org>
 References: <20221022072415.034382448@linuxfoundation.org>
@@ -55,35 +54,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+From: Liang He <windhl@126.com>
 
-[ Upstream commit 64b88afbd92fbf434759d1896a7cf705e1c00e79 ]
+[ Upstream commit 14e7157afb055248ed34901fcd6fbf54201cfea1 ]
 
-Previous commit fixed checking of the ERR_PTR value returned by
-drm_gem_shmem_get_sg_table(), but it missed to zero out the shmem->pages,
-which will crash virtio_gpu_cleanup_object(). Add the missing zeroing of
-the shmem->pages.
+In tc_probe_bridge_endpoint(), we should call of_node_put() when
+breaking out of the for_each_endpoint_of_node() which will automatically
+increase and decrease the refcount.
 
-Fixes: c24968734abf ("drm/virtio: Fix NULL vs IS_ERR checking in virtio_gpu_object_shmem_init")
-Reviewed-by: Emil Velikov <emil.l.velikov@gmail.com>
-Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Link: http://patchwork.freedesktop.org/patch/msgid/20220630200726.1884320-2-dmitry.osipenko@collabora.com
-Signed-off-by: Gerd Hoffmann <kraxel@redhat.com>
+Fixes: 71f7d9c03118 ("drm/bridge: tc358767: Detect bridge mode from connected endpoints in DT")
+Signed-off-by: Liang He <windhl@126.com>
+Reviewed-by: Robert Foss <robert.foss@linaro.org>
+Signed-off-by: Robert Foss <robert.foss@linaro.org>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220719065447.1080817-2-windhl@126.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/virtio/virtgpu_object.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/gpu/drm/bridge/tc358767.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/virtio/virtgpu_object.c b/drivers/gpu/drm/virtio/virtgpu_object.c
-index b38c338211aa..75a159df0af6 100644
---- a/drivers/gpu/drm/virtio/virtgpu_object.c
-+++ b/drivers/gpu/drm/virtio/virtgpu_object.c
-@@ -170,6 +170,7 @@ static int virtio_gpu_object_shmem_init(struct virtio_gpu_device *vgdev,
- 	shmem->pages = drm_gem_shmem_get_sg_table(&bo->base);
- 	if (IS_ERR(shmem->pages)) {
- 		drm_gem_shmem_unpin(&bo->base);
-+		shmem->pages = NULL;
- 		return PTR_ERR(shmem->pages);
+diff --git a/drivers/gpu/drm/bridge/tc358767.c b/drivers/gpu/drm/bridge/tc358767.c
+index 16affb42086a..c41c6c464b7f 100644
+--- a/drivers/gpu/drm/bridge/tc358767.c
++++ b/drivers/gpu/drm/bridge/tc358767.c
+@@ -1986,9 +1986,10 @@ static int tc_probe_bridge_endpoint(struct tc_data *tc)
+ 
+ 	for_each_endpoint_of_node(dev->of_node, node) {
+ 		of_graph_parse_endpoint(node, &endpoint);
+-		if (endpoint.port > 2)
++		if (endpoint.port > 2) {
++			of_node_put(node);
+ 			return -EINVAL;
+-
++		}
+ 		mode |= BIT(endpoint.port);
  	}
  
 -- 
