@@ -2,107 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F13A608BD9
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 12:44:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 209DD608BE4
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 12:48:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230422AbiJVKol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 06:44:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46834 "EHLO
+        id S230436AbiJVKsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 06:48:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231178AbiJVKoQ (ORCPT
+        with ESMTP id S230182AbiJVKrl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 06:44:16 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA96631BF6E;
-        Sat, 22 Oct 2022 03:01:54 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e714329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e714:329c:23ff:fea6:a903])
+        Sat, 22 Oct 2022 06:47:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B0C92B733A
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 03:05:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 752A21EC0629;
-        Sat, 22 Oct 2022 12:00:36 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1666432836;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=8JIbHKcJJ+kMxdbJLrXmFhUHK09tqfA4e7vxfuzOL3s=;
-        b=BJfz4jtTpZ9Fd4zl2nfhPjfuGwymwBFYWxmyqQiqR59npXdqgP1XxhKZEyqsL4qQcdMFod
-        sxt+i/g3gZQBqiqetv9wP6LHjSdq5L6WGr9BGq6iHeq78+eSG1fIN+cgPL6x3AowP1L5Xa
-        K54bH9dY+mAb/8fZoipOD5o+lL0angc=
-Date:   Sat, 22 Oct 2022 12:00:32 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Jia He <justin.he@arm.com>, Len Brown <lenb@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
-        Jan Luebbe <jlu@pengutronix.de>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Kani Toshi <toshi.kani@hpe.com>,
-        James Morse <james.morse@arm.com>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-        devel@acpica.org, "Rafael J . Wysocki" <rafael@kernel.org>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>, linux-efi@vger.kernel.org,
-        nd@arm.com, Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v10 6/7] apei/ghes: Use xchg_release() for updating new
- cache slot instead of cmpxchg()
-Message-ID: <Y1O/QN32d2AlzEiA@zn.tnic>
-References: <20221018082214.569504-1-justin.he@arm.com>
- <20221018082214.569504-7-justin.he@arm.com>
- <Y1OtRpLRwPPG/4Il@zn.tnic>
- <CAMj1kXFu36faTPoGSGPs9KhcKsoh_DE9X2rmwdenxaJwa3P_yw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXFu36faTPoGSGPs9KhcKsoh_DE9X2rmwdenxaJwa3P_yw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7647AB81B13
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 10:05:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F629C433D6;
+        Sat, 22 Oct 2022 10:05:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666433121;
+        bh=ut45MV8KXe9yyX4ipKBkMLHt+qSDahGglY9awia2Me8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=vJzh8ShR4wyxdfcjASi+UWKzdzX6+nl++AMPqLvTjjrNOU+9mnXcU8DqCtT+RjXwY
+         kQfh188GKVgihNi9QWtoYOOwKdIFipBNlvSUh7IBPXVW8+oKTtuUhodutI9XbIBSr3
+         Yyq6FK7ymQdLpfxQhYN6fRIaeahervEAEsyqgKaUjoc3Xb50tBcxPnH0ZJWFSgMja2
+         UDUbrD4qwAVqXzs9vkm4uKQK9tC/PylbQSItEyFSk/kBg3lNM6Q76lz5h9kCFECYf2
+         5pqbt6q/Xbqjj3oEEzqqR/cAhMmH6ZsIuh7PksP6gu4DK2SbHE7CX+jo/LNPjsA92Y
+         3hQVE2YfHN62g==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1omBNW-000keI-S6;
+        Sat, 22 Oct 2022 11:05:18 +0100
+Date:   Sat, 22 Oct 2022 11:04:37 +0100
+Message-ID: <87fsfggone.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     firas ashkar <firas.ashkar@savoirfairelinux.com>
+Cc:     alex@digriz.org.uk, tglx@linutronix.de,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2] irqchip: add TS7800v1 fpga based controller driver
+In-Reply-To: <118f1bcc4583612423aa0dca0421c4eea3cd648d.camel@savoirfairelinux.com>
+References: <20221020141351.14829-1-firas.ashkar@savoirfairelinux.com>
+        <861qr1fs55.wl-maz@kernel.org>
+        <7b2ac9ae5f18e5272e52478c73da53a76cf9f2a2.camel@savoirfairelinux.com>
+        <86zgdpdrj3.wl-maz@kernel.org>
+        <118f1bcc4583612423aa0dca0421c4eea3cd648d.camel@savoirfairelinux.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: firas.ashkar@savoirfairelinux.com, alex@digriz.org.uk, tglx@linutronix.de, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 22, 2022 at 11:01:01AM +0200, Ard Biesheuvel wrote:
-> But the point is that the new element we are adding has the same
-> properties as the one we want to avoid replacing inadvertently,
+On Fri, 21 Oct 2022 19:14:48 +0100,
+firas ashkar <firas.ashkar@savoirfairelinux.com> wrote:
+> > > > > +static void ts7800_ic_chained_handle_irq(struct irq_desc
+> > > > > *desc)
+> > > > > +{
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct ts7800_irq_data=
+ *data =3D
+> > > > > irq_desc_get_handler_data(desc);
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct irq_chip *chip =
+=3D irq_desc_get_chip(desc);
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 mask_bits =3D read=
+l(data->base + IRQ_MASK_REG);
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 status =3D readl(d=
+ata->bridge);
+> > > > > +
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0chained_irq_enter(chip=
+, desc);
+> > > > > +
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (unlikely(status =
+=3D=3D 0)) {
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0handle_bad_irq(desc);
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0goto out;
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
+> > > > > +
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0do {
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0unsigned int bit =3D __ffs(status);
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0int irq =3D irq_find_mapping(data->domain, bit);
+> > > > > +
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0if (irq && (mask_bits & BIT(bit)))
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+generic_handle_irq(irq);
+> > > >=20
+> > > > Again, this is not appropriate. I've pointed you to the right API
+> > > > in
+> > > > my previous review of this patch.
+> > > 'generic_handle_domain_irq' causing some issues
+> >=20
+> > Which issue?
+> # insmod /tmp/virt-dma.ko=20
+> # insmod /tmp/ts-dmac.ko=20
+> generic_handle_domain_irq failed, error -22
+> irq 2, desc: a285c39f, depth: 0, count: 0, unhandled: 0
+> ->handle_irq():  e7046ee9, ts7800_ic_chained_handle_irq+0x0/0x1ec
+> [irq_ts7800]
+> ->irq_data.chip(): 70d81143, 0xc14db44c
+> ->action(): f799c8dd
+> ->action->handler(): dcf07981, bad_chained_irq+0x0/0x64
+>      IRQ_LEVEL set
+>    IRQ_NOPROBE set
+>  IRQ_NOREQUEST set
+>   IRQ_NOTHREAD set
+> unexpected IRQ trap at vector 02
+> generic_handle_domain_irq failed, error -22
 
-No, we're removing the oldest element we found. The new one is anything
-but we don't compare it to slot_cache which we're about to remove.
+[...]
 
-> and if the cmpxchg() failed, we just drop it on the floor.
+News flash, your code is buggy. How about you debug it? The domain
+name you use definitely indicates that you "know how" to do it...
 
-Yeah, I guess the intent here was: oh well, we'll log that thing again
-because our "throttling cache" didn't manage to enter it.
+	M.
 
-> So instead of dropping 'our' new element, we now drop 'the other' new
-> element.
-
-Aha, this is what you mean with logging something twice. That other new
-element gets dropped so if it happens again, it'll get logged and if it
-then gets entered in the cache properly, then it gets ignored on the
-next logging run.
-
-Oh well, fine with me.
-
-> The correct approach here would be to rerun the selection loop on
-> failure, but I doubt whether it is worth it. This is just a fancy rate
-> limiter.
-
-Yap, exactly.
-
-Ok, so I'll try to summarize what we talked here in the commit message
-so that it is written down somewhere for later.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+--=20
+Without deviation from the norm, progress is not possible.
