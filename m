@@ -2,42 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D5C3608633
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 09:45:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F3CE608608
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 09:43:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231374AbiJVHpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 03:45:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45918 "EHLO
+        id S231247AbiJVHnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 03:43:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231330AbiJVHnd (ORCPT
+        with ESMTP id S231274AbiJVHmm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 03:43:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDA2A5DF20;
-        Sat, 22 Oct 2022 00:42:32 -0700 (PDT)
+        Sat, 22 Oct 2022 03:42:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5F2D65004;
+        Sat, 22 Oct 2022 00:41:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2EC04B82DF7;
-        Sat, 22 Oct 2022 07:38:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C7BAC433C1;
-        Sat, 22 Oct 2022 07:38:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C136A60AFA;
+        Sat, 22 Oct 2022 07:37:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D848AC433C1;
+        Sat, 22 Oct 2022 07:37:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666424318;
-        bh=gMan5kpbovKahV/1vwN9rBg7BvTH6IpSR+9l0CZ8VNw=;
+        s=korg; t=1666424253;
+        bh=dJ6NpRGfTiudBlY78zUwNyNL6KxXExXZrduB0FLK+cE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2s5TM+pXfRjAfdsEwq4m11jtx8PH+gHLg0ONSgLeD3Om70jr+hjc+I19AyjPSYaaq
-         bL5Zdsyf+RQkst57yrY6diDlqhtvyLwISjPO5DFWjcN/oIIW7QNcWqqMqbQZ8MeHiN
-         8YBeQSaz3iTMGOGMmgp4VDgQXZyhxCLWPuRZz0ac=
+        b=X4tAELJ+8WJa6iTPLCMBdopVPDGh6RLUAnatSSaui2wStx9H9ZFt6CRWSxr1NW3dr
+         RzRoLlHgYO6bsxRmqe+w3BWqBE2yrnoQW8n0ghpMxec7pViVUHyz1+z+hba+ejjAMU
+         i0e6r+feABG4vd9gbrwZC0Q75wSzmCaiAsBjUVXQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Takashi Iwai <tiwai@suse.de>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [PATCH 5.19 071/717] drm/udl: Restore display mode on resume
-Date:   Sat, 22 Oct 2022 09:19:10 +0200
-Message-Id: <20221022072427.764692624@linuxfoundation.org>
+        stable@vger.kernel.org, Carlos Llamas <cmllamas@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Liam Howlett <liam.howlett@oracle.com>,
+        "Christian Brauner (Microsoft)" <brauner@kernel.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH 5.19 078/717] mm/mmap: undo ->mmap() when arch_validate_flags() fails
+Date:   Sat, 22 Oct 2022 09:19:17 +0200
+Message-Id: <20221022072429.031061362@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221022072415.034382448@linuxfoundation.org>
 References: <20221022072415.034382448@linuxfoundation.org>
@@ -54,50 +59,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Carlos Llamas <cmllamas@google.com>
 
-commit 6d6e732835db92e66c28dbcf258a7e3d3c71420d upstream.
+commit deb0f6562884b5b4beb883d73e66a7d3a1b96d99 upstream.
 
-Restore the display mode whne resuming from suspend. Currently, the
-display remains dark.
+Commit c462ac288f2c ("mm: Introduce arch_validate_flags()") added a late
+check in mmap_region() to let architectures validate vm_flags.  The check
+needs to happen after calling ->mmap() as the flags can potentially be
+modified during this callback.
 
-On resume, the CRTC's mode does not change, but the 'active' flag
-changes to 'true'. Taking this into account when considering a mode
-switch restores the display mode.
+If arch_validate_flags() check fails we unmap and free the vma.  However,
+the error path fails to undo the ->mmap() call that previously succeeded
+and depending on the specific ->mmap() implementation this translates to
+reference increments, memory allocations and other operations what will
+not be cleaned up.
 
-The bug is reproducable by using Gnome with udl and observing the
-adapter's suspend/resume behavior.
+There are several places (mainly device drivers) where this is an issue.
+However, one specific example is bpf_map_mmap() which keeps count of the
+mappings in map->writecnt.  The count is incremented on ->mmap() and then
+decremented on vm_ops->close().  When arch_validate_flags() fails this
+count is off since bpf_map_mmap_close() is never called.
 
-Actually, the whole check added in udl_simple_display_pipe_enable()
-about the crtc_state->mode_changed was bogus.  We should drop the
-whole check and always apply the mode change in this function.
+One can reproduce this issue in arm64 devices with MTE support.  Here the
+vm_flags are checked to only allow VM_MTE if VM_MTE_ALLOWED has been set
+previously.  From userspace then is enough to pass the PROT_MTE flag to
+mmap() syscall to trigger the arch_validate_flags() failure.
 
-[ tiwai -- Drop the mode_changed check entirely instead, per Daniel's
-  suggestion ]
+The following program reproduces this issue:
 
-Fixes: 997d33c35618 ("drm/udl: Inline DPMS code into CRTC enable and disable functions")
-Cc: <stable@vger.kernel.org>
-Suggested-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220908095115.23396-2-tiwai@suse.de
+  #include <stdio.h>
+  #include <unistd.h>
+  #include <linux/unistd.h>
+  #include <linux/bpf.h>
+  #include <sys/mman.h>
+
+  int main(void)
+  {
+	union bpf_attr attr = {
+		.map_type = BPF_MAP_TYPE_ARRAY,
+		.key_size = sizeof(int),
+		.value_size = sizeof(long long),
+		.max_entries = 256,
+		.map_flags = BPF_F_MMAPABLE,
+	};
+	int fd;
+
+	fd = syscall(__NR_bpf, BPF_MAP_CREATE, &attr, sizeof(attr));
+	mmap(NULL, 4096, PROT_WRITE | PROT_MTE, MAP_SHARED, fd, 0);
+
+	return 0;
+  }
+
+By manually adding some log statements to the vm_ops callbacks we can
+confirm that when passing PROT_MTE to mmap() the map->writecnt is off upon
+->release():
+
+With PROT_MTE flag:
+  root@debian:~# ./bpf-test
+  [  111.263874] bpf_map_write_active_inc: map=9 writecnt=1
+  [  111.288763] bpf_map_release: map=9 writecnt=1
+
+Without PROT_MTE flag:
+  root@debian:~# ./bpf-test
+  [  157.816912] bpf_map_write_active_inc: map=10 writecnt=1
+  [  157.830442] bpf_map_write_active_dec: map=10 writecnt=0
+  [  157.832396] bpf_map_release: map=10 writecnt=0
+
+This patch fixes the above issue by calling vm_ops->close() when the
+arch_validate_flags() check fails, after this we can proceed to unmap and
+free the vma on the error path.
+
+Link: https://lkml.kernel.org/r/20220930003844.1210987-1-cmllamas@google.com
+Fixes: c462ac288f2c ("mm: Introduce arch_validate_flags()")
+Signed-off-by: Carlos Llamas <cmllamas@google.com>
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+Reviewed-by: Liam Howlett <liam.howlett@oracle.com>
+Cc: Christian Brauner (Microsoft) <brauner@kernel.org>
+Cc: Michal Hocko <mhocko@suse.com>
+Cc: Suren Baghdasaryan <surenb@google.com>
+Cc: <stable@vger.kernel.org>	[5.10+]
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/udl/udl_modeset.c |    3 ---
- 1 file changed, 3 deletions(-)
+ mm/mmap.c |    5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
---- a/drivers/gpu/drm/udl/udl_modeset.c
-+++ b/drivers/gpu/drm/udl/udl_modeset.c
-@@ -382,9 +382,6 @@ udl_simple_display_pipe_enable(struct dr
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -1845,7 +1845,7 @@ unsigned long mmap_region(struct file *f
+ 	if (!arch_validate_flags(vma->vm_flags)) {
+ 		error = -EINVAL;
+ 		if (file)
+-			goto unmap_and_free_vma;
++			goto close_and_free_vma;
+ 		else
+ 			goto free_vma;
+ 	}
+@@ -1892,6 +1892,9 @@ out:
  
- 	udl_handle_damage(fb, &shadow_plane_state->data[0], 0, 0, fb->width, fb->height);
+ 	return addr;
  
--	if (!crtc_state->mode_changed)
--		return;
--
- 	/* enable display */
- 	udl_crtc_write_mode_to_hw(crtc);
- }
++close_and_free_vma:
++	if (vma->vm_ops && vma->vm_ops->close)
++		vma->vm_ops->close(vma);
+ unmap_and_free_vma:
+ 	fput(vma->vm_file);
+ 	vma->vm_file = NULL;
 
 
