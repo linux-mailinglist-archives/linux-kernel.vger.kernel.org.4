@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 764C4608542
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 08:47:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84E4F608544
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 08:48:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230022AbiJVGrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 02:47:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45642 "EHLO
+        id S230043AbiJVGsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 02:48:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229766AbiJVGra (ORCPT
+        with ESMTP id S230031AbiJVGs1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 02:47:30 -0400
+        Sat, 22 Oct 2022 02:48:27 -0400
 Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 984842A686F
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 23:47:28 -0700 (PDT)
-X-QQ-mid: bizesmtp75t1666421232tpc6h6wr
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B22C35D888;
+        Fri, 21 Oct 2022 23:48:25 -0700 (PDT)
+X-QQ-mid: bizesmtp66t1666421292te8r12sd
 Received: from localhost.localdomain ( [182.148.15.254])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 22 Oct 2022 14:47:11 +0800 (CST)
+        id ; Sat, 22 Oct 2022 14:48:11 +0800 (CST)
 X-QQ-SSF: 01000000000000C0E000000A0000000
-X-QQ-FEAT: 6ArnuSDJ+imHYHENxMzAz/e5e0MSyxAleQnz0MFlV97xLvydnBQUaOuoPlSkw
-        sUDowsASjyZ65kiAN66/GrrPyKbePVYoQ5Os8ibGVtt/UKbp1EiJ4Lz0+iY1C1sU9GQ0aNo
-        N6xUT5EOiS/To38vasA3mRgp5Dvlz0wP/GZ5rig6ZHQXt/QeK5vpqA6X0dbzdEQx1PAsPSq
-        aXvSVdDda0aAR3a7cJw4m8djPGZPeMJJdn+1BDmmpi4FMVRYLNenHG+OUmFNXIvUlVrNUN6
-        9KNFLoThdAy8EHsk0mlFxkPTUB34+HhO5Bb2aWea7AaOqA2BnmXU+RBHlWAxvnrrQ29IGGI
-        91eaYe3Kx81juOW8+iLBS6MmzON16/LuPQEw7gW5I0u+WgxJys=
+X-QQ-FEAT: HHPuPN/BfjVKu/qy7U1mWM9vuS+Xl3Jr1dlbAy+dIOjToMdyjIkFvg9I9EXE8
+        wYp0H1HiUGCEJreFifzt7K/EDigVqYcknl0MxwzKNBkwbrqrg0OqsqzJxBqF75vheytsahK
+        PbL4Nrjlwa5CEQb+7k36h0wSKzuTn20paHarQn1m2qUhmmMSUhe08Zd2AZ5zUJdkKdstuIz
+        Afc+wqqiK0WElvrvwUgZFxxcZKKvXnFBA9bNBhUqpfxxxiEhJgWW80Epf4VadKvy8kK7Ypx
+        dSRQowz37E4uJJTKxKRhvAa2E2nBr2yvrpuCqNQsU3PzbvtdckkzdMRwo1SclOB23YL5bBj
+        7TvxSuL7JfRaD/DXdkR5usz3kcbxsqZYYmaCf3BurnHR/ujFKk=
 X-QQ-GoodBg: 0
 From:   wangjianli <wangjianli@cdjrlc.com>
-To:     dhowells@redhat.com, marc.dionne@auristor.com
-Cc:     linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org,
+To:     arnd@arndb.de
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
         wangjianli <wangjianli@cdjrlc.com>
-Subject: [PATCH] fs/afs: fix repeated words in comments
-Date:   Sat, 22 Oct 2022 14:47:04 +0800
-Message-Id: <20221022064704.36326-1-wangjianli@cdjrlc.com>
+Subject: [PATCH] uapi/asm-generic: fix repeated words in comments
+Date:   Sat, 22 Oct 2022 14:48:05 +0800
+Message-Id: <20221022064805.37541-1-wangjianli@cdjrlc.com>
 X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -51,22 +51,22 @@ Delete the redundant word 'the'.
 
 Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
 ---
- fs/afs/flock.c | 2 +-
+ include/uapi/asm-generic/fcntl.h | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/afs/flock.c b/fs/afs/flock.c
-index c4210a3964d8..801fe305878f 100644
---- a/fs/afs/flock.c
-+++ b/fs/afs/flock.c
-@@ -152,7 +152,7 @@ static void afs_next_locker(struct afs_vnode *vnode, int error)
- }
- 
- /*
-- * Kill off all waiters in the the pending lock queue due to the vnode being
-+ * Kill off all waiters in the pending lock queue due to the vnode being
-  * deleted.
+diff --git a/include/uapi/asm-generic/fcntl.h b/include/uapi/asm-generic/fcntl.h
+index f13d37b60775..974629ba0c5a 100644
+--- a/include/uapi/asm-generic/fcntl.h
++++ b/include/uapi/asm-generic/fcntl.h
+@@ -143,7 +143,7 @@
+  * record  locks, but are "owned" by the open file description, not the
+  * process. This means that they are inherited across fork() like BSD (flock)
+  * locks, and they are only released automatically when the last reference to
+- * the the open file against which they were acquired is put.
++ * the open file against which they were acquired is put.
   */
- static void afs_kill_lockers_enoent(struct afs_vnode *vnode)
+ #define F_OFD_GETLK	36
+ #define F_OFD_SETLK	37
 -- 
 2.36.1
 
