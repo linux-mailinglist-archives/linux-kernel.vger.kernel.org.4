@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80FF96084AF
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 07:43:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C8A96084B2
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 07:46:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbiJVFnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 01:43:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40676 "EHLO
+        id S229911AbiJVFqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 01:46:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229865AbiJVFnN (ORCPT
+        with ESMTP id S229501AbiJVFp7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 01:43:13 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 187802B0933;
-        Fri, 21 Oct 2022 22:43:11 -0700 (PDT)
-X-QQ-mid: bizesmtp62t1666417371t3sr5ka6
+        Sat, 22 Oct 2022 01:45:59 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B097B4DB1D;
+        Fri, 21 Oct 2022 22:45:56 -0700 (PDT)
+X-QQ-mid: bizesmtp78t1666417552thej280e
 Received: from localhost.localdomain ( [182.148.15.254])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 22 Oct 2022 13:42:50 +0800 (CST)
+        id ; Sat, 22 Oct 2022 13:45:51 +0800 (CST)
 X-QQ-SSF: 01000000000000C0E000000A0000000
-X-QQ-FEAT: /+iK7ZpVlLRnZYf9ZV4xBBazYX0WBMAdPSgrhKjq0hmEMiq1VQ8q+a0dtmaBf
-        MKJPfrNEmcKt7+seP6av5ZWQEyw5IQJgTtmJn1Y5WL3NwYKaKge+p+hqAt3ipffzDpGDqag
-        nc+rUPcXIYMhMjfD4rEQpdfTsj/XjbJarNi38tejUN3Z0ETGKYrT7Hsx71aLi+8kEblB7tz
-        cISLi2p2xTth74HS+ecBMHmSnV1WmPzXQw1Qz3zaolk6ZuChutWtt1zbtGTY1DVQVitzCY4
-        IomNINk2Dfr841O9IlHxJ4KpvQ2HiWlPODOoOGGKCz2GtYwwC76LJ8Ke/76kGsv7zRStZ5p
-        E/ng1q9z7AbdS4g2LTOCVYPuu54aZe0N7MYiwr0NQCzjxtPzjY=
+X-QQ-FEAT: o+V1LJLjbvwu6e1PveR47JqxyLgFKerIUDADvetPE27ebD52f6nOZrebpho+b
+        gRgehuhgo2AfrkbIZwHcLt9p+3wU9vkJzvicAyKkqiQ1UDlcYE8xlYROgp/Swp5/6s8uFMK
+        YjSqd+uszLPtOWWpEQkpA0irEwjaeJ7A3SgQlM702D/3U1Gj0S9QHaa2Bz+P9lJ92bBuaMA
+        hBMgLOELOb5N9tqDmhclzMku8N2etLMebD7x1d9lncG2u6nRIQ4Ca6BZlihlaDqWM/hfQ+K
+        R8x1EsyCm3UyTo7jq6q7Cm4tib5rbzBdTu9anVJkedTg2YapPyYUb9TkffuVJhIXry77NfA
+        +Y5Jayb/qMQZqrAoJk6fSjnoAMu60T2jD+VvyYiOuDRkqz6ojg=
 X-QQ-GoodBg: 0
 From:   wangjianli <wangjianli@cdjrlc.com>
-To:     gregory.greenman@intel.com, kvalo@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
-Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, wangjianli <wangjianli@cdjrlc.com>
-Subject: [PATCH] iwlwifi/mvm: fix repeated words in comments
-Date:   Sat, 22 Oct 2022 13:42:44 +0800
-Message-Id: <20221022054244.31996-1-wangjianli@cdjrlc.com>
+To:     sre@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        wangjianli <wangjianli@cdjrlc.com>
+Subject: [PATCH] power/supply: fix repeated words in comments
+Date:   Sat, 22 Oct 2022 13:45:44 +0800
+Message-Id: <20221022054544.35121-1-wangjianli@cdjrlc.com>
 X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr7
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -52,22 +51,22 @@ Delete the redundant word 'the'.
 
 Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
 ---
- drivers/net/wireless/intel/iwlwifi/mvm/phy-ctxt.c | 2 +-
+ drivers/power/supply/ab8500_charger.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/phy-ctxt.c b/drivers/net/wireless/intel/iwlwifi/mvm/phy-ctxt.c
-index a3cefbc43e80..abf8585bf3bd 100644
---- a/drivers/net/wireless/intel/iwlwifi/mvm/phy-ctxt.c
-+++ b/drivers/net/wireless/intel/iwlwifi/mvm/phy-ctxt.c
-@@ -29,7 +29,7 @@ u8 iwl_mvm_get_channel_width(struct cfg80211_chan_def *chandef)
- 
- /*
-  * Maps the driver specific control channel position (relative to the center
-- * freq) definitions to the the fw values
-+ * freq) definitions to the fw values
+diff --git a/drivers/power/supply/ab8500_charger.c b/drivers/power/supply/ab8500_charger.c
+index d04d087caa50..2af83643508c 100644
+--- a/drivers/power/supply/ab8500_charger.c
++++ b/drivers/power/supply/ab8500_charger.c
+@@ -1963,7 +1963,7 @@ static int ab8500_charger_get_ext_psy_data(struct device *dev, void *data)
+  *
+  * Due to a asic bug it is necessary to lower the input current to the vbus
+  * charger when charging with at some specific levels. This issue is only valid
+- * for below a certain battery voltage. This function makes sure that the
++ * for below a certain battery voltage. This function makes sure that
+  * the allowed current limit isn't exceeded.
   */
- u8 iwl_mvm_get_ctrl_pos(struct cfg80211_chan_def *chandef)
- {
+ static void ab8500_charger_check_vbat_work(struct work_struct *work)
 -- 
 2.36.1
 
