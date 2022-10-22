@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5E03608AE0
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 11:12:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB49460879B
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 10:05:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231204AbiJVJL4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 05:11:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37788 "EHLO
+        id S232783AbiJVIEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 04:04:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232165AbiJVJLa (ORCPT
+        with ESMTP id S232332AbiJVH5d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 05:11:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02BD32514E3;
-        Sat, 22 Oct 2022 01:25:42 -0700 (PDT)
+        Sat, 22 Oct 2022 03:57:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E8213A5B4;
+        Sat, 22 Oct 2022 00:48:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6564560B0C;
-        Sat, 22 Oct 2022 07:48:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 766DCC433C1;
-        Sat, 22 Oct 2022 07:48:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BDF5AB82DEF;
+        Sat, 22 Oct 2022 07:48:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2345EC433D7;
+        Sat, 22 Oct 2022 07:48:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666424902;
-        bh=CKtuwDOYPsb0DMnuLbGcnbkAajbl8yEKG+j15wLGQfA=;
+        s=korg; t=1666424905;
+        bh=0M6ldLkPIHOA6wq73aLHiYig4mC6FQqYwNyvlLZ3uo0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=u3yjSkGKQ1+NLzAf42T76EK+ulDzpZarpQjMrYhqKF3aqP6Z7nvtgtU3JO2YemP3b
-         N3pE6TpE5XhflqeJKXpCWP7Lf+3aTC2sZ6NwK9oQvJ+hH381gFqfy7reMIesbdpPtQ
-         7J48jMsXzJVCZ63Hp6ut5hzCdwrZ9ehIiigLfW/Y=
+        b=UJFPx6Xqv0PnA0Ahf0iwef+DM2x1DeQlJDVaoK+yZ7wDSVOOyJDHy+CDCgebITE/q
+         4zVJQ4gWO2VMIvE6xt8WWPoAqHSAPMpWRVGGexBrnJ1jwysoHHwhUsQF8mW2uTqzDw
+         4ssOv9macPzzrF3OoYHXIIRz+Rlo46s8oR+UJm/Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pin-yen Lin <treapking@chromium.org>,
-        Robert Foss <robert.foss@linaro.org>,
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 319/717] drm/bridge: it6505: Fix the order of DP_SET_POWER commands
-Date:   Sat, 22 Oct 2022 09:23:18 +0200
-Message-Id: <20221022072508.422913883@linuxfoundation.org>
+Subject: [PATCH 5.19 320/717] ASoC: rsnd: Add check for rsnd_mod_power_on
+Date:   Sat, 22 Oct 2022 09:23:19 +0200
+Message-Id: <20221022072508.533986921@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221022072415.034382448@linuxfoundation.org>
 References: <20221022072415.034382448@linuxfoundation.org>
@@ -54,58 +55,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pin-yen Lin <treapking@chromium.org>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-[ Upstream commit 7c1dceaffd99247bf443606730515b54d6285969 ]
+[ Upstream commit 376be51caf8871419bbcbb755e1e615d30dc3153 ]
 
-Send DP_SET_POWER_D3 command to the downstream before stopping DP, so the
-suspend process will not be interrupted by the HPD interrupt. Also modify
-the order in .atomic_enable callback to make the callbacks symmetric.
+As rsnd_mod_power_on() can return negative numbers,
+it should be better to check the return value and
+deal with the exception.
 
-Fixes: 46ca7da7f1e8 ("drm/bridge: it6505: Send DPCD SET_POWER to downstream")
-Signed-off-by: Pin-yen Lin <treapking@chromium.org>
-Reviewed-by: Robert Foss <robert.foss@linaro.org>
-Signed-off-by: Robert Foss <robert.foss@linaro.org>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220830045756.1655954-1-treapking@chromium.org
+Fixes: e7d850dd10f4 ("ASoC: rsnd: use mod base common method on SSI-parent")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Acked-by: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Link: https://lore.kernel.org/r/20220902013030.3691266-1-jiasheng@iscas.ac.cn
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/bridge/ite-it6505.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ sound/soc/sh/rcar/ctu.c | 6 +++++-
+ sound/soc/sh/rcar/dvc.c | 6 +++++-
+ sound/soc/sh/rcar/mix.c | 6 +++++-
+ sound/soc/sh/rcar/src.c | 5 ++++-
+ sound/soc/sh/rcar/ssi.c | 4 +++-
+ 5 files changed, 22 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/gpu/drm/bridge/ite-it6505.c b/drivers/gpu/drm/bridge/ite-it6505.c
-index e5626035f311..a09d1a39ab0a 100644
---- a/drivers/gpu/drm/bridge/ite-it6505.c
-+++ b/drivers/gpu/drm/bridge/ite-it6505.c
-@@ -2945,9 +2945,6 @@ static void it6505_bridge_atomic_enable(struct drm_bridge *bridge,
- 	if (ret)
- 		dev_err(dev, "Failed to setup AVI infoframe: %d", ret);
- 
--	it6505_drm_dp_link_set_power(&it6505->aux, &it6505->link,
--				     DP_SET_POWER_D0);
--
- 	it6505_update_video_parameter(it6505, mode);
- 
- 	ret = it6505_send_video_infoframe(it6505, &frame);
-@@ -2957,6 +2954,9 @@ static void it6505_bridge_atomic_enable(struct drm_bridge *bridge,
- 
- 	it6505_int_mask_enable(it6505);
- 	it6505_video_reset(it6505);
+diff --git a/sound/soc/sh/rcar/ctu.c b/sound/soc/sh/rcar/ctu.c
+index 6156445bcb69..e39eb2ac7e95 100644
+--- a/sound/soc/sh/rcar/ctu.c
++++ b/sound/soc/sh/rcar/ctu.c
+@@ -171,7 +171,11 @@ static int rsnd_ctu_init(struct rsnd_mod *mod,
+ 			 struct rsnd_dai_stream *io,
+ 			 struct rsnd_priv *priv)
+ {
+-	rsnd_mod_power_on(mod);
++	int ret;
 +
-+	it6505_drm_dp_link_set_power(&it6505->aux, &it6505->link,
-+				     DP_SET_POWER_D0);
- }
++	ret = rsnd_mod_power_on(mod);
++	if (ret < 0)
++		return ret;
  
- static void it6505_bridge_atomic_disable(struct drm_bridge *bridge,
-@@ -2968,9 +2968,9 @@ static void it6505_bridge_atomic_disable(struct drm_bridge *bridge,
- 	DRM_DEV_DEBUG_DRIVER(dev, "start");
+ 	rsnd_ctu_activation(mod);
  
- 	if (it6505->powered) {
--		it6505_video_disable(it6505);
- 		it6505_drm_dp_link_set_power(&it6505->aux, &it6505->link,
- 					     DP_SET_POWER_D3);
-+		it6505_video_disable(it6505);
- 	}
- }
+diff --git a/sound/soc/sh/rcar/dvc.c b/sound/soc/sh/rcar/dvc.c
+index 5137e03a9d7c..16befcbc312c 100644
+--- a/sound/soc/sh/rcar/dvc.c
++++ b/sound/soc/sh/rcar/dvc.c
+@@ -186,7 +186,11 @@ static int rsnd_dvc_init(struct rsnd_mod *mod,
+ 			 struct rsnd_dai_stream *io,
+ 			 struct rsnd_priv *priv)
+ {
+-	rsnd_mod_power_on(mod);
++	int ret;
++
++	ret = rsnd_mod_power_on(mod);
++	if (ret < 0)
++		return ret;
+ 
+ 	rsnd_dvc_activation(mod);
+ 
+diff --git a/sound/soc/sh/rcar/mix.c b/sound/soc/sh/rcar/mix.c
+index 3572c2c5686c..1de0e085804c 100644
+--- a/sound/soc/sh/rcar/mix.c
++++ b/sound/soc/sh/rcar/mix.c
+@@ -146,7 +146,11 @@ static int rsnd_mix_init(struct rsnd_mod *mod,
+ 			 struct rsnd_dai_stream *io,
+ 			 struct rsnd_priv *priv)
+ {
+-	rsnd_mod_power_on(mod);
++	int ret;
++
++	ret = rsnd_mod_power_on(mod);
++	if (ret < 0)
++		return ret;
+ 
+ 	rsnd_mix_activation(mod);
+ 
+diff --git a/sound/soc/sh/rcar/src.c b/sound/soc/sh/rcar/src.c
+index 0ea84ae57c6a..f832165e46bc 100644
+--- a/sound/soc/sh/rcar/src.c
++++ b/sound/soc/sh/rcar/src.c
+@@ -463,11 +463,14 @@ static int rsnd_src_init(struct rsnd_mod *mod,
+ 			 struct rsnd_priv *priv)
+ {
+ 	struct rsnd_src *src = rsnd_mod_to_src(mod);
++	int ret;
+ 
+ 	/* reset sync convert_rate */
+ 	src->sync.val = 0;
+ 
+-	rsnd_mod_power_on(mod);
++	ret = rsnd_mod_power_on(mod);
++	if (ret < 0)
++		return ret;
+ 
+ 	rsnd_src_activation(mod);
+ 
+diff --git a/sound/soc/sh/rcar/ssi.c b/sound/soc/sh/rcar/ssi.c
+index 43c5e27dc5c8..7ade6c5ed96f 100644
+--- a/sound/soc/sh/rcar/ssi.c
++++ b/sound/soc/sh/rcar/ssi.c
+@@ -480,7 +480,9 @@ static int rsnd_ssi_init(struct rsnd_mod *mod,
+ 
+ 	ssi->usrcnt++;
+ 
+-	rsnd_mod_power_on(mod);
++	ret = rsnd_mod_power_on(mod);
++	if (ret < 0)
++		return ret;
+ 
+ 	rsnd_ssi_config_init(mod, io);
  
 -- 
 2.35.1
