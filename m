@@ -2,131 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAFBA608EF5
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 20:17:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9C4D608EF8
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 20:19:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbiJVSQ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 14:16:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49062 "EHLO
+        id S229721AbiJVSTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 14:19:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbiJVSQy (ORCPT
+        with ESMTP id S229587AbiJVSTA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 14:16:54 -0400
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86C27EA9EC
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 11:16:51 -0700 (PDT)
-Received: by mail-qt1-x834.google.com with SMTP id c23so3532081qtw.8
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 11:16:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8d0KCdG35QJgPzxY2PI5qF4wSDq+As804wur+n4mrk0=;
-        b=Dlapqk7u3r5R+hK/Sg/KWPsYs7tfU6S9C02brY3SkmFAMIHHhptUQoMcR3/b7mTkYi
-         MbJkeUIbDnrtnp02J3XF1lFi4YRuFRnn+UlALHdVhdPTVUv7JgEC44f9h8+dASuHGJac
-         gfstM1uSAC+JNHVJYDEwl7uW6MEu4hiaC10EI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8d0KCdG35QJgPzxY2PI5qF4wSDq+As804wur+n4mrk0=;
-        b=PCTu5TwNNRsR6/SoN0o+i7KvKbwJtcNLZYlxpONcrRiO2mgrlbX1y2p2bL0JEH9uPh
-         3P6RIg/KBziFCxlDmEVFDEO0SlA/rtz1tA5LKOYcHeySJIiTfLL5yG+B6PdJLBmriMVg
-         oMfuHxT3wj/dA8bRavlWVeR7bnG3W3nGhTNaJg38KQv9H1wsaFtv2Bg9z60gpp1qMUYT
-         k8DGHwp8lAw/Z8wg7ToWAjwjQCxHLYEPyvpmTaX7+9iquu8YimbZ/7w5M7IVChW+MTqa
-         fGbNoAYMvGzR9oEtBFOT+8z2TlXfeZS37pqENBSL2s5P08c6A3uwUT8rbiSirbAhWzsI
-         HQWA==
-X-Gm-Message-State: ACrzQf3JjTbKjKtTyU/biTrHTofDAN/3uxGme7S2UlHl1CI4fvNQ/1Z6
-        NCTM6yfTvVF06035cVMYNhwo8aYf3WkZTg==
-X-Google-Smtp-Source: AMsMyM5PC3WBTqR1sNuvu9Sr/3bPDtoW/6RHkFw9Ui+q21fvjeLccF0k/+ebJ6twzKxHQn1ucZtKXQ==
-X-Received: by 2002:a05:622a:1a9f:b0:39c:ae32:9f7f with SMTP id s31-20020a05622a1a9f00b0039cae329f7fmr22339305qtc.80.1666462610374;
-        Sat, 22 Oct 2022 11:16:50 -0700 (PDT)
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com. [209.85.128.182])
-        by smtp.gmail.com with ESMTPSA id he7-20020a05622a600700b003972790deb9sm9938331qtb.84.2022.10.22.11.16.49
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 22 Oct 2022 11:16:49 -0700 (PDT)
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-369426664f9so51761737b3.12
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 11:16:49 -0700 (PDT)
-X-Received: by 2002:a81:11d0:0:b0:35b:dd9f:5358 with SMTP id
- 199-20020a8111d0000000b0035bdd9f5358mr22201031ywr.401.1666462609310; Sat, 22
- Oct 2022 11:16:49 -0700 (PDT)
+        Sat, 22 Oct 2022 14:19:00 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C95F5ED980;
+        Sat, 22 Oct 2022 11:18:59 -0700 (PDT)
+Received: from mercury (unknown [185.209.196.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 828AD660237E;
+        Sat, 22 Oct 2022 19:18:57 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1666462737;
+        bh=aVRfa05Pe4xu8Oy3Hd7CQnA76p8LS2W9iGhPGMnw+qg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MK/yeP8c8W918ZegSCk1eMlJ+VPS+K8YHfpnvuq768Vo87AGYTqpFPvlaG/EFFDLS
+         dPUKr7VN+Ybw342XFy2hBe4RnwxWXA5cHsyL1/1qVxnNj5W+7jusYh3RF/fpQrm8Hk
+         SQ0dzvr9yStrJfsR5W1o7RzRpPi9mdj+LK06OfAJLzOxxqJ0W0FPRlUuKtp29+ael/
+         BmIEp/r+bHo/J3W7hNRw4kO5VXQMjvS+IPzWcj6E8WS1S6vacIJE/g1SDoXeMRVLAQ
+         Ur419A1T2KfXpJlhhXar9CFC0kXibYQgz3rGcx/1vx8RVeA+Q53TqPOxIqJs1hOPdl
+         VDxh07PGeyGBQ==
+Received: by mercury (Postfix, from userid 1000)
+        id C0F3210607E8; Sat, 22 Oct 2022 20:18:54 +0200 (CEST)
+Date:   Sat, 22 Oct 2022 20:18:54 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        linux-rockchip@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Finley Xiao <finley.xiao@rock-chips.com>, kernel@collabora.com
+Subject: Re: [PATCH 1/2] thermal: rockchip: Support RK3588 SoC in the thermal
+ driver
+Message-ID: <20221022181854.znel4pizx3gemz7q@mercury.elektranox.org>
+References: <20221021174721.92468-1-sebastian.reichel@collabora.com>
+ <20221021174721.92468-2-sebastian.reichel@collabora.com>
+ <2aafa6cc-a7de-0b7a-571f-04593ad53787@linaro.org>
+ <7276280.TLKafQO6qx@archbook>
+ <2b0fe8c2-674a-3b44-16aa-d3008b1271c3@linaro.org>
 MIME-Version: 1.0
-References: <20221019162648.3557490-1-Jason@zx2c4.com> <20221019165455.GL25951@gate.crashing.org>
- <CAHk-=wiMWk2t8FHn0iqVVe1mn62OTAD6ffL5rn9Eeu021H9d1Q@mail.gmail.com>
- <20221019174345.GM25951@gate.crashing.org> <CAHk-=wiNNKLFfa0d+Hk=Wm5caiKjLY4V9wwu9DhcSSwPuMbxrg@mail.gmail.com>
- <Y1Elx+e5VLCTfyXi@lt-gp.iram.es> <CAHk-=wiYtSvjyz5xz2Sbnmxgzg_=AL2OyTiRueUem3xzCzM8VA@mail.gmail.com>
- <Y1OIXdh3vWOMUlQK@lt-gp.iram.es>
-In-Reply-To: <Y1OIXdh3vWOMUlQK@lt-gp.iram.es>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sat, 22 Oct 2022 11:16:33 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgaeTa9nAeJ8DP1cBWrs8fZvJ7k1-L8-kjxEOxpLf+XNA@mail.gmail.com>
-Message-ID: <CAHk-=wgaeTa9nAeJ8DP1cBWrs8fZvJ7k1-L8-kjxEOxpLf+XNA@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: treat char as always signed
-To:     Gabriel Paubert <paubert@iram.es>
-Cc:     Segher Boessenkool <segher@kernel.crashing.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-toolchains@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="r3ipl5tfxboahj42"
+Content-Disposition: inline
+In-Reply-To: <2b0fe8c2-674a-3b44-16aa-d3008b1271c3@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 11:06 PM Gabriel Paubert <paubert@iram.es> wrote:
->
-> Ok, I=C2=B4ve just tried it, except that I had something slightly differe=
-nt in
-> mind, but perhaps should have been clearer in my first post.
->
-> I have change your code to the following:
 
-I actually tested that, but using a slightly different version, and my
-non-union test case ended up like
+--r3ipl5tfxboahj42
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-   size_t strlen(const char *p)
-  {
-        return __builtin_strlen(p);
-  }
+Hi,
 
-and then gcc actually complains about
+On Sat, Oct 22, 2022 at 01:12:22PM +0200, Daniel Lezcano wrote:
+> > If you have access to the TRM, it contains the following line in
+> > part 1 on page 1372:
+>=20
+> Unfortunately no, I don't have access to the TRM. But I'll be happy if I =
+can
+> ;)
 
-    warning: infinite recursion detected
+The RK3588 TRM is available under datasheets on this page:
 
-and I (incorrectly) thought this was unworkable. But your version
-seems to work fine.
+https://wiki.radxa.com/Rock5/hardware
 
-So yeah, for the kernel I think we could do something like this. It's
-ugly, but it gets rid of the crazy warning.
+> > 	Support to 7 channel TS-ADC (near chip center, A76_0/1, A76_2/3,
+> > 	DSU and A55_0/1/2/3, PD_CENTER, NPU, GPU)
+> >=20
+> > I assume one of "TOP" and "CENTER" is "near chip center", the other is
+> > PD_CENTER, whatever that means (PD =3D power domain maybe?)
+>=20
+> Yes certainly.
+>=20
+> I take the opportunity to let you know there is a new tool in the linux
+> tools directory called 'thermometer'. You can capture the temperature and
+> use the data to create graphics.
 
-Practically speaking this might be a bit painful, because we've got
-several different variations of this all due to all the things like
-our debugging versions (see <linux/fortify-string.h> for example), so
-some of our code is this crazy jungle of "with this config, use this
-wrapper".
+nice :)
 
-But if somebody wants to deal with the '-Wpointer-sign' warnings,
-there does seem to be a way out. Maybe with another set of helper
-macros, creating those odd __transparent_union__ wrappers might even
-end up reasonable.
+-- Sebastian
 
-It's not like we don't have crazy macros for function wrappers
-elsewhere (the SYSCALL macros come to mind - shudder). The macros
-themselves may be a nasty horror, but when done right the _use_ point
-of said macros can be nice and clean.
+--r3ipl5tfxboahj42
+Content-Type: application/pgp-signature; name="signature.asc"
 
-                  Linus
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmNUNAsACgkQ2O7X88g7
++pqiABAAoegMIjcvD0MMzIGy5tJXZrbTiRiXnecAxm52JAWAFUOguaq/9eHHfUTA
+txSchjmuzrZf41rhF1nM+6gbb3EEgZyNlkVfcmY+I++jWpA4labqb/fj+j7Ct2aF
+TCixCcJT7RgPyF/MvrQ5zAlPPk0loikk3OBZwLIs5zDULIurjwu9hHLNYHi0S5nT
+taiaHtfvdzlOidmbb7yc0TdvC5bYKnIjeMCQ49Vs7OsltnzUJvztSCEtRHj2flvq
+GvFZavp3VB3ZZl3FaRO4AzmHGM9zxTMsbLXMBqMO6pplUKCHEliOKh6svRwbrEza
+MqNHl4cNl9KWI7hqdB1kXPtRF3s6kcTZsH8+LK0wkh2po1oV9jkVloFxApy0kjo3
+EDpuRmUKOeWdX0iO+88ehK6k31heZInEjTYJivgCII52OrwN7ryDkYj5s/WoZE+i
+KqkozthBLI9dM7yojZ97fYO2MqxO4IF+63j9kmgcjhDEF3PQjs/5gMlpMyEY+Ab0
+rR6zN1X8t12EDUfm1tmPtFSJ9YfbWoi18CkBid8BB0YFYl9rCfl7BNlCp35B2uBo
+fwgHnDefq3llRKK+5NX+Imk+z3DiMisEeLjEicORXERweAzkuG6CaMQwK2GboMK9
+e32ANTH6AUcf9knUFSKqFGckFVkdpne5N+pDgIrrL4NHaSOCVoQ=
+=oMve
+-----END PGP SIGNATURE-----
+
+--r3ipl5tfxboahj42--
