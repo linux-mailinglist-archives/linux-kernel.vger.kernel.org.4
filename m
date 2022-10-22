@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CFBE608C02
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 12:56:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 589F4608C05
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 12:56:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229972AbiJVK4X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 06:56:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36968 "EHLO
+        id S230431AbiJVK4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 06:56:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230481AbiJVK4E (ORCPT
+        with ESMTP id S230332AbiJVK4S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 06:56:04 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ED2E2FC5A3;
-        Sat, 22 Oct 2022 03:13:58 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id r14so14446268edc.7;
-        Sat, 22 Oct 2022 03:13:58 -0700 (PDT)
+        Sat, 22 Oct 2022 06:56:18 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F90A17E06;
+        Sat, 22 Oct 2022 03:14:23 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id m15so14393028edb.13;
+        Sat, 22 Oct 2022 03:14:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=googlemail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=06Eh/nhcc2dk5YHgUHqVnCwIQ6d3gtHqF6ndFEyn00o=;
-        b=VMuZTZXRwDpR3O+afkcfnJXAjQaa5SZKkHcYlMnVcwYNqOFKFxdi0LFa6WPSQTKNM/
-         pc5fiF04hiUnP4DSCczNQyvQnbN4AESxQECufjLjtfKnqrc2XPmpgpeNDR7z2bs4+CHL
-         IvxEmFJCZ4uAe2JcieU3RgEEe8ustULxygdjz8h62X8fClJKGJOxjr2kcqtm9V/C4mwv
-         yE0qxdwqHcSimSx+euw2ho3YtC6fIVUsyvNQKYfQMgkoPu104g3gYBtWIeZiHzwa2X3P
-         Z9a6e48lhW1bTuubdJt+KuMtq8fuANAk9+DD21gRtOqQNpE5bj8W7pO+mWUV8oGMa6n6
-         OcWQ==
+        bh=QU5eKnCMasT6Q9fSCMOcqpffbD8d615reCYXwSO/gf4=;
+        b=hGU6dc6xbDgw8swPGkLy3Yorq+CrOuuW/m//YQGpQSrTiLpoecj4A5xKOXogY7torv
+         aNY/+de9gUXI2qoFVounok6PizOkGfHz29Mav3d6j0MajPeZuK6EhwcCadyETjDlMwV4
+         LeHUwBwLqbrrsbQhlAslMjZXx/g68JIjtjF+CTFsyyaUX/aSr66Agqtkzgkrs5aM9kl4
+         L0WkXZU+l+/TSMZrRQNr27oQ/fEOW+9E7N6jw+rgH7fL+Y/YYexvdaLYVrySPrDslQ/j
+         /0/Gx/vALPRnTNtiVGn8tQDa29CKOozeeaiXRvoa+obLxRtAqWJ8rDbiiuJfdUTJhgDe
+         k8gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=06Eh/nhcc2dk5YHgUHqVnCwIQ6d3gtHqF6ndFEyn00o=;
-        b=Xgfzcd+8X0rAhGvuC5MoEy4r9s6iO7+27K0emNHr49Eh1V7G/HGk2Dp9SDmQGUYMd7
-         MYI15XY0R2JfRV6RybjCusfBjQvSPKytpw7XOYm4TeRepYLMaoUgFUOCp8sqY42sh4/v
-         /GWMlz21i4o/rVMZZaeQ5c5DnKohgDejKUrGDwYbG/7fhmNRRfjuNg+mtwpGptX3BIf+
-         5omtDskMJswvBBbReu1IkxIfXMyzMO7CMt470+1GCx0ynKmJKHBq9toaRFHbl4b5AIvk
-         7vOUMOC8J7edlfOU7ZC38wg09bGgW+XK8QQXatCGrwvkPO60irNCgxd9JSZ78pt1Z+tA
-         +Ziw==
-X-Gm-Message-State: ACrzQf1dW/moNpcBRgQ/S/jylWReRDmw77oXbUqjoRoMZsqnmPLlHm1h
-        S0TUQw+HD1sP23SxlfisTxDt+/0VXUzZ0NP7Jhg=
-X-Google-Smtp-Source: AMsMyM7QaRZd6ahXj6EN8TYBfKGXqZyCiosKZRQy5INk2+Si4bfGFYLHkGLRXI+5OCESdg4fjJkhVuQqUiCbjUV96RM=
-X-Received: by 2002:a17:906:7314:b0:791:a45a:bc84 with SMTP id
- di20-20020a170906731400b00791a45abc84mr17664692ejc.394.1666433634815; Sat, 22
- Oct 2022 03:13:54 -0700 (PDT)
+        bh=QU5eKnCMasT6Q9fSCMOcqpffbD8d615reCYXwSO/gf4=;
+        b=cjigCWnyURG5FuLELuEHUnVnbIjpBibzRQvaVLtnANxpXEWTENZc03CsuE1nzfhP2i
+         LbxSOBeg3WH/RILV/zqMyYVjFGjAW0GPe9sJrEuA/0xJ3kycf+6XXv4VLlFy4YS98dep
+         bw7n+Cmezf2nA5gf8szhc1gs+6NXBhQ+EjkLiBFn02ySkvCbz5TBhAMy/vycRqPHKk5W
+         QlvrPEInrKmB6g3aAPMT2HGukVaDfMzQNYslNHNW8W8e219faGhetTPlOhTQ30P75U8Y
+         CYBsVZoYzWndVp+mTcSrt3z9OEQiiZGsRzSgvbPrX342fcWq/2rohTGYQ/0rQ31sJSze
+         Olwg==
+X-Gm-Message-State: ACrzQf2NG/w6iF4TSdunAXMqEA46ZUoluFjl246CKBc8qKXqno0OhQKj
+        PXm2/9fO2h8/SrHsOxmVTMoxR9he5YmuueJERug=
+X-Google-Smtp-Source: AMsMyM5pa070Y9cycfmF7F9UaRmgJ8sMMr0dewTd+9nBguRc1O4LCWhsfWTjqaFi9UqVjZl0uRdKCF+KcsOb793/C1g=
+X-Received: by 2002:a17:907:3c81:b0:77a:327a:815f with SMTP id
+ gl1-20020a1709073c8100b0077a327a815fmr19824207ejc.422.1666433660962; Sat, 22
+ Oct 2022 03:14:20 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221004-up-aml-fix-spi-v4-0-0342d8e10c49@baylibre.com> <20221004-up-aml-fix-spi-v4-2-0342d8e10c49@baylibre.com>
-In-Reply-To: <20221004-up-aml-fix-spi-v4-2-0342d8e10c49@baylibre.com>
+References: <20221004-up-aml-fix-spi-v4-0-0342d8e10c49@baylibre.com> <20221004-up-aml-fix-spi-v4-3-0342d8e10c49@baylibre.com>
+In-Reply-To: <20221004-up-aml-fix-spi-v4-3-0342d8e10c49@baylibre.com>
 From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Sat, 22 Oct 2022 12:13:43 +0200
-Message-ID: <CAFBinCDWP78Eft63G_QpDH28LibUZF__GNwnBVLcM85dQO8XnA@mail.gmail.com>
-Subject: Re: [PATCH v4 2/4] spi: meson-spicc: Use pinctrl to drive CLK line
- when idle
+Date:   Sat, 22 Oct 2022 12:14:09 +0200
+Message-ID: <CAFBinCBwBz6AmxDDJPuww=WRG7Pc0xUWeH+DRXM6WcyctouFhw@mail.gmail.com>
+Subject: Re: [PATCH v4 3/4] arm64: dts: meson-gxl: add SPI pinctrl nodes for CLK
 To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>
 Cc:     Kevin Hilman <khilman@baylibre.com>,
         Jerome Brunet <jbrunet@baylibre.com>,
@@ -78,20 +77,9 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On Fri, Oct 21, 2022 at 3:31 PM Amjad Ouled-Ameur
 <aouledameur@baylibre.com> wrote:
 >
-> Between SPI transactions, all SPI pins are in HiZ state. When using the SS
-> signal from the SPICC controller it's not an issue because when the
-> transaction resumes all pins come back to the right state at the same time
-> as SS.
+> Add SPICC Controller pin nodes for CLK line when idle for Amlogic GXL
+> SoCs.
 >
-> The problem is when we use CS as a GPIO. In fact, between the GPIO CS
-> state change and SPI pins state change from idle, you can have a missing or
-> spurious clock transition.
->
-> Set a bias on the clock depending on the clock polarity requested before CS
-> goes active, by passing a special "idle-low" and "idle-high" pinctrl state
-> and setting the right state at a start of a message
->
-> Reported-by: Da Xue <da@libre.computer>
 > Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
 > Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
 Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
