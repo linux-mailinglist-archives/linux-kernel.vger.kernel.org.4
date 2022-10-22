@@ -2,51 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 721E960852B
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 08:36:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D010608531
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 08:38:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbiJVGgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 02:36:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45932 "EHLO
+        id S230058AbiJVGir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 02:38:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230049AbiJVGgO (ORCPT
+        with ESMTP id S229796AbiJVGim (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 02:36:14 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5714624BABA
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 23:36:08 -0700 (PDT)
-Received: from [77.247.85.102] (helo=[192.168.44.12]); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1om86p-0006gD-1E; Sat, 22 Oct 2022 08:35:51 +0200
-Message-ID: <2c028797-b313-be93-7b1e-8d838e694948@leemhuis.info>
-Date:   Sat, 22 Oct 2022 08:35:47 +0200
+        Sat, 22 Oct 2022 02:38:42 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 585FF2BE893;
+        Fri, 21 Oct 2022 23:38:41 -0700 (PDT)
+X-QQ-mid: bizesmtp80t1666420709t1l2benn
+Received: from localhost.localdomain ( [182.148.15.254])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sat, 22 Oct 2022 14:38:27 +0800 (CST)
+X-QQ-SSF: 01000000000000C0E000000A0000000
+X-QQ-FEAT: 83ShfzFP0oCavCx2JPmr9qQxverkE8Uiw40nOhHNooMa3gxLH5FjPCikZFLPX
+        UxtomQtna1HGBy8/hfxhZ9eiQ2lyGDe6W7QnWs3gNUPM91FWXVYvACAvUG/YVvBl7BN214b
+        MNNQSnMOJs0g+OLU/AGHElh5+zC6v6OiilP49kCIgDTlxbUeOm87+2G1WcQcimbOX7Tiq5g
+        JQBKy3IScpWihFkGSG5j2r5a+FJXWy+Iv3CzCG2TxBh0D11zAyR5lybq9gph+ztPAhLIzva
+        8EXrZwua9LCwM4Elg8GGPyfmFXQxop9hchkJjf58gMPKnu2COhl/dOnBSMQSlBG0ZJ4PXQY
+        vWKl3xGuDiuFj+T/lzumtjaP1b1MMnX4QzLvmeWW8sqrRdOEgk=
+X-QQ-GoodBg: 0
+From:   wangjianli <wangjianli@cdjrlc.com>
+To:     hare@suse.com, jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        wangjianli <wangjianli@cdjrlc.com>
+Subject: [PATCH] scsi/aic7xxx: fix repeated words in comments
+Date:   Sat, 22 Oct 2022 14:38:21 +0800
+Message-Id: <20221022063821.27974-1-wangjianli@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Content-Language: en-US, de-DE
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-Subject: [Regression] Bug 216613 - Sound stopped working with v6.0.3 on Lenovo
- T14 Gen2i: ASoC: error at snd_soc_component_probe
-To:     Cezary Rojewski <cezary.rojewski@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>
-Cc:     =?UTF-8?Q?Grzegorz_Alibo=c5=bcek?= <grzegorz.alibozek@gmail.com>,
-        alsa-devel@alsa-project.org, Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1666420573;d4023bb0;
-X-HE-SMSGID: 1om86p-0006gD-1E
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr7
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,38 +47,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, this is your Linux kernel regression tracker speaking.
+Delete the redundant word 'the'.
 
-I noticed a regression report in bugzilla.kernel.org. As many (most?)
-kernel developer don't keep an eye on it, I decided to forward it by
-mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=216613 :
+Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
+---
+ drivers/scsi/aic7xxx/aic7xxx_core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->  Grzegorz Alibożek 2022-10-21 19:26:43 UTC
-> 
-> After upgrade kernel from 6.0.2 to 6.0.3 on Lenovo T14 Gen2i, sound stopped working.
-> dmesg:
-> 
-> paź 21 21:11:45 kernel: snd_hda_codec_hdmi ehdaudio0D2: failed to create hda codec -12
-> paź 21 21:11:45 kernel: snd_hda_codec_hdmi ehdaudio0D2: ASoC: error at snd_soc_component_probe on ehdaudio0D2: -12
-> paź 21 21:11:45 kernel: skl_hda_dsp_generic skl_hda_dsp_generic: ASoC: failed to instantiate card -12
-> 
-> [reply] [−] Comment 1 Grzegorz Alibożek 2022-10-21 19:56:43 UTC
-> 
-> Created attachment 303070 [details]
-> trace
+diff --git a/drivers/scsi/aic7xxx/aic7xxx_core.c b/drivers/scsi/aic7xxx/aic7xxx_core.c
+index a396f048a031..dbce720c7a9f 100644
+--- a/drivers/scsi/aic7xxx/aic7xxx_core.c
++++ b/drivers/scsi/aic7xxx/aic7xxx_core.c
+@@ -1110,7 +1110,7 @@ ahc_handle_seqint(struct ahc_softc *ahc, u_int intstat)
+ 			hscb->control = 0;
+ 
+ 			/*
+-			 * This request sense could be because the
++			 * This request sense could be because
+ 			 * the device lost power or in some other
+ 			 * way has lost our transfer negotiations.
+ 			 * Renegotiate if appropriate.  Unit attention
+-- 
+2.36.1
 
-See the ticket for more details.
-
-BTW, let me use this mail to also add the report to the list of tracked
-regressions to ensure it's doesn't fall through the cracks:
-
-#regzbot introduced: v6.0.2..v6.0.3
-https://bugzilla.kernel.org/show_bug.cgi?id=216613
-#regzbot ignore-activity
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-
-P.S.: As the Linux kernel's regression tracker I deal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight.
