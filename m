@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 617E0608ABD
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 11:05:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3918C608799
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 10:05:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230493AbiJVJFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 05:05:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43972 "EHLO
+        id S232701AbiJVIEA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 04:04:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235102AbiJVJDq (ORCPT
+        with ESMTP id S232041AbiJVH5V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 05:03:46 -0400
+        Sat, 22 Oct 2022 03:57:21 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEEB22FBDF6;
-        Sat, 22 Oct 2022 01:18:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5320374CC7;
+        Sat, 22 Oct 2022 00:48:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C409CB82E04;
-        Sat, 22 Oct 2022 07:48:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 214A1C433D6;
-        Sat, 22 Oct 2022 07:48:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 69BF7B82E0C;
+        Sat, 22 Oct 2022 07:48:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1963C433D6;
+        Sat, 22 Oct 2022 07:48:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666424897;
-        bh=pP2r2bExKP4Le3wtAbMnar0v4Dk3GywGU3NbELH8LRo=;
+        s=korg; t=1666424900;
+        bh=OzLtw84/qExOO0VigNtqfN9GRq/sTIKWBf6EPPnoyMA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=t38+x8WkoAe7YJOx4avhVAz6+MLQ+4pvrun6ks6zv9mzakIQXPuWWfbx8vPgy9XuM
-         3c1zcyMQvdYP3D0JNfGF7/6jNcuw96M9pveZ5GAz1mu2iE96C0lcM1WllhdayNt+WQ
-         BkbsZ66TTqji7ffsaJOGruq9c8oIaKqgkd+EnZSc=
+        b=lMM+U4CAeLrUZ8QVCmmkcpVuhCUG2nbd8/wAwNnLojG4olmyTDiPJ/rpK0N+u9gaa
+         7vNbJ6rSUZGPF+TLxOfndI0x56mx26dT5RWwG3r0oF3cGemq5AA66HZMfdRga04oie
+         HdLFFoZ0xFbuEkaHqg9eLDFHWRDXQtRHpAX3BtrQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
+        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
+        Robert Foss <robert.foss@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 317/717] drm/amdgpu: add missing pci_disable_device() in amdgpu_pmops_runtime_resume()
-Date:   Sat, 22 Oct 2022 09:23:16 +0200
-Message-Id: <20221022072508.171109408@linuxfoundation.org>
+Subject: [PATCH 5.19 318/717] drm/bridge: megachips: Fix a null pointer dereference bug
+Date:   Sat, 22 Oct 2022 09:23:17 +0200
+Message-Id: <20221022072508.308070614@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221022072415.034382448@linuxfoundation.org>
 References: <20221022072415.034382448@linuxfoundation.org>
@@ -54,37 +54,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yingliang <yangyingliang@huawei.com>
+From: Zheyu Ma <zheyuma97@gmail.com>
 
-[ Upstream commit 6b11af6d1c8f5d4135332bb932baaa06e511173d ]
+[ Upstream commit 1ff673333d46d2c1b053ebd0c1c7c7c79e36943e ]
 
-Add missing pci_disable_device() if amdgpu_device_resume() fails.
+When removing the module we will get the following warning:
 
-Fixes: 8e4d5d43cc6c ("drm/amdgpu: Handling of amdgpu_device_resume return value for graceful teardown")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+[   31.911505] i2c-core: driver [stdp2690-ge-b850v3-fw] unregistered
+[   31.912484] general protection fault, probably for non-canonical address 0xdffffc0000000001: 0000 [#1] PREEMPT SMP KASAN PTI
+[   31.913338] KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
+[   31.915280] RIP: 0010:drm_bridge_remove+0x97/0x130
+[   31.921825] Call Trace:
+[   31.922533]  stdp4028_ge_b850v3_fw_remove+0x34/0x60 [megachips_stdpxxxx_ge_b850v3_fw]
+[   31.923139]  i2c_device_remove+0x181/0x1f0
+
+The two bridges (stdp2690, stdp4028) do not probe at the same time, so
+the driver does not call ge_b850v3_resgiter() when probing, causing the
+driver to try to remove the object that has not been initialized.
+
+Fix this by checking whether both the bridges are probed.
+
+Fixes: 11632d4aa2b3 ("drm/bridge: megachips: Ensure both bridges are probed before registration")
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+Signed-off-by: Robert Foss <robert.foss@linaro.org>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220830073450.1897020-1-zheyuma97@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/bridge/megachips-stdpxxxx-ge-b850v3-fw.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-index 8890300766a5..5e8ca32bc3a9 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-@@ -2548,8 +2548,11 @@ static int amdgpu_pmops_runtime_resume(struct device *dev)
- 		amdgpu_device_baco_exit(drm_dev);
- 	}
- 	ret = amdgpu_device_resume(drm_dev, false);
--	if (ret)
-+	if (ret) {
-+		if (amdgpu_device_supports_px(drm_dev))
-+			pci_disable_device(pdev);
- 		return ret;
-+	}
+diff --git a/drivers/gpu/drm/bridge/megachips-stdpxxxx-ge-b850v3-fw.c b/drivers/gpu/drm/bridge/megachips-stdpxxxx-ge-b850v3-fw.c
+index cce98bf2a4e7..72248a565579 100644
+--- a/drivers/gpu/drm/bridge/megachips-stdpxxxx-ge-b850v3-fw.c
++++ b/drivers/gpu/drm/bridge/megachips-stdpxxxx-ge-b850v3-fw.c
+@@ -296,7 +296,9 @@ static void ge_b850v3_lvds_remove(void)
+ 	 * This check is to avoid both the drivers
+ 	 * removing the bridge in their remove() function
+ 	 */
+-	if (!ge_b850v3_lvds_ptr)
++	if (!ge_b850v3_lvds_ptr ||
++	    !ge_b850v3_lvds_ptr->stdp2690_i2c ||
++		!ge_b850v3_lvds_ptr->stdp4028_i2c)
+ 		goto out;
  
- 	if (amdgpu_device_supports_px(drm_dev))
- 		drm_dev->switch_power_state = DRM_SWITCH_POWER_ON;
+ 	drm_bridge_remove(&ge_b850v3_lvds_ptr->bridge);
 -- 
 2.35.1
 
