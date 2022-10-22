@@ -2,218 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FB29608D9E
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 16:12:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01764608DA4
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 16:21:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229760AbiJVOMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 10:12:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48792 "EHLO
+        id S229783AbiJVOVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 10:21:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbiJVOMA (ORCPT
+        with ESMTP id S229760AbiJVOVn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 10:12:00 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC4992670C4;
-        Sat, 22 Oct 2022 07:11:58 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 0D4ED18846E9;
-        Sat, 22 Oct 2022 14:11:57 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 05097250007B;
-        Sat, 22 Oct 2022 14:11:57 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id EDE749EC0013; Sat, 22 Oct 2022 14:11:56 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Sat, 22 Oct 2022 10:21:43 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6440C29E5BD
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 07:21:41 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id q19so15822651edd.10
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 07:21:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=3y5NneVGSVHM3d4TxVK3DB/B/isDhSM9Gf6zlSsh6og=;
+        b=fEYjzegl5no7TevDLOfHUBkm7rzl0qSt9KpunP6BMmHiN8kUy9GbodQAok8mD0UmDV
+         wEw30+ospvHDZHn0EKinrLqjyUUm/bLG/pX10LHdXhqKCMlvbErPevVIYQwfY7i3LHPu
+         ZRJRlIgra1wPEjLBdQqmAV+v6SVo+Ygsix4upYoPRPykuCLI//wlpNu7uv/q9JswYMEP
+         24kyKfsD73+vSEmU6ecqkGGdTARi5ZfDnu3RKx2aOH4nvTZTmwGcYEWcFGdcM4Yh7FRx
+         ZhlTgxqHt8kDNJUY2eiRetE1yuS7N1QBsDrcKn7Bt4k6JHjpGm0l9y9scyomloVsdMbu
+         yB4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3y5NneVGSVHM3d4TxVK3DB/B/isDhSM9Gf6zlSsh6og=;
+        b=pOEMfN5MmHee6aOdWZ9xQpMmE1h3T3A3dhj74Y2BuW6qA30NC424YQ2PFAVJQ2rPX7
+         IWie5/SSBX6J4FgUNhB1RLuRElWtaSV7PQTYScOJgFjUuo1HZxJzt5T02YXjNWHySws3
+         6JrcmMtxZ6uAJA75X+1+dqw+2jvN1WvDj9j37GCnA56ocFCqZgITjBd+rOVFvojEbdrg
+         OFV1aJFXCeYfEhYxn5RprrdL5dAUrAatJADkdmQNwXk4wlnWeNtuug7nhEJcAeHNsPW8
+         uHvaOrTOCYkkBWnGr1GzzExEce3KauVBSfqBCk8ojdMGw1A9qMWy1iFKyFfdfnhNEyor
+         r9SQ==
+X-Gm-Message-State: ACrzQf2dFUoUVd6xTGTZJPEGxDGvLxIKxX6C5ViDDrUbUKSf7qpAmvqP
+        43bmQNHHhiCYoIQymx33HVcRWIjS7bQA3oT/GW2/va+mpCYQNQ==
+X-Google-Smtp-Source: AMsMyM4X9zWrTzirAffhGB0WOX1DKzqBAFxwop6hJIJPvSwv25uxB4GP44x770IP/27iBsXBuJcOHtsaauk3b4N1BCw=
+X-Received: by 2002:a05:6402:4029:b0:45b:d50c:b9b0 with SMTP id
+ d41-20020a056402402900b0045bd50cb9b0mr22267578eda.126.1666448500471; Sat, 22
+ Oct 2022 07:21:40 -0700 (PDT)
 MIME-Version: 1.0
-Date:   Sat, 22 Oct 2022 16:11:56 +0200
-From:   netdev@kapio-technology.com
-To:     Ido Schimmel <idosch@nvidia.com>
-Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        Oleksandr Mazur <oleksandr.mazur@plvision.eu>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
+References: <20221021181016.14740-1-ansuelsmth@gmail.com> <CACRpkdbfvr1pkVb3XhBZLnmn7vy3XyzavwVjW_VmFKTdh3LABQ@mail.gmail.com>
+ <63531543.050a0220.b6bf5.284d@mx.google.com>
+In-Reply-To: <63531543.050a0220.b6bf5.284d@mx.google.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sat, 22 Oct 2022 16:21:28 +0200
+Message-ID: <CACRpkdbOQq9hUT=d1QBDMmgLaJ1wZ=hd44ciMnjFVgpLCnK8Wg@mail.gmail.com>
+Subject: Re: [PATCH] ARM: mach-qcom: fix support for ipq806x
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
         Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Florent Fourcot <florent.fourcot@wifirst.fr>,
-        Hans Schultz <schultz.hans@gmail.com>,
-        Joachim Wiberg <troglobit@gmail.com>,
-        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v8 net-next 10/12] net: dsa: mv88e6xxx: mac-auth/MAB
- implementation
-In-Reply-To: <Y1P0/gYdvrk+W866@shredder>
-References: <2565c09bb95d69142522c3c3bcaa599e@kapio-technology.com>
- <20221020225719.l5iw6vndmm7gvjo3@skbuf>
- <82d23b100b8d2c9e4647b8a134d5cbbf@kapio-technology.com>
- <20221021112216.6bw6sjrieh2znlti@skbuf>
- <7bfaae46b1913fe81654a4cd257d98b1@kapio-technology.com>
- <20221021163005.xljk2j3fkikr6uge@skbuf>
- <d1fb07de4b55d64f98425fe66156c4e4@kapio-technology.com>
- <20221021173014.oit3qmpkrsjwzbgu@skbuf>
- <b88e331e016ad3801f1bf1a0dec507f3@kapio-technology.com>
- <20221021181411.sv52q4yxr5r7urab@skbuf> <Y1P0/gYdvrk+W866@shredder>
-User-Agent: Gigahost Webmail
-Message-ID: <a11af0d07a79adbd2ac3d242b36dec7e@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Nick Hawkins <nick.hawkins@hpe.com>,
+        John Crispin <john@phrozen.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-22 15:49, Ido Schimmel wrote:
-> On Fri, Oct 21, 2022 at 09:14:11PM +0300, Vladimir Oltean wrote:
->> On Fri, Oct 21, 2022 at 07:39:34PM +0200, netdev@kapio-technology.com 
->> wrote:
->> > Well, with this change, to have MAB working, the bridge would need learning on
->> > of course, but how things work with the bridge according to the flags, they
->> > should also work in the offloaded case if you ask me. There should be no
->> > difference between the two, thus MAB in drivers would have to be with
->> > learning on.
->> 
->> Am I proposing for things to work differently in the offload and
->> software case, and not realizing it? :-/
->> 
->> The essence of my proposal was to send a bug fix now which denies
->> BR_LEARNING to be set together with BR_PORT_LOCKED. The fact that
->> link-local traffic is learned by the software bridge is something
->> unintended as far as I understand.
->> 
->> You tried to fix it here, and as far as I could search in my inbox, 
->> that
->> didn't go anywhere:
->> https://lore.kernel.org/netdev/47d8d747-54ef-df52-3b9c-acb9a77fa14a@blackwall.org/T/#u
->> 
->> I thought only mv88e6xxx offloads BR_PORT_LOCKED, but now, after
->> searching, I also see prestera has support for it, so let me add
->> Oleksandr Mazur to the discussion as well. I wonder how they deal with
->> this? Has somebody come to rely on learning being enabled on a locked
->> port?
->> 
->> 
->> MAB in offloading drivers will have to be with learning on (same as in
->> software). When BR_PORT_LOCKED | BR_LEARNING will be allowed together
->> back in net-next (to denote the MAB configuration), offloading drivers
->> (mv88e6xxx and prestera) will be patched to reject them. They will 
->> only
->> accept the two together when they implement MAB support.
->> 
->> Future drivers after this mess has been cleaned up will have to look 
->> at
->> the BR_PORT_LOCKED and BR_LEARNING flag in combination, to see which
->> kind of learning is desired on a port (secure, CPU based learning or
->> autonomous learning).
->> 
->> Am I not making sense?
-> 
-> I will try to summarize what I learned from past discussions because I
-> think it is not properly explained in the commit messages.
-> 
-> If you look at the hostapd fork by Westermo [1], you will see that they
-> are authorizing hosts by adding dynamic FDB entries from user space, 
-> not
+On Fri, Oct 21, 2022 at 11:55 PM Christian Marangi <ansuelsmth@gmail.com> wrote:
+> On Fri, Oct 21, 2022 at 11:44:56PM +0200, Linus Walleij wrote:
 
-Those dynamic FDB entries are to be dynamic ATU entries by a patch set 
-that
-I have ready, but which I have not submitted as I was expecting to 
-submit
-it after this patch set was accepted.
+> > Is it not possible to use Geert's linux,usable-memory-range in
+> > the chosen node to make the kernel stay off the memory?
+> > (See examples by grep usable-memory in the kernel.)
+> >
+>
+> Hi,
+> just to confirm this is one of the example you are suggesting?
+>
+> chosen {
+>                 bootargs = "console=ttyS0,115200 earlycon";
+>                 stdout-path = "serial0:115200n8";
+>                 linux,usable-memory-range = <0x80200000 0x1fe00000>;
+>         };
 
-The important aspect of Dynamic ATU entries is that the HW refreshes the
-ATU entries with an active host.
+Yep that thing!
+
+> Main problem here is that uboot in some case doesn't support dt and pass
+> wrong ATAGS (with the memory not reserved) and AUTO_ZRELADDR calculate
+> the wrong addr I assume?
+
+You do have a DTB right, just that it is attached, and then the kernel
+uses the ATAGs to augment the memory?
+
+In that case what about disabling ARM_ATAG_DTB_COMPAT
+and adding the actual valid memory to the top-level DTS
+file? Just like that:
+
+      memory {
+                device_type = "memory";
+                reg = <0x42000000 0xnnnnnnnn>;
+        };
 
 
-> static ones. Someone from Westermo will need to confirm this, but I
+> I will test the usable-memory-range but isn't the same of declaring
+> reserved space in the dts? Or the zimage decompressor checks
+> linux,usable-memory-range bypassing atags?
 
-I represent WesterMo in the upstreaming of these patches, and can 
-confirm
-that both for hostapd and the MAB solution, WesterMo authorizes by using
-dynamic entries.
+As long as it just pass "too much" memory it should do the job,
+I *think*.
 
-> guess the reasons are that a) They want hosts that became silent to 
-> lose
-> their authentication after the aging time b) They want hosts to lose
-> their authentication when the carrier of the bridge port goes down. 
-> This
-> will cause the bridge driver to flush dynamic FDB entries, but not
-> static ones. Otherwise, an attacker with physical access to the switch
-> and knowledge of the MAC address of the authenticated host can connect 
-> a
-> different (malicious) host that will be able to communicate through the
-> bridge.
+Since I wrote this article:
+https://people.kernel.org/linusw/how-the-arm32-linux-kernel-decompresses
+Geert introduced some very elaborate low-level OF code and I
+do think it kicks in and makes sure to reserve this memory even
+before the decompressor goes to work (in difference from e.g.
+"reserved memory nodes" that are not inspected until later).
 
-Seems correct, only that it must be specified that it must be the 
-switchcore
-and not the bridge that ages the entries, thus ATU entries.
+See:
+commit 48342ae751c797ac73ac9c894b3f312df18ffd21
+"ARM: 9124/1: uncompress: Parse "linux,usable-memory-range" DT property"
 
-> 
-> In the above scenario, learning does not need to be on for the bridge 
-> to
-> populate its FDB, but rather for the bridge to refresh the dynamic FDB
-> entries installed by hostapd. This seems like a valid use case and one
-> needs a good reason to break it in future kernels.
-> 
-> Regarding learning from link-local frames, this can be mitigated by [2]
-> without adding additional checks in the bridge. I don't know why this
-> bridge option was originally added, but if it wasn't for this use case,
-> then now it has another use case.
-> 
-> Regarding MAB, from the above you can see that a pure 802.1X
-> implementation that does not involve MAB can benefit from locked bridge
-> ports with learning enabled. It is therefore not accurate to say that
-> one wants MAB merely by enabling learning on a locked port. Given that
-> MAB is a proprietary extension and much less secure than 802.1X, we can
-> assume that there will be deployments out there that do not use MAB and
-> do not care about notifications regarding locked FDB entries. I
-> therefore think that MAB needs to be enabled by a separate bridge port
-> flag that is rejected unless the bridge port is locked and has learning
-> enabled.
-> 
-> Regarding hardware offload, I have an idea (needs testing) on how to
-> make mlxsw work in a similar way to mv88e6xxx. That is, does not 
-> involve
-> injecting frames that incurred a miss to the Rx path. If you guys want,
-> I'm willing to take a subset of the patches here, improve the commit
-> message, do some small changes and submit them along with an mlxsw
-> implementation. My intention is not to discredit anyone (I will keep 
-> the
-> original authorship), but to help push this forward and give another
-> example of hardware offload.
+Then if the memory node is in the DTB originally or patched in
+by U-Boot shouldn't really matter, usable-memory-range should
+kick in in either case.
 
-You are very welcome to help pushing this forward for my sake, I just 
-need
-to know how it will affect this patch set. :-)
+It is described as used for kexec (which I never use) but I think it can
+solve your problem too.
 
-> 
-> [1] 
-> https://github.com/westermo/hostapd/commit/10c584b875a63a9e58b0ad39835282545351c30e#diff-338b6fad34b4bdb015d7d96930974bd96796b754257473b6c91527789656d6ed
-> [2] 
-> https://git.kernel.org/pub/scm/network/iproute2/iproute2-next.git/commit/?id=c74a8bc9cf5d6b6c9d8c64d5a80c5740165f315a
+The DT property is (by agreement) an undocumented Linux extension,
+so Geert knows the intended usecases better :)
+
+Yours,
+Linus Walleij
