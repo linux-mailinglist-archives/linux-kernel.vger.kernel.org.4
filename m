@@ -2,39 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 237F7608526
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 08:33:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 463A2608528
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 08:34:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230031AbiJVGdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 02:33:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35424 "EHLO
+        id S230045AbiJVGeo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 02:34:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbiJVGdb (ORCPT
+        with ESMTP id S230030AbiJVGei (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 02:33:31 -0400
+        Sat, 22 Oct 2022 02:34:38 -0400
 Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C75D2B733A;
-        Fri, 21 Oct 2022 23:33:29 -0700 (PDT)
-X-QQ-mid: bizesmtp90t1666420395t156loke
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C188823395;
+        Fri, 21 Oct 2022 23:34:35 -0700 (PDT)
+X-QQ-mid: bizesmtp77t1666420460tx40crpx
 Received: from localhost.localdomain ( [182.148.15.254])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 22 Oct 2022 14:33:13 +0800 (CST)
+        id ; Sat, 22 Oct 2022 14:34:18 +0800 (CST)
 X-QQ-SSF: 01000000000000C0E000000A0000000
-X-QQ-FEAT: hWIfutFPnzgDM/Y+7bTvF1MD1+GypHU/zCINYgLo+j6aWxU42xFhZM5bL3s2n
-        ipQ/s2874Q4Ylf1W4iVc5INYH0YBgZ7yy5t5ptWR4wlloLOkB5Ben+oKGwWh4n7mVoE/wXk
-        dH6oa28cUq11nm+IW6UEPiwvLI3VXdPRYaOVIVfwfr9WezKcocU+4wTZdKoyfzWjltgQtzB
-        Zi0JtIKoYGogVEToMDvK5y3wxbQS0f99TWB/DZSATMOssy/GH5dGLcb30Ks/2TrqMAgIr9D
-        eFzHW79NGW5gXnXDHm9mvSngizfjQeStEFcF2EehOWe9eI9LuYel7TZoFaTwbrc37EFz1q+
-        eo5jkh82tYUoOy8GK0wN0bt0quB1e6pTj9Is6Z8lFPcdnwjfg8=
+X-QQ-FEAT: bYR630AeiPgmGcbt1t12FyeXXFBFvklvTTG8OTSi+2Cetfti1lIh/+FSX8oPK
+        GGkGUJJ/fxXQTnqUBcF+axkBiFEdcaP0U1RhiDumKD3D0AmtD6s0nqDDVBPHUpG8sT3ROV7
+        XKSykIF+rsS9PYd7uXc44AvEmOJMQ4h/Sqgt8hbxzuHgy8VMaZNSsogaV+drNrnz8Sir3ny
+        +pObSbEqOauFTD1JT4erPzfOnkZowDrFM8nQ35wRlGBeOeUUxHcYetrBtgLX1LjpMBBMpc6
+        JJ+e0OPABicQdON2z3z/6FdiV9JLvGdl6R1jSlOjAYFPXN7uqaVPVYSlKrxGrL+iuhoJzgW
+        NcoVkRKkyhVxeJZnf6PrqkreFiOU4+fUSPtQbe7afvkLJ6weABTO307oAYC9g==
 X-QQ-GoodBg: 0
 From:   wangjianli <wangjianli@cdjrlc.com>
-To:     artur.paszkiewicz@intel.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com
+To:     hare@suse.de, jejb@linux.ibm.com, martin.petersen@oracle.com
 Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
         wangjianli <wangjianli@cdjrlc.com>
-Subject: [PATCH] scsi/isci: fix repeated words in comments
-Date:   Sat, 22 Oct 2022 14:33:07 +0800
-Message-Id: <20221022063307.22150-1-wangjianli@cdjrlc.com>
+Subject: [PATCH] scsi/fcoe: fix repeated words in comments
+Date:   Sat, 22 Oct 2022 14:34:02 +0800
+Message-Id: <20221022063402.23288-1-wangjianli@cdjrlc.com>
 X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -52,22 +51,22 @@ Delete the redundant word 'the'.
 
 Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
 ---
- drivers/scsi/isci/remote_node_context.h | 2 +-
+ drivers/scsi/fcoe/fcoe_ctlr.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/isci/remote_node_context.h b/drivers/scsi/isci/remote_node_context.h
-index c7ee81d01125..f22950b12b8b 100644
---- a/drivers/scsi/isci/remote_node_context.h
-+++ b/drivers/scsi/isci/remote_node_context.h
-@@ -154,7 +154,7 @@ enum sci_remote_node_context_destination_state {
- /**
-  * struct sci_remote_node_context - This structure contains the data
-  *    associated with the remote node context object.  The remote node context
-- *    (RNC) object models the the remote device information necessary to manage
-+ *    (RNC) object models the remote device information necessary to manage
-  *    the silicon RNC.
-  */
- struct sci_remote_node_context {
+diff --git a/drivers/scsi/fcoe/fcoe_ctlr.c b/drivers/scsi/fcoe/fcoe_ctlr.c
+index 39e16eab47aa..28e8b9f1e1a4 100644
+--- a/drivers/scsi/fcoe/fcoe_ctlr.c
++++ b/drivers/scsi/fcoe/fcoe_ctlr.c
+@@ -205,7 +205,7 @@ static int fcoe_sysfs_fcf_add(struct fcoe_fcf *new)
+ 		 * that doesn't have a priv (fcf was deleted). However,
+ 		 * libfcoe will always delete FCFs before trying to add
+ 		 * them. This is ensured because both recv_adv and
+-		 * age_fcfs are protected by the the fcoe_ctlr's mutex.
++		 * age_fcfs are protected by the fcoe_ctlr's mutex.
+ 		 * This means that we should never get a FCF with a
+ 		 * non-NULL priv pointer.
+ 		 */
 -- 
 2.36.1
 
