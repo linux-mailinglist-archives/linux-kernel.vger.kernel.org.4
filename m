@@ -2,211 +2,348 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23ECF608E63
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 18:14:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E7EE608E66
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 18:19:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229484AbiJVQOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 12:14:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43886 "EHLO
+        id S229619AbiJVQTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 12:19:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbiJVQOi (ORCPT
+        with ESMTP id S229635AbiJVQTE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 12:14:38 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BEF613E17
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 09:14:34 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id r8-20020a1c4408000000b003c47d5fd475so7167927wma.3
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 09:14:34 -0700 (PDT)
+        Sat, 22 Oct 2022 12:19:04 -0400
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DE5313589A
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 09:18:56 -0700 (PDT)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-1364357a691so7194489fac.7
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 09:18:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9PbpSrnNj4RAelQRv7F+Nb0NTeaodlXg2sLrAl+yuPA=;
-        b=pXdYB3AiwLuXqcmpd7sCCKRV91JonK2vmQxLfiWTBhXpBnpFLiteCrciY1DgBu6JaE
-         9yyktXeDOKtEdGQ3jz1Pb2jKAVa1awKy0D0BlrLRKs30B/1ONZ1vnDJCVzCIXqE0Jph5
-         Y+VsAZuqkf7uBw6C7aU17U8AKZu9a7vMfYZIv5VlvosrzuRFmWET8eW/4IZcInMcsrQH
-         a7vhtuDhLte8JDMQrnQjvhgMMsw6Nr6+vY8rlL7MFoOh81GPGuG8Td6VORlbudNEC7ZV
-         pBtVKTIEKjYxRlNtJefWAL/2gLVdk1S/yH/4wErhYEIfbRGnNWuzRQoH4sMD1Jm7P6j7
-         TYaQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=br+HnS22isyDTm0T0WKGrqcorfoSfii9AXXj0ko/jkg=;
+        b=GnRU0N9fVf/mVBhAHbuyEOC9wrQXeKfjaaUP1h6IBql8j3JnQHljnf3W9QeKGRXEGX
+         iRMbsdsEp5DAFJpsdvVKayYxlT2jICNcluDcr1k05EoFzayaIcmQ8efe+Le0mWqxzDbF
+         0pm3g3n55Q5V/4RBcXb7L9pCSGeONWOuIlY0+Dq73CUKFCbkLde5t2Iq4zBQXE+JNrue
+         IBZjvA5W3twyqCQ7XNS3MzqBL5aU/zXX+vMtGjuwDpnF+V3hqgIcPb9YocxQ4QNFzvsY
+         rn4O+DqilHeDAmZwCzwEtPtGuDZq+tBw/KeJmE2SBWUXhjzlZf9VraIizGYlvAqJBnxo
+         Gijg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9PbpSrnNj4RAelQRv7F+Nb0NTeaodlXg2sLrAl+yuPA=;
-        b=sFL55Uk42wAVeANwfEhrPhH7gxpjWqv9vIfP0isY5KKQHEko1TviyUBIDATUmiLpSe
-         ldFZyF7Eu5xxWU+qMW3SnMCWCcxrSxbBwVyTIkRhcb6gUBSZiLMN/ICUarNngf9Xy3uJ
-         ufFL0RhGRCLIbpmKbR2c7HcfOBpF7BlgPHzTxvF/QX8MzMPEgD/OWAXUiOCGzbX+LvDI
-         L8THNiwPiktPxpr1TDP91BwifmwE2dLYTWiF1ype2IiV4iW2QBh/tn1Em+mT+qULL58+
-         bSAoms/fDxO02KCQWDeDxCcxuf4WZ+4FjzR/uv6DQIAPcyUZ+nPBMd2zSIW/pJngj4Zq
-         6p5A==
-X-Gm-Message-State: ACrzQf1S8ebF4ELggU5JEJU3ozLb3+cCRTmZffBuEd7aYvKlselz0eea
-        a/N9tAU2AGbKKM/a2XQ08TY=
-X-Google-Smtp-Source: AMsMyM4ADjocQXR/cgHp2CaKTGgdZURIh7Y55t9LvGbmaVhatKEKePuY6uXEmOJYZ/SfeBIok3sVdw==
-X-Received: by 2002:a7b:c5c2:0:b0:3c4:fd96:fb68 with SMTP id n2-20020a7bc5c2000000b003c4fd96fb68mr16635598wmk.36.1666455272600;
-        Sat, 22 Oct 2022 09:14:32 -0700 (PDT)
-Received: from localhost.localdomain ([117.102.55.205])
-        by smtp.gmail.com with ESMTPSA id g6-20020a05600c310600b003a6a3595edasm6387582wmo.27.2022.10.22.09.14.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 22 Oct 2022 09:14:32 -0700 (PDT)
-From:   Osama Muhammad <osmtendev@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, Osama Muhammad <osmtendev@gmail.com>,
-        Samuel Thibault <samuel.thibault@ens-lyon.org>
-Subject: [PATCH] Accessiblity: speakup: specifying the default driver parameters among the module params
-Date:   Sat, 22 Oct 2022 21:14:21 +0500
-Message-Id: <20221022161421.30453-1-osmtendev@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=br+HnS22isyDTm0T0WKGrqcorfoSfii9AXXj0ko/jkg=;
+        b=Qt70zFEJWaC5kuLD0wNCeOWXmGV3FWyMnEYl0kSuioBTSlViKfj+bGq3d4LzkrxrgX
+         BKBZPUfQahFvWm36fEKVMpNwsmTuAjxrgpooh2gss5sTDelP00IkVuwKC+nqYjGEmfbf
+         LGEw8e9VCk60WqzCxNBE+UQkYy/JEbu2VbC019Gq5ygMsfivrzpRlKnGn4nRr1r2bVY9
+         pv+3DtKhSgZzJM3Zc7oJToQn7d+vJ55rcY4VDBi+nFgeix8+SBHt8EewmEiUEWEHwPDZ
+         1GXgzMugKT+ua0vBtLLc2zKisaXaL13zNjJuSNaerpHMo/bBM3GjBxJz21wMOrSVvCCo
+         i2YQ==
+X-Gm-Message-State: ACrzQf1Ngg1w/GlkJIYyJHvNqqfpudKwbS6IDmpAGAdxbuXFfzrTh1Ei
+        MqXbSVbxLK5gFx8Mj/bQ0dlq7w==
+X-Google-Smtp-Source: AMsMyM5LBTbSQmhRB3iN1nczIfrXMxrWAUYJE4+PUysGP/rfOMrysmsCkNiSRND3aYiduPG3kahmMA==
+X-Received: by 2002:a05:6870:d107:b0:137:11e5:6a95 with SMTP id e7-20020a056870d10700b0013711e56a95mr16305190oac.146.1666455535738;
+        Sat, 22 Oct 2022 09:18:55 -0700 (PDT)
+Received: from [10.203.8.70] ([205.153.95.177])
+        by smtp.gmail.com with ESMTPSA id d6-20020aca3606000000b0034d14c6ce3dsm2293236oia.16.2022.10.22.09.18.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 22 Oct 2022 09:18:54 -0700 (PDT)
+Message-ID: <a46c6a18-903d-2120-4876-509ce8ad19d5@linaro.org>
+Date:   Sat, 22 Oct 2022 12:18:49 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH 1/2] dt-bindings: mtd: marvell-nand: Convert to YAML DT
+ scheme
+Content-Language: en-US
+To:     Vadym Kochan <vadym.kochan@plvision.eu>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     Elad Nachman <enachman@marvell.com>
+References: <20221021194552.683-1-vadym.kochan@plvision.eu>
+ <20221021194552.683-2-vadym.kochan@plvision.eu>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221021194552.683-2-vadym.kochan@plvision.eu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an enhancement which allows to specify the default driver
-parameters among the module parameters.
+On 21/10/2022 15:45, Vadym Kochan wrote:
+> Switch the DT binding to a YAML schema to enable the DT validation.
+> 
+> Dropped deprecated compatibles and properties described in txt file.
+> 
+> Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
+> ---
+>  .../bindings/mtd/marvell,nand-controller.yaml | 199 ++++++++++++++++++
+>  .../devicetree/bindings/mtd/marvell-nand.txt  | 126 -----------
+>  2 files changed, 199 insertions(+), 126 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/mtd/marvell,nand-controller.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/mtd/marvell-nand.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/mtd/marvell,nand-controller.yaml b/Documentation/devicetree/bindings/mtd/marvell,nand-controller.yaml
+> new file mode 100644
+> index 000000000000..535b7f8903c8
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mtd/marvell,nand-controller.yaml
+> @@ -0,0 +1,199 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mtd/marvell,nand-controller.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Marvell NAND Flash Controller (NFC)
+> +
+> +maintainers:
+> +  - Miquel Raynal <miquel.raynal@bootlin.com>
 
-Adding default variables to the speakup_acntpc.c and speakup_acntsa.c
-module allows to easily set that at boot, rather than
-setting the sys variables after boot.
-More details can be found here:
-https://github.com/linux-speakup/speakup/issues/7
+This should be someone responsible for hardware, not subsystem
+maintainer. Unless by coincidence Miquel matches both. :)
 
-Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
+> +
+> +properties:
+> +
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +        - const: marvell,armada-8k-nand-controller
+> +        - const: marvell,armada370-nand-controller
+
+Does not look like you tested the bindings. Please run `make
+dt_binding_check` (see
+Documentation/devicetree/bindings/writing-schema.rst for instructions).
+
+> +      - const: marvell,armada370-nand-controller
+> +      - const: marvell,pxa3xx-nand-controller
+
+These two are just enum.
+
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  "#address-cells":
+> +    const: 1
+
+Drop, comes with nand-controller.yaml
+
+> +
+> +  "#size-cells":
+> +    const: 0
+
+Ditto
+
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    minItems: 1
+> +    maxItems: 2
+> +    description: |
+
+No need for |
+
+> +     Shall reference the NAND controller clocks, the second one is
+> +     is only needed for the Armada 7K/8K SoCs
+
+You need allOf:if:then restricting it further per variant.
+
+> +
+> +  clock-names:
+> +    items:
+> +      - const: core
+> +      - const: reg
+> +    description: |
+> +      Mandatory if there is a second clock, in this case there
+> +      should be one clock named "core" and another one named "reg"
+
+The message is confusing. What is mandatory if there is a second clock?
+Plus, the binding requires two clocks.
+
+Drop entire description.
+
+minItems: 1
 
 
-Reviewed-by: Samuel Thibault <samuel.thibault@ens-lyon.org>
+> +
+> +  dmas:
+> +    maxItems: 1
+> +    description: rxtx DMA channel
+
+Drop description.
+
+> +
+> +  dma-names:
+> +    items:
+> +      - const: rxtx
+> +
+> +  marvell,system-controller:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description: Syscon node that handles NAND controller related registers
+> +
+> +patternProperties:
+> +  "^nand@[0-3]$":
+> +    type: object
+> +    properties:
+> +
+
+Drop blank line.
+
+> +      reg:
+> +        minimum: 0
+> +        maximum: 3
+> +
+> +      nand-rb:
+> +        minimum: 0
+> +        maximum: 1
+> +
+> +      nand-ecc-strength:
+> +        enum: [1, 4, 8]
+> +
+> +      nand-on-flash-bbt: true
+> +
+> +      nand-ecc-mode: true
+> +
+> +      nand-ecc-algo:
+> +        description: |
+> +          This property is essentially useful when not using hardware ECC.
+> +          Howerver, it may be added when using hardware ECC for clarification
+> +          but will be ignored by the driver because ECC mode is chosen depending
+> +          on the page size and the strength required by the NAND chip.
+> +          This value may be overwritten with nand-ecc-strength property.
+> +
+> +      nand-ecc-step-size:
+> +        const: 512
+
+Why this is const?
+
+> +        description: |
+> +          Marvell's NAND flash controller does use fixed strength
+> +          (1-bit for Hamming, 16-bit for BCH), so the actual step size
+> +          will shrink or grow in order to fit the required strength.
+> +          Step sizes are not completely random for all and follow certain
+> +          patterns described in AN-379, "Marvell SoC NFC ECC".
+> +
+> +      label:
+> +        $ref: /schemas/types.yaml#/definitions/string
+> +
+> +      partitions:
+> +        type: object
+> +        $ref: "/schemas/mtd/partitions/partition.yaml"
+
+Drop quotes
+
+        unevalautedProperties: false
+
+and then you will see errors, because you referenced schema for one
+partition.
 
 
----
- .../accessibility/speakup/speakup_acntpc.c    | 38 +++++++++++++++----
- .../accessibility/speakup/speakup_acntsa.c    | 37 ++++++++++++++----
- 2 files changed, 59 insertions(+), 16 deletions(-)
+> +
+> +      marvell,nand-keep-config:
+> +        description: |
+> +          Orders the driver not to take the timings from the core and
+> +          leaving them completely untouched. Bootloader timings will then
+> +          be used.
+> +        $ref: /schemas/types.yaml#/definitions/flag
+> +
+> +      marvell,nand-enable-arbiter:
+> +        description: |
+> +          To enable the arbiter, all boards blindly used it,
+> +          this bit was set by the bootloader for many boards and even if
+> +          it is marked reserved in several datasheets, it might be needed to set
+> +          it (otherwise it is harmless) so whether or not this property is set,
+> +          the bit is selected by the driver.
+> +        $ref: /schemas/types.yaml#/definitions/flag
+> +        deprecated: true
+> +
+> +    additionalProperties: false
+> +
+> +    required:
+> +      - reg
+> +      - nand-rb
+> +
+> +additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - "#address-cells"
+> +  - "#size-cells"
 
-diff --git a/drivers/accessibility/speakup/speakup_acntpc.c b/drivers/accessibility/speakup/speakup_acntpc.c
-index a55b60754eb1..a27e6bbf05da 100644
---- a/drivers/accessibility/speakup/speakup_acntpc.c
-+++ b/drivers/accessibility/speakup/speakup_acntpc.c
-@@ -34,14 +34,23 @@ static int synth_port_control;
- static int port_forced;
- static unsigned int synth_portlist[] = { 0x2a8, 0 };
- 
--static struct var_t vars[] = {
--	{ CAPS_START, .u.s = {"\033P8" } },
--	{ CAPS_STOP, .u.s = {"\033P5" } },
--	{ RATE, .u.n = {"\033R%c", 9, 0, 17, 0, 0, "0123456789abcdefgh" } },
--	{ PITCH, .u.n = {"\033P%d", 5, 0, 9, 0, 0, NULL } },
--	{ VOL, .u.n = {"\033A%d", 5, 0, 9, 0, 0, NULL } },
--	{ TONE, .u.n = {"\033V%d", 5, 0, 9, 0, 0, NULL } },
--	{ DIRECT, .u.n = {NULL, 0, 0, 1, 0, 0, NULL } },
-+enum default_vars_id {
-+	CAPS_START_ID = 0, CAPS_STOP_ID,
-+	RATE_ID, PITCH_ID,
-+	VOL_ID, TONE_ID,
-+	DIRECT_ID, V_LAST_VAR_ID,
-+	NB_ID
-+};
-+
-+
-+static struct var_t vars[NB_ID] = {
-+	[CAPS_START_ID] = { CAPS_START, .u.s = {"\033P8" } },
-+	[CAPS_STOP_ID] = { CAPS_STOP, .u.s = {"\033P5" } },
-+	[RATE_ID] = { RATE, .u.n = {"\033R%c", 9, 0, 17, 0, 0, "0123456789abcdefgh" } },
-+	[PITCH_ID] = { PITCH, .u.n = {"\033P%d", 5, 0, 9, 0, 0, NULL } },
-+	[VOL_ID] = { VOL, .u.n = {"\033A%d", 5, 0, 9, 0, 0, NULL } },
-+	[TONE_ID] = { TONE, .u.n = {"\033V%d", 5, 0, 9, 0, 0, NULL } },
-+	[DIRECT_ID] = { DIRECT, .u.n = {NULL, 0, 0, 1, 0, 0, NULL } },
- 	V_LAST_VAR
- };
- 
-@@ -305,9 +314,22 @@ static void accent_release(struct spk_synth *synth)
- 
- module_param_hw_named(port, port_forced, int, ioport, 0444);
- module_param_named(start, synth_acntpc.startup, short, 0444);
-+module_param_named(rate, vars[RATE_ID].u.n.default_val, int, 0444);
-+module_param_named(pitch, vars[PITCH_ID].u.n.default_val, int, 0444);
-+module_param_named(vol, vars[VOL_ID].u.n.default_val, int, 0444);
-+module_param_named(tone, vars[TONE_ID].u.n.default_val, int, 0444);
-+module_param_named(direct, vars[DIRECT_ID].u.n.default_val, int, 0444);
-+
-+
- 
- MODULE_PARM_DESC(port, "Set the port for the synthesizer (override probing).");
- MODULE_PARM_DESC(start, "Start the synthesizer once it is loaded.");
-+MODULE_PARM_DESC(rate, "Set the rate variable on load.");
-+MODULE_PARM_DESC(pitch, "Set the pitch variable on load.");
-+MODULE_PARM_DESC(vol, "Set the vol variable on load.");
-+MODULE_PARM_DESC(tone, "Set the tone variable on load.");
-+MODULE_PARM_DESC(direct, "Set the direct variable on load.");
-+
- 
- module_spk_synth(synth_acntpc);
- 
-diff --git a/drivers/accessibility/speakup/speakup_acntsa.c b/drivers/accessibility/speakup/speakup_acntsa.c
-index 2697c51ed6b5..26bb9f9399d3 100644
---- a/drivers/accessibility/speakup/speakup_acntsa.c
-+++ b/drivers/accessibility/speakup/speakup_acntsa.c
-@@ -19,14 +19,24 @@
- 
- static int synth_probe(struct spk_synth *synth);
- 
--static struct var_t vars[] = {
--	{ CAPS_START, .u.s = {"\033P8" } },
--	{ CAPS_STOP, .u.s = {"\033P5" } },
--	{ RATE, .u.n = {"\033R%c", 9, 0, 17, 0, 0, "0123456789abcdefgh" } },
--	{ PITCH, .u.n = {"\033P%d", 5, 0, 9, 0, 0, NULL } },
--	{ VOL, .u.n = {"\033A%d", 9, 0, 9, 0, 0, NULL } },
--	{ TONE, .u.n = {"\033V%d", 5, 0, 9, 0, 0, NULL } },
--	{ DIRECT, .u.n = {NULL, 0, 0, 1, 0, 0, NULL } },
-+
-+enum default_vars_id {
-+	CAPS_START_ID = 0, CAPS_STOP_ID,
-+	RATE_ID, PITCH_ID,
-+	VOL_ID, TONE_ID,
-+	DIRECT_ID, V_LAST_VAR_ID,
-+	NB_ID
-+};
-+
-+
-+static struct var_t vars[NB_ID] = {
-+	[CAPS_START_ID] = { CAPS_START, .u.s = {"\033P8" } },
-+	[CAPS_STOP_ID] = { CAPS_STOP, .u.s = {"\033P5" } },
-+	[RATE_ID] = { RATE, .u.n = {"\033R%c", 9, 0, 17, 0, 0, "0123456789abcdefgh" } },
-+	[PITCH_ID] = { PITCH, .u.n = {"\033P%d", 5, 0, 9, 0, 0, NULL } },
-+	[VOL_ID] = { VOL, .u.n = {"\033A%d", 9, 0, 9, 0, 0, NULL } },
-+	[TONE_ID] = { TONE, .u.n = {"\033V%d", 5, 0, 9, 0, 0, NULL } },
-+	[DIRECT_ID] = { DIRECT, .u.n = {NULL, 0, 0, 1, 0, 0, NULL } },
- 	V_LAST_VAR
- };
- 
-@@ -129,10 +139,21 @@ static int synth_probe(struct spk_synth *synth)
- module_param_named(ser, synth_acntsa.ser, int, 0444);
- module_param_named(dev, synth_acntsa.dev_name, charp, 0444);
- module_param_named(start, synth_acntsa.startup, short, 0444);
-+module_param_named(rate, vars[RATE_ID].u.n.default_val, int, 0444);
-+module_param_named(pitch, vars[PITCH_ID].u.n.default_val, int, 0444);
-+module_param_named(vol, vars[VOL_ID].u.n.default_val, int, 0444);
-+module_param_named(tone, vars[TONE_ID].u.n.default_val, int, 0444);
-+module_param_named(direct, vars[DIRECT_ID].u.n.default_val, int, 0444);
- 
- MODULE_PARM_DESC(ser, "Set the serial port for the synthesizer (0-based).");
- MODULE_PARM_DESC(dev, "Set the device e.g. ttyUSB0, for the synthesizer.");
- MODULE_PARM_DESC(start, "Start the synthesizer once it is loaded.");
-+MODULE_PARM_DESC(rate, "Set the rate variable on load.");
-+MODULE_PARM_DESC(pitch, "Set the pitch variable on load.");
-+MODULE_PARM_DESC(vol, "Set the vol variable on load.");
-+MODULE_PARM_DESC(tone, "Set the tone variable on load.");
-+MODULE_PARM_DESC(direct, "Set the direct variable on load.");
-+
- 
- module_spk_synth(synth_acntsa);
- 
--- 
-2.25.1
+Drop these two - required by nand-controller.
+
+> +  - interrupts
+> +  - clocks
+> +
+> +allOf:
+> +  - $ref: "nand-controller.yaml#"
+
+Drop quotes.
+
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: marvell,pxa3xx-nand-controller
+> +    then:
+> +      required:
+> +        - dmas
+> +        - dma-names
+> +    else:
+> +      properties:
+> +        dmas: false
+> +        dma-names: false
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: marvell,armada-8k-nand-controller
+> +    then:
+> +      required:
+> +        - marvell,system-controller
+> +    else:
+> +      properties:
+> +        marvell,system-controller: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    nand_controller: nand-controller@d0000 {
+> +            compatible = "marvell,armada370-nand-controller";
+> +            reg = <0xd0000 0x54>;
+
+Use 4 spaces for example indentation.
+
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +            interrupts = <GIC_SPI 84 IRQ_TYPE_LEVEL_HIGH>;
+> +            clocks = <&coredivclk 0>;
+> +
+
+Best regards,
+Krzysztof
 
