@@ -2,114 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D75F608D07
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 13:54:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4D9F608D0B
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 13:55:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230013AbiJVLx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 07:53:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35040 "EHLO
+        id S230004AbiJVLzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 07:55:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229914AbiJVLxy (ORCPT
+        with ESMTP id S229940AbiJVLzN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 07:53:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45B846171D
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 04:53:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666439632;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KPmvOeY7znrhinzMDTYzlhkvZyG6kRL1anJ+HPXl5ug=;
-        b=c6Q0QRQH9Gbgpy1FBP2YThMxMevi7cDePYsL8rTpNaoejVbhhs+vv87JE5Gl+p6r1Qlmlw
-        DUBcqrpCh47yxGE1xDg/8nnEoHznH6iq1ie4j4b095bPJZxCxy5+RegyCHdBK3mvGH0h4o
-        fupYSZFuH3z0o9ZQaHCXq0smqHbP2Pg=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-547-82cbFq9aNyuRfMGWbrTXMw-1; Sat, 22 Oct 2022 07:53:47 -0400
-X-MC-Unique: 82cbFq9aNyuRfMGWbrTXMw-1
-Received: by mail-ed1-f70.google.com with SMTP id h13-20020a056402280d00b0045cb282161cso5156734ede.8
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 04:53:47 -0700 (PDT)
+        Sat, 22 Oct 2022 07:55:13 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3085757575;
+        Sat, 22 Oct 2022 04:55:11 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id t16so15013681edd.2;
+        Sat, 22 Oct 2022 04:55:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=lb9/zjqYRw+NBkGo45ll85eULcpfPgNmAc+gmZ4GdK8=;
+        b=Zn6DNUW7Q97y/Bj/MSIzEC49CS64UT31QlzoAD6wLkmrUxwL1opBKx7FXFWrSqbXaY
+         Kr1KrFPsJ5JFxz0E1ldEufc0LNrVaS6CfxrDGIytU7fsPoRNSf7b8USeKEUhwUXCscFM
+         a2eyfsGFdsJkoxvamtodBneDSb4qhyXHHlRu7IuxYnRTevp2bmD1yAVHZeigULn1T3uo
+         SomsjVAH+PAFo+dUSfG7fdu4CcnjNb6zpwlwRsUS2LdACbuiopa+fiVo3Kp3Y0SXSwg0
+         sJQXpsxD9lNfpN8JbakSleno2DDivomz9MFdYdzSmr8s6ium2N25Al1S20hCR2OOVz/t
+         QzOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KPmvOeY7znrhinzMDTYzlhkvZyG6kRL1anJ+HPXl5ug=;
-        b=x7jr4lHqxGFhDnaV6JOfmtZhgHhllkYn9EbrtnADYlnrK++7UzzDbQ+rdxVg7NutM/
-         QrHKwDNaBx+dpFYBL4UsphUYguy6OiskQAtuXC3UeTzRQ1ilusj5INt9jXk3AT/+l9Q+
-         rhIaEarZAfmg5jsnXGREHmf3dSia8aupDr1jIhnM5x3bTE5hd01w39w7Appf2Jr64QyV
-         xvntPZoEbZv3WtyNx86DuY2a4PVIkPbeYAkg1eVIhJt4LeGSbqh0YFGeEWOayLvWdJsu
-         9tnBsktWRjffJKJ4SZMaS+CxGUZVVKd67TnGFn0GcZuZ0vIi8ra5aOLvcWTgMMVa0t/4
-         vwaA==
-X-Gm-Message-State: ACrzQf2Xz+MqBcFfA258YkX05YHwGhawg5JWrDDp2mj/yzlJJPnl9D0R
-        XN43DwAjHUPCpPvbmPoEwyQ1pB4QUYDNV9NzuO9iuJB+gvT9Fhpkb9msxZbHNjqjdNyfnIB9Z/6
-        3Gmtr2Ik7a2/z3b3RTFW2MSJk
-X-Received: by 2002:a17:907:16a7:b0:79e:9eed:8f6 with SMTP id hc39-20020a17090716a700b0079e9eed08f6mr4603474ejc.731.1666439626787;
-        Sat, 22 Oct 2022 04:53:46 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7L4myOJ/0NIdAr5ZVQ+QtDR8RDZxDn9M+eafRx+6P9t9XZmCfx8weClDwmUUZOtYPytHfyTw==
-X-Received: by 2002:a17:907:16a7:b0:79e:9eed:8f6 with SMTP id hc39-20020a17090716a700b0079e9eed08f6mr4603462ejc.731.1666439626502;
-        Sat, 22 Oct 2022 04:53:46 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:2f4b:62da:3159:e077? ([2001:b07:6468:f312:2f4b:62da:3159:e077])
-        by smtp.googlemail.com with ESMTPSA id y16-20020a056402171000b0044e937ddcabsm18323edu.77.2022.10.22.04.53.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 22 Oct 2022 04:53:46 -0700 (PDT)
-Message-ID: <e436fc94-6bd7-989d-a1bb-5cd08a7d10c3@redhat.com>
-Date:   Sat, 22 Oct 2022 13:53:45 +0200
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lb9/zjqYRw+NBkGo45ll85eULcpfPgNmAc+gmZ4GdK8=;
+        b=ABuwE8rArrEVe/VMJI+B+/Y/6xkS5tbsBgqA+j927Rz890gVC2IwCsRUT11Jrzjr5X
+         AHvloeh5tDHTLLlnLFKQi7KVSNrqpaqEurraORVbbyJOenOs5HzOcLIv1+ud/34/CZQ1
+         BA1VJy6ndSYR5nPB7aMv8yFy5XPsh4LeWxWAE+qVb5dIRK5jE0t9KXRdv9rWgy0FHkg9
+         wfd8zEVJJZYg54aUzmRZPrE6+uAeVnR4Yk4TmdOSbo/wxXe2Ok9qzOwnTIITNF8gKbdi
+         /E3SsPkKt1kFt9gbKQMaGsASKf7M6OqJqHx5JjF0Kh1ZNHY/MV/gpNG+yI0PF/94ipl4
+         H86g==
+X-Gm-Message-State: ACrzQf3Hx9ZAQS+hKAC5FETHC8HPGVZL/9cVHIlZVXfdmlwjYPdRzA3R
+        kK34YM5dJdf0kzgTCre6g4U=
+X-Google-Smtp-Source: AMsMyM5sZekC9ebEG4UlcVJhjIzJk4B8pbY2EdSY2DXkIQxcMmosxQTI6bWhf1D8BYOHHlCeocAkpw==
+X-Received: by 2002:a05:6402:1cca:b0:460:7d72:8f2 with SMTP id ds10-20020a0564021cca00b004607d7208f2mr12435625edb.205.1666439709061;
+        Sat, 22 Oct 2022 04:55:09 -0700 (PDT)
+Received: from skbuf ([188.27.184.197])
+        by smtp.gmail.com with ESMTPSA id fd13-20020a056402388d00b0045b3853c4b7sm14906421edb.51.2022.10.22.04.55.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 22 Oct 2022 04:55:08 -0700 (PDT)
+Date:   Sat, 22 Oct 2022 14:55:05 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     netdev@kapio-technology.com
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Florent Fourcot <florent.fourcot@wifirst.fr>,
+        Hans Schultz <schultz.hans@gmail.com>,
+        Joachim Wiberg <troglobit@gmail.com>,
+        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v8 net-next 10/12] net: dsa: mv88e6xxx: mac-auth/MAB
+ implementation
+Message-ID: <20221022115505.nlnkfy2xrgrq74li@skbuf>
+References: <20221018165619.134535-1-netdev@kapio-technology.com>
+ <20221018165619.134535-1-netdev@kapio-technology.com>
+ <20221018165619.134535-11-netdev@kapio-technology.com>
+ <20221018165619.134535-11-netdev@kapio-technology.com>
+ <20221020132538.reirrskemcjwih2m@skbuf>
+ <a0269818b270ad0537b991bd98725260@kapio-technology.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH] tools: include: sync include/api/linux/kvm.h
-Content-Language: en-US
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-References: <20221022114423.1741799-1-pbonzini@redhat.com>
- <87bkq4gjwc.wl-maz@kernel.org>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <87bkq4gjwc.wl-maz@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a0269818b270ad0537b991bd98725260@kapio-technology.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/22/22 13:47, Marc Zyngier wrote:
->> Provide a definition of KVM_CAP_DIRTY_LOG_RING_ACQ_REL.
->>
->> Fixes: 4b3402f1f4d9 ("KVM: selftests: dirty-log: Use KVM_CAP_DIRTY_LOG_RING_ACQ_REL if available")
->> Cc: Marc Zyngier<maz@kernel.org>
->> Signed-off-by: Paolo Bonzini<pbonzini@redhat.com>
->> ---
->>   tools/include/uapi/linux/kvm.h | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/tools/include/uapi/linux/kvm.h b/tools/include/uapi/linux/kvm.h
->> index eed0315a77a6..0d5d4419139a 100644
->> --- a/tools/include/uapi/linux/kvm.h
->> +++ b/tools/include/uapi/linux/kvm.h
->> @@ -1177,6 +1177,7 @@ struct kvm_ppc_resize_hpt {
->>   #define KVM_CAP_VM_DISABLE_NX_HUGE_PAGES 220
->>   #define KVM_CAP_S390_ZPCI_OP 221
->>   #define KVM_CAP_S390_CPU_TOPOLOGY 222
->> +#define KVM_CAP_DIRTY_LOG_RING_ACQ_REL 223
->>   
->>   #ifdef KVM_CAP_IRQ_ROUTING
->>   
-> Huh, I wonder how I missed that one, as the test were compiling here.
-> 
-> Acked-by: Marc Zyngier<maz@kernel.org>
+On Sat, Oct 22, 2022 at 09:31:06AM +0200, netdev@kapio-technology.com wrote:
+> But I think it should be so that turning MAB off will clear the ALE entries
+> regardless, as the port can continue to be locked and needing port association,
+> or you want them to just age out normally in that case, thus lingering for
+> up to bridge ageing time?
 
-5 minutes later -- The tests do not use that file, they use usr/include/ 
-in the build tree.  So the right Fixes tag is 17601bfed909 ("KVM: Add 
-KVM_CAP_DIRTY_LOG_RING_ACQ_REL capability and config option").
+Even without BR_PORT_LOCKED, I find it normal that dynamically learned
+FDB entries are forcefully aged out when BR_LEARNING is turned off,
+instead of lingering on until they expire.
 
-Paolo
+This does not happen in the software bridge, and I did not understand
+why (I suspected some backwards compatibility reasons), and for this
+reason, it is only from within DSA that we are forcing this behavior to
+take place. In dsa_port_bridge_flags(), when BR_LEARNING is turned off,
+we call dsa_port_fast_age() which also calls SWITCHDEV_FDB_FLUSH_TO_BRIDGE
+(and this clears the bridge software FDB of dynamically learned entries).
 
+I very much expect the same thing with MAB and BR_FDB_LOCKED entries,
+that they go away when the BR_PORT_MAB/BR_LEARNING flag (whichever way
+we call it) is unset.
+
+Now, if the bridge should initiate the flushing, or still DSA, is
+perhaps a topic for further discussion. Given that BR_FDB_LOCKED entries
+are new, maybe the bridge could do it in this case (no backwards
+compatibility to handle).
+
+Currently the DSA logic mentioned above is bypassed, because we treat
+MAB and autonomous learning differently. If we accepted that MAB is
+still a form of learning (managed through BR_LEARNING+BR_PORT_LOCKED),
+then the DSA logic would kick in, and both the software bridge and the
+hardware driver would have a hook to clean up the BR_FDB_LOCKED entries,
+plus anything else that is dynamic. The DSA logic would also kick in if
+we treated BR_PORT_MAB within DSA like BR_LEARNING, which basically
+amounts to the same thing, except for the confusing (IMO) UAPI of having
+a flag (BR_PORT_MAB) which is basically a form of learning that isn't
+controlled by the BR_LEARNING flag (which is undefined and unclear if it
+should be set or not, in BR_PORT_LOCKED mode).
