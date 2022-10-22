@@ -2,141 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E21F8608D5E
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 15:15:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A79F4608D6A
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 15:34:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229634AbiJVNPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 09:15:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47772 "EHLO
+        id S229716AbiJVNeX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 09:34:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbiJVNPN (ORCPT
+        with ESMTP id S229520AbiJVNeT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 09:15:13 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 546CF4DB12;
-        Sat, 22 Oct 2022 06:15:05 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 71136188440A;
-        Sat, 22 Oct 2022 13:15:03 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 51EDC250007B;
-        Sat, 22 Oct 2022 13:15:03 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id 2D6B09EC0013; Sat, 22 Oct 2022 13:15:03 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Sat, 22 Oct 2022 09:34:19 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 332CF250292;
+        Sat, 22 Oct 2022 06:34:15 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id a10so8412904wrm.12;
+        Sat, 22 Oct 2022 06:34:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Fs1ugU1QCtTRojQKok2Y9RVK5OYpb5v6MU7b7mZxaIU=;
+        b=ADfCJtpLhac9mODNjRtR9Trv7yVpCi+0T6WbsfEnkaoGWXQ23gFvNm1td9GyxF8AR+
+         sdXo88xxA8Kj0PLQxckvQ5bOJlYh+Bv4yqHPMX9ELqMnRmkh9FTIqnwOYIeXKq6aRJ0r
+         73TrRdD6/cWa/CzN+OAbySB5UT4pnve4pJT68lMowsBZqxGeUtzDeQnq+pXiprhK60LW
+         pU5Wx3u+FvYqMKj6XCl87ShDLO8h8+6oPxhdrp5cLtQgaUhvmY2MQMX0E1xJeP3MpHGk
+         6oDpRwWVCRpmb5DIjToNNTSglYNC9NCCZWPrJsNpVfNwsnlgRaj8d/5lm2d9VzkrpjUm
+         LFPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Fs1ugU1QCtTRojQKok2Y9RVK5OYpb5v6MU7b7mZxaIU=;
+        b=FwPsmZ4mM75Ap4aJ+LXoNwgn8wKNXPlnWAYFpszrD6ipjdwRMQhibmrraEXjTTkx/+
+         cTjikCaNxEPgdoq1Lvhq8qSp2/lfR/EOfby2ASSCGKc0pCEGC9lwhC9cF72p4JsAJO3z
+         ivue+korHe3b+o6P7ObzO5qxzxzXW5nETO8FfflwKzGdV1IRL4oH8yBIS1a4cffuMf0c
+         rb3z3V2W4EtkawdTNBd6jyLFbpqBzqP1QDOtBYkOJMsMFNx4+mB8vB404K+ycd1eb4SU
+         8a1fxPcNC52B6HhC6kSKPJInw+/jhdzq+r8k+xzdNb0rctuf0Ueh6CI7Ge8KWdSQwE+l
+         rVCQ==
+X-Gm-Message-State: ACrzQf345t999ORet5ezZ3FJm7lcHceu+T/wyksrJeDIf7/b0zw3rJp/
+        sPmRy0MB8hiQfZFshL9n69pK+3+QKx0=
+X-Google-Smtp-Source: AMsMyM6+Gp773kEwcLrpKgHk/yCZrQqvJIxZTgbaVCwMd9zoBCYVvddNef0t+kT59rcLdwldK52wZw==
+X-Received: by 2002:a5d:6f17:0:b0:22e:33e7:6f6c with SMTP id ay23-20020a5d6f17000000b0022e33e76f6cmr14986014wrb.201.1666445653321;
+        Sat, 22 Oct 2022 06:34:13 -0700 (PDT)
+Received: from debby ([2a01:e0a:a6d:a8d0:7ff4:8f61:5574:9f95])
+        by smtp.gmail.com with ESMTPSA id t2-20020adff602000000b0023659925b2asm2770617wrp.51.2022.10.22.06.34.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 22 Oct 2022 06:34:12 -0700 (PDT)
+From:   Romain Perier <romain.perier@gmail.com>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        Daniel Palmer <daniel@0x0f.com>,
+        Romain Perier <romain.perier@gmail.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH RESEND v7 0/1] ARM: mstar: cpupll
+Date:   Sat, 22 Oct 2022 15:34:03 +0200
+Message-Id: <20221022133404.3832-1-romain.perier@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Date:   Sat, 22 Oct 2022 15:15:03 +0200
-From:   netdev@kapio-technology.com
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Oleksandr Mazur <oleksandr.mazur@plvision.eu>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Florent Fourcot <florent.fourcot@wifirst.fr>,
-        Hans Schultz <schultz.hans@gmail.com>,
-        Joachim Wiberg <troglobit@gmail.com>,
-        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v8 net-next 10/12] net: dsa: mv88e6xxx: mac-auth/MAB
- implementation
-In-Reply-To: <20221022120200.no5pl54bcfa3wcnd@skbuf>
-References: <20221020225719.l5iw6vndmm7gvjo3@skbuf>
- <82d23b100b8d2c9e4647b8a134d5cbbf@kapio-technology.com>
- <20221021112216.6bw6sjrieh2znlti@skbuf>
- <7bfaae46b1913fe81654a4cd257d98b1@kapio-technology.com>
- <20221021163005.xljk2j3fkikr6uge@skbuf>
- <d1fb07de4b55d64f98425fe66156c4e4@kapio-technology.com>
- <20221021173014.oit3qmpkrsjwzbgu@skbuf>
- <b88e331e016ad3801f1bf1a0dec507f3@kapio-technology.com>
- <20221021181411.sv52q4yxr5r7urab@skbuf>
- <37dc7673fde2b8e166a5ed78431a2078@kapio-technology.com>
- <20221022120200.no5pl54bcfa3wcnd@skbuf>
-User-Agent: Gigahost Webmail
-Message-ID: <871cd2930adbed99d351da0864aee340@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-22 14:02, Vladimir Oltean wrote:
-> On Sat, Oct 22, 2022 at 09:24:56AM +0200, netdev@kapio-technology.com 
-> wrote:
->> I will not say that you are not making sense as for the mv88e6xxx, as 
->> it
->> needs port association in all cases with BR_PORT_LOCKED, MAB or not, 
->> and
->> port association is turned on in the driver with learning turned on.
->> 
->> That said, there must be some resolution and agreement overall with 
->> this
->> issue to move on. Right now port association is turned on in the 
->> mv88e6xxx
->> driver when locking the port, thus setting learning off after locking 
->> will
->> break things.
-> 
-> This already needs to be treated as a bug and fixed on its own. Forget
-> about MAB.
-> 
-> You're saying that when BR_LEARNING=on and BR_PORT_LOCKED=on, the
-> mv88e6xxx driver works properly, but the software bridge is broken
-> (learns from link-local multicast).
-> 
-> When BR_LEARNING=off and BR_PORT_LOCKED=on, the software bridge is not
-> broken, but the mv88e6xxx driver is, because it requires the PAV
-> configured properly.
-> 
-> And you're saying that I'm the one who suggests things should work
-> differently in software mode vs offloaded mode?!
+This is a resend of the remaining patches of this series. I have kept
+the cover letter in order to do not loose context of the previous series.
 
-Well :-) To be specific, I am talking about how things work from a user
-perspective, where I have kept to BR_LEARNING off before turning
-BR_PORT_LOCKED on.
+This series adds a basic driver for the PLL that generates
+the cpu clock on MStar/SigmaStar ARMv7 SoCs.
 
-I admit to a weakness in that BR_LEARNING off after BR_PORT_LOCKED on is
-a problem that from my perspective at this point would be a user error.
+Unfortunately there isn't much documentation for this thing
+so there are few magic values and guesses.
 
-> 
-> Why don't you
-> (a) deny BR_LEARNING + BR_PORT_LOCKED in the bridge layer
-> (b) fix the mv88e6xxx driver to always keep the assoc_vector set
->     properly for the port, if BR_LEARNING *or* BR_PORT_LOCKED is set?
+This needs to come after the MPLL DT changes.
 
-(a) yes, I have thought that documentation could handle this, but maybe
-     you are right, maybe it should be enforced...
-(b) BR_PORT_LOCKED ensures now that the PAV is correctly set, so I have
-     basically distinguished between learning and port association (which
-     I know mechanically is the same in mv88e6xxx), but still I have
-     adhered to learning off while port association is on for the port.
+Changes since v6:
+- Add my Signed-off-by tag
+
+Changes since v5:
+- Fixed tags for Willy
+- Add missing kernel.h and device.h
+- Use devm_of_clk_add_hw_provider
+- Move "cpupll_parent" on the stack as it is only used by
+  devm_clk_hw_register (it seems safe).
+
+Changes since v4:
+- Removed merged patches (dt-bindings documentation and dt-bindings)
+- Rebased onto 5.19
+
+Changes since v3:
+- Added Reviewed-by on Daniel's patches
+- Removed "[PATCH v3 8/9] ARM: mstar: Add OPP table for mercury5"
+
+Changes since v2:
+- Re-ordered Kconfig by name
+- Re-ordered includes alphabetically and removed useless ones
+- Used timeout for cpu_relax
+- Returned DIV_ROUND_DOWN_ULL() directly in
+  msc313_cpupll_frequencyforreg()
+- Returned DIV_ROUND_DOWN_ULL() directly in
+  msc313_cpupll_regforfrequecy()
+- Reduced the number of lines for msc313_cpupll_of_match
+- Removed CLK_IS_CRITICAL
+
+Changes since v1:
+- Re-worked the series and ensure that 'make dt_binding_check' passes.
+  The required commit is merged now, so it is okay.
+- Fixed coding style issues in the driver and makes check_patch.pl happy
+- Added one more commit for extending the opp_table for infinity2m.
+
+Daniel Palmer (1):
+  clk: mstar: msc313 cpupll clk driver
+
+ drivers/clk/mstar/Kconfig             |   7 +
+ drivers/clk/mstar/Makefile            |   1 +
+ drivers/clk/mstar/clk-msc313-cpupll.c | 220 ++++++++++++++++++++++++++
+ 3 files changed, 228 insertions(+)
+ create mode 100644 drivers/clk/mstar/clk-msc313-cpupll.c
+
+-- 
+2.35.1
+
