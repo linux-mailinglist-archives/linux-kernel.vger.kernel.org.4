@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7E7B6087E7
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 10:07:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 239876087A2
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 10:05:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232951AbiJVIHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 04:07:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42346 "EHLO
+        id S233003AbiJVIEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 04:04:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232559AbiJVIC0 (ORCPT
+        with ESMTP id S232475AbiJVH7D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 04:02:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594F82A5202;
-        Sat, 22 Oct 2022 00:51:09 -0700 (PDT)
+        Sat, 22 Oct 2022 03:59:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1540B71;
+        Sat, 22 Oct 2022 00:49:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7ECC860B0A;
-        Sat, 22 Oct 2022 07:49:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F693C433D6;
-        Sat, 22 Oct 2022 07:49:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EEF7CB82E0C;
+        Sat, 22 Oct 2022 07:49:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D172C433D6;
+        Sat, 22 Oct 2022 07:49:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666424949;
-        bh=tFoKgWJaqjUw4lxxvnzsr2/zSpgY2MqNnWOONxKS3dU=;
+        s=korg; t=1666424952;
+        bh=D3pgGgzO7UPi97hX7mChXw0CmsUbUFVWqqVAoDheCr8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iptKyllNOLL7glTLX0lYUaqZc79GgiKuJGxzT4Fa/pAU3plkCOauHscIi3rru4U6D
-         ZPQ8jChzYLWWTHQkE0JKM51t4mZ2HjH/g0V7EgfFyZjndHdXSNd+zKGxEybMKPcSBm
-         X0hkvv2cpg0FZ720qRLRcnjwIb99jcb601TBHHpo=
+        b=14OMXf4UGaoWZeWCMxtf+5GCLD8X2djExB5J8PR7c2b8b2VHS8pipgJAOthlSqqnY
+         //E8MGnqt1QPTqJOA7S0XyJNWJkAk5cZ5pSL0bCjaSAVfUofRUmhXOfpwhnpYRHVvi
+         /qdVN7pGZejBN0SD20uIu99a2QInxZEbVKQPGfMA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 337/717] ASoC: da7219: Fix an error handling path in da7219_register_dai_clks()
-Date:   Sat, 22 Oct 2022 09:23:36 +0200
-Message-Id: <20221022072510.214461373@linuxfoundation.org>
+        stable@vger.kernel.org, Andreas Pape <apape@de.adit-jv.com>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Takashi Iwai <tiwai@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 338/717] ALSA: dmaengine: increment buffer pointer atomically
+Date:   Sat, 22 Oct 2022 09:23:37 +0200
+Message-Id: <20221022072510.288484702@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221022072415.034382448@linuxfoundation.org>
 References: <20221022072415.034382448@linuxfoundation.org>
@@ -55,55 +54,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Andreas Pape <apape@de.adit-jv.com>
 
-[ Upstream commit abb4e4349afe7eecdb0499582f1c777031e3a7c8 ]
+[ Upstream commit d1c442019594692c64a70a86ad88eb5b6db92216 ]
 
-If clk_hw_register() fails, the corresponding clk should not be
-unregistered.
+Setting pointer and afterwards checking for wraparound leads
+to the possibility of returning the inconsistent pointer position.
 
-To handle errors from loops, clean up partial iterations before doing the
-goto.  So add a clk_hw_unregister().
-Then use a while (--i >= 0) loop in the unwind section.
+This patch increments buffer pointer atomically to avoid this issue.
 
-Fixes: 78013a1cf297 ("ASoC: da7219: Fix clock handling around codec level probe")
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
-Link: https://lore.kernel.org/r/e4acceab57a0d9e477a8d5890a45c5309e553e7c.1663875789.git.christophe.jaillet@wanadoo.fr
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: e7f73a1613567a ("ASoC: Add dmaengine PCM helper functions")
+Signed-off-by: Andreas Pape <apape@de.adit-jv.com>
+Signed-off-by: Eugeniu Rosca <erosca@de.adit-jv.com>
+Link: https://lore.kernel.org/r/1664211493-11789-1-git-send-email-erosca@de.adit-jv.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/da7219.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ sound/core/pcm_dmaengine.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/sound/soc/codecs/da7219.c b/sound/soc/codecs/da7219.c
-index 7fdef38ed8cd..1bfba7ef51ce 100644
---- a/sound/soc/codecs/da7219.c
-+++ b/sound/soc/codecs/da7219.c
-@@ -2196,6 +2196,7 @@ static int da7219_register_dai_clks(struct snd_soc_component *component)
- 			dai_clk_lookup = clkdev_hw_create(dai_clk_hw, init.name,
- 							  "%s", dev_name(dev));
- 			if (!dai_clk_lookup) {
-+				clk_hw_unregister(dai_clk_hw);
- 				ret = -ENOMEM;
- 				goto err;
- 			} else {
-@@ -2217,12 +2218,12 @@ static int da7219_register_dai_clks(struct snd_soc_component *component)
- 	return 0;
+diff --git a/sound/core/pcm_dmaengine.c b/sound/core/pcm_dmaengine.c
+index af6f717e1e7e..c6ccb75036ae 100644
+--- a/sound/core/pcm_dmaengine.c
++++ b/sound/core/pcm_dmaengine.c
+@@ -131,12 +131,14 @@ EXPORT_SYMBOL_GPL(snd_dmaengine_pcm_set_config_from_dai_data);
  
- err:
--	do {
-+	while (--i >= 0) {
- 		if (da7219->dai_clks_lookup[i])
- 			clkdev_drop(da7219->dai_clks_lookup[i]);
+ static void dmaengine_pcm_dma_complete(void *arg)
+ {
++	unsigned int new_pos;
+ 	struct snd_pcm_substream *substream = arg;
+ 	struct dmaengine_pcm_runtime_data *prtd = substream_to_prtd(substream);
  
- 		clk_hw_unregister(&da7219->dai_clks_hw[i]);
--	} while (i-- > 0);
-+	}
+-	prtd->pos += snd_pcm_lib_period_bytes(substream);
+-	if (prtd->pos >= snd_pcm_lib_buffer_bytes(substream))
+-		prtd->pos = 0;
++	new_pos = prtd->pos + snd_pcm_lib_period_bytes(substream);
++	if (new_pos >= snd_pcm_lib_buffer_bytes(substream))
++		new_pos = 0;
++	prtd->pos = new_pos;
  
- 	if (np)
- 		kfree(da7219->clk_hw_data);
+ 	snd_pcm_period_elapsed(substream);
+ }
 -- 
 2.35.1
 
