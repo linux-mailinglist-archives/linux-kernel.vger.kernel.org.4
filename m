@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80728608751
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 10:00:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 183C9608766
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 10:01:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231975AbiJVIAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 04:00:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54872 "EHLO
+        id S232372AbiJVIBJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 04:01:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232172AbiJVHyS (ORCPT
+        with ESMTP id S232183AbiJVHyV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 03:54:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E4022C6EB3;
+        Sat, 22 Oct 2022 03:54:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E5248A6D6;
         Sat, 22 Oct 2022 00:47:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A6B160B0A;
-        Sat, 22 Oct 2022 07:46:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E86CC433C1;
-        Sat, 22 Oct 2022 07:46:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BD1D960B1F;
+        Sat, 22 Oct 2022 07:46:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D10E8C433C1;
+        Sat, 22 Oct 2022 07:46:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666424808;
-        bh=HZaN/LuBXVRxq6KpjERBiJycbpJDZKdsXB0MQGoEFeE=;
+        s=korg; t=1666424814;
+        bh=yJ/mjHVuHuKgEgxhXjb+OhqM37MZoOaiJaQbRqrj8x4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vPC8xjyHCw+HeiP4cYdzHApKvrmsBwDCBxaHn7vIdOj/Gvf5qyCoDi6pNnoBMm59K
-         ri5JRhiGSIbPTDu9PmX2jDUYy844Xnhzkj6sk2iRAlnwAWvtlonRFE6VY6FC++2YF9
-         t56iCNEMIsmDbIF0xVDh9uXILH6gRyNgQR+3P7qk=
+        b=CnKVybTOkGE7ZGjSuIbSUPY02oCJh8mwj5AOrClrDv+PJ1Rdp3KUQLR0h75oyE/je
+         IjNBSzXPXfmcQe01iD1lYat+h9WMt1Hw1x3/AD2GTjNdG2eHYuGTnn0wCTF6YHiCOj
+         ddJsue1RYUS9j87eEL/+aoZdjBfYMkHllzZfhmTg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Oleksandr Shamray <oleksandrs@nvidia.com>,
-        Vadim Pasternak <vadimp@nvidia.com>,
-        Guenter Roeck <linux@roeck-us.net>,
+        stable@vger.kernel.org, syzbot <syzkaller@googlegroups.com>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 284/717] hwmon: (pmbus/mp2888) Fix sensors readouts for MPS Multi-phase mp2888 controller
-Date:   Sat, 22 Oct 2022 09:22:43 +0200
-Message-Id: <20221022072503.950265706@linuxfoundation.org>
+Subject: [PATCH 5.19 286/717] af_unix: Fix memory leaks of the whole sk due to OOB skb.
+Date:   Sat, 22 Oct 2022 09:22:45 +0200
+Message-Id: <20221022072504.218304416@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221022072415.034382448@linuxfoundation.org>
 References: <20221022072415.034382448@linuxfoundation.org>
@@ -55,80 +55,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Oleksandr Shamray <oleksandrs@nvidia.com>
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-[ Upstream commit 525dd5aed67a2f4f7278116fb92a24e6a53e2622 ]
+[ Upstream commit 7a62ed61367b8fd01bae1e18e30602c25060d824 ]
 
-Fix scale factors for reading MPS Multi-phase mp2888 controller.
-Fixed sensors:
-    - PIN/POUT: based on vendor documentation, set bscale factor 0.5W/LSB
-    - IOUT: based on vendor documentation, set scale factor 0.25 A/LSB
+syzbot reported a sequence of memory leaks, and one of them indicated we
+failed to free a whole sk:
 
-Fixes: e4db7719d037 ("hwmon: (pmbus) Add support for MPS Multi-phase mp2888 controller")
-Signed-off-by: Oleksandr Shamray <oleksandrs@nvidia.com>
-Reviewed-by: Vadim Pasternak <vadimp@nvidia.com>
-Link: https://lore.kernel.org/r/20220929121642.63051-1-oleksandrs@nvidia.com
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+  unreferenced object 0xffff8880126e0000 (size 1088):
+    comm "syz-executor419", pid 326, jiffies 4294773607 (age 12.609s)
+    hex dump (first 32 bytes):
+      00 00 00 00 00 00 00 00 7d 00 00 00 00 00 00 00  ........}.......
+      01 00 07 40 00 00 00 00 00 00 00 00 00 00 00 00  ...@............
+    backtrace:
+      [<000000006fefe750>] sk_prot_alloc+0x64/0x2a0 net/core/sock.c:1970
+      [<0000000074006db5>] sk_alloc+0x3b/0x800 net/core/sock.c:2029
+      [<00000000728cd434>] unix_create1+0xaf/0x920 net/unix/af_unix.c:928
+      [<00000000a279a139>] unix_create+0x113/0x1d0 net/unix/af_unix.c:997
+      [<0000000068259812>] __sock_create+0x2ab/0x550 net/socket.c:1516
+      [<00000000da1521e1>] sock_create net/socket.c:1566 [inline]
+      [<00000000da1521e1>] __sys_socketpair+0x1a8/0x550 net/socket.c:1698
+      [<000000007ab259e1>] __do_sys_socketpair net/socket.c:1751 [inline]
+      [<000000007ab259e1>] __se_sys_socketpair net/socket.c:1748 [inline]
+      [<000000007ab259e1>] __x64_sys_socketpair+0x97/0x100 net/socket.c:1748
+      [<000000007dedddc1>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+      [<000000007dedddc1>] do_syscall_64+0x38/0x90 arch/x86/entry/common.c:80
+      [<000000009456679f>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+We can reproduce this issue by creating two AF_UNIX SOCK_STREAM sockets,
+send()ing an OOB skb to each other, and close()ing them without consuming
+the OOB skbs.
+
+  int skpair[2];
+
+  socketpair(AF_UNIX, SOCK_STREAM, 0, skpair);
+
+  send(skpair[0], "x", 1, MSG_OOB);
+  send(skpair[1], "x", 1, MSG_OOB);
+
+  close(skpair[0]);
+  close(skpair[1]);
+
+Currently, we free an OOB skb in unix_sock_destructor() which is called via
+__sk_free(), but it's too late because the receiver's unix_sk(sk)->oob_skb
+is accounted against the sender's sk->sk_wmem_alloc and __sk_free() is
+called only when sk->sk_wmem_alloc is 0.
+
+In the repro sequences, we do not consume the OOB skb, so both two sk's
+sock_put() never reach __sk_free() due to the positive sk->sk_wmem_alloc.
+Then, no one can consume the OOB skb nor call __sk_free(), and we finally
+leak the two whole sk.
+
+Thus, we must free the unconsumed OOB skb earlier when close()ing the
+socket.
+
+Fixes: 314001f0bf92 ("af_unix: Add OOB support")
+Reported-by: syzbot <syzkaller@googlegroups.com>
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/hwmon/pmbus/mp2888.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ net/unix/af_unix.c |   13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/hwmon/pmbus/mp2888.c b/drivers/hwmon/pmbus/mp2888.c
-index 8ecd4adfef40..24e5194706cf 100644
---- a/drivers/hwmon/pmbus/mp2888.c
-+++ b/drivers/hwmon/pmbus/mp2888.c
-@@ -34,7 +34,7 @@ struct mp2888_data {
- 	int curr_sense_gain;
- };
+--- a/net/unix/af_unix.c
++++ b/net/unix/af_unix.c
+@@ -548,12 +548,6 @@ static void unix_sock_destructor(struct
  
--#define to_mp2888_data(x)  container_of(x, struct mp2888_data, info)
-+#define to_mp2888_data(x)	container_of(x, struct mp2888_data, info)
+ 	skb_queue_purge(&sk->sk_receive_queue);
  
- static int mp2888_read_byte_data(struct i2c_client *client, int page, int reg)
- {
-@@ -109,7 +109,7 @@ mp2888_read_phase(struct i2c_client *client, struct mp2888_data *data, int page,
- 	 * - Kcs is the DrMOS current sense gain of power stage, which is obtained from the
- 	 *   register MP2888_MFR_VR_CONFIG1, bits 13-12 with the following selection of DrMOS
- 	 *   (data->curr_sense_gain):
--	 *   00b - 5µA/A, 01b - 8.5µA/A, 10b - 9.7µA/A, 11b - 10µA/A.
-+	 *   00b - 8.5µA/A, 01b - 9.7µA/A, 1b - 10µA/A, 11b - 5µA/A.
- 	 * - Rcs is the internal phase current sense resistor. This parameter depends on hardware
- 	 *   assembly. By default it is set to 1kΩ. In case of different assembly, user should
- 	 *   scale this parameter by dividing it by Rcs.
-@@ -118,10 +118,9 @@ mp2888_read_phase(struct i2c_client *client, struct mp2888_data *data, int page,
- 	 * because sampling of current occurrence of bit weight has a big deviation, especially for
- 	 * light load.
- 	 */
--	ret = DIV_ROUND_CLOSEST(ret * 100 - 9800, data->curr_sense_gain);
--	ret = (data->phase_curr_resolution) ? ret * 2 : ret;
-+	ret = DIV_ROUND_CLOSEST(ret * 200 - 19600, data->curr_sense_gain);
- 	/* Scale according to total current resolution. */
--	ret = (data->total_curr_resolution) ? ret * 8 : ret * 4;
-+	ret = (data->total_curr_resolution) ? ret * 2 : ret;
- 	return ret;
- }
+-#if IS_ENABLED(CONFIG_AF_UNIX_OOB)
+-	if (u->oob_skb) {
+-		kfree_skb(u->oob_skb);
+-		u->oob_skb = NULL;
+-	}
+-#endif
+ 	WARN_ON(refcount_read(&sk->sk_wmem_alloc));
+ 	WARN_ON(!sk_unhashed(sk));
+ 	WARN_ON(sk->sk_socket);
+@@ -598,6 +592,13 @@ static void unix_release_sock(struct soc
  
-@@ -212,7 +211,7 @@ static int mp2888_read_word_data(struct i2c_client *client, int page, int phase,
- 		ret = pmbus_read_word_data(client, page, phase, reg);
- 		if (ret < 0)
- 			return ret;
--		ret = data->total_curr_resolution ? ret * 2 : ret;
-+		ret = data->total_curr_resolution ? ret : DIV_ROUND_CLOSEST(ret, 2);
- 		break;
- 	case PMBUS_POUT_OP_WARN_LIMIT:
- 		ret = pmbus_read_word_data(client, page, phase, reg);
-@@ -223,7 +222,7 @@ static int mp2888_read_word_data(struct i2c_client *client, int page, int phase,
- 		 * set 1. Actual power is reported with 0.5W or 1W respectively resolution. Scaling
- 		 * is needed to match both.
- 		 */
--		ret = data->total_curr_resolution ? ret * 4 : ret * 2;
-+		ret = data->total_curr_resolution ? ret * 2 : ret;
- 		break;
- 	/*
- 	 * The below registers are not implemented by device or implemented not according to the
--- 
-2.35.1
-
+ 	unix_state_unlock(sk);
+ 
++#if IS_ENABLED(CONFIG_AF_UNIX_OOB)
++	if (u->oob_skb) {
++		kfree_skb(u->oob_skb);
++		u->oob_skb = NULL;
++	}
++#endif
++
+ 	wake_up_interruptible_all(&u->peer_wait);
+ 
+ 	if (skpair != NULL) {
 
 
