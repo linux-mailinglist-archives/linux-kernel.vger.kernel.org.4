@@ -2,167 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96E91608CB6
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 13:33:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 048A0608CF2
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 13:49:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229874AbiJVLdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 07:33:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47718 "EHLO
+        id S230173AbiJVLtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 07:49:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229954AbiJVLdH (ORCPT
+        with ESMTP id S229864AbiJVLst (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 07:33:07 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A68961777
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 04:13:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666437218; x=1697973218;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=E3UdXHkLke1SBbqBTfdiYIuAu4z4rEiF8vP3hLoYVNg=;
-  b=URiPOPbfYBtfkUvm9Tetnq7RdlTTu8026ch0BhefGQZl2bpXB1bC1C5x
-   7LtQy/IslaWdmJuhCkNHN278NOfLReOYFRfjqho/L4jmC2s7pII4AV5E0
-   FDNwN47Z7uxBf1dBR14GNeb2X5YmTPG8f7AaFWQFK3KD2rKs2mfV1CLwX
-   khF2gfVMToSw1gfW4hPY0KWGbKe7l2ecjlyJax973qjB3FctZV251fErr
-   2l9dRE0kOulJe+EY2Orsf8dsaFOvYkJlbXLwCzM1g+TrTeszTY2K87Y1a
-   frkhyGXwQLyLAZ+PIIqSjY0eySqKduwm4Ty8owjcjyA9fTy944/50NB8X
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10507"; a="307169658"
-X-IronPort-AV: E=Sophos;i="5.95,205,1661842800"; 
-   d="scan'208";a="307169658"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2022 04:13:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10507"; a="581885576"
-X-IronPort-AV: E=Sophos;i="5.95,205,1661842800"; 
-   d="scan'208";a="581885576"
-Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 22 Oct 2022 04:13:36 -0700
-Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1omCRb-0003aa-34;
-        Sat, 22 Oct 2022 11:13:35 +0000
-Date:   Sat, 22 Oct 2022 19:12:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:dev.2022.10.20a] BUILD SUCCESS
- 0787663d34936ae88dd58fa22cc5d60fbff5a4be
-Message-ID: <6353d02c.DXWI0cqjTTVhejCB%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 22 Oct 2022 07:48:49 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D5AC24FED2
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 04:48:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Subject:Cc:To:From:Date:Message-ID:
+        Sender:Reply-To:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=n6LTTtrs2VOiP4go+HBPByerRRMgGVp88WeQbYfK2Q4=; b=HbtSiyIUOHWi6apk9vXdYVVWmK
+        vmr+WGoRtpgnM82kFqQH7FHC3hu2E4FTE9p30Ciog6g8OsFTn0Wfwavl07bKJzhrNahPQSjAF+WBl
+        w+1WR/zuZSPeDIeoGXD8fIJbNtGSiIjhrnKOhssKmovQKhVyKpGjxgl5KI3maVInzvEuJ03uE43Wc
+        zEJXxiCNtIWxLmk2kRXt1ByH1wI3AiGGpY8fBeVQn4HFUObefQ8oJzn0RRBoyW+Vcs6/qbLit0faa
+        XuOoyj7fVt7DRerw0vuWCxN6IvmqwMRSdEcXtEfdy40jxw9aB9mqYpZH9ID+Zi5qKwt3ZvsmVzCFO
+        AY2i3+JQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1omCzL-005XdC-Fs; Sat, 22 Oct 2022 11:48:28 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 34C84300474;
+        Sat, 22 Oct 2022 13:48:26 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
+        id 1862128B8E50C; Sat, 22 Oct 2022 13:48:26 +0200 (CEST)
+Message-ID: <20221022111403.531902164@infradead.org>
+User-Agent: quilt/0.66
+Date:   Sat, 22 Oct 2022 13:14:03 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     x86@kernel.org, willy@infradead.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
+        linux-mm@kvack.org, aarcange@redhat.com,
+        kirill.shutemov@linux.intel.com, jroedel@suse.de, ubizjak@gmail.com
+Subject: [PATCH 00/13] Clean up pmd_get_atomic() and i386-PAE
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2022.10.20a
-branch HEAD: 0787663d34936ae88dd58fa22cc5d60fbff5a4be  selftests/nolibc: Add 7 tests for memcmp()
+Hi,
 
-elapsed time: 725m
+At long *long* last a respin of the patches that clean up pmd_get_atomic() and
+i386-PAE. I'd nearly forgotten why I did this, but the old posting gave clue
+that patch #7 was the whole purpose of me doing these patches.
 
-configs tested: 85
-configs skipped: 3
+Having carried these patches for at least 2 years, they recently hit a rebase
+bump against the mg-lru patches, which is what prompted this repost.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Linus' comment about try_cmpxchg64() (and Uros before him) made me redo those
+patches (see patch #10) which resulted in pxx_xchg64(). This in turn led to
+killing off set_64bit().
 
-gcc tested configs:
-arc                                 defconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                          rhel-8.3-func
-alpha                               defconfig
-x86_64                    rhel-8.3-kselftests
-i386                                defconfig
-x86_64                              defconfig
-s390                                defconfig
-s390                             allmodconfig
-x86_64                               rhel-8.3
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-arm                                 defconfig
-powerpc                           allnoconfig
-x86_64                           allyesconfig
-x86_64                         rhel-8.3-kunit
-i386                          randconfig-a001
-x86_64                        randconfig-a015
-m68k                             allyesconfig
-i386                          randconfig-a003
-mips                             allyesconfig
-s390                             allyesconfig
-x86_64                           rhel-8.3-kvm
-m68k                             allmodconfig
-i386                          randconfig-a005
-arc                  randconfig-r043-20221020
-powerpc                          allmodconfig
-x86_64                           rhel-8.3-syz
-i386                          randconfig-a012
-arc                              allyesconfig
-i386                          randconfig-a016
-sh                               allmodconfig
-s390                 randconfig-r044-20221020
-arm64                            allyesconfig
-i386                          randconfig-a014
-alpha                            allyesconfig
-arc                  randconfig-r043-20221018
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-riscv                randconfig-r042-20221020
-arm                              allyesconfig
-riscv                randconfig-r042-20221018
-x86_64                        randconfig-a006
-s390                 randconfig-r044-20221018
-i386                             allyesconfig
-arc                  randconfig-r043-20221019
-sh                         microdev_defconfig
-arm                            qcom_defconfig
-arc                              alldefconfig
-m68k                          atari_defconfig
-powerpc                     tqm8548_defconfig
-arm                          lpd270_defconfig
-arm                       omap2plus_defconfig
-arm                        clps711x_defconfig
-powerpc                 linkstation_defconfig
-arc                            hsdk_defconfig
-openrisc                 simple_smp_defconfig
-i386                          randconfig-c001
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-i386                          debian-10.3-kvm
-i386                        debian-10.3-kunit
-i386                         debian-10.3-func
+The robot doesn't hate on these patches and they boot in kvm (because who still
+has i386 hardware).
 
-clang tested configs:
-x86_64                        randconfig-a016
-x86_64                        randconfig-a012
-hexagon              randconfig-r041-20221020
-i386                          randconfig-a013
-hexagon              randconfig-r045-20221020
-i386                          randconfig-a002
-x86_64                        randconfig-a014
-i386                          randconfig-a011
-hexagon              randconfig-r041-20221018
-i386                          randconfig-a006
-hexagon              randconfig-r045-20221018
-i386                          randconfig-a004
-i386                          randconfig-a015
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-x86_64                        randconfig-k001
+Patches also available at:
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+  git://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/mm.pae
+
+---
+ arch/mips/Kconfig                           |   2 +-
+ arch/sh/Kconfig                             |   2 +-
+ arch/sh/include/asm/pgtable-3level.h        |  10 +-
+ arch/um/include/asm/pgtable-3level.h        |   8 --
+ arch/x86/Kconfig                            |   2 +-
+ arch/x86/include/asm/cmpxchg_32.h           |  28 -----
+ arch/x86/include/asm/cmpxchg_64.h           |   5 -
+ arch/x86/include/asm/pgtable-3level.h       | 171 ++++++----------------------
+ arch/x86/include/asm/pgtable-3level_types.h |   7 ++
+ arch/x86/include/asm/pgtable_64_types.h     |   1 +
+ arch/x86/include/asm/pgtable_types.h        |   4 +-
+ drivers/iommu/intel/irq_remapping.c         |  10 +-
+ include/linux/pgtable.h                     |  71 +++++++-----
+ kernel/events/core.c                        |   2 +-
+ mm/Kconfig                                  |   2 +-
+ mm/gup.c                                    |   2 +-
+ mm/hmm.c                                    |   3 +-
+ mm/khugepaged.c                             |   2 +-
+ mm/mapping_dirty_helpers.c                  |   2 +-
+ mm/mprotect.c                               |   2 +-
+ mm/userfaultfd.c                            |   2 +-
+ mm/vmscan.c                                 |   5 +-
+ 22 files changed, 110 insertions(+), 233 deletions(-)
+
