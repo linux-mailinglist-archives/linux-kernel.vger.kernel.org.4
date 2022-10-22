@@ -2,101 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA63C608F86
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 22:08:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4B9E608F8A
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 22:16:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229936AbiJVUI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 16:08:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34878 "EHLO
+        id S229916AbiJVUP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 16:15:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229925AbiJVUIU (ORCPT
+        with ESMTP id S229514AbiJVUPx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 16:08:20 -0400
-Received: from 003.lax.mailroute.net (003.lax.mailroute.net [199.89.1.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37F8C11D99F
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 13:08:19 -0700 (PDT)
-Received: from localhost (003.lax.mailroute.net [127.0.0.1])
-        by 003.lax.mailroute.net (Postfix) with ESMTP id 4MvspV3hTpz1spkm
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 20:08:18 +0000 (UTC)
-X-Virus-Scanned: by MailRoute
-Received: from 003.lax.mailroute.net ([199.89.1.6])
-        by localhost (003.lax [127.0.0.1]) (mroute_mailscanner, port 10026)
-        with LMTP id hPbx7KS_toyP for <linux-kernel@vger.kernel.org>;
-        Sat, 22 Oct 2022 20:08:17 +0000 (UTC)
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com [209.85.216.72])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by 003.lax.mailroute.net (Postfix) with ESMTPS id 4MvspT3WkPz1spkh
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 20:08:17 +0000 (UTC)
-Received: by mail-pj1-f72.google.com with SMTP id w2-20020a17090a8a0200b002119ea856edso5568425pjn.5
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 13:08:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sladewatkins.net; s=googled;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=sM4EI5EG8aFU0eCqXxfKOVx9vcJ9fHC3LeTBs0eo7r0=;
-        b=Vp5HkvPRblNR7maW8zuZrwdq2lE0SXcr+CtwyVTGZn1L2pCKCKgh8KnAif6jf4iD/B
-         7Y+G1PZa4tMXeu0plBaywXBc+Bee92QSCz4JGUjigl4ll3QxehlxMlaTNPi9ORTNGU7s
-         UFtfLgxAoNQrSdhlo2lLPHKK/FWMu29+tyrv5eUMdH92woXr2Xb7OBFbHu5Vq9s+aHt6
-         a3duvn8piFheu2ThyPoG6e8hTQmq7fYeTKg8w+n0MGamtMpOe1s2BliDMcbZTAl33JLr
-         kduISj+Ex0nvmXiXCpDWCjJ76TzfGU67GN/DmKbYnv/At9tXskaIitYqnsMe40iRr4dT
-         +TEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sM4EI5EG8aFU0eCqXxfKOVx9vcJ9fHC3LeTBs0eo7r0=;
-        b=nZR0L6pMbzIF7nA6GiS+/JtLEAVk45v6kYh4yQMK0FMbDmwNZe4ZvdZyFu7KBcbsD+
-         U5OXxhA/7wn6QsLSyCcn/1yFyLd3VJ++Ne+V3+rjnDUwQCh0fPUoGDD/+qBKhsFApUBo
-         gNk8toyPZJm53QFztkQCpnTueKkn0UXutcr1Fv9rkXNmraPW+mXCNO8HjnfdXvbpbsG6
-         ssWMVD3AIHSIBRzdhlDwST1IOldN9Z1Ag5BWCUiJYTgI7Pt7O+CvkV2yYKp4FwNDeFpu
-         CSMS75NAVotFXN1en6z5+LBsiPphkKqcssO5uS2OanlhCC2664SN5JNlqY7Oa1g0PvGr
-         CShw==
-X-Gm-Message-State: ACrzQf13Qcj9NFY2Sw2rUI1Pw5UvjZy9E5L2xvg2oKxSFziuiPKSgkS5
-        qiSr+NOnSpuuYitL/YgeCp0gyesHVcU4bs5ZhIm69IktiQQ9S+UQAfU1r5cuXPGmAWDVjt8HSid
-        /xKd+f4lTAoDrCAnIC6CjbEjRmFtCOc76A9l64Utdnlz0KYUd3sb7WYs=
-X-Received: by 2002:a05:6a00:8d0:b0:53b:2cbd:fab6 with SMTP id s16-20020a056a0008d000b0053b2cbdfab6mr25812761pfu.3.1666469295620;
-        Sat, 22 Oct 2022 13:08:15 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4TQlnIFWemjieXYFHB4kZCU06MWCA0fuLbWzeSKkOadrNWOw5GKkPPMHCMsnRSY108W+f8AO/qejDPa7Rc+Pc=
-X-Received: by 2002:a05:6a00:8d0:b0:53b:2cbd:fab6 with SMTP id
- s16-20020a056a0008d000b0053b2cbdfab6mr25812755pfu.3.1666469295383; Sat, 22
- Oct 2022 13:08:15 -0700 (PDT)
+        Sat, 22 Oct 2022 16:15:53 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D9096CF4A
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 13:15:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666469751; x=1698005751;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ZnglPn+5xbW0AIxCLQWJEvFktMC4RkQISjphDtCr0JE=;
+  b=OOamsc9VurrAxTItlS2eGwwJnyhqHCl6FPzjTvvM/ulLQou7R/OBDItb
+   ysQqTAUwIc6PnY7P1V2bR2PUziVtMGL82nlhZToKuNd31JHK8gjcAx5FW
+   vsAl5xjYIRu824Mg8KvaEXBziW/aX/jNPGtqEBjcvrhPNVbtBksx0pJMS
+   xP8o65Fc1iV8TDRZisU5mX2eXOFHZn58fq9fAoRs99cM68u5Forxn8yu7
+   U0GKBL47uEt72q5f1ay/hTUsDem23653vHczLert6ojf4sXcUeJ+sLvVP
+   4ArOegIOLpsXwXBzlxakBNzQD3wFvlRC6brx7tg/9erqWm6iSb68grecx
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10508"; a="308304721"
+X-IronPort-AV: E=Sophos;i="5.95,205,1661842800"; 
+   d="scan'208";a="308304721"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2022 13:15:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10508"; a="699723279"
+X-IronPort-AV: E=Sophos;i="5.95,205,1661842800"; 
+   d="scan'208";a="699723279"
+Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 22 Oct 2022 13:15:49 -0700
+Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1omKuK-0003sb-1O;
+        Sat, 22 Oct 2022 20:15:48 +0000
+Date:   Sun, 23 Oct 2022 04:15:39 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/core] BUILD SUCCESS
+ bd194611444caf7f30e9198b7e2b89522b257462
+Message-ID: <63544f6b.W2gIvMSJ8sfStKfp%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <d4898956a848c85fc93c3f7d25cafbfc49a46e60.camel@zohomail.com>
-In-Reply-To: <d4898956a848c85fc93c3f7d25cafbfc49a46e60.camel@zohomail.com>
-From:   Slade Watkins <srw@sladewatkins.net>
-Date:   Sat, 22 Oct 2022 16:08:04 -0400
-Message-ID: <CA+pv=HOrpzS8j6Pq=GD8_U6n9VWA8pyTwKRP40dixSHsZ3=MXw@mail.gmail.com>
-Subject: Re: [PATCH 1/3] Staging: rtl8192e: rtl819x_HTProc: fixed missing
- blank space
-To:     t4rmin@zohomail.com
-Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 22, 2022 at 11:48 AM Aaron Lawrence <t4rmin@zohomail.com> wrote:
->
-> From e6635103e3cf2426220767955b99d2e2b62a7329 Mon Sep 17 00:00:00 2001
-> Message-Id: <e6635103e3cf2426220767955b99d2e2b62a7329.1666450553.git.t4rmin@zohomail.com>
-> In-Reply-To: <cover.1666450553.git.t4rmin@zohomail.com>
-> References: <cover.1666450553.git.t4rmin@zohomail.com>
-> From: Aaron Lawrence <t4rmin@zohomail.com>
-> Date: Sat, 22 Oct 2022 20:46:25 +0700
-> Subject: [PATCH 1/3] Staging: rtl8192e: rtl819x_HTProc: fixed missing blank
->  space
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/core
+branch HEAD: bd194611444caf7f30e9198b7e2b89522b257462  Merge branch 'x86/urgent' into x86/core, to resolve conflict
 
-Hey there,
-Could you resend this without the above? For whatever reason it was
-included in the message, even though it shouldn't be.
+elapsed time: 723m
 
--srw
+configs tested: 110
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+um                             i386_defconfig
+arc                                 defconfig
+um                           x86_64_defconfig
+alpha                               defconfig
+i386                                defconfig
+s390                                defconfig
+x86_64                           rhel-8.3-syz
+s390                             allmodconfig
+x86_64                        randconfig-a013
+x86_64                              defconfig
+x86_64                         rhel-8.3-kunit
+x86_64                        randconfig-a011
+s390                             allyesconfig
+x86_64                           rhel-8.3-kvm
+i386                             allyesconfig
+arm                                 defconfig
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+powerpc                           allnoconfig
+x86_64                        randconfig-a015
+arc                  randconfig-r043-20221019
+m68k                             allyesconfig
+x86_64                               rhel-8.3
+powerpc                          allmodconfig
+m68k                             allmodconfig
+x86_64                        randconfig-a006
+sh                               allmodconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                           allyesconfig
+x86_64                          rhel-8.3-func
+mips                             allyesconfig
+arc                              allyesconfig
+arc                  randconfig-r043-20221020
+alpha                            allyesconfig
+s390                 randconfig-r044-20221020
+arm                              allyesconfig
+i386                          randconfig-a001
+riscv                randconfig-r042-20221020
+i386                          randconfig-a003
+arm64                            allyesconfig
+i386                          randconfig-a005
+arm                        multi_v7_defconfig
+sh                           se7721_defconfig
+powerpc                         ps3_defconfig
+m68k                           virt_defconfig
+arm                           u8500_defconfig
+csky                                defconfig
+parisc                generic-64bit_defconfig
+sparc                       sparc32_defconfig
+sh                          sdk7786_defconfig
+parisc                           alldefconfig
+mips                      fuloong2e_defconfig
+arm                            zeus_defconfig
+sh                               alldefconfig
+loongarch                         allnoconfig
+sh                                  defconfig
+sh                          polaris_defconfig
+powerpc                 mpc834x_mds_defconfig
+i386                          randconfig-c001
+sh                           se7722_defconfig
+ia64                          tiger_defconfig
+arm                        mvebu_v7_defconfig
+mips                    maltaup_xpa_defconfig
+arc                        nsimosci_defconfig
+microblaze                          defconfig
+arm                          lpd270_defconfig
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+arm                        clps711x_defconfig
+mips                       bmips_be_defconfig
+arm                            mps2_defconfig
+arc                     nsimosci_hs_defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+
+clang tested configs:
+i386                 randconfig-a011-20221017
+i386                 randconfig-a013-20221017
+x86_64                        randconfig-a016
+i386                 randconfig-a012-20221017
+x86_64                        randconfig-a012
+riscv                randconfig-r042-20221019
+hexagon              randconfig-r041-20221020
+i386                 randconfig-a014-20221017
+x86_64                        randconfig-a001
+x86_64                        randconfig-a014
+x86_64                        randconfig-a003
+hexagon              randconfig-r045-20221020
+i386                 randconfig-a016-20221017
+hexagon              randconfig-r045-20221019
+x86_64                        randconfig-a005
+i386                 randconfig-a015-20221017
+hexagon              randconfig-r041-20221019
+s390                 randconfig-r044-20221019
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+powerpc                   microwatt_defconfig
+arm                         orion5x_defconfig
+powerpc                      obs600_defconfig
+arm                      pxa255-idp_defconfig
+mips                          ath79_defconfig
+powerpc                      acadia_defconfig
+arm                             mxs_defconfig
+x86_64                        randconfig-k001
+mips                       rbtx49xx_defconfig
+arm                           spitz_defconfig
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
