@@ -2,47 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8862460831B
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 03:23:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0820608324
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 03:28:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229849AbiJVBXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 21:23:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35482 "EHLO
+        id S230031AbiJVB2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 21:28:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbiJVBXi (ORCPT
+        with ESMTP id S229865AbiJVB2j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 21:23:38 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20E542B2E3D;
-        Fri, 21 Oct 2022 18:23:37 -0700 (PDT)
-Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MvNrZ2wGHzHvD2;
-        Sat, 22 Oct 2022 09:23:26 +0800 (CST)
-Received: from dggpeml100012.china.huawei.com (7.185.36.121) by
- dggpeml500025.china.huawei.com (7.185.36.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 22 Oct 2022 09:23:35 +0800
-Received: from huawei.com (10.67.165.24) by dggpeml100012.china.huawei.com
- (7.185.36.121) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Sat, 22 Oct
- 2022 09:23:35 +0800
-From:   Kai Ye <yekai13@huawei.com>
-To:     <herbert@gondor.apana.org.au>
-CC:     <linux-crypto@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <yekai13@huawei.com>
-Subject: [PATCH v3 3/3] crypto: hisilicon/qm - delete redundancy check
-Date:   Sat, 22 Oct 2022 01:17:46 +0000
-Message-ID: <20221022011746.27197-4-yekai13@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221022011746.27197-1-yekai13@huawei.com>
-References: <20221022011746.27197-1-yekai13@huawei.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.165.24]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpeml100012.china.huawei.com (7.185.36.121)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        Fri, 21 Oct 2022 21:28:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D7AE2A5683;
+        Fri, 21 Oct 2022 18:28:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CEAD1B82DB5;
+        Sat, 22 Oct 2022 01:28:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8E94BC433C1;
+        Sat, 22 Oct 2022 01:28:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666402115;
+        bh=2Sk/3lIYamfUY5C9LLGc0MR2yjRE7JKe3t3JGmktUuw=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=vR7uD+1OYU+EQSJbKZ4AlsvQTT1SepsMwkaiNQ1fb+hZHn1qPC82wlbCP+DpZaAL4
+         PJZkO0upV7O1+WlpZO2IWdRCaksXVFnvwgpK9cS7+Nr4H57Ujl7M8hW7zA/zRKBbRc
+         EJ2fnPz+MnVtv++VgBn0YtQjgPlrP6sgC9JAbU4bWY7isczNKmLL6jUTZVQvee49qM
+         rByIgOeoknWYK+gv2t7MdFodtbdOlh9Sv6B+vn7tjeMXCkI/srebqtosovkVivEgql
+         o+rMjt9jO+34114f94SuEJAhABSHxQhtuL4srJWTfLT6+FfWZfn99RyTxHB2h9Rs1z
+         iiKHXK4H5Hjmg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6FDC5E270DF;
+        Sat, 22 Oct 2022 01:28:35 +0000 (UTC)
+Subject: Re: [GIT PULL] ACPI fixes for v6.1-rc1
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAJZ5v0h6OWoyO3om5GjsU-6+jPcXPiR-p+4LA22YD6-ptpnhbg@mail.gmail.com>
+References: <CAJZ5v0h6OWoyO3om5GjsU-6+jPcXPiR-p+4LA22YD6-ptpnhbg@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-pci.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAJZ5v0h6OWoyO3om5GjsU-6+jPcXPiR-p+4LA22YD6-ptpnhbg@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-6.1-rc2
+X-PR-Tracked-Commit-Id: 3f8deab61ea86d738a1e7fdf95e9ad2bf08d14b8
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 9d6e681d33943e7e5b26b945e680a71311683795
+Message-Id: <166640211544.11783.7532023669913523373.pr-tracker-bot@kernel.org>
+Date:   Sat, 22 Oct 2022 01:28:35 +0000
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,28 +62,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Because the permission on the VF debugfs file is "0444". So
-the VF function checking is redundant in qos writing api.
+The pull request you sent on Fri, 21 Oct 2022 20:48:42 +0200:
 
-Signed-off-by: Kai Ye <yekai13@huawei.com>
----
- drivers/crypto/hisilicon/qm.c | 3 ---
- 1 file changed, 3 deletions(-)
+> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-6.1-rc2
 
-diff --git a/drivers/crypto/hisilicon/qm.c b/drivers/crypto/hisilicon/qm.c
-index 80eeb966cf89..363a02810a16 100644
---- a/drivers/crypto/hisilicon/qm.c
-+++ b/drivers/crypto/hisilicon/qm.c
-@@ -4632,9 +4632,6 @@ static ssize_t qm_algqos_write(struct file *filp, const char __user *buf,
- 	unsigned long val;
- 	int len, ret;
- 
--	if (qm->fun_type == QM_HW_VF)
--		return -EINVAL;
--
- 	if (*pos != 0)
- 		return 0;
- 
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/9d6e681d33943e7e5b26b945e680a71311683795
+
+Thank you!
+
 -- 
-2.17.1
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
