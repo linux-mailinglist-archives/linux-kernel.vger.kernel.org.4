@@ -2,143 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 892FB608D1A
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 14:06:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EF1B608D24
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 14:20:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbiJVMGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 08:06:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45602 "EHLO
+        id S229695AbiJVMUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 08:20:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbiJVMGc (ORCPT
+        with ESMTP id S229682AbiJVMUN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 08:06:32 -0400
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A34B3237FB5;
-        Sat, 22 Oct 2022 05:06:27 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lirui.org; s=key1;
-        t=1666440385;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Nc63P9hRTQ/Z/eSeuCo+wraUic53v2hR6RRkGzpw6/o=;
-        b=FH8LkjeN6X1aOippPiAt6lAMO3BdihGUSOP+TV97NxowGjFjYf9IbCytf+g4W7DTGULDe6
-        SPZqgu7QkS151ixVQ6Lw5zHnCZnu8mh/6bOGuTKi5kb5A8E+xiGnpsIlVD0dz7M3MY7ZfR
-        N7li2ZQLnQMn5pEV7ZOMYraFg4Je9fDekAaQWgVgUfRAYy11DW0B9MXvOtbKebCoe0qjTa
-        bbrOvJxjtHG0ND5SmsJ02hCreeO+6Q3jEjJEqkboZm/LwjJhLFdNkQ21BaRp2ijVyuHVnW
-        I5vtEK6juPKFwGm0TqrzuYbvrM2x6N12vectSwDlhaPb33kFBfXf63HjsSyJWg==
-From:   Rui Li <me@lirui.org>
-To:     Alex Shi <alexs@kernel.org>, Yanteng Si <siyanteng@loongson.cn>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Wu XiangCheng <wu.xiangcheng@linux.dev>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rui Li <me@lirui.org>
-Subject: [PATCH] docs/zh_CN: Add userspace-api/no_new_privs Chinese translation
-Date:   Sat, 22 Oct 2022 20:05:57 +0800
-Message-Id: <20221022120557.381115-1-me@lirui.org>
+        Sat, 22 Oct 2022 08:20:13 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11A7563D1F;
+        Sat, 22 Oct 2022 05:20:11 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id v1so8726450wrt.11;
+        Sat, 22 Oct 2022 05:20:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XqgQmpthFtTKMqinrF6XH8lDGi0vzOcHTbCq+06suV8=;
+        b=XYsOqslHc6NB/IZUEoGoi6//b5rrjvV+2ZXq08K6CfW2wDN2jLqQxqdEbXhHLHqkVR
+         HUsOWkz5Oih7hTLO/sMyGeuuW6NtpMSSxK7lNwT0V9IjZduTcSV53hV/d30gOG/5Wez5
+         +EwFg38ucmAH60wvhugz4gV9+l0Fy17HEe28GSbYE98jRidroXcYK0eSmSOXDTKFtx/i
+         L2w/8B8thwK/bYWxHyR15mTLhJ8fFGvEN6GLGnJe8M6vvQPCbeF5xlZF1fZa4nE1+BSo
+         6K4r9yMfRro7s6mB2dO7DKIHjlrAxF0/QZmrKYbBPIlgOvr0Y2C0+XIRZts/MFqL8zEh
+         bwbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XqgQmpthFtTKMqinrF6XH8lDGi0vzOcHTbCq+06suV8=;
+        b=zMbxZv5wiDBenG5EglKQAGVO6d8uhJ3qdhlvG+JA4K9JVsa4scMsjtMQD+AELu7DM+
+         3WqM1hjQ5H/qQEFPB7MRGGec/ut5t7bq7Dd7fj312Sv01JXMb3txTt94lqBj3fWfDZUo
+         vpr6t5V1vUHVEEIjxeWqqyQkecdC0iYWQkWpgs1mMXMTsSc9TFtjGaiDLu1l9QKUcBSk
+         dTgz/c1ikuq+iZMwneUC2SlbxicmJ+Bo9Oc7DSzvb3B6mC2g7OTr4wUP/gyqXVLzNRcf
+         rsm2U8qHYTXh3e9oR4BXExwwMXsJBiyGEvlkqSpXQBEzyIkX/WTkfewu7auOtR7Cb/3f
+         +PXw==
+X-Gm-Message-State: ACrzQf2rp4sbkVSjUDRUFS9MPkvLc8aV8wQ6oEmFQoB2EE1ntvUyiy1d
+        ZPRa3DYK/GVP/e6Yp0FMkbehi3pOY/2Xn7Hkal4=
+X-Google-Smtp-Source: AMsMyM7aEBBWfrqZ6s3SgA9CgPBVd+S3cBD8nocD48HeBNF1UcEzyFY++aYpR2vMTpBrY/NFqSqUL/WjhFGOkIKcJIY=
+X-Received: by 2002:a5d:42c6:0:b0:235:1b3a:8d2e with SMTP id
+ t6-20020a5d42c6000000b002351b3a8d2emr9784028wrr.689.1666441209297; Sat, 22
+ Oct 2022 05:20:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221005085439.740992-1-megi@xff.cz> <CAMdYzYrEXEqOmMeozGBbAAvrujZcOxLh4VYOmu5DSjPWTS-5zQ@mail.gmail.com>
+ <20221005220812.4psu6kckej63yo2z@core> <4679102.Wku2Vz74k6@phil>
+ <CAMdYzYq3S2rR3Kb61irpV9xHYijNiJY0mkVnJwPrpXzxg_Zh9g@mail.gmail.com>
+ <20221021153913.l5ry6v4mcnzcmj2v@core> <CAMdYzYpYC6ME_ZYE65UWq__i+rit6_os-+do+JLmEL7y-jKr9g@mail.gmail.com>
+ <20221021193248.2he6amnj7knk4biu@core> <87edv0sxup.fsf@bloch.sibelius.xs4all.nl>
+In-Reply-To: <87edv0sxup.fsf@bloch.sibelius.xs4all.nl>
+From:   Peter Geis <pgwipeout@gmail.com>
+Date:   Sat, 22 Oct 2022 08:19:57 -0400
+Message-ID: <CAMdYzYp6ShLqKxdiAjaRFiRF5i+wzfKiQvwPMzyQLAutWZbApg@mail.gmail.com>
+Subject: Re: [PATCH v2] arm64: dts: rockchip: rk356x: Fix PCIe register map
+ and ranges
+To:     Mark Kettenis <mark.kettenis@xs4all.nl>
+Cc:     =?UTF-8?Q?Ond=C5=99ej_Jirman?= <megi@xff.cz>, heiko@sntech.de,
+        linux-rockchip@lists.infradead.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, michael.riesch@wolfvision.net,
+        frattaroli.nicolas@gmail.com, s.hauer@pengutronix.de,
+        frank-w@public-files.de, ezequiel@vanguardiasur.com.ar,
+        yifeng.zhao@rock-chips.com, jbx6244@gmail.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Translate the following documents into Chinese:
+On Fri, Oct 21, 2022 at 4:52 PM Mark Kettenis <mark.kettenis@xs4all.nl> wro=
+te:
+>
+> > Date: Fri, 21 Oct 2022 21:32:48 +0200
+> > From: Ond=C5=99ej Jirman <megi@xff.cz>
+> >
+> > On Fri, Oct 21, 2022 at 12:48:15PM -0400, Peter Geis wrote:
+> > > On Fri, Oct 21, 2022 at 11:39 AM Ond=C5=99ej Jirman <megi@xff.cz> wro=
+te:
+> > > >
+> > > > On Fri, Oct 21, 2022 at 09:07:50AM -0400, Peter Geis wrote:
+> > > > > Good Morning Heiko,
+> > > > >
+> > > > > Apologies for just getting to this, I'm still in the middle of mo=
+ving
+> > > > > and just got my lab set back up.
+> > > > >
+> > > > > I've tested this patch series and it leads to the same regression=
+ with
+> > > > > NVMe drives. A loop of md5sum on two identical 4GB random files
+> > > > > produces the following results:
+> > > > > d11cf0caa541b72551ca22dc5bef2de0  test-rand.img
+> > > > > fad97e91da8d4fd554c895cafa89809b  test-rand2.img
+> > > > > 2d56a7baa05c38535f4c19a2b371f90a  test-rand.img
+> > > > > 74e8e6f93d7c3dc3ad250e91176f5901  test-rand2.img
+> > > > > 25cfcfecf4dd529e4e9fbbe2be482053  test-rand.img
+> > > > > 74e8e6f93d7c3dc3ad250e91176f5901  test-rand2.img
+> > > > > b9637505bf88ed725f6d03deb7065dab  test-rand.img
+> > > > > f7437e88d524ea92e097db51dce1c60d  test-rand2.img
+> > > > >
+> > > > > Before this patch series:
+> > > > > d11cf0caa541b72551ca22dc5bef2de0  test-rand.img
+> > > > > d11cf0caa541b72551ca22dc5bef2de0  test-rand2.img
+> > > > > d11cf0caa541b72551ca22dc5bef2de0  test-rand.img
+> > > > > d11cf0caa541b72551ca22dc5bef2de0  test-rand2.img
+> > > > > d11cf0caa541b72551ca22dc5bef2de0  test-rand.img
+> > > > > d11cf0caa541b72551ca22dc5bef2de0  test-rand2.img
+> > > > > d11cf0caa541b72551ca22dc5bef2de0  test-rand.img
+> > > > > d11cf0caa541b72551ca22dc5bef2de0  test-rand2.img
+> > > > >
+> > > > > Though I do love where this patch is going and would like to see =
+if it
+> > > > > can be made to work, in its current form it does not.
+> > > >
+> > > > Thanks for the test. Can you please also test v1? Also please share=
+ lspci -vvv
+> > > > of your nvme drive, so that we can see allocated address ranges, et=
+c.
+> > >
+> > > Good catch, with your patch as is, the following issue crops up:
+> > > Region 0: Memory at 300000000 (64-bit, non-prefetchable) [size=3D16K]
+> > > Region 2: I/O ports at 1000 [disabled] [size=3D256]
+> > >
+> > > However, with a simple fix, we can get this:
+> > > Region 0: Memory at 300000000 (64-bit, non-prefetchable) [virtual] [s=
+ize=3D16K]
+> > > Region 2: I/O ports at 1000 [virtual] [size=3D256]
+> > >
+> > > and with it a working NVMe drive.
+> > >
+> > > Change the following range:
+> > > 0x02000000 0x0 0x40000000 0x3 0x00000000 0x0 0x40000000>;
+> > > to
+> > > 0x02000000 0x0 0x00000000 0x3 0x00000000 0x0 0x40000000>;
+> >
+> > I've already tried this, but this unfrotunately breaks the wifi cards.
+> > (those only use the I/O space) Maybe because I/O and memory address spa=
+ces
+> > now overlap, I don't know. That's why I used the 1GiB offset for memory
+> > space.
+>
+> Meanwhile, I have an NVMe drive that only works if mmio is completely
+> untranslated.  This is an ADATA SX8000NP drive, which uses a Silicon
+> Motion SM2260 controller.
+>
+> So for me, a working configuration has the following "ranges":
+>
+> ranges =3D <0x01000000 0x0 0x00000000 0x3 0x3fff0000 0x0 0x00010000>,
+>          <0x02000000 0x0 0xf4000000 0x0 0xf4000000 0x0 0x02000000>,
+>          <0x03000000 0x3 0x10000000 0x3 0x10000000 0x0 0x2fff0000>;
+>
+> This also needs changes to the "reg" propery:
+>
+> reg =3D <0x3 0xc0000000 0x0 0x00400000>,
+>       <0x0 0xfe260000 0x0 0x00010000>,
+>       <0x3 0x00000000 0x0 0x10000000>;
 
-- userspace-api/no_new_privs.rst
+Now this is interesting. I've been reading up on PCIe ranges and what
+is necessary for things to work properly, and I found this interesting
+article from ARM:
+https://developer.arm.com/documentation/102337/0000/Programmers-model/Memor=
+y-maps/AP-system-memory-map/PCIe-MMIO-and-ECAM-memory-regions
 
-Signed-off-by: Rui Li <me@lirui.org>
----
- .../zh_CN/userspace-api/index.rst             |  2 +-
- .../zh_CN/userspace-api/no_new_privs.rst      | 57 +++++++++++++++++++
- 2 files changed, 58 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/translations/zh_CN/userspace-api/no_new_privs.rst
+TLDR: We need a low region (below 4g) and a high region.
 
-diff --git a/Documentation/translations/zh_CN/userspace-api/index.rst b/Documentation/translations/zh_CN/userspace-api/index.rst
-index 12c63d81c663..6a7e82ac16b9 100644
---- a/Documentation/translations/zh_CN/userspace-api/index.rst
-+++ b/Documentation/translations/zh_CN/userspace-api/index.rst
-@@ -25,10 +25,10 @@ Linux 内核用户空间API指南
-    :maxdepth: 2
- 
-    ebpf/index
-+   no_new_privs
- 
- TODOList:
- 
--* no_new_privs
- * seccomp_filter
- * landlock
- * unshare
-diff --git a/Documentation/translations/zh_CN/userspace-api/no_new_privs.rst b/Documentation/translations/zh_CN/userspace-api/no_new_privs.rst
-new file mode 100644
-index 000000000000..81bd16ce3ad2
---- /dev/null
-+++ b/Documentation/translations/zh_CN/userspace-api/no_new_privs.rst
-@@ -0,0 +1,57 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+.. include:: ../disclaimer-zh_CN.rst
-+
-+:Original: Documentation/userspace-api/no_new_privs.rst
-+
-+:翻译:
-+
-+ 李睿 Rui Li <me@lirui.org>
-+
-+============
-+无新权限标志
-+============
-+
-+execve系统调用可以给一个新启动的程序授予它的父程序本没有的权限。最明显的两个
-+例子就是setuid/setgid控制程序和文件的能力。为了避免父程序也获得这些权限，内
-+核和用户代码必须小心避免任何父程序可以颠覆子程序的情况。比如：
-+
-+ - 程序在setuid后，动态装载器处理 ``LD_*`` 环境变量的不同方式。
-+
-+ - 对于非特权程序，chroot是不允许的，因为这会允许 ``/etc/passwd`` 在继承
-+   chroot的程序眼中被替换。
-+
-+ - 执行代码对ptrace有特殊处理。
-+
-+这些都是临时性的修复。 ``no_new_privs`` 位（从 Linux 3.5 起）是一个新的通
-+用的机制来保证一个进程安全地修改其执行环境并跨execve持久化。任何任务都可以设
-+置 ``no_new_privs`` 。一旦该位被设置，它会在fork、clone和execve中继承下去
-+，并且不能被撤销。在 ``no_new_privs`` 被设置的情况下， ``execve()`` 将保证
-+不会授予权限去做任何没有execve调用就不能做的事情。比如， setuid 和 setgid
-+位不会再改变 uid 或 gid；文件能力不会被添加到授权集合中，并且Linux安全模块（
-+LSM）不会在execve调用后放松限制。
-+
-+设置 ``no_new_privs`` 使用::
-+
-+    prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
-+
-+不过要小心，Linux安全模块（LSM）也可能不会在 ``no_new_privs`` 模式下收紧约束。
-+（这意味着一个一般的服务启动器在执行守护进程前就去设置 ``no_new_privs`` 可能
-+会干扰基于LSM的沙箱。）
-+
-+请注意， ``no_new_privs`` 并不能阻止不涉及 ``execve()`` 的权限变化。一个拥有
-+适当权限的任务仍然可以调用 ``setuid(2)`` 并接收 SCM_RIGHTS 数据报。
-+
-+目前来说， ``no_new_privs`` 有两大使用场景：
-+
-+ - 为seccomp模式2沙箱安装的过滤器会跨execve持久化，并能够改变新执行程序的行为。
-+   非特权用户因此在 ``no_new_privs`` 被设置的情况下只允许安装这样的过滤器。
-+
-+ - ``no_new_privs`` 本身就能被用于减少非特权用户的攻击面。如果所有以某个 uid
-+   运行的程序都设置了 ``no_new_privs`` ，那么那个 uid 将无法通过攻击 setuid，
-+   setgid 和使用文件能力的二进制来提权；它需要先攻击一些没有被设置 ``no_new_privs``
-+   位的东西。
-+
-+将来，其他潜在的危险的内核特性可能被非特权任务利用，即使 ``no_new_privs`` 被置位。
-+原则上，当 ``no_new_privs`` 被置位时， ``unshare(2)`` 和 ``clone(2)`` 的几个选
-+项将是安全的，并且 ``no_new_privs`` 加上 ``chroot`` 是可以被认为比 chroot本身危
-+险性小得多的。
--- 
-2.30.2
+From other articles I've gleaned that the config / io should probably
+also be in the low range. As such I believe the other patch that was
+sent to me may be the correct way to go. If both of you would try the
+following reg / ranges:
 
+reg =3D <0x3 0xc0000000 0x0 0x00400000>,
+      <0x0 0xfe260000 0x0 0x00010000>,
+      <0x0 0xf4000000 0x0 0x00100000>;
+
+ranges =3D <0x01000000 0x0 0xf4100000 0x0 0xf4100000 0x0 0x00100000>,
+<0x02000000 0x0 0xf4200000 0x0 0xf4200000 0x0 0x01e00000>,
+<0x03000000 0x0 0x40000000 0x3 0x00000000 0x0 0x40000000>;
+
+Very Respectfully,
+Peter Geis
+
+>
+> Now admittedly, this is with OpenBSD running on EDK2 UEFI firmware
+> from
+>
+>   https://github.com/jaredmcneill/quartz64_uefi
+>
+> that I modified to pass through the device tree and modify the ranges
+> as above.  But the way my OpenBSD driver sets up the address
+> translation windows matches what the mainline Linux driver does.
+>
+> I picked the ranges above to match the EDK2 configuration.  But it is
+> a setup that maximizes the 32-bit mmio window.
+>
+> Cheers,
+>
+> Mark
+>
+> > > I still haven't tested this with other cards yet, and another patch
+> > > that does similar work I've tested successfully as well with NVMe
+> > > drives. I'll have to get back to you on the results of greater
+> > > testing.
+> > >
+> > > Very Respectfully,
+> > > Peter Geis
+> > >
+> > > >
+> > > > kind regards,
+> > > >         o.
+> > > >
+> > > > > Very Respectfully,
+> > > > > Peter Geis
+> >
+> > _______________________________________________
+> > linux-arm-kernel mailing list
+> > linux-arm-kernel@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
