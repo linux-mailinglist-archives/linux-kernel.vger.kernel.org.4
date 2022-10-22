@@ -2,115 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B12C3608D05
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 13:53:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D75F608D07
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 13:54:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229937AbiJVLxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 07:53:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60728 "EHLO
+        id S230013AbiJVLx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 07:53:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbiJVLwy (ORCPT
+        with ESMTP id S229914AbiJVLxy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 07:52:54 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 656AEE027;
-        Sat, 22 Oct 2022 04:52:45 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id a13so15079895edj.0;
-        Sat, 22 Oct 2022 04:52:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=jrvz3xnxmWMFBldQvzy2ZgmI4h77t/gPKZnFb0toqjg=;
-        b=IkNUMBBK3F7G2PHSg4UUbh50Ru31YT5iLaRe+eXiX/kgyEVFRWM+EOsx8fOhmmHZYB
-         mpbIbh4q3vvwnGYurdPN4A+6370j/lx2BQ8nIWwsFsKx7Y9z3Heey5CL1lY0jPs9BmQs
-         phlDwix2DMjgdaGZx7K06usQjnaAJXxond0AzlVST6lU+BhY3YDU08cxFgsQ/dUXc2c7
-         LdYPI7IFyVT/b62MgoKyx+X6xWA8M1MoAde1RLXhSz1IYm4Xjv5RErUgw3uEISZC4QYx
-         hjKz433tB6OeY3mXTLp49KN3S9Tg+E2Z2NqOFJVPn3sVHkt0h8isq2wF9OnV5ADNL+8a
-         l+Vg==
+        Sat, 22 Oct 2022 07:53:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45B846171D
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 04:53:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666439632;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KPmvOeY7znrhinzMDTYzlhkvZyG6kRL1anJ+HPXl5ug=;
+        b=c6Q0QRQH9Gbgpy1FBP2YThMxMevi7cDePYsL8rTpNaoejVbhhs+vv87JE5Gl+p6r1Qlmlw
+        DUBcqrpCh47yxGE1xDg/8nnEoHznH6iq1ie4j4b095bPJZxCxy5+RegyCHdBK3mvGH0h4o
+        fupYSZFuH3z0o9ZQaHCXq0smqHbP2Pg=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-547-82cbFq9aNyuRfMGWbrTXMw-1; Sat, 22 Oct 2022 07:53:47 -0400
+X-MC-Unique: 82cbFq9aNyuRfMGWbrTXMw-1
+Received: by mail-ed1-f70.google.com with SMTP id h13-20020a056402280d00b0045cb282161cso5156734ede.8
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 04:53:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jrvz3xnxmWMFBldQvzy2ZgmI4h77t/gPKZnFb0toqjg=;
-        b=76DF1DKUd1O9c0pGluAJxetk/BCt+lYOAlNlJfzBPYbnY3Xus5rZszjxqZQq99BBiz
-         LRnsRsRbgSxjT39YzI4uLP0zRqbOV2Gy8fCg6UJI5QsAf9CZf3Tp3lWMicD5xi5pjfi+
-         PHyFrTUVNcho/BWTWnDC9m4nbtQJUiPxSS7lsjxmMaRvlqcihdDUkgdkwB44bhRGDcea
-         cAv/kfJ+YHc2FogtEfCelzF7gvS3gYpIlc8LV/jxyp7J42FZXsPEmejYpaKNd+gwPknS
-         R4CH3+ftsZ3Fu0dMdv5HP2HktFYyCelkpMXeC9c9799Rc6IGRyVzP3m2Dno1e2Uy3Ij1
-         1NTQ==
-X-Gm-Message-State: ACrzQf3FeTBvBHQHJNuThcwUGgecjmkb/5/nbpsb9hF+3VhfZcMsc8et
-        BOMdeYQ1LhHbEUBVDCLhavgU37QOc7H+CGNh6lc=
-X-Google-Smtp-Source: AMsMyM6muR/RwsipWgBLxIPXio2nN5ILA/phMy0wSCb+hRGOvh2zvm54UfTCsw2MojaPvDmu/D2VNn3FDSPF1kaXgew=
-X-Received: by 2002:a17:907:7f92:b0:78d:ed9c:d86f with SMTP id
- qk18-20020a1709077f9200b0078ded9cd86fmr19695128ejc.251.1666439563373; Sat, 22
- Oct 2022 04:52:43 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KPmvOeY7znrhinzMDTYzlhkvZyG6kRL1anJ+HPXl5ug=;
+        b=x7jr4lHqxGFhDnaV6JOfmtZhgHhllkYn9EbrtnADYlnrK++7UzzDbQ+rdxVg7NutM/
+         QrHKwDNaBx+dpFYBL4UsphUYguy6OiskQAtuXC3UeTzRQ1ilusj5INt9jXk3AT/+l9Q+
+         rhIaEarZAfmg5jsnXGREHmf3dSia8aupDr1jIhnM5x3bTE5hd01w39w7Appf2Jr64QyV
+         xvntPZoEbZv3WtyNx86DuY2a4PVIkPbeYAkg1eVIhJt4LeGSbqh0YFGeEWOayLvWdJsu
+         9tnBsktWRjffJKJ4SZMaS+CxGUZVVKd67TnGFn0GcZuZ0vIi8ra5aOLvcWTgMMVa0t/4
+         vwaA==
+X-Gm-Message-State: ACrzQf2Xz+MqBcFfA258YkX05YHwGhawg5JWrDDp2mj/yzlJJPnl9D0R
+        XN43DwAjHUPCpPvbmPoEwyQ1pB4QUYDNV9NzuO9iuJB+gvT9Fhpkb9msxZbHNjqjdNyfnIB9Z/6
+        3Gmtr2Ik7a2/z3b3RTFW2MSJk
+X-Received: by 2002:a17:907:16a7:b0:79e:9eed:8f6 with SMTP id hc39-20020a17090716a700b0079e9eed08f6mr4603474ejc.731.1666439626787;
+        Sat, 22 Oct 2022 04:53:46 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7L4myOJ/0NIdAr5ZVQ+QtDR8RDZxDn9M+eafRx+6P9t9XZmCfx8weClDwmUUZOtYPytHfyTw==
+X-Received: by 2002:a17:907:16a7:b0:79e:9eed:8f6 with SMTP id hc39-20020a17090716a700b0079e9eed08f6mr4603462ejc.731.1666439626502;
+        Sat, 22 Oct 2022 04:53:46 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:2f4b:62da:3159:e077? ([2001:b07:6468:f312:2f4b:62da:3159:e077])
+        by smtp.googlemail.com with ESMTPSA id y16-20020a056402171000b0044e937ddcabsm18323edu.77.2022.10.22.04.53.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 22 Oct 2022 04:53:46 -0700 (PDT)
+Message-ID: <e436fc94-6bd7-989d-a1bb-5cd08a7d10c3@redhat.com>
+Date:   Sat, 22 Oct 2022 13:53:45 +0200
 MIME-Version: 1.0
-References: <20221022084737.1028-1-linux.amoon@gmail.com> <CAFBinCBu_-0m9JeAr5kd-v7Z5LTi7w0WmmUYybW_kL4KJXXpOQ@mail.gmail.com>
- <CANAwSgRzdD0FWg+z6hTFs7KvpsD64bChX-k0dPXJfACXZH2zbQ@mail.gmail.com>
-In-Reply-To: <CANAwSgRzdD0FWg+z6hTFs7KvpsD64bChX-k0dPXJfACXZH2zbQ@mail.gmail.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Sat, 22 Oct 2022 13:52:32 +0200
-Message-ID: <CAFBinCCNJiL-ZKRYesQAwys6bBMpYHJbUDK-Zi_VhGDVSvF7uQ@mail.gmail.com>
-Subject: Re: [PATCHv3] arm64: dts: meson: Enable active coling using gpio-fan
- on Odroid N2/N2+
-To:     Anand Moon <linux.amoon@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Dan Johansen <strit@manjaro.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH] tools: include: sync include/api/linux/kvm.h
+Content-Language: en-US
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+References: <20221022114423.1741799-1-pbonzini@redhat.com>
+ <87bkq4gjwc.wl-maz@kernel.org>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <87bkq4gjwc.wl-maz@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Anand,
+On 10/22/22 13:47, Marc Zyngier wrote:
+>> Provide a definition of KVM_CAP_DIRTY_LOG_RING_ACQ_REL.
+>>
+>> Fixes: 4b3402f1f4d9 ("KVM: selftests: dirty-log: Use KVM_CAP_DIRTY_LOG_RING_ACQ_REL if available")
+>> Cc: Marc Zyngier<maz@kernel.org>
+>> Signed-off-by: Paolo Bonzini<pbonzini@redhat.com>
+>> ---
+>>   tools/include/uapi/linux/kvm.h | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/tools/include/uapi/linux/kvm.h b/tools/include/uapi/linux/kvm.h
+>> index eed0315a77a6..0d5d4419139a 100644
+>> --- a/tools/include/uapi/linux/kvm.h
+>> +++ b/tools/include/uapi/linux/kvm.h
+>> @@ -1177,6 +1177,7 @@ struct kvm_ppc_resize_hpt {
+>>   #define KVM_CAP_VM_DISABLE_NX_HUGE_PAGES 220
+>>   #define KVM_CAP_S390_ZPCI_OP 221
+>>   #define KVM_CAP_S390_CPU_TOPOLOGY 222
+>> +#define KVM_CAP_DIRTY_LOG_RING_ACQ_REL 223
+>>   
+>>   #ifdef KVM_CAP_IRQ_ROUTING
+>>   
+> Huh, I wonder how I missed that one, as the test were compiling here.
+> 
+> Acked-by: Marc Zyngier<maz@kernel.org>
 
-On Sat, Oct 22, 2022 at 1:27 PM Anand Moon <linux.amoon@gmail.com> wrote:
-[...]
-> > > @@ -1982,7 +1982,6 @@ pwm_ao_d_10_pins: pwm-ao-d-10 {
-> > >                                                 mux {
-> > >                                                         groups = "pwm_ao_d_10";
-> > >                                                         function = "pwm_ao_d";
-> > > -                                                       bias-disable;
-> > &pwm_ao_d_10_pins is not referenced anywhere so it seems that this
-> > change has no impact on controlling the fan on Odroid-N2(+).
-> > How did you test this change?
-> >
-> Ok I felt these changes affect the behavior of the pinctrl
->
->   * @PIN_CONFIG_BIAS_DISABLE: disable any pin bias on the pin, a
->  *  transition from say pull-up to pull-down implies that you disable
->  *  pull-up in the process, this setting disables all biasing.
->
-> I mapped this is linked in pinctrl driver, pwm_ao_d_10_pins GPIOAO_10 see below
-Yes, I understand this part.
-My concern is: &pwm_ao_d_10_pins settings only become active when this
-node is actively referenced. You can even see it in your output
-below...
+5 minutes later -- The tests do not use that file, they use usr/include/ 
+in the build tree.  So the right Fixes tag is 17601bfed909 ("KVM: Add 
+KVM_CAP_DIRTY_LOG_RING_ACQ_REL capability and config option").
 
-[...]
-> pin 10 (GPIOAO_10): (MUX UNCLAIMED) aobus-banks:1958
-This shows that it's used as a GPIO. If the &pwm_ao_d_10_pins setting
-was used then it would show "function pwm_ao_d group pwm_ao_d_10"
-(similar to what GPIOE_1 shows in your output)
+Paolo
 
-If you want to know if a pull-up/down is enabled you can look at the output of:
-$ cat /sys/kernel/debug/pinctrl/ff800000.sys-ctrl\:pinctrl@14-pinctrl-meson/pinconf-pins
-(I'm sure this can also be retrieved from some userspace tools, but I
-don't know how)
-
-
-Best regards,
-Martin
