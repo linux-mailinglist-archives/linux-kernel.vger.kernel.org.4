@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03648608793
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 10:03:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57DC860877F
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 10:02:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232679AbiJVIDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 04:03:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47386 "EHLO
+        id S232568AbiJVICa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 04:02:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232236AbiJVH4s (ORCPT
+        with ESMTP id S232292AbiJVHyj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 03:56:48 -0400
+        Sat, 22 Oct 2022 03:54:39 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF9B13A588;
-        Sat, 22 Oct 2022 00:48:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B5A1356D3;
+        Sat, 22 Oct 2022 00:47:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7CE46B82E1C;
-        Sat, 22 Oct 2022 07:45:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAEB6C433D6;
-        Sat, 22 Oct 2022 07:45:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 616F1B82E2E;
+        Sat, 22 Oct 2022 07:46:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6170C4314B;
+        Sat, 22 Oct 2022 07:46:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666424703;
-        bh=uKCPqX8as8dkL2IZatNJrSMA6N4n2ERN4NedPly5oI8=;
+        s=korg; t=1666424793;
+        bh=l/euQJPP0mwXSsy4UxgqRB05+NW8V00BdPhBeRB2P0s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pLj/n9x+1oXu3a0Y04YtrIcDspxFKhopJfhpAo6Ch4Rk8AWovujNElDmJ4HaxzpAT
-         d6WxaYg5cLRfKtv4XxAeqO1PM/+ebMpMqjtKrAPY0WuyYhEmtp1NpHb/KadacCaFMK
-         VmVQPnXfBUNoYeJ+K8O2zT0igvz6sVHsL8Ii0SFg=
+        b=0jEohYFld89eptxalM2R7sIoID+3S5CsUv+2cV/vFeqAb93fIhlQWWTmdMAJfplGU
+         YS5u/iYaAYVw3NNf7c7qhrAT9A2y1+TpNDOYZ5p5+LBY036UkkpsnDOCygmaL4Ncve
+         PqUF5zuo/+2oIYxpGRF5uLJxae+ahS/JK8ljQN5w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Felix Fietkau <nbd@nbd.name>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 245/717] wifi: mt76: connac: fix possible unaligned access in mt76_connac_mcu_add_nested_tlv
-Date:   Sat, 22 Oct 2022 09:22:04 +0200
-Message-Id: <20221022072458.267489976@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 261/717] mips: dts: ralink: mt7621: fix external phy on GB-PC2
+Date:   Sat, 22 Oct 2022 09:22:20 +0200
+Message-Id: <20221022072500.824900397@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221022072415.034382448@linuxfoundation.org>
 References: <20221022072415.034382448@linuxfoundation.org>
@@ -54,39 +56,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lorenzo Bianconi <lorenzo@kernel.org>
+From: Arınç ÜNAL <arinc.unal@arinc9.com>
 
-[ Upstream commit 0a4860f627f1f2b2b777f54f993de1638a79da9f ]
+[ Upstream commit 247825f991b34440f9b9d4fe607502435a42ac7b ]
 
-Fix possible unaligned pointer in mt76_connac_mcu_add_nested_tlv
-routine.
+The address of the external phy on the mdio bus is 5. Update the devicetree
+for GB-PC2 accordingly.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Fixes: 25702d9c55dc5 ("mt76: connac: rely on le16_add_cpu in mt76_connac_mcu_add_nested_tlv")
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-Signed-off-by: Felix Fietkau <nbd@nbd.name>
+Fixes: 5bc148649cf3 ("staging: mt7621-dts: fix GB-PC2 devicetree")
+Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+Reviewed-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.c b/drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.c
-index 7eb23805aa94..d10b441eac4f 100644
---- a/drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.c
-@@ -258,8 +258,10 @@ mt76_connac_mcu_add_nested_tlv(struct sk_buff *skb, int tag, int len,
- 	ntlv = le16_to_cpu(ntlv_hdr->tlv_num);
- 	ntlv_hdr->tlv_num = cpu_to_le16(ntlv + 1);
+diff --git a/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts b/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts
+index a6201a119a1f..5bdc63187e77 100644
+--- a/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts
++++ b/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts
+@@ -83,12 +83,12 @@
  
--	if (sta_hdr)
--		le16_add_cpu(&sta_hdr->len, len);
-+	if (sta_hdr) {
-+		len += le16_to_cpu(sta_hdr->len);
-+		sta_hdr->len = cpu_to_le16(len);
-+	}
+ &gmac1 {
+ 	status = "okay";
+-	phy-handle = <&ethphy7>;
++	phy-handle = <&ethphy5>;
+ };
  
- 	return ptlv;
- }
+ &mdio {
+-	ethphy7: ethernet-phy@7 {
+-		reg = <7>;
++	ethphy5: ethernet-phy@5 {
++		reg = <5>;
+ 		phy-mode = "rgmii-rxid";
+ 	};
+ };
 -- 
 2.35.1
 
