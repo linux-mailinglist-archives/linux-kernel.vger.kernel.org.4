@@ -2,134 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 923F6608B40
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 12:07:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE7C9608B5B
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 12:14:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbiJVKGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 06:06:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37384 "EHLO
+        id S230073AbiJVKOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 06:14:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229992AbiJVKGF (ORCPT
+        with ESMTP id S230335AbiJVKOF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 06:06:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AE0432CC54;
-        Sat, 22 Oct 2022 02:22:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 96F4EB81AFB;
-        Sat, 22 Oct 2022 09:01:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31F7DC43140;
-        Sat, 22 Oct 2022 09:01:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666429275;
-        bh=NVy7cwX6C23sERHy1g/nnuGIjErNtZyXyTNgD2+Z8lo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=hkdoLSo4YoYvszhmKO8wDid/L8ZK2oEDeBpeBgfhSAzXitpKlqDL4xRbeqmPgY0Y/
-         EEqFUomF7UshpP5lc9rladRCEJo6VbL7GX2+yw2nrt0bPsLUSja8deN8fMgc5afKN0
-         tURbO0z+fjDe4sGWYpnRA2VysvFUcLZGL2E10h2stBS7U4t55ufhNnsamg9zSnHgN/
-         oEm2NPFC2pP32E1IdA0bPQaMxj36naCwbeW5HkSltSPxmAWFYWEc5pGANFFBS8r6V+
-         ZFD7kmV6HhMJ1EXLLhDxGblCYpHir/URlq5kP+bQ8K7xBbRsjeUIUuW0YfpoVb1cp2
-         tTl/o4uOYRZVA==
-Received: by mail-lj1-f173.google.com with SMTP id bs14so6660489ljb.9;
-        Sat, 22 Oct 2022 02:01:15 -0700 (PDT)
-X-Gm-Message-State: ACrzQf34J+gboSTV6z9lSVAmEW0T2/yhsD20vp/zgJGtbrcyYrJZ5Bps
-        YFLT3Sqlgcv+4tfMfgzP6rmfYoMDdz9O/LX+5iU=
-X-Google-Smtp-Source: AMsMyM5F3pcPecCVma1z4hA5Ubjj98E32W8YwWQjcBGZOhJmB8By+ME04iKb6STAkgLC/rbG8+zw0NOQeOUua+pqEwE=
-X-Received: by 2002:a2e:9a81:0:b0:26c:5b63:7a83 with SMTP id
- p1-20020a2e9a81000000b0026c5b637a83mr8989214lji.291.1666429273074; Sat, 22
- Oct 2022 02:01:13 -0700 (PDT)
+        Sat, 22 Oct 2022 06:14:05 -0400
+Received: from mxout3.routing.net (mxout3.routing.net [IPv6:2a03:2900:1:a::8])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46363317B3C;
+        Sat, 22 Oct 2022 02:31:37 -0700 (PDT)
+Received: from mxbox1.masterlogin.de (unknown [192.168.10.88])
+        by mxout3.routing.net (Postfix) with ESMTP id D818E605AA;
+        Sat, 22 Oct 2022 09:05:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
+        s=20200217; t=1666429537;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=5u/+U3WMoQOALWqYdkq+g/H0rCbuuXYSAnM9TAS61+s=;
+        b=DUsU397IVw2enhP8d7YRHxAuzAHL12nlD+bX3frXXHde7f1AVIA2yoMKBemaRsIuXw8F+M
+        Mz28YQ1804U+l6zrfnxUzrLLjNaFznEa38wjwVdiRyWXw6Gzl024h7H7m9QVT6IeD1B8nc
+        8M8aCAf2UqInZ9RztMHRIHmdkRJXmcw=
+Received: from frank-G5.. (fttx-pool-80.245.73.148.bambit.de [80.245.73.148])
+        by mxbox1.masterlogin.de (Postfix) with ESMTPSA id DD7F5405AF;
+        Sat, 22 Oct 2022 09:05:35 +0000 (UTC)
+From:   Frank Wunderlich <linux@fw-web.de>
+To:     linux-mediatek@lists.infradead.org
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Wenbin Mei <wenbin.mei@mediatek.com>,
+        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/5] Add mmc-support for mt7986
+Date:   Sat, 22 Oct 2022 11:05:25 +0200
+Message-Id: <20221022090530.16265-1-linux@fw-web.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20221018082214.569504-1-justin.he@arm.com> <20221018082214.569504-7-justin.he@arm.com>
- <Y1OtRpLRwPPG/4Il@zn.tnic>
-In-Reply-To: <Y1OtRpLRwPPG/4Il@zn.tnic>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Sat, 22 Oct 2022 11:01:01 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXFu36faTPoGSGPs9KhcKsoh_DE9X2rmwdenxaJwa3P_yw@mail.gmail.com>
-Message-ID: <CAMj1kXFu36faTPoGSGPs9KhcKsoh_DE9X2rmwdenxaJwa3P_yw@mail.gmail.com>
-Subject: Re: [PATCH v10 6/7] apei/ghes: Use xchg_release() for updating new
- cache slot instead of cmpxchg()
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Jia He <justin.he@arm.com>, Len Brown <lenb@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
-        Jan Luebbe <jlu@pengutronix.de>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Kani Toshi <toshi.kani@hpe.com>,
-        James Morse <james.morse@arm.com>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-        devel@acpica.org, "Rafael J . Wysocki" <rafael@kernel.org>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>, linux-efi@vger.kernel.org,
-        nd@arm.com, Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Mail-ID: 3d4a4418-e83c-4c0f-bb27-e18e2915e9b8
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 22 Oct 2022 at 10:44, Borislav Petkov <bp@alien8.de> wrote:
->
-> On Tue, Oct 18, 2022 at 08:22:13AM +0000, Jia He wrote:
-> > From: Ard Biesheuvel <ardb@kernel.org>
-> >
-> > From: Ard Biesheuvel <ardb@kernel.org>
-> >
-> > ghes_estatus_cache_add() selects a slot, and either succeeds in
-> > replacing its contents with a pointer to a new cached item, or it just
-> > gives up and frees the new item again, without attempting to select
-> > another slot even if one might be available.
-> >
-> > Since only inserting new items is needed, the race can only cause a failure
-> > if the selected slot was updated with another new item concurrently,
-> > which means that it is arbitrary which of those two items gets
-> > dropped. This means the cmpxchg() and the special case are not necessary,
->
-> Hmm, are you sure about this?
->
-> Looking at this complex code, I *think* the intent of the cache is to
-> collect already reported errors - the ghes_estatus_cached() checks - and
-> the adding happens when you report a new one:
->
->         if (!ghes_estatus_cached(estatus)) {
->                 if (ghes_print_estatus(NULL, ghes->generic, estatus))
->                         ghes_estatus_cache_add(ghes->generic, estatus);
->
-> Now, the loop in ghes_estatus_cache_add() is trying to pick out the,
-> well, oldest element in there. Meaning, something which got reported
-> already but a long while ago. There's even a sentence trying to say what
-> this does:
->
-> /*
->  * GHES error status reporting throttle, to report more kinds of
->  * errors, instead of just most frequently occurred errors.
->  */
->
-> And the cmpxchg() is there to make sure when that selected element
-> slot_cache is removed, it really *is* that element that gets removed and
-> not one which replaced it in the meantime.
->
-> So it is likely I'm missing something here but it sure looks like this
-> is some sort of a complex, lockless, LRU scheme...
->
+From: Frank Wunderlich <frank-w@public-files.de>
 
-You are correct.
+I've noticed the mtk-sd binding needs a bit more work get into a more
+clean state.
 
-But the point is that the new element we are adding has the same
-properties as the one we want to avoid replacing inadvertently, and if
-the cmpxchg() failed, we just drop it on the floor.
+There are 2 properties missing that maybe need to be added later or
+dropped from devicetrees:
+drv-type (which is used in mt8183-kukui.dtsi and set to <2>)
+and
+r_smpl (used in mt7622-rfb1.dts and mt7622-bananapi-bpi-r64.dts, both
+times set to <1>)
 
-So instead of dropping 'our' new element, we now drop 'the other' new element.
+i don't know their function and boundaries and i do not find them in
+driver. I guess they are added by accident, but before removing them i
+want to fix the other problems.
 
-The correct approach here would be to rerun the selection loop on
-failure, but I doubt whether it is worth it. This is just a fancy rate
-limiter.
+Frank Wunderlich (2):
+  arm64: dts: mediatek: mt2712e: swap last 2 clocks to match binding
+  dt-bindings: mmc: mtk-sd: add mt7986
+
+Nícolas F. R. A. Prado (1):
+  dt-bindings: mmc: mtk-sd: Set clocks based on compatible
+
+Sam Shih (2):
+  dt-bindings: mmc: Add compatible for Mediatek MT7986
+  mmc: mediatek: add support for MT7986 SoC
+
+ .../devicetree/bindings/mmc/mtk-sd.yaml       | 140 ++++++++++++++----
+ arch/arm64/boot/dts/mediatek/mt2712e.dtsi     |   6 +-
+ drivers/mmc/host/mtk-sd.c                     |  14 ++
+ 3 files changed, 127 insertions(+), 33 deletions(-)
+
+-- 
+2.34.1
+
