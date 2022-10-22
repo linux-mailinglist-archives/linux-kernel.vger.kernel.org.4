@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F827608E39
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 17:48:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 813AE608E3C
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 17:48:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229954AbiJVPsn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 11:48:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34502 "EHLO
+        id S229955AbiJVPsr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 11:48:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbiJVPsc (ORCPT
+        with ESMTP id S229891AbiJVPsc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 22 Oct 2022 11:48:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A9967455
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 08:48:28 -0700 (PDT)
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6A924F0F
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 08:48:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666453707;
+        s=mimecast20190719; t=1666453708;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=EDSXo8hsV8NzzkWo+KouABAzM9HOiQi26MuXJl4LsjA=;
-        b=JK5ku7k1GI8ofebQoJNflX8ULdtgJbQvQSQKkLHnqpTLwXKC4Hmr03paaBhOAxgRshuAUD
-        6V1hnViORtnf/4lAcPopqI5qfKpMpA1CJctDhI3QvXrrujCOX7iGmlpLGOj44Ed/NDHUSL
-        xxl3hia3Y81H4ntv/sJU5UontazszCA=
+        bh=i+xYh4ED8NY+eSwwcDjW7bMv+eHis2lS261cJxu7qzg=;
+        b=CZgOp/Rx10BA42ASxMKapDvLpj8fDMB+QecDc9iaU2zT3bMoxG/KWg+c0G7SJnVGnjjDgl
+        GZnQ98kbHuN1AVI97ihZcHqkpG2RTgIG3otWMidp36L9/GTRTJcYXfv/UVVmbd7tb7jwGu
+        HhJuAxilknplp/RyGNUvxUhK0Q2egok=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-612-6wXycPoUPqGmjo96iTbJBQ-1; Sat, 22 Oct 2022 11:48:23 -0400
-X-MC-Unique: 6wXycPoUPqGmjo96iTbJBQ-1
+ us-mta-63-cSLsb5qPObusKCwipu1UWA-1; Sat, 22 Oct 2022 11:48:23 -0400
+X-MC-Unique: cSLsb5qPObusKCwipu1UWA-1
 Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BD53585A583;
-        Sat, 22 Oct 2022 15:48:22 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3122F85A59D;
+        Sat, 22 Oct 2022 15:48:23 +0000 (UTC)
 Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5F96D4A9268;
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C65FD4A9279;
         Sat, 22 Oct 2022 15:48:22 +0000 (UTC)
 From:   Emanuele Giuseppe Esposito <eesposit@redhat.com>
 To:     kvm@vger.kernel.org
@@ -51,9 +51,9 @@ Cc:     Paolo Bonzini <pbonzini@redhat.com>,
         "H. Peter Anvin" <hpa@zytor.com>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Emanuele Giuseppe Esposito <eesposit@redhat.com>
-Subject: [PATCH 2/4] KVM: introduce kvm_clear_all_cpus_request
-Date:   Sat, 22 Oct 2022 11:48:17 -0400
-Message-Id: <20221022154819.1823133-3-eesposit@redhat.com>
+Subject: [PATCH 3/4] KVM: introduce memory transaction semaphore
+Date:   Sat, 22 Oct 2022 11:48:18 -0400
+Message-Id: <20221022154819.1823133-4-eesposit@redhat.com>
 In-Reply-To: <20221022154819.1823133-1-eesposit@redhat.com>
 References: <20221022154819.1823133-1-eesposit@redhat.com>
 MIME-Version: 1.0
@@ -69,49 +69,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clear the given request in all vcpus of the VM with struct kvm.
+Right now the semaphore is only used to signal that a vcpu
+entered KVM_RUN (not necessarly in guest mode, could be also
+blocked/halted).
+Later it will be used by specific ioctls (writers) to wait that
+all vcpus (readers) exit from KVM_RUN.
 
 Signed-off-by: Emanuele Giuseppe Esposito <eesposit@redhat.com>
 ---
- Documentation/virt/kvm/vcpu-requests.rst |  3 +++
- virt/kvm/kvm_main.c                      | 10 ++++++++++
- 2 files changed, 13 insertions(+)
+ virt/kvm/kvm_main.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/Documentation/virt/kvm/vcpu-requests.rst b/Documentation/virt/kvm/vcpu-requests.rst
-index 31f62b64e07b..468410dfe84d 100644
---- a/Documentation/virt/kvm/vcpu-requests.rst
-+++ b/Documentation/virt/kvm/vcpu-requests.rst
-@@ -36,6 +36,9 @@ its TLB with a VCPU request.  The API consists of the following functions::
-   /* Make request @req of all VCPUs of the VM with struct kvm @kvm. */
-   bool kvm_make_all_cpus_request(struct kvm *kvm, unsigned int req);
- 
-+  /* Clear request @req of all VCPUs of the VM with struct kvm @kvm. */
-+  void kvm_clear_all_cpus_request(struct kvm *kvm, unsigned int req);
-+
- Typically a requester wants the VCPU to perform the activity as soon
- as possible after making the request.  This means most requests
- (kvm_make_request() calls) are followed by a call to kvm_vcpu_kick(),
 diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 584a5bab3af3..c080b93edc0d 100644
+index c080b93edc0d..ae0240928a4a 100644
 --- a/virt/kvm/kvm_main.c
 +++ b/virt/kvm/kvm_main.c
-@@ -355,6 +355,16 @@ bool kvm_make_all_cpus_request(struct kvm *kvm, unsigned int req)
- }
- EXPORT_SYMBOL_GPL(kvm_make_all_cpus_request);
+@@ -119,6 +119,8 @@ static const struct file_operations stat_fops_per_vm;
  
-+void kvm_clear_all_cpus_request(struct kvm *kvm, unsigned int req)
-+{
-+	unsigned long i;
-+	struct kvm_vcpu *vcpu;
+ static struct file_operations kvm_chardev_ops;
+ 
++static DECLARE_RWSEM(memory_transaction);
 +
-+	kvm_for_each_vcpu(i, vcpu, kvm)
-+		kvm_clear_request(req, vcpu);
-+}
-+EXPORT_SYMBOL_GPL(kvm_clear_all_cpus_request);
-+
- #ifndef CONFIG_HAVE_KVM_ARCH_TLB_FLUSH_ALL
- void kvm_flush_remote_tlbs(struct kvm *kvm)
- {
+ static long kvm_vcpu_ioctl(struct file *file, unsigned int ioctl,
+ 			   unsigned long arg);
+ #ifdef CONFIG_KVM_COMPAT
+@@ -4074,7 +4076,19 @@ static long kvm_vcpu_ioctl(struct file *filp,
+ 				synchronize_rcu();
+ 			put_pid(oldpid);
+ 		}
++		/*
++		 * Notify that a vcpu wants to run, and thus could be reading
++		 * memslots.
++		 * If KVM_KICK_ALL_RUNNING_VCPUS runs afterwards, it will have
++		 * to wait that KVM_RUN exited and up_read() is called.
++		 * If KVM_KICK_ALL_RUNNING_VCPUS already returned but
++		 * KVM_RESUME_ALL_KICKED_VCPUS didn't start yet, then there
++		 * is a request pending for the vcpu that will cause it to
++		 * exit KVM_RUN.
++		 */
++		down_read(&memory_transaction);
+ 		r = kvm_arch_vcpu_ioctl_run(vcpu);
++		up_read(&memory_transaction);
+ 		trace_kvm_userspace_exit(vcpu->run->exit_reason, r);
+ 		break;
+ 	}
 -- 
 2.31.1
 
