@@ -2,85 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 083BB60856A
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 09:25:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 996E76085F2
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 09:41:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbiJVHSo convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 22 Oct 2022 03:18:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39112 "EHLO
+        id S231231AbiJVHl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 03:41:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiJVHSm (ORCPT
+        with ESMTP id S230519AbiJVHl3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 03:18:42 -0400
-Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64DC427FE84
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 00:18:41 -0700 (PDT)
-Received: from omf11.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay07.hostedemail.com (Postfix) with ESMTP id 35B161603C3;
-        Sat, 22 Oct 2022 07:18:40 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf11.hostedemail.com (Postfix) with ESMTPA id CEFB420029;
-        Sat, 22 Oct 2022 07:18:23 +0000 (UTC)
-Message-ID: <cae0a94e73b1e44a7d8c750a406aa77d1942a06a.camel@perches.com>
-Subject: Re: [PATCH v3 1/6] staging: vt6655: fix lines ending in a '('
-From:   Joe Perches <joe@perches.com>
-To:     Tanjuate Brunostar <tanjubrunostar0@gmail.com>,
-        gregkh@linuxfoundation.org
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev
-Date:   Sat, 22 Oct 2022 00:18:34 -0700
-In-Reply-To: <20221022070612.13009-2-tanjubrunostar0@gmail.com>
-References: <20221022070612.13009-1-tanjubrunostar0@gmail.com>
-         <20221022070612.13009-2-tanjubrunostar0@gmail.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Sat, 22 Oct 2022 03:41:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C97002D762;
+        Sat, 22 Oct 2022 00:39:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1BADAB82DB2;
+        Sat, 22 Oct 2022 07:37:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BC9AC433D6;
+        Sat, 22 Oct 2022 07:36:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1666424219;
+        bh=jBoTbudxBixvFylnCwkGubpi1p23EEKMHTLT51gJ8yc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=TZV78V4vEcacLNqVOteInxngf0sBchFvD3o6EC965Uq5kPflbJFWVWB/gdBnhrTIG
+         lxnzjkFaddwXFWYRLS0jKUzx0X7gyIRiWfw243xy+tdse1ebRxIcPfG7YIJ/2Si0yK
+         kNlGnOKRDk1lOueTEoiszkwzdskaWLFA4PnkZKzw=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Alexander Aring <aahringo@redhat.com>,
+        David Teigland <teigland@redhat.com>
+Subject: [PATCH 5.19 036/717] fs: dlm: fix race between test_bit() and queue_work()
+Date:   Sat, 22 Oct 2022 09:18:35 +0200
+Message-Id: <20221022072421.521048689@linuxfoundation.org>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221022072415.034382448@linuxfoundation.org>
+References: <20221022072415.034382448@linuxfoundation.org>
+User-Agent: quilt/0.67
 MIME-Version: 1.0
-X-Rspamd-Queue-Id: CEFB420029
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        KHOP_HELO_FCRDNS,SPF_HELO_PASS,SPF_NONE,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Stat-Signature: hking6ccz1af9g4dp75gah5faz6rb571
-X-Rspamd-Server: rspamout04
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/Qk4Udegm35BK3jmzSWYorLoNMBhIVhOA=
-X-HE-Tag: 1666423103-706658
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2022-10-22 at 07:06 +0000, Tanjuate Brunostar wrote:
-> fix serveral checkpatch errors related to lines ending with a '(' by
-> refactoring the code lines
-[]
-> diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
-[]
-> @@ -141,13 +141,11 @@ static __le16 vnt_time_stamp_off(struct vnt_private *priv, u16 rate)
->   */
->  static
->  unsigned int
-> -s_uGetTxRsvTime(
-> -	struct vnt_private *pDevice,
-> -	unsigned char byPktType,
-> -	unsigned int cbFrameLength,
-> -	unsigned short wRate,
-> -	bool bNeedAck
-> -)
-> +s_uGetTxRsvTime(struct vnt_private *pDevice,
+From: Alexander Aring <aahringo@redhat.com>
 
-If you end up doing more work here, ou might consider removing the
-Hungarian style notations
+commit eef6ec9bf390e836a6c4029f3620fe49528aa1fe upstream.
 
-Maybe something like:
+This patch fixes a race by using ls_cb_mutex around the bit
+operations and conditional code blocks for LSFL_CB_DELAY.
 
-s_uGetTxRsvTime	-> get_tx_rsv_time
+The function dlm_callback_stop() expects to stop all callbacks and
+flush all currently queued onces. The set_bit() is not enough because
+there can still be queue_work() after the workqueue was flushed.
+To avoid queue_work() after set_bit(), surround both by ls_cb_mutex.
 
-> +		unsigned char byPktType,
+Cc: stable@vger.kernel.org
+Signed-off-by: Alexander Aring <aahringo@redhat.com>
+Signed-off-by: David Teigland <teigland@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ fs/dlm/ast.c |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-byPktType	-> pkt_type
+--- a/fs/dlm/ast.c
++++ b/fs/dlm/ast.c
+@@ -200,13 +200,13 @@ void dlm_add_cb(struct dlm_lkb *lkb, uin
+ 	if (!prev_seq) {
+ 		kref_get(&lkb->lkb_ref);
+ 
++		mutex_lock(&ls->ls_cb_mutex);
+ 		if (test_bit(LSFL_CB_DELAY, &ls->ls_flags)) {
+-			mutex_lock(&ls->ls_cb_mutex);
+ 			list_add(&lkb->lkb_cb_list, &ls->ls_cb_delay);
+-			mutex_unlock(&ls->ls_cb_mutex);
+ 		} else {
+ 			queue_work(ls->ls_callback_wq, &lkb->lkb_cb_work);
+ 		}
++		mutex_unlock(&ls->ls_cb_mutex);
+ 	}
+  out:
+ 	mutex_unlock(&lkb->lkb_cb_mutex);
+@@ -288,7 +288,9 @@ void dlm_callback_stop(struct dlm_ls *ls
+ 
+ void dlm_callback_suspend(struct dlm_ls *ls)
+ {
++	mutex_lock(&ls->ls_cb_mutex);
+ 	set_bit(LSFL_CB_DELAY, &ls->ls_flags);
++	mutex_unlock(&ls->ls_cb_mutex);
+ 
+ 	if (ls->ls_callback_wq)
+ 		flush_workqueue(ls->ls_callback_wq);
 
-etc...
-
-Perhaps patches by unique rename.
 
