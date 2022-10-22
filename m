@@ -2,110 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69B08608DC0
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 16:50:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FD94608DC1
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 16:51:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229763AbiJVOuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 10:50:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54228 "EHLO
+        id S229681AbiJVOvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 10:51:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiJVOt7 (ORCPT
+        with ESMTP id S229608AbiJVOvq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 10:49:59 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D3457EFD7;
-        Sat, 22 Oct 2022 07:49:57 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id a67so15961467edf.12;
-        Sat, 22 Oct 2022 07:49:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FXANfOozsR8ZWtJEknyWv/BQc+quoG2zfT6HYPTQF5o=;
-        b=YsopUazClirccbXPzAAfSeCAEE5h62Jqu8W0jsjUhsLNTN4dTn2w3UC1YFTUZuuPsa
-         gHYXm/WHBKBdbp/XSQlQEaSuIWH1HNSAJXf89FQlBbUHnaNSXBszl/t4S7BjnH7NIp5M
-         SXjEuGavThZDBG4/N61IpZztZU3VbzNQGVDaMHz3xX/N6e2q8JMQSWq1C7NDLPWw3Qqg
-         O8l2UrYfhr3z9jAF9gEItJkagPBvjQUHHyOdgQ+P8zJJbXwWqFCWEnh59t8KavBc6QWQ
-         INpXNlK29ET+d6gO6F8VCgKinp7DkXi+bsnDX2sZxrwNnX9V964X/O34lX+1e7IQkchk
-         uuFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FXANfOozsR8ZWtJEknyWv/BQc+quoG2zfT6HYPTQF5o=;
-        b=SqkQxTAVTcf1lE+0L50joNCbjoiwxLLbT+WPooSsbP1c21SIJk4SSg7CuIZ5nWVXmL
-         Rnz3KRW4pnuch0E663qphdnBQ+A+75DuqPOipKcoa2l3lw0hLh4+X/nsrZECCROsw+R+
-         yvWftCmquLnQVdHIuEkx/VQuShAsUjCrBuaJBzUDoYYNgRjYofGfgvr3qm4QAelCgFjE
-         ++qUrupPIgRrgjl3iAwWupdfprYhwBz2dvP1MAziMjAvC+vfVoHzmZRZlOh1PacXtFd9
-         AbmSqjmFTqa7rWusiJBrOrub8SJOB9dDXHNfIqL9iPDLYo5aDLwDQJSZlHqz1Ec7igKv
-         H0jw==
-X-Gm-Message-State: ACrzQf04kGMKkwHKkp94VMPwJhgFTuOA602H6xqck5TWD0EDxcw2f6oh
-        pYstnO+GXqrY2FwDzvT9fr0=
-X-Google-Smtp-Source: AMsMyM4r60hxK1s59BiS5G0AlmT5m7tS1FwRfTCOCXlg6bUPLgP+Hx9y5QBGUNw+ku2VFA6Qeh7sAA==
-X-Received: by 2002:a17:907:7d8b:b0:78e:2534:4fd3 with SMTP id oz11-20020a1709077d8b00b0078e25344fd3mr20714928ejc.141.1666450195961;
-        Sat, 22 Oct 2022 07:49:55 -0700 (PDT)
-Received: from skbuf ([188.27.184.197])
-        by smtp.gmail.com with ESMTPSA id y16-20020a056402171000b0044e937ddcabsm217699edu.77.2022.10.22.07.49.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 22 Oct 2022 07:49:55 -0700 (PDT)
-Date:   Sat, 22 Oct 2022 17:49:51 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Ido Schimmel <idosch@nvidia.com>
-Cc:     netdev@kapio-technology.com, davem@davemloft.net, kuba@kernel.org,
-        netdev@vger.kernel.org,
-        Oleksandr Mazur <oleksandr.mazur@plvision.eu>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
+        Sat, 22 Oct 2022 10:51:46 -0400
+Received: from the.earth.li (the.earth.li [IPv6:2a00:1098:86:4d:c0ff:ee:15:900d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B5582565F1
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 07:51:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
+        s=the; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:
+        Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=zK3GK745Rpekd0W3RMt4rPJA0uSmGOJkehdAfC4Sz4o=; b=kbSUpYYVx5Er7Y4ja6jOBUNuis
+        UDYrfrLiM/JaU5yEfa1SgddD98KIhlH3oj5pPfe6gwz+Rf/zTcv0vImd7ArwOHRw47clBM/Ijvhv+
+        PQlwv89fSn1NUWER5gEHdTFLU0Z3JJhJxassuJZd6IuuazfKPPXteOhtR32x62hiiN9ISkn+TOLxD
+        WmCxppr5R6OvjRXLryiBcym+ASw0JoKftM6tHZM6eywnDXnwAsE5/hYZTcXYeEwRV5j1BbN4yuuMh
+        8HGdtg+3ZrbORGfL8L1OmPjyyUfS0YdQScNR/nq84HTv05Dszp00O4UST9+ctc6BtWYqhZ35lUTmh
+        aTNfl+DQ==;
+Received: from noodles by the.earth.li with local (Exim 4.94.2)
+        (envelope-from <noodles@earth.li>)
+        id 1omFqG-004Bfl-Kz; Sat, 22 Oct 2022 15:51:16 +0100
+Date:   Sat, 22 Oct 2022 15:51:16 +0100
+From:   Jonathan McDowell <noodles@earth.li>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Christian Marangi <ansuelsmth@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
         Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Florent Fourcot <florent.fourcot@wifirst.fr>,
-        Hans Schultz <schultz.hans@gmail.com>,
-        Joachim Wiberg <troglobit@gmail.com>,
-        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v8 net-next 10/12] net: dsa: mv88e6xxx: mac-auth/MAB
- implementation
-Message-ID: <20221022144951.v2twgp2lcnhnbhrv@skbuf>
-References: <20221020225719.l5iw6vndmm7gvjo3@skbuf>
- <82d23b100b8d2c9e4647b8a134d5cbbf@kapio-technology.com>
- <20221021112216.6bw6sjrieh2znlti@skbuf>
- <7bfaae46b1913fe81654a4cd257d98b1@kapio-technology.com>
- <20221021163005.xljk2j3fkikr6uge@skbuf>
- <d1fb07de4b55d64f98425fe66156c4e4@kapio-technology.com>
- <20221021173014.oit3qmpkrsjwzbgu@skbuf>
- <b88e331e016ad3801f1bf1a0dec507f3@kapio-technology.com>
- <20221021181411.sv52q4yxr5r7urab@skbuf>
- <Y1P0/gYdvrk+W866@shredder>
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Nick Hawkins <nick.hawkins@hpe.com>,
+        John Crispin <john@phrozen.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH] ARM: mach-qcom: fix support for ipq806x
+Message-ID: <Y1QDZMoCeYAfeO6j@earth.li>
+References: <20221021181016.14740-1-ansuelsmth@gmail.com>
+ <CACRpkdbfvr1pkVb3XhBZLnmn7vy3XyzavwVjW_VmFKTdh3LABQ@mail.gmail.com>
+ <63531543.050a0220.b6bf5.284d@mx.google.com>
+ <CACRpkdbOQq9hUT=d1QBDMmgLaJ1wZ=hd44ciMnjFVgpLCnK8Wg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y1P0/gYdvrk+W866@shredder>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <CACRpkdbOQq9hUT=d1QBDMmgLaJ1wZ=hd44ciMnjFVgpLCnK8Wg@mail.gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,SPF_HELO_NONE,T_SPF_TEMPERROR autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -113,107 +65,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 22, 2022 at 04:49:50PM +0300, Ido Schimmel wrote:
-> I will try to summarize what I learned from past discussions because I
-> think it is not properly explained in the commit messages.
+On Sat, Oct 22, 2022 at 04:21:28PM +0200, Linus Walleij wrote:
+> On Fri, Oct 21, 2022 at 11:55 PM Christian Marangi <ansuelsmth@gmail.com> wrote:
+> > On Fri, Oct 21, 2022 at 11:44:56PM +0200, Linus Walleij wrote:
 > 
-> If you look at the hostapd fork by Westermo [1], you will see that they
-> are authorizing hosts by adding dynamic FDB entries from user space, not
-> static ones. Someone from Westermo will need to confirm this, but I
-> guess the reasons are that a) They want hosts that became silent to lose
-> their authentication after the aging time b) They want hosts to lose
-> their authentication when the carrier of the bridge port goes down. This
-> will cause the bridge driver to flush dynamic FDB entries, but not
-> static ones. Otherwise, an attacker with physical access to the switch
-> and knowledge of the MAC address of the authenticated host can connect a
-> different (malicious) host that will be able to communicate through the
-> bridge.
-
-Not only is it not well explained, but Hans said back in February that
-"in the common case you will want to use static entries":
-https://lore.kernel.org/lkml/867da5viak.fsf@gmail.com/
-
+> > > Is it not possible to use Geert's linux,usable-memory-range in
+> > > the chosen node to make the kernel stay off the memory?
+> > > (See examples by grep usable-memory in the kernel.)
+> > >
+> > just to confirm this is one of the example you are suggesting?
+> >
+> > chosen {
+> >                 bootargs = "console=ttyS0,115200 earlycon";
+> >                 stdout-path = "serial0:115200n8";
+> >                 linux,usable-memory-range = <0x80200000 0x1fe00000>;
+> >         };
 > 
-> In the above scenario, learning does not need to be on for the bridge to
-> populate its FDB, but rather for the bridge to refresh the dynamic FDB
-> entries installed by hostapd. This seems like a valid use case and one
-> needs a good reason to break it in future kernels.
-
-Before suggesting any alternatives, I'd like to know more details about
-how this will work in practice, because I'm aware of the limitations
-that come with DSA not syncing its hardware FDB with the software bridge.
-
-So you add a dynamic FDB entry from user space, it gets propagated to
-hardware via SWITCHDEV_FDB_ADD_TO_DEVICE, and from there on, they have
-completely independent ageing timers.
-
-You'll still suffer interruptions in authorization, if the software FDB
-entry expires because it was never refreshed (which will happen if
-traffic is forwarded autonomously and not seen by software). And at this
-stage, you could just add static FDB entries which you periodically
-delete from user space, since the effect would be equivalent.
-
-If the mitigation to that is going to involve the extern_learn flag, the
-whole point becomes moot (for mv88e6xxx), since FDB refreshing does not
-happen in the bridge driver in that case (so the learning flag can be
-whatever).
-
+> Yep that thing!
 > 
-> Regarding learning from link-local frames, this can be mitigated by [2]
-> without adding additional checks in the bridge. I don't know why this
-> bridge option was originally added, but if it wasn't for this use case,
-> then now it has another use case.
-
-There is still the problem that link-local learning is on by default
-(follows the BR_LEARNING setting of the port). I don't feel exactly
-comfortable with the fact that it's easy for a user to miss this and
-leave the port completely insecure.
-
+> > Main problem here is that uboot in some case doesn't support dt and pass
+> > wrong ATAGS (with the memory not reserved) and AUTO_ZRELADDR calculate
+> > the wrong addr I assume?
 > 
-> Regarding MAB, from the above you can see that a pure 802.1X
-> implementation that does not involve MAB can benefit from locked bridge
-> ports with learning enabled. It is therefore not accurate to say that
-> one wants MAB merely by enabling learning on a locked port. Given that
-> MAB is a proprietary extension and much less secure than 802.1X, we can
-> assume that there will be deployments out there that do not use MAB and
-> do not care about notifications regarding locked FDB entries. I
-> therefore think that MAB needs to be enabled by a separate bridge port
-> flag that is rejected unless the bridge port is locked and has learning
-> enabled.
-
-I had missed the detail that dynamic FDB entries will be refreshed only
-with "learning" on. It makes the picture more complete. Only this is
-said in "man bridge":
-
-       learning on or learning off
-              Controls whether a given port will learn MAC addresses
-              from received traffic or not. If learning if off, the
-              bridge will end up flooding any traffic for which it has
-              no FDB entry. By default this flag is on.
-
-Can live with MAB being a separate flag if it comes to that, as long as
-'learning' will continue to have its own specific meaning, independent
-of it (right now that meaning is subtle and undocumented, but makes sense).
-
-> Regarding hardware offload, I have an idea (needs testing) on how to
-> make mlxsw work in a similar way to mv88e6xxx. That is, does not involve
-> injecting frames that incurred a miss to the Rx path. If you guys want,
-> I'm willing to take a subset of the patches here, improve the commit
-> message, do some small changes and submit them along with an mlxsw
-> implementation. My intention is not to discredit anyone (I will keep the
-> original authorship), but to help push this forward and give another
-> example of hardware offload.
+> You do have a DTB right, just that it is attached, and then the kernel
+> uses the ATAGs to augment the memory?
 > 
-> [1] https://github.com/westermo/hostapd/commit/10c584b875a63a9e58b0ad39835282545351c30e#diff-338b6fad34b4bdb015d7d96930974bd96796b754257473b6c91527789656d6ed
-> [2] https://git.kernel.org/pub/scm/network/iproute2/iproute2-next.git/commit/?id=c74a8bc9cf5d6b6c9d8c64d5a80c5740165f315a
+> In that case what about disabling ARM_ATAG_DTB_COMPAT
+> and adding the actual valid memory to the top-level DTS
+> file? Just like that:
+> 
+>       memory {
+>                 device_type = "memory";
+>                 reg = <0x42000000 0xnnnnnnnn>;
+>         };
 
-I think it would be very nice if you could do that. As a middle ground
-between mv88e6xxx and mlxsw, I can also try to build a setup on ocelot
-(which should trap frames with MAC SA misses in a similar way to mlxsw,
-but does also not sync its FDB with the bridge, similar to the mv88e6xxx.
-Not sure what to do with dynamic FDB entries).
+The RB3011 (arch/arm/boot/dts/qcom-ipq8064-rb3011.dts) does this and has
+been working fine with AUTO_ZRELADDR (and no ATAGS support enabled) - I
+have a recollection it didn't used to, but it's certainly worked since
+the 5.15 timeframe.
 
-If only I would figure out how to configure that hostapd fork (something
-which I never did before).
+J.
 
-Hans, would it be possible to lay out some usage instructions for this fork?
+-- 
+Generally, all generalizations are false..
+This .sig brought to you by the letter M and the number 44
+Product of the Republic of HuggieTag
