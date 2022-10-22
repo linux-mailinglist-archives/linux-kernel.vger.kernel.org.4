@@ -2,64 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 808C5608D42
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 14:56:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02B89608D47
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 14:57:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229766AbiJVM4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 08:56:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59350 "EHLO
+        id S229824AbiJVM5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 08:57:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbiJVM4x (ORCPT
+        with ESMTP id S229767AbiJVM5K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 08:56:53 -0400
-Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DAFA22B38C
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 05:56:48 -0700 (PDT)
-Received: by mail-vk1-xa2b.google.com with SMTP id x64so504673vka.13
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 05:56:48 -0700 (PDT)
+        Sat, 22 Oct 2022 08:57:10 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F01AC22B38C;
+        Sat, 22 Oct 2022 05:57:09 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id z97so15312982ede.8;
+        Sat, 22 Oct 2022 05:57:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rQaY+HDVEiFRpN3kWAbD+MEiHpWt4WE+omD3Z9rD2lE=;
-        b=ZS81E+md9y/nvgPQJ7eLi4ZxZmDaZwaZoIVi6+cuvhfIghlsLBgIFFbSx61taz1jEV
-         Qlr/zG1Nz/HrR1MN9sNZxqgZjzoisMX39yMZBIYA8L8aVWQ2jgrg1r0XUW3DVbX4ij0d
-         kUgsxFGTR9ptAnfIGkmkIA4BQPqUds9xLrXU2nUe+7O1F1k39M8SzIcouc8F8OiGpB6s
-         YJyAGdMnlk6a0yrwuXwAO6oAQV7RJpfekeyiMn+53S3UD+cestjWDXUj/9ydYyUMtnyy
-         QQQANOVzaQ8lEsFJfUU9xnY69w3K4wlak2vkqEvZJtt+sTdzPbqBCc/aNXvAJOLc2NEL
-         dR2Q==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=527bxp9h/jqaP6bCJj6qmuI38uc+kV9+b2ns/HCfZM8=;
+        b=G6ngoJy0awMrBKvuw1h47s/rl8H0wPcmh4spCh/kMBZ2e+bHcBagxeNSzrhqVQ/Pjs
+         rnuLGgZngqVL3/yMAcsXbNVLv/jbPRxXIbVjhHa7NZvZrjQig3Z+3n8QDqM90QSmxhu9
+         4V8PtdORXhxasdAEVTH34Us65ggHldjnH2dntHIJw+22G3urNR6pe9GOz7LlfzTwLTSp
+         g7G4jO/w1EtMPExUDLI7RBWZqUW76/FSJTF7KTPll83EqU/oVBhInJb3eULY7340wwpy
+         2EWrIJYxfXtivs2mCCCjwtBVbYeSXcO34yw8gPsQc+k9MA2lSjpL19jo54OIUVl1xjPs
+         jEmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rQaY+HDVEiFRpN3kWAbD+MEiHpWt4WE+omD3Z9rD2lE=;
-        b=KWeqjeqpLt7Kbd2HcGCZ8lQIIJj578T1Hg8TIzAvVId42f88QL7Hq/f6HHVTEadbim
-         2tfkCogxtin+VOmeI3ojA4slRlD1ov5DwUMWYxkIcDp4svO7qV8lol78fL6nE275iFy8
-         gHs5lESJSMv343PFRI8E7uC1F/hLAtE8RjYpU1A8fj1o3kQtGF3oGGgNqQ03YGaqJue+
-         5eSnQHVe+6u2NFbxXn7RV8v8cZYBuj2STinKYg2ovpyhmxq7hyOLBSC0p34mx2KbHtR+
-         /paKOVV6vDK9StwAgyiZR0zCroV/05Iu9EkvvdIWmReeH4QUR8SmVCmaSPSZUoCE34DV
-         vB0A==
-X-Gm-Message-State: ACrzQf3qiG9VcHy0YoGGXfHzpEZ9vIU7rO2tuP4QdzCoAoIBJAEEvjeh
-        akLyu2mvSY8O7fcXRCApq/SZFoOYio8u3bR6E64=
-X-Google-Smtp-Source: AMsMyM4IaF0foAqgyB3f1MxLG7fcq0RGmAjxcusLRSTau3x3HWCRzMis6PlfMbncxSOltIV/QZX++R9Fdk0+kpvzWPA=
-X-Received: by 2002:a1f:b405:0:b0:3ae:be72:32bc with SMTP id
- d5-20020a1fb405000000b003aebe7232bcmr14550010vkf.41.1666443407803; Sat, 22
- Oct 2022 05:56:47 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=527bxp9h/jqaP6bCJj6qmuI38uc+kV9+b2ns/HCfZM8=;
+        b=kIAg3B50B9+sVFUSMSZXdZClRaOBeB4RCKi9/Z9YOBaJVQUzRlEtmgYc1dCu5YMW2V
+         G/90IKu3HvIO+Mf05nMOrx1BEoi4OUpBTbD/mpXb55zQHd9JtiySrCtvyuES3zYP+79W
+         e1OsHD+myoMpRjZPM7qJ2U4r2clgrcSF1YcYz6N678KX4o7n0z33BRGrBkavZqpVt4lv
+         nmh0ciYkn0n/s78tCeQHMJDIa+rgOiqLpQXae7STvG6+YWhon35axpZl5qtN8W68pxT1
+         cpgAXcDgQoQbqrsQKtDi366ZiFxvdgP+ZdDOIzvnYgGEWiM6XvfnWZqLCFlEWEFmHS0Y
+         ZH0A==
+X-Gm-Message-State: ACrzQf0h7EdfiKovQ742Nlzkh67CuPImuZkecHOY9DUONJGkTAAmGKrx
+        aMZvRd6UQspNeyLvruMmGos=
+X-Google-Smtp-Source: AMsMyM5+JIbx7OR2f6XLQo3O89li6hBkahzs9EsxHlhWypPUsw87KEtQT2iWwX5CDe1b9La5Fy0otw==
+X-Received: by 2002:a05:6402:3223:b0:461:8635:e5c with SMTP id g35-20020a056402322300b0046186350e5cmr1580007eda.303.1666443428117;
+        Sat, 22 Oct 2022 05:57:08 -0700 (PDT)
+Received: from localhost.localdomain (93-42-70-134.ip85.fastwebnet.it. [93.42.70.134])
+        by smtp.googlemail.com with ESMTPSA id t29-20020a056402241d00b0045ce419ecffsm15173970eda.58.2022.10.22.05.57.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 22 Oct 2022 05:57:07 -0700 (PDT)
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Christian Marangi <ansuelsmth@gmail.com>
+Subject: [PATCH v3 0/3] thermal: qcom: tsens: small fixup for debugfs
+Date:   Sat, 22 Oct 2022 14:56:54 +0200
+Message-Id: <20221022125657.22530-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-References: <20221013214639.31134-1-palmer@rivosinc.com>
-In-Reply-To: <20221013214639.31134-1-palmer@rivosinc.com>
-From:   Romain Perier <romain.perier@gmail.com>
-Date:   Sat, 22 Oct 2022 14:56:36 +0200
-Message-ID: <CABgxDoL1+TY1heaaJaCrbaJSPX+Agz5WSFYyhyXMmMjo3sjpWw@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: git://github -> https://github.com for linux-chenxing
-To:     Palmer Dabbelt <palmer@rivosinc.com>
-Cc:     daniel@thingy.jp, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Conor Dooley <conor.dooley@microchip.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -70,44 +76,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+This is a small series to fixup some bug in how tsens init debufs.
 
-Le jeu. 13 oct. 2022 =C3=A0 23:49, Palmer Dabbelt <palmer@rivosinc.com> a =
-=C3=A9crit :
->
-> Github deprecated the git:// links about a year ago, so let's move to
-> the https:// URLs instead.
->
-> Reported-by: Conor Dooley <conor.dooley@microchip.com>
-> Link: https://github.blog/2021-09-01-improving-git-protocol-security-gith=
-ub/
-> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
-> ---
-> I've split these up by github username so folks can take them
-> independently, as some of these repos have been renamed at github and
-> thus need more than just a sed to fix them.
-> ---
->  MAINTAINERS | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 3bc404b292d3..5a7194bd66d8 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -2430,7 +2430,7 @@ M:        Romain Perier <romain.perier@gmail.com>
->  L:     linux-arm-kernel@lists.infradead.org (moderated for non-subscribe=
-rs)
->  S:     Maintained
->  W:     http://linux-chenxing.org/
-> -T:     git git://github.com/linux-chenxing/linux.git
-> +T:     git https://github.com/linux-chenxing/linux.git
->  F:     Documentation/devicetree/bindings/arm/mstar/*
->  F:     Documentation/devicetree/bindings/clock/mstar,msc313-mpll.yaml
->  F:     Documentation/devicetree/bindings/gpio/mstar,msc313-gpio.yaml
-> --
-> 2.38.0
->
-Reviewed-by: Romain Perier <romain.perier@gmail.com>
+The first patch just handle situation where tsens fails to register and
+debugfs are getting registred anyway. When tsens is tried to reprobe
+debugs will print a warning as the directory are already there.
 
-Thanks,
-Romain
+The second patch is a fixup for wrong version when the ancient VER_0 is
+used.
+
+The third patch is a rework of debugfs structure moving version in the
+tsens istance instead of ignoring any other tsens istance if it will
+ever be the case in the future of having multiple tsens instance with
+different version. It's just futureproof on it's own and also removed
+one additional check.
+
+changes v3:
+- remove extra space from patch 1
+- split patch 2 to 2 different patch
+- patch 3 rework wrong debugfs structure
+changes v2:
+- Changed sob name to new one.
+
+(the resend was actually v2 but i totally forgot that I sent it as v2 with
+the sob name fixed... but everything should be good now...)
+
+Christian Marangi (3):
+  thermal: qcom: tsens: init debugfs only with successful probe
+  thermal: qcom: tsens: fix wrong version id dbg_version_show
+  thermal: qcom: tsens: rework debugfs file structure
+
+ drivers/thermal/qcom/tsens.c | 23 +++++++++--------------
+ 1 file changed, 9 insertions(+), 14 deletions(-)
+
+-- 
+2.37.2
+
