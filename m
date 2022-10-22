@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 589F4608C05
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 12:56:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFA35608C08
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 12:57:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230431AbiJVK4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 06:56:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35622 "EHLO
+        id S229574AbiJVK5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 06:57:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230332AbiJVK4S (ORCPT
+        with ESMTP id S230472AbiJVK4l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 06:56:18 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F90A17E06;
-        Sat, 22 Oct 2022 03:14:23 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id m15so14393028edb.13;
-        Sat, 22 Oct 2022 03:14:22 -0700 (PDT)
+        Sat, 22 Oct 2022 06:56:41 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DABF94C2C1;
+        Sat, 22 Oct 2022 03:14:48 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id a67so14408377edf.12;
+        Sat, 22 Oct 2022 03:14:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=googlemail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=QU5eKnCMasT6Q9fSCMOcqpffbD8d615reCYXwSO/gf4=;
-        b=hGU6dc6xbDgw8swPGkLy3Yorq+CrOuuW/m//YQGpQSrTiLpoecj4A5xKOXogY7torv
-         aNY/+de9gUXI2qoFVounok6PizOkGfHz29Mav3d6j0MajPeZuK6EhwcCadyETjDlMwV4
-         LeHUwBwLqbrrsbQhlAslMjZXx/g68JIjtjF+CTFsyyaUX/aSr66Agqtkzgkrs5aM9kl4
-         L0WkXZU+l+/TSMZrRQNr27oQ/fEOW+9E7N6jw+rgH7fL+Y/YYexvdaLYVrySPrDslQ/j
-         /0/Gx/vALPRnTNtiVGn8tQDa29CKOozeeaiXRvoa+obLxRtAqWJ8rDbiiuJfdUTJhgDe
-         k8gw==
+        bh=HRxA1wCfL0RgEilQ0nEOZlpZEZ5XChNDT1P0uuoGXtQ=;
+        b=YwPo+TMxhdFYaL4vjMP2doMRR8fiV0VoWpwn5nZQQwIfyDL8JeoFqv97TD/P0UkcEG
+         fvsEZEL7uEM5F6r0xtA6szfPMw+neybQ/XFz5Z3jmwFQ8owH2Hx40x6Uw8VxDC/xZAx/
+         3JmIH8Tkuwhn9KQwKQG38qW/YAexVvU1e2BS/CJ3c+EBYQ23TbKUtV2PU5sJBiypBKuj
+         IaAiK0DHFzqvhMMk5HCZIAYhQOH94rG0uYIdLePxny++FEVb+PoxJaFshpBOHi5JfORy
+         F4K0TGGLDCtwAUWCL5MfXPKU1vLgSKW2yWmBTnGx/5dHeVUN1K+eS6Cq4uKnOa3QuqCU
+         UnSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=QU5eKnCMasT6Q9fSCMOcqpffbD8d615reCYXwSO/gf4=;
-        b=cjigCWnyURG5FuLELuEHUnVnbIjpBibzRQvaVLtnANxpXEWTENZc03CsuE1nzfhP2i
-         LbxSOBeg3WH/RILV/zqMyYVjFGjAW0GPe9sJrEuA/0xJ3kycf+6XXv4VLlFy4YS98dep
-         bw7n+Cmezf2nA5gf8szhc1gs+6NXBhQ+EjkLiBFn02ySkvCbz5TBhAMy/vycRqPHKk5W
-         QlvrPEInrKmB6g3aAPMT2HGukVaDfMzQNYslNHNW8W8e219faGhetTPlOhTQ30P75U8Y
-         CYBsVZoYzWndVp+mTcSrt3z9OEQiiZGsRzSgvbPrX342fcWq/2rohTGYQ/0rQ31sJSze
-         Olwg==
-X-Gm-Message-State: ACrzQf2NG/w6iF4TSdunAXMqEA46ZUoluFjl246CKBc8qKXqno0OhQKj
-        PXm2/9fO2h8/SrHsOxmVTMoxR9he5YmuueJERug=
-X-Google-Smtp-Source: AMsMyM5pa070Y9cycfmF7F9UaRmgJ8sMMr0dewTd+9nBguRc1O4LCWhsfWTjqaFi9UqVjZl0uRdKCF+KcsOb793/C1g=
-X-Received: by 2002:a17:907:3c81:b0:77a:327a:815f with SMTP id
- gl1-20020a1709073c8100b0077a327a815fmr19824207ejc.422.1666433660962; Sat, 22
- Oct 2022 03:14:20 -0700 (PDT)
+        bh=HRxA1wCfL0RgEilQ0nEOZlpZEZ5XChNDT1P0uuoGXtQ=;
+        b=YMLQJk9bj3TPZo9Fcj+AjrDUgBwo6m13pG63cXPb9IsnoU98hi7NxM3LIFOdJ+4vJm
+         npxmJYdYMeiJznwBCki4ZHq9b65sHjEshhbdr4NBwBuB/VrJWbiNykxLdoOKjBgyRT0q
+         p8TtvPdVE9ZMrAaLafcwTQGJGKa4fOkp6ODIE9DPHrzVBG8QFcqCinkQ6XjX5+HVDjA8
+         cu++l0R7znnJiHn1YzRL9mEX32rKopIf/oq4ecgkSRrSDXUHy0AE4HG1YfnYi/LmEujO
+         GLWRJlH88tCIIaub59qFTasNIk6924KhmtgY14Q+QFzpkvkdppmt2+x4mJJhvrtziTYl
+         jOag==
+X-Gm-Message-State: ACrzQf0SpHzDDf1k345UEeCi3sHt0RhXyNdv5vCo7wpi9qT5wEqQPBUP
+        JMDFbiEUIWZxg3KvFJS8T+Ek2EpxAB31xOwUaEw=
+X-Google-Smtp-Source: AMsMyM6d73cg4d0wNQuMJiODAPL6zKNKjfXCGBbTlKTkeqI5Y6WOfEPAHw1TL16UWW/UIDYpbG+ENDd56IYLTXWR9CM=
+X-Received: by 2002:a17:907:2da5:b0:78e:1208:8783 with SMTP id
+ gt37-20020a1709072da500b0078e12088783mr19641226ejc.743.1666433670312; Sat, 22
+ Oct 2022 03:14:30 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221004-up-aml-fix-spi-v4-0-0342d8e10c49@baylibre.com> <20221004-up-aml-fix-spi-v4-3-0342d8e10c49@baylibre.com>
-In-Reply-To: <20221004-up-aml-fix-spi-v4-3-0342d8e10c49@baylibre.com>
+References: <20221004-up-aml-fix-spi-v4-0-0342d8e10c49@baylibre.com> <20221004-up-aml-fix-spi-v4-4-0342d8e10c49@baylibre.com>
+In-Reply-To: <20221004-up-aml-fix-spi-v4-4-0342d8e10c49@baylibre.com>
 From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Sat, 22 Oct 2022 12:14:09 +0200
-Message-ID: <CAFBinCBwBz6AmxDDJPuww=WRG7Pc0xUWeH+DRXM6WcyctouFhw@mail.gmail.com>
-Subject: Re: [PATCH v4 3/4] arm64: dts: meson-gxl: add SPI pinctrl nodes for CLK
+Date:   Sat, 22 Oct 2022 12:14:18 +0200
+Message-ID: <CAFBinCD63tjLKU0mSUhutb5beGOy1k7LHw0-WngB7yE2VaeJFQ@mail.gmail.com>
+Subject: Re: [PATCH v4 4/4] arm64: dts: meson-gxbb: add SPI pinctrl nodes for CLK
 To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>
 Cc:     Kevin Hilman <khilman@baylibre.com>,
         Jerome Brunet <jbrunet@baylibre.com>,
@@ -77,9 +77,8 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On Fri, Oct 21, 2022 at 3:31 PM Amjad Ouled-Ameur
 <aouledameur@baylibre.com> wrote:
 >
-> Add SPICC Controller pin nodes for CLK line when idle for Amlogic GXL
+> Add SPICC Controller pin nodes for CLK line when idle for Amlogic GXBB
 > SoCs.
 >
-> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
 > Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
 Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
