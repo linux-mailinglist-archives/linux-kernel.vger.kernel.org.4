@@ -2,70 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 728C6608476
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 07:16:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCAE1608475
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 07:16:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229755AbiJVFQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 01:16:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35048 "EHLO
+        id S229727AbiJVFQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 01:16:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbiJVFQ3 (ORCPT
+        with ESMTP id S229497AbiJVFQ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 01:16:29 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF332A8A6B
+        Sat, 22 Oct 2022 01:16:28 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94F902A8A6C
         for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 22:16:27 -0700 (PDT)
-X-QQ-mid: bizesmtp86t1666415781trj2jbh4
-Received: from localhost.localdomain ( [182.148.15.254])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 22 Oct 2022 13:16:19 +0800 (CST)
-X-QQ-SSF: 01000000000000C0E000000A0000000
-X-QQ-FEAT: D6RqbDSxuq6+whg+cHMxbbJQDzgKw0UOOYf8ON1p6yiUH9xki62VYRwPHowGS
-        UXDDQJih8VaBMSoTib+5cfFmHGp6GarvL8KOcVzWM4rWiW5pOfixsJL98oAHEcehP9JPbXX
-        Lz/HIilIOyGJuxG7APejtqqw8zmfzYHyAUyZSKwY1AbBLeBdATsGjvPNjZj62EnImYHGk36
-        O6ZyuA0ueQLHoBxECZcfs0vWn1SEgg4G4FQAgeBuKPL/3RvdCzWNPvJ4yo7ShSNAIufYWSV
-        9V3/uNLmCOiKjxpOY96TUUd9aTlXfe6rsulN64eY2n0daqTuxDZF5oWITFZvjuLqlK+ec8K
-        ++VoDkVFwuDOPB++/Qy3K2aGLvi08iszfie8iZAUii6abcY2/k=
-X-QQ-GoodBg: 0
-From:   wangjianli <wangjianli@cdjrlc.com>
-To:     nsekhar@ti.com, brgl@bgdev.pl
-Cc:     linux-kernel@vger.kernel.org, wangjianli <wangjianli@cdjrlc.com>
-Subject: [PATCH] arm/mach-davinci: fix repeated words in comments
-Date:   Sat, 22 Oct 2022 13:16:13 +0800
-Message-Id: <20221022051613.3017-1-wangjianli@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+Received: by mail-ed1-x532.google.com with SMTP id b12so13008335edd.6
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 22:16:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+yFsO2k9GJqskGirXTy30+Rr4ObgZBCuJO3gxd2Y2+g=;
+        b=hSn9Ud8MZRAcuu/0OXR4Ra0GC+vLv9JzfjMakBRJrHH9stUfS664LvveE40eqxDc1B
+         YoV/m2gqS3KlfwqA3buJnJ0cIbld0d8fjksV2YwNCHuggS18BV/Z5+fuHPVpW7/mP63r
+         0lN41601nLdfUS8V4pdqK7j8t02wfhyrmeAq+bPll0DmZKXyt8TXnPagAJ+h6vhiVenK
+         T4JnuT1SsH4nJ9lUxDQrBtXWBTDDreDaeuoSX5OL5KnyyHYZcEfUV7CvzSEB0M/xc6g1
+         uVBkwHDamo+2w3oXbYfSWo8MCc8YVURW+ZNmMPgvKptqHiUm/xyY1IHZSzwMvAiaz1bY
+         Ev/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+yFsO2k9GJqskGirXTy30+Rr4ObgZBCuJO3gxd2Y2+g=;
+        b=KJEPkGRLbsN/zoL9DuH4cGMtCBzujCJa13lrqZ9iLV/YhP5f5RR/qgW5KCzjfbA5ve
+         G6bsBIGK/tKgRRy4ouc5GYc7WZG9uS160k1MRA5St9zb1iPnlOUcOoJW2cnxlMb5tmVA
+         2xANLvBONJ8P7QlHaaOl7Rgg6/iViVThcjsGLDp7MyI0CMLrxCXZggwoFJXMIYg0/zgy
+         8j6bgWtb2f9tycgKXjXiGYv0lSofFLWQgxZ6UjfBvqDBXFaYEiR+VBAbKiEJJ5QhFKOB
+         GopxMX8s293QpKK5mtWNBZumcA3r2v1344DjSCk2/UXM2OT8Twx/ERxPSnzRO2VmZ2US
+         Dfbg==
+X-Gm-Message-State: ACrzQf2Y2s//0Rw+sE3uJjrbqQO85Nu8pldlPOOkjLVueB63Q7VAL8/7
+        jqYhCQuXZvP0CibyJyJbT4JU/Ua6aFQ=
+X-Google-Smtp-Source: AMsMyM6Kdb3U8Sua5e/k8W7PleyvXrI55p8LwSSe3xrXFb0we5Sb/RXS9n/go/MwJdScEdzHmWHouw==
+X-Received: by 2002:a05:6402:e87:b0:456:c93c:5361 with SMTP id h7-20020a0564020e8700b00456c93c5361mr20203693eda.88.1666415786147;
+        Fri, 21 Oct 2022 22:16:26 -0700 (PDT)
+Received: from ?IPV6:2003:c7:8f3e:6a47:f906:12eb:e934:9c2e? (p200300c78f3e6a47f90612ebe9349c2e.dip0.t-ipconnect.de. [2003:c7:8f3e:6a47:f906:12eb:e934:9c2e])
+        by smtp.gmail.com with ESMTPSA id z12-20020a17090655cc00b0078d3e54aca1sm12327092ejp.75.2022.10.21.22.16.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Oct 2022 22:16:25 -0700 (PDT)
+Message-ID: <ee426ce3-b336-1b9d-32a1-55e184028f8a@gmail.com>
+Date:   Sat, 22 Oct 2022 07:16:24 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr7
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] Staging: rtl8192e: fixed multiple coding style issues
+Content-Language: en-US
+To:     Aaron Lawrence <t4rmin@zohomail.com>, linux-staging@lists.linux.dev
+Cc:     linux-kernel@vger.kernel.org
+References: <be839b05d799ff8e62fc2f79e6f0aaec81a8cd19.camel@zohomail.com>
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <be839b05d799ff8e62fc2f79e6f0aaec81a8cd19.camel@zohomail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Delete the redundant word 'the'.
+On 10/22/22 07:05, Aaron Lawrence wrote:
 
-Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
----
- arch/arm/mach-davinci/board-dm355-evm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi,
 
-diff --git a/arch/arm/mach-davinci/board-dm355-evm.c b/arch/arm/mach-davinci/board-dm355-evm.c
-index f7c56f662d4c..e56f8ea5eb56 100644
---- a/arch/arm/mach-davinci/board-dm355-evm.c
-+++ b/arch/arm/mach-davinci/board-dm355-evm.c
-@@ -294,7 +294,7 @@ static struct vpbe_enc_mode_info dm355evm_enc_preset_timing[] = {
- #define VENC_STD_ALL	(V4L2_STD_NTSC | V4L2_STD_PAL)
- 
- /*
-- * The outputs available from VPBE + ecnoders. Keep the
-+ * The outputs available from VPBE + ecnoders. Keep
-  * the order same as that of encoders. First those from venc followed by that
-  * from encoders. Index in the output refers to index on a particular encoder.
-  * Driver uses this index to pass it to encoder when it supports more than
--- 
-2.36.1
+please do not attach patches to the email. Make the email the patch.
+
+Have a look at the examples:
+https://lore.kernel.org/linux-staging/
+
+ > Subject: [PATCH] Staging: rtl8192e: fixed multiple coding style issues
+ >
+ > Fixed multiple coding style issues on multiple files
+ > according to the checkpatchscript.
+
+Please do one type of a change at a time and not multiple changes. Look 
+for examples in the above link or in the kernel.
+Thanks
+
+Bye Philipp
+
 
