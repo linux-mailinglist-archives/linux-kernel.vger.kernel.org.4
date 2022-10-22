@@ -2,144 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24E966082CD
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 02:20:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F1D46082D1
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 02:22:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbiJVAUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 20:20:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52276 "EHLO
+        id S229981AbiJVAWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 20:22:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiJVAU1 (ORCPT
+        with ESMTP id S229849AbiJVAWj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 20:20:27 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC38F18DAB7
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 17:20:25 -0700 (PDT)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29LLDovE005601;
-        Sat, 22 Oct 2022 00:20:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2022-7-12;
- bh=M1eVfLKhox61XURtsV92Em7f0mRjZOe+TduXSAWyTF8=;
- b=jN6DegAd16cTwaD7/2jYEJms0GpM/kmtZzUf4lxCWJneYrw284uyVLq3QVARQ0LGBGor
- lu43w41GdiHSPld7SAfcVNTXxR1ovDP8vkd6j6246qDKK+GnciSE/hsL2erqAEzmxeuv
- I7GL8U4qlYNkvihuNlx7oNjCj0uxPFyWpRRRe0e8XWPCN/KjkzvOFaUILT2xa7KTWlwn
- QeaQmS7LbbHQkqyVlTXk5wnRrWLu71/irpBm4LQUKmRSVLJwB3fpZI8oLkU2N7NdG6e8
- sVtU8ltUwOpz6EfveRXX6YyRBxTDVyUMrpE0S4EofTQeXzHtB5/cjrnb1AOfyVPwRA6+ 1A== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3k7ndtud5w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 22 Oct 2022 00:20:17 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 29M00TRv016967;
-        Sat, 22 Oct 2022 00:20:15 GMT
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2172.outbound.protection.outlook.com [104.47.57.172])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3k8huba48e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 22 Oct 2022 00:20:15 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=K8FfoiP+gZQcM42RCTawj9AtzaFoaEIat7f37JC91aLw+Kbsz9h2q/sO6Tez1QQw2vP3OmoOFFltUbTr/kyAqVfgFJRWBpozFsH2NSRInpPcahaLuHKnGmzqXJaagteTafy7HtNZ0oOlW0rwH9VM95VbDVw+YOEA4HFEXPqVrMTmsyUYzrWTJvae0Zb0a+BZbPd/5Q80+RUEbZeh55CqXvyAcEH7LbV21PBJM/vOOR5VS8Ef5IM8QXkJ6M9k2F+Did1n8q7PzJWIBTG1CmwUtbapISfydC/DUSrKCMNMSDuPw7z6Fhd2SXR/YQL5Qw1XFwPHwFqdYEk5teG1bwWtvg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=M1eVfLKhox61XURtsV92Em7f0mRjZOe+TduXSAWyTF8=;
- b=Niyij/XX/CUVhp9uwL3pWvwEkylsMXgYE6AmYkn6qOO2+ORZtykG73rw2r9OqgJlP/KLm4L7dvOi7tyLuvjDq1BQ/G1XFNqC4vgVIbhklg7wYtOJd6JFJKUU1TfwHMSoBS8UdT57JzBO6EsNDA3HJXf8oQ442E+REZ/14HY8jbnSNuoUhScXW73A6uxOLDcS6d+oWQ6mcAaVnBAxuY4vAS6fza2NRW0N3pwryVBOJX68gtshYgtkbW69zoGauFzasdgnKABcaN0MijLppUc2W0Fh6F6hbS+mmtNqzKNCg7USfdT46l4Z2wEu2ahHA66tGlpxtPOO8qdSTSSvc12d2w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Fri, 21 Oct 2022 20:22:39 -0400
+Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF522B4145
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 17:22:37 -0700 (PDT)
+Received: by mail-vs1-xe33.google.com with SMTP id n63so2818445vsc.8
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 17:22:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=M1eVfLKhox61XURtsV92Em7f0mRjZOe+TduXSAWyTF8=;
- b=O+08h/09EL1VwT0e7raeOz2IuUbcXZ+9L4Lls6jOI3zrAKhA3e/0xvQI2134cczWRLVn4egYUu+WoN4b25SJeddK7/Sie+OK/m0NqefioBGgoL199MoStFzT/fu8GUCosGB/8M+ru9Y63kbAJ6dDkUIY32FB47ZnTQQ7YUAzYa4=
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
- by CO1PR10MB4433.namprd10.prod.outlook.com (2603:10b6:303:6e::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.21; Sat, 22 Oct
- 2022 00:20:12 +0000
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::5f85:c22e:b7fa:21bd]) by BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::5f85:c22e:b7fa:21bd%5]) with mapi id 15.20.5746.021; Sat, 22 Oct 2022
- 00:20:12 +0000
-Date:   Fri, 21 Oct 2022 17:20:09 -0700
-From:   Mike Kravetz <mike.kravetz@oracle.com>
-To:     Hawkins Jiawei <yin31149@gmail.com>
-Cc:     syzbot+a3e6acd85ded5c16a709@syzkaller.appspotmail.com,
-        Muchun Song <songmuchun@bytedance.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        syzkaller-bugs@googlegroups.com, 18801353760@163.com
-Subject: Re: [PATCH -next] hugetlbfs: fix null-ptr-deref in
- hugetlbfs_parse_param()
-Message-ID: <Y1M3OQSf/gKLKYwt@monkey>
-References: <20221020231609.4810-1-yin31149@gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221020231609.4810-1-yin31149@gmail.com>
-X-ClientProxiedBy: MW4PR04CA0386.namprd04.prod.outlook.com
- (2603:10b6:303:81::31) To BY5PR10MB4196.namprd10.prod.outlook.com
- (2603:10b6:a03:20d::23)
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=93BGuosjA6Wu0xeSlrIGtuCH7vSrjSnpUerGqSJFtNA=;
+        b=RFL0PO7E8HA28xHg4parvVwpFKpWV6ON8wn65ue37ToHWccEFksz25Q5y3xzQvWmEo
+         Re/ejMEiZW2Ko1gt8pYmcErJBzggaNcPzYvFT1006z4ifdBAaTgyMDRiGA2ZsVx040Q5
+         oZ7UQZY68d51B+WyCgaOeoJ52CmEMrK/aBOC/Xqq+CZcD9YDFtnP0aJ/Bj99glhKllYy
+         Ick/JyqEhrXwjIxGl2Bhd8faNhpbGw1Y8cohYzmPi6Kho+KPXue10Jmt+aqmqR9e2yFm
+         I0vE37okygJie8BgSaX/N8eYzj+b2ohlRPLi45IkFG2CddonyJ18yXv1+0R+8iOOp/o3
+         ejaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=93BGuosjA6Wu0xeSlrIGtuCH7vSrjSnpUerGqSJFtNA=;
+        b=I9npVWn9nD56ZVNYSeuyHY4Mgp70/XH9/C8ZU9dpyKkIo5IwlQXJxYk+bOlZWgNRyx
+         s/AHNw+28MctcuwtVmfhSVkC5Vr3rOX572q8wlG1811HAUqntSdzTvSs9flZzX60cHjW
+         7qY0b9Iq43VX49kV5bCMGszE0R1TuntZoiORYcGwYQpW2D61GBjB4neLWGE+6MrOCFTO
+         ri7ZtW8nUo7fUumgJCR0BnfZCwQ8t6zeZcoWzykL61hSdXjosfxzSz5HVNWhUMU4czgN
+         OpXofcshrAu/a5VIsf/GZ2lls/4TnqajqWfAHMY/OrX3613jZ0X/1uujjviFveMP9qKX
+         3/sA==
+X-Gm-Message-State: ACrzQf0x+GpdaRHlowAXGl3L9hzOGh7t6HUlCOteCdPzIFnH2sQXlq90
+        uQAQtS50IwISHRnK7y+slUGHMfJmxbCA+wl+QAtVRoLKR//aZaLS
+X-Google-Smtp-Source: AMsMyM5bjGn8jIDMb3tZC3S54U7894nKX04YDfHLvtcav9oTj2zeVuL1k7+gCCE8F+d1m9YPOjQBZcIQdFwJ8X9DqYY=
+X-Received: by 2002:a05:6102:318c:b0:3a7:acd4:a5fc with SMTP id
+ c12-20020a056102318c00b003a7acd4a5fcmr14840610vsh.48.1666398156354; Fri, 21
+ Oct 2022 17:22:36 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR10MB4196:EE_|CO1PR10MB4433:EE_
-X-MS-Office365-Filtering-Correlation-Id: fc8bff5c-54bc-4b93-ab94-08dab3c32f48
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +AVwUk/jTVG+085Fe7JIuHQpuTZSF7T9MqqQQc/QGsFhFYhsDpQEradpgJzZV5zR2DNBO6/AhhRhFCfvsZpHKqWj3tI8AqZwXdkSi5wBSJNPqT4BlEzWnFNzWZgLgr/fJs1dqibsqxDy5uDkDYknC7jm1girdVFuR0xfnCDSfNJm+Mytcehr24gqGP6l4HNEpyiWZFmemxCYsUmFU6LBawcFkzNxEOOGa2Gm1TWMrB97IEa9VpmQTsWDf+UzdfFzpfQ7XCdND7aT/qtBnSF1f+OabwpCe0SYntVhBr/FmfDjw+Dzja5C/Bwk4aPD4aHrmfQYgbL0HtIxwamaJlsGh1XBY1sqQ+eADkzKIPh4+nMrnIQ8HF15VqNdj0w62EMJQQo10kRA/OnaQHBs+OPrhjHjOxAEIR3lUDHtJK1jO0mNaklsSwEk+hPDo3Ji66nrBLchgtteoVIQUOLN9DNV22YvFBtleXLC9qEc9tTo1j7YOG8s5lE1aDpiK6GP9IbV9QOQ0cLY0QEEH99XRKVhlf7iKF/T1qjFHdZl1PoAHxCbG4pQe29BmT+WddOYNElxgN7Jf8S+qo+TZvnLIeuY51vJWg9fGXS0Nf2iHMEuWVTw+q1XpO8gacdmogQFQi5t0UH2G5TKuHMJz56Hyo8hiw6sxz6SirByGLzxfaOCBBKnc7reoY6vzmt7X6T8zP3HsAULkO6euiRKknIhrMZuDg1Vjq4K2yg+2urSj7MD1dA=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(396003)(346002)(376002)(136003)(366004)(39860400002)(451199015)(6486002)(966005)(478600001)(86362001)(9686003)(38100700002)(33716001)(6666004)(6506007)(186003)(83380400001)(26005)(53546011)(6512007)(8676002)(66946007)(316002)(4326008)(66899015)(66476007)(66556008)(2906002)(5660300002)(6916009)(44832011)(41300700001)(8936002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?XBWINQBUrUCQBa0+s7+GsaaTOuXE2b8EBM9ddbw6otEOWf6lLZlDseLZkAgv?=
- =?us-ascii?Q?PCB6nDu1R4ilJF5dln8UxUqUVT6JDfi+q1CKExXOT20mVzANXxOfnrpWjP+n?=
- =?us-ascii?Q?RrhWTq3iH4HkoND3zJ+h3L+a0hp31pegyPDfAasBgyWQne8QX+wevZ81LdRN?=
- =?us-ascii?Q?3dgKz1xfdBRyJWFGfvCCkaJXvEs+12cXI9rwFHs0keqy8l8Fcu0Os/+CQFAw?=
- =?us-ascii?Q?41/dQ9hSmt32bojBlGPGesVBqcLobUoKogwWLR6LWSjJkYalQZ7BHP76uacn?=
- =?us-ascii?Q?ODbIj4EhSlPVFNN9O30MomgKouhahrKSg3eGAadGO6NDQKC1kCd0vqYSEXfe?=
- =?us-ascii?Q?ACVR3Db8aAIiNLwcTar6nzx+9OlKx3HgtbScLGcNvBuj+lDkScbdIM0lIXdg?=
- =?us-ascii?Q?2+U1PBhBSqYseQnHEQbE8Gz8y+k6bcCp4RGWiNIlxTLq8QAoAnTxpi1kPYki?=
- =?us-ascii?Q?5hH1eXH//DNIJiGIwCVufAii1ZImwYIUMvzBXKjtHxm3nbqs2J3NVslnTCZ1?=
- =?us-ascii?Q?VlgvEMHdFdf4zQAuXeTiAxxE7bDSs7rYrLRR0SJLnpg5/n6D9XPIgDgGXNm7?=
- =?us-ascii?Q?zZxM0VTxFsBYwNyucEo4bdMHaQhNj8mBHXXNQBMVJjEjgok87OKHdcXD40h6?=
- =?us-ascii?Q?uH586V/awZURc4j49Ovp6K6IMm3A5Q0ADFntb/so+ivYuiLQn2zLRTQ6ioNE?=
- =?us-ascii?Q?A66VjoGkv+5+yjp46HgJXNuBDlT8AkgfArDFhCFpcbjyBIpflo1flTvsXUop?=
- =?us-ascii?Q?lY7AcQynVivppR75xMqXLrIhOEUBDmTFMUFox0AcVf+ayZp/6fzGC0Vu+9fI?=
- =?us-ascii?Q?xGQ30NT8FCObVQOktkKOwBMWpsXbs1ZsfXoi+U8hsMIucBv9uP96HTKwplkg?=
- =?us-ascii?Q?QN9WBGUo/274Js3IBkFVEThdeBbhrXaLBqzgj/j+NBopEAnPSy+qYInIIONZ?=
- =?us-ascii?Q?8jJNjf/yy9M8MCVeS7txuLTCy5BZlHq9PxtxwvRXlTD6XCEjQ1LQhY7zbw8p?=
- =?us-ascii?Q?PDhkgE98//3e/F3oORobcONBfmbF9LWH/S792A4fUqmGWLFwV1FMdx1wsnxL?=
- =?us-ascii?Q?FF+xmcOv2pHsEcrqUUwXkSBAxHG3h7XxGctUHbxMTcrwOQXQDReL3NTcPXKO?=
- =?us-ascii?Q?GOCnZZkodDfq2n9QAQvrLptbAUY9F9y9lJQSe1rZEK/imi5N6JkyjRBMKW4N?=
- =?us-ascii?Q?N/g/PTwb9l8aP/pT6IaPefQnlIFu/eNQ9onQb306/gKOvX/AiUyollikO8ws?=
- =?us-ascii?Q?tKV6Exz4ElStX+PcrJcCzfQJaUU95oIyeoo46VWMbDC5V5TtXwMbXa1A2Edr?=
- =?us-ascii?Q?uQAgLo+/BeOonskOQ87yPfsWxsEzpBQgLJyr2GILxYtfo2A0VVxi+o0Ytg8c?=
- =?us-ascii?Q?AUkqwRgzLIbfpvvrICYAfIrn4ElY4Y0ykMMurAEXWP45+/1p9OBV4IfZ4LWr?=
- =?us-ascii?Q?w/8nbLWrCyQStlpPJH1TBWPbuHSOPjc/Df9uzyw36CoR2jyiB73RHFOb3+SE?=
- =?us-ascii?Q?WQKzC83duXSM4FjBN7iqEV1u/T8NJ9DHJVgRjMh2ZSs9zu/9mh31PSzNShvt?=
- =?us-ascii?Q?YilaZ5q24WhMPoOYkrzYYDWwIlqSMJMjEtx6FgYhP6FIMSmFP55ZkvgmmxWB?=
- =?us-ascii?Q?0g=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fc8bff5c-54bc-4b93-ab94-08dab3c32f48
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Oct 2022 00:20:12.2756
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2jO1QhKCI2o7NAkATiYQoIDld5Ycr+gF3uc/fFIvbcZaYMIKmePPTOZZuDMoOLNpMxL8ZGMwFkFeLi7U7NFbdg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR10MB4433
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-21_04,2022-10-21_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 adultscore=0 mlxscore=0
- spamscore=0 bulkscore=0 malwarescore=0 mlxlogscore=999 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
- definitions=main-2210220000
-X-Proofpoint-ORIG-GUID: ZgRNFrZtAUjP65sW9ZPi7TX6NUops4-0
-X-Proofpoint-GUID: ZgRNFrZtAUjP65sW9ZPi7TX6NUops4-0
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <0000000000009fa63105eb7648d8@google.com> <00000000000031aec805eb76a2d4@google.com>
+ <20221020182155.ecd44ee984b1aeb2e5a2e8ed@linux-foundation.org>
+ <CAJuCfpEh0byROe58H_FtL+NMLKAvSrQW0f0wd3QiVTBdRg5CTA@mail.gmail.com>
+ <CAJuCfpF7xsZJevfj6ERsJi5tPFj0o6FATAm4k=CMsONFG86EmQ@mail.gmail.com>
+ <CANp29Y7aNP+0hd01feB24XrCUPVa0+7kf7NiDAV_FdhPx2VkOQ@mail.gmail.com> <CAJuCfpF0eYsNZjQO4OcT8Pnaj9+H8UK_o4bwtLzD=n53-48hJw@mail.gmail.com>
+In-Reply-To: <CAJuCfpF0eYsNZjQO4OcT8Pnaj9+H8UK_o4bwtLzD=n53-48hJw@mail.gmail.com>
+From:   Aleksandr Nogikh <nogikh@google.com>
+Date:   Fri, 21 Oct 2022 17:22:25 -0700
+Message-ID: <CANp29Y4Q3X_KqxjajigGHXHFaY54vEdYkPf+5tcg3k2YyRh+jw@mail.gmail.com>
+Subject: Re: [syzbot] BUG: sleeping function called from invalid context in vm_area_dup
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        syzbot <syzbot+b910411d3d253dab25d8@syzkaller.appspotmail.com>,
+        bigeasy@linutronix.de, bpf@vger.kernel.org, brauner@kernel.org,
+        ebiederm@xmission.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
+        linux-mm@kvack.org, David Hildenbrand <david@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -147,104 +76,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/21/22 07:16, Hawkins Jiawei wrote:
-> Syzkaller reports a null-ptr-deref bug as follows:
-> ======================================================
-> KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
-> RIP: 0010:hugetlbfs_parse_param+0x1dd/0x8e0 fs/hugetlbfs/inode.c:1380
-> [...]
-> Call Trace:
->  <TASK>
->  vfs_parse_fs_param fs/fs_context.c:148 [inline]
->  vfs_parse_fs_param+0x1f9/0x3c0 fs/fs_context.c:129
->  vfs_parse_fs_string+0xdb/0x170 fs/fs_context.c:191
->  generic_parse_monolithic+0x16f/0x1f0 fs/fs_context.c:231
->  do_new_mount fs/namespace.c:3036 [inline]
->  path_mount+0x12de/0x1e20 fs/namespace.c:3370
->  do_mount fs/namespace.c:3383 [inline]
->  __do_sys_mount fs/namespace.c:3591 [inline]
->  __se_sys_mount fs/namespace.c:3568 [inline]
->  __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
->  [...]
->  </TASK>
-> ======================================================
-> 
-> According to commit
-> ac369cdd9448("vfs: parse: deal with zero length string value"),
-> kernel will sets the param->string to null pointer in
-> vfs_parse_fs_string() if fs string has zero length.
-> 
-> Yet the problem is that, hugetlbfs_parse_param() will
-> dereference the param->string, without checking whether it
-> is a null pointer. To be more specific, if hugetlbfs_parse_param()
-> parses an illegal mount parameter, such as "size=,", kernel will
-> constructs struct fs_parameter with null pointer in
-> vfs_parse_fs_string(), then passes this struct fs_parameter to
-> hugetlbfs_parse_param(), which triggers the above
-> null-ptr-deref bug.
-> 
-> This patch solves it by adding sanity check on param->string
-> in hugetlbfs_parse_param().
-> 
-> Reported-by: syzbot+a3e6acd85ded5c16a709@syzkaller.appspotmail.com
-> Tested-by: syzbot+a3e6acd85ded5c16a709@syzkaller.appspotmail.com
-> Link: https://lore.kernel.org/all/0000000000005ad00405eb7148c6@google.com/
-> Signed-off-by: Hawkins Jiawei <yin31149@gmail.com>
-> ---
->  fs/hugetlbfs/inode.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
-> index 7f836f8f9db1..3ee84604e36d 100644
-> --- a/fs/hugetlbfs/inode.c
-> +++ b/fs/hugetlbfs/inode.c
-> @@ -1377,7 +1377,7 @@ static int hugetlbfs_parse_param(struct fs_context *fc, struct fs_parameter *par
->  
->  	case Opt_size:
->  		/* memparse() will accept a K/M/G without a digit */
-> -		if (!isdigit(param->string[0]))
-> +		if (!param->string || !isdigit(param->string[0]))
->  			goto bad_val;
+On Fri, Oct 21, 2022 at 4:50 PM Suren Baghdasaryan <surenb@google.com> wrote:
+>
+> On Fri, Oct 21, 2022 at 4:12 PM Aleksandr Nogikh <nogikh@google.com> wrote:
+> >
+> > On Fri, Oct 21, 2022 at 2:52 PM 'Suren Baghdasaryan' via
+> > syzkaller-bugs <syzkaller-bugs@googlegroups.com> wrote:
+> > >
+> > > On Thu, Oct 20, 2022 at 6:58 PM Suren Baghdasaryan <surenb@google.com> wrote:
+> > > >
+> > > > On Thu, Oct 20, 2022 at 6:22 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+> > > > >
+> > > > > On Thu, 20 Oct 2022 05:40:43 -0700 syzbot <syzbot+b910411d3d253dab25d8@syzkaller.appspotmail.com> wrote:
+> > > > >
+> > > > > > syzbot has found a reproducer for the following issue on:
+> > > > >
+> > > > > Thanks.
+> > > > >
+> > > > >
+> > > > > > HEAD commit:    acee3e83b493 Add linux-next specific files for 20221020
+> > > > > > git tree:       linux-next
+> > > > > > console+strace: https://syzkaller.appspot.com/x/log.txt?x=170a8016880000
+> > > > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=c82245cfb913f766
+> > > > > > dashboard link: https://syzkaller.appspot.com/bug?extid=b910411d3d253dab25d8
+> > > > > > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > > > > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=109e0372880000
+> > > > > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1770d752880000
+> > > > > >
+> > > > > > Downloadable assets:
+> > > > > > disk image: https://storage.googleapis.com/syzbot-assets/98cc5896cded/disk-acee3e83.raw.xz
+> > > > > > vmlinux: https://storage.googleapis.com/syzbot-assets/b3d3eb3aa10a/vmlinux-acee3e83.xz
+> > > > > >
+> > > > > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > > > > > Reported-by: syzbot+b910411d3d253dab25d8@syzkaller.appspotmail.com
+> > > > > >
+> > > > > > BUG: sleeping function called from invalid context at include/linux/sched/mm.h:274
+> > > > >
+> > > > > This is happening under dup_anon_vma_name().
+> > > > >
+> > > > > I can't spot preemption being disabled on that call path, and I assume
+> > > > > this code has been exercised for some time.
+> > > >
+> > > > Indeed, it is unclear why copy_vma() would be called in atomic
+> > > > context. I'll try to reproduce tomorrow. Maybe with lockdep enabled we
+> > > > can get something interesting.
+> > >
+> > > Sorry for the delay. Having trouble booting the image built with the
+> > > attached config. My qemu crashes with a "sched: CPU #1's llc-sibling
+> > > CPU #0 is not on the same node! [node: 1 != 0]." warning before the
+> > > crash. Trying to figure out why.
+> >
+> > qemu 6.2 changed the core-to-socket assignment and it looks like we
+> > get such errors when a kernel with "numa=fake=" is run under qemu on a
+> > system with multiple CPUs.
+> >
+> > You can try removing numa=fake=... from the CMDLINE config or just
+> > manually setting the smp argument of the qemu process (e.g. -smp
+> > 2,sockets=2,cores=1)
+> >
+> > See https://gitlab.com/qemu-project/qemu/-/issues/877
+>
+> That was it. Thank you, Aleksandr!
+> I can boot with the image built using the attached config but still
+> can't reproduce the issue using the C reproducer... Will keep it
+> running for some time to see if it eventually shows up.
 
-At the bad_val label we have,
+Just in case -- did you also try executing the reproducer against the
+attached bootable disk image? Syzbot attaches the exact images on
+which it managed to find the bug. The image should work for both GCE
+and qemu.
 
-bad_val:
-        return invalfc(fc, "Bad value '%s' for mount option '%s'\n",
-                      param->string, param->key);
-
-param->string still is NULL.  But, I assume the logging can handle this.
-In the case of printk, a NULL pointer comes out as '(null)'.
-
-Thanks again,
-
-Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
--- 
-Mike Kravetz
-
-
->  		ctx->max_size_opt = memparse(param->string, &rest);
->  		ctx->max_val_type = SIZE_STD;
-> @@ -1387,7 +1387,7 @@ static int hugetlbfs_parse_param(struct fs_context *fc, struct fs_parameter *par
->  
->  	case Opt_nr_inodes:
->  		/* memparse() will accept a K/M/G without a digit */
-> -		if (!isdigit(param->string[0]))
-> +		if (!param->string || !isdigit(param->string[0]))
->  			goto bad_val;
->  		ctx->nr_inodes = memparse(param->string, &rest);
->  		return 0;
-> @@ -1403,7 +1403,7 @@ static int hugetlbfs_parse_param(struct fs_context *fc, struct fs_parameter *par
->  
->  	case Opt_min_size:
->  		/* memparse() will accept a K/M/G without a digit */
-> -		if (!isdigit(param->string[0]))
-> +		if (!param->string || !isdigit(param->string[0]))
->  			goto bad_val;
->  		ctx->min_size_opt = memparse(param->string, &rest);
->  		ctx->min_val_type = SIZE_STD;
-> -- 
-> 2.25.1
-> 
+> Thanks,
+> Suren.
+>
+> >
+> > > defconfig with CONFIG_ANON_VMA_NAME=y boots fine but does not
+> > > reproduce the issue.
+> > >
+> > > >
+> > > > >
+> > > > > I wonder if this could be fallout from the KSM locking error which
+> > > > > https://lkml.kernel.org/r/8c86678a-3bfb-3854-b1a9-ae5969e730b8@redhat.com
+> > > > > addresses.  Seems quite unlikely.
+> > > > >
+> > > > > > in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 3602, name: syz-executor107
+> > > > > > preempt_count: 1, expected: 0
+> > > > > > RCU nest depth: 0, expected: 0
+> > > > > > INFO: lockdep is turned off.
+> > > > > > Preemption disabled at:
+> > > > > > [<0000000000000000>] 0x0
+> > > > > > CPU: 0 PID: 3602 Comm: syz-executor107 Not tainted 6.1.0-rc1-next-20221020-syzkaller #0
+> > > > > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+> > > > > > Call Trace:
+> > > > > >  <TASK>
+> > > > > >  __dump_stack lib/dump_stack.c:88 [inline]
+> > > > > >  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+> > > > > >  __might_resched.cold+0x222/0x26b kernel/sched/core.c:9890
+> > > > > >  might_alloc include/linux/sched/mm.h:274 [inline]
+> > > > > >  slab_pre_alloc_hook mm/slab.h:727 [inline]
+> > > > > >  slab_alloc_node mm/slub.c:3323 [inline]
+> > > > > >  slab_alloc mm/slub.c:3411 [inline]
+> > > > > >  __kmem_cache_alloc_lru mm/slub.c:3418 [inline]
+> > > > > >  kmem_cache_alloc+0x2e6/0x3c0 mm/slub.c:3427
+> > > > > >  vm_area_dup+0x81/0x380 kernel/fork.c:466
+> > > > > >  copy_vma+0x376/0x8d0 mm/mmap.c:3216
+> > > > > >  move_vma+0x449/0xf60 mm/mremap.c:626
+> > > > > >  __do_sys_mremap+0x487/0x16b0 mm/mremap.c:1075
+> > > > > >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> > > > > >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+> > > > > >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> > > > > > RIP: 0033:0x7fd090fa5b29
+> > > > > > Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+> > > > > > RSP: 002b:00007ffc2e90bd38 EFLAGS: 00000246 ORIG_RAX: 0000000000000019
+> > > > > > RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fd090fa5b29
+> > > > > > RDX: 0000000000001000 RSI: 0000000000004000 RDI: 00000000201c4000
+> > > > > > RBP: 00007fd090f69cd0 R08: 00000000202ef000 R09: 0000000000000000
+> > > > > > R10: 0000000000000003 R11: 0000000000000246 R12: 00007fd090f69d60
+> > > > > > R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+> > > > > >  </TASK>
+> > >
+> > > --
+> > > You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
+> > > To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> > > To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/CAJuCfpF7xsZJevfj6ERsJi5tPFj0o6FATAm4k%3DCMsONFG86EmQ%40mail.gmail.com.
