@@ -2,66 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51B386084E8
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 08:04:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DA2C6084EB
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 08:06:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229887AbiJVGEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 02:04:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42632 "EHLO
+        id S229588AbiJVGGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 02:06:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiJVGEc (ORCPT
+        with ESMTP id S229711AbiJVGGL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 02:04:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFD352BD1;
-        Fri, 21 Oct 2022 23:04:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 12A92601C6;
-        Sat, 22 Oct 2022 06:04:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3FA1C433D6;
-        Sat, 22 Oct 2022 06:04:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666418668;
-        bh=Juz5LjJbSCNynnLDYD7GXdYfa161RW8vLJD4JA2tHS0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LLBwCPBC927P7PqXScUSO95lyXe13Iior2iKmUfeh/0S8b28HUBRC9vsN9D7r4NbF
-         aR/fuvZamZwjZA+ZGfdwdhtNWe8HImdVYsJvYkrhqqhCcepXvLYee0jlYfM03UbpCz
-         QqR5aSH7MyEeDGcr1FgTQAoJnzKX+K8Y6sbA0etQ=
-Date:   Sat, 22 Oct 2022 08:05:18 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH v15 2/3] virt: Add TDX guest driver
-Message-ID: <Y1OIHjFp2r58fDPI@kroah.com>
-References: <20221020045828.2354731-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20221020045828.2354731-3-sathyanarayanan.kuppuswamy@linux.intel.com>
- <Y1De4IyAB6n2qs4V@kroah.com>
- <34ef18d6-69f8-853a-d1ba-7023822e17ff@linux.intel.com>
- <Y1Iimg0WItgIGq6/@kroah.com>
- <13adfc8d-8118-2fd7-3a66-98dfbf8037a9@linux.intel.com>
+        Sat, 22 Oct 2022 02:06:11 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3472629F12C
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 23:06:09 -0700 (PDT)
+X-QQ-mid: bizesmtp85t1666418758tyusmhdu
+Received: from localhost.localdomain ( [182.148.15.254])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sat, 22 Oct 2022 14:05:57 +0800 (CST)
+X-QQ-SSF: 01000000000000C0E000000A0000000
+X-QQ-FEAT: mhDoKBI5A3ATK8ywXlCpoa1WQWXf6h02BTkLcofe/Cg10W02z6GQMH5yEeuCs
+        4AA0A9hwr5YUyJ2m8OtRtQm4uDjSjonZduer1En4GDCRUmBeTs8r5PT0Ez3Aiyoc6BkMDbz
+        CozbV/ZtcmCn93t3xFzWF0l7CQgnGsc96lloRlFEvzuywwxfa7kCWcdkCZA5eEil1jqbJPw
+        X/pFiXQ+jsJo9NY3B/4r3RwQ7zrFh4T9E0YcDaGFN7j2pkBh+yaDPwQ5iVYWxiKV/+fDuvW
+        dp4iddf19HmtC8lDOs5Re6na7dOVmUTVU8WKj4zjVAgsLUNmsK56R4QRAH76HDvA4wMqDg0
+        +cQC97ZqwLySKxS3uk1uT06/Zr8ixMeHBdrsVKdvf6YG18j+mU=
+X-QQ-GoodBg: 0
+From:   wangjianli <wangjianli@cdjrlc.com>
+To:     maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de, airlied@linux.ie, daniel@ffwll.ch
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        wangjianli <wangjianli@cdjrlc.com>
+Subject: [PATCH] gpu/drm: fix repeated words in comments
+Date:   Sat, 22 Oct 2022 14:05:51 +0800
+Message-Id: <20221022060551.56918-1-wangjianli@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <13adfc8d-8118-2fd7-3a66-98dfbf8037a9@linux.intel.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr7
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,75 +48,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 04:51:34PM -0700, Sathyanarayanan Kuppuswamy wrote:
-> Hi Greg,
-> 
-> On 10/20/22 9:39 PM, Greg Kroah-Hartman wrote:
-> >>>> +#ifdef MODULE
-> >>>> +static const struct x86_cpu_id tdx_guest_ids[] = {
-> >>>> +	X86_MATCH_FEATURE(X86_FEATURE_TDX_GUEST, NULL),
-> >>>> +	{}
-> >>>> +};
-> >>>> +MODULE_DEVICE_TABLE(x86cpu, tdx_guest_ids);
-> >>>> +#endif
-> >>> Why the #ifdef?  Should not be needed, right?
-> >> I have added it to fix the following warning reported by 0-day.
-> >>
-> >> https://lore.kernel.org/lkml/202209211607.tCtTWKbV-lkp@intel.com/
-> >>
-> >> It is related to nullifying the MODULE_DEVICE_TABLE in #ifndef MODULE
-> >> case in linux/module.h.
-> > Then fix it properly, by correctly using that structure no matter what.
-> > You don't do that here...
-> 
-> I think we can use __maybe_unused attribute to fix this warning like
-> mentioned below. Are you fine with it?
-> 
-> --- a/drivers/virt/coco/tdx-guest/tdx-guest.c
-> +++ b/drivers/virt/coco/tdx-guest/tdx-guest.c
-> @@ -118,13 +118,11 @@ static void __exit tdx_guest_exit(void)
->  }
->  module_exit(tdx_guest_exit);
->  
-> -#ifdef MODULE
-> -static const struct x86_cpu_id tdx_guest_ids[] = {
-> +static const struct x86_cpu_id __maybe_unused tdx_guest_ids[] = {
->         X86_MATCH_FEATURE(X86_FEATURE_TDX_GUEST, NULL),
->         {}
->  };
->  MODULE_DEVICE_TABLE(x86cpu, tdx_guest_ids);
-> -#endif
-> 
-> Solution 2:
-> -----------
-> 
-> We can also modify the code to use this structure in all cases like
-> below. But it requires me to use slower x86_match_cpu() in place of 
-> cpu_feature_enabled() which I think is unnecessary.
-> 
-> --- a/drivers/virt/coco/tdx-guest/tdx-guest.c
-> +++ b/drivers/virt/coco/tdx-guest/tdx-guest.c
-> @@ -103,9 +103,15 @@ static struct miscdevice tdx_misc_dev = {
->         .fops = &tdx_guest_fops,
->  };
->  
-> +static const struct x86_cpu_id tdx_guest_ids[] = {
-> +       X86_MATCH_FEATURE(X86_FEATURE_TDX_GUEST, NULL),
-> +       {}
-> +};
-> +MODULE_DEVICE_TABLE(x86cpu, tdx_guest_ids);
-> +
->  static int __init tdx_guest_init(void)
->  {
-> -       if (!cpu_feature_enabled(X86_FEATURE_TDX_GUEST))
-> +       if (!x86_match_cpu(tdx_guest_ids))
+Delete the redundant word 'the'.
 
-Please use this as it's what all other users of the x86cpu module device
-table code uses, right?
+Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
+---
+ drivers/gpu/drm/drm_mipi_dsi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-And what is the "speed" difference here?  Is is measurable and where
-does it matter?
+diff --git a/drivers/gpu/drm/drm_mipi_dsi.c b/drivers/gpu/drm/drm_mipi_dsi.c
+index c40bde96cfdf..ae12cca8b123 100644
+--- a/drivers/gpu/drm/drm_mipi_dsi.c
++++ b/drivers/gpu/drm/drm_mipi_dsi.c
+@@ -605,7 +605,7 @@ int mipi_dsi_turn_on_peripheral(struct mipi_dsi_device *dsi)
+ EXPORT_SYMBOL(mipi_dsi_turn_on_peripheral);
+ 
+ /*
+- * mipi_dsi_set_maximum_return_packet_size() - specify the maximum size of the
++ * mipi_dsi_set_maximum_return_packet_size() - specify the maximum size of
+  *    the payload in a long packet transmitted from the peripheral back to the
+  *    host processor
+  * @dsi: DSI peripheral device
+-- 
+2.36.1
 
-thanks,
-
-greg k-h
