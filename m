@@ -2,103 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C4BF608741
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 09:58:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2E8760856C
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 09:25:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232280AbiJVH6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 03:58:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55598 "EHLO
+        id S229732AbiJVHZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 03:25:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232118AbiJVHyG (ORCPT
+        with ESMTP id S229484AbiJVHZE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 03:54:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 819A059EAA;
-        Sat, 22 Oct 2022 00:47:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A558F60B1B;
-        Sat, 22 Oct 2022 07:47:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B93A4C43470;
-        Sat, 22 Oct 2022 07:47:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666424830;
-        bh=KNf54MzYOzZQ7PIZ9pF8uzpHZeVH6NK8nEr5MpJ/Xzk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bKGdVYKysi7jdCE8zbZjoZbRPXYN2+/hHKhwSYMpPYfdML60nGKJTs08uHO0Xa4qE
-         rfaNpefxPOWPUBwbAO12FU9/oaaucMqYQXVj9UsrO2jRjdpF6WZbbEi0+Fz+8HhK73
-         H0cijDpXQu4Cm3vP+nSlEFZ2crOtGgnMb84Rk9DY=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maxim Mikityanskiy <maxtram95@gmail.com>,
-        M Chetan Kumar <m.chetan.kumar@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 291/717] net: wwan: iosm: Call mutex_init before locking it
-Date:   Sat, 22 Oct 2022 09:22:50 +0200
-Message-Id: <20221022072504.847688169@linuxfoundation.org>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221022072415.034382448@linuxfoundation.org>
-References: <20221022072415.034382448@linuxfoundation.org>
-User-Agent: quilt/0.67
+        Sat, 22 Oct 2022 03:25:04 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A70746213;
+        Sat, 22 Oct 2022 00:24:59 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id E208F1884447;
+        Sat, 22 Oct 2022 07:24:56 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id DACBB250007B;
+        Sat, 22 Oct 2022 07:24:56 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id CA4389EC0002; Sat, 22 Oct 2022 07:24:56 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Date:   Sat, 22 Oct 2022 09:24:56 +0200
+From:   netdev@kapio-technology.com
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Oleksandr Mazur <oleksandr.mazur@plvision.eu>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Florent Fourcot <florent.fourcot@wifirst.fr>,
+        Hans Schultz <schultz.hans@gmail.com>,
+        Joachim Wiberg <troglobit@gmail.com>,
+        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v8 net-next 10/12] net: dsa: mv88e6xxx: mac-auth/MAB
+ implementation
+In-Reply-To: <20221021181411.sv52q4yxr5r7urab@skbuf>
+References: <20221020132538.reirrskemcjwih2m@skbuf>
+ <2565c09bb95d69142522c3c3bcaa599e@kapio-technology.com>
+ <20221020225719.l5iw6vndmm7gvjo3@skbuf>
+ <82d23b100b8d2c9e4647b8a134d5cbbf@kapio-technology.com>
+ <20221021112216.6bw6sjrieh2znlti@skbuf>
+ <7bfaae46b1913fe81654a4cd257d98b1@kapio-technology.com>
+ <20221021163005.xljk2j3fkikr6uge@skbuf>
+ <d1fb07de4b55d64f98425fe66156c4e4@kapio-technology.com>
+ <20221021173014.oit3qmpkrsjwzbgu@skbuf>
+ <b88e331e016ad3801f1bf1a0dec507f3@kapio-technology.com>
+ <20221021181411.sv52q4yxr5r7urab@skbuf>
+User-Agent: Gigahost Webmail
+Message-ID: <37dc7673fde2b8e166a5ed78431a2078@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maxim Mikityanskiy <maxtram95@gmail.com>
+On 2022-10-21 20:14, Vladimir Oltean wrote:
+> On Fri, Oct 21, 2022 at 07:39:34PM +0200, netdev@kapio-technology.com 
+> wrote:
+>> Well, with this change, to have MAB working, the bridge would need 
+>> learning on
+>> of course, but how things work with the bridge according to the flags, 
+>> they
+>> should also work in the offloaded case if you ask me. There should be 
+>> no
+>> difference between the two, thus MAB in drivers would have to be with
+>> learning on.
+> 
+> Am I proposing for things to work differently in the offload and
+> software case, and not realizing it? :-/
+> 
+> The essence of my proposal was to send a bug fix now which denies
+> BR_LEARNING to be set together with BR_PORT_LOCKED. The fact that
+> link-local traffic is learned by the software bridge is something
+> unintended as far as I understand.
+> 
+> You tried to fix it here, and as far as I could search in my inbox, 
+> that
+> didn't go anywhere:
+> https://lore.kernel.org/netdev/47d8d747-54ef-df52-3b9c-acb9a77fa14a@blackwall.org/T/#u
+> 
+> I thought only mv88e6xxx offloads BR_PORT_LOCKED, but now, after
+> searching, I also see prestera has support for it, so let me add
+> Oleksandr Mazur to the discussion as well. I wonder how they deal with
+> this? Has somebody come to rely on learning being enabled on a locked
+> port?
+> 
+> 
+> MAB in offloading drivers will have to be with learning on (same as in
+> software). When BR_PORT_LOCKED | BR_LEARNING will be allowed together
+> back in net-next (to denote the MAB configuration), offloading drivers
+> (mv88e6xxx and prestera) will be patched to reject them. They will only
+> accept the two together when they implement MAB support.
+> 
+> Future drivers after this mess has been cleaned up will have to look at
+> the BR_PORT_LOCKED and BR_LEARNING flag in combination, to see which
+> kind of learning is desired on a port (secure, CPU based learning or
+> autonomous learning).
+> 
+> Am I not making sense?
 
-[ Upstream commit ba0fbdb95da5ddd8db457ce6ba09d16dd979a294 ]
+I will not say that you are not making sense as for the mv88e6xxx, as it
+needs port association in all cases with BR_PORT_LOCKED, MAB or not, and
+port association is turned on in the driver with learning turned on.
 
-wwan_register_ops calls wwan_create_default_link, which ends up in the
-ipc_wwan_newlink callback that locks ipc_wwan->if_mutex. However, this
-mutex is not yet initialized by that point. Fix it by moving mutex_init
-above the wwan_register_ops call. This also makes the order of
-operations in ipc_wwan_init symmetric to ipc_wwan_deinit.
-
-Fixes: 83068395bbfc ("net: iosm: create default link via WWAN core")
-Signed-off-by: Maxim Mikityanskiy <maxtram95@gmail.com>
-Reviewed-by: M Chetan Kumar <m.chetan.kumar@intel.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/net/wwan/iosm/iosm_ipc_wwan.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/wwan/iosm/iosm_ipc_wwan.c b/drivers/net/wwan/iosm/iosm_ipc_wwan.c
-index 27151148c782..4712f01a7e33 100644
---- a/drivers/net/wwan/iosm/iosm_ipc_wwan.c
-+++ b/drivers/net/wwan/iosm/iosm_ipc_wwan.c
-@@ -323,15 +323,16 @@ struct iosm_wwan *ipc_wwan_init(struct iosm_imem *ipc_imem, struct device *dev)
- 	ipc_wwan->dev = dev;
- 	ipc_wwan->ipc_imem = ipc_imem;
- 
-+	mutex_init(&ipc_wwan->if_mutex);
-+
- 	/* WWAN core will create a netdev for the default IP MUX channel */
- 	if (wwan_register_ops(ipc_wwan->dev, &iosm_wwan_ops, ipc_wwan,
- 			      IP_MUX_SESSION_DEFAULT)) {
-+		mutex_destroy(&ipc_wwan->if_mutex);
- 		kfree(ipc_wwan);
- 		return NULL;
- 	}
- 
--	mutex_init(&ipc_wwan->if_mutex);
--
- 	return ipc_wwan;
- }
- 
--- 
-2.35.1
-
-
-
+That said, there must be some resolution and agreement overall with this
+issue to move on. Right now port association is turned on in the 
+mv88e6xxx
+driver when locking the port, thus setting learning off after locking 
+will
+break things.
