@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4853E608783
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 10:02:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4EE26089A0
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 10:38:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232599AbiJVICo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 04:02:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42478 "EHLO
+        id S234434AbiJVIiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 04:38:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232290AbiJVHyj (ORCPT
+        with ESMTP id S234048AbiJVIc3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 03:54:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A947C951ED;
-        Sat, 22 Oct 2022 00:47:43 -0700 (PDT)
+        Sat, 22 Oct 2022 04:32:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D6332D12A5;
+        Sat, 22 Oct 2022 01:03:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E541A60B79;
-        Sat, 22 Oct 2022 07:40:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 051C0C4314B;
-        Sat, 22 Oct 2022 07:40:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 550C260B23;
+        Sat, 22 Oct 2022 07:39:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 626E4C433D7;
+        Sat, 22 Oct 2022 07:39:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666424410;
-        bh=dnR68S+GglvsGCWDNsJlZ6XYUD/v8mulvUWGGeDe8KI=;
+        s=korg; t=1666424345;
+        bh=KzHqx2mfIHoyi1WiueYBo5GyvE9Q9Y8B+TZngBTNrwY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Fy9x5EOENK3T34j5pt0Gkp78wcu79rxwyt/aAcoWbP/dxQdK5J/DxYJmg2fOiDgoz
-         EAvZTN+WaGBJeA9t2YQN49HcMX4wbzzrIpN3El6ZOK8E1aHqkQo/zEbUyTrtWXoENx
-         vKrYp6goZ2kqF+xwNg7sRE7fCyd8L/eMCd47KUOQ=
+        b=K4rgI4k7gh2A3Sbwh5MYDQGzhlYplNKetmTJCE0dUsdd0NlXhWt2hOleKEsNUHZ75
+         nyvvPRnc405rkpgYb1C202HUbTk4es8+nlyvu0HOWXlaPYGmwQIAet9T9HjuuGRhZN
+         X2OpG+jPXezb2SoGBB9C2KuaDTEGEeIQAgd7rQuM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhang Xiaoxu <zhangxiaoxu5@huawei.com>,
-        Namjae Jeon <linkinjeon@kernel.org>,
-        Steve French <stfrench@microsoft.com>
-Subject: [PATCH 5.19 104/717] ksmbd: Fix wrong return value and message length check in smb2_ioctl()
-Date:   Sat, 22 Oct 2022 09:19:43 +0200
-Message-Id: <20221022072433.802029429@linuxfoundation.org>
+        stable@vger.kernel.org, Chao Yu <chao@kernel.org>,
+        Jaegeuk Kim <jaegeuk@kernel.org>
+Subject: [PATCH 5.19 112/717] f2fs: fix wrong continue condition in GC
+Date:   Sat, 22 Oct 2022 09:19:51 +0200
+Message-Id: <20221022072435.271034123@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221022072415.034382448@linuxfoundation.org>
 References: <20221022072415.034382448@linuxfoundation.org>
@@ -54,56 +53,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhang Xiaoxu <zhangxiaoxu5@huawei.com>
+From: Jaegeuk Kim <jaegeuk@kernel.org>
 
-commit b1763d265af62800ec96eeb79803c4c537dcef3a upstream.
+commit 605b0a778aa2599aa902ae639b8e9937c74b869b upstream.
 
-Commit c7803b05f74b ("smb3: fix ksmbd bigendian bug in oplock
-break, and move its struct to smbfs_common") use the defination
-of 'struct validate_negotiate_info_req' in smbfs_common, the
-array length of 'Dialects' changed from 1 to 4, but the protocol
-does not require the client to send all 4. This lead the request
-which satisfied with protocol and server to fail.
+We should decrease the frozen counter.
 
-So just ensure the request payload has the 'DialectCount' in
-smb2_ioctl(), then fsctl_validate_negotiate_info() will use it
-to validate the payload length and each dialect.
-
-Also when the {in, out}_buf_len is less than the required, should
-goto out to initialize the status in the response header.
-
-Fixes: f7db8fd03a4b ("ksmbd: add validation in smb2_ioctl")
 Cc: stable@vger.kernel.org
-Signed-off-by: Zhang Xiaoxu <zhangxiaoxu5@huawei.com>
-Acked-by: Namjae Jeon <linkinjeon@kernel.org>
-Signed-off-by: Steve French <stfrench@microsoft.com>
+Fixes: 325163e9892b ("f2fs: add gc_urgent_high_remaining sysfs node")
+Reviewed-by: Chao Yu <chao@kernel.org>
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ksmbd/smb2pdu.c |   13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ fs/f2fs/gc.c |   12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
 
---- a/fs/ksmbd/smb2pdu.c
-+++ b/fs/ksmbd/smb2pdu.c
-@@ -7627,11 +7627,16 @@ int smb2_ioctl(struct ksmbd_work *work)
- 			goto out;
+--- a/fs/f2fs/gc.c
++++ b/fs/f2fs/gc.c
+@@ -97,14 +97,10 @@ static int gc_thread_func(void *data)
+ 		 */
+ 		if (sbi->gc_mode == GC_URGENT_HIGH) {
+ 			spin_lock(&sbi->gc_urgent_high_lock);
+-			if (sbi->gc_urgent_high_limited) {
+-				if (!sbi->gc_urgent_high_remaining) {
+-					sbi->gc_urgent_high_limited = false;
+-					spin_unlock(&sbi->gc_urgent_high_lock);
+-					sbi->gc_mode = GC_NORMAL;
+-					continue;
+-				}
+-				sbi->gc_urgent_high_remaining--;
++			if (sbi->gc_urgent_high_limited &&
++					!sbi->gc_urgent_high_remaining--) {
++				sbi->gc_urgent_high_limited = false;
++				sbi->gc_mode = GC_NORMAL;
+ 			}
+ 			spin_unlock(&sbi->gc_urgent_high_lock);
  		}
- 
--		if (in_buf_len < sizeof(struct validate_negotiate_info_req))
--			return -EINVAL;
-+		if (in_buf_len < offsetof(struct validate_negotiate_info_req,
-+					  Dialects)) {
-+			ret = -EINVAL;
-+			goto out;
-+		}
- 
--		if (out_buf_len < sizeof(struct validate_negotiate_info_rsp))
--			return -EINVAL;
-+		if (out_buf_len < sizeof(struct validate_negotiate_info_rsp)) {
-+			ret = -EINVAL;
-+			goto out;
-+		}
- 
- 		ret = fsctl_validate_negotiate_info(conn,
- 			(struct validate_negotiate_info_req *)&req->Buffer[0],
 
 
