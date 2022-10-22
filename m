@@ -2,72 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F58F608539
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 08:42:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4A53608537
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 08:42:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230013AbiJVGmj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 02:42:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60862 "EHLO
+        id S229997AbiJVGm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 02:42:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229975AbiJVGmd (ORCPT
+        with ESMTP id S229491AbiJVGmX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 02:42:33 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 562212A5229;
-        Fri, 21 Oct 2022 23:42:30 -0700 (PDT)
-X-QQ-mid: bizesmtp69t1666420938tlbrf44a
-Received: from localhost.localdomain ( [182.148.15.254])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 22 Oct 2022 14:42:17 +0800 (CST)
-X-QQ-SSF: 01000000000000C0E000000A0000000
-X-QQ-FEAT: dS+JUNSIibc3AY3qrHR6jniD05r/Uw4yojYLttszvxF1wtYINjTE8yXE2QXy2
-        YBmLPm7SY+m0D0cJCkV0e+VcpDOD4TiLZXN1N3TxwkriR8HxWfVGpfUbdYJx9CA5H9sv5WO
-        QOhocdUn1fs5ZFKe7msKNrMp+SLbLTNJbdxBgkO3LVVlqPLDU88LJ83aZZwAx0He0C5NGVy
-        nZAafoqEniFRQxtNmNAZR+NtNuUi2C1ogvybrSS6Pvm6wozE6b0Wjf0hMSEVCQJob7nZ47k
-        IKEwZ8/s9XaIwzmHLvPmZOGmQFAEGuw53Ym16P3ItbdOCa08iQFFN/L6zSqOIFUFkiXnWeH
-        +65jR7zR2fvO3EHlJrYJHOiiGrIMGm7AwB2enweE+Tmv6/zeDkDN+x0GiFFQQ==
-X-QQ-GoodBg: 0
-From:   wangjianli <wangjianli@cdjrlc.com>
-To:     james.smart@broadcom.com, dick.kennedy@broadcom.com,
-        jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        wangjianli <wangjianli@cdjrlc.com>
-Subject: [PATCH] scsi/lpfc: fix repeated words in comments
-Date:   Sat, 22 Oct 2022 14:42:11 +0800
-Message-Id: <20221022064211.31984-1-wangjianli@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        Sat, 22 Oct 2022 02:42:23 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49E982A520A;
+        Fri, 21 Oct 2022 23:42:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666420942; x=1697956942;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Q2Sryo3FNr3ZccmOfEjnDpCgO5RRQ/r8uLrfFTtqk6g=;
+  b=ezS+wYaadCblCOJCFQGbdFf4Ky1FP53Th2DQBnh78TumGIaRwM4hli+H
+   47kvUnU79O2uS9iav5QURsksCqaz1MQj7q79RN4j3itgXOGeOORVLhNvU
+   WZvmuvm9Gxy/LGoVfTxU6lgXERWuJz2PwVDi/WR115XAL13YWuRwYO5Rg
+   SOLdC6YN2NykZV39LQfQUcgsW4/mlI3/+LexsOQEUucV+mRkII8VkPBDx
+   14kIZJxxD7q+h7kJqKdFdxguAdOmzwl492E2zuerZ+PkbC5oZo/rShoZG
+   hsGENmFEN/BWQt+RCcJIlsvpFODdMRiLhFGgdlvGDKYqW3HL6ayakOOVh
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10507"; a="307153843"
+X-IronPort-AV: E=Sophos;i="5.95,204,1661842800"; 
+   d="scan'208";a="307153843"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2022 23:42:21 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10507"; a="693983375"
+X-IronPort-AV: E=Sophos;i="5.95,204,1661842800"; 
+   d="scan'208";a="693983375"
+Received: from bmoore-mobl1.amr.corp.intel.com (HELO [10.252.130.138]) ([10.252.130.138])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2022 23:42:21 -0700
+Message-ID: <01ac3648-0d89-5c78-42e9-c43d4ef64925@linux.intel.com>
+Date:   Fri, 21 Oct 2022 23:42:20 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr7
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.2.2
+Subject: Re: [PATCH v15 2/3] virt: Add TDX guest driver
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20221020045828.2354731-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20221020045828.2354731-3-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <Y1De4IyAB6n2qs4V@kroah.com>
+ <34ef18d6-69f8-853a-d1ba-7023822e17ff@linux.intel.com>
+ <Y1Iimg0WItgIGq6/@kroah.com>
+ <13adfc8d-8118-2fd7-3a66-98dfbf8037a9@linux.intel.com>
+ <Y1OIHjFp2r58fDPI@kroah.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <Y1OIHjFp2r58fDPI@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Delete the redundant word 'the'.
 
-Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
----
- drivers/scsi/lpfc/lpfc_sli.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
-index 80ac3a051c19..9ee7e8a236b7 100644
---- a/drivers/scsi/lpfc/lpfc_sli.c
-+++ b/drivers/scsi/lpfc/lpfc_sli.c
-@@ -20538,7 +20538,7 @@ lpfc_log_fw_write_cmpl(struct lpfc_hba *phba, u32 shdr_status,
-  * the offset after the write object mailbox has completed. @size is used to
-  * determine the end of the object and whether the eof bit should be set.
-  *
-- * Return 0 is successful and offset will contain the the new offset to use
-+ * Return 0 is successful and offset will contain the new offset to use
-  * for the next write.
-  * Return negative value for error cases.
-  **/
+On 10/21/22 11:05 PM, Greg Kroah-Hartman wrote:
+> On Fri, Oct 21, 2022 at 04:51:34PM -0700, Sathyanarayanan Kuppuswamy wrote:
+>> Hi Greg,
+>>
+>> On 10/20/22 9:39 PM, Greg Kroah-Hartman wrote:
+>>>>>> +#ifdef MODULE
+>>>>>> +static const struct x86_cpu_id tdx_guest_ids[] = {
+>>>>>> +	X86_MATCH_FEATURE(X86_FEATURE_TDX_GUEST, NULL),
+>>>>>> +	{}
+>>>>>> +};
+>>>>>> +MODULE_DEVICE_TABLE(x86cpu, tdx_guest_ids);
+>>>>>> +#endif
+>>>>> Why the #ifdef?  Should not be needed, right?
+>>>> I have added it to fix the following warning reported by 0-day.
+>>>>
+>>>> https://lore.kernel.org/lkml/202209211607.tCtTWKbV-lkp@intel.com/
+>>>>
+>>>> It is related to nullifying the MODULE_DEVICE_TABLE in #ifndef MODULE
+>>>> case in linux/module.h.
+>>> Then fix it properly, by correctly using that structure no matter what.
+>>> You don't do that here...
+>>
+>> I think we can use __maybe_unused attribute to fix this warning like
+>> mentioned below. Are you fine with it?
+>>
+>> --- a/drivers/virt/coco/tdx-guest/tdx-guest.c
+>> +++ b/drivers/virt/coco/tdx-guest/tdx-guest.c
+>> @@ -118,13 +118,11 @@ static void __exit tdx_guest_exit(void)
+>>  }
+>>  module_exit(tdx_guest_exit);
+>>  
+>> -#ifdef MODULE
+>> -static const struct x86_cpu_id tdx_guest_ids[] = {
+>> +static const struct x86_cpu_id __maybe_unused tdx_guest_ids[] = {
+>>         X86_MATCH_FEATURE(X86_FEATURE_TDX_GUEST, NULL),
+>>         {}
+>>  };
+>>  MODULE_DEVICE_TABLE(x86cpu, tdx_guest_ids);
+>> -#endif
+>>
+>> Solution 2:
+>> -----------
+>>
+>> We can also modify the code to use this structure in all cases like
+>> below. But it requires me to use slower x86_match_cpu() in place of 
+>> cpu_feature_enabled() which I think is unnecessary.
+>>
+>> --- a/drivers/virt/coco/tdx-guest/tdx-guest.c
+>> +++ b/drivers/virt/coco/tdx-guest/tdx-guest.c
+>> @@ -103,9 +103,15 @@ static struct miscdevice tdx_misc_dev = {
+>>         .fops = &tdx_guest_fops,
+>>  };
+>>  
+>> +static const struct x86_cpu_id tdx_guest_ids[] = {
+>> +       X86_MATCH_FEATURE(X86_FEATURE_TDX_GUEST, NULL),
+>> +       {}
+>> +};
+>> +MODULE_DEVICE_TABLE(x86cpu, tdx_guest_ids);
+>> +
+>>  static int __init tdx_guest_init(void)
+>>  {
+>> -       if (!cpu_feature_enabled(X86_FEATURE_TDX_GUEST))
+>> +       if (!x86_match_cpu(tdx_guest_ids))
+> 
+> Please use this as it's what all other users of the x86cpu module device
+
+Ok. I will use it.
+
+> table code uses, right?
+
+Not all, but most of them use the above model. 
+
+Following two drivers seems to use __maybe_unused method.
+
+./drivers/cpufreq/acpi-cpufreq.c
+./drivers/char/hw_random/via-rng.c
+
+and following two drivers uses #ifdef MODULE method.
+
+./arch/x86/kvm/vmx/vmx.c
+./arch/x86/kvm/svm/svm.c
+
+
+> 
+> And what is the "speed" difference here?  Is is measurable and where
+
+> does it matter?
+
+Speed difference does not really matter in init code. So I am fine
+with using this approach.
+
+> 
+> thanks,
+> 
+> greg k-h
+
 -- 
-2.36.1
-
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
