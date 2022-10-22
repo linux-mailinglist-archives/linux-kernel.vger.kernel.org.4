@@ -2,97 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09156608C1B
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 13:00:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB4ED608C1C
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 13:01:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230258AbiJVLAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 07:00:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52030 "EHLO
+        id S230123AbiJVLBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 07:01:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230194AbiJVK7p (ORCPT
+        with ESMTP id S230023AbiJVLBI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 06:59:45 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD47C55A5;
-        Sat, 22 Oct 2022 03:18:04 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id b12so14483522edd.6;
-        Sat, 22 Oct 2022 03:18:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=HdufI3Hje46oVXzKveQgMEHAhY/MYqQrs94ILdJz3ZY=;
-        b=eUU/j85w3dwp8X3qf7WPl93f2WYeebxlLlOoVDHLru0upvpUCyr3zNuvLppI5kmykg
-         sNToyeVPl4CxV90JHZBRA4wrtS2DzsZyOJfQxVcsRrQXgGRqVbe98Blh8wD6Bn8/TkHZ
-         2HA5tYLnPBacYbUpaxLKoIWBz2Rpz8cwkpCXUguPmd1jdfKAE2Wxgfdu54cIvARnQboe
-         zixa2tKRILmXErh6R3zMa4Yq3Oit0L9MjegqM+NPwQpjFgAMkqWajK++p+G9SPi5PKo6
-         LqaeqfEaGjigAd8JfIcWLf1fYGngssZax9f5ajPf2TADkDj5OHYJUNCBB2YYEnO6ataC
-         zPww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HdufI3Hje46oVXzKveQgMEHAhY/MYqQrs94ILdJz3ZY=;
-        b=2yVIhEMyNUroL8J8qZ8jMIVIvReguUNw7M1RtUEnfl4EDyWMTJ/xCel637ukffEMs/
-         7UqNS5n3GhLtf95nemf6JLyGrgDYfkQxUw6JHjI1VPxum7HC/c/wUxYSa4+jlJQzD9wk
-         mI+zUDoymg+eF4pvjOjgT4bDC++ocTw+1gBVB2zFKZFa0kRk3kDT5t3PT3lpUfPS7jwi
-         loHUDEUPvVgc/0o9z/AZyBD3NfwdBYlGG3D4ZMxzEp6jK/sZVzjEXcmQLlCPLS+nW9rQ
-         ru3RNTLnUxYXF0dYdyciXQeFfSSKzB57RyOk9J5CV6FMwYKsvwJ27zjppcHsqyol1HnT
-         qRKA==
-X-Gm-Message-State: ACrzQf3OQbun/9Ds1+TlnVPLxanRYGFMxcknGiUsQzQht0zYRnDQ3UUc
-        bmjdRu2lQOpMtVaP7bFALb9Xry628fdbC6wKY1c=
-X-Google-Smtp-Source: AMsMyM7gp0sIMAuA7hxNeVlUzuW0+59UJAqTcGRUXxnKjlIGK3qUU6iuED0glB4xpGjPuhGXVt0D9ns+7w3RCqY8KeA=
-X-Received: by 2002:a17:907:3c81:b0:77a:327a:815f with SMTP id
- gl1-20020a1709073c8100b0077a327a815fmr19834118ejc.422.1666433872323; Sat, 22
- Oct 2022 03:17:52 -0700 (PDT)
+        Sat, 22 Oct 2022 07:01:08 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9119011803
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 03:19:26 -0700 (PDT)
+Received: from fsav311.sakura.ne.jp (fsav311.sakura.ne.jp [153.120.85.142])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 29MAJ98D025819;
+        Sat, 22 Oct 2022 19:19:09 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav311.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav311.sakura.ne.jp);
+ Sat, 22 Oct 2022 19:19:09 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav311.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 29MAJ9D5025816
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Sat, 22 Oct 2022 19:19:09 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <e24b949d-3596-b634-9332-35fa2bd8c50e@I-love.SAKURA.ne.jp>
+Date:   Sat, 22 Oct 2022 19:19:06 +0900
 MIME-Version: 1.0
-References: <20221022084737.1028-1-linux.amoon@gmail.com>
-In-Reply-To: <20221022084737.1028-1-linux.amoon@gmail.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Sat, 22 Oct 2022 12:17:41 +0200
-Message-ID: <CAFBinCBu_-0m9JeAr5kd-v7Z5LTi7w0WmmUYybW_kL4KJXXpOQ@mail.gmail.com>
-Subject: Re: [PATCHv3] arm64: dts: meson: Enable active coling using gpio-fan
- on Odroid N2/N2+
-To:     Anand Moon <linux.amoon@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Dan Johansen <strit@manjaro.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [syzbot] BUG: sleeping function called from invalid context in
+ break_ksm
+Content-Language: en-US
+To:     David Hildenbrand <david@redhat.com>,
+        syzbot <syzbot+78a0878b3076f71313b3@syzkaller.appspotmail.com>,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com
+References: <0000000000000f3fec05eb76e68f@google.com>
+ <c2cf3416-f762-3949-d97c-47dbbc2c6689@redhat.com>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <c2cf3416-f762-3949-d97c-47dbbc2c6689@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Anand,
+On 2022/10/20 22:40, David Hildenbrand wrote:
+> This might be due a missing page table lock unlock:
+> 
+> https://lkml.kernel.org/r/8c86678a-3bfb-3854-b1a9-ae5969e730b8@redhat.com
+> 
 
-On Sat, Oct 22, 2022 at 10:48 AM Anand Moon <linux.amoon@gmail.com> wrote:
->
-> Odroid N2/N2+ support active cooling via gpio-fan controller.
-> Add fan controls and tip point for cpu and ddr thermal sensor
-> on this boards. Drop bias-disable from set pwm_ao_d_10 the pin
-either use "on these boards" or "on this board"
+Yes. Already fixed by commit b232a629b70cccb65d0c in linux-next-20221021.
 
-[...]
-> @@ -1982,7 +1982,6 @@ pwm_ao_d_10_pins: pwm-ao-d-10 {
->                                                 mux {
->                                                         groups = "pwm_ao_d_10";
->                                                         function = "pwm_ao_d";
-> -                                                       bias-disable;
-&pwm_ao_d_10_pins is not referenced anywhere so it seems that this
-change has no impact on controlling the fan on Odroid-N2(+).
-How did you test this change?
+#syz fix: mm/ksm: convert break_ksm() to use walk_page_range_vma()
 
+[   72.213837] BUG: sleeping function called from invalid context at mm/ksm.c:500
+[   72.216580] in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 874, name: a.out
+[   72.218083] preempt_count: 1, expected: 0
+[   72.219161] RCU nest depth: 0, expected: 0
+[   72.220245] Preemption disabled at:
+[   72.220253] [<ffffffff95804158>] break_ksm_pmd_entry+0xf8/0x290
+[   72.223460] 
+[   72.223619] ============================================
+[   72.224514] WARNING: possible recursive locking detected
+[   72.225491] 6.1.0-rc1-next-20221021+ #2 Tainted: G        W         
+[   72.226750] --------------------------------------------
+[   72.227724] a.out/874 is trying to acquire lock:
+[   72.228588] ffff94fdc6756888 (ptlock_ptr(page)#2){+.+.}-{2:2}, at: break_ksm_pmd_entry+0xf8/0x290
+[   72.230229] 
+[   72.230229] but task is already holding lock:
+[   72.231321] ffff94fdc6756888 (ptlock_ptr(page)#2){+.+.}-{2:2}, at: break_ksm_pmd_entry+0xf8/0x290
+[   72.232975] 
+[   72.232975] other info that might help us debug this:
+[   72.234233]  Possible unsafe locking scenario:
+[   72.234233] 
+[   72.235256]        CPU0
+[   72.235758]        ----
+[   72.236231]   lock(ptlock_ptr(page)#2);
+[   72.237118]   lock(ptlock_ptr(page)#2);
+[   72.237808] 
+[   72.237808]  *** DEADLOCK ***
+[   72.237808] 
+[   72.239045]  May be due to missing lock nesting notation
+[   72.239045] 
+[   72.241781] 6 locks held by a.out/874:
+[   72.243135]  #0: ffff94fdc6345490 (sb_writers#6){.+.+}-{0:0}, at: ksys_write+0x70/0x100
+[   72.245232]  #1: ffff94fdc5f75c90 (&of->mutex){+.+.}-{3:3}, at: kernfs_fop_write_iter+0x11e/0x230
+[   72.247591]  #2: ffff94fdc0c6bdc8 (kn->active#83){.+.+}-{0:0}, at: kernfs_fop_write_iter+0x126/0x230
+[   72.250739]  #3: ffffffff96ec7d10 (ksm_thread_mutex){+.+.}-{3:3}, at: run_store+0x59/0x390
+[   72.253067]  #4: ffff94fdc47f8ff0 (&mm->mmap_lock#2){++++}-{3:3}, at: run_store+0x142/0x390
+[   72.255283]  #5: ffff94fdc6756888 (ptlock_ptr(page)#2){+.+.}-{2:2}, at: break_ksm_pmd_entry+0xf8/0x290
+[   72.258262] 
+[   72.258262] stack backtrace:
+[   72.260362] CPU: 2 PID: 874 Comm: a.out Tainted: G        W          6.1.0-rc1-next-20221021+ #2
+[   72.262633] Hardware name: innotek GmbH VirtualBox/VirtualBox, BIOS VirtualBox 12/01/2006
+[   72.264773] Call Trace:
+[   72.265911]  <TASK>
+[   72.267006]  dump_stack_lvl+0x5a/0x88
+[   72.268401]  find_cpio_data.cold-0x6/0x5b
+[   72.269836]  __lock_acquire.cold+0xae/0x2dc
+[   72.271327]  ? lock_is_held_type+0xf3/0x160
+[   72.272764]  lock_acquire+0xd6/0x320
+[   72.274075]  ? break_ksm_pmd_entry+0xf8/0x290
+[   72.275619]  ? __wake_up_klogd.part.0+0x64/0xb0
+[   72.277104]  ? vprintk_emit+0xd0/0x360
+[   72.278437]  ? __memcpy-0xd/0x30
+[   72.279646]  _raw_spin_lock+0x39/0x90
+[   72.280894]  ? break_ksm_pmd_entry+0xf8/0x290
+[   72.282329]  break_ksm_pmd_entry+0xf8/0x290
+[   72.283761]  walk_pgd_range+0x623/0xa90
+[   72.285092]  ? lockdep_hardirqs_on+0x86/0x120
+[   72.286563]  __walk_page_range+0x17b/0x190
+[   72.287985]  ? lock_is_held_type+0xf3/0x160
+[   72.289336]  walk_page_range_vma+0xae/0xf0
+[   72.290643]  break_ksm.part.0+0x7d/0xe0
+[   72.292001]  unmerge_ksm_pages+0x77/0xd0
+[   72.293321]  run_store+0x187/0x390
+[   72.294540]  kobj_attr_store+0x12/0x40
+[   72.295817]  sysfs_kf_write+0x4b/0x80
+[   72.297035]  kernfs_fop_write_iter+0x171/0x230
+[   72.298373]  vfs_write+0x357/0x530
+[   72.299616]  ksys_write+0x70/0x100
+[   72.300758]  __x64_sys_write+0x19/0x30
+[   72.301947]  do_syscall_64+0x5c/0xa0
+[   72.303155]  ? syscall_exit_to_user_mode+0x37/0x60
+[   72.304590]  ? do_syscall_64+0x69/0xa0
+[   72.305721]  ? irqentry_exit+0x6b/0xa0
+[   72.306877]  ? __memcpy-0xd/0x30
+[   72.307919]  ? lockdep_hardirqs_on+0x86/0x120
+[   72.309143]  ? irqentry_exit_to_user_mode+0x25/0x40
+[   72.310548]  ? irqentry_exit+0x6b/0xa0
+[   72.311637]  ? exc_page_fault+0xa8/0x310
+[   72.312755]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+[   72.314108] RIP: 0033:0x7fe2ca91ea3d
+[   72.315121] Code: 5b 41 5c c3 66 0f 1f 84 00 00 00 00 00 f3 0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d c3 a3 0f 00 f7 d8 64 89 01 48
+[   72.319924] RSP: 002b:00007ffdb4131158 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+[   72.321870] RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fe2ca91ea3d
+[   72.323727] RDX: 0000000000000002 RSI: 0000000020000000 RDI: 0000000000000003
+[   72.325523] RBP: 0000000000000001 R08: 0000000000000000 R09: 0000000000000000
+[   72.327431] R10: 0000000000000000 R11: 0000000000000246 R12: 00007ffdb4131278
+[   72.329256] R13: 00005648601cc060 R14: 00005648601cedc0 R15: 00007fe2cab74040
+[   72.331140]  </TASK>
 
-Best regards,
-Martin
