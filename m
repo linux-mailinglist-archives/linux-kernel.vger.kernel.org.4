@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E56260872C
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 09:57:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53772608772
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 10:01:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232234AbiJVH5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 03:57:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57486 "EHLO
+        id S232446AbiJVIBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 04:01:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231975AbiJVHxM (ORCPT
+        with ESMTP id S232199AbiJVHyX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 03:53:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89DAF2CA7DF;
-        Sat, 22 Oct 2022 00:46:55 -0700 (PDT)
+        Sat, 22 Oct 2022 03:54:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF91951CA;
+        Sat, 22 Oct 2022 00:47:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 61C8FB82E25;
-        Sat, 22 Oct 2022 07:46:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF8BEC433C1;
-        Sat, 22 Oct 2022 07:46:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A08660AFA;
+        Sat, 22 Oct 2022 07:47:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64BD9C433C1;
+        Sat, 22 Oct 2022 07:47:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666424764;
-        bh=0OomcN+6Xegv5qPSVKWmYj5hvP0ZwQmGX72HULQDYjY=;
+        s=korg; t=1666424832;
+        bh=z8354MLPzt46BjyGsVWJYbQLbpGutp1mNQkt1bEaeCo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ActyNUO6elPBw+Tmtj6DaUxcAbXNeFwBPofTbUdU5r1VmWy/c+YcpBABVfMmVSBPz
-         aEuoHDM3y7HBpVmxU09IiasFIMMwYcDJc0xNwFRJdT4GxXuICVsgnbe1CHK2kIxI5M
-         ZM138nbVlfYXMjm92mmkX9GZ7T3+nRilQ0xnaHm4=
+        b=LvCwJcpQSfuWcMgpTVuRMYlq/K9SyMkvgnT0jzIsYRnYME8/F4dN72mvx1bMo9UdQ
+         Zw2cTho2qSD071QIf8/ThbnPm8LyeHyEhHPpy2SZgyjZ48sPz/Sya4Xi3WybjljYVK
+         BldVMnrJIHBvQkTwjO0IlwD7WM4NZfCPvPO4Rf8M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Jesus Fernandez Manzano <jesus.manzano@galgus.net>,
+        Christian Ansuel Marangi <ansuelsmth@gmail.com>,
         Kalle Valo <quic_kvalo@quicinc.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 260/717] wifi: ath11k: fix number of VHT beamformee spatial streams
-Date:   Sat, 22 Oct 2022 09:22:19 +0200
-Message-Id: <20221022072500.677344792@linuxfoundation.org>
+Subject: [PATCH 5.19 263/717] wifi: ath11k: fix peer addition/deletion error on sta band migration
+Date:   Sat, 22 Oct 2022 09:22:22 +0200
+Message-Id: <20221022072501.174437947@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221022072415.034382448@linuxfoundation.org>
 References: <20221022072415.034382448@linuxfoundation.org>
@@ -55,99 +55,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jesus Fernandez Manzano <jesus.manzano@galgus.net>
+From: Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>
 
-[ Upstream commit 55b5ee3357d7bb98ee578cf9b84a652e7a1bc199 ]
+[ Upstream commit d673cb6fe6c03b2be157cc6c5db40481828d282d ]
 
-The number of spatial streams used when acting as a beamformee in VHT
-mode are reported by the firmware as 7 (8 sts - 1) both in IPQ6018 and
-IPQ8074 which respectively have 2 and 4 sts each. So the firmware should
-report 1 (2 - 1) and 3 (4 - 1).
+This patch try to fix the following error.
 
-Fix this by checking that the number of VHT beamformee sts reported by
-the firmware is not greater than the number of receiving antennas - 1.
-The fix is based on the same approach used in this same function for
-sanitizing the number of sounding dimensions reported by the firmware.
+Wed Jun  1 22:19:30 2022 kern.warn kernel: [  119.561227] ath11k c000000.wifi: peer already added vdev id 0 req, vdev id 1 present
+Wed Jun  1 22:19:30 2022 kern.warn kernel: [  119.561282] ath11k c000000.wifi: Failed to add peer: 28:c2:1f:xx:xx:xx for VDEV: 0
+Wed Jun  1 22:19:30 2022 kern.warn kernel: [  119.568053] ath11k c000000.wifi: Failed to add station: 28:c2:1f:xx:xx:xx for VDEV: 0
+Wed Jun  1 22:19:31 2022 daemon.notice hostapd: wlan2: STA 28:c2:1f:xx:xx:xx IEEE 802.11: Could not add STA to kernel driver
+Wed Jun  1 22:19:31 2022 daemon.notice hostapd: wlan2: STA 28:c2:1f:xx:xx:xx IEEE 802.11: did not acknowledge authentication response
+Wed Jun  1 22:19:31 2022 daemon.notice hostapd: wlan1: AP-STA-DISCONNECTED 28:c2:1f:xx:xx:xx
+Wed Jun  1 22:19:31 2022 daemon.info hostapd: wlan1: STA 28:c2:1f:xx:xx:xx IEEE 802.11: disassociated due to inactivity
+Wed Jun  1 22:19:32 2022 daemon.info hostapd: wlan1: STA 28:c2:1f:xx:xx:xx IEEE 802.11: deauthenticated due to inactivity (timer DEAUTH/REMOVE)
 
-Without this change, acting as a beamformee in VHT mode is not working
-properly.
+To repro this:
+- Have 2 Wifi with the same bssid and pass on different band (2.4 and
+5GHz)
+- Enable 802.11r Fast Transaction with same mobility domain
+- FT Protocol: FT over the Air
+>From a openwrt system issue the command (with the correct mac)
+ubus call hostapd.wlan1 wnm_disassoc_imminent '{"addr":"28:C2:1F:xx:xx:xx"}'
+Notice the log printing the errors.
 
-Tested-on: IPQ6018 hw1.0 AHB WLAN.HK.2.5.0.1-01208-QCAHKSWPL_SILICONZ-1
+The cause of this error has been investigated and we found that this is
+related to the WiFi Fast Transaction feature. We observed that this is
+triggered when the router tells the device to change band. In this case
+the device first auth to the other band and then the disconnect path
+from the prev band is triggered.
+This is problematic with the current rhash implementation since the
+addrs is used as key and the logic of "adding first, delete later"
+conflicts with the rhash logic.
+In fact peer addition will fail since the peer is already added and with
+that fixed a peer deletion will cause unitended effect by removing the
+peer just added.
+
+Current solution to this is to add additional logic to the peer delete,
+make sure we are deleting the correct peer taken from the rhash
+table (and fallback to the peer list) and for the peer add logic delete
+the peer entry for the rhash list before adding the new one (counting as
+an error only when a peer with the same vlan_id is asked to be added).
+
+With this change, a sta can correctly transition from 2.4GHz and 5GHZ
+with no drop and no error are printed.
+
 Tested-on: IPQ8074 hw2.0 AHB WLAN.HK.2.5.0.1-01208-QCAHKSWPL_SILICONZ-1
 
-Fixes: d5c65159f289 ("ath11k: driver for Qualcomm IEEE 802.11ax devices")
-Signed-off-by: Jesus Fernandez Manzano <jesus.manzano@galgus.net>
+Fixes: 7b0c70d92a43 ("ath11k: Add peer rhash table support")
+Signed-off-by: Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>
 Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-Link: https://lore.kernel.org/r/20220616173947.21901-1-jesus.manzano@galgus.net
+Link: https://lore.kernel.org/r/20220603164559.27769-1-ansuelsmth@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ath/ath11k/mac.c | 25 ++++++++++++++++++++-----
- 1 file changed, 20 insertions(+), 5 deletions(-)
+ drivers/net/wireless/ath/ath11k/peer.c | 30 ++++++++++++++++++++++----
+ 1 file changed, 26 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/wireless/ath/ath11k/mac.c b/drivers/net/wireless/ath/ath11k/mac.c
-index 06b86dcc3826..94d9a7190953 100644
---- a/drivers/net/wireless/ath/ath11k/mac.c
-+++ b/drivers/net/wireless/ath/ath11k/mac.c
-@@ -4949,6 +4949,8 @@ static int ath11k_mac_set_txbf_conf(struct ath11k_vif *arvif)
- 	if (vht_cap & (IEEE80211_VHT_CAP_SU_BEAMFORMEE_CAPABLE)) {
- 		nsts = vht_cap & IEEE80211_VHT_CAP_BEAMFORMEE_STS_MASK;
- 		nsts >>= IEEE80211_VHT_CAP_BEAMFORMEE_STS_SHIFT;
-+		if (nsts > (ar->num_rx_chains - 1))
-+			nsts = ar->num_rx_chains - 1;
- 		value |= SM(nsts, WMI_TXBF_STS_CAP_OFFSET);
- 	}
+diff --git a/drivers/net/wireless/ath/ath11k/peer.c b/drivers/net/wireless/ath/ath11k/peer.c
+index 9e22aaf34b88..1ae7af02c364 100644
+--- a/drivers/net/wireless/ath/ath11k/peer.c
++++ b/drivers/net/wireless/ath/ath11k/peer.c
+@@ -302,6 +302,21 @@ static int __ath11k_peer_delete(struct ath11k *ar, u32 vdev_id, const u8 *addr)
+ 	spin_lock_bh(&ab->base_lock);
  
-@@ -4989,7 +4991,7 @@ static int ath11k_mac_set_txbf_conf(struct ath11k_vif *arvif)
- static void ath11k_set_vht_txbf_cap(struct ath11k *ar, u32 *vht_cap)
- {
- 	bool subfer, subfee;
--	int sound_dim = 0;
-+	int sound_dim = 0, nsts = 0;
- 
- 	subfer = !!(*vht_cap & (IEEE80211_VHT_CAP_SU_BEAMFORMER_CAPABLE));
- 	subfee = !!(*vht_cap & (IEEE80211_VHT_CAP_SU_BEAMFORMEE_CAPABLE));
-@@ -4999,6 +5001,11 @@ static void ath11k_set_vht_txbf_cap(struct ath11k *ar, u32 *vht_cap)
- 		subfer = false;
- 	}
- 
-+	if (ar->num_rx_chains < 2) {
-+		*vht_cap &= ~(IEEE80211_VHT_CAP_SU_BEAMFORMEE_CAPABLE);
-+		subfee = false;
-+	}
+ 	peer = ath11k_peer_find_by_addr(ab, addr);
++	/* Check if the found peer is what we want to remove.
++	 * While the sta is transitioning to another band we may
++	 * have 2 peer with the same addr assigned to different
++	 * vdev_id. Make sure we are deleting the correct peer.
++	 */
++	if (peer && peer->vdev_id == vdev_id)
++		ath11k_peer_rhash_delete(ab, peer);
 +
- 	/* If SU Beaformer is not set, then disable MU Beamformer Capability */
- 	if (!subfer)
- 		*vht_cap &= ~(IEEE80211_VHT_CAP_MU_BEAMFORMER_CAPABLE);
-@@ -5011,7 +5018,9 @@ static void ath11k_set_vht_txbf_cap(struct ath11k *ar, u32 *vht_cap)
- 	sound_dim >>= IEEE80211_VHT_CAP_SOUNDING_DIMENSIONS_SHIFT;
- 	*vht_cap &= ~IEEE80211_VHT_CAP_SOUNDING_DIMENSIONS_MASK;
- 
--	/* TODO: Need to check invalid STS and Sound_dim values set by FW? */
-+	nsts = (*vht_cap & IEEE80211_VHT_CAP_BEAMFORMEE_STS_MASK);
-+	nsts >>= IEEE80211_VHT_CAP_BEAMFORMEE_STS_SHIFT;
-+	*vht_cap &= ~IEEE80211_VHT_CAP_BEAMFORMEE_STS_MASK;
- 
- 	/* Enable Sounding Dimension Field only if SU BF is enabled */
- 	if (subfer) {
-@@ -5023,9 +5032,15 @@ static void ath11k_set_vht_txbf_cap(struct ath11k *ar, u32 *vht_cap)
- 		*vht_cap |= sound_dim;
++	/* Fallback to peer list search if the correct peer can't be found.
++	 * Skip the deletion of the peer from the rhash since it has already
++	 * been deleted in peer add.
++	 */
++	if (!peer)
++		peer = ath11k_peer_find(ab, vdev_id, addr);
++
+ 	if (!peer) {
+ 		spin_unlock_bh(&ab->base_lock);
+ 		mutex_unlock(&ab->tbl_mtx_lock);
+@@ -312,8 +327,6 @@ static int __ath11k_peer_delete(struct ath11k *ar, u32 vdev_id, const u8 *addr)
+ 		return -EINVAL;
  	}
  
--	/* Use the STS advertised by FW unless SU Beamformee is not supported*/
--	if (!subfee)
--		*vht_cap &= ~(IEEE80211_VHT_CAP_BEAMFORMEE_STS_MASK);
-+	/* Enable Beamformee STS Field only if SU BF is enabled */
-+	if (subfee) {
-+		if (nsts > (ar->num_rx_chains - 1))
-+			nsts = ar->num_rx_chains - 1;
-+
-+		nsts <<= IEEE80211_VHT_CAP_BEAMFORMEE_STS_SHIFT;
-+		nsts &=  IEEE80211_VHT_CAP_BEAMFORMEE_STS_MASK;
-+		*vht_cap |= nsts;
-+	}
- }
+-	ath11k_peer_rhash_delete(ab, peer);
+-
+ 	spin_unlock_bh(&ab->base_lock);
+ 	mutex_unlock(&ab->tbl_mtx_lock);
  
- static struct ieee80211_sta_vht_cap
+@@ -372,8 +385,17 @@ int ath11k_peer_create(struct ath11k *ar, struct ath11k_vif *arvif,
+ 	spin_lock_bh(&ar->ab->base_lock);
+ 	peer = ath11k_peer_find_by_addr(ar->ab, param->peer_addr);
+ 	if (peer) {
+-		spin_unlock_bh(&ar->ab->base_lock);
+-		return -EINVAL;
++		if (peer->vdev_id == param->vdev_id) {
++			spin_unlock_bh(&ar->ab->base_lock);
++			return -EINVAL;
++		}
++
++		/* Assume sta is transitioning to another band.
++		 * Remove here the peer from rhash.
++		 */
++		mutex_lock(&ar->ab->tbl_mtx_lock);
++		ath11k_peer_rhash_delete(ar->ab, peer);
++		mutex_unlock(&ar->ab->tbl_mtx_lock);
+ 	}
+ 	spin_unlock_bh(&ar->ab->base_lock);
+ 
 -- 
 2.35.1
 
