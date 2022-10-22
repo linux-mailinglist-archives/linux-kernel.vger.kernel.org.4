@@ -2,61 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A02E608C21
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 13:02:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC1EE608B47
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 12:09:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230505AbiJVLCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 07:02:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51956 "EHLO
+        id S230220AbiJVKIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 06:08:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230498AbiJVLBW (ORCPT
+        with ESMTP id S230036AbiJVKIg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 07:01:22 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34BD57AC16;
-        Sat, 22 Oct 2022 03:19:45 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MvZlD6Xf5zl5kr;
-        Sat, 22 Oct 2022 16:49:28 +0800 (CST)
-Received: from [10.174.179.14] (unknown [10.174.179.14])
-        by APP4 (Coremail) with SMTP id gCh0CgC3xecSr1NjbLMLAA--.36624S3;
-        Sat, 22 Oct 2022 16:51:32 +0800 (CST)
-Subject: Re: [PATCH v2] block: fix memory leak for elevator on add_disk
- failure
-To:     Yu Kuai <yukuai1@huaweicloud.com>, axboe@kernel.dk, hch@lst.de,
-        ming.lei@redhat.com
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yukuai3@huawei.com, yi.zhang@huawei.com
-References: <20221022021615.2756171-1-yukuai1@huaweicloud.com>
-From:   Jason Yan <yanaijie@huaweicloud.com>
-Message-ID: <8c22d055-6285-d5f6-1b83-8b08d39768b2@huaweicloud.com>
-Date:   Sat, 22 Oct 2022 16:51:30 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        Sat, 22 Oct 2022 06:08:36 -0400
+Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E28FC18709F;
+        Sat, 22 Oct 2022 02:25:25 -0700 (PDT)
+Received: by mail-qv1-xf2b.google.com with SMTP id i12so3451945qvs.2;
+        Sat, 22 Oct 2022 02:25:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YBywPh8NVLG25pa2iZVL+6YbAYv3SkSxdtxeXc3ICGE=;
+        b=HFNIAjQg2u9fd7rjHOSCi52sh4i3pX2zdX59+PNAbpK0DMrPNDxrTE8Wo75ksx5lSa
+         k2rv6UKx13HHU4cHZkn+cn3Db9hi3zsGf+jJmT+vG6ge5C1TKP3muOtKFO3JYC40+2Hs
+         EI9HOjjtfL16CQdm/NV7EDvQsyDTAdRxuR72gHU77qkbTYHxJjdH8LMyriD6is2ta27y
+         VTJi913rCj7nQYOhINGuLDdkwrCyLYPhD8JXy6LarHjnk8VslSL+rGVMzLYq2dDJU49r
+         /VwB6Pcp575ap5tCoi48Ot557tMEZr2TN+gOup4K+eqBbnLpm2DYKIsM+mu2JClpWLuQ
+         Fasg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YBywPh8NVLG25pa2iZVL+6YbAYv3SkSxdtxeXc3ICGE=;
+        b=btwBD6GSBsonovG8vXNDGrUDg0Z3iUDo56BBOo+cpxEI0sfXVRcu/INIVlgAPkhLr9
+         0/p6//fkPk0qubMK5vwHfa256/TzC7c+8Mn/HoMY+U7npAhlsaCZHu4XvKaT7gmNxa2o
+         ZIjEiMe1NT4wjJnOSDYy5N6J5mfEC7vbj2itLjMDc8fseitTaqorjWedsR0sNNzUszbL
+         AhhU4wbF3xAstbcrQNXvctb4+f+03+0MtMR+Pvy2F7H5lM14gEaActCbRTPrcO3L8Qho
+         nPIytLpOxKOwYbQWMOb6lSyKFouV+U+fvtntoDO6w3XaDPnX85i6eevvu+76gwzMqRxY
+         UK3w==
+X-Gm-Message-State: ACrzQf1d0r2aaeYZIJJdLjWcc9AxOkNj/nWOr9oOUniYlQpF4imJ3w+C
+        QQmofmyKLItNq0oRzaDiaSZpyNIzjpzE0A==
+X-Google-Smtp-Source: AMsMyM5EZucdKobn64AcIzJtSK6MvkG+0ZK7xLozqjrQE0Nbc7Nm4kVlJTwuFbz+4pirMviJw78zAg==
+X-Received: by 2002:a62:1a97:0:b0:562:5587:12d6 with SMTP id a145-20020a621a97000000b00562558712d6mr23062930pfa.37.1666428897072;
+        Sat, 22 Oct 2022 01:54:57 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-75.three.co.id. [180.214.232.75])
+        by smtp.gmail.com with ESMTPSA id o4-20020a634104000000b0046ae818b626sm503468pga.30.2022.10.22.01.54.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 22 Oct 2022 01:54:56 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id B3754101140; Sat, 22 Oct 2022 15:54:52 +0700 (WIB)
+Date:   Sat, 22 Oct 2022 15:54:52 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net
+Subject: Re: [PATCH 5.19 000/717] 5.19.17-rc1 review
+Message-ID: <Y1Ov3KuyKmb9Nizm@debian.me>
+References: <20221022072415.034382448@linuxfoundation.org>
 MIME-Version: 1.0
-In-Reply-To: <20221022021615.2756171-1-yukuai1@huaweicloud.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: gCh0CgC3xecSr1NjbLMLAA--.36624S3
-X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUU5i7kC6x804xWl14x267AKxVW8JVW5JwAF
-        c2x0x2IEx4CE42xK8VAvwI8IcIk0rVWUuVWrJwAFIxvE14AKwVWUJVWUGwA2ocxC64kIII
-        0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xv
-        wVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7
-        xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
-        FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr
-        0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxv
-        r21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxV
-        WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI
-        7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
-        1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4U
-        MIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU1zuWJUUUU
-        U==
-X-CM-SenderInfo: 51dqtxhmlhqx5xdzvxpfor3voofrz/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="da3BH2hT0/m4O+ML"
+Content-Disposition: inline
+In-Reply-To: <20221022072415.034382448@linuxfoundation.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -64,22 +79,42 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 2022/10/22 10:16, Yu Kuai wrote:
-> From: Yu Kuai<yukuai3@huawei.com>
-> 
-> The default elevator is allocated in the beginning of device_add_disk(),
-> however, it's not freed in the following error path.
-> 
-> Fixes: 50e34d78815e ("block: disable the elevator int del_gendisk")
-> Signed-off-by: Yu Kuai<yukuai3@huawei.com>
-> Reviewed-by: Christoph Hellwig<hch@lst.de>
-> ---
-> Changes in v2:
->   - fix wrong fix tag
->   - add review tag
-> 
->   block/genhd.c | 12 ++++++++----
->   1 file changed, 8 insertions(+), 4 deletions(-)
+--da3BH2hT0/m4O+ML
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Jason Yan <yanaijie@huawei.com>
+On Sat, Oct 22, 2022 at 09:17:59AM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.19.17 release.
+> There are 717 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>=20
+> Note, this will be the LAST 5.19.y kernel to be released.  Please move
+> to the 6.0.y kernel branch at this point in time, as after this is
+> released, this branch will be end-of-life.
+>=20
 
+Hi Greg, thanks for the patch series, which is out three days after
+the -rc1 have been pused. As usual, the template message follows.
+
+Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
+powerpc (ps3_defconfig, GCC 12.1.0).
+
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--da3BH2hT0/m4O+ML
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY1Ov1AAKCRD2uYlJVVFO
+o/QcAQCXaZc/rI6NLvIrCTxPNzb22t+okIGUi1o+Z/b5tfeshQEA82hw2uxHuvUv
+PDjOLTGt3cMBXpN2V3J+ajJEB1A88w0=
+=oISM
+-----END PGP SIGNATURE-----
+
+--da3BH2hT0/m4O+ML--
