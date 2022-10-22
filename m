@@ -2,40 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A56C4608613
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 09:43:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88EBF60869F
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 09:51:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231347AbiJVHnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 03:43:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56818 "EHLO
+        id S231925AbiJVHvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 03:51:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230476AbiJVHnL (ORCPT
+        with ESMTP id S231565AbiJVHsl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 03:43:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C993D1B94F6;
-        Sat, 22 Oct 2022 00:42:01 -0700 (PDT)
+        Sat, 22 Oct 2022 03:48:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C93C199F6B;
+        Sat, 22 Oct 2022 00:45:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F1FBCB82E0B;
-        Sat, 22 Oct 2022 07:41:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A24CC4347C;
-        Sat, 22 Oct 2022 07:41:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D0D0660B90;
+        Sat, 22 Oct 2022 07:41:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB3E9C433C1;
+        Sat, 22 Oct 2022 07:41:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666424463;
-        bh=nFCeWBlb71nzHFatGST1sfWN1nDJByc2HnNY5OXQHfM=;
+        s=korg; t=1666424469;
+        bh=BMhRM4nqWbjmRpKYBjSHNb+WOA6zO/H96SN3tqK7YGs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dbwJOVkWdpkoC/SJvgTDsXwIll5nz4FMenygmLIYawln52KnI9pCDd0WD31MNk+Vg
-         RrtCMQYWVDrgJsdB5fh6GICqWdEO61BpYHpYVcxeBbPTmGa8/c7JKmRLchtysKtcez
-         7G+z+qJG88hGVRzS2bauSmELsRwDbj3hV023TYX4=
+        b=mzblqz1cmdf6/pW4s7ZSdzBrX2jRSMu7u5ZmQN2EXgK7nZM0Js6CoK1oxt8PPUWAv
+         oMpAH2J3uIb0uLTAaOiuKvqyY3fottfxNRKckoq8gx1loxI3b6bAO92Qn1ahpaguhE
+         BNvtZ8LWFTMI9cVrCrL2XBIkzSXSfjORL1Q9OTug=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>
-Subject: [PATCH 5.19 155/717] efi: libstub: drop pointless get_memory_map() call
-Date:   Sat, 22 Oct 2022 09:20:34 +0200
-Message-Id: <20221022072442.871548970@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: [PATCH 5.19 157/717] media: cedrus: Fix endless loop in cedrus_h265_skip_bits()
+Date:   Sat, 22 Oct 2022 09:20:36 +0200
+Message-Id: <20221022072443.234474692@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221022072415.034382448@linuxfoundation.org>
 References: <20221022072415.034382448@linuxfoundation.org>
@@ -52,37 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ard Biesheuvel <ardb@kernel.org>
+From: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 
-commit d80ca810f096ff66f451e7a3ed2f0cd9ef1ff519 upstream.
+commit 91db7a3fc7fe670cf1770a398a43bb4a1f776bf1 upstream.
 
-Currently, the non-x86 stub code calls get_memory_map() redundantly,
-given that the data it returns is never used anywhere. So drop the call.
+The busy status bit may never de-assert if number of programmed skip
+bits is incorrect, resulting in a kernel hang because the bit is polled
+endlessly in the code. Fix it by adding timeout for the bit-polling.
+This problem is reproducible by setting the data_bit_offset field of
+the HEVC slice params to a wrong value by userspace.
 
-Cc: <stable@vger.kernel.org> # v4.14+
-Fixes: 24d7c494ce46 ("efi/arm-stub: Round up FDT allocation to mapping size")
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+Cc: stable@vger.kernel.org
+Fixes: 7678c5462680 (media: cedrus: Fix decoding for some HEVC videos)
+Reported-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/firmware/efi/libstub/fdt.c |    8 --------
- 1 file changed, 8 deletions(-)
+ drivers/staging/media/sunxi/cedrus/cedrus_h265.c |    5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
---- a/drivers/firmware/efi/libstub/fdt.c
-+++ b/drivers/firmware/efi/libstub/fdt.c
-@@ -280,14 +280,6 @@ efi_status_t allocate_new_fdt_and_exit_b
- 		goto fail;
- 	}
+--- a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
+@@ -234,8 +234,9 @@ static void cedrus_h265_skip_bits(struct
+ 		cedrus_write(dev, VE_DEC_H265_TRIGGER,
+ 			     VE_DEC_H265_TRIGGER_FLUSH_BITS |
+ 			     VE_DEC_H265_TRIGGER_TYPE_N_BITS(tmp));
+-		while (cedrus_read(dev, VE_DEC_H265_STATUS) & VE_DEC_H265_STATUS_VLD_BUSY)
+-			udelay(1);
++
++		if (cedrus_wait_for(dev, VE_DEC_H265_STATUS, VE_DEC_H265_STATUS_VLD_BUSY))
++			dev_err_ratelimited(dev->dev, "timed out waiting to skip bits\n");
  
--	/*
--	 * Now that we have done our final memory allocation (and free)
--	 * we can get the memory map key needed for exit_boot_services().
--	 */
--	status = efi_get_memory_map(&map);
--	if (status != EFI_SUCCESS)
--		goto fail_free_new_fdt;
--
- 	status = update_fdt((void *)fdt_addr, fdt_size,
- 			    (void *)*new_fdt_addr, MAX_FDT_SIZE, cmdline_ptr,
- 			    initrd_addr, initrd_size);
+ 		count += tmp;
+ 	}
 
 
