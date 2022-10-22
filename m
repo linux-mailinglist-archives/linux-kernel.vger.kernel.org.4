@@ -2,54 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09B91608C49
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 13:07:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 276C3608C4F
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 13:08:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231177AbiJVLHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 07:07:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47970 "EHLO
+        id S230156AbiJVLIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 07:08:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230274AbiJVLGi (ORCPT
+        with ESMTP id S231149AbiJVLIQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 07:06:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B62743385B;
-        Sat, 22 Oct 2022 03:24:30 -0700 (PDT)
+        Sat, 22 Oct 2022 07:08:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D37F52D37C5;
+        Sat, 22 Oct 2022 03:26:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E78860B24;
-        Sat, 22 Oct 2022 10:24:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C1F6C433C1;
-        Sat, 22 Oct 2022 10:24:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CA302B8077D;
+        Sat, 22 Oct 2022 10:26:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCFC0C433C1;
+        Sat, 22 Oct 2022 10:26:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666434269;
-        bh=sNnqQxLQOiwqu7Ffq7bguDEOGa/qup8E74EebTPLQiY=;
+        s=korg; t=1666434411;
+        bh=dTTyLGATFbJsGsPhwEJxmVPaeto9T/Tpgmku7JGHixs=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CGFosPZlrGF6y4gj9t6Lw1jBTwq0zSqI9G6rgAlwH7CydFsvs8cKOl/zGAtVz8+1z
-         NHJow5DMWeZY9mKDHiwx2/ryRUJMVpRPCF2XGzQni3aKEmBnJkHC3WOet3rx7YHfQ3
-         zQ5uye9wPLs2kR7f2Pcf0xPcjQXFWWyVdVuRFoNQ=
-Date:   Sat, 22 Oct 2022 12:24:26 +0200
+        b=Q4T17/U4PIMJuTG8DgpKQAMg3Dxqwz2xAgQI7I6TnrONxSufLduiKcLRiyKnP5tcy
+         pGUECVdCnFjJT2zwjH8w4DQBsa0HYk7HalSZftIancT0o0ltV+BEbgEzCVqVOGO6xr
+         dG7Pb4s7Xb6Cpk24Yg8qBQqrUGc9aQqIuWgkwLds=
+Date:   Sat, 22 Oct 2022 12:26:48 +0200
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Tony Lindgren <tony@atomide.com>, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>, linux-omap@vger.kernel.org,
-        Lee Jones <lee@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 13/17] ARM: omap1: remove unused board files
-Message-ID: <Y1PE2nYekbHayuud@kroah.com>
-References: <20221019144119.3848027-1-arnd@kernel.org>
- <20221019150410.3851944-1-arnd@kernel.org>
- <20221019150410.3851944-13-arnd@kernel.org>
+To:     patrice.chotard@foss.st.com
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jerome Audu <jerome.audu@st.com>,
+        Felipe Balbi <felipe@balbi.sh>
+Subject: Re: [PATCH v3] usb: dwc3: st: Rely on child's compatible instead of
+ name
+Message-ID: <Y1PFaOEbPVDN7313@kroah.com>
+References: <20220930142018.890535-1-patrice.chotard@foss.st.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221019150410.3851944-13-arnd@kernel.org>
+In-Reply-To: <20220930142018.890535-1-patrice.chotard@foss.st.com>
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,18 +53,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 05:03:35PM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Fri, Sep 30, 2022 at 04:20:18PM +0200, patrice.chotard@foss.st.com wrote:
+> From: Patrice Chotard <patrice.chotard@foss.st.com>
 > 
-> All board support that was marked as 'unused' earlier can
-> now be removed, leaving the five machines that that still
-> had someone using them in 2022, or that are supported in
-> qemu.
+> To ensure that child node is found, don't rely on child's node name
+> which can take different value, but on child's compatible name.
 > 
-> Cc: Aaro Koskinen <aaro.koskinen@iki.fi>
-> Cc: Janusz Krzysztofik <jmkrzyszt@gmail.com>
-> Cc: Tony Lindgren <tony@atomide.com>
-> Cc: linux-omap@vger.kernel.org
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> Fixes: f5c5936d6b4d ("usb: dwc3: st: Fix node's child name")
+> Cc: Jerome Audu <jerome.audu@st.com>
+> Reported-by: Felipe Balbi <felipe@balbi.sh>
+> Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+> ---
+> v3: - rebase on correct branch
+> v2: - add missing reported-by
+>     - add Fixes
+> ---
+>  drivers/usb/dwc3/dwc3-st.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/dwc3/dwc3-st.c b/drivers/usb/dwc3/dwc3-st.c
+> index 6c14a79279f9..fea5290de83f 100644
+> --- a/drivers/usb/dwc3/dwc3-st.c
+> +++ b/drivers/usb/dwc3/dwc3-st.c
+> @@ -251,7 +251,7 @@ static int st_dwc3_probe(struct platform_device *pdev)
+>  	/* Manage SoftReset */
+>  	reset_control_deassert(dwc3_data->rstc_rst);
+>  
+> -	child = of_get_child_by_name(node, "usb");
+> +	child = of_get_compatible_child(node, "snps,dwc3");
+>  	if (!child) {
+>  		dev_err(&pdev->dev, "failed to find dwc3 core node\n");
+>  		ret = -ENODEV;
+> -- 
+> 2.25.1
+> 
 
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Is this still needed for 6.1-final?
+
+thanks,
+
+greg k-h
