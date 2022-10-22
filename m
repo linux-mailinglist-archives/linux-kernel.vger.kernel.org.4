@@ -2,100 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4853A60837B
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 04:06:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3621F60837D
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 04:06:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229850AbiJVCFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 21 Oct 2022 22:05:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58200 "EHLO
+        id S229449AbiJVCGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 21 Oct 2022 22:06:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbiJVCFp (ORCPT
+        with ESMTP id S229788AbiJVCG3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 21 Oct 2022 22:05:45 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 67EEF23AB5A;
-        Fri, 21 Oct 2022 19:05:42 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.32])
-        by gateway (Coremail) with SMTP id _____8Cxbbf1T1Nju5EBAA--.1939S3;
-        Sat, 22 Oct 2022 10:05:41 +0800 (CST)
-Received: from [10.20.42.32] (unknown [10.20.42.32])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bxj+D0T1NjQCgDAA--.12570S3;
-        Sat, 22 Oct 2022 10:05:40 +0800 (CST)
-Subject: Re: [PATCH V4 1/4] ACPI / PCI: fix LPIC IRQ model default PCI IRQ
- polarity
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org,
-        loongarch@lists.linux.dev, Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Len Brown <lenb@kernel.org>, rafael@kernel.org,
-        linux-pci@vger.kernel.org, linux-acpi@vger.kernel.org
-References: <20221021120129.GA185586@bhelgaas>
-From:   Jianmin Lv <lvjianmin@loongson.cn>
-Message-ID: <8362ab48-7769-8139-8ca9-aca75147a853@loongson.cn>
-Date:   Sat, 22 Oct 2022 10:05:40 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Fri, 21 Oct 2022 22:06:29 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35F8729E9B8
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 19:06:28 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id pq16so3890398pjb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 19:06:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=TiUp4piOdBE0maAv9D6j0EmLO5rQgO8m+x9nCI9z2U4=;
+        b=PD/UGksFkaEjjFdUVP6cQJdDtfIUa1SAjIa3OtMSoP0WdQKcPjGO4ZS3lMnyE5e5jR
+         gHCjntt2Pb8yo17eqJh1+kPLAT3UYAlcdOkL+mHEo+xNgpgDB2p+6I9uQVC6KwBVua95
+         ECg0oGVmL6lNc/JCFRTDllWlcfu2E2oSgaOeM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TiUp4piOdBE0maAv9D6j0EmLO5rQgO8m+x9nCI9z2U4=;
+        b=kMLetV2SisELCE78PeJofsrd6FJguFpuZBEHRDEV61gtfZMLCDX3+UnazIibGNkD/8
+         byEAnfesf1SKnelh0jh/AgefV/arbII9/HH0YbSlkucJ72GFvo8p8r4JYwdQaIaHcB5Q
+         pp6Qb3V7RqJN5stQVFpajIP7ki2CQ6WbFtwkFCEVJNKb6YY4J7yV6+NBB2kc/z0WjbmH
+         6u95QjxW2tzmhmCSYwz2XVp8obwKgB2xNf46MzhKUV61d8FU+BRZKaPUlVwl0olbOOkZ
+         /dzK3woaFswAtZBehRNGfq7ADJY/FskvGrWkqYK5Kzu6VBgwJOoAcL8uO4trt646pn0d
+         A6GA==
+X-Gm-Message-State: ACrzQf0ewyqKAGMOAGPxrfKqd+BTqgUZ9LpeDnMnRj4nWN+saYRYOQHu
+        SXM3b7CbbsanW3us/K/6/Df6/w==
+X-Google-Smtp-Source: AMsMyM74+HSsSGycWSt36x33weY8oc9gA/0sU5ilwCgdlRRmLo/cBpSnJmMHYpOgVqwyf+1EjpM2Rg==
+X-Received: by 2002:a17:90b:4d08:b0:20a:6861:352c with SMTP id mw8-20020a17090b4d0800b0020a6861352cmr25403550pjb.225.1666404387745;
+        Fri, 21 Oct 2022 19:06:27 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id z11-20020a170903018b00b00172ea8ff334sm15500193plg.7.2022.10.21.19.06.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Oct 2022 19:06:27 -0700 (PDT)
+Date:   Fri, 21 Oct 2022 19:06:26 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Rasesh Mody <rmody@marvell.com>, GR-Linux-NIC-Dev@marvell.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] bnx2: Pass allocation size to build_skb()
+Message-ID: <202210211853.99AE1276A4@keescook>
+References: <20221018085911.never.761-kees@kernel.org>
+ <20221019170255.100f41c7@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20221021120129.GA185586@bhelgaas>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Bxj+D0T1NjQCgDAA--.12570S3
-X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxJr1UAF45uw4Dtr4xJFyrJFb_yoW8JFWkpF
-        WYg3WayF4Dtw45Zrn7ta1UA3WYyF43trsxJws8A3yrW3s0vw15Xr18tayrKF93CrZ7A340
-        vFySv348u3WYkrJanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bDAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UM2kK
-        e7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
-        0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280
-        aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2
-        xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC
-        6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
-        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF
-        0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0x
-        vE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
-        6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07jOiSdUUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221019170255.100f41c7@kernel.org>
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Oct 19, 2022 at 05:02:55PM -0700, Jakub Kicinski wrote:
+> On Tue, 18 Oct 2022 01:59:29 -0700 Kees Cook wrote:
+> > In preparation for requiring that build_skb() have a non-zero size
+> > argument, pass the actual data allocation size explicitly into
+> > build_skb().
+> 
+> build_skb(, 0) has the special meaning of "head buf has been kmalloc'd",
+> rather than alloc_page(). Was this changed and I missed it?
+
+Hm, I'm not clear on it. I see ksize() being called, but I guess that
+works for alloc_page() allocations too?
+
+build_skb
+	__build_skb:
+		__build_skb_around:
+		        unsigned int size = frag_size ? : ksize(data);
+
+So I guess in this case, this patch is wrong, and should instead be this
+to match the ksize() used in build_skb():
+
+diff --git a/drivers/net/ethernet/broadcom/bnx2.c
+b/drivers/net/ethernet/broadcom/bnx2.c
+index fec57f1982c8..dbe310144780 100644
+--- a/drivers/net/ethernet/broadcom/bnx2.c
++++ b/drivers/net/ethernet/broadcom/bnx2.c
+@@ -5415,8 +5415,9 @@ bnx2_set_rx_ring_size(struct bnx2 *bp, u32 size)
+ 
+        bp->rx_buf_use_size = rx_size;
+        /* hw alignment + build_skb() overhead*/
+-       bp->rx_buf_size = SKB_DATA_ALIGN(bp->rx_buf_use_size + BNX2_RX_ALIGN) +
+-               NET_SKB_PAD + SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
++       bp->rx_buf_size = kmalloc_size_roundup(
++               SKB_DATA_ALIGN(bp->rx_buf_use_size + BNX2_RX_ALIGN) +
++               NET_SKB_PAD + SKB_DATA_ALIGN(sizeof(struct skb_shared_info)));
+        bp->rx_jumbo_thresh = rx_size - BNX2_RX_OFFSET;
+        bp->rx_ring_size = size;
+        bp->rx_max_ring = bnx2_find_max_ring(size, BNX2_MAX_RX_RINGS);
 
 
-On 2022/10/21 下午8:01, Bjorn Helgaas wrote:
-> On Fri, Oct 21, 2022 at 09:58:57AM +0800, Jianmin Lv wrote:
->> On 2022/10/21 上午12:47, Bjorn Helgaas wrote:
->>> On Thu, Oct 20, 2022 at 04:22:02PM +0800, Jianmin Lv wrote:
->>>> On LoongArch ACPI based systems, the PCI devices (e.g. sata
->>>> controlers and PCI-to-to PCI bridge controlers) existed in
->>>> Loongson chipsets output high-level interrupt signal to the
->>>> interrupt controller they connected to,
-> 
->>> The point is that one should be able to write this code from a spec,
->>> without having to empirically discover the interrupt polarity.  What
->>> spec tells you about using ACTIVE_HIGH here?
->>>
->> Yes, no mentions for the inverter in ACPI spec, the description about
->> device interrupt type can be found in Loongson chipset manual:
->>
->> https://github.com/loongson/LoongArch-Documentation/blob/main/docs/Loongson-7A1000-usermanual-EN/interrupt-controller/device-interrupt-types.adoc
-> 
-> That's the kind of reference I was looking for.  The link to HTML is
-> convenient in some ways, but since specs evolve over time and URLs are
-> ephemeral, I think a citation like "Loongson 7A1000 Bridge User Manual
-> v2.00, sec 5.3" is more likely to be useful far in the future.
-> 
-Ok, good suggestion, thanks.
-
-> Bjorn
-> 
-
+-- 
+Kees Cook
