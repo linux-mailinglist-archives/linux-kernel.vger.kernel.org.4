@@ -2,87 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E20D0608BBF
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 12:40:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF4D6608BCA
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 12:42:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230218AbiJVKj7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 06:39:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37920 "EHLO
+        id S229926AbiJVKmE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 06:42:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230047AbiJVKjf (ORCPT
+        with ESMTP id S230096AbiJVKlp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 06:39:35 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A06EE4D81B;
-        Sat, 22 Oct 2022 02:57:05 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 5BF0A1C09E5; Sat, 22 Oct 2022 11:55:57 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
-        t=1666432557;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3VXcTy4dq33vF1Lw5N+gimui6R5xNr99W5cU2xOMgEc=;
-        b=k2zcvC8MJnqwGgPO5l+yOAAOtuoTRLM/xm7iKdUkJDIHH5oHYAORwxubH6dYAnO+IgiJPL
-        X11DQNjjenSPrJR7fOiT7MgbhA1A2s4InzFtOkgYpdDsObwVZLEJkwwH1FK4QPHMHvUXXn
-        NjsSEmCmBayAEwSZA3Hyvi1+1PDS554=
-Date:   Sat, 22 Oct 2022 11:55:56 +0200
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: Re: [PATCH v2] leds: max8997: Don't error if there is no pdata
-Message-ID: <20221022095556.GA10427@duo.ucw.cz>
-References: <20221020114442.22215-1-paul@crapouillou.net>
- <20221021131145.GB16264@duo.ucw.cz>
- <ADU3KR.HZPTLZCKPHT63@crapouillou.net>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="17pEHd4RhPHOinZp"
-Content-Disposition: inline
-In-Reply-To: <ADU3KR.HZPTLZCKPHT63@crapouillou.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 22 Oct 2022 06:41:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43B04309D69;
+        Sat, 22 Oct 2022 02:59:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A68760B30;
+        Sat, 22 Oct 2022 09:58:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BF4CC433D6;
+        Sat, 22 Oct 2022 09:58:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666432730;
+        bh=WP8PgJkZVHH/W2+YkNZq5BVxG5GyrvdYpbdg64fNj8U=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=CeOdEUJW8auDaOQX9iLqKzUnSDWqVR65dWfwkAX6e7qWQO4RRIQtfslDSNBovITcw
+         EGTJXSYZunsXNlylJt5kkPJNnpIl7zaRtlx8b9u26ibddedNJWQJkULhZ5IFlgNN25
+         ke11IpSHU/Mzr9D6QehjJp3zxenL68KSg25g4vDXKsGy+Lg6Uga1o3aQO6OVR+Mz2y
+         NBJs1AOGXTQD/unUTeSBsuM322qqNcBW22IVTDLcf0gdjvYnzgSEVtTSkl1d8deD6+
+         RkyE9/Ukv84iChKBPFh9ut+CEqX6eImRkrP3zR+TbOMnQIergIoSJFZj/TQqmcxR7C
+         udzlt8jP/UGeA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1omBHE-000ka9-4n;
+        Sat, 22 Oct 2022 10:58:48 +0100
+Date:   Sat, 22 Oct 2022 10:58:07 +0100
+Message-ID: <87h6zwgoy8.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Joe Korty <joe.korty@concurrent-rt.com>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] arm64: arch_timer: XGene-1 has 31 bit, not 32 bit, arch timer.
+In-Reply-To: <20221021194746.GA5830@zipoli.concurrent-rt.com>
+References: <20221021153424.GA25677@zipoli.concurrent-rt.com>
+        <864jvxnj65.wl-maz@kernel.org>
+        <20221021194746.GA5830@zipoli.concurrent-rt.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: joe.korty@concurrent-rt.com, linux-kernel@vger.kernel.org, stable@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Joe,
 
---17pEHd4RhPHOinZp
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Fri, 21 Oct 2022 20:47:46 +0100,
+Joe Korty <joe.korty@concurrent-rt.com> wrote:
+> 
+> Hi Marc,
+> 
+> On Fri, Oct 21, 2022 at 07:08:50PM +0100, Marc Zyngier wrote:
+> > Sorry, but you'll have to provide a bit more of an analysis here. As
+> > far as I can tell, you're just changing a parameter without properly
+> > describing what breaks and how.
+> 
+> There isn't much to analyse.
 
-Hi!
+Actually, there is plenty to analyse. Starting with *why* 31 is the
+correct value (it actually is, see below) other than "hey, I reverted
+this and it's all good, just merge it".
 
-> > >  The driver works just fine if no platform data is supplied.
-> > >=20
-> > >  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> > >  Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> >=20
-> > Does it? Bad Paul, bad Andy.
->=20
-> Yes, it does.
+> For ages, 0x7fffffff (31 bits) was the
+> declared width of 'arch timer' for all arm architures, and that worked.
+> Your patch series made the declared width vary according to which chipset
+> was in use, which is good, but that rewrite changed the above mask for
+> the XGene-1 from 0x7fffffff to 0xffffffff.
 
-Sorry, I misread the patch. Applied now.
+This isn't quite what my changes did, but hey, let's not get derailed.
 
-Best regards,
-							Pavel
---=20
-People of Russia, stop Putin before his war on Ukraine escalates.
+> That change broke timers
+> for the XGene-1 since it seems that, in actuality, it has only a 31 bit
+> wide arch timer.  Thus declaring that arch timer has 32-bits is wrong.
+> This mismatch between the actual and declared sizes would cause arithmetic
+> errors in the calculation of timer deltas which more than accounts for
+> the hrtimer failures I am seeing when running 5.16+ on my Mustang XGene1.
 
---17pEHd4RhPHOinZp
-Content-Type: application/pgp-signature; name="signature.asc"
+This is the important point, and the reason why it breaks:
 
------BEGIN PGP SIGNATURE-----
+XGene implements CVAL (a 64bit comparator) in terms of TVAL (a
+countdown register) instead of the other way around. TVAL being a
+32bit register, the width of the counter should equally be 32.
+However, TVAL is a *signed* value, and keeps counting down in the
+negative range once the timer fires.
 
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY1O+LAAKCRAw5/Bqldv6
-8tY9AJ4qH2WFR1LgBtpTzKMQOvH8E++gvgCgomNJ4BSK068ZjOv1z3gfG5+glqA=
-=horM
------END PGP SIGNATURE-----
+It means that any TVAL value with bit 31 set will fire immediately, as
+it cannot be distinguished from an already expired timer. Reducing the
+timer range back to a paltry 31 bits papers over the issue.
 
---17pEHd4RhPHOinZp--
+Another problem cannot be fixed though, which is that the timer
+interrupt *must* be handled within the negative countdown period, or
+the interrupt will be lost (TVAL will rollover to a positive value,
+indicative of a new timer deadline).
+
+> Only one line need change, the rest are fluff:
+> 
+> -             return CLOCKSOURCE_MASK(32);
+> +             return CLOCKSOURCE_MASK(31);
+
+Yes, and all you need is to send a proper patch, see below.
+
+> 
+> > Also, this isn't much of a patch.
+> 
+> I don't know what this means.  The patch contains all that is needed for
+> the fix, no more.  I could add more comments as to _why_ it is 31 bits
+> not 32, but I don't know why.  I only know that the motherboard behaves
+> as if 31 bits is all that is available in the hardware.
+> 
+> > Please see the documentation on how to properly submit one.
+> 
+> AFAICS, the only submission mistake is that the 'Cc: stable@vger.kernel.org'
+> line is missing.
+
+What you have done here is to write an email with a diff appended to
+it, which isn't a proper kernel patch. I expect a patch to be
+formatted with "git format-patch" instead of "git diff"
+(i.e. something that is an actually commit instead of a local diff),
+with a proper commit message (feel free to nick some of the
+description above), with a Cc: stable@ and a Fixes: tag at the right
+spot, Cc'ing all the relevant maintainers.
+
+All of this is eloquently explained in the kernel documentation
+(Documentation/process/submitting-patches.rst), and I would definitely
+encourage you to read the sections titled "Describe your changes" and
+"The canonical patch format". You can also look at the previous
+commits to the same file to get a sense of the formatting that people
+use.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
