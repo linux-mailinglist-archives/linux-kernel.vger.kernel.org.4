@@ -2,63 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C81A608DC5
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 16:56:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69B08608DC0
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 16:50:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229711AbiJVO4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 10:56:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44506 "EHLO
+        id S229763AbiJVOuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 10:50:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbiJVO4u (ORCPT
+        with ESMTP id S229497AbiJVOt7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 10:56:50 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2DC818E1B
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 07:56:48 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id o4so840638wrq.6
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 07:56:48 -0700 (PDT)
+        Sat, 22 Oct 2022 10:49:59 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D3457EFD7;
+        Sat, 22 Oct 2022 07:49:57 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id a67so15961467edf.12;
+        Sat, 22 Oct 2022 07:49:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=/tXvrHCsrelCqwHQuBkqjhcR6QAT/KqaZfHhYAbPR28=;
-        b=faAyIpeB74juxp0oI0CEdLXKe789kz5oYbZyPN3v+rV0UzHJlNcAqgGN/8CMehGZZP
-         J6jyDmLHjYuo5wpu+OckOop70PaC6RPM8c7438G2ugEC/Pb9c5SmVf5fdLoMVSKn4mCk
-         y3kPscaIRSPLHXExm6YZU5UBGeWcs/uJcg/mxYHcHteJWB15pl2TaUVZwYIAlv2MyP7l
-         muMB+Y/05JoS74PvnXz3sGAVOH4HexKsHpuGfeeNfF2FOTMKh2mBFb1JG+nmkCwtlLyV
-         kcywv4qB/3H/Zm7gWHvj4FDesJcjTfAY8oM3+vYMI2c/+O3wjOVSfpCgOxTzXFh9qMXw
-         fO+w==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=FXANfOozsR8ZWtJEknyWv/BQc+quoG2zfT6HYPTQF5o=;
+        b=YsopUazClirccbXPzAAfSeCAEE5h62Jqu8W0jsjUhsLNTN4dTn2w3UC1YFTUZuuPsa
+         gHYXm/WHBKBdbp/XSQlQEaSuIWH1HNSAJXf89FQlBbUHnaNSXBszl/t4S7BjnH7NIp5M
+         SXjEuGavThZDBG4/N61IpZztZU3VbzNQGVDaMHz3xX/N6e2q8JMQSWq1C7NDLPWw3Qqg
+         O8l2UrYfhr3z9jAF9gEItJkagPBvjQUHHyOdgQ+P8zJJbXwWqFCWEnh59t8KavBc6QWQ
+         INpXNlK29ET+d6gO6F8VCgKinp7DkXi+bsnDX2sZxrwNnX9V964X/O34lX+1e7IQkchk
+         uuFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/tXvrHCsrelCqwHQuBkqjhcR6QAT/KqaZfHhYAbPR28=;
-        b=A1e4EZ4ptiPjwuQaFnLprBeDg2i+XNml/GjumdTs/VBO9B0gPiseh+fgnaQW9O1KoK
-         XMgEOMOjCPMPGEDiN0CePri6pQMdudyh0gugqt0IsGGWpJWJLQGYjEBykeKrPo8z6uHu
-         d8SKr4JhXC9P9p4jcRUq1n036yc6lN/1pgiLTlkjwxEOjK8DyABuSX+BBiTZAI+9Ih8T
-         9bocfGcdqDg/H5FM5MVuDjNT0sZdiB/7B0XaL2pl6VH8cCbO+4WpIoo6IImtbwGJGrCT
-         SmjbdR19HCJYyAC7F4FAsEkRD7VDAmQKqrpixhUwbIaH5bQHLnOrCd2aTseICvSM+cnR
-         NVUQ==
-X-Gm-Message-State: ACrzQf0uN7XsikO7AMINEYNgxBWW/uoWQ9u4+bBRCWTSYDKzu6O8likI
-        fU+DJS/ROnDj2T+XMnYCm5M=
-X-Google-Smtp-Source: AMsMyM7lw3r7i526KBmAk73UWpUtks688vXES7ZIp+RG8FvUccbsyfTSCqVsFw4igjST24KzkKFqZw==
-X-Received: by 2002:a05:6000:713:b0:232:bd2e:8620 with SMTP id bs19-20020a056000071300b00232bd2e8620mr15894482wrb.139.1666450607491;
-        Sat, 22 Oct 2022 07:56:47 -0700 (PDT)
-Received: from localhost.localdomain ([117.102.55.205])
-        by smtp.gmail.com with ESMTPSA id s2-20020adfea82000000b002364835caacsm6213512wrm.112.2022.10.22.07.56.45
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FXANfOozsR8ZWtJEknyWv/BQc+quoG2zfT6HYPTQF5o=;
+        b=SqkQxTAVTcf1lE+0L50joNCbjoiwxLLbT+WPooSsbP1c21SIJk4SSg7CuIZ5nWVXmL
+         Rnz3KRW4pnuch0E663qphdnBQ+A+75DuqPOipKcoa2l3lw0hLh4+X/nsrZECCROsw+R+
+         yvWftCmquLnQVdHIuEkx/VQuShAsUjCrBuaJBzUDoYYNgRjYofGfgvr3qm4QAelCgFjE
+         ++qUrupPIgRrgjl3iAwWupdfprYhwBz2dvP1MAziMjAvC+vfVoHzmZRZlOh1PacXtFd9
+         AbmSqjmFTqa7rWusiJBrOrub8SJOB9dDXHNfIqL9iPDLYo5aDLwDQJSZlHqz1Ec7igKv
+         H0jw==
+X-Gm-Message-State: ACrzQf04kGMKkwHKkp94VMPwJhgFTuOA602H6xqck5TWD0EDxcw2f6oh
+        pYstnO+GXqrY2FwDzvT9fr0=
+X-Google-Smtp-Source: AMsMyM4r60hxK1s59BiS5G0AlmT5m7tS1FwRfTCOCXlg6bUPLgP+Hx9y5QBGUNw+ku2VFA6Qeh7sAA==
+X-Received: by 2002:a17:907:7d8b:b0:78e:2534:4fd3 with SMTP id oz11-20020a1709077d8b00b0078e25344fd3mr20714928ejc.141.1666450195961;
+        Sat, 22 Oct 2022 07:49:55 -0700 (PDT)
+Received: from skbuf ([188.27.184.197])
+        by smtp.gmail.com with ESMTPSA id y16-20020a056402171000b0044e937ddcabsm217699edu.77.2022.10.22.07.49.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 22 Oct 2022 07:56:47 -0700 (PDT)
-From:   Osama Muhammad <osmtendev@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, Osama Muhammad <osmtendev@gmail.com>,
-        Samuel Thibault <samuel.thibault@ens-lyon.org>
-Subject: [PATCH v4] Accessiblity: speakup_soft: specifying the default driver parameters among the module params
-Date:   Sat, 22 Oct 2022 19:49:49 +0500
-Message-Id: <20221022144949.24473-1-osmtendev@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Sat, 22 Oct 2022 07:49:55 -0700 (PDT)
+Date:   Sat, 22 Oct 2022 17:49:51 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Ido Schimmel <idosch@nvidia.com>
+Cc:     netdev@kapio-technology.com, davem@davemloft.net, kuba@kernel.org,
+        netdev@vger.kernel.org,
+        Oleksandr Mazur <oleksandr.mazur@plvision.eu>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Florent Fourcot <florent.fourcot@wifirst.fr>,
+        Hans Schultz <schultz.hans@gmail.com>,
+        Joachim Wiberg <troglobit@gmail.com>,
+        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v8 net-next 10/12] net: dsa: mv88e6xxx: mac-auth/MAB
+ implementation
+Message-ID: <20221022144951.v2twgp2lcnhnbhrv@skbuf>
+References: <20221020225719.l5iw6vndmm7gvjo3@skbuf>
+ <82d23b100b8d2c9e4647b8a134d5cbbf@kapio-technology.com>
+ <20221021112216.6bw6sjrieh2znlti@skbuf>
+ <7bfaae46b1913fe81654a4cd257d98b1@kapio-technology.com>
+ <20221021163005.xljk2j3fkikr6uge@skbuf>
+ <d1fb07de4b55d64f98425fe66156c4e4@kapio-technology.com>
+ <20221021173014.oit3qmpkrsjwzbgu@skbuf>
+ <b88e331e016ad3801f1bf1a0dec507f3@kapio-technology.com>
+ <20221021181411.sv52q4yxr5r7urab@skbuf>
+ <Y1P0/gYdvrk+W866@shredder>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1P0/gYdvrk+W866@shredder>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -69,115 +113,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an enhancement which allows to specify the default driver
-parameters among the module parameters.
+On Sat, Oct 22, 2022 at 04:49:50PM +0300, Ido Schimmel wrote:
+> I will try to summarize what I learned from past discussions because I
+> think it is not properly explained in the commit messages.
+> 
+> If you look at the hostapd fork by Westermo [1], you will see that they
+> are authorizing hosts by adding dynamic FDB entries from user space, not
+> static ones. Someone from Westermo will need to confirm this, but I
+> guess the reasons are that a) They want hosts that became silent to lose
+> their authentication after the aging time b) They want hosts to lose
+> their authentication when the carrier of the bridge port goes down. This
+> will cause the bridge driver to flush dynamic FDB entries, but not
+> static ones. Otherwise, an attacker with physical access to the switch
+> and knowledge of the MAC address of the authenticated host can connect a
+> different (malicious) host that will be able to communicate through the
+> bridge.
 
-Adding a default variables to the speakup_soft module
-allows to easily set that at boot, rather than
-setting the sys variables after boot.
-More details can be found here:
-https://github.com/linux-speakup/speakup/issues/7
+Not only is it not well explained, but Hans said back in February that
+"in the common case you will want to use static entries":
+https://lore.kernel.org/lkml/867da5viak.fsf@gmail.com/
 
-Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
+> 
+> In the above scenario, learning does not need to be on for the bridge to
+> populate its FDB, but rather for the bridge to refresh the dynamic FDB
+> entries installed by hostapd. This seems like a valid use case and one
+> needs a good reason to break it in future kernels.
 
-Reviewed-by: Samuel Thibault <samuel.thibault@ens-lyon.org>
+Before suggesting any alternatives, I'd like to know more details about
+how this will work in practice, because I'm aware of the limitations
+that come with DSA not syncing its hardware FDB with the software bridge.
 
----
-Changes since v3:
-	- Patch reviewed by maintainer.
-	
-Changes since v2:
-	- Removed an unnecessary comment.
+So you add a dynamic FDB entry from user space, it gets propagated to
+hardware via SWITCHDEV_FDB_ADD_TO_DEVICE, and from there on, they have
+completely independent ageing timers.
 
-Changes since v1:
-	- Added NB_ID as the last member of enum default_vars_id.
-	- Added NB_ID as the size of array vars.
-	- Made sure that that the enteries in vars are in correct order.
-	
----
- drivers/accessibility/speakup/speakup_soft.c | 59 ++++++++++++++------
- 1 file changed, 43 insertions(+), 16 deletions(-)
+You'll still suffer interruptions in authorization, if the software FDB
+entry expires because it was never refreshed (which will happen if
+traffic is forwarded autonomously and not seen by software). And at this
+stage, you could just add static FDB entries which you periodically
+delete from user space, since the effect would be equivalent.
 
-diff --git a/drivers/accessibility/speakup/speakup_soft.c b/drivers/accessibility/speakup/speakup_soft.c
-index 28c8f60370cf..6d446824677b 100644
---- a/drivers/accessibility/speakup/speakup_soft.c
-+++ b/drivers/accessibility/speakup/speakup_soft.c
-@@ -33,21 +33,30 @@ static struct miscdevice synth_device, synthu_device;
- static int init_pos;
- static int misc_registered;
- 
--static struct var_t vars[] = {
--	/* DIRECT is put first so that module_param_named can access it easily */
--	{ DIRECT, .u.n = {NULL, 0, 0, 1, 0, 0, NULL } },
--
--	{ CAPS_START, .u.s = {"\x01+3p" } },
--	{ CAPS_STOP, .u.s = {"\x01-3p" } },
--	{ PAUSE, .u.n = {"\x01P" } },
--	{ RATE, .u.n = {"\x01%ds", 2, 0, 9, 0, 0, NULL } },
--	{ PITCH, .u.n = {"\x01%dp", 5, 0, 9, 0, 0, NULL } },
--	{ INFLECTION, .u.n = {"\x01%dr", 5, 0, 9, 0, 0, NULL } },
--	{ VOL, .u.n = {"\x01%dv", 5, 0, 9, 0, 0, NULL } },
--	{ TONE, .u.n = {"\x01%dx", 1, 0, 2, 0, 0, NULL } },
--	{ PUNCT, .u.n = {"\x01%db", 0, 0, 3, 0, 0, NULL } },
--	{ VOICE, .u.n = {"\x01%do", 0, 0, 7, 0, 0, NULL } },
--	{ FREQUENCY, .u.n = {"\x01%df", 5, 0, 9, 0, 0, NULL } },
-+
-+enum default_vars_id {
-+	DIRECT_ID = 0, CAPS_START_ID, CAPS_STOP_ID,
-+	PAUSE_ID, RATE_ID, PITCH_ID, INFLECTION_ID,
-+	VOL_ID, TONE_ID, PUNCT_ID, VOICE_ID,
-+	FREQUENCY_ID, V_LAST_VAR_ID,
-+	 NB_ID
-+};
-+
-+
-+static struct var_t vars[NB_ID] = {
-+
-+	[DIRECT_ID]  = { DIRECT, .u.n = {NULL, 0, 0, 1, 0, 0, NULL } },
-+	[CAPS_START_ID] = { CAPS_START, .u.s = {"\x01+3p" } },
-+	[CAPS_STOP_ID]  = { CAPS_STOP, .u.s = {"\x01-3p" } },
-+	[PAUSE_ID]  = { PAUSE, .u.n = {"\x01P" } },
-+	[RATE_ID]  = { RATE, .u.n = {"\x01%ds", 2, 0, 9, 0, 0, NULL } },
-+	[PITCH_ID]  = { PITCH, .u.n = {"\x01%dp", 5, 0, 9, 0, 0, NULL } },
-+	[INFLECTION_ID]  = { INFLECTION, .u.n = {"\x01%dr", 5, 0, 9, 0, 0, NULL } },
-+	[VOL_ID]  = { VOL, .u.n = {"\x01%dv", 5, 0, 9, 0, 0, NULL } },
-+	[TONE_ID]  = { TONE, .u.n = {"\x01%dx", 1, 0, 2, 0, 0, NULL } },
-+	[PUNCT_ID]  = { PUNCT, .u.n = {"\x01%db", 0, 0, 3, 0, 0, NULL } },
-+	[VOICE_ID]  = { VOICE, .u.n = {"\x01%do", 0, 0, 7, 0, 0, NULL } },
-+	[FREQUENCY_ID]  = { FREQUENCY, .u.n = {"\x01%df", 5, 0, 9, 0, 0, NULL } },
- 	V_LAST_VAR
- };
- 
-@@ -451,10 +460,28 @@ static int softsynth_adjust(struct spk_synth *synth, struct st_var_header *var)
- }
- 
- module_param_named(start, synth_soft.startup, short, 0444);
--module_param_named(direct, vars[0].u.n.default_val, int, 0444);
-+module_param_named(direct, vars[DIRECT_ID].u.n.default_val, int, 0444);
-+module_param_named(rate, vars[RATE_ID].u.n.default_val, int, 0444);
-+module_param_named(pitch, vars[PITCH_ID].u.n.default_val, int, 0444);
-+module_param_named(inflection, vars[INFLECTION_ID].u.n.default_val, int, 0444);
-+module_param_named(vol, vars[VOL_ID].u.n.default_val, int, 0444);
-+module_param_named(tone, vars[TONE_ID].u.n.default_val, int, 0444);
-+module_param_named(punct, vars[PUNCT_ID].u.n.default_val, int, 0444);
-+module_param_named(voice, vars[VOICE_ID].u.n.default_val, int, 0444);
-+module_param_named(frequency, vars[FREQUENCY_ID].u.n.default_val, int, 0444);
-+
-+
- 
- MODULE_PARM_DESC(start, "Start the synthesizer once it is loaded.");
- MODULE_PARM_DESC(direct, "Set the direct variable on load.");
-+MODULE_PARM_DESC(rate, "Sets the rate of the synthesizer.");
-+MODULE_PARM_DESC(pitch, "Sets the pitch of the synthesizer.");
-+MODULE_PARM_DESC(inflection, "Sets the inflection of the synthesizer.");
-+MODULE_PARM_DESC(vol, "Sets the volume of the speech synthesizer.");
-+MODULE_PARM_DESC(tone, "Sets the tone of the speech synthesizer.");
-+MODULE_PARM_DESC(punct, "Sets the amount of punctuation spoken by the synthesizer.");
-+MODULE_PARM_DESC(voice, "Sets the voice used by the synthesizer.");
-+MODULE_PARM_DESC(frequency, "Sets the frequency of speech synthesizer.");
- 
- module_spk_synth(synth_soft);
- 
--- 
-2.25.1
+If the mitigation to that is going to involve the extern_learn flag, the
+whole point becomes moot (for mv88e6xxx), since FDB refreshing does not
+happen in the bridge driver in that case (so the learning flag can be
+whatever).
 
+> 
+> Regarding learning from link-local frames, this can be mitigated by [2]
+> without adding additional checks in the bridge. I don't know why this
+> bridge option was originally added, but if it wasn't for this use case,
+> then now it has another use case.
+
+There is still the problem that link-local learning is on by default
+(follows the BR_LEARNING setting of the port). I don't feel exactly
+comfortable with the fact that it's easy for a user to miss this and
+leave the port completely insecure.
+
+> 
+> Regarding MAB, from the above you can see that a pure 802.1X
+> implementation that does not involve MAB can benefit from locked bridge
+> ports with learning enabled. It is therefore not accurate to say that
+> one wants MAB merely by enabling learning on a locked port. Given that
+> MAB is a proprietary extension and much less secure than 802.1X, we can
+> assume that there will be deployments out there that do not use MAB and
+> do not care about notifications regarding locked FDB entries. I
+> therefore think that MAB needs to be enabled by a separate bridge port
+> flag that is rejected unless the bridge port is locked and has learning
+> enabled.
+
+I had missed the detail that dynamic FDB entries will be refreshed only
+with "learning" on. It makes the picture more complete. Only this is
+said in "man bridge":
+
+       learning on or learning off
+              Controls whether a given port will learn MAC addresses
+              from received traffic or not. If learning if off, the
+              bridge will end up flooding any traffic for which it has
+              no FDB entry. By default this flag is on.
+
+Can live with MAB being a separate flag if it comes to that, as long as
+'learning' will continue to have its own specific meaning, independent
+of it (right now that meaning is subtle and undocumented, but makes sense).
+
+> Regarding hardware offload, I have an idea (needs testing) on how to
+> make mlxsw work in a similar way to mv88e6xxx. That is, does not involve
+> injecting frames that incurred a miss to the Rx path. If you guys want,
+> I'm willing to take a subset of the patches here, improve the commit
+> message, do some small changes and submit them along with an mlxsw
+> implementation. My intention is not to discredit anyone (I will keep the
+> original authorship), but to help push this forward and give another
+> example of hardware offload.
+> 
+> [1] https://github.com/westermo/hostapd/commit/10c584b875a63a9e58b0ad39835282545351c30e#diff-338b6fad34b4bdb015d7d96930974bd96796b754257473b6c91527789656d6ed
+> [2] https://git.kernel.org/pub/scm/network/iproute2/iproute2-next.git/commit/?id=c74a8bc9cf5d6b6c9d8c64d5a80c5740165f315a
+
+I think it would be very nice if you could do that. As a middle ground
+between mv88e6xxx and mlxsw, I can also try to build a setup on ocelot
+(which should trap frames with MAC SA misses in a similar way to mlxsw,
+but does also not sync its FDB with the bridge, similar to the mv88e6xxx.
+Not sure what to do with dynamic FDB entries).
+
+If only I would figure out how to configure that hostapd fork (something
+which I never did before).
+
+Hans, would it be possible to lay out some usage instructions for this fork?
