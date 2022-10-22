@@ -2,41 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0879608602
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 09:43:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9D44608642
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 09:46:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230518AbiJVHnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 03:43:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47796 "EHLO
+        id S231497AbiJVHqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 03:46:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231215AbiJVHmg (ORCPT
+        with ESMTP id S231583AbiJVHoc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 03:42:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F1F9B49;
-        Sat, 22 Oct 2022 00:41:01 -0700 (PDT)
+        Sat, 22 Oct 2022 03:44:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A414924A545;
+        Sat, 22 Oct 2022 00:43:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 001AAB82DFB;
-        Sat, 22 Oct 2022 07:40:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58542C433C1;
-        Sat, 22 Oct 2022 07:40:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 44E3860B0A;
+        Sat, 22 Oct 2022 07:38:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B2BAC433C1;
+        Sat, 22 Oct 2022 07:38:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666424407;
-        bh=wQtvt0pQYSjjl8y2IQ9Sln7QvAgF+4ZI5oQv0B0dNBc=;
+        s=korg; t=1666424326;
+        bh=zRbI9r4T8ATwG60e0stmIJjCAwfIsLK3ZdgJqhNquO4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FLNN7coLmCdU9TLkHohiDCahQFKlLFrHpA1SCp22u/OFgCAJUSKSSzh6/SZGrZYV+
-         EePWI4423Os9u6dakrUsVAEXIRaMoKczedtHSLA053GcYEfixFrPm0Cw2nuD5QMiRU
-         54gqHR5HB95Jr0/EB8bHyhrQCNvWaotoP+L5N96I=
+        b=ii4l+zDWMPIpPYV7+e0fNwt7RNV/69ajgBee83m7BMbuPScZOK8qIyya/BQ/1amMK
+         cSOsD63Cqpoz1RhhTcSkIn8A8ghTogioiyKph8qMgnwxjFAVC0rMGcCkcbkXP/FQWj
+         BrW3pc1sEPfkSqW+/+4mSjDJWUymL6s69mVUQkmI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Namjae Jeon <linkinjeon@kernel.org>,
+        stable@vger.kernel.org, Hyunchul Lee <hyc.lee@gmail.com>,
+        Steve French <smfrench@gmail.com>,
+        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+        "Christian Brauner (Microsoft)" <brauner@kernel.org>,
+        Namjae Jeon <linkinjeon@kernel.org>,
         Steve French <stfrench@microsoft.com>
-Subject: [PATCH 5.19 103/717] ksmbd: fix endless loop when encryption for response fails
-Date:   Sat, 22 Oct 2022 09:19:42 +0200
-Message-Id: <20221022072433.621452811@linuxfoundation.org>
+Subject: [PATCH 5.19 105/717] ksmbd: Fix user namespace mapping
+Date:   Sat, 22 Oct 2022 09:19:44 +0200
+Message-Id: <20221022072433.991111363@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221022072415.034382448@linuxfoundation.org>
 References: <20221022072415.034382448@linuxfoundation.org>
@@ -53,35 +57,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Namjae Jeon <linkinjeon@kernel.org>
+From: Mickaël Salaün <mic@digikod.net>
 
-commit 360c8ee6fefdb496fffd2c18bb9a96a376a1a804 upstream.
+commit 7c88c1e0ab1704bacb751341ee6431c3be34b834 upstream.
 
-If ->encrypt_resp return error, goto statement cause endless loop.
-It send an error response immediately after removing it.
+A kernel daemon should not rely on the current thread, which is unknown
+and might be malicious.  Before this security fix,
+ksmbd_override_fsids() didn't correctly override FS UID/GID which means
+that arbitrary user space threads could trick the kernel to impersonate
+arbitrary users or groups for file system access checks, leading to
+file system access bypass.
 
-Fixes: 0626e6641f6b ("cifsd: add server handler for central processing and tranport layers")
+This was found while investigating truncate support for Landlock:
+https://lore.kernel.org/r/CAKYAXd8fpMJ7guizOjHgxEyyjoUwPsx3jLOPZP=wPYcbhkVXqA@mail.gmail.com
+
+Fixes: e2f34481b24d ("cifsd: add server-side procedures for SMB3")
+Cc: Hyunchul Lee <hyc.lee@gmail.com>
+Cc: Steve French <smfrench@gmail.com>
 Cc: stable@vger.kernel.org
-Signed-off-by: Namjae Jeon <linkinjeon@kernel.org>
+Signed-off-by: Mickaël Salaün <mic@digikod.net>
+Link: https://lore.kernel.org/r/20220929100447.108468-1-mic@digikod.net
+Acked-by: Christian Brauner (Microsoft) <brauner@kernel.org>
+Acked-by: Namjae Jeon <linkinjeon@kernel.org>
 Signed-off-by: Steve French <stfrench@microsoft.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ksmbd/server.c |    4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ fs/ksmbd/smb_common.c |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
---- a/fs/ksmbd/server.c
-+++ b/fs/ksmbd/server.c
-@@ -235,10 +235,8 @@ send:
- 	if (work->sess && work->sess->enc && work->encrypted &&
- 	    conn->ops->encrypt_resp) {
- 		rc = conn->ops->encrypt_resp(work);
--		if (rc < 0) {
-+		if (rc < 0)
- 			conn->ops->set_rsp_status(work, STATUS_DATA_ERROR);
--			goto send;
--		}
- 	}
+--- a/fs/ksmbd/smb_common.c
++++ b/fs/ksmbd/smb_common.c
+@@ -4,6 +4,8 @@
+  *   Copyright (C) 2018 Namjae Jeon <linkinjeon@kernel.org>
+  */
  
- 	ksmbd_conn_write(work);
++#include <linux/user_namespace.h>
++
+ #include "smb_common.h"
+ #include "server.h"
+ #include "misc.h"
+@@ -625,8 +627,8 @@ int ksmbd_override_fsids(struct ksmbd_wo
+ 	if (!cred)
+ 		return -ENOMEM;
+ 
+-	cred->fsuid = make_kuid(current_user_ns(), uid);
+-	cred->fsgid = make_kgid(current_user_ns(), gid);
++	cred->fsuid = make_kuid(&init_user_ns, uid);
++	cred->fsgid = make_kgid(&init_user_ns, gid);
+ 
+ 	gi = groups_alloc(0);
+ 	if (!gi) {
 
 
