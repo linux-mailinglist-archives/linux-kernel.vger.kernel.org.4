@@ -2,207 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77454608556
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 09:06:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9565E608557
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 09:06:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230106AbiJVHGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 03:06:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38914 "EHLO
+        id S229906AbiJVHGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 03:06:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230022AbiJVHGN (ORCPT
+        with ESMTP id S230125AbiJVHGZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 03:06:13 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2D4825E0B4
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 00:06:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666422372; x=1697958372;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=HZQnbpQeo9qKndHOiPOZbOLQtOzV55ZGhbo0ZEnRRHg=;
-  b=OL15NDZuPzUfeAVNe/ArVaZTbP+OQpJuaQlUjUDnxv2U2YZoZCJJCkiO
-   CE6OE8zIIZnv46tFNcgKYPJAY5hRu9EV616LS/KlwsbM1FSemTvUAeSdp
-   9rsddu1FmmACROlY5Q9rdDuPgzonewQtlwN9/T4VhPq3mubwmXKxZpw2q
-   8qFlC0w+ogc8ZzezqvYukZgrLVyMJ9IfxgXByr2zMcsi4AcL9mIDd5sK9
-   lR5j9N8dTYZhKG7kZ6wy+Gk1iusMfajcLfZVuKFbfMM/MUO/0PeH8xsH5
-   bRr2YtkEvD75xdl4rY9MFcUtG4A8TyrKBCtKxhg7DTQNh3FdUYVaGA7JN
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10507"; a="307155165"
-X-IronPort-AV: E=Sophos;i="5.95,204,1661842800"; 
-   d="scan'208";a="307155165"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2022 00:06:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10507"; a="719984080"
-X-IronPort-AV: E=Sophos;i="5.95,204,1661842800"; 
-   d="scan'208";a="719984080"
-Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 22 Oct 2022 00:06:10 -0700
-Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1om8a9-0003RC-1n;
-        Sat, 22 Oct 2022 07:06:09 +0000
-Date:   Sat, 22 Oct 2022 15:05:55 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- 093c2f3190de37b8acd6902b3224879741bc5b23
-Message-ID: <63539653.Yai0OlLoJdKPSnuo%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sat, 22 Oct 2022 03:06:25 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B45E2A79C9
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 00:06:23 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id b2so8746749lfp.6
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 00:06:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=CKp0vNQJo1Xjancyd+0lhoBs/j1rOPyn9CnjbmCY3h4=;
+        b=N9jN1oR4Tl0T5jyg3x5iKJa8xLdEYKinhrjmzufnw2qDIQkR0IyFYM8zNzqDa0qehy
+         0BAtdlc7B+C7OdpATs/zbuwdvmcSg4+Se6//Ew+twkb0zuZagLdT5l7440NWSHLuCFhU
+         yn74RR+sEaZPXt63syylA0d7yl6WcuzRDs29/geUfEq62kgVDW3iyFYX/r188kmx+m/x
+         v9p2h+DK460iYGJYdqxY+AJNFOcf0txZauXuaq7TFJmlLokNqbtudpL02sun7IJOAtLt
+         ExT/wPX4TiEPhS11wmGO2vCuziIGdm6an4kBARMZay/R99V8COaSteWoZ4/Tu1/NR++5
+         MyeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CKp0vNQJo1Xjancyd+0lhoBs/j1rOPyn9CnjbmCY3h4=;
+        b=SePCde4P5L5wcyqOacqXaJk/8OLgDLG3e5nF8GNqqrjh7q96Sk7dwv0JYaDFDNDeSU
+         wFZXEGYwANkUXt2qOokoJBYoATrctLReaQ2xY3PGmK49ZWtKm7An4cUqTQGvT1nIEDGr
+         0qQcm+nbyL0KPlfbcHOyyT7FnVniQNrYsBsvv7FItBUjCAel6/hxu47qmN4tVLV4Yl/i
+         2W46XOaeI7thHS8XoRAqsAfC9RzpYuGU9J4gv+h9wwvNo4Rs7IbKCzDwnyXCAZBjLhZC
+         TYe/QoYwiEv3P5rxiW1iECaOYUwZGzZ8V82ueACrC2ijTad8UJPvsz7zBRJ6y9OEGnaJ
+         M+pA==
+X-Gm-Message-State: ACrzQf0ox2H1gMImHfpmp4f8p74RUt/BGnIARke5ljCXEQ5eR6IzPNUK
+        HLyQNi7WMFfFVD0VMMr0APQGCqtqFjeo4QXw
+X-Google-Smtp-Source: AMsMyM5i8jcmTVSuJJsemiVoGPbJ4DVnYIne0FheNXPwydmvxdU908gexeN3q6ZPBOj0rv/rduiDYQ==
+X-Received: by 2002:a05:6512:304e:b0:4a2:6c66:8355 with SMTP id b14-20020a056512304e00b004a26c668355mr9101117lfb.238.1666422381725;
+        Sat, 22 Oct 2022 00:06:21 -0700 (PDT)
+Received: from elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net ([20.240.130.248])
+        by smtp.googlemail.com with ESMTPSA id s5-20020a2e1505000000b00276d2537921sm390404ljd.59.2022.10.22.00.06.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 22 Oct 2022 00:06:21 -0700 (PDT)
+From:   Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev,
+        Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+Subject: [PATCH v3 0/6] a series of checkpatch fixes on the file: rxtx.c
+Date:   Sat, 22 Oct 2022 07:06:06 +0000
+Message-Id: <20221022070612.13009-1-tanjubrunostar0@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: 093c2f3190de37b8acd6902b3224879741bc5b23  Merge x86/core into tip/master
+The fixes are similar, mostly long lines splitting. I had to make
+serveral patches to ease the work of inspectors
 
-elapsed time: 725m
+v2: fixed a compilation error found by the kernel test robot and
+recompiled the code
 
-configs tested: 125
-configs skipped: 3
+v3: tends out the error persisted in the second version. this version is
+a correction of that
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Tanjuate Brunostar (6):
+  staging: vt6655: fix lines ending in a '('
+  staging: vt6655: refactor long lines of code in s_uGetRTSCTSDuration
+  staging: vt6655: refactor long lines of code in s_uFillDataHead
+  staging: vt6655: refactor long lines of code in s_vGenerateTxParameter
+  staging: vt6655: refactor long lines of code in the rest of the file
+  staging: vt6655: refactor code to avoid a line ending in '('
 
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-arc                                 defconfig
-alpha                               defconfig
-powerpc                           allnoconfig
-s390                             allmodconfig
-s390                                defconfig
-x86_64                              defconfig
-x86_64                           rhel-8.3-syz
-m68k                             allyesconfig
-x86_64                         rhel-8.3-kunit
-m68k                             allmodconfig
-x86_64                           rhel-8.3-kvm
-arc                              allyesconfig
-alpha                            allyesconfig
-s390                             allyesconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                    rhel-8.3-kselftests
-i386                                defconfig
-x86_64                           allyesconfig
-sh                               allmodconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-arm                                 defconfig
-arc                  randconfig-r043-20221018
-riscv                randconfig-r042-20221018
-s390                 randconfig-r044-20221018
-x86_64                        randconfig-a013
-i386                             allyesconfig
-x86_64                        randconfig-a011
-arm                              allyesconfig
-arc                           tb10x_defconfig
-sh                            titan_defconfig
-powerpc                     pq2fads_defconfig
-arm                         nhk8815_defconfig
-x86_64                        randconfig-a015
-x86_64                        randconfig-a004
-arm64                            allyesconfig
-x86_64                        randconfig-a002
-x86_64                        randconfig-a006
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-arc                  randconfig-r043-20221022
-s390                 randconfig-r044-20221022
-riscv                randconfig-r042-20221022
-i386                          randconfig-a014
-i386                          randconfig-a012
-i386                          randconfig-a016
-ia64                          tiger_defconfig
-arm                        mvebu_v7_defconfig
-mips                    maltaup_xpa_defconfig
-arm                           u8500_defconfig
-csky                                defconfig
-parisc                generic-64bit_defconfig
-i386                          randconfig-c001
-arc                              alldefconfig
-m68k                          atari_defconfig
-powerpc                     tqm8548_defconfig
-arm                          lpd270_defconfig
-m68k                            q40_defconfig
-sh                           se7721_defconfig
-m68k                        mvme147_defconfig
-nios2                            allyesconfig
-sparc                       sparc32_defconfig
-sh                          sdk7786_defconfig
-parisc                           alldefconfig
-mips                      fuloong2e_defconfig
-arm                        multi_v7_defconfig
-powerpc                         ps3_defconfig
-m68k                           virt_defconfig
-sh                           se7722_defconfig
-arm                            zeus_defconfig
-sh                               alldefconfig
-loongarch                         allnoconfig
-arm                         lubbock_defconfig
-powerpc                      pcm030_defconfig
-parisc64                         alldefconfig
-sh                         microdev_defconfig
-arm                            qcom_defconfig
-arm                       omap2plus_defconfig
-arm                        clps711x_defconfig
-powerpc                 linkstation_defconfig
-arc                            hsdk_defconfig
-openrisc                 simple_smp_defconfig
-
-clang tested configs:
-hexagon              randconfig-r045-20221018
-hexagon              randconfig-r041-20221018
-x86_64                        randconfig-a014
-x86_64                        randconfig-a005
-x86_64                        randconfig-a001
-x86_64                        randconfig-a012
-x86_64                        randconfig-a003
-x86_64                        randconfig-a016
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a006
-s390                 randconfig-r044-20221019
-hexagon              randconfig-r045-20221019
-hexagon              randconfig-r041-20221020
-riscv                randconfig-r042-20221019
-hexagon              randconfig-r045-20221020
-hexagon              randconfig-r041-20221019
-i386                          randconfig-a015
-powerpc                   microwatt_defconfig
-arm                         orion5x_defconfig
-powerpc                      obs600_defconfig
-i386                 randconfig-a013-20221017
-i386                 randconfig-a015-20221017
-i386                 randconfig-a016-20221017
-i386                 randconfig-a011-20221017
-i386                 randconfig-a014-20221017
-i386                 randconfig-a012-20221017
-arm                      pxa255-idp_defconfig
-mips                          ath79_defconfig
-powerpc                      acadia_defconfig
-arm                             mxs_defconfig
-arm                       netwinder_defconfig
-mips                        maltaup_defconfig
-powerpc                 mpc8560_ads_defconfig
-x86_64                        randconfig-k001
-mips                       rbtx49xx_defconfig
-arm                           spitz_defconfig
+ drivers/staging/vt6655/rxtx.c | 532 ++++++++++++++++++++--------------
+ 1 file changed, 321 insertions(+), 211 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.34.1
+
