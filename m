@@ -2,71 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B8E2608F78
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 21:55:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5B5C608F7C
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 22:00:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229864AbiJVTy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 15:54:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57660 "EHLO
+        id S229891AbiJVUAO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 16:00:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbiJVTyz (ORCPT
+        with ESMTP id S229491AbiJVUAL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 15:54:55 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFFA9EE29
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 12:54:52 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id a67so17648529edf.12
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 12:54:52 -0700 (PDT)
+        Sat, 22 Oct 2022 16:00:11 -0400
+Received: from mail-vk1-xa34.google.com (mail-vk1-xa34.google.com [IPv6:2607:f8b0:4864:20::a34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5646B5A14A
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 13:00:09 -0700 (PDT)
+Received: by mail-vk1-xa34.google.com with SMTP id y129so3007091vkg.8
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 13:00:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3HfWPRu5q58QJ1JKXH68bmCGHok/snJYWZPaSUmG49w=;
-        b=iy6YbSr70F78qE2NooxPIao3DPxphTPr9RnYeG3jQ0tTosLAp2CQoReO6/hn3dnB8b
-         qtAIXo/uoBNqOAPAk+wVcxRNkQGo7WjvQ/k3KPJryfAMYaLt24FHfsCR4GWLj7Gx+a5J
-         EHtgQ5CvYXXcSVGFaHMsHKnwVj0q2fEu0hfhRff9mRkniVjUyvRsLuXo4gxzDWxKmMw8
-         wTYm3y5aQ+AbNCMe5kalWnrNySTgUOGwF2dUT1His7LtFE+AmLoejKXxqoWqiHLlfE7l
-         kaXm3pD49DMxtPGvTPxz3JMAjvCQiu21bmvevaSr+VDC+4korJeZhgtInOcGoBa7bL1g
-         pU2Q==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=oCc6fCDBvainHyxcsWfWzc9zC2rNiGmKs3GME/+sOgY=;
+        b=fVR2/grxqt7bRXxWMaVwi4cf8jCYMukFdRGbhVkhbFp6kKPkdpz1xAYE+eanuh8YiM
+         R/rrLqcT+TC8p7uNhLeBpzpiOfb4tW+XhAkOmka1foCM3Qwh3CDRa6RdI+jJWYEZbm5P
+         s44MaOZuqbKAJby4Xafout/ZTPZ562ngXpn0hR+TXsgkRdryqYpOU8qMCuW0TlCkaih3
+         QE6pgOCxpzTqlj1SyokVNgoB3XPwPtc6M5y6nWzpyybtGx9g1N7Gwj1ERqmkNvvgMTAQ
+         ebG4Cw7O7LfcCBQ8fnA+8LkO5V2WeDjFIRSrXE7tpBd2NyZufjcWnIkJxpAdnLdnQn7u
+         15hA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3HfWPRu5q58QJ1JKXH68bmCGHok/snJYWZPaSUmG49w=;
-        b=gn+RheQrrKa1M6mHsZw17v6HAxI8arPfi0fNEw39Udr3UTup/shd7OLXgc2X7y9QQL
-         P+nDEZvjF31zBU2GKstwljgH7v5LnyUkPIm6Vn8w0RRoRY5fe6xj9/0uxG8o1d8e2e3B
-         e5opsTzKHGrO/8xndMBgkFd1PGI20JOsGE9NT+4IP1/p1VgkCDR+jIe+xvwWecTD9VTc
-         ahzwUyPRq3YNfNFHd/kP51TNrjLjEFbUgpgEhrJ3pfTRamNEjyv1D3VCAwJ0k7Vp0MvG
-         Vd8ywIaeTK6MKOE2Rud8N88UyWr97WSA98TV9Mqgi0GTDj20Yd4xxeYXV/Fp+b9W30uT
-         odIQ==
-X-Gm-Message-State: ACrzQf230gMgXOlSk+2LVx3BPm9pSxtMBVXqJJTsAfYvmFBoE7QRI+n9
-        KWXcHdAZdoAyUWl5XjrSLu2jLMO+jrpulA==
-X-Google-Smtp-Source: AMsMyM5B4qLC2JNOJa9o1IXQHrOZMCtNDiSgCHnorj368usir9HcPehxyyr20AxDJFnoc7Rps0p7Ig==
-X-Received: by 2002:a17:907:94d1:b0:790:65a:3a18 with SMTP id dn17-20020a17090794d100b00790065a3a18mr20584651ejc.428.1666468491062;
-        Sat, 22 Oct 2022 12:54:51 -0700 (PDT)
-Received: from andrea (host-87-17-41-249.retail.telecomitalia.it. [87.17.41.249])
-        by smtp.gmail.com with ESMTPSA id cx25-20020a05640222b900b004482dd03fe8sm15453828edb.91.2022.10.22.12.54.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 22 Oct 2022 12:54:50 -0700 (PDT)
-Date:   Sat, 22 Oct 2022 21:54:45 +0200
-From:   Andrea Parri <parri.andrea@gmail.com>
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Guo Ren <guoren@kernel.org>
-Subject: Re: [PATCH v2] riscv: fix race when vmap stack overflow
-Message-ID: <Y1RKFXEc5mqwQz6l@andrea>
-References: <20221020143329.3276-1-jszhang@kernel.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oCc6fCDBvainHyxcsWfWzc9zC2rNiGmKs3GME/+sOgY=;
+        b=6pHpp4on1zyfRj85V8KE5xUE9x5c0HivZr1DvEmh327eZgrA0ClNGAVVffHuJJxhP/
+         tNpCbLXIFKFMI7ar1tWg4QMpg/KEX9DlJuNVTih/rzO9joUcNjiKlbt7TnUDZPrI4tfU
+         drgOoHZhNSWMSlkTi35vKAjPqzkvQoIxjyBS2lRtGoDM3hsZsXlsBlItIPx1gqLROnQI
+         3Cz5/USY22DojLcoQQ471OGVTDSZPAsI6o/ZQbuscQ4k7smOS1GttUuAhgYVWR5p0DVM
+         LLwt+UnGztG5XweIzKJGyJ2hKSk2hr7Wp/rqpWFzqUECaEdKyem0zXyZQHQHXhEGluc1
+         /deA==
+X-Gm-Message-State: ACrzQf1FPWzcDsdvfsJUtLp1GLDoq+zFAtHhp7IeFFjJnHS/4lNomY2V
+        K6tpXXAkPgh24p0FjmbMduo0JkkjUDUkf/76cXXyEg==
+X-Google-Smtp-Source: AMsMyM5R7wJkJY47oWSGLG3+XPHJI1satIgi1THu/sUcJKJfxUksdiKmnecYsRKQNWcKFFIOjh6zYJAxmp6NkkNc0m4=
+X-Received: by 2002:ac5:c969:0:b0:3b6:2a34:a26b with SMTP id
+ t9-20020ac5c969000000b003b62a34a26bmr765722vkm.30.1666468808375; Sat, 22 Oct
+ 2022 13:00:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221020143329.3276-1-jszhang@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221022111403.531902164@infradead.org> <20221022114425.298833095@infradead.org>
+In-Reply-To: <20221022114425.298833095@infradead.org>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Sat, 22 Oct 2022 13:59:32 -0600
+Message-ID: <CAOUHufZo=fB2HcaCrj2aidLJ2zEhOpi7ou5M_7qOQiuQq8+wTQ@mail.gmail.com>
+Subject: Re: [PATCH 13/13] mm: Remove pointless barrier() after pmdp_get_lockless()
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, willy@infradead.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, aarcange@redhat.com,
+        kirill.shutemov@linux.intel.com, jroedel@suse.de, ubizjak@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,83 +70,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 10:33:29PM +0800, Jisheng Zhang wrote:
-> Currently, when detecting vmap stack overflow, riscv firstly switches
-> to the so called shadow stack, then use this shadow stack to call the
-> get_overflow_stack() to get the overflow stack. However, there's
-> a race here if two or more harts use the same shadow stack at the same
-> time.
-> 
-> To solve this race, we introduce spin_shadow_stack atomic var, which
-> will be swap between its own address and 0 in atomic way, when the
-> var is set, it means the shadow_stack is being used; when the var
-> is cleared, it means the shadow_stack isn't being used.
-> 
-> Fixes: 31da94c25aea ("riscv: add VMAP_STACK overflow detection")
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> Suggested-by: Guo Ren <guoren@kernel.org>
-> ---
-> Since v1:
->  - use smp_store_release directly
->  - use unsigned int instead of atomic_t
-> 
->  arch/riscv/kernel/entry.S | 4 ++++
->  arch/riscv/kernel/traps.c | 4 ++++
->  2 files changed, 8 insertions(+)
-> 
-> diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-> index b9eda3fcbd6d..7b924b16792b 100644
-> --- a/arch/riscv/kernel/entry.S
-> +++ b/arch/riscv/kernel/entry.S
-> @@ -404,6 +404,10 @@ handle_syscall_trace_exit:
->  
->  #ifdef CONFIG_VMAP_STACK
->  handle_kernel_stack_overflow:
-> +1:	la sp, spin_shadow_stack
-> +	amoswap.w sp, sp, (sp)
-> +	bnez sp, 1b
-> +
->  	la sp, shadow_stack
->  	addi sp, sp, SHADOW_OVERFLOW_STACK_SIZE
->  
-> diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
-> index f3e96d60a2ff..f1f57c1241b6 100644
-> --- a/arch/riscv/kernel/traps.c
-> +++ b/arch/riscv/kernel/traps.c
-> @@ -221,11 +221,15 @@ asmlinkage unsigned long get_overflow_stack(void)
->  		OVERFLOW_STACK_SIZE;
->  }
->  
-> +unsigned int spin_shadow_stack;
-> +
->  asmlinkage void handle_bad_stack(struct pt_regs *regs)
->  {
->  	unsigned long tsk_stk = (unsigned long)current->stack;
->  	unsigned long ovf_stk = (unsigned long)this_cpu_ptr(overflow_stack);
->  
-> +	smp_store_release(&spin_shadow_stack, 0);
-> +
+On Sat, Oct 22, 2022 at 5:48 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> pmdp_get_lockless() should itself imply any ordering required.
 
-Maybe add a comment integrating Guo's remarks,
-
-  https://lore.kernel.org/all/CAJF2gTRAEX_jQ_w5H05dyafZzHq+P5j05TJ=C+v+OL__GQam4A@mail.gmail.com/T/#u
-  https://lore.kernel.org/all/CAJF2gTRdtcpccL5W48O8VEXCMvxNAyyrKJzhwNJkc8js+H2iJg@mail.gmail.com/T/#u
-
-It will come in handy to future reviewers (and it would address the
-checkpatch.pl's "memory barrier without comment" warning).
-
-Thanks,
-  Andrea
-
-
->  	console_verbose();
->  
->  	pr_emerg("Insufficient stack space to handle exception!\n");
-> -- 
-> 2.37.2
-> 
-> 
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+There are three remaining barriers that should be removed as well.
