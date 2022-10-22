@@ -2,91 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F2CC608CEF
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 13:48:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 638D3608CB8
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 13:34:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229928AbiJVLsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 07:48:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43372 "EHLO
+        id S229782AbiJVLeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 07:34:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbiJVLst (ORCPT
+        with ESMTP id S230266AbiJVLdu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 07:48:49 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B6D24F785
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 04:48:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
-        Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:In-Reply-To;
-        bh=RY5OJVKm7PHKfP6ch20ecx7TX/MGByzkwaP5zQXVje4=; b=OJUNT+dm8Xm8G4HKPUJTT88+5b
-        tS7rS4Xte2tScbrsFmj1YbzEc81Fk6njpuY3V7B/fQSSRiowYqw06hkfp4K7lil+cYoEilAlK626c
-        skvA6gh56x7NxdcMn/+qHQbgcePeOyPqteTa64FhrQD2XdvJRo7DyDyAcFyvMhNpo/ScLaXybnWgd
-        N35tVDujd87+4UpkzlXOj/vEoKlK+9YprxpUkKPWJwSBL6UY46tD9qx15+E/rcO3cvGY6EFN4XohB
-        8Ot3mLfMet0JZV34mz6DbGldZ+616MqADT10saDPFs+Rw1ii0z/QnTUVeBnufCvLBhWNZ13DQWN5F
-        7HXKoxeQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1omCzM-005XdU-WF; Sat, 22 Oct 2022 11:48:29 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D6086303109;
-        Sat, 22 Oct 2022 13:48:26 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 518E428B8E518; Sat, 22 Oct 2022 13:48:26 +0200 (CEST)
-Message-ID: <20221022114425.298833095@infradead.org>
-User-Agent: quilt/0.66
-Date:   Sat, 22 Oct 2022 13:14:16 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     x86@kernel.org, willy@infradead.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
-        linux-mm@kvack.org, aarcange@redhat.com,
-        kirill.shutemov@linux.intel.com, jroedel@suse.de, ubizjak@gmail.com
-Subject: [PATCH 13/13] mm: Remove pointless barrier() after pmdp_get_lockless()
-References: <20221022111403.531902164@infradead.org>
+        Sat, 22 Oct 2022 07:33:50 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D5C4119BFD;
+        Sat, 22 Oct 2022 04:15:28 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 3C7B11C09E5; Sat, 22 Oct 2022 13:15:27 +0200 (CEST)
+Date:   Sat, 22 Oct 2022 13:15:26 +0200
+From:   Pavel Machek <pavel@denx.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net
+Subject: Re: [PATCH 5.19 000/717] 5.19.17-rc1 review
+Message-ID: <20221022111526.GA20649@duo.ucw.cz>
+References: <20221022072415.034382448@linuxfoundation.org>
+ <Y1Ov3KuyKmb9Nizm@debian.me>
+ <Y1PCyVHKEUst4mRL@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="liOOAslEiF7prFVr"
+Content-Disposition: inline
+In-Reply-To: <Y1PCyVHKEUst4mRL@kroah.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NEUTRAL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pmdp_get_lockless() should itself imply any ordering required.
 
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- mm/hmm.c    |    1 -
- mm/vmscan.c |    3 ---
- 2 files changed, 4 deletions(-)
+--liOOAslEiF7prFVr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
---- a/mm/hmm.c
-+++ b/mm/hmm.c
-@@ -362,7 +362,6 @@ static int hmm_vma_walk_pmd(pmd_t *pmdp,
- 		 * values.
- 		 */
- 		pmd = pmdp_get_lockless(pmdp);
--		barrier();
- 		if (!pmd_devmap(pmd) && !pmd_trans_huge(pmd))
- 			goto again;
- 
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -4041,9 +4041,6 @@ static void walk_pmd_range(pud_t *pud, u
- 	for (i = pmd_index(start), addr = start; addr != end; i++, addr = next) {
- 		pmd_t val = pmdp_get_lockless(pmd + i);
- 
--		/* for pmdp_get_lockless() */
--		barrier();
--
- 		next = pmd_addr_end(addr, end);
- 
- 		if (!pmd_present(val) || is_huge_zero_pmd(val)) {
+Hi!
 
+> > > This is the start of the stable review cycle for the 5.19.17 release.
+> > > There are 717 patches in this series, all will be posted as a response
+> > > to this one.  If anyone has any issues with these being applied, plea=
+se
+> > > let me know.
+> > >=20
+> > > Note, this will be the LAST 5.19.y kernel to be released.  Please move
+> > > to the 6.0.y kernel branch at this point in time, as after this is
+> > > released, this branch will be end-of-life.
+> > >=20
+> >=20
+> > Hi Greg, thanks for the patch series, which is out three days after
+> > the -rc1 have been pused. As usual, the template message follows.
+>=20
+> What exactly do you mean by "3 days after"?
+>=20
+> Are you watching the linux-stable-rc branches?  Those are there only for
+> CI systems and are not a "real" -rc release at all until we do this
+> email announcement.
+>=20
+> The -rc1 release here does not look at all like what was in the
+> linux-stable-rc branch 3 days ago if you look closely.  There are a lot
+> fewer patches now than before, and other changes.
+>=20
+> So again, unless you are running a CI system, don't look at the
+> linux-stable-rc branches.
 
+What do you suggest for people trying to review -stable? Two days are
+not enough to review 500 patches...
+
+Best regards,
+								Pavel
+--=20
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+
+--liOOAslEiF7prFVr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY1PQzgAKCRAw5/Bqldv6
+8jnEAKCx+qTFehKfNmo/sitI6BnaKPxBTQCcCqJ51ctRksbo6UpODN6vvbdfJwk=
+=5PP0
+-----END PGP SIGNATURE-----
+
+--liOOAslEiF7prFVr--
