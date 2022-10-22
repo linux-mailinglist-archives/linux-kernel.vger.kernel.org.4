@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF080608F22
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 21:13:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B963608F25
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 21:13:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229962AbiJVTNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 15:13:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39160 "EHLO
+        id S229994AbiJVTNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 15:13:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbiJVTN1 (ORCPT
+        with ESMTP id S229941AbiJVTN2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 15:13:27 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0345E75496;
-        Sat, 22 Oct 2022 12:13:26 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id l14so2675112wrw.2;
-        Sat, 22 Oct 2022 12:13:25 -0700 (PDT)
+        Sat, 22 Oct 2022 15:13:28 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71C00176528;
+        Sat, 22 Oct 2022 12:13:27 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id a10so9175616wrm.12;
+        Sat, 22 Oct 2022 12:13:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5HhPHTWcHqQfajKCJskET6/mbnRPhMXC0Dz2f8v2WQ8=;
-        b=ileq7Vnjm7L9LPAovWGV2ff+UZgS5kRe7LL2Ht75J5YmyEf30znt0tNAtn4msS7QbI
-         sTlfp+OEGe8xT1TAHHo+qSwnz6nb8YbDfyXOvWgZECmbE+lV6jVSz4VMDNrQzzUnekgr
-         erp/wCf/yoYASZL75XjU2wsxQMof2VbESDeo384etsZIn7p3oLQhK2qYAsmv3E+isLsK
-         pgc9B6gWI83PrniCPd7xFIg/HBTQnBcwsry5OvutkFidyBUoFYV4XXCbrfzwfqkn30KQ
-         gVC1NgIqccErxX4QksD9G0zkPVrMUF/CLi1uHkXQzmQcuV45Sao8yaXeNqKpPzHq8Vqp
-         TyLg==
+        bh=yagE6PfAWV1c7o+BEcxE7EzZidDlQUomGLf1in/WfkM=;
+        b=igPE6EXXqC7kFlmkXEmC/XA3D6fjwNngG/sJy9Ww2Pw5nOMZBTEUerkWl6cSse8UFr
+         jpZJVxD4WNjPBfvwtJzGgbVEbOj0/a4CJ+vP7vJvzCPRdvXxWxLvBnilZYa+fTg2/fwx
+         5MZUASlmGyWW3/FUX+gl+TsIapnG7Bg7xg0MGWjCxjzbOhP249izykhf7BQO59HzyJ02
+         admKo1QbvThGk6DGFALBiTuHfmBojt1pT2nmafscQ69D6dvHUWX5Vw60Kb1moBUs9kjP
+         RvDcAa8g5IyyEpHmAD1pNOo3wG93xdF8Kq6VdYQGSDzdexQP/FCxwWqWR9zfymybQr/+
+         qEXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5HhPHTWcHqQfajKCJskET6/mbnRPhMXC0Dz2f8v2WQ8=;
-        b=H2Xy95vIrFxZ1OBoAtt04M42qYTWcpc5lffclwTQW+vNP3mj98UTS9doibFx1qCGMR
-         Db1HhTtV5RwRZWEZkUxbhu5qjE0eHX2QwdVWqTgd3TXzy51R/jWwC3oQPLcstFNxhQ/6
-         J7hqAJoFQhuFRaNbxvLRMUJGYKcr5zvlJNTLrl1/LRK7j/wGhwzdjwJTlVcbuf/61MnK
-         VWk4qhaiogEut9YOpSee4rqUTUstcmhpi9WKRdsyRCV2YVQbPKqdbpgJCBZKzogbAmw9
-         7+zEt3OTh5ZjeFstOVPPt3Yt7MkquKpboaM7yZrziR28IYAZiux1rd49gWKltkHaOqXI
-         V31A==
-X-Gm-Message-State: ACrzQf2dQylnKaoSxgSwLLIWSzgixFyTRy2m5GF72DI75z8NucuWvV3T
-        bWkSFbrb4SgsiGwDd3/g2Ug=
-X-Google-Smtp-Source: AMsMyM5pqwWVzl3ekFZ73yE6ODJkux5gOvJ4YX7SmHzVVYRc1U4QdcTrpnCnLCPvYF4/u5uI6d3+mg==
-X-Received: by 2002:a5d:6da7:0:b0:22e:3edb:e372 with SMTP id u7-20020a5d6da7000000b0022e3edbe372mr16414359wrs.137.1666466004551;
-        Sat, 22 Oct 2022 12:13:24 -0700 (PDT)
+        bh=yagE6PfAWV1c7o+BEcxE7EzZidDlQUomGLf1in/WfkM=;
+        b=NFShvt+HImnn4xf0K4L85A+g+jk+eM5hUmsnc4ap5XGBRhr31V321YkFvNPLU3Ae2/
+         3yg75q3/ad4kaU8Kz7M0nOJawcnDoHzintSW8Gi5nygjtS72CRhisJ+G9a18rxllpZ7J
+         aSItS8JZ236Av+UDzOwymbjeAcKKnjinXWoeOaem/FpoJqZPvUVYQK3Od8dRDoPy9Pur
+         SWeapUhvvRFQ3iPuZF6XNubvc8olIpaBanXsEG66rW1GyHdeIRDNrcw20Fia2vE9mzTF
+         21zDTlaFvbmRE2yxvXwSaJmBrYP3XLv/Wd5DEUhORQpx5Dvlzm6kX/3w0C3GbiMFnhQa
+         ANFg==
+X-Gm-Message-State: ACrzQf0TP54UWpO6Lb9cIvHt6xt2VmTU6Gzu7jaA4MiN7a/2SNMfEk07
+        LXV7hGoqD8vc3fbBAdupj+U=
+X-Google-Smtp-Source: AMsMyM7S/Yab6rkdTXlQtmV3AMKRUInnlygeH8fTYhv1/JEeIam1Os4D5l76uQtzpq8qkakhbMq+pA==
+X-Received: by 2002:a05:6000:1f9e:b0:22e:61fa:3f1c with SMTP id bw30-20020a0560001f9e00b0022e61fa3f1cmr15908220wrb.546.1666466006048;
+        Sat, 22 Oct 2022 12:13:26 -0700 (PDT)
 Received: from localhost (94.197.1.68.threembb.co.uk. [94.197.1.68])
-        by smtp.gmail.com with ESMTPSA id bs14-20020a056000070e00b00236545edc91sm4582702wrb.76.2022.10.22.12.13.23
+        by smtp.gmail.com with ESMTPSA id u12-20020a5d6acc000000b0022ae0965a8asm21417358wrw.24.2022.10.22.12.13.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 22 Oct 2022 12:13:24 -0700 (PDT)
+        Sat, 22 Oct 2022 12:13:25 -0700 (PDT)
 From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 To:     paul@crapouillou.net, lgirdwood@gmail.com, broonie@kernel.org,
         perex@perex.cz, tiwai@suse.com
 Cc:     zhouyu@wanyeetech.com, linux-mips@vger.kernel.org,
         alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v5 3/9] ASoC: jz4740-i2s: Simplify using regmap fields
-Date:   Sat, 22 Oct 2022 20:13:02 +0100
-Message-Id: <20221022191308.82348-4-aidanmacdonald.0x0@gmail.com>
+Subject: [PATCH v5 4/9] ASoC: jz4740-i2s: Use FIELD_PREP() macros in hw_params callback
+Date:   Sat, 22 Oct 2022 20:13:03 +0100
+Message-Id: <20221022191308.82348-5-aidanmacdonald.0x0@gmail.com>
 In-Reply-To: <20221022191308.82348-1-aidanmacdonald.0x0@gmail.com>
 References: <20221022191308.82348-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
@@ -72,261 +72,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The differences between register fields on different SoC versions
-can be abstracted away using the regmap field API. This is easier
-to understand and extend than comparisons based on the version ID.
-Since the version IDs are unused after this change, remove them at
-the same time, and remove unused macros.
+Get rid of a couple of macros and improve readability by using
+FIELD_PREP() and GENMASK() for the sample size setting.
 
+Acked-by: Paul Cercueil <paul@crapouillou.net>
 Reviewed-by: Paul Cercueil <paul@crapouillou.net>
 Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 ---
- sound/soc/jz4740/jz4740-i2s.c | 135 +++++++++++++++++++---------------
- 1 file changed, 77 insertions(+), 58 deletions(-)
+ sound/soc/jz4740/jz4740-i2s.c | 17 ++++++++---------
+ 1 file changed, 8 insertions(+), 9 deletions(-)
 
 diff --git a/sound/soc/jz4740/jz4740-i2s.c b/sound/soc/jz4740/jz4740-i2s.c
-index f3c0d7c0415e..b0bbcd025241 100644
+index b0bbcd025241..4767abea425f 100644
 --- a/sound/soc/jz4740/jz4740-i2s.c
 +++ b/sound/soc/jz4740/jz4740-i2s.c
-@@ -34,8 +34,6 @@
- #define JZ_REG_AIC_CLK_DIV	0x30
- #define JZ_REG_AIC_FIFO		0x34
+@@ -3,6 +3,7 @@
+  *  Copyright (C) 2010, Lars-Peter Clausen <lars@metafoo.de>
+  */
  
--#define JZ_AIC_CONF_FIFO_RX_THRESHOLD_MASK (0xf << 12)
--#define JZ_AIC_CONF_FIFO_TX_THRESHOLD_MASK (0xf <<  8)
- #define JZ_AIC_CONF_OVERFLOW_PLAY_LAST BIT(6)
- #define JZ_AIC_CONF_INTERNAL_CODEC BIT(5)
- #define JZ_AIC_CONF_I2S BIT(4)
-@@ -44,11 +42,6 @@
++#include <linux/bitfield.h>
+ #include <linux/init.h>
+ #include <linux/io.h>
+ #include <linux/kernel.h>
+@@ -42,8 +43,8 @@
  #define JZ_AIC_CONF_SYNC_CLK_MASTER BIT(1)
  #define JZ_AIC_CONF_ENABLE BIT(0)
  
--#define JZ_AIC_CONF_FIFO_RX_THRESHOLD_OFFSET 12
--#define JZ_AIC_CONF_FIFO_TX_THRESHOLD_OFFSET 8
--#define JZ4760_AIC_CONF_FIFO_RX_THRESHOLD_OFFSET 24
--#define JZ4760_AIC_CONF_FIFO_TX_THRESHOLD_OFFSET 16
--
- #define JZ_AIC_CTRL_OUTPUT_SAMPLE_SIZE_MASK (0x7 << 19)
- #define JZ_AIC_CTRL_INPUT_SAMPLE_SIZE_MASK (0x7 << 16)
+-#define JZ_AIC_CTRL_OUTPUT_SAMPLE_SIZE_MASK (0x7 << 19)
+-#define JZ_AIC_CTRL_INPUT_SAMPLE_SIZE_MASK (0x7 << 16)
++#define JZ_AIC_CTRL_OUTPUT_SAMPLE_SIZE GENMASK(21, 19)
++#define JZ_AIC_CTRL_INPUT_SAMPLE_SIZE GENMASK(18, 16)
  #define JZ_AIC_CTRL_ENABLE_RX_DMA BIT(15)
-@@ -76,29 +69,25 @@
+ #define JZ_AIC_CTRL_ENABLE_TX_DMA BIT(14)
+ #define JZ_AIC_CTRL_MONO_TO_STEREO BIT(11)
+@@ -59,9 +60,6 @@
+ #define JZ_AIC_CTRL_ENABLE_PLAYBACK BIT(1)
+ #define JZ_AIC_CTRL_ENABLE_CAPTURE BIT(0)
  
- #define JZ_AIC_I2S_STATUS_BUSY BIT(2)
- 
--#define JZ_AIC_CLK_DIV_MASK 0xf
--#define I2SDIV_DV_SHIFT 0
--#define I2SDIV_DV_MASK (0xf << I2SDIV_DV_SHIFT)
--#define I2SDIV_IDV_SHIFT 8
--#define I2SDIV_IDV_MASK (0xf << I2SDIV_IDV_SHIFT)
+-#define JZ_AIC_CTRL_OUTPUT_SAMPLE_SIZE_OFFSET 19
+-#define JZ_AIC_CTRL_INPUT_SAMPLE_SIZE_OFFSET  16
 -
--enum jz47xx_i2s_version {
--	JZ_I2S_JZ4740,
--	JZ_I2S_JZ4760,
--	JZ_I2S_JZ4770,
--	JZ_I2S_JZ4780,
--};
--
- struct i2s_soc_info {
--	enum jz47xx_i2s_version version;
- 	struct snd_soc_dai_driver *dai;
- 
-+	struct reg_field field_rx_fifo_thresh;
-+	struct reg_field field_tx_fifo_thresh;
-+	struct reg_field field_i2sdiv_capture;
-+	struct reg_field field_i2sdiv_playback;
-+
- 	bool shared_fifo_flush;
- };
- 
- struct jz4740_i2s {
- 	struct regmap *regmap;
- 
-+	struct regmap_field *field_rx_fifo_thresh;
-+	struct regmap_field *field_tx_fifo_thresh;
-+	struct regmap_field *field_i2sdiv_capture;
-+	struct regmap_field *field_i2sdiv_playback;
-+
- 	struct clk *clk_aic;
- 	struct clk *clk_i2s;
- 
-@@ -239,12 +228,12 @@ static int jz4740_i2s_hw_params(struct snd_pcm_substream *substream,
- 	struct snd_pcm_hw_params *params, struct snd_soc_dai *dai)
- {
- 	struct jz4740_i2s *i2s = snd_soc_dai_get_drvdata(dai);
-+	struct regmap_field *div_field;
- 	unsigned int sample_size;
--	uint32_t ctrl, div_reg;
-+	uint32_t ctrl;
- 	int div;
- 
- 	regmap_read(i2s->regmap, JZ_REG_AIC_CTRL, &ctrl);
--	regmap_read(i2s->regmap, JZ_REG_AIC_CLK_DIV, &div_reg);
- 
- 	div = clk_get_rate(i2s->clk_i2s) / (64 * params_rate(params));
- 
-@@ -267,23 +256,16 @@ static int jz4740_i2s_hw_params(struct snd_pcm_substream *substream,
- 		else
- 			ctrl &= ~JZ_AIC_CTRL_MONO_TO_STEREO;
- 
--		div_reg &= ~I2SDIV_DV_MASK;
--		div_reg |= (div - 1) << I2SDIV_DV_SHIFT;
-+		div_field = i2s->field_i2sdiv_playback;
- 	} else {
- 		ctrl &= ~JZ_AIC_CTRL_INPUT_SAMPLE_SIZE_MASK;
- 		ctrl |= sample_size << JZ_AIC_CTRL_INPUT_SAMPLE_SIZE_OFFSET;
- 
--		if (i2s->soc_info->version >= JZ_I2S_JZ4770) {
--			div_reg &= ~I2SDIV_IDV_MASK;
--			div_reg |= (div - 1) << I2SDIV_IDV_SHIFT;
--		} else {
--			div_reg &= ~I2SDIV_DV_MASK;
--			div_reg |= (div - 1) << I2SDIV_DV_SHIFT;
--		}
-+		div_field = i2s->field_i2sdiv_capture;
+ #define JZ_AIC_I2S_FMT_DISABLE_BIT_CLK BIT(12)
+ #define JZ_AIC_I2S_FMT_DISABLE_BIT_ICLK BIT(13)
+ #define JZ_AIC_I2S_FMT_ENABLE_SYS_CLK BIT(4)
+@@ -249,8 +247,9 @@ static int jz4740_i2s_hw_params(struct snd_pcm_substream *substream,
  	}
  
- 	regmap_write(i2s->regmap, JZ_REG_AIC_CTRL, ctrl);
--	regmap_write(i2s->regmap, JZ_REG_AIC_CLK_DIV, div_reg);
-+	regmap_field_write(div_field, div - 1);
- 
- 	return 0;
- }
-@@ -356,7 +338,6 @@ static int jz4740_i2s_resume(struct snd_soc_component *component)
- static int jz4740_i2s_dai_probe(struct snd_soc_dai *dai)
- {
- 	struct jz4740_i2s *i2s = snd_soc_dai_get_drvdata(dai);
--	uint32_t conf;
- 	int ret;
- 
- 	ret = clk_prepare_enable(i2s->clk_aic);
-@@ -366,22 +347,14 @@ static int jz4740_i2s_dai_probe(struct snd_soc_dai *dai)
- 	snd_soc_dai_init_dma_data(dai, &i2s->playback_dma_data,
- 		&i2s->capture_dma_data);
- 
--	if (i2s->soc_info->version >= JZ_I2S_JZ4760) {
--		conf = (7 << JZ4760_AIC_CONF_FIFO_RX_THRESHOLD_OFFSET) |
--			(8 << JZ4760_AIC_CONF_FIFO_TX_THRESHOLD_OFFSET) |
--			JZ_AIC_CONF_OVERFLOW_PLAY_LAST |
--			JZ_AIC_CONF_I2S |
--			JZ_AIC_CONF_INTERNAL_CODEC;
--	} else {
--		conf = (7 << JZ_AIC_CONF_FIFO_RX_THRESHOLD_OFFSET) |
--			(8 << JZ_AIC_CONF_FIFO_TX_THRESHOLD_OFFSET) |
--			JZ_AIC_CONF_OVERFLOW_PLAY_LAST |
--			JZ_AIC_CONF_I2S |
--			JZ_AIC_CONF_INTERNAL_CODEC;
--	}
--
- 	regmap_write(i2s->regmap, JZ_REG_AIC_CONF, JZ_AIC_CONF_RESET);
--	regmap_write(i2s->regmap, JZ_REG_AIC_CONF, conf);
+ 	if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK) {
+-		ctrl &= ~JZ_AIC_CTRL_OUTPUT_SAMPLE_SIZE_MASK;
+-		ctrl |= sample_size << JZ_AIC_CTRL_OUTPUT_SAMPLE_SIZE_OFFSET;
++		ctrl &= ~JZ_AIC_CTRL_OUTPUT_SAMPLE_SIZE;
++		ctrl |= FIELD_PREP(JZ_AIC_CTRL_OUTPUT_SAMPLE_SIZE, sample_size);
 +
-+	regmap_write(i2s->regmap, JZ_REG_AIC_CONF,
-+		     JZ_AIC_CONF_OVERFLOW_PLAY_LAST |
-+		     JZ_AIC_CONF_I2S | JZ_AIC_CONF_INTERNAL_CODEC);
-+
-+	regmap_field_write(i2s->field_rx_fifo_thresh, 7);
-+	regmap_field_write(i2s->field_tx_fifo_thresh, 8);
+ 		if (params_channels(params) == 1)
+ 			ctrl |= JZ_AIC_CTRL_MONO_TO_STEREO;
+ 		else
+@@ -258,8 +257,8 @@ static int jz4740_i2s_hw_params(struct snd_pcm_substream *substream,
  
- 	return 0;
- }
-@@ -426,14 +399,20 @@ static struct snd_soc_dai_driver jz4740_i2s_dai = {
- };
+ 		div_field = i2s->field_i2sdiv_playback;
+ 	} else {
+-		ctrl &= ~JZ_AIC_CTRL_INPUT_SAMPLE_SIZE_MASK;
+-		ctrl |= sample_size << JZ_AIC_CTRL_INPUT_SAMPLE_SIZE_OFFSET;
++		ctrl &= ~JZ_AIC_CTRL_INPUT_SAMPLE_SIZE;
++		ctrl |= FIELD_PREP(JZ_AIC_CTRL_INPUT_SAMPLE_SIZE, sample_size);
  
- static const struct i2s_soc_info jz4740_i2s_soc_info = {
--	.version = JZ_I2S_JZ4740,
--	.dai = &jz4740_i2s_dai,
--	.shared_fifo_flush = true,
-+	.dai			= &jz4740_i2s_dai,
-+	.field_rx_fifo_thresh	= REG_FIELD(JZ_REG_AIC_CONF, 12, 15),
-+	.field_tx_fifo_thresh	= REG_FIELD(JZ_REG_AIC_CONF, 8, 11),
-+	.field_i2sdiv_capture	= REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
-+	.field_i2sdiv_playback	= REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
-+	.shared_fifo_flush	= true,
- };
- 
- static const struct i2s_soc_info jz4760_i2s_soc_info = {
--	.version = JZ_I2S_JZ4760,
--	.dai = &jz4740_i2s_dai,
-+	.dai			= &jz4740_i2s_dai,
-+	.field_rx_fifo_thresh	= REG_FIELD(JZ_REG_AIC_CONF, 24, 27),
-+	.field_tx_fifo_thresh	= REG_FIELD(JZ_REG_AIC_CONF, 16, 20),
-+	.field_i2sdiv_capture	= REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
-+	.field_i2sdiv_playback	= REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
- };
- 
- static struct snd_soc_dai_driver jz4770_i2s_dai = {
-@@ -455,13 +434,19 @@ static struct snd_soc_dai_driver jz4770_i2s_dai = {
- };
- 
- static const struct i2s_soc_info jz4770_i2s_soc_info = {
--	.version = JZ_I2S_JZ4770,
--	.dai = &jz4770_i2s_dai,
-+	.dai			= &jz4770_i2s_dai,
-+	.field_rx_fifo_thresh	= REG_FIELD(JZ_REG_AIC_CONF, 24, 27),
-+	.field_tx_fifo_thresh	= REG_FIELD(JZ_REG_AIC_CONF, 16, 20),
-+	.field_i2sdiv_capture	= REG_FIELD(JZ_REG_AIC_CLK_DIV, 8, 11),
-+	.field_i2sdiv_playback	= REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
- };
- 
- static const struct i2s_soc_info jz4780_i2s_soc_info = {
--	.version = JZ_I2S_JZ4780,
--	.dai = &jz4770_i2s_dai,
-+	.dai			= &jz4770_i2s_dai,
-+	.field_rx_fifo_thresh	= REG_FIELD(JZ_REG_AIC_CONF, 24, 27),
-+	.field_tx_fifo_thresh	= REG_FIELD(JZ_REG_AIC_CONF, 16, 20),
-+	.field_i2sdiv_capture	= REG_FIELD(JZ_REG_AIC_CLK_DIV, 8, 11),
-+	.field_i2sdiv_playback	= REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
- };
- 
- static const struct snd_soc_component_driver jz4740_i2s_component = {
-@@ -480,6 +465,36 @@ static const struct of_device_id jz4740_of_matches[] = {
- };
- MODULE_DEVICE_TABLE(of, jz4740_of_matches);
- 
-+static int jz4740_i2s_init_regmap_fields(struct device *dev,
-+					 struct jz4740_i2s *i2s)
-+{
-+	i2s->field_rx_fifo_thresh =
-+		devm_regmap_field_alloc(dev, i2s->regmap,
-+					i2s->soc_info->field_rx_fifo_thresh);
-+	if (IS_ERR(i2s->field_rx_fifo_thresh))
-+		return PTR_ERR(i2s->field_rx_fifo_thresh);
-+
-+	i2s->field_tx_fifo_thresh =
-+		devm_regmap_field_alloc(dev, i2s->regmap,
-+					i2s->soc_info->field_tx_fifo_thresh);
-+	if (IS_ERR(i2s->field_tx_fifo_thresh))
-+		return PTR_ERR(i2s->field_tx_fifo_thresh);
-+
-+	i2s->field_i2sdiv_capture =
-+		devm_regmap_field_alloc(dev, i2s->regmap,
-+					i2s->soc_info->field_i2sdiv_capture);
-+	if (IS_ERR(i2s->field_i2sdiv_capture))
-+		return PTR_ERR(i2s->field_i2sdiv_capture);
-+
-+	i2s->field_i2sdiv_playback =
-+		devm_regmap_field_alloc(dev, i2s->regmap,
-+					i2s->soc_info->field_i2sdiv_playback);
-+	if (IS_ERR(i2s->field_i2sdiv_playback))
-+		return PTR_ERR(i2s->field_i2sdiv_playback);
-+
-+	return 0;
-+}
-+
- static const struct regmap_config jz4740_i2s_regmap_config = {
- 	.reg_bits	= 32,
- 	.reg_stride	= 4,
-@@ -524,6 +539,10 @@ static int jz4740_i2s_dev_probe(struct platform_device *pdev)
- 	if (IS_ERR(i2s->regmap))
- 		return PTR_ERR(i2s->regmap);
- 
-+	ret = jz4740_i2s_init_regmap_fields(dev, i2s);
-+	if (ret)
-+		return ret;
-+
- 	platform_set_drvdata(pdev, i2s);
- 
- 	ret = devm_snd_soc_register_component(dev, &jz4740_i2s_component,
+ 		div_field = i2s->field_i2sdiv_capture;
+ 	}
 -- 
 2.38.1
 
