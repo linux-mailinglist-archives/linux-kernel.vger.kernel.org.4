@@ -2,70 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FF3D608E1D
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 17:41:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FDEA608D95
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 16:02:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229571AbiJVPlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 11:41:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47914 "EHLO
+        id S229765AbiJVOCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 10:02:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiJVPlN (ORCPT
+        with ESMTP id S229707AbiJVOCl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 11:41:13 -0400
-Received: from webmail.diputadospan.org.mx (webmail.diputadospan.org.mx [189.240.28.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A69DA1C69CD
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 08:41:10 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by webmail.diputadospan.org.mx (Postfix) with ESMTP id 3A7FC70CB4C5;
-        Sat, 22 Oct 2022 06:51:46 -0500 (CDT)
-Received: from webmail.diputadospan.org.mx ([127.0.0.1])
-        by localhost (webmail.diputadospan.org.mx [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id PRzhJBCwCLp5; Sat, 22 Oct 2022 06:51:46 -0500 (CDT)
-Received: from localhost (localhost [127.0.0.1])
-        by webmail.diputadospan.org.mx (Postfix) with ESMTP id 8211E70CC7FC;
-        Sat, 22 Oct 2022 06:40:43 -0500 (CDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 webmail.diputadospan.org.mx 8211E70CC7FC
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=diputadospan.org.mx;
-        s=9AF5BABA-AC48-11EA-B713-A81267214621; t=1666438843;
-        bh=zacQ2ggXkOKENbP4PyghpQq1fh5VFFCHplR9P4GrAVg=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=tRP6Np7P5aIEZ7MbNl33EPcov9lWlT6OSTsB543IWca6galMmYQTHVrwDH92ojv4s
-         rpzlss/Wtu2LXcqvzMX+zsLkgfmt5d7FzTVNSgC5WYCxUZqvcWW2XbWxE8UFnqaN7N
-         ioKQZXb4Had5L5kglyq27CYS4thdsncnRfdMEAuHdHVhS6aq4A83a87m8RJPboPeTy
-         F7Fd3a3QzQiPtDbvPrM9hBlloTIAjcSD7iDuxKyLqGianhuogwMU/qYSHJNzWGZrxQ
-         E91Q5AEWYBGfDGVNMca7rJn2FZtLy2HSSKDed4FNm/UTu66P3m3nI/h9BFINQaXQnP
-         WJxXMXNGwf6+g==
-X-Virus-Scanned: amavisd-new at diputadospan.org.mx
-Received: from webmail.diputadospan.org.mx ([127.0.0.1])
-        by localhost (webmail.diputadospan.org.mx [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id T5WiNCN-Ypbl; Sat, 22 Oct 2022 06:40:43 -0500 (CDT)
-Received: from LAPTOP-5PQ2N86D.domain.name (unknown [122.161.49.169])
-        by webmail.diputadospan.org.mx (Postfix) with ESMTPSA id 7F15B70CA0A6;
-        Sat, 22 Oct 2022 06:34:37 -0500 (CDT)
-Content-Type: text/plain; charset="iso-8859-1"
+        Sat, 22 Oct 2022 10:02:41 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79C09170DF3
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 07:02:38 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id a13so15813331edj.0
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 07:02:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=LNVXeM54MuUTzkxW4S+h/avYMDRiH1JNQoeYcnCHBhM=;
+        b=GjMO9bieaHDBelf7XPvp7Mm6+ECuPSqx2R6/8PrakF0zbhlcSTaFXUaHjvuZ2PA8oC
+         6WcjMZS86zeqIwyvNpGwuo6uT7FBWc0z/XIKRCqsdCIqfvsYU5jrdGwZO3AN/Ut8O2PU
+         dVwNs+ZCerEYbOg45w7UYYLixBM2CbHkBDvT80VOQZCglZoEQDqqFHhmGHexg7wLDjKH
+         dwidHE+9u/Qqc/ZjBKywjSP+b7eto8KN5KoUI5cL/eSVRiUi9+a4YNFvdbLp0UHLJ6sl
+         gO3VAnOCQ8U/s+ZJg38eYK/md92XTywwgTsnnIKU+jdNd8yLoqJqnpyW7AhFA1JN3Ctq
+         CMQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LNVXeM54MuUTzkxW4S+h/avYMDRiH1JNQoeYcnCHBhM=;
+        b=xof3DmucDC8tOR7XtosDKpwmmTpA2T9EsMuMbm2yI8lNrnjYFwoZDZ0bIPZg9IN10Q
+         +PdTKZNcJA+Hskyqwgv1rvlBeWmJTlMXMLI/nOPP+aLQVb+Cop/7k/WM1KEoPDStXhh+
+         xv9xczWCNVZXGRxSTE2g5TovprrcLOqQIjnx/hQ/nqbH9GtpHjnMuh++HeizsqzQ44TD
+         fYeyc9DjiJzjyXK/ZFki21bDUnm58OcUlAn5y4nNFtTzmtBrh+eEianxgHqZnn/kYBAu
+         R5dc+IRDJcbI4b/u2pEVKzKjeIkCYwa7zfGY055SCsBuXXU/ZCKEzIce2MvRVjR2TMCt
+         POjA==
+X-Gm-Message-State: ACrzQf2mLjwdTYq/Xifdn6iwpMQV4DaNfc0b6yPzIansICBFTv+2dYyR
+        VQsp00KbiaoWweqImOAxpdcYnEJ00e+Q/aoYGFKc8NZnLcc=
+X-Google-Smtp-Source: AMsMyM7E0Zchl09puiKKoBotMVhULOKYzE0S/e35EOJ4h3CGvH2Wc0rTF+zAD6m+BsOpLEKYent2ulN8cXV4ms8GFBg=
+X-Received: by 2002:a05:6402:1d55:b0:45f:c87f:c753 with SMTP id
+ dz21-20020a0564021d5500b0045fc87fc753mr14243568edb.32.1666447356997; Sat, 22
+ Oct 2022 07:02:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: re
-To:     Recipients <miguel.varela@diputadospan.org.mx>
-From:   "Smadar Barber-Tsadik" <miguel.varela@diputadospan.org.mx>
-Date:   Sat, 22 Oct 2022 17:04:19 +0530
-Reply-To: smadarbarbertsadikk@gmail.com
-Message-Id: <20221022113437.7F15B70CA0A6@webmail.diputadospan.org.mx>
-X-Spam-Status: No, score=4.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
-        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+References: <20221021202254.4142411-1-arnd@kernel.org> <20221021203329.4143397-2-arnd@kernel.org>
+In-Reply-To: <20221021203329.4143397-2-arnd@kernel.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sat, 22 Oct 2022 16:02:25 +0200
+Message-ID: <CACRpkdacViTuL_gmhWULNm7HCHQeGBXwkonDxQjubSM0=v8vgw@mail.gmail.com>
+Subject: Re: [PATCH 02/21] ARM: s3c: remove s3c24xx specific hacks
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-kernel@vger.kernel.org, Ben Dooks <ben-linux@fluff.org>,
+        Simtec Linux Team <linux@simtec.co.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Sylwester Nawrocki <sylvester.nawrocki@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-samsung-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux-clk@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi there,I'm the CEO of the First International Bank of Israel. I am contac=
-ting you in regards to a significant issue . Kindly respond back at your ea=
-rliest convenience so I can provide you the details.
+On Fri, Oct 21, 2022 at 10:37 PM Arnd Bergmann <arnd@kernel.org> wrote:
 
-Faithfully,
-Smadar Barber-Tsadik
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> A number of device drivers reference CONFIG_ARM_S3C24XX_CPUFREQ or
+> similar symbols that are no longer available with the platform gone,
+> though the drivers themselves are still used on newer platforms,
+> so remove these hacks.
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
+
+Yours,
+Linus Walleij
