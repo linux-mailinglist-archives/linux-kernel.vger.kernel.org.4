@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8471A60879A
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 10:05:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE81D608828
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 10:10:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232734AbiJVIEG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 04:04:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54382 "EHLO
+        id S233101AbiJVIKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 04:10:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232115AbiJVH5d (ORCPT
+        with ESMTP id S232818AbiJVIGQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 03:57:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE5F013A5B7;
-        Sat, 22 Oct 2022 00:48:50 -0700 (PDT)
+        Sat, 22 Oct 2022 04:06:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45B242D6549;
+        Sat, 22 Oct 2022 00:53:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 65E5560B9F;
-        Sat, 22 Oct 2022 07:43:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72242C433C1;
-        Sat, 22 Oct 2022 07:43:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D4F2960BA5;
+        Sat, 22 Oct 2022 07:43:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9E96C433C1;
+        Sat, 22 Oct 2022 07:43:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666424624;
-        bh=p6ayDb24pUcC13Ada1bVfO09ocE5wIRtINfIU329Dbg=;
+        s=korg; t=1666424630;
+        bh=sMlQcK6UppnZaZaiO1W30seCru7s+7kjiXGTuxdCF+c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ez768vD5i4czE2TjuBiZQsx9mkKTzcePYn2Dy60hcEx7rwzrgHOAkVQvluzDqRtoe
-         A3MTTVKV3cK0pWwPUwiQAANOQ+vQ7xGWvWTIhq9/0QUS5jpTcgVTxRCa9TO4a7TETB
-         HAG2Zm3snOkJkxHyk8U/3uGFTWTvF9SNXPcPdA9k=
+        b=DaLmg7+u6qsqwqH++qf9UZcqWW9WLC4hALelF+0BNvZ14sxZf3Y6Bw6qYVMMFqXlS
+         kDlRxEACDhq1nYw8+MJG585xVSzhanKUMo5uSNCtBEWVjMYT0DEYeWFHBWhYfQ5XR/
+         SQNQ1fwARx0MRCFUY4JkDwkkcrndaTdU7HjT5JnY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Kohei Tarumizu <tarumizu.kohei@fujitsu.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 215/717] x86/resctrl: Fix to restore to original value when re-enabling hardware prefetch register
-Date:   Sat, 22 Oct 2022 09:21:34 +0200
-Message-Id: <20221022072453.281763425@linuxfoundation.org>
+Subject: [PATCH 5.19 217/717] selftests/xsk: Add missing close() on netns fd
+Date:   Sat, 22 Oct 2022 09:21:36 +0200
+Message-Id: <20221022072453.646112428@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221022072415.034382448@linuxfoundation.org>
 References: <20221022072415.034382448@linuxfoundation.org>
@@ -56,105 +56,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kohei Tarumizu <tarumizu.kohei@fujitsu.com>
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 
-[ Upstream commit 499c8bb4693d1c8d8f3d6dd38e5bdde3ff5bd906 ]
+[ Upstream commit 8a7d61bdc2fac2c460a2f32a062f5c6dbd21a764 ]
 
-The current pseudo_lock.c code overwrites the value of the
-MSR_MISC_FEATURE_CONTROL to 0 even if the original value is not 0.
-Therefore, modify it to save and restore the original values.
+Commit 1034b03e54ac ("selftests: xsk: Simplify cleanup of ifobjects")
+removed close on netns fd, which is not correct, so let us restore it.
 
-Fixes: 018961ae5579 ("x86/intel_rdt: Pseudo-lock region creation/removal core")
-Fixes: 443810fe6160 ("x86/intel_rdt: Create debugfs files for pseudo-locking testing")
-Fixes: 8a2fc0e1bc0c ("x86/intel_rdt: More precise L2 hit/miss measurements")
-Signed-off-by: Kohei Tarumizu <tarumizu.kohei@fujitsu.com>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Acked-by: Reinette Chatre <reinette.chatre@intel.com>
-Link: https://lkml.kernel.org/r/eb660f3c2010b79a792c573c02d01e8e841206ad.1661358182.git.reinette.chatre@intel.com
+Fixes: 1034b03e54ac ("selftests: xsk: Simplify cleanup of ifobjects")
+Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Acked-by: Magnus Karlsson <magnus.karlsson@intel.com>
+Link: https://lore.kernel.org/bpf/20220830133905.9945-1-maciej.fijalkowski@intel.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kernel/cpu/resctrl/pseudo_lock.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ tools/testing/selftests/bpf/xdpxceiver.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/arch/x86/kernel/cpu/resctrl/pseudo_lock.c b/arch/x86/kernel/cpu/resctrl/pseudo_lock.c
-index db813f819ad6..4d8398986f78 100644
---- a/arch/x86/kernel/cpu/resctrl/pseudo_lock.c
-+++ b/arch/x86/kernel/cpu/resctrl/pseudo_lock.c
-@@ -420,6 +420,7 @@ static int pseudo_lock_fn(void *_rdtgrp)
- 	struct pseudo_lock_region *plr = rdtgrp->plr;
- 	u32 rmid_p, closid_p;
- 	unsigned long i;
-+	u64 saved_msr;
- #ifdef CONFIG_KASAN
- 	/*
- 	 * The registers used for local register variables are also used
-@@ -463,6 +464,7 @@ static int pseudo_lock_fn(void *_rdtgrp)
- 	 * the buffer and evict pseudo-locked memory read earlier from the
- 	 * cache.
- 	 */
-+	saved_msr = __rdmsr(MSR_MISC_FEATURE_CONTROL);
- 	__wrmsr(MSR_MISC_FEATURE_CONTROL, prefetch_disable_bits, 0x0);
- 	closid_p = this_cpu_read(pqr_state.cur_closid);
- 	rmid_p = this_cpu_read(pqr_state.cur_rmid);
-@@ -514,7 +516,7 @@ static int pseudo_lock_fn(void *_rdtgrp)
- 	__wrmsr(IA32_PQR_ASSOC, rmid_p, closid_p);
+diff --git a/tools/testing/selftests/bpf/xdpxceiver.c b/tools/testing/selftests/bpf/xdpxceiver.c
+index e5992a6b5e09..92e466310e27 100644
+--- a/tools/testing/selftests/bpf/xdpxceiver.c
++++ b/tools/testing/selftests/bpf/xdpxceiver.c
+@@ -1589,6 +1589,8 @@ static struct ifobject *ifobject_create(void)
+ 	if (!ifobj->umem)
+ 		goto out_umem;
  
- 	/* Re-enable the hardware prefetcher(s) */
--	wrmsr(MSR_MISC_FEATURE_CONTROL, 0x0, 0x0);
-+	wrmsrl(MSR_MISC_FEATURE_CONTROL, saved_msr);
- 	local_irq_enable();
++	ifobj->ns_fd = -1;
++
+ 	return ifobj;
  
- 	plr->thread_done = 1;
-@@ -871,6 +873,7 @@ bool rdtgroup_pseudo_locked_in_hierarchy(struct rdt_domain *d)
- static int measure_cycles_lat_fn(void *_plr)
+ out_umem:
+@@ -1600,6 +1602,8 @@ static struct ifobject *ifobject_create(void)
+ 
+ static void ifobject_delete(struct ifobject *ifobj)
  {
- 	struct pseudo_lock_region *plr = _plr;
-+	u32 saved_low, saved_high;
- 	unsigned long i;
- 	u64 start, end;
- 	void *mem_r;
-@@ -879,6 +882,7 @@ static int measure_cycles_lat_fn(void *_plr)
- 	/*
- 	 * Disable hardware prefetchers.
- 	 */
-+	rdmsr(MSR_MISC_FEATURE_CONTROL, saved_low, saved_high);
- 	wrmsr(MSR_MISC_FEATURE_CONTROL, prefetch_disable_bits, 0x0);
- 	mem_r = READ_ONCE(plr->kmem);
- 	/*
-@@ -895,7 +899,7 @@ static int measure_cycles_lat_fn(void *_plr)
- 		end = rdtsc_ordered();
- 		trace_pseudo_lock_mem_latency((u32)(end - start));
- 	}
--	wrmsr(MSR_MISC_FEATURE_CONTROL, 0x0, 0x0);
-+	wrmsr(MSR_MISC_FEATURE_CONTROL, saved_low, saved_high);
- 	local_irq_enable();
- 	plr->thread_done = 1;
- 	wake_up_interruptible(&plr->lock_thread_wq);
-@@ -940,6 +944,7 @@ static int measure_residency_fn(struct perf_event_attr *miss_attr,
- 	u64 hits_before = 0, hits_after = 0, miss_before = 0, miss_after = 0;
- 	struct perf_event *miss_event, *hit_event;
- 	int hit_pmcnum, miss_pmcnum;
-+	u32 saved_low, saved_high;
- 	unsigned int line_size;
- 	unsigned int size;
- 	unsigned long i;
-@@ -973,6 +978,7 @@ static int measure_residency_fn(struct perf_event_attr *miss_attr,
- 	/*
- 	 * Disable hardware prefetchers.
- 	 */
-+	rdmsr(MSR_MISC_FEATURE_CONTROL, saved_low, saved_high);
- 	wrmsr(MSR_MISC_FEATURE_CONTROL, prefetch_disable_bits, 0x0);
- 
- 	/* Initialize rest of local variables */
-@@ -1031,7 +1037,7 @@ static int measure_residency_fn(struct perf_event_attr *miss_attr,
- 	 */
- 	rmb();
- 	/* Re-enable hardware prefetchers */
--	wrmsr(MSR_MISC_FEATURE_CONTROL, 0x0, 0x0);
-+	wrmsr(MSR_MISC_FEATURE_CONTROL, saved_low, saved_high);
- 	local_irq_enable();
- out_hit:
- 	perf_event_release_kernel(hit_event);
++	if (ifobj->ns_fd != -1)
++		close(ifobj->ns_fd);
+ 	free(ifobj->umem);
+ 	free(ifobj->xsk_arr);
+ 	free(ifobj);
 -- 
 2.35.1
 
