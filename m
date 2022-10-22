@@ -2,151 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71CDE608DBB
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 16:46:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C81A608DC5
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 16:56:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229765AbiJVOqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 10:46:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49064 "EHLO
+        id S229711AbiJVO4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 10:56:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiJVOqp (ORCPT
+        with ESMTP id S229682AbiJVO4u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 10:46:45 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75323119BCA;
-        Sat, 22 Oct 2022 07:46:43 -0700 (PDT)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29MEhxKf016758;
-        Sat, 22 Oct 2022 14:46:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : content-transfer-encoding : mime-version; s=corp-2022-7-12;
- bh=k6x2SvuMR5/XEDwENpbBE7RATbQAl2l0jBCvVedgTcE=;
- b=wI/ttDZqzIjGHU2ht8rlUYD2DSfl4kJFz4ex88ribLE7JyeBpRvFMOqFpcTknaaEFI9B
- TENi6HpaSKY8joTCSGraUk5BnbqtTmuHhbkb5HvevOHbnvj5Tld5aNmnEH69qO1x97YA
- mIu6KEHK5/rDvFqGUVTgUd2GBlFDmIHeT5ckswn+zIeL0YuVprwLP5x/N7c0mlEM8kI6
- vXYgat8+Lqi7dhcSz5CbQl/82KMn++dttUL9b5HBiIRRnx9IR4h4+tsgd3vrPWdxxOOM
- XGHP3PCxDuxd6qlRSCqvsHUZsQtEduwwPYe0frCTNcwiiojPSR2t9esxDP+bKSzj0G/c Gg== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3kc8db8mvf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 22 Oct 2022 14:46:38 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 29M9rHY7032281;
-        Sat, 22 Oct 2022 14:46:37 GMT
-Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2172.outbound.protection.outlook.com [104.47.56.172])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3kc6y2s5jv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 22 Oct 2022 14:46:37 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iQAbht1nC3Ha1uJ7+IpQ4URH0t5DdnysPiicfl8Ri9ZIUwbB9ZMehd/91Pmhu7OzQ/tPc5UTIbmRiootijaHO6JYMtNcfg5dkY71xecTsL9+aGCAWFtL65e3xrFO3lgbZ3lIVlXYFiz29B7ATFxdfVrhHhKDeO/kF6I7uLvYIpdfywhOzbTRKKPWkFF/l8A0yAkxPrm81xS0rOCoUZfqu2bcTxbIAFjZt6NuBFWw4Asc2mFpUYk+HpsazEDa53G3DDwWGQsZliI8ukmhNXqAKUEQO/zxkWXdqzrG3mzQ3WsDaeTS4H24oNR4bfXBc0yceIVDObZnNlui15mdS0EQ1g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=k6x2SvuMR5/XEDwENpbBE7RATbQAl2l0jBCvVedgTcE=;
- b=g4dyBDXzswoIVgJ103aIdnwcA9lQ4DXg6Wmn2AUGHPZatudVQ00PTSJpTslCWTx/Dah6R4LuYMAfdUpcNRh57lroLwVGtqeTZVz6CY8aPf5i27j2NQJrZwDijnqtocJQfV8qH2G/pY45Ft2k4qmpb0goZAY/f8wrnViWpBBuFWLIoL+wKJ29yk6cCsxsm/nAEtk/5iutgzzmDgJkSsavdm5ca8jXL6PtoXRMYGiWWaT8b0VZROuzkfoOPnZk4V0txNOv+pK3z/Q8f2WcPmLte021QfnhndHddwLB4p3FLmL9/GeWHl5RBLyYKdssK+EbPp9mgGw/sGw/6sE6kGvIsw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Sat, 22 Oct 2022 10:56:50 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2DC818E1B
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 07:56:48 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id o4so840638wrq.6
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 07:56:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=k6x2SvuMR5/XEDwENpbBE7RATbQAl2l0jBCvVedgTcE=;
- b=pZQidrw9BhM93AdWA0tCtO6yC4wmT3j81a+YRRai9xU/yZeSDVuwIYnivvMmYEDyOECkNIi8saMDqa1MKcpey4R6oLcbEovv2KSwPzytp/6Alob20yloXNG7GszyYFPOu0ZXvQppb4oYfpO4dSk6EqhR2C0HaPLEC4ailLsvTno=
-Received: from DS7PR10MB5134.namprd10.prod.outlook.com (2603:10b6:5:3a1::23)
- by DM6PR10MB4122.namprd10.prod.outlook.com (2603:10b6:5:221::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.21; Sat, 22 Oct
- 2022 14:46:36 +0000
-Received: from DS7PR10MB5134.namprd10.prod.outlook.com
- ([fe80::f073:4d21:3876:ff33]) by DS7PR10MB5134.namprd10.prod.outlook.com
- ([fe80::f073:4d21:3876:ff33%7]) with mapi id 15.20.5746.021; Sat, 22 Oct 2022
- 14:46:35 +0000
-From:   Chuck Lever III <chuck.lever@oracle.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     LKML <linux-kernel@vger.kernel.org>,
-        linux-stable <stable@vger.kernel.org>,
-        Anna Schumaker <Anna.Schumaker@Netapp.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: Re: [PATCH 5.19 554/717] NFSD: Return nfserr_serverfault if splice_ok
- but buf->pages have data
-Thread-Topic: [PATCH 5.19 554/717] NFSD: Return nfserr_serverfault if
- splice_ok but buf->pages have data
-Thread-Index: AQHY5eyW2zD3eq+/T0GdaBrfEjzLgK4aflGA
-Date:   Sat, 22 Oct 2022 14:46:35 +0000
-Message-ID: <E22D29B2-5740-46E7-9A4A-52BAE214FDA1@oracle.com>
-References: <20221022072415.034382448@linuxfoundation.org>
- <20221022072522.883630640@linuxfoundation.org>
-In-Reply-To: <20221022072522.883630640@linuxfoundation.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3696.120.41.1.1)
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DS7PR10MB5134:EE_|DM6PR10MB4122:EE_
-x-ms-office365-filtering-correlation-id: 974f2abc-e083-45a1-6253-08dab43c3818
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 5nUuhkdm27pSzPjIZ5Jydk6w92CdipaKJnfd8A09+uzI0dz1Z0qKANxI+7x57Xb16cn/I3MvMFaoMwS5AXz4Gum2LyvIA3rAhkyiT9+ZrEBicAefoskiFo4RlHX8mblR6MDMiOc2tPy6iROA9+kM6Lu3emSTmaPInvDSNFMFYcp7LGK5j1aX4MKb8myHX/TtWM6SXEqIBsJLmKgNx5aCWVWWHKI4znfmzGIuD+5W7MeKK9DJsRfIdN4wxOJrE3a778EtbeENtY32F2d/5DprLxKqv8yf5i3/EP9JiSAVdFZNiBk/ANlCyRjcLZ/9XE3yo/XEwUY/R+L3og0wYHWzaqJEVJph41hkEm0SHbM92dE3j5RtUodFi+OQHOrrGvShvpgZW0heznvzJpNyi/G4CzDDRXr4NJsrBk4b92VCc0xWSIV0CPiL6D2FWqdpo+XsnkLhdYdepY+NsxnB+soOsXE57dmb42/SbfMxSyDdp0dHfZ8gbN8sr2QGSUO/2g2tEU8BegBza+8WH8KGbyon8Kzh0i9lRFjEhRTa+pqx/nB0LJYlGfMV6/ugJBnlL6Y4fgkamtqcs1fmheoaS9S8ApnqgUtOTr5BSkPpGNPHoWtzWjXwr4RV5DbZFh7Hy2qGtY2RpKygKQD/+2ptH2lciqG/zsnpX8SQdHVZB6R59AEBNEmJ5rPXgpFxUNT3qkQNB2+A/OR6MpyzWrRy4KzcyUgFolTOJPnkfq037+NgsVPAU5X9VdLBFJGc5cskkS51KviXdtsbgpIyDBi8YB8D8Mv4UAFjrJFfLAS2ko3NQnft/ipLd42X7hDjlN6472WaaVm/BqfdwMhwRSpEAhJJ8Q==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR10MB5134.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(396003)(376002)(136003)(39860400002)(366004)(451199015)(36756003)(122000001)(38070700005)(38100700002)(71200400001)(33656002)(86362001)(2906002)(478600001)(76116006)(966005)(316002)(41300700001)(6916009)(8676002)(4326008)(66556008)(66446008)(66946007)(66476007)(8936002)(5660300002)(54906003)(64756008)(6512007)(6506007)(83380400001)(6486002)(26005)(91956017)(53546011)(2616005)(186003)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?0MM19o7G97B4Aegw89zDzcVo2wReuD8c6B2SvaKlZ/kkfrvVfXVZqetROG+j?=
- =?us-ascii?Q?O2NT5RnLPWUosi4JKyPP9fG67pVAce8YnlF41uk0Am0yayGqXhBv+a1gh0bC?=
- =?us-ascii?Q?r8+U1noNC3hpvzTkrEoyLPAeRQ3t9i1NhozNcEMm89E8GXoHOafitrRxKhOY?=
- =?us-ascii?Q?nimS0lFB1NkzkP+YdBpXYoejkVOVXFydVyVzIZIMNOUHLj4SXvyLEaBDlj/U?=
- =?us-ascii?Q?BswAM1N8oZzx8GbUntrGGs4AQ7FdFG+LXtFuOUAiGECwydkoMlFTw1TeemFT?=
- =?us-ascii?Q?FyyYU6CwY0m0+HDI9Ci4Z7sySYT8++KH+nhysZFaHEeXOyL0aUtTkOpBQ/1E?=
- =?us-ascii?Q?dlfcitu97f2KVia8nvQukxeJhMDLJlRaGHIWMijnXYMv11Q6TaDhErGjriTc?=
- =?us-ascii?Q?7xaN3d3GeE7yvKoQKObKiEG4qiqzg8HzkF+lEjMgD06CcHRR/E6C4jPkYo8p?=
- =?us-ascii?Q?SZXe0X7SMvZ7RvSRcpejn+Xsjj9UbJG7uLPwRtmn+jmrrVUXlHTwVaqzqQ9v?=
- =?us-ascii?Q?u/Uzj4dEIg72atIgppFHwlbiy/h82Xioj0gNo0N3H3ZeyO//WivJocb0+KwK?=
- =?us-ascii?Q?xV7BIF7zavKlKrTCWiIryilrkvcu1iiFdBBlK7KVab2H4zxpbiav2xnJfyj2?=
- =?us-ascii?Q?NHreiN81B+01qF3Y+6g97Qm1TVIXLR1eLDXOTFpixhkoSnCHnygdkdqZsT7C?=
- =?us-ascii?Q?Ea2YL+aqd54zUf8+94sSC5JBhzak3zfxJRS+3iSXa9VL96121cXaJ60ZEQxi?=
- =?us-ascii?Q?XVL6U2sNff8grzqAOLf3mzAearTxW7EpVZEhYSUA9tPfWqbgSTCgKn1YaUHU?=
- =?us-ascii?Q?PSBoNFrBXEjm+t2nq31hw/9TTVpRte6J1MCbLfWYJvZOqtmt9TvRDmSZQ0ZY?=
- =?us-ascii?Q?GzteKvyoYmaTAMlqrI+HKJ9OXos9QexJRDTlOIOem0Zj2EyseT2RS948XKUp?=
- =?us-ascii?Q?Ei3uJhcnNtHvQ8zWtn+A9DVjy1t07q5yD4yQC/VbShDaaqAxPPCG1Isz7oK2?=
- =?us-ascii?Q?uCfw/PFyPaTMcF4hv2iJEK70OmP2bMYnlcBGt/mgmxuzZ88+cf0JfIzQ6+lp?=
- =?us-ascii?Q?MbCP7M+SMhpy11Sd90tDAdWyv5VLQYTI5kLbTrKvI3LgNUbCKI7ZAAV+7rd9?=
- =?us-ascii?Q?dzhDyXv2hYQN3HYk8hf4E1UgMwluTQGidgUQp0hL91/rPI3Q9oNJC7IjSW8c?=
- =?us-ascii?Q?AxqZC6c6Xs+Qwp+bdmQyoXjvrcS+2unkJeOYl6DLrWTsDvfG7biZUiysu8vb?=
- =?us-ascii?Q?Ijmf+yug5bd2Az0D1Ql+fXxlM706tosmUi1a72l9uqdM5j4Fcwr92gOk62pY?=
- =?us-ascii?Q?NihFd0SrCWGT6QwF1gmgLJj/Z7Iut3OpZjOHJzvMXL7D8nS7f/AbsJJU948g?=
- =?us-ascii?Q?LoxE538J0nP/W1UcvwfxDy/AVZ8VsJpqjPIuV2F6sSqAU56XQXmFlH2HPGKr?=
- =?us-ascii?Q?4PXJBZqJfudJKbThhhF6Z7Vdx3BDU8TgommO5Fc19S7l8xpUICRJfDWr/bDF?=
- =?us-ascii?Q?WX49BB6oSf2IqLiy7PRgb3MnMw3IEuyE379JBErYJCVv/I3T2fUrKKEA6E0l?=
- =?us-ascii?Q?ApesX93xeMPNShwYPKCdwFMHBAOkY85huX7+qVe8Y1dZnXrZUOYD0jdXGcfY?=
- =?us-ascii?Q?ig=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <C8BC39C3AF54C241B78B0EED8653C5A8@namprd10.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/tXvrHCsrelCqwHQuBkqjhcR6QAT/KqaZfHhYAbPR28=;
+        b=faAyIpeB74juxp0oI0CEdLXKe789kz5oYbZyPN3v+rV0UzHJlNcAqgGN/8CMehGZZP
+         J6jyDmLHjYuo5wpu+OckOop70PaC6RPM8c7438G2ugEC/Pb9c5SmVf5fdLoMVSKn4mCk
+         y3kPscaIRSPLHXExm6YZU5UBGeWcs/uJcg/mxYHcHteJWB15pl2TaUVZwYIAlv2MyP7l
+         muMB+Y/05JoS74PvnXz3sGAVOH4HexKsHpuGfeeNfF2FOTMKh2mBFb1JG+nmkCwtlLyV
+         kcywv4qB/3H/Zm7gWHvj4FDesJcjTfAY8oM3+vYMI2c/+O3wjOVSfpCgOxTzXFh9qMXw
+         fO+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/tXvrHCsrelCqwHQuBkqjhcR6QAT/KqaZfHhYAbPR28=;
+        b=A1e4EZ4ptiPjwuQaFnLprBeDg2i+XNml/GjumdTs/VBO9B0gPiseh+fgnaQW9O1KoK
+         XMgEOMOjCPMPGEDiN0CePri6pQMdudyh0gugqt0IsGGWpJWJLQGYjEBykeKrPo8z6uHu
+         d8SKr4JhXC9P9p4jcRUq1n036yc6lN/1pgiLTlkjwxEOjK8DyABuSX+BBiTZAI+9Ih8T
+         9bocfGcdqDg/H5FM5MVuDjNT0sZdiB/7B0XaL2pl6VH8cCbO+4WpIoo6IImtbwGJGrCT
+         SmjbdR19HCJYyAC7F4FAsEkRD7VDAmQKqrpixhUwbIaH5bQHLnOrCd2aTseICvSM+cnR
+         NVUQ==
+X-Gm-Message-State: ACrzQf0uN7XsikO7AMINEYNgxBWW/uoWQ9u4+bBRCWTSYDKzu6O8likI
+        fU+DJS/ROnDj2T+XMnYCm5M=
+X-Google-Smtp-Source: AMsMyM7lw3r7i526KBmAk73UWpUtks688vXES7ZIp+RG8FvUccbsyfTSCqVsFw4igjST24KzkKFqZw==
+X-Received: by 2002:a05:6000:713:b0:232:bd2e:8620 with SMTP id bs19-20020a056000071300b00232bd2e8620mr15894482wrb.139.1666450607491;
+        Sat, 22 Oct 2022 07:56:47 -0700 (PDT)
+Received: from localhost.localdomain ([117.102.55.205])
+        by smtp.gmail.com with ESMTPSA id s2-20020adfea82000000b002364835caacsm6213512wrm.112.2022.10.22.07.56.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 22 Oct 2022 07:56:47 -0700 (PDT)
+From:   Osama Muhammad <osmtendev@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org, Osama Muhammad <osmtendev@gmail.com>,
+        Samuel Thibault <samuel.thibault@ens-lyon.org>
+Subject: [PATCH v4] Accessiblity: speakup_soft: specifying the default driver parameters among the module params
+Date:   Sat, 22 Oct 2022 19:49:49 +0500
+Message-Id: <20221022144949.24473-1-osmtendev@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR10MB5134.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 974f2abc-e083-45a1-6253-08dab43c3818
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Oct 2022 14:46:35.8036
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: mdauUmFa0YQ2N01QycxLTTiSA9VlY3x2y/N4FfJXzy2VTytlRcQOx2Rj9P+4xrZr3MxgTWLmzUHyfTPLXyhy6w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB4122
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-21_04,2022-10-21_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxscore=0 phishscore=0
- mlxlogscore=999 adultscore=0 malwarescore=0 spamscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
- definitions=main-2210220092
-X-Proofpoint-ORIG-GUID: StBV1simoDOO9r1LJmOru0IfuLybKsHI
-X-Proofpoint-GUID: StBV1simoDOO9r1LJmOru0IfuLybKsHI
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -154,47 +69,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This is an enhancement which allows to specify the default driver
+parameters among the module parameters.
 
+Adding a default variables to the speakup_soft module
+allows to easily set that at boot, rather than
+setting the sys variables after boot.
+More details can be found here:
+https://github.com/linux-speakup/speakup/issues/7
 
-> On Oct 22, 2022, at 3:27 AM, Greg Kroah-Hartman <gregkh@linuxfoundation.o=
-rg> wrote:
->=20
-> From: Anna Schumaker <Anna.Schumaker@Netapp.com>
->=20
-> [ Upstream commit 06981d560606ac48d61e5f4fff6738b925c93173 ]
->=20
-> This was discussed with Chuck as part of this patch set. Returning
-> nfserr_resource was decided to not be the best error message here, and
-> he suggested changing to nfserr_serverfault instead.
->=20
-> Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
-> Link: https://lore.kernel.org/linux-nfs/20220907195259.926736-1-anna@kern=
-el.org/T/#t
-> Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
-> fs/nfsd/nfs4xdr.c | 2 +-
-> 1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/fs/nfsd/nfs4xdr.c b/fs/nfsd/nfs4xdr.c
-> index eef98e3f4ae5..1e5822d00043 100644
-> --- a/fs/nfsd/nfs4xdr.c
-> +++ b/fs/nfsd/nfs4xdr.c
-> @@ -3995,7 +3995,7 @@ nfsd4_encode_read(struct nfsd4_compoundres *resp, _=
-_be32 nfserr,
-> 	if (resp->xdr->buf->page_len &&
-> 	    test_bit(RQ_SPLICE_OK, &resp->rqstp->rq_flags)) {
-> 		WARN_ON_ONCE(1);
-> -		return nfserr_resource;
-> +		return nfserr_serverfault;
-> 	}
-> 	xdr_commit_encode(xdr);
+Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
 
-Why is this change to be included in stable kernels?
+Reviewed-by: Samuel Thibault <samuel.thibault@ens-lyon.org>
 
+---
+Changes since v3:
+	- Patch reviewed by maintainer.
+	
+Changes since v2:
+	- Removed an unnecessary comment.
 
---
-Chuck Lever
+Changes since v1:
+	- Added NB_ID as the last member of enum default_vars_id.
+	- Added NB_ID as the size of array vars.
+	- Made sure that that the enteries in vars are in correct order.
+	
+---
+ drivers/accessibility/speakup/speakup_soft.c | 59 ++++++++++++++------
+ 1 file changed, 43 insertions(+), 16 deletions(-)
 
-
+diff --git a/drivers/accessibility/speakup/speakup_soft.c b/drivers/accessibility/speakup/speakup_soft.c
+index 28c8f60370cf..6d446824677b 100644
+--- a/drivers/accessibility/speakup/speakup_soft.c
++++ b/drivers/accessibility/speakup/speakup_soft.c
+@@ -33,21 +33,30 @@ static struct miscdevice synth_device, synthu_device;
+ static int init_pos;
+ static int misc_registered;
+ 
+-static struct var_t vars[] = {
+-	/* DIRECT is put first so that module_param_named can access it easily */
+-	{ DIRECT, .u.n = {NULL, 0, 0, 1, 0, 0, NULL } },
+-
+-	{ CAPS_START, .u.s = {"\x01+3p" } },
+-	{ CAPS_STOP, .u.s = {"\x01-3p" } },
+-	{ PAUSE, .u.n = {"\x01P" } },
+-	{ RATE, .u.n = {"\x01%ds", 2, 0, 9, 0, 0, NULL } },
+-	{ PITCH, .u.n = {"\x01%dp", 5, 0, 9, 0, 0, NULL } },
+-	{ INFLECTION, .u.n = {"\x01%dr", 5, 0, 9, 0, 0, NULL } },
+-	{ VOL, .u.n = {"\x01%dv", 5, 0, 9, 0, 0, NULL } },
+-	{ TONE, .u.n = {"\x01%dx", 1, 0, 2, 0, 0, NULL } },
+-	{ PUNCT, .u.n = {"\x01%db", 0, 0, 3, 0, 0, NULL } },
+-	{ VOICE, .u.n = {"\x01%do", 0, 0, 7, 0, 0, NULL } },
+-	{ FREQUENCY, .u.n = {"\x01%df", 5, 0, 9, 0, 0, NULL } },
++
++enum default_vars_id {
++	DIRECT_ID = 0, CAPS_START_ID, CAPS_STOP_ID,
++	PAUSE_ID, RATE_ID, PITCH_ID, INFLECTION_ID,
++	VOL_ID, TONE_ID, PUNCT_ID, VOICE_ID,
++	FREQUENCY_ID, V_LAST_VAR_ID,
++	 NB_ID
++};
++
++
++static struct var_t vars[NB_ID] = {
++
++	[DIRECT_ID]  = { DIRECT, .u.n = {NULL, 0, 0, 1, 0, 0, NULL } },
++	[CAPS_START_ID] = { CAPS_START, .u.s = {"\x01+3p" } },
++	[CAPS_STOP_ID]  = { CAPS_STOP, .u.s = {"\x01-3p" } },
++	[PAUSE_ID]  = { PAUSE, .u.n = {"\x01P" } },
++	[RATE_ID]  = { RATE, .u.n = {"\x01%ds", 2, 0, 9, 0, 0, NULL } },
++	[PITCH_ID]  = { PITCH, .u.n = {"\x01%dp", 5, 0, 9, 0, 0, NULL } },
++	[INFLECTION_ID]  = { INFLECTION, .u.n = {"\x01%dr", 5, 0, 9, 0, 0, NULL } },
++	[VOL_ID]  = { VOL, .u.n = {"\x01%dv", 5, 0, 9, 0, 0, NULL } },
++	[TONE_ID]  = { TONE, .u.n = {"\x01%dx", 1, 0, 2, 0, 0, NULL } },
++	[PUNCT_ID]  = { PUNCT, .u.n = {"\x01%db", 0, 0, 3, 0, 0, NULL } },
++	[VOICE_ID]  = { VOICE, .u.n = {"\x01%do", 0, 0, 7, 0, 0, NULL } },
++	[FREQUENCY_ID]  = { FREQUENCY, .u.n = {"\x01%df", 5, 0, 9, 0, 0, NULL } },
+ 	V_LAST_VAR
+ };
+ 
+@@ -451,10 +460,28 @@ static int softsynth_adjust(struct spk_synth *synth, struct st_var_header *var)
+ }
+ 
+ module_param_named(start, synth_soft.startup, short, 0444);
+-module_param_named(direct, vars[0].u.n.default_val, int, 0444);
++module_param_named(direct, vars[DIRECT_ID].u.n.default_val, int, 0444);
++module_param_named(rate, vars[RATE_ID].u.n.default_val, int, 0444);
++module_param_named(pitch, vars[PITCH_ID].u.n.default_val, int, 0444);
++module_param_named(inflection, vars[INFLECTION_ID].u.n.default_val, int, 0444);
++module_param_named(vol, vars[VOL_ID].u.n.default_val, int, 0444);
++module_param_named(tone, vars[TONE_ID].u.n.default_val, int, 0444);
++module_param_named(punct, vars[PUNCT_ID].u.n.default_val, int, 0444);
++module_param_named(voice, vars[VOICE_ID].u.n.default_val, int, 0444);
++module_param_named(frequency, vars[FREQUENCY_ID].u.n.default_val, int, 0444);
++
++
+ 
+ MODULE_PARM_DESC(start, "Start the synthesizer once it is loaded.");
+ MODULE_PARM_DESC(direct, "Set the direct variable on load.");
++MODULE_PARM_DESC(rate, "Sets the rate of the synthesizer.");
++MODULE_PARM_DESC(pitch, "Sets the pitch of the synthesizer.");
++MODULE_PARM_DESC(inflection, "Sets the inflection of the synthesizer.");
++MODULE_PARM_DESC(vol, "Sets the volume of the speech synthesizer.");
++MODULE_PARM_DESC(tone, "Sets the tone of the speech synthesizer.");
++MODULE_PARM_DESC(punct, "Sets the amount of punctuation spoken by the synthesizer.");
++MODULE_PARM_DESC(voice, "Sets the voice used by the synthesizer.");
++MODULE_PARM_DESC(frequency, "Sets the frequency of speech synthesizer.");
+ 
+ module_spk_synth(synth_soft);
+ 
+-- 
+2.25.1
 
