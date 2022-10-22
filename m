@@ -2,119 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC1EE608B47
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 12:09:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 923F6608B40
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 12:07:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230220AbiJVKIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 06:08:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37386 "EHLO
+        id S229997AbiJVKGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 06:06:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbiJVKIg (ORCPT
+        with ESMTP id S229992AbiJVKGF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 06:08:36 -0400
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E28FC18709F;
-        Sat, 22 Oct 2022 02:25:25 -0700 (PDT)
-Received: by mail-qv1-xf2b.google.com with SMTP id i12so3451945qvs.2;
-        Sat, 22 Oct 2022 02:25:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YBywPh8NVLG25pa2iZVL+6YbAYv3SkSxdtxeXc3ICGE=;
-        b=HFNIAjQg2u9fd7rjHOSCi52sh4i3pX2zdX59+PNAbpK0DMrPNDxrTE8Wo75ksx5lSa
-         k2rv6UKx13HHU4cHZkn+cn3Db9hi3zsGf+jJmT+vG6ge5C1TKP3muOtKFO3JYC40+2Hs
-         EI9HOjjtfL16CQdm/NV7EDvQsyDTAdRxuR72gHU77qkbTYHxJjdH8LMyriD6is2ta27y
-         VTJi913rCj7nQYOhINGuLDdkwrCyLYPhD8JXy6LarHjnk8VslSL+rGVMzLYq2dDJU49r
-         /VwB6Pcp575ap5tCoi48Ot557tMEZr2TN+gOup4K+eqBbnLpm2DYKIsM+mu2JClpWLuQ
-         Fasg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YBywPh8NVLG25pa2iZVL+6YbAYv3SkSxdtxeXc3ICGE=;
-        b=btwBD6GSBsonovG8vXNDGrUDg0Z3iUDo56BBOo+cpxEI0sfXVRcu/INIVlgAPkhLr9
-         0/p6//fkPk0qubMK5vwHfa256/TzC7c+8Mn/HoMY+U7npAhlsaCZHu4XvKaT7gmNxa2o
-         ZIjEiMe1NT4wjJnOSDYy5N6J5mfEC7vbj2itLjMDc8fseitTaqorjWedsR0sNNzUszbL
-         AhhU4wbF3xAstbcrQNXvctb4+f+03+0MtMR+Pvy2F7H5lM14gEaActCbRTPrcO3L8Qho
-         nPIytLpOxKOwYbQWMOb6lSyKFouV+U+fvtntoDO6w3XaDPnX85i6eevvu+76gwzMqRxY
-         UK3w==
-X-Gm-Message-State: ACrzQf1d0r2aaeYZIJJdLjWcc9AxOkNj/nWOr9oOUniYlQpF4imJ3w+C
-        QQmofmyKLItNq0oRzaDiaSZpyNIzjpzE0A==
-X-Google-Smtp-Source: AMsMyM5EZucdKobn64AcIzJtSK6MvkG+0ZK7xLozqjrQE0Nbc7Nm4kVlJTwuFbz+4pirMviJw78zAg==
-X-Received: by 2002:a62:1a97:0:b0:562:5587:12d6 with SMTP id a145-20020a621a97000000b00562558712d6mr23062930pfa.37.1666428897072;
-        Sat, 22 Oct 2022 01:54:57 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-75.three.co.id. [180.214.232.75])
-        by smtp.gmail.com with ESMTPSA id o4-20020a634104000000b0046ae818b626sm503468pga.30.2022.10.22.01.54.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 22 Oct 2022 01:54:56 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id B3754101140; Sat, 22 Oct 2022 15:54:52 +0700 (WIB)
-Date:   Sat, 22 Oct 2022 15:54:52 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net
-Subject: Re: [PATCH 5.19 000/717] 5.19.17-rc1 review
-Message-ID: <Y1Ov3KuyKmb9Nizm@debian.me>
-References: <20221022072415.034382448@linuxfoundation.org>
+        Sat, 22 Oct 2022 06:06:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AE0432CC54;
+        Sat, 22 Oct 2022 02:22:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 96F4EB81AFB;
+        Sat, 22 Oct 2022 09:01:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31F7DC43140;
+        Sat, 22 Oct 2022 09:01:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666429275;
+        bh=NVy7cwX6C23sERHy1g/nnuGIjErNtZyXyTNgD2+Z8lo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=hkdoLSo4YoYvszhmKO8wDid/L8ZK2oEDeBpeBgfhSAzXitpKlqDL4xRbeqmPgY0Y/
+         EEqFUomF7UshpP5lc9rladRCEJo6VbL7GX2+yw2nrt0bPsLUSja8deN8fMgc5afKN0
+         tURbO0z+fjDe4sGWYpnRA2VysvFUcLZGL2E10h2stBS7U4t55ufhNnsamg9zSnHgN/
+         oEm2NPFC2pP32E1IdA0bPQaMxj36naCwbeW5HkSltSPxmAWFYWEc5pGANFFBS8r6V+
+         ZFD7kmV6HhMJ1EXLLhDxGblCYpHir/URlq5kP+bQ8K7xBbRsjeUIUuW0YfpoVb1cp2
+         tTl/o4uOYRZVA==
+Received: by mail-lj1-f173.google.com with SMTP id bs14so6660489ljb.9;
+        Sat, 22 Oct 2022 02:01:15 -0700 (PDT)
+X-Gm-Message-State: ACrzQf34J+gboSTV6z9lSVAmEW0T2/yhsD20vp/zgJGtbrcyYrJZ5Bps
+        YFLT3Sqlgcv+4tfMfgzP6rmfYoMDdz9O/LX+5iU=
+X-Google-Smtp-Source: AMsMyM5F3pcPecCVma1z4hA5Ubjj98E32W8YwWQjcBGZOhJmB8By+ME04iKb6STAkgLC/rbG8+zw0NOQeOUua+pqEwE=
+X-Received: by 2002:a2e:9a81:0:b0:26c:5b63:7a83 with SMTP id
+ p1-20020a2e9a81000000b0026c5b637a83mr8989214lji.291.1666429273074; Sat, 22
+ Oct 2022 02:01:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="da3BH2hT0/m4O+ML"
-Content-Disposition: inline
-In-Reply-To: <20221022072415.034382448@linuxfoundation.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20221018082214.569504-1-justin.he@arm.com> <20221018082214.569504-7-justin.he@arm.com>
+ <Y1OtRpLRwPPG/4Il@zn.tnic>
+In-Reply-To: <Y1OtRpLRwPPG/4Il@zn.tnic>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Sat, 22 Oct 2022 11:01:01 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXFu36faTPoGSGPs9KhcKsoh_DE9X2rmwdenxaJwa3P_yw@mail.gmail.com>
+Message-ID: <CAMj1kXFu36faTPoGSGPs9KhcKsoh_DE9X2rmwdenxaJwa3P_yw@mail.gmail.com>
+Subject: Re: [PATCH v10 6/7] apei/ghes: Use xchg_release() for updating new
+ cache slot instead of cmpxchg()
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Jia He <justin.he@arm.com>, Len Brown <lenb@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Robert Moore <robert.moore@intel.com>,
+        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        Jan Luebbe <jlu@pengutronix.de>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Kani Toshi <toshi.kani@hpe.com>,
+        James Morse <james.morse@arm.com>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        devel@acpica.org, "Rafael J . Wysocki" <rafael@kernel.org>,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>, linux-efi@vger.kernel.org,
+        nd@arm.com, Peter Zijlstra <peterz@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, 22 Oct 2022 at 10:44, Borislav Petkov <bp@alien8.de> wrote:
+>
+> On Tue, Oct 18, 2022 at 08:22:13AM +0000, Jia He wrote:
+> > From: Ard Biesheuvel <ardb@kernel.org>
+> >
+> > From: Ard Biesheuvel <ardb@kernel.org>
+> >
+> > ghes_estatus_cache_add() selects a slot, and either succeeds in
+> > replacing its contents with a pointer to a new cached item, or it just
+> > gives up and frees the new item again, without attempting to select
+> > another slot even if one might be available.
+> >
+> > Since only inserting new items is needed, the race can only cause a failure
+> > if the selected slot was updated with another new item concurrently,
+> > which means that it is arbitrary which of those two items gets
+> > dropped. This means the cmpxchg() and the special case are not necessary,
+>
+> Hmm, are you sure about this?
+>
+> Looking at this complex code, I *think* the intent of the cache is to
+> collect already reported errors - the ghes_estatus_cached() checks - and
+> the adding happens when you report a new one:
+>
+>         if (!ghes_estatus_cached(estatus)) {
+>                 if (ghes_print_estatus(NULL, ghes->generic, estatus))
+>                         ghes_estatus_cache_add(ghes->generic, estatus);
+>
+> Now, the loop in ghes_estatus_cache_add() is trying to pick out the,
+> well, oldest element in there. Meaning, something which got reported
+> already but a long while ago. There's even a sentence trying to say what
+> this does:
+>
+> /*
+>  * GHES error status reporting throttle, to report more kinds of
+>  * errors, instead of just most frequently occurred errors.
+>  */
+>
+> And the cmpxchg() is there to make sure when that selected element
+> slot_cache is removed, it really *is* that element that gets removed and
+> not one which replaced it in the meantime.
+>
+> So it is likely I'm missing something here but it sure looks like this
+> is some sort of a complex, lockless, LRU scheme...
+>
 
---da3BH2hT0/m4O+ML
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+You are correct.
 
-On Sat, Oct 22, 2022 at 09:17:59AM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.19.17 release.
-> There are 717 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->=20
-> Note, this will be the LAST 5.19.y kernel to be released.  Please move
-> to the 6.0.y kernel branch at this point in time, as after this is
-> released, this branch will be end-of-life.
->=20
+But the point is that the new element we are adding has the same
+properties as the one we want to avoid replacing inadvertently, and if
+the cmpxchg() failed, we just drop it on the floor.
 
-Hi Greg, thanks for the patch series, which is out three days after
-the -rc1 have been pused. As usual, the template message follows.
+So instead of dropping 'our' new element, we now drop 'the other' new element.
 
-Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
-powerpc (ps3_defconfig, GCC 12.1.0).
-
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---da3BH2hT0/m4O+ML
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY1Ov1AAKCRD2uYlJVVFO
-o/QcAQCXaZc/rI6NLvIrCTxPNzb22t+okIGUi1o+Z/b5tfeshQEA82hw2uxHuvUv
-PDjOLTGt3cMBXpN2V3J+ajJEB1A88w0=
-=oISM
------END PGP SIGNATURE-----
-
---da3BH2hT0/m4O+ML--
+The correct approach here would be to rerun the selection loop on
+failure, but I doubt whether it is worth it. This is just a fancy rate
+limiter.
