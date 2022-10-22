@@ -2,151 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 661FF608D5A
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 15:10:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E21F8608D5E
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 15:15:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229583AbiJVNKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 09:10:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38574 "EHLO
+        id S229634AbiJVNPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 09:15:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiJVNKs (ORCPT
+        with ESMTP id S229520AbiJVNPN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 09:10:48 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B20A4253ED4;
-        Sat, 22 Oct 2022 06:10:43 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id e18so15430062edj.3;
-        Sat, 22 Oct 2022 06:10:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:subject:cc:to:from:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=DWxqQb3pJCcHfHLbrY0SnKRqWah2jt07DVxlX1RC15Q=;
-        b=LU544rhD/8aW9X28J01TZtgJMQFfls6teFuuyKVhO7/g/eg8rKuG0gdUuqAO0N3LG6
-         K3HG/iAegJG13Y8EvqI5K5UNlwFFGBToRsJaqq+65UYxeLXMrFMWCg5VYyyrNIFFtMtV
-         e/M0ZBfUR5YO+tITz4qpnTzk2HJorrqSi0Q35gao59J5kPpej9AZHkTULjiWqoWp7LY0
-         AOQfcBA+DG18x/st63v8rhwsOE1e1sAZXe43qbV1QCB+jUqLIBj3nToyRYniQjrEOdNZ
-         9NhxEoPbXhfKgy/b7wlp8T2gFDDtHy0jNrJcUNmdNU8wHTPtKhnMdExGUynTNfid13LS
-         a71A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:subject:cc:to:from:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DWxqQb3pJCcHfHLbrY0SnKRqWah2jt07DVxlX1RC15Q=;
-        b=rEGv8GLhZrSkuCVEnCpayQlXpg0fkB2I1phzAi14VFU7fFkTpLvHjLe8aSA5let6hC
-         zZHJZske7V/eRfPo3aO77hPhvzsObOKM538HNFkLIXJ3gb6tYFG5oTi5dPTWSDL6X3J9
-         9HiIhPqp3vJtmbr89q5WjIDlphHNBTE/S1vWzy9iyJdm/6yn6rMvoKAJRJQlrMOkareF
-         XvP4cfReovldpQn+YQBQCwXbtx8OFaXnHNto6Ic5aGBNQSRJnLdvsetnval5qUzSUOSW
-         N15N1BbSIjixr/tue4xFXdVFNbG5JglTEVF5fHqrICHsRTfIHLlg77vAs50QfeC+ToJD
-         aBDQ==
-X-Gm-Message-State: ACrzQf2jiHZxfNuZqKKbJyPkImZWzKRYhJB/JM0zbMVurIu/qpNPFNko
-        b9S3br+DKATzAxU0vwX3Bug=
-X-Google-Smtp-Source: AMsMyM6dCpj3wjpMtwzjGOP46+DRGb2A5PRc4PNj927PdfRV6G+pDmrePX26iL7ahW5qL58/pJkgXw==
-X-Received: by 2002:a17:907:80b:b0:77a:86a1:db52 with SMTP id wv11-20020a170907080b00b0077a86a1db52mr20599778ejb.294.1666444242121;
-        Sat, 22 Oct 2022 06:10:42 -0700 (PDT)
-Received: from Ansuel-xps. (93-42-70-134.ip85.fastwebnet.it. [93.42.70.134])
-        by smtp.gmail.com with ESMTPSA id r9-20020a170906280900b0077b523d309asm12840797ejc.185.2022.10.22.06.10.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 22 Oct 2022 06:10:41 -0700 (PDT)
-Message-ID: <6353ebd1.170a0220.e607e.711a@mx.google.com>
-X-Google-Original-Message-ID: <Y1Pryo4btyRLfKGP@Ansuel-xps.>
-Date:   Sat, 22 Oct 2022 15:10:34 +0200
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/3] thermal: qcom: tsens: rework debugfs file
- structure
-References: <20221022125657.22530-1-ansuelsmth@gmail.com>
- <20221022125657.22530-4-ansuelsmth@gmail.com>
- <591f7038-81ed-1850-b525-d02a4e082903@linaro.org>
+        Sat, 22 Oct 2022 09:15:13 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 546CF4DB12;
+        Sat, 22 Oct 2022 06:15:05 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 71136188440A;
+        Sat, 22 Oct 2022 13:15:03 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 51EDC250007B;
+        Sat, 22 Oct 2022 13:15:03 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 2D6B09EC0013; Sat, 22 Oct 2022 13:15:03 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <591f7038-81ed-1850-b525-d02a4e082903@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Date:   Sat, 22 Oct 2022 15:15:03 +0200
+From:   netdev@kapio-technology.com
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Oleksandr Mazur <oleksandr.mazur@plvision.eu>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Florent Fourcot <florent.fourcot@wifirst.fr>,
+        Hans Schultz <schultz.hans@gmail.com>,
+        Joachim Wiberg <troglobit@gmail.com>,
+        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v8 net-next 10/12] net: dsa: mv88e6xxx: mac-auth/MAB
+ implementation
+In-Reply-To: <20221022120200.no5pl54bcfa3wcnd@skbuf>
+References: <20221020225719.l5iw6vndmm7gvjo3@skbuf>
+ <82d23b100b8d2c9e4647b8a134d5cbbf@kapio-technology.com>
+ <20221021112216.6bw6sjrieh2znlti@skbuf>
+ <7bfaae46b1913fe81654a4cd257d98b1@kapio-technology.com>
+ <20221021163005.xljk2j3fkikr6uge@skbuf>
+ <d1fb07de4b55d64f98425fe66156c4e4@kapio-technology.com>
+ <20221021173014.oit3qmpkrsjwzbgu@skbuf>
+ <b88e331e016ad3801f1bf1a0dec507f3@kapio-technology.com>
+ <20221021181411.sv52q4yxr5r7urab@skbuf>
+ <37dc7673fde2b8e166a5ed78431a2078@kapio-technology.com>
+ <20221022120200.no5pl54bcfa3wcnd@skbuf>
+User-Agent: Gigahost Webmail
+Message-ID: <871cd2930adbed99d351da0864aee340@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 22, 2022 at 03:08:46PM +0200, Daniel Lezcano wrote:
-> On 22/10/2022 14:56, Christian Marangi wrote:
-> > The current tsens debugfs structure is composed by:
-> > - a tsens dir in debugfs with a version file
-> > - a directory for each tsens istance with sensors file to dump all the
-> >    sensors value.
+On 2022-10-22 14:02, Vladimir Oltean wrote:
+> On Sat, Oct 22, 2022 at 09:24:56AM +0200, netdev@kapio-technology.com 
+> wrote:
+>> I will not say that you are not making sense as for the mv88e6xxx, as 
+>> it
+>> needs port association in all cases with BR_PORT_LOCKED, MAB or not, 
+>> and
+>> port association is turned on in the driver with learning turned on.
+>> 
+>> That said, there must be some resolution and agreement overall with 
+>> this
+>> issue to move on. Right now port association is turned on in the 
+>> mv88e6xxx
+>> driver when locking the port, thus setting learning off after locking 
+>> will
+>> break things.
 > 
-> s/istance/instance/
+> This already needs to be treated as a bug and fixed on its own. Forget
+> about MAB.
 > 
-> The patch looks good to me, no need to resend, I'll fix the typos
->
+> You're saying that when BR_LEARNING=on and BR_PORT_LOCKED=on, the
+> mv88e6xxx driver works properly, but the software bridge is broken
+> (learns from link-local multicast).
+> 
+> When BR_LEARNING=off and BR_PORT_LOCKED=on, the software bridge is not
+> broken, but the mv88e6xxx driver is, because it requires the PAV
+> configured properly.
+> 
+> And you're saying that I'm the one who suggests things should work
+> differently in software mode vs offloaded mode?!
 
-Thanks for picking this, np for fixing typos.
+Well :-) To be specific, I am talking about how things work from a user
+perspective, where I have kept to BR_LEARNING off before turning
+BR_PORT_LOCKED on.
 
-> > This works on the assumption that we have the same version for each
-> > istance but this assumption seems fragile and with more than one tsens
-> > istance results in the version file not tracking each of them.
-> > 
-> > A better approach is to just create a subdirectory for each tsens
-> > istance and put there version and sensors debugfs file.
-> > 
-> > Using this new implementation results in less code since debugfs entry
-> > are created only on successful tsens probe.
-> > 
-> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> > ---
-> >   drivers/thermal/qcom/tsens.c | 13 +++----------
-> >   1 file changed, 3 insertions(+), 10 deletions(-)
-> > 
-> > diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-> > index 467585c45d34..fc12d7c07de4 100644
-> > --- a/drivers/thermal/qcom/tsens.c
-> > +++ b/drivers/thermal/qcom/tsens.c
-> > @@ -704,21 +704,14 @@ DEFINE_SHOW_ATTRIBUTE(dbg_sensors);
-> >   static void tsens_debug_init(struct platform_device *pdev)
-> >   {
-> >   	struct tsens_priv *priv = platform_get_drvdata(pdev);
-> > -	struct dentry *root, *file;
-> > -	root = debugfs_lookup("tsens", NULL);
-> > -	if (!root)
-> > +	priv->debug_root = debugfs_lookup("tsens", NULL);
-> > +	if (!priv->debug_root)
-> >   		priv->debug_root = debugfs_create_dir("tsens", NULL);
-> > -	else
-> > -		priv->debug_root = root;
-> > -
-> > -	file = debugfs_lookup("version", priv->debug_root);
-> > -	if (!file)
-> > -		debugfs_create_file("version", 0444, priv->debug_root,
-> > -				    pdev, &dbg_version_fops);
-> >   	/* A directory for each instance of the TSENS IP */
-> >   	priv->debug = debugfs_create_dir(dev_name(&pdev->dev), priv->debug_root);
-> > +	debugfs_create_file("version", 0444, priv->debug, pdev, &dbg_version_fops);
-> >   	debugfs_create_file("sensors", 0444, priv->debug, pdev, &dbg_sensors_fops);
-> >   }
-> >   #else
-> 
-> 
-> -- 
-> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-> 
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
+I admit to a weakness in that BR_LEARNING off after BR_PORT_LOCKED on is
+a problem that from my perspective at this point would be a user error.
 
--- 
-	Ansuel
+> 
+> Why don't you
+> (a) deny BR_LEARNING + BR_PORT_LOCKED in the bridge layer
+> (b) fix the mv88e6xxx driver to always keep the assoc_vector set
+>     properly for the port, if BR_LEARNING *or* BR_PORT_LOCKED is set?
+
+(a) yes, I have thought that documentation could handle this, but maybe
+     you are right, maybe it should be enforced...
+(b) BR_PORT_LOCKED ensures now that the PAV is correctly set, so I have
+     basically distinguished between learning and port association (which
+     I know mechanically is the same in mv88e6xxx), but still I have
+     adhered to learning off while port association is on for the port.
