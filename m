@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5ADD608E99
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 18:40:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92EF9608E9B
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 18:41:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbiJVQkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 12:40:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59288 "EHLO
+        id S229828AbiJVQlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 12:41:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbiJVQkH (ORCPT
+        with ESMTP id S229629AbiJVQk7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 12:40:07 -0400
-Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C941046217
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 09:40:02 -0700 (PDT)
-Received: by mail-oo1-xc2a.google.com with SMTP id s125-20020a4a5183000000b0047fbaf2fcbcso857926ooa.11
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 09:40:02 -0700 (PDT)
+        Sat, 22 Oct 2022 12:40:59 -0400
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14FB012A360
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 09:40:55 -0700 (PDT)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-13b23e29e36so6518931fac.8
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 09:40:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=545rw8ScXkRjDM5w17g+rHUKHirulTTV6OR0mlcZkMs=;
-        b=p+u1HMt1MNKQryUWQThPkAqfoWTsH6KmsVL86mKRXhiNbd4KYLYPNB0hITHRvsRwHd
-         IzyR+zs/k4J1jE3/73NH7BNwkqjMeqBkbUwUWNeX3r0x9AhIYFWRT18rQ8egR+JYtQlm
-         CYZtZNpi2/fY0NRcNBaXILQT++KyzeZOC1hSAZJbEOILAN05eCqvX8VPU7VJwqow+RNF
-         n6C7bRH8NrUgu18S0Co7xxLWzfbLaDKYbfIZlIxs/fxHa+SBYh2Alj0L3CE0TjZ5IQ1a
-         c+7CuO8asdutbJ/33v8k6WhBNNYbe2ZEF42iqdFl7tUVH2f/Nv8NhWT0RSgBsMAdjX2c
-         Fa3A==
+        bh=QimVpA/xM2p/9j3XXOHUnzRFMhzXweEIX7clrlOcGUQ=;
+        b=o+6YQHDqxfQ77fvo5cXuuxEeb5dlFfOxXjR6kMONmcT19bbfftY0EdoCunrFd3IiL5
+         S++EQZf212jX8dkzq4URwqiy7j676j3qJXZIqqUTaxCT55a+c0JRLA7Awz2A3YKqLJJa
+         G1rCq0Ixlvg4uCi/zDh0yGuFw5YivJRA+EwOIENc1Er8SQbJJIRqYEZPFNb6gW68TPl2
+         IlIVHNg3eg/l4A1SixjNDgDWxRAOZv3PKTuzkvBWtZ1UF+cYSUivpiPtrix4Lr3qsIlY
+         pMMe0sQukUMff4mJBuv3M9forRPewkx3LARIRXhHWZqqyvYLOJHBkKnbdpT1m0dsQG7R
+         2u9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=545rw8ScXkRjDM5w17g+rHUKHirulTTV6OR0mlcZkMs=;
-        b=QPGLQhCsw001Y8l9beif+hM346mXrwAlyy7n284/bVZoji7SJwg9W3pFL2y+XBiYuF
-         IY7oDqQ+C6A/w/QGbOWCwpYq/G8//dxPi1hZWTYFb0XEX7m6kr9tD9NyCHW3mMQ5d0S3
-         4ozDkW3alAggeck+QO2NU828DgxdTHVwBVN4nZNymX+iEGyezxoSVsF6WaXB+EC4h7Lj
-         lSmCGwlej4b8k62HA5WoDyBUg/AxfZaGIIqOtKqmv0528TxD/0vo7xjsaSXANOIPWYio
-         /d7jQb9n43jn2p4qpQm5FzJtEJJwNDrPhFZ/ITnq8KjALTBoz3L5Sbfc2P+I9RnnqT2a
-         15OQ==
-X-Gm-Message-State: ACrzQf1jIDITGuKCP7x3Ke5/SQUIfy7B/Q9l4H4T/xpYlmx0CuIPM1No
-        eMyALjn6Dp532ble0RHZseWfeQ==
-X-Google-Smtp-Source: AMsMyM6eeoBGEQ7JBoltsek43vEM0SoXcCAlJEyNNtk9IE/VktMJh0yypxZafDKXkKPpq5EWdnbosQ==
-X-Received: by 2002:a05:6820:1608:b0:480:fa39:568b with SMTP id bb8-20020a056820160800b00480fa39568bmr5753643oob.43.1666456802183;
-        Sat, 22 Oct 2022 09:40:02 -0700 (PDT)
+        bh=QimVpA/xM2p/9j3XXOHUnzRFMhzXweEIX7clrlOcGUQ=;
+        b=ZeXVA9YG+WXDK2JyJZSEZeE6H2tiI02/HMUAt8EqbPZnOYSLPh2BZhAW0O6Rhld8Iu
+         XfO6a9eCAOopfLfcKWggHXXsXEe0foPEYXfMajpB/rpIaHJm43D2NBZOqt/MGNZ5AfYG
+         gxu6jx+qwJIwcKfWbA8uDns8RSK+17Gc//BhHSxCW+2hxONN+LkNwiREDSUZGZ+oQ9hJ
+         QxPhrrAPSY14VC6hBDFpfj+vVyMFhEpO4is0UNEQoO+mzXYr3Abw1Hv01EyrJ7mU+v9I
+         cQ3KoMuRFjcnovTphmsPLHjZSXxlXcob0j89Y1xQ/VCkWN4gWPcdzid8TnDCsRNgzp72
+         KIoA==
+X-Gm-Message-State: ACrzQf1rRgpgxSFW2p2SR7svafkN5UiEsi/BANhbX1C/7ne5SfGWaxkk
+        bJ3mg3swWoP7Ald0KxhAzCqZNVaCfLAjCQ==
+X-Google-Smtp-Source: AMsMyM7uIMiMDP9LIvFuHmFBJXp+2jG1Qk2DYO4TCJxIdkO8uJ5uHD/aqmm/eNbNn/XxFS6AjiXvrA==
+X-Received: by 2002:a05:6870:d29f:b0:132:bd27:825d with SMTP id d31-20020a056870d29f00b00132bd27825dmr16079326oae.99.1666456854450;
+        Sat, 22 Oct 2022 09:40:54 -0700 (PDT)
 Received: from [10.203.8.70] ([205.153.95.177])
-        by smtp.gmail.com with ESMTPSA id d6-20020aca3606000000b0034d14c6ce3dsm2306957oia.16.2022.10.22.09.39.58
+        by smtp.gmail.com with ESMTPSA id h24-20020a4abb98000000b00480816a5b8csm9723350oop.18.2022.10.22.09.40.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 22 Oct 2022 09:40:00 -0700 (PDT)
-Message-ID: <ae460461-5c20-9180-456c-8c01a4b1a7f1@linaro.org>
-Date:   Sat, 22 Oct 2022 12:39:56 -0400
+        Sat, 22 Oct 2022 09:40:53 -0700 (PDT)
+Message-ID: <168e88f0-4e9c-36c6-6862-207a10239533@linaro.org>
+Date:   Sat, 22 Oct 2022 12:40:48 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.0
@@ -105,12 +105,8 @@ On 21/10/2022 15:09, Nícolas F. R. A. Prado wrote:
 > +  AVDD-supply: true
 > +
 > +  MICVDD-supply: true
-> +
 
-How about keeping some order in the list of properties?
-
-
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Ach, unacked. Please use lowercase names.
 
 Best regards,
 Krzysztof
