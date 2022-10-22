@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CF8E6087E2
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 10:07:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 761A36087A0
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 10:05:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230406AbiJVIHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 04:07:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39560 "EHLO
+        id S232940AbiJVIEa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 04:04:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232330AbiJVIBB (ORCPT
+        with ESMTP id S232439AbiJVH7A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 04:01:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6ACC290681;
-        Sat, 22 Oct 2022 00:50:48 -0700 (PDT)
+        Sat, 22 Oct 2022 03:59:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CC8A173FE8;
+        Sat, 22 Oct 2022 00:49:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 10F22B82E28;
-        Sat, 22 Oct 2022 07:50:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D313C433D6;
-        Sat, 22 Oct 2022 07:50:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 314D460AC7;
+        Sat, 22 Oct 2022 07:49:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4879BC433C1;
+        Sat, 22 Oct 2022 07:49:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666425020;
-        bh=iHwbAIKGTFm2iePSccsgJpuXwAdrLKOvAqCJRJ1QZhE=;
+        s=korg; t=1666424941;
+        bh=xvO8OBdejBy1K8qqYfbWb8o0/2MXHQoNgGR1UEb5JqQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gWfHPER+swwzta6BPhIQ8QD4RYTKmGeYQl/Mpe9dUHk1lRENvtH/3rBwj/dsp504E
-         8NKQcQy9gXegJj0BYXrMSu2UhGpUEz31M5yZAg4eolf0wI2tC/QxoD7J+QH/vJiaGJ
-         0WzirN9IHjHCbRrZn9Uh7xzx3kEeMMkUFaj4BhpI=
+        b=EQYwhsGGjLj3UMBFgDAZZHSx24aCMm9iORVKTQ+RVS/6AjwhQW8Fr054abjsegjFQ
+         a2w7Z/F8R6EV/f6gpUT4jsLr87XnCf6al/umTxty/gXreuCWAusCzkDMdbUg63s3ms
+         TAHejG+6Juv+BaDjLQKyNezZufrQuTWWJry+7s90=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Clark <robdclark@chromium.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 332/717] drm/msm/dp: correct 1.62G link rate at dp_catalog_ctrl_config_msa()
-Date:   Sat, 22 Oct 2022 09:23:31 +0200
-Message-Id: <20221022072509.689881431@linuxfoundation.org>
+        stable@vger.kernel.org, Rafael Mendonca <rafaelmendsr@gmail.com>,
+        Martin Krastev <krastevm@vmware.com>,
+        Zack Rusin <zackr@vmware.com>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 334/717] drm/vmwgfx: Fix memory leak in vmw_mksstat_add_ioctl()
+Date:   Sat, 22 Oct 2022 09:23:33 +0200
+Message-Id: <20221022072509.880642724@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221022072415.034382448@linuxfoundation.org>
 References: <20221022072415.034382448@linuxfoundation.org>
@@ -57,48 +54,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuogee Hsieh <quic_khsieh@quicinc.com>
+From: Rafael Mendonca <rafaelmendsr@gmail.com>
 
-[ Upstream commit aa0bff10af1c4b92e6b56e3e1b7f81c660d3ba78 ]
+[ Upstream commit a40c7f61d12fbd1e785e59140b9efd57127c0c33 ]
 
-At current implementation there is an extra 0 at 1.62G link rate which
-cause no correct pixel_div selected for 1.62G link rate to calculate
-mvid and nvid. This patch delete the extra 0 to have mvid and nvid be
-calculated correctly.
+If the copy of the description string from userspace fails, then the page
+for the instance descriptor doesn't get freed before returning -EFAULT,
+which leads to a memleak.
 
-Changes in v2:
--- fix Fixes tag's text
-
-Changes in v3:
--- fix misspelling of "Reviewed-by"
-
-Fixes: 937f941ca06f  ("drm/msm/dp: Use qmp phy for DP PLL and PHY")
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
-Patchwork: https://patchwork.freedesktop.org/patch/499328/
-Link: https://lore.kernel.org/r/1661372150-3764-1-git-send-email-quic_khsieh@quicinc.com
-[DB: rewrapped commit message]
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Signed-off-by: Rob Clark <robdclark@chromium.org>
+Fixes: 7a7a933edd6c ("drm/vmwgfx: Introduce VMware mks-guest-stats")
+Signed-off-by: Rafael Mendonca <rafaelmendsr@gmail.com>
+Reviewed-by: Martin Krastev <krastevm@vmware.com>
+Signed-off-by: Zack Rusin <zackr@vmware.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220916204751.720716-1-rafaelmendsr@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/msm/dp/dp_catalog.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/vmwgfx/vmwgfx_msg.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/gpu/drm/msm/dp/dp_catalog.c b/drivers/gpu/drm/msm/dp/dp_catalog.c
-index 7257515871a9..676279d0ca8d 100644
---- a/drivers/gpu/drm/msm/dp/dp_catalog.c
-+++ b/drivers/gpu/drm/msm/dp/dp_catalog.c
-@@ -431,7 +431,7 @@ void dp_catalog_ctrl_config_msa(struct dp_catalog *dp_catalog,
+diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_msg.c b/drivers/gpu/drm/vmwgfx/vmwgfx_msg.c
+index 2aceac7856e2..089046fa21be 100644
+--- a/drivers/gpu/drm/vmwgfx/vmwgfx_msg.c
++++ b/drivers/gpu/drm/vmwgfx/vmwgfx_msg.c
+@@ -1076,6 +1076,7 @@ int vmw_mksstat_add_ioctl(struct drm_device *dev, void *data,
  
- 	if (rate == link_rate_hbr3)
- 		pixel_div = 6;
--	else if (rate == 1620000 || rate == 270000)
-+	else if (rate == 162000 || rate == 270000)
- 		pixel_div = 2;
- 	else if (rate == link_rate_hbr2)
- 		pixel_div = 4;
+ 	if (desc_len < 0) {
+ 		atomic_set(&dev_priv->mksstat_user_pids[slot], 0);
++		__free_page(page);
+ 		return -EFAULT;
+ 	}
+ 
 -- 
 2.35.1
 
