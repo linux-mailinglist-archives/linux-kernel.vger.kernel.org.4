@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53772608772
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 10:01:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58A03608771
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 10:01:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232446AbiJVIBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 04:01:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42470 "EHLO
+        id S232435AbiJVIBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 04:01:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232199AbiJVHyX (ORCPT
+        with ESMTP id S232193AbiJVHyV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 03:54:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF91951CA;
+        Sat, 22 Oct 2022 03:54:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BBC7951C8;
         Sat, 22 Oct 2022 00:47:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A08660AFA;
-        Sat, 22 Oct 2022 07:47:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64BD9C433C1;
-        Sat, 22 Oct 2022 07:47:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4595F60AC3;
+        Sat, 22 Oct 2022 07:47:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26FE4C433C1;
+        Sat, 22 Oct 2022 07:47:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666424832;
-        bh=z8354MLPzt46BjyGsVWJYbQLbpGutp1mNQkt1bEaeCo=;
+        s=korg; t=1666424838;
+        bh=GCQFGmmWCILSM7TeGWDzdxKnjq1UN8sj7bNfO38tuKg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LvCwJcpQSfuWcMgpTVuRMYlq/K9SyMkvgnT0jzIsYRnYME8/F4dN72mvx1bMo9UdQ
-         Zw2cTho2qSD071QIf8/ThbnPm8LyeHyEhHPpy2SZgyjZ48sPz/Sya4Xi3WybjljYVK
-         BldVMnrJIHBvQkTwjO0IlwD7WM4NZfCPvPO4Rf8M=
+        b=JWnO3ImtqsEfxpmCYdqcOcelSKZpB5cc+yWq8uKUVnZXTfjny4j74CCYiZuaWeGLQ
+         DovkKbCaiS+yzqhgwoFpK8FYYvYMrGs3l+za0IdWuoULqR3f0EO4xDK56amvyPavyy
+         KJOu1wkSs2eWRcVLG3TCKuF9v4TLmADK+HC7+hU4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christian Ansuel Marangi <ansuelsmth@gmail.com>,
-        Kalle Valo <quic_kvalo@quicinc.com>,
+        stable@vger.kernel.org, Zhang Qilong <zhangqilong3@huawei.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 263/717] wifi: ath11k: fix peer addition/deletion error on sta band migration
-Date:   Sat, 22 Oct 2022 09:22:22 +0200
-Message-Id: <20221022072501.174437947@linuxfoundation.org>
+Subject: [PATCH 5.19 265/717] spi: cadence-quadspi: Fix PM disable depth imbalance in cqspi_probe
+Date:   Sat, 22 Oct 2022 09:22:24 +0200
+Message-Id: <20221022072501.398405631@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221022072415.034382448@linuxfoundation.org>
 References: <20221022072415.034382448@linuxfoundation.org>
@@ -55,117 +54,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>
+From: Zhang Qilong <zhangqilong3@huawei.com>
 
-[ Upstream commit d673cb6fe6c03b2be157cc6c5db40481828d282d ]
+[ Upstream commit 4d0ef0a1c35189a6e8377d8ee8310ea5ef22c5f3 ]
 
-This patch try to fix the following error.
+The pm_runtime_enable will increase power disable depth. Thus
+a pairing decrement is needed on the error handling path to
+keep it balanced according to context.
 
-Wed Jun  1 22:19:30 2022 kern.warn kernel: [  119.561227] ath11k c000000.wifi: peer already added vdev id 0 req, vdev id 1 present
-Wed Jun  1 22:19:30 2022 kern.warn kernel: [  119.561282] ath11k c000000.wifi: Failed to add peer: 28:c2:1f:xx:xx:xx for VDEV: 0
-Wed Jun  1 22:19:30 2022 kern.warn kernel: [  119.568053] ath11k c000000.wifi: Failed to add station: 28:c2:1f:xx:xx:xx for VDEV: 0
-Wed Jun  1 22:19:31 2022 daemon.notice hostapd: wlan2: STA 28:c2:1f:xx:xx:xx IEEE 802.11: Could not add STA to kernel driver
-Wed Jun  1 22:19:31 2022 daemon.notice hostapd: wlan2: STA 28:c2:1f:xx:xx:xx IEEE 802.11: did not acknowledge authentication response
-Wed Jun  1 22:19:31 2022 daemon.notice hostapd: wlan1: AP-STA-DISCONNECTED 28:c2:1f:xx:xx:xx
-Wed Jun  1 22:19:31 2022 daemon.info hostapd: wlan1: STA 28:c2:1f:xx:xx:xx IEEE 802.11: disassociated due to inactivity
-Wed Jun  1 22:19:32 2022 daemon.info hostapd: wlan1: STA 28:c2:1f:xx:xx:xx IEEE 802.11: deauthenticated due to inactivity (timer DEAUTH/REMOVE)
+Fixes:73d5fe0462702 ("spi: cadence-quadspi: Remove spi_master_put() in probe failure path")
 
-To repro this:
-- Have 2 Wifi with the same bssid and pass on different band (2.4 and
-5GHz)
-- Enable 802.11r Fast Transaction with same mobility domain
-- FT Protocol: FT over the Air
->From a openwrt system issue the command (with the correct mac)
-ubus call hostapd.wlan1 wnm_disassoc_imminent '{"addr":"28:C2:1F:xx:xx:xx"}'
-Notice the log printing the errors.
-
-The cause of this error has been investigated and we found that this is
-related to the WiFi Fast Transaction feature. We observed that this is
-triggered when the router tells the device to change band. In this case
-the device first auth to the other band and then the disconnect path
-from the prev band is triggered.
-This is problematic with the current rhash implementation since the
-addrs is used as key and the logic of "adding first, delete later"
-conflicts with the rhash logic.
-In fact peer addition will fail since the peer is already added and with
-that fixed a peer deletion will cause unitended effect by removing the
-peer just added.
-
-Current solution to this is to add additional logic to the peer delete,
-make sure we are deleting the correct peer taken from the rhash
-table (and fallback to the peer list) and for the peer add logic delete
-the peer entry for the rhash list before adding the new one (counting as
-an error only when a peer with the same vlan_id is asked to be added).
-
-With this change, a sta can correctly transition from 2.4GHz and 5GHZ
-with no drop and no error are printed.
-
-Tested-on: IPQ8074 hw2.0 AHB WLAN.HK.2.5.0.1-01208-QCAHKSWPL_SILICONZ-1
-
-Fixes: 7b0c70d92a43 ("ath11k: Add peer rhash table support")
-Signed-off-by: Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>
-Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-Link: https://lore.kernel.org/r/20220603164559.27769-1-ansuelsmth@gmail.com
+Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
+Link: https://lore.kernel.org/r/20220924121310.78331-2-zhangqilong3@huawei.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ath/ath11k/peer.c | 30 ++++++++++++++++++++++----
- 1 file changed, 26 insertions(+), 4 deletions(-)
+ drivers/spi/spi-cadence-quadspi.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/wireless/ath/ath11k/peer.c b/drivers/net/wireless/ath/ath11k/peer.c
-index 9e22aaf34b88..1ae7af02c364 100644
---- a/drivers/net/wireless/ath/ath11k/peer.c
-+++ b/drivers/net/wireless/ath/ath11k/peer.c
-@@ -302,6 +302,21 @@ static int __ath11k_peer_delete(struct ath11k *ar, u32 vdev_id, const u8 *addr)
- 	spin_lock_bh(&ab->base_lock);
+diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
+index 72b1a5a2298c..106c09ffa425 100644
+--- a/drivers/spi/spi-cadence-quadspi.c
++++ b/drivers/spi/spi-cadence-quadspi.c
+@@ -1619,7 +1619,7 @@ static int cqspi_probe(struct platform_device *pdev)
+ 	pm_runtime_enable(dev);
+ 	ret = pm_runtime_resume_and_get(dev);
+ 	if (ret < 0)
+-		return ret;
++		goto probe_pm_failed;
  
- 	peer = ath11k_peer_find_by_addr(ab, addr);
-+	/* Check if the found peer is what we want to remove.
-+	 * While the sta is transitioning to another band we may
-+	 * have 2 peer with the same addr assigned to different
-+	 * vdev_id. Make sure we are deleting the correct peer.
-+	 */
-+	if (peer && peer->vdev_id == vdev_id)
-+		ath11k_peer_rhash_delete(ab, peer);
-+
-+	/* Fallback to peer list search if the correct peer can't be found.
-+	 * Skip the deletion of the peer from the rhash since it has already
-+	 * been deleted in peer add.
-+	 */
-+	if (!peer)
-+		peer = ath11k_peer_find(ab, vdev_id, addr);
-+
- 	if (!peer) {
- 		spin_unlock_bh(&ab->base_lock);
- 		mutex_unlock(&ab->tbl_mtx_lock);
-@@ -312,8 +327,6 @@ static int __ath11k_peer_delete(struct ath11k *ar, u32 vdev_id, const u8 *addr)
- 		return -EINVAL;
- 	}
- 
--	ath11k_peer_rhash_delete(ab, peer);
--
- 	spin_unlock_bh(&ab->base_lock);
- 	mutex_unlock(&ab->tbl_mtx_lock);
- 
-@@ -372,8 +385,17 @@ int ath11k_peer_create(struct ath11k *ar, struct ath11k_vif *arvif,
- 	spin_lock_bh(&ar->ab->base_lock);
- 	peer = ath11k_peer_find_by_addr(ar->ab, param->peer_addr);
- 	if (peer) {
--		spin_unlock_bh(&ar->ab->base_lock);
--		return -EINVAL;
-+		if (peer->vdev_id == param->vdev_id) {
-+			spin_unlock_bh(&ar->ab->base_lock);
-+			return -EINVAL;
-+		}
-+
-+		/* Assume sta is transitioning to another band.
-+		 * Remove here the peer from rhash.
-+		 */
-+		mutex_lock(&ar->ab->tbl_mtx_lock);
-+		ath11k_peer_rhash_delete(ar->ab, peer);
-+		mutex_unlock(&ar->ab->tbl_mtx_lock);
- 	}
- 	spin_unlock_bh(&ar->ab->base_lock);
- 
+ 	ret = clk_prepare_enable(cqspi->clk);
+ 	if (ret) {
+@@ -1712,6 +1712,7 @@ static int cqspi_probe(struct platform_device *pdev)
+ 	clk_disable_unprepare(cqspi->clk);
+ probe_clk_failed:
+ 	pm_runtime_put_sync(dev);
++probe_pm_failed:
+ 	pm_runtime_disable(dev);
+ 	return ret;
+ }
 -- 
 2.35.1
 
