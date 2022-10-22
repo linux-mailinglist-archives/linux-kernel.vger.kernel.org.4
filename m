@@ -2,184 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9933F608E18
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 17:34:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1419C608E22
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 17:43:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbiJVPep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 11:34:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51904 "EHLO
+        id S229536AbiJVPnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 11:43:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbiJVPed (ORCPT
+        with ESMTP id S229494AbiJVPnO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 11:34:33 -0400
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A176E3896
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 08:34:29 -0700 (PDT)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-1324e7a1284so7095742fac.10
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 08:34:29 -0700 (PDT)
+        Sat, 22 Oct 2022 11:43:14 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7EE922C45F;
+        Sat, 22 Oct 2022 08:43:13 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id e20-20020a05600c449400b003cce0107a6fso224333wmo.0;
+        Sat, 22 Oct 2022 08:43:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3o9axZvDdNOgS/Y6RutGIDFfirmDxC5Ep1Oj1cF5cFU=;
-        b=SKqAgiasw1BvwBJOekncF5FlZsqh/+Kkp4NboMpFweBcIbRHqWDAyL9k8Az1f1oYU7
-         Fh7aKCcbcOPdhTneRjBp3jbA/kqKNgx4k+FWyIO9LIH1WqcQrFQvlpllhz9nphkz+zTL
-         Cv5LLPm8ZE7i2ClXsNMgpZFGCVZMpPKCR7CVftNqCL4hmrH2smpzqhJ7lu1UZWxzKb8/
-         0NyOGPDX6x4HPes7O7UWABNKQNewG8ULuNLnDVWib8cXvFZgQtTFVRbFTM4jsgDzj4m1
-         TySH7EVBWL6SRMMmQ4TGZJzz/cSuuw2ml1hwG1c44r0x4BQ5P1LM+Gjm1ocFjPL1PMur
-         xddA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:in-reply-to
+         :subject:cc:to:from:references:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=J9r+aFR8+2XwprKP6aUwtuqR0EdoHS149XwjTsHXczI=;
+        b=Atb6QXoy2zOIgecKnjLHwUEN2heu9wkTpFNqI8supYptdMcuxInUr5HAJsJM80Tj9o
+         VkZR8XeUlyty0Zml/N24OsUr9roqXdpVPeAcHpUNC9RYC92hHPDmKq0O27MhYDy3Bi+o
+         TlHP7GqbwSeFqznULI4mlMmDBnBSCjeMRUnIYWf0VSVRDHQJ8MIquwCbNmskwbwRm1P8
+         8chIjVgV5rcEdeTMXwXLkkQsFYeOgSl1G+7xDn/uY5/NfdaD+fZdUDqe/0O7NuhcCp0k
+         aYJtHUDUxVSOWklZXvD7n9IdCWnp/9NF9Y/2A1zMHxGSjBiNxcF99n8Lk4qjf+kVgq9O
+         XO8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3o9axZvDdNOgS/Y6RutGIDFfirmDxC5Ep1Oj1cF5cFU=;
-        b=H0si1hjossei6YhPGJiEsWHp9bkH8E49iZA7wQm7A76qvb0K/L4bytonD5GHCv5aV5
-         ksQZ96LLCsOsVhGo+L2Vcz3dqcEkZzCu5evWOJbFS8rC7PzMZ176uU3KhN710XACP3c2
-         czTlzZFUXQsY2wv/4+7jqkGI2llgyJuj+HPfVNmUIaOgW50g4XVEFpkmbxUr4RUTmX6j
-         kzGbwQD+kI/0ezjLeR3GG+ImbEJe73X025ITouq+PzSELufY/yF+CSA5B/d4A6NgUGAx
-         K1yd0eAp3wVKh8JpUhZmOSKd14Daqv5R/eBfzpM2bazDYF8BgMMJIEjykrwxhcFIzJkI
-         laKA==
-X-Gm-Message-State: ACrzQf183Hi78hja6q3zBm98vdt1bjfyH5i0XEc76pWxrhOCGtUIh2yj
-        HpO8Ub0wsXARZUI55fsaJIbVYQ==
-X-Google-Smtp-Source: AMsMyM4Ya6r3OGi5EmBpVTCW2N9T2L2PUiMY6fnLJKk+7HzTi4EaAUg3uENnAa7k4pvbJPXEt7PYEw==
-X-Received: by 2002:a05:6871:288:b0:13b:13b:22e1 with SMTP id i8-20020a056871028800b0013b013b22e1mr8200018oae.115.1666452868811;
-        Sat, 22 Oct 2022 08:34:28 -0700 (PDT)
-Received: from [10.203.8.70] ([205.153.95.177])
-        by smtp.gmail.com with ESMTPSA id p34-20020a056870832200b00130e66a7644sm11617519oae.25.2022.10.22.08.34.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 22 Oct 2022 08:34:28 -0700 (PDT)
-Message-ID: <9faa50c1-9d09-6507-7b28-7a02a8c253b2@linaro.org>
-Date:   Sat, 22 Oct 2022 11:34:25 -0400
+        h=content-transfer-encoding:mime-version:message-id:date:in-reply-to
+         :subject:cc:to:from:references:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=J9r+aFR8+2XwprKP6aUwtuqR0EdoHS149XwjTsHXczI=;
+        b=QKQIw5F6QGRjXEwNzNFAH2IhLTJaSvxTGFoakvxAOKRaXQsPA75HMsbjvDuRnizpRi
+         RPczy0YU0nVR6lVb0/X17fvkaEx3pXW4NkcqghCZI1trGCbqfR+ogXHuN+eSj/+RrP+U
+         hj20EQIjZ9J4EDK02NlQsyjjXbAAgu06WHUdvEYz9vBTax5b0TbBYq5/scqIlXoTXUY9
+         ueg+Dc9YH8xBPvRtNThPI2rJwETGrNO6TmXcDuESVxOxaUsvRiWuOY+zDmuJnHsh0ngQ
+         qJKoHCsxUg3cOo+83WE58sRVKOLicvdHKm+0W0qfScqkyYJ6ZWkHKVEafP7+50YBouHf
+         9DrA==
+X-Gm-Message-State: ACrzQf1ljg6R1prQ4yWpYyVKivnuZMcrJWEajYA4ymuumKC2J2AIouVu
+        3yS2c4cjfPegdvMh8qVjoUE=
+X-Google-Smtp-Source: AMsMyM4wj9mhNf9PgnbhTN3dPvQmxmMTj72Z5wjcRTJ2hsR5qKS78V2WVXT1/5o5i4agdnM9lTTQVw==
+X-Received: by 2002:a05:600c:4588:b0:3c6:f645:dad0 with SMTP id r8-20020a05600c458800b003c6f645dad0mr17700663wmo.114.1666453392376;
+        Sat, 22 Oct 2022 08:43:12 -0700 (PDT)
+Received: from localhost (94.197.3.61.threembb.co.uk. [94.197.3.61])
+        by smtp.gmail.com with ESMTPSA id x3-20020a05600c2d0300b003a2f2bb72d5sm3403926wmf.45.2022.10.22.08.43.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 22 Oct 2022 08:43:11 -0700 (PDT)
+References: <20220708160244.21933-1-aidanmacdonald.0x0@gmail.com>
+ <20220708160244.21933-2-aidanmacdonald.0x0@gmail.com>
+ <UXHBFR.6W2XPUNX040K1@crapouillou.net>
+ <KM3aQuHkqtNZOgfaFAVA54klqcIZBA4X@localhost>
+ <Q58DFR.835FR3DH8BFV@crapouillou.net>
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
+        tiwai@suse.com, linux-mips@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 01/11] ASoC: jz4740-i2s: Handle independent FIFO
+ flush bits
+In-reply-to: <Q58DFR.835FR3DH8BFV@crapouillou.net>
+Date:   Sat, 22 Oct 2022 16:43:07 +0100
+Message-ID: <xDY1t3w8XLey5GcrHHg3gEH9kOIC7xq6@localhost>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 4/4] arm64: dts: qcom: msm8996: add support for
- oneplus3(t)
-Content-Language: en-US
-To:     Harry Austen <hpausten@protonmail.com>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Yassine Oudjana <y.oudjana@protonmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
-References: <20221021142242.129276-1-hpausten@protonmail.com>
- <20221021142242.129276-5-hpausten@protonmail.com>
- <78a117d5-b4be-8389-c909-9f8525b151d8@linaro.org>
- <wqHFrd3UmaUsRa21931VRDSHnIiusqzv3AIu7nynQkRhvAloHPmNaDvpCCGkdZoeKtZBDI_Rl9As8ehNW4EwpN47yhFJnY3-6hQkurhWy48=@protonmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <wqHFrd3UmaUsRa21931VRDSHnIiusqzv3AIu7nynQkRhvAloHPmNaDvpCCGkdZoeKtZBDI_Rl9As8ehNW4EwpN47yhFJnY3-6hQkurhWy48=@protonmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/10/2022 06:38, Harry Austen wrote:
-> On Friday, October 21st, 2022 at 3:44 PM, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
-> [...]
->>> +++ b/arch/arm64/boot/dts/qcom/msm8996-oneplus-common.dtsi
->>> @@ -0,0 +1,794 @@
->>> +// SPDX-License-Identifier: GPL-2.0-only
->>
->>
->> Are you sure this is GPL-2.0 only? Didn't you derive it from downstream
->> OnePlus DTS?
-> 
-> Yes development of these devicetrees was aided by downstream DTS, all of which appear to have
-> GPL-2.0 only headers, e.g. see msm8996-mtp.dts [1].
 
-OK, but then below copyright is not correct:
-> 
->>
->>> +/*
->>> + * Copyright (c) 2022, The Linux Foundation. All rights reserved.
+Paul Cercueil <paul@crapouillou.net> writes:
 
-... unless you work for The Linux Foundation?
+> Hi Aidan,
+>
+> Le mer., juil. 20 2022 at 15:43:06 +0100, Aidan MacDonald
+> <aidanmacdonald.0x0@gmail.com> a =C3=A9crit :
+>> Paul Cercueil <paul@crapouillou.net> writes:
+>>
+>> According to the JZ4740 programming manual JZ_AIC_CTRL_FLUSH flushes
+>> both FIFOs, so it's not equivalent JZ4760_AIC_CTRL_TFLUSH. I don't
+>> think it's a good idea to confuse the two, or we'd need comments to
+>> explain why JZ4740 uses TFLUSH but not RFLUSH.
+>
+> "shared_fifo_flush" is pretty much self-explanatory though. It then becom=
+es
+> obvious looking at the code that when this flag is set, TFLUSH flushes bo=
+th
+> FIFOs.
+>
+> If you prefer... you can #define JZ_AIC_CTRL_FLUSH JZ_AIC_CTRL_TFLUSH. I =
+don't
+> like the JZ4760 prefix, this is in no way specific to the JZ4760.
+>
 
+Makes sense, I'll stick with TFLUSH / RFLUSH only.
 
->>> + */
->>> +
->>> +#include "msm8996.dtsi"
->>> +#include "pm8994.dtsi"
->>> +#include "pmi8994.dtsi"
->>> +#include "pmi8996.dtsi"
->>> +#include <dt-bindings/gpio/gpio.h>
->>> +#include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
->>> +#include <dt-bindings/sound/qcom,q6afe.h>
->>> +#include <dt-bindings/sound/qcom,q6asm.h>
->>> +#include <dt-bindings/sound/qcom,wcd9335.h>
->>> +
->>> +/ {
->>> + aliases {
->>> + serial0 = &blsp1_uart2;
->>> + serial1 = &blsp2_uart2;
->>> + };
->>> +
->>> + battery: battery {
->>> + compatible = "simple-battery";
->>> +
->>> + constant-charge-current-max-microamp = <3000000>;
->>> + voltage-min-design-microvolt = <3400000>;
->>> + };
->>> +
->>> + chosen {
->>> + stdout-path = "serial1:115200n8";
->>> + };
->>> +
->>> + clocks {
->>> + compatible = "simple-bus";
 >>
->>
->> This is not a bus of clocks...
-> 
-> Will remove in v2.
-> 
->>
->>> +
->>> + divclk4: divclk4 {
->>
->>
->> Use common suffix or prefix for node names and generic name.
->>
->> This clock is anyway a bit weird - same frequency as sleep clk.
->>
->>> + compatible = "fixed-clock";
->>> + pinctrl-names = "default";
->>> + pinctrl-0 = <&divclk4_pin_a>;
->>
->>
->> This is a PMIC pin? So is it a PMIC clk?
-> 
-> These two clocks are described in the same way as other current MSM8996 DTs (e.g. apq8096-db820c.dts
-> and msm8996-xiaomi-common.dtsi). Happy to change if you think there is a better way to describe them?
-> Yes, these clocks originate from within the PM8994 PMIC as per the datasheet [2]. GPIO_15 is
-> configured with the DIV_CLK1 alt function and routes to the MCLK pin of the WCD9225 audio codec.
-> GPIO_18 is configured with the SLEEP_CLK5 alt function and provides the SUSCLK_32KHZ input to the
-> Atheros QCA6174 WiFi/BT chip.
+>>>>  +
+>>>>   #define JZ_AIC_CTRL_OUTPUT_SAMPLE_SIZE_OFFSET 19
+>>>>   #define JZ_AIC_CTRL_INPUT_SAMPLE_SIZE_OFFSET  16
+>>>>  @@ -90,6 +93,8 @@ enum jz47xx_i2s_version {
+>>>>   struct i2s_soc_info {
+>>>>   	enum jz47xx_i2s_version version;
+>>>>   	struct snd_soc_dai_driver *dai;
+>>>>  +
+>>>>  +	bool shared_fifo_flush;
+>>>>   };
+>>>>   struct jz4740_i2s {
+>>>>  @@ -124,12 +129,33 @@ static int jz4740_i2s_startup(struct
+>>>> snd_pcm_substream
+>>>>  *substream,
+>>>>   	uint32_t conf, ctrl;
+>>>>   	int ret;
+>>>>  +	/*
+>>>>  +	 * When we can flush FIFOs independently, only flush the
+>>>>  +	 * FIFO that is starting up.
+>>>>  +	 */
+>>>>  +	if (!i2s->soc_info->shared_fifo_flush) {
+>>>>  +		ctrl =3D jz4740_i2s_read(i2s, JZ_REG_AIC_CTRL);
+>>>>  +
+>>>>  +		if (substream->stream =3D=3D SNDRV_PCM_STREAM_PLAYBACK)
+>>>>  +			ctrl |=3D JZ4760_AIC_CTRL_TFLUSH;
+>>>>  +		else
+>>>>  +			ctrl |=3D JZ4760_AIC_CTRL_RFLUSH;
+>>>>  +
+>>>>  +		jz4740_i2s_write(i2s, JZ_REG_AIC_CTRL, ctrl);
+>>>>  +	}
+>>>  Wouldn't it be simpler to do one single if/else? And hy is one checked
+>>> before
+>>>  the (snd_soc_dai_active(dai)) check, and the other is checked after?
+>> snd_soc_dai_active() is essentially checking if there's an active
+>> substream. Eg. if no streams are open and you start playback, then
+>> the DAI will be inactive. If you then start capture while playback is
+>> running, the DAI is already active.
+>> With a shared flush bit we can only flush if there are no other active
+>> substreams (because we don't want to disturb the active stream by
+>> flushing the FIFO) so it goes after the snd_soc_dai_active() check.
+>> When the FIFOs can be separately flushed, flushing can be done before
+>> the check because it won't disturb any active substream.
+>
+> Ok. It makes sense then. Please add some info about this in the commit me=
+ssage,
+> because it really wasn't obvious to me.
 
-So this is SLEEP_CLK - a PMIC generated 32 kHz clock, which is quite
-typical among many PMIC designs. Representing it like this a bit
-hack/workaround and proper way is to have proper clock driver.
+It wasn't that obvious to me either :)
 
-But on the other hand, this is much easier and already such pattern was
-introduced with MSM8996 Xiaomi, so fine by me.
+I've added code comments too since it seems likely to trip people up
+if you're only taking a casual glance.
 
-Just name the nodes generic.	
+> You should maybe factorize the read-modify-write into its own function. I=
+ know
+> this gets eventually modified by [03/11], but this [01/11] is a bugfix so=
+ it
+> will be applied to older kernels, and I'd rather not have duplicated code
+> there.
+>
+> Cheers,
+> -Paul
 
+And I've factored out the r-m-w helper as requested.
 
-Best regards,
-Krzysztof
-
+Regards,
+Aidan
