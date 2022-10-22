@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EA936087DA
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 10:06:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B2936087E3
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 10:07:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232767AbiJVIGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 04:06:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42506 "EHLO
+        id S232927AbiJVIHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 04:07:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232893AbiJVIAM (ORCPT
+        with ESMTP id S232458AbiJVIBj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 04:00:12 -0400
+        Sat, 22 Oct 2022 04:01:39 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93BE81A527C;
-        Sat, 22 Oct 2022 00:50:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4035628B1A4;
+        Sat, 22 Oct 2022 00:50:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 63AEF60B40;
-        Sat, 22 Oct 2022 07:48:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AC14C433D6;
-        Sat, 22 Oct 2022 07:48:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 390A060B49;
+        Sat, 22 Oct 2022 07:48:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48354C433C1;
+        Sat, 22 Oct 2022 07:48:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666424913;
-        bh=uLP/v4pPCuxso/vuU6PoxkZFMFw+IoE4hCq+BrnMAP0=;
+        s=korg; t=1666424916;
+        bh=ZgKxMsG8k59NViVoefO54z2B9yZQpBZLWjXNfWIvuok=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=C7mOsT77EEnsuWrpq/kWOz5Ur2U1qiHb02It22GvlonTNag89K2TQiORCLKsjAoK3
-         2UUjy7f94U2chOsS8KkQJUjPCX5FpnurG2i49/WJ3aSk9bwypLrm1q+62nVHPMbtcs
-         fsuvRZ5ugelp/ye7/TRkCiLxnxSboahcKLRqhP1o=
+        b=AvCFikQTdkONowiA9cqeyuvqFlNx6ynYfiFh9U0V/MM2rreuUXySOooy/dnxW1SqW
+         B4gzROSqv4jFhgq4a18gEQcvdkPcVn+83OVwmq+FVt0VBAlqlAoAZUQF0jwgaNYcK1
+         kUf0ZdwZg3z6HGE2U46k0dXpn1wS897qg4XjeuFg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
+        stable@vger.kernel.org, Shao-Chuan Lee <shaochuan@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 322/717] ALSA: hda: beep: Simplify keep-power-at-enable behavior
-Date:   Sat, 22 Oct 2022 09:23:21 +0200
-Message-Id: <20221022072508.700301228@linuxfoundation.org>
+Subject: [PATCH 5.19 323/717] drm/virtio: set fb_modifiers_not_supported
+Date:   Sat, 22 Oct 2022 09:23:22 +0200
+Message-Id: <20221022072508.789883172@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221022072415.034382448@linuxfoundation.org>
 References: <20221022072415.034382448@linuxfoundation.org>
@@ -53,132 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Chia-I Wu <olvaffe@gmail.com>
 
-[ Upstream commit 4c8d695cb9bc5f6fd298a586602947b2fc099a64 ]
+[ Upstream commit 85faca8ca0f659263b5fb2385e4c231cc075bd84 ]
 
-The recent fix for IDT codecs to keep the power up while the beep is
-enabled can be better integrated into the beep helper code.
-This patch cleans up the code with refactoring.
+Without this, the drm core advertises LINEAR modifier which is
+incorrect.
 
-Fixes: 414d38ba8710 ("ALSA: hda/sigmatel: Keep power up while beep is enabled")
-Link: https://lore.kernel.org/r/20220906092306.26183-1-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Also userspace virgl does not support modifiers.  For example, it causes
+chrome on ozone/drm to fail with "Failed to create scanout buffer".
+
+Fixes: 2af104290da5 ("drm: introduce fb_modifiers_not_supported flag in mode_config")
+Suggested-by: Shao-Chuan Lee <shaochuan@chromium.org>
+Signed-off-by: Chia-I Wu <olvaffe@gmail.com>
+Link: http://patchwork.freedesktop.org/patch/msgid/20220831190601.1295129-1-olvaffe@gmail.com
+Signed-off-by: Gerd Hoffmann <kraxel@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/pci/hda/hda_beep.c       | 15 +++++++++++++--
- sound/pci/hda/hda_beep.h       |  1 +
- sound/pci/hda/patch_sigmatel.c | 25 ++-----------------------
- 3 files changed, 16 insertions(+), 25 deletions(-)
+ drivers/gpu/drm/virtio/virtgpu_display.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/sound/pci/hda/hda_beep.c b/sound/pci/hda/hda_beep.c
-index 53a2b89f8983..e63621bcb214 100644
---- a/sound/pci/hda/hda_beep.c
-+++ b/sound/pci/hda/hda_beep.c
-@@ -118,6 +118,12 @@ static int snd_hda_beep_event(struct input_dev *dev, unsigned int type,
- 	return 0;
- }
+diff --git a/drivers/gpu/drm/virtio/virtgpu_display.c b/drivers/gpu/drm/virtio/virtgpu_display.c
+index f73352e7b832..96e71813864a 100644
+--- a/drivers/gpu/drm/virtio/virtgpu_display.c
++++ b/drivers/gpu/drm/virtio/virtgpu_display.c
+@@ -348,6 +348,8 @@ int virtio_gpu_modeset_init(struct virtio_gpu_device *vgdev)
+ 	vgdev->ddev->mode_config.max_width = XRES_MAX;
+ 	vgdev->ddev->mode_config.max_height = YRES_MAX;
  
-+static void turn_on_beep(struct hda_beep *beep)
-+{
-+	if (beep->keep_power_at_enable)
-+		snd_hda_power_up_pm(beep->codec);
-+}
++	vgdev->ddev->mode_config.fb_modifiers_not_supported = true;
 +
- static void turn_off_beep(struct hda_beep *beep)
- {
- 	cancel_work_sync(&beep->beep_work);
-@@ -125,6 +131,8 @@ static void turn_off_beep(struct hda_beep *beep)
- 		/* turn off beep */
- 		generate_tone(beep, 0);
- 	}
-+	if (beep->keep_power_at_enable)
-+		snd_hda_power_down_pm(beep->codec);
- }
- 
- /**
-@@ -140,7 +148,9 @@ int snd_hda_enable_beep_device(struct hda_codec *codec, int enable)
- 	enable = !!enable;
- 	if (beep->enabled != enable) {
- 		beep->enabled = enable;
--		if (!enable)
-+		if (enable)
-+			turn_on_beep(beep);
-+		else
- 			turn_off_beep(beep);
- 		return 1;
- 	}
-@@ -167,7 +177,8 @@ static int beep_dev_disconnect(struct snd_device *device)
- 		input_unregister_device(beep->dev);
- 	else
- 		input_free_device(beep->dev);
--	turn_off_beep(beep);
-+	if (beep->enabled)
-+		turn_off_beep(beep);
- 	return 0;
- }
- 
-diff --git a/sound/pci/hda/hda_beep.h b/sound/pci/hda/hda_beep.h
-index a25358a4807a..db76e3ddba65 100644
---- a/sound/pci/hda/hda_beep.h
-+++ b/sound/pci/hda/hda_beep.h
-@@ -25,6 +25,7 @@ struct hda_beep {
- 	unsigned int enabled:1;
- 	unsigned int linear_tone:1;	/* linear tone for IDT/STAC codec */
- 	unsigned int playing:1;
-+	unsigned int keep_power_at_enable:1;	/* set by driver */
- 	struct work_struct beep_work; /* scheduled task for beep event */
- 	struct mutex mutex;
- 	void (*power_hook)(struct hda_beep *beep, bool on);
-diff --git a/sound/pci/hda/patch_sigmatel.c b/sound/pci/hda/patch_sigmatel.c
-index 7f340f18599c..a794a01a68ca 100644
---- a/sound/pci/hda/patch_sigmatel.c
-+++ b/sound/pci/hda/patch_sigmatel.c
-@@ -4311,6 +4311,8 @@ static int stac_parse_auto_config(struct hda_codec *codec)
- 		if (codec->beep) {
- 			/* IDT/STAC codecs have linear beep tone parameter */
- 			codec->beep->linear_tone = spec->linear_tone_beep;
-+			/* keep power up while beep is enabled */
-+			codec->beep->keep_power_at_enable = 1;
- 			/* if no beep switch is available, make its own one */
- 			caps = query_amp_caps(codec, nid, HDA_OUTPUT);
- 			if (!(caps & AC_AMPCAP_MUTE)) {
-@@ -4444,28 +4446,6 @@ static int stac_suspend(struct hda_codec *codec)
- 
- 	return 0;
- }
--
--static int stac_check_power_status(struct hda_codec *codec, hda_nid_t nid)
--{
--#ifdef CONFIG_SND_HDA_INPUT_BEEP
--	struct sigmatel_spec *spec = codec->spec;
--#endif
--	int ret = snd_hda_gen_check_power_status(codec, nid);
--
--#ifdef CONFIG_SND_HDA_INPUT_BEEP
--	if (nid == spec->gen.beep_nid && codec->beep) {
--		if (codec->beep->enabled != spec->beep_power_on) {
--			spec->beep_power_on = codec->beep->enabled;
--			if (spec->beep_power_on)
--				snd_hda_power_up_pm(codec);
--			else
--				snd_hda_power_down_pm(codec);
--		}
--		ret |= spec->beep_power_on;
--	}
--#endif
--	return ret;
--}
- #else
- #define stac_suspend		NULL
- #endif /* CONFIG_PM */
-@@ -4478,7 +4458,6 @@ static const struct hda_codec_ops stac_patch_ops = {
- 	.unsol_event = snd_hda_jack_unsol_event,
- #ifdef CONFIG_PM
- 	.suspend = stac_suspend,
--	.check_power_status = stac_check_power_status,
- #endif
- };
+ 	for (i = 0 ; i < vgdev->num_scanouts; ++i)
+ 		vgdev_output_init(vgdev, i);
  
 -- 
 2.35.1
