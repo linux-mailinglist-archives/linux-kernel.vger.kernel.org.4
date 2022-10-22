@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1572B6087F6
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 10:08:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B062D608780
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 10:02:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232354AbiJVIIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 04:08:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57476 "EHLO
+        id S232517AbiJVICe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 04:02:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232862AbiJVIET (ORCPT
+        with ESMTP id S232316AbiJVHyj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 04:04:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 478ED2D2C1B;
-        Sat, 22 Oct 2022 00:51:45 -0700 (PDT)
+        Sat, 22 Oct 2022 03:54:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D500DD6B92;
+        Sat, 22 Oct 2022 00:48:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9663AB82DFB;
-        Sat, 22 Oct 2022 07:41:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E2BBC433C1;
-        Sat, 22 Oct 2022 07:41:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0716B60B88;
+        Sat, 22 Oct 2022 07:41:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DB8EC433D6;
+        Sat, 22 Oct 2022 07:41:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666424474;
-        bh=HJEF7endQpM+60VPzFKP7f1JvxvvavZo44m56jkX12A=;
+        s=korg; t=1666424490;
+        bh=H2f0utUE260eE+Vd88zICS6WI0lF7gGGbPGRjwWNoew=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HRWv8JX6/w93BX/QkPwAvqqocsg7JKqVIw77VNmerIEkFlnuE1uPyQBnQFGPpIwrH
-         Tn6Lv6GXEP4x2fqpGXXGYeHnJ3C2D3GcnUgFtlo0asE90pkmV0UhnCbfTX8QvguEZZ
-         QLYtY+DIfSQ03MYmZegRHK4YyFIpws1vC5mrm5io=
+        b=bDDd90nnDTW3/93qJyiTSm7JiLWZPdxwBW3oiSSCLyAhMmEp7SmMS5CDidBRT7EJG
+         jrXIVSqnwZVAba4PNSpORIoKdhav0mZS4ZvY6HxMD7JMseHys1icBoUbHxF9xjwDrQ
+         I7/PXqQF0bnqshJAX9jmXq0a78+IGhnSw40xq7z4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhihao Cheng <chengzhihao1@huawei.com>,
-        Jan Kara <jack@suse.cz>, Theodore Tso <tytso@mit.edu>
-Subject: [PATCH 5.19 132/717] ext4: fix dir corruption when ext4_dx_add_entry() fails
-Date:   Sat, 22 Oct 2022 09:20:11 +0200
-Message-Id: <20221022072438.874019929@linuxfoundation.org>
+        stable@vger.kernel.org, stable@kernel.org,
+        Ye Bin <yebin10@huawei.com>, Jan Kara <jack@suse.cz>,
+        Theodore Tso <tytso@mit.edu>
+Subject: [PATCH 5.19 135/717] ext4: fix potential memory leak in ext4_fc_record_regions()
+Date:   Sat, 22 Oct 2022 09:20:14 +0200
+Message-Id: <20221022072439.424419076@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221022072415.034382448@linuxfoundation.org>
 References: <20221022072415.034382448@linuxfoundation.org>
@@ -53,95 +54,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhihao Cheng <chengzhihao1@huawei.com>
+From: Ye Bin <yebin10@huawei.com>
 
-commit 7177dd009c7c04290891e9a534cd47d1b620bd04 upstream.
+commit 7069d105c1f15c442b68af43f7fde784f3126739 upstream.
 
-Following process may lead to fs corruption:
-1. ext4_create(dir/foo)
- ext4_add_nondir
-  ext4_add_entry
-   ext4_dx_add_entry
-     a. add_dirent_to_buf
-      ext4_mark_inode_dirty
-      ext4_handle_dirty_metadata   // dir inode bh is recorded into journal
-     b. ext4_append    // dx_get_count(entries) == dx_get_limit(entries)
-       ext4_bread(EXT4_GET_BLOCKS_CREATE)
-        ext4_getblk
-         ext4_map_blocks
-          ext4_ext_map_blocks
-            ext4_mb_new_blocks
-             dquot_alloc_block
-              dquot_alloc_space_nodirty
-               inode_add_bytes    // update dir's i_blocks
-            ext4_ext_insert_extent
-	     ext4_ext_dirty  // record extent bh into journal
-              ext4_handle_dirty_metadata(bh)
-	      // record new block into journal
-       inode->i_size += inode->i_sb->s_blocksize   // new size(in mem)
-     c. ext4_handle_dirty_dx_node(bh2)
-	// record dir's new block(dx_node) into journal
-     d. ext4_handle_dirty_dx_node((frame - 1)->bh)
-     e. ext4_handle_dirty_dx_node(frame->bh)
-     f. do_split    // ret err!
-     g. add_dirent_to_buf
-	 ext4_mark_inode_dirty(dir)  // update raw_inode on disk(skipped)
-2. fsck -a /dev/sdb
- drop last block(dx_node) which beyonds dir's i_size.
-  /dev/sdb: recovering journal
-  /dev/sdb contains a file system with errors, check forced.
-  /dev/sdb: Inode 12, end of extent exceeds allowed value
-	(logical block 128, physical block 3938, len 1)
-3. fsck -fn /dev/sdb
- dx_node->entry[i].blk > dir->i_size
-  Pass 2: Checking directory structure
-  Problem in HTREE directory inode 12 (/dir): bad block number 128.
-  Clear HTree index? no
-  Problem in HTREE directory inode 12: block #3 has invalid depth (2)
-  Problem in HTREE directory inode 12: block #3 has bad max hash
-  Problem in HTREE directory inode 12: block #3 not referenced
+As krealloc may return NULL, in this case 'state->fc_regions' may not be
+freed by krealloc, but 'state->fc_regions' already set NULL. Then will
+lead to 'state->fc_regions' memory leak.
 
-Fix it by marking inode dirty directly inside ext4_append().
-Fetch a reproducer in [Link].
-
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=216466
-Cc: stable@vger.kernel.org
-Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
+Cc: stable@kernel.org
+Signed-off-by: Ye Bin <yebin10@huawei.com>
 Reviewed-by: Jan Kara <jack@suse.cz>
-Link: https://lore.kernel.org/r/20220911045204.516460-1-chengzhihao1@huawei.com
+Link: https://lore.kernel.org/r/20220921064040.3693255-3-yebin10@huawei.com
 Signed-off-by: Theodore Ts'o <tytso@mit.edu>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ext4/namei.c |   15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
+ fs/ext4/fast_commit.c |   14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
---- a/fs/ext4/namei.c
-+++ b/fs/ext4/namei.c
-@@ -85,15 +85,20 @@ static struct buffer_head *ext4_append(h
- 		return bh;
- 	inode->i_size += inode->i_sb->s_blocksize;
- 	EXT4_I(inode)->i_disksize = inode->i_size;
-+	err = ext4_mark_inode_dirty(handle, inode);
-+	if (err)
-+		goto out;
- 	BUFFER_TRACE(bh, "get_write_access");
- 	err = ext4_journal_get_write_access(handle, inode->i_sb, bh,
- 					    EXT4_JTR_NONE);
--	if (err) {
--		brelse(bh);
--		ext4_std_error(inode->i_sb, err);
--		return ERR_PTR(err);
--	}
-+	if (err)
-+		goto out;
- 	return bh;
+--- a/fs/ext4/fast_commit.c
++++ b/fs/ext4/fast_commit.c
+@@ -1687,15 +1687,17 @@ int ext4_fc_record_regions(struct super_
+ 	if (replay && state->fc_regions_used != state->fc_regions_valid)
+ 		state->fc_regions_used = state->fc_regions_valid;
+ 	if (state->fc_regions_used == state->fc_regions_size) {
++		struct ext4_fc_alloc_region *fc_regions;
 +
-+out:
-+	brelse(bh);
-+	ext4_std_error(inode->i_sb, err);
-+	return ERR_PTR(err);
- }
- 
- static int ext4_dx_csum_verify(struct inode *inode,
+ 		state->fc_regions_size +=
+ 			EXT4_FC_REPLAY_REALLOC_INCREMENT;
+-		state->fc_regions = krealloc(
+-					state->fc_regions,
+-					state->fc_regions_size *
+-					sizeof(struct ext4_fc_alloc_region),
+-					GFP_KERNEL);
+-		if (!state->fc_regions)
++		fc_regions = krealloc(state->fc_regions,
++				      state->fc_regions_size *
++				      sizeof(struct ext4_fc_alloc_region),
++				      GFP_KERNEL);
++		if (!fc_regions)
+ 			return -ENOMEM;
++		state->fc_regions = fc_regions;
+ 	}
+ 	region = &state->fc_regions[state->fc_regions_used++];
+ 	region->ino = ino;
 
 
