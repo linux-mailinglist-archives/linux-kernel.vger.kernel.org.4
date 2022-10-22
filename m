@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2396B608A14
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 10:46:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D86916087CD
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 10:06:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234165AbiJVIqP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 04:46:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52874 "EHLO
+        id S232834AbiJVIGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 04:06:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234915AbiJVIoB (ORCPT
+        with ESMTP id S232720AbiJVH7o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 04:44:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A1B2E96B0;
-        Sat, 22 Oct 2022 01:07:41 -0700 (PDT)
+        Sat, 22 Oct 2022 03:59:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67CDA1CFC7;
+        Sat, 22 Oct 2022 00:49:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8D376B82E0C;
-        Sat, 22 Oct 2022 07:49:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF8CAC433D6;
-        Sat, 22 Oct 2022 07:49:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BD7EE60B1F;
+        Sat, 22 Oct 2022 07:49:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A53BAC433C1;
+        Sat, 22 Oct 2022 07:49:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666424977;
-        bh=/DO/MJLKGlxxqHVavgVn6SazxotEdrvId6km3FQ0/N8=;
+        s=korg; t=1666424980;
+        bh=gg1wQswyGA90Rm8bnUp+ZwCqX2EINFwKWxmb5fEPtvA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qOjb5HI0DtqH/aI+BLrpGRCM+sAqU33Og9kp923XiHH6FcHPziecHbBbS9eWU8IdJ
-         LTjuMpe6qS9OBVCHZ94pjxdA3HgXa0MoWF9TDR36TYZvFR8r2t4hSSToy+IARNaSZR
-         1ygnIOBVlsqN2zgpp/A+bls/VBv2rL2KimK3HOdI=
+        b=xv/Gulr3m+ENM7TkkV0GsHfDEcEOccLsRhjVJbAP1a+B8WF6SfKvcSGfMSPJLJhGk
+         PesUsD3FhxcyrzL5+c6JEd6FApjZo+FDHdMwutdVJlkceDRKA9XD0LiLJHNJOhTLS3
+         CJ/WXyCwcuQZMelImL2AYIl4b32tqn0rjfzoZwgE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhang Qilong <zhangqilong3@huawei.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 346/717] ASoC: mt6660: Fix PM disable depth imbalance in mt6660_i2c_probe
-Date:   Sat, 22 Oct 2022 09:23:45 +0200
-Message-Id: <20221022072510.953833349@linuxfoundation.org>
+        stable@vger.kernel.org, Brent Lu <brent.lu@intel.com>,
+        Takashi Iwai <tiwai@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 347/717] ALSA: hda/hdmi: Dont skip notification handling during PM operation
+Date:   Sat, 22 Oct 2022 09:23:46 +0200
+Message-Id: <20221022072511.020405718@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221022072415.034382448@linuxfoundation.org>
 References: <20221022072415.034382448@linuxfoundation.org>
@@ -54,49 +53,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhang Qilong <zhangqilong3@huawei.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-[ Upstream commit b73f11e895e140537e7f8c7251211ccd3ce0782b ]
+[ Upstream commit 5226c7b9784eee215e3914f440b3c2e1764f67a8 ]
 
-The pm_runtime_enable will increase power disable depth. Thus
-a pairing decrement is needed on the error handling path to
-keep it balanced according to context. We fix it by moving
-pm_runtime_enable to the endding of mt6660_i2c_probe.
+The HDMI driver skips the notification handling from the graphics
+driver when the codec driver is being in the PM operation.  This
+behavior was introduced by the commit eb399d3c99d8 ("ALSA: hda - Skip
+ELD notification during PM process").  This skip may cause a problem,
+as we may miss the ELD update when the connection/disconnection
+happens right at the runtime-PM operation of the audio codec.
 
-Fixes:f289e55c6eeb4 ("ASoC: Add MediaTek MT6660 Speaker Amp Driver")
+Although this workaround was valid at that time, it's no longer true;
+the fix was required just because the ELD update procedure needed to
+wake up the audio codec, which had lead to a runtime-resume during a
+runtime-suspend.  Meanwhile, the ELD update procedure doesn't need a
+codec wake up any longer since the commit 788d441a164c ("ALSA: hda -
+Use component ops for i915 HDMI/DP audio jack handling"); i.e. there
+is no much reason for skipping the notification.
 
-Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
-Link: https://lore.kernel.org/r/20220928160116.125020-5-zhangqilong3@huawei.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Let's drop those checks for addressing the missing notification.
+
+Fixes: 788d441a164c ("ALSA: hda - Use component ops for i915 HDMI/DP audio jack handling")
+Reported-by: Brent Lu <brent.lu@intel.com>
+Link: https://lore.kernel.org/r/20220927135807.4097052-1-brent.lu@intel.com
+Link: https://lore.kernel.org/r/20221001074809.7461-1-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/mt6660.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ sound/pci/hda/patch_hdmi.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/sound/soc/codecs/mt6660.c b/sound/soc/codecs/mt6660.c
-index ba11555796ad..45e0df13afb9 100644
---- a/sound/soc/codecs/mt6660.c
-+++ b/sound/soc/codecs/mt6660.c
-@@ -503,13 +503,17 @@ static int mt6660_i2c_probe(struct i2c_client *client)
- 		dev_err(chip->dev, "read chip revision fail\n");
- 		goto probe_fail;
- 	}
--	pm_runtime_set_active(chip->dev);
--	pm_runtime_enable(chip->dev);
+diff --git a/sound/pci/hda/patch_hdmi.c b/sound/pci/hda/patch_hdmi.c
+index c239d9dbbaef..63c0c84348d0 100644
+--- a/sound/pci/hda/patch_hdmi.c
++++ b/sound/pci/hda/patch_hdmi.c
+@@ -2747,9 +2747,6 @@ static void generic_acomp_pin_eld_notify(void *audio_ptr, int port, int dev_id)
+ 	 */
+ 	if (codec->core.dev.power.power_state.event == PM_EVENT_SUSPEND)
+ 		return;
+-	/* ditto during suspend/resume process itself */
+-	if (snd_hdac_is_in_pm(&codec->core))
+-		return;
  
- 	ret = devm_snd_soc_register_component(chip->dev,
- 					       &mt6660_component_driver,
- 					       &mt6660_codec_dai, 1);
-+	if (!ret) {
-+		pm_runtime_set_active(chip->dev);
-+		pm_runtime_enable(chip->dev);
-+	}
-+
- 	return ret;
-+
- probe_fail:
- 	_mt6660_chip_power_on(chip, 0);
- 	mutex_destroy(&chip->io_lock);
+ 	check_presence_and_report(codec, pin_nid, dev_id);
+ }
+@@ -2933,9 +2930,6 @@ static void intel_pin_eld_notify(void *audio_ptr, int port, int pipe)
+ 	 */
+ 	if (codec->core.dev.power.power_state.event == PM_EVENT_SUSPEND)
+ 		return;
+-	/* ditto during suspend/resume process itself */
+-	if (snd_hdac_is_in_pm(&codec->core))
+-		return;
+ 
+ 	snd_hdac_i915_set_bclk(&codec->bus->core);
+ 	check_presence_and_report(codec, pin_nid, dev_id);
 -- 
 2.35.1
 
