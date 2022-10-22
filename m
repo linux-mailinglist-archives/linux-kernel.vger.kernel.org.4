@@ -2,57 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 588BA608DED
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 17:13:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FAC0608DEE
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 17:13:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229851AbiJVPNO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 11:13:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56668 "EHLO
+        id S229862AbiJVPNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 11:13:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229838AbiJVPNE (ORCPT
+        with ESMTP id S229501AbiJVPNG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 11:13:04 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D1A313642C;
-        Sat, 22 Oct 2022 08:13:02 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id v130-20020a1cac88000000b003bcde03bd44so7098863wme.5;
-        Sat, 22 Oct 2022 08:13:02 -0700 (PDT)
+        Sat, 22 Oct 2022 11:13:06 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 675281366A4;
+        Sat, 22 Oct 2022 08:13:04 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id a10so8641337wrm.12;
+        Sat, 22 Oct 2022 08:13:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pf0wqcQ2vn6wyNNf67PgKqcbfJEkj1r+s1XXcU5BuM8=;
-        b=UG0ADy3qylqYF/CuZdFG9p/YHVjwUnpYwDe36KNKPP51jVACteTE8AjTvAOLRUBG3T
-         UsPTz8tk0g3YldMIARqcWnFNqv9uQ32n78yLXAdxIvqLuyAlXeW69w3Z/tVhY/XezC+V
-         ipNly49oTGbnfGJtz4BRGZhehUucjxySy/oUeNKSuyekpOrvc3O/82yPJNyR/ATYPvm4
-         oDo4BqPRiuxQBzW3FRH5t1AQwbDOZkq93I/uIi4kzqSi+IUeTo510X8QHLAgfxH3o5CY
-         1Ckhl2Qe4SB8dekQ79QiulXJqcs70Y1vgj6kWUg0o2sZIXtb6adT28jbgNzn5ZJMAwlX
-         olNg==
+        bh=/tn9ME0TL0Y61oMWgSDpk8x/grA5ek9OA4zh/3kmEPY=;
+        b=GW6/l8Uizmyk8qF8jHpYfz4onM5N4g60uc/bdSTaYk01iniF1ZAx6pIQKcNcUHVvfO
+         oZa3Ug4sBDiPhEV7NJd+arZ2743Nyw9QCdquW6gP3SQRQkoHOox/zVPn85tE1+qPh3SB
+         uPjZeHR9n5Ot9bQW8BbhW24iKUKKJUxsi58ENfKu0p6UoyFY3Mb4bW1lvdWf7ruP/2Ct
+         AK4CvyA2f4/EYH6zQ4t7mroec2yKxVH2HoxTx1JHTPvSB4xIcJe8xVbwYUZl3AxI4nRf
+         YIfLXdyywGGGNKQPOvLuprvdTXN/E/Fkc7auipw3rBa06SwZgdUzEcn+mpN//LTzNJXM
+         H4Tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=pf0wqcQ2vn6wyNNf67PgKqcbfJEkj1r+s1XXcU5BuM8=;
-        b=ArCqCaPE5qG9ADFNLCoXIUb8HnaMkBLam9sM1Lt2qOTeNdNseYSJ38iaweFbsy96Q5
-         tLLdu41jq12COFH8aDS3rWy+MTLNddGm6W8lz1vbavO2KQjpMJdYsEEyUJ+XOmNWkC4M
-         JJhqUCRqDqXLLql75gQYl2Giy/1eM/mmLQoKBwARtqzV/aFDTUAbRg4KIg0gfVBeyEUd
-         l6M1kx1pdHgCTbAAhClEF+bLaITylKtaIhh6RoXbAjaqf9z1t1Be0O+gk/SI95+1LQtM
-         WwBcWw2vIH/ImbzDA2qAZsmK4whYLVIhxmUmScK3IT0ifYUO2x6uq/XKvKG3KekVJyBt
-         xscA==
-X-Gm-Message-State: ACrzQf15aXhayYqgwXbcFOV4aJzr0ynpoZgZK6qeJkQdhvrH+ow8YGAQ
-        KgxOkqYF1PVXSg23Ewi7lWo=
-X-Google-Smtp-Source: AMsMyM5Lqow6tzJwhfOT8o5ANbc3i6cY5SNuqCSYfStNp0fIO+Y631oY7IJ9kToRhNfpYpis8r7mFQ==
-X-Received: by 2002:a05:600c:4f46:b0:3c6:fb4f:3e1b with SMTP id m6-20020a05600c4f4600b003c6fb4f3e1bmr16909605wmq.159.1666451581054;
-        Sat, 22 Oct 2022 08:13:01 -0700 (PDT)
+        bh=/tn9ME0TL0Y61oMWgSDpk8x/grA5ek9OA4zh/3kmEPY=;
+        b=aANCfTw4+pyTo5kfqsuhmbfYvk9E5bfjisVA6nu6AqLdmwIAB/8+CD/Skq+CKH2Cxr
+         UUpu4xifop4qO89ZQJy1V6sG8zwq9Cgg6aTPi0TnN/bBgjEu3LwYkjeyq8R8cy5KskRf
+         66v6cWAD9hZTkG1sWDyJRpIH6TZX442hcbM2QQF6TWMjRlaxOafYG7PSHOFGoZXkc8+J
+         xprQCvONWt19yyCKQVtG8OWvOlGvdyfQDY4LBMNP6MnYstgUhSIbZ3VtEs9wqpQs/hzh
+         +a7I/loU7Glh6fdqQCnPH9qGwR+Abp+prgSfDXhUInDHdWm0oPYn2p+CfnM2gyPLNtJW
+         tnnw==
+X-Gm-Message-State: ACrzQf1pIgKJ5uq4EtGFjW3Y0W3HfIF1GRLneJAmgM/bTSypQ7XMGOQV
+        +rBM8aisebyp+h//mwVsoNI=
+X-Google-Smtp-Source: AMsMyM5vOXs+oBjgGHsKPd1b4S6qy+roDx3CDdb9OtBvR7J9WzXkYmXr7Y+R5BUL4bb8uBZT5hvsXA==
+X-Received: by 2002:adf:ec03:0:b0:22e:4d3:bb37 with SMTP id x3-20020adfec03000000b0022e04d3bb37mr15469099wrn.665.1666451582570;
+        Sat, 22 Oct 2022 08:13:02 -0700 (PDT)
 Received: from hp-power-15.localdomain (mm-133-18-212-37.vitebsk.dynamic.pppoe.byfly.by. [37.212.18.133])
-        by smtp.gmail.com with ESMTPSA id u11-20020adff88b000000b0022e2eaa2bdcsm21310581wrp.98.2022.10.22.08.13.00
+        by smtp.gmail.com with ESMTPSA id u11-20020adff88b000000b0022e2eaa2bdcsm21310581wrp.98.2022.10.22.08.13.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 22 Oct 2022 08:13:00 -0700 (PDT)
+        Sat, 22 Oct 2022 08:13:02 -0700 (PDT)
 From:   Siarhei Volkau <lis8215@gmail.com>
 Cc:     Siarhei Volkau <lis8215@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -60,9 +59,9 @@ Cc:     Siarhei Volkau <lis8215@gmail.com>,
         Jiri Slaby <jirislaby@kernel.org>,
         linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: [PATCH v2 1/2] dt-bindings: serial: ingenic: Add support for the JZ4750/55 SoCs
-Date:   Sat, 22 Oct 2022 18:12:23 +0300
-Message-Id: <20221022151224.4000238-2-lis8215@gmail.com>
+Subject: [PATCH v2 2/2] serial: 8250/ingenic: Add support for the JZ4750/JZ4755
+Date:   Sat, 22 Oct 2022 18:12:24 +0300
+Message-Id: <20221022151224.4000238-3-lis8215@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20221022151224.4000238-1-lis8215@gmail.com>
 References: <20221022151224.4000238-1-lis8215@gmail.com>
@@ -79,38 +78,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These SoCs UART block are the same as JZ4725b' one, the difference is
-outside of the block - it is in the clock generation unit (CGU).
-The difference requires to make a quirk for early console init.
+JZ4750/55/60 (but not JZ4760b) have an extra divisor in between extclk
+and peripheral clock, called CPCCR.ECS, the driver can't figure out the
+real state of the divisor without dirty hack - peek CGU CPCCR register.
+However, we can rely on a vendor's bootloader (u-boot 1.1.6) behavior:
+if (extclk > 16MHz)
+    the divisor is enabled, so the UART driving clock is extclk/2.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+This behavior relies on hardware differences: most boards (if not all)
+with those SoCs have 12 or 24 MHz oscillators but many peripherals want
+12Mhz to operate properly (AIC and USB-PHY at least).
+
+The patch doesn't affect JZ4760's behavior as it is subject for another
+patchset with re-classification of all supported ingenic UARTs.
+
+Link: https://github.com/carlos-wong/uboot_jz4755/blob/master/cpu/mips/jz_serial.c#L158
 Signed-off-by: Siarhei Volkau <lis8215@gmail.com>
 ---
- Documentation/devicetree/bindings/serial/ingenic,uart.yaml | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/tty/serial/8250/8250_ingenic.c | 50 ++++++++++++++++++++++----
+ 1 file changed, 43 insertions(+), 7 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/serial/ingenic,uart.yaml b/Documentation/devicetree/bindings/serial/ingenic,uart.yaml
-index 9ca7a18ec..315ceb722 100644
---- a/Documentation/devicetree/bindings/serial/ingenic,uart.yaml
-+++ b/Documentation/devicetree/bindings/serial/ingenic,uart.yaml
-@@ -20,6 +20,7 @@ properties:
-     oneOf:
-       - enum:
-           - ingenic,jz4740-uart
-+          - ingenic,jz4750-uart
-           - ingenic,jz4760-uart
-           - ingenic,jz4780-uart
-           - ingenic,x1000-uart
-@@ -31,6 +32,9 @@ properties:
-       - items:
-           - const: ingenic,jz4725b-uart
-           - const: ingenic,jz4740-uart
-+      - items:
-+          - const: ingenic,jz4755-uart
-+          - const: ingenic,jz4750-uart
+diff --git a/drivers/tty/serial/8250/8250_ingenic.c b/drivers/tty/serial/8250/8250_ingenic.c
+index 2b2f5d8d2..3ffa6b722 100644
+--- a/drivers/tty/serial/8250/8250_ingenic.c
++++ b/drivers/tty/serial/8250/8250_ingenic.c
+@@ -87,24 +87,19 @@ static void __init ingenic_early_console_setup_clock(struct earlycon_device *dev
+ 	dev->port.uartclk = be32_to_cpup(prop);
+ }
  
-   reg:
-     maxItems: 1
+-static int __init ingenic_early_console_setup(struct earlycon_device *dev,
+-					      const char *opt)
++static int __init ingenic_earlycon_setup_tail(struct earlycon_device *dev,
++					      const char *opt)
+ {
+ 	struct uart_port *port = &dev->port;
+ 	unsigned int divisor;
+ 	int baud = 115200;
+ 
+-	if (!dev->port.membase)
+-		return -ENODEV;
+-
+ 	if (opt) {
+ 		unsigned int parity, bits, flow; /* unused for now */
+ 
+ 		uart_parse_options(opt, &baud, &parity, &bits, &flow);
+ 	}
+ 
+-	ingenic_early_console_setup_clock(dev);
+-
+ 	if (dev->baud)
+ 		baud = dev->baud;
+ 	divisor = DIV_ROUND_CLOSEST(port->uartclk, 16 * baud);
+@@ -129,9 +124,49 @@ static int __init ingenic_early_console_setup(struct earlycon_device *dev,
+ 	return 0;
+ }
+ 
++static int __init ingenic_early_console_setup(struct earlycon_device *dev,
++					      const char *opt)
++{
++	if (!dev->port.membase)
++		return -ENODEV;
++
++	ingenic_early_console_setup_clock(dev);
++
++	ingenic_earlycon_setup_tail(dev, opt);
++}
++
++static int __init jz4750_early_console_setup(struct earlycon_device *dev,
++					     const char *opt)
++{
++	if (!dev->port.membase)
++		return -ENODEV;
++
++	/*
++	 * JZ4750/55/60 (not JZ4760b) have an extra divisor
++	 * between extclk and peripheral clock, the
++	 * driver can't figure out the real state of the
++	 * divisor without dirty hacks (peek CGU register).
++	 * However, we can rely on a vendor's behavior:
++	 * if (extclk > 16MHz)
++	 *   the divisor is enabled.
++	 * This behavior relies on hardware differences:
++	 * most boards with those SoCs have 12 or 24 MHz
++	 * oscillators but many peripherals want 12Mhz
++	 * to operate properly (AIC and USB-phy at least).
++	 */
++	ingenic_early_console_setup_clock(dev);
++	if (dev->port.uartclk > 16000000)
++		dev->port.uartclk /= 2;
++
++	ingenic_earlycon_setup_tail(dev, opt);
++}
++
+ OF_EARLYCON_DECLARE(jz4740_uart, "ingenic,jz4740-uart",
+ 		    ingenic_early_console_setup);
+ 
++OF_EARLYCON_DECLARE(jz4750_uart, "ingenic,jz4750-uart",
++		    jz4750_early_console_setup);
++
+ OF_EARLYCON_DECLARE(jz4770_uart, "ingenic,jz4770-uart",
+ 		    ingenic_early_console_setup);
+ 
+@@ -328,6 +363,7 @@ static const struct ingenic_uart_config x1000_uart_config = {
+ 
+ static const struct of_device_id of_match[] = {
+ 	{ .compatible = "ingenic,jz4740-uart", .data = &jz4740_uart_config },
++	{ .compatible = "ingenic,jz4750-uart", .data = &jz4760_uart_config },
+ 	{ .compatible = "ingenic,jz4760-uart", .data = &jz4760_uart_config },
+ 	{ .compatible = "ingenic,jz4770-uart", .data = &jz4760_uart_config },
+ 	{ .compatible = "ingenic,jz4775-uart", .data = &jz4760_uart_config },
 -- 
 2.36.1
 
