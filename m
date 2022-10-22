@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13C3C6087ED
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 10:07:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4853E608783
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 10:02:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232991AbiJVIHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 04:07:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43830 "EHLO
+        id S232599AbiJVICo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 04:02:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232781AbiJVIEL (ORCPT
+        with ESMTP id S232290AbiJVHyj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 04:04:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADE592C1721;
-        Sat, 22 Oct 2022 00:51:40 -0700 (PDT)
+        Sat, 22 Oct 2022 03:54:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A947C951ED;
+        Sat, 22 Oct 2022 00:47:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 57647B82E00;
-        Sat, 22 Oct 2022 07:39:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE0A7C433D6;
-        Sat, 22 Oct 2022 07:39:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E541A60B79;
+        Sat, 22 Oct 2022 07:40:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 051C0C4314B;
+        Sat, 22 Oct 2022 07:40:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666424354;
-        bh=lA0JoAyBfqKQ2fpj8FNAGAyuZ3ZEHwQ7RpJkvR7YOiM=;
+        s=korg; t=1666424410;
+        bh=dnR68S+GglvsGCWDNsJlZ6XYUD/v8mulvUWGGeDe8KI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CeobZHUJQUvU/B9F9PTDGzQc16ztUZkp4gPCy+KiQjVzRL8QWo0wG3uFNCpjwvh0E
-         i0KgwY0J0bzCBY/El5OlKHR1dljr2m2y1l0w4fLrd8OnPom5GNmlZ6XzfoP+16vz4+
-         PlLJMY6Xy6CcU7StsHZh/wTV6yHk80/FylX46YA0=
+        b=Fy9x5EOENK3T34j5pt0Gkp78wcu79rxwyt/aAcoWbP/dxQdK5J/DxYJmg2fOiDgoz
+         EAvZTN+WaGBJeA9t2YQN49HcMX4wbzzrIpN3El6ZOK8E1aHqkQo/zEbUyTrtWXoENx
+         vKrYp6goZ2kqF+xwNg7sRE7fCyd8L/eMCd47KUOQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
-        Quentin Schulz <quentin.schulz@theobroma-systems.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH 5.19 097/717] gpio: rockchip: request GPIO mux to pinctrl when setting direction
-Date:   Sat, 22 Oct 2022 09:19:36 +0200
-Message-Id: <20221022072432.541382124@linuxfoundation.org>
+        stable@vger.kernel.org, Zhang Xiaoxu <zhangxiaoxu5@huawei.com>,
+        Namjae Jeon <linkinjeon@kernel.org>,
+        Steve French <stfrench@microsoft.com>
+Subject: [PATCH 5.19 104/717] ksmbd: Fix wrong return value and message length check in smb2_ioctl()
+Date:   Sat, 22 Oct 2022 09:19:43 +0200
+Message-Id: <20221022072433.802029429@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221022072415.034382448@linuxfoundation.org>
 References: <20221022072415.034382448@linuxfoundation.org>
@@ -54,57 +54,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+From: Zhang Xiaoxu <zhangxiaoxu5@huawei.com>
 
-commit 8ea8af6c8469156ac2042d83d73f6b74eb4b4b45 upstream.
+commit b1763d265af62800ec96eeb79803c4c537dcef3a upstream.
 
-Before the split of gpio and pinctrl sections in their own driver,
-rockchip_set_mux was called in pinmux_ops.gpio_set_direction for
-configuring a pin in its GPIO function.
+Commit c7803b05f74b ("smb3: fix ksmbd bigendian bug in oplock
+break, and move its struct to smbfs_common") use the defination
+of 'struct validate_negotiate_info_req' in smbfs_common, the
+array length of 'Dialects' changed from 1 to 4, but the protocol
+does not require the client to send all 4. This lead the request
+which satisfied with protocol and server to fail.
 
-This is essential for cases where pinctrl is "bypassed" by gpio
-consumers otherwise the GPIO function is not configured for the pin and
-it does not work. Such was the case for the sysfs/libgpiod userspace
-GPIO handling.
+So just ensure the request payload has the 'DialectCount' in
+smb2_ioctl(), then fsctl_validate_negotiate_info() will use it
+to validate the payload length and each dialect.
 
-Let's call pinctrl_gpio_direction_input/output when setting the
-direction of a GPIO so that the pinctrl core requests from the rockchip
-pinctrl driver to put the pin in its GPIO function.
+Also when the {in, out}_buf_len is less than the required, should
+goto out to initialize the status in the response header.
 
-Fixes: 9ce9a02039de ("pinctrl/rockchip: drop the gpio related codes")
-Fixes: 936ee2675eee ("gpio/rockchip: add driver for rockchip gpio")
+Fixes: f7db8fd03a4b ("ksmbd: add validation in smb2_ioctl")
 Cc: stable@vger.kernel.org
-Reviewed-by: Heiko Stuebner <heiko@sntech.de>
-Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-Link: https://lore.kernel.org/r/20220930132033.4003377-3-foss+kernel@0leil.net
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Zhang Xiaoxu <zhangxiaoxu5@huawei.com>
+Acked-by: Namjae Jeon <linkinjeon@kernel.org>
+Signed-off-by: Steve French <stfrench@microsoft.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpio/gpio-rockchip.c |    7 +++++++
- 1 file changed, 7 insertions(+)
+ fs/ksmbd/smb2pdu.c |   13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
---- a/drivers/gpio/gpio-rockchip.c
-+++ b/drivers/gpio/gpio-rockchip.c
-@@ -19,6 +19,7 @@
- #include <linux/of_address.h>
- #include <linux/of_device.h>
- #include <linux/of_irq.h>
-+#include <linux/pinctrl/consumer.h>
- #include <linux/pinctrl/pinconf-generic.h>
- #include <linux/regmap.h>
+--- a/fs/ksmbd/smb2pdu.c
++++ b/fs/ksmbd/smb2pdu.c
+@@ -7627,11 +7627,16 @@ int smb2_ioctl(struct ksmbd_work *work)
+ 			goto out;
+ 		}
  
-@@ -155,6 +156,12 @@ static int rockchip_gpio_set_direction(s
- 	unsigned long flags;
- 	u32 data = input ? 0 : 1;
+-		if (in_buf_len < sizeof(struct validate_negotiate_info_req))
+-			return -EINVAL;
++		if (in_buf_len < offsetof(struct validate_negotiate_info_req,
++					  Dialects)) {
++			ret = -EINVAL;
++			goto out;
++		}
  
-+
-+	if (input)
-+		pinctrl_gpio_direction_input(bank->pin_base + offset);
-+	else
-+		pinctrl_gpio_direction_output(bank->pin_base + offset);
-+
- 	raw_spin_lock_irqsave(&bank->slock, flags);
- 	rockchip_gpio_writel_bit(bank, offset, data, bank->gpio_regs->port_ddr);
- 	raw_spin_unlock_irqrestore(&bank->slock, flags);
+-		if (out_buf_len < sizeof(struct validate_negotiate_info_rsp))
+-			return -EINVAL;
++		if (out_buf_len < sizeof(struct validate_negotiate_info_rsp)) {
++			ret = -EINVAL;
++			goto out;
++		}
+ 
+ 		ret = fsctl_validate_negotiate_info(conn,
+ 			(struct validate_negotiate_info_req *)&req->Buffer[0],
 
 
