@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 755066089B7
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 10:40:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5C4E6089D1
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 10:42:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234038AbiJVIkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 04:40:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54268 "EHLO
+        id S234692AbiJVImW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 04:42:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234473AbiJVIfh (ORCPT
+        with ESMTP id S234699AbiJVIjd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 04:35:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AFC025E9D;
-        Sat, 22 Oct 2022 01:04:40 -0700 (PDT)
+        Sat, 22 Oct 2022 04:39:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35E3B2C6369;
+        Sat, 22 Oct 2022 01:05:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AC1A760B49;
-        Sat, 22 Oct 2022 08:04:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A502AC433D7;
-        Sat, 22 Oct 2022 08:04:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 65EA0B82DFC;
+        Sat, 22 Oct 2022 08:04:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF3AFC433D6;
+        Sat, 22 Oct 2022 08:04:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666425841;
-        bh=01jDxhgdXrSDbn6vPLVwOQpBBL5rmQYUKZArmb7rDrI=;
+        s=korg; t=1666425844;
+        bh=hC7weKyqCI/bOmZ+4VQhssSCJ6Wn8R/IKSruyt9fD58=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=awLK3IyBK9niqc9lhBQPnS4KHw2q/yVkkViLuTR6tihaYc6cUjjMYHW38QlkOjapj
-         QU4ptzhFzawNz5WKHF2RAfJawG44GuYGh8TcqD0QJ4NdPC6llyGNkXZwa/hMUeYNk9
-         VoCXfEkgzuaqgHBB8DyRCYAJyTWhzPaw48YSJc6U=
+        b=TuI21YQOxoLxruKrdqaZtvx0BitmCfA2yQRQaAKEX6h/BHVDK+W5P3dB7Bbxf5Xqw
+         n+2qdgM/Dm0Uj7ZhEVjBNJuSSLGxhGlLCxfQJyH71Io55dguR4gykvcoACpBex0non
+         rf6OP2CSmsDWy3JKV+rbFUVIEUyYrApPlIYDMHnQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,9 +36,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Alexander Stein <alexander.stein@ew.tq-group.com>,
         Shawn Guo <shawnguo@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 634/717] ARM: dts: imx6sl: add missing properties for sram
-Date:   Sat, 22 Oct 2022 09:28:33 +0200
-Message-Id: <20221022072526.483888522@linuxfoundation.org>
+Subject: [PATCH 5.19 635/717] ARM: dts: imx6sll: add missing properties for sram
+Date:   Sat, 22 Oct 2022 09:28:34 +0200
+Message-Id: <20221022072526.532542038@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221022072415.034382448@linuxfoundation.org>
 References: <20221022072415.034382448@linuxfoundation.org>
@@ -57,7 +57,7 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Alexander Stein <alexander.stein@ew.tq-group.com>
 
-[ Upstream commit 60c9213a1d9941a8b33db570796c3f9be8984974 ]
+[ Upstream commit 7492a83ed9b7a151e2dd11d64b06da7a7f0fa7f9 ]
 
 All 3 properties are required by sram.yaml. Fixes the dtbs_check warning:
 sram@900000: '#address-cells' is a required property
@@ -68,13 +68,13 @@ Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
 Signed-off-by: Shawn Guo <shawnguo@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/imx6sl.dtsi | 3 +++
+ arch/arm/boot/dts/imx6sll.dtsi | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/arch/arm/boot/dts/imx6sl.dtsi b/arch/arm/boot/dts/imx6sl.dtsi
-index 06a515121dfc..cfd6b4972ae7 100644
---- a/arch/arm/boot/dts/imx6sl.dtsi
-+++ b/arch/arm/boot/dts/imx6sl.dtsi
+diff --git a/arch/arm/boot/dts/imx6sll.dtsi b/arch/arm/boot/dts/imx6sll.dtsi
+index d4a000c3dde7..2873369a57c0 100644
+--- a/arch/arm/boot/dts/imx6sll.dtsi
++++ b/arch/arm/boot/dts/imx6sll.dtsi
 @@ -115,6 +115,9 @@
  		ocram: sram@900000 {
  			compatible = "mmio-sram";
@@ -82,9 +82,9 @@ index 06a515121dfc..cfd6b4972ae7 100644
 +			ranges = <0 0x00900000 0x20000>;
 +			#address-cells = <1>;
 +			#size-cells = <1>;
- 			clocks = <&clks IMX6SL_CLK_OCRAM>;
  		};
  
+ 		intc: interrupt-controller@a01000 {
 -- 
 2.35.1
 
