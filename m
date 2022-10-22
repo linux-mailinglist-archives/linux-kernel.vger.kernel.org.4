@@ -2,142 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3B16608CB3
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 13:33:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B12C608CB5
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 13:33:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230046AbiJVLdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 07:33:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42314 "EHLO
+        id S229795AbiJVLda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 07:33:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230020AbiJVLco (ORCPT
+        with ESMTP id S229732AbiJVLdG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 07:32:44 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AAEB33A3A
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 04:12:26 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id m16so14658396edc.4
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 04:12:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XkHBPe8kKp/EBO1kgCVV44yINTVx9+9WMF/ZWQU88KM=;
-        b=hrLNxiuD7rGcoYoDFEG4FYJ/zZHCXK1tR2mH+JEjkDCh6yA6QjUPp6hoaTbZGI5xwI
-         S0wosoyTQLKJZteniGi1EOiIC27IGNkYXTMMocUfW5VMrtxE6dN2ItO5DXXhvN+8j9gS
-         H5urh1Mh8cAZU6X0H7Qk0CFxWioOf6qULmay65o9qqInJjxwFtI0329CssSoNf7bvXdv
-         DGSy76oaDRXXtkJwyDKOdxWyVIXAOFDJVOdPJ22X1EPpoTGyOKXh1e3dV1UNWIv8Av3y
-         9bfLKPDbpgWhV2bwmi+1h8ozn/pGs6jcFMH+3dRFmi3u3yI4CgmQ3FpOjrQCXg9ARbEA
-         1ilA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XkHBPe8kKp/EBO1kgCVV44yINTVx9+9WMF/ZWQU88KM=;
-        b=1bCsSJr9SNAIUw4MnffbjqNFmA7eo1YaYjtyV9NEtmW6hA6TB9E6f+XRMu9nSIAzre
-         DtvdydvCIejrzjQc2DMve5D4sWT7rmVfKQgkAYk9X+bPwkmMldjrJguSJ1/X3CvAsnyO
-         brMplhIy/e7Gq1rIJ9EAO9eQOVbEJoOev042u/T38uQlsRG5735MuonwZ1IlbY2qlGBy
-         /3YjmCgucFv55+OwUjuzCClGtEeZgRaqL3q6rO7+ivPD5m2iIAd5ZP9fIKUZoknh6+s9
-         sQQW55uP/JZKnsOF85hOasU1Dh8y67gyfzGSlNotmBjWVObmVcqVjuTQJbCmD0oAZSPd
-         yAvA==
-X-Gm-Message-State: ACrzQf38ci3ZXFOlXLkm6Sg/iLP1UZpJgkN8i//JJSbhSv958JdtneCS
-        S0f8M9NgehYcd4yIZyKJcMIS1g==
-X-Google-Smtp-Source: AMsMyM5sbHVdjq9chPJBv2v73OaTQ6ZtNtFRPn38AtlSsWcq8cx5eu0OlB4Dk1p4BQXHMJFueZyYOg==
-X-Received: by 2002:a05:6402:1911:b0:45c:be41:a879 with SMTP id e17-20020a056402191100b0045cbe41a879mr21645066edz.322.1666437144931;
-        Sat, 22 Oct 2022 04:12:24 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:25b:e73e:85eb:ae6e? ([2a05:6e02:1041:c10:25b:e73e:85eb:ae6e])
-        by smtp.googlemail.com with ESMTPSA id hp21-20020a1709073e1500b0079800b8173asm3338667ejc.158.2022.10.22.04.12.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 22 Oct 2022 04:12:24 -0700 (PDT)
-Message-ID: <2b0fe8c2-674a-3b44-16aa-d3008b1271c3@linaro.org>
-Date:   Sat, 22 Oct 2022 13:12:22 +0200
+        Sat, 22 Oct 2022 07:33:06 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E338660EA0
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 04:13:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666437217; x=1697973217;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=N/lj34MVd9FUcYHSIMRB4FOiHjHkYUMTvVoryrhPM0E=;
+  b=XgkF3mrXlM3fyQKNz+1J5M9oO98L699MRbIAhaXGykrVNyWPqwlH4Dnd
+   oZkOm7mnybGXfuXxhvZoSxx8vaFq805GHWPI1ZQZnR66jzt28Vg+IO87P
+   C6oDhQ7ceuPO/N6f6IOwKKlFjevvOcJ4egJs6QjCRseYXx92yHdihlbtX
+   Yryy3606UG85nHVbbs0NqHKJ/txo3YSUEVNmy+eX7mkTX3a528Gy+ZFAC
+   JkTbU8SfCcMpPNK0CaWMHKnR3GJjnedj2wqP7lGClwrm0vt+gMtn85Ziw
+   5hBpNLRuDRkFzSKC8ab/vOySyIZL1zyJR2LKycz3BZl6R2CnU02OFALVa
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10507"; a="308273643"
+X-IronPort-AV: E=Sophos;i="5.95,205,1661842800"; 
+   d="scan'208";a="308273643"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2022 04:13:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10507"; a="608679903"
+X-IronPort-AV: E=Sophos;i="5.95,205,1661842800"; 
+   d="scan'208";a="608679903"
+Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 22 Oct 2022 04:13:36 -0700
+Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1omCRb-0003aY-32;
+        Sat, 22 Oct 2022 11:13:35 +0000
+Date:   Sat, 22 Oct 2022 19:12:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:rcu/next] BUILD SUCCESS
+ ba38687626adeb7afce6527608adb74d7e8ed351
+Message-ID: <6353d029.TiOGmviQv3lbljbs%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/2] thermal: rockchip: Support RK3588 SoC in the thermal
- driver
-Content-Language: en-US
-To:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        linux-rockchip@lists.infradead.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Finley Xiao <finley.xiao@rock-chips.com>, kernel@collabora.com
-References: <20221021174721.92468-1-sebastian.reichel@collabora.com>
- <20221021174721.92468-2-sebastian.reichel@collabora.com>
- <2aafa6cc-a7de-0b7a-571f-04593ad53787@linaro.org>
- <7276280.TLKafQO6qx@archbook>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <7276280.TLKafQO6qx@archbook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/10/2022 10:43, Nicolas Frattaroli wrote:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git rcu/next
+branch HEAD: ba38687626adeb7afce6527608adb74d7e8ed351  selftests/nolibc: Add 7 tests for memcmp()
 
-[ ... ]
+elapsed time: 947m
 
->> What is TOP and CENTER ?
->>
->> There are 4 Bigs on this platform but two sensors ?
-> 
-> As far as I know, the four big cores in the SoC are arranged in two
-> clusters of two cores each, so one temperature sensor for each
-> cluster. As far as I can tell each CPU in a cluster shares its voltage
-> with its partner CPU core in its cluster.
+configs tested: 85
+configs skipped: 3
 
-Ok, I found some more details on the datasheet, page 7-8.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-So it is a big "Cluster" with the 4 Big cores. They share the same cache.
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+arc                                 defconfig
+s390                             allmodconfig
+alpha                               defconfig
+s390                                defconfig
+s390                             allyesconfig
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+powerpc                           allnoconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+i386                                defconfig
+x86_64                              defconfig
+arc                  randconfig-r043-20221019
+arc                  randconfig-r043-20221020
+s390                 randconfig-r044-20221020
+riscv                randconfig-r042-20221020
+x86_64                           rhel-8.3-kvm
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+x86_64                               rhel-8.3
+i386                             allyesconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+arm                                 defconfig
+i386                          randconfig-a001
+i386                          randconfig-a003
+x86_64                           allyesconfig
+i386                          randconfig-a005
+arm64                            allyesconfig
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+arm                              allyesconfig
+alpha                            allyesconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a015
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+sh                         microdev_defconfig
+arm                            qcom_defconfig
+arc                              alldefconfig
+m68k                          atari_defconfig
+powerpc                     tqm8548_defconfig
+arm                          lpd270_defconfig
+arm                       omap2plus_defconfig
+arm                        clps711x_defconfig
+powerpc                 linkstation_defconfig
+arc                            hsdk_defconfig
+openrisc                 simple_smp_defconfig
+i386                          randconfig-c001
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
 
-There is one power domain per core (cpuidle)
-
-There are two performance domains (cpufreq x 2)
-
-So it makes sense to have one sensor per performance domain to mitigate 
-the temperature.
-
-> If you have access to the TRM, it contains the following line in
-> part 1 on page 1372:
-
-Unfortunately no, I don't have access to the TRM. But I'll be happy if I 
-can ;)
-
-> 	Support to 7 channel TS-ADC (near chip center, A76_0/1, A76_2/3,
-> 	DSU and A55_0/1/2/3, PD_CENTER, NPU, GPU)
-> 
-> I assume one of "TOP" and "CENTER" is "near chip center", the other is
-> PD_CENTER, whatever that means (PD = power domain maybe?)
-
-Yes certainly.
-
-I take the opportunity to let you know there is a new tool in the linux 
-tools directory called 'thermometer'. You can capture the temperature 
-and use the data to create graphics.
-
-> I agree these could be named more descriptively.
-> 
-
-
+clang tested configs:
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a014
+riscv                randconfig-r042-20221019
+i386                 randconfig-a011-20221017
+i386                 randconfig-a013-20221017
+i386                 randconfig-a012-20221017
+i386                 randconfig-a014-20221017
+x86_64                        randconfig-a005
+x86_64                        randconfig-a016
+i386                 randconfig-a016-20221017
+x86_64                        randconfig-a001
+i386                 randconfig-a015-20221017
+hexagon              randconfig-r045-20221019
+x86_64                        randconfig-a012
+x86_64                        randconfig-a003
+hexagon              randconfig-r041-20221019
+s390                 randconfig-r044-20221019
+x86_64                        randconfig-k001
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+0-DAY CI Kernel Test Service
+https://01.org/lkp
