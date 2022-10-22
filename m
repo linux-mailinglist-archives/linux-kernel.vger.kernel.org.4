@@ -2,152 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04443608575
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 09:31:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54A946085B8
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 09:37:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229944AbiJVHbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 03:31:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42984 "EHLO
+        id S230424AbiJVHhs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 03:37:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbiJVHbL (ORCPT
+        with ESMTP id S230365AbiJVHgz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 03:31:11 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6405917F666;
-        Sat, 22 Oct 2022 00:31:07 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 5D13718845FE;
-        Sat, 22 Oct 2022 07:31:06 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 57389250007B;
-        Sat, 22 Oct 2022 07:31:06 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id 3B3579EC0002; Sat, 22 Oct 2022 07:31:06 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Sat, 22 Oct 2022 03:36:55 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CB1324B31F
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 00:35:31 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id l28so3000735qtv.4
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 00:35:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZTgwvmCwshFQNtdtBgqjMRnvCyC/Xl8rvUH5mkou+6w=;
+        b=an7tzkeyjHNGfmNqiV8MF7LnV+EamsmZjtpaDzasnoGpc0ZthGxdDMMSjpBqpcTxtf
+         T8DPHXNttV7ep4IxxyzusqdRTidcXxstFwEGJVWSrlsIGHdX9eutFo4pEi1kHY658KRt
+         b8RNoZpjZ2F44VL4JUL81Rp7+ygYPc3lGxoQCWwMfg/yCT584jlEWuQZgoDYe2/3yuZb
+         S4w6XKqD7CPr1YepVVT3QdU7wTMMxf7coBIazsMMdc00HId6Al8KURBe09PspIKuX6i3
+         gNfQN9ia+tNEBVsiAiH4mnAFPKo8meHgOVPowCMjqxg8ugXWvTbZCjrBaUibdBcmUifa
+         P0Jg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZTgwvmCwshFQNtdtBgqjMRnvCyC/Xl8rvUH5mkou+6w=;
+        b=EjVPtNQEa5LiWOxO11VXoDWOrRhmpoeDOqzinTEaMqpp2Rhjgz6ufFlfsUi7IsOX6s
+         8kKsTCbX3btTQywlkriiidl9RuWiS/hSnRrnrzU9Eg9pxKD7qQKHd+wTWi9FnUFgE0jw
+         GI5UZj4auJQhMW/O96UWN5Z8nxLUKpDMmvBNXJxGVBg5gvXaxvF52hNDUOt4pPUXSjus
+         ybzayQaWxkujeJB+uQvPVlmr+2ZMUSoccyjJ1LpS44dqNuQu2SKrNFRfciN0ORkHZIPt
+         5aHYFOoWkxIKW6jnVE55XxsE04H14q3Xxsc4IPYDE7NL47uLU0gA1BuX+aSegjaDYPtW
+         YeEQ==
+X-Gm-Message-State: ACrzQf1MSybNfK3ht/1a1ktQvIj/wJD4nuH2QKgBnnJlI/rY+K3hRqK+
+        MEfnTUip2AvepOhrs5R2hmhmaC/WumqbTP65eCStHvN34Im32eTibJQ=
+X-Google-Smtp-Source: AMsMyM7uLuNV6EpVW8mxH8VqxE3DFqPy5Qu2WdFiwjqBl/ewFeWLLSesYfHyTOJXNTow/F9voRX180fgU3ywsAQHALo=
+X-Received: by 2002:a05:622a:411:b0:39e:354e:b537 with SMTP id
+ n17-20020a05622a041100b0039e354eb537mr5632545qtx.656.1666424130617; Sat, 22
+ Oct 2022 00:35:30 -0700 (PDT)
 MIME-Version: 1.0
-Date:   Sat, 22 Oct 2022 09:31:06 +0200
-From:   netdev@kapio-technology.com
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Florent Fourcot <florent.fourcot@wifirst.fr>,
-        Hans Schultz <schultz.hans@gmail.com>,
-        Joachim Wiberg <troglobit@gmail.com>,
-        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v8 net-next 10/12] net: dsa: mv88e6xxx: mac-auth/MAB
- implementation
-In-Reply-To: <20221020132538.reirrskemcjwih2m@skbuf>
-References: <20221018165619.134535-1-netdev@kapio-technology.com>
- <20221018165619.134535-1-netdev@kapio-technology.com>
- <20221018165619.134535-11-netdev@kapio-technology.com>
- <20221018165619.134535-11-netdev@kapio-technology.com>
- <20221020132538.reirrskemcjwih2m@skbuf>
-User-Agent: Gigahost Webmail
-Message-ID: <a0269818b270ad0537b991bd98725260@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221022070612.13009-1-tanjubrunostar0@gmail.com>
+ <20221022070612.13009-2-tanjubrunostar0@gmail.com> <cae0a94e73b1e44a7d8c750a406aa77d1942a06a.camel@perches.com>
+In-Reply-To: <cae0a94e73b1e44a7d8c750a406aa77d1942a06a.camel@perches.com>
+From:   Tanju Brunostar <tanjubrunostar0@gmail.com>
+Date:   Sat, 22 Oct 2022 08:35:18 +0100
+Message-ID: <CAHJEyKU1qSoSy3AB0sJL7OAtkQX3H67dCL2ZFTMdb913F5oURQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/6] staging: vt6655: fix lines ending in a '('
+To:     Joe Perches <joe@perches.com>
+Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-20 15:25, Vladimir Oltean wrote:
->>  	if (flags.mask & BR_LEARNING) {
->>  		bool learning = !!(flags.val & BR_LEARNING);
->>  		u16 pav = learning ? (1 << port) : 0;
->> 
->> +		mv88e6xxx_reg_lock(chip);
->>  		err = mv88e6xxx_port_set_assoc_vector(chip, port, pav);
->> +		mv88e6xxx_reg_unlock(chip);
->>  		if (err)
->>  			goto out;
->>  	}
->> @@ -6563,8 +6593,10 @@ static int mv88e6xxx_port_bridge_flags(struct 
->> dsa_switch *ds, int port,
->>  	if (flags.mask & BR_FLOOD) {
->>  		bool unicast = !!(flags.val & BR_FLOOD);
->> 
->> +		mv88e6xxx_reg_lock(chip);
->>  		err = chip->info->ops->port_set_ucast_flood(chip, port,
->>  							    unicast);
->> +		mv88e6xxx_reg_unlock(chip);
->>  		if (err)
->>  			goto out;
->>  	}
->> @@ -6572,8 +6604,10 @@ static int mv88e6xxx_port_bridge_flags(struct 
->> dsa_switch *ds, int port,
->>  	if (flags.mask & BR_MCAST_FLOOD) {
->>  		bool multicast = !!(flags.val & BR_MCAST_FLOOD);
->> 
->> +		mv88e6xxx_reg_lock(chip);
->>  		err = chip->info->ops->port_set_mcast_flood(chip, port,
->>  							    multicast);
->> +		mv88e6xxx_reg_unlock(chip);
->>  		if (err)
->>  			goto out;
->>  	}
->> @@ -6581,20 +6615,34 @@ static int mv88e6xxx_port_bridge_flags(struct 
->> dsa_switch *ds, int port,
->>  	if (flags.mask & BR_BCAST_FLOOD) {
->>  		bool broadcast = !!(flags.val & BR_BCAST_FLOOD);
->> 
->> +		mv88e6xxx_reg_lock(chip);
->>  		err = mv88e6xxx_port_broadcast_sync(chip, port, broadcast);
->> +		mv88e6xxx_reg_unlock(chip);
->>  		if (err)
->>  			goto out;
->>  	}
->> 
->> +	if (flags.mask & BR_PORT_MAB) {
->> +		chip->ports[port].mab = !!(flags.val & BR_PORT_MAB);
->> +
->> +		if (!chip->ports[port].mab)
->> +			err = mv88e6xxx_atu_locked_entry_flush(ds, port);
->> +		else
->> +			err = 0;
-> 
-> Again, dsa_port_fast_age() is also called when dp->learning is turned
-> off in dsa_port_bridge_flags(). I don't want to see the mv88e6xxx 
-> driver
-> doing this manually.
-> 
-
-But I think it should be so that turning MAB off will clear the ALE 
-entries
-regardless, as the port can continue to be locked and needing port 
-association,
-or you want them to just age out normally in that case, thus lingering 
-for
-up to bridge ageing time?
+On Sat, Oct 22, 2022 at 8:18 AM Joe Perches <joe@perches.com> wrote:
+>
+> On Sat, 2022-10-22 at 07:06 +0000, Tanjuate Brunostar wrote:
+> > fix serveral checkpatch errors related to lines ending with a '(' by
+> > refactoring the code lines
+> []
+> > diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
+> []
+> > @@ -141,13 +141,11 @@ static __le16 vnt_time_stamp_off(struct vnt_private *priv, u16 rate)
+> >   */
+> >  static
+> >  unsigned int
+> > -s_uGetTxRsvTime(
+> > -     struct vnt_private *pDevice,
+> > -     unsigned char byPktType,
+> > -     unsigned int cbFrameLength,
+> > -     unsigned short wRate,
+> > -     bool bNeedAck
+> > -)
+> > +s_uGetTxRsvTime(struct vnt_private *pDevice,
+>
+> If you end up doing more work here, ou might consider removing the
+> Hungarian style notations
+>
+> Maybe something like:
+>
+> s_uGetTxRsvTime -> get_tx_rsv_time
+>
+> > +             unsigned char byPktType,
+>
+> byPktType       -> pkt_type
+>
+> etc...
+>
+> Perhaps patches by unique rename.
+>
+Yes I plan on doing that as a separate patch. It could be overwhelming
+keeping track of so many changes at a time
+thanks
+Tanju
