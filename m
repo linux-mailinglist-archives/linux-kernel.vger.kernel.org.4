@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 839316086EF
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 09:55:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3D51608701
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 09:55:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231983AbiJVHzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 03:55:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54856 "EHLO
+        id S232132AbiJVHzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 03:55:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231754AbiJVHwE (ORCPT
+        with ESMTP id S231804AbiJVHwg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 03:52:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6A612C2AEA;
-        Sat, 22 Oct 2022 00:46:24 -0700 (PDT)
+        Sat, 22 Oct 2022 03:52:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82EF82C1736;
+        Sat, 22 Oct 2022 00:46:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E268660BA2;
-        Sat, 22 Oct 2022 07:43:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 015B9C433C1;
-        Sat, 22 Oct 2022 07:43:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 366B360B21;
+        Sat, 22 Oct 2022 07:43:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15280C433D6;
+        Sat, 22 Oct 2022 07:43:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666424619;
-        bh=KTZcokemeTem35PNMjBQHPCVWK2pq04hPNhpZ0yUFtw=;
+        s=korg; t=1666424627;
+        bh=93O7dW6IRHQsb8gextTW4CtzcYvhaFQPXPpG+LAb1ro=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WdLAHb0xQZYfsAoJjnn+P94E+HckkTYwP3kznLgyCFKg/DLsHHCvfWjiTcNT+s43g
-         7LgnBoSGzPn+jg7cenRdUZZbw4A8F5c4MP49hF0hvytpXR9WkUwW47QDlKolzDC73q
-         ooYgAdAc6R3zPOCEgBrLZKH9jzBIGJtB4hfVutJk=
+        b=CUmDIEFTTzr58H56+o5iX/D3KHTuaOsaCYl/Ts4NBGAaclG5Y5sG3kh075ndJsY1Z
+         1jq1aLURc+EcRJ0T51reCRWwUf6H+RRrZFaGTNDnnXPv0L3M14VHy4o5Bn2bo35hIN
+         lJcHHuzy2xlLP//Q5eu/xlUjgnaqvVlO9wYtvguE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 214/717] spi: mt7621: Fix an error message in mt7621_spi_probe()
-Date:   Sat, 22 Oct 2022 09:21:33 +0200
-Message-Id: <20221022072453.129048558@linuxfoundation.org>
+Subject: [PATCH 5.19 216/717] xsk: Fix backpressure mechanism on Tx
+Date:   Sat, 22 Oct 2022 09:21:35 +0200
+Message-Id: <20221022072453.451371628@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221022072415.034382448@linuxfoundation.org>
 References: <20221022072415.034382448@linuxfoundation.org>
@@ -56,46 +56,169 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 
-[ Upstream commit 2b2bf6b7faa9010fae10dc7de76627a3fdb525b3 ]
+[ Upstream commit c00c4461689e15ac2cc3b9a595a54e4d8afd3d77 ]
 
-'status' is known to be 0 at this point. The expected error code is
-PTR_ERR(clk).
+Commit d678cbd2f867 ("xsk: Fix handling of invalid descriptors in XSK TX
+batching API") fixed batch API usage against set of descriptors with
+invalid ones but introduced a problem when AF_XDP SW rings are smaller
+than HW ones. Mismatch of reported Tx'ed frames between HW generator and
+user space app was observed. It turned out that backpressure mechanism
+became a bottleneck when the amount of produced descriptors to CQ is
+lower than what we grabbed from XSK Tx ring.
 
-Switch to dev_err_probe() in order to display the expected error code (in a
-human readable way).
-This also filters -EPROBE_DEFER cases, should it happen.
+Say that 512 entries had been taken from XSK Tx ring but we had only 490
+free entries in CQ. Then callsite (ZC driver) will produce only 490
+entries onto HW Tx ring but 512 entries will be released from Tx ring
+and this is what will be seen by the user space.
 
-Fixes: 1ab7f2a43558 ("staging: mt7621-spi: add mt7621 support")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
-Link: https://lore.kernel.org/r/928f3fb507d53ba0774df27cea0bbba4b055993b.1661599671.git.christophe.jaillet@wanadoo.fr
-Signed-off-by: Mark Brown <broonie@kernel.org>
+In order to fix this case, mix XSK Tx/CQ ring interractions by moving
+around internal functions and changing call order:
+
+*  pull out xskq_prod_nb_free() from xskq_prod_reserve_addr_batch()
+   up to xsk_tx_peek_release_desc_batch();
+** move xskq_cons_release_n() into xskq_cons_read_desc_batch()
+
+After doing so, algorithm can be described as follows:
+
+1. lookup Tx entries
+2. use value from 1. to reserve space in CQ (*)
+3. Read from Tx ring as much descriptors as value from 2
+ 3a. release descriptors from XSK Tx ring (**)
+4. Finally produce addresses to CQ
+
+Fixes: d678cbd2f867 ("xsk: Fix handling of invalid descriptors in XSK TX batching API")
+Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
+Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Link: https://lore.kernel.org/bpf/20220830121705.8618-1-maciej.fijalkowski@intel.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-mt7621.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ net/xdp/xsk.c       | 22 +++++++++++-----------
+ net/xdp/xsk_queue.h | 22 ++++++++++------------
+ 2 files changed, 21 insertions(+), 23 deletions(-)
 
-diff --git a/drivers/spi/spi-mt7621.c b/drivers/spi/spi-mt7621.c
-index b4b9b7309b5e..351b0ef52bbc 100644
---- a/drivers/spi/spi-mt7621.c
-+++ b/drivers/spi/spi-mt7621.c
-@@ -340,11 +340,9 @@ static int mt7621_spi_probe(struct platform_device *pdev)
- 		return PTR_ERR(base);
+diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+index 7e311420aab9..e24d62f8883a 100644
+--- a/net/xdp/xsk.c
++++ b/net/xdp/xsk.c
+@@ -355,16 +355,15 @@ static u32 xsk_tx_peek_release_fallback(struct xsk_buff_pool *pool, u32 max_entr
+ 	return nb_pkts;
+ }
  
- 	clk = devm_clk_get(&pdev->dev, NULL);
--	if (IS_ERR(clk)) {
--		dev_err(&pdev->dev, "unable to get SYS clock, err=%d\n",
--			status);
--		return PTR_ERR(clk);
+-u32 xsk_tx_peek_release_desc_batch(struct xsk_buff_pool *pool, u32 max_entries)
++u32 xsk_tx_peek_release_desc_batch(struct xsk_buff_pool *pool, u32 nb_pkts)
+ {
+ 	struct xdp_sock *xs;
+-	u32 nb_pkts;
+ 
+ 	rcu_read_lock();
+ 	if (!list_is_singular(&pool->xsk_tx_list)) {
+ 		/* Fallback to the non-batched version */
+ 		rcu_read_unlock();
+-		return xsk_tx_peek_release_fallback(pool, max_entries);
++		return xsk_tx_peek_release_fallback(pool, nb_pkts);
+ 	}
+ 
+ 	xs = list_first_or_null_rcu(&pool->xsk_tx_list, struct xdp_sock, tx_list);
+@@ -373,12 +372,7 @@ u32 xsk_tx_peek_release_desc_batch(struct xsk_buff_pool *pool, u32 max_entries)
+ 		goto out;
+ 	}
+ 
+-	max_entries = xskq_cons_nb_entries(xs->tx, max_entries);
+-	nb_pkts = xskq_cons_read_desc_batch(xs->tx, pool, max_entries);
+-	if (!nb_pkts) {
+-		xs->tx->queue_empty_descs++;
+-		goto out;
 -	}
-+	if (IS_ERR(clk))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(clk),
-+				     "unable to get SYS clock\n");
++	nb_pkts = xskq_cons_nb_entries(xs->tx, nb_pkts);
  
- 	status = clk_prepare_enable(clk);
- 	if (status)
+ 	/* This is the backpressure mechanism for the Tx path. Try to
+ 	 * reserve space in the completion queue for all packets, but
+@@ -386,12 +380,18 @@ u32 xsk_tx_peek_release_desc_batch(struct xsk_buff_pool *pool, u32 max_entries)
+ 	 * packets. This avoids having to implement any buffering in
+ 	 * the Tx path.
+ 	 */
+-	nb_pkts = xskq_prod_reserve_addr_batch(pool->cq, pool->tx_descs, nb_pkts);
++	nb_pkts = xskq_prod_nb_free(pool->cq, nb_pkts);
+ 	if (!nb_pkts)
+ 		goto out;
+ 
+-	xskq_cons_release_n(xs->tx, max_entries);
++	nb_pkts = xskq_cons_read_desc_batch(xs->tx, pool, nb_pkts);
++	if (!nb_pkts) {
++		xs->tx->queue_empty_descs++;
++		goto out;
++	}
++
+ 	__xskq_cons_release(xs->tx);
++	xskq_prod_write_addr_batch(pool->cq, pool->tx_descs, nb_pkts);
+ 	xs->sk.sk_write_space(&xs->sk);
+ 
+ out:
+diff --git a/net/xdp/xsk_queue.h b/net/xdp/xsk_queue.h
+index fb20bf7207cf..c6fb6b763658 100644
+--- a/net/xdp/xsk_queue.h
++++ b/net/xdp/xsk_queue.h
+@@ -205,6 +205,11 @@ static inline bool xskq_cons_read_desc(struct xsk_queue *q,
+ 	return false;
+ }
+ 
++static inline void xskq_cons_release_n(struct xsk_queue *q, u32 cnt)
++{
++	q->cached_cons += cnt;
++}
++
+ static inline u32 xskq_cons_read_desc_batch(struct xsk_queue *q, struct xsk_buff_pool *pool,
+ 					    u32 max)
+ {
+@@ -226,6 +231,8 @@ static inline u32 xskq_cons_read_desc_batch(struct xsk_queue *q, struct xsk_buff
+ 		cached_cons++;
+ 	}
+ 
++	/* Release valid plus any invalid entries */
++	xskq_cons_release_n(q, cached_cons - q->cached_cons);
+ 	return nb_entries;
+ }
+ 
+@@ -291,11 +298,6 @@ static inline void xskq_cons_release(struct xsk_queue *q)
+ 	q->cached_cons++;
+ }
+ 
+-static inline void xskq_cons_release_n(struct xsk_queue *q, u32 cnt)
+-{
+-	q->cached_cons += cnt;
+-}
+-
+ static inline u32 xskq_cons_present_entries(struct xsk_queue *q)
+ {
+ 	/* No barriers needed since data is not accessed */
+@@ -350,21 +352,17 @@ static inline int xskq_prod_reserve_addr(struct xsk_queue *q, u64 addr)
+ 	return 0;
+ }
+ 
+-static inline u32 xskq_prod_reserve_addr_batch(struct xsk_queue *q, struct xdp_desc *descs,
+-					       u32 max)
++static inline void xskq_prod_write_addr_batch(struct xsk_queue *q, struct xdp_desc *descs,
++					      u32 nb_entries)
+ {
+ 	struct xdp_umem_ring *ring = (struct xdp_umem_ring *)q->ring;
+-	u32 nb_entries, i, cached_prod;
+-
+-	nb_entries = xskq_prod_nb_free(q, max);
++	u32 i, cached_prod;
+ 
+ 	/* A, matches D */
+ 	cached_prod = q->cached_prod;
+ 	for (i = 0; i < nb_entries; i++)
+ 		ring->desc[cached_prod++ & q->ring_mask] = descs[i].addr;
+ 	q->cached_prod = cached_prod;
+-
+-	return nb_entries;
+ }
+ 
+ static inline int xskq_prod_reserve_desc(struct xsk_queue *q,
 -- 
 2.35.1
 
