@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 422F1608786
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 10:03:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 329A460879C
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 10:05:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232623AbiJVIC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 04:02:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42802 "EHLO
+        id S232817AbiJVIEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 04:04:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232348AbiJVHyn (ORCPT
+        with ESMTP id S232357AbiJVH6A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 03:54:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A472CDE7;
-        Sat, 22 Oct 2022 00:47:55 -0700 (PDT)
+        Sat, 22 Oct 2022 03:58:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC7A312276F;
+        Sat, 22 Oct 2022 00:49:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C1158B82E13;
-        Sat, 22 Oct 2022 07:47:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DF63C433C1;
-        Sat, 22 Oct 2022 07:47:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E713060ACE;
+        Sat, 22 Oct 2022 07:48:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 011ADC433C1;
+        Sat, 22 Oct 2022 07:48:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666424827;
-        bh=qubxgJW3yy4v52tdRBQ7C/fWqSRTYb6tebZiHAJIdL4=;
+        s=korg; t=1666424936;
+        bh=4skOxrJgX4AfIkPHOIg87BN7DK+WMUVYiGNtnr5td+c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gR/r/+dCvEDeH7zXQm3r1qOKh7VlWIV2G9w53qf87qC4Z3xPEfGj1xbi7mWqes1Il
-         nOSayFLQb3l1ThmkzyVVDVreo+H5xtPP54sPJ0+vObtJwqSQ6JOeM5fDijXIisroyh
-         9ohnL5Fjht0obMx/6fjVBf+u0ZVkvWRW3MutUx40=
+        b=1BOzT+cxYOWd4g+16P9RykHSdptaPh22Hb3uBdmVYzShbDIJNdK2MlaINZY8hNxMv
+         6gIuGf67d+4ZOVJ0RoC0Jr9j8VU9dfS/qarxKNPqEctH4nw+H5ORgvM+LSbJtIOv2d
+         fhuXEXRE0cLV2cTXpEslH/RAD9hzLyw8F3AX2RTc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zheng Wang <zyytlz.wz@163.com>,
+        stable@vger.kernel.org,
+        syzbot <syzbot+5ea725c25d06fb9114c4@syzkaller.appspotmail.com>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 290/717] eth: sp7021: fix use after free bug in spl2sw_nvmem_get_mac_address
-Date:   Sat, 22 Oct 2022 09:22:49 +0200
-Message-Id: <20221022072504.730256985@linuxfoundation.org>
+Subject: [PATCH 5.19 292/717] net/ieee802154: reject zero-sized raw_sendmsg()
+Date:   Sat, 22 Oct 2022 09:22:51 +0200
+Message-Id: <20221022072505.011272412@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221022072415.034382448@linuxfoundation.org>
 References: <20221022072415.034382448@linuxfoundation.org>
@@ -54,35 +56,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zheng Wang <zyytlz.wz@163.com>
+From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
 
-[ Upstream commit 12aece8b01507a2d357a1861f470e83621fbb6f2 ]
+[ Upstream commit 3a4d061c699bd3eedc80dc97a4b2a2e1af83c6f5 ]
 
-This frees "mac" and tries to display its address as part of the error
-message on the next line.  Swap the order.
+syzbot is hitting skb_assert_len() warning at raw_sendmsg() for ieee802154
+socket. What commit dc633700f00f726e ("net/af_packet: check len when
+min_header_len equals to 0") does also applies to ieee802154 socket.
 
-Fixes: fd3040b9394c ("net: ethernet: Add driver for Sunplus SP7021")
-Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+Link: https://syzkaller.appspot.com/bug?extid=5ea725c25d06fb9114c4
+Reported-by: syzbot <syzbot+5ea725c25d06fb9114c4@syzkaller.appspotmail.com>
+Fixes: fd1894224407c484 ("bpf: Don't redirect packets with invalid pkt_len")
+Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/sunplus/spl2sw_driver.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/ieee802154/socket.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/net/ethernet/sunplus/spl2sw_driver.c b/drivers/net/ethernet/sunplus/spl2sw_driver.c
-index 3773ce5e12cc..37711331ba0f 100644
---- a/drivers/net/ethernet/sunplus/spl2sw_driver.c
-+++ b/drivers/net/ethernet/sunplus/spl2sw_driver.c
-@@ -248,8 +248,8 @@ static int spl2sw_nvmem_get_mac_address(struct device *dev, struct device_node *
- 
- 	/* Check if mac address is valid */
- 	if (!is_valid_ether_addr(mac)) {
--		kfree(mac);
- 		dev_info(dev, "Invalid mac address in nvmem (%pM)!\n", mac);
-+		kfree(mac);
- 		return -EINVAL;
+diff --git a/net/ieee802154/socket.c b/net/ieee802154/socket.c
+index 7889e1ef7fad..cbd0e2ac4ffe 100644
+--- a/net/ieee802154/socket.c
++++ b/net/ieee802154/socket.c
+@@ -251,6 +251,9 @@ static int raw_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
+ 		return -EOPNOTSUPP;
  	}
  
++	if (!size)
++		return -EINVAL;
++
+ 	lock_sock(sk);
+ 	if (!sk->sk_bound_dev_if)
+ 		dev = dev_getfirstbyhwtype(sock_net(sk), ARPHRD_IEEE802154);
 -- 
 2.35.1
 
