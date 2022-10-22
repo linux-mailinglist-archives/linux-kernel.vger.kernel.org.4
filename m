@@ -2,38 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2677160849F
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 07:36:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E14426084A1
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 07:37:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbiJVFgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 01:36:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54826 "EHLO
+        id S229849AbiJVFhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 01:37:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbiJVFgR (ORCPT
+        with ESMTP id S229491AbiJVFhc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 01:36:17 -0400
+        Sat, 22 Oct 2022 01:37:32 -0400
 Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB03A28B1FC;
-        Fri, 21 Oct 2022 22:36:13 -0700 (PDT)
-X-QQ-mid: bizesmtp63t1666416969tzmap60o
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCE0929C3C1;
+        Fri, 21 Oct 2022 22:37:30 -0700 (PDT)
+X-QQ-mid: bizesmtp88t1666417028toi6erja
 Received: from localhost.localdomain ( [182.148.15.254])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 22 Oct 2022 13:36:08 +0800 (CST)
+        id ; Sat, 22 Oct 2022 13:37:06 +0800 (CST)
 X-QQ-SSF: 01000000000000C0E000000A0000000
-X-QQ-FEAT: r/cTxDoDoiHtF+qYAVJu9vtCCJV3DBLH0AuDzXdVIaIYzdJI/plmbSJG/poTi
-        f8FWgJBNC5GsvpMTk4rwvAGIK011LhmQ5n+pNVuhZn6maA/82oSYG/rPr+JaIHgYa7K3trM
-        6I+bAlbLZqLQUDKOhd3sIU/Z8R7oSpQyAf8yKUURdYGKz8UeHxucVcYo3jwWkokZL2wgucQ
-        zJLO62qhpuecQLB7oe5kpnoaTIrslVOTLDmuzKLb41DtQJ9gzF6m7n11JLvTT65hUGl7x+K
-        q46k3W9AohUOS2SSk0LY34u4sbk+SJvnDKHdGDahcWNOOMsjE4yYNwoaQrZasGZLSKG6Zys
-        dia0Ke3OIkT+kBXwmjjBs1FieekT2ZnGfaH1z9x8AdicvwltCU=
+X-QQ-FEAT: /+iK7ZpVlLQUvaMxQxCnGTbOqBBO+WfGbOoAxIwmBGcYlOlE5wj6EppqPyGud
+        j6Dix0YjlE211NP4UThqFZCT8iHKkxln+/RiB3mL9C2Rt9H4WwKmH+omUFqob0CpFHnoFqW
+        mwlWOKZVwKpaWxf50/NOep0wfVPeMLw4b0afxlokqIAmDmWfEVf65FOj+kRGWz4f1nzMxWs
+        pMyph4yLAd5r/nR6BOy2H5kX0kFJfZZl8h73O4F2GwMs5bhZ7iI1aTRgCvRJ6uDCjrnuZDZ
+        8lHL8MtUGXEhg0f0K16Kr0mN5MylXzzPze/aXvOCdLjBEcicdpja0dcaKPBEM4gKaK+R+Fy
+        UsmtOFwyy5mWJRzDpP5fk33xuQ9w2WHiAlaFaSpD26Q6cbmglQ=
 X-QQ-GoodBg: 0
 From:   wangjianli <wangjianli@cdjrlc.com>
-To:     tony@atomide.com
-Cc:     linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
+To:     dinguyen@kernel.org, bp@alien8.de, mchehab@kernel.org,
+        tony.luck@intel.com
+Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
         wangjianli <wangjianli@cdjrlc.com>
-Subject: [PATCH] drivers/bus: fix repeated words in comments
-Date:   Sat, 22 Oct 2022 13:36:02 +0800
-Message-Id: <20221022053602.24624-1-wangjianli@cdjrlc.com>
+Subject: [PATCH] drivers/edac: fix repeated words in comments
+Date:   Sat, 22 Oct 2022 13:37:00 +0800
+Message-Id: <20221022053700.25752-1-wangjianli@cdjrlc.com>
 X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -51,22 +52,22 @@ Delete the redundant word 'the'.
 
 Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
 ---
- drivers/bus/ti-sysc.c | 2 +-
+ drivers/edac/altera_edac.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/bus/ti-sysc.c b/drivers/bus/ti-sysc.c
-index 9a7d12332fad..a864f24d6b4f 100644
---- a/drivers/bus/ti-sysc.c
-+++ b/drivers/bus/ti-sysc.c
-@@ -912,7 +912,7 @@ static int sysc_check_registers(struct sysc *ddata)
-  * Note that the interconnect target module registers can be anywhere
-  * within the interconnect target module range. For example, SGX has
-  * them at offset 0x1fc00 in the 32MB module address space. And cpsw
-- * has them at offset 0x1200 in the CPSW_WR child. Usually the
-+ * has them at offset 0x1200 in the CPSW_WR child. Usually
-  * the interconnect target module registers are at the beginning of
-  * the module range though.
-  */
+diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
+index e7e8e624a436..940f8149172c 100644
+--- a/drivers/edac/altera_edac.c
++++ b/drivers/edac/altera_edac.c
+@@ -168,7 +168,7 @@ static ssize_t altr_sdr_mc_err_inject_write(struct file *file,
+ 	/*
+ 	 * To trigger the error, we need to read the data back
+ 	 * (the data was written with errors above).
+-	 * The READ_ONCE macros and printk are used to prevent the
++	 * The READ_ONCE macros and printk are used to prevent
+ 	 * the compiler optimizing these reads out.
+ 	 */
+ 	reg = READ_ONCE(ptemp[0]);
 -- 
 2.36.1
 
