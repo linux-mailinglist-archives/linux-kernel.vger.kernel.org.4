@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3DC9608784
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 10:02:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A760760878A
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 10:03:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232608AbiJVICt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 04:02:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42520 "EHLO
+        id S232480AbiJVIDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 04:03:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232315AbiJVHyj (ORCPT
+        with ESMTP id S232387AbiJVHyx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 03:54:39 -0400
+        Sat, 22 Oct 2022 03:54:53 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A52185F5D;
-        Sat, 22 Oct 2022 00:47:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD36B3FA07;
+        Sat, 22 Oct 2022 00:48:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B6CB1B82E18;
-        Sat, 22 Oct 2022 07:47:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10CCAC433C1;
-        Sat, 22 Oct 2022 07:47:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 15D99B82E04;
+        Sat, 22 Oct 2022 07:47:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84152C433D6;
+        Sat, 22 Oct 2022 07:47:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666424835;
-        bh=u5uu7zoc5mzz1n4mGIg5JGx6nhue3av2roUzPtmk3q8=;
+        s=korg; t=1666424846;
+        bh=ipVy3jWeRp0xJbTVsGRKB0dSH6uQrgwCt2Ovp5+8Yww=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=haBcRnvmn4UqHG+8ETH2JB/Vj3lhC87oHzw+qANufAC3GaxRB9OYPMHrOWeafFq7T
-         gbJpis8me4fCImW3oll5pZ8t2ZCQdkUcMK3Io4T97kvFvb8lHYSclrnhGE/J7TD996
-         7rmc7NQXxDveK/+6GmS4koBWv1Z8G71iwFGunwUk=
+        b=jJ6MgLhBB5rbAHpwm2ru9lSu6+Wlc2zDqJdqzA34omWHBkvfxRYgxlmvjTztalDwz
+         BkufMn0PLCo4luzUIC++bTt382ZK6vlIlKogx/JKoTgosUrordSJQM/sNWhfmrBOlA
+         g+NxZOOTxeblC2A39RX3TihY7F/e1C3lq20pjGkE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Luciano=20Le=C3=A3o?= <lucianorsleao@gmail.com>,
-        Borislav Petkov <bp@suse.de>,
-        "=?UTF-8?q?N=C3=ADcolas=20F . =20R . =20A . =20Prado?=" 
-        <n@nfraprado.net>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 264/717] x86/cpu: Include the header of init_ia32_feat_ctl()s prototype
-Date:   Sat, 22 Oct 2022 09:22:23 +0200
-Message-Id: <20221022072501.284632208@linuxfoundation.org>
+        stable@vger.kernel.org, Liu Jian <liujian56@huawei.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.19 268/717] skmsg: Schedule psock work if the cached skb exists on the psock
+Date:   Sat, 22 Oct 2022 09:22:27 +0200
+Message-Id: <20221022072501.806164079@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221022072415.034382448@linuxfoundation.org>
 References: <20221022072415.034382448@linuxfoundation.org>
@@ -47,71 +46,72 @@ User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAD_ENC_HEADER,BAYES_00,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luciano Leão <lucianorsleao@gmail.com>
+From: Liu Jian <liujian56@huawei.com>
 
-[ Upstream commit 30ea703a38ef76ca119673cd8bdd05c6e068e2ac ]
+[ Upstream commit bec217197b412d74168c6a42fc0f76d0cc9cad00 ]
 
-Include the header containing the prototype of init_ia32_feat_ctl(),
-solving the following warning:
+In sk_psock_backlog function, for ingress direction skb, if no new data
+packet arrives after the skb is cached, the cached skb does not have a
+chance to be added to the receive queue of psock. As a result, the cached
+skb cannot be received by the upper-layer application. Fix this by reschedule
+the psock work to dispose the cached skb in sk_msg_recvmsg function.
 
-  $ make W=1 arch/x86/kernel/cpu/feat_ctl.o
-  arch/x86/kernel/cpu/feat_ctl.c:112:6: warning: no previous prototype for ‘init_ia32_feat_ctl’ [-Wmissing-prototypes]
-    112 | void init_ia32_feat_ctl(struct cpuinfo_x86 *c)
-
-This warning appeared after commit
-
-  5d5103595e9e5 ("x86/cpu: Reinitialize IA32_FEAT_CTL MSR on BSP during wakeup")
-
-had moved the function init_ia32_feat_ctl()'s prototype from
-arch/x86/kernel/cpu/cpu.h to arch/x86/include/asm/cpu.h.
-
-Note that, before the commit mentioned above, the header include "cpu.h"
-(arch/x86/kernel/cpu/cpu.h) was added by commit
-
-  0e79ad863df43 ("x86/cpu: Fix a -Wmissing-prototypes warning for init_ia32_feat_ctl()")
-
-solely to fix init_ia32_feat_ctl()'s missing prototype. So, the header
-include "cpu.h" is no longer necessary.
-
-  [ bp: Massage commit message. ]
-
-Fixes: 5d5103595e9e5 ("x86/cpu: Reinitialize IA32_FEAT_CTL MSR on BSP during wakeup")
-Signed-off-by: Luciano Leão <lucianorsleao@gmail.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Reviewed-by: Nícolas F. R. A. Prado <n@nfraprado.net>
-Link: https://lore.kernel.org/r/20220922200053.1357470-1-lucianorsleao@gmail.com
+Fixes: 604326b41a6f ("bpf, sockmap: convert to generic sk_msg interface")
+Signed-off-by: Liu Jian <liujian56@huawei.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Acked-by: John Fastabend <john.fastabend@gmail.com>
+Link: https://lore.kernel.org/bpf/20220907071311.60534-1-liujian56@huawei.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kernel/cpu/feat_ctl.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/core/skmsg.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/feat_ctl.c b/arch/x86/kernel/cpu/feat_ctl.c
-index da696eb4821a..e77032c5f85c 100644
---- a/arch/x86/kernel/cpu/feat_ctl.c
-+++ b/arch/x86/kernel/cpu/feat_ctl.c
-@@ -1,11 +1,11 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <linux/tboot.h>
+diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+index 69ac686c7cae..864cd7ded2ca 100644
+--- a/net/core/skmsg.c
++++ b/net/core/skmsg.c
+@@ -435,8 +435,10 @@ int sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
+ 			if (copied + copy > len)
+ 				copy = len - copied;
+ 			copy = copy_page_to_iter(page, sge->offset, copy, iter);
+-			if (!copy)
+-				return copied ? copied : -EFAULT;
++			if (!copy) {
++				copied = copied ? copied : -EFAULT;
++				goto out;
++			}
  
-+#include <asm/cpu.h>
- #include <asm/cpufeature.h>
- #include <asm/msr-index.h>
- #include <asm/processor.h>
- #include <asm/vmx.h>
--#include "cpu.h"
+ 			copied += copy;
+ 			if (likely(!peek)) {
+@@ -456,7 +458,7 @@ int sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
+ 				 * didn't copy the entire length lets just break.
+ 				 */
+ 				if (copy != sge->length)
+-					return copied;
++					goto out;
+ 				sk_msg_iter_var_next(i);
+ 			}
  
- #undef pr_fmt
- #define pr_fmt(fmt)	"x86/cpu: " fmt
+@@ -478,7 +480,9 @@ int sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
+ 		}
+ 		msg_rx = sk_psock_peek_msg(psock);
+ 	}
+-
++out:
++	if (psock->work_state.skb && copied > 0)
++		schedule_work(&psock->work);
+ 	return copied;
+ }
+ EXPORT_SYMBOL_GPL(sk_msg_recvmsg);
 -- 
 2.35.1
 
