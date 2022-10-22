@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBAAA6087A1
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 10:05:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44EDB608956
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 10:32:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232968AbiJVIEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 04:04:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49838 "EHLO
+        id S234037AbiJVIcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 04:32:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232424AbiJVH66 (ORCPT
+        with ESMTP id S234070AbiJVI3b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 03:58:58 -0400
+        Sat, 22 Oct 2022 04:29:31 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D282157881;
-        Sat, 22 Oct 2022 00:49:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B43862E32C8;
+        Sat, 22 Oct 2022 01:02:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DF76BB82E22;
-        Sat, 22 Oct 2022 07:48:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 359DDC433D6;
-        Sat, 22 Oct 2022 07:48:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 66AE7B82DFC;
+        Sat, 22 Oct 2022 07:48:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2FE1C433C1;
+        Sat, 22 Oct 2022 07:48:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666424922;
-        bh=0AaFD66QoCu+aNMC5pc5YET2gdKwWwa6+Akg5ngrniw=;
+        s=korg; t=1666424925;
+        bh=QhYu81M8WtAo05jbsad99FIeUifFSmuabQ0GNCOz7wI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AmehfEeTcFg0WS4OwxR2zojA6veqk4affVAwEufd6/vk6FFwrb3eZS0QksGw3F//g
-         SgFJ5HdF7Vf0UKyEg1BN8S4d3BQJqJzf6eXkh4CsXo3K1/9VcEdjZN8BBZWdhB5a/C
-         mCb91YBUL7bKd1YVcxUAx3RjLkZN3fHQpolPbizs=
+        b=vvZ8vyPDSY0WYLnikL/ahwL1htyv2K4oXkpUO57fbYRMf6bWhnN6l/s2mDNQEzvtU
+         UjGw9kuAeEE2J0ha+CX+oFy6siW7jo9rkOmK+Tj0v8QJIoobvF/P4g4VLJ6w5Um4AY
+         dfuv2byvEmcuLA0g1OPMdJ7P9/C1J8lPyyoCbwc0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        stable@vger.kernel.org, Thomas Zimmermann <tzimmermann@suse.de>,
         Maxime Ripard <maxime@cerno.tech>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 297/717] drm/bridge: Avoid uninitialized variable warning
-Date:   Sat, 22 Oct 2022 09:22:56 +0200
-Message-Id: <20221022072505.578097055@linuxfoundation.org>
+Subject: [PATCH 5.19 298/717] drm/mipi-dsi: Detach devices when removing the host
+Date:   Sat, 22 Oct 2022 09:22:57 +0200
+Message-Id: <20221022072505.704974634@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221022072415.034382448@linuxfoundation.org>
 References: <20221022072415.034382448@linuxfoundation.org>
@@ -54,47 +54,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Maxime Ripard <maxime@cerno.tech>
 
-[ Upstream commit 7d1202738efda60155d98b370b3c70d336be0eea ]
+[ Upstream commit 668a8f17b5290d04ef7343636a5588a0692731a1 ]
 
-This code works, but technically it uses "num_in_bus_fmts" before it
-has been initialized so it leads to static checker warnings and probably
-KMEMsan warnings at run time.  Initialize the variable to zero to
-silence the warning.
+Whenever the MIPI-DSI host is unregistered, the code of
+mipi_dsi_host_unregister() loops over every device currently found on that
+bus and will unregister it.
 
-Fixes: f32df58acc68 ("drm/bridge: Add the necessary bits to support bus format negotiation")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+However, it doesn't detach it from the bus first, which leads to all kind
+of resource leaks if the host wants to perform some clean up whenever a
+device is detached.
+
+Fixes: 068a00233969 ("drm: Add MIPI DSI bus support")
+Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
 Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-Link: https://patchwork.freedesktop.org/patch/msgid/YrrIs3hoGcPVmXc5@kili
+Link: https://lore.kernel.org/r/20220711173939.1132294-2-maxime@cerno.tech
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/drm_bridge.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/drm_mipi_dsi.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/gpu/drm/drm_bridge.c b/drivers/gpu/drm/drm_bridge.c
-index c96847fc0ebc..36ca4092c1ab 100644
---- a/drivers/gpu/drm/drm_bridge.c
-+++ b/drivers/gpu/drm/drm_bridge.c
-@@ -823,8 +823,8 @@ static int select_bus_fmt_recursive(struct drm_bridge *first_bridge,
- 				    struct drm_connector_state *conn_state,
- 				    u32 out_bus_fmt)
+diff --git a/drivers/gpu/drm/drm_mipi_dsi.c b/drivers/gpu/drm/drm_mipi_dsi.c
+index c40bde96cfdf..c317ee9fa445 100644
+--- a/drivers/gpu/drm/drm_mipi_dsi.c
++++ b/drivers/gpu/drm/drm_mipi_dsi.c
+@@ -346,6 +346,7 @@ static int mipi_dsi_remove_device_fn(struct device *dev, void *priv)
  {
-+	unsigned int i, num_in_bus_fmts = 0;
- 	struct drm_bridge_state *cur_state;
--	unsigned int num_in_bus_fmts, i;
- 	struct drm_bridge *prev_bridge;
- 	u32 *in_bus_fmts;
- 	int ret;
-@@ -945,7 +945,7 @@ drm_atomic_bridge_chain_select_bus_fmts(struct drm_bridge *bridge,
- 	struct drm_connector *conn = conn_state->connector;
- 	struct drm_encoder *encoder = bridge->encoder;
- 	struct drm_bridge_state *last_bridge_state;
--	unsigned int i, num_out_bus_fmts;
-+	unsigned int i, num_out_bus_fmts = 0;
- 	struct drm_bridge *last_bridge;
- 	u32 *out_bus_fmts;
- 	int ret = 0;
+ 	struct mipi_dsi_device *dsi = to_mipi_dsi_device(dev);
+ 
++	mipi_dsi_detach(dsi);
+ 	mipi_dsi_device_unregister(dsi);
+ 
+ 	return 0;
 -- 
 2.35.1
 
