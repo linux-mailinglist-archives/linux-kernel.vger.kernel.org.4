@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74892608833
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 10:11:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBD6A608785
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 10:02:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233162AbiJVIL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 04:11:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35456 "EHLO
+        id S232614AbiJVICx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 04:02:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233315AbiJVIJe (ORCPT
+        with ESMTP id S232324AbiJVHyk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 04:09:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D8DC2CA7C9;
-        Sat, 22 Oct 2022 00:54:08 -0700 (PDT)
+        Sat, 22 Oct 2022 03:54:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AD992C500F;
+        Sat, 22 Oct 2022 00:47:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 37ADBB82E09;
-        Sat, 22 Oct 2022 07:40:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8331DC433C1;
-        Sat, 22 Oct 2022 07:40:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CE13B60B8C;
+        Sat, 22 Oct 2022 07:40:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4302C433C1;
+        Sat, 22 Oct 2022 07:40:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666424447;
-        bh=c9ygUptf6V7bC9GOUoGrIQJL+pvol/TW/5HDxSDa1cA=;
+        s=korg; t=1666424453;
+        bh=a6b1NSqvH/b6gAlJZYFh0Q5qf/RCTEE7cuX29pmcyhM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CR0hlwxNVkUO+Ra9qEqBY5tYmb04RA2XuwglLJUbNgYOMEORUyJd72NxDHHRkGFra
-         69FSQ59Q1qor4Wt2k/HOoYfFC7wpcaxLBZAh8RVNEumQyaAteWTJtzaHeSl+vo8I35
-         4WmtGXb3u1i4GrUGk6webIAfJLNE2COWltlwLI5I=
+        b=clXgU8gfLFw35OCd/ydkPh4ali+3CmLvxEVnESrFTv1pPOQAy71IljC7R2SvCH0la
+         ew9moy1CBnDn0D4Tn0b9/Mvh5Y9GBpNkDiQrd2Mx9JdYBUzwwHSnNrfHWT1ecv+Poe
+         pByMPprxXFVwrNP5g/up3uYdsZRkfMeL2I2mlRLg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ross Zwisler <zwisler@kernel.org>,
+        stable@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
+        Tom Zanussi <zanussi@kernel.org>,
+        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
         "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Subject: [PATCH 5.19 149/717] tracing: Do not free snapshot if tracer is on cmdline
-Date:   Sat, 22 Oct 2022 09:20:28 +0200
-Message-Id: <20221022072441.851172081@linuxfoundation.org>
+Subject: [PATCH 5.19 151/717] tracing: Add "(fault)" name injection to kernel probes
+Date:   Sat, 22 Oct 2022 09:20:30 +0200
+Message-Id: <20221022072442.154265885@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221022072415.034382448@linuxfoundation.org>
 References: <20221022072415.034382448@linuxfoundation.org>
@@ -57,80 +57,96 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-commit a541a9559bb0a8ecc434de01d3e4826c32e8bb53 upstream.
+commit 2e9906f84fc7c99388bb7123ade167250d50f1c0 upstream.
 
-The ftrace_boot_snapshot and alloc_snapshot cmdline options allocate the
-snapshot buffer at boot up for use later. The ftrace_boot_snapshot in
-particular requires the snapshot to be allocated because it will take a
-snapshot at the end of boot up allowing to see the traces that happened
-during boot so that it's not lost when user space takes over.
+Have the specific functions for kernel probes that read strings to inject
+the "(fault)" name directly. trace_probes.c does this too (for uprobes)
+but as the code to read strings are going to be used by synthetic events
+(and perhaps other utilities), it simplifies the code by making sure those
+other uses do not need to implement the "(fault)" name injection as well.
 
-When a tracer is registered (started) there's a path that checks if it
-requires the snapshot buffer or not, and if it does not and it was
-allocated it will do a synchronization and free the snapshot buffer.
+Link: https://lkml.kernel.org/r/20221012104534.644803645@goodmis.org
 
-This is only required if the previous tracer was using it for "max
-latency" snapshots, as it needs to make sure all max snapshots are
-complete before freeing. But this is only needed if the previous tracer
-was using the snapshot buffer for latency (like irqoff tracer and
-friends). But it does not make sense to free it, if the previous tracer
-was not using it, and the snapshot was allocated by the cmdline
-parameters. This basically takes away the point of allocating it in the
-first place!
-
-Note, the allocated snapshot worked fine for just trace events, but fails
-when a tracer is enabled on the cmdline.
-
-Further investigation, this goes back even further and it does not require
-a tracer on the cmdline to fail. Simply enable snapshots and then enable a
-tracer, and it will remove the snapshot.
-
-Link: https://lkml.kernel.org/r/20221005113757.041df7fe@gandalf.local.home
-
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
 Cc: stable@vger.kernel.org
-Fixes: 45ad21ca5530 ("tracing: Have trace_array keep track if snapshot buffer is allocated")
-Reported-by: Ross Zwisler <zwisler@kernel.org>
-Tested-by: Ross Zwisler <zwisler@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Tom Zanussi <zanussi@kernel.org>
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Reviewed-by: Tom Zanussi <zanussi@kernel.org>
+Fixes: bd82631d7ccdc ("tracing: Add support for dynamic strings to synthetic events")
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/trace/trace.c |   10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ kernel/trace/trace_probe_kernel.h |   31 +++++++++++++++++++++++++------
+ 1 file changed, 25 insertions(+), 6 deletions(-)
 
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -6428,12 +6428,12 @@ int tracing_set_tracer(struct trace_arra
- 	if (tr->current_trace->reset)
- 		tr->current_trace->reset(tr);
+--- a/kernel/trace/trace_probe_kernel.h
++++ b/kernel/trace/trace_probe_kernel.h
+@@ -2,6 +2,8 @@
+ #ifndef __TRACE_PROBE_KERNEL_H_
+ #define __TRACE_PROBE_KERNEL_H_
  
-+#ifdef CONFIG_TRACER_MAX_TRACE
-+	had_max_tr = tr->current_trace->use_max_tr;
++#define FAULT_STRING "(fault)"
 +
- 	/* Current trace needs to be nop_trace before synchronize_rcu */
- 	tr->current_trace = &nop_trace;
+ /*
+  * This depends on trace_probe.h, but can not include it due to
+  * the way trace_probe_tmpl.h is used by trace_kprobe.c and trace_eprobe.c.
+@@ -13,8 +15,16 @@ static nokprobe_inline int
+ kern_fetch_store_strlen_user(unsigned long addr)
+ {
+ 	const void __user *uaddr =  (__force const void __user *)addr;
++	int ret;
  
--#ifdef CONFIG_TRACER_MAX_TRACE
--	had_max_tr = tr->allocated_snapshot;
--
- 	if (had_max_tr && !t->use_max_tr) {
- 		/*
- 		 * We need to make sure that the update_max_tr sees that
-@@ -6446,11 +6446,13 @@ int tracing_set_tracer(struct trace_arra
- 		free_snapshot(tr);
- 	}
+-	return strnlen_user_nofault(uaddr, MAX_STRING_SIZE);
++	ret = strnlen_user_nofault(uaddr, MAX_STRING_SIZE);
++	/*
++	 * strnlen_user_nofault returns zero on fault, insert the
++	 * FAULT_STRING when that occurs.
++	 */
++	if (ret <= 0)
++		return strlen(FAULT_STRING) + 1;
++	return ret;
+ }
  
--	if (t->use_max_tr && !had_max_tr) {
-+	if (t->use_max_tr && !tr->allocated_snapshot) {
- 		ret = tracing_alloc_snapshot_instance(tr);
- 		if (ret < 0)
- 			goto out;
- 	}
-+#else
-+	tr->current_trace = &nop_trace;
- #endif
+ /* Return the length of string -- including null terminal byte */
+@@ -34,7 +44,18 @@ kern_fetch_store_strlen(unsigned long ad
+ 		len++;
+ 	} while (c && ret == 0 && len < MAX_STRING_SIZE);
  
- 	if (t->init) {
+-	return (ret < 0) ? ret : len;
++	/* For faults, return enough to hold the FAULT_STRING */
++	return (ret < 0) ? strlen(FAULT_STRING) + 1 : len;
++}
++
++static nokprobe_inline void set_data_loc(int ret, void *dest, void *__dest, void *base, int len)
++{
++	if (ret >= 0) {
++		*(u32 *)dest = make_data_loc(ret, __dest - base);
++	} else {
++		strscpy(__dest, FAULT_STRING, len);
++		ret = strlen(__dest) + 1;
++	}
+ }
+ 
+ /*
+@@ -55,8 +76,7 @@ kern_fetch_store_string_user(unsigned lo
+ 	__dest = get_loc_data(dest, base);
+ 
+ 	ret = strncpy_from_user_nofault(__dest, uaddr, maxlen);
+-	if (ret >= 0)
+-		*(u32 *)dest = make_data_loc(ret, __dest - base);
++	set_data_loc(ret, dest, __dest, base, maxlen);
+ 
+ 	return ret;
+ }
+@@ -87,8 +107,7 @@ kern_fetch_store_string(unsigned long ad
+ 	 * probing.
+ 	 */
+ 	ret = strncpy_from_kernel_nofault(__dest, (void *)addr, maxlen);
+-	if (ret >= 0)
+-		*(u32 *)dest = make_data_loc(ret, __dest - base);
++	set_data_loc(ret, dest, __dest, base, maxlen);
+ 
+ 	return ret;
+ }
 
 
