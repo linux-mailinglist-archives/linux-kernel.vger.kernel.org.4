@@ -2,101 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 638D3608CB8
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 13:34:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75648608CBD
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 13:37:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229782AbiJVLeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 07:34:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54356 "EHLO
+        id S229752AbiJVLhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 07:37:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230266AbiJVLdu (ORCPT
+        with ESMTP id S230253AbiJVLhF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 07:33:50 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D5C4119BFD;
-        Sat, 22 Oct 2022 04:15:28 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 3C7B11C09E5; Sat, 22 Oct 2022 13:15:27 +0200 (CEST)
-Date:   Sat, 22 Oct 2022 13:15:26 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net
-Subject: Re: [PATCH 5.19 000/717] 5.19.17-rc1 review
-Message-ID: <20221022111526.GA20649@duo.ucw.cz>
-References: <20221022072415.034382448@linuxfoundation.org>
- <Y1Ov3KuyKmb9Nizm@debian.me>
- <Y1PCyVHKEUst4mRL@kroah.com>
+        Sat, 22 Oct 2022 07:37:05 -0400
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7BE9C176B8F;
+        Sat, 22 Oct 2022 04:22:42 -0700 (PDT)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 29MBMStf030728;
+        Sat, 22 Oct 2022 13:22:28 +0200
+Date:   Sat, 22 Oct 2022 13:22:28 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/nolibc: add 7 tests for memcmp()
+Message-ID: <20221022112228.GB30596@1wt.eu>
+References: <20221021060340.7515-1-w@1wt.eu>
+ <20221021155645.GK5600@paulmck-ThinkPad-P17-Gen-1>
+ <20221021170134.GB8420@1wt.eu>
+ <20221021170738.GM5600@paulmck-ThinkPad-P17-Gen-1>
+ <20221021172026.GC8420@1wt.eu>
+ <20221021180040.GN5600@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="liOOAslEiF7prFVr"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y1PCyVHKEUst4mRL@kroah.com>
+In-Reply-To: <20221021180040.GN5600@paulmck-ThinkPad-P17-Gen-1>
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NEUTRAL autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Oct 21, 2022 at 11:00:40AM -0700, Paul E. McKenney wrote:
+> > It's even easier, you don't even need the clean phase in include/nolibc.
+> > I'm doing this and it's sufficient:
+> > 
+> >   make -C tools/testing/selftests/nolibc clean
+> >   make -C tools/testing/selftests/nolibc nolibc-test
+> >   tools/testing/selftests/nolibc/nolibc-test
+> > 
+> > Or for the test under QEMU, which involves a kernel build:
+> > 
+> >   make -C tools/testing/selftests/nolibc clean
+> >   make -C tools/testing/selftests/nolibc -j $(nproc) run
+> > 
+> > Where would you first look for such a hint ? Maybe the help output of
+> > the default "make" command could send as a hint that a clean is needed
+> > after patching nolibc and that could be sufficient ? I just want to make
+> > sure users don't waste their time trying to find what they could be doing
+> > wrong.
+> 
+> Maybe it suffices for the near term for me to put this information in
+> the signed tag for the pull request?
 
---liOOAslEiF7prFVr
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+It can be sufficient for short term indeed, but it can be easy as well
+for me to mention it in the make output.
 
-Hi!
+> Another approach would be to remind about "make clean" in the case of
+> a test failure.  Or make test failure combined with a detected change
+> trigger an automatic "make clean" and a retry.
 
-> > > This is the start of the stable review cycle for the 5.19.17 release.
-> > > There are 717 patches in this series, all will be posted as a response
-> > > to this one.  If anyone has any issues with these being applied, plea=
-se
-> > > let me know.
-> > >=20
-> > > Note, this will be the LAST 5.19.y kernel to be released.  Please move
-> > > to the 6.0.y kernel branch at this point in time, as after this is
-> > > released, this branch will be end-of-life.
-> > >=20
-> >=20
-> > Hi Greg, thanks for the patch series, which is out three days after
-> > the -rc1 have been pused. As usual, the template message follows.
->=20
-> What exactly do you mean by "3 days after"?
->=20
-> Are you watching the linux-stable-rc branches?  Those are there only for
-> CI systems and are not a "real" -rc release at all until we do this
-> email announcement.
->=20
-> The -rc1 release here does not look at all like what was in the
-> linux-stable-rc branch 3 days ago if you look closely.  There are a lot
-> fewer patches now than before, and other changes.
->=20
-> So again, unless you are running a CI system, don't look at the
-> linux-stable-rc branches.
+In fact failures are not the only case. For me it was the opposite. I
+applied Rasmus' fix, then I developed the test, verified that it worked,
+then reverted Rasmus' fix... to find that the test didn't catch the
+failure. I had a second look at the original patch and figured that
+the -192..+192 values were really not possible with a char so I
+concluded that a clean was needed. But leaving something in a claimed
+working state while it's not can be sufficiently misleading and make
+one waste significant time, because in such cases we rarely search why
+it works.
 
-What do you suggest for people trying to review -stable? Two days are
-not enough to review 500 patches...
+> Or other schemes of increasing complexity and fragility.  ;-)
 
-Best regards,
-								Pavel
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+That's exactly what I'd like to avoid with such a lightweight component.
+If it takes more time to figure why something is going wrong than to
+write a test, we'll all give up. I think that a clean for QEMU is worth
+it because the kernel is rebuilt and its dependencies are quite robust,
+so that one would be a surprise. For other tests, probably leaving it
+explicit with a hint that it's needed should suffice. I'll recheck what
+conditions the installation of uapi headers because that's really what
+I don't want to see happening all the time. The rest is discrete, it's
+just a few files being copied, maybe it can be done every time.
 
---liOOAslEiF7prFVr
-Content-Type: application/pgp-signature; name="signature.asc"
+Will keep thinking about it and hopefully propose a patch to make the
+tests easier to use before we're too far in the 6.1 release.
 
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY1PQzgAKCRAw5/Bqldv6
-8jnEAKCx+qTFehKfNmo/sitI6BnaKPxBTQCcCqJ51ctRksbo6UpODN6vvbdfJwk=
-=5PP0
------END PGP SIGNATURE-----
-
---liOOAslEiF7prFVr--
+Thanks for keeping the conversation flowing, that helps me!
+Willy
