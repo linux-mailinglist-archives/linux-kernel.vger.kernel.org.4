@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED971608D4B
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 14:57:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A0A2608D4E
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 14:57:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229904AbiJVM5T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 08:57:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60000 "EHLO
+        id S229887AbiJVM51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 08:57:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbiJVM5O (ORCPT
+        with ESMTP id S229876AbiJVM5Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 08:57:14 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7F2922B38C;
-        Sat, 22 Oct 2022 05:57:12 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id a13so15438604edj.0;
-        Sat, 22 Oct 2022 05:57:12 -0700 (PDT)
+        Sat, 22 Oct 2022 08:57:16 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 190A822B7AE;
+        Sat, 22 Oct 2022 05:57:15 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id m15so15295125edb.13;
+        Sat, 22 Oct 2022 05:57:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=elZSYe3VbormSDAP7uv9H4cczBV3tZh4oUja1hlsR2Q=;
-        b=GwyVQomAlS8vYmx2ITPLDkpqc3PV5qR/XCYkut01ioy6GM8244F3+2JhfruEja8STG
-         FUSztCJZi6vCpT28wtHY4VLFqJTElNMYw8gmFACKtsgs8hNsaP4CeC1L5va3heoAMawY
-         SZQQdpvzs6ttUtCyKkU9mgZeQQBpnGmVddREnT487+9nY14DZMItEgC6C/eetzdyiJMS
-         LD9l7saXsjjxvmoImhjLZHoHkKaS53lees9iMDh/dR6/4Yif5xFvtlpsrxFUBZkWqYol
-         SErJlRJyfQQT0Pln3duYpIpWTRLndBPOTkJclSJX0UH7ZjLWC2egs/F7wIix0YXHQ0ui
-         RdiA==
+        bh=vfeD3Vie7kg8iBMU4bkz+AYFFromxwoh/hIWgeFhX/4=;
+        b=C25zegeG71PPfAEE2c+D+wLiz7zAx/3KhgWHknRipTMUBTCQNNzbai4ngRH7syML4C
+         Zoi7cwUtl1Gcs3mLf8u2nEd42RZ6TmKYokdY9wce00/FXONAg6+ePfxMI3yKrl0ihnlv
+         jBLDEF6ADT65ExUTwIuaQPj2IFXIIUpfWtFIYhqikSsg095U4mGRVwz6Bqkmb3OxrDYQ
+         wDzdhqmHcdgUpbVRwswZOMknMJAkcjQ4vUf+xFOs86VNIxRiBf9WEEgl63FDSd2PUJrZ
+         eNQ5HVioybp84avkdM3PrK0nT8qNvtMBTnK3eqS/eaI8+2hiUt6bNL/tbSA/1B9ftySj
+         Hgew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=elZSYe3VbormSDAP7uv9H4cczBV3tZh4oUja1hlsR2Q=;
-        b=UXYi6NbkvVJ0rVnY2ICIXYFfhm/0GOjEIEAW0e9Q3wOedgr6zDO5VOZmcFbVDMZbYu
-         sUPsB5TY/32EDc71fuWt5gXVZfq8dENDv8z3PZJPe1Xxu4G4k6vr15lHGGheZ0II3glb
-         2Jol4s2yDLvMr+pFOSncn4H1lqDJFPEWD0NxfolWqmQzmrLRRXob9RRkSe/VCQR7/yoo
-         RoxiX0+ygpGjXPr/bFcStIHDNDU85ibmWrJM2hvktVXxr6czmRoSGdCBKSHUIzcp54YL
-         H7Cozw1uu2OWoo0jPMxvmEauMFTF/CwcbHqr3Lgb0ImzzQGVyTmfl7mxRIzSMTsNiFRg
-         CmuA==
-X-Gm-Message-State: ACrzQf3fJ46NVgVvEti9IcK2wILh3H5Fn44ICYL93rgTFUJBpjm4G0VU
-        95mEelmewR2aWKPfAvCUBD4=
-X-Google-Smtp-Source: AMsMyM4B0jHt87VsmbrfC+qSz9CqM6sfozpwpf91yweEP6Fjk2wo+qqPUL683+TVj3rBql/pcsyZ6w==
-X-Received: by 2002:a17:906:9bc3:b0:78d:816f:3743 with SMTP id de3-20020a1709069bc300b0078d816f3743mr20100171ejc.380.1666443431241;
-        Sat, 22 Oct 2022 05:57:11 -0700 (PDT)
+        bh=vfeD3Vie7kg8iBMU4bkz+AYFFromxwoh/hIWgeFhX/4=;
+        b=D8FFlbr+vaSoZjACpxYxOp/yOu1uW3BnB95l9/RENgQhdD2j8lVqSPum2U2nPKmkC5
+         r8+JpgR6JOB796qIYwg4Lsr7aqQcRg1tnzj6mQRny3CWGxwCJroOPlRml4LepmNsHKQ0
+         QE2sCVCEX0Wiy926byDfD94QuN3c1EyeF6PDwGEKWYmkLkWmJUs/lN0PRTxdghtTZDmw
+         FyNHAZo+vhq2pXkETx8RWI7w/ziT/c+dE2zK9FqH+HVFETYD69XZpYJ/gwo6s5nTq7jI
+         7/kHn246HqAcV9NRTXp4NJuIBGYH6Fb0hTV85uottkgap0jAoRJOZNfC0bv8v0LuMG8t
+         SFdw==
+X-Gm-Message-State: ACrzQf2K1ygGHvCdlJmtocMFA4wBX71GtfLushBQ6zVOOoLTw59CWGB0
+        1giWkyCpAZ6UuAo4CWLEf/Q=
+X-Google-Smtp-Source: AMsMyM4jRHLbhVT3BOYqYw8t6Kk5iE5G5XJrfuMXsPdVuaayzQ0ZePMqdu1S5M398MVACvFI0RHIpg==
+X-Received: by 2002:a17:906:c152:b0:78d:9dbb:150b with SMTP id dp18-20020a170906c15200b0078d9dbb150bmr18972923ejc.542.1666443433316;
+        Sat, 22 Oct 2022 05:57:13 -0700 (PDT)
 Received: from localhost.localdomain (93-42-70-134.ip85.fastwebnet.it. [93.42.70.134])
-        by smtp.googlemail.com with ESMTPSA id t29-20020a056402241d00b0045ce419ecffsm15173970eda.58.2022.10.22.05.57.09
+        by smtp.googlemail.com with ESMTPSA id t29-20020a056402241d00b0045ce419ecffsm15173970eda.58.2022.10.22.05.57.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 22 Oct 2022 05:57:10 -0700 (PDT)
+        Sat, 22 Oct 2022 05:57:12 -0700 (PDT)
 From:   Christian Marangi <ansuelsmth@gmail.com>
 To:     Amit Kucheria <amitk@kernel.org>,
         Thara Gopinath <thara.gopinath@gmail.com>,
@@ -61,9 +61,9 @@ To:     Amit Kucheria <amitk@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Christian Marangi <ansuelsmth@gmail.com>
-Subject: [PATCH v3 2/3] thermal: qcom: tsens: fix wrong version id dbg_version_show
-Date:   Sat, 22 Oct 2022 14:56:56 +0200
-Message-Id: <20221022125657.22530-3-ansuelsmth@gmail.com>
+Subject: [PATCH v3 3/3] thermal: qcom: tsens: rework debugfs file structure
+Date:   Sat, 22 Oct 2022 14:56:57 +0200
+Message-Id: <20221022125657.22530-4-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20221022125657.22530-1-ansuelsmth@gmail.com>
 References: <20221022125657.22530-1-ansuelsmth@gmail.com>
@@ -79,29 +79,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For VER_0 the version was incorrectly reported as 0.1.0.
+The current tsens debugfs structure is composed by:
+- a tsens dir in debugfs with a version file
+- a directory for each tsens istance with sensors file to dump all the
+  sensors value.
 
-Fix that and correctly report the major version for this old tsens
-revision.
+This works on the assumption that we have the same version for each
+istance but this assumption seems fragile and with more than one tsens
+istance results in the version file not tracking each of them.
+
+A better approach is to just create a subdirectory for each tsens
+istance and put there version and sensors debugfs file.
+
+Using this new implementation results in less code since debugfs entry
+are created only on successful tsens probe.
 
 Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 ---
- drivers/thermal/qcom/tsens.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/thermal/qcom/tsens.c | 13 +++----------
+ 1 file changed, 3 insertions(+), 10 deletions(-)
 
 diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-index af688ce4d14d..467585c45d34 100644
+index 467585c45d34..fc12d7c07de4 100644
 --- a/drivers/thermal/qcom/tsens.c
 +++ b/drivers/thermal/qcom/tsens.c
-@@ -692,7 +692,7 @@ static int dbg_version_show(struct seq_file *s, void *data)
- 			return ret;
- 		seq_printf(s, "%d.%d.%d\n", maj_ver, min_ver, step_ver);
- 	} else {
--		seq_puts(s, "0.1.0\n");
-+		seq_printf(s, "0.%d.0\n", priv->feat->ver_major);
- 	}
+@@ -704,21 +704,14 @@ DEFINE_SHOW_ATTRIBUTE(dbg_sensors);
+ static void tsens_debug_init(struct platform_device *pdev)
+ {
+ 	struct tsens_priv *priv = platform_get_drvdata(pdev);
+-	struct dentry *root, *file;
  
- 	return 0;
+-	root = debugfs_lookup("tsens", NULL);
+-	if (!root)
++	priv->debug_root = debugfs_lookup("tsens", NULL);
++	if (!priv->debug_root)
+ 		priv->debug_root = debugfs_create_dir("tsens", NULL);
+-	else
+-		priv->debug_root = root;
+-
+-	file = debugfs_lookup("version", priv->debug_root);
+-	if (!file)
+-		debugfs_create_file("version", 0444, priv->debug_root,
+-				    pdev, &dbg_version_fops);
+ 
+ 	/* A directory for each instance of the TSENS IP */
+ 	priv->debug = debugfs_create_dir(dev_name(&pdev->dev), priv->debug_root);
++	debugfs_create_file("version", 0444, priv->debug, pdev, &dbg_version_fops);
+ 	debugfs_create_file("sensors", 0444, priv->debug, pdev, &dbg_sensors_fops);
+ }
+ #else
 -- 
 2.37.2
 
