@@ -2,76 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A097A60846D
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 07:05:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 534CF60847F
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 07:21:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229608AbiJVFFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 01:05:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60874 "EHLO
+        id S229613AbiJVFVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 01:21:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiJVFE6 (ORCPT
+        with ESMTP id S229494AbiJVFVb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 01:04:58 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AEA243AEB
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 22:04:55 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id q71so4280646pgq.8
-        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 22:04:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=sIO8sh3SCybVwzv3Rc2zbve1XRpQI+8AREdnkwwZpmY=;
-        b=gg/qDe5Et7eWr9ahJps1Q1rySb+13JTQCoFlsWZUCgbV1tjio0WOTzpftJZyabxzRs
-         KpC1NOXav55O0Jyi4UggBxFyAAsQ5MlgoDGzRlTzpzeDi04SEbWF8I5N97htO7q1ZTwZ
-         4BgGKb2FwEN6F6B+hh39Iym1/Rmg4RE39M8PMeia/Us1zwMqZ3AWPD6+22vCzA/GLSCR
-         X6sFh3R0Z7UkfBlWtp5FdKR2cI5hP147lN7MI1f+HFWXnSWZaGYov3IeCLIvic0M0Syq
-         TE0gUHakC33qeY8xMllS3vhlS5b8gbQ3h1Z2AoKAXpV5Y+wCn/IHtk5JCD5QVFVtM++s
-         RJdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sIO8sh3SCybVwzv3Rc2zbve1XRpQI+8AREdnkwwZpmY=;
-        b=NqSrwCL0oUFa7Cp+mCsF+MDpV5ZcXhbjT3bxWamfmoiiYAJcfPMF3l0a8QMQMT449P
-         A0ogFb/b/j+n/eMQRDz6NZuRY/bXp+06ortRLABzn5qs3huOrIW8YbLdNQEU/l4ataOk
-         J7p607yPE+CnPyO5R+pxEqO02Ye4DA0GSNZKRwf8hLNJqaFS6XYP1+km4eG9F+ZFhlle
-         rg2UwPusU3UMfO4a73LkJstdzy09DcLr42ER01TI3URIj2KQY9uhsBHYHQssyLsiYecD
-         hfj/jHqpkWfdMLvcYgtjVJk6jgdcvIQFC+EFYmBmFL922nrsA8+hCC1o98oiJvOBT8MQ
-         0mqw==
-X-Gm-Message-State: ACrzQf2LjW4ndBPBllDThd7PR4YYrv1BhwKLcmFQ+XcOpn4ZxRFn+UXi
-        VHOSAwJXYdRrwX3UPnZSDCQ=
-X-Google-Smtp-Source: AMsMyM6YTBNms3fGHvjxfcRfQUc8Sra9ih1CfaPpWd4X2yoEpY0+Rscj3MxXRGVyeerMlPWiw1Ygxg==
-X-Received: by 2002:a05:6a00:804:b0:563:264a:f5e5 with SMTP id m4-20020a056a00080400b00563264af5e5mr22860776pfk.62.1666415094969;
-        Fri, 21 Oct 2022 22:04:54 -0700 (PDT)
-Received: from hyeyoo ([114.29.91.56])
-        by smtp.gmail.com with ESMTPSA id g12-20020a65594c000000b0043a1c0a0ab1sm14411363pgu.83.2022.10.21.22.04.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Oct 2022 22:04:54 -0700 (PDT)
-Date:   Sat, 22 Oct 2022 14:04:48 +0900
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Jiri Kosina <jikos@kernel.org>
-Cc:     Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] mm/slab: Annotate kmem_cache_node->list_lock as raw
-Message-ID: <Y1N58AEmb8f49Pe/@hyeyoo>
-References: <nycvar.YFH.7.76.2210211643330.29912@cbobk.fhfr.pm>
- <nycvar.YFH.7.76.2210212114480.29912@cbobk.fhfr.pm>
- <nycvar.YFH.7.76.2210212117090.29912@cbobk.fhfr.pm>
+        Sat, 22 Oct 2022 01:21:31 -0400
+X-Greylist: delayed 905 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 21 Oct 2022 22:21:29 PDT
+Received: from sender4-pp-o95.zoho.com (sender4-pp-o95.zoho.com [136.143.188.95])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24D7F24A557
+        for <linux-kernel@vger.kernel.org>; Fri, 21 Oct 2022 22:21:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1666415178; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=RL+toDvYPPSbKiquYwZWJSUtxzSJyBnxnCrjY31FKAkYhJ1s6o1+XHuhy7KvdHNbqtRdXOxJWtL4wA+A/Onc8CMnKbAej6ZzJGuR1i0hmflxdzDxJFfY6cOGt9hiPLJeRBRayRbZ2op579ZRzns0vDnGGPYexm7yC6Ihk2O3uIo=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1666415178; h=Content-Type:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
+        bh=NWkzLV1hl/Kd2bUPFdV4XEHmduPaGX3ceoKbkNdVcdw=; 
+        b=KJ4ie9ZHLfP+XYVmGBE+WbtSTGWcqV/c/GIlFQUfK+m6lIux8tdcP6zY8Wz2j+1ttu5egmzsuUXhvrRzDnFC0VeJMHFv5RfTrihEIAkPSFJ4i31WzaMyVt1crSncQB6u6tQS4EGjBffpPV7CFElWNsikrIRXAjRmIL5tHNq05fQ=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=zohomail.com;
+        spf=pass  smtp.mailfrom=t4rmin@zohomail.com;
+        dmarc=pass header.from=<t4rmin@zohomail.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1666415178;
+        s=zm2022; d=zohomail.com; i=t4rmin@zohomail.com;
+        h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:Content-Type:MIME-Version:Message-Id:Reply-To;
+        bh=NWkzLV1hl/Kd2bUPFdV4XEHmduPaGX3ceoKbkNdVcdw=;
+        b=T4RFpOr/ep9WcuKGHW2mlmnW3ynWCmiGfTUXrLgov2enDdqRHVpT2t7oIJWKOJdB
+        YzuhcICyvJJa91N8WWt2hQ8bd2kjZ3dXVLERZBWMAY+gnlmS780X/UcevlUpfbmqS8F
+        Qm0lMdC5lkTq6HviuAndSnU0TYVLk0cWZLQdoDb0=
+Received: from [192.168.0.106] (101.128.127.165 [101.128.127.165]) by mx.zohomail.com
+        with SMTPS id 1666415177078986.9220283925443; Fri, 21 Oct 2022 22:06:17 -0700 (PDT)
+Message-ID: <be839b05d799ff8e62fc2f79e6f0aaec81a8cd19.camel@zohomail.com>
+Subject: [PATCH] Staging: rtl8192e: fixed multiple coding style issues
+From:   Aaron Lawrence <t4rmin@zohomail.com>
+To:     linux-staging@lists.linux.dev
+Cc:     linux-kernel@vger.kernel.org
+Date:   Sat, 22 Oct 2022 12:05:58 +0700
+Content-Type: multipart/mixed; boundary="=-8xgEcP9U4h8sQKY7Zfd/"
+User-Agent: Evolution 3.44.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <nycvar.YFH.7.76.2210212117090.29912@cbobk.fhfr.pm>
-X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-Zoho-Virus-Status: 1
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,451 +57,283 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 09:18:12PM +0200, Jiri Kosina wrote:
-> From: Jiri Kosina <jkosina@suse.cz>
-> 
-> The list_lock can be taken in hardirq context when do_drain() is being 
-> called via IPI on all cores, and therefore lockdep complains about it, 
-> because it can't be preempted on PREEMPT_RT.
->
-> That's not a real issue, as SLAB can't be built on PREEMPT_RT anyway, but 
-> we still want to get rid of the warning on non-PREEMPT_RT builds.
-> 
-> Annotate it therefore as a raw lock in order to get rid of he lockdep 
-> warning below.
-> 
-> 	 =============================
-> 	 [ BUG: Invalid wait context ]
-> 	 6.1.0-rc1-00134-ge35184f32151 #4 Not tainted
-> 	 -----------------------------
-> 	 swapper/3/0 is trying to lock:
-> 	 ffff8bc88086dc18 (&parent->list_lock){..-.}-{3:3}, at: do_drain+0x57/0xb0
-> 	 other info that might help us debug this:
-> 	 context-{2:2}
-> 	 no locks held by swapper/3/0.
-> 	 stack backtrace:
-> 	 CPU: 3 PID: 0 Comm: swapper/3 Not tainted 6.1.0-rc1-00134-ge35184f32151 #4
-> 	 Hardware name: LENOVO 20K5S22R00/20K5S22R00, BIOS R0IET38W (1.16 ) 05/31/2017
-> 	 Call Trace:
-> 	  <IRQ>
-> 	  dump_stack_lvl+0x6b/0x9d
-> 	  __lock_acquire+0x1519/0x1730
-> 	  ? build_sched_domains+0x4bd/0x1590
-> 	  ? __lock_acquire+0xad2/0x1730
-> 	  lock_acquire+0x294/0x340
-> 	  ? do_drain+0x57/0xb0
-> 	  ? sched_clock_tick+0x41/0x60
-> 	  _raw_spin_lock+0x2c/0x40
-> 	  ? do_drain+0x57/0xb0
-> 	  do_drain+0x57/0xb0
-> 	  __flush_smp_call_function_queue+0x138/0x220
-> 	  __sysvec_call_function+0x4f/0x210
-> 	  sysvec_call_function+0x4b/0x90
-> 	  </IRQ>
-> 	  <TASK>
-> 	  asm_sysvec_call_function+0x16/0x20
-> 	 RIP: 0010:mwait_idle+0x5e/0x80
-> 	 Code: 31 d2 65 48 8b 04 25 80 ed 01 00 48 89 d1 0f 01 c8 48 8b 00 a8 08 75 14 66 90 0f 00 2d 0b 78 46 00 31 c0 48 89 c1 fb 0f 01 c9 <eb> 06 fb 0f 1f 44 00 00 65 48 8b 04 25 80 ed 01 00 f0 80 60 02 df
-> 	 RSP: 0000:ffffa90940217ee0 EFLAGS: 00000246
-> 	 RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-> 	 RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffffffff9bb9f93a
-> 	 RBP: 0000000000000003 R08: 0000000000000001 R09: 0000000000000001
-> 	 R10: ffffa90940217ea8 R11: 0000000000000000 R12: ffffffffffffffff
-> 	 R13: 0000000000000000 R14: ffff8bc88127c500 R15: 0000000000000000
-> 	  ? default_idle_call+0x1a/0xa0
-> 	  default_idle_call+0x4b/0xa0
-> 	  do_idle+0x1f1/0x2c0
-> 	  ? _raw_spin_unlock_irqrestore+0x56/0x70
-> 	  cpu_startup_entry+0x19/0x20
-> 	  start_secondary+0x122/0x150
-> 	  secondary_startup_64_no_verify+0xce/0xdb
-> 	  </TASK>
->
+--=-8xgEcP9U4h8sQKY7Zfd/
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-Looks good to me.
-Reviewed-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
 
-> Signed-off-by: Jiri Kosina <jkosina@suse.cz>
-> ---
-> 
-> v1->v2: fix !SLAB build failures due to list_lock mismatch
-> v2->v3: really fix it by sending refreshed version of the patch (facepalm)
-> 
->  mm/slab.c | 90 +++++++++++++++++++++++++++----------------------------
->  mm/slab.h |  4 +++
->  2 files changed, 49 insertions(+), 45 deletions(-)
-> 
-> diff --git a/mm/slab.c b/mm/slab.c
-> index 59c8e28f7b6a..d8a287900193 100644
-> --- a/mm/slab.c
-> +++ b/mm/slab.c
-> @@ -234,7 +234,7 @@ static void kmem_cache_node_init(struct kmem_cache_node *parent)
->  	parent->shared = NULL;
->  	parent->alien = NULL;
->  	parent->colour_next = 0;
-> -	spin_lock_init(&parent->list_lock);
-> +	raw_spin_lock_init(&parent->list_lock);
->  	parent->free_objects = 0;
->  	parent->free_touched = 0;
->  }
-> @@ -559,9 +559,9 @@ static noinline void cache_free_pfmemalloc(struct kmem_cache *cachep,
->  	slab_node = slab_nid(slab);
->  	n = get_node(cachep, slab_node);
->  
-> -	spin_lock(&n->list_lock);
-> +	raw_spin_lock(&n->list_lock);
->  	free_block(cachep, &objp, 1, slab_node, &list);
-> -	spin_unlock(&n->list_lock);
-> +	raw_spin_unlock(&n->list_lock);
->  
->  	slabs_destroy(cachep, &list);
->  }
-> @@ -684,7 +684,7 @@ static void __drain_alien_cache(struct kmem_cache *cachep,
->  	struct kmem_cache_node *n = get_node(cachep, node);
->  
->  	if (ac->avail) {
-> -		spin_lock(&n->list_lock);
-> +		raw_spin_lock(&n->list_lock);
->  		/*
->  		 * Stuff objects into the remote nodes shared array first.
->  		 * That way we could avoid the overhead of putting the objects
-> @@ -695,7 +695,7 @@ static void __drain_alien_cache(struct kmem_cache *cachep,
->  
->  		free_block(cachep, ac->entry, ac->avail, node, list);
->  		ac->avail = 0;
-> -		spin_unlock(&n->list_lock);
-> +		raw_spin_unlock(&n->list_lock);
->  	}
->  }
->  
-> @@ -768,9 +768,9 @@ static int __cache_free_alien(struct kmem_cache *cachep, void *objp,
->  		slabs_destroy(cachep, &list);
->  	} else {
->  		n = get_node(cachep, slab_node);
-> -		spin_lock(&n->list_lock);
-> +		raw_spin_lock(&n->list_lock);
->  		free_block(cachep, &objp, 1, slab_node, &list);
-> -		spin_unlock(&n->list_lock);
-> +		raw_spin_unlock(&n->list_lock);
->  		slabs_destroy(cachep, &list);
->  	}
->  	return 1;
-> @@ -811,10 +811,10 @@ static int init_cache_node(struct kmem_cache *cachep, int node, gfp_t gfp)
->  	 */
->  	n = get_node(cachep, node);
->  	if (n) {
-> -		spin_lock_irq(&n->list_lock);
-> +		raw_spin_lock_irq(&n->list_lock);
->  		n->free_limit = (1 + nr_cpus_node(node)) * cachep->batchcount +
->  				cachep->num;
-> -		spin_unlock_irq(&n->list_lock);
-> +		raw_spin_unlock_irq(&n->list_lock);
->  
->  		return 0;
->  	}
-> @@ -893,7 +893,7 @@ static int setup_kmem_cache_node(struct kmem_cache *cachep,
->  		goto fail;
->  
->  	n = get_node(cachep, node);
-> -	spin_lock_irq(&n->list_lock);
-> +	raw_spin_lock_irq(&n->list_lock);
->  	if (n->shared && force_change) {
->  		free_block(cachep, n->shared->entry,
->  				n->shared->avail, node, &list);
-> @@ -911,7 +911,7 @@ static int setup_kmem_cache_node(struct kmem_cache *cachep,
->  		new_alien = NULL;
->  	}
->  
-> -	spin_unlock_irq(&n->list_lock);
-> +	raw_spin_unlock_irq(&n->list_lock);
->  	slabs_destroy(cachep, &list);
->  
->  	/*
-> @@ -950,7 +950,7 @@ static void cpuup_canceled(long cpu)
->  		if (!n)
->  			continue;
->  
-> -		spin_lock_irq(&n->list_lock);
-> +		raw_spin_lock_irq(&n->list_lock);
->  
->  		/* Free limit for this kmem_cache_node */
->  		n->free_limit -= cachep->batchcount;
-> @@ -961,7 +961,7 @@ static void cpuup_canceled(long cpu)
->  		nc->avail = 0;
->  
->  		if (!cpumask_empty(mask)) {
-> -			spin_unlock_irq(&n->list_lock);
-> +			raw_spin_unlock_irq(&n->list_lock);
->  			goto free_slab;
->  		}
->  
-> @@ -975,7 +975,7 @@ static void cpuup_canceled(long cpu)
->  		alien = n->alien;
->  		n->alien = NULL;
->  
-> -		spin_unlock_irq(&n->list_lock);
-> +		raw_spin_unlock_irq(&n->list_lock);
->  
->  		kfree(shared);
->  		if (alien) {
-> @@ -1159,7 +1159,7 @@ static void __init init_list(struct kmem_cache *cachep, struct kmem_cache_node *
->  	/*
->  	 * Do not assume that spinlocks can be initialized via memcpy:
->  	 */
-> -	spin_lock_init(&ptr->list_lock);
-> +	raw_spin_lock_init(&ptr->list_lock);
->  
->  	MAKE_ALL_LISTS(cachep, ptr, nodeid);
->  	cachep->node[nodeid] = ptr;
-> @@ -1330,11 +1330,11 @@ slab_out_of_memory(struct kmem_cache *cachep, gfp_t gfpflags, int nodeid)
->  	for_each_kmem_cache_node(cachep, node, n) {
->  		unsigned long total_slabs, free_slabs, free_objs;
->  
-> -		spin_lock_irqsave(&n->list_lock, flags);
-> +		raw_spin_lock_irqsave(&n->list_lock, flags);
->  		total_slabs = n->total_slabs;
->  		free_slabs = n->free_slabs;
->  		free_objs = n->free_objects;
-> -		spin_unlock_irqrestore(&n->list_lock, flags);
-> +		raw_spin_unlock_irqrestore(&n->list_lock, flags);
->  
->  		pr_warn("  node %d: slabs: %ld/%ld, objs: %ld/%ld\n",
->  			node, total_slabs - free_slabs, total_slabs,
-> @@ -2096,7 +2096,7 @@ static void check_spinlock_acquired(struct kmem_cache *cachep)
->  {
->  #ifdef CONFIG_SMP
->  	check_irq_off();
-> -	assert_spin_locked(&get_node(cachep, numa_mem_id())->list_lock);
-> +	assert_raw_spin_locked(&get_node(cachep, numa_mem_id())->list_lock);
->  #endif
->  }
->  
-> @@ -2104,7 +2104,7 @@ static void check_spinlock_acquired_node(struct kmem_cache *cachep, int node)
->  {
->  #ifdef CONFIG_SMP
->  	check_irq_off();
-> -	assert_spin_locked(&get_node(cachep, node)->list_lock);
-> +	assert_raw_spin_locked(&get_node(cachep, node)->list_lock);
->  #endif
->  }
->  
-> @@ -2144,9 +2144,9 @@ static void do_drain(void *arg)
->  	check_irq_off();
->  	ac = cpu_cache_get(cachep);
->  	n = get_node(cachep, node);
-> -	spin_lock(&n->list_lock);
-> +	raw_spin_lock(&n->list_lock);
->  	free_block(cachep, ac->entry, ac->avail, node, &list);
-> -	spin_unlock(&n->list_lock);
-> +	raw_spin_unlock(&n->list_lock);
->  	ac->avail = 0;
->  	slabs_destroy(cachep, &list);
->  }
-> @@ -2164,9 +2164,9 @@ static void drain_cpu_caches(struct kmem_cache *cachep)
->  			drain_alien_cache(cachep, n->alien);
->  
->  	for_each_kmem_cache_node(cachep, node, n) {
-> -		spin_lock_irq(&n->list_lock);
-> +		raw_spin_lock_irq(&n->list_lock);
->  		drain_array_locked(cachep, n->shared, node, true, &list);
-> -		spin_unlock_irq(&n->list_lock);
-> +		raw_spin_unlock_irq(&n->list_lock);
->  
->  		slabs_destroy(cachep, &list);
->  	}
-> @@ -2188,10 +2188,10 @@ static int drain_freelist(struct kmem_cache *cache,
->  	nr_freed = 0;
->  	while (nr_freed < tofree && !list_empty(&n->slabs_free)) {
->  
-> -		spin_lock_irq(&n->list_lock);
-> +		raw_spin_lock_irq(&n->list_lock);
->  		p = n->slabs_free.prev;
->  		if (p == &n->slabs_free) {
-> -			spin_unlock_irq(&n->list_lock);
-> +			raw_spin_unlock_irq(&n->list_lock);
->  			goto out;
->  		}
->  
-> @@ -2204,7 +2204,7 @@ static int drain_freelist(struct kmem_cache *cache,
->  		 * to the cache.
->  		 */
->  		n->free_objects -= cache->num;
-> -		spin_unlock_irq(&n->list_lock);
-> +		raw_spin_unlock_irq(&n->list_lock);
->  		slab_destroy(cache, slab);
->  		nr_freed++;
->  	}
-> @@ -2629,7 +2629,7 @@ static void cache_grow_end(struct kmem_cache *cachep, struct slab *slab)
->  	INIT_LIST_HEAD(&slab->slab_list);
->  	n = get_node(cachep, slab_nid(slab));
->  
-> -	spin_lock(&n->list_lock);
-> +	raw_spin_lock(&n->list_lock);
->  	n->total_slabs++;
->  	if (!slab->active) {
->  		list_add_tail(&slab->slab_list, &n->slabs_free);
-> @@ -2639,7 +2639,7 @@ static void cache_grow_end(struct kmem_cache *cachep, struct slab *slab)
->  
->  	STATS_INC_GROWN(cachep);
->  	n->free_objects += cachep->num - slab->active;
-> -	spin_unlock(&n->list_lock);
-> +	raw_spin_unlock(&n->list_lock);
->  
->  	fixup_objfreelist_debug(cachep, &list);
->  }
-> @@ -2805,7 +2805,7 @@ static struct slab *get_first_slab(struct kmem_cache_node *n, bool pfmemalloc)
->  {
->  	struct slab *slab;
->  
-> -	assert_spin_locked(&n->list_lock);
-> +	assert_raw_spin_locked(&n->list_lock);
->  	slab = list_first_entry_or_null(&n->slabs_partial, struct slab,
->  					slab_list);
->  	if (!slab) {
-> @@ -2832,10 +2832,10 @@ static noinline void *cache_alloc_pfmemalloc(struct kmem_cache *cachep,
->  	if (!gfp_pfmemalloc_allowed(flags))
->  		return NULL;
->  
-> -	spin_lock(&n->list_lock);
-> +	raw_spin_lock(&n->list_lock);
->  	slab = get_first_slab(n, true);
->  	if (!slab) {
-> -		spin_unlock(&n->list_lock);
-> +		raw_spin_unlock(&n->list_lock);
->  		return NULL;
->  	}
->  
-> @@ -2844,7 +2844,7 @@ static noinline void *cache_alloc_pfmemalloc(struct kmem_cache *cachep,
->  
->  	fixup_slab_list(cachep, n, slab, &list);
->  
-> -	spin_unlock(&n->list_lock);
-> +	raw_spin_unlock(&n->list_lock);
->  	fixup_objfreelist_debug(cachep, &list);
->  
->  	return obj;
-> @@ -2903,7 +2903,7 @@ static void *cache_alloc_refill(struct kmem_cache *cachep, gfp_t flags)
->  	if (!n->free_objects && (!shared || !shared->avail))
->  		goto direct_grow;
->  
-> -	spin_lock(&n->list_lock);
-> +	raw_spin_lock(&n->list_lock);
->  	shared = READ_ONCE(n->shared);
->  
->  	/* See if we can refill from the shared array */
-> @@ -2927,7 +2927,7 @@ static void *cache_alloc_refill(struct kmem_cache *cachep, gfp_t flags)
->  must_grow:
->  	n->free_objects -= ac->avail;
->  alloc_done:
-> -	spin_unlock(&n->list_lock);
-> +	raw_spin_unlock(&n->list_lock);
->  	fixup_objfreelist_debug(cachep, &list);
->  
->  direct_grow:
-> @@ -3147,7 +3147,7 @@ static void *____cache_alloc_node(struct kmem_cache *cachep, gfp_t flags,
->  	BUG_ON(!n);
->  
->  	check_irq_off();
-> -	spin_lock(&n->list_lock);
-> +	raw_spin_lock(&n->list_lock);
->  	slab = get_first_slab(n, false);
->  	if (!slab)
->  		goto must_grow;
-> @@ -3165,12 +3165,12 @@ static void *____cache_alloc_node(struct kmem_cache *cachep, gfp_t flags,
->  
->  	fixup_slab_list(cachep, n, slab, &list);
->  
-> -	spin_unlock(&n->list_lock);
-> +	raw_spin_unlock(&n->list_lock);
->  	fixup_objfreelist_debug(cachep, &list);
->  	return obj;
->  
->  must_grow:
-> -	spin_unlock(&n->list_lock);
-> +	raw_spin_unlock(&n->list_lock);
->  	slab = cache_grow_begin(cachep, gfp_exact_node(flags), nodeid);
->  	if (slab) {
->  		/* This slab isn't counted yet so don't update free_objects */
-> @@ -3325,7 +3325,7 @@ static void cache_flusharray(struct kmem_cache *cachep, struct array_cache *ac)
->  
->  	check_irq_off();
->  	n = get_node(cachep, node);
-> -	spin_lock(&n->list_lock);
-> +	raw_spin_lock(&n->list_lock);
->  	if (n->shared) {
->  		struct array_cache *shared_array = n->shared;
->  		int max = shared_array->limit - shared_array->avail;
-> @@ -3354,7 +3354,7 @@ static void cache_flusharray(struct kmem_cache *cachep, struct array_cache *ac)
->  		STATS_SET_FREEABLE(cachep, i);
->  	}
->  #endif
-> -	spin_unlock(&n->list_lock);
-> +	raw_spin_unlock(&n->list_lock);
->  	ac->avail -= batchcount;
->  	memmove(ac->entry, &(ac->entry[batchcount]), sizeof(void *)*ac->avail);
->  	slabs_destroy(cachep, &list);
-> @@ -3721,9 +3721,9 @@ static int do_tune_cpucache(struct kmem_cache *cachep, int limit,
->  
->  		node = cpu_to_mem(cpu);
->  		n = get_node(cachep, node);
-> -		spin_lock_irq(&n->list_lock);
-> +		raw_spin_lock_irq(&n->list_lock);
->  		free_block(cachep, ac->entry, ac->avail, node, &list);
-> -		spin_unlock_irq(&n->list_lock);
-> +		raw_spin_unlock_irq(&n->list_lock);
->  		slabs_destroy(cachep, &list);
->  	}
->  	free_percpu(prev);
-> @@ -3815,9 +3815,9 @@ static void drain_array(struct kmem_cache *cachep, struct kmem_cache_node *n,
->  		return;
->  	}
->  
-> -	spin_lock_irq(&n->list_lock);
-> +	raw_spin_lock_irq(&n->list_lock);
->  	drain_array_locked(cachep, ac, node, false, &list);
-> -	spin_unlock_irq(&n->list_lock);
-> +	raw_spin_unlock_irq(&n->list_lock);
->  
->  	slabs_destroy(cachep, &list);
->  }
-> @@ -3901,7 +3901,7 @@ void get_slabinfo(struct kmem_cache *cachep, struct slabinfo *sinfo)
->  
->  	for_each_kmem_cache_node(cachep, node, n) {
->  		check_irq_on();
-> -		spin_lock_irq(&n->list_lock);
-> +		raw_spin_lock_irq(&n->list_lock);
->  
->  		total_slabs += n->total_slabs;
->  		free_slabs += n->free_slabs;
-> @@ -3910,7 +3910,7 @@ void get_slabinfo(struct kmem_cache *cachep, struct slabinfo *sinfo)
->  		if (n->shared)
->  			shared_avail += n->shared->avail;
->  
-> -		spin_unlock_irq(&n->list_lock);
-> +		raw_spin_unlock_irq(&n->list_lock);
->  	}
->  	num_objs = total_slabs * cachep->num;
->  	active_slabs = total_slabs - free_slabs;
-> diff --git a/mm/slab.h b/mm/slab.h
-> index 0202a8c2f0d2..7a705e4228c8 100644
-> --- a/mm/slab.h
-> +++ b/mm/slab.h
-> @@ -750,7 +750,11 @@ static inline void slab_post_alloc_hook(struct kmem_cache *s,
->   * The slab lists for all objects.
->   */
->  struct kmem_cache_node {
-> +#ifdef CONFIG_SLAB
-> +	raw_spinlock_t list_lock;
-> +#else
->  	spinlock_t list_lock;
-> +#endif
->  
->  #ifdef CONFIG_SLAB
->  	struct list_head slabs_partial;	/* partial list first, better asm code */
-> -- 
-> 2.35.3
-> 
 
--- 
-Thanks,
-Hyeonggon
+--=-8xgEcP9U4h8sQKY7Zfd/
+Content-Disposition: attachment;
+	filename*0=0001-Staging-rtl8192e-fixed-multiple-coding-style-issues.patc;
+	filename*1=h
+Content-Type: text/x-patch;
+	name="0001-Staging-rtl8192e-fixed-multiple-coding-style-issues.patch";
+	charset="UTF-8"
+Content-Transfer-Encoding: base64
+
+RnJvbSA2NmEzMTNkYjEzNWZmYWE4NmQyYWFkZGIzYjIyODZjN2IwMDRiNWYxIE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBBYXJvbiBMYXdyZW5jZSA8dDRybWluQHpvaG9tYWlsLmNvbT4K
+RGF0ZTogU2F0LCAyMiBPY3QgMjAyMiAxMTozMDoyMiArMDcwMApTdWJqZWN0OiBbUEFUQ0hdIFN0
+YWdpbmc6IHJ0bDgxOTJlOiBmaXhlZCBtdWx0aXBsZSBjb2Rpbmcgc3R5bGUgaXNzdWVzCgpGaXhl
+ZCBtdWx0aXBsZSBjb2Rpbmcgc3R5bGUgaXNzdWVzIG9uIG11bHRpcGxlIGZpbGVzCmFjY29yZGlu
+ZyB0byB0aGUgY2hlY2twYXRjaHNjcmlwdC4KClNpZ25lZC1vZmYtYnk6IEFhcm9uIExhd3JlbmNl
+IDx0NHJtaW5Aem9ob21haWwuY29tPgotLS0KIGRyaXZlcnMvc3RhZ2luZy9ydGw4MTkyZS9ydGw4
+MTl4X0hUUHJvYy5jICAgIHwgIDEgKwogZHJpdmVycy9zdGFnaW5nL3J0bDgxOTJlL3J0bDgxOXhf
+VFNQcm9jLmMgICAgfCAxMSArKysrLS0tLQogZHJpdmVycy9zdGFnaW5nL3J0bDgxOTJlL3J0bGxp
+Yl9jcnlwdF9jY21wLmMgfCAxMiArLS0tLS0tLS0KIGRyaXZlcnMvc3RhZ2luZy9ydGw4MTkyZS9y
+dGxsaWJfY3J5cHRfdGtpcC5jIHwgMjggKy0tLS0tLS0tLS0tLS0tLS0tLS0KIGRyaXZlcnMvc3Rh
+Z2luZy9ydGw4MTkyZS9ydGxsaWJfY3J5cHRfd2VwLmMgIHwgMTAgKy0tLS0tLQogZHJpdmVycy9z
+dGFnaW5nL3J0bDgxOTJlL3J0bGxpYl90eC5jICAgICAgICAgfCAxNSArKysrKy0tLS0tLQogNiBm
+aWxlcyBjaGFuZ2VkLCAxNSBpbnNlcnRpb25zKCspLCA2MiBkZWxldGlvbnMoLSkKCmRpZmYgLS1n
+aXQgYS9kcml2ZXJzL3N0YWdpbmcvcnRsODE5MmUvcnRsODE5eF9IVFByb2MuYyBiL2RyaXZlcnMv
+c3RhZ2luZy9ydGw4MTkyZS9ydGw4MTl4X0hUUHJvYy5jCmluZGV4IGVmM2RjYTUxY2Y5OS4uYjc2
+M2NmMGJhMzU2IDEwMDY0NAotLS0gYS9kcml2ZXJzL3N0YWdpbmcvcnRsODE5MmUvcnRsODE5eF9I
+VFByb2MuYworKysgYi9kcml2ZXJzL3N0YWdpbmcvcnRsODE5MmUvcnRsODE5eF9IVFByb2MuYwpA
+QCAtNzAsNiArNzAsNyBAQCBzdGF0aWMgdTggTElOS1NZU19NQVJWRUxMXzQ0MDBOWzNdID0gezB4
+MDAsIDB4MTQsIDB4YTR9Owogdm9pZCBIVFVwZGF0ZURlZmF1bHRTZXR0aW5nKHN0cnVjdCBydGxs
+aWJfZGV2aWNlICppZWVlKQogewogCXN0cnVjdCBydF9oaV90aHJvdWdocHV0ICpwSFRJbmZvID0g
+aWVlZS0+cEhUSW5mbzsKKwogCXBIVEluZm8tPmJSZWdTaG9ydEdJMjBNSHogPSAxOwogCXBIVElu
+Zm8tPmJSZWdTaG9ydEdJNDBNSHogPSAxOwogCmRpZmYgLS1naXQgYS9kcml2ZXJzL3N0YWdpbmcv
+cnRsODE5MmUvcnRsODE5eF9UU1Byb2MuYyBiL2RyaXZlcnMvc3RhZ2luZy9ydGw4MTkyZS9ydGw4
+MTl4X1RTUHJvYy5jCmluZGV4IDA1YzdlODIyZjM3Mi4uYTM3NTdjMmRkZGVlIDEwMDY0NAotLS0g
+YS9kcml2ZXJzL3N0YWdpbmcvcnRsODE5MmUvcnRsODE5eF9UU1Byb2MuYworKysgYi9kcml2ZXJz
+L3N0YWdpbmcvcnRsODE5MmUvcnRsODE5eF9UU1Byb2MuYwpAQCAtMjksNyArMjksNyBAQCBzdGF0
+aWMgdm9pZCBSeFBrdFBlbmRpbmdUaW1lb3V0KHN0cnVjdCB0aW1lcl9saXN0ICp0KQogCXU4IGlu
+ZGV4ID0gMDsKIAlib29sIGJQa3RJbkJ1ZiA9IGZhbHNlOwogCi0Jc3Bpbl9sb2NrX2lycXNhdmUo
+JihpZWVlLT5yZW9yZGVyX3NwaW5sb2NrKSwgZmxhZ3MpOworCXNwaW5fbG9ja19pcnFzYXZlKCZp
+ZWVlLT5yZW9yZGVyX3NwaW5sb2NrLCBmbGFncyk7CiAJaWYgKHBSeFRzLT5yeF90aW1lb3V0X2lu
+ZGljYXRlX3NlcSAhPSAweGZmZmYpIHsKIAkJd2hpbGUgKCFsaXN0X2VtcHR5KCZwUnhUcy0+cnhf
+cGVuZGluZ19wa3RfbGlzdCkpIHsKIAkJCXBSZW9yZGVyRW50cnkgPSAoc3RydWN0IHJ4X3Jlb3Jk
+ZXJfZW50cnkgKikKQEAgLTcyLDggKzcyLDcgQEAgc3RhdGljIHZvaWQgUnhQa3RQZW5kaW5nVGlt
+ZW91dChzdHJ1Y3QgdGltZXJfbGlzdCAqdCkKIAkJCW5ldGRldl93YXJuKGllZWUtPmRldiwKIAkJ
+CQkgICAgIiVzKCk6IFJ4IFJlb3JkZXIgc3RydWN0IGJ1ZmZlciBmdWxsXG4iLAogCQkJCSAgICBf
+X2Z1bmNfXyk7Ci0JCQlzcGluX3VubG9ja19pcnFyZXN0b3JlKCYoaWVlZS0+cmVvcmRlcl9zcGlu
+bG9jayksCi0JCQkJCSAgICAgICBmbGFncyk7CisJCQlzcGluX3VubG9ja19pcnFyZXN0b3JlKCZp
+ZWVlLT5yZW9yZGVyX3NwaW5sb2NrLCBmbGFncyk7CiAJCQlyZXR1cm47CiAJCX0KIAkJcnRsbGli
+X2luZGljYXRlX3BhY2tldHMoaWVlZSwgaWVlZS0+c3RhdHNfSW5kaWNhdGVBcnJheSwgaW5kZXgp
+OwpAQCAtODYsNyArODUsNyBAQCBzdGF0aWMgdm9pZCBSeFBrdFBlbmRpbmdUaW1lb3V0KHN0cnVj
+dCB0aW1lcl9saXN0ICp0KQogCQkJICBtc2Vjc190b19qaWZmaWVzKGllZWUtPnBIVEluZm8tPnJ4
+X3Jlb3JkZXJfcGVuZGluZ190aW1lKQogCQkJICApOwogCX0KLQlzcGluX3VubG9ja19pcnFyZXN0
+b3JlKCYoaWVlZS0+cmVvcmRlcl9zcGlubG9jayksIGZsYWdzKTsKKwlzcGluX3VubG9ja19pcnFy
+ZXN0b3JlKCZpZWVlLT5yZW9yZGVyX3NwaW5sb2NrLCBmbGFncyk7CiB9CiAKIHN0YXRpYyB2b2lk
+IFRzQWRkQmFQcm9jZXNzKHN0cnVjdCB0aW1lcl9saXN0ICp0KQpAQCAtMjc0LDExICsyNzMsMTEg
+QEAgc3RhdGljIHZvaWQgTWFrZVRTRW50cnkoc3RydWN0IHRzX2NvbW1vbl9pbmZvICpwVHNDb21t
+b25JbmZvLCB1OCAqQWRkciwKIAltZW1jcHkocFRzQ29tbW9uSW5mby0+QWRkciwgQWRkciwgNik7
+CiAKIAlpZiAocFRTUEVDKQotCQltZW1jcHkoKHU4ICopKCYocFRzQ29tbW9uSW5mby0+VFNwZWMp
+KSwgKHU4ICopcFRTUEVDLAorCQltZW1jcHkoKHU4ICopKCZwVHNDb21tb25JbmZvLT5UU3BlYyks
+ICh1OCAqKXBUU1BFQywKIAkJCXNpemVvZih1bmlvbiB0c3BlY19ib2R5KSk7CiAKIAlmb3IgKGNv
+dW50ID0gMDsgY291bnQgPCBUQ0xBU19OdW07IGNvdW50KyspCi0JCW1lbWNweSgodTggKikoJihw
+VHNDb21tb25JbmZvLT5UQ2xhc3NbY291bnRdKSksCisJCW1lbWNweSgodTggKikoJnBUc0NvbW1v
+bkluZm8tPlRDbGFzc1tjb3VudF0pLAogCQkgICAgICAgKHU4ICopcFRDTEFTLCBzaXplb2YodW5p
+b24gcW9zX3RjbGFzKSk7CiAKIAlwVHNDb21tb25JbmZvLT5UQ2xhc1Byb2MgPSBUQ0xBU19Qcm9j
+OwpkaWZmIC0tZ2l0IGEvZHJpdmVycy9zdGFnaW5nL3J0bDgxOTJlL3J0bGxpYl9jcnlwdF9jY21w
+LmMgYi9kcml2ZXJzL3N0YWdpbmcvcnRsODE5MmUvcnRsbGliX2NyeXB0X2NjbXAuYwppbmRleCBh
+OGQyMmRhOGJjOWEuLjg0ZmE0ZjIzYjBlNiAxMDA2NDQKLS0tIGEvZHJpdmVycy9zdGFnaW5nL3J0
+bDgxOTJlL3J0bGxpYl9jcnlwdF9jY21wLmMKKysrIGIvZHJpdmVycy9zdGFnaW5nL3J0bDgxOTJl
+L3J0bGxpYl9jcnlwdF9jY21wLmMKQEAgLTUyLDcgKzUyLDcgQEAgc3RhdGljIHZvaWQgKnJ0bGxp
+Yl9jY21wX2luaXQoaW50IGtleV9pZHgpCiAJc3RydWN0IHJ0bGxpYl9jY21wX2RhdGEgKnByaXY7
+CiAKIAlwcml2ID0ga3phbGxvYyhzaXplb2YoKnByaXYpLCBHRlBfQVRPTUlDKTsKLQlpZiAocHJp
+diA9PSBOVUxMKQorCWlmICghcHJpdikKIAkJZ290byBmYWlsOwogCXByaXYtPmtleV9pZHggPSBr
+ZXlfaWR4OwogCkBAIC03NCw3ICs3NCw2IEBAIHN0YXRpYyB2b2lkICpydGxsaWJfY2NtcF9pbml0
+KGludCBrZXlfaWR4KQogCXJldHVybiBOVUxMOwogfQogCi0KIHN0YXRpYyB2b2lkIHJ0bGxpYl9j
+Y21wX2RlaW5pdCh2b2lkICpwcml2KQogewogCXN0cnVjdCBydGxsaWJfY2NtcF9kYXRhICpfcHJp
+diA9IHByaXY7CkBAIC04NCw3ICs4Myw2IEBAIHN0YXRpYyB2b2lkIHJ0bGxpYl9jY21wX2RlaW5p
+dCh2b2lkICpwcml2KQogCWtmcmVlKHByaXYpOwogfQogCi0KIHN0YXRpYyBpbnQgY2NtcF9pbml0
+X2l2X2FuZF9hYWQoc3RydWN0IHJ0bGxpYl9oZHJfNGFkZHIgKmhkciwKIAkJCQl1OCAqcG4sIHU4
+ICppdiwgdTggKmFhZCkKIHsKQEAgLTE1MCw4ICsxNDgsNiBAQCBzdGF0aWMgaW50IGNjbXBfaW5p
+dF9pdl9hbmRfYWFkKHN0cnVjdCBydGxsaWJfaGRyXzRhZGRyICpoZHIsCiAJcmV0dXJuIGFhZF9s
+ZW47CiB9CiAKLQotCiBzdGF0aWMgaW50IHJ0bGxpYl9jY21wX2VuY3J5cHQoc3RydWN0IHNrX2J1
+ZmYgKnNrYiwgaW50IGhkcl9sZW4sIHZvaWQgKnByaXYpCiB7CiAJc3RydWN0IHJ0bGxpYl9jY21w
+X2RhdGEgKmtleSA9IHByaXY7CkBAIC0yMjAsNyArMjE2LDYgQEAgc3RhdGljIGludCBydGxsaWJf
+Y2NtcF9lbmNyeXB0KHN0cnVjdCBza19idWZmICpza2IsIGludCBoZHJfbGVuLCB2b2lkICpwcml2
+KQogCXJldHVybiAwOwogfQogCi0KIHN0YXRpYyBpbnQgcnRsbGliX2NjbXBfZGVjcnlwdChzdHJ1
+Y3Qgc2tfYnVmZiAqc2tiLCBpbnQgaGRyX2xlbiwgdm9pZCAqcHJpdikKIHsKIAlzdHJ1Y3QgcnRs
+bGliX2NjbXBfZGF0YSAqa2V5ID0gcHJpdjsKQEAgLTMxNSw3ICszMTAsNiBAQCBzdGF0aWMgaW50
+IHJ0bGxpYl9jY21wX2RlY3J5cHQoc3RydWN0IHNrX2J1ZmYgKnNrYiwgaW50IGhkcl9sZW4sIHZv
+aWQgKnByaXYpCiAJcmV0dXJuIGtleWlkeDsKIH0KIAotCiBzdGF0aWMgaW50IHJ0bGxpYl9jY21w
+X3NldF9rZXkodm9pZCAqa2V5LCBpbnQgbGVuLCB1OCAqc2VxLCB2b2lkICpwcml2KQogewogCXN0
+cnVjdCBydGxsaWJfY2NtcF9kYXRhICpkYXRhID0gcHJpdjsKQEAgLTM0OSw3ICszNDMsNiBAQCBz
+dGF0aWMgaW50IHJ0bGxpYl9jY21wX3NldF9rZXkodm9pZCAqa2V5LCBpbnQgbGVuLCB1OCAqc2Vx
+LCB2b2lkICpwcml2KQogCXJldHVybiAwOwogfQogCi0KIHN0YXRpYyBpbnQgcnRsbGliX2NjbXBf
+Z2V0X2tleSh2b2lkICprZXksIGludCBsZW4sIHU4ICpzZXEsIHZvaWQgKnByaXYpCiB7CiAJc3Ry
+dWN0IHJ0bGxpYl9jY21wX2RhdGEgKmRhdGEgPSBwcml2OwpAQCAtMzczLDcgKzM2Niw2IEBAIHN0
+YXRpYyBpbnQgcnRsbGliX2NjbXBfZ2V0X2tleSh2b2lkICprZXksIGludCBsZW4sIHU4ICpzZXEs
+IHZvaWQgKnByaXYpCiAJcmV0dXJuIENDTVBfVEtfTEVOOwogfQogCi0KIHN0YXRpYyB2b2lkIHJ0
+bGxpYl9jY21wX3ByaW50X3N0YXRzKHN0cnVjdCBzZXFfZmlsZSAqbSwgdm9pZCAqcHJpdikKIHsK
+IAlzdHJ1Y3QgcnRsbGliX2NjbXBfZGF0YSAqY2NtcCA9IHByaXY7CkBAIC00MDMsMTMgKzM5NSwx
+MSBAQCBzdGF0aWMgc3RydWN0IGxpYjgwMjExX2NyeXB0b19vcHMgcnRsbGliX2NyeXB0X2NjbXAg
+PSB7CiAJLm93bmVyCQkJPSBUSElTX01PRFVMRSwKIH07CiAKLQogc3RhdGljIGludCBfX2luaXQg
+cnRsbGliX2NyeXB0b19jY21wX2luaXQodm9pZCkKIHsKIAlyZXR1cm4gbGliODAyMTFfcmVnaXN0
+ZXJfY3J5cHRvX29wcygmcnRsbGliX2NyeXB0X2NjbXApOwogfQogCi0KIHN0YXRpYyB2b2lkIF9f
+ZXhpdCBydGxsaWJfY3J5cHRvX2NjbXBfZXhpdCh2b2lkKQogewogCWxpYjgwMjExX3VucmVnaXN0
+ZXJfY3J5cHRvX29wcygmcnRsbGliX2NyeXB0X2NjbXApOwpkaWZmIC0tZ2l0IGEvZHJpdmVycy9z
+dGFnaW5nL3J0bDgxOTJlL3J0bGxpYl9jcnlwdF90a2lwLmMgYi9kcml2ZXJzL3N0YWdpbmcvcnRs
+ODE5MmUvcnRsbGliX2NyeXB0X3RraXAuYwppbmRleCA4YmM5NTY1MWUzODQuLjZmNzQ5ZWJmMjlj
+ZiAxMDA2NDQKLS0tIGEvZHJpdmVycy9zdGFnaW5nL3J0bDgxOTJlL3J0bGxpYl9jcnlwdF90a2lw
+LmMKKysrIGIvZHJpdmVycy9zdGFnaW5nL3J0bDgxOTJlL3J0bGxpYl9jcnlwdF90a2lwLmMKQEAg
+LTYyLDcgKzYyLDcgQEAgc3RhdGljIHZvaWQgKnJ0bGxpYl90a2lwX2luaXQoaW50IGtleV9pZHgp
+CiAJCXJldHVybiBOVUxMOwogCiAJcHJpdiA9IGt6YWxsb2Moc2l6ZW9mKCpwcml2KSwgR0ZQX0FU
+T01JQyk7Ci0JaWYgKHByaXYgPT0gTlVMTCkKKwlpZiAoIXByaXYpCiAJCWdvdG8gZmFpbDsKIAlw
+cml2LT5rZXlfaWR4ID0ga2V5X2lkeDsKIApAQCAtOTEsNyArOTEsNiBAQCBzdGF0aWMgdm9pZCAq
+cnRsbGliX3RraXBfaW5pdChpbnQga2V5X2lkeCkKIAlyZXR1cm4gTlVMTDsKIH0KIAotCiBzdGF0
+aWMgdm9pZCBydGxsaWJfdGtpcF9kZWluaXQodm9pZCAqcHJpdikKIHsKIAlzdHJ1Y3QgcnRsbGli
+X3RraXBfZGF0YSAqX3ByaXYgPSBwcml2OwpAQCAtMTAzLDQ5ICsxMDIsNDEgQEAgc3RhdGljIHZv
+aWQgcnRsbGliX3RraXBfZGVpbml0KHZvaWQgKnByaXYpCiAJa2ZyZWVfc2Vuc2l0aXZlKHByaXYp
+OwogfQogCi0KIHN0YXRpYyBpbmxpbmUgdTE2IFJvdFIxKHUxNiB2YWwpCiB7CiAJcmV0dXJuICh2
+YWwgPj4gMSkgfCAodmFsIDw8IDE1KTsKIH0KIAotCiBzdGF0aWMgaW5saW5lIHU4IExvOCh1MTYg
+dmFsKQogewogCXJldHVybiB2YWwgJiAweGZmOwogfQogCi0KIHN0YXRpYyBpbmxpbmUgdTggSGk4
+KHUxNiB2YWwpCiB7CiAJcmV0dXJuIHZhbCA+PiA4OwogfQogCi0KIHN0YXRpYyBpbmxpbmUgdTE2
+IExvMTYodTMyIHZhbCkKIHsKIAlyZXR1cm4gdmFsICYgMHhmZmZmOwogfQogCi0KIHN0YXRpYyBp
+bmxpbmUgdTE2IEhpMTYodTMyIHZhbCkKIHsKIAlyZXR1cm4gdmFsID4+IDE2OwogfQogCi0KIHN0
+YXRpYyBpbmxpbmUgdTE2IE1rMTYodTggaGksIHU4IGxvKQogewogCXJldHVybiBsbyB8IChoaSA8
+PCA4KTsKIH0KIAotCiBzdGF0aWMgaW5saW5lIHUxNiBNazE2X2xlKHUxNiAqdikKIHsKIAlyZXR1
+cm4gKnY7CiB9CiAKLQogc3RhdGljIGNvbnN0IHUxNiBTYm94WzI1Nl0gPSB7CiAJMHhDNkE1LCAw
+eEY4ODQsIDB4RUU5OSwgMHhGNjhELCAweEZGMEQsIDB4RDZCRCwgMHhERUIxLCAweDkxNTQsCiAJ
+MHg2MDUwLCAweDAyMDMsIDB4Q0VBOSwgMHg1NjdELCAweEU3MTksIDB4QjU2MiwgMHg0REU2LCAw
+eEVDOUEsCkBAIC0xODEsMTcgKzE3MiwxNCBAQCBzdGF0aWMgY29uc3QgdTE2IFNib3hbMjU2XSA9
+IHsKIAkweDgyQzMsIDB4MjlCMCwgMHg1QTc3LCAweDFFMTEsIDB4N0JDQiwgMHhBOEZDLCAweDZE
+RDYsIDB4MkMzQSwKIH07CiAKLQogc3RhdGljIGlubGluZSB1MTYgX1NfKHUxNiB2KQogewogCXUx
+NiB0ID0gU2JveFtIaTgodildOwogCXJldHVybiBTYm94W0xvOCh2KV0gXiAoKHQgPDwgOCkgfCAo
+dCA+PiA4KSk7CiB9CiAKLQogI2RlZmluZSBQSEFTRTFfTE9PUF9DT1VOVCA4CiAKLQogc3RhdGlj
+IHZvaWQgdGtpcF9taXhpbmdfcGhhc2UxKHUxNiAqVFRBSywgY29uc3QgdTggKlRLLCBjb25zdCB1
+OCAqVEEsIHUzMiBJVjMyKQogewogCWludCBpLCBqOwpAQCAtMjEzLDcgKzIwMSw2IEBAIHN0YXRp
+YyB2b2lkIHRraXBfbWl4aW5nX3BoYXNlMSh1MTYgKlRUQUssIGNvbnN0IHU4ICpUSywgY29uc3Qg
+dTggKlRBLCB1MzIgSVYzMikKIAl9CiB9CiAKLQogc3RhdGljIHZvaWQgdGtpcF9taXhpbmdfcGhh
+c2UyKHU4ICpXRVBTZWVkLCBjb25zdCB1OCAqVEssIGNvbnN0IHUxNiAqVFRBSywKIAkJCSAgICAg
+ICB1MTYgSVYxNikKIHsKQEAgLTI2Myw3ICsyNTAsNiBAQCBzdGF0aWMgdm9pZCB0a2lwX21peGlu
+Z19waGFzZTIodTggKldFUFNlZWQsIGNvbnN0IHU4ICpUSywgY29uc3QgdTE2ICpUVEFLLAogI2Vu
+ZGlmCiB9CiAKLQogc3RhdGljIGludCBydGxsaWJfdGtpcF9lbmNyeXB0KHN0cnVjdCBza19idWZm
+ICpza2IsIGludCBoZHJfbGVuLCB2b2lkICpwcml2KQogewogCXN0cnVjdCBydGxsaWJfdGtpcF9k
+YXRhICp0a2V5ID0gcHJpdjsKQEAgLTI5Myw3ICsyNzksNiBAQCBzdGF0aWMgaW50IHJ0bGxpYl90
+a2lwX2VuY3J5cHQoc3RydWN0IHNrX2J1ZmYgKnNrYiwgaW50IGhkcl9sZW4sIHZvaWQgKnByaXYp
+CiAJfSBlbHNlCiAJCXRrZXktPnR4X3BoYXNlMV9kb25lID0gMTsKIAotCiAJbGVuID0gc2tiLT5s
+ZW4gLSBoZHJfbGVuOwogCXBvcyA9IHNrYl9wdXNoKHNrYiwgOCk7CiAJbWVtbW92ZShwb3MsIHBv
+cyArIDgsIGhkcl9sZW4pOwpAQCAtMzM2LDggKzMyMSw2IEBAIHN0YXRpYyBpbnQgcnRsbGliX3Rr
+aXBfZW5jcnlwdChzdHJ1Y3Qgc2tfYnVmZiAqc2tiLCBpbnQgaGRyX2xlbiwgdm9pZCAqcHJpdikK
+IAlpZiAoIXRjYl9kZXNjLT5iSHdTZWMpCiAJCXJldHVybiByZXQ7CiAJcmV0dXJuIDA7Ci0KLQog
+fQogCiBzdGF0aWMgaW50IHJ0bGxpYl90a2lwX2RlY3J5cHQoc3RydWN0IHNrX2J1ZmYgKnNrYiwg
+aW50IGhkcl9sZW4sIHZvaWQgKnByaXYpCkBAIC00MzYsNyArNDE5LDYgQEAgc3RhdGljIGludCBy
+dGxsaWJfdGtpcF9kZWNyeXB0KHN0cnVjdCBza19idWZmICpza2IsIGludCBoZHJfbGVuLCB2b2lk
+ICpwcml2KQogCQkJdGtleS0+ZG90MTFSU05BU3RhdHNUS0lQSUNWRXJyb3JzKys7CiAJCQlyZXR1
+cm4gLTU7CiAJCX0KLQogCX0KIAogCS8qIFVwZGF0ZSByZWFsIGNvdW50ZXJzIG9ubHkgYWZ0ZXIg
+TWljaGFlbCBNSUMgdmVyaWZpY2F0aW9uIGhhcwpAQCAtNDUzLDcgKzQzNSw2IEBAIHN0YXRpYyBp
+bnQgcnRsbGliX3RraXBfZGVjcnlwdChzdHJ1Y3Qgc2tfYnVmZiAqc2tiLCBpbnQgaGRyX2xlbiwg
+dm9pZCAqcHJpdikKIAlyZXR1cm4ga2V5aWR4OwogfQogCi0KIHN0YXRpYyBpbnQgbWljaGFlbF9t
+aWMoc3RydWN0IGNyeXB0b19zaGFzaCAqdGZtX21pY2hhZWwsIHU4ICprZXksIHU4ICpoZHIsCiAJ
+CSAgICAgICB1OCAqZGF0YSwgc2l6ZV90IGRhdGFfbGVuLCB1OCAqbWljKQogewpAQCAtNTExLDcg
+KzQ5Miw2IEBAIHN0YXRpYyB2b2lkIG1pY2hhZWxfbWljX2hkcihzdHJ1Y3Qgc2tfYnVmZiAqc2ti
+LCB1OCAqaGRyKQogCWhkclsxM10gPSBoZHJbMTRdID0gaGRyWzE1XSA9IDA7IC8qIHJlc2VydmVk
+ICovCiB9CiAKLQogc3RhdGljIGludCBydGxsaWJfbWljaGFlbF9taWNfYWRkKHN0cnVjdCBza19i
+dWZmICpza2IsIGludCBoZHJfbGVuLCB2b2lkICpwcml2KQogewogCXN0cnVjdCBydGxsaWJfdGtp
+cF9kYXRhICp0a2V5ID0gcHJpdjsKQEAgLTUzOSw3ICs1MTksNiBAQCBzdGF0aWMgaW50IHJ0bGxp
+Yl9taWNoYWVsX21pY19hZGQoc3RydWN0IHNrX2J1ZmYgKnNrYiwgaW50IGhkcl9sZW4sIHZvaWQg
+KnByaXYpCiAJcmV0dXJuIDA7CiB9CiAKLQogc3RhdGljIHZvaWQgcnRsbGliX21pY2hhZWxfbWlj
+X2ZhaWx1cmUoc3RydWN0IG5ldF9kZXZpY2UgKmRldiwKIAkJCQkgICAgICAgc3RydWN0IHJ0bGxp
+Yl9oZHJfNGFkZHIgKmhkciwKIAkJCQkgICAgICAgaW50IGtleWlkeCkKQEAgLTYwOSw3ICs1ODgs
+NiBAQCBzdGF0aWMgaW50IHJ0bGxpYl9taWNoYWVsX21pY192ZXJpZnkoc3RydWN0IHNrX2J1ZmYg
+KnNrYiwgaW50IGtleWlkeCwKIAlyZXR1cm4gMDsKIH0KIAotCiBzdGF0aWMgaW50IHJ0bGxpYl90
+a2lwX3NldF9rZXkodm9pZCAqa2V5LCBpbnQgbGVuLCB1OCAqc2VxLCB2b2lkICpwcml2KQogewog
+CXN0cnVjdCBydGxsaWJfdGtpcF9kYXRhICp0a2V5ID0gcHJpdjsKQEAgLTY0MCw3ICs2MTgsNiBA
+QCBzdGF0aWMgaW50IHJ0bGxpYl90a2lwX3NldF9rZXkodm9pZCAqa2V5LCBpbnQgbGVuLCB1OCAq
+c2VxLCB2b2lkICpwcml2KQogCXJldHVybiAwOwogfQogCi0KIHN0YXRpYyBpbnQgcnRsbGliX3Rr
+aXBfZ2V0X2tleSh2b2lkICprZXksIGludCBsZW4sIHU4ICpzZXEsIHZvaWQgKnByaXYpCiB7CiAJ
+c3RydWN0IHJ0bGxpYl90a2lwX2RhdGEgKnRrZXkgPSBwcml2OwpAQCAtNjcxLDcgKzY0OCw2IEBA
+IHN0YXRpYyBpbnQgcnRsbGliX3RraXBfZ2V0X2tleSh2b2lkICprZXksIGludCBsZW4sIHU4ICpz
+ZXEsIHZvaWQgKnByaXYpCiAJcmV0dXJuIFRLSVBfS0VZX0xFTjsKIH0KIAotCiBzdGF0aWMgdm9p
+ZCBydGxsaWJfdGtpcF9wcmludF9zdGF0cyhzdHJ1Y3Qgc2VxX2ZpbGUgKm0sIHZvaWQgKnByaXYp
+CiB7CiAJc3RydWN0IHJ0bGxpYl90a2lwX2RhdGEgKnRraXAgPSBwcml2OwpAQCAtNzEzLDEzICs2
+ODksMTEgQEAgc3RhdGljIHN0cnVjdCBsaWI4MDIxMV9jcnlwdG9fb3BzIHJ0bGxpYl9jcnlwdF90
+a2lwID0gewogCS5vd25lcgkJCT0gVEhJU19NT0RVTEUsCiB9OwogCi0KIHN0YXRpYyBpbnQgX19p
+bml0IHJ0bGxpYl9jcnlwdG9fdGtpcF9pbml0KHZvaWQpCiB7CiAJcmV0dXJuIGxpYjgwMjExX3Jl
+Z2lzdGVyX2NyeXB0b19vcHMoJnJ0bGxpYl9jcnlwdF90a2lwKTsKIH0KIAotCiBzdGF0aWMgdm9p
+ZCBfX2V4aXQgcnRsbGliX2NyeXB0b190a2lwX2V4aXQodm9pZCkKIHsKIAlsaWI4MDIxMV91bnJl
+Z2lzdGVyX2NyeXB0b19vcHMoJnJ0bGxpYl9jcnlwdF90a2lwKTsKZGlmZiAtLWdpdCBhL2RyaXZl
+cnMvc3RhZ2luZy9ydGw4MTkyZS9ydGxsaWJfY3J5cHRfd2VwLmMgYi9kcml2ZXJzL3N0YWdpbmcv
+cnRsODE5MmUvcnRsbGliX2NyeXB0X3dlcC5jCmluZGV4IDc3OTAyNzFhNmE0MC4uMjFjMmI3NjY2
+ZDZmIDEwMDY0NAotLS0gYS9kcml2ZXJzL3N0YWdpbmcvcnRsODE5MmUvcnRsbGliX2NyeXB0X3dl
+cC5jCisrKyBiL2RyaXZlcnMvc3RhZ2luZy9ydGw4MTkyZS9ydGxsaWJfY3J5cHRfd2VwLmMKQEAg
+LTI3LDcgKzI3LDYgQEAgc3RydWN0IHByaXNtMl93ZXBfZGF0YSB7CiAJc3RydWN0IGFyYzRfY3R4
+IHR4X2N0eF9hcmM0OwogfTsKIAotCiBzdGF0aWMgdm9pZCAqcHJpc20yX3dlcF9pbml0KGludCBr
+ZXlpZHgpCiB7CiAJc3RydWN0IHByaXNtMl93ZXBfZGF0YSAqcHJpdjsKQEAgLTM2LDcgKzM1LDcg
+QEAgc3RhdGljIHZvaWQgKnByaXNtMl93ZXBfaW5pdChpbnQga2V5aWR4KQogCQlyZXR1cm4gTlVM
+TDsKIAogCXByaXYgPSBremFsbG9jKHNpemVvZigqcHJpdiksIEdGUF9BVE9NSUMpOwotCWlmIChw
+cml2ID09IE5VTEwpCisJaWYgKCFwcml2KQogCQlyZXR1cm4gTlVMTDsKIAlwcml2LT5rZXlfaWR4
+ID0ga2V5aWR4OwogCkBAIC00Niw3ICs0NSw2IEBAIHN0YXRpYyB2b2lkICpwcmlzbTJfd2VwX2lu
+aXQoaW50IGtleWlkeCkKIAlyZXR1cm4gcHJpdjsKIH0KIAotCiBzdGF0aWMgdm9pZCBwcmlzbTJf
+d2VwX2RlaW5pdCh2b2lkICpwcml2KQogewogCWtmcmVlX3NlbnNpdGl2ZShwcml2KTsKQEAgLTEy
+MCw3ICsxMTgsNiBAQCBzdGF0aWMgaW50IHByaXNtMl93ZXBfZW5jcnlwdChzdHJ1Y3Qgc2tfYnVm
+ZiAqc2tiLCBpbnQgaGRyX2xlbiwgdm9pZCAqcHJpdikKIAlyZXR1cm4gMDsKIH0KIAotCiAvKiBQ
+ZXJmb3JtIFdFUCBkZWNyeXB0aW9uIG9uIGdpdmVuIHN0cnVjdCBidWZmZXIuIEJ1ZmZlciBpbmNs
+dWRlcyB3aG9sZSBXRVAKICAqIHBhcnQgb2YgdGhlIGZyYW1lOiBJViAoNCBieXRlcyksIGVuY3J5
+cHRlZCBwYXlsb2FkIChpbmNsdWRpbmcgU05BUCBoZWFkZXIpLAogICogSUNWICg0IGJ5dGVzKS4g
+bGVuIGluY2x1ZGVzIGJvdGggSVYgYW5kIElDVi4KQEAgLTE4MCw3ICsxNzcsNiBAQCBzdGF0aWMg
+aW50IHByaXNtMl93ZXBfZGVjcnlwdChzdHJ1Y3Qgc2tfYnVmZiAqc2tiLCBpbnQgaGRyX2xlbiwg
+dm9pZCAqcHJpdikKIAlyZXR1cm4gMDsKIH0KIAotCiBzdGF0aWMgaW50IHByaXNtMl93ZXBfc2V0
+X2tleSh2b2lkICprZXksIGludCBsZW4sIHU4ICpzZXEsIHZvaWQgKnByaXYpCiB7CiAJc3RydWN0
+IHByaXNtMl93ZXBfZGF0YSAqd2VwID0gcHJpdjsKQEAgLTE5NCw3ICsxOTAsNiBAQCBzdGF0aWMg
+aW50IHByaXNtMl93ZXBfc2V0X2tleSh2b2lkICprZXksIGludCBsZW4sIHU4ICpzZXEsIHZvaWQg
+KnByaXYpCiAJcmV0dXJuIDA7CiB9CiAKLQogc3RhdGljIGludCBwcmlzbTJfd2VwX2dldF9rZXko
+dm9pZCAqa2V5LCBpbnQgbGVuLCB1OCAqc2VxLCB2b2lkICpwcml2KQogewogCXN0cnVjdCBwcmlz
+bTJfd2VwX2RhdGEgKndlcCA9IHByaXY7CkBAIC0yMDcsNyArMjAyLDYgQEAgc3RhdGljIGludCBw
+cmlzbTJfd2VwX2dldF9rZXkodm9pZCAqa2V5LCBpbnQgbGVuLCB1OCAqc2VxLCB2b2lkICpwcml2
+KQogCXJldHVybiB3ZXAtPmtleV9sZW47CiB9CiAKLQogc3RhdGljIHZvaWQgcHJpc20yX3dlcF9w
+cmludF9zdGF0cyhzdHJ1Y3Qgc2VxX2ZpbGUgKm0sIHZvaWQgKnByaXYpCiB7CiAJc3RydWN0IHBy
+aXNtMl93ZXBfZGF0YSAqd2VwID0gcHJpdjsKQEAgLTIzMSwxMyArMjI1LDExIEBAIHN0YXRpYyBz
+dHJ1Y3QgbGliODAyMTFfY3J5cHRvX29wcyBydGxsaWJfY3J5cHRfd2VwID0gewogCS5vd25lcgkJ
+CT0gVEhJU19NT0RVTEUsCiB9OwogCi0KIHN0YXRpYyBpbnQgX19pbml0IHJ0bGxpYl9jcnlwdG9f
+d2VwX2luaXQodm9pZCkKIHsKIAlyZXR1cm4gbGliODAyMTFfcmVnaXN0ZXJfY3J5cHRvX29wcygm
+cnRsbGliX2NyeXB0X3dlcCk7CiB9CiAKLQogc3RhdGljIHZvaWQgX19leGl0IHJ0bGxpYl9jcnlw
+dG9fd2VwX2V4aXQodm9pZCkKIHsKIAlsaWI4MDIxMV91bnJlZ2lzdGVyX2NyeXB0b19vcHMoJnJ0
+bGxpYl9jcnlwdF93ZXApOwpkaWZmIC0tZ2l0IGEvZHJpdmVycy9zdGFnaW5nL3J0bDgxOTJlL3J0
+bGxpYl90eC5jIGIvZHJpdmVycy9zdGFnaW5nL3J0bDgxOTJlL3J0bGxpYl90eC5jCmluZGV4IGUz
+MDcwMjA1ODBhMC4uYThkZTZjMzQ4ODJiIDEwMDY0NAotLS0gYS9kcml2ZXJzL3N0YWdpbmcvcnRs
+ODE5MmUvcnRsbGliX3R4LmMKKysrIGIvZHJpdmVycy9zdGFnaW5nL3J0bDgxOTJlL3J0bGxpYl90
+eC5jCkBAIC0xOTEsNyArMTkxLDYgQEAgaW50IHJ0bGxpYl9lbmNyeXB0X2ZyYWdtZW50KHN0cnVj
+dCBydGxsaWJfZGV2aWNlICppZWVlLCBzdHJ1Y3Qgc2tfYnVmZiAqZnJhZywKIAlyZXR1cm4gMDsK
+IH0KIAotCiB2b2lkIHJ0bGxpYl90eGJfZnJlZShzdHJ1Y3QgcnRsbGliX3R4YiAqdHhiKQogewog
+CWlmICh1bmxpa2VseSghdHhiKSkKQEAgLTMwNyw3ICszMDYsNyBAQCBzdGF0aWMgdm9pZCBydGxs
+aWJfdHhfcXVlcnlfYWdnX2NhcChzdHJ1Y3QgcnRsbGliX2RldmljZSAqaWVlZSwKIAkJCWdvdG8g
+Rk9SQ0VEX0FHR19TRVRUSU5HOwogCQl9IGVsc2UgaWYgKCFwVHhUcy0+YlVzaW5nQmEpIHsKIAkJ
+CWlmIChTTl9MRVNTKHBUeFRzLT5UeEFkbWl0dGVkQkFSZWNvcmQuYmFfc3RhcnRfc2VxX2N0cmwu
+ZmllbGQuc2VxX251bSwKLQkJCSAgIChwVHhUcy0+VHhDdXJTZXErMSklNDA5NikpCisJCQkgICAo
+cFR4VHMtPlR4Q3VyU2VxICsgMSkgJSA0MDk2KSkKIAkJCQlwVHhUcy0+YlVzaW5nQmEgPSB0cnVl
+OwogCQkJZWxzZQogCQkJCWdvdG8gRk9SQ0VEX0FHR19TRVRUSU5HOwpAQCAtNDA0LDcgKzQwMyw3
+IEBAIHN0YXRpYyB2b2lkIHJ0bGxpYl9xdWVyeV9wcm90ZWN0aW9ubW9kZShzdHJ1Y3QgcnRsbGli
+X2RldmljZSAqaWVlZSwKIAlpZiAodGNiX2Rlc2MtPmJCcm9hZGNhc3QgfHwgdGNiX2Rlc2MtPmJN
+dWx0aWNhc3QpCiAJCXJldHVybjsKIAotCWlmIChpc19icm9hZGNhc3RfZXRoZXJfYWRkcihza2It
+PmRhdGErMTYpKQorCWlmIChpc19icm9hZGNhc3RfZXRoZXJfYWRkcihza2ItPmRhdGEgKyAxNikp
+CiAJCXJldHVybjsKIAogCWlmIChpZWVlLT5tb2RlIDwgSUVFRV9OXzI0RykgewpAQCAtNDc1LDcg
+KzQ3NCw2IEBAIHN0YXRpYyB2b2lkIHJ0bGxpYl9xdWVyeV9wcm90ZWN0aW9ubW9kZShzdHJ1Y3Qg
+cnRsbGliX2RldmljZSAqaWVlZSwKIAl0Y2JfZGVzYy0+YlJUU0JXCT0gZmFsc2U7CiB9CiAKLQog
+c3RhdGljIHZvaWQgcnRsbGliX3R4cmF0ZV9zZWxlY3Rtb2RlKHN0cnVjdCBydGxsaWJfZGV2aWNl
+ICppZWVlLAogCQkJCSAgICAgc3RydWN0IGNiX2Rlc2MgKnRjYl9kZXNjKQogewpAQCAtNTA2LDcg
+KzUwNCw3IEBAIHN0YXRpYyB1MTYgcnRsbGliX3F1ZXJ5X3NlcW51bShzdHJ1Y3QgcnRsbGliX2Rl
+dmljZSAqaWVlZSwgc3RydWN0IHNrX2J1ZmYgKnNrYiwKIAkJICAgIHNrYi0+cHJpb3JpdHksIFRY
+X0RJUiwgdHJ1ZSkpCiAJCQlyZXR1cm4gMDsKIAkJc2VxbnVtID0gcFRTLT5UeEN1clNlcTsKLQkJ
+cFRTLT5UeEN1clNlcSA9IChwVFMtPlR4Q3VyU2VxKzEpJTQwOTY7CisJCXBUUy0+VHhDdXJTZXEg
+PSAocFRTLT5UeEN1clNlcSArIDEpICUgNDA5NjsKIAkJcmV0dXJuIHNlcW51bTsKIAl9CiAJcmV0
+dXJuIDA7CkBAIC02MTQsNyArNjEyLDcgQEAgc3RhdGljIGludCBydGxsaWJfeG1pdF9pbnRlcihz
+dHJ1Y3Qgc2tfYnVmZiAqc2tiLCBzdHJ1Y3QgbmV0X2RldmljZSAqZGV2KQogCQlpZiAoc2tiLT5s
+ZW4gPiAyODIpIHsKIAkJCWlmIChldGhlcl90eXBlID09IEVUSF9QX0lQKSB7CiAJCQkJY29uc3Qg
+c3RydWN0IGlwaGRyICppcCA9IChzdHJ1Y3QgaXBoZHIgKikKLQkJCQkJKCh1OCAqKXNrYi0+ZGF0
+YSsxNCk7CisJCQkJCSgodTggKilza2ItPmRhdGEgKyAxNCk7CiAJCQkJaWYgKGlwLT5wcm90b2Nv
+bCA9PSBJUFBST1RPX1VEUCkgewogCQkJCQlzdHJ1Y3QgdWRwaGRyICp1ZHA7CiAKQEAgLTgxOCwx
+MCArODE2LDEwIEBAIHN0YXRpYyBpbnQgcnRsbGliX3htaXRfaW50ZXIoc3RydWN0IHNrX2J1ZmYg
+KnNrYiwgc3RydWN0IG5ldF9kZXZpY2UgKmRldikKIAkJCQkJIGNwdV90b19sZTE2KHJ0bGxpYl9x
+dWVyeV9zZXFudW0oaWVlZSwgc2tiX2ZyYWcsCiAJCQkJCQkJICAgICBoZWFkZXIuYWRkcjEpKTsK
+IAkJCQlmcmFnX2hkci0+c2VxX2N0bCA9Ci0JCQkJCSBjcHVfdG9fbGUxNihsZTE2X3RvX2NwdShm
+cmFnX2hkci0+c2VxX2N0bCk8PDQgfCBpKTsKKwkJCQkJIGNwdV90b19sZTE2KGxlMTZfdG9fY3B1
+KGZyYWdfaGRyLT5zZXFfY3RsKSA8PCA0IHwgaSk7CiAJCQl9IGVsc2UgewogCQkJCWZyYWdfaGRy
+LT5zZXFfY3RsID0KLQkJCQkJIGNwdV90b19sZTE2KGllZWUtPnNlcV9jdHJsWzBdPDw0IHwgaSk7
+CisJCQkJCSBjcHVfdG9fbGUxNihpZWVlLT5zZXFfY3RybFswXSA8PCA0IHwgaSk7CiAJCQl9CiAJ
+CQkvKiBQdXQgYSBTTkFQIGhlYWRlciBvbiB0aGUgZmlyc3QgZnJhZ21lbnQgKi8KIAkJCWlmIChp
+ID09IDApIHsKQEAgLTk1OSw3ICs5NTcsNiBAQCBzdGF0aWMgaW50IHJ0bGxpYl94bWl0X2ludGVy
+KHN0cnVjdCBza19idWZmICpza2IsIHN0cnVjdCBuZXRfZGV2aWNlICpkZXYpCiAJbmV0aWZfc3Rv
+cF9xdWV1ZShkZXYpOwogCXN0YXRzLT50eF9lcnJvcnMrKzsKIAlyZXR1cm4gMTsKLQogfQogCiBu
+ZXRkZXZfdHhfdCBydGxsaWJfeG1pdChzdHJ1Y3Qgc2tfYnVmZiAqc2tiLCBzdHJ1Y3QgbmV0X2Rl
+dmljZSAqZGV2KQotLSAKMi4zOC4xCgo=
+
+
+
+--=-8xgEcP9U4h8sQKY7Zfd/--
