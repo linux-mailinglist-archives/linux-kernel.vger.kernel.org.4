@@ -2,96 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EC61608ADA
-	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 11:08:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 889B9608A95
+	for <lists+linux-kernel@lfdr.de>; Sat, 22 Oct 2022 11:02:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbiJVJIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 05:08:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37878 "EHLO
+        id S230123AbiJVJC1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 05:02:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233057AbiJVJHs (ORCPT
+        with ESMTP id S235073AbiJVJBL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 05:07:48 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7DAA530071A;
-        Sat, 22 Oct 2022 01:21:52 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.32])
-        by gateway (Coremail) with SMTP id _____8BxHdn8olNjPp0BAA--.6980S3;
-        Sat, 22 Oct 2022 15:59:56 +0800 (CST)
-Received: from loongson-pc.loongson.cn (unknown [10.20.42.32])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx_1f7olNjLlUDAA--.13337S6;
-        Sat, 22 Oct 2022 15:59:56 +0800 (CST)
-From:   Jianmin Lv <lvjianmin@loongson.cn>
-To:     Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Len Brown <lenb@kernel.org>, rafael@kernel.org,
-        linux-pci@vger.kernel.org, linux-acpi@vger.kernel.org
-Subject: [PATCH V5 4/4] irqchip/loongson-liointc: Support to set IRQ type for ACPI path
-Date:   Sat, 22 Oct 2022 15:59:55 +0800
-Message-Id: <20221022075955.11726-5-lvjianmin@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20221022075955.11726-1-lvjianmin@loongson.cn>
-References: <20221022075955.11726-1-lvjianmin@loongson.cn>
+        Sat, 22 Oct 2022 05:01:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F068869ED9
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 01:16:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CBEC260B81
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 08:16:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3E45C433C1;
+        Sat, 22 Oct 2022 08:16:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1666426614;
+        bh=SVl9QTL0d/kdPqe3qSjUFuC2B7qpIuWhdsqvq6xVd5M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pFxHWqrcVgdMv3Z61AERre/TqJ40lTbSPzLOWcSXgNNrwO+tWN830SOrrZsM+pazZ
+         o7VNzJuG+opsuONCearIb6CSGC7ibPa8INTF7SmwHd+Bp3QDWMuLRbZrT4t0Y6g4LK
+         MfhDbi5Jf8YfX8+Epda+zr3tXdFECnm+LYgntpjg=
+Date:   Sat, 22 Oct 2022 10:05:36 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Deepak R Varma <drv@mailo.com>
+Cc:     outreachy@lists.linux.dev, Larry.Finger@lwfinger.net,
+        phil@philpotter.co.uk, paskripkin@gmail.com,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kumarpraveen@linux.microsoft.com, saurabh.truth@gmail.com
+Subject: Re: [PATCH v4 00/11] staging: r8188eu: trivial code cleanup patches
+Message-ID: <Y1OkUMCNb4lMH6Km@kroah.com>
+References: <cover.1666299151.git.drv@mailo.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Dx_1f7olNjLlUDAA--.13337S6
-X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBjvdXoW7XF4DXF15XrWxCF4Dtry5Arb_yoWfKwc_u3
-        yIgwnxGa4rZF1xJr97Ww1YvrWI9aykW3WqgF45uasIy3y8W343urW7AwnxJa93KrW0vFZ7
-        AF1F9rySya47tjkaLaAFLSUrUUUU0b8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
-        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
-        C7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
-        AFIxvE14AKwVWUXVWUAwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
-        6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7
-        xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAa
-        w2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
-        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2
-        jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY1x0262
-        kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km
-        07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r
-        1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW5
-        JVW7JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r
-        1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1U
-        YxBIdaVFxhVjvjDU0xZFpf9x07jz5lbUUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <cover.1666299151.git.drv@mailo.com>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For ACPI path, the xlate callback used IRQ_TYPE_NONE and ignored
-the IRQ type in intspec[1]. For supporting to set type for
-IRQs of the irqdomain, intspec[1] should be used to get IRQ
-type.
+On Fri, Oct 21, 2022 at 02:56:10AM +0530, Deepak R Varma wrote:
+> Address different kinds of checkpatch complains for the staging/r8188eu module.
+> The patches are required to be applied in sequence.
+> 
+> Changes in v4:
+>    1. Include patch 11 in the set for unused macro clean up. Suggested by julia.lawall@inria.fr
+>    2. Update patch 1 per feedback from David.Laight@ACULAB.COM
+>    3. Update patch 5 & 6 per feedback from dan.carpenter@oracle.com & julia.lawall@inria.fr
+> 
+> Changes in v3:
+>    1. Patch 4: Extend the __constant_htons to htons change to other files of the driver.
+>       This was suggested by philipp.g.hortmann@gmail.com
+>    2. Patch 4: Spelling mistake corrected as pointed out by joe@perches.com
+>    3. Patch 5 through 10: Included in this version. Additional clean up patches.
+> 
+> Changes in v2:
+>    I incorrectly labeled the first revision as v1 instead of v2. So,
+>    following change recorded under v1 is actually changes for v2. Feedback
+>    provided by philipp.g.hortmann@gmail.com
+>       1. Improve language / grammar for the patch descriptions
+>       2. Further improve code reformatting
+> 
 
-Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
+I've taken these, but note, your email system is not properly being
+authenticated.  Here's the results I get when I use the tool 'b4' to
+apply the patches:
+
+Grabbing thread from lore.kernel.org/all/cover.1666299151.git.drv%40mailo.com/t.mbox.gz
+Analyzing 20 messages in the thread
+Checking attestation on all messages, may take a moment...
 ---
- drivers/irqchip/irq-loongson-liointc.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+  ✗ [PATCH v4 1/11] staging: r8188eu: use Linux kernel variable naming convention
+    + Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> (✓ DKIM/gmail.com)
+  ✗ [PATCH v4 2/11] staging: r8188eu: reformat long computation lines
+    + Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> (✓ DKIM/gmail.com)
+  ✗ [PATCH v4 3/11] staging: r8188eu: remove {} for single statement blocks
+    + Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> (✓ DKIM/gmail.com)
+  ✗ [PATCH v4 4/11] staging: r8188eu: use htons macro instead of __constant_htons
+    + Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> (✓ DKIM/gmail.com)
+  ✗ [PATCH v4 5/11] staging: r8188eu: correct misspelled words in comments
+    + Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> (✓ DKIM/gmail.com)
+  ✗ [PATCH v4 6/11] staging: r8188eu: Add space between function & macro parameters
+    + Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> (✓ DKIM/gmail.com)
+  ✗ [PATCH v4 7/11] staging: r8188eu: Associate pointer symbol with parameter name
+    + Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> (✓ DKIM/gmail.com)
+  ✗ [PATCH v4 8/11] staging: r8188eu: replace leading spaces by tabs
+    + Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> (✓ DKIM/gmail.com)
+  ✗ [PATCH v4 9/11] staging: r8188eu: Put '{" on the symbol declaration line
+    + Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> (✓ DKIM/gmail.com)
+  ✗ [PATCH v4 10/11] staging: r8188eu: Correct missing or extra space in the statements
+    + Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> (✓ DKIM/gmail.com)
+  ✗ [PATCH v4 11/11] staging: r8188eu: Remove unused macros
+    + Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> (✓ DKIM/gmail.com)
+  ---
+  ✗ BADSIG: DKIM/mailo.com
+---
+Total patches: 11
 
-diff --git a/drivers/irqchip/irq-loongson-liointc.c b/drivers/irqchip/irq-loongson-liointc.c
-index 0da8716f8f24..838c8fa2d868 100644
---- a/drivers/irqchip/irq-loongson-liointc.c
-+++ b/drivers/irqchip/irq-loongson-liointc.c
-@@ -167,7 +167,12 @@ static int liointc_domain_xlate(struct irq_domain *d, struct device_node *ctrlr,
- 	if (WARN_ON(intsize < 1))
- 		return -EINVAL;
- 	*out_hwirq = intspec[0] - GSI_MIN_CPU_IRQ;
--	*out_type = IRQ_TYPE_NONE;
-+
-+	if (intsize > 1)
-+		*out_type = intspec[1] & IRQ_TYPE_SENSE_MASK;
-+	else
-+		*out_type = IRQ_TYPE_NONE;
-+
- 	return 0;
- }
- 
--- 
-2.31.1
 
+Please look into fixing up your DKIM settings.
+
+thanks,
+
+greg k-h
