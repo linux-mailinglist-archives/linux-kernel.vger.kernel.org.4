@@ -2,205 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46E3460958D
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 20:28:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B811D6095A0
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 20:32:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230031AbiJWS2H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 14:28:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56226 "EHLO
+        id S230131AbiJWScf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 14:32:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230038AbiJWS2B (ORCPT
+        with ESMTP id S230125AbiJWScc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 14:28:01 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8E1904DF2D;
-        Sun, 23 Oct 2022 11:27:48 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 39C30ED1;
-        Sun, 23 Oct 2022 11:27:53 -0700 (PDT)
-Received: from e120937-lin (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 27B733F7B4;
-        Sun, 23 Oct 2022 11:27:46 -0700 (PDT)
-Date:   Sun, 23 Oct 2022 19:27:40 +0100
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     daniel.lezcano@linaro.org, linux@roeck-us.net
-Cc:     sudeep.holla@arm.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: (bug report) HWMON & Thermal interactions
-Message-ID: <Y1WHnJ6h1RSOipV4@e120937-lin>
+        Sun, 23 Oct 2022 14:32:32 -0400
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE51B74341
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 11:32:30 -0700 (PDT)
+Received: by mail-io1-f70.google.com with SMTP id bx19-20020a056602419300b006bcbf3b91fdso5304696iob.13
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 11:32:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WApHQttljQxk0bCKPluvIjLV9y2zh4UDkWLc/0cRfdU=;
+        b=IMZPxqN/rFBFmuYcc1ZmMJqivWxaicsMWR0hWd7Vg6D8AnkVcMeEXZT6SVR/u2ipxr
+         K0FIT2qIM+xIipkt18fZMwpJCP9lsr5ovoDVcOxnTYFKcLFEsuDhzv5h4+CtYiUX+7au
+         7dAwfrdjGKK725iVolv0MwM4gX0RJIwdTvbiTM1t1DlBt2Sp10LT1DnWn1/ePuJSDWZq
+         mgkjk8XuTzMrwt2pbVnSGAodPYz9+NqKe/hYvMUd6hOLcWcy88aXY/zT4RxtgykemtGy
+         2pR5gKIKeSaQ//8itwvXldOyciLZuaj89b0CYVKTryld2i2lITaAT+2IHxbl3uz1pv52
+         j+RQ==
+X-Gm-Message-State: ACrzQf0Ec/rmkrMyNnoOB/Kihtf3XF1jH/WFxpcH/ODJpSsxphpZM2U8
+        o9bXojGtNBbmp3kZvBRjlb7BIbEuA6m2YqMpNP4qdb35nOHH
+X-Google-Smtp-Source: AMsMyM43asT9SJH35Zsduhx5OvlUhqxqP6B6I8QDYaxj8iIZrgAbuE/Bly9uxzQ2s0YOXE4PtGXgr+Y8cUwBf46aLZmBpsDTPtdA
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:c548:0:b0:2f9:fe3f:f4c2 with SMTP id
+ a8-20020a92c548000000b002f9fe3ff4c2mr18773539ilj.180.1666549950258; Sun, 23
+ Oct 2022 11:32:30 -0700 (PDT)
+Date:   Sun, 23 Oct 2022 11:32:30 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c926f905ebb7e50a@google.com>
+Subject: [syzbot] general protection fault in ieee80211_subif_start_xmit (2)
+From:   syzbot <syzbot+c6e8fca81c294fd5620a@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, edumazet@google.com,
+        johannes@sipsolutions.net, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hello,
 
-Starting with v6.1-rc1 the SCMI HWMON driver failed probing on my JUNO due
-to the fact that no trip points were (ever !) defined in the DT; bisecting it
-looks like that after:
+syzbot found the following issue on:
 
-https://lore.kernel.org/all/20220804224349.1926752-28-daniel.lezcano@linexp.org/
+HEAD commit:    4d48f589d294 Add linux-next specific files for 20221021
+git tree:       linux-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=11d36de2880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=2c4b7d600a5739a6
+dashboard link: https://syzkaller.appspot.com/bug?extid=c6e8fca81c294fd5620a
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12a9544a880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1662d48c880000
 
-the presence of the mandatory trips node within thermal zones is now
-enforced.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/0c86bd0b39a0/disk-4d48f589.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/074059d37f1f/vmlinux-4d48f589.xz
 
-So, this is NOT what this bug report is about (I'll post soon patches for
-the JUNO DT missing trips) BUT once this problem was solved in the DT,
-another issue appeared:
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+c6e8fca81c294fd5620a@syzkaller.appspotmail.com
 
-[    1.921929] hwmon hwmon0: temp2_input not attached to any thermal zone
-
-that despite having now a goodi/valid DT describing 2 sensors and 2 thermal zones
-embedding that sensors, only the first one is found as belonging to one ThermZ.
-(this happens ALSO with v6.0 once I added the trips...)
-
-Digging deep into this, it turned out that inside the call chain
-
-devm_hwmon_device_register_with_info
-  hwmon_device_register_with_info
-    __hwmon_device_register
-	hwmon_thermal_register_sensors(dev)
-		--> hwmon_thermal_add_sensor(dev, j)
-			--> devm_thermal_of_zone_register(dev, sensor_id, tdata, )
-
-the HWMON channel index j is passed to the Thermal framework in order to
-search and bind sensors with defined thermal zone, but this lead to the
-assumption that sequential HWMON channel indexes corresponds one-to-one to the
-underlying real sensor IDs that the ThermalFramework uses for matching
-within the DT.
-
-On a system like my SCMI-based DT where I have 2 temp-sensors bound to 2
-thermal zones like:
-
-thernal_zones {
-	pmic {
-		...
-		thermal-sensors = <&scmi_sensors0 0>;
-		...
-		trips {
-			...
-		}
-	soc {
-		...
-		thermal-sensors = <&scmi_sensors0 3>;
-		...
-		trips {
-			...
-		}
-	}
-}
-
-This works fine by chance for the pmic (j=0, sensor_id=0) BUT cannot work for
-the soc where J=1 BUT the real sensor ID is 3.
-
-Note that there can be a number of sensors, not all of them of a type handled
-by HWMON, and enumerated by SCMI in different ways depending on the
-platform.
-
-I suppose this is not an SCMI-only related issue, but maybe in non-SCMI
-context, where sensors are purely defined in the DT, the solution can be
-more easily attained (i.e. renumber the sensors).
-
-At first I tried to solve this inside scmi-hwmon.c BUT I could not find
-a way to present to the HWMON subsystem the list of sensors preserving
-the above index/sensor_id matching (not even with a hack like passing
-down dummy sensors to the HWMON subsystem to fill the 'holes' in the
-numbering)
-
-My tentative solution, which works fine for me in my context, was to add
-an optional HWMON hwops, so that the core hwmon can retrieve if needed the
-real sensor ID if different from the channel index (using an optional hwops
-instead of some static hwinfo var let me avoid to have to patch all the
-existent hwmon drivers that happens to just work fine as of today...but
-maybe it is not necessarily the proper final solution...)
-
-i.e.
-
-----8<----
-
-Author: Cristian Marussi <cristian.marussi@arm.com>
-Date:   Fri Oct 21 17:24:04 2022 +0100
-
-    hwmon: Add new .get_sensor_id hwops
-    
-    Add a new optional helper which can be defined to allow an hwmon chip to
-    provide the logic to map hwmon indexes to the real underlying sensor IDs.
-    
-    Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
-
-diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-index 4218750d5a66..45d3d5070cde 100644
---- a/drivers/hwmon/hwmon.c
-+++ b/drivers/hwmon/hwmon.c
-@@ -213,7 +213,8 @@ static void hwmon_thermal_remove_sensor(void *data)
-        list_del(data);
- }
- 
--static int hwmon_thermal_add_sensor(struct device *dev, int index)
-+static int hwmon_thermal_add_sensor(struct device *dev, int index,
-7+                                   unsigned int sensor_id)
- {
-        struct hwmon_device *hwdev = to_hwmon_device(dev);
-        struct hwmon_thermal_data *tdata;
-@@ -227,7 +228,7 @@ static int hwmon_thermal_add_sensor(struct device *dev, int index)
-        tdata->dev = dev;
-        tdata->index = index;
- 
--       tzd = devm_thermal_of_zone_register(dev, index, tdata,
-+       tzd = devm_thermal_of_zone_register(dev, sensor_id, tdata,
-                                            &hwmon_thermal_ops);
-        if (IS_ERR(tzd)) {
-                if (PTR_ERR(tzd) != -ENODEV)
-@@ -264,13 +265,18 @@ static int hwmon_thermal_register_sensors(struct device *dev)
- 
-                for (j = 0; info[i]->config[j]; j++) {
-                        int err;
-+                       unsigned int id;
- 
-                        if (!(info[i]->config[j] & HWMON_T_INPUT) ||
-                            !chip->ops->is_visible(drvdata, hwmon_temp,
-                                                   hwmon_temp_input, j))
-                                continue;
- 
--                       err = hwmon_thermal_add_sensor(dev, j);
-+                       id = !chip->ops->get_sensor_id ? j :
-+                               chip->ops->get_sensor_id(drvdata,
-+                                                        hwmon_temp, j);
-+
-+                       err = hwmon_thermal_add_sensor(dev, j, id);
-                        if (err)
-                                return err;
-                }
-diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
-index 14325f93c6b2..e5dbab83f4d1 100644
---- a/include/linux/hwmon.h
-+++ b/include/linux/hwmon.h
-@@ -396,6 +396,9 @@ enum hwmon_intrusion_attributes {
- struct hwmon_ops {
-        umode_t (*is_visible)(const void *drvdata, enum hwmon_sensor_types type,
-                              u32 attr, int channel);
-+       unsigned int (*get_sensor_id)(const void *drvdata,
-+                                     enum hwmon_sensor_types type,
-+                                     int channel);
-        int (*read)(struct device *dev, enum hwmon_sensor_types type,
-                    u32 attr, int channel, long *val);
-        int (*read_string)(struct device *dev, enum hwmon_sensor_types type,
+general protection fault, probably for non-canonical address 0xdffffc000000002f: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000178-0x000000000000017f]
+CPU: 1 PID: 147 Comm: kworker/1:2 Not tainted 6.1.0-rc1-next-20221021-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
+Workqueue: mld mld_ifc_work
+RIP: 0010:ieee80211_multicast_to_unicast net/mac80211/tx.c:4281 [inline]
+RIP: 0010:ieee80211_subif_start_xmit+0x25b/0x1310 net/mac80211/tx.c:4409
+Code: 80 3c 02 00 0f 85 94 10 00 00 49 8b 8c 24 28 19 00 00 48 b8 00 00 00 00 00 fc ff df 48 8d b9 7c 01 00 00 48 89 fa 48 c1 ea 03 <0f> b6 04 02 48 89 fa 83 e2 07 38 d0 7f 08 84 c0 0f 85 68 10 00 00
+RSP: 0000:ffffc90002d3f628 EFLAGS: 00010203
+RAX: dffffc0000000000 RBX: 0000000000000003 RCX: 0000000000000000
+RDX: 000000000000002f RSI: ffffffff88dc6bf8 RDI: 000000000000017c
+RBP: ffff88807b8cf140 R08: 0000000000000005 R09: 0000000000000004
+R10: 0000000000000003 R11: 000000000008c001 R12: ffff8880200b4000
+R13: ffff88807b8cf218 R14: ffff888020ea4042 R15: 1ffff920005a7ecf
+FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000055b3e4199708 CR3: 000000007b8d0000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __netdev_start_xmit include/linux/netdevice.h:4840 [inline]
+ netdev_start_xmit include/linux/netdevice.h:4854 [inline]
+ xmit_one net/core/dev.c:3590 [inline]
+ dev_hard_start_xmit+0x1be/0x990 net/core/dev.c:3606
+ __dev_queue_xmit+0x2c9a/0x3b60 net/core/dev.c:4256
+ dev_queue_xmit include/linux/netdevice.h:3008 [inline]
+ neigh_resolve_output net/core/neighbour.c:1552 [inline]
+ neigh_resolve_output+0x517/0x840 net/core/neighbour.c:1532
+ neigh_output include/net/neighbour.h:546 [inline]
+ ip6_finish_output2+0x564/0x1520 net/ipv6/ip6_output.c:134
+ __ip6_finish_output net/ipv6/ip6_output.c:195 [inline]
+ ip6_finish_output+0x690/0x1160 net/ipv6/ip6_output.c:206
+ NF_HOOK_COND include/linux/netfilter.h:291 [inline]
+ ip6_output+0x1ed/0x540 net/ipv6/ip6_output.c:227
+ dst_output include/net/dst.h:445 [inline]
+ NF_HOOK include/linux/netfilter.h:302 [inline]
+ NF_HOOK include/linux/netfilter.h:296 [inline]
+ mld_sendpack+0xa09/0xe70 net/ipv6/mcast.c:1820
+ mld_send_cr net/ipv6/mcast.c:2121 [inline]
+ mld_ifc_work+0x71c/0xdb0 net/ipv6/mcast.c:2653
+ process_one_work+0x9bf/0x1710 kernel/workqueue.c:2289
+ worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+ kthread+0x2e4/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:ieee80211_multicast_to_unicast net/mac80211/tx.c:4281 [inline]
+RIP: 0010:ieee80211_subif_start_xmit+0x25b/0x1310 net/mac80211/tx.c:4409
+Code: 80 3c 02 00 0f 85 94 10 00 00 49 8b 8c 24 28 19 00 00 48 b8 00 00 00 00 00 fc ff df 48 8d b9 7c 01 00 00 48 89 fa 48 c1 ea 03 <0f> b6 04 02 48 89 fa 83 e2 07 38 d0 7f 08 84 c0 0f 85 68 10 00 00
+RSP: 0000:ffffc90002d3f628 EFLAGS: 00010203
+RAX: dffffc0000000000 RBX: 0000000000000003 RCX: 0000000000000000
+RDX: 000000000000002f RSI: ffffffff88dc6bf8 RDI: 000000000000017c
+RBP: ffff88807b8cf140 R08: 0000000000000005 R09: 0000000000000004
+R10: 0000000000000003 R11: 000000000008c001 R12: ffff8880200b4000
+R13: ffff88807b8cf218 R14: ffff888020ea4042 R15: 1ffff920005a7ecf
+FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000055b3e4199708 CR3: 000000000ba8e000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1)
+   4:	0f 85 94 10 00 00    	jne    0x109e
+   a:	49 8b 8c 24 28 19 00 	mov    0x1928(%r12),%rcx
+  11:	00
+  12:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  19:	fc ff df
+  1c:	48 8d b9 7c 01 00 00 	lea    0x17c(%rcx),%rdi
+  23:	48 89 fa             	mov    %rdi,%rdx
+  26:	48 c1 ea 03          	shr    $0x3,%rdx
+* 2a:	0f b6 04 02          	movzbl (%rdx,%rax,1),%eax <-- trapping instruction
+  2e:	48 89 fa             	mov    %rdi,%rdx
+  31:	83 e2 07             	and    $0x7,%edx
+  34:	38 d0                	cmp    %dl,%al
+  36:	7f 08                	jg     0x40
+  38:	84 c0                	test   %al,%al
+  3a:	0f 85 68 10 00 00    	jne    0x10a8
 
 
------>8----
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-
-... plus obviously the related scmi-hwmon.c patch to make use of this.
-
-Any thought ? Am I missing something ?
-(not really an expert on both subsystems really ... :P)
-
-Thanks,
-Cristian
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
