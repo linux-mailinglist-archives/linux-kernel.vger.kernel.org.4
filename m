@@ -2,117 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65CF760933F
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 15:08:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02A9560933E
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 15:08:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230229AbiJWNIt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 09:08:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38256 "EHLO
+        id S230295AbiJWNIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 09:08:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230175AbiJWNIq (ORCPT
+        with ESMTP id S229772AbiJWNIk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 09:08:46 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A8EB72686
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 06:08:45 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id bb5so4328515qtb.11
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 06:08:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=M2gFbSafpLVxGrnK3Tg0qfxx8Aw3Ko79Pc/9rxHqkHE=;
-        b=tk+9lB/p62KsoOWZwKVgbrB9kefnRaiILS3i9PUqiUK7nbDX7D5bE9WabBDSYYUH2V
-         n0vMtsySnXCyuCStJyxfLd9kPF3pO6B8oqyVknFpBUG46r/w+n+QC6xgxoZXgAJdWc9y
-         mZlBTLQQhZnMQNdH4VA4qh97EOFF/QxPFxP1fu3cm9UC1DI3TAIBrshJf+bS/XqyDKHq
-         hdH4myOSAMFvp0ClzUdyfebmgOyqp4JiaHqB/YLIMFwKczDyjvMtL3XuvpDUcVHACQ1f
-         HQe3KPdA1hD8oGrB9YUhHBfGj51/nLXH8u9QHf27YxmbO6USXTFn26lJSvhpMB9CvBYZ
-         NTkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=M2gFbSafpLVxGrnK3Tg0qfxx8Aw3Ko79Pc/9rxHqkHE=;
-        b=2dno3LGgTAGmhCRcbO19hw5eNU+l2OtDdZ3Z9nwDc9H+wGa1X9WoMlysqtPhB/tKCl
-         yY1i+8IXCr8xDMYCjg3gW0ZYwuTmD+c/tx3QOmdNftk0QLc9Z1xLaNk0ArUkdnL1qFfo
-         86Z8wEIopLMZpPKsbQ2moEag70HZfJw3o+KJ3+YWmZzZnP1IvzdvmrHVuC92r+D+s493
-         fZnNVDeGYfwupnxw/tyIl6/OM7AMvEdzjfLJ1ZNBKJj+Q5H5G7hVgMxr3DSA6b5uPZJM
-         peA7jiZYCKM3UVSr17o1kE4V1gzms3B6ElieHz08AQpvQfb/lf2oqRW/GbV5N1RxNCYd
-         a4jQ==
-X-Gm-Message-State: ACrzQf2RZvLqOeWymlH/cqIVvN7KISk5kxXPCI56H2uqmZCDaPgfWr8F
-        X5miFiw1XsaCXFtOLIGnKRSzhaPXlAkgyg==
-X-Google-Smtp-Source: AMsMyM4yB1O6iJktvFaOE7c4rZ/hz48mOlHEfNbFjhzth0nVbpSnr07dQ43Guds7Ay2eEvGS2vvzBg==
-X-Received: by 2002:a05:620a:2905:b0:6ee:cf79:bf9c with SMTP id m5-20020a05620a290500b006eecf79bf9cmr20178717qkp.28.1666530503551;
-        Sun, 23 Oct 2022 06:08:23 -0700 (PDT)
-Received: from [192.168.1.8] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id j12-20020a05620a288c00b006b640efe6dasm13061603qkp.132.2022.10.23.06.08.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 23 Oct 2022 06:08:22 -0700 (PDT)
-Message-ID: <ef6a326b-5c61-988b-2ec2-cd8e233e5d28@linaro.org>
-Date:   Sun, 23 Oct 2022 09:08:21 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v1 2/2] dt-bindings: ASoC: simple-card: Add
- system-clock-id property
-Content-Language: en-US
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>, broonie@kernel.org,
-        lgirdwood@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, kuninori.morimoto.gx@renesas.com
-Cc:     perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
+        Sun, 23 Oct 2022 09:08:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33C46719B9;
+        Sun, 23 Oct 2022 06:08:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A966960E00;
+        Sun, 23 Oct 2022 13:08:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4183DC433D6;
+        Sun, 23 Oct 2022 13:08:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666530519;
+        bh=ouu7Bk62SDEuFF7cRLC97PYcQZcdaHWbLN9NGBfp7Ds=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=e1ZlGBZUrJfgUNh09H8TVgjfWRkL6smg0m6h3qScNQ77/QtI8oLpt0F+QjC8Rb7Hk
+         YKnGCCSviVHf4rBeTWVVqjCcpZoqZvVDxuEmPvZ3eXwTg+A20M6l8UYe3R36Rd5MR4
+         OfVV6RcBB6XYN/+Z/AqSwEy0RIQ3jnU7FP7UTxpYyDvD1SYaNjvL0xPGUhw9l5AIEz
+         naAqFsXnQEBfojWe/lhdTRBcBUKEPv7uNbxUm49uJSysU762uKK+dSH3LSadAzYbCz
+         0juPCtoHDMOuwpBeyHGBLuoU5I2GB3kf5DhiEwHN2+U864oGo8CoRnq7W7mo/au2kB
+         X+OfX+QIhL0mQ==
+Date:   Sun, 23 Oct 2022 21:08:31 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Marcel Ziswiler <marcel@ziswiler.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Max Krummenacher <max.krummenacher@toradex.com>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Philippe Schenker <philippe.schenker@toradex.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221022162742.21671-1-aidanmacdonald.0x0@gmail.com>
- <20221022162742.21671-2-aidanmacdonald.0x0@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221022162742.21671-2-aidanmacdonald.0x0@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Subject: Re: [PATCH v1 1/8] arm64: dts: verdin-imx8mp: fix ctrl_sleep_moci
+Message-ID: <20221023130831.GI125525@dragon>
+References: <20220922162925.2368577-1-marcel@ziswiler.com>
+ <20220922162925.2368577-2-marcel@ziswiler.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220922162925.2368577-2-marcel@ziswiler.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/10/2022 12:27, Aidan MacDonald wrote:
-> This is a new per-DAI property used to specify the clock ID argument
-> to snd_soc_dai_set_sysclk().
-
-You did no show the use of this property and here you refer to some
-specific Linux driver implementation, so in total this does no look like
- a hardware property.
-
-You also did not explain why do you need it (the most important piece of
-commit msg).
-
+On Thu, Sep 22, 2022 at 06:29:18PM +0200, Marcel Ziswiler wrote:
+> From: Max Krummenacher <max.krummenacher@toradex.com>
 > 
-> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-> ---
->  Documentation/devicetree/bindings/sound/simple-card.yaml | 8 ++++++++
->  1 file changed, 8 insertions(+)
+> The GPIO signaling ctrl_sleep_moci is currently handled as a gpio hog.
+> But the gpio-hog node is made a child of the wrong gpio controller.
+> Move it to the node representing gpio4 so that it actually works.
 > 
-> diff --git a/Documentation/devicetree/bindings/sound/simple-card.yaml b/Documentation/devicetree/bindings/sound/simple-card.yaml
-> index ed19899bc94b..cb7774e235d0 100644
-> --- a/Documentation/devicetree/bindings/sound/simple-card.yaml
-> +++ b/Documentation/devicetree/bindings/sound/simple-card.yaml
-> @@ -57,6 +57,12 @@ definitions:
->        single fixed sampling rate.
->      $ref: /schemas/types.yaml#/definitions/flag
->  
-> +  system-clock-id:
-> +    description: |
-> +      Specify the clock ID used for setting the DAI system clock.
+> Without this carrier board components jumpered to use the signal are
+> unconditionally switched off.
+> 
+> Fixes: 1d8df9c74bff ("arm64: dts: freescale: add initial support for verdin imx8m plus")
+> Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
+> Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-
-With lack of explanation above, I would say - use common clock framework
-to choose a clock...
-
-
-Best regards,
-Krzysztof
-
+Applied, thanks!
