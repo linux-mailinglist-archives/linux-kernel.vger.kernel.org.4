@@ -2,48 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D45CF60965C
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 23:00:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88769609669
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 23:09:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbiJWVAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 17:00:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43034 "EHLO
+        id S229787AbiJWVJH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 17:09:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbiJWVAj (ORCPT
+        with ESMTP id S229497AbiJWVJE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 17:00:39 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 168BE50737;
-        Sun, 23 Oct 2022 14:00:38 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MwVwN4WThz4xG5;
-        Mon, 24 Oct 2022 08:00:36 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1666558836;
-        bh=wV5KugerMag1PAb7Aqhg9gBZ73YytMjo2p8Adkzoiwk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=PvmVOWJPwW5vzRF5JId1U27hOAU+YdqKxzBMQJx0RLv2QuXGXhGRBcOFWh8d2M9Nl
-         CPZQS6C2cotWMURMF9jHBLY6xNaazi4itFNxc/RtxHZb6ySvAQXLP4DyJFWLrp1DLz
-         dIHAOWkwe2NIggJYCkYIUQaL15kUKJ3+YaOV615puAFKxAAb9cvU+9jdKnh+ikjqqA
-         7wi9H5RhhT4cP7/8HwDC5nlSkhaLbo0mvvovlvm6lLqxaEUQsmbofmRdS8EDccvKXD
-         E/ZP6qKUlMdxyR4QFW8qMRYYGNKKMMs5tEWS6CUYqU6ttSmgUo3yK5lEHGTekfbTdb
-         6CzEwy6VavnNw==
-Date:   Mon, 24 Oct 2022 08:00:34 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>
-Cc:     Eric Ren <renzhengeek@gmail.com>, Marc Zyngier <maz@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the kvm-fixes tree
-Message-ID: <20221024080034.36cc4709@canb.auug.org.au>
+        Sun, 23 Oct 2022 17:09:04 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D396686E;
+        Sun, 23 Oct 2022 14:09:03 -0700 (PDT)
+Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 29NL7D2p025712
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 23 Oct 2022 17:07:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1666559243; bh=zbENVyGNAon7zNh9ohkJFECSMTzXRXbcNrepMHxrEAM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=FXNrxCWraFmMAOW+vqR38ZOexAnGjiiR9A8LdOwTHYuoNMBlL77R2zP0ktOpr83lt
+         VqRJZ2eM6bTmotP3IJ0ZjbLCm4EYxGWCpxZWFf6OGNB4ci103uHdfxC4WF6VQ2zTX/
+         sdIQ8AMmuFf2tnrWyiobYzmlMOkVIMT/l7Xfqoj9INuJk54r2BALT8VjDgqDT3Zhdd
+         VJdERnwc5/7VlgvkT7OeoHx0mHgokAaWpeUY/UYmdBjcPk3IReiiQVTczMP0A0m8lc
+         roc5e18VhoTm14PI9JdmJ03W1yO7BPKEnbbIuJ9deFvxdyuN3p81VawGcIo+Cv1H4t
+         KETGAaOyQuEfg==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id BE8CB15C33A3; Sun, 23 Oct 2022 17:07:13 -0400 (EDT)
+Date:   Sun, 23 Oct 2022 17:07:13 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Christoph =?iso-8859-1?Q?B=F6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        "Darrick J . Wong" <djwong@kernel.org>,
+        SeongJae Park <sj@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Helge Deller <deller@gmx.de>, netdev@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-mmc@vger.kernel.org, linux-parisc@vger.kernel.org
+Subject: Re: [PATCH v1 0/5] convert tree to
+ get_random_u32_{below,above,between}()
+Message-ID: <Y1WtAZfciG1z2CC7@mit.edu>
+References: <20221022014403.3881893-1-Jason@zx2c4.com>
+ <20221021205522.6b56fd24@kernel.org>
+ <Y1NwJJOIB4gI5G11@zx2c4.com>
+ <20221021223242.05df0a5b@kernel.org>
+ <Y1OD2tdVwQsydSNV@zx2c4.com>
+ <20221021230322.00dd045c@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/du1CgDVgVO=N4hCQS/+xrq0";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221021230322.00dd045c@kernel.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,50 +85,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/du1CgDVgVO=N4hCQS/+xrq0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, Oct 21, 2022 at 11:03:22PM -0700, Jakub Kicinski wrote:
+> On Sat, 22 Oct 2022 07:47:06 +0200 Jason A. Donenfeld wrote:
+> > On Fri, Oct 21, 2022 at 10:32:42PM -0700, Jakub Kicinski wrote:
+> > > But whatever. I mean - hopefully there aren't any conflicts in the ~50
+> > > networking files you touch. I just wish that people didn't pipe up with
+> > > the tree wide changes right after the merge window. Feels like the
+> > > worst possible timing.  
+> > 
+> > Oh, if the timing is what makes this especially worrisome, I have
+> > no qualms about rebasing much later, and reposting this series then.
+> > I'll do that.
+> 
+> Cool, thanks! I promise to not be grumpy if you repost around rc6 :)
 
-Hi all,
+One way of making things less painful for the stable branch and for
+the upstream branch is to *add* new helpers instead of playing
+replacement games like s/prandom_u32_max/get_random_u32_below/.  This
+is what causes the patch conflict problems.
 
-In commit
+One advantage of at least adding the new functions to the stable
+branches, even if we don't do the wholesale replacement, is that it
+makes it much less likely that a backported patch, which uses the new
+API, won't fail to compile --- and of course, the major headache case
+is one where it's not noticed at first because it didn't get picked up
+in people's test compiles until after the Linux x.y.z release has been
+pushed out.
 
-  c000a2607145 ("KVM: arm64: vgic: Fix exit condition in scan_its_table()")
+Whether it's worth doing the wholesale replacement is a different
+question, but separating "add the new functions with one or two use
+cases so the functions are actulaly _used_" from the "convert the
+world to use the new functions" from the "remove the old functions",
+might life easier.
 
-Fixes tag
-
-  Fixes: 920a7a8fa92a ("KVM: arm64: vgic-its: Add infrastructure for tableo=
-okup")
-
-has these problem(s):
-
-  - Subject does not match target commit subject
-    Just use
-	git log -1 --format=3D'Fixes: %h ("%s")'
-
-Thus:
-
-Fixes: 920a7a8fa92a ("KVM: arm64: vgic-its: Add infrastructure for table lo=
-okup")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/du1CgDVgVO=N4hCQS/+xrq0
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNVq3MACgkQAVBC80lX
-0Gx81gf+PUs59nCwZvxmmOlxhJVWZDgIYiymcP0eTmgxGWoKZou/zbCp9FXA4Cbj
-SDGixcR8tdm+Vo+GgM8UF3kpakVM6uCYCbbfcWKNmn7EK8IYsVR2mbUO10mn+gGU
-TbxRsACsuA5uzJ+c3WVvWYLEhgxcJIiStHbYno28LVqhHzt+j282U1Vs+mdNNJBw
-GN3DjrJTjc1kKU0RP0QlZWGWXITMFrksvZUuVQrjGEVXcaRCfowtFoCCTSg9xOGk
-5EhEoQ/mAGTitXIzPtvWipQlhV32Giyag/Uj8Xt3De6zHVLfS/YMHarU9XefW314
-3Psb1k3G/yuaFmIxnUhpDwgHebEjOw==
-=xwgE
------END PGP SIGNATURE-----
-
---Sig_/du1CgDVgVO=N4hCQS/+xrq0--
+					- Ted
