@@ -2,197 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A93DB609505
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 19:13:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 112A160950D
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 19:17:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230476AbiJWRNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 13:13:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33710 "EHLO
+        id S230026AbiJWRRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 13:17:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230175AbiJWRNL (ORCPT
+        with ESMTP id S229882AbiJWRR3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 13:13:11 -0400
-Received: from sonic308-15.consmr.mail.ne1.yahoo.com (sonic308-15.consmr.mail.ne1.yahoo.com [66.163.187.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84FC931FB4
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 10:13:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1666545189; bh=r9lExiutIMfUYxyih2ChMZmQXxsMgWS/STr2m9x1LgA=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=RsBSdMEms/ha5ANyfyaoN1RdqtFVXollzdrYJt1WanBIvgvN42c8g832zmM9Y10V0RpjVC/qiC/wWRP4aYGw9Bqnuev9ZiL9SawWnROoTs+m6flgoXNrj/dlfmURPdCMCgrCWfyhLInK9NbJijahIeww4u3GsBrcrEW3QVOfvk72G6P97jhtoNqKIrnSlDrwzQy/1OyR5VaSWE11+B22A0lB6eMrrJNVjBwc1wI+8dWv3c2m19u14W2Gb32QdHB9nRYNdm25PIFjFbj1ul5KBA44gCyNOCKJxn28wwfMUj4T4PfJdPNiyB/oFBQydCkR3pBc/i1AzQg+L3P/rg4BHA==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1666545189; bh=+p3ZnSwcgxy4h0eesj1r0rUz9ahdEqTxbVmE9pYDmqC=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=eRrjOXlm+HbcR/UyXjcCgXcukOMX5hqVPTLtXulFPDDBtPvVszRwV9uPZIqCeQnXERBq3WfJvxCgXpeppNpnb808r2X8DuaOCEAAo9NP/nPP73KooV4N9nLNlsgV4E3oiyk+vfUKRpRXF9hmsYI94PNr7FvaqAoBlR+2pWCOmUqEg6BBZCzpukTOnnaC0OO7y7/sHX6s8IIkFLfGwX2I+oAODDCtqC4QIz6mOwWRNef1ARwWR4qF76NuNBzM6Sg+tffvOfbf82O5RUUwyIqMq8xHPkitreUP0HM5DkrD9yUzXA1P2c36fjWAiokFDdoz9EdPtN4kQtkHqBQHzBWVvA==
-X-YMail-OSG: fpW0G0oVM1ltKwsEW2ZQxF8m8XcJpDCkM3T0qJa_ZE2ezscGIVqIm6ji3Eq50hi
- G4bQqOQDHg1B.SqwA1Sy5Z7r8uZ8jpzulvaoBxKdk1VB6vh2xTJqdsCE6f0tU7YVUAzR5wNT6TEe
- uexnOOz7q5tENOyO5ss8LxRTU27qNR4BYqc4fboQhfSG2giC1VYQevYDQEH54rqLo_MvmXyWuhnx
- t5Cwq0AWAoH4cYtmK7ibbUzP98TqkzugBQ2cOufV_kVLlzPP1hKeQYf_CbpKsQwvtT9Jneqj1CoC
- jq1yiTnPdvwCroEjGwgozyIeka598mfeyRu1t4Z8OOSTJ4zXkqcwxT6wdnJ4F5sJqWQi_4jlaG71
- KNRMvpm0B.2SCgvU__enbGRq_mnSyITv_vgg0gYmQy_Qi.9aZZPBopyXmHTNmD.aY1WlY0xyOLso
- m_1HIg7IomYn_itAsjofdvSc9rHrPEhdg1jEWo7rZ6qRc2iJKT2eIy0HbS9V9Y7QMuDKKnADyJFo
- fB6FKCl9FbCZzb6ebtV.ITPBzRc4dfVWx1rLYpT8l_djitDQqbyCkAOJ6Mv2fSJxuR3vNCgc8zGT
- IQTeTAB0ubl99GFpGNxWMMTCo36qYG1167rTRuvIJNlVnci65331IfA7eWxeUwtpWaizj.2MqoAd
- ojiiTIAbObB2pxtAyU_YNqrEWfHjBKBj2tJ18.GI5S64gfa_zhUAJlKhFdltlQZTumtF9OULdU5f
- R1lWJlo0GG_IUGE9UiwHVYKqNOOGGTVkgJv0NItimy5bWmK3n6eguJdi8OZoJVLPpNaIiuRLRWht
- 3JHQDW36UBUchhtWD2HUo4YBTug1UXhujlS_mEiuv9ByKsU9ye2A3VwPTIjU_cRsG2_HZKp4O3At
- IuJAx6tOJc0kAhjOllWXE_Kk47ieNxkYkGNht1BNTV4X6FGCQQAe05uXDaAVNp1n5RiHKe8IqhR9
- yTAzbZqBuY8egzLDdf2J2bKXrHOzhV1Zva04Sf.sf25bvavWY2BU1Osw7vrOlDKqv1MxP5bFXHMs
- x1m4.EXO5sRslC0iJUbe2x9SNJko93kLoXumFsJa9p0hu2Ou1wSdSsKfdadTzZ1bytYK09e6tWnA
- Cg7.atX_khe4W4wC7DM6uEICwdJX1gYTigWUTG_7VJneiY59QgjQgzm7TTsnw6c2yB6JisaW_cEH
- _37IDIaqYFn3k.eitUAzHrTcqcuVwApXWxW8e0oSyX__wJuhY1py1y2.FqdB6vnC.VMelbZT_9ky
- nJmkAHAhu7HqVGZCmqQtGslu10bOmIcaVoVhC0WMLkQ74vcO.EY6YKtl73yBeonbHDjv2KBAFZT0
- vgx_J3DtgE51C65YUCRwI5eJpQvn3w3q.c49Uy_SvYPhcbuoorkY4EuNt_RtVsdW5qnDBE8wtxRy
- s7cPaE6XwnDt7e2ji07SGfQb0z3Wat9ngjKdO6xVqQxkY1oEStwgRRfrNdnw0LGCT29cSOkmwbaM
- L52QylCR4j40tIyBkTZyUCSdMfMzsxlXc5peUpXGssQPGXAn0mMG95GG0LIcPkI0X1aT1ostl1.6
- 6ncTfrAiao.i9A_z.70eFpd7p23XmHI5_9vVdmS7GB6pbjvSBDZFY_vRkFv4lFc9Lov.cW3PrVxd
- GFLGr9vb.d8xaB1U0tL0YvoppJgthMseEuCx09sZZI8dKn4t2wt6JDYcL_JbsgqdTxZwGWuVLafp
- SnvUKOl91r2dBDUphqkU2JQlBsOI1gYW2ML9BFAGzlcFZMT4lDq7P0h1gFFuBfSu9jd4O2ebLcF7
- ONKBEx9RDm11DrHqoJjYwhEpv8A4GgjsffrT0CvngbjGvnGedOgixoC9DpQI4YgKIvypzzqQUSYN
- 9.kygyO9rc2FHWdr6GEHT4vRjrPVWrW_6qZap12g6idYyXBsUbYTZKgLYjO6jsNpVHUXZx38fNnp
- o59lnmoaJmEooJQ.UU92WaN1VZ6jjNY0RhWoNke4LUMFQ3hOOhiD.Cp.ssjYloQusp.7vOrEXs9j
- swdMJNeGUOsStblNn19mYbn3FmhDKviwpo8PhoInx88PFXfgtKCrcVuFRRKJRUWeTqXf7elL3xpf
- hRT5zim0qwlpHRFdalTKLS4M9G.yAhl7Kjivft82r1epyV.G4Q9Pe807gakxJ3PXl1_zu4peqYx1
- .A9InxnkxnzzCyTta_9OGnnKF1oxWYuYXKJZzn29tFD.J.OUL2oWG5sIis7o.BOu.fOHebrLFV51
- _iBIUvUJzRAwAMB67fl2Y5Ih4DncjgO3O
-X-Sonic-MF: <casey@schaufler-ca.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic308.consmr.mail.ne1.yahoo.com with HTTP; Sun, 23 Oct 2022 17:13:09 +0000
-Received: by hermes--production-gq1-754cb59848-jk2dx (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 9e41f289b41449c896e30f1148424ab0;
-          Sun, 23 Oct 2022 17:13:05 +0000 (UTC)
-Message-ID: <753dfbe8-c68c-5e16-c4d0-1e14cd831c2e@schaufler-ca.com>
-Date:   Sun, 23 Oct 2022 10:13:03 -0700
+        Sun, 23 Oct 2022 13:17:29 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C03D5B710;
+        Sun, 23 Oct 2022 10:17:28 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id z24so75165ljn.4;
+        Sun, 23 Oct 2022 10:17:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jYyIMbJso6jJB2RiGcHZvZOyCs4ou0B3R3oCqDLm7rE=;
+        b=CZvtGR0W/Pw6pZm3dlwnotlIk5lvCjLfXTrWAIPW/O5oe0OdbD32iDzA/a69FZ/ryz
+         FtfNsjP/ngnNYwKCS/M4X1JpSFvqVfnF66HI8/owL6JJB9xlNIbmhi7oQxHtktWAzmAY
+         EhzkV2wnzQKWy3iTP2ENgD4fmOuUbHGLqbfw5BCuOZafu33Q0rjErimvx8jalHH187EI
+         qvUCUq0Qvj62yoRnTZOATIoz5RGjgd25D7KEUDaM9/jdAddIVnMF/s6SrHajA+Dy/RkG
+         j9Fgm9okzXGhRsItjJzMBlpc2+2uBBQ4gSVR5wThN35xvrnoGD08SCCmtZeUtLXTkqXA
+         cJ5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jYyIMbJso6jJB2RiGcHZvZOyCs4ou0B3R3oCqDLm7rE=;
+        b=YdH20TxRPS0uamm/9em4kB+GX738hCLwB/kkCqbjMGnemD3x5sHNO7mLhTGqNHTXmF
+         vD9DdM4hJL6OaqHXtztmOqctQvHVhSYLtagIkKflXqaapnC/CPqWysjDGUkOgpVMC6ue
+         nnzCKMdRMjekLF5YSCQvelDR0tJvzs+uU2fv9uowSrn/W+io4VWmWVHgYg+Jh6SWe3Af
+         RBeZGQHlfFCGBzMuSHSX/QVoDlVkUXYWFPBo3aLSbtog4tG8ubB7GtFEgAker3N8qxd1
+         +YGSGLgpd01ZgvOxZ1zXD0h5KQyHwZNswDalonhefS4NoSOTVxQwSZqf6kbu1cFPPUqL
+         6FvA==
+X-Gm-Message-State: ACrzQf0suvWu7Jy5v+fOqSuq96W3+spCSytFyPFudUSMOZ0EyruPwHTx
+        BSZzzRqM7qu1zSDIHEsGGHQ=
+X-Google-Smtp-Source: AMsMyM71qpqHAKBESCsgtbqB0echO6ZUSOpiCCuZi5nGsKe/8HY5OQoeeIGSbdh11laACPSKb4USHw==
+X-Received: by 2002:a2e:83c6:0:b0:26c:3550:bc14 with SMTP id s6-20020a2e83c6000000b0026c3550bc14mr10323785ljh.43.1666545446297;
+        Sun, 23 Oct 2022 10:17:26 -0700 (PDT)
+Received: from Michaels-MBP.home (188-177-109-202-dynamic.dk.customer.tdc.net. [188.177.109.202])
+        by smtp.gmail.com with ESMTPSA id s13-20020a056512314d00b00494a11c5f52sm1309886lfi.256.2022.10.23.10.17.24
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Sun, 23 Oct 2022 10:17:25 -0700 (PDT)
+From:   Michael Lilja <michael.lilja@gmail.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>
+Cc:     michael.lilja@gmail.com, netdev@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org
+Subject: [PATCH] Periodically flow expire from flow offload tables
+Date:   Sun, 23 Oct 2022 19:16:58 +0200
+Message-Id: <20221023171658.69761-1-michael.lilja@gmail.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v38 04/39] LSM: Maintain a table of LSM attribute data
-Content-Language: en-US
-To:     Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        casey.schaufler@intel.com, paul@paul-moore.com,
-        linux-security-module@vger.kernel.org
-Cc:     linux-audit@redhat.com, jmorris@namei.org, selinux@vger.kernel.org,
-        keescook@chromium.org, john.johansen@canonical.com,
-        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
-        casey@schaufler-ca.com
-References: <20220927195421.14713-1-casey@schaufler-ca.com>
- <20220927195421.14713-5-casey@schaufler-ca.com>
- <9907d724-4668-cd50-7454-1a8ca86542b0@I-love.SAKURA.ne.jp>
- <f6b8ac05-6900-f57d-0daf-02d5ae53bc47@schaufler-ca.com>
- <a130dc1f-a187-2957-25c1-974fb9c2569f@I-love.SAKURA.ne.jp>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <a130dc1f-a187-2957-25c1-974fb9c2569f@I-love.SAKURA.ne.jp>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.20754 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/23/2022 12:27 AM, Tetsuo Handa wrote:
-> On 2022/10/21 8:42, Casey Schaufler wrote:
->> On 10/13/2022 3:04 AM, Tetsuo Handa wrote:
->>> On 2022/09/28 4:53, Casey Schaufler wrote:
->>>> @@ -483,6 +491,16 @@ void __init security_add_hooks(struct security_hook_list *hooks, int count,
->>>>  {
->>>>  	int i;
->>>>  
->>>> +	/*
->>>> +	 * A security module may call security_add_hooks() more
->>>> +	 * than once. Landlock is one such case.
->>>> +	 */
->>>> +	if (lsm_id == 0 || lsm_idlist[lsm_id - 1] != lsmid)
->>>> +		lsm_idlist[lsm_id++] = lsmid;
->>>> +
->>>> +	if (lsm_id > LSMID_ENTRIES)
->>>> +		panic("%s Too many LSMs registered.\n", __func__);
->>> I'm not happy with LSMID_ENTRIES. This is a way towards forever forbidding LKM-based LSMs.
->> I don't see any way given the locking issues that we're ever going to
->> mix built in security modules and loaded security modules on the same
->> hook lists. The SELinux module deletion code is sufficiently scary that
->> it is being removed. That does not mean that I think loadable modules
->> are impossible, I think it means that their management is going to have
->> to be separate, the same way the BPF programs are handled. The only way
->> that I see a unified hook list is for all the LSMs to be implemented as
->> loadable modules, and I can't see that happening in my lifetime.
-> I'm not expecting for unloadable LSM modules.
-> I'm expecting for loadable LSM modules.
->
-> I'm not expecting to make all LSM modules to be implemented as loadable
-> LSM modules, for some want to associate "security label" to everything
-> (including processes which might start before the global init process starts)
-> but others do not need to associate "security label" to everything.
->
->> I can see an LSM like BPF, as I mentioned before, that manages loaded
->> modules. Over the years I've seen several designs that might work. I'm
->> encouraged (and not a little bit frightened) by the success of the BPF
->> work.
-> There can be LSM modules whose lifetime of hooks match the lifetime of
-> a process which registered hooks for that process. In that case, being
-> automatically unregistered upon process termination would be preferable.
->
-> But there are LSM modules whose lifetime of hooks is irrelevant to a process
-> which registered a hook for that process. In that case, we need a method for
-> allowing registered hooks to remain even after that process terminated.
->
-> Please don't think loadable LSM modules as something that require special
-> handling. TOMOYO is an LSM module whose lifetime of hooks is irrelevant to
-> a process which registered a hook for that process, but does not need to
-> associate "security label" to everything. It has to be trivial to convert
-> TOMOYO as a loadable LSM module.
+When a flow is added to a flow table for offload SW/HW-offload
+the user has no means of controlling the flow once it has
+been offloaded. If a number of firewall rules has been made using
+time schedules then these rules doesn't apply for the already
+offloaded flows. Adding new firewall rules also doesn't affect
+already offloaded flows.
 
-I don't see that having a built-in version of TOMOYO and a loadable version
-needs to be difficult. That's something that whoever creates the loadable
-security module scheme is going to have to address. It will depend on the
-details of the loadable module mechanism. I can't comment on how that will
-work because I don't see loadable modules hitting the top of my queue.
+This patch handle flow table retirement giving the user the option
+to at least periodically get the flow back into control of the
+firewall rules so already offloaded flows can be dropped or be
+pushed back to flow offload tables.
 
->
->> Converting the array[LSMID_ENTRIES] implementation to a hlist like the
->> hooks have used would not be that big a project and I don't see that
->> making such a change would be a show-stopper for implementing loadable
->> modules. I think that a lot of other issues would be more significant.
-> Defining constants for each LSM module (i.e. "LSM: Add an LSM identifier
-> for external use") is the show-stopper for implementing loadable modules.
+The flow retirement is disabled by default and can be set in seconds
+using sysctl -w net.netfilter.nf_flowtable_retire
 
-One possible way for loadable modules to work would be to have a built-in
-module LSM_ID_MODLOADER which maintains its own list of module hooks.
-The values returned from lsm_self_attr() would identify the this LSM
-and the data value would have to identify the loaded module it refers to,
-perhaps as "TOMOYO=XYZ" or "datastate=foobar". A flag LSM_ATTR_LOADED would
-indicate that the attribute needed to be processed according to loadable
-module attribute rules, whatever they might be.
+Signed-off-by: Michael Lilja <michael.lilja@gmail.com>
+---
+ .../networking/nf_conntrack-sysctl.rst        |  7 ++++++
+ include/net/netfilter/nf_flow_table.h         |  1 +
+ include/net/netns/conntrack.h                 |  3 +++
+ net/netfilter/nf_conntrack_standalone.c       | 17 ++++++++++++++
+ net/netfilter/nf_flow_table_core.c            | 23 +++++++++++++++----
+ 5 files changed, 47 insertions(+), 4 deletions(-)
 
-So no, it's not a show stopper. Not any more than u32 secids are a showstopper
-for process attributes it audit records. LSM IDs are inconvenient, and not my
-first choice, but I'm not going to let that get in the way of getting this
-code upstream.  
-
-> We won't be able to accept whatever LSM modules to upstream, and we won't
-> be able to enable whatever LSM modules in distributor kernels.
-
-A built in module loader security module would address this issue.
-Getting such a module accepted upstream is not going to be trivial,
-but the BPF people seem to have managed it.
-
-> LSM modules which cannot define a constant due to either "not accepted
-> to upstream" or "not enabled by distributor kernels" will be forbidden.
-> I expect that we assign a constant upon module registration (instead of
-> API visible constants) if we require all LSM modules to have a constant.
-
-Maybe the thing to do is rewrite TOMOYO in eBPF. If I wanted to have a
-loadable security module I could either take ten years or so to get a
-loadable module scheme upstream in addition to my module, or I could
-write it in eBPF and use it the next day. I don't know enough about eBPF
-programming to say if it has everything TOMOYO needs, but it sure looks
-like an easier path if it does.
-
->> I will, on the other hand, listen to compelling arguments. It is not the
->> intention of this code to lock out loadable modules. If I thought it would
->> I would not have proposed it.
-> This code is exactly for locking out loadable modules.
-
-I hope that I have suggested viable (if not convenient) alternatives.
-I suppose it is possible that locking out loadable modules is one
-motivation behind the LSM ID scheme, but I really doubt it. And more
-importantly, as I've outlined above, I can't be successful in locking
-out loadable security modules. I don't even see it as an additional
-complication.
-
+diff --git a/Documentation/networking/nf_conntrack-sysctl.rst b/Documentation/networking/nf_conntrack-sysctl.rst
+index 1120d71f28d7..ab4071bc64c1 100644
+--- a/Documentation/networking/nf_conntrack-sysctl.rst
++++ b/Documentation/networking/nf_conntrack-sysctl.rst
+@@ -201,3 +201,10 @@ nf_flowtable_udp_timeout - INTEGER (seconds)
+         Control offload timeout for udp connections.
+         UDP connections may be offloaded from nf conntrack to nf flow table.
+         Once aged, the connection is returned to nf conntrack with udp pickup timeout.
++
++nf_flowtable_retire - INTEGER (seconds)
++	- 0 - disabled (default)
++	- not 0 - enabled and set the number of seconds a flow is offloaded
++
++	If this option is enabled offloaded flows retire periodically and return the
++	control of the flow to conntrack/netfilter.
+diff --git a/include/net/netfilter/nf_flow_table.h b/include/net/netfilter/nf_flow_table.h
+index cd982f4a0f50..f5643c24fb55 100644
+--- a/include/net/netfilter/nf_flow_table.h
++++ b/include/net/netfilter/nf_flow_table.h
+@@ -177,6 +177,7 @@ struct flow_offload {
+ 	unsigned long				flags;
+ 	u16					type;
+ 	u32					timeout;
++	u32					retire;
+ 	struct rcu_head				rcu_head;
+ };
+ 
+diff --git a/include/net/netns/conntrack.h b/include/net/netns/conntrack.h
+index e1290c159184..7567d5fa8220 100644
+--- a/include/net/netns/conntrack.h
++++ b/include/net/netns/conntrack.h
+@@ -110,5 +110,8 @@ struct netns_ct {
+ #if defined(CONFIG_NF_CONNTRACK_LABELS)
+ 	unsigned int		labels_used;
+ #endif
++#if IS_ENABLED(CONFIG_NF_FLOW_TABLE)
++	unsigned int		sysctl_flowtable_retire;
++#endif
+ };
+ #endif
+diff --git a/net/netfilter/nf_conntrack_standalone.c b/net/netfilter/nf_conntrack_standalone.c
+index 4ffe84c5a82c..92ed07b93846 100644
+--- a/net/netfilter/nf_conntrack_standalone.c
++++ b/net/netfilter/nf_conntrack_standalone.c
+@@ -620,6 +620,9 @@ enum nf_ct_sysctl_index {
+ #ifdef CONFIG_LWTUNNEL
+ 	NF_SYSCTL_CT_LWTUNNEL,
+ #endif
++#if IS_ENABLED(CONFIG_NF_FLOW_TABLE)
++	NF_SYSCTL_CT_FLOWTABLE_RETIRE,
++#endif
+ 
+ 	__NF_SYSCTL_CT_LAST_SYSCTL,
+ };
+@@ -967,6 +970,15 @@ static struct ctl_table nf_ct_sysctl_table[] = {
+ 		.mode		= 0644,
+ 		.proc_handler	= nf_hooks_lwtunnel_sysctl_handler,
+ 	},
++#endif
++#if IS_ENABLED(CONFIG_NF_FLOW_TABLE)
++	[NF_SYSCTL_CT_FLOWTABLE_RETIRE] = {
++		.procname	= "nf_flowtable_retire",
++		.maxlen		= sizeof(unsigned int),
++		.mode		= 0644,
++		.data   = &init_net.ct.sysctl_flowtable_retire,
++		.proc_handler	= proc_dointvec_jiffies,
++	},
+ #endif
+ 	{}
+ };
+@@ -1111,6 +1123,11 @@ static int nf_conntrack_standalone_init_sysctl(struct net *net)
+ 	nf_conntrack_standalone_init_dccp_sysctl(net, table);
+ 	nf_conntrack_standalone_init_gre_sysctl(net, table);
+ 
++#if IS_ENABLED(CONFIG_NF_FLOW_TABLE)
++	/* Disable retire per default */
++	net->ct.sysctl_flowtable_retire = 0;
++#endif
++
+ 	/* Don't allow non-init_net ns to alter global sysctls */
+ 	if (!net_eq(&init_net, net)) {
+ 		table[NF_SYSCTL_CT_MAX].mode = 0444;
+diff --git a/net/netfilter/nf_flow_table_core.c b/net/netfilter/nf_flow_table_core.c
+index 81c26a96c30b..0a449dec8565 100644
+--- a/net/netfilter/nf_flow_table_core.c
++++ b/net/netfilter/nf_flow_table_core.c
+@@ -285,6 +285,12 @@ int flow_offload_add(struct nf_flowtable *flow_table, struct flow_offload *flow)
+ 	int err;
+ 
+ 	flow->timeout = nf_flowtable_time_stamp + flow_offload_get_timeout(flow);
++	if (nf_ct_net(flow->ct)->ct.sysctl_flowtable_retire) {
++		flow->retire = nf_flowtable_time_stamp +
++			nf_ct_net(flow->ct)->ct.sysctl_flowtable_retire;
++	} else {
++		flow->retire = 0;
++	}
+ 
+ 	err = rhashtable_insert_fast(&flow_table->rhashtable,
+ 				     &flow->tuplehash[0].node,
+@@ -313,6 +319,11 @@ int flow_offload_add(struct nf_flowtable *flow_table, struct flow_offload *flow)
+ }
+ EXPORT_SYMBOL_GPL(flow_offload_add);
+ 
++static inline bool nf_flow_has_retired(const struct flow_offload *flow)
++{
++	return flow->retire && nf_flow_timeout_delta(flow->retire) <= 0;
++}
++
+ void flow_offload_refresh(struct nf_flowtable *flow_table,
+ 			  struct flow_offload *flow)
+ {
+@@ -327,7 +338,8 @@ void flow_offload_refresh(struct nf_flowtable *flow_table,
+ 	if (likely(!nf_flowtable_hw_offload(flow_table)))
+ 		return;
+ 
+-	nf_flow_offload_add(flow_table, flow);
++	if (!nf_flow_has_retired(flow))
++		nf_flow_offload_add(flow_table, flow);
+ }
+ EXPORT_SYMBOL_GPL(flow_offload_refresh);
+ 
+@@ -339,6 +351,7 @@ static inline bool nf_flow_has_expired(const struct flow_offload *flow)
+ static void flow_offload_del(struct nf_flowtable *flow_table,
+ 			     struct flow_offload *flow)
+ {
++	clear_bit(IPS_OFFLOAD_BIT, &flow->ct->status);
+ 	rhashtable_remove_fast(&flow_table->rhashtable,
+ 			       &flow->tuplehash[FLOW_OFFLOAD_DIR_ORIGINAL].node,
+ 			       nf_flow_offload_rhash_params);
+@@ -423,12 +436,14 @@ static void nf_flow_offload_gc_step(struct nf_flowtable *flow_table,
+ 	    nf_ct_is_dying(flow->ct))
+ 		flow_offload_teardown(flow);
+ 
+-	if (test_bit(NF_FLOW_TEARDOWN, &flow->flags)) {
++	if (test_bit(NF_FLOW_TEARDOWN, &flow->flags) || nf_flow_has_retired(flow)) {
+ 		if (test_bit(NF_FLOW_HW, &flow->flags)) {
+-			if (!test_bit(NF_FLOW_HW_DYING, &flow->flags))
++			if (!test_bit(NF_FLOW_HW_DYING, &flow->flags)) {
+ 				nf_flow_offload_del(flow_table, flow);
+-			else if (test_bit(NF_FLOW_HW_DEAD, &flow->flags))
++			} else if (test_bit(NF_FLOW_HW_DEAD, &flow->flags)) {
++				clear_bit(NF_FLOW_HW, &flow->flags);
+ 				flow_offload_del(flow_table, flow);
++			}
+ 		} else {
+ 			flow_offload_del(flow_table, flow);
+ 		}
+-- 
+2.37.2
 
