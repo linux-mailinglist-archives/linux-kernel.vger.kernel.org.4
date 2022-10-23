@@ -2,189 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 253C06093CB
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 16:03:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A6116093D1
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 16:05:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbiJWOC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 10:02:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56474 "EHLO
+        id S230221AbiJWOFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 10:05:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229707AbiJWOC4 (ORCPT
+        with ESMTP id S229515AbiJWOFD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 10:02:56 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4445D73908;
-        Sun, 23 Oct 2022 07:02:55 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id l22-20020a17090a3f1600b00212fbbcfb78so1256943pjc.3;
-        Sun, 23 Oct 2022 07:02:55 -0700 (PDT)
+        Sun, 23 Oct 2022 10:05:03 -0400
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90DDD3CBDB;
+        Sun, 23 Oct 2022 07:05:01 -0700 (PDT)
+Received: by mail-io1-xd29.google.com with SMTP id q196so5865957iod.8;
+        Sun, 23 Oct 2022 07:05:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=t6pBF/o0natTLuLX/wEXaHuftOiR1PZ0M1sSmiCulEc=;
-        b=IUWzmI71fyIUK86PItGrbkGDgECFyiP1DOXhDRI36uIh3LwOJb+pBNZRtiGXBxuR/X
-         EkgHrb08gHySShO6zEhRbGtQSD8HXiWRiwsX/q1fb4Rla2P9+yK3DEuXXIoajEbx0KZJ
-         O1lMk1WEESOFv1GJwGm8jKsXfcB1ydcOrkxggQ6bgQnfaPn6QQyYl7BTjt3nku5VKDf1
-         srM3Rbj9zZMaXgvZpKOjm3Sg6oSAt/TWhe5fI7eu/Rqo3eSw/iNCKi2PS6HmcnvHUD/7
-         s4d/neVbaEVYhkCsZ7/kMfwkkOvxCHM/K84QA8S9oqiIfXWOnaDdE7aIujLYTe6abH7O
-         I1xw==
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=76WT1QUpKp6qzBWxcrAq0oJH066G81f6FsGzE6bBFSs=;
+        b=YCveSy386BWW6vtgM4Gl4qo86kzmCFKxTDd8P8Z/Xff54DECtU+F59LnPAUbUy+hj2
+         n+b7/EZTNnalwh7RFLRSlNrGTyBWrNYbEEjoYGnYJhoDRn2q6XHV3If+3GqW/oRF/Gix
+         tHpUPPjZNri0cjmT2JymTGYvSIHbHH9VjN+bah4iTc+3J0qw00lQ4vxlwDuzhvzY3i07
+         0ZOiApcdkLFcPBGJEMP+PDLJ1SGMNBG5gk65WJmA4H6nO60iFUeFeI9aaCC8hefql2MK
+         hnpb147iTx1v8lem7jcgiJcna4L3BhSJA3z1HR36kUBujRYquM7VAqJz3fBfFv9kvRIX
+         NR/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=t6pBF/o0natTLuLX/wEXaHuftOiR1PZ0M1sSmiCulEc=;
-        b=lVpqrvX7GN48MDLN2tnHNYceLwHLuvGQJDLiefQ/4gKmrOKDOuYSkAg4T5TW1NLwm6
-         Zd4gbLndfUda6fTvO8yM4fvA7sKT5clRaH1a4CAgOG8POmjpX1JRZk5zBL1WkmyC9OFx
-         Yyo7NbBsniKWqAmAKgg8+0XIc1AHBFtWMweGNhjIY+0/F2bnfr2+K5Y4RLKvjFa9E8kR
-         DqSjZtXYjFmVZeAKg4iD/DCPPwiAlkum3pV8BVSufO6sfDI5OOeJnVA0AQNdpxgH6WcG
-         0Zw3MwQnKc9XyPehGAdGbtUBSnQdu+kwQKw2IE3XtFndAJln1Qp22J14THUgENf1jgqI
-         oRdg==
-X-Gm-Message-State: ACrzQf3FUjROyED0O+vHVl1Qf5HMFIrZ8w7doR4ld1CrbCIui0jLYwbl
-        B5pAugkHgoqNXkq+4tEnWhg=
-X-Google-Smtp-Source: AMsMyM43NXpGWu4+Am+eBa3FFP7OIWC4DXukJ4PyEXkP7L0HIiDUqvD+1k1Nk6FUUuV+KhrvT3PF6Q==
-X-Received: by 2002:a17:90a:6845:b0:210:7ef5:ab99 with SMTP id e5-20020a17090a684500b002107ef5ab99mr24388726pjm.80.1666533774770;
-        Sun, 23 Oct 2022 07:02:54 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-1.three.co.id. [180.214.232.1])
-        by smtp.gmail.com with ESMTPSA id e28-20020a056a0000dc00b0056afd55722asm4270109pfj.153.2022.10.23.07.02.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Oct 2022 07:02:53 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id C9886104163; Sun, 23 Oct 2022 21:02:50 +0700 (WIB)
-Date:   Sun, 23 Oct 2022 21:02:49 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Oded Gabbay <ogabbay@kernel.org>
-Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-doc@vger.kernel.org, Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
-        Jiho Chu <jiho.chu@samsung.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
-        Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Subject: Re: [RFC PATCH 0/3] new subsystem for compute accelerator devices
-Message-ID: <Y1VJieGgVv9BwaO3@debian.me>
-References: <20221022214622.18042-1-ogabbay@kernel.org>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=76WT1QUpKp6qzBWxcrAq0oJH066G81f6FsGzE6bBFSs=;
+        b=wc7lsKPRq2SH3JXj3iCurm/Vo/fvik4cBtCWmU2WvEhkyQh0gL/9OPcapHsy7WLRf2
+         S5TT1Hvs6RmCB4DxUDSYPpRZukwtxxW3ld91w0PXJv+pAIvvNbfWsmidhEX0do/vYoaq
+         9zJaKFVOfhU2G5UlAqK1Ot94QMbv9xPpnJ+Luqv1Pv43OaUMMpTlkU/bq+CEtWxnaB19
+         /0avBEhG8kxu4tBlv/hWN+5rKqtrqJ+fq0kZRh6wg3RcCRUVQijdut7UcoyH/0ZEz0BE
+         +cMh8S7nGh5qFvsgadDwCwgX3gc5+GwjDMs9/sfJjqw6HsM4OSa4hV8QXutXGeFL9ELE
+         P7ZA==
+X-Gm-Message-State: ACrzQf39ayXc1D7J+GfzzKv7iKSEwKjmfI4oWmRZ0H+F5dgBPGh/GKKK
+        o3K20KtCyMaQSncBJgjjkwDKa/al9Vi2Z5eW4lU=
+X-Google-Smtp-Source: AMsMyM7W3X3wIg3V7xQwyIZDSWHweIf+MTIvPNcn+4KD4Cv8bwRhrdVqGCe6Q0OANw7dZKAyvozgR4ieGXSa+ABXqmM=
+X-Received: by 2002:a6b:6716:0:b0:6bc:113c:22a2 with SMTP id
+ b22-20020a6b6716000000b006bc113c22a2mr17383571ioc.12.1666533901020; Sun, 23
+ Oct 2022 07:05:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="KFhUQIkYlmhwSi0N"
-Content-Disposition: inline
-In-Reply-To: <20221022214622.18042-1-ogabbay@kernel.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20221022165047.4020785-1-lis8215@gmail.com> <20221022165047.4020785-3-lis8215@gmail.com>
+ <9W76KR.NVDSVG4IWZ3A3@crapouillou.net> <CAKNVLfZmUpFzKsdzY1e_mUTVsM-jnL65Fi6EXYcF80-oNV+DGQ@mail.gmail.com>
+ <YE87KR.VC65A15U1PH41@crapouillou.net>
+In-Reply-To: <YE87KR.VC65A15U1PH41@crapouillou.net>
+From:   Siarhei Volkau <lis8215@gmail.com>
+Date:   Sun, 23 Oct 2022 17:04:49 +0300
+Message-ID: <CAKNVLfbJaGd0t==AzxyT5Q7fVD7PwK75-S5dbb+G9GZUPpagZQ@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] serial: 8250/ingenic: Add support for the JZ4750/JZ4755
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+=D0=B2=D1=81, 23 =D0=BE=D0=BA=D1=82. 2022 =D0=B3. =D0=B2 12:16, Paul Cercue=
+il <paul@crapouillou.net>:
+> Do you have such hardware?
 
---KFhUQIkYlmhwSi0N
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+No
 
-On Sun, Oct 23, 2022 at 12:46:19AM +0300, Oded Gabbay wrote:
-> In the last couple of months we had a discussion [1] about creating a new
-> subsystem for compute accelerator devices in the kernel.
->=20
-> After an analysis that was done by DRM maintainers and myself, and follow=
-ing
-> a BOF session at the Linux Plumbers conference a few weeks ago [2], we
-> decided to create a new subsystem that will use the DRM subsystem's code =
-and
-> functionality. i.e. the accel core code will be part of the DRM subsystem.
->=20
-> This will allow us to leverage the extensive DRM code-base and
-> collaborate with DRM developers that have experience with this type of
-> devices. In addition, new features that will be added for the accelerator
-> drivers can be of use to GPU drivers as well (e.g. RAS).
->=20
-> As agreed in the BOF session, the accelerator devices will be exposed to
-> user-space with a new, dedicated device char files and a dedicated major
-> number (261), to clearly separate them from graphic cards and the graphic
-> user-space s/w stack. Furthermore, the drivers will be located in a separ=
-ate
-> place in the kernel tree (drivers/accel/).
->=20
-> This series of patches is the first step in this direction as it adds the
-> necessary infrastructure for accelerator devices to DRM. The new devices =
-will
-> be exposed with the following convention:
->=20
-> device char files - /dev/accel/accel*
-> sysfs             - /sys/class/accel/accel*/
-> debugfs           - /sys/kernel/debug/accel/accel*/
->=20
-> I tried to reuse the existing DRM code as much as possible, while keeping=
- it
-> readable and maintainable.
->=20
-> One thing that is missing from this series is defining a namespace for the
-> new accel subsystem, while I'll add in the next iteration of this patch-s=
-et,
-> after I will receive feedback from the community.
->=20
-> As for drivers, once this series will be accepted (after adding the names=
-pace),
-> I will start working on migrating the habanalabs driver to the new accel
-> subsystem. I have talked about it with Dave and we agreed that it will be
-> a good start to simply move the driver as-is with minimal changes, and th=
-en
-> start working on the driver's individual features that will be either add=
-ed
-> to the accel core code (with or without changes), or will be removed and
-> instead the driver will use existing DRM code.
->=20
-> In addition, I know of at least 3 or 4 drivers that were submitted for re=
-view
-> and are good candidates to be included in this new subsystem, instead of =
-being
-> a drm render node driver or a misc driver.
->=20
-> [1] https://lkml.org/lkml/2022/7/31/83
-> [2] https://airlied.blogspot.com/2022/09/accelerators-bof-outcomes-summar=
-y.html
->=20
+> Don't add support for cases you can't test.
 
-Since this is new subsystem, it should have its own git tree where you
-collected accelerator-related patches. By convention, there should be
-"next" branch targeting for next kernel release and "fixes" branch for
-bugfixes pending for current release. Both branches should be included
-into linux-next. The names don't necessarily be that, though.
+It's just a side effect of that approach.
 
-Also, it had been great if you write short, descriptive documentation
-about the subsystem (maintainers handbook).
+> For what we know - all JZ475x use a 24 MHz crystal and all JZ4760(B)
+> use a 12 MHz crystal, until proven otherwise.
 
-Cc'ing linux-doc folks.
+Ouf course it just confirms the rule but I found one exception: JZ4750 & 12=
+MHz
+Link: https://github.com/carlos-wong/uboot_jz4755/blob/master/include/confi=
+gs/lib4750.h
 
---=20
-An old man doll... just what I always wanted! - Clara
+Regarding your proposal:
+In my opinion enabling the divisor unconditionally is a bad practice,
+as it's already enabled (or not) by the bootloader, with respect to the
+hardware capabilities.I think it's better to keep the driver as it is than
+adding such things.
 
---KFhUQIkYlmhwSi0N
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY1VJhQAKCRD2uYlJVVFO
-o+yTAP0Wq0yPX3TS5HZJ27v0PHGSOWTbOi+nH/lPSH1cS+ol9AD8CHBTzQqZytiP
-wolMvwwGEa8J+1fi1Wk5hKbB1ex35g8=
-=9xlo
------END PGP SIGNATURE-----
-
---KFhUQIkYlmhwSi0N--
+BR,
+Siarhei
