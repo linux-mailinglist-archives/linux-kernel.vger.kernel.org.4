@@ -2,196 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 972BA6096B7
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 00:00:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98E506096F1
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 00:03:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229728AbiJWWAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 18:00:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49212 "EHLO
+        id S229681AbiJWWDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 18:03:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229736AbiJWWAc (ORCPT
+        with ESMTP id S229449AbiJWWDf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 18:00:32 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B42D64F180
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 15:00:22 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id m6so7594126pfb.0
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 15:00:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=hvIFbRsnY/vDy+taGpGboiBar50BevLz1lBfrbHmmSw=;
-        b=2K6CdRtZ5HzBar49k2LtiaW4FLoVKcjs3PX7dq9FckhdarNhspBzGdosOgBSuz/dFl
-         hqkurPNmdOALjzGHlf/R/AjdU4bgOD3OuS/7fwlCriJzk7e3+d0Mwrgg1jiDZBERrjA3
-         tPjsSEMV/bQFMwFk0aZRvlr80IT4EEcbjO/xZNKwZNZCfx+8s2raBuVEoZgGRF8qUzCo
-         e3VdHSUx68cvi2Dtq5rhCK0elIHYZ57ABlCP9JY3q0fC1wbee10T+p5t803KP0EOcmds
-         PKzKeyTQKjS424ssn94Dwhwx++97dTHY7MW4pTsHLa0hq6ZxUAMk5obAniRJJSKbNQM1
-         wpAA==
+        Sun, 23 Oct 2022 18:03:35 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70C776C951
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 15:03:33 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id a8-20020a92c548000000b002f6440ff96bso7709044ilj.22
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 15:03:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hvIFbRsnY/vDy+taGpGboiBar50BevLz1lBfrbHmmSw=;
-        b=tFfTgMfy+N3iQaNynxEY92JBnV4bNCD1ezvvzKNZnmreuQczmQjVG5DpumSMrTQONq
-         WOGRGTfSO2nbyyC3AWGjce3I5CreFiAOGa7N8MqnKUxpJk7XmabIpY0oUcHo6q+y6k8V
-         F9agO2hUS42oG5iN7FBSI5tec18qpGfDCZCQ31I5BSoxzAYlfSJ0EY7Hij3igPx9f2Jv
-         IxbBcS8+s1AJ42sIBqK2EMRAgeOc3Pvju2qDfYvp2NNy/s9u3oH3lHGalIK9dGCvYJhg
-         RItWZf83zzeTGOy6Nl2qHv1GHsM7nQ3VfkzEKn3IHv6sXhcq56YpTonx8NpMv3qWQD4e
-         mX7w==
-X-Gm-Message-State: ACrzQf1ZUdKhcs87EN1hbFTPcbU6Erobt3cqOq+HnyKO47Y7AvcjI0vK
-        1H6NcGSF3U98N4N39wb5osd3Dw==
-X-Google-Smtp-Source: AMsMyM5VwZrmUlSzb+1EZVG+tpjTbe3LySen3wNOfYDBTBo98hzEeyHHH/8b9UZAgnJ5FzV86+CCWw==
-X-Received: by 2002:aa7:8011:0:b0:567:70cc:5b78 with SMTP id j17-20020aa78011000000b0056770cc5b78mr26373798pfi.29.1666562422001;
-        Sun, 23 Oct 2022 15:00:22 -0700 (PDT)
-Received: from dread.disaster.area (pa49-181-106-210.pa.nsw.optusnet.com.au. [49.181.106.210])
-        by smtp.gmail.com with ESMTPSA id a3-20020aa78e83000000b0056beae3dee2sm14606pfr.145.2022.10.23.15.00.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Oct 2022 15:00:21 -0700 (PDT)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1omj10-005abc-AD; Mon, 24 Oct 2022 09:00:18 +1100
-Date:   Mon, 24 Oct 2022 09:00:18 +1100
-From:   Dave Chinner <david@fromorbit.com>
-To:     "Darrick J. Wong" <djwong@kernel.org>
-Cc:     =?utf-8?B?WWFuZywgWGlhby/mnagg5pmT?= <yangx.jy@fujitsu.com>,
-        =?utf-8?B?R290b3UsIFlhc3Vub3JpL+S6lOWztiDlurfmloc=?= 
-        <y-goto@fujitsu.com>, Brian Foster <bfoster@redhat.com>,
-        "hch@infradead.org" <hch@infradead.org>,
-        =?utf-8?B?UnVhbiwgU2hpeWFuZy/pmK4g5LiW6Ziz?= 
-        <ruansy.fnst@fujitsu.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
-        "nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        zwisler@kernel.org, Jeff Moyer <jmoyer@redhat.com>,
-        dm-devel@redhat.com, toshi.kani@hpe.com
-Subject: Re: [PATCH] xfs: fail dax mount if reflink is enabled on a partition
-Message-ID: <20221023220018.GX3600936@dread.disaster.area>
-References: <YyIBMJzmbZsUBHpy@magnolia>
- <a6e7f4eb-0664-bbe8-98d2-f8386b226113@fujitsu.com>
- <e3d51a6b-12e9-2a19-1280-5fd9dd64117c@fujitsu.com>
- <deb54a77-90d3-df44-1880-61cce6e3f670@fujitsu.com>
- <1444b9b5-363a-163c-0513-55d1ea951799@fujitsu.com>
- <Yzt6eWLuX/RTjmjj@magnolia>
- <f196bcab-6aa2-6313-8a7c-f8ab409621b7@fujitsu.com>
- <Yzx64zGt2kTiDYaP@magnolia>
- <6a83a56e-addc-f3c4-2357-9589a49bf582@fujitsu.com>
- <Y1NRNtToQTjs0Dbd@magnolia>
+        bh=SEBTrpeXkVsXvjjzgegY5RcjpLfMyyLXL7UFw1cR9Xs=;
+        b=1sDayHE1hBc4oQYMpt8jVJzYB/xGExSfvPE6CMAtbS2Tjmc9r6V15jwtwL5xg7WmDR
+         9CNqJVSesUwe3zb7yQDvXBbnr6JU80QLN5SjeIjEgmxgdavd/kkhFgZ+OhKt04lN3l9a
+         qDSmUrqcvAgertZtDwDJxLgL9rEe+NrbxFPpeDAtGbyx1ydGobiKGO3OLkiiEFfaC9Ja
+         hcKeoAZg6uT+MPYFzSObaGbK4ykbAeZQsCRnkuqaUWEOwuN+ucxm9FiWfTn3ZAFEfJDf
+         QKY1VaW+B3di+/4Jyd0drQpZQwb9XRPPyRbgAgLP+Y2Sg39xs2htZlbKxNqZt+tdFHH6
+         NVDQ==
+X-Gm-Message-State: ACrzQf2lemX4zS1KS+FWy0zY/2AH6OI4I9UTQzl67i4z8Ae08UfiE4jy
+        HM0hfvvPhocEev+490yvenBWo16BCS3GP7LGmBnfjIpwOmNZ
+X-Google-Smtp-Source: AMsMyM4TdIRARwRk8PNp14qV0Vtw+/fyLT9bTYzhlp7kKcO5uPvFa3xsNnii1J0SdifIvF4JOrj87ikyFocxfqU9Nm+v9itSkgIO
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y1NRNtToQTjs0Dbd@magnolia>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:cc18:0:b0:374:507b:8c16 with SMTP id
+ n24-20020a02cc18000000b00374507b8c16mr907052jap.296.1666562612824; Sun, 23
+ Oct 2022 15:03:32 -0700 (PDT)
+Date:   Sun, 23 Oct 2022 15:03:32 -0700
+In-Reply-To: <0000000000000eda7a05ebae986e@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000888f9a05ebbad8f3@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in hugetlb_fault
+From:   syzbot <syzbot+1b27d7a2722eabc2c5d5@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, llvm@lists.linux.dev, mike.kravetz@oracle.com,
+        nathan@kernel.org, ndesaulniers@google.com,
+        songmuchun@bytedance.com, syzkaller-bugs@googlegroups.com,
+        trix@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 07:11:02PM -0700, Darrick J. Wong wrote:
-> On Thu, Oct 20, 2022 at 10:17:45PM +0800, Yang, Xiao/杨 晓 wrote:
-> > In addition, I don't like your idea about the test change because it will
-> > make generic/470 become the special test for XFS. Do you know if we can fix
-> > the issue by changing the test in another way? blkdiscard -z can fix the
-> > issue because it does zero-fill rather than discard on the block device.
-> > However, blkdiscard -z will take a lot of time when the block device is
-> > large.
-> 
-> Well we /could/ just do that too, but that will suck if you have 2TB of
-> pmem. ;)
-> 
-> Maybe as an alternative path we could just create a very small
-> filesystem on the pmem and then blkdiscard -z it?
-> 
-> That said -- does persistent memory actually have a future?  Intel
-> scuttled the entire Optane product, cxl.mem sounds like expansion
-> chassis full of DRAM, and fsdax is horribly broken in 6.0 (weird kernel
-> asserts everywhere) and 6.1 (every time I run fstests now I see massive
-> data corruption).
+syzbot has found a reproducer for the following issue on:
 
-Yup, I see the same thing. fsdax was a train wreck in 6.0 - broken
-on both ext4 and XFS. Now that I run a quick check on 6.1-rc1, I
-don't think that has changed at all - I still see lots of kernel
-warnings, data corruption and "XFS_IOC_CLONE_RANGE: Invalid
-argument" errors.
+HEAD commit:    4d48f589d294 Add linux-next specific files for 20221021
+git tree:       linux-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=165e09b4880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=2c4b7d600a5739a6
+dashboard link: https://syzkaller.appspot.com/bug?extid=1b27d7a2722eabc2c5d5
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1546e96a880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=123eabd2880000
 
-If I turn off reflink, then instead of data corruption I get kernel
-warnings like this from fsx and fsstress workloads:
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/0c86bd0b39a0/disk-4d48f589.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/074059d37f1f/vmlinux-4d48f589.xz
 
-[415478.558426] ------------[ cut here ]------------
-[415478.560548] WARNING: CPU: 12 PID: 1515260 at fs/dax.c:380 dax_insert_entry+0x2a5/0x320
-[415478.564028] Modules linked in:
-[415478.565488] CPU: 12 PID: 1515260 Comm: fsx Tainted: G        W 6.1.0-rc1-dgc+ #1615
-[415478.569221] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
-[415478.572876] RIP: 0010:dax_insert_entry+0x2a5/0x320
-[415478.574980] Code: 08 48 83 c4 30 5b 5d 41 5c 41 5d 41 5e 41 5f c3 48 8b 58 20 48 8d 53 01 e9 65 ff ff ff 48 8b 58 20 48 8d 53 01 e9 50 ff ff ff <0f> 0b e9 70 ff ff ff 31 f6 4c 89 e7 e8 da ee a7 00 eb a4 48 81 e6
-[415478.582740] RSP: 0000:ffffc90002867b70 EFLAGS: 00010002
-[415478.584730] RAX: ffffea000f0d0800 RBX: 0000000000000001 RCX: 0000000000000001
-[415478.587487] RDX: ffffea0000000000 RSI: 000000000000003a RDI: ffffea000f0d0840
-[415478.590122] RBP: 0000000000000011 R08: 0000000000000000 R09: 0000000000000000
-[415478.592380] R10: ffff888800dc9c18 R11: 0000000000000001 R12: ffffc90002867c58
-[415478.594865] R13: ffff888800dc9c18 R14: ffffc90002867e18 R15: 0000000000000000
-[415478.596983] FS:  00007fd719fa2b80(0000) GS:ffff88883ec00000(0000) knlGS:0000000000000000
-[415478.599364] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[415478.600905] CR2: 00007fd71a1ad640 CR3: 00000005cf241006 CR4: 0000000000060ee0
-[415478.602883] Call Trace:
-[415478.603598]  <TASK>
-[415478.604229]  dax_fault_iter+0x240/0x600
-[415478.605410]  dax_iomap_pte_fault+0x19c/0x3d0
-[415478.606706]  __xfs_filemap_fault+0x1dd/0x2b0
-[415478.607744]  __do_fault+0x2e/0x1d0
-[415478.608587]  __handle_mm_fault+0xcec/0x17b0
-[415478.609593]  handle_mm_fault+0xd0/0x2a0
-[415478.610517]  exc_page_fault+0x1d9/0x810
-[415478.611398]  asm_exc_page_fault+0x22/0x30
-[415478.612311] RIP: 0033:0x7fd71a04b9ba
-[415478.613168] Code: 4d 29 c1 4c 29 c2 48 3b 15 db 95 11 00 0f 87 af 00 00 00 0f 10 01 0f 10 49 f0 0f 10 51 e0 0f 10 59 d0 48 83 e9 40 48 83 ea 40 <41> 0f 29 01 41 0f 29 49 f0 41 0f 29 51 e0 41 0f 29 59 d0 49 83 e9
-[415478.617083] RSP: 002b:00007ffcf277be18 EFLAGS: 00010206
-[415478.618213] RAX: 00007fd71a1a3fc5 RBX: 0000000000000fc5 RCX: 00007fd719f5a610
-[415478.619854] RDX: 000000000000964b RSI: 00007fd719f50fd5 RDI: 00007fd71a1a3fc5
-[415478.621286] RBP: 0000000000030fc5 R08: 000000000000000e R09: 00007fd71a1ad640
-[415478.622730] R10: 0000000000000001 R11: 00007fd71a1ad64e R12: 0000000000009699
-[415478.624164] R13: 000000000000a65e R14: 00007fd71a1a3000 R15: 0000000000000001
-[415478.625600]  </TASK>
-[415478.626087] ---[ end trace 0000000000000000 ]---
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+1b27d7a2722eabc2c5d5@syzkaller.appspotmail.com
 
-Even generic/247 is generating a warning like this from xfs_io,
-which is a mmap vs DIO racer. Given that DIO doesn't exist for
-fsdax, this test turns into just a normal write() vs mmap() racer.
+==================================================================
+BUG: KASAN: use-after-free in instrument_atomic_read include/linux/instrumented.h:72 [inline]
+BUG: KASAN: use-after-free in atomic_long_read include/linux/atomic/atomic-instrumented.h:1265 [inline]
+BUG: KASAN: use-after-free in is_rwsem_reader_owned kernel/locking/rwsem.c:193 [inline]
+BUG: KASAN: use-after-free in __down_read_common kernel/locking/rwsem.c:1262 [inline]
+BUG: KASAN: use-after-free in __down_read_common kernel/locking/rwsem.c:1255 [inline]
+BUG: KASAN: use-after-free in __down_read kernel/locking/rwsem.c:1269 [inline]
+BUG: KASAN: use-after-free in down_read+0x1d3/0x450 kernel/locking/rwsem.c:1511
+Read of size 8 at addr ffff88801263a508 by task syz-executor409/3698
 
-Given these are the same fsdax infrastructure failures that I
-reported for 6.0, it is also likely that ext4 is still throwing
-them. IOWs, whatever got broke in the 6.0 cycle wasn't fixed in the
-6.1 cycle.
+CPU: 1 PID: 3698 Comm: syz-executor409 Not tainted 6.1.0-rc1-next-20221021-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:253 [inline]
+ print_report+0x15e/0x45d mm/kasan/report.c:364
+ kasan_report+0xbb/0x1f0 mm/kasan/report.c:464
+ check_region_inline mm/kasan/generic.c:183 [inline]
+ kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
+ instrument_atomic_read include/linux/instrumented.h:72 [inline]
+ atomic_long_read include/linux/atomic/atomic-instrumented.h:1265 [inline]
+ is_rwsem_reader_owned kernel/locking/rwsem.c:193 [inline]
+ __down_read_common kernel/locking/rwsem.c:1262 [inline]
+ __down_read_common kernel/locking/rwsem.c:1255 [inline]
+ __down_read kernel/locking/rwsem.c:1269 [inline]
+ down_read+0x1d3/0x450 kernel/locking/rwsem.c:1511
+ hugetlb_vma_lock_read mm/hugetlb.c:6889 [inline]
+ hugetlb_fault+0x40a/0x2690 mm/hugetlb.c:5864
+ follow_hugetlb_page+0x3f3/0x1700 mm/hugetlb.c:6374
+ __get_user_pages+0x2be/0xee0 mm/gup.c:1081
+ populate_vma_page_range+0x23d/0x320 mm/gup.c:1464
+ __mm_populate+0x101/0x3a0 mm/gup.c:1578
+ mm_populate include/linux/mm.h:2714 [inline]
+ vm_mmap_pgoff+0x1fd/0x270 mm/util.c:525
+ ksys_mmap_pgoff+0x1c3/0x5a0 mm/mmap.c:1458
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fb24903a869
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fb248fec2f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000009
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fb24903a869
+RDX: 0000000000000003 RSI: 0000000000b36000 RDI: 0000000020000000
+RBP: 00007fb2490c23e8 R08: 00000000ffffffff R09: 0000000000000000
+R10: 0000000000068831 R11: 0000000000000246 R12: 00007fb2490c23e0
+R13: 00007fb2490c23ec R14: 00007fb248fec400 R15: 0000000000022000
+ </TASK>
 
-> Frankly at this point I'm tempted just to turn of fsdax support for XFS
-> for the 6.1 LTS because I don't have time to fix it.
+Allocated by task 3698:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:45
+ __kasan_unpoison_range-0xf/0x10
+ ____kasan_slab_free-0xf/0x1c0
+ kmalloc include/linux/slab.h:582 [inline]
+ hugetlb_vma_lock_alloc.part.0+0x3f/0x130 mm/hugetlb.c:6999
+ hugetlb_vma_lock_alloc mm/hugetlb.c:6755 [inline]
+ hugetlb_reserve_pages+0xa3f/0xe80 mm/hugetlb.c:6624
+ hugetlbfs_file_mmap+0x40c/0x5c0 fs/hugetlbfs/inode.c:167
+ call_mmap include/linux/fs.h:2196 [inline]
+ mmap_region+0x6bf/0x1c00 mm/mmap.c:2625
+ do_mmap+0x825/0xf50 mm/mmap.c:1412
+ vm_mmap_pgoff+0x1ab/0x270 mm/util.c:520
+ ksys_mmap_pgoff+0x1c3/0x5a0 mm/mmap.c:1458
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-/me shrugs
+Freed by task 3699:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:45
+ __kasan_unpoison_range-0xf/0x10
+ kasan_save_free_info+0x2a/0x40 mm/kasan/generic.c:511
+ ____kasan_slab_free mm/kasan/common.c:236 [inline]
+ ____kasan_slab_free+0x160/0x1c0 mm/kasan/common.c:200
+ kasan_slab_free include/linux/kasan.h:177 [inline]
+ slab_free_hook mm/slub.c:1724 [inline]
+ slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1750
+ slab_free mm/slub.c:3666 [inline]
+ __kmem_cache_free+0xab/0x3b0 mm/slub.c:3679
+ hugetlb_vma_lock_release mm/hugetlb.c:6944 [inline]
+ kref_put include/linux/kref.h:65 [inline]
+ __hugetlb_vma_unlock_write_put mm/hugetlb.c:6959 [inline]
+ __hugetlb_vma_unlock_write_free mm/hugetlb.c:6967 [inline]
+ __unmap_hugepage_range_final+0x2ad/0x340 mm/hugetlb.c:5223
+ unmap_single_vma+0x23d/0x2a0 mm/memory.c:1690
+ zap_page_range+0x38a/0x520 mm/memory.c:1762
+ madvise_dontneed_single_vma mm/madvise.c:793 [inline]
+ madvise_dontneed_free mm/madvise.c:876 [inline]
+ madvise_vma_behavior+0xee8/0x1c50 mm/madvise.c:1015
+ madvise_walk_vmas+0x1c7/0x2b0 mm/madvise.c:1240
+ do_madvise.part.0+0x24a/0x340 mm/madvise.c:1419
+ do_madvise mm/madvise.c:1432 [inline]
+ __do_sys_madvise mm/madvise.c:1432 [inline]
+ __se_sys_madvise mm/madvise.c:1430 [inline]
+ __x64_sys_madvise+0x113/0x150 mm/madvise.c:1430
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-Backporting fixes (whenever they come along) is a problem for the
-LTS kernel maintainer to deal with, not the upstream maintainer.
+The buggy address belongs to the object at ffff88801263a500
+ which belongs to the cache kmalloc-192 of size 192
+The buggy address is located 8 bytes inside of
+ 192-byte region [ffff88801263a500, ffff88801263a5c0)
 
-IMO, the issue right now is that the DAX maintainers seem to have
-little interest in ensuring that the FSDAX infrastructure actually
-works correctly. If anything, they seem to want to make things
-harder for block based filesystems to use pmem devices and hence
-FSDAX. e.g. the direction of the DAX core away from block interfaces
-that filesystems need for their userspace tools to manage the
-storage.
+The buggy address belongs to the physical page:
+page:ffffea0000498e80 refcount:1 mapcount:0 mapping:0000000000000000 index:0xdead000000000100 pfn:0x1263a
+flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000000200 ffff888011841a00 dead000080100010 0000000000000000
+raw: dead000000000100 dead000000000122 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Unmovable, gfp_mask 0x12cc0(GFP_KERNEL|__GFP_NOWARN|__GFP_NORETRY), pid 1, tgid 1 (swapper/0), ts 1916075750, free_ts 0
+ prep_new_page mm/page_alloc.c:2538 [inline]
+ get_page_from_freelist+0x10b5/0x2d50 mm/page_alloc.c:4287
+ __alloc_pages+0x1c7/0x5a0 mm/page_alloc.c:5546
+ alloc_page_interleave+0x1e/0x200 mm/mempolicy.c:2118
+ alloc_pages+0x22f/0x270 mm/mempolicy.c:2280
+ alloc_slab_page mm/slub.c:1794 [inline]
+ allocate_slab+0x213/0x300 mm/slub.c:1939
+ new_slab mm/slub.c:1992 [inline]
+ ___slab_alloc+0xa91/0x1400 mm/slub.c:3185
+ __slab_alloc.constprop.0+0x56/0xa0 mm/slub.c:3284
+ slab_alloc_node mm/slub.c:3369 [inline]
+ __kmem_cache_alloc_node+0x191/0x3e0 mm/slub.c:3442
+ kmalloc_trace+0x22/0x60 mm/slab_common.c:1046
+ kmalloc include/linux/slab.h:582 [inline]
+ kzalloc include/linux/slab.h:718 [inline]
+ kset_create lib/kobject.c:937 [inline]
+ kset_create_and_add+0x4b/0x1a0 lib/kobject.c:980
+ devices_init+0x23/0xe1 drivers/base/core.c:3957
+ driver_init+0x1b/0x48 drivers/base/init.c:26
+ do_basic_setup init/main.c:1411 [inline]
+ kernel_init_freeable+0x4e3/0x782 init/main.c:1634
+ kernel_init+0x1a/0x1d0 init/main.c:1522
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+page_owner free stack trace missing
 
-At what point do we simply say "the experiment failed, FSDAX is
-dead" and remove it from XFS altogether?
+Memory state around the buggy address:
+ ffff88801263a400: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffff88801263a480: 00 00 00 fc fc fc fc fc fc fc fc fc fc fc fc fc
+>ffff88801263a500: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                      ^
+ ffff88801263a580: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
+ ffff88801263a600: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+==================================================================
 
-Cheers,
-
-Dave.
--- 
-Dave Chinner
-david@fromorbit.com
