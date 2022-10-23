@@ -2,91 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 939AE609167
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 08:04:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91DCA60916E
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 08:25:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230010AbiJWGEb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 02:04:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57058 "EHLO
+        id S230029AbiJWGZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 02:25:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbiJWGE3 (ORCPT
+        with ESMTP id S230022AbiJWGZj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 02:04:29 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91509190
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 23:04:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666505060; x=1698041060;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=urzVgSnTrOa0Lulj3LDdQfuLpk5Eu8nvU+tXswVTwt0=;
-  b=L3Jhby/wC9DeII4OaEFI97SnjTGdJPbIgKm122PzgEZ3jFJaQ76aJJRb
-   n6eLuYcd9L5Rhqd6feXvMJViwfVli6uGreMu6KtcZYyqIGlaky8XNrRIf
-   4EE9cE+7vzS7WwUZMAzvGksITonvNE0b9YKwuI2zN/9KzPfWPi3aTE/wQ
-   znd7Efs/mTGQWrf9TZp8B+kcecOM6wMyXbt/OehlQBaJ9vJSmUz30erbA
-   8MzZ+UrzFet6mK4JLi+3eDSuWf+GhZ7HB+cFPFZzVyAakYK3EKpDyU3Nl
-   Gp8iS5PC/LXoD4i+ZYZtNk6aABAvt/guzNQ4Q+oG4EbAcqzC2b0z8rlyP
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10508"; a="286952609"
-X-IronPort-AV: E=Sophos;i="5.95,206,1661842800"; 
-   d="scan'208";a="286952609"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2022 23:04:20 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10508"; a="960072350"
-X-IronPort-AV: E=Sophos;i="5.95,206,1661842800"; 
-   d="scan'208";a="960072350"
-Received: from twinkler-lnx.jer.intel.com ([10.12.87.143])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2022 23:04:17 -0700
-From:   Tomas Winkler <tomas.winkler@intel.com>
-To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <pratyush@kernel.org>,
-        Michael Walle <michael@walle.cc>, linux-mtd@lists.infradead.org
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-kernel@vger.kernel.org,
-        Alexander Usyskin <alexander.usyskin@intel.com>,
-        Tomas Winkler <tomas.winkler@intel.com>
-Subject: [PATCH] mtd: spi-nor: macronix: Add support for mx77l51250f
-Date:   Sun, 23 Oct 2022 09:04:07 +0300
-Message-Id: <20221023060407.1139129-1-tomas.winkler@intel.com>
-X-Mailer: git-send-email 2.37.3
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 23 Oct 2022 02:25:39 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5B054F1A0;
+        Sat, 22 Oct 2022 23:25:38 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id a13so20469368edj.0;
+        Sat, 22 Oct 2022 23:25:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+gKCq5XIPW2RbA8+dolTmjgUeHqY5AM7kH+URnmauJs=;
+        b=KJ0U8DfLDa42PcgMBXYHocV4qMWNRxAHrrMfBqCzJDo0M9joeOc9iAknwrOtx3o4Fk
+         I7yeRFOx+Zt/vj+axNAP9juvC8480eYXdBUcTcRN/YGHfqTksljKaQTuCQLaSUrRwc3Z
+         PUUnwlLWAnW5oNQFYCOnlFRJ3ezH2kt1vH7cEK5Lsc01xMPh3JbvUsg0megN3E5Q02i6
+         5QJja2Eo+py0kUHU0eiTLT9DRnUmm/l1+EsYP37TcfMZambPgZPpr1zKjZOKlDguzSOQ
+         PlO0FaK/ubmPORsHyWg9eup/REjQSSErR+dlBgQ2JMiB79fHTAu8NDL7GN6VpklOzc0H
+         CKPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+gKCq5XIPW2RbA8+dolTmjgUeHqY5AM7kH+URnmauJs=;
+        b=2PKj8V8XgTnjsBSW3L1R0Y2TNjPmXhBh88TXeOjhbO2JrSPm6IYnITPqrz3ItrnbiB
+         a/0mir0V9KEN0n0+sT5PXnRSmAQplRbvo12Z16qpFPWJfdnPxUMwmpS63+7wN4q06jPU
+         RG1RGe8Lqy29RFAbbpOKZ95ZVdftKJsnZns1+Pndl6TFjGCLg8Wu9s83Qsnp0J/GWat8
+         Jec4P0u2+G/x3JQkZJozFqGIIBCMBw0euUnzAWcc4Z72vQAkDD9X5vFFYbt1J7BBmLgV
+         LBIZrbX3X1GfhG3spSoPZehNtC4P6I4tBlA2Is9ddk1/1aob7OtUKLrqNErCJ30g4YEx
+         TzOA==
+X-Gm-Message-State: ACrzQf3grQBvqqZhMGv21gzBZKCVrNqRc56ogLYRPZTwfODY9rfkoicQ
+        ZyF5I87XjRUuADl7+Qrc/OE=
+X-Google-Smtp-Source: AMsMyM435+Nkq3HHE/YtP/ntcXnP0jd57ntCHTtDEOsxtPrNClVovAKBuN4lYfxiiq8UXZ1dDGNHnw==
+X-Received: by 2002:a17:907:d10:b0:79a:a1fe:8be5 with SMTP id gn16-20020a1709070d1000b0079aa1fe8be5mr9526927ejc.125.1666506336562;
+        Sat, 22 Oct 2022 23:25:36 -0700 (PDT)
+Received: from localhost ([185.92.221.13])
+        by smtp.gmail.com with ESMTPSA id c1-20020a17090618a100b007877ad05b32sm13583140ejf.208.2022.10.22.23.25.35
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Sat, 22 Oct 2022 23:25:35 -0700 (PDT)
+From:   Wei Yang <richard.weiyang@gmail.com>
+To:     willy@infradead.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hannes@cmpxchg.org, shakeelb@google.com,
+        Wei Yang <richard.weiyang@gmail.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Vlastimil Babka <vbabka@suse.cz>
+Subject: [PATCH] XArray: fix xas_split_alloc() on checking split limit
+Date:   Sun, 23 Oct 2022 06:25:02 +0000
+Message-Id: <20221023062502.29429-1-richard.weiyang@gmail.com>
+X-Mailer: git-send-email 2.11.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for mx77l51250f spi-nor chips.
+We limit the range on split, so that we can just allocate (sibs + 1)
+nodes to meet the need. This means new order at most could be on the
+next level of old order. But current range check doesn't cover the case
+well.
 
-Datasheet: https://www.macronix.com/Lists/Datasheet/Attachments/8760/MX77L12850F,%203V,%20128Mb,%20v1.2.pdf
+For example, if old order is (3 * XA_CHUNK_SHIFT), new order with
+XA_CHUNK_SHIFT could pass the check now. This means new order is on the
+second level of old order.
 
-Cc: Tudor Ambarus <tudor.ambarus@microchip.com>
-Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
+This patch do the check on shift directly to make sure the range is in
+limit.
+
+Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
+CC: Johannes Weiner <hannes@cmpxchg.org>
+CC: Shakeel Butt <shakeelb@google.com>
+CC: Muchun Song <songmuchun@bytedance.com>
+CC: Vlastimil Babka <vbabka@suse.cz>
 ---
- drivers/mtd/spi-nor/macronix.c | 3 +++
- 1 file changed, 3 insertions(+)
+ lib/xarray.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/mtd/spi-nor/macronix.c b/drivers/mtd/spi-nor/macronix.c
-index d81a4cb2812b..ec7abb64e2bc 100644
---- a/drivers/mtd/spi-nor/macronix.c
-+++ b/drivers/mtd/spi-nor/macronix.c
-@@ -100,6 +100,9 @@ static const struct flash_info macronix_nor_parts[] = {
- 	{ "mx66u2g45g",	 INFO(0xc2253c, 0, 64 * 1024, 4096)
- 		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ)
- 		FIXUP_FLAGS(SPI_NOR_4B_OPCODES) },
-+	{ "mx77l51250f", INFO(0xc2751a, 0, 64 * 1024, 4096)
-+		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ)
-+		FIXUP_FLAGS(SPI_NOR_4B_OPCODES) },
- };
+diff --git a/lib/xarray.c b/lib/xarray.c
+index aa9dc9b9417f..2c13fd9a9cf2 100644
+--- a/lib/xarray.c
++++ b/lib/xarray.c
+@@ -1019,10 +1019,11 @@ void xas_split_alloc(struct xa_state *xas, void *entry, unsigned int order,
+ 		gfp_t gfp)
+ {
+ 	unsigned int sibs = (1 << (order % XA_CHUNK_SHIFT)) - 1;
++	unsigned int xa_shift = order - (order % XA_CHUNK_SHIFT);
+ 	unsigned int mask = xas->xa_sibs;
  
- static void macronix_nor_default_init(struct spi_nor *nor)
+ 	/* XXX: no support for splitting really large entries yet */
+-	if (WARN_ON(xas->xa_shift + 2 * XA_CHUNK_SHIFT < order))
++	if (WARN_ON(xas->xa_shift + XA_CHUNK_SHIFT < xa_shift))
+ 		goto nomem;
+ 	if (xas->xa_shift + XA_CHUNK_SHIFT > order)
+ 		return;
 -- 
-2.37.3
+2.33.1
 
