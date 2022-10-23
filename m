@@ -2,258 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE5A960960B
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 22:15:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46DF660960D
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 22:16:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230434AbiJWUPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 16:15:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60714 "EHLO
+        id S230522AbiJWUQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 16:16:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230146AbiJWUPV (ORCPT
+        with ESMTP id S230146AbiJWUQp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 16:15:21 -0400
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2119.outbound.protection.outlook.com [40.107.22.119])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B33F33405;
-        Sun, 23 Oct 2022 13:15:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=d5feHCWf8TwkLN7Odg5X5tib84rm13Zy2/patnPH8fnC4rrJvC344lBsCA66UsuKsiLWUsNknXC4t0PVLp/CzUvAdIyY8WwizD6US89iI8sWECj4mfmEXWP6kuDaFz3lVDDzccXV8070Q6/TVzPZ43jOH8FjO8ClIXQ9btfp2n2fAGbPVBuE+NP6Car7MCjOO8ufHY4ut6yzFeXWxip799m/xWv8cqQifAAAeZJ5KNp5hdJ/vHnfTiqmEv+KThYPx1KXJK1gywpZoohjvU+9bBtqnnUSnImKKa7VHKY4UakeWGuXnOgB7QZOMkmGOS/4r+v2osLdAV+VjYdU59yHzA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8a+bNiBhbvBWIzILyL2zqAMVuYeSepgmat41qz9Big0=;
- b=i5ZezJItP/7UKq9Pp0wj+Skb9KifD1pz2NDUAbaBSPGHYAcN1AIImydWPhkKeIACWpYVrb9gZtYLiMpNPxK/uoJi04JShepsbSATabm065AJXQJgK+U8AzCAgtpg45KBVvtMUHfSZWzdldF5TO0multS+Z4hV5PMylP+JnF9PJQVaYqYC+e85kbEfzkSPQUgohpZDx3jM+i16rLryMFW+QFQaqR6oddQrPVvTKJM79AupA++ffAoEPAHmW6WObBHGV7fxeTmza6R5EuuwbgVLwRjFQGrcWD39LI0em4tAEvmDfU0EuZWuAfpZqk22zV0u+LloaGuQD5VryjLBXFG2w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
- 217.111.95.7) smtp.rcpttodomain=gmail.com smtp.mailfrom=arri.de; dmarc=none
- action=none header.from=arri.de; dkim=none (message not signed); arc=none
+        Sun, 23 Oct 2022 16:16:45 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AA4B5F105
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 13:16:43 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id o64so8967438oib.12
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 13:16:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=arrigroup.onmicrosoft.com; s=selector1-arrigroup-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8a+bNiBhbvBWIzILyL2zqAMVuYeSepgmat41qz9Big0=;
- b=qlqyMrTGkP4oGL09uHRpnqxMf/fYF+fax1KY/43SAtpDLWN6lE1fU3zJcEWmjrENPWGlLDEHqnkw8VznWDCsSDsYpaWc3qn4rdkojgna7MXwP4OBAam6OsnBPAVq6GMBBUibbsS/vuKnER6ZUVUeSHieiqZY1Sqa2LkDS9Y7yGs=
-Received: from DU2PR04CA0167.eurprd04.prod.outlook.com (2603:10a6:10:2b0::22)
- by AS8PR07MB8186.eurprd07.prod.outlook.com (2603:10a6:20b:375::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.20; Sun, 23 Oct
- 2022 20:15:14 +0000
-Received: from DB5EUR02FT045.eop-EUR02.prod.protection.outlook.com
- (2603:10a6:10:2b0:cafe::df) by DU2PR04CA0167.outlook.office365.com
- (2603:10a6:10:2b0::22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.21 via Frontend
- Transport; Sun, 23 Oct 2022 20:15:14 +0000
-X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 217.111.95.7)
- smtp.mailfrom=arri.de; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arri.de;
-Received-SPF: Fail (protection.outlook.com: domain of arri.de does not
- designate 217.111.95.7 as permitted sender) receiver=protection.outlook.com;
- client-ip=217.111.95.7; helo=mta.arri.de;
-Received: from mta.arri.de (217.111.95.7) by
- DB5EUR02FT045.mail.protection.outlook.com (10.13.59.8) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5746.16 via Frontend Transport; Sun, 23 Oct 2022 20:15:13 +0000
-Received: from n95hx1g2.localnet (192.168.54.14) by mta.arri.de (10.10.18.5)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.32; Sun, 23 Oct
- 2022 22:15:12 +0200
-From:   Christian Eggers <ceggers@arri.de>
-To:     <olteanv@gmail.com>, <Arun.Ramadoss@microchip.com>
-CC:     <andrew@lunn.ch>, <linux-kernel@vger.kernel.org>,
-        <UNGLinuxDriver@microchip.com>, <vivien.didelot@gmail.com>,
-        <linux@armlinux.org.uk>, <Tristram.Ha@microchip.com>,
-        <f.fainelli@gmail.com>, <kuba@kernel.org>, <edumazet@google.com>,
-        <pabeni@redhat.com>, <richardcochran@gmail.com>,
-        <netdev@vger.kernel.org>, <Woojung.Huh@microchip.com>,
-        <davem@davemloft.net>, <b.hutchman@gmail.com>
-Subject: Re: [RFC Patch net-next 0/6] net: dsa: microchip: add gPTP support for LAN937x switch
-Date:   Sun, 23 Oct 2022 22:15:12 +0200
-Message-ID: <1843632.tdWV9SEqCh@n95hx1g2>
-Organization: Arnold & Richter Cine Technik GmbH & Co. Betriebs KG
-In-Reply-To: <d8459511785de2f6d503341ce5f87c6e6064d7b5.camel@microchip.com>
-References: <20221014152857.32645-1-arun.ramadoss@microchip.com> <20221018102924.g2houe3fz6wxlril@skbuf> <d8459511785de2f6d503341ce5f87c6e6064d7b5.camel@microchip.com>
+        d=google.com; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=L1yJrBm1zn8SsyErR4f1/ZvN1KDaJleCkqUq/AOdhu8=;
+        b=jLw2qhpgAORoIlqfrBx49W3wtNa7rjk5WfKxVvNUpbMRZlZ4pSh97O9QGQSNk3Yjdh
+         yIgh1ZN1JJQ3HOgVqxzHyEwgNLUSZEQO2VUbAifhdNbmGZ+it5TS39F/oA08gBsNQypL
+         Te8pj3B8Wm1Tlf5nAWIp2zDE2Qj1gv/6PStyxeltT/Wqb/hGgikHt+TNM5oHLH41kyU7
+         hyoUJLAUbQZNA9Qd4rWCdEjjGGpTYHmbaROGXidatd/KBAefoJkAxKTe4CVf20WSH/hQ
+         KvhVvv6P9h424Bhfcqkx8HrO4VNWMtMi0/9c8qWqsA/qmo9hu0FBVcrp2GUSDjD2AZk+
+         zFrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=L1yJrBm1zn8SsyErR4f1/ZvN1KDaJleCkqUq/AOdhu8=;
+        b=157+RhGBxgHoaFgh4CwFXDnCKuVDD5eO0zc9v/meqyb68BbAW2PU/99axM/2q/ZcAI
+         hWrIuwBQxvXSpluWn7dFYAjmfKNhTBf0DVz2oSN/tar/M2nyks85TPIA2u8xm96z4bCk
+         XaO3mmbBMjnSM3Qqo97vwqwW2hT4lV3Mux+A1MAEC3k2TZURk/sf4CmrH3rKPt/1QOp7
+         W4qgAvn3KKZghGsYEFklaVWgAI9g67LE9FgGJs7uSjFQzyXEESbyE/ECgoqXS0ee9TQY
+         O+MYrtOADGOqOrig4IBPVh48Lv0Yezk7DPcVWkb1SNB9noDyToZMh7nFK0wS3i/oxYCS
+         p6zw==
+X-Gm-Message-State: ACrzQf21Bm/JLCtc09aJ9Tvfx+l/+Eu0HkUHWUNg0TAnbFrKUyYVjdJd
+        T0JH7oSEnbf0GeDhRp4658CKyojhmF1iFw==
+X-Google-Smtp-Source: AMsMyM7ai7/LrlShKt0cDcHy/wofRnIoUy4OQ+EdVaPjQHqH5uKzvbOZHVjZ4EHzAumeshE2t5L6vw==
+X-Received: by 2002:a05:6808:10c6:b0:355:3ff8:b88e with SMTP id s6-20020a05680810c600b003553ff8b88emr17313996ois.209.1666556202691;
+        Sun, 23 Oct 2022 13:16:42 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id m4-20020a4ae3c4000000b00475d676d2d4sm5973709oov.16.2022.10.23.13.16.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 23 Oct 2022 13:16:42 -0700 (PDT)
+Date:   Sun, 23 Oct 2022 13:16:33 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     =?ISO-2022-JP?Q?=1B$B2+=5B=3F=1B=28J?= 
+        <huangjie.albert@bytedance.com>
+cc:     Hugh Dickins <hughd@google.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] mm: hugetlb: support get/set_policy for hugetlb_vm_ops
+In-Reply-To: <CABKxMyNEWVBd8hvZfOHqxgtLi7gts+X53pVvag-zEsvqYqRnhw@mail.gmail.com>
+Message-ID: <b96374a-c5df-6ac3-c598-341eface774@google.com>
+References: <20221012081526.73067-1-huangjie.albert@bytedance.com> <5f7ef6ee-6241-9912-f434-962be53272c@google.com> <CABKxMyNEWVBd8hvZfOHqxgtLi7gts+X53pVvag-zEsvqYqRnhw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Originating-IP: [192.168.54.14]
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB5EUR02FT045:EE_|AS8PR07MB8186:EE_
-X-MS-Office365-Filtering-Correlation-Id: 930ae06e-cada-40ae-9689-08dab5334b6f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Mna+ANBSPY31yVWyd11Yzu6kbOzftmO0R2U0PE696X+w+1d2QFI32krkdWVWdJlyDWX1MotOEkeBT8wyViK/4aPsoLa3wJSn5NCR2PfyG9E7Pi2Ucc7EcuqGyHNy44sTFayFqvcU8sh0RvOkQSvGJpZijJxBhut5tz2Go2UH8UnBKrO1Wt2kUSPc/TJ/mkIx7KImAMwKOxLQv9Yav8GkNPstdAk8/SygaMAKfRLr/1TuShQ3qfi7g0fttvy4B/kSJZw43LoOhQFNEvGN9aAeiW2Ji7P4eXMVAb7HEVJ7SnuCsrh+NTpgg1NJMOzLAC67l5m2ln8fBoopaAHzTb+tZQkelQ4FDHXUnMpptB2MM6q1VY0Snk0GUYtiK6lSf3JYdIf10UGMoxPKgNqJ9nls2EEoVKDpsptylLHSg/Sy31+aO/myXMmYu4sKd3WoDxye3y9I8J2hiqAKqpTT584n0I3CHI1c7TE1ObvwYfbrwS626GOGkIi/eiJRk7zV+UFw30jJkLEpAVeXAoa9gX2DZUUwpR3RztCRrMtwKjZC3U0wbeu9+R79uEPIw+lz275Fvc5jTd7EKRXmCkBCSMf/4PdXi/7r1RJTVRBQqEUl9WmPvCDDUJKE0OeW053zkrXDUMl2vLc6ab+YKWCpdLSaFtKQlmg2pmylrkt+wZa2kuVspiJ4bUzyhBhSNWm72SC5CNDNaYUFk5b/qvTC36cMYnmHZv20Enwrd9oWSDAZczByF/hdgHGPx4YXOTSQ8/TXLtiPkeCIKSaxhPI3gO+FnhtbHv+EsOvpcUXKuzI2wQSeEDFgOdXHWZS9hL39yy/UA1EzMjOu/4AvIa8SBuZzuw==
-X-Forefront-Antispam-Report: CIP:217.111.95.7;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mta.arri.de;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(396003)(136003)(376002)(39840400004)(346002)(451199015)(46966006)(36840700001)(5660300002)(8936002)(9576002)(2906002)(36860700001)(45080400002)(41300700001)(478600001)(40480700001)(54906003)(110136005)(70586007)(356005)(8676002)(4326008)(70206006)(81166007)(9686003)(86362001)(107886003)(450100002)(336012)(26005)(186003)(16526019)(426003)(36916002)(33716001)(316002)(83380400001)(47076005)(82310400005)(39026012)(36900700001);DIR:OUT;SFP:1102;
-X-OriginatorOrg: arri.de
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Oct 2022 20:15:13.9129
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 930ae06e-cada-40ae-9689-08dab5334b6f
-X-MS-Exchange-CrossTenant-Id: e6a73a5a-614d-4c51-b3e3-53b660a9433a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e6a73a5a-614d-4c51-b3e3-53b660a9433a;Ip=[217.111.95.7];Helo=[mta.arri.de]
-X-MS-Exchange-CrossTenant-AuthSource: DB5EUR02FT045.eop-EUR02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR07MB8186
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="-1463760895-794960718-1666556202=:8441"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arun, hi Vladimir,
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-On Tuesday, 18 October 2022, 15:42:41 CEST, Arun.Ramadoss@microchip.com wrote:
-> Thanks Vladimir. I will wait for Christian feedback.
-> 
-> Hi Christian,
-> To test this patch on KSZ9563, we need to increase the number of
-> interrupts port_nirqs in KSZ9893 from 2 to 3. Since the chip id of
-> KSZ9893 and KSZ9563 are same, I had reused the ksz_chip_data same for
-> both chips. But this chip differ with number of port interrupts. So we
-> need to update it. We are generating a new patch for adding the new
-> element in the ksz_chip_data for KSZ9563.
-> For now, you can update the code as below for testing the patch
-> 
-> -- a/drivers/net/dsa/microchip/ksz_common.c
-> +++ b/drivers/net/dsa/microchip/ksz_common.c
-> @@ -1266,7 +1266,7 @@ const struct ksz_chip_data ksz_switch_chips[] =
-> {         
->                  .num_statics = 16,
->                  .cpu_ports = 0x07,      /* can be configured as cpu
-> port */
->                  .port_cnt = 3,          /* total port count */
->  -               .port_nirqs = 2,
->  +               .port_nirqs = 3,
->                  .ops = &ksz9477_dev_ops,
->                  .mib_names = ksz9477_mib_names,
->                  .mib_cnt = ARRAY_SIZE(ksz9477_mib_names),
-> 
-> --
+---1463760895-794960718-1666556202=:8441
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 
-sorry for the delay. I'm currently quite busy with my own work and
-my kids' school stuff. Additionally I had to update my internal kernel tree
-from 5.15.y-stable-rt to the latest netdev which took longer than I
-expected. (Preempt-RT patches tend to become smaller, my ones are only
-getting larger).
+On Wed, 19 Oct 2022, =E9=BB=84=E6=9D=B0 wrote:
+> Hugh Dickins <hughd@google.com> =E4=BA=8E2022=E5=B9=B410=E6=9C=8813=E6=97=
+=A5=E5=91=A8=E5=9B=9B 03:45=E5=86=99=E9=81=93=EF=BC=9A
+> > On Wed, 12 Oct 2022, Albert Huang wrote:
+> > > From: "huangjie.albert" <huangjie.albert@bytedance.com>
+> > >
+> > > implement these two functions so that we can set the mempolicy to
+> > > the inode of the hugetlb file. This ensures that the mempolicy of
+> > > all processes sharing this huge page file is consistent.
+> > >
+> > > In some scenarios where huge pages are shared:
+> > > if we need to limit the memory usage of vm within node0, so I set qem=
+u's
+> > > mempilciy bind to node0, but if there is a process (such as virtiofsd=
+)
+> > > shared memory with the vm, in this case. If the page fault is trigger=
+ed
+> > > by virtiofsd, the allocated memory may go to node1 which  depends on
+> > > virtiofsd.
+> > >
+> > > Signed-off-by: huangjie.albert <huangjie.albert@bytedance.com>
+> >
+> > Aha!  Congratulations for noticing, after all this time.  hugetlbfs
+> > contains various little pieces of code that pretend to be supporting
+> > shared NUMA mempolicy, but in fact there was nothing connecting it up.
+> >
+> > It will be for Mike to decide, but personally I oppose adding
+> > shared NUMA mempolicy support to hugetlbfs, after eighteen years.
+> >
+> > The thing is, it will change the behaviour of NUMA on hugetlbfs:
+> > in ways that would have been sensible way back then, yes; but surely
+> > those who have invested in NUMA and hugetlbfs have developed other
+> > ways of administering it successfully, without shared NUMA mempolicy.
+> >
+> > At the least, I would expect some tests to break (I could easily be
+> > wrong), and there's a chance that some app or tool would break too.
+>=20
+> Hi : Hugh
+>=20
+> Can you share some issues here?
 
-Prior applying the patches, everything seems to build and run fine.
+Sorry, I don't think I can: precisely because it's been such a relief
+to know that hugetlbfs is not in the shared NUMA mempolicy game, I've
+given no thought to what issues it might have if it joined the game.
 
-After applying the patch series, I had some trouble with linking. I had
-configured nearly everything as a module:
+Not much memory is wasted on the unused fields in hugetlbfs_inode_info,
+just a few bytes per inode, that aspect doesn't concern me much.
 
-CONFIG_PTP_1588_CLOCK=m
-CONFIG_NET_DSA=m
-CONFIG_NET_DSA_MICROCHIP_KSZ_COMMON=m    [ksz_switch.ko]
-CONFIG_NET_DSA_MICROCHIP_KSZ9477_I2C=m
-CONFIG_NET_DSA_MICROCHIP_KSZ_PTP=y       [builtin]
+Reference counting of shared mempolicy has certainly been a recurrent
+problem in the past (see mpol_needs_cond_ref() etc): stable nowadays
+I believe; but whether supporting hugetlbfs would cause new problems
+to surface there, I don't know; but whatever, those would just be
+bugs to be fixed.
 
-With this configuration, kbuild doesn't even try to compile ksz_ptp.c:
+/proc/pid/numa_maps does not represent shared NUMA mempolicies
+correctly: not for tmpfs, and would not for hugetlbfs.  I did have
+old patches to fix that, but not patches that I'm ever likely to
+have time to resurrect and present and push.
 
-ERROR: modpost: "ksz_hwtstamp_get" [drivers/net/dsa/microchip/ksz_switch.ko] undefined!
-ERROR: modpost: "ksz_hwtstamp_set" [drivers/net/dsa/microchip/ksz_switch.ko] undefined!
-ERROR: modpost: "ksz_port_txtstamp" [drivers/net/dsa/microchip/ksz_switch.ko] undefined!
-ERROR: modpost: "ksz_ptp_clock_register" [drivers/net/dsa/microchip/ksz_switch.ko] undefined!
-ERROR: modpost: "ksz_port_deferred_xmit" [drivers/net/dsa/microchip/ksz_switch.ko] undefined!
-ERROR: modpost: "ksz_ptp_clock_unregister" [drivers/net/dsa/microchip/ksz_switch.ko] undefined!
-ERROR: modpost: "ksz_ptp_irq_free" [drivers/net/dsa/microchip/ksz_switch.ko] undefined!
-ERROR: modpost: "ksz_tstamp_reconstruct" [drivers/net/dsa/microchip/ksz_switch.ko] undefined!
-ERROR: modpost: "ksz_get_ts_info" [drivers/net/dsa/microchip/ksz_switch.ko] undefined!
-ERROR: modpost: "ksz_ptp_irq_setup" [drivers/net/dsa/microchip/ksz_switch.ko] undefined!
+My main difficulties in tmpfs were with how to deal correctly and
+consistently with non-hugepage-aligned mempolicies when hugepages
+are in use.  In the case of hugetlbfs, it would be simpler, since
+you're always dealing in hugepages of a known size: I recommend
+being as strict as possible, demanding correctly aligned mempolicy
+or else EINVAL.  (That may already be enforced, I've not looked.)
 
-After setting all of the above to 'y', the build process works (but I would prefer
-being able to build as modules). At startup I get a NULL pointer dereference (see below),
-but I haven't tried to track down the source yet (will continue tomorrow).
+But my main concern in extending shared NUMA mempolicy to hugetlbfs
+is exactly what I already said earlier:
 
-regards,
-Christian
+The thing is, it will change the behaviour of NUMA on hugetlbfs:
+in ways that would have been sensible way back then, yes; but surely
+those who have invested in NUMA and hugetlbfs have developed other
+ways of administering it successfully, without shared NUMA mempolicy.
 
-[   17.749629] ksz9477-switch 0-005f: Port2: using phy mode rmii instead of rgmii
-[   17.785998] 8<--- cut here ---
-[   17.789732] Unable to handle kernel NULL pointer dereference at virtual address 00000000
-[   17.798006] [00000000] *pgd=00000000
-[   17.801573] Internal error: Oops: 805 [#1] THUMB2
-[   17.806331] Modules linked in: st_magn_i2c st_sensors_i2c st_magn as73211 usb_storage st_sensors industrialio_triggered_buffer ksz9477_i2c(+) btusb rtc_rv3028 at24 kfifo_b
- spidev leds_gpio leds_pwm led_class iio_trig_sysfs imx6sx_adc industrialio micrel fec imx_napi at25 spi_imx i2c_imx nfsv3 nfs lockd grace sunrpc usb_f_ncm u_ether libcomposi
-[   17.847335] CPU: 0 PID: 201 Comm: udevd Not tainted 6.1.0-rc1+ #198
-[   17.853768] Hardware name: Freescale i.MX6 Ultralite (Device Tree)
-[   17.860060] PC is at ksz_connect_tag_protocol+0x6/0x18
-[   17.865286] LR is at dsa_register_switch+0x5a9/0x780
-[   17.870336] pc : [<c02cc6be>]    lr : [<c03a4f45>]    psr: 60000033
-[   17.876774] sp : c22abc30  ip : ffffffff  fp : 00000000
-[   17.882095] r10: c047660c  r9 : c0476e70  r8 : c5dcb400
-[   17.887412] r7 : c4f31808  r6 : c1ba1f40  r5 : c4f31800  r4 : c1ba1f40
-[   17.894058] r3 : 00000000  r2 : c02d1325  r1 : 00000007  r0 : 00000000
-[   17.900766] Flags: nZCv  IRQs on  FIQs on  Mode SVC_32  ISA Thumb  Segment none
-[   17.908211] Control: 50c53c7d  Table: 822b0059  DAC: 00000051
-[   17.914055] Register r0 information: NULL pointer
-[   17.918929] Register r1 information: non-paged memory
-[   17.924068] Register r2 information: non-slab/vmalloc memory
-[   17.929828] Register r3 information: NULL pointer
-[   17.934613] Register r4 information: slab kmalloc-192 start c1ba1f00 pointer offset 64 size 192
-[   17.943535] Register r5 information: slab kmalloc-64 start c4f31800 pointer offset 0 size 64
-[   17.952131] Register r6 information: slab kmalloc-192 start c1ba1f00 pointer offset 64 size 192
-[   17.961071] Register r7 information: slab kmalloc-64 start c4f31800 pointer offset 8 size 64
-[   17.969665] Register r8 information: slab kmalloc-512 start c5dcb400 pointer offset 0 size 512
-[   17.978434] Register r9 information: non-slab/vmalloc memory
-[   17.984254] Register r10 information: non-slab/vmalloc memory
-[   17.990103] Register r11 information: NULL pointer
-[   17.994977] Register r12 information: non-paged memory
-[   18.000206] Process udevd (pid: 201, stack limit = 0x4afbccb6)
-[   18.006223] Stack: (0xc22abc30 to 0xc22ac000)
-[   18.010658] bc20:                                     00000000 c22abc48 c0c01300 ff8064a4
-[   18.018992] bc40: ffffffff 00000002 c7eee0e4 00000000 00000168 bf981240 bf9810b8 c5dcbc00
-[   18.027527] bc60: 40000113 00000004 c22abc94 c0306423 40000113 c22f8cd0 c7ef70a8 c0306423
-[   18.035857] bc80: c22abc9c c030823d c7ef73cc c22f8cd0 00000007 c2249240 00000000 c7ef70a8
-[   18.044186] bca0: 000008e0 00000007 c051acdd c05414e4 c05414f9 c02cd2fb 00000000 00000000
-[   18.052718] bcc0: 00000000 00000002 ffffffff ffffffff c0fdf020 000000c4 c2249240 c0fdf000
-[   18.061047] bce0: 00000003 c0fdf020 c224928c bf981240 bf9810b8 bf9800ab c22abd24 bf9810b3
-[   18.069375] bd00: 00000010 00000001 00000000 00000000 00000000 00000020 00000000 00000000
-[   18.077893] bd20: 00000000 00000000 00000000 00000000 00000000 bf98002f bf98002b c2249258
-[   18.086222] bd40: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[   18.094611] bd60: 0000ffff 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[   18.102940] bd80: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[   18.111270] bda0: 00000001 00000001 00000000 00000000 00000000 00000000 00000000 00000000
-[   18.119684] bdc0: c32bffc0 c0fdf000 bf980033 bf98201c c0fdf020 c081f0c0 00000026 0000017b
-[   18.128019] bde0: 00000000 c02f8a8d c02f894b 00000000 c0fdf020 bf98201c 00000000 c02993f5
-[   18.136349] be00: 00000001 c0877380 c087748c bf98201c c0fdf020 c0299557 c0fdf064 00000000
-[   18.144739] be20: c0fdf020 bf98201c c080abd8 c081f0c0 c3035d34 c0299853 00000000 c0fdf020
-[   18.153068] be40: bf98201c c02997c7 c080abd8 c029880b c0d17dcc c1878ab0 bf98201c c3035d00
-[   18.153068] be40: bf98201c c02997c7 c080abd8 c029880b c0d17dcc c1878ab0 bf98201c c3035d00
-[   18.161477] be60: 00000000 c0298a93 bf98109f bf9810a0 0000006b bf98201c b6e6a290 c23dba00
-[   18.169808] be80: 00000000 c081f0c0 c23dba00 c0299c1b bf982074 bf982000 b6e6a290 c02f8875
-[   18.178137] bea0: 00000000 bf9b0001 b6e6a290 c0101907 c0c01100 00000cc0 ffffffff 00000008
-[   18.186525] bec0: 00000cc0 c01c1aa7 00006c65 00000000 00000000 c32bfc80 c0138a27 c32bfc80
-[   18.194853] bee0: 00000008 00000040 c32bfc80 c01ab021 00000cc0 ffffffff bf982080 b6e6a290
-[   18.203182] bf00: c32bfc80 0000017b c010027c c0138a41 bf982080 c7fb50e0 00000000 b6e6a290
-[   18.211592] bf20: 00000009 c0139cd1 c22abf38 7fffffff 00000000 00000002 c95aa000 c95ac958
-[   18.219922] bf40: c95aca40 c95aa000 001de8b0 c97764d0 c97762c8 c9733218 00003000 00003080
-[   18.228311] bf60: 00012340 000030e3 00000000 00000000 00000000 00000000 00000000 00012330
-[   18.236640] bf80: 00000749 0000074a 00000279 00000000 00000272 00000000 00000000 b6e7b670
-[   18.244971] bfa0: 0000017b c0100041 00000000 b6e7b670 00000009 b6e6a290 00000000 00000000
-[   18.253373] bfc0: 00000000 b6e7b670 0000017b 0000017b 00000000 b6e7b670 00020000 00000000
-[   18.261710] bfe0: b6e6a290 befaa918 b6e66a23 b6ed4c22 40000030 00000009 00000000 00000000
-[   18.270240]  ksz_connect_tag_protocol from dsa_register_switch+0x5a9/0x780
-[   18.277243]  dsa_register_switch from ksz_switch_register+0x417/0x48c
-[   18.283797]  ksz_switch_register from ksz9477_i2c_probe+0x79/0xfce [ksz9477_i2c]
-[   18.291583]  ksz9477_i2c_probe [ksz9477_i2c] from i2c_device_probe+0x143/0x15a
-[   18.299016]  i2c_device_probe from really_probe+0xb1/0x188
-[   18.304597]  really_probe from driver_probe_device+0x2b/0x88
-[   18.310354]  driver_probe_device from __driver_attach+0x8d/0x9e
-[   18.316438]  __driver_attach from bus_for_each_dev+0x2b/0x42
-[   18.322196]  bus_for_each_dev from bus_add_driver+0x6f/0x128
-[   18.327955]  bus_add_driver from driver_register+0x59/0x8e
-[   18.333537]  driver_register from i2c_register_driver+0x35/0x54
-[   18.339642]  i2c_register_driver from do_one_initcall+0x2b/0xbc
-[   18.345677]  do_one_initcall from do_init_module+0x2d/0x1a0
-[   18.351347]  do_init_module from sys_finit_module+0x65/0x6c
-[   18.357018]  sys_finit_module from ret_fast_syscall+0x1/0x5c
-[   18.362838] Exception stack(0xc22abfa8 to 0xc22abff0)
-[   18.367982] bfa0:                   00000000 b6e7b670 00000009 b6e6a290 00000000 00000000
-[   18.376311] bfc0: 00000000 b6e7b670 0000017b 0000017b 00000000 b6e7b670 00020000 00000000
-[   18.384717] bfe0: b6e6a290 befaa918 b6e66a23 b6ed4c22
-[   18.389862] Code: 0093 6a03 2000 4a02 (601a) 4a02
-[   18.394903] ---[ end trace 0000000000000000 ]---
+At the least, I would expect some tests to break (I could easily be
+wrong), and there's a chance that some app or tool would break too.
 
+It's a risk, and a body of complication, that I would keep away from
+myself.  The shared mempolicy rbtree: makes sense, but no madvise()
+since has implemented such a tree, to attach its advice to ranges
+of the shared object rather than to vma.
 
-
+Hugh
+---1463760895-794960718-1666556202=:8441--
