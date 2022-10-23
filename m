@@ -2,33 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42A70609216
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 11:49:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD5E1609217
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 11:49:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229982AbiJWJtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 05:49:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33254 "EHLO
+        id S230138AbiJWJtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 05:49:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbiJWJtF (ORCPT
+        with ESMTP id S230141AbiJWJtM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 05:49:05 -0400
+        Sun, 23 Oct 2022 05:49:12 -0400
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95E0358148
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 02:49:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A686BCEE
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 02:49:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
         s=mail; t=1666518543; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:references; bh=I1xloFSZ18jc2PJn2boeaypvLilS6j8tqfekKDLMabQ=;
-        b=r8ZlM8tmt0FZBA5TldfCn1kmsDwlF79qaiaAyY2rzpccPcSPZFUkNqj+bBpu+LM/vhrdct
-        cCjdl9iUELiyDD+MtUv6Bm4tR5hM3RTz48nYgaeXKEX/2iALS52lfYC8EQRaL7ueHElg60
-        /T0SICPfm3F4jsX1bIW0RWOwE/m/j+c=
+         in-reply-to:in-reply-to:references:references;
+        bh=DrQfVq26IcEBKrFEtoBOOzSjXtsyVbn1/l3uB8Ev+4g=;
+        b=kgb2K0N3EQq0luk0lhhXzMYrHyme9zzOFDWu8wKPFBkuqSry3SqyL4AWNrB6xM4PJipOup
+        W7VMdgy9C95YrZ3A2iF07l0yi13+V8bPgVW4uhAIZCCt0ulYqqiZeiHEnRvS3mKmGSfVeX
+        R2XF3LuDwrlh8XMbKOjQluhhNRCDo5w=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Lee Jones <lee@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH v3 00/28] mfd: Remove #ifdef guards for PM functions
-Date:   Sun, 23 Oct 2022 10:48:24 +0100
-Message-Id: <20221023094852.8035-1-paul@crapouillou.net>
+Subject: [PATCH v3 01/28] mfd: 88pm80x: Remove #ifdef guards for PM related functions
+Date:   Sun, 23 Oct 2022 10:48:25 +0100
+Message-Id: <20221023094852.8035-2-paul@crapouillou.net>
+In-Reply-To: <20221023094852.8035-1-paul@crapouillou.net>
+References: <20221023094852.8035-1-paul@crapouillou.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -40,94 +43,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lee,
+Use the new EXPORT_GPL_SIMPLE_DEV_PM_OPS() and pm_sleep_ptr() macros
+to handle the .suspend/.resume callbacks.
 
-Here's my V3 patchset that removes #ifdef guards around PM functions.
+These macros allow the suspend and resume functions to be automatically
+dropped by the compiler when CONFIG_SUSPEND is disabled, without having
+to use #ifdef guards.
 
-V2's patch [01/30] which introduced the new PM export macros have been
-merged, so it's been dropped from this patchset.
+This has the advantage of always compiling these functions in,
+independently of any Kconfig option. Thanks to that, bugs and other
+regressions are subsequently easier to catch.
 
-That's pretty much the only change since V2. The other change is that
-the patch to the 'intel_soc_pmic' driver was dropped since the driver
-itself was dropped.
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+---
+ drivers/mfd/88pm800.c | 2 +-
+ drivers/mfd/88pm805.c | 2 +-
+ drivers/mfd/88pm80x.c | 5 +----
+ 3 files changed, 3 insertions(+), 6 deletions(-)
 
-All the remaining 28 patches are untouched since V2.
-
-Cheers,
--Paul
-
-Paul Cercueil (28):
-  mfd: 88pm80x: Remove #ifdef guards for PM related functions
-  mfd: aat2870: Remove #ifdef guards for PM related functions
-  mfd: adp5520: Remove #ifdef guards for PM related functions
-  mfd: max8925-i2c: Remove #ifdef guards for PM related functions
-  mfd: mt6397-irq: Remove #ifdef guards for PM related functions
-  mfd: pcf50633: Remove #ifdef guards for PM related functions
-  mfd: rc5t583-irq: Remove #ifdef guards for PM related functions
-  mfd: stpmic1: Remove #ifdef guards for PM related functions
-  mfd: ucb1x00: Remove #ifdef guards for PM related functions
-  mfd: 88pm860x: Remove #ifdef guards for PM related functions
-  mfd: mcp-sa11x0: Remove #ifdef guards for PM related functions
-  mfd: sec: Remove #ifdef guards for PM related functions
-  mfd: sm501: Remove #ifdef guards for PM related functions
-  mfd: tc6387xb: Remove #ifdef guards for PM related functions
-  mfd: tps6586x: Remove #ifdef guards for PM related functions
-  mfd: wm8994: Remove #ifdef guards for PM related functions
-  mfd: max77620: Remove #ifdef guards for PM related functions
-  mfd: t7l66xb: Remove #ifdef guards for PM related functions
-  mfd: arizona: Remove #ifdef guards for PM related functions
-  mfd: max14577: Remove #ifdef guards for PM related functions
-  mfd: max77686: Remove #ifdef guards for PM related functions
-  mfd: motorola-cpcap: Remove #ifdef guards for PM related functions
-  mfd: sprd-sc27xx: Remove #ifdef guards for PM related functions
-  mfd: stmfx: Remove #ifdef guards for PM related functions
-  mfd: stmpe: Remove #ifdef guards for PM related functions
-  mfd: tc3589x: Remove #ifdef guards for PM related functions
-  mfd: tc6393xb: Remove #ifdef guards for PM related functions
-  mfd: intel-lpss: Remove #ifdef guards for PM related functions
-
- drivers/mfd/88pm800.c             |  2 +-
- drivers/mfd/88pm805.c             |  2 +-
- drivers/mfd/88pm80x.c             |  5 +----
- drivers/mfd/88pm860x-core.c       |  6 ++----
- drivers/mfd/aat2870-core.c        |  8 +++-----
- drivers/mfd/adp5520.c             |  6 ++----
- drivers/mfd/arizona-core.c        | 19 +++++++------------
- drivers/mfd/arizona-i2c.c         |  2 +-
- drivers/mfd/arizona-spi.c         |  2 +-
- drivers/mfd/intel-lpss-acpi.c     |  4 +---
- drivers/mfd/intel-lpss-pci.c      |  2 +-
- drivers/mfd/intel-lpss.c          | 15 +++++++++------
- drivers/mfd/intel-lpss.h          | 28 +---------------------------
- drivers/mfd/max14577.c            |  6 ++----
- drivers/mfd/max77620.c            |  9 +++------
- drivers/mfd/max77686.c            |  6 ++----
- drivers/mfd/max8925-i2c.c         |  7 +++----
- drivers/mfd/mcp-sa11x0.c          |  6 +-----
- drivers/mfd/motorola-cpcap.c      |  6 ++----
- drivers/mfd/mt6397-irq.c          |  6 +-----
- drivers/mfd/pcf50633-core.c       | 22 +---------------------
- drivers/mfd/pcf50633-irq.c        | 13 ++++++++-----
- drivers/mfd/rc5t583-irq.c         |  7 ++-----
- drivers/mfd/sec-core.c            |  7 +++----
- drivers/mfd/sm501.c               | 10 ++--------
- drivers/mfd/sprd-sc27xx-spi.c     |  7 +++----
- drivers/mfd/stmfx.c               |  6 ++----
- drivers/mfd/stmpe-i2c.c           |  4 +---
- drivers/mfd/stmpe-spi.c           |  4 +---
- drivers/mfd/stmpe.c               |  8 ++------
- drivers/mfd/stpmic1.c             |  6 ++----
- drivers/mfd/t7l66xb.c             |  9 ++-------
- drivers/mfd/tc3589x.c             |  7 +++----
- drivers/mfd/tc6387xb.c            |  9 ++-------
- drivers/mfd/tc6393xb.c            |  9 ++-------
- drivers/mfd/tps6586x.c            |  6 +-----
- drivers/mfd/ucb1x00-core.c        |  7 +++----
- drivers/mfd/wm8994-core.c         |  6 ++----
- include/linux/mfd/pcf50633/core.h |  6 ++----
- include/linux/mfd/stmfx.h         |  2 --
- 40 files changed, 89 insertions(+), 213 deletions(-)
-
+diff --git a/drivers/mfd/88pm800.c b/drivers/mfd/88pm800.c
+index eaf9845633b4..409f0996ae1d 100644
+--- a/drivers/mfd/88pm800.c
++++ b/drivers/mfd/88pm800.c
+@@ -599,7 +599,7 @@ static int pm800_remove(struct i2c_client *client)
+ static struct i2c_driver pm800_driver = {
+ 	.driver = {
+ 		.name = "88PM800",
+-		.pm = &pm80x_pm_ops,
++		.pm = pm_sleep_ptr(&pm80x_pm_ops),
+ 		},
+ 	.probe = pm800_probe,
+ 	.remove = pm800_remove,
+diff --git a/drivers/mfd/88pm805.c b/drivers/mfd/88pm805.c
+index ada6c513302b..724ac4947e6f 100644
+--- a/drivers/mfd/88pm805.c
++++ b/drivers/mfd/88pm805.c
+@@ -254,7 +254,7 @@ static int pm805_remove(struct i2c_client *client)
+ static struct i2c_driver pm805_driver = {
+ 	.driver = {
+ 		.name = "88PM805",
+-		.pm = &pm80x_pm_ops,
++		.pm = pm_sleep_ptr(&pm80x_pm_ops),
+ 		},
+ 	.probe = pm805_probe,
+ 	.remove = pm805_remove,
+diff --git a/drivers/mfd/88pm80x.c b/drivers/mfd/88pm80x.c
+index be036e7e787b..ac4f08565f29 100644
+--- a/drivers/mfd/88pm80x.c
++++ b/drivers/mfd/88pm80x.c
+@@ -129,7 +129,6 @@ int pm80x_deinit(void)
+ }
+ EXPORT_SYMBOL_GPL(pm80x_deinit);
+ 
+-#ifdef CONFIG_PM_SLEEP
+ static int pm80x_suspend(struct device *dev)
+ {
+ 	struct i2c_client *client = to_i2c_client(dev);
+@@ -153,10 +152,8 @@ static int pm80x_resume(struct device *dev)
+ 
+ 	return 0;
+ }
+-#endif
+ 
+-SIMPLE_DEV_PM_OPS(pm80x_pm_ops, pm80x_suspend, pm80x_resume);
+-EXPORT_SYMBOL_GPL(pm80x_pm_ops);
++EXPORT_GPL_SIMPLE_DEV_PM_OPS(pm80x_pm_ops, pm80x_suspend, pm80x_resume);
+ 
+ MODULE_DESCRIPTION("I2C Driver for Marvell 88PM80x");
+ MODULE_AUTHOR("Qiao Zhou <zhouqiao@marvell.com>");
 -- 
 2.35.1
 
