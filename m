@@ -2,93 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A2E9609542
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 19:50:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE6F4609551
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 20:05:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230341AbiJWRuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 13:50:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58690 "EHLO
+        id S230387AbiJWSFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 14:05:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230331AbiJWRuC (ORCPT
+        with ESMTP id S230383AbiJWSFj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 13:50:02 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65D5C326DA;
-        Sun, 23 Oct 2022 10:50:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666547401; x=1698083401;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=mG1GlUqs4r9Epxshg2wIumi9qx2R46z0xR8xpQ4Cc9Q=;
-  b=S6jBkfiD+hYozeP71/MAF1XMyZkQdBz2j2CBqRti5n+ccRlu+8ZZ1Oja
-   FiYobh1GNYEqP6taWldDRMyUqgwHTrV04e2S2jsKMCJ3tUwglEDZshvAG
-   k+7U09WFSgFLtVBqw7LmNGqcLZ+NCPmkiqg5IDNgrzAhbaJR8vQF/by2M
-   lqHLOPWRxlOYxDx2mcXTOH4HfX338MyN4hjuHBembnpyre5FwtxX2m/AF
-   fXoSygsXHomdSqFaIPZ77BoposLwZ5w+Za7GW2qhiJpBilEyWf2i0nADC
-   EzmNQxxjcHJupn2lHrEGA1W4bhbG3aKIECxW1vltxlspe3XvUaUCqB2S8
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="306018039"
-X-IronPort-AV: E=Sophos;i="5.95,207,1661842800"; 
-   d="scan'208";a="306018039"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2022 10:50:01 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="773599326"
-X-IronPort-AV: E=Sophos;i="5.95,207,1661842800"; 
-   d="scan'208";a="773599326"
-Received: from unknown (HELO rajath-NUC10i7FNH..) ([10.223.165.88])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2022 10:49:58 -0700
-From:   Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-To:     jic23@kernel.org, lars@metafoo.de, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, ihkose@gmail.com
-Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, rajat.khandelwal@intel.com,
-        Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-Subject: [PATCH v3] dt-bindings: iio: dac: Change the I2C slave address for ds4422/4424 to its correct value
-Date:   Mon, 24 Oct 2022 23:20:08 +0530
-Message-Id: <20221024175008.196714-1-rajat.khandelwal@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+        Sun, 23 Oct 2022 14:05:39 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8205B4D81F;
+        Sun, 23 Oct 2022 11:05:36 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id y72so8825238oia.3;
+        Sun, 23 Oct 2022 11:05:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vIkYcAuPNC2VZr6XaUkofhf+zx2CPN+Q3gq7bfVVVgs=;
+        b=VsYKXxm6CHaiX7K0eZCBPSinJHT5CS1DpO5xKAxZtl5m3onGgfI6XLFNVK80bwQfUh
+         P9Cc2YGKGX51Hv5eAYHzx7g2EzarZRw3FbnV5lMkBVHLdKR8qxKHP7s38JzNXHl8AErZ
+         +Exsj1o9K6pLbZHiJUkZ+fVVoj1hqNMrUt9veLfWnuB3iwgoHuQhnFDZXftpX4yeX6ZS
+         KMpgN0kqP/VGVUtcU+vVzn6zSgMIEEg2ay8VRvPc2dBr6sKpCuMX8P8Xie/dX5vIcu/4
+         NIGZ1ABBPD0+iJFoMvDQpICH6EUF6ZZfcWIQUeMzt0rFJ0EDaSDb9Y5IzBBZYlXGw7z6
+         IbKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vIkYcAuPNC2VZr6XaUkofhf+zx2CPN+Q3gq7bfVVVgs=;
+        b=CbiwfTM5720UAHGjgOKgFLPU4pkaTee+TzKCXozOozg4TLrmsX+23yR5rAV/UUINqZ
+         86VOCEu9TG/OKYRNPXCgfdOZukiB+eRhEGsC1H92dShAd7edy2QLEF0k+uX4cVax9/A+
+         E8wQb5PciCbxS37X4OssQoIj/tIywETV1dZDQEUKtrfqNo+ocED/I8Z1bO79ebIeA/q4
+         RefEGaSba0sHtsx5uv8kqnnEquNYolzYfvrYGi7hAUbpzCJoCgF4LXmk4SugAYBbzelR
+         8t0Jj69iDAykwlpUjmTpBvIocsG2OTZ+W4DkUZAvnK4/4p1sRYUJGBxT9QiWt0u5QmGC
+         K4FA==
+X-Gm-Message-State: ACrzQf1LK5ea9FmfYqSm72EM9z95W23Ywy2sODnBp35xrLYxXdFDaLL7
+        /QCKnns71cxkFrG72aFMgac=
+X-Google-Smtp-Source: AMsMyM5PSsB0AcGAdGpyC3coarqx8OUdSt76jr0koLYMpbPyZ/A7bhAuuH5WiKYhSnGWuaDCLQDnbw==
+X-Received: by 2002:a05:6808:171b:b0:34d:444a:fc1e with SMTP id bc27-20020a056808171b00b0034d444afc1emr29013446oib.85.1666548335793;
+        Sun, 23 Oct 2022 11:05:35 -0700 (PDT)
+Received: from ?IPV6:2603:8081:140c:1a00:1e0:e60:c33:b344? (2603-8081-140c-1a00-01e0-0e60-0c33-b344.res6.spectrum.com. [2603:8081:140c:1a00:1e0:e60:c33:b344])
+        by smtp.gmail.com with ESMTPSA id em40-20020a0568705ba800b001226d2100f2sm13037314oab.33.2022.10.23.11.05.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 23 Oct 2022 11:05:35 -0700 (PDT)
+Message-ID: <30ff25c4-ce66-eac4-eaa2-64c0db203a19@gmail.com>
+Date:   Sun, 23 Oct 2022 13:05:34 -0500
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [for-next PATCH v2 1/2] RDMA/rxe: Remove unnecessary mr testing
+Content-Language: en-US
+To:     Li Zhijian <lizhijian@fujitsu.com>,
+        Zhu Yanjun <zyjzyj2000@gmail.com>
+Cc:     jgg@ziepe.ca, leon@kernel.org, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1666338764-2-1-git-send-email-lizhijian@fujitsu.com>
+ <1666338764-2-2-git-send-email-lizhijian@fujitsu.com>
+ <CAD=hENeGMKri0nYMtcu98K2j3D+ZBkxO6fFX5cvvyJsEghrrmQ@mail.gmail.com>
+ <1846f2e1-ff13-5fa2-240f-fd7749921ce2@fujitsu.com>
+From:   Bob Pearson <rpearsonhpe@gmail.com>
+In-Reply-To: <1846f2e1-ff13-5fa2-240f-fd7749921ce2@fujitsu.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_24_48,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The datasheet states that the slave address for the device is 0x20
-when the pins A0 and A1 are ground. The DT binding has been using
-0x10 as the value and I think it should be 0x20 as per datasheet.
+On 10/21/22 20:09, Li Zhijian wrote:
+> 
+> 
+> On 21/10/2022 22:39, Zhu Yanjun wrote:
+>> On Fri, Oct 21, 2022 at 3:53 PM Li Zhijian <lizhijian@fujitsu.com> wrote:
+>>> Before the testing, we already passed it to rxe_mr_copy() where mr could
+>>> be dereferenced. so this checking is not exactly correct.
+>>>
+>>> I tried to figure out the details how/when mr could be NULL, but failed
+>>> at last. Add a WARN_ON(!mr) to that path to tell us more when it
+>>> happends.
+>> If I get you correctly, you confronted a problem,
+> Not exactly,  I removed the mr checking since i think this checking is not correct.
+> the newly added WARN_ON(!mr) is the only once place where the mr can be NULL but not handled correctly.
+> At least with/without this patch, once WARN_ON(!mr) is triggered, kernel will go something wrong.
+> 
+> so i want to place this  WARN_ON(!mr) to point to the problem.
+> 
+> Thanks
+> Zhijian
+> 
+>>   but you can not figure it out.
+>> So you send it upstream as a patch?
+>>
+>> I am not sure if it is a good idea.
+>>
+>> Zhu Yanjun
+>>
+>>> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
+>>> ---
+>>>   drivers/infiniband/sw/rxe/rxe_resp.c | 4 ++--
+>>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/drivers/infiniband/sw/rxe/rxe_resp.c b/drivers/infiniband/sw/rxe/rxe_resp.c
+>>> index ed5a09e86417..218c14fb07c6 100644
+>>> --- a/drivers/infiniband/sw/rxe/rxe_resp.c
+>>> +++ b/drivers/infiniband/sw/rxe/rxe_resp.c
+>>> @@ -778,6 +778,7 @@ static enum resp_states read_reply(struct rxe_qp *qp,
+>>>          if (res->state == rdatm_res_state_new) {
+>>>                  if (!res->replay) {
+>>>                          mr = qp->resp.mr;
+>>> +                       WARN_ON(!mr);
+>>>                          qp->resp.mr = NULL;
+>>>                  } else {
+>>>                          mr = rxe_recheck_mr(qp, res->read.rkey);
+>>> @@ -811,8 +812,7 @@ static enum resp_states read_reply(struct rxe_qp *qp,
+>>>
+>>>          rxe_mr_copy(mr, res->read.va, payload_addr(&ack_pkt),
+>>>                      payload, RXE_FROM_MR_OBJ);
+>>> -       if (mr)
+>>> -               rxe_put(mr);
+>>> +       rxe_put(mr);
+>>>
+>>>          if (bth_pad(&ack_pkt)) {
+>>>                  u8 *pad = payload_addr(&ack_pkt) + payload
+>>> -- 
+>>> 2.31.1
+>>>
+> 
 
-Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
----
+Li is correct that the only way mr could be NULL is if qp->resp.mr == NULL. So the
+'if (mr)' is not needed if that is the case. The read_reply subroutine is reached
+from a new rdma read operation after going through check_rkey or from a previous
+rdma read operations from get_req if qp->resp.res != NULL or from a duplicate request
+where the previous responder resource is found. In all these cases the mr is set.
+Initially in check_rkey where if it can't find the mr it causes an RKEY_VIOLATION.
+Thereafter the rkey is stored in the responder resources and looked up for each
+packet to get an mr or cause an RKEY_VIOLATION. So the mr can't be NULL. I think
+you can leave out the WARN and just drop the if (mr).
 
-v3:
-1. Subject prefix added
-2. Improvised 'examples:'
-
- Documentation/devicetree/bindings/iio/dac/maxim,ds4424.yaml | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/iio/dac/maxim,ds4424.yaml b/Documentation/devicetree/bindings/iio/dac/maxim,ds4424.yaml
-index 264fa7c5fe3a..e7c7c103d1dd 100644
---- a/Documentation/devicetree/bindings/iio/dac/maxim,ds4424.yaml
-+++ b/Documentation/devicetree/bindings/iio/dac/maxim,ds4424.yaml
-@@ -36,9 +36,9 @@ examples:
-         #address-cells = <1>;
-         #size-cells = <0>;
- 
--        dac@10 {
-+        dac@20 {
-             compatible = "maxim,ds4424";
--            reg = <0x10>; /* When A0, A1 pins are ground */
-+            reg = <0x20>; /* When A0, A1 pins are ground */
-             vcc-supply = <&vcc_3v3>;
-         };
-     };
--- 
-2.34.1
+Bob
 
