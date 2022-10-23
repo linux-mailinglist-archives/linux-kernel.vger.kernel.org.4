@@ -2,119 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A6FA6095FB
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 22:06:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 765006095FC
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 22:06:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231137AbiJWUG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 16:06:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40560 "EHLO
+        id S231128AbiJWUGq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 16:06:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230494AbiJWUGP (ORCPT
+        with ESMTP id S229956AbiJWUGf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 16:06:15 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F9DE71733
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 13:06:05 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id s22-20020a17090a075600b002130d2ad62aso715604pje.2
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 13:06:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QLIdpQp6TVzjpS8r5yHeQWkGEgLDOWAXXPd+wr6BFps=;
-        b=W/zZcv3w/UDpaPdd/s8jBz2WkbIIeCIby8DcPlgihtqoFanbHmNb5C9SklB+vJ3ImT
-         6bCBuTD7HnmvHz/Uy3ueZZOYPZ2xEXlXa6NTmtXoISttykHJJKbrl/3pIqsIpS9TPo7o
-         WiCrPy613uZQtgr3+OgBmfx1n1IjPIslnIDHKMHREiWXsslm02lmKTe36WMQyJmi6p7D
-         LdRrZEC+i9VnYwmbEM7HomFHI9SirmbEolrlLngZphlEF8I8rEddQtfVa96bwKLy6yRO
-         gCnZXVqRYL/cgcudnEYN5+DtOtTH1k1x9aYY+bWk8VrqSiXV7IWpkpDTNszVGIf7Y+vq
-         sFZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QLIdpQp6TVzjpS8r5yHeQWkGEgLDOWAXXPd+wr6BFps=;
-        b=DhY4EDNCcl5k16tfu9y6achaclvKAzGYHssOnQqL9OJ8Gc2HziEgsfLKQWCWN+48AH
-         oJ0gYexn2emN2Vva/MguBEhXC4LEBm6Ty7IRpeZSfUIUtje+gs93falq7gnkpHWomGa+
-         7EVFL6UmjLviwjKS4Px2FDpa7X5yz1xQ7579QovOZxxjoAlm0Rb5yI7h+fUuD3sX4Mt3
-         fMw/+5yZ/7uesKQRu9Ent3Eis2w3gaSLy41m0uNdetCnyn4ZGQnHQLsFjjyhqK8C4Hl7
-         Fmq4PGJAv5V3xKLdeUByQEQNzd6XCtHT74sS2r9IVIokIieLL8s8l/N5QrXV0pFyImi4
-         xqQQ==
-X-Gm-Message-State: ACrzQf2QKvCtM9bnTDrs92cPiPSJMnCilNP2NRiUyQ49/FwMYcGimcMf
-        7YpF99buUgGuKuja5tQNlchYqY+XyplfWTRw
-X-Google-Smtp-Source: AMsMyM76z+ArrodjsY+vLZ+DlKBCAOY6y4xwBmftR2uiJlyzZscotR3jMfVyyrkzSRbKapgoB9B41A==
-X-Received: by 2002:a17:902:ce86:b0:182:498f:afdb with SMTP id f6-20020a170902ce8600b00182498fafdbmr30602563plg.12.1666555564908;
-        Sun, 23 Oct 2022 13:06:04 -0700 (PDT)
-Received: from uftrace.. ([14.5.161.231])
-        by smtp.gmail.com with ESMTPSA id e13-20020aa798cd000000b0056bc0578c7dsm1130649pfm.110.2022.10.23.13.06.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Oct 2022 13:06:04 -0700 (PDT)
-From:   Kang Minchul <tegongkang@gmail.com>
-To:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Pavel Skripkin <paskripkin@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Kang Minchul <tegongkang@gmail.com>
-Subject: [PATCH 4/4] staging: r8188eu: remove unnecessary variable in rtw_ap
-Date:   Mon, 24 Oct 2022 05:05:32 +0900
-Message-Id: <20221023200532.259276-5-tegongkang@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221023200532.259276-1-tegongkang@gmail.com>
-References: <20221023200532.259276-1-tegongkang@gmail.com>
+        Sun, 23 Oct 2022 16:06:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0028071BF8;
+        Sun, 23 Oct 2022 13:06:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 198BAB80DBE;
+        Sun, 23 Oct 2022 20:06:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 679C3C433C1;
+        Sun, 23 Oct 2022 20:06:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666555581;
+        bh=uqQeIGbgba67C2y76k/W/YmS022AmFS+rOo0N3FprIY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VTMY8/lid3FUYKetdO4brSgNfte9VlQ6FtYGIsgLkdWdCZfyxFJlMMGOBZ0rEzDgf
+         VTz1AwAcUVZCKJKW98ooGY7xxg+XzDQf5hFXYC0Jst8ZGInbB1AIuOsL8xDJ9Ln3+i
+         ya42qHIWSVSFnOf/xWyy1emwC4L4onp12EEonehufT9+yJmwS4JTOO6M4Bg2p9yRLX
+         NLrf4AeL6iyDZYi1gKv0KiGrMjvfVpMKrW7oY8bsVXe7lO8mWDRZTI/BsvGeTUnTaV
+         qXnZuJ8y8duP16OOqwV7RvIV43jIQhG0kLaJutCPOVlbvowCl3EtDcnrR1uVfhuJfJ
+         bri5WI/fNd3jw==
+Date:   Sun, 23 Oct 2022 23:06:14 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+Cc:     dave.hansen@linux.intel.com, md.iqbal.hossain@intel.com,
+        haitao.huang@intel.com, linux-sgx@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] x86/sgx: Reduce delay and interference of enclave release
+Message-ID: <Y1WemizNZgFOVxja@kernel.org>
+References: <06a5f478d3bfaa57954954c82dd5d4040450171d.1666130846.git.reinette.chatre@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <06a5f478d3bfaa57954954c82dd5d4040450171d.1666130846.git.reinette.chatre@intel.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Return 0 directly instead of storing it in a variable.
-This can prevent cocci warning as follows:
+On Tue, Oct 18, 2022 at 03:42:47PM -0700, Reinette Chatre wrote:
+> commit 8795359e35bc ("x86/sgx: Silence softlockup detection when
+> releasing large enclaves") introduced a cond_resched() during enclave
+> release where the EREMOVE instruction is applied to every 4k enclave
+> page. Giving other tasks an opportunity to run while tearing down a
+> large enclave placates the soft lockup detector but Iqbal found
+> that the fix causes a 25% performance degradation of a workload
+> run using Gramine.
+> 
+> Gramine maintains a 1:1 mapping between processes and SGX enclaves.
+> That means if a workload in an enclave creates a subprocess then
+> Gramine creates a duplicate enclave for that subprocess to run in.
+> The consequence is that the release of the enclave used to run
+> the subprocess can impact the performance of the workload that is
+> run in the original enclave, especially in large enclaves when
+> SGX2 is not in use.
+> 
+> The workload run by Iqbal behaves as follows:
+> Create enclave (enclave "A")
+> /* Initialize workload in enclave "A" */
+> Create enclave (enclave "B")
+> /* Run subprocess in enclave "B" and send result to enclave "A" */
+> Release enclave (enclave "B")
+> /* Run workload in enclave "A" */
+> Release enclave (enclave "A")
+> 
+> The performance impact of releasing enclave "B" in the above scenario
+> is amplified when there is a lot of SGX memory and the enclave size
+> matches the SGX memory. When there is 128GB SGX memory and an enclave
+> size of 128GB, from the time enclave "B" starts the 128GB SGX memory
+> is oversubscribed with a combined demand for 256GB from the two
+> enclaves.
+> 
+> Before commit 8795359e35bc ("x86/sgx: Silence softlockup detection when
+> releasing large enclaves") enclave release was done in a tight loop
+> without giving other tasks a chance to run. Even though the system
+> experienced soft lockups the workload (run in enclave "A") obtained
+> good performance numbers because when the workload started running
+> there was no interference.
+> 
+> Commit 8795359e35bc ("x86/sgx: Silence softlockup detection when
+> releasing large enclaves") gave other tasks opportunity to run while an
+> enclave is released. The impact of this in this scenario is that while
+> enclave "B" is released and needing to access each page that belongs
+> to it in order to run the SGX EREMOVE instruction on it, enclave "A"
+> is attempting to run the workload needing to access the enclave
+> pages that belong to it. This causes a lot of swapping due to the
+> demand for the oversubscribed SGX memory. Longer latencies are
+> experienced by the workload in enclave "A" while enclave "B" is
+> released.
+> 
+> Improve the performance of enclave release while still avoiding the
+> soft lockup detector with two enhancements:
+> - Only call cond_resched() after XA_CHECK_SCHED iterations.
+> - Use the xarray advanced API to keep the xarray locked for
+>   XA_CHECK_SCHED iterations instead of locking and unlocking
+>   at every iteration.
+> 
+> This batching solution is copied from sgx_encl_may_map() that
+> also iterates through all enclave pages using this technique.
+> 
+> With this enhancement the workload experiences a 5%
+> performance degradation when compared to a kernel without
+> commit 8795359e35bc ("x86/sgx: Silence softlockup detection when
+> releasing large enclaves"), an improvement to the reported 25%
+> degradation, while still placating the soft lockup detector.
+> 
+> Scenarios with poor performance are still possible even with these
+> enhancements. For example, short workloads creating sub processes
+> while running in large enclaves. Further performance improvements
+> are pursued in user space through avoiding to create duplicate enclaves
+> for certain sub processes, and using SGX2 that will do lazy allocation
+> of pages as needed so enclaves created for sub processes start quickly
+> and release quickly.
+> 
+> Fixes: 8795359e35bc ("x86/sgx: Silence softlockup detection when releasing large enclaves")
+> Reported-by: Md Iqbal Hossain <md.iqbal.hossain@intel.com>
+> Tested-by: Md Iqbal Hossain <md.iqbal.hossain@intel.com>
+> Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
+> ---
+> 
+> I do not know if this qualifies as stable material.
+> 
+>  arch/x86/kernel/cpu/sgx/encl.c | 22 ++++++++++++++++++----
+>  1 file changed, 18 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/x86/kernel/cpu/sgx/encl.c b/arch/x86/kernel/cpu/sgx/encl.c
+> index 1ec20807de1e..f7365c278525 100644
+> --- a/arch/x86/kernel/cpu/sgx/encl.c
+> +++ b/arch/x86/kernel/cpu/sgx/encl.c
+> @@ -682,9 +682,12 @@ void sgx_encl_release(struct kref *ref)
+>  	struct sgx_encl *encl = container_of(ref, struct sgx_encl, refcount);
+>  	struct sgx_va_page *va_page;
+>  	struct sgx_encl_page *entry;
+> -	unsigned long index;
+> +	unsigned long count = 0;
+> +
+> +	XA_STATE(xas, &encl->page_array, PFN_DOWN(encl->base));
+>  
+> -	xa_for_each(&encl->page_array, index, entry) {
+> +	xas_lock(&xas);
+> +	xas_for_each(&xas, entry, PFN_DOWN(encl->base + encl->size  - 1)) {
 
-  Unneeded variable: "ret". Return "0" on line 1031
+I would add to declarations:
 
-Signed-off-by: Kang Minchul <tegongkang@gmail.com>
----
- drivers/staging/r8188eu/core/rtw_ap.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+unsigned long nr_pages = PFN_DOWN(encl->base + encl->size  - 1);
 
-diff --git a/drivers/staging/r8188eu/core/rtw_ap.c b/drivers/staging/r8188eu/core/rtw_ap.c
-index 24eb8dce9bfe..9eaf345e6a00 100644
---- a/drivers/staging/r8188eu/core/rtw_ap.c
-+++ b/drivers/staging/r8188eu/core/rtw_ap.c
-@@ -1020,7 +1020,6 @@ u8 ap_free_sta(struct adapter *padapter, struct sta_info *psta,
- int rtw_sta_flush(struct adapter *padapter)
- {
- 	struct list_head *phead, *plist;
--	int ret = 0;
- 	struct sta_info *psta = NULL;
- 	struct sta_priv *pstapriv = &padapter->stapriv;
- 	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
-@@ -1028,7 +1027,7 @@ int rtw_sta_flush(struct adapter *padapter)
- 	u8 bc_addr[ETH_ALEN] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
- 
- 	if ((pmlmeinfo->state & 0x03) != WIFI_FW_AP_STATE)
--		return ret;
-+		return 0;
- 
- 	spin_lock_bh(&pstapriv->asoc_list_lock);
- 	phead = &pstapriv->asoc_list;
-@@ -1051,7 +1050,7 @@ int rtw_sta_flush(struct adapter *padapter)
- 
- 	associated_clients_update(padapter, true);
- 
--	return ret;
-+	return 0;
- }
- 
- /* called > TSR LEVEL for USB or SDIO Interface*/
--- 
-2.34.1
+Makes this more readable.
 
+>  		if (entry->epc_page) {
+>  			/*
+>  			 * The page and its radix tree entry cannot be freed
+> @@ -699,9 +702,20 @@ void sgx_encl_release(struct kref *ref)
+>  		}
+>  
+>  		kfree(entry);
+> -		/* Invoke scheduler to prevent soft lockups. */
+> -		cond_resched();
+> +		/*
+> +		 * Invoke scheduler on every XA_CHECK_SCHED iteration
+> +		 * to prevent soft lockups.
+> +		 */
+> +		if (!(++count % XA_CHECK_SCHED)) {
+> +			xas_pause(&xas);
+> +			xas_unlock(&xas);
+> +
+> +			cond_resched();
+> +
+> +			xas_lock(&xas);
+> +		}
+>  	}
+
+        WARN_ON(count != nr_pages);
+
+> +	xas_unlock(&xas);
+>  
+>  	xa_destroy(&encl->page_array);
+>  
+> -- 
+> 2.34.1
+> 
+
+BR, Jarkko
