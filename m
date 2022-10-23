@@ -2,147 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89621609431
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 17:01:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13D7B60941F
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 16:57:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229981AbiJWPBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 11:01:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48600 "EHLO
+        id S230328AbiJWO5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 10:57:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbiJWPBK (ORCPT
+        with ESMTP id S230251AbiJWO5I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 11:01:10 -0400
-X-Greylist: delayed 599 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 23 Oct 2022 08:01:05 PDT
-Received: from sphereful.davidgow.net (sphereful.davidgow.net [IPv6:2404:9400:4:0:216:3eff:fee2:5328])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11ADE6DFB9;
-        Sun, 23 Oct 2022 08:01:04 -0700 (PDT)
-Received: by sphereful.davidgow.net (Postfix, from userid 119)
-        id DDD841C034B; Sun, 23 Oct 2022 22:44:31 +0800 (AWST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
-        s=201606; t=1666536271;
-        bh=0N3kW6+aW6yf731DNq7Jvf9k5028oUiR6Y+A1mOBVuM=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=qZQMZXNJVI8cu2fqJ8s+VifEjTH7T+mB7MZIvCMXHV/StTln2AnZaPhSEDAc1k2t7
-         UN3GwmE4P48z8HXtfUt/F7uhCZ0o/FLz58Zso+Wd61BZYmmy8kivq5SNlSb2xDFKoG
-         gADKguUBGhzY5AyEwQnGdwMB3c2VzeJLZhYg0gyc8vr4U2FoHush59qAyAXy7CMjFH
-         efZ2g9yySnZI8P9XuOftRSHN3/5lcoKphDyCSyIM0U1r5B1Hw3r7FF3dXhsnxxpb6S
-         C81CPnIqYghAzvknZWIWMnTxWA0umNsttWzA91SOWRTOVTN4eZwrJPNUz90UV52Euh
-         528fAt44KzE8I/kOLDfoElLPg+f9aaY5VCTMfCZwMZ7NBbVQM/OnlXyBR2R6T0lGt9
-         C3gWiGmdJcdZnfzv+HiWzYL8VaMQLXfsT4F8nzDz5GaE/6sBk85rXTSf2O+imZxMyK
-         Dl4I6XjgvmRjgmG57vn75g7ss4ogXT6KynLOnLJC4Ns0lKPDFUyY0vdduKiQtHFA02
-         I8jLb2K5yRij+04jE7jhEyt9/MVk+mSZwnxW+YzgypQADGBQOlo1uqH4fMp0UFvUI+
-         7YcWlgoqk+Hhu5BYMkTRJoicvLfGWSCYutKBhzUSFzedo+zSxwDs4dppNpVIJqq4qO
-         5s/6YivG5sKDuefiPG+s4rqg=
+        Sun, 23 Oct 2022 10:57:08 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15A9A5C97B;
+        Sun, 23 Oct 2022 07:57:04 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id c7-20020a05600c0ac700b003c6cad86f38so8165812wmr.2;
+        Sun, 23 Oct 2022 07:57:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5N970xLEDqJdJWYY9u+esmQAZbPzXuz4v0lBTGeL7gI=;
+        b=Us+2SC+vgzvovV5/vrRo1YZQE9myy0R2LEpEag5Wv4SVx03oi+JgRIcIA37EeSdcVR
+         mr+1XjDVCdRZu1n+S6QCYLIk5L014PjmqdZOa1gbcBBs4z+AZ8Uj24kEKEaW0WsghnZw
+         g/38o4K6TtxWrVuWo1HHPZGMH3aaBlT5gdyqswXLbrFCyvNvhnx6tjIarELDlAuNKHoM
+         4UtnAMOrsX4K2F6QEqjkBK4Yz/3aHmhbeE/1PwZD+3/nDh5+om0LLDsU3iLBEBPxazTH
+         JCIzuNCjzbc3rABz7g7++X4MYYrtu0pACpYkgZR3KBq8eTkL8HCE8iypjJuaihv6voCJ
+         usTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5N970xLEDqJdJWYY9u+esmQAZbPzXuz4v0lBTGeL7gI=;
+        b=mYloidtfQkua5fEgAbN8BmWY0UeI8xxa5wwkOiUmBWtduStfDTWJdKaK2Zs0deBjlo
+         VXTzAy5PX1/ZopeCS9h3bk6qSYeEpVJNJUl7wQvVq1Hc4+ffn7g2KVLAstu0Q8r62FnI
+         22CIDvUdEZkXXUMbi8dz1gGa54dOEVOgufuYDoNAhIeYDyVPuAWB86+5EBdp+OJSVgJr
+         ZDdYuUuQP95gt8WQDj2KT+6jFWKeRd+P4dh5k6rfMnEt21A/jL1sv+uS0mwgMkjnR3sb
+         F6h87dxZbqBlrulQAWXGyS/lnnZ/vT3EHsYv9M87IcEctWOo17NtFDKaJJ0a6OiMgEdj
+         QkDg==
+X-Gm-Message-State: ACrzQf0MecAMFqvMVqx+EQvLGGYZN3XXgZQv/qd/v0w0Cy7NPO0zABlP
+        RIC8tW2pmh6vkbJhbkSpmig=
+X-Google-Smtp-Source: AMsMyM6GM6lQttmKPWFkHc3/nspixgQvUJqM4+/klmp9IODFfN5LgygB/74btqrG6jctv8Y0X7ibdQ==
+X-Received: by 2002:a05:600c:4e8a:b0:3c6:da7c:8d71 with SMTP id f10-20020a05600c4e8a00b003c6da7c8d71mr37231818wmq.16.1666537022619;
+        Sun, 23 Oct 2022 07:57:02 -0700 (PDT)
+Received: from localhost (94.197.10.75.threembb.co.uk. [94.197.10.75])
+        by smtp.gmail.com with ESMTPSA id l1-20020a7bc341000000b003b497138093sm8219656wmj.47.2022.10.23.07.57.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 23 Oct 2022 07:57:02 -0700 (PDT)
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     paul@crapouillou.net, mturquette@baylibre.com, sboyd@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     zhouyu@wanyeetech.com, linux-mips@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1 0/5] Add support for X1000 audio clocks
+Date:   Sun, 23 Oct 2022 15:56:48 +0100
+Message-Id: <20221023145653.177234-1-aidanmacdonald.0x0@gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-Received: from [IPV6:2001:8003:8d1e:3000::a57] (unknown [IPv6:2001:8003:8d1e:3000::a57])
-        by sphereful.davidgow.net (Postfix) with ESMTPSA id 9108C1C032E;
-        Sun, 23 Oct 2022 22:44:26 +0800 (AWST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
-        s=201606; t=1666536266;
-        bh=0N3kW6+aW6yf731DNq7Jvf9k5028oUiR6Y+A1mOBVuM=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=J1AOaqB/mQVVbj4/+5Cemtg6Iksw+0uW+e/SPZ0sD7G9xudOd6WV0NctrHT9LKsuN
-         WGEYXbQLI+p/3ArcshYYjJkdMys8iHcL4zVc3hESxSYOCHceSk9eJU4NiTW77rXwWK
-         lqyymSi7n7SOB3Rm+RdjCvi/C3c0SksUYfwop0nzgrvpKp8KQB/icLPNl8+z332T2x
-         U0uNM/C6sGhd5dvlvJ0VfJhXstm/JPZ3pdm3FgV27pUlLmEd09hVMh8BeizDn6frQg
-         5W+bK15gzCMIhopvDlCeZeOWDyuP09Vx2qviCZ7acHWL+LVl8iyMgJiI6foZe9FTHx
-         LXEbt9jaUekl4vA+kdB0m3vKEsushptELPPmz4lAbSy6M9eezsl0wGVkXc7Kv64sg9
-         LZrUhi9AqtvYReZBKU2FFxJIiOz2WMvIrifxOajkdcTRl3yt1vdLH+aGdpQzZ3fdMr
-         Rw1eCf2T0FiozSqekcDZelbUnUNZj3FI6jSc89yVgdWP7Ed+yQQQ6Y4jAdxPFj0IUv
-         Ino5abpnEbe0OTA3FotIj/TjafZ3rT+abac6Ks68xMOVkGZLaydFU9E7/0X8t32CD+
-         SRVZr3AW/dQSO3/5LZQK0U3Y5zEp592DDa3bIdh0lFhZDaVaRfqYtL5gfq7NRh/j+A
-         1aID6ZM69pPk+Bf6akmP+ilw=
-Message-ID: <98a8be05-0882-fa8f-846d-b8f74f141041@davidgow.net>
-Date:   Sun, 23 Oct 2022 22:44:22 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Yu Zhao <yuzhao@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>, Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        page-reclaim@google.com, Brian Geffon <bgeffon@google.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Donald Carr <d@chaos-reins.com>,
-        =?UTF-8?Q?Holger_Hoffst=c3=a4tte?= <holger@applied-asynchrony.com>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>
-References: <20220815071332.627393-1-yuzhao@google.com>
- <20220815071332.627393-9-yuzhao@google.com>
- <Y0go8wWtdcyH1+Ch@hirez.programming.kicks-ass.net>
- <CAOUHufa9+FTO3Pv-5jC-e3S5goPsUGu-5KcPVHa4bWb0X+d2ug@mail.gmail.com>
- <CAHk-=wj1rc2t5noMtVOgu8XXeTM4KiggEub9PdcexxeQrYPZvA@mail.gmail.com>
- <Y1FXpHdyvXjrjbLw@hirez.programming.kicks-ass.net>
- <CAHk-=whQchubuDpRGFabhmcZuzdt13OOF8wznXb+Dbi3GzBQhQ@mail.gmail.com>
- <Y1GZjPO+szk7X0wP@hirez.programming.kicks-ass.net>
- <CAHk-=wikUaRM5H_y1Bc+QyvGi40dKDL8fnCTyz7ECbwK7aHNPQ@mail.gmail.com>
- <Y1IUMDJFScAMrCS5@casper.infradead.org>
- <CAHk-=wjrpH1+6cQQjTO6p-96ndBMiOnNH098vhS2jLybxD+7gA@mail.gmail.com>
-From:   David Gow <david@davidgow.net>
-Subject: Re: [PATCH v14 08/14] mm: multi-gen LRU: support page table walks
-In-Reply-To: <CAHk-=wjrpH1+6cQQjTO6p-96ndBMiOnNH098vhS2jLybxD+7gA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 22/10/22 à 00:50, Linus Torvalds a écrit :
-> On Thu, Oct 20, 2022 at 8:38 PM Matthew Wilcox<willy@infradead.org>  wrote:
->> On Thu, Oct 20, 2022 at 07:10:46PM -0700, Linus Torvalds wrote:
->>> We got rid of i386 support back in 2012. Maybe it's time to get rid of
->>> i486 support in 2022?
->> Arnd suggested removing i486 last year and got a bit of pushback.
->> The most convincing to my mind was Maciej:
-> Hmm. Maciej added to the cc.
-> 
-> I suspect we can just say "oh, well, use LTS kernels".
-> 
+The first three patches of this series modify the Ingenic CGU driver to
+allow the X1000's I2S divider to be modeled as a PLL clock. This is not
+really true -- it's just a fractional divider -- but doing it this way
+maximizes code reuse and avoids the need for a custom clock. (Thanks to
+Zhou Yanjie & Paul Cercueil for the idea.)
 
-To jump in early on the inevitable pile-on, I'm doing my occasional 
-32-bit x86 KUnit test runs on an old 486 DX/2. Now, this is _mostly_ 
-just a party trick -- and there are lots of people running 32-bit builds 
-under QEMU et al -- but personally, the only non-amd64-capable x86 
-machines I have lying around are all 486 class (including a new Vortex86 
-board).
+The last two patches actually add the X1000 SoC's audio clocks.
 
-(But, at the very least, I can confirm that the latest torvalds/master 
-does build, run, and pass KUnit tests on a real 486 at the moment.)
+Aidan MacDonald (5):
+  clk: ingenic: Make PLL clock "od" field optional
+  clk: ingenic: Make PLL clock enable_bit and stable_bit optional
+  clk: ingenic: Add .set_rate_hook() for PLL clocks
+  dt-bindings: ingenic,x1000-cgu: Add audio clocks
+  clk: ingenic: Add X1000 audio clocks
 
-So while dropping i486 wouldn't affect anything particularly important 
-for me, it'd be a minor inconvenience and make me a bit sad.
+ drivers/clk/ingenic/cgu.c                     | 45 +++++++++---
+ drivers/clk/ingenic/cgu.h                     | 17 +++--
+ drivers/clk/ingenic/x1000-cgu.c               | 69 +++++++++++++++++++
+ include/dt-bindings/clock/ingenic,x1000-cgu.h |  4 ++
+ 4 files changed, 120 insertions(+), 15 deletions(-)
 
-That being said, I have no objection to dropping support for 486SX CPUs 
-and CONFIG_MATH_EMULATION.
+-- 
+2.38.1
 
-Cheers,
--- David
