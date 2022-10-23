@@ -2,105 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DABC609336
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 15:03:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2F66609360
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 15:11:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230179AbiJWNDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 09:03:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54680 "EHLO
+        id S230150AbiJWNLy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 09:11:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230071AbiJWNDP (ORCPT
+        with ESMTP id S230199AbiJWNLt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 09:03:15 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A3546FC62
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 06:03:14 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id l9so2218790qkk.11
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 06:03:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qCqTq1pPm7I1xT+HP3x7Se2GkYTdlef4gn4o/9jUS4M=;
-        b=YNsmxiEW05f7vureKtD3GIu/M0sQYQdaMrrwIf6mnF/z7x9n0vLKEyZow5ISH3fLw0
-         qimM6ZMB4mr8xtx7Joc6bYavH2aov1Ou/6r3/uEH8LQ2JQuxn8JDysYgXLgn00ZoTjaY
-         0NwNsTc12HXmFOtnZrIZwp/FY1uyPczqnhgsz03aLWyeXz312oGl/temG0bia+uOjEng
-         0tiOngCOa9GofYuU/OxCqKCWbzwEiVPlAMpiGgCuEpej9c4vaduS//hwRmKmf8LM4rSE
-         UIr+xpBs8PN+traIS+2eXmu6449j8VOJxbFh02q2A2Ce/e4EIjw1isdN3gPJSgNezOTs
-         RSIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qCqTq1pPm7I1xT+HP3x7Se2GkYTdlef4gn4o/9jUS4M=;
-        b=luNnkSKCd12b9JIuvxanvUeRO31Hr20B80TwopxjbJEMB2rb5sFySRP02M/iYnTxvu
-         UBgp8ZW1hlm23fTMcA/CbRn6FOEYp2PNQ3nboEdgqHD5swB9QzgFeZqs6XCy5mrYhbnJ
-         EjOV3zKJS0uVb7kX2JiCJb1auzNdR/h6F9alfdaWWUfrR83cXdTsR35Tgelnq6TEu2MI
-         2K2Kt947Tv6f50LXZfTBg5t1grhIwCGXMDBBPvVNYo6Kvbv6oE5B5d37wm6vkaNY9l1q
-         9NJ0nSOASFSOi/BgslnshHMshL0SDeGvTF20QXq3hZghjhZafmRFOZQa4tsP26R3kUMo
-         bJjQ==
-X-Gm-Message-State: ACrzQf2iGhdca+k9ii2UcG20HKtWdSYk0qhiB7OjV8a1CzGqoS4qs0Mu
-        qpNZupAxnpahar3zYZf4aTnXHg==
-X-Google-Smtp-Source: AMsMyM40XDGsIZJWzkb5SuUumlq4zOOEJ8g8fTWMm8cwssRfGiZ+jCoN9I4BStll1vbKizur0c8WCA==
-X-Received: by 2002:a05:620a:448c:b0:6ce:a013:7fa3 with SMTP id x12-20020a05620a448c00b006cea0137fa3mr19244655qkp.532.1666530193368;
-        Sun, 23 Oct 2022 06:03:13 -0700 (PDT)
-Received: from [192.168.1.8] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id cf17-20020a05622a401100b0039c7b9522ecsm11288064qtb.35.2022.10.23.06.03.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 23 Oct 2022 06:03:12 -0700 (PDT)
-Message-ID: <29dfeb9c-0bca-4550-1cfc-7a044f92bd87@linaro.org>
-Date:   Sun, 23 Oct 2022 09:03:10 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 4/4] arm64: dts: qcom: Add device tree for Sony Xperia 10
- IV
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        ~postmarketos/upstreaming@lists.sr.ht
-Cc:     martin.botka@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kees Cook <keescook@chromium.org>,
-        Tony Luck <tony.luck@intel.com>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-References: <20221022194218.210941-1-konrad.dybcio@somainline.org>
- <20221022194218.210941-4-konrad.dybcio@somainline.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221022194218.210941-4-konrad.dybcio@somainline.org>
+        Sun, 23 Oct 2022 09:11:49 -0400
+X-Greylist: delayed 216 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 23 Oct 2022 06:11:32 PDT
+Received: from jari.cn (unknown [218.92.28.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E4D08625D2;
+        Sun, 23 Oct 2022 06:11:31 -0700 (PDT)
+Received: by ajax-webmail-localhost.localdomain (Coremail) ; Sun, 23 Oct
+ 2022 21:07:00 +0800 (GMT+08:00)
+X-Originating-IP: [182.148.15.254]
+Date:   Sun, 23 Oct 2022 21:07:00 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   "KaiLong Wang" <wangkailong@jari.cn>
+To:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] net: replace ternary operator with min()
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT6.0.1 build 20210329(c53f3fee)
+ Copyright (c) 2002-2022 www.mailtech.cn
+ mispb-4e503810-ca60-4ec8-a188-7102c18937cf-zhkzyfz.cn
+Content-Transfer-Encoding: base64
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+Message-ID: <4e5c1182.347.18404f42721.Coremail.wangkailong@jari.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: AQAAfwAXIW90PFVjtuVoAA--.1430W
+X-CM-SenderInfo: 5zdqwypdlo00nj6mt2flof0/1tbiAQAIB2FEYxtOnAACsD
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=2.2 required=5.0 tests=BAYES_00,RCVD_IN_PBL,RDNS_NONE,
+        T_SPF_HELO_PERMERROR,T_SPF_PERMERROR,XPRIO autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/10/2022 15:42, Konrad Dybcio wrote:
-> Add support for Sony Xperia 10 IV, a.k.a PDX225. This device is a part
-> of the SoMC SM6375 Murray platform and currently it is the only
-> device based on that board, so no -common DTSI is created until (if?)
-> other Murray devices appear.
-> 
-> This commit brings support for:
-> * USB (only USB2 for now)
-> * Display via simplefb
-
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-Best regards,
-Krzysztof
-
+Rml4IHRoZSBmb2xsb3dpbmcgY29jY2ljaGVjayB3YXJuaW5nOgoKbmV0L2lwdjQvaWdtcC5jOjI2
+MjE6IFdBUk5JTkcgb3Bwb3J0dW5pdHkgZm9yIG1pbigpCm5ldC9pcHY0L2lnbXAuYzoyNTc0OiBX
+QVJOSU5HIG9wcG9ydHVuaXR5IGZvciBtaW4oKQpuZXQvaXB2NC9pcF9zb2NrZ2x1ZS5jOjI4NTog
+V0FSTklORyBvcHBvcnR1bml0eSBmb3IgbWluKCkKClNpZ25lZC1vZmYtYnk6IEthaUxvbmcgV2Fu
+ZyA8d2FuZ2thaWxvbmdAamFyaS5jbj4KLS0tCiBuZXQvaXB2NC9pZ21wLmMgICAgICAgIHwgNCAr
+Ky0tCiBuZXQvaXB2NC9pcF9zb2NrZ2x1ZS5jIHwgMiArLQogMiBmaWxlcyBjaGFuZ2VkLCAzIGlu
+c2VydGlvbnMoKyksIDMgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvbmV0L2lwdjQvaWdtcC5j
+IGIvbmV0L2lwdjQvaWdtcC5jCmluZGV4IDgxYmUzZTBmMGU3MC4uNzkzOWQ4ZmViYjJiIDEwMDY0
+NAotLS0gYS9uZXQvaXB2NC9pZ21wLmMKKysrIGIvbmV0L2lwdjQvaWdtcC5jCkBAIC0yNTcxLDcg
+KzI1NzEsNyBAQCBpbnQgaXBfbWNfbXNmZ2V0KHN0cnVjdCBzb2NrICpzaywgc3RydWN0IGlwX21z
+ZmlsdGVyICptc2YsCiAJfSBlbHNlIHsKIAkJY291bnQgPSBwc2wtPnNsX2NvdW50OwogCX0KLQlj
+b3B5Y291bnQgPSBjb3VudCA8IG1zZi0+aW1zZl9udW1zcmMgPyBjb3VudCA6IG1zZi0+aW1zZl9u
+dW1zcmM7CisJY29weWNvdW50ID0gbWluKGNvdW50LCBtc2YtPmltc2ZfbnVtc3JjKTsKIAlsZW4g
+PSBmbGV4X2FycmF5X3NpemUocHNsLCBzbF9hZGRyLCBjb3B5Y291bnQpOwogCW1zZi0+aW1zZl9u
+dW1zcmMgPSBjb3VudDsKIAltc2Zfc2l6ZSA9IElQX01TRklMVEVSX1NJWkUoY29weWNvdW50KTsK
+QEAgLTI2MTgsNyArMjYxOCw3IEBAIGludCBpcF9tY19nc2ZnZXQoc3RydWN0IHNvY2sgKnNrLCBz
+dHJ1Y3QgZ3JvdXBfZmlsdGVyICpnc2YsCiAJZ3NmLT5nZl9mbW9kZSA9IHBtYy0+c2Ztb2RlOwog
+CXBzbCA9IHJ0bmxfZGVyZWZlcmVuY2UocG1jLT5zZmxpc3QpOwogCWNvdW50ID0gcHNsID8gcHNs
+LT5zbF9jb3VudCA6IDA7Ci0JY29weWNvdW50ID0gY291bnQgPCBnc2YtPmdmX251bXNyYyA/IGNv
+dW50IDogZ3NmLT5nZl9udW1zcmM7CisJY29weWNvdW50ID0gbWluKGNvdW50LCBnc2YtPmdmX251
+bXNyYyk7CiAJZ3NmLT5nZl9udW1zcmMgPSBjb3VudDsKIAlmb3IgKGkgPSAwOyBpIDwgY29weWNv
+dW50OyBpKyspIHsKIAkJc3RydWN0IHNvY2thZGRyX3N0b3JhZ2Ugc3M7CmRpZmYgLS1naXQgYS9u
+ZXQvaXB2NC9pcF9zb2NrZ2x1ZS5jIGIvbmV0L2lwdjQvaXBfc29ja2dsdWUuYwppbmRleCA2ZTE5
+Y2FkMTU0ZjUuLjE5YWQzNzg5NzIyNyAxMDA2NDQKLS0tIGEvbmV0L2lwdjQvaXBfc29ja2dsdWUu
+YworKysgYi9uZXQvaXB2NC9pcF9zb2NrZ2x1ZS5jCkBAIC0yODIsNyArMjgyLDcgQEAgaW50IGlw
+X2Ntc2dfc2VuZChzdHJ1Y3Qgc29jayAqc2ssIHN0cnVjdCBtc2doZHIgKm1zZywgc3RydWN0IGlw
+Y21fY29va2llICppcGMsCiAJCQkvKiBPdXIgY2FsbGVyIGlzIHJlc3BvbnNpYmxlIGZvciBmcmVl
+aW5nIGlwYy0+b3B0ICovCiAJCQllcnIgPSBpcF9vcHRpb25zX2dldChuZXQsICZpcGMtPm9wdCwK
+IAkJCQkJICAgICBLRVJORUxfU09DS1BUUihDTVNHX0RBVEEoY21zZykpLAotCQkJCQkgICAgIGVy
+ciA8IDQwID8gZXJyIDogNDApOworCQkJCQkgICAgIG1pbihlcnIsIDQwKSk7CiAJCQlpZiAoZXJy
+KQogCQkJCXJldHVybiBlcnI7CiAJCQlicmVhazsKLS0gCjIuMjUuMQo=
