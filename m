@@ -2,98 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37744609759
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 01:47:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36C4F60975E
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 01:54:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbiJWXri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 19:47:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36828 "EHLO
+        id S229828AbiJWXyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 19:54:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbiJWXrg (ORCPT
+        with ESMTP id S229631AbiJWXyT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 19:47:36 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91B645B529
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 16:47:35 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 1FEB45C0079;
-        Sun, 23 Oct 2022 19:47:33 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Sun, 23 Oct 2022 19:47:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=themaw.net; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1666568853; x=
-        1666655253; bh=SEexSojSEsUM9N+Ow1IsnK/nrCRGJAod2sk6WmNyEY8=; b=u
-        scImcc4baXfoAo7sanlkEY0oma7MmwICTGh2rMQUCOJWzREg5uTmyh22Ib1rOWAV
-        LD4BwZtJcB3fQxNlA9c42qgqcLPo85BiK6fLBrwpAyWPdNJwXgWX4PfOANw6kV2w
-        +IkJU3LylCb6gLJkj4jtcQE5irk5P6glzpI5t3+tDQfUHpXNCnp+9X8UihRrOOpK
-        0jfq6p145p2bjA8mC+LW8mzIQWowHRpmorCslCxvBANGOhiRLlb0XLn+oIGzCe1W
-        gp06zX/uW6+v8iAdJBYrp1qdDq0oUCr6GE72IVBB6kfEtU5fVZuzyK4SBP3aK4Cg
-        p9nncJrGayva2yfAiz8uA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1666568853; x=
-        1666655253; bh=SEexSojSEsUM9N+Ow1IsnK/nrCRGJAod2sk6WmNyEY8=; b=C
-        jXF3MD78vwE6SMK1UpBfwJspF38pIe1olEegUi755yykdh6cdjFCkhVvMUhWzwiF
-        dCC9Xg2XQJur8j4bW79D//QJ2igpx9LJd6oUV/H6cUGNf2V1NxvRi/KbfNeBFpgT
-        lX527PpULX9kRpBQbkDwa56nxJRRXVc+ZH0+t7eq5D8VueB//C8GVhktmUn3lYXZ
-        +vb7N5e/4CERFhS2E3lUD9i4q4oVDpKA8KW84was73ByB7//C1ZYWm+CQ2pTGx+o
-        unX5NFGRadt3CpppCU9/4hJ9S7d5ezTeCNnEEF+ddwXKmY4E2YaUI9Nl2jHsdZOd
-        1RTF1RgyE3AqwHnTcTlSQ==
-X-ME-Sender: <xms:k9JVY1OV3HuhQg05BFoqLxSRR2kC3nl6ack6_QVSfW8RBzYLvEeVBg>
-    <xme:k9JVY39CjtVKqC9SYgpBNEBfmCni76OStohdmA-EpqQL0FJdGwfvDih6l6WrVyDgl
-    WS4dD92TVw8>
-X-ME-Received: <xmr:k9JVY0TCxCO_2-rb-E3flhODKtQtli96Uol7jrCe1Es8LJl7Jh-epWq4Ib_uZoei8dsFAXpOpG3icCXi1kty4RdBu0BY30dwotdl26bZb9Jmy3lqytY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrgedtfedgvdejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepkfffgggfuffvvehfhfgjtgfgsehtjeertddtfeejnecuhfhrohhmpefkrghn
-    ucfmvghnthcuoehrrghvvghnsehthhgvmhgrfidrnhgvtheqnecuggftrfgrthhtvghrnh
-    eptddvvefhueefleeigfekjeekhfdtjedtlefhffelgffhtddthefhueelieefkefgnecu
-    ffhomhgrihhnpehshiiikhgrlhhlvghrrdgrphhpshhpohhtrdgtohhmpdhkvghrnhgvlh
-    drohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhm
-    pehrrghvvghnsehthhgvmhgrfidrnhgvth
-X-ME-Proxy: <xmx:k9JVYxs741Rqi6yEwIt9czx8WDlnDZRLokBDnBW0z9R_7NQWfSIpZw>
-    <xmx:k9JVY9cwAm8Xo_dJ3PzdkfPg-gWQNRfmNjZ-lKIqge9tMxDvmCmhYw>
-    <xmx:k9JVY92R6jQk44QVNKlrqbLSFfc2ITKismsaGgKH4n3d0Ee3DK3IZA>
-    <xmx:ldJVY93VbHvdwjfzrJvbJxhJu4tXwzM4xB_pKim6nqTXg3HXz0TOgQ>
-Feedback-ID: i31e841b0:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 23 Oct 2022 19:47:26 -0400 (EDT)
-Message-ID: <625dfe41-c665-fc9c-00a3-e8e2e13c07bc@themaw.net>
-Date:   Mon, 24 Oct 2022 07:47:23 +0800
+        Sun, 23 Oct 2022 19:54:19 -0400
+Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2114.outbound.protection.outlook.com [40.107.114.114])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAA4D60EB9;
+        Sun, 23 Oct 2022 16:54:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mi0ysKrNhzUDLy26kB35TuFLbfSmE1+RbfYiXuJuZn3VFAA/AGDoFobHSHLZhkukafbjKLIAKRMYMnYBiypk7B7wzWAuwK9kC5j8IfsrqZ+Zrggtu+y89xrTg+gBR/Y5kMzy4wF6VFHCsJfnoZhuS8Gy2C9YBlWfG7zxo+U5GTuTf2jo7ME5q29V+rnCahXvph7I76dHCWwizJy7VwiKnrRtolEKS7U3+FI6oc/NRnRJUASzJ5Ry9T/uWJeecJ+1BBP/6Ks+6R+Y64ysoz8+Ek87F1PhZnyzBx8dUCqjDOxTvxY/xMnRLryD2lx8L72yWrNXwcnaq6Bhwzrk6mc6AQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KEq4OdJK1ddoKTdgHf7BODWIeZU9bxt6gJRXYgJpjGA=;
+ b=cLtATLjJZypdOw+FBkgoP2w+FP5tW/y8ee6+b9NiOCuq3oxJxDaFwNiKw8E37BZhSlatFE/99dgwGsU3BDfH2U9VpSzLfXesMIMMBoowbFtv6iakigB6zqv1gnGMBUU3hE6e+LVGHDFIcMDSp8ce1D8+aR8l0PlPjeUQ17li/CI+eiwZ9n4mMqqKFfm9CfJ/YRLinNwgquAgGtHsLhbTMl9InXNvm9N52eeTxD/J5L0cFSgyUSIuEB0RQTi+GIcA6I6KVRYQK53RSE7VCt++uX+I8IYK/n14pT+Eh5LH6ZIT0kFrP2GELmRT5lVM5x/RcQuj5Y6jmbxNTt+28ypQcA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KEq4OdJK1ddoKTdgHf7BODWIeZU9bxt6gJRXYgJpjGA=;
+ b=Y0Dk+vG38ptOWIeYTBs9tTGscp6DQwWh6prjp1sv8obdFfMhkPcgqkk3Gbi9sr8zWVIDNu04NvhzRxu4tkrUOulZiUFI5YWCY5MTfEhKXRsLcjdyQzhBGl66XdoGbKXYDu7wllGidhn2BGYA4fmEc+qk0IorVRO1VsY5Nna5RDw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=renesas.com;
+Received: from OS3PR01MB8426.jpnprd01.prod.outlook.com (2603:1096:604:194::10)
+ by TYWPR01MB10521.jpnprd01.prod.outlook.com (2603:1096:400:29e::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.21; Sun, 23 Oct
+ 2022 23:54:15 +0000
+Received: from OS3PR01MB8426.jpnprd01.prod.outlook.com
+ ([fe80::4cba:2bd5:dfd4:f3cf]) by OS3PR01MB8426.jpnprd01.prod.outlook.com
+ ([fe80::4cba:2bd5:dfd4:f3cf%5]) with mapi id 15.20.5746.023; Sun, 23 Oct 2022
+ 23:54:15 +0000
+Message-ID: <87fsfem6zd.wl-kuninori.morimoto.gx@renesas.com>
+From:   Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     broonie@kernel.org, lgirdwood@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, perex@perex.cz, tiwai@suse.com,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/2] ASoC: simple-card: Support custom DAI system clock IDs
+In-Reply-To: <20221022162742.21671-1-aidanmacdonald.0x0@gmail.com>
+References: <20221022162742.21671-1-aidanmacdonald.0x0@gmail.com>
+User-Agent: Wanderlust/2.15.9 Emacs/26.3 Mule/6.0
+Content-Type: text/plain; charset=US-ASCII
+Date:   Sun, 23 Oct 2022 23:54:14 +0000
+X-ClientProxiedBy: TYAPR01CA0115.jpnprd01.prod.outlook.com
+ (2603:1096:404:2a::31) To OS3PR01MB8426.jpnprd01.prod.outlook.com
+ (2603:1096:604:194::10)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [syzbot] general protection fault in _parse_integer_fixup_radix
-To:     Hugh Dickins <hughd@google.com>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     syzbot <syzbot+db1d2ea936378be0e4ea@syzkaller.appspotmail.com>,
-        syzkaller-bugs@googlegroups.com,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
-        Carlos Maiolino <cmaiolino@redhat.com>,
-        David Howells <dhowells@redhat.com>,
-        kernel test robot <oliver.sang@intel.com>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Siddhesh Poyarekar <siddhesh@gotplt.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Hawkins Jiawei <yin31149@gmail.com>
-References: <0000000000002feb6605eb71458e@google.com>
- <ce198a72-92c9-e09a-ca92-2860326c2938@I-love.SAKURA.ne.jp>
- <17a1fdc-14a0-cf3c-784f-baa939895aef@google.com>
-Content-Language: en-US
-From:   Ian Kent <raven@themaw.net>
-In-Reply-To: <17a1fdc-14a0-cf3c-784f-baa939895aef@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: OS3PR01MB8426:EE_|TYWPR01MB10521:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6e01735e-eac2-4f6c-5bbb-08dab551e3ec
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ByzJoxNWC44EVyv51s6ZrNh4/cplTraesoAU/I8AewSRTzA+AVDvnpT0so+/Q0tY2rsUQgzxPrKkCfKTyY4jTMCOcb6NxN5WhybLpBb9NKySqX6uosWTsnOz+sjs7/yBLx9tuXMnvykVs7K+hwszX+OGjeJ9sqibbl2T0a4cdezI4iil4FVbK+dFLn49MoLmHFFTVMkZkbyLUkf8EObCRoakcSoLvC9O4Azd7b3Ql2mGVwlzI0PAUxL9CGx2zjL2EV2usgqmdoJmGrMiEyo3C4sxFr1tbdTuDH8Gu5+GQ61EVlN0KPmTSK2uePNcA3zciVKhRESSSPumzChSzYNtmoCLxbhjpXmzWVuQVLHfKV/BpVVpY0TBgSXJUwFRB1Qx0vlXcv3hgiw3bhXyWbZoi2iYWgRdfmoQNGRDQWfxhOA781WqnPsf3Wvv2PPQSVB+k6PCmKnoDr4g+0OL6Ncg5RSKC4rDe8JRy4Yx2/BfhaTs2sbfifrFAwGt9ruEc1YeUGH5IaxHf9rHPO4v56+OoK2b6E5nA9izd9M3AFau75R6QAlE8Qbahn9Y8DPLPD+lAS96hWVNvq/H8D+Wnhul+enjX9ENl2pIT6rFcLWcg7m3PCvlsP+vEaIIZNcW3VPuc7KkoWQO1/ztjNNZCVPBv2icsUrtTFVv7qi27VbJ2YGfdLtmWdtUjbfHq9tiU5ooLDQmrLE7aldcNau/G5goSQ7mnC47aPv2OmbFS0tzAbE2W0ZFEUygBreAYDpa+kbkEJLtfmKqjnROpwCo9ms2iA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS3PR01MB8426.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(376002)(39860400002)(136003)(346002)(366004)(451199015)(83380400001)(86362001)(478600001)(6486002)(8676002)(26005)(52116002)(6506007)(6512007)(41300700001)(7416002)(316002)(4326008)(6916009)(66476007)(66556008)(66946007)(5660300002)(8936002)(2616005)(38350700002)(38100700002)(2906002)(36756003)(186003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?BHa1fr8a4O5wPVaLf616tpIxOeTPc0isoUyzccd3EL63tYVav+Bpq2JAzA0V?=
+ =?us-ascii?Q?1DHzovPAGXJkeU2dBjL1F0bEEoqVgs9/9Q56RGKM4jtn4avKSi98IrEeMQQ5?=
+ =?us-ascii?Q?uNAQ33V7J9/o+XaejyXnJoGRv5MXfMPz9hRaaUmdEo3d7mk53k0i5ZJrA1iG?=
+ =?us-ascii?Q?5ba46N09Ad3NJDvs4udm8cimTS9bEaQd4M5fAwLokAGNlYJIzhV/gGCynHy+?=
+ =?us-ascii?Q?mCkpLy6rJ7SbZnwqRYwpNoQP005XU/eb1NW9vPoT1xjuCpZeaiAxlt7IUUh2?=
+ =?us-ascii?Q?nqFQEvfUNWqgGb4YguDzUi8vN3O9pUHeZaJ46ZIp6EqOv41GxiyiWsKOJvyQ?=
+ =?us-ascii?Q?VZEtHK3qDVs0hT2zd/dpBtZtv+0PDCxc91vcCFxKR8HmmXIK5Vfcary71m8g?=
+ =?us-ascii?Q?E+MuOcEfr2yc/eDjG2vzb3044/JuMtfJe8JeCmjBNVaj2x4J2sIx6I7GLavw?=
+ =?us-ascii?Q?RjBz+c7+QYh6Y6bJAr95/O9hqGaLtnX5mmk5ossaL9r/RoLQflE+2fgjYI+5?=
+ =?us-ascii?Q?sjwtt+R9M13Uwzw0bAOiHMronAY+YW/b2jXRUuxPV92MikQ/f7PsnbVFui7p?=
+ =?us-ascii?Q?avrIbjxObxTM0NTWl00UUnqJL2qTxTUzH0vz6nG3Bzd1/kjtRIPGDeDXW8ol?=
+ =?us-ascii?Q?Qh+AK2qaJ8Q9aRkUnOCK9FNmZB6Mn53GIvf3EbikrVJCVW0rtk0XSk1fXxJ7?=
+ =?us-ascii?Q?9VUJkZqAZwvBHP3SVoj5hQ+F01QAiW1GvWtNRXK24dGnOzGZ0eoBQ9ImHzjw?=
+ =?us-ascii?Q?Xu06FdyJeBPpWDaAsJZx8KULBYXp7paCvua/8uJ/9adOIdL/o75fZbZ9tgiF?=
+ =?us-ascii?Q?e+H7pHMzm/++SMcrkRT6klaNIpvuHESqyvOBp0vSew9ilRI4akOhCQY0XR38?=
+ =?us-ascii?Q?9wAIyuzfzHwjlixd6EjvaHZ01RB/1P1pUoxMgpvY18aGDlhNmDz84K2atmMS?=
+ =?us-ascii?Q?avLImQgd2Svcp7EYlM1BB1ehjeOkguId1bR1Aq6swIi1kHcy1MLVJnCyn7vW?=
+ =?us-ascii?Q?mCJeL2+GFlUSQUrPMSQFT3W69aq8wt8SSpW5Ak1kQeKx4uLu+CTBFJLEKKi2?=
+ =?us-ascii?Q?Yf33AZtKmeoVjHEplG+BY6PtI7UvvYRrIf6qPj74WNZdDpsIz4qASopupvO+?=
+ =?us-ascii?Q?F8adJ+7nNE32yfcjFC9pKCMtrlHoyYLdDNTtK5BZL+QI6Aqebz7QutzFjXcX?=
+ =?us-ascii?Q?dQdS2qTXnShxuE01Q+510asqsziy6uVHladp/ug2hXPbIOeCTSWrXhUO9xCi?=
+ =?us-ascii?Q?A70cCgnijBBjEOhptdKQ3MyTX/D3q4FsOlFn9s1RsGF/PxVkSOq0w3IAoYHj?=
+ =?us-ascii?Q?V63GrH2teGho7Y5mmq84LVDUpRKLieUQc4/l97DWUF8jPCONwAXpKN1tyFDx?=
+ =?us-ascii?Q?UBg+gJzIv2WynZTkvKavbzYJWWSEUy3m3a9RDQhmD4fnVhMqpftPDt1f6wzB?=
+ =?us-ascii?Q?Qhux6dH165CoUUiIH5rIJN0eOPenbDPgeVG5CuWrNqtaYnjJINGOfrlk6zUL?=
+ =?us-ascii?Q?oLk9hrxaHvYiYNR6ZC60GFeLA/HpRLjiiqfoKDVcDIm5SyESnkFIJvmBuBP9?=
+ =?us-ascii?Q?znFYIMefkuY9WJwvCTNaCMqQaadO07YJBOw9kZh3h2m+fXVepab6oQQGV8yG?=
+ =?us-ascii?Q?ztThJ/XV3LYuOnTBDip4Nqg=3D?=
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6e01735e-eac2-4f6c-5bbb-08dab551e3ec
+X-MS-Exchange-CrossTenant-AuthSource: OS3PR01MB8426.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Oct 2022 23:54:15.2085
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: MAdBa97dwtc/XtdFB7kXuEr/uPn/BvAOyZpxJGbOKt8luy3dgctPwGXtVasp7Ikl/sjuFJND3K6IkTEqHl0SCGms1tJ/xUiAWmzP3lw5razh8u6J4R2guz6px1rQ0n+D
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYWPR01MB10521
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -101,90 +117,38 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 24/10/22 02:50, Hugh Dickins wrote:
-> On Sun, 23 Oct 2022, Tetsuo Handa wrote:
->
->> syzbot is reporting that "vfs: parse: deal with zero length string value"
->> in linux-next.git broke tmpfs's mount option parsing, for tmpfs is expecting that
->> vfs_parse_fs_string() returning 0 implies that param.string != NULL.
->>
->> The "nr_inodes" parameter for tmpfs is interpreted as "nr_inodes=$integer", but
->> the addition of
->>
->> 	if (!v_size) {
->> 		param.string = NULL;
->> 		param.type = fs_value_is_empty;
->> 	} else {
->>
->> to vfs_parse_fs_string() and
->>
->> 	if (param->type == fs_value_is_empty)
->> 		return 0;
->>
->> to fs_param_is_string() broke expectation by tmpfs.
->>
->>    Parsing an fs string that has zero length should result in the parameter
->>    being set to NULL so that downstream processing handles it correctly.
->>
->> is wrong and
->>
->>    Parsing an fs string that has zero length should result in invalid argument
->>    error so that downstream processing does not dereference NULL param.string
->>    field.
->>
->> is correct for the "nr_inodes" parameter.
->>
->>
->>
->> How do we want to fix?
->> Should we add param.string != NULL checks into the downstream callers (like
->> Hawkins Jiawei did for https://syzkaller.appspot.com/bug?extid=a3e6acd85ded5c16a709 ) ?
->> Or should we add
->>
->> 	if (!*param.string)
->> 		param.string = NULL;
->>
->> rewriting into downstream callers which expect
->>
->>    For example, the proc mount table processing should print "(none)" in this
->>    case to preserve mount record field count, but if the value points to the
->>    NULL string this doesn't happen.
->>
->> behavior?
-> I've given it no thought at all: I was hoping, as Al suggests in
-> https://lore.kernel.org/lkml/Y1VwdUYGvDE4yUoI@ZenIV/
-> that the breaking commit would soon be reverted, and Ian think again.
+Hi Aidan
 
-Except that I didn't see the message so I haven't given it extra thought
+Thank you for your patch
 
-myself either, oops!
+> Some DAIs have multiple system clock sources, which can be chosen
+> using the "clk_id" argument to snd_soc_dai_set_sysclk(). Currently
+> this is hardcoded to 0 when using simple cards, but that choice is
+> not always suitable.
+> 
+> Add the "system-clock-id" property to allow selecting a different
+> clock ID on a per-DAI basis.
+> 
+> To simplify the logic on DPCM cards, add a dummy "asoc_simple_dai"
+> instance and use that for the dummy components on DPCM links. This
+> ensures that when we're iterating over DAIs in the PCM runtime there
+> is always a matching "asoc_simple_dai" we can dereference.
+> 
+> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+> ---
 
+I think adding "system-clock-id" and adding "dummy asoc_simple_dai" are
+different topics. This patch should be separated into 2 patches.
 
-akpm and Theodore also had concerns about the series.
+And I couldn't understand the reason why we need to add dummy asoc_simple_dai.
+In my understanding, we don't parse DT for dummy connection.
+Which process are you talking about specifically here?
 
+	This ensures that when we're iterating over DAIs in the PCM runtime there
+	is always a matching "asoc_simple_dai" we can dereference.
+- 
+Thank you for your help !!
 
-The other way to fix this is to modify the proc processing to check
-
-for zero length strings and check for any other places that need
-
-fixing. But that means handling it downstream for individual allocated
-
-empty string instances rather than at the source which is what I was
-
-hoping to avoid.
-
-
-But clearly there are hard to find assumptions in code that I've missed
-
-and this instance isn't the first case of it so may be we have to drop
-
-the series.
-
-
-I can't think of any other way to do this without requiring NULL be
-
-handled, does anyone have any thoughts to offer?
-
-
-Ian
-
+Best regards
+---
+Kuninori Morimoto
