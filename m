@@ -2,55 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8DB36094BE
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 18:31:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52C0C6094C0
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 18:34:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230404AbiJWQbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 12:31:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51852 "EHLO
+        id S230305AbiJWQew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 12:34:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230220AbiJWQbc (ORCPT
+        with ESMTP id S230125AbiJWQes (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 12:31:32 -0400
-Received: from mout-y-209.mailbox.org (mout-y-209.mailbox.org [91.198.250.237])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F13756A486;
-        Sun, 23 Oct 2022 09:31:27 -0700 (PDT)
+        Sun, 23 Oct 2022 12:34:48 -0400
+Received: from mout-y-111.mailbox.org (mout-y-111.mailbox.org [IPv6:2001:67c:2050:103:465::111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6A8F22B26;
+        Sun, 23 Oct 2022 09:34:42 -0700 (PDT)
 Received: from smtp102.mailbox.org (unknown [91.198.250.119])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mout-y-209.mailbox.org (Postfix) with ESMTPS id 4MwNxm4MWmz9tNc;
-        Sun, 23 Oct 2022 18:31:24 +0200 (CEST)
+        by mout-y-111.mailbox.org (Postfix) with ESMTPS id 4MwP1J3cHLz9sZZ;
+        Sun, 23 Oct 2022 18:34:28 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=noorman.info;
-        s=MBO0001; t=1666542684;
+        s=MBO0001; t=1666542868;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=jwBbiiF+pKf0bcTgRsblZnn0hi/Wak5zHyTIoUTbsXg=;
-        b=mDbf80KeQf/okGr77cx5VnaNDA7av/qTN72jsCjKBQihwf2cdxPIkjUklB5QeHLoZS/iI+
-        dRcN5DEQjSrdtrqCl0pFtRnlyZ911jFiDKoNLQHsJLRTPl3te3Z7Gq4GIzgMv6FL2Rmaya
-        zgefsF0O0eRvjNUarstpbEFYIuW9Mfga1OgIFMHr4I8t5RoanAXlmapeqrXKCiH1qIqW9y
-        CAik+hl3SerMleDUnKoTrtQX0euk3Fldc1aA0A2NPfZdQN+vtEjvcEJvPGVjmdwD+p/e1E
-        9aeG360tGwnlRK+gaaBxSaTfpZZT9ZYVlghClSLVmyghmwj6qaDLzhUQiBuIJw==
-From:   Job Noorman <job@noorman.info>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Luca Weiss <luca@z3ntu.xyz>, Job Noorman <job@noorman.info>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v5 3/3] arm64: dts: qcom: sdm632: fairphone-fp3: add touchscreen
-Date:   Sun, 23 Oct 2022 18:30:31 +0200
-Message-Id: <20221023163032.144150-4-job@noorman.info>
-In-Reply-To: <20221023163032.144150-1-job@noorman.info>
-References: <20221023163032.144150-1-job@noorman.info>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 4MwNxm4MWmz9tNc
+        bh=VTlByM7X0a7TGoECHCtYIhOyKZuzkGCKgtZ/y3W75rs=;
+        b=oUU7bQEEbPDGCE41tFrPcWAUZbdxkQV2PhLsTAGe++RlpUCQr4jKPG93Bb4fZzo2Sm3ivk
+        oTuOaKO/JCpG0y3r6gz6bARdwtGmgHjuI+RPi6lYYk6zKMTbevzHoNSMb7Decz9rKsxAwm
+        fC9EcHMnoO8uOOj0UB6tVjVFTedCppszC6yq0h7e7AddcXJ3SPCMBj3hYdOcbvhvf2GFyl
+        68izRtfS4ChwUskCcmHnMVMahGYbsxM76rPxjsZsy9zo5afIdTcDMbTh4sqEhlfsRhdWUW
+        alkG20STwbjZs4RwuPLLbn1kpu3M8Af9FXRKkRB0oIj5UJRUCDEuLHyKK6tvSQ==
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Sun, 23 Oct 2022 18:34:27 +0200
+Message-Id: <CNTG53X3S1UV.22Z2IAXN79SJA@ancom>
+Cc:     "Dmitry Torokhov" <dmitry.torokhov@gmail.com>,
+        "Henrik Rydberg" <rydberg@bitmath.org>,
+        "Luca Weiss" <luca@z3ntu.xyz>, <linux-kernel@vger.kernel.org>,
+        <linux-input@vger.kernel.org>
+Subject: Re: [PATCH v4 2/3] Input: add driver for Himax hx83112b touchscreen
+ devices
+From:   "Job Noorman" <job@noorman.info>
+To:     "Jeff LaBundy" <jeff@labundy.com>
+References: <20221017100409.189293-1-job@noorman.info>
+ <20221017100409.189293-3-job@noorman.info> <Y1NwxQ5DbusemrFc@nixie71>
+In-Reply-To: <Y1NwxQ5DbusemrFc@nixie71>
+X-Rspamd-Queue-Id: 4MwP1J3cHLz9sZZ
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -60,39 +59,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add Himax hx83112b touchscreen to the FP3 DT.
+Hi Jeff,
 
-Signed-off-by: Job Noorman <job@noorman.info>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+On Sat Oct 22, 2022 at 6:25 AM CEST, Jeff LaBundy wrote:
+> Hi Job,
+>
+> Great work so far, just a few remaining comments.
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts b/arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts
-index 891e314bc782..2920504461d3 100644
---- a/arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts
-+++ b/arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts
-@@ -49,6 +49,20 @@ &hsusb_phy {
- 	vdda-phy-dpdm-supply = <&pm8953_l13>;
- };
- 
-+&i2c_3 {
-+	status = "okay";
-+
-+	touchscreen@48 {
-+		compatible = "himax,hx83112b";
-+		reg = <0x48>;
-+		interrupt-parent = <&tlmm>;
-+		interrupts = <65 IRQ_TYPE_LEVEL_LOW>;
-+		touchscreen-size-x = <1080>;
-+		touchscreen-size-y = <2160>;
-+		reset-gpios = <&tlmm 64 GPIO_ACTIVE_LOW>;
-+	};
-+};
-+
- &pm8953_resin {
- 	status = "okay";
- 	linux,code = <KEY_VOLUMEDOWN>;
--- 
-2.38.1
+Thanks a lot for your second round of comments! Everything has been
+addressed in v5.
 
+Best regards,
+Job
