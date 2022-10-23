@@ -2,77 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87F7D60917F
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 08:50:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45915609182
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 08:51:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230057AbiJWGuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 02:50:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39832 "EHLO
+        id S230063AbiJWGvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 02:51:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230038AbiJWGt7 (ORCPT
+        with ESMTP id S229961AbiJWGvr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 02:49:59 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 826AF4F1B1;
-        Sat, 22 Oct 2022 23:49:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666507797; x=1698043797;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=evPr22dKymT0FB2f0mLWM3Nhy+DwMcrp021ivv+tOrE=;
-  b=cC8NJqEdBr/IoZf5sZ8Zjz0fAp/mRePzxo8+60gWQRJvX9dgsUYWUyyJ
-   Q8ey31K70y+v4ISfoNCB7/lm6Lh+Fp9kZgfcIJ6UtvkzaWsSyJWZcbjCL
-   SZPfiMeE8HTHYuI/yRGRkIbhX40gKFHNeZDGpUtkPtE+Q9KjveYWDBuMe
-   aEHczeoIghvyIZ3PW4ZqS7CAkBVEhuxH+nf0EocnQg6niC7qRnVvd2WRt
-   YnMD+2BPgLDcneBh0uS/S99rUFU/POph7TFzyFnhceJZ6Fp4YBdaX3ElF
-   RJ3gdZjnWJU0SJoD6pjN6SNbO3Xdr2ac7b33Ve2iCpsCDXTQ3CuLCq8ni
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10508"; a="393551094"
-X-IronPort-AV: E=Sophos;i="5.95,206,1661842800"; 
-   d="scan'208";a="393551094"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2022 23:49:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10508"; a="756249102"
-X-IronPort-AV: E=Sophos;i="5.95,206,1661842800"; 
-   d="scan'208";a="756249102"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga004.jf.intel.com with ESMTP; 22 Oct 2022 23:49:54 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 2A9F0107; Sun, 23 Oct 2022 09:50:15 +0300 (EEST)
-Date:   Sun, 23 Oct 2022 09:50:15 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andy@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH v1 1/5] pinctrl: alderlake: Deduplicate COMMUNITY macro
- code
-Message-ID: <Y1TkJ0r6PIM/7ng4@black.fi.intel.com>
-References: <20221018223427.43579-1-andriy.shevchenko@linux.intel.com>
+        Sun, 23 Oct 2022 02:51:47 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA91876964;
+        Sat, 22 Oct 2022 23:51:45 -0700 (PDT)
+Received: from kwepemi500024.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Mw84j1Hf4zHv3l;
+        Sun, 23 Oct 2022 14:51:33 +0800 (CST)
+Received: from huawei.com (10.175.103.91) by kwepemi500024.china.huawei.com
+ (7.221.188.100) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Sun, 23 Oct
+ 2022 14:51:42 +0800
+From:   Zeng Heng <zengheng4@huawei.com>
+To:     <jirislaby@kernel.org>, <f.fainelli@gmail.com>,
+        <sbranden@broadcom.com>, <l.sanfilippo@kunbus.com>,
+        <guomengqi3@huawei.com>, <rjui@broadcom.com>,
+        <ilpo.jarvinen@linux.intel.com>, <zengheng4@huawei.com>,
+        <bcm-kernel-feedback-list@broadcom.com>,
+        <gregkh@linuxfoundation.org>, <athierry@redhat.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-rpi-kernel@lists.infradead.org>, <liwei391@huawei.com>,
+        <linux-kernel@vger.kernel.org>, <linux-serial@vger.kernel.org>
+Subject: [PATCH] serial: 8250_bcm2835aux: return PTR_ERR when fail to acquire clk
+Date:   Sun, 23 Oct 2022 14:50:53 +0800
+Message-ID: <20221023065053.4057108-1-zengheng4@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221018223427.43579-1-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemi500024.china.huawei.com (7.221.188.100)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 01:34:23AM +0300, Andy Shevchenko wrote:
-> Define a common COMUNITY macro and supply a variant to it.
-                  ^^^^^^^^
-COMMUNITY
+Add error handling process when fail to acquire clk by
+`devm_clk_get_optional`.
 
-(ditto for other commit messages)
+Signed-off-by: Zeng Heng <zengheng4@huawei.com>
+---
+ drivers/tty/serial/8250/8250_bcm2835aux.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> This removes some verbosity in macros.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+diff --git a/drivers/tty/serial/8250/8250_bcm2835aux.c b/drivers/tty/serial/8250/8250_bcm2835aux.c
+index 15a2387a5b25..1c623e93232c 100644
+--- a/drivers/tty/serial/8250/8250_bcm2835aux.c
++++ b/drivers/tty/serial/8250/8250_bcm2835aux.c
+@@ -119,6 +119,8 @@ static int bcm2835aux_serial_probe(struct platform_device *pdev)
+ 
+ 	/* get the clock - this also enables the HW */
+ 	data->clk = devm_clk_get_optional(&pdev->dev, NULL);
++	if (IS_ERR(data->clk))
++		return PTR_ERR(data->clk);
+ 
+ 	/* get the interrupt */
+ 	ret = platform_get_irq(pdev, 0);
+-- 
+2.25.1
 
-Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
