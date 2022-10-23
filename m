@@ -2,154 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C7B2609119
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 06:00:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3520A60911E
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 06:12:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229988AbiJWEAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 00:00:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49566 "EHLO
+        id S230012AbiJWEMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 00:12:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbiJWEAU (ORCPT
+        with ESMTP id S229535AbiJWEL6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 00:00:20 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A91F53470E;
-        Sat, 22 Oct 2022 21:00:16 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id by36so8805462ljb.4;
-        Sat, 22 Oct 2022 21:00:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=l4bdov0hgKiLdPL4WG06hOzuyjfJGS+F4udCWXNnrmQ=;
-        b=VdJFQ3ZfvhFzUVrpER7HXO5aznN65zV3euEmWaJCpEzdtTPX1u6wGt8qsCQ2JaG/DL
-         5A1PqSZaTvO8qEwqixMaWvWeQgTh2PGYwCMq8sjk85G/fBdx2WJpUCBBgxGGvEGOf/Ak
-         LLybMsaewzhamRsbtpkAqwI9Juu+JXOMlFTHOWXjTLRfmudVrmucC1jy1Qu8kpCwexTE
-         RspMhZf1LqzaI9hLphrow6gxPHuzYMUbmZwus2XbZQ8PUxdYW5GBW5WndRjHpu2pb28H
-         CEpNK/OjRiCBPE79b1P0x33MN2noXk55n8mxGh3JGnQajHKyNBOnfUkBLAD0yx9gwWSs
-         HH1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=l4bdov0hgKiLdPL4WG06hOzuyjfJGS+F4udCWXNnrmQ=;
-        b=n7zFjsMcLRcZ8lYS6ZAO/+AsjwogQv8UZ2gzl8tBfBgJ+6aN8195S6ArPsLqQ11uQD
-         +D5+EeygerofDKLOm/xqBC6G/TigbuVqJZTWdL+/Re1cN9jLaptJLkzsVhp67mInHhYb
-         D7uOYq1Ig0XWzwH9yAz4j9mCGS43iM+TJzL/F58o05UPhZiT6zbbNP7tLgpZZo6Nb3O6
-         OCJwtKnrWvrCByhzSBK7RZjusU/8twudkbg/ymXPAK5AiowEhkVppvJfNlm/N21KbIx6
-         91T0jWxhiCHuov542wRjCXgdkrHmkPPtHXAguZZVT72xPE0MbbZIGA4G78Vyy8wpNIyS
-         Sjig==
-X-Gm-Message-State: ACrzQf2KDKvAaT1maPENduTT6D9yOkLw20Zr1QNqGnBefgXWhEQFB6sI
-        BC3zdQJPz7qGxf/LkntthsUndXCMrMACcTDzbMZ1WeHp
-X-Google-Smtp-Source: AMsMyM6GZpf3PpNlGLfpiW4o7cSxPgLZsN0APKBGqiUo79K0wbAskgyaPMe4qeIb+U0swfrJ+6+yTLtvb5oJwurVgjw=
-X-Received: by 2002:a2e:8548:0:b0:26d:fecc:5675 with SMTP id
- u8-20020a2e8548000000b0026dfecc5675mr10306893ljj.515.1666497614580; Sat, 22
- Oct 2022 21:00:14 -0700 (PDT)
+        Sun, 23 Oct 2022 00:11:58 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7787B1D3;
+        Sat, 22 Oct 2022 21:11:55 -0700 (PDT)
+X-QQ-mid: bizesmtp86t1666498304td0935i2
+Received: from [192.168.1.231] ( [183.27.97.220])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sun, 23 Oct 2022 12:11:42 +0800 (CST)
+X-QQ-SSF: 01000000000000B0B000000A0000000
+X-QQ-FEAT: qdVriHgIVQiyXBR0Tbg2aADC9wXI2EcjDe8x1uIerai50Wo0idqfvsi29nnwd
+        fgmLgD6229Z/spDSCnWFnpjkdKWsv91X+09BlStKlbBwfSS5Za8i/emahfp26hKFA6Z1aq7
+        LrqfhLf133wgBNhlFtyGwjNwZi5YD7Whtpqfybl+AuOaOxDGBA1XCD2Ush5+ohdk9YjVRZi
+        kSLXRbG1qBd2Qk6TWmblYk8/FGYUJbAMEq299TJWYeIBHCx4k1b/IMl2RBJXEaEFJkt3X2R
+        I23r/ipZZvRnWOuBGXpYSaHU/A+KpPMBIlhZRB27gK80i7J9L6hPvl2Qpd+FFAAPJWOi6Gp
+        GHHfJTTmJfWI9KXgyKsN53eWURywA==
+X-QQ-GoodBg: 0
+Message-ID: <07B628ED6CABEF1D+932737cc-7d4b-4071-531e-82f88d89a872@linux.starfivetech.com>
+Date:   Sun, 23 Oct 2022 12:11:41 +0800
 MIME-Version: 1.0
-References: <20221022220508.37489-1-maurinbe@gmail.com>
-In-Reply-To: <20221022220508.37489-1-maurinbe@gmail.com>
-From:   Roderick Colenbrander <thunderbird2k@gmail.com>
-Date:   Sat, 22 Oct 2022 21:00:02 -0700
-Message-ID: <CAEc3jaDjGBUspf5zPUfjPKgP+nk4zVFqJ0pgR8LAmX35qmx+fA@mail.gmail.com>
-Subject: Re: [PATCH] input/xpad: LED controllable through input events
-To:     Benoit Maurin <maurinbe@gmail.com>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v1 15/30] clk: starfive: Use regmap APIs to operate
+ registers
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        linux-kernel@vger.kernel.org
+References: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
+ <20220929175602.19946-1-hal.feng@linux.starfivetech.com>
+ <20220930214824.A14ACC433D6@smtp.kernel.org>
+ <CAJM55Z8xxrKqaN64KAP9miTis4wFbL2S9uhV5h-SOiYjbYng+g@mail.gmail.com>
+ <20221012230525.C6E58C433D7@smtp.kernel.org>
+Content-Language: en-US
+From:   Hal Feng <hal.feng@linux.starfivetech.com>
+In-Reply-To: <20221012230525.C6E58C433D7@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:linux.starfivetech.com:qybglogicsvr:qybglogicsvr2
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,FORGED_MUA_MOZILLA,
+        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Benoit,
+On Wed, 12 Oct 2022 16:05:23 -0700, Stephen Boyd wrote:
+> Quoting Emil Renner Berthing (2022-10-05 06:14:44)
+> > > > @@ -295,11 +296,13 @@ static int __init clk_starfive_jh7100_probe(struct platform_device *pdev)
+> > > >         if (!priv)
+> > > >                 return -ENOMEM;
+> > > >
+> > > > -       spin_lock_init(&priv->rmw_lock);
+> > > >         priv->dev = &pdev->dev;
+> > > > -       priv->base = devm_platform_ioremap_resource(pdev, 0);
+> > > > -       if (IS_ERR(priv->base))
+> > > > -               return PTR_ERR(priv->base);
+> > > > +       priv->regmap = device_node_to_regmap(priv->dev->of_node);
+> > >
+> > > This is sad. Why do we need to make a syscon? Can we instead use the
+> > > auxiliary bus to make a reset device that either gets a regmap made here
+> > > in this driver or uses a void __iomem * mapped with ioremap
+> > > (priv->base)?
+> > 
+> > In my original code the clock driver just registers the resets too
+> > similar to other combined clock and reset drivers. I wonder what you
+> > think about that approach:
+> > https://github.com/esmil/linux/commit/36f15e1b827b02d7f493dc5fce31060b21976e68
+> > and
+> > https://github.com/esmil/linux/commit/4ccafadb72968480aa3dd28c227fcccae411c13b#diff-ffec81f902f810cb210012c25e8d88217ea5b4021419a4206d1fd4dd19edfce8R471
+> 
+> I think we should use auxiliary bus and split the driver logically into
+> a reset driver in drivers/reset and a clk driver in drivers/clk. That
+> way the appropriate maintainers can review the code. There is only one
+> platform device with a single reg property and node in DT, but there are
+> two drivers. 
 
-Thanks for your patch. I'm thinking out loud whether this is a
-direction we want to go in regards to EV_LED. I vaguely recall some
-discussions a while ago that EV_LED was really from a different era
-for legacy reasons (keyboard LEDs). Since the introduction of the LED
-framework that was really the way to go.
+Yes, I agree that the reset driver and the clock driver should be split.
+However, I think using auxiliary bus is a little bit complicated in this
+case, because the reset is not a part of functionality of the clock in 
+JH7110. They just share a common register base address. I think it is 
+better to use ioremap for the same address, and the dt will be like
 
-Thanks,
-Roderick
+syscrg_clk: clock-controller@13020000 {
+	compatible = "starfive,jh7110-clkgen-sys";
+	reg = <0x0 0x13020000 0x0 0x10000>;
+	...
+};
+syscrg_rst: reset-controller@13020000 {
+	compatible = "starfive,jh7110-reset-sys";
+	reg = <0x0 0x13020000 0x0 0x10000>;
+	...
+};
 
-On Sat, Oct 22, 2022 at 3:08 PM Benoit Maurin <maurinbe@gmail.com> wrote:
->
-> (EV_LED, LED_MISC, #VALUE) can now be used to control leds on the
-> xpad gamepad (was only possible through /sys/class/leds/xpad0/brightness)
-> with permissions of /dev/input/xxx
->
-> To test the code (xpad can be compiled out-of-tree with some slight
-> tweaks):
->
-> ```
-> import evdev
-> device = evdev.InputDevice('/dev/input/event15') # not js0
-> device.set_led(8, 2)
-> device.set_led(8, 0) # this won't be delivered
-> device.set_led(8, 16) # must do this instead
-> device.set_led(8, 15)
-> ```
->
-> Signed-off-by: Benoit Maurin <maurinbe@gmail.com>
-> ---
->  drivers/input/joystick/xpad.c | 24 ++++++++++++++++++++++++
->  1 file changed, 24 insertions(+)
->
-> diff --git a/drivers/input/joystick/xpad.c b/drivers/input/joystick/xpad.c
-> index 2959d80f7..fcf4d2c8f 100644
-> --- a/drivers/input/joystick/xpad.c
-> +++ b/drivers/input/joystick/xpad.c
-> @@ -1646,6 +1646,7 @@ static int xpad_led_probe(struct usb_xpad *xpad)
->                 goto err_free_mem;
->         }
->
-> +       input_set_capability(xpad->dev, EV_LED, LED_MISC);
->         snprintf(led->name, sizeof(led->name), "xpad%d", xpad->pad_nr);
->         led->xpad = xpad;
->
-> @@ -1824,6 +1825,28 @@ static void xpad_deinit_input(struct usb_xpad *xpad)
->         }
->  }
->
-> +static int xpad_event(struct input_dev *dev, unsigned int type,
-> +                     unsigned int code, int value)
-> +{
-> +       struct usb_xpad *xpad = input_get_drvdata(dev);
-> +
-> +       if (type != EV_LED || xpad->led == NULL)
-> +               return 0;
-> +       xpad_send_led_command(xpad, value);
-> +       xpad->led->led_cdev.brightness = value;
-> +       /* Bit clearing is necessary otherwise two events with
-> +        * different non-null values will deliver only the first one.
-> +        * To work around this, we clear the bit to indicate that the
-> +        * current value is zero. The downside is that events with zero
-> +        * value won't be delivered. It's not a big deal since a value of
-> +        * 16 can be sent which is the same as 0
-> +        * See xpad_send_led_command, command %= 16
-> +        */
-> +
-> +       clear_bit(code, xpad->dev->led);
-> +       return 0;
-> +}
-> +
->  static int xpad_init_input(struct usb_xpad *xpad)
->  {
->         struct input_dev *input_dev;
-> @@ -1851,6 +1874,7 @@ static int xpad_init_input(struct usb_xpad *xpad)
->                 input_dev->open = xpad_open;
->                 input_dev->close = xpad_close;
->         }
-> +       input_dev->event = xpad_event;
->
->         if (!(xpad->mapping & MAP_STICKS_TO_NULL)) {
->                 /* set up axes */
-> --
-> 2.38.1
->
+What do you think of this approach? I would appreciate your suggestions.
+
+Best regards,
+Hal
