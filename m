@@ -2,71 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AEBF6096F9
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 00:15:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDBAE6096FC
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 00:16:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229635AbiJWWPc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 18:15:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51982 "EHLO
+        id S229686AbiJWWQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 18:16:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiJWWP3 (ORCPT
+        with ESMTP id S229455AbiJWWQK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 18:15:29 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDC4C481EA
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 15:15:26 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id h24so4781639qta.7
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 15:15:26 -0700 (PDT)
+        Sun, 23 Oct 2022 18:16:10 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0965F5F9BA;
+        Sun, 23 Oct 2022 15:16:08 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id g24so2031265plq.3;
+        Sun, 23 Oct 2022 15:16:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=y24AOJSf6aWoSnenwrB4rB+v3E66RFlXKYZodyfNpmI=;
-        b=bYPvGCsIR4tXMVTQIDgsK6ovOEDTsnWnZFWagZ69yVWsOXt3quZB41d2pj+DwvzEgl
-         4v/a818ksm996aOQdG7sbDti2ShqA0oH5Zag95O6OrGmWkHFXcWE0eFFs2kMgb6ftKzg
-         UxtGjkNOPKmKt7VQ2ubIAOuanhlaZ59MN3WVM=
+        bh=n6AztAfjAets5ADpDV5TomceKF1j8qdGrso/DrhmPTg=;
+        b=goQtL0QsLIiGPTcYVUUHEU6mO29AwG8k6ZlapUTCrltBSKsBNk7yPM/5GzRZJLGul7
+         a1l0hacW5XXh3clIgwJWqXcX9Q45d+C2euIoz0aVnjEzXt87KmguKGQdeHX/wW2+4fcm
+         QRWW5kwt6Vy56NlvoOW1ykLeZuEFNzEU0Bk/pYmWL6fyPrhkaOyw83nwF+qB91VlrUFD
+         woz1U9muG3HxsVJB8pUrrl99tA1p/7fPbrvCUOJlPcIQQy3Su+eqmLOIpO1DowoA1GyX
+         yqGlrCsCZjuU/pO+Kvt0UaAL9NBFSqOmfzkwBkqFuHFimFlNQbjkxeEPtVqptb35xBhM
+         L4Vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=y24AOJSf6aWoSnenwrB4rB+v3E66RFlXKYZodyfNpmI=;
-        b=AMDmdN8QBa5QZ3xXxqz0mKupYDGhg3DaNSHaKrmcXLbOYWe82aGYWLbWRBWPv/8xOh
-         vl0hbksbGOXXtB5Nvb2fGSbDKtGP0b+vpv/IvLLCIfVkieFR1Rtzwgj7qdOprHvM9taL
-         wPWfWwGy4JCVuaeOuSPqptwAt440mXk6Lsc0liOk8vSh22g06k49kGKLE0QvOJZfM6ul
-         aTU4rZc6aYlPI5oUGAwbenmnqGsRG8fxHcfbYGMlvBfXd66V2RYRYDk6J3TUewRsna6v
-         nAyO94fw/OVlGjLjvM6XDRGllh657Mxkoox6FdGOOTrZdrNGVka9pVyGSpwZ0GG76qoA
-         +e+w==
-X-Gm-Message-State: ACrzQf1lhz/e/Kob9udZpaz8CQ7ACT+fixHTFhM2I7ILBZ5h+tG3wfbb
-        HHXXsSbicdWJyiM+ElotkAubztfW1AP7vg==
-X-Google-Smtp-Source: AMsMyM5lqHkqrgnjYr8U9nQK9WWs4i8VPGYQmBoHgNXSdf2dSwjPCOA/3xg3cK/vljlxOxuJnnXNyg==
-X-Received: by 2002:ac8:5988:0:b0:39a:dee7:ba40 with SMTP id e8-20020ac85988000000b0039adee7ba40mr24993093qte.635.1666563325789;
-        Sun, 23 Oct 2022 15:15:25 -0700 (PDT)
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
-        by smtp.gmail.com with ESMTPSA id r17-20020ac87951000000b0039cb9ef50b5sm11727398qtt.26.2022.10.23.15.15.24
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 23 Oct 2022 15:15:24 -0700 (PDT)
-Received: by mail-yb1-f177.google.com with SMTP id e62so9236163yba.6
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 15:15:24 -0700 (PDT)
-X-Received: by 2002:a25:5389:0:b0:6bc:f12c:5d36 with SMTP id
- h131-20020a255389000000b006bcf12c5d36mr25687050ybb.184.1666563324398; Sun, 23
- Oct 2022 15:15:24 -0700 (PDT)
+        bh=n6AztAfjAets5ADpDV5TomceKF1j8qdGrso/DrhmPTg=;
+        b=CjYTAK077YyzwCTKeewaFthPiDFTEtDeNAbDPl90FydGDLgUr+JOLRD6aGw7NpCoAx
+         eplPLJ+TnycnOQ4rRj4E669q/W+odemqz6HXv2qxJ2skX4ESFYGepWbelnxjT49Dq3hz
+         O2mlt0CDmCYHt5DOLXLckzo9N6WW46iULfgfNXdzYG37N5TgvkvXQSOBTResqeUU7PoM
+         JWIzZqwWnEbP5oXz2XWZqTOeMPHgET5/NB/XZSZgiWmNJtP/SITOPZatvAFDZSxhKPoy
+         5Q6yKTAby/oiyPl+vStz6VNCkNy4IClmo+iObsQ06/IrDu5L3yrNVsgWTMtMWC6A/ADR
+         +4cQ==
+X-Gm-Message-State: ACrzQf0Uzjx+ZNvqazUqtxCZw6B9yOo5oPL+xNeC6HD8+900C7W/HfW6
+        QWpIswsUWGVEDfDf6ZrGcW5u1Z4Nkfjmc87GL0w=
+X-Google-Smtp-Source: AMsMyM4/nCeZ4G1vfioXR+kshi7I5DRImr1gsEVRXKZRO9KtFZU07weU0QBk0WzDdRkayItpdKPcocQCBzWSqrL2FF8=
+X-Received: by 2002:a17:902:6a87:b0:181:c6c6:1d38 with SMTP id
+ n7-20020a1709026a8700b00181c6c61d38mr30288289plk.74.1666563367577; Sun, 23
+ Oct 2022 15:16:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221023174307.1868939-1-pbonzini@redhat.com>
-In-Reply-To: <20221023174307.1868939-1-pbonzini@redhat.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 23 Oct 2022 15:15:08 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgL7sh-+6mPk7FGCFtjuh36fhOLNRTT0_4g3yd380P0+w@mail.gmail.com>
-Message-ID: <CAHk-=wgL7sh-+6mPk7FGCFtjuh36fhOLNRTT0_4g3yd380P0+w@mail.gmail.com>
-Subject: Re: [GIT PULL] KVM patches for Linux 6.1-rc2
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Alexander Graf <graf@amazon.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+References: <20221022072415.034382448@linuxfoundation.org>
+In-Reply-To: <20221022072415.034382448@linuxfoundation.org>
+From:   Allen Pais <stable.kernel.dev@gmail.com>
+Date:   Sun, 23 Oct 2022 15:15:56 -0700
+Message-ID: <CAJq+SaA1pFBe6RZOV8NMjci=ZXtpsHc1=XbvU+tDgW5Sd4EYDA@mail.gmail.com>
+Subject: Re: [PATCH 5.19 000/717] 5.19.17-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,34 +71,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 23, 2022 at 10:43 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
+> This is the start of the stable review cycle for the 5.19.17 release.
+> There are 717 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
-> x86:
+> Note, this will be the LAST 5.19.y kernel to be released.  Please move
+> to the 6.0.y kernel branch at this point in time, as after this is
+> released, this branch will be end-of-life.
 >
-> - add compat implementation for KVM_X86_SET_MSR_FILTER ioctl
+> Responses should be made by Mon, 24 Oct 2022 07:19:57 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.17-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
+>
 
-Side note: this should probably have used
+ Compiled and booted on my x86_64 and ARM64 test systems. No errors or
+regressions found.
 
-        compat_uptr_t bitmap;
-        ...
-        .bitmap = compat_ptr(cr->bitmap),
-
-instead of doing that
-
-        __u32 bitmap;
-        ...
-       .bitmap = (__u8 *)(ulong)cr->bitmap,
-
-because not only are those casts really ugly, using that
-'compat_uptr_t" and "compat_ptr()" helper also really explains what is
-going on.
-
-compat_ptr() also happens to get the address space right (ie it
-returns a "void __user *" pointer). But since the non-compat 'struct
-kvm_msr_filter_range' bitmap member doesn't get that right either
-(because it uses the same type for kernel pointers as for user
-pointers - ugly uglt), that isn't such a big deal. The kvm code
-clearly doesn't do proper user pointer typing, and just uses random
-casts instead.
-
-                         Linus
+Tested-by: Allen Pais <apais@linux.microsoft.com>
