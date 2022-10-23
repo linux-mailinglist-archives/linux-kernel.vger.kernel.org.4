@@ -2,76 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45915609182
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 08:51:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28176609185
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 08:52:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbiJWGvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 02:51:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48084 "EHLO
+        id S230076AbiJWGwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 02:52:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229961AbiJWGvr (ORCPT
+        with ESMTP id S229610AbiJWGwJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 02:51:47 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA91876964;
-        Sat, 22 Oct 2022 23:51:45 -0700 (PDT)
-Received: from kwepemi500024.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Mw84j1Hf4zHv3l;
-        Sun, 23 Oct 2022 14:51:33 +0800 (CST)
-Received: from huawei.com (10.175.103.91) by kwepemi500024.china.huawei.com
- (7.221.188.100) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Sun, 23 Oct
- 2022 14:51:42 +0800
-From:   Zeng Heng <zengheng4@huawei.com>
-To:     <jirislaby@kernel.org>, <f.fainelli@gmail.com>,
-        <sbranden@broadcom.com>, <l.sanfilippo@kunbus.com>,
-        <guomengqi3@huawei.com>, <rjui@broadcom.com>,
-        <ilpo.jarvinen@linux.intel.com>, <zengheng4@huawei.com>,
-        <bcm-kernel-feedback-list@broadcom.com>,
-        <gregkh@linuxfoundation.org>, <athierry@redhat.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-rpi-kernel@lists.infradead.org>, <liwei391@huawei.com>,
-        <linux-kernel@vger.kernel.org>, <linux-serial@vger.kernel.org>
-Subject: [PATCH] serial: 8250_bcm2835aux: return PTR_ERR when fail to acquire clk
-Date:   Sun, 23 Oct 2022 14:50:53 +0800
-Message-ID: <20221023065053.4057108-1-zengheng4@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Sun, 23 Oct 2022 02:52:09 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A37F76964;
+        Sat, 22 Oct 2022 23:52:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666507929; x=1698043929;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ABkS0NhAjDi8ntSJ5iUziEw9CbuP9xXeeAUlShM0158=;
+  b=d7l7K8XglqPq/42axHqWjQTjxt7CswOp0iEM4uKMDSTJztDvpoIG8HQ8
+   fphV8P1gSJtaJRcFTB0nl4/J8/sx9vU7Q55Ow1+AGRf6H5jkGaQnupKlA
+   eS6HNSUFMoXcd1thIRHbPStRr1TE79YcpnLtdp7HAi9RxBDXhXrVr+l0W
+   pHUCqFWLFzSwo5c2LXGwKkvCW1o0IxBGK5m9idBOjISJtBWTno0CwVazN
+   YxO4QIV+BCmirOf7PLJm5Y0m952Ttsu8LdXBS2Ru05A1PgeZl9UFaqKB+
+   o21brek933AGAuEwzAkCd7InisodSkWm2MkiinRY+pSF9JLFGeCYqvnUU
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10508"; a="308332040"
+X-IronPort-AV: E=Sophos;i="5.95,206,1661842800"; 
+   d="scan'208";a="308332040"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2022 23:52:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10508"; a="699804517"
+X-IronPort-AV: E=Sophos;i="5.95,206,1661842800"; 
+   d="scan'208";a="699804517"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga004.fm.intel.com with ESMTP; 22 Oct 2022 23:52:06 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id C01F4107; Sun, 23 Oct 2022 09:52:28 +0300 (EEST)
+Date:   Sun, 23 Oct 2022 09:52:28 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] thunderbolt: remove redundant assignment to variable len
+Message-ID: <Y1TkrCZJVkQgXcAY@black.fi.intel.com>
+References: <20221019225709.1506515-1-colin.i.king@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemi500024.china.huawei.com (7.221.188.100)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221019225709.1506515-1-colin.i.king@gmail.com>
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add error handling process when fail to acquire clk by
-`devm_clk_get_optional`.
+On Wed, Oct 19, 2022 at 11:57:09PM +0100, Colin Ian King wrote:
+> The variable len is assigned a value that is never read. It is re-assigned
+> a new value in the following do-while loop and never referenced after
+> the loop. The assignment is redundant and can be removed.
+> 
+> Cleans up clang scan build warning:
+> drivers/thunderbolt/xdomain.c:344:2: warning: Value stored to 'len' is
+> never read [deadcode.DeadStores]
+> 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 
-Signed-off-by: Zeng Heng <zengheng4@huawei.com>
----
- drivers/tty/serial/8250/8250_bcm2835aux.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/tty/serial/8250/8250_bcm2835aux.c b/drivers/tty/serial/8250/8250_bcm2835aux.c
-index 15a2387a5b25..1c623e93232c 100644
---- a/drivers/tty/serial/8250/8250_bcm2835aux.c
-+++ b/drivers/tty/serial/8250/8250_bcm2835aux.c
-@@ -119,6 +119,8 @@ static int bcm2835aux_serial_probe(struct platform_device *pdev)
- 
- 	/* get the clock - this also enables the HW */
- 	data->clk = devm_clk_get_optional(&pdev->dev, NULL);
-+	if (IS_ERR(data->clk))
-+		return PTR_ERR(data->clk);
- 
- 	/* get the interrupt */
- 	ret = platform_get_irq(pdev, 0);
--- 
-2.25.1
-
+Applied to thunderbolt.git/next, thanks!
