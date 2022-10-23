@@ -2,69 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A02C6093E1
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 16:26:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12B116093E8
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 16:33:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230159AbiJWO01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 10:26:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53016 "EHLO
+        id S230203AbiJWOdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 10:33:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230116AbiJWO0U (ORCPT
+        with ESMTP id S229707AbiJWOdd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 10:26:20 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 660E56888B
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 07:26:19 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id g129so5019675pgc.7
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 07:26:19 -0700 (PDT)
+        Sun, 23 Oct 2022 10:33:33 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D782B1032;
+        Sun, 23 Oct 2022 07:33:32 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id v11so5103188wmd.1;
+        Sun, 23 Oct 2022 07:33:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RCCvao8fpN3Uiz0o0Wawt3sMV5Z79poKLAthlB6c8r8=;
-        b=hNmsNahzRlWfnbEvdZ/lh5M4sqTY7+F+AL9BTTSPNRrvN1YPp7K5QSMJri76AwiaEu
-         I2CSUhHc38Ox4roxIv1gc6SrteM2JhLwbw/h+PajqHsOl4xlgJvzLsvuJDqnmsOrCn07
-         zgRQx1VoddMiAm+enhdj9CMQ83EIpH1OXW2UJ11YTj1ZBe/bTJFFMdHxLVm1pJCNQIyV
-         asfLsjOTyzhG819YCJKibxHuWXou5xxhdwiYwhDAM9XYXHJBwNJiu+Q3QpMl264B5cwu
-         HOjUSb7dgXbKo6rcD3Wn0G3qH5gp3KIgUbdiN0Ax1J72D1+4ZvgCnPFO5vRpOURr7mQ2
-         qwSQ==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WUGeajMYAerRFQcOqcSIJ1LvScQ/5lPSyQp1+APgyBg=;
+        b=NMxA7YjYwmFC7EMaBdm1k/rg1Sg6SL3DNDYSF9piNDMB26oEYDSuJPr9RZz2LI+IbX
+         gzZBC/iDZIao94YxfWesLLKDqIQ2BOIoTfJFPBc8YDp3L+KYy4s+pjdpPIkBFLMGVbvP
+         S8e4wGlNA1rKkMcCda7DtQsSmiy1dw0JjJEKiYuKdXualkP4PHSxhiNtEXVANHw1glo+
+         pGIN6PhZyYAQkHwcHhDLO4RcRJMsOjjte5Z0Qsb2ehlJZkXM9mCsoPprItJkHWoplWTt
+         h/AX24iKZ07DA33piY+5fHwqSxsoNnM4ExuXUgqejEX195YRO3faoVTSWANwFhpda/Us
+         Au4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RCCvao8fpN3Uiz0o0Wawt3sMV5Z79poKLAthlB6c8r8=;
-        b=rXtQMew9xBrMNHtNC+EI/CEQF3q0k7mfs7gntlKk7aq4WLfdA6KzQzLQCC96Yvdp1R
-         9i9Zcl6zV3hDYpKqzsPoCGNlBa2k+A3VFCRI+SZDIw1m9otPQQt6QJNDekJhozRLgLGT
-         WqdYQeCTd9QHYqO95RJ/lGMd8F5H+Sm3OlalO7uo3SIQVyx1pvHcYiIJMUY86T3jIGd/
-         f8U0m46t2eDl4C3yS2FPl9QTMFGKETcZPX+Gt3f/kTeJ3qWA1fr1xORVkJeA4LySSKqm
-         yFIHp7SbsxtaF9nEB9ra6fXZcWzu/fpnZOOkavD1Bdrupr0S3xR/KQO2zDgWgDQ/kXCH
-         NhHA==
-X-Gm-Message-State: ACrzQf1eFynOPvsPQ0fSZWsXo+lJ+2Cb710jtsKlDb4cmXX7jQIpgdGa
-        Tx7L8ZubkddqBNqfzxBWMtw=
-X-Google-Smtp-Source: AMsMyM7Kd7zd8fniNpVLeUCsdN4hfNqclRrXAfgTNN87G6fIN+FR3mT9RixMAqkHRlaJ787nETWCDg==
-X-Received: by 2002:a63:e64f:0:b0:43c:9db1:8096 with SMTP id p15-20020a63e64f000000b0043c9db18096mr23504028pgj.567.1666535178868;
-        Sun, 23 Oct 2022 07:26:18 -0700 (PDT)
-Received: from ubuntu ([175.124.254.119])
-        by smtp.gmail.com with ESMTPSA id a11-20020a634d0b000000b0040caab35e5bsm15877880pgb.89.2022.10.23.07.26.16
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WUGeajMYAerRFQcOqcSIJ1LvScQ/5lPSyQp1+APgyBg=;
+        b=gGUctGQBHNH7dGBlFTno18MPSP4pWmH7Ea/lfNpJYn9sA773Nbpf9XPo9Groe4xXmK
+         sJJhVrju8MI6JzVWoOdO2fhUjhD+UQmapSnL2Nu++1BbHRavWQuev3nPC1rcOn74zAlC
+         cBF031HHa2L60vmmlkqBEiqoA+dcP2fPEBOLR7V6GU3dAqKnXF++IkRdEHkwxeaQBMFo
+         /ss/x5L0o9EecayfcwcDiq1c9lzMz1oM2YXsHQ2xcAaNo5fBZoupjdWwCL6S+N5gAEzf
+         WjSU76LbkB8OBFr/7sTfCMeNuueAfzzM9GSvZF4EOD7IUygAHPC6Pi3hZDex4ObFd8IN
+         3O1A==
+X-Gm-Message-State: ACrzQf1PXCyxFAf8I+FAHdSvnAgB6CZM7NHszQ83c7og62qwcud/na39
+        lyoE1zXmcA/WaLAmDHGZFM2ntsea/bw=
+X-Google-Smtp-Source: AMsMyM4lrHZdx1GnN4wpUqJBRPblfE99mI/Nrpbo9kMAbrO2up/+wV+u6FaSpxhHSqPJA3Pme44kxA==
+X-Received: by 2002:a1c:770f:0:b0:3c8:33ba:150f with SMTP id t15-20020a1c770f000000b003c833ba150fmr7553451wmi.194.1666535611447;
+        Sun, 23 Oct 2022 07:33:31 -0700 (PDT)
+Received: from localhost (94.197.10.75.threembb.co.uk. [94.197.10.75])
+        by smtp.gmail.com with ESMTPSA id bu18-20020a056000079200b002302dc43d77sm10406023wrb.115.2022.10.23.07.33.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Oct 2022 07:26:18 -0700 (PDT)
-Date:   Sun, 23 Oct 2022 07:26:14 -0700
-From:   Hyunwoo Kim <imv4bel@gmail.com>
-To:     Eli Billauer <eli.billauer@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, arnd@arndb.de,
-        gregkh@linuxfoundation.org, imv4bel@gmail.com
-Subject: Re: [PATCH] char: xillybus: Fix use-after-free in xillyusb_open()
-Message-ID: <20221023142614.GA385798@ubuntu>
-References: <20221022175404.GA375335@ubuntu>
- <9674abb2-b40c-3862-5272-58b643dc91e1@gmail.com>
+        Sun, 23 Oct 2022 07:33:30 -0700 (PDT)
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     paul@crapouillou.net, lgirdwood@gmail.com, broonie@kernel.org,
+        perex@perex.cz, tiwai@suse.com
+Cc:     zhouyu@wanyeetech.com, linux-mips@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v6 0/9] ASoC: cleanups and improvements for jz4740-i2s
+Date:   Sun, 23 Oct 2022 15:33:19 +0100
+Message-Id: <20221023143328.160866-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9674abb2-b40c-3862-5272-58b643dc91e1@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,55 +69,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 23, 2022 at 05:19:40PM +0300, Eli Billauer wrote:
-> Hello, Hyunwoo.
-> 
-> > A race condition may occur if the user physically removes
-> > the USB device while calling open() for this device node.
-> > 
-> > This is a race condition between the xillyusb_open() function and
-> > the xillyusb_disconnect() function, which may eventually result in UAF.
-> 
-> Thanks a lot for pointing that out. In fact, this reveals two problems in
-> the existing code:
-> 
-> (1) unit->private_data is accessed after the mutex has been released in
-> xillybus_find_inode(), so there's no guarantee that it will be valid. This
-> is what the test caught. This can however be fixed just by moving the
-> release of the lock a few rows down.
-> 
-> (2) xillyusb_open() accesses @xdev without ensuring that it won't get freed.
-> 
-> Both of these two issues have a negligible probability of causing a visible
-> problem, but this must be fixed, of course.
-> 
-> > 
-> > So, add a mutex to the xillyusb_open() and xillyusb_disconnect()
-> > functions to avoid race contidion.
-> 
-> I'm not very fond of this solution, partially because this mutex protects
-> code and not data (There's this "Lock data, not code" rule, see [1]). Also,
-> xillyusb_disconnect() can take a significant time to run, during which
-> xillybus_open() for another (unrelated and still connected) XillyUSB device
-> has to wait. I guess this demonstrates why protecting code with a mutex is
-> considered bad practice.
-> 
-> Besides, there are already three mechanisms in place for preventing
-> premature release of memory:
-> 
-> (1) @unit_mutex in xillybus_class.c, which protects @unit_list.
-> (2) @kref inside struct xillyusb_dev (xillyusb.c), which protects the
-> structure it resides in.
-> (3) @error inside struct xillyusb_dev, which prevents xillybus_open() from
-> opening a file that belongs to a device that is about to be released.
-> 
-> It's now apparent that they're not working well enough. Rather than adding
-> another mutex, the existing mechanisms should be fixed.  Would you like to
-> do this, or should I?
+This series is a preparatory cleanup of the jz4740-i2s driver before
+adding support for a new SoC. The two improvements are lifting
+unnecessary restrictions on sample rates and formats -- the existing
+ones appear to be derived from the limitations of the JZ4740's internal
+codec and don't reflect the actual capabilities of the I2S controller.
 
-Thanks for the detailed feedback.
-It's probably better for you to work on it.
+I'm unable to test the series on any JZ47xx SoCs, but I have tested
+on an X1000 (which is the SoC I'll be adding in a followup series).
 
+Changes in v6:
 
-Regards,
-Hyunwoo Kim.
+* Added Cc: stable for flush bits fix.
+
+Changes in v5:
+
+* Drop 'mem' resource removal patch already upstream.
+* Update FIFO flush bits fix to address Paul's review comments.
+* Drop PLL clock name patch, that needs a different approach.
+
+Link for v4: https://lore.kernel.org/alsa-devel/20220708160244.21933-1-aidanmacdonald.0x0@gmail.com/
+
+Aidan MacDonald (9):
+  ASoC: jz4740-i2s: Handle independent FIFO flush bits
+  ASoC: jz4740-i2s: Convert to regmap API
+  ASoC: jz4740-i2s: Simplify using regmap fields
+  ASoC: jz4740-i2s: Use FIELD_PREP() macros in hw_params callback
+  ASoC: jz4740-i2s: Align macro values and sort includes
+  ASoC: jz4740-i2s: Support S20_LE and S24_LE sample formats
+  ASoC: jz4740-i2s: Support continuous sample rate
+  ASoC: jz4740-i2s: Move component functions near the component driver
+  ASoC: jz4740-i2s: Refactor DAI probe/remove ops as component ops
+
+ sound/soc/jz4740/Kconfig      |   1 +
+ sound/soc/jz4740/jz4740-i2s.c | 455 ++++++++++++++++++----------------
+ 2 files changed, 243 insertions(+), 213 deletions(-)
+
+-- 
+2.38.1
+
