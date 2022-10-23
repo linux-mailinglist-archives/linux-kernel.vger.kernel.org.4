@@ -2,193 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A14DA609237
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 11:56:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2473609234
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 11:55:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230389AbiJWJz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 05:55:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59180 "EHLO
+        id S230254AbiJWJzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 05:55:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230337AbiJWJzX (ORCPT
+        with ESMTP id S230322AbiJWJy6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 05:55:23 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 944813EA77
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 02:55:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1666518560; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-transfer-encoding:content-transfer-encoding:
+        Sun, 23 Oct 2022 05:54:58 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0447C24F2E
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 02:54:48 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 7A24421B73;
+        Sun, 23 Oct 2022 09:54:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1666518886; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=TEQXKhpmuv4knhdIiLWQdn8XmCoEHRrn4b2xDe3I7q8=;
-        b=vHksYpqY8Bg/aEpy6dWj761UxdGO2zSMJvI6genf6oow2CSnAucZx1N2i4ozanyrmB1f9j
-        l3LDPVkiV9CvPlw+E/Sk0BUPEC0jT1tB9qFj3k2U4MgmxXCn2/Aa4U63pNrsimr1PGQuOX
-        WMYU9iS/OH2TjkJSmkVvJRts/n+r1Co=
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Lee Jones <lee@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH v3 28/28] mfd: intel-lpss: Remove #ifdef guards for PM related functions
-Date:   Sun, 23 Oct 2022 10:48:52 +0100
-Message-Id: <20221023094852.8035-29-paul@crapouillou.net>
-In-Reply-To: <20221023094852.8035-1-paul@crapouillou.net>
-References: <20221023094852.8035-1-paul@crapouillou.net>
+        bh=CK+Pn93YM3hUO/SOOq2CfOkRVsW2wIcoKqdl4PRq0tI=;
+        b=xOEoa3Qu9+NB/uKO+Wq6e62EBHn7+JDqDckm8Yjb8yfen/73be7XawzKw4b3NJ0uWPXXA+
+        G1RxjnS5HKj9FActD3r14ol9WPMc9zMruydp0iPISKJGDKukwBak0wXc156qj4bJYnOCmO
+        xOqQqUdHbjjKwsVgHNWakVj6zv47tdc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1666518886;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CK+Pn93YM3hUO/SOOq2CfOkRVsW2wIcoKqdl4PRq0tI=;
+        b=uArJMGEzyPJQc7GDDzgXsOqn8mszxJnmAK4CYy0bcGzDwMOevb95bUngl+KoaIERZ0KhlY
+        mC6bWBCpqtiJxOCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6CE9C139F0;
+        Sun, 23 Oct 2022 09:54:46 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id /QKMGmYPVWPdOgAAMHmgww
+        (envelope-from <bp@suse.de>); Sun, 23 Oct 2022 09:54:46 +0000
+Date:   Sun, 23 Oct 2022 11:54:42 +0200
+From:   Borislav Petkov <bp@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: Re: [GIT PULL] x86/urgent for 6.1
+Message-ID: <Y1UPYnju4qOTsusI@zn.tnic>
+References: <Y1ULKYsASLRoVb7N@zn.tnic>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y1ULKYsASLRoVb7N@zn.tnic>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the new EXPORT_GPL_DEV_PM_OPS() and pm_sleep_ptr() / pm_ptr() macros
-to handle the PM callbacks.
+On Sun, Oct 23, 2022 at 11:36:41AM +0200, Borislav Petkov wrote:
+> Hi Linus,
+> 
+> as it is usually the case, right after a major release, the tip urgent
+> branches accumulate a couple more fixes than normal. And here is the
+> x86, a bit bigger, urgent pile.
+> 
+> Please pull,
+> thx.
+> 
+> ---
+> 
+> The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
+> 
+>   Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_urgent_for_v6.0_rc2
+									          ^^^^^
 
-These macros allow the PM functions to be automatically dropped by the
-compiler when CONFIG_SUSPEND is disabled, without having to use #ifdef
-guards.
+Whoops, I mistyped the version in the tag. Lemme know if you need a
+properly renamed tag: x86_urgent_for_v6.1_rc2
 
-This has the advantage of always compiling these functions in,
-independently of any Kconfig option. Thanks to that, bugs and other
-regressions are subsequently easier to catch.
+Thx.
 
-Note that instead of exporting two dev_pm_ops structures containing the
-exact same data, one in intel-lpss-acpi.c and one in intel-lpss-pci.c,
-we export one single dev_pm_ops structure from intel-lpss.c using the
-EXPORT_GP_DEV_PM_OPS() macro, which is then referenced from the -acpi.c
-and -pci.c files.
-
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
- drivers/mfd/intel-lpss-acpi.c |  4 +---
- drivers/mfd/intel-lpss-pci.c  |  2 +-
- drivers/mfd/intel-lpss.c      | 15 +++++++++------
- drivers/mfd/intel-lpss.h      | 28 +---------------------------
- 4 files changed, 12 insertions(+), 37 deletions(-)
-
-diff --git a/drivers/mfd/intel-lpss-acpi.c b/drivers/mfd/intel-lpss-acpi.c
-index a143c8dca2d9..1d46a7aa1c61 100644
---- a/drivers/mfd/intel-lpss-acpi.c
-+++ b/drivers/mfd/intel-lpss-acpi.c
-@@ -203,15 +203,13 @@ static int intel_lpss_acpi_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
--static INTEL_LPSS_PM_OPS(intel_lpss_acpi_pm_ops);
--
- static struct platform_driver intel_lpss_acpi_driver = {
- 	.probe = intel_lpss_acpi_probe,
- 	.remove = intel_lpss_acpi_remove,
- 	.driver = {
- 		.name = "intel-lpss",
- 		.acpi_match_table = intel_lpss_acpi_ids,
--		.pm = &intel_lpss_acpi_pm_ops,
-+		.pm = pm_ptr(&intel_lpss_pm_ops),
- 	},
- };
- 
-diff --git a/drivers/mfd/intel-lpss-pci.c b/drivers/mfd/intel-lpss-pci.c
-index dde31c50a632..28f4d3a5aae3 100644
---- a/drivers/mfd/intel-lpss-pci.c
-+++ b/drivers/mfd/intel-lpss-pci.c
-@@ -556,7 +556,7 @@ static struct pci_driver intel_lpss_pci_driver = {
- 	.probe = intel_lpss_pci_probe,
- 	.remove = intel_lpss_pci_remove,
- 	.driver = {
--		.pm = &intel_lpss_pci_pm_ops,
-+		.pm = pm_ptr(&intel_lpss_pm_ops),
- 	},
- };
- 
-diff --git a/drivers/mfd/intel-lpss.c b/drivers/mfd/intel-lpss.c
-index cfbee2cfba6b..9cdd0b52f8d8 100644
---- a/drivers/mfd/intel-lpss.c
-+++ b/drivers/mfd/intel-lpss.c
-@@ -468,7 +468,7 @@ static int resume_lpss_device(struct device *dev, void *data)
- 	return 0;
- }
- 
--int intel_lpss_prepare(struct device *dev)
-+static int intel_lpss_prepare(struct device *dev)
- {
- 	/*
- 	 * Resume both child devices before entering system sleep. This
-@@ -477,9 +477,8 @@ int intel_lpss_prepare(struct device *dev)
- 	device_for_each_child_reverse(dev, NULL, resume_lpss_device);
- 	return 0;
- }
--EXPORT_SYMBOL_GPL(intel_lpss_prepare);
- 
--int intel_lpss_suspend(struct device *dev)
-+static int intel_lpss_suspend(struct device *dev)
- {
- 	struct intel_lpss *lpss = dev_get_drvdata(dev);
- 	unsigned int i;
-@@ -498,9 +497,8 @@ int intel_lpss_suspend(struct device *dev)
- 
- 	return 0;
- }
--EXPORT_SYMBOL_GPL(intel_lpss_suspend);
- 
--int intel_lpss_resume(struct device *dev)
-+static int intel_lpss_resume(struct device *dev)
- {
- 	struct intel_lpss *lpss = dev_get_drvdata(dev);
- 	unsigned int i;
-@@ -513,7 +511,12 @@ int intel_lpss_resume(struct device *dev)
- 
- 	return 0;
- }
--EXPORT_SYMBOL_GPL(intel_lpss_resume);
-+
-+EXPORT_GPL_DEV_PM_OPS(intel_lpss_pm_ops) = {
-+	.prepare = pm_sleep_ptr(intel_lpss_prepare),
-+	LATE_SYSTEM_SLEEP_PM_OPS(intel_lpss_suspend, intel_lpss_resume)
-+	RUNTIME_PM_OPS(intel_lpss_suspend, intel_lpss_resume, NULL)
-+};
- 
- static int __init intel_lpss_init(void)
- {
-diff --git a/drivers/mfd/intel-lpss.h b/drivers/mfd/intel-lpss.h
-index 062ce95b68b9..c1d72b117ed5 100644
---- a/drivers/mfd/intel-lpss.h
-+++ b/drivers/mfd/intel-lpss.h
-@@ -30,32 +30,6 @@ int intel_lpss_probe(struct device *dev,
- 		     const struct intel_lpss_platform_info *info);
- void intel_lpss_remove(struct device *dev);
- 
--#ifdef CONFIG_PM
--int intel_lpss_prepare(struct device *dev);
--int intel_lpss_suspend(struct device *dev);
--int intel_lpss_resume(struct device *dev);
--
--#ifdef CONFIG_PM_SLEEP
--#define INTEL_LPSS_SLEEP_PM_OPS			\
--	.prepare = intel_lpss_prepare,		\
--	SET_LATE_SYSTEM_SLEEP_PM_OPS(intel_lpss_suspend, intel_lpss_resume)
--#else
--#define INTEL_LPSS_SLEEP_PM_OPS
--#endif
--
--#define INTEL_LPSS_RUNTIME_PM_OPS		\
--	.runtime_suspend = intel_lpss_suspend,	\
--	.runtime_resume = intel_lpss_resume,
--
--#else /* !CONFIG_PM */
--#define INTEL_LPSS_SLEEP_PM_OPS
--#define INTEL_LPSS_RUNTIME_PM_OPS
--#endif /* CONFIG_PM */
--
--#define INTEL_LPSS_PM_OPS(name)			\
--const struct dev_pm_ops name = {		\
--	INTEL_LPSS_SLEEP_PM_OPS			\
--	INTEL_LPSS_RUNTIME_PM_OPS		\
--}
-+extern const struct dev_pm_ops intel_lpss_pm_ops;
- 
- #endif /* __MFD_INTEL_LPSS_H */
 -- 
-2.35.1
+Regards/Gruss,
+    Boris.
 
+SUSE Software Solutions Germany GmbH
+GF: Ivo Totev, Andrew Myers, Andrew McDonald, Martje Boudien Moerman
+(HRB 36809, AG Nürnberg)
