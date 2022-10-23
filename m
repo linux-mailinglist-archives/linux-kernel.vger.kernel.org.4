@@ -2,202 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 772FA6093BC
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 15:46:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4227E6093BE
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 15:47:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229782AbiJWNqX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 09:46:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52360 "EHLO
+        id S230244AbiJWNrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 09:47:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230210AbiJWNqU (ORCPT
+        with ESMTP id S229497AbiJWNrF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 09:46:20 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19EB25B06F;
-        Sun, 23 Oct 2022 06:46:17 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id bu30so11746184wrb.8;
-        Sun, 23 Oct 2022 06:46:17 -0700 (PDT)
+        Sun, 23 Oct 2022 09:47:05 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC5535C975;
+        Sun, 23 Oct 2022 06:47:03 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id u6so6367790plq.12;
+        Sun, 23 Oct 2022 06:47:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=cq6ml4rMvsUZl0nbZA+VtI9dxWSfIwNhhZth1xvqK1U=;
-        b=FzoUqcb6qJbIqhCt3TliEUVGR/X71bCFhiCCI5D83ibto6Qv5XXoB+RiebX3FVhQK5
-         Fw8x1nrQm9OP0jft7Dxc8iKozpZqHdb02nYLVLYKpVheXjsdy9z/ouiHLg/J5MTLJfpO
-         OuFaw5Sr5RQrgUX/GN6iFK+eqyDDnWQXC0TE1zAZbKFr9ydEmmAK6SV1iynhBZ6MeXT4
-         RPBNsbet6SeEjqLJc79SUd0IoAWk7xeE0s7FWblyZSts9TwS/eQ1Ai1L7t8smDwJ7L+L
-         3QvI9+Uf3CsqFwDRtVAeKumZ9u+FWb8vRRLaul2qqq7Y8GU1oPd5NNPkNxG/8W6qOnDD
-         w5ng==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3nHa8A+7PeIMg7RKdNLlRzsKGG0uAkGmk1JSJv06f7g=;
+        b=f2Cppc+QfZk1KXVH6JcNRhs8g7DPxaW5ORqSgC5zYxTOJHX4Znuc/dXjM3N/q6m89d
+         +waRzpUa3GYJ7QiIORnDN1J9gVB9Wyqd+F8iwhrsMrD49QrXT9JPTtqzNHUrHJKxgxAE
+         1rzC5bcP8RTof1JSPL/cmRJlwYu3SfBGUeQ1YHbbwRZzRyUxUuOwhpckW9eKAoHAIvdX
+         D+2N5eg78YTFFRWxrg+5O9RLcTYC5pXXlhVrMvYY9RxQ7rHdg0rifkQn85dPqe8Q+wya
+         05lOONZSOoHJLN0FPL0XG/ja/EL2aF4P+Slx3vbLEAezGK4GczXjOgZ86AxFi1CVeti2
+         naFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cq6ml4rMvsUZl0nbZA+VtI9dxWSfIwNhhZth1xvqK1U=;
-        b=DW0RUJd7wNDxfIt9HgE7yn8opDam3M+zQXMxg1xrJCOPPNOTd73iTvOtN79SuDd5Lz
-         hqkLaYKCiECDvKy4EnCP7ST+Io8vnRRTdvb9o+G8hlt1LZQKHMvt/HWN67xnku4eV+yp
-         5mJ+ftppN8xkBLSdO0o7ySwhE6ihYH60baxGsAfxMrOwrIuOSuyFCGfx78GHIBKT9xRD
-         NjnczhPD5a1+bIarz2fstcuE0Bjwqpsx6+E8X9HwpEieKNdJrsGdMHp72rBbs65144hg
-         lD9dZXpr1N0tyb/mMNRJYeVu7t3XHgY4fTu6MP2O0C2s8WSmb7WUZWnjXeInPz+bqQWA
-         s6lA==
-X-Gm-Message-State: ACrzQf3FJnAob3PeVZszGrLaytnllpNjbT+LDEvxXyVaJGDHTbrFuopg
-        cRSKbiF76t63VYKli7NHwPg=
-X-Google-Smtp-Source: AMsMyM5cEBhGyIJhCn4sJCAomHqAAqJkVvaoiWF4egAgFRcx4BOvDf6EzslOacVsYxuehLGoMpyFNA==
-X-Received: by 2002:a5d:5a05:0:b0:235:474c:c12 with SMTP id bq5-20020a5d5a05000000b00235474c0c12mr12571964wrb.659.1666532775302;
-        Sun, 23 Oct 2022 06:46:15 -0700 (PDT)
-Received: from ?IPv6:2001:a61:2b07:7001:b004:9b9f:6a7a:db0f? ([2001:a61:2b07:7001:b004:9b9f:6a7a:db0f])
-        by smtp.gmail.com with ESMTPSA id n7-20020a05600c4f8700b003c6c1686b10sm5585928wmq.7.2022.10.23.06.46.14
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3nHa8A+7PeIMg7RKdNLlRzsKGG0uAkGmk1JSJv06f7g=;
+        b=RPZnraBq4ya0kYouEsrjgRfldp3JmfcgIPsyzZiM33K2MzjNgLON9aYnxzGtia4VVU
+         XKGDNKC2icNbCiLIWPwpj/AXLwPLGCSKm3ZluFVeDQF/Lopax53+yEhXUT56lakvDJ/p
+         60cSox29Mz/9wys2Pk+PEwwyOe7oSfrGQi7ob5RX0o0kKe53VD/aSrQ8p/hFT12MIPvQ
+         diPEf3YSjZRkeUJEw6XtGOaaQv5mlVuah4/KM9hXDE7yQNUVZFLiijwW1/hj0cFFr3iU
+         DvRy1Uj5nl4ccvDOdLRfk0uGsazAT2ZzI//CN6XtCao7AjIgZEKhYzCnOZ+rNq4ZGDYD
+         46Bg==
+X-Gm-Message-State: ACrzQf3jX/v6hxj3AqDL6mJVfAYnmAFyIDnwVR2M3nQgeZWVWC33DfWX
+        QoN5B3Hyow2kVg2kcyw1gfc=
+X-Google-Smtp-Source: AMsMyM6NkjM2G8o7YZ+RxKeQn131uK3LWFYzUa0kiOACmGutmZsEEiSpVlcjBePs8fqT48DOK1KZRg==
+X-Received: by 2002:a17:90b:4a8f:b0:20d:2f93:3bb with SMTP id lp15-20020a17090b4a8f00b0020d2f9303bbmr68543882pjb.149.1666532823495;
+        Sun, 23 Oct 2022 06:47:03 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-1.three.co.id. [180.214.232.1])
+        by smtp.gmail.com with ESMTPSA id v16-20020a1709028d9000b0016d5b7fb02esm17976494plo.60.2022.10.23.06.47.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Oct 2022 06:46:14 -0700 (PDT)
-Message-ID: <5cfc6dbb2a324746ece4f6cc0e633ccedfce2c54.camel@gmail.com>
-Subject: Re: [PATCH v2 3/5] dt-bindings: iio: temperature: ltc2983: refine
-From:   Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-To:     Jonathan Cameron <jic23@kernel.org>,
-        Cosmin Tanislav <demonsingur@gmail.com>
-Cc:     Nuno =?ISO-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Cosmin Tanislav <cosmin.tanislav@analog.com>
-Date:   Sun, 23 Oct 2022 15:46:13 +0200
-In-Reply-To: <20221023135124.1fdeab5e@jic23-huawei>
-References: <20221020090257.1717053-1-demonsingur@gmail.com>
-         <20221020090257.1717053-4-demonsingur@gmail.com>
-         <20221023135124.1fdeab5e@jic23-huawei>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Sun, 23 Oct 2022 06:47:02 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 3065A1005FC; Sun, 23 Oct 2022 20:47:00 +0700 (WIB)
+Date:   Sun, 23 Oct 2022 20:47:00 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     wangjianli <wangjianli@cdjrlc.com>
+Cc:     mathew.j.martineau@linux.intel.com, matthieu.baerts@tessares.net,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org, mptcp@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net/mptcp: fix repeated words in comments
+Message-ID: <Y1VF1DBYePbkTk8x@debian.me>
+References: <20221022070527.55960-1-wangjianli@cdjrlc.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="M9jz/0j3xO1O4oqZ"
+Content-Disposition: inline
+In-Reply-To: <20221022070527.55960-1-wangjianli@cdjrlc.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2022-10-23 at 13:51 +0100, Jonathan Cameron wrote:
-> On Thu, 20 Oct 2022 12:02:55 +0300
-> Cosmin Tanislav <demonsingur@gmail.com> wrote:
->=20
-> > From: Cosmin Tanislav <cosmin.tanislav@analog.com>
-> >=20
-> > =C2=A0* make sure addresses are represented as hex
-> > =C2=A0* add note about wrong unit value for adi,mux-delay-config-us
-> > =C2=A0* simplify descriptions
-> > =C2=A0* add descriptions for the items of custom sensor tables
-> > =C2=A0* add default property values where applicable
-> > =C2=A0* use conditionals to extend minimum reg value
-> > =C2=A0=C2=A0 for single ended sensors
-> > =C2=A0* remove " around phandle schema $ref
-> > =C2=A0* remove label from example and use generic temperature
-> > =C2=A0=C2=A0 sensor name
-> >=20
-> > Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
->=20
-> Hi Cosmin,
->=20
-> Just one question inline from me (other than the build bot report
-> that I'll
-> assume you'll fix for v3).
->=20
-> Otherwise looks like a nice cleanup to me.
->=20
-> I wonder a bit on whether it is worth splitting up, but that would be
-> rather messy to actually do so will leave that to the dt experts to
-> comment
-> on.
->=20
-> Jonathan
->=20
->=20
-> > ---
-> > =C2=A0.../bindings/iio/temperature/adi,ltc2983.yaml | 309 +++++++++++--=
--
-> > ----
-> > =C2=A01 file changed, 182 insertions(+), 127 deletions(-)
-> >=20
-> > diff --git
-> > a/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yam
-> > l
-> > b/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yam
-> > l
-> > index 722781aa4697..3e97ec841fd6 100644
-> > ---
-> > a/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yam
-> > l
-> > +++
-> > b/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yam
-> > l
-> > @@ -26,25 +26,25 @@ properties:
-> > =C2=A0
-> > =C2=A0=C2=A0 adi,mux-delay-config-us:
-> > =C2=A0=C2=A0=C2=A0=C2=A0 description:
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 The LTC2983 performs 2 or 3 internal co=
-nversion cycles per
-> > temperature
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 result. Each conversion cycle is perfor=
-med with different
-> > excitation and
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 input multiplexer configurations. Prior=
- to each conversion,
-> > these
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 excitation circuits and input switch co=
-nfigurations are
-> > changed and an
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 internal 1ms delay ensures settling pri=
-or to the conversion
-> > cycle in most
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 cases. An extra delay can be configured=
- using this property.
-> > The value is
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 rounded to nearest 100us.
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Extra delay prior to each conversion, i=
-n addition to the
-> > internal 1ms
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 delay, for the multiplexer to switch in=
-put configurations
-> > and
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 excitation values.
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 This property is supposed to be in micr=
-oseconds, but to
-> > maintain
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 compatibility, this value will be multi=
-plied by 100 before
-> > usage.
->=20
-> This new text has me a little confused.=C2=A0 Previously we talked
-> rounding, now it
-> is saying the value is multiplied (which would make it definitely not
-> in micro
-> secs!)..=C2=A0 So are we papering over a driver bug here?
->=20
->=20
 
-Hi Jonathan,
+--M9jz/0j3xO1O4oqZ
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Let me try to make this one clear as it was my mess...
+On Sat, Oct 22, 2022 at 03:05:27PM +0800, wangjianli wrote:
+> Delete the redundant word 'the'.
+>=20
+> Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
+> ---
+>  net/mptcp/token.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/net/mptcp/token.c b/net/mptcp/token.c
+> index f52ee7b26aed..b817c2564300 100644
+> --- a/net/mptcp/token.c
+> +++ b/net/mptcp/token.c
+> @@ -287,7 +287,7 @@ EXPORT_SYMBOL_GPL(mptcp_token_get_sock);
+>   * This function returns the first mptcp connection structure found insi=
+de the
+>   * token container starting from the specified position, or NULL.
+>   *
+> - * On successful iteration, the iterator is move to the next position an=
+d the
+> + * On successful iteration, the iterator is move to the next position and
+>   * the acquires a reference to the returned socket.
+>   */
+>  struct mptcp_sock *mptcp_token_iter_next(const struct net *net, long *s_=
+slot,
 
-The multiplication is done internally by the device. I messed up in
-this one as this value is clearly not in us but it is the raw value.
-So, tecnically, there's nothing wrong in the driver as it just reads
-this property and directly writes it. But of course this is misleading
-and wrong from the bindings point of view.
+NAK!
 
-That said, me and Cosmin did spoke about just having this property
-'deprecated' and add a new one (the driver would need to be changed
-accordingly) - no idea also about a new name for it :)
+Instead, slightly reword the comment above as "On successful iteration,
+the iterator moves to the next position and acquires a reference to the
+returned socket.".
 
-But for this round, Cosmin decided to have this stated on the
-description and see what you and dt maintainers had to say about it and
-if making it 'deprecated' is the way to go (or something else).
+Also, you and other @cdjrlc.com developers ignore reviews that request
+changes to your patches. If you want to participate in kernel
+development community, please don't just sending random patches without
+any sort of reply.
 
-- Nuno S=C3=A1
+I have pointed out this behavior either as part of my review or as reply
+to reviews from other developers. I may write this as final warning before
+I just say NAK without further ado to your future patches.
 
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--M9jz/0j3xO1O4oqZ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY1VF0AAKCRD2uYlJVVFO
+o25EAQDIoaFBeuz0b5mrP55Nk6SpOrkxQQ0pTeEwTsUbrqbC2wD/UsccZMALgll3
+5yvwmQtwwSeG2n05VcGxoklMaPFGDwQ=
+=mQXI
+-----END PGP SIGNATURE-----
+
+--M9jz/0j3xO1O4oqZ--
