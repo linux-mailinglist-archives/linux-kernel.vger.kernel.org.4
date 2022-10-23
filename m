@@ -2,121 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79236609203
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 11:30:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA7F0609205
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 11:37:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230082AbiJWJaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 05:30:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49560 "EHLO
+        id S229917AbiJWJgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 05:36:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229783AbiJWJa1 (ORCPT
+        with ESMTP id S229799AbiJWJgu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 05:30:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5944060E9D;
-        Sun, 23 Oct 2022 02:30:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sun, 23 Oct 2022 05:36:50 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6313C71BD9
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 02:36:49 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 69A5A60AF7;
-        Sun, 23 Oct 2022 09:30:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3444FC433D6;
-        Sun, 23 Oct 2022 09:30:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666517422;
-        bh=SvZU34knkzTksbDV9/R1UQaBdQ4Vp+P93Kb6ii8rmFI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IdS3KcbBazezxh9b26kfs977M6yjyqN0x7jvtpV3Q5ywMUbCdObrVuPS0OEKBg6Up
-         AUbvS3j2LuHGFqAvJMcaHQaOpw26+XGcU328Q4qn9Jg9EfQohWWl7Cl21AcBj8sF3z
-         vbyTl8JsU+nEBOS49rJMLoQk67n/0NUUGT+CLpZU4ZNYqgu79QgzbPhIAs6TmWqWkS
-         V5SyNz6DTXrvgtVqrAPVxeWnU5q9pGsokJSGRSMfu5s1IDTTac76H+C9kV65xs90bL
-         HxOkVbw/nqYM9QSy9hTkL1a8XdqxMc5qCyUl9cnw6d+6xKW6EjF8iaG5qpi60GXnfH
-         AHwXX9o8pr9Vg==
-Date:   Sun, 23 Oct 2022 17:30:16 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Sascha Hauer <s.hauer@pengutronix.de>, linux-input@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Fabio Estevam <festevam@gmail.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/4] ARM: dts: imx6qdl-sabre*: fix Egalax touchscreen
- properties
-Message-ID: <20221023093016.GC125525@dragon>
-References: <20220920042608.1865560-1-dmitry.torokhov@gmail.com>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 823C61FD4A;
+        Sun, 23 Oct 2022 09:36:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1666517807; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=a2CSw/8rZWkxUuRs5fo3QIrgID+nd0kedAMIW6JAgs4=;
+        b=Ek5FzeCC+vIbrz4H25njCQQRQbFsMAnE+b0rYXimqtQvhMSkC+ZvkJE119Yjz+/+8QLiw5
+        Kwi8OHs1T9v+nUNRqfnPyplYjHGlRCtT+CkGz20jyW2T+DucEDPLgIxiKaBXCjjil64Qmt
+        dt2QTETT8YOOBKW3yp89k+/6Lc5kj34=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1666517807;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=a2CSw/8rZWkxUuRs5fo3QIrgID+nd0kedAMIW6JAgs4=;
+        b=pZFBjLLQe/FJ/+aMAObfXsc/CEm0rJq9HVSgJiPZPow7I6er8Q8It+58ay60zLcuZ5aCOr
+        OuquBb4nzrc4BhCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7637B139F0;
+        Sun, 23 Oct 2022 09:36:47 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id H4nNHC8LVWPQMwAAMHmgww
+        (envelope-from <bp@suse.de>); Sun, 23 Oct 2022 09:36:47 +0000
+Date:   Sun, 23 Oct 2022 11:36:41 +0200
+From:   Borislav Petkov <bp@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] x86/urgent for 6.1
+Message-ID: <Y1ULKYsASLRoVb7N@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220920042608.1865560-1-dmitry.torokhov@gmail.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 19, 2022 at 09:26:05PM -0700, Dmitry Torokhov wrote:
-> This patch fixes interrupt trigger (should be level low as that is what the
-> driver is always using), the GPIO that is the interrupt source that is also
-> used to wake up chip by driving the line low.
-> 
-> The proper polarity is be needed for converting the driver to gpiod API.
-> 
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Hi Linus,
 
-Looks good to me.  Let me know if you want me to pick it up.  Otherwise,
+as it is usually the case, right after a major release, the tip urgent
+branches accumulate a couple more fixes than normal. And here is the
+x86, a bit bigger, urgent pile.
 
-Acked-by: Shawn Guo <shawnguo@kernel.org>
+Please pull,
+thx.
 
-Shawn
+---
 
-> ---
->  arch/arm/boot/dts/imx6qdl-sabreauto.dtsi | 4 ++--
->  arch/arm/boot/dts/imx6qdl-sabresd.dtsi   | 8 ++++----
->  2 files changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/arch/arm/boot/dts/imx6qdl-sabreauto.dtsi b/arch/arm/boot/dts/imx6qdl-sabreauto.dtsi
-> index 1368a4762037..1883350d004e 100644
-> --- a/arch/arm/boot/dts/imx6qdl-sabreauto.dtsi
-> +++ b/arch/arm/boot/dts/imx6qdl-sabreauto.dtsi
-> @@ -451,8 +451,8 @@ touchscreen@4 {
->  		pinctrl-names = "default";
->  		pinctrl-0 = <&pinctrl_egalax_int>;
->  		interrupt-parent = <&gpio2>;
-> -		interrupts = <28 IRQ_TYPE_EDGE_FALLING>;
-> -		wakeup-gpios = <&gpio2 28 GPIO_ACTIVE_HIGH>;
-> +		interrupts = <28 IRQ_TYPE_LEVEL_LOW>;
-> +		wakeup-gpios = <&gpio2 28 GPIO_ACTIVE_LOW>;
->  	};
->  };
->  
-> diff --git a/arch/arm/boot/dts/imx6qdl-sabresd.dtsi b/arch/arm/boot/dts/imx6qdl-sabresd.dtsi
-> index 37482a9023fc..09f4c2fa3ad6 100644
-> --- a/arch/arm/boot/dts/imx6qdl-sabresd.dtsi
-> +++ b/arch/arm/boot/dts/imx6qdl-sabresd.dtsi
-> @@ -311,8 +311,8 @@ touchscreen@4 {
->  		pinctrl-names = "default";
->  		pinctrl-0 = <&pinctrl_i2c2_egalax_int>;
->  		interrupt-parent = <&gpio6>;
-> -		interrupts = <8 IRQ_TYPE_EDGE_FALLING>;
-> -		wakeup-gpios = <&gpio6 8 GPIO_ACTIVE_HIGH>;
-> +		interrupts = <8 IRQ_TYPE_LEVEL_LOW>;
-> +		wakeup-gpios = <&gpio6 8 GPIO_ACTIVE_LOW>;
->  	};
->  
->  	ov5640: camera@3c {
-> @@ -450,8 +450,8 @@ egalax_ts@4 {
->  		compatible = "eeti,egalax_ts";
->  		reg = <0x04>;
->  		interrupt-parent = <&gpio6>;
-> -		interrupts = <7 2>;
-> -		wakeup-gpios = <&gpio6 7 0>;
-> +		interrupts = <7 IRQ_TYPE_LEVEL_LOW>;
-> +		wakeup-gpios = <&gpio6 7 GPIO_ACTIVE_LOW>;
->  	};
->  
->  	magnetometer@e {
-> -- 
-> 2.37.3.968.ga6b4b080e4-goog
-> 
+The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
+
+  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_urgent_for_v6.0_rc2
+
+for you to fetch changes up to 471f0aa7fa64e23766a1473b32d9ec3f0718895a:
+
+  x86/fpu: Fix copy_xstate_to_uabi() to copy init states correctly (2022-10-21 15:22:09 -0700)
+
+----------------------------------------------------------------
+- Use the correct CPU capability clearing function on the error path in
+  Intel perf LBR
+
+- A CFI fix to ftrace along with a simplification
+
+- Adjust handling of zero capacity bit mask for resctrl cache allocation
+  on AMD
+
+- A fix to the AMD microcode loader to attempt patch application on
+  every logical thread
+
+- A couple of topology fixes to handle CPUID leaf 0x1f enumeration info
+  properly
+
+- Drop a -mabi=ms compiler option check as both compilers support it now
+  anyway
+
+- A couple of fixes to how the initial, statically allocated FPU buffer
+  state is setup and its interaction with dynamic states at runtime
+
+----------------------------------------------------------------
+Babu Moger (1):
+      x86/resctrl: Fix min_cbm_bits for AMD
+
+Borislav Petkov (1):
+      x86/microcode/AMD: Apply the patch early on every logical thread
+
+Chang S. Bae (4):
+      x86/fpu: Configure init_fpstate attributes orderly
+      x86/fpu: Fix the init_fpstate size check with the actual size
+      x86/fpu: Exclude dynamic states from init_fpstate
+      x86/fpu: Fix copy_xstate_to_uabi() to copy init states correctly
+
+Maxim Levitsky (1):
+      perf/x86/intel/lbr: Use setup_clear_cpu_cap() instead of clear_cpu_cap()
+
+Nathan Chancellor (1):
+      x86/Kconfig: Drop check for -mabi=ms for CONFIG_EFI_STUB
+
+Peter Zijlstra (2):
+      x86/ftrace: Remove ftrace_epilogue()
+      ftrace,kcfi: Separate ftrace_stub() and ftrace_stub_graph()
+
+Zhang Rui (3):
+      hwmon/coretemp: Handle large core ID value
+      x86/topology: Fix multiple packages shown on a single-package system
+      x86/topology: Fix duplicated core ID within a package
+
+ arch/arm64/kernel/entry-ftrace.S    |  7 ++++-
+ arch/x86/Kconfig                    |  1 -
+ arch/x86/events/intel/lbr.c         |  2 +-
+ arch/x86/kernel/cpu/microcode/amd.c | 16 +++++++++--
+ arch/x86/kernel/cpu/resctrl/core.c  |  8 ++----
+ arch/x86/kernel/cpu/topology.c      | 16 +++++++----
+ arch/x86/kernel/fpu/init.c          |  8 ------
+ arch/x86/kernel/fpu/xstate.c        | 42 +++++++++++++++-------------
+ arch/x86/kernel/ftrace_64.S         | 34 +++++++++-------------
+ drivers/hwmon/coretemp.c            | 56 +++++++++++++++++++++++++++----------
+ include/asm-generic/vmlinux.lds.h   | 18 ++++++++----
+ 11 files changed, 122 insertions(+), 86 deletions(-)
+
+-- 
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH
+GF: Ivo Totev, Andrew Myers, Andrew McDonald, Martje Boudien Moerman
+(HRB 36809, AG Nürnberg)
