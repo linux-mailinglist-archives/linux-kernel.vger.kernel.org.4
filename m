@@ -2,99 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04A766091B3
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 09:46:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EC4A6091B1
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 09:45:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230099AbiJWHqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 03:46:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53844 "EHLO
+        id S230091AbiJWHps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 03:45:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229982AbiJWHqJ (ORCPT
+        with ESMTP id S229686AbiJWHpq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 03:46:09 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 954AA6CD3E
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 00:46:04 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id h2so88552pgp.4
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 00:46:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Q+3XI07NIU0r0BcSpY4o4wAED1j8IMzL6p8JlqJ+P7M=;
-        b=HNX7B3LX5uGls5yoQ/5rcdO3NyrtZTcsWkpJx9uEferAxFEMGahSk77KWsyjQqM081
-         SmHGfTKBcsKNRcnCMtbYzC8/QpkdGVvCB+DcTyYY5nzGGJMYLyY63doCjtrtagYKSqbQ
-         72KKKHZQvFXE3hErYtcA+0HNZoqNXtZfwFCWW3mzNxmOInHiyLd2jX9gK2eYWnHL56dY
-         6wUHiYGv02nGQ49T5B5Y4MEdC1rshkasUy6h29VDsZOXdecYgPtscpg17YkBPeLmj77x
-         qV/SwnwvnB8CgsNWcl7X6G2uhmBG0gSJF8EqEQmVyrv389h15pcTgy83XkMOCb0cnIB8
-         DA+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Q+3XI07NIU0r0BcSpY4o4wAED1j8IMzL6p8JlqJ+P7M=;
-        b=gkfE+7b4KlqkCQRT/arxqCYtE6NuPvXVdpKrwWsFGgh36Bx4V7uu2E50JMbVq/KSUy
-         Bk6z5zgFMZkd8QkvV6l9A5OD/4nx1uRYagQKX/cEHm3B9aLJhV1FESwDfziZv5VVT9r2
-         2I0fvnq7DuI3NuN7XWT39KVwBjmgAMETasxbzRoH68vlsTMuB3Iw0v4a+CSv2iP9Zidh
-         gc4vesynkumHU39b8sS8DGkgnBiMmwbXAcNX6aRJX5XTJrvAKhIWRu0gR3/lUna04Rtm
-         hApIeY0fP09BxzRSh6Vw7BWfJNF9di/o1tQ0YHdFOHZVE1dvJOswxKFEa26AeGH8652/
-         BEKw==
-X-Gm-Message-State: ACrzQf1PvDQlJv1J2vRlY7hllHDbLdNa44dhMAmvIolHBQx/2VBLGUxh
-        UzDWZTfyBLqWojivikPGUVOTfhbUF8zwoE2IEw==
-X-Google-Smtp-Source: AMsMyM7hnbn4FtvSizf8k1Mr/Ab9tVqFbA04W4ZUETz4RdenA5XTA4G0THtH48QpRTXAq92reGBQTA==
-X-Received: by 2002:a63:6505:0:b0:46e:d30b:8f9 with SMTP id z5-20020a636505000000b0046ed30b08f9mr6658694pgb.366.1666511164097;
-        Sun, 23 Oct 2022 00:46:04 -0700 (PDT)
-Received: from localhost.localdomain ([121.34.154.42])
-        by smtp.gmail.com with ESMTPSA id ge12-20020a17090b0e0c00b0020aa1bd91e4sm4101976pjb.4.2022.10.23.00.46.00
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 23 Oct 2022 00:46:03 -0700 (PDT)
-From:   Ban Tao <fengzheng923@gmail.com>
-To:     fengzheng923@gmail.com, lgirdwood@gmail.com, broonie@kernel.org,
-        perex@perex.cz, tiwai@suse.com, wens@csie.org,
-        jernej.skrabec@gmail.com, samuel@sholland.org
-Cc:     alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] ASoC: sun50i-dmic: avoid unused variable warning for sun50i_dmic_of_match
-Date:   Sun, 23 Oct 2022 00:44:45 -0700
-Message-Id: <1666511085-2748-1-git-send-email-fengzheng923@gmail.com>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 23 Oct 2022 03:45:46 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B38986C12A
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 00:45:45 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29N7Bu9L011244;
+        Sun, 23 Oct 2022 07:45:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=DdL19aftCDBh/ECvqp1xFc1VEI20ljr9INS5cargBb4=;
+ b=irpbEY9lqgTNw547IzrJQq2C5Ww1BlkGrsPwQLVrRYihAtOJyNmN6G4iyGSiZsEAPY3A
+ oTJfmMlB4rcHjSPA897bhNscG0+E/vOUR/A4vmQt7al1gRNK9efHvSXGbgNM5RVqfB4a
+ gOrjm5nlgCwFcvJ2RL/npt0MCRZv/FGcCMoaE/pHsctlYaySJubq+uPFcTqdSbTHsgBv
+ UD9E3XyvXTf7w7U/4AeGIWtaYTY2/+xz3ZLE5ixtsiLA+8WDtkAR/ioCIwhplGdQrX8P
+ 8S0E4NXzhipwXeOMbxvrUDe7J3CrhhW38nnXIhur7/P/93R4NWxUJfGYd7/uYArBWWlx ig== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kd10srjbt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 23 Oct 2022 07:45:20 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29N7f9x3018456;
+        Sun, 23 Oct 2022 07:45:20 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kd10srjb2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 23 Oct 2022 07:45:20 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29N7aPVO008215;
+        Sun, 23 Oct 2022 07:45:17 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma03ams.nl.ibm.com with ESMTP id 3kc8591e8w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 23 Oct 2022 07:45:17 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29N7jFs465601918
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 23 Oct 2022 07:45:15 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4B04511C04A;
+        Sun, 23 Oct 2022 07:45:15 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8E34D11C04C;
+        Sun, 23 Oct 2022 07:45:14 +0000 (GMT)
+Received: from li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com (unknown [9.145.82.233])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Sun, 23 Oct 2022 07:45:14 +0000 (GMT)
+Date:   Sun, 23 Oct 2022 09:45:13 +0200
+From:   Alexander Gordeev <agordeev@linux.ibm.com>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     John Stultz <jstultz@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Connor O'Brien" <connoro@google.com>,
+        John Dias <joaodias@google.com>, Rick Yiu <rickyiu@google.com>,
+        John Kacur <jkacur@redhat.com>,
+        Qais Yousef <qais.yousef@arm.com>,
+        Chris Redpath <chris.redpath@arm.com>,
+        Abhijeet Dharmapurikar <adharmap@quicinc.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>, kernel-team@android.com,
+        "J . Avila" <elavila@google.com>
+Subject: Re: [PATCH RFC v4 2/3] sched: Avoid placing RT threads on cores
+ handling long softirqs
+Message-ID: <Y1TxCTq5gxh4fIEd@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+References: <20221003232033.3404802-1-jstultz@google.com>
+ <20221003232033.3404802-3-jstultz@google.com>
+ <Y01NPB4sa8Z98ntK@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+ <CANDhNCoTGNANDnOQ6touhreG_UEn1-N4T4BktWFxpLPSWVfrdA@mail.gmail.com>
+ <Y0+/SAWUNRnhIW9b@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+ <CANDhNCpQuQn_84yqErF2noAYDwdwNJQF-pr4JKVp1eZzH=+f9w@mail.gmail.com>
+ <Y1FDegctcU2LrYGT@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+ <Y1Q3vYjlFt/Imu5w@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1Q3vYjlFt/Imu5w@google.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: nKJVCwofD17k3BUzqOOe-C-aWODyeKIm
+X-Proofpoint-GUID: e2PCv9anuV48p5jqlTX0k-a6iHr73z1j
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-21_04,2022-10-21_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 suspectscore=0
+ mlxlogscore=840 lowpriorityscore=0 malwarescore=0 mlxscore=0
+ priorityscore=1501 phishscore=0 clxscore=1011 bulkscore=0 impostorscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210230047
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In configurations with CONFIG_OF=n, we get a harmless build warning:
+On Sat, Oct 22, 2022 at 06:34:37PM +0000, Joel Fernandes wrote:
+> > In my reading of your approach if you find a way to additionally
+> > indicate long softirqs being handled by the remote ksoftirqd, it
+> > would cover all obvious/not-corner cases.
+> 
+> How will that help? The long softirq executing inside ksoftirqd will disable
+> preemption and prevent any RT task from executing.
 
-sound/soc/sunxi/sun50i-dmic.c:268:34: warning: unused variable
-'sun50i_dmic_of_match' [-Wunused-const-variable]
+Right. So the check to deem a remote CPU unfit would (logically) look like this:
 
-Signed-off-by: Ban Tao <fengzheng923@gmail.com>
-Reported-by: kernel test robot <lkp@intel.com>
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
----
-v1->v2:Add "Acked-by" tag.
----
- sound/soc/sunxi/sun50i-dmic.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+(active | pending | ksoftirqd) & LONG_SOFTIRQ_MASK
 
-diff --git a/sound/soc/sunxi/sun50i-dmic.c b/sound/soc/sunxi/sun50i-dmic.c
-index 86cff5a..62509cb 100644
---- a/sound/soc/sunxi/sun50i-dmic.c
-+++ b/sound/soc/sunxi/sun50i-dmic.c
-@@ -391,7 +391,7 @@ static const struct dev_pm_ops sun50i_dmic_pm = {
- static struct platform_driver sun50i_dmic_driver = {
- 	.driver         = {
- 		.name   = "sun50i-dmic",
--		.of_match_table = of_match_ptr(sun50i_dmic_of_match),
-+		.of_match_table = sun50i_dmic_of_match,
- 		.pm     = &sun50i_dmic_pm,
- 	},
- 	.probe          = sun50i_dmic_probe,
--- 
-2.7.4
+> Did I miss something?
 
+Or me :)
+
+> thanks,
+> 
+>  - Joel
+> 
