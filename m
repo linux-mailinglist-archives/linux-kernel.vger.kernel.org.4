@@ -2,72 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEA626093A2
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 15:29:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCA466093B0
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 15:36:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230315AbiJWN3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 09:29:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36976 "EHLO
+        id S230443AbiJWNgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 09:36:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbiJWN3a (ORCPT
+        with ESMTP id S229987AbiJWNgI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 09:29:30 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 182CD17586;
-        Sun, 23 Oct 2022 06:29:27 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id c7-20020a05600c0ac700b003c6cad86f38so8086648wmr.2;
-        Sun, 23 Oct 2022 06:29:27 -0700 (PDT)
+        Sun, 23 Oct 2022 09:36:08 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 251B767470;
+        Sun, 23 Oct 2022 06:36:04 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id l14so4729935wrw.2;
+        Sun, 23 Oct 2022 06:36:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:in-reply-to
+        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
          :subject:cc:to:from:references:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Wjk9paJAodEfA6iF8JDXnM1/XG2uiqXrj86E+2FXF3Y=;
-        b=PJQ9kC8uzMgvDNlpU0K2N+loBlb5Iwhwn4CyuY6wxv2iv/6RYLSzv907YDl9tNFKvN
-         31Kdi5HH81/iv+mhl7v1VgGXbssWdVyBHvOynqEviUnM+Una4EnbPis/7tgm/M0NR/+l
-         6UikMDNWPa38qhuX+YVdBDDTZGMc0ltRYvedc5Npnhb46ZRnmmGi252e3bg1etTsiUvZ
-         DwgQqV6dw9SrlLkAtKuZgSxonKwgs7/+tHaP86t3n8Za+g5zarABEEOM4k2Ik24zivYe
-         v4mNY1zJsEuZo3K0Nf1Rkmorsd0ULJWNP2ohlCa1Zb8yOILqMeyQ2fAVYy1Hd8XC479J
-         /8vQ==
+        bh=MoVvCB1hQ8h8zDnqjfbOWIK1oHoE24MiFfun5t1upMI=;
+        b=NEg55mCBKWVDjo1kRCfYA7EY4H2EQEKh4Gl4eI1jB7DDDdO7CXlXwFZUyrFc9kU9hj
+         A8vziP1KkGF1mzhP/xlCKLHMuXX49jwpb6tftQqHjZPyIR4qOB/ng/5D/KXe5GbAeKvv
+         OL5sYbR8wrUB0oKBeWCrnKhffMc8bdpIBsJXdROnNLU+7idU/jhWuPV3R7kzRRtvx4G1
+         38qw2uWSn94M7qCT90MCAYEHjhpr9zdfWhU2D5KbyVRQBbmu4AW2XfvbaKvuYWdxq4Gh
+         GCURUtzHBBi8IFjVrF0cTlJTvCSSx2UFqthe8+fSjRIizIhCNol4pN4RQc/FrP9uLoHw
+         UfOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:in-reply-to
+        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
          :subject:cc:to:from:references:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=Wjk9paJAodEfA6iF8JDXnM1/XG2uiqXrj86E+2FXF3Y=;
-        b=r9hGrqWmCuQl95eW4x0jVWVel8eaeltxxCdAZd63wjdsCKnmvQ1Kwes81Em6WPxrqa
-         ByQRiJGod/FK/Q/s8ru3EAakhpYXql8cqWnj4Epkus9Ad9258I+WlUHdN2Xb1u4PGS2b
-         95oTxfJ3V4PZPHozMDljVU1dk6fABqDRQTX5PU4jZUJP1iOLyZi1CYZQ9UdmFpz+aurh
-         aXB+U2n87vTVwvlmom4nUG/+JqvvsIRpekeHTWzwnXo1oAlQDLC3+QNEWCXMUAkUiJ05
-         XEXJyXzxt6J7utA7Jx2CcrYHn2mTy2cdLUjJPqwqs67fwKTJy9oQeZE0CROH6VV+7/d4
-         PRtA==
-X-Gm-Message-State: ACrzQf35LLF7BNafQjxyz25GGa4v9P2FMEdVVsQ9YlV2Le7HukgIPqqI
-        yUbJyo6F+Yh2IkzZnETm5Pg=
-X-Google-Smtp-Source: AMsMyM5Ld024gMXy41+tu+CPVYdHFXcJT+fli3pyPzL3OfSNwiQYWZvvR5LkPehlDHNae1KUQ0fXPQ==
-X-Received: by 2002:a05:600c:3b97:b0:3cc:c287:46fe with SMTP id n23-20020a05600c3b9700b003ccc28746femr3434001wms.148.1666531765384;
-        Sun, 23 Oct 2022 06:29:25 -0700 (PDT)
+        bh=MoVvCB1hQ8h8zDnqjfbOWIK1oHoE24MiFfun5t1upMI=;
+        b=2ztBJWDRF0DSNP0pOuz6dbmPZ2ZCWBvFpR1hBncdOmGU55qD91KqXW35T7u9U2BOsE
+         elGjjSdrN58+RCz6VPPtdz0f5SSL0NFdI6r1jRzxov5S+ILmlt4W4+lOSclWaXXnlXiD
+         bLM/BwBUWjDl308I6eYsFerrhlxDG3OyiCiI/ntbpJHyrsrd6ejX8l7GIqW5v/ILAeOK
+         mOLERypsfrJq3t7MyS2i8h7QXqSAuZ7vNWulGm/u106raRN2mMTAPPOFMPozwt95zOKR
+         qgcCGrcz249Mjw4NKR6/NprjvYddyBiCJyxAaDLZuOupgc/nBVeNQjXMPyk/us9bGn9h
+         H8kg==
+X-Gm-Message-State: ACrzQf1hhN0ilFKIrXDSUCMd7TiyRQzhvE1CzkZ8KnY7dCx0IuHXvolZ
+        Ry/KHPBeIpTMIdJqHjHPyy9RQ1j0zu7sFQ==
+X-Google-Smtp-Source: AMsMyM4mIr8LjXfQVnRa7MLd87e5HsCXWHz50muclsSe9aXcKOfO16SurXYwJroewlShnZ3tBmFUWA==
+X-Received: by 2002:a5d:47c2:0:b0:22e:4911:6925 with SMTP id o2-20020a5d47c2000000b0022e49116925mr18217396wrc.403.1666532163122;
+        Sun, 23 Oct 2022 06:36:03 -0700 (PDT)
 Received: from localhost (94.197.10.75.threembb.co.uk. [94.197.10.75])
-        by smtp.gmail.com with ESMTPSA id f15-20020a05600c154f00b003b4a68645e9sm5558141wmg.34.2022.10.23.06.29.24
+        by smtp.gmail.com with ESMTPSA id j18-20020adff012000000b00228fa832b7asm23675246wro.52.2022.10.23.06.36.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Oct 2022 06:29:24 -0700 (PDT)
-References: <20220708160244.21933-1-aidanmacdonald.0x0@gmail.com>
- <20220708160244.21933-8-aidanmacdonald.0x0@gmail.com>
- <0269b850-f33a-7aa9-a3eb-83655bd4e19a@wanyeetech.com>
- <ROSYER.QTJF8J14H2YX1@crapouillou.net>
- <6f2c7a0b-b68b-fc42-1a82-2b69c114823f@wanyeetech.com>
- <UQ597w4FmzOT8p76tdRPhzECStUpFmYe@localhost>
- <HQ76KR.B1PM87E2GIYZ1@crapouillou.net>
+        Sun, 23 Oct 2022 06:36:02 -0700 (PDT)
+References: <20221022191308.82348-1-aidanmacdonald.0x0@gmail.com>
+ <GU66KR.0W1UC5ES8HSL1@crapouillou.net>
 From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Zhou Yanjie <zhouyu@wanyeetech.com>, lgirdwood@gmail.com,
-        broonie@kernel.org, perex@perex.cz, tiwai@suse.com,
-        linux-mips@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 07/11] ASoC: jz4740-i2s: Make the PLL clock name
- SoC-specific
-In-reply-to: <HQ76KR.B1PM87E2GIYZ1@crapouillou.net>
-Date:   Sun, 23 Oct 2022 14:29:24 +0100
-Message-ID: <JRrsX7Q4m5FUeeBs2yKTRMe5Ihaso8gi@localhost>
+Cc:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
+        tiwai@suse.com, zhouyu@wanyeetech.com, linux-mips@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 0/9] ASoC: cleanups and improvements for jz4740-i2s
+Date:   Sun, 23 Oct 2022 14:29:34 +0100
+In-reply-to: <GU66KR.0W1UC5ES8HSL1@crapouillou.net>
+Message-ID: <Nzxf3qjE8JgcBzxULU2xE5br4OnbgBVC@localhost>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
@@ -86,89 +79,45 @@ Paul Cercueil <paul@crapouillou.net> writes:
 
 > Hi Aidan,
 >
-> Le sam. 22 oct. 2022 =C3=A0 18:15:05 +0100, Aidan MacDonald
+> Le sam. 22 oct. 2022 =C3=A0 20:12:59 +0100, Aidan MacDonald
 > <aidanmacdonald.0x0@gmail.com> a =C3=A9crit :
->> Zhou Yanjie <zhouyu@wanyeetech.com> writes:
->>
->>>  Hi Paul,
->>>  On 2022/7/13 =E4=B8=8B=E5=8D=8811:07, Paul Cercueil wrote:
->>>>  Hi Zhou,
->>>>  Le mer., juil. 13 2022 at 22:33:44 +0800, Zhou Yanjie
->>>> <zhouyu@wanyeetech.com>
->>>>  a =C3=A9crit :
->>>>>  Hi Aidan,
->>>>>  On 2022/7/9 =E4=B8=8A=E5=8D=8812:02, Aidan MacDonald wrote:
->>>>>>  @@ -400,6 +402,7 @@ static const struct i2s_soc_info jz4740_i2s_soc=
-_info
->>>>>> =3D
->>>>>>  {
->>>>>>        .field_tx_fifo_thresh    =3D REG_FIELD(JZ_REG_AIC_CONF, 8, 11=
-),
->>>>>>        .field_i2sdiv_capture    =3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 0,=
- 3),
->>>>>>        .field_i2sdiv_playback    =3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 0=
-, 3),
->>>>>>  +    .pll_clk_name        =3D "pll half",
->>>>>>        .shared_fifo_flush    =3D true,
->>>>>>    };
->>>>>  Since JZ4760, according to the description of the I2SCDR register,
->>>>>  Ingenic SoCs no longer use PLL/2 clock, but directly use PLL clock,
->>>>>  so it seems also inappropriate to use "pll half" for these SoCs.
->>>>  The device tree passes the clock as "pll half". So the driver should =
-use
->>>> this
->>>>  name as well...
->>>  I see...
->>>  It seems that the device tree of JZ4770 has used "pll half" already,
->>>  but there is no "pll half" used anywhere in the device tree of JZ4780,
->>>  maybe we can keep the pll_clk_name of JZ4770 as "pll half", and change
->>>  the pll_clk_name of JZ4780 to a more reasonable name.
->>>  Thanks and best regards!
->> Actually, the clock names in the DT are meaningless. The clk_get() call
->> matches only the clock's name in the CGU driver. So in fact the driver
->> is "broken" for jz4780. It seems jz4770 doesn't work correctly either,
->> it has no "pll half", and three possible parents for its "i2s" clock.
+>> This series is a preparatory cleanup of the jz4740-i2s driver before
+>> adding support for a new SoC. The two improvements are lifting
+>> unnecessary restrictions on sample rates and formats -- the existing
+>> ones appear to be derived from the limitations of the JZ4740's internal
+>> codec and don't reflect the actual capabilities of the I2S controller.
+>> I'm unable to test the series on any JZ47xx SoCs, but I have tested
+>> on an X1000 (which is the SoC I'll be adding in a followup series).
+>> Changes in v5:
+>> * Drop 'mem' resource removal patch already upstream.
+>> * Update FIFO flush bits fix to address Paul's review comments.
+>> * Drop PLL clock name patch, that needs a different approach.
+>> Link for v4: URLHERE
 >
-> That's not true. The clock names are matched via DT.
->
-> Only in the case where a corresponding clock cannot be found via DT will =
-it
-> search for the clock name among the clock providers. I believe this is a =
-legacy
-> mechanism and you absolutely shouldn't rely on it.
+> Forgot something? ;)
 >
 > -Paul
 >
 
-What you say is only true for clk_get() with a device argument. When the
-device argument is NULL -- which is the case in .set_sysclk() -- then
-the DT name is not matched. Check drivers/clk/clkdev.c, in clk_find().
-When the dev_id is NULL, it will not match any lookup entries with a
-non-null dev_id, and I believe dev_id is the mechanism that implements
-DT clock lookup. Only the wildcard entries from the CGU driver will be
-matched if dev_id is NULL, so the DT is being ignored.
+Ah, sorry, that's why you shouldn't eat dinner between format-patch
+and send-patch... :)
 
-If you don't believe me, try changing "pll half" in the device tree and
-the I2S driver to something else. I have done this, and it doesn't work.
-That proves the name in the device tree is not being used.
+Link to v4: https://lore.kernel.org/alsa-devel/20220708160244.21933-1-aidan=
+macdonald.0x0@gmail.com/
 
-I agree we shouldn't rely on this, it's a legacy behavior, but the fact
-is that's how the driver already works. I'm dropping this patch because
-the driver is wrong and needs a different fix...
-
->> I think a better approach is to have the DT define an array of parent
->> clocks for .set_sysclk()'s use, instead of hardcoding parents in the
->> driver. If the parent array is missing the driver can default to using
->> "ext" so existing DTs will work.
-
-As much as I like this idea there doesn't seem to be a mechanism for
-handling a free-floating array of clocks in the DT. Everything has
-to be put in the main "clocks" array. That makes it pretty hard to
-figure out which ones are meant to be the parent clocks.
-
-Do you know of any way to do this generically from the DT? If there's
-no way to get away from a hardcoded array of names in the driver, I can
-at least add a device argument to clk_get() so it'll use the DT names.
-
-Regards,
-Aidan
+>> Aidan MacDonald (9):
+>>   ASoC: jz4740-i2s: Handle independent FIFO flush bits
+>>   ASoC: jz4740-i2s: Convert to regmap API
+>>   ASoC: jz4740-i2s: Simplify using regmap fields
+>>   ASoC: jz4740-i2s: Use FIELD_PREP() macros in hw_params callback
+>>   ASoC: jz4740-i2s: Align macro values and sort includes
+>>   ASoC: jz4740-i2s: Support S20_LE and S24_LE sample formats
+>>   ASoC: jz4740-i2s: Support continuous sample rate
+>>   ASoC: jz4740-i2s: Move component functions near the component driver
+>>   ASoC: jz4740-i2s: Refactor DAI probe/remove ops as component ops
+>>  sound/soc/jz4740/Kconfig      |   1 +
+>>  sound/soc/jz4740/jz4740-i2s.c | 455 ++++++++++++++++++----------------
+>>  2 files changed, 243 insertions(+), 213 deletions(-)
+>> --
+>> 2.38.1
+>>
