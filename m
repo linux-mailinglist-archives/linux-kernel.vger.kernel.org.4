@@ -2,95 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BACA26094B1
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 18:21:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1E876094B2
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 18:25:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230382AbiJWQVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 12:21:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58468 "EHLO
+        id S230027AbiJWQZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 12:25:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230018AbiJWQVI (ORCPT
+        with ESMTP id S229618AbiJWQZl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 12:21:08 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B972C5B9FA;
-        Sun, 23 Oct 2022 09:21:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=iTvQ2cWB+6XWNFX3zk4Auk9RwK12kn68XHvnKVvYeIU=; b=OGBR4feeWffQUhNajVMj1osao1
-        bbXJNZtpEk7wHN8vAYkuJvGHtqMJxuYYmYCrLXA3/CU0G6VNxEWg8DL0S+1quagLailQHNnbdQihr
-        LOyVtzOphlaUcztOauPh5pOB3Y5Bb7RLaEjDeHw6TLWmjfXBWBQNCXepUnjnCIksIxnwxGi/jwTnH
-        e401yO+MqpbUPb8TO+IPti9FDtC4JRfEErt+3CiLCoQ77FYzXMpLMwJwcGhEmnMzzfutmkelXEz2j
-        Op3bnPo7QScQR4FZoAZVNOvBEOpRGb/UVap49VxOOLGp/6McjA3aiavsWjx8jG29hcztzspgDhAFe
-        +VTBRz7A==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34910)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1omdiY-00027Q-UQ; Sun, 23 Oct 2022 17:20:54 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1omdiS-0006DU-On; Sun, 23 Oct 2022 17:20:48 +0100
-Date:   Sun, 23 Oct 2022 17:20:48 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Marcin Wojtas <mw@semihalf.com>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, gregory.clement@bootlin.com,
-        sebastian.hesselbarth@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, hch@lst.de, kabel@kernel.org,
-        jaz@semihalf.com
-Subject: Re: [PATCH] ARM: dts: armada-38x: Mark devices as dma-coherent
-Message-ID: <Y1Vp4BdC50o9roKe@shell.armlinux.org.uk>
-References: <20221022234024.87475-1-mw@semihalf.com>
- <Y1VX4RtzKQZHe/oO@lunn.ch>
+        Sun, 23 Oct 2022 12:25:41 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D60CE58052
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 09:25:38 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id q1so6772861pgl.11
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 09:25:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:reply-to:message-id:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+jcQPE22A48a95d0Ogt+bAyJJhmrH6Y8yK7TFRPuffA=;
+        b=KnSZxGmLWc/7oLtUvXu2L7AuOqPgZ8Dmv0wdB5e3Jt4pUOCSMjGwFQ77x+tMF4GUO4
+         2CgS6mtfqdBJSKi1J0SppHTDP7oZARauEjG4Z+NXdnMTrlv9uS2p8NhWe7zsbdm3KFd2
+         2lnfp1zk9YNQwXFZSBVg+emUfNubt7gdKe3a6yQEMioHBfiYk9NobaOKIhsVEDafDXrA
+         D0kp4oWYHPkEKIGmhY672F0wVt6GtArCZlMg2C29GHviUTfChGgyZbJPIzZDXKcv4LEX
+         v0j0NVBqc+tQgldsSUmQAXRJFsRD5OydkM2pGHJ1qIHLq3u/eMncvqwUIJw1W/vH52Sk
+         1KDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:reply-to:message-id:date
+         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+jcQPE22A48a95d0Ogt+bAyJJhmrH6Y8yK7TFRPuffA=;
+        b=qSDNPXGQ1t3jGA9qE8Vecsg0K5QoCmwMRodPyyOFFArQbXm6XAk58B81Xt+Q9QbW+N
+         wMo68mq69+9sDjhiYxXu5iJNVHqrcCs9KreAnpJRE4XwjDnj/oOYH5pbzAxrAJpED8gW
+         adW9R7s7PB7Py6TNnU8OewgSWkkgFRz+1OLoMtFXA2Zl9AFQ3b322ozevRVuC2jM8hXa
+         fpOBR1kNID6WmnSW+icpVdb5va2G0paNv5KgXLe7BIqpEsvG/j1NsvHPyxJVt76Zdqoh
+         gD99rctpB7AksdJic1iXRG3qB7n6QwwqGaKVb+tQ30M0hFCRIuL3bmQWQPAkq2Mp1XCH
+         G/GA==
+X-Gm-Message-State: ACrzQf3/El5UkYQYj7hMNvZN/j4LkEz0DHJWUfDk16yrrxB/JJOde3S0
+        Ysup3LMGaaM80+KIe2IuUA0=
+X-Google-Smtp-Source: AMsMyM7NWsfmhTNzlYUbFoEXLmLkWMTX9T8RDOi/P8KojKBVLs3iONMPEjEDjjUcKnRmgJR32vKy3g==
+X-Received: by 2002:a65:4bc3:0:b0:439:103b:fc35 with SMTP id p3-20020a654bc3000000b00439103bfc35mr24587501pgr.248.1666542338259;
+        Sun, 23 Oct 2022 09:25:38 -0700 (PDT)
+Received: from KASONG-MB0.tencent.com ([1.203.117.185])
+        by smtp.gmail.com with ESMTPSA id x9-20020a170902ec8900b0018685aaf41dsm3727420plg.18.2022.10.23.09.25.36
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Sun, 23 Oct 2022 09:25:37 -0700 (PDT)
+From:   Kairui Song <ryncsn@gmail.com>
+To:     linux-mm@kvack.org
+Cc:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kairui Song <kasong@tencent.com>
+Subject: [PATCH] swap: add a limit for readahead page-cluster value
+Date:   Mon, 24 Oct 2022 00:25:33 +0800
+Message-Id: <20221023162533.81561-1-ryncsn@gmail.com>
+X-Mailer: git-send-email 2.35.2
+Reply-To: Kairui Song <kasong@tencent.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y1VX4RtzKQZHe/oO@lunn.ch>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 23, 2022 at 05:04:01PM +0200, Andrew Lunn wrote:
-> On Sun, Oct 23, 2022 at 01:40:24AM +0200, Marcin Wojtas wrote:
-> > Armada 38x platforms marks all devices as coherent via
-> > mvebu_hwcc_notifier(), whereas the standard way to determine
-> > this is by of_dma_is_coherent(). Reflect the hardware
-> > capabilities by adding 'dma-coherent' properties to the device tree.
-> 
-> Hi Marcin
-> 
-> Does this need to go to -rc for 6.0? The DMA issues being reported?
-> If so, please add a Fixed: tag.
+From: Kairui Song <kasong@tencent.com>
 
-Are we absolutely sure this makes sense?
+Currenty there is no upper limit for /proc/sys/vm/page-cluster, and it's
+a bit shift value, so it could result in overflow of the 32-bit integer.
+Add a reasonable upper limit for it, read-in at most 2**31 pages, which
+is a large enough value for readahead.
 
-Looking at atch/arm/mach-mvebu/coherency.c, there are dependencies
-on stuff such as whether the kernel is in SMP mode or not (because
-the page tables need to be appropriately marked as shared for
-coherency with IO to work). We only enable the shared bit if we're
-in SMP mode because (a) its difficult to do at runtime due to TLB
-conflicts (requires switching the MMU off, rewriting the page tables
-and switching the MMU back on), and (b) setting the shared bit for
-CPUs that don't need it _can_ result in the CPUs basically bypassing
-their caches and thus kill system performance.
+Signed-off-by: Kairui Song <kasong@tencent.com>
+---
+ include/linux/mm.h | 1 +
+ kernel/sysctl.c    | 1 +
+ mm/swap.c          | 3 ++-
+ 3 files changed, 4 insertions(+), 1 deletion(-)
 
-So, if we have Armada 38x platforms that are operated in uniprocessor
-mode, this patch can cause havoc on such a setup.
-
-I would suggest utmost caution with this approach.
-
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index d42536ce1dab4..5512f3b188fab 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -74,6 +74,7 @@ static inline void totalram_pages_add(long count)
+ 
+ extern void * high_memory;
+ extern int page_cluster;
++extern const int page_cluster_max;
+ 
+ #ifdef CONFIG_SYSCTL
+ extern int sysctl_legacy_va_layout;
+diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+index 188c305aeb8b7..71a4350ac601b 100644
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -2125,6 +2125,7 @@ static struct ctl_table vm_table[] = {
+ 		.mode		= 0644,
+ 		.proc_handler	= proc_dointvec_minmax,
+ 		.extra1		= SYSCTL_ZERO,
++		.extra2		= (void *)&page_cluster_max,
+ 	},
+ 	{
+ 		.procname	= "dirtytime_expire_seconds",
+diff --git a/mm/swap.c b/mm/swap.c
+index 955930f41d20c..2ab33c82cb062 100644
+--- a/mm/swap.c
++++ b/mm/swap.c
+@@ -43,8 +43,9 @@
+ #define CREATE_TRACE_POINTS
+ #include <trace/events/pagemap.h>
+ 
+-/* How many pages do we try to swap or page in/out together? */
++/* How many pages do we try to swap or page in/out together? As a power of 2 */
+ int page_cluster;
++const int page_cluster_max = 31;
+ 
+ /* Protecting only lru_rotate.fbatch which requires disabling interrupts */
+ struct lru_rotate {
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+2.35.2
+
