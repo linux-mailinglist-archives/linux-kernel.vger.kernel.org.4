@@ -2,90 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 231A76090B0
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 03:27:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA3F86090C2
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 04:09:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbiJWB1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 22 Oct 2022 21:27:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33206 "EHLO
+        id S229556AbiJWCJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 22:09:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbiJWB1f (ORCPT
+        with ESMTP id S229588AbiJWCI7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 21:27:35 -0400
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7671A1FA;
-        Sat, 22 Oct 2022 18:27:33 -0700 (PDT)
-Received: by mail-pl1-f173.google.com with SMTP id io19so662102plb.8;
-        Sat, 22 Oct 2022 18:27:33 -0700 (PDT)
+        Sat, 22 Oct 2022 22:08:59 -0400
+Received: from 011.lax.mailroute.net (011.lax.mailroute.net [199.89.1.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD8D8267D
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 19:08:57 -0700 (PDT)
+Received: from localhost (011.lax.mailroute.net [127.0.0.1])
+        by 011.lax.mailroute.net (Postfix) with ESMTP id 4Mw1pd2Gndz2lHwG
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 02:08:57 +0000 (UTC)
+X-Virus-Scanned: by MailRoute
+Received: from 011.lax.mailroute.net ([199.89.1.14])
+        by localhost (011.lax [127.0.0.1]) (mroute_mailscanner, port 10026)
+        with LMTP id j4cmWMEv-iEi for <linux-kernel@vger.kernel.org>;
+        Sun, 23 Oct 2022 02:08:55 +0000 (UTC)
+Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com [209.85.215.199])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by 011.lax.mailroute.net (Postfix) with ESMTPS id 4Mw1pb5XxQz2lHRT
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 02:08:55 +0000 (UTC)
+Received: by mail-pg1-f199.google.com with SMTP id f186-20020a636ac3000000b0044adaa7d347so2929086pgc.14
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 19:08:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sladewatkins.net; s=googled;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=4buRFRGWnnlKIHql0Q3qqpGLkPRxc7dJGxBLjsZx+7k=;
+        b=gHDPNqOQBs68kFLX07Qc8yCj+HUCAxaB2KUMqDN7ASOV8uQ9lPx4i8APW46VkpBG6y
+         jrMT3BGjO3M7bIbA7Igyry5dJaTXwM3w2e+054BMLvtnc2r47Hb1JrV5LIvnilCchuch
+         Ld8U/3+GXwNZjDXn9lq7aB7uSXMrRdXw9zLrfXl3+6w1wsIrql82s2wD6TjqXuAtLck4
+         dgEF1OtrWhs1aLBo2PJsaIp1/oiBRQoKF1eEM1G9Oqx3nsHsBkZ09Ps0Xms435XnSMo4
+         bIrmfgJYwSUefDKoByjxBJRC2XeCs7vyVjujK0BbtzTqgVLX8Eynzh7gcQ98nRg0xTDC
+         jCnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pxn8/fWqKk5uwYUJmeV2YNZEprvktpSj+qw+5kOjvoM=;
-        b=AEOnGHiQSx0ifCur+R8hVbv6EoZmXRzrIOI1YcgnElzDlRe6TbyoNERM531m83nugM
-         DamrJiz3oVmcE4vPgMHp3DiKNQff11gK3SMkmSMdl/fOkBhvQfQxvzArKOk1rsd2XCCz
-         GVoO7PY0sWQSUo2gPRTicjheyL0Ulud3PWM0njsXFu/ZBPoTURt9rs020UqI0Fz+FBqE
-         lnbabjJXXu4zr6teBU/58+sBnAEqdthx/lNxJw2cy8zr4n7cZR/GOYQTkALr7C/cm2ry
-         zSfbYWLAbcxGEbp33zAmA9d/hN7CqD3ThH64EEJYzIM69T0HxI0/uM7CP9LFTxlvlDXY
-         gvsA==
-X-Gm-Message-State: ACrzQf3RPNKTRVJ1AA6zSrLEuVuelWzc/Oz+9plThJ9DPiut49aHuu/Y
-        iKMOt2EJmQy7kwKBDhnqepI=
-X-Google-Smtp-Source: AMsMyM6MSB9NjdfgmovwHqQUK96cfTfpitw7tk0jtz+QWDu6K7xgPFAtY6xG/ZCfPr6Q6f+esTP33g==
-X-Received: by 2002:a17:902:8544:b0:183:baae:cf8d with SMTP id d4-20020a170902854400b00183baaecf8dmr27148429plo.96.1666488451973;
-        Sat, 22 Oct 2022 18:27:31 -0700 (PDT)
-Received: from [192.168.3.219] ([98.51.102.78])
-        by smtp.gmail.com with ESMTPSA id ij19-20020a170902ab5300b0017f7628cbddsm17072020plb.30.2022.10.22.18.27.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 22 Oct 2022 18:27:31 -0700 (PDT)
-Message-ID: <85ad4508-b979-c792-e92b-01bc16260dec@acm.org>
-Date:   Sat, 22 Oct 2022 18:27:29 -0700
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4buRFRGWnnlKIHql0Q3qqpGLkPRxc7dJGxBLjsZx+7k=;
+        b=QvUqg8hTLVpgWhx99tOeP9ozGMAoM11WEzgBC8hk3oFNjSCVFALrEkRxFioMHhad69
+         fIt9SzyIMUJpGCHRBcLm58u9XIndipFZQq7Rnk8sBBedj+nwucUJlsogt+dsC4ucQ7Jj
+         Q6eUJM/h75aqerDRduQwPpcPCAJkXKvJwFwf2rXOest4luK+WOLysVc/HCN51VNbl9ki
+         hWnr5pAvVI8TWcrJUq/eKg1WNGgfIzNFaFz8D+Yl196CjYllmsISgXffJqnUgMo8wmaW
+         N2ypjqZ5GL/LL2DGFnjuUbPWnae0p0neitrn6SZ9dXAddhrI9LmHVgvFMML6VVkR3Aia
+         X57w==
+X-Gm-Message-State: ACrzQf16QpADS4MDystYe4uFz0BVG9aAqXUbiPq0EG0a4lLo0mFsjCrL
+        8WkNE03hcugtiw73owjNhgx7oPmal/bdnSp2y8ZPfbfaqNvz+JJtvIaHncunl5hxuDgVLo9ZlSL
+        jzPGFMnczzM/nVsuzctbiTbZK5iBJtIHFeWl3exIE3t/X3c/Uy++xA9o=
+X-Received: by 2002:a17:90b:4b0c:b0:20d:233f:5dea with SMTP id lx12-20020a17090b4b0c00b0020d233f5deamr30474216pjb.241.1666490934613;
+        Sat, 22 Oct 2022 19:08:54 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM618i2VOUVwKcFjPt4cd8TCwTQ441RgVBvlLk5fztFUDwWKpFQQG4F3JkRMo7mgCqUcHtS4duAgAhoJKaUeWv8=
+X-Received: by 2002:a17:90b:4b0c:b0:20d:233f:5dea with SMTP id
+ lx12-20020a17090b4b0c00b0020d233f5deamr30474187pjb.241.1666490934285; Sat, 22
+ Oct 2022 19:08:54 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-From:   Bart Van Assche <bvanassche@acm.org>
-Subject: Re: Report in downstream Debian: mpt3sas broken with xen dom0 with
- update to 5.10.149 in 5.10.y.
-To:     Salvatore Bonaccorso <carnil@debian.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        sathya.prakash@broadcom.com, sreekanth.reddy@broadcom.com,
-        suganath-prabu.subramani@broadcom.com,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        MPT-FusionLinux.pdl@broadcom.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xen-devel@lists.xenproject.org, adi@kriegisch.at,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        Suganath Prabu S <suganath-prabu.subramani@broadcom.com>
-References: <Y1JkuKTjVYrOWbvm@eldamar.lan>
-Content-Language: en-US
-In-Reply-To: <Y1JkuKTjVYrOWbvm@eldamar.lan>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <Y1PydJnbL/9CRFFn@sol.ermione.com>
+In-Reply-To: <Y1PydJnbL/9CRFFn@sol.ermione.com>
+From:   Slade Watkins <srw@sladewatkins.net>
+Date:   Sat, 22 Oct 2022 22:08:43 -0400
+Message-ID: <CA+pv=HNmYsh_y1+so_p=MNePNyV-A-FQ-iX2ivvSWDuyYcPnSQ@mail.gmail.com>
+Subject: Re: mmc: sdhci-pci-core: Disable ES for ASUS BIOS on Jasper Lake
+To:     Andrea Baldoni <erm25d019@ermione.com>
+Cc:     Patrick Thompson <ptf@google.com>, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-mmc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/21/22 02:22, Salvatore Bonaccorso wrote:
-> We got the following report in Debian after an update from 5.10.140 to
-> the current 5.10.149. Full quoting below (from
-> https://bugs.debian.org/1022126). Does this ring some bell about known
-> regressions?
+On Sat, Oct 22, 2022 at 8:36 PM Andrea Baldoni <erm25d019@ermione.com> wrote:
+>
+> Hello.
+> I am not subscribed to the list so please CC to my address.
+>
+> I recently bought a new ASUS Laptop E210KA-GJ059WS with
+>
+> 00:1a.0 SD Host controller: Intel Corporation Device 4dc4 (rev 01) (prog-if 01)
+>         Subsystem: ASUSTeK Computer Inc. Device 1842
+>         Flags: bus master, fast devsel, latency 0, IRQ 16, IOMMU group 7
+>         Memory at 6001129000 (64-bit, non-prefetchable) [size=4K]
+>         Capabilities: [80] Power Management version 3
+>         Capabilities: [90] Vendor Specific Information: Len=14 <?>
+>         Kernel driver in use: sdhci-pci
+>
+> I tried to install Linux (vanilla kernel 5.19.4) and found that the internal
+> 128GB eMMC SSD was unuseable, unable to make a filesystem on it, dmesg shown
+>
+> mmc0: running CQE recovery
+> and
+> mmc0: cqhci: timeout for tag 0
+> followed by register dump
+>
+> (unfortunately I don't have the exact log now).
+>
+> I found the patch to drivers/mmc/host/sdhci-pci-core.c posted by
+> Patrick Thompson date Thu, 13 Oct 2022 17:00:17 -0400, and applied it,
+> but the only way to make the eMMC work was to disable
+> CQE in its entirety by commenting
 
-Only three mpt3sas changes are new in v5.10.149 compared to v5.10.140:
-$ git log --format=oneline v5.10.140..v5.10.149
-2b9aba0c5d58e141e32bb1bb4c7cd91d19f075b8 scsi: mpt3sas: Fix return value check of dma_get_required_mask()
-e7fafef9830c4a01e60f76e3860a9bef0262378d scsi: mpt3sas: Force PCIe scatterlist allocations to be within same 4 GB region
-ea10a652ad2ae2cf3eced6f632a5c98f26727057 scsi: mpt3sas: Fix use-after-free warning
+This one I assume?[1]
 
-Sreekanth and Suganath, can you help with bisecting this issue? For the
-full report, see also https://lore.kernel.org/linux-scsi/Y1JkuKTjVYrOWbvm@eldamar.lan/.
+>
+> slot->host->mmc->caps2 |= MMC_CAP2_CQE;
+> and
+> slot->host->mmc->caps2 |= MMC_CAP2_CQE_DCMD;
+>
+> If someone would like me to do any targeted test to be able to solve the
+> issue better, I will be happy to do it.
+>
+> At the moment I am also searching how to get the touchpad to work, I would
+> appreciate any hint and/or a contact with someone who has experience on
+> this.
+>
+> I think the relevant device should be this one, but it doesn't show in
+> /proc/bus/input/devices.
+>
+> P: /devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/device:6c/ASUE1409:00
+> E: DEVPATH=/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/device:6c/ASUE1409:00
+> E: ID_VENDOR_FROM_DATABASE=Asuscom Network Inc
+> E: MODALIAS=acpi:ASUE1409:PNP0C50:
+> E: SUBSYSTEM=acpi
+> E: USEC_INITIALIZED=10378637
+>
+> Thank you.
+>
+> Best regards,
+> Andrea Baldoni
 
-Thanks,
+Also looping in +acpi and mmc lists, +Patrick Thompson here.
 
-Bart.
+[1] https://lore.kernel.org/linux-mmc/20221013210017.3751025-1-ptf@google.com/
+
+Best,
+-srw
