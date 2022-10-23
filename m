@@ -2,169 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84D36609267
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 13:04:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24A7960923B
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 12:04:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230351AbiJWLES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 07:04:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34816 "EHLO
+        id S230255AbiJWKED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 06:04:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbiJWLEP (ORCPT
+        with ESMTP id S230291AbiJWKD7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 07:04:15 -0400
-Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA392733E8
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 04:04:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1666523044; bh=CXFYkS/9I3ecfwQqOB0xh0UmIHm5NvOthOCQ+wQCho4=;
-        h=X-EA-Auth:Date:From:To:Subject:Message-ID:MIME-Version:
-         Content-Type;
-        b=TeJ3SkKVax6heRHLZamZ2Mmo62DLNhNYc5TxC/0rdoGn4kut72/lY6+GaQVBYSYKf
-         e/Kou/u3O6zE0sXJRlh1Ij8RHXyF1mQ2MbzvfWnSuopE/D6MRFTG3dOYNcNs6URTy9
-         w5dMGaBBAMkxzTtql7EJnY7swAt/++k4hx7T+E5E=
-Received: by b-4.in.mailobj.net [192.168.90.14] with ESMTP
-        via [213.182.55.206]
-        Sun, 23 Oct 2022 13:04:04 +0200 (CEST)
-X-EA-Auth: Yjri6/BpUBj1GUUFqZyfaA0i881R5h6QtDnu49t/H5do4HKgbeG8VkdOdzAdzB+pCSYB6zJ2QORaobSbl4yso6Khm2FmV9wY
-Date:   Sat, 22 Oct 2022 01:03:42 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     outreachy@lists.linux.dev, gregkh@linuxfoundation.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] staging: wlan-ng: remove commented debug printk messages
-Message-ID: <Y1L0FiKvrM9jjZG9@debian-BULLSEYE-live-builder-AMD64>
+        Sun, 23 Oct 2022 06:03:59 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 643123472D
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 03:03:58 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 1D2ED21B19;
+        Sun, 23 Oct 2022 10:03:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1666519437; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=qaRjfuW7QEYZpNGsXhKdgIorrWebcB5XJibJvmeitzw=;
+        b=bL9dZDCfIEgeAU4otbT7lrazwNCJ9zUigg4AN7DqPXw4VnKkcZpASE/YkN+ZBv1Ly3agr2
+        e4WvCiw7uTK5MaXMhQ6lsPGJZVT85EMXkO+CT0KNHVRIzp4RMroQsE1U8a/E47MmWOJOEK
+        flVsya9J8dWc2Tma5n9PrHE5xfGHeyE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1666519437;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=qaRjfuW7QEYZpNGsXhKdgIorrWebcB5XJibJvmeitzw=;
+        b=YypzU4OioHGkjF10g1cmfiLv67X+XAE7GJMvRkH4/EX+fJnampIZ8Zz+rxKSmiM3wyupUa
+        hOzSAnOUSt4juCCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 08459139F0;
+        Sun, 23 Oct 2022 10:03:57 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id BXKCAY0RVWNOPgAAMHmgww
+        (envelope-from <bp@suse.de>); Sun, 23 Oct 2022 10:03:57 +0000
+Date:   Sun, 23 Oct 2022 12:03:56 +0200
+From:   Borislav Petkov <bp@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] sched/urgent for 6.1
+Message-ID: <Y1URjLOJ+levWPkw@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DATE_IN_PAST_24_48,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-printk messages are added for program flow tracing and are left
-commented. These commented log messages should be removed as they
-are no more useful for program execution.
+Hi Linus,
 
-Signed-off-by: Deepak R Varma <drv@mailo.com>
+please pull two urgent scheduler fixes for 6.1.
+
+Thx.
+
 ---
 
-Changes in v2:
-   1. Resending as v2 since I incorrectly send multiple emails for the patch
-   earlier. Feedback from gregkh@linuxfoundation.org
+The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
 
+  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
 
- drivers/staging/wlan-ng/p80211netdev.c | 22 ----------------------
- 1 file changed, 22 deletions(-)
+are available in the Git repository at:
 
-diff --git a/drivers/staging/wlan-ng/p80211netdev.c b/drivers/staging/wlan-ng/p80211netdev.c
-index e04fc666d218..6bef419e8ad0 100644
---- a/drivers/staging/wlan-ng/p80211netdev.c
-+++ b/drivers/staging/wlan-ng/p80211netdev.c
-@@ -881,55 +881,42 @@ static int p80211_rx_typedrop(struct wlandevice *wlandev, u16 fc)
- 		wlandev->rx.mgmt++;
- 		switch (fstype) {
- 		case WLAN_FSTYPE_ASSOCREQ:
--			/* printk("assocreq"); */
- 			wlandev->rx.assocreq++;
- 			break;
- 		case WLAN_FSTYPE_ASSOCRESP:
--			/* printk("assocresp"); */
- 			wlandev->rx.assocresp++;
- 			break;
- 		case WLAN_FSTYPE_REASSOCREQ:
--			/* printk("reassocreq"); */
- 			wlandev->rx.reassocreq++;
- 			break;
- 		case WLAN_FSTYPE_REASSOCRESP:
--			/* printk("reassocresp"); */
- 			wlandev->rx.reassocresp++;
- 			break;
- 		case WLAN_FSTYPE_PROBEREQ:
--			/* printk("probereq"); */
- 			wlandev->rx.probereq++;
- 			break;
- 		case WLAN_FSTYPE_PROBERESP:
--			/* printk("proberesp"); */
- 			wlandev->rx.proberesp++;
- 			break;
- 		case WLAN_FSTYPE_BEACON:
--			/* printk("beacon"); */
- 			wlandev->rx.beacon++;
- 			break;
- 		case WLAN_FSTYPE_ATIM:
--			/* printk("atim"); */
- 			wlandev->rx.atim++;
- 			break;
- 		case WLAN_FSTYPE_DISASSOC:
--			/* printk("disassoc"); */
- 			wlandev->rx.disassoc++;
- 			break;
- 		case WLAN_FSTYPE_AUTHEN:
--			/* printk("authen"); */
- 			wlandev->rx.authen++;
- 			break;
- 		case WLAN_FSTYPE_DEAUTHEN:
--			/* printk("deauthen"); */
- 			wlandev->rx.deauthen++;
- 			break;
- 		default:
--			/* printk("unknown"); */
- 			wlandev->rx.mgmt_unknown++;
- 			break;
- 		}
--		/* printk("\n"); */
- 		drop = 2;
- 		break;
+  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/sched_urgent_for_v6.1_rc2
 
-@@ -943,35 +930,27 @@ static int p80211_rx_typedrop(struct wlandevice *wlandev, u16 fc)
- 		wlandev->rx.ctl++;
- 		switch (fstype) {
- 		case WLAN_FSTYPE_PSPOLL:
--			/* printk("pspoll"); */
- 			wlandev->rx.pspoll++;
- 			break;
- 		case WLAN_FSTYPE_RTS:
--			/* printk("rts"); */
- 			wlandev->rx.rts++;
- 			break;
- 		case WLAN_FSTYPE_CTS:
--			/* printk("cts"); */
- 			wlandev->rx.cts++;
- 			break;
- 		case WLAN_FSTYPE_ACK:
--			/* printk("ack"); */
- 			wlandev->rx.ack++;
- 			break;
- 		case WLAN_FSTYPE_CFEND:
--			/* printk("cfend"); */
- 			wlandev->rx.cfend++;
- 			break;
- 		case WLAN_FSTYPE_CFENDCFACK:
--			/* printk("cfendcfack"); */
- 			wlandev->rx.cfendcfack++;
- 			break;
- 		default:
--			/* printk("unknown"); */
- 			wlandev->rx.ctl_unknown++;
- 			break;
- 		}
--		/* printk("\n"); */
- 		drop = 2;
- 		break;
+for you to fetch changes up to 8e5bad7dccec2014f24497b57d8a8ee0b752c290:
 
-@@ -1007,7 +986,6 @@ static int p80211_rx_typedrop(struct wlandevice *wlandev, u16 fc)
- 			wlandev->rx.cfack_cfpoll++;
- 			break;
- 		default:
--			/* printk("unknown"); */
- 			wlandev->rx.data_unknown++;
- 			break;
- 		}
---
-2.30.2
+  sched: Introduce struct balance_callback to avoid CFI mismatches (2022-10-17 16:41:25 +0200)
 
+----------------------------------------------------------------
+- Adjust code to not trip up CFI
 
+- Fix sched group cookie matching
 
+----------------------------------------------------------------
+Kees Cook (1):
+      sched: Introduce struct balance_callback to avoid CFI mismatches
+
+Lin Shengwang (1):
+      sched/core: Fix comparison in sched_group_cookie_match()
+
+ kernel/sched/core.c     | 24 ++++++++++++------------
+ kernel/sched/deadline.c |  4 ++--
+ kernel/sched/rt.c       |  4 ++--
+ kernel/sched/sched.h    | 32 +++++++++++++++++++-------------
+ 4 files changed, 35 insertions(+), 29 deletions(-)
+
+-- 
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH
+GF: Ivo Totev, Andrew Myers, Andrew McDonald, Martje Boudien Moerman
+(HRB 36809, AG Nürnberg)
