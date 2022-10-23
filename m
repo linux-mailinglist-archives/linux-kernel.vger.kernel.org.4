@@ -2,95 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08BC26095C0
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 21:07:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9F906095C3
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 21:11:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230475AbiJWTHf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 15:07:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58512 "EHLO
+        id S230509AbiJWTLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 15:11:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230457AbiJWTHd (ORCPT
+        with ESMTP id S230457AbiJWTLI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 15:07:33 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F207550BC
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 12:07:32 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id y4so6801854plb.2
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 12:07:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vxuF9kYe8hiUZgthp1fPj2oasxNSqUYeuQAWi1KfdpI=;
-        b=NGQfpHT1/lSNP/ctN/5db3V8w7tXM2IKMhuOdWc/+RU053BxefVqTN2izj/Gzyk3GF
-         rMGF+0xkowpdEMxlP76WcJUeLIJX7ywVpwGrf57QMXHerM++oZKF3D9NHX0jypdYuN0M
-         cI/mLYyPYDDSzJ6s5CHr9shiJpBgVNZsVnCOg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vxuF9kYe8hiUZgthp1fPj2oasxNSqUYeuQAWi1KfdpI=;
-        b=cayaQsDrLIMH2TJAUGF+E+k9qN576vDGM/RaZSZOfJFpNvOmKdhmXw7X5htdXeWf9H
-         eQEAygEGrfe+CtahadHkI5wJxin9FRpLm2HR9lF2R4ny9JchdFHXnQhPHB/YK/AqjJHv
-         jrm7g2/Pnfud1cJdC4LKVE1U7z19dER+8KClHu4dJ2AOsU6nREIp3zHcfINp4sW+ddKT
-         IUpshjkCNuELKsOk9cCm1w6K+zxJRawWHzcZQUTIn7MWIJwLU8Q+f18HjwH32VQpMkUK
-         86aj/50aQQo5xsTcDIgp2qAAOX/hX/O5Tt/HYASAahUIJ/KdP31Z2+OSvDwH+bYjM3Z4
-         CiDg==
-X-Gm-Message-State: ACrzQf2hI8CxyUNsCvnZkdnSibIAAF1MWVYOSXQ6ky7ST0iuAXigHoye
-        vdZF6P3q8GD8ahMwe1seDjH8/ghA5N+uTA==
-X-Google-Smtp-Source: AMsMyM5wpIjgNKM21qjRhUb5wGBeVafC2DrPIAUk4zzuZcM/DgHEFpuQLX0eUrSX6p2FtvDAZz9J4g==
-X-Received: by 2002:a05:6214:c8a:b0:4b4:3e6d:8cac with SMTP id r10-20020a0562140c8a00b004b43e6d8cacmr24731300qvr.104.1666552041205;
-        Sun, 23 Oct 2022 12:07:21 -0700 (PDT)
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
-        by smtp.gmail.com with ESMTPSA id t12-20020ac8588c000000b0039cd4d87aacsm11763963qta.15.2022.10.23.12.07.20
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 23 Oct 2022 12:07:20 -0700 (PDT)
-Received: by mail-yb1-f170.google.com with SMTP id e62so8949917yba.6
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 12:07:20 -0700 (PDT)
-X-Received: by 2002:a5b:984:0:b0:6ca:9345:b2ee with SMTP id
- c4-20020a5b0984000000b006ca9345b2eemr7353445ybq.362.1666552040395; Sun, 23
- Oct 2022 12:07:20 -0700 (PDT)
+        Sun, 23 Oct 2022 15:11:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 302585E315;
+        Sun, 23 Oct 2022 12:11:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BE83260F13;
+        Sun, 23 Oct 2022 19:11:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCA70C433D6;
+        Sun, 23 Oct 2022 19:11:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666552266;
+        bh=QXMXZXfUd2He0sZ86vmXuZdVlINZFlf8nls9igCZXrs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=oEZMesga1zur/XSb+z97i5myMe8rcjp1vTVwVy3hCkhdlN/7Fo2QTpx5xjfWs2Brn
+         PYhL/GNlhbjQU3nnhlqBV4qIlzXiNI5WZ7A5THR06H43dsIWIHZgnxBH5RcI4jp6XN
+         F81BGm+Yx640l0HtNjgXKHudewVcSvtdtzk6KifxOmGqomYp40TaFWwmxw9UDAXiUy
+         CUj0/U8tGOpQ62qvonM5v7GSE8L+2g/VYaeXbeJtypbaPLhTx5jG1ZXM1QtAlBDtcZ
+         apjMpjcjfalYhj916E/+bvvKHN6yUZ1zFH92e7A37613L7HzIA5PZBV+zSVCfw5OlL
+         TmJEHVrbVUXFg==
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Johannes Zink <j.zink@pengutronix.de>,
+        Ariel Marcovitch <arielmarcovitch@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] kconfig: fix segmentation fault in menuconfig search
+Date:   Mon, 24 Oct 2022 04:10:55 +0900
+Message-Id: <20221023191055.85098-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <166654892458.2211781.4685104302005471754@leemhuis.info>
-In-Reply-To: <166654892458.2211781.4685104302005471754@leemhuis.info>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 23 Oct 2022 12:07:04 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wj=S4zUePrFp-i-O7OL5pP+jHCWTWSmxzhdn7nqZJ9-qQ@mail.gmail.com>
-Message-ID: <CAHk-=wj=S4zUePrFp-i-O7OL5pP+jHCWTWSmxzhdn7nqZJ9-qQ@mail.gmail.com>
-Subject: Re: Linux regressions report for mainline [2022-10-23]
-To:     "Regzbot (on behalf of Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 23, 2022 at 11:22 AM Regzbot (on behalf of Thorsten
-Leemhuis) <regressions@leemhuis.info> wrote:
->
-> Hi Linus! Below is a slightly edited report from regzbot listing all
-> regression from this cycle that the bot and I are currently aware of.
+Since commit d05377e184fc ("kconfig: Create links to main menu items
+in search"), menuconfig shows a jump key next to "Main menu" if the
+nearest visible parent is the rootmenu. If you press that jump key,
+menuconfig crashes with a segmentation fault.
 
-Thanks.
+For example, do this:
 
-I'll fix up the obvious ones right away to not miss -rc2:
+  $ make ARCH=arm64 allnoconfig menuconfig
 
-> [ *NEW* ] v6.1-rc1: Regression in notification of sethostname changes
-> [ *NEW* ] Reboot failure on big endian mips systems
+Press '/' to search for the string "ACPI". Press '1' to choose
+"(1) Main menu". Then, menuconfig crashed with a segmentation fault.
 
-because that first one looks trivial, and the second one I don't want
-to see *again* in an rc on Guenter's list of problems ;)
+The following code in search_conf()
 
-The others I will have to wait for maintainers for.
+    conf(targets[i]->parent, targets[i]);
 
-                Linus
+results in NULL pointer dereference because targets[i] is the rootmenu,
+which does not have a parent.
+
+Commit d05377e184fc tried to fix the issue of top-level items not having
+a jump key, but adding the "Main menu" was not the right fix.
+
+The correct fix is to show the searched item itself. This fixes another
+weird behavior described in the comment block.
+
+Fixes: d05377e184fc ("kconfig: Create links to main menu items in search")
+Reported-by: Johannes Zink <j.zink@pengutronix.de>
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
+
+ scripts/kconfig/menu.c | 23 ++++-------------------
+ 1 file changed, 4 insertions(+), 19 deletions(-)
+
+diff --git a/scripts/kconfig/menu.c b/scripts/kconfig/menu.c
+index 62b6313f51c8..109325f31bef 100644
+--- a/scripts/kconfig/menu.c
++++ b/scripts/kconfig/menu.c
+@@ -722,8 +722,8 @@ static void get_prompt_str(struct gstr *r, struct property *prop,
+ 	if (!expr_eq(prop->menu->dep, prop->visible.expr))
+ 		get_dep_str(r, prop->visible.expr, "  Visible if: ");
+ 
+-	menu = prop->menu->parent;
+-	for (i = 0; menu && i < 8; menu = menu->parent) {
++	menu = prop->menu;
++	for (i = 0; menu != &rootmenu && i < 8; menu = menu->parent) {
+ 		bool accessible = menu_is_visible(menu);
+ 
+ 		submenu[i++] = menu;
+@@ -733,16 +733,7 @@ static void get_prompt_str(struct gstr *r, struct property *prop,
+ 	if (head && location) {
+ 		jump = xmalloc(sizeof(struct jump_key));
+ 
+-		if (menu_is_visible(prop->menu)) {
+-			/*
+-			 * There is not enough room to put the hint at the
+-			 * beginning of the "Prompt" line. Put the hint on the
+-			 * last "Location" line even when it would belong on
+-			 * the former.
+-			 */
+-			jump->target = prop->menu;
+-		} else
+-			jump->target = location;
++		jump->target = location;
+ 
+ 		if (list_empty(head))
+ 			jump->index = 0;
+@@ -758,13 +749,7 @@ static void get_prompt_str(struct gstr *r, struct property *prop,
+ 		menu = submenu[i];
+ 		if (jump && menu == location)
+ 			jump->offset = strlen(r->s);
+-
+-		if (menu == &rootmenu)
+-			/* The real rootmenu prompt is ugly */
+-			str_printf(r, "%*cMain menu", j, ' ');
+-		else
+-			str_printf(r, "%*c-> %s", j, ' ', menu_get_prompt(menu));
+-
++		str_printf(r, "%*c-> %s", j, ' ', menu_get_prompt(menu));
+ 		if (menu->sym) {
+ 			str_printf(r, " (%s [=%s])", menu->sym->name ?
+ 				menu->sym->name : "<choice>",
+-- 
+2.34.1
+
