@@ -2,279 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9381D609754
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 01:37:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 882AE609756
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 01:38:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229817AbiJWXhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 19:37:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46050 "EHLO
+        id S229833AbiJWXiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 19:38:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229786AbiJWXhg (ORCPT
+        with ESMTP id S229506AbiJWXiu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 19:37:36 -0400
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA59C5C9F8
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 16:37:34 -0700 (PDT)
-Received: by mail-qt1-x833.google.com with SMTP id s3so4825979qtn.12
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 16:37:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4HTknq9YRuLbulFwFEx4o7i6TtzfHgzwn+Ccmp35GEU=;
-        b=V+DcA8VHkywTvzroSILEaWW4mYWin25hdLz1Q9QfocNcb+9rD8WWjaPGkVkNI1Ako5
-         GqD+EXE/hBzVy0YikexMfNjsiJTbewcXcoml+udbQ2KwmTDRYNtoN9W7UE/MsgugXQMZ
-         DLWCZIn/pW+JEri/vqAOwshwmm0L0wMgoCzarkY3FlYrihy7lnRmOzkv5HfdcSQ9CXFX
-         rCNjtrO7pf1YRJENnBojZ4AG59W4OvquwftJC1j6F2jdsCHpVkNT7dlSsnJjPy1XDtNr
-         CAJLOJw74BVmuKOJyEP0d+Z2FIznP2+UhBMghqeVqd1svbeaLUcfmAFQLblwydGIrI1J
-         Lwnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4HTknq9YRuLbulFwFEx4o7i6TtzfHgzwn+Ccmp35GEU=;
-        b=WW1F1XCLPhhTJJtfl5uo3F+6SHuFOs2igicHBASaAAtObHrcDpcpYegD9rCrAsh0WM
-         LH15ts7a13qME0TNTjdHWaSzEMYG/wsawWMOrg0W5ZM1ldsAb3TH71XFI8p9EO97F1rN
-         kIA8L3r/hR17rfxB6sfVNtuThxUSF+yheTQyhTUXocIXnpxhZEhYDnGv7AHtswoHlkH7
-         2uh/qZB99xNSb/wMUbLY3c9f29LaWI7V9L00EHfLEszQcgTTyynCSeu8gj51oGR/gi7r
-         k4SSW5CxwNKS0pCticqj7v9tlWXKuSuIe+ZukwxSnkDMYUT4vI+LGYoV8IUvY3AOi/gR
-         3k8w==
-X-Gm-Message-State: ACrzQf3zW/UMO0bdjrBCAwwkEmM/4CqkAnEJTkWSjrYVrtXSLMgw7vRt
-        7c1bsQDEvPOnb/rQxTsAVXGGdw==
-X-Google-Smtp-Source: AMsMyM6rwckOelcCZiDtW/H974ErLN5TU93FI5lGx84DzpID+0M3gXrIY3sNV9Rd2QWsflpqvOOT9w==
-X-Received: by 2002:ac8:58c5:0:b0:39c:c710:f58c with SMTP id u5-20020ac858c5000000b0039cc710f58cmr24698988qta.295.1666568253682;
-        Sun, 23 Oct 2022 16:37:33 -0700 (PDT)
-Received: from [192.168.1.8] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id p7-20020a05620a132700b006b61b2cb1d2sm13788507qkj.46.2022.10.23.16.37.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 23 Oct 2022 16:37:33 -0700 (PDT)
-Message-ID: <6f28ccf3-ea27-9d5e-bd67-14f7729f713f@linaro.org>
-Date:   Sun, 23 Oct 2022 19:37:31 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 2/2] dt-bindings: pwm: mediatek: Add compatible string for
- MT7986
+        Sun, 23 Oct 2022 19:38:50 -0400
+Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2066.outbound.protection.outlook.com [40.107.114.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 116B063376
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 16:38:48 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nZW2cAjLr1hGYRcwV05znZH0nNZ2hhJ3g9BvZoI1HNpN67TRoYYJznrVOAJCVf+TTo7a24W/HX3ghK9I8BVvD508GTj8Y5VgupoO3wwNZYhXvJC9EQ5jBwQjqx2je6Q26SUUZYJJY8e4BAKizCc+3+jWgNfxBCfxORkK6g0/xaQJ1whfCA036eOjmec1kJfAY4CJnBw9ouqdayCCRLzlVLQjiZbKRI1mcIjiLmYOQ1ezlZP0C1KS+J1kHMDkOp5+NZ7sZ2VFUXheIbyLCY5divWXsFZ6LTw+42yjfjGjmgDNBhbNJyC3xuBlpNN6Am6Foq+FLTmZvi/K+qankzILSw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Pc8I2XW0QSrLjnQ6PAZLoTo2MAywKhu3Ohy/MVYIy0g=;
+ b=EYUjXz9V8lc02C+C6nTcbYJ+luBj9Lx52mn9C71Cz5WDHrDzKloaEDrehiDkllJMcfizRzO4HqfhqcyQTVSL68R1XLUr13MueRbH9eru+1tejl5yv9DnjqID29cikVVAgvMi2rbsIToYGDFFHOlIiHlrLDX7NxNVsyGbbZeUGZgV2KazuoxD9YuMhpfnBaxSNWc01hlEKZ270t2htZ1p9AJjTWijcEZiJPUvHlMU86naYguYu/v8VhUwJ7TbF43icybJr1f42NOU08bYZYG7xO7cyy91soNFTNb1dS0X3oaDj91DScL316iiJqCWyU2k8cfg8RY9sh8Qw35HU6B9ug==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nec.com; dmarc=pass action=none header.from=nec.com; dkim=pass
+ header.d=nec.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nec.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Pc8I2XW0QSrLjnQ6PAZLoTo2MAywKhu3Ohy/MVYIy0g=;
+ b=cZaKONpuglSf+7e5i3LnV2E2bXfXBROYZCyQTw0UaO6MUvi504rRlPjHiU3H+bh2SCnL0tRKjs/OErGDdDfm8fDuaVUwF7VBmdek0UXNUoCtR5PyD5RSfBaKHyYb/VM+Esyi+xz4JXixs0NfnP/jtyqFG66+rheKkWhxQ86eD2w=
+Received: from TYWPR01MB8591.jpnprd01.prod.outlook.com (2603:1096:400:13c::10)
+ by TYVPR01MB10815.jpnprd01.prod.outlook.com (2603:1096:400:2aa::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.23; Sun, 23 Oct
+ 2022 23:38:46 +0000
+Received: from TYWPR01MB8591.jpnprd01.prod.outlook.com
+ ([fe80::9f34:8082:cd2f:589c]) by TYWPR01MB8591.jpnprd01.prod.outlook.com
+ ([fe80::9f34:8082:cd2f:589c%9]) with mapi id 15.20.5746.025; Sun, 23 Oct 2022
+ 23:38:45 +0000
+From:   =?utf-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPo+OAgOebtOS5nyk=?= 
+        <naoya.horiguchi@nec.com>
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/3] mm: memory-failure: make put_ref_page() more useful
+Thread-Topic: [PATCH 1/3] mm: memory-failure: make put_ref_page() more useful
+Thread-Index: AQHY5Sb7jb31bIelbk6KVs5aKklnx64cptmA
+Date:   Sun, 23 Oct 2022 23:38:45 +0000
+Message-ID: <20221023233839.GA4024629@hori.linux.bs1.fc.nec.co.jp>
+References: <20221021084611.53765-1-wangkefeng.wang@huawei.com>
+In-Reply-To: <20221021084611.53765-1-wangkefeng.wang@huawei.com>
+Accept-Language: ja-JP, en-US
 Content-Language: en-US
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     Rob Herring <robh@kernel.org>, linux-pwm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-mediatek@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-arm-kernel@lists.infradead.org
-References: <Y1K53n7LnjoMoIfj@makrotopia.org>
- <20221021222338.GA565200-robh@kernel.org> <Y1MkIdFXrBrrv958@makrotopia.org>
- <5182e3c4-9e5e-2c36-408b-9029c65c8803@linaro.org>
- <Y1UycU0JvwyAv0x2@makrotopia.org>
- <eab019f7-f801-848e-80a3-5bb526d95d53@linaro.org>
- <Y1VXTlQ1dCSoE8N2@makrotopia.org>
- <261cd2fb-05dc-3772-dcc7-3ab1f3c0222c@linaro.org>
- <Y1VhfqBqshkM7mNR@makrotopia.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <Y1VhfqBqshkM7mNR@makrotopia.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nec.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TYWPR01MB8591:EE_|TYVPR01MB10815:EE_
+x-ms-office365-filtering-correlation-id: 0c31d6e2-8dd6-4d7b-4594-08dab54fba57
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: yyBKhDCWLtxlYPOnLrsLez+3q2Vk380NcabR1PyhPFDQ7VhvjOFnwJ6Ut+0F6S/3WGFKMHj/XGQKrn6m93t0JYbrTucFM7na0v3lK1RhUnpCYoBtcigoGLfMn+5zEwfGnmdH/jwRbIGDyeadL3gnfBTGkDhnU45ddmAMnPBG4dwDxsZvLfKsPc9jbCqES5nbfaJ+sAhjO141cG4uUhpsX2MVi28Idy6vMHIYA7t2AbRzjTxYgOstfC0ObDf0opvGK2WwuDacXceSLIdzw8zJpJmusxz7LmPZEyPtmGj37nXZF+wEBIocwtZEMiOPbrDtpS217SL9yaCfPOhSG0jTWhI25hE4KC+FDemaqoZQtT9rQxwpwLFKGfXw36ebslbwvYzZJ/gcU6ZXnyHmmJpbQhpVGst7SDQSYjHrYj0J78v2D8v3V5PC6b7KyqgO4tTHOeO7e4epCPgVpTDvfPaaJyPk/Mv5FrIx5MVoBTxml85ueMXWpg7I6CBRNVE67QAboaeyjB/FCKxUaVtdAER29lakv1ZgP41vWrdPd5LmxAn0K+edK/ZBRKt3dYmb9SQbrjs7SbRz/hVfYqyTrD5nbcAlFbMT80Lc9FzlZH4AWIvSlxz5mVgoWQhB/1UjUTctq2G+SUY1PCLCPriDWyUUNNCJmF3CgOyfd8Mv/bBZgaRAOsT5PU9ivtaAmcHExJkDgwd1jEPzE63gQTqA+yhF1Kbz773nI3j4OoHX1rCs0R1FUfh5HWZtQY5KAhaiIZFY1XJfSyf8HDUs7pBKLHurBA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYWPR01MB8591.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(39860400002)(366004)(376002)(136003)(396003)(451199015)(85182001)(2906002)(1076003)(6916009)(54906003)(66946007)(6506007)(316002)(41300700001)(33656002)(76116006)(8936002)(66476007)(66556008)(558084003)(6486002)(8676002)(86362001)(5660300002)(4326008)(66446008)(64756008)(38070700005)(82960400001)(71200400001)(26005)(478600001)(38100700002)(122000001)(186003)(6512007)(9686003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NkVTaTNWNkRienRObXZYc1lPenlFeE1OMTMxNXgyMzFFVDJiTWJCUGFjVytn?=
+ =?utf-8?B?Vk1DWDkxNWpVa2UzNEd0TUx6cDMzNWJ3UWo5Z09wR3BpWVJsclZ6b0haNFpw?=
+ =?utf-8?B?cnZ3NFR2SW85L0FOTzNDUkp0VS9WRTRmYXo3UVdSbUJieDErbU9OSVA2TXls?=
+ =?utf-8?B?RlBTVHJwcGs4SUtBMFAyV3ZUd1ZIVStxOG05UERGajZqNC9nNGpteGNuVDFp?=
+ =?utf-8?B?T2ZCL244ejVFemY5SGo2Unl2NjA0c2RpQlZHNHhLTGFDTEhZNExFV0FBeWlY?=
+ =?utf-8?B?eDEyK2dOL3d4SmVkY1c1RG1jcUNoM1Q3TXhGNnhBclFWTGlLVVNWTzhiQmVF?=
+ =?utf-8?B?YnlUdXhJVU1HV2RBT3hOQWRCVWF6LzVsR1Jld0QyVVc2ZWJRSDF2dm9oOFdv?=
+ =?utf-8?B?VmY5OG1lb0FLN1VNRWV6M2prYVB1UE5GdUUrZ3FrL1FhYzZsdzJDR3FSMCtN?=
+ =?utf-8?B?MmZrTjhvR2EwZkY2anB0aHViTjgwbjVXdjhtUTN6Mk1FQ0Q0dXpWSUxqdi91?=
+ =?utf-8?B?Y3RCekdpYWQ3ZFRYajJGSmN1T0crN1dTSC95YW04Y1g0ZXNpWUFudzhWWUhD?=
+ =?utf-8?B?cFNHVWVRc2Z3ZlBRYXZXd1Z2UUdRS3NlK3orVTVDZlVZTTc4TTdVbU5FZHlK?=
+ =?utf-8?B?VDliTVdJSElYWHZPd0R2WFlPaU9EWHZSVk5XTG1TMjdGbVVKV01Ec3lBY2pq?=
+ =?utf-8?B?cmRuZ3lmS29Md1Nqc2Fuc2ltamNzQ0RjV0J0Q2k0YU9jYzRBdjZFakFsOU1r?=
+ =?utf-8?B?WUVPWVl1aGgzV0YrQ0JaRzZ1UTJ5VFgyMGdlNWc0K3pLeWFKWkc4blV6MUJN?=
+ =?utf-8?B?Ym5wZVk3d0tsVHVlY0VPZkFjZElrbmdFS085eVBXak1uemp5SE5mMHJqRXJ2?=
+ =?utf-8?B?WEVwbVFYV3FpRGVXSmRmYTBnLzlzT0NXQkZGSXp1b1hBRDhrNCtOYzN6NFBC?=
+ =?utf-8?B?N01ncCtUSUFrbmRYbkE5cW1YMTE0OGtWTlhoK1FNeU1QbXBBdndkcmhtWC9m?=
+ =?utf-8?B?aitNK0s0Q3crOXRuNjZRZVhEUEdDaXBlZGloek0zUUV2TnJSVDdIeVNuNUc0?=
+ =?utf-8?B?ZHZMenRHVWdEUTA3b3pVVWR0Q0FKNi93NkVzSU9RZ3NQV2FxOTBBMC9UU3Ji?=
+ =?utf-8?B?cFpZblQrNkora3ViMzZMSDhlMHB3VWhlRkhqWTI3Vi9lZHpKZDc4WGlDV0pU?=
+ =?utf-8?B?QzQ1WERhL3lzdWt0NG96SGxqZnAwdm10MExINzQzZ0h5QTRvUXg3T2NRTjNE?=
+ =?utf-8?B?MXF1SFNLeDZWajZjTkxGcHljWFFERkF0ek1ZVUI3WlgvRWI5aFJia1I5Vkp2?=
+ =?utf-8?B?ZXJDOWtlcExjdWljbmZmSzZIVjRuYkdnaEl3WW5zeUpqSHc3S01JVk1YRDg1?=
+ =?utf-8?B?dHlYaDdIdmpMUUIvbFZMaTBtTXcwRjlYU2tqZWRlZis4ejlDaGYvRC9jT0Zv?=
+ =?utf-8?B?aE5tRmhPU0lhdUFkTjc5ZHRCZ2VZSjViY1hoV0tsT0RyUUw0OVhJb0JZbXFG?=
+ =?utf-8?B?c3VYWXVwSDZ5eWRmU1RLUGR2bXZIOVFXRnVqZk1yZGQxT29NVWZzYnhwUU5B?=
+ =?utf-8?B?bmw2UzdwMTRzZ1h6bGdkdUxoVDZTNUEyZ1hyNjBXc2hyYnFkU3JJaEpPUEox?=
+ =?utf-8?B?Wm1RL2VrNXFDamd5OSszdUphREgwRVFFaW53WFNENkRrMHN4TmZUWmo4aTll?=
+ =?utf-8?B?dHlPNUZZRGRZSm8zMXJvS3hYMU9MeWRXNnp5c2ZVTEpRbDZWc0VsZk9HNHFZ?=
+ =?utf-8?B?elo5MlhIWnU3a1RLRWZlY2VmNUQrU3VVN1p4L01SZUpxNEtsZ1NLdXpGV1NV?=
+ =?utf-8?B?eHBQV0srVCtnKy9FN1MvRG15VnlpZWNtRFpia1R1U0ZJWGtuRWN3MjNUeXFl?=
+ =?utf-8?B?emxqT1hTQVNvZmdIUzRHc3I1NmRlTkNLblFKaGY5bWZLaFJIMXYwR29HZkdK?=
+ =?utf-8?B?c0gwQzVwQkhKNlNmcm5yUVRkbkRtOE5Md1ZyUFU2M1dUTWtxSlp1SHo0ZXVK?=
+ =?utf-8?B?QnYrSWRXNzNLWnRCKzVNRHNGckJpRU0xTldSeFNFY2xFNUpMalVsRWxFYmhE?=
+ =?utf-8?B?eGt3WTFCdlp5VzFxc0FOOU0rSi9pK1BDc1Z5L3ZZc251RHQyakp0OEkxQmRl?=
+ =?utf-8?B?MXdaZ3ZiK2RYb3RVY2NxdlBHWTQzOGFJV2tEMVcvTWNoMExtaDBxQkMrSW1C?=
+ =?utf-8?B?eEE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <C4374269495B784E8099E7AF64E960F7@jpnprd01.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: nec.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYWPR01MB8591.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0c31d6e2-8dd6-4d7b-4594-08dab54fba57
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Oct 2022 23:38:45.9203
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: e67df547-9d0d-4f4d-9161-51c6ed1f7d11
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: zwkOnchqQFlXukVReovsQcsfmGVmzWSd2qc5RkUlU/JfqWK0UY8aQHMTonJJrqiDeHAd9GfNDca3KmDgIpYJzg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYVPR01MB10815
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/10/2022 11:45, Daniel Golle wrote:
-> On Sun, Oct 23, 2022 at 11:29:45AM -0400, Krzysztof Kozlowski wrote:
->> On 23/10/2022 11:01, Daniel Golle wrote:
->>> On Sun, Oct 23, 2022 at 08:39:34AM -0400, Krzysztof Kozlowski wrote:
->>>> On 23/10/2022 08:24, Daniel Golle wrote:
->>>>> Hi Krzysztof,
->>>>>
->>>>> On Sat, Oct 22, 2022 at 12:35:25PM -0400, Krzysztof Kozlowski wrote:
->>>>>> On 21/10/2022 18:58, Daniel Golle wrote:
->>>>>>> On Fri, Oct 21, 2022 at 05:23:38PM -0500, Rob Herring wrote:
->>>>>>>> On Fri, Oct 21, 2022 at 04:25:18PM +0100, Daniel Golle wrote:
->>>>>>>>> Add new compatible string for MT7986 PWM.
->>>>>>>>>
->>>>>>>>> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
->>>>>>>>> ---
->>>>>>>>>  Documentation/devicetree/bindings/pwm/pwm-mediatek.txt | 1 +
->>>>>>>>>  1 file changed, 1 insertion(+)
->>>>>>>>>
->>>>>>>>> diff --git a/Documentation/devicetree/bindings/pwm/pwm-mediatek.txt b/Documentation/devicetree/bindings/pwm/pwm-mediatek.txt
->>>>>>>>> index 554c96b6d0c3e0..6f4e60c9e18b81 100644
->>>>>>>>> --- a/Documentation/devicetree/bindings/pwm/pwm-mediatek.txt
->>>>>>>>> +++ b/Documentation/devicetree/bindings/pwm/pwm-mediatek.txt
->>>>>>>>> @@ -8,6 +8,7 @@ Required properties:
->>>>>>>>>     - "mediatek,mt7623-pwm": found on mt7623 SoC.
->>>>>>>>>     - "mediatek,mt7628-pwm": found on mt7628 SoC.
->>>>>>>>>     - "mediatek,mt7629-pwm": found on mt7629 SoC.
->>>>>>>>> +   - "mediatek,mt7986-pwm": found on mt7986 SoC.
->>>>>>>>
->>>>>>>> This version of the PWM h/w is not compatible with any of the existing 
->>>>>>>> chips? If it is, it should have a fallback compatible.
->>>>>>>
->>>>>>> No, it is unique because it comes with just 2 PWM channels.
->>>>>>> Otherwise the driver behaves just like for MT8183 (4 channels) or
->>>>>>> MT8365 (3 channels) which also got distinct compatible strings.
->>>>>>
->>>>>> Then something would be here compatible. E.g. If you bound MT8183 with
->>>>>> mt7986-pwm compatible, would you get working device with two channels?
->>>>>
->>>>> Yes, but I'd see another 2 channels which do not work, accessing them
->>>>> may even cause problems (I haven't tried that) as it means accessing
->>>>> an undocumented memory range of the SoC which we in general we
->>>>> shouldn't be messing around with.
->>>>
->>>> Why on MT8183 there would be undocumented memory? Where is undocumented
->>>> memory?
->>>
->>> So we were talking about using the MT8183 compatible for MT7986 SoC, as
->>> the PWM units are identical apart from the number of channels they
->>> offer:
->>
->> No, we talk about MT8183 with mt7986-pwm compatible. Read again my message.
-> 
-> Ok, that was not clear to me. I understood the other way around, to use
-> `mediatek,mt8183-pwm` on MT7986 (and not even introduce an additional
-> compatible for MT7986 in the driver, but only list it as compatibly with
-> existing MT8183 in binding docs).
-
-You need dedicated compatible (which will be used by the driver) because
-these are two different devices.
-
-https://elixir.bootlin.com/linux/v6.1-rc1/source/Documentation/devicetree/bindings/writing-bindings.rst#L42
-
-
-> So: The to-be newly introduced `mediatek,mt7986-pwm` should work on
-> MT8183 as well, but in that case only two of the four channels would be
-> accessible.
-> 
->>
->>>
->>> MT7986 got 2 PWM channels. The MMIO registers used for those two
->>> channels start at offsets 0x10 (pwm0) and 0x50 (pwm1)
->>>
->>> MT8183 got 4 PWM channels. The MMIO registers used for those four
->>> channels start of offsets 0x10 (pwm0), 0x50 (pwm1), 0x90 (pwm2) and
->>> 0xd0 (pwm3).
->>>
->>> Hence, when using the MT8183 compatible with MT7986, the driver will
->>> access offsets 0x90 and 0xd0 in case the users enables the (bogus)
->>> outputs pwm2 and pwm3. These offsets, however, are not mentioned in the
->>> datasheet, so it has to be considered that writing things to these
->>> undocumented offsets could cause unknown behavior.
->>>
->>> I hope it's more clear now what I mean.
->>
->> But even your case is not correct. On MT7986 the device would still have
->> 2 channels, how the heck he would get 4? Driver binds to ,t7986-pwm
->> compatible, which defines 2 channels.
-> 
-> If we do introduce that new compatible, then yes.
-
-No one here argued against introducing new compatible. The question was
-why these devices are not compatible with each other? Why new compatible
-is not made a part of family of existing compatibles.
-
-
-> I understood you were suggesting to use `mediatek,mt8183` on MT7986
-> hardware which would have resulted in such behavior.
-> 
->>
->>>
->>>>
->>>>>
->>>>> Also note that this case is the same as MT8183 vs. MT8365, they got
->>>>> distinct compatible strings and also for those two the only difference
->>>>> is the number of channels.
->>>>
->>>> So why they are not made compatible?
->>>
->>> My guess is that it's for this very reason:
->>> To correctly communicate the capabilities (in this case: number of
->>> channels) to the driver and not have bogus pwmX show up in the OS
->>> which then causes undocumented MMIO register access in case anyone
->>> tries to actually use them.
->>
->> No, that's not correct reason. There would be no wrong MMIO access and
->> capabilities would be still correctly communicated.
-> 
-> So what exactly do you mean by "made compatible"?
-> In the driver? In DTS files? In DT-bindings?
-
-I review bindings, so by "devices being made compatible" I meant exactly
-what Devicetree specification asks:
-
-"The property value consists of a concatenated list of null terminated
-strings, from most specific to most general. They allow a device to
-express its compatibility with a family of similar devices, potentially
-allowing a single device driver to match against several devices."
-
-Which means that devices share some common characteristics, like
-programming model, and differ by some other pieces. For device drivers,
-usually this also means that a device can use any of the compatibles to
-bind and function properly, within the limits/features of that compatible.
-
->>>>>> If so, they are compatible.
->>>>>
->>>>> By that definition you should remove the additional compatible for
->>>>> MT8365 or rather, it should have been rejected for the same argument.
->>>>>
->>>>> I'm talking about
->>>>> commit fe00faee8060402a3d85aed95775e16838a6dad2
->>>>> commit 394b517585da9fbb2eea2f2103ff47d37321e976
->>>>
->>>> This is a pattern spreading in several Mediatek bindings and we already
->>>> commented on new patches. I don't know why people working on Mediatek do
->>>> not mark pieces compatible.
->>>
->>> Others will have to answer that for you.
->>>
->>> To me this looks a bit like a structural shortcoming of the PWM controller
->>> bindings: if there was a way to tell the driver "hey, this is like MT8183,
->>> but it got only two channels" that would solve it nicely.
->>> This could either be done using child-nodes for each PWM channel or by
->>> simply adding a 'nr-pwms' property.
->>
->> No, it's rather someone did not think about Devicetree compatibles or
->> did not care to design the Mediatek bindings and just copy-paste
->> existing pattern...
-> 
-> So in that case, maybe those existing patterns should be cleaned up?
-> Can you suggest a change? (even informal, I can wrap it up as patch).
-
-Someone knowing the devices should reorganize compatibles to come up
-with family models, e.g. expressed in DT schema like:
-
-oneOf:
- - const: mediatek,mt7986-pwm
- - items:
-     - enum:
-         - mediatek,mt8183-pwm
-     - const: mediatek,mt7986-pwm
-
-and so on.
-
-> To me, code is almost always better documentation than actual
-> documentation, which is usually time consuming to read, hard to
-> understand (compared to reading code or existing examples), and it's
-> commonly full of errors. I hardly waste my time with it, if there is
-> code or existing examples, I will always prefer do read and understand
-> that.
-
-Example schema expresses it:
-
-https://elixir.bootlin.com/linux/v6.0-rc1/source/Documentation/devicetree/bindings/example-schema.yaml#L43
-
-
-
-Best regards,
-Krzysztof
-
+T24gRnJpLCBPY3QgMjEsIDIwMjIgYXQgMDQ6NDY6MDlQTSArMDgwMCwgS2VmZW5nIFdhbmcgd3Jv
+dGU6DQo+IFBhc3MgcGZuL2ZsYWdzIHRvIHB1dF9yZWZfcGFnZSgpLCB0aGVuIGNoZWNrIE1GX0NP
+VU5UX0lOQ1JFQVNFRA0KPiBhbmQgZHJvcCByZWZjb3VudCB0byBtYWtlIHRoZSBjb2RlIGxvb2sg
+Y2xlYW5lci4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IEtlZmVuZyBXYW5nIDx3YW5na2VmZW5nLndh
+bmdAaHVhd2VpLmNvbT4NCg0KTG9va3MgZ29vZCB0byBtZSwgdGhhbmsgeW91Lg0KDQpBY2tlZC1i
+eTogTmFveWEgSG9yaWd1Y2hpIDxuYW95YS5ob3JpZ3VjaGlAbmVjLmNvbT4=
