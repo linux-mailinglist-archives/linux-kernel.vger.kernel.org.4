@@ -2,87 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9891B60949C
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 18:08:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C614860949D
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 18:08:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230340AbiJWQIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 12:08:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53384 "EHLO
+        id S230361AbiJWQIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 12:08:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230024AbiJWQIE (ORCPT
+        with ESMTP id S230136AbiJWQIW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 12:08:04 -0400
-Received: from vps.xff.cz (vps.xff.cz [195.181.215.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2986A5BCB7
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 09:08:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xff.cz; s=mail;
-        t=1666541278; bh=Xqe11Ibqu1NMh5rur/Ihh+EKSfXa12WMvQt557WAbbY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=C7R1LepSst+u0rs2BWjVoU/OgTNul4lRGyCMQgdXH/iuYd1xPpgj29NwV5AT2T95A
-         dDivamyUv51VfefpUpwDdaxiIax1TAPHjawjkw1u42EItsmM0RkZua5xlASwThYL0f
-         7KSk+LpLgTkW3HY7EBBPHufiphKpFKK+cv/wSD1c=
-From:   Ondrej Jirman <megi@xff.cz>
-To:     linux-rockchip@lists.infradead.org
-Cc:     Ondrej Jirman <megi@xff.cz>, Sandy Huang <hjc@rock-chips.com>,
-        =?UTF-8?q?Heiko=20St=C3=BCbner?= <heiko@sntech.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Chris Morgan <macromorgan@hotmail.com>,
-        dri-devel@lists.freedesktop.org (open list:DRM DRIVERS FOR ROCKCHIP),
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Rockchip SoC
-        support), linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] drm/rockchip: dsi: Fix VOP selection on SoCs that support it
-Date:   Sun, 23 Oct 2022 18:07:47 +0200
-Message-Id: <20221023160747.607943-1-megi@xff.cz>
+        Sun, 23 Oct 2022 12:08:22 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2521768CC1
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 09:08:22 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id y4-20020a5e9204000000b006bbffbc3d27so5185613iop.5
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 09:08:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7epgeZqNBvzj5gC80crbhaYdIlZKNwX+R2sHVW9JIwU=;
+        b=Jnd1SSR/bCHV8DrkVC73AslbDB66WTWcAqZEqwloYjxz0+WtSAFPSuIWIZFQ1mp8Af
+         Y7o6CjACIsOAgZTQ+w1eLmuS8ErmZpqKJd9iBRGCNffDSb28asxnCg1O1BILGr7IWFzM
+         +ccMlsdFBn9HhWZyb3eTKtdoC+BTwZmvzrdQDYaYBcxawxGk61EF0sZ77/nx/dz4xApA
+         wWEW5p2wk7M+n92Sj2cqRbPsi0c8sX1ic2hxIDBpv+7mJCUgbBk7IjkQWIn4jCyLjotC
+         c3MjRDtHD5qQQ8NuG1ngpqCPwDfvxFvriD4puxEaUm7vAeOWiAea4svjruTwnEdeGG1k
+         H0Gw==
+X-Gm-Message-State: ACrzQf0Q89wxXQlJYFnZqoBC6ZO0CLR1yLhdx5vsXg269Oq9kjynV8ga
+        D1hpevn/e3sYweO5lEJZ9CYle7w1KLdORfGlK4SjUbqTWWub
+X-Google-Smtp-Source: AMsMyM6TO/k+QCLX9WfdzBnG78z+vPeyhly4YZIJ5p/YulzmSNVhV+TjvSklvG4Qwu1aUUs8aCONRfydYwYAccWPqIYLVfWpYe/N
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:140b:b0:363:fdeb:fc6d with SMTP id
+ k11-20020a056638140b00b00363fdebfc6dmr19614493jad.135.1666541301496; Sun, 23
+ Oct 2022 09:08:21 -0700 (PDT)
+Date:   Sun, 23 Oct 2022 09:08:21 -0700
+In-Reply-To: <20221023135812.2493-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000047843305ebb5e2df@google.com>
+Subject: Re: [syzbot] BUG: corrupted list in p9_fd_cancel (2)
+From:   syzbot <syzbot+9b69b8d10ab4a7d88056@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-lcdsel_grf_reg is defined as u32, so "< 0" comaprison is always false,
-which breaks VOP selection on eg. RK3399. Compare against 0.
+Hello,
 
-Fixes: f3aaa6125b6f ("drm/rockchip: dsi: add rk3568 support")
-Signed-off-by: Ondrej Jirman <megi@xff.cz>
----
- drivers/gpu/drm/rockchip/dw-mipi-dsi-rockchip.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+INFO: rcu detected stall in corrupted
 
-diff --git a/drivers/gpu/drm/rockchip/dw-mipi-dsi-rockchip.c b/drivers/gpu/drm/rockchip/dw-mipi-dsi-rockchip.c
-index 7d50a4f463d9..2982a4e9a6ed 100644
---- a/drivers/gpu/drm/rockchip/dw-mipi-dsi-rockchip.c
-+++ b/drivers/gpu/drm/rockchip/dw-mipi-dsi-rockchip.c
-@@ -760,7 +760,7 @@ static void dw_mipi_dsi_rockchip_config(struct dw_mipi_dsi_rockchip *dsi)
- static void dw_mipi_dsi_rockchip_set_lcdsel(struct dw_mipi_dsi_rockchip *dsi,
- 					    int mux)
- {
--	if (dsi->cdata->lcdsel_grf_reg < 0)
-+	if (dsi->cdata->lcdsel_grf_reg)
- 		regmap_write(dsi->grf_regmap, dsi->cdata->lcdsel_grf_reg,
- 			mux ? dsi->cdata->lcdsel_lit : dsi->cdata->lcdsel_big);
- }
-@@ -1643,7 +1643,6 @@ static const struct rockchip_dw_dsi_chip_data rk3399_chip_data[] = {
- static const struct rockchip_dw_dsi_chip_data rk3568_chip_data[] = {
- 	{
- 		.reg = 0xfe060000,
--		.lcdsel_grf_reg = -1,
- 		.lanecfg1_grf_reg = RK3568_GRF_VO_CON2,
- 		.lanecfg1 = HIWORD_UPDATE(0, RK3568_DSI0_SKEWCALHS |
- 					  RK3568_DSI0_FORCETXSTOPMODE |
-@@ -1653,7 +1652,6 @@ static const struct rockchip_dw_dsi_chip_data rk3568_chip_data[] = {
- 	},
- 	{
- 		.reg = 0xfe070000,
--		.lcdsel_grf_reg = -1,
- 		.lanecfg1_grf_reg = RK3568_GRF_VO_CON3,
- 		.lanecfg1 = HIWORD_UPDATE(0, RK3568_DSI1_SKEWCALHS |
- 					  RK3568_DSI1_FORCETXSTOPMODE |
--- 
-2.38.1
+rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P4079 } 2646 jiffies s: 2653 root: 0x0/T
+rcu: blocking rcu_node structures (internal RCU debug):
+
+
+Tested on:
+
+commit:         d47136c2 Merge tag 'hwmon-for-v6.1-rc2' of git://git.k..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=1613fd6e880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4789759e8a6d5f57
+dashboard link: https://syzkaller.appspot.com/bug?extid=9b69b8d10ab4a7d88056
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=15434bc2880000
 
