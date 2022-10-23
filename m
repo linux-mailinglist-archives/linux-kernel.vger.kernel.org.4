@@ -2,159 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA7F0609205
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 11:37:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E90A609208
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 11:40:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbiJWJgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 05:36:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36990 "EHLO
+        id S230090AbiJWJkz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 05:40:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229799AbiJWJgu (ORCPT
+        with ESMTP id S229568AbiJWJku (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 05:36:50 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6313C71BD9
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 02:36:49 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 823C61FD4A;
-        Sun, 23 Oct 2022 09:36:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1666517807; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=a2CSw/8rZWkxUuRs5fo3QIrgID+nd0kedAMIW6JAgs4=;
-        b=Ek5FzeCC+vIbrz4H25njCQQRQbFsMAnE+b0rYXimqtQvhMSkC+ZvkJE119Yjz+/+8QLiw5
-        Kwi8OHs1T9v+nUNRqfnPyplYjHGlRCtT+CkGz20jyW2T+DucEDPLgIxiKaBXCjjil64Qmt
-        dt2QTETT8YOOBKW3yp89k+/6Lc5kj34=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1666517807;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=a2CSw/8rZWkxUuRs5fo3QIrgID+nd0kedAMIW6JAgs4=;
-        b=pZFBjLLQe/FJ/+aMAObfXsc/CEm0rJq9HVSgJiPZPow7I6er8Q8It+58ay60zLcuZ5aCOr
-        OuquBb4nzrc4BhCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7637B139F0;
-        Sun, 23 Oct 2022 09:36:47 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id H4nNHC8LVWPQMwAAMHmgww
-        (envelope-from <bp@suse.de>); Sun, 23 Oct 2022 09:36:47 +0000
-Date:   Sun, 23 Oct 2022 11:36:41 +0200
-From:   Borislav Petkov <bp@suse.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] x86/urgent for 6.1
-Message-ID: <Y1ULKYsASLRoVb7N@zn.tnic>
+        Sun, 23 Oct 2022 05:40:50 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 326321D0C3
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 02:40:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666518049; x=1698054049;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=TQTwGQrCCC6DCIpFic9UX3Sgf2TMTRRA9Ba8KgtWpxc=;
+  b=lTDWbTdAsBVQbbEp+j9JcF5lBhHsgjy/liJ0nVkYpcFX7PmOT/VLjKqa
+   i0f56nBmxxL+l9WTBnH0G9C2BSRpeb6dl0AHPskZCSdlzrdh5CW6Gr47f
+   CdRYtIh252i5HeN280ohE3B8YaW6GsfLNhuRkjdftecglO6aI5nZ3X3uc
+   WsrbhSvvwNVc3/aDdmGKxMliSXLp5ANIRB1rjV5pGf06tkDuV5lvLUohY
+   iQKGyX+M3aOaFEqZJ5v3ZWSTsbk2D03qSa7GsZJMQ2/5tOY5yuAZPL1KK
+   dg3UOSQJEKiJK8ty2qsXNMrCJpVHKGeQkI8XIrLseNiPmjYo//9TIZkHP
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10508"; a="286966498"
+X-IronPort-AV: E=Sophos;i="5.95,206,1661842800"; 
+   d="scan'208";a="286966498"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2022 02:40:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10508"; a="582102427"
+X-IronPort-AV: E=Sophos;i="5.95,206,1661842800"; 
+   d="scan'208";a="582102427"
+Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 23 Oct 2022 02:40:47 -0700
+Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1omXTK-0004Hs-2y;
+        Sun, 23 Oct 2022 09:40:46 +0000
+Date:   Sun, 23 Oct 2022 17:40:01 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:master] BUILD SUCCESS
+ df0819e9f275a1110d7be26ac4d57be52b7f4824
+Message-ID: <63550bf1.cvbbnUWgmZvZUPKv%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
+branch HEAD: df0819e9f275a1110d7be26ac4d57be52b7f4824  Merge branch into tip/master: 'x86/paravirt'
 
-as it is usually the case, right after a major release, the tip urgent
-branches accumulate a couple more fixes than normal. And here is the
-x86, a bit bigger, urgent pile.
+elapsed time: 1478m
 
-Please pull,
-thx.
+configs tested: 146
+configs skipped: 4
 
----
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+arc                                 defconfig
+alpha                               defconfig
+s390                             allmodconfig
+s390                                defconfig
+i386                                defconfig
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+arc                  randconfig-r043-20221019
+powerpc                           allnoconfig
+x86_64                        randconfig-a004
+mips                             allyesconfig
+x86_64                        randconfig-a002
+powerpc                          allmodconfig
+x86_64                        randconfig-a006
+s390                             allyesconfig
+i386                          randconfig-a001
+x86_64                              defconfig
+i386                          randconfig-a003
+sh                               allmodconfig
+x86_64                          rhel-8.3-func
+i386                          randconfig-a005
+x86_64                    rhel-8.3-kselftests
+x86_64                        randconfig-a013
+arm                                 defconfig
+x86_64                               rhel-8.3
+arc                              allyesconfig
+alpha                            allyesconfig
+i386                             allyesconfig
+x86_64                        randconfig-a011
+arm64                            allyesconfig
+x86_64                           allyesconfig
+arm                              allyesconfig
+m68k                             allyesconfig
+x86_64                        randconfig-a015
+sparc                       sparc32_defconfig
+sh                          sdk7786_defconfig
+parisc                           alldefconfig
+mips                      fuloong2e_defconfig
+arm                            zeus_defconfig
+sh                               alldefconfig
+loongarch                         allnoconfig
+arm                           u8500_defconfig
+sh                                  defconfig
+sh                          polaris_defconfig
+powerpc                 mpc834x_mds_defconfig
+i386                          randconfig-c001
+csky                                defconfig
+sh                           se7722_defconfig
+ia64                          tiger_defconfig
+arm                        mvebu_v7_defconfig
+mips                    maltaup_xpa_defconfig
+arc                        nsimosci_defconfig
+microblaze                          defconfig
+arm                          lpd270_defconfig
+arm                        clps711x_defconfig
+mips                       bmips_be_defconfig
+arm                            mps2_defconfig
+arc                     nsimosci_hs_defconfig
+arm                         s3c6400_defconfig
+m68k                         apollo_defconfig
+powerpc                  iss476-smp_defconfig
+sh                           se7619_defconfig
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+sh                           se7206_defconfig
+sh                          r7780mp_defconfig
+sparc64                          alldefconfig
+m68k                             alldefconfig
+powerpc                 mpc8540_ads_defconfig
+powerpc                     tqm8555_defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+sparc                               defconfig
+xtensa                           allyesconfig
+sparc                            allyesconfig
+x86_64                                  kexec
+powerpc                      makalu_defconfig
+sh                     sh7710voipgw_defconfig
+arm                      footbridge_defconfig
+csky                              allnoconfig
+arm                          exynos_defconfig
+sh                          urquell_defconfig
+loongarch                           defconfig
+loongarch                        allmodconfig
+arm                        realview_defconfig
+powerpc                    sam440ep_defconfig
+ia64                      gensparse_defconfig
+m68k                           virt_defconfig
+nios2                            allyesconfig
+nios2                               defconfig
+parisc                              defconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+powerpc                    adder875_defconfig
+sparc64                             defconfig
+sh                   rts7751r2dplus_defconfig
+sh                         ap325rxa_defconfig
+powerpc                   currituck_defconfig
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20221023
+m68k                             allmodconfig
 
-  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_urgent_for_v6.0_rc2
-
-for you to fetch changes up to 471f0aa7fa64e23766a1473b32d9ec3f0718895a:
-
-  x86/fpu: Fix copy_xstate_to_uabi() to copy init states correctly (2022-10-21 15:22:09 -0700)
-
-----------------------------------------------------------------
-- Use the correct CPU capability clearing function on the error path in
-  Intel perf LBR
-
-- A CFI fix to ftrace along with a simplification
-
-- Adjust handling of zero capacity bit mask for resctrl cache allocation
-  on AMD
-
-- A fix to the AMD microcode loader to attempt patch application on
-  every logical thread
-
-- A couple of topology fixes to handle CPUID leaf 0x1f enumeration info
-  properly
-
-- Drop a -mabi=ms compiler option check as both compilers support it now
-  anyway
-
-- A couple of fixes to how the initial, statically allocated FPU buffer
-  state is setup and its interaction with dynamic states at runtime
-
-----------------------------------------------------------------
-Babu Moger (1):
-      x86/resctrl: Fix min_cbm_bits for AMD
-
-Borislav Petkov (1):
-      x86/microcode/AMD: Apply the patch early on every logical thread
-
-Chang S. Bae (4):
-      x86/fpu: Configure init_fpstate attributes orderly
-      x86/fpu: Fix the init_fpstate size check with the actual size
-      x86/fpu: Exclude dynamic states from init_fpstate
-      x86/fpu: Fix copy_xstate_to_uabi() to copy init states correctly
-
-Maxim Levitsky (1):
-      perf/x86/intel/lbr: Use setup_clear_cpu_cap() instead of clear_cpu_cap()
-
-Nathan Chancellor (1):
-      x86/Kconfig: Drop check for -mabi=ms for CONFIG_EFI_STUB
-
-Peter Zijlstra (2):
-      x86/ftrace: Remove ftrace_epilogue()
-      ftrace,kcfi: Separate ftrace_stub() and ftrace_stub_graph()
-
-Zhang Rui (3):
-      hwmon/coretemp: Handle large core ID value
-      x86/topology: Fix multiple packages shown on a single-package system
-      x86/topology: Fix duplicated core ID within a package
-
- arch/arm64/kernel/entry-ftrace.S    |  7 ++++-
- arch/x86/Kconfig                    |  1 -
- arch/x86/events/intel/lbr.c         |  2 +-
- arch/x86/kernel/cpu/microcode/amd.c | 16 +++++++++--
- arch/x86/kernel/cpu/resctrl/core.c  |  8 ++----
- arch/x86/kernel/cpu/topology.c      | 16 +++++++----
- arch/x86/kernel/fpu/init.c          |  8 ------
- arch/x86/kernel/fpu/xstate.c        | 42 +++++++++++++++-------------
- arch/x86/kernel/ftrace_64.S         | 34 +++++++++-------------
- drivers/hwmon/coretemp.c            | 56 +++++++++++++++++++++++++++----------
- include/asm-generic/vmlinux.lds.h   | 18 ++++++++----
- 11 files changed, 122 insertions(+), 86 deletions(-)
+clang tested configs:
+riscv                randconfig-r042-20221019
+hexagon              randconfig-r045-20221019
+hexagon              randconfig-r041-20221019
+s390                 randconfig-r044-20221019
+x86_64                        randconfig-a001
+i386                          randconfig-a002
+x86_64                        randconfig-a003
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a005
+x86_64                        randconfig-a016
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+i386                 randconfig-a011-20221017
+i386                 randconfig-a013-20221017
+i386                 randconfig-a012-20221017
+i386                 randconfig-a014-20221017
+i386                 randconfig-a016-20221017
+i386                 randconfig-a015-20221017
+mips                       rbtx49xx_defconfig
+arm                           spitz_defconfig
+powerpc                   microwatt_defconfig
+arm                         orion5x_defconfig
+powerpc                      obs600_defconfig
+x86_64                        randconfig-k001
+mips                        bcm63xx_defconfig
+mips                      bmips_stb_defconfig
+mips                      maltaaprp_defconfig
+powerpc                      walnut_defconfig
+arm                            mmp2_defconfig
+arm                      pxa255-idp_defconfig
+arm                         socfpga_defconfig
+arm                             mxs_defconfig
+powerpc                      makalu_defconfig
+powerpc                 mpc8540_ads_defconfig
+hexagon                          alldefconfig
+mips                           rs90_defconfig
+powerpc                     pseries_defconfig
+arm                        neponset_defconfig
 
 -- 
-Regards/Gruss,
-    Boris.
-
-SUSE Software Solutions Germany GmbH
-GF: Ivo Totev, Andrew Myers, Andrew McDonald, Martje Boudien Moerman
-(HRB 36809, AG Nürnberg)
+0-DAY CI Kernel Test Service
+https://01.org/lkp
