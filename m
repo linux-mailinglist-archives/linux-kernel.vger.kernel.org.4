@@ -2,62 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B7926095F4
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 22:03:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57E8B6095F7
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 22:05:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230463AbiJWUDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 16:03:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59942 "EHLO
+        id S230399AbiJWUFp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 16:05:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230235AbiJWUDf (ORCPT
+        with ESMTP id S230470AbiJWUFk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 16:03:35 -0400
-Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27DAF6566D;
-        Sun, 23 Oct 2022 13:03:34 -0700 (PDT)
-Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182]) (authenticated)
-        by conssluserg-05.nifty.com with ESMTP id 29NK3J4k022655;
-        Mon, 24 Oct 2022 05:03:19 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 29NK3J4k022655
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1666555400;
-        bh=M3ZxNAiBcIlFjCWFQwnzBKBdtwWozx3fquXatda9+ts=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=0I0T256zWWV6zA2tgsOvWc6x3ZTfoc8ge+22LIO39gjCgS/km2BA1jIrEhtn+r9GO
-         4UIsFHoVZxN9MqakWGBwi4/fzQo0jv0KHjD62NVW/XEGkWVKyERtJZZgppSN3cOOo9
-         YQA7byhXHWmkTLFDgcesP6xuJWoAdf+96F4nVvHQlwvBh+TulXgOjYa+eWq8vkbapv
-         wdU2blx2tKlpUWnJDLaTyx/+pHvNGX9PkRtMkP7BvYaRJ8REDgJyHE55hy8Mo1iZYf
-         Jl4b9ElC3Qq53iVZDAXnjnjBHNDSGNVojDatXwf3QRn/8DN6KCrcQlXDjWhvz/lbr/
-         0/hqY1a95lJCg==
-X-Nifty-SrcIP: [209.85.167.182]
-Received: by mail-oi1-f182.google.com with SMTP id y67so9026768oiy.1;
-        Sun, 23 Oct 2022 13:03:19 -0700 (PDT)
-X-Gm-Message-State: ACrzQf2Nq7sFo/dXBb7tNAQ+Sh+1PMRhek/XISXMbBMztBfhUvKyY1Gs
-        prc0XRw58ukZH5C0fULUOx7G4XklFJfbskGVXfs=
-X-Google-Smtp-Source: AMsMyM4LQgSLuv2/57yI1HYPJBmkgqay9G85DXbIyd+aQEe7R0SyF7lqhnkbn17ye/olVzl4x7cdZReGeE+6xhU6J6A=
-X-Received: by 2002:aca:bbd4:0:b0:353:f167:6fd3 with SMTP id
- l203-20020acabbd4000000b00353f1676fd3mr15510922oif.287.1666555398536; Sun, 23
- Oct 2022 13:03:18 -0700 (PDT)
+        Sun, 23 Oct 2022 16:05:40 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16DEC5B521
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 13:05:40 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id w189so5939929pfw.4
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 13:05:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6sPUPb6oRl7KEqD6mV4SRu4u5doWDjb3blZucpwF334=;
+        b=n/6o2lGh9DT0UTU0OI91LTHKxInhidxtX42U/UHHdGpfGD1dvmoFK7+znOdm7d2eim
+         Gt4PcxRDtV/rg0FOxugPT3Z+VT75Yk84whGAp9Z0HPH2FBRiLj+8iD9g7y4bQ7uNex5x
+         rR6YC4+T4jhEccaYmgyuLXf4QX+WJ8j0qsMzt2mo7JGHFWcZHvsPM4JgGH6crl0veeCm
+         I4QwJXr1gcmCfys7Q4L4GBAxsSuG2xjgQlQcn9Zp9oE7cuIs6W59wgelTH4cwFni2UOb
+         0lPur2WFLtA+2T31jPxBy+gdKUeXk65Yjzrlueo2SDZJeIGCpGia1+LEolRGioLkKxpE
+         8Rpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6sPUPb6oRl7KEqD6mV4SRu4u5doWDjb3blZucpwF334=;
+        b=yoI1N+HIxpY5XyWwVw3vswS+0h6V+KF3nf56Ok/xWhNhVxd0yG15UfCnuqOEwPzFcj
+         Kj3W21cUjHRXP3ELtQas/0iGN7XIrAC4WKAwU3lsT5ondFrFHCZHwO7JX/E+GOMc+aUB
+         bE5o81H6kpsEJEC0rw1GjNfWOIKyStC4kQtLwis3nB2OB/Pw5QB+DKC6eHnfIHBNcE0x
+         A70niYy26tCQYJCnLsQUB6DjZsnQl7IVjJVke9HgIbh2ckp1hubZgzpBmFgM1JfsY6YQ
+         VDSj7X3k2kLEJUEKCmJCSTWph6IFGgS/jsKaHfbhMjJpPTDcSt3vXw93UKDnNkwGm48q
+         GqwQ==
+X-Gm-Message-State: ACrzQf3TGrcgQ8sa3Z0a8qkewq6lGDIo50nO1QDeHYBRNa1gCeON4gcn
+        jw8Fj3s/PpLejG9iawfM2dKR5kiZoBOrTDg2
+X-Google-Smtp-Source: AMsMyM5dnunP5CXd5LNnMnemSewA8Nz4tf0FT3lhkKpCyI127u8FnW/CPxYORVuzCNrlsMBjUuug2A==
+X-Received: by 2002:a63:90c8:0:b0:46e:cd36:adb3 with SMTP id a191-20020a6390c8000000b0046ecd36adb3mr9255961pge.487.1666555539477;
+        Sun, 23 Oct 2022 13:05:39 -0700 (PDT)
+Received: from uftrace.. ([14.5.161.231])
+        by smtp.gmail.com with ESMTPSA id e13-20020aa798cd000000b0056bc0578c7dsm1130649pfm.110.2022.10.23.13.05.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 23 Oct 2022 13:05:38 -0700 (PDT)
+From:   Kang Minchul <tegongkang@gmail.com>
+To:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Pavel Skripkin <paskripkin@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Kang Minchul <tegongkang@gmail.com>
+Subject: [PATCH 0/4] staging: r8188eu: cleaning up unused variable
+Date:   Mon, 24 Oct 2022 05:05:28 +0900
+Message-Id: <20221023200532.259276-1-tegongkang@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20221020103823.31001-1-ashimida@linux.alibaba.com>
- <Y1FVphEyu23U0jho@debian.me> <8b2864bd-30b1-254f-ebd6-79967249da9b@linux.alibaba.com>
- <Y1JRhiAQ1bV/Dh7h@buildd.core.avm.de>
-In-Reply-To: <Y1JRhiAQ1bV/Dh7h@buildd.core.avm.de>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Mon, 24 Oct 2022 05:02:42 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATo3+CTpRzKQEtdOxVSU4qvj2+-BOEQr8z8_Yj7eW9p4Q@mail.gmail.com>
-Message-ID: <CAK7LNATo3+CTpRzKQEtdOxVSU4qvj2+-BOEQr8z8_Yj7eW9p4Q@mail.gmail.com>
-Subject: Re: [RFC] Documentation: kbuild: Add description of git for
- reproducible builds
-To:     Nicolas Schier <n.schier@avm.de>
-Cc:     Dan Li <ashimida@linux.alibaba.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>, michal.lkml@markovi.net,
-        ndesaulniers@google.com, corbet@lwn.net,
-        linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,85 +72,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 5:00 PM Nicolas Schier <n.schier@avm.de> wrote:
->
-> On Thu, Oct 20, 2022 at 06:48:20PM -0700, Dan Li wrote:
-> >
-> >
-> > On 10/20/22 07:05, Bagas Sanjaya wrote:
-> > > On Thu, Oct 20, 2022 at 03:38:23AM -0700, Dan Li wrote:
-> > > > diff --git a/Documentation/kbuild/reproducible-builds.rst b/Documentation/kbuild/reproducible-builds.rst
-> > > > index 071f0151a7a4..13397f38c358 100644
-> > > > --- a/Documentation/kbuild/reproducible-builds.rst
-> > > > +++ b/Documentation/kbuild/reproducible-builds.rst
-> > > > @@ -119,6 +119,16 @@ To avoid this, you can make the vDSO different for different
-> > > >   kernel versions by including an arbitrary string of "salt" in it.
-> > > >   This is specified by the Kconfig symbol ``CONFIG_BUILD_SALT``.
-> > > > +Git
-> > > > +-----------------------
-> > > > +
-> > > > +Uncommitted changes or different commit ids in git can also lead
-> > > > +to different compilation results. For example, after executing
-> > > > +``git reset HEAD^``, even if the code is the same, the
-> > > > +``include/config/kernel.release`` generated during compilation
-> > > > +will be different, which will eventually lead to binary differences.
-> > > > +See ``scripts/setlocalversion`` for details.
-> > > > +
-> > >
-> > > Briefly read the script, I don't see what the correlation between git
-> > > reset with LOCALVERSION thing is. Also, does the exact state of git
-> > > repository required for reproducible builds?
-> > >
-> >
-> > Hi Bagas,
-> >
-> > The Makefile has the following code:
-> > filechk_kernel.release = \
-> >         echo "$(KERNELVERSION)$$($(CONFIG_SHELL) $(srctree)/scripts/setlocalversion $(srctree))"
-> >
-> > The output of setlocalversion affects kernel.release, while the output
-> > of setlocalversion is related to the state of git when the git repository
-> > exists (see function scm_version).
-> >
-> > So changes in git state will result in changes to kernel.release, and
-> > this information will be included in the final output vmlinux/modules
-> > and in turn affect reproducible builds.
-> >
-> > For example:
-> > $ git log
-> > commit 4cd155a93eec......
-> > $ make ...
-> > $ cat include/config/kernel.release
-> > 6.0.0-rc4-00025-g4cd155a93eec
-> >
-> > $ git reset HEAD^
-> > $ git log
-> > commit 7b4d266b0c41......
-> > $ make ...
-> > $ cat include/config/kernel.release
-> > 6.0.0-rc4-00024-g7b4d266b0c41-dirty
-> >
-> >
-> > AFAICT, in the presence of a git repository, we can compile a reproducible
-> > build kernel in any git state, but we need to ensure that the git state is
-> > always the same between compilations (or the same from the perspective of
-> > the scm_version function).
->
-> yes, that definitely true.  Absence or presence of git tags can change
-> the output of setlocalversion even more drastically.
->
-> I think it is sensible to add a stanza about git in
-> Documentation/kbuild/reproducible-builds.rst.
+This patch series cleans up unused variables in r8188eu
+causing coccicheck warnings.
 
+Kang Minchul (4):
+  staging: r8188eu: remove unnecessary variable in ioctl_linux
+  staging: r8188eu: remove unnecessary variable in rtw_recv
+  staging: r8188eu: remove unnecessary variable in rtl8188eu_xmit
+  staging: r8188eu: remove unnecessary variable in rtw_ap
 
-
-
-Make sense.
-Applied to linux-kbuild.
-Thanks.
-
-
+ drivers/staging/r8188eu/core/rtw_ap.c        | 5 ++---
+ drivers/staging/r8188eu/core/rtw_recv.c      | 3 +--
+ drivers/staging/r8188eu/hal/rtl8188eu_xmit.c | 3 +--
+ drivers/staging/r8188eu/os_dep/ioctl_linux.c | 4 +---
+ 4 files changed, 5 insertions(+), 10 deletions(-)
 
 -- 
-Best Regards
-Masahiro Yamada
+2.34.1
+
