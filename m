@@ -2,204 +2,408 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C71A6095A1
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 20:32:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAD256095A2
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 20:36:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230373AbiJWScj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 14:32:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41754 "EHLO
+        id S230376AbiJWSgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 14:36:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230166AbiJWScd (ORCPT
+        with ESMTP id S230166AbiJWSgF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 14:32:33 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 590E674364
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 11:32:31 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id z5-20020a5e9245000000b006bd430ff7c0so1939128iop.7
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 11:32:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=l+0VgJ8Gbl95TmV6Bs0hyU7LlDiuG6XfQ/JBlPd6Jvw=;
-        b=UoSIEmom/7Ra3+s3cMDUIWUIjahAV01W3Pbv9JDZutzaauiuxdons5TFM1JVO+VZ8Q
-         hV0KPAGa/pPyj23uCXoxGVk21B9sdnWTt6QiNk6Moln/Wz/g9XKpfsYPYZnPPpUgaCug
-         u+2gWGAvWsp4a0Rbi46/xNmNZgVvV6a8PWDsSgL7P+UQEkBKKHmIqI9GbAiQSN4WE/Rg
-         d/5iD6H9f8A7Vb3gdDewRrs576g2PVG4VFckdtmoz49ZNGG6Z+qCjCUonBzjW/rHog6u
-         xTJSJ/3Fv7jjVXQUGyqRSb7aKu44JdVAQbXVYB26/oL0k8GM94I7Hwv06olqaK0UJTnI
-         ogvA==
-X-Gm-Message-State: ACrzQf1VeaqIMZcXlUQF19rfHtKi376zt6WgmaE+bzhlGeNSYv5utw+q
-        7p4PEBHxDq4O0VVuGRizMgI8xxZP60HxSp4+Fwd8iZg0vAk0
-X-Google-Smtp-Source: AMsMyM4ufSOAB+H/L20zddLafaoC1ZpxxXva8ahIgQ9Ws/IbUXseWao9xhVbb/HWlrXMPerhwF0zb8yZatVy9xZAL6u8qCCnGRQ+
+        Sun, 23 Oct 2022 14:36:05 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BDCC70E52
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 11:36:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id DA680CE0F2C
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 18:35:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89BDCC433D6;
+        Sun, 23 Oct 2022 18:35:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666550156;
+        bh=iCifHuat/D34dOyB7ohhjRHHVpFQPLMF05srQJ2flKE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=s+ISBcXlS3A2uvsXyivddy0mKrJ4B1fZh/VELjzCbpzK4LIMa8dGXa5g+HFYEF8Nn
+         iuzEt7V7l92kdATjRozhWEPw+if/MJSX/o3zaUxSrNIg1vUCYfU4BB3TlxSnw7thB9
+         e27zOU5aYY/exqm7kd9d6JDjnolr8cA/v4kPwTEwk//mPtAf4Go5ShJav4RceJ8BuU
+         EMhd8bHu8Ub2ASZyITwvCIu3l9q4K0VQ0qpwzYeYfzERilV3CxnIqzcwOm2E7IokYJ
+         6Mnc44x3bCO5IpZAqr9/+Gjh2NElyyEXf8Uycw1oVFQPstzxkEhWiW+xySLBr7iBts
+         gW7iVY6X2Ja5A==
+Date:   Sun, 23 Oct 2022 19:35:51 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     binglei wang <l3b2w1@gmail.com>
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, naveen.n.rao@linux.ibm.com,
+        anil.s.keshavamurthy@intel.com, davem@davemloft.net,
+        mhiramat@kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8] rethook: add riscv rethook implementation
+Message-ID: <Y1WJh+K0fg6iz/TP@spud>
+References: <20220930081357.651914-1-l3b2w1@gmail.com>
+ <Yzm+z+mv/VSA+5hg@spud>
+ <CAJ3C4KzyAR7dKYFBKHzFEXr-dzr-JMGRFVx+dybMhRPy0uHUgA@mail.gmail.com>
+ <Y01tdcRRFBdOmaYc@spud>
+ <CAJ3C4Kwj0yYS5JCPw=g0X9qiQhw04iKy_cTjc0x8iWdy0ay7bg@mail.gmail.com>
+ <Y062jiPZbWEAVjpO@wendy>
+ <CAJ3C4Kzzd4ZamaUNFLx6dBUwKgMin6O+nGgWf+pJbziLRx1vvA@mail.gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a02:c6d9:0:b0:373:e154:268e with SMTP id
- r25-20020a02c6d9000000b00373e154268emr1181868jan.291.1666549950546; Sun, 23
- Oct 2022 11:32:30 -0700 (PDT)
-Date:   Sun, 23 Oct 2022 11:32:30 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000cd8af105ebb7e570@google.com>
-Subject: [syzbot] inconsistent lock state in _atomic_dec_and_lock
-From:   syzbot <syzbot+9c8140e9162432b9eb20@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        syzkaller-bugs@googlegroups.com, willy@infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJ3C4Kzzd4ZamaUNFLx6dBUwKgMin6O+nGgWf+pJbziLRx1vvA@mail.gmail.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Sun, Oct 23, 2022 at 01:14:15AM +0800, binglei wang wrote:
+> Hi Conor,
+> I would appreciate if you can send the patch for me this time !
+> As keen as mustard i am to see the patch applied and merged if there
+> is no something unsuitable.
 
-syzbot found the following issue on:
+I was in the process of doing a resend on your behalf but I noticed some
+issues with the patch. Firstly, there's a whitespace error:
 
-HEAD commit:    bbed346d5a96 Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=14ee3b3c880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3a4a45d2d827c1e
-dashboard link: https://syzkaller.appspot.com/bug?extid=9c8140e9162432b9eb20
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=150865d6880000
+	Applying: rethook: add riscv rethook implementation
+	/stuff/linux/.git/rebase-apply/patch:121: new blank line at EOF.
+	+
+	warning: 1 line adds whitespace errors.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/e8e91bc79312/disk-bbed346d.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/c1cb3fb3b77e/vmlinux-bbed346d.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/ebd052ae1e7b/mount_0.gz
+And there are a bunch of errors from checkpatch too:
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+9c8140e9162432b9eb20@syzkaller.appspotmail.com
+	./scripts/checkpatch.pl --strict -g HEAD
+	
+	CHECK: Please use a blank line after function/struct/union/enum declarations
+	#107: FILE: arch/riscv/kernel/probes/rethook.c:15:
+	+}
+	+NOKPROBE_SYMBOL(arch_rethook_trampoline_callback);
+	
+	CHECK: Please don't use multiple blank lines
+	#109: FILE: arch/riscv/kernel/probes/rethook.c:17:
+	+
+	+
+	
+	CHECK: Please use a blank line after function/struct/union/enum declarations
+	#118: FILE: arch/riscv/kernel/probes/rethook.c:26:
+	+}
+	+NOKPROBE_SYMBOL(arch_rethook_prepare);
+	
+	WARNING: Improper SPDX comment style for 'arch/riscv/kernel/probes/rethook.h', please use '/*' instead
+	#126: FILE: arch/riscv/kernel/probes/rethook.h:1:
+	+// SPDX-License-Identifier: GPL-2.0-only
+	
+	WARNING: Missing or malformed SPDX-License-Identifier tag in line 1
+	#126: FILE: arch/riscv/kernel/probes/rethook.h:1:
+	+// SPDX-License-Identifier: GPL-2.0-only
+	
+	total: 0 errors, 3 warnings, 3 checks, 96 lines checked
 
-================================
-WARNING: inconsistent lock state
-6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0 Not tainted
---------------------------------
-inconsistent {IN-HARDIRQ-W} -> {HARDIRQ-ON-W} usage.
-syz-executor.3/9712 [HC0[0]:SC0[0]:HE1:SE1] takes:
-ffff0000d10c2577 (&folio_wait_table[i]){?.-.}-{2:2}, at: spin_lock include/linux/spinlock.h:349 [inline]
-ffff0000d10c2577 (&folio_wait_table[i]){?.-.}-{2:2}, at: _atomic_dec_and_lock+0xc8/0x130 lib/dec_and_lock.c:28
-{IN-HARDIRQ-W} state was registered at:
-  lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5666
-  __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
-  _raw_spin_lock_irqsave+0x6c/0xb4 kernel/locking/spinlock.c:162
-  folio_wake_bit+0x88/0x254 mm/filemap.c:1143
-  folio_unlock+0xb4/0x210 mm/filemap.c:1533
-  unlock_page+0x38/0xb8 mm/folio-compat.c:20
-  end_buffer_async_read+0x2a8/0x5f8 fs/buffer.c:290
-  end_buffer_async_read_io+0x118/0x12c fs/buffer.c:335
-  end_bio_bh_io_sync+0x5c/0xac fs/buffer.c:2672
-  bio_endio+0x28c/0x2d8 block/bio.c:1564
-  blk_complete_request block/blk-mq.c:755 [inline]
-  blk_mq_end_request_batch+0x18c/0x5ec block/blk-mq.c:989
-  nvme_complete_batch drivers/nvme/host/nvme.h:706 [inline]
-  nvme_pci_complete_batch+0x130/0x14c drivers/nvme/host/pci.c:1040
-  nvme_irq+0x64/0xa8 drivers/nvme/host/pci.c:1141
-  __handle_irq_event_percpu+0xa8/0x294 kernel/irq/handle.c:158
-  handle_irq_event_percpu kernel/irq/handle.c:193 [inline]
-  handle_irq_event+0x4c/0xe8 kernel/irq/handle.c:210
-  handle_fasteoi_irq+0x1b4/0x324 kernel/irq/chip.c:714
-  generic_handle_irq_desc include/linux/irqdesc.h:158 [inline]
-  handle_irq_desc kernel/irq/irqdesc.c:648 [inline]
-  generic_handle_domain_irq+0x4c/0x6c kernel/irq/irqdesc.c:704
-  __gic_handle_irq drivers/irqchip/irq-gic-v3.c:695 [inline]
-  __gic_handle_irq_from_irqson drivers/irqchip/irq-gic-v3.c:746 [inline]
-  gic_handle_irq+0x78/0x1b4 drivers/irqchip/irq-gic-v3.c:790
-  call_on_irq_stack+0x2c/0x54 arch/arm64/kernel/entry.S:889
-  do_interrupt_handler+0x7c/0xc0 arch/arm64/kernel/entry-common.c:274
-  __el1_irq arch/arm64/kernel/entry-common.c:470 [inline]
-  el1_interrupt+0x34/0x68 arch/arm64/kernel/entry-common.c:485
-  el1h_64_irq_handler+0x18/0x24 arch/arm64/kernel/entry-common.c:490
-  el1h_64_irq+0x64/0x68 arch/arm64/kernel/entry.S:577
-  arch_local_irq_restore arch/arm64/include/asm/irqflags.h:122 [inline]
-  __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
-  _raw_spin_unlock_irqrestore+0x58/0x8c kernel/locking/spinlock.c:194
-  debug_object_activate+0xb0/0x300 lib/debugobjects.c:692
-  debug_rcu_head_queue kernel/rcu/rcu.h:189 [inline]
-  call_rcu+0x40/0x484 kernel/rcu/tree.c:2778
-  tlb_remove_table_free mm/mmu_gather.c:174 [inline]
-  tlb_table_flush mm/mmu_gather.c:215 [inline]
-  tlb_flush_mmu_free+0x298/0x3bc mm/mmu_gather.c:253
-  tlb_flush_mmu+0x274/0x2f0 mm/mmu_gather.c:262
-  tlb_finish_mmu+0x64/0xe4 mm/mmu_gather.c:353
-  exit_mmap+0xe4/0x2e4 mm/mmap.c:3118
-  __mmput+0x90/0x204 kernel/fork.c:1187
-  mmput+0x64/0xa0 kernel/fork.c:1208
-  free_bprm+0xac/0x19c fs/exec.c:1485
-  kernel_execve+0x4ec/0x540 fs/exec.c:2004
-  call_usermodehelper_exec_async+0x10c/0x214 kernel/umh.c:112
-  ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:860
-irq event stamp: 8353
-hardirqs last  enabled at (8353): [<ffff800008161dac>] raw_spin_rq_unlock_irq kernel/sched/sched.h:1367 [inline]
-hardirqs last  enabled at (8353): [<ffff800008161dac>] finish_lock_switch+0x94/0xe8 kernel/sched/core.c:4942
-hardirqs last disabled at (8352): [<ffff80000bfc0a34>] __schedule+0x84/0x5a0 kernel/sched/core.c:6393
-softirqs last  enabled at (7378): [<ffff8000080102e4>] _stext+0x2e4/0x37c
-softirqs last disabled at (7245): [<ffff800008017c14>] ____do_softirq+0x14/0x20 arch/arm64/kernel/irq.c:79
+I'm still happy to resend it on your behalf once these issues are fixed.
+Thanks,
+Conor.
 
-other info that might help us debug this:
- Possible unsafe locking scenario:
-
-       CPU0
-       ----
-  lock(&folio_wait_table[i]);
-  <Interrupt>
-    lock(&folio_wait_table[i]);
-
- *** DEADLOCK ***
-
-1 lock held by syz-executor.3/9712:
- #0: ffff0000d1a700e0 (&type->s_umount_key#46/1){+.+.}-{3:3}, at: alloc_super+0xf8/0x430 fs/super.c:228
-
-stack backtrace:
-CPU: 1 PID: 9712 Comm: syz-executor.3 Not tainted 6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-Call trace:
- dump_backtrace+0x1c4/0x1f0 arch/arm64/kernel/stacktrace.c:156
- show_stack+0x2c/0x54 arch/arm64/kernel/stacktrace.c:163
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x104/0x16c lib/dump_stack.c:106
- dump_stack+0x1c/0x58 lib/dump_stack.c:113
- print_usage_bug+0x39c/0x3cc kernel/locking/lockdep.c:3961
- mark_lock_irq+0x4a8/0x4b4
- mark_lock+0x154/0x1b4 kernel/locking/lockdep.c:4632
- mark_usage kernel/locking/lockdep.c:4541 [inline]
- __lock_acquire+0x5f8/0x30a4 kernel/locking/lockdep.c:5007
- lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5666
- __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
- _raw_spin_lock+0x54/0x6c kernel/locking/spinlock.c:154
- spin_lock include/linux/spinlock.h:349 [inline]
- _atomic_dec_and_lock+0xc8/0x130 lib/dec_and_lock.c:28
- iput+0x50/0x324 fs/inode.c:1766
- ntfs_fill_super+0x1254/0x14a4 fs/ntfs3/super.c:1190
- get_tree_bdev+0x1e8/0x2a0 fs/super.c:1323
- ntfs_fs_get_tree+0x28/0x38 fs/ntfs3/super.c:1358
- vfs_get_tree+0x40/0x140 fs/super.c:1530
- do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
- path_mount+0x358/0x914 fs/namespace.c:3370
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount fs/namespace.c:3568 [inline]
- __arm64_sys_mount+0x2c4/0x3c4 fs/namespace.c:3568
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
- el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
-ntfs3: loop3: Mark volume as dirty due to NTFS errors
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+> 
+> 
+> 
+> 2022-10-18 22:22 GMT+08:00, Conor Dooley <conor.dooley@microchip.com>:
+> > On Tue, Oct 18, 2022 at 10:08:55PM +0800, binglei wang wrote:
+> >> Hi Conor:
+> >> Thank you for your help to check the merging process for this patch.
+> >>
+> >> > Thread overview: 3+ messages (download: mbox.gz / follow: Atom feed)
+> >> > -- links below jump to the message on this page --
+> >> >      [not found] <20220930081357.651914-1-l3b2w1@gmail.com>
+> >> I have no idea what this means, I guess maybe the way i sended the
+> >> patch was not right.
+> >>
+> >> I found the patch on the lore in this url, is this helpful ?
+> >> https://lore.kernel.org/lkml/20221002181035.490ad0155d741e39faa29716@kernel.org/
+> >
+> > Hmm, looks like your patch made it to lkml itself but got rejected by
+> > linux-riscv which is hosted by infradead. It's missing here:
+> > https://lore.kernel.org/linux-riscv/CAJ3C4Kwj0yYS5JCPw=g0X9qiQhw04iKy_cTjc0x8iWdy0ay7bg@mail.gmail.com/T/#t
+> >
+> >>
+> >> > I'm not really sure what's happened there.. I can only see your v1 and
+> >> > your v4 on lore/patchwork.
+> >> I find all my commits from v1 to v8 in this addr
+> >> https://lore.kernel.org/lkml/?q=l3b2w1
+> >>
+> >> Should I resend the patch as a last resort ?
+> >
+> > Eh, I guess you could try (and CC patches@lists.linux.dev). I'm not sure
+> > if that'll help at all though.. At worst, if that doesn't work I could
+> > possibly send the patches for you. Or if you think you may end up doing
+> > more upstream work you could always apply for an @linux.dev account?
+> > See https://korg.docs.kernel.org/linuxdev.html for more information on
+> > that.
+> >
+> >>
+> >> Binglei Wang
+> >> Best wishes.
+> >>
+> >> Conor Dooley <conor@kernel.org> 于2022年10月17日周一 22:58写道：
+> >> >
+> >> > On Mon, Oct 17, 2022 at 10:31:28PM +0800, binglei wang wrote:
+> >> > > Hi Conor,
+> >> > > could you please help me to push forward merging process of this
+> >> > > patch
+> >> > > into the 6.1 ?  Thank you!
+> >> >
+> >> > Hey Binglei,
+> >> > Unfortunately it is too late for v6.1 (the merge window closed on
+> >> > Sunday, Palmer sent his second PR on Friday) but I don't see why this
+> >> > should not be picked for v6.2. I tried last week & again just now to
+> >> > check the status of this patch on patchwork but I cannot find it there.
+> >> > Similarly, the patch does not appear on lore:
+> >> > https://lore.kernel.org/linux-riscv/CAJ3C4KzyAR7dKYFBKHzFEXr-dzr-JMGRFVx+dybMhRPy0uHUgA@mail.gmail.com/T/#t
+> >> > Thread overview: 3+ messages (download: mbox.gz / follow: Atom feed)
+> >> > -- links below jump to the message on this page --
+> >> >      [not found] <20220930081357.651914-1-l3b2w1@gmail.com>
+> >> > 2022-10-02  9:10 ` [PATCH v8] rethook: add riscv rethook implementation
+> >> > Masami Hiramatsu
+> >> > 2022-10-02 16:39 ` Conor Dooley
+> >> > 2022-10-17 14:31   ` binglei wang
+> >> >
+> >> > I'm not really sure what's happened there.. I can only see your v1 and
+> >> > your v4 on lore/patchwork. Maybe take a look if you changed anything
+> >> > between versions & try resending as v9?
+> >> >
+> >> > HTH,
+> >> > Conor.
+> >> >
+> >> > >
+> >> > > Binglei Wang
+> >> > > Best wishes.
+> >> > >
+> >> > >
+> >> > > On 2022-10-03 00:39, Conor Dooley wrote:
+> >> > > > Hey Binglei,
+> >> > > > I am not qualified to give you an actual R-b on this patch, but I
+> >> > > > see
+> >> > > > you did get one from Masami who very much is!
+> >> > > >
+> >> > > > That said, the patch looks a lot better (and much simpler!) now.
+> >> > > > Thanks
+> >> > > > for sticking with it despite the initial issues with your email
+> >> > > > setup
+> >> > > > and the submission process.
+> >> > > >
+> >> > > > Thanks,
+> >> > > > Conor.
+> >> > > >
+> >> > > > On Fri, Sep 30, 2022 at 04:13:57PM +0800, Binglei Wang wrote:
+> >> > > >> From: Binglei Wang <l3b2w1@gmail.com>
+> >> > > >>
+> >> > > >> Implement the kretprobes on riscv arch by using rethook machenism
+> >> > > >> which abstracts general kretprobe info into a struct rethook_node
+> >> > > >> to be embedded in the struct kretprobe_instance.
+> >> > > >>
+> >> > > >> Signed-off-by: Binglei Wang <l3b2w1@gmail.com>
+> >> > > >> ---
+> >> > > >>
+> >> > > >> Notes:
+> >> > > >>      v8: Add the omitted rethook.h
+> >> > > >>      v7: Add the changelog.
+> >> > > >>      v6: Remove the kretprobes trampoline.
+> >> > > >>      v5: Trt to fix robot compiling error and warnings.
+> >> > > >>      v4: Add patch version number.
+> >> > > >>      v3: Trt to fix robot compiling error and warnings.
+> >> > > >>      v2: Add comit log to explain reasons behind changes.
+> >> > > >>          Use my personal email instead of work email
+> >> > > >>              to avoid the attachments of company informaton.
+> >> > > >>          Make the kprobes_trampoline.S code to be shared.
+> >> > > >>      v1: Add riscv rethook implementation.
+> >> > > >>
+> >> > > >>   arch/riscv/Kconfig                            |  1 +
+> >> > > >>   arch/riscv/include/asm/kprobes.h              |  2 --
+> >> > > >>   arch/riscv/kernel/probes/Makefile             |  2 +-
+> >> > > >>   arch/riscv/kernel/probes/kprobes.c            | 13 ---------
+> >> > > >>   arch/riscv/kernel/probes/rethook.c            | 27
+> >> > > >> +++++++++++++++++++
+> >> > > >>   arch/riscv/kernel/probes/rethook.h            |  8 ++++++
+> >> > > >>   ...obes_trampoline.S => rethook_trampoline.S} |  6 ++---
+> >> > > >>   7 files changed, 40 insertions(+), 19 deletions(-)
+> >> > > >>   create mode 100644 arch/riscv/kernel/probes/rethook.c
+> >> > > >>   create mode 100644 arch/riscv/kernel/probes/rethook.h
+> >> > > >>   rename arch/riscv/kernel/probes/{kprobes_trampoline.S =>
+> >> > > >> rethook_trampoline.S} (94%)
+> >> > > >>
+> >> > > >> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> >> > > >> index 59d18881f..bfb66cdc5 100644
+> >> > > >> --- a/arch/riscv/Kconfig
+> >> > > >> +++ b/arch/riscv/Kconfig
+> >> > > >> @@ -97,6 +97,7 @@ config RISCV
+> >> > > >>      select HAVE_KPROBES if !XIP_KERNEL
+> >> > > >>      select HAVE_KPROBES_ON_FTRACE if !XIP_KERNEL
+> >> > > >>      select HAVE_KRETPROBES if !XIP_KERNEL
+> >> > > >> +    select HAVE_RETHOOK if !XIP_KERNEL
+> >> > > >>      select HAVE_MOVE_PMD
+> >> > > >>      select HAVE_MOVE_PUD
+> >> > > >>      select HAVE_PCI
+> >> > > >> diff --git a/arch/riscv/include/asm/kprobes.h
+> >> > > >> b/arch/riscv/include/asm/kprobes.h
+> >> > > >> index 217ef89f2..e7882ccb0 100644
+> >> > > >> --- a/arch/riscv/include/asm/kprobes.h
+> >> > > >> +++ b/arch/riscv/include/asm/kprobes.h
+> >> > > >> @@ -40,8 +40,6 @@ void arch_remove_kprobe(struct kprobe *p);
+> >> > > >>   int kprobe_fault_handler(struct pt_regs *regs, unsigned int
+> >> > > >> trapnr);
+> >> > > >>   bool kprobe_breakpoint_handler(struct pt_regs *regs);
+> >> > > >>   bool kprobe_single_step_handler(struct pt_regs *regs);
+> >> > > >> -void __kretprobe_trampoline(void);
+> >> > > >> -void __kprobes *trampoline_probe_handler(struct pt_regs *regs);
+> >> > > >>
+> >> > > >>   #endif /* CONFIG_KPROBES */
+> >> > > >>   #endif /* _ASM_RISCV_KPROBES_H */
+> >> > > >> diff --git a/arch/riscv/kernel/probes/Makefile
+> >> > > >> b/arch/riscv/kernel/probes/Makefile
+> >> > > >> index 7f0840dcc..c40139e9c 100644
+> >> > > >> --- a/arch/riscv/kernel/probes/Makefile
+> >> > > >> +++ b/arch/riscv/kernel/probes/Makefile
+> >> > > >> @@ -1,6 +1,6 @@
+> >> > > >>   # SPDX-License-Identifier: GPL-2.0
+> >> > > >>   obj-$(CONFIG_KPROBES)              += kprobes.o decode-insn.o
+> >> > > >> simulate-insn.o
+> >> > > >> -obj-$(CONFIG_KPROBES)               += kprobes_trampoline.o
+> >> > > >> +obj-$(CONFIG_RETHOOK)               += rethook.o
+> >> > > >> rethook_trampoline.o
+> >> > > >>   obj-$(CONFIG_KPROBES_ON_FTRACE)    += ftrace.o
+> >> > > >>   obj-$(CONFIG_UPROBES)              += uprobes.o decode-insn.o
+> >> > > >> simulate-insn.o
+> >> > > >>   CFLAGS_REMOVE_simulate-insn.o = $(CC_FLAGS_FTRACE)
+> >> > > >> diff --git a/arch/riscv/kernel/probes/kprobes.c
+> >> > > >> b/arch/riscv/kernel/probes/kprobes.c
+> >> > > >> index e6e950b7c..f21592d20 100644
+> >> > > >> --- a/arch/riscv/kernel/probes/kprobes.c
+> >> > > >> +++ b/arch/riscv/kernel/probes/kprobes.c
+> >> > > >> @@ -345,19 +345,6 @@ int __init
+> >> > > >> arch_populate_kprobe_blacklist(void)
+> >> > > >>      return ret;
+> >> > > >>   }
+> >> > > >>
+> >> > > >> -void __kprobes __used *trampoline_probe_handler(struct pt_regs
+> >> > > >> *regs)
+> >> > > >> -{
+> >> > > >> -    return (void *)kretprobe_trampoline_handler(regs, NULL);
+> >> > > >> -}
+> >> > > >> -
+> >> > > >> -void __kprobes arch_prepare_kretprobe(struct kretprobe_instance
+> >> > > >> *ri,
+> >> > > >> -                                  struct pt_regs *regs)
+> >> > > >> -{
+> >> > > >> -    ri->ret_addr = (kprobe_opcode_t *)regs->ra;
+> >> > > >> -    ri->fp = NULL;
+> >> > > >> -    regs->ra = (unsigned long) &__kretprobe_trampoline;
+> >> > > >> -}
+> >> > > >> -
+> >> > > >>   int __kprobes arch_trampoline_kprobe(struct kprobe *p)
+> >> > > >>   {
+> >> > > >>      return 0;
+> >> > > >> diff --git a/arch/riscv/kernel/probes/rethook.c
+> >> > > >> b/arch/riscv/kernel/probes/rethook.c
+> >> > > >> new file mode 100644
+> >> > > >> index 000000000..cbd0da059
+> >> > > >> --- /dev/null
+> >> > > >> +++ b/arch/riscv/kernel/probes/rethook.c
+> >> > > >> @@ -0,0 +1,27 @@
+> >> > > >> +// SPDX-License-Identifier: GPL-2.0-only
+> >> > > >> +/*
+> >> > > >> + * Generic return hook for riscv.
+> >> > > >> + */
+> >> > > >> +
+> >> > > >> +#include <linux/kprobes.h>
+> >> > > >> +#include <linux/rethook.h>
+> >> > > >> +#include "rethook.h"
+> >> > > >> +
+> >> > > >> +/* This is called from arch_rethook_trampoline() */
+> >> > > >> +unsigned long __used arch_rethook_trampoline_callback(struct
+> >> > > >> pt_regs *regs)
+> >> > > >> +{
+> >> > > >> +    return rethook_trampoline_handler(regs, regs->s0);
+> >> > > >> +}
+> >> > > >> +NOKPROBE_SYMBOL(arch_rethook_trampoline_callback);
+> >> > > >> +
+> >> > > >> +
+> >> > > >> +void arch_rethook_prepare(struct rethook_node *rhn, struct pt_regs
+> >> > > >> *regs, bool mcount)
+> >> > > >> +{
+> >> > > >> +    rhn->ret_addr = regs->ra;
+> >> > > >> +    rhn->frame = regs->s0;
+> >> > > >> +
+> >> > > >> +    /* replace return addr with trampoline */
+> >> > > >> +    regs->ra = (unsigned long)arch_rethook_trampoline;
+> >> > > >> +}
+> >> > > >> +NOKPROBE_SYMBOL(arch_rethook_prepare);
+> >> > > >> +
+> >> > > >> diff --git a/arch/riscv/kernel/probes/rethook.h
+> >> > > >> b/arch/riscv/kernel/probes/rethook.h
+> >> > > >> new file mode 100644
+> >> > > >> index 000000000..cc573d701
+> >> > > >> --- /dev/null
+> >> > > >> +++ b/arch/riscv/kernel/probes/rethook.h
+> >> > > >> @@ -0,0 +1,8 @@
+> >> > > >> +// SPDX-License-Identifier: GPL-2.0-only
+> >> > > >> +#ifndef __RISCV_RETHOOK_H
+> >> > > >> +#define __RISCV_RETHOOK_H
+> >> > > >> +
+> >> > > >> +unsigned long arch_rethook_trampoline_callback(struct pt_regs
+> >> > > >> *regs);
+> >> > > >> +void arch_rethook_prepare(struct rethook_node *rhn, struct pt_regs
+> >> > > >> *regs, bool mcount);
+> >> > > >> +
+> >> > > >> +#endif
+> >> > > >> diff --git a/arch/riscv/kernel/probes/kprobes_trampoline.S
+> >> > > >> b/arch/riscv/kernel/probes/rethook_trampoline.S
+> >> > > >> similarity index 94%
+> >> > > >> rename from arch/riscv/kernel/probes/kprobes_trampoline.S
+> >> > > >> rename to arch/riscv/kernel/probes/rethook_trampoline.S
+> >> > > >> index 7bdb09ded..21bac92a1 100644
+> >> > > >> --- a/arch/riscv/kernel/probes/kprobes_trampoline.S
+> >> > > >> +++ b/arch/riscv/kernel/probes/rethook_trampoline.S
+> >> > > >> @@ -75,13 +75,13 @@
+> >> > > >>      REG_L x31, PT_T6(sp)
+> >> > > >>      .endm
+> >> > > >>
+> >> > > >> -ENTRY(__kretprobe_trampoline)
+> >> > > >> +ENTRY(arch_rethook_trampoline)
+> >> > > >>      addi sp, sp, -(PT_SIZE_ON_STACK)
+> >> > > >>      save_all_base_regs
+> >> > > >>
+> >> > > >>      move a0, sp /* pt_regs */
+> >> > > >>
+> >> > > >> -    call trampoline_probe_handler
+> >> > > >> +    call arch_rethook_trampoline_callback
+> >> > > >>
+> >> > > >>      /* use the result as the return-address */
+> >> > > >>      move ra, a0
+> >> > > >> @@ -90,4 +90,4 @@ ENTRY(__kretprobe_trampoline)
+> >> > > >>      addi sp, sp, PT_SIZE_ON_STACK
+> >> > > >>
+> >> > > >>      ret
+> >> > > >> -ENDPROC(__kretprobe_trampoline)
+> >> > > >> +ENDPROC(arch_rethook_trampoline)
+> >> > > >> --
+> >> > > >> 2.27.0
+> >> > > >>
+> >> > >
+> >> > > _______________________________________________
+> >> > > linux-riscv mailing list
+> >> > > linux-riscv@lists.infradead.org
+> >> > > http://lists.infradead.org/mailman/listinfo/linux-riscv
+> >> > >
+> >
+> 
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
