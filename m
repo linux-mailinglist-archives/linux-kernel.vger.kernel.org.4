@@ -2,144 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F8A160936C
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 15:14:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40DC660936A
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 15:13:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230397AbiJWNNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 09:13:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53838 "EHLO
+        id S230436AbiJWNNi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 09:13:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230430AbiJWNNt (ORCPT
+        with ESMTP id S230397AbiJWNNe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 09:13:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6586278BFA;
-        Sun, 23 Oct 2022 06:13:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E87CEB80946;
-        Sun, 23 Oct 2022 13:12:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1572C433D6;
-        Sun, 23 Oct 2022 13:12:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666530760;
-        bh=+6IyGl0MVPkVHS2QT8+DH7EhBIU/cufLxi876OE1DWk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BAGT9kCaAHGKDvqtQwV95r6i9PfDKr2sRbQzDBsu2P9NJf9pKgtNXGH1ZCgSKrvOX
-         F2e7nN6P54X3hJXo7VM7y2SwAYrQWRj2DVtdmOoYBczH/+n3XPWP/z/OamHJuU2bug
-         8aYLLBwTV8xrBUrWHUNEyogDVskgbiQX4HslbJaq4G4Xy+oFzeGqHO/0ogE1eiw1iF
-         wH13W6T4wd2wk+lij8n00YBPoGxC5g8xaun43rp6wvyLYaxbHo+qf30sA6Pw1pwuFw
-         vX/ZACzrw3pO+E0g3t5ndKxM87PdAzZKC/jX6mMLkp662HwMDGYH1bHqaxGxAJm60H
-         5TsclH/ofoH5w==
-Date:   Sun, 23 Oct 2022 21:12:32 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Marcel Ziswiler <marcel@ziswiler.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Max Krummenacher <max.krummenacher@toradex.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Philippe Schenker <philippe.schenker@toradex.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 6/8] arm64: dts: verdin-imx8mp: add pcie support
-Message-ID: <20221023131232.GN125525@dragon>
-References: <20220922162925.2368577-1-marcel@ziswiler.com>
- <20220922162925.2368577-7-marcel@ziswiler.com>
+        Sun, 23 Oct 2022 09:13:34 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8F177645B
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 06:13:21 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id a5so4767125qkl.6
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 06:13:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uZZVZxGYHwnE1PIam0i2Ywe02Lmqk/XzV+z7/E9fIPY=;
+        b=V8u/hQ+wAFe2HLlBScSXqDxNPKgepGTKIfTPzyCu51pVOETTB0gLPomcBItqz6HPbl
+         G9zPgraSprrqeRJevz7fn1GKZ9on1AhbhTGPMPze68F3IxToHI91fn7h4Qv8ZcDidMyd
+         lqDthJ1FhWqM/pkkhCthaqS53jnJCvZiWp5rMx3dD53eZSpKQjOOplBLfkjltjOohpVK
+         m8XJWE7H3boEsVlB2nGceZjelBO2Zl3TvFhRvy0G7dm+bzqqg6zk8wIAUpmX15w2ej1b
+         SBDcI2eVMs7URG/xV6UyyP/MeAL2Lwn0uhhJMz9SeP9zAKwoyLp1aXeMSKHqwUvxt00P
+         FCkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uZZVZxGYHwnE1PIam0i2Ywe02Lmqk/XzV+z7/E9fIPY=;
+        b=AYjuyASfHsXxuk8o6f7G5OAJkwW5VH1e0PHOR3VDqwPZeOUrvj2FOpcTvc7VotZHZy
+         vG48MBLue88B8mInM660E+wUX7PSK51JezbqyFbIyP7geNn4I5sl9hlGP/YslhJLYIcn
+         nHDKxObFRgoNbZi7q+BHj5DdmTXk3QKMfFtUI85b/paV7GzMocZ05MSpA8aY9iVL/+r4
+         WGMlPHxjwHtyxMx9oufAxlaSKUhhyKV/ipw3RX9cbQw+Mekckk2+VLzNIsiUBSlU0qCf
+         ymDTTBURUvaJV89dwdY4slFXhJkJVhNBP+0E8mVzP2c0Q4B2AMOBHap65y/4aET/+sr4
+         rBbQ==
+X-Gm-Message-State: ACrzQf2sPe9cCJKTRSqIf8m0f7HRXpYCHLLai3uYmtt8xjXiXJZ3K0aa
+        BE8aAdF52+f/G8dxzn4KiEmL9g==
+X-Google-Smtp-Source: AMsMyM7nxzKp2ffgUCDO/X5GoslLPIunxildH8dLc0Nz0E5MubAlrLfOCbLO21902pFFqNdlkh7PSw==
+X-Received: by 2002:a05:620a:2406:b0:6ec:c5f5:6304 with SMTP id d6-20020a05620a240600b006ecc5f56304mr19801640qkn.95.1666530756908;
+        Sun, 23 Oct 2022 06:12:36 -0700 (PDT)
+Received: from [192.168.1.8] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id p7-20020a05620a132700b006b61b2cb1d2sm12994401qkj.46.2022.10.23.06.12.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 23 Oct 2022 06:12:35 -0700 (PDT)
+Message-ID: <909abf31-91d9-159b-baef-6ffcfc3e07b2@linaro.org>
+Date:   Sun, 23 Oct 2022 09:12:33 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220922162925.2368577-7-marcel@ziswiler.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH 2/6] ASoC: samsung: i2s: configure PSR from sound card
+Content-Language: en-US
+To:     Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>,
+        'Mark Brown' <broonie@kernel.org>
+Cc:     lgirdwood@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, s.nawrocki@samsung.com,
+        perex@perex.cz, tiwai@suse.com, pankaj.dubey@samsung.com,
+        alim.akhtar@samsung.com, rcsekar@samsung.com,
+        aswani.reddy@samsung.com, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org
+References: <20221014102151.108539-1-p.rajanbabu@samsung.com>
+ <CGME20221014104857epcas5p2a275a1d606ca066227228d13bcf5b120@epcas5p2.samsung.com>
+ <20221014102151.108539-3-p.rajanbabu@samsung.com>
+ <Y0lPz91gbovAub9D@sirena.org.uk>
+ <04a101d8e523$30804b80$9180e280$@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <04a101d8e523$30804b80$9180e280$@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 06:29:23PM +0200, Marcel Ziswiler wrote:
-> From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+On 21/10/2022 04:00, Padmanabhan Rajanbabu wrote:
+>> It's not clear to me why the solution here is to move the configuration to
+> the
+>> sound card rather than to improve the I2S driver to be able to cope with
+>> whatever the restrictions are on the PSR in these systems - it seems more
+>> cumbersome for system integrators, especially since you've not documented
+>> the issues or how to configure it.  Could you expand on what the
+> constraints
+>> are here and why it's not possible for the driver to figure things out
+> (given
+>> some quirk information)?
 > 
-> Add PCIe support on the Verdin iMX8M Plus.
+> Thank you for reviewing the patch.
 > 
-> Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+> In Samsung I2S CPU controller, to derive the frame clock, we are supposed to
+> configure the PSR and RFS internal dividers. i.e.
 > 
-> ---
-> This still relies on the PHY part landing [1] and the internal SYSPLL
-> mode getting sorted [2].
+> OPCLK -> PSR -> RCLK -> RFS -> Frame clock
 > 
-> [1] https://lore.kernel.org/all/1663659498-5180-1-git-send-email-hongxing.zhu@nxp.com/
-> [2] https://lore.kernel.org/all/AS8PR04MB867657D03C61774096A5A1628C4C9@AS8PR04MB8676.eurprd04.prod.outlook.com/
+> Where:
+> OPCLK - Operational clock
+> PSR - Operational clock prescaler
+> RCLK - Root Clock (derived from OPCLK based on PSR)
+> RFS - Root frequency selection (divider)
+> Frame clock - Sample frequency (derived from RCLK based on RFS)
+> 
+> Ultimately,
+> 
+> PSR = OPCLK / Frame clock / RFS
+> 
+> Unlike other platforms utilizing Samsung CPU DAI, FSD SoC has a limitation
+> on
+> operational clock, where the clock frequency is fixed (66 MHz) and cannot be
+> modified. 
+> 
+> Assuming that an userspace application wants perform playback @44100 Hz
+> and assuming that RFS divider value is configured as 256, the PSR value will
+> yield to
+> 
+> 66 MHz / 44.1 KHz / 256 = 5
+> 
+> However if HW uses PSR = 5 to derive the frame clock from operational clock,
+> then
+> 
+> RCLK = OPCLK / PSR = 66 MHz / 5 = 13.2 MHz
+> Frame clock = RCLK / RFS = 13.2 MHz / 256 = 51562 Hz
+> 
+> The actual frame clock derived based on PSR is now different from what user
+> application has intended. The situation did not improve even if the RFS is
+> swept throughout the entire valid range.
+> 
+> We can overcome this scenario to an extent if we can get a flexibility to
+> Configure both PSR as well as RFS.
+> 
+> i.e. to achieve frame clock of 44100 Hz, if PSR  = 23 and RFS = 64
+> then frame clock = 66 MHz / 23 / 64 = 44836 Hz 
+> 
+> Although the sample frequency is not precise, it is very much closer to the
+> Intended frequency, when compared to that of the existing solution. Since
+> this
+> scenario is specific to FSD SoC and has no changes in the Samsung I2S CPU
+> DAI,
+> the configuration is being done from the sound card of FSD SoC during
+> hw_params.
+> 
+> Please let me know if you think this scenario can be approached in any other
+> way possible, rather than configuring from sound card.
 
-Are these dependencies already landed on v6.1-rc1?
+Entire new driver for this, instead of improving existing Samsung
+drivers... no, it is no the way. If you followed this approach you would
+send 20 drivers for each "specific" quirk difference.
 
-Shawn
+Best regards,
+Krzysztof
 
-> 
->  .../dts/freescale/imx8mp-verdin-dahlia.dtsi   |  9 +++++++-
->  .../boot/dts/freescale/imx8mp-verdin.dtsi     | 22 ++++++++++++++++++-
->  2 files changed, 29 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mp-verdin-dahlia.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-verdin-dahlia.dtsi
-> index 4b8f86f63081..60f9dc4847db 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mp-verdin-dahlia.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx8mp-verdin-dahlia.dtsi
-> @@ -67,7 +67,14 @@ &i2c4 {
->  	/* TODO: Audio Codec */
->  };
->  
-> -/* TODO: Verdin PCIE_1 */
-> +/* Verdin PCIE_1 */
-> +&pcie {
-> +	status = "okay";
-> +};
-> +
-> +&pcie_phy {
-> +	status = "okay";
-> +};
->  
->  /* Verdin PWM_1 */
->  &pwm1 {
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
-> index 7be7e922927b..160bb32cb5f7 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
-> @@ -734,7 +734,27 @@ eeprom_carrier_board: eeprom@57 {
->  	};
->  };
->  
-> -/* TODO: Verdin PCIE_1 */
-> +/* Verdin PCIE_1 */
-> +&pcie {
-> +	assigned-clocks = <&clk IMX8MP_CLK_PCIE_AUX>;
-> +	assigned-clock-parents = <&clk IMX8MP_SYS_PLL2_50M>;
-> +	assigned-clock-rates = <10000000>;
-> +	clocks = <&clk IMX8MP_CLK_HSIO_ROOT>,
-> +		 <&clk IMX8MP_CLK_PCIE_ROOT>,
-> +		 <&clk IMX8MP_CLK_HSIO_AXI>;
-> +	clock-names = "pcie", "pcie_aux", "pcie_bus";
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_pcie>;
-> +	/* PCIE_1_RESET# (SODIMM 244) */
-> +	reset-gpio = <&gpio4 19 GPIO_ACTIVE_LOW>;
-> +};
-> +
-> +&pcie_phy {
-> +	clocks = <&clk IMX8MP_CLK_HSIO_ROOT>;
-> +	clock-names = "ref";
-> +	fsl,clkreq-unsupported;
-> +	fsl,refclk-pad-mode = <IMX8_PCIE_REFCLK_PAD_OUTPUT>;
-> +};
->  
->  /* Verdin PWM_1 */
->  &pwm1 {
-> -- 
-> 2.36.1
-> 
