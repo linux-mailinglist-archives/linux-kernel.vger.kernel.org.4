@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A593560942B
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 16:57:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56760609426
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 16:57:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230182AbiJWO5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 10:57:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35682 "EHLO
+        id S230362AbiJWO5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 10:57:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230323AbiJWO5L (ORCPT
+        with ESMTP id S229515AbiJWO5J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 10:57:11 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BF2D5C9EE;
+        Sun, 23 Oct 2022 10:57:09 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 781F75D0C2;
         Sun, 23 Oct 2022 07:57:06 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id v1so11871522wrt.11;
+Received: by mail-wr1-x433.google.com with SMTP id k8so3200229wrh.1;
         Sun, 23 Oct 2022 07:57:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Qe13r2WOQcom5qgxJ09BQZ2VmoEe3B9Ta0b6mH3uDkQ=;
-        b=TsA5DcJq4IUwRM/afzHqd9b6CTH+1ao0fVsQFlRzv+l/J/adyJKXiVZtnYFXkd7qfa
-         P3oB5o8wA8aRW5K4NDWK+NFUHOB/Qv7gd0BMB4QsQ3oBXZhina9D+3gce4PPDUfS1ehY
-         E6MB7SYpjVrDyiTWGbWtD3XVf8KA5EXpnyMllFpZjluCOzLla1/IZ5evlrAaYMmKkwVC
-         BpjhA2aOrcTbrnJfLUBe0wzEFYBt5AQsPXIHeRreiI+Oax70fsgDhj2XwVYZEp3DR8FP
-         NnX0Yu+9iUCxRYAy4QFe/6nPUjU8OFvmYdp9PXNLU/aCIGqSjcmRRHjH63BqcQ+BBiJv
-         N9Yw==
+        bh=Megb+EEQ+42EwfPZKfmRdUWZPZjTpyMy4vvWz7+p9e0=;
+        b=oItMR1ONDqqX6HzyaBT/Azz2BaW1CA6mIhZhtTK0SZ+LRng8mlK5cgeBsExzuODo2p
+         543JHHhUZCEDttvrHHQga0rFTLsDudRpsuEerG6QRvLRfQKoOG3Cyffb90hrWx5QCWEh
+         qnumNnm1EeVvzRmhEVlmnC8IQqgI72+gZntPT3zTBfCM4mDM97jALJa685OXbN7FM30U
+         bXR3I3sy2nPv8AR2ZuHoLVFjGXTuHymYho2IHZJZ+7VMAGOgGNq2DerDjScqZeofoZmj
+         EO5tMnUkbzNEGqVJo/GYo4Spnp0v2TCq+ykbISkX6K6gfH3KYpvbaVeW+gdQCdG7kxQP
+         YgEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Qe13r2WOQcom5qgxJ09BQZ2VmoEe3B9Ta0b6mH3uDkQ=;
-        b=c0eG8gda3AuTOeaydXo+P5nevNHQOLgv7m2H0ec386ukQ1Ur1MUg7MqxEtPaMmK2sQ
-         +H/dQ7eyVL1nzkc6bKllntq2Eu7YiPlNFsnJqG0LOzyJu2e1oNv6UVTVAjLQt+h0lrNm
-         SezRUTEnSwPdIzLETV09wtfkbfwnkvgOcuLq0C3f7zsr05zDGUzpEG4B3qV5ij3jGSQh
-         PXFXd/lbEs5dncXZjUd4Q+SGJZYQ1Ni5GJUIAtNLqj3sinWqkmZiikFyFL3kZm6q4flK
-         6uxn2NUavAEU9f17Mj0tTNt0LlqTJ1FncQg0kxhRjihNaGrwl0CJkcCnMgKf0HLKpd6K
-         I4+w==
-X-Gm-Message-State: ACrzQf2n1JDVSxfYHh/l8+Y5aRaiRjXYvZVELwxBMUWJJpYja0Ex1BWg
-        Lx6ouwAh1pQ3ctwqaK8efc8=
-X-Google-Smtp-Source: AMsMyM5fLNjtV14hiLS7/dRcxK6MJIIlj7Xowjtnhwvct0o/Fu8svQ84q4nxtok7BHGy15oum2pRBQ==
-X-Received: by 2002:a5d:5346:0:b0:235:6c05:6272 with SMTP id t6-20020a5d5346000000b002356c056272mr12833554wrv.332.1666537024962;
-        Sun, 23 Oct 2022 07:57:04 -0700 (PDT)
+        bh=Megb+EEQ+42EwfPZKfmRdUWZPZjTpyMy4vvWz7+p9e0=;
+        b=nRSMuTV8syTaPmpVrnOhzKpw6aZ/PDtGbFkWOZ3wk2vHce8hCy8EigQfr+qXleQUq6
+         KBJEhsgGZnjUrG6PIwIDRWqRPtVa3wgvyM8Bk0aykDjKn7QyG9MYhcJaITxO/AmlwFpU
+         Q7emr/Ht2iSLXbwqpuT2wX15S4sL6FXqkzSc3CQfL7jw7UxYMEESMWUzDn+z/gx/T0IE
+         efVVgTSCybi0lb7cMVDzL8PAtaQaTqNNpRKlFF+UMwg3dLRiVWFjxWwX8so4k6+y84Bf
+         9aC30YDF6pFU1TNLKGDwPFnSUr4ajfjZmEVCjibPDIFHY1cV6p6MBC7xaxB/XxtRMTcP
+         5/XQ==
+X-Gm-Message-State: ACrzQf1XaSxZV3k1X5/qsQVJ2K3wBIrWkxdEVmsuONFCN4e6ExSTm+D1
+        6YZjXBQHZ49Dom3QPX/IBGw=
+X-Google-Smtp-Source: AMsMyM49YMU+pzIsy1dJTIjfUkij3brTI0jAuo/dc/ZSG8VT1W0eUdb5MCYxz3ll/SWHhA0zQqKK+w==
+X-Received: by 2002:adf:f68a:0:b0:236:6e9b:dc91 with SMTP id v10-20020adff68a000000b002366e9bdc91mr1303344wrp.207.1666537026122;
+        Sun, 23 Oct 2022 07:57:06 -0700 (PDT)
 Received: from localhost (94.197.10.75.threembb.co.uk. [94.197.10.75])
-        by smtp.gmail.com with ESMTPSA id b13-20020a5d4d8d000000b0023660f6cecfsm3747605wru.80.2022.10.23.07.57.04
+        by smtp.gmail.com with ESMTPSA id r6-20020a5d52c6000000b00228dbf15072sm23603166wrv.62.2022.10.23.07.57.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Oct 2022 07:57:04 -0700 (PDT)
+        Sun, 23 Oct 2022 07:57:05 -0700 (PDT)
 From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 To:     paul@crapouillou.net, mturquette@baylibre.com, sboyd@kernel.org,
         robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
 Cc:     zhouyu@wanyeetech.com, linux-mips@vger.kernel.org,
         linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v1 2/5] clk: ingenic: Make PLL clock enable_bit and stable_bit optional
-Date:   Sun, 23 Oct 2022 15:56:50 +0100
-Message-Id: <20221023145653.177234-3-aidanmacdonald.0x0@gmail.com>
+Subject: [PATCH v1 3/5] clk: ingenic: Add .set_rate_hook() for PLL clocks
+Date:   Sun, 23 Oct 2022 15:56:51 +0100
+Message-Id: <20221023145653.177234-4-aidanmacdonald.0x0@gmail.com>
 In-Reply-To: <20221023145653.177234-1-aidanmacdonald.0x0@gmail.com>
 References: <20221023145653.177234-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
@@ -73,97 +73,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the enable bit is undefined, the clock is assumed to be always
-on and enable/disable is a no-op. When the stable bit is undefined,
-the PLL stable check is a no-op.
+The set rate hook is called immediately after updating the clock
+register but before the spinlock is released. This allows another
+register to be updated alongside the main one, which is needed to
+handle the I2S divider on some SoCs.
 
 Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 ---
- drivers/clk/ingenic/cgu.c | 14 +++++++++++++-
- drivers/clk/ingenic/cgu.h | 10 ++++++----
- 2 files changed, 19 insertions(+), 5 deletions(-)
+ drivers/clk/ingenic/cgu.c | 3 +++
+ drivers/clk/ingenic/cgu.h | 4 ++++
+ 2 files changed, 7 insertions(+)
 
 diff --git a/drivers/clk/ingenic/cgu.c b/drivers/clk/ingenic/cgu.c
-index 7dc2e2567d53..bbb55e8d8b55 100644
+index bbb55e8d8b55..574d5fe10fdf 100644
 --- a/drivers/clk/ingenic/cgu.c
 +++ b/drivers/clk/ingenic/cgu.c
-@@ -190,6 +190,9 @@ static inline int ingenic_pll_check_stable(struct ingenic_cgu *cgu,
- {
- 	u32 ctl;
+@@ -233,6 +233,9 @@ ingenic_pll_set_rate(struct clk_hw *hw, unsigned long req_rate,
  
-+	if (pll_info->stable_bit < 0)
-+		return 0;
-+
- 	return readl_poll_timeout(cgu->base + pll_info->reg, ctl,
- 				  ctl & BIT(pll_info->stable_bit),
- 				  0, 100 * USEC_PER_MSEC);
-@@ -231,7 +234,7 @@ ingenic_pll_set_rate(struct clk_hw *hw, unsigned long req_rate,
  	writel(ctl, cgu->base + pll_info->reg);
  
++	if (pll_info->set_rate_hook)
++		pll_info->set_rate_hook(pll_info, rate, parent_rate);
++
  	/* If the PLL is enabled, verify that it's stable */
--	if (ctl & BIT(pll_info->enable_bit))
-+	if (pll_info->enable_bit >= 0 && (ctl & BIT(pll_info->enable_bit)))
+ 	if (pll_info->enable_bit >= 0 && (ctl & BIT(pll_info->enable_bit)))
  		ret = ingenic_pll_check_stable(cgu, pll_info);
- 
- 	spin_unlock_irqrestore(&cgu->lock, flags);
-@@ -249,6 +252,9 @@ static int ingenic_pll_enable(struct clk_hw *hw)
- 	int ret;
- 	u32 ctl;
- 
-+	if (pll_info->enable_bit < 0)
-+		return 0;
-+
- 	spin_lock_irqsave(&cgu->lock, flags);
- 	if (pll_info->bypass_bit >= 0) {
- 		ctl = readl(cgu->base + pll_info->bypass_reg);
-@@ -279,6 +285,9 @@ static void ingenic_pll_disable(struct clk_hw *hw)
- 	unsigned long flags;
- 	u32 ctl;
- 
-+	if (pll_info->enable_bit < 0)
-+		return;
-+
- 	spin_lock_irqsave(&cgu->lock, flags);
- 	ctl = readl(cgu->base + pll_info->reg);
- 
-@@ -296,6 +305,9 @@ static int ingenic_pll_is_enabled(struct clk_hw *hw)
- 	const struct ingenic_cgu_pll_info *pll_info = &clk_info->pll;
- 	u32 ctl;
- 
-+	if (pll_info->enable_bit < 0)
-+		return true;
-+
- 	ctl = readl(cgu->base + pll_info->reg);
- 
- 	return !!(ctl & BIT(pll_info->enable_bit));
 diff --git a/drivers/clk/ingenic/cgu.h b/drivers/clk/ingenic/cgu.h
-index 567142b584bb..a5e44ca7f969 100644
+index a5e44ca7f969..99da9bd86e63 100644
 --- a/drivers/clk/ingenic/cgu.h
 +++ b/drivers/clk/ingenic/cgu.h
-@@ -42,8 +42,10 @@
-  * @bypass_reg: the offset of the bypass control register within the CGU
-  * @bypass_bit: the index of the bypass bit in the PLL control register, or
-  *              -1 if there is no bypass bit
-- * @enable_bit: the index of the enable bit in the PLL control register
-- * @stable_bit: the index of the stable bit in the PLL control register
-+ * @enable_bit: the index of the enable bit in the PLL control register, or
-+ *		-1 if there is no enable bit (ie, the PLL is always on)
-+ * @stable_bit: the index of the stable bit in the PLL control register, or
-+ *		-1 if there is no stable bit
+@@ -46,6 +46,8 @@
+  *		-1 if there is no enable bit (ie, the PLL is always on)
+  * @stable_bit: the index of the stable bit in the PLL control register, or
+  *		-1 if there is no stable bit
++ * @set_rate_hook: hook called immediately after updating the CGU register,
++ *		   before releasing the spinlock
   */
  struct ingenic_cgu_pll_info {
  	unsigned reg;
-@@ -54,8 +56,8 @@ struct ingenic_cgu_pll_info {
- 	u8 od_shift, od_bits, od_max;
- 	unsigned bypass_reg;
- 	s8 bypass_bit;
--	u8 enable_bit;
--	u8 stable_bit;
-+	s8 enable_bit;
-+	s8 stable_bit;
+@@ -61,6 +63,8 @@ struct ingenic_cgu_pll_info {
  	void (*calc_m_n_od)(const struct ingenic_cgu_pll_info *pll_info,
  			    unsigned long rate, unsigned long parent_rate,
  			    unsigned int *m, unsigned int *n, unsigned int *od);
++	void (*set_rate_hook)(const struct ingenic_cgu_pll_info *pll_info,
++			      unsigned long rate, unsigned long parent_rate);
+ };
+ 
+ /**
 -- 
 2.38.1
 
