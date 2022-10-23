@@ -2,57 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4E526092CC
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 14:42:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FF136092D5
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 14:43:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230209AbiJWMmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 08:42:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52608 "EHLO
+        id S230181AbiJWMnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 08:43:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230185AbiJWMmM (ORCPT
+        with ESMTP id S230213AbiJWMnL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 08:42:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EEF86E8B9;
-        Sun, 23 Oct 2022 05:42:09 -0700 (PDT)
+        Sun, 23 Oct 2022 08:43:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3136D63FCA;
+        Sun, 23 Oct 2022 05:43:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6287A60A4B;
-        Sun, 23 Oct 2022 12:42:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48F2BC433C1;
-        Sun, 23 Oct 2022 12:42:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D150CB80BED;
+        Sun, 23 Oct 2022 12:42:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B7FAC433D6;
+        Sun, 23 Oct 2022 12:42:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666528927;
-        bh=z/exFzsXImhJJM377UDQ0yPTeqlUGFaEtkysGUue2GA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=b/odMp2oXSJqy64TNm0G/vKGWP0EFAVKL8Z/iUmvmAIeKCBYu4q2EJfargNiSDC0J
-         9PUPIBQ9uGEJIoCGVLvZTx/NpNC7DgJQ5W/+w1f6xtw3iPwJDlrfKpk2ZjgMJ+h7/P
-         WLQam7BtxwBeL/pVZDfE3EVE5UMtWxbj8BUQmhizvzNkDBcBE9DPXbpF+rWniAv+dA
-         H+OATwcCWLgUQ96Y8XvSbBHa3HTLgzQhDSJInWxi6W1vYln8abzmvRFH8C9ez6/5lv
-         p0GvBU7508PyNiFHQfMt6r9oX/+yJxnGzbqSBzOK+Mb0NOBOmWA4TMZhXsNtTDGZDC
-         NzTeA0j21ttMg==
-Date:   Sun, 23 Oct 2022 13:42:41 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Cosmin Tanislav <demonsingur@gmail.com>
-Cc:     Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Rob Herring <robh+dt@kernel.org>,
+        s=k20201202; t=1666528977;
+        bh=vrFk6NMIz6UAgnOLVnkBD64jbgD9mYeUIHhy/LZoHKc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=j9WrvSXa6HYHHKodX3Qn80rSlHP2xt8YHUUs0djqXwupe7TI6NDnat92FsIlqolaK
+         ZmwflspNGJ03RtOREPT55XB/F358xEI0KPRVn3vEg283PJFf+TnIyc9QyJpqUngDRv
+         sxvlNqd60HbPgU60It0wbahqHi3jOpzrOGNR1GtJIU9Fv13h6M76s9v/SSZuDzxXAP
+         vDbAWuC2SbUJA7FSA8k3VCGQMBkEMif1ZVG3uFij9Sl9CBszzFgCcfx8MTJWIf6vhR
+         PclYNVHnBm9k3w9tuJywB3CImwLaCQs9mZ8jOB4DTP0ZV3l7qomvfwqLfa/8S+oW6F
+         SFegSeGTeWWjQ==
+Date:   Sun, 23 Oct 2022 20:42:50 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Tim Harvey <tharvey@gateworks.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Cosmin Tanislav <cosmin.tanislav@analog.com>
-Subject: Re: [PATCH v2 2/5] iio: temperature: ltc2983: make bulk write
- buffer DMA-safe
-Message-ID: <20221023134241.79c52280@jic23-huawei>
-In-Reply-To: <20221020090257.1717053-3-demonsingur@gmail.com>
-References: <20221020090257.1717053-1-demonsingur@gmail.com>
-        <20221020090257.1717053-3-demonsingur@gmail.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH] arm64: dts: imx8m*-venice: add I2C GPIO bus recovery
+ support
+Message-ID: <20221023124250.GG125525@dragon>
+References: <20220921164620.3298914-1-tharvey@gateworks.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220921164620.3298914-1-tharvey@gateworks.com>
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -62,66 +59,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 20 Oct 2022 12:02:54 +0300
-Cosmin Tanislav <demonsingur@gmail.com> wrote:
-
-> From: Cosmin Tanislav <cosmin.tanislav@analog.com>
+On Wed, Sep 21, 2022 at 09:46:20AM -0700, Tim Harvey wrote:
+> Add I2C GPIO bus recovery support by adding scl-gpios and sda-gpios for the
+> various I2C busses on Gateworks Venice boards.
 > 
-> regmap_bulk_write() does not guarantee implicit DMA-safety,
-> even though the current implementation duplicates the given
-> buffer. Do not rely on it.
-> 
-> Fixes: f110f3188e56 ("iio: temperature: Add support for LTC2983")
-> Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
-LGTM.
+> Signed-off-by: Tim Harvey <tharvey@gateworks.com>
 
-As you right observed this is only sort of a fix because right now we
-are fine anyway, so in the interests of getting the rest of the series
-upstream quicker I'll take this one for the next merge window along
-with the rest of the set.
-
-Thanks,
-
-Jonathan
-
-> ---
->  drivers/iio/temperature/ltc2983.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/iio/temperature/ltc2983.c b/drivers/iio/temperature/ltc2983.c
-> index a60ccf183687..1117991ca2ab 100644
-> --- a/drivers/iio/temperature/ltc2983.c
-> +++ b/drivers/iio/temperature/ltc2983.c
-> @@ -209,6 +209,7 @@ struct ltc2983_data {
->  	 * Holds the converted temperature
->  	 */
->  	__be32 temp __aligned(IIO_DMA_MINALIGN);
-> +	__be32 chan_val;
->  };
->  
->  struct ltc2983_sensor {
-> @@ -313,19 +314,18 @@ static int __ltc2983_fault_handler(const struct ltc2983_data *st,
->  	return 0;
->  }
->  
-> -static int __ltc2983_chan_assign_common(const struct ltc2983_data *st,
-> +static int __ltc2983_chan_assign_common(struct ltc2983_data *st,
->  					const struct ltc2983_sensor *sensor,
->  					u32 chan_val)
->  {
->  	u32 reg = LTC2983_CHAN_START_ADDR(sensor->chan);
-> -	__be32 __chan_val;
->  
->  	chan_val |= LTC2983_CHAN_TYPE(sensor->type);
->  	dev_dbg(&st->spi->dev, "Assign reg:0x%04X, val:0x%08X\n", reg,
->  		chan_val);
-> -	__chan_val = cpu_to_be32(chan_val);
-> -	return regmap_bulk_write(st->regmap, reg, &__chan_val,
-> -				 sizeof(__chan_val));
-> +	st->chan_val = cpu_to_be32(chan_val);
-> +	return regmap_bulk_write(st->regmap, reg, &st->chan_val,
-> +				 sizeof(st->chan_val));
->  }
->  
->  static int __ltc2983_chan_custom_sensor_assign(struct ltc2983_data *st,
-
+Applied, thanks!
