@@ -2,81 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE95360961A
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 22:25:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C31B1609623
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 22:32:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230038AbiJWUZF convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 23 Oct 2022 16:25:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48020 "EHLO
+        id S229776AbiJWUcq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 16:32:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230385AbiJWUYz (ORCPT
+        with ESMTP id S229574AbiJWUcn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 16:24:55 -0400
-Received: from mx07-006a4e02.pphosted.com (mx07-006a4e02.pphosted.com [143.55.146.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14E4813CD4;
-        Sun, 23 Oct 2022 13:24:44 -0700 (PDT)
-Received: from pps.filterd (m0316692.ppops.net [127.0.0.1])
-        by m0316692.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 29NKKQJ6017297;
-        Sun, 23 Oct 2022 22:24:06 +0200
-Received: from mta-out01.sim.rediris.es (mta-out01.sim.rediris.es [130.206.24.43])
-        by m0316692.ppops.net (PPS) with ESMTPS id 3kcu9mc2sc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 23 Oct 2022 22:24:06 +0200
-Received: from mta-out01.sim.rediris.es (localhost.localdomain [127.0.0.1])
-        by mta-out01.sim.rediris.es (Postfix) with ESMTPS id 26DDA3000047;
-        Sun, 23 Oct 2022 22:24:05 +0200 (CEST)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mta-out01.sim.rediris.es (Postfix) with ESMTP id E22013197C11;
-        Sun, 23 Oct 2022 22:24:04 +0200 (CEST)
-X-Amavis-Modified: Mail body modified (using disclaimer) -
-        mta-out01.sim.rediris.es
-Received: from mta-out01.sim.rediris.es ([127.0.0.1])
-        by localhost (mta-out01.sim.rediris.es [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id AvB5T1Imovv1; Sun, 23 Oct 2022 22:24:04 +0200 (CEST)
-Received: from lt-gp.iram.es (haproxy02.sim.rediris.es [130.206.24.70])
-        by mta-out01.sim.rediris.es (Postfix) with ESMTPA id B07C23000047;
-        Sun, 23 Oct 2022 22:24:01 +0200 (CEST)
-Date:   Sun, 23 Oct 2022 22:23:56 +0200
-From:   Gabriel Paubert <paubert@iram.es>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Segher Boessenkool <segher@kernel.crashing.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-toolchains@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] kbuild: treat char as always signed
-Message-ID: <Y1Wi29MuYlCRTKfH@lt-gp.iram.es>
-References: <20221019162648.3557490-1-Jason@zx2c4.com>
- <20221019165455.GL25951@gate.crashing.org>
- <CAHk-=wiMWk2t8FHn0iqVVe1mn62OTAD6ffL5rn9Eeu021H9d1Q@mail.gmail.com>
- <20221019174345.GM25951@gate.crashing.org>
- <CAHk-=wiNNKLFfa0d+Hk=Wm5caiKjLY4V9wwu9DhcSSwPuMbxrg@mail.gmail.com>
- <Y1Elx+e5VLCTfyXi@lt-gp.iram.es>
- <CAHk-=wiYtSvjyz5xz2Sbnmxgzg_=AL2OyTiRueUem3xzCzM8VA@mail.gmail.com>
- <Y1OIXdh3vWOMUlQK@lt-gp.iram.es>
- <CAHk-=wgaeTa9nAeJ8DP1cBWrs8fZvJ7k1-L8-kjxEOxpLf+XNA@mail.gmail.com>
+        Sun, 23 Oct 2022 16:32:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22C5B6705D;
+        Sun, 23 Oct 2022 13:32:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D915AB80DCD;
+        Sun, 23 Oct 2022 20:32:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51389C433D6;
+        Sun, 23 Oct 2022 20:32:36 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="QnB2qtO6"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1666557154;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=eCkESx7tLbcl/nHIQwtIPhMNwZ8iCRtVJZ00kAPVrdA=;
+        b=QnB2qtO6lEOM4mxmjapSCxuIUb838GyXQD9dk5cHuNf7r1kHF1OS2YJOtpj4MajPA79g2y
+        QGM5P4bMHnEZYNxeABp8h+OC9XW5ZhtaXOplvIwtuUPSR4RupWA3lpwNA60vNAAYYFdeXD
+        J2Fu0drXLEG5BiOYGLbxOOeFisHSqfM=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 40fbc149 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Sun, 23 Oct 2022 20:32:33 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Chris Zankel <chris@zankel.net>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guo Ren <guoren@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juergen Gross <jgross@suse.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Rich Felker <dalias@libc.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-sh@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org
+Subject: [PATCH v1 0/2] cleanup stackprotector canary generation
+Date:   Sun, 23 Oct 2022 22:32:06 +0200
+Message-Id: <20221023203208.118919-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wgaeTa9nAeJ8DP1cBWrs8fZvJ7k1-L8-kjxEOxpLf+XNA@mail.gmail.com>
-Content-Transfer-Encoding: 8BIT
-X-Proofpoint-ORIG-GUID: zgBEguqV2sx207ySGJtcCtxIxSPFqKi5
-X-Proofpoint-GUID: zgBEguqV2sx207ySGJtcCtxIxSPFqKi5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-21_04,2022-10-21_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbounddefault_notspam policy=outbounddefault score=0
- lowpriorityscore=0 mlxscore=0 malwarescore=0 suspectscore=0
- impostorscore=0 bulkscore=0 mlxlogscore=769 spamscore=0 priorityscore=1501
- adultscore=0 clxscore=1015 phishscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2209130000
- definitions=main-2210230130
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,PDS_RDNS_DYNAMIC_FP,
-        RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,63 +79,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 22, 2022 at 11:16:33AM -0700, Linus Torvalds wrote:
-> On Fri, Oct 21, 2022 at 11:06 PM Gabriel Paubert <paubert@iram.es> wrote:
-> >
-> > Ok, I´ve just tried it, except that I had something slightly different in
-> > mind, but perhaps should have been clearer in my first post.
-> >
-> > I have change your code to the following:
-> 
-> I actually tested that, but using a slightly different version, and my
-> non-union test case ended up like
-> 
->    size_t strlen(const char *p)
->   {
->         return __builtin_strlen(p);
->   }
-> 
-> and then gcc actually complains about
-> 
->     warning: infinite recursion detected
-> 
-> and I (incorrectly) thought this was unworkable. But your version
-> seems to work fine.
+Stack canary generation currently lives partially in random.h, where it
+doesn't belong, and is in general a bit overcomplicated. This small
+patchset fixes up both issues. I'll take these in my tree, unless
+somebody else prefers to do so.
 
-Incidentally, it also gives exactly the same code with -ffreestanding.
+Cc: Albert Ou <aou@eecs.berkeley.edu>
+Cc: Boris Ostrovsky <boris.ostrovsky@oracle.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Chris Zankel <chris@zankel.net>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Guo Ren <guoren@kernel.org>
+Cc: H. Peter Anvin <hpa@zytor.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Juergen Gross <jgross@suse.com>
+Cc: Max Filippov <jcmvbkbc@gmail.com>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Nicholas Piggin <npiggin@gmail.com>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>
+Cc: Rich Felker <dalias@libc.org>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Will Deacon <will@kernel.org>
+Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-csky@vger.kernel.org
+Cc: linux-mips@vger.kernel.org
+Cc: linux-riscv@lists.infradead.org
+Cc: linux-sh@vger.kernel.org
+Cc: linux-xtensa@linux-xtensa.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: x86@kernel.org
 
-> 
-> So yeah, for the kernel I think we could do something like this. It's
-> ugly, but it gets rid of the crazy warning.
+Jason A. Donenfeld (2):
+  stackprotector: move CANARY_MASK and get_random_canary() into
+    stackprotector.h
+  stackprotector: actually use get_random_canary()
 
-Not as ugly as casts IMO, and it's localized in a few header files.
+ arch/arm/include/asm/stackprotector.h     |  9 +--------
+ arch/arm64/include/asm/stackprotector.h   |  9 +--------
+ arch/csky/include/asm/stackprotector.h    | 10 +---------
+ arch/mips/include/asm/stackprotector.h    |  9 +--------
+ arch/powerpc/include/asm/stackprotector.h | 10 +---------
+ arch/riscv/include/asm/stackprotector.h   | 10 +---------
+ arch/sh/include/asm/stackprotector.h      | 10 +---------
+ arch/x86/include/asm/stackprotector.h     | 14 +-------------
+ arch/x86/kernel/cpu/common.c              |  2 +-
+ arch/x86/kernel/setup_percpu.c            |  2 +-
+ arch/x86/kernel/smpboot.c                 |  2 +-
+ arch/x86/xen/enlighten_pv.c               |  2 +-
+ arch/xtensa/include/asm/stackprotector.h  |  7 +------
+ include/linux/random.h                    | 19 -------------------
+ include/linux/stackprotector.h            | 19 +++++++++++++++++++
+ kernel/fork.c                             |  2 +-
+ 16 files changed, 33 insertions(+), 103 deletions(-)
 
-However, it does not solve the problem of assigning a constant string to
-an u8 *; I've no idea on how to fix that.
-
-> 
-> Practically speaking this might be a bit painful, because we've got
-> several different variations of this all due to all the things like
-> our debugging versions (see <linux/fortify-string.h> for example), so
-> some of our code is this crazy jungle of "with this config, use this
-> wrapper".
-
-I've just had a look at that code, and I don't want to touch it with a
-10 foot pole. If someone else to get his hands dirty... 
-
-	Gabriel
-
-> 
-> But if somebody wants to deal with the '-Wpointer-sign' warnings,
-> there does seem to be a way out. Maybe with another set of helper
-> macros, creating those odd __transparent_union__ wrappers might even
-> end up reasonable.
-> 
-> It's not like we don't have crazy macros for function wrappers
-> elsewhere (the SYSCALL macros come to mind - shudder). The macros
-> themselves may be a nasty horror, but when done right the _use_ point
-> of said macros can be nice and clean.
-> 
->                   Linus
- 
+-- 
+2.38.1
 
