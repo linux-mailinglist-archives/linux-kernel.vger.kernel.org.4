@@ -2,120 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88769609669
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 23:09:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29C0C609674
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 23:17:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbiJWVJH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 17:09:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56644 "EHLO
+        id S229711AbiJWVRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 17:17:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiJWVJE (ORCPT
+        with ESMTP id S229497AbiJWVRg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 17:09:04 -0400
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D396686E;
-        Sun, 23 Oct 2022 14:09:03 -0700 (PDT)
-Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 29NL7D2p025712
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 23 Oct 2022 17:07:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1666559243; bh=zbENVyGNAon7zNh9ohkJFECSMTzXRXbcNrepMHxrEAM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=FXNrxCWraFmMAOW+vqR38ZOexAnGjiiR9A8LdOwTHYuoNMBlL77R2zP0ktOpr83lt
-         VqRJZ2eM6bTmotP3IJ0ZjbLCm4EYxGWCpxZWFf6OGNB4ci103uHdfxC4WF6VQ2zTX/
-         sdIQ8AMmuFf2tnrWyiobYzmlMOkVIMT/l7Xfqoj9INuJk54r2BALT8VjDgqDT3Zhdd
-         VJdERnwc5/7VlgvkT7OeoHx0mHgokAaWpeUY/UYmdBjcPk3IReiiQVTczMP0A0m8lc
-         roc5e18VhoTm14PI9JdmJ03W1yO7BPKEnbbIuJ9deFvxdyuN3p81VawGcIo+Cv1H4t
-         KETGAaOyQuEfg==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id BE8CB15C33A3; Sun, 23 Oct 2022 17:07:13 -0400 (EDT)
-Date:   Sun, 23 Oct 2022 17:07:13 -0400
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Christoph =?iso-8859-1?Q?B=F6hmwalder?= 
-        <christoph.boehmwalder@linbit.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        "Darrick J . Wong" <djwong@kernel.org>,
-        SeongJae Park <sj@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Helge Deller <deller@gmx.de>, netdev@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-mmc@vger.kernel.org, linux-parisc@vger.kernel.org
-Subject: Re: [PATCH v1 0/5] convert tree to
- get_random_u32_{below,above,between}()
-Message-ID: <Y1WtAZfciG1z2CC7@mit.edu>
-References: <20221022014403.3881893-1-Jason@zx2c4.com>
- <20221021205522.6b56fd24@kernel.org>
- <Y1NwJJOIB4gI5G11@zx2c4.com>
- <20221021223242.05df0a5b@kernel.org>
- <Y1OD2tdVwQsydSNV@zx2c4.com>
- <20221021230322.00dd045c@kernel.org>
+        Sun, 23 Oct 2022 17:17:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53147DFD3;
+        Sun, 23 Oct 2022 14:17:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B070E60F5A;
+        Sun, 23 Oct 2022 21:17:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82492C433D6;
+        Sun, 23 Oct 2022 21:17:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666559854;
+        bh=eww41udNaMuXD4PMpBks27BJLoB4EyHOihBbydaDgtQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=e+6zZQfAIp1iaUxFxyNJAVYls4dVrhMQvzQHdfcTDPdBn5omPfL1g/MV+VEstmGX+
+         TyhPT4XDoSkylEW3mt9g5y/sNjg+NVGGxPQmyz/xSeTkpIdCJeclplweDa0n1xJeQG
+         jh2rOZuuhqR42zLANPnwmHOpXISgE+h/jGpkLFUGRrRMXU8/A8dj1lR+JNAKTssnmw
+         cTKH4YPSQNCxY8YEviveP11uRO9o4IX2xte5ta2RAWVcZvGWl6iEyZybjlGvJOmEUV
+         WcQd+lnGwabwrk3ejl9S08tWuMUI6g4ilm0sWdXFFr6AoDMpU93xZHlmoIrdv9MYC1
+         szA9tsjpkiOhQ==
+Date:   Mon, 24 Oct 2022 00:17:27 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     "Kalra, Ashish" <ashish.kalra@amd.com>
+Cc:     Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        linux-crypto@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
+        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
+        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
+        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
+        michael.roth@amd.com, vbabka@suse.cz, kirill@shutemov.name,
+        ak@linux.intel.com, tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
+        dgilbert@redhat.com
+Subject: Re: [PATCH Part2 v6 12/49] crypto: ccp: Add support to initialize
+ the AMD-SP for SEV-SNP
+Message-ID: <Y1WvZ0lLDAmrweXs@kernel.org>
+References: <cover.1655761627.git.ashish.kalra@amd.com>
+ <87a0481526e66ddd5f6192cbb43a50708aee2883.1655761627.git.ashish.kalra@amd.com>
+ <Yzh558vy+rJfsBBq@zn.tnic>
+ <f997dd38-a615-e343-44cd-a7aeb9447a1e@amd.com>
+ <d3ab29c8-8f22-28eb-dfe3-6100a8f16e4b@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20221021230322.00dd045c@kernel.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d3ab29c8-8f22-28eb-dfe3-6100a8f16e4b@amd.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 11:03:22PM -0700, Jakub Kicinski wrote:
-> On Sat, 22 Oct 2022 07:47:06 +0200 Jason A. Donenfeld wrote:
-> > On Fri, Oct 21, 2022 at 10:32:42PM -0700, Jakub Kicinski wrote:
-> > > But whatever. I mean - hopefully there aren't any conflicts in the ~50
-> > > networking files you touch. I just wish that people didn't pipe up with
-> > > the tree wide changes right after the merge window. Feels like the
-> > > worst possible timing.  
-> > 
-> > Oh, if the timing is what makes this especially worrisome, I have
-> > no qualms about rebasing much later, and reposting this series then.
-> > I'll do that.
+On Wed, Oct 19, 2022 at 01:48:48PM -0500, Kalra, Ashish wrote:
+> Another follow up:
 > 
-> Cool, thanks! I promise to not be grumpy if you repost around rc6 :)
+> > > >   int sev_platform_init(int *error);
+> > > > +/**
+> > > > + * sev_snp_init - perform SEV SNP_INIT command
+> > > > + *
+> > > > + * @error: SEV command return code
+> > > > + *
+> > > > + * Returns:
+> > > > + * 0 if the SEV successfully processed the command
+> > > > + * -%ENODEV    if the SEV device is not available
+> > > > + * -%ENOTSUPP  if the SEV does not support SEV
+> > > > + * -%ETIMEDOUT if the SEV command timed out
+> > > > + * -%EIO       if the SEV returned a non-zero return code
+> > > 
+> > > Something's weird with those args. I think it should be
+> > > 
+> > >     %-ENODEV
+> > > 
+> > > and so on...
+> > > 
+> > 
+> > Yes, off course %-<errno>
+> > 
+> 
+> I see that other drivers are also using the same convention:
+> 
+> include/linux/regset.h:
+> ..
+> /**
+>  * user_regset_set_fn - type of @set function in &struct user_regset
+>  * @target:     thread being examined
+>  * @regset:     regset being examined
+>  * @pos:        offset into the regset data to access, in bytes
+>  * @count:      amount of data to copy, in bytes
+>  * @kbuf:       if not %NULL, a kernel-space pointer to copy from
+>  * @ubuf:       if @kbuf is %NULL, a user-space pointer to copy from
+>  *
+>  * Store register values.  Return %0 on success; -%EIO or -%ENODEV
+>  * are usual failure returns.  The @pos and @count values are in
+> ...
+> 
+> include/linux/psp-tee.h:
+> ..
+> /**
+>  * psp_tee_process_cmd() - Process command in Trusted Execution Environment
+>  * @cmd_id:     TEE command ID (&enum tee_cmd_id)
+>  * @buf:        Command buffer for TEE processing. On success, is updated
+>  *              with the response
+>  * @len:        Length of command buffer in bytes
+>  * @status:     On success, holds the TEE command execution status
+>  *
+>  * This function submits a command to the Trusted OS for processing in the
+>  * TEE environment and waits for a response or until the command times out.
+>  *
+>  * Returns:
+>  * 0 if TEE successfully processed the command
+>  * -%ENODEV    if PSP device not available
+>  * -%EINVAL    if invalid input
+>  * -%ETIMEDOUT if TEE command timed out
+>  * -%EBUSY     if PSP device is not responsive
+>  */
+> ...
+> 
+> Thanks,
+> Ashis
 
-One way of making things less painful for the stable branch and for
-the upstream branch is to *add* new helpers instead of playing
-replacement games like s/prandom_u32_max/get_random_u32_below/.  This
-is what causes the patch conflict problems.
+In SGX driver the convention is:
 
-One advantage of at least adding the new functions to the stable
-branches, even if we don't do the wholesale replacement, is that it
-makes it much less likely that a backported patch, which uses the new
-API, won't fail to compile --- and of course, the major headache case
-is one where it's not noticed at first because it didn't get picked up
-in people's test compiles until after the Linux x.y.z release has been
-pushed out.
+* Return:
+* - -ENODEV  ...
+* - -EINVAL  ...
 
-Whether it's worth doing the wholesale replacement is a different
-question, but separating "add the new functions with one or two use
-cases so the functions are actulaly _used_" from the "convert the
-world to use the new functions" from the "remove the old functions",
-might life easier.
+"Return:" because this is what kernel-nanodoc-HOWTO.txt suggests.
 
-					- Ted
+The dashes are recognized by Sphinx as list so each return code
+gets a newline when processed through "make htmldocs". Otherwise,
+you get a mess because newlines will be removed.
+
+I don't actually have idea of '%' and neither see it in the kernel
+documenation.
+
+BR, Jarkko
