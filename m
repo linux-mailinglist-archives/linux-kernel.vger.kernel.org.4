@@ -2,105 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AADCA6095EC
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 21:57:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87FA9609655
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 22:55:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230383AbiJWT50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 15:57:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50210 "EHLO
+        id S229696AbiJWUzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 16:55:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbiJWT5Y (ORCPT
+        with ESMTP id S229535AbiJWUzM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 15:57:24 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BD6C70E43;
-        Sun, 23 Oct 2022 12:57:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sun, 23 Oct 2022 16:55:12 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA9A43314;
+        Sun, 23 Oct 2022 13:55:07 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 8A6F6CE0F58;
-        Sun, 23 Oct 2022 19:57:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E233C433C1;
-        Sun, 23 Oct 2022 19:57:19 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="RHl2LtIT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1666555036;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=cWtExo86QbcGU83TlxLOo9FcuH1N6ldwUMYQv/obgzc=;
-        b=RHl2LtITdsVw3pwWJLkHF4seczWczbn1OqZH2KgVX8rAsHgRpazXCOrq6DWxZF8v07JdEL
-        rYfXZt/bxcshHqqZ6gQx67hKQKvnEWINrE3f3cv8EeyMJbIFVA3slI1XMvvHA7FlUMfAmu
-        DCnr6Qj7X+mef3h86QrEUvBcyodfgog=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 31711279 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Sun, 23 Oct 2022 19:57:16 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linus.walleij@linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>, stable@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH] soc: ux500: do not directly dereference __iomem
-Date:   Sun, 23 Oct 2022 21:57:11 +0200
-Message-Id: <20221023195711.52515-1-Jason@zx2c4.com>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MwVnw5R9rz4x1G;
+        Mon, 24 Oct 2022 07:55:00 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1666558501;
+        bh=4KOcWjIHUV+bFt3KF/p0g/pELvGUf/h9QNWfEapfHIo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=DmSIjmYFMoxHlMHdOasMqarWVkLocx/+LSoORALNBGYbfRBTE2aL+FEW4LqMZrwh+
+         kl3DGT8Y5s0MZtJ+YkzUW2Z8PAE4s1dXsgvdMo6LyDN3Vu12id7Yk3O6EaU/8RkJMW
+         Dr85LTNv3Cf9uOgCJzK7oMZhAyd/nySDGQkwf35aaQruPPKiFEbPXVTtM1Ju3xcJ40
+         0TuAjkGBVpsgc0iEVpIq4tjmsNuM1lvdORA7nu44fSvgXppuMdjdrvDQVFxww/Ar4f
+         paoac2dG8R4knYxa+yTSnBqsJjuslW50YVPxzHyzTZZBnmuNm/ct7gaHQpHJth6GAq
+         DCCts31hxj7EA==
+Date:   Sun, 23 Oct 2022 12:48:10 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Dan Li <ashimida@linux.alibaba.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the kbuild-current
+ tree
+Message-ID: <20221023124810.51b1201b@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/Rkahi.Q2swWNgzpz6S8fIIX";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sparse reports that calling add_device_randomness() on `uid` is a
-violation of address spaces. And indeed the next usage uses readl()
-properly, but that was left out when passing it toadd_device_
-randomness(). So instead copy the whole thing to the stack first.
+--Sig_/Rkahi.Q2swWNgzpz6S8fIIX
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Fixes: 4040d10a3d44 ("ARM: ux500: add DB serial number to entropy pool")
-Cc: Linus Walleij <linus.walleij@linaro.org>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/all/202210230819.loF90KDh-lkp@intel.com/
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
-Untested, but hopefully correct.
+Hi all,
 
- drivers/soc/ux500/ux500-soc-id.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+Commit
 
-diff --git a/drivers/soc/ux500/ux500-soc-id.c b/drivers/soc/ux500/ux500-soc-id.c
-index a9472e0e5d61..27d6e25a0115 100644
---- a/drivers/soc/ux500/ux500-soc-id.c
-+++ b/drivers/soc/ux500/ux500-soc-id.c
-@@ -167,20 +167,18 @@ ATTRIBUTE_GROUPS(ux500_soc);
- static const char *db8500_read_soc_id(struct device_node *backupram)
- {
- 	void __iomem *base;
--	void __iomem *uid;
- 	const char *retstr;
-+	u32 uid[5];
- 
- 	base = of_iomap(backupram, 0);
- 	if (!base)
- 		return NULL;
--	uid = base + 0x1fc0;
-+	memcpy_fromio(uid, base + 0x1fc0, sizeof(uid));
- 
- 	/* Throw these device-specific numbers into the entropy pool */
--	add_device_randomness(uid, 0x14);
-+	add_device_randomness(uid, sizeof(uid));
- 	retstr = kasprintf(GFP_KERNEL, "%08x%08x%08x%08x%08x",
--			 readl((u32 *)uid+0),
--			 readl((u32 *)uid+1), readl((u32 *)uid+2),
--			 readl((u32 *)uid+3), readl((u32 *)uid+4));
-+			   uid[0], uid[1], uid[2], uid[3], uid[4]);
- 	iounmap(base);
- 	return retstr;
- }
--- 
-2.38.1
+  9a21115ca50e ("Documentation: kbuild: Add description of git for reproduc=
+ible builds")
 
+is missing a Signed-off-by from its committer.
+
+Also, I am guessing (I haven't actually done the build, yet) that this
+will produce a new build warning from (e.g.) "make htmldocs", as the
+underlining of the new "Git" header line is longer than it should be.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Rkahi.Q2swWNgzpz6S8fIIX
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNUnVoACgkQAVBC80lX
+0GwoBQf/e7mzHvNQ9ceEhk9YWGqwA3yaSFUzpqgbQbthaSd1RqsH5tzaJsHUCiNz
+mdIYsorHJPaPEXmBKpDATA5OQEuwVVUvv3uyrifMRYBuwy7Nz6VdbeqNNpWdMjhM
+KFjN3ROWoqrEOb2NFHFFCdFuE3eG80I9CRR3LQMUjbOdRg6Tit9VC/35k0XLwzVY
+bPMDuSgTmKNXe3FDV+Yh4ZSaFQu9PerDRnmU2blDd1r32LCIvFbOjdffoBW5leCS
+VpI0xd+zjO5KCXnaejcZixLaorvtQBM3Naj06Kthy2t8QHbf04nAQ44dze/YpCem
+Cjf0RqCIzGy2RRIQKI/SvbrJA7LwtA==
+=5++v
+-----END PGP SIGNATURE-----
+
+--Sig_/Rkahi.Q2swWNgzpz6S8fIIX--
