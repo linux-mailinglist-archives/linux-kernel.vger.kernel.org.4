@@ -2,343 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0565D6090DA
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 04:53:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9DBF6090E1
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 05:03:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbiJWCxW convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 22 Oct 2022 22:53:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44942 "EHLO
+        id S229968AbiJWDC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 22 Oct 2022 23:02:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229707AbiJWCxT (ORCPT
+        with ESMTP id S229756AbiJWDCw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 22 Oct 2022 22:53:19 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3429D69F4D
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 19:53:18 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id a8-20020a92c548000000b002f6440ff96bso6532941ilj.22
-        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 19:53:18 -0700 (PDT)
+        Sat, 22 Oct 2022 23:02:52 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1007A13F43
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 20:02:51 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id h185so5897068pgc.10
+        for <linux-kernel@vger.kernel.org>; Sat, 22 Oct 2022 20:02:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZM5gJHOnivLnvLSSbR9bvNlNc5ldgiHnzUjRHLcgvbU=;
+        b=qd5Kz33mh+7AO0dVcQ+c7EyyLSmJkMhour9nYFlmFGTktHVOXpNha9k3JhuJSZF+zD
+         UE2RXd/ePi8/QZEOYyUV0LpLttN9k9SNBV0B5MExwgCyfC0F2w6Sjs+fKqlXNLFrr0os
+         qKDJvX4pUKvDnEoS5UMC3WcKEOSl8/YXQ8u7T+MaqDAyZy/ucbEF5bXn6iV0waJT3Q1A
+         zu7VwaenZ9BTr6djmsNX0MgrW9sJdNrE425K+e0LGOv+k1iFbTp9VL0610juVNRTtQvR
+         6PJmiU3ZZ7lwZrCo99zGDAM1azg3u9RbdQxuntvNk1ttFq4ICZCAHX3MwV80wuvfMxPO
+         /kNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:from:subject:message-id:in-reply-to
-         :date:mime-version:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IYmWZjruYF7VupBjXQwzhRIstLbtsnRbBI9VaAmFNKI=;
-        b=mbj/XEPB86h01tnZlsx9Ljsbb3dFDgzEh3P+XojnFY1VUBwA9qnTgvGrNqGLbqkK7K
-         tQNg9mohQSAvqGBSLZ6GoIyu3fDV9W2xHE1D+v9BXNjTnc6gTwP2XJjZL8/o8e6jc2um
-         p1FjSWbKvLNFQBy6Zg69lWJz0ESfV1RnzykGDn5tLMMgl9qjmQawbgxa9XXoqmI+oZPS
-         FynMUSE0RgAQI5HrNEq2k9JgN8Voyqd/IjG8DNs6gZUKXW/AlKCVUjNBTy6XY67U51d+
-         8kBOvuYY5NWKzhEA6PKshSv3/lzeRcEd4AktkHrGx65Sdl3LEsVQmC6U6UHVvFuCCSsI
-         wzTw==
-X-Gm-Message-State: ACrzQf1JX8ZJtVHwjB8Dn2MUax4+VX3uEB3FcWfa3PU9z+tYEKPXsusn
-        7viapNBm6xkHW5gzorQPLsJJxXIonhen7+LYxGGlHyMGbxBF
-X-Google-Smtp-Source: AMsMyM4ibnokPU0eunWWUqnu6gbELEHC9kfS5mZF2h1EOFXJDRc2mdew60BOSdejqvtFVshNeeMt92yJLkkEUN4IZ7Q79F6afBpj
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZM5gJHOnivLnvLSSbR9bvNlNc5ldgiHnzUjRHLcgvbU=;
+        b=44qk2i2bcNg2SYSeZBqkWWnkWICzHD200HbYgoHoaLLilsGqan03Yr0E0DMcjXqewk
+         Fp4oCncrXYgJbf70yrS+FuEEuC4yjMe8aNxJtYi5mD/MTtmCNJER2bzJAmHa8eoLXOcl
+         ObwoFKa3bDZ7yLqQMXyPhCZn/89nq4k6UyZ9T47GTsaPq2us9jjRiPHx6utcDp6kDBqT
+         j53bbAlhLdkRMDBLq6VGx+b0xzI4JbpzLv2WOy5P3FYI1ELCqU6YsWWrDrd+u2eR6wAz
+         641rd5T0mnWYyZTwlRhwTqk7q14ctscBcsiShg7dafuO5b7cejUXceU1v677DpPZeSGb
+         KhkA==
+X-Gm-Message-State: ACrzQf22OpfGWuXmTSMcGuGs9E1v7XNdYy6mrO6ibY2mPCFmxuQJeWjn
+        2+6D0it+AMwZd8mmhnHdPqiZTWfOmIIfuyfp
+X-Google-Smtp-Source: AMsMyM790aDklrOEICsMHtcknQnjRuh3Z1xara5tff7NEOLvBKd5wjuUk8H/Vh9slA/TCXO2Y93SfQ==
+X-Received: by 2002:a63:9144:0:b0:45f:c9f5:1bb with SMTP id l65-20020a639144000000b0045fc9f501bbmr21925716pge.165.1666494170286;
+        Sat, 22 Oct 2022 20:02:50 -0700 (PDT)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id w186-20020a6362c3000000b0044a4025cea1sm15023467pgb.90.2022.10.22.20.02.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 22 Oct 2022 20:02:49 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Yu Kuai <yukuai1@huaweicloud.com>, ebiggers@google.com, hch@lst.de
+Cc:     yukuai3@huawei.com, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, linux-block@vger.kernel.org
+In-Reply-To: <20221019121518.3865235-1-yukuai1@huaweicloud.com>
+References: <20221019121518.3865235-1-yukuai1@huaweicloud.com>
+Subject: Re: [PATCH v5 0/6] blk-wbt: simple improvment to enable wbt correctly
+Message-Id: <166649416867.43324.13666623072880876901.b4-ty@kernel.dk>
+Date:   Sat, 22 Oct 2022 21:02:48 -0600
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:12cb:b0:2fa:b257:fa39 with SMTP id
- i11-20020a056e0212cb00b002fab257fa39mr17787385ilm.242.1666493597427; Sat, 22
- Oct 2022 19:53:17 -0700 (PDT)
-Date:   Sat, 22 Oct 2022 19:53:17 -0700
-In-Reply-To: <20221023004724.2079-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e52f6805ebaac6c0@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in kernfs_add_one
-From:   syzbot <syzbot+ef17b5b364116518fd65@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.11.0-dev-d9ed3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, 19 Oct 2022 20:15:12 +0800, Yu Kuai wrote:
+> From: Yu Kuai <yukuai3@huawei.com>
+> 
+> changes in v5:
+>  - code adjustment in patch 4, as suggested by Christoph.
+>  - add review tag by Christop.
+> 
+> changes in v4:
+>  - remove patch 3 from v3
+>  - add patch 2,3 in v4
+> 
+> [...]
 
-syzbot tried to test the proposed patch but the build/boot failed:
+Applied, thanks!
 
-che: Netfs 'afs' registered for caching
-[   13.500882][    T1] Btrfs loaded, crc32c=crc32c-intel, assert=on, zoned=yes, fsverity=yes
-[   13.510556][    T1] Key type big_key registered
-[   13.519302][    T1] Key type encrypted registered
-[   13.524584][    T1] ima: No TPM chip found, activating TPM-bypass!
-[   13.530967][    T1] Loading compiled-in module X.509 certificates
-[   13.538472][    T1] Loaded X.509 cert 'Build time autogenerated kernel key: f850c787ad998c396ae089c083b940ff0a9abb77'
-[   13.549867][    T1] ima: Allocated hash algorithm: sha256
-[   13.555945][    T1] ima: No architecture policies found
-[   13.561723][    T1] evm: Initialising EVM extended attributes:
-[   13.568162][    T1] evm: security.selinux (disabled)
-[   13.573567][    T1] evm: security.SMACK64
-[   13.578111][    T1] evm: security.SMACK64EXEC
-[   13.582752][    T1] evm: security.SMACK64TRANSMUTE
-[   13.588073][    T1] evm: security.SMACK64MMAP
-[   13.592999][    T1] evm: security.apparmor (disabled)
-[   13.598532][    T1] evm: security.ima
-[   13.602464][    T1] evm: security.capability
-[   13.607225][    T1] evm: HMAC attrs: 0x1
-[   13.699721][    T1] PM:   Magic number: 10:646:713
-[   13.705725][    T1] video4linux radio24: hash matches
-[   13.716160][    T1] printk: console [netcon0] enabled
-[   13.721404][    T1] netconsole: network logging started
-[   13.727580][    T1] gtp: GTP module loaded (pdp ctx size 104 bytes)
-[   13.737077][    T1] rdma_rxe: loaded
-[   13.741304][    T1] cfg80211: Loading compiled-in X.509 certificates for regulatory database
-[   13.753006][    T1] cfg80211: Loaded X.509 cert 'sforshee: 00b28ddf47aef9cea7'
-[   13.763068][    T1] ALSA device list:
-[   13.764341][    T7] platform regulatory.0: Direct firmware load for regulatory.db failed with error -2
-[   13.767026][    T1]   #0: Dummy 1
-[   13.776574][    T7] platform regulatory.0: Falling back to sysfs fallback for: regulatory.db
-[   13.788911][    T1]   #1: Loopback 1
-[   13.792729][    T1]   #2: Virtual MIDI Card 1
-[   13.800826][    T1] md: Waiting for all devices to be available before autodetect
-[   13.808606][    T1] md: If you don't use raid, use raid=noautodetect
-[   13.815242][    T1] md: Autodetecting RAID arrays.
-[   13.820269][    T1] md: autorun ...
-[   13.823994][    T1] md: ... autorun DONE.
-[   13.853970][    T1] EXT4-fs (sda1): mounted filesystem with ordered data mode. Opts: (null). Quota mode: none.
-[   13.864437][    T1] VFS: Mounted root (ext4 filesystem) readonly on device 8:1.
-[   13.886509][    T1] devtmpfs: mounted
-[   13.949731][    T1] Freeing unused kernel image (initmem) memory: 3828K
-[   13.956753][    T1] Write protecting the kernel read-only data: 167936k
-[   13.969087][    T1] Freeing unused kernel image (text/rodata gap) memory: 2012K
-[   13.979387][    T1] Freeing unused kernel image (rodata/data gap) memory: 1688K
-[   13.992266][    T1] Failed to set sysctl parameter 'max_rcu_stall_to_panic=1': parameter not found
-[   14.002382][    T1] Run /sbin/init as init process
-[   14.257070][ T2936] mount (2936) used greatest stack depth: 23376 bytes left
-[   14.317912][ T2937] EXT4-fs (sda1): re-mounted. Opts: (null). Quota mode: none.
-[   14.357277][ T2939] mkdir (2939) used greatest stack depth: 23296 bytes left
-mount: mounting selinuxfs on /sys/fs/selinux failed: No such file or directory
-mount: mounting mqueue on /dev/mqueue failed: No such file or directory
-mount: [   14.406166][ T2940] mount (2940) used greatest stack depth: 21664 bytes left
-mounting hugetlbfs on /dev/hugepages failed: No such file or directory
-mount: mounting fuse.lxcfs on /var/lib/lxcfs failed: No such file or directory
-Starting syslogd: OK
-Starting acpid: OK
-Starting klogd: OK
-Running sysctl: OK
-[   14.952768][ T2965] logger (2965) used greatest stack depth: 21264 bytes left
-Populating /dev using udev: [   15.122458][ T2969] udevd[2969]: starting version 3.2.10
-[   15.431463][ T2970] udevd[2970]: starting eudev-3.2.10
-[   15.433624][ T2969] udevd (2969) used greatest stack depth: 19776 bytes left
-[   18.456577][ T2979] ================================================================================
-[   18.469857][ T2979] UBSAN: null-ptr-deref in ./include/linux/pagemap.h:1088:17
-[   18.538074][ T2979] member access within null pointer of type 'struct folio'
-[   18.575904][ T2979] CPU: 0 PID: 2979 Comm: udevd Not tainted 5.16.0-rc3-syzkaller-01043-g1a2fb220edca-dirty #0
-[   18.586314][ T2979] Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
-[   18.596595][ T2979] Call Trace:
-[   18.599900][ T2979]  <TASK>
-[   18.602840][ T2979]  dump_stack_lvl+0x1e3/0x2cb
-[   18.607653][ T2979]  ? bfq_pos_tree_add_move+0x451/0x451
-[   18.613136][ T2979]  ? panic+0x7e3/0x7e3
-[   18.617406][ T2979]  ? mpage_readahead+0x6a0/0x6a0
-[   18.622367][ T2979]  ubsan_type_mismatch_common+0x280/0x390
-[   18.628692][ T2979]  __ubsan_handle_type_mismatch_v1+0x4a/0x60
-[   18.634794][ T2979]  mpage_readahead+0x588/0x6a0
-[   18.639606][ T2979]  ? dio_await_one+0x250/0x250
-[   18.644440][ T2979]  ? blkdev_fallocate+0x330/0x330
-[   18.649751][ T2979]  ? put_page+0x90/0x90
-[   18.654283][ T2979]  ? __alloc_pages+0x2fd/0x5f0
-[   18.659256][ T2979]  ? blk_start_plug_nr_ios+0xaa/0x210
-[   18.664788][ T2979]  read_pages+0x162/0x520
-[   18.669173][ T2979]  ? page_cache_ra_unbounded+0x840/0x840
-[   18.674829][ T2979]  ? filemap_add_folio+0x1ab/0x220
-[   18.680150][ T2979]  ? add_to_page_cache_locked+0x90/0x90
-[   18.685994][ T2979]  ? folio_alloc+0x47/0x50
-[   18.690543][ T2979]  ? filemap_alloc_folio+0x1a9/0x1c0
-[   18.696205][ T2979]  page_cache_ra_unbounded+0x6c1/0x840
-[   18.701964][ T2979]  ? read_cache_pages_invalidate_pages+0xa0/0xa0
-[   18.708384][ T2979]  ? do_page_cache_ra+0xde/0x100
-[   18.713352][ T2979]  force_page_cache_ra+0x288/0x2e0
-[   18.718608][ T2979]  filemap_read+0x809/0x23d0
-[   18.723270][ T2979]  ? find_get_pages_range_tag+0x570/0x570
-[   18.729098][ T2979]  ? memset+0x1f/0x40
-[   18.733162][ T2979]  ? generic_file_read_iter+0x9e/0x4a0
-[   18.739180][ T2979]  ? memset+0x1f/0x40
-[   18.743347][ T2979]  ? init_sync_kiocb+0x303/0x4b0
-[   18.748408][ T2979]  vfs_read+0x5cd/0x760
-[   18.753197][ T2979]  ? kernel_read+0x1f0/0x1f0
-[   18.757837][ T2979]  ? __fget_light+0xcc/0x170
-[   18.762803][ T2979]  ksys_read+0x19f/0x2d0
-[   18.767273][ T2979]  ? vfs_write+0x720/0x720
-[   18.771729][ T2979]  ? syscall_enter_from_user_mode+0x2e/0x1c0
-[   18.777991][ T2979]  ? lockdep_hardirqs_on+0x95/0x140
-[   18.783257][ T2979]  ? syscall_enter_from_user_mode+0x2e/0x1c0
-[   18.789379][ T2979]  do_syscall_64+0x44/0xa0
-[   18.794342][ T2979]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[   18.800265][ T2979] RIP: 0033:0x7fef837538fe
-[   18.804785][ T2979] Code: c0 e9 e6 fe ff ff 50 48 8d 3d 0e c7 09 00 e8 c9 cf 01 00 66 0f 1f 84 00 00 00 00 00 64 8b 04 25 18 00 00 00 85 c0 75 14 0f 05 <48> 3d 00 f0 ff ff 77 5a c3 66 0f 1f 84 00 00 00 00 00 48 83 ec 28
-[   18.824787][ T2979] RSP: 002b:00007ffea8972ab8 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
-[   18.834099][ T2979] RAX: ffffffffffffffda RBX: 000000007fff0000 RCX: 00007fef837538fe
-[   18.842179][ T2979] RDX: 0000000000000040 RSI: 000055f64a2af6d8 RDI: 0000000000000009
-[   18.850170][ T2979] RBP: 0000000000000040 R08: 000055f64a2af6b0 R09: 00007fef83823a60
-[   18.858243][ T2979] R10: 0000000000200000 R11: 0000000000000246 R12: 000055f64a2af6b0
-[   18.866500][ T2979] R13: 000055f64a2af6c8 R14: 000055f64a2b6720 R15: 000055f64a2b66d0
-[   18.874677][ T2979]  </TASK>
-[   19.500327][ T2991] ================================================================================
-[   19.661875][ T2991] UBSAN: object-size-mismatch in net/unix/af_unix.c:1094:14
-[   19.717755][ T2991] member access within address ffff88801815e6c8 with insufficient space
-[   19.779625][ T2991] for an object of type 'struct sockaddr_un'
-[   19.844942][ T2991] CPU: 1 PID: 2991 Comm: udevadm Not tainted 5.16.0-rc3-syzkaller-01043-g1a2fb220edca-dirty #0
-[   19.855745][ T2991] Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
-[   19.866130][ T2991] Call Trace:
-[   19.869498][ T2991]  <TASK>
-[   19.872430][ T2991]  dump_stack_lvl+0x1e3/0x2cb
-[   19.877100][ T2991]  ? bfq_pos_tree_add_move+0x451/0x451
-[   19.882543][ T2991]  ? panic+0x7e3/0x7e3
-[   19.886901][ T2991]  ubsan_type_mismatch_common+0x1e6/0x390
-[   19.892637][ T2991]  __ubsan_handle_type_mismatch_v1+0x4a/0x60
-[   19.898625][ T2991]  unix_autobind+0x13e/0x4d0
-[   19.903239][ T2991]  unix_stream_connect+0x622/0xbf0
-[   19.908342][ T2991]  ? bpf_lsm_socket_connect+0x5/0x10
-[   19.914131][ T2991]  ? security_socket_connect+0x9d/0xb0
-[   19.919703][ T2991]  __x64_sys_connect+0x15b/0x1e0
-[   19.924797][ T2991]  ? __sys_connect+0x170/0x170
-[   19.929592][ T2991]  ? syscall_enter_from_user_mode+0x2e/0x1c0
-[   19.935598][ T2991]  ? lockdep_hardirqs_on+0x95/0x140
-[   19.941067][ T2991]  ? syscall_enter_from_user_mode+0x2e/0x1c0
-[   19.947035][ T2991]  do_syscall_64+0x44/0xa0
-[   19.951623][ T2991]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[   19.957618][ T2991] RIP: 0033:0x7f474d116d23
-[   19.962241][ T2991] Code: 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 64 8b 04 25 18 00 00 00 85 c0 75 14 b8 2a 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 55 c3 0f 1f 40 00 48 83 ec 18 89 54 24 0c 48
-[   19.982635][ T2991] RSP: 002b:00007fffd159a368 EFLAGS: 00000246 ORIG_RAX: 000000000000002a
-[   19.991348][ T2991] RAX: ffffffffffffffda RBX: 0000559aa0cda930 RCX: 00007f474d116d23
-[   19.999354][ T2991] RDX: 0000000000000013 RSI: 0000559aa0cda948 RDI: 0000000000000003
-[   20.007628][ T2991] RBP: 000000000000001e R08: 000000000000001e R09: 0030312e322e332d
-[   20.015622][ T2991] R10: 00007fffd159a4b4 R11: 0000000000000246 R12: 00007fffd159a380
-[   20.023593][ T2991] R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000007
-[   20.031578][ T2991]  </TASK>
-[   20.613100][ T2979] ================================================================================
-[   20.681439][ T2979] Kernel panic - not syncing: panic_on_warn set ...
-[   20.688430][ T2979] CPU: 0 PID: 2979 Comm: udevd Not tainted 5.16.0-rc3-syzkaller-01043-g1a2fb220edca-dirty #0
-[   20.698597][ T2979] Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
-[   20.708677][ T2979] Call Trace:
-[   20.711976][ T2979]  <TASK>
-[   20.714926][ T2979]  dump_stack_lvl+0x1e3/0x2cb
-[   20.719636][ T2979]  ? bfq_pos_tree_add_move+0x451/0x451
-[   20.725127][ T2979]  ? panic+0x7e3/0x7e3
-[   20.729236][ T2979]  panic+0x2f1/0x7e3
-[   20.733377][ T2979]  ? ubsan_type_mismatch_common+0x2a4/0x390
-[   20.739478][ T2979]  ? fb_is_primary_device+0xcc/0xcc
-[   20.744706][ T2979]  ? panic+0x7e3/0x7e3
-[   20.748985][ T2979]  ? mpage_readahead+0x6a0/0x6a0
-[   20.754056][ T2979]  ubsan_type_mismatch_common+0x38c/0x390
-[   20.760262][ T2979]  __ubsan_handle_type_mismatch_v1+0x4a/0x60
-[   20.766546][ T2979]  mpage_readahead+0x588/0x6a0
-[   20.771338][ T2979]  ? dio_await_one+0x250/0x250
-[   20.776581][ T2979]  ? blkdev_fallocate+0x330/0x330
-[   20.781833][ T2979]  ? put_page+0x90/0x90
-[   20.786019][ T2979]  ? __alloc_pages+0x2fd/0x5f0
-[   20.790815][ T2979]  ? blk_start_plug_nr_ios+0xaa/0x210
-[   20.796385][ T2979]  read_pages+0x162/0x520
-[   20.800836][ T2979]  ? page_cache_ra_unbounded+0x840/0x840
-[   20.806593][ T2979]  ? filemap_add_folio+0x1ab/0x220
-[   20.811913][ T2979]  ? add_to_page_cache_locked+0x90/0x90
-[   20.817565][ T2979]  ? folio_alloc+0x47/0x50
-[   20.822089][ T2979]  ? filemap_alloc_folio+0x1a9/0x1c0
-[   20.827414][ T2979]  page_cache_ra_unbounded+0x6c1/0x840
-[   20.833601][ T2979]  ? read_cache_pages_invalidate_pages+0xa0/0xa0
-[   20.840089][ T2979]  ? do_page_cache_ra+0xde/0x100
-[   20.845127][ T2979]  force_page_cache_ra+0x288/0x2e0
-[   20.850354][ T2979]  filemap_read+0x809/0x23d0
-[   20.855676][ T2979]  ? find_get_pages_range_tag+0x570/0x570
-[   20.861591][ T2979]  ? memset+0x1f/0x40
-[   20.865601][ T2979]  ? generic_file_read_iter+0x9e/0x4a0
-[   20.871203][ T2979]  ? memset+0x1f/0x40
-[   20.875298][ T2979]  ? init_sync_kiocb+0x303/0x4b0
-[   20.880251][ T2979]  vfs_read+0x5cd/0x760
-[   20.884603][ T2979]  ? kernel_read+0x1f0/0x1f0
-[   20.889200][ T2979]  ? __fget_light+0xcc/0x170
-[   20.893838][ T2979]  ksys_read+0x19f/0x2d0
-[   20.898157][ T2979]  ? vfs_write+0x720/0x720
-[   20.902646][ T2979]  ? syscall_enter_from_user_mode+0x2e/0x1c0
-[   20.908616][ T2979]  ? lockdep_hardirqs_on+0x95/0x140
-[   20.913812][ T2979]  ? syscall_enter_from_user_mode+0x2e/0x1c0
-[   20.919831][ T2979]  do_syscall_64+0x44/0xa0
-[   20.924431][ T2979]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[   20.930418][ T2979] RIP: 0033:0x7fef837538fe
-[   20.934855][ T2979] Code: c0 e9 e6 fe ff ff 50 48 8d 3d 0e c7 09 00 e8 c9 cf 01 00 66 0f 1f 84 00 00 00 00 00 64 8b 04 25 18 00 00 00 85 c0 75 14 0f 05 <48> 3d 00 f0 ff ff 77 5a c3 66 0f 1f 84 00 00 00 00 00 48 83 ec 28
-[   20.954802][ T2979] RSP: 002b:00007ffea8972ab8 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
-[   20.963380][ T2979] RAX: ffffffffffffffda RBX: 000000007fff0000 RCX: 00007fef837538fe
-[   20.971639][ T2979] RDX: 0000000000000040 RSI: 000055f64a2af6d8 RDI: 0000000000000009
-[   20.979995][ T2979] RBP: 0000000000000040 R08: 000055f64a2af6b0 R09: 00007fef83823a60
-[   20.988207][ T2979] R10: 0000000000200000 R11: 0000000000000246 R12: 000055f64a2af6b0
-[   20.996338][ T2979] R13: 000055f64a2af6c8 R14: 000055f64a2b6720 R15: 000055f64a2b66d0
-[   21.004453][ T2979]  </TASK>
-[   21.007945][ T2979] Kernel Offset: disabled
-[   21.012860][ T2979] Rebooting in 86400 seconds..
+[1/6] elevator: remove redundant code in elv_unregister_queue()
+      commit: 4321c1ad4abe05fb3683745ed52d0ca17918d537
+[2/6] blk-wbt: remove unnecessary check in wbt_enable_default()
+      commit: e2c2a27a4fef0af09bfb50c017d1d1962aa8784b
+[3/6] blk-wbt: make enable_state more accurate
+      commit: 563ee8c7ebfa01d43fa9a785c562318b3f6a587b
+[4/6] blk-wbt: don't show valid wbt_lat_usec in sysfs while wbt is disabled
+      commit: a66d2566505c819261591fb2462a99069c43db55
+[5/6] elevator: add new field flags in struct elevator_queue
+      commit: dd58a3a032d5b53571e9934b23a4ceae7b158db0
+[6/6] blk-wbt: don't enable throttling if default elevator is bfq
+      commit: b192851f14d980f8ce794e747adc4a2418527a75
 
+Best regards,
+-- 
+Jens Axboe
 
-syzkaller build log:
-go env (err=<nil>)
-GO111MODULE="auto"
-GOARCH="amd64"
-GOBIN=""
-GOCACHE="/syzkaller/.cache/go-build"
-GOENV="/syzkaller/.config/go/env"
-GOEXE=""
-GOEXPERIMENT=""
-GOFLAGS=""
-GOHOSTARCH="amd64"
-GOHOSTOS="linux"
-GOINSECURE=""
-GOMODCACHE="/syzkaller/jobs/linux/gopath/pkg/mod"
-GONOPROXY=""
-GONOSUMDB=""
-GOOS="linux"
-GOPATH="/syzkaller/jobs/linux/gopath"
-GOPRIVATE=""
-GOPROXY="https://proxy.golang.org,direct"
-GOROOT="/usr/local/go"
-GOSUMDB="sum.golang.org"
-GOTMPDIR=""
-GOTOOLDIR="/usr/local/go/pkg/tool/linux_amd64"
-GOVCS=""
-GOVERSION="go1.17"
-GCCGO="gccgo"
-AR="ar"
-CC="gcc"
-CXX="g++"
-CGO_ENABLED="1"
-GOMOD="/syzkaller/jobs/linux/gopath/src/github.com/google/syzkaller/go.mod"
-CGO_CFLAGS="-g -O2"
-CGO_CPPFLAGS=""
-CGO_CXXFLAGS="-g -O2"
-CGO_FFLAGS="-g -O2"
-CGO_LDFLAGS="-g -O2"
-PKG_CONFIG="pkg-config"
-GOGCCFLAGS="-fPIC -m64 -pthread -fmessage-length=0 -fdebug-prefix-map=/tmp/go-build7159890=/tmp/go-build -gno-record-gcc-switches"
-
-git status (err=<nil>)
-HEAD detached at 8bcc32a67
-nothing to commit, working tree clean
-
-
-go list -f '{{.Stale}}' ./sys/syz-sysgen | grep -q false || go install ./sys/syz-sysgen
-make .descriptions
-bin/syz-sysgen
-touch .descriptions
-GOOS=linux GOARCH=amd64 go build "-ldflags=-s -w -X github.com/google/syzkaller/prog.GitRevision=8bcc32a67bc7180173447e1a78c03dae096b4231 -X 'github.com/google/syzkaller/prog.gitRevisionDate=20220415-122244'" "-tags=syz_target syz_os_linux syz_arch_amd64 " -o ./bin/linux_amd64/syz-fuzzer github.com/google/syzkaller/syz-fuzzer
-GOOS=linux GOARCH=amd64 go build "-ldflags=-s -w -X github.com/google/syzkaller/prog.GitRevision=8bcc32a67bc7180173447e1a78c03dae096b4231 -X 'github.com/google/syzkaller/prog.gitRevisionDate=20220415-122244'" "-tags=syz_target syz_os_linux syz_arch_amd64 " -o ./bin/linux_amd64/syz-execprog github.com/google/syzkaller/tools/syz-execprog
-GOOS=linux GOARCH=amd64 go build "-ldflags=-s -w -X github.com/google/syzkaller/prog.GitRevision=8bcc32a67bc7180173447e1a78c03dae096b4231 -X 'github.com/google/syzkaller/prog.gitRevisionDate=20220415-122244'" "-tags=syz_target syz_os_linux syz_arch_amd64 " -o ./bin/linux_amd64/syz-stress github.com/google/syzkaller/tools/syz-stress
-mkdir -p ./bin/linux_amd64
-gcc -o ./bin/linux_amd64/syz-executor executor/executor.cc \
-	-m64 -O2 -pthread -Wall -Werror -Wparentheses -Wunused-const-variable -Wframe-larger-than=16384 -Wno-stringop-overflow -Wno-array-bounds -Wno-format-overflow -static-pie -fpermissive -w -DGOOS_linux=1 -DGOARCH_amd64=1 \
-	-DHOSTGOOS_linux=1 -DGIT_REVISION=\"8bcc32a67bc7180173447e1a78c03dae096b4231\"
-
-
-Error text is too large and was truncated, full error text is at:
-https://syzkaller.appspot.com/x/error.txt?x=13defd8a880000
-
-
-Tested on:
-
-commit:         1a2fb220 skbuff: Extract list pointers to silence comp..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-kernel config:  https://syzkaller.appspot.com/x/.config?x=7f37c0162d15e714
-dashboard link: https://syzkaller.appspot.com/bug?extid=ef17b5b364116518fd65
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=146ed6ba880000
 
