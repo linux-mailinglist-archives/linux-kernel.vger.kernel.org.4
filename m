@@ -2,144 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B19B160924E
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 12:25:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA1B5609250
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 12:43:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230314AbiJWKZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 06:25:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44176 "EHLO
+        id S230316AbiJWKli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 06:41:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230293AbiJWKZb (ORCPT
+        with ESMTP id S230293AbiJWKlg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 06:25:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1DF15F7E1;
-        Sun, 23 Oct 2022 03:25:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5621C60B78;
-        Sun, 23 Oct 2022 10:25:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D6A2C433C1;
-        Sun, 23 Oct 2022 10:25:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666520728;
-        bh=xHTDzXr6yMemliNn/X5wJr/+HKi1d/u3kKmHEczRJ6c=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=PNETu/wg6gI+HfefOSjm98ZXp1gaCUwQ282BKWbhbPtErarhdWqGOAMOR3aexaBG0
-         e2Mv5TIbvMcQ2vKcU5kJd4VrYC7MPfTkifXDUIEB6JGQfzmL9SP4ECvnCDlU0efGUc
-         1blQfkU7chk8nuMXdWPwD++UHOz5C/tiqcBHRIwlWBXfvG/bGL8ChARWeeEqNsvpl+
-         3nl3RX/X0IGQP4WMFo7cd5l2Yu3PMBNwehajgllCQF35U5UeJceW8u80wezQiRXqOw
-         RgqYck/Of9/WHyvNe/fdVlNfWIgDt2h/SVYUPCtjRaWctBEkyPgScNj3/1B/O6Iimy
-         7tk62+vROPffA==
-Date:   Sun, 23 Oct 2022 11:25:26 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Hal Feng <hal.feng@linux.starfivetech.com>,
-        Stephen Boyd <sboyd@kernel.org>
-CC:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        linux-kernel@vger.kernel.org
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v1_15/30=5D_clk=3A_starfive=3A_?= =?US-ASCII?Q?Use_regmap_APIs_to_operate_registers?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <07B628ED6CABEF1D+932737cc-7d4b-4071-531e-82f88d89a872@linux.starfivetech.com>
-References: <20220929143225.17907-1-hal.feng@linux.starfivetech.com> <20220929175602.19946-1-hal.feng@linux.starfivetech.com> <20220930214824.A14ACC433D6@smtp.kernel.org> <CAJM55Z8xxrKqaN64KAP9miTis4wFbL2S9uhV5h-SOiYjbYng+g@mail.gmail.com> <20221012230525.C6E58C433D7@smtp.kernel.org> <07B628ED6CABEF1D+932737cc-7d4b-4071-531e-82f88d89a872@linux.starfivetech.com>
-Message-ID: <4AF0F174-CB35-447A-9F22-7D300B225011@kernel.org>
+        Sun, 23 Oct 2022 06:41:36 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0E5272B61
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 03:41:34 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id b7-20020a92c567000000b002fb9207838bso6997123ilj.23
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 03:41:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qpNFTxcSpPo8ecI5kvYJisJb2tg21P+66J49GuZR0Pg=;
+        b=nGiM0f+MADRj0CenIU4SG0x5X06PEsrCG0a2bktvUvvV3zd0l4ditIQjQCiAVCbqOo
+         F+2z+VbEfTSm9Ydi+1Lfi//B9VSH6tX/cwspIfMbTXVUawUGF9vLJ8v7zXKSGksexvc5
+         Z64/s7gdRZn66T9cjD6PZMGSEzYdiDigBOGXNflYs5B0NAkke4Z/8me0zK40CadShfHz
+         QKWEUd5E40rpYvF0jyxvV9NKuUYdRkuWbjo8jymJzZ04td+BXhCkTcyws8/Hx5X4nXp6
+         By0LonZNa6fQMSrHKWHQSgKXTaWXbJKDPudLYtd7bG8cmMeR4EBwbTyt1aE0vvNtPUoV
+         vGTg==
+X-Gm-Message-State: ACrzQf0GpKYAVQZHyYpABayElMqSbdnWNIDkopE6ioNZ7xPuwMM6HR4P
+        EIRdig3+qxIXEfbrvRBpSgGBNdlLxUNhoMOdiB+VnKS21mXo
+X-Google-Smtp-Source: AMsMyM6yCJ1fjd1c0P8z6vMm5DiAxhaPcPmqoWkxDUreIJTyCye7aLLU3PnnmoVUDjARpY3g/aKTxeaqlYS8/tfeflLZXkThj0bM
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:118b:b0:2ff:c7c6:885 with SMTP id
+ y11-20020a056e02118b00b002ffc7c60885mr2344809ili.25.1666521694165; Sun, 23
+ Oct 2022 03:41:34 -0700 (PDT)
+Date:   Sun, 23 Oct 2022 03:41:34 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000009763b605ebb1519a@google.com>
+Subject: [syzbot] BUG: corrupted list in p9_fd_cancel (2)
+From:   syzbot <syzbot+9b69b8d10ab4a7d88056@syzkaller.appspotmail.com>
+To:     asmadeus@codewreck.org, davem@davemloft.net, edumazet@google.com,
+        ericvh@gmail.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux_oss@crudebyte.com, lucho@ionkov.net, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com,
+        v9fs-developer@lists.sourceforge.net
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    d47136c28015 Merge tag 'hwmon-for-v6.1-rc2' of git://git.k..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=12f36de2880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4789759e8a6d5f57
+dashboard link: https://syzkaller.appspot.com/bug?extid=9b69b8d10ab4a7d88056
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1076cb7c880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=102eabd2880000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/5664e231e97f/disk-d47136c2.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/9bbe0daa4a04/vmlinux-d47136c2.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+9b69b8d10ab4a7d88056@syzkaller.appspotmail.com
+
+list_del corruption, ffff88802295c4b0->next is LIST_POISON1 (dead000000000100)
+------------[ cut here ]------------
+kernel BUG at lib/list_debug.c:55!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 4018 Comm: syz-executor365 Not tainted 6.1.0-rc1-syzkaller-00427-gd47136c28015 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
+RIP: 0010:__list_del_entry_valid+0xef/0x130 lib/list_debug.c:53
+Code: 29 40 03 06 0f 0b 48 c7 c7 e0 bf 0a 8b 4c 89 fe 31 c0 e8 16 40 03 06 0f 0b 48 c7 c7 40 c0 0a 8b 4c 89 fe 31 c0 e8 03 40 03 06 <0f> 0b 48 c7 c7 a0 c0 0a 8b 4c 89 fe 31 c0 e8 f0 3f 03 06 0f 0b 48
+RSP: 0018:ffffc900044c7630 EFLAGS: 00010246
+RAX: 000000000000004e RBX: dead000000000122 RCX: 5051969350135b00
+RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
+RBP: 0000000000000001 R08: ffffffff816cec5d R09: fffff52000898e7d
+R10: fffff52000898e7d R11: 1ffff92000898e7c R12: dffffc0000000000
+R13: 1ffff1100452b880 R14: dead000000000100 R15: ffff88802295c4b0
+FS:  00007f0d52859700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000020001000 CR3: 000000007ed87000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __list_del_entry include/linux/list.h:134 [inline]
+ list_del include/linux/list.h:148 [inline]
+ p9_fd_cancel+0x9c/0x230 net/9p/trans_fd.c:703
+ p9_client_rpc+0x92c/0xad0 net/9p/client.c:723
+ p9_client_create+0x997/0x1030 net/9p/client.c:1015
+ v9fs_session_init+0x1e3/0x1990 fs/9p/v9fs.c:408
+ v9fs_mount+0xd2/0xcb0 fs/9p/vfs_super.c:126
+ legacy_get_tree+0xea/0x180 fs/fs_context.c:610
+ vfs_get_tree+0x88/0x270 fs/super.c:1530
+ do_new_mount+0x289/0xad0 fs/namespace.c:3040
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount+0x2e3/0x3d0 fs/namespace.c:3568
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f0d528a89f9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 a1 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f0d528592f8 EFLAGS: 00000246 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 00007f0d529344e0 RCX: 00007f0d528a89f9
+RDX: 0000000020000040 RSI: 0000000020000000 RDI: 0000000000000000
+RBP: 00007f0d52901174 R08: 0000000020000080 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0030656c69662f2e
+R13: 0000000000000004 R14: 64663d736e617274 R15: 00007f0d529344e8
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:__list_del_entry_valid+0xef/0x130 lib/list_debug.c:53
+Code: 29 40 03 06 0f 0b 48 c7 c7 e0 bf 0a 8b 4c 89 fe 31 c0 e8 16 40 03 06 0f 0b 48 c7 c7 40 c0 0a 8b 4c 89 fe 31 c0 e8 03 40 03 06 <0f> 0b 48 c7 c7 a0 c0 0a 8b 4c 89 fe 31 c0 e8 f0 3f 03 06 0f 0b 48
+RSP: 0018:ffffc900044c7630 EFLAGS: 00010246
+RAX: 000000000000004e RBX: dead000000000122 RCX: 5051969350135b00
+RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
+RBP: 0000000000000001 R08: ffffffff816cec5d R09: fffff52000898e7d
+R10: fffff52000898e7d R11: 1ffff92000898e7c R12: dffffc0000000000
+R13: 1ffff1100452b880 R14: dead000000000100 R15: ffff88802295c4b0
+FS:  00007f0d52859700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000020001000 CR3: 000000007ed87000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
 
-On 23 October 2022 05:11:41 IST, Hal Feng <hal=2Efeng@linux=2Estarfivetech=
-=2Ecom> wrote:
->On Wed, 12 Oct 2022 16:05:23 -0700, Stephen Boyd wrote:
->> Quoting Emil Renner Berthing (2022-10-05 06:14:44)
->> > > > @@ -295,11 +296,13 @@ static int __init clk_starfive_jh7100_probe=
-(struct platform_device *pdev)
->> > > >         if (!priv)
->> > > >                 return -ENOMEM;
->> > > >
->> > > > -       spin_lock_init(&priv->rmw_lock);
->> > > >         priv->dev =3D &pdev->dev;
->> > > > -       priv->base =3D devm_platform_ioremap_resource(pdev, 0);
->> > > > -       if (IS_ERR(priv->base))
->> > > > -               return PTR_ERR(priv->base);
->> > > > +       priv->regmap =3D device_node_to_regmap(priv->dev->of_node=
-);
->> > >
->> > > This is sad=2E Why do we need to make a syscon? Can we instead use =
-the
->> > > auxiliary bus to make a reset device that either gets a regmap made=
- here
->> > > in this driver or uses a void __iomem * mapped with ioremap
->> > > (priv->base)?
->> >=20
->> > In my original code the clock driver just registers the resets too
->> > similar to other combined clock and reset drivers=2E I wonder what yo=
-u
->> > think about that approach:
->> > https://github=2Ecom/esmil/linux/commit/36f15e1b827b02d7f493dc5fce310=
-60b21976e68
->> > and
->> > https://github=2Ecom/esmil/linux/commit/4ccafadb72968480aa3dd28c227fc=
-ccae411c13b#diff-ffec81f902f810cb210012c25e8d88217ea5b4021419a4206d1fd4dd19=
-edfce8R471
->>=20
->> I think we should use auxiliary bus and split the driver logically into
->> a reset driver in drivers/reset and a clk driver in drivers/clk=2E That
->> way the appropriate maintainers can review the code=2E There is only on=
-e
->> platform device with a single reg property and node in DT, but there ar=
-e
->> two drivers=2E=20
->
->Yes, I agree that the reset driver and the clock driver should be split=
-=2E
->However, I think using auxiliary bus is a little bit complicated in this
->case, because the reset is not a part of functionality of the clock in=20
->JH7110=2E They just share a common register base address=2E I think it is=
-=20
->better to use ioremap for the same address, and the dt will be like
->
->syscrg_clk: clock-controller@13020000 {
->	compatible =3D "starfive,jh7110-clkgen-sys";
->	reg =3D <0x0 0x13020000 0x0 0x10000>;
->	=2E=2E=2E
->};
->syscrg_rst: reset-controller@13020000 {
->	compatible =3D "starfive,jh7110-reset-sys";
->	reg =3D <0x0 0x13020000 0x0 0x10000>;
->	=2E=2E=2E
->};
->
->What do you think of this approach? I would appreciate your suggestions=
-=2E
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-No, the dtb checks will all start warning for this=2E
-Aux bus is not that difficult, you can likely copy much of what I did rece=
-ntly in clk-mpfs=2Ec
->
->Best regards,
->Hal
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
