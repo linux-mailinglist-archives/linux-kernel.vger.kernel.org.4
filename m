@@ -2,99 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42E8F6094AA
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 18:13:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BACA26094B1
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 18:21:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230384AbiJWQNY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 12:13:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38808 "EHLO
+        id S230382AbiJWQVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 12:21:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230235AbiJWQNO (ORCPT
+        with ESMTP id S230018AbiJWQVI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 12:13:14 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE6F26FA2C;
-        Sun, 23 Oct 2022 09:13:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666541592; x=1698077592;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Dx/eyFHeXeUFZ0jVshCZRF81EMBFVHHeyq+Bgt9BlYE=;
-  b=QkyJTeuRqOFmhhG80A25Nzj4g1sEgU+xH9tr0dllJ9kqIyM6A+q9pEzr
-   bH/f/y7DMdA15iwHXkWiTndnAomhpGUpFgGPFLs9zO8EDyr4mL4c1M6mg
-   4X435kBydKgoQRUVAEOCiXKbx1RqPGNqzmf3qw+eP3BN2iGy14yCbtwgq
-   xH6Bsf5+d5hXfW7wCbQboQjU3qbXMdjdUL32wwrPCPriEjwlwfIVy06HQ
-   p82dzN9QTGR+v6KI5sZBNpm60uqGkRv6QXoV4T3iCBu1EQkF/UMcWAiFD
-   BensBIpu3kHlNoTJuZEElXxU+IIgFct6LMpSfqIMKfCGMMaGfZLM9Y/fy
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="307271592"
-X-IronPort-AV: E=Sophos;i="5.95,207,1661842800"; 
-   d="scan'208";a="307271592"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2022 09:13:12 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="631031587"
-X-IronPort-AV: E=Sophos;i="5.95,207,1661842800"; 
-   d="scan'208";a="631031587"
-Received: from supriya-m-ravichandran.amr.corp.intel.com (HELO [10.212.253.138]) ([10.212.253.138])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2022 09:13:11 -0700
-Message-ID: <c09184e3-ac15-b230-6dea-d6718f6f0ab0@linux.intel.com>
-Date:   Sun, 23 Oct 2022 09:13:11 -0700
+        Sun, 23 Oct 2022 12:21:08 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B972C5B9FA;
+        Sun, 23 Oct 2022 09:21:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=iTvQ2cWB+6XWNFX3zk4Auk9RwK12kn68XHvnKVvYeIU=; b=OGBR4feeWffQUhNajVMj1osao1
+        bbXJNZtpEk7wHN8vAYkuJvGHtqMJxuYYmYCrLXA3/CU0G6VNxEWg8DL0S+1quagLailQHNnbdQihr
+        LOyVtzOphlaUcztOauPh5pOB3Y5Bb7RLaEjDeHw6TLWmjfXBWBQNCXepUnjnCIksIxnwxGi/jwTnH
+        e401yO+MqpbUPb8TO+IPti9FDtC4JRfEErt+3CiLCoQ77FYzXMpLMwJwcGhEmnMzzfutmkelXEz2j
+        Op3bnPo7QScQR4FZoAZVNOvBEOpRGb/UVap49VxOOLGp/6McjA3aiavsWjx8jG29hcztzspgDhAFe
+        +VTBRz7A==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34910)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1omdiY-00027Q-UQ; Sun, 23 Oct 2022 17:20:54 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1omdiS-0006DU-On; Sun, 23 Oct 2022 17:20:48 +0100
+Date:   Sun, 23 Oct 2022 17:20:48 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Marcin Wojtas <mw@semihalf.com>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, gregory.clement@bootlin.com,
+        sebastian.hesselbarth@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, hch@lst.de, kabel@kernel.org,
+        jaz@semihalf.com
+Subject: Re: [PATCH] ARM: dts: armada-38x: Mark devices as dma-coherent
+Message-ID: <Y1Vp4BdC50o9roKe@shell.armlinux.org.uk>
+References: <20221022234024.87475-1-mw@semihalf.com>
+ <Y1VX4RtzKQZHe/oO@lunn.ch>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.2.2
-Subject: Re: [PATCH v15 2/3] virt: Add TDX guest driver
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <20221020045828.2354731-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20221020045828.2354731-3-sathyanarayanan.kuppuswamy@linux.intel.com>
- <Y1De4IyAB6n2qs4V@kroah.com>
- <34ef18d6-69f8-853a-d1ba-7023822e17ff@linux.intel.com>
- <Y1Iimg0WItgIGq6/@kroah.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <Y1Iimg0WItgIGq6/@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1VX4RtzKQZHe/oO@lunn.ch>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 10/20/22 9:39 PM, Greg Kroah-Hartman wrote:
->>> You are allowing userspace to spam the kernel logs, please do not do
->>> that.
->> Added it to help userspace understand the reason for the failure (only for
->> the cases like request param issues and TDCALL failure). Boris recommended
->> adding it in the previous review.
-> Again, you just created a vector for userspace to spam the kernel log.
-> No kernel driver should ever do that.
+On Sun, Oct 23, 2022 at 05:04:01PM +0200, Andrew Lunn wrote:
+> On Sun, Oct 23, 2022 at 01:40:24AM +0200, Marcin Wojtas wrote:
+> > Armada 38x platforms marks all devices as coherent via
+> > mvebu_hwcc_notifier(), whereas the standard way to determine
+> > this is by of_dma_is_coherent(). Reflect the hardware
+> > capabilities by adding 'dma-coherent' properties to the device tree.
 > 
+> Hi Marcin
+> 
+> Does this need to go to -rc for 6.0? The DMA issues being reported?
+> If so, please add a Fixed: tag.
 
-Brois, any comments? Do you also agree?
+Are we absolutely sure this makes sense?
+
+Looking at atch/arm/mach-mvebu/coherency.c, there are dependencies
+on stuff such as whether the kernel is in SMP mode or not (because
+the page tables need to be appropriately marked as shared for
+coherency with IO to work). We only enable the shared bit if we're
+in SMP mode because (a) its difficult to do at runtime due to TLB
+conflicts (requires switching the MMU off, rewriting the page tables
+and switching the MMU back on), and (b) setting the shared bit for
+CPUs that don't need it _can_ result in the CPUs basically bypassing
+their caches and thus kill system performance.
+
+So, if we have Armada 38x platforms that are operated in uniprocessor
+mode, this patch can cause havoc on such a setup.
+
+I would suggest utmost caution with this approach.
 
 -- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
