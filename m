@@ -2,56 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C91560926A
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 13:06:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E33860926D
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 13:09:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230364AbiJWLGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 07:06:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43364 "EHLO
+        id S230349AbiJWLJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 07:09:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbiJWLGE (ORCPT
+        with ESMTP id S229973AbiJWLJe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 07:06:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6177D60EBD;
-        Sun, 23 Oct 2022 04:06:03 -0700 (PDT)
+        Sun, 23 Oct 2022 07:09:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44765B4A1;
+        Sun, 23 Oct 2022 04:09:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 00D11B80D1A;
-        Sun, 23 Oct 2022 11:06:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0544C433D6;
-        Sun, 23 Oct 2022 11:05:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EDB39B80D19;
+        Sun, 23 Oct 2022 11:09:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FEF5C433C1;
+        Sun, 23 Oct 2022 11:09:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666523160;
-        bh=8rOlNiffgPzLVub62XDxQM2DQLZXmwSEQjbUkRpZbA8=;
+        s=k20201202; t=1666523368;
+        bh=hiZr0V8wLCVK725mDTsg+Vkx2ABBUDMJRSowxO1xsOE=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=hKHwWy12Da7ZqAGPfm/DRBTKABGmHkjr0caS2HvWJPfYirvuDMut2SLFWfCbWeYs+
-         eFykS0mjJYEI4KuDy/g9qqoxXu72emwfiHvCeVxRdiSL7r9BxqkgMkXHYAP/Eytx4L
-         29vpk3BqVoQHbfWWQJDhFPQzYeEqHnPR3itH2GWTANRODsVLouQA6ifFI9FYHRkBig
-         txXpv5gKioZdeFj44B0V7fy2hXnl26b5dYrKBJDqmyblv8sAqvihbLZdbZOpnuX8JJ
-         CmxguN+lT3pKTNXVJ6v9JAUId/KSFRaBT+aPPLFt6JOfPXhZjx7r2TCoBVvvSxF0cp
-         4edcEcFE0wCFA==
-Date:   Sun, 23 Oct 2022 12:06:34 +0100
+        b=nzcbqZoukgqsGngCsoasbc3DUs/PIuJup7jsyBYc5ztDIvRUFEEGnst53E/LSwJ7m
+         DQ6vj8QU/IM91WlLGg9JWICdYqqaY6VNRAwTjxiDUxDvkBB6OXWZplT0r47jddXyhO
+         8o6AMrATI6a6iEnePYL0RHhgd/HIe7O5gOfDcTgpwcYNlyRxOK4bSI3Pm9WxhTLTAo
+         e2/HQBthr4c8D6mm91FhQDrxLkuXwYdYLX3/J8XqUWV3+290By6AdJIzHc9Vjqy+Na
+         QeSyXdPScNCtiOa2QrfeetG66hankx6k6a4l/WfPJ5KmTaoC1PeoAogd98SzCM+iOZ
+         XIMdMubqJ/oGA==
+Date:   Sun, 23 Oct 2022 12:10:02 +0100
 From:   Jonathan Cameron <jic23@kernel.org>
-To:     Mitja Spes <mitja@lxnav.com>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
+To:     Marcus Folkesson <marcus.folkesson@gmail.com>
+Cc:     Mitja Spes <mitja@lxnav.com>, Lars-Peter Clausen <lars@metafoo.de>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Andy Shevchenko <andy.shevchenko@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?B?SsOpcsO0bWU=?= Pouiller <jerome.pouiller@silabs.com>,
+        Mark Brown <broonie@kernel.org>,
         Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
         <u.kleine-koenig@pengutronix.de>,
         Tomasz Duszynski <tduszyns@gmail.com>,
         linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] iio: pressure: ms5611: fixed value compensation
- bug
-Message-ID: <20221023120634.0dda4b5f@jic23-huawei>
-In-Reply-To: <20221021135827.1444793-2-mitja@lxnav.com>
+Subject: Re: [PATCH v2 2/3] iio: pressure: ms5611: changed hardcoded SPI
+ speed to value limited
+Message-ID: <20221023121002.742bc48f@jic23-huawei>
+In-Reply-To: <Y1K7hWKl0siEtaAl@gmail.com>
 References: <20221021135827.1444793-1-mitja@lxnav.com>
-        <20221021135827.1444793-2-mitja@lxnav.com>
+        <20221021135827.1444793-3-mitja@lxnav.com>
+        <Y1K7hWKl0siEtaAl@gmail.com>
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -65,167 +66,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 21 Oct 2022 15:58:20 +0200
-Mitja Spes <mitja@lxnav.com> wrote:
+On Fri, 21 Oct 2022 17:32:21 +0200
+Marcus Folkesson <marcus.folkesson@gmail.com> wrote:
 
-> When using multiple instances of this driver the compensation PROM was
-> overwritten by the last initialized sensor. Now each sensor has own PROM
-> storage.
+> Hi Mitja,
 > 
-> Signed-off-by: Mitja Spes <mitja@lxnav.com>
-Fixes tag?
+> On Fri, Oct 21, 2022 at 03:58:21PM +0200, Mitja Spes wrote:
+> > Don't hardcode the ms5611 SPI speed, limit it instead.
+> > 
+> > Signed-off-by: Mitja Spes <mitja@lxnav.com>
+Please give a fixes tag for this one as well.
+The driver should never have been doing this.
 
-I think this is one we will want to backport. 
+Jonathan
 
-> ---
->  drivers/iio/pressure/ms5611.h      | 12 +++----
->  drivers/iio/pressure/ms5611_core.c | 51 ++++++++++++++++--------------
->  2 files changed, 31 insertions(+), 32 deletions(-)
+> > ---
+> >  drivers/iio/pressure/ms5611_spi.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/iio/pressure/ms5611_spi.c b/drivers/iio/pressure/ms5611_spi.c
+> > index 432e912096f4..a0a7205c9c3a 100644
+> > --- a/drivers/iio/pressure/ms5611_spi.c
+> > +++ b/drivers/iio/pressure/ms5611_spi.c
+> > @@ -91,7 +91,7 @@ static int ms5611_spi_probe(struct spi_device *spi)
+> >  	spi_set_drvdata(spi, indio_dev);
+> >  
+> >  	spi->mode = SPI_MODE_0;
+> > -	spi->max_speed_hz = 20000000;
+> > +	spi->max_speed_hz = min(spi->max_speed_hz, 20000000U);  
 > 
-> diff --git a/drivers/iio/pressure/ms5611.h b/drivers/iio/pressure/ms5611.h
-> index cbc9349c342a..550b75b7186f 100644
-> --- a/drivers/iio/pressure/ms5611.h
-> +++ b/drivers/iio/pressure/ms5611.h
-> @@ -25,13 +25,6 @@ enum {
->  	MS5607,
->  };
->  
-> -struct ms5611_chip_info {
-> -	u16 prom[MS5611_PROM_WORDS_NB];
-> -
-> -	int (*temp_and_pressure_compensate)(struct ms5611_chip_info *chip_info,
-> -					    s32 *temp, s32 *pressure);
-> -};
-> -
->  /*
->   * OverSampling Rate descriptor.
->   * Warning: cmd MUST be kept aligned on a word boundary (see
-> @@ -50,12 +43,15 @@ struct ms5611_state {
->  	const struct ms5611_osr *pressure_osr;
->  	const struct ms5611_osr *temp_osr;
->  
-> +	u16 prom[MS5611_PROM_WORDS_NB];
-> +
->  	int (*reset)(struct ms5611_state *st);
->  	int (*read_prom_word)(struct ms5611_state *st, int index, u16 *word);
->  	int (*read_adc_temp_and_pressure)(struct ms5611_state *st,
->  					  s32 *temp, s32 *pressure);
->  
-> -	struct ms5611_chip_info *chip_info;
-> +	int (*compensate_temp_and_pressure)(struct ms5611_state *st, s32 *temp,
-> +					  s32 *pressure);
->  	struct regulator *vdd;
->  };
->  
-> diff --git a/drivers/iio/pressure/ms5611_core.c b/drivers/iio/pressure/ms5611_core.c
-> index 717521de66c4..c564a1d6cafe 100644
-> --- a/drivers/iio/pressure/ms5611_core.c
-> +++ b/drivers/iio/pressure/ms5611_core.c
-> @@ -85,7 +85,7 @@ static int ms5611_read_prom(struct iio_dev *indio_dev)
->  	struct ms5611_state *st = iio_priv(indio_dev);
->  
->  	for (i = 0; i < MS5611_PROM_WORDS_NB; i++) {
-> -		ret = st->read_prom_word(st, i, &st->chip_info->prom[i]);
-> +		ret = st->read_prom_word(st, i, &st->prom[i]);
->  		if (ret < 0) {
->  			dev_err(&indio_dev->dev,
->  				"failed to read prom at %d\n", i);
-> @@ -93,7 +93,7 @@ static int ms5611_read_prom(struct iio_dev *indio_dev)
->  		}
->  	}
->  
-> -	if (!ms5611_prom_is_valid(st->chip_info->prom, MS5611_PROM_WORDS_NB)) {
-> +	if (!ms5611_prom_is_valid(st->prom, MS5611_PROM_WORDS_NB)) {
->  		dev_err(&indio_dev->dev, "PROM integrity check failed\n");
->  		return -ENODEV;
->  	}
-> @@ -114,21 +114,20 @@ static int ms5611_read_temp_and_pressure(struct iio_dev *indio_dev,
->  		return ret;
->  	}
->  
-> -	return st->chip_info->temp_and_pressure_compensate(st->chip_info,
-> -							   temp, pressure);
-> +	return st->compensate_temp_and_pressure(st, temp, pressure);
->  }
->  
-> -static int ms5611_temp_and_pressure_compensate(struct ms5611_chip_info *chip_info,
-> +static int ms5611_temp_and_pressure_compensate(struct ms5611_state *st,
->  					       s32 *temp, s32 *pressure)
->  {
->  	s32 t = *temp, p = *pressure;
->  	s64 off, sens, dt;
->  
-> -	dt = t - (chip_info->prom[5] << 8);
-> -	off = ((s64)chip_info->prom[2] << 16) + ((chip_info->prom[4] * dt) >> 7);
-> -	sens = ((s64)chip_info->prom[1] << 15) + ((chip_info->prom[3] * dt) >> 8);
-> +	dt = t - (st->prom[5] << 8);
-> +	off = ((s64)st->prom[2] << 16) + ((st->prom[4] * dt) >> 7);
-> +	sens = ((s64)st->prom[1] << 15) + ((st->prom[3] * dt) >> 8);
->  
-> -	t = 2000 + ((chip_info->prom[6] * dt) >> 23);
-> +	t = 2000 + ((st->prom[6] * dt) >> 23);
->  	if (t < 2000) {
->  		s64 off2, sens2, t2;
->  
-> @@ -154,17 +153,17 @@ static int ms5611_temp_and_pressure_compensate(struct ms5611_chip_info *chip_inf
->  	return 0;
->  }
->  
-> -static int ms5607_temp_and_pressure_compensate(struct ms5611_chip_info *chip_info,
-> +static int ms5607_temp_and_pressure_compensate(struct ms5611_state *st,
->  					       s32 *temp, s32 *pressure)
->  {
->  	s32 t = *temp, p = *pressure;
->  	s64 off, sens, dt;
->  
-> -	dt = t - (chip_info->prom[5] << 8);
-> -	off = ((s64)chip_info->prom[2] << 17) + ((chip_info->prom[4] * dt) >> 6);
-> -	sens = ((s64)chip_info->prom[1] << 16) + ((chip_info->prom[3] * dt) >> 7);
-> +	dt = t - (st->prom[5] << 8);
-> +	off = ((s64)st->prom[2] << 17) + ((st->prom[4] * dt) >> 6);
-> +	sens = ((s64)st->prom[1] << 16) + ((st->prom[3] * dt) >> 7);
->  
-> -	t = 2000 + ((chip_info->prom[6] * dt) >> 23);
-> +	t = 2000 + ((st->prom[6] * dt) >> 23);
->  	if (t < 2000) {
->  		s64 off2, sens2, t2, tmp;
->  
-> @@ -342,15 +341,6 @@ static int ms5611_write_raw(struct iio_dev *indio_dev,
->  
->  static const unsigned long ms5611_scan_masks[] = {0x3, 0};
->  
-> -static struct ms5611_chip_info chip_info_tbl[] = {
-> -	[MS5611] = {
-> -		.temp_and_pressure_compensate = ms5611_temp_and_pressure_compensate,
-> -	},
-> -	[MS5607] = {
-> -		.temp_and_pressure_compensate = ms5607_temp_and_pressure_compensate,
-> -	}
-> -};
-> -
->  static const struct iio_chan_spec ms5611_channels[] = {
->  	{
->  		.type = IIO_PRESSURE,
-> @@ -433,7 +423,20 @@ int ms5611_probe(struct iio_dev *indio_dev, struct device *dev,
->  	struct ms5611_state *st = iio_priv(indio_dev);
->  
->  	mutex_init(&st->lock);
-> -	st->chip_info = &chip_info_tbl[type];
-> +
-> +	switch (type) {
-> +	case MS5611:
-> +		st->compensate_temp_and_pressure =
-> +			ms5611_temp_and_pressure_compensate;
-> +		break;
-> +	case MS5607:
-> +		st->compensate_temp_and_pressure =
-> +			ms5607_temp_and_pressure_compensate;
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
->  	st->temp_osr =
->  		&ms5611_avail_temp_osr[ARRAY_SIZE(ms5611_avail_temp_osr) - 1];
->  	st->pressure_osr =
+> max_speed_hz is a limit, and the max frequency the ms5611 support is
+> 20MHz.
+> 
+> Best regards,
+> Marcus Folkesson
 
