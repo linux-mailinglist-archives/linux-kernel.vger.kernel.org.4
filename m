@@ -2,76 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CDB86094DD
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 18:46:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 201946094DE
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 18:46:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230445AbiJWQqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 12:46:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58042 "EHLO
+        id S230459AbiJWQqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 12:46:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230401AbiJWQqi (ORCPT
+        with ESMTP id S230455AbiJWQqt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 12:46:38 -0400
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5AD85143E
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 09:46:36 -0700 (PDT)
-Received: by mail-qk1-x729.google.com with SMTP id j21so4925458qkk.9
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 09:46:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vyuixz7FtK5XW5CZmBbyCIN1cJYtJoIWuEPQgd8UQk8=;
-        b=Ar2qvKdq3KASst+JAnLN4i3PBzt/KTrS4k4cU7mIoDLH8DUYQtr46t5+ZnanGN0xRL
-         djudYLAKPcmeN70dLbgtNxqsQHpn7WfyvVK26d65TV56W7o/IXAKyj3P92etth7qIvd/
-         BCXKa0eR75PsXxeNNdPIjyBDL5B1U5svAQg0M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vyuixz7FtK5XW5CZmBbyCIN1cJYtJoIWuEPQgd8UQk8=;
-        b=PAsBtHMylZ+bmOO2w4Ls7dF9UFdtaFBeKKMwUmaSv10b+UaApGHaPBv9VPV81tDsbF
-         fx3cCVCWXYHmdIp08LHZWMfkC91XMhVIev//WZRy4S+Riz9qcTagrTlYDhau+UYfZYL/
-         WGeGmdTsv3pT/lmvIT1PJRkZXKno6zc4p+pZux8ZvHFuqPNXtA+iVDtdu5DJqVESQi1D
-         rNjA+/WJfixx9rASGj5OlxlOIRC5zNFPUllykFQORFLO4h59COYO/TDLO35b2nqNS4Kc
-         xjALWaRWYt+IrZG6bh7PIsxbwDzGLltMurDZquJ9D3RdQN/Xc5Z6pNgjzbgm1ar/0zPj
-         L2FQ==
-X-Gm-Message-State: ACrzQf1v1ZpUgk00WI3e3kxLOp1YFokL/b5+LGmhodYsYrycJ53/qptP
-        KMxZ3cVKeaj6yE+q9cwkmt/Y48nDCudZFQ==
-X-Google-Smtp-Source: AMsMyM5zz5pJo+W5ZzhkVsvEj9bgCmpzn/JN9lukX7ibWUx52EJNV2EYfmkEhnV9uN1y2ruwBbN01Q==
-X-Received: by 2002:a05:620a:1329:b0:6ee:dfb8:d438 with SMTP id p9-20020a05620a132900b006eedfb8d438mr18954755qkj.686.1666543595445;
-        Sun, 23 Oct 2022 09:46:35 -0700 (PDT)
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com. [209.85.128.175])
-        by smtp.gmail.com with ESMTPSA id m15-20020a05620a13af00b006ee949b8051sm13229111qki.51.2022.10.23.09.46.34
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 23 Oct 2022 09:46:34 -0700 (PDT)
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-3321c2a8d4cso67506607b3.5
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 09:46:34 -0700 (PDT)
-X-Received: by 2002:a81:1902:0:b0:36b:2578:f6e2 with SMTP id
- 2-20020a811902000000b0036b2578f6e2mr6530111ywz.352.1666543594506; Sun, 23 Oct
- 2022 09:46:34 -0700 (PDT)
+        Sun, 23 Oct 2022 12:46:49 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 621A760693;
+        Sun, 23 Oct 2022 09:46:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666543607; x=1698079607;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=jjcKY1AML8veP32zA0GqudSRI7EtoeO02Jl9LYsqrDo=;
+  b=NpTX5Xga9aSrhML8woht6b2geJgH6dAk4X6L4VlxEPFRUL5X1LaBpNZx
+   FAUXG4vn3Nj06NuzhehwjkjJGmNpeFsCgIOnDvIVs0dj2rM4bC+fVoXNf
+   v3aAVtT/bfx8jDYI+nNYICDCY9674/IXGBh1xbFZQGfY3TsdJo3uznhvF
+   lwn03B+rxpIZjtMhEdwqFkOjiz9HAPWTKRe390PNP38K+2jgC93iuarc9
+   AWRiKdEqYMw4eSZ2yEg+QcyM8w/buceQ4nNUeiqGMFc2g7wrAPPue1Y4v
+   zqIP0a2v+TBz5hIC6m45ShI5yRPIkDJ04fK+hvws0dw1VI5PB1Nd9YS9H
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="371501093"
+X-IronPort-AV: E=Sophos;i="5.95,207,1661842800"; 
+   d="scan'208";a="371501093"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2022 09:46:46 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="582191192"
+X-IronPort-AV: E=Sophos;i="5.95,207,1661842800"; 
+   d="scan'208";a="582191192"
+Received: from etyuvae-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.44.32])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2022 09:46:44 -0700
+Message-ID: <f79b22ea-2018-cb57-81b3-cdab2f66ea67@intel.com>
+Date:   Sun, 23 Oct 2022 19:46:40 +0300
 MIME-Version: 1.0
-References: <20221021064453.3341050-1-gregkh@linuxfoundation.org>
- <CAHk-=wggc19mf+WR=eg7h7MfVVNbE1c8b5vcOc6wmDASNTMddg@mail.gmail.com>
- <Y1Vjb9v2ggSjhRbc@kroah.com> <Y1VmBuVrkL7MSzjY@kroah.com>
-In-Reply-To: <Y1VmBuVrkL7MSzjY@kroah.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 23 Oct 2022 09:46:18 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whLgudbtXKbnTzGnqP7E2rY=BNSWayMbcZmPUHr3j8y5A@mail.gmail.com>
-Message-ID: <CAHk-=whLgudbtXKbnTzGnqP7E2rY=BNSWayMbcZmPUHr3j8y5A@mail.gmail.com>
-Subject: Re: [PATCH] USB: gadget: dummy_hcd: switch char * to u8 *
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Ira Weiny <ira.weiny@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.0
+Subject: Re: [PATCH v2] perf test: Do not fail Intel-PT misc test w/o
+ libpython
+To:     Namhyung Kim <namhyung@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users@vger.kernel.org, Ammy Yi <ammy.yi@intel.com>
+References: <20221021181055.60183-1-namhyung@kernel.org>
+Content-Language: en-US
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20221021181055.60183-1-namhyung@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,22 +71,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 23, 2022 at 9:04 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> Along these lines, do we really not have a predefined macro/inline
-> function that does:
->         (value >> 8)
-> to give you the "high byte" of a 16bit value?
+On 21/10/22 21:10, Namhyung Kim wrote:
+> The virtuall LBR test uses a python script to check the max size of
+> branch stack in the Intel-PT generated LBR.  But it didn't check whether
+> python scripting is available (as it's optional).
+> 
+> Let's skip the test if the python support is not available.
+> 
+> Fixes: f77811a0f625 ("perf test: test_intel_pt.sh: Add 9 tests")
+> Cc: Ammy Yi <ammy.yi@intel.com>
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 
-No macros like that. And honestly, why would you want a macro that is
-more complicated than the operation itself?
+Reviewed-by: Adrian Hunter <adrian.hunter@intel.com>
 
-But it sounds like what you actually want is just
+> ---
+>  tools/perf/tests/shell/test_intel_pt.sh | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/tools/perf/tests/shell/test_intel_pt.sh b/tools/perf/tests/shell/test_intel_pt.sh
+> index 4c0aabbe33bd..f5ed7b1af419 100755
+> --- a/tools/perf/tests/shell/test_intel_pt.sh
+> +++ b/tools/perf/tests/shell/test_intel_pt.sh
+> @@ -526,6 +526,12 @@ test_kernel_trace()
+>  test_virtual_lbr()
+>  {
+>  	echo "--- Test virtual LBR ---"
+> +	# Check if python script is supported
+> +	libpython=$(perf version --build-options | grep python | grep -cv OFF)
+> +	if [ "${libpython}" != "1" ] ; then
+> +		echo "SKIP: python scripting is not supported"
+> +		return 2
+> +	fi
+>  
+>  	# Python script to determine the maximum size of branch stacks
+>  	cat << "_end_of_file_" > "${maxbrstack}"
 
-     put_unaligned_le16(dum->devstatus, buf);
-
-which does both bytes correctly (and turns into a plain 16-bit store
-on sane architectures)..
-
-               Linus
