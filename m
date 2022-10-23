@@ -2,61 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12B116093E8
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 16:33:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41E596093E6
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 16:33:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230203AbiJWOdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 10:33:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35410 "EHLO
+        id S230218AbiJWOdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 10:33:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229707AbiJWOdd (ORCPT
+        with ESMTP id S230125AbiJWOdf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 10:33:33 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D782B1032;
-        Sun, 23 Oct 2022 07:33:32 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id v11so5103188wmd.1;
-        Sun, 23 Oct 2022 07:33:32 -0700 (PDT)
+        Sun, 23 Oct 2022 10:33:35 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 551FC1032;
+        Sun, 23 Oct 2022 07:33:34 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id bu30so11847941wrb.8;
+        Sun, 23 Oct 2022 07:33:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=WUGeajMYAerRFQcOqcSIJ1LvScQ/5lPSyQp1+APgyBg=;
-        b=NMxA7YjYwmFC7EMaBdm1k/rg1Sg6SL3DNDYSF9piNDMB26oEYDSuJPr9RZz2LI+IbX
-         gzZBC/iDZIao94YxfWesLLKDqIQ2BOIoTfJFPBc8YDp3L+KYy4s+pjdpPIkBFLMGVbvP
-         S8e4wGlNA1rKkMcCda7DtQsSmiy1dw0JjJEKiYuKdXualkP4PHSxhiNtEXVANHw1glo+
-         pGIN6PhZyYAQkHwcHhDLO4RcRJMsOjjte5Z0Qsb2ehlJZkXM9mCsoPprItJkHWoplWTt
-         h/AX24iKZ07DA33piY+5fHwqSxsoNnM4ExuXUgqejEX195YRO3faoVTSWANwFhpda/Us
-         Au4Q==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UT0ZSJttMO+IN7qAwXeIN59Jy0agrsi51doQcQVju30=;
+        b=a4R41X2eIL3ukRmoZio82gBdHf1RipQIToHH1XoKU3wVW61b9R8bZ2B9FnJPaaMC+N
+         EYBvlP5agU5pbx5jgmaT3golS5rSSFTKyRns8NvC5zP2DonVnHtoGe6eTgKPlW+ZnaJr
+         tCBTXCM2niXy3frrsfQ9vUIvFUR/oe3QWesIB5EyJc1QvACAyzfz1j9LHiHeiiessVZm
+         Uxr1n1nd+3eKlDfP7YvuOq6gEG+FkWXoaxdp7Azn6v9v32FT33VCFdJ8auptHYDlHHWT
+         DfdY0z4B9rMKPX39CPMoj0vv4wQKNISpojmcLGTyhgTYu6NS8T828O1hptghMVlieq8u
+         OjcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WUGeajMYAerRFQcOqcSIJ1LvScQ/5lPSyQp1+APgyBg=;
-        b=gGUctGQBHNH7dGBlFTno18MPSP4pWmH7Ea/lfNpJYn9sA773Nbpf9XPo9Groe4xXmK
-         sJJhVrju8MI6JzVWoOdO2fhUjhD+UQmapSnL2Nu++1BbHRavWQuev3nPC1rcOn74zAlC
-         cBF031HHa2L60vmmlkqBEiqoA+dcP2fPEBOLR7V6GU3dAqKnXF++IkRdEHkwxeaQBMFo
-         /ss/x5L0o9EecayfcwcDiq1c9lzMz1oM2YXsHQ2xcAaNo5fBZoupjdWwCL6S+N5gAEzf
-         WjSU76LbkB8OBFr/7sTfCMeNuueAfzzM9GSvZF4EOD7IUygAHPC6Pi3hZDex4ObFd8IN
-         3O1A==
-X-Gm-Message-State: ACrzQf1PXCyxFAf8I+FAHdSvnAgB6CZM7NHszQ83c7og62qwcud/na39
-        lyoE1zXmcA/WaLAmDHGZFM2ntsea/bw=
-X-Google-Smtp-Source: AMsMyM4lrHZdx1GnN4wpUqJBRPblfE99mI/Nrpbo9kMAbrO2up/+wV+u6FaSpxhHSqPJA3Pme44kxA==
-X-Received: by 2002:a1c:770f:0:b0:3c8:33ba:150f with SMTP id t15-20020a1c770f000000b003c833ba150fmr7553451wmi.194.1666535611447;
-        Sun, 23 Oct 2022 07:33:31 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UT0ZSJttMO+IN7qAwXeIN59Jy0agrsi51doQcQVju30=;
+        b=pyIX9I645VoFxpgDMiNfvphGY+RrbbYRIHhmtG4vhlTbw5h6n6K7pIFE0ppExu78iJ
+         pjiXZY27P6M1zI5D+Yb+Cdr3RhdO5Slcj+1s69YC/VTk/2cgMQq7m1HB1hXrN3icZfUJ
+         Hb6Tb9cESW6bKk0Ds+Z4AkObve6ctovHzE5ikwG7l9bVZClvkHgJFFqohG6iOiTBes+j
+         8Dt9FxQOc/BZEs3bXdBxmnHz0K+I3VdI1qL16acBpfD56gC3xj5ceVgdfsBJy8RTegx0
+         E4kGOFmgevbQe0RjV5yeIhPxthVUtg31uVMhoTnbrwcLQwSIJdIN7YAXvDf6eCRswV/L
+         CKXw==
+X-Gm-Message-State: ACrzQf32Tu+YF8ZMC7XIf80Vc0dgzLD7LSg/+NLL/qNOTwnPqWI1TEoV
+        YpnJ1nYlN2w/1exrZ11wkdM=
+X-Google-Smtp-Source: AMsMyM4b1TfpWpauU5EEm47KOxNOzxuoX31aAUHykGuhBW0PTbFZhN5faExd22+r1cuOe4l2UjJkVg==
+X-Received: by 2002:a05:6000:4084:b0:22e:5b99:4c4a with SMTP id da4-20020a056000408400b0022e5b994c4amr19057178wrb.538.1666535612756;
+        Sun, 23 Oct 2022 07:33:32 -0700 (PDT)
 Received: from localhost (94.197.10.75.threembb.co.uk. [94.197.10.75])
-        by smtp.gmail.com with ESMTPSA id bu18-20020a056000079200b002302dc43d77sm10406023wrb.115.2022.10.23.07.33.30
+        by smtp.gmail.com with ESMTPSA id c1-20020adfed81000000b00226dba960b4sm24235577wro.3.2022.10.23.07.33.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Oct 2022 07:33:30 -0700 (PDT)
+        Sun, 23 Oct 2022 07:33:32 -0700 (PDT)
 From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 To:     paul@crapouillou.net, lgirdwood@gmail.com, broonie@kernel.org,
         perex@perex.cz, tiwai@suse.com
 Cc:     zhouyu@wanyeetech.com, linux-mips@vger.kernel.org,
         alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v6 0/9] ASoC: cleanups and improvements for jz4740-i2s
-Date:   Sun, 23 Oct 2022 15:33:19 +0100
-Message-Id: <20221023143328.160866-1-aidanmacdonald.0x0@gmail.com>
+Subject: [PATCH v6 1/9] ASoC: jz4740-i2s: Handle independent FIFO flush bits
+Date:   Sun, 23 Oct 2022 15:33:20 +0100
+Message-Id: <20221023143328.160866-2-aidanmacdonald.0x0@gmail.com>
+In-Reply-To: <20221023143328.160866-1-aidanmacdonald.0x0@gmail.com>
+References: <20221023143328.160866-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -69,42 +72,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series is a preparatory cleanup of the jz4740-i2s driver before
-adding support for a new SoC. The two improvements are lifting
-unnecessary restrictions on sample rates and formats -- the existing
-ones appear to be derived from the limitations of the JZ4740's internal
-codec and don't reflect the actual capabilities of the I2S controller.
+On the JZ4740, there is a single bit that flushes (empties) both
+the transmit and receive FIFO. Later SoCs have independent flush
+bits for each FIFO.
 
-I'm unable to test the series on any JZ47xx SoCs, but I have tested
-on an X1000 (which is the SoC I'll be adding in a followup series).
+Independent FIFOs can be flushed before the snd_soc_dai_active()
+check because it won't disturb other active streams. This ensures
+that the FIFO we're about to use is always flushed before starting
+up. With shared FIFOs we can't do that because if another substream
+is active, flushing its FIFO would cause underrun errors.
 
-Changes in v6:
+This also fixes a bug: since we were only setting the JZ4740's
+flush bit, which corresponds to the TX FIFO flush bit on other
+SoCs, other SoCs were not having their RX FIFO flushed at all.
 
-* Added Cc: stable for flush bits fix.
+Fixes: 967beb2e8777 ("ASoC: jz4740: Add jz4780 support")
+Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+Cc: stable@vger.kernel.org
+Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+---
+v5 -> v6: Cc'd stable.
 
-Changes in v5:
+ sound/soc/jz4740/jz4740-i2s.c | 39 ++++++++++++++++++++++++++++++-----
+ 1 file changed, 34 insertions(+), 5 deletions(-)
 
-* Drop 'mem' resource removal patch already upstream.
-* Update FIFO flush bits fix to address Paul's review comments.
-* Drop PLL clock name patch, that needs a different approach.
-
-Link for v4: https://lore.kernel.org/alsa-devel/20220708160244.21933-1-aidanmacdonald.0x0@gmail.com/
-
-Aidan MacDonald (9):
-  ASoC: jz4740-i2s: Handle independent FIFO flush bits
-  ASoC: jz4740-i2s: Convert to regmap API
-  ASoC: jz4740-i2s: Simplify using regmap fields
-  ASoC: jz4740-i2s: Use FIELD_PREP() macros in hw_params callback
-  ASoC: jz4740-i2s: Align macro values and sort includes
-  ASoC: jz4740-i2s: Support S20_LE and S24_LE sample formats
-  ASoC: jz4740-i2s: Support continuous sample rate
-  ASoC: jz4740-i2s: Move component functions near the component driver
-  ASoC: jz4740-i2s: Refactor DAI probe/remove ops as component ops
-
- sound/soc/jz4740/Kconfig      |   1 +
- sound/soc/jz4740/jz4740-i2s.c | 455 ++++++++++++++++++----------------
- 2 files changed, 243 insertions(+), 213 deletions(-)
-
+diff --git a/sound/soc/jz4740/jz4740-i2s.c b/sound/soc/jz4740/jz4740-i2s.c
+index c4c1e89b47c1..83cb81999c6f 100644
+--- a/sound/soc/jz4740/jz4740-i2s.c
++++ b/sound/soc/jz4740/jz4740-i2s.c
+@@ -55,7 +55,8 @@
+ #define JZ_AIC_CTRL_MONO_TO_STEREO BIT(11)
+ #define JZ_AIC_CTRL_SWITCH_ENDIANNESS BIT(10)
+ #define JZ_AIC_CTRL_SIGNED_TO_UNSIGNED BIT(9)
+-#define JZ_AIC_CTRL_FLUSH		BIT(8)
++#define JZ_AIC_CTRL_TFLUSH		BIT(8)
++#define JZ_AIC_CTRL_RFLUSH		BIT(7)
+ #define JZ_AIC_CTRL_ENABLE_ROR_INT BIT(6)
+ #define JZ_AIC_CTRL_ENABLE_TUR_INT BIT(5)
+ #define JZ_AIC_CTRL_ENABLE_RFS_INT BIT(4)
+@@ -90,6 +91,8 @@ enum jz47xx_i2s_version {
+ struct i2s_soc_info {
+ 	enum jz47xx_i2s_version version;
+ 	struct snd_soc_dai_driver *dai;
++
++	bool shared_fifo_flush;
+ };
+ 
+ struct jz4740_i2s {
+@@ -116,19 +119,44 @@ static inline void jz4740_i2s_write(const struct jz4740_i2s *i2s,
+ 	writel(value, i2s->base + reg);
+ }
+ 
++static inline void jz4740_i2s_set_bits(const struct jz4740_i2s *i2s,
++	unsigned int reg, uint32_t bits)
++{
++	uint32_t value = jz4740_i2s_read(i2s, reg);
++	value |= bits;
++	jz4740_i2s_write(i2s, reg, value);
++}
++
+ static int jz4740_i2s_startup(struct snd_pcm_substream *substream,
+ 	struct snd_soc_dai *dai)
+ {
+ 	struct jz4740_i2s *i2s = snd_soc_dai_get_drvdata(dai);
+-	uint32_t conf, ctrl;
++	uint32_t conf;
+ 	int ret;
+ 
++	/*
++	 * When we can flush FIFOs independently, only flush the FIFO
++	 * that is starting up. We can do this when the DAI is active
++	 * because it does not disturb other active substreams.
++	 */
++	if (!i2s->soc_info->shared_fifo_flush) {
++		if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK)
++			jz4740_i2s_set_bits(i2s, JZ_REG_AIC_CTRL, JZ_AIC_CTRL_TFLUSH);
++		else
++			jz4740_i2s_set_bits(i2s, JZ_REG_AIC_CTRL, JZ_AIC_CTRL_RFLUSH);
++	}
++
+ 	if (snd_soc_dai_active(dai))
+ 		return 0;
+ 
+-	ctrl = jz4740_i2s_read(i2s, JZ_REG_AIC_CTRL);
+-	ctrl |= JZ_AIC_CTRL_FLUSH;
+-	jz4740_i2s_write(i2s, JZ_REG_AIC_CTRL, ctrl);
++	/*
++	 * When there is a shared flush bit for both FIFOs, the TFLUSH
++	 * bit flushes both FIFOs. Flushing while the DAI is active would
++	 * cause FIFO underruns in other active substreams so we have to
++	 * guard this behind the snd_soc_dai_active() check.
++	 */
++	if (i2s->soc_info->shared_fifo_flush)
++		jz4740_i2s_set_bits(i2s, JZ_REG_AIC_CTRL, JZ_AIC_CTRL_TFLUSH);
+ 
+ 	ret = clk_prepare_enable(i2s->clk_i2s);
+ 	if (ret)
+@@ -443,6 +471,7 @@ static struct snd_soc_dai_driver jz4740_i2s_dai = {
+ static const struct i2s_soc_info jz4740_i2s_soc_info = {
+ 	.version = JZ_I2S_JZ4740,
+ 	.dai = &jz4740_i2s_dai,
++	.shared_fifo_flush = true,
+ };
+ 
+ static const struct i2s_soc_info jz4760_i2s_soc_info = {
 -- 
 2.38.1
 
