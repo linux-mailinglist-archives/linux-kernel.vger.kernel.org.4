@@ -2,96 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06D3F609476
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 17:41:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 519F2609479
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 17:41:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230211AbiJWPlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 11:41:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51794 "EHLO
+        id S230274AbiJWPlu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 11:41:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbiJWPlV (ORCPT
+        with ESMTP id S230235AbiJWPlr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 11:41:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4297060503
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 08:41:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 68DCEB80BFF
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 15:41:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9495BC433C1;
-        Sun, 23 Oct 2022 15:41:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666539677;
-        bh=+bj01iiwf+CdtRMBHGs4xgTOR7ZEf/SdTveVoJpgGC8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gfDCCjs+ubGpwCh2Q8ohzzglaDs1XSxFZESKh9+P5paO+P+4W/Mfc6N3dCcSUZUjQ
-         lhAM6pA0xfJ6wg4UaKId1Rj6n7KCikhYhqPCbzXZrj2FG74VRDme4+STL+fygkBA/i
-         imIByMaK0D277uzGelt2LcCiarPf6Q9C+Jwm391U=
-Date:   Sun, 23 Oct 2022 17:41:14 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Dragan Cvetic <dragan.m.cvetic@gmail.com>
-Cc:     philipp.g.hortmann@gmail.com, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] staging: rtl8192e: Rename Enable, cck_Rx_path and
- disabledRF
-Message-ID: <Y1Vgms28JIPluZ45@kroah.com>
-References: <20221022151506.63725-1-dragan.m.cvetic@gmail.com>
+        Sun, 23 Oct 2022 11:41:47 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBD2461738
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 08:41:45 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id 8so4899930qka.1
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 08:41:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qKm/ygaUyu+mdWLzI2FaUp8bVXs/rUKlSlQewbnTSq8=;
+        b=xUlQPVd8BdW0EXinGs6JbgeWbbRb2E6nEjF1e5QxlsKvOVdLWCspZXCn8DwMXH2x4f
+         f5zlNt+073Q+45PJK+1+JHUoQ9MLd8wNMz/GTu7f3ocBYFvm7HpA3Yaz+K6ZGhGe0NuX
+         w+LUQZiCAcb4c2nM1DZEpkFRDs53bJ4N8vBNVS7tiGxYxv9tcDhNDMhJpDIX3YTFUB6H
+         SMfGMfNT8e/AhAbs+4UWmeIprDihwsEIWlupxny8DtiVxuUwLSryDX2iDdeb/Ar7a4ew
+         DP1u2OJ0NqVF1Vk0rOMMmU/faRWev8bYdTTr9+fuIvphaP70XCRTaFZhek6k6hB0bVV7
+         oOXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qKm/ygaUyu+mdWLzI2FaUp8bVXs/rUKlSlQewbnTSq8=;
+        b=317Rk6L6pFW+Qsx1+4LWIzv5x+ecn4TeLAI5uWUUC+Rdih67D1lz6LSTvJ2Ki5wJ+v
+         kPjG1xwxwVCRbVQ8OuVVaOmN0UwN6fajUYQkMpR9pZcJyV0fgjlFq7p39Z8gx1GIWThg
+         YeXB9Ctl4A2KcW4FF/ekKOLMU4Ca6UTBXsqR/25eFLGhONr4OVj6HnbRujspurrHH6yg
+         tleFXkxjXaIfHPAxZM01VuLukWpFeY8rtrhZTpXQOV+3OitovnmOIAQRFkcq2+9S9Hed
+         93VCYkb07m2TwSfbRQqebdkrz4oYnJOAjCAp7JAoPJMYtSAbxkdAEDUt3mjlehdKgaYG
+         JFQw==
+X-Gm-Message-State: ACrzQf1BfIOVuxwOGleZ0awJkNjkQXqYCvAX9QO6S8H75bPxS0VhPBIo
+        RPqiWmD7HUfZEpoz7riJGNtJpg==
+X-Google-Smtp-Source: AMsMyM40jB2uE9+zox0fYZalOOrH463HyfYcXRKYcp7jTFsC68pShoY7wPXpWxYf2EZXiQN0Lx4w3w==
+X-Received: by 2002:a05:620a:2683:b0:6cf:3a7e:e006 with SMTP id c3-20020a05620a268300b006cf3a7ee006mr20082344qkp.474.1666539705070;
+        Sun, 23 Oct 2022 08:41:45 -0700 (PDT)
+Received: from [192.168.1.8] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id cg15-20020a05622a408f00b0039c37a7914csm11229206qtb.23.2022.10.23.08.41.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 23 Oct 2022 08:41:44 -0700 (PDT)
+Message-ID: <cfbde0da-9939-e976-52c1-88577de7d4cb@linaro.org>
+Date:   Sun, 23 Oct 2022 11:41:42 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221022151506.63725-1-dragan.m.cvetic@gmail.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH net-next V2] dt-bindings: net: ethernet-controller: Add
+ ptp-hardware-clock
+Content-Language: en-US
+To:     Sarath Babu Naidu Gaddam <sarath.babu.naidu.gaddam@amd.com>,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh+dt@kernel.org, richardcochran@gmail.com
+Cc:     krzysztof.kozlowski+dt@linaro.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yangbo.lu@nxp.com, radhey.shyam.pandey@amd.com,
+        anirudha.sarangi@amd.com, harini.katakam@amd.com, git@amd.com
+References: <20221021054111.25852-1-sarath.babu.naidu.gaddam@amd.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221021054111.25852-1-sarath.babu.naidu.gaddam@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 22, 2022 at 04:15:06PM +0100, Dragan Cvetic wrote:
-> Rename variable Enable to enable, cck_Rx_path to cck_rx_path and
-> disabledRF to disabled_rf to avoid CamelCase which is not accepted
-> by checkpatch.
+On 21/10/2022 01:41, Sarath Babu Naidu Gaddam wrote:
+> There is currently no standard property to pass PTP device index
+> information to ethernet driver when they are independent.
 > 
-> Signed-off-by: Dragan Cvetic <dragan.m.cvetic@gmail.com>
+> ptp-hardware-clock property will contain phandle to PTP clock node.
+> 
+> Freescale driver currently has this implementation but it will be
+> good to agree on a generic (optional) property name to link to PTP
+> phandle to Ethernet node. In future or any current ethernet driver
+> wants to use this method of reading the PHC index,they can simply use
+> this generic name and point their own PTP clock node, instead of
+> creating separate property names in each ethernet driver DT node.
+> 
+> axiethernet driver uses this method when PTP support is integrated.
+> 
+> Example:
+> 	fman0: fman@1a00000 {
+> 		ptp-hardware-clock = <&ptp_timer0>;
+> 	}
+> 
+> 	ptp_timer0: ptp-timer@1afe000 {
+> 		compatible = "fsl,fman-ptp-timer";
+> 		reg = <0x0 0x1afe000 0x0 0x1000>;
+> 	}
+> 
+> Signed-off-by: Sarath Babu Naidu Gaddam <sarath.babu.naidu.gaddam@amd.com>
+> ---
+> We want binding to be reviewed/accepted and then make changes in freescale
+> binding documentation to use this generic binding.
 
-Any reason you didn't cc: the staging tree maintainer?  :(
+No, send entire set. We need to see the users of it.
 
-Anyway, this changelog is confusing, you just list some random variable
-names that you have changed, without any explaining what ties them
-together.
+> 
+> DT information:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
+> tree/arch/arm64/boot/dts/freescale/qoriq-fman3-0.dtsi#n23
 
-The code itself gives you a clue:
+Don't wrap links. It's not possible to click them...
 
->  struct drx_path_sel {
-> -	u8		Enable;
-> +	u8		enable;
->  	u8		cck_method;
-> -	u8		cck_Rx_path;
-> +	u8		cck_rx_path;
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
+> tree/Documentation/devicetree/bindings/net/fsl-fman.txt#n320
+> 
+> Freescale driver:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
+> tree/drivers/net/ethernet/freescale/dpaa/dpaa_ethtool.c#n467
+> 
+> Changes in V2:
+> 1) Changed the ptimer-handle to ptp-hardware-clock based on
+>    Richard Cochran's comment.
+> 2) Updated commit description.
+> ---
+>  .../devicetree/bindings/net/ethernet-controller.yaml         | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/ethernet-controller.yaml b/Documentation/devicetree/bindings/net/ethernet-controller.yaml
+> index 3aef506fa158..d2863c1dd585 100644
+> --- a/Documentation/devicetree/bindings/net/ethernet-controller.yaml
+> +++ b/Documentation/devicetree/bindings/net/ethernet-controller.yaml
+> @@ -161,6 +161,11 @@ properties:
+>        - auto
+>        - in-band-status
 >  
->  	u8		SS_TH_low;
->  	u8		diff_TH;
-> -	u8		disabledRF;
-> +	u8		disabled_rf;
->  	u8		reserved;
->  
->  	u8		rf_rssi[4];
+> +  ptp-hardware-clock:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description:
+> +      Specifies a reference to a node representing a IEEE1588 timer.
 
+Drop "Specifies a reference to". It's obvious from the schema.
 
-Ah, you are fixing up the drx_path_sel structure.
+Aren't you expecting here some specific Devicetree node of IEEE1588
+timer? IOW, you expect to point to timer, but what this timer must
+provide? How is this generic?
 
-But just some of the fields, not all of them, odd.
+In your commit msg you use multiple times "driver", so are you adding it
+only to satisfy Linux driver requirements? What about other drivers,
+e.g. on BSD or U-Boot?
 
-Please redo this and make the changelog more descriptive of what you are
-doing, as well as the subject line (don't need the variable names in
-there.)
+Best regards,
+Krzysztof
 
-Also do it for all the fields in the structure, not just 3 random ones.
-
-thanks,
-
-greg k-h
