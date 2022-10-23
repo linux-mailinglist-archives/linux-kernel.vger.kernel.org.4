@@ -2,74 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 002F16093DF
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 16:25:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 253C06093CB
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 16:03:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230185AbiJWOZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 10:25:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50300 "EHLO
+        id S230078AbiJWOC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 10:02:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230062AbiJWOZY (ORCPT
+        with ESMTP id S229707AbiJWOC4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 10:25:24 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7DFA5592;
-        Sun, 23 Oct 2022 07:25:21 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id v1so11803562wrt.11;
-        Sun, 23 Oct 2022 07:25:21 -0700 (PDT)
+        Sun, 23 Oct 2022 10:02:56 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4445D73908;
+        Sun, 23 Oct 2022 07:02:55 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id l22-20020a17090a3f1600b00212fbbcfb78so1256943pjc.3;
+        Sun, 23 Oct 2022 07:02:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :references:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z2TGd84mJNKYZWaNw9rSgpYeoRxeJqWopIs81mFX9hM=;
-        b=md9aWeGHxax0KdKn3KCysdQBGl/kgf6cCwPGXFAwEDVusPNgVYoIOYrc+MANyQomck
-         QJCNOIjpkV7EPUZMYkUSQZpobtjjbvR4TCmixsN5QfyMLpelvx6fFj1Np7ZwAOYyYE0b
-         x+23tvXUbnxXMThWdDn5LwrgO6lvL6Q3SYSpLbv8Vl0gPCPFPyDY4Q2JHtze4zUBZiFJ
-         83i+fh+JPsN1CCQm6AXcxC7CKKYyvhLMfEI3RIsH4kzxblzv1Tk2xHEu/m2gucZgxatv
-         7IJZOB2tPQUt3vYk6HVBrb1Kk9uBODXS8h0os7LhLbGjzh3fUJZacGq1y5O67dlkNfhH
-         yeWA==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=t6pBF/o0natTLuLX/wEXaHuftOiR1PZ0M1sSmiCulEc=;
+        b=IUWzmI71fyIUK86PItGrbkGDgECFyiP1DOXhDRI36uIh3LwOJb+pBNZRtiGXBxuR/X
+         EkgHrb08gHySShO6zEhRbGtQSD8HXiWRiwsX/q1fb4Rla2P9+yK3DEuXXIoajEbx0KZJ
+         O1lMk1WEESOFv1GJwGm8jKsXfcB1ydcOrkxggQ6bgQnfaPn6QQyYl7BTjt3nku5VKDf1
+         srM3Rbj9zZMaXgvZpKOjm3Sg6oSAt/TWhe5fI7eu/Rqo3eSw/iNCKi2PS6HmcnvHUD/7
+         s4d/neVbaEVYhkCsZ7/kMfwkkOvxCHM/K84QA8S9oqiIfXWOnaDdE7aIujLYTe6abH7O
+         I1xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :references:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Z2TGd84mJNKYZWaNw9rSgpYeoRxeJqWopIs81mFX9hM=;
-        b=fJebmoX3xOs84X3a09HEsnmPhjbNsPI9LMzg8R00Fg8N3W6A6GPnrytn9hiktqKki5
-         ATYYLL+gnIvoL5t9h4DfO+tR9snmrx8rqDp42VFwRghJbtT25E8WSS5fEqKmINrUfGjc
-         /bT9FL2yJALNO7AdrSfxqFUoBeHr/CMdib6av+3tAPjd4/xZRyYEMzL7AnDHbikAF+Gv
-         A8+Yyt+AuGt1Rcmei3q4pczVihhOc0KzBF1uJVgltrFUyXJeCQns540BjdGQBlrvva8M
-         T8I4WIqp4h2V/w5VAchrJKFfQBfYgMc0tVI/3UTuNsWQmj1lL0kXsvyOecbz5V6B3tID
-         xwyA==
-X-Gm-Message-State: ACrzQf0V1zsBL096G+n+5ufN/k9w3HVd/D+v5DB9K7YfbXy4yIJ+w6eN
-        wUl6sU2XQtzYxjfJyNomvNA=
-X-Google-Smtp-Source: AMsMyM5cZ5qYaANvFQtaG8aUeJsUZ/WHs1fwM6KOyo6s+qe6/NWU9ItTeFLX0RH78JM9rSxl4uYKQA==
-X-Received: by 2002:adf:f491:0:b0:235:894e:8d6c with SMTP id l17-20020adff491000000b00235894e8d6cmr12064536wro.209.1666535120231;
-        Sun, 23 Oct 2022 07:25:20 -0700 (PDT)
-Received: from localhost (94.197.10.75.threembb.co.uk. [94.197.10.75])
-        by smtp.gmail.com with ESMTPSA id c5-20020a05600c0a4500b003b5054c6f87sm9205046wmq.21.2022.10.23.07.25.18
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=t6pBF/o0natTLuLX/wEXaHuftOiR1PZ0M1sSmiCulEc=;
+        b=lVpqrvX7GN48MDLN2tnHNYceLwHLuvGQJDLiefQ/4gKmrOKDOuYSkAg4T5TW1NLwm6
+         Zd4gbLndfUda6fTvO8yM4fvA7sKT5clRaH1a4CAgOG8POmjpX1JRZk5zBL1WkmyC9OFx
+         Yyo7NbBsniKWqAmAKgg8+0XIc1AHBFtWMweGNhjIY+0/F2bnfr2+K5Y4RLKvjFa9E8kR
+         DqSjZtXYjFmVZeAKg4iD/DCPPwiAlkum3pV8BVSufO6sfDI5OOeJnVA0AQNdpxgH6WcG
+         0Zw3MwQnKc9XyPehGAdGbtUBSnQdu+kwQKw2IE3XtFndAJln1Qp22J14THUgENf1jgqI
+         oRdg==
+X-Gm-Message-State: ACrzQf3FUjROyED0O+vHVl1Qf5HMFIrZ8w7doR4ld1CrbCIui0jLYwbl
+        B5pAugkHgoqNXkq+4tEnWhg=
+X-Google-Smtp-Source: AMsMyM43NXpGWu4+Am+eBa3FFP7OIWC4DXukJ4PyEXkP7L0HIiDUqvD+1k1Nk6FUUuV+KhrvT3PF6Q==
+X-Received: by 2002:a17:90a:6845:b0:210:7ef5:ab99 with SMTP id e5-20020a17090a684500b002107ef5ab99mr24388726pjm.80.1666533774770;
+        Sun, 23 Oct 2022 07:02:54 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-1.three.co.id. [180.214.232.1])
+        by smtp.gmail.com with ESMTPSA id e28-20020a056a0000dc00b0056afd55722asm4270109pfj.153.2022.10.23.07.02.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Oct 2022 07:25:19 -0700 (PDT)
-References: <20221022162742.21671-1-aidanmacdonald.0x0@gmail.com>
- <20221022162742.21671-2-aidanmacdonald.0x0@gmail.com>
- <ef6a326b-5c61-988b-2ec2-cd8e233e5d28@linaro.org>
-From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     broonie@kernel.org, lgirdwood@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        kuninori.morimoto.gx@renesas.com, perex@perex.cz, tiwai@suse.com,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 2/2] dt-bindings: ASoC: simple-card: Add
- system-clock-id property
-Date:   Sun, 23 Oct 2022 14:47:56 +0100
-In-reply-to: <ef6a326b-5c61-988b-2ec2-cd8e233e5d28@linaro.org>
-Message-ID: <GMvEU8xVTkjIoQ518XWAaLkhldSZHlk7@localhost>
+        Sun, 23 Oct 2022 07:02:53 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id C9886104163; Sun, 23 Oct 2022 21:02:50 +0700 (WIB)
+Date:   Sun, 23 Oct 2022 21:02:49 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Oded Gabbay <ogabbay@kernel.org>
+Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-doc@vger.kernel.org, Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+        Jiho Chu <jiho.chu@samsung.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+        Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: Re: [RFC PATCH 0/3] new subsystem for compute accelerator devices
+Message-ID: <Y1VJieGgVv9BwaO3@debian.me>
+References: <20221022214622.18042-1-ogabbay@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="KFhUQIkYlmhwSi0N"
+Content-Disposition: inline
+In-Reply-To: <20221022214622.18042-1-ogabbay@kernel.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -77,72 +94,97 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> writes:
+--KFhUQIkYlmhwSi0N
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> On 22/10/2022 12:27, Aidan MacDonald wrote:
->> This is a new per-DAI property used to specify the clock ID argument
->> to snd_soc_dai_set_sysclk().
->
-> You did no show the use of this property and here you refer to some
-> specific Linux driver implementation, so in total this does no look like
->  a hardware property.
->
-> You also did not explain why do you need it (the most important piece of
-> commit msg).
->
->>
->> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
->> ---
->>  Documentation/devicetree/bindings/sound/simple-card.yaml | 8 ++++++++
->>  1 file changed, 8 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/sound/simple-card.yaml b/Documentation/devicetree/bindings/sound/simple-card.yaml
->> index ed19899bc94b..cb7774e235d0 100644
->> --- a/Documentation/devicetree/bindings/sound/simple-card.yaml
->> +++ b/Documentation/devicetree/bindings/sound/simple-card.yaml
->> @@ -57,6 +57,12 @@ definitions:
->>        single fixed sampling rate.
->>      $ref: /schemas/types.yaml#/definitions/flag
->>
->> +  system-clock-id:
->> +    description: |
->> +      Specify the clock ID used for setting the DAI system clock.
->
->
-> With lack of explanation above, I would say - use common clock framework
-> to choose a clock...
->
->
-> Best regards,
-> Krzysztof
+On Sun, Oct 23, 2022 at 12:46:19AM +0300, Oded Gabbay wrote:
+> In the last couple of months we had a discussion [1] about creating a new
+> subsystem for compute accelerator devices in the kernel.
+>=20
+> After an analysis that was done by DRM maintainers and myself, and follow=
+ing
+> a BOF session at the Linux Plumbers conference a few weeks ago [2], we
+> decided to create a new subsystem that will use the DRM subsystem's code =
+and
+> functionality. i.e. the accel core code will be part of the DRM subsystem.
+>=20
+> This will allow us to leverage the extensive DRM code-base and
+> collaborate with DRM developers that have experience with this type of
+> devices. In addition, new features that will be added for the accelerator
+> drivers can be of use to GPU drivers as well (e.g. RAS).
+>=20
+> As agreed in the BOF session, the accelerator devices will be exposed to
+> user-space with a new, dedicated device char files and a dedicated major
+> number (261), to clearly separate them from graphic cards and the graphic
+> user-space s/w stack. Furthermore, the drivers will be located in a separ=
+ate
+> place in the kernel tree (drivers/accel/).
+>=20
+> This series of patches is the first step in this direction as it adds the
+> necessary infrastructure for accelerator devices to DRM. The new devices =
+will
+> be exposed with the following convention:
+>=20
+> device char files - /dev/accel/accel*
+> sysfs             - /sys/class/accel/accel*/
+> debugfs           - /sys/kernel/debug/accel/accel*/
+>=20
+> I tried to reuse the existing DRM code as much as possible, while keeping=
+ it
+> readable and maintainable.
+>=20
+> One thing that is missing from this series is defining a namespace for the
+> new accel subsystem, while I'll add in the next iteration of this patch-s=
+et,
+> after I will receive feedback from the community.
+>=20
+> As for drivers, once this series will be accepted (after adding the names=
+pace),
+> I will start working on migrating the habanalabs driver to the new accel
+> subsystem. I have talked about it with Dave and we agreed that it will be
+> a good start to simply move the driver as-is with minimal changes, and th=
+en
+> start working on the driver's individual features that will be either add=
+ed
+> to the accel core code (with or without changes), or will be removed and
+> instead the driver will use existing DRM code.
+>=20
+> In addition, I know of at least 3 or 4 drivers that were submitted for re=
+view
+> and are good candidates to be included in this new subsystem, instead of =
+being
+> a drm render node driver or a misc driver.
+>=20
+> [1] https://lkml.org/lkml/2022/7/31/83
+> [2] https://airlied.blogspot.com/2022/09/accelerators-bof-outcomes-summar=
+y.html
+>=20
 
-Sorry, I didn't explain things very well. The system clock ID is indeed
-a property of the DAI hardware. The ID is not specific to Linux in any
-way, and really it's an enumeration that requires a dt-binding.
+Since this is new subsystem, it should have its own git tree where you
+collected accelerator-related patches. By convention, there should be
+"next" branch targeting for next kernel release and "fixes" branch for
+bugfixes pending for current release. Both branches should be included
+into linux-next. The names don't necessarily be that, though.
 
-A DAI may support multiple system clock inputs or outputs identified by
-the clock ID. In the case of outputs, these could be distinct clocks
-that have their own I/O pins, or the clock ID could select the internal
-source clock used for a clock generator. For inputs, the system clock ID
-may inform the DAI how or where the system clock is being provided so
-hardware registers can be configured appropriately.
+Also, it had been great if you write short, descriptive documentation
+about the subsystem (maintainers handbook).
 
-Really the details do not matter, except that in a particular DAI link
-configuration a specific clock ID must be used. This is determined by
-the actual hardware connection between the DAIs; if the wrong clock is
-used, the DAI may not function correctly.
+Cc'ing linux-doc folks.
 
-Currently the device tree is ambiguous as to which system clock should
-be used when the DAI supports more than one, because there is no way to
-specify which clock was intended. Linux just treats the ID as zero, but
-that's currently a Linux-specific numbering so there's guarantee that
-another OS would choose the same clock as Linux.
+--=20
+An old man doll... just what I always wanted! - Clara
 
-The system-clock-id property is therefore necessary to fully describe
-the hardware connection between DAIs in a DAI link when a DAI offers
-more than one choice of system clock.
+--KFhUQIkYlmhwSi0N
+Content-Type: application/pgp-signature; name="signature.asc"
 
-I will resend the patch with the above in the commit message.
+-----BEGIN PGP SIGNATURE-----
 
-Regards,
-Aidan
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY1VJhQAKCRD2uYlJVVFO
+o+yTAP0Wq0yPX3TS5HZJ27v0PHGSOWTbOi+nH/lPSH1cS+ol9AD8CHBTzQqZytiP
+wolMvwwGEa8J+1fi1Wk5hKbB1ex35g8=
+=9xlo
+-----END PGP SIGNATURE-----
+
+--KFhUQIkYlmhwSi0N--
