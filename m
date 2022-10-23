@@ -2,35 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 120A760922D
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 11:54:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E14B60922E
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 11:54:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230253AbiJWJyB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 05:54:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51124 "EHLO
+        id S230260AbiJWJyI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 05:54:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230210AbiJWJxw (ORCPT
+        with ESMTP id S230210AbiJWJyD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 05:53:52 -0400
+        Sun, 23 Oct 2022 05:54:03 -0400
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE32857227
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 02:53:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90BA7760D4
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 02:53:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1666518555; h=from:from:sender:reply-to:subject:subject:date:date:
+        s=mail; t=1666518556; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=aDdXMBaOyK7oXLIUXU8KO8h1827AMeVClKPmuTxxjYw=;
-        b=UVcgkd2hqBcVTDUblKW3Y+9nk5/fMeVVyGZYIWvhDzaCIWOkUxmwBQdyN3JQupoMFszBVp
-        yI+asK4EPSJltpmZ7zS7Caj/JDgmv3A6Eva7yNng/Ed+fBnDg482KqaaeuLKQ0ThFT1T3h
-        b6DQA5qDSaJPv3K1ERHiG5kKTzsyI1g=
+        bh=fH7g4YysWMLgOSNDG15jV52CUiW7mUEZ75bQsRILO7Y=;
+        b=Eo1izMgZo0Frd07iuiRf9vf0fPXjQWEKqIe+2Bb8/l1BPw7uYGD6XuUOmArqH5H2tabJWa
+        uw/WwGE6sqa2b04ScoqkO0g6adnTgivFJn62wERiV03dp5Q6uXsq4yEprv0pRue1F6jXZX
+        HKP/0H4faJWhV237ysdVPljtKQ0IC54=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Lee Jones <lee@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v3 21/28] mfd: max77686: Remove #ifdef guards for PM related functions
-Date:   Sun, 23 Oct 2022 10:48:45 +0100
-Message-Id: <20221023094852.8035-22-paul@crapouillou.net>
+Cc:     linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH v3 22/28] mfd: motorola-cpcap: Remove #ifdef guards for PM related functions
+Date:   Sun, 23 Oct 2022 10:48:46 +0100
+Message-Id: <20221023094852.8035-23-paul@crapouillou.net>
 In-Reply-To: <20221023094852.8035-1-paul@crapouillou.net>
 References: <20221023094852.8035-1-paul@crapouillou.net>
 MIME-Version: 1.0
@@ -56,40 +55,42 @@ independently of any Kconfig option. Thanks to that, bugs and other
 regressions are subsequently easier to catch.
 
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/mfd/max77686.c | 6 ++----
+ drivers/mfd/motorola-cpcap.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/mfd/max77686.c b/drivers/mfd/max77686.c
-index 2ac64277fb84..f8e863f3fc95 100644
---- a/drivers/mfd/max77686.c
-+++ b/drivers/mfd/max77686.c
-@@ -226,7 +226,6 @@ static int max77686_i2c_probe(struct i2c_client *i2c)
- 	return 0;
- }
+diff --git a/drivers/mfd/motorola-cpcap.c b/drivers/mfd/motorola-cpcap.c
+index 265464b5d7cc..ae8930eff72d 100644
+--- a/drivers/mfd/motorola-cpcap.c
++++ b/drivers/mfd/motorola-cpcap.c
+@@ -221,7 +221,6 @@ static const struct regmap_config cpcap_regmap_config = {
+ 	.val_format_endian = REGMAP_ENDIAN_LITTLE,
+ };
  
 -#ifdef CONFIG_PM_SLEEP
- static int max77686_suspend(struct device *dev)
+ static int cpcap_suspend(struct device *dev)
  {
- 	struct i2c_client *i2c = to_i2c_client(dev);
-@@ -261,14 +260,13 @@ static int max77686_resume(struct device *dev)
+ 	struct spi_device *spi = to_spi_device(dev);
+@@ -239,9 +238,8 @@ static int cpcap_resume(struct device *dev)
  
  	return 0;
  }
--#endif /* CONFIG_PM_SLEEP */
+-#endif
  
--static SIMPLE_DEV_PM_OPS(max77686_pm, max77686_suspend, max77686_resume);
-+static DEFINE_SIMPLE_DEV_PM_OPS(max77686_pm, max77686_suspend, max77686_resume);
+-static SIMPLE_DEV_PM_OPS(cpcap_pm, cpcap_suspend, cpcap_resume);
++static DEFINE_SIMPLE_DEV_PM_OPS(cpcap_pm, cpcap_suspend, cpcap_resume);
  
- static struct i2c_driver max77686_i2c_driver = {
+ static const struct mfd_cell cpcap_mfd_devices[] = {
+ 	{
+@@ -346,7 +344,7 @@ static struct spi_driver cpcap_driver = {
  	.driver = {
- 		   .name = "max77686",
--		   .pm = &max77686_pm,
-+		   .pm = pm_sleep_ptr(&max77686_pm),
- 		   .of_match_table = max77686_pmic_dt_match,
+ 		.name = "cpcap-core",
+ 		.of_match_table = cpcap_of_match,
+-		.pm = &cpcap_pm,
++		.pm = pm_sleep_ptr(&cpcap_pm),
  	},
- 	.probe_new = max77686_i2c_probe,
+ 	.probe = cpcap_probe,
+ 	.id_table = cpcap_spi_ids,
 -- 
 2.35.1
 
