@@ -2,71 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C25460943E
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 17:08:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD486609442
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 17:16:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230080AbiJWPII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 11:08:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34934 "EHLO
+        id S230143AbiJWPQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 11:16:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbiJWPIG (ORCPT
+        with ESMTP id S229867AbiJWPQP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 11:08:06 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D81F8733F2
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 08:08:05 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1omca3-0005bX-1k; Sun, 23 Oct 2022 17:08:03 +0200
-Message-ID: <b108978a-77ff-68aa-8c7a-1f6e67629608@leemhuis.info>
-Date:   Sun, 23 Oct 2022 17:08:02 +0200
+        Sun, 23 Oct 2022 11:16:15 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF2416556C;
+        Sun, 23 Oct 2022 08:16:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1666538169; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=76gz1YSbuUIA+tLdwL/4i5a5zfRt4Nv9mdTm/uPed3w=;
+        b=UlzyMNfvxSOmsLFTbpmCgLzlm2t9lt6VDAnPrCvAKxKuPoUcNOKhtEwnaboUeHB4d5tTfe
+        C9xIxNS1OEVeLBs8lNjsFdpeW0L+Zd1F04C8HQinUJl2Fl0S/RoInmia/68XJaTXapOIXb
+        tinDxuX0iCncdtoF63UIOpSF9qTqA30=
+Date:   Sun, 23 Oct 2022 16:15:58 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v3 2/2] serial: 8250/ingenic: Add support for the
+ JZ4750/JZ4755
+To:     Siarhei Volkau <lis8215@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+Message-Id: <M2P7KR.MNWZYPK0OB5B@crapouillou.net>
+In-Reply-To: <CAKNVLfbJaGd0t==AzxyT5Q7fVD7PwK75-S5dbb+G9GZUPpagZQ@mail.gmail.com>
+References: <20221022165047.4020785-1-lis8215@gmail.com>
+        <20221022165047.4020785-3-lis8215@gmail.com>
+        <9W76KR.NVDSVG4IWZ3A3@crapouillou.net>
+        <CAKNVLfZmUpFzKsdzY1e_mUTVsM-jnL65Fi6EXYcF80-oNV+DGQ@mail.gmail.com>
+        <YE87KR.VC65A15U1PH41@crapouillou.net>
+        <CAKNVLfbJaGd0t==AzxyT5Q7fVD7PwK75-S5dbb+G9GZUPpagZQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v1 1/1] mfd: syscon: Remove repetition of the
- regmap_get_val_endian()
-Content-Language: en-US, de-DE
-To:     regressions@lists.linux.dev
-Cc:     linux-kernel@vger.kernel.org
-References: <20220808140811.26734-1-andriy.shevchenko@linux.intel.com>
- <20221009163942.GA630814@roeck-us.net>
-From:   Thorsten Leemhuis <linux@leemhuis.info>
-In-Reply-To: <20221009163942.GA630814@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1666537685;72467617;
-X-HE-SMSGID: 1omca3-0005bX-1k
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09.10.22 18:39, Guenter Roeck wrote:
-> On Mon, Aug 08, 2022 at 05:08:11PM +0300, Andy Shevchenko wrote:
->> Since the commit 0dbdb76c0ca8 ("regmap: mmio: Parse endianness
->> definitions from DT") regmap MMIO parses DT itsef, no need to
->> repeat this in the caller(s).
->>
->> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> 
-> This patch results in reboot failures for all big endian mips emulations.
-> 
-> Sample log:
-> 
-> Network interface test passed
-> Boot successful.
-> Rebooting
-> reboot: Restarting system
-> Unable to restart system
-> Reboot failed -- System halted
-> 
-> The problem is not seen with little endian mips emulations. Reverting
-> this patch fixes the problem. Bisect log attached.
-> 
-> #regzbot introduced: 72a95859728a
-> #regzbot title: Reboot failure on big endian mips systems
 
-#regzbot monitor: https://lore.kernel.org/all/Y0GZwkDwnak2ReTt@zx2c4.com/
+
+Le dim. 23 oct. 2022 =C3=A0 17:04:49 +0300, Siarhei Volkau=20
+<lis8215@gmail.com> a =C3=A9crit :
+> =D0=B2=D1=81, 23 =D0=BE=D0=BA=D1=82. 2022 =D0=B3. =D0=B2 12:16, Paul Cerc=
+ueil=20
+> <paul@crapouillou.net>:
+>>  Do you have such hardware?
+>=20
+> No
+>=20
+>>  Don't add support for cases you can't test.
+>=20
+> It's just a side effect of that approach.
+>=20
+>>  For what we know - all JZ475x use a 24 MHz crystal and all JZ4760(B)
+>>  use a 12 MHz crystal, until proven otherwise.
+>=20
+> Ouf course it just confirms the rule but I found one exception:=20
+> JZ4750 & 12MHz
+> Link:=20
+> https://github.com/carlos-wong/uboot_jz4755/blob/master/include/configs/l=
+ib4750.h
+
+Then when this board is upstreamed it will declare a 12 MHz oscillator=20
+in its DT, and the ingenic init code won't have to enable the /2=20
+divider for that particular board.
+
+> Regarding your proposal:
+> In my opinion enabling the divisor unconditionally is a bad practice,
+> as it's already enabled (or not) by the bootloader, with respect to=20
+> the
+> hardware capabilities.I think it's better to keep the driver as it is=20
+> than
+> adding such things.
+
+Well, I disagree. Linux should not depend on whatever the bootloader=20
+configures.
+
+-Paul
+
+
