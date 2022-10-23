@@ -2,72 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BB776093DA
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 16:20:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A94D6093DD
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 16:21:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230127AbiJWOUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 10:20:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42284 "EHLO
+        id S230173AbiJWOV3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 10:21:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229987AbiJWOUw (ORCPT
+        with ESMTP id S230125AbiJWOVY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 10:20:52 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23F5D6F543
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 07:20:50 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id bu30so11819217wrb.8
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 07:20:50 -0700 (PDT)
+        Sun, 23 Oct 2022 10:21:24 -0400
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 600BE50708;
+        Sun, 23 Oct 2022 07:21:23 -0700 (PDT)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-13ba86b5ac0so636672fac.1;
+        Sun, 23 Oct 2022 07:21:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=/orQTBhmScBMes7cEg9o5UNm+NtQahGU/9bTdc+qHMc=;
-        b=M40WNjmuZQ86ORS7qOwd3tLxZaGx73PsButnOh1stkRm7mWEL8BZEOTsaUdGWbhd84
-         L3rA7bw/d5blYCaVfyRH8q8sODTRUgbblZC+67i9L7Q9aNTZzWWaa4WqkFEDKT4C5MmL
-         6LqyhHLg0XzNrhnJZ7KEExaP5jRbciqimKMA/ijKR9qNMr+0mKkLmFEe2/qvn3iAtoVY
-         ia7ZtBzd2ITtXGFKfEp0rSTohWanxPw3m9HQfI99va44UqA1cqYJbRVfT3Cdjl9TnbGT
-         Klt2DDY6ZKNvpYv/QwbFfFRYto1RsGVCPDGye97NFLv3K53//HAXLc07YB8w18rE+CTC
-         SN8w==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZTAAkkj/PEqEYXCHWGmASpbHjy0heS6WaXHLTcNNRCQ=;
+        b=c5LDdOqLDCIMz+hCtZ8Owc1PLjcqMDkHRloTKXi50u5M5blkov+LBRqMLilT02pSgI
+         AhJyQizNqnNEtQvsUUay4+PkblK+Es0xSgH/TF6V3LjAkkOvOsfWT46CLc8epx5dGXry
+         G5vAtRLLu6D/wR8M5jW1b4jbhb6yTPwFvdjhD/O+8qKyPyseVTQkirg/509O+wZ5YTP0
+         eDjiaLW93Jzydpakl26NeGO9jqDyT+9fgDsDKcEsUCMq4rDvLNm5Z+90qk2E9N0mDlkk
+         TRv+sEz2tTqodsZxRcqg8axZGlV15FTUUQJxKI2pPQmQGItPBL8zhgHjL/xp3Um3ivcF
+         rQNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/orQTBhmScBMes7cEg9o5UNm+NtQahGU/9bTdc+qHMc=;
-        b=NrJx+GiOpqUF4iFHwx8t5uXv0aDJlDHokMFSZ0OYUrNefD2rev19EJxE3ZUHC2MI1H
-         uIb5Rem0jBscYUoJn/L2IVpm46fCzYzkZL9xSukImhd0Dbd9c+C0LidoeaKUgDUJ/Y8H
-         16KZJJnVdZyz1PxvfdU8zziAS1pkETRMYnOhR+ONxbGVPRzGqTwvCpj3xS4H+w0qRGC3
-         fyIiEcaBEBwcuZDTw/bdXqOZZ1szG/yjQPLTEil0FgJLNzgow3bhDDPxScfEp1o6gXvp
-         BY5EPWI0nrkW+vUxXMi5XE+0SLXm5OvK1t6sFNhzTiBBOjs0Wbha0d/ZJ6LSSDSL2at5
-         QGgg==
-X-Gm-Message-State: ACrzQf2s+7B3LtZ7ITvkuzkrtICe9A6plaDIAVSxohNg9HWfDCyIG8zL
-        v3w1rbCnOvTclXfyoSDjGPjwmk6sMbw=
-X-Google-Smtp-Source: AMsMyM4pdG6Ip1BZxSseQVyUtWoSxVYA+OhZxVwvHaYeS+1IT5EpgArkrpVHlV7ReM4pT3B/shhkpA==
-X-Received: by 2002:a5d:4c43:0:b0:236:547f:bd3c with SMTP id n3-20020a5d4c43000000b00236547fbd3cmr8416119wrt.380.1666534848482;
-        Sun, 23 Oct 2022 07:20:48 -0700 (PDT)
-Received: from [109.186.183.118] (109-186-183-118.bb.netvision.net.il. [109.186.183.118])
-        by smtp.gmail.com with ESMTPSA id i10-20020a05600c354a00b003c6bbe910fdsm6718928wmq.9.2022.10.23.07.20.46
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZTAAkkj/PEqEYXCHWGmASpbHjy0heS6WaXHLTcNNRCQ=;
+        b=A9rUBZj9N7x2idb1aVFoTuMsjKvzWOhnEbfdK0pzca+5Y3stBx0VJIymrL6o8C44oI
+         1JwyPqmL2QLUiRA1FF8ngEfOZMDbZstnO9XdmmChWJuxsle4O0cWH8ord12/bSoGRl7n
+         fFngr+6ehAVeAsUFDSGLt0vbdxZFDcjO/9HV/OURJrBaYF9zUCikanZ7Myjm4yPUxS9H
+         A9gImn6/IVHDL19nNn35lRb937FQ0RoJ1T7KFowajWRIik9KotM7JMrA+5cubzitsYiN
+         8jX4gqUyhIvT4X8qdW90SyYiNV2JkgqSys57f5Fy7pDH3mgzRCKTWIZJ1d5+fexIJEQJ
+         IhUA==
+X-Gm-Message-State: ACrzQf2hDphTmDBnX/Cn4DLMNwMx/uE8E9V0HtvIzTG5z4OWOcvF0EQB
+        EQhmVz98saeHBnmmbavq1Og=
+X-Google-Smtp-Source: AMsMyM5YuD6L0l9a4P5ALqEGY/7htBU57fOqiFG3zRJqI/Q/kVmMIK+fuKVNidojQsn9n7VKGgREuA==
+X-Received: by 2002:a05:6870:3126:b0:132:7416:cb31 with SMTP id v38-20020a056870312600b001327416cb31mr18368629oaa.140.1666534882683;
+        Sun, 23 Oct 2022 07:21:22 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id w21-20020acaad15000000b00354932bae03sm2565450oie.10.2022.10.23.07.21.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 23 Oct 2022 07:20:47 -0700 (PDT)
-Message-ID: <9674abb2-b40c-3862-5272-58b643dc91e1@gmail.com>
-Date:   Sun, 23 Oct 2022 17:19:40 +0300
+        Sun, 23 Oct 2022 07:21:21 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <1d052998-9ac2-2d4b-927a-06e0318eaef4@roeck-us.net>
+Date:   Sun, 23 Oct 2022 07:21:19 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-From:   Eli Billauer <eli.billauer@gmail.com>
-Subject: Re: [PATCH] char: xillybus: Fix use-after-free in xillyusb_open()
-To:     Hyunwoo Kim <imv4bel@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, arnd@arndb.de,
-        gregkh@linuxfoundation.org
-References: <20221022175404.GA375335@ubuntu>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] hwmon: (aquacomputer_d5next) Add support for temperature
+ sensor offsets
 Content-Language: en-US
-In-Reply-To: <20221022175404.GA375335@ubuntu>
+To:     Aleksa Savic <savicaleksa83@gmail.com>
+Cc:     linux-hwmon@vger.kernel.org, leonard.anderweit@gmail.com,
+        Jack Doan <me@jackdoan.com>, Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221021174834.736930-1-savicaleksa83@gmail.com>
+ <20221022135720.GA739650@roeck-us.net>
+ <6ef88c2c-3435-8847-0f4f-53e81cd3af5d@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <6ef88c2c-3435-8847-0f4f-53e81cd3af5d@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,52 +83,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, Hyunwoo.
-
-> A race condition may occur if the user physically removes
-> the USB device while calling open() for this device node.
+On 10/23/22 06:15, Aleksa Savic wrote:
+> On 2022-10-22 15:57:20 GMT+02:00, Guenter Roeck wrote:
+>> Please go up to 100 columns to avoid excessive line splits.
 > 
-> This is a race condition between the xillyusb_open() function and
-> the xillyusb_disconnect() function, which may eventually result in UAF.
-
-Thanks a lot for pointing that out. In fact, this reveals two problems 
-in the existing code:
-
-(1) unit->private_data is accessed after the mutex has been released in 
-xillybus_find_inode(), so there's no guarantee that it will be valid. 
-This is what the test caught. This can however be fixed just by moving 
-the release of the lock a few rows down.
-
-(2) xillyusb_open() accesses @xdev without ensuring that it won't get freed.
-
-Both of these two issues have a negligible probability of causing a 
-visible problem, but this must be fixed, of course.
-
+> Will fix this and other comments in v2.
 > 
-> So, add a mutex to the xillyusb_open() and xillyusb_disconnect()
-> functions to avoid race contidion.
+>> Is it really necessary to re-read the control buffer repeatedly
+>> to report this value ? I don't know how costly that is, but unlike
+>> the pwm value I would not expect the number to change.
+> 
+> Yes, aside from the driver userspace can also change settings on the
+> device using hidraw and we'd end up with stale data. Reading it is
+> very fast, it takes about 4ms in my testing.
+> 
+>> Also, is this number indeed not included in the regular reports
+>> sent from the controller ?
+> 
+> Unfortunately, it's not. The sensor report only includes final (calculated)
+> sensor readings.
+> 
+>> The driver doesn't distinguish between offsets in the control buffer
+>> (pwm, and now temperature sensor offset) and offsets in the report buffer,
+>> making it a bit difficult to determine if those are the same or not.
+>> Some explanation in the driver would be nice if someone finds the time
+>> to provide one. If the control buffer offsets are in a different number
+>> space, they should really be marked accordingly (for example with a
+>> _CTRL in the define).
+> 
+> I can see how it can be confusing. After this, I can send a patch to
+> reorder the macros & initializations and add more comments regarding
+> what is what.
+> 
 
-I'm not very fond of this solution, partially because this mutex 
-protects code and not data (There's this "Lock data, not code" rule, see 
-[1]). Also, xillyusb_disconnect() can take a significant time to run, 
-during which xillybus_open() for another (unrelated and still connected) 
-XillyUSB device has to wait. I guess this demonstrates why protecting 
-code with a mutex is considered bad practice.
+Please do.
 
-Besides, there are already three mechanisms in place for preventing 
-premature release of memory:
+Thanks,
+Guenter
 
-(1) @unit_mutex in xillybus_class.c, which protects @unit_list.
-(2) @kref inside struct xillyusb_dev (xillyusb.c), which protects the 
-structure it resides in.
-(3) @error inside struct xillyusb_dev, which prevents xillybus_open() 
-from opening a file that belongs to a device that is about to be released.
-
-It's now apparent that they're not working well enough. Rather than 
-adding another mutex, the existing mechanisms should be fixed.  Would 
-you like to do this, or should I?
-
-Thanks again,
-   Eli
-
-[1] Documentation/kernel-hacking/locking.rst in the kernel tree
