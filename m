@@ -2,82 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2F66609360
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 15:11:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3055460933B
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 15:08:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230150AbiJWNLy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 09:11:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48820 "EHLO
+        id S230149AbiJWNIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 09:08:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230199AbiJWNLt (ORCPT
+        with ESMTP id S229707AbiJWNIM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 09:11:49 -0400
-X-Greylist: delayed 216 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 23 Oct 2022 06:11:32 PDT
-Received: from jari.cn (unknown [218.92.28.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E4D08625D2;
-        Sun, 23 Oct 2022 06:11:31 -0700 (PDT)
-Received: by ajax-webmail-localhost.localdomain (Coremail) ; Sun, 23 Oct
- 2022 21:07:00 +0800 (GMT+08:00)
-X-Originating-IP: [182.148.15.254]
-Date:   Sun, 23 Oct 2022 21:07:00 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   "KaiLong Wang" <wangkailong@jari.cn>
-To:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] net: replace ternary operator with min()
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT6.0.1 build 20210329(c53f3fee)
- Copyright (c) 2002-2022 www.mailtech.cn
- mispb-4e503810-ca60-4ec8-a188-7102c18937cf-zhkzyfz.cn
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Sun, 23 Oct 2022 09:08:12 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C47C36DCE;
+        Sun, 23 Oct 2022 06:08:11 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id q1so6537250pgl.11;
+        Sun, 23 Oct 2022 06:08:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+l0QpWjgbpwI354rKJV/rkqR6xzz5YmulbQglgXlqwo=;
+        b=PVeitBNC7+FP13r/Q8oZgE7n5XjweMXdzZRvqXkdQ1tefjnYMbiQNPxAnLRgHZVhXS
+         MW9bzLkJzVrp8xTaGEp+2ZZStMXfi1Vm6hfvVaFYTikAJOAD6DSXhcrT5ua8NmghL5y3
+         XTaAVfbHW0zwwVPif6Gxv/MY4ZI8tiAYPsmzKmVZ1MIxcvDyh4OB1m+IvjED96vCHpap
+         LITI793KCuwekLjPV9awffKWERzvX9MUWOavAJqWDbJF4m47axorAp5ReTqFDmWlHNuv
+         qgy2JsWORwegruBe4IDj0ihK01d8nSiEW5B8EvRMGN1V0PdDXZGFfz3ZDO3H6pHvujR8
+         ww1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+l0QpWjgbpwI354rKJV/rkqR6xzz5YmulbQglgXlqwo=;
+        b=IytCvCEE1g0iRBkN1eWXh4/BplzNaqDRDH6WV26ja2Jio7XgEYCgImqcihxR0YonIR
+         m5Q/o3Qvt0wZUXfl8rvWSzZ5L1jNz+/TIW0oxTKVzRauM2dgTGUfV5QaLnTexAMWQVER
+         sP8KPLUz4u+Hljz+pTQ1k0eRLr3cEhgQUbfPnuZi9iOKVWZo+7FZBtauEEtvYt/CCRyu
+         KdkmCM9aBeOH8I8j5WgNTvYhMiOjNm9SodtTrH0N9jPOn77J6nOA0GhxizQkjutn5Ly/
+         1HP4dYdpBVfTpSMloEKvhH9oC9Bo3MtOXeeEwGKq17kx0ENyG0tSMyw8pxM4Nr532eu8
+         jrJw==
+X-Gm-Message-State: ACrzQf3d9mYBvfVr82PjAjshLGl9/criIkteh2zqW2P5HmGE/sAyX1yK
+        x+2Sr8eROQKwo2hk06E+byyU8XSNgjKPvw==
+X-Google-Smtp-Source: AMsMyM4lWP0T/ypzsxjrbwl2revCYhfU72GYP6b0uZT6Y3ZS8s4XCaMQXG5qeJhaLydYwRPMvzOxIw==
+X-Received: by 2002:a63:5a44:0:b0:431:fa3a:f92c with SMTP id k4-20020a635a44000000b00431fa3af92cmr24867859pgm.471.1666530490816;
+        Sun, 23 Oct 2022 06:08:10 -0700 (PDT)
+Received: from [192.168.43.80] (subs02-180-214-232-1.three.co.id. [180.214.232.1])
+        by smtp.gmail.com with ESMTPSA id z18-20020aa79592000000b0053e2b61b714sm18181300pfj.114.2022.10.23.06.08.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 23 Oct 2022 06:08:10 -0700 (PDT)
+Message-ID: <d6fbe2e6-6e5a-823e-462d-19a8e18fbb40@gmail.com>
+Date:   Sun, 23 Oct 2022 20:08:05 +0700
 MIME-Version: 1.0
-Message-ID: <4e5c1182.347.18404f42721.Coremail.wangkailong@jari.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: AQAAfwAXIW90PFVjtuVoAA--.1430W
-X-CM-SenderInfo: 5zdqwypdlo00nj6mt2flof0/1tbiAQAIB2FEYxtOnAACsD
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=2.2 required=5.0 tests=BAYES_00,RCVD_IN_PBL,RDNS_NONE,
-        T_SPF_HELO_PERMERROR,T_SPF_PERMERROR,XPRIO autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: **
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH 7/7] Documentation: kunit: rewrite usage
+Content-Language: en-US
+To:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Khalid Masum <khalid.masum.92@gmail.com>,
+        Sadiya Kazi <sadiyakazi@google.com>
+References: <20221023125414.60961-1-bagasdotme@gmail.com>
+ <20221023125414.60961-8-bagasdotme@gmail.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20221023125414.60961-8-bagasdotme@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rml4IHRoZSBmb2xsb3dpbmcgY29jY2ljaGVjayB3YXJuaW5nOgoKbmV0L2lwdjQvaWdtcC5jOjI2
-MjE6IFdBUk5JTkcgb3Bwb3J0dW5pdHkgZm9yIG1pbigpCm5ldC9pcHY0L2lnbXAuYzoyNTc0OiBX
-QVJOSU5HIG9wcG9ydHVuaXR5IGZvciBtaW4oKQpuZXQvaXB2NC9pcF9zb2NrZ2x1ZS5jOjI4NTog
-V0FSTklORyBvcHBvcnR1bml0eSBmb3IgbWluKCkKClNpZ25lZC1vZmYtYnk6IEthaUxvbmcgV2Fu
-ZyA8d2FuZ2thaWxvbmdAamFyaS5jbj4KLS0tCiBuZXQvaXB2NC9pZ21wLmMgICAgICAgIHwgNCAr
-Ky0tCiBuZXQvaXB2NC9pcF9zb2NrZ2x1ZS5jIHwgMiArLQogMiBmaWxlcyBjaGFuZ2VkLCAzIGlu
-c2VydGlvbnMoKyksIDMgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvbmV0L2lwdjQvaWdtcC5j
-IGIvbmV0L2lwdjQvaWdtcC5jCmluZGV4IDgxYmUzZTBmMGU3MC4uNzkzOWQ4ZmViYjJiIDEwMDY0
-NAotLS0gYS9uZXQvaXB2NC9pZ21wLmMKKysrIGIvbmV0L2lwdjQvaWdtcC5jCkBAIC0yNTcxLDcg
-KzI1NzEsNyBAQCBpbnQgaXBfbWNfbXNmZ2V0KHN0cnVjdCBzb2NrICpzaywgc3RydWN0IGlwX21z
-ZmlsdGVyICptc2YsCiAJfSBlbHNlIHsKIAkJY291bnQgPSBwc2wtPnNsX2NvdW50OwogCX0KLQlj
-b3B5Y291bnQgPSBjb3VudCA8IG1zZi0+aW1zZl9udW1zcmMgPyBjb3VudCA6IG1zZi0+aW1zZl9u
-dW1zcmM7CisJY29weWNvdW50ID0gbWluKGNvdW50LCBtc2YtPmltc2ZfbnVtc3JjKTsKIAlsZW4g
-PSBmbGV4X2FycmF5X3NpemUocHNsLCBzbF9hZGRyLCBjb3B5Y291bnQpOwogCW1zZi0+aW1zZl9u
-dW1zcmMgPSBjb3VudDsKIAltc2Zfc2l6ZSA9IElQX01TRklMVEVSX1NJWkUoY29weWNvdW50KTsK
-QEAgLTI2MTgsNyArMjYxOCw3IEBAIGludCBpcF9tY19nc2ZnZXQoc3RydWN0IHNvY2sgKnNrLCBz
-dHJ1Y3QgZ3JvdXBfZmlsdGVyICpnc2YsCiAJZ3NmLT5nZl9mbW9kZSA9IHBtYy0+c2Ztb2RlOwog
-CXBzbCA9IHJ0bmxfZGVyZWZlcmVuY2UocG1jLT5zZmxpc3QpOwogCWNvdW50ID0gcHNsID8gcHNs
-LT5zbF9jb3VudCA6IDA7Ci0JY29weWNvdW50ID0gY291bnQgPCBnc2YtPmdmX251bXNyYyA/IGNv
-dW50IDogZ3NmLT5nZl9udW1zcmM7CisJY29weWNvdW50ID0gbWluKGNvdW50LCBnc2YtPmdmX251
-bXNyYyk7CiAJZ3NmLT5nZl9udW1zcmMgPSBjb3VudDsKIAlmb3IgKGkgPSAwOyBpIDwgY29weWNv
-dW50OyBpKyspIHsKIAkJc3RydWN0IHNvY2thZGRyX3N0b3JhZ2Ugc3M7CmRpZmYgLS1naXQgYS9u
-ZXQvaXB2NC9pcF9zb2NrZ2x1ZS5jIGIvbmV0L2lwdjQvaXBfc29ja2dsdWUuYwppbmRleCA2ZTE5
-Y2FkMTU0ZjUuLjE5YWQzNzg5NzIyNyAxMDA2NDQKLS0tIGEvbmV0L2lwdjQvaXBfc29ja2dsdWUu
-YworKysgYi9uZXQvaXB2NC9pcF9zb2NrZ2x1ZS5jCkBAIC0yODIsNyArMjgyLDcgQEAgaW50IGlw
-X2Ntc2dfc2VuZChzdHJ1Y3Qgc29jayAqc2ssIHN0cnVjdCBtc2doZHIgKm1zZywgc3RydWN0IGlw
-Y21fY29va2llICppcGMsCiAJCQkvKiBPdXIgY2FsbGVyIGlzIHJlc3BvbnNpYmxlIGZvciBmcmVl
-aW5nIGlwYy0+b3B0ICovCiAJCQllcnIgPSBpcF9vcHRpb25zX2dldChuZXQsICZpcGMtPm9wdCwK
-IAkJCQkJICAgICBLRVJORUxfU09DS1BUUihDTVNHX0RBVEEoY21zZykpLAotCQkJCQkgICAgIGVy
-ciA8IDQwID8gZXJyIDogNDApOworCQkJCQkgICAgIG1pbihlcnIsIDQwKSk7CiAJCQlpZiAoZXJy
-KQogCQkJCXJldHVybiBlcnI7CiAJCQlicmVhazsKLS0gCjIuMjUuMQo=
+On 10/23/22 19:54, Bagas Sanjaya wrote:
+> Rewrite the documentation for clarity. Major points:
+> 
+>   * Switch to third person point of view
+>   * Briefly describe code examples before giving them out
+>   * Use "base" and "derived" terminology on class inheritance
+> 
+> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+
+Oops, duplicate patch sent. Please ignore this series.
+
+-- 
+An old man doll... just what I always wanted! - Clara
+
