@@ -2,62 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A31F609273
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 13:14:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2853760927A
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 13:38:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230156AbiJWLOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 07:14:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59358 "EHLO
+        id S230186AbiJWLi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 07:38:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbiJWLOR (ORCPT
+        with ESMTP id S229649AbiJWLiZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 07:14:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D36F6753A5;
-        Sun, 23 Oct 2022 04:14:14 -0700 (PDT)
+        Sun, 23 Oct 2022 07:38:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C2297434A;
+        Sun, 23 Oct 2022 04:38:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 076CEB80BFE;
-        Sun, 23 Oct 2022 11:14:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B898C433D6;
-        Sun, 23 Oct 2022 11:14:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666523651;
-        bh=DLMyfkLQCJ2cNhFzfchZELot8uBKjXe99jDV1JeqSV0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=D73HcALIYD0/BJDZHJPw6p3DKY+V1dJXBB/1X78Ak48PO8eVONp+IuoqT0HwT671e
-         OMzNIWrPBaclgyNun6EXd1xHyl+W2swXkUHynbfuXcsmwmfdO1QkSvwK8aan6psb4E
-         6y2ngYlOUW7WgttGxY1TWaLXOTv59XQj0VGIT4/d7Va76fjRKcDK047Wh76EupDbFE
-         U08N9umL3l3oRwP90G5TfBf/ubHGevXqJpp93fqT/1gx6tx6R9YSoQel7TnsUujx6Q
-         uKxhkPJtM9R0r8wb7SoxZsyR0LOIihTTiBgZ/BPwsyBzEODkdtU747od8Ht9aP9a6a
-         ZZCSYpEOqdYWA==
-Date:   Sun, 23 Oct 2022 12:14:45 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Mitja Spes <mitja@lxnav.com>, Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Lee Jones <lee.jones@linaro.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Tomasz Duszynski <tduszyns@gmail.com>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] dt-bindings: iio: pressure: meas,ms5611: add max
- SPI frequency to the example
-Message-ID: <20221023121445.204b4de8@jic23-huawei>
-In-Reply-To: <b656b2c5-3f2e-a808-b86f-796dd03127b3@linaro.org>
-References: <20221021135827.1444793-1-mitja@lxnav.com>
-        <20221021135827.1444793-4-mitja@lxnav.com>
-        <b656b2c5-3f2e-a808-b86f-796dd03127b3@linaro.org>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ABD5E60B55;
+        Sun, 23 Oct 2022 11:38:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85A22C433D6;
+        Sun, 23 Oct 2022 11:38:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1666525104;
+        bh=M6HXpQhc0LgopSmchjDdBJF0+nlmGhCmgJ1jyMgGHwM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DUKxC0lMVPylJ3weuY1GQj+BI9Ykq5TAcV3TyoHwttVpHUg9+GLfz2SWrMjaiD2Uq
+         jfaNesUy5mSEw9/uKsXV2Kptggigckotkw8NlMNu9zGofAyxfqyxr1q45VEFmqggoS
+         Qtk8YM+pjPukKIL7mLXd+LcE1bIyEIwu23PeBq8A=
+Date:   Sun, 23 Oct 2022 13:38:20 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Chuck Lever III <chuck.lever@oracle.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        linux-stable <stable@vger.kernel.org>,
+        Anna Schumaker <Anna.Schumaker@netapp.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: Re: [PATCH 5.19 554/717] NFSD: Return nfserr_serverfault if
+ splice_ok but buf->pages have data
+Message-ID: <Y1UnrINKthRQu8R5@kroah.com>
+References: <20221022072415.034382448@linuxfoundation.org>
+ <20221022072522.883630640@linuxfoundation.org>
+ <E22D29B2-5740-46E7-9A4A-52BAE214FDA1@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <E22D29B2-5740-46E7-9A4A-52BAE214FDA1@oracle.com>
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -67,27 +55,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 21 Oct 2022 10:08:42 -0400
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
-
-> On 21/10/2022 09:58, Mitja Spes wrote:
-> > Added max SPI frequency setting to the example. It is now honored by the
-> > driver.
-> >   
+On Sat, Oct 22, 2022 at 02:46:35PM +0000, Chuck Lever III wrote:
 > 
-> This could be there regardless of driver support (because it does not
-> matter)... anyway:
 > 
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Having the max frequency specified is certainly a valid addition, so I've
-applied this patch to the togreg branch (targetting next merge window).
-The other two are fixes so will go in quicker.
-
-Jonathan
-
+> > On Oct 22, 2022, at 3:27 AM, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> > 
+> > From: Anna Schumaker <Anna.Schumaker@Netapp.com>
+> > 
+> > [ Upstream commit 06981d560606ac48d61e5f4fff6738b925c93173 ]
+> > 
+> > This was discussed with Chuck as part of this patch set. Returning
+> > nfserr_resource was decided to not be the best error message here, and
+> > he suggested changing to nfserr_serverfault instead.
+> > 
+> > Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
+> > Link: https://lore.kernel.org/linux-nfs/20220907195259.926736-1-anna@kernel.org/T/#t
+> > Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
+> > Signed-off-by: Sasha Levin <sashal@kernel.org>
+> > ---
+> > fs/nfsd/nfs4xdr.c | 2 +-
+> > 1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/fs/nfsd/nfs4xdr.c b/fs/nfsd/nfs4xdr.c
+> > index eef98e3f4ae5..1e5822d00043 100644
+> > --- a/fs/nfsd/nfs4xdr.c
+> > +++ b/fs/nfsd/nfs4xdr.c
+> > @@ -3995,7 +3995,7 @@ nfsd4_encode_read(struct nfsd4_compoundres *resp, __be32 nfserr,
+> > 	if (resp->xdr->buf->page_len &&
+> > 	    test_bit(RQ_SPLICE_OK, &resp->rqstp->rq_flags)) {
+> > 		WARN_ON_ONCE(1);
+> > -		return nfserr_resource;
+> > +		return nfserr_serverfault;
+> > 	}
+> > 	xdr_commit_encode(xdr);
 > 
-> Best regards,
-> Krzysztof
-> 
+> Why is this change to be included in stable kernels?
 
+Is it not a valid bugfix?  If so, I will be glad to drop it, but in
+reading the changelog text and the code change itself, it seems like a
+valid fix to be backporting to stable kernels.
+
+thanks,
+
+greg k-h
