@@ -2,37 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 750B260956E
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 20:22:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35DB1609588
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 20:25:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230070AbiJWSW3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 14:22:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43600 "EHLO
+        id S230393AbiJWSZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 14:25:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbiJWSW1 (ORCPT
+        with ESMTP id S230113AbiJWSZW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 14:22:27 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE5D3A4AB
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 11:22:25 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:5054:ff:feb3:8f48] (helo=regzbot.fritz.box); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        id 1omfc7-0003sn-JN; Sun, 23 Oct 2022 20:22:23 +0200
-From:   "Regzbot (on behalf of Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-Subject: Linux regressions report  for mainline [2022-10-23]
-Date:   Sun, 23 Oct 2022 18:22:22 +0000
-Message-Id: <166654892458.2211781.4685104302005471754@leemhuis.info>
+        Sun, 23 Oct 2022 14:25:22 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A3B481FC;
+        Sun, 23 Oct 2022 11:25:17 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29NIOdOa030994;
+        Sun, 23 Oct 2022 13:24:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1666549479;
+        bh=jpYbbUqKSjwmKESHnd6CtOIE6EyYMS7eEAQw7V+xc5k=;
+        h=From:To:CC:Subject:Date;
+        b=iCQDX7Gu592q+isuHbctxd5ZFTBscxIGBpJ1rmkf8PXud0rOjfhuAVVO10TOpc7RY
+         sdpMHQ2+1A1fc3MUyIROULTOEAWJZrMovtJ50Sifwa++ZLG9rZ2FJrTA4NlTup415T
+         oNwlVl/ZzcOcUnDo7FHYAQUMKJYhYk3l/sPKPEv0=
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29NIOd4g011677
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Sun, 23 Oct 2022 13:24:39 -0500
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Sun, 23
+ Oct 2022 13:24:38 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Sun, 23 Oct 2022 13:24:38 -0500
+Received: from ula0226330.dal.design.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29NIObVX042708;
+        Sun, 23 Oct 2022 13:24:38 -0500
+From:   Andrew Davis <afd@ti.com>
+To:     Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Frank Rowand <frowand.list@gmail.com>
+CC:     <devicetree@vger.kernel.org>, <linux-kbuild@vger.kernel.org>,
+        <linux-renesas-soc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Andrew Davis <afd@ti.com>
+Subject: [PATCH 0/6] Rename DTB overlay source files
+Date:   Sun, 23 Oct 2022 13:24:31 -0500
+Message-ID: <20221023182437.15263-1-afd@ti.com>
 X-Mailer: git-send-email 2.37.3
-Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1666549345;756b8485;
-X-HE-SMSGID: 1omfc7-0003sn-JN
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -40,126 +73,147 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus! Below is a slightly edited report from regzbot listing all
-regression from this cycle that the bot and I are currently aware of.
+Hello all,
 
-For two of those five regressions a patch was accepted by the
-maintainer, but is not even yet in linux-next afaics.
+This is a series based on my patch here[0]. As suggested by Rob
+I've resurrected Frank's patch and appended it to mine as a series.
 
-HTH, Ciao, Thorsten
+First patch here is my original patch, 3rd is Frank's patch but with
+the unittest changes pulled out into the 2nd patch. That was re-worked
+moving the source building macro into scripts/Makefile.lib.
 
----
+Patches 4, 5, and 6 are an attempt at renaming all the existing DTB
+overlays. Split out by platform so they could be taken by platform
+maintainers or if easier ACK'd here and taken all together.
 
-Hi, this is regzbot, the Linux kernel regression tracking bot.
+This should cover all the DTB overlays so we can remove the old .dts
+rule for overlays and make .dtso the only supported way, let me know
+if we want that this cycle and I can post that too.
 
-Currently I'm aware of 5 regressions in linux-mainline. Find the
-current status below and the latest on the web:
+Thanks,
+Andrew
 
-https://linux-regtracking.leemhuis.info/regzbot/mainline/
+[0] https://www.spinics.net/lists/kernel/msg4548509.html
 
-Bye bye, hope to see you soon for the next report.
-   Regzbot (on behalf of Thorsten Leemhuis)
+Andrew Davis (5):
+  kbuild: Allow DTB overlays to built from .dtso named source files
+  kbuild: Allow DTB overlays to built into .dtso.S files
+  arm64: dts: freescale: Rename DTB overlay source files from .dts to
+    .dtso
+  arm64: dts: renesas: Rename DTB overlay source files from .dts to
+    .dtso
+  arm64: dts: xilinx: Rename DTB overlay source files from .dts to .dtso
 
+Frank Rowand (1):
+  of: overlay: rename overlay source files from .dts to .dtso
 
-======================================================
-current cycle (v6.0.. aka v6.1-rc), culprit identified
-======================================================
+ ...qds-13bb.dts => fsl-ls1028a-qds-13bb.dtso} |  0
+ ...qds-65bb.dts => fsl-ls1028a-qds-65bb.dtso} |  0
+ ...qds-7777.dts => fsl-ls1028a-qds-7777.dtso} |  0
+ ...qds-85bb.dts => fsl-ls1028a-qds-85bb.dtso} |  0
+ ...qds-899b.dts => fsl-ls1028a-qds-899b.dtso} |  0
+ ...qds-9999.dts => fsl-ls1028a-qds-9999.dtso} |  0
+ ...ts => imx8mm-venice-gw72xx-0x-imx219.dtso} |  0
+ ...=> imx8mm-venice-gw72xx-0x-rs232-rts.dtso} |  0
+ ...dts => imx8mm-venice-gw72xx-0x-rs422.dtso} |  0
+ ...dts => imx8mm-venice-gw72xx-0x-rs485.dtso} |  0
+ ...ts => imx8mm-venice-gw73xx-0x-imx219.dtso} |  0
+ ...=> imx8mm-venice-gw73xx-0x-rs232-rts.dtso} |  0
+ ...dts => imx8mm-venice-gw73xx-0x-rs422.dtso} |  0
+ ...dts => imx8mm-venice-gw73xx-0x-rs485.dtso} |  0
+ ...2.dts => draak-ebisu-panel-aa104xd12.dtso} |  0
+ ...xd12.dts => salvator-panel-aa104xd12.dtso} |  0
+ ...v-g-revA.dts => zynqmp-sck-kv-g-revA.dtso} |  0
+ ...v-g-revB.dts => zynqmp-sck-kv-g-revB.dtso} |  0
+ drivers/of/unittest-data/Makefile             | 66 +++++++++----------
+ .../{overlay.dts => overlay.dtso}             |  0
+ .../{overlay_0.dts => overlay_0.dtso}         |  0
+ .../{overlay_1.dts => overlay_1.dtso}         |  0
+ .../{overlay_10.dts => overlay_10.dtso}       |  0
+ .../{overlay_11.dts => overlay_11.dtso}       |  0
+ .../{overlay_12.dts => overlay_12.dtso}       |  0
+ .../{overlay_13.dts => overlay_13.dtso}       |  0
+ .../{overlay_15.dts => overlay_15.dtso}       |  0
+ .../{overlay_16.dts => overlay_16.dtso}       |  0
+ .../{overlay_17.dts => overlay_17.dtso}       |  0
+ .../{overlay_18.dts => overlay_18.dtso}       |  0
+ .../{overlay_19.dts => overlay_19.dtso}       |  0
+ .../{overlay_2.dts => overlay_2.dtso}         |  0
+ .../{overlay_20.dts => overlay_20.dtso}       |  0
+ .../{overlay_3.dts => overlay_3.dtso}         |  0
+ .../{overlay_4.dts => overlay_4.dtso}         |  0
+ .../{overlay_5.dts => overlay_5.dtso}         |  0
+ .../{overlay_6.dts => overlay_6.dtso}         |  0
+ .../{overlay_7.dts => overlay_7.dtso}         |  0
+ .../{overlay_8.dts => overlay_8.dtso}         |  0
+ .../{overlay_9.dts => overlay_9.dtso}         |  0
+ ...node.dts => overlay_bad_add_dup_node.dtso} |  0
+ ...prop.dts => overlay_bad_add_dup_prop.dtso} |  0
+ ...d_phandle.dts => overlay_bad_phandle.dtso} |  0
+ ...bad_symbol.dts => overlay_bad_symbol.dtso} |  0
+ .../{overlay_base.dts => overlay_base.dtso}   |  0
+ ...erlay_gpio_01.dts => overlay_gpio_01.dtso} |  0
+ ...lay_gpio_02a.dts => overlay_gpio_02a.dtso} |  0
+ ...lay_gpio_02b.dts => overlay_gpio_02b.dtso} |  0
+ ...erlay_gpio_03.dts => overlay_gpio_03.dtso} |  0
+ ...lay_gpio_04a.dts => overlay_gpio_04a.dtso} |  0
+ ...lay_gpio_04b.dts => overlay_gpio_04b.dtso} |  0
+ .../{testcases.dts => testcases.dtso}         |  0
+ drivers/of/unittest.c                         | 48 +++++++-------
+ scripts/Makefile.lib                          | 23 ++++++-
+ 54 files changed, 79 insertions(+), 58 deletions(-)
+ rename arch/arm64/boot/dts/freescale/{fsl-ls1028a-qds-13bb.dts => fsl-ls1028a-qds-13bb.dtso} (100%)
+ rename arch/arm64/boot/dts/freescale/{fsl-ls1028a-qds-65bb.dts => fsl-ls1028a-qds-65bb.dtso} (100%)
+ rename arch/arm64/boot/dts/freescale/{fsl-ls1028a-qds-7777.dts => fsl-ls1028a-qds-7777.dtso} (100%)
+ rename arch/arm64/boot/dts/freescale/{fsl-ls1028a-qds-85bb.dts => fsl-ls1028a-qds-85bb.dtso} (100%)
+ rename arch/arm64/boot/dts/freescale/{fsl-ls1028a-qds-899b.dts => fsl-ls1028a-qds-899b.dtso} (100%)
+ rename arch/arm64/boot/dts/freescale/{fsl-ls1028a-qds-9999.dts => fsl-ls1028a-qds-9999.dtso} (100%)
+ rename arch/arm64/boot/dts/freescale/{imx8mm-venice-gw72xx-0x-imx219.dts => imx8mm-venice-gw72xx-0x-imx219.dtso} (100%)
+ rename arch/arm64/boot/dts/freescale/{imx8mm-venice-gw72xx-0x-rs232-rts.dts => imx8mm-venice-gw72xx-0x-rs232-rts.dtso} (100%)
+ rename arch/arm64/boot/dts/freescale/{imx8mm-venice-gw72xx-0x-rs422.dts => imx8mm-venice-gw72xx-0x-rs422.dtso} (100%)
+ rename arch/arm64/boot/dts/freescale/{imx8mm-venice-gw72xx-0x-rs485.dts => imx8mm-venice-gw72xx-0x-rs485.dtso} (100%)
+ rename arch/arm64/boot/dts/freescale/{imx8mm-venice-gw73xx-0x-imx219.dts => imx8mm-venice-gw73xx-0x-imx219.dtso} (100%)
+ rename arch/arm64/boot/dts/freescale/{imx8mm-venice-gw73xx-0x-rs232-rts.dts => imx8mm-venice-gw73xx-0x-rs232-rts.dtso} (100%)
+ rename arch/arm64/boot/dts/freescale/{imx8mm-venice-gw73xx-0x-rs422.dts => imx8mm-venice-gw73xx-0x-rs422.dtso} (100%)
+ rename arch/arm64/boot/dts/freescale/{imx8mm-venice-gw73xx-0x-rs485.dts => imx8mm-venice-gw73xx-0x-rs485.dtso} (100%)
+ rename arch/arm64/boot/dts/renesas/{draak-ebisu-panel-aa104xd12.dts => draak-ebisu-panel-aa104xd12.dtso} (100%)
+ rename arch/arm64/boot/dts/renesas/{salvator-panel-aa104xd12.dts => salvator-panel-aa104xd12.dtso} (100%)
+ rename arch/arm64/boot/dts/xilinx/{zynqmp-sck-kv-g-revA.dts => zynqmp-sck-kv-g-revA.dtso} (100%)
+ rename arch/arm64/boot/dts/xilinx/{zynqmp-sck-kv-g-revB.dts => zynqmp-sck-kv-g-revB.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay.dts => overlay.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_0.dts => overlay_0.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_1.dts => overlay_1.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_10.dts => overlay_10.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_11.dts => overlay_11.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_12.dts => overlay_12.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_13.dts => overlay_13.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_15.dts => overlay_15.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_16.dts => overlay_16.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_17.dts => overlay_17.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_18.dts => overlay_18.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_19.dts => overlay_19.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_2.dts => overlay_2.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_20.dts => overlay_20.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_3.dts => overlay_3.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_4.dts => overlay_4.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_5.dts => overlay_5.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_6.dts => overlay_6.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_7.dts => overlay_7.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_8.dts => overlay_8.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_9.dts => overlay_9.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_bad_add_dup_node.dts => overlay_bad_add_dup_node.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_bad_add_dup_prop.dts => overlay_bad_add_dup_prop.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_bad_phandle.dts => overlay_bad_phandle.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_bad_symbol.dts => overlay_bad_symbol.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_base.dts => overlay_base.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_gpio_01.dts => overlay_gpio_01.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_gpio_02a.dts => overlay_gpio_02a.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_gpio_02b.dts => overlay_gpio_02b.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_gpio_03.dts => overlay_gpio_03.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_gpio_04a.dts => overlay_gpio_04a.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_gpio_04b.dts => overlay_gpio_04b.dtso} (100%)
+ rename drivers/of/unittest-data/{testcases.dts => testcases.dtso} (100%)
 
+-- 
+2.37.3
 
-[ *NEW* ] mm: sparc64: dpkg fails on sparc64 since "mm/thp: Carry over dirty bit when thp splits on pmd)"
----------------------------------------------------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/20221021160603.GA23307@u164.east.ru/
-https://lore.kernel.org/lkml/20221021160603.GA23307@u164.east.ru/
-
-By Anatoly Pugachev; 2 days ago; 1 activities, latest 2 days ago.
-Introduced in 0ccf7f168e17 (v6.1-rc1)
-
-Recent activities from: Anatoly Pugachev (1)
-
-
-[ *NEW* ] drm: amdgpu: some games (Cyberpunk 2077, Forza Horizon 4/5) hang at start
------------------------------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/CABXGCsOeQ7VYm98jRVaYp6KaNsFVsAnSb33ZT8JvZxcTcEGW0w@mail.gmail.com/
-https://lore.kernel.org/lkml/CABXGCsOeQ7VYm98jRVaYp6KaNsFVsAnSb33ZT8JvZxcTcEGW0w@mail.gmail.com/
-
-By Mikhail Gavrilov; 2 days ago; 3 activities, latest 2 days ago.
-Introduced in dd80d9c8eeca (v6.1-rc1)
-
-Recent activities from: Mikhail Gavrilov (2), Christian König (1)
-
-
-[ *NEW* ] v6.1-rc1: Regression in notification of sethostname changes
----------------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/0c2b92a6-0f25-9538-178f-eee3b06da23f@secunet.com/
-https://lore.kernel.org/lkml/0c2b92a6-0f25-9538-178f-eee3b06da23f@secunet.com/
-
-By Torsten Hilbrich; 4 days ago; 6 activities, latest 3 days ago.
-Introduced in bfca3dd3d0 (v6.1-rc1)
-
-Fix incoming:
-* https://lore.kernel.org/regressions/e910961b-2a8a-9d50-5842-54632aa05cd4@leemhuis.info/
-
-
-[ *NEW* ] Reboot failure on big endian mips systems
----------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/20221009163942.GA630814@roeck-us.net/
-https://lore.kernel.org/lkml/20221009163942.GA630814@roeck-us.net/
-
-By Guenter Roeck; 14 days ago; 12 activities, latest 5 days ago.
-Introduced in 72a95859728a (v6.1-rc1)
-
-Recent activities from: Andy Shevchenko (4), Lee Jones (3), Jason A.
-  Donenfeld (3), Guenter Roeck (1), Linus Torvalds (1)
-
-One patch associated with this regression:
-* [PATCH] Revert "mfd: syscon: Remove repetition of the regmap_get_val_endian()"
-  https://lore.kernel.org/lkml/20221008154700.404837-1-Jason@zx2c4.com/
-  15 days ago, by Jason A. Donenfeld
-
-Noteworthy links:
-* Re: [GIT PULL] MFD for v6.1
-  https://lore.kernel.org/lkml/Y0GZwkDwnak2ReTt@zx2c4.com/
-  15 days ago, by Jason A. Donenfeld; thread monitored.
-
-
-[ *NEW* ] mm: Observed memory leak in hugetlb_reserve_pages
------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/CAKXUXMxf7OiCwbxib7MwfR4M1b5+b3cNTU7n5NV9Zm4967=FPQ@mail.gmail.com/
-https://lore.kernel.org/lkml/CAKXUXMxf7OiCwbxib7MwfR4M1b5%2Bb3cNTU7n5NV9Zm4967=FPQ@mail.gmail.com/
-
-By Lukas Bulwahn; 6 days ago; 3 activities, latest 5 days ago.
-Introduced in bbff39cc6cbc (v6.1-rc1)
-
-Recent activities from: Mike Kravetz (2), Lukas Bulwahn (1)
-
-
-=============
-End of report
-=============
-
-All regressions marked '[ *NEW* ]' were added since the previous report,
-which can be found here:
-https://lore.kernel.org/r/166473157744.1194655.10375853755031619713@leemhuis.info
-
-Thanks for your attention, have a nice day!
-
-  Regzbot, your hard working Linux kernel regression tracking robot
-
-
-P.S.: Wanna know more about regzbot or how to use it to track regressions
-for your subsystem? Then check out the getting started guide or the
-reference documentation:
-
-https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
-https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md
-
-The short version: if you see a regression report you want to see
-tracked, just send a reply to the report where you Cc
-regressions@lists.linux.dev with a line like this:
-
-#regzbot introduced: v5.13..v5.14-rc1
-
-If you want to fix a tracked regression, just do what is expected
-anyway: add a 'Link:' tag with the url to the report, e.g.:
-
-Link: https://lore.kernel.org/all/30th.anniversary.repost@klaava.Helsinki.FI/
