@@ -2,127 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 705836095AE
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 20:45:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 369646095B2
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 20:50:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230460AbiJWSpc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 14:45:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40378 "EHLO
+        id S230355AbiJWSuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 14:50:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230395AbiJWSpT (ORCPT
+        with ESMTP id S230060AbiJWSuV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 14:45:19 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5618E3FEEC;
-        Sun, 23 Oct 2022 11:45:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1666550719; x=1698086719;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=eVE2lQ5w+2D1pFZYr6+909z4xn/w37Zq+2kgclL7XFo=;
-  b=WUrNW6X8J04JeyR55yOjf+DQNgeEAkGx9wjCCcHtw60YaeIiPyyGWOtQ
-   dQdMwhXgFK5G8PsmjoK/dkI/HcJpaZI7iyfcwSq4NRAPZRTx7/ZrJxFKU
-   vKGpBR8JMElASA1gQG/EywrruvyCzowwBfXtWiZcA2/pMi2pwHuq1KHaZ
-   23ZLI9PL1x4nAUcrSV6CLKAdQ0Sijbx0oa6OmEYeVdQfYJ30JgbSAP7bA
-   6wk7wNwmb2/oTAkme5tnciEn6gZ+Xn97jXADiLnSKDQPq3X8c0/9E7hCW
-   2KqBkAMOyP+xDl6VV/jAN06bhqsbF7ys/rJssCiG2IEWCBp4meoiKnYRl
-   A==;
-X-IronPort-AV: E=Sophos;i="5.95,207,1661842800"; 
-   d="scan'208";a="180146172"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Oct 2022 11:45:18 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Sun, 23 Oct 2022 11:45:17 -0700
-Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Sun, 23 Oct 2022 11:45:16 -0700
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <UNGLinuxDriver@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>
-Subject: [PATCH net 3/3] net: lan966x: Fix FDMA when MTU is changed
-Date:   Sun, 23 Oct 2022 20:48:38 +0200
-Message-ID: <20221023184838.4128061-4-horatiu.vultur@microchip.com>
-X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221023184838.4128061-1-horatiu.vultur@microchip.com>
-References: <20221023184838.4128061-1-horatiu.vultur@microchip.com>
+        Sun, 23 Oct 2022 14:50:21 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AADE72DABF
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 11:50:20 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id a24so4607214qto.10
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 11:50:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Bo2FXRI4ezRdP3Q+KGa6tSORGuBT0cFIf5tHm1iuBAA=;
+        b=Jt6uz48TUndgKHW6KUNpL+gmN0dsX4EYS8ehAGq41nDBYiYyyiQpQwvuNBA8gDlc5y
+         utGgPsy1GYdyaFYD28yFJDPkiyFSGhnfebQrw9Ba/XATKeRYG7HF/BuwQHOFGiuGsKit
+         oYgaeiYQGSmV/UO5RhApqRlJClVjssQRQzWt5uXnWSlVJoHey6VMLGMLoEN/eTIK4RdC
+         QyBihpH0hIby8zfEekCDfWwNFeA0ptS0gaJN0jZSd2dbEnaAXNEWgxXw5QMYFMDPKSQ9
+         so0kG/YhpO9W+/NErXzFzghsELZY5NfmwkLfdZ1wsVP4NPcnCo9meTdUySDRJCcEBMrW
+         9ycA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Bo2FXRI4ezRdP3Q+KGa6tSORGuBT0cFIf5tHm1iuBAA=;
+        b=N0chIMyN3B4oR1sQu1LO7OmWA6Inv4mA9DscCJWEm2GvuGAnTUwHr7mIpqfeBNpLKF
+         QM1eFh0iKk3qLESbaoa3p9qpPbBNJOQ1fLDRyG9t2GWBHu3hXyS9C5bJiq0ghBtFM9PK
+         aFFfdzNb+yJf4G+Qbyj76WLmeN76GcUJxbJRePiClXzO1ar2D3GdEtKeBtJ13QuH6k7r
+         BH3Dxm1HLI95QlWi+m3Ut04SXcK+Jk/4FZZ8i1U5LS8LDrF124G0wraTtEi/fzb7TbH5
+         EYU4ltBwEufdP4OAoHSB57jwU81BtYTNwUARUAPClxCiHWt8atPImHDu/GP0fjJvAgHQ
+         aEeA==
+X-Gm-Message-State: ACrzQf3gavCBiO2nJG5CjOgFoN3aXJ2qEAV6guEXyADxPA+7TBfAE+X8
+        rflBn3t5SPGICi5mNRUoYeMJuA==
+X-Google-Smtp-Source: AMsMyM7pIZzGA8m3YFTKvr4fcYK1riAaox42UGlghPk4R9OQVx70tm/FX0bc7mgTx+m4aEtUfZtQpA==
+X-Received: by 2002:a05:622a:1054:b0:39c:fff0:9d32 with SMTP id f20-20020a05622a105400b0039cfff09d32mr19269643qte.677.1666551019723;
+        Sun, 23 Oct 2022 11:50:19 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id x6-20020ac86b46000000b0035ba48c032asm11378685qts.25.2022.10.23.11.50.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 23 Oct 2022 11:50:19 -0700 (PDT)
+Date:   Sun, 23 Oct 2022 11:50:09 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+cc:     syzbot <syzbot+db1d2ea936378be0e4ea@syzkaller.appspotmail.com>,
+        syzkaller-bugs@googlegroups.com, Ian Kent <raven@themaw.net>,
+        Andrew Morton <akpm@linux-foundation.org>, hughd@google.com,
+        linux-kernel@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
+        Carlos Maiolino <cmaiolino@redhat.com>,
+        David Howells <dhowells@redhat.com>,
+        kernel test robot <oliver.sang@intel.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Siddhesh Poyarekar <siddhesh@gotplt.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Hawkins Jiawei <yin31149@gmail.com>
+Subject: Re: [syzbot] general protection fault in
+ _parse_integer_fixup_radix
+In-Reply-To: <ce198a72-92c9-e09a-ca92-2860326c2938@I-love.SAKURA.ne.jp>
+Message-ID: <17a1fdc-14a0-cf3c-784f-baa939895aef@google.com>
+References: <0000000000002feb6605eb71458e@google.com> <ce198a72-92c9-e09a-ca92-2860326c2938@I-love.SAKURA.ne.jp>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When MTU is changed, FDMA is required to calculate what is the maximum
-size of the frame that it can received. So it can calculate what is the
-page order needed to allocate for the received frames.
-The first problem was that, when the max MTU was calculated it was
-reading the value from dev and not from HW, so in this way it was
-missing L2 header + the FCS.
-The other problem was that once the skb is created using
-__build_skb_around, it would reserve some space for skb_shared_info.
-So if we received a frame which size is at the limit of the page order
-then the creating will failed because it would not have space to put all
-the data.
+On Sun, 23 Oct 2022, Tetsuo Handa wrote:
 
-Fixes: 2ea1cbac267e ("net: lan966x: Update FDMA to change MTU.")
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
----
- drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c | 7 +++++--
- drivers/net/ethernet/microchip/lan966x/lan966x_main.c | 2 +-
- 2 files changed, 6 insertions(+), 3 deletions(-)
+> syzbot is reporting that "vfs: parse: deal with zero length string value"
+> in linux-next.git broke tmpfs's mount option parsing, for tmpfs is expecting that
+> vfs_parse_fs_string() returning 0 implies that param.string != NULL.
+> 
+> The "nr_inodes" parameter for tmpfs is interpreted as "nr_inodes=$integer", but
+> the addition of
+> 
+> 	if (!v_size) {
+> 		param.string = NULL;
+> 		param.type = fs_value_is_empty;
+> 	} else {
+> 
+> to vfs_parse_fs_string() and
+> 
+> 	if (param->type == fs_value_is_empty)
+> 		return 0;
+> 
+> to fs_param_is_string() broke expectation by tmpfs.
+> 
+>   Parsing an fs string that has zero length should result in the parameter
+>   being set to NULL so that downstream processing handles it correctly.
+> 
+> is wrong and
+> 
+>   Parsing an fs string that has zero length should result in invalid argument
+>   error so that downstream processing does not dereference NULL param.string
+>   field.
+> 
+> is correct for the "nr_inodes" parameter.
+> 
+> 
+> 
+> How do we want to fix?
+> Should we add param.string != NULL checks into the downstream callers (like
+> Hawkins Jiawei did for https://syzkaller.appspot.com/bug?extid=a3e6acd85ded5c16a709 ) ?
+> Or should we add
+> 
+> 	if (!*param.string)
+> 		param.string = NULL;
+> 
+> rewriting into downstream callers which expect
+> 
+>   For example, the proc mount table processing should print "(none)" in this
+>   case to preserve mount record field count, but if the value points to the
+>   NULL string this doesn't happen.
+> 
+> behavior?
 
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-index a42035cec611c..5a5603f9e9fd3 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-@@ -668,12 +668,14 @@ static int lan966x_fdma_get_max_mtu(struct lan966x *lan966x)
- 	int i;
- 
- 	for (i = 0; i < lan966x->num_phys_ports; ++i) {
-+		struct lan966x_port *port;
- 		int mtu;
- 
--		if (!lan966x->ports[i])
-+		port = lan966x->ports[i];
-+		if (!port)
- 			continue;
- 
--		mtu = lan966x->ports[i]->dev->mtu;
-+		mtu = lan_rd(lan966x, DEV_MAC_MAXLEN_CFG(port->chip_port));
- 		if (mtu > max_mtu)
- 			max_mtu = mtu;
- 	}
-@@ -733,6 +735,7 @@ int lan966x_fdma_change_mtu(struct lan966x *lan966x)
- 
- 	max_mtu = lan966x_fdma_get_max_mtu(lan966x);
- 	max_mtu += IFH_LEN * sizeof(u32);
-+	max_mtu += SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
- 
- 	if (round_up(max_mtu, PAGE_SIZE) / PAGE_SIZE - 1 ==
- 	    lan966x->rx.page_order)
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-index b3070c3fcad0a..20ee5b28f70a5 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-@@ -395,7 +395,7 @@ static int lan966x_port_change_mtu(struct net_device *dev, int new_mtu)
- 
- 	err = lan966x_fdma_change_mtu(lan966x);
- 	if (err) {
--		lan_wr(DEV_MAC_MAXLEN_CFG_MAX_LEN_SET(old_mtu),
-+		lan_wr(DEV_MAC_MAXLEN_CFG_MAX_LEN_SET(LAN966X_HW_MTU(old_mtu)),
- 		       lan966x, DEV_MAC_MAXLEN_CFG(port->chip_port));
- 		dev->mtu = old_mtu;
- 	}
--- 
-2.38.0
+I've given it no thought at all: I was hoping, as Al suggests in
+https://lore.kernel.org/lkml/Y1VwdUYGvDE4yUoI@ZenIV/
+that the breaking commit would soon be reverted, and Ian think again.
 
+Hugh
