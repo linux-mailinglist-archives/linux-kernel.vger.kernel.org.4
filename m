@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCDA2609220
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 11:51:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EFB2609221
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 11:51:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230169AbiJWJvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 05:51:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39028 "EHLO
+        id S230250AbiJWJvM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 05:51:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230219AbiJWJum (ORCPT
+        with ESMTP id S230178AbiJWJu4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 05:50:42 -0400
+        Sun, 23 Oct 2022 05:50:56 -0400
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0AD03ECD0
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 02:50:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6838F5B7AD
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 02:50:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1666518547; h=from:from:sender:reply-to:subject:subject:date:date:
+        s=mail; t=1666518548; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=3M9dCoUiG7SdzuIW6iaf9KAa+/qkvhEMPsTc9+Iggvw=;
-        b=Hu+oDwDkdnYZX6c5HGfyuyRIFGXcLqOLji3RgwBRZ+GeLGd5dcKaBrd9841snyAius7VDJ
-        QzIVd3YQBUbp29WD/XwyqhT/wfhuWldPSFkkqGJ4dvjgMdOD21GNC7l6SooEacairfkNxu
-        7+pX0qcDiCtlUui5J/nBk3vSaICD9Fk=
+        bh=o88MccR3qEu1Ka3g1RWgK0rEm5DdYE6bq3HPlQGFNi4=;
+        b=pcuJSH76iZA0NzImnhzEJW9EKq7oVQaT+snLzlGBC0H2whCUg2u8YgmO21xYq33N8W+IMH
+        CddyIvSF3nqZAmX/czfADjkUGj59SSs6bgr9yHl4BqX+B/VEEiF4Ro35jkeR6Yh6vSWmKd
+        /i15obtEisSF1mLVDw/ZgPzDH9fmgU0=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Lee Jones <lee@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH v3 08/28] mfd: stpmic1: Remove #ifdef guards for PM related functions
-Date:   Sun, 23 Oct 2022 10:48:32 +0100
-Message-Id: <20221023094852.8035-9-paul@crapouillou.net>
+Subject: [PATCH v3 09/28] mfd: ucb1x00: Remove #ifdef guards for PM related functions
+Date:   Sun, 23 Oct 2022 10:48:33 +0100
+Message-Id: <20221023094852.8035-10-paul@crapouillou.net>
 In-Reply-To: <20221023094852.8035-1-paul@crapouillou.net>
 References: <20221023094852.8035-1-paul@crapouillou.net>
 MIME-Version: 1.0
@@ -56,41 +56,40 @@ regressions are subsequently easier to catch.
 
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 ---
- drivers/mfd/stpmic1.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/mfd/ucb1x00-core.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/mfd/stpmic1.c b/drivers/mfd/stpmic1.c
-index eb3da558c3fb..7d8b0c0548fe 100644
---- a/drivers/mfd/stpmic1.c
-+++ b/drivers/mfd/stpmic1.c
-@@ -162,7 +162,6 @@ static int stpmic1_probe(struct i2c_client *i2c,
- 	return devm_of_platform_populate(dev);
+diff --git a/drivers/mfd/ucb1x00-core.c b/drivers/mfd/ucb1x00-core.c
+index b690796d24d4..fc4d4c844a81 100644
+--- a/drivers/mfd/ucb1x00-core.c
++++ b/drivers/mfd/ucb1x00-core.c
+@@ -660,7 +660,6 @@ void ucb1x00_unregister_driver(struct ucb1x00_driver *drv)
+ 	mutex_unlock(&ucb1x00_mutex);
  }
  
 -#ifdef CONFIG_PM_SLEEP
- static int stpmic1_suspend(struct device *dev)
+ static int ucb1x00_suspend(struct device *dev)
  {
- 	struct i2c_client *i2c = to_i2c_client(dev);
-@@ -187,9 +186,8 @@ static int stpmic1_resume(struct device *dev)
- 
+ 	struct ucb1x00_plat_data *pdata = dev_get_platdata(dev);
+@@ -728,15 +727,15 @@ static int ucb1x00_resume(struct device *dev)
+ 	mutex_unlock(&ucb1x00_mutex);
  	return 0;
  }
 -#endif
  
--static SIMPLE_DEV_PM_OPS(stpmic1_pm, stpmic1_suspend, stpmic1_resume);
-+static DEFINE_SIMPLE_DEV_PM_OPS(stpmic1_pm, stpmic1_suspend, stpmic1_resume);
+-static SIMPLE_DEV_PM_OPS(ucb1x00_pm_ops, ucb1x00_suspend, ucb1x00_resume);
++static DEFINE_SIMPLE_DEV_PM_OPS(ucb1x00_pm_ops,
++				ucb1x00_suspend, ucb1x00_resume);
  
- static const struct of_device_id stpmic1_of_match[] = {
- 	{ .compatible = "st,stpmic1", },
-@@ -201,7 +199,7 @@ static struct i2c_driver stpmic1_driver = {
- 	.driver = {
- 		.name = "stpmic1",
- 		.of_match_table = of_match_ptr(stpmic1_of_match),
--		.pm = &stpmic1_pm,
-+		.pm = pm_sleep_ptr(&stpmic1_pm),
+ static struct mcp_driver ucb1x00_driver = {
+ 	.drv		= {
+ 		.name	= "ucb1x00",
+ 		.owner	= THIS_MODULE,
+-		.pm	= &ucb1x00_pm_ops,
++		.pm	= pm_sleep_ptr(&ucb1x00_pm_ops),
  	},
- 	.probe = stpmic1_probe,
- };
+ 	.probe		= ucb1x00_probe,
+ 	.remove		= ucb1x00_remove,
 -- 
 2.35.1
 
