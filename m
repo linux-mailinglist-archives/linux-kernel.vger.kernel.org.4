@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BB7360ABCC
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:56:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E54260A53E
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:22:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236841AbiJXN4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:56:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45506 "EHLO
+        id S231468AbiJXMWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:22:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236872AbiJXNyY (ORCPT
+        with ESMTP id S233598AbiJXMTz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:54:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C0D5BE2C2;
-        Mon, 24 Oct 2022 05:44:02 -0700 (PDT)
+        Mon, 24 Oct 2022 08:19:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567FA836C1;
+        Mon, 24 Oct 2022 04:59:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B49FD612C9;
-        Mon, 24 Oct 2022 12:44:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCF6FC433C1;
-        Mon, 24 Oct 2022 12:44:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C714B612D2;
+        Mon, 24 Oct 2022 11:57:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCB30C433C1;
+        Mon, 24 Oct 2022 11:57:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666615442;
-        bh=886F7+QHCEAnDMEkfjueOSSJcarr3O9tSlES4/xq6vE=;
+        s=korg; t=1666612677;
+        bh=1dNVR3X2IySjniVZceBtGxiJ2W3mMOjlJ9Z7yNLlviY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zn03B/0Cciu4XNi4N6qp5pIhy5ZRJoA5/6lBMh2ET05niaVDFpNRMO6zVXlSAI8WD
-         ZZ0veM6mnTwPy9d2TEZT2DuIPZPf4z4SqoPA4ytexKaZSb0A7zA2c5UDzkIy4hHcJa
-         gdpw2CK/Vn0Ja3TfwDk6Rz4SVbionCPl54T8501Y=
+        b=bJ3yL4Rz36fXRYrfEoC7gdEP6IMpuBqiF65LBoeui5XSgLsvaNXdl2Rbd8W2LGJWS
+         P9dITkQrO1JwtOmLUkgGFX+3MrNrJtZGj8uKoKI+8V4EhoepNOhJeIdF670eQs9ZHl
+         SFxvRybudfY1fWS1fHWYpBO+802c/1Ob0moqZbhw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lucas Stach <l.stach@pengutronix.de>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
+        stable@vger.kernel.org, Xu Qiang <xuqiang36@huawei.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 252/530] ARM: dts: imx6qdl-kontron-samx6i: hook up DDC i2c bus
+Subject: [PATCH 4.19 077/229] spi: qup: add missing clk_disable_unprepare on error in spi_qup_pm_resume_runtime()
 Date:   Mon, 24 Oct 2022 13:29:56 +0200
-Message-Id: <20221024113056.510332388@linuxfoundation.org>
+Message-Id: <20221024113001.561231833@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
-References: <20221024113044.976326639@linuxfoundation.org>
+In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
+References: <20221024112959.085534368@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,48 +54,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lucas Stach <l.stach@pengutronix.de>
+From: Xu Qiang <xuqiang36@huawei.com>
 
-[ Upstream commit afd8f77957e3e83adf21d9229c61ff37f44a177a ]
+[ Upstream commit 494a22765ce479c9f8ad181c5d24cffda9f534bb ]
 
-i2c2 is routed to the pins dedicated as DDC in the module standard.
-Reduce clock rate to 100kHz to be in line with VESA standard and hook
-this bus up to the HDMI node.
+Add the missing clk_disable_unprepare() before return
+from spi_qup_pm_resume_runtime() in the error handling case.
 
-Fixes: 708ed2649ad8 ("ARM: dts: imx6qdl-kontron-samx6i: increase i2c-frequency")
-Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
-[m.felsch@pengutronix.de: add fixes line]
-Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+Fixes: dae1a7700b34 (“spi: qup: Handle clocks in pm_runtime suspend and resume”)
+Signed-off-by: Xu Qiang <xuqiang36@huawei.com>
+Link: https://lore.kernel.org/r/20220825065324.68446-2-xuqiang36@huawei.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/imx6qdl-kontron-samx6i.dtsi | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/spi/spi-qup.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/imx6qdl-kontron-samx6i.dtsi b/arch/arm/boot/dts/imx6qdl-kontron-samx6i.dtsi
-index 6b791d515e29..683f6e58ab23 100644
---- a/arch/arm/boot/dts/imx6qdl-kontron-samx6i.dtsi
-+++ b/arch/arm/boot/dts/imx6qdl-kontron-samx6i.dtsi
-@@ -263,6 +263,10 @@
- 	phy-reset-gpios = <&gpio1 25 GPIO_ACTIVE_LOW>;
- };
+diff --git a/drivers/spi/spi-qup.c b/drivers/spi/spi-qup.c
+index c5c727274814..1ca678bcb527 100644
+--- a/drivers/spi/spi-qup.c
++++ b/drivers/spi/spi-qup.c
+@@ -1172,8 +1172,10 @@ static int spi_qup_pm_resume_runtime(struct device *device)
+ 		return ret;
  
-+&hdmi {
-+	ddc-i2c-bus = <&i2c2>;
-+};
-+
- &i2c_intern {
- 	pmic@8 {
- 		compatible = "fsl,pfuze100";
-@@ -387,7 +391,7 @@
+ 	ret = clk_prepare_enable(controller->cclk);
+-	if (ret)
++	if (ret) {
++		clk_disable_unprepare(controller->iclk);
+ 		return ret;
++	}
  
- /* HDMI_CTRL */
- &i2c2 {
--	clock-frequency = <375000>;
-+	clock-frequency = <100000>;
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pinctrl_i2c2>;
- };
+ 	/* Disable clocks auto gaiting */
+ 	config = readl_relaxed(controller->base + QUP_CONFIG);
 -- 
 2.35.1
 
