@@ -2,235 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D96760B536
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 20:15:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 653F660B5FB
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 20:45:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231204AbiJXSP3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 14:15:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35100 "EHLO
+        id S232466AbiJXSpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 14:45:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232573AbiJXSPF (ORCPT
+        with ESMTP id S232399AbiJXSpH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 14:15:05 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDD201C69FE
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 09:56:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666630613; x=1698166613;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=1hbp8kaTb4GcgcijNqWwSdVbsOrKOyHhSINyKLFdtr4=;
-  b=nCGXicpXJyS2phpDEYum/X/E9PV28AE9CTc/gpzLU5GdpEp9UGA2hGWs
-   DFuXsVwhCTzys/6lxD55RI5j29W8qOrxDCir+Ri0tckXtfEthWYNJoCz5
-   Kv/mew6pB3lyu5/KMW9muJ6+mjLh9G3kFG+IaEfbfulnVeTjL8bwptEeU
-   HDDPS1rVxsXJWWxUCyLpX6eZD14Nvy9tYaLr3dm5FOyRzbuV756ngpWG6
-   ekE4DhUJzmWa31AVTBcGUcmcaFgHtbSMHNrAIFLu+QuJIuKiSofDbMhEt
-   MnFCWymAFI8fKmSMAyKrfXWQGQN8z21EoaGH/OHMm+ywd5CLMIDdB+LCL
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="287189603"
-X-IronPort-AV: E=Sophos;i="5.95,209,1661842800"; 
-   d="scan'208";a="287189603"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 09:54:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="626133202"
-X-IronPort-AV: E=Sophos;i="5.95,209,1661842800"; 
-   d="scan'208";a="626133202"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga007.jf.intel.com with ESMTP; 24 Oct 2022 09:54:36 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 24 Oct 2022 09:54:36 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 24 Oct 2022 09:54:35 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Mon, 24 Oct 2022 09:54:35 -0700
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.169)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Mon, 24 Oct 2022 09:54:35 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FrHQEARc7qk1vQ2AvRHSX8HcGRy2aNYqKFqMADL7XGJY0NbePi4kei/K6nJsl8hoi3AvDWdCXSD8HTfYleUFnS/M8wtTQvng1I5p+YvMxTW0miHzwPW3k3f9fWNl9kwGbrmRT9xUXJyV4Rs273tlTy9xzkLaDGFm/ljly7VxhXuIJGnNPHYY1d1n+QCfSYV+JU5gLBxddXXy/Axk/GRroVI2zkvb/YNtA44TZ6//7RGf9WcduVazfYy5YGRjB1CKJJG230CBTo+cyKB1dUwZUNInfKgKGWbSVOKEBom88mZxWI8oTUl37OjUm1Z/ByX5f+gCihshJN9JlzlixBGLtg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=m/zWozhZIYwHLTJp+Yaqq87HBhkbgsVlXIqvNk4uEDs=;
- b=kPaP17nS+HZ+xTRhbwcXbkSWNbQM4Bjq34OJxCHymJ7jeiFUnJZU1iPDly4Sadjsm99Qy5IwLs8aTVlVnCazbScPWspaajI5JEsMSMgH/r8mrqL8Tz63FF1j1QiTLI0t8Vo5AM93eJdzu5SCBFf3I4oPITaFXoxXoXHQUSrsYzWsVHVedS/2Ed/72lbOZJzSBpIOPPMjHn3b/G7Qh78+f4QHtjXZh+G03eOEKqtzDIr0RJjGPCyq6yp95VrS5gdnrcMM5GRPZLytukKzCiwRWvpebYFrpZWKeSiwoEcMSAyLvDvlDTRYHaCNamdbsO/7bqjUn97KqFlMNNBjCAB9MQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SA1PR11MB6733.namprd11.prod.outlook.com (2603:10b6:806:25c::17)
- by BL1PR11MB5510.namprd11.prod.outlook.com (2603:10b6:208:31d::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.33; Mon, 24 Oct
- 2022 16:54:33 +0000
-Received: from SA1PR11MB6733.namprd11.prod.outlook.com
- ([fe80::6f83:c165:aa0c:efae]) by SA1PR11MB6733.namprd11.prod.outlook.com
- ([fe80::6f83:c165:aa0c:efae%8]) with mapi id 15.20.5723.033; Mon, 24 Oct 2022
- 16:54:33 +0000
-Date:   Mon, 24 Oct 2022 09:54:30 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-CC:     Randy Dunlap <rdunlap@infradead.org>, Peter Xu <peterx@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        kernel test robot <yujie.liu@intel.com>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH for rc] mm/shmem: Ensure proper fallback if page faults
-Message-ID: <Y1bDRpmPdYdilJzp@iweiny-mobl>
-References: <20221024043305.1491403-1-ira.weiny@intel.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20221024043305.1491403-1-ira.weiny@intel.com>
-X-ClientProxiedBy: BYAPR04CA0036.namprd04.prod.outlook.com
- (2603:10b6:a03:40::49) To SA1PR11MB6733.namprd11.prod.outlook.com
- (2603:10b6:806:25c::17)
+        Mon, 24 Oct 2022 14:45:07 -0400
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC3724D887
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:26:52 -0700 (PDT)
+Received: by mail-qk1-x72b.google.com with SMTP id l9so3953187qkk.11
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:26:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=kLAt+IwnGUmyRpzuLFJymfFyXp1Of/OcSyYHk3SGp7Q=;
+        b=ooGvCPGn1tpoAbxaK0Qx/raipTEsSorlHAr/SmqJ+o8acuPfGUgfU+iXabUNAw6VWC
+         wtmCmfba7/DQafyZMUYSNBaYq6HeQDbZR0z+S+RGYFbyJPlN8058ykNLqt7VS/ZRUwfg
+         JdD02f4Qf12OdVlJJQcEOR8g5CI7dHbo3/inQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kLAt+IwnGUmyRpzuLFJymfFyXp1Of/OcSyYHk3SGp7Q=;
+        b=FleknIM8AIbqUymDjEJD1yGkt4Zy2pfcPWvGFdcPdSjOeE7FqbL7IXJrsw+pmn72PB
+         Bybd98a8mSJwPIAiGhPx0Oj7P7SaxHi6VJYjgtrBZwLCukQelht6U5S0tcbubW8wyYSW
+         3lZFf8eODjObNkmjmn5hmz9giGEC2YkNS23SfSnBhp+MPxTSf/97Fbd31jUlsfStGuGG
+         6dFJQLqmmVmExwTMOpVOPmsa7gGEN5oJfQfbBm+jTELe227i+k1UrK7Baw8Esy8jo8bB
+         olYQ8c5c5aPtBjquIr/eUgGy+WlqREPYA2DoluiWrbkNhLDfTfp6ffS7s5h8aoZo0SKI
+         s0AA==
+X-Gm-Message-State: ACrzQf1c3xYouhgwHVO8wRL2Jc5s+vTu7uiwe3nt6awCISTKJi68zXha
+        xNOzvj9HAXAHRd1+WbvhNU+mCmKpGcjOmw==
+X-Google-Smtp-Source: AMsMyM7sdEixbP1ueOE9/G1lmfqTO0Z9L6CDFDExuNFVhfP6nqDGxQPj5YjlT+OnY6v8EZpT5sRw8Q==
+X-Received: by 2002:a05:622a:211:b0:39c:f429:e03a with SMTP id b17-20020a05622a021100b0039cf429e03amr29318466qtx.389.1666630471625;
+        Mon, 24 Oct 2022 09:54:31 -0700 (PDT)
+Received: from localhost (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
+        by smtp.gmail.com with ESMTPSA id bc14-20020a05622a1cce00b0039bde72b14asm168364qtb.92.2022.10.24.09.54.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Oct 2022 09:54:31 -0700 (PDT)
+Date:   Mon, 24 Oct 2022 16:54:30 +0000
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     Uladzislau Rezki <urezki@gmail.com>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com,
+        rostedt@goodmis.org
+Subject: Re: [PATCH rcu 13/14] workqueue: Make queue_rcu_work() use
+ call_rcu_flush()
+Message-ID: <Y1bDRmAv3135XLcn@google.com>
+References: <20221019225138.GA2499943@paulmck-ThinkPad-P17-Gen-1>
+ <20221019225144.2500095-13-paulmck@kernel.org>
+ <CAEXW_YQgSwMYisZVctXkjFu6_5YhFCpL_E5o5H4oJooS5Syp+g@mail.gmail.com>
+ <20221024031540.GU5600@paulmck-ThinkPad-P17-Gen-1>
+ <Y1ZtyjxKCcV0Hfjn@pc636>
+ <Y1aDy3maaO39ClSU@pc636>
+ <Y1ahs83258Lok9+O@google.com>
+ <20221024153958.GY5600@paulmck-ThinkPad-P17-Gen-1>
+ <Y1a8ei1h7SzyYZx9@pc636>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA1PR11MB6733:EE_|BL1PR11MB5510:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1374e254-626b-4c73-92f0-08dab5e06d40
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6pj0WrdUWL5hj55aWBab75R1j0zVVEMRBYENVPQZ1FFvZkyCJsiQBC5GezssPLeFGEnXoyvwryJn0g76YHwGSKVCrlqPHYny6PNXln10a9M1bgya44ZDpPLbLWnHoJxlkvVZ+y7v57CYmoYyI7I90womN8Zn6nJuWwiqvNE5Vyv6EHyqLgTxKfZtWl+PYtEM0e3QSxE0e/9n0nblYYTIbnMdbqobMXbpaiKkxoNaUimopwRijFj1UfagmkdMqnOMVpqtHf8aunhqDz1L8HMNi7m5AM8nVAPVScupm70T8k1JmXonF+B+sOkyuw/YBVf0FBce79o9j532z6CzG4Z2P0zY8ygzE0uwW0YRZgZZ/r1zproMvIhiYye5iSBJBRaVJnvIiNu9RUFuDy+32jtaP1EDHhZY/LQPDjfZm2DlTa7Y45hoOkMtjgXrKryQOSvZaubxfO2YHq8wadl7d6I3GK7Evp9TFthibcVBjYMklVGNed43l1iSqkYFuasFN4+WmTfs8QNUru0zxHX3vg96fLZeq8AtnGLRM/cQ9IiRX2x09bTvsg64Kb8aGjZl3CUC1t9Z5uDrDWKFafONHbVmpqSBXw+mxqQb+Jx0Y8oP9Ffc+QmQ18RMJ9o4acynA0jUaUVohrTCcc9VeADKpWpnX69dlHJ42ykSd8eni5mxj7+Sf2jrCmcTAokABljCQsXPiKHByCfQ1lHolbHGcmZKdV02xezbbbHWcYGD61uhhh8JzxPjiu5t1h8iQ5SSRcrrNBk+J9/2lhbKdVGa4PnsTg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6733.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(346002)(136003)(39860400002)(366004)(376002)(396003)(451199015)(5660300002)(82960400001)(6916009)(966005)(33716001)(4326008)(86362001)(66556008)(54906003)(8676002)(6486002)(186003)(26005)(66946007)(66476007)(6512007)(9686003)(316002)(41300700001)(6506007)(44832011)(83380400001)(478600001)(2906002)(8936002)(38100700002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?L1xjQ6Tg3Av7KQn0tEmAyFGaNBbAze6d3EU1NR+ADkg4H+EJYsmZDz/oy2YC?=
- =?us-ascii?Q?B4X4+Woa80UCHBsCcd7/C2lEAvE8SmSFNks+iNbYG5jHD3yzKtFLeLmNKCrA?=
- =?us-ascii?Q?ImMGBafl1R8pOpIwO55mTw2yTqw7QJgspDtzuaiSthULYZ6x1jN2+BD40w9y?=
- =?us-ascii?Q?1zxg7XSHUXrvfeiuL5xR0wxrCkwHo8AWUnLPjFoYiidorn/xjswRAP5K2xIM?=
- =?us-ascii?Q?OaGvHquuFkI3pIUcN3uJxgGroNeVKHkhj9pOsK/7wWPw1kD/j0SJJVqCzt5i?=
- =?us-ascii?Q?psMc5tmrC/6dHyg6BBZQC1lNVjuVqOjbgR65fKlZe45vpfRU8VS7SlvXrn9k?=
- =?us-ascii?Q?VqM3ab977ydpclDQC0KqKcod+AqIANm8W7CDWH1R5kjeipuRv2J0TTFzEVUK?=
- =?us-ascii?Q?x21ES5+Yr6jmXdbN79/WJrEMuEiKf+uagJ/4OAa6c53Es6/NTiNeEs4pDHds?=
- =?us-ascii?Q?O3o6nklCPeIfXHGhc1Ern83cYl+uAFs/ieiYYwZgxQjSlhwpMCH/xK96C0wx?=
- =?us-ascii?Q?in55L5wABT9uY3gwrtcndJ2q//WJXhKyymO10afVqb62XAw1O+KWnn6mFURh?=
- =?us-ascii?Q?u54m7mwMPxWC9C4u0N0GmC1UlhdbCrVtpYxqqQde4X4EoGt5noOqEupfuQW7?=
- =?us-ascii?Q?5VOEOXydQ+LkTijUfMuBdzrXTSaNF4EiDrF6GrLSLpjkSwRrZOx/4FKR+Wcx?=
- =?us-ascii?Q?LrUyCiHD1/YyJR4LJ/Y4NnCzQ4B93qC/NyAmQ8nBSJxgnGQgsXYhEs1POWE0?=
- =?us-ascii?Q?VH+AkAIBiToHo8b2LiX/UT0bBIJuu0rj53q6Ro49MXZpuoz9quhVS1zevpo2?=
- =?us-ascii?Q?Kb+8WkeilkEMSAEuc93QR3N/eHgZ4ywfCxYy7PyWZZSVUHZYlWzXLj8WKR27?=
- =?us-ascii?Q?o3y9CG5aRa6chOb5Eey+S/57pzWy48TGz5M9hzWaVJxHTH5NrtNI3cmFAFh6?=
- =?us-ascii?Q?YubG22J7vwZmRGhHKTSIORcTkzjW2oloulb30BeAUVe/8pziks5iNaDKgc9t?=
- =?us-ascii?Q?e7eD8cnn6CpfiR0s9qBXA9vMg4ava/8IdWsWBX5YNDOERzzxBacpVSKZR9EG?=
- =?us-ascii?Q?/JKfeQSKlDiYkSSt6uKRruyixx8JV547nN//hO7rkSEDV9dW87OnzgXu21/S?=
- =?us-ascii?Q?eG9+Q/o8J4AYAaoS9KCCdYu/idlR0TNwSp9T4Crf6cldAzjdYjL55z3jGYQL?=
- =?us-ascii?Q?nltwYo0597OMVi4Ch/UzhEpA1Du+VbtGisZuHzGIcrKMZ1nMCrXZyfd9NCRe?=
- =?us-ascii?Q?uxzmoxWsBTZCQmuYde//oMZhCvn9ZmI/KKx+FhxSQW26ZHFPH2HA9KMnAVur?=
- =?us-ascii?Q?jFrEymYT63wN11irUNWrez+P7Mjo/tBBltJou9j/QcSi5FdvNempUrJPADV6?=
- =?us-ascii?Q?X2uIJkIOTVzn1f1EGX51mYTuuKJqBZXf4cE7CRp2k8B+aDOn8FU4lEXnvKR5?=
- =?us-ascii?Q?9jSoZX4tPwZ/o4Gi0G/mUx2tQlZ+JFW8ZER9UlTPa6IHB9J8ZRBN/NxZlfcZ?=
- =?us-ascii?Q?0M/Iq4qkdeuYwMnU12hdolXmCPnA9D6bcgqnm5J0eiFn7PnFWm5I/Hrcaduc?=
- =?us-ascii?Q?ACEvXdsau8d3Y/LM01btNauKX2NewUdVlr95czsR?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1374e254-626b-4c73-92f0-08dab5e06d40
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6733.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Oct 2022 16:54:33.7846
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Vf9Bv0vGnyoSq+ypStGayHmuxZjGigCHwZ3nfWucQN9BOXL9SlliFAK9Iu+hqtgZn++vQVYpw2KPG0b8NxdO8w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5510
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1a8ei1h7SzyYZx9@pc636>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 23, 2022 at 09:33:05PM -0700, Ira wrote:
-> From: Ira Weiny <ira.weiny@intel.com>
-> 
-> The kernel test robot flagged a recursive lock as a result of a
-> conversion from kmap_atomic() to kmap_local_folio()[Link]
-> 
-> The cause was due to the code depending on the kmap_atomic() side effect
-> of disabling page faults.  In that case the code expects the fault to
-> fail and take the fallback case.
-> 
-> git archaeology implied that the recursion may not be an actual bug.[1]
-> However, the mmap_lock needed in the fault may be the one held.[2]
-> 
-> Add an explicit pagefault_disable() and a big comment to explain this
-> for future souls looking at this code.
-> 
-> [1] https://lore.kernel.org/all/Y1MymJ%2FINb45AdaY@iweiny-desk3/
-> [2] https://lore.kernel.org/all/Y1M2p9OtBGnKwGUE@x1n/
-> 
-> Fixes: 7a7256d5f512 ("shmem: convert shmem_mfill_atomic_pte() to use a folio")
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Peter Xu <peterx@redhat.com>
-> Cc: Andrea Arcangeli <aarcange@redhat.com>
-> Reported-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> Reported-by: kernel test robot <yujie.liu@intel.com>
-> Link: https://lore.kernel.org/r/202210211215.9dc6efb5-yujie.liu@intel.com
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> 
-> ---
-> Thanks to Matt and Andrew for initial diagnosis.
-> Thanks to Randy for pointing out C code needs ';'  :-D
-> Thanks to Andrew for suggesting an elaborate comment
-> Thanks to Peter for pointing out that the mm's may be the same.
-> ---
->  mm/shmem.c | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/mm/shmem.c b/mm/shmem.c
-> index 8280a5cb48df..c1bca31cd485 100644
-> --- a/mm/shmem.c
-> +++ b/mm/shmem.c
-> @@ -2424,9 +2424,16 @@ int shmem_mfill_atomic_pte(struct mm_struct *dst_mm,
->  
->  		if (!zeropage) {	/* COPY */
->  			page_kaddr = kmap_local_folio(folio, 0);
-> +			/*
-> +			 * The mmap_lock is held here.  Disable page faults to
-> +			 * prevent deadlock should copy_from_user() fault.  The
-> +			 * copy will be retried outside the mmap_lock.
-> +			 */
+On Mon, Oct 24, 2022 at 06:25:30PM +0200, Uladzislau Rezki wrote:
+> >
+> > You guys might need to agree on the definition of "good" here.  Or maybe
+> > understand the differences in your respective platforms' definitions of
+> > "good".  ;-)
+> >
+> Indeed. Bad is when once per-millisecond infinitely :) At least in such use
 
-Offline Dave Hansen and I were discussing this and he was concerned that this
-comment implies that a deadlock would always occur rather than might occur.
+To me once per-ms is really bad, and once per 20ms indefinitely is also not
+ideal ;-). Just to give you a sense of why I feel this, I see the RCU thread
+wake ups that periodically happen can disturb CPUIdle.
 
-I was not clear on this as I was thinking the read mmap_lock was non-recursive.
+The act of queuing Callback + gp delay + rcu threads running is enough to
+disrupt overlaps between CPUidle time and the gp delay. Further the idle
+governor will refrain from entering deeper CPUidle states because it will see
+timers queued in the near future to wake up the RCU grace-period kthreads.
 
-So I think we have 3 cases only 1 of which will actually deadlock and is, as
-Dave puts it, currently theoretical.
-
-	1) Different mm's are in play (no issue)
-	2) Readlock implementation is recursive and same mm is in play (no issue)
-	3) Readlock implementation is _not_ recursive (issue)
-
-In both 1 and 2 lockdep is incorrectly flagging the issue but 3 is a problem
-and I think this is what Andrea was thinking.
-
-Is that the case?
-
-If so the above comment is incorrectly worded and I should update it.
-
-Ira
-
-> +			pagefault_disable();
->  			ret = copy_from_user(page_kaddr,
->  					     (const void __user *)src_addr,
->  					     PAGE_SIZE);
-> +			pagefault_enable();
->  			kunmap_local(page_kaddr);
->  
->  			/* fallback to copy_from_user outside mmap_lock */
-> -- 
-> 2.37.2
+> workload a can detect a power delta and power gain. Anyway, below is a new
+> trace where i do not use "flush" variant for the kvfree_rcu():
 > 
+> <snip>
+> 1. Home screen swipe:
+>          rcuop/0-15      [003] d..1  1792.767750: rcu_batch_start: rcu_preempt CBs=1003 bl=10
+>          rcuop/2-33      [002] d..1  1792.771717: rcu_batch_start: rcu_preempt CBs=934 bl=10
+>          rcuop/3-40      [001] d..1  1794.811816: rcu_batch_start: rcu_preempt CBs=1508 bl=11
+>          rcuop/1-26      [003] d..1  1797.116382: rcu_batch_start: rcu_preempt CBs=2127 bl=16
+>          rcuop/4-48      [001] d..1  1797.124422: rcu_batch_start: rcu_preempt CBs=95 bl=10
+>          rcuop/5-55      [002] d..1  1797.124731: rcu_batch_start: rcu_preempt CBs=143 bl=10
+>          rcuop/6-62      [005] d..1  1798.911719: rcu_batch_start: rcu_preempt CBs=132 bl=10
+>          rcuop/2-33      [002] d..1  1803.003966: rcu_batch_start: rcu_preempt CBs=3797 bl=29
+>          rcuop/0-15      [003] d..1  1803.004707: rcu_batch_start: rcu_preempt CBs=2969 bl=23
+> 2. App launches:
+>          rcuop/4-48      [005] d..1  1831.087612: rcu_batch_start: rcu_preempt CBs=6141 bl=47
+>          rcuop/7-69      [007] d..1  1831.095578: rcu_batch_start: rcu_preempt CBs=5464 bl=42
+>          rcuop/5-55      [004] d..1  1832.703571: rcu_batch_start: rcu_preempt CBs=8461 bl=66
+>          rcuop/0-15      [004] d..1  1833.731603: rcu_batch_start: rcu_preempt CBs=2548 bl=19
+>          rcuop/1-26      [006] d..1  1833.743691: rcu_batch_start: rcu_preempt CBs=2567 bl=20
+>          rcuop/2-33      [006] d..1  1833.744005: rcu_batch_start: rcu_preempt CBs=2359 bl=18
+>          rcuop/3-40      [006] d..1  1833.744286: rcu_batch_start: rcu_preempt CBs=3681 bl=28
+>          rcuop/4-48      [002] d..1  1838.079777: rcu_batch_start: rcu_preempt CBs=10444 bl=81
+>          rcuop/7-69      [001] d..1  1838.080375: rcu_batch_start: rcu_preempt CBs=12572 bl=98
+>            <...>-62      [002] d..1  1838.080646: rcu_batch_start: rcu_preempt CBs=14135 bl=110
+>          rcuop/6-62      [000] d..1  1838.087722: rcu_batch_start: rcu_preempt CBs=10839 bl=84
+>            <...>-62      [003] d..1  1839.227022: rcu_batch_start: rcu_preempt CBs=1834 bl=14
+>            <...>-26      [001] d..1  1839.963315: rcu_batch_start: rcu_preempt CBs=5769 bl=45
+>          rcuop/2-33      [001] d..1  1839.966485: rcu_batch_start: rcu_preempt CBs=3789 bl=29
+>            <...>-40      [001] d..1  1839.966596: rcu_batch_start: rcu_preempt CBs=6425 bl=50
+>          rcuop/2-33      [005] d..1  1840.541272: rcu_batch_start: rcu_preempt CBs=825 bl=10
+>          rcuop/2-33      [005] d..1  1840.547724: rcu_batch_start: rcu_preempt CBs=44 bl=10
+>          rcuop/2-33      [005] d..1  1841.075759: rcu_batch_start: rcu_preempt CBs=516 bl=10
+>          rcuop/0-15      [002] d..1  1841.695716: rcu_batch_start: rcu_preempt CBs=6312 bl=49
+>          rcuop/0-15      [003] d..1  1841.709714: rcu_batch_start: rcu_preempt CBs=39 bl=10
+>          rcuop/5-55      [004] d..1  1843.112442: rcu_batch_start: rcu_preempt CBs=16007 bl=125
+>          rcuop/5-55      [004] d..1  1843.115444: rcu_batch_start: rcu_preempt CBs=7901 bl=61
+>          rcuop/6-62      [001] dn.1  1843.123983: rcu_batch_start: rcu_preempt CBs=8427 bl=65
+>          rcuop/6-62      [006] d..1  1843.412383: rcu_batch_start: rcu_preempt CBs=981 bl=10
+>          rcuop/0-15      [003] d..1  1844.659812: rcu_batch_start: rcu_preempt CBs=1851 bl=14
+>          rcuop/0-15      [003] d..1  1844.667790: rcu_batch_start: rcu_preempt CBs=135 bl=10
+> <snip>
+> 
+> it is much more better. But. As i wrote earlier there is a patch that i have submitted
+> some time ago improving kvfree_rcu() batching:
+
+Yes it seems much better than your last traces! I'd propose to drop this
+patch because as you show, it effects not only yours but ChromeOS. It appears
+kvfree_rcu() use of queue_rcu_work() is a perfect candidate for call_rcu()
+batching because it is purely driven by memory pressure. And we have a
+shrinker for lazy-RCU as well.
+
+For non-kvfree uses, we can introduce a queue_rcu_work_flush() if need-be.
+
+What do you think?
+
+thanks,
+
+ - Joel
+
