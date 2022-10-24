@@ -2,246 +2,343 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9A0D60AF4F
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 17:43:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DA7860AF55
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 17:44:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231157AbiJXPnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 11:43:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59304 "EHLO
+        id S230187AbiJXPoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 11:44:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231843AbiJXPmr (ORCPT
+        with ESMTP id S230257AbiJXPnp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 11:42:47 -0400
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19511DBBC7
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 07:33:36 -0700 (PDT)
-Received: by mail-qk1-x72a.google.com with SMTP id d13so6152591qko.5
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 07:33:36 -0700 (PDT)
+        Mon, 24 Oct 2022 11:43:45 -0400
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FFB295E52
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 07:35:25 -0700 (PDT)
+Received: by mail-pj1-f44.google.com with SMTP id h14so8246903pjv.4
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 07:35:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+/XLQZflou66lKa0gZIYt18hRQNYmviArxHBYFKClz4=;
-        b=uznb3zBxvdmtDwiDfEOJ3NaFJ7SVE2QrKIaVenGLkv/s+DT9G3acdYX+vy1JfD+zdy
-         1nHLVAqIXvzk+blOIE8j+Aum3ZZSsscVFflxxXjd1Y8C7rgwnADLMy9XuZGkvP0UMzcc
-         2hYxckCf99P8f5lnY2aFKWJ2EO7sLR9fSESK4=
+        d=daynix-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wkknqfE8N8iJl5XEQQmyIBiDl6R0jV4HGlicMSZl2gQ=;
+        b=L0/1RRlkmYmA8CLIifUuUlVJ74Kz+AS0tmR8KIQvxLhzv2mfq4GRaFSzf6y7ExNPMt
+         0JMZA7nNRAT//74v5qJU7bQBu9l+wJClqFc6pDeSKQ+AYJN+EOAUDDNv6XD3AjR9AOaH
+         woTW5Wvk4jghdUjKZn0Szj7uOj8nN2IpQjXF9jr/bA963Cnftma2v/vygHFtKVZjQRh8
+         2nGaht+ZSPBBxljf4ve53oU6E/u+s0bGvW8WQ+rw1qYeRn33wNMm3GPyocuKQd6eLN0X
+         tvkX/rZlb+YA+EpML8EgckKck+AwIrn6gKUISkLAzey62Co2gw5l77imQVOsx3pNb9sY
+         BwXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+/XLQZflou66lKa0gZIYt18hRQNYmviArxHBYFKClz4=;
-        b=kfjp+FL2LVHDx8njcYeM8qpL4h0cn29bUGyt1iubUsm8SlR8QywsHlMmMUqS6wCyPH
-         s65Oq7mogYuvzOalnE0tCRvxl8jQjzCMndsuk+Jp+F15MXx0i1AcesPqhMjoV69xVekS
-         gsr/q3hpibmHz2R7IgiLxj0y+y1+h221C6gGNO8DHjGK4sROd0T4cw4yy8sp29R7+D9y
-         Tw5NFzqWBaYpTUEp1NGGaRQg17zJ6FjKSh4Q9BE90L3ra+E/ACwK8gpbnI/6kfvpltzO
-         6A9CNRu2YU9tEItq2V6YkzYH+7bBmcAbp/uV7x96FAA2bzW7j4QbzIJEx2ZuRT9EhEgC
-         tDcQ==
-X-Gm-Message-State: ACrzQf14JfNgveKFNS6PyYf/wCtb/30nW/jT60L1LoXu+7DuNYuk81+5
-        QCZmp5x86kepE2o45p214/oW6Q==
-X-Google-Smtp-Source: AMsMyM64u+6su/07nQCXTybFcsmEKZ1fEe/Bplzv/fjtSc/IriKTo7KhAxWCB6qmKt2fFjI6NS5SsQ==
-X-Received: by 2002:a05:620a:808b:b0:6ee:942b:dfc1 with SMTP id ef11-20020a05620a808b00b006ee942bdfc1mr23080359qkb.13.1666621876678;
-        Mon, 24 Oct 2022 07:31:16 -0700 (PDT)
-Received: from localhost (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
-        by smtp.gmail.com with ESMTPSA id h2-20020ac81382000000b0038b684a1642sm42426qtj.32.2022.10.24.07.31.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 07:31:16 -0700 (PDT)
-Date:   Mon, 24 Oct 2022 14:31:15 +0000
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     Uladzislau Rezki <urezki@gmail.com>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com,
-        rostedt@goodmis.org
-Subject: Re: [PATCH rcu 13/14] workqueue: Make queue_rcu_work() use
- call_rcu_flush()
-Message-ID: <Y1ahs83258Lok9+O@google.com>
-References: <20221019225138.GA2499943@paulmck-ThinkPad-P17-Gen-1>
- <20221019225144.2500095-13-paulmck@kernel.org>
- <CAEXW_YQgSwMYisZVctXkjFu6_5YhFCpL_E5o5H4oJooS5Syp+g@mail.gmail.com>
- <20221024031540.GU5600@paulmck-ThinkPad-P17-Gen-1>
- <Y1ZtyjxKCcV0Hfjn@pc636>
- <Y1aDy3maaO39ClSU@pc636>
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wkknqfE8N8iJl5XEQQmyIBiDl6R0jV4HGlicMSZl2gQ=;
+        b=piI95U14i+RBG5vJu28RGc4xxsbruNxgxYACq/MoTnGCMEfSEB6/oxjt4Dox7kw2Qj
+         uCJcruT9xAiX/Sfi3a6h08vQlcyHKLS9hBi0Z4FcDdWfpkath8Ggi/NHWHiI4nknBoWN
+         UlLN8yUsYLAaFzNdzvbifyZxr+YkkD/ZqR0zDjGB9gG2KQQ4G3p0uUr4rSTfVNVZbRZU
+         0uXW2x7dGO8FoJl1mZv0TfXHrcHPzjxQ1fwczl1VcSTe2e7E2VozIoJRe/NoRGd3xljW
+         XRjswY1ckQtYRhcDsrGW3vIX9+aoFUp1ScJKHKOZFSSnsMrIanKCVqpgj5/k7Ahr/zDI
+         QjcQ==
+X-Gm-Message-State: ACrzQf1J8FuZQ78SwRM5jcVWOUcaZ9iuaeDiO5L287GQC1CoOtRXOZLS
+        jr3wTYAQbaTYB1+0vNbqQCXXoA==
+X-Google-Smtp-Source: AMsMyM6L4EimJuPN+RegX8YJLfERy+lfPY4csYLFUl7zZWPrHXhB+m+qxFaDBRxxyqG4MIlhTWivBg==
+X-Received: by 2002:a17:90a:b28d:b0:20d:6790:19fa with SMTP id c13-20020a17090ab28d00b0020d679019famr73827828pjr.68.1666621885509;
+        Mon, 24 Oct 2022 07:31:25 -0700 (PDT)
+Received: from ?IPV6:2400:4050:c360:8200:8ae8:3c4:c0da:7419? ([2400:4050:c360:8200:8ae8:3c4:c0da:7419])
+        by smtp.gmail.com with ESMTPSA id l3-20020a170903244300b00174f7d107c8sm19771856pls.293.2022.10.24.07.31.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Oct 2022 07:31:24 -0700 (PDT)
+Message-ID: <7373e258-f7cc-4416-9b1c-c8c9dab59ada@daynix.com>
+Date:   Mon, 24 Oct 2022 23:31:16 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y1aDy3maaO39ClSU@pc636>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH 00/22] Fallback to native backlight
+Content-Language: en-US
+From:   Akihiko Odaki <akihiko.odaki@daynix.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        "Lee, Chun-Yi" <jlee@suse.com>, Mark Gross <markgross@kernel.org>,
+        Corentin Chary <corentin.chary@gmail.com>,
+        Cezary Jackiewicz <cezary.jackiewicz@gmail.com>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        Jonathan Woithe <jwoithe@just42.net>,
+        Ike Panhc <ike.pan@canonical.com>,
+        Daniel Dadap <ddadap@nvidia.com>,
+        Kenneth Chan <kenneth.t.chan@gmail.com>,
+        Mattia Dongili <malattia@linux.it>,
+        Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
+        Azael Avalos <coproscefalo@gmail.com>,
+        Lee Jones <lee@kernel.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Robert Moore <robert.moore@intel.com>,
+        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org,
+        platform-driver-x86@vger.kernel.org,
+        acpi4asus-user@lists.sourceforge.net,
+        ibm-acpi-devel@lists.sourceforge.net, linux-fbdev@vger.kernel.org,
+        devel@acpica.org
+References: <20221024113513.5205-1-akihiko.odaki@daynix.com>
+ <746e5cc6-516f-8f69-9d4b-8fe237de8fd6@redhat.com>
+ <edec5950-cec8-b647-ccb1-ba48f9b3bbb0@daynix.com>
+ <60672af8-05d2-113c-12b9-d635608be0dd@redhat.com>
+ <ea69242c-0bc8-c7bb-9602-c7489bb69684@daynix.com>
+In-Reply-To: <ea69242c-0bc8-c7bb-9602-c7489bb69684@daynix.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 02:23:39PM +0200, Uladzislau Rezki wrote:
-> > > On Sun, Oct 23, 2022 at 08:36:00PM -0400, Joel Fernandes wrote:
-> > > > On Wed, Oct 19, 2022 at 6:51 PM Paul E. McKenney <paulmck@kernel.org> wrote:
-> > > > >
-> > > > > From: Uladzislau Rezki <urezki@gmail.com>
-> > > > >
-> > > > > call_rcu() changes to save power will slow down RCU workqueue items
-> > > > > queued via queue_rcu_work(). This may not be an issue, however we cannot
-> > > > > assume that workqueue users are OK with long delays. Use
-> > > > > call_rcu_flush() API instead which reverts to the old behavio
-> > > > 
-> > > > On ChromeOS, I can see that queue_rcu_work() is pretty noisy and the
-> > > > batching is much better if we can just keep it as call_rcu() instead
-> > > > of call_rcu_flush().
-> > > > 
-> > > > Is there really any reason to keep it as call_rcu_flush() ?  If I
-> > > > recall, the real reason Vlad's system was slowing down was because of
-> > > > scsi and the queue_rcu_work() conversion was really a red herring.
-> > > 
-> > <snip>
-> > *** drivers/acpi/osl.c:
-> > acpi_os_drop_map_ref[401]      queue_rcu_work(system_wq, &map->track.rwork);
-> > 
-> > *** drivers/gpu/drm/i915/gt/intel_execlists_submission.c:
-> > virtual_context_destroy[3653]  queue_rcu_work(system_wq, &ve->rcu);
-> > 
-> > *** fs/aio.c:
-> > free_ioctx_reqs[632]           queue_rcu_work(system_wq, &ctx->free_rwork);
-> > 
-> > *** fs/fs-writeback.c:
-> > inode_switch_wbs[604]          queue_rcu_work(isw_wq, &isw->work);
-> > cleanup_offline_cgwb[676]      queue_rcu_work(isw_wq, &isw->work);
-> > 
-> > *** include/linux/workqueue.h:
-> > __printf[446]                  extern bool queue_rcu_work(struct workqueue_struct *wq, struct rcu_work *rwork);
-> > 
-> > *** kernel/cgroup/cgroup.c:
-> > css_release_work_fn[5253]      queue_rcu_work(cgroup_destroy_wq, &css->destroy_rwork);
-> > css_create[5384]               queue_rcu_work(cgroup_destroy_wq, &css->destroy_rwork);
-> > 
-> > *** kernel/rcu/tree.c:
-> > kfree_rcu_monitor[3192]        queue_rcu_work(system_wq, &krwp->rcu_work);
-> > 
-> > *** net/core/skmsg.c:
-> > sk_psock_drop[852]             queue_rcu_work(system_wq, &psock->rwork);
-> > 
-> > *** net/sched/act_ct.c:
-> > tcf_ct_flow_table_put[355]     queue_rcu_work(act_ct_wq, &ct_ft->rwork);
-> > 
-> > *** net/sched/cls_api.c:
-> > tcf_queue_work[225]            return queue_rcu_work(tc_filter_wq, rwork);
-> > <snip>
-> > There are 9 users of the queue_rcu_work() functions. I think there can be
-> > a side effect if we keep it as lazy variant. Please note that i have not
-> > checked all those users.
-> > 
-> > > There are less than 20 invocations of queue_rcu_work(), so it should
-> > > be possible look through each.  The low-risk approach is of course to
-> > > have queue_rcu_work() use call_rcu_flush().
-
-Yes, once I get to a device (tomorrow), I'll look more. Last I checked it was
-kvfree_rcu() -- this was a few weeks/months ago though.
-
-> > > The next approach might be to have a Kconfig option and/or kernel
-> > > boot parameter that allowed a per-system choice.
-> > > 
-> > > But it would not hurt to double-check on Android.
-> > > 
-> > I did not see such noise but i will come back some data on 5.10 kernel
-> > today.
-> > 
-> Home screen swipe:
-> <snip>
->        <...>-15      [003] d..1   202.142205: rcu_batch_start: rcu_preempt CBs=105 bl=10
->        <...>-55      [001] d..1   202.166174: rcu_batch_start: rcu_preempt CBs=135 bl=10
->        <...>-26      [001] d..1   202.402182: rcu_batch_start: rcu_preempt CBs=221 bl=10
->      rcuop/3-40      [003] d..1   202.650323: rcu_batch_start: rcu_preempt CBs=213 bl=10
->      rcuop/3-40      [000] d..1   203.210537: rcu_batch_start: rcu_preempt CBs=90 bl=10
->      rcuop/5-55      [001] d..1   204.675671: rcu_batch_start: rcu_preempt CBs=14 bl=10
->      rcuop/2-33      [002] d..1   205.162229: rcu_batch_start: rcu_preempt CBs=649 bl=10
->      rcuop/3-40      [000] d..1   205.418214: rcu_batch_start: rcu_preempt CBs=291 bl=10
->      rcuop/3-40      [003] d..1   206.134204: rcu_batch_start: rcu_preempt CBs=174 bl=10
->      rcuop/0-15      [003] d..1   206.726311: rcu_batch_start: rcu_preempt CBs=738 bl=10
->      rcuop/1-26      [001] d..1   206.814168: rcu_batch_start: rcu_preempt CBs=865 bl=10
->      rcuop/3-40      [003] d..1   207.278178: rcu_batch_start: rcu_preempt CBs=287 bl=10
->      rcuop/1-26      [001] d..1   208.826279: rcu_batch_start: rcu_preempt CBs=506 bl=10
-> <snip>
-
-This looks fine to me, but..
-
-> An app launch:
-> <snip>
->          rcuop/3-40      [002] d..1   322.118620: rcu_batch_start: rcu_preempt CBs=99 bl=10
->          rcuop/4-48      [005] dn.1   322.454052: rcu_batch_start: rcu_preempt CBs=270 bl=10
->          rcuop/5-55      [005] d..1   322.454109: rcu_batch_start: rcu_preempt CBs=91 bl=10
->          rcuop/5-55      [007] d..1   322.470054: rcu_batch_start: rcu_preempt CBs=106 bl=10
->          rcuop/6-62      [005] d..1   322.482120: rcu_batch_start: rcu_preempt CBs=231 bl=10
->          rcuop/4-48      [001] d..1   322.494150: rcu_batch_start: rcu_preempt CBs=227 bl=10
->            <...>-69      [002] d..1   322.502442: rcu_batch_start: rcu_preempt CBs=3350 bl=26
->          rcuop/1-26      [001] d..1   322.646099: rcu_batch_start: rcu_preempt CBs=1685 bl=13
->          rcuop/2-33      [001] d..1   322.670071: rcu_batch_start: rcu_preempt CBs=438 bl=10
->          rcuop/1-26      [001] d..1   322.674120: rcu_batch_start: rcu_preempt CBs=18 bl=10
->          rcuop/2-33      [003] d..1   322.690152: rcu_batch_start: rcu_preempt CBs=10 bl=10
->          rcuop/1-26      [002] d..1   322.698104: rcu_batch_start: rcu_preempt CBs=10 bl=10
->          rcuop/3-40      [002] d..1   322.706167: rcu_batch_start: rcu_preempt CBs=313 bl=10
->          rcuop/2-33      [003] d..1   322.710075: rcu_batch_start: rcu_preempt CBs=15 bl=10
-
-The above does not look fine to me (^^^) from a Lazu-RCU PoV.  Here, RCU
-callbacks are being invoked every 10-20ms.  The batching I seek is of the
-order of seconds, when the system is relatively idle.
-
-Why is Lazy-RCU not in effect for app launch? IOW, which callback is causing
-Lazy-RCU to not be lazy here?  Could it be queue_rcu_work()?  Whenever a
-non-lazy callback is queued, all the lazy ones are 'promoted' to non-lazy.
-That's why I am asking. Even if you queue one non-lazy callback at a high
-enough frequency, the lazy ones will no longer giving you batching or the
-benefits of laziness.
-
->          rcuop/3-40      [002] d..1   322.742137: rcu_batch_start: rcu_preempt CBs=13 bl=10
->          rcuop/5-55      [000] d..1   322.754270: rcu_batch_start: rcu_preempt CBs=157 bl=10
->          rcuop/3-40      [000] d..1   322.762182: rcu_batch_start: rcu_preempt CBs=17 bl=10
->          rcuop/2-33      [003] d..1   322.774088: rcu_batch_start: rcu_preempt CBs=38 bl=10
->          rcuop/3-40      [000] d..1   322.778131: rcu_batch_start: rcu_preempt CBs=23 bl=10
->          rcuop/1-26      [002] d..1   322.790105: rcu_batch_start: rcu_preempt CBs=33 bl=10
->          rcuop/4-48      [001] d..1   322.798074: rcu_batch_start: rcu_preempt CBs=340 bl=10
->          rcuop/2-33      [002] d..1   322.806158: rcu_batch_start: rcu_preempt CBs=18 bl=10
->          rcuop/1-26      [002] d..1   322.814057: rcu_batch_start: rcu_preempt CBs=18 bl=10
->          rcuop/0-15      [001] d..1   322.822476: rcu_batch_start: rcu_preempt CBs=333 bl=10
->          rcuop/4-48      [003] d..1   322.830102: rcu_batch_start: rcu_preempt CBs=11 bl=10
->          rcuop/2-33      [001] d..1   322.846109: rcu_batch_start: rcu_preempt CBs=80 bl=10
->          rcuop/3-40      [001] d..1   322.854162: rcu_batch_start: rcu_preempt CBs=145 bl=10
->          rcuop/4-48      [003] d..1   322.874129: rcu_batch_start: rcu_preempt CBs=21 bl=10
->          rcuop/3-40      [001] d..1   322.878149: rcu_batch_start: rcu_preempt CBs=43 bl=10
->          rcuop/3-40      [001] d..1   322.906273: rcu_batch_start: rcu_preempt CBs=10 bl=10
->          rcuop/4-48      [001] d..1   322.918201: rcu_batch_start: rcu_preempt CBs=23 bl=10
->          rcuop/2-33      [001] d..1   322.926212: rcu_batch_start: rcu_preempt CBs=86 bl=10
->          rcuop/2-33      [001] d..1   322.946251: rcu_batch_start: rcu_preempt CBs=12 bl=10
->          rcuop/5-55      [003] d..1   322.954482: rcu_batch_start: rcu_preempt CBs=70 bl=10
->          rcuop/2-33      [003] d..1   322.978146: rcu_batch_start: rcu_preempt CBs=20 bl=10
->          rcuop/1-26      [002] d..1   323.014290: rcu_batch_start: rcu_preempt CBs=230 bl=10
->          rcuop/4-48      [001] d..1   323.026119: rcu_batch_start: rcu_preempt CBs=73 bl=10
->          rcuop/5-55      [003] d..1   323.026175: rcu_batch_start: rcu_preempt CBs=94 bl=10
->          rcuop/3-40      [001] d..1   323.035310: rcu_batch_start: rcu_preempt CBs=70 bl=10
->          rcuop/0-15      [001] d..1   323.046231: rcu_batch_start: rcu_preempt CBs=165 bl=10
->          rcuop/6-62      [005] d..1   323.066132: rcu_batch_start: rcu_preempt CBs=179 bl=10
->          rcuop/1-26      [002] d..1   323.174202: rcu_batch_start: rcu_preempt CBs=61 bl=10
->          rcuop/2-33      [003] d..1   323.190203: rcu_batch_start: rcu_preempt CBs=80 bl=10
->          rcuop/3-40      [003] d..1   323.206210: rcu_batch_start: rcu_preempt CBs=84 bl=10
->          rcuop/2-33      [003] d..1   323.226880: rcu_batch_start: rcu_preempt CBs=5 bl=10
-
-And for several seconds you have the same thing going ^^^.
-
-> <snip>
+On 2022/10/24 23:06, Akihiko Odaki wrote:
+> On 2022/10/24 22:21, Hans de Goede wrote:
+>> Hi,
+>>
+>> On 10/24/22 14:58, Akihiko Odaki wrote:
+>>> On 2022/10/24 20:53, Hans de Goede wrote:
+>>>> Hi Akihiko,
+>>>>
+>>>> On 10/24/22 13:34, Akihiko Odaki wrote:
+>>>>> Commit 2600bfa3df99 ("ACPI: video: Add 
+>>>>> acpi_video_backlight_use_native()
+>>>>> helper") and following commits made native backlight unavailable if
+>>>>> CONFIG_ACPI_VIDEO is set and the backlight feature of ACPI video is
+>>>>> unavailable, which broke the backlight functionality on Lenovo 
+>>>>> ThinkPad
+>>>>> C13 Yoga Chromebook. Allow to fall back to native backlight in such
+>>>>> cases.
+>>>>
+>>>> I appreciate your work on this, but what this in essence does is
+>>>> it allows 2 backlight drivers (vendor + native) to get registered
+>>>> for the same panel again. While the whole goal of the backlight 
+>>>> refactor
+>>>> series landing in 6.1 was to make it so that there always is only
+>>>> *1* backlight device registered instead of (possibly) registering
+>>>> multiple and letting userspace figure it out. It is also important
+>>>> to only always have 1 backlight device per panel for further
+>>>> upcoming changes.
+>>>>
+>>>> So nack for this solution, sorry.
+>>>>
+>>>> I am aware that this breaks backlight control on some Chromebooks,
+>>>> this was already reported and I wrote a long reply explaining why
+>>>> things are done the way they are done now and also suggesting
+>>>> 2 possible (much simpler) fixes, see:
+>>>> https://lore.kernel.org/linux-acpi/42a5f2c9-a1dc-8fc0-7334-fe6c390ecfbb@redhat.com/
+>>>>
+>>>> Unfortunately the reported has not followed-up on this and
+>>>> I don't have the hardware to test this myself.
+>>>>
+>>>> Can you please try implementing 1 of the fixes suggested there
+>>>> and then submit that upstream ?
+>>>>
+>>>> Regards,
+>>>>
+>>>> Hans
+>>>>
+>>>
+>>> Hi Hans,
+>>>
+>>> Thanks for reviewing and letting me know the prior attempt.
+>>>
+>>> In this case, there is only a native backlight device and no vendor 
+>>> backlight device so the duplication of backlight devices does not 
+>>> happen. I think it is better to handle such a case without quirks.
+>>
+>> Adding a single heuristic for all chromebooks is something completely 
+>> different
+>> then adding per model quirks which indeed ideally should be avoided 
+>> (but this
+>> is not always possible).
+>>
+>>> I understand it is still questionable to cover the case by allowing 
+>>> duplication when both of a vendor backlight device and native one. To 
+>>> explain my understanding and reasoning for *not* trying to apply the 
+>>> de-duplication rule to the vendor/native combination, let me first 
+>>> describe that the de-duplication which happens in 
+>>> acpi_video_get_backlight_type() is a heuristics and limited.
+>>>
+>>> As the background of acpi_video_get_backlight_type(), there is an 
+>>> assumption that it should be common that both of the firmware, 
+>>> implementing ACPI, and the kernel have code to drive backlight. In 
+>>> the case, the more reliable one should be picked instead of using 
+>>> both, and that is what the statements in `if (video_caps & 
+>>> ACPI_VIDEO_BACKLIGHT)` does.
+>>>
+>>> However, the method has two limitations:
+>>> 1. It does not cover the case where two backlight devices with the 
+>>> same type exist.
+>>
+>> This only happens when there are 2 panels; or 2 gpus driving a single 
+>> panel
+>> which are both special cases where we actually want 2 backlight devices.
+>>
+>>> 2. The underlying assumption does not apply to vendor/native 
+>>> combination.
+>>>
+>>> Regarding the second limitation, I don't even understand the 
+>>> difference between vendor and native. My guess is that a vendor 
+>>> backlight device uses vendor-specific ACPI interface, and a native 
+>>> one directly uses hardware registers. If my guess is correct, the 
+>>> difference between vendor and native does not imply that both of them 
+>>> are likely to exist at the same time. As the conclusion, there is no 
+>>> more motivation to try to de-duplicate the vendor/native combination 
+>>> than to try to de-duplicate combination of devices with a single type.
+>>>
+>>> Of course, it is better if we could also avoid registering two 
+>>> devices with one type for one physical device. Possibly we can do so 
+>>> by providing a parameter to indicate that it is for the same 
+>>> "internal" backlight to devm_backlight_device_register(), and let the 
+>>> function check for the duplication. However, this rule may be too 
+>>> restrict, or may have problems I missed.
+>>>
+>>> Based on the discussion above, we can deduce three possibilities:
+>>> a. There is no reason to distinguish vendor and native in this case, 
+>>> and we can stick to my current proposal.
+>>> b. There is a valid reason to distinguish vendor and native, and we 
+>>> can adopt the same strategy that already adopted for ACPI 
+>>> video/vendor combination.
+>>> c. We can implement de-duplication in devm_backlight_device_register().
+>>> d. The other possible options are not worth, and we can just 
+>>> implement quirks specific to Chromebook/coreboot.
+>>>
+>>> In case b, it should be noted that vendor and native backlight device 
+>>> do not require ACPI video, and CONFIG_ACPI_VIDEO may not be enabled. 
+>>> In the case, the de-duplication needs to be implemented in backlight 
+>>> class device.
+>>
+>> I have been working on the ACPI/x86 backlight detection code since 
+>> 2015, please trust
+>> me when I say that allowing both vendor + native backlight devices at 
+>> the same time
+>> is a bad idea.
+>>
+>> I'm currently in direct contact with the ChromeOS team about fixing 
+>> the Chromebook
+>> backlight issue introduced in 6.1-rc1.
+>>
+>> If you wan to help, please read:
+>>
+>> https://lore.kernel.org/linux-acpi/42a5f2c9-a1dc-8fc0-7334-fe6c390ecfbb@redhat.com/
+>>
+>> And try implementing 1 if the 2 solutions suggested there.
+>>
+>> Regards,
+>>
+>> Hans
 > 
-> It is on Android with 5.10 kernel running. I do not see that queue_rcu_work() makes
-> some noise.
+> Hi,
+> 
+> I just wanted to confirm your intention that we should distinguish 
+> vendor and native. In the case I think it is better to modify 
+> __acpi_video_get_backlight_type() and add "native_available" check in 
+> case of no ACPI video as already done for the ACPI video/native 
+> combination.
+> 
+> Unfortunately this has one pitfall though: it does not work if 
+> CONFIG_ACPI_VIDEO is disabled. If it is, acpi_video_get_backlight_type() 
+> always return acpi_backlight_vendor, and 
+> acpi_video_backlight_use_native() always returns true. It is not a 
+> regression but the current behavior. Fixing it requires also refactoring 
+> touching both of ACPI video and backlight class driver so I guess I'm 
+> not an appropriate person to do that, and I should just add 
+> "native_available" check to __acpi_video_get_backlight_type().
+> 
+> Does that sound good?
 
-Your rcu_batch_start tracepoint output above does not really reveal much
-information about which callbacks are lazy and which are not.
-rcu_invoke_callback is better in the sense at least you have the name of the
-callback and can take a guess.
+Well, it would not be that easy since just adding native_available 
+cannot handle the case where the vendor driver gets registered first. 
+Checking with "native_available" was possible for ACPI video/vendor 
+combination because ACPI video registers its backlight after some delay. 
+I still think it does not overcomplicate things to modify 
+__acpi_video_get_backlight_type() so that it can use both of vendor and 
+native as fallback while preventing duplicate registration.
 
-> Joel Could you please post your batch_start trace point output where you see the noise?
+Regards,
+Akihiko Odaki
 
-Sure, I'll do that once I get to a device.
-
-thanks,
-
- - Joel
-
+> 
+> Regards,
+> Akihiko Odaki
+> 
+>>  >
+>>
+>>>>> Akihiko Odaki (22):
+>>>>>     drm/i915/opregion: Improve backlight request condition
+>>>>>     ACPI: video: Introduce acpi_video_get_backlight_types()
+>>>>>     LoongArch: Use acpi_video_get_backlight_types()
+>>>>>     platform/x86: acer-wmi: Use acpi_video_get_backlight_types()
+>>>>>     platform/x86: asus-laptop: Use acpi_video_get_backlight_types()
+>>>>>     platform/x86: asus-wmi: Use acpi_video_get_backlight_types()
+>>>>>     platform/x86: compal-laptop: Use acpi_video_get_backlight_types()
+>>>>>     platform/x86: eeepc-laptop: Use acpi_video_get_backlight_types()
+>>>>>     platform/x86: fujitsu-laptop: Use acpi_video_get_backlight_types()
+>>>>>     platform/x86: ideapad-laptop: Use acpi_video_get_backlight_types()
+>>>>>     platform/x86: msi-laptop: Use acpi_video_get_backlight_types()
+>>>>>     platform/x86: msi-wmi: Use acpi_video_get_backlight_types()
+>>>>>     platform/x86: nvidia-wmi-ec-backlight: Use
+>>>>>       acpi_video_get_backlight_types()
+>>>>>     platform/x86: panasonic-laptop: Use 
+>>>>> acpi_video_get_backlight_types()
+>>>>>     platform/x86: samsung-laptop: Use acpi_video_get_backlight_types()
+>>>>>     platform/x86: sony-laptop: Use acpi_video_get_backlight_types()
+>>>>>     platform/x86: thinkpad_acpi: Use acpi_video_get_backlight_types()
+>>>>>     platform/x86: toshiba_acpi: Use acpi_video_get_backlight_types()
+>>>>>     platform/x86: dell-laptop: Use acpi_video_get_backlight_types()
+>>>>>     platform/x86: intel_oaktrail: Use acpi_video_get_backlight_types()
+>>>>>     ACPI: video: Remove acpi_video_get_backlight_type()
+>>>>>     ACPI: video: Fallback to native backlight
+>>>>>
+>>>>>    Documentation/gpu/todo.rst                    |  8 +--
+>>>>>    drivers/acpi/acpi_video.c                     |  2 +-
+>>>>>    drivers/acpi/video_detect.c                   | 54 
+>>>>> ++++++++++---------
+>>>>>    drivers/gpu/drm/i915/display/intel_opregion.c |  3 +-
+>>>>>    drivers/platform/loongarch/loongson-laptop.c  |  4 +-
+>>>>>    drivers/platform/x86/acer-wmi.c               |  2 +-
+>>>>>    drivers/platform/x86/asus-laptop.c            |  2 +-
+>>>>>    drivers/platform/x86/asus-wmi.c               |  4 +-
+>>>>>    drivers/platform/x86/compal-laptop.c          |  2 +-
+>>>>>    drivers/platform/x86/dell/dell-laptop.c       |  2 +-
+>>>>>    drivers/platform/x86/eeepc-laptop.c           |  2 +-
+>>>>>    drivers/platform/x86/fujitsu-laptop.c         |  4 +-
+>>>>>    drivers/platform/x86/ideapad-laptop.c         |  2 +-
+>>>>>    drivers/platform/x86/intel/oaktrail.c         |  2 +-
+>>>>>    drivers/platform/x86/msi-laptop.c             |  2 +-
+>>>>>    drivers/platform/x86/msi-wmi.c                |  2 +-
+>>>>>    .../platform/x86/nvidia-wmi-ec-backlight.c    |  2 +-
+>>>>>    drivers/platform/x86/panasonic-laptop.c       |  2 +-
+>>>>>    drivers/platform/x86/samsung-laptop.c         |  2 +-
+>>>>>    drivers/platform/x86/sony-laptop.c            |  2 +-
+>>>>>    drivers/platform/x86/thinkpad_acpi.c          |  4 +-
+>>>>>    drivers/platform/x86/toshiba_acpi.c           |  2 +-
+>>>>>    drivers/video/backlight/backlight.c           | 18 +++++++
+>>>>>    include/acpi/video.h                          | 21 ++++----
+>>>>>    include/linux/backlight.h                     |  1 +
+>>>>>    25 files changed, 85 insertions(+), 66 deletions(-)
+>>>>>
+>>>>
+>>>
+>>
