@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7DC560B1FF
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:42:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 063DF60B308
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:56:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234573AbiJXQlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 12:41:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32930 "EHLO
+        id S235735AbiJXQy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 12:54:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234495AbiJXQlB (ORCPT
+        with ESMTP id S235524AbiJXQts (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 12:41:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF1BCA8A1;
-        Mon, 24 Oct 2022 08:28:13 -0700 (PDT)
+        Mon, 24 Oct 2022 12:49:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F15653AE69;
+        Mon, 24 Oct 2022 08:33:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3AC5DB8198E;
-        Mon, 24 Oct 2022 12:42:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BE3BC433D6;
-        Mon, 24 Oct 2022 12:42:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0FC32B811F5;
+        Mon, 24 Oct 2022 12:06:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64103C433C1;
+        Mon, 24 Oct 2022 12:06:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666615342;
-        bh=uCwDTPvAmBCJuKXN3Jqav2b+F4g1SwvzbWav77fECBo=;
+        s=korg; t=1666613208;
+        bh=ZIGrfetGEIU8wKnKF3wqlhW5iLqaHlFdnmonhwY5LqQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eX3/GCNJmrxOGXBx1nSk6LRQObe3P+t/WfrFflcpfs0sgJWe+TTKR3Ly1hgyw5IIm
-         VyfhvZRIwXFHA/l0rRVZEvQUtW1oDqO/+zsm3gYEoz7SuXoH9CqThKiwW0CfsDO5ge
-         6cCVUqTCEwDfsSs9aTejCp3g68B7NvUZ+W/DJlNM=
+        b=MUaLmpxiD2AOX+rVPBcNtbNlqxF9M1HSfIapABY0ER0nc43nrzN6Egl4WnnHo0ra7
+         EYQipx7yCXeaLOxjVfUXp/rLU+L3Bxu2WKrZK+etnwUfXc73Ogwohc4ttSJLOHfnh0
+         ibG6zWT8dm4SVMaEzZ5Q60RBKzszv20m6ayKLTCg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Simon Ser <contact@emersion.fr>,
-        Lyude Paul <lyude@redhat.com>,
-        Benjamin Gaignard <benjamin.gaignard@st.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 214/530] drm/dp_mst: fix drm_dp_dpcd_read return value checks
-Date:   Mon, 24 Oct 2022 13:29:18 +0200
-Message-Id: <20221024113054.766507107@linuxfoundation.org>
+        stable@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Subject: [PATCH 5.4 049/255] ring-buffer: Check pending waiters when doing wake ups as well
+Date:   Mon, 24 Oct 2022 13:29:19 +0200
+Message-Id: <20221024113004.064636694@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
-References: <20221024113044.976326639@linuxfoundation.org>
+In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
+References: <20221024113002.471093005@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,57 +54,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Simon Ser <contact@emersion.fr>
+From: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-[ Upstream commit 2ac6cdd581f48c8f68747156fde5868486a44985 ]
+commit ec0bbc5ec5664dcee344f79373852117dc672c86 upstream.
 
-drm_dp_dpcd_read returns the number of bytes read. The previous code
-would print garbage on DPCD error, and would exit with on error on
-success.
+The wake up waiters only checks the "wakeup_full" variable and not the
+"full_waiters_pending". The full_waiters_pending is set when a waiter is
+added to the wait queue. The wakeup_full is only set when an event is
+triggered, and it clears the full_waiters_pending to avoid multiple calls
+to irq_work_queue().
 
-Signed-off-by: Simon Ser <contact@emersion.fr>
-Fixes: cb897542c6d2 ("drm/dp_mst: Fix W=1 warnings")
-Cc: Lyude Paul <lyude@redhat.com>
-Cc: Benjamin Gaignard <benjamin.gaignard@st.com>
-Reviewed-by: Jani Nikula <jani.nikula@intel.com>
-Link: https://patchwork.freedesktop.org/patch/473500/
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+The irq_work callback really needs to check both wakeup_full as well as
+full_waiters_pending such that this code can be used to wake up waiters
+when a file is closed that represents the ring buffer and the waiters need
+to be woken up.
+
+Link: https://lkml.kernel.org/r/20220927231824.209460321@goodmis.org
+
+Cc: stable@vger.kernel.org
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Fixes: 15693458c4bc0 ("tracing/ring-buffer: Move poll wake ups into ring buffer code")
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/drm_dp_mst_topology.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ kernel/trace/ring_buffer.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/drm_dp_mst_topology.c b/drivers/gpu/drm/drm_dp_mst_topology.c
-index 2a586e6489da..9bf9430209b0 100644
---- a/drivers/gpu/drm/drm_dp_mst_topology.c
-+++ b/drivers/gpu/drm/drm_dp_mst_topology.c
-@@ -4899,14 +4899,14 @@ void drm_dp_mst_dump_topology(struct seq_file *m,
- 		seq_printf(m, "dpcd: %*ph\n", DP_RECEIVER_CAP_SIZE, buf);
+--- a/kernel/trace/ring_buffer.c
++++ b/kernel/trace/ring_buffer.c
+@@ -568,8 +568,9 @@ static void rb_wake_up_waiters(struct ir
+ 	struct rb_irq_work *rbwork = container_of(work, struct rb_irq_work, work);
  
- 		ret = drm_dp_dpcd_read(mgr->aux, DP_FAUX_CAP, buf, 2);
--		if (ret) {
-+		if (ret != 2) {
- 			seq_printf(m, "faux/mst read failed\n");
- 			goto out;
- 		}
- 		seq_printf(m, "faux/mst: %*ph\n", 2, buf);
- 
- 		ret = drm_dp_dpcd_read(mgr->aux, DP_MSTM_CTRL, buf, 1);
--		if (ret) {
-+		if (ret != 1) {
- 			seq_printf(m, "mst ctrl read failed\n");
- 			goto out;
- 		}
-@@ -4914,7 +4914,7 @@ void drm_dp_mst_dump_topology(struct seq_file *m,
- 
- 		/* dump the standard OUI branch header */
- 		ret = drm_dp_dpcd_read(mgr->aux, DP_BRANCH_OUI, buf, DP_BRANCH_OUI_HEADER_SIZE);
--		if (ret) {
-+		if (ret != DP_BRANCH_OUI_HEADER_SIZE) {
- 			seq_printf(m, "branch oui read failed\n");
- 			goto out;
- 		}
--- 
-2.35.1
-
+ 	wake_up_all(&rbwork->waiters);
+-	if (rbwork->wakeup_full) {
++	if (rbwork->full_waiters_pending || rbwork->wakeup_full) {
+ 		rbwork->wakeup_full = false;
++		rbwork->full_waiters_pending = false;
+ 		wake_up_all(&rbwork->full_waiters);
+ 	}
+ }
 
 
