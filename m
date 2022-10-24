@@ -2,106 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78BCA609D3E
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 11:00:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1669A609D3A
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 11:00:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230093AbiJXJA4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 05:00:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38134 "EHLO
+        id S229954AbiJXJA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 05:00:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbiJXJAt (ORCPT
+        with ESMTP id S229904AbiJXJAX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 05:00:49 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 747DA4D819;
-        Mon, 24 Oct 2022 02:00:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=U2qsyck3+2cZvGphRuro4gkFJ7O7eymLJWgikp+cU+s=; b=U25ri7EwmLT5MxOLEoXBr3iXF9
-        //tLMlxGyred958W7o9TvSwbvrSwqZ2rLozMg2tLh7IRrjpux6tQ/UIvKHI1Tgz0770t/WbNVU8XP
-        F7scfNrHIjOXlt+pWkT59l8i9MGYhrmX9xk8dqvyWypdXyGkALYA6oHKJlDkY4USmzkepv3YXulbn
-        WHIPVrH1Dee5fsWip3LINGnMhr3hYP+jlLV1y8a1bYLaWQ7smWXkjBzGsMs5ZS5rK9eGul7K3Tqpo
-        PmzAazNhuRTl8SEF/ksfPF45z7d70kGNRBuPAhzCTj062yNqOioJE7cZxSmwpQG+Vt/n/CVmITwT0
-        Q5EA2ASA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1omtJD-00FIk8-N9; Mon, 24 Oct 2022 08:59:47 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3766A300205;
-        Mon, 24 Oct 2022 10:59:40 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 126822C356CB9; Mon, 24 Oct 2022 10:59:40 +0200 (CEST)
-Date:   Mon, 24 Oct 2022 10:59:40 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        x86@kernel.org, Dave Hansen <dave.hansen@intel.com>,
-        Borislav Petkov <bp@alien8.de>
-Subject: Re: linux-next: build warning after merge of the tip tree
-Message-ID: <Y1ZT/FdOgMtsiMxk@hirez.programming.kicks-ass.net>
-References: <20221024112845.5efaa8c1@canb.auug.org.au>
+        Mon, 24 Oct 2022 05:00:23 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1428139B97
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 02:00:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666602021; x=1698138021;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=TM0l/s+rG+hN32SDo2o0Gc0+BtXVKCquC3rTP//FhsE=;
+  b=mfy9/Ux8EvhS/hwDcV9eVZ0+ZOP2wZbl4eyXGCm9XYaYW/SZCM5aacJT
+   IMa2Z2ZoM2zQsRIYJ8IxH9sn7pwynZ0sRJsCTz/oiJiPxowt7bX3Apdsn
+   RejuKMEvP/3xJpWLuYGFtl1geqbOmKVnbqK9ESwi6SYm7Zv6VnfJSQhrz
+   sqndu0gYcpLqNlYSh9sos9rLbEBqs2o2WT6ghkCuLNoTOmtNr/yj8jNyl
+   1NVP05wc30QvJsZHjJ9kIeAtEDDj0C3ClPxBlGlyAxbXYtdy513TT3Eot
+   hWIFJJtQAASTEvNlHHz0zPkCPwtOkUZ2mcp+BSRMf2kTuzIUERHyIpBsD
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="290672840"
+X-IronPort-AV: E=Sophos;i="5.95,207,1661842800"; 
+   d="scan'208";a="290672840"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 02:00:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="736338740"
+X-IronPort-AV: E=Sophos;i="5.95,207,1661842800"; 
+   d="scan'208";a="736338740"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP; 24 Oct 2022 02:00:18 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1omtJg-001MKr-10;
+        Mon, 24 Oct 2022 12:00:16 +0300
+Date:   Mon, 24 Oct 2022 12:00:16 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        David Laight <David.Laight@aculab.com>
+Subject: Re: [PATCH 1/1] linux/container_of.h: Warn about loss of constness
+Message-ID: <Y1ZUIEYcjQZMdSfp@smile.fi.intel.com>
+References: <20221024082610.74990-1-sakari.ailus@linux.intel.com>
+ <Y1ZQSEMLkybFCadS@kroah.com>
+ <Y1ZQpcdK4sdy+5QZ@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20221024112845.5efaa8c1@canb.auug.org.au>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y1ZQpcdK4sdy+5QZ@kroah.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 11:28:45AM +1100, Stephen Rothwell wrote:
-> Hi all,
->=20
-> After merging the tip tree, today's linux-next build (x86_64 allmodconfig)
-> produced this warning:
->=20
-> vmlinux.o: warning: objtool: get_cpu_entry_area+0x4: call to cea_offset()=
- leaves .noinstr.text section
->=20
-> Presumably something to do with commit
->=20
->   1248fb6a8201 ("x86/mm: Randomize per-cpu entry area")
++ Kees
 
-Thanks, and yesh Boris said the same late on Friday... all the *SAN
-stuff tickled the compiler's stupid bone again.
+On Mon, Oct 24, 2022 at 10:45:25AM +0200, Greg Kroah-Hartman wrote:
+> On Mon, Oct 24, 2022 at 10:43:52AM +0200, Greg Kroah-Hartman wrote:
+> > On Mon, Oct 24, 2022 at 11:26:10AM +0300, Sakari Ailus wrote:
+> > > container_of() casts the original type to another which leads to the loss
+> > > of the const qualifier if it is not specified in the caller-provided type.
+> > > This easily leads to container_of() returning a non-const pointer to a
+> > > const struct which the C compiler does not warn about.
 
-The below cures it, Dave, do we fold it in or mash on top?
+...
+
+> > >   * @type:	the type of the container struct this is embedded in.
+> > >   * @member:	the name of the member within the struct.
+> > >   *
+> > > + * WARNING: as container_of() casts the given struct to another, also the
+> 
+> Wrong function name here.
+> 
+> > > + * possible const qualifier of @ptr is lost unless it is also specified in
+> > > + * @type. This is not a problem if the containing object is not const. Use with
+> > > + * care.
+> > 
+> > Same comments here.
+> 
+> Wait, no one uses this macro, so why not just remove it entirely?
+
+Kees, do you know why and what for we have container_of_safe()?
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-diff --git a/arch/x86/mm/cpu_entry_area.c b/arch/x86/mm/cpu_entry_area.c
-index ad1f750517a1..a8f18e613190 100644
---- a/arch/x86/mm/cpu_entry_area.c
-+++ b/arch/x86/mm/cpu_entry_area.c
-@@ -18,7 +18,7 @@ DEFINE_PER_CPU(struct cea_exception_stacks*, cea_exceptio=
-n_stacks);
-=20
- static DEFINE_PER_CPU_READ_MOSTLY(unsigned long, _cea_offset);
-=20
--static inline unsigned int cea_offset(unsigned int cpu)
-+static __always_inline unsigned int cea_offset(unsigned int cpu)
- {
- 	return per_cpu(_cea_offset, cpu);
- }
-@@ -52,7 +52,7 @@ static __init void init_cea_offsets(void)
- #else /* !X86_64 */
- DECLARE_PER_CPU_PAGE_ALIGNED(struct doublefault_stack, doublefault_stack);
-=20
--static inline unsigned int cea_offset(unsigned int cpu)
-+static __always_inline unsigned int cea_offset(unsigned int cpu)
- {
- 	return cpu;
- }
