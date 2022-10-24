@@ -2,110 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E49B60BB59
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:56:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56FC760BB5C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:57:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235233AbiJXU4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 16:56:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49642 "EHLO
+        id S233306AbiJXU45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 16:56:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234324AbiJXU4R (ORCPT
+        with ESMTP id S235141AbiJXU4Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 16:56:17 -0400
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 492893F1C4;
-        Mon, 24 Oct 2022 12:02:19 -0700 (PDT)
-Received: by mail-qt1-x832.google.com with SMTP id f22so6186592qto.3;
-        Mon, 24 Oct 2022 12:02:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CozUqg7YwpS4ovQKkqpk2bxWG5AUnh+8+yTOuh93bTc=;
-        b=nmts/kPbn0fQAdVu8UHgAtSdo3CwiAQVp8RLTMLlgWMl/t7BLzzUnbOLxpQ6UAvaKp
-         rvWsr46vUYxeI1oz9Bf5rj/7KcluvYR2HHVQGJIYGfSJY1slUvNHDrlgy2xNp3C9aC6C
-         gaghq+LftAMYK6+BKQnCYl0LsBw5IndhGULEBNO85S7ZiFVCQFn9Cey6RDdC7eMtV7tz
-         TSG9AzzEx/uNgdUfIc67mYg+BuVhf+bt+McMRZQqjje6xiXk7tJpg2hKxBulcq5x0/Pe
-         zf2U/j82Envy/CjAEV69LNpYNbRnaJY7hRTYLcBtZJU6rMmfPx7juVYhgCl3i/LAFVOF
-         0knQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CozUqg7YwpS4ovQKkqpk2bxWG5AUnh+8+yTOuh93bTc=;
-        b=4h1ld7N25eD/B3uCe6ovo2WqvaSYPcDyig+rciOqMHmL3CDbAOlvzr0XMITOLGnbg2
-         e4XCj5qc9lXAqlMDH0/8/D5HudWqq57D2IO6hJMf89uGPEuSmfzq7MnDbGigbPvO7ZjU
-         GlmQAtGWzCXhTnvqlrBJ7aHwvQVIkiV3plw9OGJYLGTEEl+5tuzbaceqI6W7HnxiEZN5
-         jYQ30uKwD268QNq2t//KNfClqK7S7ZGcRbZ8s/hucfAEblZog2on7QzAQrl1Nl5oxOqC
-         y5Fy31Jhd3u3uhVF84zJH29Z8FEScAF53XR8zFiIpzFnzeLinbv9vzINzz1Ww9g1KCrO
-         j4Rg==
-X-Gm-Message-State: ACrzQf0fFcTKBRDXkTeqf1w7OWDMRMFyh24o6btr2jiDbkM2RVDBavpv
-        Pom+aEnshbi9WTixcwea33k=
-X-Google-Smtp-Source: AMsMyM5sMtUQwhK9RVN5TcIjvz2j0WuPXmFvh833LXBGzP/oBW+p1x54tY7t9xMn/UEDZy5hdzJSBw==
-X-Received: by 2002:ac8:7d0b:0:b0:39d:90d:601b with SMTP id g11-20020ac87d0b000000b0039d090d601bmr21829872qtb.278.1666638102319;
-        Mon, 24 Oct 2022 12:01:42 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id k11-20020a05620a414b00b006ce9e880c6fsm448176qko.111.2022.10.24.12.01.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Oct 2022 12:01:41 -0700 (PDT)
-Message-ID: <c8075805-2543-d46d-8b42-99c734603b36@gmail.com>
-Date:   Mon, 24 Oct 2022 12:01:35 -0700
+        Mon, 24 Oct 2022 16:56:24 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83F7FB3B0A;
+        Mon, 24 Oct 2022 12:03:01 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 1217921E70;
+        Mon, 24 Oct 2022 19:01:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1666638117; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=oIWrFVCTFI0P8Gt8DB2CKcLBPuXOX6c8HwKwpujStPs=;
+        b=usXYqPefh4eEIKMYACSLS5A/8NdFsaITAJCgUzvwEPid3GH+TQTOI23v3ll5y+QNooeUZr
+        3ze7SirTSyiludyKt5GZz6rSOZ4tTwb4/lM5MDT4xrVqbSLeSQ4fcXWMk6rLmlp1uQzghA
+        S91SJQQGa1p2ZsLepX1DcrVHc9wRUhs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1666638117;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=oIWrFVCTFI0P8Gt8DB2CKcLBPuXOX6c8HwKwpujStPs=;
+        b=autQ68W9Wcb4TmHypUYFSXRRxqC0YVTZoahysFvUonU38+sDLf5TP/WJB83BWUqQQktFKV
+        qo006gi3pzYwxRCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E11FC13A79;
+        Mon, 24 Oct 2022 19:01:56 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id juQiNSThVmMpLwAAMHmgww
+        (envelope-from <mliska@suse.cz>); Mon, 24 Oct 2022 19:01:56 +0000
+Message-ID: <f70c7a11-e81e-f6b9-a403-315117f4aa3a@suse.cz>
+Date:   Mon, 24 Oct 2022 21:01:56 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 5.19 000/717] 5.19.17-rc1 review
+ Thunderbird/102.4.0
+From:   =?UTF-8?Q?Martin_Li=c5=a1ka?= <mliska@suse.cz>
+Subject: [PATCH] block: fix Werror=format with GCC 13
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-block@vger.kernel.org, axboe@kernel.dk
 Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net
-References: <20221022072415.034382448@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20221022072415.034382448@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/22/22 00:17, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.19.17 release.
-> There are 717 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Note, this will be the LAST 5.19.y kernel to be released.  Please move
-> to the 6.0.y kernel branch at this point in time, as after this is
-> released, this branch will be end-of-life.
-> 
-> Responses should be made by Mon, 24 Oct 2022 07:19:57 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.17-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+Starting with GCC 13, since
+[g3b3083a598ca3f4b] c: C2x enums wider than int [PR36113]
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
+GCC promotes enum values with larger than integer types to a wider type.
+In case of the anonymous enum type in blk-iocost.c it is:
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+enum {
+	MILLION			= 1000000,
+...
+
+	WEIGHT_ONE		= 1 << 16,
+...
+	VTIME_PER_SEC_SHIFT	= 37,
+	VTIME_PER_SEC		= 1LLU << VTIME_PER_SEC_SHIFT,
+...
+
+as seen VTIME_PER_SEC cannot fit into 32-bits (int type), thus one needs
+to use 'long unsigned int' in the format string.
+
+It fixes then the following 2 warnings:
+
+block/blk-iocost.c: In function ‘ioc_weight_prfill’:
+block/blk-iocost.c:3035:37: error: format ‘%u’ expects argument of type ‘unsigned int’, but argument 4 has type ‘long unsigned int’ [-Werror=format=]
+ 3035 |                 seq_printf(sf, "%s %u\n", dname, iocg->cfg_weight / WEIGHT_ONE);
+      |                                    ~^            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                                     |                             |
+      |                                     unsigned int                  long unsigned int
+      |                                    %lu
+block/blk-iocost.c: In function ‘ioc_weight_show’:
+block/blk-iocost.c:3045:34: error: format ‘%u’ expects argument of type ‘unsigned int’, but argument 3 has type ‘long unsigned int’ [-Werror=format=]
+ 3045 |         seq_printf(sf, "default %u\n", iocc->dfl_weight / WEIGHT_ONE);
+      |                                 ~^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                                  |                      |
+      |                                  unsigned int           long unsigned int
+      |                                 %lu
+
+Signed-off-by: Martin Liska <mliska@suse.cz>
+---
+ block/blk-iocost.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/block/blk-iocost.c b/block/blk-iocost.c
+index 495396425bad..f165bac9bffb 100644
+--- a/block/blk-iocost.c
++++ b/block/blk-iocost.c
+@@ -3032,7 +3032,7 @@ static u64 ioc_weight_prfill(struct seq_file *sf, struct blkg_policy_data *pd,
+ 	struct ioc_gq *iocg = pd_to_iocg(pd);
+ 
+ 	if (dname && iocg->cfg_weight)
+-		seq_printf(sf, "%s %u\n", dname, iocg->cfg_weight / WEIGHT_ONE);
++		seq_printf(sf, "%s %lu\n", dname, iocg->cfg_weight / WEIGHT_ONE);
+ 	return 0;
+ }
+ 
+@@ -3042,7 +3042,7 @@ static int ioc_weight_show(struct seq_file *sf, void *v)
+ 	struct blkcg *blkcg = css_to_blkcg(seq_css(sf));
+ 	struct ioc_cgrp *iocc = blkcg_to_iocc(blkcg);
+ 
+-	seq_printf(sf, "default %u\n", iocc->dfl_weight / WEIGHT_ONE);
++	seq_printf(sf, "default %lu\n", iocc->dfl_weight / WEIGHT_ONE);
+ 	blkcg_print_blkgs(sf, blkcg, ioc_weight_prfill,
+ 			  &blkcg_policy_iocost, seq_cft(sf)->private, false);
+ 	return 0;
 -- 
-Florian
+2.38.0
 
