@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A91BE60B372
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 19:06:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BDCA60B39F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 19:12:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235067AbiJXRFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 13:05:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47032 "EHLO
+        id S232721AbiJXRMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 13:12:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235273AbiJXREV (ORCPT
+        with ESMTP id S234234AbiJXRMb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 13:04:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 719C3A50ED;
-        Mon, 24 Oct 2022 08:40:15 -0700 (PDT)
+        Mon, 24 Oct 2022 13:12:31 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACD7CA99C4;
+        Mon, 24 Oct 2022 08:47:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6BDD8B811C2;
-        Mon, 24 Oct 2022 15:38:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6E3DC433D6;
-        Mon, 24 Oct 2022 15:38:37 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 2A1FECE1894;
+        Mon, 24 Oct 2022 15:38:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39A04C433D6;
+        Mon, 24 Oct 2022 15:38:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666625919;
-        bh=X4rAnmFhah1kdNXPF3V+U8K+wcI+iCdD1LhiLBT7mcw=;
+        s=k20201202; t=1666625922;
+        bh=/8jDtxqnl7niHxk1zz2MXK8dHL5Pq5bCc9LHkJNr30I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IM40F2Kn8KW7Qu7s3UPXy+FWfIPtUCy7+ezMMTPZlSUc1Q1Os9kpNZ05aJa277MfH
-         4t+73plmZGQr1TZcV7DsOdqu47DagMowuSo94NzU1/OUJtPVT4QlsSqY0SPeTAJxEI
-         L3ddREKv39497rTXG4Ue28+HkIH+FY97ZTdb34d/XE+ofW+RQR1Vug7s5wqB1VRv9b
-         RZIljHyMS5AlqCBvD/yS4HtzdlHLfbU+QXo6ba4zJheFBiKpdFOuoIRjwVl/uwGbRt
-         qORLmNXL2hKaYvH4pnbcwGqo3kjz3krFRxcG/YLmHZmf7ITTAwKOu3CjFrJtS3U47S
-         jNihgJLOANPEw==
+        b=d4FcPe6GRX0jivqFMD74XeNvnwFNiURs8fNiV/vKYaFgx7vYR3WEBPSCLEgkNbvWO
+         491qzoeG+G9I6/y0D6lm0ICTd0SDmVzUFY/1lZZhEHJUQXXdq5hHblk9XmRanZODoD
+         3nw6/wo9CRw2fvrAwxpr2hqnwbxIVjzcd5iMbyPpt5rVP3SPMft7sgPgSQF+wpwZa9
+         47Y1anE6NSBnPC0AbK2x4XCOLiWGDT4ZGCZ1wDwsDOZauKsKjpXuyUqAX+dxTZCI59
+         VJeq7z9Y8OBQVeN52BbSJfjmzZkyMMLWSxE7eo/SSlNSECCGQ7ybIs06+siLIUN4hT
+         X+1RZqHhEMsPg==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     Tony Lindgren <tony@atomide.com>, linux-omap@vger.kernel.org
 Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH 08/10] ARM: omap2: remove unused declarations
-Date:   Mon, 24 Oct 2022 17:38:12 +0200
-Message-Id: <20221024153814.254652-9-arnd@kernel.org>
+Subject: [PATCH 10/10] ARM: omap2: make functions static
+Date:   Mon, 24 Oct 2022 17:38:14 +0200
+Message-Id: <20221024153814.254652-11-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20221024153814.254652-1-arnd@kernel.org>
 References: <20221024153814.254652-1-arnd@kernel.org>
@@ -55,235 +55,633 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-These functions were removed at some point in the
-past, but the extraneous declarations were left behind.
+A number of functions are only called from the file they
+are defined in, so remove the extern declarations and
+make them local to those files.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/arm/mach-omap2/clock.h                  |  5 -----
- arch/arm/mach-omap2/common.h                 | 11 -----------
- arch/arm/mach-omap2/omap_hwmod.h             |  9 ---------
- arch/arm/mach-omap2/omap_hwmod_common_data.h |  1 -
- arch/arm/mach-omap2/omap_opp_data.h          |  5 -----
- arch/arm/mach-omap2/pm.h                     | 18 ------------------
- arch/arm/mach-omap2/powerdomain.h            |  2 --
- arch/arm/mach-omap2/prm2xxx_3xxx.h           |  3 ---
- arch/arm/mach-omap2/sdrc.h                   |  1 -
- arch/arm/mach-omap2/sram.h                   |  4 ----
- arch/arm/mach-omap2/voltage.h                |  1 -
- 11 files changed, 60 deletions(-)
+ arch/arm/mach-omap2/board-n8x0.c                   |  2 +-
+ arch/arm/mach-omap2/clockdomain.c                  |  4 ++--
+ arch/arm/mach-omap2/clockdomain.h                  |  2 --
+ arch/arm/mach-omap2/cm2xxx.c                       |  4 ++--
+ arch/arm/mach-omap2/cm2xxx.h                       |  2 --
+ arch/arm/mach-omap2/common.h                       |  2 --
+ arch/arm/mach-omap2/id.c                           |  2 +-
+ arch/arm/mach-omap2/id.h                           |  2 --
+ arch/arm/mach-omap2/io.c                           |  2 +-
+ arch/arm/mach-omap2/omap-secure.c                  |  2 +-
+ arch/arm/mach-omap2/omap-secure.h                  |  2 --
+ arch/arm/mach-omap2/omap_device.c                  | 14 ++++++++++----
+ arch/arm/mach-omap2/omap_device.h                  |  9 ---------
+ arch/arm/mach-omap2/omap_hwmod.c                   |  4 +++-
+ arch/arm/mach-omap2/omap_hwmod.h                   |  1 -
+ .../mach-omap2/omap_hwmod_2xxx_3xxx_ipblock_data.c |  2 +-
+ arch/arm/mach-omap2/omap_hwmod_2xxx_ipblock_data.c |  6 +++---
+ arch/arm/mach-omap2/omap_hwmod_common_data.h       |  4 ----
+ arch/arm/mach-omap2/pm.c                           |  2 +-
+ arch/arm/mach-omap2/powerdomain.c                  |  8 ++++----
+ arch/arm/mach-omap2/powerdomain.h                  |  3 ---
+ arch/arm/mach-omap2/prcm-common.h                  |  1 -
+ arch/arm/mach-omap2/prm.h                          |  1 -
+ arch/arm/mach-omap2/prm3xxx.c                      |  5 +++--
+ arch/arm/mach-omap2/prm3xxx.h                      |  2 --
+ arch/arm/mach-omap2/prm_common.c                   |  4 ++--
+ arch/arm/mach-omap2/sdrc.c                         |  2 +-
+ arch/arm/mach-omap2/sdrc.h                         |  1 -
+ arch/arm/mach-omap2/usb-tusb6010.c                 |  6 ++----
+ arch/arm/mach-omap2/voltage.c                      |  2 +-
+ arch/arm/mach-omap2/voltage.h                      |  1 -
+ include/linux/platform_data/voltage-omap.h         |  1 -
+ include/linux/usb/musb.h                           |  2 --
+ 33 files changed, 39 insertions(+), 68 deletions(-)
 
-diff --git a/arch/arm/mach-omap2/clock.h b/arch/arm/mach-omap2/clock.h
-index f365614405e8..41391fa1418a 100644
---- a/arch/arm/mach-omap2/clock.h
-+++ b/arch/arm/mach-omap2/clock.h
-@@ -63,11 +63,6 @@
+diff --git a/arch/arm/mach-omap2/board-n8x0.c b/arch/arm/mach-omap2/board-n8x0.c
+index 5e86145db0e2..eb21a4cc5e4d 100644
+--- a/arch/arm/mach-omap2/board-n8x0.c
++++ b/arch/arm/mach-omap2/board-n8x0.c
+@@ -505,7 +505,7 @@ static void __init n8x0_mmc_init(void)
+ }
+ #else
+ static struct omap_mmc_platform_data mmc1_data;
+-void __init n8x0_mmc_init(void)
++static void __init n8x0_mmc_init(void)
+ {
+ }
+ #endif	/* CONFIG_MMC_OMAP */
+diff --git a/arch/arm/mach-omap2/clockdomain.c b/arch/arm/mach-omap2/clockdomain.c
+index f4e488e72515..d145e7ac709b 100644
+--- a/arch/arm/mach-omap2/clockdomain.c
++++ b/arch/arm/mach-omap2/clockdomain.c
+@@ -831,7 +831,7 @@ int clkdm_clear_all_sleepdeps(struct clockdomain *clkdm)
+  * -EINVAL if @clkdm is NULL or if clockdomain does not support
+  * software-initiated sleep; 0 upon success.
+  */
+-int clkdm_sleep_nolock(struct clockdomain *clkdm)
++static int clkdm_sleep_nolock(struct clockdomain *clkdm)
+ {
+ 	int ret;
  
- extern struct ti_clk_ll_ops omap_clk_ll_ops;
+@@ -885,7 +885,7 @@ int clkdm_sleep(struct clockdomain *clkdm)
+  * -EINVAL if @clkdm is NULL or if the clockdomain does not support
+  * software-controlled wakeup; 0 upon success.
+  */
+-int clkdm_wakeup_nolock(struct clockdomain *clkdm)
++static int clkdm_wakeup_nolock(struct clockdomain *clkdm)
+ {
+ 	int ret;
  
--extern const struct clkops clkops_omap2_dflt_wait;
--extern const struct clkops clkops_omap2_dflt;
--
--extern struct clk_functions omap2_clk_functions;
--
- int __init omap2_clk_setup_ll_ops(void);
+diff --git a/arch/arm/mach-omap2/clockdomain.h b/arch/arm/mach-omap2/clockdomain.h
+index a6bce3795a32..c36fb2721261 100644
+--- a/arch/arm/mach-omap2/clockdomain.h
++++ b/arch/arm/mach-omap2/clockdomain.h
+@@ -204,9 +204,7 @@ void clkdm_allow_idle(struct clockdomain *clkdm);
+ void clkdm_deny_idle_nolock(struct clockdomain *clkdm);
+ void clkdm_deny_idle(struct clockdomain *clkdm);
  
- void __init ti_clk_init_features(void);
+-int clkdm_wakeup_nolock(struct clockdomain *clkdm);
+ int clkdm_wakeup(struct clockdomain *clkdm);
+-int clkdm_sleep_nolock(struct clockdomain *clkdm);
+ int clkdm_sleep(struct clockdomain *clkdm);
+ 
+ int clkdm_clk_enable(struct clockdomain *clkdm, struct clk *clk);
+diff --git a/arch/arm/mach-omap2/cm2xxx.c b/arch/arm/mach-omap2/cm2xxx.c
+index 17833e0f22f8..1c6d69f4bf49 100644
+--- a/arch/arm/mach-omap2/cm2xxx.c
++++ b/arch/arm/mach-omap2/cm2xxx.c
+@@ -145,8 +145,8 @@ static int omap2xxx_cm_split_idlest_reg(struct clk_omap_reg *idlest_reg,
+  * (@prcm_mod, @idlest_id, @idlest_shift) is clocked.  Return 0 upon
+  * success or -EBUSY if the module doesn't enable in time.
+  */
+-int omap2xxx_cm_wait_module_ready(u8 part, s16 prcm_mod, u16 idlest_id,
+-				  u8 idlest_shift)
++static int omap2xxx_cm_wait_module_ready(u8 part, s16 prcm_mod, u16 idlest_id,
++					 u8 idlest_shift)
+ {
+ 	int ena = 0, i = 0;
+ 	u8 cm_idlest_reg;
+diff --git a/arch/arm/mach-omap2/cm2xxx.h b/arch/arm/mach-omap2/cm2xxx.h
+index ee0cb40691b2..7cbeff15ffb0 100644
+--- a/arch/arm/mach-omap2/cm2xxx.h
++++ b/arch/arm/mach-omap2/cm2xxx.h
+@@ -46,8 +46,6 @@
+ extern void omap2xxx_cm_set_dpll_disable_autoidle(void);
+ extern void omap2xxx_cm_set_dpll_auto_low_power_stop(void);
+ 
+-int omap2xxx_cm_wait_module_ready(u8 part, s16 prcm_mod, u16 idlest_id,
+-				  u8 idlest_shift);
+ extern int omap2xxx_cm_fclks_active(void);
+ extern int omap2xxx_cm_mpu_retention_allowed(void);
+ extern u32 omap2xxx_cm_get_core_clk_src(void);
 diff --git a/arch/arm/mach-omap2/common.h b/arch/arm/mach-omap2/common.h
-index 415ca353a345..112e7966107c 100644
+index ebf0266e1943..08034d589081 100644
 --- a/arch/arm/mach-omap2/common.h
 +++ b/arch/arm/mach-omap2/common.h
-@@ -87,12 +87,6 @@ static inline int amx3_common_pm_init(void)
- }
- #endif
+@@ -106,7 +106,6 @@ void omap2420_init_early(void);
+ void omap2430_init_early(void);
+ void omap3430_init_early(void);
+ void omap3630_init_early(void);
+-void omap3_init_early(void);	/* Do not use this one */
+ void am33xx_init_early(void);
+ void am35xx_init_early(void);
+ void ti814x_init_early(void);
+@@ -120,7 +119,6 @@ void omap4430_init_late(void);
+ void ti81xx_init_late(void);
+ void am33xx_init_late(void);
+ void omap5_init_late(void);
+-int omap2_common_pm_late_init(void);
+ void dra7xx_init_early(void);
+ void dra7xx_init_late(void);
  
--extern void omap2_init_common_infrastructure(void);
--
--extern void omap_init_time(void);
--extern void omap3_secure_sync32k_timer_init(void);
--extern void omap3_gptimer_timer_init(void);
--extern void omap4_local_timer_init(void);
- #ifdef CONFIG_CACHE_L2X0
- int omap_l2_cache_init(void);
- #define OMAP_L2C_AUX_CTRL	(L2C_AUX_CTRL_SHARED_OVERRIDE | \
-@@ -229,11 +223,6 @@ void __init ti81xx_map_io(void);
- 	}							\
- })
+diff --git a/arch/arm/mach-omap2/id.c b/arch/arm/mach-omap2/id.c
+index 59755b5a1ad7..98999aa8cc0c 100644
+--- a/arch/arm/mach-omap2/id.c
++++ b/arch/arm/mach-omap2/id.c
+@@ -117,7 +117,7 @@ static struct omap_id omap_ids[] __initdata = {
+ static void __iomem *tap_base;
+ static u16 tap_prod_id;
  
--extern struct device *omap2_get_mpuss_device(void);
--extern struct device *omap2_get_iva_device(void);
--extern struct device *omap2_get_l3_device(void);
--extern struct device *omap4_get_dsp_device(void);
--
- void omap_gic_of_init(void);
- 
- #ifdef CONFIG_CACHE_L2X0
-diff --git a/arch/arm/mach-omap2/omap_hwmod.h b/arch/arm/mach-omap2/omap_hwmod.h
-index 3fa6d217ab83..b6b53170ad1e 100644
---- a/arch/arm/mach-omap2/omap_hwmod.h
-+++ b/arch/arm/mach-omap2/omap_hwmod.h
-@@ -638,11 +638,6 @@ void omap_hwmod_write(u32 v, struct omap_hwmod *oh, u16 reg_offs);
- u32 omap_hwmod_read(struct omap_hwmod *oh, u16 reg_offs);
- int omap_hwmod_softreset(struct omap_hwmod *oh);
- 
--int omap_hwmod_count_resources(struct omap_hwmod *oh, unsigned long flags);
--int omap_hwmod_fill_resources(struct omap_hwmod *oh, struct resource *res);
--int omap_hwmod_get_resource_byname(struct omap_hwmod *oh, unsigned int type,
--				   const char *name, struct resource *res);
--
- void __iomem *omap_hwmod_get_mpu_rt_va(struct omap_hwmod *oh);
- 
- int omap_hwmod_for_each_by_class(const char *classname,
-@@ -672,12 +667,8 @@ omap_hwmod_for_each_by_class(const char *classname,
- extern int omap2420_hwmod_init(void);
- extern int omap2430_hwmod_init(void);
- extern int omap3xxx_hwmod_init(void);
--extern int omap44xx_hwmod_init(void);
--extern int am33xx_hwmod_init(void);
- extern int dm814x_hwmod_init(void);
- extern int dm816x_hwmod_init(void);
--extern int dra7xx_hwmod_init(void);
--int am43xx_hwmod_init(void);
- 
- extern int __init omap_hwmod_register_links(struct omap_hwmod_ocp_if **ois);
- 
-diff --git a/arch/arm/mach-omap2/omap_hwmod_common_data.h b/arch/arm/mach-omap2/omap_hwmod_common_data.h
-index c8eb1e6cc4a9..e0d65ad65614 100644
---- a/arch/arm/mach-omap2/omap_hwmod_common_data.h
-+++ b/arch/arm/mach-omap2/omap_hwmod_common_data.h
-@@ -59,7 +59,6 @@ extern struct omap_hwmod_ocp_if omap2_l4_core__uart2;
- extern struct omap_hwmod_ocp_if omap2_l4_core__uart3;
- extern struct omap_hwmod_ocp_if omap2xxx_l4_core__mcspi1;
- extern struct omap_hwmod_ocp_if omap2xxx_l4_core__mcspi2;
--extern struct omap_hwmod_ocp_if omap2xxx_l4_core__timer2;
- extern struct omap_hwmod_ocp_if omap2xxx_l4_core__timer3;
- extern struct omap_hwmod_ocp_if omap2xxx_l4_core__timer4;
- extern struct omap_hwmod_ocp_if omap2xxx_l4_core__timer5;
-diff --git a/arch/arm/mach-omap2/omap_opp_data.h b/arch/arm/mach-omap2/omap_opp_data.h
-index 88375ab38e31..ed84fe95e857 100644
---- a/arch/arm/mach-omap2/omap_opp_data.h
-+++ b/arch/arm/mach-omap2/omap_opp_data.h
-@@ -71,11 +71,6 @@ struct omap_opp_def {
- 	.vp_errgain	= _errgain				       \
- }
- 
--/* Use this to initialize the default table */
--extern int __init omap_init_opp_table(struct omap_opp_def *opp_def,
--		u32 opp_def_size);
--
--
- extern struct omap_volt_data omap34xx_vddmpu_volt_data[];
- extern struct omap_volt_data omap34xx_vddcore_volt_data[];
- extern struct omap_volt_data omap36xx_vddmpu_volt_data[];
-diff --git a/arch/arm/mach-omap2/pm.h b/arch/arm/mach-omap2/pm.h
-index 0c95774a4b8f..90a341b0369c 100644
---- a/arch/arm/mach-omap2/pm.h
-+++ b/arch/arm/mach-omap2/pm.h
-@@ -32,20 +32,6 @@ extern void omap3_pm_off_mode_enable(int);
- extern void omap_sram_idle(void);
- extern int omap_pm_clkdms_setup(struct clockdomain *clkdm, void *unused);
- 
--#if defined(CONFIG_PM_OPP)
--extern int omap3_opp_init(void);
--extern int omap4_opp_init(void);
--#else
--static inline int omap3_opp_init(void)
--{
--	return -EINVAL;
--}
--static inline int omap4_opp_init(void)
--{
--	return -EINVAL;
--}
--#endif
--
- extern int omap3_pm_get_suspend_state(struct powerdomain *pwrdm);
- extern int omap3_pm_set_suspend_state(struct powerdomain *pwrdm, int state);
- 
-@@ -58,9 +44,6 @@ extern void pm_dbg_update_time(struct powerdomain *pwrdm, int prev);
- #endif /* CONFIG_PM_DEBUG */
- 
- /* 24xx */
--extern void omap24xx_idle_loop_suspend(void);
--extern unsigned int omap24xx_idle_loop_suspend_sz;
--
- extern void omap24xx_cpu_suspend(u32 dll_ctrl, void __iomem *sdrc_dlla_ctrl,
- 					void __iomem *sdrc_power);
- extern unsigned int omap24xx_cpu_suspend_sz;
-@@ -120,7 +103,6 @@ static inline int omap_devinit_smartreflex(void)
- #ifdef CONFIG_TWL4030_CORE
- extern int omap3_twl_init(void);
- extern int omap4_twl_init(void);
--extern int omap3_twl_set_sr_bit(bool enable);
- #else
- static inline int omap3_twl_init(void)
+-void omap_get_die_id(struct omap_die_id *odi)
++static void omap_get_die_id(struct omap_die_id *odi)
  {
-diff --git a/arch/arm/mach-omap2/powerdomain.h b/arch/arm/mach-omap2/powerdomain.h
-index 2eaabd94986f..4c5284d0fd62 100644
---- a/arch/arm/mach-omap2/powerdomain.h
-+++ b/arch/arm/mach-omap2/powerdomain.h
-@@ -208,8 +208,6 @@ struct powerdomain *pwrdm_lookup(const char *name);
- 
- int pwrdm_for_each(int (*fn)(struct powerdomain *pwrdm, void *user),
- 			void *user);
--int pwrdm_for_each_nolock(int (*fn)(struct powerdomain *pwrdm, void *user),
--			void *user);
- 
- int pwrdm_add_clkdm(struct powerdomain *pwrdm, struct clockdomain *clkdm);
- 
-diff --git a/arch/arm/mach-omap2/prm2xxx_3xxx.h b/arch/arm/mach-omap2/prm2xxx_3xxx.h
-index 3d803f7182b9..bc263d564acc 100644
---- a/arch/arm/mach-omap2/prm2xxx_3xxx.h
-+++ b/arch/arm/mach-omap2/prm2xxx_3xxx.h
-@@ -104,9 +104,6 @@ int omap2_prm_deassert_hardreset(u8 rst_shift, u8 st_shift, u8 part,
- 				 s16 prm_mod, u16 reset_offset,
- 				 u16 st_offset);
- 
--extern int omap2_pwrdm_set_next_pwrst(struct powerdomain *pwrdm, u8 pwrst);
--extern int omap2_pwrdm_read_next_pwrst(struct powerdomain *pwrdm);
--extern int omap2_pwrdm_read_pwrst(struct powerdomain *pwrdm);
- extern int omap2_pwrdm_set_mem_onst(struct powerdomain *pwrdm, u8 bank,
- 				    u8 pwrst);
- extern int omap2_pwrdm_set_mem_retst(struct powerdomain *pwrdm, u8 bank,
-diff --git a/arch/arm/mach-omap2/sdrc.h b/arch/arm/mach-omap2/sdrc.h
-index 5a44d64e3fbe..07ff33b006a7 100644
---- a/arch/arm/mach-omap2/sdrc.h
-+++ b/arch/arm/mach-omap2/sdrc.h
-@@ -92,7 +92,6 @@ struct memory_timings {
+ 	if (soc_is_omap44xx() || soc_is_omap54xx() || soc_is_dra7xx()) {
+ 		odi->id_0 = read_tap_reg(OMAP_TAP_DIE_ID_44XX_0);
+diff --git a/arch/arm/mach-omap2/id.h b/arch/arm/mach-omap2/id.h
+index d1735f4497e3..ded7392f0526 100644
+--- a/arch/arm/mach-omap2/id.h
++++ b/arch/arm/mach-omap2/id.h
+@@ -14,6 +14,4 @@ struct omap_die_id {
+ 	u32 id_3;
  };
  
- extern void omap2xxx_sdrc_init_params(u32 force_lock_to_unlock_mode);
--struct omap_sdrc_params *rx51_get_sdram_timings(void);
- 
- u32 omap2xxx_sdrc_dll_is_unlocked(void);
- u32 omap2xxx_sdrc_reprogram(u32 level, u32 force);
-diff --git a/arch/arm/mach-omap2/sram.h b/arch/arm/mach-omap2/sram.h
-index 271062f23482..030cabc39821 100644
---- a/arch/arm/mach-omap2/sram.h
-+++ b/arch/arm/mach-omap2/sram.h
-@@ -17,10 +17,6 @@ extern int __init omap_sram_init(void);
- 
- extern void *omap_sram_push(void *funcp, unsigned long size);
- 
--/* Do not use these */
--extern void omap24xx_sram_reprogram_clock(u32 ckctl, u32 dpllctl);
--extern unsigned long omap24xx_sram_reprogram_clock_sz;
+-void omap_get_die_id(struct omap_die_id *odi);
 -
- extern void omap242x_sram_ddr_init(u32 *slow_dll_ctrl, u32 fast_dll_ctrl,
- 						u32 base_cs, u32 force_unlock);
- extern unsigned long omap242x_sram_ddr_init_sz;
+ #endif
+diff --git a/arch/arm/mach-omap2/io.c b/arch/arm/mach-omap2/io.c
+index 81cb175c2dbe..14ec3f78000b 100644
+--- a/arch/arm/mach-omap2/io.c
++++ b/arch/arm/mach-omap2/io.c
+@@ -461,7 +461,7 @@ void __init omap2430_init_early(void)
+  * same machine_id for 34xx and 36xx beagle.. Will get fixed with DT.
+  */
+ #ifdef CONFIG_ARCH_OMAP3
+-void __init omap3_init_early(void)
++static void __init omap3_init_early(void)
+ {
+ 	omap2_set_globals_tap(OMAP343X_CLASS, OMAP2_L4_IO_ADDRESS(0x4830A000));
+ 	omap2_set_globals_sdrc(OMAP2_L3_IO_ADDRESS(OMAP343X_SDRC_BASE),
+diff --git a/arch/arm/mach-omap2/omap-secure.c b/arch/arm/mach-omap2/omap-secure.c
+index 41aec5c93a70..29c7350b06ab 100644
+--- a/arch/arm/mach-omap2/omap-secure.c
++++ b/arch/arm/mach-omap2/omap-secure.c
+@@ -152,7 +152,7 @@ u32 omap3_save_secure_ram(void *addr, int size)
+  * NOTE: rx51_secure_dispatcher differs from omap_secure_dispatcher because
+  *       it calling omap_smc3() instead omap_smc2() and param[0] is nargs+1
+  */
+-u32 rx51_secure_dispatcher(u32 idx, u32 process, u32 flag, u32 nargs,
++static u32 rx51_secure_dispatcher(u32 idx, u32 process, u32 flag, u32 nargs,
+ 			   u32 arg1, u32 arg2, u32 arg3, u32 arg4)
+ {
+ 	static u32 param[5];
+diff --git a/arch/arm/mach-omap2/omap-secure.h b/arch/arm/mach-omap2/omap-secure.h
+index 2ce26a86b7bd..2517c4a5a0e2 100644
+--- a/arch/arm/mach-omap2/omap-secure.h
++++ b/arch/arm/mach-omap2/omap-secure.h
+@@ -74,8 +74,6 @@ extern int omap_secure_ram_reserve_memblock(void);
+ extern u32 save_secure_ram_context(u32 args_pa);
+ extern u32 omap3_save_secure_ram(void *save_regs, int size);
+ 
+-extern u32 rx51_secure_dispatcher(u32 idx, u32 process, u32 flag, u32 nargs,
+-				  u32 arg1, u32 arg2, u32 arg3, u32 arg4);
+ extern u32 rx51_secure_update_aux_cr(u32 set_bits, u32 clear_bits);
+ extern u32 rx51_secure_rng_call(u32 ptr, u32 count, u32 flag);
+ 
+diff --git a/arch/arm/mach-omap2/omap_device.c b/arch/arm/mach-omap2/omap_device.c
+index 0594aaaa1a98..4afa2f08e668 100644
+--- a/arch/arm/mach-omap2/omap_device.c
++++ b/arch/arm/mach-omap2/omap_device.c
+@@ -39,6 +39,12 @@
+ #include "omap_device.h"
+ #include "omap_hwmod.h"
+ 
++static struct omap_device *omap_device_alloc(struct platform_device *pdev,
++				struct omap_hwmod **ohs, int oh_cnt);
++static void omap_device_delete(struct omap_device *od);
++static struct dev_pm_domain omap_device_fail_pm_domain;
++static struct dev_pm_domain omap_device_pm_domain;
++
+ /* Private functions */
+ 
+ static void _add_clkdev(struct omap_device *od, const char *clk_alias,
+@@ -296,7 +302,7 @@ static int _omap_device_idle_hwmods(struct omap_device *od)
+  *
+  * Returns an struct omap_device pointer or ERR_PTR() on error;
+  */
+-struct omap_device *omap_device_alloc(struct platform_device *pdev,
++static struct omap_device *omap_device_alloc(struct platform_device *pdev,
+ 					struct omap_hwmod **ohs, int oh_cnt)
+ {
+ 	int ret = -ENOMEM;
+@@ -333,7 +339,7 @@ struct omap_device *omap_device_alloc(struct platform_device *pdev,
+ 	return ERR_PTR(ret);
+ }
+ 
+-void omap_device_delete(struct omap_device *od)
++static void omap_device_delete(struct omap_device *od)
+ {
+ 	if (!od)
+ 		return;
+@@ -425,14 +431,14 @@ static int _od_resume_noirq(struct device *dev)
+ #define _od_resume_noirq NULL
+ #endif
+ 
+-struct dev_pm_domain omap_device_fail_pm_domain = {
++static struct dev_pm_domain omap_device_fail_pm_domain = {
+ 	.ops = {
+ 		SET_RUNTIME_PM_OPS(_od_fail_runtime_suspend,
+ 				   _od_fail_runtime_resume, NULL)
+ 	}
+ };
+ 
+-struct dev_pm_domain omap_device_pm_domain = {
++static struct dev_pm_domain omap_device_pm_domain = {
+ 	.ops = {
+ 		SET_RUNTIME_PM_OPS(_od_runtime_suspend, _od_runtime_resume,
+ 				   NULL)
+diff --git a/arch/arm/mach-omap2/omap_device.h b/arch/arm/mach-omap2/omap_device.h
+index 455f0a2b43ee..aa8096ecb23c 100644
+--- a/arch/arm/mach-omap2/omap_device.h
++++ b/arch/arm/mach-omap2/omap_device.h
+@@ -25,9 +25,6 @@
+ 
+ #include "omap_hwmod.h"
+ 
+-extern struct dev_pm_domain omap_device_pm_domain;
+-extern struct dev_pm_domain omap_device_fail_pm_domain;
+-
+ /* omap_device._state values */
+ #define OMAP_DEVICE_STATE_UNKNOWN	0
+ #define OMAP_DEVICE_STATE_ENABLED	1
+@@ -66,12 +63,6 @@ struct omap_device {
+ int omap_device_enable(struct platform_device *pdev);
+ int omap_device_idle(struct platform_device *pdev);
+ 
+-/* Core code interface */
+-
+-struct omap_device *omap_device_alloc(struct platform_device *pdev,
+-				      struct omap_hwmod **ohs, int oh_cnt);
+-void omap_device_delete(struct omap_device *od);
+-
+ /* Other */
+ 
+ int omap_device_assert_hardreset(struct platform_device *pdev,
+diff --git a/arch/arm/mach-omap2/omap_hwmod.c b/arch/arm/mach-omap2/omap_hwmod.c
+index b03be626bc99..5a2a9b8e61ed 100644
+--- a/arch/arm/mach-omap2/omap_hwmod.c
++++ b/arch/arm/mach-omap2/omap_hwmod.c
+@@ -3054,6 +3054,8 @@ int __init omap_hwmod_register_links(struct omap_hwmod_ocp_if **ois)
+ 	return 0;
+ }
+ 
++static int __init omap_hwmod_setup_one(const char *oh_name);
++
+ /**
+  * _ensure_mpu_hwmod_is_setup - ensure the MPU SS hwmod is init'ed and set up
+  * @oh: pointer to the hwmod currently being set up (usually not the MPU)
+@@ -3084,7 +3086,7 @@ static void __init _ensure_mpu_hwmod_is_setup(struct omap_hwmod *oh)
+  * registered omap_hwmod.  Also calls _setup() on each hwmod.  Returns
+  * -EINVAL upon error or 0 upon success.
+  */
+-int __init omap_hwmod_setup_one(const char *oh_name)
++static int __init omap_hwmod_setup_one(const char *oh_name)
+ {
+ 	struct omap_hwmod *oh;
+ 
+diff --git a/arch/arm/mach-omap2/omap_hwmod.h b/arch/arm/mach-omap2/omap_hwmod.h
+index b6b53170ad1e..dcab7a01c10e 100644
+--- a/arch/arm/mach-omap2/omap_hwmod.h
++++ b/arch/arm/mach-omap2/omap_hwmod.h
+@@ -615,7 +615,6 @@ struct omap_hwmod *omap_hwmod_lookup(const char *name);
+ int omap_hwmod_for_each(int (*fn)(struct omap_hwmod *oh, void *data),
+ 			void *data);
+ 
+-int __init omap_hwmod_setup_one(const char *name);
+ int omap_hwmod_parse_module_range(struct omap_hwmod *oh,
+ 				  struct device_node *np,
+ 				  struct resource *res);
+diff --git a/arch/arm/mach-omap2/omap_hwmod_2xxx_3xxx_ipblock_data.c b/arch/arm/mach-omap2/omap_hwmod_2xxx_3xxx_ipblock_data.c
+index 2581b8a5f866..67f1f38909d9 100644
+--- a/arch/arm/mach-omap2/omap_hwmod_2xxx_3xxx_ipblock_data.c
++++ b/arch/arm/mach-omap2/omap_hwmod_2xxx_3xxx_ipblock_data.c
+@@ -62,7 +62,7 @@ struct omap_hwmod_class iva_hwmod_class = {
+ 	.name = "iva",
+ };
+ 
+-struct omap_hwmod_class_sysconfig omap2_hdq1w_sysc = {
++static struct omap_hwmod_class_sysconfig omap2_hdq1w_sysc = {
+ 	.rev_offs	= 0x0,
+ 	.sysc_offs	= 0x14,
+ 	.syss_offs	= 0x18,
+diff --git a/arch/arm/mach-omap2/omap_hwmod_2xxx_ipblock_data.c b/arch/arm/mach-omap2/omap_hwmod_2xxx_ipblock_data.c
+index 9ab1d57f8b73..4982e04ead53 100644
+--- a/arch/arm/mach-omap2/omap_hwmod_2xxx_ipblock_data.c
++++ b/arch/arm/mach-omap2/omap_hwmod_2xxx_ipblock_data.c
+@@ -30,7 +30,7 @@ static struct omap_hwmod_class_sysconfig omap2_dispc_sysc = {
+ 	.sysc_fields	= &omap_hwmod_sysc_type1,
+ };
+ 
+-struct omap_hwmod_class omap2_dispc_hwmod_class = {
++static struct omap_hwmod_class omap2_dispc_hwmod_class = {
+ 	.name	= "dispc",
+ 	.sysc	= &omap2_dispc_sysc,
+ };
+@@ -47,7 +47,7 @@ static struct omap_hwmod_class_sysconfig omap2xxx_timer_sysc = {
+ 	.sysc_fields	= &omap_hwmod_sysc_type1,
+ };
+ 
+-struct omap_hwmod_class omap2xxx_timer_hwmod_class = {
++static struct omap_hwmod_class omap2xxx_timer_hwmod_class = {
+ 	.name	= "timer",
+ 	.sysc	= &omap2xxx_timer_sysc,
+ };
+@@ -67,7 +67,7 @@ static struct omap_hwmod_class_sysconfig omap2xxx_wd_timer_sysc = {
+ 	.sysc_fields	= &omap_hwmod_sysc_type1,
+ };
+ 
+-struct omap_hwmod_class omap2xxx_wd_timer_hwmod_class = {
++static struct omap_hwmod_class omap2xxx_wd_timer_hwmod_class = {
+ 	.name		= "wd_timer",
+ 	.sysc		= &omap2xxx_wd_timer_sysc,
+ 	.pre_shutdown	= &omap2_wd_timer_disable,
+diff --git a/arch/arm/mach-omap2/omap_hwmod_common_data.h b/arch/arm/mach-omap2/omap_hwmod_common_data.h
+index e0d65ad65614..69dddc53e1d8 100644
+--- a/arch/arm/mach-omap2/omap_hwmod_common_data.h
++++ b/arch/arm/mach-omap2/omap_hwmod_common_data.h
+@@ -84,14 +84,10 @@ extern struct omap_hwmod_class mpu_hwmod_class;
+ extern struct omap_hwmod_class iva_hwmod_class;
+ extern struct omap_hwmod_class omap2_uart_class;
+ extern struct omap_hwmod_class omap2_dss_hwmod_class;
+-extern struct omap_hwmod_class omap2_dispc_hwmod_class;
+ extern struct omap_hwmod_class omap2_rfbi_hwmod_class;
+ extern struct omap_hwmod_class omap2_venc_hwmod_class;
+-extern struct omap_hwmod_class_sysconfig omap2_hdq1w_sysc;
+ extern struct omap_hwmod_class omap2_hdq1w_class;
+ 
+-extern struct omap_hwmod_class omap2xxx_timer_hwmod_class;
+-extern struct omap_hwmod_class omap2xxx_wd_timer_hwmod_class;
+ extern struct omap_hwmod_class omap2xxx_gpio_hwmod_class;
+ extern struct omap_hwmod_class omap2xxx_mailbox_hwmod_class;
+ extern struct omap_hwmod_class omap2xxx_mcspi_class;
+diff --git a/arch/arm/mach-omap2/pm.c b/arch/arm/mach-omap2/pm.c
+index 53a132f11961..700869c9eae1 100644
+--- a/arch/arm/mach-omap2/pm.c
++++ b/arch/arm/mach-omap2/pm.c
+@@ -134,7 +134,7 @@ int __maybe_unused omap_pm_nop_init(void)
+ 
+ int (*omap_pm_soc_init)(void);
+ 
+-int __init omap2_common_pm_late_init(void)
++static int __init omap2_common_pm_late_init(void)
+ {
+ 	int error;
+ 
+diff --git a/arch/arm/mach-omap2/powerdomain.c b/arch/arm/mach-omap2/powerdomain.c
+index 0155a1e57a87..fd974514a7b2 100644
+--- a/arch/arm/mach-omap2/powerdomain.c
++++ b/arch/arm/mach-omap2/powerdomain.c
+@@ -37,8 +37,8 @@
+ 
+ #define PWRDM_TRACE_STATES_FLAG	(1<<31)
+ 
+-void pwrdms_save_context(void);
+-void pwrdms_restore_context(void);
++static void pwrdms_save_context(void);
++static void pwrdms_restore_context(void);
+ 
+ enum {
+ 	PWRDM_STATE_NOW = 0,
+@@ -1174,12 +1174,12 @@ static int pwrdm_restore_context(struct powerdomain *pwrdm, void *unused)
+ 	return 0;
+ }
+ 
+-void pwrdms_save_context(void)
++static void pwrdms_save_context(void)
+ {
+ 	pwrdm_for_each(pwrdm_save_context, NULL);
+ }
+ 
+-void pwrdms_restore_context(void)
++static void pwrdms_restore_context(void)
+ {
+ 	pwrdm_for_each(pwrdm_restore_context, NULL);
+ }
+diff --git a/arch/arm/mach-omap2/powerdomain.h b/arch/arm/mach-omap2/powerdomain.h
+index 4c5284d0fd62..fbc89999460b 100644
+--- a/arch/arm/mach-omap2/powerdomain.h
++++ b/arch/arm/mach-omap2/powerdomain.h
+@@ -269,7 +269,4 @@ extern struct powerdomain gfx_omap2_pwrdm;
+ extern void pwrdm_lock(struct powerdomain *pwrdm);
+ extern void pwrdm_unlock(struct powerdomain *pwrdm);
+ 
+-extern void pwrdms_save_context(void);
+-extern void pwrdms_restore_context(void);
+-
+ #endif
+diff --git a/arch/arm/mach-omap2/prcm-common.h b/arch/arm/mach-omap2/prcm-common.h
+index 48e804c93caf..5e3544a63526 100644
+--- a/arch/arm/mach-omap2/prcm-common.h
++++ b/arch/arm/mach-omap2/prcm-common.h
+@@ -550,7 +550,6 @@ struct omap_prcm_init_data {
+ 	struct device_node *np;
+ };
+ 
+-extern void omap_prcm_irq_cleanup(void);
+ extern int omap_prcm_register_chain_handler(
+ 	struct omap_prcm_irq_setup *irq_setup);
+ extern int omap_prcm_event_to_irq(const char *event);
+diff --git a/arch/arm/mach-omap2/prm.h b/arch/arm/mach-omap2/prm.h
+index bad15ba5256c..fc45a7ed09bb 100644
+--- a/arch/arm/mach-omap2/prm.h
++++ b/arch/arm/mach-omap2/prm.h
+@@ -16,7 +16,6 @@
+ extern struct omap_domain_base prm_base;
+ extern u16 prm_features;
+ int omap_prcm_init(void);
+-int omap2_prm_base_init(void);
+ int omap2_prcm_base_init(void);
+ # endif
+ 
+diff --git a/arch/arm/mach-omap2/prm3xxx.c b/arch/arm/mach-omap2/prm3xxx.c
+index 63e73e9b82bc..1b5d08f594aa 100644
+--- a/arch/arm/mach-omap2/prm3xxx.c
++++ b/arch/arm/mach-omap2/prm3xxx.c
+@@ -32,6 +32,7 @@ static void omap3xxx_prm_read_pending_irqs(unsigned long *events);
+ static void omap3xxx_prm_ocp_barrier(void);
+ static void omap3xxx_prm_save_and_clear_irqen(u32 *saved_mask);
+ static void omap3xxx_prm_restore_irqen(u32 *saved_mask);
++static void omap3xxx_prm_iva_idle(void);
+ 
+ static const struct omap_prcm_irq omap3_prcm_irqs[] = {
+ 	OMAP_PRCM_IRQ("wkup",	0,	0),
+@@ -268,7 +269,7 @@ static int omap3xxx_prm_clear_mod_irqs(s16 module, u8 regs, u32 wkst_mask)
+  * Toggles the reset signal to modem IP block. Required to allow
+  * OMAP3430 without stacked modem to idle properly.
+  */
+-void __init omap3_prm_reset_modem(void)
++static void __init omap3_prm_reset_modem(void)
+ {
+ 	omap2_prm_write_mod_reg(
+ 		OMAP3430_RM_RSTCTRL_CORE_MODEM_SW_RSTPWRON_MASK |
+@@ -469,7 +470,7 @@ static u32 omap3xxx_prm_read_reset_sources(void)
+  * function forces the IVA2 into idle state so it can go
+  * into retention/off and thus allow full-chip retention/off.
+  */
+-void omap3xxx_prm_iva_idle(void)
++static void omap3xxx_prm_iva_idle(void)
+ {
+ 	/* ensure IVA2 clock is disabled */
+ 	omap2_cm_write_mod_reg(0, OMAP3430_IVA2_MOD, CM_FCLKEN);
+diff --git a/arch/arm/mach-omap2/prm3xxx.h b/arch/arm/mach-omap2/prm3xxx.h
+index ed7c389aa5a7..ab899e461c62 100644
+--- a/arch/arm/mach-omap2/prm3xxx.h
++++ b/arch/arm/mach-omap2/prm3xxx.h
+@@ -138,8 +138,6 @@ extern void omap3_prm_vcvp_write(u32 val, u8 offset);
+ extern u32 omap3_prm_vcvp_rmw(u32 mask, u32 bits, u8 offset);
+ 
+ int __init omap3xxx_prm_init(const struct omap_prcm_init_data *data);
+-void omap3xxx_prm_iva_idle(void);
+-void omap3_prm_reset_modem(void);
+ int omap3xxx_prm_clear_global_cold_reset(void);
+ void omap3_prm_save_scratchpad_contents(u32 *ptr);
+ void omap3_prm_init_pm(bool has_uart4, bool has_iva);
+diff --git a/arch/arm/mach-omap2/prm_common.c b/arch/arm/mach-omap2/prm_common.c
+index 9a27f566612f..fd896f2295a1 100644
+--- a/arch/arm/mach-omap2/prm_common.c
++++ b/arch/arm/mach-omap2/prm_common.c
+@@ -187,7 +187,7 @@ int omap_prcm_event_to_irq(const char *name)
+  *
+  * No return value.
+  */
+-void omap_prcm_irq_cleanup(void)
++static void omap_prcm_irq_cleanup(void)
+ {
+ 	unsigned int irq;
+ 	int i;
+@@ -689,7 +689,7 @@ static const struct of_device_id omap_prcm_dt_match_table[] __initconst = {
+  * on the DT data. Returns 0 in success, negative error value
+  * otherwise.
+  */
+-int __init omap2_prm_base_init(void)
++static int __init omap2_prm_base_init(void)
+ {
+ 	struct device_node *np;
+ 	const struct of_device_id *match;
+diff --git a/arch/arm/mach-omap2/sdrc.c b/arch/arm/mach-omap2/sdrc.c
+index 9900fc777f39..b1bf9e24d442 100644
+--- a/arch/arm/mach-omap2/sdrc.c
++++ b/arch/arm/mach-omap2/sdrc.c
+@@ -45,7 +45,7 @@ static struct omap2_sms_regs sms_context;
+  *
+  * Save SMS registers that need to be restored after off mode.
+  */
+-void omap2_sms_save_context(void)
++static void omap2_sms_save_context(void)
+ {
+ 	sms_context.sms_sysconfig = sms_read_reg(SMS_SYSCONFIG);
+ }
+diff --git a/arch/arm/mach-omap2/sdrc.h b/arch/arm/mach-omap2/sdrc.h
+index 07ff33b006a7..45b35422b587 100644
+--- a/arch/arm/mach-omap2/sdrc.h
++++ b/arch/arm/mach-omap2/sdrc.h
+@@ -80,7 +80,6 @@ static inline void __init omap2_sdrc_init(struct omap_sdrc_params *sdrc_cs0,
+ 					  struct omap_sdrc_params *sdrc_cs1) {};
+ #endif
+ 
+-void omap2_sms_save_context(void);
+ void omap2_sms_restore_context(void);
+ 
+ struct memory_timings {
+diff --git a/arch/arm/mach-omap2/usb-tusb6010.c b/arch/arm/mach-omap2/usb-tusb6010.c
+index a0c4c42e56b9..18fa52f828dc 100644
+--- a/arch/arm/mach-omap2/usb-tusb6010.c
++++ b/arch/arm/mach-omap2/usb-tusb6010.c
+@@ -97,7 +97,7 @@ static int tusb_set_sync_mode(unsigned sysclk_ps)
+ }
+ 
+ /* tusb driver calls this when it changes the chip's clocking */
+-int tusb6010_platform_retime(unsigned is_refclk)
++static int tusb6010_platform_retime(unsigned is_refclk)
+ {
+ 	static const char	error[] =
+ 		KERN_ERR "tusb6010 %s retime error %d\n";
+@@ -121,7 +121,6 @@ int tusb6010_platform_retime(unsigned is_refclk)
+ done:
+ 	return status;
+ }
+-EXPORT_SYMBOL_GPL(tusb6010_platform_retime);
+ 
+ static struct resource tusb_resources[] = {
+ 	/* Order is significant!  The start/end fields
+@@ -154,8 +153,7 @@ static struct platform_device tusb_device = {
+ 
+ 
+ /* this may be called only from board-*.c setup code */
+-int __init
+-tusb6010_setup_interface(struct musb_hdrc_platform_data *data,
++int __init tusb6010_setup_interface(struct musb_hdrc_platform_data *data,
+ 		unsigned ps_refclk, unsigned waitpin,
+ 		unsigned async, unsigned sync,
+ 		unsigned irq, unsigned dmachan)
+diff --git a/arch/arm/mach-omap2/voltage.c b/arch/arm/mach-omap2/voltage.c
+index 0a0c771dbb0a..49e8bc69abdd 100644
+--- a/arch/arm/mach-omap2/voltage.c
++++ b/arch/arm/mach-omap2/voltage.c
+@@ -67,7 +67,7 @@ unsigned long voltdm_get_voltage(struct voltagedomain *voltdm)
+  * This API should be called by the kernel to do the voltage scaling
+  * for a particular voltage domain during DVFS.
+  */
+-int voltdm_scale(struct voltagedomain *voltdm,
++static int voltdm_scale(struct voltagedomain *voltdm,
+ 		 unsigned long target_volt)
+ {
+ 	int ret, i;
 diff --git a/arch/arm/mach-omap2/voltage.h b/arch/arm/mach-omap2/voltage.h
-index 4a225f9559a5..5beb91ce3b38 100644
+index 5beb91ce3b38..e610f63a020d 100644
 --- a/arch/arm/mach-omap2/voltage.h
 +++ b/arch/arm/mach-omap2/voltage.h
 @@ -163,7 +163,6 @@ extern void omap54xx_voltagedomains_init(void);
  
  struct voltagedomain *voltdm_lookup(const char *name);
  void voltdm_init(struct voltagedomain **voltdm_list);
--int voltdm_add_pwrdm(struct voltagedomain *voltdm, struct powerdomain *pwrdm);
- int voltdm_scale(struct voltagedomain *voltdm, unsigned long target_volt);
+-int voltdm_scale(struct voltagedomain *voltdm, unsigned long target_volt);
  void voltdm_reset(struct voltagedomain *voltdm);
  unsigned long voltdm_get_voltage(struct voltagedomain *voltdm);
+ #endif
+diff --git a/include/linux/platform_data/voltage-omap.h b/include/linux/platform_data/voltage-omap.h
+index 43e8da9fb447..6d74e507dbd2 100644
+--- a/include/linux/platform_data/voltage-omap.h
++++ b/include/linux/platform_data/voltage-omap.h
+@@ -29,7 +29,6 @@ struct omap_volt_data {
+ struct voltagedomain;
+ 
+ struct voltagedomain *voltdm_lookup(const char *name);
+-int voltdm_scale(struct voltagedomain *voltdm, unsigned long target_volt);
+ unsigned long voltdm_get_voltage(struct voltagedomain *voltdm);
+ struct omap_volt_data *omap_voltage_get_voltdata(struct voltagedomain *voltdm,
+ 		unsigned long volt);
+diff --git a/include/linux/usb/musb.h b/include/linux/usb/musb.h
+index fc6c77918481..e4a3ad3c800f 100644
+--- a/include/linux/usb/musb.h
++++ b/include/linux/usb/musb.h
+@@ -143,8 +143,6 @@ extern int __init tusb6010_setup_interface(
+ 		unsigned async_cs, unsigned sync_cs,
+ 		unsigned irq, unsigned dmachan);
+ 
+-extern int tusb6010_platform_retime(unsigned is_refclk);
+-
+ #endif	/* OMAP2 */
+ 
+ #endif /* __LINUX_USB_MUSB_H */
 -- 
 2.29.2
 
