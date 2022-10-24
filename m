@@ -2,102 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F24460B62D
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 20:50:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C81F960B575
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 20:28:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232172AbiJXSuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 14:50:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58232 "EHLO
+        id S230181AbiJXS2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 14:28:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232846AbiJXStw (ORCPT
+        with ESMTP id S231260AbiJXS1d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 14:49:52 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 41A94B48AE
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:30:47 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 91A651516;
-        Mon, 24 Oct 2022 10:05:02 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.7.186])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 168B13F792;
-        Mon, 24 Oct 2022 10:04:54 -0700 (PDT)
-Date:   Mon, 24 Oct 2022 18:04:49 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org, catalin.marinas@arm.com,
-        linux-arm-kernel@lists.infradead.org, mhiramat@kernel.org,
-        revest@chromium.org, will@kernel.org
-Subject: Re: [PATCH 1/4] ftrace: pass fregs to arch_ftrace_set_direct_caller()
-Message-ID: <Y1bFsXt5njFNa01Q@FVFF77S0Q05N>
-References: <20221024140846.3555435-1-mark.rutland@arm.com>
- <20221024140846.3555435-2-mark.rutland@arm.com>
- <20221024104845.3c898d85@gandalf.local.home>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+        Mon, 24 Oct 2022 14:27:33 -0400
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2059.outbound.protection.outlook.com [40.107.95.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD210A47D;
+        Mon, 24 Oct 2022 10:09:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Nk5YcLl1dpUm1rECDJNn/SG00gXFavjs1EZa2RRy+vp2BfklX/zO2K4aAWUqEcHq1o/qqvOMZe8UNx/EWOweEFbxAUTzC6ZTs6D4VT78SuNp73jvjlWVWx0RDW8nSWZrb9lihdyr70obDZubhw76Yu+Xx46HRJUcf3i9X1M2xwH9PIPPbj9qnoCF9DWdPGNc13Wdtj7E/OxDuYsdTUfZNdQ3yOu8wHhUPoWpOIblEh64ATGk8UuP2QHXIaesqB+TbtQ89FuMFQJcAqRMI6d6N6meerCElJapMFUhq5SGYthh6g8R89b4WFDLJl1j5Ov4cghDFBSV3oNntp+7y1gwkQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rMfOtIoNYFx3chhM75KrjYl729PIJ3xogRyhROocmxg=;
+ b=GRG2e5DZV1v+QNeW5kuD6DR05mogmJcc5dWwvvNMnPKyK/wDElfMQWpx1Q1s3uHR33FjMXAeF9U8iD2rf6FxexzR8EIp2iY/8c3PYs7Pr/l94Z4bC3/rOwUEM2ob08dbr46FzLp5w8ERgUGxD0oK9PI63Yj9be+a/oSrjX/LUFxKZRvO2kCH0cecadg2Mycgz3vH++D7ju41sfzlELT9F+NsYXkXXa49dSdMI2lTZsSM+ul8DWeCxrEJYf5oy14g0mrgHmaL9FyKUBUTSIhWcySY8bhF9gTArnZmWlnpytrL0cR6ev/vUI7abY+GqTLh1e1g2i84zdYa2clIsFOKIQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rMfOtIoNYFx3chhM75KrjYl729PIJ3xogRyhROocmxg=;
+ b=rhKSTdRp6UkpqaeoYm5QGylnUEVa3IGcBPL303jNkTGyeTS9+jD2635ket3auraVTiSCxozjWpP7OqQ0TiopxRLnxbE1+ixARaT3rvstJhCfho2+W+0WSTlG4J4h9HB5uJxN2xR9k9oHonRkQky4i5RfYcJ+QKEDmFnGyLDz9sM8r6CDq+4DGzVaCovvKKxOozcXzBLfxUVkaxWSu6wITWYcIUsnG2jU++1u/X+/oj5JLAqyqCEVX7X2QI3mLRim10C57BmXTtwdRQtLHjlvrVXthfts0VL2jiZMTgI+8EJRk2Wv0GaoblxGft8+rXkcAu0cQBSK7EPJ/KYWu2TuoQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by MN2PR12MB4336.namprd12.prod.outlook.com (2603:10b6:208:1df::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.28; Mon, 24 Oct
+ 2022 17:06:35 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::7a81:a4e4:bb9c:d1de]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::7a81:a4e4:bb9c:d1de%6]) with mapi id 15.20.5746.021; Mon, 24 Oct 2022
+ 17:06:35 +0000
+Date:   Mon, 24 Oct 2022 14:06:34 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Li Zhijian <lizhijian@fujitsu.com>
+Cc:     zyjzyj2000@gmail.com, leon@kernel.org, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Bob Pearson <rpearsonhpe@gmail.com>
+Subject: Re: [PATCH for-next] RDMA/rxe: Fix mr leak in RESPST_ERR_RNR
+Message-ID: <Y1bGGurUBxm4YOJS@nvidia.com>
+References: <20221013040333.21097-1-lizhijian@fujitsu.com>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221024104845.3c898d85@gandalf.local.home>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221013040333.21097-1-lizhijian@fujitsu.com>
+X-ClientProxiedBy: BL1PR13CA0330.namprd13.prod.outlook.com
+ (2603:10b6:208:2c1::35) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|MN2PR12MB4336:EE_
+X-MS-Office365-Filtering-Correlation-Id: 798ff933-23ab-43f0-0a4f-08dab5e21b5c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: apBrEdKeqhYWabRJxMoWGvl4x7fmiKxsGfvuOTCtwvg4wujPiIsySdy8hKkSTPAYrWzBenK7M+jD4SB8m7tvTN0VPvA5JQeGSuTPpASNe02RVogNBJvwJbm75T38jqbXuqjuPnJ2Elj6V6ZVXBzsWTI3sbDuo4/tmTWGuMfB+8uepy4EyOjku9wSv5yICLKhJRszVwVyEwnO0Md1XPsjaxeJErazlCqyskf21TU22EXBd5A1r+8hXLFwTFjqKxwE1JEmGROmhC6nzKZgAd5c8Jr/OTX3jkipk1Inrl6U80nruHIY6spglctFBUYAA+nYkGIeYQLeqVsGNp6bdCZqSm2nOqvcAASshs0QZ+eqyqM/jzWNO2iJ/er42CKpq+vmTyzY9lMd7k0avWX/b3+E6ZWpf+dnNZl/eLjnyah6EXqLM+3hbO2OPKklDFLiyJXFgRff8E/zZly952AKIvAmYaNAZdwvDYERulkgSVpjdUHTPmMf3Z7nSLkjGFotEDZil25qudkG4wn0mwzwQWooVJFfuYDZJ8AeqxTS0wl58IExmpmvyQcLFbb392u9z7JKVSJbQrlLSVepxDJAWJNk4SO3EWlAXsV74il9qc1owyEg2L45IPUP9Dfp5lZhdc+CxJpBZ8jRSjlxgah7kf8T7bmjd03uNzevDFOW1HL07xbjwIbW5FNrFFq7qsP0hMB83LlHG09b7nLb2R9eWWa6qg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(39860400002)(346002)(396003)(376002)(366004)(451199015)(6916009)(36756003)(2906002)(5660300002)(8936002)(66946007)(66476007)(8676002)(4326008)(41300700001)(86362001)(66556008)(316002)(6506007)(6512007)(26005)(83380400001)(186003)(2616005)(38100700002)(6486002)(478600001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ivpW3ReQvJUJ4wVjpCD1ahyJOtB9uW8VVtL4y7HbOMGCjR3S8m0hLo1Y+cAs?=
+ =?us-ascii?Q?UeSmh8PoeSC5fTJtimGOBaiW35pIPHlOKMCpxh7+U/FaElBsinNAY6k4xvyI?=
+ =?us-ascii?Q?dPp/qMALt00wBoYd1YoYQCYx73ytS8ZNsDthfpbVWMIsRROy8L1V5+6K5ikw?=
+ =?us-ascii?Q?STgyrB7vA49x/veC+3kl5mqfGFyxZd6kWkNzT5rtWi2RfTmlTPNBH1HCUMpk?=
+ =?us-ascii?Q?jwXQ52RRmdntn+YUCD1lbL0YtWaSJ5FVM9M+3yvH/T30NBUqtlUR8HVbAt6H?=
+ =?us-ascii?Q?0xWsLMxWOEi+fI+d3AmxcF1tEQ4xaNf4Y9VH6t5oDqbhnVcsfaWLwHtML24y?=
+ =?us-ascii?Q?Uax88C7EM4ju4sXI/V/4r/NjYz+Zrj9yQ9jX88/eAfwKesCTvmfRi0Kfacj2?=
+ =?us-ascii?Q?iGVgCd4SW3GY/UZ9dAVxAzgjKQ3FFTWy2ESWqrcbCaojiQpnZu9xwwffHJnF?=
+ =?us-ascii?Q?ScEqP5Mrmqk7CjoDOvFGqjvzQSCaSyhVk0o6qeSFkwEi31ndSAPjnyaED5Xd?=
+ =?us-ascii?Q?jptYBI44GYI90BggGhdFIfnr3TpF+Haawc3jBzXvxipyPbCy92B8vN6T4ULo?=
+ =?us-ascii?Q?diGkKb5F9Px+NX4R93UYiPJpnCYj0DolSfXurOJUqLyYz584zwtHJtQPN/aA?=
+ =?us-ascii?Q?2ZysdOSLepPRX+85LGtCCDtkof47qVlxJz10iZa9fr7MUvmUuu71kWyd7Wjw?=
+ =?us-ascii?Q?kOaQmlQrHjzGKetLTUWMa9bk5Bnms/NvXTOZRHjJ19i8CPJpRiye6pxO5xN7?=
+ =?us-ascii?Q?wRa3KoPnjsz7sDKqxF9xMB+N3JS2/zqM5M6FJ/V7xAw7erarSWQ7YAG6qiVV?=
+ =?us-ascii?Q?BPVSdYofhpMNd82dr5pdaK1lEIqreGdt5SExgh/bWlRxqXjTU1FTMnewOF3m?=
+ =?us-ascii?Q?QnAIqB2D37l99JupaoEzTKXgfzy2OMfyDgdaEsz3SXvaXd9fdM87/wE5QPhV?=
+ =?us-ascii?Q?HwdsOW/9fOl+2qf//bibq4WGizMD7PmmcfXPTNgBRb2rSrEMmvrKOCbScP9p?=
+ =?us-ascii?Q?56M5aNQakbUNf8WwvTVk70B3wrVgE5o6NSAKeDrwWUMSbMZ/YuOaIqF00cQK?=
+ =?us-ascii?Q?DbB1I6FH5GwqkWwt6FCLKUmRdc/nv4vAtH0NBHoZGKAKh6aA3KHU21chxFA0?=
+ =?us-ascii?Q?8v9ySHNoV+bnEJddyD8ubPvigUNlwuNISPP44o6dXIH7WIdhFlzzZPiwTlQJ?=
+ =?us-ascii?Q?IdGLDPDEhDcb9z/uaV5lDCVcwB9aMQPXrnZUpZMCI3/660xVIeUCuIoNSNlr?=
+ =?us-ascii?Q?hbvBHBEx0+l/KRvwm/KIKogtMzu6KLR1ca0HjXTPHTTWSqtyeM4U1uNCr5vH?=
+ =?us-ascii?Q?flLZFE7n6wigsjXSvpC58v7pmwYC7W4FxPLcoHjidi9foUWPvkO9fIf3YwxS?=
+ =?us-ascii?Q?RuMYZvSv709mOUhTu8Tt/zMD01fls6MSXkI9jGKuuPJYcqwPY/lZybBuhWwe?=
+ =?us-ascii?Q?c7wgHqgDghOBc5qI2Y08jWxQLjl581XvRBMlCywlnkkXOgKmXzMg7zE4Lhta?=
+ =?us-ascii?Q?gtRHU+xcBUCugIQ+eztxraUB5zyAYhX0vsLKbA5A+Bk+uikyoJfDZc6yLpYG?=
+ =?us-ascii?Q?ytShJ2lHonuVz5UjYs8=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 798ff933-23ab-43f0-0a4f-08dab5e21b5c
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Oct 2022 17:06:35.5411
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: S45o96ro2k1SWShIYy6ttC1XyHfhyRAPiJRrkkrUVHq84K/ot4bpaj4PaxtvkS1E
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4336
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 10:48:45AM -0400, Steven Rostedt wrote:
-> On Mon, 24 Oct 2022 15:08:43 +0100
-> Mark Rutland <mark.rutland@arm.com> wrote:
+On Thu, Oct 13, 2022 at 12:03:33PM +0800, Li Zhijian wrote:
+> rxe_recheck_mr() will increase mr's ref_cnt, so we should call rxe_put(mr)
+> to drop mr's ref_cnt in RESPST_ERR_RNR to avoid below warning:
+> [  633.447883] WARNING: CPU: 0 PID: 4156 at drivers/infiniband/sw/rxe/rxe_pool.c:259 __rxe_cleanup+0x1df/0x240 [rdma_rxe]
+> ...
+> [  633.509482] Call Trace:
+> [  633.510246]  <TASK>
+> [  633.510962]  rxe_dereg_mr+0x4c/0x60 [rdma_rxe]
+> [  633.512123]  ib_dereg_mr_user+0xa8/0x200 [ib_core]
+> [  633.513444]  ib_mr_pool_destroy+0x77/0xb0 [ib_core]
+> [  633.514763]  nvme_rdma_destroy_queue_ib+0x89/0x240 [nvme_rdma]
+> [  633.516230]  nvme_rdma_free_queue+0x40/0x50 [nvme_rdma]
+> [  633.517577]  nvme_rdma_teardown_io_queues.part.0+0xc3/0x120 [nvme_rdma]
+> [  633.519204]  nvme_rdma_error_recovery_work+0x4d/0xf0 [nvme_rdma]
+> [  633.520695]  process_one_work+0x582/0xa40
+> [  633.522987]  ? pwq_dec_nr_in_flight+0x100/0x100
+> [  633.524227]  ? rwlock_bug.part.0+0x60/0x60
+> [  633.525372]  worker_thread+0x2a9/0x700
+> [  633.526437]  ? process_one_work+0xa40/0xa40
+> [  633.527589]  kthread+0x168/0x1a0
+> [  633.528518]  ? kthread_complete_and_exit+0x20/0x20
+> [  633.529792]  ret_from_fork+0x22/0x30
 > 
-> > --- a/include/linux/ftrace.h
-> > +++ b/include/linux/ftrace.h
-> > @@ -429,6 +429,7 @@ static inline int modify_ftrace_direct_multi_nolock(struct ftrace_ops *ops, unsi
-> >  }
-> >  #endif /* CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS */
-> >  
-> > +#ifdef CONFIG_FUNCTION_TRACER
-> 
-> Instead of adding the above preprocessor check, the below chunk should be
-> moved into the CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS block above.
+> CC: Bob Pearson <rpearsonhpe@gmail.com>
+> Fixes: 8a1a0be894da ("RDMA/rxe: Replace mr by rkey in responder resources")
+> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
+> ---
+>  drivers/infiniband/sw/rxe/rxe_resp.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
 
-Sure; but note that doing that naively means 'struct ftrace_regs' won't always
-be declared (e.g. if !CONFIG_FUNCTION_TRACER), and will result in warnings, e.g.
+Applied to for-rc, thanks
 
-|   CC      arch/x86/kernel/asm-offsets.s
-| In file included from ./include/linux/kvm_host.h:32,
-|                  from arch/x86/kernel/../kvm/vmx/vmx.h:5,
-|                  from arch/x86/kernel/asm-offsets.c:22:
-| ./include/linux/ftrace.h:444:57: error: ‘struct ftrace_regs’ declared inside parameter list will not be visible outside of this definition or declaration [-Werror]
-|   444 | static inline void arch_ftrace_set_direct_caller(struct ftrace_regs *fregs,
-|       |                                                         ^~~~~~~~~~~
-| cc1: all warnings being treated as errors
-| make[1]: *** [scripts/Makefile.build:118: arch/x86/kernel/asm-offsets.s] Error 1
-| make: *** [Makefile:1270: prepare0] Error 2
-
-... so I'll either need to add some ifdeffery, for CONFIG_FUNCTION_TRACER, or I
-can hoist the declaration of 'struct ftrace_regs' to not depend on
-CONFIG_FUNCTION_TRACER.
-
-I guess the latter is preferable, e.g.
-
-| diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
-| index 2b34fec40a39..f201fcbfffb0 100644
-| --- a/include/linux/ftrace.h
-| +++ b/include/linux/ftrace.h
-| @@ -37,9 +37,10 @@ extern void ftrace_boot_snapshot(void);
-|  static inline void ftrace_boot_snapshot(void) { }
-|  #endif
-|  
-| -#ifdef CONFIG_FUNCTION_TRACER
-|  struct ftrace_ops;
-|  struct ftrace_regs;
-| +
-| +#ifdef CONFIG_FUNCTION_TRACER
-|  /*
-|   * If the arch's mcount caller does not support all of ftrace's
-|   * features, then it must call an indirect function that
-
-... so I've done that locally for now.
-
-Thanks,
-Mark.
+Jason
