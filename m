@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90FE560A9F7
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:27:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C7D160A7CC
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:57:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231431AbiJXN1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:27:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56512 "EHLO
+        id S234828AbiJXM5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:57:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236127AbiJXNY3 (ORCPT
+        with ESMTP id S234849AbiJXM5Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:24:29 -0400
+        Mon, 24 Oct 2022 08:57:25 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA67918383;
-        Mon, 24 Oct 2022 05:30:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2C8E96203;
+        Mon, 24 Oct 2022 05:16:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 26F9E612FF;
-        Mon, 24 Oct 2022 12:29:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39700C433D6;
-        Mon, 24 Oct 2022 12:29:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D2FAE61311;
+        Mon, 24 Oct 2022 12:13:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9B46C433D6;
+        Mon, 24 Oct 2022 12:13:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666614570;
-        bh=Jad87ZPGbOMCQZjFg6peU5RSSRiKnGTlnlSYbcbi8sA=;
+        s=korg; t=1666613597;
+        bh=DmKl3AC4K8Xq5BhfsENEDctHS3UNUA0S8jQKRCZMKjQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hzI1oSKMH4D6t8Ir7PW6yB4NxGgIDPrz4eNrwDgEhNOsRq6JXQcNet8c+FG34iyEk
-         kRJ4RoP2V7fyFP6rIJXngxA1RljWgpoRibWtClUqUYTxIUXXj1V0hrGVjcmw+2pRw0
-         cHU6iv+5f/U8Mh1qwjbOxPjhcqniyWVtMHpujPmA=
+        b=pk4kRJNcjoxp6wSbMUXCbqUXRG5NFxFsHi6rYMpziP/m0x+oEbNngv8+eQ3R39+x5
+         4jLwZI3GgxJ6Wr4dIKHOA/C5ygE9pzm1A8Yg2QSXH2oY11D98hGCQzMR4WMJt29Azr
+         35SE/OSHW4Tb1QbKgRymmhN2ZQRukYfaN5sRiBuA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Herbert Xu <herbert@gondor.apana.org.au>,
-        syzbot+5ec9bb042ddfe9644773@syzkaller.appspotmail.com,
-        Khalid Masum <khalid.masum.92@gmail.com>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 311/390] xfrm: Update ipcomp_scratches with NULL when freed
+        stable@vger.kernel.org,
+        Alexander Coffin <alex.coffin@matician.com>,
+        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 198/255] wifi: brcmfmac: fix use-after-free bug in brcmf_netdev_start_xmit()
 Date:   Mon, 24 Oct 2022 13:31:48 +0200
-Message-Id: <20221024113036.218746726@linuxfoundation.org>
+Message-Id: <20221024113009.576851342@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
-References: <20221024113022.510008560@linuxfoundation.org>
+In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
+References: <20221024113002.471093005@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,70 +54,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Khalid Masum <khalid.masum.92@gmail.com>
+From: Alexander Coffin <alex.coffin@matician.com>
 
-[ Upstream commit 8a04d2fc700f717104bfb95b0f6694e448a4537f ]
+[ Upstream commit 3f42faf6db431e04bf942d2ebe3ae88975723478 ]
 
-Currently if ipcomp_alloc_scratches() fails to allocate memory
-ipcomp_scratches holds obsolete address. So when we try to free the
-percpu scratches using ipcomp_free_scratches() it tries to vfree non
-existent vm area. Described below:
+> ret = brcmf_proto_tx_queue_data(drvr, ifp->ifidx, skb);
 
-static void * __percpu *ipcomp_alloc_scratches(void)
-{
-        ...
-        scratches = alloc_percpu(void *);
-        if (!scratches)
-                return NULL;
-ipcomp_scratches does not know about this allocation failure.
-Therefore holding the old obsolete address.
-        ...
-}
+may be schedule, and then complete before the line
 
-So when we free,
+> ndev->stats.tx_bytes += skb->len;
 
-static void ipcomp_free_scratches(void)
-{
-        ...
-        scratches = ipcomp_scratches;
-Assigning obsolete address from ipcomp_scratches
+[   46.912801] ==================================================================
+[   46.920552] BUG: KASAN: use-after-free in brcmf_netdev_start_xmit+0x718/0x8c8 [brcmfmac]
+[   46.928673] Read of size 4 at addr ffffff803f5882e8 by task systemd-resolve/328
+[   46.935991]
+[   46.937514] CPU: 1 PID: 328 Comm: systemd-resolve Tainted: G           O      5.4.199-[REDACTED] #1
+[   46.947255] Hardware name: [REDACTED]
+[   46.954568] Call trace:
+[   46.957037]  dump_backtrace+0x0/0x2b8
+[   46.960719]  show_stack+0x24/0x30
+[   46.964052]  dump_stack+0x128/0x194
+[   46.967557]  print_address_description.isra.0+0x64/0x380
+[   46.972877]  __kasan_report+0x1d4/0x240
+[   46.976723]  kasan_report+0xc/0x18
+[   46.980138]  __asan_report_load4_noabort+0x18/0x20
+[   46.985027]  brcmf_netdev_start_xmit+0x718/0x8c8 [brcmfmac]
+[   46.990613]  dev_hard_start_xmit+0x1bc/0xda0
+[   46.994894]  sch_direct_xmit+0x198/0xd08
+[   46.998827]  __qdisc_run+0x37c/0x1dc0
+[   47.002500]  __dev_queue_xmit+0x1528/0x21f8
+[   47.006692]  dev_queue_xmit+0x24/0x30
+[   47.010366]  neigh_resolve_output+0x37c/0x678
+[   47.014734]  ip_finish_output2+0x598/0x2458
+[   47.018927]  __ip_finish_output+0x300/0x730
+[   47.023118]  ip_output+0x2e0/0x430
+[   47.026530]  ip_local_out+0x90/0x140
+[   47.030117]  igmpv3_sendpack+0x14c/0x228
+[   47.034049]  igmpv3_send_cr+0x384/0x6b8
+[   47.037895]  igmp_ifc_timer_expire+0x4c/0x118
+[   47.042262]  call_timer_fn+0x1cc/0xbe8
+[   47.046021]  __run_timers+0x4d8/0xb28
+[   47.049693]  run_timer_softirq+0x24/0x40
+[   47.053626]  __do_softirq+0x2c0/0x117c
+[   47.057387]  irq_exit+0x2dc/0x388
+[   47.060715]  __handle_domain_irq+0xb4/0x158
+[   47.064908]  gic_handle_irq+0x58/0xb0
+[   47.068581]  el0_irq_naked+0x50/0x5c
+[   47.072162]
+[   47.073665] Allocated by task 328:
+[   47.077083]  save_stack+0x24/0xb0
+[   47.080410]  __kasan_kmalloc.isra.0+0xc0/0xe0
+[   47.084776]  kasan_slab_alloc+0x14/0x20
+[   47.088622]  kmem_cache_alloc+0x15c/0x468
+[   47.092643]  __alloc_skb+0xa4/0x498
+[   47.096142]  igmpv3_newpack+0x158/0xd78
+[   47.099987]  add_grhead+0x210/0x288
+[   47.103485]  add_grec+0x6b0/0xb70
+[   47.106811]  igmpv3_send_cr+0x2e0/0x6b8
+[   47.110657]  igmp_ifc_timer_expire+0x4c/0x118
+[   47.115027]  call_timer_fn+0x1cc/0xbe8
+[   47.118785]  __run_timers+0x4d8/0xb28
+[   47.122457]  run_timer_softirq+0x24/0x40
+[   47.126389]  __do_softirq+0x2c0/0x117c
+[   47.130142]
+[   47.131643] Freed by task 180:
+[   47.134712]  save_stack+0x24/0xb0
+[   47.138041]  __kasan_slab_free+0x108/0x180
+[   47.142146]  kasan_slab_free+0x10/0x18
+[   47.145904]  slab_free_freelist_hook+0xa4/0x1b0
+[   47.150444]  kmem_cache_free+0x8c/0x528
+[   47.154292]  kfree_skbmem+0x94/0x108
+[   47.157880]  consume_skb+0x10c/0x5a8
+[   47.161466]  __dev_kfree_skb_any+0x88/0xa0
+[   47.165598]  brcmu_pkt_buf_free_skb+0x44/0x68 [brcmutil]
+[   47.171023]  brcmf_txfinalize+0xec/0x190 [brcmfmac]
+[   47.176016]  brcmf_proto_bcdc_txcomplete+0x1c0/0x210 [brcmfmac]
+[   47.182056]  brcmf_sdio_sendfromq+0x8dc/0x1e80 [brcmfmac]
+[   47.187568]  brcmf_sdio_dpc+0xb48/0x2108 [brcmfmac]
+[   47.192529]  brcmf_sdio_dataworker+0xc8/0x238 [brcmfmac]
+[   47.197859]  process_one_work+0x7fc/0x1a80
+[   47.201965]  worker_thread+0x31c/0xc40
+[   47.205726]  kthread+0x2d8/0x370
+[   47.208967]  ret_from_fork+0x10/0x18
+[   47.212546]
+[   47.214051] The buggy address belongs to the object at ffffff803f588280
+[   47.214051]  which belongs to the cache skbuff_head_cache of size 208
+[   47.227086] The buggy address is located 104 bytes inside of
+[   47.227086]  208-byte region [ffffff803f588280, ffffff803f588350)
+[   47.238814] The buggy address belongs to the page:
+[   47.243618] page:ffffffff00dd6200 refcount:1 mapcount:0 mapping:ffffff804b6bf800 index:0xffffff803f589900 compound_mapcount: 0
+[   47.255007] flags: 0x10200(slab|head)
+[   47.258689] raw: 0000000000010200 ffffffff00dfa980 0000000200000002 ffffff804b6bf800
+[   47.266439] raw: ffffff803f589900 0000000080190018 00000001ffffffff 0000000000000000
+[   47.274180] page dumped because: kasan: bad access detected
+[   47.279752]
+[   47.281251] Memory state around the buggy address:
+[   47.286051]  ffffff803f588180: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+[   47.293277]  ffffff803f588200: fb fb fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+[   47.300502] >ffffff803f588280: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+[   47.307723]                                                           ^
+[   47.314343]  ffffff803f588300: fb fb fb fb fb fb fb fb fb fb fc fc fc fc fc fc
+[   47.321569]  ffffff803f588380: fc fc fc fc fc fc fc fc fb fb fb fb fb fb fb fb
+[   47.328789] ==================================================================
 
-        if (!scratches)
-                return;
-
-        for_each_possible_cpu(i)
-               vfree(*per_cpu_ptr(scratches, i));
-Trying to free non existent page, causing warning: trying to vfree
-existent vm area.
-        ...
-}
-
-Fix this breakage by updating ipcomp_scrtches with NULL when scratches
-is freed
-
-Suggested-by: Herbert Xu <herbert@gondor.apana.org.au>
-Reported-by: syzbot+5ec9bb042ddfe9644773@syzkaller.appspotmail.com
-Tested-by: syzbot+5ec9bb042ddfe9644773@syzkaller.appspotmail.com
-Signed-off-by: Khalid Masum <khalid.masum.92@gmail.com>
-Acked-by: Herbert Xu <herbert@gondor.apana.org.au>
-Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
+Signed-off-by: Alexander Coffin <alex.coffin@matician.com>
+Signed-off-by: Kalle Valo <kvalo@kernel.org>
+Link: https://lore.kernel.org/r/20220808174925.3922558-1-alex.coffin@matician.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/xfrm/xfrm_ipcomp.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/wireless/broadcom/brcm80211/brcmfmac/core.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/net/xfrm/xfrm_ipcomp.c b/net/xfrm/xfrm_ipcomp.c
-index 0814320472f1..24ac6805275e 100644
---- a/net/xfrm/xfrm_ipcomp.c
-+++ b/net/xfrm/xfrm_ipcomp.c
-@@ -212,6 +212,7 @@ static void ipcomp_free_scratches(void)
- 		vfree(*per_cpu_ptr(scratches, i));
+diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/core.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/core.c
+index edb79e9665dc..5b7c1b99273d 100644
+--- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/core.c
++++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/core.c
+@@ -290,6 +290,7 @@ static netdev_tx_t brcmf_netdev_start_xmit(struct sk_buff *skb,
+ 	struct brcmf_pub *drvr = ifp->drvr;
+ 	struct ethhdr *eh;
+ 	int head_delta;
++	unsigned int tx_bytes = skb->len;
  
- 	free_percpu(scratches);
-+	ipcomp_scratches = NULL;
- }
+ 	brcmf_dbg(DATA, "Enter, bsscfgidx=%d\n", ifp->bsscfgidx);
  
- static void * __percpu *ipcomp_alloc_scratches(void)
+@@ -361,7 +362,7 @@ static netdev_tx_t brcmf_netdev_start_xmit(struct sk_buff *skb,
+ 		ndev->stats.tx_dropped++;
+ 	} else {
+ 		ndev->stats.tx_packets++;
+-		ndev->stats.tx_bytes += skb->len;
++		ndev->stats.tx_bytes += tx_bytes;
+ 	}
+ 
+ 	/* Return ok: we always eat the packet */
 -- 
 2.35.1
 
