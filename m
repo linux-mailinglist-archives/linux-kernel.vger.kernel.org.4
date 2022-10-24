@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CA2460A912
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:15:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4864360A40F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:05:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231675AbiJXNO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:14:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47710 "EHLO
+        id S232283AbiJXMFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:05:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235724AbiJXNMb (ORCPT
+        with ESMTP id S232286AbiJXMCU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:12:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7760FF5A7;
-        Mon, 24 Oct 2022 05:24:37 -0700 (PDT)
+        Mon, 24 Oct 2022 08:02:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EEE32495B;
+        Mon, 24 Oct 2022 04:49:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ADA24612D2;
-        Mon, 24 Oct 2022 12:23:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE309C43141;
-        Mon, 24 Oct 2022 12:23:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D4A6612C9;
+        Mon, 24 Oct 2022 11:46:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CACCC433D7;
+        Mon, 24 Oct 2022 11:46:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666614216;
-        bh=vW1MAh2Y8DexQ8ahN7RV2MAtzHxoN1y560yOxQM4TVo=;
+        s=korg; t=1666611998;
+        bh=qRqcUUTGz48ylilhA9AgVfT7w9HHuLUTCmZjZVP6zcQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ziq3zqkK4h3O8xywWySk3YuRz3A3iYn+PR5wYiEndiwxXJV2Hd4G2DGd97tjjH5UV
-         TZgJmtDF31SMw6jxfjgJFSkoFF93cgPx1StQcOp+R8XnC0wUBlwME04obT7NzeoP0S
-         M4vP921LzH46POsVu3Yns83TriZi8HVge66iV5VE=
+        b=MVGIaP64f15RCwlyI38wVCDZ8zr0316twfNnAnQ3wk066eDjUsWpU9yp5BiMT2bHX
+         hlUYPnvleVQc04w6sl+BlISAllTUXOt54BCJQAG4r+Fu7P4sFvV5TJMLuzQ4b/dxo9
+         oWMs46EhtthhvzfR+cebjdr0vbIpTAzcKGFjXphs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 149/390] ASoC: tas2764: Allow mono streams
-Date:   Mon, 24 Oct 2022 13:29:06 +0200
-Message-Id: <20221024113029.033986134@linuxfoundation.org>
+        stable@vger.kernel.org, "Dmitry Vyukov" <dvyukov@google.com>,
+        stable <stable@kernel.org>,
+        syzbot+23f57c5ae902429285d7@syzkaller.appspotmail.com,
+        Tadeusz Struk <tadeusz.struk@linaro.org>,
+        PaX Team <pageexec@freemail.hu>
+Subject: [PATCH 4.14 030/210] usb: mon: make mmapped memory read only
+Date:   Mon, 24 Oct 2022 13:29:07 +0200
+Message-Id: <20221024112957.939635963@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
-References: <20221024113022.510008560@linuxfoundation.org>
+In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
+References: <20221024112956.797777597@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,40 +56,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Martin Povišer <povik+lin@cutebit.org>
+From: Tadeusz Struk <tadeusz.struk@linaro.org>
 
-[ Upstream commit 23204d928a27146d13e11c9383632775345ecca8 ]
+commit a659daf63d16aa883be42f3f34ff84235c302198 upstream.
 
-The part is a mono speaker amp, but it can do downmix and switch between
-left and right channel, so the right channel range is 1 to 2.
+Syzbot found an issue in usbmon module, where the user space client can
+corrupt the monitor's internal memory, causing the usbmon module to
+crash the kernel with segfault, UAF, etc.
 
-(This mirrors commit bf54d97a835d ("ASoC: tas2770: Allow mono streams")
-which was a fix to the tas2770 driver.)
+The reproducer mmaps the /dev/usbmon memory to user space, and
+overwrites it with arbitrary data, which causes all kinds of issues.
 
-Fixes: 827ed8a0fa50 ("ASoC: tas2764: Add the driver for the TAS2764")
-Signed-off-by: Martin Povišer <povik+lin@cutebit.org>
-Link: https://lore.kernel.org/r/20220825140241.53963-2-povik+lin@cutebit.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Return an -EPERM error from mon_bin_mmap() if the flag VM_WRTIE is set.
+Also clear VM_MAYWRITE to make it impossible to change it to writable
+later.
+
+Cc: "Dmitry Vyukov" <dvyukov@google.com>
+Cc: stable <stable@kernel.org>
+Fixes: 6f23ee1fefdc ("USB: add binary API to usbmon")
+Suggested-by: PaX Team <pageexec@freemail.hu>	# for the VM_MAYRITE portion
+Link: https://syzkaller.appspot.com/bug?id=2eb1f35d6525fa4a74d75b4244971e5b1411c95a
+Reported-by: syzbot+23f57c5ae902429285d7@syzkaller.appspotmail.com
+Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
+Link: https://lore.kernel.org/r/20220919215957.205681-1-tadeusz.struk@linaro.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/codecs/tas2764.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/mon/mon_bin.c |    5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/sound/soc/codecs/tas2764.c b/sound/soc/codecs/tas2764.c
-index 37588804a6b5..bde92f080459 100644
---- a/sound/soc/codecs/tas2764.c
-+++ b/sound/soc/codecs/tas2764.c
-@@ -485,7 +485,7 @@ static struct snd_soc_dai_driver tas2764_dai_driver[] = {
- 		.id = 0,
- 		.playback = {
- 			.stream_name    = "ASI1 Playback",
--			.channels_min   = 2,
-+			.channels_min   = 1,
- 			.channels_max   = 2,
- 			.rates      = TAS2764_RATES,
- 			.formats    = TAS2764_FORMATS,
--- 
-2.35.1
-
+--- a/drivers/usb/mon/mon_bin.c
++++ b/drivers/usb/mon/mon_bin.c
+@@ -1267,6 +1267,11 @@ static int mon_bin_mmap(struct file *fil
+ {
+ 	/* don't do anything here: "fault" will set up page table entries */
+ 	vma->vm_ops = &mon_bin_vm_ops;
++
++	if (vma->vm_flags & VM_WRITE)
++		return -EPERM;
++
++	vma->vm_flags &= ~VM_MAYWRITE;
+ 	vma->vm_flags |= VM_DONTEXPAND | VM_DONTDUMP;
+ 	vma->vm_private_data = filp->private_data;
+ 	mon_bin_vma_open(vma);
 
 
