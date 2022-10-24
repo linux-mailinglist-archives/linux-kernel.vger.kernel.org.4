@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A4C660AD50
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 16:21:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01AB060AC38
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 16:05:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235507AbiJXOVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 10:21:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54540 "EHLO
+        id S233058AbiJXODs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 10:03:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237053AbiJXOPn (ORCPT
+        with ESMTP id S236952AbiJXOCX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 10:15:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47AF977EBC;
-        Mon, 24 Oct 2022 05:55:34 -0700 (PDT)
+        Mon, 24 Oct 2022 10:02:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D79F4C0693;
+        Mon, 24 Oct 2022 05:48:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DEE04B8168C;
-        Mon, 24 Oct 2022 12:27:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CC54C433D7;
-        Mon, 24 Oct 2022 12:27:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 78D3E61342;
+        Mon, 24 Oct 2022 12:46:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E93EC433D6;
+        Mon, 24 Oct 2022 12:46:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666614460;
-        bh=LlDjGU1z6C8Y/HGgUIA6xrtbjnFjPgP22JBVHE1fZJc=;
+        s=korg; t=1666615583;
+        bh=WFVjG+q3vUFosN6VOG2U+vIcJlTIVoQCqEg0IL9VlxE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CeASMxgYBVxU1JGBOoCyRCDxDnPfGSFKO/JOJmw/aVy7NCwCWHAg1iWhAB8SddyV4
-         84nJHs1X/6aM3eG5L8N4vQjqF5f9zYsS7Ts+h/ERc55aYfyetYzZXks3BJdZ2iy3iG
-         Xzzw5PMPkoTeiwNssJKqraW6m9mklAxVc7bhwiIw=
+        b=N0HYa444HdybmU56sRcnXr25d0CunBcgPmC/WtPVLDvrBZz+O5dg6GkvljX3YBD85
+         uWgBJehbURt3nGKkhpILaoQSY9AiN/5rESVN4F43rj+EJuVO718aIMpPLAAqZeuOId
+         senQPNdgGpq0QM1zlaV6bj1j5Z6Wuhh9mtQOcjcI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Lee Jones <lee@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 252/390] mfd: sm501: Add check for platform_driver_register()
-Date:   Mon, 24 Oct 2022 13:30:49 +0200
-Message-Id: <20221024113033.596128064@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 307/530] mtd: rawnand: fsl_elbc: Fix none ECC mode
+Date:   Mon, 24 Oct 2022 13:30:51 +0200
+Message-Id: <20221024113058.957285912@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
-References: <20221024113022.510008560@linuxfoundation.org>
+In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
+References: <20221024113044.976326639@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,41 +56,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Pali Rohár <pali@kernel.org>
 
-[ Upstream commit 8325a6c24ad78b8c1acc3c42b098ee24105d68e5 ]
+[ Upstream commit 049e43b9fd8fd2966940485da163d67e96ee3fea ]
 
-As platform_driver_register() can return error numbers,
-it should be better to check platform_driver_register()
-and deal with the exception.
+Commit f6424c22aa36 ("mtd: rawnand: fsl_elbc: Make SW ECC work") added
+support for specifying ECC mode via DTS and skipping autodetection.
 
-Fixes: b6d6454fdb66 ("[PATCH] mfd: SM501 core driver")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Signed-off-by: Lee Jones <lee@kernel.org>
-Link: https://lore.kernel.org/r/20220913091112.1739138-1-jiasheng@iscas.ac.cn
+But it broke explicit specification of HW ECC mode in DTS as correct
+settings for HW ECC mode are applied only when NONE mode or nothing was
+specified in DTS file.
+
+Also it started aliasing NONE mode to be same as when ECC mode was not
+specified and disallowed usage of ON_DIE mode.
+
+Fix all these issues. Use autodetection of ECC mode only in case when mode
+was really not specified in DTS file by checking that ecc value is invalid.
+Set HW ECC settings either when HW ECC was specified in DTS or it was
+autodetected. And do not fail when ON_DIE mode is set.
+
+Fixes: f6424c22aa36 ("mtd: rawnand: fsl_elbc: Make SW ECC work")
+Signed-off-by: Pali Rohár <pali@kernel.org>
+Reviewed-by: Marek Behún <kabel@kernel.org>
+Reviewed-by: Marek Behún <kabel@kernel.org>
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Link: https://lore.kernel.org/linux-mtd/20220707184328.3845-1-pali@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mfd/sm501.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ drivers/mtd/nand/raw/fsl_elbc_nand.c | 28 ++++++++++++++++------------
+ 1 file changed, 16 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/mfd/sm501.c b/drivers/mfd/sm501.c
-index 6d2f4a0a901d..37ad72d8cde2 100644
---- a/drivers/mfd/sm501.c
-+++ b/drivers/mfd/sm501.c
-@@ -1720,7 +1720,12 @@ static struct platform_driver sm501_plat_driver = {
+diff --git a/drivers/mtd/nand/raw/fsl_elbc_nand.c b/drivers/mtd/nand/raw/fsl_elbc_nand.c
+index aab93b9e6052..a18d121396aa 100644
+--- a/drivers/mtd/nand/raw/fsl_elbc_nand.c
++++ b/drivers/mtd/nand/raw/fsl_elbc_nand.c
+@@ -726,36 +726,40 @@ static int fsl_elbc_attach_chip(struct nand_chip *chip)
+ 	struct fsl_lbc_regs __iomem *lbc = ctrl->regs;
+ 	unsigned int al;
  
- static int __init sm501_base_init(void)
- {
--	platform_driver_register(&sm501_plat_driver);
-+	int ret;
+-	switch (chip->ecc.engine_type) {
+ 	/*
+ 	 * if ECC was not chosen in DT, decide whether to use HW or SW ECC from
+ 	 * CS Base Register
+ 	 */
+-	case NAND_ECC_ENGINE_TYPE_NONE:
++	if (chip->ecc.engine_type == NAND_ECC_ENGINE_TYPE_INVALID) {
+ 		/* If CS Base Register selects full hardware ECC then use it */
+ 		if ((in_be32(&lbc->bank[priv->bank].br) & BR_DECC) ==
+ 		    BR_DECC_CHK_GEN) {
+-			chip->ecc.read_page = fsl_elbc_read_page;
+-			chip->ecc.write_page = fsl_elbc_write_page;
+-			chip->ecc.write_subpage = fsl_elbc_write_subpage;
+-
+ 			chip->ecc.engine_type = NAND_ECC_ENGINE_TYPE_ON_HOST;
+-			mtd_set_ooblayout(mtd, &fsl_elbc_ooblayout_ops);
+-			chip->ecc.size = 512;
+-			chip->ecc.bytes = 3;
+-			chip->ecc.strength = 1;
+ 		} else {
+ 			/* otherwise fall back to default software ECC */
+ 			chip->ecc.engine_type = NAND_ECC_ENGINE_TYPE_SOFT;
+ 			chip->ecc.algo = NAND_ECC_ALGO_HAMMING;
+ 		}
++	}
 +
-+	ret = platform_driver_register(&sm501_plat_driver);
-+	if (ret < 0)
-+		return ret;
-+
- 	return pci_register_driver(&sm501_pci_driver);
- }
++	switch (chip->ecc.engine_type) {
++	/* if HW ECC was chosen, setup ecc and oob layout */
++	case NAND_ECC_ENGINE_TYPE_ON_HOST:
++		chip->ecc.read_page = fsl_elbc_read_page;
++		chip->ecc.write_page = fsl_elbc_write_page;
++		chip->ecc.write_subpage = fsl_elbc_write_subpage;
++		mtd_set_ooblayout(mtd, &fsl_elbc_ooblayout_ops);
++		chip->ecc.size = 512;
++		chip->ecc.bytes = 3;
++		chip->ecc.strength = 1;
+ 		break;
  
+-	/* if SW ECC was chosen in DT, we do not need to set anything here */
++	/* if none or SW ECC was chosen, we do not need to set anything here */
++	case NAND_ECC_ENGINE_TYPE_NONE:
+ 	case NAND_ECC_ENGINE_TYPE_SOFT:
++	case NAND_ECC_ENGINE_TYPE_ON_DIE:
+ 		break;
+ 
+-	/* should we also implement *_ECC_ENGINE_CONTROLLER to do as above? */
+ 	default:
+ 		return -EINVAL;
+ 	}
 -- 
 2.35.1
 
