@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3292860A683
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:35:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0591D60A4E0
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:18:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234507AbiJXMfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:35:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51162 "EHLO
+        id S231140AbiJXMSA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:18:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234243AbiJXM3s (ORCPT
+        with ESMTP id S231734AbiJXMQG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:29:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05136895DE;
-        Mon, 24 Oct 2022 05:03:44 -0700 (PDT)
+        Mon, 24 Oct 2022 08:16:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94A2280F41;
+        Mon, 24 Oct 2022 04:56:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DCC03612D2;
-        Mon, 24 Oct 2022 12:02:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0894C433D6;
-        Mon, 24 Oct 2022 12:02:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 798EAB811B8;
+        Mon, 24 Oct 2022 11:52:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0C36C433C1;
+        Mon, 24 Oct 2022 11:52:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612972;
-        bh=frh3ChJeHGWvclmldQc8G3du3v9eRy5i/YPzCKhzBE4=;
+        s=korg; t=1666612342;
+        bh=ZkKl/EsOt+55to666XhPgsn1/N1tcDCZ1GlCuJY/pbg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VmUb94R9hyyfBN01ngbXQwAUIytU+6LshE2HZwnxoJaG+YL/YCt7AM6yzAYPiMXXq
-         GUawSdSiVt7fvIIGSpc6FH2ULr2+lZ098gSRXYul54xpM8KWyG6j35hBn3Im4YzaUG
-         84QrgHhYK1R5yhZJbR36GG1XpMwLwCp+OSoeMEy8=
+        b=FxwvBaSIk+y+cZqDdYSFCYPav31ixjZaJDUgC9jGFwtbn3tiwrZdniwrEz5+wk5be
+         aXsZqu3MbRREXUw4VsWB6gAXrRsFKBNC2hWXO/0FNaU6r/eUDLej2E5mq6qDMYwB+1
+         SFrYTc4mtBAXzo9OQOvJb3xh/BfoASbZ8v8i9e0g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jack Wang <jinpu.wang@ionos.com>,
-        Jassi Brar <jaswinder.singh@linaro.org>,
+        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        Arvid Norlander <lkml@vorpal.se>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 158/229] mailbox: bcm-ferxrm-mailbox: Fix error check for dma_map_sg
-Date:   Mon, 24 Oct 2022 13:31:17 +0200
-Message-Id: <20221024113004.114523680@linuxfoundation.org>
+Subject: [PATCH 4.14 161/210] ACPI: video: Add Toshiba Satellite/Portege Z830 quirk
+Date:   Mon, 24 Oct 2022 13:31:18 +0200
+Message-Id: <20221024113002.199716272@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
-References: <20221024112959.085534368@linuxfoundation.org>
+In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
+References: <20221024112956.797777597@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,45 +55,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jack Wang <jinpu.wang@ionos.com>
+From: Arvid Norlander <lkml@vorpal.se>
 
-[ Upstream commit 6b207ce8a96a71e966831e3a13c38143ba9a73c1 ]
+[ Upstream commit 574160b8548deff8b80b174f03201e94ab8431e2 ]
 
-dma_map_sg return 0 on error, fix the error check, and return -EIO
-to caller.
+Toshiba Satellite Z830 needs the quirk video_disable_backlight_sysfs_if
+for proper backlight control after suspend/resume cycles.
 
-Fixes: dbc049eee730 ("mailbox: Add driver for Broadcom FlexRM ring manager")
-Signed-off-by: Jack Wang <jinpu.wang@ionos.com>
-Signed-off-by: Jassi Brar <jaswinder.singh@linaro.org>
+Toshiba Portege Z830 is simply the same laptop rebranded for certain
+markets (I looked through the manual to other language sections to confirm
+this) and thus also needs this quirk.
+
+Thanks to Hans de Goede for suggesting this fix.
+
+Link: https://www.spinics.net/lists/platform-driver-x86/msg34394.html
+Suggested-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Arvid Norlander <lkml@vorpal.se>
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Tested-by: Arvid Norlander <lkml@vorpal.se>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mailbox/bcm-flexrm-mailbox.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/acpi/acpi_video.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-diff --git a/drivers/mailbox/bcm-flexrm-mailbox.c b/drivers/mailbox/bcm-flexrm-mailbox.c
-index 96bcabfebc23..543c4a4a8fca 100644
---- a/drivers/mailbox/bcm-flexrm-mailbox.c
-+++ b/drivers/mailbox/bcm-flexrm-mailbox.c
-@@ -634,15 +634,15 @@ static int flexrm_spu_dma_map(struct device *dev, struct brcm_message *msg)
- 
- 	rc = dma_map_sg(dev, msg->spu.src, sg_nents(msg->spu.src),
- 			DMA_TO_DEVICE);
--	if (rc < 0)
--		return rc;
-+	if (!rc)
-+		return -EIO;
- 
- 	rc = dma_map_sg(dev, msg->spu.dst, sg_nents(msg->spu.dst),
- 			DMA_FROM_DEVICE);
--	if (rc < 0) {
-+	if (!rc) {
- 		dma_unmap_sg(dev, msg->spu.src, sg_nents(msg->spu.src),
- 			     DMA_TO_DEVICE);
--		return rc;
-+		return -EIO;
- 	}
- 
- 	return 0;
+diff --git a/drivers/acpi/acpi_video.c b/drivers/acpi/acpi_video.c
+index 5a69260edf80..cc228e5ad2b3 100644
+--- a/drivers/acpi/acpi_video.c
++++ b/drivers/acpi/acpi_video.c
+@@ -511,6 +511,22 @@ static const struct dmi_system_id video_dmi_table[] = {
+ 		DMI_MATCH(DMI_PRODUCT_NAME, "SATELLITE R830"),
+ 		},
+ 	},
++	{
++	 .callback = video_disable_backlight_sysfs_if,
++	 .ident = "Toshiba Satellite Z830",
++	 .matches = {
++		DMI_MATCH(DMI_SYS_VENDOR, "TOSHIBA"),
++		DMI_MATCH(DMI_PRODUCT_NAME, "SATELLITE Z830"),
++		},
++	},
++	{
++	 .callback = video_disable_backlight_sysfs_if,
++	 .ident = "Toshiba Portege Z830",
++	 .matches = {
++		DMI_MATCH(DMI_SYS_VENDOR, "TOSHIBA"),
++		DMI_MATCH(DMI_PRODUCT_NAME, "PORTEGE Z830"),
++		},
++	},
+ 	/*
+ 	 * Some machine's _DOD IDs don't have bit 31(Device ID Scheme) set
+ 	 * but the IDs actually follow the Device ID Scheme.
 -- 
 2.35.1
 
