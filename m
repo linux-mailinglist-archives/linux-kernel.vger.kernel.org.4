@@ -2,135 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB6F860B01C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:02:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B326B60AD4F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 16:21:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbiJXQBZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 12:01:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38302 "EHLO
+        id S235312AbiJXOUm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 10:20:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232702AbiJXP7O (ORCPT
+        with ESMTP id S237034AbiJXOPf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 11:59:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90D7A23BC6;
-        Mon, 24 Oct 2022 07:54:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0CD0AB81132;
-        Mon, 24 Oct 2022 11:46:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93FC2C433D7;
-        Mon, 24 Oct 2022 11:46:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666612007;
-        bh=pnOGLgH5gRMhfwXAarsnMQ3g6BWpSzwCy+mhmsk2EMs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OOPpq5aKDQ88/zqFaqTpYtPq+stRELuPZzsaq3OXBW0/1lq/4asmRAjoc2ezoLGhG
-         R4thXBh7vuS0C1ZTx1+RFAxYJ7HzWqK8uiUB5p6/DLGN+SY+gM7Jd2JJ467lKH63D3
-         iDxBulvQVtdjgm9rXo+bKNXro8Y5P2wK4Be0nvQYZUO3AvFBs8dphBGvR+VgbF7PRU
-         y19AqoRVZlRBJETLvt97Af2A/4KDHh9NqAHYQIZeq0N31Kn6dT3E7dQfClEm4LHEPG
-         aKpnTlkwi+GXl9yMWNYoqcMEDWl3CP90jZtEPsI8dwge58+A08Ph/PKByRb68lNxEq
-         T2y5XDuU+wF2g==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id E003B404BE; Mon, 24 Oct 2022 08:46:44 -0300 (-03)
-Date:   Mon, 24 Oct 2022 08:46:44 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Jiri Olsa <jolsa@kernel.org>, Yang Jihong <yangjihong1@huawei.com>
-Cc:     peterz@infradead.org, mingo@redhat.com, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, namhyung@kernel.org,
-        adrian.hunter@intel.com, ak@linux.intel.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] perf daemon: Check err before calling
- setup_server_config in __cmd_start
-Message-ID: <Y1Z7JB/4t8sEJkV/@kernel.org>
-References: <20221022092735.114967-1-yangjihong1@huawei.com>
- <20221022092735.114967-2-yangjihong1@huawei.com>
+        Mon, 24 Oct 2022 10:15:35 -0400
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86A34635DC;
+        Mon, 24 Oct 2022 05:55:23 -0700 (PDT)
+Received: by mail-pf1-f178.google.com with SMTP id g28so8864796pfk.8;
+        Mon, 24 Oct 2022 05:55:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TIs/7jsTplOiTmK71IOmd1MtbeRmmHQaVO9SeNsFPEI=;
+        b=H+f609bljltxHtEvGCrpGTUzOHEcOSDjxVS+GbzW8JDjnO63Rtoa1dazIb2L1Ekksw
+         Hqsjr91OoWiyJ4sUplZSLOtrR8mQ/lVEpztiSxYNpmH9/8yveIPrM9c5SVK49hmEp+LY
+         vS1VKeWnATXsa9rNgROwLP1q4EM7x8bFD8NUr0/WJ3NBruO9hVEZUGH/J0CL2HzYuxRX
+         nZ1B2IJ5iCW0LZxwI1wm/RZVceucuYZyQE4OkBNJuNEbGDnKUOFD+wugpUr6KfXTIVQ2
+         UkbLjk2vf9eYKVscXsD54+Ump0VY3U0ft4/zbLpA68YMn6dbQ9HLM2NhDuzLR1CvDIzK
+         /qPg==
+X-Gm-Message-State: ACrzQf0d/QcwUC/tEJC6At/G2xrXK43nrGEtoj6VSz9R9HJ7f/rMHbQU
+        hMkKj460D3Rny5bqmYB1/vy4LfJ0keg44Q==
+X-Google-Smtp-Source: AMsMyM5LUaTQ1hsO2YLfn08QQOEUI62y2A0C07T7lYkMYwIWtqpHRN2Y43Aq9a82c0quM4jC7rTX/w==
+X-Received: by 2002:a05:6214:c68:b0:4b2:31c5:78bc with SMTP id t8-20020a0562140c6800b004b231c578bcmr27218596qvj.45.1666612034806;
+        Mon, 24 Oct 2022 04:47:14 -0700 (PDT)
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
+        by smtp.gmail.com with ESMTPSA id bp17-20020a05620a459100b006ce3f1af120sm15029241qkb.44.2022.10.24.04.47.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Oct 2022 04:47:14 -0700 (PDT)
+Received: by mail-yb1-f178.google.com with SMTP id j7so10695987ybb.8;
+        Mon, 24 Oct 2022 04:47:13 -0700 (PDT)
+X-Received: by 2002:a5b:104:0:b0:6b0:429:3fe9 with SMTP id 4-20020a5b0104000000b006b004293fe9mr27481885ybx.543.1666612033596;
+ Mon, 24 Oct 2022 04:47:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221022092735.114967-2-yangjihong1@huawei.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221023182437.15263-1-afd@ti.com> <20221023182437.15263-2-afd@ti.com>
+In-Reply-To: <20221023182437.15263-2-afd@ti.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 24 Oct 2022 13:47:02 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWSorMA8uBSfOQCBXpY+319Pb_fcaHX5B8o1=xxaaGofA@mail.gmail.com>
+Message-ID: <CAMuHMdWSorMA8uBSfOQCBXpY+319Pb_fcaHX5B8o1=xxaaGofA@mail.gmail.com>
+Subject: Re: [PATCH 1/6] kbuild: Allow DTB overlays to built from .dtso named
+ source files
+To:     Andrew Davis <afd@ti.com>
+Cc:     Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Sat, Oct 22, 2022 at 05:27:33PM +0800, Yang Jihong escreveu:
-> If err!=0 before calling setup_server_config and reconfig==true,
-> setup_server_config function may return 0 and err becomes 0.
-> As a result, previous error is overwritten, need to check value of err first.
-> 
-> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
-> ---
->  tools/perf/builtin-daemon.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/perf/builtin-daemon.c b/tools/perf/builtin-daemon.c
-> index 6cb3f6cc36d0..b82bd902602a 100644
-> --- a/tools/perf/builtin-daemon.c
-> +++ b/tools/perf/builtin-daemon.c
-> @@ -1333,7 +1333,7 @@ static int __cmd_start(struct daemon *daemon, struct option parent_options[],
->  			if (fda.entries[signal_pos].revents & POLLIN)
->  				err = handle_signalfd(daemon) < 0;
->  
-> -			if (reconfig)
-> +			if (!err && reconfig)
->  				err = setup_server_config(daemon);
->  		}
+On Sun, Oct 23, 2022 at 8:24 PM Andrew Davis <afd@ti.com> wrote:
+> Currently DTB Overlays (.dtbo) are build from source files with the same
+> extension (.dts) as the base DTs (.dtb). This may become confusing and
+> even lead to wrong results. For example, a composite DTB (created from a
+> base DTB and a set of overlays) might have the same name as one of the
+> overlays that create it.
+>
+> Different files should be generated from differently named sources.
+>  .dtb  <-> .dts
+>  .dtbo <-> .dtso
+>
+> We do not remove the ability to compile DTBO files from .dts files here,
+> only add a new rule allowing the .dtso file name. The current .dts named
+> overlays can be renamed with time. After all have been renamed we can
+> remove the other rule.
+>
+> Signed-off-by: Andrew Davis <afd@ti.com>
 
-Expanding the context a bit:
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-        while (!done && !err) {
-                err = daemon__reconfig(daemon);
+Gr{oetje,eeting}s,
 
-                if (!err && fdarray__poll(&fda, -1)) {
-                        bool reconfig = false;
+                        Geert
 
-                        if (fda.entries[sock_pos].revents & POLLIN)
-                                err = handle_server_socket(daemon, sock_fd);
-                        if (fda.entries[file_pos].revents & POLLIN)
-                                err = handle_config_changes(daemon, conf_fd, &reconfig);
-                        if (fda.entries[signal_pos].revents & POLLIN)
-                                err = handle_signalfd(daemon) < 0;
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-                        if (!err && reconfig)
-                                err = setup_server_config(daemon);
-                }
-        }
-
-The err you're checking may be the last one, that may have overwritten
-'err' from handle_config_changes(), perhaps moving things around helps?
-I.e.:
-                if (!err && fdarray__poll(&fda, -1)) {
-                        bool reconfig = false;
-
-                        if (fda.entries[sock_pos].revents & POLLIN)
-                                err = handle_server_socket(daemon, sock_fd);
-                        if (fda.entries[signal_pos].revents & POLLIN)
-                                err = handle_signalfd(daemon) < 0;
-                        if (fda.entries[file_pos].revents & POLLIN)
-                                err = handle_config_changes(daemon, conf_fd, &reconfig);
-
-                        if (!err && reconfig)
-                                err = setup_server_config(daemon);
-                }
-
-
-?
-
-Jiri?
-
-- Arnaldo
-
->  	}
-> -- 
-> 2.30.GIT
-
--- 
-
-- Arnaldo
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
