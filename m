@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14929609C44
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 10:16:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74062609C46
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 10:16:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230242AbiJXIQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 04:16:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41214 "EHLO
+        id S229692AbiJXIQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 04:16:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230313AbiJXIP6 (ORCPT
+        with ESMTP id S230286AbiJXIQC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 04:15:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5E9F43313
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 01:15:00 -0700 (PDT)
+        Mon, 24 Oct 2022 04:16:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48A3C4D800
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 01:15:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666599299;
+        s=mimecast20190719; t=1666599305;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=EBzRuKDFM+71l7c7xLrT1+dLyWIbjD2WVMOLNE3ePAk=;
-        b=MnHAroaTc6RrPXwsH+QgEgbPO/IJ4eawdOfFKdlWRoCGChSg7ldSANu9OvDV1a4FRfIBMb
-        /4RuK75ADJukCxSS94O85pzOPrWX0aYWUUOi49Z+RrVGvSS5ZNWSqSdAtSXEJYLUzwtTfb
-        CeqvxxJjhMwyfN4tQ2L61PHS0YmxfdQ=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=L+dfYrksNn4TdevHXr7sUSqhlmuSgsZD4nCKZ/IkdDk=;
+        b=cAUvlvdr7ErAxFrnDg3jWxpv9aR9iP+rNipsO3fUy4JQ2pDQxhIEOeTtuK8mqy7ovZWVio
+        prdJHB2NMjLhc7Y4IlKA/DzvkA1AHxUix9LM8a5y8OXBlSmZlHXuVhcaodYYY7SqcLLMuC
+        zzzZRENNCUDRpZ4UiC23EeKBpafZhDU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-127-SP0uFmoMOeuzBev62VLccA-1; Mon, 24 Oct 2022 04:14:55 -0400
-X-MC-Unique: SP0uFmoMOeuzBev62VLccA-1
+ us-mta-458-6Bt9hgApOOS0VLkaDLvcJA-1; Mon, 24 Oct 2022 04:14:59 -0400
+X-MC-Unique: 6Bt9hgApOOS0VLkaDLvcJA-1
 Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 94E3D1C05132;
-        Mon, 24 Oct 2022 08:14:54 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id ED68C185A78F;
+        Mon, 24 Oct 2022 08:14:58 +0000 (UTC)
 Received: from MiWiFi-R3L-srv.redhat.com (ovpn-12-35.pek2.redhat.com [10.72.12.35])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5F37140C6F75;
-        Mon, 24 Oct 2022 08:14:51 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5C16240C6FA0;
+        Mon, 24 Oct 2022 08:14:54 +0000 (UTC)
 From:   Baoquan He <bhe@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
         Christoph Lameter <cl@linux.com>,
         Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
         Baoquan He <bhe@redhat.com>
-Subject: [PATCH 3/8] mm/percpu: Update the code comment when creating new chunk
-Date:   Mon, 24 Oct 2022 16:14:30 +0800
-Message-Id: <20221024081435.204970-4-bhe@redhat.com>
+Subject: [PATCH 4/8] mm/percpu: add comment to state the empty populated pages accounting
+Date:   Mon, 24 Oct 2022 16:14:31 +0800
+Message-Id: <20221024081435.204970-5-bhe@redhat.com>
 In-Reply-To: <20221024081435.204970-1-bhe@redhat.com>
 References: <20221024081435.204970-1-bhe@redhat.com>
 MIME-Version: 1.0
@@ -63,37 +63,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The lock pcpu_alloc_mutex taking code has been moved to the beginning of
-pcpu_allo() if it's non atomic allocation. So the code comment above
-above pcpu_create_chunk() callsite need be updated.
+When allocating an area from a chunk, pcpu_block_update_hint_alloc()
+is called to update chunk metadata, including chunk's and global
+nr_empty_pop_pages. However, if the allocation is not atomic, some
+blocks may not be populated with pages yet, while we still account it
+here. The number of pages will be subtracted with pcpu_chunk_populated()
+when populating pages.
+
+Adding code comment to make that more understandable.
 
 Signed-off-by: Baoquan He <bhe@redhat.com>
 ---
- mm/percpu.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ mm/percpu.c | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
 diff --git a/mm/percpu.c b/mm/percpu.c
-index a3fde4ac03a4..a8121302a79c 100644
+index a8121302a79c..09e407338573 100644
 --- a/mm/percpu.c
 +++ b/mm/percpu.c
-@@ -1817,16 +1817,12 @@ static void __percpu *pcpu_alloc(size_t size, size_t align, bool reserved,
+@@ -831,13 +831,15 @@ static void pcpu_block_update_hint_alloc(struct pcpu_chunk *chunk, int bit_off,
  
- 	spin_unlock_irqrestore(&pcpu_lock, flags);
+ 	/*
+ 	 * Update s_block.
+-	 * block->first_free must be updated if the allocation takes its place.
+-	 * If the allocation breaks the contig_hint, a scan is required to
+-	 * restore this hint.
+ 	 */
+ 	if (s_block->contig_hint == PCPU_BITMAP_BLOCK_BITS)
+ 		nr_empty_pages++;
  
--	/*
--	 * No space left.  Create a new chunk.  We don't want multiple
--	 * tasks to create chunks simultaneously.  Serialize and create iff
--	 * there's still no empty chunk after grabbing the mutex.
--	 */
- 	if (is_atomic) {
- 		err = "atomic alloc failed, no space left";
- 		goto fail;
++	/*
++	 * block->first_free must be updated if the allocation takes its place.
++	 * If the allocation breaks the contig_hint, a scan is required to
++	 * restore this hint.
++	 */
+ 	if (s_off == s_block->first_free)
+ 		s_block->first_free = find_next_zero_bit(
+ 					pcpu_index_alloc_map(chunk, s_index),
+@@ -912,6 +914,12 @@ static void pcpu_block_update_hint_alloc(struct pcpu_chunk *chunk, int bit_off,
+ 		}
  	}
  
-+	/* No space left.  Create a new chunk. */
- 	if (list_empty(&pcpu_chunk_lists[pcpu_free_slot])) {
- 		chunk = pcpu_create_chunk(pcpu_gfp);
- 		if (!chunk) {
++	/*
++	 * If the allocation is not atomic, some blocks may not
++	 * be populated with pages, while we account it here.
++	 * The number of pages will be subtracted with
++	 * pcpu_chunk_populated() when populating pages.
++	 */
+ 	if (nr_empty_pages)
+ 		pcpu_update_empty_pages(chunk, -nr_empty_pages);
+ 
 -- 
 2.34.1
 
