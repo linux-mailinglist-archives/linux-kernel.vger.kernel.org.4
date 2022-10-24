@@ -2,97 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4112260B931
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:06:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9850460B91F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:04:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233071AbiJXUGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 16:06:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49988 "EHLO
+        id S231617AbiJXUEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 16:04:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232828AbiJXUFX (ORCPT
+        with ESMTP id S233964AbiJXUD5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 16:05:23 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 856B121E101;
-        Mon, 24 Oct 2022 11:26:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 4F0F2CE16BB;
-        Mon, 24 Oct 2022 16:09:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB5DCC433C1;
-        Mon, 24 Oct 2022 16:09:19 +0000 (UTC)
-Date:   Mon, 24 Oct 2022 12:09:29 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-arch@vger.kernel.org>, <quic_satyap@quicinc.com>
-Subject: Re: [PATCH] asm-generic/io: Add _RET_IP_ to MMIO trace for more
- accurate debug info
-Message-ID: <20221024120929.41241e07@gandalf.local.home>
-In-Reply-To: <20221017143450.9161-1-quic_saipraka@quicinc.com>
-References: <20221017143450.9161-1-quic_saipraka@quicinc.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 24 Oct 2022 16:03:57 -0400
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC4938A0E
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 11:24:55 -0700 (PDT)
+Received: by mail-oi1-x22f.google.com with SMTP id o64so11672035oib.12
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 11:24:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0+L/wgZJq25QWZOfBJI7Y8G4kNdlVFzsE8gcKEq0Mfs=;
+        b=ZT+bcVMBNk7fpdzG51qvU+nw1MQlFcyYzv6wxeZnY1j+dre6v7vQ6lHY5Ifk344dlP
+         gdAvAMVQmF+7ROzaIojNXfakKOHyzc9qvCV2j2xBa1B8l4HMqv5zJmx3MP2QUkXEn+gr
+         ee7UlBpMa++JOciZw2MCsyIYwsJxjL7k2zx7k=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0+L/wgZJq25QWZOfBJI7Y8G4kNdlVFzsE8gcKEq0Mfs=;
+        b=Jjlz1RE4I/lTm/HGBYemcmdE4O+zt7pDtKwvXYQvBlr4Sg9VBcmAqBZAQge3ldkKXb
+         9Jng1Ud4jAwDWQUHO6E16yuxACE5CtgnxHCfnBP7mvAxloE98D1leK+q9SLK35UBLnEX
+         HqSrhFw1TMxO7xyIYEi+GTntOLkAcx2oQFAshMq2WeV8mFD5b9xTvRsj2EcL3KCTnxcT
+         iDcBytMJ+ApIsua5mDhA24SMmAh3T+zJz83wq3f8GRKnw6HVx51nrpLdQ3iq8ZmKe4wi
+         9lZQMmNU2BK1FdGgYu4W60R2VsUSHxBBLz+EUQTNz2GcM49kyQRaDYHeZX0lOeV6DMlM
+         YW6A==
+X-Gm-Message-State: ACrzQf1AbAii47LLWGLotKlOmaZMptnvOfHNvu6qfjoHTS0CeELlzdQU
+        olSvfzFSMNgzI2hmX98+pu1d7WYcl3PTUg==
+X-Google-Smtp-Source: AMsMyM7QdS4FtEGrBDpWgc9Evd5MJ+xSYAJnNXyqo5gXSJ1mvVH/il24Yx4mUoL6wddj14/oGzHbng==
+X-Received: by 2002:a17:90b:2317:b0:213:26a3:246f with SMTP id mt23-20020a17090b231700b0021326a3246fmr3082381pjb.148.1666627955871;
+        Mon, 24 Oct 2022 09:12:35 -0700 (PDT)
+Received: from tigerii.tok.corp.google.com ([2401:fa00:8f:203:5f9c:c5bc:902f:3da4])
+        by smtp.gmail.com with ESMTPSA id u70-20020a627949000000b0056b8726d2d3sm5162pfc.157.2022.10.24.09.12.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Oct 2022 09:12:35 -0700 (PDT)
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Minchan Kim <minchan@kernel.org>
+Cc:     Nitin Gupta <ngupta@vflare.org>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Sergey Senozhatsky <senozhatsky@chromium.org>
+Subject: [PATCH 4/6] Documentation: document zram pool_page_order attribute
+Date:   Tue, 25 Oct 2022 01:12:11 +0900
+Message-Id: <20221024161213.3221725-5-senozhatsky@chromium.org>
+X-Mailer: git-send-email 2.38.0.135.g90850a2211-goog
+In-Reply-To: <20221024161213.3221725-1-senozhatsky@chromium.org>
+References: <20221024161213.3221725-1-senozhatsky@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 17 Oct 2022 20:04:50 +0530
-Sai Prakash Ranjan <quic_saipraka@quicinc.com> wrote:
+Provide a simple documentation for zram pool_page_order
+device attribute.
 
-> Due to compiler optimizations like inlining, there are cases where
-> MMIO traces using _THIS_IP_ for caller information might not be
-> sufficient to provide accurate debug traces.
-> 
-> 1) With optimizations (Seen with GCC):
-> 
-> In this case, _THIS_IP_ works fine and prints the caller information
-> since it will be inlined into the caller and we get the debug traces
-> on who made the MMIO access, for ex:
-> 
-> rwmmio_read: qcom_smmu_tlb_sync+0xe0/0x1b0 width=32 addr=0xffff8000087447f4
-> rwmmio_post_read: qcom_smmu_tlb_sync+0xe0/0x1b0 width=32 val=0x0 addr=0xffff8000087447f4
-> 
-> 2) Without optimizations (Seen with Clang):
-> 
-> _THIS_IP_ will not be sufficient in this case as it will print only
-> the MMIO accessors itself which is of not much use since it is not
-> inlined as below for example:
-> 
-> rwmmio_read: readl+0x4/0x80 width=32 addr=0xffff8000087447f4
-> rwmmio_post_read: readl+0x48/0x80 width=32 val=0x4 addr=0xffff8000087447f4
-> 
-> So in order to handle this second case as well irrespective of the compiler
-> optimizations, add _RET_IP_ to MMIO trace to make it provide more accurate
-> debug information in all these scenarios.
-> 
-> Before:
-> 
-> rwmmio_read: readl+0x4/0x80 width=32 addr=0xffff8000087447f4
-> rwmmio_post_read: readl+0x48/0x80 width=32 val=0x4 addr=0xffff8000087447f4
-> 
-> After:
-> 
-> rwmmio_read: qcom_smmu_tlb_sync+0xe0/0x1b0 -> readl+0x4/0x80 width=32 addr=0xffff8000087447f4
-> rwmmio_post_read: qcom_smmu_tlb_sync+0xe0/0x1b0 -> readl+0x4/0x80 width=32 val=0x0 addr=0xffff8000087447f4
-> 
-> Fixes: 210031971cdd ("asm-generic/io: Add logging support for MMIO accessors")
-> Signed-off-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+---
+ Documentation/admin-guide/blockdev/zram.rst | 31 ++++++++++++++++-----
+ 1 file changed, 24 insertions(+), 7 deletions(-)
 
+diff --git a/Documentation/admin-guide/blockdev/zram.rst b/Documentation/admin-guide/blockdev/zram.rst
+index 010fb05a5999..cd12a5982ae0 100644
+--- a/Documentation/admin-guide/blockdev/zram.rst
++++ b/Documentation/admin-guide/blockdev/zram.rst
+@@ -112,7 +112,24 @@ to list all of them using, for instance, /proc/crypto or any other
+ method. This, however, has an advantage of permitting the usage of
+ custom crypto compression modules (implementing S/W or H/W compression).
+ 
+-4) Set Disksize
++4) Set maximum pool page order
++==============================
++
++zsmalloc pages can consist of up to 2^N physical pages. The exact size
++is calculated per each zsmalloc size class during zsmalloc pool creation.
++ZRAM provides pool_page_order device attribute to see or change N.
++
++Examples::
++
++	#show current maximum zsmalloc page order
++	cat /sys/block/zramX/pool_page_order
++	2
++
++	#set maximum zsmalloc page order
++	echo 3 > /sys/block/zramX/pool_page_order
++
++
++5) Set Disksize
+ ===============
+ 
+ Set disk size by writing the value to sysfs node 'disksize'.
+@@ -132,7 +149,7 @@ There is little point creating a zram of greater than twice the size of memory
+ since we expect a 2:1 compression ratio. Note that zram uses about 0.1% of the
+ size of the disk when not in use so a huge zram is wasteful.
+ 
+-5) Set memory limit: Optional
++6) Set memory limit: Optional
+ =============================
+ 
+ Set memory limit by writing the value to sysfs node 'mem_limit'.
+@@ -151,7 +168,7 @@ Examples::
+ 	# To disable memory limit
+ 	echo 0 > /sys/block/zram0/mem_limit
+ 
+-6) Activate
++7) Activate
+ ===========
+ 
+ ::
+@@ -162,7 +179,7 @@ Examples::
+ 	mkfs.ext4 /dev/zram1
+ 	mount /dev/zram1 /tmp
+ 
+-7) Add/remove zram devices
++8) Add/remove zram devices
+ ==========================
+ 
+ zram provides a control interface, which enables dynamic (on-demand) device
+@@ -182,7 +199,7 @@ execute::
+ 
+ 	echo X > /sys/class/zram-control/hot_remove
+ 
+-8) Stats
++9) Stats
+ ========
+ 
+ Per-device statistics are exported as various nodes under /sys/block/zram<id>/
+@@ -283,7 +300,7 @@ a single line of text and contains the following stats separated by whitespace:
+ 		Unit: 4K bytes
+  ============== =============================================================
+ 
+-9) Deactivate
++10) Deactivate
+ =============
+ 
+ ::
+@@ -291,7 +308,7 @@ a single line of text and contains the following stats separated by whitespace:
+ 	swapoff /dev/zram0
+ 	umount /dev/zram1
+ 
+-10) Reset
++11) Reset
+ =========
+ 
+ 	Write any positive value to 'reset' sysfs node::
+-- 
+2.38.0.135.g90850a2211-goog
 
-Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-
-What tree should this go through?
-
--- Steve
