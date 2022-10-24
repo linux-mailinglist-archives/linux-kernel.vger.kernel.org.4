@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C19D760A6AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:37:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 116F360AA00
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:27:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231279AbiJXMgG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:36:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45258 "EHLO
+        id S233812AbiJXN1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:27:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234312AbiJXM37 (ORCPT
+        with ESMTP id S236259AbiJXNYw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:29:59 -0400
+        Mon, 24 Oct 2022 09:24:52 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D1B839112;
-        Mon, 24 Oct 2022 05:04:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62D2FA9258;
+        Mon, 24 Oct 2022 05:31:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9209A612D5;
-        Mon, 24 Oct 2022 12:03:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BC1AC433D6;
-        Mon, 24 Oct 2022 12:03:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 23DA7612A1;
+        Mon, 24 Oct 2022 12:30:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FFA3C43142;
+        Mon, 24 Oct 2022 12:30:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666613004;
-        bh=FwSMJGBQ21UcchXwi0pC2cCu9Y98Gdm1Se469QUuPDA=;
+        s=korg; t=1666614602;
+        bh=gFrW7cGD5JJ4ll2P3SrnHW8IEKo4ms+qt3S6ja08OKM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=J/bk2KY1MkO77RKhcJKsv39tbk1JtxvOTwDlT+t7khwPofJzhzHr+KYgK/ZmTItvk
-         4a5c4T1V5woxM2oEGqufetUZkaTa4XvWLhudzmkS4GcRAUoWFQCMReBJQQZskHsYXZ
-         QzErxu9WqKN2lQoQRqr3/lO0PDgfdZHsuHeQ7X6g=
+        b=Dh9kj4+ZIUqFc7qpDRpC2ffvN4oQY2mFxr1vTpoaMaknEeVew4orZS4g9ec/wscKc
+         vZGy/kFNigq9CXN+a3nY+IrjpjjVzOHFCyYh23GnGgS8d1o2ode2S6W2ro7DcfBA/Y
+         hVuSks7QypKLMvPNWYe8eQj2jfS1PiPLD8xS/wsU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Shawn Guo <shawnguo@kernel.org>,
+        stable@vger.kernel.org, Andrew Gaul <gaul@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 202/229] ARM: dts: imx6dl: add missing properties for sram
+Subject: [PATCH 5.10 324/390] r8152: Rate limit overflow messages
 Date:   Mon, 24 Oct 2022 13:32:01 +0200
-Message-Id: <20221024113005.696537033@linuxfoundation.org>
+Message-Id: <20221024113036.797564152@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
-References: <20221024112959.085534368@linuxfoundation.org>
+In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
+References: <20221024113022.510008560@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,36 +54,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Stein <alexander.stein@ew.tq-group.com>
+From: Andrew Gaul <gaul@gaul.org>
 
-[ Upstream commit f5848b95633d598bacf0500e0108dc5961af88c0 ]
+[ Upstream commit 93e2be344a7db169b7119de21ac1bf253b8c6907 ]
 
-All 3 properties are required by sram.yaml. Fixes the dtbs_check warning:
-sram@900000: '#address-cells' is a required property
-sram@900000: '#size-cells' is a required property
-sram@900000: 'ranges' is a required property
+My system shows almost 10 million of these messages over a 24-hour
+period which pollutes my logs.
 
-Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+Signed-off-by: Andrew Gaul <gaul@google.com>
+Link: https://lore.kernel.org/r/20221002034128.2026653-1-gaul@google.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/imx6dl.dtsi | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/net/usb/r8152.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/imx6dl.dtsi b/arch/arm/boot/dts/imx6dl.dtsi
-index f0607eb41df4..079f77c7e0f0 100644
---- a/arch/arm/boot/dts/imx6dl.dtsi
-+++ b/arch/arm/boot/dts/imx6dl.dtsi
-@@ -81,6 +81,9 @@
- 		ocram: sram@900000 {
- 			compatible = "mmio-sram";
- 			reg = <0x00900000 0x20000>;
-+			ranges = <0 0x00900000 0x20000>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
- 			clocks = <&clks IMX6QDL_CLK_OCRAM>;
- 		};
- 
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index 0bb5b1c78654..a526242a3e36 100644
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -1689,7 +1689,9 @@ static void intr_callback(struct urb *urb)
+ 			   "Stop submitting intr, status %d\n", status);
+ 		return;
+ 	case -EOVERFLOW:
+-		netif_info(tp, intr, tp->netdev, "intr status -EOVERFLOW\n");
++		if (net_ratelimit())
++			netif_info(tp, intr, tp->netdev,
++				   "intr status -EOVERFLOW\n");
+ 		goto resubmit;
+ 	/* -EPIPE:  should clear the halt */
+ 	default:
 -- 
 2.35.1
 
