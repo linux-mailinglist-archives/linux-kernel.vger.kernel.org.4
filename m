@@ -2,65 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66D6460B671
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 20:58:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D24C60B67F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 21:01:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231463AbiJXS6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 14:58:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40244 "EHLO
+        id S231460AbiJXTA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 15:00:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232664AbiJXS50 (ORCPT
+        with ESMTP id S231933AbiJXTAI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 14:57:26 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 022D71C77E7
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:37:27 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id b5so9243242pgb.6
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:37:27 -0700 (PDT)
+        Mon, 24 Oct 2022 15:00:08 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC8D3726BC
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:39:37 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id v13-20020a17090a6b0d00b0021332e5388fso819769pjj.1
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:39:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=xSP1eEqSv1XvPA9FALZsPLkCJwsdVfpHOieGi3imvbc=;
-        b=WlmZ1wq6/6gt+R7MsXQ/k+6txkY+6LANNH270vSZs7cAXNKciUb1Aa3no7PuWJj0XN
-         KDAH0220mAN4TzZYG6gbxrjGpaltlhLmpQn23Z0efGAQaxEk4kjPL5cNBo0OPQ3UNLPw
-         k9r0EtHZ6BFmHl/MmP9eyxrJZ9L/y7oFV+2915zTW1x7lC6c6s428aBiSWmxW7U359RG
-         PHv49s51u1NWfdUkr2lhNMnS4HuZmUz/2R70DVUUTNzcgyiPt5QVPasG9KPEHGPWGx90
-         BLBcXLyRz8VK2faSvjsnYJ8sJKNaZb+C1MhvCH5pE7PgaGBbT4C5KGMdKQylV3fMmZ+L
-         MtZQ==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0SvrvFQbZJt7iDWYQmvN7U67sbT18oYJVK+RPEPBAvQ=;
+        b=lBfQbxfMjOYjjVVAu8Vi6VTVn3QT2ScttZTJRCZEyujkbH41Lr59JYJaEDwAm7pt1t
+         xQHy3VUPrWmEbVZjCCVcjLgWGySPQaYJCHJPZXXfB9WICSairI3xhRn6w5RneS6fcuWs
+         /191zHzVa7wDwYUhDCFcjM4GRScANHBAO79dOIy3ApqLWhQi9/XrD8zFjQ59v/P+xNX+
+         xCDcOvsK2t9vrJTU/hZ2WISRGkQOiie6exyOzS2FB51a0dRO79nJx/fuTr3i97V6HY7g
+         OB9U2D97jOpYl0v4LoveN4mkBtLxqpTOwov+hYOErIJUGhPpMGlWmHvoU50PvC7DibgP
+         4LwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xSP1eEqSv1XvPA9FALZsPLkCJwsdVfpHOieGi3imvbc=;
-        b=dlGKWTtQCMDPeq7oC1wGLn3O5ge3pXE9/MLza9u5P13S3jLMkcrImJkrRwPLl8g53j
-         Lvy61Gi9yLXCxsTrE/FxXDjAQv8S2Y8QviK8RgSoQhDeSJPqi7HWWv6y72C00aTcej6B
-         dhcMb5vfQr+20IIZdR5A3DuPiNpBJjTxf9CGq/6KBjYhbBS1YtsKQkMToBaG0UR7MAVc
-         Rn1OY+5CBkYd/jZ7YfxyGClY2JnL5+zJLd72aROpX1VhiJZk4FA6b8WhfPtfrLYTsyM3
-         2FDV0yEJphsHWwug5zut2Enbn+baG3Hi9KfPrG2OR6GvlO5jpZedhpUHonwR/tLCMHnr
-         5kJQ==
-X-Gm-Message-State: ACrzQf0EPv9ZRcjYSXbPlzd35DPCB/xlFqddnRPJDwUV+0RX8hORUtoS
-        VaNvpt28TD6z8sZIXdQm6Qs=
-X-Google-Smtp-Source: AMsMyM4IUkNMSFbXGOyhjUiHSa6EOD4mZwmCeM+q3qGeinEpducdTZh6kL5gOl1BEtnO5JFDk01u0g==
-X-Received: by 2002:a05:6a00:2191:b0:56a:fd17:6723 with SMTP id h17-20020a056a00219100b0056afd176723mr17619569pfi.4.1666632966867;
-        Mon, 24 Oct 2022 10:36:06 -0700 (PDT)
-Received: from biggie.. ([103.230.148.187])
-        by smtp.gmail.com with ESMTPSA id b26-20020aa78eda000000b0056283e2bdbdsm74955pfr.138.2022.10.24.10.36.03
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0SvrvFQbZJt7iDWYQmvN7U67sbT18oYJVK+RPEPBAvQ=;
+        b=PnzABMQl4gFbInfu962yOOWuv6X5OLjvnj5SeSWo514y6fnE+LGbUp+s6fNWTmP48P
+         4xCb80aFI2jt/QHXLPoEc9Au2dmmnJYVC1gn3temkvt8gaCrgeYVMeu8jWDrvmYHth+4
+         A7IJ+hHgYr68wond+R8qsVJ0caEVii1p1lLBM8cBsUMesnBfXS/vGDOZzC+RBzM+MmTC
+         z1ATUZJL2OfLftQFsRiqKQu/dMW7lmKM6oheWBBlhADzsCC0QNbwBorce789r4AtamIk
+         q8I4Foa0TL0S/YYrFFcCu8Ba1dJP93zEqmBItfDCIyxNgdOdXB2s/1Fx6X2SP6oRIVi/
+         h3bg==
+X-Gm-Message-State: ACrzQf0UGFWCPxfAAQa/uFIG+7hTqrqNArPEnBiP1Cbv4maFK8BwJjOA
+        Q7a4TJgf3CsT9Zr+4o3WOfg=
+X-Google-Smtp-Source: AMsMyM4ul+peWSJ5kBk/E8QtIu9ueJjvVDpG7haldk/47PgjDGdFhd9fWLyOZSUan3A6isvrAKnaMA==
+X-Received: by 2002:a17:90b:3e82:b0:20d:2fa1:d071 with SMTP id rj2-20020a17090b3e8200b0020d2fa1d071mr75370882pjb.58.1666633115028;
+        Mon, 24 Oct 2022 10:38:35 -0700 (PDT)
+Received: from biggie ([103.230.148.187])
+        by smtp.gmail.com with ESMTPSA id t18-20020aa79472000000b0056bf5e54961sm72858pfq.161.2022.10.24.10.38.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 10:36:06 -0700 (PDT)
+        Mon, 24 Oct 2022 10:38:34 -0700 (PDT)
+Date:   Mon, 24 Oct 2022 23:08:28 +0530
 From:   Gautam Menghani <gautammenghani201@gmail.com>
-To:     akpm@linux-foundation.org, rostedt@goodmis.org,
-        mhiramat@kernel.org, zokeefe@google.com, shy828301@gmail.com,
-        vbabka@suse.cz, david@redhat.com
-Cc:     Gautam Menghani <gautammenghani201@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] mm/khugepaged: add tracepoint to collapse_file()
-Date:   Mon, 24 Oct 2022 23:05:58 +0530
-Message-Id: <20221024173559.332324-1-gautammenghani201@gmail.com>
-X-Mailer: git-send-email 2.34.1
+To:     Zach O'Keefe <zokeefe@google.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>, akpm@linux-foundation.org,
+        mhiramat@kernel.org, shy828301@gmail.com, vbabka@suse.cz,
+        david@redhat.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/khugepaged: add tracepoint to collapse_file()
+Message-ID: <Y1bNlKl1XSCxhaVT@biggie>
+References: <20221024150922.129814-1-gautammenghani201@gmail.com>
+ <20221024111621.3ba17e2c@gandalf.local.home>
+ <CAAa6QmSKtj6T2dW1tkg5_HVj2+rXj5inOLdEzr0MkJzQxxcPXQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAa6QmSKtj6T2dW1tkg5_HVj2+rXj5inOLdEzr0MkJzQxxcPXQ@mail.gmail.com>
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -71,82 +74,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the file mm/khugepaged.c, a TODO in the function collapse_file() asks
-to add tracepoints. Add the tracepoint named "mm_khugepaged_collapse_file".
-
-Signed-off-by: Gautam Menghani <gautammenghani201@gmail.com>
----
-changes in v2:
-1. Move filename dereference out of calling path (Steven Rostedt).
-2. Capture is_shmem and index (Zach O'Keefe)
-
- include/trace/events/huge_memory.h | 38 ++++++++++++++++++++++++++++++
- mm/khugepaged.c                    |  4 +++-
- 2 files changed, 41 insertions(+), 1 deletion(-)
-
-diff --git a/include/trace/events/huge_memory.h b/include/trace/events/huge_memory.h
-index 935af4947917..472238d0e3a3 100644
---- a/include/trace/events/huge_memory.h
-+++ b/include/trace/events/huge_memory.h
-@@ -203,5 +203,43 @@ TRACE_EVENT(mm_khugepaged_scan_file,
- 		__print_symbolic(__entry->result, SCAN_STATUS))
- );
+On Mon, Oct 24, 2022 at 09:44:16AM -0700, Zach O'Keefe wrote:
+> Thanks for your mail, Gautam.
+> 
+> > I try to keep dereferences out of the calling path as much as possible
+> > (adds to I$ at the call site).
+> 
+> This was probably due to the way I handled
+> trace_mm_khugepaged_scan_file(). Perhaps that can be cleaned up at the
+> same time as this patch, for consistency.
+>
+Yes sure I'll send a patch for cleaning this up.
  
-+TRACE_EVENT(mm_khugepaged_collapse_file,
-+	TP_PROTO(struct mm_struct *mm, struct page *hpage, pgoff_t index,
-+			bool is_shmem, unsigned long addr, struct file *file,
-+			int nr, int result),
-+	TP_ARGS(mm, hpage, index, is_shmem, addr, file, nr, result),
-+	TP_STRUCT__entry(
-+		__field(struct mm_struct *, mm)
-+		__field(unsigned long, hpfn)
-+		__field(pgoff_t, index)
-+		__field(bool, is_shmem)
-+		__field(unsigned long, addr)
-+		__string(filename, file->f_path.dentry->d_iname)
-+		__field(int, nr)
-+		__field(int, result)
-+	),
-+
-+	TP_fast_assign(
-+		__entry->mm = mm;
-+		__entry->hpfn = hpage ? page_to_pfn(hpage) : -1;
-+		__entry->index = index;
-+		__entry->is_shmem = is_shmem;
-+		__entry->addr = addr;
-+		__assign_str(filename, file->f_path.dentry->d_iname);
-+		__entry->nr = nr;
-+		__entry->result = result;
-+	),
-+
-+	TP_printk("mm=%p, hpage_pfn=0x%lx, index=%ld, is_shmem=%d, addr=%ld, filename=%s, nr=%d, result=%s",
-+		__entry->mm,
-+		__entry->hpfn,
-+		__entry->index,
-+		__entry->is_shmem,
-+		__entry->addr,
-+		__get_str(filename),
-+		__entry->nr,
-+		__print_symbolic(__entry->result, SCAN_STATUS))
-+);
-+
- #endif /* __HUGE_MEMORY_H */
- #include <trace/define_trace.h>
-diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-index 4734315f7940..977c0ff82c46 100644
---- a/mm/khugepaged.c
-+++ b/mm/khugepaged.c
-@@ -2059,7 +2059,9 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
- 		mem_cgroup_uncharge(page_folio(hpage));
- 		put_page(hpage);
- 	}
--	/* TODO: tracepoints */
-+
-+	trace_mm_khugepaged_collapse_file(mm, hpage, index, is_shmem,
-+		addr, file, nr, result);
- 	return result;
- }
- 
--- 
-2.34.1
+> Also, no qualms about adding this tracepoint; there are a few scan
+> result codes that overlap between hpage_collapse_scan_file() and those
+> possibly returned in collapse_file() such that, if we only have the
+> one tracepoint in hpage_collapse_scan_file(), it could be ambiguous
+> what callsite the error path stemmed from. Luckily this hasn't been an
+> issue thus far.
+> 
+> Lastly, a few other items we might care about capturing:
+> 
+> - is_shmem (perhaps the filename is enough to know this - but I know
+> at least once during development I was caught off-guard b/c a mount I
+> thought to be file-backed turned out to be tmpfs (and something I
+> didn't think to question until I had wasted some time on other
+> paths)).
+> - index
 
+Yes noted.  
