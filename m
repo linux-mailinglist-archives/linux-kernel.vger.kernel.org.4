@@ -2,63 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBE6560BE1D
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 01:03:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07E5E60BE1F
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 01:04:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229746AbiJXXDg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 19:03:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35298 "EHLO
+        id S230094AbiJXXEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 19:04:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230384AbiJXXDE (ORCPT
+        with ESMTP id S231777AbiJXXD5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 19:03:04 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89E9A32BB0B
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 14:24:27 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id y69so14544630ede.5
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 14:24:26 -0700 (PDT)
+        Mon, 24 Oct 2022 19:03:57 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A59BFF26A
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 14:24:28 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id a5so20471840edb.11
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 14:24:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=bQAYa+fLJox/NZH1tjJ+liVfXSJpT0A7dg3CtjYLJqI=;
-        b=HhVMJjUWnEX2/bI1fcYlS2gBN4LO5cARc0+K9EyA62L3szY9ESDnBfmlenWCHBxTIG
-         9vy5a96kBS86oMQaLFq2PEa81BKgxzaMg8HEKjzO7ZgvdtKLEnUV5RvLGBnvtZ6aEOuz
-         ik8XLDXu2o9bv8KWayqeYf3zAWmDghmP1FdyX45mPd/35U0XTYMeTjbX7keIWzpMCjUX
-         nNG/Sunew4FwvjZyw8Ql8JKMDOq7Fzs8DruAQ52t1GC/f5ekIjUqdBx3Ho/GlwKn5F1t
-         W+l1441yRnA+T7AuovrqQD6zItmfx7sHzwzmdqWw22FLvB5UFyuaw7qQiGbMycTXLhcd
-         0ptw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MZsnAEsVBgH1SY91CR++8td8qF2as+jKuxUWas/0RKs=;
+        b=dzRCCrMq/BADC/Fq6uUj+xe4Hc2cbZBCsUhG9yVbyfUSS1a86aZsZ7fC8TIJmhqzfY
+         ogPnqCKM91NWVfT8PK2+CgtZNrLhZPwQcsiw/CRCvT1q2cN3Z5CMaAQHlwPes9vGSNFo
+         /xF5YfpSccFvTfAzr0DtKzQZhbnfAgNQOkdGZiVu0Cx6sdb9/Pu9W7+634yEGHSyE5ah
+         5agHKO/fxUU975BV+2IYrrVPVTkvptgwuh7KLNpdnZ9L7NB98wMG0fILvtul28sqSPJv
+         XB3n4hDyQfiXhvAK0+aD+k6fU7jHFFRUv+USAh+LNlJpzxNPePRDAfMWoakPD+rXIxWq
+         Ckbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bQAYa+fLJox/NZH1tjJ+liVfXSJpT0A7dg3CtjYLJqI=;
-        b=72tkDrwEO9QThdZQhWWcP3jOr6DXBnVjtxUYac2VmxSA/ss9ZfV8wEsb/7xJ7BXNx9
-         HLeFAVvNWPaLeKx6/Miw6LdWppcXAmGqm25zuUIUAHhbPZ3bl7kr1j3icZg3VZbpmyJ2
-         enOiMf2SFXSqt+gm9T7X2hERwVyVmZpudWCCOtWWtGIbZQ3beN34fc/deadw+wgyET/a
-         4IJz3cEZHKWqErTTjNoaMbxqFjqBRfY9JJgz5AJN7JAsGL25Zgq1+pJjGsxNXqzviMp9
-         uXdwyi/kOdb3yzenjV/TAVTULTWP0S8Us9oqGLi0jj9G8X29dnBB0pWemNZd+TD9L956
-         DlUg==
-X-Gm-Message-State: ACrzQf175xzLDT8fPEA+EQ3w4Qo6K11sCugyUsKbQaGD9hBwqJUyKQVv
-        aVDPAUwFEOQAbZBsEU+gZEI=
-X-Google-Smtp-Source: AMsMyM6/qCmr5spS+W5iEx75xawJB3t7ZI7urvtVo4wnsCnv/FqyPoOcz92/orCA8VKCHXNyjWd/tA==
-X-Received: by 2002:a05:6402:406:b0:458:a47:d14c with SMTP id q6-20020a056402040600b004580a47d14cmr32275444edv.41.1666646664353;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MZsnAEsVBgH1SY91CR++8td8qF2as+jKuxUWas/0RKs=;
+        b=iAIV1G6L0PpruVCyrSBRLLLcVQMGXX0VYE9ro4ebj9iREDMNhWAq+W3qN4X6A9R9yE
+         sTCA7wvcsTISEoxBu5H2nG0fPS5St9KgQlJIOUjV80gfTJZ3xCsOzgqdYPDCSNp56Kqm
+         b6pBK+/kUFL7AvZEtgs78g1LkbVlHgoKNT1Ypug6AymCLnvBVTI28V6NTDiqisJxsyIv
+         gGQ2MbZDOuZnyWh2siy2hfquDduqZhf/O4wXTjyTskO6MfIWyfAHQNNs6ufdOkYECw8d
+         Y2hBeVlZwpRxxnjMgTwJ78YxhydVa5wGe38pWupURafWza6Ao52qLWBxp4KtNI3rtrRu
+         MKYQ==
+X-Gm-Message-State: ACrzQf3kkPX/BccnnPgw70nvKWQAa+2oAgSArRNL0uxI6o9Qlo0NsKSe
+        yW0LPYKt88jJDe9uz9fNFdM=
+X-Google-Smtp-Source: AMsMyM7RaR8vfj9qvimhwIoyMgNFL/0emWD7zwzvYCY0ojkY8rFMx9BmK8n9aBabFF67YVaGcDNeeA==
+X-Received: by 2002:a05:6402:294f:b0:461:f5ce:31e8 with SMTP id ed15-20020a056402294f00b00461f5ce31e8mr2721525edb.363.1666646664984;
         Mon, 24 Oct 2022 14:24:24 -0700 (PDT)
 Received: from localhost.localdomain (ip-217-105-46-178.ip.prioritytelecom.net. [217.105.46.178])
-        by smtp.gmail.com with ESMTPSA id r1-20020a1709061ba100b007a9c3831409sm379354ejg.137.2022.10.24.14.24.23
+        by smtp.gmail.com with ESMTPSA id r1-20020a1709061ba100b007a9c3831409sm379354ejg.137.2022.10.24.14.24.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 14:24:23 -0700 (PDT)
+        Mon, 24 Oct 2022 14:24:24 -0700 (PDT)
 From:   Nam Cao <namcaov@gmail.com>
 To:     Larry Finger <Larry.Finger@lwfinger.net>,
         Florian Schilhabel <florian.c.schilhabel@googlemail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     namcaov@gmail.com, linux-staging@lists.linux.dev,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 0/4] staging: rtl8712: clean up dynamic memory management
-Date:   Mon, 24 Oct 2022 23:24:05 +0200
-Message-Id: <cover.1666645510.git.namcaov@gmail.com>
+Subject: [PATCH 1/4] Revert "staging: r8712u: Tracking kmemleak false positives."
+Date:   Mon, 24 Oct 2022 23:24:06 +0200
+Message-Id: <0542c043702f4b44be90f84b39f46fd7de5d85ee.1666645510.git.namcaov@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1666645510.git.namcaov@gmail.com>
+References: <cover.1666645510.git.namcaov@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -71,22 +74,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This driver is fine if memory allocation never fails. However it does not
-handle allocation failure well. This can either lead to memory leak, or
-unallocated buffers being used.
+This reverts commit 5d3da4a20a271e3cf5496a50cbb8118aa019374f.
 
-Nam Cao (4):
-  Revert "staging: r8712u: Tracking kmemleak false positives."
-  staging: rtl8712: check for alloc fail in _r8712_init_recv_priv()
-  staging: rtl8712: check for return value of _r8712_init_xmit_priv()
-  staging: rtl8712: fix potential memory leak
+This commit annotated false positive for kmemleak. The reasoning is that
+the buffers are freed when the driver is unloaded. However, there is
+actually potential memory leak when probe fails.
 
- drivers/staging/rtl8712/os_intfs.c     | 27 +++++++++++++++++++++-----
- drivers/staging/rtl8712/recv_osdep.h   |  8 ++++----
- drivers/staging/rtl8712/rtl8712_recv.c |  7 ++++---
- drivers/staging/rtl8712/rtl871x_recv.c | 16 ++++++++-------
- 4 files changed, 39 insertions(+), 19 deletions(-)
+Signed-off-by: Nam Cao <namcaov@gmail.com>
+---
+ drivers/staging/rtl8712/rtl871x_recv.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
+diff --git a/drivers/staging/rtl8712/rtl871x_recv.c b/drivers/staging/rtl8712/rtl871x_recv.c
+index de9a568eaffa..4db7eed64a03 100644
+--- a/drivers/staging/rtl8712/rtl871x_recv.c
++++ b/drivers/staging/rtl8712/rtl871x_recv.c
+@@ -17,9 +17,7 @@
+ #define _RTL871X_RECV_C_
+ 
+ #include <linux/ip.h>
+-#include <linux/slab.h>
+ #include <linux/if_ether.h>
+-#include <linux/kmemleak.h>
+ #include <linux/etherdevice.h>
+ #include <linux/ieee80211.h>
+ #include <net/cfg80211.h>
+@@ -61,7 +59,6 @@ void _r8712_init_recv_priv(struct recv_priv *precvpriv,
+ 				GFP_ATOMIC);
+ 	if (!precvpriv->pallocated_frame_buf)
+ 		return;
+-	kmemleak_not_leak(precvpriv->pallocated_frame_buf);
+ 	precvpriv->precv_frame_buf = precvpriv->pallocated_frame_buf +
+ 				    RXFRAME_ALIGN_SZ -
+ 				    ((addr_t)(precvpriv->pallocated_frame_buf) &
 -- 
 2.25.1
 
