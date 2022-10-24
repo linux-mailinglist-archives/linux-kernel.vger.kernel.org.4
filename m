@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B08B60A28F
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 13:45:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D119C60A271
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 13:43:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230167AbiJXLpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 07:45:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43454 "EHLO
+        id S231465AbiJXLng (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 07:43:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231491AbiJXLnv (ORCPT
+        with ESMTP id S231419AbiJXLnM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 07:43:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04BB2722AE;
-        Mon, 24 Oct 2022 04:41:06 -0700 (PDT)
+        Mon, 24 Oct 2022 07:43:12 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9728D481E4;
+        Mon, 24 Oct 2022 04:40:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E2D53B8114B;
-        Mon, 24 Oct 2022 11:38:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CBC9C433C1;
-        Mon, 24 Oct 2022 11:38:56 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id E26DACE1316;
+        Mon, 24 Oct 2022 11:39:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8541C433D6;
+        Mon, 24 Oct 2022 11:38:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666611537;
-        bh=CGBcvrQd/p0n6IUwX80bJdyxLJsrY696W1INoFA4j84=;
+        s=korg; t=1666611540;
+        bh=2wJzM/OpT+moIcK13Z8XJcyYyeF+rkw2CkY7TGKvMG4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0gnxS6m7c23VYeF+/Fv7gBDNIpPS/L+hAZDAvoeIRDx9YgWr8eKEl/B+kHwrMQNZb
-         f8l+Iu5Dl9kZMZTs8TJluj8m/nKSgJseQbJULHTPvo+DkW5YzfNBDV5BEjgi8FjUQZ
-         jgdqJnPnJvy1ANMdCmzBJ8aXbS02wu8kRO6WbhO4=
+        b=tMC+rg2rpUtig8/KWYN6KytYmwXQ42EsJVecrk4aI7epXH4eh4DXPFm71PETqF8BZ
+         SxxO6YzfdbntjGTSq8qjoXkv74Cv4hux5O8wFZSHsHk6Ye/5PfAcxQT0pzg+F8pgFC
+         8m0jFanwdXQizg4ZrRL0qquEbO1rOSh84m4U2Y2s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Frank Wunderlich <frank-w@public-files.de>,
-        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 4.9 004/159] net: usb: qmi_wwan: Add new usb-id for Dell branded EM7455
-Date:   Mon, 24 Oct 2022 13:29:18 +0200
-Message-Id: <20221024112949.530220698@linuxfoundation.org>
+        stable@vger.kernel.org, ChenXiaoSong <chenxiaosong2@huawei.com>,
+        Anton Altaparmakov <anton@tuxera.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH 4.9 005/159] ntfs: fix BUG_ON in ntfs_lookup_inode_by_name()
+Date:   Mon, 24 Oct 2022 13:29:19 +0200
+Message-Id: <20221024112949.566093029@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221024112949.358278806@linuxfoundation.org>
 References: <20221024112949.358278806@linuxfoundation.org>
@@ -54,31 +54,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Frank Wunderlich <frank-w@public-files.de>
+From: ChenXiaoSong <chenxiaosong2@huawei.com>
 
-commit 797666cd5af041ffb66642fff62f7389f08566a2 upstream.
+commit 1b513f613731e2afc05550e8070d79fac80c661e upstream.
 
-Add support for Dell 5811e (EM7455) with USB-id 0x413c:0x81c2.
+Syzkaller reported BUG_ON as follows:
 
-Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-Cc: stable@vger.kernel.org
-Acked-by: Bjørn Mork <bjorn@mork.no>
-Link: https://lore.kernel.org/r/20220926150740.6684-3-linux@fw-web.de
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+------------[ cut here ]------------
+kernel BUG at fs/ntfs/dir.c:86!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN PTI
+CPU: 3 PID: 758 Comm: a.out Not tainted 5.19.0-next-20220808 #5
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
+RIP: 0010:ntfs_lookup_inode_by_name+0xd11/0x2d10
+Code: ff e9 b9 01 00 00 e8 1e fe d6 fe 48 8b 7d 98 49 8d 5d 07 e8 91 85 29 ff 48 c7 45 98 00 00 00 00 e9 5a fb ff ff e8 ff fd d6 fe <0f> 0b e8 f8 fd d6 fe 0f 0b e8 f1 fd d6 fe 48 8b b5 50 ff ff ff 4c
+RSP: 0018:ffff888079607978 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000008000 RCX: 0000000000000000
+RDX: ffff88807cf10000 RSI: ffffffff82a4a081 RDI: 0000000000000003
+RBP: ffff888079607a70 R08: 0000000000000001 R09: ffff88807a6d01d7
+R10: ffffed100f4da03a R11: 0000000000000000 R12: ffff88800f0fb110
+R13: ffff88800f0ee000 R14: ffff88800f0fb000 R15: 0000000000000001
+FS:  00007f33b63c7540(0000) GS:ffff888108580000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f33b635c090 CR3: 000000000f39e005 CR4: 0000000000770ee0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+PKRU: 55555554
+Call Trace:
+ <TASK>
+ load_system_files+0x1f7f/0x3620
+ ntfs_fill_super+0xa01/0x1be0
+ mount_bdev+0x36a/0x440
+ ntfs_mount+0x3a/0x50
+ legacy_get_tree+0xfb/0x210
+ vfs_get_tree+0x8f/0x2f0
+ do_new_mount+0x30a/0x760
+ path_mount+0x4de/0x1880
+ __x64_sys_mount+0x2b3/0x340
+ do_syscall_64+0x38/0x90
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f33b62ff9ea
+Code: 48 8b 0d a9 f4 0b 00 f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 76 f4 0b 00 f7 d8 64 89 01 48
+RSP: 002b:00007ffd0c471aa8 EFLAGS: 00000202 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f33b62ff9ea
+RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007ffd0c471be0
+RBP: 00007ffd0c471c60 R08: 00007ffd0c471ae0 R09: 00007ffd0c471c24
+R10: 0000000000000000 R11: 0000000000000202 R12: 000055bac5afc160
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+
+Fix this by adding sanity check on extended system files' directory inode
+to ensure that it is directory, just like ntfs_extend_init() when mounting
+ntfs3.
+
+Link: https://lkml.kernel.org/r/20220809064730.2316892-1-chenxiaosong2@huawei.com
+Signed-off-by: ChenXiaoSong <chenxiaosong2@huawei.com>
+Cc: Anton Altaparmakov <anton@tuxera.com>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/usb/qmi_wwan.c |    1 +
- 1 file changed, 1 insertion(+)
+ fs/ntfs/super.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -966,6 +966,7 @@ static const struct usb_device_id produc
- 	{QMI_FIXED_INTF(0x413c, 0x81b3, 8)},	/* Dell Wireless 5809e Gobi(TM) 4G LTE Mobile Broadband Card (rev3) */
- 	{QMI_FIXED_INTF(0x413c, 0x81b6, 8)},	/* Dell Wireless 5811e */
- 	{QMI_FIXED_INTF(0x413c, 0x81b6, 10)},	/* Dell Wireless 5811e */
-+	{QMI_FIXED_INTF(0x413c, 0x81c2, 8)},	/* Dell Wireless 5811e */
- 	{QMI_FIXED_INTF(0x413c, 0x81cc, 8)},	/* Dell Wireless 5816e */
- 	{QMI_FIXED_INTF(0x413c, 0x81d7, 0)},	/* Dell Wireless 5821e */
- 	{QMI_FIXED_INTF(0x413c, 0x81d7, 1)},	/* Dell Wireless 5821e preproduction config */
+--- a/fs/ntfs/super.c
++++ b/fs/ntfs/super.c
+@@ -2108,7 +2108,8 @@ get_ctx_vol_failed:
+ 	// TODO: Initialize security.
+ 	/* Get the extended system files' directory inode. */
+ 	vol->extend_ino = ntfs_iget(sb, FILE_Extend);
+-	if (IS_ERR(vol->extend_ino) || is_bad_inode(vol->extend_ino)) {
++	if (IS_ERR(vol->extend_ino) || is_bad_inode(vol->extend_ino) ||
++	    !S_ISDIR(vol->extend_ino->i_mode)) {
+ 		if (!IS_ERR(vol->extend_ino))
+ 			iput(vol->extend_ino);
+ 		ntfs_error(sb, "Failed to load $Extend.");
 
 
