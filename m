@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DD9160A46F
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:10:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56D8360A7E7
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:00:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232784AbiJXMKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:10:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51156 "EHLO
+        id S234847AbiJXNA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:00:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232892AbiJXMJH (ORCPT
+        with ESMTP id S232122AbiJXM63 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:09:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AE5D7E30D;
-        Mon, 24 Oct 2022 04:52:19 -0700 (PDT)
+        Mon, 24 Oct 2022 08:58:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4296981CF;
+        Mon, 24 Oct 2022 05:17:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D8592B81150;
-        Mon, 24 Oct 2022 11:41:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35131C433C1;
-        Mon, 24 Oct 2022 11:41:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DDDB761286;
+        Mon, 24 Oct 2022 11:50:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFB4BC433D6;
+        Mon, 24 Oct 2022 11:50:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666611689;
-        bh=4inlYOFl1eXSTajS6aRDIXXw7r7t8VLR/Qy2sCG58w8=;
+        s=korg; t=1666612205;
+        bh=BBEZSL/kEaLKT0nn3CDJDaoaCe8MaFX+1kU7JZ+z9Ck=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1P4yMeCqtHXGaXwVO6HIPn3Sf+Sx/IPDN5bF9wI37FC8tcvh2ZP6Y9Ts8b93AolIX
-         KPJnkcbU8oadLAttMdLvIMFZ6uwXwWVhgagCoGA50rpL2bvuO5J00dvBXtLARKCpqT
-         1+2IOXtXOqGALYCzssEn5Y8tg3YUD3/TecdZ6GWg=
+        b=QotdaSOMakNZsKCppLdr+ert4ConasfJd2QUp599h1aygca2noXAgy9bgvhvYkTyB
+         vn6NxbQL5t7m3AMrF5IXufw7TVs9k2BgIkzITXIUS1WJg+vf/r7TtuvhcwqNKZmUPv
+         k7Bqc2PneutNz67IhDTlqp3ATM/a4rE2P2CHzmgQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Michael Walle <michael@walle.cc>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 073/159] mISDN: fix use-after-free bugs in l1oip timer handlers
+Subject: [PATCH 4.14 110/210] ARM: dts: kirkwood: lsxl: fix serial line
 Date:   Mon, 24 Oct 2022 13:30:27 +0200
-Message-Id: <20221024112952.118608404@linuxfoundation.org>
+Message-Id: <20221024113000.576191265@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112949.358278806@linuxfoundation.org>
-References: <20221024112949.358278806@linuxfoundation.org>
+In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
+References: <20221024112956.797777597@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,95 +55,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Duoming Zhou <duoming@zju.edu.cn>
+From: Michael Walle <michael@walle.cc>
 
-[ Upstream commit 2568a7e0832ee30b0a351016d03062ab4e0e0a3f ]
+[ Upstream commit 04eabc6ac10fda9424606d9a7ab6ab9a5d95350a ]
 
-The l1oip_cleanup() traverses the l1oip_ilist and calls
-release_card() to cleanup module and stack. However,
-release_card() calls del_timer() to delete the timers
-such as keep_tl and timeout_tl. If the timer handler is
-running, the del_timer() will not stop it and result in
-UAF bugs. One of the processes is shown below:
+Commit 327e15428977 ("ARM: dts: kirkwood: consolidate common pinctrl
+settings") unknowingly broke the serial output on this board. Before
+this commit, the pinmux was still configured by the bootloader and the
+kernel didn't reconfigured it again. This was an oversight by the
+initial board support where the pinmux for the serial line was never
+configured by the kernel. But with this commit, the serial line will be
+reconfigured to the wrong pins. This is especially confusing, because
+the output still works, but the input doesn't. Presumingly, the input is
+reconfigured to MPP10, but the output is connected to both MPP11 and
+MPP5.
 
-    (cleanup routine)          |        (timer handler)
-release_card()                 | l1oip_timeout()
- ...                           |
- del_timer()                   | ...
- ...                           |
- kfree(hc) //FREE              |
-                               | hc->timeout_on = 0 //USE
+Override the pinmux in the board device tree.
 
-Fix by calling del_timer_sync() in release_card(), which
-makes sure the timer handlers have finished before the
-resources, such as l1oip and so on, have been deallocated.
-
-What's more, the hc->workq and hc->socket_thread can kick
-those timers right back in. We add a bool flag to show
-if card is released. Then, check this flag in hc->workq
-and hc->socket_thread.
-
-Fixes: 3712b42d4b1b ("Add layer1 over IP support")
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 327e15428977 ("ARM: dts: kirkwood: consolidate common pinctrl settings")
+Signed-off-by: Michael Walle <michael@walle.cc>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/isdn/mISDN/l1oip.h      |  1 +
- drivers/isdn/mISDN/l1oip_core.c | 13 +++++++------
- 2 files changed, 8 insertions(+), 6 deletions(-)
+ arch/arm/boot/dts/kirkwood-lsxl.dtsi | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/isdn/mISDN/l1oip.h b/drivers/isdn/mISDN/l1oip.h
-index 661c060ada49..67d1a4762d56 100644
---- a/drivers/isdn/mISDN/l1oip.h
-+++ b/drivers/isdn/mISDN/l1oip.h
-@@ -58,6 +58,7 @@ struct l1oip {
- 	int			bundle;		/* bundle channels in one frm */
- 	int			codec;		/* codec to use for transmis. */
- 	int			limit;		/* limit number of bchannels */
-+	bool			shutdown;	/* if card is released */
+diff --git a/arch/arm/boot/dts/kirkwood-lsxl.dtsi b/arch/arm/boot/dts/kirkwood-lsxl.dtsi
+index 7b151acb9984..321a40a98ed2 100644
+--- a/arch/arm/boot/dts/kirkwood-lsxl.dtsi
++++ b/arch/arm/boot/dts/kirkwood-lsxl.dtsi
+@@ -10,6 +10,11 @@
  
- 	/* timer */
- 	struct timer_list	keep_tl;
-diff --git a/drivers/isdn/mISDN/l1oip_core.c b/drivers/isdn/mISDN/l1oip_core.c
-index 67c21876c35f..b77ae00a95a3 100644
---- a/drivers/isdn/mISDN/l1oip_core.c
-+++ b/drivers/isdn/mISDN/l1oip_core.c
-@@ -287,7 +287,7 @@ l1oip_socket_send(struct l1oip *hc, u8 localcodec, u8 channel, u32 chanmask,
- 	p = frame;
- 
- 	/* restart timer */
--	if (time_before(hc->keep_tl.expires, jiffies + 5 * HZ))
-+	if (time_before(hc->keep_tl.expires, jiffies + 5 * HZ) && !hc->shutdown)
- 		mod_timer(&hc->keep_tl, jiffies + L1OIP_KEEPALIVE * HZ);
- 	else
- 		hc->keep_tl.expires = jiffies + L1OIP_KEEPALIVE * HZ;
-@@ -619,7 +619,9 @@ l1oip_socket_parse(struct l1oip *hc, struct sockaddr_in *sin, u8 *buf, int len)
- 		goto multiframe;
- 
- 	/* restart timer */
--	if (time_before(hc->timeout_tl.expires, jiffies + 5 * HZ) || !hc->timeout_on) {
-+	if ((time_before(hc->timeout_tl.expires, jiffies + 5 * HZ) ||
-+	     !hc->timeout_on) &&
-+	    !hc->shutdown) {
- 		hc->timeout_on = 1;
- 		mod_timer(&hc->timeout_tl, jiffies + L1OIP_TIMEOUT * HZ);
- 	} else /* only adjust timer */
-@@ -1246,11 +1248,10 @@ release_card(struct l1oip *hc)
- {
- 	int	ch;
- 
--	if (timer_pending(&hc->keep_tl))
--		del_timer(&hc->keep_tl);
-+	hc->shutdown = true;
- 
--	if (timer_pending(&hc->timeout_tl))
--		del_timer(&hc->timeout_tl);
-+	del_timer_sync(&hc->keep_tl);
-+	del_timer_sync(&hc->timeout_tl);
- 
- 	cancel_work_sync(&hc->workq);
- 
+ 	ocp@f1000000 {
+ 		pinctrl: pin-controller@10000 {
++			/* Non-default UART pins */
++			pmx_uart0: pmx-uart0 {
++				marvell,pins = "mpp4", "mpp5";
++			};
++
+ 			pmx_power_hdd: pmx-power-hdd {
+ 				marvell,pins = "mpp10";
+ 				marvell,function = "gpo";
 -- 
 2.35.1
 
