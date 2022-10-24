@@ -2,151 +2,333 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 088E560B59D
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 20:34:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E37C160B6DD
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 21:12:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231868AbiJXSdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 14:33:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35624 "EHLO
+        id S233208AbiJXTMr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 15:12:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231924AbiJXSdZ (ORCPT
+        with ESMTP id S232267AbiJXTMM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 14:33:25 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2046.outbound.protection.outlook.com [40.107.95.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55FDCA52C0;
-        Mon, 24 Oct 2022 10:15:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TcLDXuRU17BovYCwLP0T/EN7ZHkY51fMcXTs3WyXjI1imQo1zxtETaXnkdoPOuZq0+QU33f/pXLVAPnkFliXVZjsw9rOF60hRDzavG4Y0i3Gcb4EwB8EWxz82c37rNr7k7jlgt8a7E9VbikYxNaHdncu3ADV1oX/mfaZwLKL1QpnPE7hNYKP4xJL+gh5+IkOACTk+udj9SVl0dpfqFLNBAd65bXw4wl7Ld3x+7uU2PJsuDzHUfpTk3o5jeQjRaxtGy6+9Q8Y9K2JkyvsrxlocJ5CChRWiHpwVd6m77hWXe8VBoghy63MSnlUH8fjOWXHlzW65JPHD7Fbrpa2yJJyqg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bggu4R0XT3OzwZiBag+Jf+uQlOV80jJUPhz5uysP0Ng=;
- b=TuICsoKCupq/4B3wkIkCwKCp8IYxsh2M1eZ9rTVl5g1GkuRTVQjr+UARjGB1irM4PZfOcRlTr+WIPALrX8HwCU06E2TkCYoNEdaLa1QjZMjca4Pe2apQjaA9FRXb7Atn1IgCaFa+g/L41fub3GhzXdjUTXby122uBcy60nlP4oPr3MftV/fQFOzwt5Hz5UlY+fSFRA+vpxvFNPEjP52OnkUea9ip/mzVJw28IEiMOzWhn3Xh0QspA0GymCuxlBEydAd29gRJDBiBspxCesJ3B6W9cxp1ecu5vBCtD86zU7tsdjwHr6bz5mJrUPlfIofeZWknd9rwwYOD44wAbdAGgg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bggu4R0XT3OzwZiBag+Jf+uQlOV80jJUPhz5uysP0Ng=;
- b=tHBzPjARVk2O28myJuxBv5PC8J3wKxOJ9zBFFtJKV0cM7NLRaxkGpfjN1xyYWlOXCWFlTvM8B08UU8GahGgb+Meb5LwzGpSqccxxOfHCdWrW7bZs0ZazmbVz90GGsYbNFWyzyW0LT3NUQ5Jz0TrfZz0X9v4ebbGJWYTZONsOew/yKElmlQWPyeMBdHwZCXjRkB6QP5Pln5Z1RFrD6yFujQgxsyOjCxJf0uweDiOEQXjCbMuiJR1QeMSbMg+60XP7OMKjO9pLh6kgczu7gHC9GIyjlKDoQ57vbMd1RNyu+jBpuStKS0aNQ0cBQr0KzT4KBVbrBppAdrfONsgmIZ429A==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by IA1PR12MB7592.namprd12.prod.outlook.com (2603:10b6:208:428::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.23; Mon, 24 Oct
- 2022 17:13:47 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::7a81:a4e4:bb9c:d1de]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::7a81:a4e4:bb9c:d1de%6]) with mapi id 15.20.5746.021; Mon, 24 Oct 2022
- 17:13:47 +0000
-Date:   Mon, 24 Oct 2022 14:13:46 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Li Zhijian <lizhijian@fujitsu.com>
-Cc:     zyjzyj2000@gmail.com, leon@kernel.org, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Bob Pearson <rpearsonhpe@gmail.com>
-Subject: Re: [PATCH for-next v3 2/2] RDMA/rxe: Fix mr leak in RESPST_ERR_RNR
-Message-ID: <Y1bHygLEu6VjXIzI@nvidia.com>
-References: <1666582315-2-1-git-send-email-lizhijian@fujitsu.com>
- <20221024052049.20577-1-lizhijian@fujitsu.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221024052049.20577-1-lizhijian@fujitsu.com>
-X-ClientProxiedBy: MN2PR20CA0058.namprd20.prod.outlook.com
- (2603:10b6:208:235::27) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Mon, 24 Oct 2022 15:12:12 -0400
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82AB91814B8
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:50:38 -0700 (PDT)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-13bd2aea61bso1926529fac.0
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:50:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=30l5lqOYdv1hu91sboQ4QyKkjdkEWUElruOKi6s7Elk=;
+        b=TEA4ySfWtQ68NLvBJbiENMd3Mnd+D1i+Nj7KOtT0D9Nuifc8D73tNPIw3ff1wY2MqB
+         R3aak4txhnehP3B72M3nBlpph358xYMOsvwGOV8FU+0E23HLMlaSzXp4G53D5Hm/lVme
+         0oNWKvvBXtW5xPqPLx4feCG1tHta07oOWjldpazIsaYhYYYWWpoytRTNiIxsCQfZ0y0C
+         Npf1LNWYbvIJlhpd1lFDdMVEl/2Jpci9g7QU09ppNBjvRJijc8gjfs/gLzH7ZMakufQ9
+         kR7mtILhCME7w8iRxhhFs1DemK8M/YpkCKbOj3R5z6+uCIOJG1GmYzuPHNVOtb22cXZc
+         BnTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=30l5lqOYdv1hu91sboQ4QyKkjdkEWUElruOKi6s7Elk=;
+        b=z9VmX0WzS9igXdQ67J05Il9mjK2NVUqSFUMkqd5zJBNcVgXRZe+JKvH2R5WTLkot5i
+         DXe27hBBu0LsvoQPMLiSiUMliAGKPyw35Fy9J6KIWZYaow4IxT0hjF0mv7ZRrnB+ie+X
+         T0CyLnKXy2PINU8AKcwI0tOvu5rZ+Nbd7E+X6Pva+6RnOokEF5I2c0eNcnucV9NJBrcF
+         L7gfbGYUhXqnYcPqo5gD09s/dSAB2R7LZxy6m5dFMBeWpkPghjB4Qu5CQaC0gsFkp1nx
+         rTHfORAwx78pyhYU+pvYWb1UdmnOMqmo7145eECjZNvqKx5KWPtRK8ksOZKFqKRpJ8jZ
+         bkvw==
+X-Gm-Message-State: ACrzQf1Onc/Ly0kWVx6Iw2oI0APPhx3aQ+bhdzL8RROL5WB0NsRe4L4N
+        zMrAfXuZT3+eROmILNX2VnMGLn1iu1n1GNSvzkGzlIHm
+X-Google-Smtp-Source: AMsMyM4uHsoal4/RNkZVoeM59YIpXXMatwWYNp/GXgB4jKW4yRe1fPs5cE7+bAOzXZOHUEjb+r74ZNw8F3ekcHATzhc=
+X-Received: by 2002:a05:6870:a7a4:b0:136:7c39:979e with SMTP id
+ x36-20020a056870a7a400b001367c39979emr21206012oao.96.1666631736390; Mon, 24
+ Oct 2022 10:15:36 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|IA1PR12MB7592:EE_
-X-MS-Office365-Filtering-Correlation-Id: bbe18a34-fdc4-4053-43c5-08dab5e31ca2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: UBj+NivwzgP0Xiu7hWn28lHRLe3po/bmjiObve1Uanfn6FWBQaxUtGeGiQhErg1ruA/QS/AnP5NuSwAaPxOh/CjfLUo9sudEyTneqL6mQjMFDPFhefAdc8bPRUcwwbLY6mI94pnjaZoO/lkHiu65qpooSSs5TSzBdQ1an22hvhZ0uJ9VG2pKgg+mMoP8CrFDYaBOHq2bYoPB8MM5SIs/bG+UP348mgcFVDB5IeaBu+D0PBHJlEiA/8VmkCbNsUtxFVUBX68+xZvrwalH5G9ncLJD3DEL0ZafJIB8yD6Ac2xIgcmXdnWpmSKUskWJ/ZJeK6glfudJqBUCCAPZBIoCj1CMHaW8elce6+9+LfF3b8SR7LwT06UR5igny+k4UybiswLvom4+CPOXmzs7Fs6eZFUKMN4fhvMIc3tIiVqFAFr/+ktVHT0P+lHQ73LZvn34JW1COImp9BYbZm/QvQS86Af5aDrV4Ye7dd+OiMd8BlxIfaoGvTPJRve58AX+5tbq5+FBgEWfz4WbfyzQP4fzh22Nb6WQlM87Xvdooxjw4Hcii4qLrMYOanU7wWO7kaNPNcN6Ev6ka5vH9Iqe/uQxjx0GhwZV6qvakfiYI3NSRXSdxEQ33ZlgGyZbmlyAwooNtP+UkJaqqy5uHEemqAVnqmHIt1SJMOsnsZbjnxQGxbxrc2TBV1i00ubeKGhjaKR9+kuPG1M2nVH765Y5B4fogg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(136003)(346002)(39860400002)(396003)(376002)(451199015)(86362001)(8676002)(38100700002)(36756003)(316002)(66556008)(66476007)(66946007)(4326008)(6916009)(26005)(2906002)(8936002)(41300700001)(5660300002)(83380400001)(2616005)(478600001)(6486002)(6512007)(6506007)(186003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zAky8FD8uUADEQkmkzw2MkcnuP5enU4tm5+0CDhTJnl7MFqUz7S3zrXzolqD?=
- =?us-ascii?Q?mVaywS6yDj3qsKzIVF9ErxUXHn2/oYGgZoEk/Pr6Jt/ZbYQSsWXMywO5K3LL?=
- =?us-ascii?Q?ob/h9fZKNE61AtdtBEunRd7rG9u/jmOiMbA0qvxCgmEUyj15M9fqj93IRQxI?=
- =?us-ascii?Q?JBCR2QHhoZ5qK3N6FqKaIwHk3WuJhHnC9aIztPsC5j4HHMk2a4DQsKHD7rb1?=
- =?us-ascii?Q?o/xFdLsF5itKVnl5AAmLljZ9PT/8Ek28MJU+kq/KmtzC0l5vK+AjAI7YZdfz?=
- =?us-ascii?Q?ib/8ljrtDGC/8VvHt03ymglDkMd9ZqIcVwoTtTvJyHqXJ8aV4vgC18Yl6pPD?=
- =?us-ascii?Q?UXTOI/9/zpiHLcUqIgNpwa91g3hIPcKqnFc++PWPLmpUA07W2DLDkkZadwMz?=
- =?us-ascii?Q?So828rdEQL5WPb4rVba0dqpy019NZ5Tg1DCdBOUxbw+t7z55516omB43R+D3?=
- =?us-ascii?Q?Xr5WOL2bYFS+Bz8xf+rJ45D2ZtLLuq1bO8xYWAiJ5E8x7iogGad7Udzw66O3?=
- =?us-ascii?Q?/ViGY5c/SZqmIj9PHtKIWZzBPV6d3c/DXb1JckAMQ6C7vbTo7RuwE83MmLJU?=
- =?us-ascii?Q?M6Bq21V26v/EXH2M1puq2d/8jUjHYpiAi3OGATjqX6+A/uW+TBfGDgpj1ELO?=
- =?us-ascii?Q?9KXIZVfZFX2dkmCxaWPVzg7fNTJQ9mzBq3FANA+ZNEC24Ntsea6yln1E72WG?=
- =?us-ascii?Q?6CQmv0K4yvo+mkHdCMjLBJ3wky3z4lTcRBrSFU9GDZfgG0w2sZe5b50/9sur?=
- =?us-ascii?Q?kacILCnvbxcXq8ffvN1/wT+9UXIj4N/i+AUTD5UbtRnUtKag9S2V7iHNWiZk?=
- =?us-ascii?Q?X0nkrifGddQBx1fNjomJxk1vv0356fLL7ldRRvQxbdlt1s2GktqQZdUbHFQ2?=
- =?us-ascii?Q?IHBDkLmNGbStH4PsbYNmnXENR8LCeXKJQ2psYkS54wpvTEoftVMcWpzFeUjA?=
- =?us-ascii?Q?IXwITXO2qbomSlHzPypMml4IBIcequE0gpHpTGdLjGCpHAQ3FNxjXb9dbFaY?=
- =?us-ascii?Q?iZrNsHxsPIWfjl08bjfcyuVT9w+KxNR5WqF78lfSWrY/jEgEN1ScpTPrGPM+?=
- =?us-ascii?Q?HNZc2IyNacjeytW0aQmgC2dsAvFsNwwVtx+EARhXrya22VHYKd8UsTLgBvJo?=
- =?us-ascii?Q?VAqlp9QEI4Z8ix6E7576feyjRxWJAbuKTG3WrGz8iZeZPjbkTKErPtYKxcLj?=
- =?us-ascii?Q?rGFM16rR10V6PAl77JSjdi8IU3Q5msclpLTIARRRhupQmct1KYwwPznHU35y?=
- =?us-ascii?Q?6fgwiRgR8HmUyNFqwfO8z3tG6uVwZsG5xI5Ppr03tisbVKxOl8XxXzVCs/WG?=
- =?us-ascii?Q?a2yoWUeofUI1gT3kBok247OIvsv/AeIsowZfYD5JaXKLyKCfm3rt2hoJ8jza?=
- =?us-ascii?Q?sjqXJMcjbN7PZ6SAlSCmae9nmfp/zxfJXmLmbZ19/9zTk9vBygPhufNJBbFI?=
- =?us-ascii?Q?b3+T5nvDWhj5gL52l1LsOWRwzjrJap/VT3JQKURnDvOOPNPTymsI7quKmIIK?=
- =?us-ascii?Q?/apCwmTyG56ANz4KqCYBrHBELU+DKESqr3LDeeSJ6ZQSzSN7DiF+P2FoSgGL?=
- =?us-ascii?Q?s4GHpyUeoS4/4OOvMZQ=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bbe18a34-fdc4-4053-43c5-08dab5e31ca2
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Oct 2022 17:13:47.0977
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: l19OP6L073+4M5WF1/yNpyaXmV0FNADaU9MNhDaJYtnPWZ8TBmH/tKFWF+CHOpda
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB7592
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20221024154055.21473-1-tiwai@suse.de>
+In-Reply-To: <20221024154055.21473-1-tiwai@suse.de>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Mon, 24 Oct 2022 13:15:24 -0400
+Message-ID: <CADnq5_N-4tWLQmxkCSjwp8wAftJ7zLizoHn=YL+EDbJtLd1O+w@mail.gmail.com>
+Subject: Re: [PATCH] drm/radeon: Add HD-audio component notifier support (v4)
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Jim Qu <Jim.Qu@amd.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Alex Deucher <alexander.deucher@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 01:20:49PM +0800, Li Zhijian wrote:
-> rxe_recheck_mr() will increase mr's ref_cnt, so we should call rxe_put(mr)
-> to drop mr's ref_cnt in RESPST_ERR_RNR to avoid below warning:
-> [  633.447883] WARNING: CPU: 0 PID: 4156 at drivers/infiniband/sw/rxe/rxe_pool.c:259 __rxe_cleanup+0x1df/0x240 [rdma_rxe]
-> ...
-> [  633.509482] Call Trace:
-> [  633.510246]  <TASK>
-> [  633.510962]  rxe_dereg_mr+0x4c/0x60 [rdma_rxe]
-> [  633.512123]  ib_dereg_mr_user+0xa8/0x200 [ib_core]
-> [  633.513444]  ib_mr_pool_destroy+0x77/0xb0 [ib_core]
-> [  633.514763]  nvme_rdma_destroy_queue_ib+0x89/0x240 [nvme_rdma]
-> [  633.516230]  nvme_rdma_free_queue+0x40/0x50 [nvme_rdma]
-> [  633.517577]  nvme_rdma_teardown_io_queues.part.0+0xc3/0x120 [nvme_rdma]
-> [  633.519204]  nvme_rdma_error_recovery_work+0x4d/0xf0 [nvme_rdma]
-> [  633.520695]  process_one_work+0x582/0xa40
-> [  633.522987]  ? pwq_dec_nr_in_flight+0x100/0x100
-> [  633.524227]  ? rwlock_bug.part.0+0x60/0x60
-> [  633.525372]  worker_thread+0x2a9/0x700
-> [  633.526437]  ? process_one_work+0xa40/0xa40
-> [  633.527589]  kthread+0x168/0x1a0
-> [  633.528518]  ? kthread_complete_and_exit+0x20/0x20
-> [  633.529792]  ret_from_fork+0x22/0x30
-> 
-> CC: Bob Pearson <rpearsonhpe@gmail.com>
-> Fixes: 8a1a0be894da ("RDMA/rxe: Replace mr by rkey in responder resources")
-> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
-> V2: remove mr testing
+Applied.  Thanks!
+
+Alex
+
+On Mon, Oct 24, 2022 at 11:41 AM Takashi Iwai <tiwai@suse.de> wrote:
+>
+> This patch adds the support for the notification of HD-audio hotplug
+> via the already existing drm_audio_component framework to radeon
+> driver.  This allows us more reliable hotplug notification and ELD
+> transfer without accessing HD-audio bus; it's more efficient, and more
+> importantly, it works without waking up the runtime PM.
+>
+> The implementation is rather simplistic: radeon driver provides the
+> get_eld ops for HD-audio, and it notifies the audio hotplug via
+> pin_eld_notify callback upon each radeon_audio_enable() call.
+> The pin->id is referred as the port number passed to the notifier
+> callback, and the corresponding connector is looked through the
+> encoder list in the get_eld callback in turn.
+>
+> The bind and unbind callbacks handle the device-link so that it
+> assures the PM call order.
+>
+> Also, as a gratis bonus, this patch "fixes" the regression by the
+> recent change in HD-audio to be more strict for the HDMI/DP
+> connection, too.  Since the HD-audio HDMI/DP codec requires both the
+> connection bit and the valid ELD to be provided, it started failing on
+> some RADEON gfx boards where the ELD update performed instably.  As
+> this change switches the communication to a direct way between the
+> audio and the graphics drivers, now the system receives the proper
+> ELD, and the HDMI/DP hotplug starts working again.
+>
+> [ v2: fix the logic in radeon_audio_component_get_eld to walk the
+>   connector list since that is where the EDID lives and we can
+>   derive the encoder from the connector because the encoder has
+>   not been assigned at this point (i.e., during monitor probe).
+>
+>   v3: the component binding is moved outside radeon_audio_init() and
+>   _fini(), as those are called from suspend/resume, too.
+>   Drop modeset lock calls that caused Oops.
+>   Moved Kconfig change so that it can be applied on older kernels.
+>
+>   v4: revive drm_modeset_lock*() again, add the missing
+>   device_link_remove() call at unbinding ]
+>
+> Link: https://gitlab.freedesktop.org/drm/amd/-/issues/1569
+> Signed-off-by: Takashi Iwai <tiwai@suse.de>
 > ---
->  drivers/infiniband/sw/rxe/rxe_resp.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-
-Sigh, please try to avoid sending patches in a way that causes
-patchworks to become confused. I updated things to remove the if as in
-this v2.
-
-Jason
+>  drivers/gpu/drm/Kconfig                |   1 +
+>  drivers/gpu/drm/radeon/radeon.h        |   7 ++
+>  drivers/gpu/drm/radeon/radeon_audio.c  | 113 +++++++++++++++++++++++++
+>  drivers/gpu/drm/radeon/radeon_device.c |   3 +
+>  4 files changed, 124 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
+> index 34f5a092c99e..fa986075e8fb 100644
+> --- a/drivers/gpu/drm/Kconfig
+> +++ b/drivers/gpu/drm/Kconfig
+> @@ -243,6 +243,7 @@ config DRM_RADEON
+>          select DRM_KMS_HELPER
+>          select DRM_TTM
+>         select DRM_TTM_HELPER
+> +       select SND_HDA_COMPONENT if SND_HDA_CORE
+>         select POWER_SUPPLY
+>         select HWMON
+>         select BACKLIGHT_CLASS_DEVICE
+> diff --git a/drivers/gpu/drm/radeon/radeon.h b/drivers/gpu/drm/radeon/radeon.h
+> index 166c18d62f6d..d82424525f5a 100644
+> --- a/drivers/gpu/drm/radeon/radeon.h
+> +++ b/drivers/gpu/drm/radeon/radeon.h
+> @@ -79,6 +79,7 @@
+>  #include <drm/ttm/ttm_execbuf_util.h>
+>
+>  #include <drm/drm_gem.h>
+> +#include <drm/drm_audio_component.h>
+>
+>  #include "radeon_family.h"
+>  #include "radeon_mode.h"
+> @@ -1796,6 +1797,8 @@ struct r600_audio {
+>         struct radeon_audio_funcs *hdmi_funcs;
+>         struct radeon_audio_funcs *dp_funcs;
+>         struct radeon_audio_basic_funcs *funcs;
+> +       struct drm_audio_component *component;
+> +       bool component_registered;
+>  };
+>
+>  /*
+> @@ -2994,6 +2997,10 @@ void radeon_irq_kms_set_irq_n_enabled(struct radeon_device *rdev,
+>                                       bool enable, const char *name,
+>                                       unsigned n);
+>
+> +/* Audio component binding */
+> +void radeon_audio_component_init(struct radeon_device *rdev);
+> +void radeon_audio_component_fini(struct radeon_device *rdev);
+> +
+>  #include "radeon_object.h"
+>
+>  #endif
+> diff --git a/drivers/gpu/drm/radeon/radeon_audio.c b/drivers/gpu/drm/radeon/radeon_audio.c
+> index 7c5e80d03fc9..4ceb90556127 100644
+> --- a/drivers/gpu/drm/radeon/radeon_audio.c
+> +++ b/drivers/gpu/drm/radeon/radeon_audio.c
+> @@ -23,6 +23,7 @@
+>   */
+>
+>  #include <linux/gcd.h>
+> +#include <linux/component.h>
+>
+>  #include <drm/drm_crtc.h>
+>  #include "dce6_afmt.h"
+> @@ -180,6 +181,9 @@ static struct radeon_audio_funcs dce6_dp_funcs = {
+>         .dpms = evergreen_dp_enable,
+>  };
+>
+> +static void radeon_audio_component_notify(struct drm_audio_component *acomp,
+> +                                         int port);
+> +
+>  static void radeon_audio_enable(struct radeon_device *rdev,
+>                                 struct r600_audio_pin *pin, u8 enable_mask)
+>  {
+> @@ -207,6 +211,8 @@ static void radeon_audio_enable(struct radeon_device *rdev,
+>
+>         if (rdev->audio.funcs->enable)
+>                 rdev->audio.funcs->enable(rdev, pin, enable_mask);
+> +
+> +       radeon_audio_component_notify(rdev->audio.component, pin->id);
+>  }
+>
+>  static void radeon_audio_interface_init(struct radeon_device *rdev)
+> @@ -721,3 +727,110 @@ unsigned int radeon_audio_decode_dfs_div(unsigned int div)
+>         else
+>                 return 0;
+>  }
+> +
+> +/*
+> + * Audio component support
+> + */
+> +static void radeon_audio_component_notify(struct drm_audio_component *acomp,
+> +                                         int port)
+> +{
+> +       if (acomp && acomp->audio_ops && acomp->audio_ops->pin_eld_notify)
+> +               acomp->audio_ops->pin_eld_notify(acomp->audio_ops->audio_ptr,
+> +                                                port, -1);
+> +}
+> +
+> +static int radeon_audio_component_get_eld(struct device *kdev, int port,
+> +                                         int pipe, bool *enabled,
+> +                                         unsigned char *buf, int max_bytes)
+> +{
+> +       struct drm_device *dev = dev_get_drvdata(kdev);
+> +       struct drm_encoder *encoder;
+> +       struct radeon_encoder *radeon_encoder;
+> +       struct radeon_encoder_atom_dig *dig;
+> +       struct drm_connector *connector;
+> +       int ret = 0;
+> +
+> +       *enabled = false;
+> +       list_for_each_entry(connector, &dev->mode_config.connector_list, head) {
+> +               const struct drm_connector_helper_funcs *connector_funcs =
+> +                       connector->helper_private;
+> +               encoder = connector_funcs->best_encoder(connector);
+> +
+> +               if (!encoder)
+> +                       continue;
+> +               if (!radeon_encoder_is_digital(encoder))
+> +                       continue;
+> +               radeon_encoder = to_radeon_encoder(encoder);
+> +               dig = radeon_encoder->enc_priv;
+> +               if (!dig->pin || dig->pin->id != port)
+> +                       continue;
+> +               *enabled = true;
+> +               ret = drm_eld_size(connector->eld);
+> +               memcpy(buf, connector->eld, min(max_bytes, ret));
+> +               break;
+> +       }
+> +
+> +       return ret;
+> +}
+> +
+> +static const struct drm_audio_component_ops radeon_audio_component_ops = {
+> +       .get_eld = radeon_audio_component_get_eld,
+> +};
+> +
+> +static int radeon_audio_component_bind(struct device *kdev,
+> +                                      struct device *hda_kdev, void *data)
+> +{
+> +       struct drm_device *dev = dev_get_drvdata(kdev);
+> +       struct radeon_device *rdev = dev->dev_private;
+> +       struct drm_audio_component *acomp = data;
+> +
+> +       if (WARN_ON(!device_link_add(hda_kdev, kdev, DL_FLAG_STATELESS)))
+> +               return -ENOMEM;
+> +
+> +       drm_modeset_lock_all(dev);
+> +       acomp->ops = &radeon_audio_component_ops;
+> +       acomp->dev = kdev;
+> +       rdev->audio.component = acomp;
+> +       drm_modeset_unlock_all(dev);
+> +
+> +       return 0;
+> +}
+> +
+> +static void radeon_audio_component_unbind(struct device *kdev,
+> +                                         struct device *hda_kdev, void *data)
+> +{
+> +       struct drm_device *dev = dev_get_drvdata(kdev);
+> +       struct radeon_device *rdev = dev->dev_private;
+> +       struct drm_audio_component *acomp = data;
+> +
+> +       device_link_remove(hda_kdev, kdev);
+> +
+> +       drm_modeset_lock_all(dev);
+> +       rdev->audio.component = NULL;
+> +       acomp->ops = NULL;
+> +       acomp->dev = NULL;
+> +       drm_modeset_unlock_all(dev);
+> +}
+> +
+> +static const struct component_ops radeon_audio_component_bind_ops = {
+> +       .bind   = radeon_audio_component_bind,
+> +       .unbind = radeon_audio_component_unbind,
+> +};
+> +
+> +void radeon_audio_component_init(struct radeon_device *rdev)
+> +{
+> +       if (rdev->audio.component_registered ||
+> +           !radeon_audio || !radeon_audio_chipset_supported(rdev))
+> +               return;
+> +
+> +       if (!component_add(rdev->dev, &radeon_audio_component_bind_ops))
+> +               rdev->audio.component_registered = true;
+> +}
+> +
+> +void radeon_audio_component_fini(struct radeon_device *rdev)
+> +{
+> +       if (rdev->audio.component_registered) {
+> +               component_del(rdev->dev, &radeon_audio_component_bind_ops);
+> +               rdev->audio.component_registered = false;
+> +       }
+> +}
+> diff --git a/drivers/gpu/drm/radeon/radeon_device.c b/drivers/gpu/drm/radeon/radeon_device.c
+> index a556b6be1137..17bfbbe906c8 100644
+> --- a/drivers/gpu/drm/radeon/radeon_device.c
+> +++ b/drivers/gpu/drm/radeon/radeon_device.c
+> @@ -1451,6 +1451,8 @@ int radeon_device_init(struct radeon_device *rdev,
+>                         goto failed;
+>         }
+>
+> +       radeon_audio_component_init(rdev);
+> +
+>         r = radeon_ib_ring_tests(rdev);
+>         if (r)
+>                 DRM_ERROR("ib ring test failed (%d).\n", r);
+> @@ -1513,6 +1515,7 @@ void radeon_device_fini(struct radeon_device *rdev)
+>         rdev->shutdown = true;
+>         /* evict vram memory */
+>         radeon_bo_evict_vram(rdev);
+> +       radeon_audio_component_fini(rdev);
+>         radeon_fini(rdev);
+>         if (!pci_is_thunderbolt_attached(rdev->pdev))
+>                 vga_switcheroo_unregister_client(rdev->pdev);
+> --
+> 2.35.3
+>
