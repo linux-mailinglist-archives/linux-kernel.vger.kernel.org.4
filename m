@@ -2,183 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B6A460B5F6
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 20:44:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC84A60B50E
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 20:12:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232335AbiJXSoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 14:44:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38758 "EHLO
+        id S232560AbiJXSMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 14:12:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232165AbiJXSnn (ORCPT
+        with ESMTP id S231805AbiJXSMC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 14:43:43 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E036F147074;
-        Mon, 24 Oct 2022 10:25:51 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 401551477;
-        Mon, 24 Oct 2022 07:17:12 -0700 (PDT)
-Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 243153F792;
-        Mon, 24 Oct 2022 07:17:04 -0700 (PDT)
-Date:   Mon, 24 Oct 2022 15:17:01 +0100
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Icenowy Zheng <uwu@icenowy.me>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        soc@kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-phy@lists.infradead.org,
-        linux-usb@vger.kernel.org, Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v2 02/10] dt-bindings: phy: add binding document for
- Allwinner F1C100s USB PHY
-Message-ID: <20221024151701.3dff5794@donnerap.cambridge.arm.com>
-In-Reply-To: <20221012055602.1544944-3-uwu@icenowy.me>
-References: <20221012055602.1544944-1-uwu@icenowy.me>
-        <20221012055602.1544944-3-uwu@icenowy.me>
-Organization: ARM
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 24 Oct 2022 14:12:02 -0400
+Received: from wnew4-smtp.messagingengine.com (wnew4-smtp.messagingengine.com [64.147.123.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E4B626C44E;
+        Mon, 24 Oct 2022 09:53:44 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.west.internal (Postfix) with ESMTP id 382C32B066F1;
+        Mon, 24 Oct 2022 10:27:54 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Mon, 24 Oct 2022 10:27:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1666621673; x=
+        1666628873; bh=j5Xmm1hIOnDXfjVvOH1nBH2jD1dezyQFcZOvqExQy/Q=; b=R
+        FOCrFIiTxT4VVyc9mEDQdkEn+wGl6bgl85vYTnOHs9SmkuBXihbN449jNzacB8jI
+        rTTZjSbMHEkOE6lva8OK7H+tWMs7X8EpOfrjmtb6/oVOGDu9QbZ0yoFBmwCcqV/f
+        OY2S9hiS5k+xnEniFrSzWv69cVnlbB0lhSbJ9CqHWVp9ya8AIfEqbYesbuFRq9Qd
+        PSVVASHWixWTm4BTrueGRqrr2qoyHEcyvUm2O9mtgTacw1X/e4TGUOI7spwRF4k8
+        NrLH6dKrsa3XnjqeccrXYuGDRxoUwvp7+h9Ls1LReoWuxJMTQSMuUwY2jFO3D+Jm
+        dHiTM/iSZCKnRNoHbTlJQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1666621673; x=
+        1666628873; bh=j5Xmm1hIOnDXfjVvOH1nBH2jD1dezyQFcZOvqExQy/Q=; b=j
+        bQ9YG0M5QUfhAMC5KcxlBfNv3OPZ3dcPqvAHDAkHJFJBtkG/oKiHEgB/CGkfd5D4
+        4WXIXCvh3vM6V7jLlWzrMUTV4Fpaa7SNUDAMOjP9/s26EtfpqJpXHuJvjncEf/Hb
+        l2A1rrOSEilHAzFog8P4c885b26rzqZmcbf/q5PoNykrPcDsbeuOwk+rlSf/XLVe
+        pO9o+yifsE2IWF0Wd9xtiS41jAXVVz31C3ZyF1314cL/e+AOiNL9MtukAPZEZ2j8
+        gZbNNP84mt+QmazljsROIuA11JsXMnAQOzsIvfqse5ElLjsQWYAznhJvSftlDiy8
+        UDnTIRgLvHwK0iMEY12aQ==
+X-ME-Sender: <xms:6KBWY_gwmdA9MhV8F7kI-IAT6RjoV8UyoY8vJd_im8nzMhPr-w5SEg>
+    <xme:6KBWY8DFzu_H1NXJNLoNcdftX0Fccg83xmP1gZ_Oo0PjdmKShBDqthVvsAPur-jjx
+    nKKucVvJWn2dHOfBYM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrgedtgedgjedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpefgkeeuleegieeghfduudeltdekfeffjeeuleehleefudettddtgfevueef
+    feeigeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:6KBWY_EKFaUSxfmbFq4u45xHq3kzkmlHX7APZxOrmpX4NKAPPIVhLw>
+    <xmx:6KBWY8Sa2YoRcKoTYZV4cAVrgo3XWvtPHJE_rauldYzUHnGUJcpV8g>
+    <xmx:6KBWY8zBpoCDaeX7eS6StOnrb6kSgFjb8QNDCQkjBv4w_fjHvPPK9g>
+    <xmx:6aBWY7iVKZZZeLJhXB65ARrCr06Q6ReuiHPabu10swOp_0SKXFR2BwSFrZk>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id F38B1B60086; Mon, 24 Oct 2022 10:27:51 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1047-g9e4af4ada4-fm-20221005.001-g9e4af4ad
+Mime-Version: 1.0
+Message-Id: <8d6ddb0d-98be-4c4d-9523-f024c339c8d0@app.fastmail.com>
+In-Reply-To: <2204103.iZASKD2KPV@diego>
+References: <20221021202254.4142411-1-arnd@kernel.org>
+ <20221021203329.4143397-1-arnd@kernel.org> <2204103.iZASKD2KPV@diego>
+Date:   Mon, 24 Oct 2022 16:27:31 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        linux-arm-kernel@lists.infradead.org,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
+        "Arnd Bergmann" <arnd@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, "Ben Dooks" <ben-linux@fluff.org>,
+        "Simtec Linux Team" <linux@simtec.co.uk>,
+        "Arnaud Patard" <arnaud.patard@rtp-net.org>,
+        "Christer Weinigel" <christer@weinigel.se>,
+        "Guillaume GOURAT" <guillaume.gourat@nexvision.tv>,
+        openmoko-kernel@lists.openmoko.org,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        "Alim Akhtar" <alim.akhtar@samsung.com>,
+        "Olof Johansson" <olof@lixom.net>, soc@kernel.org,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Sylwester Nawrocki" <s.nawrocki@samsung.com>,
+        "Tomasz Figa" <tomasz.figa@gmail.com>,
+        "Chanwoo Choi" <cw00.choi@samsung.com>,
+        "Michael Turquette" <mturquette@baylibre.com>,
+        "Stephen Boyd" <sboyd@kernel.org>, linux-doc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com, linux-clk@vger.kernel.org
+Subject: Re: [PATCH 01/21] ARM: s3c: remove all s3c24xx support
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 12 Oct 2022 13:55:54 +0800
-Icenowy Zheng <uwu@icenowy.me> wrote:
+On Sat, Oct 22, 2022, at 22:56, Heiko St=C3=BCbner wrote:
+> Am Freitag, 21. Oktober 2022, 22:27:34 CEST schrieb Arnd Bergmann:
+>> From: Arnd Bergmann <arnd@arndb.de>
+>>=20
+>> The platform was deprecated in commit 6a5e69c7ddea ("ARM: s3c: mark
+>> as deprecated and schedule removal") and can be removed. This includes
+>> all files that are exclusively for s3c24xx and not shared with s3c64x=
+x,
+>> as well as the glue logic in Kconfig and the maintainer file entries.
+>>=20
+>> Cc: Arnaud Patard <arnaud.patard@rtp-net.org>
+>> Cc: Ben Dooks <ben-linux@fluff.org>
+>> Cc: Christer Weinigel <christer@weinigel.se>
+>> Cc: Guillaume GOURAT <guillaume.gourat@nexvision.tv>
+>> Cc: Heiko Stuebner <heiko@sntech.de>
+>> Cc: Simtec Linux Team <linux@simtec.co.uk>
+>> Cc: openmoko-kernel@lists.openmoko.org
+>> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+>
+> So many memories of me starting out in the kernel on s3c24xx.
+> But it's no use trying to keep stuff around that nobody will likely
+> ever use again. So with a sad face
+>
+> Acked-by: Heiko Stuebner <heiko@sntech.de>
+>
+>
+> though you might want to also include
+> 	drivers/dma/s3c24xx-dma.c
 
-> Allwinner F1C100s has the most simple USB PHY among all Allwinner SoCs,
-> because it has only one OTG USB controller, no host-only OHCI/EHCI
-> controllers.
-> 
-> Add a binding document for it. Following the current situation of one
-> YAML file per SoC, this one is based on
-> allwinner,sun8i-v3s-usb-phy.yaml, but with OHCI/EHCI-related bits
-> removed. (The same driver in Linux, phy-sun4i-usb, covers all these
-> binding files now.)
-> 
-> Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> ---
-> Changes in v2:
-> - Clarify the relation with other phy-sun4i-usb bindings.
-> - Added Rob's ACK.
-> 
->  .../phy/allwinner,suniv-f1c100s-usb-phy.yaml  | 83 +++++++++++++++++++
->  1 file changed, 83 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/phy/allwinner,suniv-f1c100s-usb-phy.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/phy/allwinner,suniv-f1c100s-usb-phy.yaml b/Documentation/devicetree/bindings/phy/allwinner,suniv-f1c100s-usb-phy.yaml
-> new file mode 100644
-> index 000000000000..22ff8e0f2331
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/phy/allwinner,suniv-f1c100s-usb-phy.yaml
-> @@ -0,0 +1,83 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/phy/allwinner,suniv-f1c100s-usb-phy.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Allwinner F1C100s USB PHY Device Tree Bindings
+This was in a separate patch that removes the driver:
 
-I see that commit dd3cb467ebb56 [1] discourages the redundant "Device Tree
-Bindings" suffix in the title name, so I think you should remove that.
+https://lore.kernel.org/linux-arm-kernel/20221021203329.4143397-14-arnd@=
+kernel.org/
 
-The rest looks alright to me, compared against the manual and what the
-driver expects, so with that fixed:
+In the first patch, I only include references to removed
+Kconfig symbols that would not make sense to split out into
+separate patches.
 
-Reviewed-by: Andre Przywara <andre.przywara@arm.com>
-
-Cheers,
-Andre
-
-[1]
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=dd3cb467ebb56
-
-> +
-> +maintainers:
-> +  - Chen-Yu Tsai <wens@csie.org>
-> +  - Maxime Ripard <mripard@kernel.org>
-> +
-> +properties:
-> +  "#phy-cells":
-> +    const: 1
-> +
-> +  compatible:
-> +    const: allwinner,suniv-f1c100s-usb-phy
-> +
-> +  reg:
-> +    maxItems: 1
-> +    description: PHY Control registers
-> +
-> +  reg-names:
-> +    const: phy_ctrl
-> +
-> +  clocks:
-> +    maxItems: 1
-> +    description: USB OTG PHY bus clock
-> +
-> +  clock-names:
-> +    const: usb0_phy
-> +
-> +  resets:
-> +    maxItems: 1
-> +    description: USB OTG reset
-> +
-> +  reset-names:
-> +    const: usb0_reset
-> +
-> +  usb0_id_det-gpios:
-> +    maxItems: 1
-> +    description: GPIO to the USB OTG ID pin
-> +
-> +  usb0_vbus_det-gpios:
-> +    maxItems: 1
-> +    description: GPIO to the USB OTG VBUS detect pin
-> +
-> +  usb0_vbus_power-supply:
-> +    description: Power supply to detect the USB OTG VBUS
-> +
-> +  usb0_vbus-supply:
-> +    description: Regulator controlling USB OTG VBUS
-> +
-> +required:
-> +  - "#phy-cells"
-> +  - compatible
-> +  - clocks
-> +  - clock-names
-> +  - reg
-> +  - reg-names
-> +  - resets
-> +  - reset-names
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/gpio/gpio.h>
-> +    #include <dt-bindings/clock/suniv-ccu-f1c100s.h>
-> +    #include <dt-bindings/reset/suniv-ccu-f1c100s.h>
-> +
-> +    phy@1c13400 {
-> +        compatible = "allwinner,suniv-f1c100s-usb-phy";
-> +        reg = <0x01c13400 0x10>;
-> +        reg-names = "phy_ctrl";
-> +        clocks = <&ccu CLK_USB_PHY0>;
-> +        clock-names = "usb0_phy";
-> +        resets = <&ccu RST_USB_PHY0>;
-> +        reset-names = "usb0_reset";
-> +        #phy-cells = <1>;
-> +        usb0_id_det-gpios = <&pio 4 2 GPIO_ACTIVE_HIGH>;
-> +    };
-
+    Arnd
