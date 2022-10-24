@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C42A60B703
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 21:15:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C93CB60B532
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 20:14:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231985AbiJXTPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 15:15:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34890 "EHLO
+        id S232350AbiJXSOd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 14:14:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231972AbiJXTO2 (ORCPT
+        with ESMTP id S233118AbiJXSON (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 15:14:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0572A7D1CE
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:52:53 -0700 (PDT)
+        Mon, 24 Oct 2022 14:14:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0085F5CE1;
+        Mon, 24 Oct 2022 09:55:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CBC4EB8128A
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 16:28:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABD71C433D7;
-        Mon, 24 Oct 2022 16:28:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9682A614A9;
+        Mon, 24 Oct 2022 16:28:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFCB5C433C1;
+        Mon, 24 Oct 2022 16:28:50 +0000 (UTC)
 Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="OuR0REi9"
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="M+4u14Jr"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1666628914;
+        t=1666628929;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding;
-        bh=SBGplGN9wXQ6YLKsKfvWr4VPlcYFhGIJKX2SJ5Tbgz0=;
-        b=OuR0REi93gSfWxI2j9p4sviZJruH4d2XvOwVipHS0AEud70IfxjbJv4Ywxb5KHJwn2D/u7
-        sAvY7pYUeLJXrKoTVt/BiPkEqt8iyonJkVCFj+aXSsmTqCeL9TfK9VYGmYwQxE6CxKYNUX
-        r917dy9emszDy6uLr7I2HUAU/DVsUV4=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id aef9884c (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Mon, 24 Oct 2022 16:28:33 +0000 (UTC)
+        bh=lGWkAOM76PXD9OlLzryeLFcK9Aq5PqnA6itzc82Ub3k=;
+        b=M+4u14JreonhS4vq1das3LDBYNnu98JclDVylg7bnn3tXscMzTOWihPJkilWMzZRBB37Ca
+        S9acT1Bxh2NYBFW4LjoKQhyCy3lra+g1dzuaUxGeAkk7DT/t2+OG3cAcs8pIU61cazWGvh
+        PCxsepQ1D45QhxmMTJ1aaymwd12dDpU=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 8130baa5 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Mon, 24 Oct 2022 16:28:48 +0000 (UTC)
 From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Dimitri Sivanich <dimitri.sivanich@hpe.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH] misc: sgi-gru: use explicitly signed char
-Date:   Mon, 24 Oct 2022 18:28:23 +0200
-Message-Id: <20221024162823.535884-1-Jason@zx2c4.com>
+        Kalle Valo <kvalo@kernel.org>, linux-wireless@vger.kernel.org
+Subject: [PATCH] wifi: cisco: do not assign -1 to unsigned char
+Date:   Mon, 24 Oct 2022 18:28:43 +0200
+Message-Id: <20221024162843.535921-1-Jason@zx2c4.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -57,79 +55,65 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 With char becoming unsigned by default, and with `char` alone being
-ambiguous and based on architecture, signed chars need to be marked
-explicitly as such. This fixes warnings like:
+ambiguous and based on architecture, we get a warning when assigning the
+unchecked output of hex_to_bin() to that unsigned char. Mark `key` as a
+`u8`, which matches the struct's type, and then check each call to
+hex_to_bin() before casting.
 
-drivers/misc/sgi-gru/grumain.c:711 gru_check_chiplet_assignment() warn: 'gts->ts_user_chiplet_id' is unsigned
-
-Cc: Dimitri Sivanich <dimitri.sivanich@hpe.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Kalle Valo <kvalo@kernel.org>
+Cc: linux-wireless@vger.kernel.org
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 ---
- drivers/misc/sgi-gru/grumain.c   |  6 +++---
- drivers/misc/sgi-gru/grutables.h | 10 +++++-----
- 2 files changed, 8 insertions(+), 8 deletions(-)
+ drivers/net/wireless/cisco/airo.c | 18 ++++++++++++++----
+ 1 file changed, 14 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/misc/sgi-gru/grumain.c b/drivers/misc/sgi-gru/grumain.c
-index 9afda47efbf2..6706ef3c5977 100644
---- a/drivers/misc/sgi-gru/grumain.c
-+++ b/drivers/misc/sgi-gru/grumain.c
-@@ -152,7 +152,7 @@ static int gru_assign_asid(struct gru_state *gru)
-  * Optionally, build an array of chars that contain the bit numbers allocated.
-  */
- static unsigned long reserve_resources(unsigned long *p, int n, int mmax,
--				       char *idx)
-+				       signed char *idx)
- {
- 	unsigned long bits = 0;
- 	int i;
-@@ -170,14 +170,14 @@ static unsigned long reserve_resources(unsigned long *p, int n, int mmax,
+diff --git a/drivers/net/wireless/cisco/airo.c b/drivers/net/wireless/cisco/airo.c
+index 10daef81c355..fb2c35bd73bb 100644
+--- a/drivers/net/wireless/cisco/airo.c
++++ b/drivers/net/wireless/cisco/airo.c
+@@ -5232,7 +5232,7 @@ static int get_wep_tx_idx(struct airo_info *ai)
+ 	return -1;
  }
  
- unsigned long gru_reserve_cb_resources(struct gru_state *gru, int cbr_au_count,
--				       char *cbmap)
-+				       signed char *cbmap)
+-static int set_wep_key(struct airo_info *ai, u16 index, const char *key,
++static int set_wep_key(struct airo_info *ai, u16 index, const u8 *key,
+ 		       u16 keylen, int perm, int lock)
  {
- 	return reserve_resources(&gru->gs_cbr_map, cbr_au_count, GRU_CBR_AU,
- 				 cbmap);
- }
+ 	static const unsigned char macaddr[ETH_ALEN] = { 0x01, 0, 0, 0, 0, 0 };
+@@ -5283,7 +5283,7 @@ static void proc_wepkey_on_close(struct inode *inode, struct file *file)
+ 	struct net_device *dev = pde_data(inode);
+ 	struct airo_info *ai = dev->ml_priv;
+ 	int i, rc;
+-	char key[16];
++	u8 key[16];
+ 	u16 index = 0;
+ 	int j = 0;
  
- unsigned long gru_reserve_ds_resources(struct gru_state *gru, int dsr_au_count,
--				       char *dsmap)
-+				       signed char *dsmap)
- {
- 	return reserve_resources(&gru->gs_dsr_map, dsr_au_count, GRU_DSR_AU,
- 				 dsmap);
-diff --git a/drivers/misc/sgi-gru/grutables.h b/drivers/misc/sgi-gru/grutables.h
-index 5efc869fe59a..e467d78fcf64 100644
---- a/drivers/misc/sgi-gru/grutables.h
-+++ b/drivers/misc/sgi-gru/grutables.h
-@@ -351,7 +351,7 @@ struct gru_thread_state {
- 	pid_t			ts_tgid_owner;	/* task that is using the
- 						   context - for migration */
- 	short			ts_user_blade_id;/* user selected blade */
--	char			ts_user_chiplet_id;/* user selected chiplet */
-+	signed char		ts_user_chiplet_id;/* user selected chiplet */
- 	unsigned short		ts_sizeavail;	/* Pagesizes in use */
- 	int			ts_tsid;	/* thread that owns the
- 						   structure */
-@@ -364,11 +364,11 @@ struct gru_thread_state {
- 						   required for contest */
- 	unsigned char		ts_cbr_au_count;/* Number of CBR resources
- 						   required for contest */
--	char			ts_cch_req_slice;/* CCH packet slice */
--	char			ts_blade;	/* If >= 0, migrate context if
-+	signed char		ts_cch_req_slice;/* CCH packet slice */
-+	signed char		ts_blade;	/* If >= 0, migrate context if
- 						   ref from different blade */
--	char			ts_force_cch_reload;
--	char			ts_cbr_idx[GRU_CBR_AU];/* CBR numbers of each
-+	signed char		ts_force_cch_reload;
-+	signed char		ts_cbr_idx[GRU_CBR_AU];/* CBR numbers of each
- 							  allocated CB */
- 	int			ts_data_valid;	/* Indicates if ts_gdata has
- 						   valid data */
+@@ -5311,12 +5311,22 @@ static void proc_wepkey_on_close(struct inode *inode, struct file *file)
+ 	}
+ 
+ 	for (i = 0; i < 16*3 && data->wbuffer[i+j]; i++) {
++		int val;
++
++		if (i % 3 == 2)
++			continue;
++
++		val = hex_to_bin(data->wbuffer[i+j]);
++		if (val < 0) {
++			airo_print_err(ai->dev->name, "WebKey passed invalid key hex");
++			return;
++		}
+ 		switch(i%3) {
+ 		case 0:
+-			key[i/3] = hex_to_bin(data->wbuffer[i+j])<<4;
++			key[i/3] = (u8)val << 4;
+ 			break;
+ 		case 1:
+-			key[i/3] |= hex_to_bin(data->wbuffer[i+j]);
++			key[i/3] |= (u8)val;
+ 			break;
+ 		}
+ 	}
 -- 
 2.38.1
 
