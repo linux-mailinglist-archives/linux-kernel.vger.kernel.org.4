@@ -2,120 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1175609D13
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 10:46:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 126C1609D16
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 10:47:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229535AbiJXIqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 04:46:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59536 "EHLO
+        id S230133AbiJXIrf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 04:47:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230385AbiJXIq3 (ORCPT
+        with ESMTP id S229562AbiJXIrd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 04:46:29 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0459D67056;
-        Mon, 24 Oct 2022 01:46:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666601189; x=1698137189;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=zr3WKsPxb7aaiIO0Wjz4+22fObmXP9eCkj8VHh8e+Zw=;
-  b=ivH+6Aiule3GXccJQb5bNmoDVy81GpkcZ4Q9RauKIkZsFODgkMs6cE8D
-   eFGKyNwTDiro+gbzfChUpsLiACAgyLA/UjPHvfoDhjRM1tfTncw8mSryk
-   AMWpg8pUSZiovFJseXClQKNSi6A3pmOv1u8iKJi+bE+/+X/ssl7lafhmq
-   AoPyfwkAvxgsnWTkGZQOPah2J+x8OHsBxqnZMjvtKn7WUvzKC9FMFlFwO
-   U6oIj/VvaULXWMi5uDK1WFA6Hg9WZpncT5wcNzJJTISMq29+c82SQSjpW
-   WrZJcxeKyTdy8nQtSeh29CBbJZFgPsyvwhDhshoyP3s+QOuIbMnfWFq9e
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="304978464"
-X-IronPort-AV: E=Sophos;i="5.95,207,1661842800"; 
-   d="scan'208";a="304978464"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 01:46:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="773746804"
-X-IronPort-AV: E=Sophos;i="5.95,207,1661842800"; 
-   d="scan'208";a="773746804"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 24 Oct 2022 01:46:20 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 24 Oct 2022 11:46:20 +0300
-Date:   Mon, 24 Oct 2022 11:46:20 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     Wayne Chang <waynec@nvidia.com>, gregkh@linuxfoundation.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        treding@nvidia.com, jonathanh@nvidia.com, thierry.reding@gmail.com,
-        ajayg@nvidia.com, kishon@ti.com, vkoul@kernel.org,
-        p.zabel@pengutronix.de, mathias.nyman@intel.com, jckuo@nvidia.com,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, singhanc@nvidia.com,
-        linux-i2c@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-tegra@vger.kernel.org
-Subject: Re: [PATCH 06/11] usb: typec: ucsi_ccg: Replace ccgx to well-known
- regex
-Message-ID: <Y1ZQ3NyR7Suxdltu@kuha.fi.intel.com>
-References: <20221024074128.1113554-1-waynec@nvidia.com>
- <20221024074128.1113554-7-waynec@nvidia.com>
- <Y1ZGZ2H0/ug3se6j@kuha.fi.intel.com>
- <87czaheiag.fsf@balbi.sh>
+        Mon, 24 Oct 2022 04:47:33 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95BF823EAB;
+        Mon, 24 Oct 2022 01:47:32 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 56A2121A31;
+        Mon, 24 Oct 2022 08:47:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1666601251; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QoVcV9gbQThkvscNugr29PVp2ZbHse5aemDFMb3FVME=;
+        b=J9s2V8zycLD77Lz2SnE+jZElvElJAACENvJ3DiGpSjMaY1Vs8cQIVNaQMCyCYLVUs6Uldu
+        7Z/+/8/dv/L5CHzXxYjtXmMX2skPc1KWmO0ykcnt+KS+f404plQ6V9WhJTqbpwloHXb0X2
+        MwMBCX+U43pXQ5lOvpXTLabvsBxZwnA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1666601251;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QoVcV9gbQThkvscNugr29PVp2ZbHse5aemDFMb3FVME=;
+        b=kCjJuKCeEjB0/Lrz0AE0IhsorVpD5YAAkRomV0kYIhg+nxgEwsjU73AIpAPVJFL3LmWIIx
+        UUThjllY9ycrbkCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 20E4313357;
+        Mon, 24 Oct 2022 08:47:31 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id FfHEBiNRVmNFWQAAMHmgww
+        (envelope-from <nstange@suse.de>); Mon, 24 Oct 2022 08:47:31 +0000
+From:   Nicolai Stange <nstange@suse.de>
+To:     Daniel Jordan <daniel.m.jordan@oracle.com>
+Cc:     Nicolai Stange <nstange@suse.de>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Martin Doucha <mdoucha@suse.cz>, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/5] padata: fix liftime issues after ->serial() has
+ completed
+References: <20221019083708.27138-1-nstange@suse.de>
+        <20221021213540.7zlhwbbbp7og4lrl@parnassus.localdomain>
+Date:   Mon, 24 Oct 2022 10:47:30 +0200
+In-Reply-To: <20221021213540.7zlhwbbbp7og4lrl@parnassus.localdomain> (Daniel
+        Jordan's message of "Fri, 21 Oct 2022 17:35:40 -0400")
+Message-ID: <87wn8pip5p.fsf@suse.de>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87czaheiag.fsf@balbi.sh>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 11:29:27AM +0300, Felipe Balbi wrote:
-> Heikki Krogerus <heikki.krogerus@linux.intel.com> writes:
-> 
-> > On Mon, Oct 24, 2022 at 03:41:23PM +0800, Wayne Chang wrote:
-> >> ccgx is refer to the cypress cypd4226 typec controller.
-> >> Replace ccgx to well-known regex "cypress".
-> >> 
-> >> Signed-off-by: Wayne Chang <waynec@nvidia.com>
-> >> ---
-> >>  drivers/usb/typec/ucsi/ucsi_ccg.c | 2 +-
-> >>  1 file changed, 1 insertion(+), 1 deletion(-)
-> >> 
-> >> diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
-> >> index 139707a2f3d6..5d3099e6eb77 100644
-> >> --- a/drivers/usb/typec/ucsi/ucsi_ccg.c
-> >> +++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-> >> @@ -1358,7 +1358,7 @@ static int ucsi_ccg_probe(struct i2c_client *client,
-> >>  	INIT_WORK(&uc->pm_work, ccg_pm_workaround_work);
-> >>  
-> >>  	/* Only fail FW flashing when FW build information is not provided */
-> >> -	status = device_property_read_u16(dev, "ccgx,firmware-build",
-> >> +	status = device_property_read_u16(dev, "cypress,firmware-build",
-> >>  					  &uc->fw_build);
-> >>  	if (status)
-> >>  		dev_err(uc->dev, "failed to get FW build information\n");
-> >
-> > This will break bisectability. You need to first add that
-> > "cyppress,firmware-build" identifier without removing the old
-> > "ccgx,firmware-build" identifier, and then introduce a separate
-> > clean-up patch where you remove it when it's safe to remove:
-> >
-> > 1. Add new - This patch.
-> > 2. Modify users - PATCH 7/11.
-> > 3. Remove old - *missing*.
-> 
-> will it ever be safe to remove? What about potential products in the
-> market with little to no upgrade path? There are likely to be products
-> with a DTB that will never be updated, no?
+Hi Daniel,
 
-Not the case here. OF support is only just added to this driver in
-this series. That old identifier has been used as a build-in property
-only.
+Daniel Jordan <daniel.m.jordan@oracle.com> writes:
 
-thanks,
+> On Wed, Oct 19, 2022 at 10:37:03AM +0200, Nicolai Stange wrote:
+>> this series is supposed to fix some lifetime issues all related to the f=
+act that
+>> once the last ->serial() has been invoked, the padata user (i.e. pcrypt)=
+ is well
+>> with its right to tear down the associated padata_shell or parallel_data
+>> instance respectively.
+>>=20
+>> Only the first one, addressed by patch [2/5], has actually been observed=
+, namely
+>> on a (downstream) RT kernel under a very specific workload involving LTP=
+'s
+>> pcrypt_aead01. On non-RT, I've been unable to reproduce.
+>
+> I haven't been able to hit the issue in 2/5 on RT on a v6.0 kernel in an
+> x86 vm.  Were there any other things running on the system besides
+> pcrypt_aead01?  More details about your environment and your kernel
+> config would be helpful.
 
--- 
-heikki
+Right, the issue is indeed hard to reproduce, unfortunately. It has
+originally been reported internally by our QA Maintenance team, which --
+for unknown reason -- suddenly started to hit the issue once every while
+in their testing environment. I did manage to reproduce it once or twice
+myself, but it took me several days running pcrypt_aead01 in a loop each
+time. AFAIR, I allocated a single cpu to the VM only and increased the
+priority of pcrypt_aead01 a bit, with the intent to make preemption of
+the ->serial() worker by DELALG more likely. But really, I cannot tell
+if that did in fact contribute to the likelihood of triggering the race
+or whether I've just been lucky.
+
+Also, as mentioned in the cover letter, the RT kernel this has been
+observed on is a downstream one, based on 5.3.18 (source tree at [1],
+config at [2]), but with quite some additional patches on top. A
+backport of this patch series here had been subject to testing in the
+same environment the issue originally showed up in on a fairly regular
+basis and no new crashes have been observed since.
+
+Let me know if I could provide you with any more details.
+
+Thanks,
+
+Nicolai
+
+[1] https://github.com/SUSE/kernel/tree/SLE15-SP3-RT
+[2] https://github.com/SUSE/kernel-source/blob/SLE15-SP3-RT/config/x86_64/rt
+
+--=20
+SUSE Software Solutions Germany GmbH, Frankenstra=C3=9Fe 146, 90461 N=C3=BC=
+rnberg, Germany
+GF: Ivo Totev, Andrew Myers, Andrew McDonald, Boudien Moerman
+(HRB 36809, AG N=C3=BCrnberg)
