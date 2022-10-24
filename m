@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07E5E60BE1F
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 01:04:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A3A460BE1E
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 01:03:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230094AbiJXXEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 19:04:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56588 "EHLO
+        id S230137AbiJXXDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 19:03:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231777AbiJXXD5 (ORCPT
+        with ESMTP id S231214AbiJXXDG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 19:03:57 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A59BFF26A
+        Mon, 24 Oct 2022 19:03:06 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 999D51C73E4
         for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 14:24:28 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id a5so20471840edb.11
+Received: by mail-ed1-x536.google.com with SMTP id r14so33568328edc.7
         for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 14:24:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=MZsnAEsVBgH1SY91CR++8td8qF2as+jKuxUWas/0RKs=;
-        b=dzRCCrMq/BADC/Fq6uUj+xe4Hc2cbZBCsUhG9yVbyfUSS1a86aZsZ7fC8TIJmhqzfY
-         ogPnqCKM91NWVfT8PK2+CgtZNrLhZPwQcsiw/CRCvT1q2cN3Z5CMaAQHlwPes9vGSNFo
-         /xF5YfpSccFvTfAzr0DtKzQZhbnfAgNQOkdGZiVu0Cx6sdb9/Pu9W7+634yEGHSyE5ah
-         5agHKO/fxUU975BV+2IYrrVPVTkvptgwuh7KLNpdnZ9L7NB98wMG0fILvtul28sqSPJv
-         XB3n4hDyQfiXhvAK0+aD+k6fU7jHFFRUv+USAh+LNlJpzxNPePRDAfMWoakPD+rXIxWq
-         Ckbg==
+        bh=TLGob7xf35t9SsnfBjxCcR4IfErklOduxxLTtm9ur1I=;
+        b=nsu7fcq1ngbWdbFKhL4y1cafZxXzRGqhXLAb9vehKnW/VVlFTAqp0gyWgiYbWQvA9d
+         XyDPBtYzEw9+y6N7oNFfU3S1IO8FlLnZjn0fvgaRX89MI3wqAQ32hgdN1cxjvwOxioVS
+         54P9vIqyjxI+8Vc+TMluQTP2wLYIPsnQgR1zojywdne9Ysq2QNIAC++8XeuJmO7ESKHc
+         czt/sZZ8tD9tpYsBU61IGHyPQaG+kmTgw1QzZKxKhTa0uz7uVyY7CMRTq8mIJ+1sg5jS
+         v0/SmWZcf+XJDjqnFJw6q8dBGPboc62cYKd80DewdheSkojpdt1abxQqdAp5AREyyVL2
+         zOqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=MZsnAEsVBgH1SY91CR++8td8qF2as+jKuxUWas/0RKs=;
-        b=iAIV1G6L0PpruVCyrSBRLLLcVQMGXX0VYE9ro4ebj9iREDMNhWAq+W3qN4X6A9R9yE
-         sTCA7wvcsTISEoxBu5H2nG0fPS5St9KgQlJIOUjV80gfTJZ3xCsOzgqdYPDCSNp56Kqm
-         b6pBK+/kUFL7AvZEtgs78g1LkbVlHgoKNT1Ypug6AymCLnvBVTI28V6NTDiqisJxsyIv
-         gGQ2MbZDOuZnyWh2siy2hfquDduqZhf/O4wXTjyTskO6MfIWyfAHQNNs6ufdOkYECw8d
-         Y2hBeVlZwpRxxnjMgTwJ78YxhydVa5wGe38pWupURafWza6Ao52qLWBxp4KtNI3rtrRu
-         MKYQ==
-X-Gm-Message-State: ACrzQf3kkPX/BccnnPgw70nvKWQAa+2oAgSArRNL0uxI6o9Qlo0NsKSe
-        yW0LPYKt88jJDe9uz9fNFdM=
-X-Google-Smtp-Source: AMsMyM7RaR8vfj9qvimhwIoyMgNFL/0emWD7zwzvYCY0ojkY8rFMx9BmK8n9aBabFF67YVaGcDNeeA==
-X-Received: by 2002:a05:6402:294f:b0:461:f5ce:31e8 with SMTP id ed15-20020a056402294f00b00461f5ce31e8mr2721525edb.363.1666646664984;
-        Mon, 24 Oct 2022 14:24:24 -0700 (PDT)
+        bh=TLGob7xf35t9SsnfBjxCcR4IfErklOduxxLTtm9ur1I=;
+        b=5BVXOaVp9KnrSRIcRhAuWOMn1vb0mYSls248vVEa9SUDeLoZf/km+aDFmmiurrOW9K
+         lLcV1eqV0cXZBkxK02LqWOtvbAa45wqIMYzy2CuxeDr4VGxYxNrsmniqZq6oDvxEpmAZ
+         /SarZtll69L87z3CN/WV0G5X3V3yS7HLuJ/4tXQvHkQ14tVgTMhMSVIfo/44YnmJghcB
+         uaEZSU+34TvTqIsa3Qs77BYX+uqN81padw40Ip9qOsimM+tke7NnXBdgTAabaZbcZZ6Q
+         Il9oCA1O7xstqOCh371hnNDz+v9l/DVqL+A4RQPl5F6EpQRGhbLJJ8mBGJ/hOnrIuzJl
+         oU8g==
+X-Gm-Message-State: ACrzQf3xLWlBDphgfFulFAtLwobLY2pikYDGHqJzpt+cJdW0639U6g0S
+        sflnlldUy/u629AYdEeCm2g=
+X-Google-Smtp-Source: AMsMyM47ywCfVGcSh4I2R2rFVZ0cpbI0/DxOY01dcAOlsDEB5OVrxF6paOshzJno4w/uPzgQd68zHA==
+X-Received: by 2002:a05:6402:2681:b0:461:cbda:fe4b with SMTP id w1-20020a056402268100b00461cbdafe4bmr5863506edd.124.1666646665641;
+        Mon, 24 Oct 2022 14:24:25 -0700 (PDT)
 Received: from localhost.localdomain (ip-217-105-46-178.ip.prioritytelecom.net. [217.105.46.178])
-        by smtp.gmail.com with ESMTPSA id r1-20020a1709061ba100b007a9c3831409sm379354ejg.137.2022.10.24.14.24.24
+        by smtp.gmail.com with ESMTPSA id r1-20020a1709061ba100b007a9c3831409sm379354ejg.137.2022.10.24.14.24.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 14:24:24 -0700 (PDT)
+        Mon, 24 Oct 2022 14:24:25 -0700 (PDT)
 From:   Nam Cao <namcaov@gmail.com>
 To:     Larry Finger <Larry.Finger@lwfinger.net>,
         Florian Schilhabel <florian.c.schilhabel@googlemail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     namcaov@gmail.com, linux-staging@lists.linux.dev,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 1/4] Revert "staging: r8712u: Tracking kmemleak false positives."
-Date:   Mon, 24 Oct 2022 23:24:06 +0200
-Message-Id: <0542c043702f4b44be90f84b39f46fd7de5d85ee.1666645510.git.namcaov@gmail.com>
+Subject: [PATCH 2/4] staging: rtl8712: check for alloc fail in _r8712_init_recv_priv()
+Date:   Mon, 24 Oct 2022 23:24:07 +0200
+Message-Id: <ce12408f17f90b3b368d077a7321a2a252f52b72.1666645510.git.namcaov@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1666645510.git.namcaov@gmail.com>
 References: <cover.1666645510.git.namcaov@gmail.com>
@@ -74,39 +74,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit 5d3da4a20a271e3cf5496a50cbb8118aa019374f.
-
-This commit annotated false positive for kmemleak. The reasoning is that
-the buffers are freed when the driver is unloaded. However, there is
-actually potential memory leak when probe fails.
+The function _r8712_init_recv_priv() and also r8712_init_recv_priv()
+just returns silently if they fail to allocate memory. Change their
+return type to int and add necessary checks and handling if they return
+-ENOMEM
 
 Signed-off-by: Nam Cao <namcaov@gmail.com>
 ---
- drivers/staging/rtl8712/rtl871x_recv.c | 3 ---
- 1 file changed, 3 deletions(-)
+ drivers/staging/rtl8712/os_intfs.c     |  3 ++-
+ drivers/staging/rtl8712/recv_osdep.h   |  8 ++++----
+ drivers/staging/rtl8712/rtl8712_recv.c |  7 ++++---
+ drivers/staging/rtl8712/rtl871x_recv.c | 13 +++++++++----
+ 4 files changed, 19 insertions(+), 12 deletions(-)
 
+diff --git a/drivers/staging/rtl8712/os_intfs.c b/drivers/staging/rtl8712/os_intfs.c
+index 003e97205124..47d7d998fa86 100644
+--- a/drivers/staging/rtl8712/os_intfs.c
++++ b/drivers/staging/rtl8712/os_intfs.c
+@@ -309,7 +309,8 @@ int r8712_init_drv_sw(struct _adapter *padapter)
+ 	if (ret)
+ 		return ret;
+ 	_r8712_init_xmit_priv(&padapter->xmitpriv, padapter);
+-	_r8712_init_recv_priv(&padapter->recvpriv, padapter);
++	ret = _r8712_init_recv_priv(&padapter->recvpriv, padapter);
++		return ret;
+ 	memset((unsigned char *)&padapter->securitypriv, 0,
+ 	       sizeof(struct security_priv));
+ 	timer_setup(&padapter->securitypriv.tkip_timer,
+diff --git a/drivers/staging/rtl8712/recv_osdep.h b/drivers/staging/rtl8712/recv_osdep.h
+index d8c1fa74f544..fbe3f2868506 100644
+--- a/drivers/staging/rtl8712/recv_osdep.h
++++ b/drivers/staging/rtl8712/recv_osdep.h
+@@ -18,15 +18,15 @@
+ #include "drv_types.h"
+ #include <linux/skbuff.h>
+ 
+-void _r8712_init_recv_priv(struct recv_priv *precvpriv,
+-			   struct _adapter *padapter);
++int _r8712_init_recv_priv(struct recv_priv *precvpriv,
++			  struct _adapter *padapter);
+ void _r8712_free_recv_priv(struct recv_priv *precvpriv);
+ void r8712_recv_entry(union recv_frame *precv_frame);
+ void r8712_recv_indicatepkt(struct _adapter *adapter,
+ 			    union recv_frame *precv_frame);
+ void r8712_handle_tkip_mic_err(struct _adapter *padapter, u8 bgroup);
+-void r8712_init_recv_priv(struct recv_priv *precvpriv,
+-			  struct _adapter *padapter);
++int r8712_init_recv_priv(struct recv_priv *precvpriv,
++			 struct _adapter *padapter);
+ void r8712_free_recv_priv(struct recv_priv *precvpriv);
+ void r8712_os_recv_resource_alloc(struct _adapter *padapter,
+ 				  union recv_frame *precvframe);
+diff --git a/drivers/staging/rtl8712/rtl8712_recv.c b/drivers/staging/rtl8712/rtl8712_recv.c
+index 7f1fdd058551..7da014ab0723 100644
+--- a/drivers/staging/rtl8712/rtl8712_recv.c
++++ b/drivers/staging/rtl8712/rtl8712_recv.c
+@@ -30,8 +30,8 @@
+ 
+ static void recv_tasklet(struct tasklet_struct *t);
+ 
+-void r8712_init_recv_priv(struct recv_priv *precvpriv,
+-			  struct _adapter *padapter)
++int r8712_init_recv_priv(struct recv_priv *precvpriv,
++			 struct _adapter *padapter)
+ {
+ 	int i;
+ 	struct recv_buf *precvbuf;
+@@ -44,7 +44,7 @@ void r8712_init_recv_priv(struct recv_priv *precvpriv,
+ 	precvpriv->pallocated_recv_buf =
+ 		kzalloc(NR_RECVBUFF * sizeof(struct recv_buf) + 4, GFP_ATOMIC);
+ 	if (!precvpriv->pallocated_recv_buf)
+-		return;
++		return -ENOMEM;
+ 	precvpriv->precv_buf = precvpriv->pallocated_recv_buf + 4 -
+ 			      ((addr_t)(precvpriv->pallocated_recv_buf) & 3);
+ 	precvbuf = (struct recv_buf *)precvpriv->precv_buf;
+@@ -75,6 +75,7 @@ void r8712_init_recv_priv(struct recv_priv *precvpriv,
+ 		}
+ 		pskb = NULL;
+ 	}
++	return 0;
+ }
+ 
+ void r8712_free_recv_priv(struct recv_priv *precvpriv)
 diff --git a/drivers/staging/rtl8712/rtl871x_recv.c b/drivers/staging/rtl8712/rtl871x_recv.c
-index de9a568eaffa..4db7eed64a03 100644
+index 4db7eed64a03..8a3566214af7 100644
 --- a/drivers/staging/rtl8712/rtl871x_recv.c
 +++ b/drivers/staging/rtl8712/rtl871x_recv.c
-@@ -17,9 +17,7 @@
- #define _RTL871X_RECV_C_
+@@ -42,9 +42,10 @@ void _r8712_init_sta_recv_priv(struct sta_recv_priv *psta_recvpriv)
+ 	_init_queue(&psta_recvpriv->defrag_q);
+ }
  
- #include <linux/ip.h>
--#include <linux/slab.h>
- #include <linux/if_ether.h>
--#include <linux/kmemleak.h>
- #include <linux/etherdevice.h>
- #include <linux/ieee80211.h>
- #include <net/cfg80211.h>
-@@ -61,7 +59,6 @@ void _r8712_init_recv_priv(struct recv_priv *precvpriv,
+-void _r8712_init_recv_priv(struct recv_priv *precvpriv,
+-			   struct _adapter *padapter)
++int _r8712_init_recv_priv(struct recv_priv *precvpriv,
++			  struct _adapter *padapter)
+ {
++	int ret;
+ 	sint i;
+ 	union recv_frame *precvframe;
+ 
+@@ -58,7 +59,7 @@ void _r8712_init_recv_priv(struct recv_priv *precvpriv,
+ 				sizeof(union recv_frame) + RXFRAME_ALIGN_SZ,
  				GFP_ATOMIC);
  	if (!precvpriv->pallocated_frame_buf)
- 		return;
--	kmemleak_not_leak(precvpriv->pallocated_frame_buf);
+-		return;
++		return -ENOMEM;
  	precvpriv->precv_frame_buf = precvpriv->pallocated_frame_buf +
  				    RXFRAME_ALIGN_SZ -
  				    ((addr_t)(precvpriv->pallocated_frame_buf) &
+@@ -73,7 +74,11 @@ void _r8712_init_recv_priv(struct recv_priv *precvpriv,
+ 		precvframe++;
+ 	}
+ 	precvpriv->rx_pending_cnt = 1;
+-	r8712_init_recv_priv(precvpriv, padapter);
++	ret = r8712_init_recv_priv(precvpriv, padapter);
++	if (ret)
++		kfree(precvpriv->pallocated_frame_buf);
++
++	return ret;
+ }
+ 
+ void _r8712_free_recv_priv(struct recv_priv *precvpriv)
 -- 
 2.25.1
 
