@@ -2,67 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B84D609FDE
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 13:11:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FA3A609FE5
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 13:11:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230093AbiJXLLR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 07:11:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59482 "EHLO
+        id S230036AbiJXLLd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 07:11:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230200AbiJXLLD (ORCPT
+        with ESMTP id S230175AbiJXLLS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 07:11:03 -0400
+        Mon, 24 Oct 2022 07:11:18 -0400
 Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C183845999;
-        Mon, 24 Oct 2022 04:11:00 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 4737E3200919;
-        Mon, 24 Oct 2022 07:10:59 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 517F45247D;
+        Mon, 24 Oct 2022 04:11:12 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 1F649320039A;
+        Mon, 24 Oct 2022 07:11:10 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Mon, 24 Oct 2022 07:11:00 -0400
+  by compute3.internal (MEProxy); Mon, 24 Oct 2022 07:11:11 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
          h=cc:cc:content-transfer-encoding:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1666609858; x=
-        1666696258; bh=QE/t9z9CMyL9UR78guoOLnyMowBUbgZ3WsCHLUVTT94=; b=v
-        5cnVG/LxeZ1GExr93cvVTDPL/mAqjnVWHHLVELFd7JgBeddYkNf39egBrtvbLS/v
-        GstPDllllcsUMmhki1NdAQDvppsROUysi/N4DhiGUAPjtY/WPkNBn5MlCGIzDF19
-        DGe4CN92OMBGsmYbn4vY1fiZkQt0JvKmedSellZd2QsqPxlxRLZSJcinnBpyNZ26
-        KSEZ2clbznRjUDgJWyj/GP9I6Tl7cLr+WcXxPfCWEEgnyO8Qc28wvQ68wNVI270R
-        rKHwvMwzE7tfH4YOQuUONve9mRYkNsqgmsybfs5msCywNvCuHS1zUqOGy03CuEof
-        1jCIo5hsk5o+54IVIg6ig==
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1666609869; x=
+        1666696269; bh=ynAT58+Vu0mtbcRfj1YgAHjDB2Kth/KaQbVDWU03R6w=; b=0
+        DYGfdYr6RoRkVKhZJIdmWVMXdoxHKnLJ5AacM+oEApZJOKn2F4N/bNt/IBIpRln5
+        C0F8PL/1wTaZkfYPqJ7t2zXu9az/aHdGpAjh+ZTXSMZREMZ92UTDV7otXV0kZHM6
+        PBJMpQCKb49L/pU2rkq2cwWG1+4Hzy3352ytdks7EmcYtblepq2HH6STjL0dbVXd
+        TyUPr3VIiQeKV1FmnEx7iLC/FOOwDdpfcy9oBIJfhuPNPadkrQi+qoiNvzsJsHti
+        mCEcpes4/hd/HgPTzsRTPQUKB63GF5T12gXTCvq/NiQQTgEBCxmcvwfqn6TS6UWi
+        QPQ/3xPLOQ0DylJyaAsLg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1666609858; x=1666696258; bh=QE/t9z9CMyL9U
-        R78guoOLnyMowBUbgZ3WsCHLUVTT94=; b=eZnwJsff4b0i0ZpG3AcFS2lj5FWaz
-        bulPOPQn5VIVPMcOzKWbue1qcfe6oZjnh9+FvHIsAduMaXQ83osLjfaSf50IGH+v
-        gf4p5vB6anR3OsIlUrQT/cifABKJKMcdQPHYTS7o1ub3o9KVSakG+4g2mZ0chJL/
-        ZGjioIRvhT2KZGR8F19mv+0Cgs0qoiwcHHgW80AyofIQhpavj9Pfk6NdTG9C3hLC
-        HU9OpJ/FOzpoO3NKW3ZwNo53LCpYGA1akvBfJgT3QYkGz1z8JQKwbAnpTz+YaqLB
-        R+58Y/ji5m+Ha0dCqXPNhXAqLnF84/tK8Lhs4ZgIMDtMUVP1p7o6j9DrA==
-X-ME-Sender: <xms:wnJWY0_64v9aOlBnrjbQa56DiBxjGVSLokHL_-A183TK2xQz1QTDTA>
-    <xme:wnJWY8upUWsqi749V0ydHLaffTBqFbZWVd92CqG8hLDD5D0njIsPWLgfpTipVxtV8
-    Bhf4CUGaFE3PQfSDx4>
-X-ME-Received: <xmr:wnJWY6AF1pgg-zaR17nE41aAs5gkcAABaI9hFnr7xONHpYmCJDGl5VrkZtMwYrf-76YEvlKwE8XI>
+        :x-sasl-enc; s=fm3; t=1666609869; x=1666696269; bh=ynAT58+Vu0mtb
+        cRfj1YgAHjDB2Kth/KaQbVDWU03R6w=; b=KADEwXXEJuMHg6ExF9TQOrKRcHgcx
+        i6GVmZy3zSrQOeEdP5TZoAnnHc8d4PdJWQkOh/2jXHxTsklBMZ587bPvJM/xctkP
+        9XVza3TJXS0C0okWe7pYglE/nTDI3WrQ0IGiYMZRPR+Z1r+/3wIvT4Ee2FgdEr/G
+        X9i1DIW4mwvaUkpwXPFAGqgptWmCmkGt6lwYLZbX+vpdEWJltkcgXPfkeE0vyoWn
+        gbYHvRy0AlwkDol2ZMF6pdx/02HuIgFr0IMoE+sQttobwVGdxDdPQFBMQ3PfVrmB
+        9bohjCkBHzKtJYEZ0VmY5gt9othYlzZYSxpa2ymx8Iw8ZER90lCFId8kQ==
+X-ME-Sender: <xms:zHJWY7NqZZX5tbA8K0sFYG1L3iLiqGzc6tXAHWm8Zk6JHF-sTIElDQ>
+    <xme:zHJWY19cBZkJjGRSSGLCqvrzFy5PTtOVpeOxi_1hhA28pMewrc9A_EmJ0ibZLam-m
+    ADjEhefsdMNJx3E754>
+X-ME-Received: <xmr:zHJWY6QGOnmD0i_eJB813QytgGGvX5BUc9-EeRJNl7Rl4gqkKgDeqmFwyFPpj_qhQm1yoE189iL1>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrgedtgedgfeefucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomheptehlihhs
-    thgrihhrucfhrhgrnhgtihhsuceorghlihhsthgrihhrsegrlhhishhtrghirhdvfedrmh
-    gvqeenucggtffrrghtthgvrhhnpeelgfffueehvedvkeeggffhgeeuueetteeukeetveeg
-    tdffjeevgfeuudejleejveenucffohhmrghinhepuggvvhhitggvthhrvggvrdhorhhgne
-    cuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghlihhs
-    thgrihhrsegrlhhishhtrghirhdvfedrmhgv
-X-ME-Proxy: <xmx:wnJWY0eRkZBaWF61TbRB3tfCetd5FS5rRxbdagac82SnYINwsvmM3w>
-    <xmx:wnJWY5NpOBLmUPvmXg00-A-NRB_TbI88mWGAv1vdnf0duFzt149MXQ>
-    <xmx:wnJWY-mhSb-4cf9bg-VhUW_kzIKKDSF0p1MQcf2YbYYDTlYc-spWQw>
-    <xmx:wnJWY_tZmg_edbOkXhepZQyfQudh-b2Ob7fUDZwG8CDJOVbvXtYY-g>
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffojghfggfgsedtke
+    ertdertddtnecuhfhrohhmpeetlhhishhtrghirhcuhfhrrghntghishcuoegrlhhishht
+    rghirhesrghlihhsthgrihhrvdefrdhmvgeqnecuggftrfgrthhtvghrnhepiedtfeekte
+    elvdelveevueeujeffuefguedvteekveejjeeutedufeethffgheehnecuvehluhhsthgv
+    rhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghlihhsthgrihhrsegrlh
+    hishhtrghirhdvfedrmhgv
+X-ME-Proxy: <xmx:zHJWY_uXv1s6n14Zy4a8X9AzO0vtqLsVpBEejqg-OfsI72xbv0UeHg>
+    <xmx:zHJWYzf8xjSF3bd5H9Ah5ExK8wjl9u1e8AhM9wRMs8KEL9tirRorOg>
+    <xmx:zHJWY71p7fR2fG30hPwJEj225cJC4-3ynKdD1UxCo6NdfG3YFvbqrg>
+    <xmx:zXJWYx2jyo2o6JBsXHr5KAiTCohZnmBr6HPZlzyqDQgZBAeBWoNLVA>
 Feedback-ID: ifd214418:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 24 Oct 2022 07:10:49 -0400 (EDT)
+ 24 Oct 2022 07:11:00 -0400 (EDT)
 From:   Alistair Francis <alistair@alistair23.me>
 To:     linux-input@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
@@ -70,11 +69,10 @@ Cc:     linus.walleij@linaro.org, s.hauer@pengutronix.de,
         robh+dt@kernel.org, andreas@kemnade.info,
         krzysztof.kozlowski+dt@linaro.org, alistair23@gmail.com,
         dmitry.torokhov@gmail.com, rydberg@bitmath.org,
-        shawnguo@kernel.org, Alistair Francis <alistair@alistair23.me>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v9 2/4] dt-bindings: input: Add Cypress TT2100 touchscreen controller
-Date:   Mon, 24 Oct 2022 21:10:15 +1000
-Message-Id: <20221024111017.43859-3-alistair@alistair23.me>
+        shawnguo@kernel.org, Alistair Francis <alistair@alistair23.me>
+Subject: [PATCH v9 3/4] ARM: imx_v6_v7_defconfig: Enable the cyttsp5 touchscreen
+Date:   Mon, 24 Oct 2022 21:10:16 +1000
+Message-Id: <20221024111017.43859-4-alistair@alistair23.me>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221024111017.43859-1-alistair@alistair23.me>
 References: <20221024111017.43859-1-alistair@alistair23.me>
@@ -90,126 +88,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the Cypress TrueTouch Generation 5 touchscreen device tree bindings
-documentation. It can use I2C or SPI bus.
-This touchscreen can handle some defined zone that are designed and
-sent as button. To be able to customize the keycode sent, the
-"linux,code" property in a "button" sub-node can be used.
-
 Signed-off-by: Alistair Francis <alistair@alistair23.me>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Reviewed-by: Rob Herring <robh@kernel.org>
 ---
- .../input/touchscreen/cypress,tt21000.yaml    | 100 ++++++++++++++++++
- 1 file changed, 100 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/input/touchscreen/cypress,tt21000.yaml
+ arch/arm/configs/imx_v6_v7_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/input/touchscreen/cypress,tt21000.yaml b/Documentation/devicetree/bindings/input/touchscreen/cypress,tt21000.yaml
-new file mode 100644
-index 000000000000..0913b585af5c
---- /dev/null
-+++ b/Documentation/devicetree/bindings/input/touchscreen/cypress,tt21000.yaml
-@@ -0,0 +1,100 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/input/touchscreen/cypress,tt21000.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Cypress TT2100 touchscreen controller
-+
-+description: The Cypress TT2100 series (also known as "CYTTSP5" after
-+  the marketing name Cypress TrueTouch Standard Product series 5).
-+
-+maintainers:
-+  - Alistair Francis <alistair@alistair23.me>
-+
-+allOf:
-+  - $ref: touchscreen.yaml#
-+
-+properties:
-+  compatible:
-+    const: cypress,tt21000
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  vdd-supply:
-+    description: Regulator for voltage.
-+
-+  reset-gpios:
-+    maxItems: 1
-+
-+  linux,keycodes:
-+    description: EV_ABS specific event code generated by the axis.
-+
-+patternProperties:
-+  "^button@[0-9]+$":
-+    type: object
-+    $ref: input.yaml#
-+    properties:
-+      reg:
-+        maxItems: 1
-+      linux,keycodes:
-+        description: Keycode to emit
-+
-+    required:
-+      - reg
-+      - linux,keycodes
-+
-+    additionalProperties: false
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - vdd-supply
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/gpio/gpio.h>
-+    #include <dt-bindings/input/linux-event-codes.h>
-+
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        touchscreen@24 {
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+
-+            compatible = "cypress,tt21000";
-+            reg = <0x24>;
-+            pinctrl-names = "default";
-+            pinctrl-0 = <&tp_reset_ds203>;
-+            interrupt-parent = <&pio>;
-+            interrupts = <1 5 IRQ_TYPE_LEVEL_LOW>;
-+            reset-gpios = <&pio 7 1 GPIO_ACTIVE_LOW>;
-+            vdd-supply = <&reg_touch>;
-+
-+            button@0 {
-+                reg = <0>;
-+                linux,keycodes = <KEY_HOMEPAGE>;
-+            };
-+
-+            button@1 {
-+                reg = <1>;
-+                linux,keycodes = <KEY_MENU>;
-+            };
-+
-+            button@2 {
-+                reg = <2>;
-+                linux,keycodes = <KEY_BACK>;
-+            };
-+        };
-+    };
-+...
+diff --git a/arch/arm/configs/imx_v6_v7_defconfig b/arch/arm/configs/imx_v6_v7_defconfig
+index 078d61b758a9..8665b192d83c 100644
+--- a/arch/arm/configs/imx_v6_v7_defconfig
++++ b/arch/arm/configs/imx_v6_v7_defconfig
+@@ -166,6 +166,7 @@ CONFIG_TOUCHSCREEN_ADS7846=y
+ CONFIG_TOUCHSCREEN_AD7879=y
+ CONFIG_TOUCHSCREEN_AD7879_I2C=y
+ CONFIG_TOUCHSCREEN_ATMEL_MXT=y
++CONFIG_TOUCHSCREEN_CYTTSP5=y
+ CONFIG_TOUCHSCREEN_DA9052=y
+ CONFIG_TOUCHSCREEN_EGALAX=y
+ CONFIG_TOUCHSCREEN_GOODIX=y
 -- 
 2.37.3
 
