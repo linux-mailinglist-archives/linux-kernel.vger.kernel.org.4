@@ -2,139 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4367460B23A
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:44:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7284D60B0F4
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:13:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234723AbiJXQnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 12:43:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59654 "EHLO
+        id S234052AbiJXQNE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 12:13:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234719AbiJXQnH (ORCPT
+        with ESMTP id S233782AbiJXQJL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 12:43:07 -0400
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 249A31CFCF
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 08:29:36 -0700 (PDT)
-Received: by mail-il1-x135.google.com with SMTP id o2so1961314ilo.8
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 08:29:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3RFUYnxkZfbGB4sUYeSVCHGTolA3bNrSoJ5VxM9ll30=;
-        b=T8fZhnkSRW0EcYMeVwli0zShE13H8FMRgyv42sjmdyBdRt1iAKhbeWLluKgnHZxlQ5
-         UI1vATreT4jIvGzHcmSm9NXP5o7zwk1z5/KuCy+w8rLSUALYMmvI1pgiDwCN7zdufSfe
-         Rpwce8lZ2PXeUAv/dvtoN0dWQXnR6V+PyiDujRVKOEu/BBUs4S0zGFEwnpDw1EsXlo4v
-         fJNcBGY8H5iiBy/SMSoBEhREubwsu7ivvui4kSZtRxAiePHjCG3I7uyfqibtFyBEvS/I
-         frTwfcEEXLFrbgV1lgFay1OJVoH2Jg1HL43V4wJXkDQaJiBGEhgBDDBGVLlCKY9Yl6SH
-         4UAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3RFUYnxkZfbGB4sUYeSVCHGTolA3bNrSoJ5VxM9ll30=;
-        b=K+LOaZ1PC+7f2s3FHMEvukaDINDjf1rSD23CZst1CahNhfDR7ZWnPSsY+6eaSh/Goz
-         dkciN4VqxLGZRzIlnHq1tGPcRqeScgJeyKOFgtcWbfhQC2S7F63igMMmwNTcAob/NZSs
-         mXggBKIJ1FfZcH3YrjXDMzamBjp2YWx01DjgYQqHTpJpwQFYlYd9qpwodaMCDDUtoNB9
-         WpiQA6908Cn70vgWMQzBK0Cl39b+IpDDUYp+cJAlDl+WON/BjA/uIinJD+BNWy0GuXGA
-         4mzqNZw/TpDeYgcsrJJoxTSFJenV92GBJMnlBUWr2CnhHVX68ZDkfFWIvk3ACJHhzji9
-         f6tg==
-X-Gm-Message-State: ACrzQf3gRJq/KasdEJRxSoAxLHmO6/t9p0V3SKIztsCtTfPzGGuKXPNR
-        BbjI0jduHeNc66Lw4c6FI0r3HiReZJQMeW09
-X-Google-Smtp-Source: AMsMyM7MkD2jDxUhY+Ie+vHsovp22ZlwLzRWnn+eqHGHGwHdaJH1e1WLV2xJ8hBG+s3N0GsXto7nlA==
-X-Received: by 2002:a63:450c:0:b0:443:94a1:3703 with SMTP id s12-20020a63450c000000b0044394a13703mr27735849pga.565.1666623173978;
-        Mon, 24 Oct 2022 07:52:53 -0700 (PDT)
-Received: from ?IPV6:2400:4050:c360:8200:8ae8:3c4:c0da:7419? ([2400:4050:c360:8200:8ae8:3c4:c0da:7419])
-        by smtp.gmail.com with ESMTPSA id oc12-20020a17090b1c0c00b00212735c8898sm4126456pjb.30.2022.10.24.07.52.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Oct 2022 07:52:53 -0700 (PDT)
-Message-ID: <37ec64ac-9e08-dd41-4b20-8701bf9413fb@daynix.com>
-Date:   Mon, 24 Oct 2022 23:52:50 +0900
+        Mon, 24 Oct 2022 12:09:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EBA13470A
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 07:59:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ABF2661425
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 14:52:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52EFBC433C1;
+        Mon, 24 Oct 2022 14:52:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1666623153;
+        bh=iIf7CBp4DRtS4RK5w27tn1+7LfTAdJA8NimWQF9sSvg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=0R1tizG1JTD1VZMfei9eZUwBceJMo27F3IPhrwxgizVbdIXR/VebztKIjUAfm+TJ2
+         cpiPAbSdylVk4YR/PmDNZIIZzoMbWnp7XnOykqA3Po0XqNtgjvxOXuMeqXyiEX1VR+
+         i+cMHZA9GYInHS3HEvmT7UEBSkL+YkXi0BemMqzI=
+Date:   Mon, 24 Oct 2022 16:53:22 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-erofs@lists.ozlabs.org, ocfs2-devel@oss.oracle.com,
+        linux-mtd@lists.infradead.org, amd-gfx@lists.freedesktop.org,
+        rafael@kernel.org, somlo@cmu.edu, mst@redhat.com,
+        jaegeuk@kernel.org, chao@kernel.org, hsiangkao@linux.alibaba.com,
+        huangjianan@oppo.com, mark@fasheh.com, jlbec@evilplan.org,
+        joseph.qi@linux.alibaba.com, akpm@linux-foundation.org,
+        alexander.deucher@amd.com, luben.tuikov@amd.com, richard@nod.at,
+        liushixin2@huawei.com
+Subject: Re: [PATCH v2] kset: fix memory leak when kset_register() returns
+ error
+Message-ID: <Y1am4mjS+obAbUTJ@kroah.com>
+References: <20221024121910.1169801-1-yangyingliang@huawei.com>
+ <Y1aYuLmlXBRvMP1Z@kroah.com>
+ <8281fc72-948a-162d-6e5f-a9fe29d8ee46@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v2] ACPI: video: Fix missing native backlight on
- Chromebooks
-Content-Language: en-US
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Sean Paul <seanpaul@chromium.org>
-Cc:     kernel@collabora.com, linux-acpi@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20221024141210.67784-1-dmitry.osipenko@collabora.com>
-From:   Akihiko Odaki <akihiko.odaki@daynix.com>
-In-Reply-To: <20221024141210.67784-1-dmitry.osipenko@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8281fc72-948a-162d-6e5f-a9fe29d8ee46@huawei.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/10/24 23:12, Dmitry Osipenko wrote:
-> Chromebooks don't have backlight in ACPI table, they suppose to use
-> native backlight in this case. Check presence of the CrOS embedded
-> controller ACPI device and prefer the native backlight if EC found.
+On Mon, Oct 24, 2022 at 10:39:44PM +0800, Yang Yingliang wrote:
 > 
-> Suggested-by: Hans de Goede <hdegoede@redhat.com>
-> Fixes: 2600bfa3df99 ("ACPI: video: Add acpi_video_backlight_use_native() helper")
-> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-> ---
-> 
-> Changelog:
-> 
-> v2: - Added explanatory comment to the code and added check for the
->        native backlight presence, like was requested by Hans de Goede.
-> 
->   drivers/acpi/video_detect.c | 12 ++++++++++++
->   1 file changed, 12 insertions(+)
-> 
-> diff --git a/drivers/acpi/video_detect.c b/drivers/acpi/video_detect.c
-> index 0d9064a9804c..9cd8797d12bb 100644
-> --- a/drivers/acpi/video_detect.c
-> +++ b/drivers/acpi/video_detect.c
-> @@ -668,6 +668,11 @@ static const struct dmi_system_id video_detect_dmi_table[] = {
->   	{ },
->   };
->   
-> +static bool google_cros_ec_present(void)
-> +{
-> +	return acpi_dev_found("GOOG0004");
-> +}
-> +
->   /*
->    * Determine which type of backlight interface to use on this system,
->    * First check cmdline, then dmi quirks, then do autodetect.
-> @@ -730,6 +735,13 @@ static enum acpi_backlight_type __acpi_video_get_backlight_type(bool native)
->   			return acpi_backlight_video;
->   	}
->   
-> +	/*
-> +	 * Chromebooks that don't have backlight handle in ACPI table
-> +	 * are supposed to use native backlight if it's available.
-> +	 */
-> +	if (google_cros_ec_present() && native_available)
-> +		return acpi_backlight_native;
-> +
->   	/* No ACPI video (old hw), use vendor specific fw methods. */
->   	return acpi_backlight_vendor;
->   }
+> On 2022/10/24 21:52, Greg KH wrote:
+> > On Mon, Oct 24, 2022 at 08:19:10PM +0800, Yang Yingliang wrote:
+> > > Inject fault while loading module, kset_register() may fail.
+> > > If it fails, the name allocated by kobject_set_name() which
+> > > is called before kset_register() is leaked, because refcount
+> > > of kobject is hold in kset_init().
+> > > 
+> > > As a kset may be embedded in a larger structure which needs
+> > > be freed in release() function or error path in callers, we
+> > > can not call kset_put() in kset_register(), or it will cause
+> > > double free, so just call kfree_const() to free the name and
+> > > set it to NULL.
+> > > 
+> > > With this fix, the callers don't need to care about the name
+> > > freeing and call an extra kset_put() if kset_register() fails.
+> > > 
+> > > Suggested-by: Luben Tuikov <luben.tuikov@amd.com>
+> > > Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> > > ---
+> > > v1 -> v2:
+> > >    Free name inside of kset_register() instead of calling kset_put()
+> > >    in drivers.
+> > > ---
+> > >   lib/kobject.c | 8 +++++++-
+> > >   1 file changed, 7 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/lib/kobject.c b/lib/kobject.c
+> > > index a0b2dbfcfa23..3409a89c81e5 100644
+> > > --- a/lib/kobject.c
+> > > +++ b/lib/kobject.c
+> > > @@ -834,6 +834,9 @@ EXPORT_SYMBOL_GPL(kobj_sysfs_ops);
+> > >   /**
+> > >    * kset_register() - Initialize and add a kset.
+> > >    * @k: kset.
+> > > + *
+> > > + * NOTE: On error, the kset.kobj.name allocated by() kobj_set_name()
+> > > + * which is called before kset_register() in caller need be freed.
+> > This comment doesn't make any sense anymore.  No caller needs to worry
+> > about this, right?
+> With this fix, the name is freed inside of kset_register(), it can not be
+> accessed,
 
-Hi,
+Agreed.
 
-The native_available check does not prevent duplicate registration if 
-vendor backlight registers first. It was enough for the combination of 
-ACPI video and native because ACPI video delays its registration, but it 
-is not the case for vendor/native combination.
+> if it allocated dynamically, but callers don't know this if no comment here,
+> they may use it in error path (something like to print error message with
+> it),
+> so how about comment like this to tell callers not to use the name:
+> 
+> NOTE: On error, the kset.kobj.name allocated by() kobj_set_name()
+> is freed, it can not be used any more.
 
-Regards,
-Akihiko Odaki
+Sure, that's a better way to word it.
+
+> > >    */
+> > >   int kset_register(struct kset *k)
+> > >   {
+> > > @@ -844,8 +847,11 @@ int kset_register(struct kset *k)
+> > >   	kset_init(k);
+> > >   	err = kobject_add_internal(&k->kobj);
+> > > -	if (err)
+> > > +	if (err) {
+> > > +		kfree_const(k->kobj.name);
+> > > +		k->kobj.name = NULL;
+> > Why are you setting the name here to NULL?
+> I set it to NULL to avoid accessing bad pointer in callers,
+> if callers use it in error path, current callers won't use this
+> name pointer in error path, so we can remove this assignment?
+
+Ah, I didn't think about using it on error paths.  Ideally that would
+never happen, but that's good to set just to make it obvious.  How about
+adding a small comment here saying why you are setting it so we all
+remember it in 5 years when we look at the code again.
+
+thanks,
+
+greg k-h
