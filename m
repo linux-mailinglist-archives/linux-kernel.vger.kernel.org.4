@@ -2,115 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AF5C60B17B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:26:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8601060B168
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:22:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232361AbiJXQ0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 12:26:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54404 "EHLO
+        id S230218AbiJXQWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 12:22:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232144AbiJXQZV (ORCPT
+        with ESMTP id S233931AbiJXQWI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 12:25:21 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183417295B;
-        Mon, 24 Oct 2022 08:11:45 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-13b103a3e5dso12207702fac.2;
-        Mon, 24 Oct 2022 08:11:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=U+Yuvpt1GSZqGdrT4ZNMksu/TT2o+vLhvUeXJWl+juA=;
-        b=G3hjXjpuTgIb1v0BBsl9aKj1EeJjNNdnxPSboKpkfA2YaDukveKgRQdCoDEpf0GYZi
-         uEBqCEoDdFXNFRwdPo/nxG/fxBaDRGUIGi6hSsN+WwMCoB45wT5VVuSfG/PROayYWmar
-         OLJqwR8SDBiTYgxsfuzaPIreO7LOXSSdqkmF1dWM2+0eJrALq6ZmxpUTPJMUPFpBks2P
-         7RoV7oDfDNGsHRzCTR0xTQd/OyUKY+L3eoWjo697xELzT3PdFI2XpaglgiWlfOwGvEh1
-         TyLvXFLu4r07xyGrNxgrY6FUzgEU11lz9nGGDDAO671FPgmJOTlfCVO/5LQi1VlFxPCX
-         okIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=U+Yuvpt1GSZqGdrT4ZNMksu/TT2o+vLhvUeXJWl+juA=;
-        b=56rM6zyUcOahViMCT9WnS1P0EKCuOZUGdt9xnPXh3LcKB1ldTMvGHC5YcVhO0s6th+
-         FBQ0ZN5jB8ZsNb+jMPmdH6M9+KMHEMk1qvOqwxOXKL1DVcaBqyXd+IQkQyQOiESeAx+2
-         ZcuqhsAlX1rkCo/AlwAmP/XE5Y1/hVexNchUpjzAiE9Twz7V1aZsg/KRemZXD9RJrjIq
-         nB1qI8FlVlmDtUmCtvuWzgrOlNC9k7nvy0SquOxChyp0YGZeBux8o14XThmohJ0ZWPxL
-         KIlWVHgKwUAxE3FpxFMYeeUaSBw3PSboeOdhNddotZw//us8MLeUti3n62Npnnaf5vqi
-         MR8g==
-X-Gm-Message-State: ACrzQf2ZdsJCfowBPuTPM+RTvcrI2vrYrT18kVARR+RP/jI06ZtxZ3Zj
-        P/hW5bMvgYO2B+zOJL9RT02XbUYQMDo=
-X-Google-Smtp-Source: AMsMyM5UPuATp0U6GswxRNGFVsyX6hVuubEeKJjtgK1rqAC7YNJAZLcqV4sonzcmR32W9vmIqZ9vmA==
-X-Received: by 2002:a54:4001:0:b0:355:385e:c07b with SMTP id x1-20020a544001000000b00355385ec07bmr20006904oie.36.1666620617164;
-        Mon, 24 Oct 2022 07:10:17 -0700 (PDT)
-Received: from ?IPV6:2603:8081:140c:1a00:1e0:e60:c33:b344? (2603-8081-140c-1a00-01e0-0e60-0c33-b344.res6.spectrum.com. [2603:8081:140c:1a00:1e0:e60:c33:b344])
-        by smtp.gmail.com with ESMTPSA id a5-20020a05680802c500b0034fd36e95bfsm3960219oid.31.2022.10.24.07.10.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Oct 2022 07:10:16 -0700 (PDT)
-Message-ID: <fe897b45-b556-1a4b-d3db-e674f76e5234@gmail.com>
-Date:   Mon, 24 Oct 2022 09:10:15 -0500
+        Mon, 24 Oct 2022 12:22:08 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9D3EBE13;
+        Mon, 24 Oct 2022 08:07:34 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id F34F31F8C5;
+        Mon, 24 Oct 2022 14:10:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1666620654; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=u9evsbgc3SrLCrKokVwOe61qW1przq4bKiIEjr89pIY=;
+        b=UIAptxlxsu/y71ot288XhILJwTzmBryk+k9egJYV094lSaX9ImmhZAaAglr4ltfJC4l/gb
+        ztDo1OHhLLoznVxDoqeagiSsblcPyGTYL/3OQ5UIC8eU5dZ5GwKrWLKPaF9cf5Nm9cT3kh
+        NgKSna3XliSwmSO1IEiJzR9meXiMU1I=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1666620654;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=u9evsbgc3SrLCrKokVwOe61qW1przq4bKiIEjr89pIY=;
+        b=mwf30PIEhjBDJJGff+AzgGHi6LapSKfuEaZEpDGBAP9Pl9CxdPPz7sAh1bBTTl7nFO1QjE
+        BwBurwpi5gjXgCDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E2AD113357;
+        Mon, 24 Oct 2022 14:10:53 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id hEBRN+2cVmPBFgAAMHmgww
+        (envelope-from <jack@suse.cz>); Mon, 24 Oct 2022 14:10:53 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 67C9FA06F6; Mon, 24 Oct 2022 16:10:53 +0200 (CEST)
+Date:   Mon, 24 Oct 2022 16:10:53 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Baokun Li <libaokun1@huawei.com>
+Cc:     linux-ext4@vger.kernel.org, tytso@mit.edu,
+        adilger.kernel@dilger.ca, jack@suse.cz, ritesh.list@gmail.com,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        yukuai3@huawei.com
+Subject: Re: [PATCH v2 1/2] ext4: fix bug_on in __es_tree_search caused by
+ wrong s_usr_quota_inum
+Message-ID: <20221024141053.n3ds3q37abdajrto@quack3>
+References: <20221021040731.4180649-1-libaokun1@huawei.com>
+ <20221021040731.4180649-2-libaokun1@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH for-next v3 1/2] RDMA/rxe: Remove unnecessary mr testing
-Content-Language: en-US
-To:     Li Zhijian <lizhijian@fujitsu.com>, zyjzyj2000@gmail.com,
-        jgg@ziepe.ca, leon@kernel.org, linux-rdma@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-References: <1666582315-2-1-git-send-email-lizhijian@fujitsu.com>
-From:   Bob Pearson <rpearsonhpe@gmail.com>
-In-Reply-To: <1666582315-2-1-git-send-email-lizhijian@fujitsu.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221021040731.4180649-2-libaokun1@huawei.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/23/22 22:31, Li Zhijian wrote:
-> Before the testing, we already passed it to rxe_mr_copy() where mr could
-> be dereferenced. so this checking is not needed.
+On Fri 21-10-22 12:07:30, Baokun Li wrote:
+> We got a issue as fllows:
+> ==================================================================
+>  kernel BUG at fs/ext4/extents_status.c:202!
+>  invalid opcode: 0000 [#1] PREEMPT SMP
+>  CPU: 1 PID: 810 Comm: mount Not tainted 6.1.0-rc1-next-g9631525255e3 #352
+>  RIP: 0010:__es_tree_search.isra.0+0xb8/0xe0
+>  RSP: 0018:ffffc90001227900 EFLAGS: 00010202
+>  RAX: 0000000000000000 RBX: 0000000077512a0f RCX: 0000000000000000
+>  RDX: 0000000000000002 RSI: 0000000000002a10 RDI: ffff8881004cd0c8
+>  RBP: ffff888177512ac8 R08: 47ffffffffffffff R09: 0000000000000001
+>  R10: 0000000000000001 R11: 00000000000679af R12: 0000000000002a10
+>  R13: ffff888177512d88 R14: 0000000077512a10 R15: 0000000000000000
+>  FS: 00007f4bd76dbc40(0000)GS:ffff88842fd00000(0000)knlGS:0000000000000000
+>  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>  CR2: 00005653bf993cf8 CR3: 000000017bfdf000 CR4: 00000000000006e0
+>  DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+>  DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>  Call Trace:
+>   <TASK>
+>   ext4_es_cache_extent+0xe2/0x210
+>   ext4_cache_extents+0xd2/0x110
+>   ext4_find_extent+0x5d5/0x8c0
+>   ext4_ext_map_blocks+0x9c/0x1d30
+>   ext4_map_blocks+0x431/0xa50
+>   ext4_getblk+0x82/0x340
+>   ext4_bread+0x14/0x110
+>   ext4_quota_read+0xf0/0x180
+>   v2_read_header+0x24/0x90
+>   v2_check_quota_file+0x2f/0xa0
+>   dquot_load_quota_sb+0x26c/0x760
+>   dquot_load_quota_inode+0xa5/0x190
+>   ext4_enable_quotas+0x14c/0x300
+>   __ext4_fill_super+0x31cc/0x32c0
+>   ext4_fill_super+0x115/0x2d0
+>   get_tree_bdev+0x1d2/0x360
+>   ext4_get_tree+0x19/0x30
+>   vfs_get_tree+0x26/0xe0
+>   path_mount+0x81d/0xfc0
+>   do_mount+0x8d/0xc0
+>   __x64_sys_mount+0xc0/0x160
+>   do_syscall_64+0x35/0x80
+>   entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>   </TASK>
+> ==================================================================
 > 
-> The only way that mr is NULL is when it reaches below line 780 with
->  'qp->resp.mr = NULL', which is not possible in Bob's explanation[1].
+> Above issue may happen as follows:
+> -------------------------------------
+> ext4_fill_super
+>  ext4_orphan_cleanup
+>   ext4_enable_quotas
+>    ext4_quota_enable
+>     ext4_iget --> get error inode <5>
+>      ext4_ext_check_inode --> Wrong imode makes it escape inspection
+>      make_bad_inode(inode) --> EXT4_BOOT_LOADER_INO set imode
+>     dquot_load_quota_inode
+>      vfs_setup_quota_inode --> check pass
+>      dquot_load_quota_sb
+>       v2_check_quota_file
+>        v2_read_header
+>         ext4_quota_read
+>          ext4_bread
+>           ext4_getblk
+>            ext4_map_blocks
+>             ext4_ext_map_blocks
+>              ext4_find_extent
+>               ext4_cache_extents
+>                ext4_es_cache_extent
+>                 __es_tree_search.isra.0
+>                  ext4_es_end --> Wrong extents trigger BUG_ON
 > 
->  778         if (res->state == rdatm_res_state_new) {
->  779                 if (!res->replay) {
->  780                         mr = qp->resp.mr;
->  781                         qp->resp.mr = NULL;
->  782                 } else {
+> In the above issue, s_usr_quota_inum is set to 5, but inode<5> contains
+> incorrect imode and disordered extents. Because 5 is EXT4_BOOT_LOADER_INO,
+> the ext4_ext_check_inode check in the ext4_iget function can be bypassed,
+> finally, the extents that are not checked trigger the BUG_ON in the
+> __es_tree_search function. To solve this issue, check whether qf_inode
+> obtained by ext4_iget is bad_inode.
 > 
-> [1] https://lore.kernel.org/lkml/30ff25c4-ce66-eac4-eaa2-64c0db203a19@gmail.com/
-> 
-> CC: Bob Pearson <rpearsonhpe@gmail.com>
-> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
-> ---
-> V3: remove WARN_ON # Yanjun and Bob
-> ---
->  drivers/infiniband/sw/rxe/rxe_resp.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/infiniband/sw/rxe/rxe_resp.c b/drivers/infiniband/sw/rxe/rxe_resp.c
-> index ed5a09e86417..b02639cf8cba 100644
-> --- a/drivers/infiniband/sw/rxe/rxe_resp.c
-> +++ b/drivers/infiniband/sw/rxe/rxe_resp.c
-> @@ -811,8 +811,7 @@ static enum resp_states read_reply(struct rxe_qp *qp,
->  
->  	rxe_mr_copy(mr, res->read.va, payload_addr(&ack_pkt),
->  		    payload, RXE_FROM_MR_OBJ);
-> -	if (mr)
-> -		rxe_put(mr);
-> +	rxe_put(mr);
->  
->  	if (bth_pad(&ack_pkt)) {
->  		u8 *pad = payload_addr(&ack_pkt) + payload;
+> Signed-off-by: Baokun Li <libaokun1@huawei.com>
 
-Reviewed-by: Bob Pearson <rpearsonhpe@gmail.com>
+Looks good to me. Feel free to add:
+
+Reviewed-by: Jan Kara <jack@suse.cz>
+
+								Honza
+
+> ---
+>  fs/ext4/super.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+> index 7a57dadfe256..5a5f95c6a0cb 100644
+> --- a/fs/ext4/super.c
+> +++ b/fs/ext4/super.c
+> @@ -6907,9 +6907,9 @@ static int ext4_quota_enable(struct super_block *sb, int type, int format_id,
+>  		return -EPERM;
+>  
+>  	qf_inode = ext4_iget(sb, qf_inums[type], EXT4_IGET_SPECIAL);
+> -	if (IS_ERR(qf_inode)) {
+> +	if (IS_ERR(qf_inode) || is_bad_inode(qf_inode)) {
+>  		ext4_error(sb, "Bad quota inode # %lu", qf_inums[type]);
+> -		return PTR_ERR(qf_inode);
+> +		return IS_ERR(qf_inode) ? PTR_ERR(qf_inode) : -EUCLEAN;
+>  	}
+>  
+>  	/* Don't account quota for quota files to avoid recursion */
+> -- 
+> 2.31.1
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
