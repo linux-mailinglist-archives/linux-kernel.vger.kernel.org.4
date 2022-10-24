@@ -2,75 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8719A60BC0D
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 23:24:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7060560BC21
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 23:27:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231435AbiJXVYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 17:24:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38160 "EHLO
+        id S234425AbiJXV0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 17:26:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234499AbiJXVXz (ORCPT
+        with ESMTP id S233332AbiJXV00 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 17:23:55 -0400
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A860C10EE70;
-        Mon, 24 Oct 2022 12:30:25 -0700 (PDT)
-Received: by mail-qt1-x832.google.com with SMTP id g11so6246802qts.1;
-        Mon, 24 Oct 2022 12:30:25 -0700 (PDT)
+        Mon, 24 Oct 2022 17:26:26 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 954228F24E;
+        Mon, 24 Oct 2022 12:32:56 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id i127so12110617ybc.11;
+        Mon, 24 Oct 2022 12:32:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mQ5BLyq/Wh5Af2rFK+o7OkOAy0M8fFmgplOhU8zXlss=;
-        b=qj2I3qzsZW5PHcuNfqSdA/dkKeLdJxE9Z4hO11ZlvlR/ANGtBrMfoB+7rLJmsT3nf0
-         81vXUxVoz2f/qkPpZCaFFHPkgoeOqRyyPR7GOm2WA+zeUOi+i3zNrNMMerZSubs5ywby
-         DEQm4pf+zD1WNFAJr6+1yRqAfzaMLhK2lCPva2p7/w7Ehf0cZGZGGMl7sqviypM/8cLy
-         6S/nBiSmJK6dtaWnIYRQq/+7WPTr7E75cPUJJOfcnvWf49bnfDjzr8d/6cqYctXzjv/f
-         r1vf2Qb+rzZm5CUcn4w+uKj3CsFQy8yVJ6pMumBBQ+5wusFbImlTNJQmJELScCmMdGZW
-         Nleg==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ewURVtEZDzlu0i+gVIVlIwdo2AKdKjYywGZcJK82PeY=;
+        b=pvb2n989P4g452NhPl3a7ovLcs0nrAlug6GLmwQOWVXp8sZf4hJMVc75J+1AdeaR5B
+         jTPfEsL3DxRnXGA7sUdDXsbNz9yiIRbkdJnpbTPKyuqZjCtxmSrHQ8G13WCC1Iuw5z+o
+         sb4RzMo24wxwjit5EZW/pEDJsdJvyK01K/zuT64THd3AukYqfUeJn+21U43e4WOGV7AE
+         TRjlBL3V1r6EQNYSf744jlDgboUSn44k7FA4sUf3fJvYekNs22FOZgtNlymJimDJwZ6+
+         t25uP2Y+j8/iUSZasJ8p1q+kJXQcLGIToESALHyDssHFEsfrxGDSk2to5cSEMGM1zWKn
+         AmIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mQ5BLyq/Wh5Af2rFK+o7OkOAy0M8fFmgplOhU8zXlss=;
-        b=rYu4Cq1R+VNg/t5xRleWjytTbXdpyGp6bRS8+NIAVGXciQQmpr7bxD/nA7IdZ8Afnp
-         7upTtE3g83aYavja0k3614UpixY5+qSbHpAwCxVDc7ZS9tCF0oL7hKmKqOpW7O7dsREY
-         H4LTgU29jaD4lr9kkfPQNHKkYf4UKePruy/sLULJZqvGxaI2ebBtk7+N7YlqBM8uQRWz
-         Sp+WgTcwUhbuto9LpRBjMy2yV0jfNiOhAn/OnwNILoz+IFqrmuYu4WZHhmfdzJ+q14LH
-         Pg1p/qD4bNXEVnMcQIFBmFZ0BOxMmuZhfIr2NwVyE6yC52mwt3x7glE0dSEEclZetzSL
-         lZ1g==
-X-Gm-Message-State: ACrzQf2H8LUr2QCsqfL20806hRXE5G7quUk1mtAjaZhJhI12N6slBOAp
-        Iq5sYjGZDdSfxXKd2YO7LVk=
-X-Google-Smtp-Source: AMsMyM494rI73ivC7+owwV0guCX3kMWgTdVjtzJW5IC5tzephuhjGYeaWlCtpmd1BB+3Iv/9Lokzjg==
-X-Received: by 2002:a05:622a:209:b0:39c:d88f:20ed with SMTP id b9-20020a05622a020900b0039cd88f20edmr28279111qtx.131.1666639718759;
-        Mon, 24 Oct 2022 12:28:38 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id bn6-20020a05620a2ac600b006bbc3724affsm523322qkb.45.2022.10.24.12.28.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Oct 2022 12:28:38 -0700 (PDT)
-Message-ID: <ed444438-8a97-60a6-fa40-954c81ef4de1@gmail.com>
-Date:   Mon, 24 Oct 2022 12:28:31 -0700
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ewURVtEZDzlu0i+gVIVlIwdo2AKdKjYywGZcJK82PeY=;
+        b=eCMf2kHbPew0J4JQHk0FNS0l3Xf9pT7J317HUfEnhJMz1et8O7Z0QTMDkeI+vLCyqz
+         Yjm7SzyQ2y3/vfCPz9tb8TwNQKj7aH1zNalPlWnfOScbuSbYVRDoJA8kXISGV1A97SOe
+         C71EHI4zOgBaJm32IjlUu6PX2pkVqSZMUr/tmcbWGqY/s7NtNclGtMpB3BEJhgcQj0HB
+         0lKEE5PlT3e7vBaGFQJDUsV4UCD1k33QYXGjUqud2bSjVq8mckojopkngwt0aV/gbBrB
+         UNe/DAgSazjkuX2YCz1TNmfIln+kenG9hg/moAkFklHYQDJcASMtve7E2hl2FgSEO5zb
+         tQtw==
+X-Gm-Message-State: ACrzQf1KmBzM+U2k3zn2O6OrcDMHDjAi5jXIlIG4zA8ZawHc8/oztVu8
+        aW8acizlaQ/N/94wkvaXNaWMs2ZuvbB3L0Gr7aK7FdfqHVeI6Q==
+X-Google-Smtp-Source: AMsMyM6B6fNnp2prURoNrQAhN6Lbp6rH2u1B/iqqAEW6OHySGJ/tzUiCXpuF8+v7sMB52Tmf+g8Xaw+7Yytz7WdTgT4=
+X-Received: by 2002:a25:3bd0:0:b0:6ca:6428:ac94 with SMTP id
+ i199-20020a253bd0000000b006ca6428ac94mr16397507yba.462.1666639881517; Mon, 24
+ Oct 2022 12:31:21 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 6.0 00/20] 6.0.4-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net
-References: <20221024112934.415391158@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20221024112934.415391158@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20221017202451.4951-1-vishal.moola@gmail.com> <20221017202451.4951-12-vishal.moola@gmail.com>
+In-Reply-To: <20221017202451.4951-12-vishal.moola@gmail.com>
+From:   Vishal Moola <vishal.moola@gmail.com>
+Date:   Mon, 24 Oct 2022 12:31:10 -0700
+Message-ID: <CAOzc2pwKoyy4i4zBKhvoKmN8cezUxjDhjYZnK9GLcJniQVPoGA@mail.gmail.com>
+Subject: Re: [PATCH v3 11/23] f2fs: Convert f2fs_fsync_node_pages() to use filemap_get_folios_tag()
+To:     linux-fsdevel@vger.kernel.org
+Cc:     linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-cifs@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, cluster-devel@redhat.com,
+        linux-nilfs@vger.kernel.org, linux-mm@kvack.org,
+        jaegeuk@kernel.org, chao@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,29 +71,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/24/22 04:31, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.0.4 release.
-> There are 20 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 26 Oct 2022 11:29:24 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.4-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+On Mon, Oct 17, 2022 at 1:25 PM Vishal Moola (Oracle)
+<vishal.moola@gmail.com> wrote:
+>
+> Convert function to use a folio_batch instead of pagevec. This is in
+> preparation for the removal of find_get_pages_range_tag().
+>
+> Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
+> ---
+>  fs/f2fs/node.c | 19 ++++++++++---------
+>  1 file changed, 10 insertions(+), 9 deletions(-)
+>
+> diff --git a/fs/f2fs/node.c b/fs/f2fs/node.c
+> index 983572f23896..e8b72336c096 100644
+> --- a/fs/f2fs/node.c
+> +++ b/fs/f2fs/node.c
+> @@ -1728,12 +1728,12 @@ int f2fs_fsync_node_pages(struct f2fs_sb_info *sbi, struct inode *inode,
+>                         unsigned int *seq_id)
+>  {
+>         pgoff_t index;
+> -       struct pagevec pvec;
+> +       struct folio_batch fbatch;
+>         int ret = 0;
+>         struct page *last_page = NULL;
+>         bool marked = false;
+>         nid_t ino = inode->i_ino;
+> -       int nr_pages;
+> +       int nr_folios;
+>         int nwritten = 0;
+>
+>         if (atomic) {
+> @@ -1742,20 +1742,21 @@ int f2fs_fsync_node_pages(struct f2fs_sb_info *sbi, struct inode *inode,
+>                         return PTR_ERR_OR_ZERO(last_page);
+>         }
+>  retry:
+> -       pagevec_init(&pvec);
+> +       folio_batch_init(&fbatch);
+>         index = 0;
+>
+> -       while ((nr_pages = pagevec_lookup_tag(&pvec, NODE_MAPPING(sbi), &index,
+> -                               PAGECACHE_TAG_DIRTY))) {
+> +       while ((nr_folios = filemap_get_folios_tag(NODE_MAPPING(sbi), &index,
+> +                                       (pgoff_t)-1, PAGECACHE_TAG_DIRTY,
+> +                                       &fbatch))) {
+>                 int i;
+>
+> -               for (i = 0; i < nr_pages; i++) {
+> -                       struct page *page = pvec.pages[i];
+> +               for (i = 0; i < nr_folios; i++) {
+> +                       struct page *page = &fbatch.folios[i]->page;
+>                         bool submitted = false;
+>
+>                         if (unlikely(f2fs_cp_error(sbi))) {
+>                                 f2fs_put_page(last_page, 0);
+> -                               pagevec_release(&pvec);
+> +                               folio_batch_release(&fbatch);
+>                                 ret = -EIO;
+>                                 goto out;
+>                         }
+> @@ -1821,7 +1822,7 @@ int f2fs_fsync_node_pages(struct f2fs_sb_info *sbi, struct inode *inode,
+>                                 break;
+>                         }
+>                 }
+> -               pagevec_release(&pvec);
+> +               folio_batch_release(&fbatch);
+>                 cond_resched();
+>
+>                 if (ret || marked)
+> --
+> 2.36.1
+>
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
-
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
-
+Following up on these f2fs patches (11/23, 12/23, 13/23, 14/23, 15/23,
+16/23). Does anyone have time to review them this week?
