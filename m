@@ -2,244 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DE1E60B170
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:23:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FA1660B218
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:43:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbiJXQXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 12:23:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56710 "EHLO
+        id S234679AbiJXQmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 12:42:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232443AbiJXQXS (ORCPT
+        with ESMTP id S231881AbiJXQlr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 12:23:18 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 353AF4B0E4;
-        Mon, 24 Oct 2022 08:09:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666624140; x=1698160140;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=2aq6bJvZs/INx2TIs6FczB9jmb8q3tRqCcz8AIvKGzQ=;
-  b=J+JCyiVWb5CkeN8MYnca/S4XA2nP9R2RotbIipWevSAAC4v66c++jFLG
-   xnJlVO/DH9NjzQQjAL7KtoV+t7FS0W2oXfLsoP7hRjtvMxDJ4EDMHaZlo
-   HwUC98rjqnaQT8ocPkC+0gVoatTgMMkHuCUekbqr7TVNV7pvs/X7ZRiRW
-   vSU60SXplbbl9VvV1tLi/XUYBBZfVaM4nmLGba1mJ0lqjVCqnJazVaEWS
-   ZLfLZJeNSN5Z6wgdU4PtUXiBk4iKt6XWHdDibSQ1DCpOK0hagHfpRbC5a
-   0N6xqDBOr7ZpKh2RiTR6WJ+IMk9WPvxOEMrYrwzBRhB5Y8/h1uSdRhzz6
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="287155496"
-X-IronPort-AV: E=Sophos;i="5.95,209,1661842800"; 
-   d="scan'208";a="287155496"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 07:55:59 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="626092623"
-X-IronPort-AV: E=Sophos;i="5.95,209,1661842800"; 
-   d="scan'208";a="626092623"
-Received: from rhweight-wrk1.ra.intel.com ([137.102.106.139])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 07:55:58 -0700
-Date:   Mon, 24 Oct 2022 07:56:11 -0700 (PDT)
-From:   matthew.gerlach@linux.intel.com
-X-X-Sender: mgerlach@rhweight-WRK1
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tianfei.zhang@intel.com, corbet@lwn.net,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        jirislaby@kernel.org, geert+renesas@glider.be,
-        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
-        johan@kernel.org, lukas@wunner.de, ilpo.jarvinen@linux.intel.com,
-        marpagan@redhat.com
-Subject: Re: [PATCH v4 3/4] fpga: dfl: add basic support DFHv1
-In-Reply-To: <Y1HGhT5+Nxv6anw5@smile.fi.intel.com>
-Message-ID: <alpine.DEB.2.22.394.2210240746570.2070724@rhweight-WRK1>
-References: <20221020212610.697729-1-matthew.gerlach@linux.intel.com> <20221020212610.697729-4-matthew.gerlach@linux.intel.com> <Y1HGhT5+Nxv6anw5@smile.fi.intel.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Mon, 24 Oct 2022 12:41:47 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9AC080EA5;
+        Mon, 24 Oct 2022 08:28:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=BrxfrDUbPsUFpThWqA9RSxt3bESyLFU8TgRiCKoKos4=; b=hUFyDn4iEM2Umosu5AGmbJVVWt
+        Gd8sS4dlaaccEMpfxIA+FTJfDLsCW3BaDAKG3WhFItnfHCxaubrTdZcHF8xD8CMyGl3OmKYss13IE
+        cf7PvX1v+ed7wIBYbKJjEjVdhn9MaeL34ZUWWMpOrhVUUo9bZHo4GVCsmH33ynRef9Y1jXHk6l4fg
+        G8iouAdGGN7jn0NThsBLmMWXfD+Xc0Zq7a7DnyNRFXx9xAcR78IQiUioEthdkXoKBCJEAQ2fpzM3Y
+        CHABnGcBjLNwmN00otsMN4Yv0UHBCNvxhe1dp3ZPOwFbs7nuc1SQJMrsZ+/bVPXsQK4n67mIGfEfg
+        ncRzNHSA==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34932)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1omysw-0003Fd-7H; Mon, 24 Oct 2022 15:57:02 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1omysk-0007DB-GY; Mon, 24 Oct 2022 15:56:50 +0100
+Date:   Mon, 24 Oct 2022 15:56:50 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Frank Wunderlich <frank-w@public-files.de>
+Cc:     Frank Wunderlich <linux@fw-web.de>,
+        linux-mediatek@lists.infradead.org,
+        Alexander Couzens <lynxis@fe80.eu>,
+        Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: Re: Re: Re: [PATCH v2] net: mtk_sgmii: implement mtk_pcs_ops
+Message-ID: <Y1ansgmD69AcITWx@shell.armlinux.org.uk>
+References: <Y1UMrvk2A9aAcjo5@shell.armlinux.org.uk>
+ <trinity-5350c2bc-473d-408f-a25a-16b34bbfcba7-1666537529990@3c-app-gmx-bs01>
+ <Y1Vh5U96W2u/GCnx@shell.armlinux.org.uk>
+ <trinity-1d4cc306-d1a4-4ccf-b853-d315553515ce-1666543305596@3c-app-gmx-bs01>
+ <Y1V/asUompZKj0ct@shell.armlinux.org.uk>
+ <trinity-ac9a840b-cb06-4710-827a-4c4423686074-1666551838763@3c-app-gmx-bs01>
+ <trinity-169e3c3f-3a64-485c-9a43-b7cc595531a9-1666552897046@3c-app-gmx-bs01>
+ <Y1Wfc+M/zVdw9Di3@shell.armlinux.org.uk>
+ <Y1Zah4+hyFk50JC6@shell.armlinux.org.uk>
+ <trinity-d2f74581-c020-4473-a5f4-0fc591233293-1666622740261@3c-app-gmx-bap55>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <trinity-d2f74581-c020-4473-a5f4-0fc591233293-1666622740261@3c-app-gmx-bap55>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Oct 24, 2022 at 04:45:40PM +0200, Frank Wunderlich wrote:
+> Hi
+> > Gesendet: Montag, 24. Oktober 2022 um 11:27 Uhr
+> > Von: "Russell King (Oracle)" <linux@armlinux.org.uk>
+> 
+> > Here's the combined patch for where I would like mtk_sgmii to get to.
+> >
+> > It looks like this PCS is similar to what we know as pcs-lynx.c, but
+> > there do seem to be differences - the duplex bit for example appears
+> > to be inverted.
+> >
+> > Please confirm whether this still works for you, thanks.
+> 
+> basicly Patch works, but i get some (1-50) retransmitts on iperf3 on first interval in tx-mode (on r3 without -R), other 9 are clean. reverse mode is mostly clean.
+> run iperf3 multiple times, every first interval has retransmitts. same for gmac0 (fixed-link 2500baseX)
+> 
+> i notice that you have changed the timer again to 10000000 for 1000/2500baseX...maybe use here the default value too like the older code does?
 
+You obviously missed my explanation. I will instead quote the 802.3
+standard which covers 1000base-X:
 
-On Fri, 21 Oct 2022, Andy Shevchenko wrote:
+37.3.1.4 Timers
 
-> On Thu, Oct 20, 2022 at 02:26:09PM -0700, matthew.gerlach@linux.intel.com wrote:
->> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->>
->> Add generic support for MSI-X interrupts for DFL devices.
->>
->> The location of a feature's registers is explicitly
->> described in DFHv1 and can be relative to the base of the DFHv1
->> or an absolute address.  Parse the location and pass the information
->> to DFL driver.
->
-> ...
->
->> +static void *find_param(void *base, resource_size_t max, int param)
->
-> Why base can't be u64 * to begin with?
+ link_timer
+          Timer used to ensure Auto-Negotiation protocol stability and
+	  register read/write by the management interface.
 
-It can be u64, and I will consider it for the next iteration.
->
->> +{
->> +	int off = 0;
->> +	u64 v, next;
->> +
->> +	while (off < max) {
->
-> Maybe you need a comment somewhere to tell that the caller guarantees that max
-> won't provoke OOB accesses.
->
->> +		v = *(u64 *)(base + off);
->
-> Okay, if offset is not multiple of at least 4, how do you guarantee no
-> exception on the architectures with disallowed misaligned accesses?
->
-> Making base to be u64 * solves this, but you need to take care to provide
-> offset in terms of u64 words.
+	  Duration: 10 ms, tolerance +10 ms, –0 s.
 
-The masking of next below ensures that the offset it at least 4 byte 
-aligned, but it might make sense to define the next field in terms of 8 
-byte words.
+For SGMII, the situation is different. Here is what the SGMII
+specification says:
 
->
->> +		if (param == FIELD_GET(DFHv1_PARAM_HDR_ID, v))
->> +			return base + off + DFHv1_PARAM_DATA;
->> +
->> +		next = FIELD_GET(DFHv1_PARAM_HDR_NEXT_OFFSET, v);
->> +		off += next & ~DFHv1_PARAM_HDR_NEXT_MASK;
->> +		if (next & DFHv1_PARAM_HDR_NEXT_EOL)
->> +			break;
->> +
->> +	}
->> +
->> +	return NULL;
->> +}
->
-> ...
->
->> +		/*
->> +		 * DFHv0 only provides mmio resource information for each feature
->
-> MMIO
+  The link_timer inside the Auto-Negotiation has been changed from 10
+  msec to 1.6 msec to ensure a prompt update of the link status.
 
-I'll change mmio to MMIO here and a place in the documentation that I 
-noticed.
+So, 10ms is correct for 1000base-X, and 1.6ms correct for SGMII.
 
->
->> +		 * in the DFL header.  There is no generic interrupt information.
->> +		 * Instead, features with interrupt functionality provide
->> +		 * the information in feature specific registers.
->> +		 */
->
-> ...
->
->> +		if (!finfo->param_size)
->>  			break;
->
-> This is redundant as it's implied by find_param().
+However, feel free to check whether changing it solves that issue, but
+also check whether it could be some ARP related issue - remember, if
+two endpoints haven't communicated, they need to ARP to get the other
+end's ethernet addresses which adds extra latency, and may result in
+some packet loss in high packet queuing rate situations.
 
-I will remove the redundant code.
-
->
->> +		p = find_param(params, finfo->param_size, DFHv1_PARAM_ID_MSI_X);
->> +		if (!p)
->>  			break;
->
-> ...
->
->> +static int dfh_get_psize(void __iomem *dfh_base, resource_size_t max)
->> +{
->> +	int size = 0;
->> +	u64 v, next;
->> +
->> +	if (!FIELD_GET(DFHv1_CSR_SIZE_GRP_HAS_PARAMS,
->> +		       readq(dfh_base + DFHv1_CSR_SIZE_GRP)))
->> +		return 0;
->> +
->> +	while (size + DFHv1_PARAM_HDR < max) {
->> +		v = readq(dfh_base + DFHv1_PARAM_HDR + size);
->> +
->> +		next = FIELD_GET(DFHv1_PARAM_HDR_NEXT_OFFSET, v);
->> +		if (!(next & ~DFHv1_PARAM_HDR_NEXT_MASK))
->> +			return -EINVAL;
->> +
->> +		size += next & ~DFHv1_PARAM_HDR_NEXT_MASK;
->> +
->> +		if (next & DFHv1_PARAM_HDR_NEXT_EOL)
->> +			return size;
->
-> These 3 looks like they deserve different fields and hence separate FIELD_GET()
-> will return exactly what we need without additional masking, right?
-
-I agree separate FIELD_GET() calls will be cleaner.
-
->
->> +	}
->> +
->> +	return -ENOENT;
->> +}
->
-> ...
->
->> +	if (dfh_psize > 0) {
->
-> Isn't this implied by memcpy_fromio()? I mean if it's 0, nothing bad will
-> happen if you call the above directly.
->
->> +		memcpy_fromio(finfo->params,
->> +			      binfo->ioaddr + ofst + DFHv1_PARAM_HDR, dfh_psize);
->> +		finfo->param_size = dfh_psize;
->> +	}
->
-> ...
->
->>  	finfo->mmio_res.flags = IORESOURCE_MEM;
->> +	if (dfh_ver == 1) {
->> +		v = readq(binfo->ioaddr + ofst + DFHv1_CSR_ADDR);
->> +		if (v & DFHv1_CSR_ADDR_REL)
->> +			finfo->mmio_res.start = v & ~DFHv1_CSR_ADDR_REL;
->> +		else
->> +			finfo->mmio_res.start = binfo->start + ofst +
->> +					       FIELD_GET(DFHv1_CSR_ADDR_MASK, v);
->> +
->> +		v = readq(binfo->ioaddr + ofst + DFHv1_CSR_SIZE_GRP);
->> +		finfo->mmio_res.end = finfo->mmio_res.start +
->> +				      FIELD_GET(DFHv1_CSR_SIZE_GRP_SIZE, v) - 1;
->> +	} else {
->> +		finfo->mmio_res.start = binfo->start + ofst;
->> +		finfo->mmio_res.end = finfo->mmio_res.start + size - 1;
->> +	}
->
-> You may define
->
-> 	resource_size_t start, end;
->
-> locally and simplify above quite a bit.
-
-That is a good suggestion that should clean up the code quite a bit.
-
->
-> ...
->
->> +void *dfh_find_param(struct dfl_device *dfl_dev, int param);
->
-> + Blank line.
->
->>  #endif /* __LINUX_DFL_H */
->
-> -- 
-> With Best Regards,
-> Andy Shevchenko
->
->
->
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
